@@ -68,7 +68,7 @@ class FestivalController(IFestivalController):
         if self.__bootcampController.isInBootcamp():
             return False
         config = self.__lobbyContext.getServerSettings().getFestivalConfig()
-        return config[FEST_CONFIG.FESTIVAL_ENABLED] and config[FEST_CONFIG.PLAYER_CARDS_ENABLED]
+        return config.get(FEST_CONFIG.FESTIVAL_ENABLED, False) and config.get(FEST_CONFIG.PLAYER_CARDS_ENABLED, False)
 
     def getHangarQuestsFlagData(self):
         return _DEFAULT_QUESTS_FLAG

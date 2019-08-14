@@ -605,7 +605,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         g_currentVehicle.onChangeStarted -= self.__onVehicleChangeStarted
         g_currentVehicle.onChanged -= self.__onVehicleChanged
         self.__ctx = None
-        self.service.destroyCtx()
+        self.service.closeCustomization()
         super(MainView, self)._dispose()
         return
 

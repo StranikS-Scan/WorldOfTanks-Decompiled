@@ -156,23 +156,31 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         return
 
     def showCustomization(self, vehInvID=None, callback=None):
-        if not g_currentVehicle.hangarSpace.spaceInited or not g_currentVehicle.hangarSpace.isModelLoaded:
-            _logger.warning('Space or vehicle is not presented, could not show customization view, return')
+        if not self.hangarSpace.spaceInited or not self.hangarSpace.isModelLoaded:
+            _logger.error('Space or vehicle is not presented, could not show customization view, return')
             return
         else:
+            self.__createCtx()
             loadCallback = lambda : self.__loadCustomization(vehInvID, callback)
             if self.__showCustomizationCallbackId is None:
-                self.moveHangarVehicleToCustomizationRoom()
+                self.__moveHangarVehicleToCustomizationRoom()
                 self.__showCustomizationCallbackId = BigWorld.callback(0.0, lambda : self.__showCustomization(loadCallback))
             return
 
+    def closeCustomization(self):
+        self.__destroyCtx()
+
     def getCtx(self):
-        if not self.__customizationCtx:
-            self.__customizationCtx = CustomizationContext()
-            self.__customizationCtx.init()
         return self.__customizationCtx
 
-    def destroyCtx(self):
+    def __createCtx(self):
+        if self.__customizationCtx is not None:
+            self.__customizationCtx.fini()
+        self.__customizationCtx = CustomizationContext()
+        self.__customizationCtx.init()
+        return
+
+    def __destroyCtx(self):
         if self.__customizationCtx:
             self.__customizationCtx.fini()
         self.__customizationCtx = None
@@ -257,7 +265,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
     def getHightlighter(self):
         return self._helper
 
-    def moveHangarVehicleToCustomizationRoom(self):
+    def __moveHangarVehicleToCustomizationRoom(self):
         from gui.ClientHangarSpace import customizationHangarCFG
         cfg = customizationHangarCFG()
         targetPos = cfg['v_start_pos']

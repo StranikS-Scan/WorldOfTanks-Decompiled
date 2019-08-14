@@ -1,10 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/tooltips/element.py
 from CurrentVehicle import g_currentVehicle
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.shared import getItemInventoryCount, getItemAppliedCount, makeVehiclesShortNamesString, getSuitableText
 from gui.customization.shared import SEASON_TYPE_TO_NAME
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -115,11 +113,14 @@ class ElementTooltip(BlocksTooltipData):
         self._item = None
         self._specialArgs = None
         self._isUnsupportedForm = None
+        self._appliedCount = 0
+        self.__ctx = None
         return
 
     def _packBlocks(self, *args):
         self._item = self.itemsCache.items.getItemByCD(args[0])
         statsConfig = self.context.getStatsConfiguration(self._item)
+        self.__ctx = self.service.getCtx()
         if len(args) > 1:
             showInventoryBlock = args[1]
             statsConfig.buyPrice = showInventoryBlock
@@ -138,12 +139,14 @@ class ElementTooltip(BlocksTooltipData):
         self.installedToVehs = self._item.getInstalledVehicles()
         self.installedCount = self._item.getInstalledOnVehicleCount(self.currentVehicle.intCD)
         camo = None
-        self.appliedCount = 0
+        self._appliedCount = 0
+        bonusEnabled = False
         if self._item.itemTypeID != GUI_ITEM_TYPE.STYLE:
-            self.appliedCount = getItemAppliedCount(self._item, self.service.getCtx().getOutfitsInfo())
             bonus = self._item.bonus
-            hullContainer = self.service.getCtx().currentOutfit.hull
-            isApplied = hullContainer.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).getItem() == self._item
+            if self.__ctx is not None:
+                self._appliedCount = getItemAppliedCount(self._item, self.__ctx.getOutfitsInfo())
+                hullContainer = self.__ctx.currentOutfit.hull
+                bonusEnabled = hullContainer.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).getItem() == self._item
         else:
             self.bonusDescription = VEHICLE_CUSTOMIZATION.BONUS_STYLE
             for container in (self._item.getOutfit(season).hull for season in SeasonType.SEASONS if self._item.getOutfit(season)):
@@ -154,16 +157,18 @@ class ElementTooltip(BlocksTooltipData):
             else:
                 bonus = None
 
-            originalStyle = self.service.getCtx().originalStyle
-            modifiedStyle = self.service.getCtx().modifiedStyle
-            if modifiedStyle:
-                isApplied = self._item == modifiedStyle
-            else:
-                isApplied = self._item == originalStyle
-            self.appliedCount = int(isApplied)
+            if self.__ctx is not None:
+                originalStyle = self.__ctx.originalStyle
+                modifiedStyle = self.__ctx.modifiedStyle
+                if modifiedStyle:
+                    isApplied = self._item == modifiedStyle
+                else:
+                    isApplied = self._item == originalStyle
+                bonusEnabled = bonus is not None and isApplied
+                self._appliedCount = int(isApplied)
         if bonus and statsConfig.showBonus:
             camo = self._item if not camo else camo
-            items.append(self._packBonusBlock(bonus, camo, isApplied))
+            items.append(self._packBonusBlock(bonus, camo, bonusEnabled))
         if not self._item.isHistorical() or self._item.fullDescription:
             block = self._packDescriptionBlock()
             if block:
@@ -206,7 +211,7 @@ class ElementTooltip(BlocksTooltipData):
 
     def _packAppliedBlock(self):
         vehicles = set(self.installedToVehs)
-        if self.appliedCount > 0:
+        if self._appliedCount > 0:
             vehicles.add(self.currentVehicle.intCD)
         elif not self.installedToVehs:
             return None
@@ -229,11 +234,11 @@ class ElementTooltip(BlocksTooltipData):
             else:
                 specials.append(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_BOUND_SPECIAL_TEXT))
         if self._item.isLimited:
-            purchaseLimit = self.service.getCtx().getPurchaseLimit(self._item)
-            if self._item.buyCount > 0 and (purchaseLimit > 0 or self.appliedCount > 0):
+            purchaseLimit = self.__ctx.getPurchaseLimit(self._item) if self.__ctx is not None else self._item.buyCount
+            if self._item.buyCount > 0 and (purchaseLimit > 0 or self._appliedCount > 0):
                 specials.append(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_LIMITED_SPECIAL_RULES_TEXT, available=text_styles.neutral(purchaseLimit)))
         if not specials:
-            return None
+            return
         else:
             if len(specials) > 1:
                 specials = [ '<li>{}</li>'.format(s) for s in specials ]
@@ -276,12 +281,6 @@ class ElementTooltip(BlocksTooltipData):
         return formatters.packItemTitleDescBlockData(title=text_styles.highTitle(title), desc=text_styles.main(desc), highlightPath=RES_ICONS.MAPS_ICONS_CUSTOMIZATION_CORNER_RARE, img=RES_ICONS.MAPS_ICONS_CUSTOMIZATION_BRUSH_RARE, imgPadding=formatters.packPadding(top=15, left=8), padding=formatters.packPadding(top=-20, left=-19, bottom=-7), txtPadding=formatters.packPadding(top=20, left=-8), descPadding=formatters.packPadding(top=25, left=-8)) if self._item.isRare() else formatters.packTitleDescBlock(title=text_styles.highTitle(title), desc=text_styles.main(desc), descPadding=formatters.packPadding(top=-5))
 
     def _packInventoryBlock(self, showBuyPrice, showSellPrice, showInventoryCount):
-        container = self.app.containerManager.getContainer(ViewTypes.LOBBY_SUB)
-        view = container.getView()
-        if view.alias == VIEW_ALIAS.LOBBY_CUSTOMIZATION:
-            getInventoryCount = self.service.getCtx().getItemInventoryCount
-        else:
-            getInventoryCount = getItemInventoryCount
         subBlocks = []
         money = self.itemsCache.items.stats.money
         if showBuyPrice and not self._item.isHidden:
@@ -310,7 +309,10 @@ class ElementTooltip(BlocksTooltipData):
                     subBlocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.ACTIONPRICE_SELL_BODY_SIMPLE), value=text_styles.concatStylesToSingleLine(text_styles.credits(backport.getIntegralFormat(value)), '    ', icons.credits()), icon='alertMedium', valueWidth=88, padding=formatters.packPadding(left=-5)))
                 subBlocks.append(makePriceBlock(value, CURRENCY_SETTINGS.SELL_PRICE, oldPrice=defValue if defValue > 0 else None, percent=actionPercent, valueWidth=88, leftPadding=49))
 
-        inventoryCount = getInventoryCount(self._item)
+        if self.__ctx is not None:
+            inventoryCount = self.__ctx.getItemInventoryCount(self._item)
+        else:
+            inventoryCount = getItemInventoryCount(self._item)
         info = text_styles.concatStylesWithSpace(text_styles.stats(inventoryCount))
         padding = formatters.packPadding(left=83, bottom=0)
         titlePadding = formatters.packPadding(left=-1)
@@ -318,7 +320,8 @@ class ElementTooltip(BlocksTooltipData):
             if self._item.isRentable:
                 textKey = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_INVENTORY_RENT_BATTLESLEFT
                 icon = RES_ICONS.MAPS_ICONS_LIBRARY_CLOCKICON_1
-                if self._item.isRented and self.service.getCtx().autoRentEnabled():
+                autoRentEnabled = self.__ctx.autoRentEnabled() if self.__ctx is not None else False
+                if self._item.isRented and autoRentEnabled:
                     textKey = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_INVENTORY_RENT_BATTLESLEFT_AUTOPROLONGATIONON
                     icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ICON_RENT
                 title = text_styles.main(_ms(textKey, tankname=g_currentVehicle.item.shortUserName))

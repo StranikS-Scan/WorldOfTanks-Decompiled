@@ -174,6 +174,7 @@ class HangarCameraManager(object):
 
     def setCameraLocation(self, targetPos=None, pivotPos=None, yaw=None, pitch=None, dist=None, camConstraints=None, ignoreConstraints=False, movementMode=FAST_CAMERA_MOVEMENT_MODE):
         if self.__cam is None:
+            _logger.error('Unable to set camera location, because camera reference is None.')
             return
         else:
             from gui.ClientHangarSpace import hangarCFG

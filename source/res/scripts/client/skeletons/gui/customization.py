@@ -16,10 +16,10 @@ class ICustomizationService(object):
     def showCustomization(self, vehInvId=None, callback=None):
         raise NotImplementedError
 
-    def getCtx(self):
+    def closeCustomization(self):
         raise NotImplementedError
 
-    def destroyCtx(self):
+    def getCtx(self):
         raise NotImplementedError
 
     def startHighlighter(self, mode):
@@ -107,9 +107,6 @@ class ICustomizationService(object):
         raise NotImplementedError
 
     def selectRegions(self, regionsMask):
-        raise NotImplementedError
-
-    def moveHangarVehicleToCustomizationRoom(self):
         raise NotImplementedError
 
     def setSelectingRegionEnabled(self, enable):

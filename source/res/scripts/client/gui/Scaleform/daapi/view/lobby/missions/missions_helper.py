@@ -493,10 +493,24 @@ class _DetailedMissionInfo(_MissionInfo):
             criteria = cond.getFilterCriteria(cond.getData())
         else:
             criteria = REQ_CRITERIA.DISCLOSABLE
+        isQuestForBattleRoyale = False
+        battleCond = self.event.preBattleCond.getConditions()
+        if battleCond:
+            bonusTypes = battleCond.find('bonusTypes')
+            if bonusTypes:
+                arenaTypes = bonusTypes.getValue()
+                if arenaTypes:
+                    if constants.ARENA_BONUS_TYPE.EVENT_BATTLES not in arenaTypes or constants.ARENA_BONUS_TYPE.EVENT_BATTLES_2 not in arenaTypes:
+                        criteria = criteria | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
+                    if constants.ARENA_BONUS_TYPE.EPIC_BATTLE not in arenaTypes:
+                        criteria = criteria | ~REQ_CRITERIA.VEHICLE.EPIC_BATTLE
+                    if constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD in arenaTypes or constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO in arenaTypes:
+                        isQuestForBattleRoyale = True
         xpMultCond = conds.find('hasReceivedMultipliedXP')
         if xpMultCond:
             extraConditions.append(xpMultCond)
-        return (criteria, extraConditions)
+        criteria = criteria | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+        return (criteria, extraConditions, isQuestForBattleRoyale)
 
     def _getUIDecoration(self):
         decoration = self.eventsCache.prefetcher.getMissionDecoration(self.event.getIconID(), DECORATION_SIZES.DETAILS)

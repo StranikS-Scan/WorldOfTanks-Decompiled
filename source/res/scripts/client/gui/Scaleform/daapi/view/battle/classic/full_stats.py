@@ -18,7 +18,16 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 
-class FullStatsComponent(TabbedFullStatsMeta):
+class IFullStatsComponent(object):
+
+    def setActiveTabIndex(self, index):
+        raise NotImplementedError
+
+    def showQuestProgressAnimation(self):
+        raise NotImplementedError
+
+
+class FullStatsComponent(TabbedFullStatsMeta, IFullStatsComponent):
     settingsCore = dependency.descriptor(ISettingsCore)
     eventsCache = dependency.descriptor(IEventsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)

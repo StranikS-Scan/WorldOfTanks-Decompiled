@@ -9,8 +9,8 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared.formatters import text_styles, moneyWithIcon
-from gui.shared.formatters.currency import getStyle, getBWFormatter
+from gui.shared.formatters import text_styles, moneyWithIcon, icons
+from gui.shared.formatters.currency import getBWFormatter, getStyle
 from gui.shared.gui_items import Vehicle
 from gui.shared.gui_items.items_actions import factory
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
@@ -223,13 +223,15 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
 
     @staticmethod
     def __packCompensation(value, currency):
-        isGold = currency == Currency.GOLD
-        currencyFormatter = getBWFormatter(currency)
+        rBPstr = R.strings.vehicle_preview.buyingPanel
+        rIcons = R.images.gui.maps.icons.library
         currencyStyle = getStyle(currency)
-        iconInfo = RES_ICONS.MAPS_ICONS_LIBRARY_INFO_YELLOW if isGold else RES_ICONS.MAPS_ICONS_LIBRARY_INFO
-        return {'value': currencyStyle('-{}'.format(currencyStyle(currencyFormatter(value)))),
-         'tooltip': makeTooltip(body=backport.text(R.strings.vehicle_preview.buyingPanel.compensation.body())),
-         'iconInfo': iconInfo}
+        currencyFormatter = getBWFormatter(currency)
+        currencyIcon = icons.makeImageTag(backport.image(rIcons.dyn('{}{}'.format(currency.capitalize(), 'Icon_1'))()), vSpace=-2)
+        return {'iconInfo': backport.image(rIcons.info_yellow() if currency == Currency.GOLD else rIcons.info()),
+         'description': backport.text(rBPstr.compensation()),
+         'value': '{} {}'.format(currencyStyle(currencyFormatter(value)), currencyIcon),
+         'tooltip': makeTooltip(body=backport.text(rBPstr.compensation.body()))}
 
     @staticmethod
     def __getCustomOfferData(data):

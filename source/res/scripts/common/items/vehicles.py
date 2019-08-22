@@ -138,7 +138,8 @@ VEHICLE_ATTRIBUTE_FACTORS = {'engine/power': 1.0,
  'crewRolesFactor': 1.0,
  'stunResistanceEffect': 0.0,
  'stunResistanceDuration': 0.0,
- 'repeatedStunDurationFactor': 1.0}
+ 'repeatedStunDurationFactor': 1.0,
+ 'deathZones/sensitivityFactor': 1.0}
 _g_prices = None
 
 class CamouflageBonus():
@@ -1018,7 +1019,8 @@ class VehicleDescriptor(object):
              'crewChanceToHitFactor': 1.0,
              'stunResistanceEffect': 0.0,
              'stunResistanceDuration': 0.0,
-             'repeatedStunDurationFactor': 1.0}
+             'repeatedStunDurationFactor': 1.0,
+             'deathZones/sensitivityFactor': 1.0}
             for device in self.optionalDevices:
                 if device is not None:
                     device.updateVehicleDescrAttrs(self)
@@ -2096,6 +2098,15 @@ def getSpecificAmmoForGun(gunDescr, ammoProperties):
     return ammo
 
 
+def calculateCarryingTriangles(carryingPoint):
+    v = carryingPoint
+    topLeft = Vector2(-v.x, v.y)
+    bottomLeft = Vector2(-v.x, -v.y)
+    topRight = Vector2(v.x, v.y)
+    bottomRight = Vector2(v.x, -v.y)
+    return (((topLeft + bottomLeft) / 2.0, topRight, bottomRight), ((topRight + bottomRight) / 2.0, bottomLeft, topLeft))
+
+
 def _getAmmoForGun(gunDescr, defaultPortion=None):
     ammo = []
     maxCount = gunDescr.maxAmmo
@@ -2411,14 +2422,32 @@ def _readHullVariants(xmlCtx, section, defHull, chassis, turrets):
                 modelsSets = shared_readers.readModelsSets(ctx, section, 'models')
                 variant.models = modelsSets['default']
                 continue
+            if name == 'exhaust':
+                if IS_CLIENT:
+                    variant.customEffects = (__readExhaustEffect(ctx, section),)
+                continue
             if name == 'hitTester':
                 variant.hitTester = _readHitTester(ctx, section, 'hitTester')
                 continue
             if name == 'armor':
                 variant.materials = _readArmor(ctx, section, 'armor')
                 continue
+            if name == 'primaryArmor':
+                if IS_CLIENT:
+                    variant.primaryArmor = _readPrimaryArmor(ctx, section, 'primaryArmor', variant.materials)
+                continue
+            if name == 'armorHomogenization':
+                if not IS_CLIENT and not IS_BOT:
+                    variant.armorHomogenization = _xml.readPositiveFloat(ctx, section, 'armorHomogenization')
+                continue
             if name == 'weight':
                 variant.weight = _xml.readNonNegativeFloat(ctx, section, 'weight')
+                continue
+            if name == 'maxHealth':
+                variant.maxHealth = _xml.readInt(ctx, section, 'maxHealth', 1)
+                continue
+            if name == 'ammoBayHealth':
+                variant.ammoBayHealth = shared_readers.readDeviceHealthParams(ctx, section, 'ammoBayHealth', False)
                 continue
             if name == 'turretPositions':
                 v = []
@@ -2526,12 +2555,7 @@ def _readChassis(xmlCtx, section, item, unlocksDescrs=None, _=None):
             item.wheelHealthParams[wheelNumber] = shared_readers.readDeviceHealthParams(subctx, subsection)
 
     if IS_CLIENT or IS_EDITOR or IS_CELLAPP or IS_WEB or IS_BOT:
-        v = item.topRightCarryingPoint
-        topLeft = Vector2(-v.x, v.y)
-        bottomLeft = Vector2(-v.x, -v.y)
-        topRight = Vector2(v.x, v.y)
-        bottomRight = Vector2(v.x, -v.y)
-        item.carryingTriangles = (((topLeft + bottomLeft) / 2.0, topRight, bottomRight), ((topRight + bottomRight) / 2.0, bottomLeft, topLeft))
+        item.carryingTriangles = calculateCarryingTriangles(item.topRightCarryingPoint)
     if IS_CLIENT or IS_EDITOR or IS_CELLAPP:
         drivingWheelNames = section.readString('drivingWheels').split()
         if len(drivingWheelNames) != 2:
@@ -2661,6 +2685,9 @@ def _readRadio(xmlCtx, section, item, unlocksDescrs=None, _=None):
     item.level = _readLevel(xmlCtx, section)
     item.weight = _xml.readNonNegativeFloat(xmlCtx, section, 'weight')
     item.distance = _xml.readNonNegativeFloat(xmlCtx, section, 'distance')
+    defaults = g_cache.commonConfig['miscParams']['radarDefaults']
+    item.radarRadius = _xml.readNonNegativeFloat(xmlCtx, section, 'radarRadius', defaults['radarRadius'])
+    item.radarCooldown = _xml.readNonNegativeFloat(xmlCtx, section, 'radarCooldown', defaults['radarCooldown'])
     _readPriceForItem(xmlCtx, section, item.compactDescr)
     if IS_CLIENT or IS_WEB:
         item.i18n = shared_readers.readUserText(section)
@@ -3690,7 +3717,7 @@ def _copyPriceForItem(sourceCompactDescr, destCompactDescr, itemNotInShop):
 
 
 def _readUnlocks(xmlCtx, section, subsectionName, unlocksDescrs, *requiredItems):
-    if unlocksDescrs is None or IS_CELLAPP:
+    if unlocksDescrs is None:
         return []
     else:
         s = section[subsectionName]
@@ -4099,7 +4126,9 @@ def _readCommonConfig(xmlCtx, section):
      'explosionDamageFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionDamageFactor'),
      'explosionDamageAbsorptionFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionDamageAbsorptionFactor'),
      'explosionEdgeDamageFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionEdgeDamageFactor'),
-     'allowMortarShooting': _xml.readBool(xmlCtx, section, 'miscParams/allowMortarShooting')}
+     'allowMortarShooting': _xml.readBool(xmlCtx, section, 'miscParams/allowMortarShooting'),
+     'radarDefaults': {'radarRadius': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/radarDefaults/radarRadius'),
+                       'radarCooldown': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/radarDefaults/radarCooldown')}}
     if IS_CLIENT or IS_EDITOR:
         v = {}
         for lodName in _xml.getSubsection(xmlCtx, section, 'lodLevels').keys():

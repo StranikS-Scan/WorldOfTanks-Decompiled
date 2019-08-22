@@ -4,7 +4,7 @@ import copy
 import types
 from collections import namedtuple
 from Event import Event
-from constants import IS_TUTORIAL_ENABLED, SWITCH_STATE, PremiumConfigs
+from constants import IS_TUTORIAL_ENABLED, SWITCH_STATE, PremiumConfigs, Configs
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_DEBUG
 from gui import GUI_SETTINGS, SystemMessages
 from gui.SystemMessages import SM_TYPE
@@ -351,6 +351,27 @@ class _SquadPremiumBonus(namedtuple('_SquadPremiumBonus', ('isEnabled', 'ownCred
         return result
 
 
+class _BattleRoyaleConfig(namedtuple('_BattleRoyaleConfig', ('isEnabled', 'peripheryIDs', 'unburnableTitles', 'eventProgression', 'primeTimes', 'seasons', 'cycleTimes', 'maps', 'battleXP', 'coneVisibility', 'loot', 'defaultAmmo', 'introVideoUrl'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=False, peripheryIDs={}, eventProgression={}, unburnableTitles=(), primeTimes={}, seasons={}, cycleTimes={}, maps=(), battleXP={}, coneVisibility={}, loot={}, defaultAmmo={}, introVideoUrl='')
+        defaults.update(kwargs)
+        return super(_BattleRoyaleConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
 class _TelecomConfig(object):
     __slots__ = ('__vehCDToProvider',)
 
@@ -476,6 +497,11 @@ class ServerSettings(object):
             self.__epicGameSettings = makeTupleByDict(_EpicGameConfig, self.__serverSettings['epic_config'])
         if PremiumConfigs.PREM_SQUAD in self.__serverSettings:
             self.__squadPremiumBonus = _SquadPremiumBonus.create(self.__serverSettings[PremiumConfigs.PREM_SQUAD])
+        if Configs.BATTLE_ROYALE_CONFIG in self.__serverSettings:
+            LOG_DEBUG('battle_royale_config', self.__serverSettings[Configs.BATTLE_ROYALE_CONFIG])
+            self.__battleRoyaleSettings = makeTupleByDict(_BattleRoyaleConfig, self.__serverSettings[Configs.BATTLE_ROYALE_CONFIG])
+        else:
+            self.__battleRoyaleSettings = _BattleRoyaleConfig.defaults()
         if 'telecom_config' in self.__serverSettings:
             self.__telecomConfig = _TelecomConfig(self.__serverSettings['telecom_config'])
         if 'blueprints_config' in self.__serverSettings:
@@ -503,6 +529,8 @@ class ServerSettings(object):
         if 'epic_config' in serverSettingsDiff:
             self.__updateEpic(serverSettingsDiff)
             self.__serverSettings['epic_config'] = serverSettingsDiff['epic_config']
+        if Configs.BATTLE_ROYALE_CONFIG in serverSettingsDiff:
+            self.__updateBattleRoyale(serverSettingsDiff)
         if 'telecom_config' in serverSettingsDiff:
             self.__telecomConfig = _TelecomConfig(self.__serverSettings['telecom_config'])
         if 'disabledPMOperations' in serverSettingsDiff:
@@ -590,6 +618,10 @@ class ServerSettings(object):
     @property
     def epicBattles(self):
         return self.__epicGameSettings
+
+    @property
+    def battleRoyale(self):
+        return self.__battleRoyaleSettings
 
     @property
     def telecomConfig(self):
@@ -816,6 +848,9 @@ class ServerSettings(object):
 
     def __updateSquadBonus(self, sourceSettings):
         self.__squadPremiumBonus = self.__squadPremiumBonus.replace(sourceSettings[PremiumConfigs.PREM_SQUAD])
+
+    def __updateBattleRoyale(self, targetSettings):
+        self.__battleRoyaleSettings = self.__battleRoyaleSettings.replace(targetSettings['battle_royale_config'])
 
     def __updateIngameShop(self, targetSettings):
         self.__bwIngameShop = self.__bwIngameShop.replace(targetSettings['ingameShop'])

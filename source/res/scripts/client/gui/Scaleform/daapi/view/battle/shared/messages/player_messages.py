@@ -2,8 +2,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/messages/player_messages.py
 from constants import EQUIPMENT_STAGES
 from debug_utils import LOG_DEBUG
-from gui.Scaleform.daapi.view.battle.shared.messages import fading_messages
 from gui.battle_control import avatar_getter
+from gui.battle_royale.constants import BR_EQUIPMENTS_WITH_MESSAGES
+from gui.Scaleform.daapi.view.battle.shared.messages import fading_messages
 from items import vehicles
 from gui.sounds.epic_sound_constants import EPIC_SOUND
 _ID_TO_DESTRUCTIBLE_ENTITY_NAME = {1: '1',
@@ -71,9 +72,15 @@ class PlayerMessages(fading_messages.FadingMessages):
         self.showMessage(key, args, extra)
 
     def __onCombatEquipmentUpdated(self, _, item):
-        if item.getPrevStage() in (EQUIPMENT_STAGES.DEPLOYING, EQUIPMENT_STAGES.UNAVAILABLE, EQUIPMENT_STAGES.COOLDOWN) and item.getStage() == EQUIPMENT_STAGES.READY:
-            postfix = item.getDescriptor().name.split('_')[0].upper()
-            self.showMessage('COMBAT_EQUIPMENT_READY', {}, postfix=postfix)
+        if item.becomeReady:
+            itemDescriptor = item.getDescriptor()
+            if itemDescriptor.name in BR_EQUIPMENTS_WITH_MESSAGES:
+                if item.getPrevStage() == EQUIPMENT_STAGES.COOLDOWN and item.getQuantity() == 0:
+                    return
+                self.showMessage('COMBAT_BR_EQUIPMENT_READY', {'equipment': itemDescriptor.userString})
+            else:
+                postfix = itemDescriptor.name.split('_')[0].upper()
+                self.showMessage('COMBAT_EQUIPMENT_READY', {}, postfix=postfix)
 
     def __onCombatEquipmentUsed(self, shooterID, eqID):
         battleCxt = self.sessionProvider.getCtx()

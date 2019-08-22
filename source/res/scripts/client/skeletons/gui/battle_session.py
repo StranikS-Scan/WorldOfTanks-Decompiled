@@ -117,6 +117,26 @@ class IDynamicControllersLocator(object):
     def battleField(self):
         raise NotImplementedError
 
+    @property
+    def progression(self):
+        raise NotImplementedError
+
+    @property
+    def radar(self):
+        raise NotImplementedError
+
+    @property
+    def spawn(self):
+        raise NotImplementedError
+
+    @property
+    def deathScreen(self):
+        raise NotImplementedError
+
+    @property
+    def vehicleCount(self):
+        raise NotImplementedError
+
 
 class ISquadInvitationsHandler(object):
     __slots__ = ()
@@ -158,6 +178,9 @@ class IClientArenaVisitor(object):
 
     @property
     def vehicles(self):
+        raise NotImplementedError
+
+    def getComponentSystem(self):
         raise NotImplementedError
 
     def isArenaNotStarted(self):
@@ -294,6 +317,9 @@ class IArenaDataProvider(object):
         raise NotImplementedError
 
     def updateVehicleInteractiveStats(self, iStats):
+        raise NotImplementedError
+
+    def updateGameModeSpecificStats(self, vehicleID, isStatic, stats):
         raise NotImplementedError
 
     def updateInvitationStatus(self, accountDBID, include, exclude=0):
@@ -599,4 +625,10 @@ class IBattleSessionProvider(object):
         raise NotImplementedError
 
     def handleShortcutChatCommand(self, key):
+        raise NotImplementedError
+
+    def updateVehicleEffects(self):
+        raise NotImplementedError
+
+    def updateObservedVehicleData(self, vID, extraData):
         raise NotImplementedError

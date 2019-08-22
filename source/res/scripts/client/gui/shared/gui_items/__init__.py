@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/__init__.py
 from shared_utils import CONST_CONTAINER
-from items import ITEM_TYPE_NAMES, vehicles, ITEM_TYPE_INDICES, EQUIPMENT_TYPES
+from items import ITEM_TYPE_NAMES, vehicles, ITEM_TYPE_INDICES, EQUIPMENT_TYPES, getTypeOfCompactDescr
 from gui.shared.money import Currency
+from skeletons.gui.shared.gui_items import IGuiItemsFactory
+from helpers import dependency
 CLAN_LOCK = 1
 GUI_ITEM_TYPE_NAMES = tuple(ITEM_TYPE_NAMES) + tuple(['reserved'] * (16 - len(ITEM_TYPE_NAMES)))
 GUI_ITEM_TYPE_NAMES += ('dossierAccount', 'dossierVehicle', 'dossierTankman', 'achievement', 'tankmanSkill', 'battleBooster', 'badge', 'battleAbility', 'lootBox', 'paint', 'camouflage', 'modification', 'outfit', 'style', 'decal', 'emblem', 'inscription', 'projectionDecal', 'insignia', 'personalNumber', 'sequence', 'attachment')
@@ -216,6 +218,19 @@ def getVehicleSuitablesByType(vehDescr, itemTypeId, turretPID=0):
 
 def getItemIconName(itemName):
     return '%s.png' % itemName.replace(':', '-')
+
+
+@dependency.replace_none_kwargs(itemsFactory=IGuiItemsFactory)
+def isItemVehicleHull(intCD, vehicle, itemsFactory=None):
+    typeCD = getTypeOfCompactDescr(intCD)
+    if typeCD == GUI_ITEM_TYPE.CHASSIS:
+        item = itemsFactory.createGuiItem(typeCD, intCompactDescr=intCD)
+        hulls = vehicle.descriptor.type.hulls
+        for hull in hulls:
+            if item.innationID in hull.variantMatch:
+                return True
+
+    return False
 
 
 class ACTION_ENTITY_ITEM(object):

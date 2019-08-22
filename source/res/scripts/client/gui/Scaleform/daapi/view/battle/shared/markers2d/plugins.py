@@ -13,7 +13,7 @@ from account_helpers.settings_core.options import VehicleMarkerSetting
 from battleground.StunAreaManager import STUN_AREA_STATIC_MARKER
 from gui.Scaleform.daapi.view.battle.shared.markers2d import markers
 from gui.Scaleform.daapi.view.battle.shared.markers2d import settings
-from gui.Scaleform.daapi.view.battle.shared.markers2d.timer import StunMarkerTimer
+from gui.Scaleform.daapi.view.battle.shared.markers2d.timer import MarkerTimer
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control.arena_info.arena_vos import VehicleActions
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
@@ -36,10 +36,12 @@ STUN_STATE = 0
 INSPIRING_STATE = 1
 INSPIRED_STATE = 2
 ENGINEER_STATE = 3
+HEALING_STATE = 4
 _STATUS_EFFECTS_PRIORITY = {INSPIRED_STATE: 0,
  STUN_STATE: 1,
  INSPIRING_STATE: 2,
- ENGINEER_STATE: 3}
+ ENGINEER_STATE: 3,
+ HEALING_STATE: 4}
 
 class IMarkersManager(object):
 
@@ -100,7 +102,7 @@ class SettingsPlugin(MarkerPlugin):
 
     def init(self, *args):
         super(SettingsPlugin, self).init(*args)
-        self.__setMarkerSettings(notify=False)
+        self._setMarkerSettings(notify=False)
         self.__setColorsSchemes()
         self._parentObj.setColorBlindFlag(self.settingsCore.getSetting(GRAPHICS.COLOR_BLIND))
         self._parentObj.setScale(self.settingsCore.interfaceScale.get())
@@ -112,7 +114,7 @@ class SettingsPlugin(MarkerPlugin):
         self.settingsCore.interfaceScale.onScaleChanged -= self.__onScaleChanged
         super(SettingsPlugin, self).fini()
 
-    def __setMarkerSettings(self, notify=False):
+    def _setMarkerSettings(self, notify=False):
         getter = self.settingsCore.getSetting
         self._parentObj.setMarkerSettings(dict(((name, getter(name)) for name in MARKERS.ALL())), notify=notify)
 
@@ -136,10 +138,58 @@ class SettingsPlugin(MarkerPlugin):
         if GRAPHICS.COLOR_BLIND in diff:
             self._parentObj.setColorBlindFlag(diff[GRAPHICS.COLOR_BLIND])
         if set(MARKERS.ALL()) & set(diff):
-            self.__setMarkerSettings(notify=True)
+            self._setMarkerSettings(notify=True)
 
     def __onScaleChanged(self, scale):
         self._parentObj.setScale(scale)
+
+
+class BRSettingsPlugin(SettingsPlugin):
+    SETTINGS = {'ally': {'markerBaseIcon': False,
+              'markerBaseLevel': False,
+              'markerBaseHpIndicator': True,
+              'markerBaseDamage': True,
+              'markerBaseHp': 0,
+              'markerBaseVehicleName': False,
+              'markerBasePlayerName': True,
+              'markerAltIcon': False,
+              'markerAltLevel': False,
+              'markerAltHpIndicator': True,
+              'markerAltDamage': True,
+              'markerAltHp': 0,
+              'markerAltVehicleName': False,
+              'markerAltPlayerName': True},
+     'enemy': {'markerBaseIcon': False,
+               'markerBaseLevel': False,
+               'markerBaseHpIndicator': True,
+               'markerBaseDamage': True,
+               'markerBaseHp': 0,
+               'markerBaseVehicleName': False,
+               'markerBasePlayerName': True,
+               'markerAltIcon': False,
+               'markerAltLevel': False,
+               'markerAltHpIndicator': True,
+               'markerAltDamage': True,
+               'markerAltHp': 0,
+               'markerAltVehicleName': False,
+               'markerAltPlayerName': True},
+     'dead': {'markerBaseIcon': False,
+              'markerBaseLevel': False,
+              'markerBaseHpIndicator': True,
+              'markerBaseDamage': True,
+              'markerBaseHp': 0,
+              'markerBaseVehicleName': False,
+              'markerBasePlayerName': True,
+              'markerAltIcon': False,
+              'markerAltLevel': False,
+              'markerAltHpIndicator': True,
+              'markerAltDamage': True,
+              'markerAltHp': 0,
+              'markerAltVehicleName': False,
+              'markerAltPlayerName': True}}
+
+    def _setMarkerSettings(self, notify=False):
+        self._parentObj.setMarkerSettings(dict(((name, self.SETTINGS[name]) for name in MARKERS.ALL())), notify=notify)
 
 
 class EventBusPlugin(MarkerPlugin):
@@ -212,16 +262,16 @@ class AreaStaticMarkerPlugin(MarkerPlugin):
 
 class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
     bootcamp = dependency.descriptor(IBootcampController)
-    __slots__ = ('_markers', '_markersStates', '_clazz', '__playerVehicleID', '_isSquadIndicatorEnabled', '__showDamageIcon', '_stunTimers')
+    __slots__ = ('_markers', '_markersStates', '_clazz', '_playerVehicleID', '_isSquadIndicatorEnabled', '__showDamageIcon', '_markerTimers')
 
     def __init__(self, parentObj, clazz=markers.VehicleMarker):
         super(VehicleMarkerPlugin, self).__init__(parentObj)
         self._markers = {}
         self._markersStates = defaultdict(list)
         self._clazz = clazz
-        self._stunTimers = {}
+        self._markerTimers = {}
         self._isSquadIndicatorEnabled = False
-        self.__playerVehicleID = 0
+        self._playerVehicleID = 0
         self.__showDamageIcon = False
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
@@ -238,7 +288,7 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
         if ctrl is not None:
             ctrl.onVehicleMarkerAdded += self.__onVehicleMarkerAdded
             ctrl.onVehicleMarkerRemoved += self.__onVehicleMarkerRemoved
-            ctrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
+            ctrl.onVehicleFeedbackReceived += self._onVehicleFeedbackReceived
         g_messengerEvents.voip.onPlayerSpeaking += self.__onPlayerSpeaking
         g_playerEvents.onTeamChanged += self.__onTeamChanged
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
@@ -249,7 +299,7 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
         if ctrl is not None:
             ctrl.onVehicleMarkerAdded -= self.__onVehicleMarkerAdded
             ctrl.onVehicleMarkerRemoved -= self.__onVehicleMarkerRemoved
-            ctrl.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
+            ctrl.onVehicleFeedbackReceived -= self._onVehicleFeedbackReceived
         g_messengerEvents.voip.onPlayerSpeaking -= self.__onPlayerSpeaking
         g_playerEvents.onTeamChanged -= self.__onTeamChanged
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
@@ -258,7 +308,7 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
 
     def start(self):
         super(VehicleMarkerPlugin, self).start()
-        self.__playerVehicleID = self.sessionProvider.getArenaDP().getPlayerVehicleID()
+        self._playerVehicleID = self.sessionProvider.getArenaDP().getPlayerVehicleID()
         self.sessionProvider.addArenaCtrl(self)
 
     def stop(self):
@@ -266,8 +316,8 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
             _, marker = self._markers.popitem()
             marker.destroy()
 
-        while self._stunTimers:
-            _, timer = self._stunTimers.popitem()
+        while self._markerTimers:
+            _, timer = self._markerTimers.popitem()
             timer.clear()
 
         super(VehicleMarkerPlugin, self).stop()
@@ -281,7 +331,7 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
         feedback = self.sessionProvider.shared.feedback
         for vInfo in arenaDP.getVehiclesInfoIterator():
             vehicleID = vInfo.vehicleID
-            if vehicleID == self.__playerVehicleID or vInfo.isObserver():
+            if vehicleID == self._playerVehicleID or vInfo.isObserver():
                 continue
             if vehicleID not in self._markers:
                 marker = self.__addMarkerToPool(vehicleID, vProxy=feedback.getVehicleProxy(vehicleID))
@@ -315,14 +365,14 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
     def invalidatePlayerStatus(self, flags, vInfo, arenaDP):
         self.__setEntityName(vInfo, arenaDP)
 
-    def showStunMarker(self, vehicleID, handle, stunState, leftStunTime, animated):
-        self._updateStatusMarkerState(vehicleID, leftStunTime > 0, handle, stunState, leftStunTime, animated, False)
+    def showMarkerTimer(self, vehicleID, handle, statusID, leftStunTime, animated):
+        self._updateStatusMarkerState(vehicleID, leftStunTime > 0, handle, statusID, leftStunTime, animated, False)
 
-    def updateStunMarker(self, handle, leftStunTime, animated):
-        self._updateStatusEffectTimer(handle, STUN_STATE, leftStunTime, animated)
+    def updateMarkerTimer(self, handle, leftTime, animated, statusID):
+        self._updateStatusEffectTimer(handle, statusID, leftTime, animated)
 
-    def hideStunMarker(self, vehicleID, handle, stunState, currentlyActiveStatusID, animated):
-        self._updateStatusMarkerState(vehicleID, False, handle, stunState, 0, animated, False)
+    def hideMarkerTimer(self, vehicleID, handle, statusID, currentlyActiveStatusID, animated):
+        self._updateStatusMarkerState(vehicleID, False, handle, statusID, 0, animated, False)
 
     def _setMarkerInitialState(self, marker, accountDBID=0):
         self.__setupDynamic(marker, accountDBID=accountDBID)
@@ -361,8 +411,8 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
         return marker
 
     def __hide(self, handle, vehicleID):
-        if handle in self._stunTimers:
-            timer = self._stunTimers.pop(handle)
+        if handle in self._markerTimers:
+            timer = self._markerTimers.pop(handle)
             timer.hide()
             timer.clear()
         if vehicleID in self._markersStates:
@@ -420,7 +470,7 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
     def __onVehicleMarkerRemoved(self, vehicleID):
         self._hideVehicleMarker(vehicleID)
 
-    def __onVehicleFeedbackReceived(self, eventID, vehicleID, value):
+    def _onVehicleFeedbackReceived(self, eventID, vehicleID, value):
         if vehicleID not in self._markers:
             return
         else:
@@ -447,6 +497,8 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
                 self.__updateStunMarker(vehicleID, handle, value.duration)
             elif eventID == _EVENT_ID.VEHICLE_INSPIRE:
                 self.__updateInspireMarker(vehicleID, handle, **value)
+            elif eventID == _EVENT_ID.VEHICLE_HEAL_POINT:
+                self.__updateHealingMarker(vehicleID, handle, value.get('duration', 0))
             elif eventID == _EVENT_ID.VEHICLE_PASSIVE_ENGINEERING:
                 self.__updatePassiveEngineeringMarker(vehicleID, handle, *value)
             return
@@ -458,8 +510,8 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
         if GAME.SHOW_DAMAGE_ICON in diff:
             self.__showDamageIcon = diff[GAME.SHOW_DAMAGE_ICON]
 
-    def _updateStatusEffectTimer(self, handle, statusID, leftStunTime, animated):
-        self._invokeMarker(handle, 'updateStatusEffectTimer', statusID, leftStunTime, animated)
+    def _updateStatusEffectTimer(self, handle, statusID, leftTime, animated):
+        self._invokeMarker(handle, 'updateStatusEffectTimer', statusID, leftTime, animated)
 
     def __updateMarkerState(self, handle, newState, isImmediate, text='', iconAnimation=''):
         self._invokeMarker(handle, 'updateState', newState, isImmediate, text, iconAnimation)
@@ -467,15 +519,8 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
     def __showActionMarker(self, handle, newState):
         self._invokeMarker(handle, 'showActionMarker', newState)
 
-    def __updateStunMarker(self, vehicleID, handle, stunDuration, animated=True):
-        if handle in self._stunTimers:
-            timer = self._stunTimers.pop(handle)
-            timer.hide()
-            timer.clear()
-        if stunDuration > 0:
-            timer = StunMarkerTimer(self, vehicleID, handle, stunDuration, stunState=STUN_STATE, animated=True)
-            self._stunTimers[handle] = timer
-            timer.show(True)
+    def __updateStunMarker(self, vehicleID, handle, duration):
+        self.__updateMarkerTimer(vehicleID, handle, duration, STUN_STATE)
 
     def __updatePassiveEngineeringMarker(self, vehicleID, handle, isAttacker, enabled, animated=True):
         self._updateStatusMarkerState(vehicleID, enabled, handle, ENGINEER_STATE, enabled, animated, isAttacker)
@@ -491,7 +536,7 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
         elif not isShown and statusID in activeStatuses:
             self._markersStates[vehicleID].remove(statusID)
         if self._markersStates[vehicleID]:
-            activeStatuses = sorted(activeStatuses, cmp=lambda x, y: _STATUS_EFFECTS_PRIORITY[y] - _STATUS_EFFECTS_PRIORITY[x])
+            activeStatuses = sorted(self._markersStates[vehicleID], cmp=lambda x, y: _STATUS_EFFECTS_PRIORITY[y] - _STATUS_EFFECTS_PRIORITY[x])
             self._markersStates[vehicleID] = activeStatuses
         currentlyActiveStatusID = self._markersStates[vehicleID][0] if self._markersStates[vehicleID] else -1
         if isShown:
@@ -508,6 +553,24 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
         else:
             self._updateStatusMarkerState(vehicleID, False, handle, statusID, duration, animated, isSourceVehicle)
         return
+
+    def __updateHealingMarker(self, vehicleID, handle, duration):
+        vehicle = BigWorld.entities.get(vehicleID)
+        if vehicle is None or not vehicle.isAlive():
+            return
+        else:
+            self.__updateMarkerTimer(vehicleID, handle, duration, HEALING_STATE)
+            return
+
+    def __updateMarkerTimer(self, vehicleID, handle, duration, statusID):
+        if handle in self._markerTimers:
+            timer = self._markerTimers.pop(handle)
+            timer.hide()
+            timer.clear()
+        if duration > 0:
+            timer = MarkerTimer(self, vehicleID, handle, duration, statusID=statusID)
+            self._markerTimers[handle] = timer
+            timer.show(True)
 
     def __updateVehicleHealth(self, handle, newHealth, aInfo, attackReasonID):
         if newHealth < 0 and not constants.SPECIAL_VEHICLE_HEALTH.IS_AMMO_BAY_DESTROYED(newHealth):
@@ -532,7 +595,7 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
         if not attackerInfo:
             return settings.DAMAGE_TYPE.FROM_UNKNOWN
         attackerID = attackerInfo.vehicleID
-        if attackerID == self.__playerVehicleID:
+        if attackerID == self._playerVehicleID:
             return settings.DAMAGE_TYPE.FROM_PLAYER
         entityName = self.sessionProvider.getCtx().getPlayerGuiProps(attackerID, attackerInfo.team)
         if entityName == PLAYER_GUI_PROPS.squadman:

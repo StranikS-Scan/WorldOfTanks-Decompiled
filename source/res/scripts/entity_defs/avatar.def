@@ -12,6 +12,8 @@
     <Interface>	RecoveryMechanic_Avatar	</Interface>
     <Interface>	DestructibleEntity_Avatar	</Interface>
     <Interface>	RespawnController_Avatar	</Interface>
+    <Interface>	AvatarLoot	</Interface>
+    <Interface>	AvatarSpawnKeyPoints	</Interface>
     <Interface>	AvatarEpic	</Interface>
   </Implements>
   <Volatile>
@@ -228,6 +230,7 @@
       <Arg>	INT32	</Arg>
       <Arg>	UINT16	</Arg>
       <Arg>	UINT8	</Arg>
+      <Arg>	UINT8	</Arg>
       <Arg>	INT16	</Arg>
       <Arg>	INT16	</Arg>
     </updateVehicleAmmo>
@@ -256,6 +259,12 @@
       <Arg>	UINT8	</Arg>
       <Arg>	INT32	</Arg>
     </updateVehicleSetting>
+    <vehicleUpgradeResponse>
+      <Arg>	INT32	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	STRING	</Arg>
+    </vehicleUpgradeResponse>
+    <upgradeVehicleGun></upgradeVehicleGun>
     <updateTargetingInfo>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
@@ -470,10 +479,10 @@
     <forbidUnbindingFromVehicle>
       <Arg>	INT8	</Arg>
     </forbidUnbindingFromVehicle>
-    <fullyDiscloseVehicles>
+    <fullyDiscloseEntities>
       <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
       </Arg>
-    </fullyDiscloseVehicles>
+    </fullyDiscloseEntities>
     <receiveVisibilityUpdate>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	BOOL	</Arg>
@@ -580,6 +589,13 @@
       <Arg>	UINT8	</Arg>
     </updateOwnVehicleAuxPhysicsDataAndGear>
     <sendAmmoStatusToClient></sendAmmoStatusToClient>
+    <chooseSpawnKeyPoint>
+      <Exposed>	OWN_CLIENT	</Exposed>
+      <Arg>	STRING	</Arg>
+    </chooseSpawnKeyPoint>
+    <placeVehicle>
+      <Exposed>	OWN_CLIENT	</Exposed>
+    </placeVehicle>
   </CellMethods>
   <BaseMethods>
     <kickSelf>

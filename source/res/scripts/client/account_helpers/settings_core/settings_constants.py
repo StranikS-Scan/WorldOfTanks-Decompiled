@@ -280,6 +280,7 @@ class GuiSettingsBehavior(CONST_CONTAINER):
     FREE_XP_INFO_DIALOG_SHOWED = 'isFreeXPInfoDialogShowed'
     RANKED_WELCOME_VIEW_SHOWED = 'isRankedWelcomeViewShowed'
     RANKED_WELCOME_VIEW_STARTED = 'isRankedWelcomeViewStarted'
+    BATTLE_ROYALE_WELCOME_VIEW_SHOWED = 'isBattleRoyaleWelcomeViewShowed'
     EPIC_RANDOM_CHECKBOX_CLICKED = 'isEpicRandomCheckboxClicked'
     EPIC_WELCOME_VIEW_SHOWED = 'isEpicWelcomeViewShowed'
     LAST_SHOWN_EPIC_WELCOME_SCREEN = 'lastShownEpicWelcomeScreen'

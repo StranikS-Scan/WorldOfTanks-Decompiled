@@ -65,7 +65,6 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
     settingsCore = dependency.descriptor(ISettingsCore)
     hangarSpace = dependency.descriptor(IHangarSpace)
     allCameraObjects = set()
-    P1_DELTA_Y = 10.0
     P1_DELTA_X_Z = 10.0
 
     def __init__(self):
@@ -155,7 +154,8 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
         self.stopCallback(self.__update)
         self.enable(True)
         if newSelectedObject and newSelectedObject == self.hangarSpace.space.getVehicleEntity():
-            newSelectedObject.cameraUpcomingDuration = self.cameraUpcomingDuration
+            newSelectedObject.cameraUpcomingDuration = self.cameraBackwardDuration
+            newSelectedObject.movementYDelta = self.movementYDelta
 
     def setState(self, state):
         self.__state = state
@@ -205,7 +205,7 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
         self.__curTime = 0.0
         self.__p2 = self.__goalTarget + self.cameraPivot
         self.__p1 = (self.__startPosition + self.__goalPosition) * 0.5
-        self.__p1.y += self.P1_DELTA_Y
+        self.__p1.y += self.movementYDelta
         self.__p1 += getXZDeltaDirection(self.__startPosition, self.__goalPosition, self.__p2) * self.P1_DELTA_X_Z
         self.__normalizeStartValues()
         self.__wasPreviousUpdateSkipped = True

@@ -10,6 +10,7 @@ from gui.shared.utils import makeSearchableString
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.game_control import IBattleRoyaleController
 
 def _filterDict(dictionary, keys):
     return {key:value for key, value in dictionary.iteritems() if key in keys}
@@ -115,12 +116,13 @@ class CriteriesGroup(object):
 
 class CarouselFilter(_CarouselFilter):
     settingsCore = dependency.descriptor(ISettingsCore)
+    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
 
     def __init__(self):
         super(CarouselFilter, self).__init__()
         self._serverSections = (CAROUSEL_FILTER_1, CAROUSEL_FILTER_2)
         self._clientSections = (CAROUSEL_FILTER_CLIENT_1,)
-        self._criteriesGroups = (EventCriteriesGroup(), BasicCriteriesGroup())
+        self._setCriteriaGroups()
 
     def save(self):
         self.settingsCore.serverSettings.setSections(self._serverSections, self._filters)
@@ -139,6 +141,9 @@ class CarouselFilter(_CarouselFilter):
             savedFilters[key] = type(value)(savedFilters[key])
 
         self.update(savedFilters, save=False)
+
+    def _setCriteriaGroups(self):
+        self._criteriesGroups = (EventCriteriesGroup(), BasicCriteriesGroup())
 
 
 class SessionCarouselFilter(_CarouselFilter):
@@ -247,3 +252,11 @@ class EventCriteriesGroup(CriteriesGroup):
     @staticmethod
     def isApplicableFor(vehicle):
         return vehicle.isEvent
+
+
+class BattleRoyaleCriteriesGroup(BasicCriteriesGroup):
+
+    def update(self, filters):
+        super(BattleRoyaleCriteriesGroup, self).update(filters)
+        if filters['battleRoyale']:
+            self._criteria |= REQ_CRITERIA.VEHICLE.BATTLE_ROYALE

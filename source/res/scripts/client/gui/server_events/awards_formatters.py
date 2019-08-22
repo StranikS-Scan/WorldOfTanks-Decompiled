@@ -198,6 +198,18 @@ def getRankedFormatterMap():
     return mapping
 
 
+def getRoyaleFormatterMap():
+    simpleBonusFormatter = SimpleBonusFormatter()
+    return {Currency.GOLD: simpleBonusFormatter,
+     Currency.CREDITS: simpleBonusFormatter,
+     Currency.CRYSTAL: simpleBonusFormatter,
+     PREMIUM_ENTITLEMENTS.BASIC: PremiumDaysBonusFormatter(),
+     PREMIUM_ENTITLEMENTS.PLUS: PremiumDaysBonusFormatter(),
+     'customizations': CustomizationsBonusFormatter(),
+     'dossier': DossierBonusFormatter(),
+     BonusName.FESTIVAL_ITEMS: FestivalItemsFormatter()}
+
+
 def getDefaultAwardFormatter():
     return AwardsPacker(getDefaultFormattersMap())
 
@@ -228,6 +240,10 @@ def getPostBattleAwardsPacker():
 
 def getRankedAwardsPacker():
     return AwardsPacker(getRankedFormatterMap())
+
+
+def getRoyaleAwardsPacker():
+    return AwardsPacker(getRoyaleFormatterMap())
 
 
 def getPersonalMissionAwardPacker():
@@ -1267,14 +1283,15 @@ class FestivalItemsFormatter(SimpleBonusFormatter):
 
     def _format(self, bonus):
         result = []
-        for itemID, count in bonus.getValue().iteritems():
-            result.append(self.__itemFormat(bonus, itemID, count))
+        bonusValue = bonus.getValue()
+        items = sorted((FestivalItemInfo(itemID) for itemID in bonusValue))
+        for festItem in items:
+            result.append(self.__itemFormat(bonus, festItem, bonusValue[festItem.getID()]))
 
         return result
 
-    def __itemFormat(self, bonus, itemID, count):
-        festItem = FestivalItemInfo(itemID)
-        return PreformattedBonus(isSpecial=True, bonusName=bonus.getName(), images=self._getImages(festItem), label='', userName=self._getUserName(festItem), specialArgs=[itemID, count, False], specialAlias=TOOLTIPS_CONSTANTS.FESTIVAL_ITEM)
+    def __itemFormat(self, bonus, festItem, count):
+        return PreformattedBonus(isSpecial=True, bonusName=bonus.getName(), images=self._getImages(festItem), label='', userName=self._getUserName(festItem), specialArgs=[festItem.getID(), count, False], specialAlias=TOOLTIPS_CONSTANTS.FESTIVAL_ITEM)
 
     @classmethod
     def _getImages(cls, festItem):

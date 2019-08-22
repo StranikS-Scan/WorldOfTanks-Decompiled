@@ -85,7 +85,7 @@ class _VehiclesSelector(object):
 
     def highlightVehicles(self):
         self.__clearEdgedVehicles()
-        vehicles = [ v for v in BigWorld.player().vehicles if v.isAlive() ]
+        vehicles = [ v for v in BigWorld.player().vehicles if v.isStarted and v.isAlive() ]
         selected = self.__intersectChecker(vehicles)
         for v in selected:
             v.drawEdge(True)
@@ -346,8 +346,10 @@ _STRIKE_SELECTORS = {artefacts.RageArtillery: _ArtilleryStrikeSelector,
  artefacts.RageBomber: _BomberStrikeSelector,
  artefacts.EpicArtillery: _ArtilleryStrikeSelector,
  artefacts.EpicBomber: _BomberStrikeSelector,
+ artefacts.BRBomber: _BomberStrikeSelector,
  artefacts.EpicRecon: _ReconStrikeSelector,
- artefacts.EpicSmoke: _SmokeStrikeSelector}
+ artefacts.EpicSmoke: _SmokeStrikeSelector,
+ artefacts.BRSmoke: _SmokeStrikeSelector}
 
 class MapCaseControlMode(IControlMode, CallbackDelayer):
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)

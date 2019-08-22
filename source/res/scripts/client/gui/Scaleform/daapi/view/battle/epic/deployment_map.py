@@ -77,8 +77,7 @@ class EpicDeploymentMapComponent(EpicDeploymentMapMeta):
         return self._size
 
     def _processMinimapSize(self, minSize, maxSize):
-        mapWidthPx = int(abs(maxSize[0] - minSize[0]) * 0.001 * minimap_utils.EPIC_1KM_IN_PX)
-        mapHeightPx = int(abs(maxSize[1] - minSize[1]) * 0.001 * minimap_utils.EPIC_1KM_IN_PX)
+        mapWidthPx, mapHeightPx = minimap_utils.metersToMinimapPixels(minSize, maxSize)
         self.as_setMapDimensionsS(mapWidthPx, mapHeightPx)
         self._size = (mapWidthPx, mapHeightPx)
         self._bounds = (minSize, maxSize)

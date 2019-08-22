@@ -1,0 +1,16 @@
+<BattleXP.def>
+  <Properties>
+    <battleXP>
+      <Type>	INT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </battleXP>
+    <battleXpLvlData>
+      <Type>	TUPLE	  <of>	UINT16	</of>
+        <size>	3	</size>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </battleXpLvlData>
+  </Properties>
+</BattleXP.def>

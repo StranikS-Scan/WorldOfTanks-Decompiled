@@ -2,56 +2,45 @@
 # Embedded file name: scripts/client_common/arena_component_system/arena_equipment_component.py
 from collections import namedtuple
 from functools import partial
+import logging
 import BigWorld
-import ResMgr
 import Event
-from vehicle_systems.components.terrain_circle_component import readTerrainCircleSettings
 from client_arena_component_system import ClientArenaComponent
 from constants import ARENA_SYNC_OBJECTS
-from debug_utils import LOG_ERROR_DEV, LOG_ERROR
-from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
+from debug_utils import LOG_ERROR_DEV
+from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, FEEDBACK_EVENT_ID
 from gui.battle_control.matrix_factory import makeVehicleEntityMP
 from helpers import dependency
 from shared_utils import CONST_CONTAINER
+from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
 from skeletons.gui.battle_session import IBattleSessionProvider
 from smoke_screen import SmokeScreen
+_logger = logging.getLogger(__name__)
 
-def readInspireVisualSettings():
-    xmlTag = 'InspireAreaVisual'
-    filePath = 'scripts/dynamic_objects.xml'
-    xmlSection = ResMgr.openSection(filePath)
-    if xmlSection is None:
-        LOG_ERROR("initSettings: Could not open section '{}' in file {}".format(xmlTag, filePath))
-        return
-    else:
-        xmlCtx = (None, filePath)
-        return readTerrainCircleSettings(xmlSection, xmlCtx, xmlTag)
+class EffectData(object):
 
-
-g_inspireVisualSettings = readInspireVisualSettings()
-
-class InspireData(object):
-
-    class INSPIRE_PERIOD(CONST_CONTAINER):
-        INSPIRED = 0
+    class EFFECT_PERIOD(CONST_CONTAINER):
+        EXPOSED = 0
         INACTIVATION = 1
         OVER = 2
 
     TimerTuple = namedtuple('TimerTuple', ('period', 'callbackID'))
 
-    def __init__(self, vehicleID, startTime, endTime, inactivationStartTime=None, inactivationEndTime=None):
+    def __init__(self, vehicleID, startTime, endTime, visualSettings, inactivationStartTime=None, inactivationEndTime=None, radius=None):
         self.vehicleID = vehicleID
         self.startTime = startTime
         self.endTime = endTime
+        self.visualSettings = visualSettings
         self.inactivationStartTime = inactivationStartTime
         self.inactivationEndTime = inactivationEndTime
+        self.radius = radius
         self.__timerTuple = None
         return
 
-    def updateTerrainCircle(self, radius):
+    def updateTerrainCircle(self):
         vehicle = BigWorld.entities.get(self.vehicleID)
-        if vehicle is not None:
-            vehicle.appearance.showTerrainCircle(radius, g_inspireVisualSettings)
+        if vehicle is not None and self.radius is not None:
+            vehicle.appearance.showTerrainCircle(self.radius, self.visualSettings)
         return
 
     @property
@@ -78,7 +67,7 @@ class InspireData(object):
 
     def destroy(self):
         vehicle = BigWorld.entities.get(self.vehicleID)
-        if vehicle is not None:
+        if vehicle is not None and self.radius is not None:
             vehicle.appearance.hideTerrainCircle()
         if self.__timerTuple is not None and self.__timerTuple.callbackID is not None:
             BigWorld.cancelCallback(self.__timerTuple.callbackID)
@@ -86,12 +75,12 @@ class InspireData(object):
         return
 
     def getNextPeriodAndStartTime(self, currentTime, currentPeriod=None):
-        periods = ((self.INSPIRE_PERIOD.INSPIRED, self.startTime), (self.INSPIRE_PERIOD.INACTIVATION, self.inactivationStartTime), (self.INSPIRE_PERIOD.OVER, self.inactivationEndTime))
+        periods = ((self.EFFECT_PERIOD.EXPOSED, self.startTime), (self.EFFECT_PERIOD.INACTIVATION, self.inactivationStartTime), (self.EFFECT_PERIOD.OVER, self.inactivationEndTime))
         if currentPeriod is not None:
-            nextPeriod = min(currentPeriod + 1, self.INSPIRE_PERIOD.OVER)
+            nextPeriod = min(currentPeriod + 1, self.EFFECT_PERIOD.OVER)
             return periods[nextPeriod]
         else:
-            return next((period for period in periods if period[1] > currentTime), periods[self.INSPIRE_PERIOD.OVER])
+            return next((period for period in periods if period[1] > currentTime), periods[self.EFFECT_PERIOD.OVER])
 
     def __invokeCallback(self, func, period):
         self.__timerTuple = self.__timerTuple._replace(callbackID=None)
@@ -100,171 +89,217 @@ class InspireData(object):
 
 
 InspireArgs = namedtuple('InspireArgs', ('isSourceVehicle', 'isInactivation', 'endTime', 'duration'))
+HealPointArgs = namedtuple('HealPointArgs', ('isSourceVehicle', 'isInactivation', 'endTime', 'duration'))
+
+class Effect(object):
+
+    def __init__(self, name, args, vehicleViewState, feedbackEventID, visualSettings, exposedVehicles=None, providingVehicles=None):
+        self.name = name
+        self.args = args
+        self.vehicleViewState = vehicleViewState
+        self.feedbackEventID = feedbackEventID
+        self.visualSettings = visualSettings
+        self.exposedVehicles = exposedVehicles if exposedVehicles is not None else dict()
+        self.providingVehicles = providingVehicles if providingVehicles is not None else dict()
+        return
+
+    def destroy(self):
+        for exposedVehicle in (data for data in self.exposedVehicles.itervalues() if data is not None):
+            exposedVehicle.destroy()
+
+        self.exposedVehicles.clear()
+        for providingVehicle in (data for data in self.providingVehicles.itervalues() if data is not None):
+            providingVehicle.destroy()
+
+        self.providingVehicles.clear()
+
 
 class ArenaEquipmentComponent(ClientArenaComponent):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    __dynamicObjectsCache = dependency.descriptor(IBattleDynamicObjectsCache)
 
     def __init__(self, componentSystem):
         ClientArenaComponent.__init__(self, componentSystem)
         self.onSmokeScreenStarted = Event.Event(self._eventManager)
         self.onSmokeScreenEnded = Event.Event(self._eventManager)
         self.__smokeScreen = dict()
-        self.__inspiredData = dict()
-        self.__inspiringData = dict()
+        self.__healingEffect = None
+        self.__inspiringEffect = None
+        return
 
     def activate(self):
         super(ArenaEquipmentComponent, self).activate()
         self.addSyncDataCallback(ARENA_SYNC_OBJECTS.SMOKE, '', self.__onSmokeScreenUpdated)
+        dynamicObjects = self.__dynamicObjectsCache.getConfig(BigWorld.player().arenaGuiType)
+        if dynamicObjects is not None:
+            self.__inspiringEffect = Effect('inspire', InspireArgs, VEHICLE_VIEW_STATE.INSPIRE, FEEDBACK_EVENT_ID.VEHICLE_INSPIRE, dynamicObjects.getInspiringEffect())
+            self.__healingEffect = Effect('healPoint', HealPointArgs, VEHICLE_VIEW_STATE.HEALING, FEEDBACK_EVENT_ID.VEHICLE_HEAL_POINT, dynamicObjects.getHealPointEffect())
+        else:
+            _logger.error("Couldn't load effect data! Effect can not be shown!")
+        return
 
     def deactivate(self):
         super(ArenaEquipmentComponent, self).deactivate()
         self.removeSyncDataCallback(ARENA_SYNC_OBJECTS.SMOKE, '', self.__onSmokeScreenUpdated)
         self.__smokeScreen.clear()
-        SmokeScreen.enableSmokePostEffect(False)
 
     def destroy(self):
         super(ArenaEquipmentComponent, self).destroy()
-        for inspireData in (data for data in self.__inspiredData.itervalues() if data is not None):
-            inspireData.destroy()
+        if self.__inspiringEffect is not None:
+            self.__inspiringEffect.destroy()
+        if self.__healingEffect is not None:
+            self.__healingEffect.destroy()
+        return
 
-        self.__inspiredData.clear()
-        for inspiringData in (data for data in self.__inspiringData.itervalues() if data is not None):
-            inspiringData.destroy()
-
-        self.__inspiringData.clear()
-
-    def removeInspire(self, vehicleId):
+    def __removeEffect(self, vehicleId, effect):
         needsRemove = False
-        data = self.__inspiringData.pop(vehicleId, None)
+        data = effect.providingVehicles.pop(vehicleId, None)
         if data:
             needsRemove |= data.isActive
             data.destroy()
-        data = self.__inspiredData.pop(vehicleId, None)
+        data = effect.exposedVehicles.pop(vehicleId, None)
         if data:
             needsRemove |= data.isActive
             data.destroy()
         if needsRemove:
-            noneArgs = InspireArgs(None, None, None, None)
+            noneArgs = effect.args(None, None, None, None)
             attachedVehicle = BigWorld.player().getVehicleAttached()
             isAttachedVehicle = attachedVehicle and vehicleId == attachedVehicle.id
             if isAttachedVehicle:
-                self.sessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.INSPIRE, noneArgs._asdict())
+                self.sessionProvider.invalidateVehicleState(effect.vehicleViewState, noneArgs._asdict())
             else:
                 ctrl = self.sessionProvider.shared.feedback
                 if ctrl is not None:
-                    ctrl.invalidateInspire(vehicleId, noneArgs._asdict())
+                    ctrl.invalidateBuffEffect(effect.feedbackEventID, vehicleId, noneArgs._asdict())
         return
+
+    def __updateExposedToEffect(self, vehicleID, startTime, endTime, inactivationStartTime, inactivationEndTime, effect):
+        exposedVehicleData = effect.exposedVehicles.get(vehicleID, None)
+        if startTime is None:
+            if exposedVehicleData is not None:
+                exposedVehicleData.startTime = exposedVehicleData.endTime = exposedVehicleData.inactivationStartTime = exposedVehicleData.inactivationEndTime = 0
+                providingVehicleData = effect.providingVehicles.get(vehicleID, None)
+                if providingVehicleData is not None:
+                    exposedVehicleData.destroy()
+                    del effect.exposedVehicles[vehicleID]
+                else:
+                    self.__restartEffectData(exposedVehicleData, effect, isSource=False, atPeriod=EffectData.EFFECT_PERIOD.OVER)
+            return
+        else:
+            if exposedVehicleData is None:
+                effect.exposedVehicles[vehicleID] = exposedVehicleData = EffectData(vehicleID, startTime, endTime, effect.visualSettings, inactivationStartTime, inactivationEndTime)
+            else:
+                exposedVehicleData.startTime = startTime
+                exposedVehicleData.endTime = endTime
+                exposedVehicleData.inactivationStartTime = inactivationStartTime
+                exposedVehicleData.inactivationEndTime = inactivationEndTime
+            self.__restartEffectData(exposedVehicleData, effect, isSource=False)
+            return
+
+    def _updateEffectSource(self, vehicleID, startTime, endTime, inactivationDelay, effectSourceRadius, effect):
+        providingVehicleData = effect.providingVehicles.get(vehicleID, None)
+        if startTime is None:
+            if providingVehicleData is not None:
+                providingVehicleData.startTime = providingVehicleData.endTime = providingVehicleData.inactivationStartTime = providingVehicleData.inactivationEndTime = 0
+                self.__restartEffectData(providingVehicleData, effect, isSource=True, atPeriod=EffectData.EFFECT_PERIOD.OVER)
+            return
+        else:
+            exposedVehicleData = effect.exposedVehicles.get(vehicleID, None)
+            if exposedVehicleData is not None:
+                exposedVehicleData.cancelCallback()
+            if providingVehicleData is None:
+                effect.providingVehicles[vehicleID] = providingVehicleData = EffectData(vehicleID=vehicleID, startTime=startTime, endTime=endTime, visualSettings=effect.visualSettings, inactivationStartTime=endTime, inactivationEndTime=endTime + inactivationDelay if endTime is not None else None, radius=effectSourceRadius)
+            else:
+                providingVehicleData.startTime = startTime
+                providingVehicleData.endTime = endTime
+                providingVehicleData.inactivationStartTime = endTime
+                providingVehicleData.inactivationEndTime = endTime + inactivationDelay if endTime is not None else None
+                providingVehicleData.radius = effectSourceRadius
+            self.__restartEffectData(providingVehicleData, effect, isSource=True)
+            return
+
+    def removeInspire(self, vehicleID):
+        self.__removeEffect(vehicleID, self.__inspiringEffect)
+
+    def removeHealPoint(self, vehicleID):
+        self.__removeEffect(vehicleID, self.__healingEffect)
 
     def updateInspired(self, vehicleID, startTime, endTime, inactivationStartTime, inactivationEndTime):
-        inspiredData = self.__inspiredData.get(vehicleID, None)
-        if startTime is None:
-            if inspiredData is not None:
-                inspiredData.startTime = inspiredData.endTime = inspiredData.inactivationStartTime = inspiredData.inactivationEndTime = 0
-                inspiringData = self.__inspiringData.get(vehicleID, None)
-                if inspiringData is not None:
-                    inspiredData.destroy()
-                    del self.__inspiredData[vehicleID]
-                else:
-                    self.__restartInspireData(inspiredData, isSource=False, atPeriod=InspireData.INSPIRE_PERIOD.OVER)
-            return
-        else:
-            if inspiredData is None:
-                self.__inspiredData[vehicleID] = inspiredData = InspireData(vehicleID, startTime, endTime, inactivationStartTime, inactivationEndTime)
-            else:
-                inspiredData.startTime = startTime
-                inspiredData.endTime = endTime
-                inspiredData.inactivationStartTime = inactivationStartTime
-                inspiredData.inactivationEndTime = inactivationEndTime
-            self.__restartInspireData(inspiredData, isSource=False)
-            return
+        self.__updateExposedToEffect(vehicleID, startTime, endTime, inactivationStartTime, inactivationEndTime, self.__inspiringEffect)
+
+    def updateHealing(self, vehicleID, startTime, endTime, inactivationStartTime, inactivationEndTime):
+        self.__updateExposedToEffect(vehicleID, startTime, endTime, inactivationStartTime, inactivationEndTime, self.__healingEffect)
 
     def updateInspiringSource(self, vehicleID, startTime, endTime, inactivationDelay, inspireSourceRadius):
-        inspiringData = self.__inspiringData.get(vehicleID, None)
-        if startTime is None:
-            if inspiringData is not None:
-                inspiringData.startTime = inspiringData.endTime = inspiringData.inactivationStartTime = inspiringData.inactivationEndTime = 0
-                self.__restartInspireData(inspiringData, isSource=True, atPeriod=InspireData.INSPIRE_PERIOD.OVER)
-            return
-        else:
-            inspiredData = self.__inspiredData.get(vehicleID, None)
-            if inspiredData is not None:
-                inspiredData.cancelCallback()
-            if inspiringData is None:
-                self.__inspiringData[vehicleID] = inspiringData = InspireData(vehicleID=vehicleID, startTime=startTime, endTime=endTime, inactivationStartTime=endTime, inactivationEndTime=endTime + inactivationDelay if endTime is not None else None)
-            else:
-                inspiringData.startTime = startTime
-                inspiringData.endTime = endTime
-                inspiringData.inactivationStartTime = endTime
-                inspiringData.inactivationEndTime = endTime + inactivationDelay if endTime is not None else None
-            self.__restartInspireData(inspiringData, isSource=True, inspireSourceRadius=inspireSourceRadius)
-            return
+        self._updateEffectSource(vehicleID, startTime, endTime, inactivationDelay, inspireSourceRadius, self.__inspiringEffect)
 
-    def __evaluateInspiredData(self, data, period):
+    def updateHealingSource(self, vehicleID, startTime, endTime, inactivationDelay, healingSourceRadius):
+        self._updateEffectSource(vehicleID, startTime, endTime, inactivationDelay, healingSourceRadius, self.__healingEffect)
+
+    def __evaluateExposedData(self, data, period, effect):
         attachedVehicle = BigWorld.player().getVehicleAttached()
         vehicleID = data.vehicleID
         isAttachedVehicle = attachedVehicle and vehicleID == attachedVehicle.id
-        isSourceVehicle = self.__inspiringData.get(vehicleID, None) is not None
-        args = None
-        if period == InspireData.INSPIRE_PERIOD.INSPIRED:
-            if not isSourceVehicle:
-                args = InspireArgs(False, False, data.endTime, data.endTime - data.startTime)
-                data.setNextCallback(self.__evaluateInspiredData)
-        elif period == InspireData.INSPIRE_PERIOD.INACTIVATION:
-            args = InspireArgs(False, True, data.inactivationEndTime, data.inactivationEndTime - data.inactivationStartTime)
-            data.setNextCallback(self.__evaluateInspiredData)
+        isSourceVehicle = effect.providingVehicles.get(vehicleID, None) is not None
+        if period == EffectData.EFFECT_PERIOD.EXPOSED:
+            args = effect.args(isSourceVehicle, False, data.endTime, data.endTime - BigWorld.serverTime())
+            data.setNextCallback(partial(self.__evaluateExposedData, effect=effect))
+        elif period == EffectData.EFFECT_PERIOD.INACTIVATION:
+            args = effect.args(False, True, data.inactivationEndTime, data.inactivationEndTime - data.inactivationStartTime)
+            data.setNextCallback(partial(self.__evaluateExposedData, effect=effect))
         else:
-            args = InspireArgs(None, None, None, None)
+            args = effect.args(None, None, None, None)
             data.destroy()
-            del self.__inspiredData[data.vehicleID]
+            del effect.exposedVehicles[data.vehicleID]
         if args:
             if isAttachedVehicle:
-                self.sessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.INSPIRE, args._asdict())
+                self.sessionProvider.invalidateVehicleState(effect.vehicleViewState, args._asdict())
             else:
                 ctrl = self.sessionProvider.shared.feedback
                 if ctrl is not None:
-                    ctrl.invalidateInspire(vehicleID, args._asdict())
+                    ctrl.invalidateBuffEffect(effect.feedbackEventID, vehicleID, args._asdict())
         return
 
-    def __evaluateInspiringSourceData(self, inspireSourceRadius, data, period):
+    def __evaluateEffectSourceData(self, data, period, effect):
         attachedVehicle = BigWorld.player().getVehicleAttached()
         vehicleID = data.vehicleID
         isAttachedVehicle = attachedVehicle and vehicleID == attachedVehicle.id
-        if period == InspireData.INSPIRE_PERIOD.INSPIRED:
-            args = InspireArgs(True, False, data.endTime, data.endTime - data.startTime)
+        if period == EffectData.EFFECT_PERIOD.EXPOSED:
+            args = effect.args(True, False, data.endTime, data.endTime - data.startTime)
             if isAttachedVehicle:
-                self.sessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.INSPIRE, args._asdict())
+                self.sessionProvider.invalidateVehicleState(effect.vehicleViewState, args._asdict())
             else:
                 ctrl = self.sessionProvider.shared.feedback
                 if ctrl is not None:
-                    ctrl.invalidateInspire(vehicleID, args._asdict())
+                    ctrl.invalidateBuffEffect(effect.feedbackEventID, vehicleID, args._asdict())
             arenaDP = self.sessionProvider.getArenaDP()
             if arenaDP and arenaDP.isAllyTeam(arenaDP.getVehicleInfo(vehicleID).team):
-                data.updateTerrainCircle(inspireSourceRadius)
-            data.setNextCallback(partial(self.__evaluateInspiringSourceData, inspireSourceRadius))
+                data.updateTerrainCircle()
+            data.setNextCallback(partial(self.__evaluateEffectSourceData, effect=effect))
         else:
             data.destroy()
-            del self.__inspiringData[vehicleID]
-            inspiredData = self.__inspiredData.get(vehicleID, None)
-            if inspiredData is not None:
-                self.__restartInspireData(inspiredData, isSource=False)
+            del effect.providingVehicles[vehicleID]
+            exposedVehicleData = effect.exposedVehicles.get(vehicleID, None)
+            if exposedVehicleData is not None:
+                self.__restartEffectData(exposedVehicleData, effect, isSource=False)
             else:
-                noneArgs = InspireArgs(None, None, None, None)
+                noneArgs = effect.args(None, None, None, None)
                 if isAttachedVehicle:
-                    self.sessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.INSPIRE, noneArgs._asdict())
+                    self.sessionProvider.invalidateVehicleState(effect.vehicleViewState, noneArgs._asdict())
                 else:
                     ctrl = self.sessionProvider.shared.feedback
                     if ctrl is not None:
-                        ctrl.invalidateInspire(vehicleID, noneArgs._asdict())
+                        ctrl.invalidateBuffEffect(effect.feedbackEventID, vehicleID, noneArgs._asdict())
         return
 
-    def __restartInspireData(self, inspireData, isSource=False, inspireSourceRadius=0, atPeriod=None):
-        if inspireData is not None:
-            inspireData.cancelCallback()
-            currentPeriod = atPeriod if atPeriod is not None else max(inspireData.getNextPeriodAndStartTime(BigWorld.serverTime())[0] - 1, InspireData.INSPIRE_PERIOD.INSPIRED)
+    def __restartEffectData(self, effectData, effect, isSource=False, atPeriod=None):
+        if effectData is not None:
+            effectData.cancelCallback()
+            currentPeriod = atPeriod if atPeriod is not None else max(effectData.getNextPeriodAndStartTime(BigWorld.serverTime())[0] - 1, EffectData.EFFECT_PERIOD.EXPOSED)
             if isSource:
-                self.__evaluateInspiringSourceData(inspireSourceRadius, inspireData, currentPeriod)
+                self.__evaluateEffectSourceData(effectData, currentPeriod, effect)
             else:
-                self.__evaluateInspiredData(inspireData, currentPeriod)
+                self.__evaluateExposedData(effectData, currentPeriod, effect)
         return
 
     def __getMotor(self, vehicleId):

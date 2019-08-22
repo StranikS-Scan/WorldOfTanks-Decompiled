@@ -923,7 +923,8 @@ class EquipmentParams(_ParameterBase):
         return params
 
 
-class _ParamsDictProxy(dict):
+class _ParamsDictProxy(object):
+    __slots__ = ('__paramsCalculator', '__cachedParams', '__allAreLoaded', '__conditions', '__filteredByConditions', '__popped')
 
     def __init__(self, calculator, preload=False, conditions=None):
         super(_ParamsDictProxy, self).__init__()
@@ -953,7 +954,10 @@ class _ParamsDictProxy(dict):
         return value
 
     def get(self, k, default=None):
-        return self[k] if k in self else default
+        try:
+            return self[k]
+        except KeyError:
+            return default
 
     def keys(self):
         return list(self.__iter__())
@@ -980,7 +984,7 @@ class _ParamsDictProxy(dict):
                 self.__cachedParams[item] = value
             else:
                 raise KeyError
-        return self.__cachedParams.get(item)
+        return self.__cachedParams[item]
 
     def __iter__(self):
         self.__loadAllValues()

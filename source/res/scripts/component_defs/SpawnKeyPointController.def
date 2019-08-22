@@ -1,0 +1,16 @@
+<SpawnKeyPointController.def>
+  <CellMethods>
+    <setSpawnKeyPoints>
+      <Arg>	PYTHON	</Arg>
+    </setSpawnKeyPoints>
+    <beginChoosingPoints></beginChoosingPoints>
+    <sendPointsToPlayer>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+    </sendPointsToPlayer>
+  </CellMethods>
+  <BaseMethods></BaseMethods>
+  <ofEntity>
+    <Arena></Arena>
+  </ofEntity>
+</SpawnKeyPointController.def>

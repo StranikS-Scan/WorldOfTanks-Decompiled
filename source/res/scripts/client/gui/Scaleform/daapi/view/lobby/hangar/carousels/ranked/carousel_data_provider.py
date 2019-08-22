@@ -16,6 +16,7 @@ class RankedCarouselDataProvider(HangarCarouselDataProvider):
         return (vehicle.getCustomState() == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE,
          not vehicle.isInInventory,
          not vehicle.isEvent,
+         not vehicle.isOnlyForBattleRoyaleBattles,
          not vehicle.isFavorite,
          not cls.rankedController.hasVehicleRankedBonus(vehicle.intCD),
          GUI_NATIONS_ORDER_INDEX[vehicle.nationName],

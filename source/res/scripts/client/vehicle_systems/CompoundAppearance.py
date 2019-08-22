@@ -285,6 +285,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         if self.__terrainCircle is not None:
             self.__terrainCircle.destroy()
             self.__terrainCircle = None
+        self.onModelChanged.clear()
         self.onModelChanged = None
         CallbackDelayer.destroy(self)
         return

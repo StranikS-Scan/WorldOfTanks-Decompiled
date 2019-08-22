@@ -1,0 +1,14 @@
+<InBattleUpgrades.def>
+  <Properties>
+    <upgradeReadinessTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </upgradeReadinessTime>
+    <readinessChangeReason>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </readinessChangeReason>
+  </Properties>
+</InBattleUpgrades.def>

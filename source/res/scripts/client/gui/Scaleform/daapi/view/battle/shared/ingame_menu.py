@@ -28,6 +28,7 @@ from skeletons.gui.game_control import IServerStatsController, IBootcampControll
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.BOOTCAMP import BOOTCAMP
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from constants import ARENA_GUI_TYPE
 
 class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
     serverStats = dependency.descriptor(IServerStatsController)
@@ -147,6 +148,8 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
             igrType = constants.IGR_TYPE.NONE
         if constants.IS_KOREA and GUI_SETTINGS.igrEnabled and igrType != constants.IGR_TYPE.NONE:
             i18nKey = 'quitBattleIGR'
+        elif self.sessionProvider.arenaVisitor.getArenaGuiType() == ARENA_GUI_TYPE.BATTLE_ROYALE:
+            i18nKey = 'quitBattleBR'
         else:
             i18nKey = 'quitBattle'
         if exitResult.isDeserter:

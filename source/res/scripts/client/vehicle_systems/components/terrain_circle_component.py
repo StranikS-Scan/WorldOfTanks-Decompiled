@@ -32,9 +32,12 @@ class TerrainCircleComponent(CallbackDelayer):
     def configure(self, radius, terrainCircleSettings):
         if self.__areaVisual is None:
             self.__create()
+        terrainColor = terrainCircleSettings.color
+        if terrainColor == 0:
+            g_logger.warning('The color of Terrain Circle is 0! Terrain circle will be invisible!')
         self.__maxUpdateInterval = terrainCircleSettings.maxUpdateInterval
         visual = self.__areaVisual
-        visual.setup(terrainCircleSettings.modelPath, Vector2(radius + radius, radius + radius), terrainCircleSettings.overTerrainHeight, terrainCircleSettings.color)
+        visual.setup(terrainCircleSettings.modelPath, Vector2(radius + radius, radius + radius), terrainCircleSettings.overTerrainHeight, terrainColor)
         visual.enableAccurateCollision(terrainCircleSettings.enableAccurateCollision)
         if self.__isVisible:
             self.__update()

@@ -25,6 +25,7 @@ class INVITES(object):
     INVITES_TEXT_CREATORNAME = '#invites:invites/text/creatorName'
     INVITES_TEXT_SQUAD = '#invites:invites/text/SQUAD'
     INVITES_TEXT_EVENT = '#invites:invites/text/EVENT'
+    INVITES_TEXT_BATTLE_ROYALE = '#invites:invites/text/BATTLE_ROYALE'
     INVITES_TEXT_FALLOUT = '#invites:invites/text/FALLOUT'
     INVITES_TEXT_FALLOUT_FALLOUT_CLASSIC = '#invites:invites/text/FALLOUT/FALLOUT_CLASSIC'
     INVITES_TEXT_FALLOUT_FALLOUT_MULTITEAM = '#invites:invites/text/FALLOUT/FALLOUT_MULTITEAM'

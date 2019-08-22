@@ -519,7 +519,7 @@ class GuiAmbientsCtrl(object):
         SOUND_DEBUG('Ambient has been changed', ambient)
         self._restartSounds()
 
-    @staticmethod
-    def __onSpaceChanged():
+    def __onSpaceChanged(self):
         _MC.g_musicController.stopAmbient(True)
         _MC.g_musicController.stopMusic()
+        self._restartSounds()

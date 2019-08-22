@@ -45,3 +45,7 @@ class WaitingView(WaitingViewMeta, IWaitingWidget):
             LOG_CURRENT_EXCEPTION()
 
         return
+
+    def setBackgroundImage(self, image):
+        if image:
+            self.as_showBackgroundImgS(image)

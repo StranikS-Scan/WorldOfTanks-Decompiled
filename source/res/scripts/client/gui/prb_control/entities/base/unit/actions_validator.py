@@ -37,8 +37,9 @@ class UnitVehiclesValidator(BaseActionsValidator):
             for vInfo in vInfos:
                 vehicle = vInfo.getVehicle()
                 if vehicle is not None:
-                    if not self._isValidMode(vehicle):
-                        return ValidationResult(False, UNIT_RESTRICTION.VEHICLE_WRONG_MODE)
+                    vehicleIsNotSuitableForMode = self._isVehicleSuitableForMode(vehicle)
+                    if vehicleIsNotSuitableForMode is not None:
+                        return vehicleIsNotSuitableForMode
                     if not vehicle.isReadyToPrebattle(checkForRent=self._isCheckForRent()):
                         if vehicle.isBroken:
                             return ValidationResult(False, UNIT_RESTRICTION.VEHICLE_BROKEN)
@@ -56,7 +57,10 @@ class UnitVehiclesValidator(BaseActionsValidator):
             return super(UnitVehiclesValidator, self)._validate()
 
     def _isValidMode(self, vehicle):
-        return not vehicle.isEvent and not vehicle.isOnlyForEpicBattles
+        return not vehicle.isEvent and not vehicle.isOnlyForEpicBattles and not vehicle.isOnlyForBattleRoyaleBattles
+
+    def _isVehicleSuitableForMode(self, vehicle):
+        return ValidationResult(False, UNIT_RESTRICTION.VEHICLE_WRONG_MODE) if not self._isValidMode(vehicle) else None
 
     def _isCheckForRent(self):
         return True

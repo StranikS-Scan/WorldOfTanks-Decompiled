@@ -196,7 +196,9 @@ _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'RP2018thirdmed',
  'RP2018sergeant',
  'rankedDivisionFighter',
- 'rankedStayingPower']
+ 'rankedStayingPower',
+ 'BR2019Top1Solo',
+ 'BR2019Top1Squad']
 _achievements15x15PopUps = ['warrior',
  'invader',
  'sniper',
@@ -319,7 +321,9 @@ _achievements15x15PopUps = ['warrior',
  'RP2018firstmed',
  'RP2018secondmed',
  'RP2018thirdmed',
- 'RP2018sergeant']
+ 'RP2018sergeant',
+ 'BR2019Top1Solo',
+ 'BR2019Top1Squad']
 _achievements15x15BlockBuilder = StaticSizeBlockBuilder('achievements', _ACHIEVEMENTS15X15_BLOCK_LAYOUT, ACHIEVEMENT15X15_DEPENDENCIES, _achievements15x15PopUps)
 ACHIEVEMENTS7X7_BLOCK_LAYOUT = ['wolfAmongSheep',
  'wolfAmongSheepMedal',
@@ -471,7 +475,11 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'se12019Medal',
  'Fest19Collection1',
  'Fest19Collection2',
- 'Fest19Collection3']
+ 'Fest19Collection3',
+ 'twitchPrime4',
+ 'BR2019Title25',
+ 'BR2019Title15',
+ 'BR2019Title5']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -546,6 +554,7 @@ _singleAchievementsPopUps = ['titleSniper',
  'twitchPrime2',
  'twitchPrime3',
  'se12019Medal',
+ 'twitchPrime4',
  'Fest19Collection1',
  'Fest19Collection2',
  'Fest19Collection3']

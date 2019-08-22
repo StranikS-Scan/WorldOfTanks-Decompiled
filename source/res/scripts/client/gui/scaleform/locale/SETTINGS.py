@@ -474,6 +474,8 @@ class SETTINGS(object):
     KEYBOARD_KEYSBLOCKS_COMMAND_ITEM06 = '#settings:keyboard/keysBlocks/command/item06'
     KEYBOARD_KEYSBLOCKS_COMMAND_ITEM07 = '#settings:keyboard/keysBlocks/command/item07'
     KEYBOARD_KEYSBLOCKS_COMMAND_ITEM08 = '#settings:keyboard/keysBlocks/command/item08'
+    KEYBOARD_KEYSBLOCKS_COMMAND_ITEM09 = '#settings:keyboard/keysBlocks/command/item09'
+    KEYBOARD_KEYSBLOCKS_COMMAND_ITEM00 = '#settings:keyboard/keysBlocks/command/item00'
     KEYBOARD_KEYSBLOCKS_GROUP_SHORTCUTS = '#settings:keyboard/keysBlocks/group/shortcuts'
     KEYBOARD_KEYSBLOCKS_COMMAND_MY_TARGET_FOLLOW_ME = '#settings:keyboard/keysBlocks/command/my_target/follow_me'
     KEYBOARD_KEYSBLOCKS_COMMAND_ATTACK = '#settings:keyboard/keysBlocks/command/attack'

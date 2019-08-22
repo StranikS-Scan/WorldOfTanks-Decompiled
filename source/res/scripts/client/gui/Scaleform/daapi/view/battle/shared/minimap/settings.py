@@ -55,6 +55,8 @@ class ENTRY_SYMBOL_NAME(object):
     EPIC_PROTECTION_ZONE = 'LandingZoneEntry'
     EPIC_DEPLOY_SECTOR_BASE = 'SectorBaseEntryDeployment'
     EPIC_DEPLOY_HQ = 'HeadquarterEntryDeployment'
+    RADAR_ANIM = 'RadarUI'
+    DISCOVERED_ITEM_MARKER = 'net.wg.gui.battle.views.minimap.components.entries.battleRoyale.DiscoveredItemMarker'
 
 
 class TRANSFORM_FLAG(object):

@@ -2,15 +2,17 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/hint_panel/plugins.py
 from collections import namedtuple
 from datetime import datetime
+import BigWorld
 import CommandMapping
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import TRAJECTORY_VIEW_HINT_SECTION, PRE_BATTLE_HINT_SECTION, QUEST_PROGRESS_HINT_SECTION, HELP_SCREEN_HINT_SECTION, SIEGE_HINT_SECTION, WHEELED_MODE_HINT_SECTION, HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY
+from account_helpers.AccountSettings import TRAJECTORY_VIEW_HINT_SECTION, PRE_BATTLE_HINT_SECTION, QUEST_PROGRESS_HINT_SECTION, HELP_SCREEN_HINT_SECTION, SIEGE_HINT_SECTION, WHEELED_MODE_HINT_SECTION, HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY, RADAR_HINT_SECTION
 from gui.impl import backport
-from gui.impl.gen import R
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, ARENA_PERIOD, ARENA_GUI_TYPE
 from debug_utils import LOG_DEBUG
 from gui import GUI_SETTINGS
+from gui.impl.gen import R
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CROSSHAIR_VIEW_ID
+from gui.battle_control.controllers.radar_ctrl import IRadarListener
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 from gui.shared.utils.key_mapping import getReadableKey
@@ -20,6 +22,7 @@ from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from items import makeIntCompactDescrByID
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 HintData = namedtuple('HintData', ['key',
  'messageLeft',
  'messageRight',
@@ -47,6 +50,8 @@ def createPlugins():
         result['siegeIndicatorHint'] = SiegeIndicatorHintPlugin
     if PreBattleHintPlugin.isSuitable():
         result['prebattleHints'] = PreBattleHintPlugin
+    if RadarHintPlugin.isSuitable():
+        result['radarHint'] = RadarHintPlugin
     return result
 
 
@@ -97,6 +102,7 @@ class HintPriority(object):
     HELP = 1
     QUESTS = 2
     SIEGE = 3
+    RADAR = 4
 
 
 class PRBSettings(object):
@@ -415,6 +421,150 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
         return self._isUnderFire or self._isInRecovery or self._isInProgressCircle
 
 
+class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
+    _sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    _settingsCore = dependency.descriptor(ISettingsCore)
+    _HINT_DAY_COOLDOWN = 30
+    _HINT_BATTLES_COOLDOWN = 10
+    _TIME_AFTER_RADAR_COOLDOWN = 1
+
+    def __init__(self, parentObj):
+        super(RadarHintPlugin, self).__init__(parentObj)
+        CallbackDelayer.__init__(self)
+        self.__isEnabled = False
+        self.__settings = {}
+        self.__isHintShown = False
+        self.__isInPostmortem = False
+        self.__isObserver = False
+        self.__period = None
+        self.__isInDisplayPeriod = False
+        self._isInRecovery = False
+        self._isInProgressCircle = False
+        self._isUnderFire = False
+        self.__cbOnRadarCooldown = None
+        return
+
+    def start(self):
+        self.__settings = AccountSettings.getSettings(RADAR_HINT_SECTION)
+        self._updateCounterOnStart(self.__settings, self._HINT_DAY_COOLDOWN, self._HINT_BATTLES_COOLDOWN)
+        arenaDP = self._sessionProvider.getArenaDP()
+        self.__isObserver = arenaDP.getVehicleInfo().isObserver() if arenaDP is not None else False
+        arena = BigWorld.player().arena
+        if arena is not None:
+            self.__isEnabled = ARENA_BONUS_TYPE_CAPS.checkAny(arena.bonusType, ARENA_BONUS_TYPE_CAPS.RADAR)
+        if self._sessionProvider.dynamic.radar:
+            self._sessionProvider.dynamic.radar.addRuntimeView(self)
+        vStateCtrl = self._sessionProvider.shared.vehicleState
+        if vStateCtrl:
+            vStateCtrl.onPostMortemSwitched += self.__onPostMortemSwitched
+            vStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+        return
+
+    @classmethod
+    def isSuitable(cls):
+        return cls._sessionProvider.arenaVisitor.getArenaGuiType() == ARENA_GUI_TYPE.BATTLE_ROYALE
+
+    def stop(self):
+        if self._sessionProvider.dynamic.radar:
+            self._sessionProvider.dynamic.radar.removeRuntimeView(self)
+        vStateCtrl = self._sessionProvider.shared.vehicleState
+        self.__clearRadarCooldown()
+        if vStateCtrl:
+            vStateCtrl.onPostMortemSwitched -= self.__onPostMortemSwitched
+            vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+        AccountSettings.setSettings(RADAR_HINT_SECTION, self.__settings)
+        self.destroy()
+
+    def updateMapping(self):
+        if not self.__isEnabled:
+            return
+        self.__updateHint()
+
+    def setPeriod(self, period):
+        if period is ARENA_PERIOD.BATTLE:
+            self.__isInDisplayPeriod = self.__period is not None
+            self._updateCounterOnBattle(self.__settings)
+        self.__period = period
+        return
+
+    def radarActivated(self, _):
+        self.__hideHint()
+
+    def radarActivationFailed(self, code):
+        self.__hideHint()
+
+    def startTimeOut(self, timeLeft, duration):
+        if self.__isEnabled and self.__isInDisplayPeriod and self.__cbOnRadarCooldown is None:
+            self.__cbOnRadarCooldown = BigWorld.callback(timeLeft + self._TIME_AFTER_RADAR_COOLDOWN, self.__updateHint)
+        return
+
+    def _getHint(self):
+        keyName = getReadableKey(CommandMapping.CMD_CM_VEHICLE_ACTIVATE_RADAR)
+        pressText = ''
+        if keyName:
+            pressText = backport.text(R.strings.battle_royale.radar.hint.press())
+            hintText = backport.text(R.strings.battle_royale.radar.hint.text())
+        else:
+            hintText = backport.text(R.strings.battle_royale.radar.hint.noBinding())
+        return HintData(keyName, pressText, hintText, 0, 0, HintPriority.RADAR)
+
+    def __showHint(self):
+        self._parentObj.setBtnHint(CommandMapping.CMD_CM_VEHICLE_ACTIVATE_RADAR, self._getHint())
+        self.__isHintShown = True
+        self.__isInDisplayPeriod = False
+        self.delayCallback(_HINT_TIMEOUT, self.__onHintTimeOut)
+        self._updateCounterOnUsed(self.__settings)
+
+    def __hideHint(self):
+        if self.__isHintShown:
+            self._parentObj.removeBtnHint(CommandMapping.CMD_CM_VEHICLE_ACTIVATE_RADAR)
+            self.__isHintShown = False
+            self.stopCallback(self.__onHintTimeOut)
+
+    def __updateHint(self):
+        LOG_DEBUG('Updating radar hints')
+        if self.__isInPostmortem or self.__isObserver or not self.__isEnabled:
+            return
+        if self.__isInDisplayPeriod and self._haveHintsLeft(self.__settings) and not self.__areOtherIndicatorsShown():
+            self.__showHint()
+        else:
+            self.__hideHint()
+        self.__clearRadarCooldown()
+
+    def __onVehicleStateUpdated(self, state, value):
+        if not self.__isEnabled:
+            return
+        if state == VEHICLE_VIEW_STATE.RECOVERY:
+            self._isInRecovery = value[0]
+            self.__updateHint()
+        elif state == VEHICLE_VIEW_STATE.PROGRESS_CIRCLE:
+            self._isInProgressCircle = value[1]
+            self.__updateHint()
+        elif state == VEHICLE_VIEW_STATE.UNDER_FIRE:
+            self._isUnderFire = value
+            self.__updateHint()
+        elif state == VEHICLE_VIEW_STATE.DESTROYED:
+            self.__isInDisplayPeriod = False
+            self.__updateHint()
+
+    def __onPostMortemSwitched(self, *args):
+        self.__isInPostmortem = True
+        self.__isHintShown = False
+
+    def __onHintTimeOut(self):
+        self._parentObj.removeBtnHint(CommandMapping.CMD_CM_VEHICLE_ACTIVATE_RADAR)
+        self.__isHintShown = False
+
+    def __areOtherIndicatorsShown(self):
+        return self._isUnderFire or self._isInRecovery or self._isInProgressCircle
+
+    def __clearRadarCooldown(self):
+        if self.__cbOnRadarCooldown is not None:
+            BigWorld.cancelCallback(self.__cbOnRadarCooldown)
+            self.__cbOnRadarCooldown = None
+        return
+
+
 class PreBattleHintPlugin(HintPanelPlugin):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
@@ -432,7 +582,8 @@ class PreBattleHintPlugin(HintPanelPlugin):
 
     @classmethod
     def isSuitable(cls):
-        return cls.sessionProvider.arenaVisitor.getArenaGuiType() != ARENA_GUI_TYPE.RANKED
+        guiType = cls.sessionProvider.arenaVisitor.getArenaGuiType()
+        return guiType != ARENA_GUI_TYPE.RANKED and guiType != ARENA_GUI_TYPE.BATTLE_ROYALE
 
     def start(self):
         prbSettings = dict(AccountSettings.getSettings(PRE_BATTLE_HINT_SECTION))

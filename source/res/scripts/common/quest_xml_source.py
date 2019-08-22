@@ -420,7 +420,8 @@ class Source(object):
              'critical': self.__readBattleResultsConditionList,
              'crit': self.__readBattleResultsConditionList,
              'critName': self.__readCritName,
-             'unregularAmmo': self.__readCondition_true})
+             'unregularAmmo': self.__readCondition_true,
+             'isNotLeaver': self.__readCondition_true})
         if eventType in (EVENT_TYPE.BATTLE_QUEST,):
             condition_readers.update({'red': self.__readListOfInts,
              'silver': self.__readListOfInts,

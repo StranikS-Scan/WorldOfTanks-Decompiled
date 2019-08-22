@@ -13,6 +13,10 @@ class InjectComponentAdaptor(BaseDAAPIComponent):
         self.__injectView = None
         return
 
+    @property
+    def injectView(self):
+        return self.__injectView
+
     def registerFlashComponent(self, component, alias, *args):
         _logger.warning('InjectComponentAdaptor %s does not support internal components', self.getAlias())
 

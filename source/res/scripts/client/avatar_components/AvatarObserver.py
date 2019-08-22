@@ -110,7 +110,8 @@ class AvatarObserver(CallbackDelayer):
         if self.vehicle is not None:
             typeofveh = 'observed' if self.__observedVehicleID == self.vehicle.id else 'players'
             LOG_DEBUG_DEV('Vehicle ID is ' + str(self.vehicle.id) + ' and is ' + typeofveh)
-        if self.isObserver() and self.vehicle is not None and self.__observedVehicleID != self.vehicle.id:
+        observing = self.isObserver() or self.guiSessionProvider.shared.vehicleState.isInPostmortem
+        if observing and self.vehicle is not None and self.__observedVehicleID != self.vehicle.id:
             self.__observedVehicleID = self.vehicle.id
             self.guiSessionProvider.getArenaDP().switchCurrentTeam(self.vehicle.publicInfo['team'])
             extraData = self.observedVehicleData[self.__observedVehicleID]
@@ -137,10 +138,6 @@ class AvatarObserver(CallbackDelayer):
                 turretYaw, gunPitch = self.vehicle.getAimParams()
                 self.gunRotator.forceGunParams(turretYaw, gunPitch, extraData.dispAngle)
             self.guiSessionProvider.updateObservedVehicleData(self.__observedVehicleID, extraData)
-            ammoCtrl = self.guiSessionProvider.shared.ammo
-            shotIdx = ammoCtrl.getGunSettings().getShotIndex(extraData.currentShellCD)
-            if shotIdx > -1:
-                self.vehicle.typeDescriptor.activeGunShotIndex = shotIdx
         return
 
     def vehicle_onEnterWorld(self, vehicle):
@@ -185,6 +182,16 @@ class AvatarObserver(CallbackDelayer):
                 if isinstance(vehicle.filter, BigWorld.WGVehicleFilter):
                     return vehicle.filter.stabilisedMatrix
                 return vehicle.matrix
+        return
+
+    def getObservedVehicleTurretMatrix(self):
+        player = BigWorld.player()
+        if player.isObserver():
+            vehicle = player.getVehicleAttached()
+            if vehicle is not None:
+                if isinstance(vehicle.filter, BigWorld.WGVehicleFilter):
+                    return vehicle.filter.bodyMatrix
+                return vehicle.appearance.turretMatrix
         return
 
     def getVehicleAttached(self):

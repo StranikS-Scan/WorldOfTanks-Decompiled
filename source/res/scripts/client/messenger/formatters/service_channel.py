@@ -17,6 +17,7 @@ from constants import INVOICE_ASSET, AUTO_MAINTENANCE_TYPE, AUTO_MAINTENANCE_RES
 from blueprints.BlueprintTypes import BlueprintTypes
 from bonus_constants import BonusName
 from festivity.festival.item_info import FestivalItemInfo
+from gui.battle_royale import royale_helpers
 from nations import NAMES
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
@@ -304,6 +305,9 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
     __battleResultKeys = {-1: 'battleDefeatResult',
      0: 'battleDrawGameResult',
      1: 'battleVictoryResult'}
+    __BRResultKeys = {-1: 'battleRoyaleDefeatResult',
+     0: 'battleRoyaleDefeatResult',
+     1: 'battleRoyaleVictoryResult'}
     __goldTemplateKey = 'battleResultGold'
     __questsTemplateKey = 'battleQuests'
 
@@ -349,6 +353,8 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                 ctx['achieves'], ctx['badges'] = self.__makeAchievementsAndBadgesStrings(battleResults)
                 ctx['rankedProgress'] = self.__makeRankedFlowStrings(battleResults)
                 ctx['rankedBonusBattles'] = self.__makeRankedBonusString(battleResults)
+                ctx['BRChevrons'] = self.__makeBRChevronsString(battleResults)
+                ctx['BRTitle'] = self.__makeBRTitleString(battleResults)
                 ctx['lock'] = self.__makeVehicleLockString(vehicleNames, battleResults)
                 ctx['quests'] = self.__makeQuestsAchieve(message)
                 team = battleResults.get('team', 0)
@@ -357,7 +363,11 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                         winnerIfDraw = battleResults.get('winnerIfDraw')
                         if winnerIfDraw:
                             battleResKey = 1 if winnerIfDraw == team else -1
-                templateName = self.__battleResultKeys[battleResKey]
+                if guiType == ARENA_GUI_TYPE.BATTLE_ROYALE:
+                    battleResultKeys = self.__BRResultKeys
+                else:
+                    battleResultKeys = self.__battleResultKeys
+                templateName = battleResultKeys[battleResKey]
                 bgIconSource = None
                 arenaUniqueID = battleResults.get('arenaUniqueID', 0)
                 formatted = g_settings.msgTemplates.format(templateName, ctx=ctx, data={'timestamp': arenaCreateTime,
@@ -503,6 +513,54 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
 
     def __makePiggyBankString(self, credits_):
         return '' if not credits_ else g_settings.htmlTemplates.format('piggyBank', ctx={'credits': self.__makeCurrencyString(Currency.CREDITS, credits_)})
+
+    def __makeBRChevronsString(self, battleResults):
+        __serviceChannelMessages = R.strings.messenger.serviceChannelMessages
+        brChevronsValue = ''
+        brChevronsTitle = ''
+        if battleResults.get('guiType', 0) == ARENA_GUI_TYPE.BATTLE_ROYALE:
+            chevrons = battleResults.get('brPointsChanges', 0)
+            if chevrons != 0:
+                brChevronsValue = str(abs(chevrons))
+                if chevrons > 0:
+                    brChevronsTitle = backport.text(__serviceChannelMessages.BRbattleResults.chevronsEarned())
+                else:
+                    brChevronsTitle = backport.text(__serviceChannelMessages.BRbattleResults.chevronsLost())
+            else:
+                brChevronsTitle = backport.text(__serviceChannelMessages.BRbattleResults.chevronsSaved())
+        brChevronsBlock = ''
+        if brChevronsValue:
+            brChevronsBlock = g_settings.htmlTemplates.format('battleResultBRProgression', {'brProgressionTitle': brChevronsTitle,
+             'brProgressionValue': brChevronsValue})
+        elif brChevronsTitle:
+            brChevronsBlock = g_settings.htmlTemplates.format('BRbattleResult', {'brStr': brChevronsTitle})
+        return brChevronsBlock
+
+    def __makeBRTitleString(self, battleResults):
+        brChevronsBlock = []
+        resultMsg = R.strings.messenger.serviceChannelMessages.BRbattleResults
+        if battleResults.get('guiType', 0) == ARENA_GUI_TYPE.BATTLE_ROYALE:
+            accTitles = battleResults.get('accBRTitle', (0, 0))
+            brTitleChange = battleResults.get('brTitleChange', 0)
+            if brTitleChange:
+                if brTitleChange > 0:
+                    brTitleStr = backport.text(resultMsg.titleEarned())
+                    currentTitle = accTitles[0]
+                    for brTitleValue in range(currentTitle - brTitleChange, currentTitle):
+                        brTitleValue += 1
+                        brChevronsBlock.append(g_settings.htmlTemplates.format('battleResultBRProgression', {'brProgressionTitle': brTitleStr,
+                         'brProgressionValue': brTitleValue}))
+
+                else:
+                    tilesDiff = abs(brTitleChange)
+                    brTitleStr = backport.text(resultMsg.titleLost())
+                    while tilesDiff > 0:
+                        brTitleValue = str(abs(accTitles[0] + tilesDiff))
+                        brChevronsBlock.append(g_settings.htmlTemplates.format('battleResultBRProgression', {'brProgressionTitle': brTitleStr,
+                         'brProgressionValue': brTitleValue}))
+                        tilesDiff -= 1
+
+        return ''.join(brChevronsBlock)
 
 
 class AutoMaintenanceFormatter(WaitItemsSyncFormatter):
@@ -1996,6 +2054,14 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
                 result = yield RankedQuestFormatter(forToken=True).format(message)
                 callback(result)
                 return
+            if royale_helpers.isBRQuestID(first(completedQuestIDs, '')):
+                result = yield BRQuestsFormatter().format(message)
+                callback(result)
+                return
+            if royale_helpers.isBRVehiclesInvoiceQuestComplete(completedQuestIDs):
+                messageData = self.__buildBattleRoyaleMessageData(message)
+                callback([messageData])
+                return
             if self.__FRONTLINE_REWARD_QUEST_TEMPLATE in first(completedQuestIDs, ''):
                 callback([_MessageData(None, None)])
                 return
@@ -2246,6 +2312,20 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
             return _MessageData(formatted, settings)
         else:
             return
+
+    def __buildBattleRoyaleMessageData(self, message, withCustomizations=True):
+        data = message.data or {}
+        fmt = self.formatQuestAchieves(data, asBattleFormatter=False, processCustomizations=withCustomizations)
+        settings = self._getGuiSettings(message, 'royaleVehiclesInvoiceReceived')
+        operationTime = message.sentTime
+        if operationTime:
+            fDatetime = TimeFormatter.getLongDatetimeFormat(time_utils.makeLocalServerTime(operationTime))
+        else:
+            fDatetime = 'N/A'
+        ctx = {'achieves': fmt,
+         'at': fDatetime}
+        formatted = g_settings.msgTemplates.format('royaleVehiclesInvoiceReceived', ctx)
+        return _MessageData(formatted, settings)
 
 
 class NCMessageFormatter(ServiceChannelFormatter):
@@ -2744,6 +2824,46 @@ class RotationGroupUnlockFormatter(RotationGroupLockFormatter):
 
     def _getMessageTemplateKey(self):
         pass
+
+
+class BRQuestsFormatter(TokenQuestsFormatter):
+    __eventsCache = dependency.descriptor(IEventsCache)
+
+    @async
+    @process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        if isSynced:
+            completedQuestIDs = message.data.get('completedQuestIDs', set())
+            messages = self.__formatEveryTitle(completedQuestIDs, message.data.copy())
+            callback([ _MessageData(formattedMessage, self._getGuiSettings(message)) for formattedMessage in messages ])
+        else:
+            callback([_MessageData(None, self._getGuiSettings(message))])
+        return
+
+    def __formatEveryTitle(self, completedQuestIDs, data):
+        formattedMessage = None
+        formattedTitles = {}
+        quests = self.__eventsCache.getHiddenQuests()
+        for questID in completedQuestIDs:
+            quest = quests.get(questID)
+            if quest is not None:
+                titleID = self.__getTitle(quest)
+                textID = R.strings.system_messages.royale.notifications.singleTitle.text()
+                formattedTitles[titleID] = backport.text(textID, title=titleID)
+
+        if formattedTitles:
+            formattedMessage = g_settings.msgTemplates.format('BrTitleQuest', ctx={'titlesBlock': _EOL.join([ formattedTitles[key] for key in sorted(formattedTitles) ]),
+             'awardsBlock': self._packTitleAwards(data)})
+        return [formattedMessage]
+
+    @classmethod
+    def _packTitleAwards(cls, awardsDict):
+        return cls.formatQuestAchieves(awardsDict, asBattleFormatter=False) or ''
+
+    @classmethod
+    def __getTitle(cls, quest):
+        return str(quest.getID().split(':')[-1])
 
 
 class RankedQuestFormatter(TokenQuestsFormatter):

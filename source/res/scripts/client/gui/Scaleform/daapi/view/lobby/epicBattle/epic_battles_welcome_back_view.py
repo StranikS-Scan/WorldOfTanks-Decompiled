@@ -66,8 +66,8 @@ class EpicBattlesWelcomeBackView(LobbySubView, EpicBattlesWelcomeBackViewMeta):
 
     def __makeTileList(self):
         return [ {'iconSource': RES_ICONS.getEpicWelcomeBackImgTilePath(nr),
-         'titleLabel': localize(EPIC_BATTLE.getTileLabel(nr)),
-         'descriptionLabel': localize(EPIC_BATTLE.getTileDescr(nr)),
+         'titleLabel': '',
+         'descriptionLabel': '',
          'showDelay': _DEFAULT_TILE_SHOW_DELAY + nr * _TILE_SHOW_DELAY_STEP} for nr in xrange(1, _NR_OF_TILES + 1) ]
 
     def __close(self, nextView=VIEW_ALIAS.LOBBY_HANGAR):
@@ -83,7 +83,7 @@ class EpicBattlesWelcomeBackView(LobbySubView, EpicBattlesWelcomeBackViewMeta):
         url = yield self.__urlMacros.parse(self.__settings.get('url'))
         webBrowser = self.__getCurrentBrowser()
         if not webBrowser or url != webBrowser.url:
-            title = localize(EPIC_BATTLE.EPICBATTLESWELCOMEBACKVIEW_VIDEO_TITLE)
+            title = ''
             self.__browserID = yield self.browserCtrl.load(url, title, showActionBtn=False, browserID=self.__browserID, browserSize=gc_constants.BROWSER.VIDEO_SIZE, isDefault=False, showCloseBtn=True, handlers=self.__createWebHandlers())
 
     def __getCurrentBrowser(self):

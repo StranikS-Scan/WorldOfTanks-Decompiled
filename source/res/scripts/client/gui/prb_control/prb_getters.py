@@ -42,6 +42,10 @@ def isInEpicQueue():
     return getattr(BigWorld.player(), 'isInEpicQueue', False)
 
 
+def isInBattleRoyaleQueue():
+    return getattr(BigWorld.player(), 'isInBattleRoyaleQueue', False)
+
+
 def getQueueType():
     queueType = 0
     if isInRandomQueue():
@@ -56,6 +60,8 @@ def getQueueType():
         queueType = QUEUE_TYPE.SANDBOX
     elif isInEpicQueue():
         queueType = QUEUE_TYPE.EPIC
+    elif isInBattleRoyaleQueue():
+        queueType = QUEUE_TYPE.BATTLE_ROYALE
     return queueType
 
 
@@ -140,7 +146,8 @@ _ARENA_GUI_TYPE_BY_PRB_TYPE = {PREBATTLE_TYPE.SQUAD: ARENA_GUI_TYPE.RANDOM,
 _ARENA_GUI_TYPE_BY_QUEUE_TYPE = {QUEUE_TYPE.RANDOMS: ARENA_GUI_TYPE.RANDOM,
  QUEUE_TYPE.EVENT_BATTLES: ARENA_GUI_TYPE.EVENT_BATTLES,
  QUEUE_TYPE.RANKED: ARENA_GUI_TYPE.RANKED,
- QUEUE_TYPE.EPIC: ARENA_GUI_TYPE.EPIC_BATTLE}
+ QUEUE_TYPE.EPIC: ARENA_GUI_TYPE.EPIC_BATTLE,
+ QUEUE_TYPE.BATTLE_ROYALE: ARENA_GUI_TYPE.BATTLE_ROYALE}
 
 def getArenaGUIType(prbType=None, queueType=None):
     if prbType is None:

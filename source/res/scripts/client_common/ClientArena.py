@@ -35,7 +35,8 @@ class ClientArena(object):
      ARENA_UPDATE.OWN_VEHICLE_LOCKED_FOR_RP: '_ClientArena__onOwnVehicleLockedForRP',
      ARENA_UPDATE.VIEW_POINTS: '_ClientArena__onViewPoints',
      ARENA_UPDATE.VEHICLE_RECOVERED: '_ClientArena__onVehicleRecovered',
-     ARENA_UPDATE.FOG_OF_WAR: '_ClientArena__onFogOfWar'}
+     ARENA_UPDATE.FOG_OF_WAR: '_ClientArena__onFogOfWar',
+     ARENA_UPDATE.RADAR_INFO_RECEIVED: '_ClientArena__onRadarInfoReceived'}
 
     def __init__(self, arenaUniqueID, arenaTypeID, arenaBonusType, arenaGuiType, arenaExtraData):
         self.__vehicles = {}
@@ -49,6 +50,7 @@ class ClientArena(object):
         self.__viewPoints = []
         self.__isFogOfWarEnabled = False
         self.__hasFogOfWarHiddenVehicles = False
+        self.__arenaInfo = None
         self.__eventManager = Event.EventManager()
         em = self.__eventManager
         self.onNewVehicleListReceived = Event.Event(em)
@@ -71,6 +73,7 @@ class ClientArena(object):
         self.onFogOfWarEnabled = Event.Event(em)
         self.onFogOfWarHiddenVehiclesSet = Event.Event(em)
         self.onTeamHealthPercentUpdate = Event.Event(em)
+        self.onRadarInfoReceived = Event.Event(em)
         self.arenaUniqueID = arenaUniqueID
         self.arenaType = ArenaType.g_cache.get(arenaTypeID, None)
         if self.arenaType is None:
@@ -94,6 +97,7 @@ class ClientArena(object):
     isFogOfWarEnabled = property(lambda self: self.__isFogOfWarEnabled)
     hasFogOfWarHiddenVehicles = property(lambda self: self.__hasFogOfWarHiddenVehicles)
     hasObservers = property(lambda self: any(('observer' in v['vehicleType'].type.tags for v in self.__vehicles.itervalues() if v['vehicleType'] is not None)))
+    arenaInfo = property(lambda self: self.__arenaInfo)
 
     def destroy(self):
         self.__eventManager.clear()
@@ -139,6 +143,13 @@ class ClientArena(object):
 
     def isPointInsideArenaBB(self, point):
         return None if self.__arenaBBCollider is None and not self.__setupBBColliders() else self.__arenaBBCollider.isPointInsideBB(point)
+
+    def registerArenaInfo(self, arenaInfo):
+        self.__arenaInfo = arenaInfo
+
+    def unregisterArenaInfo(self, arenaInfo):
+        self.__arenaInfo = None
+        return
 
     def __setupBBColliders(self):
         if BigWorld.wg_getSpaceBounds().length == 0.0:
@@ -191,6 +202,10 @@ class ClientArena(object):
         self.__hasFogOfWarHiddenVehicles = bool(status & 2)
         self.onFogOfWarHiddenVehiclesSet(self.__hasFogOfWarHiddenVehicles)
 
+    def __onRadarInfoReceived(self, argStr):
+        status = cPickle.loads(argStr)
+        self.onRadarInfoReceived(status)
+
     def __onStatisticsUpdate(self, argStr):
         self.__statistics = {}
         statList = cPickle.loads(zlib.decompress(argStr))
@@ -206,10 +221,11 @@ class ClientArena(object):
         self.onVehicleStatisticsUpdate(vehicleID)
 
     def __onVehicleKilled(self, argStr):
-        victimID, killerID, equipmentID, reason = cPickle.loads(argStr)
+        victimID, killerID, equipmentID, reason, deathOrder = cPickle.loads(argStr)
         vehInfo = self.__vehicles.get(victimID, None)
         if vehInfo is not None:
             vehInfo['isAlive'] = False
+            vehInfo['events']['deathOrder'] = deathOrder
             self.onVehicleKilled(victimID, killerID, equipmentID, reason)
         return
 

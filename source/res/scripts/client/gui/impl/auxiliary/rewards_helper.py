@@ -5,6 +5,7 @@ import types
 import itertools
 from bonus_constants import BonusName
 from frameworks.wulf import ViewFlags
+from gui.battle_royale.constants import ROYALE_POSTBATTLE_REWARDS_COUNT
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.genConsts.PROGRESSIVEREWARD_CONSTANTS import PROGRESSIVEREWARD_CONSTANTS as prConst
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -29,7 +30,7 @@ from gui.impl.gen.view_models.views.loot_box_view.loot_vehicle_compensation_rend
 from gui.impl.gen.view_models.views.loot_box_view.loot_conversion_renderer_model import LootConversionRendererModel
 from gui.impl.gen.view_models.views.loot_box_view.loot_renderer_types import LootRendererTypes
 from gui.impl.gen.view_models.views.loot_box_view.loot_vehicle_renderer_model import LootVehicleRendererModel
-from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker, getLootboxesAwardsPacker
+from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker, getLootboxesAwardsPacker, getRoyaleAwardsPacker
 from gui.server_events.bonuses import getNonQuestBonuses, BlueprintsBonusSubtypes
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import BonusNameQuestsBonusComposer
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import LootBoxBonusComposer
@@ -401,7 +402,7 @@ class FestivalItemsRewardPresenter(FestivalRewardMixinPresenter, LootRewardDefMo
             return
         else:
             model.setLabelStr(text_styles.stats(backport.text(festItem.getNameResID())))
-            if festItem.getType() != FEST_ITEM_TYPE.BASIS:
+            if not festItem.isAlternative():
                 return
             iconID = R.images.gui.maps.icons.festival.items.icon_badge_special
             if not iconID.exists():
@@ -465,6 +466,7 @@ _DEF_MODEL_PRESENTERS = {CrewBonusTypes.CREW_BOOK_BONUSES: CrewBookModelPresente
 FESTIVAL_MODEL_PRESENTERS = {BonusName.FESTIVAL_ITEMS: FestivalItemsRewardPresenter(),
  CrewBonusTypes.CREW_SKIN_BONUSES: CrewSkinsRewardModelPresenter(),
  'customizations': UniqueStyleModelPresenter()}
+BATTLE_ROYALE_MODEL_PRESENTERS = {BonusName.FESTIVAL_ITEMS: FestivalItemsRewardPresenter()}
 
 def getRewardsBonuses(rewards, size='big', awardsCount=_DEFAULT_DISPLAYED_AWARDS_COUNT):
     formatter = BonusNameQuestsBonusComposer(awardsCount, getPackRentVehiclesAwardPacker())
@@ -575,6 +577,35 @@ def getProgressiveRewardBonuses(rewards, size='big', maxAwardCount=_DEFAULT_DISP
         alwaysVisibleBonuses.sort(key=_keySortOrder)
     formattedBonuses = formatter.getVisibleFormattedBonuses(bonuses, alwaysVisibleBonuses, size)
     return (formattedBonuses, specialRewardType)
+
+
+def getRoyaleBonuses(bonuses, size='big'):
+    bonuses.sort(key=_keySortOrder)
+    alwaysVisibleBonuses = []
+    commonBonuses = []
+    for b in bonuses:
+        if b.getName() == BonusName.FESTIVAL_ITEMS:
+            alwaysVisibleBonuses.append(b)
+        commonBonuses.append(b)
+
+    formatter = LootBoxBonusComposer(ROYALE_POSTBATTLE_REWARDS_COUNT, getRoyaleAwardsPacker())
+    formattedBonuses = formatter.getVisibleFormattedBonuses(commonBonuses, alwaysVisibleBonuses, size)
+    return formattedBonuses
+
+
+def getRoyaleBonusesFromDict(rewards, size='big'):
+    alwaysVisibleBonuses = []
+    commonBonuses = []
+    for bonusType, bonusValue in rewards.iteritems():
+        if bonusType == BonusName.FESTIVAL_ITEMS:
+            alwaysVisibleBonuses.extend(getNonQuestBonuses(bonusType, bonusValue))
+        commonBonuses.extend(getNonQuestBonuses(bonusType, bonusValue))
+
+    commonBonuses.sort(key=_keySortOrder)
+    alwaysVisibleBonuses.sort(key=_keySortOrder)
+    formatter = LootBoxBonusComposer(ROYALE_POSTBATTLE_REWARDS_COUNT, getRoyaleAwardsPacker())
+    formattedBonuses = formatter.getVisibleFormattedBonuses(commonBonuses, alwaysVisibleBonuses, size)
+    return formattedBonuses
 
 
 def fillStepsModel(currentStep, probability, maxSteps, hasCompleted, stepsModel):

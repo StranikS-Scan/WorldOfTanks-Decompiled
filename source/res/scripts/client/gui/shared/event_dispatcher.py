@@ -8,29 +8,31 @@ from constants import RentType, GameSeasonType
 from debug_utils import LOG_WARNING
 from gui import SystemMessages, DialogsInterface, GUI_SETTINGS
 from gui.Scaleform import MENU
-from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
-from gui.Scaleform.locale.MESSENGER import MESSENGER
-from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta, I18nConfirmDialogMeta, DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsWebProductMeta
 from gui.Scaleform.daapi.view.dialogs.rent_confirm_dialog import RentConfirmDialogMeta
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getWebShopURL, isIngameShopEnabled, getBuyPremiumUrl
+from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.entities.View import ViewKey
+from gui.Scaleform.genConsts.BATTLEROYALE_ALIASES import BATTLEROYALE_ALIASES
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
-from gui.impl import backport
+from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
+from gui.Scaleform.locale.MESSENGER import MESSENGER
+from gui.battle_royale.royale_helpers import getBattleRoyaleIntroPageUrl
 from gui.game_control.links import URLMacros
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.impl.lobby.festival.festival_helper import FestivalViews
 from gui.ingame_shop import generateShopRentRenewProductID, showBuyGoldForRentWebOverlay
 from gui.ingame_shop import getShopProductInfo
 from gui.ingame_shop import makeBuyParamsByProductInfo
 from gui.ingame_shop import showBuyVehicleOverlay
-from gui.impl.gen import R
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.shared import events, g_eventBus, money
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -46,10 +48,10 @@ from helpers.aop import pointcutable
 from helpers.i18n import makeString as _ms
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IHeroTankController, IReferralProgramController
-from skeletons.gui.impl import IGuiLoader
-from skeletons.gui.shared import IItemsCache
 from skeletons.gui.goodies import IGoodiesCache
+from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 
@@ -77,6 +79,10 @@ def showRankedBattleResultsWindow(rankedResultsVO, rankInfo, questsProgress):
      'questsProgress': questsProgress}), EVENT_BUS_SCOPE.LOBBY)
 
 
+def showBattleRoyaleResults(arenaUniqueID):
+    g_eventBus.handleEvent(events.LoadViewEvent(BATTLEROYALE_ALIASES.HANGAR_BATTLE_ROYALE_RESULTS, getViewName(BATTLEROYALE_ALIASES.HANGAR_BATTLE_ROYALE_RESULTS, str(arenaUniqueID)), ctx={'arenaUniqueID': arenaUniqueID}), EVENT_BUS_SCOPE.LOBBY)
+
+
 def showRankedAwardWindow(awardsSequence, rankedInfo):
     g_eventBus.handleEvent(events.LoadViewEvent(alias=RANKEDBATTLES_ALIASES.RANKED_BATTLES_AWARD, ctx={'awardsSequence': awardsSequence,
      'rankedInfo': rankedInfo}), EVENT_BUS_SCOPE.LOBBY)
@@ -84,6 +90,10 @@ def showRankedAwardWindow(awardsSequence, rankedInfo):
 
 def showRankedPrimeTimeWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(alias=RANKEDBATTLES_ALIASES.RANKED_BATTLE_PRIME_TIME, ctx={}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showBattleRoyalePrimeTimeWindow():
+    g_eventBus.handleEvent(events.LoadViewEvent(alias=BATTLEROYALE_ALIASES.BATTLE_ROYALE_PRIME_TIME, ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showEpicBattlesPrimeTimeWindow():
@@ -227,6 +237,12 @@ def showDashboardView():
     g_eventBus.handleEvent(events.LoadUnboundViewEvent(R.views.lobby.premacc.prem_dashboard_view.PremDashboardView(), PremDashboardView, ScopeTemplates.LOBBY_SUB_SCOPE), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
+def showBattleRoyaleResultsView(ctx):
+    from gui.Scaleform.daapi.view.lobby.battle_royale.battle_royale_results import BattleRoyaleResultsWindow
+    window = BattleRoyaleResultsWindow(ctx=ctx)
+    window.load()
+
+
 def showBattleBoosterBuyDialog(battleBoosterIntCD, install=False):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOSTER_BUY_WINDOW, ctx={'typeCompDescr': battleBoosterIntCD,
      'install': install}), EVENT_BUS_SCOPE.LOBBY)
@@ -261,6 +277,14 @@ def showBarracks():
 def showBadges(backViewName=''):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BADGES_PAGE, ctx={'backViewName': backViewName} if backViewName else None), scope=EVENT_BUS_SCOPE.LOBBY)
     return
+
+
+def showHangarVehicleConfigurator(isFirstEnter=False):
+    g_eventBus.handleEvent(events.LoadViewEvent(BATTLEROYALE_ALIASES.HANGAR_VEH_INFO_VIEW, ctx={'isFirstEnter': isFirstEnter}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showProgressionView():
+    g_eventBus.handleEvent(events.LoadViewEvent(BATTLEROYALE_ALIASES.EVENT_PROGRESSION_VIEW), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showStrongholds(url=None):
@@ -651,3 +675,11 @@ def showFestivalMainView(viewName=FestivalViews.CARD):
     else:
         g_eventBus.handleEvent(events.LoadUnboundViewEvent(contentResId, FestivalMainView, ScopeTemplates.LOBBY_SUB_SCOPE, viewName=viewName), scope=EVENT_BUS_SCOPE.LOBBY)
     return
+
+
+def showBattleRoyaleIntroVideo(returnAlias=None, selectedItemID=None):
+    from web_client_api.battle_royale import createBattleRoyaleWebHanlders
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BROWSER_VIEW, ctx={'url': getBattleRoyaleIntroPageUrl(),
+     'webHandlers': createBattleRoyaleWebHanlders(),
+     'returnAlias': returnAlias,
+     'selectedItemID': selectedItemID}), EVENT_BUS_SCOPE.LOBBY)

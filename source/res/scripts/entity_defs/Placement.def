@@ -1,0 +1,19 @@
+<Placement.def>
+  <AppealRadius>	3000	</AppealRadius>
+  <Properties>
+    <dropTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </dropTime>
+    <config>
+      <Type>	PYTHON	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </config>
+  </Properties>
+  <ClientMethods></ClientMethods>
+  <BaseMethods></BaseMethods>
+  <TempProperties>
+    <_spawner></_spawner>
+  </TempProperties>
+  <shouldBackup>	false	</shouldBackup>
+</Placement.def>

@@ -1042,6 +1042,9 @@ class SYSTEM_MESSAGES(object):
     RANKED_NOTIFICATION_PRIMETIME = '#system_messages:ranked/notification/primeTime'
     RANKED_NOTIFICATION_NOTAVAILABLE = '#system_messages:ranked/notification/notAvailable'
     RANKED_NOTIFICATION_AVAILABLE = '#system_messages:ranked/notification/available'
+    ROYALE_NOTIFICATION_PRIMETIME = '#system_messages:royale/notification/primeTime'
+    ROYALE_NOTIFICATION_CONGRATULATIONS = '#system_messages:royale/notification/congratulations'
+    ROYALE_NOTIFICATIONS_SINGLETITLE_TEXT = '#system_messages:royale/notifications/singleTitle/text'
     TOKENS_NOTIFICATION_MARK_ACQUIRED = '#system_messages:tokens/notification/mark_acquired'
     EPICBATTLES_NOTIFICATION_NOTAVAILABLE = '#system_messages:epicBattles/notification/notAvailable'
     EPICBATTLES_PRESTIGETRIGGER_ERROR = '#system_messages:epicBattles/prestigeTrigger/error'
@@ -2246,6 +2249,9 @@ class SYSTEM_MESSAGES(object):
      RANKED_NOTIFICATION_PRIMETIME,
      RANKED_NOTIFICATION_NOTAVAILABLE,
      RANKED_NOTIFICATION_AVAILABLE,
+     ROYALE_NOTIFICATION_PRIMETIME,
+     ROYALE_NOTIFICATION_CONGRATULATIONS,
+     ROYALE_NOTIFICATIONS_SINGLETITLE_TEXT,
      TOKENS_NOTIFICATION_MARK_ACQUIRED,
      EPICBATTLES_NOTIFICATION_NOTAVAILABLE,
      EPICBATTLES_PRESTIGETRIGGER_ERROR,

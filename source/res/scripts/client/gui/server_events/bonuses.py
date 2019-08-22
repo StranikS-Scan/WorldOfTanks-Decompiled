@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/bonuses.py
 import copy
-from collections import namedtuple, OrderedDict
+from collections import namedtuple
 from functools import partial
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
@@ -1575,19 +1575,9 @@ class CrewBooksBonus(SimpleBonus):
 
 class FestivalItemsBonus(SimpleBonus):
 
-    def __init__(self, name, value, isCompensation=False, ctx=None, compensationReason=None):
-        festivalItems = sorted((FestivalItemInfo(itemID) for itemID in value))
-        formattedValue = OrderedDict()
-        for festItem in festivalItems:
-            itemID = festItem.getID()
-            formattedValue[itemID] = value[itemID]
-
-        super(FestivalItemsBonus, self).__init__(name, formattedValue, isCompensation, ctx, compensationReason)
-
     def formatValue(self):
         itemNames = []
-        for itemID in self._value:
-            festItem = FestivalItemInfo(itemID)
+        for festItem in sorted((FestivalItemInfo(itemID) for itemID in self._value)):
             itemName = backport.text(R.strings.festival.festivalItem.fullName(), backport.text(festItem.getTypeResID()), backport.text(festItem.getNameResID()))
             itemNames.append(itemName)
 

@@ -10,6 +10,8 @@ def createComponentSystem(arena, bonusType, arenaType):
     from arena_component_system.assembler_helper import COMPONENT_ASSEMBLER
     if bonusType in COMPONENT_ASSEMBLER:
         COMPONENT_ASSEMBLER[bonusType].assembleComponents(componentSystem)
+    else:
+        ClientArenaComponentAssembler._assembleBonusCapsComponents(componentSystem)
     ClientArenaComponentAssembler._addArenaComponents(componentSystem, getDefaultComponents())
     componentSystem.activate()
     return componentSystem

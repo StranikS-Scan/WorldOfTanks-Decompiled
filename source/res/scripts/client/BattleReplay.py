@@ -175,6 +175,7 @@ class BattleReplay(object):
     def subscribe(self):
         g_playerEvents.onBattleResultsReceived += self.__onBattleResultsReceived
         g_playerEvents.onAccountBecomePlayer += self.__onAccountBecomePlayer
+        g_playerEvents.onAvatarBecomePlayer += self.__onAvatarBecomePlayer
         g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
         g_playerEvents.onBootcampAccountMigrationComplete += self.__onBootcampAccountMigrationComplete
         self.settingsCore.onSettingsChanged += self.__onSettingsChanging
@@ -182,6 +183,7 @@ class BattleReplay(object):
     def unsubscribe(self):
         g_playerEvents.onBattleResultsReceived -= self.__onBattleResultsReceived
         g_playerEvents.onAccountBecomePlayer -= self.__onAccountBecomePlayer
+        g_playerEvents.onAvatarBecomePlayer -= self.__onAvatarBecomePlayer
         g_playerEvents.onArenaPeriodChange -= self.__onArenaPeriodChange
         g_playerEvents.onBootcampAccountMigrationComplete -= self.__onBootcampAccountMigrationComplete
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanging
@@ -772,7 +774,7 @@ class BattleReplay(object):
     def registerWotReplayFileExtension(self):
         self.__replayCtrl.registerWotReplayFileExtension()
 
-    def enableAutoRecordingBattles(self, enable):
+    def enableAutoRecordingBattles(self, enable, delete=False):
         if self.__isAutoRecordingEnabled == enable:
             return
         else:
@@ -787,7 +789,7 @@ class BattleReplay(object):
             else:
                 g_playerEvents.onAccountBecomePlayer -= self.__startAutoRecord
                 if self.isRecording:
-                    self.stop()
+                    self.stop(delete=delete)
             return
 
     def setResultingFileName(self, fileName, overwriteExisting=False):
@@ -850,6 +852,7 @@ class BattleReplay(object):
         return
 
     def __onAccountBecomePlayer(self):
+        self.enableAutoRecordingBattles(True)
         if not isPlayerAccount():
             return
         else:
@@ -866,7 +869,11 @@ class BattleReplay(object):
                 self.__playerDatabaseID = player.databaseID
             return
 
-    def __onSettingsChanging(self, diff):
+    def __onAvatarBecomePlayer(self):
+        if self.sessionProvider.arenaVisitor.getArenaBonusType() in constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
+            self.enableAutoRecordingBattles(False, True)
+
+    def __onSettingsChanging(self, *_):
         newSpeed = self.__playbackSpeedModifiers[self.__playbackSpeedIdx]
         newQuiet = newSpeed == 0 or newSpeed > 4.0
         g_replayEvents.onMuteSound(newQuiet)

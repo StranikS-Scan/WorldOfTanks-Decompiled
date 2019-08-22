@@ -80,7 +80,7 @@ def init():
     ResMgr.purge(_LIST_XML, True)
     ResMgr.purge(_DEFAULT_XML, True)
     g_gameplaysMask = getGameplaysMask(g_gameplayNames)
-    g_geometryNamesToIDs = dict([ (arenaType.geometryName, arenaType.geometryID) for arenaType in g_cache.itervalues() ])
+    g_geometryNamesToIDs = {arenaType.geometryName:arenaType.geometryID for arenaType in g_cache.itervalues()}
     return
 
 
@@ -453,7 +453,7 @@ def __calcSpaceBoundingBox(arenaBoundingBox):
 
 
 def __readChatCommandFlags(name, section, defaultXml):
-    if section[name] is not None:
+    if section.has_key(name):
         flagsAsWhitespaceSeparatedString = section.readString(name)
     else:
         flagsAsWhitespaceSeparatedString = defaultXml.readString(name)
@@ -693,7 +693,7 @@ def __readTeamsCount(key, section, defaultXml):
 def __readTeamNumbers(section, maxTeamsInArena):
     if not (section.has_key('squadTeamNumbers') or section.has_key('soloTeamNumbers')):
         if maxTeamsInArena > 2:
-            raise 'For multiteam mode squadTeamNumbers and (or) soloTeamNumbers must be set'
+            raise SoftException('For multiteam mode squadTeamNumbers and (or) soloTeamNumbers must be set')
         return (set(), set())
     squadTeamNumbers = set([ int(v) for v in section.readString('squadTeamNumbers', '').split() ])
     soloTeamNumbers = set([ int(v) for v in section.readString('soloTeamNumbers', '').split() ])

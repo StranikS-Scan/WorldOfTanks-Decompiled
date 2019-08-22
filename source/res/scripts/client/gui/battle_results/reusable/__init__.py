@@ -294,6 +294,25 @@ class _ReusableInfo(object):
         info.addAvatarInfo(weakref.proxy(self.getAvatarInfo()))
         return info
 
+    def getAllPlayersIterator(self, result, sortKey=sort_keys.TeamItemSortKey):
+        allPlayers = []
+        getAvatarInfo = self.__avatars.getAvatarInfo
+        for dbID, player in self.__players.getPlayerInfoIterator():
+            info = self.__vehicles.getVehicleSummarizeInfo(player, result)
+            info.addAvatarInfo(weakref.proxy(getAvatarInfo(dbID)))
+            allPlayers.append(info)
+
+        bots = self.__common.getBots()
+        for bot in bots.iteritems():
+            info = self.__vehicles.getAIBotVehicleSummarizeInfo(bot[0], bot[1], result)
+            allPlayers.append(info)
+
+        def __allPlayers():
+            for player in sorted(allPlayers, key=sortKey):
+                yield player
+
+        return __allPlayers()
+
     def getBiDirectionTeamsIterator(self, result, sortKey=sort_keys.TeamItemSortKey):
         allies = []
         enemies = []

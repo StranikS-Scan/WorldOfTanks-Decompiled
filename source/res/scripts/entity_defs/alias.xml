@@ -1039,7 +1039,7 @@
       </outfit>
     </Properties>
   </RESPAWN_INFO_VEHICLE>
-  <INSPIRING_EFFECT>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+  <BUFF_EFFECT>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <radius>
         <Type>	FLOAT32	</Type>
@@ -1054,8 +1054,8 @@
         <Type>	FLOAT32	</Type>
       </inactivationDelay>
     </Properties>
-  </INSPIRING_EFFECT>
-  <INSPIRED>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+  </BUFF_EFFECT>
+  <BUFF_EFFECT_INACTIVATION>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <startTime>
         <Type>	FLOAT64	</Type>
@@ -1070,7 +1070,7 @@
         <Type>	FLOAT64	</Type>
       </inactivationEndTime>
     </Properties>
-  </INSPIRED>
+  </BUFF_EFFECT_INACTIVATION>
   <SMOKE_INFO>	FIXED_DICT	  <Properties>
       <smokeID>
         <Type>	UINT16	</Type>

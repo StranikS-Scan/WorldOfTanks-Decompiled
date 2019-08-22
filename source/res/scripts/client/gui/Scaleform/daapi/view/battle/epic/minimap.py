@@ -9,7 +9,6 @@ from gui.Scaleform.daapi.view.battle.classic.minimap import GlobalSettingsPlugin
 from gui.Scaleform.daapi.view.battle.shared.minimap.plugins import PersonalEntriesPlugin, ArenaVehiclesPlugin
 from gui.Scaleform.daapi.view.battle.shared.minimap.common import SimplePlugin, AttentionToCellPlugin
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings
-from gui.Scaleform.daapi.view.battle.shared.minimap.component import _IMAGE_PATH_FORMATTER
 from gui.battle_control import minimap_utils, avatar_getter
 from aih_constants import CTRL_MODE_NAME
 from epic_constants import EPIC_BATTLE_TEAM_ID
@@ -35,11 +34,10 @@ _FRONT_LINE_DEV_VISUALIZATION_SUPPORTED = IS_DEVELOPMENT
 _MINI_MINIMAP_HIGHLIGHT_PATH = '_level0.root.{}.main.minimap.mapShortcutLabel.sectorOverview.mmapAreaHighlight'.format(APP_CONTAINERS_NAMES.VIEWS)
 _MINI_MINIMAP_SIZE = 46
 _ZOOM_MODE_MIN = 1
-_ZOOM_MODE_MAX = 3
 _ZOOM_MODE_STEP = 0.5
 _ZOOM_MULTIPLIER_TEXT = 'x'
+_METERS_IN_1X_ZOOM = 1000
 EPIC_MINIMAP_HIT_AREA = 210
-EPIC_1KM_IN_PX = 210
 
 def makeMousePositionToEpicWorldPosition(clickedX, clickedY, bounds, hitArea=EPIC_MINIMAP_HIT_AREA):
     upperLeftX, upperLeftZ, lowerRightX, lowerrightZ = bounds
@@ -62,11 +60,15 @@ class EpicMinimapComponent(EpicMinimapMeta):
         super(EpicMinimapComponent, self).__init__()
         self.__mode = None
         self.__minimapCenterPos = (-1, -1)
+        self.__maxZoomMode = None
         return
 
     def _populate(self):
         super(EpicMinimapComponent, self)._populate()
-        self.updateZoomMode(AccountSettings.getSettings('epicMinimapZoom'))
+        mode = AccountSettings.getSettings('epicMinimapZoom')
+        if mode > self.__maxZoomMode:
+            mode = self.__maxZoomMode
+        self.updateZoomMode(mode)
 
     def setMinimapCenterEntry(self, entryID):
         self.getComponent().setMinimapCenterEntry(entryID)
@@ -90,8 +92,8 @@ class EpicMinimapComponent(EpicMinimapMeta):
 
     def onZoomModeChanged(self, change):
         mode = self.__mode + change * _ZOOM_MODE_STEP
-        if mode > _ZOOM_MODE_MAX:
-            mode = _ZOOM_MODE_MAX
+        if mode > self.__maxZoomMode:
+            mode = self.__maxZoomMode
         elif mode < _ZOOM_MODE_MIN:
             mode = _ZOOM_MODE_MIN
         self.updateZoomMode(mode)
@@ -131,8 +133,8 @@ class EpicMinimapComponent(EpicMinimapMeta):
         return setup
 
     def _processMinimapSize(self, minSize, maxSize):
-        mapWidthPx = int(abs(maxSize[0] - minSize[0]) * 0.001 * minimap_utils.EPIC_1KM_IN_PX)
-        mapHeightPx = int(abs(maxSize[1] - minSize[1]) * 0.001 * minimap_utils.EPIC_1KM_IN_PX)
+        self.__maxZoomMode = self._getMaxZoomMode(minSize, maxSize)
+        mapWidthPx, mapHeightPx = minimap_utils.metersToMinimapPixels(minSize, maxSize)
         self.as_setMapDimensionsS(mapWidthPx, mapHeightPx)
 
     def _createFlashComponent(self):
@@ -140,11 +142,12 @@ class EpicMinimapComponent(EpicMinimapMeta):
         comp.setMiniMinimapHighlightProps(_MINI_MINIMAP_HIGHLIGHT_PATH, _MINI_MINIMAP_SIZE)
         return comp
 
-    def _getMinimapSize(self):
-        return minimap_utils.MINIMAP_SIZE
-
-    def _getMinimapTexture(self, arenaVisitor):
-        return _IMAGE_PATH_FORMATTER.format(arenaVisitor.type.getMinimapTexture())
+    def _getMaxZoomMode(self, bl, tr):
+        topRightX, topRightY = tr
+        bottomLeftX, bottomLeftY = bl
+        d1 = abs(topRightX - bottomLeftX)
+        d2 = abs(topRightY - bottomLeftY)
+        return max(d1, d2) / _METERS_IN_1X_ZOOM
 
     def __zoomText(self):
         return str(round(self.__mode, 1)) + _ZOOM_MULTIPLIER_TEXT
@@ -241,14 +244,18 @@ class CenteredPersonalEntriesPlugin(RespawningPersonalEntriesPlugin):
         super(CenteredPersonalEntriesPlugin, self).updateControlMode(mode, vehicleID)
         self.__centerMapBasedOnMode()
 
+    def _getPostmortemCenterEntry(self):
+        iah = avatar_getter.getInputHandler()
+        if iah and iah.ctrls[CTRL_MODE_NAME.POSTMORTEM].altTargetMode == CTRL_MODE_NAME.DEATH_FREE_CAM:
+            newEntryID = self._getViewPointID()
+        else:
+            newEntryID = self._getDeadPointID()
+        return newEntryID
+
     def __centerMapBasedOnMode(self):
         newEntryID = self.__savedEntry
         if self._isInPostmortemMode():
-            iah = avatar_getter.getInputHandler()
-            if iah and iah.ctrls[CTRL_MODE_NAME.POSTMORTEM].altTargetMode == CTRL_MODE_NAME.DEATH_FREE_CAM:
-                newEntryID = self._getViewPointID()
-            else:
-                newEntryID = self._getDeadPointID()
+            newEntryID = self._getPostmortemCenterEntry()
             self.__mode = CTRL_MODE_NAME.POSTMORTEM
         elif self._isInStrategicMode():
             newEntryID = self._getCameraIDs()[_S_NAME.STRATEGIC_CAMERA]
@@ -532,7 +539,57 @@ class EpicGlobalSettingsPlugin(GlobalSettingsPlugin):
         pass
 
 
-class MarkPositionPlugin(AttentionToCellPlugin):
+class SimpleMarkPositionPlugin(AttentionToCellPlugin):
+    __slots__ = ('_hitAreaSize',)
+
+    def __init__(self, parentObj):
+        super(SimpleMarkPositionPlugin, self).__init__(parentObj)
+        self._hitAreaSize = minimap_utils.EPIC_MINIMAP_HIT_AREA
+
+    def setAttentionToCell(self, x, y, isRightClick):
+        finalPos = self._getPositionFromClick(x, y)
+        if isRightClick:
+            handler = avatar_getter.getInputHandler()
+            if handler is not None:
+                handler.onMinimapClicked(finalPos)
+        else:
+            commands = self.sessionProvider.shared.chatCommands
+            if commands is not None:
+                commands.sendAttentionToPosition(Math.Vector3(int(finalPos.x), int(finalPos.y), int(finalPos.z)))
+        return
+
+    def _doAttention(self, index, duration):
+        pass
+
+    def _doAttentionAtPosition(self, senderID, position, duration):
+        self._doAttentionToItem(position, _S_NAME.MARK_POSITION, duration)
+
+    def _doAttentionToItem(self, position, entryName, duration):
+        newX = position.x * 2 if position.x >= 0 else position.x * -1 * 2 - 1
+        newZ = position.z * 2 if position.z >= 0 else position.z * -1 * 2 - 1
+        uniqueIndex = int(0.5 * (newX + newZ) * (newX + newZ + 1) + newZ)
+        matrix = Math.Matrix()
+        matrix.setTranslate(position)
+        if self._isCallbackExisting(uniqueIndex):
+            self._clearCallback(uniqueIndex)
+        model = self._addEntryEx(uniqueIndex, entryName, _C_NAME.PERSONAL, matrix=matrix, active=True)
+        if model:
+            self._invoke(model.getID(), 'playAnimation')
+            self._setCallback(uniqueIndex, duration)
+            self._playSound2D(settings.MINIMAP_ATTENTION_SOUND_ID)
+
+    def _doAttentionToObjective(self, senderID, hqIdx, duration):
+        pass
+
+    def _doAttentionToBase(self, senderID, baseIdx, baseName, duration):
+        pass
+
+    def _getPositionFromClick(self, x, y):
+        return makeMousePositionToEpicWorldPosition(x, y, self._parentObj.getVisualBounds(), self._hitAreaSize)
+
+
+class MarkPositionPlugin(SimpleMarkPositionPlugin):
+    __slots__ = ('__hqsList', '__hqListInited', '__baseList', '__baseListInited')
 
     def __init__(self, parentObj):
         super(MarkPositionPlugin, self).__init__(parentObj)
@@ -589,37 +646,17 @@ class MarkPositionPlugin(AttentionToCellPlugin):
                     commands.sendAttentionToBase(baseIdx, baseName, self._arenaDP.getNumberOfTeam() == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER)
         return
 
-    def _doAttention(self, index, duration):
-        pass
-
-    def _doAttentionAtPosition(self, senderID, position, duration):
-        self.__doAttentionToItem(position, _S_NAME.MARK_POSITION, duration)
-
     def _doAttentionToObjective(self, senderID, hqId, duration):
         position = self.__hqsList[hqId]
         isAtk = avatar_getter.getPlayerTeam() == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER
         entryName = _S_NAME.MARK_OBJECTIVE_ATK if isAtk else _S_NAME.MARK_OBJECTIVE_DEF
-        self.__doAttentionToItem(position, entryName, duration)
+        self._doAttentionToItem(position, entryName, duration)
 
     def _doAttentionToBase(self, senderID, baseId, baseName, duration):
         position = self.__baseList[baseId]
         isAtk = avatar_getter.getPlayerTeam() == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER
         entryName = _S_NAME.MARK_OBJECTIVE_ATK if isAtk else _S_NAME.MARK_OBJECTIVE_DEF
-        self.__doAttentionToItem(position, entryName, duration)
-
-    def __doAttentionToItem(self, position, entryName, duration):
-        newX = position.x * 2 if position.x >= 0 else position.x * -1 * 2 - 1
-        newZ = position.z * 2 if position.z >= 0 else position.z * -1 * 2 - 1
-        uniqueIndex = int(0.5 * (newX + newZ) * (newX + newZ + 1) + newZ)
-        matrix = Math.Matrix()
-        matrix.setTranslate(position)
-        if self._isCallbackExisting(uniqueIndex):
-            self._clearCallback(uniqueIndex)
-        model = self._addEntryEx(uniqueIndex, entryName, _C_NAME.PERSONAL, matrix=matrix, active=True)
-        if model:
-            self._invoke(model.getID(), 'playAnimation')
-            self._setCallback(uniqueIndex, duration)
-            self._playSound2D(settings.MINIMAP_ATTENTION_SOUND_ID)
+        self._doAttentionToItem(position, entryName, duration)
 
     def __onDestructibleEntityAdded(self, destEntity):
         self.__hqsList[destEntity.destructibleEntityID] = destEntity.position
@@ -634,6 +671,8 @@ class MarkPositionPlugin(AttentionToCellPlugin):
             return
         else:
             closestHqIdx, distance = destructibleComponent.getNearestDestructibleEntityID(clickPos)
+            if closestHqIdx is None or distance is None:
+                return
             destEntity = destructibleComponent.getDestructibleEntity(closestHqIdx)
             return closestHqIdx if distance <= range_ and destEntity.isActive else None
 
@@ -652,9 +691,6 @@ class MarkPositionPlugin(AttentionToCellPlugin):
 
             closestBase = min(openBases, key=getDistance)
             return (closestBase.baseID, ID_TO_BASENAME[closestBase.baseID]) if getDistance(closestBase) <= range_ else (None, None)
-
-    def _getPositionFromClick(self, x, y):
-        return makeMousePositionToEpicWorldPosition(x, y, self._parentObj.getVisualBounds(), self._hitAreaSize)
 
 
 class StepRepairPointEntriesPlugin(SimplePlugin):

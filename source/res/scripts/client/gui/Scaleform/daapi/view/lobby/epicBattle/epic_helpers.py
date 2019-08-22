@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/epicBattle/epic_helpers.py
+import re
 import logging
 from web_client_api.common import ItemPackType
 from gui import SystemMessages
@@ -20,6 +21,7 @@ FRONTLINE_LEVEL_TOKEN_BASE = 'epicmetagame:levelup:'
 FRONTLINE_TOKEN_PRESTIGE_POINTS = 'prestige_point'
 FRONTLINE_HIDDEN_TAG = 'fr_hidden'
 FRONTLINE_VEH_BOUGHT_TOKEN_TEMPLATE = 'fr_reward_%s'
+NESTED_VALUE_REGEX = '(?P<obj>.*)\\[(?P<param>.*)\\]'
 _EPIC_GAME_PARAMS = {'artillery': {'cooldownTime': 'Cooldown',
                'delay': 'Deployment',
                'areaRadius': 'Dispersion',
@@ -37,7 +39,7 @@ _EPIC_GAME_PARAMS = {'artillery': {'cooldownTime': 'Cooldown',
  'inspire': {'cooldownTime': 'Cooldown',
              'radius': 'Effect Radius',
              'duration-inspire': 'Duration',
-             'crewIncreaseFactor': 'Crew Performance',
+             'increaseFactors[crewRolesFactor]': 'Crew Performance',
              'inactivationDelay': 'Effect Cooldown'},
  'smoke': {'cooldownTime': 'Cooldown',
            'minDelay': 'Deployment',
@@ -81,11 +83,30 @@ class DirectValuesMixin(DisplayValuesMixin):
         return _getFormattedNum(curValue)
 
 
+class NestedValuesMixin(DisplayValuesMixin):
+
+    @classmethod
+    def _getParamValue(cls, curEq, param):
+        param = _getAttrName(param)
+        match = re.search(NESTED_VALUE_REGEX, param)
+        obj = getattr(curEq, match.group('obj'))
+        curValue = obj.get(match.group('param'))
+        return _getFormattedNum(curValue)
+
+
 class PercentValueMixin(DirectValuesMixin):
 
     @classmethod
     def _getParamValue(cls, curEq, param):
         value = super(PercentValueMixin, cls)._getParamValue(curEq, param)
+        return value * 100 - 100
+
+
+class NestedPercentValueMixin(NestedValuesMixin):
+
+    @classmethod
+    def _getParamValue(cls, curEq, param):
+        value = super(NestedPercentValueMixin, cls)._getParamValue(curEq, param)
         return value * 100 - 100
 
 
@@ -158,6 +179,10 @@ class PercentNumericTextParam(TextParam, PercentValueMixin):
     pass
 
 
+class NestedPercentNumericTextParam(TextParam, NestedPercentValueMixin):
+    pass
+
+
 class ReciprocalNumericTextParam(TextParam, ReciprocalValuesMixin):
     pass
 
@@ -186,7 +211,7 @@ epicEquipmentParameterFormaters = {'cooldownTime': DirectNumericTextParam.update
  'projectilesNumber': DirectNumericTextParam.updateParams,
  'totalDuration': DirectNumericTextParam.updateParams,
  'radius': DirectNumericTextParam.updateParams,
- 'crewIncreaseFactor': PercentNumericTextParam.updateParams,
+ 'increaseFactors[crewRolesFactor]': NestedPercentNumericTextParam.updateParams,
  'inactivationDelay': DirectNumericTextParam.updateParams,
  'resupplyCooldownFactor': ReciprocalNumericTextParam.updateParams,
  'resupplyHealthPointsFactor': PercentNumericTextParam.updateParams,

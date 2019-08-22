@@ -19,6 +19,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 _POSTMORTEM_PANEL_SETTINGS_PATH = 'gui/postmortem_panel.xml'
 _VEHICLE_SMALL_ICON_RES_PATH = '../maps/icons/vehicle/small/{0}.png'
+_VEHICLE_BR_ICON_RES_PATH = '../maps/icons/battleRoyale/vehicleSmall/{0}.png'
 _ATTACK_REASON_CODE_TO_MSG = {ATTACK_REASON_INDICES['shot']: 'DEATH_FROM_SHOT',
  ATTACK_REASON_INDICES['fire']: 'DEATH_FROM_FIRE',
  ATTACK_REASON_INDICES['ramming']: 'DEATH_FROM_RAMMING',
@@ -271,9 +272,9 @@ class PostmortemPanel(_SummaryPostmortemPanel):
             showVehicle = True
             vInfoVO = battleCtx.getArenaDP().getVehicleInfo(killerVehID)
             vTypeInfoVO = vInfoVO.vehicleType
-            vehLvl = int2roman(vTypeInfoVO.level)
-            vehImg = _VEHICLE_SMALL_ICON_RES_PATH.format(vTypeInfoVO.iconName)
-            vehClass = Vehicle.getTypeBigIconPath(vTypeInfoVO.classTag)
+            vehLvl = int2roman(vTypeInfoVO.level) if not vTypeInfoVO.isOnlyForBattleRoyaleBattles else None
+            vehImg = _VEHICLE_SMALL_ICON_RES_PATH.format(vTypeInfoVO.iconName) if not vTypeInfoVO.isOnlyForBattleRoyaleBattles else _VEHICLE_BR_ICON_RES_PATH.format(vTypeInfoVO.iconName)
+            vehClass = Vehicle.getTypeBigIconPath(vTypeInfoVO.classTag) if not vTypeInfoVO.isOnlyForBattleRoyaleBattles else None
             vehName = vTypeInfoVO.shortNameWithPrefix
         else:
             showVehicle = False

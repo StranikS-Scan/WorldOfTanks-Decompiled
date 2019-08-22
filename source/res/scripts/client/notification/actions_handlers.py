@@ -28,7 +28,7 @@ from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from notification.tutorial_helper import TutorialGlobalStorage, TUTORIAL_GLOBAL_VAR
 from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.battle_results import IBattleResultsService
-from skeletons.gui.game_control import IBrowserController, IRankedBattlesController
+from skeletons.gui.game_control import IBrowserController, IRankedBattlesController, IBattleRoyaleController
 from skeletons.gui.web import IWebController
 from soft_exception import SoftException
 from skeletons.gui.customization import ICustomizationService
@@ -337,6 +337,21 @@ class ShowRankedSeasonCompleteHandler(_ActionHandler):
              'awards': data,
              'season': season}), scope=EVENT_BUS_SCOPE.LOBBY)
         return
+
+
+class SelectBattleRoyaleMode(_ActionHandler):
+    battleRoyale = dependency.descriptor(IBattleRoyaleController)
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        self.battleRoyale.selectRoyaleBattle()
 
 
 class ShowBattleResultsHandler(_ShowArenaResultHandler):
@@ -708,6 +723,7 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  WGNCActionsHandler,
  SecurityLinkHandler,
  ShowRankedSeasonCompleteHandler,
+ SelectBattleRoyaleMode,
  _ShowClanAppsHandler,
  _ShowClanInvitesHandler,
  _AcceptClanAppHandler,

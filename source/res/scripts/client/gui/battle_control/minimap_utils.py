@@ -10,7 +10,7 @@ MINIMAP_SIZE = (210.0, 210.0)
 MINIMAP_DIMENSION = 10.0
 MINIMAP_COLUMN_OFFSET = 4
 EPIC_MINIMAP_HIT_AREA = 210
-EPIC_1KM_IN_PX = 210
+_METERS_TO_KILOMETERS = 0.001
 if AOI.ENABLE_MANUAL_RULES:
     AOI_ESTIMATE = AOI.VEHICLE_CIRCULAR_AOI_RADIUS - 50.0
 
@@ -90,3 +90,10 @@ def getCellIdxFromPosition(desiredShotPoint, boundingBox):
     mapGridY = MINIMAP_DIMENSION - math.floor((yOffset + desiredShotPoint.z) / mapYLength * MINIMAP_DIMENSION)
     mapGridY -= 1
     return mapGridX * MINIMAP_DIMENSION + mapGridY
+
+
+def metersToMinimapPixels(minSize, maxSize):
+    mmPixelsWidth, mmPixelsHeight = MINIMAP_SIZE
+    mapWidthPx = int(abs(maxSize[0] - minSize[0]) * _METERS_TO_KILOMETERS * mmPixelsWidth)
+    mapHeightPx = int(abs(maxSize[1] - minSize[1]) * _METERS_TO_KILOMETERS * mmPixelsHeight)
+    return (mapWidthPx, mapHeightPx)

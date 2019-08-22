@@ -10,6 +10,10 @@ _IGNORE_LIST_SIZE_FORMAT = '<B'
 _IGNORE_LIST_FORMAT = '{}L'
 _IGNORE_LIST_RECORD_FORMAT = _IGNORE_LIST_SIZE_FORMAT + _IGNORE_LIST_FORMAT
 _IGNORE_LIST_SIZE_LEN = struct.calcsize(_IGNORE_LIST_SIZE_FORMAT)
+_MODULE_LIST_SIZE_FORMAT = '<B'
+_MODULE_LIST_FORMAT = '{}i'
+_MODULE_LIST_RECORD_FORMAT = _MODULE_LIST_SIZE_FORMAT + _MODULE_LIST_FORMAT
+_MODULE_LIST_SIZE_LEN = struct.calcsize(_MODULE_LIST_SIZE_FORMAT)
 
 class AbstractCacheRecord(object):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -40,6 +44,42 @@ class AbstractCacheRecord(object):
 
     def load(self):
         return self.__cache.load()
+
+
+class TmpBRProgressionCacheRecord(AbstractCacheRecord):
+
+    def __init__(self, cache):
+        super(TmpBRProgressionCacheRecord, self).__init__(cache)
+        self._selectedModules = set()
+
+    @classmethod
+    def getRecordID(cls):
+        return CACHE_RECORDS_IDS.TMP_PROGRESSION
+
+    def addModule(self, value):
+        if value not in self._selectedModules:
+            self._selectedModules.add(value)
+            return True
+        return False
+
+    def getModules(self):
+        return self._selectedModules
+
+    def pack(self):
+        modulesCount = len(self._selectedModules)
+        return struct.pack(_MODULE_LIST_RECORD_FORMAT.format(modulesCount), modulesCount, *self._selectedModules)
+
+    def unpack(self, record):
+        if record:
+            try:
+                modulesCount = struct.unpack(_IGNORE_LIST_SIZE_FORMAT, record[:_MODULE_LIST_SIZE_LEN])[0]
+                if modulesCount > 0:
+                    self._selectedModules = set(struct.unpack_from(_IGNORE_LIST_FORMAT.format(modulesCount), record, offset=_MODULE_LIST_SIZE_LEN))
+            except struct.error as e:
+                LOG_ERROR('Could not unpack the following record: ', record, e)
+
+        else:
+            self._selectedModules.clear()
 
 
 class TmpIgnoredCacheRecord(AbstractCacheRecord):

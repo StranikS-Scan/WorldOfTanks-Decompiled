@@ -305,6 +305,9 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
     def isEpicBattle(self):
         return self._guiType == _GUI_TYPE.EPIC_BATTLE
 
+    def isBattleRoyale(self):
+        return self._guiType == _GUI_TYPE.BATTLE_ROYALE
+
     def hasLabel(self):
         return self._guiType != _GUI_TYPE.UNKNOWN and self._guiType in _GUI_TYPE_LABEL.LABELS
 

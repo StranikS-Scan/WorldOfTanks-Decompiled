@@ -15,6 +15,7 @@ from gui.shared.utils.requesters import VehicleRotationRequester
 from gui.shared.utils.requesters import TokensRequester
 from gui.shared.utils.requesters.badges_requester import BadgesRequester
 from gui.shared.utils.requesters.RankedRequester import RankedRequester
+from gui.shared.utils.requesters.BattleRoyaleRequester import BattleRoyaleRequester
 from gui.shared.utils.requesters.EpicMetaGameRequester import EpicMetaGameRequester
 from gui.shared.utils.requesters.blueprints_requester import BlueprintsRequester
 from gui.shared.utils.requesters.session_stats_requester import SessionStatsRequester
@@ -32,7 +33,7 @@ class ItemsCache(IItemsCache):
     def __init__(self):
         super(ItemsCache, self).__init__()
         goodies = GoodiesRequester()
-        self.__items = ItemsRequester.ItemsRequester(InventoryRequester(), StatsRequester(), DossierRequester(), goodies, ShopRequester(goodies), RecycleBinRequester(), VehicleRotationRequester(), RankedRequester(), BadgesRequester(), EpicMetaGameRequester(), TokensRequester(), dependency.instance(IFestivityFactory).getRequester(), BlueprintsRequester(), SessionStatsRequester())
+        self.__items = ItemsRequester.ItemsRequester(InventoryRequester(), StatsRequester(), DossierRequester(), goodies, ShopRequester(goodies), RecycleBinRequester(), VehicleRotationRequester(), RankedRequester(), BattleRoyaleRequester(), BadgesRequester(), EpicMetaGameRequester(), TokensRequester(), dependency.instance(IFestivityFactory).getRequester(), BlueprintsRequester(), SessionStatsRequester())
         self.__waitForSync = False
         self.__syncFailed = False
         self.onSyncStarted = Event()

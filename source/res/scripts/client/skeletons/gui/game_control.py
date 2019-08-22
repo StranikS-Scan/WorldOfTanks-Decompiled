@@ -4,6 +4,8 @@ import typing
 if typing.TYPE_CHECKING:
     from Event import Event
     from gui.periodic_battles.models import PrimeTime
+    from gui.battle_royale.royale_models import TitleData, Title
+    from gui.battle_royale.royale_helpers.stats_composer import BattleRoyaleStatsComposer
     from gui.ranked_battles.ranked_helpers.sound_manager import RankedSoundManager
     from gui.ranked_battles.ranked_helpers.league_provider import WebLeague, RankedBattlesLeagueProvider
     from gui.ranked_battles.ranked_helpers.stats_composer import EfficiencyStamp, RankedBattlesStatsComposer
@@ -514,15 +516,27 @@ class IQuestsController(IGameController):
         raise NotImplementedError
 
 
-class IRankedBattlesController(IGameController, ISeasonProvider):
+class ISpecialModeController(IGameController):
+
+    def getPrimeTimes(self):
+        raise NotImplementedError
+
+    def isAvailable(self):
+        raise NotImplementedError
+
+    def hasAvailablePrimeTimeServers(self):
+        raise NotImplementedError
+
+    def getPrimeTimesForDay(self, selectedTime, groupIdentical=False):
+        raise NotImplementedError
+
+
+class IRankedBattlesController(ISpecialModeController, ISeasonProvider):
     onUpdated = None
     onPrimeTimeStatusUpdated = None
     onYearPointsChanges = None
 
     def getYearRewardPoints(self):
-        raise NotImplementedError
-
-    def isAvailable(self):
         raise NotImplementedError
 
     def isAccountMastered(self):
@@ -777,15 +791,9 @@ class IMarathonEventsController(IGameController):
         raise NotImplementedError
 
 
-class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
+class IEpicBattleMetaGameController(ISpecialModeController, ISeasonProvider):
     onUpdated = None
     onPrimeTimeStatusUpdated = None
-
-    def isEnabled(self):
-        raise NotImplementedError
-
-    def isAvailable(self):
-        raise NotImplementedError
 
     def isInPrimeTime(self):
         raise NotImplementedError
@@ -806,9 +814,6 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
         raise NotImplementedError
 
     def getPointsProgressForLevel(self, level):
-        raise NotImplementedError
-
-    def getPrimeTimes(self):
         raise NotImplementedError
 
     def getPrimeTimeStatus(self, peripheryID=None):
@@ -874,16 +879,7 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
     def isFrozen(self):
         raise NotImplementedError
 
-    def getPrimeTimesForDay(self, selectedTime, groupIdentical=False):
-        raise NotImplementedError
-
-    def hasAvailablePrimeTimeServers(self):
-        raise NotImplementedError
-
     def isWelcomeScreenUpToDate(self, serverSettings):
-        raise NotImplementedError
-
-    def getTimer(self):
         raise NotImplementedError
 
     def openURL(self, url=None):
@@ -893,7 +889,107 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
         raise NotImplementedError
 
     def getStoredEpicDiscount(self):
-        return NotImplementedError
+        raise NotImplementedError
+
+
+class IBattleRoyaleController(ISpecialModeController, ISeasonProvider):
+    onUpdated = None
+    onGameModeStatusUpdated = None
+    onGameModeStatusTick = None
+
+    def getDefaultAmmoCount(self, itemKey, intCD=None):
+        raise NotImplementedError
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def isAccountMastered(self):
+        raise NotImplementedError
+
+    def isFrozen(self):
+        raise NotImplementedError
+
+    def hasConfiguredPrimeTimeServers(self):
+        raise NotImplementedError
+
+    def getClientTitle(self):
+        raise NotImplementedError
+
+    def getTimer(self):
+        raise NotImplementedError
+
+    def getClientMaxTitle(self):
+        raise NotImplementedError
+
+    def getCurrentTitle(self):
+        raise NotImplementedError
+
+    def getMaxTitle(self):
+        raise NotImplementedError
+
+    def getMinPossibleTitle(self):
+        raise NotImplementedError
+
+    def getMaxPossibleTitle(self):
+        raise NotImplementedError
+
+    def getStatsComposer(self):
+        raise NotImplementedError
+
+    def getPerformanceGroup(self):
+        raise NotImplementedError
+
+    def getPrimeTimeStatus(self, peripheryID=None):
+        raise NotImplementedError
+
+    def getTitle(self, titleID):
+        raise NotImplementedError
+
+    def getCachedTitlesChain(self, leftRequiredBorder=None, rightRequiredBorder=None):
+        raise NotImplementedError
+
+    def getTitlesChainExt(self, currentProgress, lastProgress, maxProgress):
+        raise NotImplementedError
+
+    def getUnburnableTitles(self):
+        raise NotImplementedError
+
+    def getSoloStepsTop(self):
+        raise NotImplementedError
+
+    def getSquadStepsTop(self):
+        raise NotImplementedError
+
+    def showBattleRoyalePage(self, ctx):
+        raise NotImplementedError
+
+    def updateClientValues(self):
+        raise NotImplementedError
+
+    def getEndTime(self):
+        raise NotImplementedError
+
+    @property
+    def voiceoverController(self):
+        raise NotImplementedError
+
+    def fightClick(self):
+        raise NotImplementedError
+
+    def isBattleRoyaleMode(self):
+        raise NotImplementedError
+
+    def isInBattleRoyaleSquad(self):
+        raise NotImplementedError
+
+    def selectRoyaleBattle(self):
+        raise NotImplementedError
+
+    def selectRandomBattle(self):
+        raise NotImplementedError
+
+    def wasInLobby(self):
+        raise NotImplementedError
 
 
 class IManualController(IGameController):
@@ -912,7 +1008,12 @@ class IManualController(IGameController):
 
 
 class ICalendarController(IGameController):
-    pass
+
+    def showWindow(self, url=None, invokedFrom=None):
+        raise NotImplementedError
+
+    def hideWindow(self):
+        raise NotImplementedError
 
 
 class IReferralProgramController(IGameController):

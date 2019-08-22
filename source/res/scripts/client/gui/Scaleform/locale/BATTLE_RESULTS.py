@@ -140,6 +140,7 @@ class BATTLE_RESULTS(object):
     COMMON_DETAILS_BUYPREMIUMBTN = '#battle_results:common/details/buyPremiumBtn'
     COMMON_NOINCOME_ALERT_TITLE = '#battle_results:common/noIncome/alert/title'
     COMMON_NOINCOME_ALERT_TEXT = '#battle_results:common/noIncome/alert/text'
+    COMMON_VEHICLESTATE_VICTORY = '#battle_results:common/vehicleState/victory'
     COMMON_PREMIUMBONUS_DESCRIPTION = '#battle_results:common/premiumBonus/description'
     COMMON_PREMIUMBONUS_RULE = '#battle_results:common/premiumBonus/rule'
     COMMON_PREMIUMBONUS_EXPIREDBATTLERESULT = '#battle_results:common/premiumBonus/expiredBattleResult'

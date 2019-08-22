@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/calendar_controller.py
+import functools
 import logging
 from datetime import timedelta
 from account_helpers.AccountSettings import AccountSettings, LAST_CALENDAR_SHOW_TIMESTAMP
@@ -14,6 +15,7 @@ from gui.game_control import CalendarInvokeOrigin
 from gui.game_control.links import URLMacros
 from gui.server_events.modifiers import CalendarSplashModifier
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showHangar
 from helpers import dependency, time_utils, i18n
 from helpers.time_utils import ONE_HOUR
 from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
@@ -21,15 +23,33 @@ from skeletons.gui.game_control import ICalendarController, IBrowserController
 from skeletons.gui.game_window_controller import GameWindowController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.lobby_context import ILobbyContext
-from web_client_api import webApiCollection
+from web_client_api import w2capi, webApiCollection, w2c, W2CSchema
 from web_client_api.request import RequestWebApi
+from web_client_api.shop import ShopWebApi
 from web_client_api.sound import SoundWebApi
-from web_client_api import w2capi
-from web_client_api.ui import ShopWebApiMixin, CloseWindowWebApi
+from web_client_api.ui import CloseWindowWebApi, NotificationWebApi, ShopWebApiMixin, UtilWebApi, VehiclePreviewWebApiMixin
 
 @w2capi(name='open_tab', key='tab_id')
-class _OpenShopTabWebApi(ShopWebApiMixin):
-    pass
+class _OpenTabWebApi(ShopWebApiMixin, VehiclePreviewWebApiMixin):
+    __calendarController = dependency.descriptor(ICalendarController)
+
+    def _getVehiclePreviewReturnAlias(self, cmd):
+        return VIEW_ALIAS.ADVENT_CALENDAR
+
+    def _getVehiclePreviewReturnCallback(self, cmd):
+        return functools.partial(self.__showCalendar, cmd.back_url)
+
+    def __showCalendar(self, backUrl=None):
+        self.__calendarController.showWindow(backUrl, CalendarInvokeOrigin.HANGAR)
+
+
+@w2capi(name='close_window', key='window_id')
+class _CloseWindowWebApi(CloseWindowWebApi):
+    __calendarController = dependency.descriptor(ICalendarController)
+
+    @w2c(W2CSchema, 'advent_calendar')
+    def adventCalendar(self, *_):
+        self.__calendarController.hideWindow()
 
 
 _BROWSER_SIZE = (1014, 654)
@@ -96,8 +116,27 @@ class CalendarController(GameWindowController, ICalendarController):
 
             return result
 
+    def showWindow(self, url=None, invokedFrom=None):
+        self._showWindow(url, invokedFrom)
+
+    def hideWindow(self):
+        if self.__browserID is None:
+            return
+        else:
+            app = self.appLoader.getApp()
+            if app is not None and app.containerManager is not None:
+                browserWindow = app.containerManager.getView(ViewTypes.WINDOW, criteria={POP_UP_CRITERIA.UNIQUE_NAME: VIEW_ALIAS.ADVENT_CALENDAR})
+                if browserWindow is not None:
+                    browserWindow.destroy()
+                    self.__browserID = None
+                else:
+                    self.browserCtrl.delBrowser(self.__browserID)
+            return
+
     def _openWindow(self, url, invokedFrom=None):
         if self.appLoader.getSpaceID() != GuiGlobalSpaceID.LOBBY:
+            return
+        elif self.__getBrowserView() is not None:
             return
         else:
             try:
@@ -113,20 +152,6 @@ class CalendarController(GameWindowController, ICalendarController):
             self.__openBrowser(self.__browserID, url, _BROWSER_SIZE, invokedFrom)
             self.__setShowTimestamp(time_utils.getServerRegionalTime())
             _logger.debug('Calendar opened in web browser (browserID=%d)', self.__browserID)
-            return
-
-    def hideWindow(self):
-        if self.__browserID is None:
-            return
-        else:
-            app = self.appLoader.getApp()
-            if app is not None and app.containerManager is not None:
-                browserWindow = app.containerManager.getView(ViewTypes.WINDOW, criteria={POP_UP_CRITERIA.UNIQUE_NAME: VIEW_ALIAS.ADVENT_CALENDAR})
-                if browserWindow is not None:
-                    browserWindow.destroy()
-                    self.__browserID = None
-                else:
-                    self.browserCtrl.delBrowser(self.__browserID)
             return
 
     def _onSyncCompleted(self, *_):
@@ -154,12 +179,20 @@ class CalendarController(GameWindowController, ICalendarController):
 
         return None
 
+    def __getBrowserView(self):
+        app = self.appLoader.getApp()
+        if app is not None and app.containerManager is not None:
+            browserView = app.containerManager.getView(ViewTypes.WINDOW, criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.ADVENT_CALENDAR})
+            return browserView
+        else:
+            return
+
     def __setShowTimestamp(self, tstamp):
         AccountSettings.setSettings(LAST_CALENDAR_SHOW_TIMESTAMP, str(tstamp))
 
     @process
     def __openBrowser(self, browserID, url, browserSize, invokedFrom):
-        browserHandlers = webApiCollection(SoundWebApi, RequestWebApi, _OpenShopTabWebApi, CloseWindowWebApi)
+        browserHandlers = webApiCollection(NotificationWebApi, RequestWebApi, ShopWebApi, SoundWebApi, UtilWebApi, _CloseWindowWebApi, _OpenTabWebApi)
 
         def showBrowserWindow():
             ctx = {'size': browserSize,
@@ -172,6 +205,8 @@ class CalendarController(GameWindowController, ICalendarController):
              'showActionBtn': False}
             browser = self.browserCtrl.getBrowser(browserID)
             browser.useSpecialKeys = False
+            if invokedFrom == CalendarInvokeOrigin.HANGAR:
+                showHangar()
             g_eventBus.handleEvent(events.DirectLoadViewEvent(SFViewLoadParams(VIEW_ALIAS.ADVENT_CALENDAR), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
 
         title = i18n.makeString(MENU.ADVENTCALENDAR_WINDOW_TITLE)

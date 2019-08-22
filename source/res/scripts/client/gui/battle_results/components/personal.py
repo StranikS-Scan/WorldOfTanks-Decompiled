@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/components/personal.py
+import logging
 import random
 from math import ceil
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
@@ -25,6 +26,8 @@ from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 _UNDEFINED_EFFICIENCY_VALUE = '-'
+_logger = logging.getLogger(__name__)
+_logger.addHandler(logging.NullHandler())
 
 class PremiumAccountFlag(base.StatsItem):
     __slots__ = ()
@@ -575,6 +578,54 @@ class TotalEfficiencyDetailsHeader(base.StatsBlock):
             return None
 
 
+class BRTotalEfficiencyDetailsHeader(base.StatsBlock):
+    __slots__ = ('accPlace', 'chevrons', 'kills', 'damageDealt', 'criticalDamages', 'damageBlockedByArmor', 'squadKills')
+
+    def __init__(self, meta=None, field='', *path):
+        super(BRTotalEfficiencyDetailsHeader, self).__init__(meta, field, *path)
+        self.accPlace = None
+        self.chevrons = None
+        self.kills = None
+        self.damageDealt = None
+        self.criticalDamages = None
+        self.damageBlockedByArmor = None
+        self.squadKills = None
+        return
+
+    def setRecord(self, result, reusable):
+        personalInfo = reusable.getPersonalVehiclesInfo(result['personal'])
+        if personalInfo is None:
+            _logger.error('ERROR: BRTotalEfficiencyDetailsHeader:setRecord: getPersonalVehiclesInfo returned NONE!')
+            return
+        else:
+            avatar = personalInfo.avatar
+            if avatar is None or avatar.extensionInfo is None:
+                _logger.error('ERROR: BRTotalEfficiencyDetailsHeader:setRecord: invalid avatar')
+                return
+            self.kills = personalInfo.kills
+            self.damageDealt = personalInfo.damageDealt
+            self.criticalDamages = personalInfo.critsCount
+            self.damageBlockedByArmor = personalInfo.damageBlockedByArmor
+            self.accPlace = avatar.extensionInfo.get('battleRoyale', {}).get('accPos', 0)
+            self.chevrons = reusable.personal.getBattleRoyaleInfo().get('brPointsChanges', 0)
+            self.squadKills = self._getSquadKills(result['vehicles'], reusable)
+            return
+
+    def _getSquadKills(self, result, reusable):
+        personal = reusable.getPlayerInfo()
+        squadKills = 0
+        if personal.squadIndex:
+            allPlayers = reusable.getAllPlayersIterator(result)
+            squadKills = 0
+            personalPrebattleID = personal.prebattleID
+            for item in allPlayers:
+                player = item.player
+                if personalPrebattleID != 0 and personalPrebattleID == player.prebattleID:
+                    squadKills += item.kills
+
+        return squadKills
+
+
 class TotalEfficiencyDetailsBlock(base.StatsBlock):
     __slots__ = ()
 
@@ -646,6 +697,40 @@ class PersonalAccountDBID(base.StatsItem):
 
     def _convert(self, value, reusable):
         return reusable.personal.avatar.accountDBID
+
+
+class BRPointsChanges(base.StatsItem):
+
+    def _convert(self, value, reusable):
+        info = reusable.personal.getBattleRoyaleInfo()
+        return info.get('brPointsChanges', 0)
+
+
+class BRAccTitle(base.StatsItem):
+
+    def _convert(self, value, reusable):
+        info = reusable.personal.getBattleRoyaleInfo()
+        return info.get('accBRTitle', (0, 0))
+
+
+class BREventProgressionBlock(base.StatsBlock):
+    __slots__ = ('accBRTitle', 'brPointsChanges', 'maxBRTitle', 'lastBRTitle', 'questProgress')
+
+    def __init__(self, meta=None, field='', *path):
+        super(BREventProgressionBlock, self).__init__(meta, field, *path)
+        self.accBRTitle = (0, 0)
+        self.maxBRTitle = (0, 0)
+        self.lastBRTitle = (0, 0)
+        self.brPointsChanges = 0
+        self.questProgress = []
+
+    def setRecord(self, result, reusable):
+        info = reusable.personal.getBattleRoyaleInfo()
+        self.accBRTitle = info.get('accBRTitle', (0, 0))
+        self.maxBRTitle = info.get('maxAchievedBRTitle', (0, 0))
+        self.lastBRTitle = info.get('prevBRTitle', (0, 0))
+        self.brPointsChanges = info.get('brPointsChanges', 0)
+        self.questProgress = reusable.personal.getQuestsProgress().keys()
 
 
 def fillKillerInfoBlock(vehicleStateBlock, deathReason, killerID, reusable):

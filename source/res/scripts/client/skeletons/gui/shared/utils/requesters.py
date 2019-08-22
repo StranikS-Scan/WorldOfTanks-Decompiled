@@ -666,6 +666,37 @@ class IRankedRequester(IRequester):
         raise NotImplementedError
 
 
+class IBattleRoyaleRequester(IRequester):
+
+    @property
+    def accTitle(self):
+        raise NotImplementedError
+
+    @property
+    def maxTitle(self):
+        raise NotImplementedError
+
+    @property
+    def battlesAmount(self):
+        raise NotImplementedError
+
+    @property
+    def top1SoloAmount(self):
+        raise NotImplementedError
+
+    @property
+    def top1SquadAmount(self):
+        raise NotImplementedError
+
+    @property
+    def killsAmount(self):
+        raise NotImplementedError
+
+    @property
+    def maxKillsCount(self):
+        raise NotImplementedError
+
+
 class IBadgesRequester(IRequester):
 
     @property

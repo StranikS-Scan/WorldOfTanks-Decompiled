@@ -17,6 +17,7 @@ from items import vehicles
 import BattleReplay
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
+from smoke_screen import SmokeScreen
 _ENABLE_DEBUG_DRAW = False
 _ENABLE_DEBUG_LOG = False
 
@@ -90,6 +91,7 @@ class CombatEquipmentManager(object):
         self.__callbackDelayer.destroy()
         self.__selectedAreas = {}
         self.__wings = {}
+        SmokeScreen.enableSmokePostEffect(False)
 
     def updatePlaneTrajectory(self, equipmentID, team, curTime, curPos, curDir, nextTime, nextPos, nextDir, isEndOfFlight):
         if _ENABLE_DEBUG_LOG:
@@ -284,6 +286,7 @@ class CombatEquipmentManager(object):
         self.__lastSmokeInfos = smokeInfos
         if ctrl is not None:
             ctrl.notifyStateChanged(VEHICLE_VIEW_STATE.SMOKE, smokeInfos)
+        SmokeScreen.enableSmokePostEffect(bool(smokeInfos))
         return
 
     @property

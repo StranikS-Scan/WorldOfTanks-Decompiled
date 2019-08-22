@@ -1,5 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/awards_formatters.py
+from bonus_constants import BonusName
+from festivity.festival.item_info import FestivalItemInfo
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -9,6 +13,7 @@ from gui.server_events.bonuses import FreeTokensBonus
 from gui.shared.formatters import text_styles
 from helpers import i18n, dependency
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 _OPERATION_AWARDS_COUNT = 3
 
 class CurtailingAwardsComposer(QuestsBonusComposer):
@@ -438,6 +443,35 @@ class EpicCurtailingAwardsComposer(CurtailingAwardsComposer):
             shortData = {'name': bonus.userName,
              'label': bonus.getFormattedLabel(),
              'imgSource': bonus.getImage('tooltip')}
+            bonuses.append(shortData)
+
+        return bonuses
+
+
+class RoyaleCurtailingAwardsComposer(CurtailingAwardsComposer):
+    itemsCache = dependency.descriptor(IItemsCache)
+
+    @classmethod
+    def _getShortBonusesData(cls, preformattedBonuses, size=AWARDS_SIZES.SMALL):
+        bonuses = []
+        for bonus in preformattedBonuses:
+            name = bonus.userName
+            if bonus.bonusName == BonusName.FESTIVAL_ITEMS:
+                festivalItemInfo = FestivalItemInfo(bonus.specialArgs[0])
+                name = text_styles.concatStylesWithSpace(backport.text(festivalItemInfo.getTypeResID()), name)
+            if bonus.specialAlias in (TOOLTIPS_CONSTANTS.BADGE, TOOLTIPS_CONSTANTS.BATTLE_STATS_ACHIEVS, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_AWARD):
+                typeName = userName = name
+                if bonus.specialAlias == TOOLTIPS_CONSTANTS.BADGE:
+                    typeName = backport.text(R.strings.battle_royale.tooltips.awards.badge())
+                if bonus.specialAlias == TOOLTIPS_CONSTANTS.BATTLE_STATS_ACHIEVS:
+                    typeName = backport.text(R.strings.battle_royale.tooltips.awards.achievement())
+                if bonus.specialAlias == TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_AWARD:
+                    item = cls.itemsCache.items.getItemByCD(bonus.specialArgs[0])
+                    userName = item.userName
+                name = backport.text(R.strings.battle_royale.tooltips.awards.pattern(), typeName=typeName, userName=userName)
+            shortData = {'name': name,
+             'label': bonus.getFormattedLabel(),
+             'imgSource': bonus.getImage(size)}
             bonuses.append(shortData)
 
         return bonuses

@@ -141,6 +141,7 @@ class LoginView(LoginPageMeta):
         self.as_setVersionS(getFullClientVersion())
         self.as_setCopyrightS(backport.text(R.strings.menu.copy()), backport.text(R.strings.menu.legal()))
         self.sessionProvider.getCtx().lastArenaUniqueID = None
+        self.sessionProvider.getCtx().lastArenaBonusType = None
         self._loginMode.init()
         self.update()
         if self.__capsLockCallbackID is None:

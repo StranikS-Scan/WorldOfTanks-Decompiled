@@ -3852,6 +3852,163 @@
     <season>	ALL	</season>
     <historical>	false	</historical>
     <vehicleFilter>
+      <include>
+        <levels>	8 9 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	53	</id>
+      <texture>	gui/maps/vehicles/styles/br_paid.png	</texture>
+      <description>	#vehicle_customization:special_style/br_paid_desc	</description>
+      <userString>	#vehicle_customization:special_style/br_paid	</userString>
+      <priceGroup>	styles 1750g notInShop	</priceGroup>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	7	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	6	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	6	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <vehicleFilter>
+      <include>
+        <levels>	8 9 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	54	</id>
+      <texture>	gui/maps/vehicles/styles/br_award_15.png	</texture>
+      <description>	#vehicle_customization:special_style/br_award_15_desc	</description>
+      <userString>	#vehicle_customization:special_style/br_award_15	</userString>
+      <priceGroup>	styles 750g notInShop	</priceGroup>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	8	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	7	</id>
+              <appliedTo>	112	</appliedTo>
+            </item>
+            <item>
+              <id>	8	</id>
+              <appliedTo>	28672	</appliedTo>
+            </item>
+            <item>
+              <id>	9	</id>
+              <appliedTo>	1799	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	8	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <vehicleFilter>
+      <include>
+        <levels>	8 9 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	55	</id>
+      <texture>	gui/maps/vehicles/styles/br_award_25.png	</texture>
+      <description>	#vehicle_customization:special_style/br_award_25_desc	</description>
+      <userString>	#vehicle_customization:special_style/br_award_25	</userString>
+      <priceGroup>	styles 750g notInShop	</priceGroup>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	10	</id>
+              <appliedTo>	16	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	9	</id>
+              <appliedTo>	4352	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	10	</id>
+              <appliedTo>	112	</appliedTo>
+            </item>
+            <item>
+              <id>	11	</id>
+              <appliedTo>	28672	</appliedTo>
+            </item>
+            <item>
+              <id>	12	</id>
+              <appliedTo>	1799	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	9	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <vehicleFilter>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>

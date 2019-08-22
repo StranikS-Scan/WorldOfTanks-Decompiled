@@ -24,10 +24,10 @@ class BCConsumablesPanel(ConsumablesPanel):
     def _getEquipmentIconPath(self):
         return EQUIPMENT_ICON_PATH_BIG if self.__isBigIcons else EQUIPMENT_ICON_PATH_DEFAULT
 
-    def _addShellSlot(self, idx, keyCode, sfKeyCode, quantity, clipCapacity, shellIconPath, noShellIconPath, tooltipText):
-        pass
+    def _addShellSlot(self, idx, intCD, descriptor, quantity, gunSettings):
+        self._cds[idx] = intCD
 
-    def _showEquipmentGlow(self, equipmentIndex):
+    def _showEquipmentGlow(self, equipmentIndex, glowType=CONSUMABLES_PANEL_SETTINGS.GLOW_ID_ORANGE):
         if self.__isBigIcons:
             return
         super(BCConsumablesPanel, self)._showEquipmentGlow(equipmentIndex)

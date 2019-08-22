@@ -19,7 +19,7 @@ from gui.prb_control import settings
 from gui.prb_control.settings import UNIT_RESTRICTION
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.ranges import toRomanRangeString
-from gui.shared.gui_items.Vehicle import VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED, Vehicle
+from gui.shared.gui_items.Vehicle import VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED, Vehicle, getIconResourceName
 from gui.shared.utils.functions import makeTooltip
 from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE, AIRSTRIKE, ARTILLERY_STRIKE, REQUISITION, HIGH_CAPACITY_TRANSPORT
 from helpers import i18n
@@ -74,29 +74,43 @@ def makeSlotLabel(unitFlags, slotState, isCreator=False, vehCount=0, checkForVeh
     return slotLabel
 
 
+def makeBattleRoyaleSlotLabel(slotState):
+    slotLabel = SLOT_LABEL.DEFAULT
+    if slotState.isFree:
+        slotLabel = makeHtmlString('html_templates:lobby/cyberSport/unit', SLOT_LABEL.BATTLE_ROYALE)
+    return slotLabel
+
+
 def makeVehicleBasicVO(vehicle, levelsRange=None, vehicleTypes=None):
     if vehicle is None:
         return
     else:
+        isBattleRoyaleVehicle = vehicle.isOnlyForBattleRoyaleBattles
         enabled, tooltip = True, None
         if levelsRange is not None and vehicle.level not in levelsRange:
             enabled, tooltip = False, TOOLTIPS.VEHICLESELECTOR_OVERFLOWLEVEL
         elif vehicleTypes is not None and vehicle.type not in vehicleTypes:
             enabled, tooltip = False, TOOLTIPS.VEHICLESELECTOR_INCOMPATIBLETYPE
+        elif isBattleRoyaleVehicle:
+            enabled, tooltip = True, TOOLTIPS_CONSTANTS.BATTLE_ROYALE_VEHICLE
+        if isBattleRoyaleVehicle:
+            iconPath = backport.image(R.images.gui.maps.icons.battleRoyale.vehicleSmall.dyn(getIconResourceName(vehicle.name))())
+        else:
+            iconPath = backport.image(R.images.gui.maps.icons.vehicle.small.dyn(getIconResourceName(vehicle.name))())
         return {'intCD': vehicle.intCD,
          'nationID': vehicle.nationID,
          'name': vehicle.name,
          'userName': vehicle.userName,
          'shortUserName': vehicle.shortUserName,
-         'level': vehicle.level,
-         'type': vehicle.type,
+         'level': vehicle.level if not vehicle.isOnlyForBattleRoyaleBattles else 0,
+         'type': vehicle.type if not vehicle.isOnlyForBattleRoyaleBattles else '',
          'typeIndex': VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED[vehicle.type],
-         'smallIconPath': '../maps/icons/vehicle/small/{0}.png'.format(vehicle.name.replace(':', '-')),
+         'smallIconPath': iconPath,
          'isReadyToFight': True,
          'enabled': enabled,
          'tooltip': tooltip,
          'state': '',
-         'isFalloutVehicle': False}
+         'isEventVehicle': isBattleRoyaleVehicle}
 
 
 def makeVehicleVO(vehicle, levelsRange=None, vehicleTypes=None, isCurrentPlayer=True):
@@ -283,7 +297,10 @@ def _getSlotsData(unitMgrID, fullData, levelsRange=None, checkForVehicles=True, 
                 if vehicle.vehTypeCompDescr:
                     vehicleVO = makeVehicleVO(vehicleGetter(vehicle.vehTypeCompDescr), levelsRange, isCurrentPlayer=isCurrentPlayer)
         isRequired = False
-        slotLabel = makeSlotLabel(unitState, slotState, isPlayerCreator, vehCount, checkForVehicles, isRequired=isRequired)
+        if unit is not None and unit.getPrebattleType() == PREBATTLE_TYPE.BATTLE_ROYALE:
+            slotLabel = makeBattleRoyaleSlotLabel(slotState)
+        else:
+            slotLabel = makeSlotLabel(unitState, slotState, isPlayerCreator, vehCount, checkForVehicles, isRequired=isRequired)
         if unit.isPrebattlesSquad():
             playerStatus = getSquadPlayerStatus(slotState, player)
         else:
@@ -316,7 +333,7 @@ def _getSlotsData(unitMgrID, fullData, levelsRange=None, checkForVehicles=True, 
          'selectedVehicle': vehicleVO,
          'selectedVehicleLevel': 1 if slotState.isClosed else slotLevel,
          'restrictions': restrictions,
-         'isFallout': False,
+         'isEvent': False,
          'rating': rating,
          'isLegionaries': isLegionaries,
          'isLocked': isLocked,
@@ -347,6 +364,8 @@ def _getSlotsData(unitMgrID, fullData, levelsRange=None, checkForVehicles=True, 
              'additionalMsg': additionMsg})
         elif unit.getPrebattleType() == PREBATTLE_TYPE.EPIC and squadPremBonusEnabled:
             slot.update(_updateEpicBattleSlotInfo(player, vehicle))
+        elif unit.getPrebattleType() == PREBATTLE_TYPE.BATTLE_ROYALE:
+            slot.update(_updateBattleRoyaleSlotInfo(player, vehicle))
         slots.append(slot)
         playerCount += 1
 
@@ -354,10 +373,18 @@ def _getSlotsData(unitMgrID, fullData, levelsRange=None, checkForVehicles=True, 
 
 
 def _updateEpicBattleSlotInfo(player, vehicle):
+    return _updateSpecialBattleSlotInfo(player, vehicle, backport.text(R.strings.messenger.dialogs.simpleSquad.epicBattle.VehicleRestriction()))
+
+
+def _updateBattleRoyaleSlotInfo(player, vehicle):
+    return _updateSpecialBattleSlotInfo(player, vehicle, backport.text(R.strings.messenger.dialogs.simpleSquad.battleRoyale.VehicleRestriction()))
+
+
+def _updateSpecialBattleSlotInfo(player, vehicle, message):
     result = {}
     if vehicle is None:
         isVisibleAdtMsg = player and player.isCurrentPlayer()
-        additionalMsg = text_styles.main(backport.text(R.strings.messenger.dialogs.simpleSquad.epicBattle.VehicleRestriction()))
+        additionalMsg = text_styles.main(message)
         result = {'isVisibleAdtMsg': isVisibleAdtMsg,
          'additionalMsg': additionalMsg}
     return result

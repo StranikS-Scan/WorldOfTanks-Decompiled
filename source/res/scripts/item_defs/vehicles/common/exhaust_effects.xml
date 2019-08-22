@@ -83,12 +83,28 @@
       <name>	GearUp	</name>
       <selector>
         <type>	discrete	</type>
-        <variable>	_gearUp	</variable>
+        <variable>	_nitro	</variable>
+        <selector>
+          <key>	0	</key>
+          <type>	discrete	</type>
+          <variable>	_gearUp	</variable>
+          <selector>
+            <key>	1	</key>
+            <type>	effect	</type>
+            <ttl>	0.05	</ttl>
+            <name>	particles/Tank/exhaust/{0}/rpm02_Load04.eff	</name>
+          </selector>
+        </selector>
         <selector>
           <key>	1	</key>
-          <type>	effect	</type>
-          <ttl>	0.05	</ttl>
-          <name>	particles/Tank/exhaust/{0}/rpm02_Load04.eff	</name>
+          <type>	discrete	</type>
+          <variable>	_gearUp	</variable>
+          <selector>
+            <key>	1	</key>
+            <type>	effect	</type>
+            <ttl>	0.05	</ttl>
+            <name>	particles/Environment/scenarios/br_nitro_gearup.eff	</name>
+          </selector>
         </selector>
       </selector>
     </template>
@@ -96,12 +112,28 @@
       <name>	EngineStart	</name>
       <selector>
         <type>	discrete	</type>
-        <variable>	_engineStart	</variable>
+        <variable>	_nitro	</variable>
+        <selector>
+          <key>	0	</key>
+          <type>	discrete	</type>
+          <variable>	_engineStart	</variable>
+          <selector>
+            <key>	1	</key>
+            <type>	effect	</type>
+            <ttl>	5.2	</ttl>
+            <name>	particles/Tank/exhaust/{0}/start.eff	</name>
+          </selector>
+        </selector>
         <selector>
           <key>	1	</key>
-          <type>	effect	</type>
-          <ttl>	5.2	</ttl>
-          <name>	particles/Tank/exhaust/{0}/start.eff	</name>
+          <type>	discrete	</type>
+          <variable>	_engineStart	</variable>
+          <selector>
+            <key>	1	</key>
+            <type>	effect	</type>
+            <ttl>	5.2	</ttl>
+            <name>	particles/Environment/scenarios/br_nitro_start.eff	</name>
+          </selector>
         </selector>
       </selector>
     </template>
@@ -195,17 +227,37 @@
     <template>
       <name>	ExhaustLoad	</name>
       <selector>
-        <type>	range	</type>
-        <variable>	_engine_load	</variable>
+        <type>	discrete	</type>
+        <variable>	_nitro	</variable>
         <selector>
-          <key>	1	</key>
-          <type>	effect	</type>
-          <name>	particles/Tank/exhaust/{0}/rpm01_Load01.eff	</name>
+          <key>	0	</key>
+          <type>	range	</type>
+          <variable>	_engine_load	</variable>
+          <selector>
+            <key>	1	</key>
+            <type>	effect	</type>
+            <name>	particles/Tank/exhaust/{0}/rpm01_Load01.eff	</name>
+          </selector>
+          <selector>
+            <key>	2	</key>
+            <type>	template	</type>
+            <name>	PhysicLoad	</name>
+          </selector>
         </selector>
         <selector>
-          <key>	2	</key>
-          <type>	template	</type>
-          <name>	PhysicLoad	</name>
+          <key>	1	</key>
+          <type>	range	</type>
+          <variable>	_engine_load	</variable>
+          <selector>
+            <key>	1	</key>
+            <type>	effect	</type>
+            <name>	particles/Environment/scenarios/br_nitro_idle.eff	</name>
+          </selector>
+          <selector>
+            <key>	2	</key>
+            <type>	effect	</type>
+            <name>	particles/Environment/scenarios/br_nitro_load.eff	</name>
+          </selector>
         </selector>
       </selector>
     </template>
@@ -216,59 +268,99 @@
         <selector>
           <type>	template	</type>
           <name>	ExhaustLoad	</name>
-          <parameters>	_engine_load:engineLoad;      _physicLoad:physicLoad;      _rpm:RPM	</parameters>
+          <parameters>	_engine_load:engineLoad;      _physicLoad:physicLoad;      _rpm:RPM;      _nitro:Nitro	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	GearUp	</name>
-          <parameters>	_gearUp:gearUp	</parameters>
+          <parameters>	_gearUp:gearUp;_nitro:Nitro	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	EngineStart	</name>
-          <parameters>	_engineStart:engineStart	</parameters>
+          <parameters>	_engineStart:engineStart;_nitro:Nitro	</parameters>
         </selector>
       </selector>
     </template>
     <template>
       <name>	STRVLoad	</name>
       <selector>
-        <type>	range	</type>
-        <variable>	engineState	</variable>
+        <type>	discrete	</type>
+        <variable>	_nitro	</variable>
         <selector>
-          <key>	0.0	</key>
-          <type>	discrete	</type>
-          <variable>	siegeProgress	</variable>
+          <key>	0	</key>
+          <type>	range	</type>
+          <variable>	engineState	</variable>
           <selector>
-            <key>	0	</key>
-            <type>	range	</type>
-            <variable>	_engine_load	</variable>
+            <key>	0.0	</key>
+            <type>	discrete	</type>
+            <variable>	siegeProgress	</variable>
+            <selector>
+              <key>	0	</key>
+              <type>	range	</type>
+              <variable>	_engine_load	</variable>
+              <selector>
+                <key>	1	</key>
+                <type>	effect	</type>
+                <name>	particles/Tank/exhaust/{0}/rpm01_Load01.eff	</name>
+              </selector>
+              <selector>
+                <key>	2	</key>
+                <type>	template	</type>
+                <name>	PhysicLoad	</name>
+              </selector>
+            </selector>
             <selector>
               <key>	1	</key>
               <type>	effect	</type>
-              <name>	particles/Tank/exhaust/{0}/rpm01_Load01.eff	</name>
-            </selector>
-            <selector>
-              <key>	2	</key>
-              <type>	template	</type>
-              <name>	PhysicLoad	</name>
+              <name>	particles/Tank/exhaust/strv_change_exhaust.eff	</name>
             </selector>
           </selector>
           <selector>
-            <key>	1	</key>
+            <key>	1.0	</key>
             <type>	effect	</type>
-            <name>	particles/Tank/exhaust/strv_change_exhaust.eff	</name>
+            <name>	particles/Tank/exhaust/strv_engine_crit.eff	</name>
+          </selector>
+          <selector>
+            <key>	3.5	</key>
+            <type>	effect	</type>
+            <name>	particles/Tank/exhaust/strv_engine_crit.eff	</name>
           </selector>
         </selector>
         <selector>
-          <key>	1.0	</key>
-          <type>	effect	</type>
-          <name>	particles/Tank/exhaust/strv_engine_crit.eff	</name>
-        </selector>
-        <selector>
-          <key>	3.5	</key>
-          <type>	effect	</type>
-          <name>	particles/Tank/exhaust/strv_engine_crit.eff	</name>
+          <key>	1	</key>
+          <type>	range	</type>
+          <variable>	engineState	</variable>
+          <selector>
+            <key>	0	</key>
+            <type>	discrete	</type>
+            <variable>	siegeProgress	</variable>
+            <selector>
+              <key>	0	</key>
+              <type>	range	</type>
+              <variable>	_engine_load	</variable>
+              <selector>
+                <key>	1	</key>
+                <type>	effect	</type>
+                <name>	particles/Environment/scenarios/br_nitro_idle.eff	</name>
+              </selector>
+              <selector>
+                <key>	2	</key>
+                <type>	effect	</type>
+                <name>	particles/Environment/scenarios/br_nitro_load.eff	</name>
+              </selector>
+            </selector>
+            <selector>
+              <key>	1	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/strv_change_exhaust.eff	</name>
+            </selector>
+          </selector>
+          <selector>
+            <key>	2	</key>
+            <type>	effect	</type>
+            <name>	particles/Tank/exhaust/strv_engine_crit.eff	</name>
+          </selector>
         </selector>
       </selector>
     </template>
@@ -279,17 +371,17 @@
         <selector>
           <type>	template	</type>
           <name>	STRVLoad	</name>
-          <parameters>	_engine_load:engineLoad;      _physicLoad:physicLoad;      _rpm:RPM	</parameters>
+          <parameters>	_engine_load:engineLoad;      _physicLoad:physicLoad;      _rpm:RPM;      _nitro:Nitro	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	GearUp	</name>
-          <parameters>	_gearUp:gearUp	</parameters>
+          <parameters>	_gearUp:gearUp;_nitro:Nitro	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	EngineStart	</name>
-          <parameters>	_engineStart:engineStart	</parameters>
+          <parameters>	_engineStart:engineStart;_nitro:Nitro	</parameters>
         </selector>
       </selector>
     </template>

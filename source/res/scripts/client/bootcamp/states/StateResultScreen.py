@@ -53,6 +53,7 @@ class StateResultScreen(AbstractState):
                     self.__storedArenaUniqueID = battleCtx.lastArenaUniqueID
                     g_eventBus.addListener(events.AppLifeCycleEvent.INITIALIZED, self.__onAppInitialized, EVENT_BUS_SCOPE.GLOBAL)
                 battleCtx.lastArenaUniqueID = None
+                battleCtx.lastArenaBonusType = None
             return
 
     def _doDeactivate(self):

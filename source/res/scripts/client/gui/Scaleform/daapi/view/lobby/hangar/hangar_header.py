@@ -183,6 +183,7 @@ def _getPersonalMissionsTooltip(branch, key):
 
 
 class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
+    __slots__ = ('_currentVehicle', '__screenWidth')
     _itemsCache = dependency.descriptor(IItemsCache)
     _eventsCache = dependency.descriptor(IEventsCache)
     _questController = dependency.descriptor(IQuestsController)
@@ -264,8 +265,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
              'isVisible': True,
              'quests': quests}
         else:
-            headerVO = {'isVisible': False,
-             'quests': []}
+            headerVO = self.__hideHeader()
         return headerVO
 
     def _getQuestsToHeaderVO(self, vehicle):
@@ -490,3 +490,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
 
     def __onSetHangarHeaderEnabled(self, _=None):
         self.update()
+
+    def __hideHeader(self):
+        return {'isVisible': False,
+         'quests': []}

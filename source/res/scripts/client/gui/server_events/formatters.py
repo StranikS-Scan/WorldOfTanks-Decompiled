@@ -334,6 +334,8 @@ def getUniqueBonusTypes(bonusTypes):
             bonusType = ARENA_BONUS_TYPE.REGULAR
         if bonusType in (ARENA_BONUS_TYPE.EVENT_BATTLES_2,):
             bonusType = ARENA_BONUS_TYPE.EVENT_BATTLES
+        if bonusType in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
+            bonusType = ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO
         uniqueTypes.add(bonusType)
 
     return uniqueTypes

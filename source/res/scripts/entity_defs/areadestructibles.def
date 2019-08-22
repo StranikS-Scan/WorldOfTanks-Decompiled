@@ -9,6 +9,14 @@
       <Type>	UINT16	</Type>
       <Flags>	CELL_PUBLIC	</Flags>
     </chunkID>
+    <arenaTypeID>
+      <Type>	INT32	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </arenaTypeID>
+    <arenaBonusType>
+      <Type>	UINT8	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </arenaBonusType>
     <destroyedModules>
       <Type>	ARRAY	  <of>	TUPLE	  <of>	UINT8	</of>
           <size>	3	</size>

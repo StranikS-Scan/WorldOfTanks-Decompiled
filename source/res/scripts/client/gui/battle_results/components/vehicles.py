@@ -10,6 +10,7 @@ from gui.battle_results.components import base, shared, style, ranked
 from gui.battle_results.components.base import PropertyValue
 from gui.battle_results.components.personal import fillKillerInfoBlock
 from gui.battle_results.reusable import sort_keys
+from gui.battle_results.reusable.avatars import AvatarInfo
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.ranked_battles.constants import ZERO_RANK_ID
@@ -205,6 +206,36 @@ class EpicVehicleStatsBlock(RegularVehicleStatsBlock):
              'icon': RES_ICONS.MAPS_ICONS_LIBRARY_EPICVEHICLESALL})
             self.__allAdded = True
         return super(EpicVehicleStatsBlock, self).getVO()
+
+
+class BattleRoyaleVehicleStatsBlock(base.StatsBlock):
+    __slots__ = ('isPersonal', 'team', 'isPersonalSquad', 'kills', 'nameLabel', 'place', 'index', 'isPrematureLeave')
+
+    def __init__(self, meta=None, field='', *path):
+        super(BattleRoyaleVehicleStatsBlock, self).__init__(meta, field, *path)
+        self.isPersonal = False
+        self.isPersonalSquad = False
+        self.team = 0
+        self.nameLabel = ''
+        self.place = 0
+        self.kills = 0
+        self.index = None
+        self.isPrematureLeave = False
+        return
+
+    def setRecord(self, vehicleSummarizeInfo, reusable):
+        avatar = reusable.avatars.getAvatarInfo(vehicleSummarizeInfo.player.dbID)
+        if avatar is None or avatar.extensionInfo is None:
+            return
+        else:
+            if self.isPersonal:
+                self.isPrematureLeave = reusable.personal.avatar.isPrematureLeave
+            extensionInfo = avatar.extensionInfo
+            self.place = extensionInfo.get('battleRoyale', {}).get('accPos', 0)
+            self.team = vehicleSummarizeInfo.player.team
+            self.kills = vehicleSummarizeInfo.kills
+            self.nameLabel = reusable.getPlayerInfo(vehicleSummarizeInfo.player.dbID).getFullName()
+            return
 
 
 class RegularVehicleStatValuesBlock(base.StatsBlock):
@@ -473,6 +504,36 @@ class EpicTeamStatsBlock(TeamStatsBlock):
 
     def __init__(self, meta=None, field='', *path):
         super(EpicTeamStatsBlock, self).__init__(EpicVehicleStatsBlock, meta, field, *path)
+
+
+class BattleRoyaleTeamStatsBlock(base.StatsBlock):
+    __slots__ = ()
+
+    def setRecord(self, result, reusable):
+        allPlayers = reusable.getAllPlayersIterator(result, sortKey=sort_keys.placeSortKey)
+        personalInfo = reusable.getPlayerInfo()
+        personalDBID = personalInfo.dbID
+        if personalInfo.squadIndex:
+            personalPrebattleID = personalInfo.prebattleID
+        else:
+            personalPrebattleID = 0
+        for idx, item in enumerate(allPlayers):
+            if item.vehicle is not None and item.vehicle.isObserver:
+                continue
+            block = BattleRoyaleVehicleStatsBlock()
+            block.index = idx
+            if item.avatar is None or item.avatar.extensionInfo is None or item.avatar.extensionInfo.get('battleRoyale', {}).get('accPos', 0) == 0:
+                block.setRecord(item, reusable)
+                self.addComponent(self.getNextComponentIndex(), block)
+                continue
+            player = item.player
+            isPersonal = player.dbID == personalDBID
+            block.isPersonal = isPersonal
+            block.isPersonalSquad = personalPrebattleID != 0 and personalPrebattleID == player.prebattleID
+            block.setRecord(item, reusable)
+            self.addComponent(self.getNextComponentIndex(), block)
+
+        return
 
 
 class TwoTeamsStatsBlock(shared.BiDiStatsBlock):

@@ -137,7 +137,10 @@ class ElementTooltip(BlocksTooltipData):
         self.currentVehicle = g_currentVehicle.item
         self.boundVehs = [ vehicleCD for vehicleCD in self._item.boundInventoryCount if vehicleCD != -1 ]
         self.installedToVehs = self._item.getInstalledVehicles()
-        self.installedCount = self._item.getInstalledOnVehicleCount(self.currentVehicle.intCD)
+        if self.currentVehicle:
+            self.installedCount = self._item.getInstalledOnVehicleCount(self.currentVehicle.intCD)
+        else:
+            self.installedCount = 0
         camo = None
         self._appliedCount = 0
         bonusEnabled = False

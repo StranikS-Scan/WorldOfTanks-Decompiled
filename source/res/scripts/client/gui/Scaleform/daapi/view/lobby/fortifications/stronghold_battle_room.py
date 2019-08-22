@@ -30,7 +30,6 @@ from gui.prb_control.items.stronghold_items import REQUISITION_TYPE
 from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_FLAG
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.utils.MethodsRules import MethodsRules
 from gui.shared.utils.functions import getViewName, makeTooltip
 from gui.shared.view_helpers import UsersInfoHelper
 from helpers import dependency, i18n
@@ -44,7 +43,7 @@ from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBrowserController
 from skeletons.gui.shared import IItemsCache
 
-class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdListener, MethodsRules, UsersInfoHelper):
+class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdListener, UsersInfoHelper):
     browserCtrl = dependency.descriptor(IBrowserController)
     itemsCache = dependency.descriptor(IItemsCache)
     appLoader = dependency.descriptor(IAppLoader)

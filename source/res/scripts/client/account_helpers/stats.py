@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/Stats.py
 import cPickle
-from functools import partial
+from functools import partial, wraps
 import AccountCommands
 import items
 from account_helpers.premium_info import PremiumInfo
@@ -28,6 +28,29 @@ _CACHE_STATS = ('isFinPswdVerified', 'mayConsumeWalletResources', 'unitAcceptDea
 _PREFERRED_MAPS_KEY = 'preferredMaps'
 _ADDITIONAL_XP_CACHE_KEY = '_additionalXPCache'
 
+def _checkIfNonPlayer(*args):
+
+    def _decorator(func):
+
+        @wraps(func)
+        def _wrapper(self, *func_args, **func_kwargs):
+            if self.ignore:
+                callback = func_kwargs.get('callback')
+                if callback is not None:
+                    callback(AccountCommands.RES_NON_PLAYER, *args)
+                return
+            else:
+                return func(self, *func_args, **func_kwargs)
+
+        return _wrapper
+
+    return _decorator
+
+
+def _get_callback_proxy(callback=None):
+    return None if callback is None else (lambda requestID, resultID, errorStr, ext=None: callback(resultID))
+
+
 class Stats(object):
 
     def __init__(self, syncData):
@@ -36,6 +59,10 @@ class Stats(object):
         self.__cache = {}
         self.__ignore = True
         return
+
+    @property
+    def ignore(self):
+        return self.__ignore
 
     def onAccountBecomePlayer(self):
         self.__ignore = False
@@ -311,6 +338,10 @@ class Stats(object):
                 proxy = None
             self.__account._doCmdIntArr(AccountCommands.CMD_COMPLETE_PERSONAL_MISSION, [questID, int(withAdditional)], proxy)
             return
+
+    @_checkIfNonPlayer()
+    def changeBRPoints(self, points, ignoreUnburnableTitles=False, callback=None):
+        self.__account._doCmdInt3(AccountCommands.CMD_CHANGE_BR_POINTS, points, int(ignoreUnburnableTitles), 0, _get_callback_proxy(callback))
 
     def __onGetResponse(self, statName, callback, resultID):
         if resultID < 0:

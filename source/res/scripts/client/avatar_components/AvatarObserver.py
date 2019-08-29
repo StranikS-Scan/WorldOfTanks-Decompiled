@@ -110,24 +110,27 @@ class AvatarObserver(CallbackDelayer):
         if self.vehicle is not None:
             typeofveh = 'observed' if self.__observedVehicleID == self.vehicle.id else 'players'
             LOG_DEBUG_DEV('Vehicle ID is ' + str(self.vehicle.id) + ' and is ' + typeofveh)
-        observing = self.isObserver() or self.guiSessionProvider.shared.vehicleState.isInPostmortem
-        if observing and self.vehicle is not None and self.__observedVehicleID != self.vehicle.id:
+        isInPostmortem = self.guiSessionProvider.shared.vehicleState.isInPostmortem
+        isObserving = self.isObserver() or isInPostmortem
+        if isObserving and self.vehicle is not None and self.__observedVehicleID != self.vehicle.id:
             self.__observedVehicleID = self.vehicle.id
-            self.guiSessionProvider.getArenaDP().switchCurrentTeam(self.vehicle.publicInfo['team'])
+            if not isInPostmortem:
+                self.guiSessionProvider.getArenaDP().switchCurrentTeam(self.vehicle.publicInfo['team'])
             extraData = self.observedVehicleData[self.__observedVehicleID]
             extraData.gunSettings = self.vehicle.typeDescriptor.gun
             self.inputHandler.setObservedVehicle(self.__observedVehicleID)
             if self.gunRotator is not None:
                 self.gunRotator.start()
             self.updateObservedVehicleData()
-            if hasattr(self.vehicle.filter, 'enableStabilisedMatrix'):
-                self.vehicle.filter.enableStabilisedMatrix(True)
-            BigWorld.target.exclude = self.vehicle
-            for v in BigWorld.entities.values():
-                if isinstance(v, Vehicle.Vehicle) and v.appearance is not None:
-                    v.appearance.highlighter.setVehicleOwnership()
-                    self.guiSessionProvider.stopVehicleVisual(v.id, False)
-                    self.guiSessionProvider.startVehicleVisual(v, True)
+            if not isInPostmortem:
+                if hasattr(self.vehicle.filter, 'enableStabilisedMatrix'):
+                    self.vehicle.filter.enableStabilisedMatrix(True)
+                BigWorld.target.exclude = self.vehicle
+                for v in BigWorld.entities.values():
+                    if isinstance(v, Vehicle.Vehicle) and v.appearance is not None:
+                        v.appearance.highlighter.setVehicleOwnership()
+                        self.guiSessionProvider.stopVehicleVisual(v.id, False)
+                        self.guiSessionProvider.startVehicleVisual(v, True)
 
         return
 

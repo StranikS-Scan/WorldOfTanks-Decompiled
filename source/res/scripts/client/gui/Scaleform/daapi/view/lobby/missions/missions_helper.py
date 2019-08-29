@@ -725,7 +725,7 @@ class _DetailedPrivateMissionInfo(_DetailedMissionInfo, _PrivateMissionInfo):
 class _DetailedTokenMissionInfo(_DetailedMissionInfo):
 
     def getVehicleRequirementsCriteria(self):
-        return (None, [])
+        return (None, [], False)
 
     def _getMainConditions(self):
         return _detailedCardTokenConditionFormatter.format(self.event)
@@ -765,7 +765,7 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
         criteria = REQ_CRITERIA.INVENTORY
         criteria |= REQ_CRITERIA.VEHICLE.LEVELS(range(self.event.getVehMinLevel(), constants.MAX_VEHICLE_LEVEL + 1))
         criteria |= REQ_CRITERIA.VEHICLE.CLASSES(self.event.getQuestClassifier().classificationAttr)
-        return (criteria, extraConditions)
+        return (criteria, extraConditions, False)
 
     def getAwardScreenConditionsFormatter(self):
         return formatters.PMAwardScreenConditionsFormatter(self.event)

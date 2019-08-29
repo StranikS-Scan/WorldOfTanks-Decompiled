@@ -143,6 +143,8 @@ class SpawnController(ViewComponentsController, ISpawnController):
     def __closeSpawnPoints(self):
         if self._app:
             self._app.containerManager.onViewAddedToContainer -= self.__onViewAddedToContainer
+        if self.__notifier:
+            self.__notifier.stopNotification()
         self.__isSpawnPointsVisible = False
         for viewComponent in self._viewComponents:
             viewComponent.closeSpawnPoints()

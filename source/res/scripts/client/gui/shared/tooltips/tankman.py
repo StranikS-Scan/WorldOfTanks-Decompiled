@@ -337,7 +337,8 @@ class TankmanTooltipDataBlock(BlocksTooltipData):
 class BattleRoyaleTankmanTooltipDataBlock(TankmanTooltipDataBlock):
 
     def _getFullUserName(self, item):
-        return item.firstUserName
+        tooltipHeaderByNation = ('#ussr_vehicles:T-43_BR', '#germany_vehicles:PzV_BR', '#usa_vehicles:T25_2_BR')
+        return makeString(tooltipHeaderByNation[item.nationID])
 
     def _getTankmanDescription(self, item):
         return item.roleUserName

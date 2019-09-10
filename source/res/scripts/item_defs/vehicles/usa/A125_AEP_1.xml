@@ -104,6 +104,10 @@
         <camouflage>	HULL	</camouflage>
       </customizableVehicleAreas>
     </customization>
+    <camouflage>
+      <density>	103.321 103.277	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_A125_AEP_1>
@@ -728,7 +732,7 @@
           <segmentsPlaneOffset>	-1.48	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <front>	0.0673907	</front>
+              <front>	0.05	</front>
               <top>	0.069705	</top>
               <back>	0.0648724	</back>
               <bottom>	0.066453	</bottom>
@@ -736,7 +740,7 @@
             <forwardMovement>
               <back>	0.0648724	</back>
               <top>	0.0619831	</top>
-              <front>	0.0703907	</front>
+              <front>	0.065	</front>
               <bottom>	0.066453	</bottom>
             </forwardMovement>
           </springsLength>
@@ -1216,7 +1220,7 @@
           <segmentsPlaneOffset>	1.48	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <front>	0.0673907	</front>
+              <front>	0.05	</front>
               <top>	0.069705	</top>
               <back>	0.0648724	</back>
               <bottom>	0.066453	</bottom>
@@ -1224,7 +1228,7 @@
             <forwardMovement>
               <back>	0.0648724	</back>
               <top>	0.0619831	</top>
-              <front>	0.0783907	</front>
+              <front>	0.068	</front>
               <bottom>	0.066453	</bottom>
             </forwardMovement>
           </springsLength>
@@ -1598,6 +1602,8 @@
           </customization>
           <camouflage>
             <tiling>	0.6 0.6 0.000000 0.000000	</tiling>
+            <density>	115.917 115.961	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_120mm_Gun_M58A>
       </guns>
@@ -1677,6 +1683,8 @@
       </customization>
       <camouflage>
         <tiling>	1 0.5 0.000000 0.000000	</tiling>
+        <density>	96.5013 96.7844	</density>
+        <aoTextureSize>	1024 512	</aoTextureSize>
       </camouflage>
     </Turret_1_A125_AEP_1>
   </turrets0>

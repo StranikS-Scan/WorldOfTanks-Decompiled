@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/Crew.py
 from CurrentVehicle import g_currentVehicle
 from gui import SystemMessages
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared import events, event_dispatcher as shared_events
 from gui.shared.events import LoadViewEvent
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -11,10 +12,11 @@ from gui.shared.gui_items.Tankman import getCrewSkinIconSmallWithoutPath
 from gui.shared.gui_items.processors.tankman import TankmanUnload, TankmanEquip
 from gui.shared.SoundEffectsId import SoundEffectsId
 from gui.shared.utils import decorators
+from gui.impl.gen import R
+from gui.impl import backport
 import SoundGroups
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.CrewMeta import CrewMeta
-from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.Waiting import Waiting
 from helpers import dependency
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
@@ -128,8 +130,10 @@ class Crew(CrewMeta):
              'tankmen': tankmenData})
             dogName = ''
             if 'dog' in self.itemsCache.items.getItemByCD(g_currentVehicle.item.intCD).tags:
-                dogName = MENU.HANGAR_CREW_RODY_DOG_NAME
+                dogName = backport.text(R.strings.menu.hangar.crew.rody.dog.dyn(vehicle.nationName).name())
             self.as_dogResponseS(dogName)
+            tooltipId = TOOLTIPS.HANGAR_CREW_RUDY_DOG + vehicle.nationName
+            self.as_setDogTooltipS(tooltipId)
         Waiting.hide('updateTankmen')
         return
 

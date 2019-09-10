@@ -420,8 +420,7 @@ class Source(object):
              'critical': self.__readBattleResultsConditionList,
              'crit': self.__readBattleResultsConditionList,
              'critName': self.__readCritName,
-             'unregularAmmo': self.__readCondition_true,
-             'isNotLeaver': self.__readCondition_true})
+             'unregularAmmo': self.__readCondition_true})
         if eventType in (EVENT_TYPE.BATTLE_QUEST,):
             condition_readers.update({'red': self.__readListOfInts,
              'silver': self.__readListOfInts,
@@ -460,9 +459,7 @@ class Source(object):
          'vehicleChoice',
          'crewSkin',
          'blueprint',
-         'blueprintAny',
-         'festivalTickets',
-         'festivalItem'}
+         'blueprintAny'}
         if eventType in (EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST, EVENT_TYPE.NT_QUEST):
             bonusTypes.update(('xp', 'tankmenXP', 'xpFactor', 'creditsFactor', 'freeXPFactor', 'tankmenXPFactor'))
         if eventType in (EVENT_TYPE.NT_QUEST,):

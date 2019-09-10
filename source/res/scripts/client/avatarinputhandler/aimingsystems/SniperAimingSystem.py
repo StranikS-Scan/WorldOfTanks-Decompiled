@@ -39,15 +39,7 @@ class SniperAimingSystem(IAimingSystem):
         self.__worldPitch = 0.0
         self.__vehicleTypeDescriptor = None
         self.__vehicleMProv = None
-        self.__siegeModeControl = None
-        player = BigWorld.player()
-        if player.vehicleTypeDescriptor is not None:
-            typeDesc = player.vehicleTypeDescriptor
-            if typeDesc.hasSiegeMode:
-                self.__siegeModeControl = player.inputHandler.siegeModeControl
-                self.__siegeModeControl.onSiegeStateChanged += self.onSiegeStateChanged
-            else:
-                self.__siegeModeState = VEHICLE_SIEGE_STATE.DISABLED
+        self.__siegeState = VEHICLE_SIEGE_STATE.DISABLED
         self.__yprDeviationConstraints = Vector3(SniperAimingSystem.__STABILIZED_CONSTRAINTS)
         self.__oscillator = Math.PyOscillator(1.0, Vector3(0.0, 0.0, 15.0), Vector3(0.0, 0.0, 3.5), self.__yprDeviationConstraints)
         self.__returningOscillator = Math.PyOscillator(1.0, Vector3(0.0, 15.0, 15.0), Vector3(0.0, 3.5, 3.5), self.__yprDeviationConstraints)
@@ -61,8 +53,6 @@ class SniperAimingSystem(IAimingSystem):
     def destroy(self):
         IAimingSystem.destroy(self)
         SniperAimingSystem.__activeSystem = None
-        if self.__siegeModeControl:
-            self.__siegeModeControl.onSiegeStateChanged -= self.onSiegeStateChanged
         return
 
     def enableHorizontalStabilizerRuntime(self, enable):
@@ -74,12 +64,9 @@ class SniperAimingSystem(IAimingSystem):
 
     def getDynamicPitchLimits(self, turretYaw=0.0):
 
-        def _getCorrectGunPitch(vehicleMatrix, turretYaw, gunPitch, overrideTurretLocalZ=None, useGunCamPosition=False):
+        def _getCorrectGunPitch(vehicleMatrix, turretYaw, gunPitch, overrideTurretLocalZ=None):
             turretMat = AimingSystems.getTurretJointMat(self.__vehicleTypeDescriptor, vehicleMatrix, turretYaw, overrideTurretLocalZ)
-            if not useGunCamPosition:
-                gunMat = AimingSystems.getGunJointMat(self.__vehicleTypeDescriptor, turretMat, gunPitch, overrideTurretLocalZ)
-            else:
-                gunMat = AimingSystems.getGunCameraJointMat(self.__vehicleTypeDescriptor, turretMat, gunPitch)
+            gunMat = AimingSystems.getGunJointMat(self.__vehicleTypeDescriptor, turretMat, gunPitch, overrideTurretLocalZ)
             return gunMat.pitch
 
         typeDescr = self.__vehicleTypeDescriptor
@@ -100,24 +87,19 @@ class SniperAimingSystem(IAimingSystem):
          'minPitch': ((0.0, minPitch), (math.pi * 2.0, minPitch))}
 
     def getPitchLimits(self, turretYaw=0.0):
-        return self.getDynamicPitchLimits(turretYaw) if self.__vehicleTypeDescriptor.isHullAimingAvailable and self.__siegeModeState == VEHICLE_SIEGE_STATE.ENABLED else self.__vehicleTypeDescriptor.gun.pitchLimits
+        return self.getDynamicPitchLimits(turretYaw) if self.__vehicleTypeDescriptor.isHullAimingAvailable and self.__siegeState == VEHICLE_SIEGE_STATE.ENABLED else self.__vehicleTypeDescriptor.gun.pitchLimits
 
-    def onSiegeStateChanged(self, newState, timeToNextMode):
-        if newState == VEHICLE_SIEGE_STATE.SWITCHING_ON:
-            self.__siegeModeState = VEHICLE_SIEGE_STATE.ENABLED
-        elif newState == VEHICLE_SIEGE_STATE.SWITCHING_OFF:
-            self.__siegeModeState = VEHICLE_SIEGE_STATE.DISABLED
-        else:
-            self.__siegeModeState = newState
+    def onSiegeStateChanged(self, newState):
+        self.__siegeState = newState
 
     def enable(self, targetPos, playerGunMatFunction=AimingSystems.getPlayerGunMat):
         player = BigWorld.player()
+        if player.vehicle is not None:
+            siegeState = player.vehicle.siegeState
+            self.__siegeState = siegeState if siegeState is not None else VEHICLE_SIEGE_STATE.DISABLED
         self.__playerGunMatFunction = playerGunMatFunction
         self.__vehicleTypeDescriptor = player.vehicleTypeDescriptor
         self.__vehicleMProv = player.inputHandler.steadyVehicleMatrixCalculator.outputMProv
-        if self.__siegeModeControl is None and self.__vehicleTypeDescriptor.hasSiegeMode:
-            self.__siegeModeControl = player.inputHandler.siegeModeControl
-            self.__siegeModeControl.onSiegeStateChanged += self.onSiegeStateChanged
         IAimingSystem.enable(self, targetPos)
         self.focusOnPos(targetPos)
         self.__oscillator.reset()

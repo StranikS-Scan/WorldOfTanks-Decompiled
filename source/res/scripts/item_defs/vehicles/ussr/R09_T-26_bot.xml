@@ -106,6 +106,10 @@
         <isUVProportional>	true	</isUVProportional>
       </slot>
     </customizationSlots>
+    <camouflage>
+      <density>	127.557 127.216	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
   </hull>
   <chassis>
     <T-26_bot>
@@ -1129,6 +1133,8 @@
           </customization>
           <camouflage>
             <tiling>	0.5 0.5 0.000000 0.000000	</tiling>
+            <density>	199.349 201.326	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_37mm_B-3_bot>
       </guns>
@@ -1176,6 +1182,8 @@
       </customizationSlots>
       <camouflage>
         <tiling>	0.6 0.6 0.000000 0.000000	</tiling>
+        <density>	119.378 119.436	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
     </T-26_cylindrical_bot>
   </turrets0>

@@ -9,8 +9,8 @@ from gui.impl.pub.dialog_window import DialogWindow, DialogContent, DialogLayer
 
 class SimpleDialogWindow(DialogWindow):
 
-    def __init__(self, bottomContent=None, parent=None, balanceContent=None, enableBlur=True, enableBlur3dScene=True, preset=DialogPresets.DEFAULT, layer=DialogLayer.TOP_WINDOW):
-        super(SimpleDialogWindow, self).__init__(bottomContent=bottomContent, parent=parent, balanceContent=balanceContent, enableBlur=enableBlur, content=DialogContent(R.views.common.dialog_view.simple_dialog_content.SimpleDialogContent(), SimpleDialogWindowModel), layer=layer, enableBlur3dScene=enableBlur3dScene)
+    def __init__(self, bottomContent=None, parent=None, balanceContent=None, enableBlur=True, preset=DialogPresets.DEFAULT, layer=DialogLayer.TOP_WINDOW):
+        super(SimpleDialogWindow, self).__init__(bottomContent=bottomContent, parent=parent, balanceContent=balanceContent, enableBlur=enableBlur, content=DialogContent(R.views.common.dialog_view.simple_dialog_content.SimpleDialogContent(), SimpleDialogWindowModel), layer=layer)
         self._setPreset(preset)
 
     @property

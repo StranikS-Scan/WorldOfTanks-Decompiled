@@ -11,6 +11,7 @@ from gui.shared.events import CSRosterSlotSettingsWindow
 from gui.shared.formatters import text_styles, icons
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
+from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
 from skeletons.gui.shared import IItemsCache
 VEHICLE_SELECTOR_TAB_ID = 'vehicleSelectorTab'
 RANGE_SELECTOR_TAB_ID = 'rangeSelectorTab'
@@ -51,8 +52,12 @@ class RosterSlotSettingsWindow(RosterSlotSettingsWindowMeta, VehicleSelectorBase
 
     def submitButtonHandler(self, value):
         self.__currentSlot, _ = self.__makeInitialSlotData(value)
-        self.fireEvent(CSRosterSlotSettingsWindow(CSRosterSlotSettingsWindow.APPLY_SLOT_SETTINGS, self.__getSlotsSettings()))
+        slotSettins = self.__getSlotsSettings()
+        self.fireEvent(CSRosterSlotSettingsWindow(CSRosterSlotSettingsWindow.APPLY_SLOT_SETTINGS, slotSettins))
+        if self.__currentSlot is not None and 'intCD' in self.__currentSlot:
+            self.__addAditionalSlot(slotSettins)
         self.onWindowClose()
+        return
 
     def cancelButtonHandler(self):
         self.onWindowClose()
@@ -141,3 +146,15 @@ class RosterSlotSettingsWindow(RosterSlotSettingsWindowMeta, VehicleSelectorBase
         slotsSettings.extend(self.__flashSlots)
         slotsSettings.append(self.__currentSlot)
         return slotsSettings
+
+    def __addAditionalSlot(self, slotSettins):
+        row = slotSettins[0]
+        column = slotSettins[1]
+        vehicleCD = self.__currentSlot['intCD']
+        vehicle = self.itemsCache.items.getItemByCD(int(vehicleCD))
+        if vehicle.hasNationGroup and vehicle.activeInNationGroup:
+            addVehCD = iterVehTypeCDsInNationGroup(vehicleCD).next()
+            vehicle = self.itemsCache.items.getItemByCD(addVehCD)
+            addSlot = makeVehicleVO(vehicle, self.__convertLevelsRange(self._levelsRange), self.__vehicleTypes)
+            slotSettings = [row, 1 - column, addSlot]
+            self.fireEvent(CSRosterSlotSettingsWindow(CSRosterSlotSettingsWindow.APPLY_SLOT_SETTINGS, slotSettings))

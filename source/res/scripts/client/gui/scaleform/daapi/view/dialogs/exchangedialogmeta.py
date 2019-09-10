@@ -571,7 +571,8 @@ class _ExchangeXpSubmitter(_ExchangeSubmitterBase):
     @async
     @decorators.process('exchangeVehiclesXP')
     def submit(self, gold, xpToExchange, callback=None):
-        criteria = REQ_CRITERIA.VEHICLE.FULLY_ELITE | ~REQ_CRITERIA.IN_CD_LIST([self._parentCD])
+        vehiclesCriteria = REQ_CRITERIA.VEHICLE.FULLY_ELITE | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP
+        criteria = vehiclesCriteria | ~REQ_CRITERIA.IN_CD_LIST([self._parentCD])
         eliteVehicles = self.itemsCache.items.getVehicles(criteria).keys()
         result = yield FreeXPExchanger(xpToExchange, eliteVehicles).request()
         if callback is not None:

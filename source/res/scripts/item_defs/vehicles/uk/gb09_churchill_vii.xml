@@ -109,6 +109,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	2.08 2.08 0.000000 0.000000	</tiling>
+      <density>	99.9996 100.081	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -1803,6 +1805,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.91 0.91 0.000000 0.000000	</tiling>
+            <density>	128.745 135.87	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </QF_6_pounder_Mk_V>
         <_3.7inch_Howitzer>	shared	  <maxAmmo>	50	</maxAmmo>
@@ -1873,6 +1877,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.91 0.91 0.000000 0.000000	</tiling>
+            <density>	151.551 142.356	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_3.7inch_Howitzer>
         <_75mm_Gun_Mk_V>	shared	  <maxAmmo>	84	</maxAmmo>
@@ -1947,6 +1953,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.88 0.88 0.000000 0.000000	</tiling>
+            <density>	129.675 137.129	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_Gun_Mk_V>
         <_75mm_Gun_Vickers_HV>	shared	  <maxAmmo>	84	</maxAmmo>
@@ -2017,6 +2025,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.82 0.82 0.000000 0.000000	</tiling>
+            <density>	125.13 149.107	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_Gun_Vickers_HV>
       </guns>
@@ -2073,6 +2083,10 @@
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	112.378 112.158	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </Turret_1_GB09_Churchill_VII>
     <Turret_2_GB09_Churchill_VII>
       <userString>	#gb_vehicles:Turret_2_GB09_Churchill_VII	</userString>
@@ -2185,6 +2199,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.94 0.94 0.000000 0.000000	</tiling>
+            <density>	128.745 135.87	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </QF_6_pounder_Mk_V>
         <_3.7inch_Howitzer>	shared	  <maxAmmo>	50	</maxAmmo>
@@ -2255,6 +2271,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.955 0.955 0.000000 0.000000	</tiling>
+            <density>	151.551 142.356	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_3.7inch_Howitzer>
         <_75mm_Gun_Mk_V>	shared	  <maxAmmo>	84	</maxAmmo>
@@ -2325,6 +2343,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.91 0.91 0.000000 0.000000	</tiling>
+            <density>	129.675 137.129	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_Gun_Mk_V>
         <_75mm_Gun_Vickers_HV>	shared	  <maxAmmo>	84	</maxAmmo>
@@ -2395,6 +2415,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.94 0.94 0.000000 0.000000	</tiling>
+            <density>	125.13 149.107	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_Gun_Vickers_HV>
         <OQF_77mm_Gun_MkII>	shared	  <maxAmmo>	84	</maxAmmo>
@@ -2467,6 +2489,10 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	124.785 151.492	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </OQF_77mm_Gun_MkII>
       </guns>
       <models>
@@ -2523,6 +2549,10 @@
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	104.368 104.277	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </Turret_2_GB09_Churchill_VII>
   </turrets0>
   <engines>

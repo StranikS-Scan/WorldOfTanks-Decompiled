@@ -7,17 +7,8 @@ class ProfileSummaryWindowMeta(ProfileSummary):
     def openClanStatistic(self):
         self._printOverrideError('openClanStatistic')
 
-    def onDogtagRollover(self):
-        self._printOverrideError('onDogtagRollover')
-
-    def onDogtagRollout(self):
-        self._printOverrideError('onDogtagRollout')
-
     def as_setClanDataS(self, data):
         return self.flashObject.as_setClanData(data) if self._isDAAPIInited() else None
 
     def as_setClanEmblemS(self, source):
         return self.flashObject.as_setClanEmblem(source) if self._isDAAPIInited() else None
-
-    def as_setDogtagInfoS(self, isEnabled, basisImg, emblemImg, titleImg, rankStr, nickStr, basisSmallImg, emblemSmallImg, translateStr, basisBackImg, truncateEndingStr):
-        return self.flashObject.as_setDogtagInfo(isEnabled, basisImg, emblemImg, titleImg, rankStr, nickStr, basisSmallImg, emblemSmallImg, translateStr, basisBackImg, truncateEndingStr) if self._isDAAPIInited() else None

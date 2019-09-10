@@ -179,13 +179,14 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
             if self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS and not self.__elenHasEvents():
                 self.__currentTabAlias = None
             if not self.__currentTabAlias:
+                self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS
                 if self.__elenHasEvents():
                     self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS
                 elif self.marathonsCtrl.doesShowAnyMissionsTab():
-                    self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS
-                    self.__marathonPrefix = self.marathonsCtrl.getFirstEnabledMarathon().prefix
-                else:
-                    self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS
+                    enabledMarathon = self.marathonsCtrl.getFirstEnabledMarathon()
+                    if enabledMarathon is not None:
+                        self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS
+                        self.__marathonPrefix = enabledMarathon.prefix
         self._eventID = ctx.get('eventID')
         self._groupID = ctx.get('groupID')
         self._showMissionDetails = ctx.get('showMissionDetails', True)

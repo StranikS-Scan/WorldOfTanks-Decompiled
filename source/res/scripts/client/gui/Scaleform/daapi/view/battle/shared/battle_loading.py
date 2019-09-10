@@ -85,17 +85,11 @@ class BattleLoading(BaseBattleLoadingMeta, IArenaVehiclesController):
             criteria.setNation(nation)
             translation = self.gui.resourceManager.getTranslatedText
             tip = criteria.find()
-            self.as_setTipTitleS(self._formatTipTitle(translation(tip.status)))
-            self.as_setTipS(self._formatTipBody(translation(tip.body)))
+            self.as_setTipTitleS(text_styles.highTitle(translation(tip.status)))
+            self.as_setTipS(text_styles.playerOnline(translation(tip.body)))
             self.as_setVisualTipInfoS(self.__makeVisualTipVO(arenaDP, tip))
             _setBattleLoading(True)
         return
-
-    def _formatTipTitle(self, tipTitleText):
-        return text_styles.highTitle(tipTitleText)
-
-    def _formatTipBody(self, tipBody):
-        return text_styles.playerOnline(tipBody)
 
     def _addArenaTypeData(self):
         self.as_setMapIconS(SMALL_MAP_IMAGE_SF_PATH % self._arenaVisitor.type.getGeometryName())

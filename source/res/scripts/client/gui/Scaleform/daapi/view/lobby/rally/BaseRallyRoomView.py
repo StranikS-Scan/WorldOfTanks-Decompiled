@@ -17,11 +17,14 @@ from gui.prb_control.settings import CTRL_ENTITY_TYPE, REQUEST_TYPE
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from helpers import i18n
 from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 from messenger.proto.events import g_messengerEvents
+from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
 from skeletons.gui.shared import IItemsCache
 
 class BaseRallyRoomView(BaseRallyRoomViewMeta):
@@ -152,11 +155,13 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta):
         usersEvents = g_messengerEvents.users
         usersEvents.onUsersListReceived += self._onUsersReceived
         usersEvents.onUserActionReceived += self._onUserActionReceived
+        self.itemsCache.onSyncCompleted += self.__onCacheResync
 
     def _dispose(self):
         usersEvents = g_messengerEvents.users
         usersEvents.onUsersListReceived -= self._onUsersReceived
         usersEvents.onUserActionReceived -= self._onUserActionReceived
+        self.itemsCache.onSyncCompleted -= self.__onCacheResync
         self._closeSendInvitesWindow()
         HideEvent = events.HideWindowEvent
         self.fireEvent(HideEvent(HideEvent.HIDE_VEHICLE_SELECTOR_WINDOW))
@@ -266,6 +271,16 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta):
                 view.destroy()
         return
 
+    def onUnitErrorReceived(self, errorCode):
+        selected = self._getVehicleSelectorVehicles()
+        if selected:
+            vehicle = self.itemsCache.items.getItemByCD(selected[0])
+            if vehicle.hasNationGroup:
+                playerInfo = self.prbEntity.getPlayerInfo()
+                slotIdx = playerInfo.slotIdx
+                self.as_setMemberVehicleS(slotIdx, 0, None)
+        return
+
     def isPlayerInUnit(self, databaseID):
         result = False
         players = self.prbEntity.getPlayers()
@@ -321,3 +336,19 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta):
 
     def __handleCurrentVehicleChanged(self):
         self._setActionButtonState()
+
+    def __onCacheResync(self, reason, diff):
+        if reason != CACHE_SYNC_REASON.CLIENT_UPDATE:
+            return
+        else:
+            selected = self._getVehicleSelectorVehicles()
+            if selected:
+                if diff is not None and GUI_ITEM_TYPE.VEHICLE in diff:
+                    vehDiff = diff[GUI_ITEM_TYPE.VEHICLE]
+                    for changedVehCD in vehDiff:
+                        vehicle = self.itemsCache.items.getItemByCD(changedVehCD)
+                        if not vehicle.activeInNationGroup and selected[0] == changedVehCD:
+                            itemCD = iterVehTypeCDsInNationGroup(vehicle.intCompactDescr).next()
+                            self._selectVehicles([itemCD])
+
+            return

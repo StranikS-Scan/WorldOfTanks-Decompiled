@@ -79,7 +79,6 @@ def _set_ACHIEVEMENT15X15_DEPENDENCIES():
      'sniper2': [_updateBattleHeroes],
      'mainGun': [_updateBattleHeroes],
      'WFC2014WinSeries': [_updateMaxWFC2014WinSeries],
-     'reliableComradeSeries': [_updateReliableComrade],
      'deathTrackWinSeries': [_updateMaxDeathTrackWinSeries],
      'tankwomenProgress': [_updateTankwomen],
      'EFC2016WinSeries': [_updateMaxEFC2016WinSeries],
@@ -546,14 +545,6 @@ def _updateRankedAchievementsProgress(dossierDescr, dossierBlockDescr, key, valu
     curClass = __getNewMedalClass(key, value, 0)
     if prevClass != curClass:
         dossierDescr.addPopUp('achievements', key, curClass)
-
-
-def _updateReliableComrade(dossierDescr, dossierBlockDescr, key, value, prevValue):
-    amountRequired = RECORD_CONFIGS['reliableComrade']
-    if value >= amountRequired:
-        medals, amountLeft = divmod(value, amountRequired)
-        dossierBlockDescr['reliableComrade'] += medals
-        dossierBlockDescr['reliableComradeSeries'] = amountLeft
 
 
 def _updateMaxDeathTrackWinSeries(dossierDescr, dossierBlockDescr, key, value, prevValue):

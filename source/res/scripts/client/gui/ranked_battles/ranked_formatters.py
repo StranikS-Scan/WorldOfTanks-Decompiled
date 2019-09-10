@@ -11,17 +11,17 @@ _UNAVAILABLE_VALUE = -1
 _UNAVAILABLE_SYMBOL = '--'
 _PERCENT_SYMBOL = '%'
 
-class _RanksColumnRewardsComposer(CurtailingAwardsComposer):
+class _RankedAwardsComposer(CurtailingAwardsComposer):
 
     def __init__(self, displayedAwardsCount):
-        super(_RanksColumnRewardsComposer, self).__init__(displayedAwardsCount, awardsFormatter=getRankedAwardsPacker())
+        super(_RankedAwardsComposer, self).__init__(displayedAwardsCount, awardsFormatter=getRankedAwardsPacker())
 
     def setMaxRewardsCount(self, maxRewardsCount):
         self._displayedRewardsCount = maxRewardsCount
 
-    def getFormattedBonuses(self, bonuses, size=AWARDS_SIZES.SMALL):
-        bonuses = sorted(bonuses, cmp=_sortBonusesFunc, reverse=True)
-        return super(_RanksColumnRewardsComposer, self).getFormattedBonuses(bonuses, size)
+    def getFormattedBonuses(self, bonuses, size=AWARDS_SIZES.SMALL, compareMethod=None):
+        bonuses = sorted(bonuses, cmp=compareMethod if compareMethod else _sortBonusesFunc, reverse=True)
+        return super(_RankedAwardsComposer, self).getFormattedBonuses(bonuses, size)
 
 
 def getFloatPercentStrStat(value):
@@ -39,8 +39,8 @@ def getTimeLongStr(value):
     return _UNAVAILABLE_SYMBOL if _getValueOrUnavailable(value) == _UNAVAILABLE_VALUE else backport.getLongTimeFormat(value)
 
 
-def getRanksColumnRewardsFormatter(maxRewardsCount=DEFAULT_REWARDS_COUNT):
-    return _RanksColumnRewardsComposer(maxRewardsCount)
+def getRankedAwardsFormatter(maxRewardsCount=DEFAULT_REWARDS_COUNT):
+    return _RankedAwardsComposer(maxRewardsCount)
 
 
 def _getOrderByBonusType(bonusName):

@@ -174,8 +174,7 @@ class EventsCache(IEventsCache):
                 return
             if isNeedToClearItemsCaches:
                 self.__clearQuestsItemsCache()
-                _cbWrapper(True)
-            elif isQPUpdated:
+            if isQPUpdated:
                 _cbWrapper(True)
             else:
                 callback(True)
@@ -286,12 +285,6 @@ class EventsCache(IEventsCache):
         battles = self.__getEventBattles()
         return EventBattles(battles.get('vehicleTags', set()), battles.get('vehicles', []), bool(battles.get('enabled', 0)), battles.get('arenaTypeID')) if battles else EventBattles(set(), [], 0, None)
 
-    def getQuestByID(self, qID):
-        questsData = self.__getQuestsData()
-        questsData.update(self.__getPersonalQuestsData())
-        questsData.update(self.__getPersonalMissionsHiddenQuests())
-        return self._makeQuest(qID, questsData[qID]) if qID in questsData else None
-
     def isEventEnabled(self):
         return len(self.__getEventBattles()) > 0 and len(self.getEventVehicles()) > 0
 
@@ -383,6 +376,13 @@ class EventsCache(IEventsCache):
         result = self.__actionsCache[ACTION_SECTION_TYPE.ECONOMICS][ACTION_MODIFIER_TYPE.DISCOUNT].get(name, [])
         resultMult = self.__actionsCache[ACTION_SECTION_TYPE.ECONOMICS][ACTION_MODIFIER_TYPE.DISCOUNT].get('%sMultiplier' % name, [])
         return tuple(result + resultMult)
+
+    def getTradeInActions(self):
+
+        def containsTradeIn(a):
+            return any((step.get('name') == 'set_TradeInParams' for step in a.getData().get('steps', [])))
+
+        return self.getActions(containsTradeIn).values()
 
     def isBalancedSquadEnabled(self):
         return bool(self.__getUnitRestrictions().get('enabled', False))

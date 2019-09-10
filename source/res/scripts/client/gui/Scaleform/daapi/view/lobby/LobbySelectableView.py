@@ -34,11 +34,7 @@ class LobbySelectableView(LobbySubView):
         self.removeListener(LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self._onNotifyCursorOver3dScene)
         self.__selected3DEntityUnderMouseDown = None
         if self.__selected3DEntity is not None:
-            from ClientSelectableObject import ClientSelectableObject
-            if isinstance(self.__selected3DEntity, ClientSelectableObject):
-                self.__selected3DEntity.highlight(False)
-            else:
-                BigWorld.wgDelEdgeDetectEntity(self.__selected3DEntity)
+            BigWorld.wgDelEdgeDetectEntity(self.__selected3DEntity)
             self.__selected3DEntity = None
         return
 

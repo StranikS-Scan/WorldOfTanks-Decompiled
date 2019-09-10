@@ -477,7 +477,6 @@ class PersonalCaseDataProvider(object):
         tankman = items.getTankman(self.tmanInvID)
         nativeVehicleCD = tankman.vehicleNativeDescr.type.compactDescr
         criteria = REQ_CRITERIA.NATIONS([tankman.nationID]) | REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.VEHICLE.OBSERVER
-        criteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
         if not constants.IS_IGR_ENABLED:
             criteria |= ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
         if constants.IS_DEVELOPMENT:
@@ -602,6 +601,8 @@ class PersonalCaseDataProvider(object):
             return (False, backport.text(R.strings.menu.tankmen.lockReason.inbattle()))
         elif vehicle.isBroken:
             return (False, backport.text(R.strings.menu.tankmen.lockReason.broken()))
+        elif vehicle.isDisabled:
+            return (False, i18n.makeString('#menu:tankmen/lockReason/disabled'))
         else:
             if g_currentVehicle.item == vehicle:
                 dispatcher = g_prbLoader.getDispatcher()

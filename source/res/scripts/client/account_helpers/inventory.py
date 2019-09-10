@@ -76,7 +76,11 @@ class Inventory(object):
                 callback(AccountCommands.RES_NON_PLAYER)
             return
         elif itemTypeIdx == _VEHICLE:
-            self.sellVehicle(itemInvID, True, [], [], [], callback)
+            self.sellVehicle([(itemInvID,
+              True,
+              [],
+              [],
+              [])], callback)
             return
         elif itemTypeIdx == _TANKMAN:
             if callback is not None:
@@ -95,13 +99,13 @@ class Inventory(object):
             self.__account.shop.waitForSync(partial(self.__sellMultipleItems_onShopSynced, itemList, callback))
             return
 
-    def sellVehicle(self, vehInvID, dismissCrew, itemsFromVehicle, itemsFromInventory, customizationItems, callback):
+    def sellVehicle(self, vehiclesSellData, callback):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER)
             return
         else:
-            self.__account.shop.waitForSync(partial(self.__sellVehicle_onShopSynced, vehInvID, dismissCrew, itemsFromVehicle, itemsFromInventory, customizationItems, callback))
+            self.__account.shop.waitForSync(partial(self.__sellVehicle_onShopSynced, vehiclesSellData, callback))
             return
 
     def dismissTankman(self, tmanInvID, callback):
@@ -385,6 +389,29 @@ class Inventory(object):
             self.__account._doCmdIntArr(AccountCommands.CMD_TMAN_ADD_CREW_SKIN, skinList, proxy)
             return
 
+    def switchNation(self, itemName, nextItemName, callback):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+
+            def _selectVehicle(resultID, ext, cacheResultID, cacheData=None):
+                vhTypeID = ext.get('switchToVhInvID', 0)
+                if vhTypeID:
+                    from CurrentVehicle import g_currentVehicle
+                    if not g_currentVehicle.item.activeInNationGroup:
+                        g_currentVehicle.selectVehicle(vhTypeID)
+                callback(resultID)
+
+            def _waitForDossier(resultID, ext):
+                self.__account.dossierCache.waitForSync(partial(_selectVehicle, resultID, ext))
+
+            proxy = lambda requestID, resultID, errorStr, ext={}: _waitForDossier(resultID, ext)
+            arr = [itemName, nextItemName]
+            self.__account._doCmdStrArr(AccountCommands.CMD_VEHICLE_CHANGE_NATION, arr, proxy)
+            return
+
     def __onGetItemsResponse(self, itemTypeIdx, callback, resultID):
         if resultID < 0:
             if callback is not None:
@@ -448,7 +475,7 @@ class Inventory(object):
 
             return
 
-    def __sellVehicle_onShopSynced(self, vehInvID, flags, itemsFromVehicle, itemsFromInventory, customizationItems, callback, resultID, shopRev):
+    def __sellVehicle_onShopSynced(self, vehiclesSellData, callback, resultID, shopRev):
         if resultID < 0:
             if callback is not None:
                 callback(resultID)
@@ -458,12 +485,13 @@ class Inventory(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
             else:
                 proxy = None
-            arr = [shopRev,
-             vehInvID,
-             flags,
-             len(itemsFromVehicle)] + itemsFromVehicle
-            arr += [len(itemsFromInventory)] + itemsFromInventory
-            arr += [len(customizationItems)] + customizationItems
+            arr = [shopRev]
+            for data in vehiclesSellData:
+                vehInvID, flags, itemsFromVehicle, itemsFromInventory, customizationItems = data
+                arr += [vehInvID, flags, len(itemsFromVehicle)] + itemsFromVehicle
+                arr += [len(itemsFromInventory)] + itemsFromInventory
+                arr += [len(customizationItems)] + customizationItems
+
             self.__account._doCmdIntArr(AccountCommands.CMD_SELL_VEHICLE, arr, proxy)
             return
 

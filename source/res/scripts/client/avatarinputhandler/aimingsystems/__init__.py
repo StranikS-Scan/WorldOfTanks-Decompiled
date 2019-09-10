@@ -86,14 +86,7 @@ def getGunJointMat(vehicleTypeDescriptor, turretMatrix, gunPitch, overrideTurret
     return gunMat
 
 
-def getGunCameraJointMat(vehicleTypeDescriptor, turretMatrix, gunPitch):
-    gunOffset = Vector3(vehicleTypeDescriptor.turret.gunCamPosition)
-    gunMat = math_utils.createRTMatrix(Vector3(0, gunPitch, 0), gunOffset)
-    gunMat.postMultiply(turretMatrix)
-    return gunMat
-
-
-def getPlayerTurretMats(turretYaw=0.0, gunPitch=0.0, overrideTurretLocalZ=None, useGunCamPosition=False):
+def getPlayerTurretMats(turretYaw=0.0, gunPitch=0.0, overrideTurretLocalZ=None):
     player = BigWorld.player()
     if player.isObserver() and player.getVehicleAttached() is not None:
         vehicleTypeDescriptor = player.getVehicleAttached().typeDescriptor
@@ -106,10 +99,7 @@ def getPlayerTurretMats(turretYaw=0.0, gunPitch=0.0, overrideTurretLocalZ=None, 
         vehicleMatrix = player.inputHandler.steadyVehicleMatrixCalculator.stabilisedMProv
         correctGunPitch = 0.0
     turretMat = getTurretJointMat(vehicleTypeDescriptor, vehicleMatrix, turretYaw, overrideTurretLocalZ)
-    if not useGunCamPosition:
-        gunMat = getGunJointMat(vehicleTypeDescriptor, turretMat, correctGunPitch, overrideTurretLocalZ)
-    else:
-        gunMat = getGunCameraJointMat(vehicleTypeDescriptor, turretMat, correctGunPitch)
+    gunMat = getGunJointMat(vehicleTypeDescriptor, turretMat, correctGunPitch, overrideTurretLocalZ)
     if not isPitchHullAimingAvailable:
         return (turretMat, gunMat)
     else:
@@ -131,10 +121,6 @@ def getPlayerGunMat(turretYaw=0.0, gunPitch=0.0, overrideTurretLocalZ=None):
 
 def getCenteredPlayerGunMat(turretYaw=0.0, gunPitch=0.0):
     return getPlayerTurretMats(turretYaw, gunPitch, 0.0)[1]
-
-
-def getSniperCameraPlayerGunMat(turretYaw=0.0, gunPitch=0.0):
-    return getPlayerTurretMats(turretYaw, gunPitch, useGunCamPosition=True)[1]
 
 
 def getTurretMatrixProvider(vehicleTypeDescriptor, vehicleMatrixProvider, turretYawMatrixProvider):

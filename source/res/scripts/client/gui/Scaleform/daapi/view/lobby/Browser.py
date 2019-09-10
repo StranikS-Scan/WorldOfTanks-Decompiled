@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/Browser.py
 from Event import Event
+from web.client_web_api.common import WebEventSender
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.Scaleform.daapi.view.meta.BrowserMeta import BrowserMeta
 from gui.Scaleform.locale.MENU import MENU
@@ -8,7 +9,7 @@ from gui.shared.events import BrowserEvent
 from gui.shared.formatters import icons
 from helpers import i18n, dependency
 from skeletons.gui.game_control import IBrowserController
-from web_client_api import WebCommandHandler
+from web.web_client_api import WebCommandHandler
 from soft_exception import SoftException
 
 class Browser(BrowserMeta):
@@ -22,6 +23,7 @@ class Browser(BrowserMeta):
         self.__isLoaded = True
         self.__httpStatusCode = None
         self.__webCommandHandler = None
+        self.__webEventSender = None
         self.onError = Event()
         return
 
@@ -38,6 +40,9 @@ class Browser(BrowserMeta):
         if webHandlersMap is not None:
             self.__webCommandHandler.addHandlers(webHandlersMap)
         self.__webCommandHandler.onCallback += self.__onWebCommandCallback
+        self.__webEventSender = WebEventSender()
+        self.__webEventSender.onCallback += self.__onWebEventCallback
+        self.__webEventSender.init()
         if not self.__browser.hasBrowser:
             self.addListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)
         else:
@@ -112,6 +117,10 @@ class Browser(BrowserMeta):
             self.__webCommandHandler.onCallback -= self.__onWebCommandCallback
             self.__webCommandHandler.fini()
             self.__webCommandHandler = None
+        if self.__webEventSender:
+            self.__webEventSender.onCallback -= self.__onWebEventCallback
+            self.__webEventSender.fini()
+            self.__webEventSender = None
         self.browserCtrl.delBrowser(self.__browserID)
         self.removeListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)
         super(Browser, self)._dispose()
@@ -149,6 +158,9 @@ class Browser(BrowserMeta):
 
     def __onWebCommandCallback(self, callbackData):
         self.__browser.sendMessage(callbackData)
+
+    def __onWebEventCallback(self, callbackData):
+        self.__browser.sendEvent(callbackData)
 
     def __onTitleChange(self, title):
         self.as_changeTitleS(title)

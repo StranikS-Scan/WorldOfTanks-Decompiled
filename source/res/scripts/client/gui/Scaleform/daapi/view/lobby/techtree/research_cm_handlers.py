@@ -14,6 +14,8 @@ from helpers import dependency
 from skeletons.gui.game_control import IVehicleComparisonBasket, IBootcampController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
 
 class ResearchItemContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
     _itemsCache = dependency.descriptor(IItemsCache)
@@ -92,7 +94,8 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
          VEHICLE.SELL: 'sellVehicle',
          VEHICLE.SELECT: 'selectVehicle',
          VEHICLE.STATS: 'showVehicleStats',
-         VEHICLE.COMPARE: 'compareVehicle'})
+         VEHICLE.COMPARE: 'compareVehicle',
+         VEHICLE.NATION_CHANGE: 'changeVehicleNation'})
 
     def getVehCD(self):
         return self._nodeCD
@@ -107,8 +110,7 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
         ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, vehicleCD, unlockProps)
 
     def showVehiclePreview(self):
-        previewBackCb = self._getPreviewCallback()
-        shared_events.showVehiclePreview(self._nodeCD, self._previewAlias, previewBackCb=previewBackCb)
+        shared_events.showVehiclePreview(self._nodeCD, self._previewAlias)
 
     def selectVehicle(self):
         shared_events.selectVehicleInHangar(self._nodeCD)
@@ -123,12 +125,8 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
         else:
             super(ResearchVehicleContextMenuHandler, self).buyVehicle()
 
-    def _getPreviewCallback(self):
-        descriptor = self._nodeCD
-        if self._previewAlias == VIEW_ALIAS.LOBBY_RESEARCH:
-            return lambda : shared_events.showResearchView(descriptor)
-        else:
-            return (lambda : shared_events.showTechTree(descriptor)) if self._previewAlias == VIEW_ALIAS.LOBBY_TECHTREE else None
+    def changeVehicleNation(self):
+        ItemsActionsFactory.doAction(ItemsActionsFactory.CHANGE_NATION, self._nodeCD)
 
     def _initFlashValues(self, ctx):
         self._nodeCD = int(ctx.nodeCD)
@@ -164,6 +162,15 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
                 options.append(self._makeItem(VEHICLE.BUY, label, {'enabled': NODE_STATE.isAvailable2Buy(self._nodeState)}))
         else:
             options.append(self._makeItem(VEHICLE.UNLOCK, MENU.CONTEXTMENU_UNLOCK, {'enabled': NODE_STATE.isAvailable2Unlock(self._nodeState) and not NODE_STATE.isPremium(self._nodeState)}))
+        if vehicle.hasNationGroup:
+            if vehicle.isInInventory or vehicle.isRented:
+                isNationChangeAvailable = vehicle.isNationChangeAvailable
+                nationChangeIsNew = not AccountSettings.getSettings(NATION_CHANGE_VIEWED)
+            else:
+                isNationChangeAvailable = False
+                nationChangeIsNew = False
+            options.append(self._makeItem(VEHICLE.NATION_CHANGE, MENU.CONTEXTMENU_NATIONCHANGE, {'enabled': isNationChangeAvailable,
+             'isNew': nationChangeIsNew}))
         if not vehicle.isPremiumIGR:
             isAvailable2SellOrRemove = NODE_STATE.isAvailable2Sell(self._nodeState)
             if isAvailable2SellOrRemove:

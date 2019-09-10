@@ -70,7 +70,7 @@ class SelectedViewState(IVehicleViewState):
         pass
 
     def _resolveVehicleState(self, vehicle):
-        self._isInHangar = vehicle.isInHangar()
+        self._isInHangar = vehicle.isInHangar() and not vehicle.isDisabled()
         self._isBroken = vehicle.isBroken()
         self._isDisabledInRent = vehicle.isDisabledInRent()
         self._isOnlyForEventBattles = vehicle.isOnlyForEventBattles()

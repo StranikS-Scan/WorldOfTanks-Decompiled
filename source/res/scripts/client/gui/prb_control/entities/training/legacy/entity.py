@@ -24,6 +24,7 @@ from gui.prb_control.settings import PREBATTLE_SETTING_NAME, PREBATTLE_RESTRICTI
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.prb_control.storages import legacy_storage_getter
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
+from gui.shared.events import ViewEventType
 from prebattle_shared import decodeRoster
 from gui.prb_control.entities.training.pre_queue.vehicles_watcher import TrainingVehiclesWatcher
 
@@ -115,7 +116,8 @@ class TrainingEntity(LegacyEntity):
      VIEW_ALIAS.VEHICLE_COMPARE,
      VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS,
      VIEW_ALIAS.LOBBY_MISSIONS,
-     VIEW_ALIAS.LOBBY_STRONGHOLD)
+     VIEW_ALIAS.LOBBY_STRONGHOLD,
+     ViewEventType.LOAD_UB_VIEW)
 
     def __init__(self, settings):
         requests = {REQUEST_TYPE.ASSIGN: self.assign,

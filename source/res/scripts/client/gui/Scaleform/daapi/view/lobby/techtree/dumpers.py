@@ -160,4 +160,5 @@ class NationObjDumper(_BaseDumper):
          'blueprintLabel': node.getBlueprintLabel(),
          'blueprintProgress': node.getBlueprintProgress(),
          'blueprintCanConvert': blueprints.canConvert if blueprints is not None else False,
-         'buyPrice': node.getBuyPrices()}
+         'buyPrice': node.getBuyPrices(),
+         'isNationChangeAvailable': node.hasItemNationGroup()}

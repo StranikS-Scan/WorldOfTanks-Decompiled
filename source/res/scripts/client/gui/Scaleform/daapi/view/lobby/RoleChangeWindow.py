@@ -207,7 +207,7 @@ class RoleChangeWindow(RoleChangeMeta):
 
     def __getVehiclesData(self, nationID, nativeVehicleCD):
         items = []
-        criteria = REQ_CRITERIA.NATIONS([nationID]) | REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+        criteria = REQ_CRITERIA.NATIONS([nationID]) | REQ_CRITERIA.UNLOCKED
         if not constants.IS_IGR_ENABLED:
             criteria |= ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
         if constants.IS_DEVELOPMENT:

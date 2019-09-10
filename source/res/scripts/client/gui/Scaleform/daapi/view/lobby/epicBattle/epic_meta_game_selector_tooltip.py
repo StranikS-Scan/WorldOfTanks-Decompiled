@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/epicBattle/epic_meta_game_selector_tooltip.py
+from gui.impl.gen import R
+from gui.impl import backport
 from gui.Scaleform import MENU
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
-from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.tooltips import formatters
 from gui.shared.tooltips.common import BlocksTooltipData
@@ -80,7 +81,7 @@ class EpicSelectorWarningTooltip(BlocksTooltipData):
             for periodStart, periodEnd in periods:
                 startTime = formatDate('%H:%M', periodStart)
                 endTime = formatDate('%H:%M', periodEnd)
-                periodsStr.append(i18n.makeString(RANKED_BATTLES.CALENDARDAY_TIME, start=startTime, end=endTime))
+                periodsStr.append(backport.text(R.strings.ranked_battles.calendarDay.time(), start=startTime, end=endTime))
 
             return '\n'.join(periodsStr)
         return i18n.makeString(EPIC_BATTLE.SELECTORTOOLTIP_EPICBATTLE_TIMETABLE_DASH)

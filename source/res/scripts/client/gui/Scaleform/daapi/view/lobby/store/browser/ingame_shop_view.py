@@ -10,11 +10,11 @@ from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from sound_constants import INGAMESHOP_SOUND_SPACE
-from gui.Scaleform.daapi.view.lobby.shared.web_overlay_base import WebOverlayBase
+from gui.Scaleform.daapi.view.lobby.shared.web_view import WebView
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 
-class _IngameShopOverlayBase(WebOverlayBase):
+class _IngameShopOverlayBase(WebView):
 
     def _onError(self):
         super(_IngameShopOverlayBase, self)._onError()
@@ -71,11 +71,11 @@ class IngameShopView(LobbySubView, IngameShopBase):
 class IngameShopOverlay(_IngameShopOverlayBase):
 
     def onEscapePress(self):
-        if not self._browserParams.get('isTransparent'):
+        if not self._browserParams.get('isHidden'):
             self.destroy()
 
 
-class PremContentPageOverlay(WebOverlayBase):
+class PremContentPageOverlay(WebView):
 
     def webHandlers(self):
         from gui.Scaleform.daapi.view.lobby.shared.web_handlers import createPremAccWebHandlers

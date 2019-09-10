@@ -18,7 +18,6 @@ from gui.shared import EVENT_BUS_SCOPE, events
 from helpers import dependency, uniprof
 from skeletons.gameplay import IGameplayLogic, PlayerEventID
 from skeletons.gui.battle_session import IBattleSessionProvider
-from skeletons.gui.game_control import IFestivityController
 
 class IComponentsConfig(object):
 
@@ -63,7 +62,6 @@ _SHARED_COMPONENTS_CONFIG = _SharedComponentsConfig()
 class SharedPage(BattlePageMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     gameplay = dependency.descriptor(IGameplayLogic)
-    _festivityController = dependency.descriptor(IFestivityController)
 
     def __init__(self, components=None, external=None):
         super(SharedPage, self).__init__()
@@ -116,7 +114,6 @@ class SharedPage(BattlePageMeta):
         self.addListener(events.GameEvent.SHOW_BTN_HINT, self.__handleShowBtnHint, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.HIDE_BTN_HINT, self.__handleHideBtnHint, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.gameplay.postStateEvent(PlayerEventID.AVATAR_SHOW_GUI)
-        self._definePostmortemPanel()
 
     @uniprof.regionDecorator(label='avatar.show_gui', scope='exit')
     def _dispose(self):
@@ -137,9 +134,6 @@ class SharedPage(BattlePageMeta):
         self.removeListener(events.GameEvent.HIDE_BTN_HINT, self.__handleHideBtnHint, scope=EVENT_BUS_SCOPE.GLOBAL)
         self._stopBattleSession()
         super(SharedPage, self)._dispose()
-
-    def _definePostmortemPanel(self):
-        self.as_useEventPostmortemPanelS(self._festivityController.isEnabled())
 
     def _toggleGuiVisible(self):
         self._isVisible = not self._isVisible

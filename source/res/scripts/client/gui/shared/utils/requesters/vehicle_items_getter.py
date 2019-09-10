@@ -159,7 +159,7 @@ def getItemsIterator(data, nationID=None, itemTypeID=None, onlyWithPrices=False)
         prices = ItemsPrices()
     getters = _MODULES_GETTERS
     if itemTypeID is None:
-        itemTypeIDs = getters.iterkeys()
+        itemTypeIDs = getters.keys()
     elif itemTypeID in getters:
         itemTypeIDs = (itemTypeID,)
     else:

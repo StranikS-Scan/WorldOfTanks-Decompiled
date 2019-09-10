@@ -117,6 +117,10 @@
         <isUVProportional>	true	</isUVProportional>
       </slot>
     </customizationSlots>
+    <camouflage>
+      <density>	98.6024 92.5941	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_M53_55>
@@ -1511,6 +1515,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.61 0.31 0.000000 0.000000	</tiling>
+            <density>	83.5476 93.4165	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_155mm_Gun_M46>
         <_203mm_Howitzer_M47>	shared	  <maxAmmo>	20	</maxAmmo>
@@ -1588,6 +1594,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.7 0.325 0.000000 0.000000	</tiling>
+            <density>	87.2707 89.9946	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_203mm_Howitzer_M47>
       </guns>
@@ -1654,6 +1662,10 @@
           <isUVProportional>	true	</isUVProportional>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	50.2519 50.2685	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </Turret_1_M53_55>
   </turrets0>
   <engines>

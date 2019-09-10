@@ -4,16 +4,13 @@ from constants import DEATH_REASON_ALIVE
 from epic_constants import EPIC_BATTLE_TEAM_ID
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
-from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.battle_results.components import base, shared, style, ranked
 from gui.battle_results.components.base import PropertyValue
 from gui.battle_results.components.personal import fillKillerInfoBlock
 from gui.battle_results.reusable import sort_keys
-from gui.battle_results.reusable.avatars import AvatarInfo
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.ranked_battles.constants import ZERO_RANK_ID
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import getSmallIconPath, getIconPath
 from helpers import dependency, i18n
@@ -162,16 +159,8 @@ class RankedBattlesVehicleStatsBlock(RegularVehicleStatsBlock):
             self.xpSort = result.xp - result.xpPenalty
 
     def __makeRankIcon(self, rankID):
-        if not rankID:
-            return ''
-        division = self.__rankedController.getDivision(rankID)
-        divisionID = division.getID()
-        if rankID == division.lastRank:
-            rankName = str(ZERO_RANK_ID)
-            divisionID += 1
-        else:
-            rankName = division.getRankUserName(rankID)
-        return backport.image(R.images.gui.maps.icons.rankedBattles.ranks.c_24x24.dyn('rank%s_%s' % (divisionID, rankName))())
+        displayInfo = self.__rankedController.getRankDisplayInfoForBattle(rankID)
+        return backport.image(R.images.gui.maps.icons.rankedBattles.ranks.c_24x24.dyn('ranks_group{}_{}'.format(displayInfo.division, displayInfo.level))()) if displayInfo.isGroup else backport.image(R.images.gui.maps.icons.rankedBattles.ranks.c_24x24.dyn('rank{}_{}'.format(displayInfo.division, displayInfo.level))())
 
 
 class EpicVehicleStatsBlock(RegularVehicleStatsBlock):
@@ -206,36 +195,6 @@ class EpicVehicleStatsBlock(RegularVehicleStatsBlock):
              'icon': RES_ICONS.MAPS_ICONS_LIBRARY_EPICVEHICLESALL})
             self.__allAdded = True
         return super(EpicVehicleStatsBlock, self).getVO()
-
-
-class BattleRoyaleVehicleStatsBlock(base.StatsBlock):
-    __slots__ = ('isPersonal', 'team', 'isPersonalSquad', 'kills', 'nameLabel', 'place', 'index', 'isPrematureLeave')
-
-    def __init__(self, meta=None, field='', *path):
-        super(BattleRoyaleVehicleStatsBlock, self).__init__(meta, field, *path)
-        self.isPersonal = False
-        self.isPersonalSquad = False
-        self.team = 0
-        self.nameLabel = ''
-        self.place = 0
-        self.kills = 0
-        self.index = None
-        self.isPrematureLeave = False
-        return
-
-    def setRecord(self, vehicleSummarizeInfo, reusable):
-        avatar = reusable.avatars.getAvatarInfo(vehicleSummarizeInfo.player.dbID)
-        if avatar is None or avatar.extensionInfo is None:
-            return
-        else:
-            if self.isPersonal:
-                self.isPrematureLeave = reusable.personal.avatar.isPrematureLeave
-            extensionInfo = avatar.extensionInfo
-            self.place = extensionInfo.get('battleRoyale', {}).get('accPos', 0)
-            self.team = vehicleSummarizeInfo.player.team
-            self.kills = vehicleSummarizeInfo.kills
-            self.nameLabel = reusable.getPlayerInfo(vehicleSummarizeInfo.player.dbID).getFullName()
-            return
 
 
 class RegularVehicleStatValuesBlock(base.StatsBlock):
@@ -506,36 +465,6 @@ class EpicTeamStatsBlock(TeamStatsBlock):
         super(EpicTeamStatsBlock, self).__init__(EpicVehicleStatsBlock, meta, field, *path)
 
 
-class BattleRoyaleTeamStatsBlock(base.StatsBlock):
-    __slots__ = ()
-
-    def setRecord(self, result, reusable):
-        allPlayers = reusable.getAllPlayersIterator(result, sortKey=sort_keys.placeSortKey)
-        personalInfo = reusable.getPlayerInfo()
-        personalDBID = personalInfo.dbID
-        if personalInfo.squadIndex:
-            personalPrebattleID = personalInfo.prebattleID
-        else:
-            personalPrebattleID = 0
-        for idx, item in enumerate(allPlayers):
-            if item.vehicle is not None and item.vehicle.isObserver:
-                continue
-            block = BattleRoyaleVehicleStatsBlock()
-            block.index = idx
-            if item.avatar is None or item.avatar.extensionInfo is None or item.avatar.extensionInfo.get('battleRoyale', {}).get('accPos', 0) == 0:
-                block.setRecord(item, reusable)
-                self.addComponent(self.getNextComponentIndex(), block)
-                continue
-            player = item.player
-            isPersonal = player.dbID == personalDBID
-            block.isPersonal = isPersonal
-            block.isPersonalSquad = personalPrebattleID != 0 and personalPrebattleID == player.prebattleID
-            block.setRecord(item, reusable)
-            self.addComponent(self.getNextComponentIndex(), block)
-
-        return
-
-
 class TwoTeamsStatsBlock(shared.BiDiStatsBlock):
     __slots__ = ()
 
@@ -609,10 +538,10 @@ class RankedResultsTeamDataStatsBlock(base.StatsBlock):
             lists, listsSteps = self.__createListsAndSteps(listsData=helper.getListsData(isLoser=not isWon))
         self.__fillIncompleteTeam(playerCount, helper.getPlayersNumber(), lists, listsSteps)
         if isWon:
-            self.title = text_styles.highTitle(RANKED_BATTLES.BATTLERESULT_WINNERS)
+            self.title = text_styles.highTitle(backport.text(R.strings.ranked_battles.battleResult.winners()))
             self.titleAlpha = 1.0
         else:
-            self.title = text_styles.highTitle(RANKED_BATTLES.BATTLERESULT_LOSERS)
+            self.title = text_styles.highTitle(backport.text(R.strings.ranked_battles.battleResult.losers()))
             self.titleAlpha = 0.6
         self.teamList = []
         for listOfPlayers in lists:

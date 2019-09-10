@@ -61,23 +61,61 @@ _maxRankedSeason1BlockBuilder = StaticSizeBlockBuilder('maxRankedSeason1', MAX_A
 _maxRankedSeason2BlockBuilder = StaticSizeBlockBuilder('maxRankedSeason2', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _maxRankedSeason3BlockBuilder = StaticSizeBlockBuilder('maxRankedSeason3', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _maxRankedArchiveBlockBuilder = StaticSizeBlockBuilder('maxRankedArchive', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
-_vehTypeFragsBlockBuilder = DictBlockBuilder('vehTypeFrags', 'I', 'H', VEH_TYPE_FRAGS_DEPENDENCIES)
-_a15x15CutBlockBuilder = DictBlockBuilder('a15x15Cut', 'I', 'III', {})
-_a7x7CutBlockBuilder = DictBlockBuilder('a7x7Cut', 'I', 'IIIIIII', {})
-_rated7x7CutBlockBuilder = DictBlockBuilder('rated7x7Cut', 'I', 'IIIIIII', {})
-_historicalCutBlockBuilder = DictBlockBuilder('historicalCut', 'I', 'III', {})
-_fortBattlesCutBlockBuilder = DictBlockBuilder('fortBattlesCut', 'I', 'III', {})
-_fortSortiesCutBlockBuilder = DictBlockBuilder('fortSortiesCut', 'I', 'III', {})
-_globalMapCommonCutBlockBuilder = DictBlockBuilder('globalMapCommonCut', 'I', 'III', {})
-_falloutCutBlockBuilder = DictBlockBuilder('falloutCut', 'I', 'IIII', {})
-_rankedCutBlockBuilder = DictBlockBuilder('rankedCut', 'I', 'III', {})
-_rankedCutSeason1BlockBuilder = DictBlockBuilder('rankedCutSeason1', 'I', 'III', {})
-_rankedCutSeason2BlockBuilder = DictBlockBuilder('rankedCutSeason2', 'I', 'III', {})
-_rankedCutSeason3BlockBuilder = DictBlockBuilder('rankedCutSeason3', 'I', 'III', {})
-_rankedCutArchiveBlockBuilder = DictBlockBuilder('rankedCutArchive', 'I', 'III', {})
-_a30x30CutBlockBuilder = DictBlockBuilder('a30x30Cut', 'I', 'III', {})
-_markOfMasteryCut = DictBlockBuilder('markOfMasteryCut', 'I', 'B', {})
-_epicBattleCutBlockBuilder = DictBlockBuilder('epicBattleCut', 'I', 'III', {})
+
+class VEHICLE_STATS:
+    FRAGS = 'vehTypeFrags'
+    A15x15_CUT = 'a15x15Cut'
+    A30x30_CUT = 'a30x30Cut'
+    A7x7_CUT = 'a7x7Cut'
+    HISTORICAL_CUT = 'historicalCut'
+    FORT_SORTIES_CUT = 'fortSortiesCut'
+    FORT_BATTLES_CUT = 'fortBattlesCut'
+    RANKED_CUT = 'rankedCut'
+    RANKED_CUT_SEASON_1 = 'rankedCutSeason1'
+    RANKED_CUT_SEASON_2 = 'rankedCutSeason2'
+    RANKED_CUT_SEASON_3 = 'rankedCutSeason3'
+    RANKED_CUT_ARCHIVE = 'rankedCutArchive'
+    RATED_7x7_CUT = 'rated7x7Cut'
+    GLOBAL_MAP_COMMON_CUT = 'globalMapCommonCut'
+    FALLOUT_CUT = 'falloutCut'
+    MARK_OF_MASTERY_CUT = 'markOfMasteryCut'
+    EPIC_BATTLE_CUT = 'epicBattleCut'
+    ALL = (FRAGS,
+     A15x15_CUT,
+     A30x30_CUT,
+     A7x7_CUT,
+     HISTORICAL_CUT,
+     FORT_SORTIES_CUT,
+     FORT_BATTLES_CUT,
+     RANKED_CUT,
+     RANKED_CUT_SEASON_1,
+     RANKED_CUT_SEASON_2,
+     RANKED_CUT_SEASON_3,
+     RANKED_CUT_ARCHIVE,
+     RATED_7x7_CUT,
+     GLOBAL_MAP_COMMON_CUT,
+     FALLOUT_CUT,
+     MARK_OF_MASTERY_CUT,
+     EPIC_BATTLE_CUT)
+
+
+_vehTypeFragsBlockBuilder = DictBlockBuilder(VEHICLE_STATS.FRAGS, 'I', 'H', VEH_TYPE_FRAGS_DEPENDENCIES)
+_a15x15CutBlockBuilder = DictBlockBuilder(VEHICLE_STATS.A15x15_CUT, 'I', 'III', {})
+_a7x7CutBlockBuilder = DictBlockBuilder(VEHICLE_STATS.A7x7_CUT, 'I', 'IIIIIII', {})
+_rated7x7CutBlockBuilder = DictBlockBuilder(VEHICLE_STATS.RATED_7x7_CUT, 'I', 'IIIIIII', {})
+_historicalCutBlockBuilder = DictBlockBuilder(VEHICLE_STATS.HISTORICAL_CUT, 'I', 'III', {})
+_fortBattlesCutBlockBuilder = DictBlockBuilder(VEHICLE_STATS.FORT_BATTLES_CUT, 'I', 'III', {})
+_fortSortiesCutBlockBuilder = DictBlockBuilder(VEHICLE_STATS.FORT_SORTIES_CUT, 'I', 'III', {})
+_globalMapCommonCutBlockBuilder = DictBlockBuilder(VEHICLE_STATS.GLOBAL_MAP_COMMON_CUT, 'I', 'III', {})
+_falloutCutBlockBuilder = DictBlockBuilder(VEHICLE_STATS.FALLOUT_CUT, 'I', 'IIII', {})
+_rankedCutBlockBuilder = DictBlockBuilder(VEHICLE_STATS.RANKED_CUT, 'I', 'III', {})
+_rankedCutSeason1BlockBuilder = DictBlockBuilder(VEHICLE_STATS.RANKED_CUT_SEASON_1, 'I', 'III', {})
+_rankedCutSeason2BlockBuilder = DictBlockBuilder(VEHICLE_STATS.RANKED_CUT_SEASON_2, 'I', 'III', {})
+_rankedCutSeason3BlockBuilder = DictBlockBuilder(VEHICLE_STATS.RANKED_CUT_SEASON_3, 'I', 'III', {})
+_rankedCutArchiveBlockBuilder = DictBlockBuilder(VEHICLE_STATS.RANKED_CUT_ARCHIVE, 'I', 'III', {})
+_a30x30CutBlockBuilder = DictBlockBuilder(VEHICLE_STATS.A30x30_CUT, 'I', 'III', {})
+_markOfMasteryCut = DictBlockBuilder(VEHICLE_STATS.MARK_OF_MASTERY_CUT, 'I', 'B', {})
+_epicBattleCutBlockBuilder = DictBlockBuilder(VEHICLE_STATS.EPIC_BATTLE_CUT, 'I', 'III', {})
 _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'sniperSeries',
  'maxSniperSeries',
@@ -476,10 +514,10 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'Fest19Collection1',
  'Fest19Collection2',
  'Fest19Collection3',
- 'twitchPrime4',
  'BR2019Title25',
  'BR2019Title15',
- 'BR2019Title5']
+ 'BR2019Title5',
+ 'twitchPrime4']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -554,10 +592,13 @@ _singleAchievementsPopUps = ['titleSniper',
  'twitchPrime2',
  'twitchPrime3',
  'se12019Medal',
- 'twitchPrime4',
  'Fest19Collection1',
  'Fest19Collection2',
- 'Fest19Collection3']
+ 'Fest19Collection3',
+ 'BR2019Title25',
+ 'BR2019Title15',
+ 'BR2019Title5',
+ 'twitchPrime4']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, {}, _singleAchievementsPopUps)
 FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',
@@ -580,7 +621,7 @@ RANKED_BADGES_BLOCK_LAYOUT = ['1',
  '8',
  '9']
 _playerBadgesBlockBuilder = DictBlockBuilder('playerBadges', 'I', 'I', {})
-_rankedSeasonsBlockBuilder = DictBlockBuilder('rankedSeasons', 'II', 'BBHHH', {})
+_rankedSeasonsBlockBuilder = DictBlockBuilder('rankedSeasons', 'II', 'BHHHH', {})
 _rareAchievementsBlockBuilder = ListBlockBuilder('rareAchievements', 'I', {})
 UNIQUE_ACHIEVEMENT_VALUES = ['histBattle1_battlefield',
  'histBattle1_historyLessons',

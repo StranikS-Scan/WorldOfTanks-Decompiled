@@ -279,8 +279,6 @@ class AS3_AppFactory(IAppFactory):
             event = events.LoadViewEvent(VIEW_ALIAS.EPIC_RANDOM_PAGE)
         elif arenaGuiType == ARENA_GUI_TYPE.RANKED:
             event = events.LoadViewEvent(VIEW_ALIAS.RANKED_BATTLE_PAGE)
-        elif arenaGuiType == ARENA_GUI_TYPE.BATTLE_ROYALE:
-            event = events.LoadViewEvent(VIEW_ALIAS.BATTLE_ROYALE_PAGE)
         elif arenaGuiType == ARENA_GUI_TYPE.BOOTCAMP:
             event = events.LoadViewEvent(VIEW_ALIAS.BOOTCAMP_BATTLE_PAGE)
         elif arenaGuiType in ARENA_GUI_TYPE.EPIC_RANGE:

@@ -3,7 +3,7 @@
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.ranked_battles.ranked_formatters import getRanksColumnRewardsFormatter
+from gui.ranked_battles.ranked_formatters import getRankedAwardsFormatter
 from gui.shared.formatters import text_styles
 from gui.shared.tooltips import TOOLTIP_TYPE, formatters
 from gui.shared.tooltips.common import BlocksTooltipData
@@ -35,11 +35,11 @@ class RankedTooltipData(BlocksTooltipData):
         comment = self.__packComment()
         if comment is not None:
             items.append(comment)
-        items.append(formatters.packBuildUpBlockData([formatters.packRankBlockData(rank=self.item, shieldStatus=self.__shieldStatus, padding=formatters.packPadding(top=10, bottom=15))]))
+        items.append(formatters.packBuildUpBlockData([formatters.packRankBlockData(rank=self.item, padding=formatters.packPadding(top=10, bottom=15))]))
         quest = self.item.getQuest()
         if quest is not None:
             items.append(formatters.packBuildUpBlockData(self.__packAwardsBlock(quest), 0, BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, topPaddingText))
-        bottomBlocks = self.__buildStatusBlock()
+        bottomBlocks = self.__packStatusBlock()
         items.append(formatters.packBuildUpBlockData(bottomBlocks))
         return items
 
@@ -50,9 +50,7 @@ class RankedTooltipData(BlocksTooltipData):
         return formatters.packTextBlockData(text_styles.concatStylesToMultiLine(name, divisionName))
 
     def __packComment(self):
-        comment = self.__getDivisionComment()
-        if comment is None:
-            comment = self.__getShieldComment()
+        comment = self.__getDivisionComment() or self.__getShieldComment() or self.__getUnburnableComment()
         return formatters.packTextBlockData(comment) if comment is not None else None
 
     def __getDivisionComment(self):
@@ -89,6 +87,12 @@ class RankedTooltipData(BlocksTooltipData):
             comment = text_styles.standard(backport.text(R.strings.tooltips.battleTypes.ranked.haveDisposableShield(), hp=text_styles.stats(hp)))
         return comment
 
+    def __getUnburnableComment(self):
+        comment = None
+        if self.item.isVisualUnburnable():
+            comment = text_styles.standard(backport.text(R.strings.tooltips.battleTypes.ranked.rank.isUnburnable()))
+        return comment
+
     def __packStepsBlock(self):
         stepsNumber = self.item.getStepsCountToAchieve()
         stepsNumberStr = text_styles.gold(stepsNumber)
@@ -98,7 +102,7 @@ class RankedTooltipData(BlocksTooltipData):
             locKey = R.strings.tooltips.battleTypes.ranked.rank.conditions()
         return text_styles.main(backport.text(locKey, stepsNumber=stepsNumberStr))
 
-    def __buildStatusBlock(self):
+    def __packStatusBlock(self):
         result = []
         if self.item.isAcquired():
             status = text_styles.statInfo(backport.text(R.strings.tooltips.battleTypes.ranked.rank.status.received()))
@@ -120,7 +124,7 @@ class RankedTooltipData(BlocksTooltipData):
             middleTitle = formatters.packImageTextBlockData(title=text_styles.statInfo(backport.text(R.strings.tooltips.battleTypes.ranked.rank.award.received())), img=backport.image(R.images.gui.maps.icons.buttons.checkmark()), imgPadding=formatters.packPadding(left=2, top=3), txtOffset=20)
         else:
             middleTitle = formatters.packTextBlockData(text_styles.middleTitle(backport.text(R.strings.tooltips.battleTypes.ranked.rank.reward())))
-        listData = getRanksColumnRewardsFormatter().getFormattedBonuses(quest.getBonuses())
+        listData = getRankedAwardsFormatter().getFormattedBonuses(quest.getBonuses())
         awardsWidth = len(listData) * _AWARD_STEP
         if awardsWidth < _TOOLTIP_MIN_WIDTH:
             awardsWidth = _TOOLTIP_MIN_WIDTH

@@ -15,6 +15,7 @@ class STORAGE(object):
     CARD_CANNOTSELLTITLE = '#storage:card/cannotSellTitle'
     CARD_VEHICLE_HOVER_MAXADDITIONALPRICELABEL = '#storage:card/vehicle/hover/maxAdditionalPriceLabel'
     CARD_VEHICLE_HOVER_RESTOREAVAILABLELABEL = '#storage:card/vehicle/hover/restoreAvailableLabel'
+    CARD_VEHICLE_TRADEOFFPRICELABEL = '#storage:card/vehicle/tradeOffPriceLabel'
     MARKEVERYTHING = '#storage:markEverything'
     CUSTOMIZATION_SECTIONTITLE = '#storage:customization/sectionTitle'
     CUSTOMIZATION_NOITEMS_TITLE = '#storage:customization/noItems/title'

@@ -11,6 +11,8 @@ from gui.Scaleform.locale.RES_COMMON import RES_COMMON
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared import g_eventBus
+from gui.impl.gen import R
+from gui.impl import backport
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Tankman import SabatonTankmanSkill, TankmanSkill
 from gui.shared.gui_items.Tankman import getFullUserName, getSmallIconPath, getBigIconPath
@@ -21,7 +23,7 @@ from items.tankmen import SKILL_INDICES, SKILL_NAMES
 from shared_utils import first
 from items.components.tankmen_components import SPECIAL_CREW_TAG
 from soft_exception import SoftException
-from web_client_api.common import ItemPackType, ItemPackTypeGroup
+from web.web_client_api.common import ItemPackType, ItemPackTypeGroup
 NEW_SKILL_ICON = '../maps/icons/tankmen/skills/big/preview_new_skill.png'
 _SimpleSkill = namedtuple('_SimpleSkill', ('name', 'userName', 'bigIconPath', 'isPerk'))
 _SimpleSkill.__new__.__defaults__ = ('new',
@@ -305,8 +307,8 @@ def getUniqueMembers(vehicle):
     if 'dog' in vehicle.tags:
         uniqueMembers.append({'crewId': -1,
          'icon': RES_COMMON.MAPS_ICONS_TANKMEN_ICONS_SMALL_USSR_DOG_1,
-         'name': MENU.HANGAR_CREW_RODY_DOG_NAME,
-         'tooltip': '',
+         'name': backport.text(R.strings.menu.hangar.crew.rody.dog.dyn(vehicle.nationName).name()),
+         'tooltip': TOOLTIPS.HANGAR_CREW_RUDY_DOG + vehicle.nationName,
          'role': ''})
     return uniqueMembers
 

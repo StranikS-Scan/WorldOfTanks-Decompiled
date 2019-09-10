@@ -24,6 +24,7 @@
     <priceFactor>	1.8	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
     <exclusionMask></exclusionMask>
+    <density>	1 1	</density>
   </camouflage>
   <hull>
     <armor>
@@ -108,6 +109,8 @@
     </customization>
     <camouflage>
       <tiling>	1.72 1.72 0.000000 0.000000	</tiling>
+      <density>	88.9302 89.3553	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -1112,6 +1115,8 @@
           </customization>
           <camouflage>
             <tiling>	1.24 0.46 0.000000 0.000000	</tiling>
+            <density>	116.701 115.623	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_122mm_M62-T2A>
       </guns>
@@ -1189,6 +1194,10 @@
           <camouflage>	TURRET	</camouflage>
         </customizableVehicleAreas>
       </customization>
+      <camouflage>
+        <density>	92.952 93.3572	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </Turret_1_R119_Object_777>
   </turrets0>
   <engines>

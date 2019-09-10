@@ -581,7 +581,7 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
         parentCD = None
         if techTreeNode is not None:
             isNextToUnlock = bool(int(techTreeNode.state) & NODE_STATE_FLAGS.NEXT_2_UNLOCK)
-            parentCD = techTreeNode.unlockProps.parentID
+            parentCD = int(techTreeNode.unlockProps.parentID) or None
         if xp:
             xpValue = vehicle.xp
             if isUnlocked and not vehicle.getRentPackage() or vehicle.isRestorePossible() or vehicle.isInInventory:
@@ -855,7 +855,7 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
         tooltip, level = None, Vehicle.VEHICLE_STATE_LEVEL.WARNING
         parentCD = None
         if config.node is not None:
-            parentCD = config.node.unlockProps.parentID
+            parentCD = int(config.node.unlockProps.parentID) or None
         _, _, need2Unlock, _, _ = getUnlockPrice(vehicle.intCD, parentCD, vehicle.level)
         if not nodeState & NODE_STATE_FLAGS.UNLOCKED:
             level = Vehicle.VEHICLE_STATE_LEVEL.CRITICAL

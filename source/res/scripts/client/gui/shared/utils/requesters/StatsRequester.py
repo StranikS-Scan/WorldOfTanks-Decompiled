@@ -10,6 +10,7 @@ from helpers import time_utils, dependency
 from skeletons.gui.game_control import IWalletController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.utils.requesters import IStatsRequester
+from nation_change.nation_change_helpers import NationalGroupDataAccumulator
 _ADDITIONAL_XP_DATA_KEY = '_additionalXPCache'
 _ControllableXPData = namedtuple('_ControllableXPData', ('vehicleID', 'bonusType', 'extraXP', 'extraFreeXP', 'extraTmenXP', 'isXPToTMan'))
 
@@ -67,7 +68,7 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
 
     @property
     def vehiclesXPs(self):
-        return self.getCacheValue('vehTypeXP', dict())
+        return NationalGroupDataAccumulator(self.getCacheValue('vehTypeXP', dict()))
 
     @property
     def multipliedVehicles(self):

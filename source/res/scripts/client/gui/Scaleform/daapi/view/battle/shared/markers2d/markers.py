@@ -46,7 +46,7 @@ class VehicleMarker(Marker):
         self._vProxy.appearance.onModelChanged += self.__onModelChanged
 
     def detach(self):
-        if self._vProxy is not None and self._vProxy.appearance is not None:
+        if self._vProxy is not None:
             self._vProxy.appearance.onModelChanged -= self.__onModelChanged
             self._vProxy = None
         return

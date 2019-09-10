@@ -52,6 +52,7 @@ class ServiceLocator(object):
 
 g_replayCtrl = None
 g_onBeforeSendEvent = None
+g_scenario = None
 
 def autoFlushPythonLog():
     BigWorld.flushPythonLog()
@@ -88,6 +89,8 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         except Exception:
             LOG_CURRENT_EXCEPTION()
 
+        import nation_change
+        nation_change.init()
         import items
         items.init(True, None if not constants.IS_DEVELOPMENT else {})
         import win_points
@@ -213,18 +216,11 @@ def start():
                     LOG_CURRENT_EXCEPTION()
 
                 ServiceLocator.gameplay.start()
-            elif sys.argv[1] == 'botInit' or sys.argv[1] == 'botExecute':
+            elif sys.argv[1] == 'botExecute':
                 ServiceLocator.gameplay.start()
-                try:
-                    LOG_DEBUG('BOTNET: Playing scenario "%s" with bot "%s"...' % (sys.argv[2], sys.argv[3]))
-                    if sys.argv[1] == 'botInit':
-                        scenarioPlayer().initBot(sys.argv[3], sys.argv[2])
-                    elif sys.argv[1] == 'botExecute':
-                        scenarioPlayer().execute(sys.argv[3], sys.argv[2])
-                except Exception:
-                    LOG_DEBUG('BOTNET: Failed to start the client with:')
-                    LOG_CURRENT_EXCEPTION()
-
+                botLoginName = sys.argv[3]
+                scenarioPath = sys.argv[2]
+                initBotNet(scenarioPath, botLoginName)
             else:
                 ServiceLocator.gameplay.start()
         else:
@@ -303,6 +299,8 @@ def fini():
         from predefined_hosts import g_preDefinedHosts
         if g_preDefinedHosts is not None:
             g_preDefinedHosts.fini()
+        from bootcamp.BootcampTransition import BootcampTransition
+        BootcampTransition.stop()
         SoundGroups.g_instance.stopListeningGUISpaceChanges()
         dependency.clear()
         if g_replayCtrl is not None:
@@ -314,7 +312,7 @@ def fini():
         SoundGroups.g_instance.destroy()
         Settings.g_instance.save()
         if g_scenario is not None:
-            g_scenario.fini()
+            g_scenario.destroy()
         g_onBeforeSendEvent = None
         WebBrowser.destroyExternalCache()
         return
@@ -503,7 +501,8 @@ _PYTHON_MACROS = {'p': 'BigWorld.player()',
  'setHero': 'from HeroTank import debugReloadHero; debugReloadHero',
  'rankedCtrl': 'from helpers import dependency; from skeletons.gui.game_control import IRankedBattlesController;rc = dependency.instance(IRankedBattlesController)',
  'eventsCache': 'from helpers import dependency; from skeletons.gui.server_events import IEventsCache;ec = dependency.instance(IEventsCache)',
- 'items': 'from helpers import dependency; from skeletons.gui.shared import IItemsCache;items = dependency.instance(IItemsCache).items'}
+ 'items': 'from helpers import dependency; from skeletons.gui.shared import IItemsCache;items = dependency.instance(IItemsCache).items',
+ 'switchNation': 'import Account; Account.g_accountRepository.inventory.switchNation()'}
 
 def expandMacros(line):
     import re
@@ -556,12 +555,10 @@ def onMemoryCritical():
     g_critMemHandler()
 
 
-g_scenario = None
-
-def scenarioPlayer():
+def initBotNet(scenarioPath, botLoginName):
     global g_scenario
-    if g_scenario is None:
-        sys.path.append('scripts/bot')
-        from client.ScenarioPlayer import g_scenarioPlayer
-        g_scenario = g_scenarioPlayer
-    return g_scenario
+    sys.path.append('scripts/bot')
+    from client.ClientScenarioPlayer import g_scenarioPlayer
+    LOG_DEBUG('BOTNET: Start playing scenario {} with bot {}...'.format(scenarioPath, botLoginName))
+    g_scenario = g_scenarioPlayer
+    g_scenario.addBot(loginName=botLoginName, scenarioPath=scenarioPath)

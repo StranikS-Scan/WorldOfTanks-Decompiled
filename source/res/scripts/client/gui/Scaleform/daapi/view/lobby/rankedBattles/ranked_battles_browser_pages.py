@@ -3,7 +3,7 @@
 from gui.Scaleform.daapi.view.lobby.components.browser_view_page import BrowserPageComponent
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_battles_page import IResetablePage
 from gui.ranked_battles.ranked_helpers import getRankedBattlesUrl, getRankedBattlesInfoPageUrl
-from web_client_api.ranked_battles import createRankedBattlesWebHandlers
+from web.web_client_api.ranked_battles import createRankedBattlesWebHandlers
 
 class LeaderBoardBrowserPage(BrowserPageComponent, IResetablePage):
 

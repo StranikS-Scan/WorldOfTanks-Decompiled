@@ -6,7 +6,8 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.ranked_battles.ranked_builders import shared_vos
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
-from gui.shared.formatters import text_styles
+from gui.shared.formatters import text_styles, icons
+from gui.shared.utils.functions import makeTooltip
 if typing.TYPE_CHECKING:
     from gui.ranked_battles.ranked_models import Rank, PostBattleRankInfo
 AwardBlock = namedtuple('AwardBlock', 'rankID, awards')
@@ -16,6 +17,8 @@ def getVOsSequence(awardBlocks, ranks, rankedInfo):
     awardBlocks.sort(key=lambda x: x.rankID)
     for awardBlock in awardBlocks:
         rank = ranks[awardBlock.rankID]
+        if rank.isQualification():
+            result.append(_getQualificationCongVO(awardBlock, ranks, rankedInfo))
         result.append(_getRankCongVO(awardBlock, rank))
         if rank.isInitialForNextDivision():
             result.append(_getDivisionCongVO(awardBlock, ranks, rankedInfo))
@@ -26,42 +29,58 @@ def getVOsSequence(awardBlocks, ranks, rankedInfo):
 
 
 def _getRankCongVO(awardBlock, rank):
-    return _getBlockVO(RANKEDBATTLES_ALIASES.AWARD_VIEW_RANK_STATE, backport.text(R.strings.ranked_battles.awards.gotRank()), rankVO=shared_vos.buildRankVO(rank=rank, imageSize=RANKEDBATTLES_ALIASES.WIDGET_HUGE, isEnabled=True, shieldStatus=rank.getShieldStatus()), awards=awardBlock.awards)
+    return _getBlockVO(RANKEDBATTLES_ALIASES.AWARD_VIEW_RANK_STATE, backport.text(R.strings.ranked_battles.awards.gotRank()), rankVO=shared_vos.buildRankVO(rank=rank, imageSize=RANKEDBATTLES_ALIASES.WIDGET_HUGE, isEnabled=True), awards=awardBlock.awards)
+
+
+def _getQualificationCongVO(awardBlock, ranks, rankedInfo):
+    division = ranks[awardBlock.rankID].getDivision()
+    newDivision = ranks[awardBlock.rankID + 1].getDivision()
+    return _getBlockVO(RANKEDBATTLES_ALIASES.AWARD_VIEW_QUAL_STATE, backport.text(R.strings.ranked_battles.awards.gotQualification()), qualificationVO=_getQualificationVO(division, newDivision), awards=awardBlock.awards, **_getBonusBattleFields(rankedInfo.qualificationBonusBattles, rankedInfo.additionalBonusBattles))
 
 
 def _getDivisionCongVO(awardBlock, ranks, rankedInfo):
     division = ranks[awardBlock.rankID].getDivision()
     newDivision = ranks[awardBlock.rankID + 1].getDivision()
-    return _getBlockVO(RANKEDBATTLES_ALIASES.AWARD_VIEW_DIVISION_STATE, backport.text(R.strings.ranked_battles.awards.gotDivision()), divisionVO=_getDivisionVO(division, newDivision, rankedInfo.additionalBonusBattles))
+    return _getBlockVO(RANKEDBATTLES_ALIASES.AWARD_VIEW_DIVISION_STATE, backport.text(R.strings.ranked_battles.awards.gotDivision()), divisionVO=_getDivisionVO(division, newDivision), **_getBonusBattleFields(rankedInfo.qualificationBonusBattles, rankedInfo.additionalBonusBattles))
 
 
 def _getLeagueCongVO(rankedInfo):
-    return _getBlockVO(RANKEDBATTLES_ALIASES.AWARD_VIEW_LEAGUE_STATE, backport.text(R.strings.ranked_battles.awards.gotLeague()), leagueVO=_getLeagueVO(rankedInfo.additionalBonusBattles))
+    return _getBlockVO(RANKEDBATTLES_ALIASES.AWARD_VIEW_LEAGUE_STATE, backport.text(R.strings.ranked_battles.awards.gotLeague()), **_getBonusBattleFields(rankedInfo.qualificationBonusBattles, rankedInfo.additionalBonusBattles))
 
 
-def _getDivisionVO(division, newDivision, bonusBattlesDiff):
+def _getQualificationVO(division, newDivision):
+    return {'division': division.getID(),
+     'newDivision': newDivision.getID()}
+
+
+def _getDivisionVO(division, newDivision):
     return {'division': division.getID(),
      'divisionName': text_styles.middleTitle(backport.text(R.strings.ranked_battles.division.dyn(division.getUserID())())),
      'newDivision': newDivision.getID(),
-     'newDivisionName': text_styles.middleTitle(backport.text(R.strings.ranked_battles.division.dyn(newDivision.getUserID())())),
-     'additionalBonusBattles': _getBonusBattlesDiffLabel(bonusBattlesDiff)}
+     'newDivisionName': text_styles.middleTitle(backport.text(R.strings.ranked_battles.division.dyn(newDivision.getUserID())()))}
 
 
-def _getLeagueVO(bonusBattlesDiff):
-    return {'additionalBonusBattles': _getBonusBattlesDiffLabel(bonusBattlesDiff)}
+def _getBonusBattleFields(qualificationBonus, divisionBonus):
+    return {'bonusBattleText': _getBonusBattlesDiffLabel(qualificationBonus + divisionBonus),
+     'bonusBattleTooltip': _getBonusBattlesTooltip(qualificationBonus, divisionBonus)}
 
 
 def _getBonusBattlesDiffLabel(bonusBattlesDiff):
-    label = ''
-    if bonusBattlesDiff > 0:
-        label = text_styles.highlightText(backport.text(R.strings.ranked_battles.awards.additionalBonusBattles(), count=bonusBattlesDiff))
-    return label
+    return text_styles.concatStylesWithSpace(text_styles.highlightText(backport.text(R.strings.ranked_battles.awards.bonusBattles.label(), count=bonusBattlesDiff)), icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.attentionIcon1()), vSpace=-2))
 
 
-def _getBlockVO(state, subTitle='', rankVO=None, divisionVO=None, leagueVO=None, awards=None):
+def _getBonusBattlesTooltip(qualificationBonus, divisionBonus):
+    header = text_styles.middleTitle(backport.text(R.strings.ranked_battles.awards.bonusBattles.header()))
+    body = text_styles.main(backport.text(R.strings.ranked_battles.awards.bonusBattles.body(), divisionAmount=text_styles.neutral(divisionBonus), qualAmount=text_styles.neutral(qualificationBonus)))
+    return makeTooltip(header, body)
+
+
+def _getBlockVO(state, subTitle='', rankVO=None, qualificationVO=None, divisionVO=None, awards=None, bonusBattleText='', bonusBattleTooltip=''):
     return {'state': state,
      'subTitle': subTitle,
      'rankVO': rankVO,
+     'qualVO': qualificationVO,
      'divisionVO': divisionVO,
-     'leagueVO': leagueVO,
-     'awards': awards}
+     'awards': awards,
+     'bonusBattleText': bonusBattleText,
+     'bonusBattleTooltip': bonusBattleTooltip}

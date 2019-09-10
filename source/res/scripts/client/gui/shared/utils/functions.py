@@ -7,11 +7,12 @@ from adisp import async, process
 from debug_utils import LOG_DEBUG
 from gui import GUI_SETTINGS, SystemMessages
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.money import Currency, MONEY_UNDEFINED
 from helpers.i18n import makeString
 from ids_generators import SequenceIDGenerator
 from items import ITEM_TYPE_INDICES, vehicles as vehs_core
-from gui.Scaleform.locale.ARENAS import ARENAS
 
 def rnd_choice(*args):
     args = list(args)
@@ -187,16 +188,16 @@ def getArenaFullName(arenaTypeID):
     arenaType = ArenaType.g_cache[arenaTypeID]
     arenaName = arenaType.name
     if arenaType.gameplayName != 'ctf':
-        arenaName = '%s - %s' % (arenaName, makeString('#arenas:type/%s/name' % arenaType.gameplayName))
+        arenaName = '%s - %s' % (arenaName, backport.text(R.strings.arenas.type.dyn(arenaType.gameplayName).dyn('name')()))
     return arenaName
 
 
 def getBattleSubTypeWinText(arenaTypeID, teamID):
-    key = 'type/{}/description'.format(ArenaType.g_cache[arenaTypeID].gameplayName)
-    arenasKey = ARENAS.all(key)
-    if arenasKey is None:
-        arenasKey = ARENAS.all('{}{}'.format(key, teamID))
-    return makeString(arenasKey)
+    root = R.strings.arenas.type.dyn(ArenaType.g_cache[arenaTypeID].gameplayName)
+    description = root.dyn('description')
+    if not description:
+        description = root.dyn('description{}'.format(teamID))
+    return backport.text(description())
 
 
 def getBattleSubTypeBaseNumber(arenaTypeID, team, baseID):

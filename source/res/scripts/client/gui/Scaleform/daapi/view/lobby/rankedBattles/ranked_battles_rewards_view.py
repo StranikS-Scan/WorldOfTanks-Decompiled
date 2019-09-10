@@ -12,10 +12,9 @@ from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.ranked_battles.constants import DEFAULT_REWARDS_COUNT, YEAR_AWARDS_ORDER, YEAR_AWARDS_POINTS_MAP
+from gui.ranked_battles.constants import YEAR_AWARDS_ORDER
 from gui.ranked_battles.ranked_builders import rewards_vos
-from gui.ranked_battles.ranked_formatters import getRanksColumnRewardsFormatter
-from gui.server_events.awards_formatters import AWARDS_SIZES
+from gui.ranked_battles.ranked_formatters import getRankedAwardsFormatter
 from gui.shared.event_dispatcher import showStylePreview
 from helpers import dependency
 from items.vehicles import VehicleDescriptor
@@ -96,25 +95,20 @@ class RankedBattlesRewardsRanksView(RankedBattlesRewardsRanksMeta, IResetablePag
 
     def __init__(self):
         super(RankedBattlesRewardsRanksView, self).__init__()
-        self.__selectedDivision = self.__rankedController.getCurrentDivision()
-        self.__iconSize = AWARDS_SIZES.SMALL
-        self.__maxRewardsCountInRow = DEFAULT_REWARDS_COUNT
-        self.__bonusFormatter = getRanksColumnRewardsFormatter(self.__maxRewardsCountInRow)
+        self.__selectedDivisionIdx = self.__rankedController.getCurrentDivision().getID()
+        self.__bonusFormatter = getRankedAwardsFormatter()
 
-    def onDivisionIdxChanged(self, divisionIdx):
-        self.__selectedDivision = self.__rankedController.getDivisions()[int(divisionIdx)]
-        self.__updateSounds()
-        self.as_setRewardsS(self.__getRewardsData(self.__selectedDivision))
-
-    def onRequestData(self, iconSizeID, rewardsCount):
-        self.__iconSize = iconSizeID
-        self.__maxRewardsCountInRow = int(rewardsCount)
-        self.as_setRewardsS(self.__getRewardsData(self.__selectedDivision))
+    def onRequestData(self, divisionIdx, iconSizeID, rewardsCount):
+        if self.__selectedDivisionIdx != int(divisionIdx):
+            self.__selectedDivisionIdx = int(divisionIdx)
+            self.__updateSounds()
+        selectedDivision = self.__getSelectedDivision()
+        self.as_setRewardsS(self.__getRewardsData(selectedDivision, iconSizeID, int(rewardsCount)), selectedDivision.isQualification())
 
     def reset(self):
-        currentDivision = self.__rankedController.getCurrentDivision()
-        if self.__selectedDivision != currentDivision:
-            self.__selectedDivision = currentDivision
+        currentDivisionIdx = self.__rankedController.getCurrentDivision().getID()
+        if self.__selectedDivisionIdx != currentDivisionIdx:
+            self.__selectedDivisionIdx = currentDivisionIdx
             self.__onUpdate(True)
         self.__updateSounds()
 
@@ -125,14 +119,13 @@ class RankedBattlesRewardsRanksView(RankedBattlesRewardsRanksMeta, IResetablePag
 
     def _dispose(self):
         self.__bonusFormatter = None
-        self.__selectedDivision = None
         self.__rankedController.onUpdated -= self.__onUpdate
         super(RankedBattlesRewardsRanksView, self)._dispose()
         return
 
-    def __getRankRewards(self, rank):
+    def __getRankRewards(self, rank, iconSize):
         quest = rank.getQuest()
-        return self.__bonusFormatter.getFormattedBonuses(quest.getBonuses(), self.__iconSize) if quest else []
+        return self.__bonusFormatter.getFormattedBonuses(quest.getBonuses(), iconSize) if quest else []
 
     def __getDivisionsData(self):
         data = []
@@ -141,24 +134,29 @@ class RankedBattlesRewardsRanksView(RankedBattlesRewardsRanksMeta, IResetablePag
 
         return data
 
-    def __getRewardsData(self, division):
+    def __getSelectedDivision(self):
+        return self.__rankedController.getDivisions()[self.__selectedDivisionIdx]
+
+    def __getRewardsData(self, division, iconSize, rewardsCount):
         rewards = []
-        self.__bonusFormatter.setMaxRewardsCount(self.__maxRewardsCountInRow)
+        self.__bonusFormatter.setMaxRewardsCount(rewardsCount)
         currentRankID, _ = self.__rankedController.getMaxRank()
+        if division.isQualification():
+            iconSize = RANKEDBATTLES_CONSTS.RANKED_REWARDS_REWARD_SIZE_BIG
         for rankID in division.getRanksIDs():
             rank = self.__rankedController.getRank(rankID)
-            rewards.append(rewards_vos.getRankRewardsVO(rank, self.__getRankRewards(rank), currentRankID))
+            rewards.append(rewards_vos.getRankRewardsVO(rank, self.__getRankRewards(rank, iconSize), currentRankID))
 
         return rewards
 
     def __onUpdate(self, immediately=False):
         self.as_setDivisionsDataS(self.__getDivisionsData(), immediately)
-        self.as_setRewardsS(self.__getRewardsData(self.__selectedDivision))
 
     def __updateSounds(self):
         soundManager = self.__rankedController.getSoundManager()
-        if self.__selectedDivision.isUnlocked():
-            soundManager.setProgressSound(self.__selectedDivision.getUserID())
+        selectedDivision = self.__getSelectedDivision()
+        if selectedDivision.isUnlocked():
+            soundManager.setProgressSound(selectedDivision.getUserID())
         else:
             soundManager.setProgressSound(self.__rankedController.getCurrentDivision().getUserID(), isLoud=False)
 
@@ -193,7 +191,7 @@ class RankedBattlesRewardsLeaguesView(RankedBattlesRewardsLeaguesMeta, IResetabl
     def __getLeaguesData(self):
         leaguesRewardsData = self.__rankedController.getLeagueRewards('customizations')
         result = []
-        formatter = getRanksColumnRewardsFormatter()
+        formatter = getRankedAwardsFormatter()
         for data in leaguesRewardsData:
             leagueID = data['league']
             styleBonus = first(formatter.getPreformattedBonuses(data['awards']))
@@ -257,8 +255,9 @@ class RankedBattlesRewardsYearView(RankedBattlesRewardsYearMeta, IResetablePage)
     @classmethod
     def __getAwardsData(cls, points):
         data = []
+        awardsMap = cls.__rankedController.getYearAwardsPointsMap()
         for awardName in YEAR_AWARDS_ORDER:
-            minPoints, maxPoints = YEAR_AWARDS_POINTS_MAP[awardName]
+            minPoints, maxPoints = awardsMap[awardName]
             if points > maxPoints:
                 status = RANKEDBATTLES_CONSTS.YEAR_REWARD_STATUS_PASSED
             elif maxPoints >= points >= minPoints:

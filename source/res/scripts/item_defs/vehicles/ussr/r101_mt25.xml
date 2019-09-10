@@ -114,6 +114,10 @@
         <anchorDirection>	0.000000 0.382095 -0.924123	</anchorDirection>
       </slot>
     </customizationSlots>
+    <camouflage>
+      <density>	113.879 113.58	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_R101_MT25>
@@ -674,6 +678,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	1 0.6 0.000000 0.000000	</tiling>
+            <density>	101.546 120.062	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_45mm_VT-43M>
         <_57mm_ZiS-4M>	shared	  <maxAmmo>	100	</maxAmmo>
@@ -760,6 +766,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	1 0.6 0.000000 0.000000	</tiling>
+            <density>	98.3083 107.095	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_57mm_ZiS-4M>
         <_76mm_S-54M>	shared	  <maxAmmo>	70	</maxAmmo>
@@ -846,6 +854,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	1 0.6 0.000000 0.000000	</tiling>
+            <density>	104.535 94.4275	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_76mm_S-54M>
       </guns>
@@ -915,6 +925,8 @@
       </customizationSlots>
       <camouflage>
         <tiling>	0.7 0.4 0.000000 0.000000	</tiling>
+        <density>	96.6334 95.5651	</density>
+        <aoTextureSize>	512 256	</aoTextureSize>
       </camouflage>
     </Turret_1_R101_MT25>
   </turrets0>

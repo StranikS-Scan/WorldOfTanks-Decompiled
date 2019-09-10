@@ -48,7 +48,9 @@ class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
             LOG_ERROR('Respawn Controller not available!')
         minSize, maxSize = self.sessionProvider.arenaVisitor.type.getBoundingBox()
         self.__mapDim = (abs(maxSize[0] - minSize[0]) * 1.0, abs(maxSize[1] - minSize[1]) * 1.0)
-        mapWidthPx, mapHeightPx = minimap_utils.metersToMinimapPixels(*self.sessionProvider.arenaVisitor.type.getBoundingBox())
+        dimx, dimy = self.__mapDim
+        mapWidthPx = int(dimx * 0.001 * minimap_utils.EPIC_1KM_IN_PX)
+        mapHeightPx = int(dimy * 0.001 * minimap_utils.EPIC_1KM_IN_PX)
         self.as_setMapDimensionsS(mapWidthPx, mapHeightPx)
         for lane in range(EB_MIN_RESPAWN_LANE_IDX, EB_MAX_RESPAWN_LANE_IDX):
             self.__lastRespawnPositions[lane] = [0, 0]

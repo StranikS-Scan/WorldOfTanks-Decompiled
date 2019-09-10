@@ -18,7 +18,7 @@ from helpers.i18n import makeString as localize
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBrowserController
 from skeletons.gui.game_control import IEpicBattleMetaGameController
-from web_client_api.sound import HangarSoundWebApi
+from web.web_client_api.sound import HangarSoundWebApi
 from account_helpers.AccountSettings import AccountSettings, GUI_START_BEHAVIOR
 from epic_cycle_helpers import getCurrentWelcomeScreenVersion
 _NR_OF_TILES = 3
@@ -66,8 +66,8 @@ class EpicBattlesWelcomeBackView(LobbySubView, EpicBattlesWelcomeBackViewMeta):
 
     def __makeTileList(self):
         return [ {'iconSource': RES_ICONS.getEpicWelcomeBackImgTilePath(nr),
-         'titleLabel': '',
-         'descriptionLabel': '',
+         'titleLabel': localize(EPIC_BATTLE.getTileLabel(nr)),
+         'descriptionLabel': localize(EPIC_BATTLE.getTileDescr(nr)),
          'showDelay': _DEFAULT_TILE_SHOW_DELAY + nr * _TILE_SHOW_DELAY_STEP} for nr in xrange(1, _NR_OF_TILES + 1) ]
 
     def __close(self, nextView=VIEW_ALIAS.LOBBY_HANGAR):
@@ -83,7 +83,7 @@ class EpicBattlesWelcomeBackView(LobbySubView, EpicBattlesWelcomeBackViewMeta):
         url = yield self.__urlMacros.parse(self.__settings.get('url'))
         webBrowser = self.__getCurrentBrowser()
         if not webBrowser or url != webBrowser.url:
-            title = ''
+            title = localize(EPIC_BATTLE.EPICBATTLESWELCOMEBACKVIEW_VIDEO_TITLE)
             self.__browserID = yield self.browserCtrl.load(url, title, showActionBtn=False, browserID=self.__browserID, browserSize=gc_constants.BROWSER.VIDEO_SIZE, isDefault=False, showCloseBtn=True, handlers=self.__createWebHandlers())
 
     def __getCurrentBrowser(self):

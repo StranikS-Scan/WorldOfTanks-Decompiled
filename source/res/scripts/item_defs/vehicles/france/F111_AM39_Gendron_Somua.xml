@@ -118,6 +118,8 @@
     <hangarShadowTexture>	vehicles/french/F111_AM39_Gendron_Somua/AM39_Gendron_Somua_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	1.91 1.91 0.000000 0.000000	</tiling>
+      <density>	161.458 162.066	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -547,6 +549,8 @@
           </customization>
           <camouflage>
             <tiling>	0.5 0.25 0.000000 0.000000	</tiling>
+            <density>	327.802 327.954	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_25mm_SA35>
       </guns>
@@ -604,6 +608,10 @@
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.908 -0.018 1.001 0.000 0.554 0.291 0.880 0.580 0.322 0.500 0.242 0.506 0.228 0.681 0.293	</physicsShape>
+      <camouflage>
+        <density>	183.155 182.962	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </Turret_1_F111_AM39_Gendron_Somua>
   </turrets0>
   <engines>

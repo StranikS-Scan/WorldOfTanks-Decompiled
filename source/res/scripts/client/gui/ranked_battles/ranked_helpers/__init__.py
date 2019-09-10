@@ -4,7 +4,7 @@ import logging
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.periodic_battles.models import CalendarStatusVO
-from gui.ranked_battles.constants import RANKED_QUEST_ID_PREFIX, PrimeTimeStatus, SPRINTER_POSTFIX
+from gui.ranked_battles.constants import RANKED_QUEST_ID_PREFIX, PrimeTimeStatus, RankedTokenQuestPostfix
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.utils.functions import makeTooltip
@@ -73,9 +73,22 @@ def getRankedBattlesIntroPageUrl(lobbyContext=None):
     return lobbyContext.getServerSettings().bwRankedBattles.introPageUrl
 
 
-def getRankedDataFromTokenQuestID(questID):
-    seasonID, league, sprinterPostfix = questID.split('_')[-3:]
-    return (int(seasonID), int(league), sprinterPostfix == SPRINTER_POSTFIX)
+def isSeasonTokenQuest(questID):
+    return questID.split('_')[-1] in (RankedTokenQuestPostfix.SPRINTER, RankedTokenQuestPostfix.COMMON)
+
+
+def getDataFromSeasonTokenQuestID(questID):
+    seasonID, leagueID, postfix = questID.split('_')[-3:]
+    if postfix not in (RankedTokenQuestPostfix.SPRINTER, RankedTokenQuestPostfix.COMMON):
+        _logger.error('getDataFromSeasonTokenQuestID usage not for season token quest')
+    return (int(seasonID), int(leagueID), postfix == RankedTokenQuestPostfix.SPRINTER)
+
+
+def getDataFromFinalTokenQuestID(questID):
+    awardsPackID, postfix = questID.split('_')[-2:]
+    if postfix != RankedTokenQuestPostfix.FINAL:
+        _logger.error('getDataFromFinalTokenQuestID usage not for final token quest')
+    return awardsPackID
 
 
 def getShieldSizeByRankSize(rankSize):

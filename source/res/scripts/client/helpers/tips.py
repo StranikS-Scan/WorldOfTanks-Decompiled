@@ -180,34 +180,6 @@ class EpicRandomTipsCriteria(_TipsCriteria):
         return _FoundTip('', '', '')
 
 
-def _getBattleRoyaleTipIterator():
-    tipSize = R.strings.tips.battleRoyale.length()
-    if tipSize > 0:
-        items = range(tipSize)
-        return rnd_choice_loop(*items)
-    else:
-        return None
-
-
-class BattleRoyaleTipsCriteria(_TipsCriteria):
-    __tipIterator = None
-
-    def __init__(self):
-        super(BattleRoyaleTipsCriteria, self).__init__()
-        if BattleRoyaleTipsCriteria.__tipIterator is None:
-            BattleRoyaleTipsCriteria.__tipIterator = _getBattleRoyaleTipIterator()
-        return
-
-    def find(self):
-        iterator = BattleRoyaleTipsCriteria.__tipIterator
-        if iterator is not None:
-            tipNum = next(iterator)
-            tipRes = R.strings.tips.battleRoyale.dyn('c_{}'.format(tipNum))
-            if tipRes:
-                return _FoundTip(tipRes.title(), tipRes.body(), R.images.gui.maps.icons.battleLoading.tips.dyn('battleRoyale{}'.format(tipNum))())
-        return _FoundTip('', '', '')
-
-
 def getTipsCriteria(arenaVisitor):
     if arenaVisitor.gui.isSandboxBattle():
         return SandboxTipsCriteria()
@@ -217,9 +189,7 @@ def getTipsCriteria(arenaVisitor):
         return RankedTipsCriteria()
     if arenaVisitor.gui.isEpicRandomBattle():
         return EpicRandomTipsCriteria()
-    if arenaVisitor.gui.isInEpicRange():
-        return EpicBattleTipsCriteria()
-    return BattleRoyaleTipsCriteria() if arenaVisitor.gui.isBattleRoyale() else RandomTipsCriteria()
+    return EpicBattleTipsCriteria() if arenaVisitor.gui.isInEpicRange() else RandomTipsCriteria()
 
 
 def getTipsIterator(arenaGuiType, battlesCount, vehicleType, vehicleNation, vehicleLvl):

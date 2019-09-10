@@ -9,7 +9,6 @@ from constants import EVENT_TYPE as _ET, DOSSIER_TYPE, LOOTBOX_TOKEN_PREFIX, PRE
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from dossiers2.custom.records import RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
-from festivity.festival.item_info import FestivalItemInfo
 from gui import makeHtmlString
 from gui.impl import backport
 from gui.impl.gen import R
@@ -23,7 +22,6 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.Scaleform.settings import getBadgeIconPath, BADGES_ICONS, ICONS_SIZES
 from gui.server_events.awards_formatters import AWARDS_SIZES
-from bonus_constants import BonusName
 from gui.server_events.formatters import parseComplexToken
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
@@ -1212,17 +1210,15 @@ class CustomizationsBonus(SimpleBonus):
 
 
 class BoxBonus(SimpleBonus):
-    __rankedIconSizes = {'big': '100x88',
-     'small': '48x48'}
 
-    class HANDLER_NAMES(object):
-        RANKED = 'ranked'
+    class HandlerNames(object):
+        pass
 
     def __init__(self, name, value, isCompensation=False, ctx=None):
         super(BoxBonus, self).__init__(name, value, isCompensation)
         self.__iconsHandlerData = ('', None)
         self.__tooltipType = None
-        self.__iconHandlers = {self.HANDLER_NAMES.RANKED: self.__rankedIconHandler}
+        self.__iconHandlers = {}
         return
 
     def setupIconHandler(self, handlerData, handlerParams):
@@ -1244,11 +1240,6 @@ class BoxBonus(SimpleBonus):
         if self.__tooltipType is not None:
             name = '/'.join([name, self.__tooltipType])
         return _getItemTooltip(name)
-
-    def __rankedIconHandler(self, params, sizeLabel):
-        boxType, number = params
-        size = self.__rankedIconSizes[sizeLabel]
-        return RES_ICONS.getRankedBoxIcon(size, boxType, '', number)
 
 
 def itemsBonusFactory(name, value, isCompensation=False, ctx=None):
@@ -1573,20 +1564,6 @@ class CrewBooksBonus(SimpleBonus):
         return itemInfo
 
 
-class FestivalItemsBonus(SimpleBonus):
-
-    def formatValue(self):
-        itemNames = []
-        for festItem in sorted((FestivalItemInfo(itemID) for itemID in self._value)):
-            itemName = backport.text(R.strings.festival.festivalItem.fullName(), backport.text(festItem.getTypeResID()), backport.text(festItem.getNameResID()))
-            itemNames.append(itemName)
-
-        return ', '.join(itemNames)
-
-    def getWrappedEpicBonusList(self):
-        return []
-
-
 _BONUSES = {Currency.CREDITS: CreditsBonus,
  Currency.GOLD: GoldBonus,
  Currency.CRYSTAL: CrystalBonus,
@@ -1621,10 +1598,8 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  'oneof': BoxBonus,
  'badgesGroup': BadgesGroupBonus,
  'blueprints': blueprintBonusFactory,
- 'crewSkins': crewSkinsBonusFactory,
- BonusName.FESTIVAL_TICKETS: IntegralBonus,
- BonusName.FESTIVAL_ITEMS: FestivalItemsBonus}
-_BONUSES_PRIORITY = (BonusName.FESTIVAL_TICKETS, 'tokens', 'oneof')
+ 'crewSkins': crewSkinsBonusFactory}
+_BONUSES_PRIORITY = ('tokens', 'oneof')
 _BONUSES_ORDER = dict(((n, idx) for idx, n in enumerate(_BONUSES_PRIORITY)))
 
 def compareBonuses(bonusName1, bonusName2):

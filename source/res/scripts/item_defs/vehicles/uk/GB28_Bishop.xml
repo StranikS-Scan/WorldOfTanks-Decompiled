@@ -143,6 +143,10 @@
         <anchorDirection>	0.000000 0.629364 -0.777111	</anchorDirection>
       </slot>
     </customizationSlots>
+    <camouflage>
+      <density>	99.7588 100.297	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_GB28_Bishop>
@@ -2306,6 +2310,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.4 0.25 0.000000 0.000000	</tiling>
+            <density>	128.609 125.573	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </OQF_25pdr_Gun_Mk_II>
         <_4.5inch_SPG_Howitzer>	shared	  <maxAmmo>	32	</maxAmmo>
@@ -2379,6 +2385,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.43 0.25 0.000000 0.000000	</tiling>
+            <density>	132.079 121.893	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_4.5inch_SPG_Howitzer>
       </guns>

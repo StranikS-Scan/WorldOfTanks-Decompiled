@@ -100,6 +100,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	2 2 0.000000 0.000000	</tiling>
+      <density>	98.8264 99.0515	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -1584,6 +1586,10 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	97.0102 95.5715	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_105mm_leFH16_L22>
         <_105mm_leFH18_L28>	shared	  <maxAmmo>	60	</maxAmmo>
           <pitchLimits>
@@ -1658,6 +1664,10 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	96.8596 96.053	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_105mm_leFH18_L28>
       </guns>
       <models>
@@ -1734,6 +1744,10 @@
           <isUVProportional>	true	</isUVProportional>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	88.1453 88.1683	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </Turret_1_Pz_Sfl_IVb>
   </turrets0>
   <engines>

@@ -120,6 +120,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	1.7 1.7 0.000000 0.000000	</tiling>
+      <density>	102.253 102.471	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -2160,6 +2162,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	1.1 1.1 0.000000 0.000000	</tiling>
+            <density>	89.4905 92.3526	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_88mm_KwK_43_L71>
         <_105mm_KwK45_L52>	shared	  <maxAmmo>	56	</maxAmmo>
@@ -2244,6 +2248,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
+            <density>	92.3553 88.5365	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_105mm_KwK45_L52>
         <_105mm_KwK46_L68>	shared	  <maxAmmo>	42	</maxAmmo>
@@ -2324,6 +2330,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	1.1 1.1 0.000000 0.000000	</tiling>
+            <density>	94.7555 78.3691	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_105mm_KwK46_L68>
       </guns>
@@ -2337,7 +2345,6 @@
         <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.4625 1.58327	</gunPosition>
-      <gunCamPosition>	0.000000 0.4625 0.977	</gunCamPosition>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.022 -0.052 1.052 0.000 0.575 0.186 0.848 0.619 0.349 0.500 0.459 0.500 0.209 0.770 0.047	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
@@ -2402,6 +2409,10 @@
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	104.355 104.734	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </VK4502P_Standardturm>
     <VK4502P_Eliteturm>
       <userString>	#germany_vehicles:VK4502P_Eliteturm	</userString>
@@ -2520,6 +2531,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	1.1 1.1 0.000000 0.000000	</tiling>
+            <density>	89.4905 92.3526	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_88mm_KwK_43_L71>
         <_105mm_KwK45_L52>	shared	  <maxAmmo>	56	</maxAmmo>
@@ -2595,6 +2608,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	1.1 1.1 0.000000 0.000000	</tiling>
+            <density>	92.3553 88.5365	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_105mm_KwK45_L52>
         <_105mm_KwK46_L68>	shared	  <maxAmmo>	42	</maxAmmo>
@@ -2670,6 +2685,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	1.36 1.36 0.000000 0.000000	</tiling>
+            <density>	94.7555 78.3691	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_105mm_KwK46_L68>
         <_128mm_KwK44_L55>	shared	  <maxAmmo>	36	</maxAmmo>
@@ -2754,6 +2771,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	1.18 1.18 0.000000 0.000000	</tiling>
+            <density>	82.3408 86.7994	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_128mm_KwK44_L55>
       </guns>
@@ -2767,7 +2786,6 @@
         <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.446848 1.60867	</gunPosition>
-      <gunCamPosition>	0.000000 0.446848 0.977	</gunCamPosition>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.001 -0.092 1.005 0.000 0.558 0.122 0.781 0.472 0.395 0.500 0.261 0.500 0.166 0.622 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
@@ -2832,6 +2850,10 @@
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	103.2 103.698	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </VK4502P_Eliteturm>
   </turrets0>
   <engines>

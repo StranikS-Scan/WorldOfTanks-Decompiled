@@ -67,6 +67,7 @@
   </system>
   <environment>
     <materialKinds>	system/data/material_kinds.xml	</materialKinds>
+    <effectMaterials>	system/data/effect_materials.xml	</effectMaterials>
     <floraXML>	system/data/flora.xml	</floraXML>
     <skyXML>	system/data/sky.xml	</skyXML>
     <splodgeMaterial>	system/materials/splodge.mfm	</splodgeMaterial>
@@ -153,7 +154,6 @@
   </shaderPaths>
   <gameplay>
     <areaBorderModel>	system/models/fx_area_border.model	</areaBorderModel>
-    <areaBorderModelSmall>	system/models/fx_area_border_small.model	</areaBorderModelSmall>
   </gameplay>
   <asset_pipeline>
     <havok_processor>

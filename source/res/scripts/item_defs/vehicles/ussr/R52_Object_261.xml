@@ -1283,6 +1283,10 @@
         <camouflage>	HULL	</camouflage>
       </customizableVehicleAreas>
     </customization>
+    <camouflage>
+      <density>	98.112 97.8704	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_Object_261>
@@ -2451,6 +2455,8 @@
           </customization>
           <camouflage>
             <tiling>	0.8 0.4 0.000000 0.000000	</tiling>
+            <density>	122.563 124.139	</density>
+            <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
         </_180mm_B-1-P>
       </guns>
@@ -2481,6 +2487,10 @@
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	50.0 25.0	</density>
+        <aoTextureSize>	512 256	</aoTextureSize>
+      </camouflage>
     </Turret_1_Object_261>
   </turrets0>
   <engines>

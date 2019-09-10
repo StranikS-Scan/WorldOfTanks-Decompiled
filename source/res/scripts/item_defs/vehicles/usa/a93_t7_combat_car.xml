@@ -102,6 +102,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	1.5 1.5 0.000000 0.000000	</tiling>
+      <density>	114.21 114.819	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -908,6 +910,10 @@
               <camouflage></camouflage>
             </customizableVehicleAreas>
           </customization>
+          <camouflage>
+            <density>	25.0 25.0	</density>
+            <aoTextureSize>	256 128	</aoTextureSize>
+          </camouflage>
         </_12.7mm_MG_HB_M2_A>
       </guns>
       <models>
@@ -976,6 +982,8 @@
       </customizationSlots>
       <camouflage>
         <tiling>	1.2 0.6 0.51 0.98	</tiling>
+        <density>	86.2855 86.6357	</density>
+        <aoTextureSize>	512 256	</aoTextureSize>
       </camouflage>
     </Turret_1_T7_Combat_Car>
   </turrets0>

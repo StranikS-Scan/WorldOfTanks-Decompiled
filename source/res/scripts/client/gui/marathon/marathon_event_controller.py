@@ -3,14 +3,14 @@
 import Event
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewTypes
-from gui.app_loader import sf_lobby
-from gui.marathon.festival_marathon import FestivalMarathon
+from gui.marathon.marathon_event_dp import MarathonEvent
+from gui.app_loader.decorators import sf_lobby
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from helpers import dependency, isPlayerAccount
 from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-MARATHON_EVENTS = [FestivalMarathon()]
+MARATHON_EVENTS = [MarathonEvent()]
 DEFAULT_MARATHON_PREFIX = MARATHON_EVENTS[0].prefix if any(MARATHON_EVENTS) else None
 
 class MarathonEventsController(IMarathonEventsController, Notifiable):

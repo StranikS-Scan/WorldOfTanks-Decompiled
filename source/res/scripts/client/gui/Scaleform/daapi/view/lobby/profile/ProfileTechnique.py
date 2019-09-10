@@ -204,55 +204,58 @@ class ProfileTechnique(ProfileTechniqueMeta):
 
     def _receiveVehicleDossier(self, vehicleIntCD, databaseId):
         vehDossier = self.itemsCache.items.getVehicleDossier(vehicleIntCD, databaseId)
-        achievementsList = None
-        specialMarksStats = []
-        specialRankedStats = []
-        if self._battlesType in (PROFILE_DROPDOWN_KEYS.ALL, PROFILE_DROPDOWN_KEYS.EPIC_RANDOM):
-            achievementsEnabled = True
-            if self._battlesType == PROFILE_DROPDOWN_KEYS.ALL:
-                stats = vehDossier.getRandomStats()
-            elif self._battlesType == PROFILE_DROPDOWN_KEYS.EPIC_RANDOM:
-                stats = vehDossier.getEpicRandomStats()
-                achievementsEnabled = self.lobbyContext.getServerSettings().isEpicRandomAchievementsEnabled()
-            if achievementsEnabled:
+        if not vehDossier:
+            return
+        else:
+            achievementsList = None
+            specialMarksStats = []
+            specialRankedStats = []
+            if self._battlesType in (PROFILE_DROPDOWN_KEYS.ALL, PROFILE_DROPDOWN_KEYS.EPIC_RANDOM):
+                achievementsEnabled = True
+                if self._battlesType == PROFILE_DROPDOWN_KEYS.ALL:
+                    stats = vehDossier.getRandomStats()
+                elif self._battlesType == PROFILE_DROPDOWN_KEYS.EPIC_RANDOM:
+                    stats = vehDossier.getEpicRandomStats()
+                    achievementsEnabled = self.lobbyContext.getServerSettings().isEpicRandomAchievementsEnabled()
+                if achievementsEnabled:
+                    achievementsList = self.__getAchievementsList(stats, vehDossier)
+                if self.__showMarksOnGun(vehicleIntCD):
+                    if self._battlesType != PROFILE_DROPDOWN_KEYS.EPIC_RANDOM or self.lobbyContext.getServerSettings().isEpicRandomMarksOnGunEnabled():
+                        specialMarksStats.append(self.__packAchievement(stats, vehDossier, MARK_ON_GUN_RECORD))
+            elif self._battlesType == PROFILE_DROPDOWN_KEYS.TEAM:
+                stats = vehDossier.getTeam7x7Stats()
                 achievementsList = self.__getAchievementsList(stats, vehDossier)
-            if self.__showMarksOnGun(vehicleIntCD):
-                if self._battlesType != PROFILE_DROPDOWN_KEYS.EPIC_RANDOM or self.lobbyContext.getServerSettings().isEpicRandomMarksOnGunEnabled():
-                    specialMarksStats.append(self.__packAchievement(stats, vehDossier, MARK_ON_GUN_RECORD))
-        elif self._battlesType == PROFILE_DROPDOWN_KEYS.TEAM:
-            stats = vehDossier.getTeam7x7Stats()
-            achievementsList = self.__getAchievementsList(stats, vehDossier)
-        elif self._battlesType == PROFILE_DROPDOWN_KEYS.STATICTEAM:
-            stats = vehDossier.getRated7x7Stats()
-            achievementsList = self.__getAchievementsList(stats, vehDossier)
-        elif self._battlesType == PROFILE_DROPDOWN_KEYS.HISTORICAL:
-            stats = vehDossier.getHistoricalStats()
-            achievementsList = self.__getAchievementsList(stats, vehDossier)
-        elif self._battlesType == PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES:
-            stats = vehDossier.getFortSortiesStats()
-        elif self._battlesType == PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES:
-            stats = vehDossier.getFortBattlesStats()
-        elif self._battlesType == PROFILE_DROPDOWN_KEYS.CLAN:
-            stats = vehDossier.getGlobalMapStats()
-        elif self._battlesType == PROFILE_DROPDOWN_KEYS.FALLOUT:
-            stats = vehDossier.getFalloutStats()
-        elif self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED:
-            stats = vehDossier.getRankedStats()
-            achievementsList = self.__getAchievementsList(stats, vehDossier)
-        else:
-            raise SoftException('Profile Technique: Unknown battle type: ' + self._battlesType)
-        if achievementsList is not None:
-            achievementsList.insert(0, specialRankedStats)
-            achievementsList.insert(1, specialMarksStats)
-        if self._battlesType == PROFILE_DROPDOWN_KEYS.FALLOUT:
-            layout = FALLOUT_STATISTICS_LAYOUT
-        else:
-            layout = STATISTICS_LAYOUT
-        preparedStatistics = DetailedStatisticsUtils.getStatistics(stats, self._userID is None, layout)
-        self._selectedVehicleIntCD = vehicleIntCD
-        self.as_responseVehicleDossierS({'detailedData': preparedStatistics,
-         'achievements': achievementsList})
-        return
+            elif self._battlesType == PROFILE_DROPDOWN_KEYS.STATICTEAM:
+                stats = vehDossier.getRated7x7Stats()
+                achievementsList = self.__getAchievementsList(stats, vehDossier)
+            elif self._battlesType == PROFILE_DROPDOWN_KEYS.HISTORICAL:
+                stats = vehDossier.getHistoricalStats()
+                achievementsList = self.__getAchievementsList(stats, vehDossier)
+            elif self._battlesType == PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES:
+                stats = vehDossier.getFortSortiesStats()
+            elif self._battlesType == PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES:
+                stats = vehDossier.getFortBattlesStats()
+            elif self._battlesType == PROFILE_DROPDOWN_KEYS.CLAN:
+                stats = vehDossier.getGlobalMapStats()
+            elif self._battlesType == PROFILE_DROPDOWN_KEYS.FALLOUT:
+                stats = vehDossier.getFalloutStats()
+            elif self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED:
+                stats = vehDossier.getRankedStats()
+                achievementsList = self.__getAchievementsList(stats, vehDossier)
+            else:
+                raise SoftException('Profile Technique: Unknown battle type: ' + self._battlesType)
+            if achievementsList is not None:
+                achievementsList.insert(0, specialRankedStats)
+                achievementsList.insert(1, specialMarksStats)
+            if self._battlesType == PROFILE_DROPDOWN_KEYS.FALLOUT:
+                layout = FALLOUT_STATISTICS_LAYOUT
+            else:
+                layout = STATISTICS_LAYOUT
+            preparedStatistics = DetailedStatisticsUtils.getStatistics(stats, self._userID is None, layout)
+            self._selectedVehicleIntCD = vehicleIntCD
+            self.as_responseVehicleDossierS({'detailedData': preparedStatistics,
+             'achievements': achievementsList})
+            return
 
     def __getAchievementsList(self, targetData, vehDossier):
         packedList = []

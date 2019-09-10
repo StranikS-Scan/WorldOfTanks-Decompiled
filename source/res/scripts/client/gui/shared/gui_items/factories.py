@@ -79,8 +79,8 @@ class GuiItemFactory(IGuiItemsFactory):
     def createTankmanDossier(self, tmanDescr, tankmanDossierDescr, extDossier, playerDBID=None, currentVehicleItem=None):
         return TankmanDossier(tmanDescr, tankmanDossierDescr, extDossier, playerDBID, currentVehicleItem)
 
-    def createAccountDossier(self, dossier, playerDBID=None, rated7x7Seasons=None, festivalInfo=None):
-        return AccountDossier(dossier, playerDBID, rated7x7Seasons, festivalInfo)
+    def createAccountDossier(self, dossier, playerDBID=None, rated7x7Seasons=None):
+        return AccountDossier(dossier, playerDBID, rated7x7Seasons)
 
     def createVehicleDossier(self, dossier, vehTypeCompDescr, playerDBID=None):
         return VehicleDossier(dossier, vehTypeCompDescr, playerDBID)

@@ -6,6 +6,10 @@ from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _FET
 from constants import ATTACK_REASON, ATTACK_REASONS, SHELL_TYPES_LIST
 _logger = logging.getLogger(__name__)
 
+def _unpackInteger(packedData):
+    return packedData
+
+
 def _unpackDamage(packedData):
     return _DamageExtra(*_BET.unpackDamage(packedData))
 
@@ -14,12 +18,12 @@ def _unpackCrits(packedData):
     return _CritsExtra(*_BET.unpackCrits(packedData))
 
 
-def _unpackInteger(packedData):
-    return packedData
-
-
 def _unpackVisibility(packedData):
     return _VisibilityExtra(*_BET.unpackVisibility(packedData))
+
+
+def _unpackMultiStun(packedData):
+    return _MultiStunExtra(packedData, True)
 
 
 _BATTLE_EVENT_TO_PLAYER_FEEDBACK_EVENT = {_BET.KILL: _FET.PLAYER_KILLED_ENEMY,
@@ -42,7 +46,8 @@ _BATTLE_EVENT_TO_PLAYER_FEEDBACK_EVENT = {_BET.KILL: _FET.PLAYER_KILLED_ENEMY,
  _BET.DESTRUCTIBLES_DEFENDED: _FET.DESTRUCTIBLES_DEFENDED,
  _BET.DEFENDER_BONUS: _FET.DEFENDER_BONUS,
  _BET.SMOKE_ASSIST: _FET.SMOKE_ASSIST,
- _BET.INSPIRE_ASSIST: _FET.INSPIRE_ASSIST}
+ _BET.INSPIRE_ASSIST: _FET.INSPIRE_ASSIST,
+ _BET.MULTI_STUN: _FET.PLAYER_STUN_ENEMIES}
 _PLAYER_FEEDBACK_EXTRA_DATA_CONVERTERS = {_FET.PLAYER_DAMAGED_HP_ENEMY: _unpackDamage,
  _FET.PLAYER_ASSIST_TO_KILL_ENEMY: _unpackDamage,
  _FET.PLAYER_CAPTURED_BASE: _unpackInteger,
@@ -58,7 +63,8 @@ _PLAYER_FEEDBACK_EXTRA_DATA_CONVERTERS = {_FET.PLAYER_DAMAGED_HP_ENEMY: _unpackD
  _FET.DESTRUCTIBLES_DEFENDED: _unpackInteger,
  _FET.SMOKE_ASSIST: _unpackDamage,
  _FET.INSPIRE_ASSIST: _unpackDamage,
- _FET.PLAYER_SPOTTED_ENEMY: _unpackVisibility}
+ _FET.PLAYER_SPOTTED_ENEMY: _unpackVisibility,
+ _FET.PLAYER_STUN_ENEMIES: _unpackMultiStun}
 
 def _getShellType(shellTypeID):
     return None if shellTypeID == NONE_SHELL_TYPE else SHELL_TYPES_LIST[shellTypeID]
@@ -105,9 +111,6 @@ class _DamageExtra(object):
     def isWorldCollision(self):
         return self.isAttackReason(ATTACK_REASON.WORLD_COLLISION)
 
-    def isDeathZone(self):
-        return self.isAttackReason(ATTACK_REASON.DEATH_ZONE)
-
     def isProtectionZone(self, primary=True):
         return self.isAttackReason(ATTACK_REASON.ARTILLERY_PROTECTION) or self.isAttackReason(ATTACK_REASON.ARTILLERY_SECTOR) if primary else self.isSecondaryAttackReason(ATTACK_REASON.ARTILLERY_PROTECTION) or self.isSecondaryAttackReason(ATTACK_REASON.ARTILLERY_SECTOR)
 
@@ -150,6 +153,22 @@ class _VisibilityExtra(object):
         return self.__isRoleAction
 
 
+class _MultiStunExtra(object):
+    __slots__ = ('__targetsAmount', '__isRoleAction')
+
+    def __init__(self, targetsAmount, isRoleAction):
+        super(_MultiStunExtra, self).__init__()
+        self.__targetsAmount = targetsAmount
+        self.__isRoleAction = bool(isRoleAction)
+        _logger.debug('_StunExtra isRoleAction = %s', isRoleAction)
+
+    def getTargetsAmount(self):
+        return self.__targetsAmount
+
+    def isRoleAction(self):
+        return self.__isRoleAction
+
+
 class _CritsExtra(object):
     __slots__ = ('__critsCount', '__shellType', '__isShellGold', '__attackReasonID', '__secondaryAttackReasonID')
 
@@ -181,9 +200,6 @@ class _CritsExtra(object):
 
     def isWorldCollision(self):
         return self.isAttackReason(ATTACK_REASON.WORLD_COLLISION)
-
-    def isDeathZone(self):
-        return self.isAttackReason(ATTACK_REASON.DEATH_ZONE)
 
     def isProtectionZone(self, primary=True):
         return self.isAttackReason(ATTACK_REASON.ARTILLERY_PROTECTION) or self.isAttackReason(ATTACK_REASON.ARTILLERY_SECTOR) if primary else self.isSecondaryAttackReason(ATTACK_REASON.ARTILLERY_PROTECTION) or self.isSecondaryAttackReason(ATTACK_REASON.ARTILLERY_SECTOR)

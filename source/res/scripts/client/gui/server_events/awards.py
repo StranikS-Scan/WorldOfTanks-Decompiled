@@ -428,19 +428,6 @@ class MissionAward(MissionAwardAbstract):
         return len(self._eventsCache.getQuests(lambda q: q.isAvailable()[0] and q.getType() not in constants.EVENT_TYPE.SHARED_QUESTS and not q.isCompleted()))
 
 
-class RankedBoobyAward(MissionAward):
-
-    def __init__(self, quest, proxyEvent):
-        super(RankedBoobyAward, self).__init__(quest, {'eventsCache': None}, proxyEvent)
-        return
-
-    def getAvailableText(self):
-        pass
-
-    def isNextAvailable(self):
-        return False
-
-
 class OperationUnlockedAward(MissionAward):
     BODY_BUTTON_LINKAGE = 'LobbyMenuButton'
 

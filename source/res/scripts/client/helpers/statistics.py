@@ -251,7 +251,8 @@ class StatisticsCollector(IStatisticsCollector):
          'graphicsAPIID': statisticsDict['graphicsAPIID'],
          'multiGPU': statisticsDict['multiGPU'],
          'cpuName': statisticsDict['cpuName'],
-         'hangarFirstLoadingTime': self.__hangarLoadingTime}
+         'hangarFirstLoadingTime': self.__hangarLoadingTime,
+         'clientBit': statisticsDict['clientBit']}
 
     def __onSettingsChanged(self, diff):
         keys = set(diff.keys())

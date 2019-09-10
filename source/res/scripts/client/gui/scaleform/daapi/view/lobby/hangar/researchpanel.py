@@ -15,6 +15,7 @@ from gui.shared.formatters.time_formatters import getTimeLeftStr
 from helpers import i18n, dependency
 from skeletons.gui.game_control import IVehicleComparisonBasket, IIGRController
 from skeletons.gui.shared import IItemsCache
+from nation_change.nation_change_helpers import iterVehiclesWithNationGroupInOrder
 
 class ResearchPanel(ResearchPanelMeta):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -88,8 +89,10 @@ class ResearchPanel(ResearchPanelMeta):
     def onVehicleTypeXPChanged(self, xps):
         if g_currentVehicle.isPresent():
             vehCD = g_currentVehicle.item.intCD
-            if vehCD in xps:
-                self.as_setEarnedXPS(xps[vehCD])
+            nationGroupVehCDs = set(iterVehiclesWithNationGroupInOrder([vehCD]))
+            if nationGroupVehCDs.intersection(xps):
+                xp = self.itemsCache.items.stats.vehiclesXPs.get(vehCD, 0)
+                self.as_setEarnedXPS(xp)
 
     def onVehicleBecomeElite(self, elite):
         if g_currentVehicle.isPresent():

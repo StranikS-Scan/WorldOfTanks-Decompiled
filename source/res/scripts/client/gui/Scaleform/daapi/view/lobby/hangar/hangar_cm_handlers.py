@@ -5,20 +5,23 @@ from adisp import process
 from constants import GameSeasonType, RentType
 from debug_utils import LOG_ERROR
 from gui import SystemMessages
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getTradeInUrl
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
-from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
+from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler, CM_BUY_COLOR
 from gui.Scaleform.locale.MENU import MENU
 from gui.prb_control import prbDispatcherProperty
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showVehicleRentRenewDialog
+from gui.shared.event_dispatcher import showVehicleRentRenewDialog, showWebShop
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.gui_items.processors.tankman import TankmanUnload
 from gui.shared.gui_items.processors.vehicle import VehicleFavoriteProcessor
 from gui.shared.utils import decorators
 from helpers import dependency
-from skeletons.gui.game_control import IVehicleComparisonBasket, IEpicBattleMetaGameController
+from skeletons.gui.game_control import IVehicleComparisonBasket, IEpicBattleMetaGameController, ITradeInController
 from skeletons.gui.shared import IItemsCache
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
 
 class CREW(object):
     PERSONAL_CASE = 'personalCase'
@@ -36,6 +39,7 @@ class MODULE(object):
 
 
 class VEHICLE(object):
+    EXCHANGE = 'exchange'
     INFO = 'vehicleInfo'
     PREVIEW = 'preview'
     STATS = 'showVehicleStatistics'
@@ -50,6 +54,7 @@ class VEHICLE(object):
     UNCHECK = 'vehicleUncheck'
     COMPARE = 'compare'
     BLUEPRINT = 'blueprint'
+    NATION_CHANGE = 'nationChange'
 
 
 class CrewContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
@@ -148,9 +153,11 @@ class SimpleVehicleCMHandler(AbstractContextMenuHandler, EventSystemEntity):
 class VehicleContextMenuHandler(SimpleVehicleCMHandler):
     _comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
     _epicController = dependency.descriptor(IEpicBattleMetaGameController)
+    _tradeInController = dependency.descriptor(ITradeInController)
 
     def __init__(self, cmProxy, ctx=None):
-        super(VehicleContextMenuHandler, self).__init__(cmProxy, ctx, {VEHICLE.INFO: 'showVehicleInfo',
+        super(VehicleContextMenuHandler, self).__init__(cmProxy, ctx, {VEHICLE.EXCHANGE: 'showVehicleExchange',
+         VEHICLE.INFO: 'showVehicleInfo',
          VEHICLE.SELL: 'sellVehicle',
          VEHICLE.RESEARCH: 'toResearch',
          VEHICLE.CHECK: 'checkFavoriteVehicle',
@@ -158,7 +165,8 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
          VEHICLE.STATS: 'showVehicleStats',
          VEHICLE.BUY: 'buyVehicle',
          VEHICLE.COMPARE: 'compareVehicle',
-         VEHICLE.RENEW: 'renewRentVehicle'})
+         VEHICLE.RENEW: 'renewRentVehicle',
+         VEHICLE.NATION_CHANGE: 'changeVehicleNation'})
 
     @prbDispatcherProperty
     def prbDispatcher(self):
@@ -178,6 +186,10 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
             LOG_ERROR("Can't go to Research because id for current vehicle is None")
         return
 
+    def showVehicleExchange(self):
+        self._tradeInController.setActiveTradeOffVehicleCD(self.vehCD)
+        showWebShop(getTradeInUrl())
+
     def checkFavoriteVehicle(self):
         self.__favoriteVehicle(True)
 
@@ -191,6 +203,9 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
         vehicle = self.itemsCache.items.getVehicle(self.vehInvID)
         rentRenewCycle = vehicle.rentInfo.getAvailableRentRenewCycleInfoForSeason(GameSeasonType.EPIC)
         showVehicleRentRenewDialog(self.vehCD, RentType.SEASON_CYCLE_RENT, rentRenewCycle.ID, GameSeasonType.EPIC)
+
+    def changeVehicleNation(self):
+        ItemsActionsFactory.doAction(ItemsActionsFactory.CHANGE_NATION, self.vehCD)
 
     def _initFlashValues(self, ctx):
         self.vehInvID = int(ctx.inventoryId)
@@ -218,6 +233,9 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                 if vehicle.intCD in wasInBattleSet:
                     vehicleWasInBattle = True
             if vehicle is not None:
+                if vehicle.canTradeOff:
+                    options.append(self._makeItem(VEHICLE.EXCHANGE, MENU.contextmenu(VEHICLE.EXCHANGE), {'enabled': vehicle.isReadyToTradeOff,
+                     'textColor': CM_BUY_COLOR}))
                 options.extend([self._makeItem(VEHICLE.INFO, MENU.contextmenu(VEHICLE.INFO)), self._makeItem(VEHICLE.STATS, MENU.contextmenu(VEHICLE.STATS), {'enabled': vehicleWasInBattle}), self._makeSeparator()])
                 self._manageVehCompareOptions(options, vehicle)
                 if self.prbDispatcher is not None:
@@ -226,6 +244,10 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                     isNavigationEnabled = True
                 if not vehicle.isOnlyForEpicBattles:
                     options.append(self._makeItem(VEHICLE.RESEARCH, MENU.contextmenu(VEHICLE.RESEARCH), {'enabled': isNavigationEnabled}))
+                if vehicle.hasNationGroup:
+                    isNew = not AccountSettings.getSettings(NATION_CHANGE_VIEWED)
+                    options.append(self._makeItem(VEHICLE.NATION_CHANGE, MENU.CONTEXTMENU_NATIONCHANGE, {'enabled': vehicle.isNationChangeAvailable,
+                     'isNew': isNew}))
                 if vehicle.isRented:
                     if not vehicle.isPremiumIGR:
                         items = self.itemsCache.items

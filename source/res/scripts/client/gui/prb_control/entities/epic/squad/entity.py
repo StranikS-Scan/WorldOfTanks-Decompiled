@@ -63,6 +63,11 @@ class EpicSquadEntity(SquadEntity):
         self.invalidateVehicleStates()
         return super(EpicSquadEntity, self).fini(ctx=ctx, woEvents=woEvents)
 
+    def leave(self, ctx, callback=None):
+        if ctx.hasFlags(FUNCTIONAL_FLAG.SWITCH):
+            self.storage.suspend()
+        super(EpicSquadEntity, self).leave(ctx, callback)
+
     def getQueueType(self):
         return QUEUE_TYPE.EPIC
 

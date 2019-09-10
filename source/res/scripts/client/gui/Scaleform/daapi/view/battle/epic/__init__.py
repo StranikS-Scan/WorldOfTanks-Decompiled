@@ -23,7 +23,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.epic import respawn
     from gui.Scaleform.daapi.view.battle.epic import minimap
     from gui.Scaleform.daapi.view.battle.epic import deployment_map
-    from gui.Scaleform.daapi.view.battle.epic import timers_panel
+    from gui.Scaleform.daapi.view.battle.epic import destroy_timers_panel
     from gui.Scaleform.daapi.view.battle.epic import game_messages_panel
     from gui.Scaleform.daapi.view.battle.epic import full_stats
     from gui.Scaleform.daapi.view.battle.epic import overviewmap_screen
@@ -56,7 +56,7 @@ def getViewSettings():
      ViewSettings(BATTLE_VIEW_ALIASES.EPIC_DEPLOYMENT_MAP, deployment_map.EpicDeploymentMapComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.EPIC_OVERVIEW_MAP_SCREEN, overviewmap_screen.OverviewMapScreen, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL, game_messages_panel.EpicMessagePanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.TIMERS_PANEL, timers_panel.EpicDestroyTimersPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(BATTLE_VIEW_ALIASES.DESTROY_TIMERS_PANEL, destroy_timers_panel.EpicDestroyTimersPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.FULL_STATS, full_stats.EpicFullStatsComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.BATTLE_STATISTIC_DATA_CONTROLLER, stats_exchange.EpicStatisticsDataController, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.EPIC_SPECTATOR_VIEW, spectator_view.EpicSpectatorView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),

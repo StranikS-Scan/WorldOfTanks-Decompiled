@@ -24,7 +24,6 @@ class SLOT_LABEL(object):
     NOT_ALLOWED = 'notAllowed'
     EMPTY = 'emptySlot'
     REQUIRED = 'required'
-    BATTLE_ROYALE = 'battleRoyale'
 
 
 def getContextMenuHandlers():

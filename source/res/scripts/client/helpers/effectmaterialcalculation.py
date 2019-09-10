@@ -22,6 +22,8 @@ def calcSurfaceMaterialNearPoint(point, normal, spaceID, defaultEffectMaterial='
                     moduleDesc = desc['modules'].get(matKind)
                     if moduleDesc is not None:
                         effectIdx = moduleDesc.get('effectMtrlIdx')
+            else:
+                matKind = 0
         else:
             effectIdx = calcEffectMaterialIndex(matKind)
         if effectIdx is None:

@@ -1046,6 +1046,8 @@
     </customization>
     <camouflage>
       <tiling>	2 2 0.000000 0.000000	</tiling>
+      <density>	92.2858 92.3416	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -2050,6 +2052,10 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <camouflage>
+            <density>	91.9989 92.0757	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_240mm_Howitzer_M1>
       </guns>
       <models>
@@ -2085,6 +2091,10 @@
           <anchorDirection>	0.000000 1 -0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	50.0 50.0	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </Turret_1_T92>
   </turrets0>
   <engines>

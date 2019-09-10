@@ -8,9 +8,6 @@ from gui.battle_control.view_components import ViewComponentsController
 
 class IBattleFieldListener(object):
 
-    def updateVehicleHealth(self, vehicleID, newHealth, maxHealth):
-        pass
-
     def updateDeadVehicles(self, aliveAllies, deadAllies, aliveEnemies, deadEnemies):
         pass
 
@@ -59,23 +56,15 @@ class BattleFieldCtrl(IBattleFieldController, ViewComponentsController):
     def setVehicleHealth(self, vehicleID, newHealth):
         if self.__isEnabled:
             self.__changeVehicleHealth(vehicleID, newHealth)
-            self.__updateVehicleHealth(vehicleID)
 
     def setVehicleVisible(self, vehicleID, health):
         if self.__isEnabled:
             self.__changeVehicleHealth(vehicleID, health)
-            self.__updateVehicleHealth(vehicleID)
 
     def addVehicleInfo(self, vInfoVO, arenaDP):
         if self.__isEnabled and vInfoVO.isAlive():
             self.__registerAliveVehicle(vInfoVO, arenaDP)
             self.__updateVehiclesHealth()
-
-    def updateVehiclesInfo(self, updated, arenaDP):
-        if self.__isEnabled:
-            for _, vInfoVO in updated:
-                if vInfoVO.isAlive():
-                    self.__changeMaxVehicleHealth(vInfoVO.vehicleID, vInfoVO.vehicleType.maxHealth)
 
     def invalidateFogOfWarEnabledFlag(self, flag):
         self.__isEnabled = not flag
@@ -142,17 +131,6 @@ class BattleFieldCtrl(IBattleFieldController, ViewComponentsController):
         for viewCmp in self._viewComponents:
             viewCmp.updateDeadVehicles(set(self._aliveAllies.iterkeys()), self.__deadAllies, set(self._aliveEnemies.iterkeys()), self.__deadEnemies)
 
-    def __updateVehicleHealth(self, vehicleID):
-        if vehicleID in self._aliveAllies:
-            currH, maxH = self._aliveAllies[vehicleID]
-            for viewCmp in self._viewComponents:
-                viewCmp.updateVehicleHealth(vehicleID, currH, maxH)
-
-        elif vehicleID in self._aliveEnemies:
-            currH, maxH = self._aliveEnemies[vehicleID]
-            for viewCmp in self._viewComponents:
-                viewCmp.updateVehicleHealth(vehicleID, currH, maxH)
-
     def __changeVehicleHealth(self, vehicleID, newHealth):
         if vehicleID in self._aliveEnemies:
             currH, _ = self._aliveEnemies[vehicleID]
@@ -166,30 +144,6 @@ class BattleFieldCtrl(IBattleFieldController, ViewComponentsController):
             self.__alliesHealth += newHealth
             self._aliveAllies[vehicleID][0] = newHealth
             self.__updateVehiclesHealth()
-
-    def __changeMaxVehicleHealth(self, vehicleID, newMaxHealth):
-        setter = None
-        currentMaxHealth = 0
-        if vehicleID in self._aliveEnemies:
-            setter = self.__setEnemyMaxHealth
-            currentMaxHealth = self._aliveEnemies[vehicleID][1]
-        elif vehicleID in self._aliveAllies:
-            setter = self.__setAllyMaxHealth
-            currentMaxHealth = self._aliveAllies[vehicleID][1]
-        if setter is not None and currentMaxHealth != newMaxHealth:
-            setter(vehicleID, currentMaxHealth, newMaxHealth)
-            self.__updateVehiclesHealth()
-        return
-
-    def __setEnemyMaxHealth(self, vehicleID, currentMaxHealth, newMaxHealth):
-        self.__totalEnemiesHealth -= currentMaxHealth
-        self.__totalEnemiesHealth += newMaxHealth
-        self._aliveEnemies[vehicleID][1] = newMaxHealth
-
-    def __setAllyMaxHealth(self, vehicleID, currentMaxHealth, newMaxHealth):
-        self.__totalAlliesHealth -= currentMaxHealth
-        self.__totalAlliesHealth += newMaxHealth
-        self._aliveAllies[vehicleID][1] = newMaxHealth
 
     def __clear(self):
         self.__deadAllies.clear()

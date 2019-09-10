@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/view_helpers/emblems.py
 from functools import partial
 from gui.clans import settings as clan_settings
-from gui.shared.view_helpers.image_helper import ImageHelper, readLocalImage
+from gui.shared.image_helper import ImageHelper, readLocalImage
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 

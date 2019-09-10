@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/carousels/ranked/carousel_data_provider.py
+from gui.impl.gen import R
+from gui.impl import backport
 from gui import GUI_NATIONS_ORDER_INDEX
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.basic.carousel_data_provider import HangarCarouselDataProvider
-from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
 from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
@@ -16,7 +17,6 @@ class RankedCarouselDataProvider(HangarCarouselDataProvider):
         return (vehicle.getCustomState() == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE,
          not vehicle.isInInventory,
          not vehicle.isEvent,
-         not vehicle.isOnlyForBattleRoyaleBattles,
          not vehicle.isFavorite,
          not cls.rankedController.hasVehicleRankedBonus(vehicle.intCD),
          GUI_NATIONS_ORDER_INDEX[vehicle.nationName],
@@ -30,7 +30,7 @@ class RankedCarouselDataProvider(HangarCarouselDataProvider):
         state, _ = vehicle.getState()
         result['hasRankedBonus'] = self.rankedController.hasVehicleRankedBonus(vehicle.intCD)
         if state == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE:
-            result['lockedTooltip'] = makeTooltip(RANKED_BATTLES.RANKEDBATTLESCAROUSEL_LOCKEDTOOLTIP_HEADER, RANKED_BATTLES.RANKEDBATTLESCAROUSEL_LOCKEDTOOLTIP_BODY)
+            result['lockedTooltip'] = makeTooltip(backport.text(R.strings.ranked_battles.rankedBattlesCarousel.lockedTooltip.header()), backport.text(R.strings.ranked_battles.rankedBattlesCarousel.lockedTooltip.body()))
             result['clickEnabled'] = True
             result['hasRankedBonus'] = False
         return result

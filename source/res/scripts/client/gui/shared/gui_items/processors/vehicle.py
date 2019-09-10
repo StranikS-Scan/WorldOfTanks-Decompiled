@@ -18,6 +18,9 @@ from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
 from gui.shared.formatters import formatPrice, formatGoldPrice, text_styles
 from gui.shared.formatters import icons
 from gui.shared.formatters.time_formatters import formatTime, getTimeLeftInfo
+from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.Vehicle import getCrewCount
 from gui.shared.gui_items.processors import ItemProcessor, Processor, makeI18nSuccess, makeI18nError, plugins as proc_plugs, makeSuccess, makeCrewSkinCompensationMessage
 from gui.shared.gui_items.vehicle_equipment import ShellLayoutHelper
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency
@@ -25,7 +28,7 @@ from helpers import time_utils, dependency
 from gui.shared.gui_items.gui_item_economics import ItemPrice
 from helpers.i18n import makeString
 from shared_utils import findFirst
-from skeletons.gui.game_control import IRestoreController
+from skeletons.gui.game_control import IRestoreController, ITradeInController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from rent_common import parseRentID
@@ -180,13 +183,15 @@ class VehicleRestoreProcessor(VehicleBuyer):
 
 
 class VehicleTradeInProcessor(VehicleBuyer):
+    __tradeIn = dependency.descriptor(ITradeInController)
 
     def __init__(self, vehicleToBuy, vehicleToTradeOff, buySlot, buyShell=False, crewType=-1):
         self.itemToTradeOff = vehicleToTradeOff
         super(VehicleTradeInProcessor, self).__init__(vehicleToBuy, buySlot, buyShell=buyShell, crewType=crewType)
 
     def _getPluginsList(self):
-        barracksBerthsNeeded = len([ item for item in self.itemToTradeOff.crew if item[1] is not None ])
+        nationGroupVehs = self.itemToTradeOff.getAllNationGroupVehs(self.itemsCache.items)
+        barracksBerthsNeeded = getCrewCount(nationGroupVehs)
         return (proc_plugs.VehicleValidator(self.itemToTradeOff, setAll=True),
          proc_plugs.VehicleTradeInValidator(self.item, self.itemToTradeOff),
          proc_plugs.VehicleSellValidator(self.itemToTradeOff),
@@ -194,7 +199,8 @@ class VehicleTradeInProcessor(VehicleBuyer):
          proc_plugs.BarracksSlotsValidator(barracksBerthsNeeded))
 
     def _getPrice(self):
-        return super(VehicleTradeInProcessor, self)._getPrice() - self.itemToTradeOff.tradeOffPrice
+        price = self.__tradeIn.getTradeInPrice(self.item).price
+        return getCrewAndShellsSumPrice(price, self.item, self.crewType, self.buyShell)
 
     def _errorHandler(self, code, errStr='', ctx=None, itemsCache=None):
         if not errStr:
@@ -264,20 +270,22 @@ class VehicleSeller(ItemProcessor):
         optDevs = optDevs or []
         inventory = inventory or []
         customizationItems = customizationItems or []
+        nationGroupVehs = vehicle.getAllNationGroupVehs(self.itemsCache.items)
         self.vehicle = vehicle
+        self.nationGroupVehs = nationGroupVehs
         self.shells = shells
         self.eqs = eqs
         self.optDevs = optDevs
-        self.inventory = inventory
-        self.customizationItems = customizationItems
-        self.gainMoney, self.spendMoney = self.__getGainSpendMoney(vehicle, shells, eqs, optDevs, inventory, customizationItems)
-        barracksBerthsNeeded = len([ item for item in vehicle.crew if item[1] is not None ])
+        self.gainMoney, self.spendMoney = self.__getGainSpendMoney(vehicle, nationGroupVehs, shells, eqs, optDevs, inventory, customizationItems)
+        self.inventory = set((m.intCD for m in inventory))
+        self.customizationItems = set(customizationItems)
+        barracksBerthsNeeded = getCrewCount(nationGroupVehs)
         bufferOverflowCtx = {}
         isBufferOverflowed = False
         crewSkinsNeedDeletion = []
         self.__compensationAmount = ItemPrice(Money(), Money())
         if isCrewDismiss:
-            tankmenGoingToBuffer, deletedTankmen = self.restore.getTankmenDeletedBySelling(vehicle)
+            tankmenGoingToBuffer, deletedTankmen = self.restore.getTankmenDeletedBySelling(*nationGroupVehs)
             countOfDeleted = len(deletedTankmen)
             if countOfDeleted > 0:
                 isBufferOverflowed = True
@@ -288,14 +296,15 @@ class VehicleSeller(ItemProcessor):
                     bufferOverflowCtx['extraCount'] = countOfDeleted - 1
             if self.lobbyContext.getServerSettings().isCrewSkinsEnabled():
                 freeCountByItem = {}
-                for _, tankman in vehicle.crew:
-                    if tankman is not None and tankman.skinID != NO_CREW_SKIN_ID:
-                        crewSkinItem = self.itemsCache.items.getCrewSkin(tankman.skinID)
-                        if freeCountByItem.setdefault(crewSkinItem.getID(), crewSkinItem.getFreeCount()) < crewSkinItem.getMaxCount():
-                            freeCountByItem[crewSkinItem.getID()] += 1
-                        else:
-                            crewSkinsNeedDeletion.append(crewSkinItem)
-                            self.__compensationAmount += crewSkinItem.getBuyPrice()
+                for veh in nationGroupVehs:
+                    for _, tankman in veh.crew:
+                        if tankman is not None and tankman.skinID != NO_CREW_SKIN_ID:
+                            crewSkinItem = self.itemsCache.items.getCrewSkin(tankman.skinID)
+                            if freeCountByItem.setdefault(crewSkinItem.getID(), crewSkinItem.getFreeCount()) < crewSkinItem.getMaxCount():
+                                freeCountByItem[crewSkinItem.getID()] += 1
+                            else:
+                                crewSkinsNeedDeletion.append(crewSkinItem)
+                                self.__compensationAmount += crewSkinItem.getBuyPrice()
 
         self.__compensationRequired = bool(crewSkinsNeedDeletion)
         plugins = [proc_plugs.VehicleValidator(vehicle, False, prop={'isBroken': True,
@@ -314,7 +323,7 @@ class VehicleSeller(ItemProcessor):
             plugins.append(skinsPlugin)
         super(VehicleSeller, self).__init__(vehicle, plugins)
         self.isCrewDismiss = isCrewDismiss
-        self.isDismantlingForMoney = len(getDismantlingToInventoryDevices(vehicle, optDevs)) > 0
+        self.isDismantlingForMoney = bool(self.spendMoney)
         self.isRemovedAfterRent = vehicle.isRented
         return
 
@@ -356,34 +365,12 @@ class VehicleSeller(ItemProcessor):
             return
 
     def _request(self, callback):
-        itemsFromVehicle = list()
-        itemsFromInventory = list()
-        customizationItems = list()
-        isSellShells = len(self.shells) > 0
-        for shell in self.shells:
-            itemsFromVehicle.append(shell.intCD)
+        saleData = self.__splitDataByVehicle()
+        _logger.debug('Make server request: %s, %s, %s, %s, %s, %s, %s, %s', self.nationGroupVehs, bool(self.shells), bool(self.eqs), bool(self.inventory), bool(self.optDevs), self.isDismantlingForMoney, self.isCrewDismiss, saleData)
+        BigWorld.player().inventory.sellVehicle(saleData, lambda code: self._response(code, callback))
 
-        isSellEqs = len(self.eqs) > 0
-        for eq in self.eqs:
-            itemsFromVehicle.append(eq.intCD)
-
-        isSellFromInv = len(self.inventory) > 0
-        for module in self.inventory:
-            itemsFromInventory.append(module.intCD)
-
-        isSellOptDevs = len(self.optDevs) > 0
-        for dev in self.optDevs:
-            itemsFromVehicle.append(dev.intCD)
-
-        for custItem in self.customizationItems:
-            customizationItems.append(custItem.intCD)
-            customizationItems.append(custItem.getInstalledOnVehicleCount(self.vehicle.intCD))
-
-        _logger.debug('Make server request: %s, %s, %s, %s, %s, %s, %s, %s, %s, %s', self.vehicle.invID, isSellShells, isSellEqs, isSellFromInv, isSellOptDevs, self.isDismantlingForMoney, self.isCrewDismiss, itemsFromVehicle, itemsFromInventory, customizationItems)
-        BigWorld.player().inventory.sellVehicle(self.vehicle.invID, self.isCrewDismiss, itemsFromVehicle, itemsFromInventory, customizationItems, lambda code: self._response(code, callback))
-
-    def __getGainSpendMoney(self, vehicle, vehShells, vehEqs, optDevicesToSell, inventory, customizationItems):
-        moneyGain = vehicle.sellPrices.itemPrice.price
+    def __getGainSpendMoney(self, currentVehicle, vehicles, vehShells, vehEqs, optDevicesToSell, inventory, customizationItems):
+        moneyGain = currentVehicle.sellPrices.itemPrice.price
         for shell in vehShells:
             moneyGain += shell.sellPrices.itemPrice.price * shell.count
 
@@ -394,9 +381,10 @@ class VehicleSeller(ItemProcessor):
             moneyGain += module.sellPrices.itemPrice.price * module.inventoryCount
 
         for module in customizationItems:
-            moneyGain += module.sellPrices.itemPrice.price * module.getInstalledOnVehicleCount(self.vehicle.intCD)
+            getCount = module.getInstalledOnVehicleCount
+            moneyGain += module.sellPrices.itemPrice.price * reduce(lambda acc, veh: acc + getCount(veh.intCD), vehicles, 0)
 
-        dismantlingToInventoryDevices = getDismantlingToInventoryDevices(vehicle, optDevicesToSell)
+        dismantlingToInventoryDevices = getDismantlingToInventoryDevices(optDevicesToSell, *vehicles)
         moneySpend = calculateSpendMoney(self.itemsCache.items, dismantlingToInventoryDevices)
         return (moneyGain, moneySpend)
 
@@ -404,11 +392,73 @@ class VehicleSeller(ItemProcessor):
         result += price * count
         return result
 
+    def __splitInventory(self):
+        result = {}
+        for vehicle in self.nationGroupVehs:
+            vehInv = self.itemsCache.items.getItems(criteria=REQ_CRITERIA.VEHICLE.SUITABLE([vehicle], [GUI_ITEM_TYPE.SHELL, GUI_ITEM_TYPE.VEHICLE_MODULES]) | REQ_CRITERIA.INVENTORY).values()
+            result[vehicle.invID] = set((m.intCD for m in vehInv)) & self.inventory
 
-def getDismantlingToInventoryDevices(vehicle, optDevicesToSell):
-    optDevicesToSell = {dev.intCD for dev in optDevicesToSell}
-    vehDevices = vehicle.optDevices if vehicle is not None else []
-    return [ dev for dev in vehDevices if dev and not dev.isRemovable and dev.intCD not in optDevicesToSell ]
+        full = reduce(lambda acc, inv: acc | inv, result.itervalues())
+        unique = reduce(lambda acc, inv: acc ^ inv, result.itervalues())
+        difference = full - unique
+        for key in result.iterkeys():
+            result[key] -= difference
+
+        result[self.vehicle.invID].update(difference)
+        return result
+
+    def __splitDataByVehicle(self):
+        result = []
+        itemsFromInventory = self.__splitInventory()
+        for vehicle in self.nationGroupVehs:
+            itemsFromVehicle = set()
+            seenCustItems = set()
+            customizationItems = []
+            for shell in list(self.shells):
+                if shell.isInstalled(vehicle) and shell.intCD not in itemsFromVehicle:
+                    itemsFromVehicle.add(shell.intCD)
+                    self.shells.remove(shell)
+
+            for eq in list(self.eqs):
+                if eq.isInstalled(vehicle) and eq.intCD not in itemsFromVehicle:
+                    itemsFromVehicle.add(eq.intCD)
+                    self.eqs.remove(eq)
+
+            for od in list(self.optDevs):
+                if od.isInstalled(vehicle) and od.intCD not in itemsFromVehicle:
+                    itemsFromVehicle.add(od.intCD)
+                    self.optDevs.remove(od)
+
+            for ci in list(self.customizationItems):
+                installedCount = ci.getInstalledOnVehicleCount(vehicle.intCD)
+                if installedCount > 0 and ci.intCD not in seenCustItems:
+                    customizationItems.append(ci.intCD)
+                    customizationItems.append(installedCount)
+                    seenCustItems.add(ci.intCD)
+                    self.customizationItems.remove(ci)
+
+            result.append((vehicle.invID,
+             self.isCrewDismiss,
+             list(itemsFromVehicle),
+             list(itemsFromInventory[vehicle.invID]),
+             customizationItems))
+
+        return result
+
+
+def getDismantlingToInventoryDevices(optDevicesToSell, *vehicles):
+    result = []
+    optDevicesToSell = [ dev.intCD for dev in optDevicesToSell ]
+    for vehicle in vehicles:
+        vehDevices = vehicle.optDevices if vehicle is not None else []
+        for dev in vehDevices:
+            if dev and not dev.isRemovable:
+                if dev.intCD in optDevicesToSell:
+                    optDevicesToSell.remove(dev.intCD)
+                else:
+                    result.append(dev)
+
+    return result
 
 
 def calculateSpendMoney(items, dismantlingToInventoryDevices):

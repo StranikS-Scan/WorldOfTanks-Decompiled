@@ -1012,6 +1012,7 @@ class SniperControlMode(_GunControlMode):
     def __siegeModeStateChanged(self, newState, timeToNewMode):
         if newState == VEHICLE_SIEGE_STATE.ENABLED or newState == VEHICLE_SIEGE_STATE.DISABLED:
             self._cam.aimingSystem.forceFullStabilization(self.__isFullStabilizationRequired())
+            self._cam.aimingSystem.onSiegeStateChanged(newState)
 
     def __isFullStabilizationRequired(self):
         descriptor = BigWorld.player().vehicleTypeDescriptor
@@ -1312,8 +1313,6 @@ class PostMortemControlMode(IControlMode):
 
     def __onVehicleLeaveWorld(self, vehicle):
         if vehicle.id == self.__curVehicleID:
-            if vehicle.isUpgrading():
-                return
             vehicleID = BigWorld.player().playerVehicleID
             vehicle = BigWorld.entities.get(vehicleID)
             if vehicle is not None and 'observer' in vehicle.typeDescriptor.type.tags:

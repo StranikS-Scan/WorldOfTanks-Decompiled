@@ -240,10 +240,6 @@ def showPersonalMissionAward(quest, ctx):
     shared_events.showPersonalMissionsQuestAwardScreen(quest, ctx, showPersonalMission)
 
 
-def showRankedBoobyAward(quest):
-    shared_events.showMissionAwardWindow(awards.RankedBoobyAward(quest, showMission))
-
-
 def showOperationUnlockedAward(quest, ctx):
     shared_events.showAwardWindow(awards.OperationUnlockedAward(quest, ctx, showPersonalMissionsChain))
 

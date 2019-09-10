@@ -107,6 +107,12 @@ class ActionPriceModel(ViewModel):
     def setIsBuying(self, value):
         self._setBool(16, value)
 
+    def getShowOldValue(self):
+        return self._getBool(17)
+
+    def setShowOldValue(self, value):
+        self._setBool(17, value)
+
     def _initialize(self):
         super(ActionPriceModel, self)._initialize()
         self._addStringProperty('type', 'gold')
@@ -126,3 +132,4 @@ class ActionPriceModel(ViewModel):
         self._addNumberProperty('oldGold', 0)
         self._addNumberProperty('oldCrystal', 0)
         self._addBoolProperty('isBuying', True)
+        self._addBoolProperty('showOldValue', False)

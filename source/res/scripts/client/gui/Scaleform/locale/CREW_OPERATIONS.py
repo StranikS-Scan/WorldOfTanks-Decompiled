@@ -15,6 +15,7 @@ class CREW_OPERATIONS(object):
     RETRAIN_BUTTON_LABEL = '#crew_operations:retrain/button/label'
     RETRAIN_ERROR_NOCREW = '#crew_operations:retrain/error/noCrew'
     RETRAIN_ERROR_ALREADYRETRAINED = '#crew_operations:retrain/error/alreadyRetrained'
+    RETRAIN_ERROR_LOCKED = '#crew_operations:retrain/error/locked'
     RETURN_TITLE = '#crew_operations:return/title'
     RETURN_DESCRIPTION = '#crew_operations:return/description'
     RETURN_BUTTON_LABEL = '#crew_operations:return/button/label'

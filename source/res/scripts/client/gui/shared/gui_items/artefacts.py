@@ -20,6 +20,7 @@ from helpers import i18n
 from soft_exception import SoftException
 from items.vehicles import ABILITY_SLOTS_BY_VEHICLE_CLASS, getVehicleClassFromVehicleType
 _TAG_NOT_FOR_SALE = 'notForSale'
+_TAG_TRIGGER = 'trigger'
 _TAG_CREW_BATTLE_BOOSTER = 'crewSkillBattleBooster'
 _TAG_EQUEPMENT_BUILTIN = 'builtin'
 _TAG_OPT_DEVICE_DELUXE = 'deluxe'
@@ -111,6 +112,10 @@ class Equipment(VehicleArtefact):
 
     def isInstalled(self, vehicle, slotIdx=None):
         return vehicle.equipment.regularConsumables.containsIntCD(self.intCD, slotIdx)
+
+    @property
+    def isTrigger(self):
+        return _TAG_TRIGGER in self.tags
 
     def mayInstall(self, vehicle, slotIdx=None):
         for idx, eq in enumerate(vehicle.equipment.regularConsumables):
@@ -309,6 +314,10 @@ class BattleAbility(Equipment):
     @property
     def shortDescription(self):
         return self.descriptor.shortDescription
+
+    @property
+    def fullDescription(self):
+        return self.descriptor.longDescription
 
     @property
     def shortFilterAlert(self):

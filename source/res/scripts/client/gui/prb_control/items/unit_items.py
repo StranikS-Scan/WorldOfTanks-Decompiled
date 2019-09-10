@@ -79,7 +79,7 @@ class PlayerUnitInfo(object):
         return self.dbID == getAccountDatabaseID()
 
     def getVehiclesCDs(self):
-        requestCriteria = REQ_CRITERIA.INVENTORY
+        requestCriteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP
         requestCriteria |= ~REQ_CRITERIA.VEHICLE.DISABLED_IN_PREM_IGR
         requestCriteria |= ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT
         requestCriteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE

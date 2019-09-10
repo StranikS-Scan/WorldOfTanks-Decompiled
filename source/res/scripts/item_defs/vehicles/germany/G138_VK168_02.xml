@@ -929,6 +929,8 @@
     </customization>
     <camouflage>
       <tiling>	2 2 0.000000 0.000000	</tiling>
+      <density>	98.3823 98.814	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -2047,6 +2049,8 @@
           </customization>
           <camouflage>
             <tiling>	1 0.5 0.000000 0.000000	</tiling>
+            <density>	121.734 122.574	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_128mm_L50P>
       </guns>
@@ -2060,7 +2064,6 @@
         <collisionModelClient>	vehicles/german/G138_VK168_02/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.022609 0.641567 1.60792	</gunPosition>
-      <gunCamPosition>	-0.022609 0.641567 1.267	</gunCamPosition>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.059 0.078 1.098 0.000 0.534 0.273 0.863 0.500 0.169 0.500 0.475 0.500 0.162 0.500 0.000	</physicsShape>
@@ -2519,6 +2522,8 @@
       </customization>
       <camouflage>
         <tiling>	2.1 1 0.1 0.000000	</tiling>
+        <density>	106.881 106.556	</density>
+        <aoTextureSize>	1024 512	</aoTextureSize>
       </camouflage>
     </Turret_1_G138_VK168_02>
   </turrets0>

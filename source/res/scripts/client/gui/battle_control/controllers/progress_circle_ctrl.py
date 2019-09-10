@@ -312,7 +312,6 @@ class SectorBasePlugin(ProgressTimerPlugin):
         elif action in (SECTOR_BASE_ACTION.LEAVE, SECTOR_BASE_ACTION.LEAVE_WHILE_CD):
             self._controller.onVehicleLeft(self._type, basePointIndex)
             self._inCircleIdx = -1
-            self.__stopBlockState()
         elif action == SECTOR_BASE_ACTION.COOLDOWN:
             duration = self._getTime(nextActionTime)
             self._sessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.CAPTURE_BLOCKED, duration)
@@ -332,7 +331,9 @@ class SectorBasePlugin(ProgressTimerPlugin):
 
     def __stopBlockState(self):
         self._sessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.CAPTURE_BLOCKED, 0)
-        self.__blockedCB = None
+        if self.__blockedCB is not None:
+            BigWorld.cancelCallback(self.__blockedCB)
+            self.__blockedCB = None
         return
 
 

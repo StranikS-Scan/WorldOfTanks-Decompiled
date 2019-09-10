@@ -99,6 +99,10 @@
         <anchorDirection>	0.000000 0.312487 0.949922	</anchorDirection>
       </slot>
     </customizationSlots>
+    <camouflage>
+      <density>	135.054 135.057	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_G113_SP_I_C>
@@ -1607,6 +1611,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.685 0.385 0.000000 0.000000	</tiling>
+            <density>	116.223 124.225	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_90mm_D921_F1>
       </guns>
@@ -1686,6 +1692,8 @@
       </customizationSlots>
       <camouflage>
         <tiling>	0.685 0.355 0.25 0.000000	</tiling>
+        <density>	92.1794 92.2261	</density>
+        <aoTextureSize>	512 256	</aoTextureSize>
       </camouflage>
     </Turret_1_G113_SP_I_C>
     <Turret_2_G113_SP_I_C>
@@ -1819,6 +1827,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.625 0.37 0.000000 0.000000	</tiling>
+            <density>	116.223 124.225	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_90mm_D921_F1>
         <_90mm_Mecar>	shared	  <maxAmmo>	40	</maxAmmo>
@@ -1920,6 +1930,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.67 0.34 0.000000 0.000000	</tiling>
+            <density>	118.763 120.985	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_90mm_Mecar>
       </guns>
@@ -1933,7 +1945,6 @@
         <collisionModelClient>	vehicles/german/G113_SP_I_C/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.27598 1.01753	</gunPosition>
-      <gunCamPosition>	0.000000 0.27598 0.762	</gunCamPosition>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <physicsShape>	1.000 0.010 1.000 -0.000 0.345 0.433 0.500 0.500 0.418 0.500 0.250 0.500 0.338 0.469 0.000	</physicsShape>
@@ -2000,6 +2011,8 @@
       </customizationSlots>
       <camouflage>
         <tiling>	0.565 0.565 0.28 0.000000	</tiling>
+        <density>	121.331 121.119	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
     </Turret_2_G113_SP_I_C>
   </turrets0>

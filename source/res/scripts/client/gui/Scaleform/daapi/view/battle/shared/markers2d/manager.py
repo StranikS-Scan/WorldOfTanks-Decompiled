@@ -132,7 +132,8 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
         return GUI.WGVehicleMarkersCanvasFlashAS3(self.movie)
 
     def _setupPlugins(self, arenaVisitor):
-        setup = {'eventBus': plugins.EventBusPlugin,
+        setup = {'settings': plugins.SettingsPlugin,
+         'eventBus': plugins.EventBusPlugin,
          'equipments': plugins.EquipmentsMarkerPlugin,
          'area': plugins.AreaStaticMarkerPlugin,
          'vehiclesTargets': plugins.VehicleMarkerTargetPlugin}
@@ -144,10 +145,6 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
             setup['vehicles'] = plugins.RespawnableVehicleMarkerPlugin
         else:
             setup['vehicles'] = plugins.VehicleMarkerPlugin
-        if arenaVisitor.gui.isBattleRoyale():
-            setup['settings'] = plugins.BRSettingsPlugin
-        else:
-            setup['settings'] = plugins.SettingsPlugin
         return setup
 
     def __addCanvas(self, arenaVisitor):

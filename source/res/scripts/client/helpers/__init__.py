@@ -85,18 +85,21 @@ def int2roman(number):
 
 def getClientVersion():
     sec = ResMgr.openSection(VERSION_FILE_PATH)
-    return sec.readString('version')
+    return '' if sec is None else sec.readString('version')
 
 
 def getShortClientVersion():
     sec = ResMgr.openSection(VERSION_FILE_PATH)
-    return sec.readString('version').split('#')[0]
+    return '' if sec is None else sec.readString('version').split('#')[0]
 
 
 def getFullClientVersion():
     sec = ResMgr.openSection(VERSION_FILE_PATH)
-    version = i18n.makeString(sec.readString('appname')) + ' ' + sec.readString('version')
-    return version
+    if sec is None:
+        return ''
+    else:
+        version = i18n.makeString(sec.readString('appname')) + ' ' + sec.readString('version')
+        return version
 
 
 def isShowStartupVideo():

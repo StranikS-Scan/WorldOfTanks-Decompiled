@@ -11,7 +11,7 @@ from gui import makeHtmlString
 from helpers import dependency
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from web_client_api.common import ItemPackEntry, ItemPackType
+from web.web_client_api.common import ItemPackEntry, ItemPackType
 from gui.shared.utils.functions import makeTooltip, makeString as _ms
 from gui.impl import backport
 from gui.impl.gen import R

@@ -8,12 +8,12 @@ from skeletons.gui.shared.utils.requesters import IRankedRequester
 class RankedRequester(AbstractSyncDataRequester, IRankedRequester):
 
     @property
-    def accRank(self):
-        return self.getCacheValue('accRank', (0, 0))
-
-    @property
     def season(self):
         return self.getCacheValue('season', (-1, -1))
+
+    @property
+    def accRank(self):
+        return self.getCacheValue('accRank', (0, 0))
 
     @property
     def maxRank(self):
@@ -32,16 +32,16 @@ class RankedRequester(AbstractSyncDataRequester, IRankedRequester):
         return self.getCacheValue('currentEfficiency', {})
 
     @property
+    def divisionsStats(self):
+        return self.getCacheValue('divisions', {})
+
+    @property
     def shields(self):
         return self.getCacheValue('shields', {})
 
     @property
     def bonusBattlesCount(self):
         return self.getCacheValue('bonusBattlesCount', 0)
-
-    @property
-    def divisionsStats(self):
-        return self.getCacheValue('divisions', {})
 
     @async
     def _requestCache(self, callback):

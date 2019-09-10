@@ -3,7 +3,6 @@
 from collections import namedtuple
 from gui import SystemMessages
 from gui.impl import backport
-from gui.impl.gen import R
 from gui.shared.notifications import NotificationPriorityLevel
 NotifySysMessages = namedtuple('NotifySysMessages', 'resID, priority, type')
 NotifySysMessages.__new__.__defaults__ = (None, NotificationPriorityLevel.MEDIUM, SystemMessages.SM_TYPE.Information)
@@ -29,7 +28,3 @@ class SimpleSysMessageNotifier(BaseNotifier):
 
     def getPath(self):
         return self.__path
-
-
-FESTIVAL_ENABLED_NOTIFIER = SimpleSysMessageNotifier(('festival_config', 'isEnabled'), {(True, False): NotifySysMessages(R.strings.festival.systemMessages.offEvent()),
- (False, True): NotifySysMessages(R.strings.festival.systemMessages.onEvent(), priority=NotificationPriorityLevel.HIGH)})

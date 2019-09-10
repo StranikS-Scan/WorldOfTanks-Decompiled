@@ -13,9 +13,8 @@ from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.ranked_battles import ranked_helpers
 from gui.server_events import finders
-from gui.server_events.bonuses import getBonuses, compareBonuses, BoxBonus
+from gui.server_events.bonuses import getBonuses, compareBonuses
 from gui.server_events import events_helpers
 from gui.server_events.events_helpers import isPremium
 from gui.server_events.formatters import getLinkedActionID
@@ -436,11 +435,6 @@ class Quest(ServerEventAbstract):
         return self.vehicleReqs.getSuitableVehicles()
 
     def _bonusDecorator(self, bonus):
-        if self.getType() == constants.EVENT_TYPE.TOKEN_QUEST and bonus.getName() == 'oneof':
-            if ranked_helpers.isRankedQuestID(self.getID()):
-                _, league, _ = ranked_helpers.getRankedDataFromTokenQuestID(self.getID())
-                bonus.setupIconHandler(BoxBonus.HANDLER_NAMES.RANKED, ('metal', league))
-                bonus.setTooltipType('rankedSeason')
         return bonus
 
     def __checkGroupedCompletion(self, values, progress, bonusLimit=None, keyMaker=lambda v: v):
@@ -536,16 +530,6 @@ class RankedQuest(Quest):
 
     def isForRank(self):
         return self.__rankedData['subtype'] == 'rank'
-
-    def isBooby(self):
-        return self.__rankedData['subtype'] == 'booby'
-
-    def _bonusDecorator(self, bonus):
-        if bonus.getName() == 'oneof':
-            if self.isProcessedAtCycleEnd():
-                bonus.setupIconHandler(BoxBonus.HANDLER_NAMES.RANKED, ('wooden', self.getRank()))
-                bonus.setTooltipType('rankedCycle')
-        return bonus
 
     @classmethod
     def __parseRankSeasonData(cls, data):

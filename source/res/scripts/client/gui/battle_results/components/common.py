@@ -211,14 +211,6 @@ class EpicBattleBattleFinishResultBlock(RegularFinishResultBlock):
         return
 
 
-class BattleRoyaleFinishResultBlock(RegularFinishResultBlock):
-    __slots__ = ('finishReasonLabel', 'shortResultLabel', 'fullResultLabel')
-    sessionProvider = dependency.descriptor(IBattleSessionProvider)
-
-    def setRecord(self, result, reusable):
-        self.finishReasonLabel = reusable.personal.avatar.extensionInfo.get('battleRoyale', {}).get('accPos', 0)
-
-
 class AllyTeamClanTitle(base.StatsItem):
     __slots__ = ()
 
@@ -286,9 +278,3 @@ class SortieTeamsUiVisibility(TeamsUiVisibility):
         ui_visibility = super(SortieTeamsUiVisibility, self)._convert(value, reusable)
         ui_visibility |= UI_VISIBILITY.SHOW_RESOURCES
         return ui_visibility
-
-
-class IsInSquadBattleRoyaleFlag(base.StatsItem):
-
-    def _convert(self, value, reusable):
-        return reusable.isSquadSupported

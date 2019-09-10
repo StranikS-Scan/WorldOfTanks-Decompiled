@@ -81,7 +81,7 @@ class PersonalMissionsCache(object):
     def init(self):
         self.itemsCache.onSyncCompleted += self.__updateVehRequirementsCache
         self.__settingsCache.onSyncCompleted += self.__onSettingsCacheSynced
-        invVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).values()
+        invVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP).values()
         for _, personalMissionID in personal_missions.g_cache:
             branch = personal_missions.g_cache.questByPotapovQuestID(personalMissionID).branch
             if branch in PM_BRANCH.ACTIVE_BRANCHES:
@@ -336,7 +336,7 @@ class PersonalMissionsCache(object):
         q.setRequiredVehiclesPresence(hasRequiredVehicle)
 
     def __updateVehRequirementsCache(self, *_):
-        invVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).values()
+        invVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP).values()
         for qd in self.__questsData.itervalues():
             for key, value in qd.vehRequirementsCache.iteritems():
                 operationID, chainID = key

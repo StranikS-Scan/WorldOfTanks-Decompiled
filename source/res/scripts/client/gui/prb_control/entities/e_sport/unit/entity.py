@@ -93,7 +93,7 @@ class ESportIntroEntity(UnitIntroEntity):
                 LOG_WARNING('There is invalid vehicle compact descriptor in the stored unit seelected vehicles data', vehCD)
 
         else:
-            criteria = REQ_CRITERIA.INVENTORY
+            criteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP
             selectedVehicles = [ k for k, v in self.itemsCache.items.getVehicles(criteria).iteritems() if v.level in self._rosterSettings.getLevelsRange() ]
         return selectedVehicles
 

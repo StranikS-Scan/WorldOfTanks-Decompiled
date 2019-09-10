@@ -44,7 +44,8 @@ _BATTLE_EVENTS_SETTINGS_TO_BATTLE_EFFICIENCY_TYPES = {BATTLE_EVENTS.ENEMY_HP_DAM
                                  _BET.RECEIVED_RAM,
                                  _BET.RECEIVED_WORLD_COLLISION),
  BATTLE_EVENTS.RECEIVED_CRITS: (_BET.RECEIVED_CRITS,),
- BATTLE_EVENTS.ENEMY_ASSIST_STUN: (_BET.STUN,)}
+ BATTLE_EVENTS.ENEMIES_STUN: (_BET.STUN,),
+ BATTLE_EVENTS.ENEMY_ASSIST_STUN: (_BET.ASSIST_STUN,)}
 
 def _getVehicleData(arenaDP, vehArenaID):
     vTypeInfoVO = arenaDP.getVehicleInfo(vehArenaID).vehicleType
@@ -62,7 +63,7 @@ def _baseRibbonFormatter(ribbon, arenaDP, updater):
 
 
 def _enemyDetectionRibbonFormatter(ribbon, arenaDP, updater):
-    count = ribbon.getCount()
+    count = ribbon.getTargetsAmount()
     bonusRibbonLabelID = _BRL.BASE_BONUS_LABEL if ribbon.isRoleBonus() else _BRL.NO_BONUS
     if count > 1:
         updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), leftFieldStr=_formatCounter(count), bonusRibbonLabelID=bonusRibbonLabelID)
@@ -77,10 +78,14 @@ def _enemyDetectionRibbonFormatter(ribbon, arenaDP, updater):
         updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, bonusRibbonLabelID=bonusRibbonLabelID)
 
 
+def _enemiesStunRibbonFormatter(ribbon, arenaDP, updater):
+    count = ribbon.getTargetsAmount()
+    bonusRibbonLabelID = _BRL.BASE_BONUS_LABEL if ribbon.isRoleBonus() else _BRL.NO_BONUS
+    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), leftFieldStr=_formatCounter(count), bonusRibbonLabelID=bonusRibbonLabelID)
+
+
 def _singleVehRibbonFormatter(ribbon, arenaDP, updater):
-    if ribbon.getType() == _BET.DEATH_ZONE:
-        vehicleName, vehicleClassTag = ('', '')
-    elif ribbon.getDamageSource() == DAMAGE_SOURCE.PLAYER:
+    if ribbon.getDamageSource() == DAMAGE_SOURCE.PLAYER:
         vehicleName, vehicleClassTag = _getVehicleData(arenaDP, ribbon.getVehicleID())
     else:
         vehicleName, vehicleClassTag = '', ribbon.getDamageSource()
@@ -129,6 +134,7 @@ def _epicEventRibbonFormatter(ribbon, arenaDP, updater):
 _RIBBONS_FMTS = {_BET.CAPTURE: _baseRibbonFormatter,
  _BET.DEFENCE: _baseRibbonFormatter,
  _BET.DETECTION: _enemyDetectionRibbonFormatter,
+ _BET.STUN: _enemiesStunRibbonFormatter,
  _BET.ARMOR: _singleVehRibbonFormatter,
  _BET.DAMAGE: _singleVehRibbonFormatter,
  _BET.CRITS: _criticalHitRibbonFormatter,
@@ -143,7 +149,7 @@ _RIBBONS_FMTS = {_BET.CAPTURE: _baseRibbonFormatter,
  _BET.RECEIVED_RAM: _receivedRamRibbonFormatter,
  _BET.RECEIVED_BURN: _singleVehRibbonFormatter,
  _BET.RECEIVED_WORLD_COLLISION: _singleVehRibbonFormatter,
- _BET.STUN: _singleVehRibbonFormatter,
+ _BET.ASSIST_STUN: _singleVehRibbonFormatter,
  _BET.VEHICLE_RECOVERY: _epicEventRibbonFormatter,
  _BET.ENEMY_SECTOR_CAPTURED: _epicEventRibbonFormatter,
  _BET.DESTRUCTIBLE_DAMAGED: _epicEventRibbonFormatter,
@@ -151,8 +157,7 @@ _RIBBONS_FMTS = {_BET.CAPTURE: _baseRibbonFormatter,
  _BET.DESTRUCTIBLES_DEFENDED: _epicEventRibbonFormatter,
  _BET.DEFENDER_BONUS: _epicEventRibbonFormatter,
  _BET.BASE_CAPTURE_BLOCKED: _baseRibbonFormatter,
- _BET.ASSIST_BY_ABILITY: _singleVehRibbonFormatter,
- _BET.DEATH_ZONE: _singleVehRibbonFormatter}
+ _BET.ASSIST_BY_ABILITY: _singleVehRibbonFormatter}
 
 class BattleRibbonsPanel(RibbonsPanelMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -303,6 +308,7 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
          [_BET.RECEIVED_RAM, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedRam())],
          [_BET.RECEIVED_WORLD_COLLISION, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedWorldCollision())],
          [_BET.STUN, backport.text(R.strings.ingame_gui.efficiencyRibbons.stun())],
+         [_BET.ASSIST_STUN, backport.text(R.strings.ingame_gui.efficiencyRibbons.assistStun())],
          [_BET.VEHICLE_RECOVERY, backport.text(R.strings.ingame_gui.efficiencyRibbons.vehicleRecovery())],
          [_BET.ENEMY_SECTOR_CAPTURED, backport.text(R.strings.ingame_gui.efficiencyRibbons.enemySectorCaptured())],
          [_BET.DESTRUCTIBLE_DAMAGED, backport.text(R.strings.ingame_gui.efficiencyRibbons.destructibleDamaged())],
@@ -310,5 +316,4 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
          [_BET.DESTRUCTIBLES_DEFENDED, backport.text(R.strings.ingame_gui.efficiencyRibbons.destructiblesDefended())],
          [_BET.DEFENDER_BONUS, backport.text(R.strings.ingame_gui.efficiencyRibbons.defenderBonus())],
          [_BET.BASE_CAPTURE_BLOCKED, backport.text(R.strings.ingame_gui.efficiencyRibbons.defence())],
-         [_BET.ASSIST_BY_ABILITY, backport.text(R.strings.ingame_gui.efficiencyRibbons.assistByAbility())],
-         [_BET.DEATH_ZONE, backport.text(R.strings.ingame_gui.efficiencyRibbons.deathZone())]], self.__isExtendedAnim, self.__enabled, self.__isWithRibbonName, self.__isWithVehName, [backport.text(R.strings.ingame_gui.efficiencyRibbons.bonusRibbon())])
+         [_BET.ASSIST_BY_ABILITY, backport.text(R.strings.ingame_gui.efficiencyRibbons.assistByAbility())]], self.__isExtendedAnim, self.__enabled, self.__isWithRibbonName, self.__isWithVehName, [backport.text(R.strings.ingame_gui.efficiencyRibbons.bonusRibbon())])

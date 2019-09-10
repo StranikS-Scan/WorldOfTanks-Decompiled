@@ -11,7 +11,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import LoadViewEvent
-from skeletons.gui.game_control import IEpicBattleMetaGameController, IBattleRoyaleController
+from skeletons.gui.game_control import IEpicBattleMetaGameController
 from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.server_events import IEventsCache
@@ -21,7 +21,6 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
     eventsCache = dependency.descriptor(IEventsCache)
     rankedController = dependency.descriptor(IRankedBattlesController)
     epicQueueController = dependency.descriptor(IEpicBattleMetaGameController)
-    battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, _=None):
@@ -64,9 +63,6 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
             elif itemData == PREBATTLE_ACTION_NAME.SANDBOX:
                 isSpecial = True
                 tooltip = TOOLTIPS_CONSTANTS.BATTLE_TRAINING
-            elif itemData == PREBATTLE_ACTION_NAME.BATTLE_ROYALE:
-                tooltip = TOOLTIPS_CONSTANTS.BATTLE_ROYALE_SELECTOR_INFO
-                isSpecial = True
             result = {'isSpecial': isSpecial,
              'tooltip': tooltip}
             return result

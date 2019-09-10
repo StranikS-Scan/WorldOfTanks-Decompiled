@@ -7,7 +7,7 @@ from operator import itemgetter
 from collections import namedtuple
 import BigWorld
 import constants
-from AccountCommands import LOCK_REASON, VEHICLE_SETTINGS_FLAG
+from AccountCommands import LOCK_REASON, VEHICLE_SETTINGS_FLAG, VEHICLE_EXTRA_SETTING_FLAG
 from account_shared import LayoutIterator
 from constants import WIN_XP_FACTOR_MODE, RentType
 from gui.impl import backport
@@ -40,6 +40,7 @@ from shared_utils import findFirst, CONST_CONTAINER
 from skeletons.gui.game_control import IIGRController, IRentalsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from nation_change.nation_change_helpers import hasNationGroup, iterVehTypeCDsInNationGroup
 
 class VEHICLE_CLASS_NAME(CONST_CONTAINER):
     LIGHT_TANK = 'lightTank'
@@ -96,7 +97,6 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     CREW_LOCKED = 'lockCrew'
     OUTFIT_LOCKED = 'lockOutfit'
     EPIC_BATTLES = 'epic_battles'
-    BATTLE_ROYALE = 'battle_royale'
     RENT_PROMOTION = 'rent_promotion'
 
 
@@ -105,7 +105,7 @@ _MAX_RENT_MULTIPLIER = 2
 RentPackagesInfo = namedtuple('RentPackagesInfo', ('hasAvailableRentPackages', 'mainRentType', 'seasonType'))
 
 class Vehicle(FittingItem, HasStrCD):
-    __slots__ = ('__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_rentPackagesInfo', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_canTradeIn', '_canTradeOff', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_optDevices', '_shells', '_equipment', '_equipmentLayout', '_bonuses', '_crewIndices', '_slotsIds', '_crew', '_lastCrew', '_hasModulesToSelect', '_customOutfits', '_styledOutfits', '_slotsAnchors')
+    __slots__ = ('__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_rentPackagesInfo', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_tradeInAvailable', '_tradeOffAvailable', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_optDevices', '_shells', '_equipment', '_equipmentLayout', '_bonuses', '_crewIndices', '_slotsIds', '_crew', '_lastCrew', '_hasModulesToSelect', '_customOutfits', '_styledOutfits', '_slotsAnchors', '_hasNationGroup', '_extraSettings')
 
     class VEHICLE_STATE(object):
         DAMAGED = 'damaged'
@@ -133,16 +133,23 @@ class Vehicle(FittingItem, HasStrCD):
         ROTATION_GROUP_LOCKED = 'rotationGroupLocked'
         RENTABLE = 'rentable'
         RENTABLE_AGAIN = 'rentableAgain'
+        DISABLED = 'disabled'
 
-    CAN_SELL_STATES = [VEHICLE_STATE.UNDAMAGED,
+    CAN_SELL_STATES = (VEHICLE_STATE.UNDAMAGED,
      VEHICLE_STATE.CREW_NOT_FULL,
      VEHICLE_STATE.AMMO_NOT_FULL,
      VEHICLE_STATE.GROUP_IS_NOT_READY,
      VEHICLE_STATE.UNSUITABLE_TO_QUEUE,
      VEHICLE_STATE.UNSUITABLE_TO_UNIT,
      VEHICLE_STATE.ROTATION_GROUP_UNLOCKED,
-     VEHICLE_STATE.ROTATION_GROUP_LOCKED]
-    GROUP_STATES = [VEHICLE_STATE.GROUP_IS_NOT_READY]
+     VEHICLE_STATE.ROTATION_GROUP_LOCKED)
+    TRADE_OFF_NOT_READY_STATES = (VEHICLE_STATE.DAMAGED,
+     VEHICLE_STATE.EXPLODED,
+     VEHICLE_STATE.DESTROYED,
+     VEHICLE_STATE.BATTLE,
+     VEHICLE_STATE.IN_PREBATTLE,
+     VEHICLE_STATE.LOCKED)
+    GROUP_STATES = (VEHICLE_STATE.GROUP_IS_NOT_READY,)
 
     class VEHICLE_STATE_LEVEL(object):
         CRITICAL = 'critical'
@@ -151,10 +158,10 @@ class Vehicle(FittingItem, HasStrCD):
         RENTED = 'rented'
         RENTABLE = 'rentableBlub'
 
-    igrCtrl = dependency.descriptor(IIGRController)
-    eventsCache = dependency.descriptor(IEventsCache)
-    lobbyContext = dependency.descriptor(ILobbyContext)
     rentalsController = dependency.descriptor(IRentalsController)
+    lobbyContext = dependency.descriptor(ILobbyContext)
+    eventsCache = dependency.descriptor(IEventsCache)
+    igrCtrl = dependency.descriptor(IIGRController)
 
     def __init__(self, strCompactDescr=None, inventoryID=-1, typeCompDescr=None, proxy=None):
         if strCompactDescr is not None:
@@ -177,8 +184,8 @@ class Vehicle(FittingItem, HasStrCD):
         self._isDisabledForBuy = False
         self._isSelected = False
         self._restorePrice = None
-        self._canTradeIn = False
-        self._canTradeOff = False
+        self._tradeInAvailable = False
+        self._tradeOffAvailable = False
         self._tradeOffPriceFactor = 0
         self._tradeOffPrice = MONEY_UNDEFINED
         self._rotationGroupNum = 0
@@ -186,6 +193,7 @@ class Vehicle(FittingItem, HasStrCD):
         self._isRotationGroupLocked = False
         self._isInfiniteRotationGroup = False
         self._unlockedBy = []
+        self._hasNationGroup = hasNationGroup(vehDescr.type.compactDescr)
         self._customOutfits = {}
         self._styledOutfits = {}
         if self.isPremiumIGR:
@@ -227,6 +235,7 @@ class Vehicle(FittingItem, HasStrCD):
             self._unlockedBy = proxy.vehicleRotation.unlockedBy(self.rotationGroupNum)
         self._inventoryCount = 1 if invData.keys() else 0
         self._settings = invData.get('settings', 0)
+        self._extraSettings = invData.get('extraSettings', 0)
         self._lock = invData.get('lock', (0, 0))
         self._repairCost, self._health = invData.get('repair', (0, 0))
         self._gun = self.itemsFactory.createVehicleGun(vehDescr.gun.compactDescr, proxy, vehDescr.gun)
@@ -240,11 +249,13 @@ class Vehicle(FittingItem, HasStrCD):
         self._sellPrices = ItemPrices(itemPrice=ItemPrice(price=sellPrice, defPrice=defaultSellPrice), itemAltPrice=ITEM_PRICE_EMPTY)
         if tradeInData is not None and tradeInData.isEnabled and self.isPremium and not self.isPremiumIGR:
             self._tradeOffPriceFactor = tradeInData.sellPriceFactor
-            tradeInLevels = tradeInData.allowedVehicleLevels
-            self._canTradeIn = not self.isInInventory and not self.isHidden and self.isUnlocked and not self.isRestorePossible() and self.level in tradeInLevels and not self.isRented
-            self._canTradeOff = self.isPurchased and not self.canNotBeSold and self.intCD not in tradeInData.forbiddenVehicles and self.level in tradeInLevels
+            canTrade = self.intCD not in tradeInData.forbiddenVehicles and self.level in tradeInData.allowedVehicleLevels
+            self._tradeInAvailable = canTrade and not self.isHidden and self.isUnlocked and not self.isRestorePossible() and not self.isRented
+            self._tradeOffAvailable = canTrade and self.isPurchased
             if self.canTradeOff:
-                self._tradeOffPrice = Money(gold=int(math.ceil(self.tradeOffPriceFactor * self.buyPrices.itemPrice.price.gold)))
+                self._tradeOffPrice = Money(gold=int(math.ceil(self.tradeOffPriceFactor * self.buyPrices.itemPrice.defPrice.gold)))
+                if self._tradeOffPrice.gold < tradeInData.minAcceptableSellPrice:
+                    self._tradeOffAvailable = False
         self._optDevices = self._parserOptDevs(vehDescr.optionalDevices, proxy)
         gunAmmoLayout = []
         for shell in self.gun.defaultAmmo:
@@ -259,8 +270,13 @@ class Vehicle(FittingItem, HasStrCD):
         self._crewIndices = dict([ (invID, idx) for idx, invID in enumerate(crewList) ])
         self._crew = self._buildCrew(crewList, proxy)
         self._lastCrew = invData.get('lastCrew')
-        self._rentPackages = calcRentPackages(self, proxy, self.rentalsController)
-        self._maxRentDuration, self._minRentDuration = self.__calcMinMaxRentDuration()
+        if self.canTradeIn:
+            self._rentPackagesInfo = RentPackagesInfo(False, 0, 0)
+            self._rentPackages = []
+            self._maxRentDuration, self._minRentDuration = (0, 0)
+        else:
+            self._rentPackages = calcRentPackages(self, proxy, self.rentalsController)
+            self._maxRentDuration, self._minRentDuration = self.__calcMinMaxRentDuration()
         self._hasModulesToSelect = self.__hasModulesToSelect()
         self.__customState = ''
         self._slotsAnchorsById, self._slotsAnchors = self.__initAnchors()
@@ -574,12 +590,20 @@ class Vehicle(FittingItem, HasStrCD):
         return self._restorePrice
 
     @property
+    def isTradeInAvailable(self):
+        return self._tradeInAvailable
+
+    @property
     def canTradeIn(self):
-        return self._canTradeIn
+        return self._tradeInAvailable and not self.isInInventory
+
+    @property
+    def isTradeOffAvailable(self):
+        return self._tradeOffAvailable
 
     @property
     def canTradeOff(self):
-        return self._canTradeOff
+        return self._tradeOffAvailable and not self.canNotBeSold
 
     @property
     def tradeOffPriceFactor(self):
@@ -849,6 +873,20 @@ class Vehicle(FittingItem, HasStrCD):
     def isWheeledTech(self):
         return self._descriptor.type.isWheeledVehicle
 
+    @property
+    def hasNationGroup(self):
+        isEnabled = self.lobbyContext.getServerSettings().isNationChangeEnabled()
+        return isEnabled and self._hasNationGroup
+
+    @property
+    def isNationChangeAvailable(self):
+        return self.hasNationGroup and not self.isLocked and not self.isBroken and (self.isPurchased or self.isRented)
+
+    def getAllNationGroupVehs(self, proxy):
+        nationGroupVehs = [ proxy.getItemByCD(cd) for cd in iterVehTypeCDsInNationGroup(self.intCD) ]
+        nationGroupVehs.insert(0, self)
+        return nationGroupVehs
+
     def getC11nItemNoveltyCounter(self, proxy, item):
         newItems = proxy.inventory.getC11nItemsNoveltyCounters(self._descriptor.type)
         return newItems.get(item.intCD, 0)
@@ -884,6 +922,8 @@ class Vehicle(FittingItem, HasStrCD):
             ms = Vehicle.VEHICLE_STATE.IN_PREMIUM_IGR_ONLY
         elif self.isInPrebattle:
             ms = Vehicle.VEHICLE_STATE.IN_PREBATTLE
+        elif self.isDisabled:
+            ms = Vehicle.VEHICLE_STATE.DISABLED
         elif self.isLocked:
             ms = Vehicle.VEHICLE_STATE.LOCKED
         elif self.isDisabledInRoaming:
@@ -1066,6 +1106,10 @@ class Vehicle(FittingItem, HasStrCD):
         return st in self.CAN_SELL_STATES and not checkForTags(self.tags, VEHICLE_TAGS.CANNOT_BE_SOLD)
 
     @property
+    def isReadyToTradeOff(self):
+        return self.canTradeOff and self.getState()[0] not in self.TRADE_OFF_NOT_READY_STATES
+
+    @property
     def isLocked(self):
         return self.lock[0] != LOCK_REASON.NONE
 
@@ -1084,6 +1128,10 @@ class Vehicle(FittingItem, HasStrCD):
     @property
     def isInUnit(self):
         return self.lock[0] == LOCK_REASON.UNIT
+
+    @property
+    def isDisabled(self):
+        return self.lock[0] == LOCK_REASON.BREAKER
 
     @property
     def typeOfLockingArena(self):
@@ -1111,10 +1159,6 @@ class Vehicle(FittingItem, HasStrCD):
         return checkForTags(self.tags, VEHICLE_TAGS.EPIC_BATTLES)
 
     @property
-    def isOnlyForBattleRoyaleBattles(self):
-        return checkForTags(self.tags, VEHICLE_TAGS.BATTLE_ROYALE)
-
-    @property
     def isTelecom(self):
         return checkForTags(self.tags, VEHICLE_TAGS.TELECOM)
 
@@ -1137,7 +1181,7 @@ class Vehicle(FittingItem, HasStrCD):
             return False
         result = not self.hasLockMode()
         if result:
-            result = not self.isBroken and self.isCrewFull and not self.isDisabledInPremIGR and not self.isInBattle and not self.isRotationGroupLocked
+            result = not self.isBroken and self.isCrewFull and not self.isDisabledInPremIGR and not self.isInBattle and not self.isRotationGroupLocked and not self.isDisabled
         return result
 
     @property
@@ -1150,6 +1194,10 @@ class Vehicle(FittingItem, HasStrCD):
         if result:
             result = self.isAlive and self.isCrewFull and not self.isDisabledInRoaming and not self.isDisabledInPremIGR and not self.isRotationGroupLocked
         return result
+
+    @property
+    def activeInNationGroup(self):
+        return not bool(self._extraSettings & VEHICLE_EXTRA_SETTING_FLAG.NOT_ACTIVE_IN_NATION_GROUP)
 
     @property
     def isXPToTman(self):
@@ -1188,7 +1236,7 @@ class Vehicle(FittingItem, HasStrCD):
             permission = self.__prbDispatcher.getGUIPermissions()
             if permission is not None:
                 locked = not permission.canChangeVehicle()
-        return not self.isOnlyForEventBattles and not self.isInBattle and self.isInInventory and not self.isLocked and not locked and not self.isBroken and not self.rentalIsOver and not self.isOutfitLocked
+        return not self.isOnlyForEventBattles and not self.isInBattle and self.isInInventory and not self.isLocked and not locked and not self.isBroken and not self.rentalIsOver and not self.isOutfitLocked and not self.isDisabled
 
     def isAutoLoadFull(self):
         if self.isAutoLoad:
@@ -1576,6 +1624,10 @@ def getVehicleClassTag(tags):
     if subSet:
         result = list(subSet).pop()
     return result
+
+
+def getCrewCount(vehs):
+    return reduce(lambda acc, value: acc + value, [ len([ tankman for _, tankman in veh.crew if tankman is not None ]) for veh in vehs ])
 
 
 _VEHICLE_STATE_TO_ICON = {Vehicle.VEHICLE_STATE.BATTLE: RES_ICONS.MAPS_ICONS_VEHICLESTATES_BATTLE,

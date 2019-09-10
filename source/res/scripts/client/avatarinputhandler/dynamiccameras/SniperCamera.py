@@ -218,12 +218,10 @@ class SniperCamera(ICamera, CallbackDelayer):
     def __setupCamera(self, targetPos):
         vehicleTypeDescriptor = BigWorld.player().vehicleTypeDescriptor
         playerGunMatFunction = AimingSystems.getPlayerGunMat
-        if vehicleTypeDescriptor:
-            if vehicleTypeDescriptor.isYawHullAimingAvailable:
-                playerGunMatFunction = AimingSystems.getCenteredPlayerGunMat
-            elif vehicleTypeDescriptor.turret.gunCamPosition:
-                playerGunMatFunction = AimingSystems.getSniperCameraPlayerGunMat
+        if vehicleTypeDescriptor is not None and vehicleTypeDescriptor.isYawHullAimingAvailable:
+            playerGunMatFunction = AimingSystems.getCenteredPlayerGunMat
         self.__aimingSystem.enable(targetPos, playerGunMatFunction)
+        return
 
     def __waitVehicle(self):
         player = BigWorld.player()

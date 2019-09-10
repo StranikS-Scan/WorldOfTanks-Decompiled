@@ -20,7 +20,7 @@ from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.Scaleform.locale.STORAGE import STORAGE
 from gui.impl import backport
 from gui.shared.event_dispatcher import showVehiclePreview, showStorage
-from gui.shared.formatters import text_styles, getItemPricesVO, icons
+from gui.shared.formatters import text_styles, getItemPricesVO, icons, getMoneyVO
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from helpers.i18n import makeString as _ms
 from gui.shared.money import Currency
@@ -99,9 +99,11 @@ def getStorageVehicleVo(vehicle):
     stateIcon, stateText = _getVehicleInfo(vehicle)
     if not imageSmall and not stateText:
         stateText = text_styles.vehicleStatusInfoText(_ms(STORAGE.INHANGAR_NOIMAGE))
-    vo = createStorageDefVO(vehicle.intCD, name, description, vehicle.inventoryCount, getItemPricesVO(vehicle.getSellPrice())[0], imageSmall, RES_SHOP.getVehicleIcon(STORE_CONSTANTS.ICON_SIZE_SMALL, 'empty_tank'), itemType=getSlotOverlayIconType(vehicle), nationFlagIcon=RES_SHOP.getNationFlagIcon(nations.NAMES[vehicle.nationID]), contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_REGULAR_ITEM)
+    vo = createStorageDefVO(vehicle.intCD, name, description, vehicle.inventoryCount, getItemPricesVO(vehicle.getSellPrice())[0], imageSmall, RES_SHOP.getVehicleIcon(STORE_CONSTANTS.ICON_SIZE_SMALL, 'empty_tank'), itemType=getSlotOverlayIconType(vehicle), nationFlagIcon=RES_SHOP.getNationFlagIcon(nations.NAMES[vehicle.nationID]), contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_MULTI_NATION_ITEM if vehicle.hasNationGroup else CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_REGULAR_ITEM)
     vo.update({'infoImgSrc': stateIcon,
      'infoText': stateText})
+    if vehicle.canTradeOff:
+        vo.update({'tradeOffPrice': {'price': getMoneyVO(vehicle.tradeOffPrice)}})
     return vo
 
 

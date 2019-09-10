@@ -81,17 +81,6 @@ def makeArcadeCameraMatrix():
     return matrix
 
 
-def makeVehicleTurretMatrixMP():
-    matrixProvider = Math.WGCombinedMP()
-    vehicleMatrix = BigWorld.player().consistentMatrices.attachedVehicleMatrix
-    matrixProvider.translationSrc = vehicleMatrix
-    localTransform = Math.MatrixProduct()
-    localTransform.a = BigWorld.player().consistentMatrices.ownVehicleTurretMProv
-    localTransform.b = vehicleMatrix
-    matrixProvider.rotationSrc = localTransform
-    return matrixProvider
-
-
 def makeStrategicCameraMatrix():
     matrix = Math.WGStrategicAreaViewMP()
     matrix.source = BigWorld.camera().invViewMatrix

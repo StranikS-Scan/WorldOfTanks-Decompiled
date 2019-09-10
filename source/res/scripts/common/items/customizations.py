@@ -662,20 +662,31 @@ class CustomizationOutfit(SerializableComponent):
         selfItems[:] = [ i for i in selfItems if i.appliedTo != 0 ]
         selfItems.extend(otherItems)
 
-    def dismountComponents(self, applyArea, dismountTypes=CustomizationType._APPLIED_TO_TYPES):
+    def dismountComponents(self, applyArea, dismountTypes=CustomizationType._DISMOUNT_TYPE):
         toMove = defaultdict(int)
         areas = [ i for i in ApplyArea.RANGE if i & applyArea ]
-        for c11nType in CustomizationType._APPLIED_TO_TYPES:
-            components = getattr(self, '{}s'.format(lower(CustomizationTypeNames[c11nType])))
-            if c11nType not in dismountTypes:
+        for c11nType in dismountTypes:
+            if c11nType is CustomizationType.STYLE:
                 continue
-            for component in components:
-                for area in areas:
-                    if component.appliedTo & area:
-                        component.appliedTo &= ~area
-                        toMove[(c11nType, component.id)] += 1
+            components = getattr(self, '{}s'.format(lower(CustomizationTypeNames[c11nType])))
+            if c11nType in CustomizationType._APPLIED_TO_TYPES:
+                for component in components:
+                    for area in areas:
+                        if component.appliedTo & area:
+                            component.appliedTo &= ~area
+                            toMove[(c11nType, component.id)] += 1
 
-            components[:] = [ c for c in components if c.appliedTo != 0 ]
+                components[:] = [ c for c in components if c.appliedTo != 0 ]
+            if c11nType == CustomizationType.PROJECTION_DECAL:
+                for projectionDecal in self.projection_decals:
+                    toMove[(CustomizationType.PROJECTION_DECAL, projectionDecal.id)] += 1
+
+                self.projection_decals = []
+            if c11nType == CustomizationType.MODIFICATION:
+                for modification in self.modifications:
+                    toMove[(CustomizationType.MODIFICATION, modification)] += 1
+
+                self.modifications = []
 
         return dict(toMove)
 

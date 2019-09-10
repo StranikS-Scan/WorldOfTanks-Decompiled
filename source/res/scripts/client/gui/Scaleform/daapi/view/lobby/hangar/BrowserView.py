@@ -15,11 +15,13 @@ from helpers import dependency
 from skeletons.gui.game_control import IBrowserController
 from skeletons.gui.lobby_context import ILobbyContext
 
-def makeBrowserParams(waitingMessage=R.invalid(), isTransparent=False):
+def makeBrowserParams(waitingMessage=R.invalid(), isModal=False, isHidden=False, bgAlpha=1.0):
     if not waitingMessage:
         waitingMessage = R.strings.waiting.loadContent()
     return {'waitingMessage': backport.msgid(waitingMessage),
-     'isTransparent': isTransparent}
+     'isModal': isModal,
+     'isHidden': isHidden,
+     'bgAlpha': bgAlpha}
 
 
 class BrowserView(LobbySubView, BrowserScreenMeta):
@@ -34,6 +36,7 @@ class BrowserView(LobbySubView, BrowserScreenMeta):
         self.__hasFocus = False
         self.__browser = None
         self.__browserComponent = None
+        self.__browserParams = (ctx or {}).get('browserParams', makeBrowserParams())
         self.__errorOccurred = False
         self.__closedByUser = False
         self.__isBrowserLoading = True
@@ -70,6 +73,7 @@ class BrowserView(LobbySubView, BrowserScreenMeta):
 
     def _populate(self):
         super(BrowserView, self)._populate()
+        self.as_setBrowserParamsS(self.__browserParams)
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         g_inputHandler.onKeyDown += self.__onKeyDown
 

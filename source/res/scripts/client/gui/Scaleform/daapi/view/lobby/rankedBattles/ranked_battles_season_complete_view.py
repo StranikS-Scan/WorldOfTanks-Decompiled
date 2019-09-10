@@ -7,7 +7,7 @@ from gui.impl import backport
 from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.constants import RankedDossierKeys
 from gui.ranked_battles.ranked_builders import season_comple_vos
-from gui.ranked_battles.ranked_formatters import getRanksColumnRewardsFormatter
+from gui.ranked_battles.ranked_formatters import getRankedAwardsFormatter
 from gui.ranked_battles.ranked_helpers.league_provider import UNDEFINED_LEAGUE_ID
 from gui.ranked_battles.ranked_helpers.sound_manager import RANKED_OVERLAY_SOUND_SPACE
 from gui.server_events.awards_formatters import AWARDS_SIZES
@@ -54,15 +54,15 @@ class RankedBattlesSeasonCompleteView(RankedBattlesSeasonCompleteViewMeta):
 
     def _packAwards(self):
         result = []
-        formatter = getRanksColumnRewardsFormatter()
+        formatter = getRankedAwardsFormatter()
         for name, value in self._awards.iteritems():
             result.extend(formatter.getFormattedBonuses(getBonuses(self._quest, name, value), size=AWARDS_SIZES.BIG))
 
         return result
 
     def __setData(self):
-        seasonID, league, isSprinter = ranked_helpers.getRankedDataFromTokenQuestID(self._quest.getID())
-        season = self.__rankedController.getSeason(int(seasonID))
+        seasonID, league, isSprinter = ranked_helpers.getDataFromSeasonTokenQuestID(self._quest.getID())
+        season = self.__rankedController.getSeason(seasonID)
         if season is not None:
             leagueData = self.__rankedController.getLeagueProvider().webLeague
             if leagueData.league == UNDEFINED_LEAGUE_ID:

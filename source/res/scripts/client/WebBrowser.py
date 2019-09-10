@@ -305,6 +305,10 @@ class WebBrowser(object):
         if self.hasBrowser:
             self.__browser.sendMessage(message)
 
+    def sendEvent(self, webEvent):
+        if self.hasBrowser:
+            self.__browser.sendEvent(webEvent)
+
     def navigateBack(self):
         if self.hasBrowser:
             self.__browser.goBack(self.url)

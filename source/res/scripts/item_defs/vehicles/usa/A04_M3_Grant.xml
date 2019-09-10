@@ -141,6 +141,10 @@
         <anchorDirection>	0.000000 0.878932 -0.476947	</anchorDirection>
       </slot>
     </customizationSlots>
+    <camouflage>
+      <density>	96.9347 99.9382	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
   </hull>
   <chassis>
     <VVSST41>
@@ -1840,6 +1844,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.295 0.295 0.000000 0.000000	</tiling>
+            <density>	100.546 99.1263	</density>
+            <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_75mm_Gun_M2_L28>
         <_75mm_Gun_M3_L37>	shared	  <maxAmmo>	50	</maxAmmo>
@@ -1901,6 +1907,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.355 0.355 0.000000 0.000000	</tiling>
+            <density>	101.53 99.8283	</density>
+            <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_75mm_Gun_M3_L37>
       </guns>
@@ -1937,6 +1945,10 @@
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	100.671 100.675	</density>
+        <aoTextureSize>	256 256	</aoTextureSize>
+      </camouflage>
     </M3_S>
   </turrets0>
   <engines>

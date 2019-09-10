@@ -30,3 +30,6 @@ class CrewMeta(BaseDAAPIComponent):
 
     def as_dogResponseS(self, dogName):
         return self.flashObject.as_dogResponse(dogName) if self._isDAAPIInited() else None
+
+    def as_setDogTooltipS(self, tooltipId):
+        return self.flashObject.as_setDogTooltip(tooltipId) if self._isDAAPIInited() else None

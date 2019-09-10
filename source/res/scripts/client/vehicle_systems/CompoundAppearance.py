@@ -285,7 +285,6 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         if self.__terrainCircle is not None:
             self.__terrainCircle.destroy()
             self.__terrainCircle = None
-        self.onModelChanged.clear()
         self.onModelChanged = None
         CallbackDelayer.destroy(self)
         return
@@ -705,6 +704,13 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
 
     def __disableStipple(self):
         self.compoundModel.stipple = False
+
+    def computeFullVehicleLength(self):
+        vehicleLength = 0.0
+        if self.compoundModel is not None:
+            hullBB = Math.Matrix(self.compoundModel.getBoundsForPart(TankPartIndexes.HULL))
+            vehicleLength = hullBB.applyVector(Math.Vector3(0.0, 0.0, 1.0)).length
+        return vehicleLength
 
     def setupGunMatrixTargets(self, target):
         self.turretMatrix.target = target.turretMatrix

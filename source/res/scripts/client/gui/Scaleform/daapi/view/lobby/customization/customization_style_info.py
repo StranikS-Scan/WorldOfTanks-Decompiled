@@ -23,7 +23,7 @@ StyleInfoVO = namedtuple('StyleInfoVO', ('styleName', 'styleInfo', 'styleInfoBig
 ButtonVO = namedtuple('ButtonVO', ('enabled', 'label', 'disabledTooltip', 'visible'))
 ParamVO = namedtuple('ParamVO', ('iconSrc', 'paramText'))
 STYLE_INFO_BLUR_DELAY = 0.2
-_STYLE_INFO_BLUR_MASK = 'system/maps/mask.dds'
+_STYLE_INFO_BLUR_RECTANGLE_ID = 0
 _INSERTION_OPEN_TAG = "<font size='16' face='$FieldFont' color='#E9E2BF'>"
 _INSERTION_OPEN_TAG_BIG = "<font size='18' face='$TitleFont' color='#E9E2BF'>"
 _INSERTION_CLOSE_TAG = '</font>'
@@ -45,6 +45,7 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
         self.__prevStyle = None
         self.__selectedStyle = None
         self.__paramsDOF = None
+        self.__blurParams = None
         return
 
     def _populate(self):
@@ -59,6 +60,7 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
         g_currentVehicle.onChangeStarted -= self.__onVehicleChangeStarted
         self.__ctx.onLocateToStyleInfo -= self.__onLocateToStyleInfo
         self.service.onCustomizationHelperRecreated -= self.__onCustomizationHelperRecreated
+        self.__blur.removeRect(_STYLE_INFO_BLUR_RECTANGLE_ID)
         self.__ctx = None
         return
 
@@ -99,19 +101,20 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
 
     def onApply(self):
         self.__ctx.onStyleInfoHidden(toBuyWindow=True)
-        self.__blur.blendMask = ''
+        self.__blur.removeRect(_STYLE_INFO_BLUR_RECTANGLE_ID)
         self.service.setDOFenabled(False)
         self.__visible = False
 
     def hide(self):
         self.stopCallback(self.__enableBlur)
         self.stopCallback(self.service.setDOFenabled)
+        self.disableBlur()
         self.as_hideS()
         self.__paramsDOF = None
         return
 
     def disableBlur(self):
-        self.__blur.blendMask = ''
+        self.__blur.removeRect(_STYLE_INFO_BLUR_RECTANGLE_ID)
         self.__blur.enable = False
         self.__paramsDOF = None
         self.service.setDOFenabled(False)
@@ -184,7 +187,6 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
         return params
 
     def __enableBlur(self):
-        self.__blur.blendMask = _STYLE_INFO_BLUR_MASK
         self.__blur.enable = True
 
     def __installStyle(self, style):
@@ -195,7 +197,7 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
 
     def __onLocateToStyleInfo(self, paramsDOF):
         self.__paramsDOF = paramsDOF
-        if self.__paramsDOF is not None:
+        if self.__paramsDOF is not None and self.visible:
             self.service.setDOFparams(self.__paramsDOF)
             self.delayCallback(STYLE_INFO_BLUR_DELAY, self.service.setDOFenabled, enable=True)
         return
@@ -214,3 +216,12 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
         if self.visible:
             self.service.setDOFenabled(False)
         return
+
+    def onWidthUpdated(self, x, width, height):
+        if not self.visible:
+            return
+        blurRect = (round(x),
+         0,
+         round(x + width),
+         round(height))
+        self.__blur.addRect(_STYLE_INFO_BLUR_RECTANGLE_ID, blurRect)

@@ -10,6 +10,7 @@ from gui import InputHandler
 from gui.Scaleform.daapi.view.bootcamp.component_override import BootcampComponentOverride
 from gui.Scaleform.framework.entities.abstract.ContextMenuManagerMeta import ContextMenuManagerMeta
 from soft_exception import SoftException
+CM_BUY_COLOR = 13347959
 _SEPARATOR_ID = 'separate'
 _handlers = {}
 
@@ -132,6 +133,9 @@ class AbstractContextMenuHandler(object):
             return getattr(self, self.__handlers[optionId])()
         LOG_WARNING('Unknown context menu option', self, self.__cmProxy, optionId)
 
+    def getCMInfo(self):
+        pass
+
     def _dispatchChanges(self, options):
         if self.__cmProxy is not None:
             self.__cmProxy._onOptionsChanged(options)
@@ -142,7 +146,7 @@ class AbstractContextMenuHandler(object):
         return {'id': optId,
          'label': optLabel,
          'iconType': iconType,
-         'initData': optInitData,
+         'initData': cls.__makeOptDataDefaults(optInitData),
          'submenu': optSubMenu,
          'linkage': linkage}
 
@@ -159,5 +163,11 @@ class AbstractContextMenuHandler(object):
     def _clearFlashValues(self):
         pass
 
-    def getCMInfo(self):
-        pass
+    @staticmethod
+    def __makeOptDataDefaults(optInitData):
+        if optInitData is None:
+            return {'visible': True}
+        else:
+            if 'visible' not in optInitData or optInitData['visible'] is None:
+                optInitData['visible'] = True
+            return optInitData

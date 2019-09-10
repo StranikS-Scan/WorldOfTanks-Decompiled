@@ -8,31 +8,28 @@ from constants import RentType, GameSeasonType
 from debug_utils import LOG_WARNING
 from gui import SystemMessages, DialogsInterface, GUI_SETTINGS
 from gui.Scaleform import MENU
+from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
+from gui.Scaleform.locale.MESSENGER import MESSENGER
+from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta, I18nConfirmDialogMeta, DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsWebProductMeta
 from gui.Scaleform.daapi.view.dialogs.rent_confirm_dialog import RentConfirmDialogMeta
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getWebShopURL, isIngameShopEnabled, getBuyPremiumUrl
-from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.entities.View import ViewKey
-from gui.Scaleform.genConsts.BATTLEROYALE_ALIASES import BATTLEROYALE_ALIASES
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
-from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
-from gui.Scaleform.locale.MESSENGER import MESSENGER
-from gui.battle_royale.royale_helpers import getBattleRoyaleIntroPageUrl
-from gui.game_control.links import URLMacros
 from gui.impl import backport
-from gui.impl.gen import R
-from gui.impl.lobby.festival.festival_helper import FestivalViews
+from gui.game_control.links import URLMacros
 from gui.ingame_shop import generateShopRentRenewProductID, showBuyGoldForRentWebOverlay
 from gui.ingame_shop import getShopProductInfo
 from gui.ingame_shop import makeBuyParamsByProductInfo
 from gui.ingame_shop import showBuyVehicleOverlay
+from gui.impl.gen import R
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.shared import events, g_eventBus, money
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -48,11 +45,12 @@ from helpers.aop import pointcutable
 from helpers.i18n import makeString as _ms
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IHeroTankController, IReferralProgramController
-from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader
-from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.goodies import IGoodiesCache
+from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
+from async import async, await
 _logger = logging.getLogger(__name__)
 
 class SETTINGS_TAB_INDEX(object):
@@ -79,10 +77,6 @@ def showRankedBattleResultsWindow(rankedResultsVO, rankInfo, questsProgress):
      'questsProgress': questsProgress}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showBattleRoyaleResults(arenaUniqueID):
-    g_eventBus.handleEvent(events.LoadViewEvent(BATTLEROYALE_ALIASES.HANGAR_BATTLE_ROYALE_RESULTS, getViewName(BATTLEROYALE_ALIASES.HANGAR_BATTLE_ROYALE_RESULTS, str(arenaUniqueID)), ctx={'arenaUniqueID': arenaUniqueID}), EVENT_BUS_SCOPE.LOBBY)
-
-
 def showRankedAwardWindow(awardsSequence, rankedInfo):
     g_eventBus.handleEvent(events.LoadViewEvent(alias=RANKEDBATTLES_ALIASES.RANKED_BATTLES_AWARD, ctx={'awardsSequence': awardsSequence,
      'rankedInfo': rankedInfo}), EVENT_BUS_SCOPE.LOBBY)
@@ -90,10 +84,6 @@ def showRankedAwardWindow(awardsSequence, rankedInfo):
 
 def showRankedPrimeTimeWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(alias=RANKEDBATTLES_ALIASES.RANKED_BATTLE_PRIME_TIME, ctx={}), EVENT_BUS_SCOPE.LOBBY)
-
-
-def showBattleRoyalePrimeTimeWindow():
-    g_eventBus.handleEvent(events.LoadViewEvent(alias=BATTLEROYALE_ALIASES.BATTLE_ROYALE_PRIME_TIME, ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showEpicBattlesPrimeTimeWindow():
@@ -216,6 +206,11 @@ def showBlueprintView(vehicleCD, exitEvent=None, itemsCache=None):
      'exitEvent': exitEvent}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
+def showChangeVehicleNationDialog(vehicleCD):
+    from gui.impl.lobby.nation_change.nation_change_screen import NationChangeScreen
+    g_eventBus.handleEvent(events.LoadUnboundViewEvent(R.views.lobby.nation_change.nation_change_screen.NationChangeScreen(), NationChangeScreen, ScopeTemplates.LOBBY_SUB_SCOPE, ctx={'vehicleCD': vehicleCD}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
 def showPiggyBankView():
     from gui.impl.lobby.premacc.piggybank import PiggyBankView
     g_eventBus.handleEvent(events.LoadUnboundViewEvent(R.views.lobby.premacc.piggybank.Piggybank(), PiggyBankView, ScopeTemplates.LOBBY_SUB_SCOPE), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -235,12 +230,6 @@ def showDailyExpPageView(exitEvent=None):
 def showDashboardView():
     from gui.impl.lobby.premacc.prem_dashboard_view import PremDashboardView
     g_eventBus.handleEvent(events.LoadUnboundViewEvent(R.views.lobby.premacc.prem_dashboard_view.PremDashboardView(), PremDashboardView, ScopeTemplates.LOBBY_SUB_SCOPE), scope=EVENT_BUS_SCOPE.LOBBY)
-
-
-def showBattleRoyaleResultsView(ctx):
-    from gui.Scaleform.daapi.view.lobby.battle_royale.battle_royale_results import BattleRoyaleResultsWindow
-    window = BattleRoyaleResultsWindow(ctx=ctx)
-    window.load()
 
 
 def showBattleBoosterBuyDialog(battleBoosterIntCD, install=False):
@@ -277,14 +266,6 @@ def showBarracks():
 def showBadges(backViewName=''):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BADGES_PAGE, ctx={'backViewName': backViewName} if backViewName else None), scope=EVENT_BUS_SCOPE.LOBBY)
     return
-
-
-def showHangarVehicleConfigurator(isFirstEnter=False):
-    g_eventBus.handleEvent(events.LoadViewEvent(BATTLEROYALE_ALIASES.HANGAR_VEH_INFO_VIEW, ctx={'isFirstEnter': isFirstEnter}), scope=EVENT_BUS_SCOPE.LOBBY)
-
-
-def showProgressionView():
-    g_eventBus.handleEvent(events.LoadViewEvent(BATTLEROYALE_ALIASES.EVENT_PROGRESSION_VIEW), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showStrongholds(url=None):
@@ -341,6 +322,7 @@ def showOldVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR
 
 
 def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None, previewBackCb=None, itemsPack=None, offers=None, price=money.MONEY_UNDEFINED, oldPrice=None, title='', description=None, endTime=None, buyParams=None, vehParams=None, isFrontline=False):
+    itemsCache = dependency.instance(IItemsCache)
     lobbyContext = dependency.instance(ILobbyContext)
     newPreviewEnabled = lobbyContext.getServerSettings().isIngamePreviewEnabled()
     heroTankController = dependency.instance(IHeroTankController)
@@ -353,7 +335,12 @@ def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, v
          'previewAlias': previewAlias,
          'previewBackCb': previewBackCb}), scope=EVENT_BUS_SCOPE.LOBBY)
     elif newPreviewEnabled:
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_PREVIEW_20, ctx={'itemCD': vehTypeCompDescr,
+        vehicle = itemsCache.items.getItemByCD(vehTypeCompDescr)
+        if not (itemsPack or offers) and vehicle.canTradeIn:
+            viewAlias = VIEW_ALIAS.TRADE_IN_VEHICLE_PREVIEW_20
+        else:
+            viewAlias = VIEW_ALIAS.VEHICLE_PREVIEW_20
+        g_eventBus.handleEvent(events.LoadViewEvent(viewAlias, ctx={'itemCD': vehTypeCompDescr,
          'previewAlias': previewAlias,
          'vehicleStrCD': vehStrCD,
          'previewBackCb': previewBackCb,
@@ -513,21 +500,24 @@ def showBoostersWindow(tabID=None):
 @dependency.replace_none_kwargs(goodiesCache=IGoodiesCache)
 def showBoosterActivateDialog(boosterIntCD, goodiesCache=None):
     newBooster = goodiesCache.getBooster(boosterIntCD)
-    criteria = REQ_CRITERIA.BOOSTER.ACTIVE | REQ_CRITERIA.BOOSTER.BOOSTER_TYPES([newBooster.boosterType])
-    activeBoosters = goodiesCache.getBoosters(criteria=criteria).values()
-    curBooster = max(activeBoosters, key=attrgetter('effectValue')) if activeBoosters else None
-    messageCtx = {'newBoosterName': text_styles.middleTitle(newBooster.description)}
-    if curBooster is None:
-        key = BOOSTER_CONSTANTS.BOOSTER_ACTIVATION_CONFORMATION_TEXT_KEY
+    if not newBooster.isReadyToActivate:
+        return
     else:
-        key = BOOSTER_CONSTANTS.BOOSTER_REPLACE_CONFORMATION_TEXT_KEY
-        messageCtx['curBoosterName'] = text_styles.middleTitle(curBooster.description)
-    shouldActivate = yield DialogsInterface.showDialog(I18nConfirmDialogMeta(key=key, messageCtx=messageCtx, focusedID=DIALOG_BUTTON_ID.CLOSE))
-    if shouldActivate:
-        result = yield BoosterActivator(newBooster).request()
-        if result.userMsg:
-            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
-    return
+        criteria = REQ_CRITERIA.BOOSTER.ACTIVE | REQ_CRITERIA.BOOSTER.BOOSTER_TYPES([newBooster.boosterType])
+        activeBoosters = goodiesCache.getBoosters(criteria=criteria).values()
+        curBooster = max(activeBoosters, key=attrgetter('effectValue')) if activeBoosters else None
+        messageCtx = {'newBoosterName': text_styles.middleTitle(newBooster.description)}
+        if curBooster is None:
+            key = BOOSTER_CONSTANTS.BOOSTER_ACTIVATION_CONFORMATION_TEXT_KEY
+        else:
+            key = BOOSTER_CONSTANTS.BOOSTER_REPLACE_CONFORMATION_TEXT_KEY
+            messageCtx['curBoosterName'] = text_styles.middleTitle(curBooster.description)
+        shouldActivate = yield DialogsInterface.showDialog(I18nConfirmDialogMeta(key=key, messageCtx=messageCtx, focusedID=DIALOG_BUTTON_ID.CLOSE))
+        if shouldActivate:
+            result = yield BoosterActivator(newBooster).request()
+            if result.userMsg:
+                SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+        return
 
 
 def stopTutorial():
@@ -613,14 +603,6 @@ def showTankPremiumAboutPage():
     return
 
 
-def showFestivalInfoPage():
-    url = GUI_SETTINGS.festivalInfo.get('baseURL')
-    if url is None:
-        _logger.error('festivalInfo.baseURL is missed')
-    showBrowserOverlayView(url, alias=VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW)
-    return
-
-
 @process
 def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=None, callbackOnLoad=None):
     if url:
@@ -651,12 +633,6 @@ def showProgressiveRewardAwardWindow(bonuses, specialRewardType, currentStep):
     window.load()
 
 
-def showFestivalAwardWindow(bonuses, specialRewardType, reachValue):
-    from gui.impl.lobby.progressive_reward.progressive_reward_award_view import FestivalAwardWindow
-    window = FestivalAwardWindow(bonuses, specialRewardType, reachValue)
-    window.load()
-
-
 def showStylePreview(vehCD, style, styleDescr, backCallback, backBtnDescrLabel=''):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.STYLE_PREVIEW, ctx={'itemCD': vehCD,
      'style': style,
@@ -665,21 +641,24 @@ def showStylePreview(vehCD, style, styleDescr, backCallback, backBtnDescrLabel='
      'backBtnDescrLabel': backBtnDescrLabel}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showFestivalMainView(viewName=FestivalViews.CARD):
-    from gui.impl.lobby.festival.festival_main_view import FestivalMainView
-    uiLoader = dependency.instance(IGuiLoader)
-    contentResId = R.views.lobby.festival.festival_main_view.FestivalMainView()
-    festivalView = uiLoader.windowsManager.getViewByLayoutID(contentResId)
-    if festivalView is not None:
-        festivalView.switchContent(viewName)
+@async
+def showFrontlineExchangePrestigePoints(ctx):
+    from gui.impl.dialogs.builders import InfoDialogBuilder
+    from gui.impl.dialogs import dialogs
+    from gui.impl.wrappers.user_format_string_arg_model import UserFormatStringArgModel as FmtArgs
+    from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import exchangePrestigePoints
+    from gui.server_events.formatters import formatGoldPrice, formatCrystalPrice
+    prestigePoints = ctx.get('prestige_points', 0)
+    gold = ctx.get('gold', 1) * prestigePoints
+    crystals = ctx.get('crystal', 1) * prestigePoints
+    canBuyVehs = ctx.get('canBuy')
+    if canBuyVehs:
+        dialogParams = R.strings.dialogs.frontline.dialogPrestigePointsConvert
     else:
-        g_eventBus.handleEvent(events.LoadUnboundViewEvent(contentResId, FestivalMainView, ScopeTemplates.LOBBY_SUB_SCOPE, viewName=viewName), scope=EVENT_BUS_SCOPE.LOBBY)
-    return
-
-
-def showBattleRoyaleIntroVideo(returnAlias=None, selectedItemID=None):
-    from web_client_api.battle_royale import createBattleRoyaleWebHanlders
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BROWSER_VIEW, ctx={'url': getBattleRoyaleIntroPageUrl(),
-     'webHandlers': createBattleRoyaleWebHanlders(),
-     'returnAlias': returnAlias,
-     'selectedItemID': selectedItemID}), EVENT_BUS_SCOPE.LOBBY)
+        dialogParams = R.strings.dialogs.frontline.dialogPrestigePointsConvert.haveAllTank
+    builder = InfoDialogBuilder()
+    builder.setMessagesAndButtons(dialogParams)
+    builder.setMessageArgs(fmtArgs=[FmtArgs(str(prestigePoints), 'points', R.styles.NeutralTextStyle()), FmtArgs(formatGoldPrice(gold), 'gold', R.styles.GoldTextStyle()), FmtArgs(formatCrystalPrice(crystals), 'bons', R.styles.CrystalTextStyle())])
+    result = yield await(dialogs.showSimple(builder.build()))
+    if result:
+        exchangePrestigePoints()

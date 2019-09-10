@@ -57,6 +57,8 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
 
     def __getRetrainOperationData(self, vehicle):
         crew = vehicle.crew
+        if vehicle.isDisabled:
+            return self.__getInitCrewOperationObject(OPERATION_RETRAIN, 'locked')
         if self.__isNoCrew(crew):
             return self.__getInitCrewOperationObject(OPERATION_RETRAIN, 'noCrew')
         return self.__getInitCrewOperationObject(OPERATION_RETRAIN, 'alreadyRetrained') if self.__isTopCrewForCurrentVehicle(crew, vehicle) else self.__getInitCrewOperationObject(OPERATION_RETRAIN)

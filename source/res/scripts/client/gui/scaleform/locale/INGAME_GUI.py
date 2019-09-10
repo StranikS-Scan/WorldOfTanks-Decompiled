@@ -22,15 +22,14 @@ class INGAME_GUI(object):
     PLAYER_ERRORS_CANT_MOVE_CREW_INACTIVE = '#ingame_gui:player_errors/cant_move/crew_inactive'
     PLAYER_ERRORS_CANT_MOVE_ENGINE_DAMAGED = '#ingame_gui:player_errors/cant_move/engine_damaged'
     PLAYER_ERRORS_CANT_MOVE_CHASSIS_DAMAGED = '#ingame_gui:player_errors/cant_move/chassis_damaged'
-    PLAYER_ERRORS_CANT_MOVE_VEHICLE_DESTROYED = '#ingame_gui:player_errors/cant_move/vehicle_destroyed'
     PLAYER_ERRORS_CANT_SHOOT_VEHICLE_DESTROYED = '#ingame_gui:player_errors/cant_shoot/vehicle_destroyed'
     PLAYER_ERRORS_CANT_SHOOT_CREW_INACTIVE = '#ingame_gui:player_errors/cant_shoot/crew_inactive'
-    PLAYER_ERRORS_EQUIPMENT_ALREADYACTIVATED = '#ingame_gui:player_errors/equipment/alreadyActivated'
     PLAYER_ERRORS_CANT_SHOOT_NO_AMMO = '#ingame_gui:player_errors/cant_shoot/no_ammo'
     PLAYER_ERRORS_CANT_SHOOT_GUN_DAMAGED = '#ingame_gui:player_errors/cant_shoot/gun_damaged'
     PLAYER_ERRORS_CANT_SHOOT_GUN_RELOAD = '#ingame_gui:player_errors/cant_shoot/gun_reload'
     PLAYER_ERRORS_CANT_SHOOT_GUN_LOCKED = '#ingame_gui:player_errors/cant_shoot/gun_locked'
     PLAYER_ERRORS_CANT_SWITCH_ENGINE_DESTROYED = '#ingame_gui:player_errors/cant_switch/engine_destroyed'
+    PLAYER_ERRORS_EQUIPMENT_ALREADYACTIVATED = '#ingame_gui:player_errors/equipment/alreadyActivated'
     PLAYER_ERRORS_EQUIPMENT_ISINCOOLDOWN = '#ingame_gui:player_errors/equipment/isInCooldown'
     PLAYER_ERRORS_EQUIPMENT_MEDKIT_TANKMANISSAFE = '#ingame_gui:player_errors/equipment/medkit/tankmanIsSafe'
     PLAYER_ERRORS_EQUIPMENT_MEDKIT_ALLTANKMENARESAFE = '#ingame_gui:player_errors/equipment/medkit/allTankmenAreSafe'
@@ -416,8 +415,6 @@ class INGAME_GUI(object):
     PLAYER_MESSAGES_COMBAT_EQUIPMENT_USED_RECON = '#ingame_gui:player_messages/COMBAT_EQUIPMENT_USED_RECON'
     PLAYER_MESSAGES_COMBAT_EQUIPMENT_USED_SMOKE = '#ingame_gui:player_messages/COMBAT_EQUIPMENT_USED_SMOKE'
     PLAYER_MESSAGES_COMBAT_EQUIPMENT_USED_INSPIRE = '#ingame_gui:player_messages/COMBAT_EQUIPMENT_USED_INSPIRE'
-    PLAYER_MESSAGES_COMBAT_EQUIPMENT_USED_HEALPOINT = '#ingame_gui:player_messages/COMBAT_EQUIPMENT_USED_HEALPOINT'
-    PLAYER_MESSAGES_COMBAT_BR_EQUIPMENT_READY = '#ingame_gui:player_messages/COMBAT_BR_EQUIPMENT_READY'
     VEHICLE_MESSAGES_DEATH_FROM_WORLD_COLLISION_SELF_SUICIDE = '#ingame_gui:vehicle_messages/DEATH_FROM_WORLD_COLLISION_SELF_SUICIDE'
     POSTMORTEM_MESSAGES_DEATH_FROM_WORLD_COLLISION_SELF_SUICIDE = '#ingame_gui:postmortem_messages/DEATH_FROM_WORLD_COLLISION_SELF_SUICIDE'
     VEHICLE_MESSAGES_DEATH_FROM_WORLD_COLLISION_ENEMY_SELF = '#ingame_gui:vehicle_messages/DEATH_FROM_WORLD_COLLISION_ENEMY_SELF'
@@ -533,14 +530,14 @@ class INGAME_GUI(object):
     EFFICIENCYRIBBONS_RECEIVEDWORLDCOLLISION = '#ingame_gui:efficiencyRibbons/receivedWorldCollision'
     EFFICIENCYRIBBONS_VEHICLERECOVERY = '#ingame_gui:efficiencyRibbons/vehicleRecovery'
     EFFICIENCYRIBBONS_BONUSRIBBON = '#ingame_gui:efficiencyRibbons/bonusRibbon'
-    EFFICIENCYRIBBONS_DEATHZONE = '#ingame_gui:efficiencyRibbons/deathZone'
+    EFFICIENCYRIBBONS_STUN = '#ingame_gui:efficiencyRibbons/stun'
+    EFFICIENCYRIBBONS_ASSISTSTUN = '#ingame_gui:efficiencyRibbons/assistStun'
     DAMAGELOG_SHELLTYPE_ARMOR_PIERCING = '#ingame_gui:damageLog/shellType/ARMOR_PIERCING'
     DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE = '#ingame_gui:damageLog/shellType/HIGH_EXPLOSIVE'
     DAMAGELOG_SHELLTYPE_ARMOR_PIERCING_HE = '#ingame_gui:damageLog/shellType/ARMOR_PIERCING_HE'
     DAMAGELOG_SHELLTYPE_ARMOR_PIERCING_CR = '#ingame_gui:damageLog/shellType/ARMOR_PIERCING_CR'
     DAMAGELOG_SHELLTYPE_HOLLOW_CHARGE = '#ingame_gui:damageLog/shellType/HOLLOW_CHARGE'
     DAMAGELOG_MULTIPLIER = '#ingame_gui:damageLog/multiplier'
-    EFFICIENCYRIBBONS_STUN = '#ingame_gui:efficiencyRibbons/stun'
     HITMARKER_BLOCKED = '#ingame_gui:hitMarker/blocked'
     HITMARKER_RICOCHET = '#ingame_gui:hitMarker/ricochet'
     HITMARKER_CRITICAL = '#ingame_gui:hitMarker/critical'
@@ -670,7 +667,6 @@ class INGAME_GUI(object):
     REWARDWINDOW_PIGGYBANK_SUBHEADERTEXT = '#ingame_gui:rewardWindow/piggyBank/subHeaderText'
     REWARDWINDOW_PIGGYBANK_DESCTEXT = '#ingame_gui:rewardWindow/piggyBank/descText'
     REWARDWINDOW_PIGGYBANK_BTNLABEL = '#ingame_gui:rewardWindow/piggyBank/btnLabel'
-    LEVELPROGRESS_MAXLEVEL = '#ingame_gui:levelProgress/maxLevel'
     CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_TURN_BACK,
      CHAT_SHORTCUTS_SUPPORT_ME_WITH_FIRE,
      CHAT_SHORTCUTS_RELOADING_GUN,
@@ -752,8 +748,8 @@ class INGAME_GUI(object):
      EFFICIENCYRIBBONS_RECEIVEDWORLDCOLLISION,
      EFFICIENCYRIBBONS_VEHICLERECOVERY,
      EFFICIENCYRIBBONS_BONUSRIBBON,
-     EFFICIENCYRIBBONS_DEATHZONE,
      EFFICIENCYRIBBONS_STUN,
+     EFFICIENCYRIBBONS_ASSISTSTUN,
      EFFICIENCYRIBBONS_ENEMYSECTORCAPTURED,
      EFFICIENCYRIBBONS_DESTRUCTIBLEDAMAGED,
      EFFICIENCYRIBBONS_DESTRUCTIBLEDESTROYED,

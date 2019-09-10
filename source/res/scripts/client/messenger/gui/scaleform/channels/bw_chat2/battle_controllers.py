@@ -94,11 +94,9 @@ class TeamChannelController(_ChannelController):
     def isEnabled(self):
         result = super(TeamChannelController, self).isEnabled()
         arenaDP = self.sessionProvider.getArenaDP()
-        arenaVisitor = self.sessionProvider.arenaVisitor
         hasAnyTeammates = arenaDP.getAlliesVehiclesNumber() > 1
         isObserver = arenaDP.isPlayerObserver()
-        isBattleRoyale = arenaVisitor.gui.isBattleRoyale()
-        return result and (hasAnyTeammates or isObserver) and not isBattleRoyale
+        return result and (hasAnyTeammates or isObserver)
 
     def _formatCommand(self, command):
         isCurrent = False
@@ -177,7 +175,7 @@ class EpicTeamChannelController(TeamChannelController):
             if nonCapturedBases == 0 or hqActive and sectorID > 6:
                 suffix = '&lt;' + i18n.makeString(EPIC_BATTLE.ZONE_HEADQUARTERS_TEXT) + '&gt;'
             elif 0 < nonCapturedBases < 3:
-                suffix = 0 < lane < 4 and '&lt;' + i18n.makeString(EPIC_BATTLE.ZONE_ZONE_TEXT) + ' ' + ID_TO_BASENAME[_NONCAPTURED_BASES_FOR_LANE_DICT[lane][nonCapturedBases]] + '&gt;'
+                suffix = 0 < lane < 4 and '&lt;' + i18n.makeString(EPIC_BATTLE.ZONE_ZONE_TEXT) + ' ' + ID_TO_BASENAME[sectorID] + '&gt;'
             return suffix
 
     def _formatMessage(self, message, doFormatting=True):

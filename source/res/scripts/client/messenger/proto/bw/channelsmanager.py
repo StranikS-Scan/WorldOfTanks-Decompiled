@@ -121,7 +121,7 @@ class ChannelsManager(ChatActionsListener):
         else:
             if name.startswith('#'):
                 name = name[1:]
-            self.__creationInfo[name] = password
+            self.__creationInfo[unicode(name, 'utf-8', errors='ignore')] = password
             BigWorld.player().createChatChannel(name, password)
             return None
 

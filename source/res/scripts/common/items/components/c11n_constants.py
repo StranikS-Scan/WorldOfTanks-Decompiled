@@ -51,6 +51,12 @@ class CustomizationType(object):
      PROJECTION_DECAL,
      SEQUENCE,
      ATTACHMENT)
+    _DISMOUNT_TYPE = (PAINT,
+     CAMOUFLAGE,
+     DECAL,
+     PERSONAL_NUMBER,
+     MODIFICATION,
+     PROJECTION_DECAL)
 
 
 CustomizationTypeNames = {getattr(CustomizationType, k):k for k in dir(CustomizationType) if not k.startswith('_') and k != 'RANGE'}

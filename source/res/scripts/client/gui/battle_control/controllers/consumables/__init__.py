@@ -1,10 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/consumables/__init__.py
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from gui.battle_control.controllers.consumables import ammo_ctrl
 from gui.battle_control.controllers.consumables import equipment_ctrl
 from gui.battle_control.controllers.consumables import opt_devices_ctrl
-from gui.battle_control.controllers.consumables import br_equipment_ctrl
 
 def createAmmoCtrl(setup):
     if setup.isReplayRecording:
@@ -13,10 +11,7 @@ def createAmmoCtrl(setup):
 
 
 def createEquipmentCtrl(setup):
-    isBattleRoyale = ARENA_BONUS_TYPE_CAPS.checkAny(setup.arenaEntity.bonusType, ARENA_BONUS_TYPE_CAPS.BATTLEROYALE)
-    if isBattleRoyale:
-        clazz = br_equipment_ctrl.BattleRoyaleEquipmentController
-    elif setup.isReplayPlaying:
+    if setup.isReplayPlaying:
         clazz = equipment_ctrl.EquipmentsReplayPlayer
     else:
         clazz = equipment_ctrl.EquipmentsController

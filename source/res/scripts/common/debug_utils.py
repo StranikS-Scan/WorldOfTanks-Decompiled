@@ -341,8 +341,8 @@ def dump_garbage_2(verbose=True, generation=2):
         LOG_ERROR('Value of generation is invalid. Generation may be an integer specifying which generation to collect (from 0 to 2)')
         return
     if verbose:
-        print '========================================='
-        print '##DUMPSTART'
+        BigWorld.logInfo('', '=========================================', None)
+        BigWorld.logInfo('', '##DUMPSTART', None)
     del gc.garbage[:]
     d = defaultdict(lambda : 0)
     for i in gc.get_objects():
@@ -355,14 +355,17 @@ def dump_garbage_2(verbose=True, generation=2):
 
     if verbose:
         for t, cnt in d.iteritems():
-            print '%d %s' % (cnt, t)
+            msg = '%d %s' % (cnt, t)
+            if isinstance(msg, unicode):
+                msg = msg.encode()
+            BigWorld.logInfo('', msg, None)
 
     d.clear()
     del gc.garbage[:]
     del d
     if verbose:
-        print '##DUMPEND'
-        print '========================================='
+        BigWorld.logInfo('', '##DUMPEND', None)
+        BigWorld.logInfo('', '=========================================', None)
     return
 
 

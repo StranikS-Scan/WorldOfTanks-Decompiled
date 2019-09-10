@@ -144,6 +144,10 @@
         <anchorDirection>	0.000000 0.791415 -0.61128	</anchorDirection>
       </slot>
     </customizationSlots>
+    <camouflage>
+      <density>	111.604 111.497	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_S20_Ikv_72>
@@ -1784,6 +1788,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.4 0.2 0.000000 0.000000	</tiling>
+            <density>	110.531 109.29	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_75mm_kan_m_41_ikv>
         <_75mm_kan_m_41_ikv_L_50>	shared	  <maxAmmo>	42	</maxAmmo>
@@ -1845,6 +1851,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.4 0.2 0.000000 0.000000	</tiling>
+            <density>	108.543 109.079	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_75mm_kan_m_41_ikv_L_50>
       </guns>
@@ -1868,6 +1876,10 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
+      <camouflage>
+        <density>	25.0 25.0	</density>
+        <aoTextureSize>	128 128	</aoTextureSize>
+      </camouflage>
     </Turret_1_S20_Ikv_72>
   </turrets0>
   <engines>

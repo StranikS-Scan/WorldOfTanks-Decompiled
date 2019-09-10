@@ -24,6 +24,7 @@
     <priceFactor>	0.4	</priceFactor>
     <tiling>	2.7 2.6 0.33 0.000000	</tiling>
     <exclusionMask></exclusionMask>
+    <density>	1 1	</density>
   </camouflage>
   <hull>
     <armor>
@@ -113,6 +114,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	2.3 2.3 0.000000 0.000000	</tiling>
+      <density>	99.8499 99.8233	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -1945,6 +1948,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
+            <density>	145.064 145.056	</density>
+            <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </QF_6_pounder_8cwt_Mk_II>
       </guns>
@@ -2012,6 +2017,11 @@
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	142.126 141.997	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+        <tiling>	0.8 0.8 0.33 0.000000	</tiling>
+      </camouflage>
     </Turret_1_GB05_Vickers_Medium_Mk_II>
     <Turret_2_GB05_Vickers_Medium_Mk_II>
       <userString>	#gb_vehicles:Turret_2_GB05_Vickers_Medium_Mk_II	</userString>
@@ -2109,6 +2119,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
+            <density>	145.064 145.056	</density>
+            <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </QF_6_pounder_8cwt_Mk_II>
         <OQF_3pdr_Gun>	shared	  <maxAmmo>	111	</maxAmmo>
@@ -2176,6 +2188,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
+            <density>	150.421 149.887	</density>
+            <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </OQF_3pdr_Gun>
         <QF_6_pounder_8cwt_Mk_I>	shared	  <maxAmmo>	80	</maxAmmo>
@@ -2237,6 +2251,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
+            <density>	153.379 152.898	</density>
+            <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </QF_6_pounder_8cwt_Mk_I>
       </guns>
@@ -2304,6 +2320,10 @@
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	124.264 124.394	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </Turret_2_GB05_Vickers_Medium_Mk_II>
   </turrets0>
   <engines>

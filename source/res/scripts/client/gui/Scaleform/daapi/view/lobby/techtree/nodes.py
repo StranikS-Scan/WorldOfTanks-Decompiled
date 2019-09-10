@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/nodes.py
 from gui.Scaleform.daapi.view.lobby.techtree.settings import DEFAULT_UNLOCK_PROPS
-from gui.shared.formatters import getItemUnlockPricesVO, getItemPricesVO, text_styles, getItemRentOrRestorePricesVO
+from gui.shared.formatters import text_styles
+from gui.shared.formatters import getItemPricesVO, getItemRentOrRestorePricesVO, getItemUnlockPricesVO
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.money import MONEY_UNDEFINED
 from helpers.time_utils import getCurrentTimestamp
 from helpers import i18n, dependency
+from skeletons.gui.game_control import ITradeInController
 from skeletons.gui.server_events import IEventsCache
 
 class BaseNode(object):
@@ -135,10 +137,14 @@ class ExposedNode(object):
     def getRentInfo(self):
         raise NotImplementedError
 
+    def hasItemNationGroup(self):
+        raise NotImplementedError
+
 
 class RealNode(ExposedNode):
     __slots__ = ('__item',)
     __eventsCache = dependency.descriptor(IEventsCache)
+    __tradeIn = dependency.descriptor(ITradeInController)
 
     def __init__(self, nodeCD, item, earnedXP, state, displayInfo, unlockProps=None, bpfProps=None, price=None):
         super(RealNode, self).__init__(nodeCD, earnedXP, state, displayInfo, unlockProps=unlockProps, bpfProps=bpfProps, price=price)
@@ -176,7 +182,9 @@ class RealNode(ExposedNode):
     def getItemPrices(self):
         item = self.__item
         unlockProps = self.getUnlockProps()
-        if not item.isUnlocked and unlockProps is not None:
+        if item.canTradeIn:
+            return getItemPricesVO(self.__tradeIn.getTradeInPrice(item))
+        elif not item.isUnlocked and unlockProps is not None:
             return getItemUnlockPricesVO(unlockProps)
         else:
             return getItemRentOrRestorePricesVO(item.restorePrice) if item.isRestoreAvailable() else getItemPricesVO(item.getBuyPrice())
@@ -230,6 +238,9 @@ class RealNode(ExposedNode):
     def getRentInfo(self):
         rentMoney = self.__item.minRentPrice
         return (rentMoney, rentMoney.getCurrency()) if rentMoney else (0, None)
+
+    def hasItemNationGroup(self):
+        return self.__item.hasNationGroup
 
 
 class AnnouncementNode(ExposedNode):
@@ -301,3 +312,6 @@ class AnnouncementNode(ExposedNode):
 
     def getRentInfo(self):
         return (0, None)
+
+    def hasItemNationGroup(self):
+        return False

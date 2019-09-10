@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/ranked_battles/constants.py
-import sys
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.shared.money import Currency
 from shared_utils import CONST_CONTAINER
@@ -17,10 +16,6 @@ class YearAwardsNames(CONST_CONTAINER):
     LARGE = RANKEDBATTLES_CONSTS.RANKED_REWARDS_YEAR_LARGE
 
 
-YEAR_AWARDS_POINTS_MAP = {YearAwardsNames.SMALL: (3, 6),
- YearAwardsNames.MEDIUM: (7, 9),
- YearAwardsNames.BIG: (10, 14),
- YearAwardsNames.LARGE: (15, sys.maxint)}
 YEAR_AWARDS_ORDER = (YearAwardsNames.SMALL,
  YearAwardsNames.MEDIUM,
  YearAwardsNames.BIG,
@@ -42,8 +37,7 @@ AWARDS_ORDER = ['battleToken',
  Currency.CREDITS,
  'premium',
  Currency.GOLD,
- Currency.CRYSTAL,
- 'oneof']
+ Currency.CRYSTAL]
 DEFAULT_REWARDS_COUNT = 7
 
 class RankedDossierKeys(CONST_CONTAINER):
@@ -53,10 +47,15 @@ class RankedDossierKeys(CONST_CONTAINER):
 
 ARCHIVE_SEASON_ID = 0
 NOT_IN_LEAGUES_QUEST = 'ranked_{}_0_common'
-COMMON_POSTFIX = 'common'
-SPRINTER_POSTFIX = 'sprinter'
+FINAL_QUEST_PATTERN = 'ranked_2019_{}_final'
 RANKED_QUEST_ID_PREFIX = 'ranked'
 YEAR_POINTS_TOKEN = 'rb2019'
+
+class RankedTokenQuestPostfix(CONST_CONTAINER):
+    COMMON = 'common'
+    SPRINTER = 'sprinter'
+    FINAL = 'final'
+
 
 class SeasonResultTokenPatterns(CONST_CONTAINER):
     RANKED_OFF_BANNED = 'ranked_{}_banned'
@@ -73,6 +72,9 @@ class SeasonGapStates(CONST_CONTAINER):
     WAITING_IN_DIVISIONS = 3
     IN_DIVISIONS = 4
     BANNED_IN_DIVISIONS = 5
-    WAITING_NOT_IN_SEASON = 6
-    NOT_IN_SEASON = 7
-    BANNED_NOT_IN_SEASON = 8
+    WAITING_NOT_IN_DIVISIONS = 6
+    NOT_IN_DIVISIONS = 7
+    BANNED_NOT_IN_DIVISIONS = 8
+    WAITING_NOT_IN_SEASON = 9
+    NOT_IN_SEASON = 10
+    BANNED_NOT_IN_SEASON = 11

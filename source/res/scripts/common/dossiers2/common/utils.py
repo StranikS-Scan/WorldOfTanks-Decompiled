@@ -2,6 +2,10 @@
 # Embedded file name: scripts/common/dossiers2/common/utils.py
 import dossiers2
 import struct
+from typing import Iterable, TYPE_CHECKING
+from constants import DOSSIER_TYPE
+if TYPE_CHECKING:
+    from dossiers2.common.DossierDescr import DossierDescr
 __DOSSIER_CONSOLE_OUTPUT_FORMAT = '%s\n--------------------\n%s\n===================='
 
 def printAccountDossier(accountDossierDescr):

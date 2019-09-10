@@ -462,6 +462,50 @@
       <devices>	100	</devices>
     </damage>
   </_75mm_Sprg.18_K2>
+  <_85mm_UBR-365KBM>
+    <id>	71	</id>
+    <userString>	#poland_vehicles:_85mm_UBR-365KBM	</userString>
+    <icon>	ap	</icon>
+    <price>	175	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	85	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	180	</armor>
+      <devices>	115	</devices>
+    </damage>
+  </_85mm_UBR-365KBM>
+  <_85mm_UBR-365PBM>
+    <id>	72	</id>
+    <userString>	#poland_vehicles:_85mm_UBR-365PBM	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	3200	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	85	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	180	</armor>
+      <devices>	115	</devices>
+    </damage>
+  </_85mm_UBR-365PBM>
+  <_85mm_UOF-365BM>
+    <id>	73	</id>
+    <userString>	#poland_vehicles:_85mm_UOF-365BM	</userString>
+    <icon>	he	</icon>
+    <price>	139	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	85	</caliber>
+    <explosionRadius>	1.32	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	300	</armor>
+      <devices>	115	</devices>
+    </damage>
+  </_85mm_UOF-365BM>
   <_90mm_AP>
     <id>	42	</id>
     <userString>	#poland_vehicles:_90mm_AP	</userString>

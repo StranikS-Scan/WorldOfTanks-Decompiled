@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -139,10 +139,10 @@
     <PS_PERFORMANCE_LOD_MULT>	1.2	</PS_PERFORMANCE_LOD_MULT>
   </ParticleSystem>
   <debug>
-    <fullDump>	true	</fullDump>
-    <clientUrl></clientUrl>
+    <fullDump>	false	</fullDump>
+    <clientUrl>	http://cat-st1.wargaming.net	</clientUrl>
     <botsUrl>	http://cat-st1.wargaming.net	</botsUrl>
-    <dxdiag>	true	</dxdiag>
+    <dxdiag>	false	</dxdiag>
     <framesCount>	0	</framesCount>
     <enableServers>	false	</enableServers>
     <profilerBufferSize>	12582912	</profilerBufferSize>
@@ -275,12 +275,6 @@
         <project>
           <name>	plugin_media.bnk	</name>
         </project>
-        <project>
-          <name>	ev_battle_royale_2019_music.bnk	</name>
-        </project>
-        <project>
-          <name>	ev_battle_royale_2019_music.pck	</name>
-        </project>
       </SFX_soundbanks_loadonce>
       <SFX_soundbanks_hangar>
         <project>
@@ -306,9 +300,6 @@
         </project>
         <project>
           <name>	researches.bnk	</name>
-        </project>
-        <project>
-          <name>	ev_wot_fest_token_hangar.bnk	</name>
         </project>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>
@@ -379,9 +370,6 @@
         </project>
         <project>
           <name>	wheel_vehicle_GUI.bnk	</name>
-        </project>
-        <project>
-          <name>	ev_wot_fest_token_arena.bnk	</name>
         </project>
       </SFX_soundbanks_arena>
       <SFX_soundbanks_editor>
@@ -571,8 +559,8 @@
       <source>	SCRIPT	</source>
       <source>	UI	</source>
       <openMode>	a	</openMode>
-      <maxSizeKB>	2048	</maxSizeKB>
-      <trimToKB>	512	</trimToKB>
+      <maxSizeKB>	512	</maxSizeKB>
+      <trimToKB>	0	</trimToKB>
       <showTime>	true	</showTime>
       <disableBuffering>	false	</disableBuffering>
       <messageLength>	8192	</messageLength>
@@ -580,8 +568,8 @@
     <file>	ui.log	  <enabled>	true	</enabled>
       <source>	UI	</source>
       <openMode>	a	</openMode>
-      <maxSizeKB>	2048	</maxSizeKB>
-      <trimToKB>	512	</trimToKB>
+      <maxSizeKB>	512	</maxSizeKB>
+      <trimToKB>	0	</trimToKB>
       <showTime>	true	</showTime>
       <disableBuffering>	false	</disableBuffering>
       <messageLength>	8192	</messageLength>

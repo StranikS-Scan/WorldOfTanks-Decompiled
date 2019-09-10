@@ -2,8 +2,6 @@
 # Embedded file name: scripts/common/items/basic_item.py
 from items import ITEM_TYPE_NAMES
 from items.components import legacy_stuff, shared_components, component_constants
-_LONG_DESCR_PROPERTY = 'longDescriptionSpecial'
-_SHORT_DESCR_PROPERTY = 'shortDescriptionSpecial'
 
 class BasicItem(legacy_stuff.LegacyStuff):
     __slots__ = ('typeID', 'id', 'name', 'compactDescr', 'tags', 'i18n')
@@ -39,14 +37,11 @@ class BasicItem(legacy_stuff.LegacyStuff):
 
     @property
     def shortDescriptionSpecial(self):
-        return self._getDescription(_SHORT_DESCR_PROPERTY)
+        return self.i18n.shortDescriptionSpecial if self.i18n is not None else ''
 
     @property
     def longDescriptionSpecial(self):
-        return self._getDescription(_LONG_DESCR_PROPERTY)
-
-    def _getDescription(self, descr):
-        return self.i18n.__getattribute__(descr) if self.i18n is not None else ''
+        return self.i18n.longDescriptionSpecial if self.i18n is not None else ''
 
     def copy(self):
         component = self.__class__(self.typeID, self.id, self.name, self.compactDescr)

@@ -5,6 +5,9 @@ from items import vehicles
 import BigWorld
 import ResMgr
 import Math
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
+from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from Flock import DebugGizmo
 ENVIRONMENT_EFFECTS_CONFIG_FILE = 'scripts/dynamic_objects.xml'
 _SHOW_DEBUG_SMOKE = False
@@ -61,6 +64,7 @@ class _SmokeDebugVisualization(object):
 
 
 class SmokeScreen(object):
+    guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
     vignetteEnabled = False
     renderSettings = BigWorld.WGRenderSettings()
 
@@ -69,12 +73,18 @@ class SmokeScreen(object):
         self.__effectID = -1
         self.__smokeID = smokeId
         self.__debugGizmo = None
+        ctrl = self.guiSessionProvider.shared.vehicleState
+        if ctrl is not None:
+            ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
         self.__loadSmokeScreen(args[0], args[1])
         if _SHOW_DEBUG_SMOKE:
             self.__debugGizmo = _SmokeDebugVisualization(args[1], args[0], args[3])
         return
 
     def stop(self):
+        ctrl = self.guiSessionProvider.shared.vehicleState
+        if ctrl is not None:
+            ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
         self.__stopSmokeScreen()
         if _SHOW_DEBUG_SMOKE and self.__debugGizmo:
             self.__debugGizmo.stop()
@@ -99,6 +109,10 @@ class SmokeScreen(object):
         if player is not None and self.__effectID >= 0:
             player.terrainEffects.stop(self.__effectID)
         return
+
+    def __onVehicleStateUpdated(self, state, value):
+        if state == VEHICLE_VIEW_STATE.SMOKE:
+            SmokeScreen.enableSmokePostEffect(bool(value))
 
     @staticmethod
     def enableSmokePostEffect(enabled):

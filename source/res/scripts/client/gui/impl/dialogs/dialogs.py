@@ -7,9 +7,6 @@ from gui.impl.lobby.blueprints.blueprints_conversion_view import BlueprintsConve
 from gui.impl.lobby.crew_books.crew_books_buy_dialog import CrewBooksBuyDialog
 from gui.impl.lobby.crew_books.crew_books_dialog import CrewBooksDialog
 from gui.impl.lobby.dialogs.quit_game_dialog import QuitGameDialogWindow
-from gui.impl.lobby.festival.dialogs.apply_player_card_dialog import ApplyPlayerCardDialogWindow
-from gui.impl.lobby.festival.dialogs.buy_items_dialog import BuyItemsDialogWindow
-from gui.impl.lobby.festival.dialogs.buy_package_dialog import BuyPackageDialogWindow
 from gui.impl.lobby.premacc.maps_blacklist_confirm_view import MapsBlacklistConfirmView
 from gui.impl.pub.dialog_window import DialogWindow
 from gui.impl.pub.dialog_window import DialogButtons
@@ -63,30 +60,3 @@ def buyCrewBook(parent, crewBookCD):
     dialog = CrewBooksBuyDialog(parent.getParentWindow(), crewBookCD)
     result = yield await(showSimple(dialog))
     raise AsyncReturn(result)
-
-
-@async
-def festivalBuyItem(itemID, parent=None):
-    dialog = BuyItemsDialogWindow(itemID, parent)
-    dialog.load()
-    result = yield await(dialog.wait())
-    dialog.destroy()
-    raise AsyncReturn(result.result == DialogButtons.PURCHASE)
-
-
-@async
-def festivalApplyPlayerCard(itemIDs, parent=None):
-    dialog = ApplyPlayerCardDialogWindow(itemIDs, parent)
-    dialog.load()
-    result = yield await(dialog.wait())
-    dialog.destroy()
-    raise AsyncReturn(result.result == DialogButtons.PURCHASE)
-
-
-@async
-def festivalBuyPackage(packageItem, parent=None):
-    dialog = BuyPackageDialogWindow(packageItem, parent)
-    dialog.load()
-    result = yield await(dialog.wait())
-    dialog.destroy()
-    raise AsyncReturn((result.result == DialogButtons.PURCHASE, result.data))

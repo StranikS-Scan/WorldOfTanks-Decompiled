@@ -47,12 +47,12 @@ class Waiting(object):
         return cls.__getWaiting().getSuspendedWaitingTask(convertToResource(msg)())
 
     @classmethod
-    def show(cls, message, isSingle=False, interruptCallback=None, overlapsUI=True, isAlwaysOnTop=False, backgroundImage=None):
+    def show(cls, message, isSingle=False, interruptCallback=None, overlapsUI=True):
         resourceID = convertToResource(message)
         if not resourceID:
             _logger.error('Waiting can not be shown. Resource is not found: %s', message)
             return
-        cls.__getWaiting().show(resourceID(), isSingle=isSingle, interruptCallback=interruptCallback, isBlocking=overlapsUI, isAlwaysOnTop=isAlwaysOnTop, backgroundImage=backgroundImage)
+        cls.__getWaiting().show(resourceID(), isSingle=isSingle, interruptCallback=interruptCallback, isBlocking=overlapsUI)
 
     @classmethod
     def hide(cls, message):

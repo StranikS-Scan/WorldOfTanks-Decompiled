@@ -40,10 +40,6 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'piercingPower': MENU.TANK_PARAMS_MM,
  'pitchLimits': MENU.TANK_PARAMS_GRADS,
  'radioDistance': MENU.TANK_PARAMS_M,
- 'radarRadius': MENU.TANK_PARAMS_M,
- 'radarCooldown': MENU.TANK_PARAMS_S,
- 'maxHullHealth': MENU.TANK_PARAMS_VAL,
- 'forwardMaxSpeed': MENU.TANK_PARAMS_MPH,
  'reloadMagazineTime': MENU.TANK_PARAMS_S,
  'reloadTime': MENU.TANK_PARAMS_SPM,
  'reloadTimeSecs': MENU.TANK_PARAMS_S,
@@ -57,7 +53,6 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'turretYawLimits': MENU.TANK_PARAMS_GRADS,
  'vehicleWeight': MENU.TANK_PARAMS_T,
  'weight': MENU.TANK_PARAMS_KG,
- 'hullWeight': MENU.TANK_PARAMS_KG,
  'caliber': MENU.TANK_PARAMS_MM,
  'damage': MENU.TANK_PARAMS_VAL,
  'turretRotationSpeed': MENU.TANK_PARAMS_GPS,
@@ -305,10 +300,7 @@ _STATES_INDEX_IN_COLOR_MAP = {PARAM_STATE.WORSE: 0,
  PARAM_STATE.BETTER: 2}
 
 def _colorize(paramStr, state, colorScheme):
-    if isinstance(state, (tuple, list)):
-        stateType, _ = state
-    else:
-        stateType = state
+    stateType, _ = state
     return paramStr if stateType == PARAM_STATE.NOT_APPLICABLE else colorScheme[_STATES_INDEX_IN_COLOR_MAP[stateType]](paramStr)
 
 

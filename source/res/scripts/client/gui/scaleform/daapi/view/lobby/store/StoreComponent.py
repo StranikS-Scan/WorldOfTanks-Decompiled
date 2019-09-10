@@ -160,7 +160,7 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
         return self.tradeIn.isEnabled()
 
     def __populateFilters(self):
-        vehicles = self.__invVehicles
+        vehicles = [ veh for veh in self.__invVehicles if veh.activeInNationGroup ]
         filterVehicle = None
         if g_currentVehicle.isPresent():
             filterVehicle = g_currentVehicle.item.intCD

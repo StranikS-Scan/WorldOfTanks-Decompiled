@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/VehicleSellDialog.py
 from account_helpers.AccountSettings import AccountSettings
+from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui import SystemMessages, makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -37,6 +38,8 @@ class VehicleSellDialog(VehicleSellDialogMeta):
     def __init__(self, ctx=None):
         super(VehicleSellDialog, self).__init__()
         self.__vehInvID = ctx.get('vehInvID', {})
+        vehicleCD = self.__getCurrentVehicle().intCD
+        self.__nationGroupIds = [ cd for cd in iterVehTypeCDsInNationGroup(vehicleCD) ]
         self.__controlNumber = None
         self.__spendMoney = MONEY_UNDEFINED
         self.__checkUsefulTankman = False
@@ -59,6 +62,8 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         self.itemsCache.onSyncCompleted += self.__shopResyncHandler
         items = self.itemsCache.items
         vehicle = items.getVehicle(self.__vehInvID)
+        nationGroupVehs = self.__getNationGroupVehicles()
+        nationGroupVehs.append(vehicle)
         sellPrice = vehicle.sellPrices.itemPrice.price
         sellCurrency = sellPrice.getCurrency(byWeight=True)
         sellForGold = sellCurrency == Currency.GOLD
@@ -67,12 +72,8 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         currencyIcon = CURRENCIES_CONSTANTS.GOLD if sellForGold else CURRENCIES_CONSTANTS.CREDITS
         invVehs = items.getVehicles(REQ_CRITERIA.INVENTORY)
         self.checkControlQuestion(self.__checkUsefulTankman)
-        modules = items.getItems(criteria=REQ_CRITERIA.VEHICLE.SUITABLE([vehicle]) | REQ_CRITERIA.INVENTORY).values()
-        shells = items.getItems(criteria=REQ_CRITERIA.VEHICLE.SUITABLE([vehicle], [GUI_ITEM_TYPE.SHELL]) | REQ_CRITERIA.INVENTORY).values()
-        installedCustomizations = items.getItems(itemTypeID=GUI_ITEM_TYPE.STYLE, criteria=REQ_CRITERIA.CUSTOMIZATION.IS_INSTALLED_ON_VEHICLE(vehicle)).values()
-        if not installedCustomizations:
-            installedCustomizations = items.getItems(itemTypeID=GUI_ITEM_TYPE.CUSTOMIZATIONS, criteria=REQ_CRITERIA.CUSTOMIZATION.IS_INSTALLED_ON_VEHICLE(vehicle)).itervalues()
-            installedCustomizations = sorted(installedCustomizations, key=lambda item: TYPES_ORDER.index(item.itemTypeID))
+        modules = items.getItems(criteria=REQ_CRITERIA.VEHICLE.SUITABLE(nationGroupVehs) | REQ_CRITERIA.INVENTORY).values()
+        shells = items.getItems(criteria=REQ_CRITERIA.VEHICLE.SUITABLE(nationGroupVehs, [GUI_ITEM_TYPE.SHELL]) | REQ_CRITERIA.INVENTORY).values()
         otherVehsShells = set()
         for invVeh in invVehs.itervalues():
             if invVeh.invID != self.__vehInvID:
@@ -87,7 +88,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         else:
             description = DIALOGS.vehicleselldialog_vehicletype(vehicle.type)
         levelStr = text_styles.concatStylesWithSpace(text_styles.stats(int2roman(vehicle.level)), text_styles.main(_ms(DIALOGS.VEHICLESELLDIALOG_VEHICLE_LEVEL)))
-        tankmenGoingToBuffer, deletedTankmen = self.restore.getTankmenDeletedBySelling(vehicle)
+        tankmenGoingToBuffer, deletedTankmen = self.restore.getTankmenDeletedBySelling(*nationGroupVehs)
         deletedCount = len(deletedTankmen)
         if deletedCount > 0:
             deletedStr = formatDeletedTankmanStr(deletedTankmen[0])
@@ -102,7 +103,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         if vehicle.isCrewLocked:
             hasCrew = False
         else:
-            hasCrew = vehicle.hasCrew
+            hasCrew = any([ veh.hasCrew for veh in nationGroupVehs ])
         barracksDropDownData = [{'label': _ms(MENU.BARRACKS_BTNUNLOAD)}, {'label': _ms(MENU.BARRACKS_BTNDISSMISS)}]
         sellVehicleData = {'intCD': vehicle.intCD,
          'userName': vehicle.userName,
@@ -110,6 +111,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
          'level': vehicle.level,
          'isElite': vehicle.isElite,
          'isPremium': vehicle.isPremium,
+         'hasNationGroup': vehicle.hasNationGroup,
          'type': vehicle.type,
          'nationID': vehicle.nationID,
          'sellPrice': sellPrice.toMoneyTuple(),
@@ -123,9 +125,48 @@ class VehicleSellDialog(VehicleSellDialogMeta):
          'levelStr': levelStr,
          'priceLabel': _ms(DIALOGS.VEHICLESELLDIALOG_VEHICLE_EMPTYSELLPRICE),
          'crewLabel': _ms(DIALOGS.VEHICLESELLDIALOG_CREW_LABEL),
+         'inNationGroupDescription': _ms(DIALOGS.VEHICLESELLDIALOG_MESSAGE_MULTINATIONAL),
          'crewTooltip': crewTooltip,
          'barracksDropDownData': barracksDropDownData}
         currentGoldBalance = self.itemsCache.items.stats.money.get(Currency.GOLD, 0)
+        inInventoryModules = []
+        for m in modules:
+            inInventoryModules.append({'intCD': m.intCD,
+             'inventoryCount': m.inventoryCount,
+             'toInventory': True,
+             'sellPrice': m.sellPrices.itemPrice.price.toMoneyTuple()})
+
+        inInventoryShells = []
+        for s in shells:
+            action = None
+            itemPrice = s.sellPrices.itemPrice
+            if itemPrice.isActionPrice():
+                action = packItemActionTooltipData(s, False)
+            inInventoryShells.append({'intCD': s.intCD,
+             'count': s.inventoryCount,
+             'sellPrice': itemPrice.price.toMoneyTuple(),
+             'userName': s.userName,
+             'kind': s.type,
+             'toInventory': s in otherVehsShells or s.isPremium,
+             'action': action})
+
+        settings = self.getDialogSettings()
+        isSlidingComponentOpened = settings['isOpened']
+        data = {'accountMoney': items.stats.money.toMoneyTuple(),
+         'sellVehicleVO': sellVehicleData,
+         'modulesInInventory': inInventoryModules,
+         'shellsInInventory': inInventoryShells,
+         'isSlidingComponentOpened': isSlidingComponentOpened}
+        for veh in nationGroupVehs:
+            remainedGold, modsData = self.__collectVehicleMods(items, veh, otherVehsShells, currentGoldBalance)
+            currentGoldBalance = remainedGold
+            for modType, mods in modsData.iteritems():
+                data[modType] = data.setdefault(modType, []) + mods
+
+        self.as_setDataS(data)
+        return
+
+    def __collectVehicleMods(self, items, vehicle, otherVehsShells, currentGoldBalance):
         onVehicleOptionalDevices = []
         for o in vehicle.optDevices:
             if o is not None:
@@ -189,27 +230,10 @@ class VehicleSellDialog(VehicleSellDialogMeta):
              'onlyToInventory': True}
             onVehicleBattleBoosters.append(data)
 
-        inInventoryModules = []
-        for m in modules:
-            inInventoryModules.append({'intCD': m.intCD,
-             'inventoryCount': m.inventoryCount,
-             'toInventory': True,
-             'sellPrice': m.sellPrices.itemPrice.price.toMoneyTuple()})
-
-        inInventoryShells = []
-        for s in shells:
-            action = None
-            itemPrice = s.sellPrices.itemPrice
-            if itemPrice.isActionPrice():
-                action = packItemActionTooltipData(s, False)
-            inInventoryShells.append({'intCD': s.intCD,
-             'count': s.inventoryCount,
-             'sellPrice': itemPrice.price.toMoneyTuple(),
-             'userName': s.userName,
-             'kind': s.type,
-             'toInventory': s in otherVehsShells or s.isPremium,
-             'action': action})
-
+        installedCustomizations = items.getItems(itemTypeID=GUI_ITEM_TYPE.STYLE, criteria=REQ_CRITERIA.CUSTOMIZATION.IS_INSTALLED_ON_VEHICLE(vehicle)).values()
+        if not installedCustomizations:
+            installedCustomizations = items.getItems(itemTypeID=GUI_ITEM_TYPE.CUSTOMIZATIONS, criteria=REQ_CRITERIA.CUSTOMIZATION.IS_INSTALLED_ON_VEHICLE(vehicle)).itervalues()
+            installedCustomizations = sorted(installedCustomizations, key=lambda item: TYPES_ORDER.index(item.itemTypeID))
         customizationOnVehicle = []
         for c in installedCustomizations:
             action = None
@@ -226,19 +250,12 @@ class VehicleSellDialog(VehicleSellDialogMeta):
              'action': action}
             customizationOnVehicle.append(data)
 
-        settings = self.getDialogSettings()
-        isSlidingComponentOpened = settings['isOpened']
-        self.as_setDataS({'accountMoney': items.stats.money.toMoneyTuple(),
-         'sellVehicleVO': sellVehicleData,
-         'optionalDevicesOnVehicle': onVehicleOptionalDevices,
+        result = {'optionalDevicesOnVehicle': onVehicleOptionalDevices,
          'shellsOnVehicle': onVehicleoShells,
          'equipmentsOnVehicle': onVehicleEquipments,
-         'modulesInInventory': inInventoryModules,
-         'shellsInInventory': inInventoryShells,
-         'isSlidingComponentOpened': isSlidingComponentOpened,
          'battleBoostersOnVehicle': onVehicleBattleBoosters,
-         'customizationOnVehicle': customizationOnVehicle})
-        return
+         'customizationOnVehicle': customizationOnVehicle}
+        return (currentGoldBalance, result)
 
     def onChangeConfiguration(self, optDevicesToStorage):
         self.__updateSpendMoneyByOptDevicesToStorage(optDevicesToStorage)
@@ -335,5 +352,8 @@ class VehicleSellDialog(VehicleSellDialogMeta):
     def __getCurrentVehicle(self):
         return self.itemsCache.items.getVehicle(self.__vehInvID)
 
+    def __getNationGroupVehicles(self):
+        return [ self.itemsCache.items.getItemByCD(cd) for cd in self.__nationGroupIds ]
+
     def __updateSpendMoneyByOptDevicesToStorage(self, optDevicesToSell):
-        self.__spendMoney = calculateSpendMoney(self.itemsCache.items, getDismantlingToInventoryDevices(self.__getCurrentVehicle(), optDevicesToSell))
+        self.__spendMoney = calculateSpendMoney(self.itemsCache.items, getDismantlingToInventoryDevices(optDevicesToSell, self.__getCurrentVehicle(), *self.__getNationGroupVehicles()))

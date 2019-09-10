@@ -70,6 +70,10 @@ def _getParams(reason, price, itemId=None):
     return params
 
 
+def _getTradeOffParams(targetVehicleLevel):
+    return {'targetVehicleLevel': targetVehicleLevel}
+
+
 def _makeBuyItemUrl(categoryUrl, itemId=None):
     return '{}/items/$PARAMS(web2client_{})'.format(categoryUrl, itemId) if itemId else categoryUrl
 
@@ -113,6 +117,10 @@ def showBuyOptionalDeviceOverlay(itemId, source=None, origin=None):
     _showBuyItemWebOverlay(helpers.getBuyOptionalDevicesUrl(), itemId, source, origin)
 
 
+def showTradeOffOverlay(targetLevel):
+    _showBlurredWebOverlay(helpers.getTradeOffOverlayUrl(), _getTradeOffParams(targetLevel))
+
+
 def showBuyGoldForVehicleWebOverlay(fullPrice, intCD):
     showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.VEHICLE, fullPrice, intCD))
 
@@ -152,6 +160,13 @@ def showBuyGoldForBundle(fullPrice, params=None):
 
 
 @process
+def _showBlurredWebOverlay(url, params=None):
+    url = yield URLMacros().parse(url, params)
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.WEB_VIEW_TRANSPARENT, ctx={'url': url,
+     'allowRightClick': False}), EVENT_BUS_SCOPE.LOBBY)
+
+
+@process
 def _showBuyItemWebOverlay(url, itemId, source=None, origin=None):
     url = yield URLMacros().parse(url)
     params = {}
@@ -177,7 +192,7 @@ def showBuyVehicleOverlay(params=None):
     if url:
         url = yield URLMacros().parse(url, params=params)
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.OVERLAY_WEB_STORE, ctx={'url': url,
-         'browserParams': makeBrowserParams(R.strings.waiting.buyItem(), True)}), EVENT_BUS_SCOPE.LOBBY)
+         'browserParams': makeBrowserParams(R.strings.waiting.buyItem(), True, True, 0.5)}), EVENT_BUS_SCOPE.LOBBY)
 
 
 @async

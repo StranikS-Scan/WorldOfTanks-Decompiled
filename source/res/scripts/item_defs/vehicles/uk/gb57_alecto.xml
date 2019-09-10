@@ -152,6 +152,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	2.3 2.3 0.000000 0.000000	</tiling>
+      <density>	96.535 96.6296	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -776,6 +778,10 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	93.1718 98.172	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </QF_6_pounder_Mk_II_AT>
         <_3.7inch_AT_Howitzer>	shared	  <maxAmmo>	48	</maxAmmo>
           <unlocks>
@@ -840,6 +846,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
+            <density>	93.7431 95.7147	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_3.7inch_AT_Howitzer>
         <QF_6_pounder_Mk_IV_AT>	shared	  <maxAmmo>	120	</maxAmmo>
@@ -902,6 +910,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.895 0.895 0.000000 0.000000	</tiling>
+            <density>	93.3728 98.0226	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </QF_6_pounder_Mk_IV_AT>
         <_25pdr_AT_Field_Gun>	shared	  <maxAmmo>	60	</maxAmmo>
@@ -967,6 +977,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
+            <density>	87.1201 87.5725	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_25pdr_AT_Field_Gun>
       </guns>
@@ -1005,6 +1017,8 @@
       </customizationSlots>
       <camouflage>
         <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
+        <density>	119.877 119.682	</density>
+        <aoTextureSize>	512 256	</aoTextureSize>
       </camouflage>
     </Turret_1_GB57_Alecto>
   </turrets0>

@@ -126,9 +126,6 @@ class _ReceivedHitVehicleVOBuilder(_VehicleVOBuilder):
         if info.getArenaVehicleID() == arenaDP.getPlayerVehicleID() and info.isRam():
             vehicleVO.vehicleName = ''
             vehicleVO.vehicleTypeImg = ''
-        if info.isDeathZone():
-            vehicleVO.vehicleName = ''
-            vehicleVO.vehicleTypeImg = ''
         if info.isProtectionZoneDamage() or info.isProtectionZoneDamage(primary=False) or info.isArtilleryEqDamage() or info.isArtilleryEqDamage(primary=False):
             vehicleVO.vehicleName = ''
             vehicleVO.vehicleTypeImg = _IMAGES.DAMAGELOG_ARTILLERY_16X16
@@ -252,7 +249,7 @@ class _DamageActionImgVOBuilder(_ActionImgVOBuilder):
         self._wcIcon = wcIcon
 
     def _getImage(self, info):
-        if info.isShot() or info.isProtectionZoneDamage() or info.isBombersDamage() or info.isArtilleryEqDamage() or info.isBomberEqDamage() or info.isDeathZone():
+        if info.isShot() or info.isProtectionZoneDamage() or info.isBombersDamage() or info.isArtilleryEqDamage() or info.isBomberEqDamage():
             return self._shotIcon
         if info.isFire():
             return self._fireIcon

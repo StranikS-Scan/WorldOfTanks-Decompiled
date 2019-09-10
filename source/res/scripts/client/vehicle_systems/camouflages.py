@@ -4,6 +4,7 @@ import logging
 from collections import namedtuple, defaultdict
 from copy import deepcopy
 from itertools import product
+from string import lower
 import BigWorld
 import Math
 import Vehicular
@@ -15,7 +16,7 @@ from items.customizations import parseOutfitDescr, CustomizationOutfit
 from vehicle_systems.tankStructure import VehiclePartsTuple
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from items.components.c11n_constants import ModificationType, C11N_MASK_REGION, DEFAULT_DECAL_SCALE_FACTORS, SeasonType, CustomizationType, DEFAULT_DECAL_CLIP_ANGLE, ApplyArea, ProjectionDecalPositionTags, MAX_PROJECTION_DECALS_PER_AREA, CamouflageTilingType
+from items.components.c11n_constants import ModificationType, C11N_MASK_REGION, DEFAULT_DECAL_SCALE_FACTORS, SeasonType, CustomizationType, DEFAULT_DECAL_CLIP_ANGLE, ApplyArea, ProjectionDecalPositionTags, MAX_PROJECTION_DECALS_PER_AREA, CamouflageTilingType, CustomizationTypeNames
 import math_utils
 from helpers import newFakeModel
 from soft_exception import SoftException
@@ -156,25 +157,32 @@ def getCamo(appearance, outfit, containerId, vDesc, descId, isDamaged, default=N
     result = default
     if not outfit:
         return result
-    container = outfit.getContainer(containerId)
-    slot = container.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE)
-    if not slot:
-        return result
-    camouflage = slot.getItem()
-    component = slot.getComponent()
-    if camouflage:
-        try:
-            palette = camouflage.palettes[component.palette]
-        except IndexError:
-            palette = camouflage.palettes[0]
+    else:
+        container = outfit.getContainer(containerId)
+        slot = container.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE)
+        if not slot:
+            return result
+        camouflage = slot.getItem()
+        component = slot.getComponent()
+        if camouflage:
+            try:
+                palette = camouflage.palettes[component.palette]
+            except IndexError:
+                palette = camouflage.palettes[0]
 
-        weights = Math.Vector4(*[ (c >> 24) / 255.0 for c in palette ])
-        if isDamaged:
-            weights *= _DEAD_VEH_WEIGHT_COEFF
-        tiling, exclusionMap = processTiling(appearance, vDesc, descId, camouflage, component)
-        camoAngle = camouflage.rotation[descId]
-        result = CamoParams(camouflage.texture, exclusionMap or '', tiling, camoAngle, weights, palette[0], palette[1], palette[2], palette[3])
-    return result
+            weights = Math.Vector4(*[ (c >> 24) / 255.0 for c in palette ])
+            if isDamaged:
+                weights *= _DEAD_VEH_WEIGHT_COEFF
+            vehPartCompDesc = getattr(vDesc, descId, None)
+            if not vehPartCompDesc:
+                return result
+            area = vehPartCompDesc.customizableVehicleAreas.get(lower(CustomizationTypeNames[CustomizationType.CAMOUFLAGE]), (0, None))[0]
+            if not area:
+                return result
+            tiling, exclusionMap = processTiling(appearance, vDesc, descId, camouflage, component)
+            camoAngle = camouflage.rotation[descId]
+            result = CamoParams(camouflage.texture, exclusionMap or '', tiling, camoAngle, weights, palette[0], palette[1], palette[2], palette[3])
+        return result
 
 
 def processTiling(appearance, vDesc, descId, camouflage, component):
@@ -192,6 +200,8 @@ def processTiling(appearance, vDesc, descId, camouflage, component):
         vehPartCamouflage = vehPartCompDesc.camouflage
         textureSize = (BigWorld.PyTextureProvider(camouflage.texture).width, BigWorld.PyTextureProvider(camouflage.texture).height)
         aoTextureSize = vehPartCamouflage.aoTextureSize
+        if not aoTextureSize:
+            raise SoftException("Vehicle '{}' has not required texture size parameters".format(vDesc.type.name))
         vehDensity = vDesc.type.camouflage.density
         vehPartDensity = vehPartCamouflage.density
         try:

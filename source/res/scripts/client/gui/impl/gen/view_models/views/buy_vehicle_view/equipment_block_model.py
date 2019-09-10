@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.ui_kit.vehicle_btn_model import VehicleBtnModel
 from gui.impl.gen.view_models.views.buy_vehicle_view.additional_equipment_slot_model import AdditionalEquipmentSlotModel
 
 class EquipmentBlockModel(ViewModel):
-    __slots__ = ('onCancelTradeOffVehicle',)
+    __slots__ = ('onSelectTradeOffVehicle', 'onCancelTradeOffVehicle')
 
     @property
     def totalPrice(self):
@@ -52,77 +52,83 @@ class EquipmentBlockModel(ViewModel):
     def setTradeOffVehicleIntCD(self, value):
         self._setNumber(8, value)
 
+    def getTradeOffWidgetEnabled(self):
+        return self._getBool(9)
+
+    def setTradeOffWidgetEnabled(self, value):
+        self._setBool(9, value)
+
     def getBuyVehicleIntCD(self):
-        return self._getNumber(9)
-
-    def setBuyVehicleIntCD(self, value):
-        self._setNumber(9, value)
-
-    def getSelectedRentID(self):
         return self._getNumber(10)
 
-    def setSelectedRentID(self, value):
+    def setBuyVehicleIntCD(self, value):
         self._setNumber(10, value)
 
-    def getSelectedRentDays(self):
+    def getSelectedRentID(self):
         return self._getNumber(11)
 
-    def setSelectedRentDays(self, value):
+    def setSelectedRentID(self, value):
         self._setNumber(11, value)
 
-    def getSelectedRentType(self):
+    def getSelectedRentDays(self):
         return self._getNumber(12)
 
-    def setSelectedRentType(self, value):
+    def setSelectedRentDays(self, value):
         self._setNumber(12, value)
 
-    def getSelectedRentSeason(self):
+    def getSelectedRentType(self):
         return self._getNumber(13)
 
-    def setSelectedRentSeason(self, value):
+    def setSelectedRentType(self, value):
         self._setNumber(13, value)
 
+    def getSelectedRentSeason(self):
+        return self._getNumber(14)
+
+    def setSelectedRentSeason(self, value):
+        self._setNumber(14, value)
+
     def getEmtySlotAvailable(self):
-        return self._getBool(14)
-
-    def setEmtySlotAvailable(self, value):
-        self._setBool(14, value)
-
-    def getIsRestore(self):
         return self._getBool(15)
 
-    def setIsRestore(self, value):
+    def setEmtySlotAvailable(self, value):
         self._setBool(15, value)
 
-    def getIsSlotAnimPlaying(self):
+    def getIsRestore(self):
         return self._getBool(16)
 
-    def setIsSlotAnimPlaying(self, value):
+    def setIsRestore(self, value):
         self._setBool(16, value)
 
+    def getIsSlotAnimPlaying(self):
+        return self._getBool(17)
+
+    def setIsSlotAnimPlaying(self, value):
+        self._setBool(17, value)
+
     def getBuyBtnLabel(self):
-        return self._getResource(17)
+        return self._getResource(18)
 
     def setBuyBtnLabel(self, value):
-        self._setResource(17, value)
+        self._setResource(18, value)
 
     def getConfirmGoldPrice(self):
-        return self._getNumber(18)
+        return self._getNumber(19)
 
     def setConfirmGoldPrice(self, value):
-        self._setNumber(18, value)
+        self._setNumber(19, value)
 
     def getPopoverIsAvailable(self):
-        return self._getBool(19)
-
-    def setPopoverIsAvailable(self, value):
-        self._setBool(19, value)
-
-    def getIsRentVisible(self):
         return self._getBool(20)
 
-    def setIsRentVisible(self, value):
+    def setPopoverIsAvailable(self, value):
         self._setBool(20, value)
+
+    def getIsRentVisible(self):
+        return self._getBool(21)
+
+    def setIsRentVisible(self, value):
+        self._setBool(21, value)
 
     def _initialize(self):
         super(EquipmentBlockModel, self)._initialize()
@@ -135,6 +141,7 @@ class EquipmentBlockModel(ViewModel):
         self._addBoolProperty('buyBtnIsEnabled', False)
         self._addBoolProperty('tradeInIsEnabled', False)
         self._addNumberProperty('tradeOffVehicleIntCD', -1)
+        self._addBoolProperty('tradeOffWidgetEnabled', True)
         self._addNumberProperty('buyVehicleIntCD', 0)
         self._addNumberProperty('selectedRentID', 0)
         self._addNumberProperty('selectedRentDays', 0)
@@ -147,4 +154,5 @@ class EquipmentBlockModel(ViewModel):
         self._addNumberProperty('confirmGoldPrice', 0)
         self._addBoolProperty('popoverIsAvailable', False)
         self._addBoolProperty('isRentVisible', False)
+        self.onSelectTradeOffVehicle = self._addCommand('onSelectTradeOffVehicle')
         self.onCancelTradeOffVehicle = self._addCommand('onCancelTradeOffVehicle')

@@ -8,7 +8,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.promo.constants import PROMO_SOUNDS
 from gui.promo.promo_logger import PromoLogActions
 from gui.shared.formatters import icons
-from gui.shared.view_helpers.image_helper import ImageHelper, getTextureLinkByID
+from gui.shared.image_helper import ImageHelper, getTextureLinkByID
 from helpers import time_utils, dependency
 from items.components.shared_components import i18n
 from skeletons.gui.shared.promo import IPromoLogger

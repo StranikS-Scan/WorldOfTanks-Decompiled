@@ -22,6 +22,7 @@ class BATTLE_EFFICIENCY_TYPES(object):
     RECEIVED_BURN = 'receivedBurn'
     RECEIVED_RAM = 'receivedRam'
     RECEIVED_WORLD_COLLISION = 'receivedWorldCollision'
+    ASSIST_STUN = 'assistStun'
     STUN = 'stun'
     VEHICLE_RECOVERY = 'vehicleRecovery'
     ENEMY_SECTOR_CAPTURED = 'enemySectorCaptured'
@@ -31,4 +32,3 @@ class BATTLE_EFFICIENCY_TYPES(object):
     DEFENDER_BONUS = 'defenderBonus'
     BASE_CAPTURE_BLOCKED = 'baseCaptureBlocked'
     ASSIST_BY_ABILITY = 'assistByAbility'
-    DEATH_ZONE = 'deathZone'

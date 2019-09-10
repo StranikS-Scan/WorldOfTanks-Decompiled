@@ -142,6 +142,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	2 2 0.000000 1.8	</tiling>
+      <density>	108.537 108.285	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -901,6 +903,10 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	120.042 119.832	</density>
+            <aoTextureSize>	256 128	</aoTextureSize>
+          </camouflage>
         </_37mm_kanon_m_Skoda>
         <_20mm_akan_m_Madsen>	shared	  <maxAmmo>	480	</maxAmmo>
           <unlocks>
@@ -963,6 +969,10 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	118.287 118.269	</density>
+            <aoTextureSize>	256 128	</aoTextureSize>
+          </camouflage>
         </_20mm_akan_m_Madsen>
       </guns>
       <models>
@@ -1000,6 +1010,8 @@
       </customizationSlots>
       <camouflage>
         <tiling>	1 0.5 0.000000 0.000000	</tiling>
+        <density>	119.895 119.899	</density>
+        <aoTextureSize>	512 256	</aoTextureSize>
       </camouflage>
     </Turret_1_S05_Strv_M21_29>
   </turrets0>

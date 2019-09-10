@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/marathon/marathon_event_dp.py
+import logging
 import time
 from collections import namedtuple
 from functools import partial
@@ -8,7 +9,6 @@ import constants
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import MARATHON_REWARD_WAS_SHOWN_PREFIX, MARATHON_VIDEO_WAS_SHOWN_PREFIX
 from adisp import async, process
-from debug_utils import LOG_ERROR
 from gui import GUI_SETTINGS
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -27,6 +27,7 @@ from helpers import dependency, i18n
 from helpers.time_utils import ONE_DAY, getTimeStructInLocal, ONE_HOUR
 from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.server_events import IEventsCache
+_logger = logging.getLogger(__name__)
 MarathonEventTooltipData = namedtuple('MarathonEventTooltipData', ('header', 'body', 'bodyExtra', 'errorBattleType', 'errorVehType', 'extraStateSteps', 'extraStateDiscount', 'extraStateCompleted', 'stateStart', 'stateEnd', 'stateProgress', 'stateComplete', 'daysShort', 'hoursShort'))
 MarathonEventIconsData = namedtuple('MarathonEventIconsData', ('tooltipHeader', 'libraryOkIcon', 'okIcon', 'timeIcon', 'timeIconGlow', 'alertIcon', 'iconFlag', 'libraryInProgress', 'saleIcon', 'mapFlagHeaderIcon'))
 
@@ -157,12 +158,16 @@ class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
     @process
     def getUrl(self, callback):
         if self.__baseUrl is None:
-            LOG_ERROR('Requesting URL for marathon when base URL is not specified')
-            yield lambda clb: clb(None)
+            _logger.error('Requesting URL for marathon when base URL is not specified')
+            url = yield lambda callback: callback('')
+            callback(url)
         else:
             url = yield self.__urlMacros.parse(self.__baseUrl)
             callback(url)
         return
+
+    def doesShowMissionsTab(self):
+        return self.isEnabled()
 
     def getHangarFlag(self, state=None):
         return backport.image(R.images.gui.maps.icons.library.hangarFlag.flag_italy())

@@ -71,9 +71,6 @@ class UnitClientAPI(object):
     def createEpicSquad(self):
         return self._doCreate(PREBATTLE_TYPE.EPIC)
 
-    def createBattleRoyaleSquad(self):
-        return self._doCreate(PREBATTLE_TYPE.BATTLE_ROYALE)
-
     def createFalloutSquad(self, queueType):
         return self._doCreate(PREBATTLE_TYPE.FALLOUT, queueType)
 

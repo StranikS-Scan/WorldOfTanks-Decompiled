@@ -22,6 +22,7 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import i18n, dependency
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.customization import ICustomizationService
+from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 ARTEFACTS_SLOTS = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.OPTIONALDEVICE], GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.EQUIPMENT])
 _BOOSTERS_SLOTS = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.BATTLE_BOOSTER],)
 _ABILITY_SLOTS = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.BATTLE_ABILITY],)
@@ -99,6 +100,10 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
             canBuyOrRent, _ = vehicle.mayObtainForMoney(self.itemsCache.items.stats.money)
             if vehicle.isRentable and vehicle.rentalIsOver and canBuyOrRent:
                 shared_events.showVehicleBuyDialog(vehicle)
+
+    def showChangeNation(self):
+        if g_currentVehicle.isPresent() and g_currentVehicle.item.hasNationGroup:
+            ItemsActionsFactory.doAction(ItemsActionsFactory.CHANGE_NATION, g_currentVehicle.item.intCD)
 
     def showModuleInfo(self, itemCD):
         if itemCD is not None and int(itemCD) > 0:

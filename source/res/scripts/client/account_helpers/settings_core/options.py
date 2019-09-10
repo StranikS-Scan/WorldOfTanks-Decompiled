@@ -1698,9 +1698,7 @@ class KeyboardSettings(SettingsContainer):
        ('item05', 'CMD_AMMO_CHOICE_5'),
        ('item06', 'CMD_AMMO_CHOICE_6'),
        ('item07', 'CMD_AMMO_CHOICE_7'),
-       ('item08', 'CMD_AMMO_CHOICE_8'),
-       ('item09', 'CMD_AMMO_CHOICE_9'),
-       ('item00', 'CMD_AMMO_CHOICE_0'))),
+       ('item08', 'CMD_AMMO_CHOICE_8'))),
      ('shortcuts', (('my_target/follow_me', 'CMD_CHAT_SHORTCUT_ATTACK_MY_TARGET'),
        ('attack', 'CMD_CHAT_SHORTCUT_ATTACK'),
        ('to_base/to_back', 'CMD_CHAT_SHORTCUT_BACKTOBASE'),
@@ -1714,7 +1712,7 @@ class KeyboardSettings(SettingsContainer):
        ('camera_right', 'CMD_CM_CAMERA_ROTATE_RIGHT'))),
      ('voicechat', (('pushToTalk', 'CMD_VOICECHAT_MUTE'), ('voicechat_enable', 'CMD_VOICECHAT_ENABLE'))),
      ('minimap', (('sizeUp', 'CMD_MINIMAP_SIZE_UP'), ('sizeDown', 'CMD_MINIMAP_SIZE_DOWN'), ('visible', 'CMD_MINIMAP_VISIBLE'))))
-    IMPORTANT_BINDS = ('forward', 'backward', 'left', 'right', 'fire', 'item01', 'item02', 'item03', 'item04', 'item05', 'item06', 'item07', 'item08', 'item09', 'item00')
+    IMPORTANT_BINDS = ('forward', 'backward', 'left', 'right', 'fire', 'item01', 'item02', 'item03', 'item04', 'item05', 'item06', 'item07', 'item08')
     KEYS_TOOLTIPS = {'my_target/follow_me': 'SettingsKeyFollowMe',
      'to_base/to_back': 'SettingsKeyTurnBack',
      'sos/help_me': 'SettingsKeyNeedHelp',

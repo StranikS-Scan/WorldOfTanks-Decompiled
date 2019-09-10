@@ -14,9 +14,6 @@ class LootRendererTypes(ViewModel):
     VEHICLE_COMPENSATION_WITHOUT_ANIMATION = 'VehicleCompensationWithoutAnimationRenderer'
     BLUEPRINT_FINAL_FRAGMENT = 'BlueprintFinalFragmentRenderer'
     CREW_BOOK = 'CrewBookRenderer'
-    DOGTAG_ELEMENT = 'DogtagElementRenderer'
-    UNIQUE_STYLE = 'UniqueStyleRenderer'
-    UNIQUE_CREWSKINS = 'UniqueCrewSkinsRenderer'
 
     def _initialize(self):
         super(LootRendererTypes, self)._initialize()

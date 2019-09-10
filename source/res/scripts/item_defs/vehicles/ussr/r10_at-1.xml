@@ -131,6 +131,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	1.5 1.5 0.000000 0.000000	</tiling>
+      <density>	118.058 118.347	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -2174,6 +2176,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
+            <density>	102.873 98.4149	</density>
+            <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_45mm_20K_S>
         <_76mm_L-10_S>	shared	  <pitchLimits>
@@ -2238,6 +2242,10 @@
               <applyTo>	16384	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	100.785 100.534	</density>
+            <aoTextureSize>	256 256	</aoTextureSize>
+          </camouflage>
         </_76mm_L-10_S>
         <_57mm_ZiS-8_S>	shared	  <pitchLimits>
             <minPitch>	0 -45 1 -45	</minPitch>
@@ -2307,6 +2315,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	1.66 1.66 0.000000 0.000000	</tiling>
+            <density>	100.562 122.276	</density>
+            <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_57mm_ZiS-8_S>
       </guns>

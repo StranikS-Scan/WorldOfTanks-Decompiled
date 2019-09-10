@@ -2,8 +2,9 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/ReliableComradeAchievement.py
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB
 from abstract import SimpleProgressAchievement
+from abstract.mixins import Deprecated
 
-class ReliableComradeAchievement(SimpleProgressAchievement):
+class ReliableComradeAchievement(Deprecated, SimpleProgressAchievement):
 
     def __init__(self, dossier, value=None):
         super(ReliableComradeAchievement, self).__init__('reliableComrade', _AB.TOTAL, dossier, value)

@@ -230,7 +230,7 @@ _TOTAL_EFFICIENCY_HEADER_META = base.PropertyMeta(((BATTLE_EFFICIENCY_TYPES.DEST
  (BATTLE_EFFICIENCY_TYPES.ARMOR, '-', 'damageBlockedByArmor'),
  (BATTLE_EFFICIENCY_TYPES.ASSIST, '-', 'damageAssisted'),
  (BATTLE_EFFICIENCY_TYPES.DETECTION, '-', 'spotted'),
- (BATTLE_EFFICIENCY_TYPES.STUN, '-', 'damageAssistedStun'),
+ (BATTLE_EFFICIENCY_TYPES.ASSIST_STUN, '-', 'damageAssistedStun'),
  ('killTooltip', None, 'killsTooltip'),
  ('damageTooltip', None, 'damageDealtTooltip'),
  ('critsTooltip', None, 'criticalDamagesTooltip'),
@@ -254,11 +254,11 @@ _PREMIUM_EARNINGS_VO_META = base.DictMeta({'xpTitleStrings': [],
  'creditsNoPremValues': [],
  'backgroundIcon': backport.image(R.images.gui.maps.icons.premacc.battleResult.premium())})
 _PREMIUM_EARNINGS_BLOCK = base.StatsBlock(_PREMIUM_EARNINGS_VO_META.clone(), 'premiumEarnings', _RECORD.PERSONAL)
-_PREMIUM_EARNINGS_BLOCK.addComponent(0, details.XPTitleBlock(base.ListMeta(), 'xpTitleStrings', 'premiumEarnings'))
-_PREMIUM_EARNINGS_BLOCK.addComponent(1, details.PremiumXPBlock(base.ListMeta(), 'xpPremValues', 'premiumEarnings'))
-_PREMIUM_EARNINGS_BLOCK.addComponent(3, details.BaseXPBlock(base.ListMeta(), 'xpNoPremValues', 'premiumEarnings'))
-_PREMIUM_EARNINGS_BLOCK.addComponent(4, details.PremiumCreditsBlock(base.ListMeta(), 'creditsPremValues', 'premiumEarnings'))
-_PREMIUM_EARNINGS_BLOCK.addComponent(5, details.BaseCreditsBlock(base.ListMeta(), 'creditsNoPremValues', 'premiumEarnings'))
+_PREMIUM_EARNINGS_BLOCK.addComponent(0, details.XPTitleBlock(base.ListMeta(), 'xpTitleStrings'))
+_PREMIUM_EARNINGS_BLOCK.addComponent(1, details.PremiumXPBlock(base.ListMeta(), 'xpPremValues'))
+_PREMIUM_EARNINGS_BLOCK.addComponent(3, details.BaseXPBlock(base.ListMeta(), 'xpNoPremValues'))
+_PREMIUM_EARNINGS_BLOCK.addComponent(4, details.PremiumCreditsBlock(base.ListMeta(), 'creditsPremValues'))
+_PREMIUM_EARNINGS_BLOCK.addComponent(5, details.BaseCreditsBlock(base.ListMeta(), 'creditsNoPremValues'))
 REGULAR_PERSONAL_STATS_BLOCK = base.StatsBlock(_PERSONAL_VO_META, 'personal')
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(0, personal.TotalEfficiencyDetailsHeader(_TOTAL_EFFICIENCY_HEADER_META, 'efficiencyHeader', _RECORD.PERSONAL))
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(1, personal.TotalEfficiencyDetailsBlock(base.ListMeta(), 'details', _RECORD.PERSONAL))

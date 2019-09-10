@@ -11,6 +11,7 @@ from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers.i18n import makeString
 from items.components.crew_books_constants import CREW_BOOK_RARITY
 import nations
+from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
 
 class InventoryItemsTab(StoreItemsTab):
 
@@ -57,13 +58,13 @@ class InventoryModuleTab(InventoryItemsTab, StoreModuleTab):
         requestTypeIds = self._getItemTypeID()
         if fitsType == 'myVehicle':
             vehicle = self._items.getItemByCD(int(self._filterData['vehicleCD']))
-            requestCriteria |= REQ_CRITERIA.VEHICLE.SUITABLE([vehicle], requestTypeIds)
+            requestCriteria |= REQ_CRITERIA.VEHICLE.SUITABLE_FOR_MULTI_NATION([vehicle], requestTypeIds)
             if not vehicle.hasTurrets:
                 requestCriteria |= ~REQ_CRITERIA.IN_CD_LIST([vehicle.turret.intCD])
         elif fitsType == 'myVehicles':
-            requestCriteria |= REQ_CRITERIA.VEHICLE.SUITABLE(invVehicles, requestTypeIds)
+            requestCriteria |= REQ_CRITERIA.VEHICLE.SUITABLE_FOR_MULTI_NATION(invVehicles, requestTypeIds)
         else:
-            requestCriteria |= ~REQ_CRITERIA.VEHICLE.SUITABLE(invVehicles, requestTypeIds)
+            requestCriteria |= ~REQ_CRITERIA.VEHICLE.SUITABLE_FOR_MULTI_NATION(invVehicles, requestTypeIds)
         return self._getExtraCriteria(extra, requestCriteria, invVehicles)
 
 
@@ -75,6 +76,7 @@ class InventoryVehicleTab(InventoryItemsTab, StoreVehicleTab):
     def _getRequestCriteria(self, invVehicles):
         requestCriteria = super(InventoryVehicleTab, self)._getRequestCriteria(invVehicles)
         requestCriteria |= REQ_CRITERIA.INVENTORY
+        requestCriteria |= REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP
         requestCriteria |= self._getVehicleRiterias(self._filterData['selectedTypes'], self._filterData['selectedLevels'])
         extra = self._filterData['extra']
         return self._getExtraCriteria(extra, requestCriteria, invVehicles)
@@ -118,6 +120,12 @@ class InventoryShellTab(InventoryItemsTab, StoreShellTab):
         if fitsType == 'myVehicleGun':
             vehicle = self._items.getItemByCD(int(self._filterData['vehicleCD']))
             shellsList = [ x.intCD for x in vehicle.gun.defaultAmmo ]
+            if vehicle.hasNationGroup:
+                targetVehicleCD = iterVehTypeCDsInNationGroup(vehicle.intCompactDescr).next()
+                targetVehicle = self._items.getItemByCD(targetVehicleCD)
+                for ammo in targetVehicle.gun.defaultAmmo:
+                    shellsList.append(ammo.intCD)
+
             requestCriteria |= REQ_CRITERIA.IN_CD_LIST(shellsList)
         elif fitsType == 'myVehiclesInventoryGuns':
             shellsList = set()
@@ -150,11 +158,11 @@ class InventoryArtefactTab(InventoryItemsTab, StoreArtefactTab):
         itemTypeID = self._getItemTypeID()
         if fitsType == 'myVehicle':
             vehicle = self._items.getItemByCD(int(self._filterData['vehicleCD']))
-            requestCriteria |= REQ_CRITERIA.VEHICLE.SUITABLE([vehicle], [itemTypeID])
+            requestCriteria |= REQ_CRITERIA.VEHICLE.SUITABLE_FOR_MULTI_NATION([vehicle], [itemTypeID])
         elif fitsType == 'myVehicles':
-            requestCriteria |= REQ_CRITERIA.VEHICLE.SUITABLE(invVehicles, [itemTypeID])
+            requestCriteria |= REQ_CRITERIA.VEHICLE.SUITABLE_FOR_MULTI_NATION(invVehicles, [itemTypeID])
         else:
-            requestCriteria |= ~REQ_CRITERIA.VEHICLE.SUITABLE(invVehicles, [itemTypeID])
+            requestCriteria |= ~REQ_CRITERIA.VEHICLE.SUITABLE_FOR_MULTI_NATION(invVehicles, [itemTypeID])
         return self._getExtraCriteria(self._filterData['extra'], requestCriteria, invVehicles)
 
 

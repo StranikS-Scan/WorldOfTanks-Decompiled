@@ -106,7 +106,7 @@ class ShowShooting(EntityExtra):
         distanceToWater = BigWorld.wg_collideWater(gunPos, gunPos + Math.Vector3(0, 1, 0), False)
         if distanceToWater > -1:
             position = gunPos - Math.Vector3(0, distanceToWater, 0)
-            matKind = material_kinds.WATER_MATERIAL_KIND
+            matKind = material_kinds.getWaterMatKind()
         else:
             testRes = BigWorld.wg_collideSegment(BigWorld.player().spaceID, gunPos + Math.Vector3(0, 0.5, 0), gunPos - Math.Vector3(0, 1.5, 0), 128)
             if testRes is None:
@@ -223,25 +223,4 @@ class Fire(EntityExtra):
                 del data['_effectsPlayer']
         if not isVehicleUnderwater:
             self.__playEffect(data)
-        return
-
-
-class AfterburningBattleRoyale(EntityExtra):
-
-    def _start(self, extraData, activate=None):
-        vehicle = extraData['entity']
-        appearance = vehicle.appearance
-        if appearance is not None:
-            effectMgr = appearance.customEffectManager
-            if effectMgr is not None:
-                effectMgr.variables['Nitro'] = 1
-        return
-
-    def _cleanup(self, extraData):
-        vehicle = extraData['entity']
-        appearance = vehicle.appearance
-        if appearance is not None:
-            effectMgr = appearance.customEffectManager
-            if effectMgr is not None:
-                effectMgr.variables['Nitro'] = 0
         return

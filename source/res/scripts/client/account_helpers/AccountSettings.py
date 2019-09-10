@@ -43,13 +43,9 @@ EPICBATTLE_CAROUSEL_FILTER_1 = 'EPICBATTLE_CAROUSEL_FILTER_1'
 EPICBATTLE_CAROUSEL_FILTER_2 = 'EPICBATTLE_CAROUSEL_FILTER_2'
 EPICBATTLE_CAROUSEL_FILTER_CLIENT_1 = 'EPICBATTLE_CAROUSEL_FILTER_CLIENT_1'
 STORAGE_VEHICLES_CAROUSEL_FILTER_1 = 'STORAGE_CAROUSEL_FILTER_1'
-ROYALE_CAROUSEL_FILTER_1 = 'ROYALE_CAROUSEL_FILTER_1'
-ROYALE_CAROUSEL_FILTER_2 = 'ROYALE_CAROUSEL_FILTER_2'
-ROYALE_CAROUSEL_FILTER_CLIENT_1 = 'ROYALE_CAROUSEL_FILTER_CLIENT_1'
 BARRACKS_FILTER = 'barracks_filter'
 ORDERS_FILTER = 'ORDERS_FILTER'
 CURRENT_VEHICLE = 'current'
-ROYALE_VEHICLE = 'ROYALE_VEHICLE'
 GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
 EULA_VERSION = 'EULA_VERSION'
 LINKEDSET_QUESTS = 'LINKEDSET_QUEST'
@@ -73,7 +69,6 @@ REFERRAL_COUNTER = 'referralButtonCounter'
 PROGRESSIVE_REWARD_VISITED = 'progressiveRewardVisited'
 RANKED_AWARDS_COUNTER = 'rankedAwardsCounter'
 RANKED_INFO_COUNTER = 'rankedInfoCounter'
-BATTLE_ROYALE_INFO_COUNTER = 'brInfoCounter'
 PROFILE_TECHNIQUE = 'profileTechnique'
 PROFILE_TECHNIQUE_MEMBER = 'profileTechniqueMember'
 SHOW_CRYSTAL_HEADER_BAND = 'showCrystalHeaderBand'
@@ -81,9 +76,6 @@ ELEN_NOTIFICATIONS = 'elenNotifications'
 RECRUIT_NOTIFICATIONS = 'recruitNotifications'
 SPEAKERS_DEVICE = 'speakersDevice'
 SESSION_STATS_PREV_BATTLE_COUNT = 'sessionStatsPrevBattleCnt'
-FESTIVAL_SHOP_VISITED = 'festivalShopVisited'
-FESTIVAL_REWARDS_VISITED = 'festivalRewardsVisited'
-FESTIVAL_INFO_VISITED = 'festivalInfoVisited'
 DEFAULT_QUEUE = 'defaultQueue'
 STORE_TAB = 'store_tab'
 STATS_REGULAR_SORTING = 'statsSorting'
@@ -110,7 +102,6 @@ BATTLE_EFFICIENCY_SECTION_EXPANDED_FIELD = 'battleEfficiencySectionExpanded'
 SIEGE_HINT_SECTION = 'siegeModeHint'
 WHEELED_MODE_HINT_SECTION = 'wheeledModeScreenHint'
 TRAJECTORY_VIEW_HINT_SECTION = 'trajectoryViewHint'
-RADAR_HINT_SECTION = 'radarHint'
 PRE_BATTLE_HINT_SECTION = 'preBattleHintSection'
 QUEST_PROGRESS_HINT_SECTION = 'questProgressHint'
 HELP_SCREEN_HINT_SECTION = 'helpScreenHint'
@@ -118,6 +109,7 @@ LAST_DISPLAY_DAY = 'lastDisplayDay'
 HINTS_LEFT = 'hintsLeft'
 NUM_BATTLES = 'numBattles'
 SELECTED_INTRO_VEHICLES_FIELD = 'selectedIntroVehicles'
+NATION_CHANGE_VIEWED = 'nation_change_viewed'
 CREW_SKINS_VIEWED = 'crew_skins_viewed'
 CREW_BOOKS_VIEWED = 'crew_books_viewed'
 CREW_SKINS_HISTORICAL_VISIBLE = 'crew_skins_historical_visible'
@@ -127,9 +119,6 @@ RANKED_STYLED_VEHICLES_POOL = 'rankedStyledVehiclesPool'
 RANKED_WEB_LEAGUE = 'rankedWebLeague'
 RANKED_WEB_LEAGUE_UPDATE = 'rankedWebLeagueUpdate'
 RANKED_AWARDS_BUBBLE_YEAR_REACHED = 'rankedAwardsBubbleYearReached'
-IS_FIRST_ENTRY_IN_BATTLE_ROYALE = 'isFirstEntryInBattleRoyale'
-BATTLE_ROYALE_HANGAR_BOTTOM_PANEL_VIEWED = 'battleRoyaleHangarBottomPanelViewed'
-PLAYER_CARD_ANIMATION_VISIBLE = 'playerCardAnimationVisible'
 MARATHON_REWARD_WAS_SHOWN_PREFIX = 'marathonRewardScreenWasShown'
 MARATHON_VIDEO_WAS_SHOWN_PREFIX = 'marathonRewardVideoWasShown'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
@@ -264,42 +253,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'favorite': False,
                                           'bonus': False},
                RANKED_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
-               ROYALE_CAROUSEL_FILTER_1: {'ussr': False,
-                                          'germany': False,
-                                          'usa': False,
-                                          'china': False,
-                                          'france': False,
-                                          'uk': False,
-                                          'japan': False,
-                                          'czech': False,
-                                          'sweden': False,
-                                          'poland': False,
-                                          'italy': False,
-                                          'lightTank': False,
-                                          'mediumTank': False,
-                                          'heavyTank': False,
-                                          'SPG': False,
-                                          'AT-SPG': False,
-                                          'level_1': False,
-                                          'level_2': False,
-                                          'level_3': False,
-                                          'level_4': False,
-                                          'level_5': False,
-                                          'level_6': False,
-                                          'level_7': False,
-                                          'level_8': False,
-                                          'level_9': False,
-                                          'level_10': False},
-               ROYALE_CAROUSEL_FILTER_2: {'premium': False,
-                                          'elite': False,
-                                          'igr': False,
-                                          'rented': True,
-                                          'event': True,
-                                          'gameMode': False,
-                                          'favorite': False,
-                                          'bonus': False,
-                                          'battleRoyale': True},
-               ROYALE_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                EPICBATTLE_CAROUSEL_FILTER_1: {'ussr': False,
                                               'germany': False,
                                               'usa': False,
@@ -348,7 +301,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                GUI_START_BEHAVIOR: {'isFreeXPInfoDialogShowed': False,
                                     'isRankedWelcomeViewShowed': False,
                                     'isRankedWelcomeViewStarted': False,
-                                    'isBattleRoyaleWelcomeViewShowed': False,
                                     'isEpicRandomCheckboxClicked': False,
                                     'isEpicWelcomeViewShowed': False,
                                     'lastShownEpicWelcomeScreen': 0},
@@ -399,7 +351,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'selectedColumnSorting': 'descending'},
                SPEAKERS_DEVICE: 0},
  KEY_FAVORITES: {CURRENT_VEHICLE: 0,
-                 ROYALE_VEHICLE: 0,
                  FALLOUT_VEHICLES: {}},
  KEY_SETTINGS: {'unitWindow': {SELECTED_INTRO_VEHICLES_FIELD: []},
                 'vehicleSellDialog': {'isOpened': False},
@@ -599,9 +550,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 WHEELED_MODE_HINT_SECTION: {HINTS_LEFT: 3,
                                             LAST_DISPLAY_DAY: 0,
                                             NUM_BATTLES: 0},
-                RADAR_HINT_SECTION: {HINTS_LEFT: 3,
-                                     LAST_DISPLAY_DAY: 0,
-                                     NUM_BATTLES: 0},
                 CREW_SKINS_VIEWED: set(),
                 CREW_BOOKS_VIEWED: {CREW_BOOK_RARITY.CREW_COMMON: {},
                                     CREW_BOOK_RARITY.CREW_EPIC: {},
@@ -610,29 +558,23 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 CREW_SKINS_HISTORICAL_VISIBLE: (True, True),
                 VEHICLES_WITH_BLUEPRINT_CONFIRM: {},
                 IS_FIRST_ENTRY_BY_DIVISION_ID: {},
-                IS_FIRST_ENTRY_IN_BATTLE_ROYALE: True,
-                BATTLE_ROYALE_HANGAR_BOTTOM_PANEL_VIEWED: False,
                 RANKED_STYLED_VEHICLES_POOL: [],
                 RANKED_WEB_LEAGUE: None,
                 RANKED_WEB_LEAGUE_UPDATE: None,
                 RANKED_AWARDS_BUBBLE_YEAR_REACHED: False,
-                PLAYER_CARD_ANIMATION_VISIBLE: True},
+                NATION_CHANGE_VIEWED: False},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
                 NEW_LOBBY_TAB_COUNTER: {},
                 REFERRAL_COUNTER: 1,
                 RANKED_AWARDS_COUNTER: 1,
-                RANKED_INFO_COUNTER: 1,
-                BATTLE_ROYALE_INFO_COUNTER: 1},
+                RANKED_INFO_COUNTER: 1},
  KEY_NOTIFICATIONS: {ELEN_NOTIFICATIONS: {MISSIONS_CONSTANTS.ELEN_EVENT_STARTED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_FINISHED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_TAB_VISITED: set()},
                      RECRUIT_NOTIFICATIONS: set(),
-                     PROGRESSIVE_REWARD_VISITED: False,
-                     FESTIVAL_SHOP_VISITED: False,
-                     FESTIVAL_REWARDS_VISITED: False,
-                     FESTIVAL_INFO_VISITED: False},
+                     PROGRESSIVE_REWARD_VISITED: False},
  KEY_SESSION_SETTINGS: {STORAGE_VEHICLES_CAROUSEL_FILTER_1: {'ussr': False,
                                                              'germany': False,
                                                              'usa': False,
@@ -667,7 +609,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                              'gameMode': False,
                                                              'favorite': False,
                                                              'bonus': False,
-                                                             'battleRoyale': False,
                                                              'searchNameVehicle': ''},
                         'storage_shells': {'filterMask': 0,
                                            'vehicleCD': None},

@@ -15,7 +15,6 @@ import copy
 from items.components import gun_components
 from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES
 from gun_rotation_shared import encodeRestrictedValueToUint, decodeRestrictedValueFromUint
-from typing import Dict, Any
 G = 9.81
 GRAVITY_FACTOR = 1.25
 WEIGHT_SCALE = 0.001
@@ -396,7 +395,14 @@ def configurePhysics(physics, baseCfg, typeDesc, gravityFactor, updateSiegeModeF
     try:
         cfg['fakegearbox'] = typeDesc.type.xphysics['detailed']['fakegearbox']
     except:
-        cfg['fakegearbox'] = _DEFAULT_FAKE_GEARBOX_SETTINGS
+        cfg['fakegearbox'] = {'fwdgears': {'switchSpeed': (2, 5, 15),
+                      'switchHysteresis': (1, 2, 3),
+                      'lowRpm': (0.2, 0.2, 0.2),
+                      'highRpm': (0.9, 0.9, 0.9)},
+         'bkwdgears': {'switchSpeed': (2, 5, 15),
+                       'switchHysteresis': (1, 2, 3),
+                       'lowRpm': (0.2, 0.2, 0.2),
+                       'highRpm': (0.9, 0.9, 0.9)}}
 
     if baseCfg:
         updatePhysicsCfg(baseCfg, defaultVehicleDescr, cfg)
@@ -420,51 +426,6 @@ def configurePhysics(physics, baseCfg, typeDesc, gravityFactor, updateSiegeModeF
     physics.freezeVelEpsilon = FREEZE_VEL_EPSILON
     physics.freezeAngVelEpsilon = FREEZE_ANG_VEL_EPSILON
     physics.simulationYBound = _SIMULATION_Y_BOUND
-    return cfg
-
-
-def updatePhysics(physics, typeDesc):
-    baseCfg = typeDesc.type.xphysics['detailed']
-    gravityFactor = baseCfg['gravityFactor']
-    updateSiegeModeFromCfg = False
-    vehiclePhysicsType = typeDesc.type.xphysics['detailed'].get('vehiclePhysicsType', VEHICLE_PHYSICS_TYPE.TANK)
-    isTank = vehiclePhysicsType == VEHICLE_PHYSICS_TYPE.TANK
-    cfg = copy.deepcopy(g_defaultTankXPhysicsCfg if isTank else g_defaultWheeledTechXPhysicsCfg)
-    if typeDesc.hasSiegeMode:
-        defaultVehicleDescr = typeDesc.defaultVehicleDescr
-        siegeVehicleDescr = typeDesc.siegeVehicleDescr
-    else:
-        defaultVehicleDescr = typeDesc
-    try:
-        cfg['fakegearbox'] = typeDesc.type.xphysics['detailed']['fakegearbox']
-    except:
-        cfg['fakegearbox'] = _DEFAULT_FAKE_GEARBOX_SETTINGS
-
-    updatePhysicsCfg(baseCfg, defaultVehicleDescr, cfg)
-    if typeDesc.hasSiegeMode:
-        if updateSiegeModeFromCfg and 'modes' in baseCfg and 'siegeMode' in baseCfg['modes']:
-            siegeBaseCfg = baseCfg['modes']['siegeMode']
-        else:
-            siegeBaseCfg = siegeVehicleDescr.type.xphysics['detailed']
-        updatePhysicsCfg(siegeBaseCfg, siegeVehicleDescr, cfg['modes']['siegeMode'])
-    cfg = __buildConfigurations(cfg)
-    for name, mode in cfg['modes'].iteritems():
-        configurePhysicsMode(mode, typeDesc, gravityFactor)
-
-    oldMatrix = Math.Matrix(physics.matrix)
-    inversedMatrix = Math.Matrix(oldMatrix)
-    inversedMatrix.invert()
-    oldCoM = physics.centerOfMass
-    newCoM = Math.Vector3((0.0, cfg['modes']['normal']['clearance'] + cfg['modes']['normal']['bodyHeight'] * 0.5 + cfg['modes']['normal']['hullCOMShiftY'], physics.hullCOMZ))
-    compression = inversedMatrix.applyPoint(physics.currentCenterOfMass).y / oldCoM.y
-    dy = (newCoM.y - oldCoM.y) * compression
-    physics.centerOfMass = newCoM
-    newMatrix = Math.Matrix()
-    newMatrix.setTranslate(oldMatrix.applyToAxis(1) * dy)
-    newMatrix.preMultiply(oldMatrix)
-    physics.matrix = newMatrix
-    physics.isFrozen = False
-    physics.updateSettings(cfg)
     return cfg
 
 
@@ -947,13 +908,3 @@ def __buildConfigurations(configuration):
 
     return {'vehiclePhysicsType': configuration['vehiclePhysicsType'],
      'modes': configurations}
-
-
-_DEFAULT_FAKE_GEARBOX_SETTINGS = {'fwdgears': {'switchSpeed': (2, 5, 15),
-              'switchHysteresis': (1, 2, 3),
-              'lowRpm': (0.2, 0.2, 0.2),
-              'highRpm': (0.9, 0.9, 0.9)},
- 'bkwdgears': {'switchSpeed': (2, 5, 15),
-               'switchHysteresis': (1, 2, 3),
-               'lowRpm': (0.2, 0.2, 0.2),
-               'highRpm': (0.9, 0.9, 0.9)}}

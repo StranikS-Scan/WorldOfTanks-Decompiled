@@ -30,8 +30,6 @@ class SoundEventChecker(ISoundEventChecker):
     def onLobbyStarted(self, ctx):
         self.__currentMoney = self.itemsCache.items.stats.money.copy()
         g_clientUpdateManager.addCallbacks({'stats': self.__onStatsChanged})
-        from CurrentVehicle import g_currentVehicle
-        g_currentVehicle.onChangeStarted += self.__onVehicleChanging
 
     def onAvatarBecomePlayer(self):
         self.__stop()
@@ -41,17 +39,12 @@ class SoundEventChecker(ISoundEventChecker):
 
     def __stop(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
-        from CurrentVehicle import g_currentVehicle
-        g_currentVehicle.onChangeStarted -= self.__onVehicleChanging
 
     def __playSound(self, soundName):
         app = self.app
         if app is not None and app.soundManager is not None:
             app.soundManager.playEffectSound(soundName)
         return
-
-    def __onVehicleChanging(self):
-        self.__playSound('effects.vehicle_changing')
 
     def __onStatsChanged(self, stats):
         newValues = Money.extractMoneyDict(stats)

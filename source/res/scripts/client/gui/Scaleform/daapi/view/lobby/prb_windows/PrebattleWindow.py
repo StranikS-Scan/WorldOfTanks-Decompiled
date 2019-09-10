@@ -51,9 +51,14 @@ class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
         self.destroy()
 
     def onSourceLoaded(self):
-        state = self.prbDispatcher.getFunctionalState()
-        if not state.isInLegacy():
+        dispatcher = self.prbDispatcher
+        if dispatcher is not None:
+            state = dispatcher.getFunctionalState()
+            if not state.isInLegacy():
+                self.destroy()
+        else:
             self.destroy()
+        return
 
     @storage_getter('users')
     def usersStorage(self):

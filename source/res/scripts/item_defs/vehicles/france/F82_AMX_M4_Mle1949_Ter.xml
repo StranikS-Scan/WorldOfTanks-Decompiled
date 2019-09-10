@@ -786,6 +786,10 @@
         <camouflage>	HULL	</camouflage>
       </customizableVehicleAreas>
     </customization>
+    <camouflage>
+      <density>	98.6069 99.3033	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_F82_AMX_M4_Mle1949_Ter>
@@ -1699,6 +1703,8 @@
           </customization>
           <camouflage>
             <tiling>	0.5 0.5 0.000000 0.000000	</tiling>
+            <density>	105.228 101.595	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_120mm_D_1203_B>
         <_130mm_45_Model_1935>	shared	  <maxAmmo>	30	</maxAmmo>
@@ -1784,6 +1790,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.5 0.5 0.000000 0.000000	</tiling>
+            <density>	100.688 101.142	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_130mm_45_Model_1935>
       </guns>
@@ -2321,6 +2329,8 @@
       </customization>
       <camouflage>
         <tiling>	0.9 0.5 0.000000 0.000000	</tiling>
+        <density>	105.491 105.55	</density>
+        <aoTextureSize>	1024 512	</aoTextureSize>
       </camouflage>
     </Turret_1_F82_AMX_M4_Mle1949_Ter>
   </turrets0>

@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/trainings/training_room.py
 from constants import PREBATTLE_TYPE
-from adisp import process
 from gui.Scaleform.daapi.view.lobby.trainings.TrainingRoomBase import TrainingRoomBase
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.prb_control.events_dispatcher import g_eventDispatcher
@@ -62,7 +61,6 @@ class TrainingRoom(TrainingRoomBase):
         self.as_setOtherS(self._makeAccountsData(accounts, R.strings.menu.training.info.otherLabel()))
         super(TrainingRoom, self)._showRosters(entity, rosters)
 
-    @process
     def _updateTrainingRoom(self, event):
         self._closeWindow(PREBATTLE_ALIASES.TRAINING_SETTINGS_WINDOW_PY)
         super(TrainingRoom, self)._updateTrainingRoom(event)

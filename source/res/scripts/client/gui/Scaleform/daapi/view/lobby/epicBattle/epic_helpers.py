@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/epicBattle/epic_helpers.py
-import re
 import logging
-from web_client_api.common import ItemPackType
+from web.web_client_api.common import ItemPackType
+from gui.shared.utils.requesters import REQ_CRITERIA
+from skeletons.gui.shared import IItemsCache
 from gui import SystemMessages
-from gui.shared.gui_items.processors.common import EpicPrestigeTrigger
+from gui.shared.gui_items.processors.common import EpicPrestigeTrigger, EpicPrestigePointsExchange
 from gui.shared.items_parameters.formatters import _cutDigits
 from helpers import dependency, i18n
 from items import vehicles
@@ -21,7 +22,7 @@ FRONTLINE_LEVEL_TOKEN_BASE = 'epicmetagame:levelup:'
 FRONTLINE_TOKEN_PRESTIGE_POINTS = 'prestige_point'
 FRONTLINE_HIDDEN_TAG = 'fr_hidden'
 FRONTLINE_VEH_BOUGHT_TOKEN_TEMPLATE = 'fr_reward_%s'
-NESTED_VALUE_REGEX = '(?P<obj>.*)\\[(?P<param>.*)\\]'
+FRONTLINE_PRESTIGE_POINTS_EXCHANGE_RATE = 'PrestigePointsExchange'
 _EPIC_GAME_PARAMS = {'artillery': {'cooldownTime': 'Cooldown',
                'delay': 'Deployment',
                'areaRadius': 'Dispersion',
@@ -39,7 +40,7 @@ _EPIC_GAME_PARAMS = {'artillery': {'cooldownTime': 'Cooldown',
  'inspire': {'cooldownTime': 'Cooldown',
              'radius': 'Effect Radius',
              'duration-inspire': 'Duration',
-             'increaseFactors[crewRolesFactor]': 'Crew Performance',
+             'crewIncreaseFactor': 'Crew Performance',
              'inactivationDelay': 'Effect Cooldown'},
  'smoke': {'cooldownTime': 'Cooldown',
            'minDelay': 'Deployment',
@@ -83,30 +84,11 @@ class DirectValuesMixin(DisplayValuesMixin):
         return _getFormattedNum(curValue)
 
 
-class NestedValuesMixin(DisplayValuesMixin):
-
-    @classmethod
-    def _getParamValue(cls, curEq, param):
-        param = _getAttrName(param)
-        match = re.search(NESTED_VALUE_REGEX, param)
-        obj = getattr(curEq, match.group('obj'))
-        curValue = obj.get(match.group('param'))
-        return _getFormattedNum(curValue)
-
-
 class PercentValueMixin(DirectValuesMixin):
 
     @classmethod
     def _getParamValue(cls, curEq, param):
         value = super(PercentValueMixin, cls)._getParamValue(curEq, param)
-        return value * 100 - 100
-
-
-class NestedPercentValueMixin(NestedValuesMixin):
-
-    @classmethod
-    def _getParamValue(cls, curEq, param):
-        value = super(NestedPercentValueMixin, cls)._getParamValue(curEq, param)
         return value * 100 - 100
 
 
@@ -179,10 +161,6 @@ class PercentNumericTextParam(TextParam, PercentValueMixin):
     pass
 
 
-class NestedPercentNumericTextParam(TextParam, NestedPercentValueMixin):
-    pass
-
-
 class ReciprocalNumericTextParam(TextParam, ReciprocalValuesMixin):
     pass
 
@@ -211,7 +189,7 @@ epicEquipmentParameterFormaters = {'cooldownTime': DirectNumericTextParam.update
  'projectilesNumber': DirectNumericTextParam.updateParams,
  'totalDuration': DirectNumericTextParam.updateParams,
  'radius': DirectNumericTextParam.updateParams,
- 'increaseFactors[crewRolesFactor]': NestedPercentNumericTextParam.updateParams,
+ 'crewIncreaseFactor': PercentNumericTextParam.updateParams,
  'inactivationDelay': DirectNumericTextParam.updateParams,
  'resupplyCooldownFactor': ReciprocalNumericTextParam.updateParams,
  'resupplyHealthPointsFactor': PercentNumericTextParam.updateParams,
@@ -323,6 +301,35 @@ def triggerPrestige():
         SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
 
 
+@decorators.process('updating')
+def exchangePrestigePoints():
+    yield EpicPrestigePointsExchange().request()
+
+
 def getFrontlineRewardVehPrice(intCD):
     epicMetaGameCtrl = dependency.instance(IEpicBattleMetaGameController)
     return epicMetaGameCtrl.getRewardVehicles().get(intCD, 0)
+
+
+@dependency.replace_none_kwargs(eventsCache=IEventsCache)
+def getPrestigePointsExchangeRate(eventsCache=None):
+    allQuests = eventsCache.getAllQuests()
+    exRateQuest = allQuests.get(FRONTLINE_PRESTIGE_POINTS_EXCHANGE_RATE)
+    result = {'prestige_points': getEpicGamePlayerPrestigePoints()}
+    if exRateQuest:
+        for b in exRateQuest.getBonuses():
+            result[b.getName()] = b.getValue()
+
+    return result
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache, frontLineCtrl=IEpicBattleMetaGameController)
+def getVehsAvailableToBuy(itemsCache=None, frontLineCtrl=None):
+    currentPrestigePoints = getEpicGamePlayerPrestigePoints()
+    inventoryVehicles = itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY)
+    result = []
+    for intCD, price in frontLineCtrl.getRewardVehicles().iteritems():
+        if intCD not in inventoryVehicles and not checkEpicRewardVehAlreadyBought(intCD) and price <= currentPrestigePoints:
+            result.append(intCD)
+
+    return result

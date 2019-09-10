@@ -14,13 +14,16 @@ from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.server_events import IEventsCache
 _STATE_TO_READY_GAP_STATE = {SeasonGapStates.WAITING_IN_DIVISIONS: SeasonGapStates.IN_DIVISIONS,
+ SeasonGapStates.WAITING_NOT_IN_DIVISIONS: SeasonGapStates.NOT_IN_DIVISIONS,
  SeasonGapStates.WAITING_NOT_IN_SEASON: SeasonGapStates.NOT_IN_SEASON}
 _STATE_TO_BANNED_GAP_STATE = {SeasonGapStates.WAITING_IN_LEAGUES: SeasonGapStates.BANNED_IN_LEAGUES,
  SeasonGapStates.WAITING_IN_DIVISIONS: SeasonGapStates.BANNED_IN_DIVISIONS,
+ SeasonGapStates.WAITING_NOT_IN_DIVISIONS: SeasonGapStates.BANNED_NOT_IN_DIVISIONS,
  SeasonGapStates.WAITING_NOT_IN_SEASON: SeasonGapStates.BANNED_NOT_IN_SEASON,
  SeasonGapStates.IN_LEAGUES: SeasonGapStates.BANNED_IN_LEAGUES,
  SeasonGapStates.IN_DIVISIONS: SeasonGapStates.BANNED_IN_DIVISIONS,
- SeasonGapStates.NOT_IN_SEASON: SeasonGapStates.BANNED_NOT_IN_SEASON}
+ SeasonGapStates.NOT_IN_SEASON: SeasonGapStates.BANNED_NOT_IN_SEASON,
+ SeasonGapStates.NOT_IN_DIVISIONS: SeasonGapStates.BANNED_NOT_IN_DIVISIONS}
 
 class RankedBattlesSeasonGapView(RankedBattlesSeasonGapViewMeta, IResetablePage):
     __eventsCache = dependency.descriptor(IEventsCache)
@@ -126,6 +129,8 @@ class RankedBattlesSeasonGapView(RankedBattlesSeasonGapViewMeta, IResetablePage)
         self.__resultState = SeasonGapStates.WAITING_IN_LEAGUES
         if achievedRank == ZERO_RANK_ID:
             self.__resultState = SeasonGapStates.WAITING_NOT_IN_SEASON
+        elif achievedRank == ZERO_RANK_ID + 1:
+            self.__resultState = SeasonGapStates.WAITING_NOT_IN_DIVISIONS
         elif achievedRank < self.__rankedController.getMaxPossibleRank():
             self.__resultState = SeasonGapStates.WAITING_IN_DIVISIONS
 

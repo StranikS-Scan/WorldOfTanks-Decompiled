@@ -146,6 +146,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	1.4 1.4 0.000000 0.000000	</tiling>
+      <density>	91.3457 91.7984	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -2127,6 +2129,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	1.4 0.7 0.000000 0.000000	</tiling>
+            <density>	86.0671 100.636	</density>
+            <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
         </_155mm_Gun_M1918M1>
       </guns>
@@ -2163,6 +2167,10 @@
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	50.0 50.0	</density>
+        <aoTextureSize>	512 256	</aoTextureSize>
+      </camouflage>
     </Turret_1_M12>
     <Turret_2_M12>
       <ceilless>	true	</ceilless>
@@ -2306,6 +2314,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	1.4 0.7 0.000000 0.000000	</tiling>
+            <density>	92.5318 94.6049	</density>
+            <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
         </_155mm_Gun_M1A1>
       </guns>
@@ -2344,6 +2354,8 @@
       </customizationSlots>
       <camouflage>
         <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
+        <density>	92.5318 92.5318	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
     </Turret_2_M12>
   </turrets0>

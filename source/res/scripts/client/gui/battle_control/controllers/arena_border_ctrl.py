@@ -54,13 +54,13 @@ class ArenaBorderController(IArenaLoadController):
         arenaBoundingBox = self.__arenaVisitor.type.getBoundingBox()
         bounds = Math.Vector4(arenaBoundingBox[0][0], arenaBoundingBox[0][1], arenaBoundingBox[1][0], arenaBoundingBox[1][1])
         self.__spaceID = BigWorld.player().spaceID
-        self._applySetting(self.settingsCore.getSetting(settings_constants.BATTLE_BORDER_MAP.MODE_SHOW_BORDER), self.settingsCore.getSetting(settings_constants.BATTLE_BORDER_MAP.TYPE_BORDER), self.__getCurrentColor(self.settingsCore.getSetting(settings_constants.GRAPHICS.COLOR_BLIND)))
+        self.__applySetting(self.settingsCore.getSetting(settings_constants.BATTLE_BORDER_MAP.MODE_SHOW_BORDER), self.settingsCore.getSetting(settings_constants.BATTLE_BORDER_MAP.TYPE_BORDER), self.__getCurrentColor(self.settingsCore.getSetting(settings_constants.GRAPHICS.COLOR_BLIND)))
         BigWorld.ArenaBorderHelper.setArenaBorderBounds(self.__spaceID, bounds)
 
     def getControllerID(self):
         return BATTLE_CTRL_ID.ARENA_BORDER
 
-    def _applySetting(self, showMode, drawType, color):
+    def __applySetting(self, showMode, drawType, color):
         if not self.__spaceID:
             return
         self.__showMode = showMode
@@ -103,16 +103,10 @@ class ArenaBorderController(IArenaLoadController):
             color = self.__getCurrentColor(diff[settings_constants.GRAPHICS.COLOR_BLIND])
             dirty = True
         if dirty:
-            self._applySetting(showMode, drawType, color)
+            self.__applySetting(showMode, drawType, color)
 
     def __getCurrentColor(self, colorBlind):
         colors = GuiColorsLoader.load()
         scheme = colors.getSubScheme('areaBorder', 'color_blind' if colorBlind else 'default')
         color = scheme['rgba'] / 255
         return color
-
-
-class BattleRoyaleBorderCtrl(ArenaBorderController):
-
-    def _applySetting(self, showMode, _, color):
-        super(BattleRoyaleBorderCtrl, self)._applySetting(_SHOW_MODE.SHOW_ALWAYS, _DISPLAY_MODE.TYPE_DOTTED, color)

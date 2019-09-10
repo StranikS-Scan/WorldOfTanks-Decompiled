@@ -16,7 +16,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from shared_utils import CONST_CONTAINER
 TitleAndDescription = namedtuple('TitleAndDescription', 'title, description, descriptionIcon')
 Shield = namedtuple('Shield', 'shieldCount, shieldIcon, plateIcon')
-IconAndShield = namedtuple('IconAndShield', 'icon, shield')
+IconsAndShield = namedtuple('IconsAndShield', 'icon, shield')
 
 def _getTopsLoseIcon(topNumber):
     return backport.image(R.images.gui.maps.icons.rankedBattles.tops.lose.c_106x98.dyn('top{}'.format(topNumber))())
@@ -58,6 +58,8 @@ class RankedResultsInfoHelper(RankedInfoHelper):
     __slots__ = ()
     _CHANGE_TO_ALIAS_STATE = {RankChangeStates.LEAGUE_EARNED: RANKEDBATTLES_ALIASES.BATTLE_RESULTS_POSITIVE_STATE,
      RankChangeStates.DIVISION_EARNED: RANKEDBATTLES_ALIASES.BATTLE_RESULTS_POSITIVE_STATE,
+     RankChangeStates.QUAL_EARNED: RANKEDBATTLES_ALIASES.BATTLE_RESULTS_POSITIVE_STATE,
+     RankChangeStates.QUAL_UNBURN_EARNED: RANKEDBATTLES_ALIASES.BATTLE_RESULTS_POSITIVE_STATE,
      RankChangeStates.RANK_EARNED: RANKEDBATTLES_ALIASES.BATTLE_RESULTS_POSITIVE_STATE,
      RankChangeStates.RANK_SHIELD_PROTECTED: RANKEDBATTLES_ALIASES.BATTLE_RESULTS_NEGATIVE_STATE,
      RankChangeStates.RANK_UNBURN_PROTECTED: RANKEDBATTLES_ALIASES.BATTLE_RESULTS_NORMAL_STATE,
@@ -70,6 +72,8 @@ class RankedResultsInfoHelper(RankedInfoHelper):
      RankChangeStates.STEP_LOST: RANKEDBATTLES_ALIASES.BATTLE_RESULTS_NEGATIVE_STATE}
     _STATUS_LABEL_MAP = {RankChangeStates.LEAGUE_EARNED: None,
      RankChangeStates.DIVISION_EARNED: None,
+     RankChangeStates.QUAL_EARNED: None,
+     RankChangeStates.QUAL_UNBURN_EARNED: None,
      RankChangeStates.RANK_EARNED: R.strings.ranked_battles.battleresult.status.rankEarned(),
      RankChangeStates.RANK_SHIELD_PROTECTED: R.strings.ranked_battles.battleresult.status.shieldLoseStep(),
      RankChangeStates.RANK_UNBURN_PROTECTED: R.strings.ranked_battles.battleresult.status.rankUnburnable(),
@@ -91,7 +95,10 @@ class RankedResultsInfoHelper(RankedInfoHelper):
         shieldState = rankInfo.shieldState
         resultLabel = backport.text(self._STATUS_LABEL_MAP[rankState])
         resultSubLabel = ''
-        if rankState == RankChangeStates.LEAGUE_EARNED or rankState == RankChangeStates.DIVISION_EARNED:
+        if rankState in (RankChangeStates.LEAGUE_EARNED,
+         RankChangeStates.DIVISION_EARNED,
+         RankChangeStates.QUAL_EARNED,
+         RankChangeStates.QUAL_UNBURN_EARNED):
             return ''
         if rankState == RankChangeStates.NOTHING_CHANGED and isWin:
             resultLabel = backport.text(R.strings.ranked_battles.battleresult.status.stageNotEarned())
@@ -190,6 +197,8 @@ class RankedChangesInfoHelper(RankedInfoHelper):
      MiniSteps.STEP_LOST: R.images.gui.maps.icons.rankedBattles.ranks.miniStage.minus1()}
     _STATE_TO_SUBTASK = {RankChangeStates.LEAGUE_EARNED: RANKEDBATTLES_ALIASES.SUBTASK_STATE_LEAGUE,
      RankChangeStates.DIVISION_EARNED: RANKEDBATTLES_ALIASES.SUBTASK_STATE_DIVISION,
+     RankChangeStates.QUAL_EARNED: RANKEDBATTLES_ALIASES.SUBTASK_STATE_DIVISION,
+     RankChangeStates.QUAL_UNBURN_EARNED: RANKEDBATTLES_ALIASES.SUBTASK_STATE_DIVISION,
      RankChangeStates.RANK_EARNED: RANKEDBATTLES_ALIASES.SUBTASK_STATE_RANK,
      RankChangeStates.RANK_SHIELD_PROTECTED: RANKEDBATTLES_ALIASES.SUBTASK_STATE_RANK,
      RankChangeStates.RANK_UNBURN_PROTECTED: RANKEDBATTLES_ALIASES.SUBTASK_STATE_STAGE,
@@ -202,6 +211,8 @@ class RankedChangesInfoHelper(RankedInfoHelper):
      RankChangeStates.NOTHING_CHANGED: RANKEDBATTLES_ALIASES.SUBTASK_STATE_STAGE}
     _TITLE_LABEL_MAP = {RankChangeStates.LEAGUE_EARNED: R.strings.ranked_battles.battleresult.leagueEarned(),
      RankChangeStates.DIVISION_EARNED: R.strings.ranked_battles.battleresult.divisionEarned(),
+     RankChangeStates.QUAL_EARNED: R.strings.ranked_battles.battleresult.divisionEarned(),
+     RankChangeStates.QUAL_UNBURN_EARNED: R.strings.ranked_battles.battleresult.divisionEarned(),
      RankChangeStates.RANK_EARNED: R.strings.ranked_battles.battleresult.rankEarned(),
      RankChangeStates.RANK_SHIELD_PROTECTED: R.strings.ranked_battles.battleresult.shieldLoseStep(),
      RankChangeStates.RANK_UNBURN_PROTECTED: R.strings.ranked_battles.battleresult.rankUnburnable(),
@@ -232,44 +243,43 @@ class RankedChangesInfoHelper(RankedInfoHelper):
         description = backport.text(R.strings.ranked_battles.battleresult.dyn(topKey).dyn(winKey)(), topNumber=topNumber)
         if topNumber == 1:
             description = backport.text(R.strings.ranked_battles.battleresult.first.dyn(topKey).dyn(winKey)())
+        if rankState in (RankChangeStates.RANK_UNBURN_PROTECTED, RankChangeStates.QUAL_UNBURN_EARNED):
+            description = backport.text(R.strings.ranked_battles.battleresult.notInTop.stageSaved())
         if rankInfo.isBonusBattle:
             description = text_styles.concatStylesToSingleLine(description, backport.text(R.strings.ranked_battles.battleresult.bonusBattlesUsed()))
-        if rankState in (RankChangeStates.DIVISION_EARNED, RankChangeStates.LEAGUE_EARNED):
+        if rankState in (RankChangeStates.DIVISION_EARNED,
+         RankChangeStates.LEAGUE_EARNED,
+         RankChangeStates.QUAL_EARNED,
+         RankChangeStates.QUAL_UNBURN_EARNED):
             if rankState == RankChangeStates.LEAGUE_EARNED:
                 description = backport.text(R.strings.ranked_battles.battleresult.leagueUnavailable())
-            description = text_styles.concatStylesToMultiLine(description, backport.text(R.strings.ranked_battles.battleresult.bonusBattlesEarned(), count=text_styles.neutral(rankInfo.additionalBonusBattles)))
-            return TitleAndDescription(title, description, descriptionIcon)
-        elif rankState == RankChangeStates.RANK_UNBURN_PROTECTED:
-            title = backport.text(R.strings.ranked_battles.battleresult.rankUnburnable())
-            description = backport.text(R.strings.ranked_battles.battleresult.notInTop.stageSaved())
-            return TitleAndDescription(title, description, descriptionIcon)
-        else:
-            return TitleAndDescription(title, description, descriptionIcon)
+            if rankInfo.additionalBonusBattles > 0 or rankInfo.qualificationBonusBattles > 0:
+                description = text_styles.concatStylesToMultiLine(description, backport.text(R.strings.ranked_battles.battleresult.bonusBattlesEarned()), backport.text(R.strings.ranked_battles.battleresult.bonusBattlesEarned.text(), divisionAmount=text_styles.neutral(rankInfo.additionalBonusBattles), qualificationAmount=text_styles.neutral(rankInfo.qualificationBonusBattles)))
+        return TitleAndDescription(title, description, descriptionIcon)
 
     def makeIcons(self):
-        icon = None
-        shieldIcon = None
-        plateIcon = None
-        shieldCount = None
+        shieldIcon = plateIcon = shieldCount = None
         state = self.makeSubTaskState()
         rankState = self.getRankChangeStatus()
         rankInfo = self._reusable.personal.getRankInfo()
         if state == RANKEDBATTLES_ALIASES.SUBTASK_STATE_LEAGUE:
             icon = backport.image(R.images.gui.maps.icons.rankedBattles.league.c_70x70.c_0())
-        if state == RANKEDBATTLES_ALIASES.SUBTASK_STATE_DIVISION:
+        elif state == RANKEDBATTLES_ALIASES.SUBTASK_STATE_DIVISION:
             icon = backport.image(R.images.gui.maps.icons.rankedBattles.divisions.c_58x80.dyn('c_{}'.format(self.rankedController.getDivision(rankInfo.accRank + 1).getID()))())
-        if state == RANKEDBATTLES_ALIASES.SUBTASK_STATE_RANK_LOST:
+        elif state == RANKEDBATTLES_ALIASES.SUBTASK_STATE_RANK_LOST:
             icon = self.__getRankIcon(rankInfo.prevAccRank)
-        if state == RANKEDBATTLES_ALIASES.SUBTASK_STATE_RANK:
+        elif state == RANKEDBATTLES_ALIASES.SUBTASK_STATE_RANK:
             icon = self.__getRankIcon(rankInfo.accRank)
+            if self.rankedController.getRank(rankInfo.accRank).isVisualUnburnable():
+                shieldIcon = backport.image(R.images.gui.maps.icons.rankedBattles.ranks.unburnable.small())
             if rankInfo.shieldHP > 0:
                 shieldCount = str(rankInfo.shieldHP)
                 shortcut = R.images.gui.maps.icons.rankedBattles
                 shieldIcon = backport.image(shortcut.ranks.shields.dyn(RANKEDBATTLES_ALIASES.WIDGET_SMALL)())
                 plateIcon = backport.image(shortcut.ranks.shields.plate.empty.dyn(RANKEDBATTLES_ALIASES.WIDGET_SMALL)())
-        if state == RANKEDBATTLES_ALIASES.SUBTASK_STATE_STAGE:
+        else:
             icon = backport.image(self._STEPS_ICONS[rankState])
-        return IconAndShield(icon, Shield(shieldCount, shieldIcon, plateIcon))
+        return IconsAndShield(icon, Shield(shieldCount, shieldIcon, plateIcon))
 
     def makeSubTaskState(self):
         return self._STATE_TO_SUBTASK[self.getRankChangeStatus()]
@@ -281,7 +291,7 @@ class RankedChangesInfoHelper(RankedInfoHelper):
             subTaskState = self.makeSubTaskState()
             if subTaskState not in (RANKEDBATTLES_ALIASES.SUBTASK_STATE_STAGE, RANKEDBATTLES_ALIASES.SUBTASK_STATE_LEAGUE):
                 if stepChanges == MiniSteps.STEP_LOST:
-                    if state in (RankChangeStates.RANK_UNBURN_PROTECTED, RankChangeStates.RANK_SHIELD_PROTECTED):
+                    if state in (RankChangeStates.RANK_UNBURN_PROTECTED, RankChangeStates.RANK_SHIELD_PROTECTED, RankChangeStates.QUAL_UNBURN_EARNED):
                         return backport.image(R.images.gui.maps.icons.rankedBattles.ranks.miniStage.protected())
                     if self.settingsCore.getSetting('isColorBlind'):
                         return backport.image(R.images.gui.maps.icons.rankedBattles.ranks.miniStage.blindMinus1())

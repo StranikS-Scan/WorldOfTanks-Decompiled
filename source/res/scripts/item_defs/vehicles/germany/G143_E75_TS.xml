@@ -58,6 +58,13 @@
       <undamaged>	vehicles/german/G143_E75_TS/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/german/G143_E75_TS/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/german/G143_E75_TS/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <TS_3Dst>
+          <undamaged>	vehicles/german/G143_E75_TS/_skin/TS_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G143_E75_TS/_skin/TS_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G143_E75_TS/_skin/TS_3Dst/crash/lod0/Hull.model	</exploded>
+        </TS_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -996,6 +1003,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	1.8 1.8 0.000000 0.000000	</tiling>
+      <density>	93.4022 93.3033	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -1027,6 +1036,13 @@
         <undamaged>	vehicles/german/G143_E75_TS/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G143_E75_TS/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G143_E75_TS/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <TS_3Dst>
+            <undamaged>	vehicles/german/G143_E75_TS/_skin/TS_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G143_E75_TS/_skin/TS_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G143_E75_TS/_skin/TS_3Dst/crash/lod0/Chassis.model	</exploded>
+          </TS_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1724,6 +1740,13 @@
             <undamaged>	vehicles/german/G143_E75_TS/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G143_E75_TS/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/german/G143_E75_TS/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <TS_3Dst>
+                <undamaged>	vehicles/german/G143_E75_TS/_skin/TS_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G143_E75_TS/_skin/TS_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G143_E75_TS/_skin/TS_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </TS_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G143_E75_TS/collision/Gun_01.model	</collisionModelServer>
@@ -1771,12 +1794,23 @@
             </customizableVehicleAreas>
           </customization>
           <effects>	shot_large	</effects>
+          <camouflage>
+            <density>	102.722 104.97	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_105mm_Kw_K_L_73>
       </guns>
       <models>
         <undamaged>	vehicles/german/G143_E75_TS/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/german/G143_E75_TS/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/german/G143_E75_TS/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <TS_3Dst>
+            <undamaged>	vehicles/german/G143_E75_TS/_skin/TS_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G143_E75_TS/_skin/TS_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G143_E75_TS/_skin/TS_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </TS_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/german/G143_E75_TS/collision/Turret_01.model	</collisionModelServer>
@@ -1829,20 +1863,20 @@
         <slot>
           <slotType>	inscription	</slotType>
           <slotId>	34000	</slotId>
-          <rayStart>	-1.80455 0.629565 0.383556	</rayStart>
-          <rayEnd>	-0.891351 0.273145 0.186004	</rayEnd>
+          <rayStart>	1.78 0.620626 0.499824	</rayStart>
+          <rayEnd>	0.879029 0.260767 0.257548	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.37	</size>
+          <size>	0.5	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isUVProportional>	true	</isUVProportional>
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
           <slotId>	34001	</slotId>
-          <rayStart>	1.80455 0.629565 0.383556	</rayStart>
-          <rayEnd>	0.891351 0.273145 0.186004	</rayEnd>
+          <rayStart>	-1.78 0.620626 0.499824	</rayStart>
+          <rayEnd>	-0.879029 0.260767 0.257548	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.37	</size>
+          <size>	0.5	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isUVProportional>	true	</isUVProportional>
         </slot>
@@ -2302,6 +2336,10 @@
           <anchorDirection>	0.993455 -0.0011884 -0.114218	</anchorDirection>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	89.8772 92.5652	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </Turret_1_G143_E75_TS>
   </turrets0>
   <engines>

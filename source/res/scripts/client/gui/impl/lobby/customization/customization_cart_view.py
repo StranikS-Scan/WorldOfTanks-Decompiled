@@ -28,7 +28,7 @@ from gui.shared.gui_items.customization.outfit import Area
 from gui.shared.money import Currency
 from gui.shared.utils.graphics import isRendererPipelineDeferred
 from items.components.c11n_constants import SeasonType
-from helpers import dependency
+from helpers import dependency, uniprof
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -86,6 +86,7 @@ class CustomizationCartView(ViewImpl):
     def viewModel(self):
         return super(CustomizationCartView, self).getViewModel()
 
+    @uniprof.regionDecorator(label='customization_cart.loading', scope='enter')
     def _onLoading(self):
         super(CustomizationCartView, self)._onLoading()
         self.__ctx = self.__service.getCtx()
@@ -136,9 +137,12 @@ class CustomizationCartView(ViewImpl):
                 self.__setTotalData(model)
             return
 
+    @uniprof.regionDecorator(label='customization_cart.loading', scope='exit')
+    def _onLoaded(self, *args, **kwargs):
+        self.__blur.enable = True
+
     def _initialize(self, *args, **kwargs):
         super(CustomizationCartView, self)._initialize(*args, **kwargs)
-        self.__blur.enable = True
         if self.__c11nView is not None:
             self.__c11nView.changeVisible(False)
         self.__addListeners()

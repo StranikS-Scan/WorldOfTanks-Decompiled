@@ -8,7 +8,7 @@ class AutoProperty(object):
         self.fieldName = fieldName
 
     def __get__(self, instance, owner=None):
-        return getattr(instance, self.fieldName, None) if instance is not None else self
+        return getattr(instance, self.fieldName, None) if instance is not None else getattr(owner, self.fieldName)
 
     def __set__(self, instance, value):
         setattr(instance, self.fieldName, value)

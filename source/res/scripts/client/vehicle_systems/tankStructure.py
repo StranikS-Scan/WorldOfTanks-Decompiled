@@ -152,7 +152,7 @@ def getPartModelsFromDesc(vehicleDesc, modelsSetParams):
         elif modelsSetParams.state != 'undamaged':
             skin = chooseCrashSkin(part.modelsSets)
         else:
-            skin = part.models
+            skin = part.modelsSets['default']
         path = skin.getPathByStateName(modelsSetParams.state)
         paths.append(path)
 

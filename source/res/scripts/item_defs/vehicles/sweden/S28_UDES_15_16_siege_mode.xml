@@ -886,6 +886,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	1.65 1.65 0.000000 0.000000	</tiling>
+      <density>	105.602 104.165	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -933,9 +935,9 @@
       <AODecals>
         <decal>
           <transform>
-            <row0>	4.925780 0.000000 0.000000	</row0>
+            <row0>	4.616330 0.000000 0.000000	</row0>
             <row1>	0.000000 1.342020 0.000000	</row1>
-            <row2>	0.000000 0.000000 8.172300	</row2>
+            <row2>	0.000000 0.000000 6.970650	</row2>
             <row3>	0.000000 0.000000 0.000021	</row3>
           </transform>
         </decal>
@@ -1349,6 +1351,10 @@
             </slot>
           </customizationSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <density>	113.836 115.502	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_120mm_strvkan_L_40>
       </guns>
       <models>
@@ -1860,6 +1866,10 @@
           <anchorDirection>	-0.944808 0.312599 -0.0980776	</anchorDirection>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	103.706 106.504	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </Turret_1_S28_UDES_15_16>
   </turrets0>
   <engines>

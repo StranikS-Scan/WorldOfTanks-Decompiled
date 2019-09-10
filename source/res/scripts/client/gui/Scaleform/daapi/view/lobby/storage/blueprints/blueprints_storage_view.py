@@ -27,7 +27,7 @@ class StorageCategoryBlueprintsView(StorageCategoryBlueprintsViewMeta, StorageCa
         shared_events.showBlueprintView(itemId, blueprintExitEvent())
 
     def selectConvertible(self, value):
-        self.filter.switch('can_convert', False)
+        self.filter.update({'can_convert': value})
         self.applyFilter()
 
     def _populate(self):

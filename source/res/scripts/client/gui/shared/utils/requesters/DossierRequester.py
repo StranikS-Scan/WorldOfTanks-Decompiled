@@ -27,8 +27,7 @@ class UserDossier(object):
          'available': True,
          'rating': None,
          'rated7x7Seasons': {},
-         'ranked': None,
-         'festival': {}}
+         'ranked': None}
         return
 
     def __setLastResponseTime(self):
@@ -57,20 +56,18 @@ class UserDossier(object):
                 self.__cache['rating'] = value[3]
                 self.__cache['rated7x7Seasons'] = seasons = {}
                 self.__cache['ranked'] = value[5]
-                self.__cache['festival'] = value[6]
                 for sID, d in (value[4] or {}).iteritems():
                     seasons[sID] = dossiers2.getRated7x7DossierDescr(d)
 
             callback(self.__cache['account'])
             return
 
-        self.__queue.append(lambda : BigWorld.player().requestPlayerInfo(self.__cache['databaseID'], partial(lambda c, code, databaseID, dossier, clanID, clanInfo, gRating, eSportSeasons, ranked, festival: self.__processValueResponse(c, code, (databaseID,
+        self.__queue.append(lambda : BigWorld.player().requestPlayerInfo(self.__cache['databaseID'], partial(lambda c, code, databaseID, dossier, clanID, clanInfo, gRating, eSportSeasons, ranked: self.__processValueResponse(c, code, (databaseID,
          dossier,
          (clanID, clanInfo),
          gRating,
          eSportSeasons,
-         ranked,
-         festival)), proxyCallback)))
+         ranked)), proxyCallback)))
         self.__processQueue()
 
     def __requestAccountDossier(self, callback):
@@ -174,17 +171,6 @@ class UserDossier(object):
             return
         else:
             callback(self.__cache['vehicles'][vehCompDescr])
-            return
-
-    @async
-    def getFestivalInfo(self, callback):
-        if not self.isValid:
-            callback({})
-        if self.__cache.get('festival') is None:
-            self.__requestPlayerInfo(lambda accDossier: callback(self.__cache['festival']))
-            return
-        else:
-            callback(self.__cache['festival'])
             return
 
     @property

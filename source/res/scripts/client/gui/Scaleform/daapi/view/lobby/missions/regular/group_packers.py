@@ -108,8 +108,6 @@ class _EventsBlockBuilder(object):
     def clear(self):
         self.__clearDefaultBlocks()
         self._cache.clear()
-        self.__cachedSortedDataBlocks = None
-        return
 
     def getBlocksData(self, srvEvents, filterFunc):
         result = []

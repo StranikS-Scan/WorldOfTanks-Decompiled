@@ -1056,4 +1056,137 @@
       </tiling>
     </camouflage>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	summer	</season>
+    <historical>	true	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	czech	</nations>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	38	</id>
+      <texture>	vehicles/czech/Camouflage/Cz_winter.dds	</texture>
+      <description>	#vehicle_customization:camouflage/czech/bicolor/Cz_winter01_generic_custom_look_3/description	</description>
+      <scales>	1.3 1 0.8	</scales>
+      <userString>	#vehicle_customization:camouflage/czech/bicolor/Cz_winter01_generic_custom_look_3/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	139 150 99 0	</c0>
+          <c1>	127 123 82 255	</c1>
+          <c2>	0 0 255 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Cz01_Skoda_T40>	2.01 2.01 0.71 0.22	</Cz01_Skoda_T40>
+        <Cz02_TVP_T50>	3.8 3.8 0.75 -0.05	</Cz02_TVP_T50>
+        <Cz03_LT_vz35>	3.38 3.38 0.72 0.56	</Cz03_LT_vz35>
+        <Cz04_T50_51>	5.77 5.77 0.29 -0.01	</Cz04_T50_51>
+        <Cz05_T34_100>	5.68 5.68 0.59 0.42	</Cz05_T34_100>
+        <Cz06_Kolohousenka>	3.92 3.92 0.59 0.48	</Cz06_Kolohousenka>
+        <Cz07_TVP_46>	4.67 4.67 0.94 0.06	</Cz07_TVP_46>
+        <Cz08_T_25>	2.47 2.47 0.54 0.26	</Cz08_T_25>
+        <Cz09_T_24>	4.26 4.26 0.000000 0.57	</Cz09_T_24>
+        <Cz10_LT_vz38>	3.6 3.6 0.5 0.07	</Cz10_LT_vz38>
+        <Cz11_V_8_H>	2.48 2.48 0.52 0.2	</Cz11_V_8_H>
+        <czech:Cz13_T_27>	4 4 0.000000 0.000000	</czech:Cz13_T_27>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	winter	</season>
+    <historical>	true	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	czech	</nations>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	39	</id>
+      <texture>	vehicles/german/Camouflage/Cger_1_9Branch.dds	</texture>
+      <description>	#vehicle_customization:camouflage/germany/tricolor/Branch_generic_custom_look_3_czech/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/germany/tricolor/Branch_generic_custom_look_3_czech/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	173 173 173 255	</c0>
+          <c1>	137 137 137 255	</c1>
+          <c2>	152 152 152 79	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.610865	</HULL>
+        <TURRET>	0.610865	</TURRET>
+        <GUN>	0.610865	</GUN>
+      </rotation>
+      <tiling>
+        <Cz01_Skoda_T40>	1.5 1.5 0.71 0.22	</Cz01_Skoda_T40>
+        <Cz02_TVP_T50>	2.94 2.94 0.87 0.5	</Cz02_TVP_T50>
+        <Cz03_LT_vz35>	2.5 2.5 0.72 0.56	</Cz03_LT_vz35>
+        <Cz04_T50_51>	3.9 3.9 0.29 0.3	</Cz04_T50_51>
+        <Cz05_T34_100>	4.64 4.64 0.59 0.42	</Cz05_T34_100>
+        <Cz06_Kolohousenka>	3 3 0.59 0.48	</Cz06_Kolohousenka>
+        <Cz07_TVP_46>	3.91 3.91 0.94 0.06	</Cz07_TVP_46>
+        <Cz08_T_25>	1.7 1.7 0.54 0.26	</Cz08_T_25>
+        <Cz09_T_24>	3 3 0.000000 0.57	</Cz09_T_24>
+        <Cz10_LT_vz38>	3.3 3.3 0.5 0.07	</Cz10_LT_vz38>
+        <Cz11_V_8_H>	2 2 0.52 0.29	</Cz11_V_8_H>
+        <czech:Cz13_T_27>	3 3 0.000000 0.000000	</czech:Cz13_T_27>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	desert	</season>
+    <historical>	true	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	czech	</nations>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	40	</id>
+      <texture>	vehicles/german/Camouflage/Cger_1_7GrayZigzag.dds	</texture>
+      <description>	#vehicle_customization:camouflage/germany/bicolor/GrayZigzag_generic_custom_look_3/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/germany/bicolor/GrayZigzag_generic_custom_look_3/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	114 95 75 0	</c0>
+          <c1>	155 139 110 255	</c1>
+          <c2>	0 0 255 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.174533	</HULL>
+        <TURRET>	0.174533	</TURRET>
+        <GUN>	0.174533	</GUN>
+      </rotation>
+      <tiling>
+        <Cz01_Skoda_T40>	1.5 1.5 0.71 0.22	</Cz01_Skoda_T40>
+        <Cz02_TVP_T50>	3 3 0.87 0.5	</Cz02_TVP_T50>
+        <Cz03_LT_vz35>	2.5 2.5 0.89 0.56	</Cz03_LT_vz35>
+        <Cz04_T50_51>	3.9 3.9 0.29 0.3	</Cz04_T50_51>
+        <Cz05_T34_100>	4.5 4.5 0.59 0.42	</Cz05_T34_100>
+        <Cz06_Kolohousenka>	3 3 0.59 0.48	</Cz06_Kolohousenka>
+        <Cz07_TVP_46>	3.7 3.7 0.91 -0.24	</Cz07_TVP_46>
+        <Cz08_T_25>	1.4 1.4 0.54 0.26	</Cz08_T_25>
+        <Cz09_T_24>	2.8 2.8 0.000000 0.57	</Cz09_T_24>
+        <Cz10_LT_vz38>	2.61 2.61 0.5 0.07	</Cz10_LT_vz38>
+        <Cz11_V_8_H>	1.4 1.4 0.52 0.29	</Cz11_V_8_H>
+        <czech:Cz13_T_27>	2.6 2.6 0.000000 0.000000	</czech:Cz13_T_27>
+      </tiling>
+    </camouflage>
+  </itemGroup>
 </czech.xml>

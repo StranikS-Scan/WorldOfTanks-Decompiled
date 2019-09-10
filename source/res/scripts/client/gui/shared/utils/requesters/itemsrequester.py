@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/utils/requesters/ItemsRequester.py
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict
+from typing import TYPE_CHECKING
 import operator
 import constants
 import dossiers2
@@ -19,9 +20,11 @@ from helpers import dependency
 from items import vehicles, tankmen, getTypeOfCompactDescr, makeIntCompactDescrByID
 from items.components.c11n_constants import SeasonType, StyleFlags
 from items.components.crew_skins_constants import CrewSkinType
-from skeletons.gui.shared import IItemsRequester
+from skeletons.gui.shared import IItemsRequester, IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
-DO_LOG_BROKEN_SYNC = False
+from nation_change.nation_change_helpers import iterVehiclesWithNationGroupInOrder, iterVehTypeCDsInNationGroup, isMainInNationGroupSafe
+if TYPE_CHECKING:
+    import skeletons.gui.shared.utils.requesters as requesters
 
 def _getDiffID(itemdID):
     if isinstance(itemdID, tuple):
@@ -183,10 +186,28 @@ class VehsSuitableCriteria(RequestCriteria):
         suitableCompDescrs = set()
         for vehicle in vehsItems:
             for itemTypeID in itemTypeIDs:
-                for descr in getVehicleSuitablesByType(vehicle.descriptor, itemTypeID)[0]:
-                    suitableCompDescrs.add(descr.compactDescr)
+                self._selectAllSuitableItemsByVehicle(vehicle, itemTypeID, suitableCompDescrs)
 
         super(VehsSuitableCriteria, self).__init__(PredicateCondition(lambda item: item.intCD in suitableCompDescrs))
+
+    def _selectAllSuitableItemsByVehicle(self, vehicle, itemTypeID, outSuitableCompDescrs):
+        self._selectAllSuitableItemsByVehicleDescr(vehicle.descriptor, itemTypeID, outSuitableCompDescrs)
+
+    @staticmethod
+    def _selectAllSuitableItemsByVehicleDescr(vehicleDescr, itemTypeID, outSuitableCompDescrs):
+        for descr in getVehicleSuitablesByType(vehicleDescr, itemTypeID)[0]:
+            outSuitableCompDescrs.add(descr.compactDescr)
+
+
+class VehsMultiNationSuitableCriteria(VehsSuitableCriteria):
+    itemsCache = dependency.descriptor(IItemsCache)
+
+    def _selectAllSuitableItemsByVehicle(self, vehicle, itemTypeID, outSuitableCompDescrs):
+        self._selectAllSuitableItemsByVehicleDescr(vehicle.descriptor, itemTypeID, outSuitableCompDescrs)
+        if vehicle.hasNationGroup:
+            targetVehCD = iterVehTypeCDsInNationGroup(vehicle.intCompactDescr).next()
+            if targetVehCD:
+                self._selectAllSuitableItemsByVehicleDescr(self.itemsCache.items.getItemByCD(targetVehCD).descriptor, itemTypeID, outSuitableCompDescrs)
 
 
 class REQ_CRITERIA(object):
@@ -210,6 +231,8 @@ class REQ_CRITERIA(object):
     TYPE_CRITERIA = staticmethod(lambda itemsTypeID, condition: RequestCriteria(PredicateCondition(lambda item: condition(item) if item.itemTypeID in itemsTypeID else True)))
 
     class VEHICLE(object):
+        ACTIVE_IN_NATION_GROUP = RequestCriteria(PredicateCondition(lambda item: item.activeInNationGroup))
+        ACTIVE_OR_MAIN_IN_NATION_GROUP = RequestCriteria(PredicateCondition(lambda item: item.activeInNationGroup if item.isInInventory else isMainInNationGroupSafe(item.intCD)))
         FAVORITE = RequestCriteria(PredicateCondition(lambda item: item.isFavorite))
         PREMIUM = RequestCriteria(PredicateCondition(lambda item: item.isPremium))
         READY = RequestCriteria(PredicateCondition(lambda item: item.isReadyToFight))
@@ -222,6 +245,7 @@ class REQ_CRITERIA(object):
         SPECIFIC_BY_NAME = staticmethod(lambda typeNames: RequestCriteria(PredicateCondition(lambda item: item.name in typeNames)))
         SPECIFIC_BY_INV_ID = staticmethod(lambda invIDs: RequestCriteria(PredicateCondition(lambda item: item.invID in invIDs)))
         SUITABLE = staticmethod(lambda vehsItems, itemTypeIDs=None: VehsSuitableCriteria(vehsItems, itemTypeIDs))
+        SUITABLE_FOR_MULTI_NATION = staticmethod(lambda vehsItems, itemTypeIDs=None: VehsMultiNationSuitableCriteria(vehsItems, itemTypeIDs))
         RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented))
         TELECOM = RequestCriteria(PredicateCondition(lambda item: item.isTelecom))
         ACTIVE_RENT = RequestCriteria(InventoryPredicateCondition(lambda item: item.isRented and not item.rentalIsOver))
@@ -237,7 +261,6 @@ class REQ_CRITERIA(object):
         EVENT = RequestCriteria(PredicateCondition(lambda item: item.isEvent))
         EVENT_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEventBattles))
         EPIC_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEpicBattles))
-        BATTLE_ROYALE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForBattleRoyaleBattles))
         HAS_XP_FACTOR = RequestCriteria(PredicateCondition(lambda item: item.dailyXPFactor != -1))
         IS_RESTORE_POSSIBLE = RequestCriteria(PredicateCondition(lambda item: item.isRestorePossible()))
         CAN_TRADE_IN = RequestCriteria(PredicateCondition(lambda item: item.canTradeIn))
@@ -315,13 +338,13 @@ class REQ_CRITERIA(object):
 
 
 class RESEARCH_CRITERIA(object):
-    VEHICLE_TO_UNLOCK = ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR | ~REQ_CRITERIA.VEHICLE.EVENT | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+    VEHICLE_TO_UNLOCK = ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR | ~REQ_CRITERIA.VEHICLE.EVENT
 
 
 class ItemsRequester(IItemsRequester):
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
 
-    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None):
+    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None):
         self.__inventory = inventory
         self.__stats = stats
         self.__dossiers = dossiers
@@ -330,7 +353,6 @@ class ItemsRequester(IItemsRequester):
         self.__vehicleRotation = vehicleRotation
         self.__recycleBin = recycleBin
         self.__ranked = ranked
-        self.__battleRoyale = battleRoyale
         self.__badges = badges
         self.__epicMetaGame = epicMetaGame
         self.__blueprints = blueprints
@@ -372,10 +394,6 @@ class ItemsRequester(IItemsRequester):
     @property
     def ranked(self):
         return self.__ranked
-
-    @property
-    def battleRoyale(self):
-        return self.__battleRoyale
 
     @property
     def badges(self):
@@ -426,9 +444,6 @@ class ItemsRequester(IItemsRequester):
         Waiting.show('download/ranked')
         yield self.__ranked.request()
         Waiting.hide('download/ranked')
-        Waiting.show('download/ranked')
-        yield self.__battleRoyale.request()
-        Waiting.hide('download/ranked')
         Waiting.show('download/badges')
         yield self.__badges.request()
         Waiting.hide('download/badges')
@@ -448,7 +463,7 @@ class ItemsRequester(IItemsRequester):
         callback(self)
 
     def isSynced(self):
-        return self.__stats.isSynced() and self.__inventory.isSynced() and self.__recycleBin.isSynced() and self.__shop.isSynced() and self.__dossiers.isSynced() and self.__goodies.isSynced() and self.__vehicleRotation.isSynced() and self.ranked.isSynced() and self.__battleRoyale.isSynced() and self.epicMetaGame.isSynced() and self.__blueprints.isSynced() if self.__blueprints is not None else False
+        return self.__stats.isSynced() and self.__inventory.isSynced() and self.__recycleBin.isSynced() and self.__shop.isSynced() and self.__dossiers.isSynced() and self.__goodies.isSynced() and self.__vehicleRotation.isSynced() and self.ranked.isSynced() and self.epicMetaGame.isSynced() and self.__blueprints.isSynced() if self.__blueprints is not None else False
 
     @async
     @process
@@ -458,13 +473,11 @@ class ItemsRequester(IItemsRequester):
         clanInfo = yield dr.getClanInfo()
         seasons = yield dr.getRated7x7Seasons()
         ranked = yield dr.getRankedInfo()
-        festival = yield dr.getFestivalInfo()
         container = self.__itemsCache[GUI_ITEM_TYPE.ACCOUNT_DOSSIER]
         container[databaseID] = (userAccDossier,
          clanInfo,
          seasons,
-         ranked,
-         festival)
+         ranked)
         callback((userAccDossier, clanInfo, dr.isHidden))
 
     def unloadUserDossier(self, databaseID):
@@ -496,7 +509,6 @@ class ItemsRequester(IItemsRequester):
         self.__vehicleRotation.clear()
         self.__recycleBin.clear()
         self.__ranked.clear()
-        self.__battleRoyale.clear()
         self.__badges.clear()
         self.__tokens.clear()
         self.epicMetaGame.clear()
@@ -518,7 +530,7 @@ class ItemsRequester(IItemsRequester):
                 if statName == 'eliteVehicles':
                     invalidate[GUI_ITEM_TYPE.VEHICLE].update(data)
                 if statName in ('vehTypeXP', 'vehTypeLocks'):
-                    invalidate[GUI_ITEM_TYPE.VEHICLE].update(data.keys())
+                    invalidate[GUI_ITEM_TYPE.VEHICLE].update(iterVehiclesWithNationGroupInOrder(data.keys()))
                 if statName in (('multipliedXPVehs', '_r'), ('multipliedRankedBattlesVehs', '_r')):
                     getter = vehicles.getVehicleTypeCompactDescr
                     inventoryVehiclesCDs = [ getter(v['compDescr']) for v in self.__inventory.getItems(GUI_ITEM_TYPE.VEHICLE).itervalues() ]
@@ -704,21 +716,6 @@ class ItemsRequester(IItemsRequester):
 
         return result
 
-    def removeUnsuitableTankmen(self, allTankmen, criteria=None):
-        if criteria is None:
-            return allTankmen
-        else:
-            result = []
-            for tankman in allTankmen:
-                vehicleDescr = tankman.vehicleDescr
-                if vehicleDescr is not None:
-                    currentVehicle = self.getItemByCD(vehicleDescr.type.compactDescr)
-                    if not criteria(currentVehicle):
-                        continue
-                result.append(tankman)
-
-            return result
-
     def getVehicles(self, criteria=REQ_CRITERIA.EMPTY):
         return self.getItems(GUI_ITEM_TYPE.VEHICLE, criteria=criteria)
 
@@ -773,18 +770,18 @@ class ItemsRequester(IItemsRequester):
             dossierDescr = self.__getAccountDossierDescr()
             return self.itemsFactory.createAccountDossier(dossierDescr)
         container = self.__itemsCache[GUI_ITEM_TYPE.ACCOUNT_DOSSIER]
-        dossier, _, _, _, festival = container.get(int(databaseID))
+        dossier, _, _, _ = container.get(int(databaseID))
         if dossier is None:
             LOG_WARNING('Trying to get empty user dossier', databaseID)
             return
         else:
-            return self.itemsFactory.createAccountDossier(dossier, databaseID, festivalInfo=festival)
+            return self.itemsFactory.createAccountDossier(dossier, databaseID)
 
     def getClanInfo(self, databaseID=None):
         if databaseID is None:
             return (self.__stats.clanDBID, self.__stats.clanInfo)
         container = self.__itemsCache[GUI_ITEM_TYPE.ACCOUNT_DOSSIER]
-        _, clanInfo, _, _, _ = container.get(int(databaseID))
+        _, clanInfo, _, _ = container.get(int(databaseID))
         if clanInfo is None:
             LOG_WARNING('Trying to get empty user clan info', databaseID)
             return
@@ -898,7 +895,7 @@ class ItemsRequester(IItemsRequester):
         if uid in container:
             return container[uid]
         else:
-            if DO_LOG_BROKEN_SYNC and not self.isSynced():
+            if not self.isSynced():
                 self.__logBrokenSync(itemTypeIdx)
             item = self.itemsFactory.createGuiItem(itemTypeIdx, *args, **kwargs)
             if item is not None:
@@ -962,7 +959,6 @@ class ItemsRequester(IItemsRequester):
          self.__dossiers,
          self.__goodies,
          self.__vehicleRotation,
-         self.ranked,
-         self.__battleRoyale)
+         self.ranked)
         unsyncedList = [ r.__class__.__name__ for r in [ r for r in requesters if not r.isSynced() ] ]
         LOG_ERROR('Trying to create fitting item when requesters are not fully synced:', unsyncedList, stack=True)

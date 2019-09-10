@@ -8,11 +8,15 @@ from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.prb_control.settings import REQUEST_TYPE
 from gui.shared import events
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.view_helpers import CooldownHelper
-from helpers import int2roman
+from helpers import int2roman, dependency
 from gui.shared.formatters import text_styles
+from skeletons.gui.shared import IItemsCache
 
 class CyberSportUnitsListView(CyberSportUnitsListMeta):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         super(CyberSportUnitsListView, self).__init__()
@@ -66,11 +70,13 @@ class CyberSportUnitsListView(CyberSportUnitsListMeta):
          'createBtnTooltip': None,
          'createBtnEnabled': True,
          'columnHeaders': self.__getColumnHeaders()})
+        self.itemsCache.onSyncCompleted += self.__refreshData
         return
 
     def _dispose(self):
         self._cooldown.stop()
         self._cooldown = None
+        self.itemsCache.onSyncCompleted -= self.__refreshData
         super(CyberSportUnitsListView, self)._dispose()
         return
 
@@ -85,6 +91,19 @@ class CyberSportUnitsListView(CyberSportUnitsListMeta):
 
     def _onCooldownHandle(self, isInCooldown):
         self._doEnableNavButtons(not isInCooldown)
+
+    def __refreshData(self, reason, diff):
+        if reason != CACHE_SYNC_REASON.CLIENT_UPDATE:
+            return
+        else:
+            if diff is not None and GUI_ITEM_TYPE.VEHICLE in diff:
+                vehDiff = diff[GUI_ITEM_TYPE.VEHICLE]
+                for changedVehCD in vehDiff:
+                    vehicle = self.itemsCache.items.getItemByCD(changedVehCD)
+                    if not vehicle.activeInNationGroup:
+                        self.__refreshDetails(self._searchDP.selectedRallyIndex)
+
+            return
 
     def __getColumnHeaders(self):
         return [self.__createHedader('', 82, 'center', RES_ICONS.MAPS_ICONS_STATISTIC_RATING24),

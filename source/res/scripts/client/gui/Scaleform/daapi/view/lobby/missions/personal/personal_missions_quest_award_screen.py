@@ -225,6 +225,7 @@ class PersonalMissionsQuestAwardScreen(PersonalMissionsQuestAwardScreenMeta):
                  'label': text_styles.hightlight(label),
                  'align': item['align'],
                  'tooltip': item['tooltip'],
+                 'overlayType': item['overlayType'],
                  'isSpecial': item['isSpecial'],
                  'specialAlias': item['specialAlias'],
                  'specialArgs': item['specialArgs']})

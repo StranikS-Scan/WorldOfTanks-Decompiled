@@ -1,69 +1,56 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/ranked_battles/ranked_builders/shared_vos.py
 import logging
+import typing
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.ranked_battles import ranked_formatters
 from gui.ranked_battles.ranked_helpers import getShieldSizeByRankSize, makeStatTooltip
 from gui.shared.formatters import text_styles, icons
+if typing.TYPE_CHECKING:
+    from gui.ranked_battles.ranked_models import Division, Rank
 _logger = logging.getLogger(__name__)
 __ANIMATION_DATA_FIELDS = ['top',
  'bottom',
  'left',
  'right']
 
-def buildRankVO(rank, isEnabled=False, hasTooltip=False, imageSize=RANKEDBATTLES_ALIASES.WIDGET_MEDIUM, shieldStatus=None, showShieldLabel=True, shieldAnimated=False):
-    shield = None
-    if shieldStatus is not None:
-        prevShieldHP, shieldHP, _, shieldState, newShieldState = shieldStatus
-        if shieldState != newShieldState or shieldHP > 0:
-            shieldSize = getShieldSizeByRankSize(imageSize)
-            shortcut = R.images.gui.maps.icons.rankedBattles.ranks.shields
-            shield = {'state': shieldState,
-             'newState': newShieldState,
-             'size': shieldSize,
-             'img': backport.image(shortcut.dyn(attr='{}'.format(shieldSize))()),
-             'plateImg': '',
-             'prevLabel': '',
-             'label': ''}
-            if showShieldLabel:
-                shield['prevLabel'] = str(prevShieldHP)
-                shield['label'] = str(shieldHP)
-                shield['plateImg'] = backport.image(shortcut.plate.empty.dyn(attr='{}'.format(shieldSize))())
-            if shieldAnimated:
-                shield['animationData'] = {'topImg': backport.image(shortcut.dyn(attr='{}_{}'.format(shieldSize, RANKEDBATTLES_ALIASES.SHIELD_PART_TOP))()),
-                 'bottomImg': backport.image(shortcut.dyn(attr='{}_{}'.format(shieldSize, RANKEDBATTLES_ALIASES.SHIELD_PART_BOTTOM))()),
-                 'rightImg': backport.image(shortcut.dyn(attr='{}_{}'.format(shieldSize, RANKEDBATTLES_ALIASES.SHIELD_PART_RIGHT))()),
-                 'leftImg': backport.image(shortcut.dyn(attr='{}_{}'.format(shieldSize, RANKEDBATTLES_ALIASES.SHIELD_PART_LEFT))())}
+def buildRankVO(rank, isEnabled=False, hasTooltip=False, shieldStatus=None, shieldAnimated=False, showUnburnable=False, imageSize=RANKEDBATTLES_ALIASES.WIDGET_MEDIUM):
+    shieldVO = None
+    if shieldStatus:
+        shieldVO = _getShieldVO(imageSize, shieldStatus, shieldAnimated)
+    elif rank.isVisualUnburnable():
+        shieldVO = _getUnburnableVO(imageSize)
     return {'imageSrc': rank.getIcon(imageSize),
      'smallImageSrc': rank.getIcon(RANKEDBATTLES_ALIASES.WIDGET_SMALL),
      'isEnabled': isEnabled,
      'rankID': str(rank.getID()),
      'hasTooltip': hasTooltip,
-     'shield': shield}
+     'shield': shieldVO}
 
 
-def buildRankTooltipVO(rank, isEnabled=False, imageSize=RANKEDBATTLES_ALIASES.WIDGET_MEDIUM, shieldStatus=None):
-    shieldImage = None
-    plateImage = None
+def buildRankTooltipVO(rank, imageSize):
+    shieldImage = plateImage = None
+    shieldStatus = rank.getShieldStatus()
     if shieldStatus is not None:
         _, shieldHP, _, _, _ = shieldStatus
         if shieldHP > 0:
             shieldImage = backport.image(R.images.gui.maps.icons.rankedBattles.ranks.shields.dyn(imageSize)())
-            hpShortcut = R.images.gui.maps.icons.rankedBattles.ranks.shields.plate
-            plateImage = backport.image(hpShortcut.dyn(imageSize).num(shieldHP)())
+            plateImage = backport.image(R.images.gui.maps.icons.rankedBattles.ranks.shields.plate.dyn(imageSize).num(shieldHP)())
     return {'rankImage': rank.getIcon(imageSize),
-     'shieldImage': shieldImage,
+     'shieldImage': shieldImage or _getUnburnableIcon(rank, imageSize),
      'plateImage': plateImage,
-     'isEnabled': isEnabled}
+     'isEnabled': True}
 
 
-def getStatVO(value, statKey, iconKey, tooltipKey):
-    return {'icon': iconKey,
-     'label': text_styles.alignText(text_styles.main(backport.text(R.strings.ranked_battles.rankedBattleMainView.stats.dyn(statKey)())), 'center'),
-     'value': value,
-     'tooltip': makeStatTooltip(tooltipKey)}
+def getDivisionVO(division):
+    return {'id': division.getUserID(),
+     'name': division.getUserName(),
+     'isCompleted': division.isCompleted(),
+     'isLocked': not division.isUnlocked(),
+     'isCurrent': division.isCurrent(),
+     'isQualification': division.isQualification()}
 
 
 def getEfficiencyVO(currentSeasonEfficiency, currentSeasonEfficiencyDiff):
@@ -85,9 +72,42 @@ def getRatingVO(rating):
      'value': ranked_formatters.getIntegerStrStat(rating)}
 
 
-def getDivisionVO(division):
-    return {'id': division.getUserID(),
-     'name': division.getUserName(),
-     'isCompleted': division.isCompleted(),
-     'isLocked': not division.isUnlocked(),
-     'isCurrent': division.isCurrent()}
+def getStatVO(value, statKey, iconKey, tooltipKey):
+    return {'icon': iconKey,
+     'label': text_styles.alignText(text_styles.main(backport.text(R.strings.ranked_battles.rankedBattleMainView.stats.dyn(statKey)())), 'center'),
+     'value': value,
+     'tooltip': makeStatTooltip(tooltipKey)}
+
+
+def _getShieldVO(imageSize, shieldStatus, shieldAnimated):
+    shield = None
+    prevShieldHP, shieldHP, _, shieldState, newShieldState = shieldStatus
+    if shieldState != newShieldState or shieldHP > 0:
+        shieldSize = getShieldSizeByRankSize(imageSize)
+        shortcut = R.images.gui.maps.icons.rankedBattles.ranks.shields
+        shield = {'state': shieldState,
+         'newState': newShieldState,
+         'size': shieldSize,
+         'img': backport.image(shortcut.dyn(attr='{}'.format(shieldSize))()),
+         'plateImg': backport.image(shortcut.plate.empty.dyn(attr='{}'.format(shieldSize))()),
+         'prevLabel': str(prevShieldHP),
+         'label': str(shieldHP)}
+        if shieldAnimated:
+            shield['animationData'] = {'topImg': backport.image(shortcut.dyn(attr='{}_{}'.format(shieldSize, RANKEDBATTLES_ALIASES.SHIELD_PART_TOP))()),
+             'bottomImg': backport.image(shortcut.dyn(attr='{}_{}'.format(shieldSize, RANKEDBATTLES_ALIASES.SHIELD_PART_BOTTOM))()),
+             'rightImg': backport.image(shortcut.dyn(attr='{}_{}'.format(shieldSize, RANKEDBATTLES_ALIASES.SHIELD_PART_RIGHT))()),
+             'leftImg': backport.image(shortcut.dyn(attr='{}_{}'.format(shieldSize, RANKEDBATTLES_ALIASES.SHIELD_PART_LEFT))())}
+    return shield
+
+
+def _getUnburnableVO(imageSize):
+    shieldSize = getShieldSizeByRankSize(imageSize)
+    shortcut = R.images.gui.maps.icons.rankedBattles.ranks.unburnable
+    return {'state': RANKEDBATTLES_ALIASES.SHIELD_ENABLED,
+     'newState': RANKEDBATTLES_ALIASES.SHIELD_ENABLED,
+     'size': shieldSize,
+     'img': backport.image(shortcut.dyn(attr='{}'.format(shieldSize))())}
+
+
+def _getUnburnableIcon(rank, imageSize):
+    return backport.image(R.images.gui.maps.icons.rankedBattles.ranks.unburnable.dyn(imageSize)()) if rank.isVisualUnburnable() else ''

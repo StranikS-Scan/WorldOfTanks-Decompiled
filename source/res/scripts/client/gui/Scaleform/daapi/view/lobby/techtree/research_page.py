@@ -11,6 +11,7 @@ from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveSta
 from gui.Scaleform.daapi.view.meta.ResearchMeta import ResearchMeta
 from gui.Scaleform.genConsts.RESEARCH_ALIASES import RESEARCH_ALIASES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
+from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
@@ -26,11 +27,20 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import getTypeBigIconPath
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.money import Currency
-from helpers import int2roman
+from helpers import int2roman, dependency
 from items import getTypeOfCompactDescr
+from skeletons.gui.game_control import ITradeInController
+from skeletons.gui.shared import IItemsCache
+from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
+from gui.shared.utils.functions import makeTooltip
+from helpers.i18n import makeString as _ms
 _BENEFIT_ITEMS_LIMIT = 3
 
 class Research(ResearchMeta):
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __tradeIn = dependency.descriptor(ITradeInController)
 
     def __init__(self, ctx=None, skipConfirm=False):
         super(Research, self).__init__(ResearchItemsData(dumpers.ResearchItemsObjDumper()))
@@ -48,6 +58,8 @@ class Research(ResearchMeta):
             if vehicle.isPreviewAllowed():
                 shared_events.showVehiclePreview(int(itemCD), self.alias)
             elif vehicle.isInInventory:
+                if not vehicle.activeInNationGroup:
+                    itemCD = iterVehTypeCDsInNationGroup(vehicle.intCompactDescr).next()
                 shared_events.selectVehicleInHangar(itemCD)
 
     def requestResearchData(self):
@@ -112,6 +124,9 @@ class Research(ResearchMeta):
             super(Research, self).invalidateUnlocks(unlocks)
 
     def invalidateInventory(self, data):
+        if not self._data.getRootItem().activeInNationGroup:
+            self.__redrawPageAfterNationWasChanged()
+            return
         if self._data.isRedrawNodes(data):
             self.redraw()
         else:
@@ -166,6 +181,15 @@ class Research(ResearchMeta):
         self.as_setXpInfoLinkageS(self._getExperienceInfoLinkage())
         self.as_setWalletStatusS(self._wallet.componentsStatuses)
         self.as_setFreeXPS(self._itemsCache.items.stats.actualFreeXP)
+        self.addListener(events.VehicleBuyEvent.VEHICLE_SELECTED, self.__onTradeOffSelectedChanged)
+
+    def _dispose(self):
+        self.removeListener(events.VehicleBuyEvent.VEHICLE_SELECTED, self.__onTradeOffSelectedChanged)
+        super(Research, self)._dispose()
+
+    def _onRegisterFlashComponent(self, viewPy, alias):
+        if alias == VEHPREVIEW_CONSTANTS.TRADE_OFF_WIDGET_ALIAS:
+            viewPy.setTradeInVehicle(self._data.getRootItem())
 
     def _blueprintExitEvent(self, vehicleCD):
         return events.LoadViewEvent(VIEW_ALIAS.LOBBY_RESEARCH, ctx={BackButtonContextKeys.ROOT_CD: vehicleCD,
@@ -196,12 +220,27 @@ class Research(ResearchMeta):
         isNext2Unlock = NODE_STATE.isNext2Unlock(rootNode.getState())
         comparisonState, comparisonTooltip = resolveStateTooltip(self._cmpBasket, root, enabledTooltip='', fullTooltip=TOOLTIPS.RESEARCHPAGE_VEHICLE_BUTTON_COMPARE_DISABLED)
         tankTier = int2roman(root.level)
+        tankHasNationGroup = (root.isInInventory or root.isRented) and root.hasNationGroup
+        isNationChangeAvailable = root.isNationChangeAvailable
+        if tankHasNationGroup and not isNationChangeAvailable:
+            if root.isBroken:
+                body = TOOLTIPS.HANGAR_NATIONCHANGE_DISABLED_BODY_DESTROYED
+            elif root.isInBattle:
+                body = TOOLTIPS.HANGAR_NATIONCHANGE_DISABLED_BODY_INBATTLE
+            elif root.isInUnit:
+                body = TOOLTIPS.HANGAR_NATIONCHANGE_DISABLED_BODY_INSQUAD
+            else:
+                body = ''
+            nationChangeTooltip = makeTooltip(_ms(TOOLTIPS.HANGAR_NATIONCHANGE_DISABLED_HEADER), body)
+        else:
+            nationChangeTooltip = ''
         result = {'tankTierStr': text_styles.grandTitle(tankTier),
          'tankNameStr': text_styles.grandTitle(root.userName),
          'tankTierStrSmall': text_styles.promoTitle(tankTier),
          'tankNameStrSmall': text_styles.promoTitle(root.userName),
          'typeIconPath': getTypeBigIconPath(root.type, root.isElite),
          'shopIconPath': RES_SHOP.getVehicleIcon(STORE_CONSTANTS.ICON_SIZE_MEDIUM, root.name.split(':')[1]),
+         'isInteractive': self.__getIsInteractive(root, rootNode),
          'buttonLabel': self.__getMainButtonLabel(root, rootNode),
          'blueprintLabel': self.__getResearchPageBlueprintLabel(rootNode),
          'blueprintProgress': rootNode.getBlueprintProgress(),
@@ -216,37 +255,41 @@ class Research(ResearchMeta):
          'isElite': root.isElite,
          'statusStr': self.__getRootStatusStr(root),
          'discountStr': self.__getDiscountBannerStr(root, rootNode),
-         'rentBtnLabel': self.__getRentButtonLabel(rootNode)}
+         'rentBtnLabel': self.__getRentButtonLabel(rootNode),
+         'changeNationBtnVisibility': tankHasNationGroup,
+         'isTankNationChangeAvailable': isNationChangeAvailable,
+         'nationChangeIsNew': not AccountSettings.getSettings(NATION_CHANGE_VIEWED),
+         'nationChangeTooltip': nationChangeTooltip}
         return result
 
     @staticmethod
     def __getRootStatusStr(root):
-        status = ''
-        if root.isRented and not root.rentalIsOver and not root.isTelecom and not root.isPremiumIGR:
-            status = text_styles.concatStylesToSingleLine(icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.ClockIcon_1()), width=38, height=38, vSpace=-14), RentLeftFormatter(root.rentInfo).getRentLeftStr(strForSpecialTimeFormat=backport.text(R.strings.menu.research.status.rentLeft())))
-        elif root.canTradeIn:
-            status = text_styles.concatStylesToSingleLine(icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.trade_in()), width=36, height=36, vSpace=-13), backport.text(R.strings.menu.research.status.tradeIn()))
-        return status
+        return text_styles.concatStylesToSingleLine(icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.ClockIcon_1()), width=38, height=38, vSpace=-14), RentLeftFormatter(root.rentInfo).getRentLeftStr(strForSpecialTimeFormat=backport.text(R.strings.menu.research.status.rentLeft()))) if root.isRented and not root.rentalIsOver and not root.isTelecom and not root.isPremiumIGR else ''
+
+    def __getIsInteractive(self, root, rootNode):
+        return self.__tradeIn.getActiveTradeOffVehicle() is None or self.__tradeIn.tradeOffSelectedApplicableForLevel(root.level) if NODE_STATE.canTradeIn(rootNode.getState()) else True
 
     def __getDiscountBannerStr(self, root, rootNode):
         htmlStr = ''
         nodeState = rootNode.getState()
+        if NODE_STATE.canTradeIn(nodeState) and self.__tradeIn.tradeOffSelectedApplicableForLevel(root.level):
+            return htmlStr
         if NODE_STATE.isRestoreAvailable(nodeState):
             restoreDueDate = getDueDateOrTimeStr(rootNode.getRestoreFinishTime())
             if restoreDueDate:
-                htmlStr = text_styles.concatStylesToMultiLine(text_styles.mainBig(backport.text(R.strings.menu.research.restore.commmonInfo())), text_styles.mainBig(backport.text(R.strings.menu.research.restore.dueDate(), date=restoreDueDate)))
-        elif not root.isUnlocked:
+                return text_styles.concatStylesToMultiLine(text_styles.mainBig(backport.text(R.strings.menu.research.restore.commmonInfo())), text_styles.mainBig(backport.text(R.strings.menu.research.restore.dueDate(), date=restoreDueDate)))
+        if not root.isUnlocked:
             unlockDiscount = self._itemsCache.items.blueprints.getBlueprintDiscount(root.intCD, root.level)
             if unlockDiscount > 0:
-                htmlStr = text_styles.concatStylesToMultiLine(text_styles.mainBig(backport.text(R.strings.blueprints.blueprintScreen.researchSale.label())), text_styles.grandTitle(''.join(('-', str(unlockDiscount), '%'))))
-        elif root.isRented:
+                return text_styles.concatStylesToMultiLine(text_styles.mainBig(backport.text(R.strings.blueprints.blueprintScreen.researchSale.label())), text_styles.grandTitle(''.join(('-', str(unlockDiscount), '%'))))
+        if root.isRented:
             discount = rootNode.getActionDiscount()
             if discount:
-                htmlStr = text_styles.concatStylesToMultiLine(text_styles.mainBig(backport.text(R.strings.menu.research.premium.discount())), text_styles.grandTitle(''.join(('-', str(discount), '%'))))
-        elif not NODE_STATE.inInventory(nodeState) and NODE_STATE.isActionVehicle(nodeState):
+                return text_styles.concatStylesToMultiLine(text_styles.mainBig(backport.text(R.strings.menu.research.premium.discount())), text_styles.grandTitle(''.join(('-', str(discount), '%'))))
+        if not NODE_STATE.inInventory(nodeState) and NODE_STATE.isActionVehicle(nodeState):
             actionDueDate = getDueDateOrTimeStr(rootNode.getActionFinishTime())
             if actionDueDate:
-                htmlStr = text_styles.concatStylesToMultiLine(text_styles.mainBig(backport.text(R.strings.menu.barracks.notRecruitedActivateBefore(), date=actionDueDate)), text_styles.grandTitle(''.join(('-', str(rootNode.getActionDiscount()), '%'))))
+                return text_styles.concatStylesToMultiLine(text_styles.mainBig(backport.text(R.strings.menu.barracks.notRecruitedActivateBefore(), date=actionDueDate)), text_styles.grandTitle(''.join(('-', str(rootNode.getActionDiscount()), '%'))))
         return htmlStr
 
     def __getViewLayoutData(self):
@@ -259,7 +302,8 @@ class Research(ResearchMeta):
             benefitData = [(backport.image(R.images.gui.maps.shop.kpi.star_icon_benefits()), backport.text(R.strings.vehicle_preview.infoPanel.premium.freeExpMultiplier()), backport.text(R.strings.vehicle_preview.infoPanel.premium.freeExpText()))]
             if not root.isSpecial:
                 benefitData.append((backport.image(R.images.gui.maps.shop.kpi.money_benefits()), backport.text(R.strings.vehicle_preview.infoPanel.premium.creditsMultiplier()), backport.text(R.strings.vehicle_preview.infoPanel.premium.creditsText())))
-            benefitData.append((backport.image(R.images.gui.maps.shop.kpi.crow_benefits()), backport.text(R.strings.vehicle_preview.infoPanel.premium.crewTransferTitle()), backport.text(R.strings.vehicle_preview.infoPanel.premium.crewTransferText())))
+            if not root.isCrewLocked:
+                benefitData.append((backport.image(R.images.gui.maps.shop.kpi.crow_benefits()), backport.text(R.strings.vehicle_preview.infoPanel.premium.crewTransferTitle()), backport.text(R.strings.vehicle_preview.infoPanel.premium.crewTransferText())))
             builtInEquipmentIDs = root.getBuiltInEquipmentIDs()
             builtInCount = len(builtInEquipmentIDs) if builtInEquipmentIDs else 0
             if builtInCount > 0:
@@ -282,16 +326,21 @@ class Research(ResearchMeta):
          'backBtnDescrLabel': getBackBtnLabel(self._exitEvent, self._previewAlias)}
         return result
 
-    @staticmethod
-    def __getMainButtonLabel(rootItem, rootNode):
+    def __redrawPageAfterNationWasChanged(self):
+        targetVehicleCD = iterVehTypeCDsInNationGroup(self._data.getRootCD()).next()
+        self._data.setRootCD(targetVehicleCD)
+        SelectedNation.select(self._data.getNationID())
+        self.redraw()
+
+    def __getMainButtonLabel(self, rootItem, rootNode):
         if not rootItem.isUnlocked:
             btnLabel = backport.text(R.strings.menu.unlocks.unlockButton())
         elif NODE_STATE.isRestoreAvailable(rootNode.getState()):
             btnLabel = backport.text(R.strings.menu.research.labels.button.restore())
         elif NODE_STATE.inInventory(rootNode.getState()) and not rootItem.isRented or rootItem.isHidden:
             btnLabel = backport.text(R.strings.menu.research.labels.button.showInHangar())
-        elif NODE_STATE.canTradeIn(rootNode.getState()):
-            btnLabel = text_styles.concatStylesWithSpace(icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.button_tradein())), backport.text(R.strings.menu.research.labels.button.buy()))
+        elif NODE_STATE.canTradeIn(rootNode.getState()) and self.__tradeIn.getActiveTradeOffVehicle() is not None:
+            btnLabel = backport.text(R.strings.menu.research.labels.button.trade_in())
         else:
             btnLabel = backport.text(R.strings.menu.research.labels.button.buy())
         return btnLabel
@@ -318,3 +367,6 @@ class Research(ResearchMeta):
             else:
                 label = text_styles.concatStylesWithSpace(icons.makeImageTag(backport.image(R.images.gui.maps.icons.blueprints.blueCheck()), width=16, height=16, vSpace=-1), text_styles.credits(backport.text(R.strings.blueprints.blueprintProgressBar.complete())))
         return label
+
+    def __onTradeOffSelectedChanged(self, _=None):
+        self.redraw()

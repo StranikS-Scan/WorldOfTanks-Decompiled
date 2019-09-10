@@ -14,6 +14,7 @@ from gui.prb_control.settings import REQUEST_TYPE
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from helpers import int2roman, i18n
+from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
 
 class CyberSportUnitView(CyberSportUnitMeta):
 
@@ -134,9 +135,18 @@ class CyberSportUnitView(CyberSportUnitMeta):
 
     def _updateRallyData(self):
         entity = self.prbEntity
+        self._checkForNationChange()
         data = vo_converters.makeUnitVO(entity, unitMgrID=entity.getID())
         self.as_updateRallyS(data)
         self._updateLabels(entity)
+
+    def _checkForNationChange(self):
+        selected = self._getVehicleSelectorVehicles()
+        if selected:
+            vehicle = self.itemsCache.items.getItemByCD(selected[0])
+            if not vehicle.activeInNationGroup:
+                itemCD = iterVehTypeCDsInNationGroup(vehicle.intCompactDescr).next()
+                self._selectVehicles([itemCD])
 
     def _updateLabels(self, entity):
         _, unit = entity.getUnit()

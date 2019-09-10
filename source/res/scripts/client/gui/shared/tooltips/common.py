@@ -230,7 +230,7 @@ class EfficiencyTooltipData(BlocksTooltipData):
      BATTLE_EFFICIENCY_TYPES.CRITS: efficiency.CritsItemPacker,
      BATTLE_EFFICIENCY_TYPES.CAPTURE: efficiency.CaptureItemPacker,
      BATTLE_EFFICIENCY_TYPES.DEFENCE: efficiency.DefenceItemPacker,
-     BATTLE_EFFICIENCY_TYPES.STUN: efficiency.StunItemPacker}
+     BATTLE_EFFICIENCY_TYPES.ASSIST_STUN: efficiency.StunItemPacker}
 
     def __init__(self, context):
         super(EfficiencyTooltipData, self).__init__(context, TOOLTIP_TYPE.EFFICIENCY)

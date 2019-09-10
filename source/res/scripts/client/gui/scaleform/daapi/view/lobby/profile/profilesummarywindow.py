@@ -1,12 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileSummaryWindow.py
 from adisp import process
-from festivity.festival.sounds import playSound
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
-from gui.impl.gen import R
 from gui.shared import event_dispatcher as shared_events
-from helpers import dependency
 from helpers.i18n import makeString as _ms
 from gui.clans.clan_helpers import ClanListener
 from gui.clans.formatters import getClanRoleString
@@ -15,10 +12,8 @@ from gui.shared.formatters import text_styles
 from gui.shared.view_helpers.emblems import ClanEmblemsHelper
 from gui.Scaleform.daapi.view.meta.ProfileSummaryWindowMeta import ProfileSummaryWindowMeta
 from gui.Scaleform.locale.PROFILE import PROFILE
-from skeletons.festival import IFestivalController
 
 class ProfileSummaryWindow(ProfileSummaryWindowMeta, ClanEmblemsHelper, ClanListener):
-    __festController = dependency.descriptor(IFestivalController)
 
     def __init__(self, *args):
         super(ProfileSummaryWindow, self).__init__(*args)
@@ -50,17 +45,10 @@ class ProfileSummaryWindow(ProfileSummaryWindowMeta, ClanEmblemsHelper, ClanList
     def onAccountClanInfoReceived(self, info):
         self._requestClanInfo()
 
-    def onDogtagRollover(self):
-        playSound(backport.sound(R.sounds.ev_fest_hangar_token_zoom_on()))
-
-    def onDogtagRollout(self):
-        playSound(backport.sound(R.sounds.ev_fest_hangar_token_zoom_off()))
-
     def _populate(self):
         super(ProfileSummaryWindow, self)._populate()
         self.startClanListening()
         self._requestClanInfo()
-        self._requestPlayerCard()
 
     def _dispose(self):
         self.stopClanListening()
@@ -84,27 +72,6 @@ class ProfileSummaryWindow(ProfileSummaryWindowMeta, ClanEmblemsHelper, ClanList
             self.as_setClanDataS(clanData)
             self.requestClanEmblem32x32(clanDBID)
         return
-
-    def _requestPlayerCard(self):
-        dossier = self.itemsCache.items.getAccountDossier(self._databaseID)
-        playerCard = dossier.getFestivalPlayerCard()
-        if playerCard is None:
-            return
-        else:
-            lastPlayerCard = self.__festController.getGlobalPlayerCard()
-            self.__festController.setGlobalPlayerCard(playerCard)
-            basisImg = backport.image(playerCard.getBasis().getIconResID())
-            emblemImg = backport.image(playerCard.getEmblem().getIconResID())
-            emblemSmallImg = backport.image(playerCard.getEmblem().getSmallIconResID())
-            basisSmallImg = backport.image(playerCard.getBasis().getSmallIconResID())
-            titleImg = backport.image(playerCard.getTitle().getIconResID())
-            rankStr = backport.text(playerCard.getRank().getNameResID())
-            translateStr = text_styles.counter(backport.text(R.strings.festival.dogtag.translate(), backport.text(playerCard.getTitle().getNameResID())))
-            basisBackImg = backport.image(playerCard.getBasis().getBasisResID())
-            truncateEndingStr = backport.text(R.strings.festival.dogtag.truncated())
-            self.__festController.setGlobalPlayerCard(lastPlayerCard)
-            self.as_setDogtagInfoS(isEnabled=self.__festController.isEnabled(), basisImg=basisImg, emblemImg=emblemImg, titleImg=titleImg, rankStr=rankStr, nickStr=self._userName, basisSmallImg=basisSmallImg, emblemSmallImg=emblemSmallImg, translateStr=translateStr, basisBackImg=basisBackImg, truncateEndingStr=truncateEndingStr)
-            return
 
     @process
     def _receiveRating(self, databaseID):

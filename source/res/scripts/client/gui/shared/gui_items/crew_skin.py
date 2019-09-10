@@ -56,6 +56,9 @@ class CrewSkin(FittingItem):
     def getIconID(self):
         return self._skinData().iconID
 
+    def getIconName(self):
+        return self._skinData().iconID.split('.')[0]
+
     def getDescription(self):
         return self._skinData().description
 

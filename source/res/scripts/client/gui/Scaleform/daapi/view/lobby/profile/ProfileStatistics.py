@@ -2,16 +2,15 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileStatistics.py
 from collections import namedtuple
 from debug_utils import LOG_ERROR
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.Scaleform.daapi.view.lobby.profile.profile_statistics_vos import getStatisticsVO
 from gui.Scaleform.daapi.view.meta.ProfileStatisticsMeta import ProfileStatisticsMeta
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
-from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
-from gui.Scaleform.locale.PROFILE import PROFILE
-from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
 from gui.ranked_battles.constants import RankedDossierKeys, ARCHIVE_SEASON_ID
 from gui.shared.formatters import text_styles
-from helpers import i18n, dependency
+from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
 _RankedSeasonsKeys = namedtuple('_RankedSeasonsKeys', ['all', 'current', 'previous'])
@@ -88,12 +87,12 @@ class ProfileStatistics(ProfileStatisticsMeta):
             vo['showSeasonDropdown'] = False
         elif self._battlesType == PROFILE_DROPDOWN_KEYS.STATICTEAM or self._battlesType == PROFILE_DROPDOWN_KEYS.STATICTEAM_SEASON:
             self._battlesType = PROFILE_DROPDOWN_KEYS.STATICTEAM
-            vo['headerText'] = i18n.makeString(PROFILE.SECTION_STATISTICS_HEADERTEXT_STATICTEAM)
-            vo['dropdownSeasonLabel'] = text_styles.main(CYBERSPORT.STATICFORMATIONSTATSVIEW_SEASONFILTER)
+            vo['headerText'] = backport.text(R.strings.profile.section.statistics.headerText.staticTeam())
+            vo['dropdownSeasonLabel'] = text_styles.main(backport.text(R.strings.cyberSport.StaticFormationStatsView.seasonFilter()))
             self.__updateStaticDropdownData(vo)
         elif self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED:
             vo['seasonDropdownAttachToTitle'] = True
-            vo['playersStatsLbl'] = i18n.makeString(RANKED_BATTLES.STATISTIC_PLAYERSRAITING)
+            vo['playersStatsLbl'] = backport.text(R.strings.ranked_battles.statistic.playersRaiting())
             vo['playersStats'] = self.rankedController.isEnabled()
             self.__updateRankedDropdownData(vo, self.__rankedSeasonKey)
         self.as_responseDossierS(self._battlesType, vo, _FRAME_LABELS[self._battlesType], '')
@@ -118,14 +117,14 @@ class ProfileStatistics(ProfileStatisticsMeta):
     @classmethod
     def __updateStaticDropdownData(cls, vo):
         vo['showSeasonDropdown'] = True
-        vo['seasonItems'] = [cls._dataProviderEntry(PROFILE_DROPDOWN_KEYS.STATICTEAM, PROFILE.PROFILE_SEASONSDROPDOWN_ALL)]
+        vo['seasonItems'] = [cls._dataProviderEntry(PROFILE_DROPDOWN_KEYS.STATICTEAM, backport.text(R.strings.profile.profile.seasonsdropdown.all()))]
         vo['seasonIndex'] = 0
         vo['seasonEnabled'] = False
 
     def __updateRankedDropdownData(self, vo, selectedLabel):
         showDropDown = vo['showSeasonDropdown'] = self.__hasRankedSeasonsHistory()
         if showDropDown:
-            seasonItems = vo['seasonItems'] = [self._dataProviderEntry(_RANKED_SEASONS_ARCHIVE, PROFILE.get_ranked_season_lbl(_RANKED_SEASONS_ARCHIVE))]
+            seasonItems = vo['seasonItems'] = [self._dataProviderEntry(_RANKED_SEASONS_ARCHIVE, backport.text(R.strings.profile.profile.ranked.seasonsdropdown.archive()))]
             seasonIndex = 0
             sortedSeasons = sorted(self.rankedController.getSeasonPassed(), key=lambda seasonData: seasonData[1])
             seasonIds = [ seasonID for seasonID, _ in sortedSeasons ]
@@ -135,7 +134,7 @@ class ProfileStatistics(ProfileStatisticsMeta):
             for seasonID in seasonIds:
                 season = self.rankedController.getSeason(seasonID)
                 if season:
-                    seasonItems.append(self._dataProviderEntry(str(seasonID), PROFILE.get_ranked_season_lbl(str(season.getNumber()))))
+                    seasonItems.append(self._dataProviderEntry(str(seasonID), backport.text(R.strings.profile.profile.ranked.seasonsdropdown.num(season.getNumber())())))
 
             for i, seasonItem in enumerate(seasonItems):
                 if seasonItem['key'] == selectedLabel:

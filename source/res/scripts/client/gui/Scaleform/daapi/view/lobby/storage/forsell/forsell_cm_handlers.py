@@ -10,23 +10,26 @@ from gui.shared import event_dispatcher as shared_events
 from ids_generators import SequenceIDGenerator
 
 class ForSellCMHandler(ContextMenu, EventSystemEntity):
-    _sqGen = SequenceIDGenerator()
+    __sqGen = SequenceIDGenerator()
 
-    @option(_sqGen.next(), CMLabel.INFORMATION)
+    @option(__sqGen.next(), CMLabel.INFORMATION)
     def showInfo(self):
         shared_events.showStorageModuleInfo(self._id)
 
-    @option(_sqGen.next(), CMLabel.SELL)
+    @option(__sqGen.next(), CMLabel.SELL)
     @process
     def sell(self):
         yield DialogsInterface.showDialog(SellModuleMeta(self._id))
 
-    @option(_sqGen.next(), CMLabel.SALE_OPTION)
+    @option(__sqGen.next(), CMLabel.SALE_OPTION)
     def switchSaleOption(self):
         self.fireEvent(events.StorageEvent(events.StorageEvent.SELECT_MODULE_FOR_SELL, ctx={'intCD': self._id}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _getOptionCustomData(self, label):
-        return {'label': 'prohibitSale' if self._selected else 'allowSale'} if label == CMLabel.SALE_OPTION else None
+        optionData = super(ForSellCMHandler, self)._getOptionCustomData(label)
+        if label == CMLabel.SALE_OPTION:
+            optionData.label = 'prohibitSale' if self._selected else 'allowSale'
+        return optionData
 
     def _initFlashValues(self, ctx):
         super(ForSellCMHandler, self)._initFlashValues(ctx)

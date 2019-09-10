@@ -10,6 +10,8 @@ from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from helpers import dependency
 from skeletons.gui.game_control import IVehicleComparisonBasket
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
 
 class _OPT_IDS(object):
     COPY = 'copy'
@@ -24,7 +26,8 @@ class CommonContextMenuHandler(SimpleVehicleCMHandler):
              VEHICLE.SELL: 'sellVehicle',
              VEHICLE.RESEARCH: 'researchVehicle',
              VEHICLE.BUY: 'buyVehicle',
-             VEHICLE.SELECT: 'selectVehicleInHangar'})
+             VEHICLE.SELECT: 'selectVehicleInHangar',
+             VEHICLE.NATION_CHANGE: 'changeVehicleNation'})
         super(CommonContextMenuHandler, self).__init__(cmProxy, ctx, handlers)
         return
 
@@ -52,10 +55,17 @@ class CommonContextMenuHandler(SimpleVehicleCMHandler):
     def getVehCD(self):
         return self.vehCD
 
+    def changeVehicleNation(self):
+        ItemsActionsFactory.doAction(ItemsActionsFactory.CHANGE_NATION, self.vehCD)
+
     def _generateOptions(self, ctx=None):
         options = []
         vehicle = self.__getVehicle(self.vehCD)
         self._manageStartOptions(options, vehicle)
+        if vehicle.hasNationGroup:
+            isNew = not AccountSettings.getSettings(NATION_CHANGE_VIEWED)
+            options.append(self._makeItem(VEHICLE.NATION_CHANGE, MENU.CONTEXTMENU_NATIONCHANGE, {'enabled': vehicle.isNationChangeAvailable,
+             'isNew': isNew}))
         if vehicle.isPurchased:
             options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.SELL), {'enabled': vehicle.canSell}))
         elif vehicle.isUnlocked:

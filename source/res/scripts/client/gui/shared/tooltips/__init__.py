@@ -48,10 +48,6 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     RANKED_SELECTOR_INFO = 'rankedSelectorInfo'
     RANKED_DIVISION_INFO = 'rankedDivisionInfo'
     RANKED_YEAR_REWARD = 'rankedYearReward'
-    BATTLE_ROYALE_PRIME_TIMES = 'battleRoyalePrimeTimes'
-    BATTLE_ROYALE_STEP = 'battleRoyaleStep'
-    BATTLE_ROYALE_TITLE = 'battleRoyaleTitle'
-    BATTLE_ROYALE_SELECTOR_INFO = 'battleRoyaleSelectorInfo'
     FAKE = 'fake'
     VEHICLE_ELITE_BONUS = 'vehicleEliteBonus'
     VEHICLE_HISTORICAL_REFERENCE = 'vehicleHistoricalReference'
@@ -65,7 +61,9 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     FRONTLINE = 'frontlineInfo'
     SQUAD_BONUS = 'squadBonus'
     SESSION_STATS = 'sessionStats'
-    FESTIVAL_ITEMS = 'festivalItemsInfo'
+    TRADE_IN_INFO = 'tradeInInfo'
+    TRADE_IN_INFO_NOT_AVAILABLE = 'tradeInInfoNotAvailable'
+    TRADE_IN_STATE_NOT_AVAILABLE = 'tradeInStateNotAvailable'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):
@@ -90,12 +88,11 @@ class TOOLTIP_COMPONENT(CONST_CONTAINER):
     BOOSTER = 'booster'
     BADGE = 'badge'
     RANK = 'ranked'
-    TITLE = 'title'
     RESERVE = 'reserve'
     BLUEPRINT = 'blueprints'
     SESSION_STATS = 'sessionStats'
     CREW_BOOK = 'crewBook'
-    FESTIVAL = 'festival'
+    TRADE_IN = 'tradeIn'
 
 
 class ACTION_TOOLTIPS_TYPE(CONST_CONTAINER):

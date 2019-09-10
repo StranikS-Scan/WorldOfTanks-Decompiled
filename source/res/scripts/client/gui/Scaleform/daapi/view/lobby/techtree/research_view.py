@@ -30,6 +30,9 @@ class ResearchView(LobbySubView, ResearchViewMeta):
     def goToBlueprintView(self, vehicleCD):
         shared_events.showBlueprintView(vehicleCD, self._blueprintExitEvent(vehicleCD))
 
+    def goToNationChangeView(self, vehicleCD):
+        shared_events.showChangeVehicleNationDialog(vehicleCD)
+
     def redraw(self):
         raise NotImplementedError('Must be overridden in subclass')
 

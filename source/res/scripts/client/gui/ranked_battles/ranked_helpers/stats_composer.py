@@ -39,8 +39,12 @@ class RankedBattlesStatsComposer(object):
 
     @property
     def amountStepsInLeagues(self):
-        if self.__settings is not None and self.__settings.accSteps is not None and self.amountSteps is not None:
-            result = max(0, self.amountSteps - sum(self.__settings.accSteps))
+        if self.divisionsStats is not None and self.amountSteps is not None:
+            result = 0
+            for divisionID, division in self.__settings.divisions.iteritems():
+                if division['isLeague']:
+                    result += self.divisionsStats.get(divisionID, {}).get('rankChanges', 0)
+
         else:
             result = None
         return result

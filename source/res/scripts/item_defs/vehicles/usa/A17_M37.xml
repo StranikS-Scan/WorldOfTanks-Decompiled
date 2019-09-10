@@ -93,13 +93,13 @@
         <slotType>	paint	</slotType>
         <slotId>	11000	</slotId>
         <anchorPosition>	0.000000 0.610994 -1.38944	</anchorPosition>
-        <anchorDirection>	0.000000 0.40254 -0.915402	</anchorDirection>
+        <anchorDirection>	0.000000 1 0.000001	</anchorDirection>
       </slot>
       <slot>
         <slotType>	camouflage	</slotType>
         <slotId>	12000	</slotId>
-        <anchorPosition>	0.000000 0.610994 -1.38944	</anchorPosition>
-        <anchorDirection>	0.000000 0.40254 -0.915402	</anchorDirection>
+        <anchorPosition>	0.000000 0.624617 -1.38944	</anchorPosition>
+        <anchorDirection>	0.000000 1 0.000001	</anchorDirection>
       </slot>
       <slot>
         <slotType>	player	</slotType>
@@ -145,6 +145,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	2.74 2.74 0.000000 0.000000	</tiling>
+      <density>	75.016 74.7705	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -2116,13 +2118,13 @@
         <slot>
           <slotType>	paint	</slotType>
           <slotId>	21000	</slotId>
-          <anchorPosition>	0.000008 1.74954 -0.94856	</anchorPosition>
-          <anchorDirection>	0.000032 1 0.000001	</anchorDirection>
+          <anchorPosition>	-1.39711 0.604135 0.026675	</anchorPosition>
+          <anchorDirection>	-0.917721 0.396839 0.017522	</anchorDirection>
         </slot>
         <slot>
           <slotType>	style	</slotType>
           <slotId>	29000	</slotId>
-          <anchorPosition>	0.000000 0.000000 0.000000	</anchorPosition>
+          <anchorPosition>	0.000002 1.74954 -0.94853	</anchorPosition>
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
@@ -2188,7 +2190,7 @@
           </hitTester>
           <customization>
             <customizableVehicleAreas>
-              <paint>	GUN	</paint>
+              <paint>	GUN GUN_2	</paint>
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
@@ -2201,6 +2203,13 @@
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	-0.0187984 0.0382632 -0.526118	</anchorPosition>
+              <anchorDirection>	0.000000 0.964148 -0.265365	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
               <slotType>	camouflage	</slotType>
               <slotId>	42000	</slotId>
               <anchorPosition>	-0.00804804 0.0562103 0.710196	</anchorPosition>
@@ -2210,6 +2219,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.805 0.805 0.000000 0.000000	</tiling>
+            <density>	115.113 129.87	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_105mm_Howitzer_M3>
         <_105mm_Howitzer_M4>	shared	  <maxAmmo>	126	</maxAmmo>
@@ -2246,7 +2257,7 @@
           </hitTester>
           <customization>
             <customizableVehicleAreas>
-              <paint>	GUN	</paint>
+              <paint>	GUN GUN_2	</paint>
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
@@ -2259,6 +2270,13 @@
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	-0.0187987 0.0382502 -0.526149	</anchorPosition>
+              <anchorDirection>	0.000000 0.964142 -0.265387	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
               <slotType>	camouflage	</slotType>
               <slotId>	42000	</slotId>
               <anchorPosition>	-0.00892943 0.0538967 0.95815	</anchorPosition>
@@ -2266,6 +2284,10 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	127.532 166.302	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_105mm_Howitzer_M4>
       </guns>
       <models>
@@ -2303,6 +2325,8 @@
       </customizationSlots>
       <camouflage>
         <tiling>	0.88 0.52 0.52 0.000000	</tiling>
+        <density>	113.694 114.472	</density>
+        <aoTextureSize>	512 256	</aoTextureSize>
       </camouflage>
     </M37D1>
   </turrets0>

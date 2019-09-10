@@ -5,12 +5,12 @@ from collections import namedtuple
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.ranked_battles.constants import RankTypes, ZERO_RANK_ID
-from gui.shared.money import Currency
+from gui.ranked_battles.constants import RankTypes, ZERO_RANK_ID, ZERO_DIVISION_ID
 from season_common import GameSeason
 from shared_utils import CONST_CONTAINER
 ShieldStatus = namedtuple('ShieldStatus', 'prevHP, hp, maxHP, shieldState, newShieldState')
 RankData = namedtuple('RankData', 'rank, steps')
+BattleRankInfo = namedtuple('BattleRankInfo', 'level, division, isGroup')
 
 class RankState(CONST_CONTAINER):
     UNDEFINED = 2
@@ -31,6 +31,8 @@ class RankStatus(CONST_CONTAINER):
 class RankChangeStates(CONST_CONTAINER):
     LEAGUE_EARNED = 'leagueEarned'
     DIVISION_EARNED = 'divisionEarned'
+    QUAL_EARNED = 'qualificationEarned'
+    QUAL_UNBURN_EARNED = 'qualificationUnburnEarned'
     RANK_EARNED = 'rankEarned'
     RANK_UNBURN_PROTECTED = 'rankUnburnProtected'
     RANK_SHIELD_PROTECTED = 'rankShieldProtected'
@@ -113,7 +115,7 @@ class RankProgress(object):
 
 
 class Division(object):
-    __slots__ = ('firstRank', 'lastRank', '__divisionID', '__currentRank', '__isFinal', '__rankIDs')
+    __slots__ = ('firstRank', 'lastRank', '__divisionID', '__currentRank', '__isFinal', '__rankIDs', '__isQualification', '__isPostQualification')
 
     def __eq__(self, other):
         if self.getID() != other.getID() or self.getRanksIDs() != other.getRanksIDs():
@@ -130,6 +132,8 @@ class Division(object):
         self.__currentRank = currentRank
         self.__isFinal = isFinal
         self.__rankIDs = tuple(range(self.firstRank, self.lastRank + 1))
+        self.__isQualification = divisionID == ZERO_DIVISION_ID
+        self.__isPostQualification = divisionID == ZERO_DIVISION_ID + 1
 
     def getID(self):
         return self.__divisionID
@@ -157,6 +161,12 @@ class Division(object):
             return self.firstRank - 1 <= self.__currentRank <= self.lastRank
         return self.firstRank - 1 <= self.__currentRank < self.lastRank
 
+    def isQualification(self):
+        return self.__isQualification
+
+    def isPostQualification(self):
+        return self.__isPostQualification
+
     def isFinal(self):
         return self.__isFinal
 
@@ -171,22 +181,17 @@ class Rank(object):
      'big': '114x160',
      'huge': '190x260',
      'final': '216x300'}
-    _awardsOrder = ['oneof',
-     Currency.CRYSTAL,
-     Currency.GOLD,
-     'premium',
-     Currency.CREDITS,
-     'items']
 
-    def __init__(self, rankID, rankState, progress=None, division=None, quest=None, shieldStatus=None):
+    def __init__(self, rankID, rankState, progress=None, division=None, quest=None, shield=None, isUnburnable=False):
         super(Rank, self).__init__()
-        self._rankID = rankID
-        self._state = rankState
-        self._shieldStatus = shieldStatus
-        self._progress = progress
-        self._quest = quest
-        self._type = RankTypes.ACCOUNT
+        self.__rankID = rankID
+        self.__state = rankState
+        self.__progress = progress
         self.__division = division
+        self.__quest = quest
+        self.__shieldStatus = shield
+        self.__isUnburnable = isUnburnable
+        self.__type = RankTypes.ACCOUNT
 
     def __eq__(self, other):
         if self.getState() != other.getState():
@@ -199,34 +204,44 @@ class Rank(object):
         return not self.__eq__(other)
 
     def isAcquired(self):
-        return self._state & RankState.ACQUIRED > 0
+        return self.__state & RankState.ACQUIRED > 0
 
     def isCurrent(self):
-        return self._state & RankState.CURRENT > 0
+        return self.__state & RankState.CURRENT > 0
 
     def isFinal(self):
         return self.isLastInDivision() and self.__division.isFinal()
 
     def isFirstInDivision(self):
-        return self._rankID == self.__division.firstRank
+        return self.__rankID == self.__division.firstRank
 
     def isInitial(self):
-        return self._rankID == ZERO_RANK_ID
+        return self.__rankID == ZERO_RANK_ID
 
     def isInitialForNextDivision(self):
-        return self._rankID in (ZERO_RANK_ID, self.__division.lastRank) and not self.isFinal()
+        return self.__rankID in (ZERO_RANK_ID, self.__division.lastRank) and not self.isFinal()
 
     def isLost(self):
-        return self._state & RankState.LOST > 0
+        return self.__state & RankState.LOST > 0
 
     def isLastInDivision(self):
-        return self._rankID == self.__division.lastRank
+        return self.__rankID == self.__division.lastRank
 
     def isNewForPlayer(self):
-        return self._state & RankState.NEW_FOR_PLAYER > 0
+        return self.__state & RankState.NEW_FOR_PLAYER > 0
+
+    def isQualification(self):
+        return self.__division.isQualification()
 
     def isRewardClaimed(self):
-        return self._quest is None or self._quest.isCompleted()
+        return self.__quest is None or self.__quest.isCompleted()
+
+    def isUnburnable(self):
+        return self.__isUnburnable
+
+    def isVisualUnburnable(self):
+        isCorner = self.isInitialForNextDivision() or self.isLastInDivision()
+        return not (isCorner or self.isQualification()) and self.isUnburnable()
 
     def getAchievedStepsCount(self):
         return len(self.getProgress().getAcquiredSteps())
@@ -239,34 +254,34 @@ class Rank(object):
 
     def getIcon(self, size):
         size = self._ICON_SIZES.get(size, '58x80')
-        return backport.image(R.images.gui.maps.icons.rankedBattles.ranks.num(size).dyn('rank%s_%s' % (self.__division.getID(), self.getUserName()))())
+        return backport.image(R.images.gui.maps.icons.rankedBattles.divisions.num(size).num(self.__division.getID())()) if self.isQualification() else backport.image(R.images.gui.maps.icons.rankedBattles.ranks.num(size).dyn('rank%s_%s' % (self.__division.getID(), self.getUserName()))())
 
     def getID(self):
-        return self._rankID
+        return self.__rankID
 
     def getProgress(self):
-        return self._progress
+        return self.__progress
 
     def getQuest(self):
-        return self._quest
+        return self.__quest
 
     def getState(self):
-        return self._state
+        return self.__state
 
     def getShieldStatus(self):
-        return self._shieldStatus
+        return self.__shieldStatus
 
     def getStepsCountToAchieve(self):
         return len(self.getProgress().getSteps())
 
     def getType(self):
-        return self._type
+        return self.__type
 
     def getUserName(self):
-        return self.__division.getRankUserName(self._rankID)
+        return self.__division.getRankUserName(self.__rankID)
 
 
-class PostBattleRankInfo(namedtuple('PostBattleRankInfo', ('accRank', 'accStep', 'stepChanges', 'updatedStepChanges', 'prevAccRank', 'prevAccStep', 'shields', 'prevShields', 'isBonusBattle', 'additionalBonusBattles'))):
+class PostBattleRankInfo(namedtuple('PostBattleRankInfo', ('accRank', 'accStep', 'stepChanges', 'updatedStepChanges', 'prevAccRank', 'prevAccStep', 'shields', 'prevShields', 'isBonusBattle', 'qualificationBonusBattles', 'additionalBonusBattles'))):
     __slots__ = ()
 
     @classmethod
@@ -279,7 +294,8 @@ class PostBattleRankInfo(namedtuple('PostBattleRankInfo', ('accRank', 'accStep',
         prevShields = dictWithInfo.get('prevShields', {})
         isBonusBattle = dictWithInfo.get('bonusBattleUsed', False)
         additionalBonusBattles = dictWithInfo.get('additionalBonusBattles', 0)
-        return cls(accRank, accStep, stepChanges, updatedStepChanges, prevAccRank, prevAccStep, shields, prevShields, isBonusBattle, additionalBonusBattles)
+        qualificationBonusBattles = dictWithInfo.get('qualificationBonusBattles', 0)
+        return cls(accRank, accStep, stepChanges, updatedStepChanges, prevAccRank, prevAccStep, shields, prevShields, isBonusBattle, qualificationBonusBattles, additionalBonusBattles)
 
     @property
     def shieldHP(self):

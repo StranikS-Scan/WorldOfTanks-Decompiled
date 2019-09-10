@@ -294,6 +294,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	4.5 4.5 0.000000 0.000000	</tiling>
+      <density>	119.2 119.477	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -1145,6 +1147,8 @@
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
             <tiling>	2 1 0.000000 0.000000	</tiling>
+            <density>	113.581 118.538	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_75mm_SA50L>
         <_90mm_D_921_F1>	shared	  <maxAmmo>	38	</maxAmmo>
@@ -1233,6 +1237,10 @@
             </slot>
           </customizationSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <density>	114.908 112.599	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
+          </camouflage>
         </_90mm_D_921_F1>
         <_90mm_CN_90_F3>	shared	  <maxAmmo>	38	</maxAmmo>
           <armor>
@@ -1316,6 +1324,10 @@
             </slot>
           </customizationSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <density>	115.583 117.434	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
+          </camouflage>
         </_90mm_CN_90_F3>
       </guns>
       <models>
@@ -1475,6 +1487,8 @@
       </customizationSlots>
       <camouflage>
         <tiling>	2.23 2.23 0.000000 0.000000	</tiling>
+        <density>	125.989 126.196	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
     </Turret_1_F110_Lynx_6x6>
   </turrets0>

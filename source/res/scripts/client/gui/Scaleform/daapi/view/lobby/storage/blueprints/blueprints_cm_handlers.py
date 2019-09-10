@@ -6,7 +6,7 @@ from gui.Scaleform.daapi.view.lobby.storage.blueprints import blueprintExitEvent
 from gui.Scaleform.daapi.view.lobby.storage.cm_handlers import ContextMenu, option, CMLabel
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items.items_actions import factory
-from helpers import dependency, i18n
+from helpers import dependency
 from ids_generators import SequenceIDGenerator
 from skeletons.gui.shared import IItemsCache
 
@@ -34,27 +34,16 @@ class BlueprintsCMHandler(ContextMenu):
         exitEvent = blueprintExitEvent()
         shared_events.showBlueprintView(self._id, exitEvent)
 
-    def _makeOption(self, label, data):
-        vo = super(BlueprintsCMHandler, self)._makeOption(label, data)
-        if label == CMLabel.CONVERT_BLUEPRINT_MAX:
-            count = data.pop('count', 0)
-            if count > 0:
-                vo['label'] = i18n.makeString(vo['label'], count=count)
-        return vo
-
     def _getOptionCustomData(self, label):
-        if label == CMLabel.CONVERT_BLUEPRINT_MAX:
+        optionData = super(BlueprintsCMHandler, self)._getOptionCustomData(label)
+        if label == CMLabel.CONVERT_BLUEPRINT:
+            optionData.enabled = self.__getMaxFragmentCount() > 0
+        elif label == CMLabel.CONVERT_BLUEPRINT_MAX:
             availableCount = self.__getMaxFragmentCount()
-            if availableCount > 1:
-                return {'label': 'convertBlueprintMaxCount',
-                 'count': availableCount}
-            return {'enabled': False}
-        else:
-            if label == CMLabel.CONVERT_BLUEPRINT:
-                availableCount = self.__getMaxFragmentCount()
-                if availableCount == 0:
-                    return {'enabled': False}
-            return None
+            optionData.label = 'convertBlueprintMaxCount' if availableCount > 1 else 'convertBlueprintMax'
+            optionData.enabled = availableCount > 1
+            optionData.labelCtx = {'count': availableCount}
+        return optionData
 
     def __getMaxFragmentCount(self):
         item = self.__itemsCache.items.getItemByCD(self._id)

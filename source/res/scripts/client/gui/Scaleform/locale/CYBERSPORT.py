@@ -163,7 +163,6 @@ class CYBERSPORT(object):
     WINDOW_UNIT_UNITLISTVIEW_DESCRIPTION = '#cyberSport:window/unit/unitListView/description'
     WINDOW_UNIT_UNITLISTVIEW_PLAYERS = '#cyberSport:window/unit/unitListView/players'
     WINDOW_UNIT_SLOT_EMPTYSLOT = '#cyberSport:window/unit/slot/emptySlot'
-    WINDOW_UNIT_SLOT_BATTLEROYALE = '#cyberSport:window/unit/slot/battleRoyale'
     WINDOW_UNIT_SLOT_NOTAVAILABLE = '#cyberSport:window/unit/slot/notAvailable'
     WINDOW_UNIT_SLOT_NOTALLOWED = '#cyberSport:window/unit/slot/notAllowed'
     WINDOW_UNIT_SLOT_TAKEPLACE = '#cyberSport:window/unit/slot/takePlace'

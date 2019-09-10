@@ -129,6 +129,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	1.8 1.8 0.000000 0.000000	</tiling>
+      <density>	119.445 122.135	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -1317,6 +1319,10 @@
               <applyTo>	16384	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	114.509 115.564	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_47mm_SA34>
         <_47mm_SA35>	shared	  <maxAmmo>	156	</maxAmmo>
           <unlocks>
@@ -1385,6 +1391,10 @@
               <applyTo>	16384	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	124.629 126.193	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_47mm_SA35>
       </guns>
       <models>
@@ -1441,6 +1451,10 @@
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	116.034 112.535	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </Turret_1_AMX40>
     <Turret_2_AMX40>
       <userString>	#france_vehicles:Turret_2_AMX40	</userString>
@@ -1548,6 +1562,10 @@
               <applyTo>	16384	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	114.509 115.564	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_47mm_SA34>
         <_47mm_SA35>	shared	  <maxAmmo>	156	</maxAmmo>
           <pitchLimits>
@@ -1612,6 +1630,10 @@
               <applyTo>	16384	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	124.629 126.193	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_47mm_SA35>
         <_75mm_SA32>	shared	  <maxAmmo>	70	</maxAmmo>
           <unlocks>
@@ -1681,6 +1703,10 @@
               <applyTo>	16384	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	111.663 104.301	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_75mm_SA32>
       </guns>
       <models>
@@ -1739,6 +1765,8 @@
       </customizationSlots>
       <camouflage>
         <tiling>	0.4 1 0.000000 0.000000	</tiling>
+        <density>	121.838 122.408	</density>
+        <aoTextureSize>	256 512	</aoTextureSize>
       </camouflage>
     </Turret_2_AMX40>
   </turrets0>

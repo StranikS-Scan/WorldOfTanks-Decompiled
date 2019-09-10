@@ -4,7 +4,7 @@ import logging
 from frameworks.wulf import ViewFlags
 from frameworks.wulf import WindowFlags
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.impl.auxiliary.rewards_helper import getRewardTooltipContent, getRewardRendererModelPresenter, BLUEPRINTS_CONGRAT_TYPES, fillStepsModel, getLastCongratsIndex, FESTIVAL_MODEL_PRESENTERS
+from gui.impl.auxiliary.rewards_helper import getRewardTooltipContent, getRewardRendererModelPresenter, BLUEPRINTS_CONGRAT_TYPES, fillStepsModel, getLastCongratsIndex
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.progressive_reward.progressive_reward_award_model import ProgressiveRewardAwardModel
 from gui.impl.gen.view_models.views.loot_box_view.loot_congrats_types import LootCongratsTypes
@@ -12,26 +12,24 @@ from gui.impl.gen.view_models.views.lobby.blueprints.blueprint_screen_tooltips i
 from gui.impl.lobby.progressive_reward.progressive_award_sounds import setSoundState, ProgressiveRewardSoundEvents
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
-from gui.impl.backport.backport_tooltip import createTooltipData, BackportTooltipWindow, TooltipData
+from gui.impl.backport import createTooltipData, BackportTooltipWindow, TooltipData
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.event_dispatcher import showBlueprintView
 from helpers import dependency
-from skeletons.festival import IFestivalController
 from skeletons.gui.server_events import IEventsCache
 _logger = logging.getLogger(__name__)
 
 class ProgressiveRewardAwardView(ViewImpl):
     _eventsCache = dependency.descriptor(IEventsCache)
-    __slots__ = ('__items', '__bonuses', '__specialRewardType', '__currentStep', '__initialCongratsType')
+    __slots__ = ('__items', '__bonuses', '__specialRewardType', '__currentStep')
 
     def __init__(self, contentResId, *args, **kwargs):
         super(ProgressiveRewardAwardView, self).__init__(contentResId, ViewFlags.VIEW, ProgressiveRewardAwardModel, *args, **kwargs)
         self.__items = {}
         self.__bonuses = []
         self.__specialRewardType = ''
-        self.__currentStep = kwargs.get('currentStep', 0)
-        self.__initialCongratsType = LootCongratsTypes.INIT_CONGRAT_TYPE_PROGRESSIVE_REWARDS
+        self.__currentStep = 0
         g_techTreeDP.load()
 
     @property
@@ -52,7 +50,7 @@ class ProgressiveRewardAwardView(ViewImpl):
         tooltipData = self.__getBackportTooltipData(event)
         return getRewardTooltipContent(event, tooltipData)
 
-    def _initialize(self, bonuses, specialRewardType, currentStep, initialCongratsType, reachValue):
+    def _initialize(self, bonuses, specialRewardType, currentStep):
         super(ProgressiveRewardAwardView, self)._initialize()
         self.viewModel.onDestroyEvent += self.__onDestroy
         self.viewModel.onCloseAction += self.__onWindowClose
@@ -60,14 +58,11 @@ class ProgressiveRewardAwardView(ViewImpl):
         g_clientUpdateManager.addCallbacks({'blueprints': self.__update,
          'serverSettings.blueprints_config': self.__update,
          'serverSettings.progressive_reward_config': self.__update})
-        if initialCongratsType is not None:
-            self.__initialCongratsType = initialCongratsType
         self.__specialRewardType = specialRewardType
         self.__bonuses = bonuses
         self.__currentStep = currentStep
         self.__update()
         setSoundState(groupName=ProgressiveRewardSoundEvents.PROGRESSIVE_REWARD_AWARD_GROUP, stateName=ProgressiveRewardSoundEvents.PROGRESSIVE_REWARD_AWARD_ENTER)
-        return
 
     def _finalize(self):
         self.viewModel.onCloseAction -= self.__onWindowClose
@@ -77,9 +72,6 @@ class ProgressiveRewardAwardView(ViewImpl):
         del self.__bonuses[:]
         self.__items.clear()
         super(ProgressiveRewardAwardView, self)._finalize()
-
-    def _getModelPresenters(self):
-        return None
 
     def __update(self, _=None):
         if self.__specialRewardType != LootCongratsTypes.INIT_CONGRAT_TYPE_CREW_BOOKS:
@@ -103,13 +95,12 @@ class ProgressiveRewardAwardView(ViewImpl):
             return
         else:
             with self.viewModel.transaction() as tx:
-                if self.__currentStep > -1:
-                    steps = tx.getSteps()
-                    steps.clear()
-                    fillStepsModel(currentStep, progressive.probability, progressive.maxSteps, True, steps)
-                    steps.invalidate()
+                steps = tx.getSteps()
+                steps.clear()
+                fillStepsModel(currentStep, progressive.probability, progressive.maxSteps, True, steps)
+                steps.invalidate()
                 tx.setStepIdx(currentStep)
-                tx.setInitialCongratsType(self.__initialCongratsType)
+                tx.setInitialCongratsType(LootCongratsTypes.INIT_CONGRAT_TYPE_PROGRESSIVE_REWARDS)
             return
 
     def __setBonuses(self, bonuses):
@@ -117,19 +108,15 @@ class ProgressiveRewardAwardView(ViewImpl):
             rewardsList = tx.getRewards()
             rewardsList.clear()
             lastCongratsIndex = getLastCongratsIndex(bonuses, self.__specialRewardType)
-            rewardsHaveBigAward = False
             for index, reward in enumerate(bonuses):
-                formatter = getRewardRendererModelPresenter(reward, self._getModelPresenters())
+                formatter = getRewardRendererModelPresenter(reward)
                 showCongrats = index is lastCongratsIndex
                 rewardRender = formatter.getModel(reward, index, showCongrats=showCongrats)
                 rewardsList.addViewModel(rewardRender)
-                if hasattr(rewardRender, 'congratsViewModel'):
-                    rewardsHaveBigAward = rewardRender.congratsViewModel.getCongratsType() != ''
                 compensationReason = reward.get('compensationReason', None)
                 ttTarget = compensationReason if compensationReason is not None else reward
                 self.__items[index] = TooltipData(tooltip=ttTarget.get('tooltip', None), isSpecial=ttTarget.get('isSpecial', False), specialAlias=ttTarget.get('specialAlias', ''), specialArgs=ttTarget.get('specialArgs', None))
 
-            tx.setRibbonHaveBigAward(rewardsHaveBigAward)
             rewardsList.invalidate()
             tx.setSpecialRewardType(self.__specialRewardType)
         return
@@ -165,28 +152,7 @@ class ProgressiveRewardAwardWindow(LobbyWindow):
     __slots__ = ()
 
     def __init__(self, bonuses, specialRewardType, currentStep):
-        super(ProgressiveRewardAwardWindow, self).__init__(content=ProgressiveRewardAwardView(R.views.lobby.progressive_reward.progressive_reward_award.ProgressiveRewardAward(), bonuses, specialRewardType, currentStep, initialCongratsType=None, reachValue=None), wndFlags=WindowFlags.OVERLAY, decorator=None)
-        return
-
-
-class FestivalProgressiveRewardAwardView(ProgressiveRewardAwardView):
-    __festController = dependency.descriptor(IFestivalController)
-    __slots__ = ()
-
-    def _initialize(self, bonuses, specialRewardType, currentStep, initialCongratsType, reachValue):
-        self.viewModel.setFestivalElementsCount(reachValue)
-        super(FestivalProgressiveRewardAwardView, self)._initialize(bonuses, specialRewardType, currentStep, initialCongratsType, reachValue)
-
-    def _getModelPresenters(self):
-        isGathered = self.viewModel.getFestivalElementsCount() == self.__festController.getTotalItemsCount()
-        return FESTIVAL_MODEL_PRESENTERS if isGathered else {k:v for k, v in FESTIVAL_MODEL_PRESENTERS.items() if k != 'customizations'}
-
-
-class FestivalAwardWindow(LobbyWindow):
-    __slots__ = ()
-
-    def __init__(self, bonuses, specialRewardType, reachValue):
-        super(FestivalAwardWindow, self).__init__(content=FestivalProgressiveRewardAwardView(R.views.lobby.progressive_reward.progressive_reward_award.ProgressiveRewardAward(), bonuses, specialRewardType, currentStep=-1, initialCongratsType=LootCongratsTypes.INIT_CONGRAT_TYPE_FESTIVAL_AWARD, reachValue=reachValue), wndFlags=WindowFlags.OVERLAY, decorator=None)
+        super(ProgressiveRewardAwardWindow, self).__init__(content=ProgressiveRewardAwardView(R.views.lobby.progressive_reward.progressive_reward_award.ProgressiveRewardAward(), bonuses, specialRewardType, currentStep), wndFlags=WindowFlags.OVERLAY, decorator=None)
         return
 
 

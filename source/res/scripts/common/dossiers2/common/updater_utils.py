@@ -45,6 +45,45 @@ def getStaticSizeBlockRecordValues(updateCtx, block, recordsPacking):
     return res
 
 
+def getDictBlockRecordValues(updateCtx, block, keyFormat, valueFormat):
+    compDescr = getBlockCompDescr(updateCtx, block)
+    itemFormat = keyFormat + valueFormat
+    itemSize = struct.calcsize('<' + itemFormat)
+    length = len(compDescr) / itemSize
+    keyLength = len(keyFormat)
+    valueLength = len(valueFormat)
+    if length == 0:
+        return {}
+    data = {}
+    fmt = '<' + itemFormat * length
+    values = struct.unpack(fmt, compDescr)
+    itemLength = len(itemFormat)
+    for i in xrange(0, len(values), itemLength):
+        key = values[i:i + keyLength]
+        value = values[i + keyLength:i + valueLength + keyLength]
+        data[key] = value
+
+    return data
+
+
+def updateDictRecords(updateCtx, block, keyFormat, valueFormat, values):
+    header = updateCtx['header']
+    blockIndex = updateCtx['blocksLayout'].index(block)
+    blockSize = header[blockIndex + 1]
+    headerLength = updateCtx['headerLength']
+    blockOffset = headerLength + sum(header[1:blockIndex + 1])
+    fmt = '<' + (keyFormat + valueFormat) * len(values)
+    writeValues = []
+    for key, value in values.iteritems():
+        writeValues += key + value
+
+    blockCompDescr = struct.pack(fmt, *writeValues)
+    dossierCompDescr = updateCtx['dossierCompDescr']
+    dossierCompDescr = dossierCompDescr[:blockOffset] + blockCompDescr + dossierCompDescr[blockOffset + blockSize:]
+    header[blockIndex + 1] = len(blockCompDescr)
+    updateCtx['dossierCompDescr'] = struct.pack(updateCtx['headerFormat'], *header) + dossierCompDescr[updateCtx['headerLength']:]
+
+
 def setStaticSizeBlockRecordValues(updateCtx, block, recordsPacking, recordsValues):
     blockIndex = updateCtx['blocksLayout'].index(block)
     if updateCtx['header'][blockIndex + 1] == 0:

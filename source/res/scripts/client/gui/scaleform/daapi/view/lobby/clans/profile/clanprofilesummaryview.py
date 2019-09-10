@@ -16,7 +16,7 @@ from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES as _
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.daapi.view.meta.ClanProfileSummaryViewMeta import ClanProfileSummaryViewMeta
-from gui.shared.view_helpers.image_helper import ImagesFetchCoordinator
+from gui.shared.image_helper import ImagesFetchCoordinator
 _DIVISIONS = (6, 8, 10)
 
 def _stateVO(showRequestBtn, mainStatus=None, tooltip='', enabledRequestBtn=False, addStatus=None, showPersonalBtn=False):

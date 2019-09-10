@@ -50,7 +50,6 @@ class BadgesPage(BadgesPageMeta):
         return
 
     def onBackClick(self):
-        AccountSettings.setSettings(LAST_BADGES_VISIT, getServerUTCTime())
         self.destroy()
 
     def onSelectBadge(self, badgeID):
@@ -86,6 +85,7 @@ class BadgesPage(BadgesPageMeta):
         if self.__tutorStorage is not None:
             self.__tutorStorage.setValue(GLOBAL_FLAG.BADGE_PAGE_HAS_NEW_SUFFIX_BADGE, False)
         self.badgesController.onUpdated -= self.__updateBadges
+        AccountSettings.setSettings(LAST_BADGES_VISIT, getServerUTCTime())
         super(BadgesPage, self)._dispose()
         return
 

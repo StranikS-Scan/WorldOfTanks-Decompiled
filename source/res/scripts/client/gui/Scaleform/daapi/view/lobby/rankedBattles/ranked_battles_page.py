@@ -3,7 +3,7 @@
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import GUI_START_BEHAVIOR, RANKED_AWARDS_COUNTER, RANKED_INFO_COUNTER, RANKED_AWARDS_BUBBLE_YEAR_REACHED
 from gui.ranked_battles.ranked_helpers.sound_manager import RANKED_MAIN_PAGE_SOUND_SPACE
-from gui.ranked_battles.constants import YEAR_AWARDS_POINTS_MAP, RankedDossierKeys
+from gui.ranked_battles.constants import RankedDossierKeys
 from gui.ranked_battles.ranked_builders import main_page_vos
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -106,7 +106,7 @@ class RankedMainPage(LobbySubView, RankedBattlesPageMeta):
     def __onYearAwardPointsUpdate(self):
         if not AccountSettings.getSettings(RANKED_AWARDS_BUBBLE_YEAR_REACHED):
             points = self._rankedController.getYearRewardPoints()
-            for minPoints, maxPoints in YEAR_AWARDS_POINTS_MAP.itervalues():
+            for minPoints, maxPoints in self._rankedController.getYearAwardsPointsMap().itervalues():
                 if maxPoints >= points >= minPoints:
                     AccountSettings.setCounters(RANKED_AWARDS_COUNTER, 1)
                     AccountSettings.setSettings(RANKED_AWARDS_BUBBLE_YEAR_REACHED, True)

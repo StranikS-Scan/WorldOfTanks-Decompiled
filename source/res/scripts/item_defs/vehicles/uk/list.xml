@@ -291,7 +291,7 @@
     <price>	5	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG heavyAT-SPG AT-SPG2 improvedVentilation_class3_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedHorizontal_springs_class3_user HD special	</tags>
+    <tags>	AT-SPG heavyAT-SPG AT-SPG2 RE_ATSPG_3 improvedVentilation_class3_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedHorizontal_springs_class3_user HD special	</tags>
     <level>	10	</level>
   </GB48_FV215b_183>
   <GB74_AT8>
@@ -424,7 +424,7 @@
     <description>	#gb_vehicles:GB83_FV4005_descr	</description>
     <shortUserString>	#gb_vehicles:GB83_FV4005_short	</shortUserString>
     <price>	6100000	</price>
-    <tags>	AT-SPG heavyAT-SPG AT-SPG2 improvedVentilation_class3_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedHorizontal_springs_class3_user HD	</tags>
+    <tags>	AT-SPG heavyAT-SPG AT-SPG2 RE_ATSPG_3 improvedVentilation_class3_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedHorizontal_springs_class3_user HD	</tags>
     <level>	10	</level>
   </GB83_FV4005>
   <GB41_Challenger>
@@ -801,6 +801,19 @@
     <tags>	heavyTank heavyTank1 improvedVentilation_class3_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class3_user HD secret testTank	</tags>
     <level>	6	</level>
   </GB105_Black_Prince_2019>
+  <GB99_Turtle_Mk1>
+    <id>	234	</id>
+    <userString>	#gb_vehicles:GB99_Turtle_Mk1	</userString>
+    <shortUserString>	#gb_vehicles:GB99_Turtle_Mk1_short	</shortUserString>
+    <description>	#gb_vehicles:GB99_Turtle_Mk1_descr	</description>
+    <shortDescriptionSpecial>	#gb_vehicles:GB99_Turtle_Mk1_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#gb_vehicles:GB99_Turtle_Mk1_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG heavyAT-SPG improvedVentilation_class3_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedHorizontal_springs_class3_user HD secret testTank	</tags>
+    <level>	8	</level>
+  </GB99_Turtle_Mk1>
   <GB23_Centurion_IGR>
     <id>	151	</id>
     <userString>	#igr_vehicles:GB23_Centurion_IGR	</userString>

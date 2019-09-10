@@ -29,18 +29,6 @@ def await(future, timeout=None):
     return future
 
 
-def prepare(func):
-
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        gen = func(*args, **kwargs)
-        promise = _Promise()
-        executor = _AsyncExecutor(gen, promise)
-        return (promise.get_future(), executor)
-
-    return wrapper
-
-
 def await_callback(func, timeout=None):
 
     def wrapper(*args, **kwargs):
@@ -85,13 +73,16 @@ def resignTickIfRequired(timeout=0.1):
     if BigWorld.isNextTickPending():
         return delay(timeout)
     else:
-        return _g_alwaysReadyFuture
+        promise = _Promise()
+        promise.set_value(None)
+        return promise.get_future()
+        return
 
 
 def delay(timeout):
     promise = _Promise()
 
-    def onTimer(*_):
+    def onTimer(timerID, userArg):
         promise.set_value(None)
         return
 
@@ -100,10 +91,14 @@ def delay(timeout):
     return promise.get_future()
 
 
+def _isNextTickPending():
+    return BigWorld.isNextTickPending()
+
+
 @async
 def delayWhileTickPending(maxTicksToDelay=1, timeout=0.1, logID=None):
     for n in xrange(maxTicksToDelay):
-        if not BigWorld.isNextTickPending():
+        if not _isNextTickPending():
             LOG_DEBUG_DEV('delayWhileTickPending', logID, n)
             break
         yield await(delay(timeout))
@@ -136,7 +131,7 @@ def distributeLoopOverTicks(loopIterator, minPerTick=None, maxPerTick=None, logI
         numStatements += 1
         reachedMin = minPerTick is None or countInTick >= minPerTick
         reachedMax = maxPerTick is not None and countInTick >= maxPerTick
-        if reachedMax or reachedMin and BigWorld.isNextTickPending():
+        if reachedMax or reachedMin and _isNextTickPending():
             yield await(delay(tickLength))
             countInTick = 0
             delayedCount += 1
@@ -154,18 +149,7 @@ class BrokenPromiseError(SoftException):
     pass
 
 
-class _AlwaysReadyFuture(object):
-    __slots__ = ('__result',)
-
-    def __init__(self, result):
-        self.__result = result
-
-    def then(self, callback):
-        callback(self.__result)
-
-
 class _Future(object):
-    __slots__ = ('__promise', '__callback', '__callback_set', '__result', '__result_set', '__timerID', '__expired')
 
     def __init__(self, promise):
         self.__promise = weakref.proxy(promise)
@@ -246,7 +230,6 @@ class _Future(object):
 
 
 class _Promise(object):
-    __slots__ = ('__value_set', '__future_set', '__exc_info', '__value', '__future', '__cancelled', '__cancel', '__weakref__')
 
     def __init__(self):
         self.__value_set = self.__future_set = False
@@ -326,7 +309,6 @@ class _Promise(object):
 
 
 class _FulfilledPromiseResult(object):
-    __slots__ = ('__value', '__exc_info')
 
     def __init__(self, value, exc_info):
         self.__value = value
@@ -340,21 +322,18 @@ class _FulfilledPromiseResult(object):
 
 
 class _ExpiredPromiseResult(object):
-    __slots__ = ()
 
     def get(self):
         raise TimeoutError()
 
 
 class _BrokenPromiseResult(object):
-    __slots__ = ()
 
     def get(self):
         raise BrokenPromiseError()
 
 
 class _AsyncExecutor(object):
-    __slots__ = ('__gen', '__promise')
 
     def __init__(self, gen, promise):
         self.__gen = gen
@@ -367,9 +346,9 @@ class _AsyncExecutor(object):
     def __step(self, next, *args):
         try:
             future = next(*args)
+            future.then(self.__resume)
             handler = getattr(future, 'cancel', None)
             self.__promise.set_cancel_handler(handler)
-            future.then(self.__resume)
         except AsyncReturn as r:
             self.__promise.set_value(r.value)
         except StopIteration:
@@ -540,6 +519,3 @@ class AsyncQueue(AsyncObject):
     def destroy(self):
         del self.__promises
         del self.__values
-
-
-_g_alwaysReadyFuture = _AlwaysReadyFuture(_FulfilledPromiseResult(None, None))

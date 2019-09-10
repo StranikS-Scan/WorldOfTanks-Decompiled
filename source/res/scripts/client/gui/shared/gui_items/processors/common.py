@@ -3,16 +3,18 @@
 import logging
 import BigWorld
 from constants import EMPTY_GEOMETRY_ID
-from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 from gui import SystemMessages
+from gui.impl.gen import R
+from gui.impl import backport
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
-from gui.impl import backport
 from gui.shared.formatters import formatPrice, formatGoldPrice, text_styles, icons
 from gui.shared.gui_items.processors import Processor, makeError, makeSuccess, makeI18nError, makeI18nSuccess, plugins
 from gui.shared.money import Money, Currency
+from helpers import dependency
+from skeletons.gui.game_control import IVehicleComparisonBasket
 _logger = logging.getLogger(__name__)
 
 class TankmanBerthsBuyer(Processor):
@@ -268,6 +270,13 @@ class EpicPrestigeTrigger(Processor):
         BigWorld.player().epicMetaGame.triggerEpicMetaGamePrestige(lambda code, errStr: self._response(code, callback, errStr=errStr))
 
 
+class EpicPrestigePointsExchange(Processor):
+
+    def _request(self, callback):
+        _logger.debug('Make server request to exchange prestige points')
+        BigWorld.player().epicMetaGame.exchangePrestigePoints(lambda code, errStr: self._response(code, callback, errStr=errStr))
+
+
 class EpicRewardsClaimer(Processor):
 
     def _errorHandler(self, code, errStr='', ctx=None):
@@ -386,3 +395,21 @@ class UseCrewBookProcessor(Processor):
 
     def _request(self, callback):
         BigWorld.player().inventory.useCrewBook(self.__crewBookCD, self.__vehInvID, self.__tmanInvID, lambda code: self._response(code, callback))
+
+
+class VehicleChangeNation(Processor):
+    _comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
+
+    def __init__(self, cvh, nvh):
+        super(VehicleChangeNation, self).__init__()
+        self._cvh = cvh
+        self._nvh = nvh
+
+    def _request(self, callback):
+        BigWorld.player().inventory.switchNation(self._cvh.name, self._nvh.name, lambda code: self._response(code, callback))
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError(sysMsgKey=backport.text(R.strings.system_messages.nation_change.dyn(errStr)()), defaultSysMsgKey=backport.text(R.strings.system_messages.nation_change.error()))
+
+    def _successHandler(self, code, ctx=None):
+        return makeI18nSuccess(sysMsgKey=backport.text(R.strings.system_messages.nation_change.success()), veh_name=self._cvh.userName)

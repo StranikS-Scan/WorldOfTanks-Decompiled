@@ -147,6 +147,10 @@
         <anchorDirection>	0.000000 0.728338 -0.685218	</anchorDirection>
       </slot>
     </customizationSlots>
+    <camouflage>
+      <density>	97.4338 97.5098	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_T25_AT>
@@ -2199,6 +2203,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
+            <density>	99.2816 100.882	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_90mm_AT_Gun_M3>
         <_90mm_AT_Gun_T15E2>	shared	  <maxAmmo>	56	</maxAmmo>
@@ -2284,6 +2290,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
+            <density>	104.087 106.215	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_90mm_AT_Gun_T15E2>
         <_105mm_AT_Gun_T5E1>	shared	  <maxAmmo>	40	</maxAmmo>
@@ -2364,6 +2372,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
+            <density>	107.467 108.452	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_105mm_AT_Gun_T5E1>
       </guns>

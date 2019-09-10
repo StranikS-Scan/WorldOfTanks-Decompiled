@@ -127,7 +127,7 @@ class PrbInviteWrapper(_PrbInviteData):
         return True
 
     def isActive(self):
-        return self.getState() == PRB_INVITE_STATE.PENDING
+        return self.getState() in (PRB_INVITE_STATE.PENDING, PRB_INVITE_STATE.POSTPONED)
 
     def isExpired(self):
         return False
@@ -423,7 +423,7 @@ class InvitesManager(UsersInfoHelper):
     def getInvites(self, incoming=None, version=None, onlyActive=None):
         result = self.__invites.values()
         if incoming is not None:
-            result = [ item for item in result if item.isIncoming() ]
+            result = [ item for item in result if item.isIncoming() is incoming ]
         if version is not None:
             result = [ item for item in result if item.getVersion() == version ]
         if onlyActive is not None:

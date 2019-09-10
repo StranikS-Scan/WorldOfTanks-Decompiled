@@ -90,8 +90,11 @@ class RestoreController(IRestoreController, Notifiable):
             result = self.__tankmenList[-1 * tankmenCountToDelete:]
         return result
 
-    def getTankmenDeletedBySelling(self, vehicle):
-        newTankmen = [ tankman for _, tankman in vehicle.crew if tankman is not None and tankman.isRestorable() ]
+    def getTankmenDeletedBySelling(self, *vehicles):
+        newTankmen = []
+        for vehicle in vehicles:
+            newTankmen += [ tankman for _, tankman in vehicle.crew if tankman is not None and tankman.isRestorable() ]
+
         return (newTankmen, self.getTankmenBeingDeleted(len(newTankmen)))
 
     def _stop(self):

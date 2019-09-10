@@ -61,6 +61,8 @@ def uniformIds():
     def wrapper(seqId, group, passport):
         return True if len(set(passport[3:])) == 1 else False
 
+    return wrapper
+
 
 def maxAttempts(count=1):
 

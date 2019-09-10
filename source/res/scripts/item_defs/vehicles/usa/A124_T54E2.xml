@@ -24,6 +24,7 @@
     <priceFactor>	1.6	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
     <exclusionMask></exclusionMask>
+    <density>	1 1	</density>
   </camouflage>
   <hull>
     <armor>
@@ -562,6 +563,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	0.8 0.8 0.000000 0.000000	</tiling>
+      <density>	109.915 110.372	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -1575,6 +1578,10 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <camouflage>
+            <density>	104.755 109.048	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_105mm_Gun_T140E3>
       </guns>
       <models>
@@ -2056,6 +2063,8 @@
       </customizationSlots>
       <camouflage>
         <tiling>	0.8 0.35 0.000000 0.000000	</tiling>
+        <density>	119.299 119.424	</density>
+        <aoTextureSize>	1024 512	</aoTextureSize>
       </camouflage>
     </Turret_1_A124_T54E2>
   </turrets0>

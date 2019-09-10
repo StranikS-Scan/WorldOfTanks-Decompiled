@@ -1983,6 +1983,47 @@
     <name>	Fire Trail Epic Win	</name>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/cool	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	projection_decals 150g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	117	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_29.dds	</texture>
+      <description>	#vehicle_customization:projection_decals/cool/projection_decal_29/description	</description>
+      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_29	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	118	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_30.dds	</texture>
+      <description>	#vehicle_customization:projection_decals/cool/projection_decal_30/description	</description>
+      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_30	</userString>
+      <tags>	formfactor_square	</tags>
+      <priceGroup>	projection_decals 175g	</priceGroup>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	119	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_31.dds	</texture>
+      <description>	#vehicle_customization:projection_decals/cool/projection_decal_31/description	</description>
+      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_31	</userString>
+      <tags>	formfactor_square	</tags>
+      <priceGroup>	projection_decals 175g	</priceGroup>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <name>	Battle Royale	</name>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:projection_decals/mythology	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
@@ -2084,6 +2125,42 @@
     <name>	Mythology	</name>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/holiday	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	projection_decals 150g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	168	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/projection_decal_04.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/holiday/projection_decal_04	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	169	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/projection_decal_05.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/holiday/projection_decal_05	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	170	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/projection_decal_06.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/holiday/projection_decal_06	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <name>	WoT Fest 2019	</name>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:projection_decals/pin_up	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
@@ -2176,42 +2253,6 @@
     <name>	Pin-Up	</name>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:projection_decals/holiday	</userString>
-    <season>	ALL	</season>
-    <historical>	false	</historical>
-    <priceGroup>	projection_decals 150g notInShop	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <levels>	8 10	</levels>
-      </include>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <projection_decal>
-      <id>	168	</id>
-      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/projection_decal_04.dds	</texture>
-      <userString>	#vehicle_customization:projection_decals/holiday/projection_decal_04	</userString>
-      <tags>	formfactor_square	</tags>
-      <mirror>	false	</mirror>
-    </projection_decal>
-    <projection_decal>
-      <id>	169	</id>
-      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/projection_decal_05.dds	</texture>
-      <userString>	#vehicle_customization:projection_decals/holiday/projection_decal_05	</userString>
-      <tags>	formfactor_square	</tags>
-      <mirror>	false	</mirror>
-    </projection_decal>
-    <projection_decal>
-      <id>	170	</id>
-      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/projection_decal_06.dds	</texture>
-      <userString>	#vehicle_customization:projection_decals/holiday/projection_decal_06	</userString>
-      <tags>	formfactor_square	</tags>
-      <mirror>	false	</mirror>
-    </projection_decal>
-    <name>	WoT Fest 2019	</name>
-  </itemGroup>
-  <itemGroup>
     <userString>	#vehicle_customization:projection_decals/special	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
@@ -2235,10 +2276,10 @@
     <name>	Twitch 2019	</name>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:projection_decals/cool	</userString>
+    <userString>	#vehicle_customization:projection_decals/holiday	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
-    <priceGroup>	projection_decals 150g notInShop	</priceGroup>
+    <priceGroup>	projection_decals 50g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <levels>	8 10	</levels>
@@ -2248,31 +2289,89 @@
       </exclude>
     </vehicleFilter>
     <projection_decal>
-      <id>	117	</id>
-      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_29.dds	</texture>
-      <description>	#vehicle_customization:projection_decals/cool/projection_decal_29/description	</description>
-      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_29	</userString>
+      <id>	184	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/projection_decal_07.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/holiday/projection_decal_07	</userString>
       <tags>	formfactor_square	</tags>
-      <mirror>	false	</mirror>
+      <mirror>	true	</mirror>
     </projection_decal>
     <projection_decal>
-      <id>	118	</id>
-      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_30.dds	</texture>
-      <description>	#vehicle_customization:projection_decals/cool/projection_decal_30/description	</description>
-      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_30	</userString>
+      <id>	189	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/projection_decal_08.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/holiday/projection_decal_08	</userString>
       <tags>	formfactor_square	</tags>
-      <priceGroup>	projection_decals 175g	</priceGroup>
-      <mirror>	false	</mirror>
+      <mirror>	true	</mirror>
     </projection_decal>
+    <name>	APAC 2019	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/cool	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	projection_decals 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
     <projection_decal>
-      <id>	119	</id>
-      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_31.dds	</texture>
-      <description>	#vehicle_customization:projection_decals/cool/projection_decal_31/description	</description>
-      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_31	</userString>
+      <id>	185	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/projection_decal_34.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/cool/projection_decal_34	</userString>
       <tags>	formfactor_square	</tags>
-      <priceGroup>	projection_decals 175g	</priceGroup>
-      <mirror>	false	</mirror>
+      <mirror>	true	</mirror>
     </projection_decal>
-    <name>	Battle Royale	</name>
+    <name>	APAC 2019	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/landscape	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	projection_decals 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <tags>	premium	</tags>
+        <levels>	8	</levels>
+      </include>
+      <include>
+        <levels>	10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	186	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/landscape/projection_decal_04.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/landscape/projection_decal_04	</userString>
+      <tags>	formfactor_rect1x2 direction_left_to_right	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <name>	APAC 2019	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/animals	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	projection_decals 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	187	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/animals/projection_decal_33.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/animals/projection_decal_33	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <name>	APAC 2019	</name>
   </itemGroup>
 </list.xml>

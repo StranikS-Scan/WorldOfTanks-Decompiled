@@ -16,6 +16,7 @@ from helpers import dependency
 from helpers.local_cache import FileLocalCache
 from items import getTypeOfCompactDescr, ITEM_TYPE_NAMES
 from items.vehicles import VehicleDescr
+from nation_change_helpers.client_nation_change_helper import getValidVehicleCDForNationChange
 from skeletons.gui.game_control import IVehicleComparisonBasket, IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -342,6 +343,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
         self.onChange = Event.Event()
         self.onParametersChange = Event.Event()
         self.onSwitchChange = Event.Event()
+        self.onNationChange = Event.Event()
         self.__isEnabled = True
         self.__cache = None
         return
@@ -378,6 +380,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
         self.onChange.clear()
         self.onParametersChange.clear()
         self.onSwitchChange.clear()
+        self.onNationChange.clear()
         super(VehComparisonBasket, self).fini()
         return
 
@@ -424,6 +427,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
         if not isinstance(vehicleCompactDesr, (int, float)):
             raise SoftException('Int-type compact descriptor is invalid: '.format(vehicleCompactDesr))
         if self.__canBeAdded():
+            vehicleCompactDesr = getValidVehicleCDForNationChange(vehicleCompactDesr)
             vehCmpData = self._createVehCompareData(vehicleCompactDesr, initParameters)
             if vehCmpData:
                 self.__vehicles.append(vehCmpData)
@@ -620,6 +624,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
             return
         else:
             changedIDXs = set()
+            nationWasChanged = False
             if diff is not None and GUI_ITEM_TYPE.VEHICLE in diff:
                 vehDiff = diff[GUI_ITEM_TYPE.VEHICLE]
                 diffKeys = diff.keys()
@@ -651,9 +656,16 @@ class VehComparisonBasket(IVehicleComparisonBasket):
                                 if GUI_ITEM_TYPE.CUSTOMIZATION in diffKeys or GUI_ITEM_TYPE.OUTFIT in diffKeys:
                                     self.__updateInventoryData(vehCompareData, vehicle)
                                     changedIDXs.add(idx)
+                            vehicleCompactDesr = getValidVehicleCDForNationChange(changedVehCD)
+                            if vehicleCompactDesr != changedVehCD:
+                                vehCmpData = self._createVehCompareData(vehicleCompactDesr)
+                                self.__vehicles[idx] = vehCmpData
+                                nationWasChanged = True
 
             if changedIDXs:
                 self.onParametersChange(changedIDXs)
+            if nationWasChanged:
+                self.onNationChange()
             return
 
     @classmethod

@@ -5,7 +5,7 @@ import items
 import calendar
 from account_shared import validateCustomizationItem
 from invoices_helpers import checkAccountDossierOperation
-from items import vehicles, tankmen, festival
+from items import vehicles, tankmen
 from items.components.c11n_constants import SeasonType
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE
@@ -47,18 +47,317 @@ def __readBonus_string_set(bonus, name, section, eventType):
     bonus[name] = data.strip().split()
 
 
+class IntHolder(int):
+    newval = 0
+    rate = 1
+
+    def __new__(cls, value, **kwargs):
+        return super(IntHolder, cls).__new__(cls, value, **{k:v for k, v in kwargs.iteritems() if k in ('base',)})
+
+    def __init__(self, value, **kwargs):
+        super(IntHolder, self).__init__()
+        self.ukey = kwargs.get('ukey')
+        self.rate = int(kwargs.get('rate', self.rate))
+        self._materialized = False
+
+    def materialize(self, substitutions):
+        if self.ukey is not None and substitutions and not self.isMaterialized():
+            self.newval = substitutions.get(self.ukey, 0)
+            self.newval = int(max(0, self.newval * self.rate))
+            self._materialized = True
+        return int(self)
+
+    def isMaterialized(self):
+        return self._materialized
+
+    def __int__(self):
+        return self.newval if self.isMaterialized() else super(IntHolder, self).__int__()
+
+    def __repr__(self):
+        return int(self).__repr__()
+
+    def bit_length(self):
+        return int(self).bit_length()
+
+    def __add__(self, x):
+        return int(self).__add__(x)
+
+    def __sub__(self, x):
+        return int(self).__sub__(x)
+
+    def __mul__(self, x):
+        return int(self).__mul__(x)
+
+    def __floordiv__(self, x):
+        return int(self).__floordiv__(x)
+
+    def __div__(self, x):
+        return int(self).__div__(x)
+
+    def __truediv__(self, x):
+        return int(self).__truediv__(x)
+
+    def __mod__(self, x):
+        return int(self).__mod__(x)
+
+    def __divmod__(self, x):
+        return int(self).__divmod__(x)
+
+    def __radd__(self, x):
+        return int(self).__radd__(x)
+
+    def __rsub__(self, x):
+        return int(self).__rsub__(x)
+
+    def __rmul__(self, x):
+        return int(self).__rmul__(x)
+
+    def __rfloordiv__(self, x):
+        return int(self).__rfloordiv__(x)
+
+    def __rdiv__(self, x):
+        return int(self).__rdiv__(x)
+
+    def __rtruediv__(self, x):
+        return int(self).__rtruediv__(x)
+
+    def __rmod__(self, x):
+        return int(self).__rmod__(x)
+
+    def __rdivmod__(self, x):
+        return int(self).__rdivmod__(x)
+
+    def __pow__(self, x):
+        return int(self).__pow__(x)
+
+    def __rpow__(self, x):
+        return int(self).__rpow__(x)
+
+    def __and__(self, n):
+        return int(self).__and__(n)
+
+    def __or__(self, n):
+        return int(self).__or__(n)
+
+    def __xor__(self, n):
+        return int(self).__xor__(n)
+
+    def __lshift__(self, n):
+        return int(self).__lshift__(n)
+
+    def __rshift__(self, n):
+        return int(self).__rshift__(n)
+
+    def __rand__(self, n):
+        return int(self).__rand__(n)
+
+    def __ror__(self, n):
+        return int(self).__ror__(n)
+
+    def __rxor__(self, n):
+        return int(self).__rxor__(n)
+
+    def __rlshift__(self, n):
+        return int(self).__rlshift__(n)
+
+    def __rrshift__(self, n):
+        return int(self).__rrshift__(n)
+
+    def __neg__(self):
+        return int(self).__neg__()
+
+    def __pos__(self):
+        return int(self).__pos__()
+
+    def __invert__(self):
+        return int(self).__invert__()
+
+    def __eq__(self, x):
+        return int(self).__eq__(x)
+
+    def __ne__(self, x):
+        return int(self).__ne__(x)
+
+    def __lt__(self, x):
+        return int(self).__lt__(x)
+
+    def __le__(self, x):
+        return int(self).__le__(x)
+
+    def __gt__(self, x):
+        return int(self).__gt__(x)
+
+    def __ge__(self, x):
+        return int(self).__ge__(x)
+
+    def __str__(self):
+        return int(self).__str__()
+
+    def __float__(self):
+        return int(self).__float__()
+
+    def __abs__(self):
+        return int(self).__abs__()
+
+    def __hash__(self):
+        return object.__hash__(self)
+
+    def __nonzero__(self):
+        return int(self).__nonzero__()
+
+
+class FloatHolder(float):
+    newval = 0.0
+    rate = 1.0
+
+    def __new__(cls, value, **kwargs):
+        return super(FloatHolder, cls).__new__(cls, value)
+
+    def __init__(self, value, **kwargs):
+        super(FloatHolder, self).__init__()
+        self.ukey = kwargs.get('ukey')
+        self.rate = float(kwargs.get('rate', self.rate))
+        self._materialized = False
+
+    def materialize(self, substitutions):
+        if self.ukey is not None and substitutions and not self.isMaterialized():
+            self.newval = substitutions.get(self.ukey, 0.0)
+            self.newval = float(max(0.0, self.newval * self.rate))
+            self._materialized = True
+        return float(self)
+
+    def isMaterialized(self):
+        return self._materialized
+
+    def __float__(self):
+        return self.newval if self.isMaterialized() else super(FloatHolder, self).__float__()
+
+    def __repr__(self):
+        return float(self).__repr__()
+
+    def as_integer_ratio(self):
+        return float(self).as_integer_ratio()
+
+    def hex(self):
+        return float(self).hex()
+
+    def is_integer(self):
+        return float(self).is_integer()
+
+    @classmethod
+    def fromhex(cls, s):
+        return super(FloatHolder, cls).fromhex(s)
+
+    def __add__(self, x):
+        return float(self).__add__(x)
+
+    def __sub__(self, x):
+        return float(self).__sub__(x)
+
+    def __mul__(self, x):
+        return float(self).__mul__(x)
+
+    def __floordiv__(self, x):
+        return float(self).__floordiv__(x)
+
+    def __div__(self, x):
+        return float(self).__div__(x)
+
+    def __truediv__(self, x):
+        return float(self).__truediv__(x)
+
+    def __mod__(self, x):
+        return float(self).__mod__(x)
+
+    def __divmod__(self, x):
+        return float(self).__divmod__(x)
+
+    def __pow__(self, x):
+        return float(self).__pow__(x)
+
+    def __radd__(self, x):
+        return float(self).__radd__(x)
+
+    def __rsub__(self, x):
+        return float(self).__rsub__(x)
+
+    def __rmul__(self, x):
+        return float(self).__rmul__(x)
+
+    def __rfloordiv__(self, x):
+        return float(self).__rfloordiv__(x)
+
+    def __rdiv__(self, x):
+        return float(self).__rdiv__(x)
+
+    def __rtruediv__(self, x):
+        return float(self).__rtruediv__(x)
+
+    def __rmod__(self, x):
+        return float(self).__rmod__(x)
+
+    def __rdivmod__(self, x):
+        return float(self).__rdivmod__(x)
+
+    def __rpow__(self, x):
+        return float(self).__rpow__(x)
+
+    def __eq__(self, x):
+        return float(self).__eq__(x)
+
+    def __ne__(self, x):
+        return float(self).__ne__(x)
+
+    def __lt__(self, x):
+        return float(self).__lt__(x)
+
+    def __le__(self, x):
+        return float(self).__le__(x)
+
+    def __gt__(self, x):
+        return float(self).__gt__(x)
+
+    def __ge__(self, x):
+        return float(self).__ge__(x)
+
+    def __neg__(self):
+        return float(self).__neg__()
+
+    def __pos__(self):
+        return float(self).__pos__()
+
+    def __str__(self):
+        return float(self).__str__()
+
+    def __int__(self):
+        return float(self).__int__()
+
+    def __abs__(self):
+        return float(self).__abs__()
+
+    def __hash__(self):
+        return object.__hash__(self)
+
+    def __nonzero__(self):
+        return float(self).__nonzero__()
+
+
 def __readBonus_int(bonus, name, section, eventType):
+    bindingToken = section.readString('token2int', '')
+    rate = section.readInt('rate', 1)
     value = section.asInt
     if value < 0:
         raise SoftException('Negative value (%s)' % name)
-    bonus[name] = section.asInt
+    bonus[name] = IntHolder(value, ukey=bindingToken, rate=rate) if bindingToken else value
 
 
 def __readBonus_factor(bonus, name, section, eventType):
+    bindingToken = section.readString('token2float', '')
+    rate = section.readFloat('rate', 1.0)
     value = section.asFloat
     if value < 0:
         raise SoftException('Negative value (%s)' % name)
-    bonus[name] = value
+    bonus[name] = FloatHolder(value, ukey=bindingToken, rate=rate) if bindingToken else value
 
 
 def __readBonus_equipment(bonus, _name, section, eventType):
@@ -396,18 +695,6 @@ def __readBonus_vehicleChoice(bonus, _name, section, eventType):
     bonus['demandedVehicles'] = extra
 
 
-def __readBonus_festivalItem(bonus, _name, section, eventType):
-    if section.has_key('id'):
-        itemID = section['id'].asInt
-        if itemID not in festival.g_cache.getCollection():
-            raise SoftException('Unknown festival item ID: %d' % itemID)
-        count = 1
-        if section.has_key('count'):
-            count = section['count'].asInt
-        festivalItems = bonus.setdefault('festivalItems', {})
-        festivalItems[itemID] = festivalItems.get(itemID, 0) + count
-
-
 def __readMetaSection(bonus, _name, section, eventType):
     if section is None:
         return
@@ -546,9 +833,7 @@ __BONUS_READERS = {'meta': __readMetaSection,
  'crewSkin': __readBonus_crewSkin,
  'vehicleChoice': __readBonus_vehicleChoice,
  'blueprint': __readBonus_blueprint,
- 'blueprintAny': __readBonus_blueprintAny,
- 'festivalTickets': __readBonus_int,
- 'festivalItem': __readBonus_festivalItem}
+ 'blueprintAny': __readBonus_blueprintAny}
 __PROBABILITY_READERS = {'optional': __readBonus_optional,
  'oneof': __readBonus_oneof,
  'group': __readBonus_group}
@@ -592,6 +877,9 @@ def __readBonusConfig(section):
             if limitName in limits:
                 raise SoftException('Bonus limit already defined: {}'.format(limitName))
             limits[limitName] = limitConfig
+        if name == 'needsBonusExpansion':
+            config.setdefault('needsBonusExpansion', False)
+            config['needsBonusExpansion'] = data.asBool
         raise SoftException('Unknown config section: {}'.format(name))
 
     return config

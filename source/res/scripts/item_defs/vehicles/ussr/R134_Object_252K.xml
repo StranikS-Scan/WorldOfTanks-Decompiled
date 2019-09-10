@@ -106,6 +106,10 @@
         <anchorDirection>	0.000000 0.288441 -0.957498	</anchorDirection>
       </slot>
     </customizationSlots>
+    <camouflage>
+      <density>	-1 -1	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_R134_Object_252K>
@@ -996,6 +1000,10 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	-1 -1	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
+          </camouflage>
         </_122mm_BL_13>
       </guns>
       <notInShop>	true	</notInShop>
@@ -1048,6 +1056,10 @@
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	-1 -1	</density>
+        <aoTextureSize>	1024 512	</aoTextureSize>
+      </camouflage>
     </Turret_1_R134_Object_252K>
   </turrets0>
   <engines>

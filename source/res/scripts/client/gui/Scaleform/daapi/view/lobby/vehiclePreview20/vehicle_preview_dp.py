@@ -18,9 +18,11 @@ from gui.shared.utils.functions import makeTooltip
 from helpers import dependency, func_utils
 from helpers.i18n import makeString as _ms
 from helpers.time_utils import getTillTimeString
-from items_kit_helper import getCompensateItemsCount, getDataOneVehicle, getDataMultiVehicles, collapseItemsPack, getCouponDiscountForItemPack, getCouponBonusesForItemPack
+from items_kit_helper import collapseItemsPack
+from items_kit_helper import getCompensateItemsCount, getDataOneVehicle, getDataMultiVehicles
+from items_kit_helper import getCouponDiscountForItemPack, getCouponBonusesForItemPack
 from skeletons.gui.shared import IItemsCache
-from web_client_api.common import CompensationType, ItemPackTypeGroup
+from web.web_client_api.common import CompensationType, ItemPackTypeGroup
 _logger = logging.getLogger(__name__)
 _CUSTOM_OFFER_ACTION_PERCENT = 100
 
@@ -96,18 +98,12 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
     def getBuyingPanelData(self, item, data=None, isHeroTank=False, itemsPack=None):
         isBuyingAvailable = not isHeroTank and (not item.isHidden or item.isRentable or item.isRestorePossible())
         uniqueVehicleTitle = ''
-        buyingLabel = ''
-        if isBuyingAvailable or isHeroTank:
-            if item.canTradeIn:
-                buyingLabel = text_styles.main(backport.text(R.strings.vehicle_preview.buyingPanel.tradeInLabel()))
-        else:
+        if not (isBuyingAvailable or isHeroTank):
             uniqueVehicleTitle = text_styles.tutorial(backport.text(R.strings.vehicle_preview.buyingPanel.uniqueVehicleLabel()))
         compensationData = self.__getCompensationData(itemsPack)
         resultVO = {'setTitle': data.title,
          'uniqueVehicleTitle': uniqueVehicleTitle,
-         'buyingLabel': buyingLabel,
          'vehicleId': item.intCD,
-         'isCanTrade': item.canTradeIn,
          'isBuyingAvailable': isBuyingAvailable,
          'isMoneyEnough': data.isMoneyEnough,
          'buyButtonEnabled': data.enabled,
@@ -125,14 +121,12 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
             resultVO.update({'customOffer': customOfferData})
         return resultVO
 
-    def getItemPackBuyingPanelData(self, item, data=None, itemsPack=None, couponSelected=False):
+    def getItemPackBuyingPanelData(self, data, itemsPack, couponSelected, price):
         compensationData = self.__getCompensationData(itemsPack)
         return {'setTitle': data.title,
          'uniqueVehicleTitle': '',
-         'buyingLabel': '',
          'vehicleId': 0,
-         'couponDiscount': getCouponDiscountForItemPack(itemsPack).gold if couponSelected else 0,
-         'isCanTrade': False,
+         'couponDiscount': getCouponDiscountForItemPack(itemsPack, price).gold if couponSelected else 0,
          'isBuyingAvailable': True,
          'isMoneyEnough': data.enabled,
          'buyButtonEnabled': data.enabled,
@@ -148,10 +142,8 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
     def getOffersBuyingPanelData(self, data):
         return {'setTitle': data.title,
          'uniqueVehicleTitle': '',
-         'buyingLabel': '',
          'vehicleId': 0,
          'couponDiscount': 0,
-         'isCanTrade': False,
          'isBuyingAvailable': True,
          'isMoneyEnough': data.enabled,
          'buyButtonEnabled': data.enabled,
@@ -195,9 +187,9 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
             itemsVOs = collapsedItemsVOs
         return (vehiclesVOs, itemsVOs, collapsedItemsVOs)
 
-    def packCouponData(self, itemsPack):
+    def packCouponData(self, itemsPack, price):
         statsMoney = self.__itemsCache.items.stats.money
-        labelWithDiscount = _ms(text_styles.mainBig(backport.text(R.strings.vehicle_preview.buyingPanel.frontlinePack.couponLabel())), value=moneyWithIcon(getCouponDiscountForItemPack(itemsPack), statsMoney=statsMoney))
+        labelWithDiscount = _ms(text_styles.mainBig(backport.text(R.strings.vehicle_preview.buyingPanel.frontlinePack.couponLabel())), value=moneyWithIcon(getCouponDiscountForItemPack(itemsPack, price), statsMoney=statsMoney))
         return {'isSelected': True,
          'label': labelWithDiscount,
          'icon': backport.image(R.images.gui.maps.shop.rewards.c_48x48.frontline_coupon()),

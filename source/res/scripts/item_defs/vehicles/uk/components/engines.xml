@@ -70,6 +70,7 @@
     <Jaguar_J_60>	91	</Jaguar_J_60>
     <Cummins_BTA_5_9>	92	</Cummins_BTA_5_9>
     <Jaguar_4_2_XK6>	93	</Jaguar_4_2_XK6>
+    <Rolls_Royce_Meteor_P>	94	</Rolls_Royce_Meteor_P>
     <Rolls_Royse_Meteor_MkIVC_IGR>	60001	</Rolls_Royse_Meteor_MkIVC_IGR>
     <Rolls_Royse_Meteor_M120_IGR>	60002	</Rolls_Royse_Meteor_M120_IGR>
     <Rolls_Royse_Meteor_MkIV_IGR>	60003	</Rolls_Royse_Meteor_MkIV_IGR>
@@ -157,8 +158,8 @@
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	311	</rpm_min>
-      <rpm_max>	2603	</rpm_max>
+      <rpm_min>	298	</rpm_min>
+      <rpm_max>	2643	</rpm_max>
     </Rolls_Royse_FB_60>
     <Daimler_D2458_V_8>
       <userString>	#gb_vehicles:Daimler_D2458_V_8	</userString>
@@ -173,8 +174,8 @@
       <maxRegenHealth>	160	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	468	</rpm_min>
-      <rpm_max>	2300	</rpm_max>
+      <rpm_min>	459	</rpm_min>
+      <rpm_max>	2330	</rpm_max>
     </Daimler_D2458_V_8>
     <Rover_Meteorite>
       <userString>	#gb_vehicles:Rover_Meteorite	</userString>
@@ -955,8 +956,8 @@
       <maxRegenHealth>	160	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	312	</rpm_min>
-      <rpm_max>	2801	</rpm_max>
+      <rpm_min>	293	</rpm_min>
+      <rpm_max>	2861	</rpm_max>
     </Rolls_Royse_B81>
     <Wright_Continental_R-975EC2_A>
       <userString>	#gb_vehicles:Wright_Continental_R-975EC2_A	</userString>
@@ -1055,8 +1056,8 @@
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	330	</rpm_min>
-      <rpm_max>	2542	</rpm_max>
+      <rpm_min>	324	</rpm_min>
+      <rpm_max>	2562	</rpm_max>
     </Jaguar_J_60>
     <Rolls_Royce_Meteor_M300>
       <userString>	#gb_vehicles:Rolls_Royce_Meteor_M300	</userString>
@@ -1210,6 +1211,23 @@
       <rpm_min>	487	</rpm_min>
       <rpm_max>	2240	</rpm_max>
     </Jaguar_4_2_XK6>
+    <Rolls_Royce_Meteor_P>
+      <userString>	#gb_vehicles:Rolls_Royce_Meteor_P	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	40000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	800	</power>
+      <weight>	744	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	429	</rpm_min>
+      <rpm_max>	2817	</rpm_max>
+    </Rolls_Royce_Meteor_P>
     <Rolls_Royse_Meteor_MkIVC_IGR>
       <userString>	#igr_vehicles:Rolls_Royse_Meteor_MkIVC_IGR	</userString>
       <tags>	gasoline	</tags>

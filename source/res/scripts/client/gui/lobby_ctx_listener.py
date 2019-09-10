@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/lobby_ctx_listener.py
-from gui.lobby_ctx_notifiers import FESTIVAL_ENABLED_NOTIFIER
+_CHANGE_NOTIFIERS = []
 
 def _getValueFromPath(path, data):
     if not path:
@@ -8,8 +8,6 @@ def _getValueFromPath(path, data):
     else:
         return _getValueFromPath(path[1:], data[path[0]]) if path[0] in data else None
 
-
-_CHANGE_NOTIFIERS = [FESTIVAL_ENABLED_NOTIFIER]
 
 class LobbyContextChangeListener(object):
     __slots__ = ('__notifiers', '__proxy')

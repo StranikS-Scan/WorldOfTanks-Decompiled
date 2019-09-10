@@ -184,13 +184,18 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
             self.__updateSessionStatsBtn()
 
     def __updateSessionStatsBtn(self):
-        isInSupportedMode = self.prbDispatcher.getFunctionalState().entityTypeID in (PREBATTLE_TYPE.SQUAD,)
+        dispatcher = self.prbDispatcher
+        if dispatcher is not None:
+            isInSupportedMode = dispatcher.getFunctionalState().entityTypeID in (PREBATTLE_TYPE.SQUAD,)
+        else:
+            isInSupportedMode = False
         isSessionStatsEnabled = self._lobbyContext.getServerSettings().isSessionStatsEnabled()
         tooltip = self.__getSessionStatsBtnTooltip(isInSupportedMode and isSessionStatsEnabled)
         if not isSessionStatsEnabled:
             SessionStatsRequester.resetStats()
         self.as_setSessionStatsButtonVisibleS(isSessionStatsEnabled)
         self.as_setSessionStatsButtonEnableS(isSessionStatsEnabled and isInSupportedMode, tooltip)
+        return
 
     @staticmethod
     def __getSessionStatsBtnTooltip(btnEnabled):

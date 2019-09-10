@@ -3,9 +3,7 @@
 import logging
 import types
 import itertools
-from bonus_constants import BonusName
 from frameworks.wulf import ViewFlags
-from gui.battle_royale.constants import ROYALE_POSTBATTLE_REWARDS_COUNT
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.genConsts.PROGRESSIVEREWARD_CONSTANTS import PROGRESSIVEREWARD_CONSTANTS as prConst
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -29,8 +27,7 @@ from gui.impl.gen.view_models.views.loot_box_view.loot_animated_renderer_model i
 from gui.impl.gen.view_models.views.loot_box_view.loot_vehicle_compensation_renderer_model import LootVehicleCompensationRendererModel
 from gui.impl.gen.view_models.views.loot_box_view.loot_conversion_renderer_model import LootConversionRendererModel
 from gui.impl.gen.view_models.views.loot_box_view.loot_renderer_types import LootRendererTypes
-from gui.impl.gen.view_models.views.loot_box_view.loot_vehicle_renderer_model import LootVehicleRendererModel
-from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker, getLootboxesAwardsPacker, getRoyaleAwardsPacker
+from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker, getLootboxesAwardsPacker
 from gui.server_events.bonuses import getNonQuestBonuses, BlueprintsBonusSubtypes
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import BonusNameQuestsBonusComposer
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import LootBoxBonusComposer
@@ -44,11 +41,8 @@ from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency, int2roman
 from helpers.func_utils import makeFlashPath
-from items.components.crew_skins_constants import NO_CREW_SKIN_ID
-from items.components.festival_constants import FEST_ITEM_TYPE
 from shared_utils import first
 from skeletons.gui.shared import IItemsCache
-from festivity.festival.item_info import FestivalItemInfo
 STYLES_TAGS = []
 VIDEO_TAGS = []
 _logger = logging.getLogger(__name__)
@@ -88,8 +82,7 @@ _BONUSES_ORDER = (Currency.CREDITS,
  'blueprints',
  CrewBonusTypes.CREW_SKIN_BONUSES,
  CrewBonusTypes.CREW_BOOK_BONUSES,
- 'finalBlueprints',
- 'festivalItem')
+ 'finalBlueprints')
 BLUEPRINTS_CONGRAT_TYPES = (LootCongratsTypes.CONGRAT_TYPE_BLUEPRINT, LootCongratsTypes.CONGRAT_TYPE_BLUEPRINT_PART)
 _COMPENSATION_TOOLTIP_CONTENT_RES_IDS = (R.views.common.tooltip_window.loot_box_compensation_tooltip.LootBoxCompensationTooltipContent(), R.views.common.tooltip_window.loot_box_compensation_tooltip.CrewSkinsCompensationTooltipContent(), R.views.common.tooltip_window.loot_box_compensation_tooltip.LootBoxVehicleCompensationTooltipContent())
 _COMPENSATION_TOOLTIP_CONTENT_CLASSES = {LootBoxCompensationTooltipTypes.CREW_SKINS: CrewSkinsCompensationTooltipContent,
@@ -361,100 +354,6 @@ class BlueprintFragmentRewardPresenter(LootRewardDefModelPresenter):
 _DEF_CONGRATS_VALIDATORS = {BlueprintsBonusSubtypes.FINAL_FRAGMENT: BlueprintFinalFragmentModelPresenter.validate,
  BlueprintsBonusSubtypes.VEHICLE_FRAGMENT: BlueprintFragmentRewardPresenter.validate,
  CrewBonusTypes.CREW_BOOK_BONUSES: CrewBookModelPresenter.validate}
-
-class FestivalRewardMixinPresenter(object):
-    __slots__ = ()
-
-    def _getRendererType(self, vehType='VEHICLE'):
-        return getattr(LootRendererTypes, vehType)
-
-    def _createModel(self, rendererModelCls=LootVehicleRendererModel):
-        model = rendererModelCls()
-        model.congratsViewModel.setShowCongrats(True)
-        return model
-
-    def getRewardItemID(self):
-        if getattr(self, '_reward', None) is None:
-            return
-        else:
-            specialArgs = self._reward.get('specialArgs', None)
-            if not (specialArgs and isinstance(specialArgs, (types.ListType, types.TupleType))):
-                _logger.error('Can not find fest collection item in specialArgs!')
-                return 0
-            return specialArgs[0]
-
-
-class FestivalItemsRewardPresenter(FestivalRewardMixinPresenter, LootRewardDefModelPresenter):
-    __slots__ = ()
-
-    def _getRendererType(self, vehType='VEHICLE'):
-        festItem = self.__getFestItem()
-        return LootRendererTypes.DEF if festItem is None or festItem.getType() != FEST_ITEM_TYPE.BASIS else getattr(LootRendererTypes, vehType)
-
-    def _createModel(self, rendererModelCls=LootVehicleRendererModel):
-        festItem = self.__getFestItem()
-        return LootDefRendererModel() if festItem is None or festItem.getType() != FEST_ITEM_TYPE.BASIS else super(FestivalItemsRewardPresenter, self)._createModel()
-
-    def _formatModel(self, model, ttId, showCongrats):
-        super(FestivalItemsRewardPresenter, self)._formatModel(model, ttId, showCongrats)
-        festItem = self.__getFestItem()
-        if festItem is None:
-            return
-        else:
-            model.setLabelStr(text_styles.stats(backport.text(festItem.getNameResID())))
-            if not festItem.isAlternative():
-                return
-            iconID = R.images.gui.maps.icons.festival.items.icon_badge_special
-            if not iconID.exists():
-                _logger.error('Can not find festival item type: %s', festItem.getType())
-                return
-            with model.congratsViewModel.transaction() as tx:
-                tx.setVehicleImage(backport.image(iconID()))
-                tx.setCongratsType(LootCongratsTypes.CONGRAT_FESTIVAL_DOGTAG_PART)
-            return
-
-    def __getFestItem(self):
-        festItemId = self.getRewardItemID()
-        return None if not festItemId else FestivalItemInfo(festItemId)
-
-
-class CrewSkinsRewardModelPresenter(FestivalRewardMixinPresenter, LootRewardDefModelPresenter):
-    __slots__ = ()
-    __itemsCache = dependency.descriptor(IItemsCache)
-
-    def getCrewSkin(self, crewSkinID):
-        return self.__itemsCache.items.getCrewSkin(crewSkinID)
-
-    def _formatModel(self, model, ttId, showCongrats):
-        super(CrewSkinsRewardModelPresenter, self)._formatModel(model, ttId, showCongrats)
-        crewSkinsItemID = self.getRewardItemID()
-        if crewSkinsItemID == NO_CREW_SKIN_ID:
-            _logger.error('Can not find crew skin with id: %d', crewSkinsItemID)
-            return
-        else:
-            crewSkinItem = self.getCrewSkin(crewSkinsItemID)
-            if crewSkinItem is None:
-                _logger.error('Can not find crew skin with id: %d', crewSkinsItemID)
-                return
-            iconID = crewSkinItem.getIconID()
-            fullName = localizedFullName(crewSkinItem)
-            with model.congratsViewModel.transaction() as tx:
-                tx.setVehicleImage(getCrewSkinIconBig(iconID))
-                tx.setCongratsType(LootCongratsTypes.CONGRAT_TYPE_CREWSKINS)
-                tx.setVehicleType(fullName)
-            return
-
-
-class UniqueStyleModelPresenter(FestivalRewardMixinPresenter, LootRewardDefModelPresenter):
-    __slots__ = ()
-
-    def _formatModel(self, model, ttId, showCongrats):
-        super(UniqueStyleModelPresenter, self)._formatModel(model, ttId, showCongrats)
-        with model.congratsViewModel.transaction() as tx:
-            tx.setCongratsType(LootCongratsTypes.CONGRAT_UNIQUE_STYLE)
-            tx.setVehicleImage(backport.image(R.images.gui.maps.icons.festival.items.icon_customization()))
-
-
 _DEF_MODEL_PRESENTER = LootRewardDefModelPresenter()
 _DEF_COMPENSATION_PRESENTERS = {'vehicles': VehicleCompensationModelPresenter(),
  CrewBonusTypes.CREW_SKIN_BONUSES: CrewSkinsCompensationModelPresenter()}
@@ -463,10 +362,6 @@ _DEF_MODEL_PRESENTERS = {CrewBonusTypes.CREW_BOOK_BONUSES: CrewBookModelPresente
  BlueprintsBonusSubtypes.UNIVERSAL_FRAGMENT: LootRewardConversionModelPresenter(R.images.gui.maps.icons.blueprints.fragment.big.vehicle(), R.sounds.gui_blueprint_fragment_convert()),
  BlueprintsBonusSubtypes.NATION_FRAGMENT: LootRewardConversionModelPresenter(R.images.gui.maps.icons.blueprints.fragment.big.vehicle(), R.sounds.gui_blueprint_fragment_convert()),
  BlueprintsBonusSubtypes.VEHICLE_FRAGMENT: BlueprintFragmentRewardPresenter()}
-FESTIVAL_MODEL_PRESENTERS = {BonusName.FESTIVAL_ITEMS: FestivalItemsRewardPresenter(),
- CrewBonusTypes.CREW_SKIN_BONUSES: CrewSkinsRewardModelPresenter(),
- 'customizations': UniqueStyleModelPresenter()}
-BATTLE_ROYALE_MODEL_PRESENTERS = {BonusName.FESTIVAL_ITEMS: FestivalItemsRewardPresenter()}
 
 def getRewardsBonuses(rewards, size='big', awardsCount=_DEFAULT_DISPLAYED_AWARDS_COUNT):
     formatter = BonusNameQuestsBonusComposer(awardsCount, getPackRentVehiclesAwardPacker())
@@ -568,8 +463,6 @@ def getProgressiveRewardBonuses(rewards, size='big', maxAwardCount=_DEFAULT_DISP
             if bonusType == 'items':
                 bonus = getNonQuestBonuses(bonusType, bonusValue)
                 _checkAndFillItems(bonus, alwaysVisibleBonuses, bonuses)
-            if bonusType == BonusName.FESTIVAL_ITEMS:
-                alwaysVisibleBonuses.extend(getNonQuestBonuses(bonusType, bonusValue))
             bonus = getNonQuestBonuses(bonusType, bonusValue)
             bonuses.extend(bonus)
 
@@ -577,35 +470,6 @@ def getProgressiveRewardBonuses(rewards, size='big', maxAwardCount=_DEFAULT_DISP
         alwaysVisibleBonuses.sort(key=_keySortOrder)
     formattedBonuses = formatter.getVisibleFormattedBonuses(bonuses, alwaysVisibleBonuses, size)
     return (formattedBonuses, specialRewardType)
-
-
-def getRoyaleBonuses(bonuses, size='big'):
-    bonuses.sort(key=_keySortOrder)
-    alwaysVisibleBonuses = []
-    commonBonuses = []
-    for b in bonuses:
-        if b.getName() == BonusName.FESTIVAL_ITEMS:
-            alwaysVisibleBonuses.append(b)
-        commonBonuses.append(b)
-
-    formatter = LootBoxBonusComposer(ROYALE_POSTBATTLE_REWARDS_COUNT, getRoyaleAwardsPacker())
-    formattedBonuses = formatter.getVisibleFormattedBonuses(commonBonuses, alwaysVisibleBonuses, size)
-    return formattedBonuses
-
-
-def getRoyaleBonusesFromDict(rewards, size='big'):
-    alwaysVisibleBonuses = []
-    commonBonuses = []
-    for bonusType, bonusValue in rewards.iteritems():
-        if bonusType == BonusName.FESTIVAL_ITEMS:
-            alwaysVisibleBonuses.extend(getNonQuestBonuses(bonusType, bonusValue))
-        commonBonuses.extend(getNonQuestBonuses(bonusType, bonusValue))
-
-    commonBonuses.sort(key=_keySortOrder)
-    alwaysVisibleBonuses.sort(key=_keySortOrder)
-    formatter = LootBoxBonusComposer(ROYALE_POSTBATTLE_REWARDS_COUNT, getRoyaleAwardsPacker())
-    formattedBonuses = formatter.getVisibleFormattedBonuses(commonBonuses, alwaysVisibleBonuses, size)
-    return formattedBonuses
 
 
 def fillStepsModel(currentStep, probability, maxSteps, hasCompleted, stepsModel):

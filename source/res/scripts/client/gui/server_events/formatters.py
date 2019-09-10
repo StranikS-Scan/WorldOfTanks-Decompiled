@@ -219,6 +219,12 @@ def formatCreditPriceBig(value):
     return '{} {}'.format(text_styles.creditsTextBig(value), icon)
 
 
+def formatCrystalPrice(value):
+    value = backport.getIntegralFormat(value)
+    icon = gui_icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_CRYSTALICON_2, vSpace=-4)
+    return '{} {}'.format(text_styles.crystal(value), icon)
+
+
 def formatYellow(msg, *args, **kwargs):
     return makeHtmlString('html_templates:lobby/quests', 'yellowTemplate', {'msg': i18n.makeString(msg, *args, **kwargs)})
 
@@ -334,8 +340,6 @@ def getUniqueBonusTypes(bonusTypes):
             bonusType = ARENA_BONUS_TYPE.REGULAR
         if bonusType in (ARENA_BONUS_TYPE.EVENT_BATTLES_2,):
             bonusType = ARENA_BONUS_TYPE.EVENT_BATTLES
-        if bonusType in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
-            bonusType = ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO
         uniqueTypes.add(bonusType)
 
     return uniqueTypes

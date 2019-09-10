@@ -493,24 +493,10 @@ class _DetailedMissionInfo(_MissionInfo):
             criteria = cond.getFilterCriteria(cond.getData())
         else:
             criteria = REQ_CRITERIA.DISCLOSABLE
-        isQuestForBattleRoyale = False
-        battleCond = self.event.preBattleCond.getConditions()
-        if battleCond:
-            bonusTypes = battleCond.find('bonusTypes')
-            if bonusTypes:
-                arenaTypes = bonusTypes.getValue()
-                if arenaTypes:
-                    if constants.ARENA_BONUS_TYPE.EVENT_BATTLES not in arenaTypes or constants.ARENA_BONUS_TYPE.EVENT_BATTLES_2 not in arenaTypes:
-                        criteria = criteria | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
-                    if constants.ARENA_BONUS_TYPE.EPIC_BATTLE not in arenaTypes:
-                        criteria = criteria | ~REQ_CRITERIA.VEHICLE.EPIC_BATTLE
-                    if constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD in arenaTypes or constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO in arenaTypes:
-                        isQuestForBattleRoyale = True
         xpMultCond = conds.find('hasReceivedMultipliedXP')
         if xpMultCond:
             extraConditions.append(xpMultCond)
-        criteria = criteria | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
-        return (criteria, extraConditions, isQuestForBattleRoyale)
+        return (criteria, extraConditions)
 
     def _getUIDecoration(self):
         decoration = self.eventsCache.prefetcher.getMissionDecoration(self.event.getIconID(), DECORATION_SIZES.DETAILS)
@@ -725,7 +711,7 @@ class _DetailedPrivateMissionInfo(_DetailedMissionInfo, _PrivateMissionInfo):
 class _DetailedTokenMissionInfo(_DetailedMissionInfo):
 
     def getVehicleRequirementsCriteria(self):
-        return (None, [], False)
+        return (None, [])
 
     def _getMainConditions(self):
         return _detailedCardTokenConditionFormatter.format(self.event)
@@ -765,7 +751,7 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
         criteria = REQ_CRITERIA.INVENTORY
         criteria |= REQ_CRITERIA.VEHICLE.LEVELS(range(self.event.getVehMinLevel(), constants.MAX_VEHICLE_LEVEL + 1))
         criteria |= REQ_CRITERIA.VEHICLE.CLASSES(self.event.getQuestClassifier().classificationAttr)
-        return (criteria, extraConditions, False)
+        return (criteria, extraConditions)
 
     def getAwardScreenConditionsFormatter(self):
         return formatters.PMAwardScreenConditionsFormatter(self.event)

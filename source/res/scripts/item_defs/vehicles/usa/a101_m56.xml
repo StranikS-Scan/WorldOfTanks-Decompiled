@@ -137,6 +137,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	1 1 0.09 0.000000	</tiling>
+      <density>	109.124 112.211	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -973,6 +975,10 @@
               <applyTo>	16384	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	93.0424 95.5807	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_90mm_Gun_M54>
       </guns>
       <models>
@@ -1002,6 +1008,10 @@
           <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	93.911 93.0458	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </Turret_1_A101_M56>
   </turrets0>
   <engines>

@@ -19,6 +19,9 @@ class ResearchViewMeta(View):
     def goToBlueprintView(self, itemCD):
         self._printOverrideError('goToBlueprintView')
 
+    def goToNationChangeView(self, itemCD):
+        self._printOverrideError('goToNationChangeView')
+
     def as_setNodesStatesS(self, primary, data):
         return self.flashObject.as_setNodesStates(primary, data) if self._isDAAPIInited() else None
 

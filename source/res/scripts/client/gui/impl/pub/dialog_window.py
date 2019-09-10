@@ -45,12 +45,12 @@ class DialogWindow(Window):
     gui = dependency.descriptor(IGuiLoader)
     __slots__ = ('__blur', '__scope', '__event', '__result')
 
-    def __init__(self, content=None, bottomContent=None, parent=None, balanceContent=None, enableBlur=True, enableBlur3dScene=True, layer=DialogLayer.TOP_WINDOW, decorator=None):
+    def __init__(self, content=None, bottomContent=None, parent=None, balanceContent=None, enableBlur=True, layer=DialogLayer.TOP_WINDOW):
         if content is not None:
             pass
         settings = WindowSettings()
         settings.flags = layer
-        settings.decorator = decorator or ViewImpl(R.views.common.dialog_view.dialog_window.DialogWindow(), ViewFlags.WINDOW_DECORATOR, DialogWindowModel)
+        settings.decorator = ViewImpl(R.views.common.dialog_view.dialog_window.DialogWindow(), ViewFlags.WINDOW_DECORATOR, DialogWindowModel)
         settings.content = content
         settings.parent = parent
         super(DialogWindow, self).__init__(settings)
@@ -61,7 +61,7 @@ class DialogWindow(Window):
         self.__result = DialogButtons.CANCEL
         self.__blur = None
         if enableBlur:
-            self.__blur = WGUIBackgroundBlurSupportImpl(blur3dScene=enableBlur3dScene)
+            self.__blur = WGUIBackgroundBlurSupportImpl()
             blurLayers = [APP_CONTAINERS_NAMES.VIEWS, APP_CONTAINERS_NAMES.SUBVIEW, APP_CONTAINERS_NAMES.BROWSER]
             if layer > DialogLayer.WINDOW:
                 blurLayers.append(APP_CONTAINERS_NAMES.WINDOWS)

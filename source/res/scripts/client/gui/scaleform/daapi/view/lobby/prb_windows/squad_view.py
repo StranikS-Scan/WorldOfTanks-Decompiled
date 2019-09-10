@@ -1,10 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/squad_view.py
 from adisp import process
-from gui.impl import backport
-from gui.impl.gen.resources import R
-from gui.prb_control import settings
-from gui.prb_control.settings import CTRL_ENTITY_TYPE, REQUEST_TYPE
 from gui.Scaleform.daapi.view.lobby.prb_windows.squad_action_button_state_vo import SquadActionButtonStateVO
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
@@ -12,20 +8,23 @@ from gui.Scaleform.daapi.view.meta.SquadViewMeta import SquadViewMeta
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.impl import backport
+from gui.impl.gen.resources import R
+from gui.prb_control import settings
+from gui.prb_control.settings import CTRL_ENTITY_TYPE, REQUEST_TYPE
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.game_control import IBattleRoyaleController
 
 def _unitWithPremium(unitData):
     return any((slot.player.hasPremium for slot in unitData.slotsIterator if slot.player))
 
 
 class SquadView(SquadViewMeta):
-    _eventsCache = dependency.descriptor(IEventsCache)
+    __eventsCache = dependency.descriptor(IEventsCache)
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def inviteFriendRequest(self):
@@ -44,7 +43,7 @@ class SquadView(SquadViewMeta):
     def onUnitVehiclesChanged(self, dbID, vInfos):
         entity = self.prbEntity
         pInfo = entity.getPlayerInfo(dbID=dbID)
-        needToUpdateSlots = self._eventsCache.isSquadXpFactorsEnabled()
+        needToUpdateSlots = self.__eventsCache.isSquadXpFactorsEnabled()
         if pInfo.isInSlot:
             slotIdx = pInfo.slotIdx
             if vInfos and not vInfos[0].isEmpty():
@@ -64,7 +63,7 @@ class SquadView(SquadViewMeta):
                     needToUpdateSlots = True
             elif vehicleVO is None:
                 needToUpdateSlots = True
-        if self._eventsCache.isSquadXpFactorsEnabled() or self._eventsCache.isBalancedSquadEnabled():
+        if self.__eventsCache.isSquadXpFactorsEnabled() or self.__eventsCache.isBalancedSquadEnabled():
             self.as_setActionButtonStateS(self.__getActionButtonStateVO())
         if needToUpdateSlots:
             self._updateMembersData()
@@ -184,33 +183,13 @@ class EpicSquadView(SquadView):
         return _BonusHeaderPresenter(self.prbEntity) if self._isPremiumBonusEnabled() else _EpicHeaderPresenter(self.prbEntity)
 
 
-class BattleRoyaleSquadView(SquadView):
-    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
-
-    def _populate(self):
-        super(BattleRoyaleSquadView, self)._populate()
-        self.__battleRoyaleController.onUpdated += self.__battleRoyaleEnabledChanged
-
-    def _dispose(self):
-        self.__battleRoyaleController.onUpdated -= self.__battleRoyaleEnabledChanged
-        super(BattleRoyaleSquadView, self)._dispose()
-
-    def _getHeaderPresenter(self):
-        return _BattleRoyaleHeaderPresenter(self.prbEntity)
-
-    def __battleRoyaleEnabledChanged(self):
-        if not self.__battleRoyaleController.isEnabled():
-            self._doLeave()
-
-
 class _HeaderPresenter(object):
     _eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, prbEntity):
         self._prbEntity = prbEntity
         self._bgImage = backport.image(R.images.gui.maps.icons.squad.backgrounds.without_prem())
-        self._isArtVisible = True
-        self._isBonusIconVisible = self._eventsCache.isSquadXpFactorsEnabled()
+        self._isArtVisible = self._eventsCache.isSquadXpFactorsEnabled()
 
     def getData(self):
         iconSource = ''
@@ -220,7 +199,7 @@ class _HeaderPresenter(object):
         if self._isArtVisible and not bonuses:
             iconSource, messageText = self._getMessageParams()
         return {'isVisibleInfoIcon': self._isArtVisible,
-         'isVisibleHeaderIcon': self._isBonusIconVisible,
+         'isVisibleHeaderIcon': self._isArtVisible,
          'isVisibleHeaderMessage': self._isArtVisible,
          'bonuses': bonuses,
          'backgroundHeaderSource': self._bgImage,
@@ -304,23 +283,3 @@ class _EventHeaderPresenter(_HeaderPresenter):
         iconSource = backport.image(R.images.gui.maps.icons.squad.event())
         messageText = text_styles.main(backport.text(R.strings.messenger.dialogs.squadChannel.headerMsg.eventFormationRestriction()))
         return (iconSource, messageText)
-
-
-class _BattleRoyaleHeaderPresenter(_HeaderPresenter):
-
-    def __init__(self, prbEntity):
-        super(_BattleRoyaleHeaderPresenter, self).__init__(prbEntity)
-        self._bgImage = backport.image(R.images.gui.maps.icons.squad.backgrounds.battle_royale_bg())
-        self._isBonusIconVisible = False
-
-    def _packBonuses(self):
-        return []
-
-    def _getInfoIconTooltipParams(self):
-        tooltip = makeTooltip(header=backport.text(R.strings.tooltips.squadWindow.infoIcon.battleRoyale.header()), body=backport.text(R.strings.tooltips.squadWindow.infoIcon.battleRoyale.body()))
-        return (tooltip, TOOLTIPS_CONSTANTS.COMPLEX)
-
-    def _getMessageParams(self):
-        headerIconSource = backport.image(R.images.gui.maps.icons.squad.event())
-        headerMessageText = text_styles.main(backport.text(R.strings.messenger.dialogs.squadChannel.headerMsg.battleRoyaleHint()))
-        return (headerIconSource, headerMessageText)

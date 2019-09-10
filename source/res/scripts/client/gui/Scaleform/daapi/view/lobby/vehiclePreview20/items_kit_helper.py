@@ -3,6 +3,7 @@
 import itertools
 import typing
 from collections import Container
+from sys import maxint
 from CurrentVehicle import g_currentPreviewVehicle
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getSlotOverlayIconType
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
@@ -23,7 +24,7 @@ from items.components.c11n_constants import CustomizationType
 from items.vehicles import NUM_OPTIONAL_DEVICE_SLOTS, NUM_EQUIPMENT_SLOTS_BY_TYPE, NUM_SHELLS_SLOTS
 from shared_utils import findFirst, first, CONST_CONTAINER
 from skeletons.gui.goodies import IGoodiesCache
-from web_client_api.common import ItemPackType, ItemPackTypeGroup, ItemPackEntry
+from web.web_client_api.common import ItemPackType, ItemPackTypeGroup, ItemPackEntry
 from gui.shared.gui_items import vehicle_adjusters
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from skeletons.gui.shared import IItemsCache
@@ -98,7 +99,8 @@ _TOOLTIP_TYPE = {ItemPackType.ITEM_DEVICE: TOOLTIPS_CONSTANTS.SHOP_20_MODULE,
  ItemPackType.SINGLE_ACHIEVEMENTS: TOOLTIPS_CONSTANTS.SHOP_20_ACHIEVEMENT,
  ItemPackType.BADGE: TOOLTIPS_CONSTANTS.SHOP_20_BADGE,
  ItemPackType.REFERRAL_BADGE: TOOLTIPS_CONSTANTS.REFERRAL_BADGE,
- ItemPackType.PLAYER_BADGE: TOOLTIPS_CONSTANTS.SHOP_20_BADGE}
+ ItemPackType.PLAYER_BADGE: TOOLTIPS_CONSTANTS.SHOP_20_BADGE,
+ ItemPackType.TRADE_IN_INFO: TOOLTIPS_CONSTANTS.TRADE_IN_INFO}
 _ICONS = {ItemPackType.CAMOUFLAGE_ALL: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
  ItemPackType.CAMOUFLAGE_WINTER: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
  ItemPackType.CAMOUFLAGE_SUMMER: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUFLAGE,
@@ -249,8 +251,6 @@ def getItemTitle(rawItem, item, forBox=False):
         title = _ms(TOOLTIPS.CUSTOMCREW_REFERRAL_HEADER, vehicle=vehicle.userName)
     elif rawItem.type in ItemPackTypeGroup.CREW:
         title = _ms(TOOLTIPS.CREW_HEADER)
-    elif rawItem.type in ItemPackType.CUSTOM_FESTIVAL_TICKETS:
-        title = backport.text(R.strings.tooltips.awardItem.festivalTickets.header())
     else:
         title = rawItem.title or ''
     return title
@@ -284,8 +284,6 @@ def getItemDescription(rawItem, item):
             description = _ms(TOOLTIPS.CREW_BODY, value={ItemPackType.CREW_50: CrewTypes.SKILL_50,
              ItemPackType.CREW_75: CrewTypes.SKILL_75,
              ItemPackType.CREW_100: CrewTypes.SKILL_100}.get(rawItem.type))
-    elif rawItem.type in ItemPackType.CUSTOM_FESTIVAL_TICKETS:
-        description = backport.text(R.strings.tooltips.awardItem.festivalTickets.body())
     else:
         description = rawItem.description or ''
     return description
@@ -329,7 +327,7 @@ def _createItemVO(rawItem, itemsCache, goodiesCache, slotIndex, rawTooltipData=N
     countFormat = ''
     if rawItem == _BOX_ITEM:
         cd = 0
-        icon = RES_ICONS.MAPS_ICONS_RANKEDBATTLES_BOXES_48X48_METAL_1
+        icon = backport.image(R.images.gui.maps.icons.rankedBattles.boxes.c_48x48.metal_1())
         overlay = SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
     else:
         fittingItem = lookupItem(rawItem, itemsCache, goodiesCache)
@@ -378,7 +376,7 @@ def _getBoxTooltipVO(rawItems, itemsCache, goodiesCache):
          'overlay': overlay,
          'desc': getItemTitle(rawItem, fittingItem, forBox=True)})
 
-    vo = {'icon': RES_ICONS.MAPS_ICONS_RANKEDBATTLES_BOXES_48X48_METAL_1,
+    vo = {'icon': backport.image(R.images.gui.maps.icons.rankedBattles.boxes.c_48x48.metal_1()),
      'count': len(rawItems),
      'items': items}
     return vo
@@ -628,7 +626,7 @@ def getDataOneVehicle(itemsPack, vehicle, vehicleGroupId):
     return _packDataOneVehicle(root, itemsPack, vehicle, vehicleGroupId)
 
 
-def getCouponDiscountForItemPack(itemsPack):
+def getCouponDiscountForItemPack(itemsPack, price=maxint):
     discount = 0
     if itemsPack is None:
         return Money(gold=discount)
@@ -637,7 +635,7 @@ def getCouponDiscountForItemPack(itemsPack):
             if item.type in ItemPackTypeGroup.DISCOUNT:
                 discount += item.count
 
-        return Money(gold=discount)
+        return Money(gold=min(discount, price))
 
 
 def getCouponBonusesForItemPack(itemsPack):

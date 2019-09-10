@@ -14,6 +14,8 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.STORAGE import STORAGE
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.goodies.goodie_items import BOOSTERS_ORDERS, MAX_ACTIVE_BOOSTERS_COUNT
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.event_dispatcher import showWebShop
 from gui.shared.formatters import text_styles, getItemPricesVO
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
@@ -180,8 +182,13 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
         filterWarningVO = None
         if boosters:
             for booster in sorted(boosters, cmp=self.__sort):
-                boosterLimitLocale = MENU.boosterLimitLocale(booster.boosterGuiType)
-                vo = createStorageDefVO(booster.boosterID, text_styles.hightlight(_ms(MENU.BOOSTER_DESCRIPTION_EFFECTVALUETIME, effectValue=booster.getFormattedValue(), effectTime=booster.getEffectTimeStr(hoursOnly=True))), text_styles.main(_ms(MENU.boosterInfluenceLocale(booster.boosterGuiType))), booster.count, getItemPricesVO(booster.getSellPrice())[0], func_utils.makeFlashPath(booster.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL)), func_utils.makeFlashPath(booster.getShopIcon()), 'altimage', enabled=booster.isReadyToActivate, active=booster.state, contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_PERSONAL_RESERVE_ITEM, additionalInfo=text_styles.alert(_ms(boosterLimitLocale)) if boosterLimitLocale else '')
+                influence = backport.text(R.strings.menu.booster.influence.dyn(booster.boosterGuiType)())
+                limitResource = R.strings.menu.booster.limit.dyn(booster.boosterGuiType)
+                if limitResource:
+                    additionalInfo = text_styles.alert(backport.text(limitResource()))
+                else:
+                    additionalInfo = ''
+                vo = createStorageDefVO(booster.boosterID, text_styles.hightlight(_ms(MENU.BOOSTER_DESCRIPTION_EFFECTVALUETIME, effectValue=booster.getFormattedValue(), effectTime=booster.getEffectTimeStr(hoursOnly=True))), text_styles.main(influence), booster.count, getItemPricesVO(booster.getSellPrice())[0], func_utils.makeFlashPath(booster.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL)), func_utils.makeFlashPath(booster.getShopIcon()), 'altimage', enabled=booster.isReadyToActivate, active=booster.state, contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_PERSONAL_RESERVE_ITEM, additionalInfo=additionalInfo)
                 dataProviderValues.append(vo)
                 filteredBoostersCount += booster.count
 

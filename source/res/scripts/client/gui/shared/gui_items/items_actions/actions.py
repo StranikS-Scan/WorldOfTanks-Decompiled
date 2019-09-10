@@ -43,6 +43,8 @@ from shared_utils import first, allEqual
 from skeletons.gui.game_control import ITradeInController
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
 ItemSellSpec = namedtuple('ItemSellSpec', ('typeIdx', 'intCD', 'count'))
 
 def showMessage(scopeMsg, msg, item, msgType=SystemMessages.SM_TYPE.Error, **kwargs):
@@ -186,6 +188,20 @@ class ModuleBuyAction(BuyAction):
             yield DialogsInterface.showDialog(BuyModuleMeta(self.__intCD, self._itemsCache.items.stats.money))
         else:
             yield lambda callback=None: callback
+        return
+
+
+class ChangeVehicleNationAction(IGUIItemAction):
+
+    def __init__(self, vehCD):
+        super(ChangeVehicleNationAction, self).__init__()
+        self.__vehCD = vehCD
+
+    @process
+    def doAction(self):
+        AccountSettings.setSettings(NATION_CHANGE_VIEWED, True)
+        shared_events.showChangeVehicleNationDialog(self.__vehCD)
+        yield lambda callback=None: callback
         return
 
 

@@ -1,11 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/festivity/__init__.py
-
+from festivity.dummy.df_factory import DummyFactory
+from skeletons.festivity_factory import IFestivityFactory
 
 def getFestivityConfig(manager):
-    from festivity.festival.factory import FestivalFactory
-    from skeletons.festival import IFestivalController
-    from skeletons.festivity_factory import IFestivityFactory
-    festivityFactory = FestivalFactory()
+    festivityFactory = DummyFactory()
     manager.addInstance(IFestivityFactory, festivityFactory)
-    manager.addInstance(IFestivalController, festivityFactory.getController())

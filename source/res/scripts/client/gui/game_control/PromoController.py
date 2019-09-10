@@ -27,11 +27,11 @@ from skeletons.gui.game_control import IPromoController, IBrowserController, IEv
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.promo import IPromoLogger
 from skeletons.gui.web import IWebController
-from web_client_api import webApiCollection, ui as ui_web_api, sound as sound_web_api
-from web_client_api.promo import PromoWebApi
-from web_client_api.ranked_battles import RankedBattlesWebApi
-from web_client_api.request import RequestWebApi
-from web_client_api.vehicles import VehiclesWebApi
+from web.web_client_api import webApiCollection, ui as ui_web_api, sound as sound_web_api
+from web.web_client_api.promo import PromoWebApi
+from web.web_client_api.ranked_battles import RankedBattlesWebApi
+from web.web_client_api.request import RequestWebApi
+from web.web_client_api.vehicles import VehiclesWebApi
 _PromoData = namedtuple('_PromoData', ['url', 'closeCallback', 'source'])
 _logger = logging.getLogger(__name__)
 

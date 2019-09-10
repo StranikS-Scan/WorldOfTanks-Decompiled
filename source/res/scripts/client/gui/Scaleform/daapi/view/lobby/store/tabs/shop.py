@@ -12,6 +12,7 @@ from gui.shared.money import Currency
 from gui.shared.tooltips.formatters import getActionPriceData
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency, i18n
+from nation_change.nation_change_helpers import isMainInNationGroupSafe
 from skeletons.gui.game_control import ITradeInController
 
 class ShopItemsTab(StoreItemsTab):
@@ -112,6 +113,7 @@ class ShopVehicleTab(ShopItemsTab, StoreVehicleTab):
     def _getRequestCriteria(self, invVehicles):
         requestCriteria = REQ_CRITERIA.EMPTY | ~REQ_CRITERIA.CUSTOM(lambda item: item.isHidden and not item.isRestorePossible()) | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
         requestCriteria |= self._getVehicleRiterias(self._filterData['selectedTypes'], self._filterData['selectedLevels'])
+        requestCriteria |= REQ_CRITERIA.CUSTOM(lambda item: isMainInNationGroupSafe(item.intCD))
         return self._getExtraCriteria(self._filterData['extra'], requestCriteria, invVehicles)
 
     def _getExtraCriteria(self, extra, requestCriteria, invVehicles):

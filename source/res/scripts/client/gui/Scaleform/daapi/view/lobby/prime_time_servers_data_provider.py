@@ -1,10 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prime_time_servers_data_provider.py
-from gui.Scaleform.daapi.view.servers_data_provider import ServersDataProvider
-from gui.Scaleform.locale.COMMON import COMMON
-from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
+from gui.impl.gen import R
 from gui.impl import backport
-from helpers import i18n
+from gui.Scaleform.daapi.view.servers_data_provider import ServersDataProvider
 
 class PrimeTimesServersDataProvider(ServersDataProvider):
 
@@ -54,10 +52,10 @@ class PrimeTimesServersDataProvider(ServersDataProvider):
         frmt = backport.getShortTimeFormat
         if serverPeriods:
             for periodStart, periodEnd in serverPeriods:
-                periodsStr.append(i18n.makeString(RANKED_BATTLES.CALENDARDAY_TIME, start=frmt(periodStart), end=frmt(periodEnd)))
+                periodsStr.append(backport.text(R.strings.ranked_battles.calendarDay.time(), start=frmt(periodStart), end=frmt(periodEnd)))
 
         else:
-            periodsStr = i18n.makeString(COMMON.COMMON_DASH)
+            periodsStr = backport.text(R.strings.common.common.dash())
         vo['shortname'] = item['shortname']
         vo['schedules'] = '\n'.join(periodsStr)
         vo['selected'] = False

@@ -58,7 +58,6 @@ class CustomEffectManager(Component):
 
         self.__createChassisCenterNodes()
         self.__wheelsData = None
-        self.__variableArgs['Nitro'] = 0
         PixieCache.incref()
         return
 
@@ -227,5 +226,5 @@ class CustomEffectManager(Component):
 def getCorrectedMatKinds(vehicleAppearance):
     correctedMatKinds = vehicleAppearance.terrainMatKind
     if vehicleAppearance.isInWater:
-        correctedMatKinds = [material_kinds.WATER_MATERIAL_KIND] * len(correctedMatKinds)
+        correctedMatKinds = [material_kinds.getWaterMatKind()] * len(correctedMatKinds)
     return correctedMatKinds

@@ -83,19 +83,24 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
         super(VehicleCompareView, self)._populate()
         self.as_setStaticDataS({'header': self.__getHeaderData()})
         self.as_setVehicleParamsDataS(getAllParametersTitles())
+        self._setViewData()
+        self.comparisonBasket.onChange += self.__updateUI
+        self.comparisonBasket.onSwitchChange += self.__onVehCmpBasketStateChanged
+        self.comparisonBasket.onParametersChange += self.__onVehicleParamsChanged
+        self.comparisonBasket.onNationChange += self._setViewData
+
+    def _setViewData(self):
         self.__vehDP = VehiclesDataProvider()
         self.__vehDP.setFlashObject(self.as_getVehiclesDPS())
         self.__paramsCache = VehCompareBasketParamsCache(self.__vehDP)
         self.__updateUI()
-        self.comparisonBasket.onChange += self.__updateUI
-        self.comparisonBasket.onSwitchChange += self.__onVehCmpBasketStateChanged
-        self.comparisonBasket.onParametersChange += self.__onVehicleParamsChanged
 
     def _dispose(self):
         super(VehicleCompareView, self)._dispose()
         self.comparisonBasket.onChange -= self.__updateUI
         self.comparisonBasket.onSwitchChange -= self.__onVehCmpBasketStateChanged
         self.comparisonBasket.onParametersChange -= self.__onVehicleParamsChanged
+        self.comparisonBasket.onNationChange -= self._setViewData
         self.__paramsCache.dispose()
         self.__paramsCache = None
         self.__vehDP.fini()

@@ -110,6 +110,10 @@
         <anchorDirection>	0.000000 0.762801 -0.646634	</anchorDirection>
       </slot>
     </customizationSlots>
+    <camouflage>
+      <density>	132.127 131.817	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_T71>
@@ -1548,6 +1552,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.655 0.655 0.22 0.36	</tiling>
+            <density>	102.737 103.135	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_76mm_Gun_M1A2L>
         <_76mm_Gun_T185E>	shared	  <maxAmmo>	60	</maxAmmo>
@@ -1637,6 +1643,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.7 0.7 0.23 0.000000	</tiling>
+            <density>	102.839 103.155	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_76mm_Gun_T185E>
       </guns>
@@ -1696,6 +1704,8 @@
       </customizationSlots>
       <camouflage>
         <tiling>	0.67 0.445 0.000000 0.29	</tiling>
+        <density>	111.248 111.461	</density>
+        <aoTextureSize>	512 256	</aoTextureSize>
       </camouflage>
     </Turret_1_T71>
   </turrets0>

@@ -2,17 +2,16 @@
 # Embedded file name: scripts/common/Event.py
 from debug_utils import LOG_CURRENT_EXCEPTION
 
-class Event(list):
-    __slots__ = ('__weakref__',)
+class Event(object):
 
     def __init__(self, manager=None):
-        list.__init__(self)
+        self._delegates = []
         if manager is not None:
             manager.register(self)
         return
 
     def __call__(self, *args, **kwargs):
-        for delegate in self[:]:
+        for delegate in self._delegates[:]:
             try:
                 delegate(*args, **kwargs)
             except:
@@ -22,20 +21,20 @@ class Event(list):
     def __iadd__(self, delegate):
         if not callable(delegate):
             raise TypeError('Event listener is not callable.')
-        if delegate not in self:
-            self.append(delegate)
+        if delegate not in self._delegates:
+            self._delegates.append(delegate)
         return self
 
     def __isub__(self, delegate):
-        if delegate in self:
-            self.remove(delegate)
+        if delegate in self._delegates:
+            self._delegates.remove(delegate)
         return self
 
     def clear(self):
-        del self[:]
+        del self._delegates[:]
 
     def __repr__(self):
-        return 'Event(%s):%s' % (len(self), repr(self[:]))
+        return 'Event(%s):%s' % (len(self._delegates), repr(self._delegates))
 
 
 class SafeEvent(Event):
@@ -44,7 +43,7 @@ class SafeEvent(Event):
         super(SafeEvent, self).__init__(manager)
 
     def __call__(self, *args, **kwargs):
-        for delegate in self[:]:
+        for delegate in self._delegates[:]:
             try:
                 delegate(*args, **kwargs)
             except:
@@ -71,7 +70,6 @@ class Handler(object):
 
 
 class EventManager(object):
-    __slots__ = ('__events',)
 
     def __init__(self):
         self.__events = []
@@ -85,7 +83,6 @@ class EventManager(object):
 
 
 class SuspendedEvent(Event):
-    __slots__ = ('__manager',)
 
     def __init__(self, manager):
         super(SuspendedEvent, self).__init__(manager)
@@ -104,7 +101,6 @@ class SuspendedEvent(Event):
 
 
 class SuspendedEventManager(EventManager):
-    __slots__ = ('__isSuspended', '__suspendedEvents')
 
     def __init__(self):
         super(SuspendedEventManager, self).__init__()

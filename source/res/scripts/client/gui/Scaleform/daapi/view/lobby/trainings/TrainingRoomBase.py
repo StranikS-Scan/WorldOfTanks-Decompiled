@@ -322,19 +322,21 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
         minCount = self.prbEntity.getSettings().getTeamLimits(1)['minCount']
         return GUI_SETTINGS.trainingObserverModeEnabled and minCount > 0
 
+    def _updateTrainingRoom(self, event):
+        self.__changeTrainingRoomSettings(event.ctx.get('settings', None))
+        return
+
     @process
     def _doLeave(self, isExit=True):
         yield self.prbDispatcher.doLeaveAction(LeavePrbAction(isExit=isExit))
 
     @process
-    def _updateTrainingRoom(self, event):
-        settings = event.ctx.get('settings', None)
+    def __changeTrainingRoomSettings(self, settings):
         if settings and settings.areSettingsChanged(self.prbEntity.getSettings()):
             settings.setWaitingID('prebattle/change_settings')
             result = yield self.prbDispatcher.sendPrbRequest(settings)
             if not result:
                 self._showActionErrorMessage()
-        return
 
     def __getPlayersMaxCount(self):
         playersMaxCount = self.prbEntity.getTeamLimits()['maxCount'][0]

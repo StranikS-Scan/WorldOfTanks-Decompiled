@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/InventoryRequester.py
+from itertools import imap
 from collections import namedtuple, defaultdict
 import BigWorld
+from nation_change.nation_change_helpers import activeInNationGroup
 from adisp import async
 from constants import CustomizationInvData, SkinInvData, VEHICLE_NO_INV_ID
 from items import vehicles, tankmen, getTypeOfCompactDescr, parseIntCompactDescr, makeIntCompactDescrByID
@@ -13,7 +15,7 @@ from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from skeletons.gui.shared.utils.requesters import IInventoryRequester
 
 class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
-    VEH_DATA = namedtuple('VEH_DATA', ('compDescr', 'descriptor', 'invID', 'repair', 'crew', 'lock', 'settings', 'shells', 'shellsLayout', 'eqs', 'eqsLayout'))
+    VEH_DATA = namedtuple('VEH_DATA', ('compDescr', 'descriptor', 'invID', 'repair', 'crew', 'lock', 'settings', 'extraSettings', 'shells', 'shellsLayout', 'eqs', 'eqsLayout'))
     ITEM_DATA = namedtuple('ITEM_DATA', ('compDescr', 'descriptor', 'count'))
     TMAN_DATA = namedtuple('TMAN_DATA', ('compDescr', 'descriptor', 'vehicle', 'invID'))
     OUTFIT_DATA = namedtuple('OUTFIT_DATA', ('compDescr', 'flags'))
@@ -158,7 +160,13 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
         return self.__getCrewSkinsData(dataIdx) if itemTypeIdx == GUI_ITEM_TYPE.CREW_SKINS else self.__getItemsData(itemTypeIdx, dataIdx)
 
     def getFreeSlots(self, vehiclesSlots):
-        return vehiclesSlots - len(self.__getVehiclesData())
+
+        def checker(vehData):
+            flag = vehData.get('extraSettings', 0)
+            return activeInNationGroup(flag)
+
+        activeVehicles = sum(imap(checker, self.__getVehiclesData().itervalues()))
+        return vehiclesSlots - activeVehicles
 
     @async
     def _requestCache(self, callback=None):
@@ -203,7 +211,7 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
             if compactDescr is None:
                 return
             try:
-                item = cache[typeCompDescr] = self.VEH_DATA(value('compDescr'), vehicles.VehicleDescr(compactDescr=compactDescr), vehInvID, value('repair', 0), value('crew', []), value('lock', 0), value('settings', 0), value('shells', []), value('shellsLayout', []), value('eqs', []), value('eqsLayout', []))
+                item = cache[typeCompDescr] = self.VEH_DATA(value('compDescr'), vehicles.VehicleDescr(compactDescr=compactDescr), vehInvID, value('repair', 0), value('crew', []), value('lock', 0), value('settings', 0), value('extraSettings', 0), value('shells', []), value('shellsLayout', []), value('eqs', []), value('eqsLayout', []))
             except Exception:
                 LOG_DEBUG('Error while building vehicle from inventory', vehInvID, typeCompDescr)
                 return

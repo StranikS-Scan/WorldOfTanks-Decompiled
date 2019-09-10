@@ -11,7 +11,6 @@ from adisp import process, async
 from client_request_lib.exceptions import ResponseCodes
 from debug_utils import LOG_DEBUG
 from gui import makeHtmlString
-from gui.impl.gen import R
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.event_boards.formaters import getClanTag
@@ -22,7 +21,6 @@ from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.prb_control import prb_getters, prbEntityProperty
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.events_dispatcher import g_eventDispatcher
@@ -30,7 +28,7 @@ from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME, getTypeBigIconPath
 from gui.shared.view_helpers import ClanEmblemsHelper
-from gui.shared.view_helpers.image_helper import getTextureLinkByID, ImagesFetchCoordinator
+from gui.shared.image_helper import getTextureLinkByID, ImagesFetchCoordinator
 from gui.sounds.ambients import BattleQueueEnv
 from helpers import dependency, i18n, time_utils, int2roman
 from helpers.i18n import makeString
@@ -99,12 +97,6 @@ class _QueueProvider(object):
     def getTankInfoLabel(self):
         return makeString(MENU.PREBATTLE_TANKLABEL)
 
-    def getTankIcon(self, vehicle):
-        return getTypeBigIconPath(vehicle.type)
-
-    def getLayoutStr(self):
-        pass
-
     def forceStart(self):
         currPlayer = BigWorld.player()
         if currPlayer is not None and hasattr(currPlayer, 'createArenaFromQueue'):
@@ -127,7 +119,7 @@ class _RandomQueueProvider(_QueueProvider):
         else:
             vClasses = []
             vClassesLen = 0
-        self._createCommonPlayerString(sum(vClasses))
+        self._proxy.flashObject.as_setPlayers(makeHtmlString(_HTMLTEMP_PLAYERSLABEL, 'players', {'count': sum(vClasses)}))
         if vClassesLen:
             vClassesData = []
             for vClass, message in TYPES_ORDERED:
@@ -150,9 +142,6 @@ class _RandomQueueProvider(_QueueProvider):
     def _isStartButtonDisplayed(self, vClasses):
         return constants.IS_DEVELOPMENT and sum(vClasses) > 1
 
-    def _createCommonPlayerString(self, playerCount):
-        self._proxy.flashObject.as_setPlayers(makeHtmlString(_HTMLTEMP_PLAYERSLABEL, 'players', {'count': playerCount}))
-
 
 class _EpicQueueProvider(_RandomQueueProvider):
 
@@ -174,31 +163,10 @@ class _RankedQueueProvider(_RandomQueueProvider):
     pass
 
 
-class _BattleRoyaleQueueProvider(_RandomQueueProvider):
-
-    def processQueueInfo(self, qInfo):
-        playersCount = qInfo.get('players', 0)
-        self._createCommonPlayerString(playersCount)
-        modesData = []
-        for mode in constants.BattleRoyaleMode.ALL:
-            modesData.append({'type': backport.text(R.strings.menu.prebattle.battleRoyale.dyn(mode)()),
-             'icon': RES_ICONS.getBattleRoyaleModeIconPath(mode),
-             'count': qInfo.get(mode, 0)})
-
-        self._proxy.as_setDPS(modesData)
-
-    def getTankIcon(self, vehicle):
-        return RES_ICONS.getBattleRoyaleTankIconPath(vehicle.nationName)
-
-    def getLayoutStr(self):
-        pass
-
-
 _PROVIDER_BY_QUEUE_TYPE = {constants.QUEUE_TYPE.RANDOMS: _RandomQueueProvider,
  constants.QUEUE_TYPE.EVENT_BATTLES: _EventQueueProvider,
  constants.QUEUE_TYPE.RANKED: _RankedQueueProvider,
- constants.QUEUE_TYPE.EPIC: _EpicQueueProvider,
- constants.QUEUE_TYPE.BATTLE_ROYALE: _BattleRoyaleQueueProvider}
+ constants.QUEUE_TYPE.EPIC: _EpicQueueProvider}
 
 def _providerFactory(proxy, qType):
     return _PROVIDER_BY_QUEUE_TYPE.get(qType, _QueueProvider)(proxy, qType)
@@ -277,16 +245,14 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
             vehicle = g_currentVehicle.item
             textLabel = self.__provider.getTankInfoLabel()
             tankName = vehicle.shortUserName
-            iconPath = self.__provider.getTankIcon(vehicle)
-            layoutStr = self.__provider.getLayoutStr()
+            iconPath = getTypeBigIconPath(vehicle.type)
             self.as_setTypeInfoS({'iconLabel': iconlabel,
              'title': title,
              'description': description,
              'additional': additional,
              'tankLabel': text_styles.main(textLabel),
              'tankIcon': iconPath,
-             'tankName': tankName,
-             'layoutStr': layoutStr})
+             'tankName': tankName})
             return
 
     def __stopUpdateScreen(self):

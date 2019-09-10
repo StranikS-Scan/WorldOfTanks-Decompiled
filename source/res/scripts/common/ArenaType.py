@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/ArenaType.py
 from collections import defaultdict
-import ResMgr
+from realm_utils import ResMgr
 from constants import IS_BOT, IS_WEB, IS_CLIENT, ARENA_TYPE_XML_PATH, ARENA_GUI_TYPE_LABEL
 from constants import ARENA_GAMEPLAY_IDS, TEAMS_IN_ARENA, ARENA_GAMEPLAY_NAMES, IS_DEVELOPMENT
 from constants import IS_CELLAPP, IS_BASEAPP
@@ -80,7 +80,7 @@ def init():
     ResMgr.purge(_LIST_XML, True)
     ResMgr.purge(_DEFAULT_XML, True)
     g_gameplaysMask = getGameplaysMask(g_gameplayNames)
-    g_geometryNamesToIDs = {arenaType.geometryName:arenaType.geometryID for arenaType in g_cache.itervalues()}
+    g_geometryNamesToIDs = dict([ (arenaType.geometryName, arenaType.geometryID) for arenaType in g_cache.itervalues() ])
     return
 
 
@@ -453,7 +453,7 @@ def __calcSpaceBoundingBox(arenaBoundingBox):
 
 
 def __readChatCommandFlags(name, section, defaultXml):
-    if section.has_key(name):
+    if section[name] is not None:
         flagsAsWhitespaceSeparatedString = section.readString(name)
     else:
         flagsAsWhitespaceSeparatedString = defaultXml.readString(name)
@@ -693,7 +693,7 @@ def __readTeamsCount(key, section, defaultXml):
 def __readTeamNumbers(section, maxTeamsInArena):
     if not (section.has_key('squadTeamNumbers') or section.has_key('soloTeamNumbers')):
         if maxTeamsInArena > 2:
-            raise SoftException('For multiteam mode squadTeamNumbers and (or) soloTeamNumbers must be set')
+            raise 'For multiteam mode squadTeamNumbers and (or) soloTeamNumbers must be set'
         return (set(), set())
     squadTeamNumbers = set([ int(v) for v in section.readString('squadTeamNumbers', '').split() ])
     soloTeamNumbers = set([ int(v) for v in section.readString('soloTeamNumbers', '').split() ])

@@ -6,8 +6,6 @@ from gui.shared.tooltips import skill
 from gui.shared.tooltips import tankman
 from gui.shared.tooltips import advanced
 from gui.shared.tooltips.builders import AdvancedDataBuilder, ConditionBuilder, DataBuilder
-from helpers import dependency
-from skeletons.gui.game_control import IBattleRoyaleController
 __all__ = ('getTooltipBuilders',)
 
 class TankmanTooltipBuilder(AdvancedDataBuilder):
@@ -18,19 +16,6 @@ class TankmanTooltipBuilder(AdvancedDataBuilder):
 
     def _buildData(self, _advanced, invID, *args, **kwargs):
         return super(TankmanTooltipBuilder, self)._buildData(_advanced, invID)
-
-
-class BattleRoyaleTankmanTooltipBuilder(DataBuilder):
-    __slots__ = ()
-    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
-
-    def __init__(self, tooltipType, linkage):
-        context = contexts.TankmanHangarContext()
-        isRuRealm = self.__battleRoyaleController.voiceoverController.isRuRealm
-        super(BattleRoyaleTankmanTooltipBuilder, self).__init__(tooltipType, linkage, tankman.CisBattleRoyaleTankmanTooltipDataBlock(context) if isRuRealm else tankman.BattleRoyaleTankmanTooltipDataBlock(context))
-
-    def _buildData(self, _advanced, invID, *args, **kwargs):
-        return super(BattleRoyaleTankmanTooltipBuilder, self)._buildData(_advanced, invID)
 
 
 class NotRecruitedTankmanTooltipBuilder(DataBuilder):
@@ -57,7 +42,6 @@ class TankmanNewSkillTooltipBuilder(ConditionBuilder):
 def getTooltipBuilders():
     return (TankmanTooltipBuilder(TOOLTIPS_CONSTANTS.TANKMAN, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
      NotRecruitedTankmanTooltipBuilder(TOOLTIPS_CONSTANTS.TANKMAN_NOT_RECRUITED, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
-     BattleRoyaleTankmanTooltipBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_TANKMAN, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
      AdvancedDataBuilder(TOOLTIPS_CONSTANTS.TANKMAN_SKILL, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, skill.SkillTooltipDataBlock(contexts.PersonalCaseContext(fieldsToExclude=('count',))), advanced.SkillTooltipAdvanced(contexts.PersonalCaseContext(fieldsToExclude=('count',)))),
      TankmanNewSkillTooltipBuilder(TOOLTIPS_CONSTANTS.TANKMAN_NEW_SKILL, TOOLTIPS_CONSTANTS.TANKMEN_BUY_SKILL_UI),
      AdvancedDataBuilder(TOOLTIPS_CONSTANTS.PREVIEW_CREW_SKILL, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, skill.SkillTooltipDataBlock(contexts.PreviewCaseContext()), advanced.SkillTooltipAdvanced(contexts.PreviewCaseContext())),

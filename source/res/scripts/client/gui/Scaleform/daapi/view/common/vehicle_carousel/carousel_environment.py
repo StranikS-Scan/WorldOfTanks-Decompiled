@@ -48,9 +48,6 @@ class ICarouselEnvironment(object):
     def hasEventVehicles(self):
         return False
 
-    def hasBattleRoyaleVehicles(self):
-        return False
-
 
 class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnvironment):
     rentals = dependency.descriptor(IRentalsController)
@@ -63,7 +60,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
 
     def __init__(self):
         super(CarouselEnvironment, self).__init__()
-        self._usedFilters = self._getFilters()
+        self._usedFilters = _CAROUSEL_FILTERS
         self._carouselDPConfig = {'carouselFilter': None,
          'itemsCache': None,
          'currentVehicle': None}
@@ -138,9 +135,8 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
         self.applyFilter()
 
     def updateAviability(self):
-        if not self.isDisposed():
-            state = self._currentVehicle.getViewState()
-            self.as_setEnabledS(not state.isLocked())
+        state = self._currentVehicle.getViewState()
+        self.as_setEnabledS(not state.isLocked())
 
     def _populate(self):
         super(CarouselEnvironment, self)._populate()
@@ -239,6 +235,3 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
 
     def __onVehicleClientStateChanged(self, vehicles):
         self.updateVehicles(vehicles)
-
-    def _getFilters(self):
-        return _CAROUSEL_FILTERS

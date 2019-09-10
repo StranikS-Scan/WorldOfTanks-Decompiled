@@ -25,11 +25,10 @@ from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID
 from helpers import dependency
 from helpers.i18n import makeString
 from shared_utils import findFirst
-from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController
+from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from festivity.festival.item_info import FestivalItemInfo
 
 def _getCmpVehicle():
     return cmp_helpers.getCmpConfiguratorMainView().getCurrentVehicle()
@@ -248,16 +247,6 @@ class RankedRankContext(ToolTipContext):
         return self.rankedController.getRank(int(rankID))
 
 
-class BattleRoyaleContext(ToolTipContext):
-    battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
-
-    def __init__(self, fieldsToExclude=None):
-        super(BattleRoyaleContext, self).__init__(TOOLTIP_COMPONENT.TITLE, fieldsToExclude)
-
-    def buildItem(self, title):
-        return self.battleRoyaleController.getTitle(int(title))
-
-
 class InventoryContext(ToolTipContext):
     itemsCache = dependency.descriptor(IItemsCache)
 
@@ -445,6 +434,13 @@ class HangarContext(ToolTipContext):
         value.vehicle = self._vehicle
         value.historicalBattleID = self._historicalBattleID
         return value
+
+
+class NationChangeHangarContext(HangarContext):
+
+    def buildItem(self, vehCD, intCD):
+        self._vehicle = self.itemsCache.items.getItemByCD(int(vehCD))
+        return self.itemsCache.items.getItemByCD(int(intCD))
 
 
 class PreviewContext(HangarContext):
@@ -1050,12 +1046,3 @@ class Shop20BattleBoosterContext(AwardBattleBoosterContext):
         value.inventoryCount = True
         value.vehiclesCount = True
         return value
-
-
-class FestivalItemContext(ToolTipContext):
-
-    def __init__(self, fieldsToExclude=None):
-        super(FestivalItemContext, self).__init__(TOOLTIP_COMPONENT.FESTIVAL, fieldsToExclude)
-
-    def getFestivalItemData(self, festivalItemID):
-        return FestivalItemInfo(festivalItemID)

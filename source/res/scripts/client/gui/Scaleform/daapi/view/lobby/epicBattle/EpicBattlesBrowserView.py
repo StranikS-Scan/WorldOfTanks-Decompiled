@@ -11,8 +11,8 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from skeletons.gui.game_control import IBrowserController
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.Scaleform.daapi.view.meta.EpicBattlesBrowserViewMeta import EpicBattlesBrowserViewMeta
-from web_client_api import webApiCollection
-from web_client_api.sound import SoundWebApi
+from web.web_client_api import webApiCollection
+from web.web_client_api.sound import SoundWebApi
 
 def getFrontlineUrl(urlName):
     try:

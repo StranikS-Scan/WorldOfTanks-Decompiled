@@ -237,7 +237,7 @@ class LazyBuildersCollection(BuildersCollection):
             try:
                 builders = imported.getTooltipBuilders()
             except AttributeError:
-                raise SoftException('Package {0} does not have method getTooltipBuilders'.format(path))
+                raise SoftException('Package {0} does not have method "getTooltipBuilders", or when calling "getTooltipBuilders", it failed to instantiate one of the builders.'.format(path))
 
             for builder in builders:
                 if builder.tooltipType not in tooltipTypes:

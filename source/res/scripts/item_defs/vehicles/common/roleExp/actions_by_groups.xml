@@ -17,10 +17,16 @@
   <sniper>
     <actions>	doFarDamage	</actions>
   </sniper>
-  <scout>
+  <hashSupport1>
+    <actions>	doNearDamageSq	</actions>
+  </hashSupport1>
+  <scout1>
+    <actions>	searchEnemy doInvisAssist doOwnDamage	</actions>
+  </scout1>
+  <scout2>
     <actions>	searchEnemy fragAssist doOwnDamage	</actions>
-  </scout>
+  </scout2>
   <SPG>
-    <actions>	doStun doSpgDamage	</actions>
+    <actions>	doStun doSpgDamage doGroupStun	</actions>
   </SPG>
 </actions_by_groups.xml>

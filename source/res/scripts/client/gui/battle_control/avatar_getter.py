@@ -212,15 +212,6 @@ def getArena(avatar=None):
     return result
 
 
-def getArenaInfo(avatar=None):
-    try:
-        return getArena(avatar).arenaInfo
-    except AttributeError:
-        _logger.exception('Attribute "arenaInfo" not found')
-
-    return None
-
-
 def getArenaUniqueID(avatar=None):
     try:
         return getArena(avatar).arenaUniqueID

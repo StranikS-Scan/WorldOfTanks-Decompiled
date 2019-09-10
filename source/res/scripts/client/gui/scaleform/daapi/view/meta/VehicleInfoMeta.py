@@ -13,8 +13,14 @@ class VehicleInfoMeta(AbstractWindowView):
     def addToCompare(self):
         self._printOverrideError('addToCompare')
 
+    def changeNation(self):
+        self._printOverrideError('changeNation')
+
     def as_setVehicleInfoS(self, data):
         return self.flashObject.as_setVehicleInfo(data) if self._isDAAPIInited() else None
 
     def as_setCompareButtonDataS(self, data):
         return self.flashObject.as_setCompareButtonData(data) if self._isDAAPIInited() else None
+
+    def as_setChangeNationButtonDataS(self, data):
+        return self.flashObject.as_setChangeNationButtonData(data) if self._isDAAPIInited() else None

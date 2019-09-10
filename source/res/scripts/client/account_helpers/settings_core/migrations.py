@@ -426,6 +426,16 @@ def _migrateTo47(core, data, initialized):
     data['delete'].extend((93,))
 
 
+def _migrateTo48(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.ONCE_ONLY_HINTS, 0)
+    clear = data['clear']
+    for bitPosition in range(22, 25):
+        settingOffset = 1 << bitPosition
+        if storedValue & settingOffset:
+            clear['onceOnlyHints'] = clear.get('onceOnlyHints', 0) | settingOffset
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -608,6 +618,10 @@ _versions = ((1,
   False),
  (47,
   _migrateTo47,
+  False,
+  False),
+ (48,
+  _migrateTo48,
   False,
   False))
 

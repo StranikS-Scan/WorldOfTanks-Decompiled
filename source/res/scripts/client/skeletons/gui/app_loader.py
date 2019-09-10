@@ -62,9 +62,6 @@ class IWaitingWidget(object):
     def cancelCallback(self):
         pass
 
-    def setBackgroundImage(self, image):
-        pass
-
 
 class IWaitingWorker(object):
     __slots__ = ()
@@ -81,7 +78,7 @@ class IWaitingWorker(object):
     def getSuspendedWaitingTask(self, messageID):
         raise NotImplementedError
 
-    def show(self, messageID, isSingle=False, interruptCallback=None, isBlocking=True, isAlwaysOnTop=False, backgroundImage=None):
+    def show(self, messageID, isSingle=False, interruptCallback=None, isBlocking=True):
         raise NotImplementedError
 
     def hide(self, messageID):

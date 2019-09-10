@@ -394,8 +394,9 @@ def _readPreferredTiltDirections(section):
 
 def _readProjectilePiercingPowerReduction(section):
     res = []
+    defaultVal = section.readVector2(EFFECT_MATERIALS[0])
     for matName in EFFECT_MATERIALS:
-        val = section.readString(matName, '').split(None, 2)
+        val = section.readVector2(matName) or defaultVal
         try:
             reductionFactor = float(val[0])
             minReduction = float(val[1])

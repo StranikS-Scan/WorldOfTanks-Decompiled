@@ -1013,6 +1013,7 @@ class SYSTEM_MESSAGES(object):
     ROTATION_UNLOCK = '#system_messages:rotation/unlock'
     ROTATION_VEHICLEISLOCKED = '#system_messages:rotation/vehicleIsLocked'
     RANKED_NOTIFICATION_CONGRATULATIONS = '#system_messages:ranked/notification/congratulations'
+    RANKED_NOTIFICATIONS_QUALIFICATIONFINISH = '#system_messages:ranked/notifications/qualificationFinish'
     RANKED_NOTIFICATIONS_SINGLERANK_TEXT = '#system_messages:ranked/notifications/singleRank/text'
     RANKED_NOTIFICATIONS_BONUSNAME_YEARPOINTS = '#system_messages:ranked/notifications/bonusName/yearPoints'
     RANKED_NOTIFICATIONS_BONUSNAME_CRYSTAL = '#system_messages:ranked/notifications/bonusName/crystal'
@@ -1042,9 +1043,6 @@ class SYSTEM_MESSAGES(object):
     RANKED_NOTIFICATION_PRIMETIME = '#system_messages:ranked/notification/primeTime'
     RANKED_NOTIFICATION_NOTAVAILABLE = '#system_messages:ranked/notification/notAvailable'
     RANKED_NOTIFICATION_AVAILABLE = '#system_messages:ranked/notification/available'
-    ROYALE_NOTIFICATION_PRIMETIME = '#system_messages:royale/notification/primeTime'
-    ROYALE_NOTIFICATION_CONGRATULATIONS = '#system_messages:royale/notification/congratulations'
-    ROYALE_NOTIFICATIONS_SINGLETITLE_TEXT = '#system_messages:royale/notifications/singleTitle/text'
     TOKENS_NOTIFICATION_MARK_ACQUIRED = '#system_messages:tokens/notification/mark_acquired'
     EPICBATTLES_NOTIFICATION_NOTAVAILABLE = '#system_messages:epicBattles/notification/notAvailable'
     EPICBATTLES_PRESTIGETRIGGER_ERROR = '#system_messages:epicBattles/prestigeTrigger/error'
@@ -1097,9 +1095,10 @@ class SYSTEM_MESSAGES(object):
     CREWBOOKS_BUY_SUCCESS = '#system_messages:crewBooks_buy/success'
     CREWBOOKS_BUY_SERVER_ERROR = '#system_messages:crewBooks_buy/server_error'
     CREWBOOKS_SELL_SERVER_ERROR = '#system_messages:crewBooks_sell/server_error'
-    FESTIVAL_BUYITEM_SERVER_ERROR = '#system_messages:festival/buyItem/server_error'
-    FESTIVAL_SETITEM_SERVER_ERROR = '#system_messages:festival/setItem/server_error'
-    FESTIVAL_BUYPACKAGE_SERVER_ERROR = '#system_messages:festival/buyPackage/server_error'
+    NATION_CHANGE_SUCCESS = '#system_messages:nation_change/success'
+    NATION_CHANGE_FAILED = '#system_messages:nation_change/FAILED'
+    NATION_CHANGE_WRONG_ARG_VALUE = '#system_messages:nation_change/WRONG_ARG_VALUE'
+    NATION_CHANGE_ERROR = '#system_messages:nation_change/error'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -2220,6 +2219,7 @@ class SYSTEM_MESSAGES(object):
      ROTATION_UNLOCK,
      ROTATION_VEHICLEISLOCKED,
      RANKED_NOTIFICATION_CONGRATULATIONS,
+     RANKED_NOTIFICATIONS_QUALIFICATIONFINISH,
      RANKED_NOTIFICATIONS_SINGLERANK_TEXT,
      RANKED_NOTIFICATIONS_BONUSNAME_YEARPOINTS,
      RANKED_NOTIFICATIONS_BONUSNAME_CRYSTAL,
@@ -2249,9 +2249,6 @@ class SYSTEM_MESSAGES(object):
      RANKED_NOTIFICATION_PRIMETIME,
      RANKED_NOTIFICATION_NOTAVAILABLE,
      RANKED_NOTIFICATION_AVAILABLE,
-     ROYALE_NOTIFICATION_PRIMETIME,
-     ROYALE_NOTIFICATION_CONGRATULATIONS,
-     ROYALE_NOTIFICATIONS_SINGLETITLE_TEXT,
      TOKENS_NOTIFICATION_MARK_ACQUIRED,
      EPICBATTLES_NOTIFICATION_NOTAVAILABLE,
      EPICBATTLES_PRESTIGETRIGGER_ERROR,
@@ -2304,9 +2301,10 @@ class SYSTEM_MESSAGES(object):
      CREWBOOKS_BUY_SUCCESS,
      CREWBOOKS_BUY_SERVER_ERROR,
      CREWBOOKS_SELL_SERVER_ERROR,
-     FESTIVAL_BUYITEM_SERVER_ERROR,
-     FESTIVAL_SETITEM_SERVER_ERROR,
-     FESTIVAL_BUYPACKAGE_SERVER_ERROR)
+     NATION_CHANGE_SUCCESS,
+     NATION_CHANGE_FAILED,
+     NATION_CHANGE_WRONG_ARG_VALUE,
+     NATION_CHANGE_ERROR)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

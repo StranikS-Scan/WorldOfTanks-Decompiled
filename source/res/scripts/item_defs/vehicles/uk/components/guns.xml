@@ -92,6 +92,7 @@
     <_75mm_HV_L40>	98	</_75mm_HV_L40>
     <QF_6_pounder_Mk_V_LT>	99	</QF_6_pounder_Mk_V_LT>
     <_75mm_Gun_Mk_V_LT>	100	</_75mm_Gun_Mk_V_LT>
+    <OQF_55_pdr_AT_Gun>	101	</OQF_55_pdr_AT_Gun>
     <_20pdr_Gun_Type_A_IGR>	60001	</_20pdr_Gun_Type_A_IGR>
     <_20pdr_Gun_Type_B_IGR>	60002	</_20pdr_Gun_Type_B_IGR>
     <_75mm_Gun_Vickers_HV_IGR>	60003	</_75mm_Gun_Vickers_HV_IGR>
@@ -4112,6 +4113,64 @@
         </_32pdr_HE_Mk_3>
       </shots>
     </_32_pounder_AT_Gun_OQF_Mk_II>
+    <OQF_55_pdr_AT_Gun>
+      <userString>	#gb_vehicles:OQF_55_pdr_AT_Gun	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	125000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	72	</maxAmmo>
+      <aimingTime>	3	</aimingTime>
+      <weight>	3500	</weight>
+      <maxHealth>	208	</maxHealth>
+      <maxRegenHealth>	104	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_55pdr_APCBC>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	792	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	224 207	</piercingPower>
+        </_55pdr_APCBC>
+        <_55pdr_APDS>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	991	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	253 242	</piercingPower>
+        </_55pdr_APDS>
+        <_55pdr_HE>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	792	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	54 54	</piercingPower>
+        </_55pdr_HE>
+      </shots>
+    </OQF_55_pdr_AT_Gun>
     <_25pdr_Field_Gun>
       <userString>	#gb_vehicles:_25pdr_Field_Gun	</userString>
       <tags></tags>

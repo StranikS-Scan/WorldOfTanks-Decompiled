@@ -26,7 +26,7 @@ class VehicleSelectorBase(object):
          'compatibleOnly': compatibleOnly}
 
     def _updateData(self, allVehicles, compatiblePredicate=lambda vo: vo.get('enabled')):
-        criteria = REQ_CRITERIA.EMPTY
+        criteria = REQ_CRITERIA.EMPTY | REQ_CRITERIA.VEHICLE.ACTIVE_OR_MAIN_IN_NATION_GROUP
         criteria |= ~REQ_CRITERIA.VEHICLE.EXPIRED_IGR_RENT
         criteria |= ~REQ_CRITERIA.VEHICLE.DISABLED_IN_PREM_IGR
         if not self.showNotReadyVehicles:

@@ -23,11 +23,11 @@ from skeletons.gui.game_control import ICalendarController, IBrowserController
 from skeletons.gui.game_window_controller import GameWindowController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.lobby_context import ILobbyContext
-from web_client_api import w2capi, webApiCollection, w2c, W2CSchema
-from web_client_api.request import RequestWebApi
-from web_client_api.shop import ShopWebApi
-from web_client_api.sound import SoundWebApi
-from web_client_api.ui import CloseWindowWebApi, NotificationWebApi, ShopWebApiMixin, UtilWebApi, VehiclePreviewWebApiMixin
+from web.web_client_api import w2capi, webApiCollection, w2c, W2CSchema
+from web.web_client_api.request import RequestWebApi
+from web.web_client_api.shop import ShopWebApi
+from web.web_client_api.sound import SoundWebApi
+from web.web_client_api.ui import CloseWindowWebApi, NotificationWebApi, ShopWebApiMixin, UtilWebApi, VehiclePreviewWebApiMixin
 
 @w2capi(name='open_tab', key='tab_id')
 class _OpenTabWebApi(ShopWebApiMixin, VehiclePreviewWebApiMixin):

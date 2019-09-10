@@ -418,9 +418,8 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
     def __setCreditsCallBack(self, credit):
         self.as_setCreditsS(credit)
 
-    def __setTradeOffVehicle(self, event):
-        selectedVehCD = int(event.ctx)
-        self.tradeOffVehicle = self.itemsCache.items.getItemByCD(selectedVehCD)
+    def __setTradeOffVehicle(self, _=None):
+        self.tradeOffVehicle = self.tradeIn.getActiveTradeOffVehicle()
         tradeOffVehicleHtml = moneyWithIcon(self.tradeOffVehicle.tradeOffPrice, currType=Currency.GOLD)
         tradeOffVehicleStatus = i18n.makeString(DIALOGS.BUYVEHICLEWINDOW_TRADEIN_INFO_SAVING, cost=tradeOffVehicleHtml)
         tradeOffVehicleVo = makeVehicleVO(self.tradeOffVehicle)

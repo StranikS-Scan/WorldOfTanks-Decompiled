@@ -25,7 +25,7 @@ class SiegeModeControl(InputHandlerCommand):
             return False
         else:
             vehicle = BigWorld.player().getVehicleAttached()
-            if vehicle is not None and vehicle.isAlive():
+            if vehicle is not None and vehicle.isPlayerVehicle and vehicle.isAlive():
                 self.__switchSiegeMode()
             return True
 

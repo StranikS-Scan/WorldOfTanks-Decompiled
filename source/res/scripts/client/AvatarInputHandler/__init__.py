@@ -28,9 +28,6 @@ from AvatarInputHandler.commands.bootcamp_mode_control import BootcampModeContro
 from AvatarInputHandler.commands.siege_mode_control import SiegeModeControl
 from AvatarInputHandler.remote_camera_sender import RemoteCameraSender
 from AvatarInputHandler.siege_mode_player_notifications import SiegeModeSoundNotifications, SiegeModeCameraShaker
-from AvatarInputHandler.commands.radar_control import RadarControl
-from AvatarInputHandler.commands.vehicle_upgrade_control import VehicleUpdateControl
-from AvatarInputHandler.commands.vehicle_upgrade_control import VehicleUpgradePanelControl
 from Event import Event
 from constants import ARENA_PERIOD, AIMING_MODE
 from control_modes import _ARCADE_CAM_PIVOT_POS
@@ -44,7 +41,6 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBootcampController
 from svarog_script.script_game_object import ScriptGameObject, ComponentDescriptor
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 INPUT_HANDLER_CFG = 'gui/avatar_input_handler.xml'
 
 class _CTRL_TYPE(object):
@@ -61,10 +57,6 @@ _GUN_MARKER_FLAG = aih_constants.GUN_MARKER_FLAG
 _BINDING_ID = aih_global_binding.BINDING_ID
 _CTRL_MODES = aih_constants.CTRL_MODES
 _CTRLS_FIRST = _CTRL_MODE.DEFAULT
-_CTRL_MODULES = (control_modes,
- MapCaseMode,
- RespawnDeathMode,
- epic_battle_death_mode)
 _CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: ('ArcadeControlMode', 'arcadeMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.STRATEGIC: ('StrategicControlMode', 'strategicMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.ARTY: ('ArtyControlMode', 'artyMode', _ARTY_CTRL_TYPE),
@@ -208,7 +200,6 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         self.__observerVehicle = None
         self.__observerIsSwitching = False
         self.__commands = []
-        self.__detachedCommands = []
         self.__remoteCameraSender = None
         self.__isGUIVisible = False
         return
@@ -227,12 +218,6 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             self.siegeModeControl.onSiegeStateChanged += SiegeModeCameraShaker.shake
         if self.bootcampCtrl.isInBootcamp() and constants.HAS_DEV_RESOURCES:
             self.__commands.append(BootcampModeControl())
-        if ARENA_BONUS_TYPE_CAPS.checkAny(player.arena.bonusType, ARENA_BONUS_TYPE_CAPS.RADAR):
-            self.__commands.append(RadarControl())
-        if ARENA_BONUS_TYPE_CAPS.checkAny(player.arena.bonusType, ARENA_BONUS_TYPE_CAPS.BATTLEROYALE):
-            self.__commands.append(VehicleUpdateControl())
-            self.__commands.append(VehicleUpgradePanelControl())
-            self.__detachedCommands.append(VehicleUpgradePanelControl())
 
     def prerequisites(self):
         out = []
@@ -249,10 +234,6 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         elif self.__isStarted and self.__isDetached:
             if self.__curCtrl.alwaysReceiveKeyEvents() and not self.isObserverFPV or CommandMapping.g_instance.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key):
                 self.__curCtrl.handleKeyEvent(isDown, key, mods, event)
-            for command in self.__detachedCommands:
-                if command.handleKeyEvent(isDown, key, mods, event):
-                    return True
-
             return BigWorld.player().handleKey(isDown, key, mods)
         elif not self.__isStarted or self.__isDetached:
             return False
@@ -457,8 +438,10 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
 
     def __onVehicleChanged(self, isStatic):
         self.steadyVehicleMatrixCalculator.relinkSources()
+        self.__commands = []
         self.__identifySPG()
         self.__identifyWheeledTech()
+        self.__constructComponents()
         if self.__waitObserverCallback is not None and self.__observerVehicle is not None:
             player = BigWorld.player()
             ownVehicle = BigWorld.entity(player.playerVehicleID)
@@ -548,7 +531,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             elif vehicle is not None and isReplayPlaying:
                 vehicleID = vehicle.id
             self.onCameraChanged(eMode, vehicleID)
-            if not isReplayPlaying and not vehicle.isUpgrading():
+            if not isReplayPlaying:
                 self.__curCtrl.handleMouseEvent(0.0, 0.0, 0.0)
             return
 
@@ -753,6 +736,10 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             return sec
 
     def __setupCtrls(self, section):
+        modules = (control_modes,
+         MapCaseMode,
+         RespawnDeathMode,
+         epic_battle_death_mode)
         bonusType = BigWorld.player().arenaBonusType
         bonusTypeCtrlsMap = _OVERWRITE_CTRLS_DESC_MAP.get(bonusType, {})
         for name, desc in _CTRLS_DESC_MAP.items():
@@ -761,7 +748,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             try:
                 if desc[2] != _CTRL_TYPE.DEVELOPMENT or desc[2] == _CTRL_TYPE.DEVELOPMENT and constants.HAS_DEV_RESOURCES:
                     if name not in self.__ctrls:
-                        for module in _CTRL_MODULES:
+                        for module in modules:
                             classType = getattr(module, desc[0], None)
                             if classType is None:
                                 pass

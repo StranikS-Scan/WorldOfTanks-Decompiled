@@ -1,10 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/cm_handlers.py
 import inspect
-from gui.Scaleform import MENU
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
-_menuKey = MENU.cst_item_ctx_menu
-CM_BUY_COLOR = 13347959
+from gui.impl import backport
+from gui.impl.gen import R
+
+def _makeMenuLabel(label, data):
+    return backport.text(R.strings.menu.cst_item_ctx_menu.dyn(data.pop('label', label))(), **data.pop('labelCtx', {}))
+
 
 class CMLabel(object):
     INFORMATION = 'information'
@@ -14,6 +17,7 @@ class CMLabel(object):
     SALE_OPTION = 'saleOption'
     BUY = 'buy'
     BUY_MORE = 'buyMore'
+    EXCHANGE = 'exchange'
     RENEW_RENT = 'rentRenew'
     ADD_TO_COMPARE = 'addToCompare'
     SHOW_IN_HANGAR = 'showInHangar'
@@ -24,6 +28,7 @@ class CMLabel(object):
     CONVERT_BLUEPRINT = 'convertBlueprint'
     CONVERT_BLUEPRINT_MAX = 'convertBlueprintMax'
     SHOW_BLUEPRINT = 'showBlueprint'
+    NATION_CHANGE = 'nationChange'
 
 
 def option(order, label):
@@ -41,6 +46,19 @@ def option(order, label):
     return optionDecorator
 
 
+class StorageOptionCustomData(object):
+
+    def __init__(self, label, enabled=True, visible=True, textColor=None, labelCtx=None):
+        self.label = label
+        self.enabled = enabled
+        self.visible = visible
+        self.textColor = textColor
+        self.labelCtx = labelCtx
+
+    def asDict(self):
+        return {key:value for key, value in inspect.getmembers(self, lambda m: not inspect.ismethod(m)) if not (key.startswith('_') or key.startswith('__')) and value is not None}
+
+
 class ContextMenu(AbstractContextMenuHandler):
 
     def __init__(self, cmProxy=None, ctx=None):
@@ -52,10 +70,10 @@ class ContextMenu(AbstractContextMenuHandler):
         self._id = int(ctx.id)
 
     def _generateOptions(self, ctx=None):
-        return [ self._makeOption(method.cm['label'], self._getOptionCustomData(method.cm['label']) or {}) for method in self.__handlerMethods ]
+        return [ self._makeOption(method.cm['label'], self._getOptionCustomData(method.cm['label']).asDict()) for method in self.__handlerMethods ]
 
     def _makeOption(self, label, data):
-        return self._makeItem(label, _menuKey(data.pop('label', label)), data or None)
+        return self._makeItem(optId=label, optLabel=_makeMenuLabel(label, data), optInitData=data or None)
 
     def _getOptionCustomData(self, label):
-        return None
+        return StorageOptionCustomData(label)

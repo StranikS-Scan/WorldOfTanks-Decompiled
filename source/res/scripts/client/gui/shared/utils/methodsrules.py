@@ -51,11 +51,10 @@ class MethodsRules(object):
         self.__notificationToDelay = defaultdict(list)
         self.__delayersProcessed = set()
 
-    def clear(self, reset=True):
+    def clear(self):
         self.__listenersToSkip = []
+        self.__notificationToDelay.clear()
         self.__delayersProcessed.clear()
-        if reset:
-            self.__notificationToDelay.clear()
 
     def skipListenerNotification(self, wrapper):
         self.__listenersToSkip.append(wrapper.listener)

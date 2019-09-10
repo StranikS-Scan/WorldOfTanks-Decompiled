@@ -21,16 +21,6 @@ class ComponentDescriptor(AutoProperty):
         return
 
 
-class ComponentDescriptorTyped(ComponentDescriptor):
-
-    def __init__(self, allowedType, fieldName=None):
-        ComponentDescriptor.__init__(self, fieldName)
-        self.allowedType = allowedType
-
-    def __set__(self, instance, value):
-        ComponentDescriptor.__set__(self, instance, value)
-
-
 class ScriptGameObject(object):
     __metaclass__ = AutoPropertyInitMetaclass
 

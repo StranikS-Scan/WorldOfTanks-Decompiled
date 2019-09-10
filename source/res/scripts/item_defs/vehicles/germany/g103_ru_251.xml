@@ -116,6 +116,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	1.72 1.72 0.000000 0.000000	</tiling>
+      <density>	124.425 124.273	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -2196,10 +2198,11 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	-0.000639413 0.00208652 2.09389	</rayStart>
-              <rayEnd>	-0.00423691 0.00953957 2.09389	</rayEnd>
-              <rayUp>	0.108 0.108 4	</rayUp>
-              <size>	0.361	</size>
+              <rayStart>	-0.000000 0.000000 1.98178	</rayStart>
+              <rayEnd>	0.105992 -0.0100066 1.98178	</rayEnd>
+              <rayUp>	0.12245 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.5	</size>
               <hideIfDamaged>	true	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
             </slot>
@@ -2227,6 +2230,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.625 0.625 0.000000 0.000000	</tiling>
+            <density>	145.322 146.93	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_90mm_Rheinmetall_90_L40>
       </guns>
@@ -2294,6 +2299,10 @@
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	102.243 102.206	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </Turret_1_G103_RU_251>
   </turrets0>
   <engines>

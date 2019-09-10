@@ -148,9 +148,6 @@ class BCBattlePage(BCBattlePageMeta):
     def _toggleRadialMenu(self, enable):
         pass
 
-    def _definePostmortemPanel(self):
-        self.as_useEventPostmortemPanelS(False)
-
     def __onComponentVisibilityEvent(self, name, isVisible):
         if isVisible:
             self._setComponentsVisibility(visible={name}, hidden=set())

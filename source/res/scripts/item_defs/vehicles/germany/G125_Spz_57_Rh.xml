@@ -1057,6 +1057,8 @@
     </customization>
     <camouflage>
       <tiling>	2.2 2.2 0.000000 0.000000	</tiling>
+      <density>	111.265 111.951	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -2234,6 +2236,10 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <camouflage>
+            <density>	111.702 112.542	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_105mm_Kanone>
       </guns>
       <models>
@@ -2278,6 +2284,7 @@
           <rayStart>	0.968176 0.4046 0.47126	</rayStart>
           <rayEnd>	0.697352 0.149303 0.324697	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
+          <isMirrored>	true	</isMirrored>
           <size>	0.3	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isUVProportional>	true	</isUVProportional>
@@ -2458,6 +2465,10 @@
           <camouflage>	TURRET	</camouflage>
         </customizableVehicleAreas>
       </customization>
+      <camouflage>
+        <density>	119.317 119.538	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </Turret_1_G125_Spz_57_Rh>
   </turrets0>
   <engines>

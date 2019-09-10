@@ -385,10 +385,6 @@ class TankmanDescr(object):
         if self.roleLevel == MAX_SKILL_LEVEL and self.__skills:
             self.__levelUpLastSkill()
 
-    def checkRestrictionsByVehicleTags(self):
-        if 'lockCrewSkills' in self.__vehicleTags:
-            raise SoftException('Changing tankmans skills is forbidden for current vehicle.')
-
     def addSkill(self, skillName):
         if skillName in self.skills:
             raise SoftException('Skill already leaned (%s)' % skillName)

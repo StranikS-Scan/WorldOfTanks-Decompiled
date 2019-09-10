@@ -87,6 +87,14 @@ def getBonsUrl():
     return _getUrl('bonsUrl')
 
 
+def getTradeInUrl():
+    return _getUrl('tradeIn')
+
+
+def getTradeOffOverlayUrl():
+    return _getUrl('tradeOffOverlay')
+
+
 def showDisabledDialog():
     DialogsInterface.showI18nInfoDialog('ingameShopDisabled', None)
     return

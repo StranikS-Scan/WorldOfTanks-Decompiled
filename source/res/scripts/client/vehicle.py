@@ -146,7 +146,6 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         self.__handbrakeFired = False
         self.__wheelsScrollFilter = None
         self.__wheelsSteeringFilter = None
-        self.__isUpgrading = False
         return
 
     def __del__(self):
@@ -172,32 +171,15 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         if respawnCompactDescr is None and self.typeDescriptor is not None:
             return
         else:
-            oldTypeDescriptor = self.typeDescriptor
             self.typeDescriptor = self.getDescr(respawnCompactDescr)
             forceReloading = respawnCompactDescr is not None
-            if 'battle_royale' in self.typeDescriptor.type.tags:
-                if oldTypeDescriptor:
-                    forceReloading = False
-                    for moduleName in ('gun', 'turret', 'chassis'):
-                        oldModule = getattr(oldTypeDescriptor, moduleName)
-                        newModule = getattr(self.typeDescriptor, moduleName)
-                        if oldModule.id != newModule.id:
-                            forceReloading = True
-                            _logger.info('Battle royale force appearance reloading!')
-                            break
-
-                else:
-                    forceReloading = True
             self.appearance, prereqs = appearance_cache.createAppearance(self.id, self.typeDescriptor, self.health, self.isCrewActive, self.isTurretDetached, outfitDescr, forceReloading)
             return (loadingPriority(self.id), prereqs)
 
     def getDescr(self, respawnCompactDescr):
         if respawnCompactDescr is not None:
             descr = vehicles.VehicleDescr(respawnCompactDescr)
-            if 'battle_royale' in descr.type.tags:
-                pass
-            else:
-                self.health = descr.maxHealth
+            self.health = descr.maxHealth
             return descr
         else:
             return vehicles.VehicleDescr(compactDescr=_stripVehCompDescrIfRoaming(self.publicInfo.compDescr))
@@ -262,7 +244,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         BigWorld.player().vehicle_onLeaveWorld(self)
 
     def showShooting(self, burstCount, isPredictedShot=False):
-        blockShooting = self.siegeState is not None and self.siegeState != VEHICLE_SIEGE_STATE.ENABLED and self.siegeState != VEHICLE_SIEGE_STATE.DISABLED
+        blockShooting = self.siegeState is not None and self.siegeState != VEHICLE_SIEGE_STATE.ENABLED and self.siegeState != VEHICLE_SIEGE_STATE.DISABLED and not self.typeDescriptor.hasAutoSiegeMode
         if not self.isStarted or blockShooting:
             return
         else:
@@ -530,53 +512,13 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
 
         return
 
-    def set_battleXP(self, _=None):
-        ctrl = self.guiSessionProvider.dynamic.progression
-        if ctrl is not None and self.id == BigWorld.player().playerVehicleID:
-            ctrl.updateXP(self.battleXP)
-        return
-
-    def set_battleXpLvlData(self, _=None):
-        ctrl = self.guiSessionProvider.dynamic.progression
-        if ctrl is not None and self.id == BigWorld.player().playerVehicleID:
-            ctrl.updateLevel(*self.battleXpLvlData)
-        return
-
-    def set_radarReadinessTime(self, _=None):
-        ctrl = self.guiSessionProvider.dynamic.radar
-        if ctrl is not None and self.id == BigWorld.player().playerVehicleID:
-            ctrl.updateRadarReadinessTime(self.radarReadinessTime)
-        return
-
-    def set_upgradeReadinessTime(self, _=None):
-        _logger.info('Vehicle upgrade readiness time changed')
-        ctrl = self.guiSessionProvider.dynamic.progression
-        if ctrl is not None and self.id == BigWorld.player().playerVehicleID:
-            ctrl.updateVehicleReadinessTime(self.upgradeReadinessTime, self.readinessChangeReason)
-        return
-
-    def onVehicleUpgraded(self, newVehCompactDescr, newVehOutfitCompactDescr):
-        self.__isUpgrading = True
-        if self.isPlayerVehicle:
-            inputHandler = BigWorld.player().inputHandler
-            inputHandler.onControlModeChanged('arcade')
-        progressionCtrl = self.guiSessionProvider.dynamic.progression
-        if progressionCtrl is not None:
-            progressionCtrl.vehicleVisualChangingStarted(self.id)
-        self.respawnVehicle(self.id, newVehCompactDescr, newVehOutfitCompactDescr)
-        self.__isUpgrading = False
-        return
-
-    def isUpgrading(self):
-        return self.__isUpgrading
-
     def onHealthChanged(self, newHealth, attackerID, attackReasonID):
         if newHealth > 0 and self.health <= 0:
             self.health = newHealth
             return
-        self.guiSessionProvider.setVehicleHealth(self.isPlayerVehicle, self.id, newHealth, attackerID, attackReasonID)
         if not self.isStarted:
             return
+        self.guiSessionProvider.setVehicleHealth(self.isPlayerVehicle, self.id, newHealth, attackerID, attackReasonID)
         if not self.appearance.damageState.isCurrentModelDamaged:
             self.appearance.onVehicleHealthChanged()
         if self.health <= 0 and self.isCrewActive:
@@ -741,7 +683,8 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         self.guiSessionProvider.startVehicleVisual(self.proxy, True)
         if self.stunInfo > 0.0:
             self.updateStunInfo()
-        self.refreshBuffEffects()
+        self.set_inspiringEffect()
+        self.set_inspired()
         if self.isSpeedCapturing:
             self.set_isSpeedCapturing()
         if self.isBlockingCapture:
@@ -754,9 +697,6 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         self.refreshNationalVoice()
         self.__prereqs = None
         self.appearance.highlighter.setVehicleOwnership()
-        progressionCtrl = self.guiSessionProvider.dynamic.progression
-        if progressionCtrl is not None:
-            progressionCtrl.vehicleVisualChangingFinished(self.id)
         if self.respawnCompactDescr:
             _logger.debug('respawn compact descr is still valid, request reloading of tank resources %s', self.id)
             BigWorld.callback(0.0, lambda : Vehicle.respawnVehicle(self.id, self.respawnCompactDescr))
@@ -906,7 +846,6 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
                 ctrl.setVehicleState(self.id, _GUI_EVENT_ID.VEHICLE_DEAD, isDeadStarted)
         TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.VEHICLE_DESTROYED, vehicleId=self.id)
         self._removeInspire()
-        self._removeHealing()
         bwfilter = self.filter
         if hasattr(bwfilter, 'velocityErrorCompensation'):
             bwfilter.velocityErrorCompensation = 100.0
@@ -951,9 +890,6 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         if self.appearance.detailedEngineState is not None:
             self.appearance.detailedEngineState.throttle = 0
         return
-
-    def onLootPickup(self):
-        _logger.info('onLootPickup')
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)

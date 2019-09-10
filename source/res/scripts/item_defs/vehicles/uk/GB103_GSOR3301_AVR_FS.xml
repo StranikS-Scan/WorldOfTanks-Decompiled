@@ -135,6 +135,8 @@
     </customization>
     <camouflage>
       <tiling>	2.11 2.11 0.000000 0.000000	</tiling>
+      <density>	127.488 127.514	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -275,6 +277,34 @@
         <elasticity>	1300	</elasticity>
         <damping>	2	</damping>
         <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.0678233	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.0678233	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.0741325	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.0741325	</offset>
+        </node>
+        <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
           <forwardElastK>	2	</forwardElastK>
@@ -351,34 +381,6 @@
           <forwardElastK>	2	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
           <leftSibling>	Track_VT_R7	</leftSibling>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L0	</name>
-          <forwardElastK>	0.6	</forwardElastK>
-          <backwardElastK>	2	</backwardElastK>
-          <offset>	-0.0678233	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R0	</name>
-          <forwardElastK>	0.6	</forwardElastK>
-          <backwardElastK>	2	</backwardElastK>
-          <offset>	-0.0678233	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L1	</name>
-          <forwardElastK>	1.2	</forwardElastK>
-          <backwardElastK>	0.65	</backwardElastK>
-          <offset>	-0.0741325	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R1	</name>
-          <forwardElastK>	1.2	</forwardElastK>
-          <backwardElastK>	0.65	</backwardElastK>
-          <offset>	-0.0741325	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
@@ -1113,6 +1115,34 @@
         <elasticity>	1300	</elasticity>
         <damping>	2	</damping>
         <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.0678233	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.0678233	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.0741325	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.0741325	</offset>
+        </node>
+        <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
           <forwardElastK>	2	</forwardElastK>
@@ -1189,34 +1219,6 @@
           <forwardElastK>	2	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
           <leftSibling>	Track_VT_R7	</leftSibling>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L0	</name>
-          <forwardElastK>	0.6	</forwardElastK>
-          <backwardElastK>	2	</backwardElastK>
-          <offset>	-0.0678233	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R0	</name>
-          <forwardElastK>	0.6	</forwardElastK>
-          <backwardElastK>	2	</backwardElastK>
-          <offset>	-0.0678233	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L1	</name>
-          <forwardElastK>	1.2	</forwardElastK>
-          <backwardElastK>	0.65	</backwardElastK>
-          <offset>	-0.0741325	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R1	</name>
-          <forwardElastK>	1.2	</forwardElastK>
-          <backwardElastK>	0.65	</backwardElastK>
-          <offset>	-0.0741325	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
@@ -1939,6 +1941,10 @@
           </customization>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <effects>	shot_main_mb	</effects>
+          <camouflage>
+            <density>	136.233 139.493	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_85mm_HV_L40>
         <_90mm_Cockerill>	shared	  <maxAmmo>	25	</maxAmmo>
           <pitchLimits>
@@ -2016,6 +2022,10 @@
           </customization>
           <effects>	shot_main_mb	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <density>	137.573 138.741	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_90mm_Cockerill>
       </guns>
       <models>
@@ -2061,6 +2071,10 @@
           <camouflage>	TURRET	</camouflage>
         </customizableVehicleAreas>
       </customization>
+      <camouflage>
+        <density>	136.788 136.932	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </Turret_1_GB103_GSOR3301_AVR_FS>
   </turrets0>
   <engines>

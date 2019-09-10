@@ -2,14 +2,14 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/epicBattle/web_handlers.py
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from web_client_api import webApiCollection
-from web_client_api.frontline import FrontLineWebApi
-from web_client_api.request import RequestWebApi
-from web_client_api.sound import SoundWebApi, HangarSoundWebApi, SoundStateWebApi
-from web_client_api.shop import ShopWebApi
-from web_client_api.ui import NotificationWebApi, OpenWindowWebApi, OpenTabWebApi
-from web_client_api.ui import CloseWindowWebApi, UtilWebApi, ContextMenuWebApi
-from web_client_api.vehicles import VehiclesWebApi
+from web.web_client_api import webApiCollection
+from web.web_client_api.frontline import FrontLineWebApi
+from web.web_client_api.request import RequestWebApi
+from web.web_client_api.sound import SoundWebApi, HangarSoundWebApi, SoundStateWebApi
+from web.web_client_api.shop import ShopWebApi
+from web.web_client_api.ui import NotificationWebApi, OpenWindowWebApi, OpenTabWebApi
+from web.web_client_api.ui import CloseWindowWebApi, UtilWebApi, ContextMenuWebApi
+from web.web_client_api.vehicles import VehiclesWebApi
 
 class _OpenTabWebApi(OpenTabWebApi):
 

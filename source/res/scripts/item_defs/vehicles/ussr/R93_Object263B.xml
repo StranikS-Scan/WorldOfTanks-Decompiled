@@ -1460,6 +1460,8 @@
     </customization>
     <camouflage>
       <tiling>	2 2 0.000000 0.000000	</tiling>
+      <density>	98.5319 98.4494	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -2430,6 +2432,8 @@
           </customization>
           <camouflage>
             <tiling>	1 0.9 0.000000 0.2	</tiling>
+            <density>	97.613 107.601	</density>
+            <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
         </_122-mm_D-49>
       </guns>
@@ -2460,6 +2464,10 @@
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	50.0 25.0	</density>
+        <aoTextureSize>	512 256	</aoTextureSize>
+      </camouflage>
     </Turret_1_Object263B>
   </turrets0>
   <engines>

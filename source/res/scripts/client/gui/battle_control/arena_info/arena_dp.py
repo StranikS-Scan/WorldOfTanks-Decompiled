@@ -205,9 +205,6 @@ class ArenaDataProvider(IArenaDataProvider):
     def getPersonalDescription(self):
         return self.__description
 
-    def getNumberOfSquads(self):
-        return self.__squadFinder.getNumberOfSquads()
-
     def getPlayerVehicleID(self, forceUpdate=False):
         if forceUpdate and self.__playerVehicleID is None:
             self.__tryToGetRequiredData()

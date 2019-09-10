@@ -102,6 +102,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	1 1 1 0.8	</tiling>
+      <density>	88.1627 88.1875	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -1149,6 +1151,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.505 0.505 0.000000 0.000000	</tiling>
+            <density>	105.569 103.782	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_128mm_KwK44_L55_IGR>
       </guns>
@@ -1162,7 +1166,6 @@
         <collisionModelClient>	vehicles/german/G42_Maus/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.073553 0.661651 1.51396	</gunPosition>
-      <gunCamPosition>	0.073553 0.661651 1.402	</gunCamPosition>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.962 -0.112 1.103 0.000 0.867 -0.102 0.500 0.100 0.000 0.500 0.470 0.500 0.095 0.733 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
@@ -1217,6 +1220,8 @@
       </customizationSlots>
       <camouflage>
         <tiling>	0.8 0.4 0.5 0.4	</tiling>
+        <density>	106.865 106.714	</density>
+        <aoTextureSize>	1024 512	</aoTextureSize>
       </camouflage>
     </Mausturm_IGR>
   </turrets0>

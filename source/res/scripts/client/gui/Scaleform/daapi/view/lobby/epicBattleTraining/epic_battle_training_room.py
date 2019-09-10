@@ -122,7 +122,6 @@ class EpicBattleTrainingRoom(EpicBattleTrainingRoomMeta):
     def _isObserverModeEnabled(self):
         return False
 
-    @process
     def _updateTrainingRoom(self, event):
         self._closeWindow(PREBATTLE_ALIASES.EPIC_TRAINING_SETTINGS_WINDOW_PY)
         super(EpicBattleTrainingRoom, self)._updateTrainingRoom(event)

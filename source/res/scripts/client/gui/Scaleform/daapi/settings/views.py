@@ -26,6 +26,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     BROWSER_LOBBY_TOP_SUB = 'overlayBrowserView'
     BROWSER_OVERLAY = 'overlayBrowserFull'
     OVERLAY_PREM_CONTENT_VIEW = 'overlayPremContentView'
+    WEB_VIEW_TRANSPARENT = 'webViewTransparent'
     LOBBY_INVENTORY = 'inventory'
     LOBBY_PROFILE = 'profile'
     LOBBY_MISSIONS = 'missions'
@@ -102,6 +103,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     HERO_VEHICLE_PREVIEW = 'heroVehiclePreview'
     HERO_VEHICLE_PREVIEW_20 = 'heroVehiclePreview20Page'
     FRONTLINE_VEHICLE_PREVIEW_20 = 'frontLineVehiclePreview'
+    TRADE_IN_VEHICLE_PREVIEW_20 = 'tradeInVehiclePreview'
     VEHICLE_COMPARE = 'vehicleCompare'
     VEHICLE_COMPARE_MAIN_CONFIGURATOR = 'vehicleCompareConfigurator'
     LOBBY_ACADEMY = 'academy'
@@ -188,7 +190,6 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     EPIC_BATTLE_PAGE = 'epicBattlePage'
     EVENT_BATTLE_PAGE = 'classicBattlePage'
     RANKED_BATTLE_PAGE = 'rankedBattlePage'
-    BATTLE_ROYALE_PAGE = 'battleRoyalePage'
     MISSION_AWARD_WINDOW = 'missionAwardWindow'
     CRYSTALS_PROMO_WINDOW = 'crystalsPromoWindow'
     BOOTCAMP_BATTLE_PAGE = 'bootcampBattlePage'
@@ -234,5 +235,4 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
      EVENT_BATTLE_PAGE,
      RANKED_BATTLE_PAGE,
      BOOTCAMP_BATTLE_PAGE,
-     EPIC_BATTLE_PAGE,
-     BATTLE_ROYALE_PAGE)
+     EPIC_BATTLE_PAGE)

@@ -1,8 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/event_dispatcher.py
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
-from gui.battle_control.avatar_getter import isVehicleAlive
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent, LoadViewEvent
 _SCOPE = EVENT_BUS_SCOPE.BATTLE
@@ -50,15 +48,6 @@ def setPlayingTimeOnArena(playingTime):
 
 def showIngameMenu():
     g_eventBus.handleEvent(LoadViewEvent(VIEW_ALIAS.INGAME_MENU), scope=_SCOPE)
-
-
-def showBattleVehicleConfigurator():
-    if isVehicleAlive():
-        g_eventBus.handleEvent(LoadViewEvent(BATTLE_VIEW_ALIASES.BATTLE_VEHICLE_CONFIGURATOR), scope=_SCOPE)
-
-
-def hideBattleVehicleConfigurator():
-    g_eventBus.handleEvent(GameEvent(GameEvent.HIDE_VEHICLE_UPGRADE), scope=_SCOPE)
 
 
 def toggleFullStats(isDown):

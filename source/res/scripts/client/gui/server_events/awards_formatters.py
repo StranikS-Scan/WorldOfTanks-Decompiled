@@ -4,7 +4,6 @@ import logging
 from collections import namedtuple
 from math import ceil
 from constants import LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS
-from festivity.festival.item_info import FestivalItemInfo
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS
@@ -14,7 +13,6 @@ from gui.Scaleform.settings import ICONS_SIZES
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.ranked_battles.constants import YEAR_POINTS_TOKEN
-from bonus_constants import BonusName
 from gui.server_events.formatters import parseComplexToken, TOKEN_SIZES
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
@@ -138,8 +136,6 @@ def getDefaultFormattersMap():
      'finalBlueprints': BlueprintBonusFormatter(),
      'crewSkins': CrewSkinsBonusFormatter(),
      'crewBooks': CrewBooksBonusFormatter(),
-     BonusName.FESTIVAL_TICKETS: simpleBonusFormatter,
-     BonusName.FESTIVAL_ITEMS: FestivalItemsFormatter(),
      'slots': countableIntegralBonusFormatter,
      'berths': countableIntegralBonusFormatter}
 
@@ -198,18 +194,6 @@ def getRankedFormatterMap():
     return mapping
 
 
-def getRoyaleFormatterMap():
-    simpleBonusFormatter = SimpleBonusFormatter()
-    return {Currency.GOLD: simpleBonusFormatter,
-     Currency.CREDITS: simpleBonusFormatter,
-     Currency.CRYSTAL: simpleBonusFormatter,
-     PREMIUM_ENTITLEMENTS.BASIC: PremiumDaysBonusFormatter(),
-     PREMIUM_ENTITLEMENTS.PLUS: PremiumDaysBonusFormatter(),
-     'customizations': CustomizationsBonusFormatter(),
-     'dossier': DossierBonusFormatter(),
-     BonusName.FESTIVAL_ITEMS: FestivalItemsFormatter()}
-
-
 def getDefaultAwardFormatter():
     return AwardsPacker(getDefaultFormattersMap())
 
@@ -240,10 +224,6 @@ def getPostBattleAwardsPacker():
 
 def getRankedAwardsPacker():
     return AwardsPacker(getRankedFormatterMap())
-
-
-def getRoyaleAwardsPacker():
-    return AwardsPacker(getRoyaleFormatterMap())
 
 
 def getPersonalMissionAwardPacker():
@@ -344,10 +324,8 @@ class QuestsBonusComposer(object):
     def getPreformattedBonuses(self, bonuses):
         return self.__bonusFormatter.format(bonuses)
 
-    def getFormattedBonuses(self, bonuses, size=AWARDS_SIZES.SMALL, compareMethod=None):
+    def getFormattedBonuses(self, bonuses, size=AWARDS_SIZES.SMALL):
         preformattedBonuses = self.getPreformattedBonuses(bonuses)
-        if compareMethod is not None:
-            preformattedBonuses.sort(cmp=compareMethod)
         return self._packBonuses(preformattedBonuses, size)
 
     def _packBonuses(self, preformattedBonuses, size):
@@ -424,8 +402,7 @@ class SimpleBonusFormatter(AwardFormatter):
     def _getImages(cls, bonus):
         result = {}
         for size in AWARDS_SIZES.ALL():
-            image = AWARD_IMAGES.get(size, {}).get(bonus.getName())
-            result[size] = image or RES_ICONS.getBonusIcon(size, bonus.getName())
+            result[size] = AWARD_IMAGES.get(size, {}).get(bonus.getName())
 
         return result
 
@@ -1277,30 +1254,3 @@ class CrewSkinsCompensationFormatter(CrewSkinsBonusFormatter):
         defaultStr = text_styles.stats(backport.text(R.strings.item_types.crewSkins.itemType.dyn(Rarity.STRINGS[item.getRarity()])()))
         formattedStr = formatCountLabel(count=compensatedNumber, defaultStr=defaultStr)
         return formattedStr
-
-
-class FestivalItemsFormatter(SimpleBonusFormatter):
-
-    def _format(self, bonus):
-        result = []
-        bonusValue = bonus.getValue()
-        items = sorted((FestivalItemInfo(itemID) for itemID in bonusValue))
-        for festItem in items:
-            result.append(self.__itemFormat(bonus, festItem, bonusValue[festItem.getID()]))
-
-        return result
-
-    def __itemFormat(self, bonus, festItem, count):
-        return PreformattedBonus(isSpecial=True, bonusName=bonus.getName(), images=self._getImages(festItem), label='', userName=self._getUserName(festItem), specialArgs=[festItem.getID(), count, False], specialAlias=TOOLTIPS_CONSTANTS.FESTIVAL_ITEM)
-
-    @classmethod
-    def _getImages(cls, festItem):
-        result = {}
-        for size in AWARDS_SIZES.ALL():
-            result[size] = backport.image(R.images.gui.maps.icons.festival.bonuses.dyn(size).dyn(festItem.getType())())
-
-        return result
-
-    @classmethod
-    def _getUserName(cls, festItem):
-        return backport.text(festItem.getNameResID())

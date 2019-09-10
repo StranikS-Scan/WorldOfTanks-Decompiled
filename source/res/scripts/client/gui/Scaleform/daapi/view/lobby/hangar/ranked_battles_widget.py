@@ -9,7 +9,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.meta.RankedBattlesHangarWidgetMeta import RankedBattlesHangarWidgetMeta
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
-from gui.ranked_battles.ranked_builders.widget_vos import StateBlock, WidgetPreferences, getVOsSequence, getAdditionalVOs
+from gui.ranked_battles.ranked_builders.widget_vos import StateBlock, WidgetPreferences, getQualAddVOs, getVOsSequence, getLeagueAdditionalVOs
 from gui.ranked_battles.ranked_helpers.league_provider import UNDEFINED_LEAGUE_ID
 from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController
@@ -57,7 +57,8 @@ class RankedBattleResultsWidget(RankedBattlesHangarWidgetMeta):
         ranksChain = ranksChain if ranksChain is not None else self.rankedController.getRanksChain(min(lastRankID, currentRankID), max(lastRankID, currentRankID) + 1)
         preferences = WidgetPreferences(self._isAnimationEnabled(), self._isHuge(), self._hasAdditionalRankInfo())
         statesSequence = self._buildStatesSequence(lastRankID, currentRankID, clientMaxRankID, ranksChain)
-        statesSequence = self._extendWithLeagueStatesSequence(statesSequence)
+        statesSequence = self.__extendWithQualificationStatesSequence(statesSequence)
+        statesSequence = self.__extendWithLeagueStatesSequence(statesSequence)
         vosSequence = getVOsSequence(preferences, statesSequence, ranksChain)
         self.rankedController.updateClientValues()
         if vosSequence:
@@ -86,18 +87,22 @@ class RankedBattleResultsWidget(RankedBattlesHangarWidgetMeta):
         if currentRank.isNewForPlayer():
             if lastRank.isAcquired():
                 for rankID, nextRankID in zip(range(lastRankID, currentRankID), range(lastRankID + 1, currentRankID + 1)):
-                    if ranks[rankID].isInitialForNextDivision() or ranks[nextRankID].isInitialForNextDivision():
-                        if ranks[rankID].isInitialForNextDivision():
+                    rank = ranks[rankID]
+                    nextRank = ranks[nextRankID]
+                    if rank.isInitialForNextDivision() or nextRank.isInitialForNextDivision():
+                        if rank.isInitialForNextDivision():
                             if rankID < maxRankID:
                                 states.append(StateBlock(RANKEDBATTLES_ALIASES.FIRST_RANK_REACHIVE_STATE, rankID, nextRankID, None))
                             else:
                                 states.append(StateBlock(RANKEDBATTLES_ALIASES.FIRST_RANK_RECEIVE_STATE, rankID, nextRankID, None))
-                        if ranks[nextRankID].isInitialForNextDivision():
+                        if nextRank.isInitialForNextDivision() and not nextRank.isQualification():
                             states.append(StateBlock(RANKEDBATTLES_ALIASES.DIVISION_RECEIVE_STATE, rankID, nextRankID, None))
                     if rankID < maxRankID:
                         states.append(StateBlock(RANKEDBATTLES_ALIASES.RANK_REACHIVE_STATE, rankID, nextRankID, None))
                     states.append(StateBlock(RANKEDBATTLES_ALIASES.RANK_RECEIVE_STATE, rankID, nextRankID, None))
 
+                if lastRank.isInitial() and lastRank.isQualification():
+                    states[0] = StateBlock(RANKEDBATTLES_ALIASES.QUAL_DIVISION_FINISHED_STATE, lastRankID, lastRankID + 1, None)
                 if currentRank.isFinal():
                     states[-1] = StateBlock(RANKEDBATTLES_ALIASES.LEAGUE_RECEIVE_STATE, currentRankID - 1, currentRankID, None)
             if lastRank.isLost():
@@ -137,12 +142,25 @@ class RankedBattleResultsWidget(RankedBattlesHangarWidgetMeta):
             if state == RANKEDBATTLES_ALIASES.RANK_IDLE_STATE:
                 if currentRank.isInitialForNextDivision():
                     state = RANKEDBATTLES_ALIASES.RANK_INIT_STATE
+                if currentRank.isInitial() and currentRank.isQualification():
+                    state = RANKEDBATTLES_ALIASES.QUAL_IDLE_STATE
                 if state == RANKEDBATTLES_ALIASES.RANK_IDLE_STATE and currentRank.isFinal():
                     state = RANKEDBATTLES_ALIASES.LEAGUE_UPDATE_STATE
             states = [StateBlock(state, currentRankID, currentRankID, None)]
             return states
 
-    def _extendWithLeagueStatesSequence(self, statesSequence):
+    def __extendWithQualificationStatesSequence(self, statesSequence):
+        if not statesSequence:
+            _logger.error('There can not be empty statesSequence')
+            return statesSequence
+        firstBlock = statesSequence[0]
+        if firstBlock.state in (RANKEDBATTLES_ALIASES.QUAL_IDLE_STATE, RANKEDBATTLES_ALIASES.QUAL_DIVISION_FINISHED_STATE):
+            battlesInQualification = self.rankedController.getStatsComposer().amountBattles
+            totalQualificationBattles = self.rankedController.getTotalQualificationBattles()
+            statesSequence[0] = StateBlock(firstBlock.state, firstBlock.lastID, firstBlock.currentID, getQualAddVOs(battlesInQualification, totalQualificationBattles))
+        return statesSequence
+
+    def __extendWithLeagueStatesSequence(self, statesSequence):
         if not statesSequence:
             _logger.error('There can not be empty statesSequence')
             return statesSequence
@@ -158,7 +176,7 @@ class RankedBattleResultsWidget(RankedBattlesHangarWidgetMeta):
             currWebLeague = self.rankedController.getLeagueProvider().webLeague
             if currWebLeague.league == UNDEFINED_LEAGUE_ID:
                 currWebLeague = prevWebLeague
-            additionalVOs = getAdditionalVOs(currEfficiency, currEfficiencyDiff, currWebLeague.position)
+            additionalVOs = getLeagueAdditionalVOs(currEfficiency, currEfficiencyDiff, currWebLeague.position)
             prevLeagueID = prevWebLeague.league
             prevPosition = prevWebLeague.position
             currLeagueID = currWebLeague.league
@@ -170,7 +188,7 @@ class RankedBattleResultsWidget(RankedBattlesHangarWidgetMeta):
                     state = RANKEDBATTLES_ALIASES.LEAGUE_INCREASE_STATE
                     if prevLeagueID != UNDEFINED_LEAGUE_ID and prevLeagueID < currLeagueID:
                         state = RANKEDBATTLES_ALIASES.LEAGUE_DECREASE_STATE
-                    additionalVOs = getAdditionalVOs(currEfficiency, currEfficiencyDiff, currWebLeague.position, prevEfficiency, prevEfficiencyDiff, prevPosition)
+                    additionalVOs = getLeagueAdditionalVOs(currEfficiency, currEfficiencyDiff, currWebLeague.position, prevEfficiency, prevEfficiencyDiff, prevPosition)
                 statesSequence.append(StateBlock(state, prevLeagueID, currLeagueID, additionalVOs))
         return statesSequence
 

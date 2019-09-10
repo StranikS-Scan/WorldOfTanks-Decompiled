@@ -2,14 +2,14 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/referral_program/browser/web_handlers.py
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared.event_dispatcher import showReferralProgramWindow
-from web_client_api import webApiCollection
-from web_client_api.referral_program import ReferralProgramWebApi
-from web_client_api.request import RequestWebApi
-from web_client_api.rewards import RewardsWebApi
-from web_client_api.shop import ShopWebApi
-from web_client_api.social import SocialWebApi
-from web_client_api.sound import SoundWebApi
-from web_client_api.ui import OpenWindowWebApi, OpenTabWebApi, UtilWebApi, ContextMenuWebApi, CloseWindowWebApi
+from web.web_client_api import webApiCollection
+from web.web_client_api.referral_program import ReferralProgramWebApi
+from web.web_client_api.request import RequestWebApi
+from web.web_client_api.rewards import RewardsWebApi
+from web.web_client_api.shop import ShopWebApi
+from web.web_client_api.social import SocialWebApi
+from web.web_client_api.sound import SoundWebApi
+from web.web_client_api.ui import OpenWindowWebApi, OpenTabWebApi, UtilWebApi, ContextMenuWebApi, CloseWindowWebApi
 
 class _OpenTabWebApi(OpenTabWebApi):
 

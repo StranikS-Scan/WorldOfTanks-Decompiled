@@ -107,6 +107,10 @@
         <anchorDirection>	0.000000 0.139197 0.990265	</anchorDirection>
       </slot>
     </customizationSlots>
+    <camouflage>
+      <density>	141.187 141.262	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_A123_T78>
@@ -1108,6 +1112,8 @@
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
             <tiling>	0.54 0.54 0.000000 0.000000	</tiling>
+            <density>	160.224 160.349	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_90mm_Gun_M3_ID>
       </guns>
@@ -1192,6 +1198,10 @@
           <isUVProportional>	true	</isUVProportional>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	89.7096 89.6221	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </Turret_1_A123_T78>
   </turrets0>
   <engines>

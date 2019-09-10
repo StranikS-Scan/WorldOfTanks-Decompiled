@@ -115,6 +115,10 @@
         <isUVProportional>	true	</isUVProportional>
       </slot>
     </customizationSlots>
+    <camouflage>
+      <density>	16.2785 16.0146	</density>
+      <aoTextureSize>	128 128	</aoTextureSize>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_T18>
@@ -302,6 +306,8 @@
           </customization>
           <camouflage>
             <tiling>	0.445 0.445 0.000000 0.000000	</tiling>
+            <density>	29.281 29.2776	</density>
+            <aoTextureSize>	128 128	</aoTextureSize>
           </camouflage>
         </_12.7mm_T23>
       </guns>
@@ -324,6 +330,10 @@
           <camouflage>	TURRET	</camouflage>
         </customizableVehicleAreas>
       </customization>
+      <camouflage>
+        <density>	25.1497 25.1514	</density>
+        <aoTextureSize>	128 128	</aoTextureSize>
+      </camouflage>
     </T18T47>
   </turrets0>
   <engines>

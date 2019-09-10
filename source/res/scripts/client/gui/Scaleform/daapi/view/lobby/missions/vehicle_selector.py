@@ -56,11 +56,9 @@ class MissionVehicleSelector(MissionsVehicleSelectorMeta):
     def __init__(self):
         super(MissionVehicleSelector, self).__init__()
         self._carousel = None
-        self.__isQuestForBattleRoyale = False
         return
 
-    def setCriteria(self, criteria, extraConditions, isQuestForBattleRoyale):
-        self.__isQuestForBattleRoyale = isQuestForBattleRoyale
+    def setCriteria(self, criteria, extraConditions):
         self._carousel.setCriteria(criteria, extraConditions)
         self.__updateSelectedVehicle()
 
@@ -92,38 +90,31 @@ class MissionVehicleSelector(MissionsVehicleSelectorMeta):
     def __updateSelectedVehicle(self):
         vehicle = g_currentVehicle.item
         suitableVehicles = self._carousel.getSuitableVehicles()
-        if self.__isQuestForBattleRoyale:
-            selectedVeh = None
+        if suitableVehicles and vehicle and vehicle.intCD in suitableVehicles:
+            selectedVeh = getVehicleDataVO(vehicle)
+            selectedVeh.update({'tooltip': TOOLTIPS.MISSIONS_VEHICLE_SELECTOR_LIST})
+            status = text_styles.bonusAppliedText(QUESTS.MISSIONS_VEHICLESELECTOR_STATUS_SELECTED)
+        elif suitableVehicles:
+            label = QUESTS.MISSIONS_VEHICLESELECTOR_STATUS_SELECT
+            style = text_styles.premiumVehicleName
+            selectedVeh = {'buyTank': True,
+             'iconSmall': RES_ICONS.MAPS_ICONS_LIBRARY_EMPTY_SELECTION,
+             'smallInfoText': style(label),
+             'tooltip': TOOLTIPS.MISSIONS_VEHICLE_SELECTOR_SELECT}
             status = ''
-            title = ''
         else:
-            if suitableVehicles and vehicle and vehicle.intCD in suitableVehicles:
-                selectedVeh = getVehicleDataVO(vehicle)
-                selectedVeh.update({'tooltip': TOOLTIPS.MISSIONS_VEHICLE_SELECTOR_LIST})
-                status = text_styles.bonusAppliedText(QUESTS.MISSIONS_VEHICLESELECTOR_STATUS_SELECTED)
-            elif suitableVehicles:
-                label = QUESTS.MISSIONS_VEHICLESELECTOR_STATUS_SELECT
-                style = text_styles.premiumVehicleName
-                selectedVeh = {'buyTank': True,
-                 'iconSmall': RES_ICONS.MAPS_ICONS_LIBRARY_EMPTY_SELECTION,
-                 'smallInfoText': style(label),
-                 'tooltip': TOOLTIPS.MISSIONS_VEHICLE_SELECTOR_SELECT}
-                status = ''
-            else:
-                label = QUESTS.MISSIONS_VEHICLESELECTOR_STATUS_LIST
-                style = text_styles.premiumVehicleName
-                selectedVeh = {'buyTank': True,
-                 'iconSmall': RES_ICONS.MAPS_ICONS_LIBRARY_EMPTY_SELECTION,
-                 'smallInfoText': style(label),
-                 'tooltip': TOOLTIPS.MISSIONS_VEHICLE_SELECTOR_LIST}
-                status = self._getNotAvailableStatusText()
-            selectedVeh.update(isUseRightBtn=False)
-            selectedVeh.update(clickEnabled=True)
-            title = self._getTitle()
-        self.as_setInitDataS({'title': title,
+            label = QUESTS.MISSIONS_VEHICLESELECTOR_STATUS_LIST
+            style = text_styles.premiumVehicleName
+            selectedVeh = {'buyTank': True,
+             'iconSmall': RES_ICONS.MAPS_ICONS_LIBRARY_EMPTY_SELECTION,
+             'smallInfoText': style(label),
+             'tooltip': TOOLTIPS.MISSIONS_VEHICLE_SELECTOR_LIST}
+            status = self._getNotAvailableStatusText()
+        selectedVeh.update(isUseRightBtn=False)
+        selectedVeh.update(clickEnabled=True)
+        self.as_setInitDataS({'title': self._getTitle(),
          'statusText': status})
         self.as_showSelectedVehicleS(selectedVeh)
-        return
 
     def _getTitle(self):
         pass
@@ -154,6 +145,9 @@ class _MissionsCarouselDataProvider(CarouselDataProvider):
         self.__extraConditions = []
         super(_MissionsCarouselDataProvider, self)._dispose()
 
+    def _addCriteria(self):
+        self._addVehicleItemsByCriteria(self._baseCriteria)
+
     def _buildVehicleItems(self):
         self.__suitableVehiclesIDs = []
         super(_MissionsCarouselDataProvider, self)._buildVehicleItems()
@@ -162,7 +156,7 @@ class _MissionsCarouselDataProvider(CarouselDataProvider):
         vehicleVO = super(_MissionsCarouselDataProvider, self)._buildVehicle(vehicle)
         vehicleVO.update(isUseRightBtn=False)
         xpFactor = self._itemsCache.items.shop.dailyXPFactor
-        if vehicle.isInInventory:
+        if vehicle.isInInventory and vehicle.activeInNationGroup:
             for condition in self.__extraConditions:
                 isOk, reason = condition.isAvailableReason(vehicle)
                 if not isOk:
@@ -180,4 +174,4 @@ class SelectorCriteriesGroup(BasicCriteriesGroup):
     def update(self, filters):
         super(SelectorCriteriesGroup, self).update(filters)
         if filters['inventory']:
-            self._criteria |= REQ_CRITERIA.INVENTORY
+            self._criteria |= REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP

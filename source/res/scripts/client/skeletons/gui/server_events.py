@@ -85,9 +85,6 @@ class IEventsCache(object):
     def getEventBattles(self):
         raise NotImplementedError
 
-    def getQuestByID(self, qID):
-        raise NotImplementedError
-
     def isEventEnabled(self):
         raise NotImplementedError
 
@@ -116,6 +113,9 @@ class IEventsCache(object):
         raise NotImplementedError
 
     def getEconomicsAction(self, name):
+        raise NotImplementedError
+
+    def getTradeInActions(self):
         raise NotImplementedError
 
     def isBalancedSquadEnabled(self):

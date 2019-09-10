@@ -70,8 +70,8 @@ class CustomizationMainViewMeta(View):
     def as_updateAnchorDataS(self, data):
         return self.flashObject.as_updateAnchorData(data) if self._isDAAPIInited() else None
 
-    def as_onRegionHighlightedS(self, slotId, highlightingType, highlightingResult):
-        return self.flashObject.as_onRegionHighlighted(slotId, highlightingType, highlightingResult) if self._isDAAPIInited() else None
+    def as_onRegionHighlightedS(self, slotId, highlightingType, highlightingResult, areaMouseBehavior):
+        return self.flashObject.as_onRegionHighlighted(slotId, highlightingType, highlightingResult, areaMouseBehavior) if self._isDAAPIInited() else None
 
     def as_updateSelectedRegionsS(self, slotId):
         return self.flashObject.as_updateSelectedRegions(slotId) if self._isDAAPIInited() else None

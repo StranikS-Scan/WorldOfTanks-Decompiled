@@ -15,7 +15,7 @@ from gui.shared import event_dispatcher, events, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IRankedBattlesController
-from web_client_api import webApiCollection, ui as ui_web_api, sound as sound_web_api
+from web.web_client_api import webApiCollection, ui as ui_web_api, sound as sound_web_api
 BLOCKS_COUNT = 3
 
 class RankedBattlesIntro(LobbySubView, RankedBattlesIntroMeta):

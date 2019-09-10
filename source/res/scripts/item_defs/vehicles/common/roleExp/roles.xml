@@ -24,6 +24,7 @@
   <FirstLineSupport4>
     <actionsGroup>	firstLineSupport1	</actionsGroup>
     <includeTags>	AT-SPG2	</includeTags>
+    <excludeTags>	RE_ATSPG_3	</excludeTags>
   </FirstLineSupport4>
   <FireSupport1>
     <actionsGroup>	fireSupport1	</actionsGroup>
@@ -43,16 +44,20 @@
     <includeTags>	AT-SPG1	</includeTags>
   </Sniper>
   <Scout1>
-    <actionsGroup>	scout	</actionsGroup>
+    <actionsGroup>	scout1	</actionsGroup>
     <includeTags>	scout	</includeTags>
     <excludeTags>	wheeledVehicle	</excludeTags>
   </Scout1>
   <Scout2>
-    <actionsGroup>	scout	</actionsGroup>
+    <actionsGroup>	scout2	</actionsGroup>
     <includeTags>	wheeledVehicle	</includeTags>
   </Scout2>
   <SPG>
     <actionsGroup>	SPG	</actionsGroup>
     <includeTags>	SPG	</includeTags>
   </SPG>
+  <HashSupport1>
+    <actionsGroup>	hashSupport1	</actionsGroup>
+    <includeTags>	RE_ATSPG_3	</includeTags>
+  </HashSupport1>
 </roles.xml>

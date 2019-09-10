@@ -13,31 +13,33 @@ from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 
 class CustomizationCMHandler(ContextMenu, EventSystemEntity):
-    _service = dependency.descriptor(ICustomizationService)
-    _itemsCache = dependency.descriptor(IItemsCache)
-    _sqGen = SequenceIDGenerator()
+    __service = dependency.descriptor(ICustomizationService)
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __sqGen = SequenceIDGenerator()
 
-    @option(_sqGen.next(), CMLabel.INFORMATION)
+    @option(__sqGen.next(), CMLabel.INFORMATION)
     def showInfo(self):
         pass
 
-    @option(_sqGen.next(), CMLabel.PREVIEW_CUSTOMIZATION)
+    @option(__sqGen.next(), CMLabel.PREVIEW_CUSTOMIZATION)
     def preview(self):
         customizationPreview(self._id)
 
-    @option(_sqGen.next(), CMLabel.SELL)
+    @option(__sqGen.next(), CMLabel.SELL)
     @process
     def sell(self):
-        item = self._itemsCache.items.getItemByCD(self._id)
+        item = self.__itemsCache.items.getItemByCD(self._id)
         yield DialogsInterface.showDialog(ConfirmC11nSellMeta(item.intCD, item.inventoryCount, self.__sellItem))
 
     def _getOptionCustomData(self, label):
+        optionData = super(CustomizationCMHandler, self)._getOptionCustomData(label)
         if label == CMLabel.SELL:
-            item = self._itemsCache.items.getItemByCD(self._id)
-            return {'enabled': item and customizationAvailableForSell(item)}
-        else:
-            return {'enabled': False} if label == CMLabel.INFORMATION else None
+            item = self.__itemsCache.items.getItemByCD(self._id)
+            optionData.enabled = item is not None and customizationAvailableForSell(item)
+        elif label == CMLabel.INFORMATION:
+            optionData.enabled = False
+        return optionData
 
     def __sellItem(self, itemCD, count):
-        item = self._itemsCache.items.getItemByCD(itemCD)
-        self._service.sellItem(item, count)
+        item = self.__itemsCache.items.getItemByCD(itemCD)
+        self.__service.sellItem(item, count)

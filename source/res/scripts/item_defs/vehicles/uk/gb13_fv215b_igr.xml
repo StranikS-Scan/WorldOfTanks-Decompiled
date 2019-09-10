@@ -91,6 +91,10 @@
         <isUVProportional>	true	</isUVProportional>
       </slot>
     </customizationSlots>
+    <camouflage>
+      <density>	101.55 101.194	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_GB13_FV215b_IGR>
@@ -1120,6 +1124,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.5 0.5 0.000000 0.000000	</tiling>
+            <density>	106.003 106.24	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_120mm_Gun_L1A1_IGR>
       </guns>
@@ -1187,6 +1193,8 @@
       </customizationSlots>
       <camouflage>
         <tiling>	1 0.5 0.000000 0.000000	</tiling>
+        <density>	100.951 100.507	</density>
+        <aoTextureSize>	1024 512	</aoTextureSize>
       </camouflage>
     </Turret_1_GB13_FV215b_IGR>
   </turrets0>

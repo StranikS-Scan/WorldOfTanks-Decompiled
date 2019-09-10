@@ -309,7 +309,7 @@ class Booster(BoosterUICommon):
     def isReadyToUpdate(self):
         if self.enabled:
             for aBoosterType, aEffectValue, _ in self.__getActiveBoosters():
-                if self.boosterType == aBoosterType and self.count > 0:
+                if self.boosterType == aBoosterType and self.count > 0 and self.__readyForEvent():
                     return self.effectValue > aEffectValue
 
         return False

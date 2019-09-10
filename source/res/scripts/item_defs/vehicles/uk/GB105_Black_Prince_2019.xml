@@ -59,6 +59,13 @@
       <undamaged>	vehicles/british/GB105_Black_Prince_2019/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/british/GB105_Black_Prince_2019/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/british/GB105_Black_Prince_2019/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <GB105_Black_Prince_2019_3Dst>
+          <undamaged>	vehicles/british/GB105_Black_Prince_2019/_skin/GB105_Black_Prince_2019_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/british/GB105_Black_Prince_2019/_skin/GB105_Black_Prince_2019_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/british/GB105_Black_Prince_2019/_skin/GB105_Black_Prince_2019_3Dst/crash/lod0/Hull.model	</exploded>
+        </GB105_Black_Prince_2019_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -110,6 +117,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	0.955 0.955 0.000000 0.000000	</tiling>
+      <density>	97.997 98.4118	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -141,6 +150,13 @@
         <undamaged>	vehicles/british/GB105_Black_Prince_2019/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/british/GB105_Black_Prince_2019/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/british/GB105_Black_Prince_2019/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <GB105_Black_Prince_2019_3Dst>
+            <undamaged>	vehicles/british/GB105_Black_Prince_2019/_skin/GB105_Black_Prince_2019_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/british/GB105_Black_Prince_2019/_skin/GB105_Black_Prince_2019_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/british/GB105_Black_Prince_2019/_skin/GB105_Black_Prince_2019_3Dst/crash/lod0/Chassis.model	</exploded>
+          </GB105_Black_Prince_2019_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -925,6 +941,13 @@
             <undamaged>	vehicles/british/GB105_Black_Prince_2019/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/british/GB105_Black_Prince_2019/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/british/GB105_Black_Prince_2019/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <GB105_Black_Prince_2019_3Dst>
+                <undamaged>	vehicles/british/GB105_Black_Prince_2019/_skin/GB105_Black_Prince_2019_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/british/GB105_Black_Prince_2019/_skin/GB105_Black_Prince_2019_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/british/GB105_Black_Prince_2019/_skin/GB105_Black_Prince_2019_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </GB105_Black_Prince_2019_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/british/GB105_Black_Prince_2019/collision/Gun_01.model	</collisionModelServer>
@@ -966,6 +989,8 @@
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
             <tiling>	0.43 0.43 0.000000 0.000000	</tiling>
+            <density>	119.997 126.172	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </OQF_17pdr_Gun_Mk_VII_A>
       </guns>
@@ -973,6 +998,13 @@
         <undamaged>	vehicles/british/GB105_Black_Prince_2019/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/british/GB105_Black_Prince_2019/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/british/GB105_Black_Prince_2019/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <GB105_Black_Prince_2019_3Dst>
+            <undamaged>	vehicles/british/GB105_Black_Prince_2019/_skin/GB105_Black_Prince_2019_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB105_Black_Prince_2019/_skin/GB105_Black_Prince_2019_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/british/GB105_Black_Prince_2019/_skin/GB105_Black_Prince_2019_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </GB105_Black_Prince_2019_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB105_Black_Prince_2019/collision/Turret_01.model	</collisionModelServer>
@@ -1045,6 +1077,8 @@
       </customizationSlots>
       <camouflage>
         <tiling>	0.505 0.505 0.000000 0.000000	</tiling>
+        <density>	101.625 103.136	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
     </Turret_1_GB105_Black_Prince_2019>
   </turrets0>

@@ -10,10 +10,16 @@ from gui.shared.utils import AUTO_RELOAD_PROP_NAME
 from helpers import i18n, dependency
 from items import tankmen
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
+from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IVehicleComparisonBasket
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
+from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
+from gui.impl import backport
+from gui.impl.gen import R
 
 class VehicleInfoWindow(VehicleInfoMeta):
     _itemsCache = dependency.descriptor(IItemsCache)
@@ -70,16 +76,25 @@ class VehicleInfoWindow(VehicleInfoMeta):
     def addToCompare(self):
         self._comparisonBasket.addVehicle(self.__vehicleCompactDescr)
 
+    def changeNation(self):
+        vehicle = self._itemsCache.items.getItemByCD(self.__vehicleCompactDescr)
+        vehCD = vehicle.intCD if vehicle.activeInNationGroup else iterVehTypeCDsInNationGroup(vehicle.intCD).next()
+        ItemsActionsFactory.doAction(ItemsActionsFactory.CHANGE_NATION, vehCD)
+        self.destroy()
+
     def _populate(self):
         self.__highlightPossible = self._settingsCore.serverSettings.checkAutoReloadHighlights()
         super(VehicleInfoWindow, self)._populate()
         self._comparisonBasket.onChange += self.__onVehCompareBasketChanged
         self._comparisonBasket.onSwitchChange += self.__updateCompareButtonState
+        self._itemsCache.onSyncCompleted += self.__onCacheResync
         self.__updateCompareButtonState()
+        self.__updateChangeNationButtonState()
 
     def _dispose(self):
         self._comparisonBasket.onSwitchChange -= self.__updateCompareButtonState
         self._comparisonBasket.onChange -= self.__onVehCompareBasketChanged
+        self._itemsCache.onSyncCompleted -= self.__onCacheResync
         super(VehicleInfoWindow, self)._dispose()
 
     def __packParams(self, paramsList):
@@ -109,3 +124,13 @@ class VehicleInfoWindow(VehicleInfoMeta):
     def __onVehCompareBasketChanged(self, changedData):
         if changedData.isFullChanged:
             self.__updateCompareButtonState()
+
+    def __updateChangeNationButtonState(self):
+        vehicle = self._itemsCache.items.getItemByCD(self.__vehicleCompactDescr)
+        self.as_setChangeNationButtonDataS({'visible': vehicle.hasNationGroup and vehicle.isInInventory,
+         'enabled': vehicle.isNationChangeAvailable,
+         'label': backport.text(R.strings.menu.vehicleInfo.nationChangeBtn.label()),
+         'isNew': not AccountSettings.getSettings(NATION_CHANGE_VIEWED)})
+
+    def __onCacheResync(self, reason, diff):
+        self.__updateChangeNationButtonState()

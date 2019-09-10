@@ -10,11 +10,6 @@
       <Flags>	ALL_CLIENTS	</Flags>
       <Editable>	true	</Editable>
     </prefab>
-    <data>
-      <Type>	PYTHON	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-      <AllowUnsafeData>	true	</AllowUnsafeData>
-    </data>
     <createdFromSpace>
       <Type>	BOOL	</Type>
       <Flags>	CELL_PUBLIC	</Flags>
@@ -29,6 +24,5 @@
   <BaseMethods>
     <smartDestroy></smartDestroy>
   </BaseMethods>
-  <shouldBackup>	false	</shouldBackup>
   <shouldBackup>	false	</shouldBackup>
 </GameObjectEntity.def>

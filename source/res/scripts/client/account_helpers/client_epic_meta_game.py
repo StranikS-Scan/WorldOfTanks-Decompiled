@@ -40,6 +40,9 @@ class ClientEpicMetaGame(object):
     def getStoredDiscount(self):
         return self.__cache['epicMetaGame'].get('freeEpicDiscount', {})
 
+    def exchangePrestigePoints(self, callback=_skipResponse):
+        self.__account._doCmdStr(AccountCommands.CMD_GET_SINGLE_TOKEN, 'prestige_point', lambda requestID, resultID, errorCode: callback(resultID, errorCode))
+
     def onAccountBecomePlayer(self):
         self.__ignore = False
 

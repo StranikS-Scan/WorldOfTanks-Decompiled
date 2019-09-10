@@ -163,9 +163,9 @@ class RentalsController(IRentalsController):
                     nextCycleChange = currentSeason.getCycleEndDate()
                 else:
                     nextCycleChange = currentSeason.getCycleStartDate()
-                delta = float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(nextCycleChange)))
+                delta = int(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(nextCycleChange)))
                 if delta > 0:
-                    nextRentNotification = min(nextRentNotification, self.getDeltaPeriod(delta))
+                    nextRentNotification = min(nextRentNotification, self.getDeltaPeriod(delta + 1))
 
         if not notificationList and nextRentNotification == maxint:
             return

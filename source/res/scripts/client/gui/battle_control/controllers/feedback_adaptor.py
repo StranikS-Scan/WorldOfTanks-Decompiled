@@ -194,8 +194,8 @@ class BattleFeedbackAdaptor(IBattleController):
     def invalidateStun(self, vehicleID, stunDuration):
         self.onVehicleFeedbackReceived(_FET.VEHICLE_STUN, vehicleID, stunDuration)
 
-    def invalidateBuffEffect(self, feedbackEventID, vehicleID, data):
-        self.onVehicleFeedbackReceived(feedbackEventID, vehicleID, data)
+    def invalidateInspire(self, vehicleID, data):
+        self.onVehicleFeedbackReceived(_FET.VEHICLE_INSPIRE, vehicleID, data)
 
     def invalidatePassiveEngineering(self, vehicleID, data):
         self.onVehicleFeedbackReceived(_FET.VEHICLE_PASSIVE_ENGINEERING, vehicleID, data)

@@ -104,6 +104,10 @@
         <isUVProportional>	true	</isUVProportional>
       </slot>
     </customizationSlots>
+    <camouflage>
+      <density>	136.92 136.835	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
   </hull>
   <chassis>
     <T2E1_bot>
@@ -937,6 +941,10 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <camouflage>
+            <density>	229.233 222.401	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_37mm_semiautomatic_gun_M1924_bot>
       </guns>
       <models>
@@ -973,6 +981,8 @@
       </customizationSlots>
       <camouflage>
         <tiling>	0.445 0.25 0.11 0.000000	</tiling>
+        <density>	130.455 129.038	</density>
+        <aoTextureSize>	512 256	</aoTextureSize>
       </camouflage>
     </T2T1_bot>
   </turrets0>

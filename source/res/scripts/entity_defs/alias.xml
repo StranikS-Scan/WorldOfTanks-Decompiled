@@ -80,6 +80,9 @@
       <hangarFirstLoadingTime>
         <Type>	FLOAT	</Type>
       </hangarFirstLoadingTime>
+      <clientBit>
+        <Type>	UINT8	</Type>
+      </clientBit>
     </Properties>
   </CLIENT_SYSTEM>
   <CLIENT_STATISTICS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -713,10 +716,6 @@
       <premMask>
         <Type>	INT8	</Type>
       </premMask>
-      <playerCard>
-        <Type>	ARRAY	  <of>	INT32	</of>
-        </Type>
-      </playerCard>
     </Properties>
   </ARENA_ADDPLAYER_INFO>
   <AVATAR_VEHICLE_ROSTER>	FIXED_DICT	  <Properties>
@@ -1039,7 +1038,7 @@
       </outfit>
     </Properties>
   </RESPAWN_INFO_VEHICLE>
-  <BUFF_EFFECT>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+  <INSPIRING_EFFECT>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <radius>
         <Type>	FLOAT32	</Type>
@@ -1054,8 +1053,8 @@
         <Type>	FLOAT32	</Type>
       </inactivationDelay>
     </Properties>
-  </BUFF_EFFECT>
-  <BUFF_EFFECT_INACTIVATION>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+  </INSPIRING_EFFECT>
+  <INSPIRED>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <startTime>
         <Type>	FLOAT64	</Type>
@@ -1070,7 +1069,7 @@
         <Type>	FLOAT64	</Type>
       </inactivationEndTime>
     </Properties>
-  </BUFF_EFFECT_INACTIVATION>
+  </INSPIRED>
   <SMOKE_INFO>	FIXED_DICT	  <Properties>
       <smokeID>
         <Type>	UINT16	</Type>

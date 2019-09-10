@@ -18,8 +18,11 @@ class EpicMetaScheduler(BaseScheduler):
     def init(self):
         status, _, _ = self.__epicController.getPrimeTimeStatus()
         self.__isPrimeTime = status == PrimeTimeStatus.AVAILABLE
-        self.__isCycle = self.__epicController.getCurrentSeason().hasActiveCycle(time_utils.getCurrentLocalServerTimestamp())
+        season = self.__epicController.getCurrentSeason()
+        if season is not None:
+            self.__isCycle = season.hasActiveCycle(time_utils.getCurrentLocalServerTimestamp())
         self.__epicController.onPrimeTimeStatusUpdated += self.__update
+        return
 
     def fini(self):
         self.__epicController.onPrimeTimeStatusUpdated -= self.__update

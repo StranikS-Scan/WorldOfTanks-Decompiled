@@ -43,14 +43,14 @@ class MarathonEventTooltipData(BlocksTooltipData):
         if state == MARATHON_STATE.FINISHED:
             text = text_styles.main(backport.text(self.__tooltipData.bodyExtra, day=self._marathonEvent.getExtraDaysToBuy()))
         else:
-            text = text_styles.main(self.__tooltipData.body)
+            text = text_styles.main(backport.text(self.__tooltipData.body))
         return formatters.packTextBlockData(text=text, padding=formatters.packPadding(left=20, top=10, bottom=20, right=10))
 
     def _getBottom(self, state):
         vehicle = g_currentVehicle.item
         isObtained = self._marathonEvent.isRewardObtained()
         if isObtained:
-            statusLabel = text_styles.bonusAppliedText(icons.makeImageTag(self.__iconsData.libraryOkIcon, width=32, height=32, vSpace=-10, hSpace=-10) + ' ' + backport.text(self.__tooltipData.extraStateCompleted))
+            statusLabel = text_styles.bonusAppliedText(icons.makeImageTag(self.__iconsData.libraryOkIcon, vSpace=-2) + ' ' + backport.text(self.__tooltipData.extraStateCompleted))
             return formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'alignText', {'align': 'center',
              'message': statusLabel}), padding=formatters.packPadding(bottom=20))
         if state == MARATHON_STATE.IN_PROGRESS:

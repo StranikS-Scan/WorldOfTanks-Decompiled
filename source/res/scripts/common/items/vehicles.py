@@ -10,6 +10,7 @@ import copy
 import os
 import BigWorld
 from Math import Vector2, Vector3
+import nation_change
 import nations
 import items
 from items import _xml, makeIntCompactDescrByID, parseIntCompactDescr, ITEM_TYPES
@@ -138,8 +139,7 @@ VEHICLE_ATTRIBUTE_FACTORS = {'engine/power': 1.0,
  'crewRolesFactor': 1.0,
  'stunResistanceEffect': 0.0,
  'stunResistanceDuration': 0.0,
- 'repeatedStunDurationFactor': 1.0,
- 'deathZones/sensitivityFactor': 1.0}
+ 'repeatedStunDurationFactor': 1.0}
 _g_prices = None
 
 class CamouflageBonus():
@@ -1019,8 +1019,7 @@ class VehicleDescriptor(object):
              'crewChanceToHitFactor': 1.0,
              'stunResistanceEffect': 0.0,
              'stunResistanceDuration': 0.0,
-             'repeatedStunDurationFactor': 1.0,
-             'deathZones/sensitivityFactor': 1.0}
+             'repeatedStunDurationFactor': 1.0}
             for device in self.optionalDevices:
                 if device is not None:
                     device.updateVehicleDescrAttrs(self)
@@ -1199,13 +1198,15 @@ class VehicleType(object):
      'role',
      'actionsGroup',
      'actions',
-     'builtins')
+     'builtins',
+     'nationChangeGroupId')
 
     def __init__(self, nationID, basicInfo, xmlPath, vehMode=VEHICLE_MODE.DEFAULT):
         self.name = basicInfo.name
         self.id = (nationID, basicInfo.id)
         self.compactDescr = basicInfo.compactDescr
         self.mode = vehMode
+        self.nationChangeGroupId = nation_change.findVehicleNationGroupId(self.name)
         section = ResMgr.openSection(xmlPath)
         if section is None:
             _xml.raiseWrongXml(None, xmlPath, 'can not open or read')
@@ -2098,15 +2099,6 @@ def getSpecificAmmoForGun(gunDescr, ammoProperties):
     return ammo
 
 
-def calculateCarryingTriangles(carryingPoint):
-    v = carryingPoint
-    topLeft = Vector2(-v.x, v.y)
-    bottomLeft = Vector2(-v.x, -v.y)
-    topRight = Vector2(v.x, v.y)
-    bottomRight = Vector2(v.x, -v.y)
-    return (((topLeft + bottomLeft) / 2.0, topRight, bottomRight), ((topRight + bottomRight) / 2.0, bottomLeft, topLeft))
-
-
 def _getAmmoForGun(gunDescr, defaultPortion=None):
     ammo = []
     maxCount = gunDescr.maxAmmo
@@ -2422,32 +2414,14 @@ def _readHullVariants(xmlCtx, section, defHull, chassis, turrets):
                 modelsSets = shared_readers.readModelsSets(ctx, section, 'models')
                 variant.models = modelsSets['default']
                 continue
-            if name == 'exhaust':
-                if IS_CLIENT:
-                    variant.customEffects = (__readExhaustEffect(ctx, section),)
-                continue
             if name == 'hitTester':
                 variant.hitTester = _readHitTester(ctx, section, 'hitTester')
                 continue
             if name == 'armor':
                 variant.materials = _readArmor(ctx, section, 'armor')
                 continue
-            if name == 'primaryArmor':
-                if IS_CLIENT:
-                    variant.primaryArmor = _readPrimaryArmor(ctx, section, 'primaryArmor', variant.materials)
-                continue
-            if name == 'armorHomogenization':
-                if not IS_CLIENT and not IS_BOT:
-                    variant.armorHomogenization = _xml.readPositiveFloat(ctx, section, 'armorHomogenization')
-                continue
             if name == 'weight':
                 variant.weight = _xml.readNonNegativeFloat(ctx, section, 'weight')
-                continue
-            if name == 'maxHealth':
-                variant.maxHealth = _xml.readInt(ctx, section, 'maxHealth', 1)
-                continue
-            if name == 'ammoBayHealth':
-                variant.ammoBayHealth = shared_readers.readDeviceHealthParams(ctx, section, 'ammoBayHealth', False)
                 continue
             if name == 'turretPositions':
                 v = []
@@ -2555,7 +2529,12 @@ def _readChassis(xmlCtx, section, item, unlocksDescrs=None, _=None):
             item.wheelHealthParams[wheelNumber] = shared_readers.readDeviceHealthParams(subctx, subsection)
 
     if IS_CLIENT or IS_EDITOR or IS_CELLAPP or IS_WEB or IS_BOT:
-        item.carryingTriangles = calculateCarryingTriangles(item.topRightCarryingPoint)
+        v = item.topRightCarryingPoint
+        topLeft = Vector2(-v.x, v.y)
+        bottomLeft = Vector2(-v.x, -v.y)
+        topRight = Vector2(v.x, v.y)
+        bottomRight = Vector2(v.x, -v.y)
+        item.carryingTriangles = (((topLeft + bottomLeft) / 2.0, topRight, bottomRight), ((topRight + bottomRight) / 2.0, bottomLeft, topLeft))
     if IS_CLIENT or IS_EDITOR or IS_CELLAPP:
         drivingWheelNames = section.readString('drivingWheels').split()
         if len(drivingWheelNames) != 2:
@@ -2685,9 +2664,6 @@ def _readRadio(xmlCtx, section, item, unlocksDescrs=None, _=None):
     item.level = _readLevel(xmlCtx, section)
     item.weight = _xml.readNonNegativeFloat(xmlCtx, section, 'weight')
     item.distance = _xml.readNonNegativeFloat(xmlCtx, section, 'distance')
-    defaults = g_cache.commonConfig['miscParams']['radarDefaults']
-    item.radarRadius = _xml.readNonNegativeFloat(xmlCtx, section, 'radarRadius', defaults['radarRadius'])
-    item.radarCooldown = _xml.readNonNegativeFloat(xmlCtx, section, 'radarCooldown', defaults['radarCooldown'])
     _readPriceForItem(xmlCtx, section, item.compactDescr)
     if IS_CLIENT or IS_WEB:
         item.i18n = shared_readers.readUserText(section)
@@ -2913,8 +2889,6 @@ def _readTurret(xmlCtx, section, item, unlocksDescrs=None, _=None):
     item.hitTester = _readHitTester(xmlCtx, section, 'hitTester')
     item.gunPosition = _xml.readVector3(xmlCtx, section, 'gunPosition')
     item.customizableVehicleAreas = _readCustomizableAreas(xmlCtx, section, 'customization')
-    if section.has_key('gunCamPosition'):
-        item.gunCamPosition = _xml.readVector3(xmlCtx, section, 'gunCamPosition')
     item.materials = _readArmor(xmlCtx, section, 'armor')
     item.weight = _xml.readNonNegativeFloat(xmlCtx, section, 'weight')
     item.healthParams = shared_components.DeviceHealth(_xml.readInt(xmlCtx, section, 'maxHealth', 1))
@@ -3717,7 +3691,7 @@ def _copyPriceForItem(sourceCompactDescr, destCompactDescr, itemNotInShop):
 
 
 def _readUnlocks(xmlCtx, section, subsectionName, unlocksDescrs, *requiredItems):
-    if unlocksDescrs is None:
+    if unlocksDescrs is None or IS_CELLAPP:
         return []
     else:
         s = section[subsectionName]
@@ -4126,9 +4100,7 @@ def _readCommonConfig(xmlCtx, section):
      'explosionDamageFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionDamageFactor'),
      'explosionDamageAbsorptionFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionDamageAbsorptionFactor'),
      'explosionEdgeDamageFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionEdgeDamageFactor'),
-     'allowMortarShooting': _xml.readBool(xmlCtx, section, 'miscParams/allowMortarShooting'),
-     'radarDefaults': {'radarRadius': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/radarDefaults/radarRadius'),
-                       'radarCooldown': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/radarDefaults/radarCooldown')}}
+     'allowMortarShooting': _xml.readBool(xmlCtx, section, 'miscParams/allowMortarShooting')}
     if IS_CLIENT or IS_EDITOR:
         v = {}
         for lodName in _xml.getSubsection(xmlCtx, section, 'lodLevels').keys():
@@ -4611,11 +4583,12 @@ def _readVehicleEffects(xmlCtx, section, subsectionName, defaultEffects=None):
             effect = cachedEffects.get(effectName)
             if effect is None:
                 _xml.raiseWrongXml(xmlCtx, effectKind, 'missing or wrong effect name')
-        elif defaultEffects is not None:
+        elif defaultEffects is not None and effectKind in defaultEffects:
             effect = defaultEffects[effectKind]
         else:
-            _xml.raiseWrongXml(xmlCtx, '', "subsection '%s' is missing" % effectKind)
-        res[effectKind] = effect
+            effect = None
+        if effect:
+            res[effectKind] = effect
 
     damagedStateGroupPath = 'damagedStateGroup'
     damagedStateGroupName = _xml.readStringOrNone(xmlCtx, section, damagedStateGroupPath)
@@ -4650,18 +4623,16 @@ def _readTurretDetachmentEffects(xmlCtx, section, subsectionName, defaultEffects
         if effectSection is not None:
             effectName = effectSection.asString
             return g_cache._turretDetachmentEffects.get(effectName)
-        elif defaultEffect is not None:
-            return defaultEffect
         else:
-            _xml.raiseWrongXml(xmlCtx, '', "subsection '%s' is missing" % state)
-            return
+            return defaultEffect if defaultEffect is not None else None
 
     for detachmentState in ('flight', 'flamingOnGround'):
         effectSection = None
         if detachmentEffectsSection is not None:
             effectSection = detachmentEffectsSection[detachmentState]
         effect = getEffect(effectSection, defaultEffects.get(detachmentState), detachmentState)
-        res[detachmentState] = effect
+        if effect:
+            res[detachmentState] = effect
 
     for collisionEffectType in ('collision', 'pull'):
         collisionEffectsSection = None
@@ -4675,7 +4646,8 @@ def _readTurretDetachmentEffects(xmlCtx, section, subsectionName, defaultEffects
             if collisionEffectsSection is not None:
                 effectSection = collisionEffectsSection[effectMaterial]
             effect = getEffect(effectSection, defaultCollisionEffects.get(effectIdx), effectMaterial)
-            resultCollisionEffects[effectIdx] = effect
+            if effect:
+                resultCollisionEffects[effectIdx] = effect
 
         res[collisionEffectType] = resultCollisionEffects
 

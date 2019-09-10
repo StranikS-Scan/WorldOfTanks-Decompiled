@@ -247,6 +247,7 @@ class BATTLE_EVENTS(CONST_CONTAINER):
     RECEIVED_DAMAGE = 'battleEventsReceivedDamage'
     RECEIVED_CRITS = 'battleEventsReceivedCrits'
     ENEMY_ASSIST_STUN = 'battleEventsEnemyAssistStun'
+    ENEMIES_STUN = 'battleEventsEnemyStun'
 
 
 class BATTLE_BORDER_MAP(CONST_CONTAINER):
@@ -280,7 +281,6 @@ class GuiSettingsBehavior(CONST_CONTAINER):
     FREE_XP_INFO_DIALOG_SHOWED = 'isFreeXPInfoDialogShowed'
     RANKED_WELCOME_VIEW_SHOWED = 'isRankedWelcomeViewShowed'
     RANKED_WELCOME_VIEW_STARTED = 'isRankedWelcomeViewStarted'
-    BATTLE_ROYALE_WELCOME_VIEW_SHOWED = 'isBattleRoyaleWelcomeViewShowed'
     EPIC_RANDOM_CHECKBOX_CLICKED = 'isEpicRandomCheckboxClicked'
     EPIC_WELCOME_VIEW_SHOWED = 'isEpicWelcomeViewShowed'
     LAST_SHOWN_EPIC_WELCOME_SCREEN = 'lastShownEpicWelcomeScreen'
@@ -309,8 +309,3 @@ class OnceOnlyHints(CONST_CONTAINER):
     BATTLE_SESSION_UP_BUTTON_TOURNAMENT_HINT = 'BattleSessionUpButtonTournamentHint'
     CREW_OPERATION_BTN_HINT = 'CrewOperationBtnHint'
     SOUND_BUTTONEX_HINT = 'SoundButtonExHint'
-
-
-class FestivalSettings(CONST_CONTAINER):
-    FIRST_ENTRY = 'FestivalFirstEntry'
-    BUY_RANDOM_HINT = 'FestivalScreenBuyRandomItemHint'

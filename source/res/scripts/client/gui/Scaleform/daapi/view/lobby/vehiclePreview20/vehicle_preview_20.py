@@ -43,7 +43,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from gui.Scaleform.daapi.view.lobby.store.browser.sound_constants import INGAMESHOP_PREVIEW_SOUND_SPACE
-from web_client_api.common import ItemPackTypeGroup, ItemPackEntry, ItemPackType
+from web.web_client_api.common import ItemPackTypeGroup, ItemPackEntry, ItemPackType
 _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_STORE: 'shop',
  VIEW_ALIAS.LOBBY_STORAGE: 'storage',
@@ -288,7 +288,8 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
          'nationName': MENU.nations(vehicle.nationName),
          'compareBtnTooltip': compareBtnTooltip,
          'showCompareBtn': compareBtnEnabled,
-         'listDesc': self.__getInfoPanelListDescription(vehicle)}
+         'listDesc': self.__getInfoPanelListDescription(vehicle),
+         'isMultinational': vehicle.hasNationGroup}
         return result
 
     @staticmethod

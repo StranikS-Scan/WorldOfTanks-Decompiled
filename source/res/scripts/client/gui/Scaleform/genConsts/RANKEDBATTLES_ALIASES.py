@@ -15,6 +15,8 @@ class RANKEDBATTLES_ALIASES(object):
     RANKED_BATTLES_INTRO_ALIAS = 'rankedBattlesIntro'
     RANKED_BATTLES_RANG_REWARDS_UI = 'RankedBattlesRangsRewardsUI'
     RANKED_BATTLES_DIVISIONS_VIEW_UI = 'RankedBattlesDivisionsViewUI'
+    RANKED_BATTLES_DIVISIONS_PROGRESS_UI = 'RankedBattlesDivisionProgressUI'
+    RANKED_BATTLES_DIVISIONS_QUALIFICATION_UI = 'RankedBattlesDivisionQualificationUI'
     RANKED_BATTLES_LEAGUES_VIEW_UI = 'RankedBattlesLeaguesViewUI'
     RANKED_BATTLES_SEASON_GAP_VIEW_UI = 'RankedBattlesSeasonGapViewUI'
     RANKED_BATTLES_RAITING_ALIAS = 'RankedBattlesRatingAlias'
@@ -91,6 +93,8 @@ class RANKEDBATTLES_ALIASES(object):
      STEP_JUST_LOST_SHORT_STATE,
      STEP_LOST_BLINK_STATE]
     STEP_NOT_ANIMATED_STATES = [STEP_RECEIVED_STATE, STEP_NOT_RECEIVED_STATE]
+    QUAL_IDLE_STATE = 'qual_idle'
+    QUAL_DIVISION_FINISHED_STATE = 'qual_division_finished'
     RANK_IDLE_STATE = 'rank_idle'
     RANK_INIT_STATE = 'rank_init'
     FIRST_RANK_RECEIVE_STATE = 'first_rank_receive'
@@ -116,7 +120,8 @@ class RANKEDBATTLES_ALIASES(object):
     ANIM_SHIELD_NOT_FULL = 'anim_shield_not_full'
     ANIM_ACHIEVE_LADDER_POINT = 'anim_achive_ladder_point'
     ANIM_SHIELD_ONE_RANK_STATES = [ANIM_SHIELD_NOT_FULL, ANIM_SHIELD_LOSE_STEP_FROM_FULL, ANIM_SHIELD_LOSE_STEP]
-    RANK_ANIMATED_STATES = [RANK_INIT_STATE,
+    RANK_ANIMATED_STATES = [QUAL_DIVISION_FINISHED_STATE,
+     RANK_INIT_STATE,
      FIRST_RANK_RECEIVE_STATE,
      FIRST_RANK_REACHIVE_STATE,
      FIRST_RANK_LOST_STATE,
@@ -140,12 +145,10 @@ class RANKEDBATTLES_ALIASES(object):
     WIDGET_MEDIUM = 'medium'
     WIDGET_BIG = 'big'
     WIDGET_HUGE = 'huge'
-    WIDGET_FINAL = 'final'
     WIDGET_SIZES = [WIDGET_SMALL,
      WIDGET_MEDIUM,
      WIDGET_BIG,
-     WIDGET_HUGE,
-     WIDGET_FINAL]
+     WIDGET_HUGE]
     PAST_MISSED = 'past_missed'
     PAST_COMPLETED = 'past_completed'
     CURRENT = 'current'
@@ -182,6 +185,7 @@ class RANKEDBATTLES_ALIASES(object):
     STEP_VALUE_EARN = 1
     STEP_VALUE_LOSE = -1
     STEP_VALUE_NO_CHANGE = 0
+    AWARD_VIEW_QUAL_STATE = 'award_view_qual_state'
     AWARD_VIEW_RANK_STATE = 'award_view_rank_state'
     AWARD_VIEW_DIVISION_STATE = 'award_view_division_state'
     AWARD_VIEW_LEAGUE_STATE = 'award_view_league_state'

@@ -54,9 +54,6 @@ class _IStatusAnimPlayer(object):
     def hideStatus(self, animated):
         self._hasStatus = False
 
-    def hasStatus(self):
-        return self._hasStatus
-
 
 class _ActionScriptTimer(_IStatusAnimPlayer):
 
@@ -111,9 +108,7 @@ class _TankIndicatorCtrl(object):
         self.__component = GUI.WGTankIndicatorFlash(app.movie, '_level0.root.{}.main.damagePanel.tankIndicator'.format(APP_CONTAINERS_NAMES.VIEWS))
         self.__component.wg_inputKeyMode = InputKeyMode.NO_HANDLE
         self.__app = app
-        self.__vId = None
         self.__app.component.addChild(self.__component, 'tankIndicator')
-        return
 
     def __del__(self):
         LOG_DEBUG('_TankIndicatorCtrl is deleted')
@@ -137,14 +132,6 @@ class _TankIndicatorCtrl(object):
             self.__component.wg_turretYawConstraints = Math.Vector2(0.0, 0.0)
         self.__component.wg_hullMatProv = hullMat
         self.__component.wg_turretMatProv = turretMat
-        self.__vId = vehicle.id
-
-    def vehicleRemoved(self, vId):
-        if vId == self.__vId:
-            staticHullMatrix = Math.Matrix(self.__component.wg_hullMatProv)
-            staticTurretMatrix = Math.Matrix(self.__component.wg_turretMatProv)
-            self.__component.wg_hullMatProv = staticHullMatrix
-            self.__component.wg_turretMatProv = staticTurretMatrix
 
 
 class DamagePanel(DamagePanelMeta):
@@ -206,9 +193,6 @@ class DamagePanel(DamagePanelMeta):
             if vehicle is not None:
                 self._updatePlayerInfo(vehicle.id)
                 self.__onVehicleControlling(vehicle)
-        feedbackCtrl = self.sessionProvider.shared.feedback
-        if feedbackCtrl is not None:
-            feedbackCtrl.onMinimapVehicleRemoved += self.__onVehicleRemoved
         self.as_setStaticDataS(i18n.makeString(INGAME_GUI.PLAYER_MESSAGES_TANK_IN_FIRE))
         g_replayEvents.onPause += self.__onReplayPaused
         timerCls = _PythonTimer if self.sessionProvider.isReplayPlaying else _ActionScriptTimer
@@ -224,20 +208,12 @@ class DamagePanel(DamagePanelMeta):
         if ctrl is not None:
             ctrl.onVehicleControlling -= self.__onVehicleControlling
             ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
-        feedbackCtrl = self.sessionProvider.shared.feedback
-        if feedbackCtrl is not None:
-            feedbackCtrl.onMinimapVehicleRemoved -= self.__onVehicleRemoved
         if self.__tankIndicator is not None:
             self.__tankIndicator.clear()
             self.__tankIndicator = None
         self.__isShow = False
         g_replayEvents.onPause -= self.__onReplayPaused
         super(DamagePanel, self)._dispose()
-        return
-
-    def __onVehicleRemoved(self, vId):
-        if self.__tankIndicator is not None:
-            self.__tankIndicator.vehicleRemoved(vId)
         return
 
     def _updatePlayerInfo(self, value):
@@ -286,13 +262,12 @@ class DamagePanel(DamagePanelMeta):
             self.__statusAnimPlayers[STATUS_ID.STUN].hideStatus(True)
 
     def _updateInspire(self, values):
-        status = self.__statusAnimPlayers[STATUS_ID.INSPIRE]
         if values['isInactivation'] is not None:
             time = values['endTime'] - BigWorld.serverTime()
             if time > 0:
-                status.showStatus(time, not status.hasStatus())
+                self.__statusAnimPlayers[STATUS_ID.INSPIRE].showStatus(time, True)
         else:
-            status.hideStatus(True)
+            self.__statusAnimPlayers[STATUS_ID.INSPIRE].hideStatus(True)
         return
 
     def __changeVehicleSetting(self, tag, entityName):

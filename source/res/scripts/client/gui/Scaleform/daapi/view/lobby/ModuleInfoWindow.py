@@ -3,16 +3,17 @@
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getSlotOverlayIconType
 from gui.Scaleform.daapi.view.meta.ModuleInfoMeta import ModuleInfoMeta
-from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.framework.entities.View import View
+from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
+from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.shared.formatters import text_styles
-from gui.shared.items_parameters import params_helper, formatters
 from gui.shared import utils
-from gui.shared.utils.functions import stripColorTagDescrTags, getAbsoluteUrl
-from helpers import dependency
-from helpers.i18n import makeString as _ms
+from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.items_parameters import params_helper, formatters
+from gui.shared.utils.functions import stripColorTagDescrTags, getAbsoluteUrl
+from helpers import dependency, int2roman
+from helpers.i18n import makeString as _ms
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -42,12 +43,20 @@ class ModuleInfoWindow(ModuleInfoMeta):
         super(View, self)._populate()
         module = self.itemsCache.items.getItemByCD(self.moduleCompactDescr)
         description = ''
-        if module.itemTypeID in (GUI_ITEM_TYPE.OPTIONALDEVICE,
+        itemTypeID = module.itemTypeID
+        if itemTypeID in (GUI_ITEM_TYPE.OPTIONALDEVICE,
          GUI_ITEM_TYPE.EQUIPMENT,
          GUI_ITEM_TYPE.BATTLE_ABILITY,
          GUI_ITEM_TYPE.CREW_BOOKS):
             description = stripColorTagDescrTags(module.fullDescription)
-        if module.itemTypeID in (GUI_ITEM_TYPE.OPTIONALDEVICE,
+        if itemTypeID == GUI_ITEM_TYPE.BATTLE_ABILITY:
+            if module.level == 0:
+                label = _ms(EPIC_BATTLE.METAABILITYSCREEN_ABILITY_NOT_UNLOCKED)
+            else:
+                romanLvl = int2roman(module.level)
+                label = _ms(EPIC_BATTLE.METAABILITYSCREEN_ABILITY_LEVEL, lvl=romanLvl)
+            description = stripColorTagDescrTags(label)
+        if itemTypeID in (GUI_ITEM_TYPE.OPTIONALDEVICE,
          GUI_ITEM_TYPE.SHELL,
          GUI_ITEM_TYPE.EQUIPMENT,
          GUI_ITEM_TYPE.CREW_BOOKS):
@@ -68,7 +77,7 @@ class ModuleInfoWindow(ModuleInfoMeta):
          'parameters': {'headerText': '',
                         'params': []},
          utils.EXTRA_MODULE_INFO: ''}
-        if module.itemTypeID == GUI_ITEM_TYPE.CREW_BOOKS:
+        if itemTypeID == GUI_ITEM_TYPE.CREW_BOOKS:
             self._updateModuleInfo(moduleData)
             return
         else:
@@ -76,9 +85,9 @@ class ModuleInfoWindow(ModuleInfoMeta):
             moduleParameters = params.get('parameters', {})
             formattedModuleParameters = formatters.getFormattedParamsList(module.descriptor, moduleParameters)
             extraParamsInfo = params.get('extras', {})
-            isGun = module.itemTypeID == GUI_ITEM_TYPE.GUN
-            isShell = module.itemTypeID == GUI_ITEM_TYPE.SHELL
-            isChassis = module.itemTypeID == GUI_ITEM_TYPE.CHASSIS
+            isGun = itemTypeID == GUI_ITEM_TYPE.GUN
+            isShell = itemTypeID == GUI_ITEM_TYPE.SHELL
+            isChassis = itemTypeID == GUI_ITEM_TYPE.CHASSIS
             excludedParametersNames = extraParamsInfo.get('excludedParams', tuple())
             highlightPossible = False
             if isGun:
@@ -131,7 +140,7 @@ class ModuleInfoWindow(ModuleInfoMeta):
                 compatible.append({'type': _ms(MENU.moduleinfo_compatible(paramType)),
                  'value': paramValue})
 
-            if module.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
+            if itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
 
                 def makeEffectsStr(root, node):
                     return stripColorTagDescrTags(_ms('#artefacts:{}/{}'.format(root, node)))
@@ -148,6 +157,9 @@ class ModuleInfoWindow(ModuleInfoMeta):
                 if cooldownSeconds > 0:
                     moduleData['addParams'] = {'type': formatters.formatModuleParamName('cooldownSeconds') + '\n',
                      'value': text_styles.stats(cooldownSeconds) + '\n'}
+            if itemTypeID == GUI_ITEM_TYPE.BATTLE_ABILITY:
+                effectsKey = 'effectOnUse' if module.isTrigger else 'effectAlways'
+                moduleData['effects'] = {effectsKey: stripColorTagDescrTags(_ms(module.fullDescription))}
             if isShell and self.__isAdditionalInfoShow is not None:
                 moduleData['additionalInfo'] = self.__isAdditionalInfoShow
             moduleData['overlayType'] = getSlotOverlayIconType(module)

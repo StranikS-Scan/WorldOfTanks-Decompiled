@@ -134,5 +134,22 @@ def getLocalAimPoint(vehicleDescriptor):
         turretPosition = vehicleDescriptor.hull.turretPositions[0] * 0.5
         maxZOffset = abs(hullBox[1].z - hullBox[0].z) * 0.2
         turretPosition.z = max(-maxZOffset, min(maxZOffset, turretPosition.z))
-        localAimPoint = calculatedHullPosition + turretPosition
+        autoAimOffset = vehicleDescriptor.chassis.autoAimOffset
+        if autoAimOffset is None:
+            autoAimOffset = Math.Vector3(0.0, 0.0, 0.0)
+        localAimPoint = calculatedHullPosition + turretPosition + autoAimOffset
         return localAimPoint
+
+
+def computeLeadingFireCorrection(vehicle, targetVehicle, minDistance=5.0, tickOffset=1):
+    correction = Math.Vector3(0.0, 0.0, 0.0)
+    position = vehicle.position
+    distToVehicle = position.flatDistTo(targetVehicle.position)
+    if distToVehicle > minDistance:
+        if IS_CLIENT:
+            targetVelocity3d = targetVehicle.filter.velocity
+        else:
+            targetVelocity3d = targetVehicle.velocity
+        shotSpeed = vehicle.typeDescriptor.shot.speed
+        correction = targetVelocity3d * (distToVehicle / shotSpeed + 0.1 * tickOffset)
+    return correction

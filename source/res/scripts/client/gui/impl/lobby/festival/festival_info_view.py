@@ -7,6 +7,7 @@ from gui.impl.gen.view_models.views.lobby.festival.festival_info_view_model impo
 from gui.impl.pub import ViewImpl
 from gui.shared.event_dispatcher import showFestivalInfoPage
 from helpers import dependency
+from helpers.time_utils import ONE_MINUTE
 from items.components.festival_constants import FEST_ITEM_TYPE
 from skeletons.festival import IFestivalController
 
@@ -19,7 +20,13 @@ class FestivalInfoView(ViewImpl):
 
     def _initialize(self):
         super(FestivalInfoView, self)._initialize()
+        self.__festController.onMiniGamesUpdated += self.__onMiniGamesUpdated
+        timeout = self.__festController.getMiniGamesCooldownDuration()
+        tries = self.__festController.getMiniGamesAttemptsMax()
         with self.viewModel.transaction() as model:
+            model.setMinigamesTimeout(timeout / ONE_MINUTE)
+            model.setMinigamesTries(tries)
+            model.setIsMiniGamesEnabled(self.__festController.isMiniGamesEnabled())
             for randomName in FEST_ITEM_TYPE.INFO:
                 randomCost = self.__festController.getRandomCost(randomName)
                 if randomName == FEST_ITEM_TYPE.ANY:
@@ -31,6 +38,7 @@ class FestivalInfoView(ViewImpl):
 
     def _finalize(self):
         self.getViewModel().onVideoClicked -= self.__onVideoClicked
+        self.__festController.onMiniGamesUpdated -= self.__onMiniGamesUpdated
         super(FestivalInfoView, self)._finalize()
 
     @property
@@ -40,3 +48,7 @@ class FestivalInfoView(ViewImpl):
     @staticmethod
     def __onVideoClicked():
         showFestivalInfoPage()
+
+    def __onMiniGamesUpdated(self):
+        with self.viewModel.transaction() as model:
+            model.setIsMiniGamesEnabled(self.__festController.isMiniGamesEnabled())

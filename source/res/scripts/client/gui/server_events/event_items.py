@@ -404,6 +404,9 @@ class Quest(ServerEventAbstract):
 
         return sorted(result, cmp=compareBonuses, key=operator.methodcaller('getName'))
 
+    def getBonusesDict(self):
+        return self._data.get('bonus', {})
+
     def __getVehicleStyleBonuses(self, vehiclesData):
         stylesData = []
         for vehData in vehiclesData.itervalues():
@@ -466,6 +469,14 @@ class TokenQuest(Quest):
 
     def _checkConditions(self):
         return self.accountReqs.isAvailable()
+
+
+class RaceEventTokenQuest(TokenQuest):
+    QUEST_NAME = 'fest19:race:recruit_reward'
+    TOKEN_NAME = 'fest19:race:recruit'
+
+    def isHidden(self):
+        return self.TOKEN_NAME not in self.itemsCache.items.tokens.getTokens()
 
 
 class LinkedSetTokenQuest(TokenQuest):
@@ -1255,6 +1266,8 @@ def getTileGrayOverIconPath(tileIconID):
 
 
 def createQuest(questType, qID, data, progress=None, expiryTime=None):
+    if qID == RaceEventTokenQuest.QUEST_NAME:
+        return RaceEventTokenQuest(qID, data, progress)
     if questType == constants.EVENT_TYPE.PERSONAL_QUEST:
         return PersonalQuest(qID, data, progress, expiryTime)
     if questType == constants.EVENT_TYPE.GROUP:

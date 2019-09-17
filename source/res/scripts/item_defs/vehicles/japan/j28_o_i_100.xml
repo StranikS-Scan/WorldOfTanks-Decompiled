@@ -109,6 +109,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	2.2 2.2 0.000000 0.000000	</tiling>
+      <density>	92.1643 92.1572	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -1776,6 +1778,10 @@
               <applyTo>	16384	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	89.9579 89.878	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_105mm_Cannon_Type92>
         <_105mm_Experimental_Tank_Gun>	shared	  <maxAmmo>	100	</maxAmmo>
           <unlocks>
@@ -1856,6 +1862,10 @@
               <applyTo>	16384	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	93.5851 94.537	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_105mm_Experimental_Tank_Gun>
         <_150mm_Howitzer_Type96>	shared	  <maxAmmo>	60	</maxAmmo>
           <armor>
@@ -1931,6 +1941,10 @@
               <applyTo>	16384	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	87.02 88.6416	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_150mm_Howitzer_Type96>
       </guns>
       <models>
@@ -2007,6 +2021,10 @@
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	97.3383 97.4787	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </Turret_1_J28_O_I_100>
   </turrets0>
   <engines>

@@ -640,3 +640,12 @@ class FakeDataAccessor(base.BaseDataAccessor):
     def get_unread_count(self, fields=None):
         url = '/unread/'
         return self._request_data(url, None)
+
+    @fake_method(example={'attempts_cooldown': 300,
+     'tickets_cooldown': None,
+     'attempts': 0,
+     'attempts_before_cooldown': 5,
+     'tickets_earned': 200,
+     'attempts_cooldown_duration': 2500})
+    def account_data(self, fields=None):
+        return self._request_data('account_data', None)

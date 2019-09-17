@@ -255,7 +255,7 @@ class AmmoController(MethodsRules, IBattleController):
         self.clear(leave=True)
 
     def clear(self, leave=True):
-        super(AmmoController, self).clear(leave)
+        super(AmmoController, self).clear()
         if leave:
             self.__eManager.clear()
         self.__ammo.clear()

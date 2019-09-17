@@ -8,6 +8,7 @@ from gui.Scaleform.genConsts.MISSIONS_ALIASES import MISSIONS_ALIASES
 from gui.Scaleform.locale.NATIONS import NATIONS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.FESTIVAL import FESTIVAL
 from gui.server_events import formatters as events_fmts
 from gui.server_events.cond_formatters import FormattableField, FORMATTER_IDS, VEHICLE_TYPES, MAX_CONDITIONS_IN_OR_SECTION_SUPPORED, packSimpleTitle, packDescriptionField
 from personal_missions_constants import CONDITION_ICON
@@ -104,6 +105,34 @@ class SimpleMissionsFormatter(MissionFormatter):
 
     def _packGui(self, condition):
         return events_fmts.packMissionIconCondition(self.getTitle(condition), MISSIONS_ALIASES.NONE, self.getDescription(condition), self._getIconKey(condition), sortKey=self._getSortKey(condition), progressID=condition.progressID)
+
+
+class _CumulativeCustomTokenFormatter(SimpleMissionsFormatter):
+
+    @classmethod
+    def _getTitle(cls, condition):
+        return FormattableField(FORMATTER_IDS.CUMULATIVE, (min(condition.getReceivedCount(), condition.getNeededCount()), condition.getNeededCount()))
+
+    @classmethod
+    def _getIconKey(cls, condition=None):
+        return CONDITION_ICON.FOLDER
+
+    def _packGui(self, condition):
+        return events_fmts.packMissionIconCondition(self.getTitle(condition), MISSIONS_ALIASES.CUMULATIVE, self.getDescription(condition), self._getIconKey(condition), sortKey=self._getSortKey(condition), progressID=condition.progressID, total=condition.getNeededCount(), current=min(condition.getReceivedCount(), condition.getNeededCount()))
+
+
+class RaceAchievementsFormatter(_CumulativeCustomTokenFormatter):
+    TOKEN = 'fest19:race:achievement'
+
+    def _getDescription(self, condition):
+        return FormattableField(FORMATTER_IDS.DESCRIPTION, (i18n.makeString(FESTIVAL.RACE_ACHIEVEMENTCONDITION_DESC, condition.getNeededCount()),))
+
+
+class RaceRecruitFormatter(_CumulativeCustomTokenFormatter):
+    TOKEN = 'fest19:race:quests_complete'
+
+    def _getDescription(self, condition):
+        return FormattableField(FORMATTER_IDS.DESCRIPTION, (i18n.makeString(FESTIVAL.RACE_RECRUITCONDITION_DESC, condition.getNeededCount()),))
 
 
 class MissionsVehicleListFormatter(MissionFormatter):

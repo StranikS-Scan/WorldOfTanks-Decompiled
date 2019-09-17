@@ -51,7 +51,7 @@ class EventBattleEntity(PreQueueEntity):
         LOG_DEBUG('Sends request on dequeuing from the event battles')
 
     def _goToQueueUI(self):
-        g_eventDispatcher.loadBattleQueue()
+        g_eventDispatcher.loadEventBattleQueue()
         return FUNCTIONAL_FLAG.LOAD_PAGE
 
     def _exitFromQueueUI(self):

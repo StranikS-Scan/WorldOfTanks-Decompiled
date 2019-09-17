@@ -46,10 +46,6 @@ class DIALOGS(object):
     QUITBATTLE_DESERTER_MESSAGE = '#dialogs:quitBattle/deserter/message'
     QUITBATTLE_DESERTER_SUBMIT = '#dialogs:quitBattle/deserter/submit'
     QUITBATTLE_DESERTER_CANCEL = '#dialogs:quitBattle/deserter/cancel'
-    QUITBATTLEBR_DESERTER_TITLE = '#dialogs:quitBattleBR/deserter/title'
-    QUITBATTLEBR_DESERTER_MESSAGE = '#dialogs:quitBattleBR/deserter/message'
-    QUITBATTLEBR_DESERTER_SUBMIT = '#dialogs:quitBattleBR/deserter/submit'
-    QUITBATTLEBR_DESERTER_CANCEL = '#dialogs:quitBattleBR/deserter/cancel'
     QUITBATTLEIGR_TITLE = '#dialogs:quitBattleIGR/title'
     QUITBATTLEIGR_MESSAGE = '#dialogs:quitBattleIGR/message'
     QUITBATTLEIGR_SUBMIT = '#dialogs:quitBattleIGR/submit'
@@ -997,6 +993,10 @@ class DIALOGS(object):
     CREWBOOKS_SUCCESS_DESC_CREWBOOK = '#dialogs:crewBooks/success/desc/crewBook'
     CREWBOOKS_SUCCESS_DESC_PERSONALBOOK = '#dialogs:crewBooks/success/desc/personalBook'
     CREWBOOKS_SUCCESS_TITLE = '#dialogs:crewBooks/success/title'
+    UNLOADTRAINING_TITLE = '#dialogs:unloadTraining/title'
+    UNLOADTRAINING_MESSAGE = '#dialogs:unloadTraining/message'
+    UNLOADTRAINING_SUBMIT = '#dialogs:unloadTraining/submit'
+    UNLOADTRAINING_CANCEL = '#dialogs:unloadTraining/cancel'
     RECRUITWINDOW_VEHICLECLASSDROPDOWN_ENUM = (RECRUITWINDOW_VEHICLECLASSDROPDOWN_ALL,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_LIGHTTANK,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_MEDIUMTANK,
@@ -1038,10 +1038,6 @@ class DIALOGS(object):
      QUITBATTLE_DESERTER_MESSAGE,
      QUITBATTLE_DESERTER_SUBMIT,
      QUITBATTLE_DESERTER_CANCEL,
-     QUITBATTLEBR_DESERTER_TITLE,
-     QUITBATTLEBR_DESERTER_MESSAGE,
-     QUITBATTLEBR_DESERTER_SUBMIT,
-     QUITBATTLEBR_DESERTER_CANCEL,
      QUITBATTLEIGR_TITLE,
      QUITBATTLEIGR_MESSAGE,
      QUITBATTLEIGR_SUBMIT,
@@ -1988,7 +1984,11 @@ class DIALOGS(object):
      CREWBOOKS_CONFIRMATION_BUTTON_CANCEL,
      CREWBOOKS_SUCCESS_DESC_CREWBOOK,
      CREWBOOKS_SUCCESS_DESC_PERSONALBOOK,
-     CREWBOOKS_SUCCESS_TITLE)
+     CREWBOOKS_SUCCESS_TITLE,
+     UNLOADTRAINING_TITLE,
+     UNLOADTRAINING_MESSAGE,
+     UNLOADTRAINING_SUBMIT,
+     UNLOADTRAINING_CANCEL)
 
     @classmethod
     def recruitwindow_vehicleclassdropdown(cls, key0):

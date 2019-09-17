@@ -67,6 +67,17 @@
       </constant>
     </constantsGroup>
     <constantsGroup>
+      <name>	electric_small	</name>
+      <constant>
+        <name>	_0	</name>
+        <value>	small_electric	</value>
+      </constant>
+      <constant>
+        <name>	_fileDescriptor	</name>
+        <value>	small_electric	</value>
+      </constant>
+    </constantsGroup>
+    <constantsGroup>
       <name>	null	</name>
       <constant>
         <name>	_0	</name>
@@ -83,7 +94,7 @@
       <name>	GearUp	</name>
       <selector>
         <type>	discrete	</type>
-        <variable>	_nitro	</variable>
+        <variable>	_speed_boost	</variable>
         <selector>
           <key>	0	</key>
           <type>	discrete	</type>
@@ -93,17 +104,6 @@
             <type>	effect	</type>
             <ttl>	0.05	</ttl>
             <name>	particles/Tank/exhaust/{0}/rpm02_Load04.eff	</name>
-          </selector>
-        </selector>
-        <selector>
-          <key>	1	</key>
-          <type>	discrete	</type>
-          <variable>	_gearUp	</variable>
-          <selector>
-            <key>	1	</key>
-            <type>	effect	</type>
-            <ttl>	0.05	</ttl>
-            <name>	particles/Environment/scenarios/br_nitro_gearup.eff	</name>
           </selector>
         </selector>
       </selector>
@@ -112,114 +112,193 @@
       <name>	EngineStart	</name>
       <selector>
         <type>	discrete	</type>
-        <variable>	_nitro	</variable>
-        <selector>
-          <key>	0	</key>
-          <type>	discrete	</type>
-          <variable>	_engineStart	</variable>
-          <selector>
-            <key>	1	</key>
-            <type>	effect	</type>
-            <ttl>	5.2	</ttl>
-            <name>	particles/Tank/exhaust/{0}/start.eff	</name>
-          </selector>
-        </selector>
+        <variable>	_engineStart	</variable>
         <selector>
           <key>	1	</key>
-          <type>	discrete	</type>
-          <variable>	_engineStart	</variable>
-          <selector>
-            <key>	1	</key>
-            <type>	effect	</type>
-            <ttl>	5.2	</ttl>
-            <name>	particles/Environment/scenarios/br_nitro_start.eff	</name>
-          </selector>
+          <type>	effect	</type>
+          <ttl>	5.2	</ttl>
+          <name>	particles/Tank/exhaust/{0}/start.eff	</name>
         </selector>
       </selector>
     </template>
     <template>
       <name>	PhysicLoad	</name>
       <selector>
-        <type>	range	</type>
-        <variable>	_physicLoad	</variable>
+        <type>	discrete	</type>
+        <variable>	_speed_boost	</variable>
         <selector>
           <key>	0	</key>
           <type>	range	</type>
-          <variable>	_rpm	</variable>
+          <variable>	_physicLoad	</variable>
           <selector>
-            <key>	0.00	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/exhaust/{0}/rpm01_Load01.eff	</name>
+            <key>	0	</key>
+            <type>	range	</type>
+            <variable>	_rpm	</variable>
+            <selector>
+              <key>	0.00	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/{0}/rpm01_Load01.eff	</name>
+            </selector>
+            <selector>
+              <key>	0.5	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/{0}/rpm02_Load01.eff	</name>
+            </selector>
+            <selector>
+              <key>	0.9	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/{0}/rpm03_Load01.eff	</name>
+            </selector>
           </selector>
           <selector>
             <key>	0.5	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/exhaust/{0}/rpm02_Load01.eff	</name>
+            <type>	range	</type>
+            <variable>	_rpm	</variable>
+            <selector>
+              <key>	0.00	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/{0}/rpm01_Load02.eff	</name>
+            </selector>
+            <selector>
+              <key>	0.5	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/{0}/rpm02_Load02.eff	</name>
+            </selector>
+            <selector>
+              <key>	0.9	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/{0}/rpm03_Load02.eff	</name>
+            </selector>
           </selector>
           <selector>
             <key>	0.9	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/exhaust/{0}/rpm03_Load01.eff	</name>
+            <type>	range	</type>
+            <variable>	_rpm	</variable>
+            <selector>
+              <key>	0.00	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/{0}/rpm01_Load03.eff	</name>
+            </selector>
+            <selector>
+              <key>	0.5	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/{0}/rpm02_Load03.eff	</name>
+            </selector>
+            <selector>
+              <key>	0.9	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/{0}/rpm03_Load03.eff	</name>
+            </selector>
+          </selector>
+          <selector>
+            <key>	0.98	</key>
+            <type>	range	</type>
+            <variable>	_rpm	</variable>
+            <selector>
+              <key>	0.00	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/{0}/rpm01_Load04.eff	</name>
+            </selector>
+            <selector>
+              <key>	0.5	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/{0}/rpm02_Load04.eff	</name>
+            </selector>
+            <selector>
+              <key>	0.9	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/{0}/rpm03_Load04.eff	</name>
+            </selector>
           </selector>
         </selector>
         <selector>
-          <key>	0.5	</key>
+          <key>	1	</key>
           <type>	range	</type>
-          <variable>	_rpm	</variable>
+          <variable>	_physicLoad	</variable>
           <selector>
-            <key>	0.00	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/exhaust/{0}/rpm01_Load02.eff	</name>
+            <key>	0	</key>
+            <type>	range	</type>
+            <variable>	_rpm	</variable>
+            <selector>
+              <key>	0.00	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/forsage_diesel/forsage_idle.eff	</name>
+            </selector>
           </selector>
           <selector>
-            <key>	0.5	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/exhaust/{0}/rpm02_Load02.eff	</name>
-          </selector>
-          <selector>
-            <key>	0.9	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/exhaust/{0}/rpm03_Load02.eff	</name>
+            <key>	0.3	</key>
+            <type>	range	</type>
+            <variable>	_rpm	</variable>
+            <selector>
+              <key>	0.00	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/forsage_diesel/forsage_idle.eff	</name>
+            </selector>
+            <selector>
+              <key>	0.1	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/forsage_diesel/forsage_work_load.eff	</name>
+            </selector>
           </selector>
         </selector>
         <selector>
-          <key>	0.9	</key>
+          <key>	2	</key>
           <type>	range	</type>
-          <variable>	_rpm	</variable>
+          <variable>	_physicLoad	</variable>
           <selector>
-            <key>	0.00	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/exhaust/{0}/rpm01_Load03.eff	</name>
+            <key>	0	</key>
+            <type>	range	</type>
+            <variable>	_rpm	</variable>
+            <selector>
+              <key>	0.00	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/forsage_gas/forsage_idle.eff	</name>
+            </selector>
           </selector>
           <selector>
-            <key>	0.5	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/exhaust/{0}/rpm02_Load03.eff	</name>
-          </selector>
-          <selector>
-            <key>	0.9	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/exhaust/{0}/rpm03_Load03.eff	</name>
+            <key>	0.3	</key>
+            <type>	range	</type>
+            <variable>	_rpm	</variable>
+            <selector>
+              <key>	0.00	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/forsage_gas/forsage_idle.eff	</name>
+            </selector>
+            <selector>
+              <key>	0.1	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/forsage_gas/forsage_work_load.eff	</name>
+            </selector>
           </selector>
         </selector>
         <selector>
-          <key>	0.98	</key>
+          <key>	3	</key>
           <type>	range	</type>
-          <variable>	_rpm	</variable>
+          <variable>	_physicLoad	</variable>
           <selector>
-            <key>	0.00	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/exhaust/{0}/rpm01_Load04.eff	</name>
+            <key>	0	</key>
+            <type>	range	</type>
+            <variable>	_rpm	</variable>
+            <selector>
+              <key>	0.00	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/forsage_electric/forsage_idle.eff	</name>
+            </selector>
           </selector>
           <selector>
-            <key>	0.5	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/exhaust/{0}/rpm02_Load04.eff	</name>
-          </selector>
-          <selector>
-            <key>	0.9	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/exhaust/{0}/rpm03_Load04.eff	</name>
+            <key>	0.3	</key>
+            <type>	range	</type>
+            <variable>	_rpm	</variable>
+            <selector>
+              <key>	0.00	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/forsage_electric/forsage_idle.eff	</name>
+            </selector>
+            <selector>
+              <key>	0.1	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/forsage_electric/forsage_work_load.eff	</name>
+            </selector>
           </selector>
         </selector>
       </selector>
@@ -228,7 +307,7 @@
       <name>	ExhaustLoad	</name>
       <selector>
         <type>	discrete	</type>
-        <variable>	_nitro	</variable>
+        <variable>	_speed_boost	</variable>
         <selector>
           <key>	0	</key>
           <type>	range	</type>
@@ -251,12 +330,42 @@
           <selector>
             <key>	1	</key>
             <type>	effect	</type>
-            <name>	particles/Environment/scenarios/br_nitro_idle.eff	</name>
+            <name>	particles/Tank/exhaust/forsage_diesel/forsage_idle.eff	</name>
           </selector>
           <selector>
             <key>	2	</key>
+            <type>	template	</type>
+            <name>	PhysicLoad	</name>
+          </selector>
+        </selector>
+        <selector>
+          <key>	2	</key>
+          <type>	range	</type>
+          <variable>	_engine_load	</variable>
+          <selector>
+            <key>	1	</key>
             <type>	effect	</type>
-            <name>	particles/Environment/scenarios/br_nitro_load.eff	</name>
+            <name>	particles/Tank/exhaust/forsage_gas/forsage_idle.eff	</name>
+          </selector>
+          <selector>
+            <key>	2	</key>
+            <type>	template	</type>
+            <name>	PhysicLoad	</name>
+          </selector>
+        </selector>
+        <selector>
+          <key>	3	</key>
+          <type>	range	</type>
+          <variable>	_engine_load	</variable>
+          <selector>
+            <key>	1	</key>
+            <type>	effect	</type>
+            <name>	particles/Tank/exhaust/forsage_electric/forsage_idle.eff	</name>
+          </selector>
+          <selector>
+            <key>	2	</key>
+            <type>	template	</type>
+            <name>	PhysicLoad	</name>
           </selector>
         </selector>
       </selector>
@@ -268,17 +377,17 @@
         <selector>
           <type>	template	</type>
           <name>	ExhaustLoad	</name>
-          <parameters>	_engine_load:engineLoad;      _physicLoad:physicLoad;      _rpm:RPM;      _nitro:Nitro	</parameters>
+          <parameters>	_engine_load:engineLoad;_physicLoad:physicLoad;_rpm:RPM;_speed_boost:SpeedBoost	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	GearUp	</name>
-          <parameters>	_gearUp:gearUp;_nitro:Nitro	</parameters>
+          <parameters>	_gearUp:gearUp;_speed_boost:SpeedBoost	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	EngineStart	</name>
-          <parameters>	_engineStart:engineStart;_nitro:Nitro	</parameters>
+          <parameters>	_engineStart:engineStart;_speed_boost:SpeedBoost	</parameters>
         </selector>
       </selector>
     </template>
@@ -286,7 +395,7 @@
       <name>	STRVLoad	</name>
       <selector>
         <type>	discrete	</type>
-        <variable>	_nitro	</variable>
+        <variable>	_speed_boost	</variable>
         <selector>
           <key>	0	</key>
           <type>	range	</type>
@@ -327,41 +436,6 @@
             <name>	particles/Tank/exhaust/strv_engine_crit.eff	</name>
           </selector>
         </selector>
-        <selector>
-          <key>	1	</key>
-          <type>	range	</type>
-          <variable>	engineState	</variable>
-          <selector>
-            <key>	0	</key>
-            <type>	discrete	</type>
-            <variable>	siegeProgress	</variable>
-            <selector>
-              <key>	0	</key>
-              <type>	range	</type>
-              <variable>	_engine_load	</variable>
-              <selector>
-                <key>	1	</key>
-                <type>	effect	</type>
-                <name>	particles/Environment/scenarios/br_nitro_idle.eff	</name>
-              </selector>
-              <selector>
-                <key>	2	</key>
-                <type>	effect	</type>
-                <name>	particles/Environment/scenarios/br_nitro_load.eff	</name>
-              </selector>
-            </selector>
-            <selector>
-              <key>	1	</key>
-              <type>	effect	</type>
-              <name>	particles/Tank/exhaust/strv_change_exhaust.eff	</name>
-            </selector>
-          </selector>
-          <selector>
-            <key>	2	</key>
-            <type>	effect	</type>
-            <name>	particles/Tank/exhaust/strv_engine_crit.eff	</name>
-          </selector>
-        </selector>
       </selector>
     </template>
     <template>
@@ -371,17 +445,17 @@
         <selector>
           <type>	template	</type>
           <name>	STRVLoad	</name>
-          <parameters>	_engine_load:engineLoad;      _physicLoad:physicLoad;      _rpm:RPM;      _nitro:Nitro	</parameters>
+          <parameters>	_engine_load:engineLoad;_physicLoad:physicLoad;_rpm:RPM;_speed_boost:SpeedBoost	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	GearUp	</name>
-          <parameters>	_gearUp:gearUp;_nitro:Nitro	</parameters>
+          <parameters>	_gearUp:gearUp;_speed_boost:SpeedBoost	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	EngineStart	</name>
-          <parameters>	_engineStart:engineStart;_nitro:Nitro	</parameters>
+          <parameters>	_engineStart:engineStart;_speed_boost:SpeedBoost	</parameters>
         </selector>
       </selector>
     </template>
@@ -443,6 +517,13 @@
         <constantsGroup>	diesel_large	</constantsGroup>
       </selector>
     </diesel_strv>
+    <electric_small>
+      <selector>
+        <type>	template	</type>
+        <name>	Exhaust	</name>
+        <constantsGroup>	electric_small	</constantsGroup>
+      </selector>
+    </electric_small>
     <null>
       <selector>
         <type>	template	</type>

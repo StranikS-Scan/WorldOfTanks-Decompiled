@@ -1230,6 +1230,15 @@ class CalendarSplashModifier(ActionModifier):
         return int(strDuration) if strDuration else None
 
 
+class CalendarCounterModifier(ActionModifier):
+
+    def __init__(self, _, params):
+        super(CalendarCounterModifier, self).__init__('calendarCounter', params, modType=ACTION_MODIFIER_TYPE.AVAILABILITY)
+
+    def getIsEnabled(self):
+        return self._params.get('enabled', '').lower() in ('1', 'yes', 'true')
+
+
 _MODIFIERS = (('mul_EconomicsParams', EconomicsMul),
  ('set_EconomicsParams', EconomicsSet),
  ('mul_EconomicsPrices', EconomicsMul),
@@ -1268,7 +1277,8 @@ _MODIFIERS = (('mul_EconomicsParams', EconomicsMul),
  ('set_MarathonFinished', MarathonEventModifier),
  ('ReferralProgramDisabled', ReferralModifier),
  ('AdventCalendarEnabled', CalendarModifier),
- ('AdventCalendarForced', CalendarSplashModifier))
+ ('AdventCalendarForced', CalendarSplashModifier),
+ ('AdventCalendarCounter', CalendarCounterModifier))
 _MODIFIERS_DICT = dict(_MODIFIERS)
 _MODIFIERS_ORDER = dict(((n, idx) for idx, (n, _) in enumerate(_MODIFIERS)))
 

@@ -26,10 +26,6 @@
 			200
 			400
 			800	</explosionCandleVolumes>
-    <radarDefaults>
-      <radarRadius>	0.	</radarRadius>
-      <radarCooldown>	0.	</radarCooldown>
-    </radarDefaults>
   </miscParams>
   <defaultVehicleEffects>
     <damagedStateGroup>	medium	</damagedStateGroup>
@@ -101,6 +97,7 @@
     <rancorousBattleBooster>	NoneExtra : BattleBoosterForCrewSkill	</rancorousBattleBooster>
     <pedantBattleBooster>	NoneExtra : BattleBoosterForCrewSkill	</pedantBattleBooster>
     <lastEffortBattleBooster>	NoneExtra : BattleBoosterForCrewSkill	</lastEffortBattleBooster>
+    <rotationBySpeedModifiers>	NoneExtra : RotationBySpeedModifiers	</rotationBySpeedModifiers>
     <shoot>	ShowShooting : Shoot	</shoot>
     <noAmmo>	NoneExtra : NoAmmo	</noAmmo>
     <gunReload>	NoneExtra : GunReload	</gunReload>
@@ -123,7 +120,6 @@
     <largeMedkit>	NoneExtra : Repairkit	</largeMedkit>
     <smallRepairkit>	NoneExtra : Repairkit	</smallRepairkit>
     <largeRepairkit>	NoneExtra : Repairkit	</largeRepairkit>
-    <regenerationKit>	NoneExtra : RegenerationKit	</regenerationKit>
     <lendLeaseOil>	NoneExtra : Fuel	</lendLeaseOil>
     <gasoline100>	NoneExtra : Fuel	</gasoline100>
     <gasoline105>	NoneExtra : Fuel	</gasoline105>
@@ -140,7 +136,6 @@
     <ration_italy>	NoneExtra : Stimulator	</ration_italy>
     <removedRpmLimiter>	NoneExtra : RemovedRpmLimiter	</removedRpmLimiter>
     <qualityOil>	NoneExtra : Fuel	</qualityOil>
-    <large_repairkit_battle_royale>	NoneExtra : RepairkitBattleRoyale	</large_repairkit_battle_royale>
     <overturn>	NoneExtra : Overturn	  <isOnboardShotAllowed>	true	</isOnboardShotAllowed>
       <gameplayFactors>
         <reloadTime>	2.0	</reloadTime>
@@ -151,21 +146,88 @@
         <visionRadius>	0.5	</visionRadius>
       </gameplayFactors>
     </overturn>
-    <overturn_battle_royale>	NoneExtra : OverturnBattleRoyale	  <isOnboardShotAllowed>	true	</isOnboardShotAllowed>
-      <gameplayFactors>
-        <reloadTime>	2.0	</reloadTime>
-        <turretRotationSpeed>	0.5	</turretRotationSpeed>
-        <gunRotationSpeed>	0.5	</gunRotationSpeed>
-        <aimingTime>	2.0	</aimingTime>
-        <shotDispersion>	2.0	</shotDispersion>
-        <visionRadius>	0.5	</visionRadius>
-      </gameplayFactors>
-    </overturn_battle_royale>
     <drowning>	NoneExtra : Drowning	</drowning>
+    <antiOverturn>	NoneExtra : AntiOverturn	  <restoreTime>	1.0	</restoreTime>
+    </antiOverturn>
     <burnout>	NoneExtra : Burnout	</burnout>
-    <afterburning>	NoneExtra : Afterburning	</afterburning>
-    <afterburning_battle_royale>	AfterburningBattleRoyale : AfterburningBattleRoyale	</afterburning_battle_royale>
-    <trappoint>	NoneExtra : TrapPoint	</trappoint>
+    <speedboostT-50>	SpeedBoost : SpeedBoost	  <vehEffectsKey>	1	</vehEffectsKey>
+      <sounds>
+        <start_for_player>
+          <sound>	ev_race_afterburner_diesel_turbo_pc	</sound>
+        </start_for_player>
+        <start_for_npc>
+          <sound>	ev_race_afterburner_diesel_turbo_npc	</sound>
+        </start_for_npc>
+        <stop_for_player>
+          <sound>	ev_race_afterburner_stop_pc	</sound>
+        </stop_for_player>
+        <stop_for_npc>
+          <sound>	ev_race_afterburner_stop_npc	</sound>
+        </stop_for_npc>
+      </sounds>
+      <maxPoints>	1000	</maxPoints>
+      <startPoints>	0	</startPoints>
+      <pointsPerSecond>
+        <points>	67	</points>
+        <points>	77	</points>
+        <points>	91	</points>
+        <points>	111	</points>
+        <points>	143	</points>
+        <points>	200	</points>
+      </pointsPerSecond>
+    </speedboostT-50>
+    <speedboostLeopard>	SpeedBoost : SpeedBoost	  <vehEffectsKey>	3	</vehEffectsKey>
+      <sounds>
+        <start_for_player>
+          <sound>	ev_race_afterburner_petrol_electric_pc	</sound>
+        </start_for_player>
+        <start_for_npc>
+          <sound>	ev_race_afterburner_petrol_electric_npc	</sound>
+        </start_for_npc>
+        <stop_for_player>
+          <sound>	ev_race_afterburner_stop_pc	</sound>
+        </stop_for_player>
+        <stop_for_npc>
+          <sound>	ev_race_afterburner_stop_npc	</sound>
+        </stop_for_npc>
+      </sounds>
+      <maxPoints>	1000	</maxPoints>
+      <startPoints>	0	</startPoints>
+      <pointsPerSecond>
+        <points>	67	</points>
+        <points>	77	</points>
+        <points>	91	</points>
+        <points>	111	</points>
+        <points>	143	</points>
+        <points>	200	</points>
+      </pointsPerSecond>
+    </speedboostLeopard>
+    <speedboostChaffee>	SpeedBoost : SpeedBoost	  <vehEffectsKey>	2	</vehEffectsKey>
+      <sounds>
+        <start_for_player>
+          <sound>	ev_race_afterburner_radial_pc	</sound>
+        </start_for_player>
+        <start_for_npc>
+          <sound>	ev_race_afterburner_radial_npc	</sound>
+        </start_for_npc>
+        <stop_for_player>
+          <sound>	ev_race_afterburner_stop_pc	</sound>
+        </stop_for_player>
+        <stop_for_npc>
+          <sound>	ev_race_afterburner_stop_npc	</sound>
+        </stop_for_npc>
+      </sounds>
+      <maxPoints>	1000	</maxPoints>
+      <startPoints>	0	</startPoints>
+      <pointsPerSecond>
+        <points>	67	</points>
+        <points>	77	</points>
+        <points>	91	</points>
+        <points>	111	</points>
+        <points>	143	</points>
+        <points>	200	</points>
+      </pointsPerSecond>
+    </speedboostChaffee>
     <engineHealth>	DamageMarker : EngineHealth	  <sounds>
         <critical>	engine_damaged	</critical>
         <destroyed>	engine_destroyed	</destroyed>
@@ -295,6 +357,27 @@
     <siegeMode>	NoneExtra : SiegeMode	</siegeMode>
     <tuner>	NoneExtra: Tuner	</tuner>
     <builtinRepairkit>	NoneExtra : Repairkit	</builtinRepairkit>
+    <festivalRaceRepair>	FestivalRaceRepair : FestivalRaceRepair	  <effects>
+        <effect>
+          <position>	1	</position>
+          <vehicleEffect>	repairLarge	</vehicleEffect>
+        </effect>
+        <effect>
+          <position>	2	</position>
+          <vehicleEffect>	repairMedium	</vehicleEffect>
+        </effect>
+        <effect>
+          <position>	3	</position>
+          <vehicleEffect>	repairSmall	</vehicleEffect>
+        </effect>
+      </effects>
+    </festivalRaceRepair>
+    <flightStabilizer>	NoneExtra : FlightStabilizer	  <stabilizationAngle>	50	</stabilizationAngle>
+      <hullContactDelay>	0.3	</hullContactDelay>
+    </flightStabilizer>
+    <vehicleValidZoneGuard>	VehicleValidZoneGuard : VehicleValidZoneGuard	  <invalidGroundType>	soft	</invalidGroundType>
+      <enterInvalidZoneDelay>	1.0	</enterInvalidZoneDelay>
+    </vehicleValidZoneGuard>
   </extras>
   <deviceExtras>
     <devices>

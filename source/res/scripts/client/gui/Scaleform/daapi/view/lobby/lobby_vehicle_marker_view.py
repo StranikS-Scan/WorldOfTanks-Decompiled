@@ -24,15 +24,17 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         self.addListener(events.HangarVehicleEvent.ON_HERO_TANK_DESTROY, self.__onHeroTankDestroy, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.HangarVehicleEvent.HERO_TANK_MARKER, self.__onMarkerDisable, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__onCameraEntityUpdated, EVENT_BUS_SCOPE.DEFAULT)
+        self.addListener(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, self.__onMarkerDisable, EVENT_BUS_SCOPE.LOBBY)
         self.hangarSpace.onSpaceDestroy += self.__onSpaceDestroy
 
     def _dispose(self):
-        super(LobbyVehicleMarkerView, self)._dispose()
         self.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__onCameraEntityUpdated, EVENT_BUS_SCOPE.DEFAULT)
         self.removeListener(events.HangarVehicleEvent.ON_HERO_TANK_LOADED, self.__onHeroTankLoaded, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.HangarVehicleEvent.ON_HERO_TANK_DESTROY, self.__onHeroTankDestroy, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.HangarVehicleEvent.HERO_TANK_MARKER, self.__onMarkerDisable, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, self.__onMarkerDisable, EVENT_BUS_SCOPE.LOBBY)
         self.hangarSpace.onSpaceDestroy -= self.__onSpaceDestroy
+        super(LobbyVehicleMarkerView, self)._dispose()
         self.__vehicleMarker = None
         return
 
@@ -92,12 +94,12 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
 
     def __createMarker(self, vehicle):
         vClass, vName, vMatrix = self.__getVehicleInfo(vehicle)
-        flashMarker = self.as_createMarkerS(vClass, vName)
+        flashMarker = self.as_createVehMarkerS(vClass, vName)
         self.__vehicleMarker = GUI.WGHangarVehicleMarker()
         self.__vehicleMarker.setMarker(flashMarker, vMatrix)
         self.__updateMarkerVisibility()
 
     def __destroyMarker(self):
-        self.as_removeMarkerS()
+        self.as_removeVehMarkerS()
         self.__vehicleMarker = None
         return

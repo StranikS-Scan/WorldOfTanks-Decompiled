@@ -10,6 +10,8 @@ from gui.prb_control import settings
 from gui.prb_control.formatters import messages
 from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import i18n
+from helpers import dependency
+from skeletons.gui.game_control import IRacingEventController
 
 @stored_window(DATA_TYPE.UNIQUE_WINDOW, TARGET_ID.CHANNEL_CAROUSEL)
 class SquadWindow(SquadWindowMeta):
@@ -85,6 +87,15 @@ class SquadWindow(SquadWindowMeta):
 
 
 class EventSquadWindow(SquadWindow):
+    _racingEventController = dependency.descriptor(IRacingEventController)
+
+    def _populate(self):
+        super(EventSquadWindow, self)._populate()
+        self._racingEventController.onRacingEventTriggerChanged += self.__EventTriggerChanged
+
+    def _dispose(self):
+        self._racingEventController.onRacingEventTriggerChanged -= self.__EventTriggerChanged
+        super(EventSquadWindow, self)._dispose()
 
     def getPrbType(self):
         return PREBATTLE_TYPE.EVENT
@@ -94,6 +105,10 @@ class EventSquadWindow(SquadWindow):
 
     def _getSquadViewAlias(self):
         return PREBATTLE_ALIASES.EVENT_SQUAD_VIEW_PY
+
+    def __EventTriggerChanged(self, enabled):
+        if not enabled:
+            self._doLeave()
 
 
 class EpicSquadWindow(SquadWindow):
@@ -106,15 +121,3 @@ class EpicSquadWindow(SquadWindow):
 
     def _getSquadViewAlias(self):
         return PREBATTLE_ALIASES.EPIC_SQUAD_VIEW_PY
-
-
-class BattleRoyaleSquadWindow(SquadWindow):
-
-    def _getTitle(self):
-        return ''.join((i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_SQUAD), i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_SQUAD_BATTLEROYALE)))
-
-    def getPrbType(self):
-        return PREBATTLE_TYPE.BATTLE_ROYALE
-
-    def _getSquadViewAlias(self):
-        return PREBATTLE_ALIASES.BATTLE_ROYALE_SQUAD_VIEW_PY

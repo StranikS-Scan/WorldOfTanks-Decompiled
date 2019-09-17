@@ -145,6 +145,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	2.74 2.74 0.000000 0.000000	</tiling>
+      <density>	75.016 74.7705	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -2210,6 +2212,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.805 0.805 0.000000 0.000000	</tiling>
+            <density>	115.113 129.87	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_105mm_Howitzer_M3>
         <_105mm_Howitzer_M4>	shared	  <maxAmmo>	126	</maxAmmo>
@@ -2266,6 +2270,10 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	127.532 166.302	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_105mm_Howitzer_M4>
       </guns>
       <models>
@@ -2303,6 +2311,8 @@
       </customizationSlots>
       <camouflage>
         <tiling>	0.88 0.52 0.52 0.000000	</tiling>
+        <density>	113.694 114.472	</density>
+        <aoTextureSize>	512 256	</aoTextureSize>
       </camouflage>
     </M37D1>
   </turrets0>

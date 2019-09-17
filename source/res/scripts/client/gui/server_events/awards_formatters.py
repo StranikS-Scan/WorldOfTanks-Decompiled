@@ -4,6 +4,7 @@ import logging
 from collections import namedtuple
 from math import ceil
 from constants import LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS
+from festivity.festival.constants import RACE_COLLECTION_TOKEN_PREFIX
 from festivity.festival.item_info import FestivalItemInfo
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -198,18 +199,6 @@ def getRankedFormatterMap():
     return mapping
 
 
-def getRoyaleFormatterMap():
-    simpleBonusFormatter = SimpleBonusFormatter()
-    return {Currency.GOLD: simpleBonusFormatter,
-     Currency.CREDITS: simpleBonusFormatter,
-     Currency.CRYSTAL: simpleBonusFormatter,
-     PREMIUM_ENTITLEMENTS.BASIC: PremiumDaysBonusFormatter(),
-     PREMIUM_ENTITLEMENTS.PLUS: PremiumDaysBonusFormatter(),
-     'customizations': CustomizationsBonusFormatter(),
-     'dossier': DossierBonusFormatter(),
-     BonusName.FESTIVAL_ITEMS: FestivalItemsFormatter()}
-
-
 def getDefaultAwardFormatter():
     return AwardsPacker(getDefaultFormattersMap())
 
@@ -240,10 +229,6 @@ def getPostBattleAwardsPacker():
 
 def getRankedAwardsPacker():
     return AwardsPacker(getRankedFormatterMap())
-
-
-def getRoyaleAwardsPacker():
-    return AwardsPacker(getRoyaleFormatterMap())
 
 
 def getPersonalMissionAwardPacker():
@@ -569,6 +554,10 @@ class TokenBonusFormatter(SimpleBonusFormatter):
                 formatted = self._formatLootBoxToken(tokenID, token, bonus)
                 if formatted is not None:
                     result.append(formatted)
+            if tokenID.startswith(RACE_COLLECTION_TOKEN_PREFIX):
+                formatted = self._formatRaceCollection(token, bonus)
+                if formatted is not None:
+                    result.append(formatted)
 
         return result
 
@@ -604,6 +593,14 @@ class TokenBonusFormatter(SimpleBonusFormatter):
                 images[size] = RES_ICONS.getLootBoxBonusIcon(size, lootBox.getType())
 
             return PreformattedBonus(label=self._formatBonusLabel(token.count), userName=lootBox.getUserName(), labelFormatter=self._getLabelFormatter(bonus), images=images, tooltip=makeTooltip(header=lootBox.getUserName(), body=TOOLTIPS.QUESTS_BONUSES_LOOTBOXTOKEN_BODY), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus))
+
+    def _formatRaceCollection(self, token, bonus):
+        if token.count <= 0:
+            return None
+        else:
+            images = {AWARDS_SIZES.SMALL: RES_ICONS.MAPS_ICONS_RACE_HANGAR_BATTLERESULTS_COLLECTIONITEM_SMALL,
+             AWARDS_SIZES.BIG: RES_ICONS.MAPS_ICONS_RACE_HANGAR_BATTLERESULTS_COLLECTIONITEM_BIG}
+            return PreformattedBonus(label=self._formatBonusLabel(token.count), userName=backport.text(R.strings.festival.race.collectionBonus.title()), labelFormatter=self._getLabelFormatter(bonus), images=images, tooltip=makeTooltip(header=backport.text(R.strings.festival.race.collectionBonus.title()), body=backport.text(R.strings.festival.race.collectionBonus.desc())), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus))
 
 
 class RankedPointFormatter(TokenBonusFormatter):
@@ -1283,15 +1280,14 @@ class FestivalItemsFormatter(SimpleBonusFormatter):
 
     def _format(self, bonus):
         result = []
-        bonusValue = bonus.getValue()
-        items = sorted((FestivalItemInfo(itemID) for itemID in bonusValue))
-        for festItem in items:
-            result.append(self.__itemFormat(bonus, festItem, bonusValue[festItem.getID()]))
+        for itemID, count in bonus.getValue().iteritems():
+            result.append(self.__itemFormat(bonus, itemID, count))
 
         return result
 
-    def __itemFormat(self, bonus, festItem, count):
-        return PreformattedBonus(isSpecial=True, bonusName=bonus.getName(), images=self._getImages(festItem), label='', userName=self._getUserName(festItem), specialArgs=[festItem.getID(), count, False], specialAlias=TOOLTIPS_CONSTANTS.FESTIVAL_ITEM)
+    def __itemFormat(self, bonus, itemID, count):
+        festItem = FestivalItemInfo(itemID)
+        return PreformattedBonus(isSpecial=True, bonusName=bonus.getName(), images=self._getImages(festItem), label='', userName=self._getUserName(festItem), specialArgs=[itemID, count, False], specialAlias=TOOLTIPS_CONSTANTS.FESTIVAL_ITEM)
 
     @classmethod
     def _getImages(cls, festItem):

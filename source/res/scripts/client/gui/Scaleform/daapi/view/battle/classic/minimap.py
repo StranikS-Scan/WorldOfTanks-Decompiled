@@ -76,6 +76,10 @@ class GlobalSettingsPlugin(common.SimplePlugin):
         self.setSettings()
         return previousSettings
 
+    @staticmethod
+    def _clampMinimapSizeIndex(szIndex):
+        return settings.clampMinimapSizeIndex(szIndex)
+
     def _toogleVisible(self):
         self.__isVisible = not self.__isVisible
         self._parentObj.as_setVisibleS(self.__isVisible)
@@ -84,7 +88,7 @@ class GlobalSettingsPlugin(common.SimplePlugin):
         AccountSettings.setSettings(self.__currentSizeSettings, self.__sizeIndex)
 
     def __setSizeByStep(self, step):
-        newIndex = settings.clampMinimapSizeIndex(self.__sizeIndex + step)
+        newIndex = self._clampMinimapSizeIndex(self.__sizeIndex + step)
         if self.__sizeIndex != newIndex:
             LOG_DEBUG('Try to change size index of minimap by step', newIndex)
             self._parentObj.as_setSizeS(newIndex)

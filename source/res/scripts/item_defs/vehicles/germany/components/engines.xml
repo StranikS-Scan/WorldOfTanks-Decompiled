@@ -140,9 +140,7 @@
     <Engine_PzIV>	253	</Engine_PzIV>
     <Engine_VK4502P>	254	</Engine_VK4502P>
     <Engine_Auf_Panther>	255	</Engine_Auf_Panther>
-    <Maybach_HL_210_TRM_P30_BR>	321	</Maybach_HL_210_TRM_P30_BR>
-    <Maybach_HL_230_TRM_P30_BR>	322	</Maybach_HL_230_TRM_P30_BR>
-    <Maybach_HL_230_TRM_P35_BR>	323	</Maybach_HL_230_TRM_P35_BR>
+    <Maybach_HL_120_TRM_L_race>	252	</Maybach_HL_120_TRM_L_race>
     <Maybach_HL_210P30_Ausf_A_IGR>	60001	</Maybach_HL_210P30_Ausf_A_IGR>
     <Maybach_HL_230_TRM_P30_IGR>	60002	</Maybach_HL_230_TRM_P30_IGR>
     <Maybach_HL_230_TRM_P45_IGR>	60003	</Maybach_HL_230_TRM_P45_IGR>
@@ -1401,7 +1399,6 @@
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	4	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <notInShop>	true	</notInShop>
       <rpm_min>	376	</rpm_min>
       <rpm_max>	2072	</rpm_max>
     </Development_Engine>
@@ -2596,6 +2593,24 @@
       <rpm_min>	632	</rpm_min>
       <rpm_max>	2354	</rpm_max>
     </Continental_AVI_1790_8>
+    <Maybach_HL_120_TRM_L_race>
+      <userString>	#germany_vehicles:Maybach_HL_120_TRM_L_race	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <notInShop>	true	</notInShop>
+      <price>	14000	</price>
+      <wwsoundPC>	ev_race_eng_petrol_electric_pc	</wwsoundPC>
+      <wwsoundNPC>	ev_race_eng_petrol_electric_npc	</wwsoundNPC>
+      <power>	460	</power>
+      <weight>	510	</weight>
+      <maxHealth>	84	</maxHealth>
+      <maxRegenHealth>	41	</maxRegenHealth>
+      <invulnerable>	true	</invulnerable>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	337	</rpm_min>
+      <rpm_max>	2721	</rpm_max>
+    </Maybach_HL_120_TRM_L_race>
     <Maybach_HL_210P30_Ausf_A_IGR>
       <userString>	#igr_vehicles:Maybach_HL_210P30_Ausf_A_IGR	</userString>
       <tags>	gasoline	</tags>
@@ -2719,56 +2734,5 @@
       <rpm_min>	250	</rpm_min>
       <rpm_max>	2800	</rpm_max>
     </MB507_IGR>
-    <Maybach_HL_210_TRM_P30_BR>
-      <userString>	#germany_vehicles:Maybach_HL_210_TRM_P30_BR	</userString>
-      <shortUserString>	#germany_vehicles:Maybach_HL_210_TRM_P30_BR_short	</shortUserString>
-      <tags>	gasoline	</tags>
-      <level>	1	</level>
-      <price>	35500	</price>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <power>	850	</power>
-      <weight>	700	</weight>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	120	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	362	</rpm_min>
-      <rpm_max>	2972	</rpm_max>
-    </Maybach_HL_210_TRM_P30_BR>
-    <Maybach_HL_230_TRM_P30_BR>
-      <userString>	#germany_vehicles:Maybach_HL_230_TRM_P30_BR	</userString>
-      <shortUserString>	#germany_vehicles:Maybach_HL_230_TRM_P30_BR_short	</shortUserString>
-      <tags>	gasoline	</tags>
-      <level>	4	</level>
-      <price>	54000	</price>
-      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
-      <power>	1300	</power>
-      <weight>	850	</weight>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	120	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	376	</rpm_min>
-      <rpm_max>	2395	</rpm_max>
-    </Maybach_HL_230_TRM_P30_BR>
-    <Maybach_HL_230_TRM_P35_BR>
-      <userString>	#germany_vehicles:Maybach_HL_230_TRM_P35_BR	</userString>
-      <shortUserString>	#germany_vehicles:Maybach_HL_230_TRM_P35_BR_short	</shortUserString>
-      <tags>	gasoline	</tags>
-      <level>	4	</level>
-      <price>	54000	</price>
-      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
-      <power>	1000	</power>
-      <weight>	850	</weight>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	120	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	460	</rpm_min>
-      <rpm_max>	2125	</rpm_max>
-    </Maybach_HL_230_TRM_P35_BR>
   </shared>
 </engines.xml>

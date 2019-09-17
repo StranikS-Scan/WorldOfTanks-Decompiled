@@ -6,7 +6,6 @@ from aih_constants import CTRL_MODE_NAME
 from gui.battle_control import avatar_getter
 from gui.battle_control import event_dispatcher
 from soft_exception import SoftException
-import CommandMapping
 
 class BattleGUIKeyHandler(object):
 
@@ -67,11 +66,8 @@ class BattleGameInputMgr(object):
                         return True
 
             if isDown and self.__ctrlModeName != CTRL_MODE_NAME.MAP_CASE:
-                event_dispatcher.showIngameMenu()
                 event_dispatcher.toggleFullStats(False)
             return True
-        if isDown and CommandMapping.g_instance.isFired(CommandMapping.CMD_UPGRADE_PANEL_SHOW, key):
-            event_dispatcher.hideBattleVehicleConfigurator()
         if key in (Keys.KEY_LCONTROL, Keys.KEY_RCONTROL):
             if not self.__consumers:
                 avatar_getter.setForcedGuiControlMode(isDown, enableAiming=False)

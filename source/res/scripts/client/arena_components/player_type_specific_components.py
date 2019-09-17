@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/arena_components/player_type_specific_components.py
+from arena_component_system.festival_race_component import FestivalRaceComponent
 from arena_components.epic_battle_player_data_component import EpicBattlePlayerDataComponent
 from player_data_component import PlayerDataComponent
 from arena_component_system.epic_sector_warning_component import EpicSectorWarningComponent
@@ -18,3 +19,7 @@ def getPlayerTypeSpecificComponentsForEpicBattle():
 
 def getDefaultComponents():
     return {'arenaEquipmentComponent': ArenaEquipmentComponent}
+
+
+def getPlayerTypeSpecificComponentsForFestivalRace():
+    return {'festivalRaceComponent': FestivalRaceComponent}

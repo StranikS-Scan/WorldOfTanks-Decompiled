@@ -11,7 +11,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared.utils import IHangarSpace
 from helpers import dependency
 from gui import g_keyEventHandlers, g_mouseEventHandlers
-from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared import g_eventBus
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
 from gui.hangar_cameras.hangar_camera_idle import HangarCameraIdle
 from gui.hangar_cameras.hangar_camera_parallax import HangarCameraParallax
@@ -139,10 +139,8 @@ class HangarCameraManager(object):
         g_eventBus.addListener(CameraRelatedEvents.VEHICLE_LOADING, self.__handleVehicleLoading)
         g_eventBus.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleEntityUpdated)
         g_eventBus.addListener(CameraRelatedEvents.FORCE_DISABLE_CAMERA_MOVEMENT, self.__handleDisableMovement)
-        g_eventBus.handleEvent(events.HangarCameraManagerEvent(events.HangarCameraManagerEvent.ON_CREATE, ctx={'hangarCameraManager': self}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def destroy(self):
-        g_eventBus.handleEvent(events.HangarCameraManagerEvent(events.HangarCameraManagerEvent.ON_DESTROY, ctx={'hangarCameraManager': self}), scope=EVENT_BUS_SCOPE.LOBBY)
         self.hangarSpace.onSpaceCreate -= self.__onSpaceCreated
         self.hangarSpace.onSpaceDestroy -= self.__onSpaceDestroy
         self.settingsCore.onSettingsChanged -= self.__handleSettingsChange

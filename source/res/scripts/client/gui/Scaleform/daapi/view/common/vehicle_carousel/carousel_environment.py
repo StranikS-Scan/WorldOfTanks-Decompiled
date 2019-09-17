@@ -16,9 +16,9 @@ from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IRentalsController, IIGRController, IClanLockController, IEpicBattleMetaGameController, IRankedBattlesController
+from skeletons.gui.game_control import IRentalsController, IIGRController, IClanLockController, IEpicBattleMetaGameController, IRankedBattlesController, IRacingEventController
 from skeletons.gui.shared import IItemsCache
-_CAROUSEL_FILTERS = ('bonus', 'favorite', 'elite', 'premium')
+_CAROUSEL_FILTERS = ('bonus', 'favorite', 'event', 'elite', 'premium')
 if constants.IS_KOREA:
     _CAROUSEL_FILTERS += ('igr',)
 
@@ -48,9 +48,6 @@ class ICarouselEnvironment(object):
     def hasEventVehicles(self):
         return False
 
-    def hasBattleRoyaleVehicles(self):
-        return False
-
 
 class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnvironment):
     rentals = dependency.descriptor(IRentalsController)
@@ -60,10 +57,11 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
     itemsCache = dependency.descriptor(IItemsCache)
     epicController = dependency.descriptor(IEpicBattleMetaGameController)
     rankedController = dependency.descriptor(IRankedBattlesController)
+    racingEventController = dependency.descriptor(IRacingEventController)
 
     def __init__(self):
         super(CarouselEnvironment, self).__init__()
-        self._usedFilters = self._getFilters()
+        self._usedFilters = _CAROUSEL_FILTERS
         self._carouselDPConfig = {'carouselFilter': None,
          'itemsCache': None,
          'currentVehicle': None}
@@ -138,19 +136,15 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
         self.applyFilter()
 
     def updateAviability(self):
-        if not self.isDisposed():
-            state = self._currentVehicle.getViewState()
-            self.as_setEnabledS(not state.isLocked())
+        state = self._currentVehicle.getViewState()
+        self.as_setEnabledS(not state.isLocked())
 
     def _populate(self):
         super(CarouselEnvironment, self)._populate()
         self._currentVehicle = g_currentVehicle
         self._initDataProvider()
         setting = self.settingsCore.options.getSetting(settings_constants.GAME.VEHICLE_CAROUSEL_STATS)
-        self._carouselDP.setShowStats(setting.get())
-        self._carouselDP.setEnvironment(self.app)
-        self._carouselDP.setFlashObject(self.as_getDataProviderS())
-        self._carouselDP.buildList()
+        self._carouselDP.init(setting.get(), self.app, self.as_getDataProviderS())
         self.rentals.onRentChangeNotify += self.__updateRent
         self.igrCtrl.onIgrTypeChanged += self.__updateIgrType
         self.clanLock.onClanLockUpdate += self.__updateClanLocks
@@ -158,6 +152,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
         self._currentVehicle.onChanged += self.__onCurrentVehicleChanged
         self.epicController.onUpdated += self.__updateEpicSeasonRent
         self.rankedController.onUpdated += self.__updateRankedBonusBattles
+        self.racingEventController.onRacingEventTriggerChanged += self.__racingEventTriggerChanged
         self.settingsCore.onSettingsChanged += self._onCarouselSettingsChange
         g_playerEvents.onVehicleBecomeElite += self.__onVehicleBecomeElite
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
@@ -167,6 +162,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
         self.as_setInitDataS({'counterCloseTooltip': makeTooltip('#tooltips:tanksFilter/counter/close/header', '#tooltips:tanksFilter/counter/close/body')})
 
     def _dispose(self):
+        self.racingEventController.onRacingEventTriggerChanged -= self.__racingEventTriggerChanged
         self.rentals.onRentChangeNotify -= self.__updateRent
         self.igrCtrl.onIgrTypeChanged -= self.__updateIgrType
         self.clanLock.onClanLockUpdate -= self.__updateClanLocks
@@ -240,5 +236,5 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
     def __onVehicleClientStateChanged(self, vehicles):
         self.updateVehicles(vehicles)
 
-    def _getFilters(self):
-        return _CAROUSEL_FILTERS
+    def __racingEventTriggerChanged(self, _):
+        self.updateVehicles()

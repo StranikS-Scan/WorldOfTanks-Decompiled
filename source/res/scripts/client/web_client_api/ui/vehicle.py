@@ -3,24 +3,29 @@
 from itertools import groupby
 from types import NoneType
 from logging import getLogger
+from CurrentVehicle import g_currentVehicle
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import STYLE_PREVIEW_VEHICLES_POOL
 from constants import NC_MESSAGE_PRIORITY
 from debug_utils import LOG_ERROR
 from gui import SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.vehiclePreview20.items_kit_helper import getCDFromId
+from gui.Scaleform.daapi.view.lobby.vehiclePreview20.items_kit_helper import getCDFromId, canInstallStyle
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import checkIfVehicleIsHidden
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
+from gui.customization.shared import C11nId, SEASON_TYPE_TO_IDX
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared import event_dispatcher
 from gui.shared.event_dispatcher import showStylePreview, showHangar
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.customization.outfit import Area
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from helpers.time_utils import getCurrentLocalServerTimestamp, getTimeStructInLocal
 from helpers.time_utils import getTimestampFromISO, getDateTimeInUTC, utcToLocalDatetime, getDateTimeInLocal
-from items import ITEM_TYPES
+from items import ITEM_TYPES, vehicles
 from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IVehicleComparisonBasket, IEpicBattleMetaGameController
@@ -42,6 +47,7 @@ REQUIRED_TANKMAN_FIELDS = {'isPremium',
  'gId',
  'nationID',
  'vehicleTypeID'}
+DEFAULT_STYLED_VEHICLES = (15697, 6193, 19969, 3937)
 
 class _ItemPackValidationError(SoftException):
     pass
@@ -57,6 +63,17 @@ class _VehicleOfferEntry(VehicleOfferEntry):
 
     def replace(self, values):
         return self._replace(**values)
+
+
+def _doesVehicleCDExist(vehicleCD):
+    itemTypeID, nationID, innationID = vehicles.parseIntCompactDescr(vehicleCD)
+    if itemTypeID == GUI_ITEM_TYPE.VEHICLE and innationID in vehicles.g_list.getList(nationID):
+        return True
+    raise SoftException('Invalid vehicle CD: %d' % vehicleCD)
+
+
+def _validateVehiclesCDList(vehiclesCDs):
+    return all((_doesVehicleCDExist(vehicleCD) for vehicleCD in vehiclesCDs))
 
 
 def _validateItemsPack(items):
@@ -286,6 +303,17 @@ class _VehicleStylePreviewSchema(W2CSchema):
     back_btn_descr = Field(required=True, type=basestring)
 
 
+class _VehicleListStylePreviewSchema(W2CSchema):
+    style_id = Field(required=True, type=int)
+    vehicle_min_level = Field(required=False, type=int, default=10)
+    vehicle_list = Field(required=False, type=(list, NoneType), validator=lambda value, _: _validateVehiclesCDList(value), default=DEFAULT_STYLED_VEHICLES)
+    back_btn_descr = Field(required=True, type=basestring)
+
+
+class _VehicleCustomizationPreviewSchema(W2CSchema):
+    style_id = Field(required=True, type=int)
+
+
 class VehicleSellWebApiMixin(object):
     itemsCache = dependency.descriptor(IItemsCache)
 
@@ -322,6 +350,7 @@ def _pushInvalidPreviewMessage():
 
 class VehiclePreviewWebApiMixin(object):
     itemsCache = dependency.descriptor(IItemsCache)
+    c11n = dependency.descriptor(ICustomizationService)
 
     @w2c(_VehiclePreviewSchema, 'vehicle_preview')
     def openVehiclePreview(self, cmd):
@@ -367,9 +396,47 @@ class VehiclePreviewWebApiMixin(object):
 
     @w2c(_VehicleStylePreviewSchema, 'vehicle_style_preview')
     def openVehicleStylePreview(self, cmd):
-        c11n = dependency.instance(ICustomizationService)
-        style = c11n.getItemByID(GUI_ITEM_TYPE.STYLE, cmd.style_id)
-        showStylePreview(cmd.vehicle_cd, style, style.getDescription(), self._getVehicleStylePreviewCallback(), backBtnDescrLabel=backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.dyn(cmd.back_btn_descr)()))
+        self.__showStylePreview(cmd.vehicle_cd, cmd.style_id, cmd.back_btn_descr)
+
+    @w2c(_VehicleListStylePreviewSchema, 'vehicle_list_style_preview')
+    def openVehicleListStylePreview(self, cmd):
+        styledVehicleCD = None
+        if g_currentVehicle.isPresent() and g_currentVehicle.item.level >= cmd.vehicle_min_level:
+            styledVehicleCD = g_currentVehicle.item.intCD
+        else:
+            accDossier = self.itemsCache.items.getAccountDossier()
+            vehiclesStats = accDossier.getRandomStats().getVehicles()
+            vehicleGetter = self.itemsCache.items.getItemByCD
+            vehiclesStats = {vehicle:value for vehicle, value in vehiclesStats.iteritems() if vehicleGetter(vehicle).level >= cmd.vehicle_min_level}
+            if vehiclesStats:
+                sortedVehicles = sorted(vehiclesStats.items(), key=lambda vStat: vStat[1].battlesCount, reverse=True)
+                styledVehicleCD = sortedVehicles[0][0]
+            if not styledVehicleCD:
+                vehiclesPool = AccountSettings.getSettings(STYLE_PREVIEW_VEHICLES_POOL)
+                if not vehiclesPool or set(vehiclesPool) != set(cmd.vehicle_list):
+                    vehiclesPool = list(cmd.vehicle_list)
+                styledVehicleCD = vehiclesPool.pop(0)
+                vehiclesPool.append(styledVehicleCD)
+                AccountSettings.setSettings(STYLE_PREVIEW_VEHICLES_POOL, vehiclesPool)
+        self.__showStylePreview(styledVehicleCD, cmd.style_id, cmd.back_btn_descr)
+        return
+
+    @w2c(_VehicleCustomizationPreviewSchema, 'vehicle_customization_preview')
+    def openVehicleCustomizationPreview(self, cmd):
+        result = canInstallStyle(cmd.style_id)
+        if not result.canInstall:
+            return {'installed': result.canInstall}
+
+        def styleCallback():
+            if result.style is not None:
+                self.c11n.getCtx().switchToStyle()
+                season = SEASON_TYPE_TO_IDX[self.c11n.getCtx().currentSeason]
+                styleSlot = C11nId(areaId=Area.MISC, slotType=GUI_ITEM_TYPE.STYLE, regionIdx=0)
+                self.c11n.getCtx().installItem(result.style.intCD, styleSlot, season)
+            return
+
+        self.c11n.showCustomization(result.vehicle.invID, callback=styleCallback)
+        return {'installed': result.canInstall}
 
     def _getVehicleStylePreviewCallback(self):
         return showHangar
@@ -379,6 +446,10 @@ class VehiclePreviewWebApiMixin(object):
 
     def _getVehiclePreviewReturnAlias(self, cmd):
         return VIEW_ALIAS.LOBBY_HANGAR
+
+    def __showStylePreview(self, vehicleCD, styleID, backBtnDescr):
+        style = self.c11n.getItemByID(GUI_ITEM_TYPE.STYLE, styleID)
+        showStylePreview(vehicleCD, style, style.getDescription(), self._getVehicleStylePreviewCallback(), backBtnDescrLabel=backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.dyn(backBtnDescr)()))
 
     def __validVehiclePreview(self, intCD):
         vehicle = None

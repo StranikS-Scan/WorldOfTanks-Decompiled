@@ -2960,4 +2960,58 @@
       </effects>
     </variant1>
   </dynamicCollision>
+  <repairSmall>
+    <variant1>
+      <stages>
+        <fire>	0.0	</fire>
+        <noEmission>	4.0	</noEmission>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	fire	</startKey>
+          <file>	particles/Tank/destruction/healing_tank_10percent.eff	</file>
+          <position>	HP_gunJoint	</position>
+        </pixie>
+        <stopEmission>
+          <startKey>	noEmission	</startKey>
+        </stopEmission>
+      </effects>
+    </variant1>
+  </repairSmall>
+  <repairMedium>
+    <variant1>
+      <stages>
+        <fire>	0.0	</fire>
+        <noEmission>	4.0	</noEmission>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	fire	</startKey>
+          <file>	particles/Tank/destruction/healing_tank_15percent.eff	</file>
+          <position>	HP_gunJoint	</position>
+        </pixie>
+        <stopEmission>
+          <startKey>	noEmission	</startKey>
+        </stopEmission>
+      </effects>
+    </variant1>
+  </repairMedium>
+  <repairLarge>
+    <variant1>
+      <stages>
+        <fire>	0.0	</fire>
+        <noEmission>	4.0	</noEmission>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	fire	</startKey>
+          <file>	particles/Tank/destruction/healing_tank_25percent.eff	</file>
+          <position>	HP_gunJoint	</position>
+        </pixie>
+        <stopEmission>
+          <startKey>	noEmission	</startKey>
+        </stopEmission>
+      </effects>
+    </variant1>
+  </repairLarge>
 </vehicle_effects.xml>

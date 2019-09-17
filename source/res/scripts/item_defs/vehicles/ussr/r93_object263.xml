@@ -160,6 +160,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	2 2 0.000000 0.000000	</tiling>
+      <density>	98.5319 98.4494	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -1998,6 +2000,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	1.6 0.8 0.000000 0.2	</tiling>
+            <density>	111.527 111.984	</density>
+            <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
         </_122mm_M62-T2S>
         <_130mm_S-70A>	shared	  <maxAmmo>	42	</maxAmmo>
@@ -2080,6 +2084,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	1 0.9 0.000000 0.2	</tiling>
+            <density>	97.613 107.601	</density>
+            <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
         </_130mm_S-70A>
       </guns>
@@ -2110,6 +2116,10 @@
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	50.0 25.0	</density>
+        <aoTextureSize>	512 256	</aoTextureSize>
+      </camouflage>
     </Turret_1_R93_Object263>
   </turrets0>
   <engines>

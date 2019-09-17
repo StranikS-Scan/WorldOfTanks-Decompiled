@@ -31,4 +31,3 @@ class BATTLE_EFFICIENCY_TYPES(object):
     DEFENDER_BONUS = 'defenderBonus'
     BASE_CAPTURE_BLOCKED = 'baseCaptureBlocked'
     ASSIST_BY_ABILITY = 'assistByAbility'
-    DEATH_ZONE = 'deathZone'

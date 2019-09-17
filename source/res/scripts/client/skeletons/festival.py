@@ -4,6 +4,7 @@ from skeletons.gui.game_control import IFestivityController
 
 class IFestivalController(IFestivityController):
     onDataUpdated = None
+    onMiniGamesUpdated = None
 
     def setCurrentCardTabState(self, tabState):
         raise NotImplementedError
@@ -66,4 +67,22 @@ class IFestivalController(IFestivityController):
         raise NotImplementedError
 
     def canShowRandomBtnHint(self):
+        raise NotImplementedError
+
+    def getMiniGamesCooldown(self):
+        raise NotImplementedError
+
+    def getMiniGamesCooldownDuration(self):
+        raise NotImplementedError
+
+    def getMiniGamesAttemptsMax(self):
+        raise NotImplementedError
+
+    def getMiniGamesAttemptsLeft(self):
+        raise NotImplementedError
+
+    def forceUpdateMiniGames(self):
+        raise NotImplementedError
+
+    def isMiniGamesEnabled(self):
         raise NotImplementedError

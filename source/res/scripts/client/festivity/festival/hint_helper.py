@@ -6,6 +6,7 @@ from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.festival import IFestivalController
 _FEST_BUY_RANDOM_HINT_ID = 'FestivalScreenBuyRandomItem'
+_FEST_OPEN_MINI_GAMES_HINT_ID = 'FestivalScreenOpenMiniGames'
 
 class FestivalHintHelper(object):
     __settingsCore = dependency.descriptor(ISettingsCore)
@@ -36,3 +37,20 @@ class FestivalHintHelper(object):
     def updateRndBuyHintVisible(value):
         eventType = events.TutorialEvent.ON_COMPONENT_FOUND if value else events.TutorialEvent.ON_COMPONENT_LOST
         g_eventBus.handleEvent(events.TutorialEvent(eventType, targetID=_FEST_BUY_RANDOM_HINT_ID), scope=EVENT_BUS_SCOPE.GLOBAL)
+
+    @classmethod
+    def getMiniGames(cls):
+        return cls.__settingsCore.serverSettings.getOnceOnlyHintsSetting(FestivalSettings.MINI_GAMES, True)
+
+    @classmethod
+    def setMiniGames(cls):
+        cls.__settingsCore.serverSettings.setOnceOnlyHintsSettings({FestivalSettings.MINI_GAMES: True})
+
+    @classmethod
+    def canShowMiniGames(cls):
+        return cls.getFirstEntry() and cls.getBuyRandom() and not cls.getMiniGames() and cls.__festController.isMiniGamesEnabled()
+
+    @staticmethod
+    def updateMiniGamesHintVisible(value):
+        eventType = events.TutorialEvent.ON_COMPONENT_FOUND if value else events.TutorialEvent.ON_COMPONENT_LOST
+        g_eventBus.handleEvent(events.TutorialEvent(eventType, targetID=_FEST_OPEN_MINI_GAMES_HINT_ID), scope=EVENT_BUS_SCOPE.GLOBAL)

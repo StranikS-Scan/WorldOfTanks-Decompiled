@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web_client_api/ui/browser.py
 from adisp import process
+from gui.ingame_shop import showBuyGoldWebOverlay
 from gui.shared.event_dispatcher import showBrowserOverlayView
 from helpers import dependency
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -28,6 +29,10 @@ class _OpenExternalBrowserSchema(W2CSchema):
 
 class _OpenBrowserOverlaySchema(W2CSchema):
     url = Field(required=True, type=basestring)
+
+
+class _OpenBuyGoldOverlaySchema(W2CSchema):
+    params = Field(required=False, type=dict)
 
 
 class OpenBrowserWindowWebApiMixin(object):
@@ -71,6 +76,8 @@ class CloseBrowserWindowWebApiMixin(object):
                         break
 
                 if browserWindow is not None:
+                    if hasattr(browserWindow, 'destroyedByWeb'):
+                        browserWindow.destroyedByWeb = True
                     browserWindow.destroy()
                 else:
                     raise WebCommandException('Browser window could not be found! May be alias "{}" is wrong or probably browser has unsupported viewType.'.format(windowAlias))
@@ -109,3 +116,10 @@ class OpenBrowserOverlayWebApiMixin(object):
     @w2c(_OpenBrowserOverlaySchema, 'browser_overlay')
     def openBrowserOverlay(self, cmd):
         showBrowserOverlayView(cmd.url)
+
+
+class OpenBuyGoldWebApiMixin(object):
+
+    @w2c(_OpenBuyGoldOverlaySchema, 'buy_gold')
+    def openBuyGoldWebOverlay(self, cmd):
+        showBuyGoldWebOverlay(cmd.params)

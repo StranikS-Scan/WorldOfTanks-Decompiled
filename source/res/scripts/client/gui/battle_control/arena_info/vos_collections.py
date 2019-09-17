@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/vos_collections.py
 from gui.shared.sort_key import SortKey
-from gui.battle_control.arena_info.arena_vos import EPIC_RANDOM_KEYS, EPIC_BATTLE_KEYS
+from gui.battle_control.arena_info.arena_vos import EPIC_RANDOM_KEYS, EPIC_BATTLE_KEYS, EVENT_FESTIVAL_RACE_KEYS
 
 class VehicleInfoSortKey(SortKey):
     __slots__ = ('vInfoVO', 'vStatsVO')
@@ -67,6 +67,17 @@ class SquadmanSpawnGroupVehicleInfoSortKey(SpawnGroupVehicleInfoSortKey):
     def _cmp(self, other):
         result = cmp(other.vInfoVO.isSquadMan(self.prebattleID), self.vInfoVO.isSquadMan(self.prebattleID))
         return result if result else super(SquadmanSpawnGroupVehicleInfoSortKey, self)._cmp(other)
+
+
+class RacePositionSortKey(VehicleInfoSortKey):
+    __slots__ = ()
+
+    def _cmp(self, other):
+        xvStatsVO = self.vStatsVO
+        yvStatsVO = other.vStatsVO
+        xvRacePosition = xvStatsVO.gameModeSpecific.getValue(EVENT_FESTIVAL_RACE_KEYS.PLAYER_RACE_POSITION)
+        yvRacePosition = yvStatsVO.gameModeSpecific.getValue(EVENT_FESTIVAL_RACE_KEYS.PLAYER_RACE_POSITION)
+        return cmp(xvRacePosition, yvRacePosition)
 
 
 class FragCorrelationSortKey(VehicleInfoSortKey):

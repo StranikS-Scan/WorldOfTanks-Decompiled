@@ -3,7 +3,7 @@
 from collections import namedtuple
 from gui.shared.event_bus import SharedEvent
 from shared_utils import CONST_CONTAINER
-__all__ = ('ArgsEvent', 'LoadEvent', 'ComponentEvent', 'LoadViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginCreateEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'HasCtxEvent')
+__all__ = ('ArgsEvent', 'LoadEvent', 'ComponentEvent', 'LoadViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginCreateEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent')
 
 class HasCtxEvent(SharedEvent):
 
@@ -44,7 +44,6 @@ class GameEvent(HasCtxEvent):
     CROSSHAIR_VIEW = 'game/crosshairView'
     FULL_STATS = 'game/fullStats'
     FULL_STATS_QUEST_PROGRESS = 'game/fullStats/questProgress'
-    HIDE_VEHICLE_UPGRADE = 'game/battleRoyale/hideVehicleUpgrade'
     SHOW_CURSOR = 'game/showCursor'
     HIDE_CURSOR = 'game/hideCursor'
     NEXT_PLAYERS_PANEL_MODE = 'game/nextPlayersPanelMode'
@@ -60,6 +59,11 @@ class GameEvent(HasCtxEvent):
     SHOW_BTN_HINT = 'game/showBtnHint'
     HIDE_BTN_HINT = 'game/hideBtnHint'
     DESTROY_TIMERS_PANEL = 'game/destroyTimersPanel'
+    EVENT_HELP_SHOW = 'game/eventHelpShow'
+    EVENT_HELP_HIDE = 'game/eventHelpHide'
+    EVENT_INGAME_MENU = 'game/eventIngameMenu'
+    INGAME_MENU = 'game/ingameMenu'
+    ESC_PRESSED = 'game/escPressed'
 
 
 class GUICommonEvent(SharedEvent):
@@ -289,6 +293,8 @@ class LobbySimpleEvent(HasCtxEvent):
     PREMIUM_XP_BONUS_CHANGED = 'premiumXPBonusChanged'
     WAITING_SHOWN = 'waitingShown'
     BATTLE_RESULTS_POSTED = 'battleResultsPosted'
+    TURN_LOBBY_DRAGGING_ON = 'turnLobbyDraggingOn'
+    TURN_LOBBY_DRAGGING_OFF = 'turnLobbyDraggingOff'
 
 
 class MissionsEvent(HasCtxEvent):
@@ -645,24 +651,16 @@ class ReferralProgramEvent(HasCtxEvent):
 
 
 class AdventCalendarEvent(HasCtxEvent):
+    ADVENT_CALENDAR_OBJECT_ENTER = 'adventCalendar/enter'
+    ADVENT_CALENDAR_OBJECT_LEAVE = 'adventCalendar/leave'
     ADVENT_CALENDAR = 'adventCalendar'
+    DEFERRED_ITEMS_ACTION_STATE_CHANGED = 'adventCalendar/deferredItemsAction/stateChanged'
 
 
 class ProgressiveRewardEvent(HasCtxEvent):
     WIDGET_WAS_SHOWN = 'progressiveWidgetWasShown'
 
 
-class AirDropEvent(HasCtxEvent):
-    AIR_DROP_SPAWNED = 'onAirDropSpawned'
-    AIR_DROP_LANDED = 'onAirDropLanded'
-    AIR_DROP_LOOP_ENTERED = 'onAirDropLootEntered'
-    AIR_DROP_LOOP_LEFT = 'onAirDropLootLeft'
-
-
-class HangarCameraManagerEvent(HasCtxEvent):
-    ON_CREATE = 'hangarCameraManagerEvent/onCreate'
-    ON_DESTROY = 'hangarCameraManagerEvent/onDestroy'
-
-
-class HangarPlaceManagerEvent(SharedEvent):
-    ON_PLACE_SWITCHED = 'hangarPlaceManagerEvent/onPlaceSwitched'
+class MiniGamesEvent(HasCtxEvent):
+    MINI_GAMES_OBJECT_ENTER = 'miniGames/enter'
+    MINI_GAMES_OBJECT_LEAVE = 'miniGames/leave'

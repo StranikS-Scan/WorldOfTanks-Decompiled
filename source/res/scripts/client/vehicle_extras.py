@@ -3,14 +3,20 @@
 import random
 import weakref
 from functools import partial
+import typing
+import logging
 import BigWorld
 import Math
 import material_kinds
-from debug_utils import LOG_CODEPOINT_WARNING, LOG_CURRENT_EXCEPTION
+from debug_utils import LOG_CODEPOINT_WARNING, LOG_CURRENT_EXCEPTION, LOG_DEBUG_DEV
 from items import vehicles
 from helpers import i18n
 from helpers.EffectsList import EffectsListPlayer
 from helpers.EntityExtra import EntityExtra
+from vehicle_systems.tankStructure import TankSoundObjectsIndexes
+if typing.TYPE_CHECKING:
+    import ResMgr
+_logger = logging.getLogger(__name__)
 
 def reload():
     modNames = (reload.__module__,)
@@ -226,22 +232,138 @@ class Fire(EntityExtra):
         return
 
 
-class AfterburningBattleRoyale(EntityExtra):
+class FestivalRaceRepair(EntityExtra):
+    EXTRA_NAME = 'festivalRaceRepair'
 
-    def _start(self, extraData, activate=None):
-        vehicle = extraData['entity']
+    def _readConfig(self, dataSection, containerName):
+        self.__effectByPosition = {}
+        vehEffects = vehicles.g_cache.vehicleEffects
+        effectsSection = dataSection['effects']
+        for e in effectsSection.values():
+            position = e.readInt('position')
+            effectName = e.readString('vehicleEffect')
+            effectList = vehEffects.get(effectName, None)
+            if effectList is None:
+                self._raiseWrongConfig('vehicleEffect', containerName)
+            self.__effectByPosition[position] = effectList
+
+        return
+
+    def _start(self, data, args):
+        racePosition = args
+        self._replayEffect(data, racePosition)
+
+    def _update(self, data, args):
+        racePosition = args
+        self._replayEffect(data, racePosition)
+
+    def _replayEffect(self, data, racePosition):
+        vehicle = data['entity']
+        self.__tryClearEffect(data)
+        effectVariant = random.choice(self.__effectByPosition[racePosition])
+        player = EffectsListPlayer(effectVariant.effectsList, effectVariant.keyPoints, **data)
+        player.play(vehicle.appearance.compoundModel)
+        data['effectPlayer'] = player
+
+    def _cleanup(self, data):
+        self.__tryClearEffect(data)
+
+    def __tryClearEffect(self, data):
+        player = data.get('effectPlayer')
+        if player is None:
+            return
+        else:
+            player.stop()
+            del data['effectPlayer']
+            return
+
+
+class SpeedBoost(EntityExtra):
+    __slots__ = ('__effectsKey', '__soundEvents', '__stopSoundEvents', '__engineSoundObjects')
+    SOUND_START_FOR_PLAYER = 'start_for_player'
+    SOUND_START_FOR_NPC = 'start_for_npc'
+    SOUND_STOP_FOR_PLAYER = 'stop_for_player'
+    SOUND_STOP_FOR_NPC = 'stop_for_npc'
+    VSE_START_EVENT = 'playerSpeedBoostOn'
+    VSE_STOP_EVENT = 'playerSpeedBoostOff'
+
+    def __init__(self, name, index, containerName, dataSection):
+        self.__effectsKey = None
+        self.__engineSoundObjects = {}
+        self.__soundEvents = {}
+        super(SpeedBoost, self).__init__(name, index, containerName, dataSection)
+        return
+
+    def _readConfig(self, dataSection, containerName):
+        self.__effectsKey = dataSection['vehEffectsKey'].asInt
+        for name, section in dataSection['sounds'].items():
+            soundEvent = section.readString('sound')
+            self.__soundEvents[name] = soundEvent
+
+    def _start(self, data, args):
+        vehicle = data['entity']
+        self.__vsePlayerEvent(data, self.VSE_START_EVENT)
         appearance = vehicle.appearance
         if appearance is not None:
             effectMgr = appearance.customEffectManager
             if effectMgr is not None:
-                effectMgr.variables['Nitro'] = 1
+                effectMgr.variables['SpeedBoost'] = self.__effectsKey
+        self.__doSoundAction(data, True)
         return
 
-    def _cleanup(self, extraData):
-        vehicle = extraData['entity']
+    def _cleanup(self, data):
+        vehicle = data['entity']
+        self.__vsePlayerEvent(data, self.VSE_STOP_EVENT)
         appearance = vehicle.appearance
         if appearance is not None:
             effectMgr = appearance.customEffectManager
             if effectMgr is not None:
-                effectMgr.variables['Nitro'] = 0
+                effectMgr.variables['SpeedBoost'] = 0
+        self.__doSoundAction(data, False)
         return
+
+    def __doSoundAction(self, data, isPlay):
+        vehicle = data['entity']
+        if isPlay:
+            soundCategory = self.SOUND_START_FOR_PLAYER if vehicle.isPlayerVehicle else self.SOUND_START_FOR_NPC
+        else:
+            soundCategory = self.SOUND_STOP_FOR_PLAYER if vehicle.isPlayerVehicle else self.SOUND_STOP_FOR_NPC
+        soundEventID = self.__soundEvents.get(soundCategory)
+        if not self.__engineSoundObjects.get(vehicle.id, None):
+            self.__engineSoundObjects[vehicle.id] = vehicle.appearance.engineAudition.getSoundObject(TankSoundObjectsIndexes.ENGINE)
+        if soundEventID is not None:
+            self.__playSoundOnEngine(self.__engineSoundObjects[vehicle.id], soundEventID)
+            if not isPlay:
+                self.__engineSoundObjects[vehicle.id] = None
+        else:
+            _logger.error('SpeedBoost: Bad configuration! Sound not found for: %s, %d', soundCategory, vehicle.id)
+        return
+
+    @staticmethod
+    def __playSoundOnEngine(soundObject, soundEventID):
+        if soundObject is not None:
+            soundObject.play(soundEventID)
+        return
+
+    def __vsePlayerEvent(self, data, eventName):
+        vehicle = data['entity']
+        if vehicle.isPlayerVehicle:
+            BigWorld.player().vsPlanEvent(eventName)
+
+
+class VehicleValidZoneGuard(EntityExtra):
+
+    def _readConfig(self, dataSection, containerName):
+        self.__enterInvalidZoneDelay = dataSection.readFloat('enterInvalidZoneDelay', 1.0)
+
+    def _start(self, data, args):
+        vehicle = data['entity']
+        vehicleName = vehicle.publicInfo['name']
+        vehicle.onInvalidZoneEnter()
+        LOG_DEBUG_DEV('[VehicleValidZoneGuard] {} ({}) entered invalid zone'.format(vehicleName, vehicle.id))
+
+    def _cleanup(self, data):
+        vehicle = data['entity']
+        vehicleName = vehicle.publicInfo['name']
+        vehicle.onInvalidZoneExit()
+        LOG_DEBUG_DEV('[VehicleValidZoneGuard] {} ({}) left invalid zone'.format(vehicleName, vehicle.id))

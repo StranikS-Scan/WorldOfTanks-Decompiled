@@ -93,3 +93,6 @@ class SettingsWindowMeta(AbstractWindowView):
 
     def as_setFeedbackDataProviderS(self, dataProvider):
         return self.flashObject.as_setFeedbackDataProvider(dataProvider) if self._isDAAPIInited() else None
+
+    def as_setFestRaceEventS(self, isFestRace):
+        return self.flashObject.as_setFestRaceEvent(isFestRace) if self._isDAAPIInited() else None

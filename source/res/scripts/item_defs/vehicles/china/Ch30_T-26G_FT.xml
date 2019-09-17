@@ -141,6 +141,10 @@
         <anchorDirection>	0.000000 0.25845 -0.966025	</anchorDirection>
       </slot>
     </customizationSlots>
+    <camouflage>
+      <density>	120.685 120.55	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_Ch30_T-26G_FT>
@@ -2119,6 +2123,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.6 0.3 0.000000 0.000000	</tiling>
+            <density>	170.047 169.555	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_37mm_Pak>
         <_47mm_Gun_Type_1G_FT>	shared	  <maxAmmo>	80	</maxAmmo>
@@ -2189,6 +2195,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.6 0.3 0.000000 0.000000	</tiling>
+            <density>	163.118 166.818	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_47mm_Gun_Type_1G_FT>
       </guns>
@@ -2227,6 +2235,8 @@
       </customizationSlots>
       <camouflage>
         <tiling>	0.7 0.3 0.000000 0.000000	</tiling>
+        <density>	163.238 163.24	</density>
+        <aoTextureSize>	512 256	</aoTextureSize>
       </camouflage>
     </Turret_1_Ch30_T-26G_FT>
   </turrets0>

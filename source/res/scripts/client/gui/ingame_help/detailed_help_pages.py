@@ -15,8 +15,6 @@ def buildPagesData(ctx):
         datailedList.extend(buildBurnoutPages())
     if ctx.get('isWheeled'):
         datailedList.extend(buildWheeledPages())
-    if ctx.get('battleRoyale'):
-        datailedList.extend(_buildBattleRoyalePages())
     return datailedList
 
 
@@ -51,16 +49,6 @@ def buildWheeledPages():
     pages = []
     _addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.wheeledVeh.stableChassis.title()), backport.text(R.strings.ingame_help.detailsHelp.wheeledVeh.stableChassis()), [], backport.image(R.images.gui.maps.icons.battleHelp.wheeledHelp.wheel_chassis()))
     _addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.wheeledVeh.aboutTechnique.title()), backport.text(R.strings.ingame_help.detailsHelp.wheeledVeh.aboutTechnique()), [], backport.image(R.images.gui.maps.icons.battleHelp.wheeledHelp.wheel_details()))
-    return pages
-
-
-def _buildBattleRoyalePages():
-    pages = []
-    _addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.radar.title()), backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.radar.description()), [], backport.image(R.images.gui.maps.icons.battleHelp.battleRoyale.br_radar()))
-    _addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.zone.title()), backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.zone.description()), [], backport.image(R.images.gui.maps.icons.battleHelp.battleRoyale.br_zone()))
-    _addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.sectorVision.title()), backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.sectorVision.description()), [], backport.image(R.images.gui.maps.icons.battleHelp.battleRoyale.br_sector()))
-    _addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.airDrop.title()), backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.airDrop.description()), [], backport.image(R.images.gui.maps.icons.battleHelp.battleRoyale.br_airdrop()))
-    _addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.upgrade.title()), backport.text(R.strings.ingame_help.detailsHelp.battleRoyale.upgrade.description()), [], backport.image(R.images.gui.maps.icons.battleHelp.battleRoyale.br_tree()))
     return pages
 
 

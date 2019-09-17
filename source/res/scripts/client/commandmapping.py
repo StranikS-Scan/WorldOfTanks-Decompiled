@@ -73,12 +73,7 @@ EPIC_GLOBAL_MSG_FOCUS_HQ = 65
 CMD_REQUEST_RECOVERY = 66
 CMD_QUEST_PROGRESS_SHOW = 67
 CMD_SHOW_HELP = 68
-CMD_CM_VEHICLE_ACTIVATE_RADAR = 69
-CMD_CM_VEHICLE_UPGRADE_PANEL_LEFT = 70
-CMD_CM_VEHICLE_UPGRADE_PANEL_RIGHT = 71
-CMD_CM_VEHICLE_UPGRADE_PANEL_ALTERNATIVE_LEFT = 72
-CMD_CM_VEHICLE_UPGRADE_PANEL_ALTERNATIVE_RIGHT = 73
-CMD_UPGRADE_PANEL_SHOW = 74
+CMD_SHOW_MENU = 69
 
 class CommandMapping(object):
     __DEFAULT_CONFIG_FILE_NAME = 'scripts/command_mapping.xml'
@@ -124,14 +119,6 @@ class CommandMapping(object):
 
         except Exception:
             return None
-
-        return None
-
-    def getCommandKeys(self, command):
-        for fireKey, listKeyInfo in self.__mapping.iteritems():
-            for keyInfo in listKeyInfo:
-                if keyInfo[0] == command:
-                    return (fireKey, keyInfo[1])
 
         return None
 

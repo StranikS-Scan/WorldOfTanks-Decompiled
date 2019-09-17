@@ -24,8 +24,7 @@ class HangarCarouselDataProvider(CarouselDataProvider):
 
     def __init__(self, carouselFilter, itemsCache, currentVehicle):
         super(HangarCarouselDataProvider, self).__init__(carouselFilter, itemsCache, currentVehicle)
-        self._setBaseCriteria()
-        self._criteriaForHiddenVehicles = REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+        self._baseCriteria = REQ_CRITERIA.INVENTORY
         self._supplyItems = []
         self._emptySlotsCount = 0
         self._restorableVehiclesCount = 0
@@ -46,9 +45,6 @@ class HangarCarouselDataProvider(CarouselDataProvider):
     def clear(self):
         super(HangarCarouselDataProvider, self).clear()
         self._supplyItems = []
-
-    def _setBaseCriteria(self):
-        self._baseCriteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
 
     def _buildRentPromitionVehicleItems(self):
         rentPromotionCriteria = REQ_CRITERIA.VEHICLE.RENT_PROMOTION | ~self._baseCriteria
@@ -76,12 +72,10 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         items = self._itemsCache.items
         slots = items.stats.vehicleSlots
         vehicles = self.getTotalVehiclesCount()
-        hiddenVehicles = self._getHiddenVehicleCount(items)
         rentPromotion = self.getRentPromotionVehiclesCount()
         slotPrice = items.shop.getVehicleSlotsPrice(slots)
         defaultSlotPrice = items.shop.defaults.getVehicleSlotsPrice(slots)
-        self._emptySlotsCount = slots - (vehicles - rentPromotion) - hiddenVehicles
-        self._emptySlotsCount = max(self._emptySlotsCount, 0)
+        self._emptySlotsCount = slots - (vehicles - rentPromotion)
         criteria = REQ_CRITERIA.IN_CD_LIST(items.recycleBin.getVehiclesIntCDs()) | REQ_CRITERIA.VEHICLE.IS_RESTORE_POSSIBLE
         self._restorableVehiclesCount = len(items.getVehicles(criteria))
         if slotPrice != defaultSlotPrice:
@@ -114,9 +108,6 @@ class HangarCarouselDataProvider(CarouselDataProvider):
             buySlotVO.update({'slotPriceActionData': discount})
         self._supplyItems.append(buySlotVO)
         return
-
-    def _getHiddenVehicleCount(self, items):
-        return 0 if not self._criteriaForHiddenVehicles else len(items.getVehicles(self._criteriaForHiddenVehicles))
 
     def __getSupplyIndices(self):
         return [ len(self._vehicles) + idx for idx in _SUPPLY_ITEMS.ALL ]

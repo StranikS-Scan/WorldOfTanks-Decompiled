@@ -15,6 +15,11 @@ class _SoundStateSchema(W2CSchema):
     state_value = Field(required=True, type=basestring)
 
 
+class _GlobalSoundStateSchema(W2CSchema):
+    state_name = Field(required=True, type=basestring)
+    state_value = Field(required=True, type=int)
+
+
 class _HangarSoundSchema(W2CSchema):
     mute = Field(required=True, type=bool)
 
@@ -31,6 +36,28 @@ class SoundWebApi(object):
 
 
 @w2capi()
+class SoundPlay2DWebApi(object):
+
+    @w2c(_SoundSchema, 'play_sound_2d')
+    def playSound2D(self, cmd):
+        appLoader = dependency.instance(IAppLoader)
+        app = appLoader.getApp()
+        if app and app.soundManager:
+            app.soundManager.playSound2D(str(cmd.sound_id))
+
+
+@w2capi()
+class SoundStop2DWebApi(object):
+
+    @w2c(_SoundSchema, 'stop_sound_2d')
+    def stopSound2D(self, cmd):
+        appLoader = dependency.instance(IAppLoader)
+        app = appLoader.getApp()
+        if app and app.soundManager:
+            app.soundManager.stopSound2D(str(cmd.sound_id))
+
+
+@w2capi()
 class SoundStateWebApi(object):
     __ON_EXIT_STATES = {'STATE_overlay_hangar_general': 'STATE_overlay_hangar_general_off',
      'STATE_video_overlay': 'STATE_video_overlay_off'}
@@ -42,6 +69,14 @@ class SoundStateWebApi(object):
     def _soundStateFini(self):
         for stateName, stateValue in self.__ON_EXIT_STATES.iteritems():
             WWISE.WW_setState(stateName, stateValue)
+
+
+@w2capi()
+class GlobalSoundStateWebApi(object):
+
+    @w2c(_GlobalSoundStateSchema, 'global_sound_state')
+    def setGlobalSoundState(self, cmd):
+        WWISE.WW_setRTCPGlobal(str(cmd.state_name), cmd.state_value)
 
 
 @w2capi()

@@ -1,0 +1,21 @@
+<RaceController_Vehicle.def>
+  <Properties>
+    <lastCheckpointID>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </lastCheckpointID>
+    <racePosition>
+      <Type>	INT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </racePosition>
+    <raceFinishTime>
+      <Type>	FLOAT	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0.0	</Default>
+    </raceFinishTime>
+    <patrolNodeID>
+      <Type>	STRING	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </patrolNodeID>
+  </Properties>
+</RaceController_Vehicle.def>

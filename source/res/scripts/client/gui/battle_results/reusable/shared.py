@@ -366,12 +366,24 @@ class _VehicleInfo(object):
     def equipmentDamageAssisted(self):
         raise NotImplementedError
 
+    @property
+    def racingPosition(self):
+        raise NotImplementedError
+
+    @property
+    def racingFinishTime(self):
+        raise NotImplementedError
+
+    @property
+    def racingPoints(self):
+        raise NotImplementedError
+
     def getOrderByClass(self):
         return Vehicle.getOrderByVehicleClass(Vehicle.getVehicleClassTag(self.vehicle.descriptor.type.tags))
 
 
 class VehicleDetailedInfo(_VehicleInfo):
-    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire', '_isTeamKiller', '_isKilledByTeamKiller', '_rollouts', '_respawns', '_extPublic', '_deathCount', '_equipmentDamageDealt', '_equipmentDamageAssisted', '_xpForAttack', '_xpForAssist', '_xpOther', '_xpPenalty')
+    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire', '_isTeamKiller', '_isKilledByTeamKiller', '_rollouts', '_respawns', '_extPublic', '_deathCount', '_equipmentDamageDealt', '_equipmentDamageAssisted', '_xpForAttack', '_xpForAssist', '_xpOther', '_xpPenalty', '_racingPosition', '_racingFinishTime', '_racingPoints')
 
     def __init__(self, vehicleID, vehicle, player, deathReason=DEATH_REASON_ALIVE):
         super(VehicleDetailedInfo, self).__init__(vehicleID, player, deathReason)
@@ -419,6 +431,9 @@ class VehicleDetailedInfo(_VehicleInfo):
         self._xpOther = 0
         self._xpPenalty = 0
         self._isKilledByTeamKiller = False
+        self._racingPosition = 0
+        self._racingFinishTime = 0.0
+        self._racingPoints = 0
 
     @property
     def vehicle(self):
@@ -616,6 +631,18 @@ class VehicleDetailedInfo(_VehicleInfo):
     def xpPenalty(self):
         return self._xpPenalty
 
+    @property
+    def racingPosition(self):
+        return self._racingPosition
+
+    @property
+    def racingPoints(self):
+        return self._racingPoints
+
+    @property
+    def racingFinishTime(self):
+        return self._racingFinishTime
+
     def haveInteractionDetails(self):
         return self._spotted != 0 or self._deathReason > DEATH_REASON_ALIVE or self._directHits != 0 or self._explosionHits != 0 or self._piercings != 0 or self._damageDealt != 0 or self.damageAssisted != 0 or self.damageAssistedStun != 0 or self.stunNum != 0 or self.critsCount != 0 or self._fire != 0 or self._targetKills != 0 or self.stunDuration != 0 or self._damageBlockedByArmor != 0
 
@@ -665,6 +692,9 @@ class VehicleDetailedInfo(_VehicleInfo):
         info._xpForAssist = vehicleRecords['xp/assist']
         info._xpForAttack = vehicleRecords['xp/attack']
         info._xpPenalty = vehicleRecords['xpPenalty']
+        info._racingPosition = vehicleRecords['racingPosition']
+        info._racingFinishTime = vehicleRecords['racingFinishTime']
+        info._racingPoints = vehicleRecords['racingPoints']
         info._isTeamKiller = vehicleRecords['isTeamKiller']
         info._isKilledByTeamKiller = vehicleRecords.get('isKilledByTeamKiller', False)
         info._rollouts = vehicleRecords['rolloutsCount']
@@ -920,6 +950,18 @@ class VehicleSummarizeInfo(_VehicleInfo):
     def equipmentDamageAssisted(self):
         return self.__accumulate('equipmentDamageAssisted')
 
+    @property
+    def racingPosition(self):
+        return self.__accumulate('racingPosition')
+
+    @property
+    def racingFinishTime(self):
+        return self.__accumulate('racingFinishTime')
+
+    @property
+    def racingPoints(self):
+        return self.__accumulate('racingPoints')
+
     def addVehicleInfo(self, info):
         self.__vehicles.append(info)
 
@@ -942,6 +984,15 @@ class VehicleSummarizeInfo(_VehicleInfo):
                     result.append((achievement, True))
 
         return sorted(result, key=sort_keys.AchievementSortKey)
+
+    def getRacingAchievements(self):
+        result = []
+        for achievementID in self.achievementsIDs:
+            block, achievement = DB_ID_TO_RECORD.get(achievementID, (None, None))
+            if block == 'racing2019Achievements':
+                result.append(achievement)
+
+        return result
 
     def __getAtrributeGenerator(self, attr):
         getter = operator.attrgetter(attr)

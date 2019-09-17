@@ -24,12 +24,12 @@ from helpers import dependency
 from helpers import i18n
 from helpers.i18n import makeString
 from account_helpers.settings_core.settings_constants import TUTORIAL
+from skeletons.gui.game_control import IRacingEventController
 from skeletons.gui.shared import IItemsCache
-from gui.prb_control.entities.listener import IGlobalListener
-from constants import QUEUE_TYPE
 
-class TechnicalMaintenance(TechnicalMaintenanceMeta, IGlobalListener):
+class TechnicalMaintenance(TechnicalMaintenanceMeta):
     itemsCache = dependency.descriptor(IItemsCache)
+    racingEventController = dependency.descriptor(IRacingEventController)
 
     def __init__(self, _=None, skipConfirm=False):
         super(TechnicalMaintenance, self).__init__()
@@ -54,23 +54,23 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta, IGlobalListener):
         g_clientUpdateManager.addCallbacks({'cache.mayConsumeWalletResources': self.onGoldChange,
          'cache.vehsLock': self.__onCurrentVehicleChanged})
         g_currentVehicle.onChanged += self.__onCurrentVehicleChanged
+        self.racingEventController.onEventModeChanged += self.__onEventModeChanged
         if g_currentVehicle.isPresent():
             self.__currentVehicleId = g_currentVehicle.item.intCD
         self.populateTechnicalMaintenance()
         self.populateTechnicalMaintenanceEquipmentDefaults()
         self.setupContextHints(TUTORIAL.TECHNICAL_MAINTENANCE)
-        self.startGlobalListening()
 
     def _dispose(self):
         self.itemsCache.onSyncCompleted -= self._onShopResync
         g_clientUpdateManager.removeObjectCallbacks(self)
         g_currentVehicle.onChanged -= self.__onCurrentVehicleChanged
+        self.racingEventController.onEventModeChanged -= self.__onEventModeChanged
         self.removeListener(events.TechnicalMaintenanceEvent.RESET_EQUIPMENT, self.__resetEquipment, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.stopGlobalListening()
         super(TechnicalMaintenance, self)._dispose()
 
-    def onPrbEntitySwitched(self):
-        if self.prbDispatcher.getFunctionalState().isQueueSelected(QUEUE_TYPE.BATTLE_ROYALE):
+    def __onEventModeChanged(self, isEventModeOn):
+        if isEventModeOn:
             self.destroy()
 
     def onCreditsChange(self, value):

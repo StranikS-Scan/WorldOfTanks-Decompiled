@@ -38,9 +38,7 @@
     <Radio_PzIV>	254	</Radio_PzIV>
     <Radio_VK4502P>	255	</Radio_VK4502P>
     <Radio_Auf_Panther>	256	</Radio_Auf_Panther>
-    <FuG5_BR>	311	</FuG5_BR>
-    <FuG7_BR>	312	</FuG7_BR>
-    <FuG12_BR>	313	</FuG12_BR>
+    <FuG5_race>	257	</FuG5_race>
     <FuG7A_IGR>	60001	</FuG7A_IGR>
     <FuG12_IGR>	60002	</FuG12_IGR>
     <FuG7_IGR>	60003	</FuG7_IGR>
@@ -540,8 +538,20 @@
       <maxHealth>	90	</maxHealth>
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	0	</repairCost>
-      <notInShop>	true	</notInShop>
     </Development_Radio>
+    <FuG5_race>
+      <userString>	#germany_vehicles:FuG5_race	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <notInShop>	true	</notInShop>
+      <price>	630	</price>
+      <weight>	50	</weight>
+      <distance>	310	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <invulnerable>	true	</invulnerable>
+      <repairCost>	0.5	</repairCost>
+    </FuG5_race>
     <FuG7A_IGR>
       <userString>	#igr_vehicles:FuG7A_IGR	</userString>
       <tags></tags>
@@ -590,44 +600,5 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </_10WSc_IGR>
-    <FuG5_BR>
-      <userString>	#germany_vehicles:FuG5_BR	</userString>
-      <tags></tags>
-      <level>	1	</level>
-      <price>	630	</price>
-      <weight>	100	</weight>
-      <distance>	2000	</distance>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	49	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-      <radarRadius>	325	</radarRadius>
-      <radarCooldown>	32	</radarCooldown>
-    </FuG5_BR>
-    <FuG7_BR>
-      <userString>	#germany_vehicles:FuG7_BR	</userString>
-      <tags></tags>
-      <level>	3	</level>
-      <price>	8160	</price>
-      <weight>	100	</weight>
-      <distance>	2000	</distance>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-      <radarRadius>	325	</radarRadius>
-      <radarCooldown>	22	</radarCooldown>
-    </FuG7_BR>
-    <FuG12_BR>
-      <userString>	#germany_vehicles:FuG12_BR	</userString>
-      <tags></tags>
-      <level>	3	</level>
-      <price>	43200	</price>
-      <weight>	100	</weight>
-      <distance>	2000	</distance>
-      <maxHealth>	150	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-      <radarRadius>	525	</radarRadius>
-      <radarCooldown>	32	</radarCooldown>
-    </FuG12_BR>
   </shared>
 </radios.xml>

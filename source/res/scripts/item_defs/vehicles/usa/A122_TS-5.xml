@@ -1143,6 +1143,10 @@
         <anchorDirection>	0.998156 -0.00419211 0.0605494	</anchorDirection>
       </slot>
     </customizationSlots>
+    <camouflage>
+      <density>	101.384 101.61	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_A122_TS-5>
@@ -2252,6 +2256,8 @@
           <effects>	shot_large_mb	</effects>
           <camouflage>
             <tiling>	0.4 0.2 0.000000 0.000000	</tiling>
+            <density>	112.749 114.079	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_120mm_AT_Gun_M58>
       </guns>

@@ -13,11 +13,12 @@ from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.battle_results import RequestResultsContext
 from gui.clans.clan_helpers import showAcceptClanInviteDialog
 from gui.impl.lobby.festival.festival_helper import FestivalViews
+from gui.marathon.racing_event import RacingEvent
 from gui.prb_control import prbInvitesProperty, prbDispatcherProperty
 from gui.ranked_battles import ranked_helpers
-from gui.server_events.events_dispatcher import showPersonalMission
+from gui.server_events.events_dispatcher import showPersonalMission, showMissionsMarathon
 from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events
-from gui.shared.event_dispatcher import showProgressiveRewardWindow, showFestivalMainView
+from gui.shared.event_dispatcher import showProgressiveRewardWindow, showFestivalMainView, showRacingCollection
 from gui.shared.utils import decorators
 from gui.wgcg.clan import contexts as clan_ctxs
 from gui.wgnc import g_wgncProvider
@@ -28,7 +29,7 @@ from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from notification.tutorial_helper import TutorialGlobalStorage, TUTORIAL_GLOBAL_VAR
 from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.battle_results import IBattleResultsService
-from skeletons.gui.game_control import IBrowserController, IRankedBattlesController, IBattleRoyaleController
+from skeletons.gui.game_control import IBrowserController, IRankedBattlesController
 from skeletons.gui.web import IWebController
 from soft_exception import SoftException
 from skeletons.gui.customization import ICustomizationService
@@ -89,6 +90,38 @@ class _OpenEventBoardsHandler(_ActionHandler):
     def handleAction(self, model, entityID, action):
         super(_OpenEventBoardsHandler, self).handleAction(model, entityID, action)
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MISSIONS, ctx={'tab': QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+class _OpenMissionsMarathonHandler(_ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        super(_OpenMissionsMarathonHandler, self).handleAction(model, entityID, action)
+        showMissionsMarathon(marathonPrefix=RacingEvent.RACING_MARATHON_PREFIX)
+
+
+class _ShowRacingCollectionHandler(_ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        super(_ShowRacingCollectionHandler, self).handleAction(model, entityID, action)
+        notification = model.getNotification(self.getNotType(), entityID)
+        savedData = notification.getSavedData()
+        showRacingCollection(savedData)
 
 
 class _ShowArenaResultHandler(_ActionHandler):
@@ -337,21 +370,6 @@ class ShowRankedSeasonCompleteHandler(_ActionHandler):
              'awards': data,
              'season': season}), scope=EVENT_BUS_SCOPE.LOBBY)
         return
-
-
-class SelectBattleRoyaleMode(_ActionHandler):
-    battleRoyale = dependency.descriptor(IBattleRoyaleController)
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def handleAction(self, model, entityID, action):
-        self.battleRoyale.selectRoyaleBattle()
 
 
 class ShowBattleResultsHandler(_ShowArenaResultHandler):
@@ -723,7 +741,6 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  WGNCActionsHandler,
  SecurityLinkHandler,
  ShowRankedSeasonCompleteHandler,
- SelectBattleRoyaleMode,
  _ShowClanAppsHandler,
  _ShowClanInvitesHandler,
  _AcceptClanAppHandler,
@@ -742,7 +759,9 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _LootBoxesAutoOpenHandler,
  _OpenProgressiveRewardView,
  ProlongStyleRent,
- _OpenFestivalShopView)
+ _OpenFestivalShopView,
+ _OpenMissionsMarathonHandler,
+ _ShowRacingCollectionHandler)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

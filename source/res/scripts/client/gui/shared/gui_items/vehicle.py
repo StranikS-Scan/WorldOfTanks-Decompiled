@@ -96,7 +96,6 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     CREW_LOCKED = 'lockCrew'
     OUTFIT_LOCKED = 'lockOutfit'
     EPIC_BATTLES = 'epic_battles'
-    BATTLE_ROYALE = 'battle_royale'
     RENT_PROMOTION = 'rent_promotion'
 
 
@@ -821,7 +820,7 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def isAmmoFull(self):
-        return sum((s.count for s in self.shells)) >= self.ammoMaxSize * _NOT_FULL_AMMO_MULTIPLIER
+        return sum((s.count for s in self.shells)) >= self.ammoMaxSize * _NOT_FULL_AMMO_MULTIPLIER or self.isEvent
 
     @property
     def hasShells(self):
@@ -1109,10 +1108,6 @@ class Vehicle(FittingItem, HasStrCD):
     @property
     def isOnlyForEpicBattles(self):
         return checkForTags(self.tags, VEHICLE_TAGS.EPIC_BATTLES)
-
-    @property
-    def isOnlyForBattleRoyaleBattles(self):
-        return checkForTags(self.tags, VEHICLE_TAGS.BATTLE_ROYALE)
 
     @property
     def isTelecom(self):

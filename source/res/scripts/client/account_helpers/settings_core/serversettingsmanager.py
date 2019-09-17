@@ -29,8 +29,6 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     CAROUSEL_FILTER_2 = 'CAROUSEL_FILTER_2'
     RANKED_CAROUSEL_FILTER_1 = 'RANKED_CAROUSEL_FILTER_1'
     RANKED_CAROUSEL_FILTER_2 = 'RANKED_CAROUSEL_FILTER_2'
-    ROYALE_CAROUSEL_FILTER_1 = 'ROYALE_CAROUSEL_FILTER_1'
-    ROYALE_CAROUSEL_FILTER_2 = 'ROYALE_CAROUSEL_FILTER_2'
     EPICBATTLE_CAROUSEL_FILTER_1 = 'EPICBATTLE_CAROUSEL_FILTER_1'
     EPICBATTLE_CAROUSEL_FILTER_2 = 'EPICBATTLE_CAROUSEL_FILTER_2'
     GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
@@ -250,8 +248,7 @@ class ServerSettingsManager(object):
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED: 1,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_STARTED: 2,
                                             GuiSettingsBehavior.EPIC_RANDOM_CHECKBOX_CLICKED: 3,
-                                            GuiSettingsBehavior.EPIC_WELCOME_VIEW_SHOWED: 5,
-                                            GuiSettingsBehavior.BATTLE_ROYALE_WELCOME_VIEW_SHOWED: 6}, offsets={GuiSettingsBehavior.LAST_SHOWN_EPIC_WELCOME_SCREEN: Offset(7, 8388480)}),
+                                            GuiSettingsBehavior.EPIC_WELCOME_VIEW_SHOWED: 5}, offsets={GuiSettingsBehavior.LAST_SHOWN_EPIC_WELCOME_SCREEN: Offset(6, 4194240)}),
      SETTINGS_SECTIONS.EULA_VERSION: Section(masks={}, offsets={'version': Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.MARKS_ON_GUN: Section(masks={}, offsets={GAME.SHOW_MARKS_ON_GUN: Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.CONTACTS: Section(masks={CONTACTS.SHOW_OFFLINE_USERS: 0,
@@ -292,7 +289,8 @@ class ServerSettingsManager(object):
                                          OnceOnlyHints.CREW_OPERATION_BTN_HINT: 20,
                                          OnceOnlyHints.SOUND_BUTTONEX_HINT: 21,
                                          FESTIVAL_SETTINGS.BUY_RANDOM_HINT: 22,
-                                         FESTIVAL_SETTINGS.FIRST_ENTRY: 23}, offsets={}),
+                                         FESTIVAL_SETTINGS.FIRST_ENTRY: 23,
+                                         FESTIVAL_SETTINGS.MINI_GAMES: 24}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                           DAMAGE_INDICATOR.PRESETS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -344,42 +342,7 @@ class ServerSettingsManager(object):
                                     UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER: Offset(10, 7168)}),
      SETTINGS_SECTIONS.LINKEDSET_QUESTS: Section(masks={}, offsets={'shown': Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.QUESTS_PROGRESS: Section(masks={}, offsets={QUESTS_PROGRESS.VIEW_TYPE: Offset(0, 3),
-                                         QUESTS_PROGRESS.DISPLAY_TYPE: Offset(2, 12)}),
-     SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
-                                                  'germany': 1,
-                                                  'usa': 2,
-                                                  'china': 3,
-                                                  'france': 4,
-                                                  'uk': 5,
-                                                  'japan': 6,
-                                                  'czech': 7,
-                                                  'sweden': 8,
-                                                  'poland': 9,
-                                                  'italy': 10,
-                                                  'lightTank': 15,
-                                                  'mediumTank': 16,
-                                                  'heavyTank': 17,
-                                                  'SPG': 18,
-                                                  'AT-SPG': 19,
-                                                  'level_1': 20,
-                                                  'level_2': 21,
-                                                  'level_3': 22,
-                                                  'level_4': 23,
-                                                  'level_5': 24,
-                                                  'level_6': 25,
-                                                  'level_7': 26,
-                                                  'level_8': 27,
-                                                  'level_9': 28,
-                                                  'level_10': 29}, offsets={}),
-     SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2: Section(masks={'premium': 0,
-                                                  'elite': 1,
-                                                  'rented': 2,
-                                                  'igr': 3,
-                                                  'gameMode': 4,
-                                                  'favorite': 5,
-                                                  'bonus': 6,
-                                                  'event': 7,
-                                                  'battleRoyale': 8}, offsets={})}
+                                         QUESTS_PROGRESS.DISPLAY_TYPE: Offset(2, 12)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,

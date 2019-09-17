@@ -140,7 +140,6 @@ class BATTLE_RESULTS(object):
     COMMON_DETAILS_BUYPREMIUMBTN = '#battle_results:common/details/buyPremiumBtn'
     COMMON_NOINCOME_ALERT_TITLE = '#battle_results:common/noIncome/alert/title'
     COMMON_NOINCOME_ALERT_TEXT = '#battle_results:common/noIncome/alert/text'
-    COMMON_VEHICLESTATE_VICTORY = '#battle_results:common/vehicleState/victory'
     COMMON_PREMIUMBONUS_DESCRIPTION = '#battle_results:common/premiumBonus/description'
     COMMON_PREMIUMBONUS_RULE = '#battle_results:common/premiumBonus/rule'
     COMMON_PREMIUMBONUS_EXPIREDBATTLERESULT = '#battle_results:common/premiumBonus/expiredBattleResult'
@@ -181,6 +180,10 @@ class BATTLE_RESULTS(object):
     TEAM_EPICRESPAWNHEADER_BODY = '#battle_results:team/epicRespawnHeader/body'
     TEAM_FALLOUTFRAGHEADER_HEADER = '#battle_results:team/falloutFragHeader/header'
     TEAM_FALLOUTFRAGHEADER_BODY = '#battle_results:team/falloutFragHeader/body'
+    TEAM_CAPTUREPOINTSHEADER_HEADER = '#battle_results:team/capturePointsHeader/header'
+    TEAM_CAPTUREPOINTSHEADER_BODY = '#battle_results:team/capturePointsHeader/body'
+    TEAM_BOWLCOUNTHEADER_HEADER = '#battle_results:team/bowlCountHeader/header'
+    TEAM_BOWLCOUNTHEADER_BODY = '#battle_results:team/bowlCountHeader/body'
     TEAM_VICTORYSCORE_HEADER = '#battle_results:team/victoryScore/header'
     TEAM_VICTORYSCORE_BODY = '#battle_results:team/victoryScore/body'
     TEAM_FLAGS_HEADER = '#battle_results:team/flags/header'
@@ -242,6 +245,7 @@ class BATTLE_RESULTS(object):
     TEAM_STATS_LABELS_TIMESDESTROYED = '#battle_results:team/stats/labels_timesDestroyed'
     TEAM_STATS_LABELS_FLAGS = '#battle_results:team/stats/labels_flags'
     TEAM_STATS_LABELS_DEATHS = '#battle_results:team/stats/labels_deaths'
+    TEAM_STATS_LABELS_RACINGFINISHTIME = '#battle_results:team/stats/labels_racingFinishTime'
     TEAM_STATS_MILEAGE = '#battle_results:team/stats/mileage'
     TEAM_STATS_CLOSE = '#battle_results:team/stats/close'
     TEAM_RANKHEADER_HEADER = '#battle_results:team/rankHeader/header'
@@ -337,6 +341,16 @@ class BATTLE_RESULTS(object):
     PERSONALQUEST_FAILED_ATTENTION = '#battle_results:personalQuest/failed/attention'
     PERSONALQUEST_FAILED_DESCR = '#battle_results:personalQuest/failed/descr'
     PROGRESSIVEREWARD_DESCR = '#battle_results:progressiveReward/descr'
+    RACING_CUP_FINISHCUP = '#battle_results:racing/cup/finishCup'
+    RACING_CUP_INVADERCUP = '#battle_results:racing/cup/invaderCup'
+    RACING_CUP_SHOOTERCUP = '#battle_results:racing/cup/shooterCup'
+    RACING_CUP_ALWAYSFIRSTCUP = '#battle_results:racing/cup/alwaysFirstCup'
+    RACING_CUP_VICTORIOUSSHOOTERCUP = '#battle_results:racing/cup/victoriousShooterCup'
+    RACING_CUP_VICTORIOUSINVADER = '#battle_results:racing/cup/victoriousInvader'
+    RACING_STATS_CAPTURE = '#battle_results:racing/stats/capture'
+    RACING_STATS_KILL = '#battle_results:racing/stats/kill'
+    RACING_STATS_DAMAGE = '#battle_results:racing/stats/damage'
+    RACING_STATS_FINISH = '#battle_results:racing/stats/finish'
     DETAILS_TIME_LBL_ENUM = (DETAILS_TIME_LBL_OBJECTIVESREACHED,
      DETAILS_TIME_LBL_OBJECTIVESDESTROYED,
      DETAILS_TIME_LBL_BASESCAPTURED,
@@ -416,6 +430,7 @@ class BATTLE_RESULTS(object):
      TEAM_STATS_LABELS_TIMESDESTROYED,
      TEAM_STATS_LABELS_FLAGS,
      TEAM_STATS_LABELS_DEATHS,
+     TEAM_STATS_LABELS_RACINGFINISHTIME,
      TEAM_STATS_LABELS_DESTROYRECOVERYRATIO,
      TEAM_STATS_LABELS_ATKOBJECTIVES,
      TEAM_STATS_LABELS_DEFOBJECTIVES)

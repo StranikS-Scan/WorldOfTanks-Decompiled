@@ -93,7 +93,6 @@ IS_TUTORIAL_ENABLED = True
 LEAKS_DETECTOR_MAX_EXECUTION_TIME = 2.0
 IS_IGR_ENABLED = IS_KOREA or IS_CHINA
 SERVER_TICK_LENGTH = 0.1
-NULL_ENTITY_ID = 0
 SHELL_TRAJECTORY_EPSILON_CLIENT = 0.03
 SHELL_TRAJECTORY_EPSILON_SERVER = 0.1
 SHELL_TRAJECTORY_EPSILON_AI = 1.0
@@ -165,7 +164,6 @@ class ARENA_GUI_TYPE:
     EPIC_RANDOM_TRAINING = 20
     EPIC_BATTLE = 21
     EPIC_TRAINING = 22
-    BATTLE_ROYALE = 23
     RANGE = (UNKNOWN,
      RANDOM,
      TRAINING,
@@ -184,8 +182,7 @@ class ARENA_GUI_TYPE:
      EPIC_RANDOM,
      EPIC_RANDOM_TRAINING,
      EPIC_BATTLE,
-     EPIC_TRAINING,
-     BATTLE_ROYALE)
+     EPIC_TRAINING)
     SANDBOX_RANGE = (SANDBOX, RATED_SANDBOX)
     FALLOUT_RANGE = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
     EPIC_RANGE = (EPIC_BATTLE, EPIC_TRAINING)
@@ -209,8 +206,7 @@ class ARENA_GUI_TYPE_LABEL:
      ARENA_GUI_TYPE.EPIC_RANDOM: 'epic_random',
      ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING: 'epic_random_training',
      ARENA_GUI_TYPE.EPIC_BATTLE: 'epicbattle',
-     ARENA_GUI_TYPE.EPIC_TRAINING: 'epicbattle',
-     ARENA_GUI_TYPE.BATTLE_ROYALE: 'battle_royale'}
+     ARENA_GUI_TYPE.EPIC_TRAINING: 'epicbattle'}
 
 
 class ARENA_BONUS_TYPE:
@@ -238,8 +234,7 @@ class ARENA_BONUS_TYPE:
     EVENT_BATTLES_2 = 26
     EPIC_BATTLE = 27
     EPIC_BATTLE_TRAINING = 28
-    BATTLE_ROYALE_SOLO = 29
-    BATTLE_ROYALE_SQUAD = 30
+    TOURNAMENT_EVENT = 31
     RANGE = (UNKNOWN,
      REGULAR,
      TRAINING,
@@ -264,18 +259,21 @@ class ARENA_BONUS_TYPE:
      EPIC_RANDOM_TRAINING,
      EPIC_BATTLE,
      EPIC_BATTLE_TRAINING,
-     BATTLE_ROYALE_SOLO,
-     BATTLE_ROYALE_SQUAD)
+     TOURNAMENT_EVENT)
     RANDOM_RANGE = (REGULAR, EPIC_RANDOM)
     SANDBOX_RANGE = (RATED_SANDBOX, SANDBOX)
     FALLOUT_RANGE = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
-    BATTLE_ROYALE_RANGE = (BATTLE_ROYALE_SOLO, BATTLE_ROYALE_SQUAD)
+    TOURNAMENT_RANGE = (TOURNAMENT,
+     TOURNAMENT_REGULAR,
+     TOURNAMENT_CLAN,
+     TOURNAMENT_EVENT)
     EXTERNAL_RANGE = (SORTIE_2,
      FORT_BATTLE_2,
      GLOBAL_MAP,
      TOURNAMENT,
      TOURNAMENT_CLAN,
-     TOURNAMENT_REGULAR)
+     TOURNAMENT_REGULAR,
+     TOURNAMENT_EVENT)
 
 
 ARENA_BONUS_TYPE_NAMES = dict([ (k, v) for k, v in ARENA_BONUS_TYPE.__dict__.iteritems() if isinstance(v, int) ])
@@ -309,8 +307,6 @@ class ARENA_UPDATE:
     VEHICLE_STATISTICS = 5
     VEHICLE_KILLED = 6
     AVATAR_READY = 7
-    BASE_POINTS = 8
-    BASE_CAPTURED = 9
     TEAM_KILLER = 10
     VEHICLE_UPDATED = 11
     COMBAT_EQUIPMENT_USED = 12
@@ -325,7 +321,6 @@ class ARENA_UPDATE:
     VIEW_POINTS = 26
     FOG_OF_WAR = 27
     VEHICLE_RECOVERED = 28
-    RADAR_INFO_RECEIVED = 29
 
 
 class ARENA_SYNC_OBJECTS:
@@ -336,7 +331,6 @@ class ARENA_SYNC_OBJECTS:
     SECTOR = 5
     OVERTIME = 6
     SMOKE = 7
-    BR_DEATH_ZONE = 8
 
 
 ARENA_SYNC_OBJECT_NAMES = dict([ (v, k) for k, v in ARENA_SYNC_OBJECTS.__dict__.iteritems() if not k.startswith('_') ])
@@ -419,7 +413,6 @@ class PREBATTLE_TYPE:
     E_SPORT_COMMON = 14
     EPIC = 15
     EPIC_TRAINING = 16
-    BATTLE_ROYALE = 17
     RANGE = (SQUAD,
      TRAINING,
      COMPANY,
@@ -432,8 +425,7 @@ class PREBATTLE_TYPE:
      EXTERNAL,
      E_SPORT_COMMON,
      EPIC,
-     EPIC_TRAINING,
-     BATTLE_ROYALE)
+     EPIC_TRAINING)
     LEGACY_PREBATTLES = (TRAINING,
      TOURNAMENT,
      CLAN,
@@ -441,8 +433,7 @@ class PREBATTLE_TYPE:
     SQUAD_PREBATTLES = (SQUAD,
      FALLOUT,
      EVENT,
-     EPIC,
-     BATTLE_ROYALE)
+     EPIC)
     UNIT_MGR_PREBATTLES = (UNIT,
      SQUAD,
      CLAN,
@@ -450,21 +441,20 @@ class PREBATTLE_TYPE:
      EVENT,
      EXTERNAL,
      E_SPORT_COMMON,
-     EPIC,
-     BATTLE_ROYALE)
+     EPIC)
     CREATE_FROM_CLIENT = (UNIT,
      SQUAD,
      EPIC,
      FALLOUT,
-     EVENT,
-     BATTLE_ROYALE)
+     EVENT)
     CREATE_FROM_WEB = (UNIT, SQUAD, EXTERNAL)
     TRAININGS = (TRAINING, EPIC_TRAINING)
     CREATE_EX_FROM_SERVER = (SQUAD,
      CLAN,
      EPIC,
-     BATTLE_ROYALE)
+     EVENT)
     CREATE_EX_FROM_WEB = (SQUAD, CLAN)
+    JOIN_EX = (SQUAD, EPIC, EVENT)
     EPIC_PREBATTLES = (EPIC, EPIC_TRAINING)
     REMOVED = (COMPANY, CLUBS)
 
@@ -534,7 +524,8 @@ OBSERVERS_BONUS_TYPES = (ARENA_BONUS_TYPE.TRAINING,
  ARENA_BONUS_TYPE.TOURNAMENT,
  ARENA_BONUS_TYPE.TOURNAMENT_CLAN,
  ARENA_BONUS_TYPE.TOURNAMENT_REGULAR,
- ARENA_BONUS_TYPE.EPIC_RANDOM_TRAINING)
+ ARENA_BONUS_TYPE.EPIC_RANDOM_TRAINING,
+ ARENA_BONUS_TYPE.TOURNAMENT_EVENT)
 
 class PREBATTLE_ERRORS:
     ROSTER_LIMIT = 'ROSTER_LIMIT'
@@ -728,10 +719,6 @@ class PremiumConfigs(object):
     PREM_SQUAD = 'premSquad_config'
 
 
-class Configs(object):
-    BATTLE_ROYALE_CONFIG = 'battle_royale_config'
-
-
 class RESTRICTION_TYPE:
     NONE = 0
     BAN = 1
@@ -826,15 +813,6 @@ class EQUIPMENT_STAGES:
     COOLDOWN = 6
     SHARED_COOLDOWN = 7
     EXHAUSTED = 255
-    ALL = (NOT_RUNNING,
-     DEPLOYING,
-     UNAVAILABLE,
-     READY,
-     PREPARING,
-     ACTIVE,
-     COOLDOWN,
-     SHARED_COOLDOWN,
-     EXHAUSTED)
 
     @classmethod
     def toString(cls, value):
@@ -1134,7 +1112,6 @@ class QUEUE_TYPE:
     RANKED = 17
     BOOTCAMP = 18
     EPIC = 19
-    BATTLE_ROYALE = 20
     FALLOUT = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
     ALL = (RANDOMS,
      COMPANIES,
@@ -1151,8 +1128,7 @@ class QUEUE_TYPE:
      EXTERNAL_UNITS,
      RANKED,
      BOOTCAMP,
-     EPIC,
-     BATTLE_ROYALE)
+     EPIC)
     REMOVED = (COMPANIES,)
 
 
@@ -1234,12 +1210,10 @@ class GameSeasonType(object):
     NONE = 0
     RANKED = 1
     EPIC = 2
-    BATTLE_ROYALE = 3
 
 
 SEASON_TYPE_BY_NAME = {'ranked': GameSeasonType.RANKED,
- 'epic': GameSeasonType.EPIC,
- 'battle_royale': GameSeasonType.BATTLE_ROYALE}
+ 'epic': GameSeasonType.EPIC}
 SEASON_NAME_BY_TYPE = {val:key for key, val in SEASON_TYPE_BY_NAME.iteritems()}
 CHANNEL_SEARCH_RESULTS_LIMIT = 50
 USER_SEARCH_RESULTS_LIMIT = 50
@@ -1363,10 +1337,6 @@ class DROWN_WARNING_LEVEL:
     CAUTION = 1
     DANGER = 2
 
-    @classmethod
-    def isDrowning(cls, warningLevel):
-        return warningLevel == cls.DANGER
-
 
 class OVERTURN_WARNING_LEVEL:
     SAFE = 0
@@ -1380,8 +1350,8 @@ class OVERTURN_WARNING_LEVEL:
 
 class OVERTURN_CONDITION:
     IGNOR_DELAY = 0.1
-    WARNING_COSINE = math.cos(math.radians(70))
-    ONBOARD_COSINE = math.cos(math.radians(80))
+    WARNING_COSINE = math.cos(math.radians(60))
+    ONBOARD_COSINE = math.cos(math.radians(60))
     OVERTURN_COSINE = math.cos(math.radians(120))
     HULL_PRESSURE = 0.2
 
@@ -1638,9 +1608,7 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  USER_SERVER_SETTINGS.HIDE_MARKS_ON_GUN: 'Hide marks on gun',
  USER_SERVER_SETTINGS.LINKEDSET_QUESTS: 'linkedset quests show reward info',
  USER_SERVER_SETTINGS.QUESTS_PROGRESS: 'feedback quests progress',
- 91: 'Loot box last viewed count',
- 92: 'Battle Royale carousel filter 1',
- 93: 'Battle Royale carousel filter 2'}
+ 91: 'Loot box last viewed count'}
 
 class WG_GAMES:
     TANKS = 'wot'
@@ -1725,7 +1693,7 @@ class PREBATTLE_INVITE_STATUS:
 
 
 PREBATTLE_INVITE_STATUS_NAMES = dict([ (v, k) for k, v in PREBATTLE_INVITE_STATUS.__dict__.iteritems() if not k.startswith('_') ])
-FAIRPLAY_VIOLATIONS_NAMES = ('deserter', 'suicide', 'afk')
+FAIRPLAY_VIOLATIONS_NAMES = ('deserter', 'suicide', 'afk', 'event_afk')
 FAIRPLAY_VIOLATIONS_MASKS = dict([ (name, 1 << index) for index, name in enumerate(FAIRPLAY_VIOLATIONS_NAMES) ])
 
 class INVALID_CLIENT_STATS:
@@ -1833,12 +1801,8 @@ class INVITATION_STATUS:
 class INVITATION_TYPE:
     SQUAD = PREBATTLE_TYPE.SQUAD
     EPIC = PREBATTLE_TYPE.EPIC
-    FALLOUT = PREBATTLE_TYPE.FALLOUT
-    BATTLE_ROYALE = PREBATTLE_TYPE.BATTLE_ROYALE
-    RANGE = (SQUAD,
-     FALLOUT,
-     EPIC,
-     BATTLE_ROYALE)
+    EVENT = PREBATTLE_TYPE.EVENT
+    RANGE = (SQUAD, EVENT, EPIC)
 
 
 class REPAIR_FLAGS:
@@ -2158,26 +2122,6 @@ class LOCALIZABLE_BOT_NAME:
         return (int(token) for token in name.split('_')[1:]) if name and name.startswith(LOCALIZABLE_BOT_NAME.PREFIX) else None
 
 
-class LOOT_TYPE(object):
-    NONE = 0
-    BASIC = 1
-    ADVANCED = 2
-    AIRDROP = 3
-    CORPSE = 4
-
-
-class LootAction(object):
-    PICKUP_STARTED = 0
-    PICKUP_FAILED = 1
-    PICKUP_SUCCEEDED = 2
-
-
-class BattleRoyaleMode(object):
-    SOLO = 'solo'
-    SQUAD = 'squad'
-    ALL = (SOLO, SQUAD)
-
-
 class CLIENT_COMMAND_SOURCES:
     UNDEFINED = 0
     RENTED_STYLE_RADIAL_MENU = 1
@@ -2269,24 +2213,9 @@ class ASSIST_TYPES(object):
     INSPIRE = 4
 
 
-class CollisionFlags(object):
-    TRIANGLE_NOT_IN_BSP = 255
-    TRIANGLE_CAMERANOCOLLIDE = 1
-    TRIANGLE_TRANSPARENT = 2
-    TRIANGLE_BLENDED = 4
-    TRIANGLE_TERRAIN = 8
-    TRIANGLE_NOCOLLIDE = 16
-    TRIANGLE_DOUBLESIDED = 32
-    TRIANGLE_WATER = 64
-    TRIANGLE_PROJECTILENOCOLLIDE = 128
-    TRIANGLE_COLLISIONFLAG_MASK = 255
-    TRIANGLE_MATERIALKIND_MASK = 65280
-    TRIANGLE_MATERIALKIND_SHIFT = 8
-
-
-class UpgradeProhibitionReason(object):
-    UNDEFINED = 0
-    COMBATING = 1
-    DROWNING = 2
-    OVERTURNED = 3
-    SETTLING = 4
+class RACE_CHECKPOINTS:
+    NO_NAME = '-'
+    REPAIR = 'repair'
+    SHOW_REPAIR = 'show_repair'
+    MIDDLE = 'middle'
+    SHOW_FINISH = 'show_finish'

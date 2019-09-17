@@ -166,7 +166,8 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'blueprintsAny': __mergeItems,
  'blueprints': __mergeBlueprints,
  'festivalTickets': __mergeValue,
- 'festivalItems': __mergeFestivalItems}
+ 'festivalItems': __mergeFestivalItems,
+ 'raceCollectionItems': __mergeItems}
 ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._inventory.getVehicleInvID(key) != 0,
  'customizations': lambda account, key: account._customizations20.getItems((key,), 0)[key] > 0,
  'tokens': lambda account, key: account._quests.hasToken(key)}

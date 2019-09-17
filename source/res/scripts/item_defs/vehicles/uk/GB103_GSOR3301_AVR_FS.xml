@@ -135,6 +135,8 @@
     </customization>
     <camouflage>
       <tiling>	2.11 2.11 0.000000 0.000000	</tiling>
+      <density>	127.488 127.514	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -1939,6 +1941,10 @@
           </customization>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <effects>	shot_main_mb	</effects>
+          <camouflage>
+            <density>	136.233 139.493	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_85mm_HV_L40>
         <_90mm_Cockerill>	shared	  <maxAmmo>	25	</maxAmmo>
           <pitchLimits>
@@ -2016,6 +2022,10 @@
           </customization>
           <effects>	shot_main_mb	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <density>	137.573 138.741	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_90mm_Cockerill>
       </guns>
       <models>
@@ -2061,6 +2071,10 @@
           <camouflage>	TURRET	</camouflage>
         </customizableVehicleAreas>
       </customization>
+      <camouflage>
+        <density>	136.788 136.932	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </Turret_1_GB103_GSOR3301_AVR_FS>
   </turrets0>
   <engines>

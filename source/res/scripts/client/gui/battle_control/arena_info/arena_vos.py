@@ -21,6 +21,8 @@ _DEFAULT_PLAYER_GROUP = 1
 _DEFAULT_PLAYER_RANK = 0
 _DEFAULT_PHYSICAL_SECTOR = 1
 _DEFAULT_HAS_RESPAWNS = True
+_DEFAULT_PLAYER_RACE_POSITION = 0
+_DEFAULT_PLAYER_RACE_FINISH_TIME = 0.0
 
 class EPIC_RANDOM_KEYS(object):
     PLAYER_GROUP = 'playerGroup'
@@ -52,10 +54,24 @@ class EPIC_BATTLE_KEYS():
         return [EPIC_BATTLE_KEYS.RANK] if not static else []
 
 
+class EVENT_FESTIVAL_RACE_KEYS():
+    PLAYER_RACE_POSITION = 'playerRacePosition'
+    PLAYER_RACE_FINISH_TIME = 'playerRaceFinishTime'
+
+    @staticmethod
+    def getKeys(static=True):
+        return [] if static else [(EVENT_FESTIVAL_RACE_KEYS.PLAYER_RACE_POSITION, _DEFAULT_PLAYER_RACE_POSITION), (EVENT_FESTIVAL_RACE_KEYS.PLAYER_RACE_FINISH_TIME, _DEFAULT_PLAYER_RACE_FINISH_TIME)]
+
+    @staticmethod
+    def getSortingKeys(static=True):
+        return [EVENT_FESTIVAL_RACE_KEYS.PLAYER_RACE_POSITION] if not static else []
+
+
 GAMEMODE_SPECIFIC_KEYS = {ARENA_GUI_TYPE.EPIC_RANDOM: EPIC_RANDOM_KEYS,
  ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING: EPIC_RANDOM_KEYS,
  ARENA_GUI_TYPE.EPIC_BATTLE: EPIC_BATTLE_KEYS,
- ARENA_GUI_TYPE.EPIC_TRAINING: EPIC_BATTLE_KEYS}
+ ARENA_GUI_TYPE.EPIC_TRAINING: EPIC_BATTLE_KEYS,
+ ARENA_GUI_TYPE.EVENT_BATTLES: EVENT_FESTIVAL_RACE_KEYS}
 
 class GameModeDataVO(object):
     __slots__ = ('__internalData', '__sortingKeys')
@@ -94,10 +110,6 @@ def isPremium(tags):
 
 def isPremiumIGR(tags):
     return VEHICLE_TAGS.PREMIUM_IGR in tags
-
-
-def isBattleRoyaleTank(tags):
-    return VEHICLE_TAGS.BATTLE_ROYALE in tags
 
 
 class PlayerInfoVO(object):
@@ -149,7 +161,7 @@ class PlayerInfoVO(object):
 
 
 class VehicleTypeInfoVO(object):
-    __slots__ = ('compactDescr', 'shortName', 'name', 'level', 'iconName', 'iconPath', 'isObserver', 'isPremiumIGR', 'guiName', 'shortNameWithPrefix', 'classTag', 'nationID', 'turretYawLimits', 'maxHealth', 'strCompactDescr', 'isOnlyForBattleRoyaleBattles')
+    __slots__ = ('compactDescr', 'shortName', 'name', 'level', 'iconName', 'iconPath', 'isObserver', 'isPremiumIGR', 'guiName', 'shortNameWithPrefix', 'classTag', 'nationID', 'turretYawLimits', 'maxHealth')
 
     def __init__(self, vehicleType=None, **kwargs):
         super(VehicleTypeInfoVO, self).__init__()
@@ -166,22 +178,15 @@ class VehicleTypeInfoVO(object):
         return result if result else cmp(self.shortName, other.shortName)
 
     def update(self, invalidate=_INVALIDATE_OP.NONE, vehicleType=None, **kwargs):
-        if vehicleType is not None:
-            if self.compactDescr != vehicleType.type.compactDescr:
-                self.__setVehicleData(vehicleType)
-                invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.SORTING)
-            else:
-                newStrCD = vehicleType.makeCompactDescr()
-                if self.strCompactDescr != newStrCD:
-                    self.__setVehicleData(vehicleType)
-                    invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.SORTING)
+        if vehicleType is not None and self.compactDescr != vehicleType.type.compactDescr:
+            self.__setVehicleData(vehicleType)
+            invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.SORTING)
         return invalidate
 
     def __setVehicleData(self, vehicleDescr=None):
         if vehicleDescr is not None:
             vehicleType = vehicleDescr.type
             self.compactDescr = vehicleType.compactDescr
-            self.strCompactDescr = vehicleDescr.makeCompactDescr()
             tags = vehicleType.tags
             self.classTag = Vehicle.getVehicleClassTag(tags)
             self.isObserver = isObserver(tags)
@@ -194,14 +199,12 @@ class VehicleTypeInfoVO(object):
             self.nationID = vehicleType.id[0]
             self.level = vehicleType.level
             self.maxHealth = vehicleDescr.maxHealth
-            self.isOnlyForBattleRoyaleBattles = isBattleRoyaleTank(tags)
             vName = vehicleType.name
             self.iconName = settings.makeVehicleIconName(vName)
             self.iconPath = settings.makeContourIconSFPath(vName)
         else:
             vehicleName = i18n.makeString(settings.UNKNOWN_VEHICLE_NAME)
             self.compactDescr = 0
-            self.strCompactDescr = ''
             self.classTag = None
             self.isObserver = False
             self.isPremiumIGR = False
@@ -216,7 +219,6 @@ class VehicleTypeInfoVO(object):
             self.iconPath = settings.UNKNOWN_CONTOUR_ICON_SF_PATH
             self.shortNameWithPrefix = vehicleName
             self.maxHealth = None
-            self.isOnlyForBattleRoyaleBattles = False
         return
 
     def getClassName(self):
@@ -271,7 +273,6 @@ class VehicleArenaInfoVO(object):
             invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.VEHICLE_STATUS)
             if diff & _VEHICLE_STATUS.IS_ALIVE > 0 or diff & _VEHICLE_STATUS.STOP_RESPAWN > 0:
                 invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.SORTING)
-        invalidate = self.updateEvents(invalidate=invalidate, **kwargs)
         return invalidate
 
     def updatePlayerStatus(self, invalidate=_INVALIDATE_OP.NONE, isTeamKiller=None, isSquadMan=None, **kwargs):
@@ -315,12 +316,6 @@ class VehicleArenaInfoVO(object):
             invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.VEHICLE_INFO)
         return invalidate
 
-    def updateEvents(self, invalidate=_INVALIDATE_OP.NONE, events=None, **kwargs):
-        if events is not None:
-            self.events.update(events)
-            invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.VEHICLE_INFO)
-        return invalidate
-
     def updateGameModeSpecificStats(self, *args):
         return self.gameModeSpecific.update(*args)
 
@@ -337,7 +332,6 @@ class VehicleArenaInfoVO(object):
         invalidate = self.updateInvitationStatus(invalidate=invalidate, **kwargs)
         invalidate = self.updateRanked(invalidate=invalidate, **kwargs)
         invalidate = self.updatePlayerCard(invalidate=invalidate, **kwargs)
-        invalidate = self.updateEvents(invalidate=invalidate, **kwargs)
         return invalidate
 
     def getSquadID(self):

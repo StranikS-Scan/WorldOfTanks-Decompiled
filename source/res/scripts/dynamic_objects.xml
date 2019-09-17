@@ -45,6 +45,24 @@
       <color>	0x64fa0700	</color>
     </modelSetting>
   </SectorBorderVisual>
+  <FestivalRaceStartFinishEffect>
+    <start>
+      <path>	particles/eff_sequence/102_Airplane_start_01.seq	</path>
+      <position>	-807. 60 560	</position>
+    </start>
+    <finish>
+      <left>
+        <path>	particles/eff_sequence/102_race_finish_firework_ground_01.seq	</path>
+        <position>	210.941 12.124 -217.968	</position>
+        <yaw>	0.0434587	</yaw>
+      </left>
+      <right>
+        <path>	particles/eff_sequence/102_race_finish_firework_ground_02.seq	</path>
+        <position>	208.214 12.124 -259.925	</position>
+        <yaw>	-0.087266462	</yaw>
+      </right>
+    </finish>
+  </FestivalRaceStartFinishEffect>
   <SmokeScreenEffect_lev1>
     <timeline>
       <effectEnd>	36000	</effectEnd>
@@ -147,120 +165,4 @@
     <maxUpdateInterval>	0.04	</maxUpdateInterval>
     <overTerrainHeight>	0.5	</overTerrainHeight>
   </InspireAreaVisual>
-  <HealPointVisual>
-    <visual>	content/Interface/TargetPoint/inspire.model	</visual>
-    <color>	0xffffffff	</color>
-    <enableAccurateCollision>	False	</enableAccurateCollision>
-    <maxUpdateInterval>	0.04	</maxUpdateInterval>
-    <overTerrainHeight>	0.5	</overTerrainHeight>
-  </HealPointVisual>
-  <lootTypes>
-    <item>	&gt;	  <name>	lootBase	</name>
-      <id>	1	</id>
-    </item>
-    <item>	&gt;	  <name>	lootImproved	</name>
-      <id>	2	</id>
-    </item>
-    <item>	&gt;	  <name>	lootAir	</name>
-      <id>	3	</id>
-    </item>
-    <item>	&gt;	  <name>	lootCorpse	</name>
-      <id>	4	</id>
-    </item>
-  </lootTypes>
-  <lootBase>
-    <model>
-      <name>	content/MilitaryEnvironment/hd_mle_UNI_500_Lootbox/normal/lod0/hd_mle_UNI_500_Lootbox01.model	</name>
-      <border>	content/Environment/env_null_model/null_model.model	</border>
-    </model>
-    <effect>
-      <path_fwd>	particles/eff_sequence/br_loot_fwd.seq	</path_fwd>
-      <path>	particles/eff_sequence/br_loot.seq	</path>
-    </effect>
-    <pickupEffect>
-      <path_fwd>	particles/eff_sequence/br_loot_end_fwd.seq	</path_fwd>
-      <path>	particles/eff_sequence/br_loot_end.seq	</path>
-    </pickupEffect>
-  </lootBase>
-  <lootImproved>
-    <model>
-      <name>	content/MilitaryEnvironment/hd_mle_UNI_500_Lootbox/normal/lod0/hd_mle_UNI_500_Lootbox02.model	</name>
-      <border>	content/Environment/env_null_model/null_model.model	</border>
-    </model>
-    <effect>
-      <path_fwd>	particles/eff_sequence/br_loot_upgraded_fwd.seq	</path_fwd>
-      <path>	particles/eff_sequence/br_loot_upgraded.seq	</path>
-    </effect>
-    <pickupEffect>
-      <path_fwd>	particles/eff_sequence/br_loot_upgraded_end_fwd.seq	</path_fwd>
-      <path>	particles/eff_sequence/br_loot_upgraded_end.seq	</path>
-    </pickupEffect>
-  </lootImproved>
-  <lootAir>
-    <model>
-      <name>	content/MilitaryEnvironment/hd_mle_UNI_500_Lootbox/normal/lod0/hd_mle_UNI_500_Lootbox03.model	</name>
-      <border>	content/Environment/env_null_model/null_model.model	</border>
-    </model>
-    <effect>
-      <path_fwd>	particles/eff_sequence/br_airdrop_fwd.seq	</path_fwd>
-      <path>	particles/eff_sequence/br_airdrop.seq	</path>
-    </effect>
-    <pickupEffect>
-      <path_fwd>	particles/eff_sequence/br_airdrop_end_fwd.seq	</path_fwd>
-      <path>	particles/eff_sequence/br_airdrop_end.seq	</path>
-    </pickupEffect>
-  </lootAir>
-  <dropPlane>
-    <model>	content/MilitaryEnvironment/hd_mle_UNI_AN12/normal/lod0/hd_mle_UNI_AN12.model	</model>
-    <flyAnimation>	content/MilitaryEnvironment/hd_mle_UNI_AN12/animation/hd_mle_UNI_AN12.ssm	</flyAnimation>
-    <sound>	BR_airdrop_plane	</sound>
-  </dropPlane>
-  <airDrop>
-    <model>	content/MilitaryEnvironment/hd_mle_UNI_Drop_Platform/normal/lod0/hd_mle_UNI_Drop_Platform_B.model	</model>
-    <dropAnimation>	content/MilitaryEnvironment/hd_mle_UNI_Drop_Platform/animation/hd_mle_UNI_Drop_Platform_B.ssm	</dropAnimation>
-  </airDrop>
-  <lootCorpse>
-    <model>
-      <border>	content/Environment/env_null_model/null_model.model	</border>
-      <overTerrainHeight>	3.00	</overTerrainHeight>
-    </model>
-    <effect>
-      <path_fwd>	particles/eff_sequence/br_loot_corpse_fwd.seq	</path_fwd>
-      <path>	particles/eff_sequence/br_loot_corpse.seq	</path>
-    </effect>
-    <pickupEffect>
-      <path_fwd>	particles/eff_sequence/br_loot_corpse_end_fwd.seq	</path_fwd>
-      <path>	particles/eff_sequence/br_loot_corpse_end.seq	</path>
-    </pickupEffect>
-  </lootCorpse>
-  <TrapPoint>
-    <enemy>
-      <effect>
-        <path_fwd>	particles/eff_sequence/br_traparea_fwd.seq	</path_fwd>
-        <path>	particles/eff_sequence/br_traparea.seq	</path>
-        <rate>	10.0	</rate>
-        <offset>	0.0 10.0 0.0	</offset>
-      </effect>
-      <vehicleEffect>
-        <path>	particles/Environment/Scenarios/br_trapdamage.eff	</path>
-        <rate>	10.0	</rate>
-        <offset>	0.0 0.0 0.0	</offset>
-      </vehicleEffect>
-    </enemy>
-    <ally>
-      <effect>
-        <path_fwd>	particles/eff_sequence/br_traparea_friendly_fwd.seq	</path_fwd>
-        <path>	particles/eff_sequence/br_traparea_friendly.seq	</path>
-        <rate>	10.0	</rate>
-        <offset>	0.0 10.0 0.0	</offset>
-      </effect>
-    </ally>
-  </TrapPoint>
-  <VehicleUpgrade>
-    <effect>
-      <path>	particles/Environment/Scenarios/br_module_change.eff	</path>
-      <rate>	10.0	</rate>
-      <offset>	0.0 0.0 0.0	</offset>
-    </effect>
-  </VehicleUpgrade>
 </dynamic_objects.xml>

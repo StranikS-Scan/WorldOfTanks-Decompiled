@@ -26,6 +26,7 @@ def _getEpicRandomSwitch(lobbyContext=None):
 class SettingsCore(ISettingsCore):
     onSettingsChanged = Event.Event()
     onSettingsApplied = Event.Event()
+    onStoragesCleared = Event.Event()
 
     def __init__(self):
         super(SettingsCore, self).__init__()
@@ -368,6 +369,8 @@ class SettingsCore(ISettingsCore):
     def clearStorages(self):
         for storage in self.__storages.values():
             storage.clear()
+
+        self.onStoragesCleared()
 
     def __onAccountSettingsChanging(self, key, value):
         LOG_DEBUG('Apply account setting: ', {key: value})

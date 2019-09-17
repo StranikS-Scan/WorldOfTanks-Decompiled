@@ -7,6 +7,9 @@ class SquadViewMeta(BaseRallyRoomView):
     def leaveSquad(self):
         self._printOverrideError('leaveSquad')
 
+    def excludePlayer(self, index):
+        self._printOverrideError('excludePlayer')
+
     def as_updateBattleTypeS(self, data):
         return self.flashObject.as_updateBattleType(data) if self._isDAAPIInited() else None
 

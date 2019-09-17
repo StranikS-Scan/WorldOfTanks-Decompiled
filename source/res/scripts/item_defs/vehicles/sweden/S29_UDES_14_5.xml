@@ -225,6 +225,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	2 2 0.000000 0.000000	</tiling>
+      <density>	133.853 134.38	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -898,6 +900,10 @@
           </customizationSlots>
           <effects>	shot_main	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <density>	134.763 135.084	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_90mm_Bofors_strvkan_L_43>
         <_90mm_Bofors_strvkan_L_53>	shared	  <maxAmmo>	60	</maxAmmo>
           <unlocks>
@@ -983,6 +989,10 @@
           </customizationSlots>
           <effects>	shot_main	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <density>	124.343 124.889	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_90mm_Bofors_strvkan_L_53>
         <_105mm_strvkan_L_45>	shared	  <maxAmmo>	40	</maxAmmo>
           <armor>
@@ -1067,6 +1077,10 @@
             </slot>
           </customizationSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <density>	121.06 125.696	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_105mm_strvkan_L_45>
       </guns>
       <models>
@@ -1202,6 +1216,10 @@
           <anchorDirection>	-0.000007 0.905897 -0.423498	</anchorDirection>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	127.096 127.773	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </Turret_1_S29_UDES_14_5>
   </turrets0>
   <engines>

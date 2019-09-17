@@ -6,6 +6,3 @@ class RankedPrimeTimeMeta(PrimeTimeViewBase):
 
     def as_setHeaderDataS(self, data):
         return self.flashObject.as_setHeaderData(data) if self._isDAAPIInited() else None
-
-    def as_setBackgroundSourceS(self, source):
-        return self.flashObject.as_setBackgroundSource(source) if self._isDAAPIInited() else None

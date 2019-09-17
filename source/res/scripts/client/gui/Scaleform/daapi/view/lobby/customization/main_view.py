@@ -34,7 +34,6 @@ from gui.impl.pub import UIImplType
 from gui.hangar_cameras.c11n_hangar_camera_manager import C11nCameraModes
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.shared import events
-from gui.shared import g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import LobbyHeaderMenuEvent
 from gui.shared.formatters import formatPrice, text_styles
@@ -142,11 +141,8 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__ctx = None
         self.__viewCtx = viewCtx or {}
         self.__renderEnv = None
-        self.__initAnchorsPositionsCallback = None
-        self.__setCollisionsCallback = None
         self.__selectedAnchor = C11nId()
         self.__locateCameraToStyleInfo = False
-        self.__isHangarPlaceSwitched = False
         return
 
     def showBuyWindow(self, ctx=None):
@@ -194,33 +190,23 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__clearSelectionAndHidePropertySheet()
         self.__setHeaderInitData()
         self.__setSeasonData()
-        self.__initAnchorsPositionsCallback = BigWorld.callback(0.0, self.__initAnchorsPositions)
-        self.__setCollisionsCallback = BigWorld.callback(0.0, self.__wrapSetCollisions)
+        BigWorld.callback(0.0, self.__initAnchorsPositions)
+        BigWorld.callback(0.0, self.__ctx.vehicleAnchorsUpdater.setCollisions)
         return
 
     def __onVehicleLoadStarted(self):
         pass
 
     def __onVehicleLoadFinished(self):
-        if self.__ctx.c11CameraManager is not None:
-            return
-        else:
-            if self.__locateCameraToStyleInfo:
-                self.__locateCameraToStyleInfo = False
-                self.__ctx.c11CameraManager.locateCameraToStyleInfoPreview()
-            return
+        if self.__locateCameraToStyleInfo:
+            self.__locateCameraToStyleInfo = False
+            self.__ctx.c11CameraManager.locateCameraToStyleInfoPreview()
 
     def __initAnchorsPositions(self):
-        self.__initAnchorsPositionsCallback = None
-        if self.__ctx.c11CameraManager is not None and self.__ctx.c11CameraManager.vEntity is not None:
+        if self.__ctx.c11CameraManager.vEntity is not None:
             self.__ctx.c11CameraManager.vEntity.appearance.updateAnchorsParams()
         self.__setAnchorsInitData()
         self.__locateCameraToCustomizationPreview(updateTankCentralPoint=True)
-        return
-
-    def __wrapSetCollisions(self):
-        self.__setCollisionsCallback = None
-        self.__ctx.vehicleAnchorsUpdater.setCollisions()
         return
 
     def onBuyConfirmed(self, isOk):
@@ -537,14 +523,12 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.hangarSpace.onSpaceDestroy += self.__onSpaceDestroyHandler
         self.hangarSpace.onSpaceRefresh += self.__onSpaceRefreshHandler
         self.service.onRegionHighlighted += self.__onRegionHighlighted
-        g_eventBus.addListener(events.HangarPlaceManagerEvent.ON_PLACE_SWITCHED, self.__onHangarPlaceSwitched, scope=EVENT_BUS_SCOPE.LOBBY)
         self._seasonSoundAnimantion = _SeasonSoundAnimantion(len(SeasonType.COMMON_SEASONS), self.soundManager)
         self.__setHeaderInitData()
         self.__setSeasonData()
         self.__ctx.refreshOutfit()
         self.as_selectSeasonS(SEASON_TYPE_TO_IDX[self.__ctx.currentSeason])
         self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': True}), EVENT_BUS_SCOPE.LOBBY)
-        self.fireEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': True}), EVENT_BUS_SCOPE.LOBBY)
         self.fireEvent(LobbyHeaderMenuEvent(LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.ONLINE_COUNTER}), EVENT_BUS_SCOPE.LOBBY)
         if self.__ctx.c11CameraManager is not None:
             self.__ctx.c11CameraManager.locateCameraToCustomizationPreview(forceLocate=True)
@@ -572,22 +556,19 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         entity = self.hangarSpace.getVehicleEntity()
         if entity and entity.appearance:
             entity.appearance.loadState.unsubscribe(self.__onVehicleLoadFinished, self.__onVehicleLoadStarted)
-        if not self.__isHangarPlaceSwitched:
-            self.fireEvent(events.HangarCustomizationEvent(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM), scope=EVENT_BUS_SCOPE.LOBBY)
-            self.fireEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': False}), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.HangarCustomizationEvent(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM), scope=EVENT_BUS_SCOPE.LOBBY)
         self.fireEvent(LobbyHeaderMenuEvent(LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.ALL}), EVENT_BUS_SCOPE.LOBBY)
         self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': False}), EVENT_BUS_SCOPE.LOBBY)
         if self.appLoader.getSpaceID() != GuiGlobalSpaceID.LOGIN:
             self.__releaseItemSound()
             self.soundManager.playInstantSound(SOUNDS.EXIT)
         if self.__ctx.c11CameraManager is not None:
-            self.__ctx.c11CameraManager.locateCameraToStartState(not self.__isHangarPlaceSwitched)
+            self.__ctx.c11CameraManager.locateCameraToStartState()
         if self.__styleInfo is not None:
             self.__styleInfo.disableBlur()
             self.__disableStyleInfoSound()
         self._seasonSoundAnimantion = None
-        if not self.__isHangarPlaceSwitched:
-            self.__renderEnv.enable(False)
+        self.__renderEnv.enable(False)
         self.__renderEnv = None
         self.__viewLifecycleWatcher.stop()
         self.service.stopHighlighter()
@@ -597,7 +578,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.hangarSpace.onSpaceDestroy -= self.__onSpaceDestroyHandler
         self.hangarSpace.onSpaceRefresh -= self.__onSpaceRefreshHandler
         self.service.onRegionHighlighted -= self.__onRegionHighlighted
-        g_eventBus.removeListener(events.HangarPlaceManagerEvent.ON_PLACE_SWITCHED, self.__onHangarPlaceSwitched, scope=EVENT_BUS_SCOPE.LOBBY)
         if g_currentVehicle.item:
             g_tankActiveCamouflage[g_currentVehicle.item.intCD] = self.__ctx.currentSeason
             g_currentVehicle.refreshModel()
@@ -624,12 +604,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__ctx.c11CameraManager.onTurretRotated -= self.__onTurretRotated
         g_currentVehicle.onChangeStarted -= self.__onVehicleChangeStarted
         g_currentVehicle.onChanged -= self.__onVehicleChanged
-        if self.__initAnchorsPositionsCallback is not None:
-            BigWorld.cancelCallback(self.__initAnchorsPositionsCallback)
-            self.__initAnchorsPositionsCallback = None
-        if self.__setCollisionsCallback is not None:
-            BigWorld.cancelCallback(self.__setCollisionsCallback)
-            self.__setCollisionsCallback = None
         self.__ctx = None
         self.service.closeCustomization()
         super(MainView, self)._dispose()
@@ -1022,6 +996,3 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
 
     def __isGamefaceBuyViewOpened(self):
         return self.guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.customization.CustomizationCart())
-
-    def __onHangarPlaceSwitched(self, _):
-        self.__isHangarPlaceSwitched = True

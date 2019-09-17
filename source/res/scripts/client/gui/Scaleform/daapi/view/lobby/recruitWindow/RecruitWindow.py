@@ -125,7 +125,7 @@ class RecruitWindow(RecruitWindowMeta):
         return
 
     def __getNationsCriteria(self):
-        return REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.VEHICLE.OBSERVER | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+        return REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.VEHICLE.OBSERVER
 
     def updateNationDropdown(self):
         vehsItems = self.itemsCache.items.getVehicles(self.__getNationsCriteria())
@@ -164,6 +164,7 @@ class RecruitWindow(RecruitWindowMeta):
 
     def __getVehicleTypeCriteria(self, nationID, vclass):
         criteria = self.__getClassesCriteria(nationID) | REQ_CRITERIA.VEHICLE.CLASSES([vclass])
+        criteria |= ~REQ_CRITERIA.VEHICLE.EVENT
         if not constants.IS_IGR_ENABLED:
             criteria |= ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
         if constants.IS_DEVELOPMENT:

@@ -105,9 +105,6 @@ class _DamageExtra(object):
     def isWorldCollision(self):
         return self.isAttackReason(ATTACK_REASON.WORLD_COLLISION)
 
-    def isDeathZone(self):
-        return self.isAttackReason(ATTACK_REASON.DEATH_ZONE)
-
     def isProtectionZone(self, primary=True):
         return self.isAttackReason(ATTACK_REASON.ARTILLERY_PROTECTION) or self.isAttackReason(ATTACK_REASON.ARTILLERY_SECTOR) if primary else self.isSecondaryAttackReason(ATTACK_REASON.ARTILLERY_PROTECTION) or self.isSecondaryAttackReason(ATTACK_REASON.ARTILLERY_SECTOR)
 
@@ -181,9 +178,6 @@ class _CritsExtra(object):
 
     def isWorldCollision(self):
         return self.isAttackReason(ATTACK_REASON.WORLD_COLLISION)
-
-    def isDeathZone(self):
-        return self.isAttackReason(ATTACK_REASON.DEATH_ZONE)
 
     def isProtectionZone(self, primary=True):
         return self.isAttackReason(ATTACK_REASON.ARTILLERY_PROTECTION) or self.isAttackReason(ATTACK_REASON.ARTILLERY_SECTOR) if primary else self.isSecondaryAttackReason(ATTACK_REASON.ARTILLERY_PROTECTION) or self.isSecondaryAttackReason(ATTACK_REASON.ARTILLERY_SECTOR)

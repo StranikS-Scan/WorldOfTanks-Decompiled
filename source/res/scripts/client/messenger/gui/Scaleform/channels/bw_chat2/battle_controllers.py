@@ -94,11 +94,9 @@ class TeamChannelController(_ChannelController):
     def isEnabled(self):
         result = super(TeamChannelController, self).isEnabled()
         arenaDP = self.sessionProvider.getArenaDP()
-        arenaVisitor = self.sessionProvider.arenaVisitor
         hasAnyTeammates = arenaDP.getAlliesVehiclesNumber() > 1
         isObserver = arenaDP.isPlayerObserver()
-        isBattleRoyale = arenaVisitor.gui.isBattleRoyale()
-        return result and (hasAnyTeammates or isObserver) and not isBattleRoyale
+        return result and (hasAnyTeammates or isObserver)
 
     def _formatCommand(self, command):
         isCurrent = False

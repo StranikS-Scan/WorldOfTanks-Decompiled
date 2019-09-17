@@ -502,6 +502,10 @@
       </customizableVehicleAreas>
     </customization>
     <hangarShadowTexture>	vehicles/french/F108_Panhard_EBR_105/Panhard_EBR_105_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <density>	138.504 142.295	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_F108_Panhard_EBR_105>
@@ -1068,6 +1072,8 @@
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
             <tiling>	0.68 0.68 0.000000 0.000000	</tiling>
+            <density>	150.02 148.15	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_105mm_D_1504_EBR>
       </guns>
@@ -1550,6 +1556,8 @@
       <physicsShape>	1.000 0.000 1.024 0.000 0.488 0.189 0.268 0.008 0.370 0.500 0.248 0.500 0.000 0.100 0.000	</physicsShape>
       <camouflage>
         <tiling>	0.91 0.91 0.000000 0.000000	</tiling>
+        <density>	100.679 100.535	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
     </Turret_1_F108_Panhard_EBR_105>
   </turrets0>

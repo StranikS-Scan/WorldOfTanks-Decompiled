@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/components/personal.py
-import logging
 import random
 from math import ceil
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
@@ -22,12 +21,11 @@ from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import getSmallIconPath, getTypeBigIconPath, getNationLessName, getIconShopPath
 from gui.shared.utils.functions import makeTooltip
 from helpers import i18n, dependency, time_utils
+from helpers.time_utils import ONE_MINUTE
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 _UNDEFINED_EFFICIENCY_VALUE = '-'
-_logger = logging.getLogger(__name__)
-_logger.addHandler(logging.NullHandler())
 
 class PremiumAccountFlag(base.StatsItem):
     __slots__ = ()
@@ -578,54 +576,6 @@ class TotalEfficiencyDetailsHeader(base.StatsBlock):
             return None
 
 
-class BRTotalEfficiencyDetailsHeader(base.StatsBlock):
-    __slots__ = ('accPlace', 'chevrons', 'kills', 'damageDealt', 'criticalDamages', 'damageBlockedByArmor', 'squadKills')
-
-    def __init__(self, meta=None, field='', *path):
-        super(BRTotalEfficiencyDetailsHeader, self).__init__(meta, field, *path)
-        self.accPlace = None
-        self.chevrons = None
-        self.kills = None
-        self.damageDealt = None
-        self.criticalDamages = None
-        self.damageBlockedByArmor = None
-        self.squadKills = None
-        return
-
-    def setRecord(self, result, reusable):
-        personalInfo = reusable.getPersonalVehiclesInfo(result['personal'])
-        if personalInfo is None:
-            _logger.error('ERROR: BRTotalEfficiencyDetailsHeader:setRecord: getPersonalVehiclesInfo returned NONE!')
-            return
-        else:
-            avatar = personalInfo.avatar
-            if avatar is None or avatar.extensionInfo is None:
-                _logger.error('ERROR: BRTotalEfficiencyDetailsHeader:setRecord: invalid avatar')
-                return
-            self.kills = personalInfo.kills
-            self.damageDealt = personalInfo.damageDealt
-            self.criticalDamages = personalInfo.critsCount
-            self.damageBlockedByArmor = personalInfo.damageBlockedByArmor
-            self.accPlace = avatar.extensionInfo.get('battleRoyale', {}).get('accPos', 0)
-            self.chevrons = reusable.personal.getBattleRoyaleInfo().get('brPointsChanges', 0)
-            self.squadKills = self._getSquadKills(result['vehicles'], reusable)
-            return
-
-    def _getSquadKills(self, result, reusable):
-        personal = reusable.getPlayerInfo()
-        squadKills = 0
-        if personal.squadIndex:
-            allPlayers = reusable.getAllPlayersIterator(result)
-            squadKills = 0
-            personalPrebattleID = personal.prebattleID
-            for item in allPlayers:
-                player = item.player
-                if personalPrebattleID != 0 and personalPrebattleID == player.prebattleID:
-                    squadKills += item.kills
-
-        return squadKills
-
-
 class TotalEfficiencyDetailsBlock(base.StatsBlock):
     __slots__ = ()
 
@@ -699,40 +649,6 @@ class PersonalAccountDBID(base.StatsItem):
         return reusable.personal.avatar.accountDBID
 
 
-class BRPointsChanges(base.StatsItem):
-
-    def _convert(self, value, reusable):
-        info = reusable.personal.getBattleRoyaleInfo()
-        return info.get('brPointsChanges', 0)
-
-
-class BRAccTitle(base.StatsItem):
-
-    def _convert(self, value, reusable):
-        info = reusable.personal.getBattleRoyaleInfo()
-        return info.get('accBRTitle', (0, 0))
-
-
-class BREventProgressionBlock(base.StatsBlock):
-    __slots__ = ('accBRTitle', 'brPointsChanges', 'maxBRTitle', 'lastBRTitle', 'questProgress')
-
-    def __init__(self, meta=None, field='', *path):
-        super(BREventProgressionBlock, self).__init__(meta, field, *path)
-        self.accBRTitle = (0, 0)
-        self.maxBRTitle = (0, 0)
-        self.lastBRTitle = (0, 0)
-        self.brPointsChanges = 0
-        self.questProgress = []
-
-    def setRecord(self, result, reusable):
-        info = reusable.personal.getBattleRoyaleInfo()
-        self.accBRTitle = info.get('accBRTitle', (0, 0))
-        self.maxBRTitle = info.get('maxAchievedBRTitle', (0, 0))
-        self.lastBRTitle = info.get('prevBRTitle', (0, 0))
-        self.brPointsChanges = info.get('brPointsChanges', 0)
-        self.questProgress = reusable.personal.getQuestsProgress().keys()
-
-
 def fillKillerInfoBlock(vehicleStateBlock, deathReason, killerID, reusable):
     reason = style.makeI18nDeathReason(deathReason)
     vehicleStateBlock.vehicleState = reason.i18nString
@@ -746,3 +662,75 @@ def fillKillerInfoBlock(vehicleStateBlock, deathReason, killerID, reusable):
         playerKillerBlock.setTeamKillerInfo()
         vehicleStateBlock.isKilledByTeamKiller = True
     vehicleStateBlock.addComponent(vehicleStateBlock.getNextComponentIndex(), playerKillerBlock)
+
+
+class PersonalRacingPoints(base.StatsItem):
+    __slots__ = ()
+
+    def _convert(self, value, reusable):
+        info = reusable.getPersonalVehiclesInfo(value['personal'])
+        return info.racingPoints
+
+
+class PersonalRacingDamageDealt(base.StatsItem):
+    __slots__ = ()
+
+    def _convert(self, value, reusable):
+        info = reusable.getPersonalVehiclesInfo(value['personal'])
+        return info.damageDealt
+
+
+class PersonalRacingKills(base.StatsItem):
+    __slots__ = ()
+
+    def _convert(self, value, reusable):
+        info = reusable.getPersonalVehiclesInfo(value['personal'])
+        return info.kills
+
+
+class PersonalRacingCapturePoints(base.StatsItem):
+    __slots__ = ()
+
+    def _convert(self, value, reusable):
+        info = reusable.getPersonalVehiclesInfo(value['personal'])
+        return info.capturePoints
+
+
+class PersonalRacingFinishTime(base.StatsItem):
+    __slots__ = ()
+
+    def _convert(self, value, reusable):
+        info = reusable.getPersonalVehiclesInfo(value['personal'])
+        return '-' if info.racingFinishTime == float('+inf') else backport.text(R.strings.festival.race.postBattle.finishTime(), minutes=backport.getIntegralFormat(info.racingFinishTime / ONE_MINUTE), seconds=backport.getFractionalFormat(info.racingFinishTime % ONE_MINUTE))
+
+
+class PersonalRacingAchievementsBlock(base.StatsBlock):
+    __slots__ = ()
+
+    def setRecord(self, result, reusable):
+        info = reusable.getPersonalVehiclesInfo(result)
+        bowlsOrder = ['successfulFinish',
+         'invader',
+         'shooter',
+         'alwaysFirst',
+         'winnerShooter',
+         'winnerSniper']
+        racingAchievements = info.getRacingAchievements()
+        for bowl in bowlsOrder:
+            block = RacingAchievementBlock()
+            block.enable = bowl in racingAchievements
+            block.cupType = bowl
+            self.addNextComponent(block)
+
+
+class RacingAchievementBlock(base.StatsBlock):
+    __slots__ = ('enable', 'cupType')
+
+    def __init__(self, meta=None, field='', *path):
+        super(RacingAchievementBlock, self).__init__(meta, field, *path)
+        self.enable = False
+        self.cupType = ''
+
+    def setRecord(self, result, reusable):
+        self.enable = result.get('enabled')
+        self.cupType = result.get('cupType')

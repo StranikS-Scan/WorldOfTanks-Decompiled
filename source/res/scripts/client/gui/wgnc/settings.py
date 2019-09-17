@@ -27,6 +27,8 @@ class WGNC_DATA_PROXY_TYPE(object):
     UPDATE_REFERRAL_BUBBLE = 80
     BECOME_RECRUITER = 81
     SHOW_REFERRAL_WINDOW = 82
+    RACING_TOURNAMENT_END = 83
+    RACING_TOURNAMENT_STAGE_END = 84
 
 
 WGNC_POP_UP_PRIORITIES = ('low', 'medium', 'high')
@@ -45,7 +47,8 @@ _WGNC_ICON_TO_LOCAL = {'information': WGNC_DEFAULT_ICON,
  'hands': 'hands',
  'handsOff': 'handsOff',
  'handsPlus': 'handsPlus',
- 'box': 'referralCoin'}
+ 'box': 'referralCoin',
+ 'racingFlag': 'RacingNotificationIcon'}
 
 def convertToLocalIcon(icon):
     result = WGNC_DEFAULT_ICON
@@ -57,6 +60,9 @@ def convertToLocalIcon(icon):
 _WGNC_BG_TO_LOCAL = {'battle_defeat': ('BgBattleResultIconDefeat', (288, 167)),
  'battle_draw': ('BgBattleResultIconDraw', (288, 167)),
  'battle_victory': ('BgBattleResultIconVictory', (288, 167)),
+ 'race_defeat': ('BgRaceResultIconDefeat', (288, 167)),
+ 'race_draw': ('BgRaceResultIconDraw', (288, 167)),
+ 'race_victory': ('BgRaceResultIconVictory', (288, 167)),
  'sh_battle_defeat': ('FortBattleDefeatBg', (312, 170)),
  'sh_battle_draw': ('FortBattleDrawBg', (312, 170)),
  'sh_battle_victory': ('FortBattleVictoryBg', (312, 170)),

@@ -1,13 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/festival.py
+import logging
+from gui.Scaleform.daapi.view.lobby.race.racing_vehicle_tooltip import RacingVehicleTooltipContent
+from gui.Scaleform.daapi.view.lobby.race.racing_widget_cmp import RaceWidgetTooltip
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.impl import backport
 from gui.impl.gen.resources import R
+from gui.impl.lobby.tooltips.racing_cup_tooltip import RacingCupTooltip
 from gui.shared.formatters import text_styles, icons
-from gui.shared.tooltips import TOOLTIP_TYPE
+from gui.shared.tooltips import TOOLTIP_TYPE, ToolTipBaseData
 from gui.shared.tooltips import formatters
 from gui.shared.tooltips.common import BlocksTooltipData
 from items.components.festival_constants import FEST_ITEM_TYPE
+_logger = logging.getLogger(__name__)
 
 class FestivalTooltipData(BlocksTooltipData):
 
@@ -62,3 +67,30 @@ class FestivalTooltipData(BlocksTooltipData):
             else:
                 self._items.append(formatters.packAlignedTextBlockData(text_styles.concatStylesWithSpace(text_styles.main(backport.text(R.strings.festival.tooltip.status.buy())), text_styles.expTextBig(itemCost), icons.makeImageTag(source=backport.image(R.images.gui.maps.icons.festival.tickets()), width=24, height=24, vSpace=-6, hSpace=3)), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=-3, bottom=-1)))
         return self._items
+
+
+class RaceVehicleTooltipWindowData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(RaceVehicleTooltipWindowData, self).__init__(context, TOOLTIP_TYPE.RACE_VEHICLE)
+
+    def getDisplayableData(self, intCD):
+        return RacingVehicleTooltipContent(intCD)
+
+
+class RaceWidgetTooltipWindowData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(RaceWidgetTooltipWindowData, self).__init__(context, TOOLTIP_TYPE.RACE_WIDGET)
+
+    def getDisplayableData(self):
+        return RaceWidgetTooltip()
+
+
+class RacingCupTooltipWindowData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(RacingCupTooltipWindowData, self).__init__(context, TOOLTIP_TYPE.RACING_CUP)
+
+    def getDisplayableData(self, cupType):
+        return RacingCupTooltip(cupType)

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/missions_views.py
 from functools import partial
+from collections import defaultdict
 import BigWorld
 from adisp import process
 from async import async, await
@@ -24,7 +25,6 @@ from gui.Scaleform.locale.LINKEDSET import LINKEDSET
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.event_boards.settings import expandGroup, isGroupMinimized
-from gui.marathon.web_handlers import createMarathonWebHandlers
 from gui.server_events import settings, caches
 from gui.server_events.event_items import DEFAULTS_GROUPS
 from gui.server_events.events_dispatcher import hideMissionDetails
@@ -34,12 +34,15 @@ from gui.shared import actions
 from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showTankPremiumAboutPage
+from gui.shared.events import MissionsEvent
 from gui.shared.formatters import text_styles, icons
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IReloginController, IMarathonEventsController, IBrowserController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from gui.marathon.racing_event import RacingEvent
+from account_helpers.AccountSettings import AccountSettings, RACING_INTRO_PAGE_SHOWED
 
 class _GroupedMissionsView(MissionsGroupedViewMeta):
 
@@ -87,6 +90,7 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
     _browserCtrl = dependency.descriptor(IBrowserController)
     _marathonsCtrl = dependency.descriptor(IMarathonEventsController)
     eventsCache = dependency.descriptor(IEventsCache)
+    _NAVIGATE_TIMEOUT = 5
 
     def __init__(self):
         super(MissionsMarathonView, self).__init__()
@@ -96,7 +100,9 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
         self._height = 0
         self._builder = None
         self.__loadBrowserCallbackID = None
+        self.__navigateCallbackData = defaultdict(dict)
         self.__browserView = None
+        self.__musicIsPlaying = False
         return
 
     def closeView(self):
@@ -106,12 +112,36 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
         return []
 
     @process
-    def reload(self):
+    def reload(self, afterReloadHandler=None):
+
+        def afterReloadHandlerWrapper(url, isLoaded, httpStatusCode, callbackIndex):
+            if callbackIndex in self.__navigateCallbackData:
+                self.__navigateCallbackData[callbackIndex]['navigateProcessed'] = True
+            afterReloadHandler()
+
+        def afterReloadHandlerTimeoutWrapper(callbackIndex):
+            if callbackIndex in self.__navigateCallbackData:
+                self.__navigateCallbackData[callbackIndex]['bigWorldCallbackId'] = None
+                self.__browserView.browser.onLoadEnd -= self.__navigateCallbackData[callbackIndex]['wrp']
+                if not self.__navigateCallbackData[callbackIndex]['navigateProcessed']:
+                    self.__browserView.showDataUnavailableView()
+                    afterReloadHandler()
+                del self.__navigateCallbackData[callbackIndex]
+            return
+
         browser = self._browserCtrl.getBrowser(self.__browserID)
         if browser is not None and self._marathonEvent and self.__browserView:
             url = yield self._marathonEvent.getUrl()
             if url:
                 self.__browserView.as_loadingStartS()
+                if afterReloadHandler is not None:
+                    callbackIndex = id(afterReloadHandlerWrapper)
+                    wrp = partial(afterReloadHandlerWrapper, callbackIndex=callbackIndex)
+                    self.__browserView.browser.onLoadEnd += wrp
+                    bigWorldCallbackId = BigWorld.callback(self._NAVIGATE_TIMEOUT, partial(afterReloadHandlerTimeoutWrapper, callbackIndex=callbackIndex))
+                    self.__navigateCallbackData[callbackIndex]['bigWorldCallbackId'] = bigWorldCallbackId
+                    self.__navigateCallbackData[callbackIndex]['navigateProcessed'] = False
+                    self.__navigateCallbackData[callbackIndex]['wrp'] = wrp
                 browser.navigate(url)
         else:
             yield lambda callback: callback(True)
@@ -131,6 +161,9 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
         self._width = width
         self._height = height
 
+    def setUnboundInjVisible(self, visible=False):
+        self.as_setUnboundInjVisibleS(visible)
+
     @process
     def _onRegisterFlashComponent(self, viewPy, alias):
         if alias == VIEW_ALIAS.BROWSER and self._marathonEvent:
@@ -138,7 +171,7 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
                 url = yield self._marathonEvent.getUrl()
                 browserID = yield self._browserCtrl.load(url=url, useBrowserWindow=False, browserID=self.__browserID, browserSize=(self._width, self._height))
                 self.__browserID = browserID
-                viewPy.init(browserID, createMarathonWebHandlers(), alias=alias)
+                viewPy.init(browserID, self._marathonEvent.createMarathonWebHandlers(), alias=alias)
                 self.__browserView = viewPy
                 browser = self._browserCtrl.getBrowser(browserID)
                 if browser is not None:
@@ -156,14 +189,33 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
 
     def _populate(self):
         super(MissionsMarathonView, self)._populate()
+        self.addListener(MissionsEvent.ON_TAB_CHANGED, self.__onTabChanged, EVENT_BUS_SCOPE.LOBBY)
         Waiting.hide('loadPage')
         self.__loadBrowserCallbackID = BigWorld.callback(0.01, self.__loadBrowser)
+        self.__setMusicPlaying(True)
 
     def _dispose(self):
+        self.__setMusicPlaying(False)
         self.__cancelLoadBrowserCallback()
+        self.__cancelNavigateTimeoutCallbacks()
         self.__browserView = None
+        self.removeListener(MissionsEvent.ON_TAB_CHANGED, self.__onTabChanged, EVENT_BUS_SCOPE.LOBBY)
         super(MissionsMarathonView, self)._dispose()
         return
+
+    def __onTabChanged(self, event):
+        if event.ctx == self.getAlias():
+            self.__setMusicPlaying(True)
+        else:
+            self.__setMusicPlaying(False)
+
+    def __setMusicPlaying(self, play):
+        if play and self._marathonEvent.isAvailable() and not self.__musicIsPlaying:
+            self._marathonEvent.playSoundsOnEnterTab()
+            self.__musicIsPlaying = play
+        elif not play:
+            self._marathonEvent.playSoundsOnExitTab()
+            self.__musicIsPlaying = play
 
     def __cancelLoadBrowserCallback(self):
         if self.__loadBrowserCallbackID is not None:
@@ -174,6 +226,24 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
     def __loadBrowser(self):
         self.__loadBrowserCallbackID = None
         self.as_loadBrowserS()
+        if self._marathonEvent.prefix == RacingEvent.RACING_MARATHON_PREFIX:
+            introPageShowed = AccountSettings.getSettings(RACING_INTRO_PAGE_SHOWED)
+            if not introPageShowed:
+                AccountSettings.setSettings(RACING_INTRO_PAGE_SHOWED, True)
+                self.setUnboundInjVisible(True)
+            else:
+                self.setUnboundInjVisible(False)
+        else:
+            self.setUnboundInjVisible(False)
+        return
+
+    def __cancelNavigateTimeoutCallbacks(self):
+        for callbackData in self.__navigateCallbackData.itervalues():
+            if callbackData['bigWorldCallbackId'] is not None:
+                BigWorld.cancelCallback(callbackData['bigWorldCallbackId'])
+            self.__browserView.browser.onLoadEnd -= callbackData['wrp']
+
+        self.__navigateCallbackData = {}
         return
 
     def __removeLoadingScreen(self, url):

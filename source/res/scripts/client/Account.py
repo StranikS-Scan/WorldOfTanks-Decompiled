@@ -16,7 +16,7 @@ from ClientUnitMgr import ClientUnitMgr, ClientUnitBrowser
 from ContactInfo import ContactInfo
 from OfflineMapCreator import g_offlineMapCreator
 from PlayerEvents import g_playerEvents as events
-from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings, ClientBattleRoyale
+from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings
 from account_helpers import ClientInvitations, vehicle_rotation
 from account_helpers import ClientRanked, ClientBadges
 from account_helpers import client_epic_meta_game, tokens
@@ -144,7 +144,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.vehicleRotation = g_accountRepository.vehicleRotation
         self.recycleBin = g_accountRepository.recycleBin
         self.ranked = g_accountRepository.ranked
-        self.battleRoyale = g_accountRepository.battleRoyale
         self.badges = g_accountRepository.badges
         self.tokens = g_accountRepository.tokens
         self.epicMetaGame = g_accountRepository.epicMetaGame
@@ -166,7 +165,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.vehicleRotation.setAccount(self)
         self.recycleBin.setAccount(self)
         self.ranked.setAccount(self)
-        self.battleRoyale.setAccount(self)
         self.badges.setAccount(self)
         self.tokens.setAccount(self)
         self.epicMetaGame.setAccount(self)
@@ -192,7 +190,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInSandboxQueue = False
         self.isInRankedQueue = False
         self.isInEpicQueue = False
-        self.isInBattleRoyaleQueue = False
         self.__onCmdResponse = {}
         self.__onStreamComplete = {}
         self.__objectsSelectionEnabled = True
@@ -218,7 +215,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.vehicleRotation.onAccountBecomePlayer()
         self.recycleBin.onAccountBecomePlayer()
         self.ranked.onAccountBecomePlayer()
-        self.battleRoyale.onAccountBecomePlayer()
         self.badges.onAccountBecomePlayer()
         self.tokens.onAccountBecomeNonPlayer()
         self.epicMetaGame.onAccountBecomePlayer()
@@ -252,7 +248,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.vehicleRotation.onAccountBecomeNonPlayer()
         self.recycleBin.onAccountBecomeNonPlayer()
         self.ranked.onAccountBecomeNonPlayer()
-        self.battleRoyale.onAccountBecomeNonPlayer()
         self.badges.onAccountBecomeNonPlayer()
         self.tokens.onAccountBecomeNonPlayer()
         self.epicMetaGame.onAccountBecomeNonPlayer()
@@ -273,7 +268,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.vehicleRotation.setAccount(None)
         self.recycleBin.setAccount(None)
         self.ranked.setAccount(None)
-        self.battleRoyale.setAccount(None)
         self.badges.setAccount(None)
         self.tokens.setAccount(None)
         self.epicMetaGame.setAccount(None)
@@ -371,9 +365,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.EPIC:
             self.isInEpicQueue = True
             events.onEnqueuedEpic()
-        elif queueType == QUEUE_TYPE.BATTLE_ROYALE:
-            self.isInBattleRoyaleQueue = True
-            events.onEnqueuedBattleRoyale()
 
     def onEnqueueFailure(self, queueType, errorCode, errorStr):
         LOG_DEBUG('onEnqueueFailure', queueType, errorCode, errorStr)
@@ -393,8 +384,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             events.onEnqueuedRankedFailure(errorCode, errorStr)
         elif queueType == QUEUE_TYPE.EPIC:
             events.onEnqueuedEpicFailure(errorCode, errorStr)
-        elif queueType == QUEUE_TYPE.BATTLE_ROYALE:
-            events.onEnqueuedBattleRoyaleFailure(errorCode, errorStr)
 
     def onDequeued(self, queueType):
         LOG_DEBUG('onDequeued', queueType)
@@ -422,9 +411,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.EPIC:
             self.isInEpicQueue = False
             events.onDequeuedEpic()
-        elif queueType == QUEUE_TYPE.BATTLE_ROYALE:
-            self.isInBattleRoyaleQueue = False
-            events.onDequeuedBattleRoyale()
 
     def onTutorialEnqueued(self, number, queueLen, avgWaitingTime):
         LOG_DEBUG('onTutorialEnqueued', number, queueLen, avgWaitingTime)
@@ -523,9 +509,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.EPIC:
             self.isInEpicQueue = False
             events.onKickedFromEpicQueue()
-        elif queueType == QUEUE_TYPE.BATTLE_ROYALE:
-            self.isInBattleRoyaleQueue = False
-            events.onKickedFromBattleRoyaleQueue()
 
     def onArenaCreated(self):
         LOG_DEBUG('onArenaCreated')
@@ -543,7 +526,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInSandboxQueue = False
         self.isInBootcampQueue = False
         self.isInEpicQueue = False
-        self.isInBattleRoyaleQueue = False
         events.isPlayerEntityChanging = False
         events.onPlayerEntityChangeCanceled()
         events.onArenaJoinFailure(errorCode, errorStr)
@@ -861,14 +843,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_EPIC, 0, 0, 0)
 
-    def enqueueBattleRoyale(self, vehInvID):
-        if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_BATTLE_ROYALE, vehInvID, 0, 0)
-
-    def dequeueBattleRoyale(self):
-        if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_BATTLE_ROYALE, 0, 0, 0)
-
     def forceEpicDevStart(self):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_FORCE_EPIC_DEV_START, 0, 0, 0)
@@ -1173,7 +1147,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.vehicleRotation.synchronize(isFullSync, diff)
             self.recycleBin.synchronize(isFullSync, diff)
             self.ranked.synchronize(isFullSync, diff)
-            self.battleRoyale.synchronize(isFullSync, diff)
             self.badges.synchronize(isFullSync, diff)
             self.tokens.synchronize(isFullSync, diff)
             self.epicMetaGame.synchronize(isFullSync, diff)
@@ -1408,7 +1381,6 @@ class _AccountRepository(object):
         self.vehicleRotation = vehicle_rotation.VehicleRotation(self.syncData)
         self.recycleBin = client_recycle_bin.ClientRecycleBin(self.syncData)
         self.ranked = ClientRanked.ClientRanked(self.syncData)
-        self.battleRoyale = ClientBattleRoyale.ClientBattleRoyale(self.syncData)
         self.badges = ClientBadges.ClientBadges(self.syncData)
         self.tokens = tokens.Tokens(self.syncData)
         self.epicMetaGame = client_epic_meta_game.ClientEpicMetaGame(self.syncData)

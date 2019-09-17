@@ -183,7 +183,6 @@ def _getPersonalMissionsTooltip(branch, key):
 
 
 class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
-    __slots__ = ('_currentVehicle', '__screenWidth')
     _itemsCache = dependency.descriptor(IItemsCache)
     _eventsCache = dependency.descriptor(IEventsCache)
     _questController = dependency.descriptor(IQuestsController)
@@ -265,7 +264,8 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
              'isVisible': True,
              'quests': quests}
         else:
-            headerVO = self.__hideHeader()
+            headerVO = {'isVisible': False,
+             'quests': []}
         return headerVO
 
     def _getQuestsToHeaderVO(self, vehicle):
@@ -358,7 +358,11 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
                 label = MENU.hangarHeaderPersonalMissionsLabel(LABEL_STATE.INACTIVE)
                 tooltip = _getPersonalMissionsTooltip(branch, pmState)
                 enable = False
-            result.append(self._headerQuestFormaterVo(enable, icon, label, questType, questID=personalMissionID, tooltip=tooltip, isTooltipSpecial=bool(pmState & WIDGET_PM_STATE.IN_PROGRESS or pmState & WIDGET_PM_STATE.ON_PAUSE)))
+            if bool(pmState & WIDGET_PM_STATE.IN_PROGRESS or pmState & WIDGET_PM_STATE.ON_PAUSE):
+                tooltipType = TOOLTIPS_CONSTANTS.SPECIAL
+            else:
+                tooltipType = TOOLTIPS_CONSTANTS.COMPLEX
+            result.append(self._headerQuestFormaterVo(enable, icon, label, questType, questID=personalMissionID, tooltip=tooltip, tooltipType=tooltipType))
 
         if all([ st == WIDGET_PM_STATE.DONE for st in states ]):
             for vo in result:
@@ -388,7 +392,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         else:
             commonQuestsIcon = festivityFlagData.iconDisabled or RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_DISABLED
             label = ''
-        quests = [self._headerQuestFormaterVo(totalCount > 0, commonQuestsIcon, label, HANGAR_HEADER_QUESTS.QUEST_TYPE_COMMON, flag=festivityFlagData.flagBackground, tooltip=TOOLTIPS_CONSTANTS.QUESTS_PREVIEW, isTooltipSpecial=True)]
+        quests = [self._headerQuestFormaterVo(totalCount > 0, commonQuestsIcon, label, HANGAR_HEADER_QUESTS.QUEST_TYPE_COMMON, flag=festivityFlagData.flagBackground, tooltip=TOOLTIPS_CONSTANTS.QUESTS_PREVIEW, tooltipType=TOOLTIPS_CONSTANTS.SPECIAL)]
         return self._wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_COMMON, '', quests)
 
     def __getMarathonQuestsVO(self, vehicle, isGroupped=False):
@@ -398,7 +402,8 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             for index, marathonEvent in enumerate(marathons):
                 flagVO = marathonEvent.getMarathonFlagState(vehicle)
                 if flagVO['visible']:
-                    quest = self._headerQuestFormaterVo(flagVO['enable'], flagVO['flagHeaderIcon'], '', ''.join((HANGAR_HEADER_QUESTS.QUEST_TYPE_MARATHON, str(index))), flag=flagVO['flagMain'], stateIcon=flagVO['flagStateIcon'], questID=marathonEvent.prefix, tooltip=flagVO['tooltip'], isTooltipSpecial=flagVO['enable'])
+                    flagStateIcon = '' if bool(flagVO.get('flagStateText', False)) else flagVO['flagStateIcon']
+                    quest = self._headerQuestFormaterVo(flagVO['enable'], flagVO['flagHeaderIcon'], flagVO.get('flagStateText', ''), ''.join((HANGAR_HEADER_QUESTS.QUEST_TYPE_MARATHON, str(index))), flag=flagVO['flagMain'], stateIcon=flagStateIcon, questID=marathonEvent.prefix, tooltip=flagVO['tooltip'], tooltipType=flagVO['tooltipType'])
                     if not isGroupped:
                         wrappedGroup = self._wrapQuestGroup(''.join((HANGAR_HEADER_QUESTS.QUEST_GROUP_MARATHON, str(index))), '', [quest])
                     result.append(quest if isGroupped else wrappedGroup)
@@ -438,7 +443,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
                 enable = False
             if enable:
                 eventQuestsTooltip = TOOLTIPS_CONSTANTS.EVENT_QUESTS_PREVIEW
-                eventQuestsTooltipIsSpecial = True
+                eventQuestsTooltipType = TOOLTIPS_CONSTANTS.SPECIAL
                 battleType = currentEvent.getBattleType()
                 wrongBattleType = self.prbEntity.getEntityType() != battleType
                 inSquadState = self.prbDispatcher.getFunctionalState().isInUnit(constants.PREBATTLE_TYPE.SQUAD)
@@ -465,10 +470,10 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
                 if not eventsData.hasActiveEvents():
                     return
                 eventQuestsTooltip = TOOLTIPS.HANGAR_ELEN_BOTTOM_NOEVENTS
-                eventQuestsTooltipIsSpecial = False
+                eventQuestsTooltipType = TOOLTIPS_CONSTANTS.COMPLEX
                 eventQuestsLabel = '--'
                 eventQuestsIcon = RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_CUP_DISABLE_ICON
-            quests = [self._headerQuestFormaterVo(enable, eventQuestsIcon, eventQuestsLabel, HANGAR_HEADER_QUESTS.QUEST_TYPE_EVENT, questID=eventId, isReward=True, tooltip=eventQuestsTooltip, isTooltipSpecial=eventQuestsTooltipIsSpecial)]
+            quests = [self._headerQuestFormaterVo(enable, eventQuestsIcon, eventQuestsLabel, HANGAR_HEADER_QUESTS.QUEST_TYPE_EVENT, questID=eventId, isReward=True, tooltip=eventQuestsTooltip, tooltipType=eventQuestsTooltipType)]
             return self._wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_EVENTS, '', quests)
 
     def _wrapQuestGroup(self, groupID, icon, quests):
@@ -476,7 +481,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
          'groupIcon': icon,
          'quests': quests}
 
-    def _headerQuestFormaterVo(self, enable, icon, label, questType, flag=None, stateIcon=None, questID=None, isReward=False, tooltip='', isTooltipSpecial=False):
+    def _headerQuestFormaterVo(self, enable, icon, label, questType, flag=None, stateIcon=None, questID=None, isReward=False, tooltip='', tooltipType=TOOLTIPS_CONSTANTS.COMPLEX):
         return {'enable': enable,
          'flag': flag or FLAG_BY_QUEST_TYPE[questType],
          'icon': icon,
@@ -486,11 +491,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
          'questID': str(questID),
          'isReward': isReward,
          'tooltip': tooltip,
-         'isTooltipSpecial': isTooltipSpecial}
+         'tooltipType': tooltipType}
 
     def __onSetHangarHeaderEnabled(self, _=None):
         self.update()
-
-    def __hideHeader(self):
-        return {'isVisible': False,
-         'quests': []}

@@ -1,0 +1,17 @@
+<festival_race.xml>
+  <xmlns:xsi>	http://www.w3.org/2001/XMLSchema-instance	</xmlns:xsi>
+  <xsi:noNamespaceSchemaLocation>	../development/xml_schema/festival_race.xsd	</xsi:noNamespaceSchemaLocation>
+  <vehicleRamming>
+    <damageFactor>	0.1	</damageFactor>
+    <damageMax>	150	</damageMax>
+  </vehicleRamming>
+  <teamColors>
+    <enemyCamoPaletteIdx>	1	</enemyCamoPaletteIdx>
+  </teamColors>
+  <vsePlans>
+    <plan>
+      <id>	player	</id>
+      <name>	player_avatar	</name>
+    </plan>
+  </vsePlans>
+</festival_race.xml>

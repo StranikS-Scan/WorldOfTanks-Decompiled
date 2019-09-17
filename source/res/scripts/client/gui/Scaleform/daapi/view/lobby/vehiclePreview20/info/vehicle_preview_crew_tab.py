@@ -12,7 +12,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared import g_eventBus
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items.Tankman import SabatonTankmanSkill, TankmanSkill
+from gui.shared.gui_items.Tankman import SabatonTankmanSkill, TankmanSkill, OffspringTankmanSkill
 from gui.shared.gui_items.Tankman import getFullUserName, getSmallIconPath, getBigIconPath
 from gui.shared.gui_items.Vehicle import sortCrew
 from helpers.i18n import makeString as _ms
@@ -41,8 +41,17 @@ def _isSabatonCrew(tankman):
     return tankmen.hasTagInTankmenGroup(tankman.nationID, tankman.gId, tankman.isPremium, SPECIAL_CREW_TAG.SABATON)
 
 
+def _isOffspringCrew(tankman):
+    return tankmen.hasTagInTankmenGroup(tankman.nationID, tankman.gId, tankman.isPremium, SPECIAL_CREW_TAG.OFFSPRING)
+
+
 def getTankmanSkill(skillName, tankman=None):
-    return SabatonTankmanSkill(skillName) if tankman and _isSabatonCrew(tankman) else TankmanSkill(skillName)
+    if tankman:
+        if _isSabatonCrew(tankman):
+            return SabatonTankmanSkill(skillName)
+        if _isOffspringCrew(tankman):
+            return OffspringTankmanSkill(skillName)
+    return TankmanSkill(skillName)
 
 
 class PreviewTankman(object):
@@ -222,6 +231,8 @@ class VehiclePreviewCrewTab(VehiclePreviewCrewTabMeta):
             skillName = ''
             if _isSabatonBrotherhood(firstSkill):
                 skillName = 'sabaton_brotherhood'
+            elif _isOffspringBrotherhood(firstSkill):
+                skillName = 'offspring_brotherhood'
             elif not firstSkill.name == 'new':
                 skillName = firstSkill.name
             notEmptySkillsLen = len(notEmptySkills)
@@ -298,6 +309,10 @@ def getCrewComment(skill, crewLevel, role, forOne):
 
 def _isSabatonBrotherhood(skill):
     return isinstance(skill, SabatonTankmanSkill) and skill.name == 'brotherhood'
+
+
+def _isOffspringBrotherhood(skill):
+    return isinstance(skill, OffspringTankmanSkill) and skill.name == 'brotherhood'
 
 
 def getUniqueMembers(vehicle):

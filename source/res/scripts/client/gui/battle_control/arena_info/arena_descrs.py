@@ -1,14 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/arena_descrs.py
 import weakref
+from random import randint
+from gui.impl.gen import R
+from gui.impl import backport
+from helpers import dependency
 import BattleReplay
 from constants import IS_DEVELOPMENT
-from gui.impl import backport
-from gui.impl.gen import R
 from gui.Scaleform import getNecessaryArenaFrameName
 from gui.Scaleform.locale.MENU import MENU
 from gui.battle_control.arena_info import settings
 from gui.prb_control.formatters import getPrebattleFullDescription
+from gui.shared.utils import key_mapping
+from skeletons.account_helpers.settings_core import ISettingsCore
 from gui.shared.utils import toUpper, functions
 from helpers import i18n
 
@@ -151,6 +155,10 @@ class DefaultArenaGuiDescription(IArenaGuiDescription):
     def getSelectedQuestInfo(self):
         return self._selectedQuestInfo
 
+    @property
+    def arenaHint(self):
+        pass
+
 
 class ArenaWithBasesDescription(DefaultArenaGuiDescription):
     __slots__ = ()
@@ -182,6 +190,37 @@ class ArenaWithLabelDescription(DefaultArenaGuiDescription):
 
     def getLegacyFrameLabel(self):
         return self.getFrameLabel()
+
+
+class EventArenaGuiDescriptor(ArenaWithLabelDescription):
+    _settingsCore = dependency.descriptor(ISettingsCore)
+    _SCREEN_TO_HINT = {0: R.strings.festival.festival.loading_hint.forsage,
+     1: R.strings.festival.festival.loading_hint.repair,
+     2: R.strings.festival.festival.loading_hint.victory}
+    _n = randint(0, 2)
+
+    def __init__(self, visitor):
+        super(EventArenaGuiDescriptor, self).__init__(visitor)
+        self.__screenImageNum = 0
+
+    @property
+    def arenaHint(self):
+        if self.__screenImageNum == 0:
+            key = self._settingsCore.getSetting('keyboard')['item04']
+            keyName = key_mapping.getBigworldNameFromKey(key_mapping.SCALEFORM_TO_BW[key])
+            keyText = backport.text(R.strings.readable_key_names.dyn(keyName)())
+            return (self._SCREEN_TO_HINT[self.__screenImageNum], {'hotkey': keyText})
+        return (self._SCREEN_TO_HINT[self.__screenImageNum],)
+
+    def getScreenIcon(self):
+        base = 3
+        self.__screenImageNum = EventArenaGuiDescriptor._n % base
+        iconKey = settings.SCREEN_MAP_IMAGE_RES_PATH % '%s%d' % ('%s', self.__screenImageNum)
+        EventArenaGuiDescriptor._n += 1
+        return self._visitor.getArenaIcon(iconKey)
+
+    def getTeamName(self, team):
+        return backport.text(R.strings.festival.festival.loading.ally()) if team == self._team else backport.text(R.strings.festival.festival.loading.enemy())
 
 
 class TutorialBattleDescription(ArenaWithLabelDescription):
@@ -250,6 +289,10 @@ class ArenaWithL10nDescription(IArenaGuiDescription):
     def getSelectedQuestInfo(self):
         return self._decorated.getSelectedQuestInfo()
 
+    @property
+    def arenaHint(self):
+        return self._decorated.arenaHint
+
 
 class BootcampBattleDescription(ArenaWithLabelDescription):
     __slots__ = ()
@@ -260,16 +303,6 @@ class BootcampBattleDescription(ArenaWithLabelDescription):
 
     def getScreenIcon(self):
         return settings.DEFAULT_SCREEN_MAP_IMAGE_RES_PATH
-
-
-class BattleRoyaleDescription(ArenaWithLabelDescription):
-    __slots__ = ()
-
-    def getScreenIcon(self):
-        return settings.DEFAULT_SCREEN_MAP_IMAGE_RES_PATH
-
-    def getWinString(self, isInBattle=True):
-        return backport.text(R.strings.arenas.c_250_br_battle_city2_1.description())
 
 
 class EpicBattlesDescription(ArenaWithLabelDescription):
@@ -298,8 +331,8 @@ def createDescription(arenaVisitor):
         description = BootcampBattleDescription(arenaVisitor)
     elif guiVisitor.isInEpicRange():
         description = EpicBattlesDescription(arenaVisitor)
-    elif guiVisitor.isBattleRoyale():
-        description = BattleRoyaleDescription(arenaVisitor)
+    elif guiVisitor.isEventBattle():
+        description = EventArenaGuiDescriptor(arenaVisitor)
     elif guiVisitor.hasLabel():
         description = ArenaWithLabelDescription(arenaVisitor)
     else:

@@ -120,6 +120,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	2 2 0.000000 0.000000	</tiling>
+      <density>	97.5714 97.8144	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -2178,6 +2180,10 @@
               <applyTo>	16384	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	100.313 101.293	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
+          </camouflage>
         </_75mm_SA32>
         <_75mm_Long_44>	shared	  <maxAmmo>	74	</maxAmmo>
           <unlocks>
@@ -2256,6 +2262,10 @@
               <applyTo>	16384	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	92.2238 108.863	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
+          </camouflage>
         </_75mm_Long_44>
       </guns>
       <models>
@@ -2329,6 +2339,10 @@
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	99.2938 99.3379	</density>
+        <aoTextureSize>	512 256	</aoTextureSize>
+      </camouflage>
     </Turret_1_BDR_G1B>
     <Turret_2_BDR_G1B>
       <userString>	#france_vehicles:Turret_2_BDR_G1B	</userString>
@@ -2450,6 +2464,10 @@
               <applyTo>	16384	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	100.313 101.293	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
+          </camouflage>
         </_75mm_SA32>
         <_75mm_Long_44>	shared	  <maxAmmo>	74	</maxAmmo>
           <armor>
@@ -2531,6 +2549,10 @@
               <applyTo>	16384	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	92.2238 108.863	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
+          </camouflage>
         </_75mm_Long_44>
         <_90mm_canon_DCA_30>	shared	  <maxAmmo>	48	</maxAmmo>
           <armor>
@@ -2614,6 +2636,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.865 0.865 0.000000 0.000000	</tiling>
+            <density>	99.5907 102.271	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_90mm_canon_DCA_30>
       </guns>
@@ -2688,6 +2712,10 @@
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	114.048 113.996	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </Turret_2_BDR_G1B>
   </turrets0>
   <engines>

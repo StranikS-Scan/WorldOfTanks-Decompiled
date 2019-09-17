@@ -1,12 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/action_button_state_vo.py
-from gui.impl import backport
-from gui.impl.gen import R
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.locale.FESTIVAL import FESTIVAL
 from gui.prb_control.settings import UNIT_RESTRICTION
 from gui.shared.formatters import text_styles, icons
 from helpers import i18n
@@ -30,6 +29,7 @@ class ActionButtonStateVO(dict):
         self.__flags = unitEntity.getFlags()
         self.__settings = unitEntity.getRosterSettings()
         self.__canTakeSlot = not self._playerInfo.isLegionary()
+        self.__unit = unitEntity.getUnit()[1]
         self.__INVALID_UNIT_MESSAGES = {UNIT_RESTRICTION.UNDEFINED: ('', {}),
          UNIT_RESTRICTION.UNIT_IS_FULL: (CYBERSPORT.WINDOW_UNIT_MESSAGE_UNITISFULL, {}),
          UNIT_RESTRICTION.UNIT_IS_LOCKED: (CYBERSPORT.WINDOW_UNIT_MESSAGE_UNITISLOCKED, {}),
@@ -52,7 +52,7 @@ class ActionButtonStateVO(dict):
          UNIT_RESTRICTION.NOT_IN_SLOT: BoundMethodWeakref(self._notInSlotMessage),
          UNIT_RESTRICTION.VEHICLE_NOT_VALID_FOR_EVENT: (CYBERSPORT.WINDOW_UNIT_MESSAGE_VEHICLENOTVALID, {}),
          UNIT_RESTRICTION.CURFEW: (CYBERSPORT.WINDOW_UNIT_MESSAGE_CURFEW, {}),
-         UNIT_RESTRICTION.VEHICLE_WRONG_MODE: (CYBERSPORT.WINDOW_UNIT_MESSAGE_VEHICLEINNOTREADY_WRONGMODE, {}),
+         UNIT_RESTRICTION.VEHICLE_WRONG_MODE: (CYBERSPORT.WINDOW_UNIT_MESSAGE_VEHICLEINNOTREADY_WRONGMODE, {}) if not self.__unit.isEvent() else (FESTIVAL.RACE_HANGAR_SQUAD_WRONGVEHICLE, {}),
          UNIT_RESTRICTION.FORT_DISABLED: (CYBERSPORT.WINDOW_UNIT_MESSAGE_FORTIFICATIONNOTAVAILABLE, {}),
          UNIT_RESTRICTION.VEHICLE_INVALID_LEVEL: (self.__getNotAvailableIcon() + i18n.makeString(MESSENGER.DIALOGS_SQUAD_MESSAGE_INVALIDVEHICLELEVEL), {}),
          UNIT_RESTRICTION.SPG_IS_FORBIDDEN: (self.__getNotAvailableIcon() + i18n.makeString(MESSENGER.DIALOGS_SQUAD_MESSAGE_SPGFORBIDDEN), {}),
@@ -65,8 +65,7 @@ class ActionButtonStateVO(dict):
          UNIT_RESTRICTION.UNIT_WAITINGFORDATA: (TOOLTIPS.STRONGHOLDS_TIMER_WAITINGFORDATA, {}),
          UNIT_RESTRICTION.UNIT_MIN_CLAN_MEMBERS: BoundMethodWeakref(self._clanMembersNotEnoughMessage),
          UNIT_RESTRICTION.UNIT_IS_IN_PLAYERS_MATCHING: (CYBERSPORT.WINDOW_UNIT_MESSAGE_IN_PLAYERS_MATCHING, {}),
-         UNIT_RESTRICTION.UNIT_NOT_FULL: ('', {}),
-         UNIT_RESTRICTION.UNSUITABLE_VEHICLE: (self.__getNotAvailableIcon() + backport.text(R.strings.system_messages.prebattle.vehicleInvalid.vehicleNotSupported()), {})}
+         UNIT_RESTRICTION.PLAYER_DOESNT_HAS_RACING_ATTEMPTS: (FESTIVAL.RACE_HANGAR_SQUAD_ATTEMPTSENDEDEXT, {})}
         self.__WARNING_UNIT_MESSAGES = {UNIT_RESTRICTION.XP_PENALTY_VEHICLE_LEVELS: (MESSENGER.DIALOGS_SQUAD_MESSAGE_VEHICLES_DIFFERENTLEVELS, {})}
         self.__NEUTRAL_UNIT_MESSAGES = {UNIT_RESTRICTION.UNIT_WILL_SEARCH_PLAYERS: (FORTIFICATIONS.UNIT_WINDOW_WILLSEARCHPLAYERS, {})}
         stateKey, stateCtx = self.__getState()
@@ -132,8 +131,10 @@ class ActionButtonStateVO(dict):
             return TOOLTIPS.CYBERSPORT_UNIT_FIGHTBTN_NOTINSLOT
         if self.__restrictionType == UNIT_RESTRICTION.VEHICLE_NOT_VALID:
             return TOOLTIPS.CYBERSPORT_UNIT_FIGHTBTN_VEHICLENOTVALID
-        if self.__restrictionType in (UNIT_RESTRICTION.VEHICLE_WRONG_MODE, UNIT_RESTRICTION.UNSUITABLE_VEHICLE):
+        if self.__restrictionType == UNIT_RESTRICTION.VEHICLE_WRONG_MODE:
             return TOOLTIPS.CYBERSPORT_UNIT_FIGHTBTN_EVENTVEHICLEWRONGMODE
+        if self.__restrictionType == UNIT_RESTRICTION.PLAYER_DOESNT_HAS_RACING_ATTEMPTS:
+            return TOOLTIPS.EVENT_SQUAD_DISABLE
         if self.__isEnabled and not self._playerInfo.isReady:
             return TOOLTIPS.CYBERSPORT_UNIT_FIGHTBTN_PRESSFORREADY
         return TOOLTIPS.CYBERSPORT_UNIT_FIGHTBTN_PRESSFORNOTREADY if self.__isEnabled and self._playerInfo.isReady else ''

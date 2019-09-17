@@ -29,6 +29,7 @@ from items import getTypeOfCompactDescr
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from personal_missions import PERSONAL_MISSIONS_XML_PATH
 from quest_cache_helpers import readQuestsFromFile
+from shared_utils import first
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -383,6 +384,25 @@ class EventsCache(IEventsCache):
         result = self.__actionsCache[ACTION_SECTION_TYPE.ECONOMICS][ACTION_MODIFIER_TYPE.DISCOUNT].get(name, [])
         resultMult = self.__actionsCache[ACTION_SECTION_TYPE.ECONOMICS][ACTION_MODIFIER_TYPE.DISCOUNT].get('%sMultiplier' % name, [])
         return tuple(result + resultMult)
+
+    def getAdventCalendarCounterAction(self):
+        isEnabled = False
+        start = 0
+        finish = 0
+
+        def containsAdventCalendarCounter(a):
+            return any((step.get('name') == 'AdventCalendarCounter' for step in a.getData().get('steps', [])))
+
+        action = first(self.getActions(containsAdventCalendarCounter).values())
+        if action:
+            start = action.getStartTimeRaw()
+            finish = action.getFinishTimeRaw()
+            modifier = first(action.getModifiers())
+            if modifier:
+                isEnabled = modifier.getIsEnabled()
+        return {'isEnabled': isEnabled,
+         'start': start,
+         'finish': finish}
 
     def isBalancedSquadEnabled(self):
         return bool(self.__getUnitRestrictions().get('enabled', False))

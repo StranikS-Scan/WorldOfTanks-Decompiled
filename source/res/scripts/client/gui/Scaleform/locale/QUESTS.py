@@ -5,6 +5,7 @@ from debug_utils import LOG_WARNING
 class QUESTS(object):
     BONUSES_COMPENSATION = '#quests:bonuses/compensation'
     MISSIONS_TAB_KURSK = '#quests:missions/tab/kursk'
+    MISSIONS_TAB_RACINGEVENT = '#quests:missions/tab/racingEvent'
     MISSIONS_TAB_MARATHONS = '#quests:missions/tab/marathons'
     MISSIONS_TAB_FESTIVALMARATHON = '#quests:missions/tab/festivalMarathon'
     MISSIONS_TAB_EVENTBOARDS = '#quests:missions/tab/eventBoards'
@@ -924,8 +925,6 @@ class QUESTS(object):
     DETAILS_DOSSIER_22_BATTLESCOUNT = '#quests:details/dossier/22/battlesCount'
     DETAILS_DOSSIER_24_BATTLESCOUNT = '#quests:details/dossier/24/battlesCount'
     DETAILS_DOSSIER_27_BATTLESCOUNT = '#quests:details/dossier/27/battlesCount'
-    DETAILS_DOSSIER_29_BATTLESCOUNT = '#quests:details/dossier/29/battlesCount'
-    DETAILS_DOSSIER_30_BATTLESCOUNT = '#quests:details/dossier/30/battlesCount'
     DETAILS_MODIFIERS_TITLE_DISCOUNT = '#quests:details/modifiers/title/discount'
     DETAILS_MODIFIERS_TITLE_SELLING = '#quests:details/modifiers/title/selling'
     DETAILS_MODIFIERS_TITLE_AVAILABILITY = '#quests:details/modifiers/title/availability'
@@ -1006,6 +1005,9 @@ class QUESTS(object):
     MISSIONS_TAB_MARATHONS_BODY = '#quests:missions/tab/marathons/body'
     MISSIONS_TAB_FESTIVALMARATHON_HEADER = '#quests:missions/tab/festivalMarathon/header'
     MISSIONS_TAB_FESTIVALMARATHON_BODY = '#quests:missions/tab/festivalMarathon/body'
+    MISSIONS_TAB_LABEL_RACINGEVENT = '#quests:missions/tab/label/racingEvent'
+    MISSIONS_TAB_RACINGEVENT_HEADER = '#quests:missions/tab/racingEvent/header'
+    MISSIONS_TAB_RACINGEVENT_BODY = '#quests:missions/tab/racingEvent/body'
     MISSIONS_TAB_MISSIONS_HEADER = '#quests:missions/tab/missions/header'
     MISSIONS_TAB_MISSIONS_BODY = '#quests:missions/tab/missions/body'
     MISSIONS_TAB_LABEL_MISSIONS = '#quests:missions/tab/label/missions'
@@ -2038,9 +2040,7 @@ class QUESTS(object):
      DETAILS_DOSSIER_21_BATTLESCOUNT,
      DETAILS_DOSSIER_22_BATTLESCOUNT,
      DETAILS_DOSSIER_24_BATTLESCOUNT,
-     DETAILS_DOSSIER_27_BATTLESCOUNT,
-     DETAILS_DOSSIER_29_BATTLESCOUNT,
-     DETAILS_DOSSIER_30_BATTLESCOUNT)
+     DETAILS_DOSSIER_27_BATTLESCOUNT)
     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ENUM = (PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_USSR,
      PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_GERMANY,
      PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_USA,

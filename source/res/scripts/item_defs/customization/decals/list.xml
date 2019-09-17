@@ -4120,12 +4120,38 @@
     <historical>	false	</historical>
     <priceGroup>	emblems 50g notInShop	</priceGroup>
     <decal>
-      <id>	2048	</id>
-      <texture>	gui/maps/vehicles/decals/battle_royale.dds	</texture>
-      <userString>	#vehicle_customization:emblem/group41/battle_royale	</userString>
+      <id>	22	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_494.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_494	</userString>
       <mirror>	false	</mirror>
     </decal>
-    <name>	Battle Royale	</name>
+    <decal>
+      <id>	23	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_495.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_495	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	21	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_496.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_496	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	WoT Racing 2019	</name>
+    <type>	EMBLEM	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	emblems 50g notInShop	</priceGroup>
+    <decal>
+      <id>	56	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_515.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_515	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	t_october	</name>
     <type>	EMBLEM	</type>
   </itemGroup>
   <xmlns:czech0>	ussr	</xmlns:czech0>
@@ -7519,7 +7545,6 @@
     <userString>	#vehicle_customization:inscription/special	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
-    <tags>	hiddenInUI	</tags>
     <priceGroup>	inscriptions 50g notInShop	</priceGroup>
     <decal>
       <id>	14	</id>
@@ -7612,6 +7637,26 @@
       <mirror>	false	</mirror>
     </decal>
     <name>	BR Paid	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <decal>
+      <id>	19	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_268.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/inscription_268	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	20	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_269.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/inscription_269	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	WoT Racing_2019	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
   <xmlns:czech0>	ussr	</xmlns:czech0>

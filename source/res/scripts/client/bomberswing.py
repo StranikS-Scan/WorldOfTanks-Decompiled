@@ -2,20 +2,17 @@
 # Embedded file name: scripts/client/BombersWing.py
 from collections import namedtuple
 import math
-import AnimationSequence
 from helpers.CallbackDelayer import CallbackDelayer
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from items import vehicles
 import BigWorld
 from Math import Vector3
 import SoundGroups
-from vehicle_systems.stricted_loading import makeCallbackWeak
 CurveControlPoint = namedtuple('CurveControlPoint', ['position', 'direction', 'time'])
 BomberDesc = namedtuple('BomberDesc', ['modelName',
  'soundEvent',
  'initPointA',
- 'initPointB',
- 'flyAnimation'])
+ 'initPointB'])
 AREA_LENGTH_SCALE_FACTOR = 0.05
 _INITIAL_RETREAT_SHIFT = 200.0
 _RETREAT_SUBDIVISION_FACTOR = 10
@@ -27,31 +24,59 @@ class Bomber(object):
     ROLL_SPEED = math.radians(45)
     timeOffset = property(lambda self: self.__desc.timeOffset)
     motor = property(lambda self: self.__motor)
-    model = property(lambda self: self._model)
 
     def __init__(self, desc):
-        self._desc = desc
-        self._model = None
+        self.__desc = desc
+        self.__model = None
+        BigWorld.loadResourceListBG((self.__desc.modelName,), self.__onModelLoaded)
+        self.__motor = BigWorld.PyTimedWarplaneMotor(self.__desc.initPointA, self.__desc.initPointB, Bomber.ROLL_SPEED)
         self.__sound = None
-        self._destroyed = False
-        self.__motor = BigWorld.PyTimedWarplaneMotor(self._desc.initPointA, self._desc.initPointB, Bomber.ROLL_SPEED)
-        self._loadRes()
+        self.__destroyed = False
         return
 
     def destroy(self):
-        self._destroyed = True
-        if self._model:
-            if self.__motor and self.__motor in self._model.motors:
-                self._model.delMotor(self.__motor)
-            player = BigWorld.player()
-            if player is not None:
-                player.delModel(self._model)
-        self._model = None
+        self.__destroyed = True
+        if self.__model:
+            if self.__motor and self.__motor in self.__model.motors:
+                self.__model.delMotor(self.__motor)
+            if self.__model in BigWorld.models():
+                BigWorld.delModel(self.__model)
+        self.__model = None
         self.__motor = None
         if self.__sound is not None:
             self.__sound.stop()
             self.__sound.releaseMatrix()
             self.__sound = None
+        return
+
+    def __onModelLoaded(self, resourceRefs):
+        if self.__destroyed:
+            return
+        if self.__desc.modelName not in resourceRefs.failedIDs:
+            self.__model = resourceRefs[self.__desc.modelName]
+            self.__onFlightStarted()
+        else:
+            LOG_ERROR('Could not load model %s' % self.__desc.modelName)
+
+    def __onFlightStarted(self):
+        if self.__model:
+            BigWorld.addModel(self.__model)
+            if self.__motor:
+                self.__model.addMotor(self.__motor)
+            self.__playSound()
+
+    def __onAttackEnded(self, position, velocity):
+        self.startAttack(False)
+
+    def __playSound(self):
+        if self.__desc and self.__desc.soundEvent:
+            try:
+                self.__sound = SoundGroups.g_instance.getSound3D(self.__model.root, self.__desc.soundEvent)
+                self.__sound.play()
+            except Exception:
+                self.__sound = None
+                LOG_CURRENT_EXCEPTION()
+
         return
 
     def startAttack(self, isAttacking):
@@ -64,97 +89,9 @@ class Bomber(object):
     def addControlPoint(self, position, velocity, time, attackEnded=False):
         callback = None
         if attackEnded:
-            callback = self._onAttackEnded
+            callback = self.__onAttackEnded
         self.__motor.addTrajectoryPoint(position, velocity, time, callback)
         return
-
-    def _loadRes(self):
-        BigWorld.loadResourceListBG((self._desc.modelName,), makeCallbackWeak(self._onModelLoaded))
-
-    def _onAttackEnded(self, position, velocity):
-        self.startAttack(False)
-
-    def _playSound(self):
-        if self._desc and self._desc.soundEvent:
-            try:
-                self.__sound = SoundGroups.g_instance.getSound3D(self._model.root, self._desc.soundEvent)
-                self.__sound.play()
-            except Exception:
-                self.__sound = None
-                LOG_CURRENT_EXCEPTION()
-
-        return
-
-    def _onModelLoaded(self, resourceRefs):
-        if self._destroyed:
-            return
-        if self._desc.modelName not in resourceRefs.failedIDs:
-            self._model = resourceRefs[self._desc.modelName]
-            self.__onFlightStarted()
-        else:
-            LOG_ERROR('Could not load model %s' % self._desc.modelName)
-
-    def __onFlightStarted(self):
-        if self._model:
-            BigWorld.player().addModel(self._model)
-            if self.__motor:
-                self._model.addMotor(self.__motor)
-            self._playSound()
-
-
-class CompoundBomber(Bomber):
-
-    def __init__(self, desc):
-        super(CompoundBomber, self).__init__(desc)
-        self.__flyAnimation = None
-        return
-
-    def destroy(self):
-        self.__flyAnimation = None
-        player = BigWorld.player()
-        if player is not None and self._model is not None:
-            player.delModel(self._model)
-        self._model = None
-        super(CompoundBomber, self).destroy()
-        return
-
-    def tick(self, currentTime, timeDelta):
-        self.motor.tick(currentTime, timeDelta)
-
-    def setTrigger(self, triggerName):
-        if self.__flyAnimation is not None:
-            self.__flyAnimation.setTrigger(triggerName)
-        return
-
-    def _loadRes(self):
-        BigWorld.loadResourceListBG((self._desc.modelName, self._desc.flyAnimation), makeCallbackWeak(self._onModelLoaded))
-
-    def _onAttackEnded(self, position, velocity):
-        self.startAttack(False)
-        self.__flyAnimation = None
-        return
-
-    def _onModelLoaded(self, resourceRefs):
-        if self._destroyed:
-            return
-        if self._desc.flyAnimation not in resourceRefs.failedIDs:
-            self.__flyAnimation = resourceRefs[self._desc.flyAnimation.name]
-        else:
-            LOG_ERROR('Could not load animation %s' % self._desc.flyAnimation.name)
-        if self._desc.modelName not in resourceRefs.failedIDs:
-            self._model = resourceRefs[self._desc.modelName.name]
-            self.__onFlightStarted()
-        else:
-            LOG_ERROR('Could not load model %s' % self._desc.modelName.name)
-
-    def __onFlightStarted(self):
-        if self._model:
-            BigWorld.player().addModel(self._model)
-            self.__flyAnimation.bindTo(AnimationSequence.CompoundWrapperContainer(self._model))
-            self.__flyAnimation.start()
-            if self.motor:
-                self._model.matrix = self.motor.getMatrix()
-            self._playSound()
 
 
 class BombersWing(CallbackDelayer):
@@ -175,10 +112,8 @@ class BombersWing(CallbackDelayer):
                 realOffset = self.__calculateOffset(offset, flatVectors[i])
                 points.append(CurveControlPoint(point.position + realOffset, speed * point.direction, times[i]))
 
-            bomberDesc = BomberDesc(modelName, soundEvent, points[0], points[1], None)
+            bomberDesc = BomberDesc(modelName, soundEvent, points[0], points[1])
             self.__bombers.append(Bomber(bomberDesc))
-
-        return
 
     def destroy(self):
         CallbackDelayer.destroy(self)
@@ -238,8 +173,7 @@ class BombersWing(CallbackDelayer):
                 for bomberRetreatPosition, retreatVelocity, bomberTime in retreatPath:
                     bomber.addControlPoint(bomberRetreatPosition, retreatVelocity, bomberTime, True)
 
-                time = retreatPath[-1].time - BigWorld.time()
-                self.delayCallback(time, self.__onFlightComplete)
+                self.delayCallback(retreatPath[-1].time - BigWorld.time(), self.__onFlightComplete)
 
     def __generateRetreatTrajectory(self, idealFlightHeight, bombingEndPosition, bombingDir, bombingEndTime):
         clientArena = BigWorld.player().arena

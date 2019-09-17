@@ -88,7 +88,7 @@ class ToolTip(ToolTipMgrMeta):
             else:
                 _logger.warning('Tooltip can not be displayed: type "%s" is not found', tooltipType)
                 return
-            window = DecoratedTooltipWindow(data.getDisplayableData(), None)
+            window = DecoratedTooltipWindow(data.getDisplayableData(*args), None)
             window.load()
             window.move(x, y)
             self.__tooltipWindowId = window.uniqueID

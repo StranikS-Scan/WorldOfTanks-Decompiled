@@ -24,6 +24,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     LOBBY_STORAGE_OLD = 'storageOld'
     OVERLAY_WEB_STORE = 'overlayWebStore'
     BROWSER_LOBBY_TOP_SUB = 'overlayBrowserView'
+    RACING_AWARD_VIEW = 'racingAwardView'
     BROWSER_OVERLAY = 'overlayBrowserFull'
     OVERLAY_PREM_CONTENT_VIEW = 'overlayPremContentView'
     LOBBY_INVENTORY = 'inventory'
@@ -59,6 +60,8 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     LOBBY_MENU = 'lobbyMenu'
     BROWSER = 'browser'
     LOBBY_VEHICLE_MARKER_VIEW = 'lobbyVehicleMarkerView'
+    LOBBY_ADVENT_CALENDAR_MARKER_VIEW = 'lobbyAdventCalendarMarkerView'
+    LOBBY_MINI_GAMES_MARKER_VIEW = 'lobbyMiniGamesMarkerView'
     SYSTEM_MESSAGES = 'systemMessages'
     MESSENGER_BAR = 'messengerBar'
     RECRUIT_PARAMS = 'recruitParams'
@@ -78,6 +81,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     VEHICLE_BUY_WINDOW = 'vehicleBuyWindow'
     VEHICLE_RESTORE_WINDOW = 'vehicleRestoreWindow'
     BATTLE_QUEUE = 'battleQueue'
+    EVENT_BATTLE_QUEUE = 'eventBattleQueue'
     BATTLE_STRONGHOLDS_QUEUE = 'battleStrongholdsQueue'
     BATTLE_LOADING = 'battleLoading'
     LEGAL_INFO_WINDOW = 'legalInfoWindow'
@@ -188,7 +192,6 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     EPIC_BATTLE_PAGE = 'epicBattlePage'
     EVENT_BATTLE_PAGE = 'classicBattlePage'
     RANKED_BATTLE_PAGE = 'rankedBattlePage'
-    BATTLE_ROYALE_PAGE = 'battleRoyalePage'
     MISSION_AWARD_WINDOW = 'missionAwardWindow'
     CRYSTALS_PROMO_WINDOW = 'crystalsPromoWindow'
     BOOTCAMP_BATTLE_PAGE = 'bootcampBattlePage'
@@ -197,6 +200,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     INGAME_HELP = 'ingameHelp'
     INGAME_DETAILS_HELP = 'ingameDetailsHelp'
     INGAME_DESERTER = 'ingameDeserter'
+    EVENT_INGAME_HELP = 'ingameEventHelp'
     BOTS_MENU = 'botsMenu'
     BOOTCAMP_INTRO = 'bootcampIntro'
     BOOTCAMP_INTRO_VIDEO = 'bootcampIntroVideo'
@@ -227,6 +231,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     FEEDBACK_DAMAGE_INDICATOR = 'feedbackDamageIndicator'
     FEEDBACK_BATTLE_BORDER_MAP = 'feedbackBattleBorderMap'
     FEEDBACK_QUESTS_PROGRESS = 'feedbackQuestsProgress'
+    OVERLAY_FEST_MINI_GAMES = 'overlayFestMiniGames'
     LOADINGS = (BATTLE_LOADING, TUTORIAL_LOADING)
     BATTLE_PAGES = (CLASSIC_BATTLE_PAGE,
      TUTORIAL_BATTLE_PAGE,
@@ -234,5 +239,4 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
      EVENT_BATTLE_PAGE,
      RANKED_BATTLE_PAGE,
      BOOTCAMP_BATTLE_PAGE,
-     EPIC_BATTLE_PAGE,
-     BATTLE_ROYALE_PAGE)
+     EPIC_BATTLE_PAGE)

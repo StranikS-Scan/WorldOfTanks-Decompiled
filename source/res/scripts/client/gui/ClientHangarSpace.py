@@ -23,7 +23,6 @@ _DEFAULT_SPACES_PATH = 'spaces'
 _SERVER_CMD_CHANGE_HANGAR = 'cmd_change_hangar'
 _SERVER_CMD_CHANGE_HANGAR_PREM = 'cmd_change_hangar_prem'
 _CUSTOMIZATION_HANGAR_SETTINGS_SEC = 'customizationHangarSettings'
-_SECONDARY_HANGAR_SETTINGS_SEC = 'secondaryHangarSettings'
 _SPACE_FULL_VISIBILITY_MASK = ~0
 
 def _getDefaultHangarPath(isPremium):
@@ -65,10 +64,6 @@ def customizationHangarCFG():
     return _CFG.get(_CUSTOMIZATION_HANGAR_SETTINGS_SEC)
 
 
-def secondaryHangarCFG():
-    return _CFG.get(_SECONDARY_HANGAR_SETTINGS_SEC)
-
-
 def _readHangarSettings():
     hangarsXml = ResMgr.openSection('gui/hangars.xml')
     paths = [ path for path, _ in ResMgr.openSection(_DEFAULT_SPACES_PATH).items() ]
@@ -92,11 +87,6 @@ def _readHangarSettings():
             customizationCfg = {}
             _loadCustomizationConfig(customizationCfg, customizationXmlSection)
             cfg[_CUSTOMIZATION_HANGAR_SETTINGS_SEC] = customizationCfg
-        if settingsXml.has_key(_SECONDARY_HANGAR_SETTINGS_SEC):
-            secondarySettingsXmlSection = settingsXml[_SECONDARY_HANGAR_SETTINGS_SEC]
-            secondaryCfg = {}
-            _loadSecondaryConfig(secondaryCfg, secondarySettingsXmlSection)
-            cfg[_SECONDARY_HANGAR_SETTINGS_SEC] = secondaryCfg
         configset[spaceKey] = cfg
         _validateConfigValues(cfg)
 
@@ -181,23 +171,6 @@ def _loadCustomizationConfig(cfg, xml):
     loadConfigValue('cam_fluency', xml, xml.readFloat, cfg, cfg)
 
 
-def _loadSecondaryConfig(cfg, xml):
-    defaultShadowOffsetsCfg = {'shadow_forward_y_offset': 0.0,
-     'shadow_deferred_y_offset': 0.0}
-    loadConfigValue('v_start_pos', xml, xml.readVector3, cfg, cfg)
-    loadConfigValue('v_start_angles', xml, xml.readVector3, cfg, cfg)
-    for i in range(0, 3):
-        cfg['v_start_angles'][i] = math.radians(cfg['v_start_angles'][i])
-
-    loadConfigValue('cam_start_dist', xml, xml.readFloat, cfg, cfg)
-    loadConfigValue('cam_dist_constr', xml, xml.readVector2, cfg, cfg)
-    loadConfigValue('cam_start_angles', xml, xml.readVector2, cfg, cfg)
-    loadConfigValue('cam_pivot_pos', xml, xml.readVector3, cfg, cfg)
-    loadConfigValue('cam_start_target_pos', xml, xml.readVector3, cfg, cfg)
-    loadConfigValue('shadow_forward_y_offset', xml, xml.readFloat, cfg, defaultShadowOffsetsCfg)
-    loadConfigValue('shadow_deferred_y_offset', xml, xml.readFloat, cfg, defaultShadowOffsetsCfg)
-
-
 def loadConfigValue(name, xml, fn, cfg, defaultCfg=None):
     if xml.has_key(name):
         cfg[name] = fn(name)
@@ -227,8 +200,6 @@ class ClientHangarSpace(object):
         self.__onVehicleLoadedCallback = onVehicleLoadedCallback
         self.__gfxOptimizerMgr = None
         self.__optimizerID = None
-        self.__spacePath = None
-        self.__spaceVisibilityMask = None
         _HANGAR_CFGS = _readHangarSettings()
         return
 
@@ -261,8 +232,6 @@ class ClientHangarSpace(object):
                 LOG_CURRENT_EXCEPTION()
                 return
 
-        self.__spacePath = spacePath
-        self.__spaceVisibilityMask = spaceVisibilityMask
         spaceKey = _getHangarKey(spacePath)
         _CFG = copy.deepcopy(_HANGAR_CFGS[spaceKey])
         self.__vEntityId = BigWorld.createEntity('HangarVehicle', self.__spaceId, 0, _CFG['v_start_pos'], (_CFG['v_start_angles'][2], _CFG['v_start_angles'][1], _CFG['v_start_angles'][0]), dict())
@@ -371,8 +340,6 @@ class ClientHangarSpace(object):
             BigWorld.releaseSpace(self.__spaceId)
         self.__spaceMappingId = None
         self.__spaceId = None
-        self.__spacePath = None
-        self.__spaceVisibilityMask = None
         self.__vEntityId = None
         BigWorld.wg_disableSpecialFPSMode()
         return
@@ -409,15 +376,7 @@ class ClientHangarSpace(object):
 
     @property
     def camera(self):
-        return self.__cameraManager.camera
-
-    @property
-    def spacePath(self):
-        return self.__spacePath
-
-    @property
-    def visibilityMask(self):
-        return self.__spaceVisibilityMask
+        return None if self.__cameraManager is None else self.__cameraManager.camera
 
 
 class _ClientHangarSpacePathOverride(object):
@@ -492,7 +451,6 @@ class _ClientHangarSpacePathOverride(object):
 
         if hasChanged and self.hangarSpace.inited:
             self.hangarSpace.refreshSpace(isPremium, True)
-            self.hangarSpace.onSpaceChangedByAction()
 
 
 g_clientHangarSpaceOverride = _ClientHangarSpacePathOverride()

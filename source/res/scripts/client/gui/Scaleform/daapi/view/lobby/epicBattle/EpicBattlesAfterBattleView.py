@@ -7,7 +7,7 @@ from gui.Scaleform.daapi.view.meta.EpicBattlesAfterBattleViewMeta import EpicBat
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events.awards_formatters import AWARDS_SIZES, getEpicViewAwardPacker
-from gui.server_events.bonuses import CreditsBonus, CrystalBonus, ItemsBonus, GoodiesBonus, BasicPremiumDaysBonus, PlusPremiumDaysBonus
+from gui.server_events.bonuses import CreditsBonus, CrystalBonus, ItemsBonus, GoodiesBonus, BasicPremiumDaysBonus, PlusPremiumDaysBonus, FestivalTickets
 from gui.shared.formatters import text_styles
 from gui.shared.utils import toUpper
 from gui.sounds.epic_sound_constants import EPIC_METAGAME_WWISE_SOUND_EVENTS
@@ -34,6 +34,9 @@ def _AccumulateBonuses(bonuses):
     def accumulatePlusPremiumDays(bonuses):
         return __accumulateIntegralBonus(PlusPremiumDaysBonus, bonuses)
 
+    def accumulateFestivalTickets(bonuses):
+        return __accumulateIntegralBonus(FestivalTickets, bonuses)
+
     def accumulateItems(bonuses):
         values = dict()
         for b in bonuses:
@@ -58,7 +61,8 @@ def _AccumulateBonuses(bonuses):
      ItemsBonus: accumulateItems,
      GoodiesBonus: accumulateGoodies,
      BasicPremiumDaysBonus: accumulateBasicPremiumDays,
-     PlusPremiumDaysBonus: accumulatePlusPremiumDays}
+     PlusPremiumDaysBonus: accumulatePlusPremiumDays,
+     FestivalTickets: accumulateFestivalTickets}
     accumulatedBonuses = []
     for bonusType in set((type(b) for b in bonuses)):
         bonusesOfType = [ b for b in bonuses if isinstance(b, bonusType) ]

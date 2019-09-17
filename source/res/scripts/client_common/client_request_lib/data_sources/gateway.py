@@ -1,14 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/client_request_lib/data_sources/gateway.py
 import json
-from urllib import urlencode
 from datetime import datetime, timedelta, time as dt_time
 from client_request_lib import exceptions
 from client_request_lib.data_sources import base
 from base64 import b64encode
 import urllib
 import zlib
-from debug_utils import LOG_DEBUG
 EXAMPLES = {}
 DEFAULT_SINCE_DELAY = timedelta(days=1)
 SUCCESS_STATUSES = [200, 201, 304]
@@ -138,6 +136,10 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         if post_data:
             args.append(json.dumps(post_data))
         self.url_fetcher(url, self._preprocess_callback(callback, converters=converters), *args)
+
+    def advent_calendar_fetch_info(self, callback):
+        url = '/advc/counter_state/'
+        return self._request_data(callback, url)
 
     def get_clans_ratings(self, callback, clan_ids, fields=None):
         get_params = {'clan_ids': clan_ids,
@@ -578,6 +580,10 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def client_promo_log(self, callback, data):
         url = '/client_promo_log/'
         return self._request_data(callback, url, data, method='GET')
+
+    def account_data(self, callback, fields=None):
+        url = '/wotmg/account_data/'
+        return self._request_data(callback, url, method='GET')
 
     def _get_formatted_language_code(self):
         return self.client_lang.replace('_', '-')

@@ -28,6 +28,9 @@ class BattleResultsMeta(AbstractWindowView):
     def onShowDetailsPremium(self):
         self._printOverrideError('onShowDetailsPremium')
 
+    def cupAnimationStart(self, delay):
+        self._printOverrideError('cupAnimationStart')
+
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
@@ -36,3 +39,6 @@ class BattleResultsMeta(AbstractWindowView):
 
     def as_setTeamInfoS(self, uid, iconTag, teamName):
         return self.flashObject.as_setTeamInfo(uid, iconTag, teamName) if self._isDAAPIInited() else None
+
+    def as_showAnimationS(self):
+        return self.flashObject.as_showAnimation() if self._isDAAPIInited() else None

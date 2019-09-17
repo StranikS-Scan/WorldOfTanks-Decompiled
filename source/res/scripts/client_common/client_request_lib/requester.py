@@ -65,6 +65,12 @@ class BaseAccessor(object):
         self._data_source = data_source
 
 
+class AdventCalendarAccessor(BaseAccessor):
+
+    def advent_calendar_fetch_info(self, callback):
+        return self._data_source.advent_calendar_fetch_info(callback)
+
+
 class GmAccessor(BaseAccessor):
 
     def get_provinces(self, callback, clan_id, fields=None):
@@ -323,10 +329,17 @@ class PromoScreensAccessor(BaseAccessor):
         return self._data_source.client_promo_log(callback, data)
 
 
+class MiniGamesAccessor(BaseAccessor):
+
+    def account_data(self, callback, fields=None):
+        return self._data_source.account_data(callback, fields=fields)
+
+
 class Requester(object):
     available_data_sources = {'stagings': StagingDataAccessor,
      'fake': FakeDataAccessor,
      'gateway': GatewayDataAccessor}
+    advc = RequestDescriptor(AdventCalendarAccessor)
     global_map = RequestDescriptor(GmAccessor)
     ratings = RequestDescriptor(RatingAccessor)
     strongholds = RequestDescriptor(StrongholdsAccessor)
@@ -339,6 +352,7 @@ class Requester(object):
     wgrms = RequestDescriptor(WgrmsAccessor)
     promo_screens = RequestDescriptor(PromoScreensAccessor)
     freya = RequestDescriptor(FreyaAccessor)
+    wotmg = RequestDescriptor(MiniGamesAccessor)
 
     @classmethod
     def create_requester(cls, url_fetcher, config, client_lang=None, user_agent=None):

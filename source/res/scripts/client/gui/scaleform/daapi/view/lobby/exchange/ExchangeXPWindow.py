@@ -9,6 +9,7 @@ from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.impl import backport
 from gui.ingame_shop import showBuyGoldForXpWebOverlay
 from gui.shared.formatters import icons
 from gui.shared.formatters.text_styles import builder
@@ -19,9 +20,6 @@ from gui.shared.utils.decorators import process
 from helpers import i18n, dependency
 from skeletons.gui.game_control import IWalletController
 from skeletons.gui.shared import IItemsCache
-from gui.impl import backport
-from gui.impl.gen.resources import R
-from gui.shared.gui_items.Vehicle import getIconResourceName
 
 class ExchangeXPWindow(ExchangeXpWindowMeta):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -73,18 +71,13 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
                 vehicle = self.itemsCache.items.getItemByCD(vehicleCD)
                 if not vehicle.xp:
                     continue
-                isBattleRoyaleVehicle = vehicle.isOnlyForBattleRoyaleBattles
-                if isBattleRoyaleVehicle:
-                    iconPath = backport.image(R.images.gui.maps.icons.battleRoyale.vehicleSmall.dyn(getIconResourceName(vehicle.name))())
-                else:
-                    iconPath = vehicle.iconSmall
                 values.append({'id': vehicle.intCD,
-                 'vehicleType': getVehicleTypeAssetPath(vehicle.type) if not isBattleRoyaleVehicle else None,
+                 'vehicleType': getVehicleTypeAssetPath(vehicle.type),
                  'vehicleName': vehicle.shortUserName,
                  'xp': vehicle.xp,
                  'xpStrValue': backport.getIntegralFormat(vehicle.xp),
                  'isSelectCandidate': vehicle.isFullyElite,
-                 'vehicleIco': iconPath,
+                 'vehicleIco': vehicle.iconSmall,
                  'nationIco': getNationsAssetPath(vehicle.nationID, namePrefix=NATION_ICON_PREFIX_131x31)})
             except Exception:
                 continue

@@ -1,0 +1,14 @@
+<TeamBaseSharedInfo.def>
+  <ClientMethods>
+    <updateCapturingInfo>
+      <Arg>	UINT8	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	ARRAY	  <of>	UINT16	</of>
+      </Arg>
+    </updateCapturingInfo>
+    <onCaptured>
+      <Arg>	UINT8	</Arg>
+      <Arg>	UINT8	</Arg>
+    </onCaptured>
+  </ClientMethods>
+</TeamBaseSharedInfo.def>

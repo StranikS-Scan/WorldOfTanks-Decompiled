@@ -14,6 +14,7 @@ class PLAYER_GUI_STATUS(object):
     BATTLE = 3
     LOCKED = 4
     CREATOR = 5
+    NO_RACING_ATTEMPTS = 6
 
 
 class SLOT_LABEL(object):
@@ -24,7 +25,6 @@ class SLOT_LABEL(object):
     NOT_ALLOWED = 'notAllowed'
     EMPTY = 'emptySlot'
     REQUIRED = 'required'
-    BATTLE_ROYALE = 'battleRoyale'
 
 
 def getContextMenuHandlers():

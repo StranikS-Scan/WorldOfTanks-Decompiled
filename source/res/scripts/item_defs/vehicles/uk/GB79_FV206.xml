@@ -492,6 +492,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	2 2 0.000000 0.000000	</tiling>
+      <density>	92.9803 92.9174	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -2154,6 +2156,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	1.18 1.18 0.000000 0.000000	</tiling>
+            <density>	106.574 102.589	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_5.5inch_SPG_Gun>
         <_6inch_SPG_Gun>	shared	  <maxAmmo>	48	</maxAmmo>
@@ -2234,6 +2238,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	1.24 1.24 0.000000 0.000000	</tiling>
+            <density>	103.514 100.384	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_6inch_SPG_Gun>
       </guns>
@@ -2270,6 +2276,10 @@
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	114.808 114.842	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </Turret_1_GB79_FV206>
   </turrets0>
   <engines>

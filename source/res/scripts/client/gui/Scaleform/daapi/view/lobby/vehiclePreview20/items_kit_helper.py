@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehiclePreview20/items_kit_helper.py
 import itertools
 import typing
-from collections import Container
-from CurrentVehicle import g_currentPreviewVehicle
+from collections import Container, namedtuple
+from CurrentVehicle import g_currentPreviewVehicle, g_currentVehicle
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getSlotOverlayIconType
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.locale.COMMON import COMMON
@@ -17,11 +17,13 @@ from gui.shared.money import Currency, Money, MONEY_ZERO_GOLD
 from gui.shared.utils.functions import makeTooltip
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.shared.utils.requesters import REQ_CRITERIA
 from items import EQUIPMENT_TYPES
 from items import makeIntCompactDescrByID as makeCD
 from items.components.c11n_constants import CustomizationType
 from items.vehicles import NUM_OPTIONAL_DEVICE_SLOTS, NUM_EQUIPMENT_SLOTS_BY_TYPE, NUM_SHELLS_SLOTS
 from shared_utils import findFirst, first, CONST_CONTAINER
+from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.goodies import IGoodiesCache
 from web_client_api.common import ItemPackType, ItemPackTypeGroup, ItemPackEntry
 from gui.shared.gui_items import vehicle_adjusters
@@ -139,6 +141,7 @@ _OPEN_QUOTES = _ms(COMMON.COMMON_OPEN_QUOTES)
 _DOUBLE_OPEN_QUOTES = _OPEN_QUOTES + _OPEN_QUOTES
 _CLOSE_QUOTES = _ms(COMMON.COMMON_CLOSE_QUOTES)
 _DOUBLE_CLOSE_QUOTES = _CLOSE_QUOTES + _CLOSE_QUOTES
+StyleInstallInfo = namedtuple('StyleInstallInfo', ('canInstall', 'style', 'vehicle'))
 
 class BoosterGUIItemProxy(object):
 
@@ -706,6 +709,20 @@ def mayObtainForMoney(itemPrice, itemsCache=None):
     return itemPrice <= itemsCache.items.stats.money
 
 
+@dependency.replace_none_kwargs(service=ICustomizationService)
+def canInstallStyle(styleId, service=None):
+    style = service.getItemByID(GUI_ITEM_TYPE.STYLE, styleId)
+    if not style.isInInventory:
+        return StyleInstallInfo(canInstall=False, style=style, vehicle=None)
+    else:
+        vehicle = g_currentVehicle.item
+        if not style.mayInstall(vehicle):
+            vehicle = __findVehicle(style)
+            if vehicle is None:
+                return StyleInstallInfo(canInstall=False, style=style, vehicle=None)
+        return StyleInstallInfo(canInstall=True, style=style, vehicle=vehicle)
+
+
 def _sortItemsByOrder(items, rule=None):
     if rule is None:
         rule = _PACK_ITEMS_SORT_ORDER
@@ -750,3 +767,20 @@ def __getDefaultPackRule():
 
 def __getFrontlinePackRule():
     return _FrontlineNodeContainer(nextNode=_GiftNodeContainer())
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def __findVehicle(style, itemsCache=None):
+    criteria = REQ_CRITERIA.IN_OWNERSHIP | ~REQ_CRITERIA.VEHICLE.IS_IN_BATTLE
+    vehicles = [ vehicle for vehicle in itemsCache.items.getVehicles(criteria=criteria).itervalues() if style.mayInstall(vehicle) ]
+    randomStats = itemsCache.items.getAccountDossier().getRandomStats()
+    vehRandomStats = randomStats.getVehicles()
+
+    def vehicleComparator(item):
+        if item.intCD not in vehRandomStats:
+            return (0, item.level)
+        battlesCount, _, _ = vehRandomStats.get(item.intCD)
+        return (battlesCount if battlesCount else 0, item.level)
+
+    vehicles = sorted(vehicles, key=vehicleComparator, reverse=True)
+    return findFirst(None, vehicles)

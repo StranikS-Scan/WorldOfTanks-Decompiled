@@ -41,6 +41,7 @@ class CONDITION_ICON:
     RAM = 'ram'
     MAIN_REPEAT = 'main_repeat'
     IMPROVE = 'improve'
+    RACING_POSITION = 'race'
 
 
 class PROGRESS_TEMPLATE:

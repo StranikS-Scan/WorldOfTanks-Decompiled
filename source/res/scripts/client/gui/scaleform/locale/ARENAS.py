@@ -130,14 +130,13 @@ class ARENAS(object):
     C_99_POLAND_DESCRIPTION = '#arenas:99_poland/description'
     C_222_ER_CLIME_NAME = '#arenas:222_er_clime/name'
     C_222_ER_CLIME_DESCRIPTION = '#arenas:222_er_clime/description'
-    C_250_BR_BATTLE_CITY2_1_NAME = '#arenas:250_br_battle_city2-1/name'
-    C_250_BR_BATTLE_CITY2_1_DESCRIPTION = '#arenas:250_br_battle_city2-1/description'
     C_95_LOST_CITY_CTF_NAME = '#arenas:95_lost_city_ctf/name'
     C_95_LOST_CITY_CTF_DESCRIPTION = '#arenas:95_lost_city_ctf/description'
     C_83_KHARKIV_NAME = '#arenas:83_kharkiv/name'
     C_83_KHARKIV_DESCRIPTION = '#arenas:83_kharkiv/description'
     C_209_WG_EPIC_SUBURBIA_NAME = '#arenas:209_wg_epic_suburbia/name'
     C_209_WG_EPIC_SUBURBIA_DESCRIPTION = '#arenas:209_wg_epic_suburbia/description'
+    C_102_RACE_NAME = '#arenas:102_race/name'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -265,14 +264,13 @@ class ARENAS(object):
      C_99_POLAND_DESCRIPTION,
      C_222_ER_CLIME_NAME,
      C_222_ER_CLIME_DESCRIPTION,
-     C_250_BR_BATTLE_CITY2_1_NAME,
-     C_250_BR_BATTLE_CITY2_1_DESCRIPTION,
      C_95_LOST_CITY_CTF_NAME,
      C_95_LOST_CITY_CTF_DESCRIPTION,
      C_83_KHARKIV_NAME,
      C_83_KHARKIV_DESCRIPTION,
      C_209_WG_EPIC_SUBURBIA_NAME,
-     C_209_WG_EPIC_SUBURBIA_DESCRIPTION)
+     C_209_WG_EPIC_SUBURBIA_DESCRIPTION,
+     C_102_RACE_NAME)
 
     @classmethod
     def all(cls, key0):

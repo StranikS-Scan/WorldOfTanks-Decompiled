@@ -14,6 +14,7 @@ class MENU(object):
     HEADERBUTTONS_BTNLABEL = '#menu:headerButtons/btnLabel/'
     PROMO_TEASERTIMEFORMAT = '#menu:promo/teaserTimeFormat'
     BOOSTERS_TIMELEFT = '#menu:boosters/timeLeft'
+    ADVENTCALENDAR_TIMELEFT = '#menu:adventCalendar/timeLeft'
     COPY = '#menu:copy'
     LEGAL = '#menu:legal'
     LEGALINFO_CLOSEBTN = '#menu:legalInfo/closeBtn'
@@ -152,8 +153,6 @@ class MENU(object):
     LOADING_BATTLETYPES_DESC_21 = '#menu:loading/battleTypes/desc/21'
     LOADING_BATTLETYPES_22 = '#menu:loading/battleTypes/22'
     LOADING_BATTLETYPES_DESC_22 = '#menu:loading/battleTypes/desc/22'
-    LOADING_BATTLETYPES_23 = '#menu:loading/battleTypes/23'
-    LOADING_BATTLETYPES_DESC_23 = '#menu:loading/battleTypes/desc/23'
     LOADING_TEAM1 = '#menu:loading/team1'
     LOADING_TEAM2 = '#menu:loading/team2'
     LOADING_TEAMS_ALLIES = '#menu:loading/teams/allies'
@@ -387,8 +386,6 @@ class MENU(object):
     PREBATTLE_GROUPSLABEL = '#menu:prebattle/groupsLabel'
     PREBATTLE_SIDEA = '#menu:prebattle/sideA'
     PREBATTLE_SIDEB = '#menu:prebattle/sideB'
-    PREBATTLE_BATTLEROYALE_SOLO = '#menu:prebattle/battleRoyale/solo'
-    PREBATTLE_BATTLEROYALE_SQUAD = '#menu:prebattle/battleRoyale/squad'
     PREBATTLE_TIMERLABEL = '#menu:prebattle/timerLabel'
     PREBATTLE_TANKLABEL = '#menu:prebattle/tankLabel'
     PREBATTLE_STARTINGTANKLABEL = '#menu:prebattle/startingTankLabel'
@@ -517,8 +514,6 @@ class MENU(object):
     TANK_PARAMS_TURRETROTATIONSPEED = '#menu:tank_params/turretRotationSpeed'
     TANK_PARAMS_CIRCULARVISIONRADIUS = '#menu:tank_params/circularVisionRadius'
     TANK_PARAMS_RADIODISTANCE = '#menu:tank_params/radioDistance'
-    TANK_PARAMS_RADARRADIUS = '#menu:tank_params/radarRadius'
-    TANK_PARAMS_RADARCOOLDOWN = '#menu:tank_params/radarCooldown'
     TANK_PARAMS_TURRETYAWLIMITS = '#menu:tank_params/turretYawLimits'
     TANK_PARAMS_PITCHLIMITS = '#menu:tank_params/pitchLimits'
     TANK_PARAMS_GUNYAWLIMITS = '#menu:tank_params/gunYawLimits'
@@ -600,24 +595,11 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY_HOURS = '#menu:headerButtons/battle/types/ranked/availability/hours'
     HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY_MIN = '#menu:headerButtons/battle/types/ranked/availability/min'
     HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY_LESSMIN = '#menu:headerButtons/battle/types/ranked/availability/lessMin'
-    HEADERBUTTONS_BATTLE_TYPES_BATTLEROYALE_AVAILABILITY_DAYS = '#menu:headerButtons/battle/types/battleRoyale/availability/days'
-    HEADERBUTTONS_BATTLE_TYPES_BATTLEROYALE_AVAILABILITY_HOURS = '#menu:headerButtons/battle/types/battleRoyale/availability/hours'
-    HEADERBUTTONS_BATTLE_TYPES_BATTLEROYALE_AVAILABILITY_MIN = '#menu:headerButtons/battle/types/battleRoyale/availability/min'
-    HEADERBUTTONS_BATTLE_TYPES_BATTLEROYALE_AVAILABILITY_LESSMIN = '#menu:headerButtons/battle/types/battleRoyale/availability/lessMin'
     HEADERBUTTONS_BATTLE_TYPES_RANKEDLEAVE_DESCR = '#menu:headerButtons/battle/types/rankedLeave/descr'
     HEADERBUTTONS_BATTLE_TYPES_SQUAD = '#menu:headerButtons/battle/types/squad'
-    HEADERBUTTONS_BATTLE_TYPES_SQUAD_DESCRIPTION = '#menu:headerButtons/battle/types/squad/description'
-    HEADERBUTTONS_BATTLE_TYPES_SIMPLESQUAD = '#menu:headerButtons/battle/types/simpleSquad'
-    HEADERBUTTONS_BATTLE_TYPES_EVENTSQUAD = '#menu:headerButtons/battle/types/eventSquad'
-    HEADERBUTTONS_BATTLE_TYPES_BATTLEROYALE = '#menu:headerButtons/battle/types/battleRoyale'
-    HEADERBUTTONS_BATTLE_TYPES_BATTLEROYALE_EXTRA_FROZEN = '#menu:headerButtons/battle/types/battleRoyale/extra/frozen'
-    HEADERBUTTONS_BATTLE_TYPES_BATTLEROYALE_EXTRA_FINISHED = '#menu:headerButtons/battle/types/battleRoyale/extra/finished'
-    HEADERBUTTONS_BATTLE_TYPES_BATTLEROYALESQUAD = '#menu:headerButtons/battle/types/battleRoyaleSquad'
-    HEADERBUTTONS_BATTLE_TYPES_BATTLEROYALESQUAD_DESCRIPTION = '#menu:headerButtons/battle/types/battleRoyaleSquad/description'
     HEADERBUTTONS_BATTLE_TYPES_SQUAD_RANDOMBATTLE = '#menu:headerButtons/battle/types/squad/randomBattle'
     HEADERBUTTONS_BATTLE_TYPES_SQUAD_EVENT = '#menu:headerButtons/battle/types/squad/event'
     HEADERBUTTONS_BATTLE_TYPES_SQUAD_EPIC = '#menu:headerButtons/battle/types/squad/epic'
-    HEADERBUTTONS_BATTLE_TYPES_SQUAD_BATTLEROYALE = '#menu:headerButtons/battle/types/squad/battleRoyale'
     HEADERBUTTONS_BATTLE_TYPES_SQUADLEAVEOWNER = '#menu:headerButtons/battle/types/squadLeaveOwner'
     HEADERBUTTONS_BATTLE_TYPES_SQUADLEAVE = '#menu:headerButtons/battle/types/squadLeave'
     HEADERBUTTONS_BATTLE_TYPES_SQUAD_DESCR = '#menu:headerButtons/battle/types/squad/descr'
@@ -629,6 +611,10 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_EPICTRAINING_DESCR = '#menu:headerButtons/battle/types/epicTraining/descr'
     HEADERBUTTONS_BATTLE_TYPES_LEAVETRAINING_DESCR = '#menu:headerButtons/battle/types/leaveTraining/descr'
     HEADERBUTTONS_BATTLE_TYPES_TRAININGLEAVEOWNER = '#menu:headerButtons/battle/types/trainingLeaveOwner'
+    HEADERBUTTONS_BATTLE_TYPES_SIMPLESQUAD = '#menu:headerButtons/battle/types/simpleSquad'
+    HEADERBUTTONS_BATTLE_TYPES_SIMPLESQUADSUBSCRIPTION = '#menu:headerButtons/battle/types/simpleSquadSubscription'
+    HEADERBUTTONS_BATTLE_TYPES_EVENTSQUAD = '#menu:headerButtons/battle/types/eventSquad'
+    HEADERBUTTONS_BATTLE_TYPES_EVENTSQUADSUBSCRIPTION = '#menu:headerButtons/battle/types/eventSquadSubscription'
     HEADERBUTTONS_BATTLE_TYPES_TRAININGLEAVE = '#menu:headerButtons/battle/types/trainingLeave'
     HEADERBUTTONS_BATTLE_TYPES_BATTLETEACHING = '#menu:headerButtons/battle/types/battleTeaching'
     HEADERBUTTONS_BATTLE_TYPES_SPEC = '#menu:headerButtons/battle/types/spec'
@@ -668,6 +654,7 @@ class MENU(object):
     HEADERBUTTONS_BATTLE = '#menu:headerButtons/battle'
     HEADERBUTTONS_READY = '#menu:headerButtons/ready'
     HEADERBUTTONS_NOTREADY = '#menu:headerButtons/notReady'
+    HEADERBUTTONS_RACE = '#menu:headerButtons/race'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_FALLOUTONLY_HEADER = '#menu:headerButtons/fightBtn/tooltip/falloutOnly/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_FALLOUTONLY_BODY = '#menu:headerButtons/fightBtn/tooltip/falloutOnly/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_FALLOUTNOTSELECTED_HEADER = '#menu:headerButtons/fightBtn/tooltip/falloutNotSelected/header'
@@ -691,10 +678,6 @@ class MENU(object):
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICBATTLEONLY_BODY = '#menu:headerButtons/fightBtn/tooltip/epicBattleOnly/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDDISABLED_HEADER = '#menu:headerButtons/fightBtn/tooltip/rankedDisabled/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDDISABLED_BODY = '#menu:headerButtons/fightBtn/tooltip/rankedDisabled/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_BATTLEROYALEDISABLED_HEADER = '#menu:headerButtons/fightBtn/tooltip/battleRoyaleDisabled/header'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_BATTLEROYALEDISABLED_BODY = '#menu:headerButtons/fightBtn/tooltip/battleRoyaleDisabled/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_UNSUTABLETOBATTLEROYALE_HEADER = '#menu:headerButtons/fightBtn/tooltip/unsutableToBattleRoyale/header'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_UNSUTABLETOBATTLEROYALE_BODY = '#menu:headerButtons/fightBtn/tooltip/unsutableToBattleRoyale/body'
     HEADERBUTTONS_DEFAULTCOUNTER = '#menu:headerButtons/defaultCounter'
     PVESANDBOX_QUEUE_TITLE = '#menu:pveSandbox/queue/title'
     PVESANDBOX_QUEUE_UNITS = '#menu:pveSandbox/queue/units'
@@ -1012,15 +995,6 @@ class MENU(object):
     MODULEINFO_PARAMS_STUNMAXDURATIONLIST = '#menu:moduleInfo/params/stunMaxDurationList'
     MODULEINFO_PARAMS_STUNMINDURATIONLIST = '#menu:moduleInfo/params/stunMinDurationList'
     MODULEINFO_PARAMS_COOLDOWNSECONDS = '#menu:moduleInfo/params/cooldownSeconds'
-    MODULEINFO_PARAMS_RADARRADIUS = '#menu:moduleInfo/params/radarRadius'
-    MODULEINFO_PARAMS_RADARCOOLDOWN = '#menu:moduleInfo/params/radarCooldown'
-    MODULEINFO_PARAMS_MAXHEALTH = '#menu:moduleInfo/params/maxHealth'
-    MODULEINFO_PARAMS_MAXHULLHEALTH = '#menu:moduleInfo/params/maxHullHealth'
-    MODULEINFO_PARAMS_HULLWEIGHT = '#menu:moduleInfo/params/hullWeight'
-    MODULEINFO_PARAMS_HULLARMOR = '#menu:moduleInfo/params/hullArmor'
-    MODULEINFO_PARAMS_FORWARDMAXSPEED = '#menu:moduleInfo/params/forwardMaxSpeed'
-    MODULEINFO_PARAMS_DRIVINGCONTROL = '#menu:moduleInfo/params/drivingControl'
-    MODULEINFO_PARAMS_ENGINEPOWERPERTON = '#menu:moduleInfo/params/enginePowerPerTon'
     MODULEINFO_COMPATIBLE_TURRETS = '#menu:moduleInfo/compatible/turrets'
     MODULEINFO_COMPATIBLE_SHELLS = '#menu:moduleInfo/compatible/shells'
     MODULEINFO_COMPATIBLE_GUNS = '#menu:moduleInfo/compatible/guns'
@@ -1437,7 +1411,6 @@ class MENU(object):
     CONTEXTMENU_TAKELEADERSHIP = '#menu:contextMenu/takeLeadership'
     CONTEXTMENU_CREATESQUAD = '#menu:contextMenu/createSquad'
     CONTEXTMENU_CREATEEVENTSQUAD = '#menu:contextMenu/createEventSquad'
-    CONTEXTMENU_CREATEBATTLEROYALESQUAD = '#menu:contextMenu/createBattleRoyaleSquad'
     CONTEXTMENU_INVITE = '#menu:contextMenu/invite'
     CONTEXTMENU_APPEAL = '#menu:contextMenu/appeal'
     CONTEXTMENU_INCORRECTBEHAVIOR = '#menu:contextMenu/incorrectBehavior'
@@ -1501,6 +1474,7 @@ class MENU(object):
     FINALSTATISTIC_TABS_TEAMSTATS = '#menu:finalStatistic/tabs/teamStats'
     FINALSTATISTIC_TABS_DETAILSSTATS = '#menu:finalStatistic/tabs/detailsStats'
     FINALSTATISTIC_TABS_EPICSTATS = '#menu:finalStatistic/tabs/epicStats'
+    FINALSTATISTIC_TABS_RACINGSTATS = '#menu:finalStatistic/tabs/racingStats'
     FINALSTATISTIC_COMMONSTATS_RESULTLABEL_WIN = '#menu:finalStatistic/commonStats/resultlabel/win'
     FINALSTATISTIC_COMMONSTATS_RESULTLABEL_LOSE = '#menu:finalStatistic/commonStats/resultlabel/lose'
     FINALSTATISTIC_COMMONSTATS_RESULTLABEL_TIE = '#menu:finalStatistic/commonStats/resultlabel/tie'
@@ -1553,7 +1527,6 @@ class MENU(object):
     BONUSTYPE_21 = '#menu:bonusType/21'
     BONUSTYPE_22 = '#menu:bonusType/22'
     BONUSTYPE_24 = '#menu:bonusType/24'
-    BONUSTYPE_29 = '#menu:bonusType/29'
     FORTIFICATIONCTX_ASSIGNEDPLAYERS = '#menu:fortificationCtx/assignedPlayers'
     FORTIFICATIONCTX_PREPAREORDER = '#menu:fortificationCtx/prepareOrder'
     FORTIFICATIONCTX_CLANDESCRIPTION_OPENCLANCARD = '#menu:fortificationCtx/clanDescription/openClanCard'
@@ -1740,6 +1713,11 @@ class MENU(object):
     TIME_TIMEVALUEWITHSECS_HOURS = '#menu:Time/timeValueWithSecs/hours'
     TIME_TIMEVALUEWITHSECS_MIN = '#menu:Time/timeValueWithSecs/min'
     TIME_TIMEVALUEWITHSECS_LESSMIN = '#menu:Time/timeValueWithSecs/lessMin'
+    ADVENTCALENDAR_FORMAT = '#menu:adventCalendar/format'
+    ADVENTCALENDAR_TIMELEFT_DAYS = '#menu:adventCalendar/timeLeft/days'
+    ADVENTCALENDAR_TIMELEFT_HOURS = '#menu:adventCalendar/timeLeft/hours'
+    ADVENTCALENDAR_TIMELEFT_MIN = '#menu:adventCalendar/timeLeft/min'
+    ADVENTCALENDAR_TIMELEFT_LESSMIN = '#menu:adventCalendar/timeLeft/lessMin'
     MAPBLACKLIST_TIMELEFTSHORT_DAYS = '#menu:mapBlackList/timeLeftShort/days'
     MAPBLACKLIST_TIMELEFTSHORT_HOURS = '#menu:mapBlackList/timeLeftShort/hours'
     MAPBLACKLIST_TIMELEFTSHORT_MIN = '#menu:mapBlackList/timeLeftShort/min'
@@ -1949,6 +1927,9 @@ class MENU(object):
     BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_FL_XP = '#menu:booster/description/bonusValueTime/booster_fl_xp'
     BOOSTER_BONUS_BOOSTER_FL_XP = '#menu:booster/bonus/booster_fl_xp'
     BOOSTER_LIMIT_BOOSTER_FL_XP = '#menu:booster/limit/booster_fl_xp'
+    RACING_POINTS = '#menu:racing/points'
+    RACING_REWARDS_RECEIVED = '#menu:racing/rewards/received'
+    RACING_REWARDS_NOTRECEIVED = '#menu:racing/rewards/notReceived'
     CONTEXTMENU_ENUM = (CONTEXTMENU_VEHICLEINFO,
      CONTEXTMENU_VEHICLEINFOEX,
      CONTEXTMENU_GOTONATIONTREE,
@@ -2001,7 +1982,6 @@ class MENU(object):
      CONTEXTMENU_TAKELEADERSHIP,
      CONTEXTMENU_CREATESQUAD,
      CONTEXTMENU_CREATEEVENTSQUAD,
-     CONTEXTMENU_CREATEBATTLEROYALESQUAD,
      CONTEXTMENU_INVITE,
      CONTEXTMENU_APPEAL,
      CONTEXTMENU_INCORRECTBEHAVIOR,
@@ -2217,16 +2197,7 @@ class MENU(object):
      MODULEINFO_PARAMS_STUNMINDURATION,
      MODULEINFO_PARAMS_STUNMAXDURATIONLIST,
      MODULEINFO_PARAMS_STUNMINDURATIONLIST,
-     MODULEINFO_PARAMS_COOLDOWNSECONDS,
-     MODULEINFO_PARAMS_RADARRADIUS,
-     MODULEINFO_PARAMS_RADARCOOLDOWN,
-     MODULEINFO_PARAMS_MAXHEALTH,
-     MODULEINFO_PARAMS_MAXHULLHEALTH,
-     MODULEINFO_PARAMS_HULLWEIGHT,
-     MODULEINFO_PARAMS_HULLARMOR,
-     MODULEINFO_PARAMS_FORWARDMAXSPEED,
-     MODULEINFO_PARAMS_DRIVINGCONTROL,
-     MODULEINFO_PARAMS_ENGINEPOWERPERTON)
+     MODULEINFO_PARAMS_COOLDOWNSECONDS)
     MODULEINFO_COMPATIBLE_ENUM = (MODULEINFO_COMPATIBLE_TURRETS,
      MODULEINFO_COMPATIBLE_SHELLS,
      MODULEINFO_COMPATIBLE_GUNS,
@@ -2342,8 +2313,6 @@ class MENU(object):
      TANK_PARAMS_TURRETROTATIONSPEED,
      TANK_PARAMS_CIRCULARVISIONRADIUS,
      TANK_PARAMS_RADIODISTANCE,
-     TANK_PARAMS_RADARRADIUS,
-     TANK_PARAMS_RADARCOOLDOWN,
      TANK_PARAMS_TURRETYAWLIMITS,
      TANK_PARAMS_PITCHLIMITS,
      TANK_PARAMS_GUNYAWLIMITS,
@@ -2413,8 +2382,7 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_19,
      LOADING_BATTLETYPES_DESC_20,
      LOADING_BATTLETYPES_DESC_21,
-     LOADING_BATTLETYPES_DESC_22,
-     LOADING_BATTLETYPES_DESC_23)
+     LOADING_BATTLETYPES_DESC_22)
     LOADING_BATTLETYPES_ENUM = (LOADING_BATTLETYPES_0,
      LOADING_BATTLETYPES_DESC_0,
      LOADING_BATTLETYPES_1,
@@ -2456,9 +2424,7 @@ class MENU(object):
      LOADING_BATTLETYPES_21,
      LOADING_BATTLETYPES_DESC_21,
      LOADING_BATTLETYPES_22,
-     LOADING_BATTLETYPES_DESC_22,
-     LOADING_BATTLETYPES_23,
-     LOADING_BATTLETYPES_DESC_23)
+     LOADING_BATTLETYPES_DESC_22)
     CST_ITEM_CTX_MENU_ENUM = (CST_ITEM_CTX_MENU_BUY,
      CST_ITEM_CTX_MENU_BUYMORE,
      CST_ITEM_CTX_MENU_SELL,

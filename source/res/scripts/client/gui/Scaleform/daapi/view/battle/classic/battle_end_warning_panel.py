@@ -6,6 +6,7 @@ from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from helpers.time_utils import ONE_MINUTE
+from constants import ARENA_PERIOD
 from skeletons.gui.battle_session import IBattleSessionProvider
 
 class _WWISE_EVENTS(object):
@@ -39,7 +40,8 @@ class BattleEndWarningPanel(BattleEndWarningPanelMeta, IAbstractPeriodView):
         secondsStr = '{:02d}'.format(seconds)
         if self.__isShown:
             self.as_setTotalTimeS(minutesStr, secondsStr)
-        if totalTime == self.__appearTime and self.__warningIsValid:
+        isInBattle = self.sessionProvider.arenaVisitor.getArenaPeriod() == ARENA_PERIOD.BATTLE
+        if totalTime == self.__appearTime and self.__warningIsValid and isInBattle:
             self._callWWISE(_WWISE_EVENTS.APPEAR)
             self.as_setTotalTimeS(minutesStr, secondsStr)
             self.as_setTextInfoS(_ms(_WARNING_TEXT_KEY))

@@ -339,32 +339,90 @@
       </mul>
     </kpi>
   </hotCoffee>
-  <afterburning>
+  <speedboostChaffee>
     <id>	14	</id>
-    <userString>	#artefacts:afterburning/name	</userString>
-    <description>	#artefacts:afterburning/descr	</description>
-    <icon>	afterburning 0 0	</icon>
-    <price>	15000	</price>
+    <userString>	#festival:festival/tooltips/forsage_name	</userString>
+    <description>	#festival:festival/tooltips/forsage_descr	</description>
+    <icon>	A00_M24_Chaffee_nitro 0 0	</icon>
+    <price>	5000	</price>
+    <tags>	festival_ability	</tags>
     <notInShop>	true	</notInShop>
-    <tags>	notForSale trigger	</tags>
-    <soundNotification>	nitro_combat_reserve	</soundNotification>
     <vehicleFilter>
       <include>
-        <nations>	ussr germany	</nations>
+        <nations>	usa	</nations>
         <vehicle>
-          <tags>	afterburning_user	</tags>
+          <tags>	event_battles	</tags>
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	Afterburning	  <deploySeconds>	10	</deploySeconds>
-      <consumeSeconds>	20	</consumeSeconds>
-      <rechargeSeconds>	20	</rechargeSeconds>
-      <enginePowerFactor>	1.7	</enginePowerFactor>
-      <maxSpeedFactor>	2.0	</maxSpeedFactor>
-      <cooldownSeconds>	3	</cooldownSeconds>
+    <script>	SpeedBoost	  <activationDuration>	5	</activationDuration>
+      <enginePowerFactor>	1.0	</enginePowerFactor>
+      <maxSpeedFactor>	1.2	</maxSpeedFactor>
+      <rotationSpeedFactor>	1	</rotationSpeedFactor>
+      <impulseForce>	0 0 200	</impulseForce>
+      <impulseModification>	0.25	</impulseModification>
+      <impulseModificationRange>	2.0	</impulseModificationRange>
+      <impulseModDistanceMin>	4.0	</impulseModDistanceMin>
+      <activationAddRotation>	-2.2 0 0	</activationAddRotation>
       <reuseCount>	-1	</reuseCount>
     </script>
-  </afterburning>
+  </speedboostChaffee>
+  <speedboostLeopard>
+    <id>	65	</id>
+    <userString>	#festival:festival/tooltips/forsage_name	</userString>
+    <description>	#festival:festival/tooltips/forsage_descr	</description>
+    <icon>	G00_VK16_nitro 0 0	</icon>
+    <price>	5000	</price>
+    <tags>	festival_ability	</tags>
+    <notInShop>	true	</notInShop>
+    <vehicleFilter>
+      <include>
+        <nations>	germany	</nations>
+        <vehicle>
+          <tags>	event_battles	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	SpeedBoost	  <activationDuration>	5	</activationDuration>
+      <enginePowerFactor>	1.0	</enginePowerFactor>
+      <maxSpeedFactor>	1.2	</maxSpeedFactor>
+      <rotationSpeedFactor>	1	</rotationSpeedFactor>
+      <impulseForce>	0 0 200	</impulseForce>
+      <impulseModification>	0.35	</impulseModification>
+      <impulseModificationRange>	2.0	</impulseModificationRange>
+      <impulseModDistanceMin>	4.0	</impulseModDistanceMin>
+      <activationAddRotation>	-2.2 0 0	</activationAddRotation>
+      <reuseCount>	-1	</reuseCount>
+    </script>
+  </speedboostLeopard>
+  <speedboostT-50>
+    <id>	66	</id>
+    <userString>	#festival:festival/tooltips/forsage_name	</userString>
+    <description>	#festival:festival/tooltips/forsage_descr	</description>
+    <icon>	R00_T-50_nitro 0 0	</icon>
+    <price>	5000	</price>
+    <tags>	festival_ability	</tags>
+    <notInShop>	true	</notInShop>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr	</nations>
+        <vehicle>
+          <tags>	event_battles	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	SpeedBoost	  <activationDuration>	5	</activationDuration>
+      <enginePowerFactor>	1.0	</enginePowerFactor>
+      <maxSpeedFactor>	1.2	</maxSpeedFactor>
+      <rotationSpeedFactor>	1	</rotationSpeedFactor>
+      <impulseForce>	0 0 200	</impulseForce>
+      <impulseModification>	0.1	</impulseModification>
+      <impulseModificationRange>	2.0	</impulseModificationRange>
+      <impulseModDistanceMin>	4.0	</impulseModDistanceMin>
+      <activationAddRotation>	-2.2 0 0	</activationAddRotation>
+      <reuseCount>	-1	</reuseCount>
+    </script>
+  </speedboostT-50>
   <ration_china>
     <id>	15	</id>
     <userString>	#artefacts:ration_china/name	</userString>

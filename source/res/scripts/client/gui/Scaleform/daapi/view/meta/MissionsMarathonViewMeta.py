@@ -9,3 +9,6 @@ class MissionsMarathonViewMeta(BaseDAAPIComponent):
 
     def as_loadBrowserS(self):
         return self.flashObject.as_loadBrowser() if self._isDAAPIInited() else None
+
+    def as_setUnboundInjVisibleS(self, value):
+        return self.flashObject.as_setUnboundInjVisible(value) if self._isDAAPIInited() else None

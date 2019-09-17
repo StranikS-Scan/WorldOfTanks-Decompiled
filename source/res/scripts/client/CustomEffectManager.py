@@ -58,7 +58,7 @@ class CustomEffectManager(Component):
 
         self.__createChassisCenterNodes()
         self.__wheelsData = None
-        self.__variableArgs['Nitro'] = 0
+        self.__variableArgs['SpeedBoost'] = 0
         PixieCache.incref()
         return
 

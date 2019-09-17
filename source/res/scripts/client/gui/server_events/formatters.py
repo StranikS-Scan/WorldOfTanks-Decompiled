@@ -326,7 +326,7 @@ def getUniqueBonusTypes(bonusTypes):
     for bonusType in bonusTypes:
         if bonusType in (ARENA_BONUS_TYPE.SANDBOX, ARENA_BONUS_TYPE.RATED_SANDBOX):
             bonusType = ARENA_BONUS_TYPE.RATED_SANDBOX
-        if bonusType in (ARENA_BONUS_TYPE.TOURNAMENT_REGULAR, ARENA_BONUS_TYPE.TOURNAMENT_CLAN):
+        if bonusType in ARENA_BONUS_TYPE.TOURNAMENT_RANGE:
             bonusType = ARENA_BONUS_TYPE.TOURNAMENT
         if bonusType in (ARENA_BONUS_TYPE.EPIC_RANDOM_TRAINING, ARENA_BONUS_TYPE.EPIC_BATTLE_TRAINING):
             bonusType = ARENA_BONUS_TYPE.EPIC_RANDOM
@@ -334,8 +334,6 @@ def getUniqueBonusTypes(bonusTypes):
             bonusType = ARENA_BONUS_TYPE.REGULAR
         if bonusType in (ARENA_BONUS_TYPE.EVENT_BATTLES_2,):
             bonusType = ARENA_BONUS_TYPE.EVENT_BATTLES
-        if bonusType in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
-            bonusType = ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO
         uniqueTypes.add(bonusType)
 
     return uniqueTypes

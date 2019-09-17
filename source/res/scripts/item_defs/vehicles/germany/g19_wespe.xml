@@ -148,6 +148,10 @@
         <isUVProportional>	true	</isUVProportional>
       </slot>
     </customizationSlots>
+    <camouflage>
+      <density>	107.692 109.229	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
   </hull>
   <chassis>
     <Wespeketten_ausf_A>
@@ -2228,6 +2232,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	1.24 0.46 0.000000 0.000000	</tiling>
+            <density>	105.285 109.504	</density>
+            <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
         </_105mm_leFH16_L22>
         <_105mm_leFH18_L28>	shared	  <maxAmmo>	32	</maxAmmo>
@@ -2290,6 +2296,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	1.24 0.58 0.000000 0.000000	</tiling>
+            <density>	123.419 127.696	</density>
+            <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
         </_105mm_leFH18_L28>
       </guns>
@@ -2328,6 +2336,8 @@
       </customizationSlots>
       <camouflage>
         <tiling>	0.46 0.46 0.000000 0.000000	</tiling>
+        <density>	125.136 125.196	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
     </Wespeturm>
   </turrets0>

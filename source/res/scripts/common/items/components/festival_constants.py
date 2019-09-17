@@ -32,6 +32,10 @@ class FEST_CONFIG(object):
     RANDOM_PRICES = 'randomPrices'
     FESTIVAL_ENABLED = 'isEnabled'
     PLAYER_CARDS_ENABLED = 'isPlayerCardsEnabled'
+    RACE_COLLECTION_INFO = 'raceCollectionInfo'
+    RACING_EVENT_URL = 'racingEventUrl'
+    MINI_GAMES_URL = 'miniGamesUrl'
+    MINI_GAMES_ENABLED = 'isMiniGamesEnabled'
 
 
 FEST_TYPE_IDS = {name:idx for idx, name in enumerate(FEST_ITEM_TYPE.ALL)}

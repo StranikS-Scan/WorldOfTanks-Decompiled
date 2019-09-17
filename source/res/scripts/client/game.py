@@ -28,6 +28,7 @@ import SoundGroups
 from skeletons.connection_mgr import IConnectionManager
 from bootcamp.Bootcamp import g_bootcamp
 from skeletons.gameplay import IGameplayLogic
+from event_settings import event_settings_swapper
 tutorialLoaderInit = lambda : None
 tutorialLoaderFini = lambda : None
 if constants.IS_TUTORIAL_ENABLED:
@@ -104,6 +105,7 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         motivation_quests.init()
         BigWorld.worldDrawEnabled(False)
         dependency.configure(services_config.getClientServicesConfig)
+        event_settings_swapper.g_instance.init()
         tutorialLoaderInit()
         SoundGroups.g_instance.startListeningGUISpaceChanges()
         gui_personality.init(loadingScreenGUI=loadingScreenGUI)
@@ -130,6 +132,9 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         from AvatarInputHandler.cameras import FovExtended
         FovExtended.instance().resetFov()
         BigWorld.pauseDRRAutoscaling(True)
+        if constants.HAS_DEV_RESOURCES:
+            import development
+            development.init()
     except Exception:
         LOG_CURRENT_EXCEPTION()
         BigWorld.quit()
@@ -304,6 +309,7 @@ def fini():
         if g_preDefinedHosts is not None:
             g_preDefinedHosts.fini()
         SoundGroups.g_instance.stopListeningGUISpaceChanges()
+        event_settings_swapper.g_instance.fini()
         dependency.clear()
         if g_replayCtrl is not None:
             g_replayCtrl.destroy()
@@ -317,6 +323,9 @@ def fini():
             g_scenario.fini()
         g_onBeforeSendEvent = None
         WebBrowser.destroyExternalCache()
+        if constants.HAS_DEV_RESOURCES:
+            import development
+            development.fini()
         return
 
 
@@ -503,7 +512,13 @@ _PYTHON_MACROS = {'p': 'BigWorld.player()',
  'setHero': 'from HeroTank import debugReloadHero; debugReloadHero',
  'rankedCtrl': 'from helpers import dependency; from skeletons.gui.game_control import IRankedBattlesController;rc = dependency.instance(IRankedBattlesController)',
  'eventsCache': 'from helpers import dependency; from skeletons.gui.server_events import IEventsCache;ec = dependency.instance(IEventsCache)',
- 'items': 'from helpers import dependency; from skeletons.gui.shared import IItemsCache;items = dependency.instance(IItemsCache).items'}
+ 'items': 'from helpers import dependency; from skeletons.gui.shared import IItemsCache;items = dependency.instance(IItemsCache).items',
+ 'festRepair1': 'BigWorld.player().base.setDevelopmentFeature(0, "festivalRaceRepair", 1, "")',
+ 'festRepair2': 'BigWorld.player().base.setDevelopmentFeature(0, "festivalRaceRepair", 2, "")',
+ 'festRepair3': 'BigWorld.player().base.setDevelopmentFeature(0, "festivalRaceRepair", 3, "")',
+ 'festRepair4': 'BigWorld.player().base.setDevelopmentFeature(0, "festivalRaceRepair", 4, "")',
+ 'festRepair5': 'BigWorld.player().base.setDevelopmentFeature(0, "festivalRaceRepair", 5, "")',
+ 'festRepair6': 'BigWorld.player().base.setDevelopmentFeature(0, "festivalRaceRepair", 6, "")'}
 
 def expandMacros(line):
     import re

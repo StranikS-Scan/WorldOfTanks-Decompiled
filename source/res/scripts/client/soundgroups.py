@@ -304,6 +304,7 @@ class SoundGroups(object):
                 volume = ds.readFloat('volume_' + categoryName, defCategoryVolumes.get(categoryName, 1.0))
                 self.__volumeByCategory[categoryName] = volume
 
+            self.__adjustHangarMusicVolumeAtFirstTime(ds)
             soundModeSec = ds['soundMode']
             if soundModeSec is not None:
                 soundModeName = soundModeSec.asString
@@ -637,3 +638,20 @@ class SoundGroups(object):
 
     def setSwitch(self, group, switch):
         WWISE.WW_setSwitch(group, switch)
+
+    def __getMedianSoundValue(self):
+        soundValues = sorted([ self.__volumeByCategory[categoryName] for categoryName in ('gui', 'vehicles', 'voice', 'effects', 'ambient', 'music', 'music_hangar') if categoryName in self.__volumeByCategory ])
+        return soundValues[len(soundValues) / 2]
+
+    def __adjustHangarMusicVolumeAtFirstTime(self, soundPrefsDataSection):
+        firstTimeGuardSection = 'hangar_music_adjusted'
+        isHangarMusicVolumeAdjusted = soundPrefsDataSection.readBool(firstTimeGuardSection, False)
+        if isHangarMusicVolumeAdjusted:
+            return
+        soundPrefsDataSection.writeBool(firstTimeGuardSection, True)
+        medianValue = self.__getMedianSoundValue()
+        minVolume = 0.05
+        if medianValue < minVolume:
+            self.__volumeByCategory['music_hangar'] = minVolume
+        elif self.__volumeByCategory['music_hangar'] < medianValue:
+            self.__volumeByCategory['music_hangar'] = medianValue

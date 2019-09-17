@@ -128,6 +128,27 @@ ACHIEVEMENT_CONDITIONS_EXT = {'warrior': {'minFrags': 8},
  'medalRadleyWalters': {'minLevel': 5,
                         'minKills': 10,
                         'maxKills': 12}}
+RACING_ACHIEVEMENT_CONDITIONS = {'successfulFinish': {},
+ 'invader': {'minCapturePts': 1},
+ 'shooter': {'minDamageDealt': 500},
+ 'alwaysFirst': {'racingPosition': 1},
+ 'winnerShooter': {'minDamageDealt': 1000},
+ 'winnerSniper': {'minDamaged': 3}}
+RACING_ACHIEVEMENT_POINTS = {'successfulFinish': 5,
+ 'invader': 5,
+ 'shooter': 5,
+ 'alwaysFirst': 5,
+ 'winnerShooter': 10,
+ 'winnerSniper': 10}
+
+def calculateRacingPoints(achievements):
+    totalPoints = 0
+    for record, points in RACING_ACHIEVEMENT_POINTS.iteritems():
+        if RECORD_DB_IDS['racing2019Achievements', record] in achievements:
+            totalPoints += points
+
+    return totalPoints
+
 
 def getAchievementCondition(arenaBonusType, medal):
     if BONUS_CAPS.checkAny(arenaBonusType, BONUS_CAPS.ACHIEVEMENT_CONDITIONS_EXT):

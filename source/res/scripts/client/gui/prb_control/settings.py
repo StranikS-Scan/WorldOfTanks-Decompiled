@@ -55,8 +55,7 @@ class FUNCTIONAL_FLAG(BitmaskHelper):
     BOOTCAMP = 2097152
     EPIC_TRAINING = 4194304
     EPIC = 8388608
-    BATTLE_ROYALE = 16777216
-    DEFAULT = 33554432
+    DEFAULT = 16777216
     LEGACY_BITMASK = LEGACY_INTRO | LEGACY
     UNIT_BITMASK = UNIT_INTRO | UNIT_BROWSER | UNIT
     PRE_QUEUE_BITMASK = PRE_QUEUE_INTRO | PRE_QUEUE
@@ -138,7 +137,6 @@ class PREBATTLE_ACTION_NAME(object):
     SPEC_BATTLES_LIST = 'specBattlesList'
     SQUAD = 'squad'
     EVENT_SQUAD = 'eventSquad'
-    BATTLE_ROYALE_SQUAD = 'battleRoyaleSquad'
     TOURNAMENT = 'tournament'
     CLAN = 'clan'
     E_SPORT = 'eSport'
@@ -153,7 +151,6 @@ class PREBATTLE_ACTION_NAME(object):
     EPIC_TRAINING_LIST = 'epicTrainingsList'
     EPIC = 'epicQueue'
     EPIC_FORCED = 'epicForced'
-    BATTLE_ROYALE = 'battleRoyaleQueue'
 
 
 class PREBATTLE_INIT_STEP(object):
@@ -168,7 +165,6 @@ class SELECTOR_BATTLE_TYPES(object):
     SORTIE = 'sortie'
     RANKED = 'ranked'
     EPIC = 'epic'
-    BATTLE_ROYALE = 'battleRoyale'
 
 
 class REQUEST_TYPE(object):
@@ -239,9 +235,7 @@ class PREBATTLE_RESTRICTION(object):
     VEHICLE_NOT_SUPPORTED = 'vehicle/not_supported'
     VEHICLE_EPIC_ONLY = 'vehicle/epic_only'
     VEHICLE_ROTATION_GROUP_LOCKED = 'vehicle/rotationGroupLocked'
-    UNSUITABLE_VEHICLE_FOR_BATTLE_ROYALE = 'vehicle/notForBattleRoyaleMode'
     CREW_NOT_FULL = 'crew/notFull'
-    UNIT_NOT_FULL = 'squad/notFull'
     TUTORIAL_NOT_FINISHED = 'tutorial/notFinished'
     SERVER_LIMITS = (LIMIT_MIN_COUNT,
      LIMIT_MAX_COUNT,
@@ -327,8 +321,7 @@ class UNIT_RESTRICTION(object):
     UNIT_MIN_CLAN_MEMBERS = 40
     UNIT_WILL_SEARCH_PLAYERS = 41
     UNIT_IS_IN_PLAYERS_MATCHING = 42
-    UNIT_NOT_FULL = 43
-    UNSUITABLE_VEHICLE = 44
+    PLAYER_DOESNT_HAS_RACING_ATTEMPTS = 43
 
 
 class PRE_QUEUE_RESTRICTION(object):

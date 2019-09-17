@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/festival/festival_card_view.py
+import time
 from festivity.festival.constants import FestSyncDataKeys
 from festivity.festival.hint_helper import FestivalHintHelper
 from festivity.festival.item_info import FestivalItemInfo
@@ -14,8 +15,10 @@ from gui.impl.gen.view_models.views.lobby.festival.festival_tab_model import Fes
 from gui.impl.lobby.festival.festival_helper import fillItemsInfoModel, fillFestivalItemsArray, fillFestivalPlayerCard, FestSelectedFilters
 from gui.impl.lobby.festival.festival_random_generator_view import showFestivalRandomGenerator
 from gui.impl.pub import ViewImpl
+from gui.shared.event_dispatcher import showFestMiniGameOverlay
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import decorators
+from gui.shared.utils.scheduled_notifications import SimpleNotifier
 from helpers import dependency
 from items.components.festival_constants import FEST_ITEM_TYPE
 from skeletons.festival import IFestivalController
@@ -25,7 +28,7 @@ _UNDEFINED_INDEX = -1
 
 class FestivalCardView(ViewImpl):
     __festController = dependency.descriptor(IFestivalController)
-    __slots__ = ('__tempPlayerCard', '__currentTypeName', '__selectedFilter', '__isFocus')
+    __slots__ = ('__tempPlayerCard', '__currentTypeName', '__selectedFilter', '__notifier', '__isFocus')
 
     def __init__(self, viewKey=R.views.lobby.festival.festival_card_view.FestivalCardView(), viewModelClazz=FestivalCardViewModel, *args, **kwargs):
         super(FestivalCardView, self).__init__(viewKey, ViewFlags.COMPONENT, viewModelClazz, *args, **kwargs)
@@ -70,11 +73,14 @@ class FestivalCardView(ViewImpl):
         self.viewModel.filterModel.onFilterChanged += self.__onFilterChange
         self.viewModel.onDogtagGenerator += self.__onDogtagGenerator
         self.viewModel.onMarkAsSeenItem += self.__onMarkAsSeenItem
+        self.viewModel.onOpenMiniGames += self.__onOpenMiniGames
         self.__festController.onDataUpdated += self.__onDataUpdated
+        self.__festController.onMiniGamesUpdated += self.__onMiniGamesUpdated
         tabName = tabName or self.__festController.getCurrentCardTabState()
         self.__tempPlayerCard = self.__festController.getPlayerCard()
         self.__festController.setGlobalPlayerCard(self.__tempPlayerCard)
         self.__currentTypeName = tabName
+        self.__notifier = SimpleNotifier(self.__getMiniGameCooldownPeriod, self.__updateMiniGameCooldown)
         with self.viewModel.transaction() as model:
             fillItemsInfoModel(model)
             model.setStartIndex(FEST_ITEM_TYPE.ALL.index(tabName))
@@ -92,6 +98,7 @@ class FestivalCardView(ViewImpl):
             self.__fillItems(model)
             self.__updateSeenItems(model)
             self.__updateTutorial()
+            self.__updateMiniGames(model)
             self.__selectedFilter.initFilters(model.filterModel)
 
     def _finalize(self):
@@ -103,10 +110,14 @@ class FestivalCardView(ViewImpl):
         self.viewModel.filterModel.onFilterChanged -= self.__onFilterChange
         self.viewModel.onDogtagGenerator -= self.__onDogtagGenerator
         self.viewModel.onMarkAsSeenItem -= self.__onMarkAsSeenItem
+        self.viewModel.onOpenMiniGames -= self.__onOpenMiniGames
         self.__festController.onDataUpdated -= self.__onDataUpdated
+        self.__festController.onMiniGamesUpdated -= self.__onMiniGamesUpdated
         self.__festController.setCurrentCardTabState(self.__currentTypeName)
         self.__festController.setGlobalPlayerCard(None)
         self.__selectedFilter.clear()
+        self.__notifier.stopNotification()
+        self.__notifier = None
         super(FestivalCardView, self)._finalize()
         return
 
@@ -114,7 +125,15 @@ class FestivalCardView(ViewImpl):
     def __onDogtagGenerator(self):
         FestivalHintHelper.updateRndBuyHintVisible(False)
         FestivalHintHelper.setBuyRandom()
-        yield showFestivalRandomGenerator(self.getParentWindow())
+        result = yield showFestivalRandomGenerator(self.getParentWindow())
+        if result:
+            FestivalHintHelper.updateMiniGamesHintVisible(FestivalHintHelper.canShowMiniGames())
+
+    def __onOpenMiniGames(self):
+        if FestivalHintHelper.canShowMiniGames():
+            FestivalHintHelper.updateMiniGamesHintVisible(False)
+            FestivalHintHelper.setMiniGames()
+        showFestMiniGameOverlay()
 
     @decorators.process('festival/buyFestivalItem')
     def __onBuyItem(self, args):
@@ -122,6 +141,10 @@ class FestivalCardView(ViewImpl):
         result = yield FestivalBuyItemProcessor(itemID, self.getParentWindow()).request()
         if result and result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+
+    def __onMiniGamesUpdated(self):
+        with self.viewModel.transaction() as model:
+            self.__updateMiniGames(model)
 
     def __onDataUpdated(self, keys):
         with self.viewModel.transaction() as model:
@@ -226,8 +249,35 @@ class FestivalCardView(ViewImpl):
             item.setIsCanBuy(festItem.getCost() <= self.__festController.getTickets())
 
     def __updateTutorial(self):
-        isRndBuyHintEnabled = FestivalHintHelper.canShowIsBuyRandom()
-        FestivalHintHelper.updateRndBuyHintVisible(self.__isFocus and isRndBuyHintEnabled)
+        isRndBuyHintEnabled = FestivalHintHelper.canShowIsBuyRandom(additionalCondition=self.__isFocus)
+        FestivalHintHelper.updateRndBuyHintVisible(isRndBuyHintEnabled)
+        FestivalHintHelper.updateMiniGamesHintVisible(self.__isFocus and FestivalHintHelper.canShowMiniGames())
+
+    def __updateMiniGames(self, model):
+        model.setTotalMiniGamesAttempts(self.__festController.getMiniGamesAttemptsMax())
+        model.setRemainedMiniGamesAttempts(self.__festController.getMiniGamesAttemptsLeft())
+        model.setIsMiniGamesEnabled(self.__festController.isMiniGamesEnabled())
+        miniGamesCooldown = self.__festController.getMiniGamesCooldown()
+        if miniGamesCooldown is not None:
+            self.__notifier.startNotification()
+            model.setMiniGamesCooldown(miniGamesCooldown if miniGamesCooldown > 0 else 0)
+        else:
+            self.__notifier.stopNotification()
+            model.setMiniGamesCooldown(0)
+        return
+
+    def __getMiniGameCooldownPeriod(self):
+        leftTime = self.viewModel.getMiniGamesCooldown()
+        gmTime = time.gmtime(leftTime)
+        return gmTime.tm_sec + 1
+
+    def __updateMiniGameCooldown(self):
+        miniGamesCooldown = self.__festController.getMiniGamesCooldown()
+        if miniGamesCooldown is None:
+            self.__notifier.stopNotification()
+        else:
+            self.viewModel.setMiniGamesCooldown(miniGamesCooldown if miniGamesCooldown > 0 else 0)
+        return
 
     def __fillItems(self, model):
         fillFestivalItemsArray(self.__selectedFilter.getItems(), model.items)

@@ -205,13 +205,19 @@ class ArenaVehiclesListener(_Listener):
         if stats:
             self._invokeListenersMethod('updateVehiclesStats', stats, self._arenaDP)
 
-    def __arena_onGameModeSpecifcStats(self, isStatic, stats):
+    def __arena_onGameModeSpecifcStats(self, isStatic, stats, aggregate=False):
+        vos = []
         for vehicleID, vehicleStats in stats.iteritems():
             flags, vo = self._arenaDP.updateGameModeSpecificStats(vehicleID, isStatic, vehicleStats)
-            if isStatic:
-                self._invokeListenersMethod('updateVehiclesInfo', [(flags, vo)], self._arenaDP)
-            if flags != INVALIDATE_OP.NONE:
-                self._invokeListenersMethod('updateVehiclesStats', [(flags, vo)], self._arenaDP)
+            if not aggregate:
+                if isStatic:
+                    self._invokeListenersMethod('updateVehiclesInfo', [(flags, vo)], self._arenaDP)
+                elif flags != INVALIDATE_OP.NONE:
+                    self._invokeListenersMethod('updateVehiclesStats', [(flags, vo)], self._arenaDP)
+            vos.append((flags, vo))
+
+        if aggregate:
+            self._invokeListenersMethod('updateVehiclesStats', vos, self._arenaDP)
 
     def __arena_onFogOfWarHiddenVehiclesSet(self, flag):
         pass

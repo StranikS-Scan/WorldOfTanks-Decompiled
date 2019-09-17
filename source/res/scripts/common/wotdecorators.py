@@ -9,30 +9,30 @@ import time_tracking
 
 def noexcept(func):
 
-    def noexceptWrapper(*args, **kwArgs):
+    def wrapper(*args, **kwArgs):
         try:
             return func(*args, **kwArgs)
         except:
-            LOG_WRAPPED_CURRENT_EXCEPTION(noexceptWrapper.__name__, func.__name__, func.func_code.co_filename, func.func_code.co_firstlineno + 1)
+            LOG_WRAPPED_CURRENT_EXCEPTION(wrapper.__name__, func.__name__, func.func_code.co_filename, func.func_code.co_firstlineno + 1)
 
-    return noexceptWrapper
+    return wrapper
 
 
 def nofail(func):
 
-    def nofailWrapper(*args, **kwArgs):
+    def wrapper(*args, **kwArgs):
         try:
             return func(*args, **kwArgs)
         except:
-            LOG_WRAPPED_CURRENT_EXCEPTION(nofailWrapper.__name__, func.__name__, func.func_code.co_filename, func.func_code.co_firstlineno + 1)
+            LOG_WRAPPED_CURRENT_EXCEPTION(wrapper.__name__, func.__name__, func.func_code.co_filename, func.func_code.co_firstlineno + 1)
             CRITICAL_ERROR('Exception in no-fail code')
 
-    return nofailWrapper
+    return wrapper
 
 
 def exposedtoclient(func):
 
-    def exposedtoclientWrapper(*args, **kwArgs):
+    def wrapper(*args, **kwArgs):
         try:
             lastTick = time.time()
             result = func(*args, **kwArgs)
@@ -44,9 +44,9 @@ def exposedtoclient(func):
                  kwArgs))
             return result
         except:
-            LOG_WRAPPED_CURRENT_EXCEPTION(exposedtoclientWrapper.__name__, func.__name__, func.func_code.co_filename, func.func_code.co_firstlineno + 1)
+            LOG_WRAPPED_CURRENT_EXCEPTION(wrapper.__name__, func.__name__, func.func_code.co_filename, func.func_code.co_firstlineno + 1)
 
-    return exposedtoclientWrapper
+    return wrapper
 
 
 def singleton(cls):

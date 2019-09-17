@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.festival.festival_player_card_view_mod
 from gui.impl.gen.view_models.views.lobby.selected_filters_model import SelectedFiltersModel
 
 class FestivalCardViewModel(FestivalItemsInfoViewModel):
-    __slots__ = ('onBuyItem', 'onItemTypeChange', 'onSelectItem', 'onMarkAsSeenItem', 'onDogtagGenerator')
+    __slots__ = ('onBuyItem', 'onItemTypeChange', 'onSelectItem', 'onMarkAsSeenItem', 'onDogtagGenerator', 'onOpenMiniGames')
 
     @property
     def playerCard(self):
@@ -62,11 +62,35 @@ class FestivalCardViewModel(FestivalItemsInfoViewModel):
     def setIsRandomBtnEnabled(self, value):
         self._setBool(11, value)
 
-    def getLowestRandomPrice(self):
+    def getTotalMiniGamesAttempts(self):
         return self._getNumber(12)
 
-    def setLowestRandomPrice(self, value):
+    def setTotalMiniGamesAttempts(self, value):
         self._setNumber(12, value)
+
+    def getRemainedMiniGamesAttempts(self):
+        return self._getNumber(13)
+
+    def setRemainedMiniGamesAttempts(self, value):
+        self._setNumber(13, value)
+
+    def getMiniGamesCooldown(self):
+        return self._getNumber(14)
+
+    def setMiniGamesCooldown(self, value):
+        self._setNumber(14, value)
+
+    def getIsMiniGamesEnabled(self):
+        return self._getBool(15)
+
+    def setIsMiniGamesEnabled(self, value):
+        self._setBool(15, value)
+
+    def getLowestRandomPrice(self):
+        return self._getNumber(16)
+
+    def setLowestRandomPrice(self, value):
+        self._setNumber(16, value)
 
     def _initialize(self):
         super(FestivalCardViewModel, self)._initialize()
@@ -80,9 +104,14 @@ class FestivalCardViewModel(FestivalItemsInfoViewModel):
         self._addBoolProperty('isCanApply', False)
         self._addArrayProperty('notReceivedItems', Array())
         self._addBoolProperty('isRandomBtnEnabled', False)
+        self._addNumberProperty('totalMiniGamesAttempts', 0)
+        self._addNumberProperty('remainedMiniGamesAttempts', 0)
+        self._addNumberProperty('miniGamesCooldown', 0)
+        self._addBoolProperty('isMiniGamesEnabled', False)
         self._addNumberProperty('lowestRandomPrice', 0)
         self.onBuyItem = self._addCommand('onBuyItem')
         self.onItemTypeChange = self._addCommand('onItemTypeChange')
         self.onSelectItem = self._addCommand('onSelectItem')
         self.onMarkAsSeenItem = self._addCommand('onMarkAsSeenItem')
         self.onDogtagGenerator = self._addCommand('onDogtagGenerator')
+        self.onOpenMiniGames = self._addCommand('onOpenMiniGames')

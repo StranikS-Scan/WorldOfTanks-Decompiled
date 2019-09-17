@@ -2,7 +2,6 @@
 # Embedded file name: scripts/common/items/vehicle_items.py
 import functools
 import Math
-import vehicles
 from ModelHitTester import ModelHitTester
 from constants import SHELL_TYPES
 from soft_exception import SoftException
@@ -126,11 +125,12 @@ class InstallableItem(VehicleItem):
 
 @add_shallow_copy()
 class Chassis(InstallableItem):
-    __slots__ = ('hullPosition', 'topRightCarryingPoint', 'navmeshGirth', 'minPlaneNormalY', 'maxLoad', 'specificFriction', 'rotationSpeed', 'rotationSpeedLimit', 'rotationIsAroundCenter', 'shotDispersionFactors', 'terrainResistance', 'bulkHealthFactor', 'carryingTriangles', 'drivingWheelsSizes', 'chassisLodDistance', 'traces', 'tracks', 'wheels', 'groundNodes', 'trackNodes', 'trackSplineParams', 'splineDesc', 'leveredSuspension', 'suspensionSpringsLength', 'hullAimingSound', 'effects', 'customEffects', 'AODecals', 'brakeForce', 'physicalTracks', 'customizableVehicleAreas', 'generalWheelsAnimatorConfig', 'wheelHealthParams')
+    __slots__ = ('hullPosition', 'topRightCarryingPoint', 'navmeshGirth', 'minPlaneNormalY', 'maxLoad', 'specificFriction', 'rotationSpeed', 'rotationSpeedLimit', 'rotationIsAroundCenter', 'shotDispersionFactors', 'terrainResistance', 'bulkHealthFactor', 'carryingTriangles', 'drivingWheelsSizes', 'chassisLodDistance', 'traces', 'tracks', 'wheels', 'groundNodes', 'trackNodes', 'trackSplineParams', 'splineDesc', 'leveredSuspension', 'suspensionSpringsLength', 'hullAimingSound', 'effects', 'customEffects', 'AODecals', 'brakeForce', 'physicalTracks', 'customizableVehicleAreas', 'generalWheelsAnimatorConfig', 'wheelHealthParams', 'autoAimOffset')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Chassis, self).__init__(typeID, componentID, componentName, compactDescr, level=level)
         self.hullPosition = None
+        self.autoAimOffset = None
         self.topRightCarryingPoint = None
         self.navmeshGirth = component_constants.ZERO_FLOAT
         self.minPlaneNormalY = component_constants.ZERO_FLOAT
@@ -188,13 +188,11 @@ class FuelTank(InstallableItem):
 
 @add_shallow_copy()
 class Radio(InstallableItem):
-    __slots__ = ('distance', 'radarRadius', 'radarCooldown')
+    __slots__ = ('distance',)
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Radio, self).__init__(typeID, componentID, componentName, compactDescr, level)
         self.distance = component_constants.ZERO_FLOAT
-        self.radarRadius = component_constants.ZERO_FLOAT
-        self.radarCooldown = component_constants.ZERO_FLOAT
 
 
 @add_shallow_copy()
@@ -365,30 +363,3 @@ def createRadio(nationID, componentID, name):
 
 def createShell(nationID, componentID, name):
     return Shell(ITEM_TYPES.shell, (nationID, componentID), name, makeIntCompactDescrByID('shell', nationID, componentID))
-
-
-def checkModuleValidity(intCD, vehicleDescriptor):
-    module = vehicles.getItemByCompactDescr(intCD)
-    vehicleModules = (vehicleDescriptor.chassis,
-     vehicleDescriptor.turret,
-     vehicleDescriptor.gun,
-     vehicleDescriptor.engine,
-     vehicleDescriptor.radio)
-    currentLevel = module.level
-    previousLevel = currentLevel - 1
-    if not all((module.level < currentLevel for module in vehicleModules)):
-        return (False, 'invalide module')
-    else:
-        if previousLevel > 1:
-            for previousModule in vehicleModules:
-                if previousModule.level == previousLevel and previousModule.unlocks:
-                    for modulesCDs in vehicleDescriptor.type.unlocksDescrs:
-                        if len(modulesCDs) > 2:
-                            moduleCD = modulesCDs[1]
-                            if moduleCD == intCD:
-                                if previousModule.compactDescr in modulesCDs[2:-1]:
-                                    return (True, None)
-
-                    return (False, 'module is not in unlocks')
-
-        return (True, None)

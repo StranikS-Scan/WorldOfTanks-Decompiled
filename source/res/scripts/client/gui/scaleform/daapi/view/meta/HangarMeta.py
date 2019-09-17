@@ -7,9 +7,6 @@ class HangarMeta(View):
     def onEscape(self):
         self._printOverrideError('onEscape')
 
-    def onCloseBtnClick(self):
-        self._printOverrideError('onCloseBtnClick')
-
     def showHelpLayout(self):
         self._printOverrideError('showHelpLayout')
 
@@ -79,11 +76,5 @@ class HangarMeta(View):
     def as_setFestivalWidgetVisibleS(self, value):
         return self.flashObject.as_setFestivalWidgetVisible(value) if self._isDAAPIInited() else None
 
-    def as_toggleBattleRoyaleS(self, isBattleRoyale):
-        return self.flashObject.as_toggleBattleRoyale(isBattleRoyale) if self._isDAAPIInited() else None
-
-    def as_showNotificationS(self, message, isAlert, tooltip):
-        return self.flashObject.as_showNotification(message, isAlert, tooltip) if self._isDAAPIInited() else None
-
-    def as_hideNotificationS(self):
-        return self.flashObject.as_hideNotification() if self._isDAAPIInited() else None
+    def as_toggleFestivalRaceS(self, isRace):
+        return self.flashObject.as_toggleFestivalRace(isRace) if self._isDAAPIInited() else None

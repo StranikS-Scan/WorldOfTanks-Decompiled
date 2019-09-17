@@ -5,13 +5,14 @@ from adisp import process
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL
 from gui.Scaleform.locale.MENU import MENU
 from gui.awards.event_dispatcher import showRecruiterAward
+from gui.marathon.racing_event import TOURNAMENT_END_FAKE_TOKEN, TOURNAMENT_STAGE_END_FAKE_TOKEN, RacingEvent
 from gui.promo.promo_logger import PromoLogSourceType, PromoLogActions
 from gui.shared.event_dispatcher import showReferralProgramWindow
 from gui.wgnc.common import WebHandlersContainer
 from gui.wgnc.events import g_wgncEvents
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
 from helpers import dependency
-from skeletons.gui.game_control import IEncyclopediaController, IBrowserController, IPromoController, IReferralProgramController
+from skeletons.gui.game_control import IEncyclopediaController, IBrowserController, IPromoController, IReferralProgramController, IMarathonEventsController
 from skeletons.gui.shared.promo import IPromoLogger
 
 class _ProxyDataItem(object):
@@ -284,6 +285,36 @@ class ShowReferralWindowItem(_ProxyDataItem):
     def show(self, _):
         url = getReferralProgramURL() + self.__relativeUrl
         showReferralProgramWindow(url)
+
+
+class RacingTournamentEndItem(_ProxyDataItem):
+    _marathonEventsController = dependency.descriptor(IMarathonEventsController)
+
+    def getType(self):
+        return WGNC_DATA_PROXY_TYPE.RACING_TOURNAMENT_END
+
+    def show(self, _):
+        marathonEvent = self._marathonEventsController.getMarathon(RacingEvent.RACING_MARATHON_PREFIX)
+        if marathonEvent is not None:
+            self._setAwardReceived(marathonEvent)
+            self._marathonEventsController.tryShowRewardScreen()
+        return
+
+    def _setAwardReceived(self, marathonEvent):
+        marathonEvent.addAwardToQueue(TOURNAMENT_END_FAKE_TOKEN)
+
+
+class RacingTournamentStageEndItem(RacingTournamentEndItem):
+
+    def __init__(self, stageNumber):
+        super(RacingTournamentStageEndItem, self).__init__()
+        self.__stageNumber = stageNumber
+
+    def getType(self):
+        return WGNC_DATA_PROXY_TYPE.RACING_TOURNAMENT_STAGE_END
+
+    def _setAwardReceived(self, marathonEvent):
+        marathonEvent.addAwardToQueue(TOURNAMENT_STAGE_END_FAKE_TOKEN + str(self.__stageNumber))
 
 
 class ProxyDataHolder(object):

@@ -114,6 +114,8 @@
     <hangarShadowTexture>	vehicles/french/F107_Hotchkiss_EBR/Hotchkiss_EBR_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	2 2 0.000000 0.000000	</tiling>
+      <density>	111.203 110.321	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -928,6 +930,10 @@
           </customization>
           <effects>	shot_medium_mb	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <density>	115.268 116.553	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_75mm_SA49_EBR>
         <Canon_de_75mm_Vo_920_m_s_EBR>	shared	  <maxAmmo>	60	</maxAmmo>
           <unlocks>
@@ -1006,6 +1012,10 @@
           </customization>
           <effects>	shot_medium_mb	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <density>	103.84 103.802	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </Canon_de_75mm_Vo_920_m_s_EBR>
         <Canon_de_75mm_Vo_1000_m_s_EBR>	shared	  <maxAmmo>	60	</maxAmmo>
           <armor>
@@ -1080,6 +1090,10 @@
           </customization>
           <effects>	shot_medium_mb	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <density>	102.361 105.534	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </Canon_de_75mm_Vo_1000_m_s_EBR>
       </guns>
       <models>
@@ -1146,6 +1160,10 @@
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.955 -0.015 1.000 0.000 0.669 0.179 0.697 0.448 0.459 0.500 0.275 0.500 0.000 0.100 0.227	</physicsShape>
+      <camouflage>
+        <density>	112.121 112.506	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </Turret_1_F107_Hotchkiss_EBR>
   </turrets0>
   <engines>

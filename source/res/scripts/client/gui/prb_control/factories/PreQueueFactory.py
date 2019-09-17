@@ -4,7 +4,6 @@ import inspect
 import gui.prb_control.prb_getters
 from constants import QUEUE_TYPE
 from debug_utils import LOG_ERROR
-from gui.prb_control.entities.battle_royale.pre_queue import entity as br_entity
 from gui.prb_control.factories.ControlFactory import ControlFactory
 from gui.prb_control.entities.base.pre_queue.ctx import LeavePreQueueCtx
 from gui.prb_control.entities.random.pre_queue.entity import RandomEntity, RandomEntryPoint
@@ -23,8 +22,7 @@ _SUPPORTED_QUEUES = {QUEUE_TYPE.RANDOMS: RandomEntity,
  QUEUE_TYPE.SANDBOX: SandboxEntity,
  QUEUE_TYPE.RANKED: RankedEntity,
  QUEUE_TYPE.BOOTCAMP: BootcampEntity,
- QUEUE_TYPE.EPIC: EpicEntity,
- QUEUE_TYPE.BATTLE_ROYALE: br_entity.BattleRoyaleEntity}
+ QUEUE_TYPE.EPIC: EpicEntity}
 _SUPPORTED_ENTRY_BY_ACTION = {PREBATTLE_ACTION_NAME.RANDOM: RandomEntryPoint,
  PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL: TutorialEntryPoint,
  PREBATTLE_ACTION_NAME.SANDBOX: SandboxEntryPoint,
@@ -32,8 +30,7 @@ _SUPPORTED_ENTRY_BY_ACTION = {PREBATTLE_ACTION_NAME.RANDOM: RandomEntryPoint,
  PREBATTLE_ACTION_NAME.RANKED_FORCED: RankedForcedEntryPoint,
  PREBATTLE_ACTION_NAME.BOOTCAMP: BootcampEntryPoint,
  PREBATTLE_ACTION_NAME.EPIC: EpicEntryPoint,
- PREBATTLE_ACTION_NAME.EPIC_FORCED: EpicForcedEntryPoint,
- PREBATTLE_ACTION_NAME.BATTLE_ROYALE: br_entity.BattleRoyaleEntryPoint}
+ PREBATTLE_ACTION_NAME.EPIC_FORCED: EpicForcedEntryPoint}
 
 class PreQueueFactory(ControlFactory):
 
@@ -47,10 +44,6 @@ class PreQueueFactory(ControlFactory):
 
     @prequeue_storage_getter(QUEUE_TYPE.EPIC)
     def epicStorage(self):
-        return None
-
-    @prequeue_storage_getter(QUEUE_TYPE.BATTLE_ROYALE)
-    def battleRoyaleStorage(self):
         return None
 
     def createEntry(self, ctx):
@@ -105,7 +98,5 @@ class PreQueueFactory(ControlFactory):
             return SandboxEntity()
         elif self.rankedStorage.isModeSelected():
             return RankedEntity()
-        elif self.epicStorage.isModeSelected():
-            return EpicEntity()
         else:
-            return br_entity.BattleRoyaleEntity() if self.battleRoyaleStorage.isModeSelected() else None
+            return EpicEntity() if self.epicStorage.isModeSelected() else None

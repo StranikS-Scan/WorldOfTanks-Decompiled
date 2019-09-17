@@ -2,22 +2,14 @@
 # Embedded file name: scripts/client/AvatarInputHandler/AimingSystems/magnetic_aim.py
 from collections import namedtuple
 from itertools import chain
-import math
+from typing import TYPE_CHECKING
 import BigWorld
 import Vehicle
 from Math import Vector3, Matrix
 import math_utils
 from gui.battle_control import event_dispatcher as gui_event_dispatcher
-
-class MagneticAimSettings(object):
-    MAGNETIC_ANGLE = 2.25
-    KEY_DELAY_SEC = 0.5
-
-    @staticmethod
-    def getMagneticAngle():
-        return math.cos(math.radians(MagneticAimSettings.MAGNETIC_ANGLE))
-
-
+if TYPE_CHECKING:
+    from items.vehicles import VehicleType
 _TargetVeh = namedtuple('TargetVehicle', ('vehicleRef', 'dotResult', 'distance'))
 
 def autoAimProcessor(target):
@@ -41,6 +33,7 @@ def magneticAimProcessor(previousSimpleTarget=None, previousMagneticTarget=None)
 
 def magneticAimFindTarget():
     vehicleAttached = BigWorld.player().getVehicleAttached()
+    vehicleType = vehicleAttached.typeDescriptor.type
     aimCamera = BigWorld.player().inputHandler.ctrl.camera
     aimCameraDirection = aimCamera.aimingSystem.matrix.applyToAxis(2)
     if vehicleAttached is None or not vehicleAttached.isAlive():
@@ -58,7 +51,7 @@ def magneticAimFindTarget():
             vehiclePositionDirection.normalise()
             dotResult = vehiclePositionDirection.dot(aimCameraDirection)
             targetDistance = vehicle.position - vehicleAttached.position
-            if dotResult < MagneticAimSettings.getMagneticAngle():
+            if dotResult < vehicleType.magneticAim.getMagneticAngle():
                 continue
             if not isVehicleVisibleFromCamera(vehicle, aimCamera):
                 continue
@@ -108,7 +101,7 @@ def isVehicleVisibleFromCamera(vehicle, aimCamera):
         testResStatic = BigWorld.wg_collideSegment(BigWorld.player().spaceID, startPos, endPos, 128)
         if testResStatic is None:
             testResDynamic = BigWorld.wg_collideDynamic(BigWorld.player().spaceID, startPos, endPos, BigWorld.player().playerVehicleID)
-            return testResDynamic is None and True
-        continue
+            if testResDynamic is None:
+                return True
 
     return False

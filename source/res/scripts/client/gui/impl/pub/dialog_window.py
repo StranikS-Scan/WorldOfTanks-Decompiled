@@ -92,6 +92,13 @@ class DialogWindow(Window):
     def bottomContentViewModel(self):
         return self.viewModel.getBottomContent().getViewModel()
 
+    def setParentWindowState(self, state, forceSetAllChain=False):
+        if self.viewModel.getIsAnimatedState():
+            parentWindow = self.viewModel.getParentWindow()
+            DialogWindow(parentWindow).viewModel.setCurrentState(state)
+            if forceSetAllChain:
+                DialogWindow(parentWindow).setParentWindowState(state, forceSetAllChain)
+
     def _initialize(self):
         super(DialogWindow, self)._initialize()
         self.viewModel.onClosed += self._onClosed

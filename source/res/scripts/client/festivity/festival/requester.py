@@ -35,3 +35,9 @@ class FestivalRequester(BaseFestivityRequester):
 
     def getPurchases(self):
         return self.getCacheValue(FestSyncDataKeys.PURCHASES, {})
+
+    def getRaceCooldown(self):
+        return self.getCacheValue(FestSyncDataKeys.RACE, 0)
+
+    def getRaceCollections(self):
+        return self.getCacheValue(FestSyncDataKeys.RACE_COLLECTIONS, [])

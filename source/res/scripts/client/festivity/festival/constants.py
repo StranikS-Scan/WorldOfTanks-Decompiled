@@ -12,3 +12,8 @@ class FestSyncDataKeys(CONST_CONTAINER):
     PURCHASES = 'purchases'
     PACKAGES = 'packages'
     RANDOM_PRICES = 'randomPrices'
+    RACE = 'race'
+    RACE_COLLECTIONS = 'raceCollections'
+
+
+RACE_COLLECTION_TOKEN_PREFIX = 'fest19RaceCollectionItem'

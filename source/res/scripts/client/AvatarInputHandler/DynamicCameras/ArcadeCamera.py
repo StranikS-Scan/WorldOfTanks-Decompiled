@@ -320,10 +320,11 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
 
     def __setupCameraProviders(self, vehicleMProv):
         vehiclePos = Math.Vector4Translation(vehicleMProv)
+        modifiedVehiclePos = BigWorld.PMTranslation(vehicleMProv)
         cameraPositionProvider = Math.Vector4Combiner()
         cameraPositionProvider.fn = 'ADD'
         cameraPositionProvider.a = Vector4(0, 0, 0, 0)
-        cameraPositionProvider.b = vehiclePos
+        cameraPositionProvider.b = modifiedVehiclePos
         cameraAimPointProvider = Math.Vector4Combiner()
         cameraAimPointProvider.fn = 'ADD'
         cameraAimPointProvider.a = Vector4(0, 0, 1, 0)

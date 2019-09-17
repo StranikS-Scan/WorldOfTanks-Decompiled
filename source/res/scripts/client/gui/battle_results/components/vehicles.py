@@ -10,13 +10,14 @@ from gui.battle_results.components import base, shared, style, ranked
 from gui.battle_results.components.base import PropertyValue
 from gui.battle_results.components.personal import fillKillerInfoBlock
 from gui.battle_results.reusable import sort_keys
-from gui.battle_results.reusable.avatars import AvatarInfo
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.ranked_battles.constants import ZERO_RANK_ID
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import getSmallIconPath, getIconPath
+from gui.shared.utils.functions import makeTooltip
 from helpers import dependency, i18n
+from helpers.time_utils import ONE_MINUTE
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -133,6 +134,7 @@ class RegularVehicleStatsBlock(base.StatsBlock):
             if self.killerID:
                 fillKillerInfoBlock(self, self.deathReason, self.killerID, reusable)
         else:
+            self.vehicleStatePrefix = ''
             self.vehicleState = i18n.makeString(BATTLE_RESULTS.COMMON_VEHICLESTATE_ALIVE)
         self.isTeamKiller = result.isTeamKiller
 
@@ -208,34 +210,27 @@ class EpicVehicleStatsBlock(RegularVehicleStatsBlock):
         return super(EpicVehicleStatsBlock, self).getVO()
 
 
-class BattleRoyaleVehicleStatsBlock(base.StatsBlock):
-    __slots__ = ('isPersonal', 'team', 'isPersonalSquad', 'kills', 'nameLabel', 'place', 'index', 'isPrematureLeave')
+class RacingVehicleStatsBlock(RegularVehicleStatsBlock):
+    __slots__ = ('capturePoints', 'bowlCount', 'bowlsTooltip')
 
     def __init__(self, meta=None, field='', *path):
-        super(BattleRoyaleVehicleStatsBlock, self).__init__(meta, field, *path)
-        self.isPersonal = False
-        self.isPersonalSquad = False
-        self.team = 0
-        self.nameLabel = ''
-        self.place = 0
-        self.kills = 0
-        self.index = None
-        self.isPrematureLeave = False
+        super(RacingVehicleStatsBlock, self).__init__(meta, field, *path)
+        self.capturePoints = 0
+        self.bowlCount = 0
+        self.bowlsTooltip = None
         return
 
-    def setRecord(self, vehicleSummarizeInfo, reusable):
-        avatar = reusable.avatars.getAvatarInfo(vehicleSummarizeInfo.player.dbID)
-        if avatar is None or avatar.extensionInfo is None:
-            return
-        else:
-            if self.isPersonal:
-                self.isPrematureLeave = reusable.personal.avatar.isPrematureLeave
-            extensionInfo = avatar.extensionInfo
-            self.place = extensionInfo.get('battleRoyale', {}).get('accPos', 0)
-            self.team = vehicleSummarizeInfo.player.team
-            self.kills = vehicleSummarizeInfo.kills
-            self.nameLabel = reusable.getPlayerInfo(vehicleSummarizeInfo.player.dbID).getFullName()
-            return
+    def _setTotalStats(self, result, noPenalties):
+        self.kills = kills = result.kills
+        self.tkills = teamKills = result.tkills
+        self.realKills = kills - teamKills
+        self.damageDealt = result.damageDealt
+        self.capturePoints = result.capturePoints
+        bowls = result.getRacingAchievements()
+        self.bowlCount = len(bowls)
+        bowlsTextList = [ backport.text(R.strings.festival.race.bowls.dyn(bowl).name()) for bowl in bowls ]
+        self.bowlsTooltip = makeTooltip(body='\n'.join(bowlsTextList)) if bowlsTextList else None
+        return
 
 
 class RegularVehicleStatValuesBlock(base.StatsBlock):
@@ -366,6 +361,22 @@ class EpicVehicleStatValuesBlock(base.StatsBlock):
         return vo
 
 
+class RacingVehicleStatValuesBlock(RegularVehicleStatValuesBlock):
+    __slots__ = ('racingFinishTime',)
+
+    def __init__(self, meta=None, field='', *path):
+        super(RacingVehicleStatValuesBlock, self).__init__(meta, field, *path)
+        self._filters = set()
+        self.racingFinishTime = ''
+
+    def setRecord(self, result, reusable):
+        super(RacingVehicleStatValuesBlock, self).setRecord(result, reusable)
+        if result.racingFinishTime == float('+inf'):
+            self.racingFinishTime = text_styles.disabled('-')
+        else:
+            self.racingFinishTime = backport.text(R.strings.festival.race.postBattle.finishTime(), minutes=backport.getIntegralFormat(result.racingFinishTime / ONE_MINUTE), seconds=backport.getFractionalFormat(result.racingFinishTime % ONE_MINUTE))
+
+
 class AllRegularVehicleStatValuesBlock(base.StatsBlock):
     __slots__ = ()
 
@@ -411,6 +422,21 @@ class AllEpicVehicleStatValuesBlock(base.StatsBlock):
             add(block)
 
 
+class AllRacingVehicleStatValuesBlock(base.StatsBlock):
+    __slots__ = ()
+
+    def setRecord(self, result, reusable):
+        isPersonal, iterator = result
+        add = self.addNextComponent
+        stunFilter = _getStunFilter()
+        for vehicle in iterator:
+            block = RacingVehicleStatValuesBlock()
+            block.setPersonal(isPersonal)
+            block.addFilters(stunFilter)
+            block.setRecord(vehicle, reusable)
+            add(block)
+
+
 class PersonalVehiclesRegularStatsBlock(base.StatsBlock):
     __slots__ = ()
 
@@ -450,6 +476,21 @@ class PersonalVehiclesEpicStatsBlock(base.StatsBlock):
         stunFilter = _getStunFilter()
         for data in info.getVehiclesIterator():
             block = EpicVehicleStatValuesBlock()
+            block.setPersonal(True)
+            block.addFilters(stunFilter)
+            block.setRecord(data, reusable)
+            add(block)
+
+
+class PersonalVehiclesRacingStatsBlock(base.StatsBlock):
+    __slots__ = ()
+
+    def setRecord(self, result, reusable):
+        info = reusable.getPersonalVehiclesInfo(result)
+        add = self.addNextComponent
+        stunFilter = _getStunFilter()
+        for data in info.getVehiclesIterator():
+            block = RacingVehicleStatValuesBlock()
             block.setPersonal(True)
             block.addFilters(stunFilter)
             block.setRecord(data, reusable)
@@ -506,34 +547,11 @@ class EpicTeamStatsBlock(TeamStatsBlock):
         super(EpicTeamStatsBlock, self).__init__(EpicVehicleStatsBlock, meta, field, *path)
 
 
-class BattleRoyaleTeamStatsBlock(base.StatsBlock):
+class RacingTeamStatsBlock(TeamStatsBlock):
     __slots__ = ()
 
-    def setRecord(self, result, reusable):
-        allPlayers = reusable.getAllPlayersIterator(result, sortKey=sort_keys.placeSortKey)
-        personalInfo = reusable.getPlayerInfo()
-        personalDBID = personalInfo.dbID
-        if personalInfo.squadIndex:
-            personalPrebattleID = personalInfo.prebattleID
-        else:
-            personalPrebattleID = 0
-        for idx, item in enumerate(allPlayers):
-            if item.vehicle is not None and item.vehicle.isObserver:
-                continue
-            block = BattleRoyaleVehicleStatsBlock()
-            block.index = idx
-            if item.avatar is None or item.avatar.extensionInfo is None or item.avatar.extensionInfo.get('battleRoyale', {}).get('accPos', 0) == 0:
-                block.setRecord(item, reusable)
-                self.addComponent(self.getNextComponentIndex(), block)
-                continue
-            player = item.player
-            isPersonal = player.dbID == personalDBID
-            block.isPersonal = isPersonal
-            block.isPersonalSquad = personalPrebattleID != 0 and personalPrebattleID == player.prebattleID
-            block.setRecord(item, reusable)
-            self.addComponent(self.getNextComponentIndex(), block)
-
-        return
+    def __init__(self, meta=None, field='', *path):
+        super(RacingTeamStatsBlock, self).__init__(RacingVehicleStatsBlock, meta, field, *path)
 
 
 class TwoTeamsStatsBlock(shared.BiDiStatsBlock):

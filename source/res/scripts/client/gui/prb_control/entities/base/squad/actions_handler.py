@@ -29,7 +29,7 @@ class SquadActionsHandler(AbstractActionsHandler):
             vInfos = unit.getMemberVehicles(pInfo.dbID)
             if vInfos is not None:
                 g_currentVehicle.selectVehicle(vInfos[0].vehInvID)
-            g_eventDispatcher.loadBattleQueue()
+            self._showBattleQueueGUI()
         elif loadHangar:
             g_eventDispatcher.loadHangar()
         return
@@ -136,3 +136,6 @@ class SquadActionsHandler(AbstractActionsHandler):
 
     def __onKickedFromQueue(self):
         SystemMessages.pushI18nMessage('#system_messages:arena_start_errors/prb/kick/timeout', type=SystemMessages.SM_TYPE.Warning)
+
+    def _showBattleQueueGUI(self):
+        g_eventDispatcher.loadBattleQueue()

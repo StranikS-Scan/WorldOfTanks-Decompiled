@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/cameras.py
 import math
+from operator import mul
 import BigWorld
 import Math
 import math_utils
+import Event
 
 class ImpulseReason(object):
     MY_SHOT = 0
@@ -222,6 +224,7 @@ class FovExtended(object):
     __TO_HORIZONTAL_THRESHOLD = 3.0 / 2.0 + 0.001
     __HOR_TO_BIG_HOR_RATIO = 2.0
     __BIG_ASPECT_THRESHOLD = 11.0 / 3.0
+    __DEFAULT_MULTIPLIER_KEY = 'default'
 
     @staticmethod
     def clampFov(fov):
@@ -268,10 +271,20 @@ class FovExtended(object):
 
     actualDefaultVerticalFov = property(__getActualDefaultVerticalFov)
 
+    def __getMultiplier(self):
+        return reduce(mul, self.__multipliers.itervalues(), 1.0)
+
+    def __setDefaultMultiplier(self, value):
+        self.__multipliers[FovExtended.__DEFAULT_MULTIPLIER_KEY] = value
+
+    __multiplier = property(__getMultiplier, __setDefaultMultiplier)
+
     def __init__(self):
+        self.__multipliers = {}
         self.__isHorizontalFovFixed = getScreenAspectRatio() > FovExtended.__TO_HORIZONTAL_THRESHOLD
         self.__multiplier = 1.0
         self.__enabled = True
+        self.onSetFovSettingEvent = Event.Event()
         initialVerticalFov = math.radians(60)
         self.defaultHorizontalFov = initialVerticalFov * getScreenAspectRatio()
         from gui import g_guiResetters
@@ -282,6 +295,9 @@ class FovExtended(object):
 
     def setFovByMultiplier(self, multiplier, rampTime=None):
         self.__multiplier = multiplier
+        self.__updateFav(rampTime)
+
+    def __updateFav(self, rampTime=None):
         if not self.__enabled:
             return
         else:
@@ -299,7 +315,24 @@ class FovExtended(object):
 
     def refreshFov(self):
         self.__isHorizontalFovFixed = getScreenAspectRatio() > FovExtended.__TO_HORIZONTAL_THRESHOLD
-        self.setFovByMultiplier(self.__multiplier)
+        self.__updateFav()
+
+    def applyHorizontalFovSetting(self, horizontalFov, needToReset):
+        if needToReset:
+            self.resetFov()
+        self.defaultHorizontalFov = horizontalFov
+        self.onSetFovSettingEvent()
+
+    def setExtraMultiplier(self, key, value, rampTime=None):
+        self.__multipliers[key] = value
+        self.__updateFav(rampTime)
+
+    def getExtraMultiplier(self, key):
+        return self.__multipliers[key]
+
+    def remExtraMultiplier(self, key):
+        del self.__multipliers[key]
+        self.__updateFav()
 
 
 def _clampPoint2DInBox2D(bottomLeft, upperRight, point):

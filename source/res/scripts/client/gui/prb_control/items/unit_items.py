@@ -18,7 +18,7 @@ from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 
 class PlayerUnitInfo(object):
-    __slots__ = ('dbID', 'unitMgrID', 'unit', 'name', 'rating', 'role', 'accID', 'vehDict', 'isReady', 'isInSlot', 'slotIdx', 'regionCode', 'clanDBID', 'clanAbbrev', 'timeJoin', 'igrType', 'badges', 'hasPremium')
+    __slots__ = ('dbID', 'unitMgrID', 'unit', 'name', 'rating', 'role', 'accID', 'vehDict', 'isReady', 'isInSlot', 'slotIdx', 'regionCode', 'clanDBID', 'clanAbbrev', 'timeJoin', 'igrType', 'badges', 'hasPremium', 'attempts')
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
@@ -43,6 +43,7 @@ class PlayerUnitInfo(object):
         self.igrType = igrType
         self.badges = BadgesHelper(badges or [])
         self.hasPremium = kwargs.get('isPremium', False)
+        self.attempts = kwargs.get('raceAttempts', 0)
         return
 
     def __repr__(self):
@@ -77,6 +78,9 @@ class PlayerUnitInfo(object):
 
     def isCurrentPlayer(self):
         return self.dbID == getAccountDatabaseID()
+
+    def isReadyForEventBattle(self):
+        return self.attempts > 0
 
     def getVehiclesCDs(self):
         requestCriteria = REQ_CRITERIA.INVENTORY

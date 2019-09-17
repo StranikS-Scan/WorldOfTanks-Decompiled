@@ -119,7 +119,7 @@ def getTimeDeltaTillNow(t):
         return delta.days * ONE_DAY + delta.seconds
 
 
-def getTillTimeString(timeValue, keyNamespace='', isRoundUp=False, sourceStrGenerator=None, removeLeadingZeros=False):
+def getTillTimeString(timeValue, keyNamespace='', isRoundUp=False, sourceStrGenerator=None, removeLeadingZeros=False, removeLeadingZerosSeconds=False):
     gmtime = time.gmtime(timeValue)
     if isRoundUp and gmtime.tm_sec > 0:
         timeValue += ONE_MINUTE
@@ -137,7 +137,7 @@ def getTillTimeString(timeValue, keyNamespace='', isRoundUp=False, sourceStrGene
     fmtValues = {'day': str(tm.tm_yday),
      'hour': time.strftime('%H', gmtime) if not removeLeadingZeros else str(tm.tm_hour),
      'min': time.strftime('%M', gmtime) if not removeLeadingZeros else str(tm.tm_min),
-     'sec': time.strftime('%S', gmtime)}
+     'sec': time.strftime('%S', gmtime) if not removeLeadingZerosSeconds else str(tm.tm_sec)}
     return sourceStrGenerator(fmtKey, **fmtValues) if sourceStrGenerator else _ms('{}/{}'.format(keyNamespace, fmtKey), **fmtValues)
 
 

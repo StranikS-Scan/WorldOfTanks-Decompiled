@@ -43,7 +43,6 @@ class TOOLTIPS(object):
     HEADER_DOMINATIONSQUAD = '#tooltips:header/dominationSquad'
     HEADER_RANKEDSQUAD = '#tooltips:header/rankedSquad'
     HEADER_SQUAD_MEMBER = '#tooltips:header/squad_member'
-    HEADER_BATTLEROYALESQUAD = '#tooltips:header/battleRoyaleSquad'
     HEADER_BATTLETYPE = '#tooltips:header/battleType'
     HEADER_INFO_PLAYERS_ONLINE_FULL = '#tooltips:header/info/players_online_full'
     HEADER_BUTTONS_HANGAR = '#tooltips:header/buttons/hangar'
@@ -165,6 +164,7 @@ class TOOLTIPS(object):
     TECHTREEPAGE_BLUEPRINTSSWITCHTOOLTIPDISABLED = '#tooltips:techTreePage/blueprintsSwitchTooltipDisabled'
     TECHTREEPAGE_BLUEPRINTCONVERTTOOLTIP = '#tooltips:techTreePage/blueprintConvertTooltip'
     STORAGE_FILTER_NORESULTSBTN = '#tooltips:storage/filter/noResultsBtn'
+    EVENT_SQUAD_DISABLE = '#tooltips:event/squad/disable'
     BADGEINFO_TITLE = '#tooltips:badgeinfo/title'
     BADGEINFO_TEXT = '#tooltips:badgeinfo/text'
     TEMPLATE_DAYS_SHORT = '#tooltips:template/days/short'
@@ -263,8 +263,6 @@ class TOOLTIPS(object):
     SQUADWINDOW_BUTTONS_LEAVEEVENTSQUAD_BODY = '#tooltips:squadWindow/buttons/leaveEventSquad/body'
     SQUADWINDOW_INFOICON_TECH_HEADER = '#tooltips:squadWindow/infoIcon/tech/header'
     SQUADWINDOW_INFOICON_TECH_BODY = '#tooltips:squadWindow/infoIcon/tech/body'
-    SQUADWINDOW_INFOICON_BATTLEROYALE_HEADER = '#tooltips:squadWindow/infoIcon/battleRoyale/header'
-    SQUADWINDOW_INFOICON_BATTLEROYALE_BODY = '#tooltips:squadWindow/infoIcon/battleRoyale/body'
     SQUADWINDOW_INFOICON_TECHRESTRICTIONS_HEADER = '#tooltips:squadWindow/infoIcon/techRestrictions/header'
     SQUADWINDOW_INFOICON_TECHRESTRICTIONS_TITLE0 = '#tooltips:squadWindow/infoIcon/techRestrictions/title0'
     SQUADWINDOW_INFOICON_TECHRESTRICTIONS_BODY0 = '#tooltips:squadWindow/infoIcon/techRestrictions/body0'
@@ -581,12 +579,6 @@ class TOOLTIPS(object):
     REDBUTTON_DISABLED_LIMITS_CLASSES_AT_SPG_BODY = '#tooltips:redButton/disabled/limits/classes/AT-SPG/body'
     HANGAR_STARTBTN_SQUADNOTREADY_HEADER = '#tooltips:hangar/startBtn/squadNotReady/header'
     HANGAR_STARTBTN_SQUADNOTREADY_BODY = '#tooltips:hangar/startBtn/squadNotReady/body'
-    HANGAR_STARTBTN_BATTLEROYALESQUADNOTREADY_WRONGVEHICLE_HEADER = '#tooltips:hangar/startBtn/battleRoyaleSquadNotReady/wrongVehicle/header'
-    HANGAR_STARTBTN_BATTLEROYALESQUADNOTREADY_WRONGVEHICLE_BODY = '#tooltips:hangar/startBtn/battleRoyaleSquadNotReady/wrongVehicle/body'
-    HANGAR_STARTBTN_BATTLEROYALESQUADNOTREADY_WRONGPLAYERS_HEADER = '#tooltips:hangar/startBtn/battleRoyaleSquadNotReady/wrongPlayers/header'
-    HANGAR_STARTBTN_BATTLEROYALESQUADNOTREADY_WRONGPLAYERS_BODY = '#tooltips:hangar/startBtn/battleRoyaleSquadNotReady/wrongPlayers/body'
-    HANGAR_STARTBTN_BATTLEROYALESQUADNOTREADY_NOTREADY_HEADER = '#tooltips:hangar/startBtn/battleRoyaleSquadNotReady/notReady/header'
-    HANGAR_STARTBTN_BATTLEROYALESQUADNOTREADY_NOTREADY_BODY = '#tooltips:hangar/startBtn/battleRoyaleSquadNotReady/notReady/body'
     HANGAR_STARTBTN_PREVIEW_BODY = '#tooltips:hangar/startBtn/preview/body'
     HANGAR_TANKCARUSEL_WRONGSQUADVEHICLE_HEADER = '#tooltips:hangar/tankCarusel/wrongSquadVehicle/header'
     HANGAR_TANKCARUSEL_WRONGSQUADVEHICLE_BODY = '#tooltips:hangar/tankCarusel/wrongSquadVehicle/body'
@@ -671,8 +663,6 @@ class TOOLTIPS(object):
     HEADER_EVENTSQUAD_BODY = '#tooltips:header/eventSquad/body'
     HEADER_DOMINATIONSQUAD_HEADER = '#tooltips:header/dominationSquad/header'
     HEADER_DOMINATIONSQUAD_BODY = '#tooltips:header/dominationSquad/body'
-    HEADER_BATTLEROYALESQUAD_HEADER = '#tooltips:header/battleRoyaleSquad/header'
-    HEADER_BATTLEROYALESQUAD_BODY = '#tooltips:header/battleRoyaleSquad/body'
     HEADER_RANKEDSQUAD_HEADER = '#tooltips:header/rankedSquad/header'
     HEADER_RANKEDSQUAD_BODY = '#tooltips:header/rankedSquad/body'
     HEADER_BATTLETYPE_HEADER = '#tooltips:header/battleType/header'
@@ -1982,7 +1972,8 @@ class TOOLTIPS(object):
     VEHICLEPREVIEW_BOXTOOLTIP_PERSONALNUMBER_HEADER = '#tooltips:vehiclePreview/boxTooltip/personalNumber/header'
     CONTENTBUYVIEW_SLOTCHECKBOX_NOTENOUGHSLOTS_HEADER = '#tooltips:contentBuyView/slotCheckbox/notEnoughSlots/header'
     CONTENTBUYVIEW_SLOTCHECKBOX_NOTENOUGHSLOTS_BODY = '#tooltips:contentBuyView/slotCheckbox/notEnoughSlots/body'
-    SQUADWINDOW_EVENTVEHICLE = '#tooltips:squadWindow/eventVehicle'
+    SQUADWINDOW_EVENTVEHICLE_HEADER = '#tooltips:squadWindow/eventVehicle/header'
+    SQUADWINDOW_EVENTVEHICLE_BODY = '#tooltips:squadWindow/eventVehicle/body'
     DISMISSTANKMANDIALOG_CANTRESTORALERT_HEADER = '#tooltips:dismissTankmanDialog/cantRestorAlert/header'
     DISMISSTANKMANDIALOG_CANTRESTORALERT_BODY = '#tooltips:dismissTankmanDialog/cantRestorAlert/body'
     DISMISSTANKMANDIALOG_BUFFERISFULL_HEADER = '#tooltips:dismissTankmanDialog/bufferIsFull/header'
@@ -2627,6 +2618,7 @@ class TOOLTIPS(object):
     MARATHON_EXTRA_STATE_STEPS = '#tooltips:marathon/extra_state/steps'
     MARATHON_EXTRA_STATE_COMPLETED = '#tooltips:marathon/extra_state/completed'
     MARATHON_EXTRA_STATE_DISCOUNT = '#tooltips:marathon/extra_state/discount'
+    MARATHON_FLAG_STATE_SUSPEND = '#tooltips:marathon/flag/state/suspend'
     MARATHON_OFF_HEADER = '#tooltips:marathon/off/header'
     MARATHON_OFF_BODY = '#tooltips:marathon/off/body'
     MARATHON_ERROR_BATTLE_TYPE = '#tooltips:marathon/error/battle_type'
@@ -2671,6 +2663,7 @@ class TOOLTIPS(object):
     STORAGE_MAINMENU_CUSTOMIZATION_BODY = '#tooltips:storage/mainMenu/customization/body'
     STORAGE_MAINMENU_BLUEPRINTS_HEADER = '#tooltips:storage/mainMenu/blueprints/header'
     STORAGE_MAINMENU_BLUEPRINTS_BODY = '#tooltips:storage/mainMenu/blueprints/body'
+    NOTRECRUITEDTANKMAN_HOWTOGET = '#tooltips:notrecruitedtankman/howToGet'
     NOTRECRUITEDTANKMAN_SKILLSTITLE = '#tooltips:notrecruitedtankman/skillsTitle'
     NOTRECRUITEDTANKMAN_EXPIRETITLE = '#tooltips:notrecruitedtankman/expireTitle'
     NOTRECRUITEDTANKMAN_USEBEFORE = '#tooltips:notrecruitedtankman/useBefore'
@@ -2698,6 +2691,21 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_NY19MEN_DESC = '#tooltips:notrecruitedtankman/ny19men/desc'
     NOTRECRUITEDTANKMAN_NY19WOMAN_LABEL = '#tooltips:notrecruitedtankman/ny19woman/label'
     NOTRECRUITEDTANKMAN_NY19WOMAN_DESC = '#tooltips:notrecruitedtankman/ny19woman/desc'
+    NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_LABEL = '#tooltips:notrecruitedtankman/race19_commanderA/label'
+    NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_DESC = '#tooltips:notrecruitedtankman/race19_commanderA/desc'
+    NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_HOWTOGETINFO = '#tooltips:notrecruitedtankman/race19_commanderA/howToGetInfo'
+    NOTRECRUITEDTANKMAN_RACE19_COMMANDERB_LABEL = '#tooltips:notrecruitedtankman/race19_commanderB/label'
+    NOTRECRUITEDTANKMAN_RACE19_COMMANDERB_DESC = '#tooltips:notrecruitedtankman/race19_commanderB/desc'
+    NOTRECRUITEDTANKMAN_RACE19_COMMANDERB_HOWTOGETINFO = '#tooltips:notrecruitedtankman/race19_commanderB/howToGetInfo'
+    NOTRECRUITEDTANKMAN_RACE19_COMMANDERC_LABEL = '#tooltips:notrecruitedtankman/race19_commanderC/label'
+    NOTRECRUITEDTANKMAN_RACE19_COMMANDERC_DESC = '#tooltips:notrecruitedtankman/race19_commanderC/desc'
+    NOTRECRUITEDTANKMAN_RACE19_COMMANDERC_HOWTOGETINFO = '#tooltips:notrecruitedtankman/race19_commanderC/howToGetInfo'
+    NOTRECRUITEDTANKMAN_OFFSPRING_COMMANDER_DESC = '#tooltips:notrecruitedtankman/offspring_commander/desc'
+    NOTRECRUITEDTANKMAN_OFFSPRING_GUNNER_DESC = '#tooltips:notrecruitedtankman/offspring_gunner/desc'
+    NOTRECRUITEDTANKMAN_OFFSPRING_DRIVER_DESC = '#tooltips:notrecruitedtankman/offspring_driver/desc'
+    NOTRECRUITEDTANKMAN_OFFSPRING_LOADER_DESC = '#tooltips:notrecruitedtankman/offspring_loader/desc'
+    NOTRECRUITEDTANKMAN_COMMANDER_MARINA_LABEL = '#tooltips:notrecruitedtankman/commander_marina/label'
+    NOTRECRUITEDTANKMAN_COMMANDER_MARINA_DESC = '#tooltips:notrecruitedtankman/commander_marina/desc'
     QUESTS_AWARDS_VEHICLERENT_HEADER = '#tooltips:quests/awards/vehicleRent/header'
     QUESTS_AWARDS_VEHICLERENT_EXPIRE = '#tooltips:quests/awards/vehicleRent/expire'
     QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTDAYS = '#tooltips:quests/awards/vehicleRent/rentLeft/rentDays'
@@ -2760,44 +2768,8 @@ class TOOLTIPS(object):
     CREWBOOKS_TANKMAN_SKILL_LOWGAINEDXP = '#tooltips:crewBooks/tankman/skill/lowGainedXp'
     EVENTPOSTMORTEMPANEL_GODTAG_ANIMENABLED = '#tooltips:eventPostmortemPanel/godtag/animEnabled'
     EVENTPOSTMORTEMPANEL_GODTAG_ANIMDISABLED = '#tooltips:eventPostmortemPanel/godtag/animDisabled'
-    BATTLE_ROYALE_AWARDS_NO_VEHICLE_AVAILABLE_HEADER = '#tooltips:battle_royale/awards/no_vehicle_available/header'
-    BATTLE_ROYALE_AWARDS_NO_VEHICLE_AVAILABLE_DESCRIPTION = '#tooltips:battle_royale/awards/no_vehicle_available/description'
-    BATTLE_ROYALE_SELECT_RESPAWN_HAVE_TO_SELECT_HEADER = '#tooltips:battle_royale/select_respawn/have_to_select/header'
-    BATTLE_ROYALE_SELECT_RESPAWN_PRESS_TO_START_HEADER = '#tooltips:battle_royale/select_respawn/press_to_start/header'
-    BATTLE_ROYALE_HANGAR_MODULES_BUTTON_HEADER = '#tooltips:battle_royale/hangar/modules_button/header'
-    BATTLE_ROYALE_HANGAR_MODULES_BUTTON_DESCRIPTION = '#tooltips:battle_royale/hangar/modules_button/description'
-    BATTLE_ROYALE_HANGAR_VEHICLE_STATUS = '#tooltips:battle_royale/hangar/vehicle/status'
-    BATTLE_ROYALE_HANGAR_VEHICLE_LEFTTIME = '#tooltips:battle_royale/hangar/vehicle/leftTime'
-    BATTLE_ROYALE_HANGAR_VEHICLE_DESCRIPTION_USSR = '#tooltips:battle_royale/hangar/vehicle/description/ussr'
-    BATTLE_ROYALE_HANGAR_VEHICLE_DESCRIPTION_USA = '#tooltips:battle_royale/hangar/vehicle/description/usa'
-    BATTLE_ROYALE_HANGAR_VEHICLE_DESCRIPTION_GERMANY = '#tooltips:battle_royale/hangar/vehicle/description/germany'
-    BATTLE_ROYALE_ARTEFACT_LIMIT = '#tooltips:battle_royale/artefact/limit'
-    BATTLE_ROYALE_ARTEFACT_SOURCE = '#tooltips:battle_royale/artefact/source'
-    BATTLE_ROYALE_HANGAR_REPAIR_BUTTON_HEADER = '#tooltips:battle_royale/hangar/repair_button/header'
-    BATTLE_ROYALE_HANGAR_REPAIR_DISABLED_DESCRIPTION = '#tooltips:battle_royale/hangar/repair_disabled/description'
-    BATTLE_ROYALE_HANGAR_REPAIR_ENABLED_DESCRIPTION = '#tooltips:battle_royale/hangar/repair_enabled/description'
-    BATTLE_ROYALE_HANGAR_PERF_HIGH_RISK_HEADER = '#tooltips:battle_royale/hangar/perf/high_risk/header'
-    BATTLE_ROYALE_HANGAR_PERF_HIGH_RISK_DESCRIPTION = '#tooltips:battle_royale/hangar/perf/high_risk/description'
-    BATTLE_ROYALE_HANGAR_PERF_MEDIUM_RISK_HEADER = '#tooltips:battle_royale/hangar/perf/medium_risk/header'
-    BATTLE_ROYALE_HANGAR_PERF_MEDIUM_RISK_DESCRIPTION = '#tooltips:battle_royale/hangar/perf/medium_risk/description'
-    BATTLE_ROYALE_HANGAR_MAINBTN_PERF_HEADER = '#tooltips:battle_royale/hangar/mainBtn/perf/header'
-    BATTLE_ROYALE_HANGAR_MAINBTN_PERF_EVENTDESCRIPTION = '#tooltips:battle_royale/hangar/mainBtn/perf/eventDescription'
-    BATTLE_ROYALE_HANGAR_MAINBTN_PERF_PROBLEMDESCRIPTION = '#tooltips:battle_royale/hangar/mainBtn/perf/problemDescription'
-    BATTLE_ROYALE_PROGRESSPAGE_EVENTNAME = '#tooltips:battle_royale/progressPage/eventName'
-    BATTLE_ROYALE_PROGRESSPAGE_STATS_TOP1COUNT_HEADER = '#tooltips:battle_royale/progressPage/stats/top1Count/header'
-    BATTLE_ROYALE_PROGRESSPAGE_STATS_TOP1COUNT_BODY = '#tooltips:battle_royale/progressPage/stats/top1Count/body'
-    BATTLE_ROYALE_PROGRESSPAGE_STATS_MAXKILLSCOUNT_HEADER = '#tooltips:battle_royale/progressPage/stats/maxKillsCount/header'
-    BATTLE_ROYALE_PROGRESSPAGE_STATS_MAXKILLSCOUNT_BODY = '#tooltips:battle_royale/progressPage/stats/maxKillsCount/body'
-    BATTLE_ROYALE_PROGRESSPAGE_STATS_BATTLESAMOUNT_HEADER = '#tooltips:battle_royale/progressPage/stats/battlesAmount/header'
-    BATTLE_ROYALE_PROGRESSPAGE_STATS_BATTLESAMOUNT_BODY = '#tooltips:battle_royale/progressPage/stats/battlesAmount/body'
-    BATTLE_ROYALE_PROGRESSPAGE_STATS_KILLSAMOUNT_HEADER = '#tooltips:battle_royale/progressPage/stats/killsAmount/header'
-    BATTLE_ROYALE_PROGRESSPAGE_STATS_KILLSAMOUNT_BODY = '#tooltips:battle_royale/progressPage/stats/killsAmount/body'
-    BATTLE_ROYALE_VIEWSTACK_PROGRESS_HEADER = '#tooltips:battle_royale/viewStack/progress/header'
-    BATTLE_ROYALE_VIEWSTACK_PROGRESS_BODY = '#tooltips:battle_royale/viewStack/progress/body'
-    BATTLE_ROYALE_VIEWSTACK_INFO_HEADER = '#tooltips:battle_royale/viewStack/info/header'
-    BATTLE_ROYALE_VIEWSTACK_INFO_BODY = '#tooltips:battle_royale/viewStack/info/body'
-    BATTLE_ROYALE_VIEWSTACK_REWARDS_HEADER = '#tooltips:battle_royale/viewStack/rewards/header'
-    BATTLE_ROYALE_VIEWSTACK_REWARDS_BODY = '#tooltips:battle_royale/viewStack/rewards/body'
+    DISABLEDFESTRACENOTIFICATION_HEADER = '#tooltips:disabledFestRaceNotification/header'
+    DISABLEDFESTRACENOTIFICATION_BODY = '#tooltips:disabledFestRaceNotification/body'
     ELEN_SUMMARY_RANK_ENUM = (ELEN_SUMMARY_RANK_1,
      ELEN_SUMMARY_RANK_2,
      ELEN_SUMMARY_RANK_3,
@@ -3315,7 +3287,11 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TWITCH5_LABEL,
      NOTRECRUITEDTANKMAN_TWITCH6_LABEL,
      NOTRECRUITEDTANKMAN_NY19MEN_LABEL,
-     NOTRECRUITEDTANKMAN_NY19WOMAN_LABEL)
+     NOTRECRUITEDTANKMAN_NY19WOMAN_LABEL,
+     NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_LABEL,
+     NOTRECRUITEDTANKMAN_RACE19_COMMANDERB_LABEL,
+     NOTRECRUITEDTANKMAN_RACE19_COMMANDERC_LABEL,
+     NOTRECRUITEDTANKMAN_COMMANDER_MARINA_LABEL)
     NOTRECRUITEDTANKMAN_ALL_DESC_ENUM = (NOTRECRUITEDTANKMAN_BASE_DESC,
      NOTRECRUITEDTANKMAN_BUFFON_DESC,
      NOTRECRUITEDTANKMAN_TANKWOMAN_DESC,
@@ -3327,7 +3303,16 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TWITCH5_DESC,
      NOTRECRUITEDTANKMAN_TWITCH6_DESC,
      NOTRECRUITEDTANKMAN_NY19MEN_DESC,
-     NOTRECRUITEDTANKMAN_NY19WOMAN_DESC)
+     NOTRECRUITEDTANKMAN_NY19WOMAN_DESC,
+     NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_DESC,
+     NOTRECRUITEDTANKMAN_RACE19_COMMANDERB_DESC,
+     NOTRECRUITEDTANKMAN_RACE19_COMMANDERC_DESC,
+     NOTRECRUITEDTANKMAN_OFFSPRING_COMMANDER_DESC,
+     NOTRECRUITEDTANKMAN_OFFSPRING_GUNNER_DESC,
+     NOTRECRUITEDTANKMAN_OFFSPRING_DRIVER_DESC,
+     NOTRECRUITEDTANKMAN_OFFSPRING_LOADER_DESC,
+     NOTRECRUITEDTANKMAN_COMMANDER_MARINA_DESC)
+    NOTRECRUITEDTANKMAN_ALL_HOWTOGETINFO_ENUM = (NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_HOWTOGETINFO, NOTRECRUITEDTANKMAN_RACE19_COMMANDERB_HOWTOGETINFO, NOTRECRUITEDTANKMAN_RACE19_COMMANDERC_HOWTOGETINFO)
     QUESTS_AWARDS_VEHICLERENT_RENTLEFT_ENUM = (QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTDAYS, QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTBATTLES, QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTWINS)
 
     @classmethod
@@ -3685,6 +3670,15 @@ class TOOLTIPS(object):
     def getNotRecruitedTankmanEventDesc(cls, eventName):
         outcome = '#tooltips:notrecruitedtankman/{}/desc'.format(eventName)
         if outcome not in cls.NOTRECRUITEDTANKMAN_ALL_DESC_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getNotRecruitedTankmanEventGetInfo(cls, eventName):
+        outcome = '#tooltips:notrecruitedtankman/{}/howToGetInfo'.format(eventName)
+        if outcome not in cls.NOTRECRUITEDTANKMAN_ALL_HOWTOGETINFO_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

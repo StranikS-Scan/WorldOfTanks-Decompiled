@@ -135,6 +135,8 @@
     </customizationSlots>
     <camouflage>
       <exclusionMask></exclusionMask>
+      <density>	83.3006 83.2356	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -482,6 +484,8 @@
           <camouflage>
             <tiling>	0.805 0.805 0.000000 0.000000	</tiling>
             <exclusionMask></exclusionMask>
+            <density>	102.54 106.71	</density>
+            <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
         </Gun_Env_Artillery>
       </guns>
@@ -504,6 +508,10 @@
           <camouflage>	TURRET	</camouflage>
         </customizableVehicleAreas>
       </customization>
+      <camouflage>
+        <density>	87.7833 87.9928	</density>
+        <aoTextureSize>	1024 512	</aoTextureSize>
+      </camouflage>
     </Turret_1_Env_Artillery>
   </turrets0>
   <engines>

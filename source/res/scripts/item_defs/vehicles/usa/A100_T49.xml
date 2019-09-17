@@ -100,6 +100,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	2.02 2.02 0.27 0.000000	</tiling>
+      <density>	106.512 105.281	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -1627,6 +1629,10 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	100.273 101.632	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_90mm_Gun_T132E3>
       </guns>
       <models>
@@ -1705,6 +1711,8 @@
       </customizationSlots>
       <camouflage>
         <tiling>	1.3 1.3 0.11 0.46	</tiling>
+        <density>	85.9022 86.037	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
     </Turret_1_A100_T49>
     <Turret_2_A100_T49>
@@ -1819,6 +1827,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	1.42 1.42 0.000000 0.000000	</tiling>
+            <density>	100.273 101.632	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_90mm_Gun_T132E3>
         <_152mm_Gun_Launcher_M81>	shared	  <maxAmmo>	22	</maxAmmo>
@@ -1900,6 +1910,10 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	96.5083 99.982	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_152mm_Gun_Launcher_M81>
       </guns>
       <models>
@@ -1978,6 +1992,8 @@
       </customizationSlots>
       <camouflage>
         <tiling>	1 1 0.09 0.08	</tiling>
+        <density>	93.6042 93.1835	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
     </Turret_2_A100_T49>
   </turrets0>

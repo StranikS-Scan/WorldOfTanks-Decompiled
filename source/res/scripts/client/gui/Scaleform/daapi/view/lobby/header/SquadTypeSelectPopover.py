@@ -25,7 +25,7 @@ class SquadTypeSelectPopover(BattleTypeSelectPopoverMeta, IGlobalListener):
             tooltip = TOOLTIPS.HEADER_EVENTSQUAD
         elif itemData == 'squad':
             tooltip = TOOLTIPS.HEADER_SQUAD
-        return tooltip
+        return {'tooltip': tooltip}
 
     def demoClick(self):
         pass

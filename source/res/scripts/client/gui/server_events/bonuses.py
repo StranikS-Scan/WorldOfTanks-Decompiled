@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/bonuses.py
 import copy
-from collections import namedtuple
+from collections import namedtuple, OrderedDict
 from functools import partial
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
@@ -29,6 +29,7 @@ from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_INDICES
 from gui.shared.gui_items.Tankman import getRoleUserName, calculateRoleLevel, Tankman
+from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.gui_items.crew_book import orderCmp
 from gui.shared.money import Currency, Money
@@ -920,10 +921,14 @@ class DossierBonus(SimpleBonus):
                 blockID = RECORD_DB_IDS[block, record]
             else:
                 blockID = record
+            icons = self.__getEpicBonusImages(block, record)
+            if not icons['small'] and not icons['big']:
+                icons = self.__getAchievementImages(record)
             result.append({'id': blockID,
+             'name': record,
              'type': block,
              'value': 1,
-             'icon': self.__getEpicBonusImages(block, record)})
+             'icon': icons})
 
         return result
 
@@ -933,6 +938,10 @@ class DossierBonus(SimpleBonus):
              AWARDS_SIZES.BIG: getBadgeIconPath(BADGES_ICONS.X80, record)}
         return {AWARDS_SIZES.SMALL: RES_ICONS.getEpicAchievementIcon(ICONS_SIZES.X48, record),
          AWARDS_SIZES.BIG: RES_ICONS.getEpicAchievementIcon(ICONS_SIZES.X80, record)} if block == 'singleAchievements' else {}
+
+    def __getAchievementImages(self, record):
+        return {AWARDS_SIZES.SMALL: backport.image(R.images.gui.maps.icons.achievement.num(ICONS_SIZES.X48).dyn(record)()),
+         AWARDS_SIZES.BIG: backport.image(R.images.gui.maps.icons.achievement.num(ICONS_SIZES.X80).dyn(record)())}
 
     def __getCommonAwardsVOs(self, block, record, iconSize='small', withCounts=False):
         badgesIconSizes = {'big': BADGES_ICONS.X80,
@@ -1111,7 +1120,10 @@ class CustomizationsBonus(SimpleBonus):
         result = []
         for itemData in self.getCustomizations():
             itemType = itemData.get('custType')
-            itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemType)
+            if itemType == 'projection_decal':
+                itemTypeID = GUI_ITEM_TYPE.PROJECTION_DECAL
+            else:
+                itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemType)
             item = self.c11n.getItemByID(itemTypeID, itemData.get('id'))
             smallIcon = item.getBonusIcon(AWARDS_SIZES.SMALL)
             bigIcon = item.getBonusIcon(AWARDS_SIZES.BIG)
@@ -1490,10 +1502,12 @@ class CrewSkinsBonus(SimpleBonus):
         for item, count, _, _ in self.getItems():
             if item is not None:
                 result.append({'id': item.intCD,
+                 'name': localizedFullName(item),
+                 'description': item.getDescription(),
                  'type': 'item/{}'.format(item.itemTypeName),
                  'value': count,
-                 'icon': {AWARDS_SIZES.SMALL: item.getBonusIcon(AWARDS_SIZES.SMALL),
-                          AWARDS_SIZES.BIG: item.getBonusIcon(AWARDS_SIZES.BIG)}})
+                 'icon': {AWARDS_SIZES.SMALL: backport.image(R.images.gui.maps.icons.tankmen.icons.small.crewSkins.dyn(item.getIconID())()),
+                          AWARDS_SIZES.BIG: backport.image(R.images.gui.maps.icons.tankmen.icons.big.crewSkins.dyn(item.getIconID())())}})
 
         return result
 
@@ -1575,9 +1589,19 @@ class CrewBooksBonus(SimpleBonus):
 
 class FestivalItemsBonus(SimpleBonus):
 
+    def __init__(self, name, value, isCompensation=False, ctx=None, compensationReason=None):
+        festivalItems = sorted((FestivalItemInfo(itemID) for itemID in value))
+        formattedValue = OrderedDict()
+        for festItem in festivalItems:
+            itemID = festItem.getID()
+            formattedValue[itemID] = value[itemID]
+
+        super(FestivalItemsBonus, self).__init__(name, formattedValue, isCompensation, ctx, compensationReason)
+
     def formatValue(self):
         itemNames = []
-        for festItem in sorted((FestivalItemInfo(itemID) for itemID in self._value)):
+        for itemID in self._value:
+            festItem = FestivalItemInfo(itemID)
             itemName = backport.text(R.strings.festival.festivalItem.fullName(), backport.text(festItem.getTypeResID()), backport.text(festItem.getNameResID()))
             itemNames.append(itemName)
 
@@ -1585,6 +1609,10 @@ class FestivalItemsBonus(SimpleBonus):
 
     def getWrappedEpicBonusList(self):
         return []
+
+
+class FestivalTickets(IntegralBonus):
+    pass
 
 
 _BONUSES = {Currency.CREDITS: CreditsBonus,
@@ -1622,7 +1650,7 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  'badgesGroup': BadgesGroupBonus,
  'blueprints': blueprintBonusFactory,
  'crewSkins': crewSkinsBonusFactory,
- BonusName.FESTIVAL_TICKETS: IntegralBonus,
+ BonusName.FESTIVAL_TICKETS: FestivalTickets,
  BonusName.FESTIVAL_ITEMS: FestivalItemsBonus}
 _BONUSES_PRIORITY = (BonusName.FESTIVAL_TICKETS, 'tokens', 'oneof')
 _BONUSES_ORDER = dict(((n, idx) for idx, n in enumerate(_BONUSES_PRIORITY)))

@@ -147,6 +147,10 @@
         <camouflage>	HULL	</camouflage>
       </customizableVehicleAreas>
     </customization>
+    <camouflage>
+      <density>	120.6 119.333	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_F85_M4A1_FL10>
@@ -828,6 +832,10 @@
           </customization>
           <effects>	shot_medium_mb	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <density>	98.8413 98.5786	</density>
+            <aoTextureSize>	1024 512	</aoTextureSize>
+          </camouflage>
         </_75mm_SA50_mle_50>
       </guns>
       <models>
@@ -865,6 +873,8 @@
       </customization>
       <camouflage>
         <tiling>	0.2 0.4 0.000000 0.000000	</tiling>
+        <density>	144.704 144.803	</density>
+        <aoTextureSize>	256 512	</aoTextureSize>
       </camouflage>
     </Turret_1_F85_M4A1_FL10>
   </turrets0>

@@ -16,7 +16,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.server_events import recruit_helper
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.Tankman import getTankmanSkill, SabatonTankmanSkill, TankmanSkill
+from gui.shared.gui_items.Tankman import getTankmanSkill, SabatonTankmanSkill, TankmanSkill, OffspringTankmanSkill
 from gui.shared.gui_items.dossier import factories, loadDossier
 from gui.shared.items_parameters import params_helper
 from gui.shared.items_parameters.formatters import NO_BONUS_SIMPLIFIED_SCHEME
@@ -25,7 +25,7 @@ from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID
 from helpers import dependency
 from helpers.i18n import makeString
 from shared_utils import findFirst
-from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController
+from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -246,16 +246,6 @@ class RankedRankContext(ToolTipContext):
 
     def buildItem(self, rankID):
         return self.rankedController.getRank(int(rankID))
-
-
-class BattleRoyaleContext(ToolTipContext):
-    battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
-
-    def __init__(self, fieldsToExclude=None):
-        super(BattleRoyaleContext, self).__init__(TOOLTIP_COMPONENT.TITLE, fieldsToExclude)
-
-    def buildItem(self, title):
-        return self.battleRoyaleController.getTitle(int(title))
 
 
 class InventoryContext(ToolTipContext):
@@ -664,7 +654,9 @@ class PreviewCaseContext(ToolTipContext):
         super(PreviewCaseContext, self).__init__(TOOLTIP_COMPONENT.PERSONAL_CASE, fieldsToExclude)
 
     def buildItem(self, skillID):
-        return SabatonTankmanSkill('brotherhood') if skillID == 'sabaton_brotherhood' else TankmanSkill(skillID)
+        if skillID == 'sabaton_brotherhood':
+            return SabatonTankmanSkill('brotherhood')
+        return OffspringTankmanSkill('brotherhood') if skillID == 'offspring_brotherhood' else TankmanSkill(skillID)
 
 
 class CrewSkinContext(ToolTipContext):

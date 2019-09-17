@@ -5,7 +5,7 @@
     <Average>	203	</Average>
     <Heavy>	204	</Heavy>
     <Large>	205	</Large>
-    <Large_BR>	206	</Large_BR>
+    <Average_race>	206	</Average_race>
   </ids>
   <shared>
     <Small>
@@ -48,13 +48,14 @@
       <maxRegenHealth>	70	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
     </Large>
-    <Large_BR>
+    <Average_race>
       <tags></tags>
       <price>	100	</price>
-      <weight>	300	</weight>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	70	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-    </Large_BR>
+      <weight>	250	</weight>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <invulnerable>	true	</invulnerable>
+      <repairCost>	1.0	</repairCost>
+    </Average_race>
   </shared>
 </fuelTanks.xml>

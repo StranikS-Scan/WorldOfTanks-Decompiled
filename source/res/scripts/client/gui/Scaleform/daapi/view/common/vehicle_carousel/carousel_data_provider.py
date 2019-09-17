@@ -1,21 +1,24 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/vehicle_carousel/carousel_data_provider.py
+import copy
 from constants import SEASON_NAME_BY_TYPE
 from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
 from gui import GUI_NATIONS_ORDER_INDEX, makeHtmlString
 from gui.Scaleform import getButtonsAssetPath
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.Scaleform.locale.MENU import MENU
 from gui.impl import backport
+from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
+from gui.Scaleform.framework.entities.View import ViewKey
+from gui.Scaleform.framework.managers.view_lifecycle_watcher import IViewLifecycleHandler, ViewLifecycleWatcher
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.time_formatters import RentLeftFormatter
 from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES, getVehicleStateIcon, getVehicleStateAddIcon, getBattlesLeft, getSmallIconPath, getIconPath
 from gui.shared.gui_items.dossier.achievements.MarkOfMasteryAchievement import isMarkOfMasteryAchieved
 from gui.shared.utils.requesters import REQ_CRITERIA
-from helpers.i18n import makeString as ms
 from helpers import dependency
-from skeletons.gui.game_control import IBattleRoyaleController
+from helpers.i18n import makeString as ms
+from skeletons.gui.game_control import IRacingEventController
 
 def sortedIndices(seq, getter, reverse=False):
     return sorted(range(len(seq)), key=lambda idx: getter(seq[idx]), reverse=reverse)
@@ -56,9 +59,12 @@ def getStatusStrings(vState, vStateLvl=Vehicle.VEHICLE_STATE_LEVEL.INFO, substit
         return (text_styles.middleTitle(substitute), status) if substitute else (status, status)
 
 
-def getVehicleDataVO(vehicle):
+def getVehicleDataVO(vehicle, squadWindowOpened):
     rentInfoText = RentLeftFormatter(vehicle.rentInfo, vehicle.isPremiumIGR).getRentLeftStr()
     vState, vStateLvl = vehicle.getState()
+    if squadWindowOpened is not None:
+        if vehicle.isOnlyForEventBattles ^ (not squadWindowOpened):
+            vState = Vehicle.VEHICLE_STATE.UNSUITABLE_TO_UNIT
     if vehicle.isRotationApplied():
         if vState in (Vehicle.VEHICLE_STATE.AMMO_NOT_FULL, Vehicle.VEHICLE_STATE.LOCKED):
             vState = Vehicle.VEHICLE_STATE.ROTATION_GROUP_UNLOCKED
@@ -79,17 +85,6 @@ def getVehicleDataVO(vehicle):
         bonusImage = ''
     label = vehicle.shortUserName if vehicle.isPremiumIGR else vehicle.userName
     labelStyle = text_styles.premiumVehicleName if vehicle.isPremium else text_styles.vehicleName
-    if vehicle.isOnlyForBattleRoyaleBattles:
-        tooltip = TOOLTIPS_CONSTANTS.BATTLE_ROYALE_VEHICLE
-        isUseRightBtn = False
-        level = 0
-        tankType = ''
-        bonusImage = ''
-    else:
-        tooltip = TOOLTIPS_CONSTANTS.CAROUSEL_VEHICLE
-        isUseRightBtn = True
-        level = vehicle.level
-        tankType = '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type
     return {'id': vehicle.invID,
      'intCD': vehicle.intCD,
      'infoText': largeStatus,
@@ -103,12 +98,12 @@ def getVehicleDataVO(vehicle):
      'iconSmall': vehicle.iconSmall,
      'iconSmallAlt': getSmallIconPath('noImage'),
      'label': labelStyle(label),
-     'level': level,
+     'level': vehicle.level,
      'premium': vehicle.isPremium,
      'favorite': vehicle.isFavorite,
      'nation': vehicle.nationID,
      'xpImgSource': bonusImage,
-     'tankType': tankType,
+     'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
      'rentLeft': rentInfoText,
      'clickEnabled': vehicle.isInInventory or vehicle.isRentPromotion,
      'alpha': 1,
@@ -116,16 +111,31 @@ def getVehicleDataVO(vehicle):
      'additionalImgSrc': getVehicleStateAddIcon(vState),
      'isCritInfo': vStateLvl == Vehicle.VEHICLE_STATE_LEVEL.CRITICAL,
      'isRentPromotion': vehicle.isRentPromotion and not vehicle.isRented,
-     'isUseRightBtn': isUseRightBtn,
-     'tooltip': tooltip}
+     'isRace': vehicle.isOnlyForEventBattles,
+     'isUseRightBtn': not vehicle.isOnlyForEventBattles}
+
+
+class _SquadViewLifecycleHandler(IViewLifecycleHandler):
+    __VIEWS = (PREBATTLE_ALIASES.SQUAD_WINDOW_PY, PREBATTLE_ALIASES.EVENT_SQUAD_WINDOW_PY)
+
+    def __init__(self, onSquadViewCreatedCallback, onSquadViewDestroyedCallback):
+        super(_SquadViewLifecycleHandler, self).__init__([ ViewKey(alias) for alias in self.__VIEWS ])
+        self.__onSquadViewCreatedCallback = onSquadViewCreatedCallback
+        self.__onSquadViewDestroyedCallback = onSquadViewDestroyedCallback
+
+    def onViewCreated(self, view):
+        self.__onSquadViewCreatedCallback(view.key == ViewKey(PREBATTLE_ALIASES.SQUAD_WINDOW_PY))
+
+    def onViewDestroyed(self, _):
+        self.__onSquadViewDestroyedCallback()
 
 
 class CarouselDataProvider(SortableDAAPIDataProvider):
-    _battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
+    racingEventController = dependency.descriptor(IRacingEventController)
 
     def __init__(self, carouselFilter, itemsCache, currentVehicle):
         super(CarouselDataProvider, self).__init__()
-        self._setBaseCriteria()
+        self._baseCriteria = REQ_CRITERIA.INVENTORY
         self._filter = carouselFilter
         self._itemsCache = itemsCache
         self._currentVehicle = currentVehicle
@@ -137,6 +147,8 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         self._randomStats = None
         self._filter.load()
         self.__sortedIndices = []
+        self.__viewLifecycleWatcher = ViewLifecycleWatcher()
+        self.__squadWindowOpened = None
         return
 
     def hasRentedVehicles(self):
@@ -144,9 +156,6 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
 
     def hasEventVehicles(self):
         return bool(self._getFilteredVehicles(REQ_CRITERIA.VEHICLE.EVENT))
-
-    def hasBattleRoyaleVehicles(self):
-        return False if not self._battleRoyaleController.isEnabled() else bool(self._getFilteredVehicles(REQ_CRITERIA.VEHICLE.BATTLE_ROYALE))
 
     def getTotalVehiclesCount(self):
         return len(self._vehicles)
@@ -183,7 +192,17 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         self._filteredIndices = []
         self._selectedIdx = -1
 
+    def init(self, showVehicleStats, app, flashObject):
+        self.setShowStats(showVehicleStats)
+        self.setEnvironment(app)
+        self.setFlashObject(flashObject)
+        self.buildList()
+        self.__squadWindowOpened = None
+        self.__viewLifecycleWatcher.start(self.app.containerManager, [_SquadViewLifecycleHandler(self.__onSquadViewCreatedCallback, self.__onSquadViewDestroyedCallback)])
+        return
+
     def fini(self):
+        self.__viewLifecycleWatcher.stop()
         self.clear()
         self.destroy()
 
@@ -199,7 +218,10 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         filterCriteria = filterCriteria or REQ_CRITERIA.EMPTY
         if vehiclesCDs:
             filterCriteria |= REQ_CRITERIA.IN_CD_LIST(vehiclesCDs)
-        newVehiclesCollection = self._itemsCache.items.getVehicles(self._baseCriteria | filterCriteria)
+        criteria = copy.deepcopy(self._baseCriteria)
+        if not self.racingEventController.isEnabled():
+            criteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
+        newVehiclesCollection = self._itemsCache.items.getVehicles(criteria | filterCriteria)
         oldVehiclesCDs = [ vehicle.intCD for vehicle in self._vehicles ]
         isVehicleRemoved = not set(vehiclesCDs or ()).issubset(newVehiclesCollection.viewkeys())
         isVehicleAdded = not set(vehiclesCDs or ()).issubset(oldVehiclesCDs)
@@ -246,9 +268,6 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         if needUpdate:
             self._filterByIndices()
 
-    def _setBaseCriteria(self):
-        self._baseCriteria = REQ_CRITERIA.INVENTORY
-
     def _filterByIndices(self):
         self.flashObject.as_setFilter(self._filteredIndices)
 
@@ -291,40 +310,39 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         self.__resetSortedIndices()
         self._vehicleItems = []
         self._syncRandomStats()
-        self._addVehicleItemsByCriteria(self._baseCriteria)
+        criteria = copy.deepcopy(self._baseCriteria)
+        if not self.racingEventController.isEnabled():
+            criteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
+        self._addVehicleItemsByCriteria(criteria)
 
     def _buildVehicle(self, vehicle):
-        vo = getVehicleDataVO(vehicle)
+        vo = getVehicleDataVO(vehicle, self.__squadWindowOpened)
         return vo
 
     def _getVehicleStats(self, vehicle):
-        if vehicle.isOnlyForBattleRoyaleBattles:
-            return {'statsText': '',
-             'visibleStats': False}
-        else:
-            intCD = vehicle.intCD
-            vehicleRandomStats = self._randomStats.getVehicles() if self._randomStats is not None else {}
-            if intCD in vehicleRandomStats:
-                battlesCount, wins, _ = vehicleRandomStats.get(intCD)
-                markOfMastery = self._randomStats.getMarkOfMasteryForVehicle(intCD)
-                if isMarkOfMasteryAchieved(markOfMastery):
-                    markOfMasteryText = makeHtmlString('html_templates:lobby/tank_carousel/statistic', 'markOfMastery', ctx={'markOfMastery': markOfMastery})
-                else:
-                    markOfMasteryText = ''
-                winsEfficiency = 100.0 * wins / battlesCount if battlesCount else 0
-                winsEfficiencyStr = backport.getIntegralFormat(round(winsEfficiency)) + '%'
-                winsText = makeHtmlString('html_templates:lobby/tank_carousel/statistic', 'wins', ctx={'wins': winsEfficiencyStr})
-                vehDossier = self._itemsCache.items.getVehicleDossier(intCD)
-                vehStats = vehDossier.getTotalStats()
-                marksOnGun = vehStats.getAchievement(MARK_ON_GUN_RECORD)
-                marksOnGunText = ''
-                if marksOnGun.getValue() > 0:
-                    marksOnGunText = makeHtmlString('html_templates:lobby/tank_carousel/statistic', 'marksOnGun', ctx={'count': marksOnGun.getValue()})
-                statsText = '{}   {}     {}'.format(markOfMasteryText, winsText, marksOnGunText)
+        intCD = vehicle.intCD
+        vehicleRandomStats = self._randomStats.getVehicles() if self._randomStats is not None else {}
+        if intCD in vehicleRandomStats:
+            battlesCount, wins, _ = vehicleRandomStats.get(intCD)
+            markOfMastery = self._randomStats.getMarkOfMasteryForVehicle(intCD)
+            if isMarkOfMasteryAchieved(markOfMastery):
+                markOfMasteryText = makeHtmlString('html_templates:lobby/tank_carousel/statistic', 'markOfMastery', ctx={'markOfMastery': markOfMastery})
             else:
-                statsText = '#menu:tankCarousel/statsStatus/unavailable'
-            return {'statsText': text_styles.stats(statsText),
-             'visibleStats': self._showVehicleStats}
+                markOfMasteryText = ''
+            winsEfficiency = 100.0 * wins / battlesCount if battlesCount else 0
+            winsEfficiencyStr = backport.getIntegralFormat(round(winsEfficiency)) + '%'
+            winsText = makeHtmlString('html_templates:lobby/tank_carousel/statistic', 'wins', ctx={'wins': winsEfficiencyStr})
+            vehDossier = self._itemsCache.items.getVehicleDossier(intCD)
+            vehStats = vehDossier.getTotalStats()
+            marksOnGun = vehStats.getAchievement(MARK_ON_GUN_RECORD)
+            marksOnGunText = ''
+            if marksOnGun.getValue() > 0:
+                marksOnGunText = makeHtmlString('html_templates:lobby/tank_carousel/statistic', 'marksOnGun', ctx={'count': marksOnGun.getValue()})
+            statsText = '{}   {}     {}'.format(markOfMasteryText, winsText, marksOnGunText)
+        else:
+            statsText = '#menu:tankCarousel/statsStatus/unavailable'
+        return {'statsText': text_styles.stats(statsText),
+         'visibleStats': self._showVehicleStats}
 
     def _updateVehicleItems(self, vehiclesCollection):
         updateIndices = []
@@ -357,7 +375,6 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
     def _vehicleComparisonKey(cls, vehicle):
         return (not vehicle.isInInventory,
          not vehicle.isEvent,
-         not vehicle.isOnlyForBattleRoyaleBattles,
          not vehicle.isFavorite,
          GUI_NATIONS_ORDER_INDEX[vehicle.nationName],
          VEHICLE_TYPES_ORDER_INDICES[vehicle.type],
@@ -367,3 +384,12 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
 
     def __resetSortedIndices(self):
         self.__sortedIndices = []
+
+    def __onSquadViewCreatedCallback(self, isSquadView):
+        self.__squadWindowOpened = isSquadView
+        self.updateVehicles()
+
+    def __onSquadViewDestroyedCallback(self):
+        self.__squadWindowOpened = None
+        self.updateVehicles()
+        return

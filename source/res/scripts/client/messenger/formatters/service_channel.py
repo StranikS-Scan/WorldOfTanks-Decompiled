@@ -17,7 +17,7 @@ from constants import INVOICE_ASSET, AUTO_MAINTENANCE_TYPE, AUTO_MAINTENANCE_RES
 from blueprints.BlueprintTypes import BlueprintTypes
 from bonus_constants import BonusName
 from festivity.festival.item_info import FestivalItemInfo
-from gui.battle_royale import royale_helpers
+from gui.server_events.conditions import TokenQuestToken
 from nations import NAMES
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
@@ -217,6 +217,18 @@ def _getCrewBookUserString(itemDescr):
     return i18n.makeString(itemDescr.name, **params)
 
 
+def _makeRacingCollectionElementMsgs(message):
+    messagesData = []
+    collectionElements = message.data.get(BonusName.RACE_COLLECTION_ITEMS, {}).keys()
+    priorityLevel = g_settings.msgTemplates.priority('RacingCollectionElementGot')
+    settings = NotificationGuiSettings(isNotify=True, priorityLevel=priorityLevel)
+    for collectionNum, _ in collectionElements:
+        formatted = g_settings.msgTemplates.format('RacingCollectionElementGot', ctx={'text': backport.text(R.strings.festival.serviceChannelMessages.racingEvent.collection.elementGot(), collection=text_styles.credits(backport.text(R.strings.festival.race.race2019Collection.num(collectionNum)())))}, data={'savedData': collectionNum})
+        messagesData.append(_MessageData(formatted, settings))
+
+    return messagesData
+
+
 _MessageData = namedtuple('MessageData', 'data, settings')
 
 class ServiceChannelFormatter(object):
@@ -304,10 +316,10 @@ class ServerRebootCancelledFormatter(ServiceChannelFormatter):
 class BattleResultsFormatter(WaitItemsSyncFormatter):
     __battleResultKeys = {-1: 'battleDefeatResult',
      0: 'battleDrawGameResult',
-     1: 'battleVictoryResult'}
-    __BRResultKeys = {-1: 'battleRoyaleDefeatResult',
-     0: 'battleRoyaleDefeatResult',
-     1: 'battleRoyaleVictoryResult'}
+     1: 'battleVictoryResult',
+     2: 'racingDefeatResult',
+     3: 'racingDrawGameResult',
+     4: 'racingVictoryResult'}
     __goldTemplateKey = 'battleResultGold'
     __questsTemplateKey = 'battleQuests'
 
@@ -319,6 +331,7 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
     def format(self, message, callback):
         isSynced = yield self._waitForSyncItems()
         if message.data and isSynced:
+            messagesData = []
             battleResults = message.data
             arenaTypeID = battleResults.get('arenaTypeID', 0)
             if arenaTypeID > 0 and arenaTypeID in ArenaType.g_cache:
@@ -353,37 +366,47 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                 ctx['achieves'], ctx['badges'] = self.__makeAchievementsAndBadgesStrings(battleResults)
                 ctx['rankedProgress'] = self.__makeRankedFlowStrings(battleResults)
                 ctx['rankedBonusBattles'] = self.__makeRankedBonusString(battleResults)
-                ctx['BRChevrons'] = self.__makeBRChevronsString(battleResults)
-                ctx['BRTitle'] = self.__makeBRTitleString(battleResults)
                 ctx['lock'] = self.__makeVehicleLockString(vehicleNames, battleResults)
-                ctx['quests'] = self.__makeQuestsAchieve(message)
+                isEvent = guiType == ARENA_GUI_TYPE.EVENT_BATTLES
+                ctx['quests'] = self.__makeQuestsAchieve(message, isEvent=isEvent)
                 team = battleResults.get('team', 0)
                 if guiType == ARENA_GUI_TYPE.FORT_BATTLE_2 or guiType == ARENA_GUI_TYPE.SORTIE_2:
                     if battleResKey == 0:
                         winnerIfDraw = battleResults.get('winnerIfDraw')
                         if winnerIfDraw:
                             battleResKey = 1 if winnerIfDraw == team else -1
-                if guiType == ARENA_GUI_TYPE.BATTLE_ROYALE:
-                    battleResultKeys = self.__BRResultKeys
-                else:
-                    battleResultKeys = self.__battleResultKeys
-                templateName = battleResultKeys[battleResKey]
+                elif isEvent:
+                    battleResKey += 3
+                    ctx['racingPoints'] = battleResults.get('tokens', {}).get('fest19:race:leg_all:points', {}).get('count', 0)
+                    racingBowls = [ token.split(':')[-1] for token in battleResults.get('completedQuestIDs', []) if 'racing2019Achievements' in token ]
+                    racingBowlsStrings = [ backport.text(R.strings.festival.race.bowls.dyn(bowl).name()) for bowl in racingBowls ]
+                    ctx['racingBowls'] = str(len(racingBowls))
+                    if racingBowlsStrings:
+                        ctx['racingBowls'] += '<br/>' + ', '.join(racingBowlsStrings)
+                templateName = self.__battleResultKeys[battleResKey]
                 bgIconSource = None
                 arenaUniqueID = battleResults.get('arenaUniqueID', 0)
                 formatted = g_settings.msgTemplates.format(templateName, ctx=ctx, data={'timestamp': arenaCreateTime,
                  'savedData': arenaUniqueID}, bgIconSource=bgIconSource)
                 settings = self._getGuiSettings(message, templateName)
                 settings.showAt = BigWorld.time()
-                callback([_MessageData(formatted, settings)])
+                messagesData.append(_MessageData(formatted, settings))
+                messagesData.extend(_makeRacingCollectionElementMsgs(message))
+                callback(messagesData)
             else:
                 callback([_MessageData(None, None)])
         else:
             callback([_MessageData(None, None)])
         return
 
-    def __makeQuestsAchieve(self, message):
-        fmtMsg = TokenQuestsFormatter.formatQuestAchieves(message.data, asBattleFormatter=True)
-        return g_settings.htmlTemplates.format('battleQuests', {'achieves': fmtMsg}) if fmtMsg is not None else ''
+    def __makeQuestsAchieve(self, message, isEvent=False):
+        fmtMsg = TokenQuestsFormatter.formatQuestAchieves(message.data, asBattleFormatter=True, isEvent=isEvent)
+        if fmtMsg is not None:
+            if isEvent:
+                return g_settings.htmlTemplates.format('racingBattleQuests', {'achieves': fmtMsg})
+            return g_settings.htmlTemplates.format('battleQuests', {'achieves': fmtMsg})
+        else:
+            return ''
 
     def __makeVehicleLockString(self, vehicleNames, battleResults):
         locks = []
@@ -513,54 +536,6 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
 
     def __makePiggyBankString(self, credits_):
         return '' if not credits_ else g_settings.htmlTemplates.format('piggyBank', ctx={'credits': self.__makeCurrencyString(Currency.CREDITS, credits_)})
-
-    def __makeBRChevronsString(self, battleResults):
-        __serviceChannelMessages = R.strings.messenger.serviceChannelMessages
-        brChevronsValue = ''
-        brChevronsTitle = ''
-        if battleResults.get('guiType', 0) == ARENA_GUI_TYPE.BATTLE_ROYALE:
-            chevrons = battleResults.get('brPointsChanges', 0)
-            if chevrons != 0:
-                brChevronsValue = str(abs(chevrons))
-                if chevrons > 0:
-                    brChevronsTitle = backport.text(__serviceChannelMessages.BRbattleResults.chevronsEarned())
-                else:
-                    brChevronsTitle = backport.text(__serviceChannelMessages.BRbattleResults.chevronsLost())
-            else:
-                brChevronsTitle = backport.text(__serviceChannelMessages.BRbattleResults.chevronsSaved())
-        brChevronsBlock = ''
-        if brChevronsValue:
-            brChevronsBlock = g_settings.htmlTemplates.format('battleResultBRProgression', {'brProgressionTitle': brChevronsTitle,
-             'brProgressionValue': brChevronsValue})
-        elif brChevronsTitle:
-            brChevronsBlock = g_settings.htmlTemplates.format('BRbattleResult', {'brStr': brChevronsTitle})
-        return brChevronsBlock
-
-    def __makeBRTitleString(self, battleResults):
-        brChevronsBlock = []
-        resultMsg = R.strings.messenger.serviceChannelMessages.BRbattleResults
-        if battleResults.get('guiType', 0) == ARENA_GUI_TYPE.BATTLE_ROYALE:
-            accTitles = battleResults.get('accBRTitle', (0, 0))
-            brTitleChange = battleResults.get('brTitleChange', 0)
-            if brTitleChange:
-                if brTitleChange > 0:
-                    brTitleStr = backport.text(resultMsg.titleEarned())
-                    currentTitle = accTitles[0]
-                    for brTitleValue in range(currentTitle - brTitleChange, currentTitle):
-                        brTitleValue += 1
-                        brChevronsBlock.append(g_settings.htmlTemplates.format('battleResultBRProgression', {'brProgressionTitle': brTitleStr,
-                         'brProgressionValue': brTitleValue}))
-
-                else:
-                    tilesDiff = abs(brTitleChange)
-                    brTitleStr = backport.text(resultMsg.titleLost())
-                    while tilesDiff > 0:
-                        brTitleValue = str(abs(accTitles[0] + tilesDiff))
-                        brChevronsBlock.append(g_settings.htmlTemplates.format('battleResultBRProgression', {'brProgressionTitle': brTitleStr,
-                         'brProgressionValue': brTitleValue}))
-                        tilesDiff -= 1
-
-        return ''.join(brChevronsBlock)
 
 
 class AutoMaintenanceFormatter(WaitItemsSyncFormatter):
@@ -1004,6 +979,19 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             result.append(g_settings.htmlTemplates.format('festivalItemsDebited', {'festItems': ', '.join(debited)}))
         return '<br/>'.join(result)
 
+    @classmethod
+    def getRaceCollectionStr(cls, data):
+        result = []
+        if data:
+            collectionIds = [ item[0] for item in data.keys() ]
+            for cID in set(collectionIds):
+                collectionName = backport.text(R.strings.festival.race.race2019Collection.num(cID)())
+                count = collectionIds.count(cID)
+                result.append(g_settings.htmlTemplates.format('racingCollectionElementReceived', {'text': backport.text(R.strings.festival.serviceChannelMessages.racingEvent.collection.elementInvoice(), collection=text_styles.credits(collectionName)),
+                 'amount': count}))
+
+        return '<br/>'.join(result)
+
     def _composeOperations(self, data):
         dataEx = data.get('data', {})
         if not dataEx:
@@ -1081,6 +1069,9 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             festItemsStr = self.getFestivalItemsString(dataEx.get(BonusName.FESTIVAL_ITEMS, {}))
             if festItemsStr:
                 operations.append(festItemsStr)
+            raceCollectionStr = self.getRaceCollectionStr(dataEx.get(BonusName.RACE_COLLECTION_ITEMS, {}))
+            if raceCollectionStr:
+                operations.append(raceCollectionStr)
             return operations
 
     def _formatData(self, assetType, data):
@@ -1089,7 +1080,9 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
         for customizationData in data['data'].get('customizations', ()):
             compensation += Money.makeFromMoneyTuple(customizationData.get('customCompensation', (0, 0)))
 
-        if compensation.gold > 0:
+        if data['data'].get(BonusName.RACE_COLLECTION_ITEMS, None) is not None:
+            icon = 'RacingNotificationIcon'
+        elif compensation.gold > 0:
             icon = 'goldIcon'
         elif compensation.credits > 0:
             icon = 'creditsIcon'
@@ -1841,6 +1834,25 @@ class KoreaParentalControlFormatter(SessionControlFormatter):
         return self._doFormat(data, ('%sSysMessage' % SM_TYPE.Warning), *args)
 
 
+class RacingEventStateFormatter(SessionControlFormatter):
+    _templateKeys = {'registration': {1: 'racingRegistrationStarted',
+                      2: 'racingRegistrationSuspended',
+                      3: 'racingRegistrationResumed',
+                      4: 'racingRegistrationFinished'},
+     'event': {1: 'racingEventStarted',
+               2: 'racingEventSuspended',
+               3: 'racingEventResumed',
+               4: 'racingEventFinished'}}
+
+    def format(self, data, *args):
+        template = self._templateKeys.get(data.get('stateName', ''), {}).get(data.get('state', 0), None)
+        if template is not None:
+            formatted = g_settings.msgTemplates.format(template)
+            return [_MessageData(formatted, self._getGuiSettings(args, template))]
+        else:
+            return []
+
+
 class VehicleTypeLockExpired(ServiceChannelFormatter):
 
     def format(self, message, *args):
@@ -2036,6 +2048,7 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __PERSONAL_MISSIONS_CUSTOM_TEMPLATE = 'personalMissionsCustom'
     __FRONTLINE_REWARD_QUEST_TEMPLATE = 'bought_frontline_reward_veh_'
+    __RACING_QUEST_TEMPLATE = 'fest19:race:'
 
     @async
     @process
@@ -2054,16 +2067,12 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
                 result = yield RankedQuestFormatter(forToken=True).format(message)
                 callback(result)
                 return
-            if royale_helpers.isBRQuestID(first(completedQuestIDs, '')):
-                result = yield BRQuestsFormatter().format(message)
-                callback(result)
-                return
-            if royale_helpers.isBRVehiclesInvoiceQuestComplete(completedQuestIDs):
-                messageData = self.__buildBattleRoyaleMessageData(message)
-                callback([messageData])
-                return
             if self.__FRONTLINE_REWARD_QUEST_TEMPLATE in first(completedQuestIDs, ''):
                 callback([_MessageData(None, None)])
+                return
+            if self.__RACING_QUEST_TEMPLATE in first(completedQuestIDs, ''):
+                result = yield RacingQuestFormatter().format(message)
+                callback(result)
                 return
             if self.__processPersonalMissionsSpecial(completedQuestIDs, message, callback):
                 return
@@ -2074,12 +2083,12 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
         return
 
     @classmethod
-    def formatQuestAchieves(cls, data, asBattleFormatter, processCustomizations=True):
+    def formatQuestAchieves(cls, data, asBattleFormatter, processCustomizations=True, isEvent=False):
         result = []
         tokenResult = cls._processTokens(data)
         if tokenResult:
             result.append(tokenResult)
-        if not asBattleFormatter:
+        if not asBattleFormatter or isEvent:
             crystal = data.get(Currency.CRYSTAL, 0)
             if crystal:
                 fomatter = getBWFormatter(Currency.CRYSTAL)
@@ -2093,7 +2102,7 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
             if premium:
                 result.append(cls.__makeQuestsAchieve(_PREMIUM_TEMPLATES[premiumType], days=premium))
 
-        if not asBattleFormatter:
+        if not asBattleFormatter or isEvent:
             freeXP = data.get('freeXP', 0)
             if freeXP:
                 result.append(cls.__makeQuestsAchieve('battleQuestsFreeXP', freeXP=backport.getIntegralFormat(freeXP)))
@@ -2107,7 +2116,7 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
                 if comptnStr:
                     result.append('<br/>' + comptnStr)
 
-        if not asBattleFormatter:
+        if not asBattleFormatter or isEvent:
             creditsVal = data.get(Currency.CREDITS, 0)
             if creditsVal:
                 fomatter = getBWFormatter(Currency.CREDITS)
@@ -2150,7 +2159,7 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
             strBlueprints = InvoiceReceivedFormatter.getBlueprintString(blueprints)
             if strBlueprints:
                 result.append(strBlueprints)
-        if not asBattleFormatter:
+        if not asBattleFormatter and not isEvent:
             achievementsNames = cls.__extractAchievements(data)
             if achievementsNames:
                 result.append(cls.__makeQuestsAchieve('battleQuestsPopUps', achievements=', '.join(achievementsNames)))
@@ -2312,20 +2321,6 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
             return _MessageData(formatted, settings)
         else:
             return
-
-    def __buildBattleRoyaleMessageData(self, message, withCustomizations=True):
-        data = message.data or {}
-        fmt = self.formatQuestAchieves(data, asBattleFormatter=False, processCustomizations=withCustomizations)
-        settings = self._getGuiSettings(message, 'royaleVehiclesInvoiceReceived')
-        operationTime = message.sentTime
-        if operationTime:
-            fDatetime = TimeFormatter.getLongDatetimeFormat(time_utils.makeLocalServerTime(operationTime))
-        else:
-            fDatetime = 'N/A'
-        ctx = {'achieves': fmt,
-         'at': fDatetime}
-        formatted = g_settings.msgTemplates.format('royaleVehiclesInvoiceReceived', ctx)
-        return _MessageData(formatted, settings)
 
 
 class NCMessageFormatter(ServiceChannelFormatter):
@@ -2826,46 +2821,6 @@ class RotationGroupUnlockFormatter(RotationGroupLockFormatter):
         pass
 
 
-class BRQuestsFormatter(TokenQuestsFormatter):
-    __eventsCache = dependency.descriptor(IEventsCache)
-
-    @async
-    @process
-    def format(self, message, callback):
-        isSynced = yield self._waitForSyncItems()
-        if isSynced:
-            completedQuestIDs = message.data.get('completedQuestIDs', set())
-            messages = self.__formatEveryTitle(completedQuestIDs, message.data.copy())
-            callback([ _MessageData(formattedMessage, self._getGuiSettings(message)) for formattedMessage in messages ])
-        else:
-            callback([_MessageData(None, self._getGuiSettings(message))])
-        return
-
-    def __formatEveryTitle(self, completedQuestIDs, data):
-        formattedMessage = None
-        formattedTitles = {}
-        quests = self.__eventsCache.getHiddenQuests()
-        for questID in completedQuestIDs:
-            quest = quests.get(questID)
-            if quest is not None:
-                titleID = self.__getTitle(quest)
-                textID = R.strings.system_messages.royale.notifications.singleTitle.text()
-                formattedTitles[titleID] = backport.text(textID, title=titleID)
-
-        if formattedTitles:
-            formattedMessage = g_settings.msgTemplates.format('BrTitleQuest', ctx={'titlesBlock': _EOL.join([ formattedTitles[key] for key in sorted(formattedTitles) ]),
-             'awardsBlock': self._packTitleAwards(data)})
-        return [formattedMessage]
-
-    @classmethod
-    def _packTitleAwards(cls, awardsDict):
-        return cls.formatQuestAchieves(awardsDict, asBattleFormatter=False) or ''
-
-    @classmethod
-    def __getTitle(cls, quest):
-        return str(quest.getID().split(':')[-1])
-
-
 class RankedQuestFormatter(TokenQuestsFormatter):
     __eventsCache = dependency.descriptor(IEventsCache)
     __rankedController = dependency.descriptor(IRankedBattlesController)
@@ -3062,6 +3017,43 @@ class RankedQuestFormatter(TokenQuestsFormatter):
                                    'awards': data}}))
 
         return formattedMessages
+
+
+class RacingQuestFormatter(TokenQuestsFormatter):
+    __eventsCache = dependency.descriptor(IEventsCache)
+
+    @async
+    @process
+    def format(self, message, callback=None):
+        isSynced = yield self._waitForSyncItems()
+        if isSynced:
+            completedQuestIDs = message.data.get('completedQuestIDs', set())
+            messagesData = []
+            for qID in completedQuestIDs:
+                quest = self.__eventsCache.getQuestByID(qID)
+                bonuses = quest.getBonusesDict() if quest is not None else ''
+                if 'full_collection' in qID:
+                    collectionNum = [ int(s) for s in qID.split(':') if s.isdigit() ][-1]
+                    collectionName = backport.text(R.strings.festival.race.race2019Collection.num(collectionNum)())
+                    commanderInfo = R.strings.festival.race.hangar.commanderSlot.pilot.num(collectionNum + 1)
+                    commander = (backport.text(commanderInfo.firstName()), backport.text(commanderInfo.secondName()))
+                    commander = ' '.join(commander)
+                    formatted = g_settings.msgTemplates.format('RacingNotificationSysMessage', ctx=dict(header=backport.text(R.strings.festival.serviceChannelMessages.racingEvent.collection.completed.title()), text=backport.text(R.strings.festival.serviceChannelMessages.racingEvent.collection.completed.message(), collection=text_styles.credits(collectionName), commander=text_styles.credits(commander))))
+                    messagesData.append(_MessageData(formatted, self._getGuiSettings(message)))
+                    continue
+                for progressType in ('personalProgress', 'teamProgress', 'postProgress'):
+                    if progressType in qID:
+                        conditionVal = findFirst(lambda c: isinstance(c, TokenQuestToken) and c.getID() == 'fest19:race:leg_all:points', quest.accountReqs.getConditions().items)
+                        racingPointsNeeded = conditionVal.getNeededCount() if conditionVal is not None else 0
+                        formatted = g_settings.msgTemplates.format('racingProgressReward', ctx=dict(title=backport.text(R.strings.festival.serviceChannelMessages.racingEvent.eventProgress.dyn(progressType).title()), message=backport.text(R.strings.festival.serviceChannelMessages.racingEvent.eventProgress.dyn(progressType).message(), racingPoints=text_styles.credits(racingPointsNeeded)), reward=TokenQuestsFormatter.formatQuestAchieves(bonuses, asBattleFormatter=False)))
+                        messagesData.append(_MessageData(formatted, self._getGuiSettings(message)))
+                        break
+
+            messagesData.extend(_makeRacingCollectionElementMsgs(message))
+            callback(messagesData)
+        else:
+            callback([_MessageData(None, self._getGuiSettings(message))])
+        return
 
 
 class PersonalMissionFailedFormatter(WaitItemsSyncFormatter):

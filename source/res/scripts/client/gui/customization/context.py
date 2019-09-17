@@ -809,8 +809,9 @@ class CustomizationContext(object):
         self._autoRentEnabled = g_currentVehicle.item.isAutoRentStyle
         self._vehicleAnchorsUpdater = VehicleAnchorsUpdater(self.service, self)
         self._vehicleAnchorsUpdater.startUpdater(self.settingsCore.interfaceScale.get())
-        self._c11CameraManager = C11nHangarCameraManager()
-        self._c11CameraManager.init()
+        if self.hangarSpace.spaceInited:
+            self._c11CameraManager = C11nHangarCameraManager(self.hangarSpace.space.getCameraManager())
+            self._c11CameraManager.init()
         self.settingsCore.interfaceScale.onScaleExactlyChanged += self.__onInterfaceScaleChanged
         self.service.onOutfitChanged += self.__onOutfitChanged
         self.itemsCache.onSyncCompleted += self.__onCacheResync

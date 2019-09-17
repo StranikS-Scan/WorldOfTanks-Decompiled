@@ -27,7 +27,12 @@ class EventBattleSquadEntity(SquadEntity):
 
     def doSelectAction(self, action):
         name = action.actionName
-        if name in (PREBATTLE_ACTION_NAME.SQUAD, PREBATTLE_ACTION_NAME.RANDOM):
+        if name == PREBATTLE_ACTION_NAME.EVENT_SQUAD:
+            g_eventDispatcher.showUnitWindow(self._prbType)
+            if action.accountsToInvite:
+                self._actionsHandler.processInvites(action.accountsToInvite)
+            return SelectResult(True)
+        if name == PREBATTLE_ACTION_NAME.RANDOM:
             g_eventDispatcher.showUnitWindow(self._prbType)
             return SelectResult(True)
         return super(EventBattleSquadEntity, self).doSelectAction(action)

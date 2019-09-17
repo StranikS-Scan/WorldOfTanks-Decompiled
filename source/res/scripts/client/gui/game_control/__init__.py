@@ -40,7 +40,6 @@ def getGameControllersConfig(manager):
     from gui.game_control.trade_in import TradeInController as _TradeIn
     from gui.game_control.quests_controller import QuestsController as _Quests
     from gui.game_control.ranked_battles_controller import RankedBattlesController as _Ranked
-    from gui.game_control.battle_royale_controller import BattleRoyaleController as _BattleRoyale
     from gui.game_control.epic_mode_controller import EpicModeController as _Epic
     from gui.game_control.bootcamp_controller import BootcampController as _Bootcamp
     from gui.game_control.hero_tank_controller import HeroTankController as _HeroTankController
@@ -51,6 +50,8 @@ def getGameControllersConfig(manager):
     from skeletons.gui import game_control as _interface
     from gui.game_control.referral_program_controller import ReferralProgramController as _ReferralController
     from gui.game_control.badges_controller import BadgesController as _Badges
+    from gui.game_control.racing_event_controller import RacingEventController as _RacingEventController
+    from gui.game_control.special_sound_ctrl import SpecialSoundCtrl as _SpecialSoundCtrl
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -91,9 +92,10 @@ def getGameControllersConfig(manager):
     _config(_interface.IMarathonEventsController, _MarathonEventsController())
     _config(_interface.ICalendarController, _Calendar())
     _config(_interface.IEpicBattleMetaGameController, _EpicMeta())
-    _config(_interface.IBattleRoyaleController, _BattleRoyale())
     _config(_interface.IManualController, _ManualController())
     _config(_interface.IReferralProgramController, _ReferralController())
+    _config(_interface.IRacingEventController, _RacingEventController())
+    _config(_interface.ISpecialSoundCtrl, _SpecialSoundCtrl())
     if constants.IS_CHINA:
         _config(_interface.IChinaController, _China())
     else:

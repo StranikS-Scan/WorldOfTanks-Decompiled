@@ -33,13 +33,15 @@ class RecruitSourceID(object):
     BUFFON = 'buffon'
     LOOTBOX = 'lootbox'
     CZECH_WOMAN = 'czech_woman'
+    COMMANDER_MARINA = 'commander_marina'
     EVENTS = (TWITCH_0,
      TWITCH_1,
      TWITCH_2,
      TWITCH_3,
      TWITCH_4,
      TWITCH_5,
-     TWITCH_6)
+     TWITCH_6,
+     COMMANDER_MARINA)
 
 
 _NEW_SKILL = 'new_skill'
@@ -176,6 +178,10 @@ class _TokenRecruitInfo(_BaseRecruitInfo):
         description = TOOLTIPS.getNotRecruitedTankmanEventDesc(self._sourceID)
         description = self.__getCustomDescription(description)
         return description if description is not None else TOOLTIPS.getNotRecruitedTankmanEventDesc(_TANKMAN_NAME)
+
+    def getHowToGetInfo(self):
+        howToGet = TOOLTIPS.getNotRecruitedTankmanEventGetInfo(self._sourceID)
+        return howToGet if howToGet is not None else TOOLTIPS.getNotRecruitedTankmanEventGetInfo(_TANKMAN_NAME)
 
     def getFullUserNameByNation(self, nationID):
         _, firstName, lastName, _, _ = self.__parseTankmanData(nationID)

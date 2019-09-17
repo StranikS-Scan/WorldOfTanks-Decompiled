@@ -360,42 +360,6 @@
         </effects>
       </variant1>
     </tree_Maple_Autumn_12m_touchdown>
-    <tree_Maple_Autumn_25m_fall>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/trees/Broadleaves/tree_Maple_Autumn_25m_fall.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_creak	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </tree_Maple_Autumn_25m_fall>
-    <tree_Maple_Autumn_25m_touchdown>
-      <variant1>
-        <stages>
-          <base>	5.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/trees/Broadleaves/tree_Maple_Autumn_25m_touchdown.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_down	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </tree_Maple_Autumn_25m_touchdown>
     <tree_Birch_Colored_bush_single_01_fall>
       <variant1>
         <stages>
@@ -2160,42 +2124,6 @@
         </effects>
       </variant1>
     </tree_Linden_Town_Dry_Snow_17m_touchdown>
-    <tree_Linden_High_Bald_Snow_18m_fall>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/trees/Broadleaves/tree_Linden_High_Bald_Snow_18m_fall.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_creak	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </tree_Linden_High_Bald_Snow_18m_fall>
-    <tree_Linden_High_Bald_Snow_18m_touchdown>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/trees/Broadleaves/tree_Linden_High_Bald_Snow_18m_touchdown.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_down	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </tree_Linden_High_Bald_Snow_18m_touchdown>
     <tree_Spruce_Frost_2m_fall>
       <variant1>
         <stages>
@@ -2340,42 +2268,6 @@
         </effects>
       </variant1>
     </tree_Birch_Dry_Frost_16m_touchdown>
-    <tree_Birch_Fall_Frost_01_fall>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/trees/tree_Birch_Fall_Frost_01_fall.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_creak	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </tree_Birch_Fall_Frost_01_fall>
-    <tree_Birch_Fall_Frost_01_touchdown>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/trees/tree_Birch_Fall_Frost_01_touchdown.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_down	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </tree_Birch_Fall_Frost_01_touchdown>
     <tree_Birch_Dry_Frost_17m_fall>
       <variant1>
         <stages>
@@ -6463,146 +6355,6 @@
         </effects>
       </variant1>
     </hd_gaf_AM_008_ConcreteFence_Tile_01>
-    <hd_gaf_EU_103_BigBrickFence_end>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_gaf_EU_103_BigBrickFence_end.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_1>	30	</stone_1>
-              <debrisAmount>	70	</debrisAmount>
-              <weight>	5200	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_gaf_EU_103_BigBrickFence_end>
-    <hd_gaf_EU_103_BigBrickFence_end_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_gaf_EU_103_BigBrickFence_end.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_1>	30	</stone_1>
-              <debrisAmount>	70	</debrisAmount>
-              <weight>	5200	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_gaf_EU_103_BigBrickFence_end_hit>
-    <hd_gaf_EU_103_BigBrickFence_gate>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_gaf_EU_103_BigBrickFence_gate.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_2>	49	</metal_2>
-              <stone_1>	30	</stone_1>
-              <debrisAmount>	100	</debrisAmount>
-              <weight>	6500	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_gaf_EU_103_BigBrickFence_gate>
-    <hd_gaf_EU_103_BigBrickFence_gate_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_gaf_EU_103_BigBrickFence_gate.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_2>	49	</metal_2>
-              <stone_1>	30	</stone_1>
-              <debrisAmount>	100	</debrisAmount>
-              <weight>	6500	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_gaf_EU_103_BigBrickFence_gate_hit>
-    <hd_gaf_EU_103_BigBrickFence_tile>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_gaf_EU_103_BigBrickFence_tile.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_1>	50	</stone_1>
-              <debrisAmount>	100	</debrisAmount>
-              <weight>	5500	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_gaf_EU_103_BigBrickFence_tile>
-    <hd_gaf_EU_103_BigBrickFence_tile_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_gaf_EU_103_BigBrickFence_tile.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_1>	50	</stone_1>
-              <debrisAmount>	100	</debrisAmount>
-              <weight>	5500	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_gaf_EU_103_BigBrickFence_tile_hit>
     <hd_gaf_SU_009_CastFenceTile>
       <variant1>
         <stages>
@@ -15840,30 +15592,6 @@
         </effects>
       </variant1>
     </inf_gaf015_TownForgedFenceGate_01>
-    <inf_gaf015_TownForgedFenceGate_02>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_gaf015_TownForgedFenceGate.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_2>	26	</metal_2>
-              <stone_2>	26	</stone_2>
-              <debrisAmount>	100	</debrisAmount>
-              <weight>	5000	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_gaf015_TownForgedFenceGate_02>
     <inf_gaf015_TownForgedFenceGate2_01>
       <variant1>
         <stages>
@@ -15887,29 +15615,6 @@
         </effects>
       </variant1>
     </inf_gaf015_TownForgedFenceGate2_01>
-    <inf_gaf015_TownForgedFenceGate2_02>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_gaf015_TownForgedFenceGate2.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_2>	26	</metal_2>
-              <debrisAmount>	100	</debrisAmount>
-              <weight>	5000	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_gaf015_TownForgedFenceGate2_02>
     <inf_gaf015_TownForgedFenceEnd_01>
       <variant1>
         <stages>
@@ -27409,6 +27114,24 @@
         </effects>
       </variant1>
     </inf_fuel_envAF_006_BarellFuel2>
+    <fuel_barrel_explosion_race>
+      <variant1>
+        <stages>
+          <base>	35.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/fuel_barrel_explosion_race.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	inf_fuel_envAF_006_BarellFuel2	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </fuel_barrel_explosion_race>
     <inf_fuel_envAM_011_Truck_01>
       <variant1>
         <stages>
@@ -31076,30 +30799,6 @@
         </effects>
       </variant1>
     </hd_env_UNI_659_LatheMachine_Small_hit>
-    <hd_env_UNI_051_CrashFactoryRoof>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_env_UNI_051_CrashFactoryRoof.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <debrisAmount>	70	</debrisAmount>
-              <weight>	4850	</weight>
-              <wood_1>	75	</wood_1>
-              <wood_2>	24	</wood_2>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_env_UNI_051_CrashFactoryRoof>
     <hd_env_UNI_628_VentilationSys_01>
       <variant1>
         <stages>

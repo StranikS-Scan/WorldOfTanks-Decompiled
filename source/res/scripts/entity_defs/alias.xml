@@ -258,17 +258,6 @@
       </players>
     </Properties>
   </EPIC_QUEUE_INFO>
-  <EVENT_QUEUE_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
-    <Properties>
-      <classes>
-        <Type>	ARRAY	  <of>	UINT32	</of>
-        </Type>
-      </classes>
-      <players>
-        <Type>	UINT32	</Type>
-      </players>
-    </Properties>
-  </EVENT_QUEUE_INFO>
   <RANKED_BATTLES_QUEUE_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <classes>
@@ -1039,7 +1028,7 @@
       </outfit>
     </Properties>
   </RESPAWN_INFO_VEHICLE>
-  <BUFF_EFFECT>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+  <INSPIRING_EFFECT>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <radius>
         <Type>	FLOAT32	</Type>
@@ -1054,8 +1043,8 @@
         <Type>	FLOAT32	</Type>
       </inactivationDelay>
     </Properties>
-  </BUFF_EFFECT>
-  <BUFF_EFFECT_INACTIVATION>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+  </INSPIRING_EFFECT>
+  <INSPIRED>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <startTime>
         <Type>	FLOAT64	</Type>
@@ -1070,7 +1059,7 @@
         <Type>	FLOAT64	</Type>
       </inactivationEndTime>
     </Properties>
-  </BUFF_EFFECT_INACTIVATION>
+  </INSPIRED>
   <SMOKE_INFO>	FIXED_DICT	  <Properties>
       <smokeID>
         <Type>	UINT16	</Type>
@@ -1098,4 +1087,20 @@
       </aliveOnly>
     </Properties>
   </VEHICLE_DETECTOR_INFO>
+  <RACE_RECORD>	TUPLE	  <of>	INT32	</of>
+    <size>	2	</size>
+  </RACE_RECORD>
+  <VEHICLE_FINISH_TIME_INFO>	FIXED_DICT	  <Properties>
+      <vehicleID>
+        <Type>	OBJECT_ID	</Type>
+      </vehicleID>
+      <finishTime>
+        <Type>	FLOAT32	</Type>
+      </finishTime>
+    </Properties>
+  </VEHICLE_FINISH_TIME_INFO>
+  <RACE_LIST>	ARRAY	  <of>	RACE_RECORD	</of>
+  </RACE_LIST>
+  <RACE_FINISH_TIME_LIST>	ARRAY	  <of>	VEHICLE_FINISH_TIME_INFO	</of>
+  </RACE_FINISH_TIME_LIST>
 </alias.xml>

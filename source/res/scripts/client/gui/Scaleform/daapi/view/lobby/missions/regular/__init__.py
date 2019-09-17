@@ -6,6 +6,7 @@ from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.EVENTBOARDS_ALIASES import EVENTBOARDS_ALIASES
 from gui.Scaleform.genConsts.LINKEDSET_ALIASES import LINKEDSET_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
+from gui.Scaleform.genConsts.MISSIONS_ALIASES import MISSIONS_ALIASES
 from gui.app_loader import settings as app_settings
 from gui.shared import EVENT_BUS_SCOPE
 
@@ -27,6 +28,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.event_boards.event_boards_vehicles_overlay import EventBoardsVehiclesOverlay
     from gui.Scaleform.daapi.view.lobby.event_boards.event_boards_battle_overlay import EventBoardsBattleOverlay
     from gui.Scaleform.daapi.view.lobby.event_boards.event_boards_awards_overlay import EventBoardsAwardsOverlay
+    from gui.Scaleform.daapi.view.lobby.race.race_greeting_view import RaceGreetingInjectWidget
     return (ViewSettings(VIEW_ALIAS.LOBBY_MISSIONS, MissionsPage, 'missionsPage.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_MISSIONS, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.LOBBY_MISSION_DETAILS, MissionDetailsContainerView, 'missionsDetails.swf', ViewTypes.LOBBY_TOP_SUB, VIEW_ALIAS.LOBBY_MISSION_DETAILS, ScopeTemplates.LOBBY_SUB_SCOPE, True),
      ViewSettings(EVENTBOARDS_ALIASES.EVENTBOARDS_DETAILS_BROWSER_VIEW, EventBoardsDetailsBrowserView, 'eventBoardsDetails.swf', ViewTypes.LOBBY_TOP_SUB, EVENTBOARDS_ALIASES.EVENTBOARDS_DETAILS_BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE, True),
@@ -46,7 +48,8 @@ def getViewSettings():
      ViewSettings(QUESTS_ALIASES.VEHICLE_SELECTOR_CAROUSEL_ALIAS, RegularVehicleSelectorCarousel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(QUESTS_ALIASES.MISSIONS_FILTER_POPOVER_ALIAS, MissionsFilterPopoverView, 'missionsFilterPopoverView.swf', ViewTypes.WINDOW, QUESTS_ALIASES.MISSIONS_FILTER_POPOVER_ALIAS, QUESTS_ALIASES.MISSIONS_FILTER_POPOVER_ALIAS, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(QUESTS_ALIASES.MISSIONS_TOKEN_POPOVER_ALIAS, MissionsTokenPopover, 'missionsTokenPopover.swf', ViewTypes.WINDOW, QUESTS_ALIASES.MISSIONS_TOKEN_POPOVER_ALIAS, QUESTS_ALIASES.MISSIONS_TOKEN_POPOVER_ALIAS, ScopeTemplates.DEFAULT_SCOPE),
-     GroupedViewSettings(VIEW_ALIAS.VEHICLES_FILTER_POPOVER, VehiclesFilterPopover, 'vehiclesFiltersPopoverView.swf', ViewTypes.WINDOW, VIEW_ALIAS.VEHICLES_FILTER_POPOVER, VIEW_ALIAS.VEHICLES_FILTER_POPOVER, ScopeTemplates.DEFAULT_SCOPE))
+     GroupedViewSettings(VIEW_ALIAS.VEHICLES_FILTER_POPOVER, VehiclesFilterPopover, 'vehiclesFiltersPopoverView.swf', ViewTypes.WINDOW, VIEW_ALIAS.VEHICLES_FILTER_POPOVER, VIEW_ALIAS.VEHICLES_FILTER_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(MISSIONS_ALIASES.UNBOUND_INJECTION, RaceGreetingInjectWidget, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

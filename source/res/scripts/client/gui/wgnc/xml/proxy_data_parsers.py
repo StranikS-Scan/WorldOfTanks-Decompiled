@@ -202,6 +202,24 @@ class _ShowReferralWindowParser(SectionParser):
         return proxy_data.ShowReferralWindowItem(relativeUrl)
 
 
+class _RacingTournamentEndParser(SectionParser):
+
+    def getTagName(self):
+        pass
+
+    def parse(self, section):
+        return proxy_data.RacingTournamentEndItem()
+
+
+class _RacingTournamentStageEndParser(SectionParser):
+
+    def getTagName(self):
+        pass
+
+    def parse(self, section):
+        return proxy_data.RacingTournamentStageEndItem(section.readInt('number'))
+
+
 class ProxyDataItemParser_v2(_ProxyDataItemsParser):
 
     def __init__(self):
@@ -219,4 +237,6 @@ class ProxyDataItemParser_v2(_ProxyDataItemsParser):
          _ShowPromoParser(),
          _ReferralBubbleParser(),
          _BecomeRecruiterParser(),
-         _ShowReferralWindowParser()))
+         _ShowReferralWindowParser(),
+         _RacingTournamentEndParser(),
+         _RacingTournamentStageEndParser()))

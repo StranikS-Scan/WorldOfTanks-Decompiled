@@ -66,7 +66,7 @@ class BorderVisual(object):
             self.__rootMatrix = rootMatrix = math_utils.createRTMatrix(rotation=rotation, translation=translation)
             self.__rootModel = rootModel = BigWorld.Model('')
             rootModel.addMotor(BigWorld.Servo(rootMatrix))
-            BigWorld.addModel(rootModel)
+            BigWorld.player().addModel(rootModel)
             self.__terrainModels = [None] * maxNumModels
             self.__attachNodes = [None] * maxNumModels
             self.__modelOffsets = [None] * maxNumModels
@@ -87,7 +87,7 @@ class BorderVisual(object):
     def destroy(self):
         self.__rootMatrix = None
         if self.__rootModel.inWorld:
-            BigWorld.delModel(self.__rootModel)
+            BigWorld.player().delModel(self.__rootModel)
         self.__rootModel = None
         self.__attachNodes = None
         self.__modelOffsets = None

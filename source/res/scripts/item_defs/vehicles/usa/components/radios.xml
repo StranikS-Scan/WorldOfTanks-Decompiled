@@ -33,6 +33,7 @@
     <SCR_610_ID>	71	</SCR_610_ID>
     <FuG_7_Ausf_F>	72	</FuG_7_Ausf_F>
     <AN_GRC_8E>	73	</AN_GRC_8E>
+    <AN-GRC-3_race>	74	</AN-GRC-3_race>
     <T23radio>	1000	</T23radio>
     <Development_Radio>	65535	</Development_Radio>
     <AN-ARC-27_IGR>	60001	</AN-ARC-27_IGR>
@@ -41,9 +42,6 @@
     <SCR_506_IGR>	60004	</SCR_506_IGR>
     <SCR_528_IGR>	60005	</SCR_528_IGR>
     <AN-VRC-7_IGR>	60006	</AN-VRC-7_IGR>
-    <SCR_508_BR>	311	</SCR_508_BR>
-    <SCR_506_BR>	312	</SCR_506_BR>
-    <SCR_528_BR>	313	</SCR_528_BR>
     <SCR_200_bootcamp>	64001	</SCR_200_bootcamp>
     <SCR_508_bootcamp>	64002	</SCR_508_bootcamp>
   </ids>
@@ -326,6 +324,19 @@
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	1.2	</repairCost>
     </AN-GRC-3>
+    <AN-GRC-3_race>
+      <userString>	#usa_vehicles:AN-GRC-3_race	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	21600	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	120	</weight>
+      <distance>	410	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <invulnerable>	true	</invulnerable>
+      <repairCost>	1.2	</repairCost>
+    </AN-GRC-3_race>
     <AN_GRC_8>
       <userString>	#usa_vehicles:AN_GRC_8	</userString>
       <tags></tags>
@@ -551,44 +562,5 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </AN-VRC-7_IGR>
-    <SCR_508_BR>
-      <userString>	#usa_vehicles:SCR_508_BR	</userString>
-      <tags></tags>
-      <level>	1	</level>
-      <price>	21600	</price>
-      <weight>	100	</weight>
-      <distance>	2000	</distance>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-      <radarRadius>	350	</radarRadius>
-      <radarCooldown>	30	</radarCooldown>
-    </SCR_508_BR>
-    <SCR_506_BR>
-      <userString>	#usa_vehicles:SCR_506_BR	</userString>
-      <tags></tags>
-      <level>	3	</level>
-      <price>	33600	</price>
-      <weight>	100	</weight>
-      <distance>	2000	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-      <radarRadius>	350	</radarRadius>
-      <radarCooldown>	20	</radarCooldown>
-    </SCR_506_BR>
-    <SCR_528_BR>
-      <userString>	#usa_vehicles:SCR_528_BR	</userString>
-      <tags></tags>
-      <level>	3	</level>
-      <price>	54000	</price>
-      <weight>	100	</weight>
-      <distance>	2000	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-      <radarRadius>	550	</radarRadius>
-      <radarCooldown>	30	</radarCooldown>
-    </SCR_528_BR>
   </shared>
 </radios.xml>

@@ -9,6 +9,7 @@ from gui.battle_control.arena_info.interfaces import IArenaPeriodController
 from gui.battle_control.battle_constants import COUNTDOWN_STATE, BATTLE_CTRL_ID
 from gui.battle_control.view_components import ViewComponentsController
 import SoundGroups
+from Event import Event
 from helpers import dependency
 from skeletons.connection_mgr import IConnectionManager
 _COUNTDOWN_HIDE_SPEED = 1.5
@@ -29,9 +30,6 @@ class IAbstractPeriodView(IPlayersPanelsSwitcher):
         pass
 
     def setPeriod(self, period):
-        pass
-
-    def setAdditionalInfo(self, additionalInfo):
         pass
 
     def setTotalTime(self, totalTime):
@@ -72,7 +70,7 @@ class ITimersBar(object):
 
 
 class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
-    __slots__ = ('_callbackID', '_period', '_endTime', '_length', '_sound', '_cdState', '_ttState', '_isNotified', '_totalTime', '_countdown', '_playingTime', '_switcherState', '_battleCtx', '_arenaVisitor', '_timeNotifications')
+    __slots__ = ('_callbackID', '_period', '_endTime', '_length', '_sound', '_cdState', '_ttState', '_isNotified', '_totalTime', '_countdown', '_playingTime', '_switcherState', '_battleCtx', '_arenaVisitor', '_timeNotifications', 'onCountdown')
 
     def __init__(self):
         super(ArenaPeriodController, self).__init__()
@@ -91,6 +89,7 @@ class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
         self._battleCtx = None
         self._arenaVisitor = None
         self._timeNotifications = []
+        self.onCountdown = Event()
         return
 
     def getControllerID(self):
@@ -106,6 +105,7 @@ class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
         self.__clearCallback()
         self._stopSound()
         self._setPlayingTimeOnArena()
+        self.onCountdown.clear()
         return
 
     def setViewComponents(self, *components):
@@ -151,7 +151,6 @@ class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
         self._endTime = endTime
         self._length = length
         self.__invokeViewPeriodUpdate()
-        self.__invokeAdditionInfoUpdate(additionalInfo)
         if soundID:
             self._sound = SoundGroups.g_instance.getSound2D(soundID)
         self.__setCallback()
@@ -161,7 +160,6 @@ class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
         self._endTime = endTime
         self._length = length
         self.__invokeViewPeriodUpdate()
-        self.__invokeAdditionInfoUpdate(additionalInfo)
         self.__clearCallback()
         self.__setCallback()
         self._setArenaWinStatus(additionalInfo)
@@ -255,6 +253,7 @@ class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
             self._cdState = COUNTDOWN_STATE.START
             self._setCountdown(COUNTDOWN_STATE.START, timeLeft)
             self._updateSound(timeLeft)
+            self.onCountdown(timeLeft)
         elif self._period == _PERIOD.BATTLE:
             if self._cdState in COUNTDOWN_STATE.VISIBLE:
                 self._cdState = COUNTDOWN_STATE.STOP
@@ -273,13 +272,6 @@ class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
     def __invokeViewPeriodUpdate(self):
         for view in self._viewComponents:
             view.setPeriod(self._period)
-
-    def __invokeAdditionInfoUpdate(self, additionalInfo):
-        if additionalInfo is not None:
-            for view in self._viewComponents:
-                view.setAdditionalInfo(additionalInfo)
-
-        return
 
     def __tick(self):
         floatLength = self._calculate()

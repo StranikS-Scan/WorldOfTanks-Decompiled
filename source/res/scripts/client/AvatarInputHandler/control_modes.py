@@ -3,6 +3,7 @@
 import weakref
 from collections import namedtuple
 import time
+from typing import TYPE_CHECKING
 import BigWorld
 import BattleReplay
 import CommandMapping
@@ -24,7 +25,7 @@ from DynamicCameras import SniperCamera, StrategicCamera, ArcadeCamera, ArtyCame
 from PostmortemDelay import PostmortemDelay
 from ProjectileMover import collideDynamicAndStatic
 from AimingSystems import getShotTargetInfo
-from AimingSystems.magnetic_aim import autoAimProcessor, magneticAimProcessor, MagneticAimSettings
+from AimingSystems.magnetic_aim import autoAimProcessor, magneticAimProcessor
 from TriggersManager import TRIGGER_TYPE
 from constants import AIMING_MODE
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
@@ -37,6 +38,8 @@ from gui.battle_control import event_dispatcher as gui_event_dispatcher
 from account_helpers.AccountSettings import AccountSettings, WHEELED_DEATH_DELAY_COUNT
 _ARCADE_CAM_PIVOT_POS = Math.Vector3(0, 4, 3)
 _WHEELED_VEHICLE_POSTMORTEM_DELAY = 3
+if TYPE_CHECKING:
+    from items.vehicles import MagneticAimSettings
 
 class IControlMode(object):
 
@@ -511,8 +514,8 @@ class ArcadeControlMode(_GunControlMode):
         elif BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and isDown and key == Keys.KEY_F3 and self.__videoControlModeAvailable:
             self._aih.onControlModeChanged(CTRL_MODE_NAME.VIDEO, prevModeName=CTRL_MODE_NAME.ARCADE, camMatrix=self._cam.camera.matrix)
             return True
-        isWheeledTech = self._aih.isWheeledTech
-        if isWheeledTech and cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key):
+        magneticAim = self._aih.magneticAimSettings
+        if magneticAim.isEnabled and cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key):
             if isDown:
                 self.__lockKeyPressedTime = time.time()
             else:
@@ -522,13 +525,14 @@ class ArcadeControlMode(_GunControlMode):
         if isFiredFreeCamera:
             self.setAimingMode(isDown, AIMING_MODE.USER_DISABLED)
         if isFiredLockTarget and isDown:
-            gui_event_dispatcher.hideAutoAimMarker()
-            autoAimProcessor(target=BigWorld.target())
+            if magneticAim.isEnabled:
+                gui_event_dispatcher.hideAutoAimMarker()
+                autoAimProcessor(target=BigWorld.target())
             BigWorld.player().autoAim(BigWorld.target())
             self.__simpleAimTarget = BigWorld.target()
-        if isWheeledTech and isFiredLockTarget and not isDown:
+        if magneticAim.isEnabled and isFiredLockTarget and not isDown:
             if self.__lockKeyPressedTime is not None and self.__lockKeyUpTime is not None:
-                if self.__lockKeyUpTime - self.__lockKeyPressedTime <= MagneticAimSettings.KEY_DELAY_SEC:
+                if self.__lockKeyUpTime - self.__lockKeyPressedTime <= magneticAim.keyDelaySec:
                     self.__magneticAimTarget = magneticAimProcessor(self.__simpleAimTarget, self.__magneticAimTarget)
         if cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key) and isDown:
             BigWorld.player().shoot()
@@ -918,11 +922,13 @@ class SniperControlMode(_GunControlMode):
         cmdMap = CommandMapping.g_instance
         isFiredFreeCamera = cmdMap.isFired(CommandMapping.CMD_CM_FREE_CAMERA, key)
         isFiredLockTarget = cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key) and isDown
+        magneticAim = self._aih.magneticAimSettings
         if isFiredFreeCamera or isFiredLockTarget:
             if isFiredFreeCamera:
                 self.setAimingMode(isDown, AIMING_MODE.USER_DISABLED)
             if isFiredLockTarget:
-                autoAimProcessor(target=BigWorld.target())
+                if magneticAim.isEnabled:
+                    autoAimProcessor(target=BigWorld.target())
                 BigWorld.player().autoAim(BigWorld.target())
         if cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key) and isDown:
             BigWorld.player().shoot()
@@ -1312,8 +1318,6 @@ class PostMortemControlMode(IControlMode):
 
     def __onVehicleLeaveWorld(self, vehicle):
         if vehicle.id == self.__curVehicleID:
-            if vehicle.isUpgrading():
-                return
             vehicleID = BigWorld.player().playerVehicleID
             vehicle = BigWorld.entities.get(vehicleID)
             if vehicle is not None and 'observer' in vehicle.typeDescriptor.type.tags:

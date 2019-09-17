@@ -143,6 +143,8 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
          'vehicles': plugins.ArenaVehiclesPlugin,
          'personal': plugins.PersonalEntriesPlugin,
          'area': plugins.AreaStaticMarkerPlugin}
+        if arenaVisitor.gui.isEventBattle():
+            setup['event_repair'] = plugins.EventRepairPointPlugin
         if IS_DEVELOPMENT:
             setup['teleport'] = plugins.TeleportPlugin
         return setup

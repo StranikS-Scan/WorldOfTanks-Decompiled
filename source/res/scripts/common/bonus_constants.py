@@ -5,3 +5,4 @@
 class BonusName(object):
     FESTIVAL_ITEMS = 'festivalItems'
     FESTIVAL_TICKETS = 'festivalTickets'
+    RACE_COLLECTION_ITEMS = 'raceCollectionItems'

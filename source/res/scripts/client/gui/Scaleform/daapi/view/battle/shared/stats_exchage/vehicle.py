@@ -19,7 +19,7 @@ class VehiclesSortedIDsComposer(broker.SingleSideComposer, ISortedIDsComposer):
         super(VehiclesSortedIDsComposer, self).__init__(voField=voField, sortKey=sortKey)
 
     def addSortIDs(self, isEnemy, arenaDP):
-        self._items = vos_collections.VehiclesInfoCollection().ids(arenaDP)
+        self._items = vos_collections.VehiclesItemsCollection(sortKey=self._sortKey).ids(arenaDP)
 
     def removeObserverIDs(self, arenaDP):
         self._items = [ vID for vID in self._items if not arenaDP.getVehicleInfo(vID).vehicleType.isObserver ]

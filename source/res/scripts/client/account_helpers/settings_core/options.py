@@ -10,6 +10,7 @@ import math
 import weakref
 from collections import namedtuple
 from operator import itemgetter
+import logging
 from aih_constants import CTRL_MODE_NAME
 import GUI
 from AvatarInputHandler.cameras import FovExtended
@@ -59,6 +60,8 @@ from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.sounds import ISoundsController
 from gui import makeHtmlString
+from skeletons.gui.game_control import ISpecialSoundCtrl
+_logger = logging.getLogger(__name__)
 
 class APPLY_METHOD(object):
     NORMAL = 'normal'
@@ -1698,9 +1701,7 @@ class KeyboardSettings(SettingsContainer):
        ('item05', 'CMD_AMMO_CHOICE_5'),
        ('item06', 'CMD_AMMO_CHOICE_6'),
        ('item07', 'CMD_AMMO_CHOICE_7'),
-       ('item08', 'CMD_AMMO_CHOICE_8'),
-       ('item09', 'CMD_AMMO_CHOICE_9'),
-       ('item00', 'CMD_AMMO_CHOICE_0'))),
+       ('item08', 'CMD_AMMO_CHOICE_8'))),
      ('shortcuts', (('my_target/follow_me', 'CMD_CHAT_SHORTCUT_ATTACK_MY_TARGET'),
        ('attack', 'CMD_CHAT_SHORTCUT_ATTACK'),
        ('to_base/to_back', 'CMD_CHAT_SHORTCUT_BACKTOBASE'),
@@ -1714,7 +1715,7 @@ class KeyboardSettings(SettingsContainer):
        ('camera_right', 'CMD_CM_CAMERA_ROTATE_RIGHT'))),
      ('voicechat', (('pushToTalk', 'CMD_VOICECHAT_MUTE'), ('voicechat_enable', 'CMD_VOICECHAT_ENABLE'))),
      ('minimap', (('sizeUp', 'CMD_MINIMAP_SIZE_UP'), ('sizeDown', 'CMD_MINIMAP_SIZE_DOWN'), ('visible', 'CMD_MINIMAP_VISIBLE'))))
-    IMPORTANT_BINDS = ('forward', 'backward', 'left', 'right', 'fire', 'item01', 'item02', 'item03', 'item04', 'item05', 'item06', 'item07', 'item08', 'item09', 'item00')
+    IMPORTANT_BINDS = ('forward', 'backward', 'left', 'right', 'fire', 'item01', 'item02', 'item03', 'item04', 'item05', 'item06', 'item07', 'item08')
     KEYS_TOOLTIPS = {'my_target/follow_me': 'SettingsKeyFollowMe',
      'to_base/to_back': 'SettingsKeyTurnBack',
      'sos/help_me': 'SettingsKeyNeedHelp',
@@ -2075,6 +2076,7 @@ class AltVoicesSetting(StorageDumpSetting):
     ALT_VOICES_PREVIEW = itertools.cycle(('wwsound_mode_preview01', 'wwsound_mode_preview02', 'wwsound_mode_preview03'))
     DEFAULT_IDX = 0
     PREVIEW_SOUNDS_COUNT = 3
+    __specialSounds = dependency.descriptor(ISpecialSoundCtrl)
 
     class SOUND_MODE_TYPE(object):
         UNKNOWN = 0
@@ -2193,18 +2195,31 @@ class AltVoicesSetting(StorageDumpSetting):
             mode = modes[value]
         return self._handlers[self.__getSoundModeType(mode)](mode)
 
+    def getSystemModeType(self):
+        return self.__getSoundModeType(self.__getSoundModesList()[self._get()])
+
     def __getSoundModeType(self, soundMode):
         if soundMode.name in SoundGroups.g_instance.soundModes.modes:
             return self.SOUND_MODE_TYPE.REGULAR
         return self.SOUND_MODE_TYPE.NATIONAL if soundMode.name in SoundGroups.g_instance.soundModes.nationalPresets else self.SOUND_MODE_TYPE.UNKNOWN
 
     def __applyRegularMode(self, mode):
-        soundModes = SoundGroups.g_instance.soundModes
-        soundModes.setCurrentNation(soundModes.DEFAULT_NATION)
-        return soundModes.setNationalMappingByMode(mode.name)
+        specialVoice = self.__specialSounds.specialVoice
+        if specialVoice is not None and not specialVoice.onlyInNational:
+            _logger.debug('Use %s as special voice instead %s', specialVoice.languageMode, mode)
+            return True
+        else:
+            soundModes = SoundGroups.g_instance.soundModes
+            soundModes.setCurrentNation(soundModes.DEFAULT_NATION)
+            return soundModes.setNationalMappingByMode(mode.name)
 
     def __applyNationalMode(self, mode):
-        return SoundGroups.g_instance.soundModes.setNationalMappingByPreset(mode.name)
+        specialVoice = self.__specialSounds.specialVoice
+        if specialVoice is not None:
+            _logger.debug('Use %s as special voice instead %s', specialVoice.languageMode, mode)
+            return True
+        else:
+            return SoundGroups.g_instance.soundModes.setNationalMappingByPreset(mode.name)
 
     def __getSoundModesList(self):
         result = []

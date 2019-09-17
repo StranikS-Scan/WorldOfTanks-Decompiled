@@ -1,7 +1,7 @@
 <root>
   <Paths>
-    <Path cacheSubdirs="true">./res_mods/1.6.0.4</Path>
-    <Path mode="recursive" mask="*.wotmod" root="res">./mods/1.6.0.4</Path>
+    <Path cacheSubdirs="true">./res_mods/1.6.0.7</Path>
+    <Path mode="recursive" mask="*.wotmod" root="res">./mods/1.6.0.7</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part1.pkg</Package>
@@ -21,7 +21,6 @@
       <Package type="sd,hd">./res/packages/04_himmelsdorf.pkg</Package>
       <Package type="hd">./res/packages/04_himmelsdorf_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/05_prohorovka.pkg</Package>
-      <Package type="hd">./res/packages/05_prohorovka_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/06_ensk.pkg</Package>
       <Package type="hd">./res/packages/06_ensk_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/07_lakeville.pkg</Package>
@@ -30,6 +29,8 @@
       <Package type="hd">./res/packages/08_ruinberg_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/101_dday.pkg</Package>
       <Package type="hd">./res/packages/101_dday_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/102_race.pkg</Package>
+      <Package type="hd">./res/packages/102_race_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/10_hills.pkg</Package>
       <Package type="hd">./res/packages/10_hills_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/112_eiffel_tower_ctf.pkg</Package>
@@ -62,8 +63,6 @@
       <Package type="hd">./res/packages/222_er_clime_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/23_westfeld.pkg</Package>
       <Package type="hd">./res/packages/23_westfeld_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/250_br_battle_city2-1.pkg</Package>
-      <Package type="hd">./res/packages/250_br_battle_city2-1_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/28_desert.pkg</Package>
       <Package type="hd">./res/packages/28_desert_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/29_el_hallouf.pkg</Package>
@@ -102,9 +101,8 @@
       <Package type="hd">./res/packages/99_poland_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/h20_wot_bday.pkg</Package>
       <Package type="hd">./res/packages/h20_wot_bday_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/h20_wot_bday_h26_br.pkg</Package>
-      <Package type="hd">./res/packages/h20_wot_bday_h26_br_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/h26_battle_royale.pkg</Package>
+      <Package type="sd,hd">./res/packages/h20_wot_bday_night.pkg</Package>
+      <Package type="hd">./res/packages/h20_wot_bday_night_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/hangar_v3.pkg</Package>
       <Package type="hd">./res/packages/hangar_v3_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part1.pkg</Package>
@@ -123,8 +121,8 @@
       <Package type="hd">./res/packages/vehicles_level_03_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/vehicles_level_04.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_04_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/vehicles_level_05-part1.pkg</Package>
       <Package type="sd,hd">./res/packages/vehicles_level_05-part2.pkg</Package>
+      <Package type="sd,hd">./res/packages/vehicles_level_05-part1.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_05_hd-part1.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_05_hd-part2.pkg</Package>
       <Package type="sd,hd">./res/packages/vehicles_level_06-part1.pkg</Package>

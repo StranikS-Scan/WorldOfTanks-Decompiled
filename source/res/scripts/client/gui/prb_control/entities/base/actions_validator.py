@@ -7,6 +7,8 @@ from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import PREBATTLE_RESTRICTION
 import tutorial.loader as tutorialLoader
 from soft_exception import SoftException
+from helpers import dependency
+from skeletons.gui.game_control import IRacingEventController
 _logger = logging.getLogger(__name__)
 
 class IActionsValidator(object):
@@ -113,3 +115,10 @@ class ActionsValidatorComposite(BaseActionsValidator):
                 return result
 
         return super(ActionsValidatorComposite, self)._validate()
+
+
+class ReadyToEventBattleValidator(BaseActionsValidator):
+    _eventController = dependency.descriptor(IRacingEventController)
+
+    def _validate(self):
+        return ValidationResult(False) if self._eventController.isEventModeOn() and not self._eventController.isReadyForEventBattle() else super(ReadyToEventBattleValidator, self)._validate()

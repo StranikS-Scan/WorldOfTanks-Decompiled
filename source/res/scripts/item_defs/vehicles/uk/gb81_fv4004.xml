@@ -123,6 +123,10 @@
         <anchorDirection>	0.000000 0.209076 -0.977899	</anchorDirection>
       </slot>
     </customizationSlots>
+    <camouflage>
+      <density>	96.2273 96.1847	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_GB81_FV4004>
@@ -2441,6 +2445,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.6 0.3 0.4 0.42	</tiling>
+            <density>	97.1797 100.79	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_120mm_AT_Gun_L1A1>
         <_5_5inch_AT_Gun>	shared	  <maxAmmo>	30	</maxAmmo>
@@ -2528,6 +2534,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.6 0.3 0.4 0.42	</tiling>
+            <density>	99.4311 99.162	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_5_5inch_AT_Gun>
       </guns>
@@ -2587,6 +2595,8 @@
       </customizationSlots>
       <camouflage>
         <tiling>	0.67 0.67 0.000000 0.000000	</tiling>
+        <density>	77.5978 78.4168	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
     </Turret_1_GB81_FV4004>
   </turrets0>

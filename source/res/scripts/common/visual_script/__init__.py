@@ -8,6 +8,9 @@ if anyAspectActive(ASPECT.CLIENT, ASPECT.SERVER):
     import general
     regAllVScriptComponentsInModule(general)
 if aspectActive(ASPECT.CLIENT):
-    pass
+    from visual_script_client import camera_blocks
+    regAllVScriptComponentsInModule(camera_blocks)
+    from visual_script_client import tank_blocks
+    regAllVScriptComponentsInModule(tank_blocks)
 if aspectActive(ASPECT.SERVER):
     pass

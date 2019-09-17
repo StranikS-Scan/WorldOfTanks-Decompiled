@@ -40,7 +40,6 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.vehicleGroupLocked.index(): _sc.RotationGroupLockFormatter(),
  _SM_TYPE.vehicleGroupUnlocked.index(): _sc.RotationGroupUnlockFormatter(),
  _SM_TYPE.rankedQuests.index(): _sc.RankedQuestFormatter(),
- _SM_TYPE.royaleQuests.index(): _sc.BRQuestsFormatter(),
  _SM_TYPE.bootcamp.index(): _sc.BootcampResultsFormatter(),
  _SM_TYPE.prbVehicleMaxSpgKick.index(): _sc.PrbVehicleMaxSpgKickFormatter(),
  _SM_TYPE.hangarQuests.index(): _sc.TokenQuestsFormatter(),
@@ -56,4 +55,5 @@ CLIENT_FORMATTERS = {SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE: _sc.ClientSysMessageForma
  SCH_CLIENT_MSG_TYPE.AOGAS_NOTIFY_TYPE: _sc.AOGASNotifyFormatter(),
  SCH_CLIENT_MSG_TYPE.ACTION_NOTIFY_TYPE: _sc.ActionNotificationFormatter(),
  SCH_CLIENT_MSG_TYPE.BATTLE_TUTORIAL_RESULTS_TYPE: _sc.BattleTutorialResultsFormatter(),
- SCH_CLIENT_MSG_TYPE.KOREA_PARENTAL_CONTROL_TYPE: _sc.KoreaParentalControlFormatter()}
+ SCH_CLIENT_MSG_TYPE.KOREA_PARENTAL_CONTROL_TYPE: _sc.KoreaParentalControlFormatter(),
+ SCH_CLIENT_MSG_TYPE.RACING_EVENT_STATE: _sc.RacingEventStateFormatter()}

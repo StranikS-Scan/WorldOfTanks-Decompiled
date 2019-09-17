@@ -31,7 +31,7 @@ class _EmptyWaitingWorker(IWaitingWorker):
         _logger.error('Waiting suspended task is not defined')
         return None
 
-    def show(self, messageID, isSingle=False, interruptCallback=None, isBlocking=True, isAlwaysOnTop=False, backgroundImage=None):
+    def show(self, messageID, isSingle=False, interruptCallback=None, isBlocking=True):
         _logger.error('Waiting is not found. Method "show" is ignored: %r', messageID)
 
     def hide(self, messageID):

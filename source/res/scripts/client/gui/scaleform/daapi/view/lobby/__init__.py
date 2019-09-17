@@ -6,11 +6,13 @@ from gui.Scaleform.daapi.view.bootcamp.component_override import BootcampCompone
 from gui.Scaleform.daapi.view.dialogs.missions_dialogs import UseAwardSheetWindow
 from gui.Scaleform.daapi.view.lobby.BoosterInfoWindow import BoosterInfoWindow
 from gui.Scaleform.daapi.view.lobby.image_view.image_view import ImageView
+from gui.Scaleform.daapi.view.lobby.lobby_mini_games_marker_view import LobbyMiniGameMarkerView
 from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ContainerSettings, ViewTypes, ScopeTemplates, ConditionalViewSettings
 from gui.Scaleform.framework.managers import containers
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.app_loader import settings as app_settings
+from gui.marathon.racing_event_award_screen import RacingEventAwardScreen
 from gui.shared import EVENT_BUS_SCOPE, events
 from gui.shared.events import ShowDialogEvent
 
@@ -41,7 +43,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.eliteWindow.EliteWindow import EliteWindow
     from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardWindow
     from gui.Scaleform.daapi.view.lobby.AwardWindow import MissionAwardWindow
-    from gui.Scaleform.daapi.view.lobby.battle_queue import BattleQueue, BattleStrongholdsQueue
+    from gui.Scaleform.daapi.view.lobby.battle_queue import BattleQueue, BattleStrongholdsQueue, EventBattleQueue
     from gui.Scaleform.daapi.view.lobby.BrowserWindow import BrowserWindow
     from gui.Scaleform.daapi.view.lobby.Browser import Browser
     from gui.Scaleform.daapi.view.lobby.components.CalendarComponent import CalendarComponent
@@ -51,6 +53,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.GoldFishWindow import GoldFishWindow
     from gui.Scaleform.daapi.view.lobby.LobbyMenu import LobbyMenu
     from gui.Scaleform.daapi.view.lobby.lobby_vehicle_marker_view import LobbyVehicleMarkerView
+    from gui.Scaleform.daapi.view.lobby.lobby_advent_calendar_marker_view import LobbyAdventCalendarMarkerView
     from gui.Scaleform.daapi.view.lobby.LobbyView import LobbyView
     from gui.Scaleform.daapi.view.lobby.MinimapLobby import MinimapLobby
     from gui.Scaleform.daapi.view.lobby.MinimapGrid import MinimapGrid
@@ -84,9 +87,13 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.bootcamp.BCBattleResult import BCBattleResult
     from gui.Scaleform.daapi.view.bootcamp.BCVehiclePreview import BCVehiclePreview
     from gui.Scaleform.daapi.view.lobby.vehiclePreview20.style_preview import VehicleStylePreview
+    from gui.Scaleform.daapi.view.lobby.fest_mini_game_browser import FestivalMiniGamePageOverlay
     return (ViewSettings(VIEW_ALIAS.LOBBY, LobbyView, 'lobbyPage.swf', ViewTypes.DEFAULT, None, ScopeTemplates.DEFAULT_SCOPE, False, (ContainerSettings(ViewTypes.LOBBY_SUB, containers.DefaultContainer), ContainerSettings(ViewTypes.LOBBY_TOP_SUB, containers.PopUpContainer))),
      ViewSettings(VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW, LobbyVehicleMarkerView, 'lobbyVehicleMarkerView.swf', ViewTypes.MARKER, VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(VIEW_ALIAS.LOBBY_ADVENT_CALENDAR_MARKER_VIEW, LobbyAdventCalendarMarkerView, 'lobbyVehicleMarkerView.swf', ViewTypes.MARKER, VIEW_ALIAS.LOBBY_ADVENT_CALENDAR_MARKER_VIEW, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(VIEW_ALIAS.LOBBY_MINI_GAMES_MARKER_VIEW, LobbyMiniGameMarkerView, 'lobbyVehicleMarkerView.swf', ViewTypes.MARKER, VIEW_ALIAS.LOBBY_MINI_GAMES_MARKER_VIEW, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BATTLE_QUEUE, BattleQueue, 'battleQueue.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.BATTLE_QUEUE, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(VIEW_ALIAS.EVENT_BATTLE_QUEUE, EventBattleQueue, 'festRaceBattleQueue.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.EVENT_BATTLE_QUEUE, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE, BattleStrongholdsQueue, 'battleStrongholdsQueue.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.LOBBY_CUSTOMIZATION, CustomizationMainView, 'customizationMainView.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_CUSTOMIZATION, ScopeTemplates.LOBBY_SUB_SCOPE),
      ConditionalViewSettings(VIEW_ALIAS.VEHICLE_PREVIEW, BootcampComponentOverride(VehiclePreview, BCVehiclePreview), 'vehiclePreview.swf', ViewTypes.LOBBY_SUB, None, VIEW_ALIAS.VEHICLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
@@ -98,7 +105,8 @@ def getViewSettings():
      ViewSettings(VIEW_ALIAS.IMAGE_VIEW, ImageView, 'imageView.swf', ViewTypes.OVERLAY, VIEW_ALIAS.IMAGE_VIEW, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True),
      ViewSettings(VIEW_ALIAS.VEHICLE_COMPARE, VehicleCompareView, 'vehicleCompareView.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.VEHICLE_COMPARE, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR, VehicleCompareConfiguratorMain, 'vehicleCompareConfiguratorMain.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, WebOverlayBase, 'ingameShopView.swf', ViewTypes.LOBBY_TOP_SUB, VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ViewSettings(VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, WebOverlayBase, 'ingameShopView.swf', ViewTypes.LOBBY_TOP_SUB, VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, ScopeTemplates.LOBBY_TOP_SUB_SCOPE),
+     ViewSettings(VIEW_ALIAS.RACING_AWARD_VIEW, RacingEventAwardScreen, 'ingameShopView.swf', ViewTypes.LOBBY_TOP_SUB, VIEW_ALIAS.RACING_AWARD_VIEW, ScopeTemplates.LOBBY_TOP_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.BROWSER_OVERLAY, WebOverlayBase, 'ingameShopView.swf', ViewTypes.OVERLAY, VIEW_ALIAS.BROWSER_OVERLAY, ScopeTemplates.LOBBY_SUB_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.CHECK_BOX_DIALOG, CheckBoxDialog, 'confirmDialog.swf', ViewTypes.TOP_WINDOW, 'confirmDialog', None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.CONFIRM_MODULE_DIALOG, ConfirmModuleDialog, 'confirmModuleWindow.swf', ViewTypes.TOP_WINDOW, 'confirmModuleDialog', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
@@ -146,6 +154,7 @@ def getViewSettings():
      GroupedViewSettings(VIEW_ALIAS.TRADEIN_POPOVER, TradeInPopup, 'TradeInPopover.swf', ViewTypes.TOP_WINDOW, 'TradeInPopover', VIEW_ALIAS.TRADEIN_POPOVER, ScopeTemplates.TOP_WINDOW_SCOPE),
      ViewSettings(VIEW_ALIAS.REFERRAL_PROGRAM_WINDOW, BrowserView, 'browserScreen.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE, True),
      ViewSettings(VIEW_ALIAS.BADGES_PAGE, BadgesPage, 'badgesPage.swf', ViewTypes.LOBBY_TOP_SUB, VIEW_ALIAS.BADGES_PAGE, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ViewSettings(VIEW_ALIAS.OVERLAY_FEST_MINI_GAMES, FestivalMiniGamePageOverlay, 'ingameShopView.swf', ViewTypes.OVERLAY, VIEW_ALIAS.BROWSER_OVERLAY, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.CALENDAR, CalendarComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.MINIMAP_LOBBY, MinimapLobby, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.MINIMAP_GRID, MinimapGrid, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
@@ -165,17 +174,21 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
         listeners = ((VIEW_ALIAS.AWARD_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.AWARD_WINDOW_MODAL, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_QUEUE, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.EVENT_BATTLE_QUEUE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_RESULTS, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BROWSER_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BROWSER_WINDOW_MODAL, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.RACING_AWARD_VIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BROWSER_OVERLAY, self.loadViewByCtxEvent),
          (VIEW_ALIAS.DEMONSTRATOR_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.ELITE_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.GOLD_FISH_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.GET_PREMIUM_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.LOBBY, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.LOBBY_ADVENT_CALENDAR_MARKER_VIEW, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.LOBBY_MINI_GAMES_MARKER_VIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.LOBBY_CUSTOMIZATION, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_PREVIEW, self.loadViewByCtxEvent),
@@ -207,7 +220,8 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.TRADEIN_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.CRYSTALS_PROMO_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BADGES_PAGE, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.UNBOUND_INJECT_WINDOW, self.loadViewByCtxEvent))
+         (VIEW_ALIAS.UNBOUND_INJECT_WINDOW, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.OVERLAY_FEST_MINI_GAMES, self.loadViewByCtxEvent))
         super(LobbyPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
 
 

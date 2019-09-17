@@ -15,7 +15,7 @@ from skeletons.festival import IFestivalController
 @async
 @dependency.replace_none_kwargs(festivalController=IFestivalController)
 def showFestivalWhereEarnTickets(parent=None, festivalController=None):
-    result = yield _showSimpleFestivalWhereEarnTickets(parent.parent, parent)
+    result = yield _showComplexFestivalWhereEarnTickets(parent.parent, parent)
     raise AsyncReturn(result is not None)
     return
 

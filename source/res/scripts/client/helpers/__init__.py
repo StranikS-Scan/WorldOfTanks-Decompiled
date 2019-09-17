@@ -1,13 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/__init__.py
+import logging
 import types
 import BigWorld
 import ResMgr
 import Settings
 import i18n
 import constants
+from adisp import process
 from debug_utils import LOG_CURRENT_EXCEPTION
+from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
+_logger = logging.getLogger(__name__)
 VERSION_FILE_PATH = '../version.xml'
 
 def gEffectsDisabled():
@@ -187,3 +192,26 @@ class ReferralButtonHandler(object):
         url = getReferralProgramURL() + url
         showReferralProgramWindow(url)
         return
+
+
+class OpenRacingTournamentViewHandler(object):
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+
+    @classmethod
+    @process
+    def invoke(cls, **kwargs):
+        from items.components.festival_constants import FEST_CONFIG
+        from gui.marathon.racing_event import RacingEventAddPath
+        from gui.shared.event_dispatcher import showBrowserOverlayView
+        from gui.game_control.links import URLMacros
+        from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+        baseUrl = cls.__lobbyContext.getServerSettings().getFestivalConfig().get(FEST_CONFIG.RACING_EVENT_URL, RacingEventAddPath.EMPTY_PATH)
+        value = kwargs.get('value', None)
+        url = baseUrl + value.get('action_url', '') if isinstance(value, dict) else ''
+        if not url:
+            _logger.error('No action url was specified. Root page will be shown')
+            return
+        else:
+            url = yield URLMacros().parse(url)
+            showBrowserOverlayView(url, alias=VIEW_ALIAS.RACING_AWARD_VIEW)
+            return

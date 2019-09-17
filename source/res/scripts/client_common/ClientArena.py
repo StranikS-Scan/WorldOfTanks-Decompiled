@@ -22,8 +22,6 @@ class ClientArena(object):
      ARENA_UPDATE.VEHICLE_STATISTICS: '_ClientArena__onVehicleStatisticsUpdate',
      ARENA_UPDATE.VEHICLE_KILLED: '_ClientArena__onVehicleKilled',
      ARENA_UPDATE.AVATAR_READY: '_ClientArena__onAvatarReady',
-     ARENA_UPDATE.BASE_POINTS: '_ClientArena__onBasePointsUpdate',
-     ARENA_UPDATE.BASE_CAPTURED: '_ClientArena__onBaseCaptured',
      ARENA_UPDATE.TEAM_KILLER: '_ClientArena__onTeamKiller',
      ARENA_UPDATE.VEHICLE_UPDATED: '_ClientArena__onVehicleUpdatedUpdate',
      ARENA_UPDATE.COMBAT_EQUIPMENT_USED: '_ClientArena__onCombatEquipmentUsed',
@@ -35,8 +33,7 @@ class ClientArena(object):
      ARENA_UPDATE.OWN_VEHICLE_LOCKED_FOR_RP: '_ClientArena__onOwnVehicleLockedForRP',
      ARENA_UPDATE.VIEW_POINTS: '_ClientArena__onViewPoints',
      ARENA_UPDATE.VEHICLE_RECOVERED: '_ClientArena__onVehicleRecovered',
-     ARENA_UPDATE.FOG_OF_WAR: '_ClientArena__onFogOfWar',
-     ARENA_UPDATE.RADAR_INFO_RECEIVED: '_ClientArena__onRadarInfoReceived'}
+     ARENA_UPDATE.FOG_OF_WAR: '_ClientArena__onFogOfWar'}
 
     def __init__(self, arenaUniqueID, arenaTypeID, arenaBonusType, arenaGuiType, arenaExtraData):
         self.__vehicles = {}
@@ -73,7 +70,8 @@ class ClientArena(object):
         self.onFogOfWarEnabled = Event.Event(em)
         self.onFogOfWarHiddenVehiclesSet = Event.Event(em)
         self.onTeamHealthPercentUpdate = Event.Event(em)
-        self.onRadarInfoReceived = Event.Event(em)
+        self.onVehicleDropTeamBasePointsOnHit = Event.Event(em)
+        self.onVehicleLeftTeamBase = Event.Event(em)
         self.arenaUniqueID = arenaUniqueID
         self.arenaType = ArenaType.g_cache.get(arenaTypeID, None)
         if self.arenaType is None:
@@ -202,10 +200,6 @@ class ClientArena(object):
         self.__hasFogOfWarHiddenVehicles = bool(status & 2)
         self.onFogOfWarHiddenVehiclesSet(self.__hasFogOfWarHiddenVehicles)
 
-    def __onRadarInfoReceived(self, argStr):
-        status = cPickle.loads(argStr)
-        self.onRadarInfoReceived(status)
-
     def __onStatisticsUpdate(self, argStr):
         self.__statistics = {}
         statList = cPickle.loads(zlib.decompress(argStr))
@@ -221,11 +215,10 @@ class ClientArena(object):
         self.onVehicleStatisticsUpdate(vehicleID)
 
     def __onVehicleKilled(self, argStr):
-        victimID, killerID, equipmentID, reason, deathOrder = cPickle.loads(argStr)
+        victimID, killerID, equipmentID, reason = cPickle.loads(argStr)
         vehInfo = self.__vehicles.get(victimID, None)
         if vehInfo is not None:
             vehInfo['isAlive'] = False
-            vehInfo['events']['deathOrder'] = deathOrder
             self.onVehicleKilled(victimID, killerID, equipmentID, reason)
         return
 
@@ -236,14 +229,6 @@ class ClientArena(object):
             vehInfo['isAvatarReady'] = True
             self.onAvatarReady(vehicleID)
         return
-
-    def __onBasePointsUpdate(self, argStr):
-        team, baseID, points, timeLeft, invadersCnt, capturingStopped = cPickle.loads(argStr)
-        self.onTeamBasePointsUpdate(team, baseID, points, timeLeft, invadersCnt, capturingStopped)
-
-    def __onBaseCaptured(self, argStr):
-        team, baseID = cPickle.loads(argStr)
-        self.onTeamBaseCaptured(team, baseID)
 
     def __onTeamKiller(self, argStr):
         vehicleID, value = cPickle.loads(argStr)
@@ -262,7 +247,7 @@ class ClientArena(object):
         vehInfo = self.__vehicles.get(vehID, None)
         if vehInfo is not None and vehID != BigWorld.player().playerVehicleID:
             vehInfo['isAlive'] = False
-            self.onVehicleRecovered(vehID)
+            self.onVehicleRecovered(*vehID)
         return
 
     def __onFlagTeamsReceived(self, argStr):

@@ -185,16 +185,6 @@ def isWithinSeasonTime(config, seasonID, now):
         return False
 
 
-def getActiveSeasonCycleID(config, now):
-    res, cycleInfo = getSeason(config, now)
-    if not res:
-        return (None, None)
-    else:
-        _, _, seasonID, cycleID = cycleInfo
-        return (seasonID, cycleID)
-        return None
-
-
 def getActiveCycleConfig(config, now):
     res, cycleInfo = getSeason(config, now)
     if not res:

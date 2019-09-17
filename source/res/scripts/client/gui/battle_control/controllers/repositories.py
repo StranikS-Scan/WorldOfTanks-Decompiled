@@ -4,7 +4,7 @@ from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_control.arena_info.interfaces import IArenaController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, REUSABLE_BATTLE_CTRL_IDS
 from gui.battle_control.battle_constants import getBattleCtrlName
-from gui.battle_control.controllers import arena_border_ctrl, progression_ctrl, death_ctrl
+from gui.battle_control.controllers import arena_border_ctrl, event_game_messages_ctrl
 from gui.battle_control.controllers import arena_load_ctrl, battle_field_ctrl
 from gui.battle_control.controllers import avatar_stats_ctrl
 from gui.battle_control.controllers import bootcamp_ctrl
@@ -35,9 +35,9 @@ from gui.battle_control.controllers import epic_spectator_ctrl
 from gui.battle_control.controllers import epic_missions_ctrl
 from gui.battle_control.controllers import game_notification_ctrl
 from gui.battle_control.controllers import epic_team_bases_ctrl
-from gui.battle_control.controllers import radar_ctrl
-from gui.battle_control.controllers import spawn_ctrl
-from gui.battle_control.controllers import vehicles_count_ctrl
+from gui.battle_control.controllers import event_repair_ctrl
+from gui.battle_control.controllers import event_race_position_ctrl
+from gui.battle_control.controllers import event_vehicle_capture_points_ctrl
 
 class BattleSessionSetup(object):
     __slots__ = ('avatar', 'replayCtrl', 'gasAttackMgr', 'sessionProvider')
@@ -230,24 +230,20 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
         return self._repository.getController(BATTLE_CTRL_ID.GAME_NOTIFICATIONS)
 
     @property
-    def progression(self):
-        return self._repository.getController(BATTLE_CTRL_ID.PROGRESSION_CTRL)
+    def eventRepair(self):
+        return self._repository.getController(BATTLE_CTRL_ID.EVENT_REPAIR)
 
     @property
-    def radar(self):
-        return self._repository.getController(BATTLE_CTRL_ID.RADAR_CTRL)
+    def eventRacePosition(self):
+        return self._repository.getController(BATTLE_CTRL_ID.EVENT_RACE_POSITION)
 
     @property
-    def spawn(self):
-        return self._repository.getController(BATTLE_CTRL_ID.SPAWN_CTRL)
+    def vehicleCapturePoints(self):
+        return self._repository.getController(BATTLE_CTRL_ID.EVENT_VEHICLE_CAPTURE_POINTS)
 
     @property
-    def deathScreen(self):
-        return self._repository.getController(BATTLE_CTRL_ID.DEATH_SCREEN_CTRL)
-
-    @property
-    def vehicleCount(self):
-        return self._repository.getController(BATTLE_CTRL_ID.VEHICLES_COUNT_CTRL)
+    def eventGameMessages(self):
+        return self._repository.getController(BATTLE_CTRL_ID.EVENT_GAME_MESSAGES)
 
 
 class _EmptyRepository(interfaces.IBattleControllersRepository):
@@ -341,11 +337,7 @@ class SharedControllersRepository(_ControllersRepository):
         repository.addArenaController(bootcamp_ctrl.BootcampController(), setup)
         repository.addArenaController(quest_progress_ctrl.createQuestProgressController(), setup)
         repository.addArenaController(view_points_ctrl.ViewPointsController(setup), setup)
-        guiVisitor = setup.arenaVisitor.gui
-        if guiVisitor.isBattleRoyale():
-            repository.addArenaController(arena_border_ctrl.BattleRoyaleBorderCtrl(), setup)
-        else:
-            repository.addArenaController(arena_border_ctrl.ArenaBorderController(), setup)
+        repository.addArenaController(arena_border_ctrl.ArenaBorderController(), setup)
         repository.addArenaViewController(arena_load_ctrl.createArenaLoadController(setup), setup)
         repository.addArenaViewController(period_ctrl.createPeriodCtrl(setup), setup)
         repository.addViewController(hit_direction_ctrl.createHitDirectionController(setup), setup)
@@ -398,17 +390,16 @@ class EpicControllersRepository(_ControllersRepository):
         return repository
 
 
-class BattleRoyaleControllersRepository(_ControllersRepository):
+class EventControllersRepository(_ControllersRepository):
     __slots__ = ()
 
     @classmethod
     def create(cls, setup):
-        repository = super(BattleRoyaleControllersRepository, cls).create(setup)
-        repository.addArenaViewController(progression_ctrl.ProgressionController(), setup)
-        repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
-        repository.addViewController(radar_ctrl.RadarController(), setup)
-        repository.addViewController(spawn_ctrl.SpawnController(), setup)
+        repository = super(EventControllersRepository, cls).create(setup)
+        repository.addController(event_repair_ctrl.EventRepairController())
+        repository.addController(event_race_position_ctrl.EventRacePositionController())
+        repository.addController(event_vehicle_capture_points_ctrl.EventVehicleCapturePointsController())
+        repository.addController(event_game_messages_ctrl.EventGameMessagesController(setup))
         repository.addViewController(debug_ctrl.DebugController(), setup)
-        repository.addArenaController(death_ctrl.DeathScreenController(), setup)
-        repository.addArenaViewController(vehicles_count_ctrl.VehicleCountController(), setup)
+        repository.addArenaViewController(team_bases_ctrl.createTeamsBasesCtrl(setup), setup)
         return repository

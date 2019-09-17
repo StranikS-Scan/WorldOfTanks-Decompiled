@@ -197,6 +197,7 @@ class VehicleStateController(IBattleController):
         self.onVehicleControlling = Event.Event(self.__eManager)
         self.onPostMortemSwitched = Event.Event(self.__eManager)
         self.onRespawnBaseMoving = Event.Event(self.__eManager)
+        self.onSurfaceContactChanged = Event.Event(self.__eManager)
         self.__cachedStateValues = {}
         self.__waitingTI = TimeInterval(VEHICLE_WAINING_INTERVAL, self, '_waiting')
         self.__vehicleID = 0

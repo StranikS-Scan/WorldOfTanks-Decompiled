@@ -13,6 +13,7 @@ class SoundManager(SoundManagerMeta):
     def __init__(self):
         super(SoundManager, self).__init__()
         self.sounds = GuiSoundsLoader()
+        self.__soundObjects = {}
 
     def _populate(self):
         super(SoundManager, self)._populate()
@@ -40,3 +41,16 @@ class SoundManager(SoundManagerMeta):
         else:
             _logger.warning('Sound effect "%s" not found', effectName)
         return
+
+    def playSound2D(self, soundID):
+        sound = SoundGroups.g_instance.getSound2D(soundID)
+        if sound:
+            self.__soundObjects[soundID] = sound
+            sound.play()
+        else:
+            _logger.warning('Could not find 2D sound "%s".', soundID)
+
+    def stopSound2D(self, soundID):
+        sound = self.__soundObjects.get(soundID)
+        if sound and sound.isPlaying:
+            sound.stop()

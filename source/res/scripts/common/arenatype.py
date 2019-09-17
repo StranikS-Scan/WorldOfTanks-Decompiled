@@ -6,6 +6,7 @@ from constants import IS_BOT, IS_WEB, IS_CLIENT, ARENA_TYPE_XML_PATH, ARENA_GUI_
 from constants import ARENA_GAMEPLAY_IDS, TEAMS_IN_ARENA, ARENA_GAMEPLAY_NAMES, IS_DEVELOPMENT
 from constants import IS_CELLAPP, IS_BASEAPP
 from constants import CHAT_COMMAND_FLAGS
+from constants import RACE_CHECKPOINTS
 from coordinate_system import AXIS_ALIGNED_DIRECTION
 from items.vehicles import CAMOUFLAGE_KINDS
 from debug_utils import LOG_CURRENT_EXCEPTION
@@ -80,7 +81,7 @@ def init():
     ResMgr.purge(_LIST_XML, True)
     ResMgr.purge(_DEFAULT_XML, True)
     g_gameplaysMask = getGameplaysMask(g_gameplayNames)
-    g_geometryNamesToIDs = {arenaType.geometryName:arenaType.geometryID for arenaType in g_cache.itervalues()}
+    g_geometryNamesToIDs = dict([ (arenaType.geometryName, arenaType.geometryID) for arenaType in g_cache.itervalues() ])
     return
 
 
@@ -227,6 +228,8 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
         cfg['mapActivitiesTimeframes'] = __readMapActivitiesTimeframes(section)
     if raiseIfMissing or section.has_key('boundingBox'):
         cfg['boundingBox'] = _readBoundingBox(section)
+    if raiseIfMissing or section.has_key('race'):
+        cfg['race'] = _readRaceConfiguration(section, defaultXml)
     maxTeamsInArena = cfg.get('maxTeamsInArena', geometryCfg.get('maxTeamsInArena', None))
     cfg.update(__readWinPoints(section))
     cfg.update(__readGameplayPoints(section, geometryCfg))
@@ -453,7 +456,7 @@ def __calcSpaceBoundingBox(arenaBoundingBox):
 
 
 def __readChatCommandFlags(name, section, defaultXml):
-    if section.has_key(name):
+    if section[name] is not None:
         flagsAsWhitespaceSeparatedString = section.readString(name)
     else:
         flagsAsWhitespaceSeparatedString = defaultXml.readString(name)
@@ -693,7 +696,7 @@ def __readTeamsCount(key, section, defaultXml):
 def __readTeamNumbers(section, maxTeamsInArena):
     if not (section.has_key('squadTeamNumbers') or section.has_key('soloTeamNumbers')):
         if maxTeamsInArena > 2:
-            raise SoftException('For multiteam mode squadTeamNumbers and (or) soloTeamNumbers must be set')
+            raise 'For multiteam mode squadTeamNumbers and (or) soloTeamNumbers must be set'
         return (set(), set())
     squadTeamNumbers = set([ int(v) for v in section.readString('squadTeamNumbers', '').split() ])
     soloTeamNumbers = set([ int(v) for v in section.readString('soloTeamNumbers', '').split() ])
@@ -775,6 +778,33 @@ def __readTeamBasePositions(section, maxTeamsInArena):
                 teamBase[id] = value.readVector2('')
 
         return teamBases
+
+
+def _readRaceConfiguration(section, defaultXml):
+
+    def parseCheckpointsList(inStr):
+        resCpDict = {}
+        resCpList = []
+        cpList = inStr.strip().split(',')
+        for cpStr in cpList:
+            cpParams = cpStr.split(':')
+            if len(cpParams) == 1:
+                resCpDict[cpParams[0]] = RACE_CHECKPOINTS.NO_NAME
+                resCpList.append(cpParams[0])
+            resCpDict[cpParams[1]] = cpParams[0]
+            resCpList.append(cpParams[1])
+
+        return (resCpDict, resCpList)
+
+    section = section['race']
+    if not section:
+        return None
+    else:
+        checkpointsStr = _readString('checkpoints', section, defaultXml)
+        res = dict()
+        res['checkpoints'], res['sequence'] = parseCheckpointsList(checkpointsStr)
+        res['firstNode'] = _readString('firstNode', section, defaultXml)
+        return res
 
 
 def __readTeamSpawnPoints(section, maxTeamsInArena, nodeNameTemplate='team%d', required=True):

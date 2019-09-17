@@ -149,6 +149,10 @@
         <anchorDirection>	0.000000 0.435472 0.900202	</anchorDirection>
       </slot>
     </customizationSlots>
+    <camouflage>
+      <density>	101.985 99.8584	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_R100_SU122A>
@@ -1889,6 +1893,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.64 0.64 0.000000 0.000000	</tiling>
+            <density>	94.368 91.6399	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_122mm_M-30>
         <_152mm_howitzer_D-1>	shared	  <maxAmmo>	15	</maxAmmo>
@@ -1973,6 +1979,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.715 0.715 0.000000 0.000000	</tiling>
+            <density>	95.0447 94.6627	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_152mm_howitzer_D-1>
       </guns>
@@ -2009,6 +2017,10 @@
           <anchorDirection>	0.000000 0.435472 0.900202	</anchorDirection>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	50.0 50.0	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </Turret_1_R100_SU122A>
   </turrets0>
   <engines>

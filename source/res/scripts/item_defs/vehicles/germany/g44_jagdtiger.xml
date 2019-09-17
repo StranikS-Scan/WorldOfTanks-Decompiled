@@ -153,6 +153,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	1.72 1.72 0.000000 0.000000	</tiling>
+      <density>	92.7727 93.532	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -1812,6 +1814,10 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	110.7 103.299	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_128mm_PaK44_L55>
         <_128mm_PaK44_2_L61>	shared	  <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
@@ -1893,6 +1899,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.88 0.88 0.000000 0.000000	</tiling>
+            <density>	113.128 110.218	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_128mm_PaK44_2_L61>
       </guns>

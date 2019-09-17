@@ -9,7 +9,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.server_events import formatters
 from gui.server_events.cond_formatters import FORMATTER_IDS, FormattableField, CONDITION_SIZE, getCondIconBySize, postbattle
 from gui.server_events.cond_formatters.bonus import MissionsBonusConditionsFormatter, BattlesCountFormatter
-from gui.server_events.cond_formatters.formatters import ConditionsFormatter
+from gui.server_events.cond_formatters.formatters import ConditionsFormatter, RaceAchievementsFormatter, RaceRecruitFormatter
 from gui.server_events.cond_formatters.tokens import TokensConditionFormatter
 from gui.server_events.formatters import TOKEN_SIZES
 from gui.shared.formatters import text_styles, icons
@@ -341,6 +341,57 @@ class CardTokenConditionFormatter(ConditionsFormatter):
 
     def _getFormattedField(self, *args, **kwargs):
         raise SoftException('This method should not be reached in this context')
+
+
+class CustomTokenConditionFormatter(ConditionsFormatter):
+    FORMATTERS = {RaceAchievementsFormatter.TOKEN: RaceAchievementsFormatter(),
+     RaceRecruitFormatter.TOKEN: RaceRecruitFormatter()}
+
+    def format(self, event):
+        if not event.isGuiDisabled():
+            tokenConditions = event.accountReqs.getTokens()
+            for condition in tokenConditions:
+                if condition.getID() in self.FORMATTERS:
+                    customFormatter = self.FORMATTERS[condition.getID()]
+                    return [self._packConditions(customFormatter.format(condition, event))]
+
+        return []
+
+    def _packConditions(self, preFormattedConditions):
+        return {'linkage': MISSIONS_ALIASES.ANG_GROUP_LINKAGE,
+         'linkageBig': MISSIONS_ALIASES.ANG_GROUP_BIG_LINKAGE,
+         'rendererLinkage': MISSIONS_ALIASES.MINIMIZED_BATTLE_CONDITION,
+         'data': [ self._packCondition(condition) for condition in preFormattedConditions ],
+         'isDetailed': False}
+
+    def _packCondition(self, preFormattedCondition):
+        titleFormatter = CARD_FIELDS_FORMATTERS[preFormattedCondition.titleData.formatterID]
+        return {'icon': getCondIconBySize(CONDITION_SIZE.MINIMIZED, preFormattedCondition.iconKey),
+         'title': titleFormatter(*preFormattedCondition.titleData.args),
+         'description': text_styles.standard(*preFormattedCondition.descrData.args),
+         'progress': _packProgress(preFormattedCondition),
+         'state': preFormattedCondition.progressType}
+
+    def _getFormattedField(self, *args, **kwargs):
+        raise SoftException('This method should not be reached in this context')
+
+
+class DetailedCustomTokenConditionFormatter(CustomTokenConditionFormatter):
+
+    def _packConditions(self, preFormattedConditions):
+        return {'linkage': MISSIONS_ALIASES.ANG_GROUP_LINKAGE,
+         'linkageBig': MISSIONS_ALIASES.ANG_GROUP_BIG_LINKAGE,
+         'rendererLinkage': MISSIONS_ALIASES.BATTLE_CONDITION,
+         'data': [ self._packCondition(condition) for condition in preFormattedConditions ],
+         'isDetailed': True}
+
+    def _packCondition(self, preFormattedCondition):
+        titleFormatter = NORMAL_FORMATTERS[preFormattedCondition.titleData.formatterID]
+        return {'icon': getCondIconBySize(CONDITION_SIZE.NORMAL, preFormattedCondition.iconKey),
+         'title': titleFormatter(*preFormattedCondition.titleData.args),
+         'progress': _packProgress(preFormattedCondition),
+         'description': text_styles.middleTitle(*preFormattedCondition.descrData.args),
+         'state': preFormattedCondition.progressType}
 
 
 class DetailedCardTokenConditionFormatter(CardTokenConditionFormatter):

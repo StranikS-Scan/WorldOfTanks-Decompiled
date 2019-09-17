@@ -6,6 +6,7 @@ import account_helpers
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from CurrentVehicle import g_currentVehicle
+from gui.DialogsInterface import showI18nConfirmDialog
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.prb_control import prb_getters
 from gui.prb_control.entities.training.legacy.actions_validator import TrainingActionsValidator, TrainingIntroActionsValidator
@@ -26,6 +27,7 @@ from gui.prb_control.storages import legacy_storage_getter
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from prebattle_shared import decodeRoster
 from gui.prb_control.entities.training.pre_queue.vehicles_watcher import TrainingVehiclesWatcher
+from adisp import process
 
 class TrainingEntryPoint(LegacyEntryPoint):
 
@@ -65,12 +67,15 @@ class TrainingIntroEntity(LegacyIntroEntity):
     def __init__(self):
         super(TrainingIntroEntity, self).__init__(FUNCTIONAL_FLAG.TRAINING, PREBATTLE_TYPE.TRAINING, TrainingListRequester())
         self.__watcher = None
+        self.__lastSelectedVehInvID = 0
         return
 
     def init(self, clientPrb=None, ctx=None):
         result = super(TrainingIntroEntity, self).init(clientPrb=clientPrb, ctx=ctx)
         g_eventDispatcher.loadTrainingList()
         result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_PAGE)
+        g_currentVehicle.onChanged += self.__onVehicleChange
+        g_currentVehicle.onChangeStarted += self.__onBeforeVehicleChange
         self.__watcher = TrainingVehiclesWatcher()
         self.__watcher.start()
         return result
@@ -84,6 +89,8 @@ class TrainingIntroEntity(LegacyIntroEntity):
             g_eventDispatcher.removeTrainingFromCarousel()
         else:
             g_eventDispatcher.removeTrainingFromCarousel(closeWindow=False)
+        g_currentVehicle.onChanged -= self.__onVehicleChange
+        g_currentVehicle.onChangeStarted -= self.__onBeforeVehicleChange
         if self.__watcher is not None:
             self.__watcher.stop()
             self.__watcher = None
@@ -101,6 +108,22 @@ class TrainingIntroEntity(LegacyIntroEntity):
 
     def _createActionsValidator(self):
         return TrainingIntroActionsValidator(self)
+
+    def __onBeforeVehicleChange(self):
+        self.__lastSelectedVehInvID = g_currentVehicle.invID
+
+    def __onVehicleChange(self):
+        self.__unload()
+
+    @process
+    def __unload(self):
+        if g_currentVehicle.isEvent():
+            confirmationType = 'unloadTraining'
+            result = yield showI18nConfirmDialog(confirmationType)
+            if result:
+                g_eventDispatcher.unloadLegacyIntroMode()
+            else:
+                g_currentVehicle.selectVehicle(self.__lastSelectedVehInvID)
 
 
 class TrainingEntity(LegacyEntity):

@@ -1,13 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web_client_api/ui/__init__.py
 from web_client_api import w2capi
-from web_client_api.ui.battle_royale import BattleRoyaleWebApiMixin
 from web_client_api.ui.calendar import OpenCalendarWindowWebApiMixin
 from web_client_api.ui.chat import ChatWebApiMixin
 from web_client_api.ui.shop import ShopWebApiMixin
 from web_client_api.ui.badges import BadgesWebApiMixin
 from web_client_api.ui.boosters import BoostersWindowWebApiMixin, BoostersInfoWebApiMixin
-from web_client_api.ui.browser import OpenBrowserWindowWebApiMixin, CloseBrowserWindowWebApiMixin, CloseBrowserViewWebApiMixin, OpenExternalBrowserWebApiMixin, OpenBrowserOverlayWebApiMixin
+from web_client_api.ui.browser import OpenBrowserWindowWebApiMixin, CloseBrowserWindowWebApiMixin, CloseBrowserViewWebApiMixin, OpenExternalBrowserWebApiMixin, OpenBrowserOverlayWebApiMixin, OpenBuyGoldWebApiMixin
 from web_client_api.ui.barracks import BarracksWebApiMixin
 from web_client_api.ui.clan import ClanWindowWebApiMixin
 from web_client_api.ui import hangar
@@ -19,13 +18,14 @@ from web_client_api.ui.premium import PremiumWindowWebApiMixin, PremiumViewsWebA
 from web_client_api.ui.profile import ProfileTabWebApiMixin, ProfileWindowWebApiMixin
 from web_client_api.ui.squad import SquadWebApiMixin
 from web_client_api.ui.strongholds import StrongholdsWebApiMixin
+from web_client_api.ui.tankman import OpenTankmanWebApiMixin
 from web_client_api.ui.techtree import TechTreeTabWebApiMixin
 from web_client_api.ui.util import UtilWebApiMixin
 from web_client_api.ui.vehicle import VehicleSellWebApiMixin, VehicleCompareWebApiMixin, VehiclePreviewWebApiMixin, VehicleComparisonBasketWebApiMixin
 from web_client_api.ui.waiting import WaitingWebApiMixin
 
 @w2capi(name='open_window', key='window_id')
-class OpenWindowWebApi(OpenBrowserWindowWebApiMixin, ClanWindowWebApiMixin, ProfileWindowWebApiMixin, OpenExternalBrowserWebApiMixin, VehicleSellWebApiMixin, hangar.HangarWindowsWebApiMixin, BoostersWindowWebApiMixin, PremiumWindowWebApiMixin, ManualPageWebApiMixin, ChatWebApiMixin, SquadWebApiMixin, OpenBrowserOverlayWebApiMixin, PremiumViewsWebApiMixin, OpenCalendarWindowWebApiMixin):
+class OpenWindowWebApi(OpenBrowserWindowWebApiMixin, ClanWindowWebApiMixin, ProfileWindowWebApiMixin, OpenExternalBrowserWebApiMixin, VehicleSellWebApiMixin, hangar.HangarWindowsWebApiMixin, BoostersWindowWebApiMixin, PremiumWindowWebApiMixin, ManualPageWebApiMixin, ChatWebApiMixin, SquadWebApiMixin, OpenBrowserOverlayWebApiMixin, PremiumViewsWebApiMixin, OpenBuyGoldWebApiMixin, OpenTankmanWebApiMixin, OpenCalendarWindowWebApiMixin):
     pass
 
 

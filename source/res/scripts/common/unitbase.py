@@ -7,7 +7,7 @@ from collections import namedtuple
 from items import vehicles
 from constants import VEHICLE_CLASS_INDICES, PREBATTLE_TYPE, QUEUE_TYPE, INVITATION_TYPE
 from UnitRoster import BaseUnitRosterSlot, _BAD_CLASS_INDEX, buildNamesDict, reprBitMaskFromDict
-from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, FalloutClassicRoster, FalloutMultiteamRoster, EventRoster, EpicRoster, BattleRoyaleRoster
+from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, FalloutClassicRoster, FalloutMultiteamRoster, EventRoster, EpicRoster
 from ops_pack import OpsUnpacker, packPascalString, unpackPascalString, initOpsFormatDef
 from unit_helpers.ExtrasHandler import EmptyExtrasHandler, ClanBattleExtrasHandler
 from unit_helpers.ExtrasHandler import SquadExtrasHandler, ExternalExtrasHandler
@@ -323,7 +323,6 @@ class UNIT_MGR_FLAGS:
     EVENT = 1024
     EXTERNAL = 2048
     EPIC = 4096
-    BATTLE_ROYALE = 8192
 
 
 def _prebattleTypeFromFlags(flags):
@@ -333,8 +332,6 @@ def _prebattleTypeFromFlags(flags):
         return PREBATTLE_TYPE.EVENT
     elif flags & UNIT_MGR_FLAGS.EPIC:
         return PREBATTLE_TYPE.EPIC
-    elif flags & UNIT_MGR_FLAGS.BATTLE_ROYALE:
-        return PREBATTLE_TYPE.BATTLE_ROYALE
     elif flags & UNIT_MGR_FLAGS.SQUAD:
         return PREBATTLE_TYPE.SQUAD
     elif flags & UNIT_MGR_FLAGS.SPEC_BATTLE:
@@ -363,10 +360,8 @@ def _entityNameFromFlags(flags):
 def _invitationTypeFromFlags(flags):
     if flags & UNIT_MGR_FLAGS.EPIC:
         return INVITATION_TYPE.EPIC
-    elif flags & UNIT_MGR_FLAGS.BATTLE_ROYALE:
-        return INVITATION_TYPE.BATTLE_ROYALE
-    elif flags & (UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM):
-        return INVITATION_TYPE.FALLOUT
+    elif flags & UNIT_MGR_FLAGS.EVENT:
+        return INVITATION_TYPE.EVENT
     elif flags & UNIT_MGR_FLAGS.SQUAD:
         return INVITATION_TYPE.SQUAD
     else:
@@ -382,8 +377,7 @@ class ROSTER_TYPE:
     EVENT_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.EVENT
     EXTERNAL_ROSTER = UNIT_MGR_FLAGS.EXTERNAL
     EPIC_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.EPIC
-    BATTLE_ROYALE_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.BATTLE_ROYALE
-    _MASK = SQUAD_ROSTER | SPEC_ROSTER | UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM | UNIT_MGR_FLAGS.EVENT | UNIT_MGR_FLAGS.EXTERNAL | UNIT_MGR_FLAGS.EPIC | UNIT_MGR_FLAGS.BATTLE_ROYALE
+    _MASK = SQUAD_ROSTER | SPEC_ROSTER | UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM | UNIT_MGR_FLAGS.EVENT | UNIT_MGR_FLAGS.EXTERNAL | UNIT_MGR_FLAGS.EPIC
 
 
 class EXTRAS_HANDLER_TYPE:
@@ -402,8 +396,7 @@ ROSTER_TYPE_TO_CLASS = {ROSTER_TYPE.UNIT_ROSTER: UnitRoster,
  ROSTER_TYPE.FALLOUT_MULTITEAM_ROSTER: FalloutMultiteamRoster,
  ROSTER_TYPE.EVENT_ROSTER: EventRoster,
  ROSTER_TYPE.EXTERNAL_ROSTER: SpecRoster,
- ROSTER_TYPE.EPIC_ROSTER: EpicRoster,
- ROSTER_TYPE.BATTLE_ROYALE_ROSTER: BattleRoyaleRoster}
+ ROSTER_TYPE.EPIC_ROSTER: EpicRoster}
 EXTRAS_HANDLER_TYPE_TO_HANDLER = {EXTRAS_HANDLER_TYPE.EMPTY: EmptyExtrasHandler,
  EXTRAS_HANDLER_TYPE.SQUAD: SquadExtrasHandler,
  EXTRAS_HANDLER_TYPE.SPEC_BATTLE: ClanBattleExtrasHandler,
@@ -598,7 +591,7 @@ class UnitBase(OpsUnpacker):
         return True
 
     _HEADER = '<HHHHHHBiii'
-    _PLAYER_DATA = '<qiIHBHHq?'
+    _PLAYER_DATA = '<qiIHBHHq?B'
     _PLAYER_VEHICLES_LIST = '<qH'
     _PLAYER_VEHICLE_TUPLE = '<iH'
     _SLOT_PLAYERS = '<Bq'
@@ -679,9 +672,9 @@ class UnitBase(OpsUnpacker):
             unpacking = unpacking[self._SLOT_PLAYERS_SIZE:]
 
         for i in xrange(0, playerCount):
-            blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges = self.__unpackPlayerData(unpacking)
+            blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges, raceAttempts = self.__unpackPlayerData(unpacking)
             unpacking = unpacking[blockLength:]
-            self._addPlayer(accountDBID, accountID=accountID, timeJoin=timeJoin, role=role, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType, clanDBID=clanDBID, badges=badges, isPremium=isPremium)
+            self._addPlayer(accountDBID, accountID=accountID, timeJoin=timeJoin, role=role, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType, clanDBID=clanDBID, badges=badges, isPremium=isPremium, raceAttempts=raceAttempts)
 
         self._extras = self._extrasHandler.unpack(unpacking[:extrasLen])
         unpacking = unpacking[extrasLen:]
@@ -1042,8 +1035,8 @@ class UnitBase(OpsUnpacker):
         return packedOps[opLen:]
 
     def _unpackPlayer(self, packedOps):
-        blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges = self.__unpackPlayerData(packedOps)
-        playerInfo = dict(accountID=accountID, role=role, timeJoin=timeJoin, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType, clanDBID=clanDBID, badges=badges, isPremium=isPremium)
+        blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges, raceAttempts = self.__unpackPlayerData(packedOps)
+        playerInfo = dict(accountID=accountID, role=role, timeJoin=timeJoin, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType, clanDBID=clanDBID, badges=badges, isPremium=isPremium, raceAttempts=raceAttempts)
         self._addPlayer(accountDBID, **playerInfo)
         return packedOps[blockLength:]
 
@@ -1123,7 +1116,7 @@ class UnitBase(OpsUnpacker):
         return (True, None)
 
     def __packPlayerData(self, accountDBID, **kwargs):
-        packed = struct.pack(self._PLAYER_DATA, accountDBID, kwargs.get('accountID', 0), kwargs.get('timeJoin', 0), kwargs.get('role', 0), kwargs.get('igrType', 0), kwargs.get('rating', 0), kwargs.get('peripheryID', 0), kwargs.get('clanDBID', 0), kwargs.get('isPremium', False))
+        packed = struct.pack(self._PLAYER_DATA, accountDBID, kwargs.get('accountID', 0), kwargs.get('timeJoin', 0), kwargs.get('role', 0), kwargs.get('igrType', 0), kwargs.get('rating', 0), kwargs.get('peripheryID', 0), kwargs.get('clanDBID', 0), kwargs.get('isPremium', False), kwargs.get('raceAttempts', 0))
         packed += packPascalString(kwargs.get('nickName', ''))
         packed += packPascalString(kwargs.get('clanAbbrev', ''))
         badges = kwargs.get('badges', [])
@@ -1134,7 +1127,7 @@ class UnitBase(OpsUnpacker):
 
     def __unpackPlayerData(self, packedData):
         sz = self._PLAYER_DATA_SIZE
-        accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID, clanDBID, isPremium = struct.unpack_from(self._PLAYER_DATA, packedData)
+        accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID, clanDBID, isPremium, raceAttempts = struct.unpack_from(self._PLAYER_DATA, packedData)
         nickName, lenNickBytes = unpackPascalString(packedData, sz)
         clanAbbrev, lenClanBytes = unpackPascalString(packedData, sz + lenNickBytes)
         blockLength = sz + lenNickBytes + lenClanBytes
@@ -1158,4 +1151,5 @@ class UnitBase(OpsUnpacker):
          isPremium,
          nickName,
          clanAbbrev,
-         badges)
+         badges,
+         raceAttempts)

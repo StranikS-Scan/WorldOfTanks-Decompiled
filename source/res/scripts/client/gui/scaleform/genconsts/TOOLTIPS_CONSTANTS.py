@@ -6,7 +6,6 @@ class TOOLTIPS_CONSTANTS(object):
     DEFAULT = 'default'
     TANKMAN = 'tankman'
     TANKMAN_NOT_RECRUITED = 'tankmanNotRecruited'
-    BATTLE_ROYALE_TANKMAN = 'battleRoyaleTankman'
     CONTACT = 'contact'
     BATTLE_STATS_ACHIEVS = 'battleStatsAchievementData'
     ACHIEVEMENT = 'achievement'
@@ -111,6 +110,7 @@ class TOOLTIPS_CONSTANTS(object):
     SPECIAL = 'special'
     SIMPLE = 'simple'
     COMPLEX = 'complex'
+    WULF = 'wulf'
     PRIVATE_QUESTS_TILE = 'privateQuestsTile'
     PRIVATE_QUESTS_FALLOUT_TILE = 'privateQuestsFalloutTile'
     PRIVATE_QUESTS_CHAIN = 'privateQuestsChain'
@@ -167,6 +167,9 @@ class TOOLTIPS_CONSTANTS(object):
     BATTLE_TRAINING = 'battleTraining'
     OPERATION_POSTPONED = 'operationPostponed'
     SQUAD_BONUS = 'squadBonus'
+    RACE_VEHICLE = 'raceVehicle'
+    RACE_WIDGET = 'raceWidget'
+    RACING_CUP = 'racingCup'
     SINGAPORE_WALLET_STATS = 'Stats'
     GOLD_STATS = 'goldStats'
     CREDITS_STATS = 'creditsStats'
@@ -193,19 +196,6 @@ class TOOLTIPS_CONSTANTS(object):
     EPIC_META_LEVEL_PROGRESS_INFO = 'epicMetaLevelProgressInfo'
     EPIC_SELECTOR_INFO = 'epicSelectorInfo'
     EPIC_PRESTIGE_PROGRESS_BLOCK_INFO = 'epicPrestigeProgressBlockInfo'
-    BATTLE_ROYALE_WEAK_ZONES = 'BattleRoyaleWeakZonesBlockUI'
-    BATTLE_ROYALE_MODULES = 'battleRoyaleModules'
-    BATTLE_ROYALE_MODULES_HANGAR = 'battleRoyaleModulesHangar'
-    BATTLE_ROYALE_BATTLE_PROGRESSION = 'battleRoyaleBattleProgression'
-    BATTLE_ROYALE_EQUIPMENT = 'battleRoyaleEquipment'
-    BATTLE_ROYALE_VEHICLE = 'battleRoyaleVehicle'
-    BATTLE_ROYALE_TITLE = 'battleRoyaleTitle'
-    BATTLE_ROYALE_STEP = 'battleRoyaleStep'
-    BATTLE_ROYALE_PRIME_TIMES = 'battleRoyalePrimeTimes'
-    BATTLE_ROYALE_SERVER_PRIME_TIME = 'battleRoyaleServerPrimeTime'
-    BATTLE_ROYALE_PERF_SIMPLE = 'battleRoyalePerfSimple'
-    BATTLE_ROYALE_PERF_ADVANCED = 'battleRoyalePerfAdvanced'
-    BATTLE_ROYALE_SELECTOR_INFO = 'battleRoyaleSelectorInfo'
     BLUEPRINT_INFO = 'blueprintInfo'
     BLUEPRINT_CONVERT_INFO = 'blueprintConvertInfo'
     BLUEPRINT_FRAGMENT_INFO = 'blueprintFragmentInfo'
@@ -390,8 +380,7 @@ class TOOLTIPS_CONSTANTS(object):
      TANKMAN_NEW_SKILL,
      TANKMAN_SKILL_EXTENDED,
      TANKMAN_NOT_RECRUITED,
-     PREVIEW_CREW_SKILL,
-     BATTLE_ROYALE_TANKMAN]
+     PREVIEW_CREW_SKILL]
     RANKED_SET = [RANKED_BATTLES_POSITION,
      RANKED_BATTLES_EFFICIENCY,
      RANKED_BATTLES_LEAGUE,
@@ -469,16 +458,7 @@ class TOOLTIPS_CONSTANTS(object):
     CREW_BOOK_SET = [CREW_BOOK, CREW_BOOK_RESTRICTED]
     FRONTLINE_SET = [FRONTLINE_COUPON, FRONTLINE_RANK]
     SESSION_STATS_SET = [SESSION_STATS_TANK_INFO, SESSION_STATS_EFFICIENCY_PARAM]
-    FESTIVAL_SET = [FESTIVAL_ITEM]
-    ROYALE_BATTLE_SET = [BATTLE_ROYALE_WEAK_ZONES, BATTLE_ROYALE_MODULES]
-    ROYALE_LOBBY_SET = [BATTLE_ROYALE_VEHICLE,
-     BATTLE_ROYALE_TITLE,
-     BATTLE_ROYALE_MODULES_HANGAR,
-     BATTLE_ROYALE_BATTLE_PROGRESSION,
-     BATTLE_ROYALE_STEP,
-     BATTLE_ROYALE_PRIME_TIMES,
-     BATTLE_ROYALE_SERVER_PRIME_TIME,
-     BATTLE_ROYALE_EQUIPMENT,
-     BATTLE_ROYALE_PERF_SIMPLE,
-     BATTLE_ROYALE_PERF_ADVANCED,
-     BATTLE_ROYALE_SELECTOR_INFO]
+    FESTIVAL_SET = [FESTIVAL_ITEM,
+     RACE_VEHICLE,
+     RACE_WIDGET,
+     RACING_CUP]

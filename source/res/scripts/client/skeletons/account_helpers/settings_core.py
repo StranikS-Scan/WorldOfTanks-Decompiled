@@ -48,6 +48,7 @@ class ISettingsCache(object):
 class ISettingsCore(object):
     onSettingsChanged = None
     onSettingsApplied = None
+    onStoragesCleared = None
 
     def init(self):
         raise NotImplementedError

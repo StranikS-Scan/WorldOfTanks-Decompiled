@@ -3,6 +3,7 @@
 from gui.shared.event_dispatcher import showWebShop
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from web_client_api import webApiCollection
+from web_client_api.festival import FestivalWebApi
 from web_client_api.request import RequestWebApi
 from web_client_api.sound import SoundWebApi, HangarSoundWebApi
 from web_client_api.shop import ShopWebApi
@@ -17,9 +18,10 @@ class _OpenTabWebApi(OpenTabWebApi):
     def _getVehiclePreviewReturnCallback(self, cmd):
         return self.__getReturnCallback(cmd.back_url)
 
-    def __getReturnCallback(self, backUrl):
+    @staticmethod
+    def __getReturnCallback(backUrl):
         return (lambda : showWebShop(backUrl)) if backUrl is not None else None
 
 
 def createShopWebHandlers():
-    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, _OpenTabWebApi, RequestWebApi, ShopWebApi, SoundWebApi, HangarSoundWebApi, UtilWebApi, FrontLineWebApi)
+    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, _OpenTabWebApi, RequestWebApi, ShopWebApi, SoundWebApi, HangarSoundWebApi, UtilWebApi, FrontLineWebApi, FestivalWebApi)

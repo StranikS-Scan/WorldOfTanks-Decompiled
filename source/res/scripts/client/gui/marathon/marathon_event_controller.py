@@ -5,12 +5,13 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewTypes
 from gui.app_loader import sf_lobby
 from gui.marathon.festival_marathon import FestivalMarathon
+from gui.marathon.racing_event import RacingEvent
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from helpers import dependency, isPlayerAccount
 from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-MARATHON_EVENTS = [FestivalMarathon()]
+MARATHON_EVENTS = [FestivalMarathon(), RacingEvent()]
 DEFAULT_MARATHON_PREFIX = MARATHON_EVENTS[0].prefix if any(MARATHON_EVENTS) else None
 
 class MarathonEventsController(IMarathonEventsController, Notifiable):
@@ -24,13 +25,16 @@ class MarathonEventsController(IMarathonEventsController, Notifiable):
         self.__eventManager = Event.EventManager()
         self.onFlagUpdateNotify = Event.Event(self.__eventManager)
         self.onVehicleReceived = Event.Event()
-        self.__marathons = MARATHON_EVENTS
+        self.__marathons = []
+        for marathon in MARATHON_EVENTS:
+            self.addMarathon(marathon)
 
     @sf_lobby
     def app(self):
         pass
 
     def addMarathon(self, marathonEvent):
+        marathonEvent.setFlagUpdateNotify(self.onFlagUpdateNotify)
         self.__marathons.append(marathonEvent)
 
     def delMarathon(self, prefix):
@@ -45,9 +49,9 @@ class MarathonEventsController(IMarathonEventsController, Notifiable):
     def getPrimaryMarathon(self):
         return self.__marathons[0] if self.__marathons else None
 
-    def getFirstEnabledMarathon(self):
+    def getFirstShowedMarathon(self):
         for marathon in self.__marathons:
-            if marathon.isEnabled():
+            if marathon.doesShowMissionsTab():
                 return marathon
 
         return None
@@ -101,9 +105,10 @@ class MarathonEventsController(IMarathonEventsController, Notifiable):
         self._eventsCache.onSyncCompleted += self.__onSyncCompleted
         self._eventsCache.onProgressUpdated += self.__onSyncCompleted
         self.app.loaderManager.onViewLoaded += self.__onViewLoaded
+        self.__initMarathons()
         self.__onSyncCompleted()
 
-    def __tryShowRewardScreen(self):
+    def tryShowRewardScreen(self):
         if self.__isLobbyInited and self.__isInHangar:
             for marathon in self.__marathons:
                 marathon.showRewardScreen()
@@ -112,13 +117,21 @@ class MarathonEventsController(IMarathonEventsController, Notifiable):
         if self.__isLobbyInited:
             if pyView.alias == VIEW_ALIAS.LOBBY_HANGAR:
                 self.__isInHangar = True
-                self.__tryShowRewardScreen()
+                self.tryShowRewardScreen()
             elif pyView.viewType == ViewTypes.LOBBY_SUB:
                 self.__isInHangar = False
 
+    def __initMarathons(self):
+        for m in self.__marathons:
+            m.init()
+
+    def __finiMarathons(self):
+        for m in self.__marathons:
+            m.fini()
+
     def __onSyncCompleted(self, *args):
         self.__checkEvents()
-        self.__tryShowRewardScreen()
+        self.tryShowRewardScreen()
         self.__reloadNotification()
 
     def __checkEvents(self):
@@ -128,7 +141,7 @@ class MarathonEventsController(IMarathonEventsController, Notifiable):
 
     def __updateFlagState(self):
         self.__checkEvents()
-        self.__tryShowRewardScreen()
+        self.tryShowRewardScreen()
         self.onFlagUpdateNotify()
 
     def __getClosestStatusUpdateTime(self):
@@ -146,6 +159,7 @@ class MarathonEventsController(IMarathonEventsController, Notifiable):
         self.clearNotification()
         self._eventsCache.onSyncCompleted -= self.__onSyncCompleted
         self._eventsCache.onProgressUpdated -= self.__onSyncCompleted
+        self.__finiMarathons()
         if self.app and self.app.loaderManager:
             self.app.loaderManager.onViewLoaded -= self.__onViewLoaded
         self.__isLobbyInited = False

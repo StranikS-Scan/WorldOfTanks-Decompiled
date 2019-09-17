@@ -311,6 +311,9 @@ class _PreBattleDispatcher(ListenersCollection):
     def restorePrevious(self):
         return self.__setEntity(CreatePrbEntityCtx(self.__prevEntity.getCtrlType(), self.__prevEntity.getEntityType(), flags=self.__prevEntity.getFunctionalFlags()))
 
+    def unloadLegacyIntroMode(self):
+        self.ctrl_onLegacyIntroModeLeft()
+
     def pe_onArenaCreated(self):
         if self.__entity.hasLockedState():
             g_eventDispatcher.updateUI()

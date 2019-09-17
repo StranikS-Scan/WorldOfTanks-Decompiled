@@ -38,7 +38,6 @@ LOBBY_OPTIMIZATION_CONFIG = {VIEW_ALIAS.LOBBY_HEADER: OptimizationSetting(),
  VIEW_ALIAS.LOBBY_RESEARCH: OptimizationSetting(),
  HANGAR_ALIASES.TANK_CAROUSEL: OptimizationSetting(),
  HANGAR_ALIASES.RANKED_TANK_CAROUSEL: OptimizationSetting(),
- HANGAR_ALIASES.ROYALE_TANK_CAROUSEL: OptimizationSetting(),
  GRAPHICS_OPTIMIZATION_ALIASES.CUSTOMISATION_BOTTOM_PANEL: OptimizationSetting()}
 
 class LobbyEntry(AppEntry):
@@ -65,7 +64,7 @@ class LobbyEntry(AppEntry):
         return LoaderManager(self.proxy)
 
     def _createContainerManager(self):
-        return ContainerManager(self._loaderMgr, DefaultContainer(ViewTypes.MARKER), DefaultContainer(ViewTypes.DEFAULT), DefaultContainer(ViewTypes.CURSOR), DefaultContainer(ViewTypes.WAITING), PopUpContainer(ViewTypes.WINDOW), PopUpContainer(ViewTypes.BROWSER), PopUpContainer(ViewTypes.TOP_WINDOW), PopUpContainer(ViewTypes.OVERLAY), DefaultContainer(ViewTypes.SERVICE_LAYOUT))
+        return ContainerManager(self._loaderMgr, PopUpContainer(ViewTypes.MARKER), DefaultContainer(ViewTypes.DEFAULT), DefaultContainer(ViewTypes.CURSOR), DefaultContainer(ViewTypes.WAITING), PopUpContainer(ViewTypes.WINDOW), PopUpContainer(ViewTypes.BROWSER), PopUpContainer(ViewTypes.TOP_WINDOW), PopUpContainer(ViewTypes.OVERLAY), DefaultContainer(ViewTypes.SERVICE_LAYOUT))
 
     def _createToolTipManager(self):
         tooltip = ToolTip(LOBBY_TOOLTIPS_BUILDERS_PATHS, ADVANCED_COMPLEX_TOOLTIPS, GuiGlobalSpaceID.BATTLE_LOADING)

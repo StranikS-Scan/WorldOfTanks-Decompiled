@@ -1,0 +1,21 @@
+<RacingEventArenaInfo.def>
+  <Properties>
+    <repairCounters>
+      <Type>	ARRAY	  <of>	INT8	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </repairCounters>
+    <repairNodePosition>
+      <Type>	VECTOR3	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </repairNodePosition>
+    <raceList>
+      <Type>	RACE_LIST	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </raceList>
+    <finishTimeList>
+      <Type>	RACE_FINISH_TIME_LIST	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </finishTimeList>
+  </Properties>
+</RacingEventArenaInfo.def>

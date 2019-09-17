@@ -12,6 +12,7 @@ from gui.battle_control.arena_info.interfaces import ITeamsBasesController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.view_components import ViewComponentsController
 from PlayerEvents import g_playerEvents
+from Event import Event
 _BASE_CAPTURE_SOUND_NAME_ENEMY = 'base_capture_2'
 _BASE_CAPTURE_SOUND_NAME_ALLY = 'base_capture_1'
 _AVAILABLE_TEAMS_NUMBERS = range(1, TEAMS_IN_ARENA.MAX_TEAMS + 1)
@@ -68,7 +69,7 @@ class ITeamBasesListener(object):
 
 class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
-    __slots__ = ('__battleCtx', '__arenaVisitor', '__clientIDs', '__points', '__sounds', '__callbackIDs', '__snap', '__captured')
+    __slots__ = ('__battleCtx', '__arenaVisitor', '__clientIDs', '__points', '__sounds', '__callbackIDs', '__snap', '__captured', 'onStartCapturingBase', 'onPointsUpdated')
 
     def __init__(self):
         super(BattleTeamsBasesController, self).__init__()
@@ -80,6 +81,8 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
         self.__sounds = {}
         self.__callbackIDs = {}
         self.__snap = defaultdict(tuple)
+        self.onStartCapturingBase = Event()
+        self.onPointsUpdated = Event()
         return
 
     def getControllerID(self):
@@ -111,6 +114,8 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
             feedback.onRoundFinished -= self.__onRoundFinished
         g_playerEvents.onTeamChanged -= self.__onTeamChanged
         g_playerEvents.onRoundFinished -= self.__onRoundFinished
+        self.onStartCapturingBase.clear()
+        self.onPointsUpdated.clear()
         return
 
     def setViewComponents(self, *components):
@@ -159,6 +164,7 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
          timeLeft,
          invadersCnt,
          capturingStopped)
+        self.onPointsUpdated(isEnemyBase, points)
         if self._teamBaseLeft(points, invadersCnt):
             if clientID in self.__clientIDs:
                 if not invadersCnt:
@@ -179,6 +185,7 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
 
             else:
                 self.__clientIDs.add(clientID)
+                self.onStartCapturingBase(isEnemyBase)
                 self._addCapturingTeamBase(clientID, playerTeam, points, timeLeft, invadersCnt, capturingStopped)
                 self.__addUpdateCallback(clientID)
             if not capturingStopped:

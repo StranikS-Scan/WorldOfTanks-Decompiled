@@ -7,11 +7,13 @@ from CurrentVehicle import g_currentVehicle
 from constants import QUEUE_TYPE
 from debug_utils import LOG_DEBUG
 from gui.prb_control.prb_getters import isInEventBattlesQueue
+from gui.prb_control.events_dispatcher import g_eventDispatcher
+from gui.prb_control.settings import FUNCTIONAL_FLAG
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
-_SUPPORTED_ENTITIES = ()
+_SUPPORTED_ENTITIES = ('RandomEntity',)
 _PATCHED_METHODS = ('init', 'fini')
-_SWITCHED_METHODS = ('getQueueType', 'isInQueue', '_doQueue', '_doDequeue', '_makeQueueCtxByAction')
+_SWITCHED_METHODS = ('getQueueType', 'isInQueue', '_doQueue', '_doDequeue', '_makeQueueCtxByAction', '_goToQueueUI')
 
 class EventVehicleMeta(type):
 
@@ -86,6 +88,11 @@ class _EventVehicleEntityExtension(object):
     def _makeQueueCtxByAction(self, action=None):
         from gui.prb_control.entities.event.pre_queue.ctx import EventBattleQueueCtx
         return EventBattleQueueCtx(vehInvIDs=[g_currentVehicle.item.invID], waitingID='prebattle/join')
+
+    def _goToQueueUI(self):
+        LOG_DEBUG('Opening event loading UI')
+        g_eventDispatcher.loadEventBattleQueue()
+        return FUNCTIONAL_FLAG.LOAD_PAGE
 
     def _onEventsCacheResync(self):
         if self.__isEventsEnabled != self.eventsCache.isEventEnabled():

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/marathon/marathon_event_dp.py
 import time
+from Queue import PriorityQueue
 from collections import namedtuple
 from functools import partial
 import Event
@@ -107,12 +108,20 @@ class MarathonEventDataProvider(object):
         return True
 
     @property
-    def flagTooltip(self):
+    def flagTooltipAlias(self):
         return TOOLTIPS_CONSTANTS.MARATHON_QUESTS_PREVIEW
 
     @property
-    def disabledFlagTooltip(self):
+    def flagTooltipDisabledAlias(self):
         return TOOLTIPS.MARATHON_OFF
+
+    @property
+    def flagEnabledTooltipType(self):
+        return TOOLTIPS_CONSTANTS.SPECIAL
+
+    @property
+    def flagDisabledTooltipType(self):
+        return TOOLTIPS_CONSTANTS.SIMPLE
 
     @property
     def tooltips(self):
@@ -133,7 +142,7 @@ class MarathonEventDataProvider(object):
         return True
 
     def doesShowMissionsTab(self):
-        return True
+        return False
 
 
 class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
@@ -142,9 +151,11 @@ class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
 
     def __init__(self):
         super(MarathonEvent, self).__init__()
+        self.onDataChanged = Event.Event()
         self.__isEnabled = False
         self.__isAvailable = False
         self.__rewardObtained = False
+        self._awardsReceived = PriorityQueue()
         self.__state = ''
         self.__suspendFlag = False
         self.__quest = None
@@ -163,6 +174,21 @@ class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
             url = yield self.__urlMacros.parse(self.__baseUrl)
             callback(url)
         return
+
+    def init(self):
+        self.onDataChanged += self.__flagUpdateNotify
+
+    def fini(self):
+        self.onDataChanged -= self.__flagUpdateNotify
+
+    def playSoundsOnEnterTab(self):
+        pass
+
+    def playSoundsOnExitTab(self):
+        pass
+
+    def setFlagUpdateNotify(self, flagUpdateNotify=None):
+        self.__flagUpdateNotify = flagUpdateNotify
 
     def getHangarFlag(self, state=None):
         return backport.image(R.images.gui.maps.icons.library.hangarFlag.flag_italy())
@@ -211,6 +237,7 @@ class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
          'flagStateIcon': self.__getHangarFlagStateIcon(vehicle),
          'flagMain': self.getHangarFlag(self.__state),
          'tooltip': self.__getTooltip(),
+         'tooltipType': self.__getTooltipType(),
          'enable': self.isAvailable(),
          'visible': self.isEnabled()}
 
@@ -247,6 +274,16 @@ class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
             icon = self.icons.libraryInProgress
             text = text_styles.main(backport.text(self.tooltips.stateComplete))
         return (icon, text)
+
+    def getRemainingTime(self):
+        firstQuestStartTimeLeft, firstQuestFinishTimeLeft = self.__getQuestTimeInterval()
+        if self.__state == MARATHON_STATE.NOT_STARTED:
+            text = self.__getTillTimeStart(firstQuestStartTimeLeft)
+        elif self.__state == MARATHON_STATE.IN_PROGRESS:
+            text = self.__getTillTimeEnd(firstQuestFinishTimeLeft)
+        else:
+            text = backport.text(R.strings.tooltips.marathon.state.complete())
+        return text
 
     def getFormattedStartFinishText(self):
         startDate, finishDate = self.__getGroupStartFinishTime()
@@ -323,7 +360,7 @@ class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
         for key, (_, count) in tokens.iteritems():
             if count > 0 and key in self.awardTokens:
                 rewardObtained = True
-                break
+                self.addAwardToQueue(key)
 
         self.__setRewardObtained(rewardObtained)
         return
@@ -340,7 +377,7 @@ class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
             return timeLeft
 
     def showRewardVideo(self):
-        if self.isRewardObtained() and self.doesShowRewardVideo() and not AccountSettings.getUIFlag(self.__getRewardShownMarkKey(MARATHON_VIDEO_WAS_SHOWN_PREFIX)):
+        if self.isRewardObtained() and self.doesShowRewardVideo() and not AccountSettings.getUIFlag(self._getRewardShownMarkKey(MARATHON_VIDEO_WAS_SHOWN_PREFIX)):
             showMarathonReward(self.vehicleID)
 
     def showRewardScreen(self):
@@ -348,14 +385,24 @@ class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
             return
         if self.__state in MARATHON_STATE.DISABLED_STATE:
             return
-        if self.isRewardObtained() and not AccountSettings.getUIFlag(self.__getRewardShownMarkKey(MARATHON_REWARD_WAS_SHOWN_PREFIX)):
-            showBrowserOverlayView(self.__baseUrl + self.marathonCompleteUrlAdd, alias=VIEW_ALIAS.BROWSER_OVERLAY, callbackOnLoad=partial(self.__setScreenWasShown, MARATHON_REWARD_WAS_SHOWN_PREFIX))
+        if self.isRewardObtained() and not AccountSettings.getUIFlag(self._getRewardShownMarkKey(MARATHON_REWARD_WAS_SHOWN_PREFIX)):
+            showBrowserOverlayView(self.__baseUrl + self.marathonCompleteUrlAdd, alias=VIEW_ALIAS.BROWSER_OVERLAY, callbackOnLoad=partial(self._setScreenWasShown, MARATHON_REWARD_WAS_SHOWN_PREFIX))
 
-    def __getRewardShownMarkKey(self, key):
-        return '_'.join([key, self.tokenPrefix])
+    def addAwardToQueue(self, awardToken):
+        priority = self.awardTokens.index(awardToken)
+        award = (priority, awardToken)
+        if award not in self._awardsReceived.queue and not AccountSettings.getUIFlag(self._getRewardShownMarkKey(MARATHON_REWARD_WAS_SHOWN_PREFIX, awardPostfix=awardToken)):
+            self._awardsReceived.put(award)
 
-    def __setScreenWasShown(self, key):
-        AccountSettings.setUIFlag(self.__getRewardShownMarkKey(key), True)
+    def createMarathonWebHandlers(self):
+        from gui.marathon.web_handlers import createDefaultMarathonWebHandlers
+        return createDefaultMarathonWebHandlers()
+
+    def _getRewardShownMarkKey(self, key, awardPostfix=''):
+        return '_'.join([key, self.tokenPrefix, awardPostfix])
+
+    def _setScreenWasShown(self, key='', awardPostFix=''):
+        AccountSettings.setUIFlag(self._getRewardShownMarkKey(key, awardPostfix=awardPostFix), True)
 
     def __setRewardObtained(self, obtained):
         self.__rewardObtained = obtained
@@ -401,11 +448,17 @@ class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
                 return self.icons.timeIcon
         return self.icons.saleIcon if self.__state == MARATHON_STATE.FINISHED else ''
 
+    def __getFormattedTillTimeEnd(self, value):
+        return self.__getTillTimeString(value, self.tooltips.stateEnd)
+
+    def __getFormattedTillTimeStart(self, value):
+        return self.__getTillTimeString(value, self.tooltips.stateStart, extraFmt=True)
+
     def __getTillTimeEnd(self, value):
-        return self.__getFormattedTillTimeString(value, self.tooltips.stateEnd)
+        return self.__getTillTimeString(value)
 
     def __getTillTimeStart(self, value):
-        return self.__getFormattedTillTimeString(value, self.tooltips.stateStart, extraFmt=True)
+        return self.__getTillTimeString(value)
 
     def __getProgressInDays(self, value):
         return self.__getTextInDays(value, self.tooltips.stateProgress)
@@ -415,23 +468,35 @@ class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
         text = text_styles.stats(backport.text(self.tooltips.daysShort, value=str(time.struct_time(gmtime).tm_yday)))
         return text_styles.main(backport.text(keyNamespace, value=text))
 
-    def __getFormattedTillTimeString(self, timeValue, keyNamespace, isRoundUp=True, extraFmt=False):
+    def __getTillTimeString(self, timeValue, keyNamespace=None, isRoundUp=True, extraFmt=False):
         gmtime = time.gmtime(timeValue)
         if isRoundUp and gmtime.tm_sec > 0:
             timeValue += ONE_HOUR
             gmtime = time.gmtime(timeValue)
         if timeValue >= ONE_DAY:
             gmtime = time.gmtime(timeValue - ONE_DAY)
-            text = text_styles.stats(backport.text(self.tooltips.daysShort, value=str(time.struct_time(gmtime).tm_yday)))
-            return text_styles.main(backport.text(keyNamespace, value=text))
-        if extraFmt:
-            text = text_styles.stats(backport.text(self.tooltips.hoursShort, value=str(time.struct_time(gmtime).tm_hour)))
-            return text_styles.main(backport.text(keyNamespace, value=text))
-        text = backport.text(self.tooltips.hoursShort, value=str(time.struct_time(gmtime).tm_hour))
-        return text_styles.tutorial(backport.text(keyNamespace, value=text))
+            text = backport.text(self.tooltips.daysShort, value=str(time.struct_time(gmtime).tm_yday))
+            if keyNamespace is not None:
+                text = text_styles.stats(text)
+                text = text_styles.main(backport.text(keyNamespace, value=text))
+            return text
+        elif extraFmt:
+            text = backport.text(self.tooltips.hoursShort, value=str(time.struct_time(gmtime).tm_hour))
+            if keyNamespace is not None:
+                text = text_styles.stats(text)
+                text = text_styles.main(backport.text(keyNamespace, value=text))
+            return text
+        else:
+            text = backport.text(self.tooltips.hoursShort, value=str(time.struct_time(gmtime).tm_hour))
+            if keyNamespace is not None:
+                text = text_styles.tutorial(backport.text(keyNamespace, value=text))
+            return text
 
     def __getTooltip(self):
-        return self.flagTooltip if self.isAvailable() else self.disabledFlagTooltip
+        return self.flagTooltipAlias if self.isAvailable() else self.flagTooltipDisabledAlias
+
+    def __getTooltipType(self):
+        return self.flagEnabledTooltipType if self.isAvailable() else self.flagDisabledTooltipType
 
     def __getTimeFromGroupStart(self):
         return self.__group.getTimeFromStartTillNow() if self.__group else ZERO_TIME

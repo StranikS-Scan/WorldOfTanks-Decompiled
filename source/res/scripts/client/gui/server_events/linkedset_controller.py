@@ -27,6 +27,7 @@ from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.server_events.events_helpers import hasAtLeastOneCompletedQuest, isAllQuestsCompleted
 from gui.shared.utils import isPopupsWindowsOpenDisabled
+from gui.game_control.racing_event_lobby_sounds import RacingEventLobbySounds
 from Event import Event, EventManager
 _SNDID_ACHIEVEMENT = 'result_screen_achievements'
 _SNDID_BONUS = 'result_screen_bonus'
@@ -205,6 +206,8 @@ class LinkedSetController(ILinkedSetController):
                 completedQuests = self.getCompletedLinkedSetQuests(isSutable)
                 if completedQuests:
                     self._showAwardsFor(completedQuests.values())
+                if self._hasRacingCups(resultsVO) and not event.ctx.get('uiWasShowed', True):
+                    RacingEventLobbySounds.playCupWon()
             self.needToShowAward = False
         return
 
@@ -301,3 +304,12 @@ class LinkedSetController(ILinkedSetController):
          'buttonLabel': _ms(LINKEDSET.CONTINUE),
          'back': 'blue',
          'soundID': _SNDID_BONUS}
+
+    @staticmethod
+    def _hasRacingCups(battleResultsVO):
+        racingCups = battleResultsVO.get('personal', {}).get('racingAchievements', [])
+        for cup in racingCups:
+            if cup.get('enable', False) is True:
+                return True
+
+        return False

@@ -142,6 +142,10 @@
         <isUVProportional>	true	</isUVProportional>
       </slot>
     </customizationSlots>
+    <camouflage>
+      <density>	108.809 108.909	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_T40>
@@ -1716,6 +1720,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	1 0.5 0.000000 0.000000	</tiling>
+            <density>	122.061 121.77	</density>
+            <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
         </_75mm_Howitzer_M1A1>
         <_76mm_AT_Gun_M1918>	shared	  <maxAmmo>	98	</maxAmmo>
@@ -1781,6 +1787,8 @@
           <camouflage>
             <exclusionMask></exclusionMask>
             <tiling>	1 0.5 0.000000 0.000000	</tiling>
+            <density>	121.875 121.676	</density>
+            <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
         </_76mm_AT_Gun_M1918>
         <_105mm_AT_Howitzer_M3>	shared	  <maxAmmo>	50	</maxAmmo>
@@ -1844,6 +1852,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	1 0.5 0.000000 0.000000	</tiling>
+            <density>	122.091 121.623	</density>
+            <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
         </_105mm_AT_Howitzer_M3>
         <_57mm_Gun_M1_L50>	shared	  <maxAmmo>	126	</maxAmmo>
@@ -1905,6 +1915,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.97 0.52 0.000000 0.000000	</tiling>
+            <density>	122.064 122.822	</density>
+            <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
         </_57mm_Gun_M1_L50>
         <_76mm_AT_Gun_M1A1>	shared	  <maxAmmo>	68	</maxAmmo>
@@ -1969,6 +1981,8 @@
           <camouflage>
             <exclusionMask></exclusionMask>
             <tiling>	0.955 0.535 0.000000 0.000000	</tiling>
+            <density>	119.887 119.609	</density>
+            <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
         </_76mm_AT_Gun_M1A1>
       </guns>
@@ -2007,6 +2021,8 @@
       </customizationSlots>
       <camouflage>
         <tiling>	0.505 0.289157 0.000000 0.000000	</tiling>
+        <density>	134.257 134.256	</density>
+        <aoTextureSize>	512 256	</aoTextureSize>
       </camouflage>
     </Turret_1_T40>
   </turrets0>

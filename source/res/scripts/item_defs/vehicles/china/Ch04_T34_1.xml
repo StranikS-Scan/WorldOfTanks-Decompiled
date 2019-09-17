@@ -96,6 +96,10 @@
         <anchorDirection>	0.000000 0.282714 -0.959204	</anchorDirection>
       </slot>
     </customizationSlots>
+    <camouflage>
+      <density>	124.764 124.721	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_Ch04_T34_1>
@@ -1491,9 +1495,6 @@
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
-      <camouflage>
-        <tiling>	0.5 0.5 0.32 0.32	</tiling>
-      </camouflage>
     </Chassis_Ch04_T34_1_2>
   </chassis>
   <turrets0>
@@ -1607,6 +1608,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.5 0.25 0.000000 0.000000	</tiling>
+            <density>	92.4412 103.95	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_85mm_S-53>
         <_85mm_Tip_56-85JT>	shared	  <maxAmmo>	50	</maxAmmo>
@@ -1685,6 +1688,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.5 0.25 0.000000 0.000000	</tiling>
+            <density>	91.9941 94.412	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_85mm_Tip_56-85JT>
       </guns>
@@ -1764,6 +1769,8 @@
       </customizationSlots>
       <camouflage>
         <tiling>	0.5 0.5 0.000000 0.000000	</tiling>
+        <density>	116.922 116.288	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
     </Turret_1_Ch04_T34_1>
     <Turret_2_Ch04_T34_1>
@@ -1883,6 +1890,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.5 0.25 0.000000 0.000000	</tiling>
+            <density>	92.4412 103.95	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_85mm_S-53>
         <_85mm_Tip_56-85JT>	shared	  <maxAmmo>	50	</maxAmmo>
@@ -1962,6 +1971,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.5 0.25 0.000000 0.000000	</tiling>
+            <density>	91.9941 94.412	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_85mm_Tip_56-85JT>
         <_100mm_44-100JT>	shared	  <maxAmmo>	34	</maxAmmo>
@@ -2036,6 +2047,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	0.5 0.25 0.000000 0.000000	</tiling>
+            <density>	90.7737 101.804	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_100mm_44-100JT>
       </guns>
@@ -2115,6 +2128,8 @@
       </customizationSlots>
       <camouflage>
         <tiling>	0.67 0.67 0.000000 0.000000	</tiling>
+        <density>	112.481 112.745	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
     </Turret_2_Ch04_T34_1>
   </turrets0>

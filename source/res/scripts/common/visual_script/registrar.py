@@ -1,8 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/registrar.py
 import inspect
-import BigWorld
-from constants import IS_CLIENT, IS_CELLAPP
+from constants import IS_CLIENT, IS_CELLAPP, IS_EDITOR
 from component import Component, ASPECT
 __all__ = ['regVScriptComponent',
  'regAllVScriptComponentsInModule',
@@ -17,7 +16,7 @@ def __findVScriptConponentsInModule(module):
 
 
 def aspectActive(aspect):
-    if BigWorld.component == 'editor':
+    if IS_EDITOR:
         return True
     if aspect is ASPECT.CLIENT:
         return IS_CLIENT

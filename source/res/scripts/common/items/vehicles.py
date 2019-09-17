@@ -2,8 +2,9 @@
 # Embedded file name: scripts/common/items/vehicles.py
 from soft_exception import SoftException
 from collections import namedtuple
-from math import radians, cos, atan, pi, isnan, degrees
+from math import radians, cos, atan, pi, isnan, degrees, sin
 from functools import partial
+from typing import TYPE_CHECKING, Tuple, Dict, Optional, Iterator, List
 import struct
 import itertools
 import copy
@@ -49,6 +50,8 @@ elif IS_WEB:
     from web_stubs import *
 if IS_CELLAPP:
     from vehicle_constants import OVERMATCH_MECHANICS_VER
+if TYPE_CHECKING:
+    from ResMgr import DataSection
 VEHICLE_CLASS_TAGS = frozenset(('lightTank',
  'mediumTank',
  'heavyTank',
@@ -65,6 +68,15 @@ ABILITY_SLOTS_BY_VEHICLE_CLASS = {'lightTank': 1,
  'AT-SPG': 2,
  'mediumTank': 2,
  'heavyTank': 3}
+
+def _cosDeg(angle):
+    return cos(radians(angle))
+
+
+def _sinDeg(angle):
+    return sin(radians(angle))
+
+
 VEHICLE_DEVICE_TYPE_NAMES = ('engine',
  'ammoBay',
  'fuelTank',
@@ -138,8 +150,7 @@ VEHICLE_ATTRIBUTE_FACTORS = {'engine/power': 1.0,
  'crewRolesFactor': 1.0,
  'stunResistanceEffect': 0.0,
  'stunResistanceDuration': 0.0,
- 'repeatedStunDurationFactor': 1.0,
- 'deathZones/sensitivityFactor': 1.0}
+ 'repeatedStunDurationFactor': 1.0}
 _g_prices = None
 
 class CamouflageBonus():
@@ -1019,8 +1030,7 @@ class VehicleDescriptor(object):
              'crewChanceToHitFactor': 1.0,
              'stunResistanceEffect': 0.0,
              'stunResistanceDuration': 0.0,
-             'repeatedStunDurationFactor': 1.0,
-             'deathZones/sensitivityFactor': 1.0}
+             'repeatedStunDurationFactor': 1.0}
             for device in self.optionalDevices:
                 if device is not None:
                     device.updateVehicleDescrAttrs(self)
@@ -1199,7 +1209,10 @@ class VehicleType(object):
      'role',
      'actionsGroup',
      'actions',
-     'builtins')
+     'builtins',
+     'rotationBySpeedModifiers',
+     'jumpAngularVelocityFactor',
+     'magneticAim')
 
     def __init__(self, nationID, basicInfo, xmlPath, vehMode=VEHICLE_MODE.DEFAULT):
         self.name = basicInfo.name
@@ -1354,6 +1367,9 @@ class VehicleType(object):
 
         if IS_CLIENT or IS_EDITOR:
             self.__checkPositionTags()
+        self.rotationBySpeedModifiers = RotationBySpeedModifiers.create(section['rotationBySpeedModifiers'])
+        self.jumpAngularVelocityFactor = section.readFloat('jumpAngularVelocityFactor', 1.0)
+        self.magneticAim = MagneticAimSettings.create(section['magneticAim'], True)
         VehicleType.currentReadingVeh = None
         section = None
         ResMgr.purge(xmlPath, True)
@@ -1752,7 +1768,7 @@ class Cache(object):
         return self._gunRecoilEffects.get(effectName, None)
 
     @property
-    def _vehicleEffects(self):
+    def vehicleEffects(self):
         if self.__vehicleEffects is None:
             self.__vehicleEffects = _readEffectGroups(_VEHICLE_TYPE_XML_PATH + 'common/vehicle_effects.xml', True)
         return self.__vehicleEffects
@@ -1933,6 +1949,48 @@ class VehicleList(object):
         return res
 
 
+class RotationBySpeedModifiers(object):
+    __slots__ = ('isEnabled', 'valueCurve')
+
+    def __init__(self, isEnabled, valueCurve):
+        self.isEnabled = isEnabled
+        self.valueCurve = valueCurve
+
+    @staticmethod
+    def create(xmlSection):
+        if xmlSection is None:
+            return RotationBySpeedModifiers(False, [])
+        else:
+            isEnabled = xmlSection['enabled'].asBool
+            valueCurve = []
+            for pointSection in xmlSection['valueCurve'].values():
+                valueCurve.append((pointSection['speedNorm'].asFloat, pointSection['rotationFactor'].asFloat))
+
+            return RotationBySpeedModifiers(isEnabled, valueCurve)
+
+
+class MagneticAimSettings(object):
+    __slots__ = ('isEnabled', 'magneticAngle', 'keyDelaySec')
+    DEFAULT_MAGNETIC_ANGLE = 2.25
+    DEFAULT_KEY_DELAY_SEC = 0.5
+
+    def __init__(self, isEnabled, magneticAngle=DEFAULT_MAGNETIC_ANGLE, keyDelaySec=DEFAULT_KEY_DELAY_SEC):
+        self.isEnabled = isEnabled
+        self.magneticAngle = magneticAngle
+        self.keyDelaySec = keyDelaySec
+
+    @staticmethod
+    def create(xmlSection, isWheeledTech):
+        if xmlSection is None:
+            return MagneticAimSettings(isWheeledTech)
+        else:
+            isEnabled = xmlSection['enabled'].asBool
+            return MagneticAimSettings(isEnabled, magneticAngle=xmlSection.readFloat('magneticAngle', MagneticAimSettings.DEFAULT_MAGNETIC_ANGLE), keyDelaySec=xmlSection.readFloat('keyDelaySec', MagneticAimSettings.DEFAULT_KEY_DELAY_SEC))
+
+    def getMagneticAngle(self):
+        return cos(radians(self.magneticAngle))
+
+
 def parseVehicleCompactDescr(compactDescr):
     header, vehicleTypeID = struct.unpack('2B', compactDescr[0:2])
     return (header >> 4 & 15, vehicleTypeID)
@@ -2073,8 +2131,8 @@ def getEmptyAmmoForGun(gunDescr):
     return ammo
 
 
-def getDefaultAmmoForGun(gunDescr):
-    return _getAmmoForGun(gunDescr, None)
+def getDefaultAmmoForGun(gunDescr, defaultPortion=None):
+    return _getAmmoForGun(gunDescr, defaultPortion)
 
 
 def getUniformAmmoForGun(gunDescr):
@@ -2098,13 +2156,12 @@ def getSpecificAmmoForGun(gunDescr, ammoProperties):
     return ammo
 
 
-def calculateCarryingTriangles(carryingPoint):
-    v = carryingPoint
-    topLeft = Vector2(-v.x, v.y)
-    bottomLeft = Vector2(-v.x, -v.y)
-    topRight = Vector2(v.x, v.y)
-    bottomRight = Vector2(v.x, -v.y)
-    return (((topLeft + bottomLeft) / 2.0, topRight, bottomRight), ((topRight + bottomRight) / 2.0, bottomLeft, topLeft))
+def getFirstSlotMaxAmmo(gunDescr):
+    ammo = []
+    maxCount = gunDescr.maxAmmo
+    ammo.append(gunDescr.shots[0].shell.compactDescr)
+    ammo.append(maxCount)
+    return ammo
 
 
 def _getAmmoForGun(gunDescr, defaultPortion=None):
@@ -2128,6 +2185,19 @@ def _getAmmoForGun(gunDescr, defaultPortion=None):
         ammo.append(gunDescr.shots[0].shell.compactDescr)
         ammo.append(maxCount)
     return ammo
+
+
+def getVehicleSpecialEquipment(vehicleDescr, tag):
+    equip = []
+    for e in g_cache.equipments().itervalues():
+        if tag not in e.tags:
+            continue
+        result, error = e.checkCompatibilityWithVehicle(vehicleDescr)
+        if not result:
+            continue
+        equip += (e.compactDescr, 1)
+
+    return equip
 
 
 def getBuiltinEqsForVehicle(vehType):
@@ -2265,6 +2335,17 @@ def _readNations(xmlCtx, section):
             result.append(index)
 
         return tuple(result)
+
+
+def _readShapeSettings(section):
+    res = {}
+    if section is None:
+        return res
+    else:
+        for key, value in section.items():
+            res[key] = value.asFloat
+
+        return res
 
 
 def _readFakeGearBox(xmlCtx, section):
@@ -2422,32 +2503,14 @@ def _readHullVariants(xmlCtx, section, defHull, chassis, turrets):
                 modelsSets = shared_readers.readModelsSets(ctx, section, 'models')
                 variant.models = modelsSets['default']
                 continue
-            if name == 'exhaust':
-                if IS_CLIENT:
-                    variant.customEffects = (__readExhaustEffect(ctx, section),)
-                continue
             if name == 'hitTester':
                 variant.hitTester = _readHitTester(ctx, section, 'hitTester')
                 continue
             if name == 'armor':
                 variant.materials = _readArmor(ctx, section, 'armor')
                 continue
-            if name == 'primaryArmor':
-                if IS_CLIENT:
-                    variant.primaryArmor = _readPrimaryArmor(ctx, section, 'primaryArmor', variant.materials)
-                continue
-            if name == 'armorHomogenization':
-                if not IS_CLIENT and not IS_BOT:
-                    variant.armorHomogenization = _xml.readPositiveFloat(ctx, section, 'armorHomogenization')
-                continue
             if name == 'weight':
                 variant.weight = _xml.readNonNegativeFloat(ctx, section, 'weight')
-                continue
-            if name == 'maxHealth':
-                variant.maxHealth = _xml.readInt(ctx, section, 'maxHealth', 1)
-                continue
-            if name == 'ammoBayHealth':
-                variant.ammoBayHealth = shared_readers.readDeviceHealthParams(ctx, section, 'ammoBayHealth', False)
                 continue
             if name == 'turretPositions':
                 v = []
@@ -2520,6 +2583,8 @@ def _readChassis(xmlCtx, section, item, unlocksDescrs=None, _=None):
     item.tags = _readTags(xmlCtx, section, 'tags', 'vehicleChassis')
     item.level = _readLevel(xmlCtx, section)
     item.hullPosition = _xml.readVector3(xmlCtx, section, 'hullPosition')
+    if section.has_key('autoAimOffset'):
+        item.autoAimOffset = _xml.readVector3(xmlCtx, section, 'autoAimOffset')
     item.hitTester = _readHitTester(xmlCtx, section, 'hitTester')
     item.topRightCarryingPoint = _xml.readPositiveVector2(xmlCtx, section, 'topRightCarryingPoint')
     item.navmeshGirth = _xml.readPositiveFloat(xmlCtx, section, 'navmeshGirth')
@@ -2555,7 +2620,12 @@ def _readChassis(xmlCtx, section, item, unlocksDescrs=None, _=None):
             item.wheelHealthParams[wheelNumber] = shared_readers.readDeviceHealthParams(subctx, subsection)
 
     if IS_CLIENT or IS_EDITOR or IS_CELLAPP or IS_WEB or IS_BOT:
-        item.carryingTriangles = calculateCarryingTriangles(item.topRightCarryingPoint)
+        v = item.topRightCarryingPoint
+        topLeft = Vector2(-v.x, v.y)
+        bottomLeft = Vector2(-v.x, -v.y)
+        topRight = Vector2(v.x, v.y)
+        bottomRight = Vector2(v.x, -v.y)
+        item.carryingTriangles = (((topLeft + bottomLeft) / 2.0, topRight, bottomRight), ((topRight + bottomRight) / 2.0, bottomLeft, topLeft))
     if IS_CLIENT or IS_EDITOR or IS_CELLAPP:
         drivingWheelNames = section.readString('drivingWheels').split()
         if len(drivingWheelNames) != 2:
@@ -2685,9 +2755,6 @@ def _readRadio(xmlCtx, section, item, unlocksDescrs=None, _=None):
     item.level = _readLevel(xmlCtx, section)
     item.weight = _xml.readNonNegativeFloat(xmlCtx, section, 'weight')
     item.distance = _xml.readNonNegativeFloat(xmlCtx, section, 'distance')
-    defaults = g_cache.commonConfig['miscParams']['radarDefaults']
-    item.radarRadius = _xml.readNonNegativeFloat(xmlCtx, section, 'radarRadius', defaults['radarRadius'])
-    item.radarCooldown = _xml.readNonNegativeFloat(xmlCtx, section, 'radarCooldown', defaults['radarCooldown'])
     _readPriceForItem(xmlCtx, section, item.compactDescr)
     if IS_CLIENT or IS_WEB:
         item.i18n = shared_readers.readUserText(section)
@@ -2790,6 +2857,15 @@ def _xphysicsParseChassis(ctx, sec):
     res['sideFrictionConstantRatio'] = sec.readFloat('sideFrictionConstantRatio', 0.0)
     res['angVelocityFactor0'] = sec.readFloat('angVelocityFactor0', 1.0)
     axleCount = sec.readInt('axleCount', 5)
+    __readSlopeResistanceFunction(res, sec, 'slopeResistTerrain')
+    __readSlopeResistanceFunction(res, sec, 'slopeResistStaticObject')
+    __readSlopeResistanceFunction(res, sec, 'slopeResistDynamicObject')
+    __readSlopeGripFunction(res, sec, 'slopeGripLngTerrain')
+    __readSlopeGripFunction(res, sec, 'slopeGripSdwTerrain')
+    __readSlopeGripFunction(res, sec, 'slopeGripLngStaticObject')
+    __readSlopeGripFunction(res, sec, 'slopeGripSdwStaticObject')
+    __readSlopeGripFunction(res, sec, 'slopeGripLngDynamicObject')
+    __readSlopeGripFunction(res, sec, 'slopeGripSdwDynamicObject')
     res['axleCount'] = axleCount
     floatArrParamsCommon = (('hullCOM', 3),
      ('roadWheelPositions', axleCount),
@@ -2800,6 +2876,27 @@ def _xphysicsParseChassis(ctx, sec):
     res.update(_parseFloatList(ctx, sec, floatParamsDetailed))
     res['centerRotationFwdSpeed'] *= component_constants.KMH_TO_MS
     return res
+
+
+def __readSlopeResistanceFunction(dstDict, rootSection, functionName):
+    if rootSection.has_key(functionName):
+        dstDict[functionName] = __readSlopeResistanceValues(rootSection[functionName])
+
+
+def __readSlopeResistanceValues(section):
+    return (section['factor'].asFloat, _cosDeg(section['tiltLimit'].asFloat), _sinDeg(section['slopeLimit'].asFloat))
+
+
+def __readSlopeGripFunction(dstDict, rootSection, functionName):
+    if rootSection.has_key(functionName):
+        dstDict[functionName] = __readSlopeGripValues(rootSection[functionName])
+
+
+def __readSlopeGripValues(section):
+    return (_cosDeg(section['slopeAngleFrom'].asFloat),
+     section['factorFrom'].asFloat,
+     _cosDeg(section['slopeAngleTo'].asFloat),
+     section['factorTo'].asFloat)
 
 
 def _xphysicsParseWheeledChassis(ctx, sec):
@@ -2834,6 +2931,9 @@ def _readXPhysicsMode(xmlCtx, sec, subsectionName):
         res = {}
         res['gravityFactor'] = subsec.readFloat('gravityFactor', 1.0)
         res['vehiclePhysicsType'] = subsec.readInt('vehiclePhysicsType', VEHICLE_PHYSICS_TYPE.TANK)
+        res['vehicleContactMassFactor'] = subsec.readFloat('vehicleContactMassFactor', 1.0)
+        res['auxStaticCollisionBBoxExpansion'] = subsec.readVector3('auxStaticCollisionBBoxExpansion', (0, 0, 0))
+        res['shape'] = _readShapeSettings(subsec['shape'])
         res['fakegearbox'] = _readFakeGearBox(ctx, subsec)
         res['engines'] = _parseSectionList(ctx, subsec, _xphysicsParseEngine, 'engines')
         if subsec.has_key('swingCompensator'):
@@ -3717,7 +3817,7 @@ def _copyPriceForItem(sourceCompactDescr, destCompactDescr, itemNotInShop):
 
 
 def _readUnlocks(xmlCtx, section, subsectionName, unlocksDescrs, *requiredItems):
-    if unlocksDescrs is None:
+    if unlocksDescrs is None or IS_CELLAPP:
         return []
     else:
         s = section[subsectionName]
@@ -4126,9 +4226,7 @@ def _readCommonConfig(xmlCtx, section):
      'explosionDamageFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionDamageFactor'),
      'explosionDamageAbsorptionFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionDamageAbsorptionFactor'),
      'explosionEdgeDamageFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionEdgeDamageFactor'),
-     'allowMortarShooting': _xml.readBool(xmlCtx, section, 'miscParams/allowMortarShooting'),
-     'radarDefaults': {'radarRadius': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/radarDefaults/radarRadius'),
-                       'radarCooldown': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/radarDefaults/radarCooldown')}}
+     'allowMortarShooting': _xml.readBool(xmlCtx, section, 'miscParams/allowMortarShooting')}
     if IS_CLIENT or IS_EDITOR:
         v = {}
         for lodName in _xml.getSubsection(xmlCtx, section, 'lodLevels').keys():
@@ -4603,7 +4701,7 @@ def _readVehicleEffects(xmlCtx, section, subsectionName, defaultEffects=None):
     res = {}
     section = _xml.getSubsection(xmlCtx, section, subsectionName)
     xmlCtx = (xmlCtx, subsectionName)
-    cachedEffects = g_cache._vehicleEffects
+    cachedEffects = g_cache.vehicleEffects
     for effectKind in _vehicleEffectKindNames:
         subsection = section[effectKind]
         if subsection is not None:

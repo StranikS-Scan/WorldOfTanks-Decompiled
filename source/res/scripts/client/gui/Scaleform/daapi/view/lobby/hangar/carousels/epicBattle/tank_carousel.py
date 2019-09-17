@@ -25,6 +25,7 @@ class EpicBattleTankCarousel(TankCarousel):
     def _getInitialFilterVO(self, contexts):
         filtersVO = super(EpicBattleTankCarousel, self)._getInitialFilterVO(contexts)
         filtersVO['isFrontline'] = True
+        filtersVO['isEventFilter'] = self._racingEventController.isEnabled() and self.hasEventVehicles()
         length = len(filtersVO['hotFilters'])
         for id_ in range(0, length):
             entry = filtersVO['hotFilters'][id_]

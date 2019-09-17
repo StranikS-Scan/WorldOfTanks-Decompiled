@@ -104,6 +104,8 @@
     </customizationSlots>
     <camouflage>
       <tiling>	2 2 0.000000 0.000000	</tiling>
+      <density>	107.682 107.773	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -1734,6 +1736,8 @@
           </customizationSlots>
           <camouflage>
             <tiling>	1 1 0.000000 0.1	</tiling>
+            <density>	98.6832 98.16	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_50mm_KwK_39_L60L>
         <_75mm_KwK_40_L48L>	shared	  <pitchLimits>
@@ -1809,6 +1813,10 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	96.8212 95.963	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_75mm_KwK_40_L48L>
       </guns>
       <models>
@@ -1885,6 +1893,10 @@
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	93.9557 93.4706	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </Turret_1_VK2801>
     <Turret_2_VK2801>
       <userString>	#germany_vehicles:Turret_2_VK2801	</userString>
@@ -1993,6 +2005,10 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	98.6832 98.16	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_50mm_KwK_39_L60L>
         <_75mm_KwK_40_L48L>	shared	  <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
@@ -2067,6 +2083,10 @@
               <applyTo>	4096	</applyTo>
             </slot>
           </customizationSlots>
+          <camouflage>
+            <density>	96.8212 95.963	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_75mm_KwK_40_L48L>
       </guns>
       <models>
@@ -2143,6 +2163,10 @@
           <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
         </slot>
       </customizationSlots>
+      <camouflage>
+        <density>	93.6315 93.1523	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </Turret_2_VK2801>
   </turrets0>
   <engines>

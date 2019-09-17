@@ -43,7 +43,7 @@ class VehicleGunRotator(object):
         self.__markerInfo = (Math.Vector3(0.0, 0.0, 0.0), Math.Vector3(0.0, 1.0, 0.0), 1.0)
         self.__clientMode = True
         self.__showServerMarker = False
-        self.__time = None
+        self.__time = 0.0
         self.__timerID = None
         self.__turretMatrixAnimator = _MatrixAnimator(self.__avatar)
         self.__gunMatrixAnimator = _MatrixAnimator(self.__avatar)

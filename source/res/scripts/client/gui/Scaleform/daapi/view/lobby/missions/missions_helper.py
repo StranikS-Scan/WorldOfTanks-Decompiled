@@ -16,6 +16,7 @@ from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.locale.FESTIVAL import FESTIVAL
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.server_events.awards_formatters import AWARDS_SIZES
@@ -34,6 +35,7 @@ from personal_missions import PM_BRANCH
 from potapov_quests import PM_BRANCH_TO_FREE_TOKEN_NAME
 from quest_xml_source import MAX_BONUS_LIMIT
 from shared_utils import first
+from skeletons.gui.game_control import IRacingEventController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 CARD_AWARDS_COUNT = 6
@@ -44,6 +46,8 @@ _preBattleConditionFormatter = MissionsPreBattleConditionsFormatter()
 _accountReqsFormatter = AccountRequirementsFormatter()
 _tqAccountReqsFormatter = TQAccountRequirementsFormatter()
 _cardCondFormatter = cards_formatters.CardBattleConditionsFormatters()
+_customTokenConditionFormatter = cards_formatters.CustomTokenConditionFormatter()
+_detailedCustomTokenConditionFormatter = cards_formatters.DetailedCustomTokenConditionFormatter()
 _detailedCardCondFormatter = cards_formatters.DetailedCardBattleConditionsFormatters()
 _cardTokenConditionFormatter = cards_formatters.CardTokenConditionFormatter()
 _detailedCardTokenConditionFormatter = cards_formatters.DetailedCardTokenConditionFormatter()
@@ -493,24 +497,10 @@ class _DetailedMissionInfo(_MissionInfo):
             criteria = cond.getFilterCriteria(cond.getData())
         else:
             criteria = REQ_CRITERIA.DISCLOSABLE
-        isQuestForBattleRoyale = False
-        battleCond = self.event.preBattleCond.getConditions()
-        if battleCond:
-            bonusTypes = battleCond.find('bonusTypes')
-            if bonusTypes:
-                arenaTypes = bonusTypes.getValue()
-                if arenaTypes:
-                    if constants.ARENA_BONUS_TYPE.EVENT_BATTLES not in arenaTypes or constants.ARENA_BONUS_TYPE.EVENT_BATTLES_2 not in arenaTypes:
-                        criteria = criteria | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
-                    if constants.ARENA_BONUS_TYPE.EPIC_BATTLE not in arenaTypes:
-                        criteria = criteria | ~REQ_CRITERIA.VEHICLE.EPIC_BATTLE
-                    if constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD in arenaTypes or constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO in arenaTypes:
-                        isQuestForBattleRoyale = True
         xpMultCond = conds.find('hasReceivedMultipliedXP')
         if xpMultCond:
             extraConditions.append(xpMultCond)
-        criteria = criteria | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
-        return (criteria, extraConditions, isQuestForBattleRoyale)
+        return (criteria, extraConditions)
 
     def _getUIDecoration(self):
         decoration = self.eventsCache.prefetcher.getMissionDecoration(self.event.getIconID(), DECORATION_SIZES.DETAILS)
@@ -725,7 +715,7 @@ class _DetailedPrivateMissionInfo(_DetailedMissionInfo, _PrivateMissionInfo):
 class _DetailedTokenMissionInfo(_DetailedMissionInfo):
 
     def getVehicleRequirementsCriteria(self):
-        return (None, [], False)
+        return (None, [])
 
     def _getMainConditions(self):
         return _detailedCardTokenConditionFormatter.format(self.event)
@@ -765,7 +755,7 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
         criteria = REQ_CRITERIA.INVENTORY
         criteria |= REQ_CRITERIA.VEHICLE.LEVELS(range(self.event.getVehMinLevel(), constants.MAX_VEHICLE_LEVEL + 1))
         criteria |= REQ_CRITERIA.VEHICLE.CLASSES(self.event.getQuestClassifier().classificationAttr)
-        return (criteria, extraConditions, False)
+        return (criteria, extraConditions)
 
     def getAwardScreenConditionsFormatter(self):
         return formatters.PMAwardScreenConditionsFormatter(self.event)
@@ -1053,8 +1043,86 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
         return self.eventsCache.getPersonalMissions().getFreeTokensCount(quest.getPMType().branch) >= quest.getPawnCost()
 
 
+class RaceCollectionHelper(object):
+
+    @staticmethod
+    def getCompleteStatusFields(_, bonusCount, bonusLimit):
+        return {'statusLabel': text_styles.bonusAppliedText(_ms(FESTIVAL.RACE_COLLECTIONQUEST_PROGRESS, text_styles.bonusAppliedText(bonusCount), text_styles.standard(bonusLimit))),
+         'status': MISSIONS_STATES.COMPLETED,
+         'statusTooltipData': None}
+
+    @staticmethod
+    def getRegularStatusFields(_, bonusCount, bonusLimit):
+        return {'statusLabel': text_styles.standard(_ms(FESTIVAL.RACE_COLLECTIONQUEST_PROGRESS, text_styles.stats(bonusCount), text_styles.standard(bonusLimit))),
+         'status': MISSIONS_STATES.NONE,
+         'statusTooltipData': None}
+
+
+class _RaceCollectionCustomMissionInfo(_TokenMissionInfo):
+    _racingEventController = dependency.descriptor(IRacingEventController)
+
+    def _getStatusFields(self, isAvailable, errorMsg):
+        bonusCount, bonusLimit = self._racingEventController.getRaceCollectionInfo()
+        isLimited = True
+        if bonusLimit == bonusCount:
+            return RaceCollectionHelper.getCompleteStatusFields(isLimited, bonusCount, bonusLimit)
+        return self._getUnavailableStatusFields(errorMsg) if not isAvailable else RaceCollectionHelper.getRegularStatusFields(isLimited, bonusCount, bonusLimit)
+
+    def _getMainConditions(self):
+        if self._mainFormattedConditions is None:
+            self._mainFormattedConditions = _customTokenConditionFormatter.format(self.event)
+        return self._mainFormattedConditions
+
+
+class _DetailedRaceCollectionCustomMissionInfo(_DetailedTokenMissionInfo):
+    _racingEventController = dependency.descriptor(IRacingEventController)
+
+    def _getStatusFields(self, isAvailable, errorMsg):
+        bonusCount, bonusLimit = self._racingEventController.getRaceCollectionInfo()
+        isLimited = True
+        if bonusLimit == bonusCount:
+            return RaceCollectionHelper.getCompleteStatusFields(isLimited, bonusCount, bonusLimit)
+        return self._getUnavailableStatusFields(errorMsg) if not isAvailable else RaceCollectionHelper.getRegularStatusFields(isLimited, bonusCount, bonusLimit)
+
+    def _getMainConditions(self):
+        if self._mainFormattedConditions is None:
+            self._mainFormattedConditions = _detailedCustomTokenConditionFormatter.format(self.event)
+        return self._mainFormattedConditions
+
+
+class _RaceRecruitCustomMissionInfo(_TokenMissionInfo):
+
+    def _getMainConditions(self):
+        if self._mainFormattedConditions is None:
+            self._mainFormattedConditions = _customTokenConditionFormatter.format(self.event)
+        return self._mainFormattedConditions
+
+    def getInfo(self, mainQuest=None):
+        statusData = self._getStatusFields(True, '')
+        return self._getInfo(statusData, True, '', mainQuest)
+
+
+class _DetailedRaceRecruitCustomMissionInfo(_DetailedTokenMissionInfo):
+
+    def _getMainConditions(self):
+        if self._mainFormattedConditions is None:
+            self._mainFormattedConditions = _detailedCustomTokenConditionFormatter.format(self.event)
+        return self._mainFormattedConditions
+
+    def getInfo(self, mainQuest=None):
+        statusData = self._getStatusFields(True, '')
+        return self._getInfo(statusData, True, '', mainQuest)
+
+
+_customsMissions = {'fest19:race:collection_item': _RaceCollectionCustomMissionInfo,
+ 'fest19:race:recruit_reward': _RaceRecruitCustomMissionInfo}
+_detailedCustomsMissions = {'fest19:race:collection_item': _DetailedRaceCollectionCustomMissionInfo,
+ 'fest19:race:recruit_reward': _DetailedRaceRecruitCustomMissionInfo}
+
 def getMissionInfoData(event):
-    if event.getType() == constants.EVENT_TYPE.TOKEN_QUEST:
+    if event.getID() in _customsMissions:
+        return _customsMissions[event.getID()](event)
+    elif event.getType() == constants.EVENT_TYPE.TOKEN_QUEST:
         return _TokenMissionInfo(event)
     elif event.getType() == constants.EVENT_TYPE.PERSONAL_QUEST:
         return _PrivateMissionInfo(event)
@@ -1065,7 +1133,9 @@ def getMissionInfoData(event):
 
 
 def getDetailedMissionData(event):
-    if event.getType() == constants.EVENT_TYPE.TOKEN_QUEST:
+    if event.getID() in _detailedCustomsMissions:
+        return _detailedCustomsMissions[event.getID()](event)
+    elif event.getType() == constants.EVENT_TYPE.TOKEN_QUEST:
         return _DetailedTokenMissionInfo(event)
     elif event.getType() == constants.EVENT_TYPE.PERSONAL_QUEST:
         return _DetailedPrivateMissionInfo(event)

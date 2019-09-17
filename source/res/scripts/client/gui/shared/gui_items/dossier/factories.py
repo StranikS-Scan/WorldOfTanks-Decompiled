@@ -244,6 +244,8 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.W
  (_AB.SINGLE, 'Fest19Collection1'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'Fest19Collection2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'Fest19Collection3'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'Fest19Racer'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'Fest19Offspring'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.TOTAL, 'RP2018firstmed'): _AchieveFactory.get(_as.ReferralProgramSingleAchievement),
  (_AB.TOTAL, 'RP2018secondmed'): _AchieveFactory.get(_as.ReferralProgramSingleAchievement),
  (_AB.TOTAL, 'RP2018thirdmed'): _AchieveFactory.get(_as.ReferralProgramSingleAchievement),
@@ -298,6 +300,7 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.W
  (_AB.SINGLE, 'BR2019Title25'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
  (_AB.SINGLE, 'BR2019Title15'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
  (_AB.SINGLE, 'BR2019Title5'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
+ (_AB.SINGLE, 'october19'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  WHITE_TIGER_RECORD: _CustomAchieveFactory.get(_as.WhiteTigerAchievement),
  HONORED_RANK_RECORD: _CustomAchieveFactory.get(_as.HonoredRankAchievement),
  RARE_STORAGE_RECORD: _RareAchievesFactory.get()}

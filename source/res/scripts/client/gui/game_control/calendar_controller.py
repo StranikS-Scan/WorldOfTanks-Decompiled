@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/game_control/calendar_controller.py
 import functools
 import logging
+from collections import namedtuple
 from datetime import timedelta
 from account_helpers.AccountSettings import AccountSettings, LAST_CALENDAR_SHOW_TIMESTAMP
 from adisp import process
@@ -12,9 +13,9 @@ from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.game_control import CalendarInvokeOrigin
-from gui.game_control.links import URLMacros
 from gui.server_events.modifiers import CalendarSplashModifier
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.wgcg.advent_calendar.contexts import AdventCalendarFetchInfoCtx
 from gui.shared.event_dispatcher import showHangar
 from helpers import dependency, time_utils, i18n
 from helpers.time_utils import ONE_HOUR
@@ -24,10 +25,12 @@ from skeletons.gui.game_window_controller import GameWindowController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.lobby_context import ILobbyContext
 from web_client_api import w2capi, webApiCollection, w2c, W2CSchema
+from skeletons.gui.web import IWebController
 from web_client_api.request import RequestWebApi
 from web_client_api.shop import ShopWebApi
 from web_client_api.sound import SoundWebApi
 from web_client_api.ui import CloseWindowWebApi, NotificationWebApi, ShopWebApiMixin, UtilWebApi, VehiclePreviewWebApiMixin
+from web_client_api.festival import FestivalWebApi
 
 @w2capi(name='open_tab', key='tab_id')
 class _OpenTabWebApi(ShopWebApiMixin, VehiclePreviewWebApiMixin):
@@ -65,6 +68,51 @@ def calendarEnabledActionFilter(act):
     return any((isinstance(mod, CalendarSplashModifier) for mod in act.getModifiers()))
 
 
+DeferredItemsActionInfo = namedtuple('DeferredItemsActionInfo', ('isEnabled', 'itemsCount', 'endTimestamp'))
+
+class _DeferredItemsActionHelper(object):
+    __webController = dependency.descriptor(IWebController)
+    __eventsCache = dependency.descriptor(IEventsCache)
+
+    def __init__(self):
+        self.__actionInfo = DeferredItemsActionInfo(False, 0, 0)
+        self.__eventsCache.onSyncCompleted += self.__onSyncCompleted
+
+    def fini(self):
+        self.__eventsCache.onSyncCompleted -= self.__onSyncCompleted
+
+    def getInfo(self):
+        return self.__actionInfo
+
+    def setInfo(self, itemsCount, endTimestamp):
+        self.__updateInfo(itemsCount, endTimestamp)
+
+    @process
+    def fetchInfo(self):
+        if self.__isByServerSwitchEnabled():
+            response = yield self.__webController.sendRequest(ctx=AdventCalendarFetchInfoCtx())
+            if response.isSuccess():
+                data = response.getData() or {}
+                self.__updateInfo(data.get('itemsCount', 0), data.get('endTimestamp', 0))
+            else:
+                _logger.error('Unable to fetch info of Deferred Items Action. Code: %s.', response.getCode())
+        else:
+            _logger.error('Unable to fetch info of Deferred Items Action. Reason: Disabled by Server.')
+
+    def __onSyncCompleted(self, *_):
+        self.__updateInfo(self.__actionInfo.itemsCount, self.__actionInfo.endTimestamp)
+
+    def __updateInfo(self, itemsCount, endTimestamp):
+        oldInfo = self.getInfo()
+        self.__actionInfo = DeferredItemsActionInfo(self.__isByServerSwitchEnabled() and itemsCount > 0 and endTimestamp > time_utils.getServerUTCTime(), itemsCount, endTimestamp)
+        if self.__actionInfo != oldInfo:
+            g_eventBus.handleEvent(events.AdventCalendarEvent(events.AdventCalendarEvent.DEFERRED_ITEMS_ACTION_STATE_CHANGED), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def __isByServerSwitchEnabled(self):
+        action = self.__eventsCache.getAdventCalendarCounterAction()
+        return action['isEnabled'] and action['start'] <= time_utils.getServerUTCTime() < action['finish']
+
+
 class CalendarController(GameWindowController, ICalendarController):
     browserCtrl = dependency.descriptor(IBrowserController)
     eventsCache = dependency.descriptor(IEventsCache)
@@ -73,9 +121,9 @@ class CalendarController(GameWindowController, ICalendarController):
 
     def __init__(self):
         super(CalendarController, self).__init__()
+        self.__deferredItemsAction = None
         self.__browserID = None
         self.__showOnSplash = False
-        self.__urlMacros = URLMacros()
         return
 
     def onLobbyInited(self, event):
@@ -84,10 +132,29 @@ class CalendarController(GameWindowController, ICalendarController):
         self._updateActions()
         if self.__showOnSplash and self.mustShow():
             self.showWindow(invokedFrom=CalendarInvokeOrigin.SPLASH)
+        self.__deferredItemsAction = _DeferredItemsActionHelper()
+        self.updDeferredItemsActionInfo()
+
+    def onAvatarBecomePlayer(self):
+        self.__finiDeferredItemsAction()
+        super(CalendarController, self).onAvatarBecomePlayer()
+
+    def onDisconnected(self):
+        self.__finiDeferredItemsAction()
+        super(CalendarController, self).onDisconnected()
+
+    def getDeferredItemsActionInfo(self):
+        return self.__deferredItemsAction.getInfo()
+
+    def setDeferredItemsActionInfo(self, itemsCount, endTimestamp):
+        self.__deferredItemsAction.setInfo(itemsCount, endTimestamp)
+
+    def updDeferredItemsActionInfo(self):
+        self.__deferredItemsAction.fetchInfo()
 
     def fini(self):
-        super(CalendarController, self).fini()
         self.browserCtrl.onBrowserDeleted -= self.__onBrowserDeleted
+        super(CalendarController, self).fini()
 
     def mustShow(self):
         result = False
@@ -179,6 +246,9 @@ class CalendarController(GameWindowController, ICalendarController):
 
         return None
 
+    def __setShowTimestamp(self, tstamp):
+        AccountSettings.setSettings(LAST_CALENDAR_SHOW_TIMESTAMP, str(tstamp))
+
     def __getBrowserView(self):
         app = self.appLoader.getApp()
         if app is not None and app.containerManager is not None:
@@ -187,12 +257,9 @@ class CalendarController(GameWindowController, ICalendarController):
         else:
             return
 
-    def __setShowTimestamp(self, tstamp):
-        AccountSettings.setSettings(LAST_CALENDAR_SHOW_TIMESTAMP, str(tstamp))
-
     @process
     def __openBrowser(self, browserID, url, browserSize, invokedFrom):
-        browserHandlers = webApiCollection(NotificationWebApi, RequestWebApi, ShopWebApi, SoundWebApi, UtilWebApi, _CloseWindowWebApi, _OpenTabWebApi)
+        browserHandlers = webApiCollection(NotificationWebApi, RequestWebApi, ShopWebApi, SoundWebApi, UtilWebApi, FestivalWebApi, _CloseWindowWebApi, _OpenTabWebApi)
 
         def showBrowserWindow():
             ctx = {'size': browserSize,
@@ -211,3 +278,9 @@ class CalendarController(GameWindowController, ICalendarController):
 
         title = i18n.makeString(MENU.ADVENTCALENDAR_WINDOW_TITLE)
         yield self.browserCtrl.load(url=url, browserID=browserID, browserSize=browserSize, isAsync=False, useBrowserWindow=False, showBrowserCallback=showBrowserWindow, showCreateWaiting=False, title=title)
+
+    def __finiDeferredItemsAction(self):
+        if self.__deferredItemsAction:
+            self.__deferredItemsAction.fini()
+        self.__deferredItemsAction = None
+        return

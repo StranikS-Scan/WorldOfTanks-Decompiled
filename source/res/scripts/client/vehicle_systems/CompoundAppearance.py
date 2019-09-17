@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/vehicle_systems/CompoundAppearance.py
 import random
 import math
+import typing
 from math import tan
 import BigWorld
 import Math
@@ -30,9 +31,14 @@ from vehicle_systems import camouflages
 from svarog_script.script_game_object import ComponentDescriptor
 from vehicle_systems import model_assembler
 from gui.shared.gui_items.customization.outfit import Outfit
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from constants import VEHICLE_SIEGE_STATE
 from VehicleEffects import DamageFromShotDecoder
 from common_tank_appearance import CommonTankAppearance, MATKIND_COUNT
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
+from festival_race.FestivalRaceSettings import FestivalRaceSettings
+if typing.TYPE_CHECKING:
+    from Vehicle import Vehicle
 _VEHICLE_APPEAR_TIME = 0.2
 _ROOT_NODE_NAME = 'V'
 _GUN_RECOIL_NODE_NAME = 'G'
@@ -85,7 +91,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         if self.frictionAudition is not None:
             self.frictionAudition.setVehicleMatrix(vehicle.matrix)
         self.highlighter.setVehicle(vehicle)
-        self.__applyVehicleOutfit()
+        self.__applyVehicleOutfit(self.__vehicle)
         fstList = vehicle.wheelsScrollFilters if vehicle.wheelsScrollFilters else []
         scndList = vehicle.wheelsSteeringFilters if vehicle.wheelsSteeringFilters else []
         for retriever, floatFilter in zip(self.filterRetrievers, fstList + scndList):
@@ -285,7 +291,6 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         if self.__terrainCircle is not None:
             self.__terrainCircle.destroy()
             self.__terrainCircle = None
-        self.onModelChanged.clear()
         self.onModelChanged = None
         CallbackDelayer.destroy(self)
         return
@@ -464,10 +469,32 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         outfitComponent = camouflages.getOutfitComponent(outfitCD)
         outfit = Outfit(component=outfitComponent)
         player = BigWorld.player()
-        forceHistorical = player.isHistoricallyAccurate and player.playerVehicleID != self.id and not outfit.isHistorical()
+        isRace = BONUS_CAPS.checkAny(player.arenaBonusType, BONUS_CAPS.FESTIVAL_RACE)
+        forceHistorical = not isRace and player.isHistoricallyAccurate and player.playerVehicleID != self.id and not outfit.isHistorical()
         return Outfit() if forceHistorical else outfit
 
-    def __applyVehicleOutfit(self):
+    def __applyRaceTeamColors(self, vehicle, outfit):
+        player = BigWorld.player()
+        enemyPalette = FestivalRaceSettings().enemyCamoPaletteIdx
+        if enemyPalette >= 0 and vehicle.publicInfo['team'] != player.team:
+            for ptIndx in TankPartIndexes.ALL:
+                cont = outfit.getContainer(ptIndx)
+                if cont is None:
+                    continue
+                slot = cont.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE)
+                if slot is None:
+                    continue
+                cmpt = slot.getComponent()
+                if cmpt is None:
+                    continue
+                cmpt.palette = enemyPalette
+
+        return
+
+    def __applyVehicleOutfit(self, vehicle):
+        isRace = BONUS_CAPS.checkAny(BigWorld.player().arenaBonusType, BONUS_CAPS.FESTIVAL_RACE)
+        if isRace:
+            self.__applyRaceTeamColors(vehicle, self.outfit)
         camouflages.updateFashions(self)
 
     def getBounds(self, partIdx):
@@ -705,6 +732,13 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
 
     def __disableStipple(self):
         self.compoundModel.stipple = False
+
+    def computeFullVehicleLength(self):
+        vehicleLength = 0.0
+        if self.compoundModel is not None:
+            hullBB = Math.Matrix(self.compoundModel.getBoundsForPart(TankPartIndexes.HULL))
+            vehicleLength = hullBB.applyVector(Math.Vector3(0.0, 0.0, 1.0)).length
+        return vehicleLength
 
     def setupGunMatrixTargets(self, target):
         self.turretMatrix.target = target.turretMatrix

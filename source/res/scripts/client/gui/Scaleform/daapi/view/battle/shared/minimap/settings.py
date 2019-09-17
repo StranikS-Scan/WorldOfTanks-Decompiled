@@ -6,6 +6,7 @@ from shared_utils import BitmaskHelper
 MINIMAP_COMPONENT_PATH = '_level0.root.{}.main.minimap.entriesContainer'.format(APP_CONTAINERS_NAMES.VIEWS)
 MINIMAP_MIN_SIZE_INDEX = 0
 MINIMAP_MAX_SIZE_INDEX = 5
+MINIMAP_RACE_MAX_SIZE_INDEX = 1
 MINIMAP_WAS_SPOTTED_RESET_DELAY = 5.0
 
 class CONTAINER_NAME(object):
@@ -55,8 +56,9 @@ class ENTRY_SYMBOL_NAME(object):
     EPIC_PROTECTION_ZONE = 'LandingZoneEntry'
     EPIC_DEPLOY_SECTOR_BASE = 'SectorBaseEntryDeployment'
     EPIC_DEPLOY_HQ = 'HeadquarterEntryDeployment'
-    RADAR_ANIM = 'RadarUI'
-    DISCOVERED_ITEM_MARKER = 'net.wg.gui.battle.views.minimap.components.entries.battleRoyale.DiscoveredItemMarker'
+    RACING_REPAIR_MARKER = 'RacingRepairEntry'
+    RACE_VIEW_POINT = 'FestivalRaceViewPointEntry'
+    RACE_VEHICLE = 'FestivalRaceVehicleEntry'
 
 
 class TRANSFORM_FLAG(object):
@@ -131,6 +133,10 @@ def convertSettingToFeatures(value, previous):
 
 def clampMinimapSizeIndex(index):
     return min(max(index, MINIMAP_MIN_SIZE_INDEX), MINIMAP_MAX_SIZE_INDEX)
+
+
+def clampRaceMinimapSizeIndex(index):
+    return min(max(index, MINIMAP_MIN_SIZE_INDEX), MINIMAP_RACE_MAX_SIZE_INDEX)
 
 
 MINIMAP_ATTENTION_SOUND_ID = 'minimap_attention'

@@ -1408,7 +1408,6 @@
     <userString>	#vehicle_customization:inscription/special	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
-    <tags>	hiddenInUI	</tags>
     <priceGroup>	inscriptions 50g notInShop	</priceGroup>
     <decal>
       <id>	14	</id>
@@ -1501,6 +1500,26 @@
       <mirror>	false	</mirror>
     </decal>
     <name>	BR Paid	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <decal>
+      <id>	19	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_268.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/inscription_268	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	20	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_269.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/inscription_269	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	WoT Racing_2019	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
 </inscriptions_special.xml>

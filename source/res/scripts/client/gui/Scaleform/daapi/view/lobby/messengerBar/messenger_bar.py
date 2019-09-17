@@ -20,7 +20,7 @@ from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.session_stats_requester import SessionStatsRequester
 from helpers import int2roman, dependency
 from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
-from skeletons.gui.game_control import IVehicleComparisonBasket, IReferralProgramController
+from skeletons.gui.game_control import IVehicleComparisonBasket, IReferralProgramController, IRacingEventController
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 from skeletons.gui.lobby_context import ILobbyContext
@@ -100,6 +100,7 @@ class _CompareBasketListener(object):
 class MessengerBar(MessengerBarMeta, IGlobalListener):
     _referralCtrl = dependency.descriptor(IReferralProgramController)
     _lobbyContext = dependency.descriptor(ILobbyContext)
+    _racingEventController = dependency.descriptor(IRacingEventController)
 
     @prbDispatcherProperty
     def prbDispatcher(self):
@@ -129,6 +130,7 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
         self._referralCtrl.onReferralProgramDisabled += self.__onReferralProgramDisabled
         self._referralCtrl.onReferralProgramUpdated += self.__onReferralProgramUpdated
         self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+        self._racingEventController.onEventModeChanged += self.__updateSessionStatsBtn
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.startGlobalListening()
         self.as_setInitDataS({'channelsHtmlIcon': _formatIcon('iconChannels'),
@@ -150,6 +152,7 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
         self._referralCtrl.onReferralProgramUpdated -= self.__onReferralProgramUpdated
         self._referralCtrl.onReferralProgramDisabled -= self.__onReferralProgramDisabled
         self._referralCtrl.onReferralProgramEnabled -= self.__onReferralProgramEnabled
+        self._racingEventController.onEventModeChanged -= self.__updateSessionStatsBtn
         self.stopGlobalListening()
         super(MessengerBar, self)._dispose()
 
@@ -183,7 +186,7 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
         if 'sessionStats' in diff or ('sessionStats', '_r') in diff:
             self.__updateSessionStatsBtn()
 
-    def __updateSessionStatsBtn(self):
+    def __updateSessionStatsBtn(self, *_):
         isInSupportedMode = self.prbDispatcher.getFunctionalState().entityTypeID in (PREBATTLE_TYPE.SQUAD,)
         isSessionStatsEnabled = self._lobbyContext.getServerSettings().isSessionStatsEnabled()
         tooltip = self.__getSessionStatsBtnTooltip(isInSupportedMode and isSessionStatsEnabled)

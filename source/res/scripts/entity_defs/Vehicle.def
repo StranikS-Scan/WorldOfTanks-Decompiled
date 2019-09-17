@@ -1,18 +1,4 @@
 <Vehicle.def>
-  <LoDLevels>
-    <level>	20	  <hyst>	4	</hyst>
-      <label>	NEAR	</label>
-    </level>
-    <level>	70	  <hyst>	10	</hyst>
-      <label>	MEDIUM	</label>
-    </level>
-    <level>	180	  <hyst>	20	</hyst>
-      <label>	FAR	</label>
-    </level>
-    <manual>
-      <label>	MY_VEHICLE	</label>
-    </manual>
-  </LoDLevels>
   <Implements>
     <Interface>	VehicleAIProxy	</Interface>
     <Interface>	TeamBase_Vehicle	</Interface>
@@ -29,13 +15,22 @@
     <Interface>	RecoveryMechanic_Vehicle	</Interface>
     <Interface>	RespawnController_Vehicle	</Interface>
     <Interface>	SmokeController_Vehicle	</Interface>
+    <Interface>	InspireController_Vehicle	</Interface>
     <Interface>	Wheels	</Interface>
-    <Interface>	ConeVisibility	</Interface>
-    <Interface>	Radar	</Interface>
-    <Interface>	BattleXP	</Interface>
-    <Interface>	InBattleUpgrades	</Interface>
-    <Interface>	VehicleLoot	</Interface>
+    <Interface>	FestivalRaceRepair	</Interface>
+    <Interface>	RaceController_Vehicle	</Interface>
   </Implements>
+  <LoDLevels>
+    <level>	20	  <hyst>	4	</hyst>
+      <label>	NEAR	</label>
+    </level>
+    <level>	70	  <hyst>	10	</hyst>
+      <label>	MEDIUM	</label>
+    </level>
+    <level>	180	  <hyst>	20	</hyst>
+      <label>	FAR	</label>
+    </level>
+  </LoDLevels>
   <Volatile>
     <position></position>
     <yaw></yaw>
@@ -48,6 +43,11 @@
       <Type>	BOOL	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </isStrafing>
+    <isSurfaceContact>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	True	</Default>
+    </isSurfaceContact>
     <physicsMode>
       <Type>	UINT8	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
@@ -194,21 +194,13 @@
       <Flags>	BASE	</Flags>
     </arena>
     <inspiringEffect>
-      <Type>	BUFF_EFFECT	</Type>
+      <Type>	INSPIRING_EFFECT	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </inspiringEffect>
-    <healingEffect>
-      <Type>	BUFF_EFFECT	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-    </healingEffect>
     <inspired>
-      <Type>	BUFF_EFFECT_INACTIVATION	</Type>
+      <Type>	INSPIRED	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </inspired>
-    <healing>
-      <Type>	BUFF_EFFECT_INACTIVATION	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-    </healing>
     <isSpeedCapturing>
       <Type>	BOOL	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
@@ -222,13 +214,11 @@
     <events></events>
     <p></p>
     <_Vehicle__p></_Vehicle__p>
-    <arenaCell></arenaCell>
     <_components></_components>
     <_battleFeedback></_battleFeedback>
     <_directVisibility></_directVisibility>
     <_harm></_harm>
-    <_inspireController></_inspireController>
-    <_healPointController></_healPointController>
+    <_raceController></_raceController>
     <_entityExtraUserData></_entityExtraUserData>
     <_extras></_extras>
     <attrs></attrs>
@@ -237,6 +227,7 @@
     <mover></mover>
     <directVisibility></directVisibility>
     <arenaCell></arenaCell>
+    <_Vehicle__vehicleCoordLogPeriod></_Vehicle__vehicleCoordLogPeriod>
     <_ProximityManager__data></_ProximityManager__data>
     <_TimerManager__unpersistedTimers></_TimerManager__unpersistedTimers>
     <gameObject></gameObject>
@@ -287,10 +278,6 @@
       <Arg>	VECTOR3	</Arg>
       <DetailDistance>	100	</DetailDistance>
     </showRammingEffect>
-    <onVehicleUpgraded>
-      <Arg>	STRING	</Arg>
-      <Arg>	STRING	</Arg>
-    </onVehicleUpgraded>
   </ClientMethods>
   <CellMethods>
     <updatePrebattleID>
@@ -322,9 +309,6 @@
       <Arg>	UINT8	</Arg>
       <Arg>	INT32	</Arg>
     </changeSetting>
-    <activateRadar>
-      <Exposed></Exposed>
-    </activateRadar>
     <sendVisibilityDevelopmentInfo>
       <Exposed></Exposed>
       <Arg>	OBJECT_ID	</Arg>
@@ -343,10 +327,6 @@
       <Arg>	INT32	</Arg>
       <Arg>	STRING	</Arg>
     </setDevelopmentFeature>
-    <upgradeVehicle>
-      <Exposed></Exposed>
-      <Arg>	INT32	</Arg>
-    </upgradeVehicle>
     <receiveFakeShot>
       <Arg>	INT32	</Arg>
       <Arg>	FLOAT32	</Arg>
@@ -399,7 +379,6 @@
     <updateVehicleAmmo>
       <Arg>	INT32	</Arg>
       <Arg>	UINT16	</Arg>
-      <Arg>	UINT8	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	INT16	</Arg>
       <Arg>	INT16	</Arg>
@@ -478,9 +457,6 @@
     <requestVisibilityLists>
       <Arg>	MAILBOX	</Arg>
     </requestVisibilityLists>
-    <updateActiveDeathZones>
-      <Arg>	PYTHON	</Arg>
-    </updateActiveDeathZones>
   </CellMethods>
   <BaseMethods>
     <createCellNearHere>

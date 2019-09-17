@@ -27,3 +27,6 @@ class LobbyPageMeta(View):
 
     def as_hideWaitingS(self):
         return self.flashObject.as_hideWaiting() if self._isDAAPIInited() else None
+
+    def as_switchLobbyDraggingS(self, value):
+        return self.flashObject.as_switchLobbyDragging(value) if self._isDAAPIInited() else None

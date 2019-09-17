@@ -41,15 +41,13 @@
     <_71-TK-1_bot>	209	</_71-TK-1_bot>
     <R123_fallout>	208	</R123_fallout>
     <R113_FL>	210	</R113_FL>
+    <_71-TK-3_race>	211	</_71-TK-3_race>
     <_10RK_IGR>	60001	</_10RK_IGR>
     <_12RT_IGR>	60002	</_12RT_IGR>
     <R113_IGR>	60003	</R113_IGR>
     <_10RKM_IGR>	60004	</_10RKM_IGR>
     <Mk19R_IGR>	60005	</Mk19R_IGR>
     <_10RK-26_IGR>	60006	</_10RK-26_IGR>
-    <_9R_BR>	311	</_9R_BR>
-    <_9RM_BR>	312	</_9RM_BR>
-    <R113_BR>	313	</R113_BR>
     <_10RB_bootcamp>	64001	</_10RB_bootcamp>
     <_9R_O_bootcamp>	64002	</_9R_O_bootcamp>
     <_71-TK-3_bootcamp>	64003	</_71-TK-3_bootcamp>
@@ -585,6 +583,19 @@
       <maxRegenHealth>	125	</maxRegenHealth>
       <repairCost>	1.5	</repairCost>
     </Tip_9>
+    <_71-TK-3_race>
+      <userString>	#ussr_vehicles:_71-TK-3_race	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	570	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	300	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <invulnerable>	true	</invulnerable>
+      <repairCost>	0.5	</repairCost>
+    </_71-TK-3_race>
     <_10RK_IGR>
       <userString>	#igr_vehicles:_10RK_IGR	</userString>
       <tags></tags>
@@ -657,44 +668,5 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </_10RK-26_IGR>
-    <_9R_BR>
-      <userString>	#ussr_vehicles:_9R_BR	</userString>
-      <tags></tags>
-      <level>	1	</level>
-      <price>	1980	</price>
-      <weight>	100	</weight>
-      <distance>	2000	</distance>
-      <maxHealth>	110	</maxHealth>
-      <maxRegenHealth>	55	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-      <radarRadius>	300	</radarRadius>
-      <radarCooldown>	35	</radarCooldown>
-    </_9R_BR>
-    <_9RM_BR>
-      <userString>	#ussr_vehicles:_9RM_BR	</userString>
-      <tags></tags>
-      <level>	3	</level>
-      <price>	24240	</price>
-      <weight>	100	</weight>
-      <distance>	2000	</distance>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-      <radarRadius>	300	</radarRadius>
-      <radarCooldown>	25	</radarCooldown>
-    </_9RM_BR>
-    <R113_BR>
-      <userString>	#ussr_vehicles:R113_BR	</userString>
-      <tags></tags>
-      <level>	3	</level>
-      <price>	52200	</price>
-      <weight>	100	</weight>
-      <distance>	2000	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-      <radarRadius>	500	</radarRadius>
-      <radarCooldown>	35	</radarCooldown>
-    </R113_BR>
   </shared>
 </radios.xml>

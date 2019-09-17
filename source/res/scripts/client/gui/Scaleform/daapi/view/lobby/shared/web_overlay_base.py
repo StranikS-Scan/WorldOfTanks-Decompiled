@@ -18,6 +18,7 @@ class WebOverlayBase(IngameShopViewMeta):
 
     def __init__(self, ctx=None):
         super(WebOverlayBase, self).__init__(ctx)
+        self.destroyedByWeb = False
         self.__browser = None
         self.__hasFocus = False
         self.__browserId = 0
@@ -63,12 +64,12 @@ class WebOverlayBase(IngameShopViewMeta):
 
     def _populate(self):
         super(WebOverlayBase, self)._populate()
-        self.addListener(events.HideWindowEvent.HIDE_OVERLAY_BROWSER_VIEW, self.__handleBrowserClose, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.HideWindowEvent.HIDE_OVERLAY_BROWSER_VIEW, self._handleBrowserClose, scope=EVENT_BUS_SCOPE.LOBBY)
         self.as_setBrowserParamsS(self._browserParams)
 
     def _dispose(self):
         super(WebOverlayBase, self)._dispose()
-        self.removeListener(events.HideWindowEvent.HIDE_OVERLAY_BROWSER_VIEW, self.__handleBrowserClose, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.HideWindowEvent.HIDE_OVERLAY_BROWSER_VIEW, self._handleBrowserClose, scope=EVENT_BUS_SCOPE.LOBBY)
         if self.__browserId:
             self.browserCtrl.delBrowser(self.__browserId)
 
@@ -113,5 +114,5 @@ class WebOverlayBase(IngameShopViewMeta):
         self.as_loadBrowserS()
         return
 
-    def __handleBrowserClose(self, _):
+    def _handleBrowserClose(self, _):
         self.destroy()

@@ -17,16 +17,20 @@ def getContextMenuHandlers():
 
 def getViewSettings():
     from gui.Scaleform.daapi.view.battle.classic import team_bases_panel
+    from gui.Scaleform.daapi.view.battle.event import team_bases_panel_helper
+    if team_bases_panel._getSettingItem == team_bases_panel_helper.getFestivalSettingItem:
+        reload(team_bases_panel)
     from gui.Scaleform.daapi.view.battle.classic import frag_correlation_bar
     from gui.Scaleform.daapi.view.battle.classic import full_stats
     from gui.Scaleform.daapi.view.battle.classic import players_panel
     from gui.Scaleform.daapi.view.battle.classic import stats_exchange
-    from gui.Scaleform.daapi.view.battle.shared import timers_panel
+    from gui.Scaleform.daapi.view.battle.shared import destroy_timers_panel
     from gui.Scaleform.daapi.view.battle.shared import battle_loading
     from gui.Scaleform.daapi.view.battle.classic import battle_end_warning_panel
     from gui.Scaleform.daapi.view.bootcamp.battle import bootcamp_battle_timer
     from gui.Scaleform.daapi.view.bootcamp.BCIntroFadeOut import BCIntroFadeOut
     from gui.Scaleform.daapi.view.bootcamp.BCBattleTopHint import BCBattleTopHint
+    from gui.Scaleform.daapi.view.bootcamp.BCPreBattleTimer import BCPreBattleTimer
     from gui.Scaleform.daapi.view.bootcamp.BCOverlayFinalWindow import BCOverlayFinalWindow
     from gui.Scaleform.daapi.view.bootcamp.BCBattlePage import BCBattlePage
     from gui.Scaleform.daapi.view.bootcamp.BCHighlights import BCHighlights
@@ -42,6 +46,7 @@ def getViewSettings():
      ViewSettings(VIEW_ALIAS.BOOTCAMP_INTRO_FADEOUT, BCIntroFadeOut, 'BCIntroFadeOut.swf', ViewTypes.WINDOW, None, ScopeTemplates.TOP_WINDOW_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.BOOTCAMP_BATTLE_TOP_HINT, BCBattleTopHint, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BOOTCAMP_BATTLE_FINISHED_WINDOW, BCOverlayFinalWindow, 'BCOverlayFinalWindow.swf', ViewTypes.TOP_WINDOW, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(BATTLE_VIEW_ALIASES.PREBATTLE_TIMER, BCPreBattleTimer, None, ViewTypes.COMPONENT, None, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BOOTCAMP_BATTLE_HIGHLIGHTS, BCHighlights, 'BCHighlights.swf', ViewTypes.WINDOW, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, BCConsumablesPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.RIBBONS_PANEL, BCRibbonsPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
@@ -53,7 +58,7 @@ def getViewSettings():
      ViewSettings(BATTLE_VIEW_ALIASES.FULL_STATS, full_stats.FullStatsComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.PLAYERS_PANEL, players_panel.PlayersPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.BATTLE_STATISTIC_DATA_CONTROLLER, stats_exchange.ClassicStatisticsDataController, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.TIMERS_PANEL, timers_panel.TimersPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(BATTLE_VIEW_ALIASES.DESTROY_TIMERS_PANEL, destroy_timers_panel.DestroyTimersPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.BATTLE_END_WARNING_PANEL, battle_end_warning_panel.BattleEndWarningPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.BATTLE_LOADING, battle_loading.BattleLoading, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.MINIMAP, BootcampMinimapComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),

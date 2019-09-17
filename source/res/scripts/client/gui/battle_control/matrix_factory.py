@@ -26,6 +26,14 @@ def makePositionMP(position):
     return provider
 
 
+def makePositionAndApproxRotationMP(position):
+    provider = Math.WGReplayAwaredApproxRotationMP()
+    matrix = Math.Matrix()
+    matrix.setTranslate(position)
+    provider.source = matrix
+    return provider
+
+
 def getEntityMatrix(entityID):
     try:
         return BigWorld.entities[entityID].matrix
@@ -49,7 +57,7 @@ def getVehicleMPAndLocation(vehicleID, positions):
     return (provider, location)
 
 
-def makeVehicleMPByLocation(vehicleID, location, positions):
+def makeVehicleMPByLocation(vehicleID, location, positions, byLocation=True):
     provider = None
     if location in (VEHICLE_LOCATION.AOI, VEHICLE_LOCATION.AOI_TO_FAR):
         vehicle = BigWorld.entities.get(vehicleID)
@@ -57,7 +65,7 @@ def makeVehicleMPByLocation(vehicleID, location, positions):
             if location == VEHICLE_LOCATION.AOI_TO_FAR:
                 provider = makeVehicleEntityMPCopy(vehicle)
             else:
-                provider = makeVehicleEntityMP(vehicle)
+                provider = makeVehicleEntityMP(vehicle) if byLocation else getEntityMatrix(vehicleID)
         else:
             LOG_WARNING('Entity of vehicle is not found to given location', vehicleID, location)
     elif location == VEHICLE_LOCATION.FAR:
@@ -74,22 +82,17 @@ def convertToLastSpottedVehicleMP(matrix):
     return converted
 
 
+def convertToLastSpottedVehicleWithRotationMP(matrix):
+    converted = Math.WGReplayAwaredApproxRotationMP()
+    converted.source = Math.Matrix(matrix.source)
+    return converted
+
+
 def makeArcadeCameraMatrix():
     matrix = Math.WGCombinedMP()
     matrix.translationSrc = BigWorld.player().getOwnVehicleMatrix()
     matrix.rotationSrc = BigWorld.camera().invViewMatrix
     return matrix
-
-
-def makeVehicleTurretMatrixMP():
-    matrixProvider = Math.WGCombinedMP()
-    vehicleMatrix = BigWorld.player().consistentMatrices.attachedVehicleMatrix
-    matrixProvider.translationSrc = vehicleMatrix
-    localTransform = Math.MatrixProduct()
-    localTransform.a = BigWorld.player().consistentMatrices.ownVehicleTurretMProv
-    localTransform.b = vehicleMatrix
-    matrixProvider.rotationSrc = localTransform
-    return matrixProvider
 
 
 def makeStrategicCameraMatrix():

@@ -6,11 +6,9 @@ from gui.Scaleform.genConsts.BATTLE_RESULT_TYPES import BATTLE_RESULT_TYPES
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
-from gui.Scaleform.genConsts.BATTLEROYALE_ALIASES import BATTLEROYALE_ALIASES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.ranked_battles.ranked_builders.shared_vos import buildRankTooltipVO
-from gui.battle_royale.royale_builders.shared_vos import getTitleTooltipVO
 from gui.shared.formatters import text_styles
 from gui.shared.money import MONEY_UNDEFINED
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
@@ -310,11 +308,6 @@ def packGroupBlockData(listData, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_GROUP_BLOC
 
 def packRankBlockData(rank, isEnabled=True, shieldStatus=None, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_RANK_BLOCK_LINKAGE, padding=None):
     data = buildRankTooltipVO(rank=rank, isEnabled=isEnabled, imageSize=RANKEDBATTLES_ALIASES.WIDGET_BIG, shieldStatus=shieldStatus)
-    return packBlockDataItem(linkage, data, padding)
-
-
-def packTitleBlockData(title, isEnabled=True, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TITLE_BLOCK_LINKAGE, padding=None):
-    data = getTitleTooltipVO(title=title, isEnabled=isEnabled, imageSize=BATTLEROYALE_ALIASES.TITLE_BIG)
     return packBlockDataItem(linkage, data, padding)
 
 

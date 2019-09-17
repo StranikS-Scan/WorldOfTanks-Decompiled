@@ -82,8 +82,9 @@ class StorageCarouselFilter(SessionCarouselFilter):
 
 class StorageCarouselDataProvider(CarouselDataProvider):
 
-    def _setBaseCriteria(self):
-        self._baseCriteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.RENT | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+    def __init__(self, carouselFilter, itemsCache, currentVehicle):
+        super(StorageCarouselDataProvider, self).__init__(carouselFilter, itemsCache, currentVehicle)
+        self._baseCriteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.RENT
 
     def _buildVehicle(self, item):
         return getStorageVehicleVo(item)
@@ -95,7 +96,6 @@ class StorageCarouselDataProvider(CarouselDataProvider):
     def _vehicleComparisonKey(cls, vehicle):
         return (not vehicle.isInInventory,
          not vehicle.isEvent,
-         not vehicle.isOnlyForBattleRoyaleBattles,
          GUI_NATIONS_ORDER_INDEX[vehicle.nationName],
          VEHICLE_TYPES_ORDER_INDICES[vehicle.type],
          vehicle.level,

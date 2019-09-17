@@ -7,6 +7,8 @@ from PlayerEvents import g_playerEvents
 from constants import ARENA_PERIOD
 from helpers import isPlayerAvatar
 from items import _xml
+from helpers import dependency
+from skeletons.gui.game_control import ISpecialSoundCtrl
 MUSIC_EVENT_NONE = 0
 MUSIC_EVENT_LOBBY = 2
 MUSIC_EVENT_COMBAT = 3
@@ -97,6 +99,7 @@ def play(eventId=None):
 
 
 class MusicController(object):
+    __specialSounds = dependency.descriptor(ISpecialSoundCtrl)
 
     class MusicEvent(object):
 
@@ -268,7 +271,7 @@ class MusicController(object):
             if period == ARENA_PERIOD.BATTLE and self.__isOnArena:
                 self.play(MUSIC_EVENT_COMBAT)
             elif period == ARENA_PERIOD.AFTERBATTLE:
-                wwSetup = arena.arenaType.wwmusicSetup
+                wwSetup = self.__specialSounds.arenaMusicSetup
                 self.stopAmbient()
                 MusicController.__lastBattleResultEventName = ''
                 if wwSetup is not None:
@@ -299,8 +302,9 @@ class MusicController(object):
                 return
             arenaType = player.arena.arenaType
             if eventId == MUSIC_EVENT_COMBAT_LOADING:
-                if arenaType.wwmusicSetup is not None:
-                    soundEventName = arenaType.wwmusicSetup.get('wwmusicLoading', None)
+                wwmusicSetup = self.__specialSounds.arenaMusicSetup
+                if wwmusicSetup is not None:
+                    soundEventName = wwmusicSetup.get('wwmusicLoading')
             elif eventId == AMBIENT_EVENT_COMBAT:
                 soundEventName = arenaType.ambientSound
         if soundEventName:

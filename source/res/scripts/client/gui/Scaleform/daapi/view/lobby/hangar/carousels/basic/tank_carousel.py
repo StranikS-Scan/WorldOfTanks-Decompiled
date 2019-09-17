@@ -20,7 +20,7 @@ from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IRestoreController, IBattleRoyaleController
+from skeletons.gui.game_control import IRestoreController, IRacingEventController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 
@@ -28,7 +28,7 @@ class TankCarousel(TankCarouselMeta):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
     restoreCtrl = dependency.descriptor(IRestoreController)
-    battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
+    _racingEventController = dependency.descriptor(IRacingEventController)
 
     def __init__(self):
         super(TankCarousel, self).__init__()
@@ -88,9 +88,6 @@ class TankCarousel(TankCarouselMeta):
         self.blinkCounter()
         self.applyFilter()
 
-    def hasBattleRoyaleVehicles(self):
-        return False if not self.battleRoyaleController.isBattleRoyaleMode() else self._carouselDP.hasBattleRoyaleVehicles()
-
     def _populate(self):
         super(TankCarousel, self)._populate()
         g_playerEvents.onBattleResultsReceived += self.__onFittingUpdate
@@ -134,7 +131,8 @@ class TankCarousel(TankCarouselMeta):
                      'tooltip': TANK_CAROUSEL_FILTER.TOOLTIP_PARAMS},
          'hotFilters': [],
          'isVisible': self._getFiltersVisible(),
-         'isFrontline': False}
+         'isFrontline': False,
+         'isEventFilter': self._racingEventController.isEnabled() and self.hasEventVehicles()}
         for entry in self._usedFilters:
             filterCtx = contexts.get(entry, FilterSetupContext())
             filtersVO['hotFilters'].append({'id': entry,

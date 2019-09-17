@@ -1,8 +1,25 @@
 <TeamBase_Vehicle.def>
+  <Properties>
+    <teamBasePoints>
+      <Type>	UINT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </teamBasePoints>
+    <isCapturingTeamBase>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	False	</Default>
+    </isCapturingTeamBase>
+  </Properties>
   <TempProperties>
     <_teamBase></_teamBase>
   </TempProperties>
+  <ClientMethods>
+    <onDropCapturePointsOnDamagedByEnemy></onDropCapturePointsOnDamagedByEnemy>
+  </ClientMethods>
   <CellMethods>
+    <teamBase_onCaptureStart></teamBase_onCaptureStart>
+    <teamBase_onCaptureStop></teamBase_onCaptureStop>
     <teamBase_receivePoints>
       <Arg>	UINT8	</Arg>
       <Arg>	FLOAT32	</Arg>

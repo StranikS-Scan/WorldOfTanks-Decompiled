@@ -44,7 +44,7 @@ from helpers import dependency
 from helpers.aop import pointcutable
 from helpers.i18n import makeString as _ms
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IHeroTankController, IReferralProgramController
+from skeletons.gui.game_control import IHeroTankController, IReferralProgramController, IEpicBattleMetaGameController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.goodies import IGoodiesCache
@@ -648,6 +648,8 @@ def showFrontlineExchangePrestigePoints(ctx):
     from gui.impl.wrappers.user_format_string_arg_model import UserFormatStringArgModel as FmtArgs
     from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import exchangePrestigePoints
     from gui.server_events.formatters import formatGoldPrice, formatCrystalPrice
+    from gui.game_control.epic_meta_game_ctrl import FRONTLINE_SCREENS
+    __ctrl = dependency.instance(IEpicBattleMetaGameController)
     prestigePoints = ctx.get('prestige_points', 0)
     gold = ctx.get('gold', 1) * prestigePoints
     crystals = ctx.get('crystal', 1) * prestigePoints
@@ -662,3 +664,4 @@ def showFrontlineExchangePrestigePoints(ctx):
     result = yield await(dialogs.showSimple(builder.build()))
     if result:
         exchangePrestigePoints()
+    __ctrl.showCustomScreen(FRONTLINE_SCREENS.REWARDS_SCREEN)

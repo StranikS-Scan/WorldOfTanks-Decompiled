@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/frontline/__init__.py
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import triggerPrestige, checkIfVehicleIsHidden
-from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import checkEpicRewardVehAlreadyBought
+from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import checkExchangeToken, checkEpicRewardVehAlreadyBought
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import getAwardsForLevel, getAwardsForPrestige
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import getFrontLineSkills, getEpicGamePlayerPrestigePoints
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import getPrestigePointsExchangeRate, getVehsAvailableToBuy
@@ -124,3 +124,7 @@ class FrontLineWebApi(W2CSchema):
     @w2c(W2CSchema, name='get_exchange_rate')
     def handleGetExchangeRate(self, _):
         return getPrestigePointsExchangeRate()
+
+    @w2c(W2CSchema, name='get_exchange_token')
+    def handleGetExchangeToken(self, _):
+        return checkExchangeToken()

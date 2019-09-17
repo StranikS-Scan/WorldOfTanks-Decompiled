@@ -312,7 +312,7 @@ class CustomizationContext(object):
                     SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.CUSTOMIZATION_PROHIBITED, type=SystemMessages.SM_TYPE.Warning, itemName=item.userName)
                     return False
             if item.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER:
-                if component is not None and component.isFilled() and len(component.number) != item.digitsCount:
+                if component is not None and component.isFilled():
                     number = fitPersonalNumber(component.number, item.digitsCount)
                     number = formatPersonalNumber(number, item.digitsCount)
                     if isPersonalNumberAllowed(number):

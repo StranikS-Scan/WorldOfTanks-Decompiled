@@ -860,6 +860,9 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BLACKMAPDISABLED = '#messenger:serviceChannelMessages/blackMapDisabled'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_CREWBOOKSACCRUED = '#messenger:serviceChannelMessages/invoiceReceived/crewBooksAccrued'
     SERVICECHANNELMESSAGES_CREWBOOKSCOUNT = '#messenger:serviceChannelMessages/crewBooksCount'
+    SERVICECHANNELMESSAGES_FLEXCHANGE_QUESTS = '#messenger:serviceChannelMessages/flExchange/quests'
+    SERVICECHANNELMESSAGES_FLEXCHANGE_QUESTS_POINTS = '#messenger:serviceChannelMessages/flExchange/quests/points'
+    SERVICECHANNELMESSAGES_FLEXCHANGE_QUESTS_REWARD = '#messenger:serviceChannelMessages/flExchange/quests/reward'
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_TRY_LATER,
      CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,

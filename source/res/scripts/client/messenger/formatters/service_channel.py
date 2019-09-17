@@ -19,7 +19,7 @@ from nations import NAMES
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
 from dossiers2.ui.layouts import IGNORED_BY_BATTLE_RESULTS
-from gui import GUI_SETTINGS
+from gui import GUI_SETTINGS, makeHtmlString
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.SystemMessages import SM_TYPE
@@ -1946,6 +1946,7 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __PERSONAL_MISSIONS_CUSTOM_TEMPLATE = 'personalMissionsCustom'
     __FRONTLINE_REWARD_QUEST_TEMPLATE = 'bought_frontline_reward_veh_'
+    _FRONTLINE_PRESTIGE_POINTS_EXCHANGE_TEMPLATE = 'PrestigePointsExchange'
 
     @async
     @process
@@ -1968,6 +1969,10 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
                 callback([_MessageData(None, None)])
                 return
             if self.__processPersonalMissionsSpecial(completedQuestIDs, message, callback):
+                return
+            if self._FRONTLINE_PRESTIGE_POINTS_EXCHANGE_TEMPLATE in first(completedQuestIDs, ''):
+                result = yield FrontlineExchangeQuestFormatter().format(message)
+                callback(result)
                 return
             messageData = self.__buildMessageData(message, completedQuestIDs)
         if messageData is None:
@@ -2412,6 +2417,50 @@ class RecruitQuestsFormatter(WaitItemsSyncFormatter):
 
     def _getTemplateName(self):
         pass
+
+
+class FrontlineExchangeQuestFormatter(TokenQuestsFormatter):
+    _eventsCache = dependency.descriptor(IEventsCache)
+
+    @async
+    @process
+    def format(self, message, callback=None):
+        isSynced = yield self._waitForSyncItems()
+        formatted, settings = (None, None)
+        if isSynced:
+            data = message.data or {}
+            templateParams = {}
+            rate = {}
+            exchangeQ = self._eventsCache.getAllQuests().get(self._FRONTLINE_PRESTIGE_POINTS_EXCHANGE_TEMPLATE)
+            if exchangeQ:
+                for b in exchangeQ.getBonuses():
+                    rate[b.getName()] = b.getValue()
+
+            crystal = data.get(Currency.CRYSTAL, 0)
+            if crystal:
+                templateParams[Currency.CRYSTAL] = makeHtmlString('html_templates:lobby/battle_results', 'crystal_small_label', {'value': backport.getIntegralFormat(int(crystal))})
+                if Currency.CRYSTAL in rate:
+                    crystalRate = rate[Currency.CRYSTAL]
+                    if crystalRate:
+                        templateParams['points'] = int(crystal / crystalRate)
+            gold = data.get(Currency.GOLD, 0)
+            if gold:
+                templateParams[Currency.GOLD] = makeHtmlString('html_templates:lobby/battle_results', 'gold_small_label', {'value': backport.getIntegralFormat(int(gold))})
+                if Currency.GOLD in rate and 'points' not in templateParams:
+                    goldRate = rate[Currency.GOLD]
+                    if goldRate:
+                        templateParams['points'] = int(gold / goldRate)
+            settings = self._getGuiSettings(message, self._getTemplateName())
+            formatted = g_settings.msgTemplates.format(self._getTemplateName(), templateParams)
+        callback([_MessageData(formatted, settings)])
+        return None
+
+    def _getTemplateName(self):
+        pass
+
+    @classmethod
+    def __formatAward(cls, key, **kwargs):
+        return g_settings.htmlTemplates.format(key, kwargs)
 
 
 class PersonalMissionsFormatter(TokenQuestsFormatter):

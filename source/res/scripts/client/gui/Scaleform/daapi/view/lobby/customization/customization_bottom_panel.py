@@ -220,34 +220,33 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         cartInfo = getTotalPurchaseInfo(purchaseItems)
         totalPriceVO = getItemPricesVO(cartInfo.totalPrice)
         label = _ms(VEHICLE_CUSTOMIZATION.COMMIT_APPLY)
-        tooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_BUYDISABLED_BODY
+        tooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_NOTSELECTEDITEMS
         fromStorageCount = 0
-        toByeCount = 0
+        toBuyCount = 0
         for item in purchaseItems:
             if item.isFromInventory:
                 fromStorageCount += 1
             if not item.isDismantling:
-                toByeCount += 1
+                toBuyCount += 1
 
         outfitsModified = self.__ctx.isOutfitsModified()
         if outfitsModified:
             if cartInfo.totalPrice != ITEM_PRICE_EMPTY:
                 label = _ms(VEHICLE_CUSTOMIZATION.COMMIT_BUY)
-            if fromStorageCount > 0 or toByeCount > 0:
+            if fromStorageCount > 0 or toBuyCount > 0:
                 self.__showBill()
             else:
                 self.__hideBill()
-                tooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_NOTSELECTEDITEMS
         else:
             self.__hideBill()
         fromStorageCount = text_styles.stats('({})'.format(fromStorageCount))
-        toByeCount = text_styles.stats('({})'.format(toByeCount))
+        toBuyCount = text_styles.stats('({})'.format(toBuyCount))
         self.as_setBottomPanelPriceStateS({'buyBtnEnabled': outfitsModified,
          'buyBtnLabel': label,
          'buyBtnTooltip': tooltip,
          'isHistoric': self.__ctx.currentOutfit.isHistorical(),
          'billVO': {'title': text_styles.highlightText(_ms(VEHICLE_CUSTOMIZATION.BUYPOPOVER_RESULT)),
-                    'priceLbl': text_styles.main('{} {}'.format(_ms(VEHICLE_CUSTOMIZATION.BUYPOPOVER_PRICE), toByeCount)),
+                    'priceLbl': text_styles.main('{} {}'.format(_ms(VEHICLE_CUSTOMIZATION.BUYPOPOVER_PRICE), toBuyCount)),
                     'fromStorageLbl': text_styles.main('{} {}'.format(_ms(VEHICLE_CUSTOMIZATION.BUYPOPOVER_FROMSTORAGE), fromStorageCount)),
                     'isEnoughStatuses': getMoneyVO(Money(True, True, True)),
                     'pricePanel': totalPriceVO[0]}})

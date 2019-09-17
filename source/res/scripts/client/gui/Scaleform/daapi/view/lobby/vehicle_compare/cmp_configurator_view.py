@@ -737,6 +737,10 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
             vehicle_adjusters.installEquipment(vehicle, equipmentIntCD, i)
 
         vehicle.descriptor.activeGunShotIndex = self.__vehicle.descriptor.activeGunShotIndex
+        cmp_helpers.applyCamouflage(vehicle, cmp_helpers.isCamouflageSet(self.__vehicle))
+        for battleBooster in self.__vehicle.equipment.battleBoosterConsumables.getInstalledItems():
+            vehicle_adjusters.installBattleBoosterOnVehicle(vehicle, battleBooster.intCD)
+
         return vehicle
 
     def _populate(self):

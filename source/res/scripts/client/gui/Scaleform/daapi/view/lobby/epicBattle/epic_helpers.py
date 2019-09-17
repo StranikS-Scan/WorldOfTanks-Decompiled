@@ -23,6 +23,7 @@ FRONTLINE_TOKEN_PRESTIGE_POINTS = 'prestige_point'
 FRONTLINE_HIDDEN_TAG = 'fr_hidden'
 FRONTLINE_VEH_BOUGHT_TOKEN_TEMPLATE = 'fr_reward_%s'
 FRONTLINE_PRESTIGE_POINTS_EXCHANGE_RATE = 'PrestigePointsExchange'
+FRONTLINE_PRESTIGE_POINTS_EXCHANGE_TOKEN = 'prestige_point:convert'
 _EPIC_GAME_PARAMS = {'artillery': {'cooldownTime': 'Cooldown',
                'delay': 'Deployment',
                'areaRadius': 'Dispersion',
@@ -283,15 +284,20 @@ def createEpicParam(curLvlEq, tooltipIdentifier):
     return formatter(curLvlEq, tooltipIdentifier) if formatter else None
 
 
-@dependency.replace_none_kwargs(eventsCache=IEventsCache)
-def getEpicGamePlayerPrestigePoints(eventsCache=None):
-    return eventsCache.questsProgress.getTokenCount(FRONTLINE_TOKEN_PRESTIGE_POINTS) if FRONTLINE_TOKEN_PRESTIGE_POINTS in eventsCache.questsProgress.getTokenNames() else 0
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def getEpicGamePlayerPrestigePoints(itemsCache=None):
+    return itemsCache.items.tokens.getTokens().get(FRONTLINE_TOKEN_PRESTIGE_POINTS, (0, 0))[1] if FRONTLINE_TOKEN_PRESTIGE_POINTS in itemsCache.items.tokens.getTokens() else 0
 
 
-@dependency.replace_none_kwargs(eventsCache=IEventsCache)
-def checkEpicRewardVehAlreadyBought(vehIntCD, eventsCache=None):
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def checkEpicRewardVehAlreadyBought(vehIntCD, itemsCache=None):
     tokenName = FRONTLINE_VEH_BOUGHT_TOKEN_TEMPLATE % vehIntCD
-    return tokenName in eventsCache.questsProgress.getTokenNames()
+    return tokenName in itemsCache.items.tokens.getTokens()
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def checkExchangeToken(itemsCache=None):
+    return FRONTLINE_PRESTIGE_POINTS_EXCHANGE_TOKEN in itemsCache.items.tokens.getTokens()
 
 
 @decorators.process('updating')

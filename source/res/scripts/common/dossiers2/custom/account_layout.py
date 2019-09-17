@@ -514,10 +514,10 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'Fest19Collection1',
  'Fest19Collection2',
  'Fest19Collection3',
+ 'twitchPrime4',
  'BR2019Title25',
  'BR2019Title15',
- 'BR2019Title5',
- 'twitchPrime4']
+ 'BR2019Title5']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -595,10 +595,10 @@ _singleAchievementsPopUps = ['titleSniper',
  'Fest19Collection1',
  'Fest19Collection2',
  'Fest19Collection3',
+ 'twitchPrime4',
  'BR2019Title25',
  'BR2019Title15',
- 'BR2019Title5',
- 'twitchPrime4']
+ 'BR2019Title5']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, {}, _singleAchievementsPopUps)
 FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',

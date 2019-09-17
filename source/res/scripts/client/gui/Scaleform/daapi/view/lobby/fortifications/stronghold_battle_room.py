@@ -39,6 +39,7 @@ from helpers import time_utils
 from messenger.ext import channel_num_gen
 from messenger.gui import events_dispatcher
 from messenger.proto.events import g_messengerEvents
+from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBrowserController
@@ -243,6 +244,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__onFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.prbEntity.updateStrongholdData()
         self.prbEntity.forceTimerEvent()
+        self.__validateNationGroup()
 
     def _dispose(self):
         self.__proxy = None
@@ -453,6 +455,14 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         if data['forceUpdateBuildings']:
             self.__forceUpdateBuildings()
         return
+
+    def __validateNationGroup(self):
+        selected = self._getVehicleSelectorVehicles()
+        if selected:
+            vehicle = self.itemsCache.items.getItemByCD(selected[0])
+            if not vehicle.activeInNationGroup:
+                itemCD = iterVehTypeCDsInNationGroup(vehicle.intCompactDescr).next()
+                self._selectVehicles([itemCD])
 
     def __forceUpdateBuildings(self):
         data = self.prbEntity.getStrongholdSettings()

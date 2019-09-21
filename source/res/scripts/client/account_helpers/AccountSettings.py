@@ -116,6 +116,7 @@ CREW_SKINS_HISTORICAL_VISIBLE = 'crew_skins_historical_visible'
 VEHICLES_WITH_BLUEPRINT_CONFIRM = 'showedBlueprintConfirm'
 IS_FIRST_ENTRY_BY_DIVISION_ID = 'isFirstEntryByDivisionId'
 RANKED_STYLED_VEHICLES_POOL = 'rankedStyledVehiclesPool'
+STYLE_PREVIEW_VEHICLES_POOL = 'stylePreviewVehiclesPool'
 RANKED_WEB_LEAGUE = 'rankedWebLeague'
 RANKED_WEB_LEAGUE_UPDATE = 'rankedWebLeagueUpdate'
 RANKED_AWARDS_BUBBLE_YEAR_REACHED = 'rankedAwardsBubbleYearReached'
@@ -558,6 +559,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 CREW_SKINS_HISTORICAL_VISIBLE: (True, True),
                 VEHICLES_WITH_BLUEPRINT_CONFIRM: {},
                 IS_FIRST_ENTRY_BY_DIVISION_ID: {},
+                STYLE_PREVIEW_VEHICLES_POOL: [],
                 RANKED_STYLED_VEHICLES_POOL: [],
                 RANKED_WEB_LEAGUE: None,
                 RANKED_WEB_LEAGUE_UPDATE: None,

@@ -1,0 +1,286 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
+# Embedded file name: scripts/client/AvatarInputHandler/AimingSystems/DualGunAimingSystem.py
+from functools import partial
+import BigWorld
+import math_utils
+from AvatarInputHandler import AimingSystems
+from AvatarInputHandler.AimingSystems import IAimingSystem
+from AvatarInputHandler.AimingSystems.SniperAimingSystem import SniperAimingSystem
+from Math import Vector3, Matrix, slerp
+from constants import DUAL_GUN
+from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
+
+class GunMatCalc(object):
+    __slots__ = ('__currentGun',)
+
+    @staticmethod
+    def gunOffset(vehicleDescr, currentGun):
+        if vehicleDescr.turret.multiGun is not None:
+            if 0 <= currentGun < len(vehicleDescr.turret.multiGun):
+                return vehicleDescr.turret.multiGun[currentGun].position
+        return vehicleDescr.turret.gunPosition
+
+    @staticmethod
+    def turretOffset(vehicleDescr):
+        return vehicleDescr.chassis.hullPosition + vehicleDescr.hull.turretPositions[0]
+
+    def __init__(self, gun):
+        self.__currentGun = gun
+
+    def __call__(self, yaw, pitch):
+        player = BigWorld.player()
+        if player.vehicle is not None:
+            vehicleTypeDescriptor = player.vehicle.typeDescriptor
+        else:
+            vehicleTypeDescriptor = player.getVehicleAttached().typeDescriptor
+        vehicleMat = player.inputHandler.steadyVehicleMatrixCalculator.outputMProv
+        turretMat = self.__turretJointMat(vehicleMat, yaw, vehicleTypeDescriptor)
+        gunMat = self.__gunJointMat(turretMat, pitch, vehicleTypeDescriptor)
+        return gunMat
+
+    def __turretJointMat(self, vehicleMat, turretYaw, vehicleDescr):
+        turretOffset = self.turretOffset(vehicleDescr)
+        turretMat = math_utils.createRTMatrix(Vector3(turretYaw, 0.0, 0.0), turretOffset)
+        turretMat.postMultiply(vehicleMat)
+        return turretMat
+
+    def __gunJointMat(self, turretMat, gunPitch, vehicleDescr):
+        gunOffset = self.gunOffset(vehicleDescr, self.__currentGun)
+        gunMat = math_utils.createRTMatrix(Vector3(0.0, gunPitch, 0.0), gunOffset)
+        gunMat.postMultiply(turretMat)
+        return gunMat
+
+
+class GunTransitionInterpolator(object):
+    __slots__ = ['__enabled',
+     '__initialState',
+     '__finalState',
+     '__totalTime',
+     '__elapsedTime',
+     '__prevTime']
+    _EASING_METHOD = math_utils.easeInOutQuad
+    enabled = property(lambda self: self.__enabled)
+    matrix = property(lambda self: self.__update())
+
+    def __init__(self):
+        self.__enabled = False
+        self.__initialState = None
+        self.__finalState = None
+        self.__totalTime = None
+        self.__elapsedTime = 0.0
+        self.__prevTime = 0.0
+        return
+
+    def enable(self, initialState, finalState, transitionTime):
+        self.__enabled = True
+        self.__totalTime = transitionTime
+        self.__prevTime = BigWorld.timeExact()
+        if self.__elapsedTime > 0.0:
+            self.__elapsedTime = self.__totalTime - self.__elapsedTime
+        self.__initialState = initialState
+        self.__finalState = finalState
+
+    def disable(self):
+        self.__enabled = False
+        self.__elapsedTime = 0.0
+        self.__initialState = None
+        self.__finalState = None
+        return
+
+    def __update(self):
+        currentTime = BigWorld.timeExact()
+        self.__elapsedTime += currentTime - self.__prevTime
+        self.__prevTime = currentTime
+        interpolationCoefficient = math_utils.easeInOutQuad(self.__elapsedTime, 1.0, self.__totalTime)
+        interpolationCoefficient = math_utils.clamp(0.0, 1.0, interpolationCoefficient)
+        iSource = self.__initialState.matrix
+        iTarget = self.__finalState.matrix
+        mat = slerp(iSource, iTarget, interpolationCoefficient)
+        mat.translation = math_utils.lerp(iSource.translation, iTarget.translation, interpolationCoefficient)
+        if self.__elapsedTime > self.__totalTime:
+            self.disable()
+        return mat
+
+
+class SingleGunAimingSystem(SniperAimingSystem):
+
+    def __init__(self, gunIndex):
+        super(SingleGunAimingSystem, self).__init__()
+        self.__gunIndex = gunIndex
+
+    def _getTurretYawGunPitch(self, targetPos, compensateGravity=False):
+        vehicleMatrix = Matrix(self._vehicleMProv)
+        turretOffset = GunMatCalc.turretOffset(self._vehicleTypeDescriptor)
+        gunOffset = GunMatCalc.gunOffset(self._vehicleTypeDescriptor, self.__gunIndex)
+        speed = self._vehicleTypeDescriptor.shot.speed
+        gravity = self._vehicleTypeDescriptor.shot.gravity if not compensateGravity else 0.0
+        turretYaw, gunPitch = BigWorld.wg_getShotAngles(turretOffset, gunOffset, vehicleMatrix, speed, gravity, 0.0, 0.0, targetPos, False)
+        rotation = math_utils.createRotationMatrix((turretYaw, gunPitch, 0.0))
+        rotation.postMultiply(vehicleMatrix)
+        invertSteady = Matrix(self._vehicleMProv)
+        invertSteady.invert()
+        rotation.postMultiply(invertSteady)
+        return (rotation.yaw, rotation.pitch)
+
+
+class DualGunAimingSystem(IAimingSystem):
+    __TRANSITION_TIME = 0.3
+    __TRANSITION_DELAY = 0.0
+    turretYaw = property(lambda self: self.__turretYaw())
+    gunPitch = property(lambda self: self.__gunPitch())
+
+    @staticmethod
+    def setTransitionTime(ms):
+        DualGunAimingSystem.__TRANSITION_TIME = ms
+
+    @staticmethod
+    def setTransitionDelay(ms):
+        DualGunAimingSystem.__TRANSITION_DELAY = ms
+
+    def __init__(self):
+        super(DualGunAimingSystem, self).__init__()
+        self._aim = (SingleGunAimingSystem(DUAL_GUN.ACTIVE_GUN.LEFT), SingleGunAimingSystem(DUAL_GUN.ACTIVE_GUN.RIGHT))
+        self.__activeAim = self._aim[DUAL_GUN.ACTIVE_GUN.LEFT]
+        self.__activeGun = DUAL_GUN.ACTIVE_GUN.LEFT
+        self.__interpolator = GunTransitionInterpolator()
+        self.__transitionCallbackID = None
+        self.__pendingGunIndex = None
+        return
+
+    def destroy(self):
+        super(DualGunAimingSystem, self).destroy()
+        self.__interpolator.disable()
+        if self.__transitionCallbackID is not None:
+            BigWorld.cancelCallback(self.__transitionCallbackID)
+        return
+
+    def enableHorizontalStabilizerRuntime(self, enable):
+        for aim in self._aim:
+            aim.enableHorizontalStabilizerRuntime(enable)
+
+    def forceFullStabilization(self, enable):
+        for aim in self._aim:
+            aim.forceFullStabilization(enable)
+
+    def enable(self, targetPos, playerGunMatFunction=AimingSystems.getPlayerGunMat):
+        player = BigWorld.player()
+        if player.isObserver():
+            vehicle = player.getVehicleAttached()
+        else:
+            vehicle = player.vehicle
+        if vehicle is None:
+            vehicle = player.getVehicleAttached()
+        self.__switchActiveAim(vehicle.activeGunIndex)
+        self.__activeAim.enable(targetPos, GunMatCalc(self.__activeGun))
+        return
+
+    def disable(self):
+        if self.__interpolator.enabled:
+            self.__interpolator.disable()
+            for aim in self._aim:
+                aim.disable()
+
+        else:
+            self.__activeAim.disable()
+        if self.__transitionCallbackID is not None:
+            BigWorld.cancelCallback(self.__transitionCallbackID)
+            self.__transitionCallbackID = None
+        return
+
+    def focusOnPos(self, preferredPos):
+        if self.__interpolator.enabled:
+            for aim in self._aim:
+                aim.focusOnPos(preferredPos)
+
+            self._matrix.set(self.__interpolator.matrix)
+        else:
+            self.__activeAim.focusOnPos(preferredPos)
+            self._matrix.set(self.__activeAim.matrix)
+
+    def onActiveGunChanged(self, newState, switchDelay):
+        if self.__pendingGunIndex != newState:
+            if self.__transitionCallbackID is not None:
+                BigWorld.cancelCallback(self.__transitionCallbackID)
+                self.__transitionCallbackID = None
+                targetPoint = self.getDesiredShotPoint()
+                self.__activeAim.disable()
+                self.__switchActiveAim(self.__pendingGunIndex)
+                self.__activeAim.enable(targetPoint, GunMatCalc(self.__activeGun))
+            self.__pendingGunIndex = newState
+            self.__transitionCallbackID = BigWorld.callback(switchDelay, partial(self.__onStartTransition, self.__activeGun, newState))
+        return
+
+    def onSiegeStateChanged(self, siegeState):
+        pass
+
+    def __onStartTransition(self, initialGunIndex, finalGunIndex):
+        targetPoint = self.getDesiredShotPoint()
+        self.__switchActiveAim(finalGunIndex)
+        self.enable(targetPoint)
+        self.__interpolator.enable(self._aim[initialGunIndex], self._aim[finalGunIndex], self.__TRANSITION_TIME)
+        self.__transitionCallbackID = BigWorld.callback(self.__TRANSITION_TIME, partial(self.__onEndTransition, initialGunIndex))
+
+    def __onEndTransition(self, initialGunIndex):
+        self.__pendingGunIndex = None
+        self.__transitionCallbackID = None
+        self._aim[initialGunIndex].disable()
+        self.__interpolator.disable()
+        return
+
+    def getDesiredShotPoint(self):
+        return self.__activeAim.getDesiredShotPoint()
+
+    def resetIdealDirection(self):
+        self._aim[self.__activeGun].resetIdealDirection()
+
+    def handleMovement(self, dx, dy):
+        if self.__interpolator.enabled:
+            for aim in self._aim:
+                aim.handleMovement(dx, dy)
+
+            self._matrix.set(self.__interpolator.matrix)
+        else:
+            self.__activeAim.handleMovement(dx, dy)
+            self._matrix.set(self.__activeAim.matrix)
+
+    def update(self, dt):
+        if self.__interpolator.enabled:
+            for aim in self._aim:
+                aim.update(dt)
+
+            self._matrix.set(self.__interpolator.matrix)
+        else:
+            self.__activeAim.update(dt)
+            self._matrix.set(self._aim[self.__activeGun].matrix)
+
+    def getShotPoint(self):
+        return self.getDesiredShotPoint()
+
+    def getZoom(self):
+        return self.__activeAim.getZoom()
+
+    def overrideZoom(self, zoom):
+        for aim in self._aim:
+            aim.overrideZoom(zoom)
+
+        return zoom
+
+    def __turretYaw(self):
+        return self.__activeAim.turretYaw
+
+    def __gunPitch(self):
+        return self.__activeAim.gunPitch
+
+    def __switchActiveAim(self, activeGun):
+        gunIndex = activeGun if activeGun is not None else DUAL_GUN.ACTIVE_GUN.LEFT
+        if self.__activeGun != gunIndex:
+            self.__activeGun = gunIndex
+            self.__activeAim = self._aim[gunIndex]
+        return
+
+    def __onVehicleFeedbackReceived(self, eventID, vehicleID, value):
+        if eventID == FEEDBACK_EVENT_ID.VEHICLE_ACTIVE_GUN_CHANGED:
+            activeGun, switchDelay = value
+            if activeGun != self.__activeGun and self.__transitionCallbackID is None:
+                self.onActiveGunChanged(activeGun, switchDelay)
+        return

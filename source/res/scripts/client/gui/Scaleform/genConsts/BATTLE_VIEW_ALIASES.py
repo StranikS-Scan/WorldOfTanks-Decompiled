@@ -21,6 +21,7 @@ class BATTLE_VIEW_ALIASES(object):
     CONSUMABLES_PANEL = 'consumablesPanel'
     DAMAGE_INDICATOR = 'damageIndicator'
     DESTROY_TIMERS_PANEL = 'destroyTimersPanel'
+    DUAL_GUN_PANEL = 'dualGunPanel'
     REPORT_BUG = 'reportBug'
     FULL_STATS = 'fullStats'
     RIBBONS_PANEL = 'ribbonsPanel'

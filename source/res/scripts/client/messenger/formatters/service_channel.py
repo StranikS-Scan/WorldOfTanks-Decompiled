@@ -30,7 +30,7 @@ from gui.ranked_battles.ranked_helpers.league_provider import UNDEFINED_LEAGUE_I
 from gui.ranked_battles.constants import YEAR_POINTS_TOKEN
 from gui.ranked_battles.ranked_models import PostBattleRankInfo, RankChangeStates
 from gui.server_events.awards_formatters import CompletionTokensBonusFormatter
-from gui.server_events.bonuses import VehiclesBonus, DEFAULT_CREW_LVL
+from gui.server_events.bonuses import VehiclesBonus, DEFAULT_CREW_LVL, MetaBonus
 from gui.server_events.recruit_helper import getSourceIdFromQuest
 from gui.server_events.finders import PERSONAL_MISSION_TOKEN
 from gui.shared import formatters as shared_fmts
@@ -1332,7 +1332,7 @@ class AdminMessageFormatter(ServiceChannelFormatter):
             text = ''
             if dataType in types.StringTypes:
                 text = data
-            elif isinstance(dataType, types.DictType):
+            elif dataType is types.DictType:
                 text = getLocalizedData({'value': data}, 'value')
             if not text:
                 _logger.error('Text of message not found: %s', message)
@@ -1957,6 +1957,9 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
             data = message.data or {}
             completedQuestIDs = data.get('completedQuestIDs', set())
             completedQuestIDs.update(data.get('rewardsGottenQuestIDs', set()))
+            for qID in completedQuestIDs:
+                self.__processMetaActions(qID)
+
             if getSourceIdFromQuest(first(completedQuestIDs, '')):
                 result = yield RecruitQuestsFormatter().format(message)
                 callback(result)
@@ -2103,6 +2106,21 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
     @classmethod
     def __makeQuestsAchieve(cls, key, **kwargs):
         return g_settings.htmlTemplates.format(key, kwargs)
+
+    @classmethod
+    def __processMetaActions(cls, questID):
+        quest = cls._eventsCache.getAllQuests().get(questID)
+        if quest is None:
+            _logger.debug('Could not find quest with ID: %s', questID)
+            return
+        else:
+            for bonus in quest.getBonuses():
+                if not isinstance(bonus, MetaBonus):
+                    continue
+                for action, params in bonus.getActions():
+                    bonus.handleAction(action, params)
+
+            return
 
     def __processPersonalMissionsSpecial(self, questIDs, message, callback):
         result = []

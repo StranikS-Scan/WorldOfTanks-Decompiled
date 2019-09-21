@@ -107,7 +107,7 @@ class ServiceChannelManager(ChatActionsListener):
                 return
 
             for mData in messagesListData:
-                if mData.data:
+                if mData is not None and mData.data:
                     formatted, settings = mData
                     clientID = self.__idGenerator.next()
                     self.__messages.append((clientID, (True, formatted, settings)))

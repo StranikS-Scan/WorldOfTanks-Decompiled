@@ -1,8 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/bonuses.py
 import copy
+import logging
 from collections import namedtuple
 from functools import partial
+import BigWorld
+from adisp import process
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from constants import EVENT_TYPE as _ET, DOSSIER_TYPE, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS
@@ -10,6 +13,7 @@ from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from dossiers2.custom.records import RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
 from gui import makeHtmlString
+from gui.game_control.links import URLMacros
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
@@ -25,6 +29,7 @@ from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.formatters import parseComplexToken
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
+from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_INDICES
 from gui.shared.gui_items.Tankman import getRoleUserName, calculateRoleLevel, Tankman
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
@@ -56,6 +61,7 @@ _EPIC_AWARD_STATIC_VO_ENTRIES = {'compensationTooltip': QUESTS.BONUSES_COMPENSAT
  'highlightType': '',
  'overlayType': ''}
 _ZERO_COMPENSATION_MONEY = Money(credits=0, gold=0)
+_logger = logging.getLogger(__name__)
 
 def _getAchievement(block, record, value):
     if block == ACHIEVEMENT_BLOCK.RARE:
@@ -312,6 +318,38 @@ class MetaBonus(SimpleBonus):
 
     def formatValue(self):
         return getLocalizedData({'value': self._value}, 'value')
+
+    def getActions(self):
+        return self._value.get('actions', {}).iteritems()
+
+    @classmethod
+    def handleAction(cls, action, params):
+        if action == 'browse':
+            cls.__handleBrowseAction(params)
+        else:
+            NotImplementedError('Action "%s" handler is not implemented', action)
+
+    @staticmethod
+    @process
+    def __handleBrowseAction(params):
+        from gui.shared.event_dispatcher import showBrowserOverlayView
+        url = params.get('url')
+        if url is None:
+            _logger.warning('Browse url is empty')
+            return
+        else:
+            url = yield URLMacros().parse(url)
+            target = params.get('target')
+            if target is None:
+                _logger.warning('Browse target is empty')
+                return
+            if target == 'internal':
+                showBrowserOverlayView(url)
+            elif target == 'external':
+                BigWorld.wg_openWebBrowser(url)
+            else:
+                _logger.warning('Invalid browse target: %s', target)
+            return
 
 
 class TokensBonus(SimpleBonus):
@@ -918,10 +956,14 @@ class DossierBonus(SimpleBonus):
                 blockID = RECORD_DB_IDS[block, record]
             else:
                 blockID = record
+            icons = self.__getEpicBonusImages(block, record)
+            if not icons['small'] and not icons['big']:
+                icons = self.__getAchievementImages(record)
             result.append({'id': blockID,
+             'name': record,
              'type': block,
              'value': 1,
-             'icon': self.__getEpicBonusImages(block, record)})
+             'icon': icons})
 
         return result
 
@@ -931,6 +973,10 @@ class DossierBonus(SimpleBonus):
              AWARDS_SIZES.BIG: getBadgeIconPath(BADGES_ICONS.X80, record)}
         return {AWARDS_SIZES.SMALL: RES_ICONS.getEpicAchievementIcon(ICONS_SIZES.X48, record),
          AWARDS_SIZES.BIG: RES_ICONS.getEpicAchievementIcon(ICONS_SIZES.X80, record)} if block == 'singleAchievements' else {}
+
+    def __getAchievementImages(self, record):
+        return {AWARDS_SIZES.SMALL: backport.image(R.images.gui.maps.icons.achievement.num(ICONS_SIZES.X48).dyn(record)()),
+         AWARDS_SIZES.BIG: backport.image(R.images.gui.maps.icons.achievement.num(ICONS_SIZES.X80).dyn(record)())}
 
     def __getCommonAwardsVOs(self, block, record, iconSize='small', withCounts=False):
         badgesIconSizes = {'big': BADGES_ICONS.X80,
@@ -1109,7 +1155,10 @@ class CustomizationsBonus(SimpleBonus):
         result = []
         for itemData in self.getCustomizations():
             itemType = itemData.get('custType')
-            itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemType)
+            if itemType == 'projection_decal':
+                itemTypeID = GUI_ITEM_TYPE.PROJECTION_DECAL
+            else:
+                itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemType)
             item = self.c11n.getItemByID(itemTypeID, itemData.get('id'))
             smallIcon = item.getBonusIcon(AWARDS_SIZES.SMALL)
             bigIcon = item.getBonusIcon(AWARDS_SIZES.BIG)
@@ -1481,10 +1530,12 @@ class CrewSkinsBonus(SimpleBonus):
         for item, count, _, _ in self.getItems():
             if item is not None:
                 result.append({'id': item.intCD,
+                 'name': localizedFullName(item),
+                 'description': item.getDescription(),
                  'type': 'item/{}'.format(item.itemTypeName),
                  'value': count,
-                 'icon': {AWARDS_SIZES.SMALL: item.getBonusIcon(AWARDS_SIZES.SMALL),
-                          AWARDS_SIZES.BIG: item.getBonusIcon(AWARDS_SIZES.BIG)}})
+                 'icon': {AWARDS_SIZES.SMALL: backport.image(R.images.gui.maps.icons.tankmen.icons.small.crewSkins.dyn(item.getIconID())()),
+                          AWARDS_SIZES.BIG: backport.image(R.images.gui.maps.icons.tankmen.icons.big.crewSkins.dyn(item.getIconID())())}})
 
         return result
 

@@ -33,13 +33,14 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.utils.MethodsRules import MethodsRules
 from gui.shared.utils.functions import getViewName, makeTooltip
 from gui.shared.view_helpers import UsersInfoHelper
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency, i18n
 from helpers import int2roman
 from helpers import time_utils
 from messenger.ext import channel_num_gen
 from messenger.gui import events_dispatcher
 from messenger.proto.events import g_messengerEvents
-from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
+from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup, hasNationGroup
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBrowserController
@@ -244,6 +245,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__onFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.prbEntity.updateStrongholdData()
         self.prbEntity.forceTimerEvent()
+        self.__postMinimiseFilterUpdate()
         self.__validateNationGroup()
 
     def _dispose(self):
@@ -455,6 +457,30 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         if data['forceUpdateBuildings']:
             self.__forceUpdateBuildings()
         return
+
+    def _onCacheResync(self, reason, diff):
+        super(StrongholdBattleRoom, self)._onCacheResync(reason, diff)
+        if GUI_ITEM_TYPE.VEHICLE in diff:
+            mnVehs = {vehCD:self.itemsCache.items.getItemByCD(vehCD) for vehCD in diff[GUI_ITEM_TYPE.VEHICLE] if hasNationGroup(vehCD)}
+            if mnVehs:
+                for slotIndex, vehCDs in self.__vehiclesInSlotFilters.iteritems():
+                    for cd in vehCDs:
+                        if cd in mnVehs and not mnVehs[cd].activeInNationGroup:
+                            vehCDs[vehCDs.index(cd)] = iterVehTypeCDsInNationGroup(cd).next()
+
+                    self.sendRequest(ChangeVehiclesInSlotFilterCtx(slotIndex, vehCDs or [], waitingID='prebattle/change_settings'))
+
+    def __postMinimiseFilterUpdate(self):
+        filterData = self.prbEntity.getSlotFilters()
+        for slotIndex, data in filterData.iteritems():
+            vehCDs = data['vehicle_cds'][:]
+            for cd in vehCDs:
+                if hasNationGroup(cd):
+                    vehItem = self.itemsCache.items.getItemByCD(cd)
+                    if not vehItem.activeInNationGroup:
+                        vehCDs[vehCDs.index(cd)] = iterVehTypeCDsInNationGroup(cd).next()
+
+            self.__setVehicles(slotIndex, vehCDs)
 
     def __validateNationGroup(self):
         selected = self._getVehicleSelectorVehicles()

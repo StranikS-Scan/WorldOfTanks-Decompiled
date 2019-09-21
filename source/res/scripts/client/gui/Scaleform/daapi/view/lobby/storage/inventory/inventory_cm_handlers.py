@@ -43,7 +43,10 @@ class ModulesShellsNoSaleCMHandler(ContextMenu):
         shared_events.showStorageModuleInfo(self._id)
 
     def _getOptionCustomData(self, label):
-        return {'textColor': CM_BUY_COLOR} if label == CMLabel.BUY_MORE else None
+        optionData = super(ModulesShellsNoSaleCMHandler, self)._getOptionCustomData(label)
+        if label == CMLabel.BUY_MORE:
+            optionData.textColor = CM_BUY_COLOR
+        return optionData
 
 
 class EquipmentCMHandler(ContextMenu):

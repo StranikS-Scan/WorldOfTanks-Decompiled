@@ -59,6 +59,9 @@ class GameEvent(HasCtxEvent):
     SHOW_BTN_HINT = 'game/showBtnHint'
     HIDE_BTN_HINT = 'game/hideBtnHint'
     DESTROY_TIMERS_PANEL = 'game/destroyTimersPanel'
+    CHARGE_RELEASED = 'game/chargeReleased'
+    PRE_CHARGE = 'game/preCharge'
+    CONTROL_MODE_CHANGE = 'game/controlModeChange'
 
 
 class GUICommonEvent(SharedEvent):

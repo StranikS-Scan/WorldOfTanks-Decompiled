@@ -12,7 +12,9 @@ def showDialog(meta, callback):
 
         def callback(result):
             Waiting.resume()
-            cb(result)
+            if cb is not None:
+                cb(result)
+            return
 
         return callback
 

@@ -356,6 +356,10 @@ class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
         if self.isRewardObtained() and not AccountSettings.getUIFlag(self.__getRewardShownMarkKey(MARATHON_REWARD_WAS_SHOWN_PREFIX)):
             showBrowserOverlayView(self.__baseUrl + self.marathonCompleteUrlAdd, alias=VIEW_ALIAS.BROWSER_OVERLAY, callbackOnLoad=partial(self.__setScreenWasShown, MARATHON_REWARD_WAS_SHOWN_PREFIX))
 
+    def createMarathonWebHandlers(self):
+        from gui.marathon.web_handlers import createDefaultMarathonWebHandlers
+        return createDefaultMarathonWebHandlers()
+
     def __getRewardShownMarkKey(self, key):
         return '_'.join([key, self.tokenPrefix])
 

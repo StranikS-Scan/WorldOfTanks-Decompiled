@@ -81,7 +81,8 @@ _GAME_UI = {BATTLE_VIEW_ALIASES.VEHICLE_ERROR_MESSAGES,
  BATTLE_VIEW_ALIASES.BATTLE_DAMAGE_LOG_PANEL,
  BATTLE_VIEW_ALIASES.SUPER_PLATOON_PANEL,
  BATTLE_VIEW_ALIASES.EPIC_INGAME_RANK,
- BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL}
+ BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL,
+ BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL}
 _SPECTATOR_UI = {BATTLE_VIEW_ALIASES.EPIC_SPECTATOR_VIEW,
  BATTLE_VIEW_ALIASES.DEBUG_PANEL,
  BATTLE_VIEW_ALIASES.PLAYER_MESSAGES,
@@ -123,14 +124,14 @@ _STATE_TO_UI = {PageStates.GAME: _GAME_UI,
  PageStates.SPECTATOR_FREE: _SPECTATOR_UI.union({BATTLE_VIEW_ALIASES.SUPER_PLATOON_PANEL}),
  PageStates.SPECTATOR_FOLLOW: _SPECTATOR_UI.union({BATTLE_VIEW_ALIASES.DAMAGE_PANEL,
                                BATTLE_VIEW_ALIASES.RECOVERY_PANEL,
-                               BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR,
                                BATTLE_VIEW_ALIASES.DESTROY_TIMERS_PANEL,
                                BATTLE_VIEW_ALIASES.EPIC_MISSIONS_PANEL,
                                BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL}),
  PageStates.GAME_OVER: _GAME_UI.difference({BATTLE_VIEW_ALIASES.EPIC_REINFORCEMENT_PANEL,
                         BATTLE_VIEW_ALIASES.EPIC_MISSIONS_PANEL,
                         BATTLE_VIEW_ALIASES.BATTLE_TIMER,
-                        BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR})}
+                        BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR,
+                        BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL})}
 _EPIC_EXTERNAL_COMPONENTS = (crosshair.CrosshairPanelContainer, markers2d.EpicMarkersManager)
 
 class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
@@ -174,6 +175,13 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
                 elif BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR in hiddenUI:
                     visibleUI.add(BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR)
                     hiddenUI.remove(BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR)
+                if not vehicle.typeDescriptor.isDualgunVehicle:
+                    if BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL in visibleUI:
+                        visibleUI.remove(BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL)
+                        hiddenUI.add(BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL)
+                elif BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL in hiddenUI:
+                    visibleUI.add(BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL)
+                    hiddenUI.remove(BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL)
             ctrl = self.sessionProvider.dynamic.maps
             if ctrl and BATTLE_VIEW_ALIASES.EPIC_OVERVIEW_MAP_SCREEN in visibleUI:
                 ctrl.setOverviewMapScreenVisibility(True)

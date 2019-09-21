@@ -9,22 +9,24 @@ import BigWorld
 import CommandMapping
 import DynamicCameras.ArcadeCamera
 import DynamicCameras.ArtyCamera
+import DynamicCameras.DualGunCamera
 import DynamicCameras.SniperCamera
 import DynamicCameras.StrategicCamera
 import MapCaseMode
 import Math
 import ResMgr
 import RespawnDeathMode
-import epic_battle_death_mode
+import aih_constants
 import cameras
 import constants
 import control_modes
-import aih_constants
+import epic_battle_death_mode
 from AvatarInputHandler import AimingSystems
 from AvatarInputHandler import aih_global_binding, gun_marker_ctrl
 from AvatarInputHandler.AimingSystems.SniperAimingSystem import SniperAimingSystem
 from AvatarInputHandler.AimingSystems.steady_vehicle_matrix import SteadyVehicleMatrixCalculator
 from AvatarInputHandler.commands.bootcamp_mode_control import BootcampModeControl
+from AvatarInputHandler.commands.dualgun_control import DualGunController
 from AvatarInputHandler.commands.siege_mode_control import SiegeModeControl
 from AvatarInputHandler.remote_camera_sender import RemoteCameraSender
 from AvatarInputHandler.siege_mode_player_notifications import SiegeModeSoundNotifications, SiegeModeCameraShaker
@@ -67,13 +69,15 @@ _CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: ('ArcadeControlMode', 'arcadeMode', _CTRL_
  _CTRL_MODE.VIDEO: ('VideoCameraControlMode', 'videoMode', _CTRL_TYPE.OPTIONAL),
  _CTRL_MODE.MAP_CASE: ('MapCaseControlMode', 'strategicMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.RESPAWN_DEATH: ('RespawnDeathMode', 'postMortemMode', _CTRL_TYPE.USUAL),
- _CTRL_MODE.DEATH_FREE_CAM: ('DeathFreeCamMode', 'epicVideoMode', _CTRL_TYPE.USUAL)}
+ _CTRL_MODE.DEATH_FREE_CAM: ('DeathFreeCamMode', 'epicVideoMode', _CTRL_TYPE.USUAL),
+ _CTRL_MODE.DUAL_GUN: ('DualGunControlMode', 'dualGunMode', _CTRL_TYPE.USUAL)}
 _OVERWRITE_CTRLS_DESC_MAP = {constants.ARENA_BONUS_TYPE.EPIC_BATTLE: {_CTRL_MODE.POSTMORTEM: ('DeathTankFollowMode', 'postMortemMode', _CTRL_TYPE.USUAL)},
  constants.ARENA_BONUS_TYPE.EPIC_BATTLE_TRAINING: {_CTRL_MODE.POSTMORTEM: ('DeathTankFollowMode', 'postMortemMode', _CTRL_TYPE.USUAL)}}
 _DYNAMIC_CAMERAS = (DynamicCameras.ArcadeCamera.ArcadeCamera,
  DynamicCameras.SniperCamera.SniperCamera,
  DynamicCameras.StrategicCamera.StrategicCamera,
- DynamicCameras.ArtyCamera.ArtyCamera)
+ DynamicCameras.ArtyCamera.ArtyCamera,
+ DynamicCameras.DualGunCamera.DualGunCamera)
 
 class DynamicCameraSettings(object):
     settings = property(lambda self: self.__dynamic)
@@ -132,6 +136,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     isSPG = property(lambda self: self.__isSPG)
     isATSPG = property(lambda self: self.__isATSPG)
     isWheeledTech = property(lambda self: self.__isWheeledTech)
+    isDualGun = property(lambda self: self.__isDualGun)
     isFlashBangAllowed = property(lambda self: self.__ctrls['video'] != self.__curCtrl)
     isDetached = property(lambda self: self.__isDetached)
     isGuiVisible = property(lambda self: self.__isGUIVisible)
@@ -168,6 +173,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         return self.__ctrlModeName
 
     siegeModeControl = ComponentDescriptor()
+    dualGunControl = ComponentDescriptor()
     siegeModeSoundNotifications = ComponentDescriptor()
     steadyVehicleMatrixCalculator = ComponentDescriptor()
 
@@ -192,6 +198,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         self.__isSPG = False
         self.__isATSPG = False
         self.__isWheeledTech = False
+        self.__isDualGun = False
         self.__setupCtrls(sec)
         self.__curCtrl = self.__ctrls[_CTRLS_FIRST]
         self.__ctrlModeName = _CTRLS_FIRST
@@ -206,7 +213,8 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
 
     def __constructComponents(self):
         player = BigWorld.player()
-        if player.vehicleTypeDescriptor.hasSiegeMode:
+        typeDescr = player.vehicleTypeDescriptor
+        if typeDescr.hasSiegeMode:
             if not self.siegeModeControl:
                 self.siegeModeControl = SiegeModeControl()
             self.__commands.append(self.siegeModeControl)
@@ -216,6 +224,8 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                 self.siegeModeControl.onSiegeStateChanged += self.siegeModeSoundNotifications.onSiegeStateChanged
             self.siegeModeControl.onRequestFail += self.__onRequestFail
             self.siegeModeControl.onSiegeStateChanged += SiegeModeCameraShaker.shake
+        if typeDescr.isDualgunVehicle and not self.dualGunControl:
+            self.dualGunControl = DualGunController(typeDescr)
         if self.bootcampCtrl.isInBootcamp() and constants.HAS_DEV_RESOURCES:
             self.__commands.append(BootcampModeControl())
 
@@ -358,8 +368,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         self.onControlModeChanged('arcade')
         arcadeMode = self.__ctrls['arcade']
         arcadeMode.camera.setToVehicleDirection()
-        self.__identifySPG()
-        self.__identifyWheeledTech()
+        self.__identifyVehicleType()
         self.__constructComponents()
 
     def setKillerVehicleID(self, killerVehicleID):
@@ -371,8 +380,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     def start(self):
         g_guiResetters.add(self.__onRecreateDevice)
         self.steadyVehicleMatrixCalculator = SteadyVehicleMatrixCalculator()
-        self.__identifySPG()
-        self.__identifyWheeledTech()
+        self.__identifyVehicleType()
         self.__constructComponents()
         for control in self.__ctrls.itervalues():
             control.create()
@@ -439,8 +447,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     def __onVehicleChanged(self, isStatic):
         self.steadyVehicleMatrixCalculator.relinkSources()
         self.__commands = []
-        self.__identifySPG()
-        self.__identifyWheeledTech()
+        self.__identifyVehicleType()
         self.__constructComponents()
         if self.__waitObserverCallback is not None and self.__observerVehicle is not None:
             player = BigWorld.player()
@@ -466,6 +473,8 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             isObserverMode = 'observer' in player.vehicleTypeDescriptor.type.tags if player is not None else True
             if self.__waitObserverCallback is not None:
                 self.__waitObserverCallback = None
+            if not isObserverMode and self.__isDualGun:
+                gui_event_dispatcher.controlModeChange(eMode)
             if isObserverMode and eMode == _CTRL_MODE.POSTMORTEM:
                 if self.__observerVehicle is not None and not self.__observerIsSwitching:
                     self.__waitObserverCallback = partial(self.onControlModeChanged, eMode, **args)
@@ -545,7 +554,8 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                 eMode = _CTRL_MODES[BigWorld.player().observerFPVControlMode]
             targetPos = self.getDesiredShotPoint() or Math.Vector3(0, 0, 0)
             LOG_DEBUG('onVehicleControlModeChanged: ', eMode, targetPos)
-            self.onControlModeChanged(eMode, preferredPos=targetPos, aimingMode=0, saveZoom=False, saveDist=True, equipmentID=None, curVehicleID=BigWorld.player().getVehicleAttached())
+            vehicle = BigWorld.player().getVehicleAttached()
+            self.onControlModeChanged(eMode, preferredPos=targetPos, aimingMode=0, saveZoom=False, saveDist=True, equipmentID=None, curVehicleID=vehicle.id if vehicle is not None else BigWorld.player().playerVehicleID)
             return
 
     def getTargeting(self):
@@ -562,6 +572,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         self.__curCtrl.onMinimapClicked(worldPos)
 
     def onVehicleShaken(self, vehicle, impulsePosition, impulseDir, caliber, shakeReason):
+        LOG_DEBUG('AIH::OnVehicleShaken {}, {}'.format(caliber, shakeReason))
         if shakeReason == _ShakeReason.OWN_SHOT_DELAYED:
             shakeFuncBound = functools.partial(self.onVehicleShaken, vehicle, impulsePosition, impulseDir, caliber, _ShakeReason.OWN_SHOT)
             delayTime = self.__dynamicCameraSettings.settings['ownShotImpulseDelay']
@@ -692,7 +703,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             impulseValue *= vehicleSensitivity
         return (impulseDir, impulseValue)
 
-    def __identifySPG(self):
+    def __identifyVehicleType(self):
         veh = BigWorld.entity(BigWorld.player().playerVehicleID)
         if veh is None:
             return
@@ -700,14 +711,8 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             vehTypeDesc = veh.typeDescriptor.type
             self.__isSPG = 'SPG' in vehTypeDesc.tags
             self.__isATSPG = 'AT-SPG' in vehTypeDesc.tags
-            return
-
-    def __identifyWheeledTech(self):
-        veh = BigWorld.entity(BigWorld.player().playerVehicleID)
-        if veh is None:
-            return
-        else:
-            self.__isWheeledTech = veh.isWheeledTech
+            self.__isDualGun = 'dualgun' in vehTypeDesc.tags
+            self.__isWheeledTech = 'wheeledVehicle' in vehTypeDesc.tags
             return
 
     def reloadDynamicSettings(self):

@@ -52,6 +52,7 @@ from constants import DROWN_WARNING_LEVEL
 from constants import TARGET_LOST_FLAGS
 from constants import VEHICLE_MISC_STATUS, VEHICLE_HIT_FLAGS
 from constants import VEHICLE_SIEGE_STATE
+from constants import DUAL_GUN, DUALGUN_CHARGER_STATUS
 from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG_DEV, LOG_CODEPOINT_WARNING, LOG_NOTE
 from gui import GUI_CTRL_MODE_FLAG, IngameSoundNotifications, SystemMessages
 from gui.Scaleform.locale.MESSENGER import MESSENGER
@@ -74,6 +75,7 @@ from messenger import MessengerEntry, g_settings
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from physics_shared import computeBarrelLocalPoint
+from shared_utils.avatar_helpers import DualGun
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.app_loader import IAppLoader
@@ -167,12 +169,14 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     consistentMatrices = property(lambda self: self.__consistentMatrices)
     isVehicleOverturned = property(lambda self: self.__isVehicleOverturned)
     isOwnBarrelUnderWater = property(lambda self: self.__isOwnBarrelUnderWater())
+    inCharge = property(lambda self: self.__chargeWaitingTimerID is not None)
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
     lobbyContext = dependency.descriptor(ILobbyContext)
     connectionMgr = dependency.descriptor(IConnectionManager)
     statsCollector = dependency.descriptor(IStatisticsCollector)
     appLoader = dependency.descriptor(IAppLoader)
+    canMakeDualShot = property(lambda self: self.__canMakeDualShot)
 
     def __init__(self):
         LOG_DEBUG('client Avatar.init')
@@ -204,6 +208,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__requestID = AccountCommands.REQUEST_ID_UNRESERVED_MIN
         self.__prevArenaPeriod = -1
         self.__tryShootCallbackId = None
+        self.__tryChargeCallbackID = None
         self.__fwdSpeedometerLimit = None
         self.__bckwdSpeedometerLimit = None
         self.isTeleport = False
@@ -216,6 +221,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.telemetry = None
         self.__initProgress = 0
         self.__shotWaitingTimerID = None
+        self.__chargeWaitingTimerID = None
         self.__isWaitingForShot = False
         self.__projectileMover = None
         self.positionControl = None
@@ -234,6 +240,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         if BattleReplay.g_replayCtrl.isPlaying:
             BattleReplay.g_replayCtrl.setDataCallback(CallbackDataNames.GUN_DAMAGE_SOUND, self.__gunDamagedSound)
         self.__aimingBooster = None
+        self.__canMakeDualShot = False
         return
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
@@ -250,6 +257,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         BigWorld.camera(BigWorld.CursorCamera())
         chatManager.switchPlayerProxy(self)
         g_playerEvents.isPlayerEntityChanging = False
+        self.playerVehicleID = 0
         self.__isSpaceInitialized = False
         self.__isOnArena = False
         uniprof.enterToRegion('avatar.arena.loading')
@@ -411,6 +419,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         if self.__tryShootCallbackId:
             BigWorld.cancelCallback(self.__tryShootCallbackId)
             self.__tryShootCallbackId = None
+        if self.__tryChargeCallbackID is not None:
+            BigWorld.cancelCallback(self.__tryChargeCallbackID)
+        self.__cancelWaitingForCharge()
         if self.__shotWaitingTimerID is not None:
             BigWorld.cancelCallback(self.__shotWaitingTimerID)
             self.__shotWaitingTimerID = None
@@ -492,6 +503,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def onLeaveWorld(self):
         LOG_DEBUG('[INIT_STEPS] Avatar.onLeaveWorld')
         self.__consistentMatrices.notifyLeaveWorld(self)
+        self.__cancelWaitingForCharge()
 
     def onVehicleChanged(self):
         LOG_DEBUG('Avatar vehicle has changed to %s' % self.vehicle)
@@ -501,6 +513,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             ctrl = self.guiSessionProvider.shared.vehicleState
             if self.vehicle.stunInfo > 0.0 and (self.isObserver() or ctrl.isInPostmortem):
                 self.vehicle.updateStunInfo()
+            if self.vehicle.typeDescriptor.isDualgunVehicle:
+                self.__dualGunHelper = DualGun.DualGunHelper()
+            else:
+                self.__dualGunHelper = None
             if self.vehicle.typeDescriptor.hasSiegeMode:
                 siegeState = self.vehicle.siegeState
                 siegeModeParams = self.vehicle.typeDescriptor.type.siegeModeParams
@@ -1055,6 +1071,18 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def updateVehicleClipReloadTime(self, vehicleID, timeLeft, baseTime, stunned):
         self.guiSessionProvider.shared.ammo.setGunAutoReloadTime(timeLeft, baseTime, stunned)
 
+    def updateDualGunState(self, vehicleID, activeGun, gunStates, cooldownTimes):
+        vehicle = BigWorld.entity(vehicleID)
+        if vehicle is not None:
+            if vehicle.typeDescriptor is not None and vehicle.typeDescriptor.isDualgunVehicle and vehicle.isStarted:
+                vehicle.onActiveGunChanged(activeGun, cooldownTimes[DUAL_GUN.COOLDOWNS.SWITCH])
+                self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.DUAL_GUN_STATE_UPDATED, (activeGun, cooldownTimes, gunStates))
+        if self.__dualGunHelper is not None:
+            self.__dualGunHelper.updateGunReloadTime(self, vehicleID, activeGun, gunStates, cooldownTimes, self.guiSessionProvider.shared.ammo)
+        self.__canMakeDualShot = all((state == DUAL_GUN.GUN_STATE.READY for state in gunStates))
+        LOG_DEBUG_DEV('updateDualGunState', vehicleID, activeGun, gunStates, cooldownTimes)
+        return
+
     def updateVehicleAmmo(self, vehicleID, compactDescr, quantity, quantityInClip, timeRemaining, totalTime):
         if not compactDescr:
             itemTypeIdx = ITEM_TYPE_INDICES['equipment']
@@ -1132,6 +1160,15 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     vehicle.appearance.onEngineDamageRisk(intArg > 0)
             elif code == STATUS.BURNOUT_UNAVAILABLE_DUE_TO_BROKEN_ENGINE:
                 self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.BURNOUT_UNAVAILABLE_DUE_TO_BROKEN_ENGINE, intArg)
+            elif code == STATUS.DUALGUN_CHARGER_STATE:
+                LOG_DEBUG_DEV('Charger updated ( {}, {} )'.format(intArg, floatArgs))
+                self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.DUAL_GUN_CHARGER, (intArg, floatArgs))
+                status = intArg
+                if status == DUALGUN_CHARGER_STATUS.PREPARING:
+                    _, timeLeft = floatArgs
+                    self.__startWaitingForCharge(timeLeft)
+                elif status in (DUALGUN_CHARGER_STATUS.CANCELED, DUALGUN_CHARGER_STATUS.UNAVAILABLE):
+                    self.__cancelWaitingForCharge()
             return
 
     def updateVehicleSetting(self, vehicleID, code, value):
@@ -1367,7 +1404,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         LOG_DEBUG('syncVehicleAttrs', attrs)
         self.guiSessionProvider.shared.feedback.setVehicleAttrs(self.playerVehicleID, attrs)
 
-    def showTracer(self, shooterID, shotID, isRicochet, effectsIndex, refStartPoint, velocity, gravity, maxShotDist):
+    def showTracer(self, shooterID, shotID, isRicochet, effectsIndex, refStartPoint, velocity, gravity, maxShotDist, gunIndex):
         if not self.userSeesWorld() or self.__projectileMover is None:
             return
         else:
@@ -1375,7 +1412,12 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             startPoint = refStartPoint
             shooter = BigWorld.entity(shooterID)
             if not isRicochet and shooter is not None and shooter.isStarted and effectsDescr.get('artilleryID') is None:
-                gunMatrix = Math.Matrix(shooter.appearance.compoundModel.node('HP_gunFire'))
+                multiGun = shooter.typeDescriptor.turret.multiGun
+                if multiGun is not None:
+                    gunFireHP = multiGun[gunIndex].gunFire
+                    gunMatrix = Math.Matrix(shooter.appearance.compoundModel.node(gunFireHP))
+                else:
+                    gunMatrix = Math.Matrix(shooter.appearance.compoundModel.node('HP_gunFire'))
                 gunFirePos = gunMatrix.translation
                 if cameras.isPointOnScreen(gunFirePos):
                     startPoint = gunFirePos
@@ -1673,7 +1715,12 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             if self.__isOwnVehicleSwitchingSiegeMode():
                 return
             self.base.vehicle_shoot()
-            self.__startWaitingForShot(error != CANT_SHOOT_ERROR.EMPTY_CLIP)
+            shotArgs = None
+            vehicle = BigWorld.entity(self.playerVehicleID)
+            if vehicle is not None and vehicle.isStarted:
+                if vehicle.activeGunIndex is not None:
+                    shotArgs = (vehicle.activeGunIndex, False)
+            self.__startWaitingForShot(error != CANT_SHOOT_ERROR.EMPTY_CLIP, shotArgs)
             TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.PLAYER_SHOOT, aimingInfo=self.__aimingInfo)
             if self.__stopUntilFire:
                 self.__stopUntilFire = False
@@ -1683,10 +1730,52 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 self.moveVehicle(self.makeVehicleMovementCommandByKeys(), True)
             return
 
+    def shootDualGun(self, keyDown, isPrepared=False, isRepeat=False):
+        if self.__tryChargeCallbackID is None and keyDown:
+            self.__tryChargeCallbackID = BigWorld.callback(0.0, self.__tryChargeCallback)
+        if isRepeat and self.__chargeWaitingTimerID is not None:
+            return
+        else:
+            if isPrepared:
+                self.cancelWaitingForShot()
+            if not self.__isOnArena:
+                return
+            if keyDown and not self.__canMakeDualShot:
+                return
+            if not keyDown:
+                self.__cancelWaitingForCharge()
+            if self.isGunLocked or self.__isOwnBarrelUnderWater():
+                if not isRepeat:
+                    self.showVehicleError(self.__cantShootCriticals['gun_locked'])
+                return
+            for deviceName, stateName in self.__deviceStates.iteritems():
+                msgName = self.__cantShootCriticals.get(deviceName + '_' + stateName)
+                if msgName is not None:
+                    if not isRepeat:
+                        self.__gunDamagedSound()
+                    self.showVehicleError(msgName)
+                    return
+
+            canShoot, error = self.guiSessionProvider.shared.ammo.canShoot(False)
+            if not canShoot:
+                if error in self.__cantShootCriticals:
+                    self.showVehicleError(self.__cantShootCriticals[error])
+                return
+            self.cell.setDualGunCharger(keyDown)
+            return
+
     def __tryShootCallback(self):
         self.__tryShootCallbackId = None
         if CommandMapping.g_instance.isActive(CommandMapping.CMD_CM_SHOOT):
             self.shoot(isRepeat=True)
+        return
+
+    def __tryChargeCallback(self):
+        self.__tryChargeCallbackID = None
+        if CommandMapping.g_instance.isActive(CommandMapping.CMD_CM_SHOOT):
+            self.shootDualGun(True, isRepeat=True)
+        else:
+            self.shootDualGun(False)
         return
 
     def cancelWaitingForShot(self):
@@ -2248,6 +2337,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             deathInfo = {'killerID': attackerID,
              'reason': reason}
             self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.DEATH_INFO, deathInfo)
+            self.__cancelWaitingForCharge()
             try:
                 if self.gunRotator is not None:
                     self.gunRotator.stop()
@@ -2285,7 +2375,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__prevArenaPeriod = period
         return
 
-    def __startWaitingForShot(self, makePrediction):
+    def __startWaitingForShot(self, makePrediction, shotArgs=None):
         if makePrediction:
             if self.__shotWaitingTimerID is not None:
                 BigWorld.cancelCallback(self.__shotWaitingTimerID)
@@ -2293,7 +2383,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             timeout = BigWorld.LatencyInfo().value[3] * 0.5
             timeout = min(_SHOT_WAITING_MAX_TIMEOUT, timeout)
             timeout = max(_SHOT_WAITING_MIN_TIMEOUT, timeout)
-            self.__shotWaitingTimerID = BigWorld.callback(timeout, self.__showTimedOutShooting)
+            self.__shotWaitingTimerID = BigWorld.callback(timeout, partial(self.__showTimedOutShooting, shotArgs))
             self.__isWaitingForShot = True
             self.inputHandler.setAimingMode(True, AIMING_MODE.SHOOTING)
             if not self.inputHandler.getAimingMode(AIMING_MODE.USER_DISABLED):
@@ -2301,7 +2391,22 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.__gunReloadCommandWaitEndTime = BigWorld.time() + 2.0
         return
 
-    def __showTimedOutShooting(self):
+    def __startWaitingForCharge(self, timeLeft):
+        chargeTime = timeLeft - constants.SERVER_TICK_LENGTH
+        self.__chargeWaitingTimerID = BigWorld.callback(chargeTime, self.__onTimedOutCharge)
+
+    def __onTimedOutCharge(self):
+        self.__chargeWaitingTimerID = None
+        self.__startWaitingForShot(self.__canMakeDualShot, (0, True))
+        return
+
+    def __cancelWaitingForCharge(self):
+        if self.__chargeWaitingTimerID is not None:
+            BigWorld.cancelCallback(self.__chargeWaitingTimerID)
+            self.__chargeWaitingTimerID = None
+        return
+
+    def __showTimedOutShooting(self, shotArgs):
         self.__shotWaitingTimerID = None
         self.__isWaitingForShot = False
         self.inputHandler.setAimingMode(False, AIMING_MODE.SHOOTING)
@@ -2320,7 +2425,11 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 if gunDescr.clip[0] > 1:
                     if burstCount > shotsInClip > 0:
                         burstCount = shotsInClip
-                vehicle.showShooting(burstCount, True)
+                if shotArgs is not None:
+                    gunIndexDelayed, isDual = shotArgs
+                    vehicle.showShooting(2 if isDual else burstCount, gunIndexDelayed, True)
+                    return
+                vehicle.showShooting(burstCount, None, True)
         except Exception:
             LOG_CURRENT_EXCEPTION()
 

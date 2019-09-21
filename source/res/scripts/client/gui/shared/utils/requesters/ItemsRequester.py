@@ -267,6 +267,7 @@ class REQ_CRITERIA(object):
         CAN_TRADE_OFF = RequestCriteria(PredicateCondition(lambda item: item.canTradeOff))
         CAN_SELL = RequestCriteria(PredicateCondition(lambda item: item.canSell))
         CAN_NOT_BE_SOLD = RequestCriteria(PredicateCondition(lambda item: item.canNotBeSold))
+        IS_IN_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isInBattle))
         SECRET = RequestCriteria(PredicateCondition(lambda item: item.isSecret))
         NAME_VEHICLE = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableUserName)))
         NAME_VEHICLE_WITH_SHORT = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableShortUserName or nameVehicle in item.searchableUserName)))

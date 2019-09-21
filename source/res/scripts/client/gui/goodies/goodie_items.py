@@ -301,6 +301,10 @@ class Booster(BoosterUICommon):
         return self.isReadyToUse or self.isReadyToUpdate
 
     @property
+    def isAvailable(self):
+        return self.__readyForEvent()
+
+    @property
     def isReadyToUse(self):
         activeBoosterTypes = [ boosterType for boosterType, _, _ in self.__getActiveBoosters() ]
         return self.count > 0 and self.state == GOODIE_STATE.INACTIVE and len(self.__getActiveBoosters()) < MAX_ACTIVE_BOOSTERS_COUNT and self.boosterType not in activeBoosterTypes and self.__readyForEvent() if self.enabled else False

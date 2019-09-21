@@ -70,11 +70,11 @@ class MissionsTokenPopover(MissionsTokenPopoverMeta):
              'tooltip': tooltip})
 
         self.as_setListDataProviderS(result)
-        if result:
-            descrText = ms(QUESTS.MISSIONS_TOKENPOPOVER_DESCR, name=text_styles.neutral(ms(self._token.getUserName())))
-        else:
-            descrText = ms(QUESTS.MISSIONS_TOKENPOPOVER_DESCR_SHOP, name=text_styles.neutral(ms(self._token.getUserName())))
         buyBtnVisible = self._token.isOnSale() or mainQuest.isTokensOnSale()
+        if buyBtnVisible:
+            descrText = ms(QUESTS.MISSIONS_TOKENPOPOVER_DESCR_SHOP, name=text_styles.neutral(ms(self._token.getUserName())))
+        else:
+            descrText = ms(QUESTS.MISSIONS_TOKENPOPOVER_DESCR, name=text_styles.neutral(ms(self._token.getUserName())))
         if not GUI_SETTINGS.tokenShopURL:
             buyBtnVisible = False
         self.as_setStaticDataS({'headerText': text_styles.highTitle(ms(QUESTS.MISSIONS_TOKENPOPOVER_HEADER, name=ms(self._token.getUserName()))),

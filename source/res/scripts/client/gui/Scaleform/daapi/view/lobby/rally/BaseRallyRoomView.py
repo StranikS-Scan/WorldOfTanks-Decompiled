@@ -155,13 +155,13 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta):
         usersEvents = g_messengerEvents.users
         usersEvents.onUsersListReceived += self._onUsersReceived
         usersEvents.onUserActionReceived += self._onUserActionReceived
-        self.itemsCache.onSyncCompleted += self.__onCacheResync
+        self.itemsCache.onSyncCompleted += self._onCacheResync
 
     def _dispose(self):
         usersEvents = g_messengerEvents.users
         usersEvents.onUsersListReceived -= self._onUsersReceived
         usersEvents.onUserActionReceived -= self._onUserActionReceived
-        self.itemsCache.onSyncCompleted -= self.__onCacheResync
+        self.itemsCache.onSyncCompleted -= self._onCacheResync
         self._closeSendInvitesWindow()
         HideEvent = events.HideWindowEvent
         self.fireEvent(HideEvent(HideEvent.HIDE_VEHICLE_SELECTOR_WINDOW))
@@ -337,7 +337,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta):
     def __handleCurrentVehicleChanged(self):
         self._setActionButtonState()
 
-    def __onCacheResync(self, reason, diff):
+    def _onCacheResync(self, reason, diff):
         if reason != CACHE_SYNC_REASON.CLIENT_UPDATE:
             return
         else:

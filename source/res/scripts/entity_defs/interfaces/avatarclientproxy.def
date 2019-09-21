@@ -41,6 +41,14 @@
       <Arg>	INT16	</Arg>
       <Arg>	INT16	</Arg>
     </avatarClientProxy_updateVehicleAmmo>
+    <avatarClientProxy_updateDualGunState>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	ARRAY	  <of>	UINT8	</of>
+      </Arg>
+      <Arg>	ARRAY	  <of>	COOLDOWN_INFO	</of>
+      </Arg>
+    </avatarClientProxy_updateDualGunState>
     <avatarClientProxy_updateVehicleOptionalDeviceStatus>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	UINT8	</Arg>

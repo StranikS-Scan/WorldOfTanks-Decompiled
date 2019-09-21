@@ -4,153 +4,142 @@ from gui.impl.gen import R
 from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.ui_kit.list_model import ListModel
 from gui.impl.gen.view_models.views.buy_vehicle_view.equipment_block_model import EquipmentBlockModel
-from gui.impl.gen.view_models.views.buy_vehicle_view.toggle_trade_in_btn_model import ToggleTradeInBtnModel
 from gui.impl.gen.view_models.views.buy_vehicle_view.vehicle_congratulation_model import VehicleCongratulationModel
 
 class BuyVehicleViewModel(ViewModel):
     __slots__ = ('onCloseBtnClick', 'onBuyBtnClick', 'onInHangarClick', 'onBackClick', 'onCommanderLvlChange', 'onCheckboxWithoutCrewChanged')
 
     @property
-    def tankPrice(self):
+    def commanderLvlCards(self):
         return self._getViewModel(0)
 
     @property
-    def commanderLvlCards(self):
+    def equipmentBlock(self):
         return self._getViewModel(1)
 
     @property
-    def equipmentBlock(self):
+    def congratulationAnim(self):
         return self._getViewModel(2)
 
-    @property
-    def congratulationAnim(self):
-        return self._getViewModel(3)
-
-    @property
-    def toggleTradeInBtn(self):
-        return self._getViewModel(4)
-
     def getNation(self):
-        return self._getString(5)
+        return self._getString(3)
 
     def setNation(self, value):
-        self._setString(5, value)
+        self._setString(3, value)
 
     def getTankLvl(self):
-        return self._getString(6)
+        return self._getString(4)
 
     def setTankLvl(self, value):
-        self._setString(6, value)
+        self._setString(4, value)
 
     def getTankName(self):
-        return self._getString(7)
+        return self._getString(5)
 
     def setTankName(self, value):
-        self._setString(7, value)
+        self._setString(5, value)
 
     def getTankType(self):
-        return self._getString(8)
+        return self._getString(6)
 
     def setTankType(self, value):
-        self._setString(8, value)
+        self._setString(6, value)
 
     def getIsWithoutCommander(self):
-        return self._getBool(9)
+        return self._getBool(7)
 
     def setIsWithoutCommander(self, value):
-        self._setBool(9, value)
+        self._setBool(7, value)
 
     def getCountCrew(self):
-        return self._getNumber(10)
+        return self._getNumber(8)
 
     def setCountCrew(self, value):
-        self._setNumber(10, value)
+        self._setNumber(8, value)
 
     def getVehicleNameTooltip(self):
-        return self._getString(11)
+        return self._getString(9)
 
     def setVehicleNameTooltip(self, value):
-        self._setString(11, value)
+        self._setString(9, value)
 
     def getTradeOffVehicleIntCD(self):
-        return self._getNumber(12)
+        return self._getNumber(10)
 
     def setTradeOffVehicleIntCD(self, value):
-        self._setNumber(12, value)
+        self._setNumber(10, value)
 
     def getBuyVehicleIntCD(self):
-        return self._getNumber(13)
+        return self._getNumber(11)
 
     def setBuyVehicleIntCD(self, value):
-        self._setNumber(13, value)
+        self._setNumber(11, value)
 
     def getIsToggleBtnVisible(self):
-        return self._getBool(14)
+        return self._getBool(12)
 
     def setIsToggleBtnVisible(self, value):
-        self._setBool(14, value)
+        self._setBool(12, value)
 
     def getIsElite(self):
-        return self._getBool(15)
+        return self._getBool(13)
 
     def setIsElite(self, value):
-        self._setBool(15, value)
+        self._setBool(13, value)
 
     def getIsRentSelected(self):
-        return self._getBool(16)
+        return self._getBool(14)
 
     def setIsRentSelected(self, value):
-        self._setBool(16, value)
+        self._setBool(14, value)
 
     def getIsRestore(self):
-        return self._getBool(17)
+        return self._getBool(15)
 
     def setIsRestore(self, value):
-        self._setBool(17, value)
+        self._setBool(15, value)
 
     def getWithoutCommanderAltText(self):
-        return self._getResource(18)
+        return self._getResource(16)
 
     def setWithoutCommanderAltText(self, value):
-        self._setResource(18, value)
+        self._setResource(16, value)
 
     def getPriceDescription(self):
-        return self._getResource(19)
+        return self._getResource(17)
 
     def setPriceDescription(self, value):
-        self._setResource(19, value)
+        self._setResource(17, value)
 
     def getNoCrewCheckboxLabel(self):
-        return self._getResource(20)
+        return self._getResource(18)
 
     def setNoCrewCheckboxLabel(self, value):
-        self._setResource(20, value)
+        self._setResource(18, value)
 
     def getIsMovingTextEnabled(self):
-        return self._getBool(21)
+        return self._getBool(19)
 
     def setIsMovingTextEnabled(self, value):
-        self._setBool(21, value)
+        self._setBool(19, value)
 
     def getIsContentHidden(self):
-        return self._getBool(22)
+        return self._getBool(20)
 
     def setIsContentHidden(self, value):
-        self._setBool(22, value)
+        self._setBool(20, value)
 
     def getBgSource(self):
-        return self._getResource(23)
+        return self._getResource(21)
 
     def setBgSource(self, value):
-        self._setResource(23, value)
+        self._setResource(21, value)
 
     def _initialize(self):
         super(BuyVehicleViewModel, self)._initialize()
-        self._addViewModelProperty('tankPrice', ListModel())
         self._addViewModelProperty('commanderLvlCards', ListModel())
         self._addViewModelProperty('equipmentBlock', EquipmentBlockModel())
         self._addViewModelProperty('congratulationAnim', VehicleCongratulationModel())
-        self._addViewModelProperty('toggleTradeInBtn', ToggleTradeInBtnModel())
         self._addStringProperty('nation', '')
         self._addStringProperty('tankLvl', '')
         self._addStringProperty('tankName', '')

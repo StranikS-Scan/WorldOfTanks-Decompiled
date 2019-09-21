@@ -3,6 +3,8 @@
 import math
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.gui_items import Tankman
 from gui.shared.tooltips import ToolTipDataField, ToolTipAttrField, ToolTipData, TOOLTIP_TYPE, formatters
 from gui.shared.gui_items.Vehicle import Vehicle
@@ -205,6 +207,10 @@ class NotRecruitedTooltipData(BlocksTooltipData):
         hasDescr = descrStr != EMPTY_STRING
         if hasDescr:
             blocks.append(formatters.packTextBlockData(text_styles.main(descrStr), useHtml=True, padding=formatters.packPadding(top=18)))
+        howToGetStr = i18n.makeString(item.getHowToGetInfo())
+        if howToGetStr:
+            blocks.append(formatters.packTextBlockData(text_styles.middleTitle(backport.text(R.strings.tooltips.notrecruitedtankman.howToGet())), useHtml=True, padding=formatters.packPadding(top=17 if hasDescr else 18, bottom=5)))
+            blocks.append(formatters.packTextBlockData(text_styles.main(howToGetStr), useHtml=True, padding=formatters.packPadding()))
         skills = item.getLearntSkills()
         if skills:
             blocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.NOTRECRUITEDTANKMAN_SKILLSTITLE), useHtml=True, padding=formatters.packPadding(top=17 if hasDescr else 18, bottom=10)))

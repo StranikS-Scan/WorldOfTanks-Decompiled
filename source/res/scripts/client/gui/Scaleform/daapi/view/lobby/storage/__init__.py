@@ -12,7 +12,6 @@ from gui.Scaleform.daapi.view.lobby.storage.inhangar.all_vehicles_tab import All
 from gui.Scaleform.daapi.view.lobby.storage.inhangar.in_hangar_view import StorageCategoryInHangarView
 from gui.Scaleform.daapi.view.lobby.storage.inhangar.in_hangar_view import StorageVehicleFilterPopover
 from gui.Scaleform.daapi.view.lobby.storage.inhangar.inhangar_cm_handlers import VehiclesRegularCMHandler
-from gui.Scaleform.daapi.view.lobby.storage.inhangar.inhangar_cm_handlers import VehiclesMultiNationCMHandler
 from gui.Scaleform.daapi.view.lobby.storage.inhangar.inhangar_cm_handlers import VehiclesRestoreCMHandler
 from gui.Scaleform.daapi.view.lobby.storage.inhangar.inhangar_cm_handlers import VehiclesRentedCMHandler
 from gui.Scaleform.daapi.view.lobby.storage.inhangar.rent_vehicles_tab import RentVehiclesTabView
@@ -43,7 +42,6 @@ def getContextMenuHandlers():
      (CONTEXT_MENU_HANDLER_TYPE.STORAGE_EQUIPMENT_ITEM, EquipmentCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.STORAGE_BONS_ITEM, BattleBoostersCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_REGULAR_ITEM, VehiclesRegularCMHandler),
-     (CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_MULTI_NATION_ITEM, VehiclesMultiNationCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_RESTORE_ITEM, VehiclesRestoreCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_RENTED_ITEM, VehiclesRentedCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.STORAGE_PERSONAL_RESERVE_ITEM, PersonalReservesCMHandler),

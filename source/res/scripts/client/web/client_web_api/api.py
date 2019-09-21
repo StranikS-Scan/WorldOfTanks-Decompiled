@@ -23,8 +23,12 @@ class C2WHandler(object):
         if self.__sender is not None:
             eType, eData = self.__hashedEvent(webEvent)
             if not self.__isDuplicate(eType, eData):
-                self.__sender.sendEvent(json.dumps(webEvent))
-                self.__cachePrevious(eType, eData)
+                try:
+                    self.__sender.sendEvent(json.dumps(webEvent))
+                    self.__cachePrevious(eType, eData)
+                except ReferenceError:
+                    return
+
         return
 
     def __isDuplicate(self, eType, eData):

@@ -86,6 +86,7 @@ class CommonTankAppearance(ScriptGameObject):
     gearbox = ComponentDescriptor()
     gunLinkedNodesAnimator = ComponentDescriptor()
     gunRecoil = ComponentDescriptor()
+    gunAnimators = [ComponentDescriptor()]
     gunRotatorAudition = ComponentDescriptor()
     hullAimingController = ComponentDescriptor()
     leveredSuspension = ComponentDescriptor()
@@ -415,6 +416,7 @@ class CommonTankAppearance(ScriptGameObject):
     def __assembleNonDamagedOnly(self, resourceRefs, isPlayer, lodLink, lodStateLink):
         model_assembler.assembleTerrainMatKindSensor(self, lodStateLink, self.worldID)
         model_assembler.assembleRecoil(self, lodLink)
+        model_assembler.assembleMultiGunRecoil(self, lodLink)
         model_assembler.assembleGunLinkedNodesAnimator(self)
         model_assembler.assembleCollisionObstaclesCollector(self, lodStateLink, self.typeDescriptor, self.worldID)
         model_assembler.assembleTessellationCollisionSensor(self, lodStateLink)

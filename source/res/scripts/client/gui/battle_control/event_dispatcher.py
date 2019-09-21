@@ -86,5 +86,17 @@ def addAutoAimMarker(vehicle):
     g_eventBus.handleEvent(GameEvent(GameEvent.ADD_AUTO_AIM_MARKER, {'vehicle': vehicle}), scope=_SCOPE)
 
 
+def chargeReleased(keyDown=False):
+    g_eventBus.handleEvent(GameEvent(GameEvent.CHARGE_RELEASED, {'keyDown': keyDown}), scope=_SCOPE)
+
+
 def destroyTimersPanelShown(shown=None):
     g_eventBus.handleEvent(GameEvent(GameEvent.DESTROY_TIMERS_PANEL, {'shown': shown}), scope=_SCOPE)
+
+
+def dualGunPreCharge():
+    g_eventBus.handleEvent(GameEvent(GameEvent.PRE_CHARGE), scope=_SCOPE)
+
+
+def controlModeChange(mode):
+    g_eventBus.handleEvent(GameEvent(GameEvent.CONTROL_MODE_CHANGE, {'mode': mode}), scope=_SCOPE)

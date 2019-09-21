@@ -200,6 +200,9 @@ class BattleFeedbackAdaptor(IBattleController):
     def invalidatePassiveEngineering(self, vehicleID, data):
         self.onVehicleFeedbackReceived(_FET.VEHICLE_PASSIVE_ENGINEERING, vehicleID, data)
 
+    def invalidateActiveGunChanges(self, vehicleID, data):
+        self.onVehicleFeedbackReceived(_FET.VEHICLE_ACTIVE_GUN_CHANGED, vehicleID, data)
+
     def markCellOnMinimap(self, cell):
         self.onMinimapFeedbackReceived(_FET.MINIMAP_MARK_CELL, 0, (cell, _CELL_BLINKING_DURATION))
 

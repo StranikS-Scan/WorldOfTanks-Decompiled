@@ -188,7 +188,7 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
                     additionalInfo = text_styles.alert(backport.text(limitResource()))
                 else:
                     additionalInfo = ''
-                vo = createStorageDefVO(booster.boosterID, text_styles.hightlight(_ms(MENU.BOOSTER_DESCRIPTION_EFFECTVALUETIME, effectValue=booster.getFormattedValue(), effectTime=booster.getEffectTimeStr(hoursOnly=True))), text_styles.main(influence), booster.count, getItemPricesVO(booster.getSellPrice())[0], func_utils.makeFlashPath(booster.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL)), func_utils.makeFlashPath(booster.getShopIcon()), 'altimage', enabled=booster.isReadyToActivate, active=booster.state, contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_PERSONAL_RESERVE_ITEM, additionalInfo=additionalInfo)
+                vo = createStorageDefVO(booster.boosterID, text_styles.hightlight(_ms(MENU.BOOSTER_DESCRIPTION_EFFECTVALUETIME, effectValue=booster.getFormattedValue(), effectTime=booster.getEffectTimeStr(hoursOnly=True))), text_styles.main(influence), booster.count, getItemPricesVO(booster.getSellPrice())[0], func_utils.makeFlashPath(booster.getShopIcon(STORE_CONSTANTS.ICON_SIZE_SMALL)), func_utils.makeFlashPath(booster.getShopIcon()), 'altimage', enabled=booster.isReadyToActivate, available=booster.isAvailable, active=booster.state, contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_PERSONAL_RESERVE_ITEM, additionalInfo=additionalInfo)
                 dataProviderValues.append(vo)
                 filteredBoostersCount += booster.count
 

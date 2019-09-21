@@ -158,7 +158,7 @@ class XmppServerSettings(IProtoSettings):
             if serviceType == service or hostname and hostname in serviceData['hostname']:
                 return serviceData['enabled']
 
-        return len(self.mucServices) > 0
+        return False
 
     def getChannelByType(self, channelType):
         return self.mucServices[channelType] if channelType in self.mucServices else None

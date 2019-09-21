@@ -113,8 +113,8 @@ class ModuleInfoWindow(ModuleInfoMeta):
                     moduleData['otherParameters'] = {'headerText': _ms(MENU.MODULEINFO_PARAMETERSCLIPGUNLABEL, getAbsoluteUrl(RES_ICONS.MAPS_ICONS_MODULES_MAGAZINEGUNICON)),
                      'params': otherParamsInfoList}
             if isChassis:
-                extraModuleInfo = module.getExtraIconInfo() or ''
-                if moduleParameters['isHydraulic']:
+                extraModuleInfo = module.getExtraIconInfo(self.__vehicleDescr) or ''
+                if moduleParameters['isHydraulic'] and self.__vehicleDescr is not None and not self.__vehicleDescr.isDualgunVehicle:
                     if module.isWheeledChassis():
                         description = _ms(MENU.MODULEINFO_HYDRAULICWHEELEDCHASSISLABEL)
                     elif module.hasAutoSiege():

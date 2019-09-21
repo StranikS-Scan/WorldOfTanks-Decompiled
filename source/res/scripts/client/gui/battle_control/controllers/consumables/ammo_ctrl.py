@@ -13,6 +13,7 @@ from gui.battle_control.battle_constants import SHELL_SET_RESULT, CANT_SHOOT_ERR
 from gui.battle_control.controllers.interfaces import IBattleController
 from gui.shared.utils.MethodsRules import MethodsRules
 from gui.shared.utils.decorators import ReprInjector
+from ReloadEffect import DualGunReload
 from items import vehicles
 __all__ = ('AmmoController', 'AmmoReplayPlayer')
 _ClipBurstSettings = namedtuple('_ClipBurstSettings', 'size interval')
@@ -343,7 +344,7 @@ class AmmoController(MethodsRules, IBattleController):
                 self.__gunSettings.reloadEffect.onFull()
         return
 
-    def triggerReloadEffect(self, timeLeft, baseTime):
+    def triggerReloadEffect(self, timeLeft, baseTime, directTrigger=False):
         if timeLeft > 0.0 and self.__gunSettings.reloadEffect is not None:
             shellCounts = self.__ammo[self.__currShellCD]
             clipCapacity = self.__gunSettings.clip.size
@@ -352,7 +353,10 @@ class AmmoController(MethodsRules, IBattleController):
                 ammoLow = True
                 clipCapacity = shellCounts[0]
             reloadStart = fabs(timeLeft - baseTime) < 0.001
-            self.__gunSettings.reloadEffect.start(timeLeft, ammoLow, shellCounts[1], clipCapacity, self.__currShellCD, reloadStart)
+            if isinstance(self.__gunSettings.reloadEffect, DualGunReload):
+                self.__gunSettings.reloadEffect.start(timeLeft, ammoLow, directTrigger)
+            else:
+                self.__gunSettings.reloadEffect.start(timeLeft, ammoLow, shellCounts[1], clipCapacity, self.__currShellCD, reloadStart)
         return
 
     def getGunReloadingState(self):

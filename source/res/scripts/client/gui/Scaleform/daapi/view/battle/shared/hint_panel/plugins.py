@@ -344,7 +344,7 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
         vStateCtrl = self.sessionProvider.shared.vehicleState
         vTypeDesc = vehicle.typeDescriptor
         self.__isWheeledTech = vTypeDesc.isWheeledVehicle
-        if vehicle.isAlive() and vTypeDesc.hasSiegeMode:
+        if vehicle.isAlive() and vTypeDesc.hasSiegeMode and not vTypeDesc.isDualgunVehicle:
             self.__isEnabled = True
             state = VEHICLE_VIEW_STATE.SIEGE_MODE
             value = vStateCtrl.getStateValue(state)

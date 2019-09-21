@@ -70,9 +70,6 @@ class ConsumablesPanelMeta(BaseDAAPIComponent):
     def as_resetS(self):
         return self.flashObject.as_reset() if self._isDAAPIInited() else None
 
-    def as_switchToPosmortemS(self):
-        return self.flashObject.as_switchToPosmortem() if self._isDAAPIInited() else None
-
     def as_updateEntityStateS(self, entityName, entityState):
         return self.flashObject.as_updateEntityState(entityName, entityState) if self._isDAAPIInited() else None
 

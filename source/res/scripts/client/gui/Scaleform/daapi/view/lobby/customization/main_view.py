@@ -199,10 +199,11 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         pass
 
     def __onVehicleLoadFinished(self):
-        if self.__ctx.c11CameraManager is not None:
+        if self.__ctx.c11CameraManager is None:
+            _logger.warning('Missing customization camera manager')
             return
         else:
-            if self.__locateCameraToStyleInfo:
+            if self.__ctx.c11CameraManager is not None and self.__locateCameraToStyleInfo:
                 self.__locateCameraToStyleInfo = False
                 self.__ctx.c11CameraManager.locateCameraToStyleInfoPreview()
             return

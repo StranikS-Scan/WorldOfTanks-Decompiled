@@ -196,7 +196,7 @@ class Radio(InstallableItem):
 
 @add_shallow_copy()
 class Turret(InstallableItem):
-    __slots__ = ('gunPosition', 'rotationSpeed', 'turretRotatorHealth', 'surveyingDeviceHealth', 'invisibilityFactor', 'primaryArmor', 'ceilless', 'showEmblemsOnGun', 'guns', 'turretRotatorSoundManual', 'turretRotatorSoundGear', 'AODecals', 'turretDetachmentEffects', 'physicsShape', 'circularVisionRadius', 'customizableVehicleAreas')
+    __slots__ = ('gunPosition', 'rotationSpeed', 'turretRotatorHealth', 'surveyingDeviceHealth', 'invisibilityFactor', 'primaryArmor', 'ceilless', 'showEmblemsOnGun', 'guns', 'turretRotatorSoundManual', 'turretRotatorSoundGear', 'AODecals', 'turretDetachmentEffects', 'physicsShape', 'circularVisionRadius', 'customizableVehicleAreas', 'multiGun')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Turret, self).__init__(typeID, componentID, componentName, compactDescr, level)
@@ -207,6 +207,7 @@ class Turret(InstallableItem):
         self.invisibilityFactor = component_constants.DEFAULT_INVISIBILITY_FACTOR
         self.guns = None
         self.circularVisionRadius = None
+        self.multiGun = None
         self.primaryArmor = component_constants.EMPTY_TUPLE
         self.physicsShape = None
         self.ceilless = False
@@ -225,7 +226,7 @@ class Turret(InstallableItem):
 
 @add_shallow_copy()
 class Gun(InstallableItem):
-    __slots__ = ('rotationSpeed', 'reloadTime', 'aimingTime', 'maxAmmo', 'invisibilityFactorAtShot', 'effects', 'reloadEffect', 'impulse', 'recoil', 'animateEmblemSlots', 'turretYawLimits', 'pitchLimits', 'staticTurretYaw', 'staticPitch', 'shotDispersionAngle', 'shotDispersionFactors', 'burst', 'clip', 'shots', 'autoreload', 'drivenJoints', 'customizableVehicleAreas')
+    __slots__ = ('rotationSpeed', 'reloadTime', 'aimingTime', 'maxAmmo', 'invisibilityFactorAtShot', 'effects', 'reloadEffect', 'impulse', 'recoil', 'animateEmblemSlots', 'turretYawLimits', 'pitchLimits', 'staticTurretYaw', 'staticPitch', 'shotDispersionAngle', 'shotDispersionFactors', 'burst', 'clip', 'shots', 'autoreload', 'drivenJoints', 'customizableVehicleAreas', 'dualGun')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Gun, self).__init__(typeID, componentID, componentName, compactDescr, level)
@@ -244,6 +245,7 @@ class Gun(InstallableItem):
         self.burst = component_constants.DEFAULT_GUN_BURST
         self.clip = component_constants.DEFAULT_GUN_CLIP
         self.shots = component_constants.EMPTY_TUPLE
+        self.dualGun = component_constants.DEFAULT_GUN_DUALGUN
         self.drivenJoints = None
         self.effects = None
         self.reloadEffect = None

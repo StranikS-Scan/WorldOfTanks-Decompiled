@@ -1004,3 +1004,17 @@ class IBadgesController(IGameController):
 
     def getSuffix(self):
         raise NotImplementedError
+
+
+class ISpecialSoundCtrl(IGameController):
+
+    @property
+    def arenaMusicSetup(self):
+        raise NotImplementedError
+
+    @property
+    def specialVoice(self):
+        raise NotImplementedError
+
+    def setPlayerVehicle(self, vehiclePublicInfo, isPlayerVehicle):
+        raise NotImplementedError

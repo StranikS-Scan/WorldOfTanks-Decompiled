@@ -5,7 +5,7 @@ from account_helpers.AccountSettings import NEW_LOBBY_TAB_COUNTER
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HEADER_BUTTONS_COUNTERS_CHANGED_EVENT
-from gui.Scaleform.daapi.view.lobby.vehiclePreview20.items_kit_helper import lookupItem, showItemTooltip, getCDFromId
+from gui.Scaleform.daapi.view.lobby.vehiclePreview20.items_kit_helper import lookupItem, showItemTooltip, getCDFromId, canInstallStyle
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS as TC
 from gui.shared import g_eventBus
 from gui.shared.events import HasCtxEvent
@@ -25,6 +25,7 @@ from skeletons.gui.web import IWebController
 from web.web_client_api import w2c, W2CSchema, Field, WebCommandException
 from web.web_client_api.common import ItemPackType, ItemPackEntry, SPA_ID_TYPES
 from gui.wgcg.utils.contexts import SPAAccountAttributeCtx, PlatformFetchProductListCtx
+from web.web_client_api.ui.vehicle import _VehicleCustomizationPreviewSchema
 _COUNTER_IDS_MAP = {'shop': VIEW_ALIAS.LOBBY_STORE}
 
 def _itemTypeValidator(itemType, _=None):
@@ -214,6 +215,11 @@ class UtilWebApiMixin(object):
             self.__usersInfoHelper.syncUsersInfo()
         else:
             return isAvailable()
+
+    @w2c(_VehicleCustomizationPreviewSchema, 'can_install_style')
+    def canStyleBeInstalled(self, cmd):
+        result = canInstallStyle(cmd.style_id)
+        return {'can_install': result.canInstall}
 
     def __getTooltipMgr(self):
         appLoader = dependency.instance(IAppLoader)

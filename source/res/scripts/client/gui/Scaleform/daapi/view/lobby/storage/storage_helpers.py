@@ -76,7 +76,7 @@ def getStorageItemDescr(item):
         return text_styles.main(desc)
 
 
-def createStorageDefVO(itemID, title, description, count, price, image, imageAlt, itemType='', nationFlagIcon='', enabled=True, contextMenuId='', additionalInfo='', active=GOODIE_STATE.INACTIVE):
+def createStorageDefVO(itemID, title, description, count, price, image, imageAlt, itemType='', nationFlagIcon='', enabled=True, available=True, contextMenuId='', additionalInfo='', active=GOODIE_STATE.INACTIVE):
     return {'id': itemID,
      'title': title,
      'description': description,
@@ -87,6 +87,7 @@ def createStorageDefVO(itemID, title, description, count, price, image, imageAlt
      'type': itemType,
      'nationFlagIcon': nationFlagIcon,
      'enabled': enabled,
+     'available': available,
      'additionalInfo': additionalInfo,
      'active': active == GOODIE_STATE.ACTIVE,
      'contextMenuId': contextMenuId}
@@ -99,7 +100,7 @@ def getStorageVehicleVo(vehicle):
     stateIcon, stateText = _getVehicleInfo(vehicle)
     if not imageSmall and not stateText:
         stateText = text_styles.vehicleStatusInfoText(_ms(STORAGE.INHANGAR_NOIMAGE))
-    vo = createStorageDefVO(vehicle.intCD, name, description, vehicle.inventoryCount, getItemPricesVO(vehicle.getSellPrice())[0], imageSmall, RES_SHOP.getVehicleIcon(STORE_CONSTANTS.ICON_SIZE_SMALL, 'empty_tank'), itemType=getSlotOverlayIconType(vehicle), nationFlagIcon=RES_SHOP.getNationFlagIcon(nations.NAMES[vehicle.nationID]), contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_MULTI_NATION_ITEM if vehicle.hasNationGroup else CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_REGULAR_ITEM)
+    vo = createStorageDefVO(vehicle.intCD, name, description, vehicle.inventoryCount, getItemPricesVO(vehicle.getSellPrice())[0], imageSmall, RES_SHOP.getVehicleIcon(STORE_CONSTANTS.ICON_SIZE_SMALL, 'empty_tank'), itemType=getSlotOverlayIconType(vehicle), nationFlagIcon=RES_SHOP.getNationFlagIcon(nations.NAMES[vehicle.nationID]), contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_REGULAR_ITEM)
     vo.update({'infoImgSrc': stateIcon,
      'infoText': stateText})
     if vehicle.canTradeOff:

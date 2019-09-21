@@ -360,8 +360,8 @@ def _entityNameFromFlags(flags):
 def _invitationTypeFromFlags(flags):
     if flags & UNIT_MGR_FLAGS.EPIC:
         return INVITATION_TYPE.EPIC
-    elif flags & (UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM):
-        return INVITATION_TYPE.FALLOUT
+    elif flags & UNIT_MGR_FLAGS.EVENT:
+        return INVITATION_TYPE.EVENT
     elif flags & UNIT_MGR_FLAGS.SQUAD:
         return INVITATION_TYPE.SQUAD
     else:

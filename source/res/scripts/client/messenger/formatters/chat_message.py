@@ -5,6 +5,7 @@ from helpers import i18n
 from messenger import g_settings
 from messenger.ext.player_helpers import isCurrentPlayer
 from messenger.formatters import TimeFormatter
+from messenger.m_constants import USER_GUI_TYPE
 from messenger.storage import storage_getter
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
@@ -100,6 +101,7 @@ class LobbyMessageBuilder(object):
     def __init__(self):
         super(LobbyMessageBuilder, self).__init__()
         self.__templateKey = ''
+        self.__guiType = USER_GUI_TYPE.OTHER
         self.__name = ''
         self.__time = 0.0
         self.__text = ''
@@ -112,12 +114,18 @@ class LobbyMessageBuilder(object):
         self.__time = TimeFormatter.getMessageTimeFormat(time_)
         return self
 
+    def getGroup(self):
+        return self.__templateKey
+
     def setGroup(self, group):
         self.__templateKey = group
         return self
 
+    def getGuiType(self):
+        return self.__guiType
+
     def setGuiType(self, dbID):
-        self.__templateKey = self.usersStorage.getUserGuiType(dbID)
+        self.__guiType = self.__templateKey = self.usersStorage.getUserGuiType(dbID)
         return self
 
     def setName(self, dbID, nickName, clanAbbrev=None):

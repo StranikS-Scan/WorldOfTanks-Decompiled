@@ -240,9 +240,9 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
             desc = text_styles.standard(desc)
         overlayPath, overlayPadding, blockPadding = self.__getOverlayData()
         block.append(formatters.packItemTitleDescBlockData(title=text_styles.highTitle(title), desc=desc, img=module.icon, imgPadding=formatters.packPadding(left=imgPaddingLeft, top=imgPaddingTop), txtGap=-3, txtOffset=txtOffset, padding=blockPadding, overlayPath=overlayPath, overlayPadding=overlayPadding))
+        vehicle = self.configuration.vehicle
+        vDescr = vehicle.descriptor if vehicle is not None else None
         if module.itemTypeID == GUI_ITEM_TYPE.GUN:
-            vehicle = self.configuration.vehicle
-            vDescr = vehicle.descriptor if vehicle is not None else None
             extraInfo = module.getExtraIconInfo(vDescr)
             if extraInfo:
                 if module.isClipGun(vDescr):
@@ -251,14 +251,14 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
                     titleKey = MENU.MODULEINFO_AUTORELOADGUNLABEL
                 block.append(formatters.packImageTextBlockData(title=text_styles.standard(titleKey), desc='', img=extraInfo, imgPadding=formatters.packPadding(top=3), padding=formatters.packPadding(left=108, top=9)))
         elif module.itemTypeID == GUI_ITEM_TYPE.CHASSIS:
-            if module.isHydraulicChassis():
+            if module.isHydraulicChassis() and not vDescr.isDualgunVehicle:
                 if module.isWheeledChassis():
                     title = text_styles.standard(MENU.MODULEINFO_HYDRAULICWHEELEDCHASSISLABEL)
                 elif module.hasAutoSiege():
                     title = text_styles.standard(MENU.MODULEINFO_HYDRAULICAUTOSIEGECHASSISLABEL)
                 else:
                     title = text_styles.standard(MENU.MODULEINFO_HYDRAULICCHASSISLABEL)
-                block.append(formatters.packImageTextBlockData(title=title, desc='', img=module.getExtraIconInfo(), imgPadding=formatters.packPadding(top=3), padding=formatters.packPadding(left=108, top=9)))
+                block.append(formatters.packImageTextBlockData(title=title, desc='', img=module.getExtraIconInfo(vDescr), imgPadding=formatters.packPadding(top=3), padding=formatters.packPadding(left=108, top=9)))
         return block
 
     def __getOverlayData(self):

@@ -8,15 +8,24 @@ import SoundGroups
 import BigWorld
 BARREL_DEBUG_ENABLED = False
 
+class ReloadEffectsType(object):
+    SIMPLE_RELOAD = 'SimpleReload'
+    BARREL_RELOAD = 'BarrelReload'
+    AUTO_RELOAD = 'AutoReload'
+    DUALGUN_RELOAD = 'DualGunReload'
+
+
 def _createReloadEffectDesc(eType, dataSection):
     if not dataSection.values():
         return None
-    elif eType == 'SimpleReload':
+    elif eType == ReloadEffectsType.SIMPLE_RELOAD:
         return _SimpleReloadDesc(dataSection)
-    elif eType == 'BarrelReload':
+    elif eType == ReloadEffectsType.BARREL_RELOAD:
         return _BarrelReloadDesc(dataSection)
+    elif eType == ReloadEffectsType.AUTO_RELOAD:
+        return _AutoReloadDesc(dataSection)
     else:
-        return _AutoReloadDesc(dataSection) if eType == 'AutoReload' else None
+        return _DualGunReloadDesc(dataSection) if eType == ReloadEffectsType.DUALGUN_RELOAD else None
 
 
 class _ReloadDesc(object):
@@ -39,6 +48,19 @@ class _SimpleReloadDesc(_ReloadDesc):
 
     def create(self):
         return SimpleReload(self)
+
+
+class _DualGunReloadDesc(_SimpleReloadDesc):
+    __slots__ = ('ammoLowSound', 'soundEvent', 'runTimeDelta', 'runTimeDeltaAmmoLow')
+
+    def __init__(self, dataSection):
+        super(_DualGunReloadDesc, self).__init__(dataSection)
+        self.ammoLowSound = dataSection.readString('ammoLowSound', '')
+        self.runTimeDelta = dataSection.readFloat('runTimeDelta', 0.0)
+        self.runTimeDeltaAmmoLow = dataSection.readFloat('runTimeDeltaAmmoLow', 0.0)
+
+    def create(self):
+        return DualGunReload(self)
 
 
 class _BarrelReloadDesc(_SimpleReloadDesc):
@@ -104,7 +126,6 @@ def playByName(soundName):
 
 
 class SimpleReload(CallbackDelayer):
-    __slots__ = ('_desc', '_sound', '_startLoopT')
 
     def __init__(self, effectDesc):
         CallbackDelayer.__init__(self)
@@ -162,7 +183,6 @@ class SimpleReload(CallbackDelayer):
 
 
 class BarrelReload(SimpleReload):
-    __slots__ = ('__reloadSequence',)
 
     def __init__(self, effectDesc):
         SimpleReload.__init__(self, effectDesc)
@@ -219,7 +239,6 @@ class BarrelReload(SimpleReload):
 
 
 class LoopSequence(CallbackDelayer):
-    __slots__ = ('__startLoop', '__stopLoop', '__shell', '__lastShell', '__duration', '__shellT', '__shellTLast', '__sequence')
 
     def __init__(self, desc):
         CallbackDelayer.__init__(self)
@@ -317,7 +336,6 @@ class LoopSequence(CallbackDelayer):
 
 
 class AutoReload(CallbackDelayer):
-    __slots__ = ('_desc', '_sound', '_startLoopT', '_almostCompleteSnd')
 
     def __init__(self, effectDesc):
         CallbackDelayer.__init__(self)
@@ -421,3 +439,55 @@ class AutoReload(CallbackDelayer):
             LOG_DEBUG('AutoReload::__onAlmostComplete')
         self._almostCompleteSnd = SoundGroups.g_instance.getSound2D(self._desc.almostComplete)
         self._almostCompleteSnd.play()
+
+
+class DualGunReload(CallbackDelayer):
+
+    def __init__(self, effectDesc):
+        CallbackDelayer.__init__(self)
+        self.__desc = effectDesc
+        self.__sound = None
+        return
+
+    def __del__(self):
+        if self.__sound is not None:
+            self.__sound.stop()
+            self.__sound = None
+        CallbackDelayer.destroy(self)
+        return
+
+    def start(self, shellReloadTime, ammoLow, directTrigger=False):
+        if gEffectsDisabled() or not directTrigger:
+            return
+        else:
+            self.stopCallback(self.__onReloadStart)
+            if self.__sound is not None:
+                self.__sound.stop()
+            if ammoLow:
+                timeToStart = shellReloadTime - self.__desc.runTimeDeltaAmmoLow
+                self.__sound = SoundGroups.g_instance.getSound2D(self.__desc.ammoLowSound)
+            else:
+                timeToStart = shellReloadTime - self.__desc.runTimeDelta
+                self.__sound = SoundGroups.g_instance.getSound2D(self.__desc.soundEvent)
+            if timeToStart > 0:
+                self.delayCallback(timeToStart, self.__onReloadStart, BigWorld.time() + timeToStart)
+            return
+
+    def stop(self):
+        if self.__sound is not None:
+            self.__sound.stop()
+        self.__sound = None
+        self.stopCallback(self.__onReloadStart)
+        return
+
+    def __onReloadStart(self, time):
+        if fabs(time - BigWorld.time()) > 0.1:
+            return
+        else:
+            if self.__sound is not None:
+                import BattleReplay
+                replayCtrl = BattleReplay.g_replayCtrl
+                if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
+                    return
+                self.__sound.play()
+            return

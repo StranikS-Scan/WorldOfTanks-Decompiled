@@ -17,6 +17,7 @@ from gui.battle_control.view_components import IViewComponentsCtrlListener
 from helpers import dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.game_control import ISpecialSoundCtrl
 
 def _delegate(func):
 
@@ -327,6 +328,7 @@ class _EnemyBaseCaptureCondition(_BaseCaptureCondition):
 
 class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesListener, IViewComponentsCtrlListener, IArenaLoadCtrlListener):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    __specialSounds = dependency.descriptor(ISpecialSoundCtrl)
     _SETTING_TO_CONDITION_MAPPING = {'vehiclesRemained': (lambda player: not player.sessionProvider.arenaVisitor.isArenaFogOfWarEnabled(), (_DeadAlliesCondition, _DeadEnemiesCondition), lambda name, key, data: data[name][key]),
      'timeRemained': (lambda player: True, (_TimeRemainedCondition,), lambda name, key, data: data[name][key]),
      'capturedPoints': (lambda player: True, (_AlliedBaseCaptureCondition, _EnemyBaseCaptureCondition), lambda name, key, data: (data[name][key], data['musicStopPredelay'][key])),
@@ -339,7 +341,7 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
         arenaType = self.sessionProvider.arenaVisitor.getArenaType()
         self.__guiTypeName = ARENA_GUI_TYPE_LABEL.LABELS[self.sessionProvider.arenaVisitor.getArenaGuiType()]
         self.__gameplayName = self.sessionProvider.arenaVisitor.type.getGamePlayName()
-        self._musicSetup = self._initializeMusicData(arenaType)
+        self._musicSetup = self._initializeMusicData()
         self._conditions = []
         if self._musicSetup is not None:
             self._conditions = self._initializeConditionsData(arenaType)
@@ -404,8 +406,8 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
         self.__previouslySatisfied = None
         return
 
-    def _initializeMusicData(self, arenaType):
-        wwSetup = arenaType and arenaType.wwmusicSetup or {}
+    def _initializeMusicData(self):
+        wwSetup = self.__specialSounds.arenaMusicSetup
         outcome = {}
         if not wwSetup:
             return outcome

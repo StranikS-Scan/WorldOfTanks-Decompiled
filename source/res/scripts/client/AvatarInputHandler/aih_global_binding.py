@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/AvatarInputHandler/aih_global_binding.py
 import logging
 import Math
-from aih_constants import CTRL_MODE_NAME, GUN_MARKER_FLAG, STRATEGIC_CAMERA
+from aih_constants import CTRL_MODE_NAME, GUN_MARKER_FLAG, STRATEGIC_CAMERA, CHARGE_MARKER_STATE
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 _FLOAT_EPSILON = 0.003
@@ -19,6 +19,7 @@ class BINDING_ID(object):
     SERVER_GUN_MARKER_DATA_PROVIDER = 9
     SERVER_SPG_GUN_MARKER_DATA_PROVIDER = 10
     STRATEGIC_CAMERA = 11
+    CHARGE_MARKER_STATE = 12
     RANGE = (CTRL_MODE_NAME,
      AIM_OFFSET,
      ZOOM_FACTOR,
@@ -29,7 +30,8 @@ class BINDING_ID(object):
      CLIENT_SPG_GUN_MARKER_DATA_PROVIDER,
      SERVER_GUN_MARKER_DATA_PROVIDER,
      SERVER_SPG_GUN_MARKER_DATA_PROVIDER,
-     STRATEGIC_CAMERA)
+     STRATEGIC_CAMERA,
+     CHARGE_MARKER_STATE)
 
 
 class _Observable(object):
@@ -84,7 +86,8 @@ _DEFAULT_VALUES = {BINDING_ID.CTRL_MODE_NAME: lambda : _Observable(CTRL_MODE_NAM
  BINDING_ID.CLIENT_SPG_GUN_MARKER_DATA_PROVIDER: lambda : _Observable(None),
  BINDING_ID.SERVER_GUN_MARKER_DATA_PROVIDER: lambda : _Observable(None),
  BINDING_ID.SERVER_SPG_GUN_MARKER_DATA_PROVIDER: lambda : _Observable(None),
- BINDING_ID.STRATEGIC_CAMERA: lambda : _Observable(STRATEGIC_CAMERA.DEFAULT)}
+ BINDING_ID.STRATEGIC_CAMERA: lambda : _Observable(STRATEGIC_CAMERA.DEFAULT),
+ BINDING_ID.CHARGE_MARKER_STATE: lambda : _Observable(CHARGE_MARKER_STATE.DEFAULT)}
 
 class _GlobalDataDescriptor(object):
     __slots__ = ('__bindingID', '__reader', '__writer')

@@ -244,6 +244,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         self.swingingAnimator = None
         self.burnoutProcessor = None
         self.gunRecoil = None
+        self.gunAnimators = []
         self.gunLinkedNodesAnimator = None
         if self.suspension is not None and not self.suspension.activePostmortem:
             self.suspension = None
@@ -402,14 +403,20 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
             return
 
     def recoil(self):
-        gunNode = self.compoundModel.node(TankNodeNames.GUN_INCLINATION)
-        impulseDir = Math.Matrix(gunNode).applyVector(Math.Vector3(0, 0, -1))
-        impulseValue = self.typeDescriptor.gun.impulse
-        self.receiveShotImpulse(impulseDir, impulseValue)
-        self.gunRecoil.recoil()
-        node = self.compoundModel.node('HP_gunFire')
-        gunPos = Math.Matrix(node).translation
-        BigWorld.player().inputHandler.onVehicleShaken(self.__vehicle, gunPos, impulseDir, self.typeDescriptor.shot.shell.caliber, ShakeReason.OWN_SHOT_DELAYED)
+        self.__initiateRecoil(TankNodeNames.GUN_INCLINATION, 'HP_gunFire', self.gunRecoil)
+
+    def multiGunRecoil(self, indexes):
+        if self.gunAnimators is None:
+            return
+        else:
+            for index in indexes:
+                typeDescr = self.typeDescriptor
+                gunNodeName = typeDescr.turret.multiGun[index].node
+                gunFireNodeName = typeDescr.turret.multiGun[index].gunFire
+                gunAnimator = self.gunAnimators[index]
+                self.__initiateRecoil(gunNodeName, gunFireNodeName, gunAnimator)
+
+            return
 
     def addCrashedTrack(self, isLeft):
         if not self.__vehicle.isAlive():
@@ -465,6 +472,16 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         player = BigWorld.player()
         forceHistorical = player.isHistoricallyAccurate and player.playerVehicleID != self.id and not outfit.isHistorical()
         return Outfit() if forceHistorical else outfit
+
+    def __initiateRecoil(self, gunNodeName, gunFireNodeName, gunAnimator):
+        gunNode = self.compoundModel.node(gunNodeName)
+        impulseDir = Math.Matrix(gunNode).applyVector(Math.Vector3(0, 0, -1))
+        impulseValue = self.typeDescriptor.gun.impulse
+        self.receiveShotImpulse(impulseDir, impulseValue)
+        gunAnimator.recoil()
+        node = self.compoundModel.node(gunFireNodeName)
+        gunPos = Math.Matrix(node).translation
+        BigWorld.player().inputHandler.onVehicleShaken(self.__vehicle, gunPos, impulseDir, self.typeDescriptor.shot.shell.caliber, ShakeReason.OWN_SHOT_DELAYED)
 
     def __applyVehicleOutfit(self):
         camouflages.updateFashions(self)

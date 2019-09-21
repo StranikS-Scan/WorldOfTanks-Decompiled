@@ -704,7 +704,7 @@ class BattleReplay(object):
             preferredPos = self.getGunRotatorTargetPoint()
             if controlMode == 'mapcase':
                 _, preferredPos, _ = self.getGunMarkerParams(preferredPos, Math.Vector3(0.0, 0.0, 1.0))
-            player.inputHandler.onControlModeChanged(controlMode, camMatrix=BigWorld.camera().matrix, preferredPos=preferredPos, saveZoom=False, saveDist=False, equipmentID=self.__equipmentId)
+            player.inputHandler.onControlModeChanged(controlMode, camMatrix=BigWorld.camera().matrix, preferredPos=preferredPos, saveZoom=False, saveDist=False, equipmentID=self.__equipmentId, curVehicleID=self.__replayCtrl.playerVehicleID)
             return
 
     def onPlayerVehicleIDChanged(self):

@@ -701,7 +701,11 @@ def __readMetaSection(bonus, _name, section, eventType):
     else:
         meta = {}
         for local, sub in section.items():
-            meta[local.strip()] = sub.readString('', '').strip()
+            if local != 'actions':
+                meta[local.strip()] = sub.readString('', '').strip()
+            meta['actions'] = actions = {}
+            for action, params in sub.items():
+                actions[action.strip()] = {k.strip():v.readString('', '').strip() for k, v in params.items()}
 
         bonus['meta'] = meta
         return

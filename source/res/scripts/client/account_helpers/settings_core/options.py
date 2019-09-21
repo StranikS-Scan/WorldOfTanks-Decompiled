@@ -10,6 +10,7 @@ import math
 import weakref
 from collections import namedtuple
 from operator import itemgetter
+import logging
 from aih_constants import CTRL_MODE_NAME
 import GUI
 from AvatarInputHandler.cameras import FovExtended
@@ -35,7 +36,7 @@ import CommandMapping
 from helpers import i18n
 from Event import Event
 from AvatarInputHandler import INPUT_HANDLER_CFG, AvatarInputHandler
-from AvatarInputHandler.DynamicCameras import ArcadeCamera, SniperCamera, StrategicCamera, ArtyCamera
+from AvatarInputHandler.DynamicCameras import ArcadeCamera, SniperCamera, StrategicCamera, ArtyCamera, DualGunCamera
 from AvatarInputHandler.control_modes import PostMortemControlMode, SniperControlMode
 from debug_utils import LOG_NOTE, LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_WARNING
 from gui.Scaleform.managers.windows_stored_data import g_windowsStoredData
@@ -59,6 +60,8 @@ from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.sounds import ISoundsController
 from gui import makeHtmlString
+from skeletons.gui.game_control import ISpecialSoundCtrl
+_logger = logging.getLogger(__name__)
 
 class APPLY_METHOD(object):
     NORMAL = 'normal'
@@ -1447,7 +1450,8 @@ class MouseSetting(ControlSetting):
      CTRL_MODE_NAME.ARCADE: (ArcadeCamera.getCameraAsSettingsHolder, 'arcadeMode/camera'),
      CTRL_MODE_NAME.SNIPER: (SniperCamera.getCameraAsSettingsHolder, 'sniperMode/camera'),
      CTRL_MODE_NAME.STRATEGIC: (StrategicCamera.getCameraAsSettingsHolder, 'strategicMode/camera'),
-     CTRL_MODE_NAME.ARTY: (ArtyCamera.getCameraAsSettingsHolder, 'artyMode/camera')}
+     CTRL_MODE_NAME.ARTY: (ArtyCamera.getCameraAsSettingsHolder, 'artyMode/camera'),
+     CTRL_MODE_NAME.DUAL_GUN: (DualGunCamera.getCameraAsSettingsHolder, 'dualGunMode/camera')}
 
     def __init__(self, mode, setting, default, isPreview=False, masterSwitch=''):
         super(MouseSetting, self).__init__(isPreview)
@@ -2073,6 +2077,7 @@ class AltVoicesSetting(StorageDumpSetting):
     ALT_VOICES_PREVIEW = itertools.cycle(('wwsound_mode_preview01', 'wwsound_mode_preview02', 'wwsound_mode_preview03'))
     DEFAULT_IDX = 0
     PREVIEW_SOUNDS_COUNT = 3
+    __specialSounds = dependency.descriptor(ISpecialSoundCtrl)
 
     class SOUND_MODE_TYPE(object):
         UNKNOWN = 0
@@ -2191,18 +2196,31 @@ class AltVoicesSetting(StorageDumpSetting):
             mode = modes[value]
         return self._handlers[self.__getSoundModeType(mode)](mode)
 
+    def getSystemModeType(self):
+        return self.__getSoundModeType(self.__getSoundModesList()[self._get()])
+
     def __getSoundModeType(self, soundMode):
         if soundMode.name in SoundGroups.g_instance.soundModes.modes:
             return self.SOUND_MODE_TYPE.REGULAR
         return self.SOUND_MODE_TYPE.NATIONAL if soundMode.name in SoundGroups.g_instance.soundModes.nationalPresets else self.SOUND_MODE_TYPE.UNKNOWN
 
     def __applyRegularMode(self, mode):
-        soundModes = SoundGroups.g_instance.soundModes
-        soundModes.setCurrentNation(soundModes.DEFAULT_NATION)
-        return soundModes.setNationalMappingByMode(mode.name)
+        specialVoice = self.__specialSounds.specialVoice
+        if specialVoice is not None and not specialVoice.onlyInNational:
+            _logger.debug('Use %s as special voice instead %s', specialVoice.languageMode, mode)
+            return True
+        else:
+            soundModes = SoundGroups.g_instance.soundModes
+            soundModes.setCurrentNation(soundModes.DEFAULT_NATION)
+            return soundModes.setNationalMappingByMode(mode.name)
 
     def __applyNationalMode(self, mode):
-        return SoundGroups.g_instance.soundModes.setNationalMappingByPreset(mode.name)
+        specialVoice = self.__specialSounds.specialVoice
+        if specialVoice is not None:
+            _logger.debug('Use %s as special voice instead %s', specialVoice.languageMode, mode)
+            return True
+        else:
+            return SoundGroups.g_instance.soundModes.setNationalMappingByPreset(mode.name)
 
     def __getSoundModesList(self):
         result = []
@@ -2405,29 +2423,6 @@ class ShowDamageIconSetting(StorageAccountSetting):
         return True
 
 
-class IncreasedZoomSetting(StorageAccountSetting):
-    IncreasedZoomPackStruct = namedtuple('IncreasedZoomPackStruct', 'current options extraData')
-
-    def __init__(self, settingName, storage, isPreview=False):
-        super(IncreasedZoomSetting, self).__init__(settingName, storage, isPreview)
-        self.__mouseSetting = MouseSetting('sniper', self.settingName, self.getDefaultValue())
-
-    def getExtraData(self):
-        zooms = self.__mouseSetting.getCamera().getConfigValue('zooms')[-2:]
-        zoomStrs = [ i18n.makeString(SETTINGS.GAME_INCREASEDZOOM_ZOOMSTR, zoom=zoom) for zoom in zooms ]
-        zoomStr = i18n.makeString(SETTINGS.GAME_INCREASEDZOOM_DELIMETER).join(zoomStrs)
-        return {'checkBoxLabel': i18n.makeString(SETTINGS.GAME_INCREASEDZOOM_BASE, zooms=zoomStr),
-         'tooltip': makeTooltip(TOOLTIPS.INCREASEDZOOM_HEADER, i18n.makeString(TOOLTIPS.INCREASEDZOOM_BODY, zooms=zoomStr))}
-
-    def pack(self):
-        return self.IncreasedZoomPackStruct(self._get(), self._getOptions(), self.getExtraData())._asdict()
-
-    def setSystemValue(self, value):
-        if BattleReplay.isPlaying():
-            value = True
-        self.__mouseSetting.apply(value)
-
-
 class MouseAffectedSetting(RegularSetting):
 
     def __init__(self, settingName, isPreview=False):
@@ -2441,10 +2436,32 @@ class MouseAffectedSetting(RegularSetting):
         forEach(lambda mouseSetting: mouseSetting.apply(value), self._mouseSettings)
 
 
-class SnipereModeByShiftSetting(StorageAccountSetting, MouseAffectedSetting):
+class IncreasedZoomSetting(StorageAccountSetting, MouseAffectedSetting):
+    IncreasedZoomPackStruct = namedtuple('IncreasedZoomPackStruct', 'current options extraData')
+
+    def getExtraData(self):
+        zooms = self._mouseSettings[0].getCamera().getConfigValue('zooms')[-2:]
+        zoomStrs = [ i18n.makeString(SETTINGS.GAME_INCREASEDZOOM_ZOOMSTR, zoom=zoom) for zoom in zooms ]
+        zoomStr = i18n.makeString(SETTINGS.GAME_INCREASEDZOOM_DELIMETER).join(zoomStrs)
+        return {'checkBoxLabel': i18n.makeString(SETTINGS.GAME_INCREASEDZOOM_BASE, zooms=zoomStr),
+         'tooltip': makeTooltip(TOOLTIPS.INCREASEDZOOM_HEADER, i18n.makeString(TOOLTIPS.INCREASEDZOOM_BODY, zooms=zoomStr))}
+
+    def pack(self):
+        return self.IncreasedZoomPackStruct(self._get(), self._getOptions(), self.getExtraData())._asdict()
+
+    def setSystemValue(self, value):
+        if BattleReplay.isPlaying():
+            value = True
+        super(IncreasedZoomSetting, self).setSystemValue(value)
 
     def _getCameras(self):
-        pass
+        return (CTRL_MODE_NAME.SNIPER, CTRL_MODE_NAME.DUAL_GUN)
+
+
+class SniperModeByShiftSetting(StorageAccountSetting, MouseAffectedSetting):
+
+    def _getCameras(self):
+        return (CTRL_MODE_NAME.ARCADE, CTRL_MODE_NAME.SNIPER, CTRL_MODE_NAME.DUAL_GUN)
 
 
 class GroupSetting(StorageDumpSetting):

@@ -3,7 +3,7 @@
 from web.web_client_api import webApiCollection
 from web.web_client_api.request import RequestWebApi
 from web.web_client_api.shop import ShopWebApi
-from web.web_client_api.marathon import MarathonWebApi
+from web.web_client_api.quests import QuestsWebApi
 from web.web_client_api.sound import SoundWebApi, HangarSoundWebApi
 from web.web_client_api.ui import CloseWindowWebApi, UtilWebApi, OpenWindowWebApi, OpenTabWebApi, NotificationWebApi
 _DEFAULT_WEB_API_COLLECTION = (CloseWindowWebApi,
@@ -14,7 +14,7 @@ _DEFAULT_WEB_API_COLLECTION = (CloseWindowWebApi,
  ShopWebApi,
  SoundWebApi,
  UtilWebApi,
- MarathonWebApi)
+ QuestsWebApi)
 
 def createBrowserOverlayWebHandlers():
     return webApiCollection(*_DEFAULT_WEB_API_COLLECTION)

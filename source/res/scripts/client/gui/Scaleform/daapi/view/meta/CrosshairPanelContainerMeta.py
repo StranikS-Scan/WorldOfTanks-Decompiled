@@ -61,6 +61,9 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
     def as_setNetVisibleS(self, mask):
         return self.flashObject.as_setNetVisible(mask) if self._isDAAPIInited() else None
 
+    def as_setNetSeparatorVisibleS(self, isVisible):
+        return self.flashObject.as_setNetSeparatorVisible(isVisible) if self._isDAAPIInited() else None
+
     def as_setNetTypeS(self, netType):
         return self.flashObject.as_setNetType(netType) if self._isDAAPIInited() else None
 
@@ -105,3 +108,12 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
 
     def as_stopEngineCrushErrorS(self):
         return self.flashObject.as_stopEngineCrushError() if self._isDAAPIInited() else None
+
+    def as_startDualGunChargingS(self, timeLeft, totalTime):
+        return self.flashObject.as_startDualGunCharging(timeLeft, totalTime) if self._isDAAPIInited() else None
+
+    def as_cancelDualGunChargeS(self):
+        return self.flashObject.as_cancelDualGunCharge() if self._isDAAPIInited() else None
+
+    def as_updateDualGunMarkerStateS(self, markerState):
+        return self.flashObject.as_updateDualGunMarkerState(markerState) if self._isDAAPIInited() else None

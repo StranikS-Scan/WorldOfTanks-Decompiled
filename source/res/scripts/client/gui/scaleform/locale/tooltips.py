@@ -1642,6 +1642,7 @@ class TOOLTIPS(object):
     BATTLESELECTORWINDOW_TOOLTIP_MULTITEAM_SELECTBTN_BODY = '#tooltips:battleSelectorWindow/tooltip/multiteam/selectBtn/body'
     BOOSTER_QUESTLINKBTN_BODY = '#tooltips:booster/questLinkBtn/body'
     BOOSTER_ACTIVEBTN_DISABLED_BODY = '#tooltips:booster/activeBtn/disabled/body'
+    BOOSTER_ACTIVEBTN_NOTAVAILABLE_BODY = '#tooltips:booster/activeBtn/notAvailable/body'
     BOOSTER_FILTERS_QUALITYSMALL_BODY = '#tooltips:booster/filters/qualitySmall/body'
     BOOSTER_FILTERS_QUALITYMEDIUM_BODY = '#tooltips:booster/filters/qualityMedium/body'
     BOOSTER_FILTERS_QUALITYBIG_BODY = '#tooltips:booster/filters/qualityBig/body'
@@ -2685,6 +2686,7 @@ class TOOLTIPS(object):
     STORAGE_MAINMENU_CUSTOMIZATION_BODY = '#tooltips:storage/mainMenu/customization/body'
     STORAGE_MAINMENU_BLUEPRINTS_HEADER = '#tooltips:storage/mainMenu/blueprints/header'
     STORAGE_MAINMENU_BLUEPRINTS_BODY = '#tooltips:storage/mainMenu/blueprints/body'
+    NOTRECRUITEDTANKMAN_HOWTOGET = '#tooltips:notrecruitedtankman/howToGet'
     NOTRECRUITEDTANKMAN_SKILLSTITLE = '#tooltips:notrecruitedtankman/skillsTitle'
     NOTRECRUITEDTANKMAN_EXPIRETITLE = '#tooltips:notrecruitedtankman/expireTitle'
     NOTRECRUITEDTANKMAN_USEBEFORE = '#tooltips:notrecruitedtankman/useBefore'
@@ -2712,6 +2714,19 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_NY19MEN_DESC = '#tooltips:notrecruitedtankman/ny19men/desc'
     NOTRECRUITEDTANKMAN_NY19WOMAN_LABEL = '#tooltips:notrecruitedtankman/ny19woman/label'
     NOTRECRUITEDTANKMAN_NY19WOMAN_DESC = '#tooltips:notrecruitedtankman/ny19woman/desc'
+    NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_LABEL = '#tooltips:notrecruitedtankman/race19_commanderA/label'
+    NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_DESC = '#tooltips:notrecruitedtankman/race19_commanderA/desc'
+    NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_HOWTOGETINFO = '#tooltips:notrecruitedtankman/race19_commanderA/howToGetInfo'
+    NOTRECRUITEDTANKMAN_RACE19_COMMANDERB_LABEL = '#tooltips:notrecruitedtankman/race19_commanderB/label'
+    NOTRECRUITEDTANKMAN_RACE19_COMMANDERB_DESC = '#tooltips:notrecruitedtankman/race19_commanderB/desc'
+    NOTRECRUITEDTANKMAN_RACE19_COMMANDERB_HOWTOGETINFO = '#tooltips:notrecruitedtankman/race19_commanderB/howToGetInfo'
+    NOTRECRUITEDTANKMAN_RACE19_COMMANDERC_LABEL = '#tooltips:notrecruitedtankman/race19_commanderC/label'
+    NOTRECRUITEDTANKMAN_RACE19_COMMANDERC_DESC = '#tooltips:notrecruitedtankman/race19_commanderC/desc'
+    NOTRECRUITEDTANKMAN_RACE19_COMMANDERC_HOWTOGETINFO = '#tooltips:notrecruitedtankman/race19_commanderC/howToGetInfo'
+    NOTRECRUITEDTANKMAN_OFFSPRING_COMMANDER_DESC = '#tooltips:notrecruitedtankman/offspring_commander/desc'
+    NOTRECRUITEDTANKMAN_OFFSPRING_GUNNER_DESC = '#tooltips:notrecruitedtankman/offspring_gunner/desc'
+    NOTRECRUITEDTANKMAN_OFFSPRING_DRIVER_DESC = '#tooltips:notrecruitedtankman/offspring_driver/desc'
+    NOTRECRUITEDTANKMAN_OFFSPRING_LOADER_DESC = '#tooltips:notrecruitedtankman/offspring_loader/desc'
     QUESTS_AWARDS_VEHICLERENT_HEADER = '#tooltips:quests/awards/vehicleRent/header'
     QUESTS_AWARDS_VEHICLERENT_EXPIRE = '#tooltips:quests/awards/vehicleRent/expire'
     QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTDAYS = '#tooltips:quests/awards/vehicleRent/rentLeft/rentDays'
@@ -3287,7 +3302,10 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TWITCH5_LABEL,
      NOTRECRUITEDTANKMAN_TWITCH6_LABEL,
      NOTRECRUITEDTANKMAN_NY19MEN_LABEL,
-     NOTRECRUITEDTANKMAN_NY19WOMAN_LABEL)
+     NOTRECRUITEDTANKMAN_NY19WOMAN_LABEL,
+     NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_LABEL,
+     NOTRECRUITEDTANKMAN_RACE19_COMMANDERB_LABEL,
+     NOTRECRUITEDTANKMAN_RACE19_COMMANDERC_LABEL)
     NOTRECRUITEDTANKMAN_ALL_DESC_ENUM = (NOTRECRUITEDTANKMAN_BASE_DESC,
      NOTRECRUITEDTANKMAN_BUFFON_DESC,
      NOTRECRUITEDTANKMAN_TANKWOMAN_DESC,
@@ -3299,7 +3317,15 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TWITCH5_DESC,
      NOTRECRUITEDTANKMAN_TWITCH6_DESC,
      NOTRECRUITEDTANKMAN_NY19MEN_DESC,
-     NOTRECRUITEDTANKMAN_NY19WOMAN_DESC)
+     NOTRECRUITEDTANKMAN_NY19WOMAN_DESC,
+     NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_DESC,
+     NOTRECRUITEDTANKMAN_RACE19_COMMANDERB_DESC,
+     NOTRECRUITEDTANKMAN_RACE19_COMMANDERC_DESC,
+     NOTRECRUITEDTANKMAN_OFFSPRING_COMMANDER_DESC,
+     NOTRECRUITEDTANKMAN_OFFSPRING_GUNNER_DESC,
+     NOTRECRUITEDTANKMAN_OFFSPRING_DRIVER_DESC,
+     NOTRECRUITEDTANKMAN_OFFSPRING_LOADER_DESC)
+    NOTRECRUITEDTANKMAN_ALL_HOWTOGETINFO_ENUM = (NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_HOWTOGETINFO, NOTRECRUITEDTANKMAN_RACE19_COMMANDERB_HOWTOGETINFO, NOTRECRUITEDTANKMAN_RACE19_COMMANDERC_HOWTOGETINFO)
     QUESTS_AWARDS_VEHICLERENT_RENTLEFT_ENUM = (QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTDAYS, QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTBATTLES, QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTWINS)
 
     @classmethod
@@ -3657,6 +3683,15 @@ class TOOLTIPS(object):
     def getNotRecruitedTankmanEventDesc(cls, eventName):
         outcome = '#tooltips:notrecruitedtankman/{}/desc'.format(eventName)
         if outcome not in cls.NOTRECRUITEDTANKMAN_ALL_DESC_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getNotRecruitedTankmanEventGetInfo(cls, eventName):
+        outcome = '#tooltips:notrecruitedtankman/{}/howToGetInfo'.format(eventName)
+        if outcome not in cls.NOTRECRUITEDTANKMAN_ALL_HOWTOGETINFO_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

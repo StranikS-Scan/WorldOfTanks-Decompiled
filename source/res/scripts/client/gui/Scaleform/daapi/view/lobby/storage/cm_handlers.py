@@ -48,10 +48,11 @@ def option(order, label):
 
 class StorageOptionCustomData(object):
 
-    def __init__(self, label, enabled=True, visible=True, textColor=None, labelCtx=None):
+    def __init__(self, label, enabled=True, visible=True, isNew=False, textColor=None, labelCtx=None):
         self.label = label
         self.enabled = enabled
         self.visible = visible
+        self.isNew = isNew
         self.textColor = textColor
         self.labelCtx = labelCtx
 

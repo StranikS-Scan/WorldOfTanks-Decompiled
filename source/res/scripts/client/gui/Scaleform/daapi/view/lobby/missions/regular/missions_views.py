@@ -24,7 +24,6 @@ from gui.Scaleform.locale.LINKEDSET import LINKEDSET
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.event_boards.settings import expandGroup, isGroupMinimized
-from gui.marathon.web_handlers import createMarathonWebHandlers
 from gui.server_events import settings, caches
 from gui.server_events.event_items import DEFAULTS_GROUPS
 from gui.server_events.events_dispatcher import hideMissionDetails
@@ -138,7 +137,7 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
                 url = yield self._marathonEvent.getUrl()
                 browserID = yield self._browserCtrl.load(url=url, useBrowserWindow=False, browserID=self.__browserID, browserSize=(self._width, self._height))
                 self.__browserID = browserID
-                viewPy.init(browserID, createMarathonWebHandlers(), alias=alias)
+                viewPy.init(browserID, self._marathonEvent.createMarathonWebHandlers(), alias=alias)
                 self.__browserView = viewPy
                 browser = self._browserCtrl.getBrowser(browserID)
                 if browser is not None:

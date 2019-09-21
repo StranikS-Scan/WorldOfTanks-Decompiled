@@ -908,3 +908,7 @@ def __buildConfigurations(configuration):
 
     return {'vehiclePhysicsType': configuration['vehiclePhysicsType'],
      'modes': configurations}
+
+
+def getShootTimeCorrection(roundTripTime):
+    return min(0.3, roundTripTime + SERVER_TICK_LENGTH * 0.5)

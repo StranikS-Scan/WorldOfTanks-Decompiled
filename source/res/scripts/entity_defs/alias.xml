@@ -1097,4 +1097,16 @@
       </aliveOnly>
     </Properties>
   </VEHICLE_DETECTOR_INFO>
+  <COOLDOWN_INFO>	FIXED_DICT	  <Properties>
+      <id>
+        <Type>	UINT8	</Type>
+      </id>
+      <leftTime>
+        <Type>	INT16	</Type>
+      </leftTime>
+      <baseTime>
+        <Type>	INT16	</Type>
+      </baseTime>
+    </Properties>
+  </COOLDOWN_INFO>
 </alias.xml>

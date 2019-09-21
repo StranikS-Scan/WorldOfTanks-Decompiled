@@ -10,6 +10,11 @@ from AvatarInputHandler.subfilters_constants import AVATAR_SUBFILTERS, FILTER_IN
 from debug_utils import LOG_DEBUG_DEV
 from helpers.CallbackDelayer import CallbackDelayer
 from soft_exception import SoftException
+_OBSERVABLE_VIEWS = (CTRL_MODE_NAME.ARCADE,
+ CTRL_MODE_NAME.SNIPER,
+ CTRL_MODE_NAME.DUAL_GUN,
+ CTRL_MODE_NAME.STRATEGIC,
+ CTRL_MODE_NAME.ARTY)
 _STRATEGIC_VIEW = (CTRL_MODE_NAME.STRATEGIC, CTRL_MODE_NAME.ARTY)
 
 class ObservedVehicleData(CallbackDelayer):
@@ -156,6 +161,9 @@ class AvatarObserver(CallbackDelayer):
     def updateVehicleClipReloadTime(self, vehicleID, timeLeft, baseTime, stunned):
         pass
 
+    def updateDualGunState(self, vehicleID, activeGun, gunStates, cooldownTimes):
+        pass
+
     def updateVehicleOptionalDeviceStatus(self, vehicleID, deviceID, isOn):
         self.observedVehicleData[vehicleID].setOptionalDevice(deviceID, isOn)
 
@@ -234,7 +242,7 @@ class AvatarObserver(CallbackDelayer):
         if self.isObserver() is not None:
             eMode = CTRL_MODES[self.observerFPVControlMode]
             if self.isObserverFPV:
-                if eMode not in (CTRL_MODE_NAME.ARCADE, CTRL_MODE_NAME.SNIPER) + _STRATEGIC_VIEW:
+                if eMode not in _OBSERVABLE_VIEWS:
                     LOG_DEBUG_DEV("AvatarObserver.set_observerFPVControlMode() requested control mode '{0}' is not supported, switching out of FPV".format(eMode))
                     self.cell.switchObserverFPV(False)
                 else:
@@ -246,7 +254,7 @@ class AvatarObserver(CallbackDelayer):
         LOG_DEBUG_DEV('AvatarObserver.__switchToObservedControlMode():', self.observerFPVControlMode, eMode)
         filteredValue = None
         time = BigWorld.serverTime()
-        if eMode in (CTRL_MODE_NAME.ARCADE, CTRL_MODE_NAME.SNIPER) + _STRATEGIC_VIEW:
+        if eMode in _OBSERVABLE_VIEWS:
             filteredValue = self.__filterGetVector3(AVATAR_SUBFILTERS.CAMERA_SHOT_POINT, time)
         if filteredValue is None or filteredValue == Math.Vector3(0, 0, 0):
             LOG_DEBUG_DEV('AvatarObserver.__switchToObservedControlMode(): no filtered value yet.Rescheduling switch...', filteredValue)

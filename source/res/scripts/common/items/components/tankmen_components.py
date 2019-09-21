@@ -9,12 +9,20 @@ from soft_exception import SoftException
 class SPECIAL_VOICE_TAG(object):
     BUFFON = 'buffonSpecialVoice'
     SABATON = 'sabatonSpecialVoice'
-    ALL = (BUFFON, SABATON)
+    OFFSPRING = 'offspringSpecialVoice'
+    RACER = 'racerSpecialVoice'
+    RACER_EN = 'racerSpecialVoiceEn'
+    ALL = (BUFFON,
+     SABATON,
+     OFFSPRING,
+     RACER,
+     RACER_EN)
 
 
 class SPECIAL_CREW_TAG(object):
     SABATON = 'sabatonCrew'
-    ALL = (SABATON,)
+    OFFSPRING = 'offspringCrew'
+    ALL = (SABATON, OFFSPRING)
 
 
 class GROUP_TAG(object):

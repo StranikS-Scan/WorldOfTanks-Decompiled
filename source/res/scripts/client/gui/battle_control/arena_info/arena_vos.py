@@ -145,7 +145,7 @@ class PlayerInfoVO(object):
 
 
 class VehicleTypeInfoVO(object):
-    __slots__ = ('compactDescr', 'shortName', 'name', 'level', 'iconName', 'iconPath', 'isObserver', 'isPremiumIGR', 'guiName', 'shortNameWithPrefix', 'classTag', 'nationID', 'turretYawLimits', 'maxHealth')
+    __slots__ = ('compactDescr', 'shortName', 'name', 'level', 'iconName', 'iconPath', 'isObserver', 'isPremiumIGR', 'isDualGunVehicle', 'guiName', 'shortNameWithPrefix', 'classTag', 'nationID', 'turretYawLimits', 'maxHealth')
 
     def __init__(self, vehicleType=None, **kwargs):
         super(VehicleTypeInfoVO, self).__init__()
@@ -176,6 +176,7 @@ class VehicleTypeInfoVO(object):
             self.isObserver = isObserver(tags)
             self.isPremiumIGR = isPremiumIGR(tags)
             self.turretYawLimits = vehicle_getter.getYawLimits(vehicleDescr)
+            self.isDualGunVehicle = vehicleType.isDualgunVehicle
             self.shortName = vehicleType.shortUserString
             self.name = Vehicle.getUserName(vehicleType=vehicleType, textPrefix=True)
             self.shortNameWithPrefix = Vehicle.getShortUserName(vehicleType=vehicleType, textPrefix=True)
@@ -194,6 +195,7 @@ class VehicleTypeInfoVO(object):
             self.isPremiumIGR = False
             self.turretYawLimits = None
             self.shortName = vehicleName
+            self.isDualGunVehicle = False
             self.name = vehicleName
             self.guiName = vehicleName
             self.shortNameWithPrefix = vehicleName
@@ -344,6 +346,9 @@ class VehicleArenaInfoVO(object):
 
     def isSPG(self):
         return self.vehicleType.classTag == VEHICLE_CLASS_NAME.SPG
+
+    def isDualGunVehicle(self):
+        return self.vehicleType.isDualGunVehicle
 
     def isActionsDisabled(self):
         return not self.player.accountDBID

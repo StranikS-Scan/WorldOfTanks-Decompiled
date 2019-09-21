@@ -48,6 +48,10 @@ class VehiclesRegularCMHandler(ContextMenu):
     def showInHangar(self):
         shared_events.selectVehicleInHangar(self._id)
 
+    @option(__sqGen.next(), CMLabel.NATION_CHANGE)
+    def changeNation(self):
+        ItemsActionsFactory.doAction(ItemsActionsFactory.CHANGE_NATION, self._id)
+
     def _getOptionCustomData(self, label):
         optionData = super(VehiclesRegularCMHandler, self)._getOptionCustomData(label)
         if label in CMLabel.EXCHANGE:
@@ -60,6 +64,10 @@ class VehiclesRegularCMHandler(ContextMenu):
             optionData.enabled = _canAddToComparisonBasket(self._id)
         elif label == CMLabel.SELL:
             optionData.enabled = self.__canSell()
+        elif label == CMLabel.NATION_CHANGE:
+            optionData.visible = self.__canNationChange()
+            optionData.enabled = self.__isNationChangeAvailable()
+            optionData.isNew = not AccountSettings.getSettings(NATION_CHANGE_VIEWED)
         return optionData
 
     def __canTradeOff(self):
@@ -74,21 +82,13 @@ class VehiclesRegularCMHandler(ContextMenu):
         vehicle = self.__itemsCache.items.getItemByCD(self._id)
         return vehicle is not None and vehicle.canSell and not vehicle.isOnlyForEventBattles
 
+    def __canNationChange(self):
+        vehicle = self.__itemsCache.items.getItemByCD(self._id)
+        return vehicle is not None and vehicle.hasNationGroup
 
-class VehiclesMultiNationCMHandler(VehiclesRegularCMHandler):
-    _sqGen = SequenceIDGenerator()
-    _itemsCache = dependency.descriptor(IItemsCache)
-
-    @option(_sqGen.max(), CMLabel.NATION_CHANGE)
-    def changeNation(self):
-        ItemsActionsFactory.doAction(ItemsActionsFactory.CHANGE_NATION, self._id)
-
-    def _getOptionCustomData(self, label):
-        if label == CMLabel.NATION_CHANGE:
-            isNew = not AccountSettings.getSettings(NATION_CHANGE_VIEWED)
-            return {'enabled': self._itemsCache.items.getItemByCD(self._id).isNationChangeAvailable,
-             'isNew': isNew}
-        return super(VehiclesMultiNationCMHandler, self)._getOptionCustomData(label)
+    def __isNationChangeAvailable(self):
+        vehicle = self.__itemsCache.items.getItemByCD(self._id)
+        return vehicle is not None and vehicle.isNationChangeAvailable
 
 
 class VehiclesRestoreCMHandler(ContextMenu):

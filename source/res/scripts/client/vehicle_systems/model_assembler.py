@@ -269,6 +269,28 @@ def assembleRecoil(appearance, lodLink):
     appearance.compoundModel.node(TankNodeNames.GUN_RECOIL, gunRecoilMProv)
 
 
+def createMultiGunRecoils(appearance, lodLink, gunNodes):
+    animators = []
+    for gunInstance in gunNodes:
+        gunNodeName = gunInstance.node
+        gunAnimatorNode = appearance.compoundModel.node(gunNodeName)
+        if gunAnimatorNode is not None:
+            localGunMatrix = gunAnimatorNode.localMatrix
+            gunRecoil = createGunAnimator(appearance, appearance.typeDescriptor, localGunMatrix, lodLink)
+            animators.append(gunRecoil)
+            gunRecoilMProv = gunRecoil.animatedMProv
+            appearance.compoundModel.node(gunNodeName, gunRecoilMProv)
+
+    return None if not animators else animators
+
+
+def assembleMultiGunRecoil(appearance, lodLink):
+    multiGun = appearance.typeDescriptor.turret.multiGun
+    if multiGun is not None:
+        appearance.gunAnimators = createMultiGunRecoils(appearance, lodLink, multiGun)
+    return
+
+
 def assembleGunLinkedNodesAnimator(appearance):
     drivingJoints = appearance.typeDescriptor.gun.drivenJoints
     if drivingJoints is not None:

@@ -26,7 +26,7 @@ def vehicleRequirementsCheck(quest, invVehicles):
     level = quest.getVehMinLevel()
     classifier = quest.getQuestClassifier()
     for veh in invVehicles:
-        if veh.level >= level and classifier.matchVehicle(veh.descriptor.type):
+        if veh.level >= level and classifier.matchVehicle(veh.descriptor.type) and not veh.isOnlyForEventBattles:
             return True
 
     return False

@@ -77,13 +77,15 @@ class VehicleChassis(VehicleModule):
     def icon(self):
         return RES_ICONS.MAPS_ICONS_MODULES_WHEELEDCHASSIS if self.isWheeledChassis() else RES_ICONS.MAPS_ICONS_MODULES_CHASSIS
 
-    def getExtraIconInfo(self, _=None):
+    def getExtraIconInfo(self, vehDescr=None):
         if self.isHydraulicChassis():
             if self.isWheeledChassis():
                 return RES_ICONS.MAPS_ICONS_MODULES_HYDRAULICWHEELEDCHASSISICON
+            if vehDescr is not None and vehDescr.isDualgunVehicle:
+                return
             return RES_ICONS.MAPS_ICONS_MODULES_HYDRAULICCHASSISICON
         else:
-            return None
+            return
 
     def getGUIEmblemID(self):
         return FITTING_TYPES.VEHICLE_WHEELED_CHASSIS if self.isWheeledChassis() else super(VehicleChassis, self).getGUIEmblemID()

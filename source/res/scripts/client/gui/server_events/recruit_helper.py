@@ -172,6 +172,10 @@ class _TokenRecruitInfo(_BaseRecruitInfo):
         description = TOOLTIPS.getNotRecruitedTankmanEventDesc(self._sourceID)
         return description if description is not None else TOOLTIPS.getNotRecruitedTankmanEventDesc(_TANKMAN_NAME)
 
+    def getHowToGetInfo(self):
+        howToGet = TOOLTIPS.getNotRecruitedTankmanEventGetInfo(self._sourceID)
+        return howToGet if howToGet is not None else TOOLTIPS.getNotRecruitedTankmanEventGetInfo(_TANKMAN_NAME)
+
     def getFullUserNameByNation(self, nationID):
         _, firstName, lastName, _, _ = self.__parseTankmanData(nationID)
         return '{} {}'.format(firstName, lastName)

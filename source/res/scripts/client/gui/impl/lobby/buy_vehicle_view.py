@@ -163,7 +163,6 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             vm.setTankName(self.__vehicle.shortUserName)
             vm.setCountCrew(len(self.__vehicle.crew))
             vm.setBuyVehicleIntCD(self.__vehicle.intCD)
-            vm.toggleTradeInBtn.setIsVisible(self.__isTradeIn() and self.__vehicle.hasRentPackages)
             vm.setIsElite(isElite)
             vm.setIsMovingTextEnabled(constants.IS_CHINA and GUI_SETTINGS.movingText.show)
             if self.__vehicle.hasCrew:
@@ -174,13 +173,9 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             emtySlotAvailable = self.__itemsCache.items.inventory.getFreeSlots(self.__stats.vehicleSlots) > 0
             equipmentBlock.setEmtySlotAvailable(emtySlotAvailable)
             equipmentBlock.setIsRestore(isRestore)
-            self.__updateToggleTradeInBtn()
             if self.__vehicle.hasRentPackages and (not isRestore or self.__actionType == VehicleBuyActionTypes.RENT) and self.__actionType != VehicleBuyActionTypes.BUY:
                 self.__selectedRentIdx = 0
                 self.__selectedRentID = self.__vehicle.rentPackages[self.__selectedRentIdx]['rentID']
-            tankPriceArray = vm.tankPrice.getItems()
-            self.__addVMsInActionPriceList(tankPriceArray, self.__vehicle.buyPrices.itemPrice, tooltipData=_TooltipExtraData(str(self.__vehicle.intCD), ACTION_TOOLTIPS_TYPE.ITEM))
-            self.__updateTankPrice()
             self.__updateCommanderCards()
             self.__updateSlotPrice()
             self.__updateAmmoPrice()
@@ -209,7 +204,6 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         self.viewModel.onCheckboxWithoutCrewChanged += self.__onCheckboxWithoutCrewChanged
         self.viewModel.onBuyBtnClick += self.__onBuyBtnClick
         self.viewModel.onCommanderLvlChange += self.__onCommanderLvlChange
-        self.viewModel.toggleTradeInBtn.onClicked += self.__onToggleRentAndTradeIn
         self.viewModel.onBackClick += self.__onWindowClose
         equipmentBlock = self.viewModel.equipmentBlock
         equipmentBlock.onSelectTradeOffVehicle += self.__onSelectTradeOffVehicle
@@ -230,7 +224,6 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         self.viewModel.onCheckboxWithoutCrewChanged -= self.__onCheckboxWithoutCrewChanged
         self.viewModel.onBuyBtnClick -= self.__onBuyBtnClick
         self.viewModel.onCommanderLvlChange -= self.__onCommanderLvlChange
-        self.viewModel.toggleTradeInBtn.onClicked -= self.__onToggleRentAndTradeIn
         self.viewModel.onBackClick -= self.__onWindowClose
         equipmentBlock = self.viewModel.equipmentBlock
         equipmentBlock.onSelectTradeOffVehicle -= self.__onSelectTradeOffVehicle
@@ -306,7 +299,6 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
 
     def __onToggleRentAndTradeIn(self):
         self.__isRentVisible = not self.__isRentVisible
-        self.__updateToggleTradeInBtn()
         self.__updateTradeOffVehicleIntCD()
         with self.viewModel.equipmentBlock.transaction() as equipmentBlockVm:
             tradeInVisible = not self.__isRentVisible and self.__isTradeIn() and self.__tradeOffVehicle is None
@@ -319,7 +311,6 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             else:
                 equipmentBlockVm.setPopoverIsAvailable(self.__popoverIsAvailable)
             self.__updateSlotPrice()
-            self.__updateTankPrice()
             self.__updateTotalPrice()
         self.__updateBuyBtnLabel()
         return
@@ -336,7 +327,6 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         if self.__tradeOffVehicle is not None:
             self.__updateTradeInInfo()
             self.__updateSlotPrice()
-            self.__updateTankPrice()
             self.__updateTotalPrice()
         self.__updateBuyBtnLabel()
         return
@@ -346,7 +336,6 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         self.__tradeIn.setActiveTradeOffVehicleCD(UNDEFINED_ITEM_CD)
         self.__updateTradeInInfo()
         self.__updateTotalPrice()
-        self.__updateTankPrice()
         self.__updateSlotPrice()
         self.__updateBuyBtnLabel()
         return
@@ -372,7 +361,6 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         else:
             self.__selectedRentID = self.__vehicle.rentPackages[self.__selectedRentIdx]['rentID']
         self.viewModel.hold()
-        self.__updateTankPrice()
         self.__updateRentInfo()
         self.__updateTotalPrice()
         self.__updateBuyBtnLabel()
@@ -494,35 +482,6 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         if result and result.success:
             self.showCongratulations()
         return
-
-    def __updateTankPrice(self):
-        if self.__isRentVisible:
-            if self.__selectedRentIdx == self.__RENT_NOT_SELECTED_IDX:
-                self.viewModel.setPriceDescription(R.strings.store.buyVehicleWindow.priceDescription.restore())
-                defaultPrice = self.__vehicle.restorePrice
-                self.__updateTankPriceModel(ItemPrice(self.__vehicle.restorePrice, defaultPrice))
-            elif 0 <= self.__selectedRentIdx < len(self.__vehicle.rentPackages):
-                rentPackage = self.__vehicle.rentPackages[self.__selectedRentIdx]
-                self.viewModel.setPriceDescription(R.strings.store.buyVehicleWindow.priceDescription.rent())
-                self.__updateTankPriceModel(ItemPrice(rentPackage['rentPrice'], rentPackage['defaultRentPrice']))
-            else:
-                self.viewModel.setPriceDescription(R.strings.store.buyVehicleWindow.priceDescription.full())
-                self.__updateTankPriceModel(self.__vehicle.buyPrices.itemPrice)
-        elif self.__tradeIn.tradeOffSelectedApplicableForLevel(self.__vehicle.level):
-            self.__updateTankPriceModel(self.__tradeIn.getTradeInPrice(self.__vehicle))
-            self.viewModel.setPriceDescription(R.strings.store.buyVehicleWindow.priceDescription.tradeIn())
-        elif self.viewModel.getIsRestore():
-            self.viewModel.setPriceDescription(R.strings.store.buyVehicleWindow.priceDescription.restore())
-            defaultPrice = self.__vehicle.restorePrice
-            self.__updateTankPriceModel(ItemPrice(self.__vehicle.restorePrice, defaultPrice))
-        else:
-            self.__updateTankPriceModel(self.__vehicle.buyPrices.itemPrice)
-            self.viewModel.setPriceDescription(R.strings.store.buyVehicleWindow.priceDescription.full())
-
-    def __updateTankPriceModel(self, itemPrice):
-        with self.viewModel.transaction() as vm:
-            for priceModel in vm.tankPrice.getItems():
-                self.__updatePriceModel(priceModel, itemPrice)
 
     def __updateActionPriceArray(self, priceArray, itemPrice):
         for priceModel in priceArray:
@@ -674,7 +633,6 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
                 rentBtnAvailable = self.__isToggleRentAndTradeInState() and self.__isRentVisible
                 rentBtnAvailable |= not self.__isToggleRentAndTradeInState() and self.__vehicle.hasRentPackages
                 vehicleRentBtnVm.setIsVisible(rentBtnAvailable)
-            self.__updateTankPrice()
 
     def __updateTradeOffVehicleBtnData(self):
         with self.viewModel.equipmentBlock.vehicleBtn.transaction() as vehicleBtnVm:
@@ -752,12 +710,6 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             isEnabled &= self.__isValidTradeOffSelected() and self.__tradeOffVehicle.isReadyToTradeOff
         self.viewModel.equipmentBlock.setBuyBtnIsEnabled(isEnabled)
         return
-
-    def __updateToggleTradeInBtn(self):
-        with self.viewModel.toggleTradeInBtn.transaction() as toggleTradeInBtnVm:
-            toggleTradeInBtnVm.setIcon(R.images.gui.maps.icons.library.trade_in() if self.__isRentVisible else R.images.gui.maps.icons.library.rent_ico_big())
-            toggleTradeInBtnVm.setLabel(R.strings.store.buyVehicleWindow.toggleBtn.rent() if self.__isRentVisible else R.strings.store.buyVehicleWindow.toggleBtn.buy())
-            toggleTradeInBtnVm.setIsRent(self.__isRentVisible)
 
     def __updateBuyBtnLabel(self):
         if self.__selectedRentIdx == self.__RENT_NOT_SELECTED_IDX:

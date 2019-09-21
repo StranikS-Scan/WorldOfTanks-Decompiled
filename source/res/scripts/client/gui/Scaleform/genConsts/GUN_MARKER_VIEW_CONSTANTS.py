@@ -4,18 +4,26 @@
 
 class GUN_MARKER_VIEW_CONSTANTS(object):
     GUN_MARKER_LINKAGE = 'GunMarkerUI'
+    DUAL_GUN_ARCADE_MARKER_LINKAGE = 'DualGunArcadeMarkerUI'
+    DUAL_GUN_SNIPER_MARKER_LINKAGE = 'DualGunSniperMarkerUI'
+    DUAL_GUN_ARCADE_MARKER_DEBUG_LINKAGE = 'DualGunArcadeMarkerDebugUI'
+    DUAL_GUN_SNIPER_MARKER_DEBUG_LINKAGE = 'DualGunSniperMarkerDebugUI'
     GUN_MARKER_DEBUG_LINKAGE = 'GunMarkerDebugUI'
     GUN_MARKER_SPG_LINKAGE = 'GunMarkerSPGUI'
     GUN_MARKER_SPG_DEBUG_LINKAGE = 'GunMarkerSPGDebugUI'
     ARTY_HIT_MARKER_LINKAGE = 'ArtyHitMarkerUI'
     ARCADE_GUN_MARKER_NAME = 'arcadeGunMarker'
     SNIPER_GUN_MARKER_NAME = 'sniperGunMarker'
+    DUAL_GUN_ARCADE_MARKER_NAME = 'arcadeDualGunMarker'
+    DUAL_GUN_SNIPER_MARKER_NAME = 'sniperDualGunMarker'
     SPG_GUN_MARKER_NAME = 'spgGunMarker'
     VIDEO_GUN_MARKER_NAME = 'videoGunMarker'
     ARTY_HIT_MARKER_NAME = 'artyHitGunMarker'
     DEBUG_ARCADE_GUN_MARKER_NAME = 'arcadeDebugGunMarker'
     DEBUG_SNIPER_GUN_MARKER_NAME = 'sniperGunDebugMarker'
     DEBUG_SPG_GUN_MARKER_NAME = 'spgDebugGunMarker'
+    DEBUG_DUAL_GUN_ARCADE_MARKER_NAME = 'arcadeDebugDualGunMarker'
+    DEBUG_DUAL_GUN_SNIPER_MARKER_NAME = 'sniperDebugDualGunMarker'
     GUN_TAG_RELOADING_TYPES = [1,
      4,
      7,

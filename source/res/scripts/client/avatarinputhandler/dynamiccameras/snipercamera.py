@@ -51,7 +51,7 @@ class SniperCamera(ICamera, CallbackDelayer):
         self.__noiseOscillator = None
         self.__dynamicCfg = CameraDynamicConfig()
         self.__accelerationSmoother = None
-        self.__readCfg(dataSec)
+        self._readCfg(dataSec)
         if binoculars is None:
             return
         else:
@@ -84,8 +84,10 @@ class SniperCamera(ICamera, CallbackDelayer):
     def create(self, onChangeControlMode=None):
         self.__onChangeControlMode = onChangeControlMode
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
-        aimingSystemClass = SniperAimingSystemRemote if BigWorld.player().isObserver() else SniperAimingSystem
-        self.__aimingSystem = aimingSystemClass()
+        self.__aimingSystem = self._aimingSystemClass()()
+
+    def _aimingSystemClass(self):
+        return SniperAimingSystemRemote if BigWorld.player().isObserver() else SniperAimingSystem
 
     def destroy(self):
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
@@ -391,9 +393,9 @@ class SniperCamera(ICamera, CallbackDelayer):
         import ResMgr
         ResMgr.purge('gui/avatar_input_handler.xml')
         cameraSec = ResMgr.openSection('gui/avatar_input_handler.xml/sniperMode/camera/')
-        self.__readCfg(cameraSec)
+        self._readCfg(cameraSec)
 
-    def __readCfg(self, dataSec):
+    def _readCfg(self, dataSec):
         if not dataSec:
             LOG_WARNING('Invalid section <sniperMode/camera> in avatar_input_handler.xml')
         self.__baseCfg = dict()

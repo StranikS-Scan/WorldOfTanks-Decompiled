@@ -190,6 +190,7 @@ class _HeaderPresenter(object):
         self._prbEntity = prbEntity
         self._bgImage = backport.image(R.images.gui.maps.icons.squad.backgrounds.without_prem())
         self._isArtVisible = self._eventsCache.isSquadXpFactorsEnabled()
+        self._isVisibleHeaderIcon = True
 
     def getData(self):
         iconSource = ''
@@ -199,7 +200,7 @@ class _HeaderPresenter(object):
         if self._isArtVisible and not bonuses:
             iconSource, messageText = self._getMessageParams()
         return {'isVisibleInfoIcon': self._isArtVisible,
-         'isVisibleHeaderIcon': self._isArtVisible,
+         'isVisibleHeaderIcon': self._isArtVisible and self._isVisibleHeaderIcon,
          'isVisibleHeaderMessage': self._isArtVisible,
          'bonuses': bonuses,
          'backgroundHeaderSource': self._bgImage,
@@ -274,12 +275,22 @@ class _EpicHeaderPresenter(_HeaderPresenter):
 
 class _EventHeaderPresenter(_HeaderPresenter):
 
+    def __init__(self, prbEntity):
+        super(_EventHeaderPresenter, self).__init__(prbEntity)
+        self._isVisibleHeaderIcon = False
+        self._bgImage = backport.image(R.images.gui.maps.icons.squad.backgrounds.event())
+
     def _getInfoIconTooltipParams(self):
         vehiclesNames = [ veh.userName for veh in self._eventsCache.getEventVehicles() ]
         tooltip = backport.text(R.strings.tooltips.squadWindow.eventVehicle(), tankName=', '.join(vehiclesNames))
         return (makeTooltip(body=tooltip), TOOLTIPS_CONSTANTS.COMPLEX)
 
     def _getMessageParams(self):
-        iconSource = backport.image(R.images.gui.maps.icons.squad.event())
+        iconSource = ''
+        if self._isVisibleHeaderIcon:
+            iconSource = backport.image(R.images.gui.maps.icons.squad.event())
         messageText = text_styles.main(backport.text(R.strings.messenger.dialogs.squadChannel.headerMsg.eventFormationRestriction()))
         return (iconSource, messageText)
+
+    def _packBonuses(self):
+        return []

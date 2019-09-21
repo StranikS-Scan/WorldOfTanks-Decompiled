@@ -33,7 +33,8 @@ class NoneExtra(EntityExtra):
 class ShowShooting(EntityExtra):
     __slots__ = ()
 
-    def _start(self, data, burstCount):
+    def _start(self, data, args):
+        burstCount, _ = args
         vehicle = data['entity']
         gunDescr = vehicle.typeDescriptor.gun
         stages, effects, _ = gunDescr.effects
@@ -76,7 +77,7 @@ class ShowShooting(EntityExtra):
                 avatar.getOwnVehicleShotDispersionAngle(avatar.gunRotator.turretRotationSpeed, withShot)
             groundWaveEff = effPlayer.effectsList.relatedEffects.get('groundWave')
             if groundWaveEff is not None:
-                self.__doGroundWaveEffect(data['entity'], groundWaveEff, gunModel)
+                self._doGroundWaveEffect(data['entity'], groundWaveEff, gunModel)
             self.__doRecoil(vehicle, gunModel)
             if vehicle.isPlayerVehicle:
                 appearance = vehicle.appearance
@@ -91,8 +92,8 @@ class ShowShooting(EntityExtra):
         appearance = vehicle.appearance
         appearance.recoil()
 
-    def __doGroundWaveEffect(self, vehicle, groundWaveEff, gunModel):
-        node = gunModel.node('HP_gunFire')
+    def _doGroundWaveEffect(self, vehicle, groundWaveEff, gunModel, gunNode=None):
+        node = gunModel.node('HP_gunFire' if gunNode is None else gunNode)
         gunMatr = Math.Matrix(node)
         gunPos = gunMatr.translation
         gunDir = gunMatr.applyVector((0, 0, 1))
@@ -115,6 +116,77 @@ class ShowShooting(EntityExtra):
             matKind = testRes.matKind
         BigWorld.player().terrainEffects.addNew(position, groundWaveEff.effectsList, groundWaveEff.keyPoints, None, dir=gunDir, surfaceMatKind=matKind, start=position + Math.Vector3(0, 0.5, 0), end=position - Math.Vector3(0, 0.5, 0), entity_id=vehicle.id)
         return
+
+
+class ShowShootingMultiGun(ShowShooting):
+    _SHOT_SINGLE = 1
+
+    def _start(self, data, args):
+        burstCount, gunIndex = args
+        if burstCount != self._SHOT_SINGLE:
+            data['_gunIndex'] = range(0, burstCount)
+        else:
+            data['_gunIndex'] = [gunIndex]
+        vehicle = data['entity']
+        gunDescr = vehicle.typeDescriptor.gun
+        data['entity_id'] = vehicle.id
+        effectPlayers = {}
+        for gunIndex in data['_gunIndex']:
+            stages, effects, _ = gunDescr.effects[gunIndex]
+            effectPlayers[gunIndex] = EffectsListPlayer(effects, stages, **data)
+
+        data['_effectsListPlayers'] = effectPlayers
+        data['_burst'] = (burstCount, gunDescr.burst[1])
+        data['_gunModel'] = vehicle.appearance.compoundModel
+        self.__doShot(data)
+
+    def _cleanup(self, data):
+        effPlayers = data.get('_effectsListPlayers')
+        if effPlayers is None:
+            return
+        else:
+            for effPlayer in effPlayers.values():
+                if effPlayer is not None:
+                    effPlayer.stop()
+
+            return
+
+    def __doShot(self, data):
+        try:
+            vehicle = data['entity']
+            if not vehicle.isAlive():
+                self.stop(data)
+                return
+            self.__doGunEffect(data)
+            avatar = BigWorld.player()
+            if data['entity'].isPlayerVehicle or vehicle is avatar.getVehicleAttached():
+                avatar.getOwnVehicleShotDispersionAngle(avatar.gunRotator.turretRotationSpeed, withShot=1)
+            self.__doRecoil(data)
+            if vehicle.isPlayerVehicle:
+                appearance = vehicle.appearance
+                appearance.executeShootingVibrations(vehicle.typeDescriptor.shot.shell.caliber)
+        except Exception:
+            LOG_CURRENT_EXCEPTION()
+            self.stop(data)
+
+    def __doGunEffect(self, data):
+        gunModel = data['_gunModel']
+        vehicle = data['entity']
+        multiGun = vehicle.typeDescriptor.turret.multiGun
+        for gunIndex, effPlayer in data['_effectsListPlayers'].items():
+            effPlayer.stop()
+            effPlayer.play(gunModel, None, partial(self.stop, data))
+            groundWaveEff = effPlayer.effectsList.relatedEffects.get('groundWave')
+            if groundWaveEff is not None:
+                self._doGroundWaveEffect(vehicle, groundWaveEff, gunModel, gunNode=multiGun[gunIndex].gunFire)
+
+        return
+
+    def __doRecoil(self, data):
+        vehicle = data['entity']
+        appearance = vehicle.appearance
+        gunIndexes = data['_gunIndex']
+        appearance.multiGunRecoil(gunIndexes)
 
 
 class DamageMarker(EntityExtra):

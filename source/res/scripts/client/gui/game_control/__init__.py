@@ -50,6 +50,7 @@ def getGameControllersConfig(manager):
     from skeletons.gui import game_control as _interface
     from gui.game_control.referral_program_controller import ReferralProgramController as _ReferralController
     from gui.game_control.badges_controller import BadgesController as _Badges
+    from gui.game_control.special_sound_ctrl import SpecialSoundCtrl as _SpecialSoundCtrl
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -92,6 +93,7 @@ def getGameControllersConfig(manager):
     _config(_interface.IEpicBattleMetaGameController, _EpicMeta())
     _config(_interface.IManualController, _ManualController())
     _config(_interface.IReferralProgramController, _ReferralController())
+    _config(_interface.ISpecialSoundCtrl, _SpecialSoundCtrl())
     if constants.IS_CHINA:
         _config(_interface.IChinaController, _China())
     else:

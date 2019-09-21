@@ -57,6 +57,7 @@ class STORAGE(object):
     PERSONALRESERVES_ACTIVECOUNTLABEL = '#storage:personalreserves/activeCountLabel'
     PERSONALRESERVES_NOITEMS_TITLE = '#storage:personalreserves/noItems/title'
     PERSONALRESERVES_CARD_ACTIVATED = '#storage:personalreserves/card/activated'
+    PERSONALRESERVES_CARD_NOTAVAILABLE = '#storage:personalreserves/card/notAvailable'
     MODULECOMPATIBLE_LABEL = '#storage:moduleCompatible/label'
     MODULECOMPATIBLE_MOREVEHICLES = '#storage:moduleCompatible/moreVehicles'
     SHELLCOMPATIBLE_LABEL = '#storage:shellCompatible/label'

@@ -10,7 +10,7 @@ from web.web_client_api.ui.browser import OpenBrowserWindowWebApiMixin
 from web.web_client_api.ui.browser import CloseBrowserWindowWebApiMixin
 from web.web_client_api.ui.browser import CloseBrowserViewWebApiMixin
 from web.web_client_api.ui.browser import OpenExternalBrowserWebApiMixin
-from web.web_client_api.ui.browser import OpenBrowserOverlayWebApiMixin
+from web.web_client_api.ui.browser import OpenBrowserOverlayWebApiMixin, OpenBuyGoldWebApiMixin
 from web.web_client_api.ui.barracks import BarracksWebApiMixin
 from web.web_client_api.ui.clan import ClanWindowWebApiMixin
 from web.web_client_api.ui import hangar
@@ -23,6 +23,7 @@ from web.web_client_api.ui.profile import ProfileTabWebApiMixin, ProfileWindowWe
 from web.web_client_api.ui.squad import SquadWebApiMixin
 from web.web_client_api.ui.storage import StorageWebApiMixin
 from web.web_client_api.ui.strongholds import StrongholdsWebApiMixin
+from web.web_client_api.ui.tankman import OpenTankmanWebApiMixin
 from web.web_client_api.ui.techtree import TechTreeTabWebApiMixin
 from web.web_client_api.ui.util import UtilWebApiMixin
 from web.web_client_api.ui.vehicle import VehicleSellWebApiMixin
@@ -32,7 +33,7 @@ from web.web_client_api.ui.vehicle import VehicleComparisonBasketWebApiMixin
 from web.web_client_api.ui.waiting import WaitingWebApiMixin
 
 @w2capi(name='open_window', key='window_id')
-class OpenWindowWebApi(OpenBrowserWindowWebApiMixin, ClanWindowWebApiMixin, ProfileWindowWebApiMixin, OpenExternalBrowserWebApiMixin, VehicleSellWebApiMixin, hangar.HangarWindowsWebApiMixin, BoostersWindowWebApiMixin, PremiumWindowWebApiMixin, ManualPageWebApiMixin, ChatWebApiMixin, SquadWebApiMixin, OpenBrowserOverlayWebApiMixin, PremiumViewsWebApiMixin, OpenCalendarWindowWebApiMixin):
+class OpenWindowWebApi(OpenBrowserWindowWebApiMixin, ClanWindowWebApiMixin, ProfileWindowWebApiMixin, OpenExternalBrowserWebApiMixin, VehicleSellWebApiMixin, hangar.HangarWindowsWebApiMixin, BoostersWindowWebApiMixin, PremiumWindowWebApiMixin, ManualPageWebApiMixin, ChatWebApiMixin, SquadWebApiMixin, OpenBrowserOverlayWebApiMixin, PremiumViewsWebApiMixin, OpenCalendarWindowWebApiMixin, OpenBuyGoldWebApiMixin, OpenTankmanWebApiMixin):
     pass
 
 

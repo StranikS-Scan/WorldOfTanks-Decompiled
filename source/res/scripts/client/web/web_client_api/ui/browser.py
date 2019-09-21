@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/ui/browser.py
 from adisp import process
+from gui.ingame_shop import showBuyGoldWebOverlay
 from gui.shared.event_dispatcher import showBrowserOverlayView
 from helpers import dependency
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -29,6 +30,10 @@ class _OpenExternalBrowserSchema(W2CSchema):
 class _OpenBrowserOverlaySchema(W2CSchema):
     url = Field(required=True, type=basestring)
     blur_bg = Field(type=bool, default=False)
+
+
+class _OpenBuyGoldOverlaySchema(W2CSchema):
+    params = Field(required=False, type=dict)
 
 
 class OpenBrowserWindowWebApiMixin(object):
@@ -110,3 +115,10 @@ class OpenBrowserOverlayWebApiMixin(object):
     @w2c(_OpenBrowserOverlaySchema, 'browser_overlay')
     def openBrowserOverlay(self, cmd):
         showBrowserOverlayView(cmd.url, alias=VIEW_ALIAS.WEB_VIEW_TRANSPARENT if cmd.blur_bg else VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW)
+
+
+class OpenBuyGoldWebApiMixin(object):
+
+    @w2c(_OpenBuyGoldOverlaySchema, 'buy_gold')
+    def openBuyGoldWebOverlay(self, cmd):
+        showBuyGoldWebOverlay(cmd.params)

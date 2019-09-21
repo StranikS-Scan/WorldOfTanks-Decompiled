@@ -5,10 +5,11 @@ import BigWorld
 from debug_utils import LOG_DEBUG_DEV
 from aih_constants import CTRL_MODES
 from AvatarInputHandler.commands.input_handler_command import InputHandlerCommand
-from AvatarInputHandler.control_modes import ArcadeControlMode, SniperControlMode
+from AvatarInputHandler.control_modes import ArcadeControlMode, SniperControlMode, DualGunControlMode
 from AvatarInputHandler.control_modes import StrategicControlMode, ArtyControlMode
 from AvatarInputHandler.AimingSystems.ArcadeAimingSystem import ArcadeAimingSystem
 from AvatarInputHandler.AimingSystems.SniperAimingSystem import SniperAimingSystem
+from AvatarInputHandler.AimingSystems.DualGunAimingSystem import DualGunAimingSystem
 from AvatarInputHandler.AimingSystems.StrategicAimingSystem import StrategicAimingSystem
 from AvatarInputHandler.AimingSystems.ArtyAimingSystem import ArtyAimingSystem
 
@@ -38,7 +39,7 @@ class RemoteCameraSender(InputHandlerCommand):
             if vehicle is None:
                 return
             ctrl = self.__aih.ctrl
-            if isinstance(ctrl, ArcadeControlMode) and isinstance(ctrl.camera.aimingSystem, ArcadeAimingSystem) or isinstance(ctrl, SniperControlMode) and isinstance(ctrl.camera.aimingSystem, SniperAimingSystem) or isinstance(ctrl, ArtyControlMode) and isinstance(ctrl.camera.aimingSystem, ArtyAimingSystem) or isinstance(ctrl, StrategicControlMode) and isinstance(ctrl.camera.aimingSystem, StrategicAimingSystem):
+            if isinstance(ctrl, ArcadeControlMode) and isinstance(ctrl.camera.aimingSystem, ArcadeAimingSystem) or isinstance(ctrl, SniperControlMode) and isinstance(ctrl.camera.aimingSystem, SniperAimingSystem) or isinstance(ctrl, ArtyControlMode) and isinstance(ctrl.camera.aimingSystem, ArtyAimingSystem) or isinstance(ctrl, DualGunControlMode) and isinstance(ctrl.camera.aimingSystem, DualGunAimingSystem) or isinstance(ctrl, StrategicControlMode) and isinstance(ctrl.camera.aimingSystem, StrategicAimingSystem):
                 aimingSystem = ctrl.camera.aimingSystem
                 shotPoint = aimingSystem.getShotPoint()
                 zoom = aimingSystem.getZoom()

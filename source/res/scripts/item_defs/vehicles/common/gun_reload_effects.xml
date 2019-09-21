@@ -140,4 +140,12 @@
     <almostCompleteDuration>	6000.0	</almostCompleteDuration>
     <caliber>	SWITCH_ext_rld_autoloader_caliber_85_107mm	</caliber>
   </autoloader_reload85_107>
+  <dualgun_reload115_152>
+    <type>	DualGunReload	</type>
+    <duration>	2500.0	</duration>
+    <sound>	gun_rld_dual_reloading_oneshell	</sound>
+    <runTimeDelta>	1.8	</runTimeDelta>
+    <ammoLowSound>	gun_rld_dual_reloading_oneshell_last	</ammoLowSound>
+    <runTimeDeltaAmmoLow>	0.5	</runTimeDeltaAmmoLow>
+  </dualgun_reload115_152>
 </gun_reload_effects.xml>

@@ -5,7 +5,7 @@ from PlayerEvents import g_playerEvents
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.shared.utils import getPlayerDatabaseID
 from messenger import g_settings
-from messenger.m_constants import GAME_ONLINE_STATUS, USER_TAG
+from messenger.m_constants import GAME_ONLINE_STATUS, USER_TAG, PROTO_TYPE
 from messenger.proto.entities import ClanInfo
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp import entities
@@ -38,6 +38,7 @@ class XmppClanListener(ClientHolder):
         return None
 
     def registerHandlers(self):
+        g_messengerEvents.onPluginConnected += self.__onPluginConnected
         cEvents = g_messengerEvents.channels
         cEvents.onChannelInited += self.__ce_onChannelInited
         cEvents.onChannelDestroyed += self.__ce_onChannelDestroyed
@@ -45,6 +46,7 @@ class XmppClanListener(ClientHolder):
         self.playerCtx.onClanInfoChanged += self.__pc_onClanInfoChanged
 
     def unregisterHandlers(self):
+        g_messengerEvents.onPluginConnected -= self.__onPluginConnected
         cEvents = g_messengerEvents.channels
         cEvents.onChannelInited -= self.__ce_onChannelInited
         cEvents.onChannelDestroyed -= self.__ce_onChannelDestroyed
@@ -157,6 +159,10 @@ class XmppClanListener(ClientHolder):
             user.update(clanInfo=userClanInfo)
 
         g_messengerEvents.users.onClanMembersListChanged()
+
+    def __onPluginConnected(self, proto):
+        if proto == PROTO_TYPE.XMPP:
+            self.__checkForJoin()
 
     def __checkForJoin(self):
         if self.__clanChannel is None and self.__clanDBID != 0 and self.__clanAbbrev != '':

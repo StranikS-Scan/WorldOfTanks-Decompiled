@@ -3,11 +3,11 @@
 import math
 import BigWorld
 import Math
-from constants import VEHICLE_SIEGE_STATE
-from Math import Vector3, Matrix
 import math_utils
 from AvatarInputHandler import AimingSystems
 from AvatarInputHandler.AimingSystems import IAimingSystem
+from Math import Vector3
+from constants import VEHICLE_SIEGE_STATE
 from gun_rotation_shared import calcPitchLimitsFromDesc
 
 class SniperAimingSystem(IAimingSystem):
@@ -37,8 +37,8 @@ class SniperAimingSystem(IAimingSystem):
         self.__idealGunPitch = 0.0
         self.__worldYaw = 0.0
         self.__worldPitch = 0.0
-        self.__vehicleTypeDescriptor = None
-        self.__vehicleMProv = None
+        self._vehicleTypeDescriptor = None
+        self._vehicleMProv = None
         self.__siegeState = VEHICLE_SIEGE_STATE.DISABLED
         self.__yprDeviationConstraints = Vector3(SniperAimingSystem.__STABILIZED_CONSTRAINTS)
         self.__oscillator = Math.PyOscillator(1.0, Vector3(0.0, 0.0, 15.0), Vector3(0.0, 0.0, 3.5), self.__yprDeviationConstraints)
@@ -65,11 +65,11 @@ class SniperAimingSystem(IAimingSystem):
     def getDynamicPitchLimits(self, turretYaw=0.0):
 
         def _getCorrectGunPitch(vehicleMatrix, turretYaw, gunPitch, overrideTurretLocalZ=None):
-            turretMat = AimingSystems.getTurretJointMat(self.__vehicleTypeDescriptor, vehicleMatrix, turretYaw, overrideTurretLocalZ)
-            gunMat = AimingSystems.getGunJointMat(self.__vehicleTypeDescriptor, turretMat, gunPitch, overrideTurretLocalZ)
+            turretMat = AimingSystems.getTurretJointMat(self._vehicleTypeDescriptor, vehicleMatrix, turretYaw, overrideTurretLocalZ)
+            gunMat = AimingSystems.getGunJointMat(self._vehicleTypeDescriptor, turretMat, gunPitch, overrideTurretLocalZ)
             return gunMat.pitch
 
-        typeDescr = self.__vehicleTypeDescriptor
+        typeDescr = self._vehicleTypeDescriptor
         gunLimits = typeDescr.gun.pitchLimits
         gunAngleMin = gunLimits['minPitch'][0][1]
         gunAngleMax = gunLimits['maxPitch'][0][1]
@@ -87,7 +87,7 @@ class SniperAimingSystem(IAimingSystem):
          'minPitch': ((0.0, minPitch), (math.pi * 2.0, minPitch))}
 
     def getPitchLimits(self, turretYaw=0.0):
-        return self.getDynamicPitchLimits(turretYaw) if self.__vehicleTypeDescriptor.isHullAimingAvailable and self.__siegeState == VEHICLE_SIEGE_STATE.ENABLED else self.__vehicleTypeDescriptor.gun.pitchLimits
+        return self.getDynamicPitchLimits(turretYaw) if self._vehicleTypeDescriptor.isHullAimingAvailable and self.__siegeState == VEHICLE_SIEGE_STATE.ENABLED else self._vehicleTypeDescriptor.gun.pitchLimits
 
     def onSiegeStateChanged(self, newState):
         self.__siegeState = newState
@@ -98,8 +98,9 @@ class SniperAimingSystem(IAimingSystem):
             siegeState = player.vehicle.siegeState
             self.__siegeState = siegeState if siegeState is not None else VEHICLE_SIEGE_STATE.DISABLED
         self.__playerGunMatFunction = playerGunMatFunction
-        self.__vehicleTypeDescriptor = player.vehicleTypeDescriptor
-        self.__vehicleMProv = player.inputHandler.steadyVehicleMatrixCalculator.outputMProv
+        if player.vehicle is not None:
+            self._vehicleTypeDescriptor = player.vehicle.typeDescriptor
+        self._vehicleMProv = player.inputHandler.steadyVehicleMatrixCalculator.outputMProv
         IAimingSystem.enable(self, targetPos)
         self.focusOnPos(targetPos)
         self.__oscillator.reset()
@@ -112,12 +113,12 @@ class SniperAimingSystem(IAimingSystem):
         return
 
     def focusOnPos(self, preferredPos):
-        self.__yawLimits = self.__vehicleTypeDescriptor.gun.turretYawLimits
+        self.__yawLimits = self._vehicleTypeDescriptor.gun.turretYawLimits
         if self.__isTurretHasStaticYaw():
             self.__yawLimits = None
         if self.__yawLimits is not None and abs(self.__yawLimits[0] - self.__yawLimits[1]) < 1e-05:
             self.__yawLimits = None
-        self.__idealTurretYaw, self.__idealGunPitch = self.__getTurretYawGunPitch(preferredPos, True)
+        self.__idealTurretYaw, self.__idealGunPitch = self._getTurretYawGunPitch(preferredPos, True)
         self.__returningOscillator.reset()
         self.__idealTurretYaw, self.__idealGunPitch = self.__clampToLimits(self.__idealTurretYaw, self.__idealGunPitch)
         currentGunMat = self.__getPlayerGunMat(self.__idealTurretYaw, self.__idealGunPitch)
@@ -154,7 +155,7 @@ class SniperAimingSystem(IAimingSystem):
         self._matrix.set(currentGunMat)
         self.__oscillator.velocity = Vector3(0.0, 0.0, 0.0)
         self.__returningOscillator.velocity = Vector3(0.0, 0.0, 0.0)
-        _, uncompensatedPitch = self.__getTurretYawGunPitch(self.getDesiredShotPoint())
+        _, uncompensatedPitch = self._getTurretYawGunPitch(self.getDesiredShotPoint())
         self.__pitchCompensating = math_utils.clamp(math.radians(-2.0), math.radians(2.0), self.__idealGunPitch - uncompensatedPitch)
         if abs(self.__pitchCompensating) < 1e-06:
             self.__pitchCompensating = 0.0
@@ -189,7 +190,7 @@ class SniperAimingSystem(IAimingSystem):
             return self.__pitchCompensating + pitchLimits[1] - gunPitch if self.__pitchCompensating + pitchLimits[1] < gunPitch else 0.0
 
     def __worldYawPitchToTurret(self, worldYaw, worldPitch):
-        worldToTurret = Matrix(self.__vehicleMProv)
+        worldToTurret = Math.Matrix(self._vehicleMProv)
         worldToTurret.invert()
         worldToTurret.preMultiply(math_utils.createRotationMatrix((worldYaw, worldPitch, 0.0)))
         return (worldToTurret.yaw, worldToTurret.pitch)
@@ -237,16 +238,16 @@ class SniperAimingSystem(IAimingSystem):
     def __getPlayerGunMat(self, turretYaw, gunPitch):
         return self.__playerGunMatFunction(turretYaw, gunPitch)
 
-    def __getTurretYawGunPitch(self, targetPos, compensateGravity=False):
+    def _getTurretYawGunPitch(self, targetPos, compensateGravity=False):
         player = BigWorld.player()
         stabilisedMatrix = Math.Matrix(player.inputHandler.steadyVehicleMatrixCalculator.stabilisedMProv)
-        turretYaw, gunPitch = AimingSystems.getTurretYawGunPitch(self.__vehicleTypeDescriptor, stabilisedMatrix, targetPos, compensateGravity)
+        turretYaw, gunPitch = AimingSystems.getTurretYawGunPitch(self._vehicleTypeDescriptor, stabilisedMatrix, targetPos, compensateGravity)
         rotation = math_utils.createRotationMatrix((turretYaw, gunPitch, 0.0))
         rotation.postMultiply(stabilisedMatrix)
-        invertSteady = Math.Matrix(self.__vehicleMProv)
+        invertSteady = Math.Matrix(self._vehicleMProv)
         invertSteady.invert()
         rotation.postMultiply(invertSteady)
         return (rotation.yaw, rotation.pitch)
 
     def __isTurretHasStaticYaw(self):
-        return self.__vehicleTypeDescriptor.gun.staticTurretYaw is not None
+        return self._vehicleTypeDescriptor.gun.staticTurretYaw is not None

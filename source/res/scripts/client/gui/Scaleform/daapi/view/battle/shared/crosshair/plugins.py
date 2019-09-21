@@ -2,13 +2,14 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/crosshair/plugins.py
 import math
 from collections import defaultdict
-import BigWorld
 import BattleReplay
-from ReplayEvents import g_replayEvents
-from AvatarInputHandler import gun_marker_ctrl
+import BigWorld
+from AvatarInputHandler import gun_marker_ctrl, aih_global_binding
 from PlayerEvents import g_playerEvents
+from ReplayEvents import g_replayEvents
 from account_helpers.settings_core.settings_constants import GRAPHICS, AIM, GAME
-from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE
+from aih_constants import CHARGE_MARKER_STATE
+from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, DUALGUN_CHARGER_STATUS, SERVER_TICK_LENGTH
 from debug_utils import LOG_WARNING
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.battle.shared.crosshair.settings import SHOT_RESULT_TO_ALT_COLOR
@@ -16,6 +17,7 @@ from gui.Scaleform.daapi.view.battle.shared.crosshair.settings import SHOT_RESUL
 from gui.Scaleform.daapi.view.battle.shared.formatters import getHealthPercent
 from gui.Scaleform.daapi.view.battle.shared.timers_common import PythonTimer
 from gui.Scaleform.genConsts.CROSSHAIR_CONSTANTS import CROSSHAIR_CONSTANTS
+from gui.Scaleform.genConsts.DUAL_GUN_MARKER_STATE import DUAL_GUN_MARKER_STATE
 from gui.Scaleform.genConsts.GUN_MARKER_VIEW_CONSTANTS import GUN_MARKER_VIEW_CONSTANTS as _VIEW_CONSTANTS
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control import avatar_getter
@@ -37,6 +39,10 @@ _SETTINGS_VIEWS = set(_SETTINGS_KEY_TO_VIEW_ID.values())
 _DEVICE_ENGINE_NAME = 'engine'
 _DEVICE_REPAIRED = 'repaired'
 _TARGET_UPDATE_INTERVAL = 0.2
+_DUAL_GUN_MARKER_STATES_MAP = {CHARGE_MARKER_STATE.VISIBLE: DUAL_GUN_MARKER_STATE.VISIBLE,
+ CHARGE_MARKER_STATE.LEFT_ACTIVE: DUAL_GUN_MARKER_STATE.LEFT_PART_ACTIVE,
+ CHARGE_MARKER_STATE.RIGHT_ACTIVE: DUAL_GUN_MARKER_STATE.RIGHT_PART_ACTIVE,
+ CHARGE_MARKER_STATE.DIMMED: DUAL_GUN_MARKER_STATE.DIMMED}
 
 def createPlugins():
     resultPlugins = {'core': CorePlugin,
@@ -50,7 +56,8 @@ def createPlugins():
      'shotResultIndicator': ShotResultIndicatorPlugin,
      'shotDone': ShotDonePlugin,
      'speedometerWheeledTech': SpeedometerWheeledTech,
-     'siegeMode': SiegeModePlugin}
+     'siegeMode': SiegeModePlugin,
+     'dualgun': DualGunPlugin}
     return resultPlugins
 
 
@@ -834,7 +841,7 @@ class SiegeModePlugin(CrosshairPlugin):
         if ctrl.isInPostmortem:
             return
         else:
-            if vTypeDesc.hasSiegeMode and not vTypeDesc.isWheeledVehicle and not vTypeDesc.hasAutoSiegeMode:
+            if vTypeDesc.hasSiegeMode and not vTypeDesc.isWheeledVehicle and not vTypeDesc.hasAutoSiegeMode and not vTypeDesc.isDualgunVehicle:
                 value = ctrl.getStateValue(VEHICLE_VIEW_STATE.SIEGE_MODE)
                 if value is not None:
                     self.__onVehicleStateUpdated(VEHICLE_VIEW_STATE.SIEGE_MODE, value)
@@ -856,7 +863,7 @@ class SiegeModePlugin(CrosshairPlugin):
         vehicle = vStateCtrl.getControllingVehicle()
         if vehicle is not None:
             vTypeDescr = vehicle.typeDescriptor
-            if vTypeDescr.isWheeledVehicle or vTypeDescr.hasAutoSiegeMode:
+            if vTypeDescr.isWheeledVehicle or vTypeDescr.hasAutoSiegeMode or vTypeDescr.isDualgunVehicle:
                 return
         else:
             return
@@ -912,6 +919,9 @@ class SpeedometerWheeledTech(CrosshairPlugin):
             vehicle = vStateCtrl.getControllingVehicle()
             if vehicle is not None and vehicle.isWheeledTech:
                 self.__onVehicleControlling(vehicle)
+        specCtrl = self.sessionProvider.dynamic.spectator
+        if specCtrl is not None:
+            specCtrl.onSpectatorViewModeChanged += self.__onSpectatorModeChanged
         add = g_eventBus.addListener
         add(GameEvent.DESTROY_TIMERS_PANEL, self.__destroyTimersListener, scope=EVENT_BUS_SCOPE.BATTLE)
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
@@ -924,6 +934,9 @@ class SpeedometerWheeledTech(CrosshairPlugin):
             vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
             vStateCtrl.onVehicleControlling -= self.__onVehicleControlling
             crosshairCtrl.onCrosshairViewChanged -= self.__onCrosshairViewChanged
+        specCtrl = self.sessionProvider.dynamic.spectator
+        if specCtrl is not None:
+            specCtrl.onSpectatorViewModeChanged -= self.__onSpectatorModeChanged
         remove = g_eventBus.removeListener
         remove(GameEvent.DESTROY_TIMERS_PANEL, self.__destroyTimersListener, scope=EVENT_BUS_SCOPE.BATTLE)
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
@@ -986,6 +999,9 @@ class SpeedometerWheeledTech(CrosshairPlugin):
         else:
             self.parentObj.as_stopBurnoutWarningS()
         return
+
+    def __onSpectatorModeChanged(self, mode):
+        self.parentObj.as_removeSpeedometerS()
 
     def __onReplayTimeWarpStart(self):
         self.__resetSpeedometer()
@@ -1079,3 +1095,64 @@ class SpeedometerWheeledTech(CrosshairPlugin):
             else:
                 self.parentObj.as_removeSpeedometerS()
             return
+
+
+class DualGunPlugin(CrosshairPlugin):
+    __chargeMarkerState = aih_global_binding.bindRO(aih_global_binding.BINDING_ID.CHARGE_MARKER_STATE)
+
+    def start(self):
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if vStateCtrl is not None:
+            vStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+            vStateCtrl.onVehicleControlling += self.__onVehicleControlling
+            vehicle = vStateCtrl.getControllingVehicle()
+            self.__onVehicleControlling(vehicle)
+        if crosshairCtrl is not None:
+            crosshairCtrl.onChargeMarkerStateUpdated += self.__dualGunMarkerStateUpdated
+        self.__dualGunMarkerStateUpdated(self.__chargeMarkerState)
+        return
+
+    def stop(self):
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if vStateCtrl is not None:
+            vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+            vStateCtrl.onVehicleControlling -= self.__onVehicleControlling
+        if crosshairCtrl is not None:
+            crosshairCtrl.onChargeMarkerStateUpdated -= self.__dualGunMarkerStateUpdated
+        return
+
+    def __onVehicleControlling(self, vehicle):
+        if vehicle is None:
+            return
+        else:
+            vTypeDesc = vehicle.typeDescriptor
+            if vehicle.isAlive() and vTypeDesc.isDualgunVehicle:
+                self._parentObj.as_setNetSeparatorVisibleS(False)
+            return
+
+    def __onVehicleStateUpdated(self, stateID, value):
+        if stateID == VEHICLE_VIEW_STATE.SIEGE_MODE:
+            self.__onSiegeStateUpdated(value)
+        if stateID == VEHICLE_VIEW_STATE.DUAL_GUN_CHARGER:
+            self.__onDualGunChargeStateUpdated(value)
+
+    def __onSiegeStateUpdated(self, value):
+        siegeState, _ = value
+        if siegeState is _SIEGE_STATE.DISABLED:
+            self.parentObj.as_cancelDualGunChargeS()
+
+    def __onDualGunChargeStateUpdated(self, value):
+        state, time = value
+        msInSecond = 1000
+        pingCompensation = SERVER_TICK_LENGTH * msInSecond
+        if state == DUALGUN_CHARGER_STATUS.PREPARING:
+            baseTime, timeLeft = time
+            self.parentObj.as_startDualGunChargingS(timeLeft * msInSecond - pingCompensation, baseTime * msInSecond)
+        elif state in (DUALGUN_CHARGER_STATUS.CANCELED, DUALGUN_CHARGER_STATUS.UNAVAILABLE):
+            self.parentObj.as_cancelDualGunChargeS()
+
+    def __dualGunMarkerStateUpdated(self, markerState):
+        dualGunMarkerState = _DUAL_GUN_MARKER_STATES_MAP[markerState]
+        self.parentObj.as_updateDualGunMarkerStateS(dualGunMarkerState)

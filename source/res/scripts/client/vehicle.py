@@ -30,8 +30,8 @@ from items import vehicles
 from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES, EFFECT_MATERIALS
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.game_control import ISpecialSoundCtrl
 from soft_exception import SoftException
-from special_sound import setSpecialVoice
 from vehicle_systems import appearance_cache
 from vehicle_systems.entity_components.battle_abilities_component import BattleAbilitiesComponent
 from vehicle_systems.stricted_loading import loadingPriority
@@ -87,6 +87,8 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
     hasMovingFlags = property(lambda self: self.engineMode is not None and self.engineMode[1] & 3)
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    __specialSounds = dependency.descriptor(ISpecialSoundCtrl)
+    activeGunIndex = property(lambda self: self.__activeGunIndex)
 
     @property
     def speedInfo(self):
@@ -146,6 +148,8 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         self.__handbrakeFired = False
         self.__wheelsScrollFilter = None
         self.__wheelsSteeringFilter = None
+        self.__activeGunIndex = None
+        self.refreshNationalVoice()
         return
 
     def __del__(self):
@@ -243,7 +247,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         self.__stopExtras()
         BigWorld.player().vehicle_onLeaveWorld(self)
 
-    def showShooting(self, burstCount, isPredictedShot=False):
+    def showShooting(self, burstCount, gunIndex, isPredictedShot=False):
         blockShooting = self.siegeState is not None and self.siegeState != VEHICLE_SIEGE_STATE.ENABLED and self.siegeState != VEHICLE_SIEGE_STATE.DISABLED and not self.typeDescriptor.hasAutoSiegeMode
         if not self.isStarted or blockShooting:
             return
@@ -253,7 +257,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
                     return
             extra = self.typeDescriptor.extrasDict['shoot']
             extra.stopFor(self)
-            extra.startFor(self, burstCount)
+            extra.startFor(self, (burstCount, gunIndex))
             if not isPredictedShot and self.isPlayerVehicle:
                 ctrl = self.guiSessionProvider.shared.feedback
                 if ctrl is not None:
@@ -626,6 +630,24 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
                 _logger.error('Wrong usage! Should be called only on vehicle with valid typeDescriptor and siege mode')
             return
 
+    def onActiveGunChanged(self, activeGun, switchTimes):
+        if not self.isStarted:
+            return
+        else:
+            if self.typeDescriptor is not None and self.typeDescriptor.isDualgunVehicle:
+                if self.__activeGunIndex == activeGun:
+                    return
+                self.__activeGunIndex = activeGun
+                swElapsedTime = (switchTimes['baseTime'] - switchTimes['leftTime']) / 10.0
+                afterShotDelay = self.typeDescriptor.gun.dualGun.afterShotDelay
+                leftDelayTime = max(afterShotDelay - swElapsedTime, 0.0)
+                ctrl = self.guiSessionProvider.shared.feedback
+                if ctrl is not None:
+                    ctrl.invalidateActiveGunChanges(self.id, (activeGun, leftDelayTime))
+            else:
+                _logger.error('switch gun trouble: using with not valid vehicle')
+            return
+
     def collideSegmentExt(self, startPoint, endPoint):
         if self.appearance.collisions is not None:
             collisions = self.appearance.collisions.collideAllWorld(startPoint, endPoint)
@@ -694,7 +716,6 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         if self.isTurretMarkedForDetachment:
             self.confirmTurretDetachment()
         self.__startWGPhysics()
-        self.refreshNationalVoice()
         self.__prereqs = None
         self.appearance.highlighter.setVehicleOwnership()
         if self.respawnCompactDescr:
@@ -704,11 +725,10 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
 
     def refreshNationalVoice(self):
         player = BigWorld.player()
-        if self is not player.getVehicleAttached():
-            return
-        commanderSkinID = self.publicInfo.commanderSkinID
-        vehicleType = self.typeDescriptor.type
-        setSpecialVoice(self.publicInfo.crewGroup, commanderSkinID, vehicleType, self.id == player.playerVehicleID)
+        if self.id == player.observedVehicleID:
+            self.__specialSounds.setPlayerVehicle(self.publicInfo, False)
+        elif self.id == player.playerVehicleID:
+            self.__specialSounds.setPlayerVehicle(self.publicInfo, True)
 
     def stopVisual(self, showStipple=False):
         if not self.isStarted:

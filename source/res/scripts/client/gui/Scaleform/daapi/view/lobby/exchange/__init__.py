@@ -17,7 +17,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.exchange.ExchangeXPWindow import ExchangeXPWindow
     from gui.Scaleform.daapi.view.lobby.exchange.ExchangeFreeToTankmanXpWindow import ExchangeFreeToTankmanXpWindow
     return (GroupedViewSettings(VIEW_ALIAS.CONFIRM_EXCHANGE_DIALOG, ConfirmExchangeDialog, 'confirmExchangeDialog.swf', ViewTypes.WINDOW, 'confirmExchangeDialog', None, ScopeTemplates.LOBBY_SUB_SCOPE),
-     GroupedViewSettings(VIEW_ALIAS.CONFIRM_EXCHANGE_DIALOG_MODAL, ConfirmExchangeDialog, 'confirmExchangeDialog.swf', ViewTypes.WINDOW, 'confirmExchangeDialog', None, ScopeTemplates.LOBBY_SUB_SCOPE, isModal=True),
+     GroupedViewSettings(VIEW_ALIAS.CONFIRM_EXCHANGE_DIALOG_MODAL, ConfirmExchangeDialog, 'confirmExchangeDialog.swf', ViewTypes.TOP_WINDOW, 'confirmExchangeDialog', None, ScopeTemplates.LOBBY_SUB_SCOPE, isModal=True),
      GroupedViewSettings(VIEW_ALIAS.EXCHANGE_WINDOW, ExchangeWindow, 'exchangeWindow.swf', ViewTypes.WINDOW, 'exchangeWindow', None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.EXCHANGE_XP_WINDOW, ExchangeXPWindow, 'exchangeXPWindow.swf', ViewTypes.WINDOW, 'exchangeXPWindow', None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW, ExchangeFreeToTankmanXpWindow, 'exchangeFreeToTankmanXpWindow.swf', ViewTypes.WINDOW, 'exchangeFreeToTankmanXpWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False))
@@ -58,7 +58,7 @@ class _ExchangeDialogModalBusinessHandler(PackageBusinessHandler):
         self.__loadOrUpdateDialog(name, VIEW_ALIAS.CONFIRM_EXCHANGE_DIALOG_MODAL, event.meta, event.handler)
 
     def __loadOrUpdateDialog(self, name, alias, meta, handler):
-        window = self.findViewByName(ViewTypes.WINDOW, name)
+        window = self.findViewByName(ViewTypes.TOP_WINDOW, name)
         if window is not None:
             window.updateDialog(meta, handler)
             self.bringViewToFront(name)

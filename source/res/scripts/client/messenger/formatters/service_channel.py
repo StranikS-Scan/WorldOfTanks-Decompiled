@@ -3019,7 +3019,7 @@ class CustomizationChangedFormatter(WaitItemsSyncFormatter):
     @async
     @process
     def format(self, message, callback=None):
-        from gui.customization.shared import SEASON_TYPE_TO_NAME
+        from gui.customization.shared import SEASON_TYPE_TO_NAME, SEASONS_ORDER
         isSynced = yield self._waitForSyncItems()
         if message.data and isSynced:
             data = message.data
@@ -3028,6 +3028,7 @@ class CustomizationChangedFormatter(WaitItemsSyncFormatter):
             vehicle = self._itemsCache.items.getItemByCD(vehicleIntCD)
             data = {'savedData': {'vehicleIntCD': vehicleIntCD}}
             text = backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.removeCustomizations(), vehicle=vehicle.userName)
+            seasonTexts = {}
             for season, seasonData in vehicleData.iteritems():
                 items = []
                 for itemIntCD, count in seasonData.iteritems():
@@ -3038,7 +3039,11 @@ class CustomizationChangedFormatter(WaitItemsSyncFormatter):
                 if items:
                     seasonName = SEASON_TYPE_TO_NAME.get(season)
                     formattedSeason = backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.customizations.map.dyn(seasonName)()) + ', '.join(items) + '.'
-                    text += '\n' + formattedSeason
+                    seasonTexts[season] = '\n' + formattedSeason
+
+            for season in SEASONS_ORDER:
+                if season in seasonTexts:
+                    text += seasonTexts[season]
 
             formatted = g_settings.msgTemplates.format(self._template, {'text': text}, data=data)
             settings = self._getGuiSettings(message, self._template, messageType=message.type)

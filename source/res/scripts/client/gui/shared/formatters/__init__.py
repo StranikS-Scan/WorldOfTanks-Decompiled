@@ -6,7 +6,7 @@ from gui import makeHtmlString
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.impl import backport
-from gui.shared.economics import ActualPrice
+from gui.shared.gui_items.gui_item_economics import ActualPrice
 from gui.shared.formatters import icons
 from gui.shared.formatters import text_styles
 from gui.shared.formatters import time_formatters
@@ -201,14 +201,16 @@ def getItemSellPricesVO(sellCurrency, *sellPrices):
     return [ {'price': getMoneyVO(sellPrice) or ((sellCurrency, 0),)} for sellPrice in sellPrices ]
 
 
-def getItemRentOrRestorePricesVO(*prices):
+def getItemRestorePricesVO(*prices):
     return [ {'price': getMoneyVO(price)} for price in prices ]
 
 
 def chooseItemPriceVO(priceType, price):
     itemPrice = None
-    if priceType == ActualPrice.RENT_PRICE or priceType == ActualPrice.RESTORE_PRICE:
-        itemPrice = getItemRentOrRestorePricesVO(price)
+    if priceType == ActualPrice.RESTORE_PRICE:
+        itemPrice = getItemRestorePricesVO(price)
+    if priceType == ActualPrice.RENT_PRICE:
+        itemPrice = getItemPricesVO(price)
     elif priceType == ActualPrice.BUY_PRICE:
         itemPrice = getItemPricesVO(price)
     return itemPrice

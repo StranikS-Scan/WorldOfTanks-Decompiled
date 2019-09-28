@@ -311,6 +311,8 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         self._isOver3dScene = event.ctx.get('isOver3dScene', False)
         if self._helper:
             self._helper.setSelectingEnabled(self._isOver3dScene)
+        if not self._isOver3dScene:
+            self.onRegionHighlighted(MODE_TO_C11N_TYPE[self._mode], -1, -1, False, False)
 
     def __onNotifyCursorDragging(self, event):
         if self._helper:

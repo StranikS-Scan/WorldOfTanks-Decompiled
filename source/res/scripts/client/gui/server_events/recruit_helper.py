@@ -30,13 +30,15 @@ class RecruitSourceID(object):
     TWITCH_6 = 'twitch6'
     BUFFON = 'buffon'
     LOOTBOX = 'lootbox'
+    COMMANDER_MARINA = 'commander_marina'
     EVENTS = (TWITCH_0,
      TWITCH_1,
      TWITCH_2,
      TWITCH_3,
      TWITCH_4,
      TWITCH_5,
-     TWITCH_6)
+     TWITCH_6,
+     COMMANDER_MARINA)
 
 
 _NEW_SKILL = 'new_skill'

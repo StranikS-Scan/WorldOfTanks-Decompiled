@@ -9,6 +9,7 @@ from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getT
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler, CM_BUY_COLOR
 from gui.Scaleform.locale.MENU import MENU
+from gui.impl.lobby.buy_vehicle_view import VehicleBuyActionTypes
 from gui.prb_control import prbDispatcherProperty
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events, EVENT_BUS_SCOPE
@@ -144,7 +145,7 @@ class SimpleVehicleCMHandler(AbstractContextMenuHandler, EventSystemEntity):
             shared_events.showVehicleSellDialog(self.getVehInvID())
 
     def buyVehicle(self):
-        ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, self.getVehCD())
+        ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, self.getVehCD(), False, VehicleBuyActionTypes.BUY)
 
     def _generateOptions(self, ctx=None):
         return []
@@ -236,7 +237,9 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                 if vehicle.canTradeOff:
                     options.append(self._makeItem(VEHICLE.EXCHANGE, MENU.contextmenu(VEHICLE.EXCHANGE), {'enabled': vehicle.isReadyToTradeOff,
                      'textColor': CM_BUY_COLOR}))
-                options.extend([self._makeItem(VEHICLE.INFO, MENU.contextmenu(VEHICLE.INFO)), self._makeItem(VEHICLE.STATS, MENU.contextmenu(VEHICLE.STATS), {'enabled': vehicleWasInBattle}), self._makeSeparator()])
+                options.extend([self._makeItem(VEHICLE.INFO, MENU.contextmenu(VEHICLE.INFO)), self._makeItem(VEHICLE.STATS, MENU.contextmenu(VEHICLE.STATS), {'enabled': vehicleWasInBattle})])
+                if not vehicleWasInBattle:
+                    options.append(self._makeSeparator())
                 self._manageVehCompareOptions(options, vehicle)
                 if self.prbDispatcher is not None:
                     isNavigationEnabled = not self.prbDispatcher.getFunctionalState().isNavigationDisabled()

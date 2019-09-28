@@ -520,6 +520,7 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'BR2019Title25',
  'BR2019Title15',
  'BR2019Title5',
+ 'october19',
  'Fest19Offspring',
  'Fest19Racer']
 _singleAchievementsPopUps = ['titleSniper',
@@ -600,6 +601,7 @@ _singleAchievementsPopUps = ['titleSniper',
  'Fest19Collection2',
  'Fest19Collection3',
  'twitchPrime4',
+ 'october19',
  'Fest19Offspring',
  'Fest19Racer']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, {}, _singleAchievementsPopUps)
@@ -683,6 +685,19 @@ EPIC_BATTLE_ACHIEVEMENTS_BLOCK_LAYOUT = ['occupyingForce',
  'frontlineMedal']
 _epicBattleAchievementsPopUps = ['frontlineMedal']
 _epicBattleAchievementsBlockBuilder = StaticSizeBlockBuilder('epicBattleAchievements', EPIC_BATTLE_ACHIEVEMENTS_BLOCK_LAYOUT, EPIC_BATTLE_STATS_DEPENDENCIES, _epicBattleAchievementsPopUps)
+RACING_2019_ACHIEVEMENTS_BLOCK_LAYOUT = ['successfulFinish',
+ 'invader',
+ 'shooter',
+ 'alwaysFirst',
+ 'winnerShooter',
+ 'winnerSniper']
+_racing2019AchievementsPopUps = ['successfulFinish',
+ 'invader',
+ 'shooter',
+ 'alwaysFirst',
+ 'winnerShooter',
+ 'winnerSniper']
+_racing2019AchievementsBlockBuilder = StaticSizeBlockBuilder('racing2019Achievements', RACING_2019_ACHIEVEMENTS_BLOCK_LAYOUT, {}, _racing2019AchievementsPopUps)
 accountDossierLayout = (_a15x15BlockBuilder,
  _a15x15_2BlockBuilder,
  _clanBlockBuilder,
@@ -756,7 +771,8 @@ accountDossierLayout = (_a15x15BlockBuilder,
  _rankedCutSeason3BlockBuilder,
  _rankedArchiveBlockBuilder,
  _maxRankedArchiveBlockBuilder,
- _rankedCutArchiveBlockBuilder)
+ _rankedCutArchiveBlockBuilder,
+ _racing2019AchievementsBlockBuilder)
 ACCOUNT_DOSSIER_BLOCKS = {b.name:b for b in accountDossierLayout}
 ACCOUNT_DOSSIER_STATIC_BLOCKS = frozenset((b.name for b in accountDossierLayout if type(b) == StaticSizeBlockBuilder))
 ACCOUNT_DOSSIER_BINARY_SET_BLOCKS = [ b.name for b in accountDossierLayout if type(b) == BinarySetDossierBlockBuilder ]

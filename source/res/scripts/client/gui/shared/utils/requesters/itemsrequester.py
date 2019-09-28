@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/ItemsRequester.py
 from abc import ABCMeta, abstractmethod
-from collections import defaultdict
+from collections import defaultdict, Counter
 from typing import TYPE_CHECKING
 import operator
 import constants
@@ -524,6 +524,8 @@ class ItemsRequester(IItemsRequester):
                 if itemTypeID not in (GUI_ITEM_TYPE.ACCOUNT_DOSSIER, GUI_ITEM_TYPE.VEHICLE_DOSSIER, GUI_ITEM_TYPE.BATTLE_ABILITY):
                     cache.clear()
 
+            self.inventory.initC11nItemsAppliedCounts()
+            self.inventory.initC11nItemsNoveltyData()
         else:
             for statName, data in diff.get('stats', {}).iteritems():
                 if statName in ('unlocks', ('unlocks', '_r')):
@@ -823,52 +825,63 @@ class ItemsRequester(IItemsRequester):
         invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehicleIntCD)
         vehicle = self.getItemByCD(vehicleIntCD)
         if outfitsData is None:
-            invalidItems = self.__removeVehicleOutfits(vehicle)
-            invalidate[GUI_ITEM_TYPE.CUSTOMIZATION] |= invalidItems
+            invalidate[GUI_ITEM_TYPE.CUSTOMIZATION] |= self.__removeVehicleOutfits(vehicle)
             invalidate[GUI_ITEM_TYPE.OUTFIT] |= {(vehicleIntCD, season) for season in SeasonType.RANGE}
             return
         else:
+            if SeasonType.ALL in outfitsData:
+                invalidate[GUI_ITEM_TYPE.CUSTOMIZATION] |= self.__invalidateStyledOutfits(outfitsData, vehicle)
+                invalidate[GUI_ITEM_TYPE.OUTFIT].add((vehicleIntCD, SeasonType.ALL))
             for season in outfitsData:
-                invalidate[GUI_ITEM_TYPE.OUTFIT].add((vehicleIntCD, season))
-                if outfitsData[season] is None:
-                    outfitCD, flags = None, StyleFlags.ACTIVE
-                else:
-                    outfitCD, flags = outfitsData[season]
-                if flags != StyleFlags.ACTIVE:
+                if season == SeasonType.ALL:
                     continue
-                newOutfit = Outfit(outfitCD)
-                if newOutfit.style is not None:
-                    prevOutfit = vehicle.getOutfit(SeasonType.SUMMER) or Outfit()
-                    if prevOutfit.id != newOutfit.id:
-                        self.__inventory.updateC11nItemAppliedCount(newOutfit.style.compactDescr, vehicleIntCD, 1)
-                        invalidate[GUI_ITEM_TYPE.CUSTOMIZATION].add(newOutfit.style.compactDescr)
-                    invalidItems = self.__removeVehicleOutfits(vehicle)
-                    invalidate[GUI_ITEM_TYPE.CUSTOMIZATION] |= invalidItems
-                    break
-                prevOutfit = vehicle.getCustomOutfit(season) or Outfit()
-                prevItemsCounter = prevOutfit.itemsCounter
-                newItemsCounter = newOutfit.itemsCounter
-                newItemsCounter.subtract(prevItemsCounter)
-                for itemCD, count in newItemsCounter.iteritems():
-                    self.__inventory.updateC11nItemAppliedCount(itemCD, vehicleIntCD, count)
-                    invalidate[GUI_ITEM_TYPE.CUSTOMIZATION].add(itemCD)
+                invalidate[GUI_ITEM_TYPE.CUSTOMIZATION] |= self.__invalidateCustomOutfit(outfitsData, vehicle, season)
+                invalidate[GUI_ITEM_TYPE.OUTFIT].add((vehicleIntCD, season))
 
             return
 
     def __removeVehicleOutfits(self, vehicle):
         invalidItems = set()
         for season in SeasonType.RANGE:
-            outfit = vehicle.getCustomOutfit(season) or Outfit()
-            if not outfit.isActive():
+            outfit = vehicle.getOutfit(season)
+            if outfit is None:
                 continue
             if outfit.style is not None:
-                styleIntCD = outfit.style.compactDesc
+                styleIntCD = outfit.style.compactDescr
                 self.__inventory.updateC11nItemAppliedCount(styleIntCD, vehicle.intCD, -1)
                 invalidItems.add(styleIntCD)
-                continue
+                break
             for itemCD, count in outfit.itemsCounter.iteritems():
                 self.__inventory.updateC11nItemAppliedCount(itemCD, vehicle.intCD, -count)
                 invalidItems.add(itemCD)
+
+        return invalidItems
+
+    def __invalidateStyledOutfits(self, outfitsData, vehicle):
+        invalidItems = set()
+        outfit = vehicle.getStyledOutfit(SeasonType.SUMMER) or Outfit()
+        if outfit.style is not None and outfit.isActive():
+            self.__inventory.updateC11nItemAppliedCount(outfit.style.compactDescr, vehicle.intCD, -1)
+            invalidItems.add(outfit.style.compactDescr)
+        if SeasonType.ALL in outfitsData:
+            styleCD, flags = outfitsData[SeasonType.ALL] or (None, StyleFlags.ACTIVE)
+            outfit = Outfit(strCompactDescr=styleCD, isEnabled=flags & StyleFlags.ENABLED, isInstalled=flags & StyleFlags.INSTALLED)
+            if outfit.style is not None and outfit.isActive():
+                self.__inventory.updateC11nItemAppliedCount(outfit.style.compactDescr, vehicle.intCD, 1)
+                invalidItems.add(outfit.style.compactDescr)
+        return invalidItems
+
+    def __invalidateCustomOutfit(self, outfitsData, vehicle, season):
+        invalidItems = set()
+        outfitCD, flags = outfitsData[season] or (None, StyleFlags.ACTIVE)
+        newOutfit = Outfit(strCompactDescr=outfitCD, isEnabled=flags & StyleFlags.ENABLED, isInstalled=flags & StyleFlags.INSTALLED)
+        itemsDiff = newOutfit.itemsCounter if newOutfit.isActive() else Counter()
+        prevOutfit = vehicle.getCustomOutfit(season) or Outfit()
+        if prevOutfit.isActive():
+            itemsDiff.subtract(prevOutfit.itemsCounter)
+        for itemCD, count in itemsDiff.iteritems():
+            self.__inventory.updateC11nItemAppliedCount(itemCD, vehicle.intCD, count)
+            invalidItems.add(itemCD)
 
         return invalidItems
 

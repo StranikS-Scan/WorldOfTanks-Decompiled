@@ -31,6 +31,7 @@ from helpers import int2roman, dependency
 from items import getTypeOfCompactDescr
 from skeletons.gui.game_control import ITradeInController
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.game_control import IBootcampController
 from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
@@ -41,6 +42,7 @@ _BENEFIT_ITEMS_LIMIT = 3
 class Research(ResearchMeta):
     __itemsCache = dependency.descriptor(IItemsCache)
     __tradeIn = dependency.descriptor(ITradeInController)
+    __bootcamp = dependency.descriptor(IBootcampController)
 
     def __init__(self, ctx=None, skipConfirm=False):
         super(Research, self).__init__(ResearchItemsData(dumpers.ResearchItemsObjDumper()))
@@ -247,6 +249,7 @@ class Research(ResearchMeta):
          'blueprintCanConvert': bpfProps.canConvert if bpfProps is not None else False,
          'bpbGlowEnabled': isNext2Unlock,
          'itemPrices': rootNode.getItemPrices(),
+         'compareBtnVisible': not self.__bootcamp.isInBootcamp(),
          'compareBtnEnabled': comparisonState,
          'compareBtnLabel': backport.text(R.strings.menu.research.labels.button.addToCompare()),
          'compareBtnTooltip': comparisonTooltip,

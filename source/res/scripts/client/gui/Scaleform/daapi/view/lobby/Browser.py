@@ -85,6 +85,11 @@ class Browser(BrowserMeta):
             self.__browser.onBrowserHide()
         return
 
+    def invalidateView(self):
+        if self.__browser is not None:
+            self.__browser.invalidateView()
+        return
+
     def setBrowserSize(self, width, height):
         self.__size = (width, height)
         if self.__browser is not None:

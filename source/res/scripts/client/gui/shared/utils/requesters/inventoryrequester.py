@@ -66,7 +66,7 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
                     if outfit.style is not None:
                         self.__c11nItemsAppliedCounts[outfit.style.compactDescr][vehicleIntCD] = 1
                     for itemCD, count in outfit.itemsCounter.iteritems():
-                        self.__c11nItemsAppliedCounts[itemCD][vehicleIntCD] = count
+                        self.__c11nItemsAppliedCounts[itemCD][vehicleIntCD] += count
 
             return
 

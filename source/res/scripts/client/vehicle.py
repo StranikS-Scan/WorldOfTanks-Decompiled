@@ -721,6 +721,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         if self.respawnCompactDescr:
             _logger.debug('respawn compact descr is still valid, request reloading of tank resources %s', self.id)
             BigWorld.callback(0.0, lambda : Vehicle.respawnVehicle(self.id, self.respawnCompactDescr))
+        self.refreshNationalVoice()
         return
 
     def refreshNationalVoice(self):

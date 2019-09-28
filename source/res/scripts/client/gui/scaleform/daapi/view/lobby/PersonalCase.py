@@ -539,7 +539,7 @@ class PersonalCaseDataProvider(object):
             restrictions = [ loc for key, loc in LOC_MAP.iteritems() if key & validationMask ]
             restrictionsMessage += ' ' + ', '.join(restrictions)
         soundSetID = crewSkin.getSoundSetID()
-        soundSetLoc = backport.text(R.strings.crew_skins.feature.sound.dyn(soundSetID)())
+        soundSetRes = R.strings.crew_skins.feature.sound.dyn(soundSetID)() if soundSetID != NO_CREW_SKIN_SOUND_SET else R.strings.crew_skins.feature.sound.noSound()
         return {'id': crewSkin.getID(),
          'fullName': localizedFullName(crewSkin),
          'description': crewSkin.getDescription(),
@@ -556,7 +556,7 @@ class PersonalCaseDataProvider(object):
          'isNew': crewSkin.isNew() and not PersonalCase.crewSkinsHAConfig.checkForViewed(crewSkin.getID()),
          'isAvailable': validation,
          'notAvailableMessage': restrictionsMessage,
-         'soundSetName': soundSetLoc if soundSetID != NO_CREW_SKIN_SOUND_SET else backport.text(R.strings.crew_skins.feature.sound.noSound()),
+         'soundSetName': backport.text(soundSetRes),
          'soundSetIsAvailable': soundValidation if crewSkin.getSoundSetID() != NO_CREW_SKIN_SOUND_SET else True}
 
     @async

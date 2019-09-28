@@ -80,12 +80,3 @@ def getGUIPrice(item, money, exchangeRate):
         if item.hasRestoreCooldown():
             return item.minRentPrice or item.restorePrice
     return item.minRentPrice or item.getBuyPrice(preferred=False).price
-
-
-def getPriceTypeAndValue(item, money, exchangeRate):
-    mayRent, _ = item.mayRent(money)
-    if item.isRestorePossible() and (item.isRestorePossible() and item.mayRestoreWithExchange(money, exchangeRate) or not mayRent):
-        return _DisplayPrice(ActualPrice.RESTORE_PRICE, item.restorePrice)
-    if item.hasRestoreCooldown() and not item.minRentPrice:
-        return _DisplayPrice(ActualPrice.RESTORE_PRICE, item.restorePrice)
-    return _DisplayPrice(ActualPrice.RENT_PRICE, item.minRentPrice) if item.minRentPrice else _DisplayPrice(ActualPrice.BUY_PRICE, item.getBuyPrice(preferred=False))

@@ -1,8 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/gui_item_economics.py
+from collections import namedtuple
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from gui.shared.economics import getActionPrc
 from gui.shared.gui_items import GUI_ITEM_TYPE
+
+class ActualPrice(object):
+    RESTORE_PRICE = 1
+    RENT_PRICE = 2
+    BUY_PRICE = 3
+
+
+_DisplayPrice = namedtuple('PriceTuple', ('type', 'cost'))
 
 def cmpByCurrencyWeight(p1, p2):
     price1 = p1.price
@@ -39,6 +48,26 @@ def isItemBuyPriceAvailable(item, itemPrice, shop):
 def getItemBuyPrice(item, currency, shop):
     itemPrice = item.buyPrices.getMinItemPriceByCurrency(currency)
     return itemPrice if itemPrice is not None and isItemBuyPriceAvailable(item, itemPrice, shop) else None
+
+
+def getPriceTypeAndValue(item, money, exchangeRate):
+    mayRent, _ = item.mayRent(money)
+    if item.isRestorePossible() and (item.isRestorePossible() and item.mayRestoreWithExchange(money, exchangeRate) or not mayRent):
+        return _DisplayPrice(ActualPrice.RESTORE_PRICE, item.restorePrice)
+    if item.hasRestoreCooldown() and not item.minRentPrice:
+        return _DisplayPrice(ActualPrice.RESTORE_PRICE, item.restorePrice)
+    minRentItemPrice = getMinRentItemPrice(item)
+    return _DisplayPrice(ActualPrice.RENT_PRICE, minRentItemPrice) if minRentItemPrice else _DisplayPrice(ActualPrice.BUY_PRICE, item.getBuyPrice(preferred=False))
+
+
+def getMinRentItemPrice(item):
+    minRentPricePackage = item.getRentPackage()
+    if minRentPricePackage:
+        minRentPriceValue = minRentPricePackage['rentPrice']
+        minRentDefPriceValue = minRentPricePackage['defaultRentPrice']
+        return ItemPrice(price=minRentPriceValue, defPrice=minRentDefPriceValue)
+    else:
+        return None
 
 
 class ItemPrice(object):

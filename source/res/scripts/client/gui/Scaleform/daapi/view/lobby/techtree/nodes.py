@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/nodes.py
 from gui.Scaleform.daapi.view.lobby.techtree.settings import DEFAULT_UNLOCK_PROPS
 from gui.shared.formatters import text_styles
-from gui.shared.formatters import getItemPricesVO, getItemRentOrRestorePricesVO, getItemUnlockPricesVO
+from gui.shared.formatters import getItemPricesVO, getItemRestorePricesVO, getItemUnlockPricesVO
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.money import MONEY_UNDEFINED
 from helpers.time_utils import getCurrentTimestamp
@@ -187,7 +187,7 @@ class RealNode(ExposedNode):
         elif not item.isUnlocked and unlockProps is not None:
             return getItemUnlockPricesVO(unlockProps)
         else:
-            return getItemRentOrRestorePricesVO(item.restorePrice) if item.isRestoreAvailable() else getItemPricesVO(item.getBuyPrice())
+            return getItemRestorePricesVO(item.restorePrice) if item.isRestoreAvailable() else getItemPricesVO(item.getBuyPrice())
 
     def getBuyPrices(self):
         return getItemPricesVO(self.__item.getBuyPrice())

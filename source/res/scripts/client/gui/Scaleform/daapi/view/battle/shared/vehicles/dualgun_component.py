@@ -60,6 +60,8 @@ class ReloadingAffectPolicy(object):
         self.__reloadingFactors = proxy(reloadingFactors)
 
     def __call__(self, value):
+        if not isinstance(value, bool):
+            return
         self._updateFactors(value)
 
     def _updateFactors(self, value):
@@ -74,6 +76,8 @@ class DeviceAffectPolicy(ReloadingAffectPolicy):
     __AFFECT_STATES = ('critical', 'destroyed')
 
     def __call__(self, value):
+        if not isinstance(value, tuple):
+            return
         deviceState = value
         for device in self.__AFFECT_DEVICES:
             if device in deviceState[0]:
@@ -85,6 +89,8 @@ class DestroyStateAffectPolicy(ReloadingAffectPolicy):
     __AFFECT_LEVEL = ('critical',)
 
     def __call__(self, value):
+        if not isinstance(value, DestroyTimerViewState):
+            return
         timerViewState = value
         if timerViewState.code in self.__AFFECT_STATES:
             self._updateFactors(timerViewState.level in self.__AFFECT_LEVEL)
@@ -93,6 +99,8 @@ class DestroyStateAffectPolicy(ReloadingAffectPolicy):
 class StunAffectPolicy(ReloadingAffectPolicy):
 
     def __call__(self, value):
+        if not isinstance(value, StunInfo):
+            return
         stunInfo = value
         self._updateFactors(stunInfo.duration > 0)
 
@@ -163,6 +171,8 @@ class DualGunComponent(DualGunPanelMeta):
         return
 
     def __onVehicleStateUpdated(self, stateID, value):
+        if not self.__isEnabled:
+            return
         if stateID == VEHICLE_VIEW_STATE.DUAL_GUN_STATE_UPDATED:
             self.__onDualGunStateUpdated(value)
         elif stateID == VEHICLE_VIEW_STATE.DUAL_GUN_CHARGER:

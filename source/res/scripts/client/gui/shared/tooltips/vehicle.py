@@ -13,7 +13,8 @@ from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared.formatters import getItemUnlockPricesVO, getItemRentOrRestorePricesVO, getItemSellPricesVO
+from gui.shared.formatters import getItemUnlockPricesVO, getItemRestorePricesVO, getItemSellPricesVO
+from gui.shared.gui_items.gui_item_economics import getMinRentItemPrice
 from gui.shared.formatters import text_styles, moneyWithIcon, icons, getItemPricesVO
 from gui.shared.formatters.time_formatters import RentLeftFormatter, getTimeLeftInfo
 from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE
@@ -598,13 +599,12 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
                 block.append(makeCompoundPriceBlock(CURRENCY_SETTINGS.UNLOCK_PRICE, getItemUnlockPricesVO(UnlockProps(parentID=-1, unlockIdx=0, xpCost=cost, discount=discount, xpFullCost=defCost, required=set()))))
         if minRentPrice and vehicle.isRentAvailable:
             if not (vehicle.isRented or vehicle.isRestorePossible() or vehicle.isPremiumIGR):
-                minRentPricePackage = vehicle.getRentPackage()
-                if minRentPricePackage:
-                    minRentPriceValue = minRentPricePackage['rentPrice']
-                    actionPrc = vehicle.getRentPackageActionPrc(minRentPricePackage['rentID'])
-                    currency = minRentPriceValue.getCurrency()
-                    neededValue = _getNeedValue(minRentPriceValue, currency)
-                    block.append(makeCompoundPriceBlock(CURRENCY_SETTINGS.getRentSetting(currency), getItemRentOrRestorePricesVO(minRentPriceValue)))
+                minRentItemPrice = getMinRentItemPrice(vehicle)
+                if minRentItemPrice is not None:
+                    actionPrc = minRentItemPrice.getActionPrc()
+                    currency = minRentItemPrice.getCurrency()
+                    neededValue = _getNeedValue(minRentItemPrice.price, currency)
+                    block.append(makeCompoundPriceBlock(CURRENCY_SETTINGS.getRentSetting(currency), getItemPricesVO(minRentItemPrice)))
         if sellPrice:
             if isInInventory and not (vehicle.isRentable or vehicle.isRented or vehicle.isTelecom):
                 sellPrice = vehicle.sellPrices.itemPrice.price
@@ -617,7 +617,7 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
                 neededValue = _getNeedValue(price, currency)
                 if isInInventory or not isInInventory and not isUnlocked and not isNextToUnlock:
                     neededValue = None
-                block.append(makeCompoundPriceBlock(CURRENCY_SETTINGS.RESTORE_PRICE, getItemRentOrRestorePricesVO(price)))
+                block.append(makeCompoundPriceBlock(CURRENCY_SETTINGS.RESTORE_PRICE, getItemRestorePricesVO(price)))
             elif not isInInventory or vehicle.isRentable or vehicle.isRented and not (vehicle.isDisabledForBuy or vehicle.isPremiumIGR or vehicle.isTelecom):
                 itemPrice = vehicle.buyPrices.itemPrice
                 price = itemPrice.price

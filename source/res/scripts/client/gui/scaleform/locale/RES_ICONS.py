@@ -4467,6 +4467,7 @@ class RES_ICONS(object):
     MAPS_ICONS_WINDOWS_PREM_PREMHEADER = '../maps/icons/windows/prem/premHeader.png'
     MAPS_ICONS_WINDOWS_REWARDWINDOW_ANNIVERSARY_GA_BACKGROUND = '../maps/icons/windows/rewardWindow/anniversary_ga_background.png'
     MAPS_ICONS_WINDOWS_REWARDWINDOW_AWARDRIBBON = '../maps/icons/windows/rewardWindow/awardRibbon.png'
+    MAPS_ICONS_WINDOWS_REWARDWINDOW_COMMANDER_MARINA_BACKGROUND = '../maps/icons/windows/rewardWindow/commander_marina_background.png'
     MAPS_ICONS_WINDOWS_REWARDWINDOW_CREWSKINS_PRESENTATION = '../maps/icons/windows/rewardWindow/crewSkins_presentation.png'
     MAPS_ICONS_WINDOWS_REWARDWINDOW_PIGGYBANK_BACKGROUND = '../maps/icons/windows/rewardWindow/piggyBank_background.png'
     MAPS_ICONS_WINDOWS_REWARDWINDOW_TWITCH0_BACKGROUND = '../maps/icons/windows/rewardWindow/twitch0_background.png'

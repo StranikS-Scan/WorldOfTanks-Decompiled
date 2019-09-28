@@ -52,8 +52,6 @@ def makeStrongholdsSlotsVOs(unitEntity, unitMgrID=None, maxPlayerCount=MAX_PLAYE
             break
         vehTypesInSlot = vehTypesInSlotFilters.get(idx, 0)
         vehiclesInSlot = vehiclesInSlotFilters.get(idx, ())
-        if slot['selectedVehicle'] and not slot['isFreezed'] and not slot['isCommanderState']:
-            slot['selectedVehicle']['isReadyToFight'] = True
         slot['isMatchingEnabled'] = canSetupPlayersMatching
         slot['isFiltersEnabled'] = maxLegionariesNotReached
         if slot['player'] is not None:
@@ -72,6 +70,8 @@ def makeStrongholdsSlotsVOs(unitEntity, unitMgrID=None, maxPlayerCount=MAX_PLAYE
              'slotLabel': slotLabel,
              'playerStatus': PLAYER_GUI_STATUS.READY,
              'isFiltersEnabled': True})
+        if slot['isLegionaries'] and slot['selectedVehicle'] and not slot['isFreezed'] and not slot['isCommanderState']:
+            slot['selectedVehicle']['isReadyToFight'] = True
 
     return (isRosterSet, slots)
 

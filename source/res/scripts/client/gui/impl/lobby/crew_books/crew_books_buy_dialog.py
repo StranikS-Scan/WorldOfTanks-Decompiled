@@ -29,18 +29,21 @@ class CrewBooksBuyDialog(Window):
 
     def __init__(self, parent, crewBookCD):
         settings = WindowSettings()
-        settings.flags = DialogLayer.WINDOW
+        settings.flags = DialogLayer.TOP_WINDOW
         settings.content = DialogContent(R.views.lobby.crew_books.crew_books_buy_dialog.CrewBooksBuyDialog(), CrewBooksBuyDialogModel)
         settings.parent = parent
         super(CrewBooksBuyDialog, self).__init__(settings)
         self.__bookGuiItem = self.__itemsCache.items.getItemByCD(crewBookCD)
         self.__blur = WGUIBackgroundBlurSupportImpl()
-        blurLayers = [APP_CONTAINERS_NAMES.VIEWS, APP_CONTAINERS_NAMES.SUBVIEW, APP_CONTAINERS_NAMES.BROWSER]
+        blurLayers = [APP_CONTAINERS_NAMES.VIEWS,
+         APP_CONTAINERS_NAMES.SUBVIEW,
+         APP_CONTAINERS_NAMES.BROWSER,
+         APP_CONTAINERS_NAMES.WINDOWS]
         self.__bookCount = 1
         self.__scope = AsyncScope()
         self.__event = AsyncEvent(scope=self.__scope)
         self.__result = None
-        self.__blur.enable(APP_CONTAINERS_NAMES.OVERLAY, blurLayers)
+        self.__blur.enable(APP_CONTAINERS_NAMES.DIALOGS, blurLayers)
         return
 
     @property

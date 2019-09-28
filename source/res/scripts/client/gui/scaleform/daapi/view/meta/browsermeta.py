@@ -25,6 +25,9 @@ class BrowserMeta(BaseDAAPIComponent):
     def onBrowserHide(self):
         self._printOverrideError('onBrowserHide')
 
+    def invalidateView(self):
+        self._printOverrideError('invalidateView')
+
     def setBrowserSize(self, width, height):
         self._printOverrideError('setBrowserSize')
 

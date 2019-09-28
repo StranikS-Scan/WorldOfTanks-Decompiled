@@ -103,8 +103,6 @@ def onAccountShowGUI(ctx):
     if code != ValidationCodes.OK:
         ServicesLocator.gameplay.goToLoginByError('#menu:disconnect/codes/{}'.format(code))
         return
-    ServicesLocator.itemsCache.items.inventory.initC11nItemsAppliedCounts()
-    ServicesLocator.itemsCache.items.inventory.initC11nItemsNoveltyData()
     ServicesLocator.itemsCache.onSyncCompleted(CACHE_SYNC_REASON.SHOW_GUI, {})
     ServicesLocator.settingsCore.serverSettings.applySettings()
     ServicesLocator.gameState.onAccountShowGUI(ServicesLocator.lobbyContext.getGuiCtx())

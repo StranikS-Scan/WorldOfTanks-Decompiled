@@ -248,6 +248,10 @@ class WebBrowser(object):
             _logger.error(' FAILED %s - %r', self.__baseUrl, self.__browserID)
             self.onFailedCreation(self.__baseUrl)
 
+    def invalidateView(self):
+        if self.hasBrowser:
+            self.__browser.invalidate()
+
     def updateSize(self, size):
         self.__browserSize = size
         if self.hasBrowser:

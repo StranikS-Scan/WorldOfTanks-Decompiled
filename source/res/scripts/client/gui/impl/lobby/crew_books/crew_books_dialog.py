@@ -31,16 +31,19 @@ class CrewBooksDialog(Window):
         self.__tankman = self.__itemsCache.items.getTankman(int(tankmanInvId))
         self.__tankmanInvID = int(tankmanInvId)
         settings = WindowSettings()
-        settings.flags = DialogLayer.WINDOW
+        settings.flags = DialogLayer.TOP_WINDOW
         settings.content = DialogContent(R.views.lobby.crew_books.crew_books_dialog_content.CrewBooksDialogContent(), CrewBooksDialogContentModel)
         settings.parent = parent
         super(CrewBooksDialog, self).__init__(settings)
         self.__blur = WGUIBackgroundBlurSupportImpl()
-        blurLayers = [APP_CONTAINERS_NAMES.VIEWS, APP_CONTAINERS_NAMES.SUBVIEW, APP_CONTAINERS_NAMES.BROWSER]
+        blurLayers = [APP_CONTAINERS_NAMES.VIEWS,
+         APP_CONTAINERS_NAMES.SUBVIEW,
+         APP_CONTAINERS_NAMES.BROWSER,
+         APP_CONTAINERS_NAMES.WINDOWS]
         self.__scope = AsyncScope()
         self.__event = AsyncEvent(scope=self.__scope)
         self.__result = None
-        self.__blur.enable(APP_CONTAINERS_NAMES.OVERLAY, blurLayers)
+        self.__blur.enable(APP_CONTAINERS_NAMES.DIALOGS, blurLayers)
         return
 
     @property

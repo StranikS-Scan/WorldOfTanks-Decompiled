@@ -493,6 +493,16 @@ class _DetailedMissionInfo(_MissionInfo):
             criteria = cond.getFilterCriteria(cond.getData())
         else:
             criteria = REQ_CRITERIA.DISCLOSABLE
+        battleCond = self.event.preBattleCond.getConditions()
+        if battleCond:
+            bonusTypes = battleCond.find('bonusTypes')
+            if bonusTypes:
+                arenaTypes = bonusTypes.getValue()
+                if arenaTypes:
+                    if constants.ARENA_BONUS_TYPE.EVENT_BATTLES not in arenaTypes or constants.ARENA_BONUS_TYPE.EVENT_BATTLES_2 not in arenaTypes:
+                        criteria = criteria | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
+                    if constants.ARENA_BONUS_TYPE.EPIC_BATTLE not in arenaTypes:
+                        criteria = criteria | ~REQ_CRITERIA.VEHICLE.EPIC_BATTLE
         xpMultCond = conds.find('hasReceivedMultipliedXP')
         if xpMultCond:
             extraConditions.append(xpMultCond)

@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/bonus_helper.py
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_parameters.comparator import CONDITIONAL_BONUSES, getParamExtendedData
 from gui.shared.items_parameters.params import VehicleParams
@@ -7,6 +9,20 @@ from gui.shared.items_parameters.params import EXTRAS_CAMOUFLAGE
 from helpers import dependency
 from items.components.c11n_components import SeasonType
 from skeletons.gui.shared import IItemsCache
+_OPEN_QUOTES = backport.text(R.strings.common.common.open_quotes())
+_DOUBLE_OPEN_QUOTES = _OPEN_QUOTES + _OPEN_QUOTES
+_CLOSE_QUOTES = backport.text(R.strings.common.common.close_quotes())
+_DOUBLE_CLOSE_QUOTES = _CLOSE_QUOTES + _CLOSE_QUOTES
+
+def getItemFullName(item):
+    if item is not None:
+        tooltipKey = R.strings.tooltips.vehiclePreview.boxTooltip.dyn(item.itemTypeName).header()
+        if tooltipKey:
+            title = backport.text(tooltipKey, group=item.userType, value=item.userName)
+            title = title.replace(_DOUBLE_OPEN_QUOTES, _OPEN_QUOTES).replace(_DOUBLE_CLOSE_QUOTES, _CLOSE_QUOTES)
+            return title
+    return ''
+
 
 def isSituationalBonus(bonusName):
     return bonusName in _SITUATIONAL_BONUSES

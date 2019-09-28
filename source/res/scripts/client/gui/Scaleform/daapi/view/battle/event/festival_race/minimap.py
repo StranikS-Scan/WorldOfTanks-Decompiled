@@ -152,8 +152,9 @@ class FestivalRaceMinimapComponent(FestivalRaceMinimapMeta):
                 if ctrl is not None:
                     ctrl.onRacePositionsUpdate += self.__updatePositions
             self.__vehID = value
-            raceList = BigWorld.player().arena.arenaInfo.raceList
-            self.__updatePositions(raceList)
+            if BigWorld.player().arena.arenaInfo is not None:
+                raceList = BigWorld.player().arena.arenaInfo.raceList
+                self.__updatePositions(raceList)
         return
 
     def __updatePositions(self, raceList):
@@ -179,4 +180,7 @@ class FestivalRaceMinimapComponent(FestivalRaceMinimapMeta):
         ctrl = self.sessionProvider.dynamic.eventRacePosition
         if ctrl is not None:
             ctrl.onRacePositionsUpdate -= self.__updatePositions
+        ctrl = self.sessionProvider.shared.vehicleState
+        if ctrl:
+            ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
         return

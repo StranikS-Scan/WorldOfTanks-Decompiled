@@ -10,7 +10,7 @@ import itertools
 import copy
 import os
 import BigWorld
-from Math import Vector2, Vector3
+from Math import Vector2, Vector3, Vector4
 import nations
 import items
 from items import _xml, makeIntCompactDescrByID, parseIntCompactDescr, ITEM_TYPES
@@ -1369,7 +1369,7 @@ class VehicleType(object):
             self.__checkPositionTags()
         self.rotationBySpeedModifiers = RotationBySpeedModifiers.create(section['rotationBySpeedModifiers'])
         self.jumpAngularVelocityFactor = section.readFloat('jumpAngularVelocityFactor', 1.0)
-        self.magneticAim = MagneticAimSettings.create(section['magneticAim'], True)
+        self.magneticAim = MagneticAimSettings.create(section['magneticAim'], self.isWheeledVehicle)
         VehicleType.currentReadingVeh = None
         section = None
         ResMgr.purge(xmlPath, True)
@@ -2337,13 +2337,27 @@ def _readNations(xmlCtx, section):
         return tuple(result)
 
 
-def _readShapeSettings(section):
+def _readShapeSettings(xmlCtx, section):
     res = {}
     if section is None:
         return res
     else:
+        converterMap = {float: lambda x: x.asFloat,
+         bool: lambda x: x.asBool,
+         int: lambda x: x.asInt,
+         str: lambda x: x.asString,
+         Vector2: lambda x: x.asVector2,
+         Vector3: lambda x: x.asVector3,
+         Vector4: lambda x: x.asVector4}
+        from physics_shared import g_defaultWheeledVehicleXPhysicsShapeCfg as defaultCfg
         for key, value in section.items():
-            res[key] = value.asFloat
+            if key not in defaultCfg:
+                _xml.raiseWrongSection(xmlCtx, 'Tank shape invalid parameter: ' + key)
+            t = type(defaultCfg[key])
+            if t not in converterMap:
+                _xml.raiseWrongSection(xmlCtx, 'Type of parameter {} is not supported in shape xml. See items.vehicles._readShapeSettings'.format(t))
+            converter = converterMap[t]
+            res[key] = converter(value)
 
         return res
 
@@ -2875,6 +2889,8 @@ def _xphysicsParseChassis(ctx, sec):
     floatParamsDetailed = ('centerRotationFwdSpeed', 'rotationByLockChoker', 'fwLagRatio', 'bkLagRatio')
     res.update(_parseFloatList(ctx, sec, floatParamsDetailed))
     res['centerRotationFwdSpeed'] *= component_constants.KMH_TO_MS
+    if sec.has_key('trackGaugeFactor'):
+        res['trackGaugeFactor'] = _xml.readPositiveFloat(ctx, sec, 'trackGaugeFactor')
     return res
 
 
@@ -2933,7 +2949,7 @@ def _readXPhysicsMode(xmlCtx, sec, subsectionName):
         res['vehiclePhysicsType'] = subsec.readInt('vehiclePhysicsType', VEHICLE_PHYSICS_TYPE.TANK)
         res['vehicleContactMassFactor'] = subsec.readFloat('vehicleContactMassFactor', 1.0)
         res['auxStaticCollisionBBoxExpansion'] = subsec.readVector3('auxStaticCollisionBBoxExpansion', (0, 0, 0))
-        res['shape'] = _readShapeSettings(subsec['shape'])
+        res['shape'] = _readShapeSettings(ctx, subsec['shape'])
         res['fakegearbox'] = _readFakeGearBox(ctx, subsec)
         res['engines'] = _parseSectionList(ctx, subsec, _xphysicsParseEngine, 'engines')
         if subsec.has_key('swingCompensator'):

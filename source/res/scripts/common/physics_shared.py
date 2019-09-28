@@ -217,17 +217,24 @@ g_defaultWheeledChassisXPhysicsCfg.update({'axleSteeringLockAngles': (0.0, 0.0, 
              'power': 1.0,
              'impulse': 0.0}})
 g_defaultVehicleXPhysicsShapeCfg = {'useComplexForm': False,
- 'isParametricShape': True,
+ 'useRaceForm': False,
  'terrAftChamferFraction': 0.5,
  'terrFrontChamferFraction': 0.5,
  'terrBoardAngle': 0.0,
  'tankAftChamferFraction': 0.25,
  'tankFrontChamferFraction': 0.25,
  'tankBoardAngle': 0.0,
- 'auxClearance': 0.8}
+ 'auxClearance': 0.8,
+ 'raceTopFrontStart': 0.7,
+ 'raceBottomFrontStart': 0.5,
+ 'raceFrontFaceHeight': 0.5,
+ 'raceFrontFaceWidth': 0.7,
+ 'raceBottomRearStart': 0.8,
+ 'raceRearFaceHeight': 1.0,
+ 'raceShapeScale': Math.Vector3(1.0, 1.0, 1.0)}
 g_defaultWheeledVehicleXPhysicsShapeCfg = copy.deepcopy(g_defaultVehicleXPhysicsShapeCfg)
 g_defaultWheeledVehicleXPhysicsShapeCfg.update({'wheelZPenetration': 0.8,
- 'wheelSize': (0.0, 0.0, 0.0),
+ 'wheelSize': Math.Vector3(0.0, 0.0, 0.0),
  'wheelXOffset': 0.0,
  'terrBoardAngle': 20.0,
  'terrFrontChamferFraction': 0.75})

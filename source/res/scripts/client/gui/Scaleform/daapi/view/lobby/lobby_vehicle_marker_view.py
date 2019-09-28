@@ -24,7 +24,6 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         self.addListener(events.HangarVehicleEvent.ON_HERO_TANK_DESTROY, self.__onHeroTankDestroy, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.HangarVehicleEvent.HERO_TANK_MARKER, self.__onMarkerDisable, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__onCameraEntityUpdated, EVENT_BUS_SCOPE.DEFAULT)
-        self.addListener(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, self.__onMarkerDisable, EVENT_BUS_SCOPE.LOBBY)
         self.hangarSpace.onSpaceDestroy += self.__onSpaceDestroy
 
     def _dispose(self):
@@ -32,7 +31,6 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         self.removeListener(events.HangarVehicleEvent.ON_HERO_TANK_LOADED, self.__onHeroTankLoaded, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.HangarVehicleEvent.ON_HERO_TANK_DESTROY, self.__onHeroTankDestroy, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.HangarVehicleEvent.HERO_TANK_MARKER, self.__onMarkerDisable, EVENT_BUS_SCOPE.LOBBY)
-        self.removeListener(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, self.__onMarkerDisable, EVENT_BUS_SCOPE.LOBBY)
         self.hangarSpace.onSpaceDestroy -= self.__onSpaceDestroy
         super(LobbyVehicleMarkerView, self)._dispose()
         self.__vehicleMarker = None

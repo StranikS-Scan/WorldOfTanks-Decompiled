@@ -525,9 +525,8 @@ class ArcadeControlMode(_GunControlMode):
         if isFiredFreeCamera:
             self.setAimingMode(isDown, AIMING_MODE.USER_DISABLED)
         if isFiredLockTarget and isDown:
-            if magneticAim.isEnabled:
-                gui_event_dispatcher.hideAutoAimMarker()
-                autoAimProcessor(target=BigWorld.target())
+            gui_event_dispatcher.hideAutoAimMarker()
+            autoAimProcessor(target=BigWorld.target())
             BigWorld.player().autoAim(BigWorld.target())
             self.__simpleAimTarget = BigWorld.target()
         if magneticAim.isEnabled and isFiredLockTarget and not isDown:
@@ -922,13 +921,11 @@ class SniperControlMode(_GunControlMode):
         cmdMap = CommandMapping.g_instance
         isFiredFreeCamera = cmdMap.isFired(CommandMapping.CMD_CM_FREE_CAMERA, key)
         isFiredLockTarget = cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key) and isDown
-        magneticAim = self._aih.magneticAimSettings
         if isFiredFreeCamera or isFiredLockTarget:
             if isFiredFreeCamera:
                 self.setAimingMode(isDown, AIMING_MODE.USER_DISABLED)
             if isFiredLockTarget:
-                if magneticAim.isEnabled:
-                    autoAimProcessor(target=BigWorld.target())
+                autoAimProcessor(target=BigWorld.target())
                 BigWorld.player().autoAim(BigWorld.target())
         if cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key) and isDown:
             BigWorld.player().shoot()

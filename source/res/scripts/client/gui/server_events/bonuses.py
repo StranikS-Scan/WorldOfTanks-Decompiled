@@ -32,6 +32,7 @@ from gui.shared.gui_items.Tankman import getRoleUserName, calculateRoleLevel, Ta
 from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.gui_items.crew_book import orderCmp
+from gui.shared.items_parameters.bonus_helper import getItemFullName
 from gui.shared.money import Currency, Money
 from gui.shared.utils.functions import makeTooltip, stripColorTagDescrTags
 from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID, getVehicleCDForNational
@@ -1142,7 +1143,7 @@ class CustomizationsBonus(SimpleBonus):
              'value': itemData.get('value', 0),
              'icon': {AWARDS_SIZES.SMALL: smallIcon,
                       AWARDS_SIZES.BIG: bigIcon},
-             'name': item.longUserName,
+             'name': getItemFullName(item),
              'description': item.longDescriptionSpecial})
 
         return result

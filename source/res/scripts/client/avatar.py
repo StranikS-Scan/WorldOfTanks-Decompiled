@@ -1653,8 +1653,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 self.__aimingInfo[1] = self.gunRotator.dispersionAngle / minShotDisp
                 self.onLockTarget(AimSound.TARGET_UNLOCKED, True)
                 TriggersManager.g_manager.deactivateTrigger(TRIGGER_TYPE.AUTO_AIM_AT_VEHICLE)
-                if self.inputHandler.magneticAimSettings.isEnabled:
-                    gui_event_dispatcher.hideAutoAimMarker()
+                gui_event_dispatcher.hideAutoAimMarker()
         return
 
     def __gunDamagedSound(self):

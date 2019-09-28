@@ -6,13 +6,13 @@ from collections import Container, namedtuple
 from CurrentVehicle import g_currentPreviewVehicle, g_currentVehicle
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getSlotOverlayIconType
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
-from gui.Scaleform.locale.COMMON import COMMON
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.shared.gui_items.Tankman import CrewTypes
+from gui.shared.items_parameters.bonus_helper import getItemFullName
 from gui.shared.money import Currency, Money, MONEY_ZERO_GOLD
 from gui.shared.utils.functions import makeTooltip
 from gui.impl import backport
@@ -137,10 +137,6 @@ def __getPremiumPlusIcon(days):
 
 _BOX_ITEM = None
 BOX_TYPE = 'box'
-_OPEN_QUOTES = _ms(COMMON.COMMON_OPEN_QUOTES)
-_DOUBLE_OPEN_QUOTES = _OPEN_QUOTES + _OPEN_QUOTES
-_CLOSE_QUOTES = _ms(COMMON.COMMON_CLOSE_QUOTES)
-_DOUBLE_CLOSE_QUOTES = _CLOSE_QUOTES + _CLOSE_QUOTES
 StyleInstallInfo = namedtuple('StyleInstallInfo', ('canInstall', 'style', 'vehicle'))
 
 class BoosterGUIItemProxy(object):
@@ -227,10 +223,7 @@ def getItemTitle(rawItem, item, forBox=False):
     if item is not None:
         title = item.userName
         if forBox:
-            tooltipKey = TOOLTIPS.getItemBoxTooltip(item.itemTypeName)
-            if tooltipKey:
-                title = _ms(tooltipKey, group=item.userType, value=item.userName)
-                title = title.replace(_DOUBLE_OPEN_QUOTES, _OPEN_QUOTES).replace(_DOUBLE_CLOSE_QUOTES, _CLOSE_QUOTES)
+            title = getItemFullName(item)
     elif rawItem.type == ItemPackType.CUSTOM_SLOT:
         title = _ms(key=TOOLTIPS.AWARDITEM_SLOTS_HEADER)
     elif rawItem.type == ItemPackType.CUSTOM_GOLD:

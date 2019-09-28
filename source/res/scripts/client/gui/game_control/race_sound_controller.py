@@ -244,7 +244,7 @@ class RaceSoundController(object):
             speedNorm = clamp(-1.0, 1.0, value / self.__vehicleMaxSpeed)
             vehicleID = self._sessionProvider.shared.vehicleState.getControllingVehicleID()
             vehicle = BigWorld.entity(vehicleID)
-            if vehicle is not None:
+            if vehicle is not None and vehicle.appearance is not None and vehicle.appearance.engineAudition is not None:
                 soundObject = vehicle.appearance.engineAudition.getSoundObject(TankSoundObjectsIndexes.ENGINE)
                 soundObject.setRTPC(self.RACE_RTPC_ELECTRIC, speedNorm * 100)
         return

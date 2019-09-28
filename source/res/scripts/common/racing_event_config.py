@@ -56,8 +56,8 @@ class PrepertyValue(object):
     LOW = 'low'
 
 
-RACING_VEHICLES_PROPERTIES = {RacingVehicles.VEHICLE_1: {VehicleProperties.SPEED: ('100', True),
-                            VehicleProperties.ACCELERATION: ('2', False),
+RACING_VEHICLES_PROPERTIES = {RacingVehicles.VEHICLE_1: {VehicleProperties.SPEED: ('100', False),
+                            VehicleProperties.ACCELERATION: ('2', True),
                             VehicleProperties.CHASSIS_HANDLING: (PrepertyValue.HIGH, True),
                             VehicleProperties.DPM: ('22', False),
                             VehicleProperties.GUN_RELOAD: ('1.5', True),

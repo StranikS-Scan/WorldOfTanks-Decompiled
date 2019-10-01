@@ -56,6 +56,7 @@ class ItemPackType(CONST_CONTAINER):
     CREW_50 = 'crew/50'
     CREW_75 = 'crew/75'
     CREW_100 = 'crew/100'
+    CREW_BUNDLE = 'crew/bundle'
     CREW_CUSTOM = 'crew/custom'
     CUSTOM_PREMIUM = 'custom/premium'
     CUSTOM_PREMIUM_PLUS = 'custom/premium_plus'
@@ -129,6 +130,7 @@ class ItemPackTypeGroup(CONST_CONTAINER):
     CREW = (ItemPackType.CREW_50,
      ItemPackType.CREW_75,
      ItemPackType.CREW_100,
+     ItemPackType.CREW_BUNDLE,
      ItemPackType.CREW_CUSTOM)
     TOKEN = (ItemPackType.TOKEN,)
     DISCOUNT = (ItemPackType.FRONTLINE_TOKEN,)

@@ -11,7 +11,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.items_kit_helper import getActiveOffer, addBuiltInEquipment
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.LobbySelectableView import LobbySelectableView
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled, getBuyVehiclesUrl
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.sound_constants import RESEARCH_PREVIEW_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveStateTooltip
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.info.vehicle_preview_crew_tab import getUniqueMembers
@@ -44,6 +44,8 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from gui.Scaleform.daapi.view.lobby.store.browser.sound_constants import INGAMESHOP_PREVIEW_SOUND_SPACE
 from web_client_api.common import ItemPackTypeGroup, ItemPackEntry, ItemPackType
+import SoundGroups
+from gui.Scaleform.daapi.view.lobby.hangar.Hangar import Hangar
 _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_STORE: 'shop',
  VIEW_ALIAS.LOBBY_STORAGE: 'storage',
@@ -78,7 +80,10 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
     def __init__(self, ctx=None):
         self._backAlias = ctx.get('previewAlias', VIEW_ALIAS.LOBBY_HANGAR)
         self.__itemsPack = ctx.get('itemsPack')
-        if self._backAlias == VIEW_ALIAS.LOBBY_STORE or self.__itemsPack is not None:
+        self.__isHeroTank = ctx.get('isHeroTank', False)
+        if self.__isHeroTank:
+            self._COMMON_SOUND_SPACE = Hangar.SOUND_SETTINGS
+        elif self._backAlias == VIEW_ALIAS.LOBBY_STORE or self.__itemsPack is not None:
             self._COMMON_SOUND_SPACE = INGAMESHOP_PREVIEW_SOUND_SPACE
         elif self._backAlias in (VIEW_ALIAS.LOBBY_TECHTREE, VIEW_ALIAS.LOBBY_RESEARCH):
             self._COMMON_SOUND_SPACE = RESEARCH_PREVIEW_SOUND_SPACE
@@ -87,7 +92,6 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
         self.__vehicleStrCD = ctx.get('vehicleStrCD')
         self._previousBackAlias = ctx.get('previousBackAlias')
         self._previewBackCb = ctx.get('previewBackCb')
-        self.__isHeroTank = ctx.get('isHeroTank', False)
         vehParams = ctx.get('vehParams') or {}
         self.__customizationCD = vehParams.get('styleCD')
         self.__offers = ctx.get('offers')
@@ -132,8 +136,15 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
         if not self._heroInteractive:
             self.heroTanks.setInteractive(False)
         self.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.handleSelectedEntityUpdated)
+        specialData = self.heroTanks.getCurrentPreviewParams() if self.__isHeroTank else None
+        if specialData is not None and specialData.enterEvent:
+            SoundGroups.g_instance.playSound2D(specialData.enterEvent)
+        return
 
     def _dispose(self):
+        specialData = self.heroTanks.getCurrentPreviewParams() if self.__isHeroTank else None
+        if specialData is not None and specialData.exitEvent:
+            SoundGroups.g_instance.playSound2D(specialData.exitEvent)
         self.removeListener(CameraRelatedEvents.VEHICLE_LOADING, self.__onVehicleLoading, EVENT_BUS_SCOPE.DEFAULT)
         g_clientUpdateManager.removeObjectCallbacks(self)
         g_currentPreviewVehicle.onChanged -= self.__onVehicleChanged
@@ -195,6 +206,7 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(VehiclePreview20, self)._onRegisterFlashComponent(viewPy, alias)
         if alias == VEHPREVIEW_CONSTANTS.BUYING_PANEL_PY_ALIAS:
+            viewPy.setIsHeroTank(self.__isHeroTank)
             if self.__itemsPack:
                 viewPy.setPackItems(self.__itemsPack, self.__price, self.__oldPrice, self.__title)
                 viewPy.setTimerData(self.__endTime)
@@ -210,6 +222,12 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
             elif self.__offers:
                 offer = getActiveOffer(self.__offers)
                 viewPy.setVehicleCrews((ItemPackEntry(id=g_currentPreviewVehicle.item.intCD, groupID=offer.crew.groupID),), (offer.crew,))
+            elif self.__isHeroTank:
+                crewData = self.heroTanks.getCurrentTankCrew()
+                if crewData and crewData.get('tankmen'):
+                    viewPy.setVehicleCrews((ItemPackEntry(id=g_currentPreviewVehicle.item.intCD, groupID=1),), (ItemPackEntry(type=ItemPackType.CREW_CUSTOM, groupID=1, extra=crewData),))
+                else:
+                    viewPy.setVehicleCrews((ItemPackEntry(id=g_currentPreviewVehicle.item.intCD, groupID=1),), ())
             else:
                 viewPy.setVehicleCrews((ItemPackEntry(id=g_currentPreviewVehicle.item.intCD, groupID=1),), ())
         elif alias == VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE:
@@ -327,7 +345,7 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
                 event_dispatcher.showHangar()
         elif self._backAlias == VIEW_ALIAS.LOBBY_STORE:
             if isIngameShopEnabled():
-                showWebShop(getBuyVehiclesUrl())
+                showWebShop()
             else:
                 showOldShop(ctx={'tabId': STORE_TYPES.SHOP,
                  'component': STORE_CONSTANTS.VEHICLE})

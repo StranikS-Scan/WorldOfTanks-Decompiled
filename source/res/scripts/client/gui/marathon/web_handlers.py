@@ -17,6 +17,7 @@ from web_client_api.ui import ContextMenuWebApi, OpenWindowWebApi, VehiclePrevie
 from web_client_api.ui.hangar import HangarTabWebApiMixin
 from web_client_api.ui.profile import ProfileTabWebApiMixin
 from web_client_api.vehicles import VehiclesWebApi
+from web_client_api.hero_tank import HeroTankWebApi
 _DEFAULT_MARATHON_WEB_API_COLLECTION = (SoundWebApi,
  SoundStateWebApi,
  SoundPlay2DWebApi,
@@ -33,7 +34,8 @@ _DEFAULT_MARATHON_WEB_API_COLLECTION = (SoundWebApi,
  ShopWebApi,
  FestivalWebApi,
  RewardsWebApi,
- SocialWebApi)
+ SocialWebApi,
+ HeroTankWebApi)
 
 @w2capi('request', 'request_id')
 class _RequestWebApi(AccessTokenWebApiMixin, WgniTokenWebApiMixin, SpaIdWebApiMixin):

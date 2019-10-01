@@ -330,9 +330,15 @@ def isValidCrewForVehicle(tmenItems, roles):
     tmenItemsLen = len(tmenItems)
     if tmenItemsLen <= 0 and tmenItemsLen != len(roles):
         return False
+    cleanRoles = [ first(role) for role in roles ]
+    for tItem in tmenItems:
+        if tItem['role'] not in cleanRoles:
+            return False
+
+    tmenItems.sort(key=lambda i: cleanRoles.index(i['role']))
     firstRoleLvl = first(tmenItems).get('roleLevel', [])
     for slot, tmanData in enumerate(tmenItems):
-        if first(roles[slot]) != tmanData['role'] or firstRoleLvl != tmanData.get('roleLevel', []):
+        if cleanRoles[slot] != tmanData['role'] or firstRoleLvl != tmanData.get('roleLevel', []):
             return False
 
     return True

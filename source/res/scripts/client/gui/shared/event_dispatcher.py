@@ -357,8 +357,8 @@ def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR):
     from ClientSelectableCameraObject import ClientSelectableCameraObject
     for entity in BigWorld.entities.values():
         if entity and isinstance(entity, HeroTank):
-            ClientSelectableCameraObject.switchCamera(entity)
             showHeroTankPreview(vehTypeCompDescr, previewAlias=previewAlias, previousBackAlias=None)
+            ClientSelectableCameraObject.switchCamera(entity)
             break
 
     return

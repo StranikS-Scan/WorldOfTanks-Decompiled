@@ -38043,7 +38043,7 @@ class tooltips(DynAccessor):
 
         class _custom(DynAccessor):
             __slots__ = ()
-            notEnough = DynAccessor(14794)
+            notEnough = DynAccessor(14801)
 
         custom = _custom()
         historyDescriptionHeader = DynAccessor(14102)
@@ -38123,8 +38123,8 @@ class tooltips(DynAccessor):
 
         class _buyPrice(DynAccessor):
             __slots__ = ()
-            actionPrice = DynAccessor(16105)
-            defaultPrice = DynAccessor(16104)
+            actionPrice = DynAccessor(16112)
+            defaultPrice = DynAccessor(16111)
 
         buyPrice = _buyPrice()
 
@@ -38148,10 +38148,10 @@ class tooltips(DynAccessor):
 
         class _rentPrice(DynAccessor):
             __slots__ = ()
-            c_1day = DynAccessor(16107)
-            c_3day = DynAccessor(16108)
-            days = DynAccessor(16109)
-            defaultPrice = DynAccessor(16106)
+            c_1day = DynAccessor(16114)
+            c_3day = DynAccessor(16115)
+            days = DynAccessor(16116)
+            defaultPrice = DynAccessor(16113)
 
         rentPrice = _rentPrice()
 
@@ -38189,112 +38189,112 @@ class tooltips(DynAccessor):
 
     class _advanced(DynAccessor):
         __slots__ = ()
-        aimingStabilizer = DynAccessor(15690)
-        antifragmentationLining = DynAccessor(15684)
-        ARMOR_PIERCING = DynAccessor(15666)
-        ARMOR_PIERCING_CR = DynAccessor(15667)
-        autoExtinguishers = DynAccessor(15671)
-        battleTeaching = DynAccessor(15749)
-        brotherhood = DynAccessor(15707)
-        camouflage = DynAccessor(15706)
-        camouflageNet = DynAccessor(15683)
-        carbonDioxide = DynAccessor(15687)
-        coatedOptics = DynAccessor(15682)
-        commander = DynAccessor(15699)
-        commander_eagleEye = DynAccessor(15709)
-        commander_expert = DynAccessor(15711)
-        commander_sixthSense = DynAccessor(15712)
-        commander_tutor = DynAccessor(15708)
-        commander_universalist = DynAccessor(15710)
-        driver = DynAccessor(15700)
-        driver_badRoadsKing = DynAccessor(15718)
-        driver_rammingMaster = DynAccessor(15717)
-        driver_smoothDriving = DynAccessor(15721)
-        driver_tidyPerson = DynAccessor(15719)
-        driver_virtuoso = DynAccessor(15720)
-        economyBonds = DynAccessor(15729)
-        economyConvertExp = DynAccessor(15731)
-        economyCredits = DynAccessor(15732)
-        economyGold = DynAccessor(15733)
+        aimingStabilizer = DynAccessor(15697)
+        antifragmentationLining = DynAccessor(15691)
+        ARMOR_PIERCING = DynAccessor(15673)
+        ARMOR_PIERCING_CR = DynAccessor(15674)
+        autoExtinguishers = DynAccessor(15678)
+        battleTeaching = DynAccessor(15756)
+        brotherhood = DynAccessor(15714)
+        camouflage = DynAccessor(15713)
+        camouflageNet = DynAccessor(15690)
+        carbonDioxide = DynAccessor(15694)
+        coatedOptics = DynAccessor(15689)
+        commander = DynAccessor(15706)
+        commander_eagleEye = DynAccessor(15716)
+        commander_expert = DynAccessor(15718)
+        commander_sixthSense = DynAccessor(15719)
+        commander_tutor = DynAccessor(15715)
+        commander_universalist = DynAccessor(15717)
+        driver = DynAccessor(15707)
+        driver_badRoadsKing = DynAccessor(15725)
+        driver_rammingMaster = DynAccessor(15724)
+        driver_smoothDriving = DynAccessor(15728)
+        driver_tidyPerson = DynAccessor(15726)
+        driver_virtuoso = DynAccessor(15727)
+        economyBonds = DynAccessor(15736)
+        economyConvertExp = DynAccessor(15738)
+        economyCredits = DynAccessor(15739)
+        economyGold = DynAccessor(15740)
 
         class _economyPremium(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(15742)
+            header = DynAccessor(15749)
 
-        economyPremium = _economyPremium(15741)
-        economyTankExperience = DynAccessor(15730)
-        enhancedAimDrives = DynAccessor(15680)
-        enhancedOil = DynAccessor(15675)
-        equipment = DynAccessor(15739)
-        filterCyclone = DynAccessor(15692)
-        fireFighting = DynAccessor(15705)
-        gamemodeRandom = DynAccessor(15743)
-        gamemodeSpecial = DynAccessor(15746)
-        gamemodeStronghold = DynAccessor(15745)
-        gamemodeTeam = DynAccessor(15744)
-        gamemodeTraining = DynAccessor(15747)
-        gasoline100 = DynAccessor(15676)
-        gasoline105 = DynAccessor(15677)
-        grousers = DynAccessor(15686)
-        gunner = DynAccessor(15703)
-        gunner_gunsmith = DynAccessor(15714)
-        gunner_rancorous = DynAccessor(15713)
-        gunner_smoothTurret = DynAccessor(15716)
-        gunner_sniper = DynAccessor(15715)
-        handExtinguishers = DynAccessor(15674)
+        economyPremium = _economyPremium(15748)
+        economyTankExperience = DynAccessor(15737)
+        enhancedAimDrives = DynAccessor(15687)
+        enhancedOil = DynAccessor(15682)
+        equipment = DynAccessor(15746)
+        filterCyclone = DynAccessor(15699)
+        fireFighting = DynAccessor(15712)
+        gamemodeRandom = DynAccessor(15750)
+        gamemodeSpecial = DynAccessor(15753)
+        gamemodeStronghold = DynAccessor(15752)
+        gamemodeTeam = DynAccessor(15751)
+        gamemodeTraining = DynAccessor(15754)
+        gasoline100 = DynAccessor(15683)
+        gasoline105 = DynAccessor(15684)
+        grousers = DynAccessor(15693)
+        gunner = DynAccessor(15710)
+        gunner_gunsmith = DynAccessor(15721)
+        gunner_rancorous = DynAccessor(15720)
+        gunner_smoothTurret = DynAccessor(15723)
+        gunner_sniper = DynAccessor(15722)
+        handExtinguishers = DynAccessor(15681)
 
         class _header(DynAccessor):
             __slots__ = ()
 
             class _shellType(DynAccessor):
                 __slots__ = ()
-                ARMOR_PIERCING = DynAccessor(15752)
-                ARMOR_PIERCING_CR = DynAccessor(15753)
-                HIGH_EXPLOSIVE = DynAccessor(15751)
-                HOLLOW_CHARGE = DynAccessor(15750)
+                ARMOR_PIERCING = DynAccessor(15759)
+                ARMOR_PIERCING_CR = DynAccessor(15760)
+                HIGH_EXPLOSIVE = DynAccessor(15758)
+                HOLLOW_CHARGE = DynAccessor(15757)
 
             shellType = _shellType()
 
         header = _header()
-        HIGH_EXPLOSIVE = DynAccessor(15665)
-        HOLLOW_CHARGE = DynAccessor(15664)
-        improvedVentilation = DynAccessor(15689)
-        info = DynAccessor(15662)
-        instructions = DynAccessor(15740)
-        largeMedkit = DynAccessor(15669)
-        largeRepairkit = DynAccessor(15668)
-        loader = DynAccessor(15702)
-        loader_desperado = DynAccessor(15727)
-        loader_intuition = DynAccessor(15726)
-        loader_pedant = DynAccessor(15728)
-        radioman = DynAccessor(15701)
-        radioman_finder = DynAccessor(15722)
-        radioman_inventor = DynAccessor(15724)
-        radioman_lastEffort = DynAccessor(15723)
-        radioman_retransmitter = DynAccessor(15725)
-        rammer = DynAccessor(15685)
-        ranked = DynAccessor(15748)
-        ration = DynAccessor(15670)
-        relativeArmor = DynAccessor(15735)
-        relativeCamouflage = DynAccessor(15737)
-        relativeMobility = DynAccessor(15736)
-        relativePower = DynAccessor(15734)
-        relativeVisibility = DynAccessor(15738)
-        removedRpmLimiter = DynAccessor(15678)
-        repair = DynAccessor(15704)
-        service = DynAccessor(15663)
-        smallMedkit = DynAccessor(15673)
-        smallRepairkit = DynAccessor(15672)
-        steelRollers = DynAccessor(15688)
-        stereoscope = DynAccessor(15681)
-        toolbox = DynAccessor(15679)
-        vehicleChassis = DynAccessor(15696)
-        vehicleEngine = DynAccessor(15695)
-        vehicleGun = DynAccessor(15693)
-        vehicleRadio = DynAccessor(15694)
-        vehicleTurret = DynAccessor(15698)
-        vehicleWheeledChassis = DynAccessor(15697)
-        wetCombatPack = DynAccessor(15691)
+        HIGH_EXPLOSIVE = DynAccessor(15672)
+        HOLLOW_CHARGE = DynAccessor(15671)
+        improvedVentilation = DynAccessor(15696)
+        info = DynAccessor(15669)
+        instructions = DynAccessor(15747)
+        largeMedkit = DynAccessor(15676)
+        largeRepairkit = DynAccessor(15675)
+        loader = DynAccessor(15709)
+        loader_desperado = DynAccessor(15734)
+        loader_intuition = DynAccessor(15733)
+        loader_pedant = DynAccessor(15735)
+        radioman = DynAccessor(15708)
+        radioman_finder = DynAccessor(15729)
+        radioman_inventor = DynAccessor(15731)
+        radioman_lastEffort = DynAccessor(15730)
+        radioman_retransmitter = DynAccessor(15732)
+        rammer = DynAccessor(15692)
+        ranked = DynAccessor(15755)
+        ration = DynAccessor(15677)
+        relativeArmor = DynAccessor(15742)
+        relativeCamouflage = DynAccessor(15744)
+        relativeMobility = DynAccessor(15743)
+        relativePower = DynAccessor(15741)
+        relativeVisibility = DynAccessor(15745)
+        removedRpmLimiter = DynAccessor(15685)
+        repair = DynAccessor(15711)
+        service = DynAccessor(15670)
+        smallMedkit = DynAccessor(15680)
+        smallRepairkit = DynAccessor(15679)
+        steelRollers = DynAccessor(15695)
+        stereoscope = DynAccessor(15688)
+        toolbox = DynAccessor(15686)
+        vehicleChassis = DynAccessor(15703)
+        vehicleEngine = DynAccessor(15702)
+        vehicleGun = DynAccessor(15700)
+        vehicleRadio = DynAccessor(15701)
+        vehicleTurret = DynAccessor(15705)
+        vehicleWheeledChassis = DynAccessor(15704)
+        wetCombatPack = DynAccessor(15698)
 
     advanced = _advanced()
 
@@ -38303,8 +38303,8 @@ class tooltips(DynAccessor):
 
         class _auto(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14489)
-            header = DynAccessor(14488)
+            body = DynAccessor(14496)
+            header = DynAccessor(14495)
 
         auto = _auto()
 
@@ -38315,20 +38315,20 @@ class tooltips(DynAccessor):
 
         class _battleToken(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(15190)
+            description = DynAccessor(15197)
 
             class _one(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15186)
-                header = DynAccessor(15185)
+                body = DynAccessor(15193)
+                header = DynAccessor(15192)
 
             one = _one()
 
             class _several(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15188)
-                header = DynAccessor(15187)
-                line = DynAccessor(15189)
+                body = DynAccessor(15195)
+                header = DynAccessor(15194)
+                line = DynAccessor(15196)
 
             several = _several()
 
@@ -38336,318 +38336,318 @@ class tooltips(DynAccessor):
 
         class _berths(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15192)
-            header = DynAccessor(15191)
+            body = DynAccessor(15199)
+            header = DynAccessor(15198)
 
         berths = _berths()
 
         class _completionTokens(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15211)
-            header = DynAccessor(15210)
+            body = DynAccessor(15218)
+            header = DynAccessor(15217)
 
         completionTokens = _completionTokens()
 
         class _completionTokens_1_1(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15213)
-            header = DynAccessor(15212)
+            body = DynAccessor(15220)
+            header = DynAccessor(15219)
 
         completionTokens_1_1 = _completionTokens_1_1()
 
         class _completionTokens_1_2(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15215)
-            header = DynAccessor(15214)
+            body = DynAccessor(15222)
+            header = DynAccessor(15221)
 
         completionTokens_1_2 = _completionTokens_1_2()
 
         class _completionTokens_1_3(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15217)
-            header = DynAccessor(15216)
+            body = DynAccessor(15224)
+            header = DynAccessor(15223)
 
         completionTokens_1_3 = _completionTokens_1_3()
 
         class _completionTokens_1_4(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15219)
-            header = DynAccessor(15218)
+            body = DynAccessor(15226)
+            header = DynAccessor(15225)
 
         completionTokens_1_4 = _completionTokens_1_4()
 
         class _completionTokens_1_5(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15221)
-            header = DynAccessor(15220)
+            body = DynAccessor(15228)
+            header = DynAccessor(15227)
 
         completionTokens_1_5 = _completionTokens_1_5()
 
         class _completionTokens_2_1(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15223)
-            header = DynAccessor(15222)
+            body = DynAccessor(15230)
+            header = DynAccessor(15229)
 
         completionTokens_2_1 = _completionTokens_2_1()
 
         class _completionTokens_2_2(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15225)
-            header = DynAccessor(15224)
+            body = DynAccessor(15232)
+            header = DynAccessor(15231)
 
         completionTokens_2_2 = _completionTokens_2_2()
 
         class _completionTokens_2_3(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15227)
-            header = DynAccessor(15226)
+            body = DynAccessor(15234)
+            header = DynAccessor(15233)
 
         completionTokens_2_3 = _completionTokens_2_3()
 
         class _completionTokens_2_4(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15229)
-            header = DynAccessor(15228)
+            body = DynAccessor(15236)
+            header = DynAccessor(15235)
 
         completionTokens_2_4 = _completionTokens_2_4()
 
         class _completionTokens_2_5(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15231)
-            header = DynAccessor(15230)
+            body = DynAccessor(15238)
+            header = DynAccessor(15237)
 
         completionTokens_2_5 = _completionTokens_2_5()
 
         class _completionTokens_3_1(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15233)
-            header = DynAccessor(15232)
+            body = DynAccessor(15240)
+            header = DynAccessor(15239)
 
         completionTokens_3_1 = _completionTokens_3_1()
 
         class _completionTokens_3_2(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15235)
-            header = DynAccessor(15234)
+            body = DynAccessor(15242)
+            header = DynAccessor(15241)
 
         completionTokens_3_2 = _completionTokens_3_2()
 
         class _completionTokens_3_3(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15237)
-            header = DynAccessor(15236)
+            body = DynAccessor(15244)
+            header = DynAccessor(15243)
 
         completionTokens_3_3 = _completionTokens_3_3()
 
         class _completionTokens_3_4(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15239)
-            header = DynAccessor(15238)
+            body = DynAccessor(15246)
+            header = DynAccessor(15245)
 
         completionTokens_3_4 = _completionTokens_3_4()
 
         class _completionTokens_3_5(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15241)
-            header = DynAccessor(15240)
+            body = DynAccessor(15248)
+            header = DynAccessor(15247)
 
         completionTokens_3_5 = _completionTokens_3_5()
 
         class _completionTokens_4_1(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15243)
-            header = DynAccessor(15242)
+            body = DynAccessor(15250)
+            header = DynAccessor(15249)
 
         completionTokens_4_1 = _completionTokens_4_1()
 
         class _completionTokens_4_2(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15245)
-            header = DynAccessor(15244)
+            body = DynAccessor(15252)
+            header = DynAccessor(15251)
 
         completionTokens_4_2 = _completionTokens_4_2()
 
         class _completionTokens_4_3(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15247)
-            header = DynAccessor(15246)
+            body = DynAccessor(15254)
+            header = DynAccessor(15253)
 
         completionTokens_4_3 = _completionTokens_4_3()
 
         class _completionTokens_4_4(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15249)
-            header = DynAccessor(15248)
+            body = DynAccessor(15256)
+            header = DynAccessor(15255)
 
         completionTokens_4_4 = _completionTokens_4_4()
 
         class _completionTokens_4_5(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15251)
-            header = DynAccessor(15250)
+            body = DynAccessor(15258)
+            header = DynAccessor(15257)
 
         completionTokens_4_5 = _completionTokens_4_5()
 
         class _completionTokens_5_1(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15253)
-            header = DynAccessor(15252)
+            body = DynAccessor(15260)
+            header = DynAccessor(15259)
 
         completionTokens_5_1 = _completionTokens_5_1()
 
         class _completionTokens_5_2(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15255)
-            header = DynAccessor(15254)
+            body = DynAccessor(15262)
+            header = DynAccessor(15261)
 
         completionTokens_5_2 = _completionTokens_5_2()
 
         class _completionTokens_5_3(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15257)
-            header = DynAccessor(15256)
+            body = DynAccessor(15264)
+            header = DynAccessor(15263)
 
         completionTokens_5_3 = _completionTokens_5_3()
 
         class _completionTokens_5_4(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15259)
-            header = DynAccessor(15258)
+            body = DynAccessor(15266)
+            header = DynAccessor(15265)
 
         completionTokens_5_4 = _completionTokens_5_4()
 
         class _completionTokens_6_1(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15261)
-            header = DynAccessor(15260)
+            body = DynAccessor(15268)
+            header = DynAccessor(15267)
 
         completionTokens_6_1 = _completionTokens_6_1()
 
         class _completionTokens_6_2(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15263)
-            header = DynAccessor(15262)
+            body = DynAccessor(15270)
+            header = DynAccessor(15269)
 
         completionTokens_6_2 = _completionTokens_6_2()
 
         class _completionTokens_6_3(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15265)
-            header = DynAccessor(15264)
+            body = DynAccessor(15272)
+            header = DynAccessor(15271)
 
         completionTokens_6_3 = _completionTokens_6_3()
 
         class _completionTokens_6_4(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15267)
-            header = DynAccessor(15266)
+            body = DynAccessor(15274)
+            header = DynAccessor(15273)
 
         completionTokens_6_4 = _completionTokens_6_4()
 
         class _completionTokens_7_1(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15269)
-            header = DynAccessor(15268)
+            body = DynAccessor(15276)
+            header = DynAccessor(15275)
 
         completionTokens_7_1 = _completionTokens_7_1()
 
         class _completionTokens_7_2(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15271)
-            header = DynAccessor(15270)
+            body = DynAccessor(15278)
+            header = DynAccessor(15277)
 
         completionTokens_7_2 = _completionTokens_7_2()
 
         class _completionTokens_7_3(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15273)
-            header = DynAccessor(15272)
+            body = DynAccessor(15280)
+            header = DynAccessor(15279)
 
         completionTokens_7_3 = _completionTokens_7_3()
 
         class _completionTokens_7_4(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15275)
-            header = DynAccessor(15274)
+            body = DynAccessor(15282)
+            header = DynAccessor(15281)
 
         completionTokens_7_4 = _completionTokens_7_4()
 
         class _credits(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15174)
-            header = DynAccessor(15173)
+            body = DynAccessor(15181)
+            header = DynAccessor(15180)
 
         credits = _credits()
 
         class _creditsFactor(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15194)
-            header = DynAccessor(15193)
+            body = DynAccessor(15201)
+            header = DynAccessor(15200)
 
         creditsFactor = _creditsFactor()
 
         class _crystal(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15176)
-            header = DynAccessor(15175)
+            body = DynAccessor(15183)
+            header = DynAccessor(15182)
 
         crystal = _crystal()
 
         class _festivalTickets(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15277)
-            header = DynAccessor(15276)
+            body = DynAccessor(15284)
+            header = DynAccessor(15283)
 
         festivalTickets = _festivalTickets()
 
         class _freeTokens(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15208)
-            header = DynAccessor(15207)
+            body = DynAccessor(15215)
+            header = DynAccessor(15214)
 
         freeTokens = _freeTokens()
 
         class _freeXP(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15180)
-            header = DynAccessor(15179)
+            body = DynAccessor(15187)
+            header = DynAccessor(15186)
 
         freeXP = _freeXP()
 
         class _freeXPFactor(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15196)
-            header = DynAccessor(15195)
+            body = DynAccessor(15203)
+            header = DynAccessor(15202)
 
         freeXPFactor = _freeXPFactor()
 
         class _gold(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15178)
-            header = DynAccessor(15177)
+            body = DynAccessor(15185)
+            header = DynAccessor(15184)
 
         gold = _gold()
 
         class _oneof(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15284)
-            header = DynAccessor(15283)
+            body = DynAccessor(15291)
+            header = DynAccessor(15290)
 
             class _rankedCycle(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15286)
-                header = DynAccessor(15285)
+                body = DynAccessor(15293)
+                header = DynAccessor(15292)
 
             rankedCycle = _rankedCycle()
 
             class _rankedSeason(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15288)
-                header = DynAccessor(15287)
+                body = DynAccessor(15295)
+                header = DynAccessor(15294)
 
                 class _previewStyle(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15289)
+                    body = DynAccessor(15296)
 
                 previewStyle = _previewStyle()
 
@@ -38657,71 +38657,71 @@ class tooltips(DynAccessor):
 
         class _premium(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15182)
-            header = DynAccessor(15181)
+            body = DynAccessor(15189)
+            header = DynAccessor(15188)
 
         premium = _premium()
 
         class _premium_plus(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15184)
-            header = DynAccessor(15183)
+            body = DynAccessor(15191)
+            header = DynAccessor(15190)
 
         premium_plus = _premium_plus()
 
         class _slots(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15206)
-            header = DynAccessor(15205)
+            body = DynAccessor(15213)
+            header = DynAccessor(15212)
 
         slots = _slots()
 
         class _tankman(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15282)
-            header = DynAccessor(15281)
+            body = DynAccessor(15289)
+            header = DynAccessor(15288)
 
         tankman = _tankman()
 
         class _tankmen(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15278)
-            header = DynAccessor(15209)
+            body = DynAccessor(15285)
+            header = DynAccessor(15216)
 
         tankmen = _tankmen()
 
         class _tankmenXP(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15198)
-            header = DynAccessor(15197)
+            body = DynAccessor(15205)
+            header = DynAccessor(15204)
 
         tankmenXP = _tankmenXP()
 
         class _tankmenXPFactor(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15200)
-            header = DynAccessor(15199)
+            body = DynAccessor(15207)
+            header = DynAccessor(15206)
 
         tankmenXPFactor = _tankmenXPFactor()
 
         class _tankwomen(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15280)
-            header = DynAccessor(15279)
+            body = DynAccessor(15287)
+            header = DynAccessor(15286)
 
         tankwomen = _tankwomen()
 
         class _xp(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15202)
-            header = DynAccessor(15201)
+            body = DynAccessor(15209)
+            header = DynAccessor(15208)
 
         xp = _xp()
 
         class _xpFactor(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15204)
-            header = DynAccessor(15203)
+            body = DynAccessor(15211)
+            header = DynAccessor(15210)
 
         xpFactor = _xpFactor()
 
@@ -38739,15 +38739,15 @@ class tooltips(DynAccessor):
 
         class _item_buy(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14463)
-            header = DynAccessor(14462)
+            body = DynAccessor(14470)
+            header = DynAccessor(14469)
 
         item_buy = _item_buy()
 
         class _item_empty(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14461)
-            header = DynAccessor(14460)
+            body = DynAccessor(14468)
+            header = DynAccessor(14467)
 
         item_empty = _item_empty()
 
@@ -38756,8 +38756,8 @@ class tooltips(DynAccessor):
 
             class _dismiss(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14423)
-                header = DynAccessor(14415)
+                body = DynAccessor(14430)
+                header = DynAccessor(14422)
 
             dismiss = _dismiss()
 
@@ -38768,8 +38768,8 @@ class tooltips(DynAccessor):
 
             class _dismiss(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14408)
-                header = DynAccessor(14407)
+                body = DynAccessor(14415)
+                header = DynAccessor(14414)
 
             dismiss = _dismiss()
 
@@ -38778,37 +38778,37 @@ class tooltips(DynAccessor):
 
                 class _free(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14413)
+                    body = DynAccessor(14420)
 
                 free = _free()
 
                 class _gold(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14414)
+                    body = DynAccessor(14421)
 
                 gold = _gold()
-                header = DynAccessor(14412)
-                newSkill = DynAccessor(14424)
+                header = DynAccessor(14419)
+                newSkill = DynAccessor(14431)
 
             recovery = _recovery()
 
             class _recoveryBtn(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(14411)
+                header = DynAccessor(14418)
 
             recoveryBtn = _recoveryBtn()
 
             class _recruit(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14410)
-                header = DynAccessor(14409)
+                body = DynAccessor(14417)
+                header = DynAccessor(14416)
 
             recruit = _recruit()
 
             class _unload(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14406)
-                header = DynAccessor(14405)
+                body = DynAccessor(14413)
+                header = DynAccessor(14412)
 
             unload = _unload()
 
@@ -38818,22 +38818,22 @@ class tooltips(DynAccessor):
 
     class _battleBooster(DynAccessor):
         __slots__ = ()
-        crew = DynAccessor(14339)
-        inventoryCount = DynAccessor(14559)
-        optionalDevice = DynAccessor(14338)
-        replace = DynAccessor(14344)
+        crew = DynAccessor(14346)
+        inventoryCount = DynAccessor(14566)
+        optionalDevice = DynAccessor(14345)
+        replace = DynAccessor(14351)
 
         class _skill(DynAccessor):
             __slots__ = ()
-            learnt = DynAccessor(14340)
-            not_learnt = DynAccessor(14341)
+            learnt = DynAccessor(14347)
+            not_learnt = DynAccessor(14348)
 
         skill = _skill()
 
         class _useless(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14343)
-            header = DynAccessor(14342)
+            body = DynAccessor(14350)
+            header = DynAccessor(14349)
 
         useless = _useless()
 
@@ -38882,15 +38882,15 @@ class tooltips(DynAccessor):
 
                 class _lose(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15005)
-                    header = DynAccessor(15004)
+                    body = DynAccessor(15012)
+                    header = DynAccessor(15011)
 
                 lose = _lose()
 
                 class _win(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15003)
-                    header = DynAccessor(15002)
+                    body = DynAccessor(15010)
+                    header = DynAccessor(15009)
 
                 win = _win()
 
@@ -38900,14 +38900,14 @@ class tooltips(DynAccessor):
 
         class _efficiencyHeader(DynAccessor):
             __slots__ = ()
-            summArmor = DynAccessor(15020)
-            summAssist = DynAccessor(15019)
-            summCrits = DynAccessor(15021)
-            summDamage = DynAccessor(15022)
-            summKill = DynAccessor(15023)
-            summSpotted = DynAccessor(15018)
-            summStun = DynAccessor(15024)
-            value = DynAccessor(15025)
+            summArmor = DynAccessor(15027)
+            summAssist = DynAccessor(15026)
+            summCrits = DynAccessor(15028)
+            summDamage = DynAccessor(15029)
+            summKill = DynAccessor(15030)
+            summSpotted = DynAccessor(15025)
+            summStun = DynAccessor(15031)
+            value = DynAccessor(15032)
 
         efficiencyHeader = _efficiencyHeader()
 
@@ -38916,27 +38916,27 @@ class tooltips(DynAccessor):
 
             class _legioner(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15006)
+                body = DynAccessor(15013)
 
             legioner = _legioner()
 
             class _resultsShareBtn(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15011)
-                header = DynAccessor(15010)
+                body = DynAccessor(15018)
+                header = DynAccessor(15017)
 
             resultsShareBtn = _resultsShareBtn()
 
             class _teamInfluenceTotal(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15008)
-                header = DynAccessor(15007)
+                body = DynAccessor(15015)
+                header = DynAccessor(15014)
 
             teamInfluenceTotal = _teamInfluenceTotal()
 
             class _teamResourceTotal(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(15009)
+                header = DynAccessor(15016)
 
             teamResourceTotal = _teamResourceTotal()
 
@@ -38947,21 +38947,21 @@ class tooltips(DynAccessor):
 
             class _tankmenStateChanged(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15029)
-                header = DynAccessor(15028)
+                body = DynAccessor(15036)
+                header = DynAccessor(15035)
 
             tankmenStateChanged = _tankmenStateChanged()
 
             class _tankStateChanged(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15027)
-                header = DynAccessor(15026)
+                body = DynAccessor(15034)
+                header = DynAccessor(15033)
 
             tankStateChanged = _tankStateChanged()
 
             class _xpToTmenChanged(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15030)
+                body = DynAccessor(15037)
 
             xpToTmenChanged = _xpToTmenChanged()
 
@@ -38969,12 +38969,12 @@ class tooltips(DynAccessor):
 
         class _victoryScoreDescription(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15013)
-            cost = DynAccessor(15014)
-            damagePattern = DynAccessor(15017)
-            header = DynAccessor(15012)
-            killsPattern = DynAccessor(15015)
-            pointsPattern = DynAccessor(15016)
+            body = DynAccessor(15020)
+            cost = DynAccessor(15021)
+            damagePattern = DynAccessor(15024)
+            header = DynAccessor(15019)
+            killsPattern = DynAccessor(15022)
+            pointsPattern = DynAccessor(15023)
 
         victoryScoreDescription = _victoryScoreDescription()
 
@@ -38991,8 +38991,8 @@ class tooltips(DynAccessor):
 
                 class _selectBtn(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15125)
-                    header = DynAccessor(15124)
+                    body = DynAccessor(15132)
+                    header = DynAccessor(15131)
 
                 selectBtn = _selectBtn()
 
@@ -39003,8 +39003,8 @@ class tooltips(DynAccessor):
 
                 class _selectBtn(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15127)
-                    header = DynAccessor(15126)
+                    body = DynAccessor(15134)
+                    header = DynAccessor(15133)
 
                 selectBtn = _selectBtn()
 
@@ -39185,15 +39185,15 @@ class tooltips(DynAccessor):
 
         class _strongholds(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14935)
+            body = DynAccessor(14942)
 
             class _disabled(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14937)
-                header = DynAccessor(14936)
+                body = DynAccessor(14944)
+                header = DynAccessor(14943)
 
             disabled = _disabled()
-            header = DynAccessor(14934)
+            header = DynAccessor(14941)
 
         strongholds = _strongholds()
 
@@ -39218,24 +39218,24 @@ class tooltips(DynAccessor):
 
         class _BlueprintEmptySlot(DynAccessor):
             __slots__ = ()
-            gatherHeader = DynAccessor(14772)
-            statusEnough = DynAccessor(14774)
-            statusNotEnough = DynAccessor(14773)
-            title = DynAccessor(14771)
+            gatherHeader = DynAccessor(14779)
+            statusEnough = DynAccessor(14781)
+            statusNotEnough = DynAccessor(14780)
+            title = DynAccessor(14778)
 
         BlueprintEmptySlot = _BlueprintEmptySlot()
 
         class _BlueprintFragmentTooltip(DynAccessor):
             __slots__ = ()
-            compensation = DynAccessor(14782)
-            fragmentDescription = DynAccessor(14776)
-            fragmentGathered = DynAccessor(14777)
-            fragmentHeader = DynAccessor(14775)
-            inStorage = DynAccessor(14783)
-            intelDescription = DynAccessor(14781)
-            intelFragment = DynAccessor(14780)
-            nationalDescription = DynAccessor(14779)
-            nationalFragment = DynAccessor(14778)
+            compensation = DynAccessor(14789)
+            fragmentDescription = DynAccessor(14783)
+            fragmentGathered = DynAccessor(14784)
+            fragmentHeader = DynAccessor(14782)
+            inStorage = DynAccessor(14790)
+            intelDescription = DynAccessor(14788)
+            intelFragment = DynAccessor(14787)
+            nationalDescription = DynAccessor(14786)
+            nationalFragment = DynAccessor(14785)
 
         BlueprintFragmentTooltip = _BlueprintFragmentTooltip()
 
@@ -39244,15 +39244,15 @@ class tooltips(DynAccessor):
 
             class _createMaxFragments(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14787)
-                header = DynAccessor(14786)
+                body = DynAccessor(14794)
+                header = DynAccessor(14793)
 
             createMaxFragments = _createMaxFragments()
 
             class _researchImpossible(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14785)
-                header = DynAccessor(14784)
+                body = DynAccessor(14792)
+                header = DynAccessor(14791)
 
             researchImpossible = _researchImpossible()
 
@@ -39260,31 +39260,31 @@ class tooltips(DynAccessor):
 
         class _VehicleBlueprintEmptySlotTooltip(DynAccessor):
             __slots__ = ()
-            researchDiscount = DynAccessor(14759)
+            researchDiscount = DynAccessor(14766)
 
         VehicleBlueprintEmptySlotTooltip = _VehicleBlueprintEmptySlotTooltip()
 
         class _VehicleBlueprintTooltip(DynAccessor):
             __slots__ = ()
-            blueprintFragments = DynAccessor(14756)
-            completeStatus = DynAccessor(14769)
-            descriptionFirst = DynAccessor(14752)
-            descriptionSecond = DynAccessor(14753)
-            emptyStatus = DynAccessor(14767)
-            fragmentsAcquired = DynAccessor(14757)
-            fragmentsConvert = DynAccessor(14755)
-            freeUnlock = DynAccessor(14760)
-            gatherDescription1 = DynAccessor(14762)
-            gatherDescription2 = DynAccessor(14763)
-            gatherHeader = DynAccessor(14761)
-            header = DynAccessor(14751)
-            incompleteStatus = DynAccessor(14768)
-            internationals = DynAccessor(14765)
-            loading = DynAccessor(14754)
-            nationals = DynAccessor(14766)
-            c_or = DynAccessor(14764)
-            researchDiscount = DynAccessor(14758)
-            unlockedStatus = DynAccessor(14770)
+            blueprintFragments = DynAccessor(14763)
+            completeStatus = DynAccessor(14776)
+            descriptionFirst = DynAccessor(14759)
+            descriptionSecond = DynAccessor(14760)
+            emptyStatus = DynAccessor(14774)
+            fragmentsAcquired = DynAccessor(14764)
+            fragmentsConvert = DynAccessor(14762)
+            freeUnlock = DynAccessor(14767)
+            gatherDescription1 = DynAccessor(14769)
+            gatherDescription2 = DynAccessor(14770)
+            gatherHeader = DynAccessor(14768)
+            header = DynAccessor(14758)
+            incompleteStatus = DynAccessor(14775)
+            internationals = DynAccessor(14772)
+            loading = DynAccessor(14761)
+            nationals = DynAccessor(14773)
+            c_or = DynAccessor(14771)
+            researchDiscount = DynAccessor(14765)
+            unlockedStatus = DynAccessor(14777)
 
         VehicleBlueprintTooltip = _VehicleBlueprintTooltip()
 
@@ -39298,7 +39298,7 @@ class tooltips(DynAccessor):
 
             class _disabled(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15129)
+                body = DynAccessor(15136)
 
             disabled = _disabled()
 
@@ -39309,43 +39309,43 @@ class tooltips(DynAccessor):
 
             class _qualityBig(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15132)
+                body = DynAccessor(15139)
 
             qualityBig = _qualityBig()
 
             class _qualityMedium(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15131)
+                body = DynAccessor(15138)
 
             qualityMedium = _qualityMedium()
 
             class _qualitySmall(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15130)
+                body = DynAccessor(15137)
 
             qualitySmall = _qualitySmall()
 
             class _typeCredits(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15136)
+                body = DynAccessor(15143)
 
             typeCredits = _typeCredits()
 
             class _typeCrewXp(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15134)
+                body = DynAccessor(15141)
 
             typeCrewXp = _typeCrewXp()
 
             class _typeFreeXp(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15135)
+                body = DynAccessor(15142)
 
             typeFreeXp = _typeFreeXp()
 
             class _typeXp(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15133)
+                body = DynAccessor(15140)
 
             typeXp = _typeXp()
 
@@ -39353,7 +39353,7 @@ class tooltips(DynAccessor):
 
         class _questLinkBtn(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15128)
+            body = DynAccessor(15135)
 
         questLinkBtn = _questLinkBtn()
 
@@ -39364,13 +39364,13 @@ class tooltips(DynAccessor):
 
         class _boosterDescription(DynAccessor):
             __slots__ = ()
-            note = DynAccessor(15162)
+            note = DynAccessor(15169)
 
         boosterDescription = _boosterDescription()
 
         class _openBoostersWindow(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15161)
+            body = DynAccessor(15168)
 
         openBoostersWindow = _openBoostersWindow()
 
@@ -39384,67 +39384,67 @@ class tooltips(DynAccessor):
 
             class _activateInfo(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(15160)
-                title = DynAccessor(15159)
+                description = DynAccessor(15167)
+                title = DynAccessor(15166)
 
             activateInfo = _activateInfo()
 
             class _active(DynAccessor):
                 __slots__ = ()
-                title = DynAccessor(15155)
-                value = DynAccessor(15156)
+                title = DynAccessor(15162)
+                value = DynAccessor(15163)
 
             active = _active()
 
             class _dueDate(DynAccessor):
                 __slots__ = ()
-                title = DynAccessor(15137)
-                unlimited = DynAccessor(15139)
-                value = DynAccessor(15138)
+                title = DynAccessor(15144)
+                unlimited = DynAccessor(15146)
+                value = DynAccessor(15145)
 
             dueDate = _dueDate()
 
             class _effectTime(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(15158)
-                title = DynAccessor(15157)
+                description = DynAccessor(15165)
+                title = DynAccessor(15164)
 
             effectTime = _effectTime()
 
             class _getCondition(DynAccessor):
                 __slots__ = ()
-                title = DynAccessor(15140)
-                value = DynAccessor(15141)
+                title = DynAccessor(15147)
+                value = DynAccessor(15148)
 
             getCondition = _getCondition()
 
             class _header(DynAccessor):
                 __slots__ = ()
-                credits = DynAccessor(15148)
-                crewXp = DynAccessor(15146)
+                credits = DynAccessor(15155)
+                crewXp = DynAccessor(15153)
 
                 class _description(DynAccessor):
                     __slots__ = ()
-                    credits = DynAccessor(15149)
-                    crewXp = DynAccessor(15147)
-                    freeXp = DynAccessor(15145)
-                    xp = DynAccessor(15143)
+                    credits = DynAccessor(15156)
+                    crewXp = DynAccessor(15154)
+                    freeXp = DynAccessor(15152)
+                    xp = DynAccessor(15150)
 
                 description = _description()
-                freeXp = DynAccessor(15144)
-                xp = DynAccessor(15142)
+                freeXp = DynAccessor(15151)
+                xp = DynAccessor(15149)
 
             header = _header()
-            longDescriptionSpecial = DynAccessor(15151)
+            longDescriptionSpecial = DynAccessor(15158)
 
             class _quality(DynAccessor):
                 __slots__ = ()
-                big = DynAccessor(15154)
-                medium = DynAccessor(15153)
-                small = DynAccessor(15152)
+                big = DynAccessor(15161)
+                medium = DynAccessor(15160)
+                small = DynAccessor(15159)
 
             quality = _quality()
-            shortDescriptionSpecial = DynAccessor(15150)
+            shortDescriptionSpecial = DynAccessor(15157)
 
         booster = _booster()
 
@@ -39452,9 +39452,9 @@ class tooltips(DynAccessor):
 
     class _buySkill(DynAccessor):
         __slots__ = ()
-        fully = DynAccessor(14611)
-        header = DynAccessor(14613)
-        partly = DynAccessor(14612)
+        fully = DynAccessor(14618)
+        header = DynAccessor(14620)
+        partly = DynAccessor(14619)
 
     buySkill = _buySkill()
 
@@ -39467,8 +39467,8 @@ class tooltips(DynAccessor):
 
     class _Calendar(DynAccessor):
         __slots__ = ()
-        nextMonth = DynAccessor(14996)
-        prevMonth = DynAccessor(14997)
+        nextMonth = DynAccessor(15003)
+        prevMonth = DynAccessor(15004)
 
     Calendar = _Calendar()
 
@@ -39481,16 +39481,16 @@ class tooltips(DynAccessor):
 
     class _clanCommonInfo(DynAccessor):
         __slots__ = ()
-        activity = DynAccessor(15170)
-        ClanName = DynAccessor(15163)
-        commander = DynAccessor(15169)
-        no = DynAccessor(15172)
-        slogan = DynAccessor(15164)
-        statAvgExp = DynAccessor(15168)
-        statBattlesCount = DynAccessor(15166)
-        statRating = DynAccessor(15165)
-        statWinsPercent = DynAccessor(15167)
-        yes = DynAccessor(15171)
+        activity = DynAccessor(15177)
+        ClanName = DynAccessor(15170)
+        commander = DynAccessor(15176)
+        no = DynAccessor(15179)
+        slogan = DynAccessor(15171)
+        statAvgExp = DynAccessor(15175)
+        statBattlesCount = DynAccessor(15173)
+        statRating = DynAccessor(15172)
+        statWinsPercent = DynAccessor(15174)
+        yes = DynAccessor(15178)
 
     clanCommonInfo = _clanCommonInfo()
 
@@ -39523,12 +39523,12 @@ class tooltips(DynAccessor):
 
         class _resource(DynAccessor):
             __slots__ = ()
-            mob = DynAccessor(15048)
-            web = DynAccessor(15047)
-            wotb = DynAccessor(15046)
-            wotg = DynAccessor(15045)
-            wowp = DynAccessor(15043)
-            wows = DynAccessor(15044)
+            mob = DynAccessor(15055)
+            web = DynAccessor(15054)
+            wotb = DynAccessor(15053)
+            wotg = DynAccessor(15052)
+            wowp = DynAccessor(15050)
+            wows = DynAccessor(15051)
 
         resource = _resource()
 
@@ -39537,39 +39537,39 @@ class tooltips(DynAccessor):
 
             class _inBattle(DynAccessor):
                 __slots__ = ()
-                bootcamp = DynAccessor(15036)
-                fortifications = DynAccessor(15040)
-                historical = DynAccessor(15039)
-                random = DynAccessor(15032)
-                ranked = DynAccessor(15038)
-                special = DynAccessor(15041)
-                team = DynAccessor(15034)
-                team7x7 = DynAccessor(15037)
-                training = DynAccessor(15033)
-                tutorial = DynAccessor(15035)
-                unknown = DynAccessor(15031)
+                bootcamp = DynAccessor(15043)
+                fortifications = DynAccessor(15047)
+                historical = DynAccessor(15046)
+                random = DynAccessor(15039)
+                ranked = DynAccessor(15045)
+                special = DynAccessor(15048)
+                team = DynAccessor(15041)
+                team7x7 = DynAccessor(15044)
+                training = DynAccessor(15040)
+                tutorial = DynAccessor(15042)
+                unknown = DynAccessor(15038)
 
             inBattle = _inBattle()
-            online = DynAccessor(15042)
+            online = DynAccessor(15049)
 
         status = _status()
 
         class _units(DynAccessor):
             __slots__ = ()
-            clan = DynAccessor(15050)
-            groups = DynAccessor(15056)
-            homeRealm = DynAccessor(15049)
+            clan = DynAccessor(15057)
+            groups = DynAccessor(15063)
+            homeRealm = DynAccessor(15056)
 
             class _status(DynAccessor):
                 __slots__ = ()
 
                 class _description(DynAccessor):
                     __slots__ = ()
-                    chatBan = DynAccessor(15053)
-                    ignored = DynAccessor(15052)
-                    pendingfriendship = DynAccessor(15051)
-                    recruit = DynAccessor(15055)
-                    recruiter = DynAccessor(15054)
+                    chatBan = DynAccessor(15060)
+                    ignored = DynAccessor(15059)
+                    pendingfriendship = DynAccessor(15058)
+                    recruit = DynAccessor(15062)
+                    recruiter = DynAccessor(15061)
 
                 description = _description()
 
@@ -39587,8 +39587,8 @@ class tooltips(DynAccessor):
 
             class _notEnoughSlots(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15489)
-                header = DynAccessor(15488)
+                body = DynAccessor(15496)
+                header = DynAccessor(15495)
 
             notEnoughSlots = _notEnoughSlots()
 
@@ -39605,37 +39605,37 @@ class tooltips(DynAccessor):
 
     class _crew(DynAccessor):
         __slots__ = ()
-        body = DynAccessor(14417)
-        header = DynAccessor(14416)
+        body = DynAccessor(14424)
+        header = DynAccessor(14423)
 
         class _lock(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14422)
-            header = DynAccessor(14421)
+            body = DynAccessor(14429)
+            header = DynAccessor(14428)
 
         lock = _lock()
 
         class _role(DynAccessor):
             __slots__ = ()
-            commander = DynAccessor(15756)
-            driver = DynAccessor(15757)
-            gunner = DynAccessor(15760)
-            loader = DynAccessor(15759)
-            radioman = DynAccessor(15758)
+            commander = DynAccessor(15763)
+            driver = DynAccessor(15764)
+            gunner = DynAccessor(15767)
+            loader = DynAccessor(15766)
+            radioman = DynAccessor(15765)
 
         role = _role()
 
         class _roleChange(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(15761)
-            text = DynAccessor(15762)
+            header = DynAccessor(15768)
+            text = DynAccessor(15769)
 
         roleChange = _roleChange()
 
         class _roleChangeForbid(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(15754)
-            text = DynAccessor(15755)
+            header = DynAccessor(15761)
+            text = DynAccessor(15762)
 
         roleChangeForbid = _roleChangeForbid()
 
@@ -39649,22 +39649,22 @@ class tooltips(DynAccessor):
 
             class _invalidCrew(DynAccessor):
                 __slots__ = ()
-                incompleteCrew = DynAccessor(16275)
-                invalidSkill = DynAccessor(16273)
-                invalidSpeciality = DynAccessor(16274)
-                title = DynAccessor(16272)
+                incompleteCrew = DynAccessor(16282)
+                invalidSkill = DynAccessor(16280)
+                invalidSpeciality = DynAccessor(16281)
+                title = DynAccessor(16279)
 
             invalidCrew = _invalidCrew()
 
             class _invalidItem(DynAccessor):
                 __slots__ = ()
-                title = DynAccessor(16281)
+                title = DynAccessor(16288)
 
             invalidItem = _invalidItem()
 
             class _invalidPrice(DynAccessor):
                 __slots__ = ()
-                title = DynAccessor(16282)
+                title = DynAccessor(16289)
 
             invalidPrice = _invalidPrice()
 
@@ -39675,29 +39675,29 @@ class tooltips(DynAccessor):
 
             class _filters(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(16280)
+                body = DynAccessor(16287)
 
                 class _brochure(DynAccessor):
                     __slots__ = ()
-                    title = DynAccessor(16276)
+                    title = DynAccessor(16283)
 
                 brochure = _brochure()
 
                 class _crewBook(DynAccessor):
                     __slots__ = ()
-                    title = DynAccessor(16278)
+                    title = DynAccessor(16285)
 
                 crewBook = _crewBook()
 
                 class _guide(DynAccessor):
                     __slots__ = ()
-                    title = DynAccessor(16277)
+                    title = DynAccessor(16284)
 
                 guide = _guide()
 
                 class _personalBook(DynAccessor):
                     __slots__ = ()
-                    title = DynAccessor(16279)
+                    title = DynAccessor(16286)
 
                 personalBook = _personalBook()
 
@@ -39710,7 +39710,7 @@ class tooltips(DynAccessor):
 
             class _skill(DynAccessor):
                 __slots__ = ()
-                lowGainedXp = DynAccessor(16283)
+                lowGainedXp = DynAccessor(16290)
 
             skill = _skill()
 
@@ -39718,31 +39718,57 @@ class tooltips(DynAccessor):
 
     crewBooks = _crewBooks()
 
+    class _crewBundle(DynAccessor):
+        __slots__ = ()
+
+        class _bonus(DynAccessor):
+            __slots__ = ()
+            anyAdditionalSkill = DynAccessor(14235)
+            basicRoleBoost_100 = DynAccessor(14234)
+            sameBloodZeroSkill = DynAccessor(14236)
+
+        bonus = _bonus()
+        bonuses = DynAccessor(14233)
+
+        class _header(DynAccessor):
+            __slots__ = ()
+            offspring = DynAccessor(14237)
+
+        header = _header()
+
+        class _howToGet(DynAccessor):
+            __slots__ = ()
+            offspring = DynAccessor(14238)
+
+        howToGet = _howToGet(14232)
+
+    crewBundle = _crewBundle()
+
     class _crewCustom(DynAccessor):
         __slots__ = ()
-        body = DynAccessor(14418)
+        body = DynAccessor(14425)
 
     crewCustom = _crewCustom()
 
     class _crewSkins(DynAccessor):
         __slots__ = ()
-        allUsedDescr = DynAccessor(16240)
-        allUsedHeader = DynAccessor(16239)
-        inUse = DynAccessor(16233)
-        noRestrictions = DynAccessor(16242)
-        noSound = DynAccessor(16241)
+        allUsedDescr = DynAccessor(16247)
+        allUsedHeader = DynAccessor(16246)
+        inUse = DynAccessor(16240)
+        noRestrictions = DynAccessor(16249)
+        noSound = DynAccessor(16248)
 
         class _restrictions(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(16231)
+            header = DynAccessor(16238)
 
-        restrictions = _restrictions(16232)
-        sound = DynAccessor(16230)
-        soundHeader = DynAccessor(16234)
-        soundInfo = DynAccessor(16235)
-        soundInfoDescr = DynAccessor(16236)
-        soundWarningDescr1 = DynAccessor(16237)
-        soundWarningDescr2 = DynAccessor(16238)
+        restrictions = _restrictions(16239)
+        sound = DynAccessor(16237)
+        soundHeader = DynAccessor(16241)
+        soundInfo = DynAccessor(16242)
+        soundInfoDescr = DynAccessor(16243)
+        soundWarningDescr1 = DynAccessor(16244)
+        soundWarningDescr2 = DynAccessor(16245)
 
     crewSkins = _crewSkins()
 
@@ -39755,11 +39781,11 @@ class tooltips(DynAccessor):
 
     class _csAutoSearchVehicle(DynAccessor):
         __slots__ = ()
-        conditionsTitle = DynAccessor(14812)
-        header = DynAccessor(14810)
-        more = DynAccessor(14813)
-        suitableTitle = DynAccessor(14811)
-        unsuitable = DynAccessor(14814)
+        conditionsTitle = DynAccessor(14819)
+        header = DynAccessor(14817)
+        more = DynAccessor(14820)
+        suitableTitle = DynAccessor(14818)
+        unsuitable = DynAccessor(14821)
 
     csAutoSearchVehicle = _csAutoSearchVehicle()
 
@@ -39768,8 +39794,8 @@ class tooltips(DynAccessor):
 
         class _referral(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14420)
-            header = DynAccessor(14419)
+            body = DynAccessor(14427)
+            header = DynAccessor(14426)
 
         referral = _referral()
 
@@ -39780,7 +39806,7 @@ class tooltips(DynAccessor):
 
         class _buyDisabled(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15325)
+            body = DynAccessor(15332)
 
         buyDisabled = _buyDisabled()
 
@@ -39789,8 +39815,8 @@ class tooltips(DynAccessor):
 
             class _copy(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15339)
-                header = DynAccessor(15338)
+                body = DynAccessor(15346)
+                header = DynAccessor(15345)
 
             copy = _copy()
 
@@ -39804,30 +39830,30 @@ class tooltips(DynAccessor):
 
                 class _dismount(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14502)
-                    header = DynAccessor(14501)
+                    body = DynAccessor(14509)
+                    header = DynAccessor(14508)
 
                 dismount = _dismount()
 
                 class _drop(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14500)
-                    header = DynAccessor(14499)
+                    body = DynAccessor(14507)
+                    header = DynAccessor(14506)
 
                 drop = _drop()
 
             current = _current()
-            desert = DynAccessor(14521)
-            empty = DynAccessor(14523)
+            desert = DynAccessor(14528)
+            empty = DynAccessor(14530)
 
             class _igr(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14525)
-                header = DynAccessor(14524)
+                body = DynAccessor(14532)
+                header = DynAccessor(14531)
 
             igr = _igr()
-            summer = DynAccessor(14520)
-            winter = DynAccessor(14519)
+            summer = DynAccessor(14527)
+            winter = DynAccessor(14526)
 
         camouflage = _camouflage()
 
@@ -39836,8 +39862,8 @@ class tooltips(DynAccessor):
 
             class _filter(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15333)
-                header = DynAccessor(15332)
+                body = DynAccessor(15340)
+                header = DynAccessor(15339)
 
             filter = _filter()
 
@@ -39848,8 +39874,8 @@ class tooltips(DynAccessor):
 
             class _igr(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14527)
-                header = DynAccessor(14526)
+                body = DynAccessor(14534)
+                header = DynAccessor(14533)
 
             igr = _igr()
 
@@ -39863,15 +39889,15 @@ class tooltips(DynAccessor):
 
                 class _dismount(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14506)
-                    header = DynAccessor(14505)
+                    body = DynAccessor(14513)
+                    header = DynAccessor(14512)
 
                 dismount = _dismount()
 
                 class _drop(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14504)
-                    header = DynAccessor(14503)
+                    body = DynAccessor(14511)
+                    header = DynAccessor(14510)
 
                 drop = _drop()
 
@@ -39887,15 +39913,15 @@ class tooltips(DynAccessor):
 
                 class _dismount(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14510)
-                    header = DynAccessor(14509)
+                    body = DynAccessor(14517)
+                    header = DynAccessor(14516)
 
                 dismount = _dismount()
 
                 class _drop(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14508)
-                    header = DynAccessor(14507)
+                    body = DynAccessor(14515)
+                    header = DynAccessor(14514)
 
                 drop = _drop()
 
@@ -39908,15 +39934,15 @@ class tooltips(DynAccessor):
 
             class _counter(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14537)
+                body = DynAccessor(14544)
 
                 class _close(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14535)
-                    header = DynAccessor(14534)
+                    body = DynAccessor(14542)
+                    header = DynAccessor(14541)
 
                 close = _close()
-                header = DynAccessor(14536)
+                header = DynAccessor(14543)
 
             counter = _counter()
 
@@ -39927,8 +39953,8 @@ class tooltips(DynAccessor):
 
             class _refresh(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15335)
-                header = DynAccessor(15334)
+                body = DynAccessor(15342)
+                header = DynAccessor(15341)
 
             refresh = _refresh()
 
@@ -39936,8 +39962,8 @@ class tooltips(DynAccessor):
 
         class _headerCloseBtn(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15322)
-            header = DynAccessor(15321)
+            body = DynAccessor(15329)
+            header = DynAccessor(15328)
 
         headerCloseBtn = _headerCloseBtn()
 
@@ -39946,8 +39972,8 @@ class tooltips(DynAccessor):
 
             class _igr(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14529)
-                header = DynAccessor(14528)
+                body = DynAccessor(14536)
+                header = DynAccessor(14535)
 
             igr = _igr()
 
@@ -39961,15 +39987,15 @@ class tooltips(DynAccessor):
 
                 class _dismount(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14514)
-                    header = DynAccessor(14513)
+                    body = DynAccessor(14521)
+                    header = DynAccessor(14520)
 
                 dismount = _dismount()
 
                 class _drop(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14512)
-                    header = DynAccessor(14511)
+                    body = DynAccessor(14519)
+                    header = DynAccessor(14518)
 
                 drop = _drop()
 
@@ -39985,15 +40011,15 @@ class tooltips(DynAccessor):
 
                 class _dismount(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14518)
-                    header = DynAccessor(14517)
+                    body = DynAccessor(14525)
+                    header = DynAccessor(14524)
 
                 dismount = _dismount()
 
                 class _drop(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14516)
-                    header = DynAccessor(14515)
+                    body = DynAccessor(14523)
+                    header = DynAccessor(14522)
 
                 drop = _drop()
 
@@ -40003,23 +40029,23 @@ class tooltips(DynAccessor):
 
         class _nonHistoricIndicator(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(16114)
-            header = DynAccessor(16113)
+            body = DynAccessor(16121)
+            header = DynAccessor(16120)
 
         nonHistoricIndicator = _nonHistoricIndicator()
 
         class _notEnoughResources(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15324)
-            header = DynAccessor(15323)
+            body = DynAccessor(15331)
+            header = DynAccessor(15330)
 
         notEnoughResources = _notEnoughResources()
 
         class _questAward(DynAccessor):
             __slots__ = ()
-            currentVehicle = DynAccessor(14530)
-            denyVehicle = DynAccessor(14532)
-            exactVehicle = DynAccessor(14531)
+            currentVehicle = DynAccessor(14537)
+            denyVehicle = DynAccessor(14539)
+            exactVehicle = DynAccessor(14538)
 
         questAward = _questAward()
 
@@ -40028,7 +40054,7 @@ class tooltips(DynAccessor):
 
             class _bookmark(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(16112)
+                header = DynAccessor(16119)
 
             bookmark = _bookmark()
 
@@ -40036,8 +40062,8 @@ class tooltips(DynAccessor):
 
         class _slotRevert(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15341)
-            header = DynAccessor(15340)
+            body = DynAccessor(15348)
+            header = DynAccessor(15347)
 
         slotRevert = _slotRevert()
 
@@ -40046,38 +40072,38 @@ class tooltips(DynAccessor):
 
             class _camouflage(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15327)
+                body = DynAccessor(15334)
 
             camouflage = _camouflage()
 
             class _emblem(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15328)
+                body = DynAccessor(15335)
 
             emblem = _emblem()
-            inRoaming = DynAccessor(14522)
+            inRoaming = DynAccessor(14529)
 
             class _inscription(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15329)
+                body = DynAccessor(15336)
 
             inscription = _inscription()
 
             class _modification(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15330)
+                body = DynAccessor(15337)
 
             modification = _modification()
 
             class _paint(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15326)
+                body = DynAccessor(15333)
 
             paint = _paint()
 
             class _projectionDecal(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15331)
+                body = DynAccessor(15338)
 
             projectionDecal = _projectionDecal()
 
@@ -40087,7 +40113,7 @@ class tooltips(DynAccessor):
 
     class _customizationBuyWindow(DynAccessor):
         __slots__ = ()
-        fromStorage = DynAccessor(14533)
+        fromStorage = DynAccessor(14540)
 
     customizationBuyWindow = _customizationBuyWindow()
 
@@ -40096,19 +40122,19 @@ class tooltips(DynAccessor):
 
         class _alert(DynAccessor):
             __slots__ = ()
-            onAnotherServer = DynAccessor(14846)
+            onAnotherServer = DynAccessor(14853)
 
         alert = _alert()
 
         class _captain(DynAccessor):
             __slots__ = ()
-            stats = DynAccessor(14845)
+            stats = DynAccessor(14852)
 
         captain = _captain()
 
         class _commander(DynAccessor):
             __slots__ = ()
-            stats = DynAccessor(14844)
+            stats = DynAccessor(14851)
 
         commander = _commander()
 
@@ -40120,8 +40146,8 @@ class tooltips(DynAccessor):
 
                 class _btn(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14827)
-                    header = DynAccessor(14826)
+                    body = DynAccessor(14834)
+                    header = DynAccessor(14833)
 
                 btn = _btn()
 
@@ -40132,13 +40158,13 @@ class tooltips(DynAccessor):
 
                 class _addPlayers(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14837)
-                    header = DynAccessor(14836)
+                    body = DynAccessor(14844)
+                    header = DynAccessor(14843)
 
                     class _private(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(14839)
-                        header = DynAccessor(14838)
+                        body = DynAccessor(14846)
+                        header = DynAccessor(14845)
 
                     private = _private()
 
@@ -40146,29 +40172,29 @@ class tooltips(DynAccessor):
 
                 class _assembleDisabled(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14835)
-                    header = DynAccessor(14834)
+                    body = DynAccessor(14842)
+                    header = DynAccessor(14841)
 
                 assembleDisabled = _assembleDisabled()
 
                 class _assembleTeam(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14831)
-                    header = DynAccessor(14830)
+                    body = DynAccessor(14838)
+                    header = DynAccessor(14837)
 
                 assembleTeam = _assembleTeam()
 
                 class _joinTeam(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14833)
-                    header = DynAccessor(14832)
+                    body = DynAccessor(14840)
+                    header = DynAccessor(14839)
 
                 joinTeam = _joinTeam()
 
                 class _look(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14829)
-                    header = DynAccessor(14828)
+                    body = DynAccessor(14836)
+                    header = DynAccessor(14835)
 
                 look = _look()
 
@@ -40179,8 +40205,8 @@ class tooltips(DynAccessor):
 
                 class _btn(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14825)
-                    header = DynAccessor(14824)
+                    body = DynAccessor(14832)
+                    header = DynAccessor(14831)
 
                 btn = _btn()
 
@@ -40191,15 +40217,15 @@ class tooltips(DynAccessor):
 
                 class _incompatibleLevel(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14843)
-                    header = DynAccessor(14842)
+                    body = DynAccessor(14850)
+                    header = DynAccessor(14849)
 
                 incompatibleLevel = _incompatibleLevel()
 
                 class _incompatibleType(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14841)
-                    header = DynAccessor(14840)
+                    body = DynAccessor(14848)
+                    header = DynAccessor(14847)
 
                 incompatibleType = _incompatibleType()
 
@@ -40281,36 +40307,36 @@ class tooltips(DynAccessor):
 
                 class _alreadyJoined(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14876)
-                    header = DynAccessor(14875)
+                    body = DynAccessor(14883)
+                    header = DynAccessor(14882)
 
                 alreadyJoined = _alreadyJoined()
 
                 class _applicationCooldown(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14870)
-                    header = DynAccessor(14869)
+                    body = DynAccessor(14877)
+                    header = DynAccessor(14876)
 
                 applicationCooldown = _applicationCooldown()
 
                 class _inProcess(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14872)
-                    header = DynAccessor(14871)
+                    body = DynAccessor(14879)
+                    header = DynAccessor(14878)
 
                 inProcess = _inProcess()
 
                 class _inProcessOther(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14874)
-                    header = DynAccessor(14873)
+                    body = DynAccessor(14881)
+                    header = DynAccessor(14880)
 
                 inProcessOther = _inProcessOther()
 
                 class _join(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14868)
-                    header = DynAccessor(14867)
+                    body = DynAccessor(14875)
+                    header = DynAccessor(14874)
 
                 join = _join()
 
@@ -40318,15 +40344,15 @@ class tooltips(DynAccessor):
 
             class _statsBattlesCount(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14864)
-                header = DynAccessor(14863)
+                body = DynAccessor(14871)
+                header = DynAccessor(14870)
 
             statsBattlesCount = _statsBattlesCount()
 
             class _statsWinsPercent(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14866)
-                header = DynAccessor(14865)
+                body = DynAccessor(14873)
+                header = DynAccessor(14872)
 
             statsWinsPercent = _statsWinsPercent()
 
@@ -40337,17 +40363,17 @@ class tooltips(DynAccessor):
 
             class _access(DynAccessor):
                 __slots__ = ()
-                bodyClosed = DynAccessor(14893)
-                bodyOpen = DynAccessor(14892)
-                header = DynAccessor(14889)
+                bodyClosed = DynAccessor(14900)
+                bodyOpen = DynAccessor(14899)
+                header = DynAccessor(14896)
 
             access = _access()
-            command = DynAccessor(14902)
+            command = DynAccessor(14909)
 
             class _configure(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14885)
-                header = DynAccessor(14884)
+                body = DynAccessor(14892)
+                header = DynAccessor(14891)
 
             configure = _configure()
 
@@ -40356,32 +40382,32 @@ class tooltips(DynAccessor):
 
                 class _eventVehicleWrongMode(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14912)
-                    header = DynAccessor(14911)
+                    body = DynAccessor(14919)
+                    header = DynAccessor(14918)
 
                 eventVehicleWrongMode = _eventVehicleWrongMode()
 
                 class _notInSlot(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14908)
+                    body = DynAccessor(14915)
 
                 notInSlot = _notInSlot()
 
                 class _pressForNotReady(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14910)
+                    body = DynAccessor(14917)
 
                 pressForNotReady = _pressForNotReady()
 
                 class _pressForReady(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14909)
+                    body = DynAccessor(14916)
 
                 pressForReady = _pressForReady()
 
                 class _vehicleNotValid(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14907)
+                    body = DynAccessor(14914)
 
                 vehicleNotValid = _vehicleNotValid()
 
@@ -40389,16 +40415,16 @@ class tooltips(DynAccessor):
 
             class _freeze(DynAccessor):
                 __slots__ = ()
-                bodyOff = DynAccessor(14883)
-                bodyOn = DynAccessor(14882)
-                header = DynAccessor(14881)
+                bodyOff = DynAccessor(14890)
+                bodyOn = DynAccessor(14889)
+                header = DynAccessor(14888)
 
             freeze = _freeze()
 
             class _inviteBtn(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14891)
-                header = DynAccessor(14890)
+                body = DynAccessor(14898)
+                header = DynAccessor(14897)
 
             inviteBtn = _inviteBtn()
 
@@ -40413,13 +40439,13 @@ class tooltips(DynAccessor):
 
                         class _permanently(DynAccessor):
                             __slots__ = ()
-                            body = DynAccessor(14904)
+                            body = DynAccessor(14911)
 
                         permanently = _permanently()
 
                         class _temporally(DynAccessor):
                             __slots__ = ()
-                            body = DynAccessor(14903)
+                            body = DynAccessor(14910)
 
                         temporally = _temporally()
 
@@ -40431,37 +40457,37 @@ class tooltips(DynAccessor):
 
             class _slotLabelClosed(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14895)
-                header = DynAccessor(14894)
+                body = DynAccessor(14902)
+                header = DynAccessor(14901)
 
             slotLabelClosed = _slotLabelClosed()
 
             class _slotLabelUnavailable(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14897)
-                header = DynAccessor(14896)
+                body = DynAccessor(14904)
+                header = DynAccessor(14903)
 
             slotLabelUnavailable = _slotLabelUnavailable()
 
             class _sumLevel(DynAccessor):
                 __slots__ = ()
-                bodyError = DynAccessor(14888)
-                bodyNormal = DynAccessor(14887)
-                header = DynAccessor(14886)
+                bodyError = DynAccessor(14895)
+                bodyNormal = DynAccessor(14894)
+                header = DynAccessor(14893)
 
             sumLevel = _sumLevel()
 
             class _takePlaceBtn(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14899)
-                header = DynAccessor(14898)
+                body = DynAccessor(14906)
+                header = DynAccessor(14905)
 
             takePlaceBtn = _takePlaceBtn()
 
             class _takePlaceFirstTimeBtn(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14901)
-                header = DynAccessor(14900)
+                body = DynAccessor(14908)
+                header = DynAccessor(14907)
 
             takePlaceFirstTimeBtn = _takePlaceFirstTimeBtn()
 
@@ -40469,7 +40495,7 @@ class tooltips(DynAccessor):
 
         class _unitCommand(DynAccessor):
             __slots__ = ()
-            action = DynAccessor(14847)
+            action = DynAccessor(14854)
 
         unitCommand = _unitCommand()
 
@@ -40508,15 +40534,15 @@ class tooltips(DynAccessor):
 
                 class _alreadyInRally(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14862)
-                    header = DynAccessor(14861)
+                    body = DynAccessor(14869)
+                    header = DynAccessor(14868)
 
                 alreadyInRally = _alreadyInRally()
 
                 class _alreadyRallyOwner(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14860)
-                    header = DynAccessor(14859)
+                    body = DynAccessor(14867)
+                    header = DynAccessor(14866)
 
                 alreadyRallyOwner = _alreadyRallyOwner()
 
@@ -40524,44 +40550,44 @@ class tooltips(DynAccessor):
 
             class _filterByVehicle(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(14848)
-                noVehiclesSelected = DynAccessor(14849)
-                someVehiclesSelected = DynAccessor(14850)
+                header = DynAccessor(14855)
+                noVehiclesSelected = DynAccessor(14856)
+                someVehiclesSelected = DynAccessor(14857)
 
             filterByVehicle = _filterByVehicle()
 
             class _join(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14858)
-                header = DynAccessor(14857)
+                body = DynAccessor(14865)
+                header = DynAccessor(14864)
 
             join = _join()
 
             class _joinToStaticAsLegionary(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14880)
-                header = DynAccessor(14879)
+                body = DynAccessor(14887)
+                header = DynAccessor(14886)
 
             joinToStaticAsLegionary = _joinToStaticAsLegionary()
 
             class _pagingDown(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14856)
-                header = DynAccessor(14855)
+                body = DynAccessor(14863)
+                header = DynAccessor(14862)
 
             pagingDown = _pagingDown()
 
             class _pagingUp(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14854)
-                header = DynAccessor(14853)
+                body = DynAccessor(14861)
+                header = DynAccessor(14860)
 
             pagingUp = _pagingUp()
 
             class _refresh(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14852)
-                header = DynAccessor(14851)
+                body = DynAccessor(14859)
+                header = DynAccessor(14858)
 
             refresh = _refresh()
 
@@ -40572,16 +40598,16 @@ class tooltips(DynAccessor):
 
             class _badVehicle(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14819)
-                header = DynAccessor(14818)
+                body = DynAccessor(14826)
+                header = DynAccessor(14825)
 
             badVehicle = _badVehicle()
-            notReady = DynAccessor(14815)
+            notReady = DynAccessor(14822)
 
             class _overflowLevel(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14817)
-                header = DynAccessor(14816)
+                body = DynAccessor(14824)
+                header = DynAccessor(14823)
 
             overflowLevel = _overflowLevel()
 
@@ -40592,8 +40618,8 @@ class tooltips(DynAccessor):
 
             class _configAlert(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14906)
-                header = DynAccessor(14905)
+                body = DynAccessor(14913)
+                header = DynAccessor(14912)
 
             configAlert = _configAlert()
 
@@ -40606,7 +40632,7 @@ class tooltips(DynAccessor):
 
         class _conditions(DynAccessor):
             __slots__ = ()
-            additional = DynAccessor(15617)
+            additional = DynAccessor(15624)
 
         conditions = _conditions()
 
@@ -40617,77 +40643,77 @@ class tooltips(DynAccessor):
 
         class _already_installed(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14322)
+            header = DynAccessor(14329)
 
         already_installed = _already_installed()
 
         class _credits_error(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14312)
-            text = DynAccessor(14313)
+            header = DynAccessor(14319)
+            text = DynAccessor(14320)
 
         credits_error = _credits_error()
 
         class _need_turret(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14314)
-            text = DynAccessor(14315)
+            header = DynAccessor(14321)
+            text = DynAccessor(14322)
 
         need_turret = _need_turret()
 
         class _not_for_this_vehicle_type(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14327)
-            text = DynAccessor(14328)
+            header = DynAccessor(14334)
+            text = DynAccessor(14335)
 
         not_for_this_vehicle_type = _not_for_this_vehicle_type()
 
         class _not_removable(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14329)
-            note01 = DynAccessor(14331)
-            note02 = DynAccessor(14332)
-            note_header = DynAccessor(14330)
+            body = DynAccessor(14336)
+            note01 = DynAccessor(14338)
+            note02 = DynAccessor(14339)
+            note_header = DynAccessor(14337)
 
         not_removable = _not_removable()
 
         class _not_with_installed_equipment(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14326)
+            header = DynAccessor(14333)
 
         not_with_installed_equipment = _not_with_installed_equipment()
 
         class _remove_too_heavy(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14320)
-            text = DynAccessor(14321)
+            header = DynAccessor(14327)
+            text = DynAccessor(14328)
 
         remove_too_heavy = _remove_too_heavy()
 
         class _too_heavy(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14316)
-            text = DynAccessor(14317)
+            header = DynAccessor(14323)
+            text = DynAccessor(14324)
 
         too_heavy = _too_heavy()
 
         class _too_heavy_chassi(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14318)
-            text = DynAccessor(14319)
+            header = DynAccessor(14325)
+            text = DynAccessor(14326)
 
         too_heavy_chassi = _too_heavy_chassi()
 
         class _unlock_error(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14323)
-            text = DynAccessor(14324)
+            header = DynAccessor(14330)
+            text = DynAccessor(14331)
 
         unlock_error = _unlock_error()
 
         class _wrong_slot(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14325)
+            header = DynAccessor(14332)
 
         wrong_slot = _wrong_slot()
 
@@ -40695,8 +40721,8 @@ class tooltips(DynAccessor):
 
     class _disabledFestRaceNotification(DynAccessor):
         __slots__ = ()
-        body = DynAccessor(16287)
-        header = DynAccessor(16286)
+        body = DynAccessor(16294)
+        header = DynAccessor(16293)
 
     disabledFestRaceNotification = _disabledFestRaceNotification()
 
@@ -40705,21 +40731,21 @@ class tooltips(DynAccessor):
 
         class _bufferIsFull(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15495)
-            header = DynAccessor(15494)
+            body = DynAccessor(15502)
+            header = DynAccessor(15501)
 
         bufferIsFull = _bufferIsFull()
 
         class _bufferIsFullMultiple(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15496)
+            body = DynAccessor(15503)
 
         bufferIsFullMultiple = _bufferIsFullMultiple()
 
         class _cantRestorAlert(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15493)
-            header = DynAccessor(15492)
+            body = DynAccessor(15500)
+            header = DynAccessor(15499)
 
         cantRestorAlert = _cantRestorAlert()
 
@@ -40733,21 +40759,21 @@ class tooltips(DynAccessor):
 
             class _allGroups(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(16001)
-                header = DynAccessor(16000)
+                body = DynAccessor(16008)
+                header = DynAccessor(16007)
 
             allGroups = _allGroups()
 
             class _myPosition(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(16004)
-                header = DynAccessor(16003)
+                body = DynAccessor(16011)
+                header = DynAccessor(16010)
 
             myPosition = _myPosition()
 
             class _notOccupied(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(16002)
+                body = DynAccessor(16009)
 
             notOccupied = _notOccupied()
 
@@ -40758,7 +40784,7 @@ class tooltips(DynAccessor):
 
             class _group(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(16101)
+                header = DynAccessor(16108)
 
             group = _group()
 
@@ -40775,15 +40801,15 @@ class tooltips(DynAccessor):
 
                     class _cantLeave(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15986)
-                        header = DynAccessor(15985)
+                        body = DynAccessor(15993)
+                        header = DynAccessor(15992)
 
                     cantLeave = _cantLeave()
 
                     class _leave(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15984)
-                        header = DynAccessor(15983)
+                        body = DynAccessor(15991)
+                        header = DynAccessor(15990)
 
                     leave = _leave()
 
@@ -40793,8 +40819,8 @@ class tooltips(DynAccessor):
 
             class _raiting(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15989)
-                header = DynAccessor(15988)
+                body = DynAccessor(15996)
+                header = DynAccessor(15995)
 
             raiting = _raiting()
 
@@ -40803,15 +40829,15 @@ class tooltips(DynAccessor):
 
                 class _notStarted(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15991)
-                    header = DynAccessor(15990)
+                    body = DynAccessor(15998)
+                    header = DynAccessor(15997)
 
                 notStarted = _notStarted()
 
                 class _started(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15993)
-                    header = DynAccessor(15992)
+                    body = DynAccessor(16000)
+                    header = DynAccessor(15999)
 
                 started = _started()
 
@@ -40819,7 +40845,7 @@ class tooltips(DynAccessor):
 
             class _server(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15987)
+                body = DynAccessor(15994)
 
             server = _server()
 
@@ -40830,11 +40856,11 @@ class tooltips(DynAccessor):
 
             class _battletype(DynAccessor):
                 __slots__ = ()
-                notrandom = DynAccessor(16103)
-                random = DynAccessor(16102)
+                notrandom = DynAccessor(16110)
+                random = DynAccessor(16109)
 
             battletype = _battletype()
-            primeTime = DynAccessor(15976)
+            primeTime = DynAccessor(15983)
 
         condition = _condition()
 
@@ -40849,29 +40875,29 @@ class tooltips(DynAccessor):
 
                     class _damageAssisted(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16056)
-                        header = DynAccessor(16055)
+                        body = DynAccessor(16063)
+                        header = DynAccessor(16062)
 
                     damageAssisted = _damageAssisted()
 
                     class _damageDealt(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16054)
-                        header = DynAccessor(16053)
+                        body = DynAccessor(16061)
+                        header = DynAccessor(16060)
 
                     damageDealt = _damageDealt()
 
                     class _originalXP(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16050)
-                        header = DynAccessor(16049)
+                        body = DynAccessor(16057)
+                        header = DynAccessor(16056)
 
                     originalXP = _originalXP()
 
                     class _xp(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16052)
-                        header = DynAccessor(16051)
+                        body = DynAccessor(16059)
+                        header = DynAccessor(16058)
 
                     xp = _xp()
 
@@ -40882,36 +40908,36 @@ class tooltips(DynAccessor):
 
                     class _damageAssisted(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16089)
-                        header = DynAccessor(16088)
+                        body = DynAccessor(16096)
+                        header = DynAccessor(16095)
 
                     damageAssisted = _damageAssisted()
 
                     class _damageDealt(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16087)
-                        header = DynAccessor(16086)
+                        body = DynAccessor(16094)
+                        header = DynAccessor(16093)
 
                     damageDealt = _damageDealt()
 
                     class _originalXP(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16082)
-                        header = DynAccessor(16081)
+                        body = DynAccessor(16089)
+                        header = DynAccessor(16088)
 
                     originalXP = _originalXP()
 
                     class _wins(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16091)
-                        header = DynAccessor(16090)
+                        body = DynAccessor(16098)
+                        header = DynAccessor(16097)
 
                     wins = _wins()
 
                     class _xp(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16085)
-                        header = DynAccessor(16083)
+                        body = DynAccessor(16092)
+                        header = DynAccessor(16090)
 
                     xp = _xp()
 
@@ -40922,29 +40948,29 @@ class tooltips(DynAccessor):
 
                     class _damageAssisted(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16080)
-                        header = DynAccessor(16078)
+                        body = DynAccessor(16087)
+                        header = DynAccessor(16085)
 
                     damageAssisted = _damageAssisted()
 
                     class _damageDealt(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16076)
-                        header = DynAccessor(16074)
+                        body = DynAccessor(16083)
+                        header = DynAccessor(16081)
 
                     damageDealt = _damageDealt()
 
                     class _originalXP(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16068)
-                        header = DynAccessor(16066)
+                        body = DynAccessor(16075)
+                        header = DynAccessor(16073)
 
                     originalXP = _originalXP()
 
                     class _xp(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16072)
-                        header = DynAccessor(16070)
+                        body = DynAccessor(16079)
+                        header = DynAccessor(16077)
 
                     xp = _xp()
 
@@ -40955,29 +40981,29 @@ class tooltips(DynAccessor):
 
                     class _damageAssisted(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16064)
-                        header = DynAccessor(16063)
+                        body = DynAccessor(16071)
+                        header = DynAccessor(16070)
 
                     damageAssisted = _damageAssisted()
 
                     class _damageDealt(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16062)
-                        header = DynAccessor(16061)
+                        body = DynAccessor(16069)
+                        header = DynAccessor(16068)
 
                     damageDealt = _damageDealt()
 
                     class _originalXP(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16058)
-                        header = DynAccessor(16057)
+                        body = DynAccessor(16065)
+                        header = DynAccessor(16064)
 
                     originalXP = _originalXP()
 
                     class _xp(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16060)
-                        header = DynAccessor(16059)
+                        body = DynAccessor(16067)
+                        header = DynAccessor(16066)
 
                     xp = _xp()
 
@@ -40988,29 +41014,29 @@ class tooltips(DynAccessor):
 
                     class _damageAssisted(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16079)
-                        header = DynAccessor(16077)
+                        body = DynAccessor(16086)
+                        header = DynAccessor(16084)
 
                     damageAssisted = _damageAssisted()
 
                     class _damageDealt(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16075)
-                        header = DynAccessor(16073)
+                        body = DynAccessor(16082)
+                        header = DynAccessor(16080)
 
                     damageDealt = _damageDealt()
 
                     class _originalXP(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16067)
-                        header = DynAccessor(16065)
+                        body = DynAccessor(16074)
+                        header = DynAccessor(16072)
 
                     originalXP = _originalXP()
 
                     class _xp(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16071)
-                        header = DynAccessor(16069)
+                        body = DynAccessor(16078)
+                        header = DynAccessor(16076)
 
                     xp = _xp()
 
@@ -41026,26 +41052,26 @@ class tooltips(DynAccessor):
 
                     class _c_class(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16096)
+                        body = DynAccessor(16103)
 
                     c_class = _c_class()
-                    header = DynAccessor(16092)
+                    header = DynAccessor(16099)
 
                     class _level(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16095)
+                        body = DynAccessor(16102)
 
                     level = _level()
 
                     class _nation(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16094)
+                        body = DynAccessor(16101)
 
                     nation = _nation()
 
                     class _vehicle(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16093)
+                        body = DynAccessor(16100)
 
                     vehicle = _vehicle()
 
@@ -41061,29 +41087,29 @@ class tooltips(DynAccessor):
 
                     class _damageAssisted(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16014)
-                        header = DynAccessor(16013)
+                        body = DynAccessor(16021)
+                        header = DynAccessor(16020)
 
                     damageAssisted = _damageAssisted()
 
                     class _damageDealt(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16012)
-                        header = DynAccessor(16011)
+                        body = DynAccessor(16019)
+                        header = DynAccessor(16018)
 
                     damageDealt = _damageDealt()
 
                     class _originalXP(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16008)
-                        header = DynAccessor(16007)
+                        body = DynAccessor(16015)
+                        header = DynAccessor(16014)
 
                     originalXP = _originalXP()
 
                     class _xp(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16010)
-                        header = DynAccessor(16009)
+                        body = DynAccessor(16017)
+                        header = DynAccessor(16016)
 
                     xp = _xp()
 
@@ -41094,36 +41120,36 @@ class tooltips(DynAccessor):
 
                     class _damageAssisted(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16046)
-                        header = DynAccessor(16045)
+                        body = DynAccessor(16053)
+                        header = DynAccessor(16052)
 
                     damageAssisted = _damageAssisted()
 
                     class _damageDealt(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16044)
-                        header = DynAccessor(16043)
+                        body = DynAccessor(16051)
+                        header = DynAccessor(16050)
 
                     damageDealt = _damageDealt()
 
                     class _originalXP(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16040)
-                        header = DynAccessor(16039)
+                        body = DynAccessor(16047)
+                        header = DynAccessor(16046)
 
                     originalXP = _originalXP()
 
                     class _wins(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16048)
-                        header = DynAccessor(16047)
+                        body = DynAccessor(16055)
+                        header = DynAccessor(16054)
 
                     wins = _wins()
 
                     class _xp(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16042)
-                        header = DynAccessor(16041)
+                        body = DynAccessor(16049)
+                        header = DynAccessor(16048)
 
                     xp = _xp()
 
@@ -41134,29 +41160,29 @@ class tooltips(DynAccessor):
 
                     class _damageAssisted(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16038)
-                        header = DynAccessor(16036)
+                        body = DynAccessor(16045)
+                        header = DynAccessor(16043)
 
                     damageAssisted = _damageAssisted()
 
                     class _damageDealt(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16034)
-                        header = DynAccessor(16032)
+                        body = DynAccessor(16041)
+                        header = DynAccessor(16039)
 
                     damageDealt = _damageDealt()
 
                     class _originalXP(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16026)
-                        header = DynAccessor(16024)
+                        body = DynAccessor(16033)
+                        header = DynAccessor(16031)
 
                     originalXP = _originalXP()
 
                     class _xp(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16030)
-                        header = DynAccessor(16028)
+                        body = DynAccessor(16037)
+                        header = DynAccessor(16035)
 
                     xp = _xp()
 
@@ -41167,29 +41193,29 @@ class tooltips(DynAccessor):
 
                     class _damageAssisted(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16022)
-                        header = DynAccessor(16021)
+                        body = DynAccessor(16029)
+                        header = DynAccessor(16028)
 
                     damageAssisted = _damageAssisted()
 
                     class _damageDealt(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16020)
-                        header = DynAccessor(16019)
+                        body = DynAccessor(16027)
+                        header = DynAccessor(16026)
 
                     damageDealt = _damageDealt()
 
                     class _originalXP(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16016)
-                        header = DynAccessor(16015)
+                        body = DynAccessor(16023)
+                        header = DynAccessor(16022)
 
                     originalXP = _originalXP()
 
                     class _xp(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16018)
-                        header = DynAccessor(16017)
+                        body = DynAccessor(16025)
+                        header = DynAccessor(16024)
 
                     xp = _xp()
 
@@ -41200,29 +41226,29 @@ class tooltips(DynAccessor):
 
                     class _damageAssisted(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16037)
-                        header = DynAccessor(16035)
+                        body = DynAccessor(16044)
+                        header = DynAccessor(16042)
 
                     damageAssisted = _damageAssisted()
 
                     class _damageDealt(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16033)
-                        header = DynAccessor(16031)
+                        body = DynAccessor(16040)
+                        header = DynAccessor(16038)
 
                     damageDealt = _damageDealt()
 
                     class _originalXP(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16025)
-                        header = DynAccessor(16023)
+                        body = DynAccessor(16032)
+                        header = DynAccessor(16030)
 
                     originalXP = _originalXP()
 
                     class _xp(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16029)
-                        header = DynAccessor(16027)
+                        body = DynAccessor(16036)
+                        header = DynAccessor(16034)
 
                     xp = _xp()
 
@@ -41232,15 +41258,15 @@ class tooltips(DynAccessor):
 
             class _player(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(16100)
-                header = DynAccessor(16099)
+                body = DynAccessor(16107)
+                header = DynAccessor(16106)
 
             player = _player()
 
             class _position(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(16098)
-                header = DynAccessor(16097)
+                body = DynAccessor(16105)
+                header = DynAccessor(16104)
 
             position = _position()
 
@@ -41249,8 +41275,8 @@ class tooltips(DynAccessor):
 
                 class _tooltip(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(16006)
-                    header = DynAccessor(16005)
+                    body = DynAccessor(16013)
+                    header = DynAccessor(16012)
 
                 tooltip = _tooltip()
 
@@ -41269,8 +41295,8 @@ class tooltips(DynAccessor):
 
                     class _leaveNotStarted(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15982)
-                        header = DynAccessor(15981)
+                        body = DynAccessor(15989)
+                        header = DynAccessor(15988)
 
                     leaveNotStarted = _leaveNotStarted()
 
@@ -41278,15 +41304,15 @@ class tooltips(DynAccessor):
 
                 class _notStarted(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15978)
-                    header = DynAccessor(15977)
+                    body = DynAccessor(15985)
+                    header = DynAccessor(15984)
 
                 notStarted = _notStarted()
 
                 class _started(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15980)
-                    header = DynAccessor(15979)
+                    body = DynAccessor(15987)
+                    header = DynAccessor(15986)
 
                 started = _started()
 
@@ -41302,11 +41328,11 @@ class tooltips(DynAccessor):
 
                 class _reason(DynAccessor):
                     __slots__ = ()
-                    byAge = DynAccessor(15995)
-                    byBattlesCount = DynAccessor(15998)
-                    byWinRateHigh = DynAccessor(15996)
-                    byWinRateLow = DynAccessor(15997)
-                    outOfRating = DynAccessor(15999)
+                    byAge = DynAccessor(16002)
+                    byBattlesCount = DynAccessor(16005)
+                    byWinRateHigh = DynAccessor(16003)
+                    byWinRateLow = DynAccessor(16004)
+                    outOfRating = DynAccessor(16006)
 
                 reason = _reason()
 
@@ -41314,7 +41340,7 @@ class tooltips(DynAccessor):
 
             class _requirements(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(15994)
+                header = DynAccessor(16001)
 
             requirements = _requirements()
 
@@ -41328,22 +41354,22 @@ class tooltips(DynAccessor):
 
                 class _damageBlocked(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15925)
-                    header = DynAccessor(15924)
+                    body = DynAccessor(15932)
+                    header = DynAccessor(15931)
 
                 damageBlocked = _damageBlocked()
 
                 class _frags(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15923)
-                    header = DynAccessor(15922)
+                    body = DynAccessor(15930)
+                    header = DynAccessor(15929)
 
                 frags = _frags()
 
                 class _winRate(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15921)
-                    header = DynAccessor(15920)
+                    body = DynAccessor(15928)
+                    header = DynAccessor(15927)
 
                 winRate = _winRate()
 
@@ -41354,26 +41380,26 @@ class tooltips(DynAccessor):
 
                 class _c_class(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15946)
+                    body = DynAccessor(15953)
 
                 c_class = _c_class()
-                header = DynAccessor(15942)
+                header = DynAccessor(15949)
 
                 class _level(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15945)
+                    body = DynAccessor(15952)
 
                 level = _level()
 
                 class _nation(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15944)
+                    body = DynAccessor(15951)
 
                 nation = _nation()
 
                 class _vehicle(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15943)
+                    body = DynAccessor(15950)
 
                 vehicle = _vehicle()
 
@@ -41387,29 +41413,29 @@ class tooltips(DynAccessor):
 
                     class _damageAssisted(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15887)
-                        header = DynAccessor(15886)
+                        body = DynAccessor(15894)
+                        header = DynAccessor(15893)
 
                     damageAssisted = _damageAssisted()
 
                     class _damageDealt(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15885)
-                        header = DynAccessor(15884)
+                        body = DynAccessor(15892)
+                        header = DynAccessor(15891)
 
                     damageDealt = _damageDealt()
 
                     class _originalXP(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15881)
-                        header = DynAccessor(15880)
+                        body = DynAccessor(15888)
+                        header = DynAccessor(15887)
 
                     originalXP = _originalXP()
 
                     class _xp(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15883)
-                        header = DynAccessor(15882)
+                        body = DynAccessor(15890)
+                        header = DynAccessor(15889)
 
                     xp = _xp()
 
@@ -41420,29 +41446,29 @@ class tooltips(DynAccessor):
 
                     class _damageAssisted(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15895)
-                        header = DynAccessor(15894)
+                        body = DynAccessor(15902)
+                        header = DynAccessor(15901)
 
                     damageAssisted = _damageAssisted()
 
                     class _damageDealt(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15893)
-                        header = DynAccessor(15892)
+                        body = DynAccessor(15900)
+                        header = DynAccessor(15899)
 
                     damageDealt = _damageDealt()
 
                     class _originalXP(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15889)
-                        header = DynAccessor(15888)
+                        body = DynAccessor(15896)
+                        header = DynAccessor(15895)
 
                     originalXP = _originalXP()
 
                     class _xp(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15891)
-                        header = DynAccessor(15890)
+                        body = DynAccessor(15898)
+                        header = DynAccessor(15897)
 
                     xp = _xp()
 
@@ -41453,29 +41479,29 @@ class tooltips(DynAccessor):
 
                     class _damageAssisted(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15919)
-                        header = DynAccessor(15917)
+                        body = DynAccessor(15926)
+                        header = DynAccessor(15924)
 
                     damageAssisted = _damageAssisted()
 
                     class _damageDealt(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15915)
-                        header = DynAccessor(15913)
+                        body = DynAccessor(15922)
+                        header = DynAccessor(15920)
 
                     damageDealt = _damageDealt()
 
                     class _originalXP(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15907)
-                        header = DynAccessor(15905)
+                        body = DynAccessor(15914)
+                        header = DynAccessor(15912)
 
                     originalXP = _originalXP()
 
                     class _xp(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15911)
-                        header = DynAccessor(15909)
+                        body = DynAccessor(15918)
+                        header = DynAccessor(15916)
 
                     xp = _xp()
 
@@ -41486,29 +41512,29 @@ class tooltips(DynAccessor):
 
                     class _damageAssisted(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15903)
-                        header = DynAccessor(15902)
+                        body = DynAccessor(15910)
+                        header = DynAccessor(15909)
 
                     damageAssisted = _damageAssisted()
 
                     class _damageDealt(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15901)
-                        header = DynAccessor(15900)
+                        body = DynAccessor(15908)
+                        header = DynAccessor(15907)
 
                     damageDealt = _damageDealt()
 
                     class _originalXP(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15897)
-                        header = DynAccessor(15896)
+                        body = DynAccessor(15904)
+                        header = DynAccessor(15903)
 
                     originalXP = _originalXP()
 
                     class _xp(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15899)
-                        header = DynAccessor(15898)
+                        body = DynAccessor(15906)
+                        header = DynAccessor(15905)
 
                     xp = _xp()
 
@@ -41519,29 +41545,29 @@ class tooltips(DynAccessor):
 
                     class _damageAssisted(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15918)
-                        header = DynAccessor(15916)
+                        body = DynAccessor(15925)
+                        header = DynAccessor(15923)
 
                     damageAssisted = _damageAssisted()
 
                     class _damageDealt(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15914)
-                        header = DynAccessor(15912)
+                        body = DynAccessor(15921)
+                        header = DynAccessor(15919)
 
                     damageDealt = _damageDealt()
 
                     class _originalXP(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15906)
-                        header = DynAccessor(15904)
+                        body = DynAccessor(15913)
+                        header = DynAccessor(15911)
 
                     originalXP = _originalXP()
 
                     class _xp(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15910)
-                        header = DynAccessor(15908)
+                        body = DynAccessor(15917)
+                        header = DynAccessor(15915)
 
                     xp = _xp()
 
@@ -41557,29 +41583,29 @@ class tooltips(DynAccessor):
 
                     class _damageAssisted(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15933)
-                        header = DynAccessor(15932)
+                        body = DynAccessor(15940)
+                        header = DynAccessor(15939)
 
                     damageAssisted = _damageAssisted()
 
                     class _damageDealt(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15931)
-                        header = DynAccessor(15930)
+                        body = DynAccessor(15938)
+                        header = DynAccessor(15937)
 
                     damageDealt = _damageDealt()
 
                     class _originalXP(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15927)
-                        header = DynAccessor(15926)
+                        body = DynAccessor(15934)
+                        header = DynAccessor(15933)
 
                     originalXP = _originalXP()
 
                     class _xp(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15929)
-                        header = DynAccessor(15928)
+                        body = DynAccessor(15936)
+                        header = DynAccessor(15935)
 
                     xp = _xp()
 
@@ -41590,29 +41616,29 @@ class tooltips(DynAccessor):
 
                     class _damageAssisted(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15941)
-                        header = DynAccessor(15940)
+                        body = DynAccessor(15948)
+                        header = DynAccessor(15947)
 
                     damageAssisted = _damageAssisted()
 
                     class _damageDealt(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15939)
-                        header = DynAccessor(15938)
+                        body = DynAccessor(15946)
+                        header = DynAccessor(15945)
 
                     damageDealt = _damageDealt()
 
                     class _originalXP(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15935)
-                        header = DynAccessor(15934)
+                        body = DynAccessor(15942)
+                        header = DynAccessor(15941)
 
                     originalXP = _originalXP()
 
                     class _xp(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15937)
-                        header = DynAccessor(15936)
+                        body = DynAccessor(15944)
+                        header = DynAccessor(15943)
 
                     xp = _xp()
 
@@ -41622,11 +41648,11 @@ class tooltips(DynAccessor):
 
             class _rank(DynAccessor):
                 __slots__ = ()
-                c_1 = DynAccessor(15875)
-                c_2 = DynAccessor(15876)
-                c_3 = DynAccessor(15877)
-                c_4 = DynAccessor(15878)
-                noRank = DynAccessor(15879)
+                c_1 = DynAccessor(15882)
+                c_2 = DynAccessor(15883)
+                c_3 = DynAccessor(15884)
+                c_4 = DynAccessor(15885)
+                noRank = DynAccessor(15886)
 
             rank = _rank()
 
@@ -41635,61 +41661,61 @@ class tooltips(DynAccessor):
 
                 class _damageAssisted(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15961)
-                    header = DynAccessor(15960)
+                    body = DynAccessor(15968)
+                    header = DynAccessor(15967)
 
                 damageAssisted = _damageAssisted()
 
                 class _damageDealt(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15959)
-                    header = DynAccessor(15958)
+                    body = DynAccessor(15966)
+                    header = DynAccessor(15965)
 
                 damageDealt = _damageDealt()
 
                 class _date(DynAccessor):
                     __slots__ = ()
-                    header = DynAccessor(15947)
+                    header = DynAccessor(15954)
 
                 date = _date()
 
                 class _frags(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15953)
-                    header = DynAccessor(15952)
+                    body = DynAccessor(15960)
+                    header = DynAccessor(15959)
 
                 frags = _frags()
 
                 class _originalXP(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15955)
-                    header = DynAccessor(15954)
+                    body = DynAccessor(15962)
+                    header = DynAccessor(15961)
 
                 originalXP = _originalXP()
 
                 class _platoon(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15949)
-                    header = DynAccessor(15948)
+                    body = DynAccessor(15956)
+                    header = DynAccessor(15955)
 
                 platoon = _platoon()
 
                 class _result(DynAccessor):
                     __slots__ = ()
-                    header = DynAccessor(15951)
+                    header = DynAccessor(15958)
 
                 result = _result()
 
                 class _vehicles(DynAccessor):
                     __slots__ = ()
-                    header = DynAccessor(15950)
+                    header = DynAccessor(15957)
 
                 vehicles = _vehicles()
 
                 class _xp(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15957)
-                    header = DynAccessor(15956)
+                    body = DynAccessor(15964)
+                    header = DynAccessor(15963)
 
                 xp = _xp()
 
@@ -41705,18 +41731,18 @@ class tooltips(DynAccessor):
 
                 class _full(DynAccessor):
                     __slots__ = ()
-                    c_class = DynAccessor(15974)
-                    level = DynAccessor(15972)
-                    nation = DynAccessor(15970)
+                    c_class = DynAccessor(15981)
+                    level = DynAccessor(15979)
+                    nation = DynAccessor(15977)
 
                 full = _full()
 
                 class _notFull(DynAccessor):
                     __slots__ = ()
-                    c_class = DynAccessor(15973)
-                    level = DynAccessor(15971)
-                    nation = DynAccessor(15969)
-                    vehicle = DynAccessor(15975)
+                    c_class = DynAccessor(15980)
+                    level = DynAccessor(15978)
+                    nation = DynAccessor(15976)
+                    vehicle = DynAccessor(15982)
 
                 notFull = _notFull()
 
@@ -41724,18 +41750,18 @@ class tooltips(DynAccessor):
 
             class _objective(DynAccessor):
                 __slots__ = ()
-                originalXP = DynAccessor(15963)
-                xp = DynAccessor(15962)
+                originalXP = DynAccessor(15970)
+                xp = DynAccessor(15969)
 
             objective = _objective()
 
             class _selection(DynAccessor):
                 __slots__ = ()
-                max = DynAccessor(15965)
-                sumAll = DynAccessor(15966)
-                sumMSeqN = DynAccessor(15968)
-                sumN = DynAccessor(15964)
-                sumSeqN = DynAccessor(15967)
+                max = DynAccessor(15972)
+                sumAll = DynAccessor(15973)
+                sumMSeqN = DynAccessor(15975)
+                sumN = DynAccessor(15971)
+                sumSeqN = DynAccessor(15974)
 
             selection = _selection()
 
@@ -41791,25 +41817,25 @@ class tooltips(DynAccessor):
 
     class _equipment(DynAccessor):
         __slots__ = ()
-        always = DynAccessor(14336)
+        always = DynAccessor(14343)
 
         class _auto(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14491)
-            header = DynAccessor(14490)
+            body = DynAccessor(14498)
+            header = DynAccessor(14497)
 
         auto = _auto()
-        builtIn = DynAccessor(14494)
-        effect = DynAccessor(14334)
+        builtIn = DynAccessor(14501)
+        effect = DynAccessor(14341)
 
         class _empty(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14493)
-            header = DynAccessor(14492)
+            body = DynAccessor(14500)
+            header = DynAccessor(14499)
 
         empty = _empty()
-        onUse = DynAccessor(14335)
-        restriction = DynAccessor(14337)
+        onUse = DynAccessor(14342)
+        restriction = DynAccessor(14344)
 
     equipment = _equipment()
 
@@ -41821,8 +41847,8 @@ class tooltips(DynAccessor):
 
             class _disable(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15337)
-                header = DynAccessor(15336)
+                body = DynAccessor(15344)
+                header = DynAccessor(15343)
 
             disable = _disable()
 
@@ -41835,8 +41861,8 @@ class tooltips(DynAccessor):
 
         class _godtag(DynAccessor):
             __slots__ = ()
-            animDisabled = DynAccessor(16285)
-            animEnabled = DynAccessor(16284)
+            animDisabled = DynAccessor(16292)
+            animEnabled = DynAccessor(16291)
 
         godtag = _godtag()
 
@@ -41874,25 +41900,25 @@ class tooltips(DynAccessor):
 
         class _body(DynAccessor):
             __slots__ = ()
-            levels = DynAccessor(16143)
-            style = DynAccessor(16145)
-            vehicle = DynAccessor(16144)
+            levels = DynAccessor(16150)
+            style = DynAccessor(16152)
+            vehicle = DynAccessor(16151)
 
-        body = _body(16142)
+        body = _body(16149)
 
         class _error(DynAccessor):
             __slots__ = ()
-            veh_type = DynAccessor(16148)
+            veh_type = DynAccessor(16155)
 
         error = _error()
 
         class _extra_state(DynAccessor):
             __slots__ = ()
-            completed = DynAccessor(16147)
-            steps = DynAccessor(16146)
+            completed = DynAccessor(16154)
+            steps = DynAccessor(16153)
 
         extra_state = _extra_state()
-        header = DynAccessor(16141)
+        header = DynAccessor(16148)
 
     festivalMarathon = _festivalMarathon()
 
@@ -41934,13 +41960,13 @@ class tooltips(DynAccessor):
 
         class _battleRoomLegionaries(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14920)
-            header = DynAccessor(14919)
+            body = DynAccessor(14927)
+            header = DynAccessor(14926)
 
             class _teamSection(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14914)
-                header = DynAccessor(14913)
+                body = DynAccessor(14921)
+                header = DynAccessor(14920)
 
             teamSection = _teamSection()
 
@@ -41951,8 +41977,8 @@ class tooltips(DynAccessor):
 
             class _battleTypeIcon(DynAccessor):
                 __slots__ = ()
-                defence = DynAccessor(14994)
-                offence = DynAccessor(14995)
+                defence = DynAccessor(15001)
+                offence = DynAccessor(15002)
 
             battleTypeIcon = _battleTypeIcon()
 
@@ -41963,15 +41989,15 @@ class tooltips(DynAccessor):
 
             class _settingsBtn(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14922)
+                body = DynAccessor(14929)
 
                 class _disabled(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14924)
-                    header = DynAccessor(14923)
+                    body = DynAccessor(14931)
+                    header = DynAccessor(14930)
 
                 disabled = _disabled()
-                header = DynAccessor(14921)
+                header = DynAccessor(14928)
 
             settingsBtn = _settingsBtn()
 
@@ -41985,23 +42011,23 @@ class tooltips(DynAccessor):
 
                 class _inviteBtn(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14977)
-                    header = DynAccessor(14976)
+                    body = DynAccessor(14984)
+                    header = DynAccessor(14983)
 
                 inviteBtn = _inviteBtn()
 
                 class _leaveBtn(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14947)
-                    header = DynAccessor(14946)
+                    body = DynAccessor(14954)
+                    header = DynAccessor(14953)
 
                 leaveBtn = _leaveBtn()
 
                 class _status(DynAccessor):
                     __slots__ = ()
-                    commander = DynAccessor(14950)
-                    isReady = DynAccessor(14948)
-                    notReady = DynAccessor(14949)
+                    commander = DynAccessor(14957)
+                    isReady = DynAccessor(14955)
+                    notReady = DynAccessor(14956)
 
                 status = _status()
 
@@ -42012,26 +42038,26 @@ class tooltips(DynAccessor):
 
                 class _description(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14971)
-                    header = DynAccessor(14970)
+                    body = DynAccessor(14978)
+                    header = DynAccessor(14977)
 
                 description = _description()
 
                 class _sendMessageBtn(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14973)
-                    header = DynAccessor(14972)
+                    body = DynAccessor(14980)
+                    header = DynAccessor(14979)
 
                 sendMessageBtn = _sendMessageBtn()
 
             chat = _chat()
-            configureBtnDisabled = DynAccessor(14955)
-            configureBtnEnabled = DynAccessor(14954)
+            configureBtnDisabled = DynAccessor(14962)
+            configureBtnEnabled = DynAccessor(14961)
 
             class _gunnerIcon(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14959)
-                header = DynAccessor(14958)
+                body = DynAccessor(14966)
+                header = DynAccessor(14965)
 
             gunnerIcon = _gunnerIcon()
 
@@ -42040,15 +42066,15 @@ class tooltips(DynAccessor):
 
                 class _joinBtn(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14975)
-                    header = DynAccessor(14974)
+                    body = DynAccessor(14982)
+                    header = DynAccessor(14981)
 
                 joinBtn = _joinBtn()
 
                 class _singInBtn(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14969)
-                    header = DynAccessor(14968)
+                    body = DynAccessor(14976)
+                    header = DynAccessor(14975)
 
                 singInBtn = _singInBtn()
 
@@ -42059,33 +42085,33 @@ class tooltips(DynAccessor):
 
                 class _cancelReady(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14967)
-                    header = DynAccessor(14966)
+                    body = DynAccessor(14974)
+                    header = DynAccessor(14973)
 
                 cancelReady = _cancelReady()
 
                 class _changeVehicle(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14965)
-                    header = DynAccessor(14964)
+                    body = DynAccessor(14972)
+                    header = DynAccessor(14971)
 
                 changeVehicle = _changeVehicle()
-                vehicle = DynAccessor(14951)
+                vehicle = DynAccessor(14958)
 
             player = _player()
 
             class _removeBtn(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14957)
-                header = DynAccessor(14956)
+                body = DynAccessor(14964)
+                header = DynAccessor(14963)
 
             removeBtn = _removeBtn()
-            removeFilters = DynAccessor(14953)
+            removeFilters = DynAccessor(14960)
 
             class _selectVehicle(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14963)
-                header = DynAccessor(14962)
+                body = DynAccessor(14970)
+                header = DynAccessor(14969)
 
             selectVehicle = _selectVehicle()
 
@@ -42100,7 +42126,7 @@ class tooltips(DynAccessor):
 
                         class _temporally(DynAccessor):
                             __slots__ = ()
-                            body = DynAccessor(14952)
+                            body = DynAccessor(14959)
 
                         temporally = _temporally()
 
@@ -42112,8 +42138,8 @@ class tooltips(DynAccessor):
 
             class _takePlaceFirstTimeBtn(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14961)
-                header = DynAccessor(14960)
+                body = DynAccessor(14968)
+                header = DynAccessor(14967)
 
             takePlaceFirstTimeBtn = _takePlaceFirstTimeBtn()
 
@@ -42121,12 +42147,12 @@ class tooltips(DynAccessor):
 
         class _sortieDivisionToolTip(DynAccessor):
             __slots__ = ()
-            doublebonus = DynAccessor(14930)
-            legionnairesLimit = DynAccessor(14927)
-            playersLimit = DynAccessor(14926)
-            timeLimit = DynAccessor(14928)
-            timeLimitSortie = DynAccessor(14929)
-            vehLevel = DynAccessor(14925)
+            doublebonus = DynAccessor(14937)
+            legionnairesLimit = DynAccessor(14934)
+            playersLimit = DynAccessor(14933)
+            timeLimit = DynAccessor(14935)
+            timeLimitSortie = DynAccessor(14936)
+            vehLevel = DynAccessor(14932)
 
         sortieDivisionToolTip = _sortieDivisionToolTip()
 
@@ -42135,9 +42161,9 @@ class tooltips(DynAccessor):
 
             class _access(DynAccessor):
                 __slots__ = ()
-                bodyClosed = DynAccessor(14933)
-                bodyOpen = DynAccessor(14932)
-                header = DynAccessor(14931)
+                bodyClosed = DynAccessor(14940)
+                bodyOpen = DynAccessor(14939)
+                header = DynAccessor(14938)
 
             access = _access()
 
@@ -42148,15 +42174,15 @@ class tooltips(DynAccessor):
 
             class _clanCreate(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14916)
-                header = DynAccessor(14915)
+                body = DynAccessor(14923)
+                header = DynAccessor(14922)
 
             clanCreate = _clanCreate()
 
             class _clanSearch(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14918)
-                header = DynAccessor(14917)
+                body = DynAccessor(14925)
+                header = DynAccessor(14924)
 
             clanSearch = _clanSearch()
 
@@ -42169,7 +42195,7 @@ class tooltips(DynAccessor):
 
         class _emptySlot(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15067)
+            body = DynAccessor(15074)
 
         emptySlot = _emptySlot()
 
@@ -42177,13 +42203,13 @@ class tooltips(DynAccessor):
 
     class _fortWrongTime(DynAccessor):
         __slots__ = ()
-        body = DynAccessor(14999)
-        header = DynAccessor(14998)
+        body = DynAccessor(15006)
+        header = DynAccessor(15005)
 
         class _lockTime(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15001)
-            header = DynAccessor(15000)
+            body = DynAccessor(15008)
+            header = DynAccessor(15007)
 
         lockTime = _lockTime()
 
@@ -42198,20 +42224,20 @@ class tooltips(DynAccessor):
 
     class _frontlinePackPreview(DynAccessor):
         __slots__ = ()
-        body = DynAccessor(16247)
-        discount = DynAccessor(16249)
-        gift = DynAccessor(16250)
-        header = DynAccessor(16246)
-        tradeInBody = DynAccessor(16248)
+        body = DynAccessor(16254)
+        discount = DynAccessor(16256)
+        gift = DynAccessor(16257)
+        header = DynAccessor(16253)
+        tradeInBody = DynAccessor(16255)
 
     frontlinePackPreview = _frontlinePackPreview()
 
     class _frontlineRank(DynAccessor):
         __slots__ = ()
-        exp = DynAccessor(16253)
-        expBonus = DynAccessor(16254)
-        firstRankDescr = DynAccessor(16252)
-        header = DynAccessor(16251)
+        exp = DynAccessor(16260)
+        expBonus = DynAccessor(16261)
+        firstRankDescr = DynAccessor(16259)
+        header = DynAccessor(16258)
 
     frontlineRank = _frontlineRank()
 
@@ -42241,8 +42267,8 @@ class tooltips(DynAccessor):
 
                 class _empty(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14286)
-                    header = DynAccessor(14285)
+                    body = DynAccessor(14293)
+                    header = DynAccessor(14292)
 
                 empty = _empty()
 
@@ -42253,8 +42279,8 @@ class tooltips(DynAccessor):
 
                 class _empty(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14284)
-                    header = DynAccessor(14283)
+                    body = DynAccessor(14291)
+                    header = DynAccessor(14290)
 
                 empty = _empty()
 
@@ -42265,8 +42291,8 @@ class tooltips(DynAccessor):
 
                 class _empty(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14280)
-                    header = DynAccessor(14279)
+                    body = DynAccessor(14287)
+                    header = DynAccessor(14286)
 
                 empty = _empty()
 
@@ -42277,8 +42303,8 @@ class tooltips(DynAccessor):
 
                 class _empty(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14282)
-                    header = DynAccessor(14281)
+                    body = DynAccessor(14289)
+                    header = DynAccessor(14288)
 
                 empty = _empty()
 
@@ -42288,13 +42314,13 @@ class tooltips(DynAccessor):
 
         class _crew(DynAccessor):
             __slots__ = ()
-            assignedTo = DynAccessor(14235)
-            moreskills = DynAccessor(14234)
+            assignedTo = DynAccessor(14242)
+            moreskills = DynAccessor(14241)
 
             class _new_skill_available(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(14236)
-                text = DynAccessor(14237)
+                header = DynAccessor(14243)
+                text = DynAccessor(14244)
 
             new_skill_available = _new_skill_available()
 
@@ -42303,13 +42329,13 @@ class tooltips(DynAccessor):
 
                 class _dog(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14233)
-                    header = DynAccessor(14232)
+                    body = DynAccessor(14240)
+                    header = DynAccessor(14239)
 
                 dog = _dog()
 
             rudy = _rudy()
-            specialty_skills = DynAccessor(14238)
+            specialty_skills = DynAccessor(14245)
 
         crew = _crew()
 
@@ -42321,54 +42347,54 @@ class tooltips(DynAccessor):
 
                 class _allperiphery(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15870)
-                    header = DynAccessor(15869)
+                    body = DynAccessor(15877)
+                    header = DynAccessor(15876)
 
                     class _notrandom(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15871)
+                        body = DynAccessor(15878)
 
                     notrandom = _notrandom()
 
                 allperiphery = _allperiphery()
-                goregister = DynAccessor(15872)
+                goregister = DynAccessor(15879)
 
                 class _noevents(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15867)
-                    header = DynAccessor(15866)
+                    body = DynAccessor(15874)
+                    header = DynAccessor(15873)
 
                 noevents = _noevents()
 
                 class _regulations(DynAccessor):
                     __slots__ = ()
-                    header = DynAccessor(15868)
+                    header = DynAccessor(15875)
 
                 regulations = _regulations()
-                unavailable = DynAccessor(15862)
+                unavailable = DynAccessor(15869)
 
                 class _wrongbattletype(DynAccessor):
                     __slots__ = ()
-                    random = DynAccessor(15863)
-                    ranked = DynAccessor(15864)
+                    random = DynAccessor(15870)
+                    ranked = DynAccessor(15871)
 
                 wrongbattletype = _wrongbattletype()
-                wrongsquadstate = DynAccessor(15865)
+                wrongsquadstate = DynAccessor(15872)
 
             bottom = _bottom()
 
             class _header(DynAccessor):
                 __slots__ = ()
-                name = DynAccessor(15859)
-                toend = DynAccessor(15860)
-                toendofregistration = DynAccessor(15861)
+                name = DynAccessor(15866)
+                toend = DynAccessor(15867)
+                toendofregistration = DynAccessor(15868)
 
             header = _header()
 
             class _primetime(DynAccessor):
                 __slots__ = ()
-                invalid = DynAccessor(15874)
-                valid = DynAccessor(15873)
+                invalid = DynAccessor(15881)
+                valid = DynAccessor(15880)
 
             primetime = _primetime()
 
@@ -42382,92 +42408,92 @@ class tooltips(DynAccessor):
 
                 class _available(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15612)
-                    header = DynAccessor(15611)
+                    body = DynAccessor(15619)
+                    header = DynAccessor(15618)
 
                 available = _available()
 
                 class _award(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15616)
-                    header = DynAccessor(15615)
+                    body = DynAccessor(15623)
+                    header = DynAccessor(15622)
 
                 award = _award()
 
                 class _branch_disabled(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15590)
-                    header = DynAccessor(15589)
+                    body = DynAccessor(15597)
+                    header = DynAccessor(15596)
 
                 branch_disabled = _branch_disabled()
 
                 class _completed(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15608)
-                    header = DynAccessor(15607)
+                    body = DynAccessor(15615)
+                    header = DynAccessor(15614)
 
                 completed = _completed()
 
                 class _completedLockedNext(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15598)
-                    header = DynAccessor(15597)
+                    body = DynAccessor(15605)
+                    header = DynAccessor(15604)
 
                 completedLockedNext = _completedLockedNext()
 
                 class _disabledAll(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15596)
-                    header = DynAccessor(15595)
+                    body = DynAccessor(15603)
+                    header = DynAccessor(15602)
 
                 disabledAll = _disabledAll()
 
                 class _done(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15610)
-                    header = DynAccessor(15609)
+                    body = DynAccessor(15617)
+                    header = DynAccessor(15616)
 
                 done = _done()
 
                 class _doneAll(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15619)
-                    header = DynAccessor(15618)
+                    body = DynAccessor(15626)
+                    header = DynAccessor(15625)
 
                 doneAll = _doneAll()
 
                 class _doneLockedNext(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15600)
-                    header = DynAccessor(15599)
+                    body = DynAccessor(15607)
+                    header = DynAccessor(15606)
 
                 doneLockedNext = _doneLockedNext()
 
                 class _lowLevel(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15614)
-                    header = DynAccessor(15613)
+                    body = DynAccessor(15621)
+                    header = DynAccessor(15620)
 
                 lowLevel = _lowLevel()
 
                 class _mission_disabled(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15594)
-                    header = DynAccessor(15593)
+                    body = DynAccessor(15601)
+                    header = DynAccessor(15600)
 
                 mission_disabled = _mission_disabled()
 
                 class _noVehicle(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15586)
-                    header = DynAccessor(15585)
+                    body = DynAccessor(15593)
+                    header = DynAccessor(15592)
 
                 noVehicle = _noVehicle()
 
                 class _operation_disabled(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15592)
-                    header = DynAccessor(15591)
+                    body = DynAccessor(15599)
+                    header = DynAccessor(15598)
 
                 operation_disabled = _operation_disabled()
 
@@ -42478,29 +42504,29 @@ class tooltips(DynAccessor):
 
                 class _completedLockedNext(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15602)
-                    header = DynAccessor(15601)
+                    body = DynAccessor(15609)
+                    header = DynAccessor(15608)
 
                 completedLockedNext = _completedLockedNext()
 
                 class _doneLockedNext(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15604)
-                    header = DynAccessor(15603)
+                    body = DynAccessor(15611)
+                    header = DynAccessor(15610)
 
                 doneLockedNext = _doneLockedNext()
 
                 class _noVehicle(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15588)
-                    header = DynAccessor(15587)
+                    body = DynAccessor(15595)
+                    header = DynAccessor(15594)
 
                 noVehicle = _noVehicle()
 
                 class _unavailableFull(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15606)
-                    header = DynAccessor(15605)
+                    body = DynAccessor(15613)
+                    header = DynAccessor(15612)
 
                 unavailableFull = _unavailableFull()
 
@@ -42511,38 +42537,38 @@ class tooltips(DynAccessor):
 
                 class _bottom(DynAccessor):
                     __slots__ = ()
-                    empty = DynAccessor(15505)
+                    empty = DynAccessor(15512)
 
-                bottom = _bottom(15508)
+                bottom = _bottom(15515)
 
                 class _description(DynAccessor):
                     __slots__ = ()
-                    vehicle = DynAccessor(15501)
+                    vehicle = DynAccessor(15508)
 
-                description = _description(15502)
+                description = _description(15509)
 
                 class _empty(DynAccessor):
                     __slots__ = ()
-                    vehicle = DynAccessor(15503)
+                    vehicle = DynAccessor(15510)
 
-                empty = _empty(15504)
-                header = DynAccessor(15500)
+                empty = _empty(15511)
+                header = DynAccessor(15507)
 
                 class _reward(DynAccessor):
                     __slots__ = ()
-                    rest = DynAccessor(15507)
+                    rest = DynAccessor(15514)
 
-                reward = _reward(15506)
+                reward = _reward(15513)
 
             quests = _quests()
 
             class _wgmoneyTooltip(DynAccessor):
                 __slots__ = ()
-                creditsName = DynAccessor(15653)
-                earnedValue = DynAccessor(15655)
-                goldName = DynAccessor(15652)
-                purchasedValue = DynAccessor(15654)
-                totalValue = DynAccessor(15656)
+                creditsName = DynAccessor(15660)
+                earnedValue = DynAccessor(15662)
+                goldName = DynAccessor(15659)
+                purchasedValue = DynAccessor(15661)
+                totalValue = DynAccessor(15663)
 
             wgmoneyTooltip = _wgmoneyTooltip()
 
@@ -42628,8 +42654,8 @@ class tooltips(DynAccessor):
 
         class _xpToTmenCheckbox(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14240)
-            header = DynAccessor(14239)
+            body = DynAccessor(14247)
+            header = DynAccessor(14246)
 
         xpToTmenCheckbox = _xpToTmenCheckbox()
 
@@ -42657,44 +42683,44 @@ class tooltips(DynAccessor):
 
             class _ammoSet(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(15119)
-                title = DynAccessor(15118)
+                description = DynAccessor(15126)
+                title = DynAccessor(15125)
 
             ammoSet = _ammoSet()
-            description = DynAccessor(15108)
-            title = DynAccessor(15107)
+            description = DynAccessor(15115)
+            title = DynAccessor(15114)
 
             class _type(DynAccessor):
                 __slots__ = ()
 
                 class _cumulative(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(15117)
-                    title = DynAccessor(15116)
+                    description = DynAccessor(15124)
+                    title = DynAccessor(15123)
 
                 cumulative = _cumulative()
 
                 class _high_explosive(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(15113)
-                    title = DynAccessor(15112)
+                    description = DynAccessor(15120)
+                    title = DynAccessor(15119)
 
                 high_explosive = _high_explosive()
 
                 class _piercing(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(15111)
-                    title = DynAccessor(15110)
+                    description = DynAccessor(15118)
+                    title = DynAccessor(15117)
 
                 piercing = _piercing()
 
                 class _subcaliber(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(15115)
-                    title = DynAccessor(15114)
+                    description = DynAccessor(15122)
+                    title = DynAccessor(15121)
 
                 subcaliber = _subcaliber()
-                title = DynAccessor(15109)
+                title = DynAccessor(15116)
 
             type = _type()
 
@@ -42705,19 +42731,19 @@ class tooltips(DynAccessor):
 
             class _types(DynAccessor):
                 __slots__ = ()
-                camouflageBlockDescription = DynAccessor(15070)
-                camouflageBlockTitle = DynAccessor(15069)
-                desertCamouflageDescription = DynAccessor(15076)
-                desertCamouflageTitle = DynAccessor(15075)
-                emblemBlockDescription = DynAccessor(15078)
-                emblemBlockTitle = DynAccessor(15077)
-                labelsBlockDescription = DynAccessor(15080)
-                labelsBlockTitle = DynAccessor(15079)
-                summerCamouflageDescription = DynAccessor(15074)
-                summerCamouflageTitle = DynAccessor(15073)
-                title = DynAccessor(15068)
-                winterCamouflageDescription = DynAccessor(15072)
-                winterCamouflageTitle = DynAccessor(15071)
+                camouflageBlockDescription = DynAccessor(15077)
+                camouflageBlockTitle = DynAccessor(15076)
+                desertCamouflageDescription = DynAccessor(15083)
+                desertCamouflageTitle = DynAccessor(15082)
+                emblemBlockDescription = DynAccessor(15085)
+                emblemBlockTitle = DynAccessor(15084)
+                labelsBlockDescription = DynAccessor(15087)
+                labelsBlockTitle = DynAccessor(15086)
+                summerCamouflageDescription = DynAccessor(15081)
+                summerCamouflageTitle = DynAccessor(15080)
+                title = DynAccessor(15075)
+                winterCamouflageDescription = DynAccessor(15079)
+                winterCamouflageTitle = DynAccessor(15078)
 
             types = _types()
 
@@ -42725,36 +42751,36 @@ class tooltips(DynAccessor):
 
         class _customizationCost(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15088)
-            header = DynAccessor(15087)
+            body = DynAccessor(15095)
+            header = DynAccessor(15094)
 
         customizationCost = _customizationCost()
 
         class _customizationDuration(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15084)
-            header = DynAccessor(15083)
+            body = DynAccessor(15091)
+            header = DynAccessor(15090)
 
         customizationDuration = _customizationDuration()
 
         class _customizationOptions(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15086)
-            header = DynAccessor(15085)
+            body = DynAccessor(15093)
+            header = DynAccessor(15092)
 
         customizationOptions = _customizationOptions()
 
         class _equipment(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(15121)
+            description = DynAccessor(15128)
 
             class _prem(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(15123)
-                title = DynAccessor(15122)
+                description = DynAccessor(15130)
+                title = DynAccessor(15129)
 
             prem = _prem()
-            title = DynAccessor(15120)
+            title = DynAccessor(15127)
 
         equipment = _equipment()
 
@@ -42763,34 +42789,34 @@ class tooltips(DynAccessor):
 
             class _additional(DynAccessor):
                 __slots__ = ()
-                documentsDescription = DynAccessor(15106)
-                documentsTitle = DynAccessor(15105)
-                perksDescription = DynAccessor(15104)
-                perksTitle = DynAccessor(15103)
-                recordDescription = DynAccessor(15100)
-                recordTitle = DynAccessor(15099)
-                title = DynAccessor(15098)
-                trainingDescription = DynAccessor(15102)
-                trainingTitle = DynAccessor(15101)
+                documentsDescription = DynAccessor(15113)
+                documentsTitle = DynAccessor(15112)
+                perksDescription = DynAccessor(15111)
+                perksTitle = DynAccessor(15110)
+                recordDescription = DynAccessor(15107)
+                recordTitle = DynAccessor(15106)
+                title = DynAccessor(15105)
+                trainingDescription = DynAccessor(15109)
+                trainingTitle = DynAccessor(15108)
 
             additional = _additional()
 
             class _perks(DynAccessor):
                 __slots__ = ()
-                headerDescription = DynAccessor(15095)
-                newPerkDescription = DynAccessor(15097)
-                newPerkTitle = DynAccessor(15096)
-                title = DynAccessor(15094)
+                headerDescription = DynAccessor(15102)
+                newPerkDescription = DynAccessor(15104)
+                newPerkTitle = DynAccessor(15103)
+                title = DynAccessor(15101)
 
             perks = _perks()
 
             class _skills(DynAccessor):
                 __slots__ = ()
-                headerDescription = DynAccessor(15090)
-                specialtyDescription = DynAccessor(15092)
-                specialtyTitle = DynAccessor(15091)
-                specialtyWarning = DynAccessor(15093)
-                title = DynAccessor(15089)
+                headerDescription = DynAccessor(15097)
+                specialtyDescription = DynAccessor(15099)
+                specialtyTitle = DynAccessor(15098)
+                specialtyWarning = DynAccessor(15100)
+                title = DynAccessor(15096)
 
             skills = _skills()
 
@@ -42798,8 +42824,8 @@ class tooltips(DynAccessor):
 
         class _techRepair(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15082)
-            header = DynAccessor(15081)
+            body = DynAccessor(15089)
+            header = DynAccessor(15088)
 
         techRepair = _techRepair()
 
@@ -42891,27 +42917,27 @@ class tooltips(DynAccessor):
 
             class _barracks(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14449)
-                header = DynAccessor(14448)
+                body = DynAccessor(14456)
+                header = DynAccessor(14455)
 
             barracks = _barracks()
 
             class _browser(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14455)
-                header = DynAccessor(14454)
+                body = DynAccessor(14462)
+                header = DynAccessor(14461)
 
             browser = _browser()
 
             class _clans(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14453)
-                header = DynAccessor(14452)
+                body = DynAccessor(14460)
+                header = DynAccessor(14459)
 
                 class _turnedOff(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14467)
-                    header = DynAccessor(14466)
+                    body = DynAccessor(14474)
+                    header = DynAccessor(14473)
 
                 turnedOff = _turnedOff()
 
@@ -42939,23 +42965,23 @@ class tooltips(DynAccessor):
 
             class _encyclopedia(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14457)
-                header = DynAccessor(14456)
+                body = DynAccessor(14464)
+                header = DynAccessor(14463)
 
             encyclopedia = _encyclopedia()
 
             class _forts(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14451)
-                header = DynAccessor(14450)
+                body = DynAccessor(14458)
+                header = DynAccessor(14457)
 
                 class _sandbox(DynAccessor):
                     __slots__ = ()
 
                     class _turnedOff(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(14475)
-                        header = DynAccessor(14468)
+                        body = DynAccessor(14482)
+                        header = DynAccessor(14475)
 
                     turnedOff = _turnedOff()
 
@@ -42963,8 +42989,8 @@ class tooltips(DynAccessor):
 
                 class _turnedOff(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14465)
-                    header = DynAccessor(14464)
+                    body = DynAccessor(14472)
+                    header = DynAccessor(14471)
 
                 turnedOff = _turnedOff()
 
@@ -42998,78 +43024,78 @@ class tooltips(DynAccessor):
 
             class _hangar(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14435)
-                header = DynAccessor(14434)
+                body = DynAccessor(14442)
+                header = DynAccessor(14441)
 
             hangar = _hangar()
 
             class _inventory(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14437)
-                header = DynAccessor(14436)
+                body = DynAccessor(14444)
+                header = DynAccessor(14443)
 
             inventory = _inventory()
 
             class _manual(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14459)
-                header = DynAccessor(14458)
+                body = DynAccessor(14466)
+                header = DynAccessor(14465)
 
             manual = _manual()
 
             class _missions(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14470)
-                header = DynAccessor(14469)
+                body = DynAccessor(14477)
+                header = DynAccessor(14476)
 
             missions = _missions()
 
             class _personalMissions(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14472)
-                header = DynAccessor(14471)
+                body = DynAccessor(14479)
+                header = DynAccessor(14478)
 
             personalMissions = _personalMissions()
 
             class _personalMissionsDisabled(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14474)
-                header = DynAccessor(14473)
+                body = DynAccessor(14481)
+                header = DynAccessor(14480)
 
             personalMissionsDisabled = _personalMissionsDisabled()
 
             class _profile(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14445)
-                header = DynAccessor(14444)
+                body = DynAccessor(14452)
+                header = DynAccessor(14451)
 
             profile = _profile()
 
             class _shop(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14439)
-                header = DynAccessor(14438)
+                body = DynAccessor(14446)
+                header = DynAccessor(14445)
 
             shop = _shop()
 
             class _shop2(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14441)
-                header = DynAccessor(14440)
+                body = DynAccessor(14448)
+                header = DynAccessor(14447)
 
             shop2 = _shop2()
 
             class _storage(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14443)
-                header = DynAccessor(14442)
+                body = DynAccessor(14450)
+                header = DynAccessor(14449)
 
             storage = _storage()
 
             class _techtree(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14447)
-                header = DynAccessor(14446)
+                body = DynAccessor(14454)
+                header = DynAccessor(14453)
 
             techtree = _techtree()
 
@@ -43101,22 +43127,22 @@ class tooltips(DynAccessor):
 
             class _players_online_full(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14430)
-                header = DynAccessor(14429)
+                body = DynAccessor(14437)
+                header = DynAccessor(14436)
 
             players_online_full = _players_online_full()
 
             class _players_online_region(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14428)
-                header = DynAccessor(14427)
+                body = DynAccessor(14435)
+                header = DynAccessor(14434)
 
             players_online_region = _players_online_region()
 
             class _players_unavailable(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14426)
-                header = DynAccessor(14425)
+                body = DynAccessor(14433)
+                header = DynAccessor(14432)
 
             players_unavailable = _players_unavailable()
 
@@ -43190,17 +43216,17 @@ class tooltips(DynAccessor):
             header = DynAccessor(14173)
 
         squad_member = _squad_member()
-        versionInfoHint = DynAccessor(14431)
+        versionInfoHint = DynAccessor(14438)
 
     header = _header()
 
     class _igr(DynAccessor):
         __slots__ = ()
-        msg1 = DynAccessor(14796)
-        msg2 = DynAccessor(14797)
-        msg3 = DynAccessor(14798)
-        progressHeader = DynAccessor(14799)
-        title = DynAccessor(14795)
+        msg1 = DynAccessor(14803)
+        msg2 = DynAccessor(14804)
+        msg3 = DynAccessor(14805)
+        progressHeader = DynAccessor(14806)
+        title = DynAccessor(14802)
 
     igr = _igr()
 
@@ -43213,42 +43239,42 @@ class tooltips(DynAccessor):
 
     class _itemStatus(DynAccessor):
         __slots__ = ()
-        notEnough = DynAccessor(14696)
+        notEnough = DynAccessor(14703)
 
     itemStatus = _itemStatus()
 
     class _kursk(DynAccessor):
         __slots__ = ()
-        body = DynAccessor(16123)
+        body = DynAccessor(16130)
 
         class _error(DynAccessor):
             __slots__ = ()
-            battle_type = DynAccessor(16126)
+            battle_type = DynAccessor(16133)
 
         error = _error()
 
         class _extra_state(DynAccessor):
             __slots__ = ()
-            steps = DynAccessor(16125)
+            steps = DynAccessor(16132)
 
         extra_state = _extra_state()
-        header = DynAccessor(16122)
-        progress = DynAccessor(16124)
+        header = DynAccessor(16129)
+        progress = DynAccessor(16131)
 
     kursk = _kursk()
 
     class _level(DynAccessor):
         __slots__ = ()
-        c_1 = DynAccessor(14548)
-        c_10 = DynAccessor(14557)
-        c_2 = DynAccessor(14549)
-        c_3 = DynAccessor(14550)
-        c_4 = DynAccessor(14551)
-        c_5 = DynAccessor(14552)
-        c_6 = DynAccessor(14553)
-        c_7 = DynAccessor(14554)
-        c_8 = DynAccessor(14555)
-        c_9 = DynAccessor(14556)
+        c_1 = DynAccessor(14555)
+        c_10 = DynAccessor(14564)
+        c_2 = DynAccessor(14556)
+        c_3 = DynAccessor(14557)
+        c_4 = DynAccessor(14558)
+        c_5 = DynAccessor(14559)
+        c_6 = DynAccessor(14560)
+        c_7 = DynAccessor(14561)
+        c_8 = DynAccessor(14562)
+        c_9 = DynAccessor(14563)
 
     level = _level()
 
@@ -43263,8 +43289,8 @@ class tooltips(DynAccessor):
 
                 class _disabled(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14396)
-                    header = DynAccessor(14395)
+                    body = DynAccessor(14403)
+                    header = DynAccessor(14402)
 
                 disabled = _disabled()
 
@@ -43283,8 +43309,8 @@ class tooltips(DynAccessor):
 
             class _miniclient(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15345)
-                header = DynAccessor(15344)
+                body = DynAccessor(15352)
+                header = DynAccessor(15351)
 
             miniclient = _miniclient()
 
@@ -43297,35 +43323,35 @@ class tooltips(DynAccessor):
 
         class _channel_button(DynAccessor):
             __slots__ = ()
-            inRoaming = DynAccessor(14386)
+            inRoaming = DynAccessor(14393)
 
         channel_button = _channel_button()
 
         class _channels_button(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14385)
-            header = DynAccessor(14384)
+            body = DynAccessor(14392)
+            header = DynAccessor(14391)
 
         channels_button = _channels_button()
 
         class _channels_carousel_button_left(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14388)
-            header = DynAccessor(14387)
+            body = DynAccessor(14395)
+            header = DynAccessor(14394)
 
         channels_carousel_button_left = _channels_carousel_button_left()
 
         class _channels_carousel_button_right(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14392)
-            header = DynAccessor(14391)
+            body = DynAccessor(14399)
+            header = DynAccessor(14398)
 
         channels_carousel_button_right = _channels_carousel_button_right()
 
         class _contacts_button(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14379)
-            header = DynAccessor(14378)
+            body = DynAccessor(14386)
+            header = DynAccessor(14385)
 
         contacts_button = _contacts_button()
 
@@ -43334,15 +43360,15 @@ class tooltips(DynAccessor):
 
             class _channels_carousel_button_left(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14390)
-                header = DynAccessor(14389)
+                body = DynAccessor(14397)
+                header = DynAccessor(14396)
 
             channels_carousel_button_left = _channels_carousel_button_left()
 
             class _channels_carousel_button_right(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14394)
-                header = DynAccessor(14393)
+                body = DynAccessor(14401)
+                header = DynAccessor(14400)
 
             channels_carousel_button_right = _channels_carousel_button_right()
 
@@ -43350,22 +43376,22 @@ class tooltips(DynAccessor):
 
         class _referral_button(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14381)
-            header = DynAccessor(14380)
+            body = DynAccessor(14388)
+            header = DynAccessor(14387)
 
         referral_button = _referral_button()
 
         class _service_button(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14377)
-            header = DynAccessor(14376)
+            body = DynAccessor(14384)
+            header = DynAccessor(14383)
 
         service_button = _service_button()
 
         class _vehicle_compare_button(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14383)
-            header = DynAccessor(14382)
+            body = DynAccessor(14390)
+            header = DynAccessor(14389)
 
         vehicle_compare_button = _vehicle_compare_button()
 
@@ -43485,23 +43511,23 @@ class tooltips(DynAccessor):
 
         class _body(DynAccessor):
             __slots__ = ()
-            extra = DynAccessor(16129)
+            extra = DynAccessor(16136)
 
-        body = _body(16128)
-        date = DynAccessor(16121)
+        body = _body(16135)
+        date = DynAccessor(16128)
 
         class _error(DynAccessor):
             __slots__ = ()
-            battle_type = DynAccessor(16139)
-            veh_type = DynAccessor(16140)
+            battle_type = DynAccessor(16146)
+            veh_type = DynAccessor(16147)
 
         error = _error()
 
         class _extra_state(DynAccessor):
             __slots__ = ()
-            completed = DynAccessor(16134)
-            discount = DynAccessor(16135)
-            steps = DynAccessor(16133)
+            completed = DynAccessor(16141)
+            discount = DynAccessor(16142)
+            steps = DynAccessor(16140)
 
         extra_state = _extra_state()
 
@@ -43510,28 +43536,28 @@ class tooltips(DynAccessor):
 
             class _state(DynAccessor):
                 __slots__ = ()
-                suspend = DynAccessor(16136)
+                suspend = DynAccessor(16143)
 
             state = _state()
 
         flag = _flag()
-        header = DynAccessor(16127)
+        header = DynAccessor(16134)
 
         class _off(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(16138)
-            header = DynAccessor(16137)
+            body = DynAccessor(16145)
+            header = DynAccessor(16144)
 
         off = _off()
 
         class _state(DynAccessor):
             __slots__ = ()
-            complete = DynAccessor(16132)
-            end = DynAccessor(16131)
-            start = DynAccessor(16130)
+            complete = DynAccessor(16139)
+            end = DynAccessor(16138)
+            start = DynAccessor(16137)
 
         state = _state()
-        subtitle = DynAccessor(16120)
+        subtitle = DynAccessor(16127)
 
     marathon = _marathon()
 
@@ -43547,8 +43573,8 @@ class tooltips(DynAccessor):
 
         class _noVehicle(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14803)
-            header = DynAccessor(14802)
+            body = DynAccessor(14810)
+            header = DynAccessor(14809)
 
         noVehicle = _noVehicle()
 
@@ -43570,28 +43596,28 @@ class tooltips(DynAccessor):
 
             class _achievement(DynAccessor):
                 __slots__ = ()
-                pattern = DynAccessor(15648)
+                pattern = DynAccessor(15655)
 
             achievement = _achievement()
-            progress = DynAccessor(15580)
+            progress = DynAccessor(15587)
 
         condition = _condition()
 
         class _token(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(15574)
+            header = DynAccessor(15581)
 
             class _progress(DynAccessor):
                 __slots__ = ()
-                none = DynAccessor(15578)
+                none = DynAccessor(15585)
 
-            progress = _progress(15579)
-            quest = DynAccessor(15577)
+            progress = _progress(15586)
+            quest = DynAccessor(15584)
 
             class _quests(DynAccessor):
                 __slots__ = ()
-                multiple = DynAccessor(15576)
-                single = DynAccessor(15575)
+                multiple = DynAccessor(15583)
+                single = DynAccessor(15582)
 
             quests = _quests()
 
@@ -43602,15 +43628,15 @@ class tooltips(DynAccessor):
 
             class _buyBtn(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15571)
-                header = DynAccessor(15570)
+                body = DynAccessor(15578)
+                header = DynAccessor(15577)
 
             buyBtn = _buyBtn()
 
             class _quest(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15573)
-                header = DynAccessor(15572)
+                body = DynAccessor(15580)
+                header = DynAccessor(15579)
 
             quest = _quest()
 
@@ -43621,15 +43647,15 @@ class tooltips(DynAccessor):
 
             class _list(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15582)
-                header = DynAccessor(15581)
+                body = DynAccessor(15589)
+                header = DynAccessor(15588)
 
             list = _list()
 
             class _select(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15584)
-                header = DynAccessor(15583)
+                body = DynAccessor(15591)
+                header = DynAccessor(15590)
 
             select = _select()
 
@@ -43639,7 +43665,7 @@ class tooltips(DynAccessor):
 
     class _module(DynAccessor):
         __slots__ = ()
-        count = DynAccessor(14333)
+        count = DynAccessor(14340)
 
     module = _module()
 
@@ -43648,42 +43674,42 @@ class tooltips(DynAccessor):
 
         class _already_installed(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14302)
+            header = DynAccessor(14309)
 
         already_installed = _already_installed()
 
         class _credits_error(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14287)
-            text = DynAccessor(14288)
+            header = DynAccessor(14294)
+            text = DynAccessor(14295)
 
         credits_error = _credits_error()
 
         class _duplicated(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14309)
-            note = DynAccessor(14310)
+            header = DynAccessor(14316)
+            note = DynAccessor(14317)
 
         duplicated = _duplicated()
 
         class _gold_error(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14289)
-            text = DynAccessor(14290)
+            header = DynAccessor(14296)
+            text = DynAccessor(14297)
 
         gold_error = _gold_error()
 
         class _need_turret(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14292)
-            text = DynAccessor(14293)
+            header = DynAccessor(14299)
+            text = DynAccessor(14300)
 
         need_turret = _need_turret()
 
         class _not_for_this_vehicle_type(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14298)
-            text = DynAccessor(14299)
+            header = DynAccessor(14305)
+            text = DynAccessor(14306)
 
         not_for_this_vehicle_type = _not_for_this_vehicle_type()
 
@@ -43692,7 +43718,7 @@ class tooltips(DynAccessor):
 
             class _dismantling(DynAccessor):
                 __slots__ = ()
-                price = DynAccessor(14311)
+                price = DynAccessor(14318)
 
             dismantling = _dismantling()
 
@@ -43700,49 +43726,49 @@ class tooltips(DynAccessor):
 
         class _not_with_installed_equipment(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14307)
-            text = DynAccessor(14308)
+            header = DynAccessor(14314)
+            text = DynAccessor(14315)
 
         not_with_installed_equipment = _not_with_installed_equipment()
 
         class _operation_error(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14291)
+            header = DynAccessor(14298)
 
         operation_error = _operation_error()
 
         class _remove_too_heavy(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14300)
-            text = DynAccessor(14301)
+            header = DynAccessor(14307)
+            text = DynAccessor(14308)
 
         remove_too_heavy = _remove_too_heavy()
-        replace = DynAccessor(14306)
+        replace = DynAccessor(14313)
 
         class _too_heavy(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14294)
-            text = DynAccessor(14295)
+            header = DynAccessor(14301)
+            text = DynAccessor(14302)
 
         too_heavy = _too_heavy()
 
         class _too_heavy_chassi(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14296)
-            text = DynAccessor(14297)
+            header = DynAccessor(14303)
+            text = DynAccessor(14304)
 
         too_heavy_chassi = _too_heavy_chassi()
 
         class _unlock_error(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14303)
-            text = DynAccessor(14304)
+            header = DynAccessor(14310)
+            text = DynAccessor(14311)
 
         unlock_error = _unlock_error()
 
         class _wrong_slot(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14305)
+            body = DynAccessor(14312)
 
         wrong_slot = _wrong_slot()
 
@@ -43753,8 +43779,8 @@ class tooltips(DynAccessor):
 
         class _alert(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14375)
-            header = DynAccessor(14374)
+            body = DynAccessor(14382)
+            header = DynAccessor(14381)
 
         alert = _alert()
 
@@ -43768,19 +43794,19 @@ class tooltips(DynAccessor):
 
             class _info(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15497)
+                body = DynAccessor(15504)
 
             info = _info()
 
             class _invites(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15498)
+                body = DynAccessor(15505)
 
             invites = _invites()
 
             class _offers(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15499)
+                body = DynAccessor(15506)
 
             offers = _offers()
 
@@ -43793,153 +43819,153 @@ class tooltips(DynAccessor):
 
         class _base(DynAccessor):
             __slots__ = ()
-            desc = DynAccessor(16186)
-            label = DynAccessor(16185)
+            desc = DynAccessor(16193)
+            label = DynAccessor(16192)
 
         base = _base()
 
         class _buffon(DynAccessor):
             __slots__ = ()
-            desc = DynAccessor(16188)
-            label = DynAccessor(16187)
+            desc = DynAccessor(16195)
+            label = DynAccessor(16194)
 
         buffon = _buffon()
 
         class _commander_marina(DynAccessor):
             __slots__ = ()
-            desc = DynAccessor(16223)
-            label = DynAccessor(16222)
+            desc = DynAccessor(16230)
+            label = DynAccessor(16229)
 
         commander_marina = _commander_marina()
 
         class _czech_woman(DynAccessor):
             __slots__ = ()
-            desc = DynAccessor(16192)
-            label = DynAccessor(16191)
+            desc = DynAccessor(16199)
+            label = DynAccessor(16198)
 
         czech_woman = _czech_woman()
-        expireTitle = DynAccessor(16183)
-        howToGet = DynAccessor(16181)
+        expireTitle = DynAccessor(16190)
+        howToGet = DynAccessor(16188)
 
         class _ny19men(DynAccessor):
             __slots__ = ()
-            desc = DynAccessor(16206)
-            label = DynAccessor(16205)
+            desc = DynAccessor(16213)
+            label = DynAccessor(16212)
 
         ny19men = _ny19men()
 
         class _ny19woman(DynAccessor):
             __slots__ = ()
-            desc = DynAccessor(16208)
-            label = DynAccessor(16207)
+            desc = DynAccessor(16215)
+            label = DynAccessor(16214)
 
         ny19woman = _ny19woman()
 
         class _offspring_commander(DynAccessor):
             __slots__ = ()
-            desc = DynAccessor(16218)
+            desc = DynAccessor(16225)
 
         offspring_commander = _offspring_commander()
 
         class _offspring_driver(DynAccessor):
             __slots__ = ()
-            desc = DynAccessor(16220)
+            desc = DynAccessor(16227)
 
         offspring_driver = _offspring_driver()
 
         class _offspring_gunner(DynAccessor):
             __slots__ = ()
-            desc = DynAccessor(16219)
+            desc = DynAccessor(16226)
 
         offspring_gunner = _offspring_gunner()
 
         class _offspring_loader(DynAccessor):
             __slots__ = ()
-            desc = DynAccessor(16221)
+            desc = DynAccessor(16228)
 
         offspring_loader = _offspring_loader()
 
         class _race19_commanderA(DynAccessor):
             __slots__ = ()
-            desc = DynAccessor(16210)
-            howToGetInfo = DynAccessor(16211)
-            label = DynAccessor(16209)
+            desc = DynAccessor(16217)
+            howToGetInfo = DynAccessor(16218)
+            label = DynAccessor(16216)
 
         race19_commanderA = _race19_commanderA()
 
         class _race19_commanderB(DynAccessor):
             __slots__ = ()
-            desc = DynAccessor(16213)
-            howToGetInfo = DynAccessor(16214)
-            label = DynAccessor(16212)
+            desc = DynAccessor(16220)
+            howToGetInfo = DynAccessor(16221)
+            label = DynAccessor(16219)
 
         race19_commanderB = _race19_commanderB()
 
         class _race19_commanderC(DynAccessor):
             __slots__ = ()
-            desc = DynAccessor(16216)
-            howToGetInfo = DynAccessor(16217)
-            label = DynAccessor(16215)
+            desc = DynAccessor(16223)
+            howToGetInfo = DynAccessor(16224)
+            label = DynAccessor(16222)
 
         race19_commanderC = _race19_commanderC()
-        skillsTitle = DynAccessor(16182)
+        skillsTitle = DynAccessor(16189)
 
         class _tankman(DynAccessor):
             __slots__ = ()
-            desc = DynAccessor(16194)
-            label = DynAccessor(16193)
+            desc = DynAccessor(16201)
+            label = DynAccessor(16200)
 
         tankman = _tankman()
 
         class _tankwoman(DynAccessor):
             __slots__ = ()
-            desc = DynAccessor(16190)
-            label = DynAccessor(16189)
+            desc = DynAccessor(16197)
+            label = DynAccessor(16196)
 
         tankwoman = _tankwoman()
 
         class _twitch1(DynAccessor):
             __slots__ = ()
-            desc = DynAccessor(16196)
-            label = DynAccessor(16195)
+            desc = DynAccessor(16203)
+            label = DynAccessor(16202)
 
         twitch1 = _twitch1()
 
         class _twitch3(DynAccessor):
             __slots__ = ()
-            desc = DynAccessor(16198)
-            label = DynAccessor(16197)
+            desc = DynAccessor(16205)
+            label = DynAccessor(16204)
 
         twitch3 = _twitch3()
 
         class _twitch4(DynAccessor):
             __slots__ = ()
-            desc = DynAccessor(16200)
-            label = DynAccessor(16199)
+            desc = DynAccessor(16207)
+            label = DynAccessor(16206)
 
         twitch4 = _twitch4()
 
         class _twitch5(DynAccessor):
             __slots__ = ()
-            desc = DynAccessor(16202)
-            label = DynAccessor(16201)
+            desc = DynAccessor(16209)
+            label = DynAccessor(16208)
 
         twitch5 = _twitch5()
 
         class _twitch6(DynAccessor):
             __slots__ = ()
-            desc = DynAccessor(16204)
-            label = DynAccessor(16203)
+            desc = DynAccessor(16211)
+            label = DynAccessor(16210)
 
         twitch6 = _twitch6()
-        useBefore = DynAccessor(16184)
+        useBefore = DynAccessor(16191)
 
     notrecruitedtankman = _notrecruitedtankman()
 
     class _parameter(DynAccessor):
         __slots__ = ()
-        weight = DynAccessor(14546)
-        weightUnits = DynAccessor(14547)
+        weight = DynAccessor(14553)
+        weightUnits = DynAccessor(14554)
 
     parameter = _parameter()
 
@@ -43951,20 +43977,20 @@ class tooltips(DynAccessor):
 
             class _accTeachingOfSkillBtn(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14246)
-                header = DynAccessor(14245)
+                body = DynAccessor(14253)
+                header = DynAccessor(14252)
 
                 class _notEnoughFreeXP(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14252)
-                    header = DynAccessor(14251)
+                    body = DynAccessor(14259)
+                    header = DynAccessor(14258)
 
                 notEnoughFreeXP = _notEnoughFreeXP()
 
                 class _selectSkill(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14254)
-                    header = DynAccessor(14253)
+                    body = DynAccessor(14261)
+                    header = DynAccessor(14260)
 
                 selectSkill = _selectSkill()
 
@@ -43972,20 +43998,20 @@ class tooltips(DynAccessor):
 
             class _drop(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14242)
-                header = DynAccessor(14241)
+                body = DynAccessor(14249)
+                header = DynAccessor(14248)
 
             drop = _drop()
 
             class _dropSkillsButton(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14248)
-                header = DynAccessor(14247)
+                body = DynAccessor(14255)
+                header = DynAccessor(14254)
 
                 class _noSkill(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14250)
-                    header = DynAccessor(14249)
+                    body = DynAccessor(14257)
+                    header = DynAccessor(14256)
 
                 noSkill = _noSkill()
 
@@ -43993,8 +44019,8 @@ class tooltips(DynAccessor):
 
             class _new(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14244)
-                header = DynAccessor(14243)
+                body = DynAccessor(14251)
+                header = DynAccessor(14250)
 
             new = _new()
 
@@ -44005,85 +44031,85 @@ class tooltips(DynAccessor):
 
             class _at_spg_btn(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14268)
-                header = DynAccessor(14267)
+                body = DynAccessor(14275)
+                header = DynAccessor(14274)
 
             at_spg_btn = _at_spg_btn()
 
             class _at_spg_btn_disabled(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14270)
-                header = DynAccessor(14269)
+                body = DynAccessor(14277)
+                header = DynAccessor(14276)
 
             at_spg_btn_disabled = _at_spg_btn_disabled()
 
             class _current_tank(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14278)
-                header = DynAccessor(14277)
+                body = DynAccessor(14285)
+                header = DynAccessor(14284)
 
             current_tank = _current_tank()
 
             class _heavy_tank_btn(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14264)
-                header = DynAccessor(14263)
+                body = DynAccessor(14271)
+                header = DynAccessor(14270)
 
             heavy_tank_btn = _heavy_tank_btn()
 
             class _heavy_tank_btn_disabled(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14266)
-                header = DynAccessor(14265)
+                body = DynAccessor(14273)
+                header = DynAccessor(14272)
 
             heavy_tank_btn_disabled = _heavy_tank_btn_disabled()
 
             class _light_tank_btn(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14256)
-                header = DynAccessor(14255)
+                body = DynAccessor(14263)
+                header = DynAccessor(14262)
 
             light_tank_btn = _light_tank_btn()
 
             class _light_tank_btn_disabled(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14258)
-                header = DynAccessor(14257)
+                body = DynAccessor(14265)
+                header = DynAccessor(14264)
 
             light_tank_btn_disabled = _light_tank_btn_disabled()
 
             class _medium_tank_btn(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14260)
-                header = DynAccessor(14259)
+                body = DynAccessor(14267)
+                header = DynAccessor(14266)
 
             medium_tank_btn = _medium_tank_btn()
 
             class _medium_tank_btn_disabled(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14262)
-                header = DynAccessor(14261)
+                body = DynAccessor(14269)
+                header = DynAccessor(14268)
 
             medium_tank_btn_disabled = _medium_tank_btn_disabled()
 
             class _spg_btn(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14272)
-                header = DynAccessor(14271)
+                body = DynAccessor(14279)
+                header = DynAccessor(14278)
 
             spg_btn = _spg_btn()
 
             class _spg_btn_disabled(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14274)
-                header = DynAccessor(14273)
+                body = DynAccessor(14281)
+                header = DynAccessor(14280)
 
             spg_btn_disabled = _spg_btn_disabled()
 
             class _tank(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14276)
-                header = DynAccessor(14275)
+                body = DynAccessor(14283)
+                header = DynAccessor(14282)
 
             tank = _tank()
 
@@ -44102,33 +44128,33 @@ class tooltips(DynAccessor):
 
                 class _alliance(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15819)
-                    header = DynAccessor(15818)
+                    body = DynAccessor(15826)
+                    header = DynAccessor(15825)
 
                 alliance = _alliance()
-                body = DynAccessor(15817)
-                header = DynAccessor(15816)
+                body = DynAccessor(15824)
+                header = DynAccessor(15823)
 
             camouflage = _camouflage()
 
             class _camouflageAll(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15825)
-                header = DynAccessor(15824)
+                body = DynAccessor(15832)
+                header = DynAccessor(15831)
 
             camouflageAll = _camouflageAll()
 
             class _camouflageNation(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15823)
-                header = DynAccessor(15822)
+                body = DynAccessor(15830)
+                header = DynAccessor(15829)
 
             camouflageNation = _camouflageNation()
 
             class _camouflageOnly(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15821)
-                header = DynAccessor(15820)
+                body = DynAccessor(15828)
+                header = DynAccessor(15827)
 
             camouflageOnly = _camouflageOnly()
 
@@ -44136,8 +44162,8 @@ class tooltips(DynAccessor):
 
         class _badge(DynAccessor):
             __slots__ = ()
-            descr = DynAccessor(15773)
-            title = DynAccessor(15772)
+            descr = DynAccessor(15780)
+            title = DynAccessor(15779)
 
         badge = _badge()
 
@@ -44146,15 +44172,15 @@ class tooltips(DynAccessor):
 
             class _pawnedSheet(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15815)
-                header = DynAccessor(15814)
+                body = DynAccessor(15822)
+                header = DynAccessor(15821)
 
             pawnedSheet = _pawnedSheet()
 
             class _pawnSheet(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15813)
-                header = DynAccessor(15812)
+                body = DynAccessor(15820)
+                header = DynAccessor(15819)
 
             pawnSheet = _pawnSheet()
 
@@ -44165,25 +44191,25 @@ class tooltips(DynAccessor):
 
             class _howToGet(DynAccessor):
                 __slots__ = ()
-                descr = DynAccessor(15765)
-                title = DynAccessor(15764)
+                descr = DynAccessor(15772)
+                title = DynAccessor(15771)
 
             howToGet = _howToGet()
 
             class _howToUse(DynAccessor):
                 __slots__ = ()
-                descr = DynAccessor(15767)
-                title = DynAccessor(15766)
+                descr = DynAccessor(15774)
+                title = DynAccessor(15773)
 
             howToUse = _howToUse()
-            info = DynAccessor(15768)
-            notEnough = DynAccessor(15771)
-            title = DynAccessor(15763)
+            info = DynAccessor(15775)
+            notEnough = DynAccessor(15778)
+            title = DynAccessor(15770)
 
             class _used(DynAccessor):
                 __slots__ = ()
-                Header = DynAccessor(15769)
-                text = DynAccessor(15770)
+                Header = DynAccessor(15776)
+                text = DynAccessor(15777)
 
             used = _used()
 
@@ -44191,7 +44217,7 @@ class tooltips(DynAccessor):
 
         class _loyalService(DynAccessor):
             __slots__ = ()
-            descr = DynAccessor(15774)
+            descr = DynAccessor(15781)
 
         loyalService = _loyalService()
 
@@ -44203,9 +44229,9 @@ class tooltips(DynAccessor):
 
                 class _title(DynAccessor):
                     __slots__ = ()
-                    allReceived = DynAccessor(15802)
-                    done = DynAccessor(15800)
-                    excellentDone = DynAccessor(15801)
+                    allReceived = DynAccessor(15809)
+                    done = DynAccessor(15807)
+                    excellentDone = DynAccessor(15808)
 
                 title = _title()
 
@@ -44216,16 +44242,16 @@ class tooltips(DynAccessor):
 
                 class _title(DynAccessor):
                     __slots__ = ()
-                    excellent = DynAccessor(15799)
+                    excellent = DynAccessor(15806)
 
-                title = _title(15798)
+                title = _title(15805)
 
             conditions = _conditions()
 
             class _descr(DynAccessor):
                 __slots__ = ()
-                disabled = DynAccessor(15797)
-                excellentDone = DynAccessor(15796)
+                disabled = DynAccessor(15804)
+                excellentDone = DynAccessor(15803)
 
             descr = _descr()
 
@@ -44234,15 +44260,15 @@ class tooltips(DynAccessor):
 
                 class _title(DynAccessor):
                     __slots__ = ()
-                    available = DynAccessor(15811)
-                    done = DynAccessor(15805)
-                    doneFreeSheet = DynAccessor(15806)
-                    inProgress = DynAccessor(15807)
-                    notAvailable = DynAccessor(15803)
-                    noVehicle = DynAccessor(15804)
-                    onPause = DynAccessor(15808)
-                    sheetRecoveryInProgress = DynAccessor(15809)
-                    spendedFreeSheet = DynAccessor(15810)
+                    available = DynAccessor(15818)
+                    done = DynAccessor(15812)
+                    doneFreeSheet = DynAccessor(15813)
+                    inProgress = DynAccessor(15814)
+                    notAvailable = DynAccessor(15810)
+                    noVehicle = DynAccessor(15811)
+                    onPause = DynAccessor(15815)
+                    sheetRecoveryInProgress = DynAccessor(15816)
+                    spendedFreeSheet = DynAccessor(15817)
 
                 title = _title()
 
@@ -44255,22 +44281,22 @@ class tooltips(DynAccessor):
 
             class _disabled(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15852)
-                header = DynAccessor(15851)
+                body = DynAccessor(15859)
+                header = DynAccessor(15858)
 
             disabled = _disabled()
 
             class _turnOffPause(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15850)
-                header = DynAccessor(15849)
+                body = DynAccessor(15857)
+                header = DynAccessor(15856)
 
             turnOffPause = _turnOffPause()
 
             class _turnOnPause(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15848)
-                header = DynAccessor(15847)
+                body = DynAccessor(15855)
+                header = DynAccessor(15854)
 
             turnOnPause = _turnOnPause()
 
@@ -44284,8 +44310,8 @@ class tooltips(DynAccessor):
 
                 class _title(DynAccessor):
                     __slots__ = ()
-                    done = DynAccessor(15777)
-                    excellentDone = DynAccessor(15778)
+                    done = DynAccessor(15784)
+                    excellentDone = DynAccessor(15785)
 
                 title = _title()
 
@@ -44299,26 +44325,26 @@ class tooltips(DynAccessor):
 
                     class _completionTokens(DynAccessor):
                         __slots__ = ()
-                        pm2 = DynAccessor(15788)
+                        pm2 = DynAccessor(15795)
 
-                    completionTokens = _completionTokens(15787)
-                    disabled = DynAccessor(15782)
-                    doPrevOperation = DynAccessor(15780)
-                    freeSheets = DynAccessor(15789)
-                    noVehicle = DynAccessor(15781)
-                    postponed = DynAccessor(15791)
-                    questsFullyDone = DynAccessor(15790)
-                    selectQuest = DynAccessor(15785)
+                    completionTokens = _completionTokens(15794)
+                    disabled = DynAccessor(15789)
+                    doPrevOperation = DynAccessor(15787)
+                    freeSheets = DynAccessor(15796)
+                    noVehicle = DynAccessor(15788)
+                    postponed = DynAccessor(15798)
+                    questsFullyDone = DynAccessor(15797)
+                    selectQuest = DynAccessor(15792)
 
                 descr = _descr()
 
                 class _title(DynAccessor):
                     __slots__ = ()
-                    available = DynAccessor(15792)
-                    done = DynAccessor(15784)
-                    excellentDone = DynAccessor(15793)
-                    inProgress = DynAccessor(15786)
-                    notAvailable = DynAccessor(15779)
+                    available = DynAccessor(15799)
+                    done = DynAccessor(15791)
+                    excellentDone = DynAccessor(15800)
+                    inProgress = DynAccessor(15793)
+                    notAvailable = DynAccessor(15786)
 
                 title = _title()
 
@@ -44329,7 +44355,7 @@ class tooltips(DynAccessor):
 
                 class _descr(DynAccessor):
                     __slots__ = ()
-                    postponed = DynAccessor(15783)
+                    postponed = DynAccessor(15790)
 
                 descr = _descr()
 
@@ -44337,10 +44363,10 @@ class tooltips(DynAccessor):
 
             class _missions(DynAccessor):
                 __slots__ = ()
-                title = DynAccessor(15776)
+                title = DynAccessor(15783)
 
             missions = _missions()
-            title = DynAccessor(15775)
+            title = DynAccessor(15782)
 
         operation = _operation()
 
@@ -44349,8 +44375,8 @@ class tooltips(DynAccessor):
 
             class _completeState(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15795)
-                header = DynAccessor(15794)
+                body = DynAccessor(15802)
+                header = DynAccessor(15801)
 
             completeState = _completeState()
 
@@ -44364,13 +44390,13 @@ class tooltips(DynAccessor):
 
                 class _addIncomplete(DynAccessor):
                     __slots__ = ()
-                    title = DynAccessor(15854)
+                    title = DynAccessor(15861)
 
                 addIncomplete = _addIncomplete()
 
                 class _mainIncomplete(DynAccessor):
                     __slots__ = ()
-                    title = DynAccessor(15853)
+                    title = DynAccessor(15860)
 
                 mainIncomplete = _mainIncomplete()
 
@@ -44381,8 +44407,8 @@ class tooltips(DynAccessor):
 
                 class _complete(DynAccessor):
                     __slots__ = ()
-                    add = DynAccessor(15856)
-                    main = DynAccessor(15855)
+                    add = DynAccessor(15863)
+                    main = DynAccessor(15862)
 
                 complete = _complete()
 
@@ -44395,82 +44421,82 @@ class tooltips(DynAccessor):
 
             class _addInProgress(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15835)
-                header = DynAccessor(15834)
+                body = DynAccessor(15842)
+                header = DynAccessor(15841)
 
             addInProgress = _addInProgress()
 
             class _doneWithPawn(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15831)
-                header = DynAccessor(15830)
+                body = DynAccessor(15838)
+                header = DynAccessor(15837)
 
             doneWithPawn = _doneWithPawn()
 
             class _fullDone(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15829)
-                header = DynAccessor(15828)
+                body = DynAccessor(15836)
+                header = DynAccessor(15835)
 
             fullDone = _fullDone()
 
             class _inProgress(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15833)
-                header = DynAccessor(15832)
+                body = DynAccessor(15840)
+                header = DynAccessor(15839)
 
             inProgress = _inProgress()
 
             class _lockedByPrevMissions(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15842)
-                header = DynAccessor(15841)
+                body = DynAccessor(15849)
+                header = DynAccessor(15848)
 
             lockedByPrevMissions = _lockedByPrevMissions()
 
             class _lockedByPrevOperation(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15844)
-                header = DynAccessor(15843)
+                body = DynAccessor(15851)
+                header = DynAccessor(15850)
 
             lockedByPrevOperation = _lockedByPrevOperation()
 
             class _lockedByVehicle(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(15838)
+                header = DynAccessor(15845)
 
             lockedByVehicle = _lockedByVehicle()
 
             class _lockedByVehicleAlliance(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15840)
+                body = DynAccessor(15847)
 
             lockedByVehicleAlliance = _lockedByVehicleAlliance()
 
             class _lockedByVehicleType(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15839)
+                body = DynAccessor(15846)
 
             lockedByVehicleType = _lockedByVehicleType()
 
             class _mainDone(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15827)
-                header = DynAccessor(15826)
+                body = DynAccessor(15834)
+                header = DynAccessor(15833)
 
             mainDone = _mainDone()
 
             class _onPause(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15846)
-                header = DynAccessor(15845)
+                body = DynAccessor(15853)
+                header = DynAccessor(15852)
 
             onPause = _onPause()
 
             class _sheetRecoveryInProgress(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15837)
-                header = DynAccessor(15836)
+                body = DynAccessor(15844)
+                header = DynAccessor(15843)
 
             sheetRecoveryInProgress = _sheetRecoveryInProgress()
 
@@ -44478,8 +44504,8 @@ class tooltips(DynAccessor):
 
         class _tankgirlsBlock(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15858)
-            header = DynAccessor(15857)
+            body = DynAccessor(15865)
+            header = DynAccessor(15864)
 
         tankgirlsBlock = _tankgirlsBlock()
 
@@ -44521,31 +44547,31 @@ class tooltips(DynAccessor):
 
             class _header(DynAccessor):
                 __slots__ = ()
-                badgeSlot = DynAccessor(16270)
+                badgeSlot = DynAccessor(16277)
 
                 class _clanReserves(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(16267)
+                    body = DynAccessor(16274)
 
                     class _emptySlot(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16269)
+                        body = DynAccessor(16276)
 
                     emptySlot = _emptySlot()
-                    header = DynAccessor(16266)
+                    header = DynAccessor(16273)
 
                 clanReserves = _clanReserves()
 
                 class _personalReserves(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(16265)
+                    body = DynAccessor(16272)
 
                     class _emptySlot(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(16268)
+                        body = DynAccessor(16275)
 
                     emptySlot = _emptySlot()
-                    header = DynAccessor(16264)
+                    header = DynAccessor(16271)
 
                 personalReserves = _personalReserves()
 
@@ -44558,7 +44584,7 @@ class tooltips(DynAccessor):
 
             class _ghostBtn(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(16271)
+                body = DynAccessor(16278)
 
             ghostBtn = _ghostBtn()
 
@@ -44818,9 +44844,9 @@ class tooltips(DynAccessor):
 
         class _widget(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(16245)
-            header = DynAccessor(16244)
-            linkBtn = DynAccessor(16243)
+            body = DynAccessor(16252)
+            header = DynAccessor(16251)
+            linkBtn = DynAccessor(16250)
 
         widget = _widget()
 
@@ -44834,8 +44860,8 @@ class tooltips(DynAccessor):
 
             class _onPause(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15623)
-                header = DynAccessor(15622)
+                body = DynAccessor(15630)
+                header = DynAccessor(15629)
 
             onPause = _onPause()
 
@@ -44851,22 +44877,22 @@ class tooltips(DynAccessor):
 
             class _additional(DynAccessor):
                 __slots__ = ()
-                bottom = DynAccessor(15658)
-                header = DynAccessor(15657)
+                bottom = DynAccessor(15665)
+                header = DynAccessor(15664)
 
             additional = _additional()
 
             class _vehicleRent(DynAccessor):
                 __slots__ = ()
-                bottom = DynAccessor(16229)
-                expire = DynAccessor(16225)
-                header = DynAccessor(16224)
+                bottom = DynAccessor(16236)
+                expire = DynAccessor(16232)
+                header = DynAccessor(16231)
 
                 class _rentLeft(DynAccessor):
                     __slots__ = ()
-                    rentBattles = DynAccessor(16227)
-                    rentDays = DynAccessor(16226)
-                    rentWins = DynAccessor(16228)
+                    rentBattles = DynAccessor(16234)
+                    rentDays = DynAccessor(16233)
+                    rentWins = DynAccessor(16235)
 
                 rentLeft = _rentLeft()
 
@@ -44879,8 +44905,8 @@ class tooltips(DynAccessor):
 
             class _token(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15651)
-                header = DynAccessor(15650)
+                body = DynAccessor(15658)
+                header = DynAccessor(15657)
 
             token = _token()
 
@@ -44894,7 +44920,7 @@ class tooltips(DynAccessor):
 
                 class _progressDaily(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(15640)
+                    body = DynAccessor(15647)
 
                 progressDaily = _progressDaily()
 
@@ -44902,19 +44928,19 @@ class tooltips(DynAccessor):
 
             class _personalRegular(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15642)
+                body = DynAccessor(15649)
 
             personalRegular = _personalRegular()
 
             class _progress(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15637)
-                header = DynAccessor(15636)
-                statusTooltip = DynAccessor(15643)
+                body = DynAccessor(15644)
+                header = DynAccessor(15643)
+                statusTooltip = DynAccessor(15650)
 
                 class _value(DynAccessor):
                     __slots__ = ()
-                    statusTooltip = DynAccessor(15644)
+                    statusTooltip = DynAccessor(15651)
 
                 value = _value()
 
@@ -44922,9 +44948,9 @@ class tooltips(DynAccessor):
 
             class _progressDaily(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15639)
-                dailyCount = DynAccessor(15641)
-                header = DynAccessor(15638)
+                body = DynAccessor(15646)
+                dailyCount = DynAccessor(15648)
+                header = DynAccessor(15645)
 
             progressDaily = _progressDaily()
 
@@ -44935,15 +44961,15 @@ class tooltips(DynAccessor):
 
             class _achievement(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(15645)
-                pattern = DynAccessor(15647)
+                header = DynAccessor(15652)
+                pattern = DynAccessor(15654)
 
             achievement = _achievement()
 
             class _achievements(DynAccessor):
                 __slots__ = ()
-                descr = DynAccessor(15646)
-                others = DynAccessor(15649)
+                descr = DynAccessor(15653)
+                others = DynAccessor(15656)
 
             achievements = _achievements()
 
@@ -44951,34 +44977,34 @@ class tooltips(DynAccessor):
 
         class _counter(DynAccessor):
             __slots__ = ()
-            label = DynAccessor(14626)
+            label = DynAccessor(14633)
 
         counter = _counter()
 
         class _disableLinkBtn(DynAccessor):
             __slots__ = ()
-            task = DynAccessor(14621)
+            task = DynAccessor(14628)
 
         disableLinkBtn = _disableLinkBtn()
-        igr = DynAccessor(14617)
+        igr = DynAccessor(14624)
 
         class _linkBtn(DynAccessor):
             __slots__ = ()
-            task = DynAccessor(14620)
+            task = DynAccessor(14627)
 
         linkBtn = _linkBtn()
 
         class _newLabel(DynAccessor):
             __slots__ = ()
-            action = DynAccessor(14619)
-            task = DynAccessor(14618)
+            action = DynAccessor(14626)
+            task = DynAccessor(14625)
 
         newLabel = _newLabel()
 
         class _notifier(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14628)
-            header = DynAccessor(14627)
+            body = DynAccessor(14635)
+            header = DynAccessor(14634)
 
         notifier = _notifier()
 
@@ -44987,8 +45013,8 @@ class tooltips(DynAccessor):
 
             class _status(DynAccessor):
                 __slots__ = ()
-                additional = DynAccessor(14638)
-                main = DynAccessor(14637)
+                additional = DynAccessor(14645)
+                main = DynAccessor(14644)
 
             status = _status()
 
@@ -44996,24 +45022,24 @@ class tooltips(DynAccessor):
 
         class _progress(DynAccessor):
             __slots__ = ()
-            current = DynAccessor(14615)
-            earnedInBattle = DynAccessor(14616)
-            strategic = DynAccessor(14614)
+            current = DynAccessor(14622)
+            earnedInBattle = DynAccessor(14623)
+            strategic = DynAccessor(14621)
 
         progress = _progress()
 
         class _renderer(DynAccessor):
             __slots__ = ()
-            label = DynAccessor(14625)
+            label = DynAccessor(14632)
 
         renderer = _renderer()
 
         class _schedule(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(15625)
-            header = DynAccessor(15624)
-            intervals = DynAccessor(15627)
-            weekDays = DynAccessor(15626)
+            description = DynAccessor(15632)
+            header = DynAccessor(15631)
+            intervals = DynAccessor(15634)
+            weekDays = DynAccessor(15633)
 
         schedule = _schedule()
 
@@ -45025,17 +45051,17 @@ class tooltips(DynAccessor):
 
                 class _description(DynAccessor):
                     __slots__ = ()
-                    part1 = DynAccessor(14634)
-                    part2 = DynAccessor(14635)
+                    part1 = DynAccessor(14641)
+                    part2 = DynAccessor(14642)
 
                 description = _description()
 
             femaleTankman = _femaleTankman()
-            title = DynAccessor(14633)
+            title = DynAccessor(14640)
 
             class _tokens(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(14636)
+                description = DynAccessor(14643)
 
             tokens = _tokens()
 
@@ -45043,40 +45069,40 @@ class tooltips(DynAccessor):
 
         class _status(DynAccessor):
             __slots__ = ()
-            done = DynAccessor(14622)
-            notDone = DynAccessor(14624)
-            notready = DynAccessor(14623)
+            done = DynAccessor(14629)
+            notDone = DynAccessor(14631)
+            notready = DynAccessor(14630)
 
         status = _status()
 
         class _unavailable(DynAccessor):
             __slots__ = ()
-            bottom = DynAccessor(15634)
-            bullet = DynAccessor(15631)
+            bottom = DynAccessor(15641)
+            bullet = DynAccessor(15638)
 
             class _disabled(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(15629)
+                header = DynAccessor(15636)
 
             disabled = _disabled()
 
             class _requirement(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(15632)
+                header = DynAccessor(15639)
 
             requirement = _requirement()
 
             class _time(DynAccessor):
                 __slots__ = ()
-                statusTooltip = DynAccessor(15635)
+                statusTooltip = DynAccessor(15642)
 
             time = _time()
-            token = DynAccessor(15633)
+            token = DynAccessor(15640)
 
             class _vehicle(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15630)
-                header = DynAccessor(15628)
+                body = DynAccessor(15637)
+                header = DynAccessor(15635)
 
             vehicle = _vehicle()
 
@@ -45084,16 +45110,16 @@ class tooltips(DynAccessor):
 
         class _vehicles(DynAccessor):
             __slots__ = ()
-            bottom = DynAccessor(15661)
-            description = DynAccessor(15660)
-            header = DynAccessor(15659)
+            bottom = DynAccessor(15668)
+            description = DynAccessor(15667)
+            header = DynAccessor(15666)
 
         vehicles = _vehicles()
 
         class _vehiclesBonus(DynAccessor):
             __slots__ = ()
-            title = DynAccessor(14631)
-            vehiclesLeft = DynAccessor(14632)
+            title = DynAccessor(14638)
+            vehiclesLeft = DynAccessor(14639)
 
         vehiclesBonus = _vehiclesBonus()
 
@@ -45102,8 +45128,8 @@ class tooltips(DynAccessor):
 
             class _aboutBtn(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14630)
-                header = DynAccessor(14629)
+                body = DynAccessor(14637)
+                header = DynAccessor(14636)
 
             aboutBtn = _aboutBtn()
 
@@ -45116,8 +45142,8 @@ class tooltips(DynAccessor):
 
         class _profileBtn(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14878)
-            header = DynAccessor(14877)
+            body = DynAccessor(14885)
+            header = DynAccessor(14884)
 
         profileBtn = _profileBtn()
 
@@ -45132,19 +45158,19 @@ class tooltips(DynAccessor):
 
             class _efficiency(DynAccessor):
                 __slots__ = ()
-                currentUpdate = DynAccessor(15315)
-                description = DynAccessor(15314)
-                previousUpdate = DynAccessor(15316)
-                title = DynAccessor(15313)
+                currentUpdate = DynAccessor(15322)
+                description = DynAccessor(15321)
+                previousUpdate = DynAccessor(15323)
+                title = DynAccessor(15320)
 
             efficiency = _efficiency()
 
             class _position(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(15318)
-                title = DynAccessor(15317)
-                unavailableLabel = DynAccessor(15320)
-                updateLabel = DynAccessor(15319)
+                description = DynAccessor(15325)
+                title = DynAccessor(15324)
+                unavailableLabel = DynAccessor(15327)
+                updateLabel = DynAccessor(15326)
 
             position = _position()
 
@@ -45157,29 +45183,29 @@ class tooltips(DynAccessor):
 
         class _info(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15312)
-            header = DynAccessor(15311)
+            body = DynAccessor(15319)
+            header = DynAccessor(15318)
 
         info = _info()
 
         class _ranks(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15306)
-            header = DynAccessor(15305)
+            body = DynAccessor(15313)
+            header = DynAccessor(15312)
 
         ranks = _ranks()
 
         class _rating(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15310)
-            header = DynAccessor(15309)
+            body = DynAccessor(15317)
+            header = DynAccessor(15316)
 
         rating = _rating()
 
         class _rewards(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15308)
-            header = DynAccessor(15307)
+            body = DynAccessor(15315)
+            header = DynAccessor(15314)
 
         rewards = _rewards()
 
@@ -45190,12 +45216,12 @@ class tooltips(DynAccessor):
 
         class _scorePoint(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15292)
-            header = DynAccessor(15291)
+            body = DynAccessor(15299)
+            header = DynAccessor(15298)
 
             class _short(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(15290)
+                header = DynAccessor(15297)
 
             short = _short()
 
@@ -45206,43 +45232,43 @@ class tooltips(DynAccessor):
 
             class _battlesInLeague(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15300)
-                header = DynAccessor(15299)
+                body = DynAccessor(15307)
+                header = DynAccessor(15306)
 
             battlesInLeague = _battlesInLeague()
 
             class _battlesTotal(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15304)
-                header = DynAccessor(15303)
+                body = DynAccessor(15311)
+                header = DynAccessor(15310)
 
             battlesTotal = _battlesTotal()
 
             class _divisionEfficiency(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15294)
-                header = DynAccessor(15293)
+                body = DynAccessor(15301)
+                header = DynAccessor(15300)
 
             divisionEfficiency = _divisionEfficiency()
 
             class _seasonEfficiency(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15296)
-                header = DynAccessor(15295)
+                body = DynAccessor(15303)
+                header = DynAccessor(15302)
 
             seasonEfficiency = _seasonEfficiency()
 
             class _stripesInLeague(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15298)
-                header = DynAccessor(15297)
+                body = DynAccessor(15305)
+                header = DynAccessor(15304)
 
             stripesInLeague = _stripesInLeague()
 
             class _stripesTotal(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15302)
-                header = DynAccessor(15301)
+                body = DynAccessor(15309)
+                header = DynAccessor(15308)
 
             stripesTotal = _stripesTotal()
 
@@ -45396,8 +45422,8 @@ class tooltips(DynAccessor):
 
         class _auto(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14487)
-            header = DynAccessor(14486)
+            body = DynAccessor(14494)
+            header = DynAccessor(14493)
 
         auto = _auto()
 
@@ -45414,50 +45440,50 @@ class tooltips(DynAccessor):
 
                 class _needToBuyTank(DynAccessor):
                     __slots__ = ()
-                    header = DynAccessor(14721)
-                    text = DynAccessor(14722)
+                    header = DynAccessor(14728)
+                    text = DynAccessor(14729)
 
                 needToBuyTank = _needToBuyTank()
 
                 class _notEnoughXP(DynAccessor):
                     __slots__ = ()
-                    header = DynAccessor(14719)
-                    text = DynAccessor(14720)
+                    header = DynAccessor(14726)
+                    text = DynAccessor(14727)
 
                 notEnoughXP = _notEnoughXP()
 
                 class _parentModuleIsLocked(DynAccessor):
                     __slots__ = ()
-                    header = DynAccessor(14717)
-                    text = DynAccessor(14718)
+                    header = DynAccessor(14724)
+                    text = DynAccessor(14725)
 
                 parentModuleIsLocked = _parentModuleIsLocked()
 
                 class _rootVehicleIsLocked(DynAccessor):
                     __slots__ = ()
-                    header = DynAccessor(14715)
-                    text = DynAccessor(14716)
+                    header = DynAccessor(14722)
+                    text = DynAccessor(14723)
 
                 rootVehicleIsLocked = _rootVehicleIsLocked()
 
                 class _vehicleIsBroken(DynAccessor):
                     __slots__ = ()
-                    header = DynAccessor(14727)
-                    text = DynAccessor(14728)
+                    header = DynAccessor(14734)
+                    text = DynAccessor(14735)
 
                 vehicleIsBroken = _vehicleIsBroken()
 
                 class _vehicleIsInBattle(DynAccessor):
                     __slots__ = ()
-                    header = DynAccessor(14723)
-                    text = DynAccessor(14724)
+                    header = DynAccessor(14730)
+                    text = DynAccessor(14731)
 
                 vehicleIsInBattle = _vehicleIsInBattle()
 
                 class _vehicleIsReadyToFight(DynAccessor):
                     __slots__ = ()
-                    header = DynAccessor(14725)
-                    text = DynAccessor(14726)
+                    header = DynAccessor(14732)
+                    text = DynAccessor(14733)
 
                 vehicleIsReadyToFight = _vehicleIsReadyToFight()
 
@@ -45476,8 +45502,8 @@ class tooltips(DynAccessor):
 
                     class _disabled(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(14730)
-                        header = DynAccessor(14729)
+                        body = DynAccessor(14737)
+                        header = DynAccessor(14736)
 
                     disabled = _disabled()
 
@@ -45490,9 +45516,9 @@ class tooltips(DynAccessor):
 
                 class _parentModuleIsLocked(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14733)
-                    header = DynAccessor(14731)
-                    text = DynAccessor(14732)
+                    body = DynAccessor(14740)
+                    header = DynAccessor(14738)
+                    text = DynAccessor(14739)
 
                 parentModuleIsLocked = _parentModuleIsLocked()
 
@@ -45507,36 +45533,36 @@ class tooltips(DynAccessor):
 
         class _currentRoleWarning(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15058)
-            header = DynAccessor(15057)
+            body = DynAccessor(15065)
+            header = DynAccessor(15064)
 
         currentRoleWarning = _currentRoleWarning()
 
         class _footerInfo(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15066)
-            header = DynAccessor(15065)
+            body = DynAccessor(15073)
+            header = DynAccessor(15072)
 
         footerInfo = _footerInfo()
 
         class _roleAndVehicleTaken(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15064)
-            header = DynAccessor(15063)
+            body = DynAccessor(15071)
+            header = DynAccessor(15070)
 
         roleAndVehicleTaken = _roleAndVehicleTaken()
 
         class _roleChangeForbidden(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15060)
-            header = DynAccessor(15059)
+            body = DynAccessor(15067)
+            header = DynAccessor(15066)
 
         roleChangeForbidden = _roleChangeForbidden()
 
         class _roleTaken(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15062)
-            header = DynAccessor(15061)
+            body = DynAccessor(15069)
+            header = DynAccessor(15068)
 
         roleTaken = _roleTaken()
 
@@ -45544,7 +45570,7 @@ class tooltips(DynAccessor):
 
     class _selectedVehicle(DynAccessor):
         __slots__ = ()
-        header = DynAccessor(14801)
+        header = DynAccessor(14808)
 
     selectedVehicle = _selectedVehicle()
 
@@ -45565,10 +45591,10 @@ class tooltips(DynAccessor):
 
                 class _ptt(DynAccessor):
                     __slots__ = ()
-                    warning = DynAccessor(14433)
+                    warning = DynAccessor(14440)
 
                 ptt = _ptt()
-                warning = DynAccessor(14432)
+                warning = DynAccessor(14439)
 
             key_input = _key_input()
 
@@ -45596,10 +45622,10 @@ class tooltips(DynAccessor):
 
             class _enemy(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15537)
+                body = DynAccessor(15544)
 
             enemy = _enemy()
-            subtitle = DynAccessor(15531)
+            subtitle = DynAccessor(15538)
 
         defendBase = _defendBase()
 
@@ -45629,13 +45655,13 @@ class tooltips(DynAccessor):
 
         class _followMe(DynAccessor):
             __slots__ = ()
-            subtitle = DynAccessor(15530)
+            subtitle = DynAccessor(15537)
 
         followMe = _followMe()
 
         class _helpMe(DynAccessor):
             __slots__ = ()
-            subtitle = DynAccessor(15534)
+            subtitle = DynAccessor(15541)
 
         helpMe = _helpMe()
 
@@ -45644,20 +45670,20 @@ class tooltips(DynAccessor):
 
             class _ally(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15524)
+                body = DynAccessor(15531)
 
             ally = _ally()
 
             class _enemy(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15523)
+                body = DynAccessor(15530)
 
             enemy = _enemy()
 
             class _target(DynAccessor):
                 __slots__ = ()
-                ally = DynAccessor(15526)
-                enemy = DynAccessor(15525)
+                ally = DynAccessor(15533)
+                enemy = DynAccessor(15532)
 
             target = _target()
 
@@ -45665,13 +45691,13 @@ class tooltips(DynAccessor):
 
         class _keyFollowMe(DynAccessor):
             __slots__ = ()
-            title = DynAccessor(15527)
+            title = DynAccessor(15534)
 
         keyFollowMe = _keyFollowMe()
 
         class _keyMovement(DynAccessor):
             __slots__ = ()
-            title = DynAccessor(15528)
+            title = DynAccessor(15535)
 
         keyMovement = _keyMovement()
 
@@ -45718,10 +45744,10 @@ class tooltips(DynAccessor):
 
             class _enemy(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15538)
+                body = DynAccessor(15545)
 
             enemy = _enemy()
-            subtitle = DynAccessor(15533)
+            subtitle = DynAccessor(15540)
 
         needHelp = _needHelp()
 
@@ -45730,10 +45756,10 @@ class tooltips(DynAccessor):
 
             class _enemy(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15539)
+                body = DynAccessor(15546)
 
             enemy = _enemy()
-            subtitle = DynAccessor(15535)
+            subtitle = DynAccessor(15542)
 
         reload = _reload()
 
@@ -45763,25 +45789,25 @@ class tooltips(DynAccessor):
 
         class _stop(DynAccessor):
             __slots__ = ()
-            subtitle = DynAccessor(15536)
+            subtitle = DynAccessor(15543)
 
         stop = _stop()
 
         class _support(DynAccessor):
             __slots__ = ()
-            subtitle = DynAccessor(15529)
+            subtitle = DynAccessor(15536)
 
         support = _support()
 
         class _switchMode(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15540)
+            body = DynAccessor(15547)
 
         switchMode = _switchMode()
 
         class _turnBack(DynAccessor):
             __slots__ = ()
-            subtitle = DynAccessor(15532)
+            subtitle = DynAccessor(15539)
 
         turnBack = _turnBack()
 
@@ -45795,17 +45821,17 @@ class tooltips(DynAccessor):
 
             class _alternativeVoices(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14497)
+                body = DynAccessor(14504)
 
             alternativeVoices = _alternativeVoices()
 
             class _PTTKey(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14496)
-                header = DynAccessor(14495)
+                body = DynAccessor(14503)
+                header = DynAccessor(14502)
 
             PTTKey = _PTTKey()
-            soundModeInvalid = DynAccessor(14498)
+            soundModeInvalid = DynAccessor(14505)
 
         sound = _sound()
 
@@ -45822,15 +45848,15 @@ class tooltips(DynAccessor):
 
         class _conditions(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14823)
-            header = DynAccessor(14822)
+            body = DynAccessor(14830)
+            header = DynAccessor(14829)
 
         conditions = _conditions()
 
         class _freezed(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14821)
-            header = DynAccessor(14820)
+            body = DynAccessor(14828)
+            header = DynAccessor(14827)
 
         freezed = _freezed()
 
@@ -45844,21 +45870,21 @@ class tooltips(DynAccessor):
 
             class _description(DynAccessor):
                 __slots__ = ()
-                bold = DynAccessor(15542)
+                bold = DynAccessor(15549)
 
-            description = _description(15543)
+            description = _description(15550)
 
-        basic = _basic(15541)
+        basic = _basic(15548)
 
     shell = _shell()
 
     class _showDamageIcon(DynAccessor):
         __slots__ = ()
-        blocked = DynAccessor(16119)
-        criticalDamage = DynAccessor(16117)
-        enemyRicochet = DynAccessor(16116)
-        header = DynAccessor(16115)
-        trackDamage = DynAccessor(16118)
+        blocked = DynAccessor(16126)
+        criticalDamage = DynAccessor(16124)
+        enemyRicochet = DynAccessor(16123)
+        header = DynAccessor(16122)
+        trackDamage = DynAccessor(16125)
 
     showDamageIcon = _showDamageIcon()
 
@@ -45896,77 +45922,77 @@ class tooltips(DynAccessor):
 
         class _brotherhood(DynAccessor):
             __slots__ = ()
-            descr = DynAccessor(15547)
-            header = DynAccessor(15546)
+            descr = DynAccessor(15554)
+            header = DynAccessor(15553)
 
         brotherhood = _brotherhood()
 
         class _camouflage(DynAccessor):
             __slots__ = ()
-            descr = DynAccessor(15545)
-            header = DynAccessor(15544)
+            descr = DynAccessor(15552)
+            header = DynAccessor(15551)
 
         camouflage = _camouflage()
 
         class _commander_eagleEye(DynAccessor):
             __slots__ = ()
-            descr = DynAccessor(15551)
-            header = DynAccessor(15550)
+            descr = DynAccessor(15558)
+            header = DynAccessor(15557)
 
         commander_eagleEye = _commander_eagleEye()
 
         class _driver_badRoadsKing(DynAccessor):
             __slots__ = ()
-            descr = DynAccessor(15553)
-            header = DynAccessor(15552)
+            descr = DynAccessor(15560)
+            header = DynAccessor(15559)
 
         driver_badRoadsKing = _driver_badRoadsKing()
 
         class _driver_virtuoso(DynAccessor):
             __slots__ = ()
-            descr = DynAccessor(15549)
-            header = DynAccessor(15548)
+            descr = DynAccessor(15556)
+            header = DynAccessor(15555)
 
         driver_virtuoso = _driver_virtuoso()
 
         class _forRole(DynAccessor):
             __slots__ = ()
-            commander = DynAccessor(15563)
-            common = DynAccessor(15568)
-            driver = DynAccessor(15564)
-            gunner = DynAccessor(15567)
-            loader = DynAccessor(15566)
-            radioman = DynAccessor(15565)
+            commander = DynAccessor(15570)
+            common = DynAccessor(15575)
+            driver = DynAccessor(15571)
+            gunner = DynAccessor(15574)
+            loader = DynAccessor(15573)
+            radioman = DynAccessor(15572)
 
         forRole = _forRole()
 
         class _newPerk(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(15569)
+            header = DynAccessor(15576)
 
         newPerk = _newPerk()
 
         class _radioman_finder(DynAccessor):
             __slots__ = ()
-            descr = DynAccessor(15555)
-            header = DynAccessor(15554)
+            descr = DynAccessor(15562)
+            header = DynAccessor(15561)
 
         radioman_finder = _radioman_finder()
 
         class _radioman_inventor(DynAccessor):
             __slots__ = ()
-            descr = DynAccessor(15557)
-            header = DynAccessor(15556)
+            descr = DynAccessor(15564)
+            header = DynAccessor(15563)
 
         radioman_inventor = _radioman_inventor()
 
         class _status(DynAccessor):
             __slots__ = ()
-            avgExp = DynAccessor(15561)
-            for2radiomen = DynAccessor(15562)
-            isForRole = DynAccessor(15560)
-            momental = DynAccessor(15558)
-            requiersWholeCrew = DynAccessor(15559)
+            avgExp = DynAccessor(15568)
+            for2radiomen = DynAccessor(15569)
+            isForRole = DynAccessor(15567)
+            momental = DynAccessor(15565)
+            requiersWholeCrew = DynAccessor(15566)
 
         status = _status()
 
@@ -46001,27 +46027,27 @@ class tooltips(DynAccessor):
 
         class _complex(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(16263)
-            header = DynAccessor(16262)
+            body = DynAccessor(16270)
+            header = DynAccessor(16269)
 
         complex = _complex()
 
         class _credits(DynAccessor):
             __slots__ = ()
-            bonusWithoutPremium = DynAccessor(16259)
-            bonusWithPremium = DynAccessor(16258)
-            header = DynAccessor(16257)
+            bonusWithoutPremium = DynAccessor(16266)
+            bonusWithPremium = DynAccessor(16265)
+            header = DynAccessor(16264)
 
         credits = _credits()
-        description = DynAccessor(16256)
+        description = DynAccessor(16263)
 
         class _experience(DynAccessor):
             __slots__ = ()
-            bonus = DynAccessor(16261)
-            header = DynAccessor(16260)
+            bonus = DynAccessor(16268)
+            header = DynAccessor(16267)
 
         experience = _experience()
-        title = DynAccessor(16255)
+        title = DynAccessor(16262)
 
     squadBonus = _squadBonus()
 
@@ -46126,8 +46152,8 @@ class tooltips(DynAccessor):
 
         class _eventVehicle(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15491)
-            header = DynAccessor(15490)
+            body = DynAccessor(15498)
+            header = DynAccessor(15497)
 
         eventVehicle = _eventVehicle()
 
@@ -46214,8 +46240,8 @@ class tooltips(DynAccessor):
 
                     class _onPause(DynAccessor):
                         __slots__ = ()
-                        body = DynAccessor(15621)
-                        header = DynAccessor(15620)
+                        body = DynAccessor(15628)
+                        header = DynAccessor(15627)
 
                     onPause = _onPause()
 
@@ -46241,11 +46267,11 @@ class tooltips(DynAccessor):
 
                     class _type(DynAccessor):
                         __slots__ = ()
-                        chassis = DynAccessor(16161)
-                        engines = DynAccessor(16160)
-                        guns = DynAccessor(16158)
-                        radios = DynAccessor(16162)
-                        towers = DynAccessor(16159)
+                        chassis = DynAccessor(16168)
+                        engines = DynAccessor(16167)
+                        guns = DynAccessor(16165)
+                        radios = DynAccessor(16169)
+                        towers = DynAccessor(16166)
 
                     type = _type()
 
@@ -46255,8 +46281,8 @@ class tooltips(DynAccessor):
 
             class _noResultsBtn(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(16152)
-                header = DynAccessor(16151)
+                body = DynAccessor(16159)
+                header = DynAccessor(16158)
 
             noResultsBtn = _noResultsBtn()
 
@@ -46265,14 +46291,14 @@ class tooltips(DynAccessor):
 
                 class _btns(DynAccessor):
                     __slots__ = ()
-                    duration = DynAccessor(16153)
+                    duration = DynAccessor(16160)
 
                     class _type(DynAccessor):
                         __slots__ = ()
-                        credits = DynAccessor(16157)
-                        crewExp = DynAccessor(16155)
-                        freeExp = DynAccessor(16156)
-                        vehicleExp = DynAccessor(16154)
+                        credits = DynAccessor(16164)
+                        crewExp = DynAccessor(16162)
+                        freeExp = DynAccessor(16163)
+                        vehicleExp = DynAccessor(16161)
 
                     type = _type()
 
@@ -46288,10 +46314,10 @@ class tooltips(DynAccessor):
 
                     class _type(DynAccessor):
                         __slots__ = ()
-                        armor_piercing = DynAccessor(16163)
-                        armor_piercing_cr = DynAccessor(16164)
-                        high_explosive = DynAccessor(16166)
-                        hollow_charge = DynAccessor(16165)
+                        armor_piercing = DynAccessor(16170)
+                        armor_piercing_cr = DynAccessor(16171)
+                        high_explosive = DynAccessor(16173)
+                        hollow_charge = DynAccessor(16172)
 
                     type = _type()
 
@@ -46306,8 +46332,8 @@ class tooltips(DynAccessor):
 
             class _closeButton(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(16168)
-                header = DynAccessor(16167)
+                body = DynAccessor(16175)
+                header = DynAccessor(16174)
 
             closeButton = _closeButton()
 
@@ -46318,43 +46344,43 @@ class tooltips(DynAccessor):
 
             class _blueprints(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(16180)
-                header = DynAccessor(16179)
+                body = DynAccessor(16187)
+                header = DynAccessor(16186)
 
             blueprints = _blueprints()
 
             class _customization(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(16178)
-                header = DynAccessor(16177)
+                body = DynAccessor(16185)
+                header = DynAccessor(16184)
 
             customization = _customization()
 
             class _for_sell(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(16170)
-                header = DynAccessor(16169)
+                body = DynAccessor(16177)
+                header = DynAccessor(16176)
 
             for_sell = _for_sell()
 
             class _in_hangar(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(16174)
-                header = DynAccessor(16173)
+                body = DynAccessor(16181)
+                header = DynAccessor(16180)
 
             in_hangar = _in_hangar()
 
             class _personal_reserves(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(16176)
-                header = DynAccessor(16175)
+                body = DynAccessor(16183)
+                header = DynAccessor(16182)
 
             personal_reserves = _personal_reserves()
 
             class _storage(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(16172)
-                header = DynAccessor(16171)
+                body = DynAccessor(16179)
+                header = DynAccessor(16178)
 
             storage = _storage()
 
@@ -46367,7 +46393,7 @@ class tooltips(DynAccessor):
 
         class _prebattle(DynAccessor):
             __slots__ = ()
-            noClanMembers = DynAccessor(14945)
+            noClanMembers = DynAccessor(14952)
 
         prebattle = _prebattle()
 
@@ -46378,13 +46404,13 @@ class tooltips(DynAccessor):
 
         class _timer(DynAccessor):
             __slots__ = ()
-            legionariesSearch = DynAccessor(14941)
-            searchEnemy = DynAccessor(14939)
-            squadInBattle = DynAccessor(14942)
-            squadInQueue = DynAccessor(14938)
-            timeToBattle = DynAccessor(14943)
-            timeToNextBattle = DynAccessor(14944)
-            WaitingForData = DynAccessor(14940)
+            legionariesSearch = DynAccessor(14948)
+            searchEnemy = DynAccessor(14946)
+            squadInBattle = DynAccessor(14949)
+            squadInQueue = DynAccessor(14945)
+            timeToBattle = DynAccessor(14950)
+            timeToNextBattle = DynAccessor(14951)
+            WaitingForData = DynAccessor(14947)
 
         timer = _timer()
 
@@ -46392,13 +46418,13 @@ class tooltips(DynAccessor):
 
     class _suitableVehicle(DynAccessor):
         __slots__ = ()
-        conditionsTitle = DynAccessor(14805)
-        header = DynAccessor(14800)
-        hiddenVehicleCount = DynAccessor(14809)
-        matches = DynAccessor(14807)
-        more = DynAccessor(14806)
-        suitableTitle = DynAccessor(14804)
-        unsuitable = DynAccessor(14808)
+        conditionsTitle = DynAccessor(14812)
+        header = DynAccessor(14807)
+        hiddenVehicleCount = DynAccessor(14816)
+        matches = DynAccessor(14814)
+        more = DynAccessor(14813)
+        suitableTitle = DynAccessor(14811)
+        unsuitable = DynAccessor(14815)
 
     suitableVehicle = _suitableVehicle()
 
@@ -46407,7 +46433,7 @@ class tooltips(DynAccessor):
 
         class _status(DynAccessor):
             __slots__ = ()
-            tooltip = DynAccessor(16084)
+            tooltip = DynAccessor(16091)
 
         status = _status()
 
@@ -46418,58 +46444,58 @@ class tooltips(DynAccessor):
 
         class _avgParamComment(DynAccessor):
             __slots__ = ()
-            damage = DynAccessor(15364)
-            piercingPower = DynAccessor(15365)
+            damage = DynAccessor(15371)
+            piercingPower = DynAccessor(15372)
 
         avgParamComment = _avgParamComment()
 
         class _desc(DynAccessor):
             __slots__ = ()
-            aimingTime = DynAccessor(15380)
-            attainableSpeed = DynAccessor(15354)
-            autoReloadTime = DynAccessor(15358)
-            avgDamage = DynAccessor(15363)
-            avgDamagePerMinute = DynAccessor(15366)
-            avgPiercingPower = DynAccessor(15361)
-            chassisRotationSpeed = DynAccessor(15351)
-            circularVisionRadius = DynAccessor(15368)
-            clipFireRate = DynAccessor(15373)
-            damage = DynAccessor(15362)
-            enginePower = DynAccessor(15348)
-            enginePowerPerTon = DynAccessor(15349)
-            explosionRadius = DynAccessor(15381)
-            gunYawLimits = DynAccessor(15372)
-            hullArmor = DynAccessor(15355)
-            invisibilityMovingFactor = DynAccessor(15383)
-            invisibilityStillFactor = DynAccessor(15382)
-            maxHealth = DynAccessor(15346)
-            maxSteeringLockAngle = DynAccessor(15352)
-            piercingPower = DynAccessor(15360)
-            pitchLimits = DynAccessor(15371)
-            radioDistance = DynAccessor(15369)
-            relativeArmor = DynAccessor(15375)
-            relativeCamouflage = DynAccessor(15378)
-            relativeMobility = DynAccessor(15376)
-            relativePower = DynAccessor(15374)
-            relativeVisibility = DynAccessor(15377)
-            reloadTime = DynAccessor(15357)
-            reloadTimeSecs = DynAccessor(15359)
-            shotDispersionAngle = DynAccessor(15379)
-            speedLimits = DynAccessor(15350)
-            stunMaxDuration = DynAccessor(15392)
-            stunMinDuration = DynAccessor(15391)
-            switchOffTime = DynAccessor(15385)
-            switchOnTime = DynAccessor(15384)
-            switchTime = DynAccessor(15386)
-            timeOfReaching = DynAccessor(15353)
-            turretArmor = DynAccessor(15356)
-            turretRotationSpeed = DynAccessor(15367)
-            turretYawLimits = DynAccessor(15370)
-            vehicleWeight = DynAccessor(15347)
-            wheeledSpeedModeSpeed = DynAccessor(15390)
-            wheeledSwitchOffTime = DynAccessor(15388)
-            wheeledSwitchOnTime = DynAccessor(15387)
-            wheeledSwitchTime = DynAccessor(15389)
+            aimingTime = DynAccessor(15387)
+            attainableSpeed = DynAccessor(15361)
+            autoReloadTime = DynAccessor(15365)
+            avgDamage = DynAccessor(15370)
+            avgDamagePerMinute = DynAccessor(15373)
+            avgPiercingPower = DynAccessor(15368)
+            chassisRotationSpeed = DynAccessor(15358)
+            circularVisionRadius = DynAccessor(15375)
+            clipFireRate = DynAccessor(15380)
+            damage = DynAccessor(15369)
+            enginePower = DynAccessor(15355)
+            enginePowerPerTon = DynAccessor(15356)
+            explosionRadius = DynAccessor(15388)
+            gunYawLimits = DynAccessor(15379)
+            hullArmor = DynAccessor(15362)
+            invisibilityMovingFactor = DynAccessor(15390)
+            invisibilityStillFactor = DynAccessor(15389)
+            maxHealth = DynAccessor(15353)
+            maxSteeringLockAngle = DynAccessor(15359)
+            piercingPower = DynAccessor(15367)
+            pitchLimits = DynAccessor(15378)
+            radioDistance = DynAccessor(15376)
+            relativeArmor = DynAccessor(15382)
+            relativeCamouflage = DynAccessor(15385)
+            relativeMobility = DynAccessor(15383)
+            relativePower = DynAccessor(15381)
+            relativeVisibility = DynAccessor(15384)
+            reloadTime = DynAccessor(15364)
+            reloadTimeSecs = DynAccessor(15366)
+            shotDispersionAngle = DynAccessor(15386)
+            speedLimits = DynAccessor(15357)
+            stunMaxDuration = DynAccessor(15399)
+            stunMinDuration = DynAccessor(15398)
+            switchOffTime = DynAccessor(15392)
+            switchOnTime = DynAccessor(15391)
+            switchTime = DynAccessor(15393)
+            timeOfReaching = DynAccessor(15360)
+            turretArmor = DynAccessor(15363)
+            turretRotationSpeed = DynAccessor(15374)
+            turretYawLimits = DynAccessor(15377)
+            vehicleWeight = DynAccessor(15354)
+            wheeledSpeedModeSpeed = DynAccessor(15397)
+            wheeledSwitchOffTime = DynAccessor(15395)
+            wheeledSwitchOnTime = DynAccessor(15394)
+            wheeledSwitchTime = DynAccessor(15396)
 
         desc = _desc()
 
@@ -46480,20 +46506,20 @@ class tooltips(DynAccessor):
 
         class _lock(DynAccessor):
             __slots__ = ()
-            CLAN = DynAccessor(14370)
-            header = DynAccessor(14367)
-            ROAMING = DynAccessor(14373)
+            CLAN = DynAccessor(14377)
+            header = DynAccessor(14374)
+            ROAMING = DynAccessor(14380)
 
             class _rotation(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(14368)
+                header = DynAccessor(14375)
 
-            rotation = _rotation(14372)
-            To = DynAccessor(14369)
-            TOURNAMENT = DynAccessor(14371)
+            rotation = _rotation(14379)
+            To = DynAccessor(14376)
+            TOURNAMENT = DynAccessor(14378)
 
         lock = _lock()
-        MainProperty = DynAccessor(14366)
+        MainProperty = DynAccessor(14373)
 
     tankCarusel = _tankCarusel()
 
@@ -46505,21 +46531,21 @@ class tooltips(DynAccessor):
 
             class _elite(DynAccessor):
                 __slots__ = ()
-                AT_SPG = DynAccessor(14705)
-                heavyTank = DynAccessor(14704)
-                lightTank = DynAccessor(14702)
-                mediumTank = DynAccessor(14703)
-                SPG = DynAccessor(14706)
+                AT_SPG = DynAccessor(14712)
+                heavyTank = DynAccessor(14711)
+                lightTank = DynAccessor(14709)
+                mediumTank = DynAccessor(14710)
+                SPG = DynAccessor(14713)
 
             elite = _elite()
 
             class _normal(DynAccessor):
                 __slots__ = ()
-                AT_SPG = DynAccessor(14700)
-                heavyTank = DynAccessor(14699)
-                lightTank = DynAccessor(14697)
-                mediumTank = DynAccessor(14698)
-                SPG = DynAccessor(14701)
+                AT_SPG = DynAccessor(14707)
+                heavyTank = DynAccessor(14706)
+                lightTank = DynAccessor(14704)
+                mediumTank = DynAccessor(14705)
+                SPG = DynAccessor(14708)
 
             normal = _normal()
 
@@ -46535,24 +46561,24 @@ class tooltips(DynAccessor):
 
             class _inactiveSkills(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(14711)
-                text = DynAccessor(14712)
+                header = DynAccessor(14718)
+                text = DynAccessor(14719)
 
             inactiveSkills = _inactiveSkills()
-            inactiveSkillsRoleFormat = DynAccessor(14713)
+            inactiveSkillsRoleFormat = DynAccessor(14720)
 
             class _wrongPremiumVehicle(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(14709)
-                text = DynAccessor(14710)
+                header = DynAccessor(14716)
+                text = DynAccessor(14717)
 
             wrongPremiumVehicle = _wrongPremiumVehicle()
-            wrongRoleLevel = DynAccessor(14714)
+            wrongRoleLevel = DynAccessor(14721)
 
             class _wrongVehicle(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(14707)
-                text = DynAccessor(14708)
+                header = DynAccessor(14714)
+                text = DynAccessor(14715)
 
             wrongVehicle = _wrongVehicle()
 
@@ -46565,47 +46591,47 @@ class tooltips(DynAccessor):
 
         class _buy_slot(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14352)
-            header = DynAccessor(14351)
+            body = DynAccessor(14359)
+            header = DynAccessor(14358)
 
         buy_slot = _buy_slot()
 
         class _buy_vehicle(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14346)
-            header = DynAccessor(14345)
+            body = DynAccessor(14353)
+            header = DynAccessor(14352)
 
         buy_vehicle = _buy_vehicle()
 
         class _buy_vehicle_new(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14348)
-            header = DynAccessor(14347)
+            body = DynAccessor(14355)
+            header = DynAccessor(14354)
 
         buy_vehicle_new = _buy_vehicle_new()
 
         class _restore_vehicle(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14350)
-            header = DynAccessor(14349)
+            body = DynAccessor(14357)
+            header = DynAccessor(14356)
 
         restore_vehicle = _restore_vehicle()
 
         class _vehicleStates(DynAccessor):
             __slots__ = ()
-            battle = DynAccessor(14353)
-            crewNotFull = DynAccessor(14359)
-            damaged = DynAccessor(14357)
-            destroyed = DynAccessor(14356)
-            exploded = DynAccessor(14354)
-            fallout_broken = DynAccessor(14365)
-            fallout_max = DynAccessor(14363)
-            fallout_min = DynAccessor(14362)
-            fallout_required = DynAccessor(14364)
-            group_is_not_ready = DynAccessor(14361)
-            locked = DynAccessor(14355)
-            serverRestriction = DynAccessor(14360)
-            undamaged = DynAccessor(14358)
+            battle = DynAccessor(14360)
+            crewNotFull = DynAccessor(14366)
+            damaged = DynAccessor(14364)
+            destroyed = DynAccessor(14363)
+            exploded = DynAccessor(14361)
+            fallout_broken = DynAccessor(14372)
+            fallout_max = DynAccessor(14370)
+            fallout_min = DynAccessor(14369)
+            fallout_required = DynAccessor(14371)
+            group_is_not_ready = DynAccessor(14368)
+            locked = DynAccessor(14362)
+            serverRestriction = DynAccessor(14367)
+            undamaged = DynAccessor(14365)
 
         vehicleStates = _vehicleStates()
 
@@ -46619,8 +46645,8 @@ class tooltips(DynAccessor):
 
             class _close(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15343)
-                header = DynAccessor(15342)
+                body = DynAccessor(15350)
+                header = DynAccessor(15349)
 
             close = _close()
 
@@ -46630,8 +46656,8 @@ class tooltips(DynAccessor):
 
     class _techtree(DynAccessor):
         __slots__ = ()
-        Announcement_HT = DynAccessor(16110)
-        Announcement_MT = DynAccessor(16111)
+        Announcement_HT = DynAccessor(16117)
+        Announcement_MT = DynAccessor(16118)
 
     techtree = _techtree()
 
@@ -46640,38 +46666,38 @@ class tooltips(DynAccessor):
 
         class _blueprintConvertTooltip(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14748)
-            header = DynAccessor(14747)
+            body = DynAccessor(14755)
+            header = DynAccessor(14754)
 
         blueprintConvertTooltip = _blueprintConvertTooltip()
 
         class _blueprintsSwitchTooltip(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14746)
-            header = DynAccessor(14745)
+            body = DynAccessor(14753)
+            header = DynAccessor(14752)
 
         blueprintsSwitchTooltip = _blueprintsSwitchTooltip()
 
         class _blueprintsSwitchTooltipDisabled(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14750)
-            header = DynAccessor(14749)
+            body = DynAccessor(14757)
+            header = DynAccessor(14756)
 
         blueprintsSwitchTooltipDisabled = _blueprintsSwitchTooltipDisabled()
 
         class _nations(DynAccessor):
             __slots__ = ()
-            china = DynAccessor(14737)
-            czech = DynAccessor(14741)
-            france = DynAccessor(14738)
-            germany = DynAccessor(14735)
-            italy = DynAccessor(14744)
-            japan = DynAccessor(14740)
-            poland = DynAccessor(14743)
-            sweden = DynAccessor(14742)
-            uk = DynAccessor(14739)
-            usa = DynAccessor(14736)
-            ussr = DynAccessor(14734)
+            china = DynAccessor(14744)
+            czech = DynAccessor(14748)
+            france = DynAccessor(14745)
+            germany = DynAccessor(14742)
+            italy = DynAccessor(14751)
+            japan = DynAccessor(14747)
+            poland = DynAccessor(14750)
+            sweden = DynAccessor(14749)
+            uk = DynAccessor(14746)
+            usa = DynAccessor(14743)
+            ussr = DynAccessor(14741)
 
         nations = _nations()
 
@@ -46716,21 +46742,21 @@ class tooltips(DynAccessor):
 
     class _trade(DynAccessor):
         __slots__ = ()
-        body = DynAccessor(15510)
-        discount = DynAccessor(15514)
-        header = DynAccessor(15509)
-        noDiscount = DynAccessor(15511)
-        severalDiscounts = DynAccessor(15515)
+        body = DynAccessor(15517)
+        discount = DynAccessor(15521)
+        header = DynAccessor(15516)
+        noDiscount = DynAccessor(15518)
+        severalDiscounts = DynAccessor(15522)
 
         class _vehicle(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(15516)
-            newPrice = DynAccessor(15519)
-            noVehicle = DynAccessor(15521)
-            oldPrice = DynAccessor(15518)
-            price = DynAccessor(15517)
-            result = DynAccessor(15522)
-            toChange = DynAccessor(15520)
+            header = DynAccessor(15523)
+            newPrice = DynAccessor(15526)
+            noVehicle = DynAccessor(15528)
+            oldPrice = DynAccessor(15525)
+            price = DynAccessor(15524)
+            result = DynAccessor(15529)
+            toChange = DynAccessor(15527)
 
         vehicle = _vehicle()
 
@@ -46741,8 +46767,8 @@ class tooltips(DynAccessor):
 
         class _noDiscount(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15513)
-            header = DynAccessor(15512)
+            body = DynAccessor(15520)
+            header = DynAccessor(15519)
 
         noDiscount = _noDiscount()
 
@@ -46753,43 +46779,43 @@ class tooltips(DynAccessor):
 
         class _battle(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14685)
-            header = DynAccessor(14684)
+            body = DynAccessor(14692)
+            header = DynAccessor(14691)
 
         battle = _battle()
 
         class _damaged(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14687)
-            header = DynAccessor(14686)
+            body = DynAccessor(14694)
+            header = DynAccessor(14693)
 
         damaged = _damaged()
 
         class _destroyed(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14691)
-            header = DynAccessor(14690)
+            body = DynAccessor(14698)
+            header = DynAccessor(14697)
 
         destroyed = _destroyed()
 
         class _exploded(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14689)
-            header = DynAccessor(14688)
+            body = DynAccessor(14696)
+            header = DynAccessor(14695)
 
         exploded = _exploded()
 
         class _inPrebattle(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14693)
-            header = DynAccessor(14692)
+            body = DynAccessor(14700)
+            header = DynAccessor(14699)
 
         inPrebattle = _inPrebattle()
 
         class _locked(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14695)
-            header = DynAccessor(14694)
+            body = DynAccessor(14702)
+            header = DynAccessor(14701)
 
         locked = _locked()
 
@@ -46803,8 +46829,8 @@ class tooltips(DynAccessor):
 
             class _invites_checkbox(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14398)
-                header = DynAccessor(14397)
+                body = DynAccessor(14405)
+                header = DynAccessor(14404)
 
             invites_checkbox = _invites_checkbox()
 
@@ -46815,22 +46841,22 @@ class tooltips(DynAccessor):
 
             class _btn(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14400)
-                header = DynAccessor(14399)
+                body = DynAccessor(14407)
+                header = DynAccessor(14406)
 
             btn = _btn()
 
             class _icon(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14404)
-                header = DynAccessor(14403)
+                body = DynAccessor(14411)
+                header = DynAccessor(14410)
 
             icon = _icon()
 
             class _selectedicon(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14402)
-                header = DynAccessor(14401)
+                body = DynAccessor(14409)
+                header = DynAccessor(14408)
 
             selectedicon = _selectedicon()
 
@@ -46854,21 +46880,21 @@ class tooltips(DynAccessor):
 
     class _vehicle(DynAccessor):
         __slots__ = ()
-        action_prc = DynAccessor(14574)
-        ammo = DynAccessor(14568)
-        buy_price = DynAccessor(14572)
-        buy_price_action = DynAccessor(14576)
-        crew = DynAccessor(14566)
-        crew_award = DynAccessor(14567)
-        dailyXPFactor = DynAccessor(14581)
-        damage = DynAccessor(14584)
+        action_prc = DynAccessor(14581)
+        ammo = DynAccessor(14575)
+        buy_price = DynAccessor(14579)
+        buy_price_action = DynAccessor(14583)
+        crew = DynAccessor(14573)
+        crew_award = DynAccessor(14574)
+        dailyXPFactor = DynAccessor(14588)
+        damage = DynAccessor(14591)
 
         class _deal(DynAccessor):
             __slots__ = ()
 
             class _epic(DynAccessor):
                 __slots__ = ()
-                main = DynAccessor(14610)
+                main = DynAccessor(14617)
 
             epic = _epic()
 
@@ -46877,119 +46903,119 @@ class tooltips(DynAccessor):
 
                 class _main(DynAccessor):
                     __slots__ = ()
-                    default = DynAccessor(14607)
-                    Twitchprime = DynAccessor(14608)
+                    default = DynAccessor(14614)
+                    Twitchprime = DynAccessor(14615)
 
                 main = _main()
 
             telecom = _telecom()
 
         deal = _deal()
-        devices = DynAccessor(14579)
-        elite = DynAccessor(14565)
-        equipments = DynAccessor(14578)
-        favorite = DynAccessor(14580)
+        devices = DynAccessor(14586)
+        elite = DynAccessor(14572)
+        equipments = DynAccessor(14585)
+        favorite = DynAccessor(14587)
 
         class _graph(DynAccessor):
             __slots__ = ()
 
             class _body(DynAccessor):
                 __slots__ = ()
-                moduleInstalled = DynAccessor(14484)
-                notEnough = DynAccessor(14485)
+                moduleInstalled = DynAccessor(14491)
+                notEnough = DynAccessor(14492)
 
             body = _body()
 
             class _notes(DynAccessor):
                 __slots__ = ()
-                buyAndEquip = DynAccessor(14481)
-                equip = DynAccessor(14480)
-                goToNationTree = DynAccessor(14482)
-                goToNextVehicle = DynAccessor(14483)
-                moduleUnlock = DynAccessor(14479)
-                showContextMenu = DynAccessor(14476)
-                showInfoWindow = DynAccessor(14477)
-                vehicleUnlock = DynAccessor(14478)
+                buyAndEquip = DynAccessor(14488)
+                equip = DynAccessor(14487)
+                goToNationTree = DynAccessor(14489)
+                goToNextVehicle = DynAccessor(14490)
+                moduleUnlock = DynAccessor(14486)
+                showContextMenu = DynAccessor(14483)
+                showInfoWindow = DynAccessor(14484)
+                vehicleUnlock = DynAccessor(14485)
 
             notes = _notes()
 
         graph = _graph()
-        inventoryCount = DynAccessor(14558)
-        level = DynAccessor(14561)
+        inventoryCount = DynAccessor(14565)
+        level = DynAccessor(14568)
 
         class _mastering(DynAccessor):
             __slots__ = ()
-            verySimple = DynAccessor(14563)
+            verySimple = DynAccessor(14570)
 
-        mastering = _mastering(14562)
-        minRentalsPrice = DynAccessor(14575)
-        multiplied_xp = DynAccessor(14570)
-        radioDistance = DynAccessor(14586)
-        rankedBonusBattle = DynAccessor(14582)
-        rentAvailable = DynAccessor(14601)
+        mastering = _mastering(14569)
+        minRentalsPrice = DynAccessor(14582)
+        multiplied_xp = DynAccessor(14577)
+        radioDistance = DynAccessor(14593)
+        rankedBonusBattle = DynAccessor(14589)
+        rentAvailable = DynAccessor(14608)
 
         class _rentLeft(DynAccessor):
             __slots__ = ()
-            battles = DynAccessor(14590)
-            days = DynAccessor(14588)
+            battles = DynAccessor(14597)
+            days = DynAccessor(14595)
 
             class _epic(DynAccessor):
                 __slots__ = ()
-                cycle = DynAccessor(14592)
-                cycles = DynAccessor(14593)
-                daysLeft = DynAccessor(14594)
-                hoursLeft = DynAccessor(14595)
-                minsLeft = DynAccessor(14596)
+                cycle = DynAccessor(14599)
+                cycles = DynAccessor(14600)
+                daysLeft = DynAccessor(14601)
+                hoursLeft = DynAccessor(14602)
+                minsLeft = DynAccessor(14603)
 
             epic = _epic()
-            hours = DynAccessor(14589)
-            wins = DynAccessor(14591)
+            hours = DynAccessor(14596)
+            wins = DynAccessor(14598)
 
         rentLeft = _rentLeft()
 
         class _rentLeftFuture(DynAccessor):
             __slots__ = ()
-            battles = DynAccessor(14599)
-            days = DynAccessor(14597)
-            hours = DynAccessor(14598)
-            wins = DynAccessor(14600)
+            battles = DynAccessor(14606)
+            days = DynAccessor(14604)
+            hours = DynAccessor(14605)
+            wins = DynAccessor(14607)
 
         rentLeftFuture = _rentLeftFuture()
-        restore_price = DynAccessor(14573)
+        restore_price = DynAccessor(14580)
 
         class _restoreLeft(DynAccessor):
             __slots__ = ()
-            days = DynAccessor(14602)
-            hours = DynAccessor(14603)
+            days = DynAccessor(14609)
+            hours = DynAccessor(14610)
 
         restoreLeft = _restoreLeft()
-        sell_price = DynAccessor(14577)
-        speedLimits = DynAccessor(14583)
+        sell_price = DynAccessor(14584)
+        speedLimits = DynAccessor(14590)
 
         class _stats(DynAccessor):
             __slots__ = ()
-            footnote = DynAccessor(14564)
+            footnote = DynAccessor(14571)
 
         stats = _stats()
 
         class _textDelimiter(DynAccessor):
             __slots__ = ()
-            c_or = DynAccessor(14587)
+            c_or = DynAccessor(14594)
 
         textDelimiter = _textDelimiter()
-        trade = DynAccessor(14609)
-        turretRotationSpeed = DynAccessor(14585)
-        unlock_price = DynAccessor(14571)
-        vehicleCount = DynAccessor(14560)
-        xp = DynAccessor(14569)
+        trade = DynAccessor(14616)
+        turretRotationSpeed = DynAccessor(14592)
+        unlock_price = DynAccessor(14578)
+        vehicleCount = DynAccessor(14567)
+        xp = DynAccessor(14576)
 
     vehicle = _vehicle()
 
     class _vehicleIgr(DynAccessor):
         __slots__ = ()
-        days = DynAccessor(14605)
-        hours = DynAccessor(14606)
-        specialAbility = DynAccessor(14604)
+        days = DynAccessor(14612)
+        hours = DynAccessor(14613)
+        specialAbility = DynAccessor(14611)
 
     vehicleIgr = _vehicleIgr()
 
@@ -47001,50 +47027,50 @@ class tooltips(DynAccessor):
 
             class _artefact(DynAccessor):
                 __slots__ = ()
-                template = DynAccessor(15397)
+                template = DynAccessor(15404)
 
             artefact = _artefact()
 
             class _battleBooster(DynAccessor):
                 __slots__ = ()
-                template = DynAccessor(15399)
+                template = DynAccessor(15406)
 
             battleBooster = _battleBooster()
 
             class _extra(DynAccessor):
                 __slots__ = ()
-                camouflageExtras = DynAccessor(15401)
+                camouflageExtras = DynAccessor(15408)
 
             extra = _extra()
-            inactiveDescription = DynAccessor(15404)
+            inactiveDescription = DynAccessor(15411)
 
             class _possible(DynAccessor):
                 __slots__ = ()
-                isInactive = DynAccessor(15411)
-                notInstalled = DynAccessor(15410)
+                isInactive = DynAccessor(15418)
+                notInstalled = DynAccessor(15417)
 
             possible = _possible()
 
             class _role(DynAccessor):
                 __slots__ = ()
-                template = DynAccessor(15400)
+                template = DynAccessor(15407)
 
             role = _role()
-            situational = DynAccessor(15403)
+            situational = DynAccessor(15410)
 
             class _skill(DynAccessor):
                 __slots__ = ()
-                template = DynAccessor(15398)
+                template = DynAccessor(15405)
 
             skill = _skill()
 
             class _tankmanLevel(DynAccessor):
                 __slots__ = ()
-                commander = DynAccessor(15405)
-                driver = DynAccessor(15408)
-                gunner = DynAccessor(15406)
-                loader = DynAccessor(15407)
-                radioman = DynAccessor(15409)
+                commander = DynAccessor(15412)
+                driver = DynAccessor(15415)
+                gunner = DynAccessor(15413)
+                loader = DynAccessor(15414)
+                radioman = DynAccessor(15416)
 
             tankmanLevel = _tankmanLevel()
 
@@ -47052,24 +47078,24 @@ class tooltips(DynAccessor):
 
         class _bonuses(DynAccessor):
             __slots__ = ()
-            title = DynAccessor(15395)
+            title = DynAccessor(15402)
 
         bonuses = _bonuses()
-        chassisRotationSpeed = DynAccessor(14540)
+        chassisRotationSpeed = DynAccessor(14547)
 
         class _common(DynAccessor):
             __slots__ = ()
-            title = DynAccessor(15416)
+            title = DynAccessor(15423)
 
         common = _common()
-        damage = DynAccessor(14542)
-        enginePower = DynAccessor(14539)
-        hullArmor = DynAccessor(14543)
-        maxSteeringLockAngle = DynAccessor(14541)
+        damage = DynAccessor(14549)
+        enginePower = DynAccessor(14546)
+        hullArmor = DynAccessor(14550)
+        maxSteeringLockAngle = DynAccessor(14548)
 
         class _penalties(DynAccessor):
             __slots__ = ()
-            title = DynAccessor(15396)
+            title = DynAccessor(15403)
 
         penalties = _penalties()
 
@@ -47078,54 +47104,54 @@ class tooltips(DynAccessor):
 
             class _crewNotFull(DynAccessor):
                 __slots__ = ()
-                template = DynAccessor(15414)
+                template = DynAccessor(15421)
 
             crewNotFull = _crewNotFull()
 
             class _tankmanDifferentVehicle(DynAccessor):
                 __slots__ = ()
-                template = DynAccessor(15413)
+                template = DynAccessor(15420)
 
             tankmanDifferentVehicle = _tankmanDifferentVehicle()
 
             class _tankmanLevel(DynAccessor):
                 __slots__ = ()
-                template = DynAccessor(15412)
+                template = DynAccessor(15419)
 
             tankmanLevel = _tankmanLevel()
 
         penalty = _penalty()
-        piercingPower = DynAccessor(14545)
+        piercingPower = DynAccessor(14552)
 
         class _possibleBonuses(DynAccessor):
             __slots__ = ()
-            desc = DynAccessor(15394)
+            desc = DynAccessor(15401)
 
         possibleBonuses = _possibleBonuses()
 
         class _simplified(DynAccessor):
             __slots__ = ()
-            title = DynAccessor(15417)
+            title = DynAccessor(15424)
 
         simplified = _simplified()
 
         class _skill(DynAccessor):
             __slots__ = ()
-            name = DynAccessor(15402)
+            name = DynAccessor(15409)
 
         skill = _skill()
-        speedLimits = DynAccessor(14538)
+        speedLimits = DynAccessor(14545)
 
         class _title(DynAccessor):
             __slots__ = ()
-            valueTemplate = DynAccessor(15393)
+            valueTemplate = DynAccessor(15400)
 
         title = _title()
-        turretArmor = DynAccessor(14544)
+        turretArmor = DynAccessor(14551)
 
         class _valueChange(DynAccessor):
             __slots__ = ()
-            template = DynAccessor(15415)
+            template = DynAccessor(15422)
 
         valueChange = _valueChange()
 
@@ -47136,60 +47162,60 @@ class tooltips(DynAccessor):
 
         class _boxTooltip(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15478)
+            body = DynAccessor(15485)
 
             class _camouflage(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(15480)
+                header = DynAccessor(15487)
 
             camouflage = _camouflage()
 
             class _emblem(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(15482)
+                header = DynAccessor(15489)
 
             emblem = _emblem()
-            header = DynAccessor(15477)
+            header = DynAccessor(15484)
 
             class _inscription(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(15483)
+                header = DynAccessor(15490)
 
             inscription = _inscription()
 
             class _modification(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(15484)
+                header = DynAccessor(15491)
 
             modification = _modification()
 
             class _paint(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(15485)
+                header = DynAccessor(15492)
 
             paint = _paint()
 
             class _personalNumber(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(15487)
+                header = DynAccessor(15494)
 
             personalNumber = _personalNumber()
 
             class _projectionDecal(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(15486)
+                header = DynAccessor(15493)
 
             projectionDecal = _projectionDecal()
 
             class _shell(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(15479)
+                header = DynAccessor(15486)
 
             shell = _shell()
 
             class _style(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(15481)
+                header = DynAccessor(15488)
 
             style = _style()
 
@@ -47200,61 +47226,61 @@ class tooltips(DynAccessor):
 
             class _endTime(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15459)
-                header = DynAccessor(15458)
+                body = DynAccessor(15466)
+                header = DynAccessor(15465)
 
             endTime = _endTime()
 
             class _notEnoughCredits(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15452)
-                header = DynAccessor(15451)
+                body = DynAccessor(15459)
+                header = DynAccessor(15458)
 
             notEnoughCredits = _notEnoughCredits()
 
             class _notEnoughGold(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15454)
-                header = DynAccessor(15453)
+                body = DynAccessor(15461)
+                header = DynAccessor(15460)
 
             notEnoughGold = _notEnoughGold()
 
             class _notEnoughPrestigeLevel(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(15456)
+                header = DynAccessor(15463)
 
             notEnoughPrestigeLevel = _notEnoughPrestigeLevel()
 
             class _notEnoughPrestigeLevelAndPoints(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(15457)
+                header = DynAccessor(15464)
 
             notEnoughPrestigeLevelAndPoints = _notEnoughPrestigeLevelAndPoints()
 
             class _notEnoughPrestigePoints(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(15455)
+                header = DynAccessor(15462)
 
             notEnoughPrestigePoints = _notEnoughPrestigePoints()
 
             class _notEnoughXp(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15450)
-                header = DynAccessor(15449)
+                body = DynAccessor(15457)
+                header = DynAccessor(15456)
 
             notEnoughXp = _notEnoughXp()
 
             class _parentModuleIsLocked(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15446)
-                header = DynAccessor(15445)
+                body = DynAccessor(15453)
+                header = DynAccessor(15452)
 
             parentModuleIsLocked = _parentModuleIsLocked()
 
             class _parentVehicleIsLocked(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15448)
-                header = DynAccessor(15447)
+                body = DynAccessor(15455)
+                header = DynAccessor(15454)
 
             parentVehicleIsLocked = _parentVehicleIsLocked()
 
@@ -47262,26 +47288,26 @@ class tooltips(DynAccessor):
 
         class _crew(DynAccessor):
             __slots__ = ()
-            additionalRoles = DynAccessor(15432)
-            commander = DynAccessor(15418)
-            driver = DynAccessor(15419)
-            gunner = DynAccessor(15421)
+            additionalRoles = DynAccessor(15439)
+            commander = DynAccessor(15425)
+            driver = DynAccessor(15426)
+            gunner = DynAccessor(15428)
 
             class _influence(DynAccessor):
                 __slots__ = ()
-                aimingTime = DynAccessor(15426)
-                chassisRotationSpeed = DynAccessor(15428)
-                enginePower = DynAccessor(15430)
-                firepower = DynAccessor(15425)
-                maxSteeringLockAngle = DynAccessor(15429)
-                mobility = DynAccessor(15427)
-                radioDistance = DynAccessor(15431)
-                reconnaissance = DynAccessor(15423)
-                visionRadius = DynAccessor(15424)
+                aimingTime = DynAccessor(15433)
+                chassisRotationSpeed = DynAccessor(15435)
+                enginePower = DynAccessor(15437)
+                firepower = DynAccessor(15432)
+                maxSteeringLockAngle = DynAccessor(15436)
+                mobility = DynAccessor(15434)
+                radioDistance = DynAccessor(15438)
+                reconnaissance = DynAccessor(15430)
+                visionRadius = DynAccessor(15431)
 
             influence = _influence()
-            loader = DynAccessor(15422)
-            radioman = DynAccessor(15420)
+            loader = DynAccessor(15429)
+            radioman = DynAccessor(15427)
 
         crew = _crew()
 
@@ -47290,29 +47316,29 @@ class tooltips(DynAccessor):
 
             class _battle(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15467)
-                header = DynAccessor(15466)
+                body = DynAccessor(15474)
+                header = DynAccessor(15473)
 
             battle = _battle()
 
             class _credit(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15471)
-                header = DynAccessor(15470)
+                body = DynAccessor(15478)
+                header = DynAccessor(15477)
 
             credit = _credit()
 
             class _crew(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15465)
-                header = DynAccessor(15464)
+                body = DynAccessor(15472)
+                header = DynAccessor(15471)
 
             crew = _crew()
 
             class _replace(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15469)
-                header = DynAccessor(15468)
+                body = DynAccessor(15476)
+                header = DynAccessor(15475)
 
             replace = _replace()
 
@@ -47320,35 +47346,35 @@ class tooltips(DynAccessor):
 
         class _historicalReference(DynAccessor):
             __slots__ = ()
-            title = DynAccessor(15472)
+            title = DynAccessor(15479)
 
         historicalReference = _historicalReference()
 
         class _moduls(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15461)
-            header = DynAccessor(15460)
+            body = DynAccessor(15468)
+            header = DynAccessor(15467)
 
         moduls = _moduls()
 
         class _modulsnoModules(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(15463)
-            header = DynAccessor(15462)
+            body = DynAccessor(15470)
+            header = DynAccessor(15469)
 
         modulsnoModules = _modulsnoModules()
 
         class _shopPack(DynAccessor):
             __slots__ = ()
-            count = DynAccessor(15474)
+            count = DynAccessor(15481)
 
             class _dateTimeTooltip(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15476)
-                header = DynAccessor(15475)
+                body = DynAccessor(15483)
+                header = DynAccessor(15482)
 
             dateTimeTooltip = _dateTimeTooltip()
-            title = DynAccessor(15473)
+            title = DynAccessor(15480)
 
         shopPack = _shopPack()
 
@@ -47357,10 +47383,10 @@ class tooltips(DynAccessor):
 
             class _newPerk(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(15443)
+                header = DynAccessor(15450)
 
             newPerk = _newPerk()
-            skillsTitle = DynAccessor(15442)
+            skillsTitle = DynAccessor(15449)
 
         tankman = _tankman()
 
@@ -47369,34 +47395,34 @@ class tooltips(DynAccessor):
 
             class _info(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(15444)
+                body = DynAccessor(15451)
 
                 class _header(DynAccessor):
                     __slots__ = ()
 
                     class _crew(DynAccessor):
                         __slots__ = ()
-                        AnySkills = DynAccessor(15440)
-                        isAbillity = DynAccessor(15435)
-                        isPerk = DynAccessor(15434)
+                        AnySkills = DynAccessor(15447)
+                        isAbillity = DynAccessor(15442)
+                        isPerk = DynAccessor(15441)
 
                         class _newSkill(DynAccessor):
                             __slots__ = ()
-                            forAll = DynAccessor(15439)
-                            forOne = DynAccessor(15437)
+                            forAll = DynAccessor(15446)
+                            forOne = DynAccessor(15444)
 
                         newSkill = _newSkill()
 
                         class _oneSkill(DynAccessor):
                             __slots__ = ()
-                            forAll = DynAccessor(15438)
-                            forOne = DynAccessor(15436)
+                            forAll = DynAccessor(15445)
+                            forOne = DynAccessor(15443)
 
                         oneSkill = _oneSkill()
 
                     crew = _crew()
-                    noCrew = DynAccessor(15441)
-                    withCrew = DynAccessor(15433)
+                    noCrew = DynAccessor(15448)
+                    withCrew = DynAccessor(15440)
 
                 header = _header()
 
@@ -47411,24 +47437,24 @@ class tooltips(DynAccessor):
 
         class _filter(DynAccessor):
             __slots__ = ()
-            mainVehicle = DynAccessor(14981)
-            nation = DynAccessor(14978)
-            vehLvl = DynAccessor(14980)
-            vehType = DynAccessor(14979)
+            mainVehicle = DynAccessor(14988)
+            nation = DynAccessor(14985)
+            vehLvl = DynAccessor(14987)
+            vehType = DynAccessor(14986)
 
         filter = _filter()
 
         class _incompatibleType(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14993)
-            header = DynAccessor(14992)
+            body = DynAccessor(15000)
+            header = DynAccessor(14999)
 
         incompatibleType = _incompatibleType()
 
         class _overflowLevel(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(14991)
-            header = DynAccessor(14990)
+            body = DynAccessor(14998)
+            header = DynAccessor(14997)
 
         overflowLevel = _overflowLevel()
 
@@ -47437,29 +47463,29 @@ class tooltips(DynAccessor):
 
             class _nation(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14983)
-                header = DynAccessor(14982)
+                body = DynAccessor(14990)
+                header = DynAccessor(14989)
 
             nation = _nation()
 
             class _vehLvl(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14987)
-                header = DynAccessor(14986)
+                body = DynAccessor(14994)
+                header = DynAccessor(14993)
 
             vehLvl = _vehLvl()
 
             class _vehName(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14989)
-                header = DynAccessor(14988)
+                body = DynAccessor(14996)
+                header = DynAccessor(14995)
 
             vehName = _vehName()
 
             class _vehType(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14985)
-                header = DynAccessor(14984)
+                body = DynAccessor(14992)
+                header = DynAccessor(14991)
 
             vehType = _vehType()
 
@@ -47478,8 +47504,8 @@ class tooltips(DynAccessor):
 
                 class _recovery(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(14793)
-                    header = DynAccessor(14792)
+                    body = DynAccessor(14800)
+                    header = DynAccessor(14799)
 
                 recovery = _recovery()
 
@@ -47492,15 +47518,15 @@ class tooltips(DynAccessor):
 
             class _alertIconCrystal(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14791)
-                header = DynAccessor(14790)
+                body = DynAccessor(14798)
+                header = DynAccessor(14797)
 
             alertIconCrystal = _alertIconCrystal()
 
             class _alertIconGold(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(14789)
-                header = DynAccessor(14788)
+                body = DynAccessor(14796)
+                header = DynAccessor(14795)
 
             alertIconGold = _alertIconGold()
 
@@ -47513,38 +47539,38 @@ class tooltips(DynAccessor):
 
         class _ammoNotFull(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14647)
+            header = DynAccessor(14654)
 
         ammoNotFull = _ammoNotFull()
 
         class _ammoNotFullEvents(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14648)
+            header = DynAccessor(14655)
 
         ammoNotFullEvents = _ammoNotFullEvents()
 
         class _battle(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14640)
+            header = DynAccessor(14647)
 
         battle = _battle()
-        body = DynAccessor(14639)
+        body = DynAccessor(14646)
 
         class _clanLocked(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14646)
+            header = DynAccessor(14653)
 
         clanLocked = _clanLocked()
 
         class _crewNotFull(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14654)
+            header = DynAccessor(14661)
 
         crewNotFull = _crewNotFull()
 
         class _damaged(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14649)
+            header = DynAccessor(14656)
 
         damaged = _damaged()
 
@@ -47553,38 +47579,38 @@ class tooltips(DynAccessor):
 
             class _Beltelecom(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(14664)
-                text = DynAccessor(14665)
+                header = DynAccessor(14671)
+                text = DynAccessor(14672)
 
             Beltelecom = _Beltelecom()
-            header = DynAccessor(14660)
+            header = DynAccessor(14667)
 
             class _Kazakhtelecom(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(14668)
-                text = DynAccessor(14669)
+                header = DynAccessor(14675)
+                text = DynAccessor(14676)
 
             Kazakhtelecom = _Kazakhtelecom()
 
             class _Kyivstar(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(14666)
-                text = DynAccessor(14667)
+                header = DynAccessor(14673)
+                text = DynAccessor(14674)
 
             Kyivstar = _Kyivstar()
 
             class _Rostelecom(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(14662)
-                text = DynAccessor(14663)
+                header = DynAccessor(14669)
+                text = DynAccessor(14670)
 
             Rostelecom = _Rostelecom()
-            text = DynAccessor(14661)
+            text = DynAccessor(14668)
 
             class _Twitchprime(DynAccessor):
                 __slots__ = ()
-                header = DynAccessor(14670)
-                text = DynAccessor(14671)
+                header = DynAccessor(14677)
+                text = DynAccessor(14678)
 
             Twitchprime = _Twitchprime()
 
@@ -47592,142 +47618,142 @@ class tooltips(DynAccessor):
 
         class _destroyed(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14650)
+            header = DynAccessor(14657)
 
         destroyed = _destroyed()
 
         class _exploded(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14651)
+            header = DynAccessor(14658)
 
         exploded = _exploded()
 
         class _fallout_only(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14680)
+            header = DynAccessor(14687)
 
         fallout_only = _fallout_only()
 
         class _group_is_not_ready(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14678)
+            header = DynAccessor(14685)
 
         group_is_not_ready = _group_is_not_ready()
 
         class _groupAmmoNotFull(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14679)
+            header = DynAccessor(14686)
 
         groupAmmoNotFull = _groupAmmoNotFull()
 
         class _igrRentalIsOver(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14643)
+            header = DynAccessor(14650)
 
         igrRentalIsOver = _igrRentalIsOver()
 
         class _inHangar(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14656)
+            header = DynAccessor(14663)
 
         inHangar = _inHangar()
 
         class _inPrebattle(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14645)
+            header = DynAccessor(14652)
 
         inPrebattle = _inPrebattle()
 
         class _inPremiumIgrOnly(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14644)
+            header = DynAccessor(14651)
 
         inPremiumIgrOnly = _inPremiumIgrOnly()
 
         class _locked(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14641)
+            header = DynAccessor(14648)
 
         locked = _locked()
 
         class _notEnoughCredits(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14672)
-            text = DynAccessor(14673)
+            header = DynAccessor(14679)
+            text = DynAccessor(14680)
 
         notEnoughCredits = _notEnoughCredits()
 
         class _notEnoughGold(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14674)
-            text = DynAccessor(14675)
+            header = DynAccessor(14681)
+            text = DynAccessor(14682)
 
         notEnoughGold = _notEnoughGold()
 
         class _notpresent(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14652)
+            header = DynAccessor(14659)
 
         notpresent = _notpresent()
 
         class _notSuitable(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14677)
+            header = DynAccessor(14684)
 
         notSuitable = _notSuitable()
 
         class _notUnlocked(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14655)
+            header = DynAccessor(14662)
 
         notUnlocked = _notUnlocked()
 
         class _operationError(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14676)
+            header = DynAccessor(14683)
 
         operationError = _operationError()
 
         class _rentalIsOver(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14642)
+            header = DynAccessor(14649)
 
         rentalIsOver = _rentalIsOver()
 
         class _restoreCooldown(DynAccessor):
             __slots__ = ()
-            days = DynAccessor(14657)
-            hours = DynAccessor(14658)
+            days = DynAccessor(14664)
+            hours = DynAccessor(14665)
 
         restoreCooldown = _restoreCooldown()
 
         class _rotationGroupUnlocked(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14683)
+            header = DynAccessor(14690)
 
         rotationGroupUnlocked = _rotationGroupUnlocked()
 
         class _serverRestriction(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14659)
+            header = DynAccessor(14666)
 
         serverRestriction = _serverRestriction()
 
         class _undamaged(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14653)
+            header = DynAccessor(14660)
 
         undamaged = _undamaged()
 
         class _unsuitableToQueue(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14681)
+            header = DynAccessor(14688)
 
         unsuitableToQueue = _unsuitableToQueue()
 
         class _unsuitableToUnit(DynAccessor):
             __slots__ = ()
-            header = DynAccessor(14682)
+            header = DynAccessor(14689)
 
         unsuitableToUnit = _unsuitableToUnit()
 
@@ -47788,8 +47814,8 @@ class tooltips(DynAccessor):
 
             class _goldAfterExchange(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(16150)
-                header = DynAccessor(16149)
+                body = DynAccessor(16157)
+                header = DynAccessor(16156)
 
             goldAfterExchange = _goldAfterExchange()
 
@@ -47806,20 +47832,20 @@ class tutorial(DynAccessor):
 
         class _blueprintScreen(DynAccessor):
             __slots__ = ()
-            fragmentItem = DynAccessor(16430)
+            fragmentItem = DynAccessor(16437)
 
         blueprintScreen = _blueprintScreen()
-        convertButton = DynAccessor(16429)
+        convertButton = DynAccessor(16436)
 
         class _research(DynAccessor):
             __slots__ = ()
-            blueprintButton = DynAccessor(16428)
+            blueprintButton = DynAccessor(16435)
 
         research = _research()
 
         class _techtree(DynAccessor):
             __slots__ = ()
-            switchButton = DynAccessor(16427)
+            switchButton = DynAccessor(16434)
 
         techtree = _techtree()
 
@@ -47830,9 +47856,9 @@ class tutorial(DynAccessor):
 
         class _hint(DynAccessor):
             __slots__ = ()
-            buyVehicle = DynAccessor(16390)
-            changeToPveOrRandom = DynAccessor(16392)
-            changeVehicle = DynAccessor(16391)
+            buyVehicle = DynAccessor(16397)
+            changeToPveOrRandom = DynAccessor(16399)
+            changeVehicle = DynAccessor(16398)
 
         hint = _hint()
 
@@ -47843,7 +47869,7 @@ class tutorial(DynAccessor):
 
         class _hint(DynAccessor):
             __slots__ = ()
-            goToBattle = DynAccessor(16394)
+            goToBattle = DynAccessor(16401)
 
         hint = _hint()
 
@@ -47854,11 +47880,11 @@ class tutorial(DynAccessor):
 
         class _hint(DynAccessor):
             __slots__ = ()
-            buyItem = DynAccessor(16397)
-            goToResearch = DynAccessor(16395)
-            noItemsToBuy = DynAccessor(16398)
-            noItemsToUnlock = DynAccessor(16399)
-            unlockItem = DynAccessor(16396)
+            buyItem = DynAccessor(16404)
+            goToResearch = DynAccessor(16402)
+            noItemsToBuy = DynAccessor(16405)
+            noItemsToUnlock = DynAccessor(16406)
+            unlockItem = DynAccessor(16403)
 
         hint = _hint()
 
@@ -47869,16 +47895,16 @@ class tutorial(DynAccessor):
 
         class _hint(DynAccessor):
             __slots__ = ()
-            buyVehicle1Level = DynAccessor(16404)
-            buyVehicle2Level = DynAccessor(16405)
-            buyVehicle3Level = DynAccessor(16406)
-            goToResearch = DynAccessor(16400)
-            nextLevel = DynAccessor(16407)
-            noNextLevel = DynAccessor(16408)
-            selectTankAcademy = DynAccessor(16409)
-            selectVehicle1Level = DynAccessor(16401)
-            selectVehicle2Level = DynAccessor(16402)
-            selectVehicle3Level = DynAccessor(16403)
+            buyVehicle1Level = DynAccessor(16411)
+            buyVehicle2Level = DynAccessor(16412)
+            buyVehicle3Level = DynAccessor(16413)
+            goToResearch = DynAccessor(16407)
+            nextLevel = DynAccessor(16414)
+            noNextLevel = DynAccessor(16415)
+            selectTankAcademy = DynAccessor(16416)
+            selectVehicle1Level = DynAccessor(16408)
+            selectVehicle2Level = DynAccessor(16409)
+            selectVehicle3Level = DynAccessor(16410)
 
         hint = _hint()
 
@@ -47889,9 +47915,9 @@ class tutorial(DynAccessor):
 
         class _hint(DynAccessor):
             __slots__ = ()
-            applyChanges = DynAccessor(16412)
-            openEquipmentDropDown = DynAccessor(16411)
-            openMaintenanceWindow = DynAccessor(16410)
+            applyChanges = DynAccessor(16419)
+            openEquipmentDropDown = DynAccessor(16418)
+            openMaintenanceWindow = DynAccessor(16417)
 
         hint = _hint()
 
@@ -47902,7 +47928,7 @@ class tutorial(DynAccessor):
 
         class _hint(DynAccessor):
             __slots__ = ()
-            openOptDevicesDropDown = DynAccessor(16413)
+            openOptDevicesDropDown = DynAccessor(16420)
 
         hint = _hint()
 
@@ -47913,7 +47939,7 @@ class tutorial(DynAccessor):
 
         class _hint(DynAccessor):
             __slots__ = ()
-            buyFreeSlot = DynAccessor(16414)
+            buyFreeSlot = DynAccessor(16421)
 
         hint = _hint()
 
@@ -47924,9 +47950,9 @@ class tutorial(DynAccessor):
 
         class _hint(DynAccessor):
             __slots__ = ()
-            clickToFightButton = DynAccessor(16417)
-            noPremiumVehicle = DynAccessor(16416)
-            selectPremiumVehicle = DynAccessor(16415)
+            clickToFightButton = DynAccessor(16424)
+            noPremiumVehicle = DynAccessor(16423)
+            selectPremiumVehicle = DynAccessor(16422)
 
         hint = _hint()
 
@@ -47937,8 +47963,8 @@ class tutorial(DynAccessor):
 
         class _hint(DynAccessor):
             __slots__ = ()
-            openXPChange = DynAccessor(16418)
-            submit = DynAccessor(16419)
+            openXPChange = DynAccessor(16425)
+            submit = DynAccessor(16426)
 
         hint = _hint()
 
@@ -47949,9 +47975,9 @@ class tutorial(DynAccessor):
 
         class _hint(DynAccessor):
             __slots__ = ()
-            open = DynAccessor(16420)
-            select = DynAccessor(16421)
-            submit = DynAccessor(16422)
+            open = DynAccessor(16427)
+            select = DynAccessor(16428)
+            submit = DynAccessor(16429)
 
         hint = _hint()
 
@@ -47959,16 +47985,16 @@ class tutorial(DynAccessor):
 
     class _customization(DynAccessor):
         __slots__ = ()
-        autoprolongation = DynAccessor(16424)
-        decal = DynAccessor(16425)
-        slots = DynAccessor(16423)
+        autoprolongation = DynAccessor(16431)
+        decal = DynAccessor(16432)
+        slots = DynAccessor(16430)
 
     customization = _customization()
 
     class _festival(DynAccessor):
         __slots__ = ()
-        buyRandomItem = DynAccessor(16432)
-        openMiniGames = DynAccessor(16433)
+        buyRandomItem = DynAccessor(16439)
+        openMiniGames = DynAccessor(16440)
 
     festival = _festival()
 
@@ -47977,28 +48003,28 @@ class tutorial(DynAccessor):
 
         class _customization(DynAccessor):
             __slots__ = ()
-            image = DynAccessor(16301)
-            period = DynAccessor(16300)
-            totalCost = DynAccessor(16302)
-            type = DynAccessor(16299)
+            image = DynAccessor(16308)
+            period = DynAccessor(16307)
+            totalCost = DynAccessor(16309)
+            type = DynAccessor(16306)
 
         customization = _customization()
 
         class _personalCase(DynAccessor):
             __slots__ = ()
-            actionButtons = DynAccessor(16297)
-            addActions = DynAccessor(16298)
-            characteristics = DynAccessor(16295)
-            perks = DynAccessor(16296)
+            actionButtons = DynAccessor(16304)
+            addActions = DynAccessor(16305)
+            characteristics = DynAccessor(16302)
+            perks = DynAccessor(16303)
 
         personalCase = _personalCase()
 
         class _technicalMaintenance(DynAccessor):
             __slots__ = ()
-            costAndApply = DynAccessor(16294)
-            techAmmunition = DynAccessor(16292)
-            techEquipment = DynAccessor(16293)
-            techRepair = DynAccessor(16291)
+            costAndApply = DynAccessor(16301)
+            techAmmunition = DynAccessor(16299)
+            techEquipment = DynAccessor(16300)
+            techRepair = DynAccessor(16298)
 
         technicalMaintenance = _technicalMaintenance()
 
@@ -48006,14 +48032,14 @@ class tutorial(DynAccessor):
 
     class _messages(DynAccessor):
         __slots__ = ()
-        request_bonus_failed = DynAccessor(16288)
-        tutorial_disabled = DynAccessor(16289)
+        request_bonus_failed = DynAccessor(16295)
+        tutorial_disabled = DynAccessor(16296)
 
     messages = _messages()
 
     class _onceOnlyHints(DynAccessor):
         __slots__ = ()
-        falloutQuestsTab = DynAccessor(16290)
+        falloutQuestsTab = DynAccessor(16297)
 
     onceOnlyHints = _onceOnlyHints()
 
@@ -48022,7 +48048,7 @@ class tutorial(DynAccessor):
 
         class _hint(DynAccessor):
             __slots__ = ()
-            selector = DynAccessor(16393)
+            selector = DynAccessor(16400)
 
         hint = _hint()
 
@@ -48030,13 +48056,13 @@ class tutorial(DynAccessor):
 
     class _sessionStat(DynAccessor):
         __slots__ = ()
-        openBtn = DynAccessor(16431)
+        openBtn = DynAccessor(16438)
 
     sessionStat = _sessionStat()
 
     class _tradeIn(DynAccessor):
         __slots__ = ()
-        shop = DynAccessor(16426)
+        shop = DynAccessor(16433)
 
     tradeIn = _tradeIn()
 
@@ -48045,18 +48071,18 @@ class tutorial(DynAccessor):
 
         class _award(DynAccessor):
             __slots__ = ()
-            quest14 = DynAccessor(16389)
-            quest4 = DynAccessor(16329)
+            quest14 = DynAccessor(16396)
+            quest4 = DynAccessor(16336)
 
             class _quest5(DynAccessor):
                 __slots__ = ()
-                altBonus = DynAccessor(16336)
-                kr = DynAccessor(16337)
+                altBonus = DynAccessor(16343)
+                kr = DynAccessor(16344)
 
-            quest5 = _quest5(16335)
-            quest6 = DynAccessor(16343)
-            quest7 = DynAccessor(16349)
-            quest8 = DynAccessor(16355)
+            quest5 = _quest5(16342)
+            quest6 = DynAccessor(16350)
+            quest7 = DynAccessor(16356)
+            quest8 = DynAccessor(16362)
 
         award = _award()
 
@@ -48065,141 +48091,141 @@ class tutorial(DynAccessor):
 
             class _description(DynAccessor):
                 __slots__ = ()
-                quest10 = DynAccessor(16365)
-                quest11 = DynAccessor(16371)
-                quest12 = DynAccessor(16377)
-                quest13 = DynAccessor(16383)
-                quest14 = DynAccessor(16388)
-                quest2 = DynAccessor(16318)
-                quest3 = DynAccessor(16323)
-                quest4 = DynAccessor(16328)
-                quest5 = DynAccessor(16334)
-                quest6 = DynAccessor(16342)
-                quest7 = DynAccessor(16348)
-                quest8 = DynAccessor(16354)
-                quest9 = DynAccessor(16360)
+                quest10 = DynAccessor(16372)
+                quest11 = DynAccessor(16378)
+                quest12 = DynAccessor(16384)
+                quest13 = DynAccessor(16390)
+                quest14 = DynAccessor(16395)
+                quest2 = DynAccessor(16325)
+                quest3 = DynAccessor(16330)
+                quest4 = DynAccessor(16335)
+                quest5 = DynAccessor(16341)
+                quest6 = DynAccessor(16349)
+                quest7 = DynAccessor(16355)
+                quest8 = DynAccessor(16361)
+                quest9 = DynAccessor(16367)
 
             description = _description()
-            header = DynAccessor(16311)
-            nextQuest = DynAccessor(16309)
+            header = DynAccessor(16318)
+            nextQuest = DynAccessor(16316)
 
             class _title(DynAccessor):
                 __slots__ = ()
-                quest10 = DynAccessor(16364)
-                quest11 = DynAccessor(16370)
-                quest12 = DynAccessor(16376)
-                quest13 = DynAccessor(16382)
-                quest14 = DynAccessor(16387)
-                quest2 = DynAccessor(16317)
-                quest3 = DynAccessor(16322)
-                quest4 = DynAccessor(16327)
-                quest5 = DynAccessor(16333)
-                quest6 = DynAccessor(16341)
-                quest7 = DynAccessor(16347)
-                quest8 = DynAccessor(16353)
-                quest9 = DynAccessor(16359)
+                quest10 = DynAccessor(16371)
+                quest11 = DynAccessor(16377)
+                quest12 = DynAccessor(16383)
+                quest13 = DynAccessor(16389)
+                quest14 = DynAccessor(16394)
+                quest2 = DynAccessor(16324)
+                quest3 = DynAccessor(16329)
+                quest4 = DynAccessor(16334)
+                quest5 = DynAccessor(16340)
+                quest6 = DynAccessor(16348)
+                quest7 = DynAccessor(16354)
+                quest8 = DynAccessor(16360)
+                quest9 = DynAccessor(16366)
 
-            title = _title(16306)
+            title = _title(16313)
 
         awardWindow = _awardWindow()
 
         class _condition(DynAccessor):
             __slots__ = ()
-            quest1 = DynAccessor(16312)
-            quest10 = DynAccessor(16362)
+            quest1 = DynAccessor(16319)
+            quest10 = DynAccessor(16369)
 
             class _quest11(DynAccessor):
                 __slots__ = ()
-                chain = DynAccessor(16367)
-                video = DynAccessor(16368)
+                chain = DynAccessor(16374)
+                video = DynAccessor(16375)
 
             quest11 = _quest11()
 
             class _quest12(DynAccessor):
                 __slots__ = ()
-                chain = DynAccessor(16373)
-                video = DynAccessor(16374)
+                chain = DynAccessor(16380)
+                video = DynAccessor(16381)
 
             quest12 = _quest12()
 
             class _quest13(DynAccessor):
                 __slots__ = ()
-                chain = DynAccessor(16379)
-                video = DynAccessor(16380)
+                chain = DynAccessor(16386)
+                video = DynAccessor(16387)
 
             quest13 = _quest13()
 
             class _quest14(DynAccessor):
                 __slots__ = ()
-                chain = DynAccessor(16385)
+                chain = DynAccessor(16392)
 
             quest14 = _quest14()
-            quest2 = DynAccessor(16315)
-            quest3 = DynAccessor(16320)
-            quest4 = DynAccessor(16325)
-            quest5 = DynAccessor(16331)
-            quest6 = DynAccessor(16339)
-            quest7 = DynAccessor(16345)
-            quest8 = DynAccessor(16351)
-            quest9 = DynAccessor(16357)
+            quest2 = DynAccessor(16322)
+            quest3 = DynAccessor(16327)
+            quest4 = DynAccessor(16332)
+            quest5 = DynAccessor(16338)
+            quest6 = DynAccessor(16346)
+            quest7 = DynAccessor(16352)
+            quest8 = DynAccessor(16358)
+            quest9 = DynAccessor(16364)
 
         condition = _condition()
 
         class _description(DynAccessor):
             __slots__ = ()
-            quest1 = DynAccessor(16313)
-            quest10 = DynAccessor(16363)
-            quest11 = DynAccessor(16369)
-            quest12 = DynAccessor(16375)
-            quest13 = DynAccessor(16381)
-            quest14 = DynAccessor(16386)
-            quest2 = DynAccessor(16316)
-            quest3 = DynAccessor(16321)
-            quest4 = DynAccessor(16326)
-            quest5 = DynAccessor(16332)
-            quest6 = DynAccessor(16340)
-            quest7 = DynAccessor(16346)
-            quest8 = DynAccessor(16352)
-            quest9 = DynAccessor(16358)
+            quest1 = DynAccessor(16320)
+            quest10 = DynAccessor(16370)
+            quest11 = DynAccessor(16376)
+            quest12 = DynAccessor(16382)
+            quest13 = DynAccessor(16388)
+            quest14 = DynAccessor(16393)
+            quest2 = DynAccessor(16323)
+            quest3 = DynAccessor(16328)
+            quest4 = DynAccessor(16333)
+            quest5 = DynAccessor(16339)
+            quest6 = DynAccessor(16347)
+            quest7 = DynAccessor(16353)
+            quest8 = DynAccessor(16359)
+            quest9 = DynAccessor(16365)
 
         description = _description()
 
         class _helpBtn(DynAccessor):
             __slots__ = ()
-            hint = DynAccessor(16307)
+            hint = DynAccessor(16314)
 
         helpBtn = _helpBtn()
 
         class _questsControl(DynAccessor):
             __slots__ = ()
-            hint = DynAccessor(16308)
+            hint = DynAccessor(16315)
 
         questsControl = _questsControl()
 
         class _title(DynAccessor):
             __slots__ = ()
-            quest1 = DynAccessor(16310)
-            quest10 = DynAccessor(16361)
-            quest11 = DynAccessor(16366)
-            quest12 = DynAccessor(16372)
-            quest13 = DynAccessor(16378)
-            quest14 = DynAccessor(16384)
-            quest2 = DynAccessor(16314)
-            quest3 = DynAccessor(16319)
-            quest4 = DynAccessor(16324)
-            quest5 = DynAccessor(16330)
-            quest6 = DynAccessor(16338)
-            quest7 = DynAccessor(16344)
-            quest8 = DynAccessor(16350)
-            quest9 = DynAccessor(16356)
+            quest1 = DynAccessor(16317)
+            quest10 = DynAccessor(16368)
+            quest11 = DynAccessor(16373)
+            quest12 = DynAccessor(16379)
+            quest13 = DynAccessor(16385)
+            quest14 = DynAccessor(16391)
+            quest2 = DynAccessor(16321)
+            quest3 = DynAccessor(16326)
+            quest4 = DynAccessor(16331)
+            quest5 = DynAccessor(16337)
+            quest6 = DynAccessor(16345)
+            quest7 = DynAccessor(16351)
+            quest8 = DynAccessor(16357)
+            quest9 = DynAccessor(16363)
 
         title = _title()
 
         class _video(DynAccessor):
             __slots__ = ()
-            fireExtinguisherHelp = DynAccessor(16305)
-            medkitHelp = DynAccessor(16303)
-            repairkitHelp = DynAccessor(16304)
+            fireExtinguisherHelp = DynAccessor(16312)
+            medkitHelp = DynAccessor(16310)
+            repairkitHelp = DynAccessor(16311)
 
         video = _video()
 
@@ -48214,78 +48240,78 @@ class vehicle_customization(DynAccessor):
 
         class _condition(DynAccessor):
             __slots__ = ()
-            camouflage = DynAccessor(18581)
-            season = DynAccessor(18578)
-            style = DynAccessor(18580)
+            camouflage = DynAccessor(18588)
+            season = DynAccessor(18585)
+            style = DynAccessor(18587)
 
         condition = _condition()
 
         class _name(DynAccessor):
             __slots__ = ()
-            camouflage = DynAccessor(18576)
+            camouflage = DynAccessor(18583)
 
             class _extended(DynAccessor):
                 __slots__ = ()
-                camouflage = DynAccessor(18577)
+                camouflage = DynAccessor(18584)
 
             extended = _extended()
 
         name = _name()
-        style = DynAccessor(18579)
+        style = DynAccessor(18586)
 
     bonus = _bonus()
 
     class _bonusName(DynAccessor):
         __slots__ = ()
-        all = DynAccessor(18396)
-        camouflage = DynAccessor(18395)
-        commander = DynAccessor(18397)
-        driver = DynAccessor(18398)
+        all = DynAccessor(18403)
+        camouflage = DynAccessor(18402)
+        commander = DynAccessor(18404)
+        driver = DynAccessor(18405)
 
         class _extended(DynAccessor):
             __slots__ = ()
-            all = DynAccessor(18403)
-            camouflage = DynAccessor(18402)
-            commander = DynAccessor(18404)
-            driver = DynAccessor(18405)
-            gunner = DynAccessor(18406)
-            loader = DynAccessor(18407)
-            radioman = DynAccessor(18408)
+            all = DynAccessor(18410)
+            camouflage = DynAccessor(18409)
+            commander = DynAccessor(18411)
+            driver = DynAccessor(18412)
+            gunner = DynAccessor(18413)
+            loader = DynAccessor(18414)
+            radioman = DynAccessor(18415)
 
         extended = _extended()
-        gunner = DynAccessor(18399)
-        loader = DynAccessor(18400)
-        radioman = DynAccessor(18401)
+        gunner = DynAccessor(18406)
+        loader = DynAccessor(18407)
+        radioman = DynAccessor(18408)
 
     bonusName = _bonusName()
 
     class _buypopover(DynAccessor):
         __slots__ = ()
-        btn = DynAccessor(18441)
-        fromStorage = DynAccessor(18444)
-        price = DynAccessor(18443)
-        result = DynAccessor(18442)
+        btn = DynAccessor(18448)
+        fromStorage = DynAccessor(18451)
+        price = DynAccessor(18450)
+        result = DynAccessor(18449)
 
     buypopover = _buypopover()
 
     class _buyWindow(DynAccessor):
         __slots__ = ()
-        allFailed = DynAccessor(19133)
-        someFailures = DynAccessor(19132)
+        allFailed = DynAccessor(19142)
+        someFailures = DynAccessor(19141)
 
         class _title(DynAccessor):
             __slots__ = ()
-            activeStyle = DynAccessor(18439)
+            activeStyle = DynAccessor(18446)
 
             class _bonus(DynAccessor):
                 __slots__ = ()
-                camouflage = DynAccessor(18440)
+                camouflage = DynAccessor(18447)
 
             bonus = _bonus()
-            desert = DynAccessor(18437)
-            event = DynAccessor(18438)
-            summer = DynAccessor(18435)
-            winter = DynAccessor(18436)
+            desert = DynAccessor(18444)
+            event = DynAccessor(18445)
+            summer = DynAccessor(18442)
+            winter = DynAccessor(18443)
 
         title = _title()
 
@@ -48296,205 +48322,205 @@ class vehicle_customization(DynAccessor):
 
         class _c_1_0_event(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16818)
-            label = DynAccessor(16817)
+            description = DynAccessor(16825)
+            label = DynAccessor(16824)
 
         c_1_0_event = _c_1_0_event()
 
         class _c_23feb_desert(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16816)
-            label = DynAccessor(16815)
+            description = DynAccessor(16823)
+            label = DynAccessor(16822)
 
         c_23feb_desert = _c_23feb_desert()
 
         class _c_23feb_summer(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16812)
-            label = DynAccessor(16811)
+            description = DynAccessor(16819)
+            label = DynAccessor(16818)
 
         c_23feb_summer = _c_23feb_summer()
 
         class _c_23feb_winter(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16814)
-            label = DynAccessor(16813)
+            description = DynAccessor(16821)
+            label = DynAccessor(16820)
 
         c_23feb_winter = _c_23feb_winter()
 
         class _Alpha(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16934)
-            label = DynAccessor(16933)
+            description = DynAccessor(16941)
+            label = DynAccessor(16940)
 
         Alpha = _Alpha()
 
         class _amx40ducks(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16802)
-            label = DynAccessor(16801)
+            description = DynAccessor(16809)
+            label = DynAccessor(16808)
 
         amx40ducks = _amx40ducks()
 
         class _anniversary_NA_EU_desert(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16836)
-            label = DynAccessor(16835)
+            description = DynAccessor(16843)
+            label = DynAccessor(16842)
 
         anniversary_NA_EU_desert = _anniversary_NA_EU_desert()
 
         class _anniversary_NA_EU_summer(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16834)
-            label = DynAccessor(16833)
+            description = DynAccessor(16841)
+            label = DynAccessor(16840)
 
         anniversary_NA_EU_summer = _anniversary_NA_EU_summer()
 
         class _anniversary_NA_EU_winter(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16832)
-            label = DynAccessor(16831)
+            description = DynAccessor(16839)
+            label = DynAccessor(16838)
 
         anniversary_NA_EU_winter = _anniversary_NA_EU_winter()
 
         class _Armistice(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16916)
-            label = DynAccessor(16915)
+            description = DynAccessor(16923)
+            label = DynAccessor(16922)
 
         Armistice = _Armistice()
 
         class _australia_day_d(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16974)
-            label = DynAccessor(16973)
+            description = DynAccessor(16981)
+            label = DynAccessor(16980)
 
         australia_day_d = _australia_day_d()
 
         class _australia_day_s(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16970)
-            label = DynAccessor(16969)
+            description = DynAccessor(16977)
+            label = DynAccessor(16976)
 
         australia_day_s = _australia_day_s()
 
         class _australia_day_w(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16972)
-            label = DynAccessor(16971)
+            description = DynAccessor(16979)
+            label = DynAccessor(16978)
 
         australia_day_w = _australia_day_w()
 
         class _autumn_wind(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16892)
-            label = DynAccessor(16891)
+            description = DynAccessor(16899)
+            label = DynAccessor(16898)
 
         autumn_wind = _autumn_wind()
 
         class _battle_of_bloggers_camo(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16906)
-            label = DynAccessor(16905)
+            description = DynAccessor(16913)
+            label = DynAccessor(16912)
 
         battle_of_bloggers_camo = _battle_of_bloggers_camo()
 
         class _bdr_g1b_w(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16846)
-            label = DynAccessor(16845)
+            description = DynAccessor(16853)
+            label = DynAccessor(16852)
 
         bdr_g1b_w = _bdr_g1b_w()
-        bicolor = DynAccessor(16438)
+        bicolor = DynAccessor(16445)
 
         class _BlackFriday(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16924)
-            label = DynAccessor(16923)
+            description = DynAccessor(16931)
+            label = DynAccessor(16930)
 
         BlackFriday = _BlackFriday()
 
         class _blank_camouflage(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16828)
-            label = DynAccessor(16827)
+            description = DynAccessor(16835)
+            label = DynAccessor(16834)
 
         blank_camouflage = _blank_camouflage()
 
         class _Bovington_camo(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16862)
-            label = DynAccessor(16861)
+            description = DynAccessor(16869)
+            label = DynAccessor(16868)
 
         Bovington_camo = _Bovington_camo()
 
         class _br_award_15(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(17070)
-            label = DynAccessor(17069)
+            description = DynAccessor(17077)
+            label = DynAccessor(17076)
 
         br_award_15 = _br_award_15()
 
         class _br_award_25_hull(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(17074)
-            label = DynAccessor(17073)
+            description = DynAccessor(17081)
+            label = DynAccessor(17080)
 
         br_award_25_hull = _br_award_25_hull()
 
         class _br_award_25_turret(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(17072)
-            label = DynAccessor(17071)
+            description = DynAccessor(17079)
+            label = DynAccessor(17078)
 
         br_award_25_turret = _br_award_25_turret()
 
         class _br_paid(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(17068)
-            label = DynAccessor(17065)
+            description = DynAccessor(17075)
+            label = DynAccessor(17072)
 
         br_paid = _br_paid()
 
         class _BRW_winner_camo(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16800)
-            label = DynAccessor(16799)
+            description = DynAccessor(16807)
+            label = DynAccessor(16806)
 
         BRW_winner_camo = _BRW_winner_camo()
 
         class _bulat(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(17062)
-            label = DynAccessor(17061)
+            description = DynAccessor(17069)
+            label = DynAccessor(17068)
 
         bulat = _bulat()
 
         class _chaffee(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(17067)
-            label = DynAccessor(17066)
+            description = DynAccessor(17074)
+            label = DynAccessor(17073)
 
         chaffee = _chaffee()
 
         class _Chimera_lbz_camo_d(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16884)
-            label = DynAccessor(16883)
+            description = DynAccessor(16891)
+            label = DynAccessor(16890)
 
         Chimera_lbz_camo_d = _Chimera_lbz_camo_d()
 
         class _Chimera_lbz_camo_s(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16882)
-            label = DynAccessor(16881)
+            description = DynAccessor(16889)
+            label = DynAccessor(16888)
 
         Chimera_lbz_camo_s = _Chimera_lbz_camo_s()
 
         class _Chimera_lbz_camo_w(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16880)
-            label = DynAccessor(16879)
+            description = DynAccessor(16887)
+            label = DynAccessor(16886)
 
         Chimera_lbz_camo_w = _Chimera_lbz_camo_w()
 
@@ -48506,78 +48532,78 @@ class vehicle_customization(DynAccessor):
 
                 class _china_historical_01(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16602)
-                    label = DynAccessor(16601)
+                    description = DynAccessor(16609)
+                    label = DynAccessor(16608)
 
                 china_historical_01 = _china_historical_01()
 
                 class _china_historical_02(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16604)
-                    label = DynAccessor(16603)
+                    description = DynAccessor(16611)
+                    label = DynAccessor(16610)
 
                 china_historical_02 = _china_historical_02()
 
                 class _china_historical_03(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16606)
-                    label = DynAccessor(16605)
+                    description = DynAccessor(16613)
+                    label = DynAccessor(16612)
 
                 china_historical_03 = _china_historical_03()
 
                 class _china_historical_04(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16608)
-                    label = DynAccessor(16607)
+                    description = DynAccessor(16615)
+                    label = DynAccessor(16614)
 
                 china_historical_04 = _china_historical_04()
 
                 class _china_historical_13(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16626)
-                    label = DynAccessor(16625)
+                    description = DynAccessor(16633)
+                    label = DynAccessor(16632)
 
                 china_historical_13 = _china_historical_13()
 
                 class _china_historical_desert(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16634)
-                    label = DynAccessor(16633)
+                    description = DynAccessor(16641)
+                    label = DynAccessor(16640)
 
                 china_historical_desert = _china_historical_desert()
 
                 class _china_historical_winter_1(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16630)
-                    label = DynAccessor(16629)
+                    description = DynAccessor(16637)
+                    label = DynAccessor(16636)
 
                 china_historical_winter_1 = _china_historical_winter_1()
 
                 class _china_historical_winter_2(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16632)
-                    label = DynAccessor(16631)
+                    description = DynAccessor(16639)
+                    label = DynAccessor(16638)
 
                 china_historical_winter_2 = _china_historical_winter_2()
 
                 class _generic_custom_2_china_desert(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(17042)
-                    label = DynAccessor(17041)
+                    description = DynAccessor(17049)
+                    label = DynAccessor(17048)
 
                 generic_custom_2_china_desert = _generic_custom_2_china_desert()
 
                 class _generic_custom_2_china_summer(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(17040)
-                    label = DynAccessor(17039)
+                    description = DynAccessor(17047)
+                    label = DynAccessor(17046)
 
                 generic_custom_2_china_summer = _generic_custom_2_china_summer()
 
                 class _generic_custom_2_china_winter(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(17044)
-                    label = DynAccessor(17043)
+                    description = DynAccessor(17051)
+                    label = DynAccessor(17050)
 
                 generic_custom_2_china_winter = _generic_custom_2_china_winter()
 
@@ -48588,64 +48614,64 @@ class vehicle_customization(DynAccessor):
 
                 class _china_historical_05(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16610)
-                    label = DynAccessor(16609)
+                    description = DynAccessor(16617)
+                    label = DynAccessor(16616)
 
                 china_historical_05 = _china_historical_05()
 
                 class _china_historical_06(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16612)
-                    label = DynAccessor(16611)
+                    description = DynAccessor(16619)
+                    label = DynAccessor(16618)
 
                 china_historical_06 = _china_historical_06()
 
                 class _china_historical_07(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16614)
-                    label = DynAccessor(16613)
+                    description = DynAccessor(16621)
+                    label = DynAccessor(16620)
 
                 china_historical_07 = _china_historical_07()
 
                 class _china_historical_08(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16616)
-                    label = DynAccessor(16615)
+                    description = DynAccessor(16623)
+                    label = DynAccessor(16622)
 
                 china_historical_08 = _china_historical_08()
 
                 class _china_historical_09(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16618)
-                    label = DynAccessor(16617)
+                    description = DynAccessor(16625)
+                    label = DynAccessor(16624)
 
                 china_historical_09 = _china_historical_09()
 
                 class _china_historical_10(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16620)
-                    label = DynAccessor(16619)
+                    description = DynAccessor(16627)
+                    label = DynAccessor(16626)
 
                 china_historical_10 = _china_historical_10()
 
                 class _china_historical_11(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16622)
-                    label = DynAccessor(16621)
+                    description = DynAccessor(16629)
+                    label = DynAccessor(16628)
 
                 china_historical_11 = _china_historical_11()
 
                 class _china_historical_12(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16624)
-                    label = DynAccessor(16623)
+                    description = DynAccessor(16631)
+                    label = DynAccessor(16630)
 
                 china_historical_12 = _china_historical_12()
 
                 class _china_historical_14(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16628)
-                    label = DynAccessor(16627)
+                    description = DynAccessor(16635)
+                    label = DynAccessor(16634)
 
                 china_historical_14 = _china_historical_14()
 
@@ -48655,134 +48681,134 @@ class vehicle_customization(DynAccessor):
 
         class _china_veteran(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16826)
-            label = DynAccessor(16825)
+            description = DynAccessor(16833)
+            label = DynAccessor(16832)
 
         china_veteran = _china_veteran()
 
         class _christmas_chinese(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16788)
-            label = DynAccessor(16787)
+            description = DynAccessor(16795)
+            label = DynAccessor(16794)
 
         christmas_chinese = _christmas_chinese()
 
         class _christmas_GB(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16792)
-            label = DynAccessor(16791)
+            description = DynAccessor(16799)
+            label = DynAccessor(16798)
 
         christmas_GB = _christmas_GB()
 
         class _christmas_german(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16790)
-            label = DynAccessor(16789)
+            description = DynAccessor(16797)
+            label = DynAccessor(16796)
 
         christmas_german = _christmas_german()
 
         class _christmas_ussr(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16794)
-            label = DynAccessor(16793)
+            description = DynAccessor(16801)
+            label = DynAccessor(16800)
 
         christmas_ussr = _christmas_ussr()
 
         class _clan_camo(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16898)
-            label = DynAccessor(16897)
+            description = DynAccessor(16905)
+            label = DynAccessor(16904)
 
         clan_camo = _clan_camo()
 
         class _Clan_camouflage_01(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16716)
-            label = DynAccessor(16715)
+            description = DynAccessor(16723)
+            label = DynAccessor(16722)
 
         Clan_camouflage_01 = _Clan_camouflage_01()
 
         class _Clan_camouflage_02(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16718)
-            label = DynAccessor(16717)
+            description = DynAccessor(16725)
+            label = DynAccessor(16724)
 
         Clan_camouflage_02 = _Clan_camouflage_02()
 
         class _Clan_camouflage_03(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16720)
-            label = DynAccessor(16719)
+            description = DynAccessor(16727)
+            label = DynAccessor(16726)
 
         Clan_camouflage_03 = _Clan_camouflage_03()
 
         class _Clan_camouflage_04(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16722)
-            label = DynAccessor(16721)
+            description = DynAccessor(16729)
+            label = DynAccessor(16728)
 
         Clan_camouflage_04 = _Clan_camouflage_04()
 
         class _Clan_camouflage_04_desert(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16726)
-            label = DynAccessor(16725)
+            description = DynAccessor(16733)
+            label = DynAccessor(16732)
 
         Clan_camouflage_04_desert = _Clan_camouflage_04_desert()
 
         class _Clan_camouflage_04_winter(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16724)
-            label = DynAccessor(16723)
+            description = DynAccessor(16731)
+            label = DynAccessor(16730)
 
         Clan_camouflage_04_winter = _Clan_camouflage_04_winter()
 
         class _Clan_damaged(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16738)
-            label = DynAccessor(16737)
+            description = DynAccessor(16745)
+            label = DynAccessor(16744)
 
         Clan_damaged = _Clan_damaged()
 
         class _clan_urban(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(17004)
-            label = DynAccessor(17003)
+            description = DynAccessor(17011)
+            label = DynAccessor(17010)
 
         clan_urban = _clan_urban()
 
         class _conqueror(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(17060)
-            label = DynAccessor(17059)
+            description = DynAccessor(17067)
+            label = DynAccessor(17066)
 
         conqueror = _conqueror()
 
         class _cosmonautics_day(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16988)
-            label = DynAccessor(16987)
+            description = DynAccessor(16995)
+            label = DynAccessor(16994)
 
         cosmonautics_day = _cosmonautics_day()
 
         class _Counterattack(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16922)
-            label = DynAccessor(16921)
+            description = DynAccessor(16929)
+            label = DynAccessor(16928)
 
         Counterattack = _Counterattack()
 
         class _Cracked_ice(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16732)
-            label = DynAccessor(16731)
+            description = DynAccessor(16739)
+            label = DynAccessor(16738)
 
         Cracked_ice = _Cracked_ice()
 
         class _cracked_stone_camo(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16904)
-            label = DynAccessor(16903)
+            description = DynAccessor(16911)
+            label = DynAccessor(16910)
 
         cracked_stone_camo = _cracked_stone_camo()
 
@@ -48794,36 +48820,36 @@ class vehicle_customization(DynAccessor):
 
                 class _bicolor_classic(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(17032)
-                    label = DynAccessor(17031)
+                    description = DynAccessor(17039)
+                    label = DynAccessor(17038)
 
                 bicolor_classic = _bicolor_classic()
 
                 class _Cz_desert01(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16682)
-                    label = DynAccessor(16681)
+                    description = DynAccessor(16689)
+                    label = DynAccessor(16688)
 
                 Cz_desert01 = _Cz_desert01()
 
                 class _Cz_winter01(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16680)
-                    label = DynAccessor(16679)
+                    description = DynAccessor(16687)
+                    label = DynAccessor(16686)
 
                 Cz_winter01 = _Cz_winter01()
 
                 class _generic_custom_2_czech_winter(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(17030)
-                    label = DynAccessor(17029)
+                    description = DynAccessor(17037)
+                    label = DynAccessor(17036)
 
                 generic_custom_2_czech_winter = _generic_custom_2_czech_winter()
 
                 class _grassy_green(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(17028)
-                    label = DynAccessor(17027)
+                    description = DynAccessor(17035)
+                    label = DynAccessor(17034)
 
                 grassy_green = _grassy_green()
 
@@ -48831,158 +48857,158 @@ class vehicle_customization(DynAccessor):
 
             class _Cz_dust(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(16678)
-                label = DynAccessor(16677)
+                description = DynAccessor(16685)
+                label = DynAccessor(16684)
 
             Cz_dust = _Cz_dust()
 
             class _Cz_summer(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(16676)
-                label = DynAccessor(16675)
+                description = DynAccessor(16683)
+                label = DynAccessor(16682)
 
             Cz_summer = _Cz_summer()
 
             class _Cz_winter(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(16674)
-                label = DynAccessor(16673)
+                description = DynAccessor(16681)
+                label = DynAccessor(16680)
 
             Cz_winter = _Cz_winter()
 
         czech = _czech()
-        default = DynAccessor(16435)
+        default = DynAccessor(16442)
 
         class _defender_day(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16964)
-            label = DynAccessor(16963)
+            description = DynAccessor(16971)
+            label = DynAccessor(16970)
 
         defender_day = _defender_day()
 
         class _defender_day_2(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16976)
-            label = DynAccessor(16975)
+            description = DynAccessor(16983)
+            label = DynAccessor(16982)
 
         defender_day_2 = _defender_day_2()
-        desert = DynAccessor(16441)
+        desert = DynAccessor(16448)
 
         class _Desert_camou(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16734)
-            label = DynAccessor(16733)
+            description = DynAccessor(16741)
+            label = DynAccessor(16740)
 
         Desert_camou = _Desert_camou()
 
         class _desert_rats(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(17054)
-            label = DynAccessor(17053)
+            description = DynAccessor(17061)
+            label = DynAccessor(17060)
 
         desert_rats = _desert_rats()
 
         class _Desert_Tiger_217(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16750)
-            label = DynAccessor(16749)
+            description = DynAccessor(16757)
+            label = DynAccessor(16756)
 
         Desert_Tiger_217 = _Desert_Tiger_217()
 
         class _digital_camo(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16902)
-            label = DynAccessor(16901)
+            description = DynAccessor(16909)
+            label = DynAccessor(16908)
 
         digital_camo = _digital_camo()
 
         class _diversity(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16918)
-            label = DynAccessor(16917)
+            description = DynAccessor(16925)
+            label = DynAccessor(16924)
 
         diversity = _diversity()
 
         class _event(DynAccessor):
             __slots__ = ()
-            name = DynAccessor(19225)
+            name = DynAccessor(19234)
 
         event = _event()
 
         class _Excalibur_lbz_camo_d(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16878)
-            label = DynAccessor(16877)
+            description = DynAccessor(16885)
+            label = DynAccessor(16884)
 
         Excalibur_lbz_camo_d = _Excalibur_lbz_camo_d()
 
         class _Excalibur_lbz_camo_s(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16876)
-            label = DynAccessor(16875)
+            description = DynAccessor(16883)
+            label = DynAccessor(16882)
 
         Excalibur_lbz_camo_s = _Excalibur_lbz_camo_s()
 
         class _Excalibur_lbz_camo_w(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16874)
-            label = DynAccessor(16873)
+            description = DynAccessor(16881)
+            label = DynAccessor(16880)
 
         Excalibur_lbz_camo_w = _Excalibur_lbz_camo_w()
 
         class _fireworks_2019(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16938)
-            label = DynAccessor(16937)
+            description = DynAccessor(16945)
+            label = DynAccessor(16944)
 
         fireworks_2019 = _fireworks_2019()
 
         class _football_4sale1(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16856)
-            label = DynAccessor(16855)
+            description = DynAccessor(16863)
+            label = DynAccessor(16862)
 
         football_4sale1 = _football_4sale1()
 
         class _football_4sale2(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16854)
-            label = DynAccessor(16853)
+            description = DynAccessor(16861)
+            label = DynAccessor(16860)
 
         football_4sale2 = _football_4sale2()
 
         class _football_aces(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16852)
-            label = DynAccessor(16851)
+            description = DynAccessor(16859)
+            label = DynAccessor(16858)
 
         football_aces = _football_aces()
 
         class _football_gift(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16860)
-            label = DynAccessor(16859)
+            description = DynAccessor(16867)
+            label = DynAccessor(16866)
 
         football_gift = _football_gift()
 
         class _football_meta(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16858)
-            label = DynAccessor(16857)
+            description = DynAccessor(16865)
+            label = DynAccessor(16864)
 
         football_meta = _football_meta()
 
         class _football_otms(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16848)
-            label = DynAccessor(16847)
+            description = DynAccessor(16855)
+            label = DynAccessor(16854)
 
         football_otms = _football_otms()
 
         class _football_tms(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16850)
-            label = DynAccessor(16849)
+            description = DynAccessor(16857)
+            label = DynAccessor(16856)
 
         football_tms = _football_tms()
 
@@ -48994,43 +49020,43 @@ class vehicle_customization(DynAccessor):
 
                 class _franch_1(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16574)
-                    label = DynAccessor(16573)
+                    description = DynAccessor(16581)
+                    label = DynAccessor(16580)
 
                 franch_1 = _franch_1()
 
                 class _franch_4(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16580)
-                    label = DynAccessor(16579)
+                    description = DynAccessor(16587)
+                    label = DynAccessor(16586)
 
                 franch_4 = _franch_4()
 
                 class _franch_5(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16582)
-                    label = DynAccessor(16581)
+                    description = DynAccessor(16589)
+                    label = DynAccessor(16588)
 
                 franch_5 = _franch_5()
 
                 class _generic_custom_2_france_desert(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(17026)
-                    label = DynAccessor(17025)
+                    description = DynAccessor(17033)
+                    label = DynAccessor(17032)
 
                 generic_custom_2_france_desert = _generic_custom_2_france_desert()
 
                 class _generic_custom_2_france_winter(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(17024)
-                    label = DynAccessor(17023)
+                    description = DynAccessor(17031)
+                    label = DynAccessor(17030)
 
                 generic_custom_2_france_winter = _generic_custom_2_france_winter()
 
                 class _Winter(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16594)
-                    label = DynAccessor(16593)
+                    description = DynAccessor(16601)
+                    label = DynAccessor(16600)
 
                 Winter = _Winter()
 
@@ -49041,71 +49067,71 @@ class vehicle_customization(DynAccessor):
 
                 class _Branches_and_Leaves(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16596)
-                    label = DynAccessor(16595)
+                    description = DynAccessor(16603)
+                    label = DynAccessor(16602)
 
                 Branches_and_Leaves = _Branches_and_Leaves()
 
                 class _franch_10(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16592)
-                    label = DynAccessor(16591)
+                    description = DynAccessor(16599)
+                    label = DynAccessor(16598)
 
                 franch_10 = _franch_10()
 
                 class _franch_2(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16576)
-                    label = DynAccessor(16575)
+                    description = DynAccessor(16583)
+                    label = DynAccessor(16582)
 
                 franch_2 = _franch_2()
 
                 class _franch_3(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16578)
-                    label = DynAccessor(16577)
+                    description = DynAccessor(16585)
+                    label = DynAccessor(16584)
 
                 franch_3 = _franch_3()
 
                 class _franch_6(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16584)
-                    label = DynAccessor(16583)
+                    description = DynAccessor(16591)
+                    label = DynAccessor(16590)
 
                 franch_6 = _franch_6()
 
                 class _franch_7(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16586)
-                    label = DynAccessor(16585)
+                    description = DynAccessor(16593)
+                    label = DynAccessor(16592)
 
                 franch_7 = _franch_7()
 
                 class _franch_8(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16588)
-                    label = DynAccessor(16587)
+                    description = DynAccessor(16595)
+                    label = DynAccessor(16594)
 
                 franch_8 = _franch_8()
 
                 class _franch_9(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16590)
-                    label = DynAccessor(16589)
+                    description = DynAccessor(16597)
+                    label = DynAccessor(16596)
 
                 franch_9 = _franch_9()
 
                 class _Geometric_Shapes(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16598)
-                    label = DynAccessor(16597)
+                    description = DynAccessor(16605)
+                    label = DynAccessor(16604)
 
                 Geometric_Shapes = _Geometric_Shapes()
 
                 class _Gyrus(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16600)
-                    label = DynAccessor(16599)
+                    description = DynAccessor(16607)
+                    label = DynAccessor(16606)
 
                 Gyrus = _Gyrus()
 
@@ -49115,57 +49141,57 @@ class vehicle_customization(DynAccessor):
 
         class _frontline_alliance_camo(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16840)
-            label = DynAccessor(16839)
+            description = DynAccessor(16847)
+            label = DynAccessor(16846)
 
         frontline_alliance_camo = _frontline_alliance_camo()
 
         class _frontline_captured_camo(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16842)
-            label = DynAccessor(16841)
+            description = DynAccessor(16849)
+            label = DynAccessor(16848)
 
         frontline_captured_camo = _frontline_captured_camo()
 
         class _frontline_ussr_camo(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16838)
-            label = DynAccessor(16837)
+            description = DynAccessor(16845)
+            label = DynAccessor(16844)
 
         frontline_ussr_camo = _frontline_ussr_camo()
 
         class _frost(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16936)
-            label = DynAccessor(16935)
+            description = DynAccessor(16943)
+            label = DynAccessor(16942)
 
         frost = _frost()
 
         class _gamescom_camo(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16894)
-            label = DynAccessor(16893)
+            description = DynAccessor(16901)
+            label = DynAccessor(16900)
 
         gamescom_camo = _gamescom_camo()
 
         class _generic_custom_2_sweden_desert(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(17050)
-            label = DynAccessor(17049)
+            description = DynAccessor(17057)
+            label = DynAccessor(17056)
 
         generic_custom_2_sweden_desert = _generic_custom_2_sweden_desert()
 
         class _generic_custom_2_sweden_summer(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(17046)
-            label = DynAccessor(17045)
+            description = DynAccessor(17053)
+            label = DynAccessor(17052)
 
         generic_custom_2_sweden_summer = _generic_custom_2_sweden_summer()
 
         class _generic_custom_2_sweden_winter(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(17048)
-            label = DynAccessor(17047)
+            description = DynAccessor(17055)
+            label = DynAccessor(17054)
 
         generic_custom_2_sweden_winter = _generic_custom_2_sweden_winter()
 
@@ -49177,78 +49203,78 @@ class vehicle_customization(DynAccessor):
 
                 class _Dark_Spots(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16546)
-                    label = DynAccessor(16545)
+                    description = DynAccessor(16553)
+                    label = DynAccessor(16552)
 
                 Dark_Spots = _Dark_Spots()
 
                 class _Diagonal_Stripes(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16544)
-                    label = DynAccessor(16543)
+                    description = DynAccessor(16551)
+                    label = DynAccessor(16550)
 
                 Diagonal_Stripes = _Diagonal_Stripes()
 
                 class _Feldgrau(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16518)
-                    label = DynAccessor(16517)
+                    description = DynAccessor(16525)
+                    label = DynAccessor(16524)
 
                 Feldgrau = _Feldgrau()
 
                 class _generic_custom_2_germany_summer(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(17006)
-                    label = DynAccessor(17005)
+                    description = DynAccessor(17013)
+                    label = DynAccessor(17012)
 
                 generic_custom_2_germany_summer = _generic_custom_2_germany_summer()
 
                 class _generic_custom_2_germany_winter(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(17008)
-                    label = DynAccessor(17007)
+                    description = DynAccessor(17015)
+                    label = DynAccessor(17014)
 
                 generic_custom_2_germany_winter = _generic_custom_2_germany_winter()
 
                 class _GrayZigzag(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16530)
-                    label = DynAccessor(16529)
+                    description = DynAccessor(16537)
+                    label = DynAccessor(16536)
 
                 GrayZigzag = _GrayZigzag()
 
                 class _Polylines(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16542)
-                    label = DynAccessor(16541)
+                    description = DynAccessor(16549)
+                    label = DynAccessor(16548)
 
                 Polylines = _Polylines()
 
                 class _RedClouds(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16528)
-                    label = DynAccessor(16527)
+                    description = DynAccessor(16535)
+                    label = DynAccessor(16534)
 
                 RedClouds = _RedClouds()
 
                 class _WhiteDiagonal(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16520)
-                    label = DynAccessor(16519)
+                    description = DynAccessor(16527)
+                    label = DynAccessor(16526)
 
                 WhiteDiagonal = _WhiteDiagonal()
 
                 class _Winter(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16540)
-                    label = DynAccessor(16539)
+                    description = DynAccessor(16547)
+                    label = DynAccessor(16546)
 
                 Winter = _Winter()
 
                 class _YellowBacillus(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16522)
-                    label = DynAccessor(16521)
+                    description = DynAccessor(16529)
+                    label = DynAccessor(16528)
 
                 YellowBacillus = _YellowBacillus()
 
@@ -49256,8 +49282,8 @@ class vehicle_customization(DynAccessor):
 
             class _DesertTiger(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(16548)
-                label = DynAccessor(16547)
+                description = DynAccessor(16555)
+                label = DynAccessor(16554)
 
             DesertTiger = _DesertTiger()
 
@@ -49266,43 +49292,43 @@ class vehicle_customization(DynAccessor):
 
                 class _Branch(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16534)
-                    label = DynAccessor(16533)
+                    description = DynAccessor(16541)
+                    label = DynAccessor(16540)
 
                 Branch = _Branch()
 
                 class _Honeycomb(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16532)
-                    label = DynAccessor(16531)
+                    description = DynAccessor(16539)
+                    label = DynAccessor(16538)
 
                 Honeycomb = _Honeycomb()
 
                 class _Ragged_Patches(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16536)
-                    label = DynAccessor(16535)
+                    description = DynAccessor(16543)
+                    label = DynAccessor(16542)
 
                 Ragged_Patches = _Ragged_Patches()
 
                 class _SnowOnBands(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16526)
-                    label = DynAccessor(16525)
+                    description = DynAccessor(16533)
+                    label = DynAccessor(16532)
 
                 SnowOnBands = _SnowOnBands()
 
                 class _SnowOnSpots(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16524)
-                    label = DynAccessor(16523)
+                    description = DynAccessor(16531)
+                    label = DynAccessor(16530)
 
                 SnowOnSpots = _SnowOnSpots()
 
                 class _Spots(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16538)
-                    label = DynAccessor(16537)
+                    description = DynAccessor(16545)
+                    label = DynAccessor(16544)
 
                 Spots = _Spots()
 
@@ -49312,114 +49338,114 @@ class vehicle_customization(DynAccessor):
 
         class _gift_camouflage_desert(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16786)
-            label = DynAccessor(16785)
+            description = DynAccessor(16793)
+            label = DynAccessor(16792)
 
         gift_camouflage_desert = _gift_camouflage_desert()
 
         class _gift_camouflage_summer(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16784)
-            label = DynAccessor(16783)
+            description = DynAccessor(16791)
+            label = DynAccessor(16790)
 
         gift_camouflage_summer = _gift_camouflage_summer()
 
         class _gift_camouflage_winter(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16782)
-            label = DynAccessor(16781)
+            description = DynAccessor(16789)
+            label = DynAccessor(16788)
 
         gift_camouflage_winter = _gift_camouflage_winter()
 
         class _gift_NY_2019(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16930)
-            label = DynAccessor(16929)
+            description = DynAccessor(16937)
+            label = DynAccessor(16936)
 
         gift_NY_2019 = _gift_NY_2019()
 
         class _global_map_camo(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16798)
-            label = DynAccessor(16797)
+            description = DynAccessor(16805)
+            label = DynAccessor(16804)
 
         global_map_camo = _global_map_camo()
-        historical = DynAccessor(16436)
+        historical = DynAccessor(16443)
 
         class _hvoin(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16932)
-            label = DynAccessor(16931)
+            description = DynAccessor(16939)
+            label = DynAccessor(16938)
 
         hvoin = _hvoin()
 
         class _IGR_Ch_Desert(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16708)
-            label = DynAccessor(16707)
+            description = DynAccessor(16715)
+            label = DynAccessor(16714)
 
         IGR_Ch_Desert = _IGR_Ch_Desert()
 
         class _IGR_Ch_Summer(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16706)
-            label = DynAccessor(16705)
+            description = DynAccessor(16713)
+            label = DynAccessor(16712)
 
         IGR_Ch_Summer = _IGR_Ch_Summer()
 
         class _IGR_Ch_Winter(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16704)
-            label = DynAccessor(16703)
+            description = DynAccessor(16711)
+            label = DynAccessor(16710)
 
         IGR_Ch_Winter = _IGR_Ch_Winter()
 
         class _IGR_Desert(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16702)
-            label = DynAccessor(16701)
+            description = DynAccessor(16709)
+            label = DynAccessor(16708)
 
         IGR_Desert = _IGR_Desert()
 
         class _IGR_K_Desert(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16714)
-            label = DynAccessor(16713)
+            description = DynAccessor(16721)
+            label = DynAccessor(16720)
 
         IGR_K_Desert = _IGR_K_Desert()
 
         class _IGR_K_Summer(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16712)
-            label = DynAccessor(16711)
+            description = DynAccessor(16719)
+            label = DynAccessor(16718)
 
         IGR_K_Summer = _IGR_K_Summer()
 
         class _IGR_K_Winter(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16710)
-            label = DynAccessor(16709)
+            description = DynAccessor(16717)
+            label = DynAccessor(16716)
 
         IGR_K_Winter = _IGR_K_Winter()
 
         class _IGR_Summer(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16700)
-            label = DynAccessor(16699)
+            description = DynAccessor(16707)
+            label = DynAccessor(16706)
 
         IGR_Summer = _IGR_Summer()
 
         class _IGR_Winter(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16698)
-            label = DynAccessor(16697)
+            description = DynAccessor(16705)
+            label = DynAccessor(16704)
 
         IGR_Winter = _IGR_Winter()
 
         class _italian_marathon_camo(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16830)
-            label = DynAccessor(16829)
+            description = DynAccessor(16837)
+            label = DynAccessor(16836)
 
         italian_marathon_camo = _italian_marathon_camo()
 
@@ -49428,15 +49454,15 @@ class vehicle_customization(DynAccessor):
 
             class _african_bicolor(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(16506)
-                label = DynAccessor(16505)
+                description = DynAccessor(16513)
+                label = DynAccessor(16512)
 
             african_bicolor = _african_bicolor()
 
             class _ariete_summer(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(16502)
-                label = DynAccessor(16501)
+                description = DynAccessor(16509)
+                label = DynAccessor(16508)
 
             ariete_summer = _ariete_summer()
 
@@ -49445,22 +49471,22 @@ class vehicle_customization(DynAccessor):
 
                 class _generic_custom_2_italy_desert(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(17014)
-                    label = DynAccessor(17013)
+                    description = DynAccessor(17021)
+                    label = DynAccessor(17020)
 
                 generic_custom_2_italy_desert = _generic_custom_2_italy_desert()
 
                 class _generic_custom_2_italy_summer(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(17010)
-                    label = DynAccessor(17009)
+                    description = DynAccessor(17017)
+                    label = DynAccessor(17016)
 
                 generic_custom_2_italy_summer = _generic_custom_2_italy_summer()
 
                 class _generic_custom_2_italy_winter(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(17012)
-                    label = DynAccessor(17011)
+                    description = DynAccessor(17019)
+                    label = DynAccessor(17018)
 
                 generic_custom_2_italy_winter = _generic_custom_2_italy_winter()
 
@@ -49468,57 +49494,57 @@ class vehicle_customization(DynAccessor):
 
             class _desert_bicolor(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(16508)
-                label = DynAccessor(16507)
+                description = DynAccessor(16515)
+                label = DynAccessor(16514)
 
             desert_bicolor = _desert_bicolor()
 
             class _italian_victim_black(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(16514)
-                label = DynAccessor(16513)
+                description = DynAccessor(16521)
+                label = DynAccessor(16520)
 
             italian_victim_black = _italian_victim_black()
 
             class _italian_victim_gold(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(16510)
-                label = DynAccessor(16509)
+                description = DynAccessor(16517)
+                label = DynAccessor(16516)
 
             italian_victim_gold = _italian_victim_gold()
 
             class _italian_victim_red(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(16512)
-                label = DynAccessor(16511)
+                description = DynAccessor(16519)
+                label = DynAccessor(16518)
 
             italian_victim_red = _italian_victim_red()
 
             class _italian_victim_silver(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(16516)
-                label = DynAccessor(16515)
+                description = DynAccessor(16523)
+                label = DynAccessor(16522)
 
             italian_victim_silver = _italian_victim_silver()
 
             class _italian_winter(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(16498)
-                label = DynAccessor(16497)
+                description = DynAccessor(16505)
+                label = DynAccessor(16504)
 
             italian_winter = _italian_winter()
 
             class _italian_winter_2(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(16500)
-                label = DynAccessor(16499)
+                description = DynAccessor(16507)
+                label = DynAccessor(16506)
 
             italian_winter_2 = _italian_winter_2()
 
             class _summer_tricolor(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(16504)
-                label = DynAccessor(16503)
+                description = DynAccessor(16511)
+                label = DynAccessor(16510)
 
             summer_tricolor = _summer_tricolor()
 
@@ -49526,8 +49552,8 @@ class vehicle_customization(DynAccessor):
 
         class _jacks_lamp(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16914)
-            label = DynAccessor(16913)
+            description = DynAccessor(16921)
+            label = DynAccessor(16920)
 
         jacks_lamp = _jacks_lamp()
 
@@ -49536,64 +49562,64 @@ class vehicle_customization(DynAccessor):
 
             class _desert_blue_brown(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(16670)
-                label = DynAccessor(16669)
+                description = DynAccessor(16677)
+                label = DynAccessor(16676)
 
             desert_blue_brown = _desert_blue_brown()
 
             class _desert_green_brown_spots(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(16672)
-                label = DynAccessor(16671)
+                description = DynAccessor(16679)
+                label = DynAccessor(16678)
 
             desert_green_brown_spots = _desert_green_brown_spots()
 
             class _generic_custom_2_japan_desert(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(17036)
-                label = DynAccessor(17035)
+                description = DynAccessor(17043)
+                label = DynAccessor(17042)
 
             generic_custom_2_japan_desert = _generic_custom_2_japan_desert()
 
             class _generic_custom_2_japan_summer(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(17038)
-                label = DynAccessor(17037)
+                description = DynAccessor(17045)
+                label = DynAccessor(17044)
 
             generic_custom_2_japan_summer = _generic_custom_2_japan_summer()
 
             class _generic_custom_2_japan_winter(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(17034)
-                label = DynAccessor(17033)
+                description = DynAccessor(17041)
+                label = DynAccessor(17040)
 
             generic_custom_2_japan_winter = _generic_custom_2_japan_winter()
 
             class _summer_four_color(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(16666)
-                label = DynAccessor(16665)
+                description = DynAccessor(16673)
+                label = DynAccessor(16672)
 
             summer_four_color = _summer_four_color()
 
             class _summer_three_color_spots(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(16668)
-                label = DynAccessor(16667)
+                description = DynAccessor(16675)
+                label = DynAccessor(16674)
 
             summer_three_color_spots = _summer_three_color_spots()
 
             class _winter_spots(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(16664)
-                label = DynAccessor(16663)
+                description = DynAccessor(16671)
+                label = DynAccessor(16670)
 
             winter_spots = _winter_spots()
 
             class _winter_white(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(16662)
-                label = DynAccessor(16661)
+                description = DynAccessor(16669)
+                label = DynAccessor(16668)
 
             winter_white = _winter_white()
 
@@ -49601,269 +49627,269 @@ class vehicle_customization(DynAccessor):
 
         class _kd_camo(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16866)
-            label = DynAccessor(16865)
+            description = DynAccessor(16873)
+            label = DynAccessor(16872)
 
         kd_camo = _kd_camo()
 
         class _kd_camo_t34(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16864)
-            label = DynAccessor(16863)
+            description = DynAccessor(16871)
+            label = DynAccessor(16870)
 
         kd_camo_t34 = _kd_camo_t34()
 
         class _kv2_w(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16844)
-            label = DynAccessor(16843)
+            description = DynAccessor(16851)
+            label = DynAccessor(16850)
 
         kv2_w = _kv2_w()
 
         class _left_alive(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16978)
-            label = DynAccessor(16977)
+            description = DynAccessor(16985)
+            label = DynAccessor(16984)
 
         left_alive = _left_alive()
 
         class _lunar_NY_fire(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16948)
-            label = DynAccessor(16947)
+            description = DynAccessor(16955)
+            label = DynAccessor(16954)
 
         lunar_NY_fire = _lunar_NY_fire()
 
         class _lunar_NY_fire_low_bright(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16958)
-            label = DynAccessor(16957)
+            description = DynAccessor(16965)
+            label = DynAccessor(16964)
 
         lunar_NY_fire_low_bright = _lunar_NY_fire_low_bright()
 
         class _lunar_NY_ground(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16944)
-            label = DynAccessor(16943)
+            description = DynAccessor(16951)
+            label = DynAccessor(16950)
 
         lunar_NY_ground = _lunar_NY_ground()
 
         class _lunar_NY_ground_low_bright(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16954)
-            label = DynAccessor(16953)
+            description = DynAccessor(16961)
+            label = DynAccessor(16960)
 
         lunar_NY_ground_low_bright = _lunar_NY_ground_low_bright()
 
         class _lunar_NY_metall(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16946)
-            label = DynAccessor(16945)
+            description = DynAccessor(16953)
+            label = DynAccessor(16952)
 
         lunar_NY_metall = _lunar_NY_metall()
 
         class _lunar_NY_metall_low_bright(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16956)
-            label = DynAccessor(16955)
+            description = DynAccessor(16963)
+            label = DynAccessor(16962)
 
         lunar_NY_metall_low_bright = _lunar_NY_metall_low_bright()
 
         class _lunar_NY_water(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16950)
-            label = DynAccessor(16949)
+            description = DynAccessor(16957)
+            label = DynAccessor(16956)
 
         lunar_NY_water = _lunar_NY_water()
 
         class _lunar_NY_water_low_bright(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16960)
-            label = DynAccessor(16959)
+            description = DynAccessor(16967)
+            label = DynAccessor(16966)
 
         lunar_NY_water_low_bright = _lunar_NY_water_low_bright()
 
         class _lunar_NY_wood(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16952)
-            label = DynAccessor(16951)
+            description = DynAccessor(16959)
+            label = DynAccessor(16958)
 
         lunar_NY_wood = _lunar_NY_wood()
 
         class _lunar_NY_wood_low_bright(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16962)
-            label = DynAccessor(16961)
+            description = DynAccessor(16969)
+            label = DynAccessor(16968)
 
         lunar_NY_wood_low_bright = _lunar_NY_wood_low_bright()
 
         class _marathon_september(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16908)
-            label = DynAccessor(16907)
+            description = DynAccessor(16915)
+            label = DynAccessor(16914)
 
         marathon_september = _marathon_september()
 
         class _monochrome(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(17064)
-            label = DynAccessor(17063)
+            description = DynAccessor(17071)
+            label = DynAccessor(17070)
 
         monochrome = _monochrome()
 
         class _moon_camo(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16890)
-            label = DynAccessor(16889)
+            description = DynAccessor(16897)
+            label = DynAccessor(16896)
 
         moon_camo = _moon_camo()
 
         class _Mutant_shell_desert(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16780)
-            label = DynAccessor(16779)
+            description = DynAccessor(16787)
+            label = DynAccessor(16786)
 
         Mutant_shell_desert = _Mutant_shell_desert()
 
         class _Mutant_shell_summer(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16778)
-            label = DynAccessor(16777)
+            description = DynAccessor(16785)
+            label = DynAccessor(16784)
 
         Mutant_shell_summer = _Mutant_shell_summer()
 
         class _Mutant_shell_winter(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16776)
-            label = DynAccessor(16775)
+            description = DynAccessor(16783)
+            label = DynAccessor(16782)
 
         Mutant_shell_winter = _Mutant_shell_winter()
 
         class _nation(DynAccessor):
             __slots__ = ()
-            china = DynAccessor(16447)
-            czech = DynAccessor(16451)
-            france = DynAccessor(16450)
-            germany = DynAccessor(16444)
-            italy = DynAccessor(16453)
-            japan = DynAccessor(16446)
-            sweden = DynAccessor(16452)
-            uk = DynAccessor(16448)
-            usa = DynAccessor(16449)
-            ussr = DynAccessor(16445)
+            china = DynAccessor(16454)
+            czech = DynAccessor(16458)
+            france = DynAccessor(16457)
+            germany = DynAccessor(16451)
+            italy = DynAccessor(16460)
+            japan = DynAccessor(16453)
+            sweden = DynAccessor(16459)
+            uk = DynAccessor(16455)
+            usa = DynAccessor(16456)
+            ussr = DynAccessor(16452)
 
         nation = _nation()
 
         class _Object279R_lbz_camo_d(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16872)
-            label = DynAccessor(16871)
+            description = DynAccessor(16879)
+            label = DynAccessor(16878)
 
         Object279R_lbz_camo_d = _Object279R_lbz_camo_d()
 
         class _Object279R_lbz_camo_s(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16870)
-            label = DynAccessor(16869)
+            description = DynAccessor(16877)
+            label = DynAccessor(16876)
 
         Object279R_lbz_camo_s = _Object279R_lbz_camo_s()
 
         class _Object279R_lbz_camo_w(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16868)
-            label = DynAccessor(16867)
+            description = DynAccessor(16875)
+            label = DynAccessor(16874)
 
         Object279R_lbz_camo_w = _Object279R_lbz_camo_w()
-        opaque = DynAccessor(16443)
+        opaque = DynAccessor(16450)
 
         class _pharmoz_tricolor(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16940)
-            label = DynAccessor(16939)
+            description = DynAccessor(16947)
+            label = DynAccessor(16946)
 
         pharmoz_tricolor = _pharmoz_tricolor()
 
         class _PM_desert_ob260(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16772)
-            label = DynAccessor(16771)
+            description = DynAccessor(16779)
+            label = DynAccessor(16778)
 
         PM_desert_ob260 = _PM_desert_ob260()
 
         class _PM_desert_stugiv(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16754)
-            label = DynAccessor(16753)
+            description = DynAccessor(16761)
+            label = DynAccessor(16760)
 
         PM_desert_stugiv = _PM_desert_stugiv()
 
         class _PM_desert_t28htc(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16760)
-            label = DynAccessor(16759)
+            description = DynAccessor(16767)
+            label = DynAccessor(16766)
 
         PM_desert_t28htc = _PM_desert_t28htc()
 
         class _PM_desert_t55a(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16766)
-            label = DynAccessor(16765)
+            description = DynAccessor(16773)
+            label = DynAccessor(16772)
 
         PM_desert_t55a = _PM_desert_t55a()
 
         class _PM_summer_ob260(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16774)
-            label = DynAccessor(16773)
+            description = DynAccessor(16781)
+            label = DynAccessor(16780)
 
         PM_summer_ob260 = _PM_summer_ob260()
 
         class _PM_summer_stugiv(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16756)
-            label = DynAccessor(16755)
+            description = DynAccessor(16763)
+            label = DynAccessor(16762)
 
         PM_summer_stugiv = _PM_summer_stugiv()
 
         class _PM_summer_t28htc(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16762)
-            label = DynAccessor(16761)
+            description = DynAccessor(16769)
+            label = DynAccessor(16768)
 
         PM_summer_t28htc = _PM_summer_t28htc()
 
         class _PM_summer_t55a(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16768)
-            label = DynAccessor(16767)
+            description = DynAccessor(16775)
+            label = DynAccessor(16774)
 
         PM_summer_t55a = _PM_summer_t55a()
 
         class _PM_winter_ob260(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16770)
-            label = DynAccessor(16769)
+            description = DynAccessor(16777)
+            label = DynAccessor(16776)
 
         PM_winter_ob260 = _PM_winter_ob260()
 
         class _PM_winter_stugiv(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16752)
-            label = DynAccessor(16751)
+            description = DynAccessor(16759)
+            label = DynAccessor(16758)
 
         PM_winter_stugiv = _PM_winter_stugiv()
 
         class _PM_winter_t28htc(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16758)
-            label = DynAccessor(16757)
+            description = DynAccessor(16765)
+            label = DynAccessor(16764)
 
         PM_winter_t28htc = _PM_winter_t28htc()
 
         class _PM_winter_t55a(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16764)
-            label = DynAccessor(16763)
+            description = DynAccessor(16771)
+            label = DynAccessor(16770)
 
         PM_winter_t55a = _PM_winter_t55a()
 
@@ -49875,43 +49901,43 @@ class vehicle_customization(DynAccessor):
 
                 class _generic_custom_2_poland_desert(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(17020)
-                    label = DynAccessor(17019)
+                    description = DynAccessor(17027)
+                    label = DynAccessor(17026)
 
                 generic_custom_2_poland_desert = _generic_custom_2_poland_desert()
 
                 class _generic_custom_2_poland_summer(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(17016)
-                    label = DynAccessor(17015)
+                    description = DynAccessor(17023)
+                    label = DynAccessor(17022)
 
                 generic_custom_2_poland_summer = _generic_custom_2_poland_summer()
 
                 class _generic_custom_2_poland_winter(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(17018)
-                    label = DynAccessor(17017)
+                    description = DynAccessor(17025)
+                    label = DynAccessor(17024)
 
                 generic_custom_2_poland_winter = _generic_custom_2_poland_winter()
 
                 class _grassy_green(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(18571)
-                    label = DynAccessor(18570)
+                    description = DynAccessor(18578)
+                    label = DynAccessor(18577)
 
                 grassy_green = _grassy_green()
 
                 class _GrayZigzag(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(18575)
-                    label = DynAccessor(18574)
+                    description = DynAccessor(18582)
+                    label = DynAccessor(18581)
 
                 GrayZigzag = _GrayZigzag()
 
                 class _winter(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(18573)
-                    label = DynAccessor(18572)
+                    description = DynAccessor(18580)
+                    label = DynAccessor(18579)
 
                 winter = _winter()
 
@@ -49919,22 +49945,22 @@ class vehicle_customization(DynAccessor):
 
             class _PL_desert_01(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18485)
-                label = DynAccessor(18484)
+                description = DynAccessor(18492)
+                label = DynAccessor(18491)
 
             PL_desert_01 = _PL_desert_01()
 
             class _PL_summer_02(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18489)
-                label = DynAccessor(18488)
+                description = DynAccessor(18496)
+                label = DynAccessor(18495)
 
             PL_summer_02 = _PL_summer_02()
 
             class _PL_winter_01(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18487)
-                label = DynAccessor(18486)
+                description = DynAccessor(18494)
+                label = DynAccessor(18493)
 
             PL_winter_01 = _PL_winter_01()
 
@@ -49942,277 +49968,277 @@ class vehicle_customization(DynAccessor):
 
         class _prem_camouflage_desert(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16824)
-            label = DynAccessor(16823)
+            description = DynAccessor(16831)
+            label = DynAccessor(16830)
 
         prem_camouflage_desert = _prem_camouflage_desert()
 
         class _prem_camouflage_summer(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16822)
-            label = DynAccessor(16821)
+            description = DynAccessor(16829)
+            label = DynAccessor(16828)
 
         prem_camouflage_summer = _prem_camouflage_summer()
 
         class _prem_camouflage_winter(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16820)
-            label = DynAccessor(16819)
+            description = DynAccessor(16827)
+            label = DynAccessor(16826)
 
         prem_camouflage_winter = _prem_camouflage_winter()
 
         class _racing_2019_team_a(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(17084)
-            label = DynAccessor(17083)
+            description = DynAccessor(17091)
+            label = DynAccessor(17090)
 
         racing_2019_team_a = _racing_2019_team_a()
 
         class _racing_2019_team_b(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(17082)
-            label = DynAccessor(17081)
+            description = DynAccessor(17089)
+            label = DynAccessor(17088)
 
         racing_2019_team_b = _racing_2019_team_b()
 
         class _racing_2019_team_c(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(17080)
-            label = DynAccessor(17079)
+            description = DynAccessor(17087)
+            label = DynAccessor(17086)
 
         racing_2019_team_c = _racing_2019_team_c()
 
         class _ranked_1(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16806)
-            label = DynAccessor(16805)
+            description = DynAccessor(16813)
+            label = DynAccessor(16812)
 
         ranked_1 = _ranked_1()
 
         class _ranked_1_4th(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16990)
-            label = DynAccessor(16989)
+            description = DynAccessor(16997)
+            label = DynAccessor(16996)
 
         ranked_1_4th = _ranked_1_4th()
 
         class _ranked_2(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16808)
-            label = DynAccessor(16807)
+            description = DynAccessor(16815)
+            label = DynAccessor(16814)
 
         ranked_2 = _ranked_2()
 
         class _ranked_2_4th(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16992)
-            label = DynAccessor(16991)
+            description = DynAccessor(16999)
+            label = DynAccessor(16998)
 
         ranked_2_4th = _ranked_2_4th()
 
         class _ranked_3(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16810)
-            label = DynAccessor(16809)
+            description = DynAccessor(16817)
+            label = DynAccessor(16816)
 
         ranked_3 = _ranked_3()
 
         class _ranked_3_4th(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16994)
-            label = DynAccessor(16993)
+            description = DynAccessor(17001)
+            label = DynAccessor(17000)
 
         ranked_3_4th = _ranked_3_4th()
 
         class _referal_programm_01(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16966)
-            label = DynAccessor(16965)
+            description = DynAccessor(16973)
+            label = DynAccessor(16972)
 
         referal_programm_01 = _referal_programm_01()
 
         class _referal_programm_02(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16968)
-            label = DynAccessor(16967)
+            description = DynAccessor(16975)
+            label = DynAccessor(16974)
 
         referal_programm_02 = _referal_programm_02()
 
         class _rostelekom2018(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16804)
-            label = DynAccessor(16803)
+            description = DynAccessor(16811)
+            label = DynAccessor(16810)
 
         rostelekom2018 = _rostelekom2018()
 
         class _Splinter_desert(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16744)
-            label = DynAccessor(16743)
+            description = DynAccessor(16751)
+            label = DynAccessor(16750)
 
         Splinter_desert = _Splinter_desert()
 
         class _Splinter_summer(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16742)
-            label = DynAccessor(16741)
+            description = DynAccessor(16749)
+            label = DynAccessor(16748)
 
         Splinter_summer = _Splinter_summer()
 
         class _Splinter_winter(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16740)
-            label = DynAccessor(16739)
+            description = DynAccessor(16747)
+            label = DynAccessor(16746)
 
         Splinter_winter = _Splinter_winter()
 
         class _strong(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(17052)
-            label = DynAccessor(17051)
+            description = DynAccessor(17059)
+            label = DynAccessor(17058)
 
         strong = _strong()
-        summer = DynAccessor(16440)
+        summer = DynAccessor(16447)
 
         class _summer_camo(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16736)
-            label = DynAccessor(16735)
+            description = DynAccessor(16743)
+            label = DynAccessor(16742)
 
         summer_camo = _summer_camo()
 
         class _supertest_camo(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16896)
-            label = DynAccessor(16895)
+            description = DynAccessor(16903)
+            label = DynAccessor(16902)
 
         supertest_camo = _supertest_camo()
 
         class _Sw_desert_01(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16692)
-            label = DynAccessor(16691)
+            description = DynAccessor(16699)
+            label = DynAccessor(16698)
 
         Sw_desert_01 = _Sw_desert_01()
 
         class _Sw_desert_02(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16694)
-            label = DynAccessor(16693)
+            description = DynAccessor(16701)
+            label = DynAccessor(16700)
 
         Sw_desert_02 = _Sw_desert_02()
 
         class _Sw_summer_01(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16688)
-            label = DynAccessor(16687)
+            description = DynAccessor(16695)
+            label = DynAccessor(16694)
 
         Sw_summer_01 = _Sw_summer_01()
 
         class _Sw_summer_02(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16690)
-            label = DynAccessor(16689)
+            description = DynAccessor(16697)
+            label = DynAccessor(16696)
 
         Sw_summer_02 = _Sw_summer_02()
 
         class _Sw_winter_01(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16684)
-            label = DynAccessor(16683)
+            description = DynAccessor(16691)
+            label = DynAccessor(16690)
 
         Sw_winter_01 = _Sw_winter_01()
 
         class _Sw_winter_02(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16686)
-            label = DynAccessor(16685)
+            description = DynAccessor(16693)
+            label = DynAccessor(16692)
 
         Sw_winter_02 = _Sw_winter_02()
 
         class _t_october(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(17086)
-            label = DynAccessor(17085)
+            description = DynAccessor(17093)
+            label = DynAccessor(17092)
 
         t_october = _t_october()
 
         class _Tankolet(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16928)
-            label = DynAccessor(16927)
+            description = DynAccessor(16935)
+            label = DynAccessor(16934)
 
         Tankolet = _Tankolet()
 
         class _tanksmen_day(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16910)
-            label = DynAccessor(16909)
+            description = DynAccessor(16917)
+            label = DynAccessor(16916)
 
         tanksmen_day = _tanksmen_day()
 
         class _telecoms_beltelecom(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(17000)
-            label = DynAccessor(16999)
+            description = DynAccessor(17007)
+            label = DynAccessor(17006)
 
         telecoms_beltelecom = _telecoms_beltelecom()
 
         class _telecoms_kievstar(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16998)
-            label = DynAccessor(16997)
+            description = DynAccessor(17005)
+            label = DynAccessor(17004)
 
         telecoms_kievstar = _telecoms_kievstar()
 
         class _telecoms_rostelecom(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(17002)
-            label = DynAccessor(17001)
+            description = DynAccessor(17009)
+            label = DynAccessor(17008)
 
         telecoms_rostelecom = _telecoms_rostelecom()
 
         class _ThanksGiving(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16920)
-            label = DynAccessor(16919)
+            description = DynAccessor(16927)
+            label = DynAccessor(16926)
 
         ThanksGiving = _ThanksGiving()
 
         class _Tiger217_Summer(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16748)
-            label = DynAccessor(16747)
+            description = DynAccessor(16755)
+            label = DynAccessor(16754)
 
         Tiger217_Summer = _Tiger217_Summer()
 
         class _Tiger217_winter(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16746)
-            label = DynAccessor(16745)
+            description = DynAccessor(16753)
+            label = DynAccessor(16752)
 
         Tiger217_winter = _Tiger217_winter()
 
         class _touchdown_camo(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16912)
-            label = DynAccessor(16911)
+            description = DynAccessor(16919)
+            label = DynAccessor(16918)
 
         touchdown_camo = _touchdown_camo()
-        transparent = DynAccessor(16442)
-        tricolor = DynAccessor(16439)
+        transparent = DynAccessor(16449)
+        tricolor = DynAccessor(16446)
 
         class _tunisia_dazzle(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(17056)
-            label = DynAccessor(17055)
+            description = DynAccessor(17063)
+            label = DynAccessor(17062)
 
         tunisia_dazzle = _tunisia_dazzle()
 
         class _twitch_prime(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16888)
-            label = DynAccessor(16887)
+            description = DynAccessor(16895)
+            label = DynAccessor(16894)
 
         twitch_prime = _twitch_prime()
 
@@ -50224,50 +50250,50 @@ class vehicle_customization(DynAccessor):
 
                 class _australian(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16660)
-                    label = DynAccessor(16659)
+                    description = DynAccessor(16667)
+                    label = DynAccessor(16666)
 
                 australian = _australian()
 
                 class _bicolor_classic(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16638)
-                    label = DynAccessor(16637)
+                    description = DynAccessor(16645)
+                    label = DynAccessor(16644)
 
                 bicolor_classic = _bicolor_classic()
 
                 class _desert_splintered(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16636)
-                    label = DynAccessor(16635)
+                    description = DynAccessor(16643)
+                    label = DynAccessor(16642)
 
                 desert_splintered = _desert_splintered()
 
                 class _grassy_green(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16640)
-                    label = DynAccessor(16639)
+                    description = DynAccessor(16647)
+                    label = DynAccessor(16646)
 
                 grassy_green = _grassy_green()
 
                 class _large_Mickey_Mouse_ears(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16656)
-                    label = DynAccessor(16655)
+                    description = DynAccessor(16663)
+                    label = DynAccessor(16662)
 
                 large_Mickey_Mouse_ears = _large_Mickey_Mouse_ears()
 
                 class _LRDG(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16642)
-                    label = DynAccessor(16641)
+                    description = DynAccessor(16649)
+                    label = DynAccessor(16648)
 
                 LRDG = _LRDG()
 
                 class _winter(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16658)
-                    label = DynAccessor(16657)
+                    description = DynAccessor(16665)
+                    label = DynAccessor(16664)
 
                 winter = _winter()
 
@@ -50278,43 +50304,43 @@ class vehicle_customization(DynAccessor):
 
                 class _large_spotted(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16654)
-                    label = DynAccessor(16653)
+                    description = DynAccessor(16661)
+                    label = DynAccessor(16660)
 
                 large_spotted = _large_spotted()
 
                 class _sophisticated_bicolor(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16644)
-                    label = DynAccessor(16643)
+                    description = DynAccessor(16651)
+                    label = DynAccessor(16650)
 
                 sophisticated_bicolor = _sophisticated_bicolor()
 
                 class _stains_with_notches(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16652)
-                    label = DynAccessor(16651)
+                    description = DynAccessor(16659)
+                    label = DynAccessor(16658)
 
                 stains_with_notches = _stains_with_notches()
 
                 class _tricolor_canadian(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16646)
-                    label = DynAccessor(16645)
+                    description = DynAccessor(16653)
+                    label = DynAccessor(16652)
 
                 tricolor_canadian = _tricolor_canadian()
 
                 class _tricolor_classic(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16648)
-                    label = DynAccessor(16647)
+                    description = DynAccessor(16655)
+                    label = DynAccessor(16654)
 
                 tricolor_classic = _tricolor_classic()
 
                 class _tricolor_diagonal(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16650)
-                    label = DynAccessor(16649)
+                    description = DynAccessor(16657)
+                    label = DynAccessor(16656)
 
                 tricolor_diagonal = _tricolor_diagonal()
 
@@ -50330,43 +50356,43 @@ class vehicle_customization(DynAccessor):
 
                 class _BretagneSky(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16554)
-                    label = DynAccessor(16553)
+                    description = DynAccessor(16561)
+                    label = DynAccessor(16560)
 
                 BretagneSky = _BretagneSky()
 
                 class _GuamBicolor(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16550)
-                    label = DynAccessor(16549)
+                    description = DynAccessor(16557)
+                    label = DynAccessor(16556)
 
                 GuamBicolor = _GuamBicolor()
 
                 class _IvozimaBicolor(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16552)
-                    label = DynAccessor(16551)
+                    description = DynAccessor(16559)
+                    label = DynAccessor(16558)
 
                 IvozimaBicolor = _IvozimaBicolor()
 
                 class _Membane(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16564)
-                    label = DynAccessor(16563)
+                    description = DynAccessor(16571)
+                    label = DynAccessor(16570)
 
                 Membane = _Membane()
 
                 class _WhiteScar(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16556)
-                    label = DynAccessor(16555)
+                    description = DynAccessor(16563)
+                    label = DynAccessor(16562)
 
                 WhiteScar = _WhiteScar()
 
                 class _Winter(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16570)
-                    label = DynAccessor(16569)
+                    description = DynAccessor(16577)
+                    label = DynAccessor(16576)
 
                 Winter = _Winter()
 
@@ -50377,50 +50403,50 @@ class vehicle_customization(DynAccessor):
 
                 class _generic_custom_2_usa_summer(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(17022)
-                    label = DynAccessor(17021)
+                    description = DynAccessor(17029)
+                    label = DynAccessor(17028)
 
                 generic_custom_2_usa_summer = _generic_custom_2_usa_summer()
 
                 class _IvozimaTricolor(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16560)
-                    label = DynAccessor(16559)
+                    description = DynAccessor(16567)
+                    label = DynAccessor(16566)
 
                 IvozimaTricolor = _IvozimaTricolor()
 
                 class _OldschoolUsa(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16562)
-                    label = DynAccessor(16561)
+                    description = DynAccessor(16569)
+                    label = DynAccessor(16568)
 
                 OldschoolUsa = _OldschoolUsa()
 
                 class _RudesheimTricolor(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16558)
-                    label = DynAccessor(16557)
+                    description = DynAccessor(16565)
+                    label = DynAccessor(16564)
 
                 RudesheimTricolor = _RudesheimTricolor()
 
                 class _Tri_color_Spotted(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16566)
-                    label = DynAccessor(16565)
+                    description = DynAccessor(16573)
+                    label = DynAccessor(16572)
 
                 Tri_color_Spotted = _Tri_color_Spotted()
 
                 class _Tropical_tricolor(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16568)
-                    label = DynAccessor(16567)
+                    description = DynAccessor(16575)
+                    label = DynAccessor(16574)
 
                 Tropical_tricolor = _Tropical_tricolor()
 
                 class _usa_premium_asia(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16572)
-                    label = DynAccessor(16571)
+                    description = DynAccessor(16579)
+                    label = DynAccessor(16578)
 
                 usa_premium_asia = _usa_premium_asia()
 
@@ -50436,57 +50462,57 @@ class vehicle_customization(DynAccessor):
 
                 class _Band(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16488)
-                    label = DynAccessor(16487)
+                    description = DynAccessor(16495)
+                    label = DynAccessor(16494)
 
                 Band = _Band()
 
                 class _Branches(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16482)
-                    label = DynAccessor(16481)
+                    description = DynAccessor(16489)
+                    label = DynAccessor(16488)
 
                 Branches = _Branches()
 
                 class _Brown_Spots(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16490)
-                    label = DynAccessor(16489)
+                    description = DynAccessor(16497)
+                    label = DynAccessor(16496)
 
                 Brown_Spots = _Brown_Spots()
 
                 class _BrownStains(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16466)
-                    label = DynAccessor(16465)
+                    description = DynAccessor(16473)
+                    label = DynAccessor(16472)
 
                 BrownStains = _BrownStains()
 
                 class _Katukov(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16464)
-                    label = DynAccessor(16463)
+                    description = DynAccessor(16471)
+                    label = DynAccessor(16470)
 
                 Katukov = _Katukov()
 
                 class _SpringGhost(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16468)
-                    label = DynAccessor(16467)
+                    description = DynAccessor(16475)
+                    label = DynAccessor(16474)
 
                 SpringGhost = _SpringGhost()
 
                 class _White_Spots(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16486)
-                    label = DynAccessor(16485)
+                    description = DynAccessor(16493)
+                    label = DynAccessor(16492)
 
                 White_Spots = _White_Spots()
 
                 class _Winter(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16484)
-                    label = DynAccessor(16483)
+                    description = DynAccessor(16491)
+                    label = DynAccessor(16490)
 
                 Winter = _Winter()
 
@@ -50494,36 +50520,36 @@ class vehicle_customization(DynAccessor):
 
             class _Custom_R127_T44_100_P_desert(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(16496)
-                label = DynAccessor(16495)
+                description = DynAccessor(16503)
+                label = DynAccessor(16502)
 
             Custom_R127_T44_100_P_desert = _Custom_R127_T44_100_P_desert()
 
             class _Custom_R127_T44_100_P_summer(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(16494)
-                label = DynAccessor(16493)
+                description = DynAccessor(16501)
+                label = DynAccessor(16500)
 
             Custom_R127_T44_100_P_summer = _Custom_R127_T44_100_P_summer()
 
             class _Custom_R127_T44_100_P_winter(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(16492)
-                label = DynAccessor(16491)
+                description = DynAccessor(16499)
+                label = DynAccessor(16498)
 
             Custom_R127_T44_100_P_winter = _Custom_R127_T44_100_P_winter()
 
             class _fallout_camo_Object_730(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(16728)
-                label = DynAccessor(16727)
+                description = DynAccessor(16735)
+                label = DynAccessor(16734)
 
             fallout_camo_Object_730 = _fallout_camo_Object_730()
 
             class _fallout_camo_Object_907(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(16730)
-                label = DynAccessor(16729)
+                description = DynAccessor(16737)
+                label = DynAccessor(16736)
 
             fallout_camo_Object_907 = _fallout_camo_Object_907()
 
@@ -50532,43 +50558,43 @@ class vehicle_customization(DynAccessor):
 
                 class _four_color_stains(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16480)
-                    label = DynAccessor(16479)
+                    description = DynAccessor(16487)
+                    label = DynAccessor(16486)
 
                 four_color_stains = _four_color_stains()
 
                 class _GasolinePellicle(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16478)
-                    label = DynAccessor(16477)
+                    description = DynAccessor(16485)
+                    label = DynAccessor(16484)
 
                 GasolinePellicle = _GasolinePellicle()
 
                 class _Leningrad(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16470)
-                    label = DynAccessor(16469)
+                    description = DynAccessor(16477)
+                    label = DynAccessor(16476)
 
                 Leningrad = _Leningrad()
 
                 class _OldschoolRkka(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16474)
-                    label = DynAccessor(16473)
+                    description = DynAccessor(16481)
+                    label = DynAccessor(16480)
 
                 OldschoolRkka = _OldschoolRkka()
 
                 class _Talvisota(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16476)
-                    label = DynAccessor(16475)
+                    description = DynAccessor(16483)
+                    label = DynAccessor(16482)
 
                 Talvisota = _Talvisota()
 
                 class _TricolorZebra(DynAccessor):
                     __slots__ = ()
-                    description = DynAccessor(16472)
-                    label = DynAccessor(16471)
+                    description = DynAccessor(16479)
+                    label = DynAccessor(16478)
 
                 TricolorZebra = _TricolorZebra()
 
@@ -50578,22 +50604,22 @@ class vehicle_customization(DynAccessor):
 
         class _vanquisher(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(17058)
-            label = DynAccessor(17057)
+            description = DynAccessor(17065)
+            label = DynAccessor(17064)
 
         vanquisher = _vanquisher()
 
         class _vbr(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16942)
-            label = DynAccessor(16941)
+            description = DynAccessor(16949)
+            label = DynAccessor(16948)
 
         vbr = _vbr()
 
         class _veteran_camo(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16900)
-            label = DynAccessor(16899)
+            description = DynAccessor(16907)
+            label = DynAccessor(16906)
 
         veteran_camo = _veteran_camo()
 
@@ -50602,281 +50628,281 @@ class vehicle_customization(DynAccessor):
 
             class _china_black(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18515)
-                label = DynAccessor(18514)
+                description = DynAccessor(18522)
+                label = DynAccessor(18521)
 
             china_black = _china_black()
 
             class _china_gold(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18519)
-                label = DynAccessor(18518)
+                description = DynAccessor(18526)
+                label = DynAccessor(18525)
 
             china_gold = _china_gold()
 
             class _china_red(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18517)
-                label = DynAccessor(18516)
+                description = DynAccessor(18524)
+                label = DynAccessor(18523)
 
             china_red = _china_red()
 
             class _china_silver(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18521)
-                label = DynAccessor(18520)
+                description = DynAccessor(18528)
+                label = DynAccessor(18527)
 
             china_silver = _china_silver()
 
             class _czech_black(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18547)
-                label = DynAccessor(18546)
+                description = DynAccessor(18554)
+                label = DynAccessor(18553)
 
             czech_black = _czech_black()
 
             class _czech_gold(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18551)
-                label = DynAccessor(18550)
+                description = DynAccessor(18558)
+                label = DynAccessor(18557)
 
             czech_gold = _czech_gold()
 
             class _czech_red(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18549)
-                label = DynAccessor(18548)
+                description = DynAccessor(18556)
+                label = DynAccessor(18555)
 
             czech_red = _czech_red()
 
             class _czech_silver(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18553)
-                label = DynAccessor(18552)
+                description = DynAccessor(18560)
+                label = DynAccessor(18559)
 
             czech_silver = _czech_silver()
 
             class _france_black(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18523)
-                label = DynAccessor(18522)
+                description = DynAccessor(18530)
+                label = DynAccessor(18529)
 
             france_black = _france_black()
 
             class _france_gold(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18527)
-                label = DynAccessor(18526)
+                description = DynAccessor(18534)
+                label = DynAccessor(18533)
 
             france_gold = _france_gold()
 
             class _france_red(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18525)
-                label = DynAccessor(18524)
+                description = DynAccessor(18532)
+                label = DynAccessor(18531)
 
             france_red = _france_red()
 
             class _france_silver(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18529)
-                label = DynAccessor(18528)
+                description = DynAccessor(18536)
+                label = DynAccessor(18535)
 
             france_silver = _france_silver()
 
             class _germany_black(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18499)
-                label = DynAccessor(18498)
+                description = DynAccessor(18506)
+                label = DynAccessor(18505)
 
             germany_black = _germany_black()
 
             class _germany_gold(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18503)
-                label = DynAccessor(18502)
+                description = DynAccessor(18510)
+                label = DynAccessor(18509)
 
             germany_gold = _germany_gold()
 
             class _germany_red(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18501)
-                label = DynAccessor(18500)
+                description = DynAccessor(18508)
+                label = DynAccessor(18507)
 
             germany_red = _germany_red()
 
             class _germany_silver(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18505)
-                label = DynAccessor(18504)
+                description = DynAccessor(18512)
+                label = DynAccessor(18511)
 
             germany_silver = _germany_silver()
 
             class _japan_black(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18539)
-                label = DynAccessor(18538)
+                description = DynAccessor(18546)
+                label = DynAccessor(18545)
 
             japan_black = _japan_black()
 
             class _japan_gold(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18543)
-                label = DynAccessor(18542)
+                description = DynAccessor(18550)
+                label = DynAccessor(18549)
 
             japan_gold = _japan_gold()
 
             class _japan_red(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18541)
-                label = DynAccessor(18540)
+                description = DynAccessor(18548)
+                label = DynAccessor(18547)
 
             japan_red = _japan_red()
 
             class _japan_silver(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18545)
-                label = DynAccessor(18544)
+                description = DynAccessor(18552)
+                label = DynAccessor(18551)
 
             japan_silver = _japan_silver()
 
             class _poland_black(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18563)
-                label = DynAccessor(18562)
+                description = DynAccessor(18570)
+                label = DynAccessor(18569)
 
             poland_black = _poland_black()
 
             class _poland_gold(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18567)
-                label = DynAccessor(18566)
+                description = DynAccessor(18574)
+                label = DynAccessor(18573)
 
             poland_gold = _poland_gold()
 
             class _poland_red(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18565)
-                label = DynAccessor(18564)
+                description = DynAccessor(18572)
+                label = DynAccessor(18571)
 
             poland_red = _poland_red()
 
             class _poland_silver(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18569)
-                label = DynAccessor(18568)
+                description = DynAccessor(18576)
+                label = DynAccessor(18575)
 
             poland_silver = _poland_silver()
 
             class _sweden_black(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18555)
-                label = DynAccessor(18554)
+                description = DynAccessor(18562)
+                label = DynAccessor(18561)
 
             sweden_black = _sweden_black()
 
             class _sweden_gold(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18559)
-                label = DynAccessor(18558)
+                description = DynAccessor(18566)
+                label = DynAccessor(18565)
 
             sweden_gold = _sweden_gold()
 
             class _sweden_red(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18557)
-                label = DynAccessor(18556)
+                description = DynAccessor(18564)
+                label = DynAccessor(18563)
 
             sweden_red = _sweden_red()
 
             class _sweden_silver(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18561)
-                label = DynAccessor(18560)
+                description = DynAccessor(18568)
+                label = DynAccessor(18567)
 
             sweden_silver = _sweden_silver()
 
             class _uk_black(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18531)
-                label = DynAccessor(18530)
+                description = DynAccessor(18538)
+                label = DynAccessor(18537)
 
             uk_black = _uk_black()
 
             class _uk_gold(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18535)
-                label = DynAccessor(18534)
+                description = DynAccessor(18542)
+                label = DynAccessor(18541)
 
             uk_gold = _uk_gold()
 
             class _uk_red(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18533)
-                label = DynAccessor(18532)
+                description = DynAccessor(18540)
+                label = DynAccessor(18539)
 
             uk_red = _uk_red()
 
             class _uk_silver(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18537)
-                label = DynAccessor(18536)
+                description = DynAccessor(18544)
+                label = DynAccessor(18543)
 
             uk_silver = _uk_silver()
 
             class _usa_black(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18507)
-                label = DynAccessor(18506)
+                description = DynAccessor(18514)
+                label = DynAccessor(18513)
 
             usa_black = _usa_black()
 
             class _usa_gold(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18511)
-                label = DynAccessor(18510)
+                description = DynAccessor(18518)
+                label = DynAccessor(18517)
 
             usa_gold = _usa_gold()
 
             class _usa_red(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18509)
-                label = DynAccessor(18508)
+                description = DynAccessor(18516)
+                label = DynAccessor(18515)
 
             usa_red = _usa_red()
 
             class _usa_silver(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18513)
-                label = DynAccessor(18512)
+                description = DynAccessor(18520)
+                label = DynAccessor(18519)
 
             usa_silver = _usa_silver()
 
             class _ussr_black(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18491)
-                label = DynAccessor(18490)
+                description = DynAccessor(18498)
+                label = DynAccessor(18497)
 
             ussr_black = _ussr_black()
 
             class _ussr_gold(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18495)
-                label = DynAccessor(18494)
+                description = DynAccessor(18502)
+                label = DynAccessor(18501)
 
             ussr_gold = _ussr_gold()
 
             class _ussr_red(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18493)
-                label = DynAccessor(18492)
+                description = DynAccessor(18500)
+                label = DynAccessor(18499)
 
             ussr_red = _ussr_red()
 
             class _ussr_silver(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18497)
-                label = DynAccessor(18496)
+                description = DynAccessor(18504)
+                label = DynAccessor(18503)
 
             ussr_silver = _ussr_silver()
 
@@ -50884,111 +50910,111 @@ class vehicle_customization(DynAccessor):
 
         class _victory(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16996)
-            label = DynAccessor(16995)
+            description = DynAccessor(17003)
+            label = DynAccessor(17002)
 
         victory = _victory()
 
         class _wg_anniversary(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16886)
-            label = DynAccessor(16885)
+            description = DynAccessor(16893)
+            label = DynAccessor(16892)
 
         wg_anniversary = _wg_anniversary()
 
         class _wg_fest_2019(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(17076)
-            label = DynAccessor(17075)
+            description = DynAccessor(17083)
+            label = DynAccessor(17082)
 
         wg_fest_2019 = _wg_fest_2019()
 
         class _wg_fest_camo(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16796)
-            label = DynAccessor(16795)
+            description = DynAccessor(16803)
+            label = DynAccessor(16802)
 
         wg_fest_camo = _wg_fest_camo()
 
         class _WGFest2018(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16926)
-            label = DynAccessor(16925)
+            description = DynAccessor(16933)
+            label = DynAccessor(16932)
 
         WGFest2018 = _WGFest2018()
-        winter = DynAccessor(16437)
+        winter = DynAccessor(16444)
 
         class _wot_birthday_cn(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16984)
-            label = DynAccessor(16983)
+            description = DynAccessor(16991)
+            label = DynAccessor(16990)
 
         wot_birthday_cn = _wot_birthday_cn()
 
         class _wot_birthday_eu(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16980)
-            label = DynAccessor(16979)
+            description = DynAccessor(16987)
+            label = DynAccessor(16986)
 
         wot_birthday_eu = _wot_birthday_eu()
 
         class _wot_birthday_na(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16982)
-            label = DynAccessor(16981)
+            description = DynAccessor(16989)
+            label = DynAccessor(16988)
 
         wot_birthday_na = _wot_birthday_na()
 
         class _wot_classic(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(16986)
-            label = DynAccessor(16985)
+            description = DynAccessor(16993)
+            label = DynAccessor(16992)
 
         wot_classic = _wot_classic()
 
         class _wot_fest_2019(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(17078)
-            label = DynAccessor(17077)
+            description = DynAccessor(17085)
+            label = DynAccessor(17084)
 
         wot_fest_2019 = _wot_fest_2019()
 
-    camouflage = _camouflage(16434)
+    camouflage = _camouflage(16441)
 
     class _carousel(DynAccessor):
         __slots__ = ()
 
         class _filter(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(18460)
-            counter = DynAccessor(18288)
+            body = DynAccessor(18467)
+            counter = DynAccessor(18295)
 
             class _equippedBtn(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(18466)
-                header = DynAccessor(18465)
+                body = DynAccessor(18473)
+                header = DynAccessor(18472)
 
             equippedBtn = _equippedBtn()
-            header = DynAccessor(18459)
+            header = DynAccessor(18466)
 
             class _mainBtn(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(18462)
-                header = DynAccessor(18461)
+                body = DynAccessor(18469)
+                header = DynAccessor(18468)
 
             mainBtn = _mainBtn()
 
             class _nonHistoricalBtn(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(18468)
-                header = DynAccessor(18467)
+                body = DynAccessor(18475)
+                header = DynAccessor(18474)
 
             nonHistoricalBtn = _nonHistoricalBtn()
 
             class _storageBtn(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(18464)
-                header = DynAccessor(18463)
+                body = DynAccessor(18471)
+                header = DynAccessor(18470)
 
             storageBtn = _storageBtn()
 
@@ -50996,30 +51022,30 @@ class vehicle_customization(DynAccessor):
 
         class _itemLabel(DynAccessor):
             __slots__ = ()
-            applied = DynAccessor(18419)
-            purchased = DynAccessor(18418)
+            applied = DynAccessor(18426)
+            purchased = DynAccessor(18425)
 
         itemLabel = _itemLabel()
 
         class _message(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(18290)
-            header = DynAccessor(18289)
-            propertysheet = DynAccessor(19478)
+            description = DynAccessor(18297)
+            header = DynAccessor(18296)
+            propertysheet = DynAccessor(19489)
 
         message = _message()
-        rentalBattles = DynAccessor(18420)
+        rentalBattles = DynAccessor(18427)
 
         class _swatch(DynAccessor):
             __slots__ = ()
 
             class _style(DynAccessor):
                 __slots__ = ()
-                historical = DynAccessor(19141)
-                main = DynAccessor(19138)
-                rented = DynAccessor(19137)
-                special = DynAccessor(19139)
-                unique = DynAccessor(19140)
+                historical = DynAccessor(19150)
+                main = DynAccessor(19147)
+                rented = DynAccessor(19146)
+                special = DynAccessor(19148)
+                unique = DynAccessor(19149)
 
             style = _style()
 
@@ -51029,14 +51055,14 @@ class vehicle_customization(DynAccessor):
 
     class _commit(DynAccessor):
         __slots__ = ()
-        apply = DynAccessor(19130)
-        buy = DynAccessor(19131)
+        apply = DynAccessor(19139)
+        buy = DynAccessor(19140)
 
     commit = _commit()
 
     class _confirmItemDialog(DynAccessor):
         __slots__ = ()
-        countLabel = DynAccessor(18431)
+        countLabel = DynAccessor(18438)
 
     confirmItemDialog = _confirmItemDialog()
 
@@ -51048,8 +51074,8 @@ class vehicle_customization(DynAccessor):
 
             class _backBtn(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(18347)
-                label = DynAccessor(18346)
+                description = DynAccessor(18354)
+                label = DynAccessor(18353)
 
             backBtn = _backBtn()
 
@@ -51060,20 +51086,20 @@ class vehicle_customization(DynAccessor):
 
             class _on(DynAccessor):
                 __slots__ = ()
-                vehicle = DynAccessor(18379)
+                vehicle = DynAccessor(18386)
 
             on = _on()
 
             class _only(DynAccessor):
                 __slots__ = ()
-                c_for = DynAccessor(18382)
+                c_for = DynAccessor(18389)
 
             only = _only()
 
             class _special(DynAccessor):
                 __slots__ = ()
-                text = DynAccessor(18383)
-                title = DynAccessor(18381)
+                text = DynAccessor(18390)
+                title = DynAccessor(18388)
 
             special = _special()
 
@@ -51081,7 +51107,7 @@ class vehicle_customization(DynAccessor):
 
         class _buyDisabled(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(18458)
+            body = DynAccessor(18465)
 
         buyDisabled = _buyDisabled()
 
@@ -51090,11 +51116,11 @@ class vehicle_customization(DynAccessor):
 
             class _copy(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(18474)
-                header = DynAccessor(18473)
+                body = DynAccessor(18481)
+                header = DynAccessor(18480)
 
             copy = _copy()
-            title = DynAccessor(19128)
+            title = DynAccessor(19137)
 
         buyWindow = _buyWindow()
 
@@ -51106,30 +51132,30 @@ class vehicle_customization(DynAccessor):
 
                 class _dismount(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(18351)
-                    header = DynAccessor(18350)
+                    body = DynAccessor(18358)
+                    header = DynAccessor(18357)
 
                 dismount = _dismount()
 
                 class _drop(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(18349)
-                    header = DynAccessor(18348)
+                    body = DynAccessor(18356)
+                    header = DynAccessor(18355)
 
                 drop = _drop()
 
             current = _current()
-            desert = DynAccessor(18370)
-            empty = DynAccessor(18385)
+            desert = DynAccessor(18377)
+            empty = DynAccessor(18392)
 
             class _igr(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(18387)
-                header = DynAccessor(18386)
+                body = DynAccessor(18394)
+                header = DynAccessor(18393)
 
             igr = _igr()
-            summer = DynAccessor(18369)
-            winter = DynAccessor(18368)
+            summer = DynAccessor(18376)
+            winter = DynAccessor(18375)
 
         camouflage = _camouflage()
 
@@ -51138,7 +51164,7 @@ class vehicle_customization(DynAccessor):
 
             class _tooltip(DynAccessor):
                 __slots__ = ()
-                noStyle = DynAccessor(19127)
+                noStyle = DynAccessor(19136)
 
             tooltip = _tooltip()
 
@@ -51146,7 +51172,7 @@ class vehicle_customization(DynAccessor):
 
         class _decalPopover(DynAccessor):
             __slots__ = ()
-            remove = DynAccessor(18582)
+            remove = DynAccessor(18589)
 
         decalPopover = _decalPopover()
 
@@ -51155,8 +51181,8 @@ class vehicle_customization(DynAccessor):
 
             class _igr(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(18389)
-                header = DynAccessor(18388)
+                body = DynAccessor(18396)
+                header = DynAccessor(18395)
 
             igr = _igr()
 
@@ -51170,15 +51196,15 @@ class vehicle_customization(DynAccessor):
 
                 class _dismount(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(18355)
-                    header = DynAccessor(18354)
+                    body = DynAccessor(18362)
+                    header = DynAccessor(18361)
 
                 dismount = _dismount()
 
                 class _drop(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(18353)
-                    header = DynAccessor(18352)
+                    body = DynAccessor(18360)
+                    header = DynAccessor(18359)
 
                 drop = _drop()
 
@@ -51194,15 +51220,15 @@ class vehicle_customization(DynAccessor):
 
                 class _dismount(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(18359)
-                    header = DynAccessor(18358)
+                    body = DynAccessor(18366)
+                    header = DynAccessor(18365)
 
                 dismount = _dismount()
 
                 class _drop(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(18357)
-                    header = DynAccessor(18356)
+                    body = DynAccessor(18364)
+                    header = DynAccessor(18363)
 
                 drop = _drop()
 
@@ -51212,22 +51238,22 @@ class vehicle_customization(DynAccessor):
 
         class _filter(DynAccessor):
             __slots__ = ()
-            allGroups = DynAccessor(19129)
+            allGroups = DynAccessor(19138)
 
             class _duration(DynAccessor):
                 __slots__ = ()
-                always = DynAccessor(18276)
-                disabled = DynAccessor(18282)
+                always = DynAccessor(18283)
+                disabled = DynAccessor(18289)
 
                 class _lowercase(DynAccessor):
                     __slots__ = ()
-                    always = DynAccessor(18279)
-                    month = DynAccessor(18280)
-                    week = DynAccessor(18281)
+                    always = DynAccessor(18286)
+                    month = DynAccessor(18287)
+                    week = DynAccessor(18288)
 
                 lowercase = _lowercase()
-                month = DynAccessor(18277)
-                week = DynAccessor(18278)
+                month = DynAccessor(18284)
+                week = DynAccessor(18285)
 
             duration = _duration()
 
@@ -51238,15 +51264,15 @@ class vehicle_customization(DynAccessor):
 
             class _bonusDescription(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(18472)
-                header = DynAccessor(18471)
+                body = DynAccessor(18479)
+                header = DynAccessor(18478)
 
             bonusDescription = _bonusDescription()
 
             class _refresh(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(18470)
-                header = DynAccessor(18469)
+                body = DynAccessor(18477)
+                header = DynAccessor(18476)
 
             refresh = _refresh()
 
@@ -51257,17 +51283,17 @@ class vehicle_customization(DynAccessor):
 
             class _counter(DynAccessor):
                 __slots__ = ()
-                camouflage = DynAccessor(18448)
-                emblem = DynAccessor(18450)
-                inscription = DynAccessor(18451)
-                modification = DynAccessor(18452)
-                paint = DynAccessor(18447)
-                projectionDecal = DynAccessor(18449)
+                camouflage = DynAccessor(18455)
+                emblem = DynAccessor(18457)
+                inscription = DynAccessor(18458)
+                modification = DynAccessor(18459)
+                paint = DynAccessor(18454)
+                projectionDecal = DynAccessor(18456)
 
                 class _style(DynAccessor):
                     __slots__ = ()
-                    installed = DynAccessor(18453)
-                    notInstalled = DynAccessor(18454)
+                    installed = DynAccessor(18460)
+                    notInstalled = DynAccessor(18461)
 
                 style = _style()
 
@@ -51277,14 +51303,14 @@ class vehicle_customization(DynAccessor):
 
         class _headerCloseBtn(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(18446)
-            header = DynAccessor(18445)
+            body = DynAccessor(18453)
+            header = DynAccessor(18452)
 
         headerCloseBtn = _headerCloseBtn()
 
         class _hint(DynAccessor):
             __slots__ = ()
-            maxQtyDecalsApplied = DynAccessor(19143)
+            maxQtyDecalsApplied = DynAccessor(19152)
 
         hint = _hint()
 
@@ -51293,32 +51319,32 @@ class vehicle_customization(DynAccessor):
 
             class _description(DynAccessor):
                 __slots__ = ()
-                map = DynAccessor(18610)
-                type = DynAccessor(18614)
+                map = DynAccessor(18617)
+                type = DynAccessor(18621)
 
             description = _description()
 
             class _locked(DynAccessor):
                 __slots__ = ()
-                summer = DynAccessor(18626)
-                title = DynAccessor(18625)
+                summer = DynAccessor(18633)
+                title = DynAccessor(18632)
 
             locked = _locked()
 
             class _map(DynAccessor):
                 __slots__ = ()
-                desert = DynAccessor(18617)
-                event = DynAccessor(18618)
-                spring = DynAccessor(18616)
-                winter = DynAccessor(18615)
+                desert = DynAccessor(18624)
+                event = DynAccessor(18625)
+                spring = DynAccessor(18623)
+                winter = DynAccessor(18622)
 
-            map = _map(18609)
+            map = _map(18616)
 
             class _mapType(DynAccessor):
                 __slots__ = ()
-                desert = DynAccessor(18613)
-                summer = DynAccessor(18612)
-                winter = DynAccessor(18611)
+                desert = DynAccessor(18620)
+                summer = DynAccessor(18619)
+                winter = DynAccessor(18618)
 
             mapType = _mapType()
 
@@ -51327,14 +51353,14 @@ class vehicle_customization(DynAccessor):
 
                 class _style(DynAccessor):
                     __slots__ = ()
-                    historical = DynAccessor(18623)
-                    main = DynAccessor(18621)
-                    multiline = DynAccessor(18627)
-                    rental = DynAccessor(18620)
-                    special = DynAccessor(18622)
-                    unique = DynAccessor(18624)
+                    historical = DynAccessor(18630)
+                    main = DynAccessor(18628)
+                    multiline = DynAccessor(18634)
+                    rental = DynAccessor(18627)
+                    special = DynAccessor(18629)
+                    unique = DynAccessor(18631)
 
-                style = _style(18619)
+                style = _style(18626)
 
             type = _type()
 
@@ -51345,8 +51371,8 @@ class vehicle_customization(DynAccessor):
 
             class _igr(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(18391)
-                header = DynAccessor(18390)
+                body = DynAccessor(18398)
+                header = DynAccessor(18397)
 
             igr = _igr()
 
@@ -51360,15 +51386,15 @@ class vehicle_customization(DynAccessor):
 
                 class _dismount(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(18363)
-                    header = DynAccessor(18362)
+                    body = DynAccessor(18370)
+                    header = DynAccessor(18369)
 
                 dismount = _dismount()
 
                 class _drop(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(18361)
-                    header = DynAccessor(18360)
+                    body = DynAccessor(18368)
+                    header = DynAccessor(18367)
 
                 drop = _drop()
 
@@ -51384,15 +51410,15 @@ class vehicle_customization(DynAccessor):
 
                 class _dismount(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(18367)
-                    header = DynAccessor(18366)
+                    body = DynAccessor(18374)
+                    header = DynAccessor(18373)
 
                 dismount = _dismount()
 
                 class _drop(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(18365)
-                    header = DynAccessor(18364)
+                    body = DynAccessor(18372)
+                    header = DynAccessor(18371)
 
                 drop = _drop()
 
@@ -51405,32 +51431,32 @@ class vehicle_customization(DynAccessor):
 
             class _btn(DynAccessor):
                 __slots__ = ()
-                disabled = DynAccessor(19121)
+                disabled = DynAccessor(19130)
 
                 class _style(DynAccessor):
                     __slots__ = ()
-                    disabled = DynAccessor(19122)
+                    disabled = DynAccessor(19131)
 
                 style = _style()
 
-            btn = _btn(19120)
+            btn = _btn(19129)
 
             class _clear(DynAccessor):
                 __slots__ = ()
-                massage = DynAccessor(19123)
-                nonHistoricMassage = DynAccessor(19124)
+                massage = DynAccessor(19132)
+                nonHistoricMassage = DynAccessor(19133)
 
             clear = _clear()
 
             class _historicCheckBox(DynAccessor):
                 __slots__ = ()
-                items = DynAccessor(19119)
+                items = DynAccessor(19128)
 
             historicCheckBox = _historicCheckBox()
 
             class _title(DynAccessor):
                 __slots__ = ()
-                items = DynAccessor(19118)
+                items = DynAccessor(19127)
 
             title = _title()
 
@@ -51438,17 +51464,17 @@ class vehicle_customization(DynAccessor):
 
         class _kitPopover(DynAccessor):
             __slots__ = ()
-            autoProlongationLabel = DynAccessor(18607)
+            autoProlongationLabel = DynAccessor(18614)
 
             class _buttonText(DynAccessor):
                 __slots__ = ()
-                removeStyleKit = DynAccessor(19126)
+                removeStyleKit = DynAccessor(19135)
 
             buttonText = _buttonText()
 
             class _title(DynAccessor):
                 __slots__ = ()
-                items = DynAccessor(19125)
+                items = DynAccessor(19134)
 
             title = _title()
 
@@ -51459,7 +51485,7 @@ class vehicle_customization(DynAccessor):
 
             class _current(DynAccessor):
                 __slots__ = ()
-                vehicle = DynAccessor(18377)
+                vehicle = DynAccessor(18384)
 
             current = _current()
 
@@ -51468,21 +51494,21 @@ class vehicle_customization(DynAccessor):
 
                 class _other(DynAccessor):
                     __slots__ = ()
-                    vehicle = DynAccessor(18380)
+                    vehicle = DynAccessor(18387)
 
                 other = _other()
-                vehicle = DynAccessor(18378)
+                vehicle = DynAccessor(18385)
 
             on = _on()
-            onother = DynAccessor(18371)
+            onother = DynAccessor(18378)
 
             class _special(DynAccessor):
                 __slots__ = ()
 
                 class _rules(DynAccessor):
                     __slots__ = ()
-                    text = DynAccessor(18376)
-                    title = DynAccessor(18375)
+                    text = DynAccessor(18383)
+                    title = DynAccessor(18382)
 
                 rules = _rules()
 
@@ -51492,35 +51518,35 @@ class vehicle_customization(DynAccessor):
 
         class _mapType(DynAccessor):
             __slots__ = ()
-            all = DynAccessor(18587)
-            desert = DynAccessor(18586)
-            summer = DynAccessor(18585)
-            winter = DynAccessor(18584)
+            all = DynAccessor(18594)
+            desert = DynAccessor(18593)
+            summer = DynAccessor(18592)
+            winter = DynAccessor(18591)
 
         mapType = _mapType()
 
         class _nonHistoric(DynAccessor):
             __slots__ = ()
-            buttonClearText = DynAccessor(19113)
+            buttonClearText = DynAccessor(19122)
 
             class _buttonText(DynAccessor):
                 __slots__ = ()
-                removeFromAll = DynAccessor(19112)
+                removeFromAll = DynAccessor(19121)
 
             buttonText = _buttonText()
 
             class _tableHeader(DynAccessor):
                 __slots__ = ()
-                applied = DynAccessor(19111)
-                item = DynAccessor(19114)
-                remove = DynAccessor(19115)
+                applied = DynAccessor(19120)
+                item = DynAccessor(19123)
+                remove = DynAccessor(19124)
 
             tableHeader = _tableHeader()
 
             class _tableHeaders(DynAccessor):
                 __slots__ = ()
-                new = DynAccessor(19116)
-                purchase = DynAccessor(19117)
+                new = DynAccessor(19125)
+                purchase = DynAccessor(19126)
 
             tableHeaders = _tableHeaders()
 
@@ -51528,59 +51554,59 @@ class vehicle_customization(DynAccessor):
 
         class _notEnoughResources(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(18456)
-            header = DynAccessor(18455)
+            body = DynAccessor(18463)
+            header = DynAccessor(18462)
 
         notEnoughResources = _notEnoughResources()
-        notSelectedItems = DynAccessor(18457)
+        notSelectedItems = DynAccessor(18464)
 
         class _Popover(DynAccessor):
             __slots__ = ()
 
             class _Camo(DynAccessor):
                 __slots__ = ()
-                color = DynAccessor(18604)
+                color = DynAccessor(18611)
 
             Camo = _Camo()
 
             class _emptySlot(DynAccessor):
                 __slots__ = ()
-                hint = DynAccessor(18595)
+                hint = DynAccessor(18602)
 
-            emptySlot = _emptySlot(18594)
+            emptySlot = _emptySlot(18601)
 
             class _emptyStyle(DynAccessor):
                 __slots__ = ()
-                hint = DynAccessor(18596)
+                hint = DynAccessor(18603)
 
             emptyStyle = _emptyStyle()
-            emptyText = DynAccessor(18593)
+            emptyText = DynAccessor(18600)
 
             class _itemType(DynAccessor):
                 __slots__ = ()
-                camo = DynAccessor(18590)
-                decal = DynAccessor(18591)
-                effect = DynAccessor(18592)
-                paint = DynAccessor(18589)
-                style = DynAccessor(18588)
+                camo = DynAccessor(18597)
+                decal = DynAccessor(18598)
+                effect = DynAccessor(18599)
+                paint = DynAccessor(18596)
+                style = DynAccessor(18595)
 
             itemType = _itemType()
-            mapType = DynAccessor(18583)
+            mapType = DynAccessor(18590)
 
             class _scale(DynAccessor):
                 __slots__ = ()
-                large = DynAccessor(18601)
-                normal = DynAccessor(18602)
-                small = DynAccessor(18603)
+                large = DynAccessor(18608)
+                normal = DynAccessor(18609)
+                small = DynAccessor(18610)
 
-            scale = _scale(18600)
+            scale = _scale(18607)
 
             class _Style(DynAccessor):
                 __slots__ = ()
-                custom = DynAccessor(18599)
-                items = DynAccessor(18597)
+                custom = DynAccessor(18606)
+                items = DynAccessor(18604)
 
-            Style = _Style(18598)
+            Style = _Style(18605)
 
         Popover = _Popover()
 
@@ -51589,13 +51615,13 @@ class vehicle_customization(DynAccessor):
 
             class _style(DynAccessor):
                 __slots__ = ()
-                any = DynAccessor(19098)
-                autoProlongationLabel = DynAccessor(18605)
-                desert = DynAccessor(19097)
-                info = DynAccessor(18606)
-                notautoProlongationLabel = DynAccessor(18608)
-                summer = DynAccessor(19096)
-                winter = DynAccessor(18952)
+                any = DynAccessor(19107)
+                autoProlongationLabel = DynAccessor(18612)
+                desert = DynAccessor(19106)
+                info = DynAccessor(18613)
+                notautoProlongationLabel = DynAccessor(18615)
+                summer = DynAccessor(19105)
+                winter = DynAccessor(18959)
 
             style = _style()
 
@@ -51606,15 +51632,15 @@ class vehicle_customization(DynAccessor):
 
             class _disabled(DynAccessor):
                 __slots__ = ()
-                camouflage = DynAccessor(18475)
-                color = DynAccessor(18478)
-                mirror = DynAccessor(18476)
-                move = DynAccessor(18477)
-                seasonDecal = DynAccessor(18481)
-                seasonEffect = DynAccessor(18482)
-                seasonEmblem = DynAccessor(18479)
-                seasonInscription = DynAccessor(18480)
-                styleInfo = DynAccessor(18483)
+                camouflage = DynAccessor(18482)
+                color = DynAccessor(18485)
+                mirror = DynAccessor(18483)
+                move = DynAccessor(18484)
+                seasonDecal = DynAccessor(18488)
+                seasonEffect = DynAccessor(18489)
+                seasonEmblem = DynAccessor(18486)
+                seasonInscription = DynAccessor(18487)
+                styleInfo = DynAccessor(18490)
 
             disabled = _disabled()
 
@@ -51622,9 +51648,9 @@ class vehicle_customization(DynAccessor):
 
         class _questAward(DynAccessor):
             __slots__ = ()
-            currentVehicle = DynAccessor(18392)
-            denyVehicle = DynAccessor(18394)
-            exactVehicle = DynAccessor(18393)
+            currentVehicle = DynAccessor(18399)
+            denyVehicle = DynAccessor(18401)
+            exactVehicle = DynAccessor(18400)
 
         questAward = _questAward()
 
@@ -51633,44 +51659,44 @@ class vehicle_customization(DynAccessor):
 
             class _special(DynAccessor):
                 __slots__ = ()
-                text = DynAccessor(18384)
+                text = DynAccessor(18391)
 
             special = _special()
 
         rent = _rent()
-        stored = DynAccessor(16454)
+        stored = DynAccessor(16461)
 
         class _tooltip(DynAccessor):
             __slots__ = ()
 
             class _applied(DynAccessor):
                 __slots__ = ()
-                allNations = DynAccessor(18334)
-                elementsSeparator = DynAccessor(18335)
-                excludeNations = DynAccessor(18337)
-                excludeVehicles = DynAccessor(18336)
-                title = DynAccessor(18332)
-                vehicleNation = DynAccessor(18333)
+                allNations = DynAccessor(18341)
+                elementsSeparator = DynAccessor(18342)
+                excludeNations = DynAccessor(18344)
+                excludeVehicles = DynAccessor(18343)
+                title = DynAccessor(18339)
+                vehicleNation = DynAccessor(18340)
 
             applied = _applied()
 
             class _bonus(DynAccessor):
                 __slots__ = ()
-                aimer = DynAccessor(18328)
-                commander = DynAccessor(18327)
+                aimer = DynAccessor(18335)
+                commander = DynAccessor(18334)
 
                 class _desc(DynAccessor):
                     __slots__ = ()
-                    crew = DynAccessor(18299)
-                    role = DynAccessor(18301)
-                    secrecy = DynAccessor(18300)
+                    crew = DynAccessor(18306)
+                    role = DynAccessor(18308)
+                    secrecy = DynAccessor(18307)
 
                 desc = _desc()
-                driver = DynAccessor(18329)
-                entireCrew = DynAccessor(18326)
-                c_global = DynAccessor(18298)
-                loader = DynAccessor(18331)
-                radioman = DynAccessor(18330)
+                driver = DynAccessor(18336)
+                entireCrew = DynAccessor(18333)
+                c_global = DynAccessor(18305)
+                loader = DynAccessor(18338)
+                radioman = DynAccessor(18337)
 
             bonus = _bonus()
 
@@ -51679,18 +51705,18 @@ class vehicle_customization(DynAccessor):
 
                 class _conditions(DynAccessor):
                     __slots__ = ()
-                    allyMore = DynAccessor(18307)
-                    destroy = DynAccessor(18308)
-                    detect = DynAccessor(18310)
-                    durabilityLess = DynAccessor(18305)
-                    durabilityMore = DynAccessor(18304)
-                    enemySpecificTanksCount = DynAccessor(18313)
-                    enemyTanksCount = DynAccessor(18312)
-                    hit = DynAccessor(18311)
-                    map = DynAccessor(18303)
-                    miss = DynAccessor(18309)
-                    platoonMore = DynAccessor(18306)
-                    title = DynAccessor(18302)
+                    allyMore = DynAccessor(18314)
+                    destroy = DynAccessor(18315)
+                    detect = DynAccessor(18317)
+                    durabilityLess = DynAccessor(18312)
+                    durabilityMore = DynAccessor(18311)
+                    enemySpecificTanksCount = DynAccessor(18320)
+                    enemyTanksCount = DynAccessor(18319)
+                    hit = DynAccessor(18318)
+                    map = DynAccessor(18310)
+                    miss = DynAccessor(18316)
+                    platoonMore = DynAccessor(18313)
+                    title = DynAccessor(18309)
 
                 conditions = _conditions()
 
@@ -51699,16 +51725,16 @@ class vehicle_customization(DynAccessor):
 
                     class _false(DynAccessor):
                         __slots__ = ()
-                        description = DynAccessor(18317)
+                        description = DynAccessor(18324)
 
-                    false = _false(18316)
-                    true = DynAccessor(18315)
+                    false = _false(18323)
+                    true = DynAccessor(18322)
 
                 historic = _historic()
 
                 class _history(DynAccessor):
                     __slots__ = ()
-                    title = DynAccessor(18314)
+                    title = DynAccessor(18321)
 
                 history = _history()
 
@@ -51716,12 +51742,12 @@ class vehicle_customization(DynAccessor):
 
             class _inventory(DynAccessor):
                 __slots__ = ()
-                available = DynAccessor(18297)
+                available = DynAccessor(18304)
 
                 class _cost(DynAccessor):
                     __slots__ = ()
-                    purchase = DynAccessor(18292)
-                    rent = DynAccessor(18293)
+                    purchase = DynAccessor(18299)
+                    rent = DynAccessor(18300)
 
                 cost = _cost()
 
@@ -51730,23 +51756,23 @@ class vehicle_customization(DynAccessor):
 
                     class _battlesLeft(DynAccessor):
                         __slots__ = ()
-                        autoprolongationOn = DynAccessor(18295)
+                        autoprolongationOn = DynAccessor(18302)
 
-                    battlesLeft = _battlesLeft(18294)
+                    battlesLeft = _battlesLeft(18301)
 
                 rent = _rent()
-                sellprice = DynAccessor(18296)
-                title = DynAccessor(18291)
+                sellprice = DynAccessor(18303)
+                title = DynAccessor(18298)
 
             inventory = _inventory()
-            oneTaskDescription = DynAccessor(18339)
+            oneTaskDescription = DynAccessor(18346)
 
             class _potentialProjDecalDanyPlace(DynAccessor):
                 __slots__ = ()
 
                 class _toltip(DynAccessor):
                     __slots__ = ()
-                    text = DynAccessor(18345)
+                    text = DynAccessor(18352)
 
                 toltip = _toltip()
 
@@ -51757,13 +51783,13 @@ class vehicle_customization(DynAccessor):
 
                 class _notification(DynAccessor):
                     __slots__ = ()
-                    title = DynAccessor(18343)
+                    title = DynAccessor(18350)
 
                 notification = _notification()
 
                 class _toltip(DynAccessor):
                     __slots__ = ()
-                    text = DynAccessor(18344)
+                    text = DynAccessor(18351)
 
                 toltip = _toltip()
 
@@ -51771,37 +51797,37 @@ class vehicle_customization(DynAccessor):
 
             class _slot(DynAccessor):
                 __slots__ = ()
-                camouflage = DynAccessor(18323)
-                emblem = DynAccessor(18324)
-                inscription = DynAccessor(18325)
+                camouflage = DynAccessor(18330)
+                emblem = DynAccessor(18331)
+                inscription = DynAccessor(18332)
 
             slot = _slot()
 
             class _status(DynAccessor):
                 __slots__ = ()
-                alreadyHave = DynAccessor(18319)
-                availableForBuy = DynAccessor(18320)
-                doMission = DynAccessor(18321)
-                doOperation = DynAccessor(18322)
-                onBoard = DynAccessor(18318)
+                alreadyHave = DynAccessor(18326)
+                availableForBuy = DynAccessor(18327)
+                doMission = DynAccessor(18328)
+                doOperation = DynAccessor(18329)
+                onBoard = DynAccessor(18325)
 
             status = _status()
 
             class _suitable(DynAccessor):
                 __slots__ = ()
-                title = DynAccessor(18342)
+                title = DynAccessor(18349)
 
             suitable = _suitable()
 
             class _taskDescription(DynAccessor):
                 __slots__ = ()
-                other = DynAccessor(18340)
+                other = DynAccessor(18347)
 
-            taskDescription = _taskDescription(18338)
+            taskDescription = _taskDescription(18345)
 
             class _warning(DynAccessor):
                 __slots__ = ()
-                title = DynAccessor(18341)
+                title = DynAccessor(18348)
 
             warning = _warning()
 
@@ -51809,30 +51835,30 @@ class vehicle_customization(DynAccessor):
 
         class _UnsupportedForm(DynAccessor):
             __slots__ = ()
-            descr = DynAccessor(18374)
-            slot = DynAccessor(18373)
+            descr = DynAccessor(18381)
+            slot = DynAccessor(18380)
 
-        UnsupportedForm = _UnsupportedForm(18372)
+        UnsupportedForm = _UnsupportedForm(18379)
 
     customization = _customization()
 
     class _customizationHeader(DynAccessor):
         __slots__ = ()
-        back = DynAccessor(18275)
-        close = DynAccessor(18274)
-        title = DynAccessor(18273)
+        back = DynAccessor(18282)
+        close = DynAccessor(18281)
+        title = DynAccessor(18280)
 
     customizationHeader = _customizationHeader()
 
     class _defaultStyle(DynAccessor):
         __slots__ = ()
-        label = DynAccessor(19142)
+        label = DynAccessor(19151)
 
     defaultStyle = _defaultStyle()
 
     class _element(DynAccessor):
         __slots__ = ()
-        formIconSource = DynAccessor(19469)
+        formIconSource = DynAccessor(19480)
 
     element = _element()
 
@@ -51841,8 +51867,8 @@ class vehicle_customization(DynAccessor):
 
         class _description(DynAccessor):
             __slots__ = ()
-            camouflage = DynAccessor(19432)
-            style = DynAccessor(19431)
+            camouflage = DynAccessor(19443)
+            style = DynAccessor(19442)
 
         description = _description()
 
@@ -51853,832 +51879,832 @@ class vehicle_customization(DynAccessor):
 
         class _desc(DynAccessor):
             __slots__ = ()
-            camouflage = DynAccessor(19451)
-            emblem = DynAccessor(19453)
-            inscription = DynAccessor(19454)
-            modification = DynAccessor(19455)
-            paint = DynAccessor(19456)
-            personalNumber_1 = DynAccessor(19460)
-            personalNumber_2 = DynAccessor(19459)
-            personalNumber_3 = DynAccessor(19458)
-            projectionDecal = DynAccessor(19457)
-            shell = DynAccessor(19450)
-            style = DynAccessor(19452)
+            camouflage = DynAccessor(19462)
+            emblem = DynAccessor(19464)
+            inscription = DynAccessor(19465)
+            modification = DynAccessor(19466)
+            paint = DynAccessor(19467)
+            personalNumber_1 = DynAccessor(19471)
+            personalNumber_2 = DynAccessor(19470)
+            personalNumber_3 = DynAccessor(19469)
+            projectionDecal = DynAccessor(19468)
+            shell = DynAccessor(19461)
+            style = DynAccessor(19463)
 
         desc = _desc()
-        factor = DynAccessor(19461)
+        factor = DynAccessor(19472)
 
     elementBonus = _elementBonus()
 
     class _emblem(DynAccessor):
         __slots__ = ()
-        animals = DynAccessor(18284)
+        animals = DynAccessor(18291)
 
         class _auto(DynAccessor):
             __slots__ = ()
-            alpha_tester = DynAccessor(17100)
-            beta_tester = DynAccessor(17101)
-            britain_color = DynAccessor(17096)
-            china_kuomintang = DynAccessor(17099)
-            china_star = DynAccessor(17095)
-            czech_round = DynAccessor(17104)
-            french_rose = DynAccessor(17094)
-            germany_bundecross = DynAccessor(17097)
-            germany_cross = DynAccessor(17092)
-            germany_ddr = DynAccessor(17102)
-            italian_flag = DynAccessor(17107)
-            japanese_sun = DynAccessor(17098)
-            moder_ring = DynAccessor(17103)
-            poland_chekers = DynAccessor(17105)
-            star = DynAccessor(17091)
-            swedish_flag = DynAccessor(17106)
-            usa_star = DynAccessor(17093)
+            alpha_tester = DynAccessor(17107)
+            beta_tester = DynAccessor(17108)
+            britain_color = DynAccessor(17103)
+            china_kuomintang = DynAccessor(17106)
+            china_star = DynAccessor(17102)
+            czech_round = DynAccessor(17111)
+            french_rose = DynAccessor(17101)
+            germany_bundecross = DynAccessor(17104)
+            germany_cross = DynAccessor(17099)
+            germany_ddr = DynAccessor(17109)
+            italian_flag = DynAccessor(17114)
+            japanese_sun = DynAccessor(17105)
+            moder_ring = DynAccessor(17110)
+            poland_chekers = DynAccessor(17112)
+            star = DynAccessor(17098)
+            swedish_flag = DynAccessor(17113)
+            usa_star = DynAccessor(17100)
 
-        auto = _auto(18283)
+        auto = _auto(18290)
 
         class _battle(DynAccessor):
             __slots__ = ()
-            sticker_80 = DynAccessor(17230)
-            sticker_81 = DynAccessor(17231)
-            sticker_82 = DynAccessor(17232)
-            sticker_83 = DynAccessor(17233)
-            sticker_84 = DynAccessor(17234)
-            sticker_85 = DynAccessor(17235)
-            sticker_86 = DynAccessor(17236)
-            sticker_87 = DynAccessor(17237)
-            sticker_88 = DynAccessor(17238)
+            sticker_80 = DynAccessor(17237)
+            sticker_81 = DynAccessor(17238)
+            sticker_82 = DynAccessor(17239)
+            sticker_83 = DynAccessor(17240)
+            sticker_84 = DynAccessor(17241)
+            sticker_85 = DynAccessor(17242)
+            sticker_86 = DynAccessor(17243)
+            sticker_87 = DynAccessor(17244)
+            sticker_88 = DynAccessor(17245)
 
-        battle = _battle(18285)
-        clan_content = DynAccessor(17088)
-        cool = DynAccessor(18286)
+        battle = _battle(18292)
+        clan_content = DynAccessor(17095)
+        cool = DynAccessor(18293)
 
         class _group1(DynAccessor):
             __slots__ = ()
-            animal_1 = DynAccessor(17108)
-            animal_10 = DynAccessor(17117)
-            animal_11 = DynAccessor(17118)
-            animal_12 = DynAccessor(17119)
-            animal_13 = DynAccessor(17120)
-            animal_14 = DynAccessor(17121)
-            animal_15 = DynAccessor(17122)
-            animal_16 = DynAccessor(17123)
-            animal_17 = DynAccessor(17124)
-            animal_18 = DynAccessor(17125)
-            animal_19 = DynAccessor(17126)
-            animal_2 = DynAccessor(17109)
-            animal_20 = DynAccessor(17127)
-            animal_21 = DynAccessor(17128)
-            animal_22 = DynAccessor(17129)
-            animal_23 = DynAccessor(17130)
-            animal_24 = DynAccessor(17131)
-            animal_25 = DynAccessor(17132)
-            animal_26 = DynAccessor(17133)
-            animal_27 = DynAccessor(17134)
-            animal_28 = DynAccessor(17135)
-            animal_29 = DynAccessor(17136)
-            animal_3 = DynAccessor(17110)
-            animal_30 = DynAccessor(17137)
-            animal_31 = DynAccessor(17138)
-            animal_32 = DynAccessor(17139)
-            animal_33 = DynAccessor(17140)
-            animal_34 = DynAccessor(17141)
-            animal_35 = DynAccessor(17142)
-            animal_36 = DynAccessor(17143)
-            animal_37 = DynAccessor(17144)
-            animal_4 = DynAccessor(17111)
-            animal_5 = DynAccessor(17112)
-            animal_6 = DynAccessor(17113)
-            animal_7 = DynAccessor(17114)
-            animal_8 = DynAccessor(17115)
-            animal_9 = DynAccessor(17116)
+            animal_1 = DynAccessor(17115)
+            animal_10 = DynAccessor(17124)
+            animal_11 = DynAccessor(17125)
+            animal_12 = DynAccessor(17126)
+            animal_13 = DynAccessor(17127)
+            animal_14 = DynAccessor(17128)
+            animal_15 = DynAccessor(17129)
+            animal_16 = DynAccessor(17130)
+            animal_17 = DynAccessor(17131)
+            animal_18 = DynAccessor(17132)
+            animal_19 = DynAccessor(17133)
+            animal_2 = DynAccessor(17116)
+            animal_20 = DynAccessor(17134)
+            animal_21 = DynAccessor(17135)
+            animal_22 = DynAccessor(17136)
+            animal_23 = DynAccessor(17137)
+            animal_24 = DynAccessor(17138)
+            animal_25 = DynAccessor(17139)
+            animal_26 = DynAccessor(17140)
+            animal_27 = DynAccessor(17141)
+            animal_28 = DynAccessor(17142)
+            animal_29 = DynAccessor(17143)
+            animal_3 = DynAccessor(17117)
+            animal_30 = DynAccessor(17144)
+            animal_31 = DynAccessor(17145)
+            animal_32 = DynAccessor(17146)
+            animal_33 = DynAccessor(17147)
+            animal_34 = DynAccessor(17148)
+            animal_35 = DynAccessor(17149)
+            animal_36 = DynAccessor(17150)
+            animal_37 = DynAccessor(17151)
+            animal_4 = DynAccessor(17118)
+            animal_5 = DynAccessor(17119)
+            animal_6 = DynAccessor(17120)
+            animal_7 = DynAccessor(17121)
+            animal_8 = DynAccessor(17122)
+            animal_9 = DynAccessor(17123)
 
         group1 = _group1()
 
         class _group10(DynAccessor):
             __slots__ = ()
-            special_21 = DynAccessor(17454)
+            special_21 = DynAccessor(17461)
 
         group10 = _group10()
 
         class _group12(DynAccessor):
             __slots__ = ()
-            special_31 = DynAccessor(17455)
-            special_42 = DynAccessor(17456)
+            special_31 = DynAccessor(17462)
+            special_42 = DynAccessor(17463)
 
         group12 = _group12()
 
         class _group13(DynAccessor):
             __slots__ = ()
-            special_41 = DynAccessor(17457)
-            special_42 = DynAccessor(17458)
+            special_41 = DynAccessor(17464)
+            special_42 = DynAccessor(17465)
 
         group13 = _group13()
 
         class _group14(DynAccessor):
             __slots__ = ()
-            special_43 = DynAccessor(17459)
+            special_43 = DynAccessor(17466)
 
         group14 = _group14()
 
         class _group15(DynAccessor):
             __slots__ = ()
-            special_44 = DynAccessor(17460)
+            special_44 = DynAccessor(17467)
 
         group15 = _group15()
 
         class _group16(DynAccessor):
             __slots__ = ()
-            special_45 = DynAccessor(17461)
+            special_45 = DynAccessor(17468)
 
         group16 = _group16()
 
         class _group17(DynAccessor):
             __slots__ = ()
-            battle_48 = DynAccessor(17215)
-            battle_49 = DynAccessor(17216)
-            battle_50 = DynAccessor(17217)
-            battle_51 = DynAccessor(17218)
-            battle_52 = DynAccessor(17219)
+            battle_48 = DynAccessor(17222)
+            battle_49 = DynAccessor(17223)
+            battle_50 = DynAccessor(17224)
+            battle_51 = DynAccessor(17225)
+            battle_52 = DynAccessor(17226)
 
         group17 = _group17()
 
         class _group18(DynAccessor):
             __slots__ = ()
-            special_51 = DynAccessor(17220)
-            special_52 = DynAccessor(17221)
-            special_53 = DynAccessor(17222)
-            special_54 = DynAccessor(17223)
+            special_51 = DynAccessor(17227)
+            special_52 = DynAccessor(17228)
+            special_53 = DynAccessor(17229)
+            special_54 = DynAccessor(17230)
 
         group18 = _group18()
 
         class _group2(DynAccessor):
             __slots__ = ()
-            battle_1 = DynAccessor(17145)
-            battle_10 = DynAccessor(17154)
-            battle_11 = DynAccessor(17155)
-            battle_12 = DynAccessor(17156)
-            battle_13 = DynAccessor(17157)
-            battle_14 = DynAccessor(17158)
-            battle_15 = DynAccessor(17159)
-            battle_16 = DynAccessor(17160)
-            battle_17 = DynAccessor(17161)
-            battle_18 = DynAccessor(17162)
-            battle_19 = DynAccessor(17163)
-            battle_2 = DynAccessor(17146)
-            battle_20 = DynAccessor(17164)
-            battle_21 = DynAccessor(17165)
-            battle_22 = DynAccessor(17166)
-            battle_23 = DynAccessor(17167)
-            battle_24 = DynAccessor(17168)
-            battle_25 = DynAccessor(17169)
-            battle_26 = DynAccessor(17170)
-            battle_27 = DynAccessor(17171)
-            battle_28 = DynAccessor(17172)
-            battle_29 = DynAccessor(17173)
-            battle_3 = DynAccessor(17147)
-            battle_30 = DynAccessor(17174)
-            battle_31 = DynAccessor(17175)
-            battle_32 = DynAccessor(17176)
-            battle_33 = DynAccessor(17177)
-            battle_34 = DynAccessor(17178)
-            battle_35 = DynAccessor(17179)
-            battle_36 = DynAccessor(17180)
-            battle_37 = DynAccessor(17181)
-            battle_38 = DynAccessor(17182)
-            battle_39 = DynAccessor(17183)
-            battle_4 = DynAccessor(17148)
-            battle_40 = DynAccessor(17184)
-            battle_41 = DynAccessor(17185)
-            battle_42 = DynAccessor(17186)
-            battle_43 = DynAccessor(17187)
-            battle_44 = DynAccessor(17188)
-            battle_45 = DynAccessor(17189)
-            battle_46 = DynAccessor(17190)
-            battle_47 = DynAccessor(17191)
-            battle_5 = DynAccessor(17149)
-            battle_53 = DynAccessor(17192)
-            battle_54 = DynAccessor(17193)
-            battle_55 = DynAccessor(17194)
-            battle_56 = DynAccessor(17195)
-            battle_57 = DynAccessor(17196)
-            battle_58 = DynAccessor(17197)
-            battle_59 = DynAccessor(17198)
-            battle_6 = DynAccessor(17150)
-            battle_60 = DynAccessor(17199)
-            battle_61 = DynAccessor(17200)
-            battle_62 = DynAccessor(17201)
-            battle_63 = DynAccessor(17202)
-            battle_64 = DynAccessor(17203)
-            battle_65 = DynAccessor(17204)
-            battle_66 = DynAccessor(17205)
-            battle_67 = DynAccessor(17206)
-            battle_68 = DynAccessor(17207)
-            battle_69 = DynAccessor(17208)
-            battle_7 = DynAccessor(17151)
-            battle_70 = DynAccessor(17209)
-            battle_71 = DynAccessor(17210)
-            battle_72 = DynAccessor(17211)
-            battle_73 = DynAccessor(17212)
-            battle_74 = DynAccessor(17213)
-            battle_75 = DynAccessor(17214)
-            battle_8 = DynAccessor(17152)
-            battle_9 = DynAccessor(17153)
+            battle_1 = DynAccessor(17152)
+            battle_10 = DynAccessor(17161)
+            battle_11 = DynAccessor(17162)
+            battle_12 = DynAccessor(17163)
+            battle_13 = DynAccessor(17164)
+            battle_14 = DynAccessor(17165)
+            battle_15 = DynAccessor(17166)
+            battle_16 = DynAccessor(17167)
+            battle_17 = DynAccessor(17168)
+            battle_18 = DynAccessor(17169)
+            battle_19 = DynAccessor(17170)
+            battle_2 = DynAccessor(17153)
+            battle_20 = DynAccessor(17171)
+            battle_21 = DynAccessor(17172)
+            battle_22 = DynAccessor(17173)
+            battle_23 = DynAccessor(17174)
+            battle_24 = DynAccessor(17175)
+            battle_25 = DynAccessor(17176)
+            battle_26 = DynAccessor(17177)
+            battle_27 = DynAccessor(17178)
+            battle_28 = DynAccessor(17179)
+            battle_29 = DynAccessor(17180)
+            battle_3 = DynAccessor(17154)
+            battle_30 = DynAccessor(17181)
+            battle_31 = DynAccessor(17182)
+            battle_32 = DynAccessor(17183)
+            battle_33 = DynAccessor(17184)
+            battle_34 = DynAccessor(17185)
+            battle_35 = DynAccessor(17186)
+            battle_36 = DynAccessor(17187)
+            battle_37 = DynAccessor(17188)
+            battle_38 = DynAccessor(17189)
+            battle_39 = DynAccessor(17190)
+            battle_4 = DynAccessor(17155)
+            battle_40 = DynAccessor(17191)
+            battle_41 = DynAccessor(17192)
+            battle_42 = DynAccessor(17193)
+            battle_43 = DynAccessor(17194)
+            battle_44 = DynAccessor(17195)
+            battle_45 = DynAccessor(17196)
+            battle_46 = DynAccessor(17197)
+            battle_47 = DynAccessor(17198)
+            battle_5 = DynAccessor(17156)
+            battle_53 = DynAccessor(17199)
+            battle_54 = DynAccessor(17200)
+            battle_55 = DynAccessor(17201)
+            battle_56 = DynAccessor(17202)
+            battle_57 = DynAccessor(17203)
+            battle_58 = DynAccessor(17204)
+            battle_59 = DynAccessor(17205)
+            battle_6 = DynAccessor(17157)
+            battle_60 = DynAccessor(17206)
+            battle_61 = DynAccessor(17207)
+            battle_62 = DynAccessor(17208)
+            battle_63 = DynAccessor(17209)
+            battle_64 = DynAccessor(17210)
+            battle_65 = DynAccessor(17211)
+            battle_66 = DynAccessor(17212)
+            battle_67 = DynAccessor(17213)
+            battle_68 = DynAccessor(17214)
+            battle_69 = DynAccessor(17215)
+            battle_7 = DynAccessor(17158)
+            battle_70 = DynAccessor(17216)
+            battle_71 = DynAccessor(17217)
+            battle_72 = DynAccessor(17218)
+            battle_73 = DynAccessor(17219)
+            battle_74 = DynAccessor(17220)
+            battle_75 = DynAccessor(17221)
+            battle_8 = DynAccessor(17159)
+            battle_9 = DynAccessor(17160)
 
         group2 = _group2()
 
         class _group20(DynAccessor):
             __slots__ = ()
-            special_61 = DynAccessor(17224)
-            special_62 = DynAccessor(17225)
-            special_63 = DynAccessor(17226)
-            special_64 = DynAccessor(17227)
+            special_61 = DynAccessor(17231)
+            special_62 = DynAccessor(17232)
+            special_63 = DynAccessor(17233)
+            special_64 = DynAccessor(17234)
 
         group20 = _group20()
 
         class _group21(DynAccessor):
             __slots__ = ()
-            special_70 = DynAccessor(17228)
-            special_71 = DynAccessor(17229)
+            special_70 = DynAccessor(17235)
+            special_71 = DynAccessor(17236)
 
         group21 = _group21()
 
         class _group22(DynAccessor):
             __slots__ = ()
-            special_80 = DynAccessor(17462)
-            special_81 = DynAccessor(17463)
+            special_80 = DynAccessor(17469)
+            special_81 = DynAccessor(17470)
 
         group22 = _group22()
 
         class _group23(DynAccessor):
             __slots__ = ()
-            special_90 = DynAccessor(17464)
-            special_91 = DynAccessor(17465)
-            special_92 = DynAccessor(17466)
+            special_90 = DynAccessor(17471)
+            special_91 = DynAccessor(17472)
+            special_92 = DynAccessor(17473)
 
         group23 = _group23()
 
         class _group24(DynAccessor):
             __slots__ = ()
-            special_93 = DynAccessor(17467)
-            special_94 = DynAccessor(17468)
-            special_95 = DynAccessor(17469)
-            special_96 = DynAccessor(17470)
+            special_93 = DynAccessor(17474)
+            special_94 = DynAccessor(17475)
+            special_95 = DynAccessor(17476)
+            special_96 = DynAccessor(17477)
 
         group24 = _group24()
 
         class _group25(DynAccessor):
             __slots__ = ()
-            special_100 = DynAccessor(17471)
-            special_101 = DynAccessor(17472)
-            special_102 = DynAccessor(17473)
-            special_103 = DynAccessor(17474)
-            special_104 = DynAccessor(17475)
+            special_100 = DynAccessor(17478)
+            special_101 = DynAccessor(17479)
+            special_102 = DynAccessor(17480)
+            special_103 = DynAccessor(17481)
+            special_104 = DynAccessor(17482)
 
         group25 = _group25()
 
         class _group26(DynAccessor):
             __slots__ = ()
-            special_110 = DynAccessor(17478)
-            special_111 = DynAccessor(17479)
+            special_110 = DynAccessor(17485)
+            special_111 = DynAccessor(17486)
 
         group26 = _group26()
 
         class _group27(DynAccessor):
             __slots__ = ()
-            special_201 = DynAccessor(17480)
-            special_202 = DynAccessor(17481)
-            special_203 = DynAccessor(17482)
-            special_204 = DynAccessor(17483)
-            special_205 = DynAccessor(17484)
-            special_206 = DynAccessor(17485)
-            special_207 = DynAccessor(17486)
-            special_208 = DynAccessor(17487)
-            special_209 = DynAccessor(17488)
-            special_210 = DynAccessor(17489)
+            special_201 = DynAccessor(17487)
+            special_202 = DynAccessor(17488)
+            special_203 = DynAccessor(17489)
+            special_204 = DynAccessor(17490)
+            special_205 = DynAccessor(17491)
+            special_206 = DynAccessor(17492)
+            special_207 = DynAccessor(17493)
+            special_208 = DynAccessor(17494)
+            special_209 = DynAccessor(17495)
+            special_210 = DynAccessor(17496)
 
         group27 = _group27()
 
         class _group28(DynAccessor):
             __slots__ = ()
-            special_220 = DynAccessor(17490)
-            special_221 = DynAccessor(17491)
+            special_220 = DynAccessor(17497)
+            special_221 = DynAccessor(17498)
 
         group28 = _group28()
 
         class _group29(DynAccessor):
             __slots__ = ()
-            special_230 = DynAccessor(17492)
+            special_230 = DynAccessor(17499)
 
         group29 = _group29()
 
         class _group3(DynAccessor):
             __slots__ = ()
-            cool_1 = DynAccessor(17242)
-            cool_10 = DynAccessor(17251)
-            cool_11 = DynAccessor(17252)
-            cool_12 = DynAccessor(17253)
-            cool_13 = DynAccessor(17254)
-            cool_14 = DynAccessor(17255)
-            cool_15 = DynAccessor(17256)
-            cool_16 = DynAccessor(17257)
-            cool_17 = DynAccessor(17258)
-            cool_18 = DynAccessor(17259)
-            cool_19 = DynAccessor(17260)
-            cool_2 = DynAccessor(17243)
-            cool_20 = DynAccessor(17261)
-            cool_21 = DynAccessor(17262)
-            cool_22 = DynAccessor(17263)
-            cool_23 = DynAccessor(17264)
-            cool_24 = DynAccessor(17265)
-            cool_25 = DynAccessor(17266)
-            cool_26 = DynAccessor(17267)
-            cool_27 = DynAccessor(17268)
-            cool_28 = DynAccessor(17269)
-            cool_29 = DynAccessor(17270)
-            cool_3 = DynAccessor(17244)
-            cool_30 = DynAccessor(17271)
-            cool_31 = DynAccessor(17272)
-            cool_32 = DynAccessor(17273)
-            cool_33 = DynAccessor(17274)
-            cool_34 = DynAccessor(17275)
-            cool_35 = DynAccessor(17276)
-            cool_36 = DynAccessor(17277)
-            cool_37 = DynAccessor(17278)
-            cool_38 = DynAccessor(17279)
-            cool_39 = DynAccessor(17280)
-            cool_4 = DynAccessor(17245)
-            cool_40 = DynAccessor(17281)
-            cool_41 = DynAccessor(17282)
-            cool_42 = DynAccessor(17283)
-            cool_43 = DynAccessor(17284)
-            cool_44 = DynAccessor(17285)
-            cool_45 = DynAccessor(17286)
-            cool_5 = DynAccessor(17246)
-            cool_6 = DynAccessor(17247)
-            cool_7 = DynAccessor(17248)
-            cool_8 = DynAccessor(17249)
-            cool_9 = DynAccessor(17250)
+            cool_1 = DynAccessor(17249)
+            cool_10 = DynAccessor(17258)
+            cool_11 = DynAccessor(17259)
+            cool_12 = DynAccessor(17260)
+            cool_13 = DynAccessor(17261)
+            cool_14 = DynAccessor(17262)
+            cool_15 = DynAccessor(17263)
+            cool_16 = DynAccessor(17264)
+            cool_17 = DynAccessor(17265)
+            cool_18 = DynAccessor(17266)
+            cool_19 = DynAccessor(17267)
+            cool_2 = DynAccessor(17250)
+            cool_20 = DynAccessor(17268)
+            cool_21 = DynAccessor(17269)
+            cool_22 = DynAccessor(17270)
+            cool_23 = DynAccessor(17271)
+            cool_24 = DynAccessor(17272)
+            cool_25 = DynAccessor(17273)
+            cool_26 = DynAccessor(17274)
+            cool_27 = DynAccessor(17275)
+            cool_28 = DynAccessor(17276)
+            cool_29 = DynAccessor(17277)
+            cool_3 = DynAccessor(17251)
+            cool_30 = DynAccessor(17278)
+            cool_31 = DynAccessor(17279)
+            cool_32 = DynAccessor(17280)
+            cool_33 = DynAccessor(17281)
+            cool_34 = DynAccessor(17282)
+            cool_35 = DynAccessor(17283)
+            cool_36 = DynAccessor(17284)
+            cool_37 = DynAccessor(17285)
+            cool_38 = DynAccessor(17286)
+            cool_39 = DynAccessor(17287)
+            cool_4 = DynAccessor(17252)
+            cool_40 = DynAccessor(17288)
+            cool_41 = DynAccessor(17289)
+            cool_42 = DynAccessor(17290)
+            cool_43 = DynAccessor(17291)
+            cool_44 = DynAccessor(17292)
+            cool_45 = DynAccessor(17293)
+            cool_5 = DynAccessor(17253)
+            cool_6 = DynAccessor(17254)
+            cool_7 = DynAccessor(17255)
+            cool_8 = DynAccessor(17256)
+            cool_9 = DynAccessor(17257)
 
         group3 = _group3()
 
         class _group30(DynAccessor):
             __slots__ = ()
-            special_240 = DynAccessor(17493)
-            special_241 = DynAccessor(17494)
+            special_240 = DynAccessor(17500)
+            special_241 = DynAccessor(17501)
 
         group30 = _group30()
 
         class _group31(DynAccessor):
             __slots__ = ()
-            special_250 = DynAccessor(17495)
+            special_250 = DynAccessor(17502)
 
         group31 = _group31()
 
         class _group32(DynAccessor):
             __slots__ = ()
-            special_251 = DynAccessor(17496)
+            special_251 = DynAccessor(17503)
 
         group32 = _group32()
 
         class _group33(DynAccessor):
             __slots__ = ()
-            special_260 = DynAccessor(17497)
-            special_261 = DynAccessor(17498)
-            special_262 = DynAccessor(17499)
-            special_263 = DynAccessor(17500)
-            special_264 = DynAccessor(17501)
+            special_260 = DynAccessor(17504)
+            special_261 = DynAccessor(17505)
+            special_262 = DynAccessor(17506)
+            special_263 = DynAccessor(17507)
+            special_264 = DynAccessor(17508)
 
         group33 = _group33()
 
         class _group34(DynAccessor):
             __slots__ = ()
-            special_270 = DynAccessor(17502)
-            special_271 = DynAccessor(17503)
+            special_270 = DynAccessor(17509)
+            special_271 = DynAccessor(17510)
 
         group34 = _group34()
 
         class _group35(DynAccessor):
             __slots__ = ()
-            special_280 = DynAccessor(17504)
-            special_281 = DynAccessor(17505)
+            special_280 = DynAccessor(17511)
+            special_281 = DynAccessor(17512)
 
         group35 = _group35()
 
         class _group36(DynAccessor):
             __slots__ = ()
-            special_290 = DynAccessor(17506)
+            special_290 = DynAccessor(17513)
 
         group36 = _group36()
 
         class _group37(DynAccessor):
             __slots__ = ()
-            special_300 = DynAccessor(17507)
+            special_300 = DynAccessor(17514)
 
         group37 = _group37()
 
         class _group38(DynAccessor):
             __slots__ = ()
-            special_310 = DynAccessor(17508)
+            special_310 = DynAccessor(17515)
 
         group38 = _group38()
 
         class _group39(DynAccessor):
             __slots__ = ()
-            special_320 = DynAccessor(17509)
+            special_320 = DynAccessor(17516)
 
         group39 = _group39()
 
         class _group4(DynAccessor):
             __slots__ = ()
-            signs_1 = DynAccessor(17287)
-            signs_10 = DynAccessor(17296)
-            signs_100 = DynAccessor(17386)
-            signs_101 = DynAccessor(17387)
-            signs_102 = DynAccessor(17388)
-            signs_103 = DynAccessor(17389)
-            signs_104 = DynAccessor(17390)
-            signs_105 = DynAccessor(17391)
-            signs_106 = DynAccessor(17392)
-            signs_107 = DynAccessor(17393)
-            signs_108 = DynAccessor(17394)
-            signs_109 = DynAccessor(17395)
-            signs_11 = DynAccessor(17297)
-            signs_110 = DynAccessor(17396)
-            signs_111 = DynAccessor(17397)
-            signs_112 = DynAccessor(17398)
-            signs_113 = DynAccessor(17399)
-            signs_114 = DynAccessor(17400)
-            signs_115 = DynAccessor(17401)
-            signs_116 = DynAccessor(17402)
-            signs_117 = DynAccessor(17403)
-            signs_118 = DynAccessor(17404)
-            signs_119 = DynAccessor(17405)
-            signs_12 = DynAccessor(17298)
-            signs_120 = DynAccessor(17406)
-            signs_121 = DynAccessor(17407)
-            signs_122 = DynAccessor(17408)
-            signs_123 = DynAccessor(17409)
-            signs_13 = DynAccessor(17299)
-            signs_14 = DynAccessor(17300)
-            signs_15 = DynAccessor(17301)
-            signs_16 = DynAccessor(17302)
-            signs_17 = DynAccessor(17303)
-            signs_18 = DynAccessor(17304)
-            signs_19 = DynAccessor(17305)
-            signs_2 = DynAccessor(17288)
-            signs_20 = DynAccessor(17306)
-            signs_21 = DynAccessor(17307)
-            signs_22 = DynAccessor(17308)
-            signs_23 = DynAccessor(17309)
-            signs_24 = DynAccessor(17310)
-            signs_25 = DynAccessor(17311)
-            signs_26 = DynAccessor(17312)
-            signs_27 = DynAccessor(17313)
-            signs_28 = DynAccessor(17314)
-            signs_29 = DynAccessor(17315)
-            signs_3 = DynAccessor(17289)
-            signs_30 = DynAccessor(17316)
-            signs_31 = DynAccessor(17317)
-            signs_32 = DynAccessor(17318)
-            signs_33 = DynAccessor(17319)
-            signs_34 = DynAccessor(17320)
-            signs_35 = DynAccessor(17321)
-            signs_36 = DynAccessor(17322)
-            signs_37 = DynAccessor(17323)
-            signs_38 = DynAccessor(17324)
-            signs_39 = DynAccessor(17325)
-            signs_4 = DynAccessor(17290)
-            signs_40 = DynAccessor(17326)
-            signs_41 = DynAccessor(17327)
-            signs_42 = DynAccessor(17328)
-            signs_43 = DynAccessor(17329)
-            signs_44 = DynAccessor(17330)
-            signs_45 = DynAccessor(17331)
-            signs_46 = DynAccessor(17332)
-            signs_47 = DynAccessor(17333)
-            signs_48 = DynAccessor(17334)
-            signs_49 = DynAccessor(17335)
-            signs_5 = DynAccessor(17291)
-            signs_50 = DynAccessor(17336)
-            signs_51 = DynAccessor(17337)
-            signs_52 = DynAccessor(17338)
-            signs_53 = DynAccessor(17339)
-            signs_54 = DynAccessor(17340)
-            signs_55 = DynAccessor(17341)
-            signs_56 = DynAccessor(17342)
-            signs_57 = DynAccessor(17343)
-            signs_58 = DynAccessor(17344)
-            signs_59 = DynAccessor(17345)
-            signs_6 = DynAccessor(17292)
-            signs_60 = DynAccessor(17355)
-            signs_61 = DynAccessor(17356)
-            signs_62 = DynAccessor(17357)
-            signs_63 = DynAccessor(17358)
-            signs_64 = DynAccessor(17359)
-            signs_65 = DynAccessor(17360)
-            signs_66 = DynAccessor(17361)
-            signs_67 = DynAccessor(17362)
-            signs_68 = DynAccessor(17363)
-            signs_69 = DynAccessor(17364)
-            signs_7 = DynAccessor(17293)
-            signs_70 = DynAccessor(17365)
-            signs_71 = DynAccessor(17366)
-            signs_72 = DynAccessor(17367)
-            signs_73 = DynAccessor(17368)
-            signs_74 = DynAccessor(17369)
-            signs_75 = DynAccessor(17370)
-            signs_76 = DynAccessor(17371)
-            signs_77 = DynAccessor(17372)
-            signs_78 = DynAccessor(17346)
-            signs_79 = DynAccessor(17373)
-            signs_8 = DynAccessor(17294)
-            signs_80 = DynAccessor(17347)
-            signs_81 = DynAccessor(17348)
-            signs_82 = DynAccessor(17349)
-            signs_83 = DynAccessor(17350)
-            signs_84 = DynAccessor(17351)
-            signs_85 = DynAccessor(17352)
-            signs_86 = DynAccessor(17353)
-            signs_87 = DynAccessor(17354)
-            signs_88 = DynAccessor(17374)
-            signs_89 = DynAccessor(17375)
-            signs_9 = DynAccessor(17295)
-            signs_90 = DynAccessor(17376)
-            signs_91 = DynAccessor(17377)
-            signs_92 = DynAccessor(17378)
-            signs_93 = DynAccessor(17379)
-            signs_94 = DynAccessor(17380)
-            signs_95 = DynAccessor(17381)
-            signs_96 = DynAccessor(17382)
-            signs_97 = DynAccessor(17383)
-            signs_98 = DynAccessor(17384)
-            signs_99 = DynAccessor(17385)
+            signs_1 = DynAccessor(17294)
+            signs_10 = DynAccessor(17303)
+            signs_100 = DynAccessor(17393)
+            signs_101 = DynAccessor(17394)
+            signs_102 = DynAccessor(17395)
+            signs_103 = DynAccessor(17396)
+            signs_104 = DynAccessor(17397)
+            signs_105 = DynAccessor(17398)
+            signs_106 = DynAccessor(17399)
+            signs_107 = DynAccessor(17400)
+            signs_108 = DynAccessor(17401)
+            signs_109 = DynAccessor(17402)
+            signs_11 = DynAccessor(17304)
+            signs_110 = DynAccessor(17403)
+            signs_111 = DynAccessor(17404)
+            signs_112 = DynAccessor(17405)
+            signs_113 = DynAccessor(17406)
+            signs_114 = DynAccessor(17407)
+            signs_115 = DynAccessor(17408)
+            signs_116 = DynAccessor(17409)
+            signs_117 = DynAccessor(17410)
+            signs_118 = DynAccessor(17411)
+            signs_119 = DynAccessor(17412)
+            signs_12 = DynAccessor(17305)
+            signs_120 = DynAccessor(17413)
+            signs_121 = DynAccessor(17414)
+            signs_122 = DynAccessor(17415)
+            signs_123 = DynAccessor(17416)
+            signs_13 = DynAccessor(17306)
+            signs_14 = DynAccessor(17307)
+            signs_15 = DynAccessor(17308)
+            signs_16 = DynAccessor(17309)
+            signs_17 = DynAccessor(17310)
+            signs_18 = DynAccessor(17311)
+            signs_19 = DynAccessor(17312)
+            signs_2 = DynAccessor(17295)
+            signs_20 = DynAccessor(17313)
+            signs_21 = DynAccessor(17314)
+            signs_22 = DynAccessor(17315)
+            signs_23 = DynAccessor(17316)
+            signs_24 = DynAccessor(17317)
+            signs_25 = DynAccessor(17318)
+            signs_26 = DynAccessor(17319)
+            signs_27 = DynAccessor(17320)
+            signs_28 = DynAccessor(17321)
+            signs_29 = DynAccessor(17322)
+            signs_3 = DynAccessor(17296)
+            signs_30 = DynAccessor(17323)
+            signs_31 = DynAccessor(17324)
+            signs_32 = DynAccessor(17325)
+            signs_33 = DynAccessor(17326)
+            signs_34 = DynAccessor(17327)
+            signs_35 = DynAccessor(17328)
+            signs_36 = DynAccessor(17329)
+            signs_37 = DynAccessor(17330)
+            signs_38 = DynAccessor(17331)
+            signs_39 = DynAccessor(17332)
+            signs_4 = DynAccessor(17297)
+            signs_40 = DynAccessor(17333)
+            signs_41 = DynAccessor(17334)
+            signs_42 = DynAccessor(17335)
+            signs_43 = DynAccessor(17336)
+            signs_44 = DynAccessor(17337)
+            signs_45 = DynAccessor(17338)
+            signs_46 = DynAccessor(17339)
+            signs_47 = DynAccessor(17340)
+            signs_48 = DynAccessor(17341)
+            signs_49 = DynAccessor(17342)
+            signs_5 = DynAccessor(17298)
+            signs_50 = DynAccessor(17343)
+            signs_51 = DynAccessor(17344)
+            signs_52 = DynAccessor(17345)
+            signs_53 = DynAccessor(17346)
+            signs_54 = DynAccessor(17347)
+            signs_55 = DynAccessor(17348)
+            signs_56 = DynAccessor(17349)
+            signs_57 = DynAccessor(17350)
+            signs_58 = DynAccessor(17351)
+            signs_59 = DynAccessor(17352)
+            signs_6 = DynAccessor(17299)
+            signs_60 = DynAccessor(17362)
+            signs_61 = DynAccessor(17363)
+            signs_62 = DynAccessor(17364)
+            signs_63 = DynAccessor(17365)
+            signs_64 = DynAccessor(17366)
+            signs_65 = DynAccessor(17367)
+            signs_66 = DynAccessor(17368)
+            signs_67 = DynAccessor(17369)
+            signs_68 = DynAccessor(17370)
+            signs_69 = DynAccessor(17371)
+            signs_7 = DynAccessor(17300)
+            signs_70 = DynAccessor(17372)
+            signs_71 = DynAccessor(17373)
+            signs_72 = DynAccessor(17374)
+            signs_73 = DynAccessor(17375)
+            signs_74 = DynAccessor(17376)
+            signs_75 = DynAccessor(17377)
+            signs_76 = DynAccessor(17378)
+            signs_77 = DynAccessor(17379)
+            signs_78 = DynAccessor(17353)
+            signs_79 = DynAccessor(17380)
+            signs_8 = DynAccessor(17301)
+            signs_80 = DynAccessor(17354)
+            signs_81 = DynAccessor(17355)
+            signs_82 = DynAccessor(17356)
+            signs_83 = DynAccessor(17357)
+            signs_84 = DynAccessor(17358)
+            signs_85 = DynAccessor(17359)
+            signs_86 = DynAccessor(17360)
+            signs_87 = DynAccessor(17361)
+            signs_88 = DynAccessor(17381)
+            signs_89 = DynAccessor(17382)
+            signs_9 = DynAccessor(17302)
+            signs_90 = DynAccessor(17383)
+            signs_91 = DynAccessor(17384)
+            signs_92 = DynAccessor(17385)
+            signs_93 = DynAccessor(17386)
+            signs_94 = DynAccessor(17387)
+            signs_95 = DynAccessor(17388)
+            signs_96 = DynAccessor(17389)
+            signs_97 = DynAccessor(17390)
+            signs_98 = DynAccessor(17391)
+            signs_99 = DynAccessor(17392)
 
         group4 = _group4()
 
         class _group40(DynAccessor):
             __slots__ = ()
-            special_330 = DynAccessor(17510)
+            special_330 = DynAccessor(17517)
 
         group40 = _group40()
 
         class _group41(DynAccessor):
             __slots__ = ()
-            special_340 = DynAccessor(17511)
-            special_341 = DynAccessor(17512)
-            special_342 = DynAccessor(17513)
+            special_340 = DynAccessor(17518)
+            special_341 = DynAccessor(17519)
+            special_342 = DynAccessor(17520)
 
         group41 = _group41()
 
         class _group42(DynAccessor):
             __slots__ = ()
-            special_343 = DynAccessor(17514)
-            special_344 = DynAccessor(17515)
-            special_345 = DynAccessor(17516)
+            special_343 = DynAccessor(17521)
+            special_344 = DynAccessor(17522)
+            special_345 = DynAccessor(17523)
 
         group42 = _group42()
 
         class _group43(DynAccessor):
             __slots__ = ()
-            special_346 = DynAccessor(17517)
-            special_347 = DynAccessor(17518)
-            special_348 = DynAccessor(17519)
+            special_346 = DynAccessor(17524)
+            special_347 = DynAccessor(17525)
+            special_348 = DynAccessor(17526)
 
         group43 = _group43()
 
         class _group44(DynAccessor):
             __slots__ = ()
-            special_349 = DynAccessor(17520)
-            special_350 = DynAccessor(17521)
-            special_351 = DynAccessor(17522)
+            special_349 = DynAccessor(17527)
+            special_350 = DynAccessor(17528)
+            special_351 = DynAccessor(17529)
 
         group44 = _group44()
 
         class _group45(DynAccessor):
             __slots__ = ()
-            special_360 = DynAccessor(17523)
-            special_361 = DynAccessor(17524)
-            special_362 = DynAccessor(17525)
-            special_363 = DynAccessor(17526)
-            special_364 = DynAccessor(17527)
-            special_365 = DynAccessor(17528)
-            special_366 = DynAccessor(17529)
-            special_367 = DynAccessor(17530)
+            special_360 = DynAccessor(17530)
+            special_361 = DynAccessor(17531)
+            special_362 = DynAccessor(17532)
+            special_363 = DynAccessor(17533)
+            special_364 = DynAccessor(17534)
+            special_365 = DynAccessor(17535)
+            special_366 = DynAccessor(17536)
+            special_367 = DynAccessor(17537)
 
         group45 = _group45()
 
         class _group46(DynAccessor):
             __slots__ = ()
-            special_383 = DynAccessor(17588)
+            special_383 = DynAccessor(17595)
 
         group46 = _group46()
 
         class _group5(DynAccessor):
             __slots__ = ()
-            sticker_01 = DynAccessor(17410)
-            sticker_02 = DynAccessor(17411)
-            sticker_03 = DynAccessor(17412)
-            sticker_04 = DynAccessor(17413)
-            sticker_05 = DynAccessor(17414)
-            sticker_06 = DynAccessor(17415)
-            sticker_07 = DynAccessor(17416)
-            sticker_08 = DynAccessor(17417)
-            sticker_09 = DynAccessor(17418)
-            sticker_10 = DynAccessor(17419)
+            sticker_01 = DynAccessor(17417)
+            sticker_02 = DynAccessor(17418)
+            sticker_03 = DynAccessor(17419)
+            sticker_04 = DynAccessor(17420)
+            sticker_05 = DynAccessor(17421)
+            sticker_06 = DynAccessor(17422)
+            sticker_07 = DynAccessor(17423)
+            sticker_08 = DynAccessor(17424)
+            sticker_09 = DynAccessor(17425)
+            sticker_10 = DynAccessor(17426)
 
         group5 = _group5()
 
         class _group7(DynAccessor):
             __slots__ = ()
-            clan_content_01 = DynAccessor(17420)
-            clan_content_02 = DynAccessor(17421)
-            clan_content_03 = DynAccessor(17422)
-            clan_content_04 = DynAccessor(17423)
-            clan_content_05 = DynAccessor(17424)
-            clan_content_06 = DynAccessor(17425)
-            clan_content_07 = DynAccessor(17426)
-            clan_content_08 = DynAccessor(17427)
-            clan_content_09 = DynAccessor(17428)
-            clan_content_10 = DynAccessor(17429)
-            clan_content_11 = DynAccessor(17430)
-            clan_content_12 = DynAccessor(17431)
-            clan_content_13 = DynAccessor(17432)
-            clan_content_14 = DynAccessor(17433)
-            clan_content_15 = DynAccessor(17434)
-            clan_content_16 = DynAccessor(17435)
-            clan_content_17 = DynAccessor(17436)
-            clan_content_18 = DynAccessor(17437)
-            clan_content_19 = DynAccessor(17438)
-            clan_content_20 = DynAccessor(17439)
-            clan_content_21 = DynAccessor(17440)
-            clan_content_22 = DynAccessor(17441)
-            clan_content_23 = DynAccessor(17442)
-            clan_content_24 = DynAccessor(17443)
-            clan_content_25 = DynAccessor(17444)
-            clan_content_26 = DynAccessor(17445)
-            clan_content_27 = DynAccessor(17446)
-            clan_content_28 = DynAccessor(17447)
-            clan_content_29 = DynAccessor(17448)
-            clan_content_30 = DynAccessor(17449)
-            clan_content_31 = DynAccessor(17450)
-            clan_content_32 = DynAccessor(17451)
+            clan_content_01 = DynAccessor(17427)
+            clan_content_02 = DynAccessor(17428)
+            clan_content_03 = DynAccessor(17429)
+            clan_content_04 = DynAccessor(17430)
+            clan_content_05 = DynAccessor(17431)
+            clan_content_06 = DynAccessor(17432)
+            clan_content_07 = DynAccessor(17433)
+            clan_content_08 = DynAccessor(17434)
+            clan_content_09 = DynAccessor(17435)
+            clan_content_10 = DynAccessor(17436)
+            clan_content_11 = DynAccessor(17437)
+            clan_content_12 = DynAccessor(17438)
+            clan_content_13 = DynAccessor(17439)
+            clan_content_14 = DynAccessor(17440)
+            clan_content_15 = DynAccessor(17441)
+            clan_content_16 = DynAccessor(17442)
+            clan_content_17 = DynAccessor(17443)
+            clan_content_18 = DynAccessor(17444)
+            clan_content_19 = DynAccessor(17445)
+            clan_content_20 = DynAccessor(17446)
+            clan_content_21 = DynAccessor(17447)
+            clan_content_22 = DynAccessor(17448)
+            clan_content_23 = DynAccessor(17449)
+            clan_content_24 = DynAccessor(17450)
+            clan_content_25 = DynAccessor(17451)
+            clan_content_26 = DynAccessor(17452)
+            clan_content_27 = DynAccessor(17453)
+            clan_content_28 = DynAccessor(17454)
+            clan_content_29 = DynAccessor(17455)
+            clan_content_30 = DynAccessor(17456)
+            clan_content_31 = DynAccessor(17457)
+            clan_content_32 = DynAccessor(17458)
 
         group7 = _group7()
 
         class _group8(DynAccessor):
             __slots__ = ()
-            special_01 = DynAccessor(17452)
+            special_01 = DynAccessor(17459)
 
         group8 = _group8()
 
         class _group9(DynAccessor):
             __slots__ = ()
-            asia_11 = DynAccessor(17477)
-            special_11 = DynAccessor(17453)
+            asia_11 = DynAccessor(17484)
+            special_11 = DynAccessor(17460)
 
         group9 = _group9()
-        IGR = DynAccessor(17090)
-        M41_asia = DynAccessor(17476)
-        signs = DynAccessor(18287)
+        IGR = DynAccessor(17097)
+        M41_asia = DynAccessor(17483)
+        signs = DynAccessor(18294)
 
         class _special(DynAccessor):
             __slots__ = ()
-            sticker_368 = DynAccessor(17239)
-            sticker_369 = DynAccessor(17240)
-            sticker_370 = DynAccessor(17241)
-            sticker_380 = DynAccessor(17531)
-            sticker_381 = DynAccessor(17532)
-            sticker_382 = DynAccessor(17533)
-            sticker_384 = DynAccessor(17535)
-            sticker_385 = DynAccessor(17536)
-            sticker_386 = DynAccessor(17537)
-            sticker_387 = DynAccessor(17538)
-            sticker_388 = DynAccessor(17539)
-            sticker_389 = DynAccessor(17540)
-            sticker_390 = DynAccessor(17541)
-            sticker_391 = DynAccessor(17542)
-            sticker_392 = DynAccessor(17543)
-            sticker_393 = DynAccessor(17544)
-            sticker_394 = DynAccessor(17545)
-            sticker_395 = DynAccessor(17534)
-            sticker_396 = DynAccessor(17546)
-            sticker_398 = DynAccessor(17547)
-            sticker_399 = DynAccessor(17548)
-            sticker_400 = DynAccessor(17549)
-            sticker_401 = DynAccessor(17550)
-            sticker_402 = DynAccessor(17551)
-            sticker_402_desc = DynAccessor(17552)
-            sticker_403 = DynAccessor(17553)
-            sticker_404 = DynAccessor(17554)
-            sticker_405 = DynAccessor(17555)
-            sticker_406 = DynAccessor(17556)
-            sticker_407 = DynAccessor(17557)
-            sticker_408 = DynAccessor(17558)
-            sticker_409 = DynAccessor(17559)
-            sticker_410 = DynAccessor(17560)
-            sticker_411 = DynAccessor(17561)
-            sticker_412 = DynAccessor(17562)
-            sticker_413 = DynAccessor(17569)
-            sticker_414 = DynAccessor(17570)
-            sticker_415 = DynAccessor(17571)
-            sticker_416 = DynAccessor(17572)
-            sticker_417 = DynAccessor(17573)
-            sticker_418 = DynAccessor(17574)
-            sticker_419 = DynAccessor(17575)
-            sticker_420 = DynAccessor(17576)
-            sticker_421 = DynAccessor(17577)
-            sticker_422 = DynAccessor(17578)
-            sticker_423 = DynAccessor(17579)
-            sticker_424 = DynAccessor(17580)
-            sticker_425 = DynAccessor(17563)
-            sticker_426 = DynAccessor(17564)
-            sticker_427 = DynAccessor(17565)
-            sticker_428 = DynAccessor(17566)
-            sticker_429 = DynAccessor(17567)
-            sticker_430 = DynAccessor(17568)
-            sticker_431 = DynAccessor(17581)
-            sticker_432 = DynAccessor(17584)
-            sticker_433 = DynAccessor(17585)
-            sticker_434 = DynAccessor(17586)
-            sticker_435 = DynAccessor(17587)
-            sticker_436 = DynAccessor(17582)
-            sticker_437 = DynAccessor(17583)
-            sticker_438 = DynAccessor(17589)
-            sticker_439 = DynAccessor(17590)
-            sticker_440 = DynAccessor(17591)
-            sticker_441 = DynAccessor(17592)
-            sticker_442 = DynAccessor(17593)
-            sticker_443 = DynAccessor(17594)
-            sticker_444 = DynAccessor(17595)
-            sticker_445 = DynAccessor(17596)
-            sticker_446 = DynAccessor(17597)
-            sticker_447 = DynAccessor(17598)
-            sticker_448 = DynAccessor(17599)
-            sticker_449 = DynAccessor(17600)
-            sticker_450 = DynAccessor(17601)
-            sticker_451 = DynAccessor(17614)
-            sticker_452 = DynAccessor(17615)
-            sticker_453 = DynAccessor(17616)
-            sticker_454 = DynAccessor(17617)
-            sticker_455 = DynAccessor(17618)
-            sticker_456 = DynAccessor(17619)
-            sticker_457 = DynAccessor(17620)
-            sticker_458 = DynAccessor(17621)
-            sticker_459 = DynAccessor(17622)
-            sticker_460 = DynAccessor(17623)
-            sticker_461 = DynAccessor(17624)
-            sticker_462 = DynAccessor(17625)
-            sticker_463 = DynAccessor(17602)
-            sticker_464 = DynAccessor(17603)
-            sticker_465 = DynAccessor(17604)
-            sticker_466 = DynAccessor(17605)
-            sticker_467 = DynAccessor(17606)
-            sticker_468 = DynAccessor(17607)
-            sticker_469 = DynAccessor(17608)
-            sticker_470 = DynAccessor(17609)
-            sticker_471 = DynAccessor(17610)
-            sticker_472 = DynAccessor(17611)
-            sticker_473 = DynAccessor(17612)
-            sticker_474 = DynAccessor(17613)
-            sticker_475 = DynAccessor(17626)
-            sticker_476 = DynAccessor(17627)
-            sticker_477 = DynAccessor(17628)
+            sticker_368 = DynAccessor(17246)
+            sticker_369 = DynAccessor(17247)
+            sticker_370 = DynAccessor(17248)
+            sticker_380 = DynAccessor(17538)
+            sticker_381 = DynAccessor(17539)
+            sticker_382 = DynAccessor(17540)
+            sticker_384 = DynAccessor(17542)
+            sticker_385 = DynAccessor(17543)
+            sticker_386 = DynAccessor(17544)
+            sticker_387 = DynAccessor(17545)
+            sticker_388 = DynAccessor(17546)
+            sticker_389 = DynAccessor(17547)
+            sticker_390 = DynAccessor(17548)
+            sticker_391 = DynAccessor(17549)
+            sticker_392 = DynAccessor(17550)
+            sticker_393 = DynAccessor(17551)
+            sticker_394 = DynAccessor(17552)
+            sticker_395 = DynAccessor(17541)
+            sticker_396 = DynAccessor(17553)
+            sticker_398 = DynAccessor(17554)
+            sticker_399 = DynAccessor(17555)
+            sticker_400 = DynAccessor(17556)
+            sticker_401 = DynAccessor(17557)
+            sticker_402 = DynAccessor(17558)
+            sticker_402_desc = DynAccessor(17559)
+            sticker_403 = DynAccessor(17560)
+            sticker_404 = DynAccessor(17561)
+            sticker_405 = DynAccessor(17562)
+            sticker_406 = DynAccessor(17563)
+            sticker_407 = DynAccessor(17564)
+            sticker_408 = DynAccessor(17565)
+            sticker_409 = DynAccessor(17566)
+            sticker_410 = DynAccessor(17567)
+            sticker_411 = DynAccessor(17568)
+            sticker_412 = DynAccessor(17569)
+            sticker_413 = DynAccessor(17576)
+            sticker_414 = DynAccessor(17577)
+            sticker_415 = DynAccessor(17578)
+            sticker_416 = DynAccessor(17579)
+            sticker_417 = DynAccessor(17580)
+            sticker_418 = DynAccessor(17581)
+            sticker_419 = DynAccessor(17582)
+            sticker_420 = DynAccessor(17583)
+            sticker_421 = DynAccessor(17584)
+            sticker_422 = DynAccessor(17585)
+            sticker_423 = DynAccessor(17586)
+            sticker_424 = DynAccessor(17587)
+            sticker_425 = DynAccessor(17570)
+            sticker_426 = DynAccessor(17571)
+            sticker_427 = DynAccessor(17572)
+            sticker_428 = DynAccessor(17573)
+            sticker_429 = DynAccessor(17574)
+            sticker_430 = DynAccessor(17575)
+            sticker_431 = DynAccessor(17588)
+            sticker_432 = DynAccessor(17591)
+            sticker_433 = DynAccessor(17592)
+            sticker_434 = DynAccessor(17593)
+            sticker_435 = DynAccessor(17594)
+            sticker_436 = DynAccessor(17589)
+            sticker_437 = DynAccessor(17590)
+            sticker_438 = DynAccessor(17596)
+            sticker_439 = DynAccessor(17597)
+            sticker_440 = DynAccessor(17598)
+            sticker_441 = DynAccessor(17599)
+            sticker_442 = DynAccessor(17600)
+            sticker_443 = DynAccessor(17601)
+            sticker_444 = DynAccessor(17602)
+            sticker_445 = DynAccessor(17603)
+            sticker_446 = DynAccessor(17604)
+            sticker_447 = DynAccessor(17605)
+            sticker_448 = DynAccessor(17606)
+            sticker_449 = DynAccessor(17607)
+            sticker_450 = DynAccessor(17608)
+            sticker_451 = DynAccessor(17621)
+            sticker_452 = DynAccessor(17622)
+            sticker_453 = DynAccessor(17623)
+            sticker_454 = DynAccessor(17624)
+            sticker_455 = DynAccessor(17625)
+            sticker_456 = DynAccessor(17626)
+            sticker_457 = DynAccessor(17627)
+            sticker_458 = DynAccessor(17628)
+            sticker_459 = DynAccessor(17629)
+            sticker_460 = DynAccessor(17630)
+            sticker_461 = DynAccessor(17631)
+            sticker_462 = DynAccessor(17632)
+            sticker_463 = DynAccessor(17609)
+            sticker_464 = DynAccessor(17610)
+            sticker_465 = DynAccessor(17611)
+            sticker_466 = DynAccessor(17612)
+            sticker_467 = DynAccessor(17613)
+            sticker_468 = DynAccessor(17614)
+            sticker_469 = DynAccessor(17615)
+            sticker_470 = DynAccessor(17616)
+            sticker_471 = DynAccessor(17617)
+            sticker_472 = DynAccessor(17618)
+            sticker_473 = DynAccessor(17619)
+            sticker_474 = DynAccessor(17620)
+            sticker_475 = DynAccessor(17633)
+            sticker_476 = DynAccessor(17634)
+            sticker_477 = DynAccessor(17635)
 
             class _sticker_478(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(19468)
+                description = DynAccessor(19479)
 
-            sticker_478 = _sticker_478(19467)
-            sticker_482 = DynAccessor(17629)
-            sticker_483 = DynAccessor(17630)
-            sticker_484 = DynAccessor(17631)
-            sticker_485 = DynAccessor(17632)
-            sticker_486 = DynAccessor(17633)
-            sticker_487 = DynAccessor(17634)
-            sticker_488 = DynAccessor(17635)
-            sticker_489 = DynAccessor(17636)
-            sticker_490 = DynAccessor(17641)
-            sticker_491 = DynAccessor(17642)
+            sticker_478 = _sticker_478(19478)
+            sticker_482 = DynAccessor(17636)
+            sticker_483 = DynAccessor(17637)
+            sticker_484 = DynAccessor(17638)
+            sticker_485 = DynAccessor(17639)
+            sticker_486 = DynAccessor(17640)
+            sticker_487 = DynAccessor(17641)
+            sticker_488 = DynAccessor(17642)
+            sticker_489 = DynAccessor(17643)
+            sticker_490 = DynAccessor(17648)
+            sticker_491 = DynAccessor(17649)
 
             class _sticker_493(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(17638)
+                description = DynAccessor(17645)
 
-            sticker_493 = _sticker_493(17637)
-            sticker_494 = DynAccessor(17643)
-            sticker_495 = DynAccessor(17644)
-            sticker_496 = DynAccessor(17645)
+            sticker_493 = _sticker_493(17644)
+            sticker_494 = DynAccessor(17650)
+            sticker_495 = DynAccessor(17651)
+            sticker_496 = DynAccessor(17652)
 
             class _sticker_497(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(17640)
+                description = DynAccessor(17647)
 
-            sticker_497 = _sticker_497(17639)
-            sticker_515 = DynAccessor(17646)
+            sticker_497 = _sticker_497(17646)
+            sticker_515 = DynAccessor(17653)
 
-        special = _special(17089)
+        special = _special(17096)
 
-    emblem = _emblem(17087)
+    emblem = _emblem(17094)
 
     class _filter(DynAccessor):
         __slots__ = ()
@@ -52688,32 +52714,32 @@ class vehicle_customization(DynAccessor):
 
             class _bonusType(DynAccessor):
                 __slots__ = ()
-                title = DynAccessor(18414)
+                title = DynAccessor(18421)
 
             bonusType = _bonusType()
 
             class _formfilters(DynAccessor):
                 __slots__ = ()
-                title = DynAccessor(18411)
+                title = DynAccessor(18418)
 
             formfilters = _formfilters()
-            getDefaultSettings = DynAccessor(18416)
+            getDefaultSettings = DynAccessor(18423)
 
             class _groups(DynAccessor):
                 __slots__ = ()
-                all = DynAccessor(18417)
-                title = DynAccessor(18415)
+                all = DynAccessor(18424)
+                title = DynAccessor(18422)
 
             groups = _groups()
 
             class _showonlyfilters(DynAccessor):
                 __slots__ = ()
-                acquired = DynAccessor(18413)
-                historic = DynAccessor(18412)
-                title = DynAccessor(18410)
+                acquired = DynAccessor(18420)
+                historic = DynAccessor(18419)
+                title = DynAccessor(18417)
 
             showonlyfilters = _showonlyfilters()
-            title = DynAccessor(18409)
+            title = DynAccessor(18416)
 
         popover = _popover()
 
@@ -52721,21 +52747,21 @@ class vehicle_customization(DynAccessor):
 
     class _form(DynAccessor):
         __slots__ = ()
-        formfactor_rect1x2 = DynAccessor(19475)
-        formfactor_rect1x3 = DynAccessor(19474)
-        formfactor_rect1x4 = DynAccessor(19473)
-        formfactor_rect1x6 = DynAccessor(19472)
-        formfactor_square = DynAccessor(19476)
+        formfactor_rect1x2 = DynAccessor(19486)
+        formfactor_rect1x3 = DynAccessor(19485)
+        formfactor_rect1x4 = DynAccessor(19484)
+        formfactor_rect1x6 = DynAccessor(19483)
+        formfactor_square = DynAccessor(19487)
 
     form = _form()
 
     class _gold_style(DynAccessor):
         __slots__ = ()
-        gold_style_01 = DynAccessor(18797)
+        gold_style_01 = DynAccessor(18804)
 
         class _gold_style_01_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18798)
+            long = DynAccessor(18805)
 
         gold_style_01_desc = _gold_style_01_desc()
 
@@ -52743,10 +52769,10 @@ class vehicle_customization(DynAccessor):
 
     class _historical_style(DynAccessor):
         __slots__ = ()
-        strong = DynAccessor(19061)
-        strong_desc = DynAccessor(19062)
-        tunisia_dazzle = DynAccessor(19065)
-        tunisia_dazzle_desc = DynAccessor(19066)
+        strong = DynAccessor(19068)
+        strong_desc = DynAccessor(19069)
+        tunisia_dazzle = DynAccessor(19072)
+        tunisia_dazzle_desc = DynAccessor(19073)
 
     historical_style = _historical_style()
 
@@ -52755,7 +52781,7 @@ class vehicle_customization(DynAccessor):
 
         class _styleName(DynAccessor):
             __slots__ = ()
-            custsomStyle = DynAccessor(19134)
+            custsomStyle = DynAccessor(19143)
 
         styleName = _styleName()
 
@@ -52766,8 +52792,8 @@ class vehicle_customization(DynAccessor):
 
         class _free(DynAccessor):
             __slots__ = ()
-            cut = DynAccessor(16696)
-            full = DynAccessor(16695)
+            cut = DynAccessor(16703)
+            full = DynAccessor(16702)
 
         free = _free()
 
@@ -52775,844 +52801,846 @@ class vehicle_customization(DynAccessor):
 
     class _inscription(DynAccessor):
         __slots__ = ()
-        animal = DynAccessor(17652)
+        animal = DynAccessor(17659)
 
         class _ASIA(DynAccessor):
             __slots__ = ()
-            c_59_21797 = DynAccessor(18227)
-            c_651 = DynAccessor(18225)
-            c_66 = DynAccessor(18226)
+            c_59_21797 = DynAccessor(18234)
+            c_651 = DynAccessor(18232)
+            c_66 = DynAccessor(18233)
 
-        ASIA = _ASIA(18224)
+        ASIA = _ASIA(18231)
 
         class _battle(DynAccessor):
             __slots__ = ()
-            inscription_246 = DynAccessor(18248)
-            inscription_247 = DynAccessor(18249)
-            inscription_248 = DynAccessor(18250)
-            inscription_249 = DynAccessor(18251)
-            inscription_250 = DynAccessor(18252)
-            inscription_251 = DynAccessor(18253)
-            inscription_252 = DynAccessor(18254)
-            inscription_253 = DynAccessor(18246)
-            inscription_254 = DynAccessor(18247)
+            inscription_246 = DynAccessor(18255)
+            inscription_247 = DynAccessor(18256)
+            inscription_248 = DynAccessor(18257)
+            inscription_249 = DynAccessor(18258)
+            inscription_250 = DynAccessor(18259)
+            inscription_251 = DynAccessor(18260)
+            inscription_252 = DynAccessor(18261)
+            inscription_253 = DynAccessor(18253)
+            inscription_254 = DynAccessor(18254)
 
-        battle = _battle(17659)
+        battle = _battle(17666)
 
         class _china(DynAccessor):
             __slots__ = ()
-            action = DynAccessor(17793)
-            better = DynAccessor(17807)
-            blood = DynAccessor(17791)
-            destiny = DynAccessor(17792)
-            difficult = DynAccessor(17808)
-            faith = DynAccessor(17794)
-            Fen = DynAccessor(17803)
-            fight = DynAccessor(17800)
-            firm = DynAccessor(17799)
-            harm = DynAccessor(17790)
-            help = DynAccessor(17796)
-            hero = DynAccessor(17801)
-            knock_down = DynAccessor(17810)
-            light = DynAccessor(17789)
-            myself = DynAccessor(17806)
-            pain = DynAccessor(17788)
-            people = DynAccessor(17802)
-            success = DynAccessor(17805)
-            sun = DynAccessor(17798)
-            united = DynAccessor(17809)
-            walk_alone = DynAccessor(17795)
-            war = DynAccessor(17804)
-            wish = DynAccessor(17797)
+            action = DynAccessor(17800)
+            better = DynAccessor(17814)
+            blood = DynAccessor(17798)
+            destiny = DynAccessor(17799)
+            difficult = DynAccessor(17815)
+            faith = DynAccessor(17801)
+            Fen = DynAccessor(17810)
+            fight = DynAccessor(17807)
+            firm = DynAccessor(17806)
+            harm = DynAccessor(17797)
+            help = DynAccessor(17803)
+            hero = DynAccessor(17808)
+            knock_down = DynAccessor(17817)
+            light = DynAccessor(17796)
+            myself = DynAccessor(17813)
+            pain = DynAccessor(17795)
+            people = DynAccessor(17809)
+            success = DynAccessor(17812)
+            sun = DynAccessor(17805)
+            united = DynAccessor(17816)
+            walk_alone = DynAccessor(17802)
+            war = DynAccessor(17811)
+            wish = DynAccessor(17804)
 
         china = _china()
 
         class _clan_content(DynAccessor):
             __slots__ = ()
-            inscription_01 = DynAccessor(17660)
-            inscription_02 = DynAccessor(17661)
-            inscription_03 = DynAccessor(17662)
-            inscription_04 = DynAccessor(17663)
-            inscription_05 = DynAccessor(17664)
-            inscription_06 = DynAccessor(17665)
-            inscription_07 = DynAccessor(17666)
-            inscription_11 = DynAccessor(17667)
-            inscription_12 = DynAccessor(17668)
-            inscription_13 = DynAccessor(17669)
-            inscription_14 = DynAccessor(17670)
-            inscription_15 = DynAccessor(17671)
-            inscription_16 = DynAccessor(17672)
-            inscription_17 = DynAccessor(17673)
-            inscription_21 = DynAccessor(17674)
-            inscription_22 = DynAccessor(17675)
-            inscription_23 = DynAccessor(17676)
-            inscription_24 = DynAccessor(17677)
-            inscription_25 = DynAccessor(17678)
-            inscription_26 = DynAccessor(17679)
-            inscription_27 = DynAccessor(17680)
+            inscription_01 = DynAccessor(17667)
+            inscription_02 = DynAccessor(17668)
+            inscription_03 = DynAccessor(17669)
+            inscription_04 = DynAccessor(17670)
+            inscription_05 = DynAccessor(17671)
+            inscription_06 = DynAccessor(17672)
+            inscription_07 = DynAccessor(17673)
+            inscription_11 = DynAccessor(17674)
+            inscription_12 = DynAccessor(17675)
+            inscription_13 = DynAccessor(17676)
+            inscription_14 = DynAccessor(17677)
+            inscription_15 = DynAccessor(17678)
+            inscription_16 = DynAccessor(17679)
+            inscription_17 = DynAccessor(17680)
+            inscription_21 = DynAccessor(17681)
+            inscription_22 = DynAccessor(17682)
+            inscription_23 = DynAccessor(17683)
+            inscription_24 = DynAccessor(17684)
+            inscription_25 = DynAccessor(17685)
+            inscription_26 = DynAccessor(17686)
+            inscription_27 = DynAccessor(17687)
 
-        clan_content = _clan_content(17657)
+        clan_content = _clan_content(17664)
 
         class _czech(DynAccessor):
             __slots__ = ()
-            brumovice = DynAccessor(17835)
-            chachar = DynAccessor(17840)
-            csr = DynAccessor(17845)
-            csrozhlas = DynAccessor(17841)
-            janosik = DynAccessor(17836)
-            kapitanotakarjaros = DynAccessor(17842)
-            lezaky = DynAccessor(17837)
-            lidice = DynAccessor(17831)
-            pravdavitezi = DynAccessor(17847)
-            prazacka = DynAccessor(17832)
-            radhost = DynAccessor(17838)
-            rusalka = DynAccessor(17844)
-            sotek = DynAccessor(17833)
-            strasnice = DynAccessor(17846)
-            zanasepadle = DynAccessor(17839)
-            zizka = DynAccessor(17843)
-            zizkov = DynAccessor(17834)
+            brumovice = DynAccessor(17842)
+            chachar = DynAccessor(17847)
+            csr = DynAccessor(17852)
+            csrozhlas = DynAccessor(17848)
+            janosik = DynAccessor(17843)
+            kapitanotakarjaros = DynAccessor(17849)
+            lezaky = DynAccessor(17844)
+            lidice = DynAccessor(17838)
+            pravdavitezi = DynAccessor(17854)
+            prazacka = DynAccessor(17839)
+            radhost = DynAccessor(17845)
+            rusalka = DynAccessor(17851)
+            sotek = DynAccessor(17840)
+            strasnice = DynAccessor(17853)
+            zanasepadle = DynAccessor(17846)
+            zizka = DynAccessor(17850)
+            zizkov = DynAccessor(17841)
 
         czech = _czech()
 
         class _france(DynAccessor):
             __slots__ = ()
-            abord = DynAccessor(17915)
-            alma = DynAccessor(17883)
-            alpes = DynAccessor(17868)
-            aquitaine = DynAccessor(17881)
-            aramis = DynAccessor(17927)
-            arc = DynAccessor(17917)
-            armagnac = DynAccessor(17886)
-            armor = DynAccessor(17863)
-            artagnan = DynAccessor(17919)
-            athos = DynAccessor(17929)
-            azur = DynAccessor(17880)
-            bombard = DynAccessor(17923)
-            bonoparte = DynAccessor(17924)
-            bourgogne = DynAccessor(17878)
-            boyard = DynAccessor(17921)
-            brazzaville = DynAccessor(17888)
-            brest = DynAccessor(17891)
-            bretagne = DynAccessor(17862)
-            caen = DynAccessor(17875)
-            casablanca = DynAccessor(17892)
-            chat = DynAccessor(17900)
-            courageux = DynAccessor(17907)
-            denis = DynAccessor(17873)
-            fantasque = DynAccessor(17908)
-            flandre = DynAccessor(17884)
-            foch = DynAccessor(17925)
-            fort = DynAccessor(17893)
-            france = DynAccessor(17922)
-            glorieux = DynAccessor(17904)
-            guepard = DynAccessor(17897)
-            ile = DynAccessor(17867)
-            intrepide = DynAccessor(17906)
-            jaguar = DynAccessor(17901)
-            june = DynAccessor(17931)
-            leopard = DynAccessor(17896)
-            libre = DynAccessor(17913)
-            lille = DynAccessor(17876)
-            limousin = DynAccessor(17865)
-            linvulnerable = DynAccessor(17932)
-            lion = DynAccessor(17895)
-            loire = DynAccessor(17879)
-            lorette = DynAccessor(17890)
-            lorraine = DynAccessor(17866)
-            lutte = DynAccessor(17914)
-            lynx = DynAccessor(17899)
-            lyon = DynAccessor(17877)
-            marne = DynAccessor(17933)
-            marseille = DynAccessor(17871)
-            moscowa = DynAccessor(17887)
-            nord = DynAccessor(17870)
-            normandie = DynAccessor(17869)
-            nostradamus = DynAccessor(17926)
-            olivier = DynAccessor(17930)
-            orleans = DynAccessor(17882)
-            ouragan = DynAccessor(17912)
-            ours = DynAccessor(17903)
-            panther = DynAccessor(17898)
-            paris = DynAccessor(17872)
-            pirate = DynAccessor(17909)
-            pommard = DynAccessor(17885)
-            porthos = DynAccessor(17928)
-            puma = DynAccessor(17902)
-            richelieu = DynAccessor(17920)
-            sirocco = DynAccessor(17889)
-            tell = DynAccessor(17918)
-            temeraire = DynAccessor(17905)
-            terrible = DynAccessor(17910)
-            tornade = DynAccessor(17911)
-            toulouse = DynAccessor(17874)
-            vertus = DynAccessor(17894)
-            vive = DynAccessor(17916)
-            yvelines = DynAccessor(17864)
+            abord = DynAccessor(17922)
+            alma = DynAccessor(17890)
+            alpes = DynAccessor(17875)
+            aquitaine = DynAccessor(17888)
+            aramis = DynAccessor(17934)
+            arc = DynAccessor(17924)
+            armagnac = DynAccessor(17893)
+            armor = DynAccessor(17870)
+            artagnan = DynAccessor(17926)
+            athos = DynAccessor(17936)
+            azur = DynAccessor(17887)
+            bombard = DynAccessor(17930)
+            bonoparte = DynAccessor(17931)
+            bourgogne = DynAccessor(17885)
+            boyard = DynAccessor(17928)
+            brazzaville = DynAccessor(17895)
+            brest = DynAccessor(17898)
+            bretagne = DynAccessor(17869)
+            caen = DynAccessor(17882)
+            casablanca = DynAccessor(17899)
+            chat = DynAccessor(17907)
+            courageux = DynAccessor(17914)
+            denis = DynAccessor(17880)
+            fantasque = DynAccessor(17915)
+            flandre = DynAccessor(17891)
+            foch = DynAccessor(17932)
+            fort = DynAccessor(17900)
+            france = DynAccessor(17929)
+            glorieux = DynAccessor(17911)
+            guepard = DynAccessor(17904)
+            ile = DynAccessor(17874)
+            intrepide = DynAccessor(17913)
+            jaguar = DynAccessor(17908)
+            june = DynAccessor(17938)
+            leopard = DynAccessor(17903)
+            libre = DynAccessor(17920)
+            lille = DynAccessor(17883)
+            limousin = DynAccessor(17872)
+            linvulnerable = DynAccessor(17939)
+            lion = DynAccessor(17902)
+            loire = DynAccessor(17886)
+            lorette = DynAccessor(17897)
+            lorraine = DynAccessor(17873)
+            lutte = DynAccessor(17921)
+            lynx = DynAccessor(17906)
+            lyon = DynAccessor(17884)
+            marne = DynAccessor(17940)
+            marseille = DynAccessor(17878)
+            moscowa = DynAccessor(17894)
+            nord = DynAccessor(17877)
+            normandie = DynAccessor(17876)
+            nostradamus = DynAccessor(17933)
+            olivier = DynAccessor(17937)
+            orleans = DynAccessor(17889)
+            ouragan = DynAccessor(17919)
+            ours = DynAccessor(17910)
+            panther = DynAccessor(17905)
+            paris = DynAccessor(17879)
+            pirate = DynAccessor(17916)
+            pommard = DynAccessor(17892)
+            porthos = DynAccessor(17935)
+            puma = DynAccessor(17909)
+            richelieu = DynAccessor(17927)
+            sirocco = DynAccessor(17896)
+            tell = DynAccessor(17925)
+            temeraire = DynAccessor(17912)
+            terrible = DynAccessor(17917)
+            tornade = DynAccessor(17918)
+            toulouse = DynAccessor(17881)
+            vertus = DynAccessor(17901)
+            vive = DynAccessor(17923)
+            yvelines = DynAccessor(17871)
 
         france = _france()
-        geographical = DynAccessor(17651)
+        geographical = DynAccessor(17658)
 
         class _germany(DynAccessor):
             __slots__ = ()
-            adalbert = DynAccessor(17967)
-            asgard = DynAccessor(17952)
-            badem = DynAccessor(17968)
-            berlin = DynAccessor(17997)
-            bernd = DynAccessor(17962)
-            berserker = DynAccessor(17991)
-            bismarck = DynAccessor(17951)
-            brandenburg = DynAccessor(17983)
-            breslau = DynAccessor(17984)
-            brunhild = DynAccessor(17940)
-            cyklop = DynAccessor(17953)
-            dresden = DynAccessor(17982)
-            dusseldorf = DynAccessor(17979)
-            elfriede = DynAccessor(17965)
-            emil = DynAccessor(17935)
-            ergebt = DynAccessor(17994)
-            essen = DynAccessor(17985)
-            faust = DynAccessor(17964)
-            ferdinand = DynAccessor(17937)
-            frans = DynAccessor(17941)
-            fritz = DynAccessor(17934)
-            goeben = DynAccessor(17986)
-            greta = DynAccessor(17963)
-            gretchen = DynAccessor(17959)
-            griffon = DynAccessor(18002)
-            hagen = DynAccessor(17949)
-            hans = DynAccessor(17938)
-            hansel = DynAccessor(17955)
-            heiland = DynAccessor(17970)
-            heinz = DynAccessor(17942)
-            herkules = DynAccessor(17971)
-            hummel = DynAccessor(18000)
-            jager = DynAccessor(17992)
-            jotuhn = DynAccessor(17960)
-            karl = DynAccessor(17947)
-            karlsruhe = DynAccessor(17980)
-            konig = DynAccessor(17948)
-            leopard = DynAccessor(17989)
-            lotti = DynAccessor(17969)
-            ludwig = DynAccessor(17943)
-            mammut = DynAccessor(17999)
-            marder = DynAccessor(18001)
-            margret = DynAccessor(17936)
-            mephisto = DynAccessor(17957)
-            munchen = DynAccessor(17998)
-            nixe = DynAccessor(17961)
-            norbert = DynAccessor(17972)
-            ostpreusen = DynAccessor(17987)
-            otto = DynAccessor(17946)
-            panther = DynAccessor(17988)
-            pommern = DynAccessor(17976)
-            puma = DynAccessor(17993)
-            ra = DynAccessor(18003)
-            ragnarok = DynAccessor(17995)
-            rose = DynAccessor(17944)
-            saar = DynAccessor(17973)
-            sachsen = DynAccessor(17978)
-            salzburg = DynAccessor(17977)
-            schmidt = DynAccessor(17939)
-            schnuk = DynAccessor(17966)
-            schulz = DynAccessor(17950)
-            schwaben = DynAccessor(17981)
-            schwarz = DynAccessor(17958)
-            siegfried = DynAccessor(17956)
-            teutone = DynAccessor(17996)
-            tiger = DynAccessor(17990)
-            westfalen = DynAccessor(17974)
-            wien = DynAccessor(17975)
-            wolf = DynAccessor(17954)
-            wotan = DynAccessor(17945)
-            wotan2 = DynAccessor(18004)
+            adalbert = DynAccessor(17974)
+            asgard = DynAccessor(17959)
+            badem = DynAccessor(17975)
+            berlin = DynAccessor(18004)
+            bernd = DynAccessor(17969)
+            berserker = DynAccessor(17998)
+            bismarck = DynAccessor(17958)
+            brandenburg = DynAccessor(17990)
+            breslau = DynAccessor(17991)
+            brunhild = DynAccessor(17947)
+            cyklop = DynAccessor(17960)
+            dresden = DynAccessor(17989)
+            dusseldorf = DynAccessor(17986)
+            elfriede = DynAccessor(17972)
+            emil = DynAccessor(17942)
+            ergebt = DynAccessor(18001)
+            essen = DynAccessor(17992)
+            faust = DynAccessor(17971)
+            ferdinand = DynAccessor(17944)
+            frans = DynAccessor(17948)
+            fritz = DynAccessor(17941)
+            goeben = DynAccessor(17993)
+            greta = DynAccessor(17970)
+            gretchen = DynAccessor(17966)
+            griffon = DynAccessor(18009)
+            hagen = DynAccessor(17956)
+            hans = DynAccessor(17945)
+            hansel = DynAccessor(17962)
+            heiland = DynAccessor(17977)
+            heinz = DynAccessor(17949)
+            herkules = DynAccessor(17978)
+            hummel = DynAccessor(18007)
+            jager = DynAccessor(17999)
+            jotuhn = DynAccessor(17967)
+            karl = DynAccessor(17954)
+            karlsruhe = DynAccessor(17987)
+            konig = DynAccessor(17955)
+            leopard = DynAccessor(17996)
+            lotti = DynAccessor(17976)
+            ludwig = DynAccessor(17950)
+            mammut = DynAccessor(18006)
+            marder = DynAccessor(18008)
+            margret = DynAccessor(17943)
+            mephisto = DynAccessor(17964)
+            munchen = DynAccessor(18005)
+            nixe = DynAccessor(17968)
+            norbert = DynAccessor(17979)
+            ostpreusen = DynAccessor(17994)
+            otto = DynAccessor(17953)
+            panther = DynAccessor(17995)
+            pommern = DynAccessor(17983)
+            puma = DynAccessor(18000)
+            ra = DynAccessor(18010)
+            ragnarok = DynAccessor(18002)
+            rose = DynAccessor(17951)
+            saar = DynAccessor(17980)
+            sachsen = DynAccessor(17985)
+            salzburg = DynAccessor(17984)
+            schmidt = DynAccessor(17946)
+            schnuk = DynAccessor(17973)
+            schulz = DynAccessor(17957)
+            schwaben = DynAccessor(17988)
+            schwarz = DynAccessor(17965)
+            siegfried = DynAccessor(17963)
+            teutone = DynAccessor(18003)
+            tiger = DynAccessor(17997)
+            westfalen = DynAccessor(17981)
+            wien = DynAccessor(17982)
+            wolf = DynAccessor(17961)
+            wotan = DynAccessor(17952)
+            wotan2 = DynAccessor(18011)
 
         germany = _germany()
 
         class _historical(DynAccessor):
             __slots__ = ()
-            inscription_255 = DynAccessor(18255)
-            inscription_256 = DynAccessor(18256)
-            inscription_257 = DynAccessor(18257)
+            inscription_255 = DynAccessor(18262)
+            inscription_256 = DynAccessor(18263)
+            inscription_257 = DynAccessor(18264)
 
-        historical = _historical(17648)
+        historical = _historical(17655)
 
         class _IGR(DynAccessor):
             __slots__ = ()
-            charge = DynAccessor(18215)
-            forward = DynAccessor(18217)
-            kill = DynAccessor(18212)
-            life = DynAccessor(18211)
-            loyalty = DynAccessor(18216)
-            marine = DynAccessor(18213)
-            tanks = DynAccessor(18219)
-            unity = DynAccessor(18218)
-            victory = DynAccessor(18210)
-            win = DynAccessor(18214)
+            charge = DynAccessor(18222)
+            forward = DynAccessor(18224)
+            kill = DynAccessor(18219)
+            life = DynAccessor(18218)
+            loyalty = DynAccessor(18223)
+            marine = DynAccessor(18220)
+            tanks = DynAccessor(18226)
+            unity = DynAccessor(18225)
+            victory = DynAccessor(18217)
+            win = DynAccessor(18221)
 
-        IGR = _IGR(17655)
+        IGR = _IGR(17662)
 
         class _italy(DynAccessor):
             __slots__ = ()
-            inscription_01 = DynAccessor(17768)
-            inscription_02 = DynAccessor(17769)
-            inscription_03 = DynAccessor(17770)
-            inscription_04 = DynAccessor(17771)
-            inscription_05 = DynAccessor(17772)
-            inscription_07 = DynAccessor(17773)
-            inscription_08 = DynAccessor(17774)
-            inscription_09 = DynAccessor(17775)
-            inscription_10 = DynAccessor(17776)
-            inscription_11 = DynAccessor(17777)
-            inscription_12 = DynAccessor(17778)
-            inscription_13 = DynAccessor(17779)
-            inscription_14 = DynAccessor(17780)
-            inscription_15 = DynAccessor(17781)
-            inscription_16 = DynAccessor(17782)
-            inscription_17 = DynAccessor(17783)
-            inscription_18 = DynAccessor(17784)
-            inscription_19 = DynAccessor(17785)
-            inscription_20 = DynAccessor(17786)
-            inscription_21 = DynAccessor(17787)
+            inscription_01 = DynAccessor(17775)
+            inscription_02 = DynAccessor(17776)
+            inscription_03 = DynAccessor(17777)
+            inscription_04 = DynAccessor(17778)
+            inscription_05 = DynAccessor(17779)
+            inscription_07 = DynAccessor(17780)
+            inscription_08 = DynAccessor(17781)
+            inscription_09 = DynAccessor(17782)
+            inscription_10 = DynAccessor(17783)
+            inscription_11 = DynAccessor(17784)
+            inscription_12 = DynAccessor(17785)
+            inscription_13 = DynAccessor(17786)
+            inscription_14 = DynAccessor(17787)
+            inscription_15 = DynAccessor(17788)
+            inscription_16 = DynAccessor(17789)
+            inscription_17 = DynAccessor(17790)
+            inscription_18 = DynAccessor(17791)
+            inscription_19 = DynAccessor(17792)
+            inscription_20 = DynAccessor(17793)
+            inscription_21 = DynAccessor(17794)
 
         italy = _italy()
 
         class _japan(DynAccessor):
             __slots__ = ()
-            attack = DynAccessor(18008)
-            blow = DynAccessor(18013)
-            commandos = DynAccessor(18011)
-            patriotism = DynAccessor(18006)
-            shield = DynAccessor(18005)
-            spirit = DynAccessor(18012)
-            steel = DynAccessor(18010)
-            taku = DynAccessor(18007)
-            waterfall = DynAccessor(18009)
+            attack = DynAccessor(18015)
+            blow = DynAccessor(18020)
+            commandos = DynAccessor(18018)
+            patriotism = DynAccessor(18013)
+            shield = DynAccessor(18012)
+            spirit = DynAccessor(18019)
+            steel = DynAccessor(18017)
+            taku = DynAccessor(18014)
+            waterfall = DynAccessor(18016)
 
         japan = _japan()
-        markIevent = DynAccessor(17656)
-        motto = DynAccessor(17649)
-        names = DynAccessor(17650)
-        other = DynAccessor(17654)
+        markIevent = DynAccessor(17663)
+        motto = DynAccessor(17656)
+        names = DynAccessor(17657)
+        other = DynAccessor(17661)
 
         class _poland(DynAccessor):
             __slots__ = ()
-            bijwrogajegowlasnabronia = DynAccessor(17849)
-            chwalazdobywcomberlina = DynAccessor(17850)
-            chwat = DynAccessor(17852)
-            hanus = DynAccessor(17851)
-            janka = DynAccessor(17848)
-            kubus = DynAccessor(17853)
-            magda = DynAccessor(17854)
-            pudel = DynAccessor(17855)
-            stacha = DynAccessor(17856)
-            starowka = DynAccessor(17857)
-            szarywilk = DynAccessor(17858)
-            tadeusz = DynAccessor(17859)
-            trup = DynAccessor(17860)
-            wasrodacy = DynAccessor(17861)
+            bijwrogajegowlasnabronia = DynAccessor(17856)
+            chwalazdobywcomberlina = DynAccessor(17857)
+            chwat = DynAccessor(17859)
+            hanus = DynAccessor(17858)
+            janka = DynAccessor(17855)
+            kubus = DynAccessor(17860)
+            magda = DynAccessor(17861)
+            pudel = DynAccessor(17862)
+            stacha = DynAccessor(17863)
+            starowka = DynAccessor(17864)
+            szarywilk = DynAccessor(17865)
+            tadeusz = DynAccessor(17866)
+            trup = DynAccessor(17867)
+            wasrodacy = DynAccessor(17868)
 
         poland = _poland()
-        sentence = DynAccessor(17653)
+        sentence = DynAccessor(17660)
 
         class _special(DynAccessor):
             __slots__ = ()
 
             class _inscription_259(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(17698)
+                description = DynAccessor(17705)
 
-            inscription_259 = _inscription_259(17696)
-            inscription_260 = DynAccessor(18258)
-            inscription_261 = DynAccessor(17697)
-            inscription_262 = DynAccessor(18259)
-            inscription_263 = DynAccessor(18260)
-            inscription_264 = DynAccessor(18262)
-            inscription_265 = DynAccessor(18263)
-            inscription_266 = DynAccessor(18261)
-            inscription_267 = DynAccessor(18264)
-            inscription_268 = DynAccessor(18265)
-            inscription_269 = DynAccessor(18266)
-            iron_duke = DynAccessor(18222)
-            mark = DynAccessor(18220)
-            now_is_the_time = DynAccessor(18221)
-            special_01 = DynAccessor(17681)
-            special_100 = DynAccessor(17693)
-            special_101 = DynAccessor(17694)
-            special_102 = DynAccessor(17695)
-            special_11 = DynAccessor(17682)
-            special_12 = DynAccessor(17683)
-            special_130 = DynAccessor(17699)
-            special_131 = DynAccessor(17700)
-            special_140 = DynAccessor(17767)
-            special_150 = DynAccessor(17701)
-            special_151 = DynAccessor(17702)
-            special_152 = DynAccessor(17703)
-            special_153 = DynAccessor(17705)
-            special_154 = DynAccessor(17708)
-            special_155 = DynAccessor(17704)
-            special_156 = DynAccessor(17707)
-            special_157 = DynAccessor(17706)
-            special_158 = DynAccessor(17709)
-            special_159 = DynAccessor(17710)
-            special_160 = DynAccessor(17713)
-            special_161 = DynAccessor(17716)
-            special_162 = DynAccessor(17719)
-            special_163 = DynAccessor(17711)
-            special_164 = DynAccessor(17714)
-            special_165 = DynAccessor(17717)
-            special_166 = DynAccessor(17720)
-            special_167 = DynAccessor(17712)
-            special_168 = DynAccessor(17715)
-            special_169 = DynAccessor(17718)
-            special_170 = DynAccessor(17721)
-            special_171 = DynAccessor(17722)
-            special_172 = DynAccessor(17725)
-            special_173 = DynAccessor(17723)
-            special_174 = DynAccessor(17726)
-            special_175 = DynAccessor(17724)
-            special_176 = DynAccessor(17727)
-            special_190 = DynAccessor(17728)
-            special_191 = DynAccessor(17729)
-            special_192 = DynAccessor(17730)
-            special_193 = DynAccessor(17731)
-            special_194 = DynAccessor(17732)
-            special_195 = DynAccessor(17733)
-            special_196 = DynAccessor(17734)
-            special_197 = DynAccessor(17735)
-            special_198 = DynAccessor(17736)
-            special_199 = DynAccessor(17737)
-            special_200 = DynAccessor(17738)
-            special_201 = DynAccessor(17739)
-            special_202 = DynAccessor(17740)
-            special_203 = DynAccessor(17741)
-            special_204 = DynAccessor(17742)
-            special_205 = DynAccessor(17743)
-            special_206 = DynAccessor(17744)
-            special_207 = DynAccessor(17745)
-            special_208 = DynAccessor(17746)
-            special_209 = DynAccessor(17747)
-            special_210 = DynAccessor(17748)
-            special_211 = DynAccessor(17749)
-            special_212 = DynAccessor(17750)
-            special_213 = DynAccessor(17751)
-            special_214 = DynAccessor(17752)
-            special_215 = DynAccessor(17753)
-            special_216 = DynAccessor(17754)
-            special_217 = DynAccessor(17755)
-            special_218 = DynAccessor(17756)
-            special_219 = DynAccessor(17757)
-            special_220 = DynAccessor(17758)
-            special_221 = DynAccessor(17759)
-            special_222 = DynAccessor(17761)
-            special_223 = DynAccessor(17762)
-            special_224 = DynAccessor(17760)
-            special_225 = DynAccessor(17763)
-            special_226 = DynAccessor(17764)
-            special_227 = DynAccessor(17765)
-            special_228 = DynAccessor(17766)
-            special_229 = DynAccessor(18228)
-            special_230 = DynAccessor(18229)
-            special_231 = DynAccessor(18230)
-            special_232 = DynAccessor(18231)
-            special_233 = DynAccessor(18232)
-            special_234 = DynAccessor(18233)
-            special_235 = DynAccessor(18234)
-            special_236 = DynAccessor(18235)
-            special_237 = DynAccessor(18236)
-            special_238 = DynAccessor(18237)
-            special_239 = DynAccessor(18238)
-            special_240 = DynAccessor(18239)
-            special_241 = DynAccessor(18240)
-            special_242 = DynAccessor(18241)
-            special_243 = DynAccessor(18242)
-            special_244 = DynAccessor(18243)
-            special_245 = DynAccessor(18244)
-            special_258 = DynAccessor(18245)
-            special_31 = DynAccessor(17684)
-            special_41 = DynAccessor(17685)
-            special_51 = DynAccessor(17686)
-            special_52 = DynAccessor(17687)
-            special_53 = DynAccessor(17688)
-            special_54 = DynAccessor(17689)
-            special_70 = DynAccessor(17690)
-            special_81 = DynAccessor(17691)
-            special_90 = DynAccessor(17692)
-            the_first_tank = DynAccessor(18223)
+            inscription_259 = _inscription_259(17703)
+            inscription_260 = DynAccessor(18265)
+            inscription_261 = DynAccessor(17704)
+            inscription_262 = DynAccessor(18266)
+            inscription_263 = DynAccessor(18267)
+            inscription_264 = DynAccessor(18269)
+            inscription_265 = DynAccessor(18270)
+            inscription_266 = DynAccessor(18268)
+            inscription_267 = DynAccessor(18271)
+            inscription_268 = DynAccessor(18272)
+            inscription_269 = DynAccessor(18273)
+            iron_duke = DynAccessor(18229)
+            mark = DynAccessor(18227)
+            now_is_the_time = DynAccessor(18228)
+            special_01 = DynAccessor(17688)
+            special_100 = DynAccessor(17700)
+            special_101 = DynAccessor(17701)
+            special_102 = DynAccessor(17702)
+            special_11 = DynAccessor(17689)
+            special_12 = DynAccessor(17690)
+            special_130 = DynAccessor(17706)
+            special_131 = DynAccessor(17707)
+            special_140 = DynAccessor(17774)
+            special_150 = DynAccessor(17708)
+            special_151 = DynAccessor(17709)
+            special_152 = DynAccessor(17710)
+            special_153 = DynAccessor(17712)
+            special_154 = DynAccessor(17715)
+            special_155 = DynAccessor(17711)
+            special_156 = DynAccessor(17714)
+            special_157 = DynAccessor(17713)
+            special_158 = DynAccessor(17716)
+            special_159 = DynAccessor(17717)
+            special_160 = DynAccessor(17720)
+            special_161 = DynAccessor(17723)
+            special_162 = DynAccessor(17726)
+            special_163 = DynAccessor(17718)
+            special_164 = DynAccessor(17721)
+            special_165 = DynAccessor(17724)
+            special_166 = DynAccessor(17727)
+            special_167 = DynAccessor(17719)
+            special_168 = DynAccessor(17722)
+            special_169 = DynAccessor(17725)
+            special_170 = DynAccessor(17728)
+            special_171 = DynAccessor(17729)
+            special_172 = DynAccessor(17732)
+            special_173 = DynAccessor(17730)
+            special_174 = DynAccessor(17733)
+            special_175 = DynAccessor(17731)
+            special_176 = DynAccessor(17734)
+            special_190 = DynAccessor(17735)
+            special_191 = DynAccessor(17736)
+            special_192 = DynAccessor(17737)
+            special_193 = DynAccessor(17738)
+            special_194 = DynAccessor(17739)
+            special_195 = DynAccessor(17740)
+            special_196 = DynAccessor(17741)
+            special_197 = DynAccessor(17742)
+            special_198 = DynAccessor(17743)
+            special_199 = DynAccessor(17744)
+            special_200 = DynAccessor(17745)
+            special_201 = DynAccessor(17746)
+            special_202 = DynAccessor(17747)
+            special_203 = DynAccessor(17748)
+            special_204 = DynAccessor(17749)
+            special_205 = DynAccessor(17750)
+            special_206 = DynAccessor(17751)
+            special_207 = DynAccessor(17752)
+            special_208 = DynAccessor(17753)
+            special_209 = DynAccessor(17754)
+            special_210 = DynAccessor(17755)
+            special_211 = DynAccessor(17756)
+            special_212 = DynAccessor(17757)
+            special_213 = DynAccessor(17758)
+            special_214 = DynAccessor(17759)
+            special_215 = DynAccessor(17760)
+            special_216 = DynAccessor(17761)
+            special_217 = DynAccessor(17762)
+            special_218 = DynAccessor(17763)
+            special_219 = DynAccessor(17764)
+            special_220 = DynAccessor(17765)
+            special_221 = DynAccessor(17766)
+            special_222 = DynAccessor(17768)
+            special_223 = DynAccessor(17769)
+            special_224 = DynAccessor(17767)
+            special_225 = DynAccessor(17770)
+            special_226 = DynAccessor(17771)
+            special_227 = DynAccessor(17772)
+            special_228 = DynAccessor(17773)
+            special_229 = DynAccessor(18235)
+            special_230 = DynAccessor(18236)
+            special_231 = DynAccessor(18237)
+            special_232 = DynAccessor(18238)
+            special_233 = DynAccessor(18239)
+            special_234 = DynAccessor(18240)
+            special_235 = DynAccessor(18241)
+            special_236 = DynAccessor(18242)
+            special_237 = DynAccessor(18243)
+            special_238 = DynAccessor(18244)
+            special_239 = DynAccessor(18245)
+            special_240 = DynAccessor(18246)
+            special_241 = DynAccessor(18247)
+            special_242 = DynAccessor(18248)
+            special_243 = DynAccessor(18249)
+            special_244 = DynAccessor(18250)
+            special_245 = DynAccessor(18251)
+            special_258 = DynAccessor(18252)
+            special_31 = DynAccessor(17691)
+            special_41 = DynAccessor(17692)
+            special_51 = DynAccessor(17693)
+            special_52 = DynAccessor(17694)
+            special_53 = DynAccessor(17695)
+            special_54 = DynAccessor(17696)
+            special_70 = DynAccessor(17697)
+            special_81 = DynAccessor(17698)
+            special_90 = DynAccessor(17699)
+            the_first_tank = DynAccessor(18230)
 
-        special = _special(17658)
+        special = _special(17665)
 
         class _sweden(DynAccessor):
             __slots__ = ()
-            arvet_forpliktar = DynAccessor(17811)
-            fort_och_fel = DynAccessor(17812)
-            framat = DynAccessor(17813)
-            gamla_bettan = DynAccessor(17814)
-            gittan = DynAccessor(17815)
-            heja_sverige = DynAccessor(17816)
-            kunglig_hovleverantor = DynAccessor(17817)
-            lisa = DynAccessor(17818)
-            lollo = DynAccessor(17819)
-            lotta = DynAccessor(17820)
-            maggan = DynAccessor(17821)
-            maja = DynAccessor(17822)
-            moder_svea = DynAccessor(17823)
-            nettan = DynAccessor(17824)
-            nulli_secundus = DynAccessor(17825)
-            primovictoria = DynAccessor(17830)
-            ring_sa_kommer_vi = DynAccessor(17826)
-            sla_snabbt_sla_hart = DynAccessor(17827)
-            ulla = DynAccessor(17828)
-            v_gurra = DynAccessor(17829)
+            arvet_forpliktar = DynAccessor(17818)
+            fort_och_fel = DynAccessor(17819)
+            framat = DynAccessor(17820)
+            gamla_bettan = DynAccessor(17821)
+            gittan = DynAccessor(17822)
+            heja_sverige = DynAccessor(17823)
+            kunglig_hovleverantor = DynAccessor(17824)
+            lisa = DynAccessor(17825)
+            lollo = DynAccessor(17826)
+            lotta = DynAccessor(17827)
+            maggan = DynAccessor(17828)
+            maja = DynAccessor(17829)
+            moder_svea = DynAccessor(17830)
+            nettan = DynAccessor(17831)
+            nulli_secundus = DynAccessor(17832)
+            primovictoria = DynAccessor(17837)
+            ring_sa_kommer_vi = DynAccessor(17833)
+            sla_snabbt_sla_hart = DynAccessor(17834)
+            ulla = DynAccessor(17835)
+            v_gurra = DynAccessor(17836)
 
         sweden = _sweden()
 
         class _uk(DynAccessor):
             __slots__ = ()
-            ace = DynAccessor(18065)
-            achilles = DynAccessor(18048)
-            agility = DynAccessor(18041)
-            ali = DynAccessor(18056)
-            ally = DynAccessor(18070)
-            apollo = DynAccessor(18049)
-            avenger = DynAccessor(18020)
-            battleaxe = DynAccessor(18064)
-            bert = DynAccessor(18037)
-            blockbuster = DynAccessor(18036)
-            brother = DynAccessor(18025)
-            bullpup = DynAccessor(18039)
-            centaur = DynAccessor(18052)
-            clang = DynAccessor(18029)
-            cossack = DynAccessor(18046)
-            daredevil = DynAccessor(18017)
-            demon = DynAccessor(18014)
-            destroyer = DynAccessor(18026)
-            devastator = DynAccessor(18028)
-            dogs = DynAccessor(18031)
-            dragon = DynAccessor(18063)
-            dreadnought = DynAccessor(18023)
-            duke = DynAccessor(18053)
-            dust = DynAccessor(18035)
-            elusive = DynAccessor(18047)
-            face = DynAccessor(18032)
-            fireball = DynAccessor(18016)
-            firm = DynAccessor(18060)
-            fist = DynAccessor(18018)
-            for_king = DynAccessor(18045)
-            gnome = DynAccessor(18067)
-            god_king = DynAccessor(18043)
-            god_queen = DynAccessor(18042)
-            harbinger = DynAccessor(18030)
-            hit_run = DynAccessor(18024)
-            hunter = DynAccessor(18022)
-            impertinent = DynAccessor(18040)
-            invulnerable = DynAccessor(18027)
-            jumbo = DynAccessor(18068)
-            junior = DynAccessor(18066)
-            manowar = DynAccessor(18033)
-            miller = DynAccessor(18034)
-            panda = DynAccessor(18058)
-            phantom = DynAccessor(18021)
-            princess = DynAccessor(18059)
-            robroy = DynAccessor(18055)
-            scorpion = DynAccessor(18062)
-            serenade = DynAccessor(18061)
-            squirrel = DynAccessor(18069)
-            talisman = DynAccessor(18057)
-            thunderbolt = DynAccessor(18015)
-            tiger = DynAccessor(18054)
-            ussr = DynAccessor(18044)
-            viper = DynAccessor(18050)
-            warrior = DynAccessor(18038)
-            warspite = DynAccessor(18051)
-            wrath = DynAccessor(18019)
+            ace = DynAccessor(18072)
+            achilles = DynAccessor(18055)
+            agility = DynAccessor(18048)
+            ali = DynAccessor(18063)
+            ally = DynAccessor(18077)
+            apollo = DynAccessor(18056)
+            avenger = DynAccessor(18027)
+            battleaxe = DynAccessor(18071)
+            bert = DynAccessor(18044)
+            blockbuster = DynAccessor(18043)
+            brother = DynAccessor(18032)
+            bullpup = DynAccessor(18046)
+            centaur = DynAccessor(18059)
+            clang = DynAccessor(18036)
+            cossack = DynAccessor(18053)
+            daredevil = DynAccessor(18024)
+            demon = DynAccessor(18021)
+            destroyer = DynAccessor(18033)
+            devastator = DynAccessor(18035)
+            dogs = DynAccessor(18038)
+            dragon = DynAccessor(18070)
+            dreadnought = DynAccessor(18030)
+            duke = DynAccessor(18060)
+            dust = DynAccessor(18042)
+            elusive = DynAccessor(18054)
+            face = DynAccessor(18039)
+            fireball = DynAccessor(18023)
+            firm = DynAccessor(18067)
+            fist = DynAccessor(18025)
+            for_king = DynAccessor(18052)
+            gnome = DynAccessor(18074)
+            god_king = DynAccessor(18050)
+            god_queen = DynAccessor(18049)
+            harbinger = DynAccessor(18037)
+            hit_run = DynAccessor(18031)
+            hunter = DynAccessor(18029)
+            impertinent = DynAccessor(18047)
+            invulnerable = DynAccessor(18034)
+            jumbo = DynAccessor(18075)
+            junior = DynAccessor(18073)
+            manowar = DynAccessor(18040)
+            miller = DynAccessor(18041)
+            panda = DynAccessor(18065)
+            phantom = DynAccessor(18028)
+            princess = DynAccessor(18066)
+            robroy = DynAccessor(18062)
+            scorpion = DynAccessor(18069)
+            serenade = DynAccessor(18068)
+            squirrel = DynAccessor(18076)
+            talisman = DynAccessor(18064)
+            thunderbolt = DynAccessor(18022)
+            tiger = DynAccessor(18061)
+            ussr = DynAccessor(18051)
+            viper = DynAccessor(18057)
+            warrior = DynAccessor(18045)
+            warspite = DynAccessor(18058)
+            wrath = DynAccessor(18026)
 
         uk = _uk()
 
         class _usa(DynAccessor):
             __slots__ = ()
-            accident = DynAccessor(18094)
-            ally = DynAccessor(18081)
-            america = DynAccessor(18096)
-            apocalypse = DynAccessor(18122)
-            avant = DynAccessor(18128)
-            babe = DynAccessor(18112)
-            baboon = DynAccessor(18126)
-            bambino = DynAccessor(18113)
-            baribal = DynAccessor(18091)
-            bastogne = DynAccessor(18111)
-            betty = DynAccessor(18105)
-            bison = DynAccessor(18079)
-            blackjack = DynAccessor(18115)
-            blood = DynAccessor(18108)
-            bombshell = DynAccessor(18074)
-            boomerang = DynAccessor(18118)
-            brother = DynAccessor(18086)
-            bull = DynAccessor(18092)
-            charlie = DynAccessor(18104)
-            chopper = DynAccessor(18093)
-            cobra = DynAccessor(18073)
-            daddy = DynAccessor(18089)
-            desperate = DynAccessor(18082)
-            devastator = DynAccessor(18087)
-            dot = DynAccessor(18119)
-            finn = DynAccessor(18102)
-            fireball = DynAccessor(18078)
-            firefly = DynAccessor(18095)
-            furious = DynAccessor(18083)
-            geronimo = DynAccessor(18114)
-            glory = DynAccessor(18110)
-            god = DynAccessor(18107)
-            hawk = DynAccessor(18088)
-            hell_1 = DynAccessor(18084)
-            hell_2 = DynAccessor(18085)
-            honey = DynAccessor(18076)
-            hothead = DynAccessor(18120)
-            hunter = DynAccessor(18080)
-            hurricane = DynAccessor(18072)
-            inscription_09 = DynAccessor(18130)
-            inscription_10 = DynAccessor(18131)
-            inscription_11 = DynAccessor(18132)
-            inscription_12 = DynAccessor(18133)
-            inscription_13 = DynAccessor(18134)
-            inscription_14 = DynAccessor(18135)
-            inscription_15 = DynAccessor(18136)
-            inscription_16 = DynAccessor(18137)
-            inscription_17 = DynAccessor(18138)
-            joe = DynAccessor(18099)
-            june = DynAccessor(18129)
-            kilroy = DynAccessor(18117)
-            king_kong = DynAccessor(18100)
-            laxative = DynAccessor(18127)
-            lulu = DynAccessor(18116)
-            magnet = DynAccessor(18124)
-            mud = DynAccessor(18109)
-            rhodes = DynAccessor(18106)
-            sam = DynAccessor(18098)
-            sawyer = DynAccessor(18101)
-            scot = DynAccessor(18121)
-            skeeter = DynAccessor(18125)
-            strike = DynAccessor(18075)
-            superman = DynAccessor(18097)
-            thatcher = DynAccessor(18103)
-            thunderbolt = DynAccessor(18077)
-            tornado = DynAccessor(18071)
-            warlock = DynAccessor(18090)
-            yankee = DynAccessor(18123)
+            accident = DynAccessor(18101)
+            ally = DynAccessor(18088)
+            america = DynAccessor(18103)
+            apocalypse = DynAccessor(18129)
+            avant = DynAccessor(18135)
+            babe = DynAccessor(18119)
+            baboon = DynAccessor(18133)
+            bambino = DynAccessor(18120)
+            baribal = DynAccessor(18098)
+            bastogne = DynAccessor(18118)
+            betty = DynAccessor(18112)
+            bison = DynAccessor(18086)
+            blackjack = DynAccessor(18122)
+            blood = DynAccessor(18115)
+            bombshell = DynAccessor(18081)
+            boomerang = DynAccessor(18125)
+            brother = DynAccessor(18093)
+            bull = DynAccessor(18099)
+            charlie = DynAccessor(18111)
+            chopper = DynAccessor(18100)
+            cobra = DynAccessor(18080)
+            daddy = DynAccessor(18096)
+            desperate = DynAccessor(18089)
+            devastator = DynAccessor(18094)
+            dot = DynAccessor(18126)
+            finn = DynAccessor(18109)
+            fireball = DynAccessor(18085)
+            firefly = DynAccessor(18102)
+            furious = DynAccessor(18090)
+            geronimo = DynAccessor(18121)
+            glory = DynAccessor(18117)
+            god = DynAccessor(18114)
+            hawk = DynAccessor(18095)
+            hell_1 = DynAccessor(18091)
+            hell_2 = DynAccessor(18092)
+            honey = DynAccessor(18083)
+            hothead = DynAccessor(18127)
+            hunter = DynAccessor(18087)
+            hurricane = DynAccessor(18079)
+            inscription_09 = DynAccessor(18137)
+            inscription_10 = DynAccessor(18138)
+            inscription_11 = DynAccessor(18139)
+            inscription_12 = DynAccessor(18140)
+            inscription_13 = DynAccessor(18141)
+            inscription_14 = DynAccessor(18142)
+            inscription_15 = DynAccessor(18143)
+            inscription_16 = DynAccessor(18144)
+            inscription_17 = DynAccessor(18145)
+            joe = DynAccessor(18106)
+            june = DynAccessor(18136)
+            kilroy = DynAccessor(18124)
+            king_kong = DynAccessor(18107)
+            laxative = DynAccessor(18134)
+            lulu = DynAccessor(18123)
+            magnet = DynAccessor(18131)
+            mud = DynAccessor(18116)
+            rhodes = DynAccessor(18113)
+            sam = DynAccessor(18105)
+            sawyer = DynAccessor(18108)
+            scot = DynAccessor(18128)
+            skeeter = DynAccessor(18132)
+            strike = DynAccessor(18082)
+            superman = DynAccessor(18104)
+            thatcher = DynAccessor(18110)
+            thunderbolt = DynAccessor(18084)
+            tornado = DynAccessor(18078)
+            warlock = DynAccessor(18097)
+            yankee = DynAccessor(18130)
 
         usa = _usa()
 
         class _ussr(DynAccessor):
             __slots__ = ()
-            angry = DynAccessor(18156)
-            arctic = DynAccessor(18175)
-            armorer = DynAccessor(18161)
-            avenger = DynAccessor(18149)
-            belarus = DynAccessor(18205)
-            berlin = DynAccessor(18184)
-            brave = DynAccessor(18151)
-            chapaev = DynAccessor(18198)
-            cook = DynAccessor(18157)
-            defender = DynAccessor(18139)
-            don = DynAccessor(18193)
-            donbass = DynAccessor(18154)
-            enemy = DynAccessor(18186)
-            farmer = DynAccessor(18142)
-            fearless = DynAccessor(18144)
-            frunze = DynAccessor(18203)
-            fulminatory = DynAccessor(18152)
-            furious = DynAccessor(18164)
-            girlfriend = DynAccessor(18143)
-            go = DynAccessor(18180)
-            gold = DynAccessor(18170)
-            intrepid = DynAccessor(18167)
-            invader = DynAccessor(18188)
-            komsomol = DynAccessor(18162)
-            kuibyshev = DynAccessor(18200)
-            kutuzov = DynAccessor(18192)
-            leningrad = DynAccessor(18174)
-            leningradian = DynAccessor(18208)
-            leopard = DynAccessor(18147)
-            liberator = DynAccessor(18145)
-            lightning = DynAccessor(18159)
-            mayakovsky = DynAccessor(18195)
-            metallurg = DynAccessor(18165)
-            moscow = DynAccessor(18171)
-            motherland_1 = DynAccessor(18173)
-            motherland_2 = DynAccessor(18179)
-            motherland_3 = DynAccessor(18182)
-            muromets = DynAccessor(18197)
-            neva = DynAccessor(18194)
-            penza = DynAccessor(18172)
-            pioneer = DynAccessor(18166)
-            polar = DynAccessor(18169)
-            rash = DynAccessor(18155)
-            red = DynAccessor(18185)
-            rudy = DynAccessor(18209)
-            runaway = DynAccessor(18163)
-            russian = DynAccessor(18187)
-            ruthless = DynAccessor(18140)
-            schoolboy = DynAccessor(18150)
-            sevastopol = DynAccessor(18178)
-            shchors = DynAccessor(18202)
-            smashing = DynAccessor(18160)
-            spartak = DynAccessor(18199)
-            stalin_1 = DynAccessor(18176)
-            stalin_2 = DynAccessor(18201)
-            stalinist = DynAccessor(18158)
-            steelmaker = DynAccessor(18146)
-            strong = DynAccessor(18148)
-            susanin = DynAccessor(18196)
-            suvorov = DynAccessor(18191)
-            tigers = DynAccessor(18207)
-            toberlin = DynAccessor(18206)
-            tutsan = DynAccessor(18153)
-            ukraine = DynAccessor(18204)
-            varangian = DynAccessor(18190)
-            victor = DynAccessor(18168)
-            victory_1 = DynAccessor(18177)
-            victory_2 = DynAccessor(18183)
-            victory_3 = DynAccessor(18189)
-            warlike = DynAccessor(18141)
-            west = DynAccessor(18181)
+            angry = DynAccessor(18163)
+            arctic = DynAccessor(18182)
+            armorer = DynAccessor(18168)
+            avenger = DynAccessor(18156)
+            belarus = DynAccessor(18212)
+            berlin = DynAccessor(18191)
+            brave = DynAccessor(18158)
+            chapaev = DynAccessor(18205)
+            cook = DynAccessor(18164)
+            defender = DynAccessor(18146)
+            don = DynAccessor(18200)
+            donbass = DynAccessor(18161)
+            enemy = DynAccessor(18193)
+            farmer = DynAccessor(18149)
+            fearless = DynAccessor(18151)
+            frunze = DynAccessor(18210)
+            fulminatory = DynAccessor(18159)
+            furious = DynAccessor(18171)
+            girlfriend = DynAccessor(18150)
+            go = DynAccessor(18187)
+            gold = DynAccessor(18177)
+            intrepid = DynAccessor(18174)
+            invader = DynAccessor(18195)
+            komsomol = DynAccessor(18169)
+            kuibyshev = DynAccessor(18207)
+            kutuzov = DynAccessor(18199)
+            leningrad = DynAccessor(18181)
+            leningradian = DynAccessor(18215)
+            leopard = DynAccessor(18154)
+            liberator = DynAccessor(18152)
+            lightning = DynAccessor(18166)
+            mayakovsky = DynAccessor(18202)
+            metallurg = DynAccessor(18172)
+            moscow = DynAccessor(18178)
+            motherland_1 = DynAccessor(18180)
+            motherland_2 = DynAccessor(18186)
+            motherland_3 = DynAccessor(18189)
+            muromets = DynAccessor(18204)
+            neva = DynAccessor(18201)
+            penza = DynAccessor(18179)
+            pioneer = DynAccessor(18173)
+            polar = DynAccessor(18176)
+            rash = DynAccessor(18162)
+            red = DynAccessor(18192)
+            rudy = DynAccessor(18216)
+            runaway = DynAccessor(18170)
+            russian = DynAccessor(18194)
+            ruthless = DynAccessor(18147)
+            schoolboy = DynAccessor(18157)
+            sevastopol = DynAccessor(18185)
+            shchors = DynAccessor(18209)
+            smashing = DynAccessor(18167)
+            spartak = DynAccessor(18206)
+            stalin_1 = DynAccessor(18183)
+            stalin_2 = DynAccessor(18208)
+            stalinist = DynAccessor(18165)
+            steelmaker = DynAccessor(18153)
+            strong = DynAccessor(18155)
+            susanin = DynAccessor(18203)
+            suvorov = DynAccessor(18198)
+            tigers = DynAccessor(18214)
+            toberlin = DynAccessor(18213)
+            tutsan = DynAccessor(18160)
+            ukraine = DynAccessor(18211)
+            varangian = DynAccessor(18197)
+            victor = DynAccessor(18175)
+            victory_1 = DynAccessor(18184)
+            victory_2 = DynAccessor(18190)
+            victory_3 = DynAccessor(18196)
+            warlike = DynAccessor(18148)
+            west = DynAccessor(18188)
 
         ussr = _ussr()
 
-    inscription = _inscription(17647)
+    inscription = _inscription(17654)
 
     class _insignias(DynAccessor):
         __slots__ = ()
-        national = DynAccessor(19449)
-        special = DynAccessor(19448)
+        national = DynAccessor(19460)
+        special = DynAccessor(19459)
 
     insignias = _insignias()
 
     class _item(DynAccessor):
         __slots__ = ()
-        camouflage1 = DynAccessor(18271)
-        camouflage2 = DynAccessor(18272)
-        emblem1 = DynAccessor(18267)
-        emblem2 = DynAccessor(18268)
-        inscription1 = DynAccessor(18269)
-        inscription2 = DynAccessor(18270)
+        camouflage1 = DynAccessor(18278)
+        camouflage2 = DynAccessor(18279)
+        emblem1 = DynAccessor(18274)
+        emblem2 = DynAccessor(18275)
+        inscription1 = DynAccessor(18276)
+        inscription2 = DynAccessor(18277)
 
     item = _item()
 
     class _main_style(DynAccessor):
         __slots__ = ()
-        defender_day_2 = DynAccessor(19007)
-        defender_day_2_desc = DynAccessor(19008)
-        generic_custom_look_2_china = DynAccessor(19059)
-        generic_custom_look_2_china_desc = DynAccessor(19060)
-        generic_custom_look_2_czech = DynAccessor(19053)
-        generic_custom_look_2_czech_desc = DynAccessor(19054)
-        generic_custom_look_2_france = DynAccessor(19051)
-        generic_custom_look_2_france_desc = DynAccessor(19052)
-        generic_custom_look_2_germany = DynAccessor(19043)
-        generic_custom_look_2_germany_desc = DynAccessor(19044)
-        generic_custom_look_2_italy = DynAccessor(19045)
-        generic_custom_look_2_italy_desc = DynAccessor(19046)
-        generic_custom_look_2_japan = DynAccessor(19057)
-        generic_custom_look_2_japan_desc = DynAccessor(19058)
-        generic_custom_look_2_poland = DynAccessor(19047)
-        generic_custom_look_2_poland_desc = DynAccessor(19048)
-        generic_custom_look_2_sweden = DynAccessor(19055)
-        generic_custom_look_2_sweden_desc = DynAccessor(19056)
-        generic_custom_look_2_uk = DynAccessor(19041)
-        generic_custom_look_2_uk_desc = DynAccessor(19042)
-        generic_custom_look_2_usa = DynAccessor(19049)
-        generic_custom_look_2_usa_desc = DynAccessor(19050)
-        generic_custom_look_2_ussr = DynAccessor(19039)
-        generic_custom_look_2_ussr_desc = DynAccessor(19040)
-        generic_custom_look_china = DynAccessor(19002)
+        A127_TL_1_LPC_3Dst_Offspring = DynAccessor(19101)
+        A127_TL_1_LPC_3Dst_Offspring_desc = DynAccessor(19102)
+        defender_day_2 = DynAccessor(19014)
+        defender_day_2_desc = DynAccessor(19015)
+        generic_custom_look_2_china = DynAccessor(19066)
+        generic_custom_look_2_china_desc = DynAccessor(19067)
+        generic_custom_look_2_czech = DynAccessor(19060)
+        generic_custom_look_2_czech_desc = DynAccessor(19061)
+        generic_custom_look_2_france = DynAccessor(19058)
+        generic_custom_look_2_france_desc = DynAccessor(19059)
+        generic_custom_look_2_germany = DynAccessor(19050)
+        generic_custom_look_2_germany_desc = DynAccessor(19051)
+        generic_custom_look_2_italy = DynAccessor(19052)
+        generic_custom_look_2_italy_desc = DynAccessor(19053)
+        generic_custom_look_2_japan = DynAccessor(19064)
+        generic_custom_look_2_japan_desc = DynAccessor(19065)
+        generic_custom_look_2_poland = DynAccessor(19054)
+        generic_custom_look_2_poland_desc = DynAccessor(19055)
+        generic_custom_look_2_sweden = DynAccessor(19062)
+        generic_custom_look_2_sweden_desc = DynAccessor(19063)
+        generic_custom_look_2_uk = DynAccessor(19048)
+        generic_custom_look_2_uk_desc = DynAccessor(19049)
+        generic_custom_look_2_usa = DynAccessor(19056)
+        generic_custom_look_2_usa_desc = DynAccessor(19057)
+        generic_custom_look_2_ussr = DynAccessor(19046)
+        generic_custom_look_2_ussr_desc = DynAccessor(19047)
+        generic_custom_look_china = DynAccessor(19009)
 
         class _generic_custom_look_china_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(19004)
+            long = DynAccessor(19011)
 
-        generic_custom_look_china_desc = _generic_custom_look_china_desc(19003)
-        generic_custom_look_czech = DynAccessor(18993)
+        generic_custom_look_china_desc = _generic_custom_look_china_desc(19010)
+        generic_custom_look_czech = DynAccessor(19000)
 
         class _generic_custom_look_czech_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18995)
+            long = DynAccessor(19002)
 
-        generic_custom_look_czech_desc = _generic_custom_look_czech_desc(18994)
-        generic_custom_look_france = DynAccessor(18990)
+        generic_custom_look_czech_desc = _generic_custom_look_czech_desc(19001)
+        generic_custom_look_france = DynAccessor(18997)
 
         class _generic_custom_look_france_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18992)
+            long = DynAccessor(18999)
 
-        generic_custom_look_france_desc = _generic_custom_look_france_desc(18991)
-        generic_custom_look_germany = DynAccessor(18978)
+        generic_custom_look_france_desc = _generic_custom_look_france_desc(18998)
+        generic_custom_look_germany = DynAccessor(18985)
 
         class _generic_custom_look_germany_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18980)
+            long = DynAccessor(18987)
 
-        generic_custom_look_germany_desc = _generic_custom_look_germany_desc(18979)
-        generic_custom_look_italy = DynAccessor(18981)
+        generic_custom_look_germany_desc = _generic_custom_look_germany_desc(18986)
+        generic_custom_look_italy = DynAccessor(18988)
 
         class _generic_custom_look_italy_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18983)
+            long = DynAccessor(18990)
 
-        generic_custom_look_italy_desc = _generic_custom_look_italy_desc(18982)
-        generic_custom_look_japan = DynAccessor(18999)
+        generic_custom_look_italy_desc = _generic_custom_look_italy_desc(18989)
+        generic_custom_look_japan = DynAccessor(19006)
 
         class _generic_custom_look_japan_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(19001)
+            long = DynAccessor(19008)
 
-        generic_custom_look_japan_desc = _generic_custom_look_japan_desc(19000)
-        generic_custom_look_poland = DynAccessor(18984)
+        generic_custom_look_japan_desc = _generic_custom_look_japan_desc(19007)
+        generic_custom_look_poland = DynAccessor(18991)
 
         class _generic_custom_look_poland_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18986)
+            long = DynAccessor(18993)
 
-        generic_custom_look_poland_desc = _generic_custom_look_poland_desc(18985)
-        generic_custom_look_sweden = DynAccessor(18996)
+        generic_custom_look_poland_desc = _generic_custom_look_poland_desc(18992)
+        generic_custom_look_sweden = DynAccessor(19003)
 
         class _generic_custom_look_sweden_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18998)
+            long = DynAccessor(19005)
 
-        generic_custom_look_sweden_desc = _generic_custom_look_sweden_desc(18997)
-        generic_custom_look_uk = DynAccessor(18975)
+        generic_custom_look_sweden_desc = _generic_custom_look_sweden_desc(19004)
+        generic_custom_look_uk = DynAccessor(18982)
 
         class _generic_custom_look_uk_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18977)
+            long = DynAccessor(18984)
 
-        generic_custom_look_uk_desc = _generic_custom_look_uk_desc(18976)
-        generic_custom_look_usa = DynAccessor(18987)
+        generic_custom_look_uk_desc = _generic_custom_look_uk_desc(18983)
+        generic_custom_look_usa = DynAccessor(18994)
 
         class _generic_custom_look_usa_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18989)
+            long = DynAccessor(18996)
 
-        generic_custom_look_usa_desc = _generic_custom_look_usa_desc(18988)
-        generic_custom_look_ussr = DynAccessor(18972)
+        generic_custom_look_usa_desc = _generic_custom_look_usa_desc(18995)
+        generic_custom_look_ussr = DynAccessor(18979)
 
         class _generic_custom_look_ussr_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18974)
+            long = DynAccessor(18981)
 
-        generic_custom_look_ussr_desc = _generic_custom_look_ussr_desc(18973)
-        left_alive = DynAccessor(19009)
-        left_alive_desc = DynAccessor(19010)
-        ski_patrol = DynAccessor(19075)
-        ski_patrol_desc = DynAccessor(19076)
-        usa_veteran = DynAccessor(18970)
-        usa_veteran_desc = DynAccessor(18971)
-        wot_birthday_cn = DynAccessor(19015)
-        wot_birthday_cn_desc = DynAccessor(19016)
-        wot_birthday_eu = DynAccessor(19011)
-        wot_birthday_eu_desc = DynAccessor(19012)
-        wot_birthday_na = DynAccessor(19013)
-        wot_birthday_na_desc = DynAccessor(19014)
+        generic_custom_look_ussr_desc = _generic_custom_look_ussr_desc(18980)
+        left_alive = DynAccessor(19016)
+        left_alive_desc = DynAccessor(19017)
+        ski_patrol = DynAccessor(19082)
+        ski_patrol_desc = DynAccessor(19083)
+        usa_veteran = DynAccessor(18977)
+        usa_veteran_desc = DynAccessor(18978)
+        wot_birthday_cn = DynAccessor(19022)
+        wot_birthday_cn_desc = DynAccessor(19023)
+        wot_birthday_eu = DynAccessor(19018)
+        wot_birthday_eu_desc = DynAccessor(19019)
+        wot_birthday_na = DynAccessor(19020)
+        wot_birthday_na_desc = DynAccessor(19021)
 
     main_style = _main_style()
 
@@ -53621,24 +53649,24 @@ class vehicle_customization(DynAccessor):
 
         class _age_effect_01(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(18773)
+            description = DynAccessor(18780)
 
-        age_effect_01 = _age_effect_01(18772)
+        age_effect_01 = _age_effect_01(18779)
 
         class _age_effect_02(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(18775)
+            description = DynAccessor(18782)
 
-        age_effect_02 = _age_effect_02(18774)
+        age_effect_02 = _age_effect_02(18781)
 
         class _age_effect_03(DynAccessor):
             __slots__ = ()
-            description = DynAccessor(18777)
+            description = DynAccessor(18784)
 
-        age_effect_03 = _age_effect_03(18776)
-        age_effect_04 = DynAccessor(18778)
-        age_effect_05 = DynAccessor(18779)
-        age_effect_06 = DynAccessor(18780)
+        age_effect_03 = _age_effect_03(18783)
+        age_effect_04 = DynAccessor(18785)
+        age_effect_05 = DynAccessor(18786)
+        age_effect_06 = DynAccessor(18787)
 
     modifications = _modifications()
 
@@ -53647,7 +53675,7 @@ class vehicle_customization(DynAccessor):
 
         class _slotIsFilled(DynAccessor):
             __slots__ = ()
-            title = DynAccessor(19477)
+            title = DynAccessor(19488)
 
         slotIsFilled = _slotIsFilled()
 
@@ -53655,32 +53683,32 @@ class vehicle_customization(DynAccessor):
 
     class _ny_style(DynAccessor):
         __slots__ = ()
-        asian_ny_style_01 = DynAccessor(18800)
+        asian_ny_style_01 = DynAccessor(18807)
 
         class _asian_ny_style_01_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18801)
+            long = DynAccessor(18808)
 
         asian_ny_style_01_desc = _asian_ny_style_01_desc()
-        modernWestern_ny_style_01 = DynAccessor(18804)
+        modernWestern_ny_style_01 = DynAccessor(18811)
 
         class _modernWestern_ny_style_01_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18805)
+            long = DynAccessor(18812)
 
         modernWestern_ny_style_01_desc = _modernWestern_ny_style_01_desc()
-        soviet_ny_style_01 = DynAccessor(18806)
+        soviet_ny_style_01 = DynAccessor(18813)
 
         class _soviet_ny_style_01_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18807)
+            long = DynAccessor(18814)
 
         soviet_ny_style_01_desc = _soviet_ny_style_01_desc()
-        traditionalWestern_ny_style_01 = DynAccessor(18802)
+        traditionalWestern_ny_style_01 = DynAccessor(18809)
 
         class _traditionalWestern_ny_style_01_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18803)
+            long = DynAccessor(18810)
 
         traditionalWestern_ny_style_01_desc = _traditionalWestern_ny_style_01_desc()
 
@@ -53691,23 +53719,23 @@ class vehicle_customization(DynAccessor):
 
         class _fonts(DynAccessor):
             __slots__ = ()
-            font_01 = DynAccessor(19435)
-            font_02 = DynAccessor(19436)
-            font_03 = DynAccessor(19437)
-            font_04 = DynAccessor(19438)
-            font_05 = DynAccessor(19439)
-            font_06 = DynAccessor(19440)
-            font_07 = DynAccessor(19441)
-            font_08 = DynAccessor(19442)
-            font_09 = DynAccessor(19443)
-            font_10 = DynAccessor(19444)
-            font_11 = DynAccessor(19445)
-            font_12 = DynAccessor(19446)
-            font_13 = DynAccessor(19447)
+            font_01 = DynAccessor(19446)
+            font_02 = DynAccessor(19447)
+            font_03 = DynAccessor(19448)
+            font_04 = DynAccessor(19449)
+            font_05 = DynAccessor(19450)
+            font_06 = DynAccessor(19451)
+            font_07 = DynAccessor(19452)
+            font_08 = DynAccessor(19453)
+            font_09 = DynAccessor(19454)
+            font_10 = DynAccessor(19455)
+            font_11 = DynAccessor(19456)
+            font_12 = DynAccessor(19457)
+            font_13 = DynAccessor(19458)
 
         fonts = _fonts()
-        general = DynAccessor(19434)
-        special = DynAccessor(19433)
+        general = DynAccessor(19445)
+        special = DynAccessor(19444)
 
     personal_number = _personal_number()
 
@@ -53716,7 +53744,7 @@ class vehicle_customization(DynAccessor):
 
         class _style(DynAccessor):
             __slots__ = ()
-            remove = DynAccessor(19099)
+            remove = DynAccessor(19108)
 
         style = _style()
 
@@ -53725,9 +53753,9 @@ class vehicle_customization(DynAccessor):
 
             class _form(DynAccessor):
                 __slots__ = ()
-                body = DynAccessor(19471)
+                body = DynAccessor(19482)
 
-            form = _form(19470)
+            form = _form(19481)
 
         tooltip = _tooltip()
 
@@ -53738,304 +53766,306 @@ class vehicle_customization(DynAccessor):
 
         class _animals(DynAccessor):
             __slots__ = ()
-            projection_decal_01 = DynAccessor(19277)
-            projection_decal_02 = DynAccessor(19278)
-            projection_decal_03 = DynAccessor(19279)
-            projection_decal_04 = DynAccessor(19280)
-            projection_decal_05 = DynAccessor(19281)
-            projection_decal_06 = DynAccessor(19282)
-            projection_decal_07 = DynAccessor(19283)
-            projection_decal_08 = DynAccessor(19284)
-            projection_decal_09 = DynAccessor(19285)
-            projection_decal_10 = DynAccessor(19286)
-            projection_decal_11 = DynAccessor(19287)
-            projection_decal_12 = DynAccessor(19288)
-            projection_decal_13 = DynAccessor(19289)
-            projection_decal_14 = DynAccessor(19290)
-            projection_decal_15 = DynAccessor(19291)
-            projection_decal_16 = DynAccessor(19292)
-            projection_decal_17 = DynAccessor(19293)
-            projection_decal_18 = DynAccessor(19294)
-            projection_decal_19 = DynAccessor(19295)
-            projection_decal_20 = DynAccessor(19296)
-            projection_decal_21 = DynAccessor(19297)
-            projection_decal_22 = DynAccessor(19298)
-            projection_decal_23 = DynAccessor(19299)
-            projection_decal_24 = DynAccessor(19300)
-            projection_decal_25 = DynAccessor(19301)
-            projection_decal_26 = DynAccessor(19302)
-            projection_decal_27 = DynAccessor(19303)
-            projection_decal_28 = DynAccessor(19304)
-            projection_decal_29 = DynAccessor(19305)
-            projection_decal_30 = DynAccessor(19306)
-            projection_decal_31 = DynAccessor(19307)
-            projection_decal_32 = DynAccessor(19308)
+            projection_decal_01 = DynAccessor(19286)
+            projection_decal_02 = DynAccessor(19287)
+            projection_decal_03 = DynAccessor(19288)
+            projection_decal_04 = DynAccessor(19289)
+            projection_decal_05 = DynAccessor(19290)
+            projection_decal_06 = DynAccessor(19291)
+            projection_decal_07 = DynAccessor(19292)
+            projection_decal_08 = DynAccessor(19293)
+            projection_decal_09 = DynAccessor(19294)
+            projection_decal_10 = DynAccessor(19295)
+            projection_decal_11 = DynAccessor(19296)
+            projection_decal_12 = DynAccessor(19297)
+            projection_decal_13 = DynAccessor(19298)
+            projection_decal_14 = DynAccessor(19299)
+            projection_decal_15 = DynAccessor(19300)
+            projection_decal_16 = DynAccessor(19301)
+            projection_decal_17 = DynAccessor(19302)
+            projection_decal_18 = DynAccessor(19303)
+            projection_decal_19 = DynAccessor(19304)
+            projection_decal_20 = DynAccessor(19305)
+            projection_decal_21 = DynAccessor(19306)
+            projection_decal_22 = DynAccessor(19307)
+            projection_decal_23 = DynAccessor(19308)
+            projection_decal_24 = DynAccessor(19309)
+            projection_decal_25 = DynAccessor(19310)
+            projection_decal_26 = DynAccessor(19311)
+            projection_decal_27 = DynAccessor(19312)
+            projection_decal_28 = DynAccessor(19313)
+            projection_decal_29 = DynAccessor(19314)
+            projection_decal_30 = DynAccessor(19315)
+            projection_decal_31 = DynAccessor(19316)
+            projection_decal_32 = DynAccessor(19317)
 
-        animals = _animals(19276)
+        animals = _animals(19285)
 
         class _armor(DynAccessor):
             __slots__ = ()
-            projection_decal_01 = DynAccessor(19336)
-            projection_decal_02 = DynAccessor(19337)
-            projection_decal_03 = DynAccessor(19338)
-            projection_decal_04 = DynAccessor(19339)
-            projection_decal_05 = DynAccessor(19340)
-            projection_decal_06 = DynAccessor(19341)
-            projection_decal_07 = DynAccessor(19342)
+            projection_decal_01 = DynAccessor(19345)
+            projection_decal_02 = DynAccessor(19346)
+            projection_decal_03 = DynAccessor(19347)
+            projection_decal_04 = DynAccessor(19348)
+            projection_decal_05 = DynAccessor(19349)
+            projection_decal_06 = DynAccessor(19350)
+            projection_decal_07 = DynAccessor(19351)
 
-        armor = _armor(19335)
+        armor = _armor(19344)
 
         class _cool(DynAccessor):
             __slots__ = ()
-            projection_decal_01 = DynAccessor(19310)
-            projection_decal_02 = DynAccessor(19311)
-            projection_decal_03 = DynAccessor(19312)
-            projection_decal_04 = DynAccessor(19313)
-            projection_decal_05 = DynAccessor(19314)
-            projection_decal_06 = DynAccessor(19315)
-            projection_decal_07 = DynAccessor(19316)
-            projection_decal_08 = DynAccessor(19317)
-            projection_decal_09 = DynAccessor(19318)
-            projection_decal_10 = DynAccessor(19319)
-            projection_decal_11 = DynAccessor(19320)
-            projection_decal_12 = DynAccessor(19321)
-            projection_decal_13 = DynAccessor(19322)
-            projection_decal_14 = DynAccessor(19323)
-            projection_decal_15 = DynAccessor(19324)
-            projection_decal_16 = DynAccessor(19325)
-            projection_decal_17 = DynAccessor(19326)
-            projection_decal_18 = DynAccessor(19327)
-            projection_decal_19 = DynAccessor(19328)
-            projection_decal_20 = DynAccessor(19329)
-            projection_decal_21 = DynAccessor(19330)
-            projection_decal_22 = DynAccessor(19331)
-            projection_decal_23 = DynAccessor(19332)
-            projection_decal_24 = DynAccessor(19333)
-            projection_decal_25 = DynAccessor(19334)
+            projection_decal_01 = DynAccessor(19319)
+            projection_decal_02 = DynAccessor(19320)
+            projection_decal_03 = DynAccessor(19321)
+            projection_decal_04 = DynAccessor(19322)
+            projection_decal_05 = DynAccessor(19323)
+            projection_decal_06 = DynAccessor(19324)
+            projection_decal_07 = DynAccessor(19325)
+            projection_decal_08 = DynAccessor(19326)
+            projection_decal_09 = DynAccessor(19327)
+            projection_decal_10 = DynAccessor(19328)
+            projection_decal_11 = DynAccessor(19329)
+            projection_decal_12 = DynAccessor(19330)
+            projection_decal_13 = DynAccessor(19331)
+            projection_decal_14 = DynAccessor(19332)
+            projection_decal_15 = DynAccessor(19333)
+            projection_decal_16 = DynAccessor(19334)
+            projection_decal_17 = DynAccessor(19335)
+            projection_decal_18 = DynAccessor(19336)
+            projection_decal_19 = DynAccessor(19337)
+            projection_decal_20 = DynAccessor(19338)
+            projection_decal_21 = DynAccessor(19339)
+            projection_decal_22 = DynAccessor(19340)
+            projection_decal_23 = DynAccessor(19341)
+            projection_decal_24 = DynAccessor(19342)
+            projection_decal_25 = DynAccessor(19343)
 
             class _projection_decal_29(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(19389)
+                description = DynAccessor(19398)
 
-            projection_decal_29 = _projection_decal_29(19388)
+            projection_decal_29 = _projection_decal_29(19397)
 
             class _projection_decal_30(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(19391)
+                description = DynAccessor(19400)
 
-            projection_decal_30 = _projection_decal_30(19390)
+            projection_decal_30 = _projection_decal_30(19399)
 
             class _projection_decal_31(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(19393)
+                description = DynAccessor(19402)
 
-            projection_decal_31 = _projection_decal_31(19392)
-            projection_decal_32 = DynAccessor(19424)
-            projection_decal_33 = DynAccessor(19425)
+            projection_decal_31 = _projection_decal_31(19401)
+            projection_decal_32 = DynAccessor(19433)
+            projection_decal_33 = DynAccessor(19434)
 
-        cool = _cool(19309)
+        cool = _cool(19318)
 
         class _damage(DynAccessor):
             __slots__ = ()
-            projection_decal_01 = DynAccessor(19262)
+            projection_decal_01 = DynAccessor(19271)
 
-        damage = _damage(19261)
+        damage = _damage(19270)
 
         class _flags(DynAccessor):
             __slots__ = ()
-            projection_decal_01 = DynAccessor(19227)
-            projection_decal_02 = DynAccessor(19228)
-            projection_decal_03 = DynAccessor(19229)
-            projection_decal_04 = DynAccessor(19230)
-            projection_decal_05 = DynAccessor(19231)
-            projection_decal_06 = DynAccessor(19232)
-            projection_decal_07 = DynAccessor(19233)
-            projection_decal_08 = DynAccessor(19234)
-            projection_decal_09 = DynAccessor(19235)
-            projection_decal_10 = DynAccessor(19236)
-            projection_decal_11 = DynAccessor(19237)
-            projection_decal_12 = DynAccessor(19238)
-            projection_decal_13 = DynAccessor(19239)
-            projection_decal_14 = DynAccessor(19240)
-            projection_decal_15 = DynAccessor(19241)
-            projection_decal_16 = DynAccessor(19242)
-            projection_decal_17 = DynAccessor(19243)
-            projection_decal_18 = DynAccessor(19244)
-            projection_decal_19 = DynAccessor(19245)
-            projection_decal_20 = DynAccessor(19246)
-            projection_decal_21 = DynAccessor(19247)
-            projection_decal_22 = DynAccessor(19248)
-            projection_decal_23 = DynAccessor(19249)
-            projection_decal_24 = DynAccessor(19250)
-            projection_decal_25 = DynAccessor(19251)
-            projection_decal_26 = DynAccessor(19252)
-            projection_decal_27 = DynAccessor(19253)
-            projection_decal_28 = DynAccessor(19254)
-            projection_decal_29 = DynAccessor(19255)
-            projection_decal_30 = DynAccessor(19256)
+            projection_decal_01 = DynAccessor(19236)
+            projection_decal_02 = DynAccessor(19237)
+            projection_decal_03 = DynAccessor(19238)
+            projection_decal_04 = DynAccessor(19239)
+            projection_decal_05 = DynAccessor(19240)
+            projection_decal_06 = DynAccessor(19241)
+            projection_decal_07 = DynAccessor(19242)
+            projection_decal_08 = DynAccessor(19243)
+            projection_decal_09 = DynAccessor(19244)
+            projection_decal_10 = DynAccessor(19245)
+            projection_decal_11 = DynAccessor(19246)
+            projection_decal_12 = DynAccessor(19247)
+            projection_decal_13 = DynAccessor(19248)
+            projection_decal_14 = DynAccessor(19249)
+            projection_decal_15 = DynAccessor(19250)
+            projection_decal_16 = DynAccessor(19251)
+            projection_decal_17 = DynAccessor(19252)
+            projection_decal_18 = DynAccessor(19253)
+            projection_decal_19 = DynAccessor(19254)
+            projection_decal_20 = DynAccessor(19255)
+            projection_decal_21 = DynAccessor(19256)
+            projection_decal_22 = DynAccessor(19257)
+            projection_decal_23 = DynAccessor(19258)
+            projection_decal_24 = DynAccessor(19259)
+            projection_decal_25 = DynAccessor(19260)
+            projection_decal_26 = DynAccessor(19261)
+            projection_decal_27 = DynAccessor(19262)
+            projection_decal_28 = DynAccessor(19263)
+            projection_decal_29 = DynAccessor(19264)
+            projection_decal_30 = DynAccessor(19265)
 
-        flags = _flags(19226)
+        flags = _flags(19235)
 
         class _game(DynAccessor):
             __slots__ = ()
-            projection_decal_01 = DynAccessor(19350)
+            projection_decal_01 = DynAccessor(19359)
 
-        game = _game(19349)
+        game = _game(19358)
 
         class _geometry(DynAccessor):
             __slots__ = ()
-            projection_decal_01 = DynAccessor(19264)
-            projection_decal_02 = DynAccessor(19265)
-            projection_decal_03 = DynAccessor(19266)
-            projection_decal_04 = DynAccessor(19267)
-            projection_decal_05 = DynAccessor(19268)
-            projection_decal_06 = DynAccessor(19269)
-            projection_decal_07 = DynAccessor(19270)
-            projection_decal_08 = DynAccessor(19271)
-            projection_decal_09 = DynAccessor(19272)
-            projection_decal_10 = DynAccessor(19273)
-            projection_decal_11 = DynAccessor(19274)
-            projection_decal_12 = DynAccessor(19275)
+            projection_decal_01 = DynAccessor(19273)
+            projection_decal_02 = DynAccessor(19274)
+            projection_decal_03 = DynAccessor(19275)
+            projection_decal_04 = DynAccessor(19276)
+            projection_decal_05 = DynAccessor(19277)
+            projection_decal_06 = DynAccessor(19278)
+            projection_decal_07 = DynAccessor(19279)
+            projection_decal_08 = DynAccessor(19280)
+            projection_decal_09 = DynAccessor(19281)
+            projection_decal_10 = DynAccessor(19282)
+            projection_decal_11 = DynAccessor(19283)
+            projection_decal_12 = DynAccessor(19284)
 
-        geometry = _geometry(19263)
+        geometry = _geometry(19272)
 
         class _holiday(DynAccessor):
             __slots__ = ()
-            projection_decal_01 = DynAccessor(19358)
-            projection_decal_02 = DynAccessor(19359)
-            projection_decal_03 = DynAccessor(19360)
-            projection_decal_04 = DynAccessor(19421)
-            projection_decal_05 = DynAccessor(19422)
-            projection_decal_06 = DynAccessor(19423)
+            projection_decal_01 = DynAccessor(19367)
+            projection_decal_02 = DynAccessor(19368)
+            projection_decal_03 = DynAccessor(19369)
+            projection_decal_04 = DynAccessor(19430)
+            projection_decal_05 = DynAccessor(19431)
+            projection_decal_06 = DynAccessor(19432)
 
-        holiday = _holiday(19357)
+        holiday = _holiday(19366)
 
         class _identity_signs(DynAccessor):
             __slots__ = ()
-            projection_decal_01 = DynAccessor(19352)
-            projection_decal_02 = DynAccessor(19353)
-            projection_decal_03 = DynAccessor(19354)
-            projection_decal_04 = DynAccessor(19355)
-            projection_decal_05 = DynAccessor(19356)
+            projection_decal_01 = DynAccessor(19361)
+            projection_decal_02 = DynAccessor(19362)
+            projection_decal_03 = DynAccessor(19363)
+            projection_decal_04 = DynAccessor(19364)
+            projection_decal_05 = DynAccessor(19365)
 
-        identity_signs = _identity_signs(19351)
+        identity_signs = _identity_signs(19360)
 
         class _landscape(DynAccessor):
             __slots__ = ()
-            projection_decal_01 = DynAccessor(19258)
-            projection_decal_02 = DynAccessor(19259)
-            projection_decal_03 = DynAccessor(19260)
+            projection_decal_01 = DynAccessor(19267)
+            projection_decal_02 = DynAccessor(19268)
+            projection_decal_03 = DynAccessor(19269)
 
-        landscape = _landscape(19257)
+        landscape = _landscape(19266)
 
         class _mythology(DynAccessor):
             __slots__ = ()
-            projection_decal_01 = DynAccessor(19395)
-            projection_decal_02 = DynAccessor(19396)
-            projection_decal_03 = DynAccessor(19397)
-            projection_decal_04 = DynAccessor(19398)
-            projection_decal_05 = DynAccessor(19399)
-            projection_decal_06 = DynAccessor(19400)
-            projection_decal_07 = DynAccessor(19401)
-            projection_decal_08 = DynAccessor(19402)
-            projection_decal_09 = DynAccessor(19403)
-            projection_decal_10 = DynAccessor(19404)
-            projection_decal_11 = DynAccessor(19405)
-            projection_decal_12 = DynAccessor(19406)
+            projection_decal_01 = DynAccessor(19404)
+            projection_decal_02 = DynAccessor(19405)
+            projection_decal_03 = DynAccessor(19406)
+            projection_decal_04 = DynAccessor(19407)
+            projection_decal_05 = DynAccessor(19408)
+            projection_decal_06 = DynAccessor(19409)
+            projection_decal_07 = DynAccessor(19410)
+            projection_decal_08 = DynAccessor(19411)
+            projection_decal_09 = DynAccessor(19412)
+            projection_decal_10 = DynAccessor(19413)
+            projection_decal_11 = DynAccessor(19414)
+            projection_decal_12 = DynAccessor(19415)
 
-        mythology = _mythology(19394)
+        mythology = _mythology(19403)
 
         class _pin_up(DynAccessor):
             __slots__ = ()
-            projection_decal_01 = DynAccessor(19408)
-            projection_decal_02 = DynAccessor(19409)
-            projection_decal_03 = DynAccessor(19410)
-            projection_decal_04 = DynAccessor(19411)
-            projection_decal_05 = DynAccessor(19412)
-            projection_decal_06 = DynAccessor(19413)
-            projection_decal_07 = DynAccessor(19414)
-            projection_decal_08 = DynAccessor(19415)
-            projection_decal_09 = DynAccessor(19416)
-            projection_decal_10 = DynAccessor(19417)
-            projection_decal_11 = DynAccessor(19418)
+            projection_decal_01 = DynAccessor(19417)
+            projection_decal_02 = DynAccessor(19418)
+            projection_decal_03 = DynAccessor(19419)
+            projection_decal_04 = DynAccessor(19420)
+            projection_decal_05 = DynAccessor(19421)
+            projection_decal_06 = DynAccessor(19422)
+            projection_decal_07 = DynAccessor(19423)
+            projection_decal_08 = DynAccessor(19424)
+            projection_decal_09 = DynAccessor(19425)
+            projection_decal_10 = DynAccessor(19426)
+            projection_decal_11 = DynAccessor(19427)
 
-        pin_up = _pin_up(19407)
+        pin_up = _pin_up(19416)
 
         class _signs(DynAccessor):
             __slots__ = ()
-            projection_decal_01 = DynAccessor(19344)
-            projection_decal_02 = DynAccessor(19345)
-            projection_decal_03 = DynAccessor(19346)
-            projection_decal_04 = DynAccessor(19347)
-            projection_decal_05 = DynAccessor(19348)
+            projection_decal_01 = DynAccessor(19353)
+            projection_decal_02 = DynAccessor(19354)
+            projection_decal_03 = DynAccessor(19355)
+            projection_decal_04 = DynAccessor(19356)
+            projection_decal_05 = DynAccessor(19357)
 
-        signs = _signs(19343)
+        signs = _signs(19352)
 
         class _special(DynAccessor):
             __slots__ = ()
-            projection_decal_01 = DynAccessor(19362)
-            projection_decal_02 = DynAccessor(19363)
-            projection_decal_06 = DynAccessor(19364)
-            projection_decal_07 = DynAccessor(19365)
-            projection_decal_08 = DynAccessor(19366)
-            projection_decal_09 = DynAccessor(19367)
-            projection_decal_10 = DynAccessor(19368)
-            projection_decal_11 = DynAccessor(19369)
-            projection_decal_12 = DynAccessor(19370)
-            projection_decal_13 = DynAccessor(19371)
-            projection_decal_14 = DynAccessor(19372)
-            projection_decal_15 = DynAccessor(19373)
+            projection_decal_01 = DynAccessor(19371)
+            projection_decal_02 = DynAccessor(19372)
+            projection_decal_06 = DynAccessor(19373)
+            projection_decal_07 = DynAccessor(19374)
+            projection_decal_08 = DynAccessor(19375)
+            projection_decal_09 = DynAccessor(19376)
+            projection_decal_10 = DynAccessor(19377)
+            projection_decal_11 = DynAccessor(19378)
+            projection_decal_12 = DynAccessor(19379)
+            projection_decal_13 = DynAccessor(19380)
+            projection_decal_14 = DynAccessor(19381)
+            projection_decal_15 = DynAccessor(19382)
 
             class _projection_decal_16(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(19463)
+                description = DynAccessor(19474)
 
-            projection_decal_16 = _projection_decal_16(19462)
-            projection_decal_17 = DynAccessor(19464)
-            projection_decal_18 = DynAccessor(19465)
-            projection_decal_19 = DynAccessor(19466)
-            projection_decal_20 = DynAccessor(19374)
-            projection_decal_21 = DynAccessor(19375)
-            projection_decal_22 = DynAccessor(19376)
-            projection_decal_23 = DynAccessor(19377)
+            projection_decal_16 = _projection_decal_16(19473)
+            projection_decal_17 = DynAccessor(19475)
+            projection_decal_18 = DynAccessor(19476)
+            projection_decal_19 = DynAccessor(19477)
+            projection_decal_20 = DynAccessor(19383)
+            projection_decal_21 = DynAccessor(19384)
+            projection_decal_22 = DynAccessor(19385)
+            projection_decal_23 = DynAccessor(19386)
 
             class _projection_decal_24(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(19379)
+                description = DynAccessor(19388)
 
-            projection_decal_24 = _projection_decal_24(19378)
+            projection_decal_24 = _projection_decal_24(19387)
 
             class _projection_decal_25(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(19381)
+                description = DynAccessor(19390)
 
-            projection_decal_25 = _projection_decal_25(19380)
+            projection_decal_25 = _projection_decal_25(19389)
 
             class _projection_decal_26(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(19383)
+                description = DynAccessor(19392)
 
-            projection_decal_26 = _projection_decal_26(19382)
+            projection_decal_26 = _projection_decal_26(19391)
 
             class _projection_decal_27(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(19385)
+                description = DynAccessor(19394)
 
-            projection_decal_27 = _projection_decal_27(19384)
+            projection_decal_27 = _projection_decal_27(19393)
 
             class _projection_decal_28(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(19387)
+                description = DynAccessor(19396)
 
-            projection_decal_28 = _projection_decal_28(19386)
+            projection_decal_28 = _projection_decal_28(19395)
 
             class _projection_decal_29(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(19420)
+                description = DynAccessor(19429)
 
-            projection_decal_29 = _projection_decal_29(19419)
+            projection_decal_29 = _projection_decal_29(19428)
+            projection_decal_30 = DynAccessor(19435)
+            projection_decal_31 = DynAccessor(19436)
 
-        special = _special(19361)
+        special = _special(19370)
 
     projection_decals = _projection_decals()
 
@@ -54044,97 +54074,97 @@ class vehicle_customization(DynAccessor):
 
         class _actionBtn(DynAccessor):
             __slots__ = ()
-            applyToAllMaps = DynAccessor(19171)
-            applyToAllMapsDisabled = DynAccessor(19172)
-            applyToWholeTank = DynAccessor(19169)
-            applyToWholeTankDisabled = DynAccessor(19170)
-            cancel = DynAccessor(19189)
-            clear = DynAccessor(19190)
-            close = DynAccessor(19168)
+            applyToAllMaps = DynAccessor(19180)
+            applyToAllMapsDisabled = DynAccessor(19181)
+            applyToWholeTank = DynAccessor(19178)
+            applyToWholeTankDisabled = DynAccessor(19179)
+            cancel = DynAccessor(19198)
+            clear = DynAccessor(19199)
+            close = DynAccessor(19177)
 
             class _edit(DynAccessor):
                 __slots__ = ()
-                inscription = DynAccessor(19195)
+                inscription = DynAccessor(19204)
 
             edit = _edit()
 
             class _forCurrentItem(DynAccessor):
                 __slots__ = ()
-                camouflage = DynAccessor(19174)
-                effect = DynAccessor(19177)
-                emblem = DynAccessor(19175)
-                insignia = DynAccessor(19176)
-                paint = DynAccessor(19173)
+                camouflage = DynAccessor(19183)
+                effect = DynAccessor(19186)
+                emblem = DynAccessor(19184)
+                insignia = DynAccessor(19185)
+                paint = DynAccessor(19182)
 
             forCurrentItem = _forCurrentItem()
-            getBack = DynAccessor(19192)
-            mirror = DynAccessor(19191)
-            move = DynAccessor(19193)
+            getBack = DynAccessor(19201)
+            mirror = DynAccessor(19200)
+            move = DynAccessor(19202)
 
             class _remove(DynAccessor):
                 __slots__ = ()
-                chassis = DynAccessor(19181)
-                emblem = DynAccessor(19185)
-                gun = DynAccessor(19180)
-                hull = DynAccessor(19182)
-                inscription = DynAccessor(19186)
-                mask = DynAccessor(19179)
-                modification = DynAccessor(19184)
-                projectionDecal = DynAccessor(19187)
-                seasons = DynAccessor(19188)
-                tank = DynAccessor(19183)
-                turret = DynAccessor(19178)
+                chassis = DynAccessor(19190)
+                emblem = DynAccessor(19194)
+                gun = DynAccessor(19189)
+                hull = DynAccessor(19191)
+                inscription = DynAccessor(19195)
+                mask = DynAccessor(19188)
+                modification = DynAccessor(19193)
+                projectionDecal = DynAccessor(19196)
+                seasons = DynAccessor(19197)
+                tank = DynAccessor(19192)
+                turret = DynAccessor(19187)
 
             remove = _remove()
-            removeStyle = DynAccessor(19194)
+            removeStyle = DynAccessor(19203)
 
         actionBtn = _actionBtn()
 
         class _choose(DynAccessor):
             __slots__ = ()
-            camouflage = DynAccessor(19219)
-            emblem = DynAccessor(19220)
-            inscription = DynAccessor(19221)
-            modification = DynAccessor(19222)
-            paint = DynAccessor(19218)
-            style = DynAccessor(19223)
+            camouflage = DynAccessor(19228)
+            emblem = DynAccessor(19229)
+            inscription = DynAccessor(19230)
+            modification = DynAccessor(19231)
+            paint = DynAccessor(19227)
+            style = DynAccessor(19232)
 
         choose = _choose()
-        description = DynAccessor(19224)
+        description = DynAccessor(19233)
 
         class _elementType(DynAccessor):
             __slots__ = ()
-            all = DynAccessor(19214)
-            chassis = DynAccessor(19199)
-            emblem = DynAccessor(19213)
-            gun = DynAccessor(19198)
-            hull = DynAccessor(19200)
-            inscription = DynAccessor(19212)
-            mask = DynAccessor(19197)
-            turret = DynAccessor(19196)
+            all = DynAccessor(19223)
+            chassis = DynAccessor(19208)
+            emblem = DynAccessor(19222)
+            gun = DynAccessor(19207)
+            hull = DynAccessor(19209)
+            inscription = DynAccessor(19221)
+            mask = DynAccessor(19206)
+            turret = DynAccessor(19205)
 
         elementType = _elementType()
 
         class _inscriptionController(DynAccessor):
             __slots__ = ()
-            edit_buttons = DynAccessor(19430)
-            entry_completed = DynAccessor(19429)
-            invalid_inscription = DynAccessor(19427)
-            prompt = DynAccessor(19428)
+            edit_buttons = DynAccessor(19441)
+            entry_completed = DynAccessor(19440)
+            invalid_inscription = DynAccessor(19438)
+            prompt = DynAccessor(19439)
 
         inscriptionController = _inscriptionController()
 
         class _keyboard(DynAccessor):
             __slots__ = ()
-            hint = DynAccessor(19426)
+            hint = DynAccessor(19437)
 
         keyboard = _keyboard()
 
         class _map(DynAccessor):
             __slots__ = ()
-            desert = DynAccessor(19217)
-            summer = DynAccessor(19215)
-            winter = DynAccessor(19216)
+            desert = DynAccessor(19226)
+            summer = DynAccessor(19224)
+            winter = DynAccessor(19225)
 
         map = _map()
 
@@ -54146,27 +54176,27 @@ class vehicle_customization(DynAccessor):
 
                 class _dialog(DynAccessor):
                     __slots__ = ()
-                    season = DynAccessor(19203)
-                    seasons = DynAccessor(19204)
+                    season = DynAccessor(19212)
+                    seasons = DynAccessor(19213)
 
                 dialog = _dialog()
 
                 class _seasons(DynAccessor):
                     __slots__ = ()
-                    desert = DynAccessor(19208)
-                    removed = DynAccessor(19205)
-                    summer = DynAccessor(19206)
-                    summer_desert = DynAccessor(19210)
-                    summer_winter = DynAccessor(19209)
-                    winter = DynAccessor(19207)
-                    winter_desert = DynAccessor(19211)
+                    desert = DynAccessor(19217)
+                    removed = DynAccessor(19214)
+                    summer = DynAccessor(19215)
+                    summer_desert = DynAccessor(19219)
+                    summer_winter = DynAccessor(19218)
+                    winter = DynAccessor(19216)
+                    winter_desert = DynAccessor(19220)
 
                 seasons = _seasons()
 
                 class _tooltip(DynAccessor):
                     __slots__ = ()
-                    season = DynAccessor(19201)
-                    seasons = DynAccessor(19202)
+                    season = DynAccessor(19210)
+                    seasons = DynAccessor(19211)
 
                 tooltip = _tooltip()
 
@@ -54176,23 +54206,23 @@ class vehicle_customization(DynAccessor):
 
         class _title(DynAccessor):
             __slots__ = ()
-            allMaps = DynAccessor(19159)
-            allTankPainted = DynAccessor(19157)
-            appliedTo = DynAccessor(19156)
-            appliedToMap = DynAccessor(19158)
-            color = DynAccessor(19166)
+            allMaps = DynAccessor(19168)
+            allTankPainted = DynAccessor(19166)
+            appliedTo = DynAccessor(19165)
+            appliedToMap = DynAccessor(19167)
+            color = DynAccessor(19175)
 
             class _remove(DynAccessor):
                 __slots__ = ()
-                camouflage = DynAccessor(19161)
-                emblem = DynAccessor(19162)
-                inscription = DynAccessor(19163)
-                modification = DynAccessor(19165)
-                paint = DynAccessor(19160)
-                projectionDecal = DynAccessor(19164)
+                camouflage = DynAccessor(19170)
+                emblem = DynAccessor(19171)
+                inscription = DynAccessor(19172)
+                modification = DynAccessor(19174)
+                paint = DynAccessor(19169)
+                projectionDecal = DynAccessor(19173)
 
             remove = _remove()
-            scale = DynAccessor(19167)
+            scale = DynAccessor(19176)
 
         title = _title()
 
@@ -54200,166 +54230,166 @@ class vehicle_customization(DynAccessor):
 
     class _rented_style(DynAccessor):
         __slots__ = ()
-        china = DynAccessor(18786)
-        czech = DynAccessor(18787)
-        france = DynAccessor(18788)
-        germany = DynAccessor(18789)
-        italy = DynAccessor(18795)
-        japan = DynAccessor(18790)
-        poland = DynAccessor(18796)
-        sweden = DynAccessor(18791)
-        uk = DynAccessor(18792)
-        usa = DynAccessor(18793)
-        ussr = DynAccessor(18794)
+        china = DynAccessor(18793)
+        czech = DynAccessor(18794)
+        france = DynAccessor(18795)
+        germany = DynAccessor(18796)
+        italy = DynAccessor(18802)
+        japan = DynAccessor(18797)
+        poland = DynAccessor(18803)
+        sweden = DynAccessor(18798)
+        uk = DynAccessor(18799)
+        usa = DynAccessor(18800)
+        ussr = DynAccessor(18801)
 
     rented_style = _rented_style()
 
     class _repaint(DynAccessor):
         __slots__ = ()
-        br_award_15_1 = DynAccessor(18760)
-        br_award_15_2 = DynAccessor(18761)
-        br_award_15_3 = DynAccessor(18762)
-        br_award_25_1 = DynAccessor(18763)
-        br_award_25_2 = DynAccessor(18764)
-        br_award_25_3 = DynAccessor(18765)
-        br_style_paid = DynAccessor(18759)
-        china_base_color = DynAccessor(18668)
-        china_color_01 = DynAccessor(18669)
-        china_color_02 = DynAccessor(18670)
-        china_color_03 = DynAccessor(18671)
-        china_color_04 = DynAccessor(18672)
-        china_color_05 = DynAccessor(18673)
-        china_color_06 = DynAccessor(18674)
-        china_color_07 = DynAccessor(18675)
-        color_group_02 = DynAccessor(18756)
-        color_group_03 = DynAccessor(18757)
-        color_group_04 = DynAccessor(18758)
-        color_group_05 = DynAccessor(18755)
-        custom_color_01 = DynAccessor(18717)
-        custom_color_02 = DynAccessor(18718)
-        custom_color_03 = DynAccessor(18719)
-        custom_color_04 = DynAccessor(18720)
-        custom_color_05 = DynAccessor(18721)
-        custom_color_06 = DynAccessor(18722)
-        custom_color_07 = DynAccessor(18723)
-        custom_color_08 = DynAccessor(18724)
-        custom_color_09 = DynAccessor(18725)
-        custom_color_10 = DynAccessor(18726)
-        custom_color_11 = DynAccessor(18727)
-        custom_color_12 = DynAccessor(18728)
-        custom_color_13 = DynAccessor(18729)
-        custom_color_14 = DynAccessor(18730)
-        custom_color_15 = DynAccessor(18731)
-        custom_color_16 = DynAccessor(18739)
-        custom_color_17 = DynAccessor(18740)
-        custom_color_18 = DynAccessor(18741)
-        custom_color_19 = DynAccessor(18742)
-        custom_color_20 = DynAccessor(18732)
-        custom_color_21 = DynAccessor(18733)
-        custom_color_22 = DynAccessor(18734)
-        custom_color_23 = DynAccessor(18737)
-        custom_color_24 = DynAccessor(18738)
-        custom_color_25 = DynAccessor(18735)
-        custom_color_26 = DynAccessor(18736)
-        custom_color_27 = DynAccessor(18743)
-        custom_color_28 = DynAccessor(18744)
-        custom_color_29 = DynAccessor(18745)
-        custom_color_31 = DynAccessor(18750)
-        custom_color_32 = DynAccessor(18751)
-        custom_color_33 = DynAccessor(18752)
-        custom_color_34 = DynAccessor(18753)
-        custom_color_35 = DynAccessor(18754)
-        czech_base_color = DynAccessor(18692)
-        czech_color_01 = DynAccessor(18694)
-        czech_color_02 = DynAccessor(18695)
-        czech_color_03 = DynAccessor(18696)
-        czech_color_04 = DynAccessor(18697)
-        czech_color_05 = DynAccessor(18698)
-        czech_color_06 = DynAccessor(18699)
-        czech_color_07 = DynAccessor(18700)
-        fireworks_2019 = DynAccessor(18748)
-        france_base_color = DynAccessor(18652)
-        france_color_01 = DynAccessor(18653)
-        france_color_02 = DynAccessor(18654)
-        france_color_03 = DynAccessor(18655)
-        france_color_04 = DynAccessor(18656)
-        france_color_05 = DynAccessor(18657)
-        france_color_06 = DynAccessor(18658)
-        france_color_07 = DynAccessor(18659)
-        frost = DynAccessor(18746)
-        germany_base_color = DynAccessor(18636)
-        germany_color_01 = DynAccessor(18637)
-        germany_color_02 = DynAccessor(18638)
-        germany_color_03 = DynAccessor(18639)
-        germany_color_04 = DynAccessor(18640)
-        germany_color_05 = DynAccessor(18641)
-        germany_color_06 = DynAccessor(18642)
-        germany_color_07 = DynAccessor(18643)
-        hvoin = DynAccessor(18747)
-        italy_base_color = DynAccessor(18701)
-        italy_color_01 = DynAccessor(18702)
-        italy_color_02 = DynAccessor(18703)
-        italy_color_03 = DynAccessor(18704)
-        italy_color_04 = DynAccessor(18705)
-        italy_color_05 = DynAccessor(18706)
-        italy_color_06 = DynAccessor(18707)
-        italy_color_07 = DynAccessor(18708)
-        japan_base_color = DynAccessor(18684)
-        japan_color_01 = DynAccessor(18685)
-        japan_color_02 = DynAccessor(18686)
-        japan_color_03 = DynAccessor(18687)
-        japan_color_04 = DynAccessor(18688)
-        japan_color_05 = DynAccessor(18689)
-        japan_color_06 = DynAccessor(18690)
-        japan_color_07 = DynAccessor(18691)
-        poland_base_color = DynAccessor(18709)
-        poland_color_01 = DynAccessor(18710)
-        poland_color_02 = DynAccessor(18711)
-        poland_color_03 = DynAccessor(18712)
-        poland_color_04 = DynAccessor(18713)
-        poland_color_05 = DynAccessor(18714)
-        poland_color_06 = DynAccessor(18715)
-        poland_color_07 = DynAccessor(18716)
-        primer_marmot = DynAccessor(18693)
-        racing_2019_team_a = DynAccessor(18768)
-        racing_2019_team_b = DynAccessor(18770)
-        racing_2019_team_c = DynAccessor(18769)
-        referal_programm = DynAccessor(18749)
-        sweden_base_color = DynAccessor(18676)
-        sweden_color_01 = DynAccessor(18677)
-        sweden_color_02 = DynAccessor(18678)
-        sweden_color_03 = DynAccessor(18679)
-        sweden_color_04 = DynAccessor(18680)
-        sweden_color_05 = DynAccessor(18681)
-        sweden_color_06 = DynAccessor(18682)
-        sweden_color_07 = DynAccessor(18683)
-        t_october = DynAccessor(18771)
-        uk_base_color = DynAccessor(18644)
-        uk_color_01 = DynAccessor(18645)
-        uk_color_02 = DynAccessor(18646)
-        uk_color_03 = DynAccessor(18647)
-        uk_color_04 = DynAccessor(18648)
-        uk_color_05 = DynAccessor(18649)
-        uk_color_06 = DynAccessor(18650)
-        uk_color_07 = DynAccessor(18651)
-        usa_base_color = DynAccessor(18660)
-        usa_color_01 = DynAccessor(18661)
-        usa_color_02 = DynAccessor(18662)
-        usa_color_03 = DynAccessor(18663)
-        usa_color_04 = DynAccessor(18664)
-        usa_color_05 = DynAccessor(18665)
-        usa_color_06 = DynAccessor(18666)
-        usa_color_07 = DynAccessor(18667)
-        ussr_base_color = DynAccessor(18628)
-        ussr_color_01 = DynAccessor(18629)
-        ussr_color_02 = DynAccessor(18630)
-        ussr_color_03 = DynAccessor(18631)
-        ussr_color_04 = DynAccessor(18632)
-        ussr_color_05 = DynAccessor(18633)
-        ussr_color_06 = DynAccessor(18634)
-        ussr_color_07 = DynAccessor(18635)
-        wg_fest_2019 = DynAccessor(18766)
-        wot_fest_2019 = DynAccessor(18767)
+        br_award_15_1 = DynAccessor(18767)
+        br_award_15_2 = DynAccessor(18768)
+        br_award_15_3 = DynAccessor(18769)
+        br_award_25_1 = DynAccessor(18770)
+        br_award_25_2 = DynAccessor(18771)
+        br_award_25_3 = DynAccessor(18772)
+        br_style_paid = DynAccessor(18766)
+        china_base_color = DynAccessor(18675)
+        china_color_01 = DynAccessor(18676)
+        china_color_02 = DynAccessor(18677)
+        china_color_03 = DynAccessor(18678)
+        china_color_04 = DynAccessor(18679)
+        china_color_05 = DynAccessor(18680)
+        china_color_06 = DynAccessor(18681)
+        china_color_07 = DynAccessor(18682)
+        color_group_02 = DynAccessor(18763)
+        color_group_03 = DynAccessor(18764)
+        color_group_04 = DynAccessor(18765)
+        color_group_05 = DynAccessor(18762)
+        custom_color_01 = DynAccessor(18724)
+        custom_color_02 = DynAccessor(18725)
+        custom_color_03 = DynAccessor(18726)
+        custom_color_04 = DynAccessor(18727)
+        custom_color_05 = DynAccessor(18728)
+        custom_color_06 = DynAccessor(18729)
+        custom_color_07 = DynAccessor(18730)
+        custom_color_08 = DynAccessor(18731)
+        custom_color_09 = DynAccessor(18732)
+        custom_color_10 = DynAccessor(18733)
+        custom_color_11 = DynAccessor(18734)
+        custom_color_12 = DynAccessor(18735)
+        custom_color_13 = DynAccessor(18736)
+        custom_color_14 = DynAccessor(18737)
+        custom_color_15 = DynAccessor(18738)
+        custom_color_16 = DynAccessor(18746)
+        custom_color_17 = DynAccessor(18747)
+        custom_color_18 = DynAccessor(18748)
+        custom_color_19 = DynAccessor(18749)
+        custom_color_20 = DynAccessor(18739)
+        custom_color_21 = DynAccessor(18740)
+        custom_color_22 = DynAccessor(18741)
+        custom_color_23 = DynAccessor(18744)
+        custom_color_24 = DynAccessor(18745)
+        custom_color_25 = DynAccessor(18742)
+        custom_color_26 = DynAccessor(18743)
+        custom_color_27 = DynAccessor(18750)
+        custom_color_28 = DynAccessor(18751)
+        custom_color_29 = DynAccessor(18752)
+        custom_color_31 = DynAccessor(18757)
+        custom_color_32 = DynAccessor(18758)
+        custom_color_33 = DynAccessor(18759)
+        custom_color_34 = DynAccessor(18760)
+        custom_color_35 = DynAccessor(18761)
+        czech_base_color = DynAccessor(18699)
+        czech_color_01 = DynAccessor(18701)
+        czech_color_02 = DynAccessor(18702)
+        czech_color_03 = DynAccessor(18703)
+        czech_color_04 = DynAccessor(18704)
+        czech_color_05 = DynAccessor(18705)
+        czech_color_06 = DynAccessor(18706)
+        czech_color_07 = DynAccessor(18707)
+        fireworks_2019 = DynAccessor(18755)
+        france_base_color = DynAccessor(18659)
+        france_color_01 = DynAccessor(18660)
+        france_color_02 = DynAccessor(18661)
+        france_color_03 = DynAccessor(18662)
+        france_color_04 = DynAccessor(18663)
+        france_color_05 = DynAccessor(18664)
+        france_color_06 = DynAccessor(18665)
+        france_color_07 = DynAccessor(18666)
+        frost = DynAccessor(18753)
+        germany_base_color = DynAccessor(18643)
+        germany_color_01 = DynAccessor(18644)
+        germany_color_02 = DynAccessor(18645)
+        germany_color_03 = DynAccessor(18646)
+        germany_color_04 = DynAccessor(18647)
+        germany_color_05 = DynAccessor(18648)
+        germany_color_06 = DynAccessor(18649)
+        germany_color_07 = DynAccessor(18650)
+        hvoin = DynAccessor(18754)
+        italy_base_color = DynAccessor(18708)
+        italy_color_01 = DynAccessor(18709)
+        italy_color_02 = DynAccessor(18710)
+        italy_color_03 = DynAccessor(18711)
+        italy_color_04 = DynAccessor(18712)
+        italy_color_05 = DynAccessor(18713)
+        italy_color_06 = DynAccessor(18714)
+        italy_color_07 = DynAccessor(18715)
+        japan_base_color = DynAccessor(18691)
+        japan_color_01 = DynAccessor(18692)
+        japan_color_02 = DynAccessor(18693)
+        japan_color_03 = DynAccessor(18694)
+        japan_color_04 = DynAccessor(18695)
+        japan_color_05 = DynAccessor(18696)
+        japan_color_06 = DynAccessor(18697)
+        japan_color_07 = DynAccessor(18698)
+        poland_base_color = DynAccessor(18716)
+        poland_color_01 = DynAccessor(18717)
+        poland_color_02 = DynAccessor(18718)
+        poland_color_03 = DynAccessor(18719)
+        poland_color_04 = DynAccessor(18720)
+        poland_color_05 = DynAccessor(18721)
+        poland_color_06 = DynAccessor(18722)
+        poland_color_07 = DynAccessor(18723)
+        primer_marmot = DynAccessor(18700)
+        racing_2019_team_a = DynAccessor(18775)
+        racing_2019_team_b = DynAccessor(18777)
+        racing_2019_team_c = DynAccessor(18776)
+        referal_programm = DynAccessor(18756)
+        sweden_base_color = DynAccessor(18683)
+        sweden_color_01 = DynAccessor(18684)
+        sweden_color_02 = DynAccessor(18685)
+        sweden_color_03 = DynAccessor(18686)
+        sweden_color_04 = DynAccessor(18687)
+        sweden_color_05 = DynAccessor(18688)
+        sweden_color_06 = DynAccessor(18689)
+        sweden_color_07 = DynAccessor(18690)
+        t_october = DynAccessor(18778)
+        uk_base_color = DynAccessor(18651)
+        uk_color_01 = DynAccessor(18652)
+        uk_color_02 = DynAccessor(18653)
+        uk_color_03 = DynAccessor(18654)
+        uk_color_04 = DynAccessor(18655)
+        uk_color_05 = DynAccessor(18656)
+        uk_color_06 = DynAccessor(18657)
+        uk_color_07 = DynAccessor(18658)
+        usa_base_color = DynAccessor(18667)
+        usa_color_01 = DynAccessor(18668)
+        usa_color_02 = DynAccessor(18669)
+        usa_color_03 = DynAccessor(18670)
+        usa_color_04 = DynAccessor(18671)
+        usa_color_05 = DynAccessor(18672)
+        usa_color_06 = DynAccessor(18673)
+        usa_color_07 = DynAccessor(18674)
+        ussr_base_color = DynAccessor(18635)
+        ussr_color_01 = DynAccessor(18636)
+        ussr_color_02 = DynAccessor(18637)
+        ussr_color_03 = DynAccessor(18638)
+        ussr_color_04 = DynAccessor(18639)
+        ussr_color_05 = DynAccessor(18640)
+        ussr_color_06 = DynAccessor(18641)
+        ussr_color_07 = DynAccessor(18642)
+        wg_fest_2019 = DynAccessor(18773)
+        wot_fest_2019 = DynAccessor(18774)
 
     repaint = _repaint()
 
@@ -54368,27 +54398,27 @@ class vehicle_customization(DynAccessor):
 
         class _selection(DynAccessor):
             __slots__ = ()
-            desert = DynAccessor(19102)
+            desert = DynAccessor(19111)
 
             class _mapName(DynAccessor):
                 __slots__ = ()
-                all = DynAccessor(19110)
-                desert = DynAccessor(19109)
-                summer = DynAccessor(19107)
-                winter = DynAccessor(19108)
+                all = DynAccessor(19119)
+                desert = DynAccessor(19118)
+                summer = DynAccessor(19116)
+                winter = DynAccessor(19117)
 
             mapName = _mapName()
 
             class _selected(DynAccessor):
                 __slots__ = ()
-                desert = DynAccessor(19105)
-                summer = DynAccessor(19103)
-                winter = DynAccessor(19104)
+                desert = DynAccessor(19114)
+                summer = DynAccessor(19112)
+                winter = DynAccessor(19113)
 
             selected = _selected()
-            summer = DynAccessor(19100)
-            tooltip = DynAccessor(19106)
-            winter = DynAccessor(19101)
+            summer = DynAccessor(19109)
+            tooltip = DynAccessor(19115)
+            winter = DynAccessor(19110)
 
         selection = _selection()
 
@@ -54396,398 +54426,398 @@ class vehicle_customization(DynAccessor):
 
     class _special_style(DynAccessor):
         __slots__ = ()
-        c_23feb = DynAccessor(18829)
-        c_50TP_prototyp_WingedHussar = DynAccessor(18879)
+        c_23feb = DynAccessor(18836)
+        c_50TP_prototyp_WingedHussar = DynAccessor(18886)
 
         class _c_50TP_prototyp_WingedHussar_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18880)
+            long = DynAccessor(18887)
 
         c_50TP_prototyp_WingedHussar_desc = _c_50TP_prototyp_WingedHussar_desc()
-        Alpha = DynAccessor(18927)
-        Alpha_desc = DynAccessor(18928)
-        Armistice = DynAccessor(18917)
-        australia_day = DynAccessor(18962)
-        australia_day_desc = DynAccessor(18963)
-        autumn_wind = DynAccessor(18885)
-        autumn_wind_desc = DynAccessor(18886)
-        Bat_Chatillon25t_NYst = DynAccessor(18946)
+        Alpha = DynAccessor(18934)
+        Alpha_desc = DynAccessor(18935)
+        Armistice = DynAccessor(18924)
+        australia_day = DynAccessor(18969)
+        australia_day_desc = DynAccessor(18970)
+        autumn_wind = DynAccessor(18892)
+        autumn_wind_desc = DynAccessor(18893)
+        Bat_Chatillon25t_NYst = DynAccessor(18953)
 
         class _Bat_Chatillon25t_NYst_description(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18948)
+            long = DynAccessor(18955)
 
-        Bat_Chatillon25t_NYst_description = _Bat_Chatillon25t_NYst_description(18947)
-        battle_of_bloggers_01 = DynAccessor(18899)
-        battle_of_bloggers_01_desc = DynAccessor(18900)
-        battle_of_bloggers_02 = DynAccessor(18901)
-        battle_of_bloggers_02_desc = DynAccessor(18902)
-        battle_of_bloggers_03 = DynAccessor(18903)
-        battle_of_bloggers_03_desc = DynAccessor(18904)
-        battle_of_bloggers_04 = DynAccessor(18905)
-        battle_of_bloggers_04_desc = DynAccessor(18906)
-        battle_of_kursk_01 = DynAccessor(18846)
+        Bat_Chatillon25t_NYst_description = _Bat_Chatillon25t_NYst_description(18954)
+        battle_of_bloggers_01 = DynAccessor(18906)
+        battle_of_bloggers_01_desc = DynAccessor(18907)
+        battle_of_bloggers_02 = DynAccessor(18908)
+        battle_of_bloggers_02_desc = DynAccessor(18909)
+        battle_of_bloggers_03 = DynAccessor(18910)
+        battle_of_bloggers_03_desc = DynAccessor(18911)
+        battle_of_bloggers_04 = DynAccessor(18912)
+        battle_of_bloggers_04_desc = DynAccessor(18913)
+        battle_of_kursk_01 = DynAccessor(18853)
 
         class _battle_of_kursk_01_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18848)
+            long = DynAccessor(18855)
 
-        battle_of_kursk_01_desc = _battle_of_kursk_01_desc(18847)
-        battle_of_kursk_02 = DynAccessor(18849)
-        battle_of_kursk_02_desc = DynAccessor(18850)
-        bdr_g1b_w = DynAccessor(18833)
+        battle_of_kursk_01_desc = _battle_of_kursk_01_desc(18854)
+        battle_of_kursk_02 = DynAccessor(18856)
+        battle_of_kursk_02_desc = DynAccessor(18857)
+        bdr_g1b_w = DynAccessor(18840)
 
         class _bdr_g1b_w_description(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18835)
+            long = DynAccessor(18842)
 
-        bdr_g1b_w_description = _bdr_g1b_w_description(18834)
-        blackdigital = DynAccessor(19073)
-        blackdigital_desc = DynAccessor(19074)
-        BlackFriday = DynAccessor(18955)
-        br_award_15 = DynAccessor(19081)
-        br_award_15_desc = DynAccessor(19082)
-        br_award_25 = DynAccessor(19083)
-        br_award_25_desc = DynAccessor(19084)
-        br_paid = DynAccessor(19079)
-        br_paid_desc = DynAccessor(19080)
-        brw_winner = DynAccessor(18839)
-        bulat = DynAccessor(19069)
-        chaffee = DynAccessor(19077)
-        chaffee_desc = DynAccessor(19078)
-        clan_style_01 = DynAccessor(18907)
-        clan_urban = DynAccessor(19038)
-        conqueror = DynAccessor(19068)
-        cosmonautics_day = DynAccessor(18964)
-        cosmonautics_day_desc = DynAccessor(18965)
-        Counterattack = DynAccessor(18953)
-        Counterattack_desc = DynAccessor(18954)
-        cracked_stone_style = DynAccessor(18897)
-        cracked_stone_style_desc = DynAccessor(18898)
-        czech_style = DynAccessor(18916)
-        czech_veteran = DynAccessor(18968)
+        bdr_g1b_w_description = _bdr_g1b_w_description(18841)
+        blackdigital = DynAccessor(19080)
+        blackdigital_desc = DynAccessor(19081)
+        BlackFriday = DynAccessor(18962)
+        br_award_15 = DynAccessor(19088)
+        br_award_15_desc = DynAccessor(19089)
+        br_award_25 = DynAccessor(19090)
+        br_award_25_desc = DynAccessor(19091)
+        br_paid = DynAccessor(19086)
+        br_paid_desc = DynAccessor(19087)
+        brw_winner = DynAccessor(18846)
+        bulat = DynAccessor(19076)
+        chaffee = DynAccessor(19084)
+        chaffee_desc = DynAccessor(19085)
+        clan_style_01 = DynAccessor(18914)
+        clan_urban = DynAccessor(19045)
+        conqueror = DynAccessor(19075)
+        cosmonautics_day = DynAccessor(18971)
+        cosmonautics_day_desc = DynAccessor(18972)
+        Counterattack = DynAccessor(18960)
+        Counterattack_desc = DynAccessor(18961)
+        cracked_stone_style = DynAccessor(18904)
+        cracked_stone_style_desc = DynAccessor(18905)
+        czech_style = DynAccessor(18923)
+        czech_veteran = DynAccessor(18975)
 
         class _czech_veteran_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18969)
+            long = DynAccessor(18976)
 
         czech_veteran_desc = _czech_veteran_desc()
-        defender_day = DynAccessor(18950)
-        defender_day_desc = DynAccessor(18951)
-        desert_rats = DynAccessor(19063)
-        desert_rats_desc = DynAccessor(19064)
-        digital_style = DynAccessor(18895)
-        digital_style_desc = DynAccessor(18896)
-        diversity = DynAccessor(18918)
-        fireworks_2019 = DynAccessor(18932)
+        defender_day = DynAccessor(18957)
+        defender_day_desc = DynAccessor(18958)
+        desert_rats = DynAccessor(19070)
+        desert_rats_desc = DynAccessor(19071)
+        digital_style = DynAccessor(18902)
+        digital_style_desc = DynAccessor(18903)
+        diversity = DynAccessor(18925)
+        fireworks_2019 = DynAccessor(18939)
 
         class _fireworks_2019_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18934)
+            long = DynAccessor(18941)
 
-        fireworks_2019_desc = _fireworks_2019_desc(18933)
-        football_4sale1 = DynAccessor(18871)
+        fireworks_2019_desc = _fireworks_2019_desc(18940)
+        football_4sale1 = DynAccessor(18878)
 
         class _football_4sale1_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18872)
+            long = DynAccessor(18879)
 
         football_4sale1_desc = _football_4sale1_desc()
-        football_4sale2 = DynAccessor(18869)
+        football_4sale2 = DynAccessor(18876)
 
         class _football_4sale2_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18870)
+            long = DynAccessor(18877)
 
         football_4sale2_desc = _football_4sale2_desc()
-        football_aces1 = DynAccessor(18861)
+        football_aces1 = DynAccessor(18868)
 
         class _football_aces1_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18862)
+            long = DynAccessor(18869)
 
         football_aces1_desc = _football_aces1_desc()
-        football_aces2 = DynAccessor(18863)
+        football_aces2 = DynAccessor(18870)
 
         class _football_aces2_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18864)
+            long = DynAccessor(18871)
 
         football_aces2_desc = _football_aces2_desc()
-        football_aces3 = DynAccessor(18865)
+        football_aces3 = DynAccessor(18872)
 
         class _football_aces3_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18866)
+            long = DynAccessor(18873)
 
         football_aces3_desc = _football_aces3_desc()
-        football_aces4 = DynAccessor(18867)
+        football_aces4 = DynAccessor(18874)
 
         class _football_aces4_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18868)
+            long = DynAccessor(18875)
 
         football_aces4_desc = _football_aces4_desc()
-        football_gift = DynAccessor(18875)
+        football_gift = DynAccessor(18882)
 
         class _football_gift_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18876)
+            long = DynAccessor(18883)
 
         football_gift_desc = _football_gift_desc()
-        football_meta = DynAccessor(18873)
+        football_meta = DynAccessor(18880)
 
         class _football_meta_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18874)
+            long = DynAccessor(18881)
 
         football_meta_desc = _football_meta_desc()
-        football_otms = DynAccessor(18851)
+        football_otms = DynAccessor(18858)
 
         class _football_otms_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18852)
+            long = DynAccessor(18859)
 
         football_otms_desc = _football_otms_desc()
-        football_tms1 = DynAccessor(18853)
+        football_tms1 = DynAccessor(18860)
 
         class _football_tms1_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18854)
+            long = DynAccessor(18861)
 
         football_tms1_desc = _football_tms1_desc()
-        football_tms2 = DynAccessor(18855)
+        football_tms2 = DynAccessor(18862)
 
         class _football_tms2_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18856)
+            long = DynAccessor(18863)
 
         football_tms2_desc = _football_tms2_desc()
-        football_tms3 = DynAccessor(18857)
+        football_tms3 = DynAccessor(18864)
 
         class _football_tms3_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18858)
+            long = DynAccessor(18865)
 
         football_tms3_desc = _football_tms3_desc()
-        football_tms4 = DynAccessor(18859)
+        football_tms4 = DynAccessor(18866)
 
         class _football_tms4_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18860)
+            long = DynAccessor(18867)
 
         football_tms4_desc = _football_tms4_desc()
-        frontline_alliance = DynAccessor(18842)
-        frontline_alliance_desc = DynAccessor(18843)
-        frontline_captured = DynAccessor(18844)
-        frontline_captured_desc = DynAccessor(18845)
-        frontline_ussr = DynAccessor(18840)
-        frontline_ussr_desc = DynAccessor(18841)
-        frost = DynAccessor(18929)
+        frontline_alliance = DynAccessor(18849)
+        frontline_alliance_desc = DynAccessor(18850)
+        frontline_captured = DynAccessor(18851)
+        frontline_captured_desc = DynAccessor(18852)
+        frontline_ussr = DynAccessor(18847)
+        frontline_ussr_desc = DynAccessor(18848)
+        frost = DynAccessor(18936)
 
         class _frost_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18931)
+            long = DynAccessor(18938)
 
-        frost_desc = _frost_desc(18930)
-        gamescom = DynAccessor(18889)
-        gamescom_desc = DynAccessor(18890)
-        gift_NY_2019 = DynAccessor(18921)
+        frost_desc = _frost_desc(18937)
+        gamescom = DynAccessor(18896)
+        gamescom_desc = DynAccessor(18897)
+        gift_NY_2019 = DynAccessor(18928)
 
         class _gift_NY_2019_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18923)
+            long = DynAccessor(18930)
 
-        gift_NY_2019_desc = _gift_NY_2019_desc(18922)
-        global_map = DynAccessor(18836)
-        Grille_15_L63_NYst = DynAccessor(18940)
+        gift_NY_2019_desc = _gift_NY_2019_desc(18929)
+        global_map = DynAccessor(18843)
+        Grille_15_L63_NYst = DynAccessor(18947)
 
         class _Grille_15_L63_NYst_description(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18942)
+            long = DynAccessor(18949)
 
-        Grille_15_L63_NYst_description = _Grille_15_L63_NYst_description(18941)
-        hvoin = DynAccessor(18924)
+        Grille_15_L63_NYst_description = _Grille_15_L63_NYst_description(18948)
+        hvoin = DynAccessor(18931)
 
         class _hvoin_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18926)
+            long = DynAccessor(18933)
 
-        hvoin_desc = _hvoin_desc(18925)
-        icearmor = DynAccessor(19071)
-        icearmor_desc = DynAccessor(19072)
-        IS7_NYst = DynAccessor(18943)
+        hvoin_desc = _hvoin_desc(18932)
+        icearmor = DynAccessor(19078)
+        icearmor_desc = DynAccessor(19079)
+        IS7_NYst = DynAccessor(18950)
 
         class _IS7_NYst_description(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18945)
+            long = DynAccessor(18952)
 
-        IS7_NYst_description = _IS7_NYst_description(18944)
-        italian_marathion_01 = DynAccessor(18799)
-        jacks_lamp = DynAccessor(18914)
-        jacks_lamp_desc = DynAccessor(18915)
-        KanonenPanter_105 = DynAccessor(18881)
+        IS7_NYst_description = _IS7_NYst_description(18951)
+        italian_marathion_01 = DynAccessor(18806)
+        jacks_lamp = DynAccessor(18921)
+        jacks_lamp_desc = DynAccessor(18922)
+        KanonenPanter_105 = DynAccessor(18888)
 
         class _KanonenPanter_105_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18882)
+            long = DynAccessor(18889)
 
         KanonenPanter_105_desc = _KanonenPanter_105_desc()
-        kingtiger = DynAccessor(18966)
-        kingtiger_desc = DynAccessor(18967)
-        kv2_w = DynAccessor(18830)
+        kingtiger = DynAccessor(18973)
+        kingtiger_desc = DynAccessor(18974)
+        kv2_w = DynAccessor(18837)
 
         class _kv2_w_description(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18832)
+            long = DynAccessor(18839)
 
-        kv2_w_description = _kv2_w_description(18831)
-        marathon_september = DynAccessor(18908)
-        marathon_september_desc = DynAccessor(18909)
-        monochrome = DynAccessor(19070)
-        moon_camo = DynAccessor(18883)
-        moon_camo_desc = DynAccessor(18884)
-        racing_2019_team_a = DynAccessor(19092)
-        racing_2019_team_a_desc = DynAccessor(19093)
-        racing_2019_team_b = DynAccessor(19090)
-        racing_2019_team_b_desc = DynAccessor(19091)
-        racing_2019_team_c = DynAccessor(19088)
-        racing_2019_team_c_desc = DynAccessor(19089)
-        ranked_1 = DynAccessor(18811)
-        ranked_1_2nd = DynAccessor(18817)
-        ranked_1_2nd_desc = DynAccessor(18818)
-        ranked_1_3rd = DynAccessor(18823)
-        ranked_1_3rd_desc = DynAccessor(18824)
-        ranked_1_4th = DynAccessor(19024)
-        ranked_1_4th_desc = DynAccessor(19025)
-        ranked_1_desc = DynAccessor(18812)
-        ranked_2 = DynAccessor(18813)
-        ranked_2_2nd = DynAccessor(18819)
-        ranked_2_2nd_desc = DynAccessor(18820)
-        ranked_2_3rd = DynAccessor(18825)
-        ranked_2_3rd_desc = DynAccessor(18826)
-        ranked_2_4th = DynAccessor(19026)
-        ranked_2_4th_desc = DynAccessor(19027)
-        ranked_2_desc = DynAccessor(18814)
-        ranked_3 = DynAccessor(18815)
-        ranked_3_2nd = DynAccessor(18821)
-        ranked_3_2nd_desc = DynAccessor(18822)
-        ranked_3_3rd = DynAccessor(18827)
-        ranked_3_3rd_desc = DynAccessor(18828)
-        ranked_3_4th = DynAccessor(19028)
-        ranked_3_4th_desc = DynAccessor(19029)
-        ranked_3_desc = DynAccessor(18816)
-        referal_programm = DynAccessor(19005)
-        referal_programm_desc = DynAccessor(19006)
-        rostelekom2018_style_01 = DynAccessor(18810)
-        royal_corps = DynAccessor(18877)
+        kv2_w_description = _kv2_w_description(18838)
+        marathon_september = DynAccessor(18915)
+        marathon_september_desc = DynAccessor(18916)
+        monochrome = DynAccessor(19077)
+        moon_camo = DynAccessor(18890)
+        moon_camo_desc = DynAccessor(18891)
+        racing_2019_team_a = DynAccessor(19099)
+        racing_2019_team_a_desc = DynAccessor(19100)
+        racing_2019_team_b = DynAccessor(19097)
+        racing_2019_team_b_desc = DynAccessor(19098)
+        racing_2019_team_c = DynAccessor(19095)
+        racing_2019_team_c_desc = DynAccessor(19096)
+        ranked_1 = DynAccessor(18818)
+        ranked_1_2nd = DynAccessor(18824)
+        ranked_1_2nd_desc = DynAccessor(18825)
+        ranked_1_3rd = DynAccessor(18830)
+        ranked_1_3rd_desc = DynAccessor(18831)
+        ranked_1_4th = DynAccessor(19031)
+        ranked_1_4th_desc = DynAccessor(19032)
+        ranked_1_desc = DynAccessor(18819)
+        ranked_2 = DynAccessor(18820)
+        ranked_2_2nd = DynAccessor(18826)
+        ranked_2_2nd_desc = DynAccessor(18827)
+        ranked_2_3rd = DynAccessor(18832)
+        ranked_2_3rd_desc = DynAccessor(18833)
+        ranked_2_4th = DynAccessor(19033)
+        ranked_2_4th_desc = DynAccessor(19034)
+        ranked_2_desc = DynAccessor(18821)
+        ranked_3 = DynAccessor(18822)
+        ranked_3_2nd = DynAccessor(18828)
+        ranked_3_2nd_desc = DynAccessor(18829)
+        ranked_3_3rd = DynAccessor(18834)
+        ranked_3_3rd_desc = DynAccessor(18835)
+        ranked_3_4th = DynAccessor(19035)
+        ranked_3_4th_desc = DynAccessor(19036)
+        ranked_3_desc = DynAccessor(18823)
+        referal_programm = DynAccessor(19012)
+        referal_programm_desc = DynAccessor(19013)
+        rostelekom2018_style_01 = DynAccessor(18817)
+        royal_corps = DynAccessor(18884)
 
         class _royal_corps_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18878)
+            long = DynAccessor(18885)
 
         royal_corps_desc = _royal_corps_desc()
-        siroco = DynAccessor(19020)
-        siroco_desc = DynAccessor(19021)
-        snow_leopard = DynAccessor(18959)
+        siroco = DynAccessor(19027)
+        siroco_desc = DynAccessor(19028)
+        snow_leopard = DynAccessor(18966)
 
         class _snow_leopard_description(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18961)
+            long = DynAccessor(18968)
 
-        snow_leopard_description = _snow_leopard_description(18960)
-        supertest_style = DynAccessor(18891)
-        supertest_style_desc = DynAccessor(18892)
-        t50_2 = DynAccessor(18911)
+        snow_leopard_description = _snow_leopard_description(18967)
+        supertest_style = DynAccessor(18898)
+        supertest_style_desc = DynAccessor(18899)
+        t50_2 = DynAccessor(18918)
 
         class _t50_2_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18913)
+            long = DynAccessor(18920)
 
-        t50_2_desc = _t50_2_desc(18912)
-        T57_NYst = DynAccessor(18937)
+        t50_2_desc = _t50_2_desc(18919)
+        T57_NYst = DynAccessor(18944)
 
         class _T57_NYst_description(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(18939)
+            long = DynAccessor(18946)
 
-        T57_NYst_description = _T57_NYst_description(18938)
-        t_october = DynAccessor(19094)
-        t_october_desc = DynAccessor(19095)
-        Tankolet = DynAccessor(18957)
-        Tankolet_desc = DynAccessor(18958)
-        tanksman_day = DynAccessor(18837)
-        tanksman_day_desc = DynAccessor(18838)
-        telecoms_beltelecom = DynAccessor(19034)
-        telecoms_beltelecom_desc = DynAccessor(19035)
-        telecoms_kievstar = DynAccessor(19032)
-        telecoms_kievstar_desc = DynAccessor(19033)
-        telecoms_rostelecom = DynAccessor(19036)
-        telecoms_rostelecom_desc = DynAccessor(19037)
-        Thanksgiving = DynAccessor(18919)
-        Thanksgiving_desc = DynAccessor(18920)
-        touchdown = DynAccessor(18910)
-        twitch_prime = DynAccessor(18887)
-        twitch_prime_desc = DynAccessor(18888)
-        vanquisher = DynAccessor(19067)
-        vbr = DynAccessor(18935)
-        vbr_desc = DynAccessor(18936)
-        veteran_chieftain = DynAccessor(18949)
-        veteran_style = DynAccessor(18893)
-        veteran_style_desc = DynAccessor(18894)
-        victory = DynAccessor(19030)
-        victory_desc = DynAccessor(19031)
-        wg_fest_2019 = DynAccessor(19085)
-        WGFest2018 = DynAccessor(18956)
-        wgfest_style_01 = DynAccessor(18809)
-        wolves_of_odin = DynAccessor(19017)
+        T57_NYst_description = _T57_NYst_description(18945)
+        t_october = DynAccessor(19103)
+        t_october_desc = DynAccessor(19104)
+        Tankolet = DynAccessor(18964)
+        Tankolet_desc = DynAccessor(18965)
+        tanksman_day = DynAccessor(18844)
+        tanksman_day_desc = DynAccessor(18845)
+        telecoms_beltelecom = DynAccessor(19041)
+        telecoms_beltelecom_desc = DynAccessor(19042)
+        telecoms_kievstar = DynAccessor(19039)
+        telecoms_kievstar_desc = DynAccessor(19040)
+        telecoms_rostelecom = DynAccessor(19043)
+        telecoms_rostelecom_desc = DynAccessor(19044)
+        Thanksgiving = DynAccessor(18926)
+        Thanksgiving_desc = DynAccessor(18927)
+        touchdown = DynAccessor(18917)
+        twitch_prime = DynAccessor(18894)
+        twitch_prime_desc = DynAccessor(18895)
+        vanquisher = DynAccessor(19074)
+        vbr = DynAccessor(18942)
+        vbr_desc = DynAccessor(18943)
+        veteran_chieftain = DynAccessor(18956)
+        veteran_style = DynAccessor(18900)
+        veteran_style_desc = DynAccessor(18901)
+        victory = DynAccessor(19037)
+        victory_desc = DynAccessor(19038)
+        wg_fest_2019 = DynAccessor(19092)
+        WGFest2018 = DynAccessor(18963)
+        wgfest_style_01 = DynAccessor(18816)
+        wolves_of_odin = DynAccessor(19024)
 
         class _wolves_of_odin_desc(DynAccessor):
             __slots__ = ()
-            long = DynAccessor(19019)
+            long = DynAccessor(19026)
 
-        wolves_of_odin_desc = _wolves_of_odin_desc(19018)
-        wot_classic = DynAccessor(19022)
-        wot_classic_desc = DynAccessor(19023)
-        wot_fest_2019 = DynAccessor(19086)
-        wot_fest_2019_desc = DynAccessor(19087)
+        wolves_of_odin_desc = _wolves_of_odin_desc(19025)
+        wot_classic = DynAccessor(19029)
+        wot_classic_desc = DynAccessor(19030)
+        wot_fest_2019 = DynAccessor(19093)
+        wot_fest_2019_desc = DynAccessor(19094)
 
     special_style = _special_style()
 
     class _styleInfo(DynAccessor):
         __slots__ = ()
-        bonus = DynAccessor(19147)
+        bonus = DynAccessor(19156)
 
         class _btn(DynAccessor):
             __slots__ = ()
-            install = DynAccessor(19144)
+            install = DynAccessor(19153)
 
         btn = _btn()
 
         class _event(DynAccessor):
             __slots__ = ()
-            football18 = DynAccessor(19151)
-            kursk_battle = DynAccessor(19155)
-            ny18 = DynAccessor(19152)
-            ny19 = DynAccessor(19153)
-            winter_hunt = DynAccessor(19154)
+            football18 = DynAccessor(19160)
+            kursk_battle = DynAccessor(19164)
+            ny18 = DynAccessor(19161)
+            ny19 = DynAccessor(19162)
+            winter_hunt = DynAccessor(19163)
 
         event = _event()
-        historical = DynAccessor(19148)
-        nonhistorical = DynAccessor(19149)
-        rentable = DynAccessor(19150)
-        suitable = DynAccessor(19145)
-        suitableAll = DynAccessor(19146)
+        historical = DynAccessor(19157)
+        nonhistorical = DynAccessor(19158)
+        rentable = DynAccessor(19159)
+        suitable = DynAccessor(19154)
+        suitableAll = DynAccessor(19155)
 
     styleInfo = _styleInfo()
 
     class _styles(DynAccessor):
         __slots__ = ()
-        historical_styles = DynAccessor(18785)
-        main_styles = DynAccessor(18783)
-        rented_styles = DynAccessor(18782)
-        special_styles = DynAccessor(18781)
-        unique_styles = DynAccessor(18784)
+        historical_styles = DynAccessor(18792)
+        main_styles = DynAccessor(18790)
+        rented_styles = DynAccessor(18789)
+        special_styles = DynAccessor(18788)
+        unique_styles = DynAccessor(18791)
 
     styles = _styles()
 
@@ -54796,8 +54826,8 @@ class vehicle_customization(DynAccessor):
 
         class _name(DynAccessor):
             __slots__ = ()
-            custsomStyle = DynAccessor(19135)
-            defaultStyle = DynAccessor(19136)
+            custsomStyle = DynAccessor(19144)
+            defaultStyle = DynAccessor(19145)
 
         name = _name()
 
@@ -54805,24 +54835,24 @@ class vehicle_customization(DynAccessor):
 
     class _timeLeft(DynAccessor):
         __slots__ = ()
-        infinity = DynAccessor(16461)
-        infinitySymbol = DynAccessor(16462)
+        infinity = DynAccessor(16468)
+        infinitySymbol = DynAccessor(16469)
 
         class _temporal(DynAccessor):
             __slots__ = ()
-            days = DynAccessor(16458)
-            hours = DynAccessor(16459)
-            minutes = DynAccessor(16460)
-            used = DynAccessor(16456)
+            days = DynAccessor(16465)
+            hours = DynAccessor(16466)
+            minutes = DynAccessor(16467)
+            used = DynAccessor(16463)
 
-        temporal = _temporal(16457)
-        title = DynAccessor(16455)
+        temporal = _temporal(16464)
+        title = DynAccessor(16462)
 
     timeLeft = _timeLeft()
 
     class _victim_style(DynAccessor):
         __slots__ = ()
-        default = DynAccessor(18808)
+        default = DynAccessor(18815)
 
     victim_style = _victim_style()
 
@@ -54831,29 +54861,29 @@ class vehicle_customization(DynAccessor):
 
         class _purchase(DynAccessor):
             __slots__ = ()
-            autoProlongationLabel = DynAccessor(18430)
-            bonus = DynAccessor(18421)
-            btnApply = DynAccessor(18432)
-            btnBuy = DynAccessor(18429)
-            btnCancel = DynAccessor(18433)
+            autoProlongationLabel = DynAccessor(18437)
+            bonus = DynAccessor(18428)
+            btnApply = DynAccessor(18439)
+            btnBuy = DynAccessor(18436)
+            btnCancel = DynAccessor(18440)
 
             class _formation(DynAccessor):
                 __slots__ = ()
-                alert = DynAccessor(18434)
+                alert = DynAccessor(18441)
 
             formation = _formation()
-            header = DynAccessor(18422)
-            styleHeader = DynAccessor(18423)
+            header = DynAccessor(18429)
+            styleHeader = DynAccessor(18430)
 
             class _tableHeader(DynAccessor):
                 __slots__ = ()
-                ammount = DynAccessor(18427)
-                bonus = DynAccessor(18425)
-                cost = DynAccessor(18426)
-                items = DynAccessor(18424)
+                ammount = DynAccessor(18434)
+                bonus = DynAccessor(18432)
+                cost = DynAccessor(18433)
+                items = DynAccessor(18431)
 
             tableHeader = _tableHeader()
-            totalCost = DynAccessor(18428)
+            totalCost = DynAccessor(18435)
 
         purchase = _purchase()
 
@@ -54865,19 +54895,20 @@ class vehicle_preview(DynAccessor):
 
     class _buyingPanel(DynAccessor):
         __slots__ = ()
-        alertLabel = DynAccessor(19495)
+        alertLabel = DynAccessor(19506)
 
         class _buyBtn(DynAccessor):
             __slots__ = ()
 
             class _label(DynAccessor):
                 __slots__ = ()
-                buy = DynAccessor(19519)
-                buyItemPack = DynAccessor(19520)
-                obtain = DynAccessor(19524)
-                rent = DynAccessor(19521)
-                research = DynAccessor(19523)
-                restore = DynAccessor(19522)
+                buy = DynAccessor(19530)
+                buyItemPack = DynAccessor(19531)
+                obtain = DynAccessor(19535)
+                offspring = DynAccessor(19536)
+                rent = DynAccessor(19532)
+                research = DynAccessor(19534)
+                restore = DynAccessor(19533)
 
             label = _label()
 
@@ -54885,32 +54916,32 @@ class vehicle_preview(DynAccessor):
 
         class _compensation(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(19527)
+            body = DynAccessor(19539)
 
-        compensation = _compensation(19526)
+        compensation = _compensation(19538)
 
         class _customOffer(DynAccessor):
             __slots__ = ()
-            buy = DynAccessor(19513)
-            research = DynAccessor(19514)
+            buy = DynAccessor(19524)
+            research = DynAccessor(19525)
 
         customOffer = _customOffer()
 
         class _frontlinePack(DynAccessor):
             __slots__ = ()
-            couponLabel = DynAccessor(19552)
+            couponLabel = DynAccessor(19564)
 
             class _titleLabel(DynAccessor):
                 __slots__ = ()
-                active = DynAccessor(19549)
-                inactive = DynAccessor(19551)
-                inactive_add_discount = DynAccessor(19550)
+                active = DynAccessor(19561)
+                inactive = DynAccessor(19563)
+                inactive_add_discount = DynAccessor(19562)
 
             titleLabel = _titleLabel()
 
         frontlinePack = _frontlinePack()
-        Label = DynAccessor(19494)
-        notResearchedVehicleWarning = DynAccessor(19525)
+        Label = DynAccessor(19505)
+        notResearchedVehicleWarning = DynAccessor(19537)
 
         class _offer(DynAccessor):
             __slots__ = ()
@@ -54926,11 +54957,11 @@ class vehicle_preview(DynAccessor):
 
                         class _body(DynAccessor):
                             __slots__ = ()
-                            credits = DynAccessor(19501)
-                            gold = DynAccessor(19502)
+                            credits = DynAccessor(19512)
+                            gold = DynAccessor(19513)
 
                         body = _body()
-                        header = DynAccessor(19500)
+                        header = DynAccessor(19511)
 
                     description = _description()
 
@@ -54939,15 +54970,15 @@ class vehicle_preview(DynAccessor):
 
                         class _best_offer(DynAccessor):
                             __slots__ = ()
-                            body = DynAccessor(19512)
-                            header = DynAccessor(19511)
+                            body = DynAccessor(19523)
+                            header = DynAccessor(19522)
 
                         best_offer = _best_offer()
 
                         class _body(DynAccessor):
                             __slots__ = ()
-                            cyclesLeft = DynAccessor(19510)
-                            timeLeft = DynAccessor(19509)
+                            cyclesLeft = DynAccessor(19521)
+                            timeLeft = DynAccessor(19520)
 
                         body = _body()
 
@@ -54957,17 +54988,17 @@ class vehicle_preview(DynAccessor):
 
                 class _label(DynAccessor):
                     __slots__ = ()
-                    cycle = DynAccessor(19506)
-                    cycles = DynAccessor(19507)
-                    season = DynAccessor(19508)
+                    cycle = DynAccessor(19517)
+                    cycles = DynAccessor(19518)
+                    season = DynAccessor(19519)
 
                 label = _label()
 
                 class _name(DynAccessor):
                     __slots__ = ()
-                    cycle = DynAccessor(19503)
-                    cycles = DynAccessor(19504)
-                    season = DynAccessor(19505)
+                    cycle = DynAccessor(19514)
+                    cycles = DynAccessor(19515)
+                    season = DynAccessor(19516)
 
                 name = _name()
 
@@ -54976,8 +55007,8 @@ class vehicle_preview(DynAccessor):
 
                     class _frontline(DynAccessor):
                         __slots__ = ()
-                        ordinal = DynAccessor(19498)
-                        single_cycle = DynAccessor(19499)
+                        ordinal = DynAccessor(19509)
+                        single_cycle = DynAccessor(19510)
 
                     frontline = _frontline()
 
@@ -54986,9 +55017,9 @@ class vehicle_preview(DynAccessor):
             rent = _rent()
 
         offer = _offer()
-        present = DynAccessor(19528)
-        tradeInLabel = DynAccessor(19497)
-        uniqueVehicleLabel = DynAccessor(19496)
+        present = DynAccessor(19540)
+        tradeInLabel = DynAccessor(19508)
+        uniqueVehicleLabel = DynAccessor(19507)
 
     buyingPanel = _buyingPanel()
 
@@ -55000,29 +55031,29 @@ class vehicle_preview(DynAccessor):
 
             class _descrLabel(DynAccessor):
                 __slots__ = ()
-                adventCalendar = DynAccessor(19484)
-                frontline = DynAccessor(19488)
-                hangar = DynAccessor(19485)
-                marathon = DynAccessor(19489)
-                personalAwards = DynAccessor(19481)
-                racingEvent = DynAccessor(19490)
-                referralProgram = DynAccessor(19487)
-                researchTree = DynAccessor(19480)
-                shop = DynAccessor(19482)
-                storage = DynAccessor(19483)
-                vehicleCompare = DynAccessor(19486)
+                adventCalendar = DynAccessor(19495)
+                frontline = DynAccessor(19499)
+                hangar = DynAccessor(19496)
+                marathon = DynAccessor(19500)
+                personalAwards = DynAccessor(19492)
+                racingEvent = DynAccessor(19501)
+                referralProgram = DynAccessor(19498)
+                researchTree = DynAccessor(19491)
+                shop = DynAccessor(19493)
+                storage = DynAccessor(19494)
+                vehicleCompare = DynAccessor(19497)
 
             descrLabel = _descrLabel()
-            label = DynAccessor(19479)
+            label = DynAccessor(19490)
 
         backBtn = _backBtn()
 
         class _closeBtn(DynAccessor):
             __slots__ = ()
-            label = DynAccessor(19493)
+            label = DynAccessor(19504)
 
         closeBtn = _closeBtn()
-        title = DynAccessor(19491)
+        title = DynAccessor(19502)
 
     header = _header()
 
@@ -55031,7 +55062,7 @@ class vehicle_preview(DynAccessor):
 
         class _header(DynAccessor):
             __slots__ = ()
-            title = DynAccessor(19492)
+            title = DynAccessor(19503)
 
         header = _header()
 
@@ -55039,18 +55070,18 @@ class vehicle_preview(DynAccessor):
 
     class _infoPanel(DynAccessor):
         __slots__ = ()
-        level = DynAccessor(19540)
+        level = DynAccessor(19552)
 
         class _premium(DynAccessor):
             __slots__ = ()
-            builtInEqupmentText = DynAccessor(19548)
-            builtInEqupmentTitle = DynAccessor(19547)
-            creditsMultiplier = DynAccessor(19543)
-            creditsText = DynAccessor(19544)
-            crewTransferText = DynAccessor(19546)
-            crewTransferTitle = DynAccessor(19545)
-            freeExpMultiplier = DynAccessor(19541)
-            freeExpText = DynAccessor(19542)
+            builtInEqupmentText = DynAccessor(19560)
+            builtInEqupmentTitle = DynAccessor(19559)
+            creditsMultiplier = DynAccessor(19555)
+            creditsText = DynAccessor(19556)
+            crewTransferText = DynAccessor(19558)
+            crewTransferTitle = DynAccessor(19557)
+            freeExpMultiplier = DynAccessor(19553)
+            freeExpText = DynAccessor(19554)
 
         premium = _premium()
 
@@ -55059,42 +55090,42 @@ class vehicle_preview(DynAccessor):
 
             class _browse(DynAccessor):
                 __slots__ = ()
-                name = DynAccessor(19532)
+                name = DynAccessor(19544)
 
             browse = _browse()
 
             class _crewInfo(DynAccessor):
                 __slots__ = ()
-                lockTitle = DynAccessor(19530)
-                name = DynAccessor(19529)
+                lockTitle = DynAccessor(19542)
+                name = DynAccessor(19541)
 
             crewInfo = _crewInfo()
 
             class _eliteFactSheet(DynAccessor):
                 __slots__ = ()
-                info = DynAccessor(19539)
-                title = DynAccessor(19538)
+                info = DynAccessor(19551)
+                title = DynAccessor(19550)
 
             eliteFactSheet = _eliteFactSheet()
 
             class _factSheet(DynAccessor):
                 __slots__ = ()
-                name = DynAccessor(19531)
+                name = DynAccessor(19543)
 
             factSheet = _factSheet()
 
             class _listDesc(DynAccessor):
                 __slots__ = ()
-                crew = DynAccessor(19534)
-                crewEquips = DynAccessor(19536)
-                crewSkills = DynAccessor(19535)
-                crewSkillsEquips = DynAccessor(19537)
+                crew = DynAccessor(19546)
+                crewEquips = DynAccessor(19548)
+                crewSkills = DynAccessor(19547)
+                crewSkillsEquips = DynAccessor(19549)
 
             listDesc = _listDesc()
 
             class _modules(DynAccessor):
                 __slots__ = ()
-                name = DynAccessor(19533)
+                name = DynAccessor(19545)
 
             modules = _modules()
 
@@ -55104,15 +55135,15 @@ class vehicle_preview(DynAccessor):
 
     class _modulesPanel(DynAccessor):
         __slots__ = ()
-        Label = DynAccessor(19516)
-        noModulesOptions = DynAccessor(19517)
+        Label = DynAccessor(19527)
+        noModulesOptions = DynAccessor(19528)
 
         class _status(DynAccessor):
             __slots__ = ()
-            text = DynAccessor(19518)
+            text = DynAccessor(19529)
 
         status = _status()
-        title = DynAccessor(19515)
+        title = DynAccessor(19526)
 
     modulesPanel = _modulesPanel()
 
@@ -55122,48 +55153,48 @@ class w2c(DynAccessor):
 
     class _error(DynAccessor):
         __slots__ = ()
-        invalidPreviewVehicle = DynAccessor(19553)
+        invalidPreviewVehicle = DynAccessor(19565)
 
     error = _error()
 
 
 class waiting(DynAccessor):
     __slots__ = ()
-    applyModule = DynAccessor(19611)
+    applyModule = DynAccessor(19623)
 
     class _blueprints(DynAccessor):
         __slots__ = ()
-        convertFragments = DynAccessor(19708)
+        convertFragments = DynAccessor(19720)
 
     blueprints = _blueprints()
 
     class _browser(DynAccessor):
         __slots__ = ()
-        init = DynAccessor(19596)
+        init = DynAccessor(19608)
 
     browser = _browser()
 
     class _buttons(DynAccessor):
         __slots__ = ()
-        autoSearch = DynAccessor(19634)
-        cancel = DynAccessor(19635)
-        cease = DynAccessor(19636)
-        exit = DynAccessor(19637)
-        exitQueue = DynAccessor(19633)
+        autoSearch = DynAccessor(19646)
+        cancel = DynAccessor(19647)
+        cease = DynAccessor(19648)
+        exit = DynAccessor(19649)
+        exitQueue = DynAccessor(19645)
 
     buttons = _buttons()
-    buyAndInstall = DynAccessor(19575)
-    buyBerths = DynAccessor(19571)
-    buyItem = DynAccessor(19574)
-    buySlot = DynAccessor(19570)
-    changingRole = DynAccessor(19613)
+    buyAndInstall = DynAccessor(19587)
+    buyBerths = DynAccessor(19583)
+    buyItem = DynAccessor(19586)
+    buySlot = DynAccessor(19582)
+    changingRole = DynAccessor(19625)
 
     class _clans(DynAccessor):
         __slots__ = ()
 
         class _invites(DynAccessor):
             __slots__ = ()
-            send = DynAccessor(19706)
+            send = DynAccessor(19718)
 
         invites = _invites()
 
@@ -55171,233 +55202,233 @@ class waiting(DynAccessor):
 
     class _crewBooks(DynAccessor):
         __slots__ = ()
-        useCrewBook = DynAccessor(19709)
+        useCrewBook = DynAccessor(19721)
 
     crewBooks = _crewBooks()
-    crewRetraining = DynAccessor(19584)
-    crewReturning = DynAccessor(19583)
-    customizationApply = DynAccessor(19590)
-    customizationDrop = DynAccessor(19591)
-    deleting = DynAccessor(19588)
-    disconnect = DynAccessor(19555)
+    crewRetraining = DynAccessor(19596)
+    crewReturning = DynAccessor(19595)
+    customizationApply = DynAccessor(19602)
+    customizationDrop = DynAccessor(19603)
+    deleting = DynAccessor(19600)
+    disconnect = DynAccessor(19567)
 
     class _download(DynAccessor):
         __slots__ = ()
-        badges = DynAccessor(19656)
-        blueprints = DynAccessor(19658)
-        discounts = DynAccessor(19653)
-        dossier = DynAccessor(19652)
-        epicMetaGame = DynAccessor(19657)
-        festivity = DynAccessor(19660)
-        inventory = DynAccessor(19650)
-        ranked = DynAccessor(19655)
-        recycleBin = DynAccessor(19654)
-        shop = DynAccessor(19651)
-        tokens = DynAccessor(19659)
+        badges = DynAccessor(19668)
+        blueprints = DynAccessor(19670)
+        discounts = DynAccessor(19665)
+        dossier = DynAccessor(19664)
+        epicMetaGame = DynAccessor(19669)
+        festivity = DynAccessor(19672)
+        inventory = DynAccessor(19662)
+        ranked = DynAccessor(19667)
+        recycleBin = DynAccessor(19666)
+        shop = DynAccessor(19663)
+        tokens = DynAccessor(19671)
 
     download = _download()
-    draw_research_items = DynAccessor(19595)
-    enter = DynAccessor(19559)
-    equipping = DynAccessor(19581)
-    exchangeVehiclesXP = DynAccessor(19579)
-    exit_battle = DynAccessor(19603)
+    draw_research_items = DynAccessor(19607)
+    enter = DynAccessor(19571)
+    equipping = DynAccessor(19593)
+    exchangeVehiclesXP = DynAccessor(19591)
+    exit_battle = DynAccessor(19615)
 
     class _festival(DynAccessor):
         __slots__ = ()
-        applyPlayerCard = DynAccessor(19710)
-        buyFestivalItem = DynAccessor(19711)
-        buyRandomFestivalItem = DynAccessor(19712)
+        applyPlayerCard = DynAccessor(19722)
+        buyFestivalItem = DynAccessor(19723)
+        buyRandomFestivalItem = DynAccessor(19724)
 
     festival = _festival()
-    Flash = DynAccessor(19554)
+    Flash = DynAccessor(19566)
 
     class _fort(DynAccessor):
         __slots__ = ()
-        activateConsumable = DynAccessor(19703)
-        attack = DynAccessor(19699)
+        activateConsumable = DynAccessor(19715)
+        attack = DynAccessor(19711)
 
         class _building(DynAccessor):
             __slots__ = ()
-            add = DynAccessor(19687)
-            attach = DynAccessor(19689)
-            delete = DynAccessor(19688)
-            upgrade = DynAccessor(19690)
+            add = DynAccessor(19699)
+            attach = DynAccessor(19701)
+            delete = DynAccessor(19700)
+            upgrade = DynAccessor(19702)
 
         building = _building()
 
         class _card(DynAccessor):
             __slots__ = ()
-            get = DynAccessor(19696)
+            get = DynAccessor(19708)
 
         card = _card()
-        create = DynAccessor(19683)
-        delete = DynAccessor(19684)
+        create = DynAccessor(19695)
+        delete = DynAccessor(19696)
 
         class _direction(DynAccessor):
             __slots__ = ()
-            close = DynAccessor(19686)
-            open = DynAccessor(19685)
+            close = DynAccessor(19698)
+            open = DynAccessor(19697)
 
         direction = _direction()
 
         class _favorite(DynAccessor):
             __slots__ = ()
-            add = DynAccessor(19700)
-            remove = DynAccessor(19701)
+            add = DynAccessor(19712)
+            remove = DynAccessor(19713)
 
         favorite = _favorite()
 
         class _fortBattle(DynAccessor):
             __slots__ = ()
-            createOrJoin = DynAccessor(19698)
+            createOrJoin = DynAccessor(19710)
 
         fortBattle = _fortBattle()
 
         class _order(DynAccessor):
             __slots__ = ()
-            activate = DynAccessor(19693)
-            add = DynAccessor(19692)
+            activate = DynAccessor(19705)
+            add = DynAccessor(19704)
 
         order = _order()
-        returnConsumable = DynAccessor(19704)
-        serverConnection = DynAccessor(19702)
-        settings = DynAccessor(19697)
+        returnConsumable = DynAccessor(19716)
+        serverConnection = DynAccessor(19714)
+        settings = DynAccessor(19709)
 
         class _sortie(DynAccessor):
             __slots__ = ()
-            create = DynAccessor(19694)
-            get = DynAccessor(19695)
+            create = DynAccessor(19706)
+            get = DynAccessor(19707)
 
         sortie = _sortie()
-        subscribe = DynAccessor(19681)
-        transport = DynAccessor(19691)
-        unsubscribe = DynAccessor(19682)
+        subscribe = DynAccessor(19693)
+        transport = DynAccessor(19703)
+        unsubscribe = DynAccessor(19694)
 
     fort = _fort()
 
     class _hof(DynAccessor):
         __slots__ = ()
-        loading = DynAccessor(19707)
+        loading = DynAccessor(19719)
 
     hof = _hof()
-    in_battle = DynAccessor(19602)
-    installEquipment = DynAccessor(19593)
-    loadContent = DynAccessor(19557)
-    loadHangarSpace = DynAccessor(19560)
-    loadHangarSpaceVehicle = DynAccessor(19561)
-    loadingData = DynAccessor(19614)
-    loadPage = DynAccessor(19556)
-    loadStats = DynAccessor(19577)
-    login = DynAccessor(19558)
+    in_battle = DynAccessor(19614)
+    installEquipment = DynAccessor(19605)
+    loadContent = DynAccessor(19569)
+    loadHangarSpace = DynAccessor(19572)
+    loadHangarSpaceVehicle = DynAccessor(19573)
+    loadingData = DynAccessor(19626)
+    loadPage = DynAccessor(19568)
+    loadStats = DynAccessor(19589)
+    login = DynAccessor(19570)
 
     class _message(DynAccessor):
         __slots__ = ()
-        another_periphery = DynAccessor(19646)
-        auto_login_activating = DynAccessor(19649)
-        auto_login_query_failed = DynAccessor(19648)
-        autoLogin = DynAccessor(19645)
-        checkout_error = DynAccessor(19647)
-        queue = DynAccessor(19643)
-        useAutoSearch = DynAccessor(19644)
+        another_periphery = DynAccessor(19658)
+        auto_login_activating = DynAccessor(19661)
+        auto_login_query_failed = DynAccessor(19660)
+        autoLogin = DynAccessor(19657)
+        checkout_error = DynAccessor(19659)
+        queue = DynAccessor(19655)
+        useAutoSearch = DynAccessor(19656)
 
     message = _message()
 
     class _messenger(DynAccessor):
         __slots__ = ()
-        subscribe = DynAccessor(19705)
+        subscribe = DynAccessor(19717)
 
     messenger = _messenger()
 
     class _prebattle(DynAccessor):
         __slots__ = ()
-        assign = DynAccessor(19667)
-        auto_search = DynAccessor(19675)
-        battle_queue = DynAccessor(19676)
-        change_arena_voip = DynAccessor(19670)
-        change_settings = DynAccessor(19672)
-        change_user_status = DynAccessor(19671)
-        changeDivision = DynAccessor(19680)
-        create = DynAccessor(19662)
-        giveEquipmentCommander = DynAccessor(19679)
-        giveLeadership = DynAccessor(19677)
-        join = DynAccessor(19668)
-        kick = DynAccessor(19674)
-        leave = DynAccessor(19673)
-        player_not_ready = DynAccessor(19666)
-        player_ready = DynAccessor(19665)
-        swap = DynAccessor(19669)
-        takeLeadership = DynAccessor(19678)
-        team_not_ready = DynAccessor(19664)
-        team_ready = DynAccessor(19663)
+        assign = DynAccessor(19679)
+        auto_search = DynAccessor(19687)
+        battle_queue = DynAccessor(19688)
+        change_arena_voip = DynAccessor(19682)
+        change_settings = DynAccessor(19684)
+        change_user_status = DynAccessor(19683)
+        changeDivision = DynAccessor(19692)
+        create = DynAccessor(19674)
+        giveEquipmentCommander = DynAccessor(19691)
+        giveLeadership = DynAccessor(19689)
+        join = DynAccessor(19680)
+        kick = DynAccessor(19686)
+        leave = DynAccessor(19685)
+        player_not_ready = DynAccessor(19678)
+        player_ready = DynAccessor(19677)
+        swap = DynAccessor(19681)
+        takeLeadership = DynAccessor(19690)
+        team_not_ready = DynAccessor(19676)
+        team_ready = DynAccessor(19675)
 
     prebattle = _prebattle()
-    recruting = DynAccessor(19580)
-    replacePassport = DynAccessor(19589)
-    requestCaptureDevices = DynAccessor(19600)
-    research = DynAccessor(19594)
-    retraining = DynAccessor(19587)
-    sellItem = DynAccessor(19573)
-    sellVehicle = DynAccessor(19568)
-    sinhronize = DynAccessor(19612)
-    start_battle = DynAccessor(19604)
-    stats = DynAccessor(19601)
+    recruting = DynAccessor(19592)
+    replacePassport = DynAccessor(19601)
+    requestCaptureDevices = DynAccessor(19612)
+    research = DynAccessor(19606)
+    retraining = DynAccessor(19599)
+    sellItem = DynAccessor(19585)
+    sellVehicle = DynAccessor(19580)
+    sinhronize = DynAccessor(19624)
+    start_battle = DynAccessor(19616)
+    stats = DynAccessor(19613)
 
     class _storage(DynAccessor):
         __slots__ = ()
-        forSell = DynAccessor(19569)
+        forSell = DynAccessor(19581)
 
     storage = _storage()
-    studying = DynAccessor(19586)
-    techMaintenance = DynAccessor(19598)
-    techMaintenanceEquipments = DynAccessor(19597)
+    studying = DynAccessor(19598)
+    techMaintenance = DynAccessor(19610)
+    techMaintenanceEquipments = DynAccessor(19609)
 
     class _titles(DynAccessor):
         __slots__ = ()
-        another_periphery = DynAccessor(19640)
-        auto_login_query_failed = DynAccessor(19642)
-        checkout_error = DynAccessor(19641)
-        queue = DynAccessor(19638)
-        registering = DynAccessor(19639)
+        another_periphery = DynAccessor(19652)
+        auto_login_query_failed = DynAccessor(19654)
+        checkout_error = DynAccessor(19653)
+        queue = DynAccessor(19650)
+        registering = DynAccessor(19651)
 
     titles = _titles()
-    trainingCreate = DynAccessor(19605)
-    trainingDestroy = DynAccessor(19609)
-    trainingJoin = DynAccessor(19607)
-    trainingLeave = DynAccessor(19610)
-    trainingStart = DynAccessor(19608)
-    trainingUpdate = DynAccessor(19606)
-    transferMoney = DynAccessor(19578)
-    tutorial_chapter_loading = DynAccessor(19626)
-    tutorial_queue = DynAccessor(19632)
-    tutorial_request_battle_count = DynAccessor(19616)
-    tutorial_request_bonus = DynAccessor(19615)
-    tutorial_request_credits = DynAccessor(19620)
-    tutorial_request_elite_vehicles = DynAccessor(19619)
-    tutorial_request_inventory_items = DynAccessor(19623)
-    tutorial_request_item_params = DynAccessor(19628)
-    tutorial_request_shop = DynAccessor(19630)
-    tutorial_request_slots = DynAccessor(19631)
-    tutorial_request_tankman = DynAccessor(19624)
-    tutorial_request_tankman_info = DynAccessor(19629)
-    tutorial_request_unlocks = DynAccessor(19617)
-    tutorial_request_vehicle_equipments = DynAccessor(19622)
-    tutorial_request_vehicle_settings = DynAccessor(19618)
-    tutorial_request_xp = DynAccessor(19621)
-    tutorial_start_training = DynAccessor(19625)
-    tutorial_update_scene = DynAccessor(19627)
-    unloading = DynAccessor(19582)
-    updateAmmo = DynAccessor(19565)
-    updateCaptureDevices = DynAccessor(19592)
-    updateCurrentVehicle = DynAccessor(19563)
-    updateFitting = DynAccessor(19567)
-    updateInventory = DynAccessor(19572)
-    updateMyVehicles = DynAccessor(19564)
-    updateShop = DynAccessor(19576)
-    updateTankmen = DynAccessor(19566)
-    updateVehicle = DynAccessor(19562)
-    updating = DynAccessor(19585)
-    updatingSkillWindow = DynAccessor(19661)
-    voiceChat = DynAccessor(19599)
+    trainingCreate = DynAccessor(19617)
+    trainingDestroy = DynAccessor(19621)
+    trainingJoin = DynAccessor(19619)
+    trainingLeave = DynAccessor(19622)
+    trainingStart = DynAccessor(19620)
+    trainingUpdate = DynAccessor(19618)
+    transferMoney = DynAccessor(19590)
+    tutorial_chapter_loading = DynAccessor(19638)
+    tutorial_queue = DynAccessor(19644)
+    tutorial_request_battle_count = DynAccessor(19628)
+    tutorial_request_bonus = DynAccessor(19627)
+    tutorial_request_credits = DynAccessor(19632)
+    tutorial_request_elite_vehicles = DynAccessor(19631)
+    tutorial_request_inventory_items = DynAccessor(19635)
+    tutorial_request_item_params = DynAccessor(19640)
+    tutorial_request_shop = DynAccessor(19642)
+    tutorial_request_slots = DynAccessor(19643)
+    tutorial_request_tankman = DynAccessor(19636)
+    tutorial_request_tankman_info = DynAccessor(19641)
+    tutorial_request_unlocks = DynAccessor(19629)
+    tutorial_request_vehicle_equipments = DynAccessor(19634)
+    tutorial_request_vehicle_settings = DynAccessor(19630)
+    tutorial_request_xp = DynAccessor(19633)
+    tutorial_start_training = DynAccessor(19637)
+    tutorial_update_scene = DynAccessor(19639)
+    unloading = DynAccessor(19594)
+    updateAmmo = DynAccessor(19577)
+    updateCaptureDevices = DynAccessor(19604)
+    updateCurrentVehicle = DynAccessor(19575)
+    updateFitting = DynAccessor(19579)
+    updateInventory = DynAccessor(19584)
+    updateMyVehicles = DynAccessor(19576)
+    updateShop = DynAccessor(19588)
+    updateTankmen = DynAccessor(19578)
+    updateVehicle = DynAccessor(19574)
+    updating = DynAccessor(19597)
+    updatingSkillWindow = DynAccessor(19673)
+    voiceChat = DynAccessor(19611)
 
 
 class Strings(DynAccessor):

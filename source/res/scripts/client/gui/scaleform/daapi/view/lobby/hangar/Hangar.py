@@ -54,7 +54,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     _SOUND_STATE_PLACE = 'STATE_hangar_place'
     _SOUND_STATE_PLACE_GARAGE = 'STATE_hangar_place_garage'
     __background_alpha__ = 0.0
-    __SOUND_SETTINGS = CommonSoundSpaceSettings(name='hangar', entranceStates={_SOUND_STATE_PLACE: _SOUND_STATE_PLACE_GARAGE,
+    SOUND_SETTINGS = CommonSoundSpaceSettings(name='hangar', entranceStates={_SOUND_STATE_PLACE: _SOUND_STATE_PLACE_GARAGE,
      STATE_HANGAR_FILTERED: '{}_off'.format(STATE_HANGAR_FILTERED)}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
     rankedController = dependency.descriptor(IRankedBattlesController)
     epicController = dependency.descriptor(IEpicBattleMetaGameController)
@@ -69,7 +69,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     _connectionMgr = dependency.descriptor(IConnectionManager)
     _festivityController = dependency.descriptor(IFestivityController)
     _racingEventController = dependency.descriptor(IRacingEventController)
-    _COMMON_SOUND_SPACE = __SOUND_SETTINGS
+    _COMMON_SOUND_SPACE = SOUND_SETTINGS
 
     def __init__(self, _=None):
         LobbySelectableView.__init__(self, 0)

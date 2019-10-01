@@ -4,20 +4,20 @@ from gui.impl.gen_utils import DynAccessor
 
 class Videos(DynAccessor):
     __slots__ = ()
-    Logo_All = DynAccessor(33202)
-    _bootcampFinish = DynAccessor(33203)
-    _login = DynAccessor(33204)
-    _tutorialInitial = DynAccessor(33205)
-    _tutorialInitialLoop = DynAccessor(33206)
+    Logo_All = DynAccessor(33216)
+    _bootcampFinish = DynAccessor(33217)
+    _login = DynAccessor(33218)
+    _tutorialInitial = DynAccessor(33219)
+    _tutorialInitialLoop = DynAccessor(33220)
 
     class _festival(DynAccessor):
         __slots__ = ()
-        tutorial = DynAccessor(33207)
+        tutorial = DynAccessor(33221)
 
     festival = _festival()
 
     class _vehicle(DynAccessor):
         __slots__ = ()
-        A122_TS_5 = DynAccessor(33208)
+        A122_TS_5 = DynAccessor(33222)
 
     vehicle = _vehicle()

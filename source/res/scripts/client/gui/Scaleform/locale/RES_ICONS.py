@@ -815,6 +815,8 @@ class RES_ICONS(object):
     MAPS_ICONS_CREWBOOKS_TANKMANCOMPONENTS_RED_LIGHT_NATIVE_VEHICLE = '../maps/icons/crewBooks/tankmanComponents/red_light_native_vehicle.png'
     MAPS_ICONS_CREWBOOKS_TANKMANCOMPONENTS_XP_ARROW = '../maps/icons/crewBooks/tankmanComponents/xp_arrow.png'
     MAPS_ICONS_CREWBOOKS_TANKMANCOMPONENTS_XP_ARROW_SMALL = '../maps/icons/crewBooks/tankmanComponents/xp_arrow_small.png'
+    MAPS_ICONS_CREWBUNDLES_OFFSPRING = '../maps/icons/crewBundles/offspring.png'
+    MAPS_ICONS_CREWBUNDLES_BONUSES_BASICROLEBOOST_100 = '../maps/icons/crewBundles/bonuses/basicRoleBoost_100.png'
     MAPS_ICONS_CUSTOMIZATION_BRUSH_RARE = '../maps/icons/customization/brush_rare.png'
     MAPS_ICONS_CUSTOMIZATION_CLOCKICON_1 = '../maps/icons/customization/ClockIcon-1.png'
     MAPS_ICONS_CUSTOMIZATION_CORNER_RARE = '../maps/icons/customization/corner_rare.png'

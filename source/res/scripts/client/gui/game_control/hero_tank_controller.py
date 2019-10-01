@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/hero_tank_controller.py
+import logging
 import random
 from collections import namedtuple
+import ResMgr
 import Event
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
@@ -10,14 +12,24 @@ from helpers import dependency
 from skeletons.gui.game_control import IHeroTankController, IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from gui.impl.gen import R
+from skeletons.gui.server_events import IEventsCache
+from items import vehicles, tankmen
+from shared_utils import first
+_logger = logging.getLogger(__name__)
 _HERO_VEHICLES = 'hero_vehicles'
-_HeroTankInfo = namedtuple('_HeroTankInfo', ('url', 'styleID'))
-_HeroTankInfo.__new__.__defaults__ = ('', None)
+_ADD_HERO_STEP_NAME = 'add_HeroVehicle'
+_HeroTankInfo = namedtuple('_HeroTankInfo', ('url', 'styleID', 'crew', 'name', 'ingameshopUrl'))
+_HeroTankInfo.__new__.__defaults__ = ('', None, None, '', '')
+_SpecialParamsVehicle = namedtuple('_SpecialParamsVehicle', ('name', 'styleID'))
+_PreviewParams = namedtuple('_PreviewParams', ('buyButtonLabel', 'enterEvent', 'exitEvent'))
+_SPECIAL_PREVIEW_PARAMS = {_SpecialParamsVehicle(name='usa:A127_TL_1_LPC', styleID=83): _PreviewParams(buyButtonLabel=R.strings.vehicle_preview.buyingPanel.buyBtn.label.offspring(), enterEvent='ev_fest_off_hero_tank_in', exitEvent='ev_fest_off_hero_tank_out')}
 
 class HeroTankController(IHeroTankController):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
     bootcampController = dependency.descriptor(IBootcampController)
+    _eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self):
         self.__data = {}
@@ -34,14 +46,19 @@ class HeroTankController(IHeroTankController):
     def fini(self):
         self.itemsCache.onSyncCompleted -= self.__updateInventoryVehsData
 
+    def __onEventsCacheSyncCompleted(self, *_):
+        self.__applyActions()
+
     def onLobbyStarted(self, ctx):
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
+        self._eventsCache.onSyncCompleted += self.__onEventsCacheSyncCompleted
         self.__fullUpdate()
         self.__updateSettings()
         self.onUpdated()
 
     def onAvatarBecomePlayer(self):
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
+        self._eventsCache.onSyncCompleted -= self.__onEventsCacheSyncCompleted
 
     def isEnabled(self):
         return self.__isEnabled and not self.bootcampController.isInBootcamp()
@@ -58,14 +75,26 @@ class HeroTankController(IHeroTankController):
         return self.__currentTankCD
 
     def getCurrentTankStyleId(self):
-        return self.__data[self.__currentTankCD].styleID if self.__currentTankCD in self.__data else None
+        return self.__data[self.__currentTankCD].styleID if self.isEnabled() and self.__currentTankCD in self.__data else None
 
     def getCurrentRelatedURL(self):
-        if self.isEnabled():
-            vehicleCD = self.__currentTankCD
-            if vehicleCD in self.__data:
-                return self.__data[vehicleCD].url
-            return ''
+        return self.__data[self.__currentTankCD].url if self.isEnabled() and self.__currentTankCD in self.__data else ''
+
+    def getCurrentIngameshopUrl(self):
+        return self.__data[self.__currentTankCD].ingameshopUrl if self.isEnabled() and self.__currentTankCD in self.__data else ''
+
+    def getCurrentTankCrew(self):
+        return self.__data[self.__currentTankCD].crew if self.isEnabled() and self.__currentTankCD in self.__data else None
+
+    def getCurrentVehicleName(self):
+        return self.__data[self.__currentTankCD].name if self.isEnabled() and self.__currentTankCD in self.__data else ''
+
+    def getCurrentPreviewParams(self):
+        if self.isEnabled() and self.__currentTankCD in self.__data:
+            vehicleData = self.__data[self.__currentTankCD]
+            return _SPECIAL_PREVIEW_PARAMS.get(_SpecialParamsVehicle(vehicleData.name, vehicleData.styleID))
+        else:
+            return None
 
     def setInteractive(self, interactive):
         self.onInteractive(interactive)
@@ -101,4 +130,80 @@ class HeroTankController(IHeroTankController):
         self.__isEnabled = heroVehsDict.get('isEnabled', False)
         if 'vehicles' in heroVehsDict:
             heroVehicles = heroVehsDict['vehicles']
-            self.__data = {k:_HeroTankInfo(**v) for k, v in heroVehicles.iteritems() if k not in self.__invVehsIntCD}
+            for vCompDescr, vData in heroVehicles.iteritems():
+                if vCompDescr in self.__invVehsIntCD:
+                    continue
+                self.__data[vCompDescr] = _HeroTankInfo(name=vData.get('name'), url=vData.get('url'), ingameshopUrl=vData.get('ingameshopUrl'), styleID=vData.get('styleID'), crew=self.__createCrew(vData.get('crew'), vCompDescr))
+
+        self.__applyActions()
+        self.__isEnabled = bool(self.__data)
+        self.onUpdated()
+
+    def __applyActions(self):
+        actions = self._eventsCache.getActions()
+        for action in actions.itervalues():
+            steps = action.getData().get('steps', [])
+            if not steps:
+                continue
+            for step in steps:
+                if step.get('name') != _ADD_HERO_STEP_NAME:
+                    continue
+                self.__addActionVehicle(step['params'])
+
+    def __addActionVehicle(self, params):
+        vName = params.get('name')
+        vCompDescr = vehicles.makeVehicleTypeCompDescrByName(vName)
+        if not vCompDescr:
+            _logger.error('Could not apply action, vehicle name = %s', vName)
+            return
+        elif vCompDescr in self.__invVehsIntCD:
+            return
+        else:
+            styleStr = params.get('styleID')
+            styleId = int(styleStr) if styleStr else None
+            self.__data[vCompDescr] = _HeroTankInfo(name=vName, url=params.get('url'), ingameshopUrl=params.get('ingameshopUrl'), styleID=styleId, crew=self.__createCrew(params.get('crew'), vCompDescr))
+            return
+
+    def __createCrew(self, crewXml, vCompDescr):
+        crew = {}
+        if not crewXml:
+            return crew
+        else:
+            crewStr = '<root>{}</root>'.format(crewXml.encode('ascii'))
+            crewSection = ResMgr.DataSection().createSectionFromString(crewStr)
+            if crewSection is not None:
+                crew['tankmen'] = []
+                _, nationId, vehTypeId = vehicles.parseIntCompactDescr(vCompDescr)
+                for tankmanSection in crewSection.values():
+                    tmanDict = {}
+                    tmanId = tankmanSection.readString('name')
+                    if not tmanId:
+                        continue
+                    tData = None
+                    tIdx = None
+                    for idx, tMan in enumerate(tankmen.getNationConfig(nationId).premiumGroups):
+                        if tMan.name == tmanId:
+                            tData = tMan
+                            tIdx = idx
+                            break
+
+                    if tData is None:
+                        continue
+                    tmanDict['isPremium'] = True
+                    tmanDict['gId'] = tIdx
+                    tmanDict['nationID'] = nationId
+                    tmanDict['firstNameID'] = first(tData.firstNames)
+                    tmanDict['lastNameID'] = first(tData.lastNames)
+                    tmanDict['iconID'] = first(tData.icons)
+                    tmanDict['vehicleTypeID'] = vehTypeId
+                    tmanDict['role'] = tankmanSection.readString('role')
+                    for param in ('roleLevel', 'freeXP'):
+                        tmanDict[param] = tankmanSection.readInt(param)
+
+                    for param in ('skills', 'freeSkills'):
+                        paramAsStr = tankmanSection.readString(param)
+                        tmanDict[param] = paramAsStr.split(' ') if paramAsStr else []
+
+                    crew['tankmen'].append(tmanDict)
+
+            return crew

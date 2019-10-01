@@ -295,7 +295,19 @@ class IHeroTankController(IGameController):
     def getCurrentTankStyleId(self):
         raise NotImplementedError
 
+    def getCurrentTankCrew(self):
+        raise NotImplementedError
+
     def getCurrentRelatedURL(self):
+        raise NotImplementedError
+
+    def getCurrentVehicleName(self):
+        raise NotImplementedError
+
+    def getCurrentIngameshopUrl(self):
+        raise NotImplementedError
+
+    def getCurrentPreviewParams(self):
         raise NotImplementedError
 
 

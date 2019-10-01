@@ -50,6 +50,7 @@ class VEHICLE_PREVIEW(object):
     BUYINGPANEL_BUYBTN_LABEL_RESTORE = '#vehicle_preview:buyingPanel/buyBtn/label/restore'
     BUYINGPANEL_BUYBTN_LABEL_RESEARCH = '#vehicle_preview:buyingPanel/buyBtn/label/research'
     BUYINGPANEL_BUYBTN_LABEL_OBTAIN = '#vehicle_preview:buyingPanel/buyBtn/label/obtain'
+    BUYINGPANEL_BUYBTN_LABEL_OFFSPRING = '#vehicle_preview:buyingPanel/buyBtn/label/offspring'
     BUYINGPANEL_NOTRESEARCHEDVEHICLEWARNING = '#vehicle_preview:buyingPanel/notResearchedVehicleWarning'
     BUYINGPANEL_COMPENSATION = '#vehicle_preview:buyingPanel/compensation'
     BUYINGPANEL_COMPENSATION_BODY = '#vehicle_preview:buyingPanel/compensation/body'

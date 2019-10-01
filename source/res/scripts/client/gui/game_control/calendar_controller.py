@@ -97,7 +97,7 @@ class _DeferredItemsActionHelper(object):
             else:
                 _logger.error('Unable to fetch info of Deferred Items Action. Code: %s.', response.getCode())
         else:
-            _logger.error('Unable to fetch info of Deferred Items Action. Reason: Disabled by Server.')
+            _logger.warning('Unable to fetch info of Deferred Items Action. Reason: Disabled by Server.')
 
     def __onSyncCompleted(self, *_):
         self.__updateInfo(self.__actionInfo.itemsCount, self.__actionInfo.endTimestamp)

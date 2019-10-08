@@ -55,6 +55,13 @@
       <undamaged>	vehicles/american/A127_TL_1_LPC/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/american/A127_TL_1_LPC/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/american/A127_TL_1_LPC/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <offspring>
+          <undamaged>	vehicles/american/A127_TL_1_LPC/_skin/offspring/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A127_TL_1_LPC/_skin/offspring/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A127_TL_1_LPC/_skin/offspring/crash/lod0/Hull.model	</exploded>
+        </offspring>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -84,10 +91,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.0132904 1.42185 2.86667	</rayStart>
-        <rayEnd>	0.0132904 -0.840712 1.81172	</rayEnd>
+        <rayStart>	-0.0138388 1.72576 1.84537	</rayStart>
+        <rayEnd>	-0.0138388 -0.732741 1.41197	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
-        <size>	0.383	</size>
+        <size>	0.25	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
       </slot>
@@ -918,6 +925,13 @@
         <undamaged>	vehicles/american/A127_TL_1_LPC/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A127_TL_1_LPC/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/american/A127_TL_1_LPC/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <offspring>
+            <undamaged>	vehicles/american/A127_TL_1_LPC/_skin/offspring/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A127_TL_1_LPC/_skin/offspring/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A127_TL_1_LPC/_skin/offspring/crash/lod0/Chassis.model	</exploded>
+          </offspring>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1810,7 +1824,7 @@
         <armor_7>	101.6	</armor_7>
         <armor_8>	88.9	</armor_8>
         <armor_9>	63.5	</armor_9>
-        <armor_10>	76.2	</armor_10>
+        <armor_10>	203.2	</armor_10>
         <armor_11>	25.4	</armor_11>
         <armor_12>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
         </armor_12>
@@ -1865,6 +1879,13 @@
             <undamaged>	vehicles/american/A127_TL_1_LPC/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A127_TL_1_LPC/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/american/A127_TL_1_LPC/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <offspring>
+                <undamaged>	vehicles/american/A127_TL_1_LPC/_skin/offspring/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/american/A127_TL_1_LPC/_skin/offspring/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/american/A127_TL_1_LPC/_skin/offspring/crash/lod0/Gun_01.model	</exploded>
+              </offspring>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A127_TL_1_LPC/collision/Gun_01.model	</collisionModelServer>
@@ -1922,6 +1943,13 @@
         <undamaged>	vehicles/american/A127_TL_1_LPC/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/american/A127_TL_1_LPC/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/american/A127_TL_1_LPC/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <offspring>
+            <undamaged>	vehicles/american/A127_TL_1_LPC/_skin/offspring/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A127_TL_1_LPC/_skin/offspring/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A127_TL_1_LPC/_skin/offspring/crash/lod0/Turret_01.model	</exploded>
+          </offspring>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/american/A127_TL_1_LPC/collision/Turret_01.model	</collisionModelServer>

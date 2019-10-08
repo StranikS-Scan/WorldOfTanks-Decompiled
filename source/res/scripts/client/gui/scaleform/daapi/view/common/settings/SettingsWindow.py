@@ -208,13 +208,14 @@ class SettingsWindow(SettingsWindowMeta):
         applyMethod = self.params.getApplyMethod(settings)
 
         def confirmHandler(isOk):
-            self.as_ConfirmationOfApplicationS(isOk)
-            if isOk:
-                self.__commitSettings(settings, isOk, isCloseWnd)
-            else:
-                self.params.revert()
-            if not isCloseWnd:
-                self._update()
+            if not self.isDisposed():
+                self.as_ConfirmationOfApplicationS(isOk)
+                if isOk:
+                    self.__commitSettings(settings, isOk, isCloseWnd)
+                else:
+                    self.params.revert()
+                if not isCloseWnd:
+                    self._update()
 
         if applyMethod == APPLY_METHOD.RESTART:
             DialogsInterface.showI18nConfirmDialog('graphicsPresetRestartConfirmation', confirmHandler)
@@ -257,8 +258,9 @@ class SettingsWindow(SettingsWindowMeta):
         if not option.isPresetSupportedByIndex(index):
 
             def _apply(result):
-                LOG_DEBUG('Player result', result)
-                self.as_onSoundSpeakersPresetApplyS(result)
+                if not self.isDisposed():
+                    LOG_DEBUG('Player result', result)
+                    self.as_onSoundSpeakersPresetApplyS(result)
 
             DialogsInterface.showI18nConfirmDialog('soundSpeakersPresetDoesNotMatch', callback=_apply)
             return False
@@ -302,11 +304,12 @@ class SettingsWindow(SettingsWindowMeta):
     def showWarningDialog(self, dialogID, settings, isCloseWnd):
 
         def callback(isOk):
-            if isOk:
-                self.applySettings(settings, False)
-            self.as_confirmWarningDialogS(isOk, dialogID)
-            if isCloseWnd and isOk:
-                self.onWindowClose()
+            if not self.isDisposed():
+                if isOk:
+                    self.applySettings(settings, False)
+                self.as_confirmWarningDialogS(isOk, dialogID)
+                if isCloseWnd and isOk:
+                    self.onWindowClose()
 
         DialogsInterface.showI18nConfirmDialog(dialogID, callback)
 

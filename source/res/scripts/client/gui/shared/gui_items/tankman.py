@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/Tankman.py
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from helpers import i18n
-from items import tankmen, vehicles, ITEM_TYPE_NAMES, sabaton_crew
+from items import tankmen, vehicles, ITEM_TYPE_NAMES, special_crew
 from gui import nationCompareByIndex, TANKMEN_ROLES_ORDER_DICT
 from gui.shared.utils.functions import getShortDescr
 from gui.shared.gui_items import ItemsCollection, GUI_ITEM_TYPE
@@ -559,8 +559,35 @@ class SabatonTankmanSkill(TankmanSkill):
         return self.getSkillIconName(self._name)
 
 
+class OffspringTankmanSkill(TankmanSkill):
+
+    def __init__(self, skillName, tankman=None, proxy=None):
+        super(OffspringTankmanSkill, self).__init__(skillName, tankman, proxy)
+        if skillName == 'brotherhood':
+            self._isPermanent = True
+
+    def getSkillIconName(self, skillName):
+        return 'offspring_brotherhood.png' if skillName == 'brotherhood' else i18n.convert(tankmen.getSkillsConfig().getSkill(skillName).icon)
+
+    def getSkillUserName(self, skillName):
+        return i18n.makeString(ITEM_TYPES.TANKMAN_SKILLS_BROTHERHOOD_OFFSPRING) if skillName == 'brotherhood' else tankmen.getSkillsConfig().getSkill(skillName).userString
+
+    @property
+    def userName(self):
+        return self.getSkillUserName(self._name)
+
+    @property
+    def icon(self):
+        return self.getSkillIconName(self._name)
+
+
 def getTankmanSkill(skillName, tankman=None, proxy=None):
-    return SabatonTankmanSkill(skillName, tankman, proxy) if tankman and sabaton_crew.isSabatonCrew(tankman.descriptor) else TankmanSkill(skillName, tankman, proxy)
+    if tankman:
+        if special_crew.isSabatonCrew(tankman.descriptor):
+            return SabatonTankmanSkill(skillName, tankman, proxy)
+        if special_crew.isOffspringCrew(tankman.descriptor):
+            return OffspringTankmanSkill(skillName, tankman, proxy)
+    return TankmanSkill(skillName, tankman, proxy)
 
 
 def getFirstUserName(nationID, firstNameID):

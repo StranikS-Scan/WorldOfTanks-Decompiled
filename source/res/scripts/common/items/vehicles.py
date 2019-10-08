@@ -1983,6 +1983,16 @@ def getItemByCompactDescr(compactDescr):
         raise
 
 
+def isItemWithCompactDescrExist(compactDescr):
+    try:
+        itemTypeID, nationID, compTypeID = parseIntCompactDescr(compactDescr)
+        return _itemGetters[itemTypeID](nationID, compTypeID) is not None
+    except KeyError:
+        return False
+
+    return None
+
+
 _itemGetters = {ITEM_TYPES.shell: lambda nationID, compTypeID: g_cache.shells(nationID)[compTypeID],
  ITEM_TYPES.equipment: lambda nationID, compTypeID: g_cache.equipments()[compTypeID],
  ITEM_TYPES.optionalDevice: lambda nationID, compTypeID: g_cache.optionalDevices()[compTypeID],

@@ -115,10 +115,10 @@ class TradeInController(ITradeInController):
     def isEnabled(self):
         return self.__config.isEnabled
 
-    def getTradeInPrice(self, vehicle):
-        price = vehicle.buyPrices.itemPrice.price
-        defPrice = vehicle.buyPrices.itemPrice.defPrice
-        if self.isEnabled() and self.__activeTradeOffCD in self.getTradeOffVehicles(vehicle.level):
+    def getTradeInPrice(self, veh):
+        price = veh.buyPrices.itemPrice.price
+        defPrice = veh.buyPrices.itemPrice.defPrice
+        if self.isEnabled() and veh.canTradeIn and self.__activeTradeOffCD in self.getTradeOffVehicles(veh.level):
             price = defPrice - self.getActiveTradeOffVehicle().tradeOffPrice
         return ItemPrice(price, defPrice)
 

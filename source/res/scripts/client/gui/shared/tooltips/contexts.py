@@ -16,7 +16,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.server_events import recruit_helper
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.Tankman import getTankmanSkill, SabatonTankmanSkill, TankmanSkill
+from gui.shared.gui_items.Tankman import getTankmanSkill, SabatonTankmanSkill, TankmanSkill, OffspringTankmanSkill
 from gui.shared.gui_items.dossier import factories, loadDossier
 from gui.shared.items_parameters import params_helper
 from gui.shared.items_parameters.formatters import NO_BONUS_SIMPLIFIED_SCHEME
@@ -660,7 +660,9 @@ class PreviewCaseContext(ToolTipContext):
         super(PreviewCaseContext, self).__init__(TOOLTIP_COMPONENT.PERSONAL_CASE, fieldsToExclude)
 
     def buildItem(self, skillID):
-        return SabatonTankmanSkill('brotherhood') if skillID == 'sabaton_brotherhood' else TankmanSkill(skillID)
+        if skillID == 'sabaton_brotherhood':
+            return SabatonTankmanSkill('brotherhood')
+        return OffspringTankmanSkill('brotherhood') if skillID == 'offspring_brotherhood' else TankmanSkill(skillID)
 
 
 class CrewSkinContext(ToolTipContext):

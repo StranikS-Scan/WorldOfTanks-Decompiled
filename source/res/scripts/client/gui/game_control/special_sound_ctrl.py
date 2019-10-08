@@ -19,6 +19,7 @@ from items.vehicles import VehicleDescr
 from gui.battle_control import avatar_getter
 from PlayerEvents import g_playerEvents
 from gui.shared.gui_items.customization.outfit import Outfit
+from skeletons.gui.battle_session import IBattleSessionProvider
 _logger = logging.getLogger(__name__)
 _XML_PATH = ITEM_DEFS_PATH + 'special_voices.xml'
 _VoiceoverParams = namedtuple('_VoiceoverParams', ['languageMode', 'genderSwitch', 'onlyInNational'])
@@ -28,6 +29,7 @@ _genderStrToSwitch = {'male': CREW_GENDER_SWITCHES.MALE,
 class SpecialSoundCtrl(ISpecialSoundCtrl):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __settingsCore = dependency.descriptor(ISettingsCore)
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         self.__voiceoverByVehicle = {}
@@ -91,6 +93,10 @@ class SpecialSoundCtrl(ISpecialSoundCtrl):
         if arena is None:
             return
         else:
+            arenaVisitor = self.__sessionProvider.arenaVisitor
+            if arenaVisitor.bonus.hasRespawns():
+                _logger.debug('Skip special arena sound according to game mode')
+                return
             if isPlayerVehicle and vehiclePublicInfo.outfit:
                 outfit = Outfit(vehiclePublicInfo.outfit)
                 if outfit.style and outfit.style.tags:

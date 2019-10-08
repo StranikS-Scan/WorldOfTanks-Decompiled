@@ -111,7 +111,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         self.__isGoldAutoPurhaseEnabled &= self.__wallet.isAvailable
         self.__isRentVisible = self.__vehicle.hasRentPackages and not self.__isTradeIn()
         self.__popoverIsAvailable = True
-        self.__tradeinInProgress = False
+        self.__tradeInInProgress = False
         self.__successOperation = False
         self.__purchaseInProgress = False
         return
@@ -273,7 +273,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         self.__updateTotalPrice()
 
     def __onBuyBtnClick(self):
-        if self.__tradeinInProgress:
+        if self.__tradeInInProgress:
             return
         if self.viewModel.getIsContentHidden():
             self.__onInHangar()
@@ -444,14 +444,16 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
                 addition = i18n.makeString('#dialogs:%s/message/addition' % confirmationType, operations=', '.join(operationsStr))
             ctx = {'vehName': neutral(self.__tradeOffVehicle.userName),
              'addition': addition}
-            self.__tradeinInProgress = True
+            self.__tradeInInProgress = True
             result = yield showI18nConfirmDialog(confirmationType, meta=I18nConfirmDialogMeta(confirmationType, ctx, ctx), focusedID=DIALOG_BUTTON_ID.SUBMIT)
-            if not result:
+            if not result or self.isDisposed():
                 return
             result = yield VehicleTradeInProcessor(self.__vehicle, self.__tradeOffVehicle, isWithSlot, isWithAmmo, crewType).request()
             if result.userMsg:
                 SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
-            self.__tradeinInProgress = False
+            if self.isDisposed():
+                return
+            self.__tradeInInProgress = False
             if not result.success:
                 self.__onWindowClose()
                 return
@@ -461,7 +463,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             result = yield VehicleSlotBuyer(showConfirm=False, showWarning=False).request()
             if result.userMsg:
                 SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
-            if not result.success:
+            if not result.success or self.isDisposed():
                 self.__purchaseInProgress = False
                 return
         if not isTradeIn:
@@ -471,15 +473,14 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
                     result = yield self.__getRestoreVehicleProcessor(crewType).request()
                 else:
                     result = yield self.__getObtainVehicleProcessor(crewType).request()
-                if not emptySlotAvailable and not isWithSlot:
+                if not emptySlotAvailable and not isWithSlot and not self.isDisposed():
                     self.__playSlotAnimation()
             else:
                 result = yield VehicleRenter(self.__vehicle, self.__selectedRentID, isWithAmmo, crewType).request()
             if result.userMsg:
                 SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
             self.__purchaseInProgress = False
-            self.__onItemCacheSyncCompleted()
-        if result and result.success:
+        if result and result.success and not self.isDisposed():
             self.showCongratulations()
         return
 
@@ -740,7 +741,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
 
     def __getTotalItemPrice(self):
         price = defPrice = ZERO_MONEY
-        if self.__tradeOffVehicle is not None and not self.__isRentVisible:
+        if self.__isTradeIn() and self.__tradeOffVehicle is not None and not self.__isRentVisible:
             tradeInPrice = self.__tradeIn.getTradeInPrice(self.__vehicle)
             price = tradeInPrice.price
             defPrice = tradeInPrice.defPrice

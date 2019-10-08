@@ -11,7 +11,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.items_kit_helper import getActiveOffer, addBuiltInEquipment
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.LobbySelectableView import LobbySelectableView
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled, getBuyVehiclesUrl
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.sound_constants import RESEARCH_PREVIEW_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveStateTooltip
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.info.vehicle_preview_crew_tab import getUniqueMembers
@@ -328,7 +328,7 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
                 event_dispatcher.showHangar()
         elif self._backAlias == VIEW_ALIAS.LOBBY_STORE:
             if isIngameShopEnabled():
-                showWebShop(getBuyVehiclesUrl())
+                showWebShop()
             else:
                 showOldShop(ctx={'tabId': STORE_TYPES.SHOP,
                  'component': STORE_CONSTANTS.VEHICLE})

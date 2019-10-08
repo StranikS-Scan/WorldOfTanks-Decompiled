@@ -36,5 +36,19 @@
       <languageMode>	valkyrie2	</languageMode>
     </vehicle>
   </voiceover>
-  <arenaMusic></arenaMusic>
+  <arenaMusic>
+    <style>
+      <tag>	offspringArenaMusic	</tag>
+      <wwmusicSetup>
+        <wwmusicLoading>	music_off_loading_screen	</wwmusicLoading>
+        <wwmusicIntensive>	music_off_dron_intensive	</wwmusicIntensive>
+        <wwmusicRelaxed>	music_off_dron_relaxed	</wwmusicRelaxed>
+        <wwmusicStop>	music_dron_stop	</wwmusicStop>
+        <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+        <wwmusicResultWin>	music_off_result_win	</wwmusicResultWin>
+        <wwmusicResultDrawn>	music_off_result_drawn	</wwmusicResultDrawn>
+        <wwmusicResultDefeat>	music_off_result_defeat	</wwmusicResultDefeat>
+      </wwmusicSetup>
+    </style>
+  </arenaMusic>
 </special_voices.xml>

@@ -13,9 +13,11 @@ from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from dossiers2.custom.records import RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
 from gui import makeHtmlString
+from gui.app_loader.decorators import sf_lobby
 from gui.game_control.links import URLMacros
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -313,6 +315,14 @@ class PlusPremiumDaysBonus(_PremiumDaysBonus):
 
 class MetaBonus(SimpleBonus):
 
+    def __init__(self, *args, **kwargs):
+        super(MetaBonus, self).__init__(*args, **kwargs)
+        self.__onLobbyLoadedCallbacks = []
+
+    @sf_lobby
+    def __app(self):
+        pass
+
     def isShowInGUI(self):
         return False
 
@@ -322,16 +332,14 @@ class MetaBonus(SimpleBonus):
     def getActions(self):
         return self._value.get('actions', {}).iteritems()
 
-    @classmethod
-    def handleAction(cls, action, params):
+    def handleAction(self, action, params):
         if action == 'browse':
-            cls.__handleBrowseAction(params)
+            self.__handleBrowseAction(params)
         else:
             NotImplementedError('Action "%s" handler is not implemented', action)
 
-    @staticmethod
     @process
-    def __handleBrowseAction(params):
+    def __handleBrowseAction(self, params):
         from gui.shared.event_dispatcher import showBrowserOverlayView
         url = params.get('url')
         if url is None:
@@ -344,12 +352,28 @@ class MetaBonus(SimpleBonus):
                 _logger.warning('Browse target is empty')
                 return
             if target == 'internal':
-                showBrowserOverlayView(url)
+                if self.__isLobbyLoaded():
+                    showBrowserOverlayView(url)
+                else:
+                    self.__app.loaderManager.onViewLoaded += self.__onViewLoaded
+                    self.__onLobbyLoadedCallbacks.append(partial(showBrowserOverlayView, url))
             elif target == 'external':
                 BigWorld.wg_openWebBrowser(url)
             else:
                 _logger.warning('Invalid browse target: %s', target)
             return
+
+    def __isLobbyLoaded(self):
+        container = self.__app.containerManager.getContainer(ViewTypes.LOBBY_SUB)
+        return container is not None
+
+    def __onViewLoaded(self, pyView, _):
+        if pyView.viewType == ViewTypes.LOBBY_SUB:
+            for callback in self.__onLobbyLoadedCallbacks:
+                callback()
+
+            self.__onLobbyLoadedCallbacks = []
+            self.__app.loaderManager.onViewLoaded -= self.__onViewLoaded
 
 
 class TokensBonus(SimpleBonus):

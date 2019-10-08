@@ -103,27 +103,29 @@ class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta):
     def __prepareAndSendInitData(self):
         items = self.itemsCache.items
         tankman = items.getTankman(self.__tankManId)
-        if not tankman.skills:
+        if tankman is None or not tankman.skills:
             return
-        rate = items.shop.freeXPToTManXPRate
-        toNextPrcLeft = self.__getCurrentTankmanLevelCost(tankman)
-        tDescr = tankman.descriptor
-        nextSkillLevel = tDescr.lastSkillLevel
-        freeXp = items.stats.freeXP
-        if freeXp >= self.__roundByModulo(toNextPrcLeft, rate) / rate:
-            nextSkillLevel += 1
-            skillNumber = tDescr.lastSkillNumber - tDescr.freeSkillsNumber
-            while nextSkillLevel < MAX_SKILL_LEVEL:
-                toNextPrcLeft += self.__calcLevelUpCost(tankman, nextSkillLevel, skillNumber)
-                if freeXp < self.__roundByModulo(toNextPrcLeft, rate) / rate:
-                    break
+        else:
+            rate = items.shop.freeXPToTManXPRate
+            toNextPrcLeft = self.__getCurrentTankmanLevelCost(tankman)
+            tDescr = tankman.descriptor
+            nextSkillLevel = tDescr.lastSkillLevel
+            freeXp = items.stats.freeXP
+            if freeXp >= self.__roundByModulo(toNextPrcLeft, rate) / rate:
                 nextSkillLevel += 1
+                skillNumber = tDescr.lastSkillNumber - tDescr.freeSkillsNumber
+                while nextSkillLevel < MAX_SKILL_LEVEL:
+                    toNextPrcLeft += self.__calcLevelUpCost(tankman, nextSkillLevel, skillNumber)
+                    if freeXp < self.__roundByModulo(toNextPrcLeft, rate) / rate:
+                        break
+                    nextSkillLevel += 1
 
-        data = {'tankmanID': self.__tankManId,
-         'currentSkill': packTankmanSkill(tankman.skills[len(tankman.skills) - 1], tankman),
-         'lastSkillLevel': tDescr.lastSkillLevel,
-         'nextSkillLevel': nextSkillLevel}
-        self.as_setInitDataS(data)
+            data = {'tankmanID': self.__tankManId,
+             'currentSkill': packTankmanSkill(tankman.skills[len(tankman.skills) - 1], tankman),
+             'lastSkillLevel': tDescr.lastSkillLevel,
+             'nextSkillLevel': nextSkillLevel}
+            self.as_setInitDataS(data)
+            return
 
     def __getCurrentTankmanLevelCost(self, tankman):
         if tankman.roleLevel != MAX_SKILL_LEVEL or tankman.skills and tankman.descriptor.lastSkillLevel != MAX_SKILL_LEVEL:

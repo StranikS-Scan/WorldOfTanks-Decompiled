@@ -53,11 +53,11 @@ class VehicleProgressHelper(object):
 
     def getProgressList(self, vehicleBattleXp, pureCreditsReceived, tankmenXps):
         result = []
-        ready2UnlockVehicles, ready2UnlockModules = self.__getReady2UnlockItems(vehicleBattleXp)
-        ready2BuyVehicles, ready2BuyModules = self.__getReady2BuyItems(pureCreditsReceived)
+        ready2UnlockVehicles, ready2UnlockModules = self.getReady2UnlockItems(vehicleBattleXp)
+        ready2BuyVehicles, ready2BuyModules = self.getReady2BuyItems(pureCreditsReceived)
         result.extend(ready2UnlockModules)
         result.extend(ready2BuyModules)
-        result.extend(self.__getNewSkilledTankmen(tankmenXps))
+        result.extend(self.getNewSkilledTankmen(tankmenXps))
         result.extend(ready2UnlockVehicles)
         result.extend(ready2BuyVehicles)
         return result
@@ -73,7 +73,7 @@ class VehicleProgressHelper(object):
         else:
             return 0
 
-    def __getReady2UnlockItems(self, vehicleBattleXp):
+    def getReady2UnlockItems(self, vehicleBattleXp):
         ready2UnlockModules = []
         ready2UnlockVehicles = []
         possible2UnlockItems = g_techTreeDP.getAllPossibleItems2Unlock(self.__vehicle, self.__unlocks)
@@ -90,7 +90,7 @@ class VehicleProgressHelper(object):
 
         return (ready2UnlockVehicles, ready2UnlockModules)
 
-    def __getReady2BuyItems(self, pureCreditsReceived):
+    def getReady2BuyItems(self, pureCreditsReceived):
         ready2BuyModules = []
         ready2BuyVehicles = []
         creditsValue = self.itemsCache.items.stats.credits
@@ -113,7 +113,7 @@ class VehicleProgressHelper(object):
 
         return (ready2BuyVehicles, ready2BuyModules)
 
-    def __getNewSkilledTankmen(self, tankmenXps):
+    def getNewSkilledTankmen(self, tankmenXps):
         skilledTankmans = []
         for _, tman in self.__vehicle.crew:
             if tman is not None and tman.hasSkillToLearn():

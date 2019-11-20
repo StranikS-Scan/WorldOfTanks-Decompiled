@@ -198,6 +198,7 @@ class CustomizationCartView(ViewImpl):
         model.onBuyAction += self.__onBuy
         model.onTutorialClose += self.__onTutorialClose
         g_clientUpdateManager.addMoneyCallback(self.__updateMoney)
+        g_currentVehicle.onChanged += self.__onVehicleChanged
 
     def __removeListeners(self):
         model = self.viewModel
@@ -206,6 +207,7 @@ class CustomizationCartView(ViewImpl):
         model.onBuyAction -= self.__onBuy
         model.onTutorialClose -= self.__onTutorialClose
         g_clientUpdateManager.removeObjectCallbacks(self)
+        g_currentVehicle.onChanged -= self.__onVehicleChanged
 
     def __onSelectItem(self, args=None):
         itemId = args.get('id')
@@ -297,6 +299,10 @@ class CustomizationCartView(ViewImpl):
         if item and item.bonus:
             vehicle = g_currentVehicle.item
             return item.bonus.getFormattedValue(vehicle)
+
+    def __onVehicleChanged(self):
+        self.__isProlongStyleRent = False
+        self.destroyWindow()
 
 
 class _BaseUIDataPacker(object):

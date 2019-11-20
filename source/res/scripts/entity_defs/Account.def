@@ -32,7 +32,7 @@
     <requiredVersion_16100>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	ru_1.6.1	</Default>
+      <Default>	ru_1.6.1_5	</Default>
     </requiredVersion_16100>
     <name>
       <Type>	STRING	</Type>
@@ -389,7 +389,7 @@
     </logClientSystem>
     <logClientSessionStats>
       <Exposed></Exposed>
-      <Arg>	CLIENT_STATISTICS	</Arg>
+      <Arg>	CLIENT_SESSION_STATS	</Arg>
     </logClientSessionStats>
     <logStreamCorruption>
       <Arg>	INT16	</Arg>
@@ -399,6 +399,10 @@
       <Arg>	INT32	</Arg>
       <Exposed></Exposed>
     </logStreamCorruption>
+    <logClientPB20UXStats>
+      <Exposed></Exposed>
+      <Arg>	CLIENT_PB_20_UX_STATS	</Arg>
+    </logClientPB20UXStats>
     <createAvatar>
       <Arg>	MAILBOX	</Arg>
       <Arg>	MAILBOX	</Arg>

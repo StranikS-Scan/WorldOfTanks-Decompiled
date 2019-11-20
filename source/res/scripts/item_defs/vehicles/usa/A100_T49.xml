@@ -49,6 +49,13 @@
       <undamaged>	vehicles/american/A100_T49/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/american/A100_T49/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/american/A100_T49/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <halloween>
+          <undamaged>	vehicles/american/A100_T49/_skin/halloween/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Hull.model	</exploded>
+        </halloween>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -136,6 +143,13 @@
         <undamaged>	vehicles/american/A100_T49/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A100_T49/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/american/A100_T49/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <halloween>
+            <undamaged>	vehicles/american/A100_T49/_skin/halloween/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Chassis.model	</exploded>
+          </halloween>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -841,6 +855,13 @@
         <undamaged>	vehicles/american/A100_T49/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A100_T49/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/american/A100_T49/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <halloween>
+            <undamaged>	vehicles/american/A100_T49/_skin/halloween/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Chassis.model	</exploded>
+          </halloween>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1584,6 +1605,13 @@
             <undamaged>	vehicles/american/A100_T49/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A100_T49/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/american/A100_T49/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <halloween>
+                <undamaged>	vehicles/american/A100_T49/_skin/halloween/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Gun_01.model	</exploded>
+              </halloween>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A100_T49/collision/Gun_01.model	</collisionModelServer>
@@ -1602,9 +1630,9 @@
               <slotId>	49000	</slotId>
               <rayStart>	-0.000107989 0.000590246 1.71941	</rayStart>
               <rayEnd>	-0.0283652 0.00675123 1.71889	</rayEnd>
-              <rayUp>	0.078 0.078 3	</rayUp>
+              <rayUp>	0.07 0.07 4	</rayUp>
               <size>	0.41	</size>
-              <hideIfDamaged>	true	</hideIfDamaged>
+              <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
             </slot>
             <slot>
@@ -1639,6 +1667,13 @@
         <undamaged>	vehicles/american/A100_T49/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/american/A100_T49/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/american/A100_T49/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <halloween>
+            <undamaged>	vehicles/american/A100_T49/_skin/halloween/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Turret_01.model	</exploded>
+          </halloween>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/american/A100_T49/collision/Turret_01.model	</collisionModelServer>
@@ -1780,6 +1815,13 @@
             <undamaged>	vehicles/american/A100_T49/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/american/A100_T49/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/american/A100_T49/crash/lod0/Gun_03.model	</exploded>
+            <sets>
+              <halloween>
+                <undamaged>	vehicles/american/A100_T49/_skin/halloween/normal/lod0/Gun_03.model	</undamaged>
+                <destroyed>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Gun_03.model	</destroyed>
+                <exploded>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Gun_03.model	</exploded>
+              </halloween>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A100_T49/collision/Gun_03.model	</collisionModelServer>
@@ -1865,6 +1907,13 @@
             <undamaged>	vehicles/american/A100_T49/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/american/A100_T49/crash/lod0/Gun_05.model	</destroyed>
             <exploded>	vehicles/american/A100_T49/crash/lod0/Gun_05.model	</exploded>
+            <sets>
+              <halloween>
+                <undamaged>	vehicles/american/A100_T49/_skin/halloween/normal/lod0/Gun_05.model	</undamaged>
+                <destroyed>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Gun_05.model	</destroyed>
+                <exploded>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Gun_05.model	</exploded>
+              </halloween>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A100_T49/collision/Gun_05.model	</collisionModelServer>
@@ -1885,7 +1934,7 @@
               <rayEnd>	0.108658 -0.0387216 1.39721	</rayEnd>
               <rayUp>	0.128 0.128 4	</rayUp>
               <size>	0.43	</size>
-              <hideIfDamaged>	true	</hideIfDamaged>
+              <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
             </slot>
             <slot>
@@ -1920,6 +1969,13 @@
         <undamaged>	vehicles/american/A100_T49/normal/lod0/Turret_02.model	</undamaged>
         <destroyed>	vehicles/american/A100_T49/crash/lod0/Turret_02.model	</destroyed>
         <exploded>	vehicles/american/A100_T49/crash/lod0/Turret_02.model	</exploded>
+        <sets>
+          <halloween>
+            <undamaged>	vehicles/american/A100_T49/_skin/halloween/normal/lod0/Turret_02.model	</undamaged>
+            <destroyed>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Turret_02.model	</destroyed>
+            <exploded>	vehicles/american/A100_T49/_skin/halloween/crash/lod0/Turret_02.model	</exploded>
+          </halloween>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/american/A100_T49/collision/Turret_02.model	</collisionModelServer>

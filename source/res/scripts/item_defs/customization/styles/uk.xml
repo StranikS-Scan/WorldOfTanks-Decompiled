@@ -629,4 +629,46 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 3500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB24_Centurion_Mk3	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	85	</id>
+      <texture>	gui/maps/vehicles/styles/GB24_Centurion_Mk3_Halloween_3Dst.png	</texture>
+      <description>	#vehicle_customization:main_style/GB24_Centurion_Mk3_Halloween_3Dst_desc	</description>
+      <modelsSet>	halloween	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/GB24_Centurion_Mk3_Halloween_3Dst	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </uk.xml>

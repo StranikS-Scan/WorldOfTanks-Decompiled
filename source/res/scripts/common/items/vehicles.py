@@ -1893,6 +1893,10 @@ class VehicleList(object):
     def isVehicleExisting(self, name):
         return name in self.__ids
 
+    def isVehicleExistingByCD(self, vehTypeCompDescr):
+        itemTypeID, nationID, innationID = parseIntCompactDescr(vehTypeCompDescr)
+        return itemTypeID == items.ITEM_TYPES.vehicle and innationID in self.getList(nationID)
+
     def getIDsByVehName(self, name):
         for nation in nations.NAMES:
             fullName = '%s:%s' % (nation, name)
@@ -2005,9 +2009,13 @@ _itemGetters = {ITEM_TYPES.shell: lambda nationID, compTypeID: g_cache.shells(na
  ITEM_TYPES.customizationItem: lambda cType, compTypeID: g_cache.customization20().itemTypes[cType][compTypeID]}
 VEHICLE_ITEM_TYPES = _itemGetters.keys()
 
+def isVehicleTypeCompactDescr(vehDescr):
+    cdType = type(vehDescr)
+    return True if cdType is int or cdType is long else False
+
+
 def getVehicleType(compactDescr):
-    cdType = type(compactDescr)
-    if cdType is int or cdType is long:
+    if isVehicleTypeCompactDescr(compactDescr):
         nationID = compactDescr >> 4 & 15
         vehicleTypeID = compactDescr >> 8 & 65535
     else:

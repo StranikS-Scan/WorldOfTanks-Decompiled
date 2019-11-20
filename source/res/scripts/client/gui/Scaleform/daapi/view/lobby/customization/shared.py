@@ -153,7 +153,7 @@ def getStylePurchaseItems(styleInfo, buyMore=False):
     purchaseItems = []
     original = styleInfo.original
     modified = styleInfo.modified
-    if buyMore:
+    if buyMore and modified is not None:
         purchaseItems.append(PurchaseItem(modified, modified.getBuyPrice(), areaID=None, slot=None, regionID=None, selected=True, group=AdditionalPurchaseGroups.STYLES_GROUP_ID, isFromInventory=False, isDismantling=False))
     elif modified and not original or modified and original.id != modified.id:
         inventoryCount = styleInfo.modified.fullInventoryCount(g_currentVehicle.item)

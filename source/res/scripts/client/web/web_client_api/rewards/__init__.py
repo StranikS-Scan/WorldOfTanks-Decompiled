@@ -3,6 +3,7 @@
 import itertools
 from dossiers2.custom.account_layout import ACCOUNT_DOSSIER_BLOCKS
 from dossiers2.custom.records import DB_ID_TO_RECORD
+from gui.server_events.bonuses import HIDDEN_BONUSES
 from gui.shared.gui_items.dossier import getAchievementFactory
 from web.web_client_api import W2CSchema, Field, w2capi, w2c, WebCommandException
 from helpers import dependency
@@ -65,6 +66,6 @@ class RewardsWebApi(W2CSchema):
         allQuests = self.eventsCache.getAllQuests(filterFunc=lambda q: q.getID().startswith(questIdBase))
         for questKey, questData in allQuests.iteritems():
             questBonuses = questData.getBonuses()
-            awardsData[questKey] = list(itertools.chain.from_iterable([ bonus.getWrappedEpicBonusList() for bonus in questBonuses ]))
+            awardsData[questKey] = list(itertools.chain.from_iterable([ bonus.getWrappedEpicBonusList() for bonus in questBonuses if not isinstance(bonus, HIDDEN_BONUSES) ]))
 
         return awardsData

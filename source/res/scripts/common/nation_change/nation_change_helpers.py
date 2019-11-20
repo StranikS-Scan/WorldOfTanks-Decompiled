@@ -17,6 +17,8 @@ def isMainInNationGroupSafe(vehCompDescr):
 
 
 def isMainInNationGroup(vehCompDescr):
+    if not vehicles.isVehicleTypeCompactDescr(vehCompDescr):
+        vehCompDescr = vehicles.getVehicleTypeCompactDescr(vehCompDescr)
     return getMainVehicleInNationGroup(getNationGroupID(vehCompDescr)) == vehCompDescr
 
 

@@ -56,6 +56,13 @@
       <undamaged>	vehicles/american/A66_M103/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/american/A66_M103/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/american/A66_M103/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <Helloween_3Dst>
+          <undamaged>	vehicles/american/A66_M103/_skins/Helloween_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Hull.model	</exploded>
+        </Helloween_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -85,8 +92,8 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.0178589 0.595492 3.46177	</rayStart>
-        <rayEnd>	-0.0176318 -0.30425 3.02686	</rayEnd>
+        <rayStart>	-0.00822009 0.119081 3.22995	</rayStart>
+        <rayEnd>	-0.00195807 -0.0439413 3.11426	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
@@ -143,6 +150,13 @@
         <undamaged>	vehicles/american/A66_M103/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A66_M103/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/american/A66_M103/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <Helloween_3Dst>
+            <undamaged>	vehicles/american/A66_M103/_skins/Helloween_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Chassis.model	</exploded>
+          </Helloween_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -256,6 +270,14 @@
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
         </atlas>
+        <modelSets>
+          <Helloween_3Dst>
+            <segmentModelLeft>	vehicles/american/A66_M103/_skins/Helloween_3Dst/track/segment_01.model	</segmentModelLeft>
+            <segmentModelRight>	vehicles/american/A66_M103/_skins/Helloween_3Dst/track/segment_01.model	</segmentModelRight>
+            <segment2ModelLeft>	vehicles/american/A66_M103/_skins/Helloween_3Dst/track/segment_02.model	</segment2ModelLeft>
+            <segment2ModelRight>	vehicles/american/A66_M103/_skins/Helloween_3Dst/track/segment_02.model	</segment2ModelRight>
+          </Helloween_3Dst>
+        </modelSets>
       </splineDesc>
       <trackThickness>	-0.0039	</trackThickness>
       <trackNodes>
@@ -427,6 +449,12 @@
             <model>	vehicles/american/A66_M103/track/segment_02.model	</model>
             <length>	0.0810078	</length>
           </secSegment>
+          <modelSets>
+            <Helloween_3Dst>
+              <mainSegmentModel>	vehicles/american/A66_M103/_skins/Helloween_3Dst/track/segment_01.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/american/A66_M103/_skins/Helloween_3Dst/track/segment_02.model	</secSegmentModel>
+            </Helloween_3Dst>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -700,6 +728,12 @@
             <model>	vehicles/american/A66_M103/track/segment_02.model	</model>
             <length>	0.0811247	</length>
           </secSegment>
+          <modelSets>
+            <Helloween_3Dst>
+              <mainSegmentModel>	vehicles/american/A66_M103/_skins/Helloween_3Dst/track/segment_01.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/american/A66_M103/_skins/Helloween_3Dst/track/segment_02.model	</secSegmentModel>
+            </Helloween_3Dst>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -995,6 +1029,13 @@
         <undamaged>	vehicles/american/A66_M103/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A66_M103/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/american/A66_M103/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <Helloween_3Dst>
+            <undamaged>	vehicles/american/A66_M103/_skins/Helloween_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Chassis.model	</exploded>
+          </Helloween_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1108,6 +1149,14 @@
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
         </atlas>
+        <modelSets>
+          <Helloween_3Dst>
+            <segmentModelLeft>	vehicles/american/A66_M103/_skins/Helloween_3Dst/track/segment_01.model	</segmentModelLeft>
+            <segmentModelRight>	vehicles/american/A66_M103/_skins/Helloween_3Dst/track/segment_01.model	</segmentModelRight>
+            <segment2ModelLeft>	vehicles/american/A66_M103/_skins/Helloween_3Dst/track/segment_02.model	</segment2ModelLeft>
+            <segment2ModelRight>	vehicles/american/A66_M103/_skins/Helloween_3Dst/track/segment_02.model	</segment2ModelRight>
+          </Helloween_3Dst>
+        </modelSets>
       </splineDesc>
       <trackThickness>	-0.0039	</trackThickness>
       <trackNodes>
@@ -1279,6 +1328,12 @@
             <model>	vehicles/american/A66_M103/track/segment_02.model	</model>
             <length>	0.0810078	</length>
           </secSegment>
+          <modelSets>
+            <Helloween_3Dst>
+              <mainSegmentModel>	vehicles/american/A66_M103/_skins/Helloween_3Dst/track/segment_01.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/american/A66_M103/_skins/Helloween_3Dst/track/segment_02.model	</secSegmentModel>
+            </Helloween_3Dst>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1552,6 +1607,12 @@
             <model>	vehicles/american/A66_M103/track/segment_02.model	</model>
             <length>	0.0811247	</length>
           </secSegment>
+          <modelSets>
+            <Helloween_3Dst>
+              <mainSegmentModel>	vehicles/american/A66_M103/_skins/Helloween_3Dst/track/segment_01.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/american/A66_M103/_skins/Helloween_3Dst/track/segment_02.model	</secSegmentModel>
+            </Helloween_3Dst>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1896,6 +1957,13 @@
             <undamaged>	vehicles/american/A66_M103/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A66_M103/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/american/A66_M103/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <Helloween_3Dst>
+                <undamaged>	vehicles/american/A66_M103/_skins/Helloween_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </Helloween_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A66_M103/collision/Gun_01.model	</collisionModelServer>
@@ -1981,6 +2049,13 @@
             <undamaged>	vehicles/american/A66_M103/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/american/A66_M103/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/american/A66_M103/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <Helloween_3Dst>
+                <undamaged>	vehicles/american/A66_M103/_skins/Helloween_3Dst/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Gun_02.model	</exploded>
+              </Helloween_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A66_M103/collision/Gun_02.model	</collisionModelServer>
@@ -2037,6 +2112,13 @@
         <undamaged>	vehicles/american/A66_M103/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/american/A66_M103/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/american/A66_M103/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <Helloween_3Dst>
+            <undamaged>	vehicles/american/A66_M103/_skins/Helloween_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </Helloween_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/american/A66_M103/collision/Turret_01.model	</collisionModelServer>
@@ -2187,6 +2269,13 @@
             <undamaged>	vehicles/american/A66_M103/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/american/A66_M103/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/american/A66_M103/crash/lod0/Gun_03.model	</exploded>
+            <sets>
+              <Helloween_3Dst>
+                <undamaged>	vehicles/american/A66_M103/_skins/Helloween_3Dst/normal/lod0/Gun_03.model	</undamaged>
+                <destroyed>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Gun_03.model	</destroyed>
+                <exploded>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Gun_03.model	</exploded>
+              </Helloween_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A66_M103/collision/Gun_03.model	</collisionModelServer>
@@ -2261,6 +2350,13 @@
             <undamaged>	vehicles/american/A66_M103/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/american/A66_M103/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/american/A66_M103/crash/lod0/Gun_04.model	</exploded>
+            <sets>
+              <Helloween_3Dst>
+                <undamaged>	vehicles/american/A66_M103/_skins/Helloween_3Dst/normal/lod0/Gun_04.model	</undamaged>
+                <destroyed>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Gun_04.model	</destroyed>
+                <exploded>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Gun_04.model	</exploded>
+              </Helloween_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A66_M103/collision/Gun_04.model	</collisionModelServer>
@@ -2335,6 +2431,13 @@
             <undamaged>	vehicles/american/A66_M103/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/american/A66_M103/crash/lod0/Gun_05.model	</destroyed>
             <exploded>	vehicles/american/A66_M103/crash/lod0/Gun_05.model	</exploded>
+            <sets>
+              <Helloween_3Dst>
+                <undamaged>	vehicles/american/A66_M103/_skins/Helloween_3Dst/normal/lod0/Gun_05.model	</undamaged>
+                <destroyed>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Gun_05.model	</destroyed>
+                <exploded>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Gun_05.model	</exploded>
+              </Helloween_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A66_M103/collision/Gun_05.model	</collisionModelServer>
@@ -2385,6 +2488,13 @@
         <undamaged>	vehicles/american/A66_M103/normal/lod0/Turret_02.model	</undamaged>
         <destroyed>	vehicles/american/A66_M103/crash/lod0/Turret_02.model	</destroyed>
         <exploded>	vehicles/american/A66_M103/crash/lod0/Turret_02.model	</exploded>
+        <sets>
+          <Helloween_3Dst>
+            <undamaged>	vehicles/american/A66_M103/_skins/Helloween_3Dst/normal/lod0/Turret_02.model	</undamaged>
+            <destroyed>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Turret_02.model	</destroyed>
+            <exploded>	vehicles/american/A66_M103/_skins/Helloween_3Dst/crash/lod0/Turret_02.model	</exploded>
+          </Helloween_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/american/A66_M103/collision/Turret_02.model	</collisionModelServer>

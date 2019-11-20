@@ -13,10 +13,11 @@ class DualGunSoundEvents(object):
     CHARGE_FAILED = 'gun_rld_dual_charge_fail'
     CHARGE_PRE = 'gun_rld_dual_charge_pre'
     RTPC_CHARGE_PROGRESS = 'RTPC_ext_gun_rld_dual_charge_progress'
+    CHARGE_PROGRESS_STOP = 'gun_rld_dual_charge_progress_loop_stop'
     COOLDOWN_END = 'gun_rld_dual_cooldown_end'
     NOT_ENOUGH_SHELLS = 'gun_rld_dual_charge_no_enough_shells'
     WEAPON_CHANGED = 'gun_rld_dual_wpn_change'
-    CHARGE_SOUND_FX_LENGTH = 1.9
+    CHARGE_SOUND_FX_LENGTH = 1.0
     WEAPON_CHANGED_SOUND_LENGTH = 0.8
 
 
@@ -39,6 +40,7 @@ class ChargeSoundRTPCInterpolator(CallbackDelayer):
         self.stopCallback(self.__update)
         self.stopCallback(self.disable)
         self.enabled = False
+        WWISE.WW_eventGlobal(DualGunSoundEvents.CHARGE_PROGRESS_STOP)
 
     def __update(self):
         currentTime = BigWorld.timeExact()

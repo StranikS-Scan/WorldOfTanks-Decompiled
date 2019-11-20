@@ -29,4 +29,4 @@ def createBrowserOverlayWebHandlers():
 
 
 def createPremAccWebHandlers():
-    return webApiCollection(HangarSoundWebApi, *_DEFAULT_WEB_API_COLLECTION)
+    return webApiCollection(*_DEFAULT_WEB_API_COLLECTION)

@@ -174,6 +174,7 @@ class CustomizationContext(object):
         self.onAnchorHovered = Event.Event(self._eventsManager)
         self.onAnchorUnhovered = Event.Event(self._eventsManager)
         self.onAnchorsStateChanged = Event.Event(self._eventsManager)
+        g_currentVehicle.onChangeStarted += self.__onChangeStarted
         g_currentVehicle.onChanged += self.__onVehicleChanged
         self._storedPersonalNumber = None
         return
@@ -832,6 +833,7 @@ class CustomizationContext(object):
     def fini(self):
         self.itemsCache.onSyncCompleted -= self.__onCacheResync
         self.service.onOutfitChanged -= self.__onOutfitChanged
+        g_currentVehicle.onChangeStarted -= self.__onChangeStarted
         g_currentVehicle.onChanged -= self.__onVehicleChanged
         self._eventsManager.clear()
         self.settingsCore.interfaceScale.onScaleExactlyChanged -= self.__onInterfaceScaleChanged
@@ -844,9 +846,12 @@ class CustomizationContext(object):
         return
 
     def __onVehicleChanged(self):
-        self._autoRentEnabled = g_currentVehicle.item.isAutoRentStyle
         self.carveUpOutfits()
         self.refreshOutfit()
+
+    def __onChangeStarted(self):
+        self.__prolongStyleRent = False
+        self._autoRentEnabled = g_currentVehicle.item.isAutoRentStyle
 
     def checkSlotsFillingForSeason(self, season):
         checkedSlotTypes = (TABS_SLOT_TYPE_MAPPING[tabId] for tabId in self.visibleTabs)

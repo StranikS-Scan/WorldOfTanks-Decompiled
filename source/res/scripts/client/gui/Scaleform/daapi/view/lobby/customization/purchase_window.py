@@ -109,6 +109,7 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
     def _populate(self):
         super(PurchaseWindow, self)._populate()
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+        g_currentVehicle.onChanged += self.__onVehicleChanged
         self.__c11nView = self.app.containerManager.getContainer(ViewTypes.LOBBY_SUB).getView()
         self.__ctx = self.service.getCtx()
         purchaseItems = self.__ctx.getPurchaseItems()
@@ -141,6 +142,7 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
         self.fireEvent(LobbyHeaderMenuEvent(LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.ONLINE_COUNTER}), EVENT_BUS_SCOPE.LOBBY)
         self.service.resumeHighlighter()
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
+        g_currentVehicle.onChanged -= self.__onVehicleChanged
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.__ctx = None
         self.__c11nView = None
@@ -265,6 +267,10 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
     def __onServerSettingChanged(self, diff):
         if 'isCustomizationEnabled' in diff and not diff.get('isCustomizationEnabled', True):
             self.destroy()
+
+    def __onVehicleChanged(self):
+        self.__prolongStyleRent = False
+        self.close()
 
     def updateAutoProlongation(self):
         self.__ctx.changeAutoRent()

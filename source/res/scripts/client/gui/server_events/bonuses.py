@@ -148,13 +148,14 @@ class SimpleBonus(object):
         return None
 
     def getWrappedEpicBonusList(self):
+        awardItem = R.strings.tooltips.awardItem.dyn(self._name)
         return [{'id': 0,
           'type': 'custom/{}'.format(self.getName()),
           'value': self.getValue(),
           'icon': {AWARDS_SIZES.SMALL: self.getIconBySize(AWARDS_SIZES.SMALL),
                    AWARDS_SIZES.BIG: self.getIconBySize(AWARDS_SIZES.BIG)},
-          'name': backport.text(R.strings.tooltips.awardItem.dyn(self._name).header()),
-          'description': backport.text(R.strings.tooltips.awardItem.dyn(self._name).body())}]
+          'name': backport.text(awardItem.header() if awardItem else ''),
+          'description': backport.text(awardItem.body() if awardItem else '')}]
 
     def __getCommonAwardsVOs(self, iconSize='small', align=TEXT_ALIGN.CENTER, withCounts=False):
         itemInfo = {'imgSource': self.getIconBySize(iconSize),
@@ -1674,6 +1675,7 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  'badgesGroup': BadgesGroupBonus,
  'blueprints': blueprintBonusFactory,
  'crewSkins': crewSkinsBonusFactory}
+HIDDEN_BONUSES = (MetaBonus,)
 _BONUSES_PRIORITY = ('tokens', 'oneof')
 _BONUSES_ORDER = dict(((n, idx) for idx, n in enumerate(_BONUSES_PRIORITY)))
 

@@ -2,10 +2,26 @@
 # Embedded file name: scripts/common/wotdecorators.py
 import inspect
 from functools import update_wrapper
-from debug_utils import LOG_WRAPPED_CURRENT_EXCEPTION, CRITICAL_ERROR
+from debug_utils import LOG_WRAPPED_CURRENT_EXCEPTION, CRITICAL_ERROR, LOG_ERROR
 from time_tracking import LOG_TIME_WARNING
 import time
 import time_tracking
+
+def _argsToLogID(args):
+    for arg in args:
+        logID = getattr(arg, 'logID', None)
+        if logID is not None:
+            return logID
+
+    return
+
+
+def _logErrorMessageFromArgs(prefix, args):
+    logID = _argsToLogID(args)
+    if logID is not None:
+        LOG_ERROR(prefix, logID)
+    return
+
 
 def noexcept(func):
 
@@ -13,6 +29,7 @@ def noexcept(func):
         try:
             return func(*args, **kwArgs)
         except:
+            _logErrorMessageFromArgs('Exception in noexcept', args)
             LOG_WRAPPED_CURRENT_EXCEPTION(wrapper.__name__, func.__name__, func.func_code.co_filename, func.func_code.co_firstlineno + 1)
 
     return wrapper
@@ -44,6 +61,7 @@ def exposedtoclient(func):
                  kwArgs))
             return result
         except:
+            _logErrorMessageFromArgs('Exception in exposedtoclient', args)
             LOG_WRAPPED_CURRENT_EXCEPTION(wrapper.__name__, func.__name__, func.func_code.co_filename, func.func_code.co_firstlineno + 1)
 
     return wrapper

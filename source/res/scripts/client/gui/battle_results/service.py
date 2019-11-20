@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/service.py
 import logging
+import BigWorld
 import Event
 from adisp import async, process
 from constants import PREMIUM_TYPE
@@ -23,12 +24,21 @@ from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.server_events import IEventsCache
+import personal_missions
+from gui.battle_results.components.progress import VehicleProgressHelper
+from Account import PlayerAccount
+from constants import ARENA_BONUS_TYPE
+from soft_exception import SoftException
+from shared_utils import first
+from shared_utils.account_helpers.battle_results_helpers import getEmptyClientPB20UXStats
 _logger = logging.getLogger(__name__)
 
 class BattleResultsService(IBattleResultsService):
     itemsCache = dependency.descriptor(IItemsCache)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    eventsCache = dependency.descriptor(IEventsCache)
     __slots__ = ('__composers', '__buy', '__eventsManager', 'onResultPosted', '__appliedAddXPBonus')
 
     def __init__(self):
@@ -105,6 +115,7 @@ class BattleResultsService(IBattleResultsService):
             self.__composers[arenaUniqueID] = composerObj
             self.onResultPosted(reusableInfo, composerObj)
             self.__notifyBattleResultsPosted(arenaUniqueID, needToShowUI=needToShowUI)
+            self.__postStatistics(reusableInfo, result)
             return True
 
     def areResultsPosted(self, arenaUniqueID):
@@ -172,6 +183,84 @@ class BattleResultsService(IBattleResultsService):
     def getVehicleForArena(self, arenaUniqueID):
         arenaInfo = self.__getAdditionalXPBattles().get(arenaUniqueID)
         return self.itemsCache.items.getItemByCD(arenaInfo.vehicleID) if arenaInfo is not None else None
+
+    def __postStatistics(self, reusableInfo, result):
+        playerAccount = BigWorld.player()
+        if playerAccount is None or not isinstance(playerAccount, PlayerAccount):
+            raise SoftException('Could not post afterbattle statistics, possible not in hangar')
+        if reusableInfo.common.arenaBonusType != ARENA_BONUS_TYPE.REGULAR:
+            _logger.debug('Only random battles results are logging')
+            return
+        else:
+            statisticsResult = getEmptyClientPB20UXStats()
+            vehTypeCompDescr, vData = first(reusableInfo.personal.getVehicleCDsIterator(result['personal']))
+            statisticsResult['vehTypeCompDescr'] = vehTypeCompDescr
+            if reusableInfo.isPostBattlePremiumPlus:
+                statisticsResult['premiumType'] = PREMIUM_TYPE.PLUS
+            elif reusableInfo.isPostBattlePremium:
+                statisticsResult['premiumType'] = PREMIUM_TYPE.BASIC
+            else:
+                statisticsResult['premiumType'] = PREMIUM_TYPE.NONE
+            statisticsResult['timestamp'] = result['common'].get('arenaCreateTime', 0)
+            statisticsResult['arenaTypeID'] = reusableInfo.common.arenaTypeID
+            personalMissions = {}
+            questsProgress = reusableInfo.personal.getQuestsProgress()
+            if questsProgress:
+                linkedsetQuests = self.eventsCache.getLinkedSetQuests()
+                premiumQuests = self.eventsCache.getPremiumQuests()
+                allCommonQuests = self.eventsCache.getQuests()
+                allCommonQuests.update(self.eventsCache.getHiddenQuests(lambda q: q.isShowedPostBattle()))
+                for qID, qProgress in questsProgress.iteritems():
+                    _, pPrev, pCur = qProgress
+                    isCompleted = pCur.get('bonusCount', 0) - pPrev.get('bonusCount', 0) > 0
+                    if qID in allCommonQuests:
+                        if qID in linkedsetQuests:
+                            questType = 'linkedset'
+                        elif qID in premiumQuests:
+                            questType = 'premium'
+                        else:
+                            questType = 'other'
+                        if isCompleted:
+                            statisticsResult[questType + 'QuestsCompleted'] += 1
+                        else:
+                            statisticsResult[questType + 'QuestsInProgress'] += 1
+                    if personal_missions.g_cache.isPersonalMission(qID):
+                        pqID = personal_missions.g_cache.getPersonalMissionIDByUniqueID(qID)
+                        questsCache = self.eventsCache.getPersonalMissions()
+                        quest = questsCache.getAllQuests()[pqID]
+                        personalMissions.setdefault(quest, {})[qID] = isCompleted
+
+            pm2Progress = reusableInfo.personal.getPM2Progress()
+            if pm2Progress:
+                quests = self.eventsCache.getPersonalMissions().getAllQuests()
+                for qID, data in pm2Progress.iteritems():
+                    personalMissions.setdefault(quests[qID], {}).update(data)
+
+            pmCompletedMain = 0
+            pmCompletedFull = 0
+            for quest, data in personalMissions.items():
+                if data.get(quest.getAddQuestID(), False):
+                    pmCompletedFull += 1
+                if data.get(quest.getMainQuestID(), False):
+                    pmCompletedMain += 1
+
+            statisticsResult['personalMissionsInProgress'] = len(personalMissions) - pmCompletedMain - pmCompletedFull
+            statisticsResult['personalMissionsCompletedFull'] = pmCompletedFull
+            statisticsResult['personalMissionsCompletedMain'] = pmCompletedMain
+            vehicleBattleXp = vData.get('xp', 0)
+            pureCreditsReceived = vData.get('pureCreditsReceived', 0)
+            tmenXps = dict(vData.get('xpByTmen', []))
+            helper = VehicleProgressHelper(vehTypeCompDescr)
+            ready2UnlockVehicles, ready2UnlockModules = helper.getReady2UnlockItems(vehicleBattleXp)
+            ready2BuyVehicles, ready2BuyModules = helper.getReady2BuyItems(pureCreditsReceived)
+            tankmen = helper.getNewSkilledTankmen(tmenXps)
+            statisticsResult['vehicleProgressReady2UnlockVehicles'] = len(ready2UnlockVehicles)
+            statisticsResult['vehicleProgressReady2UnlockModules'] = len(ready2UnlockModules)
+            statisticsResult['vehicleProgressReady2BuyVehicles'] = len(ready2BuyVehicles)
+            statisticsResult['vehicleProgressReady2BuyModules'] = len(ready2BuyModules)
+            statisticsResult['vehicleProgressTankmen'] = len(tankmen)
+            playerAccount.logClientPB20UXStats(statisticsResult)
+            return
 
     def __getAdditionalXPBattles(self):
         return self.itemsCache.items.stats.additionalXPCache

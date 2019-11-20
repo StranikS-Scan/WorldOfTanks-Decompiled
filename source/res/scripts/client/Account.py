@@ -1054,6 +1054,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def logClientSessionStats(self, stats):
         self.base.logClientSessionStats(stats)
 
+    def logClientPB20UXStats(self, stats):
+        self.base.logClientPB20UXStats(stats)
+
     def logUXEvents(self, intArr):
         if self.lobbyContext.needLogUXEvents:
             return

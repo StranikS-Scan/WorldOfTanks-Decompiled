@@ -174,14 +174,13 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         return self.__customizationCtx
 
     def __createCtx(self):
-        if self.__customizationCtx is not None:
-            self.__customizationCtx.fini()
-        self.__customizationCtx = CustomizationContext()
-        self.__customizationCtx.init()
+        if self.__customizationCtx is None:
+            self.__customizationCtx = CustomizationContext()
+            self.__customizationCtx.init()
         return
 
     def __destroyCtx(self):
-        if self.__customizationCtx:
+        if self.__customizationCtx is not None:
             self.__customizationCtx.fini()
         self.__customizationCtx = None
         return

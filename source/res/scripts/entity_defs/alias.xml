@@ -85,7 +85,7 @@
       </clientBit>
     </Properties>
   </CLIENT_SYSTEM>
-  <CLIENT_STATISTICS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+  <CLIENT_SESSION_STATS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <fpsMin>
         <Type>	INT16	</Type>
@@ -229,7 +229,64 @@
         <Type>	UINT16	</Type>
       </lastArenaTeam>
     </Properties>
-  </CLIENT_STATISTICS>
+  </CLIENT_SESSION_STATS>
+  <CLIENT_PB_20_UX_STATS>	FIXED_DICT	  <Properties>
+      <linkedsetQuestsCompleted>
+        <Type>	UINT8	</Type>
+      </linkedsetQuestsCompleted>
+      <linkedsetQuestsInProgress>
+        <Type>	UINT8	</Type>
+      </linkedsetQuestsInProgress>
+      <premiumQuestsCompleted>
+        <Type>	UINT8	</Type>
+      </premiumQuestsCompleted>
+      <premiumQuestsInProgress>
+        <Type>	UINT8	</Type>
+      </premiumQuestsInProgress>
+      <otherQuestsCompleted>
+        <Type>	UINT8	</Type>
+      </otherQuestsCompleted>
+      <otherQuestsInProgress>
+        <Type>	UINT8	</Type>
+      </otherQuestsInProgress>
+      <personalMissionsCompletedMain>
+        <Type>	UINT8	</Type>
+      </personalMissionsCompletedMain>
+      <personalMissionsCompletedFull>
+        <Type>	UINT8	</Type>
+      </personalMissionsCompletedFull>
+      <personalMissionsInProgress>
+        <Type>	UINT8	</Type>
+      </personalMissionsInProgress>
+      <vehicleProgressReady2UnlockVehicles>
+        <Type>	UINT8	</Type>
+      </vehicleProgressReady2UnlockVehicles>
+      <vehicleProgressReady2UnlockModules>
+        <Type>	UINT8	</Type>
+      </vehicleProgressReady2UnlockModules>
+      <vehicleProgressReady2BuyVehicles>
+        <Type>	UINT8	</Type>
+      </vehicleProgressReady2BuyVehicles>
+      <vehicleProgressReady2BuyModules>
+        <Type>	UINT8	</Type>
+      </vehicleProgressReady2BuyModules>
+      <vehicleProgressTankmen>
+        <Type>	UINT8	</Type>
+      </vehicleProgressTankmen>
+      <vehTypeCompDescr>
+        <Type>	UINT16	</Type>
+      </vehTypeCompDescr>
+      <premiumType>
+        <Type>	UINT8	</Type>
+      </premiumType>
+      <timestamp>
+        <Type>	UINT32	</Type>
+      </timestamp>
+      <arenaTypeID>
+        <Type>	UINT32	</Type>
+      </arenaTypeID>
+    </Properties>
+  </CLIENT_PB_20_UX_STATS>
   <QUEUE_INFO>	PYTHON	</QUEUE_INFO>
   <RANDOMS_QUEUE_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
@@ -931,8 +988,7 @@
   </LIST_OF_COMP_DESCRS>
   <AVATAR_AMMO_VIEWS>	FIXED_DICT	  <Properties>
       <vehTypeCompDescrs>
-        <Type>	ARRAY	  <of>	INT32	</of>
-        </Type>
+        <Type>	LIST_OF_COMP_DESCRS	</Type>
       </vehTypeCompDescrs>
       <compDescrs>
         <Type>	ARRAY	  <of>	LIST_OF_COMP_DESCRS	</of>

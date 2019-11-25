@@ -5,6 +5,9 @@ from frameworks.wulf import ViewModel
 class SimpleTooltipContentModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=4, commands=0):
+        super(SimpleTooltipContentModel, self).__init__(properties=properties, commands=commands)
+
     def getHeader(self):
         return self._getString(0)
 

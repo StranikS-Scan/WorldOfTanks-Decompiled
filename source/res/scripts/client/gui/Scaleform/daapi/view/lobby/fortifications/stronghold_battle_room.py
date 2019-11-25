@@ -45,6 +45,7 @@ from shared_utils import CONST_CONTAINER
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBrowserController
 from skeletons.gui.shared import IItemsCache
+from gui import makeHtmlString
 
 class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdListener, MethodsRules, UsersInfoHelper):
     browserCtrl = dependency.descriptor(IBrowserController)
@@ -417,24 +418,18 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         if data['isSortie']:
             headerDescr = i18n.makeString(FORTIFICATIONS.STRONGHOLDINFO_SORTIE) % {'level': level}
             timetext = None
-            if textid == FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_ENDOFBATTLESOON:
-                timetext = time_utils.getTimeLeftFormat(data['dtime'])
-            elif textid == FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLESOON:
-                timetext = time_utils.getTimeLeftFormat(data['dtime'])
-            elif textid == FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETOMORROW:
-                timetext = backport.getShortTimeFormat(data['peripheryStartTimestamp'])
-            elif textid == FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETODAY:
-                timetext = backport.getShortTimeFormat(data['peripheryStartTimestamp'])
+            if textid == FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_ENDOFBATTLESOON or textid == FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLESOON:
+                timetext = makeHtmlString('html_templates:lobby/fortifications/introView', 'fortBattles', {'text': time_utils.getTimeLeftFormat(data['dtime'])})
+            elif textid == FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETOMORROW or textid == FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETODAY:
+                timetext = makeHtmlString('html_templates:lobby/fortifications/introView', 'fortBattles', {'text': backport.getShortTimeFormat(data['peripheryStartTimestamp'])})
             wfbDescr = i18n.makeString(textid, nextDate=timetext)
         else:
             direction = vo_converters.getDirection(data['direction'])
             headerDescr = i18n.makeString(FORTIFICATIONS.STRONGHOLDINFO_STRONGHOLD) % {'direction': direction}
             if textid != FORTIFICATIONS.ROSTERINTROWINDOW_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLESOON:
                 timetext = None
-                if textid == FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETOMORROW:
-                    timetext = backport.getShortTimeFormat(data['matchmakerNextTick'])
-                elif textid == FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETODAY:
-                    timetext = backport.getShortTimeFormat(data['matchmakerNextTick'])
+                if textid == FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETOMORROW or textid == FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETODAY:
+                    timetext = makeHtmlString('html_templates:lobby/fortifications/introView', 'fortBattles', {'text': backport.getShortTimeFormat(data['matchmakerNextTick'])})
                 wfbDescr = i18n.makeString(textid, nextDate=timetext)
             else:
                 isBattleTimerVisible = True
@@ -555,7 +550,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
             self.__enemyReadyIndicator = data.getHeader().getEnemyClan().getReadyStatus()
         self.as_updateReadyStatusS(self.prbEntity.getFlags().isInQueue(), self.__enemyReadyIndicator)
 
-    def __onUserDataChanged(self, _, user):
+    def __onUserDataChanged(self, _, user, shadowMode):
         if self._candidatesDP:
             candidates = self.prbEntity.getCandidates()
             if user._databaseID in candidates:

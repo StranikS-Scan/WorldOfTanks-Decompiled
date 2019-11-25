@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/premacc/daily_experience_view.py
-from frameworks.wulf import ViewFlags
+from frameworks.wulf import ViewFlags, ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.premacc.daily_experience_view_model import DailyExperienceViewModel
 from gui.impl.lobby.premacc.daily_experience_base import DailyExperienceBaseView
@@ -15,8 +15,11 @@ def getBackBtnLabel(_=None):
 class DailyExperienceView(DailyExperienceBaseView):
     __slots__ = ('__exitEvent',)
 
-    def __init__(self, layoutID, wsFlags=ViewFlags.LOBBY_TOP_SUB_VIEW, viewModelClazz=DailyExperienceViewModel, ctx=None):
-        super(DailyExperienceView, self).__init__(layoutID, wsFlags, viewModelClazz)
+    def __init__(self, layoutID, ctx=None):
+        settings = ViewSettings(layoutID)
+        settings.flags = ViewFlags.LOBBY_TOP_SUB_VIEW
+        settings.model = DailyExperienceViewModel()
+        super(DailyExperienceView, self).__init__(settings)
         self.__exitEvent = ctx.get('exitEvent') if ctx is not None else events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR)
         return
 

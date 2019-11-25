@@ -4,8 +4,7 @@ import logging
 import ArenaType
 from async import await, async
 from constants import PREMIUM_TYPE, EMPTY_GEOMETRY_ID, PremiumConfigs
-from frameworks.wulf import View
-from frameworks.wulf import ViewFlags
+from frameworks.wulf import View, ViewSettings, ViewFlags
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform import MENU
@@ -79,7 +78,11 @@ class MapsBlacklistView(ViewImpl, SoundViewMixin):
     __slots__ = ('__availableMaps', '__notifier')
 
     def __init__(self, layoutID, wsFlags=ViewFlags.LOBBY_TOP_SUB_VIEW, viewModelClazz=MapsBlacklistViewModel, exitEvent=None):
-        super(MapsBlacklistView, self).__init__(layoutID, wsFlags, viewModelClazz, exitEvent)
+        settings = ViewSettings(layoutID)
+        settings.flags = wsFlags
+        settings.model = viewModelClazz()
+        settings.args = (exitEvent,)
+        super(MapsBlacklistView, self).__init__(settings)
         self.__availableMaps = []
         self.__notifier = None
         Waiting.show('loadPage')
@@ -322,7 +325,8 @@ class MapsBlacklistInfoTooltipContent(View):
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
-        super(MapsBlacklistInfoTooltipContent, self).__init__(R.views.lobby.premacc.maps_blacklist.maps_blacklist_tooltips.MapsBlacklistInfoTooltipContent(), ViewFlags.COMPONENT, MapsBlacklistInfoTooltipModel)
+        settings = ViewSettings(R.views.lobby.premacc.maps_blacklist.maps_blacklist_tooltips.MapsBlacklistInfoTooltipContent(), ViewFlags.COMPONENT, MapsBlacklistInfoTooltipModel())
+        super(MapsBlacklistInfoTooltipContent, self).__init__(settings)
         mapsConfig = self.__lobbyContext.getServerSettings().getPreferredMapsConfig()
         self.viewModel.setMaxCooldownTime(mapsConfig['slotCooldown'])
 

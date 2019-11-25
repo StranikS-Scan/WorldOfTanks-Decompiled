@@ -80,7 +80,7 @@ class CyberSportUnitsListView(CyberSportUnitsListMeta):
         super(CyberSportUnitsListView, self)._dispose()
         return
 
-    def _onUserActionReceived(self, _, user):
+    def _onUserActionReceived(self, _, user, shadowMode):
         self.__updateView(user)
 
     def _doEnableNavButtons(self, isEnabled):

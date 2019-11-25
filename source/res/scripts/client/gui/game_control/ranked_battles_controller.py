@@ -271,29 +271,33 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
 
     def getRankDisplayInfoForBattle(self, rankID):
         division = self.getDivision(rankID)
-        divisionID = division.getID()
-        if division.isQualification() and rankID == ZERO_RANK_ID:
-            return BattleRankInfo(rankID, divisionID, False)
-        if self.__hasMatchMakerGroups():
-            groups = self.__getGroupsForBattle()
-            if rankID == division.lastRank:
-                divisionID += 1
-            if rankID == self.getMaxPossibleRank():
-                return BattleRankInfo(ZERO_RANK_ID, divisionID, False)
-            if divisionID in groups:
-                for idx, ranksRange in enumerate(reversed(groups[divisionID]), start=1):
-                    if rankID in ranksRange:
-                        return BattleRankInfo(idx, divisionID, True)
-
+        if division is None:
+            _logger.warning('Wrong ranked_config.xml, cannot be found division for rank %s.', rankID)
+            return BattleRankInfo(-1, -1, False)
         else:
-            if rankID == division.lastRank:
-                level = ZERO_RANK_ID
-                divisionID += 1
+            divisionID = division.getID()
+            if division.isQualification() and rankID == ZERO_RANK_ID:
+                return BattleRankInfo(rankID, divisionID, False)
+            if self.__hasMatchMakerGroups():
+                groups = self.__getGroupsForBattle()
+                if rankID == division.lastRank:
+                    divisionID += 1
+                if rankID == self.getMaxPossibleRank():
+                    return BattleRankInfo(ZERO_RANK_ID, divisionID, False)
+                if divisionID in groups:
+                    for idx, ranksRange in enumerate(reversed(groups[divisionID]), start=1):
+                        if rankID in ranksRange:
+                            return BattleRankInfo(idx, divisionID, True)
+
             else:
-                level = division.getRankUserId(rankID) if rankID else rankID
-            return BattleRankInfo(level, divisionID, False)
-        _logger.error('Wrong ranked_config.xml, wrong rankGroups section!!!')
-        return BattleRankInfo(-1, -1, False)
+                if rankID == division.lastRank:
+                    level = ZERO_RANK_ID
+                    divisionID += 1
+                else:
+                    level = division.getRankUserId(rankID) if rankID else rankID
+                return BattleRankInfo(level, divisionID, False)
+            _logger.error('Wrong ranked_config.xml, wrong rankGroups section!!!')
+            return BattleRankInfo(-1, -1, False)
 
     def getDivisions(self):
         if self.__divisions is None:
@@ -943,7 +947,12 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
 
     def __hasMatchMakerGroups(self):
         groups = self.__rankedSettings.rankGroups
-        return groups and len(groups) != self.getRanksCount()
+        if groups:
+            if len(groups) != self.getRanksCount() and sum(groups) == self.__rankedSettings.accRanks + ZERO_RANK_COUNT:
+                return True
+            _logger.warning('Wrong ranked_config.xml, wrong rankGroups section')
+            return False
+        return False
 
     def __makeGroupsForBattle(self):
         if self.__hasMatchMakerGroups():

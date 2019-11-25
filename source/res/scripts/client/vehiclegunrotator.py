@@ -67,6 +67,21 @@ class VehicleGunRotator(object):
         return
 
     def start(self):
+
+        def multiGunCurrentPosition():
+            player = BigWorld.player()
+            if player is None:
+                return
+            else:
+                vehicle = player.getVehicleAttached()
+                if vehicle is None:
+                    return
+                if not vehicle.typeDescriptor.isDualgunVehicle:
+                    return
+                gunIdx = vehicle.activeGunIndex
+                multiGun = vehicle.typeDescriptor.turret.multiGun
+                return None if multiGun is None or gunIdx >= len(multiGun) or gunIdx < 0 else multiGun[gunIdx].position
+
         if self.__isStarted or not self.__speedsInitialized:
             return
         elif not self.__avatar.isOnArena:
@@ -77,6 +92,7 @@ class VehicleGunRotator(object):
             ctrl = self.__sessionProvider.shared.feedback
             if ctrl is not None:
                 ctrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
+            self.__gunPosition = multiGunCurrentPosition()
             self.__isStarted = True
             self.__updateGunMarker()
             self.__timerID = BigWorld.callback(self.__ROTATION_TICK_LENGTH, self.__onTick)

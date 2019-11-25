@@ -30,18 +30,18 @@ class InvitationsExchangeBlock(broker.ExchangeBlock):
 
 
 class UserTagsItemData(broker.VehicleComponent):
-    __slots__ = ('_ctx', '_accountDBID', '_igrType', '_tags')
+    __slots__ = ('_ctx', '_avatarSessionID', '_igrType', '_tags')
 
     def __init__(self, ctx):
         super(UserTagsItemData, self).__init__()
         self._ctx = ctx
-        self._accountDBID = 0
+        self._avatarSessionID = ''
         self._igrType = 0
         self._tags = None
         return
 
     def clear(self):
-        self._accountDBID = 0
+        self._avatarSessionID = ''
         self._igrType = 0
         self._tags = None
         super(UserTagsItemData, self).clear()
@@ -54,7 +54,7 @@ class UserTagsItemData(broker.VehicleComponent):
 
     def get(self, forced=False):
         if self._tags is None:
-            tags = self._ctx.getUserTags(self._accountDBID, self._igrType)
+            tags = self._ctx.getUserTags(self._avatarSessionID, self._igrType)
         else:
             tags = self._ctx.addTagByIGRType(self._tags, self._igrType)
         return {'isEnemy': self._isEnemy,
@@ -63,7 +63,7 @@ class UserTagsItemData(broker.VehicleComponent):
 
     def addVehicleInfo(self, vInfoVO):
         playerVO = vInfoVO.player
-        self._accountDBID = playerVO.accountDBID
+        self._avatarSessionID = playerVO.avatarSessionID
         self._igrType = playerVO.igrType
         self._vehicleID = vInfoVO.vehicleID
 

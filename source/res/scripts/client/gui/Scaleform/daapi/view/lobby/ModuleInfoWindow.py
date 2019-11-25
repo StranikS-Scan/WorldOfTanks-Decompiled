@@ -95,14 +95,17 @@ class ModuleInfoWindow(ModuleInfoMeta):
                     if moduleParameters['maxShotDistance'] >= _DEF_SHOT_DISTANCE:
                         excludedParametersNames += ('maxShotDistance',)
                 gunReloadingType = extraParamsInfo[utils.GUN_RELOADING_TYPE]
+                extraModuleInfo = module.getExtraIconInfo(self.__vehicleDescr)
                 if gunReloadingType == utils.GUN_CLIP:
                     description = _ms(MENU.MODULEINFO_CLIPGUNLABEL)
-                    extraModuleInfo = RES_ICONS.MAPS_ICONS_MODULES_MAGAZINEGUNICON
                 elif gunReloadingType == utils.GUN_AUTO_RELOAD:
                     description = _ms(MENU.MODULEINFO_AUTORELOADGUNLABEL)
-                    extraModuleInfo = RES_ICONS.MAPS_ICONS_MODULES_AUTOLOADERGUN
                     self._settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.AUTO_RELOAD_MARK_IS_SHOWN: True})
                     highlightPossible = self._settingsCore.serverSettings.checkAutoReloadHighlights(increase=True)
+                elif gunReloadingType == utils.GUN_DUAL_GUN:
+                    description = _ms(MENU.MODULEINFO_DUALGUNLABEL)
+                    self._settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.DUAL_GUN_MARK_IS_SHOWN: True})
+                    highlightPossible = self._settingsCore.serverSettings.checkDualGunHighlights(increase=True)
                 elif gunReloadingType == utils.GUN_CAN_BE_CLIP:
                     otherParamsInfoList = []
                     for paramName, paramValue in formattedModuleParameters:
@@ -126,8 +129,11 @@ class ModuleInfoWindow(ModuleInfoMeta):
             for paramName, paramValue in formattedModuleParameters:
                 if paramName not in excludedParametersNames:
                     paramRow = {'type': formatters.formatModuleParamName(paramName) + '\n',
-                     'value': text_styles.stats(paramValue)}
-                    if highlightPossible and paramName == utils.AUTO_RELOAD_PROP_NAME:
+                     'value': text_styles.stats(paramValue) + '\n'}
+                    if highlightPossible and paramName in (utils.AUTO_RELOAD_PROP_NAME,
+                     utils.RELOAD_TIME_SECS_PROP_NAME,
+                     utils.DUAL_GUN_CHARGE_TIME,
+                     utils.DUAL_GUN_RATE_TIME):
                         paramRow['highlight'] = True
                     paramsList.append(paramRow)
 

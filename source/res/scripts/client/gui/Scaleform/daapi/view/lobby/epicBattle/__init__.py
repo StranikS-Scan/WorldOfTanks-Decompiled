@@ -16,7 +16,6 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.epicBattle.EpicBattlesSkillView import EpicBattlesSkillView
     from gui.Scaleform.daapi.view.lobby.epicBattle.EpicBattlesAfterBattleView import EpicBattlesAfterBattleView
     from gui.Scaleform.daapi.view.lobby.epicBattle.EpicBattlesInfoView import EpicBattlesInfoView
-    from gui.Scaleform.daapi.view.lobby.epicBattle.epic_battles_welcome_back_view import EpicBattlesWelcomeBackView
     from gui.Scaleform.daapi.view.lobby.epicBattle.EpicBattlesPrestigeView import EpicBattlesPrestigeView
     from gui.Scaleform.daapi.view.lobby.epicBattle.EpicBattlesBrowserView import EpicBattlesBrowserView
     from gui.Scaleform.daapi.view.lobby.epicBattle.epic_prime_time import EpicBattlesPrimeTimeView
@@ -24,7 +23,6 @@ def getViewSettings():
     return (ViewSettings(EPICBATTLES_ALIASES.EPIC_BATTLES_SKILL_ALIAS, EpicBattlesSkillView, EPICBATTLES_ALIASES.EPIC_BATTLES_SKILL_VIEW_UI, ViewTypes.LOBBY_SUB, EPICBATTLES_ALIASES.EPIC_BATTLES_SKILL_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE, True),
      ViewSettings(EPICBATTLES_ALIASES.EPIC_BATTLES_AFTER_BATTLE_ALIAS, EpicBattlesAfterBattleView, EPICBATTLES_ALIASES.EPIC_BATTLES_AFTER_BATTLE_UI, ViewTypes.OVERLAY, EPICBATTLES_ALIASES.EPIC_BATTLES_AFTER_BATTLE_ALIAS, ScopeTemplates.OVERLAY_SCOPE, True),
      ViewSettings(EPICBATTLES_ALIASES.EPIC_BATTLES_INFO_ALIAS, EpicBattlesInfoView, EPICBATTLES_ALIASES.EPIC_BATTLES_INFO_VIEW_UI, ViewTypes.LOBBY_SUB, EPICBATTLES_ALIASES.EPIC_BATTLES_INFO_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE, True),
-     ViewSettings(EPICBATTLES_ALIASES.EPIC_BATTLES_WELCOME_BACK_ALIAS, EpicBattlesWelcomeBackView, EPICBATTLES_ALIASES.EPIC_BATTLES_WELCOME_BACK_VIEW_UI, ViewTypes.LOBBY_SUB, EPICBATTLES_ALIASES.EPIC_BATTLES_WELCOME_BACK_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE, True),
      ViewSettings(EPICBATTLES_ALIASES.EPIC_BATTLES_PRESTIGE_ALIAS, EpicBattlesPrestigeView, EPICBATTLES_ALIASES.EPIC_BATTLES_PRESTIGE_INFO_VIEW_UI, ViewTypes.LOBBY_SUB, EPICBATTLES_ALIASES.EPIC_BATTLES_PRESTIGE_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE, True),
      ViewSettings(EPICBATTLES_ALIASES.EPIC_BATTLES_BROWSER_ALIAS, EpicBattlesBrowserView, EPICBATTLES_ALIASES.EPIC_BATTLES_BROWSER_UI, ViewTypes.LOBBY_SUB, EPICBATTLES_ALIASES.EPIC_BATTLES_BROWSER_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE, True),
      ViewSettings(EPICBATTLES_ALIASES.EPIC_BATTLES_PRIME_TIME_ALIAS, EpicBattlesPrimeTimeView, HANGAR_ALIASES.EPIC_PRIME_TIME, ViewTypes.LOBBY_SUB, EPICBATTLES_ALIASES.EPIC_BATTLES_PRIME_TIME_ALIAS, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True),

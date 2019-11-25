@@ -23,7 +23,13 @@ from account_helpers.settings_core.options import APPLY_METHOD
 from helpers import dependency
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
+from gui.Scaleform.genConsts.SETTINGS_DIALOGS import SETTINGS_DIALOGS
+from gui.shared.formatters import icons
+from gui import makeHtmlString
+from gui.impl import backport
+from gui.impl.gen import R
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.game_control import IAnonymizerController
 from skeletons.gui.lobby_context import ILobbyContext
 _PAGES = (SETTINGS.GAMETITLE,
  SETTINGS.GRAFICTITLE,
@@ -54,6 +60,7 @@ def _delayCall(delay, function):
 
 
 class SettingsWindow(SettingsWindowMeta):
+    anonymizerController = dependency.descriptor(IAnonymizerController)
     settingsCore = dependency.descriptor(ISettingsCore)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
@@ -151,6 +158,7 @@ class SettingsWindow(SettingsWindowMeta):
         VibroManager.g_instance.onConnect += self.onVibroManagerConnect
         VibroManager.g_instance.onDisconnect += self.onVibroManagerDisconnect
         self.settingsCore.onSettingsChanged += self.__onColorSettingsChange
+        self.anonymizerController.onStateChanged += self.__refreshSettings
         g_guiResetters.add(self.onRecreateDevice)
         BigWorld.wg_setAdapterOrdinalNotifyCallback(self.onRecreateDevice)
 
@@ -170,6 +178,7 @@ class SettingsWindow(SettingsWindowMeta):
         BigWorld.wg_setAdapterOrdinalNotifyCallback(None)
         self.stopVoicesPreview()
         self.stopAltBulbPreview()
+        self.anonymizerController.onStateChanged -= self.__refreshSettings
         VibroManager.g_instance.onConnect -= self.onVibroManagerConnect
         VibroManager.g_instance.onDisconnect -= self.onVibroManagerDisconnect
         self.settingsCore.onSettingsChanged -= self.__onColorSettingsChange
@@ -311,7 +320,12 @@ class SettingsWindow(SettingsWindowMeta):
                 if isCloseWnd and isOk:
                     self.onWindowClose()
 
-        DialogsInterface.showI18nConfirmDialog(dialogID, callback)
+        ctx = None
+        if dialogID == SETTINGS_DIALOGS.MINIMAP_ALPHA_NOTIFICATION:
+            ctx = {'icon': icons.alert(),
+             'alert': makeHtmlString('html_templates:lobby/dialogs', 'minimapAlphaNotification', {'message': backport.text(R.strings.dialogs.minimapAlphaNotification.message.alert())})}
+        DialogsInterface.showI18nConfirmDialog(dialogID, callback, ctx)
+        return
 
     def openGammaWizard(self, x, y, size):
         g_eventBus.handleEvent(events.LoadViewEvent(alias=VIEW_ALIAS.GAMMA_WIZARD, ctx={'x': x,
@@ -338,6 +352,9 @@ class SettingsWindow(SettingsWindowMeta):
         if settings_constants.GRAPHICS.COLOR_GRADING_TECHNIQUE in diff:
             self.__setColorGradingTechnique(diff.get(settings_constants.GRAPHICS.COLOR_GRADING_TECHNIQUE, None))
         return
+
+    def __refreshSettings(self, **_):
+        self._update()
 
     def __setColorGradingTechnique(self, value=None):
         colorSettingsSelectedTab = AccountSettings.getSettings(COLOR_SETTINGS_TAB_IDX)

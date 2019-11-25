@@ -17,6 +17,7 @@ class DualGunSoundEvents(object):
     COOLDOWN_END = 'gun_rld_dual_cooldown_end'
     NOT_ENOUGH_SHELLS = 'gun_rld_dual_charge_no_enough_shells'
     WEAPON_CHANGED = 'gun_rld_dual_wpn_change'
+    DAULGUN_RELOAD_SNIPER_SWITCH = 'gun_rld_dual_wpn_switch_sniper_mode'
     CHARGE_SOUND_FX_LENGTH = 1.0
     WEAPON_CHANGED_SOUND_LENGTH = 0.8
 
@@ -86,6 +87,10 @@ class DualGunSounds(CallbackDelayer):
         if leftTime > 0:
             self.delayCallback(leftTime, self.__runCooldownEndSound)
             self.__interpolator.disable()
+
+    @staticmethod
+    def onSniperCameraTransition():
+        WWISE.WW_eventGlobal(DualGunSoundEvents.DAULGUN_RELOAD_SNIPER_SWITCH)
 
     @staticmethod
     def onPreChargeStarted():

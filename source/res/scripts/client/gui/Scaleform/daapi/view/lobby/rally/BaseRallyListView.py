@@ -42,5 +42,5 @@ class BaseRallyListView(BaseRallyListViewMeta):
         self.as_setVehiclesTitleS(makeHtmlString('html_templates:lobby/rally/', 'vehiclesLabel', {'minValue': minVal,
          'maxValue': maxVal}))
 
-    def _onUserActionReceived(self, _, user):
+    def _onUserActionReceived(self, _, user, shadowMode):
         pass

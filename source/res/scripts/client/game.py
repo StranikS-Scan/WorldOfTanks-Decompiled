@@ -133,6 +133,9 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         from AvatarInputHandler.cameras import FovExtended
         FovExtended.instance().resetFov()
         BigWorld.pauseDRRAutoscaling(True)
+        if constants.HAS_DEV_RESOURCES:
+            import development
+            development.init()
     except Exception:
         LOG_CURRENT_EXCEPTION()
         BigWorld.quit()
@@ -220,7 +223,8 @@ def start():
                 ServiceLocator.gameplay.start()
                 botLoginName = sys.argv[3]
                 scenarioPath = sys.argv[2]
-                initBotNet(scenarioPath, botLoginName)
+                LOG_DEBUG('BOTNET: Start playing scenario {} with bot {}...'.format(scenarioPath, botLoginName))
+                initBotNet().initializeBots(loginName=botLoginName, scenarioPath=scenarioPath)
             else:
                 ServiceLocator.gameplay.start()
         else:
@@ -315,6 +319,9 @@ def fini():
             g_scenario.destroy()
         g_onBeforeSendEvent = None
         WebBrowser.destroyExternalCache()
+        if constants.HAS_DEV_RESOURCES:
+            import development
+            development.fini()
         return
 
 
@@ -555,10 +562,10 @@ def onMemoryCritical():
     g_critMemHandler()
 
 
-def initBotNet(scenarioPath, botLoginName):
+def initBotNet():
     global g_scenario
-    sys.path.append('scripts/bot')
-    from client.ClientScenarioPlayer import g_scenarioPlayer
-    LOG_DEBUG('BOTNET: Start playing scenario {} with bot {}...'.format(scenarioPath, botLoginName))
-    g_scenario = g_scenarioPlayer
-    g_scenario.addBot(loginName=botLoginName, scenarioPath=scenarioPath)
+    if g_scenario is None:
+        sys.path.append('scripts/bot')
+        from client.ClientScenarioPlayer import g_scenarioPlayer
+        g_scenario = g_scenarioPlayer
+    return g_scenario

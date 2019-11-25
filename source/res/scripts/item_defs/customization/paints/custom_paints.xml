@@ -849,51 +849,6 @@
     </usages>
   </itemGroup>
   <itemGroup>
-    <name>	racing_2019	</name>
-    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
-    <season>	ALL	</season>
-    <historical>	false	</historical>
-    <priceGroup>	paints 20g notInShop	</priceGroup>
-    <vehicleFilter>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <paint>
-      <id>	15	</id>
-      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
-      <color>	20 20 20 255	</color>
-      <gloss>	0.6	</gloss>
-      <metallic>	0.18	</metallic>
-      <userString>	#vehicle_customization:repaint/racing_2019_team_a	</userString>
-      <tags>	hiddenInUI	</tags>
-    </paint>
-    <paint>
-      <id>	20	</id>
-      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
-      <color>	20 20 20 255	</color>
-      <gloss>	0.6	</gloss>
-      <metallic>	0.18	</metallic>
-      <userString>	#vehicle_customization:repaint/racing_2019_team_c	</userString>
-      <tags>	hiddenInUI	</tags>
-    </paint>
-    <paint>
-      <id>	21	</id>
-      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
-      <color>	20 20 20 255	</color>
-      <gloss>	0.6	</gloss>
-      <metallic>	0.18	</metallic>
-      <userString>	#vehicle_customization:repaint/racing_2019_team_b	</userString>
-      <tags>	hiddenInUI	</tags>
-    </paint>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
-  </itemGroup>
-  <itemGroup>
     <name>	t_october	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
@@ -938,6 +893,51 @@
       <gloss>	0.738	</gloss>
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/halloween_2019	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	racing_2019	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	15	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <color>	20 20 20 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.18	</metallic>
+      <userString>	#vehicle_customization:repaint/racing_2019_team_a	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	20	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <color>	20 20 20 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.18	</metallic>
+      <userString>	#vehicle_customization:repaint/racing_2019_team_c	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	21	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <color>	20 20 20 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.18	</metallic>
+      <userString>	#vehicle_customization:repaint/racing_2019_team_b	</userString>
       <tags>	hiddenInUI	</tags>
     </paint>
     <usages>

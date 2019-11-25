@@ -6,6 +6,9 @@ from frameworks.wulf import ViewModel
 class VehicleCongratulationModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=11, commands=0):
+        super(VehicleCongratulationModel, self).__init__(properties=properties, commands=commands)
+
     def getIsElite(self):
         return self._getBool(0)
 

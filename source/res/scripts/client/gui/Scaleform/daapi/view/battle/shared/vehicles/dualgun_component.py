@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/vehicles/dualgun_component.py
 from weakref import proxy
+import BattleReplay
 import BigWorld
+from ReplayEvents import g_replayEvents
 from Vehicle import StunInfo
 from aih_constants import CTRL_MODE_NAME
 from constants import ARENA_PERIOD
@@ -11,10 +13,11 @@ from constants import VEHICLE_MISC_STATUS
 from debug_utils import LOG_WARNING
 from dualgun_sounds import DualGunSounds
 from gui.Scaleform.daapi.view.meta.DualGunPanelMeta import DualGunPanelMeta
-from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, DestroyTimerViewState
+from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, FEEDBACK_EVENT_ID, DestroyTimerViewState
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 from helpers import dependency
+from helpers.time_utils import MS_IN_SECOND
 from skeletons.gui.battle_session import IBattleSessionProvider
 
 class GunStatesUI(object):
@@ -29,6 +32,7 @@ class DualGunConstants(object):
     TIME_MULTIPLIER = 100
     CHARGE_TIME_MULTIPLIER = 1000
     COOLDOWN_END_TIME_MULTIPLIER = 10
+    CHANGE_GUN_TRANSITION_TIME = 0.4
 
 
 class ReloadFactorsState(object):
@@ -131,6 +135,9 @@ class DualGunComponent(DualGunPanelMeta):
         super(DualGunComponent, self)._populate()
         ctrl = self.__sessionProvider.shared.crosshair
         ctrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
+        if BattleReplay.g_replayCtrl.isPlaying:
+            g_replayEvents.onTimeWarpStart += self.__onReplayTimeWarpStart
+            g_replayEvents.onPause += self.__onReplayPause
         vStateCtrl = self.__sessionProvider.shared.vehicleState
         if vStateCtrl is not None:
             vStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
@@ -139,19 +146,32 @@ class DualGunComponent(DualGunPanelMeta):
         specCtrl = self.__sessionProvider.dynamic.spectator
         if specCtrl is not None:
             specCtrl.onSpectatorViewModeChanged += self.__onSpectatorModeChanged
+        ammoCtrl = self.__sessionProvider.shared.ammo
+        if ammoCtrl is not None:
+            ammoCtrl.onShellsAdded += self.__updateChargeTimerState
+            ammoCtrl.onShellsUpdated += self.__updateChargeTimerState
+            ammoCtrl.onCurrentShellChanged += self.__updateChargeTimerState
+        feedBackCtrl = self.__sessionProvider.shared.feedback
+        if feedBackCtrl is not None:
+            feedBackCtrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
         add = g_eventBus.addListener
         add(GameEvent.CHARGE_RELEASED, self.__chargeReleased, scope=EVENT_BUS_SCOPE.BATTLE)
         add(GameEvent.PRE_CHARGE, self.__onPreCharge, scope=EVENT_BUS_SCOPE.BATTLE)
         add(GameEvent.CONTROL_MODE_CHANGE, self.__onControlModeChange, scope=EVENT_BUS_SCOPE.BATTLE)
+        add(GameEvent.SNIPER_CAMERA_TRANSITION, self.__onSniperCameraTransition, scope=EVENT_BUS_SCOPE.BATTLE)
         arena = self.__sessionProvider.arenaVisitor.getArenaSubscription()
         if arena is not None:
             arena.onPeriodChange += self.__onArenaPeriodChange
             self.__onArenaPeriodChange(arena.period, arena.periodEndTime, arena.periodLength, arena.periodAdditionalInfo)
+        self.as_setChangeGunTweenPropsS(MS_IN_SECOND / 2, MS_IN_SECOND)
         return
 
     def _dispose(self):
         super(DualGunComponent, self)._dispose()
         self.as_setVisibleS(False)
+        if BattleReplay.g_replayCtrl.isPlaying:
+            g_replayEvents.onTimeWarpStart -= self.__onReplayTimeWarpStart
+            g_replayEvents.onPause -= self.__onReplayPause
         vStateCtrl = self.__sessionProvider.shared.vehicleState
         if vStateCtrl is not None:
             vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
@@ -160,11 +180,20 @@ class DualGunComponent(DualGunPanelMeta):
         specCtrl = self.__sessionProvider.dynamic.spectator
         if specCtrl is not None:
             specCtrl.onSpectatorViewModeChanged -= self.__onSpectatorModeChanged
+        ammoCtrl = self.__sessionProvider.shared.ammo
+        if ammoCtrl is not None:
+            ammoCtrl.onShellsAdded -= self.__updateChargeTimerState
+            ammoCtrl.onShellsUpdated -= self.__updateChargeTimerState
+            ammoCtrl.onCurrentShellChanged -= self.__updateChargeTimerState
+        feedBackCtrl = self.__sessionProvider.shared.feedback
+        if feedBackCtrl is not None:
+            feedBackCtrl.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
         self.__soundManager.onComponentDisposed()
         remove = g_eventBus.removeListener
         remove(GameEvent.CHARGE_RELEASED, self.__chargeReleased, scope=EVENT_BUS_SCOPE.BATTLE)
         remove(GameEvent.PRE_CHARGE, self.__onPreCharge, scope=EVENT_BUS_SCOPE.BATTLE)
         remove(GameEvent.CONTROL_MODE_CHANGE, self.__onControlModeChange, scope=EVENT_BUS_SCOPE.BATTLE)
+        remove(GameEvent.SNIPER_CAMERA_TRANSITION, self.__onSniperCameraTransition, scope=EVENT_BUS_SCOPE.BATTLE)
         arena = self.__sessionProvider.arenaVisitor.getArenaSubscription()
         if arena is not None:
             arena.onPeriodChange -= self.__onArenaPeriodChange
@@ -218,7 +247,7 @@ class DualGunComponent(DualGunPanelMeta):
             return
 
     @staticmethod
-    def __convertServerStateToUI(state):
+    def _convertServerStateToUI(state):
         if state == DUAL_GUN.GUN_STATE.EMPTY:
             return GunStatesUI.EMPTY
         elif state == DUAL_GUN.GUN_STATE.RELOADING:
@@ -231,6 +260,11 @@ class DualGunComponent(DualGunPanelMeta):
         baseTime = int(serverCooldownData[gunID][DualGunConstants.BASE_TIME] * DualGunConstants.TIME_MULTIPLIER)
         self.as_setGunStateS(gunID, state, leftTime, baseTime)
 
+    def __onVehicleFeedbackReceived(self, eventID, vehicleID, value):
+        if eventID == FEEDBACK_EVENT_ID.VEHICLE_ACTIVE_GUN_CHANGED:
+            _, switchDelay = value
+            self.as_setChangeGunTweenPropsS(DualGunConstants.CHANGE_GUN_TRANSITION_TIME * MS_IN_SECOND, switchDelay * MS_IN_SECOND)
+
     def __onDualGunStateUpdated(self, value):
         if self.__chargeState == DUALGUN_CHARGER_STATUS.PREPARING:
             self.__deferredGunState = value
@@ -240,8 +274,8 @@ class DualGunComponent(DualGunPanelMeta):
         if len(states) < 2:
             LOG_WARNING('Got incorrect dualgun states length, aborting')
             return
-        leftGunState = self.__convertServerStateToUI(states[DUAL_GUN.ACTIVE_GUN.LEFT])
-        rightGunState = self.__convertServerStateToUI(states[DUAL_GUN.ACTIVE_GUN.RIGHT])
+        leftGunState = self._convertServerStateToUI(states[DUAL_GUN.ACTIVE_GUN.LEFT])
+        rightGunState = self._convertServerStateToUI(states[DUAL_GUN.ACTIVE_GUN.RIGHT])
         self.__updateGunState(DUAL_GUN.COOLDOWNS.LEFT, leftGunState, cooldownTimes)
         self.__updateGunState(DUAL_GUN.COOLDOWNS.RIGHT, rightGunState, cooldownTimes)
         leftTime = cooldownTimes[DUAL_GUN.COOLDOWNS.SWITCH][DualGunConstants.LEFT_TIME]
@@ -249,7 +283,7 @@ class DualGunComponent(DualGunPanelMeta):
         activeGunReloadingTimeLeft = max(leftTime, cooldownTimes[activeGun].leftTime)
         switchLeftTime = int(activeGunReloadingTimeLeft * DualGunConstants.TIME_MULTIPLIER)
         switchBaseTime = int(baseTime * DualGunConstants.TIME_MULTIPLIER)
-        self.__soundManager.onWeaponChanged(switchLeftTime / DualGunConstants.CHARGE_TIME_MULTIPLIER)
+        self.__soundManager.onWeaponChanged(switchLeftTime / MS_IN_SECOND)
         self.as_updateActiveGunS(activeGun, switchLeftTime, switchBaseTime)
         self.__updateDualGunState(states, cooldownTimes)
         self.__updateChargeTimerState()
@@ -270,6 +304,7 @@ class DualGunComponent(DualGunPanelMeta):
         debuff = cooldownTimes[DUAL_GUN.COOLDOWNS.DEBUFF]
         if debuff.leftTime > 0:
             self.__debuffInProgress = True
+            self.__bulletCollapsed = False
             self.__soundManager.onCooldownEnd(debuff.leftTime / DualGunConstants.COOLDOWN_END_TIME_MULTIPLIER)
             totalDebuffTime = debuff.leftTime + cooldownTimes[DUAL_GUN.ACTIVE_GUN.LEFT].baseTime + cooldownTimes[DUAL_GUN.ACTIVE_GUN.RIGHT].baseTime
             self.as_setCooldownS(totalDebuffTime * DualGunConstants.TIME_MULTIPLIER)
@@ -282,6 +317,9 @@ class DualGunComponent(DualGunPanelMeta):
     def __onPreCharge(self, _):
         if not self.__inPrebattleState:
             self.__soundManager.onPreChargeStarted()
+
+    def __onSniperCameraTransition(self, _):
+        self.__soundManager.onSniperCameraTransition()
 
     def __onControlModeChange(self, event):
         mode = event.ctx.get('mode')
@@ -311,7 +349,7 @@ class DualGunComponent(DualGunPanelMeta):
         if self.__chargeState == DUALGUN_CHARGER_STATUS.PREPARING:
             baseTime, timeLeft = time
             self.__soundManager.onChargeStarted(timeLeft)
-            self.as_startChargingS(timeLeft * DualGunConstants.CHARGE_TIME_MULTIPLIER, baseTime * DualGunConstants.CHARGE_TIME_MULTIPLIER)
+            self.as_startChargingS(timeLeft * MS_IN_SECOND, baseTime * MS_IN_SECOND)
             self.__updateTimeUntilNextDoubleShot(increaseByDebuff=True)
             return
         else:
@@ -324,11 +362,17 @@ class DualGunComponent(DualGunPanelMeta):
                 self.__deferredGunState = None
             return
 
-    def __updateChargeTimerState(self):
+    def __updateChargeTimerState(self, *args):
         if self.__sessionProvider.shared.ammo.getShellsQuantityLeft() <= 1:
             self.as_setTimerVisibleS(False)
         else:
             self.as_setTimerVisibleS(True)
+
+    def __onReplayTimeWarpStart(self):
+        self.as_resetS()
+
+    def __onReplayPause(self, _):
+        self.as_setPlaybackSpeedS(BattleReplay.g_replayCtrl.playbackSpeed)
 
     def __updateTimeUntilNextDoubleShot(self, increaseByDebuff=False):
         timeValue = self.__currentTotalTimeTimer

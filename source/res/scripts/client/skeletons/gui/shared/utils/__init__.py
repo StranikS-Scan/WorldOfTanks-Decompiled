@@ -52,6 +52,10 @@ class IItemsRequester(requesters.IRequester):
     def sessionStats(self):
         raise NotImplementedError
 
+    @property
+    def anonymizer(self):
+        raise NotImplementedError
+
     def requestUserDossier(self, databaseID, callback):
         raise NotImplementedError
 

@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/customization/slots.py
+import logging
 from shared_utils import first
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from items.components.c11n_constants import ProjectionDecalDirectionTags, ProjectionDecalFormTags, ProjectionDecalPositionTags
+_logger = logging.getLogger(__name__)
 ANCHOR_TYPE_TO_SLOT_TYPE_MAP = {'inscription': GUI_ITEM_TYPE.INSCRIPTION,
  'player': GUI_ITEM_TYPE.EMBLEM,
  'paint': GUI_ITEM_TYPE.PAINT,
@@ -12,6 +14,11 @@ ANCHOR_TYPE_TO_SLOT_TYPE_MAP = {'inscription': GUI_ITEM_TYPE.INSCRIPTION,
  'effect': GUI_ITEM_TYPE.MODIFICATION}
 SLOT_ASPECT_RATIO = {GUI_ITEM_TYPE.EMBLEM: 1.0,
  GUI_ITEM_TYPE.INSCRIPTION: 0.5}
+FORMFACTOR_ASPECT_RATIO = {ProjectionDecalFormTags.SQUARE: 1.0,
+ ProjectionDecalFormTags.RECT1X2: 1.0 / 2,
+ ProjectionDecalFormTags.RECT1X3: 1.0 / 3,
+ ProjectionDecalFormTags.RECT1X4: 1.0 / 4,
+ ProjectionDecalFormTags.RECT1X6: 1.0 / 6}
 SLOT_TYPE_TO_ANCHOR_TYPE_MAP = {v:k for k, v in ANCHOR_TYPE_TO_SLOT_TYPE_MAP.iteritems()}
 SLOT_TYPES = tuple((slotType for slotType in SLOT_TYPE_TO_ANCHOR_TYPE_MAP))
 
@@ -164,3 +171,11 @@ class ProjectionDecalSlot(BaseCustomizationSlot):
 
     def isFitForFormfactor(self, formfactor):
         return formfactor in self.formfactors
+
+
+def getProgectionDecalAspect(slotDescriptor):
+    formfactor = first((tag for tag in slotDescriptor.tags if tag.startswith(ProjectionDecalFormTags.PREFIX)))
+    if formfactor not in FORMFACTOR_ASPECT_RATIO:
+        _logger.warning('Missing aspect ratio for forfactor: %s', formfactor)
+        return 1.0
+    return FORMFACTOR_ASPECT_RATIO[formfactor]

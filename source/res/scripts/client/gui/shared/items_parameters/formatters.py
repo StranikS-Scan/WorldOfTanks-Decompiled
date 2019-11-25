@@ -11,7 +11,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.items_parameters import RELATIVE_PARAMS
 from gui.shared.items_parameters.comparator import PARAM_STATE
 from gui.shared.items_parameters.params_helper import hasGroupPenalties, getCommonParam, PARAMS_GROUPS
-from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED
+from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME
 from items import vehicles, artefacts, getTypeOfCompactDescr, ITEM_TYPES
 from web_stubs import i18n
 MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
@@ -72,7 +72,9 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  WHEELED_SWITCH_ON_TIME: MENU.TANK_PARAMS_S,
  WHEELED_SWITCH_OFF_TIME: MENU.TANK_PARAMS_S,
  WHEELED_SWITCH_TIME: MENU.TANK_PARAMS_S,
- WHEELED_SPEED_MODE_SPEED: MENU.TANK_PARAMS_MPH}
+ WHEELED_SPEED_MODE_SPEED: MENU.TANK_PARAMS_MPH,
+ DUAL_GUN_CHARGE_TIME: MENU.TANK_PARAMS_S,
+ DUAL_GUN_RATE_TIME: MENU.TANK_PARAMS_S}
 COLORLESS_SCHEME = (text_styles.stats, text_styles.stats, text_styles.stats)
 NO_BONUS_SIMPLIFIED_SCHEME = (text_styles.warning, text_styles.warning, text_styles.warning)
 NO_BONUS_BASE_SCHEME = (text_styles.error, text_styles.stats, text_styles.stats)
@@ -95,10 +97,13 @@ ITEMS_PARAMS_LIST = {ITEM_TYPES.vehicleRadio: ('radioDistance', 'weight'),
  ITEM_TYPES.optionalDevice: ('weight',),
  ITEM_TYPES.vehicleGun: ('caliber',
                          'shellsCount',
+                         'reloadTimeSecs',
                          'shellReloadingTime',
                          'reloadMagazineTime',
                          AUTO_RELOAD_PROP_NAME,
                          'reloadTime',
+                         'rateTime',
+                         'chargeTime',
                          'avgPiercingPower',
                          'avgDamageList',
                          'stunMinDurationList',
@@ -209,7 +214,7 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'damage': _niceRangeFormat,
  'piercingPower': _niceRangeFormat,
  'reloadTime': _niceRangeFormat,
- 'reloadTimeSecs': _niceRangeFormat,
+ 'reloadTimeSecs': _niceListFormat,
  'turretRotationSpeed': _niceFormat,
  'turretYawLimits': _niceListFormat,
  'gunYawLimits': _niceListFormat,
@@ -269,7 +274,9 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  WHEELED_SWITCH_ON_TIME: _niceFormat,
  WHEELED_SWITCH_OFF_TIME: _niceFormat,
  WHEELED_SWITCH_TIME: _niceListFormat,
- WHEELED_SPEED_MODE_SPEED: _niceListFormat}
+ WHEELED_SPEED_MODE_SPEED: _niceListFormat,
+ DUAL_GUN_CHARGE_TIME: _niceListFormat,
+ DUAL_GUN_RATE_TIME: _niceFormat}
 
 def _deltaWrapper(fn):
 
@@ -294,7 +301,18 @@ def _getDeltaSettings():
 
 
 DELTA_PARAMS_SETTING = _getDeltaSettings()
-_SMART_ROUND_PARAMS = ('damage', 'piercingPower', 'bombDamage', 'shellsCount', 'shellReloadingTime', 'reloadMagazineTime', 'reloadTime', 'dispertionRadius', 'aimingTime', 'weight')
+_SMART_ROUND_PARAMS = ('damage',
+ 'piercingPower',
+ 'bombDamage',
+ 'shellsCount',
+ 'shellReloadingTime',
+ 'reloadMagazineTime',
+ 'reloadTime',
+ 'dispertionRadius',
+ 'aimingTime',
+ 'weight',
+ DUAL_GUN_RATE_TIME,
+ DUAL_GUN_CHARGE_TIME)
 _STATES_INDEX_IN_COLOR_MAP = {PARAM_STATE.WORSE: 0,
  PARAM_STATE.NORMAL: 1,
  PARAM_STATE.BETTER: 2}

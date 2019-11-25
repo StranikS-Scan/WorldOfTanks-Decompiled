@@ -2,6 +2,14 @@
 # Embedded file name: scripts/client/frameworks/wulf/py_object_binder.py
 
 
+def getProxy(object_):
+    return object_.proxy if object_ is not None else None
+
+
+def getObject(proxy):
+    return proxy.object if proxy is not None else None
+
+
 class PyObjectEntity(object):
     __slots__ = ('__cppObject',)
 

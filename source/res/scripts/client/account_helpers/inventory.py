@@ -482,7 +482,7 @@ class Inventory(object):
             return
         else:
             if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errStr=errorStr) if resultID < 0 else callback(resultID)
             else:
                 proxy = None
             arr = [shopRev]

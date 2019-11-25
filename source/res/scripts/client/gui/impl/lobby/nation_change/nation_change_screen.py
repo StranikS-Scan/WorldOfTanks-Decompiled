@@ -4,7 +4,7 @@ import SoundGroups
 import WWISE
 from CurrentVehicle import g_currentVehicle
 from account_helpers.AccountSettings import NATION_CHANGE_VIEWED, AccountSettings
-from frameworks.wulf import ViewFlags
+from frameworks.wulf import ViewFlags, ViewSettings
 from frameworks.wulf import ViewStatus
 from gui import SystemMessages
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -40,14 +40,17 @@ class NationChangeScreen(ViewImpl):
     _HANGAR_SOUND_FILTERED_STATE_OFF = 'STATE_hangar_filtered_off'
     __slots__ = ('__currentVehicle', '__targetVehicle', '__icons')
 
-    def __init__(self, viewKey, viewModelClazz=NationChangeScreenModel, ctx=None):
-        super(NationChangeScreen, self).__init__(viewKey, ViewFlags.WINDOW_VIEW, viewModelClazz)
+    def __init__(self, viewKey, ctx=None):
+        settings = ViewSettings(viewKey)
+        settings.flags = ViewFlags.WINDOW_VIEW
+        settings.model = NationChangeScreenModel()
+        super(NationChangeScreen, self).__init__(settings)
         vehicle = self.__itemsCache.items.getItemByCD(ctx.get('vehicleCD', None))
         if vehicle.activeInNationGroup:
             self.__currentVehicle = vehicle
-            self.__targetVehicle = self.__itemsCache.items.getItemByCD(iterVehTypeCDsInNationGroup(vehicle.intCompactDescr).next())
+            self.__targetVehicle = self.__itemsCache.items.getItemByCD(iterVehTypeCDsInNationGroup(vehicle.intCD).next())
         else:
-            self.__currentVehicle = self.__itemsCache.items.getItemByCD(iterVehTypeCDsInNationGroup(vehicle.intCompactDescr).next())
+            self.__currentVehicle = self.__itemsCache.items.getItemByCD(iterVehTypeCDsInNationGroup(vehicle.intCD).next())
             self.__targetVehicle = vehicle
         self.__icons = R.images.gui.maps.icons
         return

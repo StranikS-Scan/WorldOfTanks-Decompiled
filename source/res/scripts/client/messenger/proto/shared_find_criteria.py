@@ -89,20 +89,6 @@ class IgnoredFindCriteria(UserTagsFindCriteria):
             return
 
 
-class TemporaryIgnoredFindCriteria(UserTagsFindCriteria):
-
-    def __init__(self):
-        super(TemporaryIgnoredFindCriteria, self).__init__({USER_TAG.IGNORED_TMP}, onlineMode=None)
-        return
-
-    def setOnlineMode(self, onlineMode):
-        if onlineMode is None:
-            return super(TemporaryIgnoredFindCriteria, self).setOnlineMode(onlineMode)
-        else:
-            LOG_WARNING('Online mode for temporary ignored list will be skipped')
-            return
-
-
 class MutedFindCriteria(UserTagsFindCriteria):
 
     def __init__(self, onlineMode=None):

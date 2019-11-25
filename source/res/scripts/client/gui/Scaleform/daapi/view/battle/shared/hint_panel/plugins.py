@@ -504,7 +504,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
             vehicleType = vTypeDesc.type.id
             self.__vehicleId = makeIntCompactDescrByID('vehicle', vehicleType[0], vehicleType[1])
             self.__haveReqLevel = vTypeDesc.level >= _HINT_MIN_VEHICLE_LEVEL
-            if vTypeDesc.isWheeledVehicle:
+            if vTypeDesc.isWheeledVehicle or vTypeDesc.isDualgunVehicle:
                 self.__updateHintCounteronStart(self.__helpHintSettings, self.__vehicleId)
             if self.__canDisplayHelpHint(vTypeDesc):
                 self.__displayHint(CommandMapping.CMD_SHOW_HELP)
@@ -534,7 +534,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
         return
 
     def __canDisplayHelpHint(self, typeDescriptor):
-        return typeDescriptor.isWheeledVehicle and self.__isInDisplayPeriod and self._haveHintsLeft(self.__helpHintSettings[self.__vehicleId])
+        return (typeDescriptor.isWheeledVehicle or typeDescriptor.isDualgunVehicle) and self.__isInDisplayPeriod and self._haveHintsLeft(self.__helpHintSettings[self.__vehicleId])
 
     def __canDisplayQuestHint(self):
         return self.__isInDisplayPeriod and self._haveHintsLeft(self.__questHintSettings) and self.__haveReqLevel

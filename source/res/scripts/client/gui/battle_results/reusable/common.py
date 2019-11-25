@@ -22,7 +22,7 @@ class CommonInfo(shared.UnpackedInfo):
         if bots is not None:
             for info in bots.iteritems():
                 if len(info) > 1:
-                    botPlayerInfo = PlayerInfo(team=info[1][0], name=preprocessBotName(info[1][1]))
+                    botPlayerInfo = PlayerInfo(team=info[1][0], realName=preprocessBotName(info[1][1]))
                     self.__bots[info[0]] = botPlayerInfo
                 LOG_ERROR('Bot information can not be unpacked', info)
                 break

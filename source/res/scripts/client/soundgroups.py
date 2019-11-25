@@ -330,9 +330,6 @@ class SoundGroups(object):
         g_replayEvents.onMuteSound += self.__onReplayMute
         return
 
-    def __del__(self):
-        LOG_DEBUG('Deleted: %s' % self)
-
     def destroy(self):
         self.onVolumeChanged.clear()
         self.onMusicVolumeChanged.clear()
@@ -343,6 +340,7 @@ class SoundGroups(object):
             player.inputHandler.onCameraChanged -= self.__onCameraChanged
         self.onVolumeChanged.clear()
         Windowing.removeWindowAccessibilityHandler(self.__onWindowAccessibilityChanged)
+        LOG_DEBUG('Destroyed: %s' % self)
         return
 
     def startListeningGUISpaceChanges(self):
@@ -374,12 +372,20 @@ class SoundGroups(object):
             volume = 0.0 if not enable else self.__volumeByCategory[categoryName]
             self.setVolume(categoryName, volume, False)
 
+    def enableEverythingExceptGui(self, enable):
+        for categoryName in ('ambient', 'music', 'music_hangar', 'vehicles', 'effects', 'voice'):
+            enable = enable and not self.__muffledByReplay
+            volume = 0.0 if not enable else self.__volumeByCategory[categoryName]
+            self.setVolume(categoryName, volume, False)
+
     def enableVoiceSounds(self, enable):
         for categoryName in ('gui',):
             volume = 0.0 if not enable else self.__volumeByCategory[categoryName]
             self.setVolume(categoryName, volume, False)
 
     def __onReplayMute(self, mute):
+        if self.__muffledByReplay is mute:
+            return
         self.__muffledByReplay = mute
         for categoryName in ('vehicles', 'effects', 'ambient', 'gui'):
             volume = 0.0 if mute else self.__volumeByCategory[categoryName]

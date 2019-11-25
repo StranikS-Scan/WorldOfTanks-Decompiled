@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/premacc/dashboard/prem_dashboard_piggy_bank_card.py
 import logging
 from constants import PremiumConfigs
-from frameworks.wulf import ViewFlags
+from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.premacc.dashboard.prem_dashboard_piggy_bank_card_model import PremDashboardPiggyBankCardModel
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
@@ -12,8 +12,10 @@ _logger = logging.getLogger(__name__)
 
 class PremDashboardPiggyBankCard(PiggyBankBaseView):
 
-    def __init__(self, *args, **kwargs):
-        super(PremDashboardPiggyBankCard, self).__init__(R.views.lobby.premacc.dashboard.prem_dashboard_piggy_bank_card.PremDashboardPiggyBankCard(), ViewFlags.VIEW, PremDashboardPiggyBankCardModel)
+    def __init__(self, layoutID=R.views.lobby.premacc.dashboard.prem_dashboard_piggy_bank_card.PremDashboardPiggyBankCard()):
+        settings = ViewSettings(layoutID)
+        settings.model = PremDashboardPiggyBankCardModel()
+        super(PremDashboardPiggyBankCard, self).__init__(settings)
 
     def onGoToPiggyView(self, args=None):
         if self._config.get('enabled', False):

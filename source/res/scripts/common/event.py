@@ -3,6 +3,7 @@
 from debug_utils import LOG_CURRENT_EXCEPTION
 
 class Event(object):
+    __slots__ = ('_delegates', '__weakref__')
 
     def __init__(self, manager=None):
         self._delegates = []
@@ -38,6 +39,7 @@ class Event(object):
 
 
 class SafeEvent(Event):
+    __slots__ = ()
 
     def __init__(self, manager=None):
         super(SafeEvent, self).__init__(manager)
@@ -51,6 +53,7 @@ class SafeEvent(Event):
 
 
 class Handler(object):
+    __slots__ = ('__delegate',)
 
     def __init__(self, manager=None):
         self.__delegate = None
@@ -70,6 +73,7 @@ class Handler(object):
 
 
 class EventManager(object):
+    __slots__ = ('__events',)
 
     def __init__(self):
         self.__events = []
@@ -83,6 +87,7 @@ class EventManager(object):
 
 
 class SuspendedEvent(Event):
+    __slots__ = ('__manager',)
 
     def __init__(self, manager):
         super(SuspendedEvent, self).__init__(manager)
@@ -101,6 +106,7 @@ class SuspendedEvent(Event):
 
 
 class SuspendedEventManager(EventManager):
+    __slots__ = ('__isSuspended', '__suspendedEvents')
 
     def __init__(self):
         super(SuspendedEventManager, self).__init__()

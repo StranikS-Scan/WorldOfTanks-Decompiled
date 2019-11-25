@@ -14,4 +14,5 @@ def getTooltipBuilders():
      DataBuilder(TOOLTIPS_CONSTANTS.SETTINGS_KEY_TURN_BACK, TOOLTIPS_CONSTANTS.SETTINGS_KEY_TURN_BACK_UI, common.SettingsKeyTurnBack(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.SETTINGS_KEY_NEED_HELP, TOOLTIPS_CONSTANTS.SETTINGS_KEY_NEED_HELP_UI, common.SettingsKeyNeedHelp(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.SETTINGS_KEY_RELOAD, TOOLTIPS_CONSTANTS.SETTINGS_KEY_RELOAD_UI, common.SettingsKeyReload(contexts.ToolTipContext(None))),
-     DataBuilder(TOOLTIPS_CONSTANTS.SETTINGS_KEY_SWITCH_MODE, TOOLTIPS_CONSTANTS.SETTINGS_KEY_SWITCH_MODE_UI, common.SettingKeySwitchMode(contexts.ToolTipContext(None))))
+     DataBuilder(TOOLTIPS_CONSTANTS.SETTINGS_KEY_SWITCH_MODE, TOOLTIPS_CONSTANTS.SETTINGS_KEY_SWITCH_MODE_UI, common.SettingKeySwitchMode(contexts.ToolTipContext(None))),
+     DataBuilder(TOOLTIPS_CONSTANTS.SETTINGS_KEY_CHARGE_FIRE, TOOLTIPS_CONSTANTS.SETTINGS_KEY_CHARGE_FIRE_UI, common.SettingsKeyChargeFire(contexts.ToolTipContext(None))))

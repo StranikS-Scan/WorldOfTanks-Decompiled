@@ -5,6 +5,9 @@ from frameworks.wulf import ViewModel
 class MarathonRewardViewModel(ViewModel):
     __slots__ = ('onGoToVehicleBtnClick', 'onViewRewardsBtnClick', 'onCloseBtnClick', 'onVideoStarted', 'onVideoStopped')
 
+    def __init__(self, properties=6, commands=5):
+        super(MarathonRewardViewModel, self).__init__(properties=properties, commands=commands)
+
     def getIsGoToVehicleBtnEnabled(self):
         return self._getBool(0)
 

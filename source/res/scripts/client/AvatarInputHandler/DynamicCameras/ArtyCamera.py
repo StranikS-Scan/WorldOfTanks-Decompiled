@@ -85,6 +85,7 @@ class ArtyCamera(ICamera, CallbackDelayer):
         self.__desiredCamDist = 0.0
         self.__aimingSystem = None
         self.__prevTime = 0.0
+        self.__prevAimPoint = Vector3()
         self.__dxdydz = Vector3(0.0, 0.0, 0.0)
         self.__autoUpdatePosition = False
         self.__needReset = 0
@@ -136,7 +137,7 @@ class ArtyCamera(ICamera, CallbackDelayer):
         BigWorld.player().positionControl.followCamera(False)
         self.__rotation = 0.0
         self.__cameraUpdate()
-        self.delayCallback(0.0, self.__cameraUpdate)
+        self.delayCallback(0.01, self.__cameraUpdate)
         self.__needReset = 1
 
     def disable(self):
@@ -355,7 +356,9 @@ class ArtyCamera(ICamera, CallbackDelayer):
         self.__cam.source = self.__sourceMatrix
         self.__cam.target.b = self.__targetMatrix
         self.__cam.pivotPosition = Vector3(0, 0, 0)
-        BigWorld.player().positionControl.moveTo(aimPoint)
+        if aimPoint.distSqrTo(self.__prevAimPoint) > 0.010000000000000002:
+            BigWorld.player().positionControl.moveTo(aimPoint)
+            self.__prevAimPoint = aimPoint
         self.__updateOscillator(deltaTime)
         self.__aimingSystem.update(deltaTime)
         if not self.__autoUpdatePosition:

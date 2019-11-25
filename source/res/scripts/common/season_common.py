@@ -54,16 +54,15 @@ class GameSeason(object):
             cycleID = self.getCycleID()
         return self.getAllCycles().get(cycleID, None) if cycleID is not None else None
 
-    def getNextCycleInfo(self, cycleID=None):
+    def getNextCycleInfo(self, now, cycleID=None):
         if cycleID is None:
-            cycleID = self.getCycleID()
-        if cycleID is not None:
-            cycles = self.getAllCycles()
-            if cycleID in cycles:
-                currentCycleOrdinalNumber = cycles[cycleID].ordinalNumber
-                for cycle in sorted(cycles.values(), key=lambda c: c.ordinalNumber):
-                    if cycle.ordinalNumber > currentCycleOrdinalNumber:
-                        return cycle
+            cycleID = self.getCycleID() or self.getLastActiveCycleID(now)
+        cycles = self.getAllCycles()
+        if cycleID and cycleID in cycles:
+            currentCycleOrdinalNumber = cycles[cycleID].ordinalNumber
+            for cycle in sorted(cycles.values(), key=lambda c: c.ordinalNumber):
+                if cycle.ordinalNumber > currentCycleOrdinalNumber:
+                    return cycle
 
         return
 
@@ -91,6 +90,10 @@ class GameSeason(object):
                     lastCycle = cycle
 
             return lastCycle
+
+    def getLastActiveCycleID(self, now):
+        cycleInfo = self.getLastActiveCycleInfo(now)
+        return cycleInfo.ID if cycleInfo else None
 
     def getCycleStartDate(self):
         return self.__cycleStartDate

@@ -100,3 +100,8 @@ def dualGunPreCharge():
 
 def controlModeChange(mode):
     g_eventBus.handleEvent(GameEvent(GameEvent.CONTROL_MODE_CHANGE, {'mode': mode}), scope=_SCOPE)
+
+
+def sniperCameraTransition(transitionTime, currentGunIndex):
+    g_eventBus.handleEvent(GameEvent(GameEvent.SNIPER_CAMERA_TRANSITION, {'transitionTime': transitionTime,
+     'currentGunIndex': currentGunIndex}), scope=_SCOPE)

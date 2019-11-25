@@ -11,9 +11,9 @@ from gui.Scaleform.daapi.view.meta.InventoryMeta import InventoryMeta
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
 from gui.shared import event_dispatcher as shared_event_dispatcher
+from gui.shared.gui_items import GUI_ITEM_TYPE_INDICES, GUI_ITEM_TYPE
 from gui.shared.utils import flashObject2Dict
 from adisp import process
-from items import ITEM_TYPE_INDICES
 from items import vehicles
 _INVENTORY_TABS = {STORE_CONSTANTS.SHELL: inventory.InventoryShellTab,
  STORE_CONSTANTS.MODULE: inventory.InventoryModuleTab,
@@ -28,8 +28,10 @@ class Inventory(InventoryMeta):
     def sellItem(self, itemCD):
         dataCompactId = int(itemCD)
         item = self.itemsCache.items.getItemByCD(dataCompactId)
-        if ITEM_TYPE_INDICES[item.itemTypeName] == vehicles._VEHICLE:
+        if GUI_ITEM_TYPE_INDICES[item.itemTypeName] == vehicles._VEHICLE:
             shared_event_dispatcher.showVehicleSellDialog(int(item.invID))
+        elif item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER:
+            shared_event_dispatcher.showBattleBoosterSellDialog(dataCompactId)
         else:
             self.__sellItem(item.intCD)
 

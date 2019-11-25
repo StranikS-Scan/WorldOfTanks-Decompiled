@@ -1873,7 +1873,7 @@ class VehicleList(object):
         return
 
     def getList(self, nationID):
-        return self.__nations[nationID]
+        return self.__nations[nationID] if nationID < len(self.__nations) else None
 
     def getCategories(self, nationID=None, vehClass=None, level=None, excluded=()):
         result = copy.copy(self.__categories)
@@ -1892,6 +1892,10 @@ class VehicleList(object):
 
     def isVehicleExisting(self, name):
         return name in self.__ids
+
+    def isVehicleExistingByType(self, nationID, vehicleTypeID):
+        nation = self.getList(nationID)
+        return nation is not None and nation.get(vehicleTypeID) is not None
 
     def isVehicleExistingByCD(self, vehTypeCompDescr):
         itemTypeID, nationID, innationID = parseIntCompactDescr(vehTypeCompDescr)
@@ -4798,7 +4802,7 @@ def _readGunDualGunParams(xmlCtx, section):
     if subSection is None:
         return
     else:
-        res = component_constants.DualGun(chargeTime=_xml.readNonNegativeFloat(xmlCtx, subSection, 'chargeTime'), shootImpulse=_xml.readNonNegativeInt(xmlCtx, subSection, 'shootImpulse'), reloadLockTime=_xml.readNonNegativeFloat(xmlCtx, subSection, 'reloadLockTime'), reloadTimes=_xml.readTupleOfPositiveFloats(xmlCtx, subSection, 'reloadTimes'), rateTime=_xml.readNonNegativeFloat(xmlCtx, subSection, 'rateTime'), chargeThreshold=_xml.readNonNegativeFloat(xmlCtx, subSection, 'chargeThreshold'), afterShotDelay=_xml.readNonNegativeFloat(xmlCtx, subSection, 'afterShotDelay'), preChargeIndication=_xml.readNonNegativeFloat(xmlCtx, subSection, 'preChargeIndication'))
+        res = component_constants.DualGun(chargeTime=_xml.readNonNegativeFloat(xmlCtx, subSection, 'chargeTime'), shootImpulse=_xml.readNonNegativeInt(xmlCtx, subSection, 'shootImpulse'), reloadLockTime=_xml.readNonNegativeFloat(xmlCtx, subSection, 'reloadLockTime'), reloadTimes=_xml.readTupleOfPositiveFloats(xmlCtx, subSection, 'reloadTimes'), rateTime=_xml.readNonNegativeFloat(xmlCtx, subSection, 'rateTime'), chargeThreshold=_xml.readNonNegativeFloat(xmlCtx, subSection, 'chargeThreshold'), afterShotDelay=_xml.readNonNegativeFloat(xmlCtx, subSection, 'afterShotDelay'), preChargeIndication=_xml.readNonNegativeFloat(xmlCtx, subSection, 'preChargeIndication'), chargeCancelTime=_xml.readNonNegativeFloat(xmlCtx, subSection, 'chargeCancelTime'))
         return res
 
 

@@ -51,14 +51,17 @@ def __mergeItems(total, key, value, isLeaf=False, count=1, *args):
         items[itemCompDescr] = items.get(itemCompDescr, 0) + count * itemCount
 
 
-def __mergeVehicles(total, key, value, isLeaf=False, *args):
-    vehs = total.setdefault(key, [])
-    vehs.extend(value if isinstance(value, list) else [value])
+def __mergeList(total, key, value, count):
+    items = total.setdefault(key, [])
+    items.extend((value if isinstance(value, list) else [value]) * count)
 
 
-def __mergeTankmen(total, key, value, isLeaf=False, *args):
-    tman = total.setdefault(key, [])
-    tman.extend(value if isinstance(value, list) else [value])
+def __mergeVehicles(total, key, value, isLeaf, count, *args):
+    __mergeList(total, key, value, count)
+
+
+def __mergeTankmen(total, key, value, isLeaf, count, *args):
+    __mergeList(total, key, value, count)
 
 
 def __mergeCustomizations(total, key, value, isLeaf, count, vehTypeCompDescr):
@@ -67,12 +70,12 @@ def __mergeCustomizations(total, key, value, isLeaf, count, vehTypeCompDescr):
         if 'boundToCurrentVehicle' in subvalue:
             subvalue = copy.deepcopy(subvalue)
             subvalue['vehTypeCompDescr'] = vehTypeCompDescr
+        subvalue['value'] *= count
         customizations.append(subvalue)
 
 
-def __mergeCrewSkins(total, key, value, isLeaf=False, *args):
-    skins = total.setdefault(key, [])
-    skins.extend(value if isinstance(value, list) else [value])
+def __mergeCrewSkins(total, key, value, isLeaf, count, *args):
+    __mergeList(total, key, value, count)
 
 
 def __mergeTokens(total, key, value, isLeaf=False, count=1, *args):

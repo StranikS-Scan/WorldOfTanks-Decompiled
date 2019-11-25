@@ -53,8 +53,7 @@ class HeaderBlockConstructor(BattleBoosterTooltipBlockConstructor):
     def _getOverlayAndHighlight(self):
         module = self.module
         if module.isCrewBooster():
-            currentVehicle = self.configuration.vehicle
-            isLearnt = currentVehicle is None or module.isAffectedSkillLearnt(self.configuration.vehicle)
+            isLearnt = module.isAffectedSkillLearnt(self.configuration.vehicle)
             overlayPath = RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_BATTLEBOOSTER_OVERLAY if isLearnt else RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_BATTLEBOOSTERREPLACE_OVERLAY
         else:
             overlayPath = RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_BATTLEBOOSTER_OVERLAY

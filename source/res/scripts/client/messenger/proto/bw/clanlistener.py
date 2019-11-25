@@ -6,7 +6,7 @@ from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.shared.utils import getPlayerDatabaseID
 from messenger.m_constants import USER_TAG, GAME_ONLINE_STATUS
 from messenger.proto.bw.find_criteria import BWClanChannelFindCriteria
-from messenger.proto.entities import CurrentUserEntity, SharedUserEntity, ClanInfo
+from messenger.proto.entities import CurrentLobbyUserEntity, SharedUserEntity, ClanInfo
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
 
@@ -114,7 +114,7 @@ class ClanListener(object):
             else:
                 gos = GAME_ONLINE_STATUS.ONLINE
             if playerID == dbID:
-                user = CurrentUserEntity(dbID, name=name, clanInfo=ClanInfo(0, clanAbbrev, roleFlags))
+                user = CurrentLobbyUserEntity(dbID, name=name, clanInfo=ClanInfo(0, clanAbbrev, roleFlags))
             else:
                 user = SharedUserEntity(dbID, name=name, clanInfo=ClanInfo(0, clanAbbrev, roleFlags), gos=gos, tags={USER_TAG.CLAN_MEMBER})
             members.append(user)

@@ -15,6 +15,9 @@ class ProgressiveRewardStepModel(ViewModel):
     PR_TYPE_SMALL_HIDDEN = 'small_hidden'
     PR_TYPE_BIG_HIDDEN = 'big_hidden'
 
+    def __init__(self, properties=3, commands=0):
+        super(ProgressiveRewardStepModel, self).__init__(properties=properties, commands=commands)
+
     def getStepState(self):
         return self._getString(0)
 

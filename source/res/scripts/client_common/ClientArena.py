@@ -274,8 +274,7 @@ class ClientArena(object):
         self.__vehicleIndexToId = dict(zip(range(len(vehs)), sorted(vehs.keys())))
 
     def __vehicleInfoAsDict(self, info):
-        getVehicleType = lambda cd: None if cd is None else vehicles.VehicleDescr(compactDescr=cd)
-        infoAsDict = {'vehicleType': getVehicleType(info[1]),
+        infoAsDict = {'vehicleType': self.__getVehicleType(info[1]),
          'name': info[2],
          'team': info[3],
          'isAlive': info[4],
@@ -284,7 +283,7 @@ class ClientArena(object):
          'accountDBID': info[7],
          'clanAbbrev': info[8],
          'clanDBID': info[9],
-         'prebattleID': info[10],
+         'prebattleID': int(info[10]),
          'isPrebattleCreator': bool(info[11]),
          'forbidInBattleInvitations': bool(info[12]),
          'events': info[13],
@@ -292,15 +291,21 @@ class ClientArena(object):
          'personalMissionIDs': info[15],
          'personalMissionInfo': info[16],
          'ranked': info[17],
-         'outfitCD': info[18]}
+         'outfitCD': info[18],
+         'avatarSessionID': info[19],
+         'wtr': int(info[20]),
+         'fakeName': info[21]}
         return (info[0], infoAsDict)
+
+    def __getVehicleType(self, intCD):
+        return None if intCD is None else vehicles.VehicleDescr(compactDescr=intCD)
 
     def __vehicleStatisticsAsDict(self, stats):
         return (stats[0], {'frags': stats[1]})
 
     @staticmethod
     def __preprocessVehicleInfo(info):
-        if IS_CLIENT and info['accountDBID'] <= 0:
+        if IS_CLIENT and not info['avatarSessionID']:
             info['name'] = preprocessBotName(info['name'])
         return info
 
@@ -387,7 +392,7 @@ class Plane(object):
             return None
         else:
             t = (self.d - self.n.dot(a)) / normalDotDir
-            return a + ab.scale(t) if t >= 0.0 and t <= 1.0 else None
+            return a + ab.scale(t) if 0.0 <= t <= 1.0 else None
 
     def testPoint(self, point):
         return True if self.n.dot(point) - self.d >= 0.0 else False

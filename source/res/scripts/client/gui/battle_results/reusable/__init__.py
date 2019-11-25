@@ -225,7 +225,8 @@ class _ReusableInfo(object):
             playerInfo = self.__players.getPlayerInfo(accountDBID)
         else:
             botInfo = self.__common.getBotInfo(vehicleID)
-            playerInfo = self.__players.makePlayerInfo(0, botInfo.name if botInfo else '')
+            botName = botInfo.realName if botInfo else ''
+            playerInfo = self.__players.makePlayerInfo(realName=botName, fakeName=botName)
         return playerInfo
 
     def wasInBattle(self, dbID=0):
@@ -258,7 +259,8 @@ class _ReusableInfo(object):
                     playerInfo = weakref.proxy(getPlayerInfo(vehicleInfo.accountDBID))
                 else:
                     botInfo = getBotInfo(vehicleID)
-                    playerInfo = makePlayerInfo(name=botInfo.name if botInfo else '')
+                    botName = botInfo.realName if botInfo else ''
+                    playerInfo = makePlayerInfo(realName=botName, fakeName=botName)
                 sortable = VehicleDetailedInfo.makeForEnemy(vehicleID, getItemByCD(intCD), playerInfo, data, vehicleInfo.deathReason, vehicleInfo.isTeamKiller)
                 if not sortable.haveInteractionDetails():
                     continue

@@ -5,6 +5,9 @@ from frameworks.wulf import ViewModel
 class PremDashboardHeaderReserveModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=4, commands=0):
+        super(PremDashboardHeaderReserveModel, self).__init__(properties=properties, commands=commands)
+
     def getId(self):
         return self._getNumber(0)
 

@@ -104,8 +104,8 @@ _NOT_FULL_AMMO_MULTIPLIER = 0.2
 _MAX_RENT_MULTIPLIER = 2
 RentPackagesInfo = namedtuple('RentPackagesInfo', ('hasAvailableRentPackages', 'mainRentType', 'seasonType'))
 
-class Vehicle(FittingItem, HasStrCD):
-    __slots__ = ('__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_rentPackagesInfo', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_tradeInAvailable', '_tradeOffAvailable', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_optDevices', '_shells', '_equipment', '_equipmentLayout', '_bonuses', '_crewIndices', '_slotsIds', '_crew', '_lastCrew', '_hasModulesToSelect', '_customOutfits', '_styledOutfits', '_slotsAnchors', '_hasNationGroup', '_extraSettings')
+class Vehicle(FittingItem):
+    __slots__ = ('__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_rentPackagesInfo', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_tradeInAvailable', '_tradeOffAvailable', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_optDevices', '_shells', '_equipment', '_equipmentLayout', '_bonuses', '_crewIndices', '_slotsIds', '_crew', '_lastCrew', '_hasModulesToSelect', '_customOutfits', '_styledOutfits', '_slotsAnchors', '_unlockedBy', '_maxRentDuration', '_minRentDuration', '_slotsAnchorsById', '_hasNationGroup', '_extraSettings')
 
     class VEHICLE_STATE(object):
         DAMAGED = 'damaged'
@@ -169,8 +169,7 @@ class Vehicle(FittingItem, HasStrCD):
         else:
             _, nID, innID = vehicles.parseIntCompactDescr(typeCompDescr)
             vehDescr = vehicles.VehicleDescr(typeID=(nID, innID))
-        HasStrCD.__init__(self, strCompactDescr)
-        FittingItem.__init__(self, vehDescr.type.compactDescr, proxy)
+        super(Vehicle, self).__init__(vehDescr.type.compactDescr, proxy, strCD=HasStrCD(strCompactDescr))
         self._descriptor = vehDescr
         self._inventoryID = inventoryID
         self._xp = 0

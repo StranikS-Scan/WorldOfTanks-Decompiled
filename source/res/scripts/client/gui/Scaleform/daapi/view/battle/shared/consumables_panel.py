@@ -24,7 +24,9 @@ from gui.shared.events import GameEvent
 from gui.shared.utils.key_mapping import getScaleformKey
 from helpers import dependency
 from helpers import i18n
+from helpers.CallbackDelayer import CallbackDelayer
 from shared_utils import forEach
+from items.artefacts import SharedCooldownConsumableConfigReader
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 AMMO_ICON_PATH = '../maps/icons/ammopanel/battle_ammo/%s'
@@ -90,7 +92,7 @@ class _PythonReloadTicker(PythonTimer):
         self._viewObject.as_setCoolDownPosAsPercentS(self.__index, 100.0)
 
 
-class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
+class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelayer):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
@@ -105,6 +107,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             self.__reloadTicker = _PythonReloadTicker(self)
         else:
             self.__reloadTicker = None
+        self.delayedReload = None
         return
 
     def onClickedToSlot(self, bwKey):
@@ -167,6 +170,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             ammoCtrl.onCurrentShellChanged += self.__onCurrentShellChanged
             ammoCtrl.onGunReloadTimeSet += self.__onGunReloadTimeSet
             ammoCtrl.onGunSettingsSet += self.__onGunSettingsSet
+            ammoCtrl.onDebuffStarted += self.__onDebuffStarted
         eqCtrl = self.sessionProvider.shared.equipments
         if eqCtrl is not None:
             self.__fillEquipments(eqCtrl)
@@ -199,6 +203,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             ammoCtrl.onCurrentShellChanged -= self.__onCurrentShellChanged
             ammoCtrl.onGunReloadTimeSet -= self.__onGunReloadTimeSet
             ammoCtrl.onGunSettingsSet -= self.__onGunSettingsSet
+            ammoCtrl.onDebuffStarted -= self.__onDebuffStarted
         eqCtrl = self.sessionProvider.shared.equipments
         if eqCtrl is not None:
             eqCtrl.onEquipmentAdded -= self.__onEquipmentAdded
@@ -382,15 +387,35 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
         else:
             LOG_ERROR('Ammo is not found in panel', intCD, self.__cds)
 
-    def __onGunReloadTimeSet(self, currShellCD, state):
-        if currShellCD in self.__cds:
-            index = self.__cds.index(currShellCD)
-            if self.__reloadTicker:
-                self.__reloadTicker.startAnimation(index, state.getActualValue(), state.getBaseValue())
-            else:
-                self.as_setCoolDownTimeS(index, state.getActualValue(), state.getBaseValue(), state.getTimePassed(), not state.isReloadingFinished())
+    def __onDebuffStarted(self, debuffTime=None):
+        self.delayedReload = debuffTime
+
+    def __startReloadDelayed(self, shellIndex, state):
+        leftTimeDelayed = state.getActualValue() - self.delayedReload
+        baseTimeDelayed = state.getBaseValue() - self.delayedReload
+        if leftTimeDelayed > 0 and baseTimeDelayed > 0:
+            self.as_setCoolDownTimeS(shellIndex, leftTimeDelayed, baseTimeDelayed, 0, not state.isReloadingFinished())
         else:
+            LOG_ERROR('Incorrect delayed reload timings', leftTimeDelayed, baseTimeDelayed)
+        self.delayedReload = None
+        return
+
+    def __startReload(self, shellIndex, state):
+        if self.__reloadTicker:
+            self.__reloadTicker.startAnimation(shellIndex, state.getActualValue(), state.getBaseValue())
+        else:
+            self.as_setCoolDownTimeS(shellIndex, state.getActualValue(), state.getBaseValue(), state.getTimePassed(), not state.isReloadingFinished())
+
+    def __onGunReloadTimeSet(self, currShellCD, state):
+        if currShellCD not in self.__cds:
             LOG_ERROR('Ammo is not found in panel', currShellCD, self.__cds)
+            return
+        shellIndex = self.__cds.index(currShellCD)
+        if self.delayedReload > 0:
+            self.delayCallback(self.delayedReload, self.__startReloadDelayed, shellIndex, state)
+            self.as_setCoolDownPosAsPercentS(shellIndex, 0)
+        else:
+            self.__startReload(shellIndex, state)
 
     def __onGunSettingsSet(self, _):
         self.__reset()
@@ -454,7 +479,11 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
         body = descriptor.description
         if item.getTotalTime() > 0:
             tooltipStr = INGAME_GUI.CONSUMABLES_PANEL_EQUIPMENT_COOLDOWNSECONDS
-            cooldownSeconds = str(int(descriptor.cooldownSeconds))
+            if isinstance(descriptor, SharedCooldownConsumableConfigReader):
+                cdSecVal = descriptor.cooldownTime
+            else:
+                cdSecVal = descriptor.cooldownSeconds
+            cooldownSeconds = str(int(cdSecVal))
             paramsString = i18n.makeString(tooltipStr, cooldownSeconds=cooldownSeconds)
             body = body + '\n\n' + paramsString
         toolTip = TOOLTIP_FORMAT.format(descriptor.userString, body)
@@ -500,6 +529,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
         self.__mask = 0
         self.__keys.clear()
         self.__currentActivatedSlotIdx = -1
+        self.delayedReload = None
         self.as_resetS()
         return
 

@@ -1146,7 +1146,7 @@ class PersonalMission(ServerEventAbstract):
         else:
             self.__pqProgress = PersonalMissionsProgressRequester.PersonalMissionProgress(state=pqState, flags=PM_FLAG.NONE, selected=(), unlocked=0, pawned=False)
 
-    def getBonuses(self, bonusName=None, isMain=None, returnAwardList=False, isDelayed=False, ctx=None):
+    def getBonuses(self, bonusName=None, filterFunc=None, isMain=None, returnAwardList=False, isDelayed=False, ctx=None):
         if isMain is None:
             data = (self.__pmType.mainQuestInfo, self.__pmType.addQuestInfo)
         elif isMain:
@@ -1163,6 +1163,8 @@ class PersonalMission(ServerEventAbstract):
                 bonuses = d.get('bonus', {}).iteritems()
             for n, v in bonuses:
                 if bonusName is not None and n != bonusName:
+                    continue
+                if filterFunc is not None and not filterFunc(n, v):
                     continue
                 result.extend(getBonuses(self, n, v, ctx=ctx))
 

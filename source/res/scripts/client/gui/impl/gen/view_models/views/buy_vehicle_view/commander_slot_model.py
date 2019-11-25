@@ -6,6 +6,9 @@ from gui.impl.gen.view_models.ui_kit.list_model import ListModel
 class CommanderSlotModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=10, commands=0):
+        super(CommanderSlotModel, self).__init__(properties=properties, commands=commands)
+
     @property
     def actionPrice(self):
         return self._getViewModel(0)

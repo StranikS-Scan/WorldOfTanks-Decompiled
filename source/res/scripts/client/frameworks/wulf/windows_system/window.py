@@ -3,20 +3,12 @@
 import typing
 import Event
 from soft_exception import SoftException
-from ..py_object_binder import PyObjectEntity
+from ..py_object_binder import PyObjectEntity, getProxy, getObject
 from ..py_object_wrappers import PyObjectWindowSettings
 from ..py_object_wrappers import PyObjectWindow
 from ..view.view import View
 from ..view.view_model import ViewModel
 from ..gui_constants import WindowStatus, WindowFlags, ViewStatus
-
-def _getProxy(object_):
-    return object_.proxy if object_ is not None else None
-
-
-def _getObject(proxy):
-    return proxy.object if proxy is not None else None
-
 
 class WindowSettings(object):
     __slots__ = ('__proxy',)
@@ -59,35 +51,35 @@ class WindowSettings(object):
 
     @property
     def decorator(self):
-        return _getObject(self.__proxy.decorator)
+        return getObject(self.__proxy.decorator)
 
     @decorator.setter
     def decorator(self, decorator):
         if decorator is not None and not isinstance(decorator, View):
             raise SoftException('Decorator should be View class or extends it')
-        self.__proxy.decorator = _getProxy(decorator)
+        self.__proxy.decorator = getProxy(decorator)
         return
 
     @property
     def content(self):
-        return _getObject(self.__proxy.content)
+        return getObject(self.__proxy.content)
 
     @content.setter
     def content(self, content):
         if content is not None and not isinstance(content, View):
             raise SoftException('Content should be View class or extends it')
-        self.__proxy.content = _getProxy(content)
+        self.__proxy.content = getProxy(content)
         return
 
     @property
     def parent(self):
-        return _getObject(self.__proxy.parent)
+        return getObject(self.__proxy.parent)
 
     @parent.setter
     def parent(self, parent):
         if parent is not None and not isinstance(parent, Window):
             raise SoftException('Content should be Window class or extends it')
-        self.__proxy.parent = _getProxy(parent)
+        self.__proxy.parent = getProxy(parent)
         return
 
 
@@ -151,12 +143,12 @@ class Window(PyObjectEntity):
 
     def setDecorator(self, decorator):
         self.__detachFromDecorator()
-        self.proxy.setDecorator(_getProxy(decorator))
+        self.proxy.setDecorator(getProxy(decorator))
         self.__attachToDecorator()
 
     def setContent(self, content):
         self.__detachFromContent()
-        self.proxy.setContent(_getProxy(content))
+        self.proxy.setContent(getProxy(content))
         self.__attachToContent()
 
     def load(self):

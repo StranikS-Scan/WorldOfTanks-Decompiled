@@ -7,22 +7,22 @@ from gui.battle_control.requests.settings import AVATAR_REQUEST_TYPE
 from gui.shared.utils.decorators import ReprInjector
 from gui.shared.utils.requesters import RequestCtx
 
-@ReprInjector.withParent(('getDatabaseIDs', 'ids'), ('getComment', 'comment'))
+@ReprInjector.withParent(('getPlayerIDs', 'ids'), ('getComment', 'comment'))
 class SendInvitesCtx(RequestCtx):
 
-    def __init__(self, databaseIDs, comment='', waitingID=''):
+    def __init__(self, playerIDs, comment='', waitingID=''):
         super(SendInvitesCtx, self).__init__(waitingID=waitingID)
-        self.__databaseIDs = databaseIDs[:300]
+        self.__playerIDs = playerIDs[:300]
         if comment:
             self.__comment = truncate_utf8(comment, prb_settings.INVITE_COMMENT_MAX_LENGTH)
         else:
             self.__comment = ''
 
     def __repr__(self):
-        return 'SendInvitesCtx(databaseIDs = {0!r:s}, comment = {1:>s})'.format(self.__databaseIDs, self.__comment)
+        return 'SendInvitesCtx(playerIDs = {0!r:s}, comment = {1:>s})'.format(self.__playerIDs, self.__comment)
 
-    def getDatabaseIDs(self):
-        return self.__databaseIDs[:]
+    def getPlayerIDs(self):
+        return self.__playerIDs[:]
 
     def getComment(self):
         return self.__comment

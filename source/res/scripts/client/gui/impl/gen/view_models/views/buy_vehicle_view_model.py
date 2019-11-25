@@ -9,6 +9,9 @@ from gui.impl.gen.view_models.views.buy_vehicle_view.vehicle_congratulation_mode
 class BuyVehicleViewModel(ViewModel):
     __slots__ = ('onCloseBtnClick', 'onBuyBtnClick', 'onInHangarClick', 'onBackClick', 'onCommanderLvlChange', 'onCheckboxWithoutCrewChanged')
 
+    def __init__(self, properties=22, commands=6):
+        super(BuyVehicleViewModel, self).__init__(properties=properties, commands=commands)
+
     @property
     def commanderLvlCards(self):
         return self._getViewModel(0)

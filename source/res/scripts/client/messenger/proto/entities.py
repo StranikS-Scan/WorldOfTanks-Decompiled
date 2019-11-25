@@ -4,10 +4,11 @@ from collections import deque
 from helpers import dependency, i18n
 from ids_generators import SequenceIDGenerator
 from gui.shared.utils.decorators import ReprInjector
-from messenger.m_constants import USER_GUI_TYPE, MESSAGES_HISTORY_MAX_LEN, MESSENGER_COMMAND_TYPE, USER_TAG, USER_DEFAULT_NAME_PREFIX, GAME_ONLINE_STATUS, PRIMARY_CHANNEL_ORDER
+from messenger.m_constants import USER_GUI_TYPE, MESSAGES_HISTORY_MAX_LEN, MESSENGER_COMMAND_TYPE, USER_TAG, USER_DEFAULT_NAME_PREFIX, GAME_ONLINE_STATUS, PRIMARY_CHANNEL_ORDER, UserEntityScope
 from messenger.proto.events import ChannelEvents, MemberEvents
 from messenger.storage import storage_getter
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.battle_session import IBattleSessionProvider
 _g_namesGenerator = None
 
 def _generateUserName():
@@ -109,7 +110,7 @@ class ReceivedBattleChatCommand(_ChatCommand):
         pass
 
     def isIgnored(self):
-        user = storage_getter('users')().getUser(self.getSenderID())
+        user = storage_getter('users')().getUser(self.getSenderID(), scope=UserEntityScope.BATTLE)
         return user.isIgnored() if user else False
 
     def isOnMinimap(self):
@@ -128,7 +129,7 @@ class ReceivedBattleChatCommand(_ChatCommand):
         return False
 
     def isSender(self):
-        user = storage_getter('users')().getUser(self.getSenderID())
+        user = storage_getter('users')().getUser(self.getSenderID(), scope=UserEntityScope.BATTLE)
         return user.isCurrentPlayer() if user else False
 
     def showMarkerForReceiver(self):
@@ -348,25 +349,20 @@ class ClanInfo(object):
             self.role = other.role
 
     def isInClan(self):
-        return self.abbrev and len(self.abbrev) > 0
+        return bool(self.abbrev)
 
 
 class UserEntity(ChatEntity):
-    __slots__ = ('_databaseID', '_name', '_note', '_tags', '_clanInfo', '_globalRating')
-    lobbyContext = dependency.descriptor(ILobbyContext)
+    __slots__ = ('_userID', '_name', '_tags', '_scope')
 
-    def __init__(self, databaseID, name=None, tags=None, clanInfo=None, globalRating=-1, note=''):
+    def __init__(self, userID, name=None, tags=None, scope=None):
         super(UserEntity, self).__init__()
-        self._databaseID = databaseID
-        self._note = note
+        self._userID = userID
         self._tags = tags or set()
-        self._clanInfo = clanInfo or ClanInfo()
-        self._globalRating = globalRating
-        if globalRating == -1:
-            self._globalRating = 0
-            self._tags.add(USER_TAG.INVALID_RATING)
+        if scope is None:
+            self._scope = self._getScope()
         else:
-            self._globalRating = globalRating
+            self._scope = scope
         if name is None:
             self._name = _generateUserName()
             self._tags.add(USER_TAG.INVALID_NAME)
@@ -374,46 +370,26 @@ class UserEntity(ChatEntity):
             self._name = name
         return
 
-    def __repr__(self):
-        return 'UserEntity(dbID={0!r:s}, fullName={1:>s}, tags={2!r:s}, clanInfo={3!r:s}, rating={4:n})'.format(self._databaseID, self.getFullName(), self.getTags(), self._clanInfo, self._globalRating)
-
     def __eq__(self, other):
-        return self.getID() == other.getID()
-
-    def __hash__(self):
-        return self.getID()
+        return self.getStorageKey() == other.getStorageKey()
 
     def getID(self):
-        return self._databaseID
+        return self._userID
+
+    def getScope(self):
+        return self._scope
+
+    def getStorageKey(self):
+        return (self.getID(), self.getScope())
 
     def getName(self):
         return self._name
 
-    def getFullName(self, isClan=True, isRegion=True):
-        if isClan:
-            clanAbbrev = self.getClanAbbrev()
-        else:
-            clanAbbrev = None
-        if isRegion:
-            pDBID = self._databaseID
-        else:
-            pDBID = None
-        return self.lobbyContext.getPlayerFullName(self.getName(), clanAbbrev=clanAbbrev, pDBID=pDBID)
-
-    def getGlobalRating(self):
-        return self._globalRating
-
-    def getGroups(self):
-        return set()
+    def getFullName(self):
+        raise NotImplementedError
 
     def getTags(self):
         return self._tags.copy()
-
-    def getResourceID(self):
-        return None
-
-    def getClientInfo(self):
-        return None
 
     def addTags(self, tags):
         self._tags = self._tags.union(tags)
@@ -427,6 +403,80 @@ class UserEntity(ChatEntity):
                 return USER_GUI_TYPE.FRIEND
             return USER_GUI_TYPE.OTHER
         return USER_GUI_TYPE.IGNORED if self.isIgnored() else USER_GUI_TYPE.OTHER
+
+    def isFriend(self):
+        return USER_TAG.FRIEND in self.getTags()
+
+    def isIgnored(self):
+        return USER_TAG.IGNORED in self.getTags() or self.isTemporaryIgnored()
+
+    def isTemporaryIgnored(self):
+        return USER_TAG.IGNORED_TMP in self.getTags()
+
+    def isMuted(self):
+        return USER_TAG.MUTED in self.getTags()
+
+    def isCurrentPlayer(self):
+        return False
+
+    def hasValidName(self):
+        return USER_TAG.INVALID_NAME not in self._tags
+
+    def setSharedProps(self, other):
+        raise NotImplementedError
+
+    def update(self, **kwargs):
+        if 'name' in kwargs:
+            if kwargs['name']:
+                self._tags.discard(USER_TAG.INVALID_NAME)
+            self._name = kwargs['name']
+        if 'tags' in kwargs:
+            self._tags = kwargs['tags']
+
+    def clear(self):
+        self._userID = None
+        self._name = None
+        self._tags = set()
+        self._scope = None
+        return
+
+    @staticmethod
+    def _getScope():
+        raise NotImplementedError
+
+
+@ReprInjector.simple(('getID', 'dbID'), ('getFullName', 'fullName'), ('getTags', 'tags'), ('getClanInfo', 'clanInfo'), ('getGlobalRating', 'rating'), ('getScope', 'scope'))
+class LobbyUserEntity(UserEntity):
+    __slots__ = ('_note', '_clanInfo', '_globalRating')
+    _lobbyContext = dependency.descriptor(ILobbyContext)
+
+    def __init__(self, userID, name=None, tags=None, clanInfo=None, globalRating=-1, note='', scope=None):
+        super(LobbyUserEntity, self).__init__(userID, name, tags, scope)
+        self._note = note
+        self._clanInfo = clanInfo or ClanInfo()
+        if globalRating == -1:
+            self._globalRating = 0
+            self._tags.add(USER_TAG.INVALID_RATING)
+        else:
+            self._globalRating = globalRating
+
+    def __hash__(self):
+        return self.getID() ^ self.getScope()
+
+    def getFullName(self):
+        return self._lobbyContext.getPlayerFullName(self.getName(), clanAbbrev=self.getClanAbbrev())
+
+    def getGlobalRating(self):
+        return self._globalRating
+
+    def getGroups(self):
+        return set()
+
+    def getResourceID(self):
+        return None
+
+    def getClientInfo(self):
+        return None
 
     def isOnline(self):
         return False
@@ -446,24 +496,6 @@ class UserEntity(ChatEntity):
     def getNote(self):
         return self._note
 
-    def isCurrentPlayer(self):
-        return False
-
-    def isFriend(self):
-        return USER_TAG.FRIEND in self.getTags()
-
-    def isIgnored(self):
-        return USER_TAG.IGNORED in self.getTags() or self.isTemporaryIgnored()
-
-    def isTemporaryIgnored(self):
-        return USER_TAG.IGNORED_TMP in self.getTags()
-
-    def isMuted(self):
-        return USER_TAG.MUTED in self.getTags()
-
-    def hasValidName(self):
-        return USER_TAG.INVALID_NAME not in self._tags
-
     def hasValidRating(self):
         return USER_TAG.INVALID_RATING not in self._tags
 
@@ -475,14 +507,9 @@ class UserEntity(ChatEntity):
         return True
 
     def update(self, **kwargs):
-        if 'name' in kwargs:
-            if kwargs['name']:
-                self._tags.discard(USER_TAG.INVALID_NAME)
-            self._name = kwargs['name']
+        super(LobbyUserEntity, self).update(**kwargs)
         if 'note' in kwargs:
             self._note = kwargs['note']
-        if 'tags' in kwargs:
-            self._tags = kwargs['tags']
         if 'globalRating' in kwargs:
             if kwargs['globalRating'] >= 0:
                 self._tags.discard(USER_TAG.INVALID_RATING)
@@ -495,23 +522,41 @@ class UserEntity(ChatEntity):
                 self._clanInfo = ClanInfo()
 
     def clear(self):
-        self._databaseID = 0
-        self._name = None
-        self._tags = set()
         self._clanInfo.clear()
         self._globalRating = -1
-        return
+        self._note = ''
+        super(LobbyUserEntity, self).clear()
+
+    @staticmethod
+    def _getScope():
+        return UserEntityScope.LOBBY
 
 
-class SharedUserEntity(UserEntity):
+@ReprInjector.simple(('getID', 'avatarSessionID'), ('getName', 'name'), ('getTags', 'tags'), ('getScope', 'scope'))
+class BattleUserEntity(UserEntity):
+    _sessionProvider = dependency.descriptor(IBattleSessionProvider)
+
+    def __hash__(self):
+        return hash(self.getID()) ^ self.getScope()
+
+    def getFullName(self):
+        return self._sessionProvider.getCtx().getPlayerFullName(avatarSessionID=self.getID(), showVehShortName=False)
+
+    def setSharedProps(self, other):
+        pass
+
+    @staticmethod
+    def _getScope():
+        return UserEntityScope.BATTLE
+
+
+@ReprInjector.withParent(('getGOS', 'gos'))
+class SharedUserEntity(LobbyUserEntity):
     __slots__ = ('_gos',)
 
-    def __init__(self, databaseID, name=None, tags=None, gos=GAME_ONLINE_STATUS.UNDEFINED, clanInfo=None, globalRating=-1, note=''):
-        super(SharedUserEntity, self).__init__(databaseID, name, tags, clanInfo, globalRating, note)
+    def __init__(self, userID, name=None, tags=None, gos=GAME_ONLINE_STATUS.UNDEFINED, clanInfo=None, globalRating=-1, note='', scope=None):
+        super(SharedUserEntity, self).__init__(userID, name, tags, clanInfo, globalRating, note, scope)
         self._gos = gos
-
-    def __repr__(self):
-        return 'SharedUserEntity(dbID={0!r:s}, fullName={1:>s}, tags={2!r:s}, gos={3!r:s}, clanInfo={4!r:s} rating={5:n})'.format(self._databaseID, self.getFullName(), self.getTags(), self._gos, self._clanInfo, self._globalRating)
 
     def isOnline(self):
         return self._gos & GAME_ONLINE_STATUS.ONLINE > 0
@@ -529,21 +574,34 @@ class SharedUserEntity(UserEntity):
         self._gos = GAME_ONLINE_STATUS.UNDEFINED
 
 
-class CurrentUserEntity(UserEntity):
+@ReprInjector.simple(('getID', 'dbID'), ('getFullName', 'fullName'), ('getClanInfo', 'clanInfo'), ('getScope', 'scope'))
+class CurrentLobbyUserEntity(LobbyUserEntity):
 
-    def __init__(self, databaseID, name=None, clanInfo=None):
-        super(CurrentUserEntity, self).__init__(databaseID, name=name, clanInfo=clanInfo, tags={USER_TAG.CURRENT})
-
-    def __repr__(self):
-        return 'CurrentUserEntity(dbID={0!r:s}, fullName={1:>s}, clanInfo={2!r:s})'.format(self._databaseID, self.getFullName(), self._clanInfo)
+    def __init__(self, userID, name=None, clanInfo=None, scope=None):
+        super(CurrentLobbyUserEntity, self).__init__(userID, name=name, clanInfo=clanInfo, tags={USER_TAG.CURRENT}, scope=scope)
 
     def getTags(self):
-        tags = super(CurrentUserEntity, self).getTags()
+        tags = super(CurrentLobbyUserEntity, self).getTags()
         tags.add(USER_TAG.CURRENT)
         return tags
 
     def isOnline(self):
         return True
+
+    def getGuiType(self):
+        return USER_GUI_TYPE.CURRENT_PLAYER
+
+    def isCurrentPlayer(self):
+        return True
+
+
+@ReprInjector.simple(('getID', 'avatarSessionID'), ('getName', 'name'), ('getScope', 'scope'))
+class CurrentBattleUserEntity(BattleUserEntity):
+
+    def getTags(self):
+        tags = super(CurrentBattleUserEntity, self).getTags()
+        tags.add(USER_TAG.CURRENT)
+        return tags
 
     def getGuiType(self):
         return USER_GUI_TYPE.CURRENT_PLAYER

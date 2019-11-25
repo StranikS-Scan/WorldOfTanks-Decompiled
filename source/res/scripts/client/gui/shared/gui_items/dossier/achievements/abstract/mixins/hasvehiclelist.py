@@ -15,7 +15,7 @@ class HasVehiclesList(object):
             vehicle = self.itemsCache.items.getItemByCD(vCD)
             result.append(self.VehicleData(vehicle.userName, vehicle.nationID, vehicle.level, vehicle.type, vehicle.iconSmall))
 
-        return map(lambda i: i._asdict(), sorted(result, self.__sortFunc))
+        return map(lambda i: i._asdict(), sorted(result, cmp=self.__sortFunc))
 
     def getVehiclesListTitle(self):
         pass

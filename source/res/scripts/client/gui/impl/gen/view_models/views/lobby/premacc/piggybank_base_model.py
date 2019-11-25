@@ -5,6 +5,9 @@ from frameworks.wulf import ViewModel
 class PiggybankBaseModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=6, commands=0):
+        super(PiggybankBaseModel, self).__init__(properties=properties, commands=commands)
+
     def getMaxAmount(self):
         return self._getNumber(0)
 

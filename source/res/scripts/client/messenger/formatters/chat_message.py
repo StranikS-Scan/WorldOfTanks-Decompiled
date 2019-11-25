@@ -20,16 +20,16 @@ class _BattleMessageBuilder(object):
          'messageColor': '',
          'messageText': ''}
 
-    def setColors(self, dbID):
+    def setColors(self, avatarSessionID):
         getter = g_settings.getColorScheme
         self._ctx['playerColor'] = getter('battle/player').getHexStr('unknown')
         self._ctx['messageColor'] = getter('battle/message').getHexStr('unknown')
         return self
 
-    def setName(self, dbID, pName=None, suffix=''):
+    def setName(self, avatarSessionID, pName=None, suffix=''):
         if pName is not None:
             pName = i18n.encodeUtf8(pName)
-        name = self.sessionProvider.getCtx().getPlayerFullName(accID=dbID, pName=pName)
+        name = self.sessionProvider.getCtx().getPlayerFullName(avatarSessionID=avatarSessionID, pName=pName)
         self._ctx['playerName'] = unicode(name + suffix, 'utf-8')
         return self
 
@@ -43,15 +43,15 @@ class _BattleMessageBuilder(object):
 
 class TeamMessageBuilder(_BattleMessageBuilder):
 
-    def setColors(self, dbID):
+    def setColors(self, avatarSessionID):
         pColorScheme = g_settings.getColorScheme('battle/player')
         pColor = pColorScheme.getHexStr('teammate')
         ctx = self.sessionProvider.getCtx()
-        if isCurrentPlayer(dbID):
+        if isCurrentPlayer(avatarSessionID):
             pColor = pColorScheme.getHexStr('himself')
-        elif ctx.isTeamKiller(accID=dbID):
+        elif ctx.isTeamKiller(avatarSessionID=avatarSessionID):
             pColor = pColorScheme.getHexStr('teamkiller')
-        elif ctx.isSquadMan(accID=dbID):
+        elif ctx.isSquadMan(avatarSessionID=avatarSessionID):
             pColor = pColorScheme.getHexStr('squadman')
         self._ctx['playerColor'] = pColor
         self._ctx['messageColor'] = g_settings.getColorScheme('battle/message').getHexStr('team')
@@ -60,21 +60,21 @@ class TeamMessageBuilder(_BattleMessageBuilder):
 
 class CommonMessageBuilder(_BattleMessageBuilder):
 
-    def setColors(self, dbID):
+    def setColors(self, avatarSessionID):
         pColorScheme = g_settings.getColorScheme('battle/player')
         pColor = pColorScheme.getHexStr('unknown')
-        if isCurrentPlayer(dbID):
+        if isCurrentPlayer(avatarSessionID):
             pColor = pColorScheme.getHexStr('himself')
         else:
             ctx = self.sessionProvider.getCtx()
-            if ctx.isAlly(accID=dbID):
-                if ctx.isTeamKiller(accID=dbID):
+            if ctx.isAlly(avatarSessionID=avatarSessionID):
+                if ctx.isTeamKiller(avatarSessionID=avatarSessionID):
                     pColor = pColorScheme.getHexStr('teamkiller')
-                elif ctx.isSquadMan(accID=dbID):
+                elif ctx.isSquadMan(avatarSessionID=avatarSessionID):
                     pColor = pColorScheme.getHexStr('squadman')
                 else:
                     pColor = pColorScheme.getHexStr('teammate')
-            elif ctx.isEnemy(accID=dbID):
+            elif ctx.isEnemy(avatarSessionID=avatarSessionID):
                 pColor = pColorScheme.getHexStr('enemy')
         self._ctx['playerColor'] = pColor
         self._ctx['messageColor'] = g_settings.getColorScheme('battle/message').getHexStr('common')
@@ -83,12 +83,12 @@ class CommonMessageBuilder(_BattleMessageBuilder):
 
 class SquadMessageBuilder(_BattleMessageBuilder):
 
-    def setColors(self, dbID):
+    def setColors(self, avatarSessionID):
         pColorScheme = g_settings.getColorScheme('battle/player')
         pColor = pColorScheme.getHexStr('squadman')
-        if isCurrentPlayer(dbID):
+        if isCurrentPlayer(avatarSessionID):
             pColor = pColorScheme.getHexStr('himself')
-        elif self.sessionProvider.getCtx().isTeamKiller(accID=dbID):
+        elif self.sessionProvider.getCtx().isTeamKiller(avatarSessionID=avatarSessionID):
             pColor = pColorScheme.getHexStr('teamkiller')
         self._ctx['playerColor'] = pColor
         self._ctx['messageColor'] = g_settings.getColorScheme('battle/message').getHexStr('squad')

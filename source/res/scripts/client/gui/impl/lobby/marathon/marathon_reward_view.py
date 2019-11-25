@@ -1,8 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/marathon/marathon_reward_view.py
 import logging
-from frameworks.wulf import ViewFlags
-from frameworks.wulf import WindowFlags
+from frameworks.wulf import ViewSettings, WindowFlags
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.marathon.marathon_reward_view_model import MarathonRewardViewModel
 from gui.impl.lobby.marathon.marathon_reward_sounds import MarathonVideos, onVideoStart, onVideoDone
@@ -17,7 +16,11 @@ class MarathonRewardView(ViewImpl):
 
     def __init__(self, *args, **kwargs):
         self.__congratsSourceId = 0
-        super(MarathonRewardView, self).__init__(R.views.lobby.marathon.marathon_reward_view.MarathonRewardView(), ViewFlags.VIEW, MarathonRewardViewModel, *args, **kwargs)
+        settings = ViewSettings(R.views.lobby.marathon.marathon_reward_view.MarathonRewardView())
+        settings.model = MarathonRewardViewModel()
+        settings.args = args
+        settings.kwargs = kwargs
+        super(MarathonRewardView, self).__init__(settings)
 
     @property
     def viewModel(self):

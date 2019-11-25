@@ -238,9 +238,9 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
             self.as_setUserTagsS(data)
 
     def invalidateUserTags(self, user):
-        accountDBID = user.getID()
+        avatarSessionID = user.getID()
         arenaDP = self._battleCtx.getArenaDP()
-        vehicleID = arenaDP.getVehIDByAccDBID(accountDBID)
+        vehicleID = arenaDP.getVehIDBySessionID(avatarSessionID)
         if vehicleID:
             vo = arenaDP.getVehicleInfo(vehicleID)
             isEnemy = self.__isEnemyTeam(arenaDP, vo.team)

@@ -6,6 +6,9 @@ from frameworks.wulf import ViewModel
 class ButtonModel(ViewModel):
     __slots__ = ('onClicked',)
 
+    def __init__(self, properties=5, commands=1):
+        super(ButtonModel, self).__init__(properties=properties, commands=commands)
+
     def getRawLabel(self):
         return self._getString(0)
 

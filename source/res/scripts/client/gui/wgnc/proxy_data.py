@@ -11,7 +11,7 @@ from gui.wgnc.common import WebHandlersContainer
 from gui.wgnc.events import g_wgncEvents
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
 from helpers import dependency
-from skeletons.gui.game_control import IEncyclopediaController, IBrowserController, IPromoController, IReferralProgramController
+from skeletons.gui.game_control import IBrowserController, IPromoController, IReferralProgramController
 from skeletons.gui.shared.promo import IPromoLogger
 
 class _ProxyDataItem(object):
@@ -195,19 +195,6 @@ class ClanInviteAcceptedItem(_ClanInviteActionResultItem):
 
     def getType(self):
         return WGNC_DATA_PROXY_TYPE.CLAN_INVITE_ACCEPTED
-
-
-class EncyclopediaContentItem(_ProxyDataItem):
-    encyclopedia = dependency.descriptor(IEncyclopediaController)
-
-    def __init__(self, contentId):
-        self.__contentId = contentId
-
-    def getType(self):
-        return WGNC_DATA_PROXY_TYPE.ENCYCLOPEDIA_CONTENT_RECEIVED
-
-    def show(self, _):
-        self.encyclopedia.addEncyclopediaRecommendation(self.__contentId)
 
 
 class ShowTeaserItem(_ProxyDataItem):

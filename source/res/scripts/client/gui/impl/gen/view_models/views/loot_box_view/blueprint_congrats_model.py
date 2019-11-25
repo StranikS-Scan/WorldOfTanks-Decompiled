@@ -5,6 +5,9 @@ from gui.impl.gen.view_models.views.loot_box_view.congrats_view_model import Con
 class BlueprintCongratsModel(CongratsViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=13, commands=0):
+        super(BlueprintCongratsModel, self).__init__(properties=properties, commands=commands)
+
     def getFragments(self):
         return self._getNumber(10)
 

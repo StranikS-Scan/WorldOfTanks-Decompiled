@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/premacc/maps_blacklist_confirm_view.py
 import logging
+from frameworks.wulf import ViewSettings
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.constants.dialog_presets import DialogPresets
@@ -66,7 +67,9 @@ class MapsBlacklistConfirmDialogContent(DialogContent):
     __slots__ = ('__mapId', '__disabledMaps', '__cooldownTime')
 
     def __init__(self, mapId, disabledMaps, cooldownTime):
-        super(MapsBlacklistConfirmDialogContent, self).__init__(R.views.lobby.premacc.maps_blacklist.maps_blacklist_confirm_dialog.MapsBlacklistConfirmDialogContent(), MapsBlacklistConfirmDialogModel)
+        settings = ViewSettings(R.views.lobby.premacc.maps_blacklist.maps_blacklist_confirm_dialog.MapsBlacklistConfirmDialogContent())
+        settings.model = MapsBlacklistConfirmDialogModel()
+        super(MapsBlacklistConfirmDialogContent, self).__init__(settings)
         self.__mapId = mapId
         self.__disabledMaps = disabledMaps
         self.__cooldownTime = cooldownTime

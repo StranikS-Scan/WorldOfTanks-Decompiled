@@ -50,6 +50,13 @@
       <undamaged>	vehicles/russian/R132_VNII_100LT/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/russian/R132_VNII_100LT/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/russian/R132_VNII_100LT/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <R132_VNII_100LT_3Dst>
+          <undamaged>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst/crash/lod0/Hull.model	</exploded>
+        </R132_VNII_100LT_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -73,8 +80,8 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.452046 0.231335 2.16478	</rayStart>
-        <rayEnd>	-0.452045 0.150094 2.13097	</rayEnd>
+        <rayStart>	-0.245586 0.316452 1.96039	</rayStart>
+        <rayEnd>	-0.245586 0.235213 1.92657	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.25	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
@@ -719,6 +726,13 @@
         <undamaged>	vehicles/russian/R132_VNII_100LT/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R132_VNII_100LT/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/russian/R132_VNII_100LT/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <R132_VNII_100LT_3Dst>
+            <undamaged>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst/crash/lod0/Chassis.model	</exploded>
+          </R132_VNII_100LT_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -730,7 +744,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-4.35	</textureScale>
+        <textureScale>	-3.15	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -1760,6 +1774,13 @@
             <undamaged>	vehicles/russian/R132_VNII_100LT/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R132_VNII_100LT/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R132_VNII_100LT/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <R132_VNII_100LT_3Dst>
+                <undamaged>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </R132_VNII_100LT_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R132_VNII_100LT/collision/Gun_01.model	</collisionModelServer>
@@ -1888,6 +1909,13 @@
         <undamaged>	vehicles/russian/R132_VNII_100LT/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/russian/R132_VNII_100LT/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/russian/R132_VNII_100LT/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <R132_VNII_100LT_3Dst>
+            <undamaged>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </R132_VNII_100LT_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R132_VNII_100LT/collision/Turret_01.model	</collisionModelServer>
@@ -1923,8 +1951,8 @@
         <slot>
           <slotType>	player	</slotType>
           <slotId>	33001	</slotId>
-          <rayStart>	1.00522 0.223358 0.354056	</rayStart>
-          <rayEnd>	0.858757 0.0977386 0.301431	</rayEnd>
+          <rayStart>	1.04198 0.221086 0.235008	</rayStart>
+          <rayEnd>	0.889251 0.0969553 0.199408	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <isMirrored>	true	</isMirrored>
           <size>	0.2	</size>

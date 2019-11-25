@@ -408,7 +408,7 @@ class HangarContext(ToolTipContext):
         value = super(HangarContext, self).getStatusConfiguration(item)
         inventoryCheck = item.itemTypeID in GUI_ITEM_TYPE.VEHICLE_MODULES
         isInInventory = inventoryCheck and item.isInInventory
-        value.checkBuying = not item.isInstalled(self._vehicle, self._slotIdx) and not isInInventory
+        value.checkBuying = self._vehicle is not None and not item.isInstalled(self._vehicle, self._slotIdx) and not isInInventory
         value.vehicle = self._vehicle
         value.slotIdx = self._slotIdx
         return value

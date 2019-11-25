@@ -6,6 +6,9 @@ from gui.impl.gen.view_models.views.loot_box_view.blueprint_congrats_model impor
 class BlueprintFinalFragmentRendererModel(LootAnimatedRendererModel):
     __slots__ = ()
 
+    def __init__(self, properties=13, commands=0):
+        super(BlueprintFinalFragmentRendererModel, self).__init__(properties=properties, commands=commands)
+
     @property
     def congratsViewModel(self):
         return self._getViewModel(12)

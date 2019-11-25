@@ -73,10 +73,18 @@ class FittingSlotVO(dict):
         if vehicleModule is None:
             return
         else:
-            if vehicleModule.itemTypeID == ITEM_TYPES.vehicleGun and vehicleModule.isAutoReloadable(vehicle.descriptor):
-                uiStorage = dependency.instance(ISettingsCore).serverSettings.getUIStorage()
-                if not uiStorage.get(UI_STORAGE_KEYS.AUTO_RELOAD_MARK_IS_SHOWN):
-                    self['counter'] = 1
+            if vehicleModule.itemTypeID == ITEM_TYPES.vehicleGun:
+                if vehicleModule.isAutoReloadable(vehicle.descriptor):
+                    uiStorage = dependency.instance(ISettingsCore).serverSettings.getUIStorage()
+                    if not uiStorage.get(UI_STORAGE_KEYS.AUTO_RELOAD_MARK_IS_SHOWN):
+                        self['counter'] = 1
+                if vehicleModule.isDualGun(vehicle.descriptor):
+                    uiStorage = dependency.instance(ISettingsCore).serverSettings.getUIStorage()
+                    if not uiStorage.get(UI_STORAGE_KEYS.DUAL_GUN_MARK_IS_SHOWN):
+                        if 'counter' in self:
+                            self['counter'] += 3
+                        else:
+                            self['counter'] = 3
             return
 
 

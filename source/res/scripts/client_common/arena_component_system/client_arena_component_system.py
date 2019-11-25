@@ -27,10 +27,16 @@ class ClientArenaComponent(Component):
         return
 
     def addSyncDataCallback(self, syncDataObjectType, key, handler):
-        self._componentSystem().addSyncDataObjectCallback(syncDataObjectType, key, handler)
+        captured = self._componentSystem()
+        if captured is not None:
+            captured.addSyncDataObjectCallback(syncDataObjectType, key, handler)
+        return
 
     def removeSyncDataCallback(self, syncDataObjectType, key, handler):
-        self._componentSystem().removeSyncDataObjectCallback(syncDataObjectType, key, handler)
+        captured = self._componentSystem()
+        if captured is not None:
+            captured.removeSyncDataObjectCallback(syncDataObjectType, key, handler)
+        return
 
     def getSyncDataObjectData(self, syncDataObjectType, key):
         return self._componentSystem().getSyncDataObjectData(syncDataObjectType, key)

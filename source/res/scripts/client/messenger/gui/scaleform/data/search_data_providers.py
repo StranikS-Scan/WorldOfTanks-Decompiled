@@ -122,7 +122,7 @@ class SearchUsersDataProvider(SearchDataProvider):
     def _getSearchComparator(self, user, other):
         return cmp(user.getName().lower(), other.getName().lower())
 
-    def __onUserActionReceived(self, _, user):
+    def __onUserActionReceived(self, _, user, shadowMode):
         self.__updateUserInSearch(user)
 
     def __onUserStatusUpdated(self, user):

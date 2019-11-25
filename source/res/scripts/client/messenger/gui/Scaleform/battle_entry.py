@@ -64,7 +64,7 @@ class BattleEntry(IGUIEntry):
     def show(self):
         g_messengerEvents.channels.onMessageReceived += self.__me_onMessageReceived
         g_messengerEvents.channels.onCommandReceived += self.__me_onCommandReceived
-        g_messengerEvents.users.onUserActionReceived += self.__me_onUserActionReceived
+        g_messengerEvents.users.onBattleUserActionReceived += self.__me_onBattleUserActionReceived
         g_messengerEvents.onErrorReceived += self.__me_onErrorReceived
         g_messengerEvents.onWarningReceived += self.__me_onWarningReceived
         g_settings.onUserPreferencesUpdated += self.__ms_onUserPreferencesUpdated
@@ -79,7 +79,7 @@ class BattleEntry(IGUIEntry):
     def close(self, nextScope):
         g_messengerEvents.channels.onMessageReceived -= self.__me_onMessageReceived
         g_messengerEvents.channels.onCommandReceived -= self.__me_onCommandReceived
-        g_messengerEvents.users.onUserActionReceived -= self.__me_onUserActionReceived
+        g_messengerEvents.users.onBattleUserActionReceived -= self.__me_onBattleUserActionReceived
         g_messengerEvents.onErrorReceived -= self.__me_onErrorReceived
         g_messengerEvents.onWarningReceived -= self.__me_onWarningReceived
         g_settings.onUserPreferencesUpdated -= self.__ms_onUserPreferencesUpdated
@@ -184,7 +184,7 @@ class BattleEntry(IGUIEntry):
             view.addMessage(formatted, fillColor=fillColor)
         return
 
-    def __me_onUserActionReceived(self, action, user):
+    def __me_onBattleUserActionReceived(self, action, user):
         message = getUserActionReceivedMessage(action, user)
         if message:
             self.__showErrorMessage(message)

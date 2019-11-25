@@ -6,6 +6,9 @@ from gui.impl.wrappers.user_list_model import UserListModel
 class CommonBalanceContentModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=1, commands=0):
+        super(CommonBalanceContentModel, self).__init__(properties=properties, commands=commands)
+
     @property
     def currency(self):
         return self._getViewModel(0)

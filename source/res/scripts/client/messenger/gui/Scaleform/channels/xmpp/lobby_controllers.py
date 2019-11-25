@@ -183,7 +183,7 @@ class UserRoomController(_ChannelController):
     def __me_onUsersListReceived(self, _):
         self._refreshMembersDP()
 
-    def __me_onUserActionReceived(self, _, contact):
+    def __me_onUserActionReceived(self, _, contact, shadowMode):
         self._refreshMembersDP()
 
 

@@ -19,7 +19,7 @@ from gui.impl import backport
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.gui_items.Vehicle import VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED
 from gui.shared.gui_items.dossier import dumpDossier
-from gui.shared.gui_items.dossier.achievements.MarkOfMasteryAchievement import isMarkOfMasteryAchieved
+from gui.shared.gui_items.dossier.achievements import isMarkOfMasteryAchieved
 from gui.shared.gui_items.dossier.stats import UNAVAILABLE_MARKS_OF_MASTERY
 from helpers import i18n, dependency
 from nations import NAMES

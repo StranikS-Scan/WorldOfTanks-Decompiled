@@ -158,7 +158,7 @@ class _TechTreeDataProvider(object):
             nextLevel = self.__nextLevels[parentCD]
             topIDs = set()
             for childCD, (idx, xpCost, required) in nextLevel.iteritems():
-                if childCD not in unlocked and required.issubset(unlocked):
+                if required.issubset(unlocked):
                     topIDs.add(parentCD)
                     available[childCD].append(UnlockProps(parentCD, idx, xpCost, topIDs, 0, xpCost))
 

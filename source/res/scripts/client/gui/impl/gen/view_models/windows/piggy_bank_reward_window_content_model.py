@@ -5,6 +5,9 @@ from gui.impl.gen.view_models.windows.reward_window_content_model import RewardW
 class PiggyBankRewardWindowContentModel(RewardWindowContentModel):
     __slots__ = ()
 
+    def __init__(self, properties=4, commands=2):
+        super(PiggyBankRewardWindowContentModel, self).__init__(properties=properties, commands=commands)
+
     def getShowDescription(self):
         return self._getBool(3)
 

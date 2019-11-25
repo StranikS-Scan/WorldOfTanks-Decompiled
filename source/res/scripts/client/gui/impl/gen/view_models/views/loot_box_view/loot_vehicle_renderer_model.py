@@ -6,6 +6,9 @@ from gui.impl.gen.view_models.views.loot_box_view.congrats_view_model import Con
 class LootVehicleRendererModel(LootDefRendererModel):
     __slots__ = ()
 
+    def __init__(self, properties=10, commands=0):
+        super(LootVehicleRendererModel, self).__init__(properties=properties, commands=commands)
+
     @property
     def congratsViewModel(self):
         return self._getViewModel(9)

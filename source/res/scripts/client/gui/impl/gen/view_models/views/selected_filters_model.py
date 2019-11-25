@@ -6,6 +6,9 @@ from frameworks.wulf import ViewModel
 class SelectedFiltersModel(ViewModel):
     __slots__ = ('onFilterChanged', 'onFilterReset')
 
+    def __init__(self, properties=4, commands=2):
+        super(SelectedFiltersModel, self).__init__(properties=properties, commands=commands)
+
     def getSelectedFilterCount(self):
         return self._getNumber(0)
 

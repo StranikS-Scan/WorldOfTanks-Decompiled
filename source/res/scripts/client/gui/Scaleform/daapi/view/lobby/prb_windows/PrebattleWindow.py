@@ -237,7 +237,7 @@ class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
     def _handleCurrentVehicleChanged(self):
         self.as_enableReadyBtnS(self.isReadyBtnEnabled())
 
-    def _onUserActionReceived(self, actionIndex, user):
+    def _onUserActionReceived(self, actionIndex, user, shadowMode):
         self._setRosterList(self.prbEntity.getRosters())
 
     def _onRegisterFlashComponent(self, viewPy, alias):

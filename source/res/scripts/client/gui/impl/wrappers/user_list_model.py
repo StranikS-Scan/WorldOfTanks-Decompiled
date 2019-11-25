@@ -93,6 +93,9 @@ class UserListModel(ListModel):
     def invalidate(self):
         self.getItems().invalidate()
 
+    def reserve(self, capacity):
+        self.getItems().reserve(capacity)
+
     def _initialize(self):
         super(UserListModel, self)._initialize()
         self.onSelectionChanged += self.__onSelectionChanged

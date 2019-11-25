@@ -15,5 +15,8 @@ class LootRendererTypes(ViewModel):
     BLUEPRINT_FINAL_FRAGMENT = 'BlueprintFinalFragmentRenderer'
     CREW_BOOK = 'CrewBookRenderer'
 
+    def __init__(self, properties=0, commands=0):
+        super(LootRendererTypes, self).__init__(properties=properties, commands=commands)
+
     def _initialize(self):
         super(LootRendererTypes, self)._initialize()

@@ -3,8 +3,8 @@
 from dossiers2.ui.achievements import ACHIEVEMENT_SECTION, ACHIEVEMENT_TYPE
 from dossiers2.custom.config import RECORD_CONFIGS
 from gui.shared.gui_items.dossier.achievements.abstract import isRareAchievement
+from gui.shared.gui_items.dossier.achievements import MarkOnGunAchievement
 from gui.Scaleform.genConsts.ACHIEVEMENTS_ALIASES import ACHIEVEMENTS_ALIASES
-from gui.shared.gui_items.dossier.achievements.MarkOnGunAchievement import MarkOnGunAchievement
 
 class AchievementsUtils(object):
 

@@ -3,8 +3,9 @@
 import typing
 from ..py_object_binder import PyObjectEntity
 from ..py_object_wrappers import PyObjectArray
+T = typing.TypeVar('T')
 
-class Array(PyObjectEntity):
+class Array(PyObjectEntity, typing.Iterable[T]):
     __slots__ = ()
 
     def __init__(self):
@@ -22,6 +23,9 @@ class Array(PyObjectEntity):
     def __iter__(self):
         for index in xrange(0, self.proxy.getSize()):
             yield self.proxy.getValue(index)
+
+    def reserve(self, capacity):
+        self.proxy.reserve(capacity)
 
     def clear(self):
         self.proxy.clear()

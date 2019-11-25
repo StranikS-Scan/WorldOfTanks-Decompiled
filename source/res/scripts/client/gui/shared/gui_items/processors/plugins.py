@@ -18,8 +18,13 @@ from gui.shared.money import Currency
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta, DIALOG_BUTTON_ID, IconPriceDialogMeta, IconDialogMeta, PMConfirmationDialogMeta, DemountDeviceDialogMeta, DestroyDeviceDialogMeta, TankmanOperationDialogMeta, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta, CheckBoxDialogMeta, CrewSkinsRemovalCompensationDialogMeta, CrewSkinsRemovalDialogMeta
 from helpers import dependency
 from items.components import skills_constants
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from gui import makeHtmlString
+from gui.impl import backport
+from gui.impl.gen import R
+from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 _SHELLS_MONEY_ERRORS = {Currency.CREDITS: 'SHELLS_NO_CREDITS',
  Currency.GOLD: 'SHELLS_NO_GOLD',
@@ -35,6 +40,10 @@ def makeSuccess(**kwargs):
 
 def makeError(msg='', **kwargs):
     return PluginResult(False, msg, kwargs)
+
+
+def _wrapHtmlMessage(message):
+    return makeHtmlString('html_templates:lobby/dialogs', 'questsDialogAlert', {'message': message})
 
 
 class ProcessorPlugin(object):
@@ -522,9 +531,10 @@ class IconMessageConfirmator(I18nMessageAbstractConfirmator):
 class DestroyDeviceConfirmator(IconMessageConfirmator):
     __DESTROY_DEVICE_PATH = '../maps/icons/modules/destroyDevice.png'
 
-    def __init__(self, localeKey, itemName=None, activeHandler=None, isEnabled=True):
+    def __init__(self, localeKey, itemName=None, destroyText='', activeHandler=None, isEnabled=True):
         super(DestroyDeviceConfirmator, self).__init__(localeKey, {'name': itemName,
-         'icon': self.__DESTROY_DEVICE_PATH}, activeHandler, isEnabled)
+         'icon': self.__DESTROY_DEVICE_PATH,
+         'destroy': destroyText}, activeHandler, isEnabled)
 
     def _makeMeta(self):
         return DestroyDeviceDialogMeta(self.localeKey, self.ctx, self.ctx, focusedID=DIALOG_BUTTON_ID.SUBMIT)
@@ -693,7 +703,8 @@ class PMProgressResetConfirmator(DialogAbstractConfirmator):
     def _makeMeta(self):
         return PMConfirmationDialogMeta('questsConfirmProgressDialog', messageCtx={'newQuest': self.quest.getUserName(),
          'oldQuest': self.oldQuest.getUserName(),
-         'icon': RES_ICONS.MAPS_ICONS_LIBRARY_ICON_ALERT_90X84})
+         'icon': RES_ICONS.MAPS_ICONS_LIBRARY_ICON_ALERT_90X84,
+         'alert': _wrapHtmlMessage(backport.text(R.strings.dialogs.questsConfirmProgressDialog.message.alert()))})
 
 
 class PMDismissWithProgressConfirmator(DialogAbstractConfirmator):
@@ -704,7 +715,8 @@ class PMDismissWithProgressConfirmator(DialogAbstractConfirmator):
 
     def _makeMeta(self):
         return PMConfirmationDialogMeta('questsDismissProgressDialog', messageCtx={'quest': self.quest.getUserName(),
-         'icon': RES_ICONS.MAPS_ICONS_LIBRARY_ICON_ALERT_90X84})
+         'icon': RES_ICONS.MAPS_ICONS_LIBRARY_ICON_ALERT_90X84,
+         'alert': _wrapHtmlMessage(backport.text(R.strings.dialogs.questsDismissProgressDialog.message.alert()))})
 
 
 class PMDiscardConfirmator(DialogAbstractConfirmator):
@@ -715,7 +727,8 @@ class PMDiscardConfirmator(DialogAbstractConfirmator):
 
     def _makeMeta(self):
         return PMConfirmationDialogMeta('questsConfirmDiscardDialog', messageCtx={'curQuest': self.curQuest.getUserName(),
-         'icon': RES_ICONS.MAPS_ICONS_LIBRARY_ICON_ALERT_90X84})
+         'icon': RES_ICONS.MAPS_ICONS_LIBRARY_ICON_ALERT_90X84,
+         'alert': _wrapHtmlMessage(backport.text(R.strings.dialogs.questsConfirmDiscardDialog.message.alert()))})
 
 
 class PMPawnConfirmator(DialogAbstractConfirmator):
@@ -830,3 +843,18 @@ class BadgesValidator(SyncValidator):
                 return makeError('NOT_UNLOCKED_BADGE')
 
         return makeSuccess()
+
+
+class BattleBoosterValidator(SyncValidator):
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+
+    def __init__(self, boosters, isEnabled=True):
+        super(BattleBoosterValidator, self).__init__(isEnabled)
+        for booster in boosters:
+            if booster.itemTypeID != GUI_ITEM_TYPE.BATTLE_BOOSTER:
+                raise SoftException("Expected type 'BattleBoosters' for BattleBoosterValidator, not '{}'!".format(type(booster)))
+
+        self.boosters = boosters
+
+    def _validate(self):
+        return makeError('disabledService') if self.boosters and not self.__lobbyContext.getServerSettings().isBattleBoostersEnabled() else makeSuccess()

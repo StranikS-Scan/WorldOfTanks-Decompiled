@@ -69,7 +69,7 @@ class AvatarRequestsController(RequestsController):
         super(AvatarRequestsController, self).fini()
 
     def sendInvites(self, ctx, callback=None):
-        return self._requester.doRequestEx(ctx, callback, 'sendInvitation', ctx.getDatabaseIDs())
+        return self._requester.doRequestEx(ctx, callback, 'sendInvitation', ctx.getPlayerIDs())
 
     def _getHandlerByRequestType(self, requestTypeID):
         return self.__handlers.get(requestTypeID)

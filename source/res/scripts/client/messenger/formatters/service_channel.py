@@ -600,10 +600,12 @@ class AutoMaintenanceFormatter(WaitItemsSyncFormatter):
                         templateName = 'RentOfStyleIsAlmostExpiredAutoprolongationONSysMessage'
                     else:
                         templateName = 'RentOfStyleIsAlmostExpiredAutoprolongationOFFSysMessage'
+                elif result == AUTO_MAINTENANCE_RESULT.DISABLED_OPTION:
+                    templateName = 'ErrorSysMessage'
                 else:
                     templateName = 'WarningSysMessage'
                 if result == AUTO_MAINTENANCE_RESULT.OK:
-                    msg += shared_fmts.formatPrice(cost.toAbs(), ignoreZeros=True)
+                    msg += shared_fmts.formatPrice(cost.toAbs(), ignoreZeros=True) + '.'
                 formatted = g_settings.msgTemplates.format(templateName, {'text': msg}, data=data)
                 settings = self._getGuiSettings(message, priorityLevel=priorityLevel, messageType=message.type, messageSubtype=result)
                 callback([_MessageData(formatted, settings)])
@@ -2727,6 +2729,7 @@ class TelecomRemovedInvoiceFormatter(TelecomReceivedInvoiceFormatter):
 
 class PrbVehicleKickFormatter(ServiceChannelFormatter):
     __itemsCache = dependency.descriptor(IItemsCache)
+    typeKick = 'prbVehicleKick'
 
     def format(self, message, *args):
         formatted = None
@@ -2736,8 +2739,12 @@ class PrbVehicleKickFormatter(ServiceChannelFormatter):
         if vehInvID:
             vehicle = self.__itemsCache.items.getVehicle(vehInvID)
             if vehicle:
-                formatted = g_settings.msgTemplates.format('prbVehicleKick', ctx={'vehName': vehicle.userName})
-        return [_MessageData(formatted, self._getGuiSettings(message, 'prbVehicleKick'))]
+                formatted = g_settings.msgTemplates.format(self.typeKick, ctx={'vehName': vehicle.userName})
+        return [_MessageData(formatted, self._getGuiSettings(message, self.typeKick))]
+
+
+class PrbVehicleKickFilterFormatter(PrbVehicleKickFormatter):
+    typeKick = 'prbVehicleKickFilter'
 
 
 class PrbVehicleMaxSpgKickFormatter(ServiceChannelFormatter):
@@ -3069,7 +3076,7 @@ class LootBoxAutoOpenFormatter(WaitItemsSyncFormatter):
                 settings = self._getGuiSettings(message, self._template)
                 settings.groupID = NotificationGroup.OFFER
                 settings.showAt = BigWorld.time()
-                fmt = TokenQuestsFormatter.formatQuestAchieves(getMergedLootBoxBonuses((data['rewards'],)), False)
+                fmt = self.formatAchieves(data)
                 formattedRewards = g_settings.msgTemplates.format(self._templateRewards, ctx={'text': fmt})
                 settingsRewards = self._getGuiSettings(message, self._templateRewards)
                 settingsRewards.showAt = BigWorld.time()
@@ -3079,6 +3086,35 @@ class LootBoxAutoOpenFormatter(WaitItemsSyncFormatter):
         else:
             callback([_MessageData(None, None)])
         return
+
+    @classmethod
+    def formatAchieves(cls, data):
+        result = []
+        items = getMergedLootBoxBonuses((data['rewards'],))
+        result.append(TokenQuestsFormatter.formatQuestAchieves(items, False))
+        achievementsNames = cls.__extractAchievements(items)
+        if achievementsNames:
+            result.append(cls.__makeAchieve('dossiersAccruedInvoiceReceived', dossiers=', '.join(achievementsNames)))
+        return '<br/>'.join(result) if result else None
+
+    @classmethod
+    def __makeAchieve(cls, key, **kwargs):
+        return g_settings.htmlTemplates.format(key, kwargs)
+
+    @staticmethod
+    def __extractAchievements(data):
+        result = set()
+        for block in data.get('dossier', {}).values():
+            for record in block.keys():
+                if record[0] == BADGES_BLOCK:
+                    continue
+                factory = getAchievementFactory(record)
+                if factory is not None:
+                    a = factory.create()
+                    if a is not None:
+                        result.add(a.getUserName())
+
+        return result
 
 
 class ProgressiveRewardFormatter(WaitItemsSyncFormatter):

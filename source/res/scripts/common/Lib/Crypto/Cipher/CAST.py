@@ -2,7 +2,7 @@
 # Embedded file name: scripts/common/Lib/Crypto/Cipher/CAST.py
 __revision__ = '$Id$'
 from Crypto.Cipher import blockalgo
-from Crypto.Cipher import _CAST
+import _CAST
 
 class CAST128Cipher(blockalgo.BlockAlgo):
 

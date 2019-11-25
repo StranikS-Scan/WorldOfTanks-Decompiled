@@ -5,6 +5,9 @@ from frameworks.wulf import ViewModel
 class BlueprintScreenSchemeItemModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=2, commands=0):
+        super(BlueprintScreenSchemeItemModel, self).__init__(properties=properties, commands=commands)
+
     def getReceived(self):
         return self._getBool(0)
 

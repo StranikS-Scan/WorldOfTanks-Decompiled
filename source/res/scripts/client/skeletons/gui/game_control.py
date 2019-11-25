@@ -32,6 +32,9 @@ class IGameController(object):
     def onAvatarBecomePlayer(self):
         pass
 
+    def onAccountBecomeNonPlayer(self):
+        pass
+
     def onAccountBecomePlayer(self):
         pass
 
@@ -297,7 +300,16 @@ class IHeroTankController(IGameController):
     def getCurrentTankStyleId(self):
         raise NotImplementedError
 
+    def getCurrentTankCrew(self):
+        raise NotImplementedError
+
     def getCurrentRelatedURL(self):
+        raise NotImplementedError
+
+    def getCurrentVehicleName(self):
+        raise NotImplementedError
+
+    def getCurrentIngameshopUrl(self):
         raise NotImplementedError
 
 
@@ -363,6 +375,29 @@ class IEventsNotificationsController(IGameController):
     onEventNotificationsChanged = None
 
     def getEventsNotifications(self, filterFunc=None):
+        raise NotImplementedError
+
+
+class IAnonymizerController(IGameController):
+    onStateChanged = None
+
+    @property
+    def isInBattle(self):
+        raise NotImplementedError
+
+    @property
+    def isEnabled(self):
+        raise NotImplementedError
+
+    @property
+    def isRestricted(self):
+        raise NotImplementedError
+
+    @property
+    def isAnonymized(self):
+        raise NotImplementedError
+
+    def setAnonymized(self, value):
         raise NotImplementedError
 
 
@@ -443,32 +478,6 @@ class IVehicleComparisonBasket(IGameController):
         raise NotImplementedError
 
     def revertVehicleByIdx(self, index):
-        raise NotImplementedError
-
-
-class IEncyclopediaController(IGameController):
-    onNewRecommendationReceived = None
-    onStateChanged = None
-
-    def isActivated(self):
-        raise NotImplementedError
-
-    def hasNewRecommendations(self):
-        raise NotImplementedError
-
-    def getRecommendations(self):
-        raise NotImplementedError
-
-    def addEncyclopediaRecommendation(self, recId):
-        raise NotImplementedError
-
-    def moveEncyclopediaRecommendationToEnd(self, recId):
-        raise NotImplementedError
-
-    def resetHasNew(self):
-        raise NotImplementedError
-
-    def buildUrl(self, callback):
         raise NotImplementedError
 
 

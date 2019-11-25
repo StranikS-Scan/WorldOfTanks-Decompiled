@@ -6,6 +6,9 @@ from frameworks.wulf import ViewModel
 class ProgressiveRewardViewModel(ViewModel):
     __slots__ = ('onCloseAction', 'onDestroyEvent')
 
+    def __init__(self, properties=4, commands=2):
+        super(ProgressiveRewardViewModel, self).__init__(properties=properties, commands=commands)
+
     def getSteps(self):
         return self._getArray(0)
 

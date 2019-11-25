@@ -6,6 +6,9 @@ from gui.impl.gen.view_models.views.lobby.premacc.daily_experience_base_model im
 class DailyExperienceViewModel(DailyExperienceBaseModel):
     __slots__ = ('onGoToContentPage', 'onBackBtnClicked')
 
+    def __init__(self, properties=5, commands=2):
+        super(DailyExperienceViewModel, self).__init__(properties=properties, commands=commands)
+
     def getBackBtnLabel(self):
         return self._getResource(4)
 

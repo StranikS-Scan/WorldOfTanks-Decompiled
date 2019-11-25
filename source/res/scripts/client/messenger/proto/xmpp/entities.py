@@ -1,23 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/entities.py
 from collections import deque
+from gui.shared.utils.decorators import ReprInjector
 from messenger.m_constants import PROTO_TYPE, USER_TAG, GAME_ONLINE_STATUS
-from messenger.proto.entities import UserEntity, ChannelEntity, MemberEntity
+from messenger.proto.entities import LobbyUserEntity, ChannelEntity, MemberEntity
 from messenger.proto.xmpp.gloox_constants import MESSAGE_TYPE, PRESENCE
 from messenger.proto.xmpp.jid import makeClanRoomJID, makeSystemRoomJID
 from messenger.proto.xmpp.xmpp_constants import XMPP_BAN_COMPONENT, XMPP_MUC_CHANNEL_TYPE, MESSAGE_LIMIT
 from messenger.proto.xmpp.xmpp_items import createItem
 
-class XMPPUserEntity(UserEntity):
+@ReprInjector.withParent(('getItem', 'item'), ('getGOS', 'isOnline'))
+class XMPPUserEntity(LobbyUserEntity):
     __slots__ = ('_item', '_gos')
 
-    def __init__(self, databaseID, name=None, tags=None, clanInfo=None, item=None, gos=GAME_ONLINE_STATUS.UNDEFINED):
-        super(XMPPUserEntity, self).__init__(databaseID, name, tags, clanInfo)
-        self._item = item or createItem(databaseID)
+    def __init__(self, userID, name=None, tags=None, clanInfo=None, item=None, gos=GAME_ONLINE_STATUS.UNDEFINED, scope=None):
+        super(XMPPUserEntity, self).__init__(userID, name, tags, clanInfo, scope=scope)
+        self._item = item or createItem(userID)
         self._gos = gos
-
-    def __repr__(self):
-        return 'XMPPUserEntity(dbID={0!r:s}, fullName={1:>s}, tags={2!r:s}, item={3!r:s}, isOnline={4!r:s}, clanInfo={5!r:s})'.format(self._databaseID, self.getFullName(), self.getTags(), self._item, self.isOnline(), self._clanInfo)
 
     def getResourceID(self):
         return self._item.getResources().getHighestPriorityID()
@@ -31,18 +30,15 @@ class XMPPUserEntity(UserEntity):
 
     def getPersistentState(self):
         state = None
-        tags = USER_TAG.filterToStoreTags(self.getTags())
-        if self._databaseID and (self._item.isTrusted() or tags):
-            state = (self._name, self._item.getItemType(), tags if tags else None)
+        if self._userID and self._item.isTrusted():
+            state = (self._name, self._item.getItemType())
         return state
 
     def setPersistentState(self, state):
         result = False
-        if len(state) == 3:
-            self._name, itemType, tags = state
-            self._item = createItem(self._databaseID, itemType, trusted=False)
-            if tags:
-                self.addTags(tags)
+        if len(state) == 2:
+            self._name, itemType = state
+            self._item = createItem(self._userID, itemType, trusted=False)
             result = True
         return result
 
@@ -68,7 +64,7 @@ class XMPPUserEntity(UserEntity):
     def removeTags(self, tags):
         super(XMPPUserEntity, self).removeTags(tags)
         if self._item.removeTags(tags):
-            self._item = createItem(self._databaseID)
+            self._item = createItem(self._userID)
 
     def getGroups(self):
         return self._item.getGroups()

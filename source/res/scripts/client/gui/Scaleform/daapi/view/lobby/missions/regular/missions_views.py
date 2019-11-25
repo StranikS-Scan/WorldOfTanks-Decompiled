@@ -39,6 +39,9 @@ from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IReloginController, IMarathonEventsController, IBrowserController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from gui import makeHtmlString
+from gui.impl import backport
+from gui.impl.gen import R
 
 class _GroupedMissionsView(MissionsGroupedViewMeta):
 
@@ -238,7 +241,7 @@ class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
         started = eventData.isStarted()
         self.as_setWaitingVisibleS(True)
         dialog = 'leaveEvent' if started else 'leaveStartedEvent'
-        success = yield DialogsInterface.showI18nConfirmDialog(dialog)
+        success = yield DialogsInterface.showI18nConfirmDialog(dialog, ctx={'warning': makeHtmlString('html_templates:lobby/dialogs', 'leaveEventWarning', {'message': backport.text(R.strings.dialogs.leaveEvent.message.warning())})})
         if success:
             yield self.eventsController.leaveEvent(eventID)
             yield self._onEventsUpdateAsync()

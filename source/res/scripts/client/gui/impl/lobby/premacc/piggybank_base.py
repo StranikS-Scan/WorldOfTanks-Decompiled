@@ -2,10 +2,8 @@
 # Embedded file name: scripts/client/gui/impl/lobby/premacc/piggybank_base.py
 import logging
 from constants import PREMIUM_TYPE, PremiumConfigs
-from frameworks.wulf import ViewFlags
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl.pub import ViewImpl
-from gui.impl.gen.view_models.views.lobby.premacc.piggybank_model import PiggybankModel
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.impl.lobby.premacc.premacc_helpers import PiggyBankConstants, getDeltaTimeHelper
 from gui.impl.lobby.premacc.premacc_helpers import SoundViewMixin
@@ -22,8 +20,8 @@ class PiggyBankBaseView(ViewImpl, SoundViewMixin):
     _gameSession = dependency.descriptor(IGameSessionController)
     __slots__ = ('_config', '_data', '_notifier', '_isTimerEnabled')
 
-    def __init__(self, layoutID, wsFlags=ViewFlags.LOBBY_SUB_VIEW, viewModelClazz=PiggybankModel):
-        super(PiggyBankBaseView, self).__init__(layoutID, wsFlags, viewModelClazz)
+    def __init__(self, settings):
+        super(PiggyBankBaseView, self).__init__(settings)
         self._config = None
         self._data = None
         self._notifier = None

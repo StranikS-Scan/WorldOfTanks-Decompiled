@@ -82,8 +82,11 @@ RANKED_RESULTS_TEAMS_STATS_BLOCK.addNextComponent(vehicles.RankedResultsTeamData
 RANKED_RESULTS_TEAMS_STATS_BLOCK.addNextComponent(vehicles.RankedResultsTeamDataStatsBlock(field='rightData'))
 _RANKED_RESULTS_LIST_ITEM_VO_META = base.PropertyMeta((('nickName', '', 'nickName'),
  ('nickNameHuge', '', 'nickNameHuge'),
+ ('fakeName', '', 'fakeName'),
+ ('fakeNameHuge', '', 'fakeNameHuge'),
  ('points', '', 'points'),
  ('pointsHuge', '', 'pointsHuge'),
  ('selected', False, 'selected'),
- ('standoff', 0, 'standoff')))
+ ('standoff', 0, 'standoff'),
+ ('tags', set(), 'tags')))
 _RANKED_RESULTS_LIST_ITEM_VO_META.bind(vehicles.RankedResultsListItemStatsBlock)

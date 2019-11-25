@@ -10,6 +10,7 @@ from async import async, await
 from connection_mgr import LOGIN_STATUS
 from external_strings_utils import isAccountLoginValid, isPasswordValid
 from gui import DialogsInterface, GUI_SETTINGS
+from gui import makeHtmlString
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.LoginPageMeta import LoginPageMeta
@@ -193,7 +194,7 @@ class LoginView(LoginPageMeta):
             if not self.__loginRetryDialogShown:
                 self.__showLoginRetryDialog({'waitingOpen': backport.text(R.strings.waiting.titles.dyn(self.__customLoginStatus)()),
                  'waitingClose': backport.msgid(R.strings.waiting.buttons.cease()),
-                 'message': backport.text(R.strings.waiting.message.dyn(self.__customLoginStatus)(), self.connectionMgr.serverUserName)})
+                 'message': backport.text(R.strings.waiting.message.dyn(self.__customLoginStatus)(), self.__getServerText(self.__customLoginStatus, self.connectionMgr.serverUserName))})
         elif peripheryID == -2:
             self.__customLoginStatus = 'centerRestart'
         elif peripheryID == -3:
@@ -206,9 +207,9 @@ class LoginView(LoginPageMeta):
             cancelBtnLbl = backport.msgid(R.strings.waiting.buttons.cancel())
         else:
             cancelBtnLbl = backport.msgid(R.strings.waiting.buttons.exitQueue())
-        message = backport.text(R.strings.waiting.message.queue(), serverName, queueNumber)
+        message = backport.text(R.strings.waiting.message.queue(), self.__getServerText('overload', serverName), queueNumber)
         if showAutoSearchBtn:
-            message = backport.text(R.strings.waiting.message.useAutoSearch(), serverName, queueNumber, serverName)
+            message = backport.text(R.strings.waiting.message.useAutoSearch(), self.__getServerText('overload', serverName), queueNumber, serverName)
         if not self.__loginQueueDialogShown:
             self._clearLoginView()
             self.__loginQueueDialogShown = True
@@ -301,7 +302,7 @@ class LoginView(LoginPageMeta):
         if not self.__loginRetryDialogShown:
             self.__showLoginRetryDialog({'waitingOpen': backport.msgid(R.strings.waiting.titles.queue()),
              'waitingClose': backport.msgid(R.strings.waiting.buttons.exitQueue()),
-             'message': backport.text(R.strings.waiting.message.autoLogin(), self.connectionMgr.serverUserName)})
+             'message': backport.text(R.strings.waiting.message.autoLogin(), self.__getServerText('overload', self.connectionMgr.serverUserName))})
 
     def __loginRejectedWithCustomState(self):
         self.as_setErrorMessageS(backport.text(R.strings.menu.login.status.dyn(self.__customLoginStatus)()), INVALID_FIELDS.ALL_VALID)
@@ -351,3 +352,6 @@ class LoginView(LoginPageMeta):
         if isOk:
             self.destroy()
             BigWorld.quit()
+
+    def __getServerText(self, key, serverName):
+        return makeHtmlString('html_templates:login/server-state', key, {'message': backport.text(R.strings.waiting.message.server.dyn(key)(), server=serverName)})

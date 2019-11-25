@@ -6,6 +6,9 @@ from gui.impl.gen.view_models.ui_kit.list_model import ListModel
 class MapsBlacklistConfirmDialogModel(ViewModel):
     __slots__ = ('onMapSelected',)
 
+    def __init__(self, properties=4, commands=1):
+        super(MapsBlacklistConfirmDialogModel, self).__init__(properties=properties, commands=commands)
+
     @property
     def selectedMaps(self):
         return self._getViewModel(0)

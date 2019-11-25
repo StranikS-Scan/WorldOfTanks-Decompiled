@@ -2,13 +2,14 @@
 # Embedded file name: scripts/client/AvatarInputHandler/AimingSystems/DualGunAimingSystem.py
 from functools import partial
 import BigWorld
+import GUI
 import math_utils
 from AvatarInputHandler import AimingSystems
 from AvatarInputHandler.AimingSystems import IAimingSystem
 from AvatarInputHandler.AimingSystems.SniperAimingSystem import SniperAimingSystem
 from Math import Vector3, Matrix, slerp
 from constants import DUAL_GUN
-from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
+from gui.battle_control import event_dispatcher as gui_event_dispatcher
 
 class GunMatCalc(object):
     __slots__ = ('__currentGun',)
@@ -51,28 +52,80 @@ class GunMatCalc(object):
         return gunMat
 
 
+class ShadowEffect(object):
+
+    def __init__(self):
+        self.__texturePath = 'system/maps/shadow.dds'
+        self.__startPositionX = 2.0
+        self.__shadowUpInitialPosition = (self.__startPositionX, 0.5, 1.0)
+        self.__shadowDownInitialPosition = (self.__startPositionX, -0.5, 1.0)
+        self.__size = (3, 1)
+        self.__shadowUp = None
+        self.__shadowDown = None
+        self.cachedPosition = 2.0
+        return
+
+    def __spawnShadow(self, position, path, rotateAngle=None):
+        shadow = GUI.Simple(path)
+        if rotateAngle is not None:
+            shadow.angle = rotateAngle
+        shadow.position = position
+        shadow.size = self.__size
+        shadow.materialFX = 'BLEND'
+        shadow.filterType = 'LINEAR'
+        shadow.visible = False
+        GUI.addRoot(shadow)
+        return shadow
+
+    def onGunIndexChanged(self, gunIndex):
+        if gunIndex == DUAL_GUN.ACTIVE_GUN.RIGHT:
+            self.cachedPosition = self.__startPositionX
+        else:
+            self.cachedPosition = -self.__startPositionX
+        self.move(self.cachedPosition)
+
+    def spawn(self):
+        if self.__shadowUp is None or self.__shadowDown is None:
+            self.__shadowUp = self.__spawnShadow(self.__shadowUpInitialPosition, self.__texturePath)
+            self.__shadowDown = self.__spawnShadow(self.__shadowDownInitialPosition, self.__texturePath, 180)
+        return
+
+    def show(self):
+        self.__shadowUp.visible = True
+        self.__shadowDown.visible = True
+
+    def hide(self):
+        self.__shadowUp.visible = False
+        self.__shadowDown.visible = False
+
+    def move(self, positionX):
+        self.__shadowUp.position[0] = positionX
+        self.__shadowDown.position[0] = positionX
+
+    def update(self, coefficient):
+        shadowPositionX = round(math_utils.lerp(self.cachedPosition, -self.cachedPosition, coefficient), 1)
+        self.move(shadowPositionX)
+
+
 class GunTransitionInterpolator(object):
-    __slots__ = ['__enabled',
-     '__initialState',
-     '__finalState',
-     '__totalTime',
-     '__elapsedTime',
-     '__prevTime']
+    __slots__ = ('__enabled', '__initialState', '__finalState', '__totalTime', '__elapsedTime', '__prevTime', '__shadowEffect')
     _EASING_METHOD = math_utils.easeInOutQuad
     enabled = property(lambda self: self.__enabled)
     matrix = property(lambda self: self.__update())
 
-    def __init__(self):
+    def __init__(self, shadowEffect):
         self.__enabled = False
         self.__initialState = None
         self.__finalState = None
         self.__totalTime = None
         self.__elapsedTime = 0.0
         self.__prevTime = 0.0
+        self.__shadowEffect = shadowEffect
         return
 
     def enable(self, initialState, finalState, transitionTime):
         self.__enabled = True
+        self.__shadowEffect.show()
         self.__totalTime = transitionTime
         self.__prevTime = BigWorld.timeExact()
         if self.__elapsedTime > 0.0:
@@ -85,6 +138,7 @@ class GunTransitionInterpolator(object):
         self.__elapsedTime = 0.0
         self.__initialState = None
         self.__finalState = None
+        self.__shadowEffect.hide()
         return
 
     def __update(self):
@@ -97,6 +151,7 @@ class GunTransitionInterpolator(object):
         iTarget = self.__finalState.matrix
         mat = slerp(iSource, iTarget, interpolationCoefficient)
         mat.translation = math_utils.lerp(iSource.translation, iTarget.translation, interpolationCoefficient)
+        self.__shadowEffect.update(interpolationCoefficient)
         if self.__elapsedTime > self.__totalTime:
             self.disable()
         return mat
@@ -130,19 +185,21 @@ class DualGunAimingSystem(IAimingSystem):
     gunPitch = property(lambda self: self.__gunPitch())
 
     @staticmethod
-    def setTransitionTime(ms):
-        DualGunAimingSystem.__TRANSITION_TIME = ms
+    def setTransitionTime(seconds):
+        DualGunAimingSystem.__TRANSITION_TIME = seconds
 
     @staticmethod
-    def setTransitionDelay(ms):
-        DualGunAimingSystem.__TRANSITION_DELAY = ms
+    def setTransitionDelay(seconds):
+        DualGunAimingSystem.__TRANSITION_DELAY = seconds
 
     def __init__(self):
         super(DualGunAimingSystem, self).__init__()
         self._aim = (SingleGunAimingSystem(DUAL_GUN.ACTIVE_GUN.LEFT), SingleGunAimingSystem(DUAL_GUN.ACTIVE_GUN.RIGHT))
         self.__activeAim = self._aim[DUAL_GUN.ACTIVE_GUN.LEFT]
         self.__activeGun = DUAL_GUN.ACTIVE_GUN.LEFT
-        self.__interpolator = GunTransitionInterpolator()
+        self.__shadowEffect = ShadowEffect()
+        self.__shadowEffect.spawn()
+        self.__interpolator = GunTransitionInterpolator(self.__shadowEffect)
         self.__transitionCallbackID = None
         self.__pendingGunIndex = None
         return
@@ -185,6 +242,8 @@ class DualGunAimingSystem(IAimingSystem):
         if self.__transitionCallbackID is not None:
             BigWorld.cancelCallback(self.__transitionCallbackID)
             self.__transitionCallbackID = None
+        if self.__pendingGunIndex is not None:
+            self.__pendingGunIndex = None
         return
 
     def focusOnPos(self, preferredPos):
@@ -219,6 +278,7 @@ class DualGunAimingSystem(IAimingSystem):
         self.enable(targetPoint)
         self.__interpolator.enable(self._aim[initialGunIndex], self._aim[finalGunIndex], self.__TRANSITION_TIME)
         self.__transitionCallbackID = BigWorld.callback(self.__TRANSITION_TIME, partial(self.__onEndTransition, initialGunIndex))
+        gui_event_dispatcher.sniperCameraTransition(self.__TRANSITION_TIME, finalGunIndex)
 
     def __onEndTransition(self, initialGunIndex):
         self.__pendingGunIndex = None
@@ -276,11 +336,5 @@ class DualGunAimingSystem(IAimingSystem):
         if self.__activeGun != gunIndex:
             self.__activeGun = gunIndex
             self.__activeAim = self._aim[gunIndex]
-        return
-
-    def __onVehicleFeedbackReceived(self, eventID, vehicleID, value):
-        if eventID == FEEDBACK_EVENT_ID.VEHICLE_ACTIVE_GUN_CHANGED:
-            activeGun, switchDelay = value
-            if activeGun != self.__activeGun and self.__transitionCallbackID is None:
-                self.onActiveGunChanged(activeGun, switchDelay)
+        self.__shadowEffect.onGunIndexChanged(gunIndex)
         return

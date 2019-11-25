@@ -3,24 +3,81 @@
 import logging
 import typing
 import Event
+from soft_exception import SoftException
 from .view_event import ViewEvent
 from .view_model import ViewModel
-from ..py_object_binder import PyObjectEntity
-from ..py_object_wrappers import PyObjectView
+from ..py_object_binder import PyObjectEntity, getProxy, getObject
+from ..py_object_wrappers import PyObjectView, PyObjectViewSettings
 from ..gui_constants import ViewFlags, ViewStatus, ViewEventType
 _logger = logging.getLogger(__name__)
+
+class ViewSettings(object):
+    __slots__ = ('__proxy', 'args', 'kwargs')
+
+    def __init__(self, layoutID, flags=ViewFlags.VIEW, model=None):
+        super(ViewSettings, self).__init__()
+        self.__proxy = PyObjectViewSettings(layoutID)
+        self.__proxy.flags = flags
+        self.args = ()
+        self.kwargs = {}
+        if model is not None:
+            self.__proxy.model = getProxy(model)
+        return
+
+    @property
+    def proxy(self):
+        return self.__proxy
+
+    @property
+    def layoutID(self):
+        return self.__proxy.layoutID
+
+    @layoutID.setter
+    def layoutID(self, layoutID):
+        self.__proxy.layoutID = layoutID
+
+    @property
+    def flags(self):
+        return self.__proxy.flags
+
+    @flags.setter
+    def flags(self, flags):
+        self.__proxy.flags = flags
+
+    @property
+    def model(self):
+        return getObject(self.__proxy.model)
+
+    @model.setter
+    def model(self, model):
+        if model is not None and not isinstance(model, ViewModel):
+            raise SoftException('model should be ViewModel class or extends it')
+        self.__proxy.model = getProxy(model)
+        return
+
+    def clear(self):
+        self.__proxy = None
+        return
+
 
 class View(PyObjectEntity):
     __slots__ = ('__viewStatus', '__viewModel', '__args', '__kwargs', 'onStatusChanged')
 
-    def __init__(self, layoutID, wsFlags, viewModelClazz, *args, **kwargs):
+    def __init__(self, settings, wsFlags=ViewFlags.VIEW, viewModelClazz=ViewModel, *args, **kwargs):
+        if not isinstance(settings, ViewSettings):
+            _logger.warning('%r: Creation of view using statement View(layoutID, wsFlags, viewModelClazz, *args, **kwargs) is deprecated and will be removed in next iteration. Please, use View(ViewSettings(...))', self.__class__.__name__)
+            settings = ViewSettings(settings)
+            settings.flags = wsFlags
+            settings.model = viewModelClazz()
+            settings.args = args
+            settings.kwargs = kwargs
         self._swapStates(ViewStatus.UNDEFINED, ViewStatus.CREATED)
-        self.__viewModel = viewModelClazz()
-        super(View, self).__init__(PyObjectView(layoutID, self.__viewModel.proxy, wsFlags))
+        self.__viewModel = settings.model
+        super(View, self).__init__(PyObjectView(settings.proxy))
         self.onStatusChanged = Event.Event()
         self.__viewStatus = ViewStatus.UNDEFINED if self.proxy is None else self.proxy.viewStatus
-        self.__args = args
-        self.__kwargs = kwargs
+        self.__args = settings.args
+        self.__kwargs = settings.kwargs
         return
 
     def __repr__(self):
@@ -57,6 +114,17 @@ class View(PyObjectEntity):
 
     def getParentView(self):
         return self.proxy.getParent() if self.proxy is not None else None
+
+    def getChildView(self, resourceID):
+        return self.proxy.getChild(resourceID) if self.proxy is not None else None
+
+    def setChildView(self, resourceID, view=None):
+        if self.proxy is not None:
+            if not self.proxy.setChild(resourceID, getProxy(view)):
+                _logger.error('%r: child %r can not be added. May be child is already added to other view or window', self, view)
+        else:
+            _logger.error('%r: Parent view does not have proxy, child can not be added', self)
+        return
 
     def load(self):
         self.proxy.load()

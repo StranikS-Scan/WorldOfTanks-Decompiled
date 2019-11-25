@@ -5,6 +5,9 @@ from frameworks.wulf import ViewModel
 class PremDashboardHeaderClanInfoModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=2, commands=0):
+        super(PremDashboardHeaderClanInfoModel, self).__init__(properties=properties, commands=commands)
+
     def getClanAbbrev(self):
         return self._getString(0)
 

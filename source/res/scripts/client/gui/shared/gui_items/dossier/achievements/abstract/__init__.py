@@ -5,15 +5,15 @@ from mixins import Deprecated
 from mixins import Quest
 from mixins import HasVehiclesList as _HasVehiclesList
 from mixins import NoProgressBar
-from ClassProgressAchievement import ClassProgressAchievement
-from HistoricalAchievement import HistoricalAchievement
-from NationSpecificAchievement import NationSpecificAchievement
-from RareAchievement import RareAchievement
-from RegularAchievement import RegularAchievement
-from SeriesAchievement import SeriesAchievement
-from RegularExtAchievement import RegularExtAchievement
-from SimpleProgressAchievement import SimpleProgressAchievement
-from StageAchievement import StageAchievement
+from class_progress import ClassProgressAchievement
+from historical import HistoricalAchievement
+from nation_specific import NationSpecificAchievement
+from rare import RareAchievement
+from regular import RegularAchievement
+from series import SeriesAchievement
+from regular_ext import RegularExtAchievement
+from simple_progress import SimpleProgressAchievement
+from stage import StageAchievement
 from skeletons.gui.server_events import IEventsCache
 
 class DeprecatedAchievement(Deprecated, RegularAchievement):

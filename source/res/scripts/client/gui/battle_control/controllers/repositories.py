@@ -2,39 +2,10 @@
 # Embedded file name: scripts/client/gui/battle_control/controllers/repositories.py
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_control.arena_info.interfaces import IArenaController
-from gui.battle_control.battle_constants import BATTLE_CTRL_ID, REUSABLE_BATTLE_CTRL_IDS
-from gui.battle_control.battle_constants import getBattleCtrlName
-from gui.battle_control.controllers import arena_border_ctrl
-from gui.battle_control.controllers import arena_load_ctrl, battle_field_ctrl
-from gui.battle_control.controllers import avatar_stats_ctrl
-from gui.battle_control.controllers import bootcamp_ctrl
-from gui.battle_control.controllers import chat_cmd_ctrl
-from gui.battle_control.controllers import consumables
-from gui.battle_control.controllers import debug_ctrl
-from gui.battle_control.controllers import drr_scale_ctrl
-from gui.battle_control.controllers import dyn_squad_functional
-from gui.battle_control.controllers import feedback_adaptor
-from gui.battle_control.controllers import game_messages_ctrl
-from gui.battle_control.controllers import hit_direction_ctrl
-from gui.battle_control.controllers import interfaces
-from gui.battle_control.controllers import msgs_ctrl
-from gui.battle_control.controllers import period_ctrl
-from gui.battle_control.controllers import personal_efficiency_ctrl
-from gui.battle_control.controllers import respawn_ctrl
-from gui.battle_control.controllers import team_bases_ctrl
-from gui.battle_control.controllers import team_health_bar_ctrl
-from gui.battle_control.controllers import tmp_ignore_list_ctrl
-from gui.battle_control.controllers import vehicle_state_ctrl
-from gui.battle_control.controllers import view_points_ctrl
+from gui.battle_control.battle_constants import BATTLE_CTRL_ID, REUSABLE_BATTLE_CTRL_IDS, getBattleCtrlName
+from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, bootcamp_ctrl, chat_cmd_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, respawn_ctrl, team_bases_ctrl, team_health_bar_ctrl, vehicle_state_ctrl, view_points_ctrl, epic_respawn_ctrl, progress_circle_ctrl, epic_maps_ctrl, epic_spectator_ctrl, epic_missions_ctrl, game_notification_ctrl, epic_team_bases_ctrl, anonymizer_fakes_ctrl
 from gui.battle_control.controllers.quest_progress import quest_progress_ctrl
 from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicControllersLocator
-from gui.battle_control.controllers import epic_respawn_ctrl
-from gui.battle_control.controllers import progress_circle_ctrl
-from gui.battle_control.controllers import epic_maps_ctrl
-from gui.battle_control.controllers import epic_spectator_ctrl
-from gui.battle_control.controllers import epic_missions_ctrl
-from gui.battle_control.controllers import game_notification_ctrl
-from gui.battle_control.controllers import epic_team_bases_ctrl
 
 class BattleSessionSetup(object):
     __slots__ = ('avatar', 'replayCtrl', 'gasAttackMgr', 'sessionProvider')
@@ -159,8 +130,8 @@ class SharedControllersLocator(_ControllersLocator, ISharedControllersLocator):
         return self._repository.getController(BATTLE_CTRL_ID.PERSONAL_EFFICIENCY)
 
     @property
-    def battleCacheCtrl(self):
-        return self._repository.getController(BATTLE_CTRL_ID.TMP_IGNORE_LIST_CTRL)
+    def anonymizerFakesCtrl(self):
+        return self._repository.getController(BATTLE_CTRL_ID.ANONYMIZER_FAKES)
 
     @property
     def viewPoints(self):
@@ -312,13 +283,11 @@ class SharedControllersRepository(_ControllersRepository):
         repository.addController(chat_cmd_ctrl.ChatCommandsController(setup, feedback, ammo))
         repository.addController(drr_scale_ctrl.DRRScaleController(messages))
         repository.addController(personal_efficiency_ctrl.createEfficiencyCtrl(setup, feedback, state))
-        tmpIgnoreListCtrl = tmp_ignore_list_ctrl.createTmpIgnoreListCtrl(setup)
-        if tmpIgnoreListCtrl is not None:
-            repository.addController(tmpIgnoreListCtrl)
         repository.addArenaController(bootcamp_ctrl.BootcampController(), setup)
         repository.addArenaController(quest_progress_ctrl.createQuestProgressController(), setup)
         repository.addArenaController(view_points_ctrl.ViewPointsController(setup), setup)
         repository.addArenaController(arena_border_ctrl.ArenaBorderController(), setup)
+        repository.addArenaController(anonymizer_fakes_ctrl.AnonymizerFakesController(setup), setup)
         repository.addArenaViewController(arena_load_ctrl.createArenaLoadController(setup), setup)
         repository.addArenaViewController(period_ctrl.createPeriodCtrl(setup), setup)
         repository.addViewController(hit_direction_ctrl.createHitDirectionController(setup), setup)

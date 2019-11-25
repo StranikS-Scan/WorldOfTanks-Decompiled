@@ -5,6 +5,9 @@ from frameworks.wulf import ViewModel
 class DailyExperienceBaseModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=4, commands=0):
+        super(DailyExperienceBaseModel, self).__init__(properties=properties, commands=commands)
+
     def getIsTankPremiumActive(self):
         return self._getBool(0)
 

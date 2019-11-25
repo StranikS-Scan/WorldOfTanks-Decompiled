@@ -2,7 +2,7 @@
 # Embedded file name: scripts/common/Lib/Crypto/Cipher/ARC2.py
 __revision__ = '$Id$'
 from Crypto.Cipher import blockalgo
-from Crypto.Cipher import _ARC2
+import _ARC2
 
 class RC2Cipher(blockalgo.BlockAlgo):
 

@@ -95,7 +95,7 @@ class EpicSelectorWarningTooltip(BlocksTooltipData):
             endKey = EPIC_BATTLE.SELECTORTOOLTIP_EPICBATTLE_TIMELEFT
         else:
             endKey = EPIC_BATTLE.SELECTORTOOLTIP_EPICBATTLE_STARTIN
-        return formatters.packTextBlockData(text_styles.concatStylesToSingleLine(text_styles.main(endKey), text_styles.middleTitle(time_utils.getTillTimeString(timeLeft, MENU.HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY))), padding=formatters.packPadding(top=2))
+        return formatters.packTextBlockData(text_styles.concatStylesToSingleLine(text_styles.main(endKey), text_styles.middleTitle(time_utils.getTillTimeString(timeLeft, MENU.HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY, removeLeadingZeros=True))), padding=formatters.packPadding(top=2))
 
     def __packFrozenBlock(self):
         return formatters.packTextBlockData(text_styles.concatStylesToSingleLine(icons.alert(), text_styles.alert(EPIC_BATTLE.SELECTORTOOLTIP_EPICBATTLE_FROZEN)), padding=formatters.packPadding(top=16))

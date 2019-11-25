@@ -35,7 +35,7 @@ class ColoringObsceneLanguageFilter(IIncomingMessageFilter):
 
     def __del__(self):
         if self.usersStorage is not None:
-            self.usersStorage._clearBreakers()
+            self.usersStorage.clearBreakers()
         return
 
     @storage_getter('users')
@@ -43,12 +43,12 @@ class ColoringObsceneLanguageFilter(IIncomingMessageFilter):
         return None
 
     def __processBadWord(self, word):
-        self.usersStorage._markAsBreaker(self.__currentID, True)
+        self.usersStorage.markAsBreaker(self.__currentID, True)
         return g_settings.lobby.badWordFormat.format(word)
 
     def filter(self, senderID, text):
         self.__currentID = senderID
-        self.usersStorage._markAsBreaker(self.__currentID, False)
+        self.usersStorage.markAsBreaker(self.__currentID, False)
         return text if isCurrentPlayer(senderID) else g_olDictionary.searchAndReplace(text)
 
 

@@ -6,6 +6,9 @@ from frameworks.wulf import ViewModel
 class CardPremInfoModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=3, commands=0):
+        super(CardPremInfoModel, self).__init__(properties=properties, commands=commands)
+
     def getIcon(self):
         return self._getResource(0)
 

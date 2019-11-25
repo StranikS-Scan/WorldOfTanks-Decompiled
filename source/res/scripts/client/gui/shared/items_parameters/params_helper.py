@@ -10,7 +10,7 @@ from gui.shared.items_parameters import params, RELATIVE_PARAMS, MAX_RELATIVE_VA
 from gui.shared.items_parameters.comparator import VehiclesComparator, ItemsComparator
 from gui.shared.items_parameters.functions import getBasicShell
 from gui.shared.items_parameters.params_cache import g_paramsCache
-from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, WHEELED_SPEED_MODE_SPEED
+from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME
 from helpers import dependency
 from items import vehicles, ITEM_TYPES
 from shared_utils import findFirst, first
@@ -31,11 +31,12 @@ RELATIVE_POWER_PARAMS = ('avgDamage',
  'reloadTime',
  AUTO_RELOAD_PROP_NAME,
  'reloadTimeSecs',
+ 'clipFireRate',
+ DUAL_GUN_CHARGE_TIME,
  'turretRotationSpeed',
  'turretYawLimits',
  'pitchLimits',
  'gunYawLimits',
- 'clipFireRate',
  'aimingTime',
  'shotDispersionAngle',
  'avgDamagePerMinute')

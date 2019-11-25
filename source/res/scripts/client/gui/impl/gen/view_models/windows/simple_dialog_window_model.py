@@ -7,6 +7,9 @@ from frameworks.wulf import ViewModel
 class SimpleDialogWindowModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=4, commands=0):
+        super(SimpleDialogWindowModel, self).__init__(properties=properties, commands=commands)
+
     def getMessage(self):
         return self._getResource(0)
 

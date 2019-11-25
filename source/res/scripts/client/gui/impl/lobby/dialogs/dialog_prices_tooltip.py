@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/dialogs/dialog_prices_tooltip.py
-from frameworks.wulf import ViewFlags
+from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.windows.dialog_prices_tooltip_model import DialogPricesTooltipModel
 from gui.impl.pub import ViewImpl
@@ -9,7 +9,11 @@ class DialogPricesTooltip(ViewImpl):
     __slots__ = ()
 
     def __init__(self, *args, **kwargs):
-        super(DialogPricesTooltip, self).__init__(R.views.common.dialog_view.components.dialog_prices_tooltip.DialogPricesTooltip(), ViewFlags.VIEW, DialogPricesTooltipModel, *args, **kwargs)
+        settings = ViewSettings(R.views.common.dialog_view.components.dialog_prices_tooltip.DialogPricesTooltip())
+        settings.model = DialogPricesTooltipModel()
+        settings.args = args
+        settings.kwargs = kwargs
+        super(DialogPricesTooltip, self).__init__(settings)
 
     @property
     def viewModel(self):

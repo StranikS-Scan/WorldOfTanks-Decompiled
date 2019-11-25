@@ -4,6 +4,7 @@ from gui.impl.gen_utils import DynAccessor
 from .animations import Animations
 from .areas import Areas
 from .atlases import Atlases
+from .dynamic_ids import DynamicIds
 from .entries import Entries
 from .images import Images
 from .sounds import Sounds
@@ -18,6 +19,7 @@ class Resources(object):
     animations = Animations()
     areas = Areas()
     atlases = Atlases()
+    dynamic_ids = DynamicIds()
     entries = Entries()
     images = Images()
     sounds = Sounds()

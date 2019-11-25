@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/pub/simple_dialog_window.py
 import typing
-from frameworks.wulf import ViewModel, Array
+from frameworks.wulf import ViewModel, Array, ViewSettings
 from gui.impl.gen.resources import R
 from gui.impl.gen.view_models.constants.dialog_presets import DialogPresets
 from gui.impl.gen.view_models.windows.simple_dialog_window_model import SimpleDialogWindowModel
@@ -10,7 +10,9 @@ from gui.impl.pub.dialog_window import DialogWindow, DialogContent, DialogLayer
 class SimpleDialogWindow(DialogWindow):
 
     def __init__(self, bottomContent=None, parent=None, balanceContent=None, enableBlur=True, preset=DialogPresets.DEFAULT, layer=DialogLayer.TOP_WINDOW):
-        super(SimpleDialogWindow, self).__init__(bottomContent=bottomContent, parent=parent, balanceContent=balanceContent, enableBlur=enableBlur, content=DialogContent(R.views.common.dialog_view.simple_dialog_content.SimpleDialogContent(), SimpleDialogWindowModel), layer=layer)
+        contentSettings = ViewSettings(R.views.common.dialog_view.simple_dialog_content.SimpleDialogContent())
+        contentSettings.model = SimpleDialogWindowModel()
+        super(SimpleDialogWindow, self).__init__(bottomContent=bottomContent, parent=parent, balanceContent=balanceContent, enableBlur=enableBlur, content=DialogContent(contentSettings), layer=layer)
         self._setPreset(preset)
 
     @property

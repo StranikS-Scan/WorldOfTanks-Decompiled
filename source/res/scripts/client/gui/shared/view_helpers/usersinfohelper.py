@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/view_helpers/UsersInfoHelper.py
+import logging
 from collections import defaultdict
 from Event import Event
 from debug_utils import LOG_DEBUG
@@ -7,15 +8,16 @@ from gui.shared import formatters as shared_fmts
 from gui.shared.view_helpers.UsersInfoController import UsersInfoController
 from helpers import dependency
 from messenger import g_settings
-from messenger.m_constants import USER_GUI_TYPE
+from messenger.m_constants import USER_GUI_TYPE, UserEntityScope
 from messenger.storage import storage_getter
 from messenger.proto import proto_getter, PROTO_TYPE
 from messenger.proto.entities import SharedUserEntity
 from skeletons.gui.lobby_context import ILobbyContext
+_logger = logging.getLogger(__name__)
 
 class UsersInfoHelper(object):
-    _rqCtrl = UsersInfoController()
     lobbyContext = dependency.descriptor(ILobbyContext)
+    _rqCtrl = UsersInfoController()
 
     def __init__(self):
         self._invalid = defaultdict(set)
@@ -53,17 +55,17 @@ class UsersInfoHelper(object):
     def proto(self):
         return None
 
-    def getContact(self, userDbID):
-        user = self.users.getUser(userDbID)
+    def getContact(self, userID, scope=UserEntityScope.LOBBY):
+        user = self.users.getUser(userID, scope=scope)
         if not user:
-            user = SharedUserEntity(userDbID)
+            user = SharedUserEntity(userID)
             self.users.addUser(user)
         return user
 
-    def getUserName(self, userDbID):
-        user = self.getContact(userDbID)
+    def getUserName(self, userID, scope=UserEntityScope.LOBBY):
+        user = self.getContact(userID, scope=scope)
         if not user.hasValidName():
-            self._invalid['names'].add(userDbID)
+            self._invalid['names'].add(userID)
             if self.proto.isConnected():
                 return ''
         return user.getName()
@@ -73,14 +75,6 @@ class UsersInfoHelper(object):
 
     def getUserRegionCode(self, userDbID):
         return self.lobbyContext.getRegionCode(userDbID)
-
-    def getUserFullName(self, userDbID, isClan=True, isRegion=True):
-        user = self.getContact(userDbID)
-        if not user.hasValidName():
-            self._invalid['names'].add(userDbID)
-            if self.proto.isConnected():
-                return ''
-        return user.getFullName(isClan=isClan, isRegion=isRegion)
 
     def getUserRating(self, userDbID):
         user = self.getContact(userDbID)
@@ -106,13 +100,9 @@ class UsersInfoHelper(object):
         user = self.getContact(userDbID)
         return (user.hasValidName() and user.hasValidRating(), self.buildGuiUserData(user))
 
-    def getGuiUserName(self, userDbID, formatter=lambda v: v):
-        userName = self.getUserName(userDbID)
+    def getGuiUserName(self, userID, formatter=lambda v: v, scope=UserEntityScope.LOBBY):
+        userName = self.getUserName(userID, scope=scope)
         return formatter(userName) if userName else ''
-
-    def getGuiUserFullName(self, userDbID, isClan=True, isRegion=True, formatter=lambda v: v):
-        userFullName = self.getUserFullName(userDbID, isClan=isClan, isRegion=isRegion)
-        return formatter(userFullName) if userFullName else ''
 
     def getGuiUserRating(self, userDbID, formatter=lambda v: v):
         userRating = self.getUserRating(userDbID)

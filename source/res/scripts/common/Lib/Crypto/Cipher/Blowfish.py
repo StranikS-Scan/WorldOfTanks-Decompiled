@@ -2,7 +2,7 @@
 # Embedded file name: scripts/common/Lib/Crypto/Cipher/Blowfish.py
 __revision__ = '$Id$'
 from Crypto.Cipher import blockalgo
-from Crypto.Cipher import _Blowfish
+import _Blowfish
 
 class BlowfishCipher(blockalgo.BlockAlgo):
 

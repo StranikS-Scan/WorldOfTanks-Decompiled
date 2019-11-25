@@ -142,7 +142,7 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
             return unicode(text, 'utf-8', errors='ignore')
 
     def getSenderID(self):
-        return self._protoData['int64Arg1']
+        return self.sessionProvider.getArenaDP().getSessionIDByVehID(self._protoData['int64Arg1'])
 
     def getFirstTargetID(self):
         return self._protoData['int32Arg1']

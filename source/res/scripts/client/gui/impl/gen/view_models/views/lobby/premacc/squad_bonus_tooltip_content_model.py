@@ -5,6 +5,9 @@ from frameworks.wulf import ViewModel
 class SquadBonusTooltipContentModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=3, commands=0):
+        super(SquadBonusTooltipContentModel, self).__init__(properties=properties, commands=commands)
+
     def getCreditsBonusWithPremium(self):
         return self._getNumber(0)
 

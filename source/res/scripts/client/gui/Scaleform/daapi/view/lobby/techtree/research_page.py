@@ -61,7 +61,7 @@ class Research(ResearchMeta):
                 shared_events.showVehiclePreview(int(itemCD), self.alias)
             elif vehicle.isInInventory:
                 if not vehicle.activeInNationGroup:
-                    itemCD = iterVehTypeCDsInNationGroup(vehicle.intCompactDescr).next()
+                    itemCD = iterVehTypeCDsInNationGroup(vehicle.intCD).next()
                 shared_events.selectVehicleInHangar(itemCD)
 
     def requestResearchData(self):

@@ -21,6 +21,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     SKILL = 'skill'
     CREW_SKIN = 'crew_skin'
     CREW_BOOK = 'crew_book'
+    CREW_BUNDLE = 'crewBundle'
     ACHIEVEMENT = 'achievement'
     ACHIEVEMENT_ATTR = 'achievementAttr'
     MODULE = 'module'
@@ -91,6 +92,7 @@ class TOOLTIP_COMPONENT(CONST_CONTAINER):
     RESERVE = 'reserve'
     BLUEPRINT = 'blueprints'
     SESSION_STATS = 'sessionStats'
+    CREW = 'crew'
     CREW_BOOK = 'crewBook'
     TRADE_IN = 'tradeIn'
 

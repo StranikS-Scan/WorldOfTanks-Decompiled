@@ -236,6 +236,7 @@ def readDeviceHealthParams(xmlCtx, section, subsectionName='', withHysteresis=Tr
             if hysteresisHealth > component.maxRegenHealth:
                 _xml.raiseWrongSection(xmlCtx, 'hysteresisHealth')
             component.hysteresisHealth = hysteresisHealth
+        component.invulnerable = _xml.readBool(xmlCtx, section, 'invulnerable', False)
     return component
 
 

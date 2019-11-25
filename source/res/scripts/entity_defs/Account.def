@@ -27,13 +27,14 @@
     <Interface>	AccountUnitBrowser	</Interface>
     <Interface>	AccountDebugger	</Interface>
     <Interface>	QuestProcessor	</Interface>
+    <Interface>	AvatarCreator	</Interface>
   </Implements>
   <Properties>
-    <requiredVersion_16100>
+    <requiredVersion_17000>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	ru_1.6.1_5	</Default>
-    </requiredVersion_16100>
+      <Default>	ct_1.7.0_1	</Default>
+    </requiredVersion_17000>
     <name>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
@@ -403,19 +404,6 @@
       <Exposed></Exposed>
       <Arg>	CLIENT_PB_20_UX_STATS	</Arg>
     </logClientPB20UXStats>
-    <createAvatar>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	VECTOR3	</Arg>
-      <Arg>	FLOAT32	</Arg>
-      <Arg>	PYTHON	</Arg>
-      <Arg>	BOOL	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	ARRAY	  <of>	INT32	</of>
-      </Arg>
-    </createAvatar>
     <releaseClientForLogin>
       <Arg>	MAILBOX	</Arg>
       <Arg>	PYTHON	</Arg>

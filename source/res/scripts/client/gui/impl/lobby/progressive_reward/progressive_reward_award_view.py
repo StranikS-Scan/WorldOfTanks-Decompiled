@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/progressive_reward/progressive_reward_award_view.py
 import logging
-from frameworks.wulf import ViewFlags
+from frameworks.wulf import ViewSettings
 from frameworks.wulf import WindowFlags
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl.auxiliary.rewards_helper import getRewardTooltipContent, getRewardRendererModelPresenter, BLUEPRINTS_CONGRAT_TYPES, fillStepsModel, getLastCongratsIndex
@@ -25,7 +25,11 @@ class ProgressiveRewardAwardView(ViewImpl):
     __slots__ = ('__items', '__bonuses', '__specialRewardType', '__currentStep')
 
     def __init__(self, contentResId, *args, **kwargs):
-        super(ProgressiveRewardAwardView, self).__init__(contentResId, ViewFlags.VIEW, ProgressiveRewardAwardModel, *args, **kwargs)
+        settings = ViewSettings(contentResId)
+        settings.model = ProgressiveRewardAwardModel()
+        settings.args = args
+        settings.kwargs = kwargs
+        super(ProgressiveRewardAwardView, self).__init__(settings)
         self.__items = {}
         self.__bonuses = []
         self.__specialRewardType = ''

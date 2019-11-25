@@ -13,7 +13,7 @@ class QuitGameDialogWindow(DialogWindow):
     __slots__ = ()
 
     def __init__(self, parent=None):
-        super(QuitGameDialogWindow, self).__init__(parent=parent)
+        super(QuitGameDialogWindow, self).__init__(parent=parent, enableBlur=False)
 
     def _initialize(self):
         super(QuitGameDialogWindow, self)._initialize()

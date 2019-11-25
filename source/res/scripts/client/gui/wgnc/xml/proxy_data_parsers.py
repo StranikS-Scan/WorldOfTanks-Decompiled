@@ -119,15 +119,6 @@ class _ClanInvitesCreatedParser(SectionParser):
         return tuple((long(itemsList[i].strip()) for i in xrange(len(itemsList))))
 
 
-class _EncyclopediaContentParser(SectionParser):
-
-    def getTagName(self):
-        pass
-
-    def parse(self, section):
-        return proxy_data.EncyclopediaContentItem(section.readInt('content_id'))
-
-
 class _ShowPromoParser(SectionParser):
 
     def getTagName(self):
@@ -214,7 +205,6 @@ class ProxyDataItemParser_v2(_ProxyDataItemsParser):
          _ClanInvitesCreatedParser(),
          _ClanInviteDeclinedParser(),
          _ClanInviteAcceptedParser(),
-         _EncyclopediaContentParser(),
          _ShowInBrowserParser(),
          _ShowPromoParser(),
          _ReferralBubbleParser(),

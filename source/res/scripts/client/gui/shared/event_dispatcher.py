@@ -8,6 +8,7 @@ from constants import RentType, GameSeasonType
 from debug_utils import LOG_WARNING
 from gui import SystemMessages, DialogsInterface, GUI_SETTINGS
 from gui.Scaleform import MENU
+from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import SellModuleMeta
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.framework import ScopeTemplates
@@ -25,6 +26,7 @@ from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.impl import backport
 from gui.game_control.links import URLMacros
+from gui.impl.pub import UIImplType
 from gui.ingame_shop import generateShopRentRenewProductID, showBuyGoldForRentWebOverlay
 from gui.ingame_shop import getShopProductInfo
 from gui.ingame_shop import makeBuyParamsByProductInfo
@@ -40,6 +42,8 @@ from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.functions import getViewName, getUniqueViewName
 from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared.gui_items.Vehicle import getUserName
+from items import vehicles as vehicles_core
 from helpers import dependency
 from helpers.aop import pointcutable
 from helpers.i18n import makeString as _ms
@@ -139,6 +143,9 @@ def _purchaseOffer(vehicleCD, rentType, nums, price, seasonType, buyParams, rene
             _doPurchaseOffer(vehicleCD, rentType, nums, price, seasonType, buyParams, renew)
     elif price.getCurrency() == Currency.GOLD and isIngameShopEnabled():
         showBuyGoldForRentWebOverlay(price.get(Currency.GOLD), vehicleCD)
+    else:
+        vehicleName = getUserName(vehicles_core.getVehicleType(vehicleCD))
+        SystemMessages.pushMessage(backport.text(R.strings.system_messages.vehicle_rent.dyn('not_enough_{}'.format(price.getCurrency()))(), vehName=vehicleName), type=SystemMessages.SM_TYPE.Error)
 
 
 @process
@@ -232,9 +239,38 @@ def showDashboardView():
     g_eventBus.handleEvent(events.LoadUnboundViewEvent(R.views.lobby.premacc.prem_dashboard_view.PremDashboardView(), PremDashboardView, ScopeTemplates.LOBBY_SUB_SCOPE), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
+def gamefaceEnabled():
+    lobbyContext = dependency.instance(ILobbyContext)
+    guiLoader = dependency.instance(IGuiLoader)
+    isGamefaceInitilized = guiLoader.implTypeMask & UIImplType.GAMEFACE_UI_IMPL > 0
+    isGamefaceEnabled = lobbyContext.getServerSettings().isGamefaceEnabled()
+    return isGamefaceInitilized and isGamefaceEnabled
+
+
+@async
 def showBattleBoosterBuyDialog(battleBoosterIntCD, install=False):
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOSTER_BUY_WINDOW, ctx={'typeCompDescr': battleBoosterIntCD,
-     'install': install}), EVENT_BUS_SCOPE.LOBBY)
+    from gui.impl.dialogs import dialogs
+    from gui.impl.lobby.instructions.booster_buy_dialog import BoosterBuyWindowView
+    if gamefaceEnabled():
+        yield dialogs.showSimple(BoosterBuyWindowView(battleBoosterIntCD, install))
+    else:
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOSTER_BUY_WINDOW, ctx={'typeCompDescr': battleBoosterIntCD,
+         'install': install}), EVENT_BUS_SCOPE.LOBBY)
+
+
+@async
+def _showBattleBoosterGFSellDialog(battleBoosterIntCD):
+    from gui.impl.lobby.instructions.booster_sell_dialog import BoosterSellWindowView
+    from gui.impl.dialogs import dialogs
+    yield dialogs.showSimple(BoosterSellWindowView(battleBoosterIntCD))
+
+
+@process
+def showBattleBoosterSellDialog(battleBoosterIntCD):
+    if gamefaceEnabled():
+        _showBattleBoosterGFSellDialog(battleBoosterIntCD)
+    else:
+        yield DialogsInterface.showDialog(SellModuleMeta(battleBoosterIntCD))
 
 
 def showResearchView(vehTypeCompDescr, exitEvent=None):
@@ -365,8 +401,8 @@ def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR):
     from ClientSelectableCameraObject import ClientSelectableCameraObject
     for entity in BigWorld.entities.values():
         if entity and isinstance(entity, HeroTank):
-            ClientSelectableCameraObject.switchCamera(entity)
             showHeroTankPreview(vehTypeCompDescr, previewAlias=previewAlias, previousBackAlias=None)
+            ClientSelectableCameraObject.switchCamera(entity)
             break
 
     return

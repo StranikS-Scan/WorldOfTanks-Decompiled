@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/module.py
 from debug_utils import LOG_ERROR
+from gui.impl.backport import backport_r
+from gui.impl.gen.resources import R
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getSlotOverlayIconType
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
@@ -18,7 +20,7 @@ from gui.shared.money import MONEY_UNDEFINED, Currency
 from gui.shared.tooltips import formatters
 from gui.shared.tooltips import getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
-from gui.shared.utils import GUN_CLIP, SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, AIMING_TIME_PROP_NAME, RELOAD_TIME_PROP_NAME, GUN_AUTO_RELOAD, AUTO_RELOAD_PROP_NAME
+from gui.shared.utils import GUN_CLIP, SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, AIMING_TIME_PROP_NAME, RELOAD_TIME_PROP_NAME, GUN_AUTO_RELOAD, AUTO_RELOAD_PROP_NAME, RELOAD_TIME_SECS_PROP_NAME, DUAL_GUN_RATE_TIME, DUAL_GUN_CHARGE_TIME, GUN_DUAL_GUN
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from helpers.i18n import makeString as _ms
@@ -163,6 +165,7 @@ class ModuleTooltipBlockConstructor(object):
     MAX_INSTALLED_LIST_LEN = 10
     CLIP_GUN_MODULE_PARAM = 'vehicleClipGun'
     AUTO_RELOAD_GUN_MODULE_PARAM = 'autoReloadGun'
+    DUAL_GUN_MODULE_PARAM = 'dualGun'
     WEIGHT_MODULE_PARAM = 'weight'
     MODULE_PARAMS = {GUI_ITEM_TYPE.CHASSIS: ('maxLoad', 'rotationSpeed', 'maxSteeringLockAngle', 'weight'),
      GUI_ITEM_TYPE.TURRET: ('armor', 'rotationSpeed', 'circularVisionRadius', 'weight'),
@@ -198,7 +201,15 @@ class ModuleTooltipBlockConstructor(object):
                                     'dispertionRadius',
                                     AIMING_TIME_PROP_NAME,
                                     'maxShotDistance',
-                                    'weight')}
+                                    'weight'),
+     DUAL_GUN_MODULE_PARAM: (RELOAD_TIME_SECS_PROP_NAME,
+                             DUAL_GUN_RATE_TIME,
+                             DUAL_GUN_CHARGE_TIME,
+                             'avgPiercingPower',
+                             'avgDamageList',
+                             'dispertionRadius',
+                             AIMING_TIME_PROP_NAME,
+                             'weight')}
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, module, configuration, leftPadding=20, rightPadding=20):
@@ -247,8 +258,10 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
             if extraInfo:
                 if module.isClipGun(vDescr):
                     titleKey = MENU.MODULEINFO_CLIPGUNLABEL
-                else:
+                elif module.isAutoReloadable(vDescr):
                     titleKey = MENU.MODULEINFO_AUTORELOADGUNLABEL
+                elif module.isDualGun(vDescr):
+                    titleKey = MENU.MODULEINFO_DUALGUNLABEL
                 block.append(formatters.packImageTextBlockData(title=text_styles.standard(titleKey), desc='', img=extraInfo, imgPadding=formatters.packPadding(top=3), padding=formatters.packPadding(left=108, top=9)))
         elif module.itemTypeID == GUI_ITEM_TYPE.CHASSIS:
             if module.isHydraulicChassis() and not vDescr.isDualgunVehicle:
@@ -424,6 +437,10 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
                 serverSettings = dependency.instance(ISettingsCore).serverSettings
                 highlightPossible = serverSettings.checkAutoReloadHighlights(increase=True)
                 paramsKeyName = self.AUTO_RELOAD_GUN_MODULE_PARAM
+            elif reloadingType == GUN_DUAL_GUN and vehicle is not None:
+                serverSettings = dependency.instance(ISettingsCore).serverSettings
+                highlightPossible = serverSettings.checkDualGunHighlights(increase=True)
+                paramsKeyName = self.DUAL_GUN_MODULE_PARAM
             paramsList = self.MODULE_PARAMS.get(paramsKeyName, [])
             if vehicle is not None:
                 if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
@@ -437,7 +454,10 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
                         paramInfo = comparator.getExtendedData(paramName)
                         fmtValue = params_formatters.colorizedFormatParameter(paramInfo, self.__colorScheme)
                         if fmtValue is not None:
-                            block.append(formatters.packTextParameterBlockData(name=params_formatters.formatModuleParamName(paramName), value=fmtValue, valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5), highlight=highlightPossible and paramName == AUTO_RELOAD_PROP_NAME))
+                            block.append(formatters.packTextParameterBlockData(name=params_formatters.formatModuleParamName(paramName), value=fmtValue, valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5), highlight=highlightPossible and paramName in (AUTO_RELOAD_PROP_NAME,
+                             RELOAD_TIME_SECS_PROP_NAME,
+                             DUAL_GUN_CHARGE_TIME,
+                             DUAL_GUN_RATE_TIME)))
 
             else:
                 formattedModuleParameters = params_formatters.getFormattedParamsList(module.descriptor, moduleParams)
@@ -457,8 +477,12 @@ class ModuleReplaceBlockConstructor(ModuleTooltipBlockConstructor):
         vehicle = self.configuration.vehicle
         optionalDevice = vehicle.optDevices[self.configuration.slotIdx]
         if optionalDevice is not None:
-            replaceModuleText = text_styles.main(TOOLTIPS.MODULEFITS_REPLACE)
-            block.append(formatters.packImageTextBlockData(title=replaceModuleText.format(moduleName=optionalDevice.userName)))
+            if self.module.isDeluxe() != optionalDevice.isDeluxe():
+                msgKey = R.strings.tooltips.moduleFits.replace()
+            else:
+                msgKey = R.strings.tooltips.moduleFits.dismantling()
+            replaceModuleText = text_styles.main(backport_r.text(msgKey, moduleName=optionalDevice.userName))
+            block.append(formatters.packImageTextBlockData(title=replaceModuleText))
         return block
 
 

@@ -20,6 +20,8 @@ from gui.shared.event_dispatcher import showProgressiveRewardWindow
 from gui.shared.utils import decorators
 from gui.wgcg.clan import contexts as clan_ctxs
 from gui.wgnc import g_wgncProvider
+from web.web_client_api import webApiCollection
+from web.web_client_api.sound import HangarSoundWebApi
 from helpers import dependency
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
@@ -422,7 +424,11 @@ class OpenPollHandler(_ActionHandler):
 
     @process
     def __doOpen(self, link, title):
-        yield self.browserCtrl.load(link, title, showActionBtn=False)
+        browserID = yield self.browserCtrl.load(link, title, showActionBtn=False, handlers=webApiCollection(HangarSoundWebApi))
+        browser = self.browserCtrl.getBrowser(browserID)
+        if browser is not None:
+            browser.setIsAudioMutable(True)
+        return
 
 
 class AcceptPrbInviteHandler(_ActionHandler):
@@ -461,6 +467,7 @@ class AcceptPrbInviteHandler(_ActionHandler):
             postActions.append(actions.DisconnectFromPeriphery())
             postActions.append(actions.ConnectToPeriphery(invite.peripheryID))
             postActions.append(actions.PrbInvitesInit())
+            postActions.append(actions.LeavePrbEntity())
         self.prbInvites.acceptInvite(entityID, postActions=postActions)
 
 

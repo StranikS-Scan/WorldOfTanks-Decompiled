@@ -6,6 +6,9 @@ from frameworks.wulf import ViewModel
 class WindowModel(ViewModel):
     __slots__ = ('onClosed', 'onMinimized')
 
+    def __init__(self, properties=3, commands=2):
+        super(WindowModel, self).__init__(properties=properties, commands=commands)
+
     def getTitle(self):
         return self._getResource(0)
 

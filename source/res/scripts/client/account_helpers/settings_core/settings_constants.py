@@ -84,6 +84,7 @@ class GAME(CONST_CONTAINER):
     SHOW_DAMAGE_ICON = 'showDamageIcon'
     SHOW_VEHICLES_COUNTER = 'showVehiclesCounter'
     SHOW_MARKS_ON_GUN = 'showMarksOnGun'
+    ANONYMIZER = 'anonymizer'
     DYNAMIC_CAMERA = 'dynamicCamera'
     SNIPER_MODE_STABILIZATION = 'horStabilizationSnp'
     INCREASED_ZOOM = 'increasedZoom'

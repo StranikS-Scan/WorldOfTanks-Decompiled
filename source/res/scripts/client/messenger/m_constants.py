@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/m_constants.py
 from collections import namedtuple
+from shared_utils import CONST_CONTAINER
 MESSENGER_XML_FILE = 'messenger'
 MESSENGER_I18N_FILE = 'messenger'
 MESSENGER_XML_FILE_PATH = 'gui/{0:>s}.xml'.format(MESSENGER_XML_FILE)
@@ -24,6 +25,11 @@ class PROTO_TYPE(object):
     XMPP = 2
     BW_CHAT2 = 3
     MIGRATION = 4
+
+
+class UserEntityScope(CONST_CONTAINER):
+    LOBBY = 1
+    BATTLE = 2
 
 
 PROTO_TYPE_NAMES = {v:k for k, v in PROTO_TYPE.__dict__.iteritems() if not k.startswith('_')}
@@ -95,7 +101,6 @@ class USER_TAG(object):
      IGNORED_TMP,
      SUB_PENDING_IN,
      MUTED}
-    _STORED_TO_CACHE = {MUTED}
 
     @classmethod
     def filterAllContactsTags(cls, tags):
@@ -104,10 +109,6 @@ class USER_TAG(object):
     @classmethod
     def filterClosedContactsTags(cls, tags):
         return tags & cls._CLOSED_CONTACTS
-
-    @classmethod
-    def filterToStoreTags(cls, tags):
-        return tags & cls._STORED_TO_CACHE
 
     @classmethod
     def filterSharedTags(cls, tags):

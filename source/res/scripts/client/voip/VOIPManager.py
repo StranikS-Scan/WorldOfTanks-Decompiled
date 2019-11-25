@@ -575,6 +575,6 @@ class VOIPManager(VOIPHandler):
             if dbID in self.__channelUsers:
                 self.__muteParticipantForMe(dbID, True)
 
-    def __me_onUserActionReceived(self, actionID, user):
+    def __me_onUserActionReceived(self, actionID, user, shadowMode):
         if actionID in (USER_ACTION_ID.MUTE_SET, USER_ACTION_ID.MUTE_UNSET):
             self.__onChatActionMute(user.getID(), user.isMuted())

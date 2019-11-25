@@ -5,6 +5,9 @@ from frameworks.wulf import ViewModel
 class LootDefRendererModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=9, commands=0):
+        super(LootDefRendererModel, self).__init__(properties=properties, commands=commands)
+
     def getLabelStr(self):
         return self._getString(0)
 

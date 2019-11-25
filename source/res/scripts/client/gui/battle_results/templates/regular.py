@@ -61,9 +61,10 @@ _COMMON_VO_META = base.DictMeta({'iconType': 'tank',
  'resultShortStr': '',
  'resultStr': '',
  'finishReasonStr': '',
- 'playerNameStr': '',
- 'playerFullNameStr': '',
+ 'playerFakeNameStr': '',
+ 'playerRealNameStr': '',
  'clanNameStr': '',
+ 'playerFullNameStr': '',
  'regionNameStr': '',
  'playerVehicles': [],
  'playerVehicleNames': [],
@@ -91,15 +92,17 @@ _PERSONAL_VEHICLE_VO_META = base.PropertyMeta((('isPrematureLeave', False, 'isPr
  ('isKilledByTeamKiller', False, 'isKilledByTeamKiller'),
  ('isNotObserver', True, 'isVehicleStatusDefined')))
 _PERSONAL_VEHICLE_VO_META.bind(personal.PersonalVehicleBlock)
-_PERSONAL_PLAYER_NAME_VO_META = base.PropertyMeta((('playerNameStr', '', 'nameLabel'),
- ('playerFullNameStr', '', 'fullNameLabel'),
+_PERSONAL_PLAYER_NAME_VO_META = base.PropertyMeta((('playerFakeNameStr', '', 'fakeNameLabel'),
+ ('playerRealNameStr', '', 'realNameLabel'),
  ('clanNameStr', '', 'clanLabel'),
+ ('playerFullNameStr', '', 'fullNameLabel'),
  ('regionNameStr', '', 'regionLabel')))
 _PERSONAL_PLAYER_NAME_VO_META.bind(personal.PersonalPlayerNameBlock)
 _PERSONAL_PLAYER_NAME_VO_META.bind(personal.DetailsPlayerNameBlock)
-_KILLER_NAME_VO_META = base.PropertyMeta((('killerNameStr', '', 'nameLabel'),
- ('killerFullNameStr', '', 'fullNameLabel'),
+_KILLER_NAME_VO_META = base.PropertyMeta((('killerFakeNameStr', '', 'fakeNameLabel'),
+ ('killerRealNameStr', '', 'realNameLabel'),
  ('killerClanNameStr', '', 'clanLabel'),
+ ('killerFullNameStr', '', 'fullNameLabel'),
  ('killerRegionNameStr', '', 'regionLabel')))
 _KILLER_NAME_VO_META.bind(personal.KillerPlayerNameBlock)
 _TIME_STATS_BLOCK = base.StatsBlock(base.ListMeta(runtime=False), 'timeStats', _RECORD.COMMON)
@@ -187,9 +190,10 @@ _TEAM_BASES_VO_META = base.PropertyMeta((('baseLabel', '', 'label'),
 _TEAM_BASES_VO_META.bind(personal.TeamBaseDetailsBlock)
 _TEAM_BASES_VO_META.bind(personal.AllyTeamBaseDetailBlock)
 _TEAM_BASES_VO_META.bind(personal.EnemyTeamBaseDetailBlock)
-_DETAILS_PLAYER_NAME_VO_META = base.PropertyMeta((('playerName', '', 'nameLabel'),
- ('playerFullName', '', 'fullNameLabel'),
+_DETAILS_PLAYER_NAME_VO_META = base.PropertyMeta((('playerFakeName', '', 'fakeNameLabel'),
+ ('playerRealName', '', 'realNameLabel'),
  ('playerClan', '', 'clanLabel'),
+ ('playerFullName', '', 'fullNameLabel'),
  ('playerRegion', '', 'regionLabel')))
 _DETAILS_PLAYER_NAME_VO_META.bind(personal.DetailsPlayerNameBlock)
 _EFFICIENCY_DETAILS_VO_META = base.PropertyMeta((('deathReason', -1, 'deathReason'),
@@ -278,11 +282,13 @@ REGULAR_PERSONAL_STATS_BLOCK.addComponent(14, personal.PremiumInfoBlock(_PREMIUM
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(15, details.PremiumBonusDetailsBlock(_PREMIUM_BONUS_VO_META, 'premiumBonus', _RECORD.PERSONAL))
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(16, _PREMIUM_EARNINGS_BLOCK.clone())
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(17, personal.DynamicPremiumState('dynamicPremiumState'))
-_TEAM_PLAYER_VO_META = base.PropertyMeta((('userName', '', 'nameLabel'),
- ('fullName', '', 'fullNameLabel'),
+_TEAM_PLAYER_VO_META = base.PropertyMeta((('fakeName', '', 'fakeNameLabel'),
+ ('userName', '', 'realNameLabel'),
  ('clanAbbrev', '', 'clanLabel'),
+ ('fullName', '', 'fullNameLabel'),
  ('region', '', 'regionLabel'),
- ('igrType', 0, 'igrType')))
+ ('igrType', 0, 'igrType'),
+ ('tags', set(), 'tags')))
 _TEAM_PLAYER_VO_META.bind(vehicles.TeamPlayerNameBlock)
 VEHICLE_STATS_BLOCK_VO_META = base.PropertyMeta((('shots', 0, 'shots'),
  ('hits', style.SlashedValuesBlock('hits'), 'hits'),

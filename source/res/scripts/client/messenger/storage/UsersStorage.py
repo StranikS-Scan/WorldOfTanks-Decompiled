@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/storage/UsersStorage.py
+import logging
 from collections import deque, defaultdict
 import types
-from debug_utils import LOG_ERROR
-from messenger.m_constants import USER_GUI_TYPE, BREAKERS_MAX_LENGTH, USER_TAG, MESSENGER_SCOPE
+from messenger.m_constants import USER_GUI_TYPE, BREAKERS_MAX_LENGTH, USER_TAG, MESSENGER_SCOPE, UserEntityScope
 from messenger.storage.local_cache import RevCachedStorage
+_logger = logging.getLogger(__name__)
 
 class UsersStorage(RevCachedStorage):
     __slots__ = ('__contacts', '__emptyGroups', '__openedGroups', '__clanMembersIDs', '__breakers')
@@ -37,49 +38,58 @@ class UsersStorage(RevCachedStorage):
         self.init()
 
     def reduce(self):
-        dbIDs = self.__contacts.keys()
-        for dbID in dbIDs:
-            user = self.__contacts[dbID]
+        keys = self.__contacts.keys()
+        for key in keys:
+            user = self.__contacts[key]
             if USER_TAG.filterToRemoveTags(user.getTags()):
-                self.__contacts.pop(dbID)
+                self.__contacts.pop(key)
 
     def all(self):
         return self.__contacts.values()
 
     def addUser(self, user):
-        dbID = user.getID()
-        if dbID not in self.__contacts:
-            self.__contacts[dbID] = user
+        key = user.getStorageKey()
+        if key not in self.__contacts:
+            self.__contacts[key] = user
         else:
-            LOG_ERROR('User exists in storage', user)
+            _logger.error('User %r exists in storage', user)
 
     def setUser(self, user):
-        dbID = user.getID()
-        if dbID not in self.__contacts:
-            self.__contacts[dbID] = user
+        key = user.getStorageKey()
+        if key not in self.__contacts:
+            self.__contacts[key] = user
         else:
-            exists = self.__contacts[dbID]
+            exists = self.__contacts[key]
             if exists.isCurrentPlayer():
                 return
             if not user.setSharedProps(exists):
-                LOG_ERROR('User entity can not be replaced', user, exists)
+                _logger.error('User entity %r can not be replaced by %r', exists, user)
                 return
-            self.__contacts[dbID] = user
+            self.__contacts[key] = user
 
-    def getUser(self, dbID, protoType=None):
+    def getUser(self, userID, protoType=None, scope=UserEntityScope.LOBBY):
         user = None
-        if dbID in self.__contacts:
-            user = self.__contacts[dbID]
+        key = (userID, scope)
+        if key in self.__contacts:
+            user = self.__contacts[key]
             if protoType is not None and not user.isCurrentPlayer() and user.getProtoType() != protoType:
                 user = None
         return user
 
-    def getUserGuiType(self, dbID):
+    def removeUser(self, sessionID):
+        try:
+            user = self.__contacts.pop((sessionID, UserEntityScope.BATTLE))
+            user.clear()
+        except KeyError:
+            _logger.warning('Trying to remove not existing contact %s', sessionID)
+
+    def getUserGuiType(self, userID, scope=UserEntityScope.LOBBY):
         name = USER_GUI_TYPE.OTHER
-        if dbID in self.__breakers:
+        key = (userID, scope)
+        if userID in self.__breakers:
             name = USER_GUI_TYPE.BREAKER
-        elif dbID in self.__contacts:
-            name = self.__contacts[dbID].getGuiType()
+        elif key in self.__contacts:
+            name = self.__contacts[key].getGuiType()
         return name
 
     def getList(self, criteria, iterator=None):
@@ -94,7 +104,7 @@ class UsersStorage(RevCachedStorage):
 
     def getClanMembersIterator(self, exCurrent=True):
         for dbID in self.__clanMembersIDs:
-            user = self.__contacts[dbID]
+            user = self.__contacts[dbID, UserEntityScope.LOBBY]
             if exCurrent and user.isCurrentPlayer():
                 continue
             yield user
@@ -183,10 +193,11 @@ class UsersStorage(RevCachedStorage):
         tags = {USER_TAG.CLAN_MEMBER}
         for member in members:
             dbID = member.getID()
-            if dbID not in self.__contacts:
-                self.__contacts[dbID] = member
+            key = (dbID, UserEntityScope.LOBBY)
+            if key not in self.__contacts:
+                self.__contacts[key] = member
             else:
-                contact = self.__contacts[dbID]
+                contact = self.__contacts[key]
                 contact.update(name=member.getName(), clanInfo=member.getClanInfo())
                 contact.addTags(tags)
             membersIDs.add(dbID)
@@ -194,22 +205,23 @@ class UsersStorage(RevCachedStorage):
         removed = self.__clanMembersIDs.difference(membersIDs)
         if removed:
             for dbID in removed:
-                if dbID in self.__contacts:
-                    contact = self.__contacts[dbID]
+                key = (dbID, UserEntityScope.LOBBY)
+                if key in self.__contacts:
+                    contact = self.__contacts[key]
                     contact.removeTags(tags)
                     contact.update(clanInfo=None)
 
         self.__clanMembersIDs = membersIDs
         return
 
-    def _markAsBreaker(self, dbID, flag):
+    def markAsBreaker(self, userID, flag):
         if flag:
-            if dbID not in self.__breakers:
-                self.__breakers.append(dbID)
-        elif dbID in self.__breakers:
-            self.__breakers.remove(dbID)
+            if userID not in self.__breakers:
+                self.__breakers.append(userID)
+        elif userID in self.__breakers:
+            self.__breakers.remove(userID)
 
-    def _clearBreakers(self):
+    def clearBreakers(self):
         self.__breakers.clear()
 
     def _syncEmptyGroups(self):

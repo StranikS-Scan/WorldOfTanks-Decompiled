@@ -9,21 +9,22 @@ _logger = logging.getLogger(__name__)
 
 def buildPagesData(ctx):
     datailedList = []
-    if ctx.get('hasSiegeMode'):
+    if ctx.get('isWheeled') and ctx.get('hasSiegeMode'):
         datailedList.extend(buildSiegeModePages())
     if ctx.get('hasBurnout'):
         datailedList.extend(buildBurnoutPages())
     if ctx.get('isWheeled'):
         datailedList.extend(buildWheeledPages())
+    if ctx.get('isDualGun'):
+        datailedList.extend(buildDualGunPages())
     return datailedList
 
 
 def buildTitle(ctx):
     title = backport.text(R.strings.ingame_help.detailsHelp.default.title())
-    if ctx.get('isWheeled'):
-        wheelTitle = _getWheeledTitleFromCtx(ctx)
-        if wheelTitle:
-            title = wheelTitle
+    vehName = ctx.get('vehName')
+    if vehName is not None:
+        title = vehName
     return title
 
 
@@ -52,16 +53,18 @@ def buildWheeledPages():
     return pages
 
 
+def buildDualGunPages():
+    pages = []
+    shootKey = getReadableKey(CommandMapping.CMD_CM_SHOOT)
+    chargeKey = getReadableKey(CommandMapping.CMD_CM_CHARGE_SHOT)
+    _addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.dualGun.volley_fire.title()), backport.text(R.strings.ingame_help.detailsHelp.dualGun.volley_fire()), [chargeKey], backport.image(R.images.gui.maps.icons.battleHelp.dualGunHelp.volley_fire()))
+    _addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.dualGun.quick_fire.title()), backport.text(R.strings.ingame_help.detailsHelp.dualGun.quick_fire()), [shootKey], backport.image(R.images.gui.maps.icons.battleHelp.dualGunHelp.quick_fire()))
+    return pages
+
+
 def _addPage(datailedList, title, descr, buttons, image):
     data = {'title': title,
      'descr': descr,
      'buttons': buttons,
      'image': image}
     datailedList.append(data)
-
-
-def _getWheeledTitleFromCtx(ctx):
-    title = ctx.get('vehName')
-    if title is None:
-        _logger.error('WheeledPages: Vehicle name not found in ctx')
-    return title

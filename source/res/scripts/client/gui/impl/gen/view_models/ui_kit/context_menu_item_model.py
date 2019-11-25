@@ -7,6 +7,9 @@ from gui.impl.gen.view_models.ui_kit.list_model import ListModel
 class ContextMenuItemModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=7, commands=0):
+        super(ContextMenuItemModel, self).__init__(properties=properties, commands=commands)
+
     @property
     def subItemsList(self):
         return self._getViewModel(0)

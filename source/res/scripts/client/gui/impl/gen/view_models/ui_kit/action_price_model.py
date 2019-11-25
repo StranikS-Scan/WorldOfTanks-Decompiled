@@ -5,6 +5,9 @@ from frameworks.wulf import ViewModel
 class ActionPriceModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=18, commands=0):
+        super(ActionPriceModel, self).__init__(properties=properties, commands=commands)
+
     def getType(self):
         return self._getString(0)
 

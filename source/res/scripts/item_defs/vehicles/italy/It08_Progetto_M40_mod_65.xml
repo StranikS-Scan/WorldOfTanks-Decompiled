@@ -50,6 +50,13 @@
       <undamaged>	vehicles/italy/It08_Progetto_M40_mod_65/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/italy/It08_Progetto_M40_mod_65/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/italy/It08_Progetto_M40_mod_65/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <It08_Progetto_M40_mod_65_3Dst>
+          <undamaged>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_3Dst/crash/lod0/Hull.model	</exploded>
+        </It08_Progetto_M40_mod_65_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -73,8 +80,8 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.211266 0.43861 2.45549	</rayStart>
-        <rayEnd>	0.21114 0.247184 2.39757	</rayEnd>
+        <rayStart>	0.10245 0.488378 2.29196	</rayStart>
+        <rayEnd>	0.102451 0.296962 2.234	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.4	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
@@ -1005,6 +1012,13 @@
         <undamaged>	vehicles/italy/It08_Progetto_M40_mod_65/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/italy/It08_Progetto_M40_mod_65/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/italy/It08_Progetto_M40_mod_65/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <It08_Progetto_M40_mod_65_3Dst>
+            <undamaged>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_3Dst/crash/lod0/Chassis.model	</exploded>
+          </It08_Progetto_M40_mod_65_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1872,6 +1886,13 @@
             <undamaged>	vehicles/italy/It08_Progetto_M40_mod_65/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/italy/It08_Progetto_M40_mod_65/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/italy/It08_Progetto_M40_mod_65/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <It08_Progetto_M40_mod_65_3Dst>
+                <undamaged>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </It08_Progetto_M40_mod_65_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/italy/It08_Progetto_M40_mod_65/collision/Gun_01.model	</collisionModelServer>
@@ -1961,6 +1982,13 @@
         <undamaged>	vehicles/italy/It08_Progetto_M40_mod_65/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/italy/It08_Progetto_M40_mod_65/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/italy/It08_Progetto_M40_mod_65/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <It08_Progetto_M40_mod_65_3Dst>
+            <undamaged>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/italy/It08_Progetto_M40_mod_65/_skin/It08_Progetto_M40_mod_65_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </It08_Progetto_M40_mod_65_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/italy/It08_Progetto_M40_mod_65/collision/Turret_01.model	</collisionModelServer>

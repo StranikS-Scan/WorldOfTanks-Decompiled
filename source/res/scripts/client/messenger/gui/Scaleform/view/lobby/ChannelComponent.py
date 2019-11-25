@@ -3,17 +3,26 @@
 import weakref
 import constants
 from debug_utils import LOG_DEBUG
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.shared.formatters import text_styles
+from helpers import dependency
 from messenger.gui import events_dispatcher
 from messenger.gui.Scaleform.meta.ChannelComponentMeta import ChannelComponentMeta
 from messenger.proto.bw_chat2.wrappers import UnitDataFactory
+from skeletons.gui.game_control import IAnonymizerController
+_R_SQUAD = R.strings.messenger.dialogs.squadChannel
 
 class ChannelComponent(ChannelComponentMeta):
+    __anonymizerController = dependency.descriptor(IAnonymizerController)
 
     def __init__(self):
         super(ChannelComponent, self).__init__()
         self._controller = lambda : None
+        self.__anonymizerController.onStateChanged += self.__onAnonymizerStateChanged
 
     def __del__(self):
+        self.__anonymizerController.onStateChanged -= self.__onAnonymizerStateChanged
         LOG_DEBUG('ChannelComponent deleted', self)
 
     def setController(self, controller):
@@ -62,6 +71,10 @@ class ChannelComponent(ChannelComponentMeta):
             result = self._controller().sendMessage(message)
         return result
 
+    def getInfo(self):
+        userAnonymized = self.__anonymizerController.isAnonymized
+        return '{}\n{}'.format(backport.text(_R_SQUAD.simpleChatName()), text_styles.alert(backport.text(_R_SQUAD.simpleChatAlert.anonymizer())) if userAnonymized else '')
+
     def getHistory(self):
         result = ''
         if self._controller():
@@ -85,3 +98,6 @@ class ChannelComponent(ChannelComponentMeta):
 
     def addCommand(self, cmd):
         pass
+
+    def __onAnonymizerStateChanged(self, **_):
+        self.as_notifyInfoChangedS()

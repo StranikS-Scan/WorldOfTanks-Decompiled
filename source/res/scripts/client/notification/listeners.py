@@ -310,10 +310,10 @@ class FriendshipRqsListener(_NotificationListener):
         for contact in contacts:
             self.__updateRequest(contact)
 
-    def __me_onUserActionReceived(self, actionID, contact):
+    def __me_onUserActionReceived(self, actionID, contact, shadowMode):
         if contact.getProtoType() != PROTO_TYPE.XMPP:
             return
-        if actionID in (USER_ACTION_ID.SUBSCRIPTION_CHANGED, USER_ACTION_ID.IGNORED_ADDED, USER_ACTION_ID.TMP_IGNORED_ADDED):
+        if actionID in (USER_ACTION_ID.SUBSCRIPTION_CHANGED, USER_ACTION_ID.IGNORED_ADDED):
             self.__updateRequest(contact)
         elif actionID in (USER_ACTION_ID.FRIEND_ADDED, USER_ACTION_ID.FRIEND_REMOVED):
             self.__updateRequests()

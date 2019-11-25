@@ -6,6 +6,9 @@ from gui.impl.gen.view_models.views.lobby.premacc.piggybank_base_model import Pi
 class PiggybankModel(PiggybankBaseModel):
     __slots__ = ('onPremAccProlong', 'onGoToContentPage', 'onBackBtnClicked')
 
+    def __init__(self, properties=11, commands=3):
+        super(PiggybankModel, self).__init__(properties=properties, commands=commands)
+
     def getPeriodInDays(self):
         return self._getNumber(6)
 

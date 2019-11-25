@@ -1677,6 +1677,7 @@
             <chargeThreshold>	0.5	</chargeThreshold>
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
+            <chargeCancelTime>	0.2	</chargeCancelTime>
           </dualGun>
           <models>
             <undamaged>	vehicles/russian/R165_Object_703_II/normal/lod0/Gun_01.model	</undamaged>
@@ -1758,9 +1759,20 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	0.02098 -0.031468 1.26847	</rayStart>
+              <rayStart>	-0.192134 -0.031468 1.26847	</rayStart>
               <rayEnd>	0.305234 -0.100609 2.09901	</rayEnd>
-              <rayUp>	0.330769 0.000000 0.000000	</rayUp>
+              <rayUp>	0.109458 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.535	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0.236315 -0.031468 1.26847	</rayStart>
+              <rayEnd>	0.305234 -0.100609 2.09901	</rayEnd>
+              <rayUp>	0.109458 0.000000 0.000000	</rayUp>
               <applyToFabric>	true	</applyToFabric>
               <size>	0.535	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
@@ -1805,7 +1817,7 @@
       </multiGun>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.068 -0.054 1.053 0.000 0.864 -0.065 0.492 0.577 0.533 0.482 0.354 0.480 0.225 1.000 0.301	</physicsShape>
+      <physicsShape>	1.035 -0.066 1.053 0.000 0.721 0.207 0.625 0.505 0.533 0.482 0.354 0.480 0.225 1.000 0.301	</physicsShape>
       <customizationSlots>
         <slot>
           <slotType>	paint	</slotType>

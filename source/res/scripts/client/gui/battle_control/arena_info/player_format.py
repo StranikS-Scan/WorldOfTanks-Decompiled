@@ -22,6 +22,7 @@ _PLAYER_FULL_NAME_FORMATS = {_FORMAT_MASK.VEHICLE: '{0:>s} ({2:>s})',
  _FORMAT_MASK.VEH_REGION: '{0:>s} {3:>s} ({2:>s})',
  _FORMAT_MASK.REG_CLAN: '{0:>s}[{1:>s}] {3:>s}',
  _FORMAT_MASK.ALL: '{0:>s}[{1:>s}] {3:>s} ({2:>s})'}
+_PlayerFormatResult = namedtuple('PlayerFormatResult', ('playerFullName', 'playerName', 'playerFakeName', 'clanAbbrev', 'regionCode', 'vehicleName'))
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def getRegionCode(accountDBID, lobbyContext=None):
@@ -34,8 +35,6 @@ def getRegionCode(accountDBID, lobbyContext=None):
                 _, regionCode = roaming.getPlayerHome(accountDBID)
     return regionCode
 
-
-PlayerFormatResult = namedtuple('PlayerFormatResult', ('playerFullName', 'playerName', 'clanAbbrev', 'regionCode', 'vehicleName'))
 
 class PlayerFullNameFormatter(object):
 
@@ -76,6 +75,7 @@ class PlayerFullNameFormatter(object):
                 vehName = vehType.name
         if playerName is None:
             playerName = self._normalizePlayerName(vInfoVO.player.getPlayerLabel())
+        fakePlayerName = vInfoVO.player.getPlayerFakeLabel()
         clanAbbrev = ''
         if self.__isClanShown:
             clanAbbrev = vInfoVO.player.clanAbbrev
@@ -89,7 +89,7 @@ class PlayerFullNameFormatter(object):
             fullName = playerName
         else:
             fullName = _PLAYER_FULL_NAME_FORMATS.get(key, '{0:>s}').format(playerName, clanAbbrev, vehShortName, regionCode)
-        return PlayerFormatResult(fullName, playerName, clanAbbrev, regionCode, vehName)
+        return _PlayerFormatResult(fullName, playerName, fakePlayerName, clanAbbrev, regionCode, vehName)
 
     @staticmethod
     def _normalizePlayerName(name):

@@ -4,9 +4,7 @@ from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils, getProfileCommonInfo
 from gui.Scaleform.daapi.view.meta.ProfileSummaryMeta import ProfileSummaryMeta
 from gui.Scaleform.locale.PROFILE import PROFILE
-from gui.impl import backport
 from helpers import dependency
-from helpers import i18n
 from PlayerEvents import g_playerEvents
 from helpers.i18n import makeString
 from gui.Scaleform.locale.MENU import MENU
@@ -65,10 +63,6 @@ class ProfileSummary(ProfileSummaryMeta):
                           'personalScore': self._formIconLabelInitObject(PROFILE.SECTION_SUMMARY_SCORES_PERSONALSCORE, ProfileUtils.getIconPath('battles40x32.png'))},
          'significantAwardsLabel': PROFILE.SECTION_SUMMARY_LABELS_SIGNIFICANTAWARDS,
          'significantAwardsErrorText': PROFILE.SECTION_SUMMARY_ERRORTEXT_SIGNIFICANTAWARDS}
-
-    def getPersonalScoreWarningText(self, data):
-        battlesCount = backport.getIntegralFormat(data)
-        return i18n.makeString(PROFILE.SECTION_SUMMARY_WARNING_PERSONALSCORE, count=battlesCount)
 
     def _dispose(self):
         g_playerEvents.onDossiersResync -= self.__dossierResyncHandler

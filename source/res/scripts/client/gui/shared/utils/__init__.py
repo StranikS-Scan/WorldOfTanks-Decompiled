@@ -16,8 +16,9 @@ from helpers import getLanguageCode, i18n
 from items import vehicles as vehs_core
 from account_helpers import getAccountDatabaseID
 from account_helpers.AccountSettings import AccountSettings
-from avatar_helpers import getAvatarDatabaseID
+from avatar_helpers import getAvatarDatabaseID, getAvatarSessionID
 SHELLS_COUNT_PROP_NAME = 'shellsCount'
+RELOAD_TIME_SECS_PROP_NAME = 'reloadTimeSecs'
 RELOAD_TIME_PROP_NAME = 'reloadTime'
 RELOAD_MAGAZINE_TIME_PROP_NAME = 'reloadMagazineTime'
 SHELL_RELOADING_TIME_PROP_NAME = 'shellReloadingTime'
@@ -38,12 +39,16 @@ WHEELED_SWITCH_ON_TIME = 'wheeledSwitchOnTime'
 WHEELED_SWITCH_OFF_TIME = 'wheeledSwitchOffTime'
 WHEELED_SWITCH_TIME = 'wheeledSwitchTime'
 WHEELED_SPEED_MODE_SPEED = 'wheeledSpeedModeSpeed'
+DUAL_GUN_CHARGE_TIME = 'chargeTime'
+DUAL_GUN_RATE_TIME = 'rateTime'
 GUN_RELOADING_TYPE = 'gunReloadingType'
 GUN_CAN_BE_CLIP = 1
 GUN_CLIP = 2
 GUN_NORMAL = 4
 GUN_CAN_BE_AUTO_RELOAD = 5
 GUN_AUTO_RELOAD = 6
+GUN_CAN_BE_DUAL_GUN = 7
+GUN_DUAL_GUN = 8
 EXTRA_MODULE_INFO = 'extraModuleInfo'
 FIELD_HIGHLIGHT_TYPE = 'highlightType'
 _FLASH_OBJECT_SYS_ATTRS = ('isPrototypeOf', 'propertyIsEnumerable', 'hasOwnProperty')

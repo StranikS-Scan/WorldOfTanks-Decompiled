@@ -3,7 +3,7 @@
 import logging
 import nations
 from blueprints.BlueprintTypes import BlueprintTypes
-from frameworks.wulf import ViewFlags
+from frameworks.wulf import ViewSettings
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.gen import R
@@ -21,8 +21,10 @@ class FragmentsBalanceContent(ViewImpl):
     __itemsCache = dependency.descriptor(IItemsCache)
     __slots__ = ('__vehicle',)
 
-    def __init__(self, vehicleCD, *args, **kwargs):
-        super(FragmentsBalanceContent, self).__init__(R.views.lobby.blueprints.fragments_balance_content.FragmentsBalanceContent(), ViewFlags.VIEW, CommonBalanceContentModel, *args, **kwargs)
+    def __init__(self, vehicleCD):
+        settings = ViewSettings(R.views.lobby.blueprints.fragments_balance_content.FragmentsBalanceContent())
+        settings.model = CommonBalanceContentModel()
+        super(FragmentsBalanceContent, self).__init__(settings)
         self.__vehicle = self.__itemsCache.items.getItemByCD(vehicleCD)
 
     @property

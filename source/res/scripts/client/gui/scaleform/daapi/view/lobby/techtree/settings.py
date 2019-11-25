@@ -98,6 +98,13 @@ class NODE_STATE(object):
         return state & NODE_STATE_FLAGS.UNLOCKED and (not state & NODE_STATE_FLAGS.IN_INVENTORY or state & NODE_STATE_FLAGS.VEHICLE_IN_RENT) and state & NODE_STATE_FLAGS.PREMIUM
 
     @classmethod
+    def setNext2Unlock(cls, state):
+        state &= ~NODE_STATE_FLAGS.LOCKED
+        if state & NODE_STATE_FLAGS.UNLOCKED == 0:
+            state |= NODE_STATE_FLAGS.NEXT_2_UNLOCK
+        return state
+
+    @classmethod
     def change2Unlocked(cls, state):
         if state & NODE_STATE_FLAGS.UNLOCKED > 0:
             return -1

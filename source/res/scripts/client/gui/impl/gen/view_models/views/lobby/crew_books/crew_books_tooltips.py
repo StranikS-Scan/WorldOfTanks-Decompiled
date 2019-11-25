@@ -9,5 +9,8 @@ class CrewBooksTooltips(ViewModel):
     TOOLTIP_TANKMAN_NEW_SKILL = 'tankmanNewSkill'
     TOOLTIP_TANKMAN_SKILL = 'tankmanSkill'
 
+    def __init__(self, properties=0, commands=0):
+        super(CrewBooksTooltips, self).__init__(properties=properties, commands=commands)
+
     def _initialize(self):
         super(CrewBooksTooltips, self)._initialize()

@@ -722,7 +722,13 @@ class NationTreeData(_ItemsData):
         return result
 
     def _changeNext2Unlock(self, nodeCD, unlockProps, unlockStats):
-        state = NODE_STATE_FLAGS.NEXT_2_UNLOCK
+        try:
+            node = self._nodes[self._nodesIdx[nodeCD]]
+        except KeyError:
+            LOG_CURRENT_EXCEPTION()
+            return 0
+
+        state = NODE_STATE.setNext2Unlock(node.getState())
         totalXP = g_techTreeDP.getAllVehiclePossibleXP(unlockProps.parentID, unlockStats)
         if totalXP >= unlockProps.xpCost:
             state = NODE_STATE.addIfNot(state, NODE_STATE_FLAGS.ENOUGH_XP)
@@ -731,13 +737,8 @@ class NationTreeData(_ItemsData):
         if self.getItem(nodeCD).isElite:
             state = NODE_STATE.addIfNot(state, NODE_STATE_FLAGS.ELITE)
         state = NODE_STATE.addIfNot(state, NODE_STATE_FLAGS.BLUEPRINT)
-        try:
-            data = self._nodes[self._nodesIdx[nodeCD]]
-            data.setState(state)
-            data.setUnlockProps(unlockProps)
-        except KeyError:
-            LOG_CURRENT_EXCEPTION()
-
+        node.setState(state)
+        node.setUnlockProps(unlockProps)
         return state
 
     def _change2UnlockedByCD(self, nodeCD):

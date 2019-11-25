@@ -5,7 +5,7 @@ from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp import entities, errors
 from messenger.proto.xmpp.contacts.note_tasks import RemoveNotesTask
 from messenger.proto.xmpp.contacts.note_tasks import canNoteAutoDelete
-from messenger.proto.xmpp.contacts.tasks import TASK_RESULT, ContactTask, SeqTask
+from messenger.proto.xmpp.contacts.tasks import TaskResult, ContactTask, SeqTask
 from messenger.proto.xmpp.find_criteria import ItemsFindCriteria
 from messenger.proto.xmpp.gloox_constants import ROSTER_CONTEXT
 from messenger.proto.xmpp.log_output import CLIENT_LOG_AREA, g_logOutput
@@ -168,7 +168,7 @@ class ChangeRosterItemGroupsTask(RosterItemTask):
     def sync(self, name, groups, sub=None, clanInfo=None):
         if self._groups != groups:
             return self._result
-        self._result = TASK_RESULT.REMOVE
+        self._result = TaskResult.REMOVE
         user = self._doSync(name, groups, sub, clanInfo)
         if user:
             _syncEmptyGroups(self.usersStorage, self._exclude, True)
@@ -200,17 +200,20 @@ class RemoveRosterItemsGroupsChain(RemoveRosterItemTask, _RosterItemsGroupsChain
         user = self._doSync(name, groups, sub, clanInfo)
         if user and user.getItemType() not in XMPP_ITEM_TYPE.ROSTER_ITEMS and canNoteAutoDelete(user):
             self._removeNotes.add(user.getID())
-        self._result = TASK_RESULT.REMOVE
+        self._result = TaskResult.REMOVE
         if self._chain:
-            self._result |= TASK_RESULT.CLONE
+            self._result |= TaskResult.CLONE
         elif self._removeNotes:
-            self._result |= TASK_RESULT.CREATE_SEQ
+            self._result |= TaskResult.CREATE_SEQ
         return self._result
 
-    def error(self, pyGlooxTag):
+    def canShadowMode(self):
+        return False
+
+    def error(self, pyGlooxTag=None):
         super(RemoveRosterItemsGroupsChain, self).error(pyGlooxTag)
         if self._removeNotes:
-            self._result |= TASK_RESULT.CREATE_SEQ
+            self._result |= TaskResult.CREATE_SEQ
 
     def clone(self):
         if self._chain:
@@ -257,8 +260,11 @@ class ChangeRosterItemsGroupsChain(ChangeRosterItemGroupsTask, _RosterItemsGroup
         user = self._doSync(name, groups, sub, clanInfo)
         if user:
             self._doNotify(USER_ACTION_ID.GROUPS_CHANGED, user)
-        self._result = TASK_RESULT.CLONE | TASK_RESULT.REMOVE
+        self._result = TaskResult.CLONE | TaskResult.REMOVE
         return self._result
+
+    def canShadowMode(self):
+        return False
 
     def clone(self):
         if self._chain:

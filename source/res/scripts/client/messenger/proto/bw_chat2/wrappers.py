@@ -9,39 +9,39 @@ from messenger.proto.entities import SharedUserEntity, ClanInfo
 from messenger_common_chat2 import messageArgs
 
 class _MessageVO(object):
-    __slots__ = ('accountDBID', 'text', 'sentAt')
+    __slots__ = ('sentAt', 'accountDBID', 'avatarSessionID', 'vehicleID', 'text', 'accountName')
 
-    def __init__(self, floatArg1=0, int32Arg1=False, int64Arg1=0, strArg1='', **kwargs):
+    def __init__(self, floatArg1=0, strArg1='', **kwargs):
         super(_MessageVO, self).__init__()
-        self.accountDBID = int64Arg1
-        if isinstance(strArg1, types.UnicodeType):
-            self.text = strArg1
-        else:
+        self.accountDBID = 0
+        self.avatarSessionID = ''
+        self.vehicleID = 0
+        self.text = strArg1
+        if not isinstance(strArg1, types.UnicodeType):
             self.text = unicode(strArg1, 'utf-8', errors='ignore')
+        self.sentAt = 0
         if floatArg1 > 0:
             self.sentAt = makeLocalServerTime(floatArg1)
-        else:
-            self.sentAt = 0
-
-
-class ArenaMessageVO(_MessageVO):
-    __slots__ = ('isCommonChannel', 'accountName')
-
-    def __init__(self, floatArg1=0, int32Arg1=False, int64Arg1=0, strArg1='', **kwargs):
-        super(ArenaMessageVO, self).__init__(floatArg1=floatArg1, int64Arg1=int64Arg1, strArg1=strArg1, **kwargs)
-        self.isCommonChannel = int32Arg1
         self.accountName = None
         return
 
 
+class ArenaMessageVO(_MessageVO):
+    __slots__ = ('isCommonChannel',)
+
+    def __init__(self, floatArg1=0, int32Arg1=False, int64Arg1=0, strArg1='', **kwargs):
+        super(ArenaMessageVO, self).__init__(floatArg1, strArg1, **kwargs)
+        self.vehicleID = int64Arg1
+        self.isCommonChannel = bool(int32Arg1)
+
+
 class UnitMessageVO(_MessageVO):
-    __slots__ = ('accountName',)
 
     def __init__(self, floatArg1=0, int64Arg1=0, strArg1='', strArg2='', **kwargs):
-        super(UnitMessageVO, self).__init__(floatArg1=floatArg1, int64Arg1=int64Arg1, strArg1=strArg1, **kwargs)
-        if isinstance(strArg2, types.UnicodeType):
-            self.accountName = strArg2
-        else:
+        super(UnitMessageVO, self).__init__(floatArg1, strArg1, **kwargs)
+        self.accountDBID = int64Arg1
+        self.accountName = strArg2
+        if not isinstance(strArg2, types.UnicodeType):
             self.accountName = unicode(strArg2, 'utf-8', errors='ignore')
 
 
@@ -61,8 +61,8 @@ def ArenaHistoryIterator(value):
         history = transport.z_loads(value['strArg1'])
     else:
         history = []
-    for sendAt, isCommonChannel, accountDBID, messageText in history:
-        yield ArenaMessageVO(sendAt, isCommonChannel, accountDBID, messageText)
+    for sendAt, isCommonChannel, vehicleID, messageText in history:
+        yield ArenaMessageVO(sendAt, isCommonChannel, vehicleID, messageText)
 
 
 def SearchResultIterator(value):
@@ -119,30 +119,3 @@ class CHAT_TYPE(object):
 
 
 ChannelProtoData = namedtuple('ChannelProtoData', ('chatType', 'settings'))
-
-def _SetMembersListIterator(members):
-    from messenger.proto.bw_chat2.entities import BWMemberEntity
-    for dbID, nickName in members:
-        yield BWMemberEntity(dbID, nickName)
-
-
-def _RemoveMembersListIterator(members):
-    for dbID, _ in members:
-        yield dbID
-
-
-def getMembersListDelta(value):
-    value = dict(value)
-    if 'int32Arg1' in value:
-        flag = value['int32Arg1']
-    else:
-        flag = 0
-    if 'strArg1' in value:
-        members = cPickle.loads(value['strArg1'])
-    else:
-        members = []
-    if flag in (0, 1):
-        iterator = _SetMembersListIterator(members)
-    else:
-        iterator = _RemoveMembersListIterator(members)
-    return (flag, iterator)

@@ -221,7 +221,7 @@ class _AutoShootsCtrl(object):
 
 
 class AmmoController(MethodsRules, IBattleController):
-    __slots__ = ('__eManager', 'onShellsAdded', 'onShellsUpdated', 'onNextShellChanged', 'onCurrentShellChanged', 'onGunSettingsSet', 'onGunReloadTimeSet', 'onGunAutoReloadTimeSet', '__ammo', '_order', '__currShellCD', '__nextShellCD', '__gunSettings', '_reloadingState', '_autoReloadingState', '__autoShoots', '__weakref__')
+    __slots__ = ('__eManager', 'onShellsAdded', 'onShellsUpdated', 'onNextShellChanged', 'onCurrentShellChanged', 'onGunSettingsSet', 'onGunReloadTimeSet', 'onGunAutoReloadTimeSet', '__ammo', '_order', '__currShellCD', '__nextShellCD', '__gunSettings', '_reloadingState', '_autoReloadingState', '__autoShoots', '__weakref__', 'onDebuffStarted')
 
     def __init__(self, reloadingState=None):
         super(AmmoController, self).__init__()
@@ -232,6 +232,7 @@ class AmmoController(MethodsRules, IBattleController):
         self.onCurrentShellChanged = Event.Event(self.__eManager)
         self.onGunSettingsSet = Event.Event(self.__eManager)
         self.onGunReloadTimeSet = Event.Event(self.__eManager)
+        self.onDebuffStarted = Event.Event(self.__eManager)
         self.onGunAutoReloadTimeSet = Event.Event(self.__eManager)
         self.__ammo = {}
         self._order = []
@@ -315,7 +316,7 @@ class AmmoController(MethodsRules, IBattleController):
     def setGunReloadTime(self, timeLeft, baseTime):
         interval = self.__gunSettings.clip.interval
         self.triggerReloadEffect(timeLeft, baseTime)
-        if interval > 0:
+        if interval > 0 and self.__currShellCD in self.__ammo:
             shellsInClip = self.__ammo[self.__currShellCD][1]
             if not (shellsInClip == 1 and timeLeft == 0 and not self.__gunSettings.hasAutoReload() or shellsInClip == 0 and timeLeft != 0):
                 baseTime = interval
@@ -331,7 +332,7 @@ class AmmoController(MethodsRules, IBattleController):
     def setGunAutoReloadTime(self, timeLeft, baseTime, isSlowed):
         self._autoReloadingState.setTimes(timeLeft, baseTime)
         self.__notifyAboutAutoReloadTimeChanges(isSlowed)
-        if self.__gunSettings.reloadEffect is not None:
+        if self.__gunSettings.reloadEffect is not None and self.__currShellCD in self.__ammo:
             shellCounts = self.__ammo[self.__currShellCD]
             shellsInClip = shellCounts[1]
             clipCapacity = self.__gunSettings.clip.size
@@ -345,7 +346,7 @@ class AmmoController(MethodsRules, IBattleController):
         return
 
     def triggerReloadEffect(self, timeLeft, baseTime, directTrigger=False):
-        if timeLeft > 0.0 and self.__gunSettings.reloadEffect is not None:
+        if timeLeft > 0.0 and self.__gunSettings.reloadEffect is not None and self.__currShellCD in self.__ammo:
             shellCounts = self.__ammo[self.__currShellCD]
             clipCapacity = self.__gunSettings.clip.size
             ammoLow = False
@@ -473,15 +474,16 @@ class AmmoController(MethodsRules, IBattleController):
                 avatar_getter.changeVehicleSetting(VEHICLE_SETTING.RELOAD_PARTIAL_CLIP, 0, avatar)
 
     def useLoaderIntuition(self):
-        quantity, _ = self.__ammo[self.__currShellCD]
-        clipSize = self.__gunSettings.clip.size
-        self._reloadingState.stopPredicateReloading()
-        if clipSize > 0 and not self.isGunReloading():
-            for _cd, (_quantity, _) in self.__ammo.iteritems():
-                self.__ammo[_cd] = (_quantity, 0)
+        if self.__currShellCD in self.__ammo:
+            quantity, _ = self.__ammo[self.__currShellCD]
+            clipSize = self.__gunSettings.clip.size
+            self._reloadingState.stopPredicateReloading()
+            if clipSize > 0 and not self.isGunReloading():
+                for _cd, (_quantity, _) in self.__ammo.iteritems():
+                    self.__ammo[_cd] = (_quantity, 0)
 
-            quantityInClip = clipSize if quantity >= clipSize else quantity
-            self.setShells(self.__currShellCD, quantity, quantityInClip)
+                quantityInClip = clipSize if quantity >= clipSize else quantity
+                self.setShells(self.__currShellCD, quantity, quantityInClip)
 
     def canShoot(self, isRepeat=False):
         if self.__currShellCD is None:
@@ -499,7 +501,7 @@ class AmmoController(MethodsRules, IBattleController):
         return (result, error)
 
     def __shotFail(self):
-        if self.__gunSettings.reloadEffect is not None:
+        if self.__gunSettings.reloadEffect is not None and self.__currShellCD in self.__ammo:
             shellCounts = self.__ammo[self.__currShellCD]
             if shellCounts[1] == 0:
                 self.__gunSettings.reloadEffect.shotFail()

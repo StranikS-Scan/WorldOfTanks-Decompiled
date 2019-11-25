@@ -6,6 +6,7 @@ import AccountCommands
 from gui import makeHtmlString
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE, CURRENCY_TO_SM_TYPE_DISMANTLING
 from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.formatters import formatPrice, icons, getBWFormatter
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.gui_item_economics import getItemBuyPrice
@@ -15,6 +16,7 @@ from gui.shared.money import Currency
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
 from helpers import i18n, dependency
+from items import vehicles
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
@@ -31,6 +33,10 @@ def _getIconHtmlTagForCurrency(currency):
 def _formatCurrencyValue(currency, value):
     formatter = getBWFormatter(currency)
     return formatter(value)
+
+
+def _wrapHtmlMessage(key, message):
+    return makeHtmlString('html_templates:lobby/dialogs', key, {'message': message})
 
 
 class ModuleProcessor(ItemProcessor):
@@ -118,7 +124,8 @@ class ModuleSeller(ModuleTradeProcessor):
 
     def _request(self, callback):
         _logger.debug('Make server request to sell item: %s, %s', self.item, self.count)
-        BigWorld.player().inventory.sell(self.item.itemTypeID, self.item.intCD, self.count, lambda code: self._response(code, callback))
+        itemTypeID, _, _ = vehicles.parseIntCompactDescr(self.item.intCD)
+        BigWorld.player().inventory.sell(itemTypeID, self.item.intCD, self.count, lambda code: self._response(code, callback))
 
 
 class MultipleModulesSeller(Processor):
@@ -154,7 +161,8 @@ class ModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
         VehicleItemProcessor.__init__(self, vehicle=vehicle, module=item, allowableTypes=itemType)
         addPlugins = []
         if install:
-            addPlugins += (plugins.CompatibilityInstallValidator(vehicle, item, slotIdx), plugins.MessageConfirmator('removeIncompatibleEqs', ctx={'name': "', '".join([ eq.userName for eq in conflictedEqs ])}, isEnabled=bool(conflictedEqs) and not skipConfirm))
+            addPlugins += (plugins.CompatibilityInstallValidator(vehicle, item, slotIdx), plugins.MessageConfirmator('removeIncompatibleEqs', ctx={'name': "', '".join([ eq.userName for eq in conflictedEqs ]),
+              'reason': _wrapHtmlMessage('incompatibleReason', backport.text(R.strings.dialogs.removeIncompatibleEqs.message.reason()))}, isEnabled=bool(conflictedEqs) and not skipConfirm))
         else:
             addPlugins += (plugins.CompatibilityRemoveValidator(vehicle, item),)
         self.install = install
@@ -179,12 +187,14 @@ class OptDeviceInstaller(ModuleInstallProcessor):
             action = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'paidRemovalCost', True, self.removalPrice.price, self.removalPrice.defPrice)
         addPlugins = []
         if install:
-            addPlugins += (plugins.MessageConfirmator('installConfirmationNotRemovable_{}'.format(self.removalPrice.price.getCurrency()), ctx={'name': item.userName}, isEnabled=not item.isRemovable and not skipConfirm),)
+            addPlugins += (plugins.MessageConfirmator('installConfirmationNotRemovable_{}'.format(self.removalPrice.price.getCurrency()), ctx={'name': item.userName,
+              'complex': _wrapHtmlMessage('confirmationNotRemovable', backport.text(R.strings.dialogs.confirmationNotRemovable.message.complex())),
+              'destroy': _wrapHtmlMessage('confirmationNotRemovable', backport.text(R.strings.dialogs.confirmationNotRemovable.message.destroy()))}, isEnabled=not item.isRemovable and not skipConfirm),)
         else:
             addPlugins += (plugins.DemountDeviceConfirmator('removeConfirmationNotRemovableMoney', ctx={'name': item.userName,
               'price': self.removalPrice,
               'action': action,
-              'item': item}, isEnabled=not item.isRemovable and isUseMoney and not skipConfirm), plugins.DestroyDeviceConfirmator('removeConfirmationNotRemovable', itemName=item.userName, isEnabled=not item.isRemovable and not isUseMoney and not skipConfirm))
+              'item': item}, isEnabled=not item.isRemovable and isUseMoney and not skipConfirm), plugins.DestroyDeviceConfirmator('removeConfirmationNotRemovable', itemName=item.userName, destroyText=_wrapHtmlMessage('confirmationNotRemovable', backport.text(R.strings.dialogs.confirmationNotRemovable.message.destroy())), isEnabled=not item.isRemovable and not isUseMoney and not skipConfirm))
         self.addPlugins(addPlugins)
         self.useMoney = isUseMoney
         return
@@ -230,7 +240,8 @@ class CommonModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
         ModuleProcessor.__init__(self, item=item, opType=opType, plugs=plugs)
         VehicleItemProcessor.__init__(self, vehicle=vehicle, module=item, allowableTypes=itemType)
         if install:
-            self.addPlugin(plugins.MessageConfirmator('removeIncompatibleEqs', ctx={'name': "', '".join([ eq.userName for eq in conflictedEqs ])}, isEnabled=bool(conflictedEqs) and not skipConfirm))
+            self.addPlugin(plugins.MessageConfirmator('removeIncompatibleEqs', ctx={'name': "', '".join([ eq.userName for eq in conflictedEqs ]),
+             'reason': _wrapHtmlMessage('incompatibleReason', backport.text(R.strings.dialogs.removeIncompatibleEqs.message.reason()))}, isEnabled=bool(conflictedEqs) and not skipConfirm))
         self.install = install
 
     def _getMsgCtx(self):
@@ -356,8 +367,11 @@ class BuyAndInstallItemProcessor(ModuleBuyer):
                 self.addPlugin(plugins.TurretCompatibilityInstallValidator(vehicle, item, self.__gunCompDescr))
             elif item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
                 removalPrice = item.getRemovalPrice(self.itemsCache.items)
-                self.addPlugin(plugins.MessageConfirmator('installConfirmationNotRemovable_{}'.format(removalPrice.price.getCurrency()), ctx={'name': item.userName}, isEnabled=not item.isRemovable and not skipConfirm))
-            self.addPlugin(plugins.MessageConfirmator('removeIncompatibleEqs', ctx={'name': "', '".join([ eq.userName for eq in conflictedEqs ])}, isEnabled=bool(conflictedEqs) and not skipConfirm))
+                self.addPlugin(plugins.MessageConfirmator('installConfirmationNotRemovable_{}'.format(removalPrice.price.getCurrency()), ctx={'name': item.userName,
+                 'complex': _wrapHtmlMessage('confirmationNotRemovable', backport.text(R.strings.dialogs.confirmationNotRemovable.message.complex())),
+                 'destroy': _wrapHtmlMessage('confirmationNotRemovable', backport.text(R.strings.dialogs.confirmationNotRemovable.message.destroy()))}, isEnabled=not item.isRemovable and not skipConfirm))
+            self.addPlugin(plugins.MessageConfirmator('removeIncompatibleEqs', ctx={'name': "', '".join([ eq.userName for eq in conflictedEqs ]),
+             'reason': _wrapHtmlMessage('incompatibleReason', backport.text(R.strings.dialogs.removeIncompatibleEqs.message.reason()))}, isEnabled=bool(conflictedEqs) and not skipConfirm))
         else:
             self.addPlugins([plugins.ModuleBuyerConfirmator('confirmBuyNotInstall', ctx={'userString': item.userName,
               'typeString': self.item.userType,

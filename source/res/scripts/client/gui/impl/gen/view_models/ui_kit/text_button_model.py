@@ -6,6 +6,9 @@ from gui.impl.gen.view_models.ui_kit.button_common_model import ButtonCommonMode
 class TextButtonModel(ButtonCommonModel):
     __slots__ = ()
 
+    def __init__(self, properties=9, commands=2):
+        super(TextButtonModel, self).__init__(properties=properties, commands=commands)
+
     def getLabelAdditional(self):
         return self._getResource(6)
 

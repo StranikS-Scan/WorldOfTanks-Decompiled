@@ -264,7 +264,7 @@ class VehicleSeller(ItemProcessor):
     restore = dependency.descriptor(IRestoreController)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, vehicle, shells=None, eqs=None, optDevs=None, inventory=None, customizationItems=None, isCrewDismiss=False):
+    def __init__(self, vehicle, shells=None, eqs=None, optDevs=None, inventory=None, customizationItems=None, boosters=None, isCrewDismiss=False):
         shells = shells or []
         eqs = eqs or []
         optDevs = optDevs or []
@@ -276,9 +276,10 @@ class VehicleSeller(ItemProcessor):
         self.shells = shells
         self.eqs = eqs
         self.optDevs = optDevs
-        self.gainMoney, self.spendMoney = self.__getGainSpendMoney(vehicle, nationGroupVehs, shells, eqs, optDevs, inventory, customizationItems)
+        self.gainMoney, self.spendMoney = self.__getGainSpendMoney(vehicle, nationGroupVehs, shells, eqs, boosters, optDevs, inventory, customizationItems)
         self.inventory = set((m.intCD for m in inventory))
         self.customizationItems = set(customizationItems)
+        self.boosters = boosters or []
         barracksBerthsNeeded = getCrewCount(nationGroupVehs)
         bufferOverflowCtx = {}
         isBufferOverflowed = False
@@ -314,6 +315,7 @@ class VehicleSeller(ItemProcessor):
          proc_plugs.VehicleSellsLeftValidator(vehicle, not (vehicle.isRented and vehicle.rentalIsOver)),
          proc_plugs.BarracksSlotsValidator(barracksBerthsNeeded, isEnabled=not isCrewDismiss),
          proc_plugs.BufferOverflowConfirmator(bufferOverflowCtx, isEnabled=isBufferOverflowed),
+         proc_plugs.BattleBoosterValidator(boosters),
          _getUniqueVehicleSellConfirmator(vehicle)]
         if self.lobbyContext.getServerSettings().isCrewSkinsEnabled():
             ctx = {'price': self.__compensationAmount,
@@ -366,15 +368,15 @@ class VehicleSeller(ItemProcessor):
 
     def _request(self, callback):
         saleData = self.__splitDataByVehicle()
-        _logger.debug('Make server request: %s, %s, %s, %s, %s, %s, %s, %s', self.nationGroupVehs, bool(self.shells), bool(self.eqs), bool(self.inventory), bool(self.optDevs), self.isDismantlingForMoney, self.isCrewDismiss, saleData)
-        BigWorld.player().inventory.sellVehicle(saleData, lambda code: self._response(code, callback))
+        _logger.debug('Make server request: %s, %s, %s, %s, %s, %s, %s, %s, %s', self.nationGroupVehs, bool(self.shells), bool(self.eqs), bool(self.boosters), bool(self.inventory), bool(self.optDevs), self.isDismantlingForMoney, self.isCrewDismiss, saleData)
+        BigWorld.player().inventory.sellVehicle(saleData, lambda code, errStr='': self._response(code, callback, errStr=errStr))
 
-    def __getGainSpendMoney(self, currentVehicle, vehicles, vehShells, vehEqs, optDevicesToSell, inventory, customizationItems):
+    def __getGainSpendMoney(self, currentVehicle, vehicles, vehShells, vehEqs, boosters, optDevicesToSell, inventory, customizationItems):
         moneyGain = currentVehicle.sellPrices.itemPrice.price
         for shell in vehShells:
             moneyGain += shell.sellPrices.itemPrice.price * shell.count
 
-        for module in vehEqs + optDevicesToSell:
+        for module in vehEqs + optDevicesToSell + boosters:
             moneyGain += module.sellPrices.itemPrice.price
 
         for module in inventory + customizationItems:
@@ -418,6 +420,11 @@ class VehicleSeller(ItemProcessor):
                 if shell.isInstalled(vehicle) and shell.intCD not in itemsFromVehicle:
                     itemsFromVehicle.add(shell.intCD)
                     self.shells.remove(shell)
+
+            for booster in self.boosters:
+                if booster.isInstalled(vehicle) and booster.intCD not in itemsFromVehicle:
+                    itemsFromVehicle.add(booster.intCD)
+                    self.boosters.remove(booster)
 
             for eq in list(self.eqs):
                 if eq.isInstalled(vehicle) and eq.intCD not in itemsFromVehicle:
@@ -635,6 +642,13 @@ class VehicleBattleBoosterLayoutProcessor(VehicleLayoutProcessor):
     def _setupPlugins(self, skipConfirm):
         if self.battleBooster:
             self.addPlugin(proc_plugs.BattleBoosterConfirmator('confirmBattleBoosterInstall', 'confirmBattleBoosterInstallNotSuitable', self.vehicle, self.battleBooster, isEnabled=not skipConfirm))
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        msgKwargs = dict(sysMsgKey='battleBooster_buy/{}'.format(errStr), defaultSysMsgKey='battleBooster_buy/server_error', type=SM_TYPE.Error)
+        if errStr not in ('server_error', 'wallet_not_available') and self.battleBooster:
+            msgKwargs['kind'] = self.battleBooster.userType
+            msgKwargs['name'] = self.battleBooster.userName
+        return makeI18nError(**msgKwargs)
 
     def _getEquipmentType(self):
         return EQUIPMENT_TYPES.battleBoosters

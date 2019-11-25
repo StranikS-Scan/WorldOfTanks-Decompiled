@@ -95,7 +95,7 @@ class BattleDenunciator(Denunciator):
 
     def _getViolatorKind(self, player, violatorID):
         arenaDP = self.sessionProvider.getArenaDP()
-        vehicleID = arenaDP.getVehIDByAccDBID(violatorID)
+        vehicleID = arenaDP.getVehIDBySessionID(violatorID)
         violator = arenaDP.getVehicleInfo(vehicleID)
         return constants.VIOLATOR_KIND.ALLY if player.team == violator.team else constants.VIOLATOR_KIND.ENEMY
 

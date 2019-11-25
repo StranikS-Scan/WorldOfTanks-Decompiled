@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/premacc/dashboard/prem_dashboard_header.py
 import typing
 import BigWorld
-from frameworks.wulf import ViewFlags
+from frameworks.wulf import ViewSettings
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import shouldOpenNewStorage
@@ -41,8 +41,10 @@ class PremDashboardHeader(ViewImpl):
     __TOOLTIPS_MAPPING = {PremDashboardHeaderTooltips.TOOLTIP_PERSONAL_RESERVE: TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO,
      PremDashboardHeaderTooltips.TOOLTIP_CLAN_RESERVE: TOOLTIPS_CONSTANTS.CLAN_RESERVE_INFO}
 
-    def __init__(self, *args, **kwargs):
-        super(PremDashboardHeader, self).__init__(R.views.lobby.premacc.dashboard.prem_dashboard_header.PremDashboardHeader(), ViewFlags.VIEW, PremDashboardHeaderModel, *args, **kwargs)
+    def __init__(self):
+        settings = ViewSettings(R.views.lobby.premacc.dashboard.prem_dashboard_header.PremDashboardHeader())
+        settings.model = PremDashboardHeaderModel()
+        super(PremDashboardHeader, self).__init__(settings)
 
     @property
     def viewModel(self):

@@ -3,171 +3,166 @@
 from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.views.dialog_prices_content_model import DialogPricesContentModel
-from frameworks.wulf import View
 
 class BlueprintScreenModel(ViewModel):
     __slots__ = ('onGoToConversionScreen', 'onClose', 'onResearchVehicle', 'onGoToAllConversion', 'onSubmitUnavailableConfirm', 'onOpenVehicleViewBtnClicked')
     INIT = 0
     UPDATE = 1
 
+    def __init__(self, properties=25, commands=6):
+        super(BlueprintScreenModel, self).__init__(properties=properties, commands=commands)
+
     @property
     def conversionMaxCost(self):
         return self._getViewModel(0)
 
-    def getBalanceContent(self):
-        return self._getView(1)
-
-    def setBalanceContent(self, value):
-        self._setView(1, value)
-
     def getVehicleName(self):
-        return self._getString(2)
+        return self._getString(1)
 
     def setVehicleName(self, value):
-        self._setString(2, value)
+        self._setString(1, value)
 
     def getVehicleType(self):
-        return self._getString(3)
+        return self._getString(2)
 
     def setVehicleType(self, value):
-        self._setString(3, value)
+        self._setString(2, value)
 
     def getVehicleLevel(self):
-        return self._getString(4)
+        return self._getString(3)
 
     def setVehicleLevel(self, value):
-        self._setString(4, value)
+        self._setString(3, value)
 
     def getIsElite(self):
-        return self._getBool(5)
+        return self._getBool(4)
 
     def setIsElite(self, value):
-        self._setBool(5, value)
+        self._setBool(4, value)
 
     def getSchemeCols(self):
-        return self._getNumber(6)
+        return self._getNumber(5)
 
     def setSchemeCols(self, value):
-        self._setNumber(6, value)
+        self._setNumber(5, value)
 
     def getSchemeRows(self):
-        return self._getNumber(7)
+        return self._getNumber(6)
 
     def setSchemeRows(self, value):
-        self._setNumber(7, value)
+        self._setNumber(6, value)
 
     def getIsUnlocked(self):
-        return self._getBool(8)
+        return self._getBool(7)
 
     def setIsUnlocked(self, value):
-        self._setBool(8, value)
+        self._setBool(7, value)
 
     def getIsAvailableForUnlock(self):
-        return self._getBool(9)
+        return self._getBool(8)
 
     def setIsAvailableForUnlock(self, value):
-        self._setBool(9, value)
+        self._setBool(8, value)
 
     def getNeedXpToUnlock(self):
-        return self._getBool(10)
+        return self._getBool(9)
 
     def setNeedXpToUnlock(self, value):
-        self._setBool(10, value)
+        self._setBool(9, value)
 
     def getConversionAvailable(self):
-        return self._getBool(11)
+        return self._getBool(10)
 
     def setConversionAvailable(self, value):
-        self._setBool(11, value)
+        self._setBool(10, value)
 
     def getSchemeItems(self):
-        return self._getArray(12)
+        return self._getArray(11)
 
     def setSchemeItems(self, value):
-        self._setArray(12, value)
+        self._setArray(11, value)
 
     def getFilledCount(self):
-        return self._getNumber(13)
+        return self._getNumber(12)
 
     def setFilledCount(self, value):
-        self._setNumber(13, value)
+        self._setNumber(12, value)
 
     def getIsSchemeFullCompleted(self):
-        return self._getBool(14)
+        return self._getBool(13)
 
     def setIsSchemeFullCompleted(self, value):
-        self._setBool(14, value)
+        self._setBool(13, value)
 
     def getIsPurchased(self):
-        return self._getBool(15)
+        return self._getBool(14)
 
     def setIsPurchased(self, value):
-        self._setBool(15, value)
+        self._setBool(14, value)
 
     def getCost(self):
-        return self._getString(16)
+        return self._getString(15)
 
     def setCost(self, value):
-        self._setString(16, value)
+        self._setString(15, value)
 
     def getDiscount(self):
-        return self._getNumber(17)
+        return self._getNumber(16)
 
     def setDiscount(self, value):
-        self._setNumber(17, value)
+        self._setNumber(16, value)
 
     def getDiscountAbs(self):
-        return self._getString(18)
+        return self._getString(17)
 
     def setDiscountAbs(self, value):
-        self._setString(18, value)
+        self._setString(17, value)
 
     def getBackBtnLabel(self):
-        return self._getString(19)
+        return self._getString(18)
 
     def setBackBtnLabel(self, value):
-        self._setString(19, value)
+        self._setString(18, value)
 
     def getMaxConvertibleFragmentCount(self):
-        return self._getNumber(20)
+        return self._getNumber(19)
 
     def setMaxConvertibleFragmentCount(self, value):
-        self._setNumber(20, value)
+        self._setNumber(19, value)
 
     def getShowUnavailableConfirm(self):
-        return self._getBool(21)
+        return self._getBool(20)
 
     def setShowUnavailableConfirm(self, value):
-        self._setBool(21, value)
+        self._setBool(20, value)
 
     def getBlueprintAnimPaused(self):
-        return self._getBool(22)
+        return self._getBool(21)
 
     def setBlueprintAnimPaused(self, value):
-        self._setBool(22, value)
+        self._setBool(21, value)
 
     def getCurrentStateView(self):
-        return self._getNumber(23)
+        return self._getNumber(22)
 
     def setCurrentStateView(self, value):
-        self._setNumber(23, value)
+        self._setNumber(22, value)
 
     def getReceivedCount(self):
-        return self._getNumber(24)
+        return self._getNumber(23)
 
     def setReceivedCount(self, value):
-        self._setNumber(24, value)
+        self._setNumber(23, value)
 
     def getShowBlueprintInfotypeIcon(self):
-        return self._getBool(25)
+        return self._getBool(24)
 
     def setShowBlueprintInfotypeIcon(self, value):
-        self._setBool(25, value)
+        self._setBool(24, value)
 
     def _initialize(self):
         super(BlueprintScreenModel, self)._initialize()
         self._addViewModelProperty('conversionMaxCost', DialogPricesContentModel())
-        self._addViewProperty('balanceContent')
         self._addStringProperty('vehicleName', '')
         self._addStringProperty('vehicleType', '')
         self._addStringProperty('vehicleLevel', '')

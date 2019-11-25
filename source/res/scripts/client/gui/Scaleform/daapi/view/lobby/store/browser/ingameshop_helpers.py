@@ -63,8 +63,12 @@ def getBuyBoostersUrl():
     return _getUrl('buyBoosters')
 
 
-def getBuyBattleBoostersUrl():
-    return _getUrl('buyBattleBoosters')
+def getBuyCreditsBattleBoostersUrl():
+    return _getUrl('buyCreditsBattleBoosters')
+
+
+def getBuyBonBattleBoostersUrl():
+    return _getUrl('buyBonBattleBoosters')
 
 
 def getBuyEquipmentUrl():

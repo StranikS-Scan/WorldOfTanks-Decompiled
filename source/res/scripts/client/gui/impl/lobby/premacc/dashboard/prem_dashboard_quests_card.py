@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/premacc/dashboard/prem_dashboard_quests_card.py
 from Event import Event
 from constants import PREMIUM_TYPE, PremiumConfigs
-from frameworks.wulf import ViewFlags
+from frameworks.wulf import ViewSettings
 from gui.Scaleform.genConsts.MISSIONS_STATES import MISSIONS_STATES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.impl.gen import R
@@ -66,8 +66,10 @@ class PremDashboardQuestsCard(ViewImpl):
     _lobbyContext = dependency.descriptor(ILobbyContext)
     _gameSession = dependency.descriptor(IGameSessionController)
 
-    def __init__(self, *args, **kwargs):
-        super(PremDashboardQuestsCard, self).__init__(R.views.lobby.premacc.dashboard.prem_dashboard_quests_card.PremDashboardQuestsCard(), ViewFlags.VIEW, PremDashboardQuestsCardModel, *args, **kwargs)
+    def __init__(self):
+        settings = ViewSettings(R.views.lobby.premacc.dashboard.prem_dashboard_quests_card.PremDashboardQuestsCard())
+        settings.model = PremDashboardQuestsCardModel()
+        super(PremDashboardQuestsCard, self).__init__(settings)
         self._questController = PremQuestsController()
         self._modelConstantsMap = {MISSIONS_STATES.COMPLETED: self.viewModel.COMPLETED,
          MISSIONS_STATES.IN_PROGRESS: self.viewModel.IN_PROGRESS}

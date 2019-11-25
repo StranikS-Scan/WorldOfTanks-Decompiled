@@ -6,6 +6,9 @@ from frameworks.wulf import ViewModel
 class ContextMenuSubItemModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=4, commands=0):
+        super(ContextMenuSubItemModel, self).__init__(properties=properties, commands=commands)
+
     def getLabel(self):
         return self._getResource(0)
 

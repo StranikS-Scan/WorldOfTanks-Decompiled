@@ -7,10 +7,12 @@ from gui.Scaleform.daapi.view.external_components import ExternalFlashComponent
 from gui.Scaleform.daapi.view.external_components import ExternalFlashSettings
 from gui.Scaleform.daapi.view.meta.GameLoadingMeta import GameLoadingMeta
 from gui.Scaleform.genConsts.ROOT_SWF_CONSTANTS import ROOT_SWF_CONSTANTS
-from gui.Scaleform.locale.MENU import MENU
 from gui.shared.utils import graphics
 from helpers import getFullClientVersion, getClientOverride, getClientLanguage
 from helpers import uniprof
+from gui.impl import backport
+from gui.impl.gen import R
+from gui import makeHtmlString
 _logger = logging.getLogger(__name__)
 
 class GameLoading(ExternalFlashComponent, GameLoadingMeta):
@@ -25,7 +27,7 @@ class GameLoading(ExternalFlashComponent, GameLoadingMeta):
         self.as_setLocaleS(getClientOverride())
         self.as_setVersionS(getFullClientVersion())
         if getClientLanguage() == 'ko':
-            self.as_setInfoS(MENU.LOADING_GAMEINFO)
+            self.as_setInfoS(backport.text(R.strings.menu.loading.gameInfo(), age=makeHtmlString('html_templates:loading', 'game-info-age')))
         self._updateStage()
 
     def onUpdateStage(self):

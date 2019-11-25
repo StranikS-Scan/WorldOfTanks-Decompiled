@@ -384,9 +384,16 @@ class Views(DynAccessor):
 
         class _customization(DynAccessor):
             __slots__ = ()
-            CustomizationCart = DynAccessor(76)
+            CustomizationCart = DynAccessor(77)
 
         customization = _customization()
+
+        class _instructions(DynAccessor):
+            __slots__ = ()
+            BuyWindow = DynAccessor(78)
+            SellWindow = DynAccessor(79)
+
+        instructions = _instructions()
 
     lobby = _lobby()
 
@@ -417,24 +424,25 @@ class Views(DynAccessor):
             class _demo_window_content(DynAccessor):
                 __slots__ = ()
                 DemoWindowContent = DynAccessor(59)
+                ImageProps = DynAccessor(60)
 
             demo_window_content = _demo_window_content()
 
             class _demo_window_details_panel(DynAccessor):
                 __slots__ = ()
-                DemoWindowDetailsPanel = DynAccessor(60)
+                DemoWindowDetailsPanel = DynAccessor(61)
 
             demo_window_details_panel = _demo_window_details_panel()
 
             class _demo_window_image_panel(DynAccessor):
                 __slots__ = ()
-                DemoWindowImagePanel = DynAccessor(61)
+                DemoWindowImagePanel = DynAccessor(62)
 
             demo_window_image_panel = _demo_window_image_panel()
 
             class _image_preview_window_content(DynAccessor):
                 __slots__ = ()
-                ImagePreviewWindowContent = DynAccessor(62)
+                ImagePreviewWindowContent = DynAccessor(63)
 
             image_preview_window_content = _image_preview_window_content()
 
@@ -450,31 +458,31 @@ class Views(DynAccessor):
 
             class _test_dialogs_view(DynAccessor):
                 __slots__ = ()
-                TestDialogsView = DynAccessor(63)
+                TestDialogsView = DynAccessor(64)
 
             test_dialogs_view = _test_dialogs_view()
 
             class _test_expr_functions_view(DynAccessor):
                 __slots__ = ()
-                TestExprFunctionsView = DynAccessor(64)
+                TestExprFunctionsView = DynAccessor(65)
 
             test_expr_functions_view = _test_expr_functions_view()
 
             class _test_sub_view(DynAccessor):
                 __slots__ = ()
-                TestSubView = DynAccessor(65)
+                TestSubView = DynAccessor(66)
 
             test_sub_view = _test_sub_view()
 
             class _test_view(DynAccessor):
                 __slots__ = ()
-                TestView = DynAccessor(66)
+                TestView = DynAccessor(67)
 
             test_view = _test_view()
 
             class _unbound_example(DynAccessor):
                 __slots__ = ()
-                UnboundExample = DynAccessor(67)
+                UnboundExample = DynAccessor(68)
 
             unbound_example = _unbound_example()
 
@@ -490,13 +498,13 @@ class Views(DynAccessor):
 
             class _list_examples_empty_render_window_content(DynAccessor):
                 __slots__ = ()
-                ListExamplesEmptyRenderWindowContent = DynAccessor(68)
+                ListExamplesEmptyRenderWindowContent = DynAccessor(69)
 
             list_examples_empty_render_window_content = _list_examples_empty_render_window_content()
 
             class _list_examples_window_content(DynAccessor):
                 __slots__ = ()
-                ListExamplesWindowContent = DynAccessor(69)
+                ListExamplesWindowContent = DynAccessor(70)
 
             list_examples_window_content = _list_examples_window_content()
 
@@ -512,7 +520,7 @@ class Views(DynAccessor):
 
             class _rotation_pivot_view(DynAccessor):
                 __slots__ = ()
-                RotationAndPivotTestView = DynAccessor(70)
+                RotationAndPivotTestView = DynAccessor(71)
 
             rotation_pivot_view = _rotation_pivot_view()
 
@@ -528,7 +536,7 @@ class Views(DynAccessor):
 
             class _rotation_view(DynAccessor):
                 __slots__ = ()
-                RotationTestView = DynAccessor(71)
+                RotationTestView = DynAccessor(72)
 
             rotation_view = _rotation_view()
 
@@ -544,7 +552,7 @@ class Views(DynAccessor):
 
             class _scale_view(DynAccessor):
                 __slots__ = ()
-                ScaleTestView = DynAccessor(72)
+                ScaleTestView = DynAccessor(73)
 
             scale_view = _scale_view()
 
@@ -560,7 +568,7 @@ class Views(DynAccessor):
 
             class _test_uikit_buttons_view(DynAccessor):
                 __slots__ = ()
-                TestUikitButtonsView = DynAccessor(73)
+                TestUikitButtonsView = DynAccessor(74)
 
             test_uikit_buttons_view = _test_uikit_buttons_view()
 
@@ -576,7 +584,7 @@ class Views(DynAccessor):
 
             class _test_uikit_view(DynAccessor):
                 __slots__ = ()
-                TestUikitView = DynAccessor(74)
+                TestUikitView = DynAccessor(75)
 
             test_uikit_view = _test_uikit_view()
 
@@ -592,24 +600,24 @@ class Views(DynAccessor):
 
             class _wtypes_demo_window_content(DynAccessor):
                 __slots__ = ()
-                WtypesDemoWindowContent = DynAccessor(75)
+                WtypesDemoWindowContent = DynAccessor(76)
 
             wtypes_demo_window_content = _wtypes_demo_window_content()
 
         views = _views()
 
     wtypes_view = _wtypes_view()
-    Anchor = DynAccessor(77)
-    ComplexListView = DynAccessor(78)
-    ComponentsDemo = DynAccessor(79)
-    DataTrackerDemo = DynAccessor(80)
-    DemoContextMenu = DynAccessor(81)
-    GFDemoPopover = DynAccessor(82)
-    GFDemoRichTooltipWindow = DynAccessor(83)
-    GFDemoWindow = DynAccessor(84)
-    GFSimpleTooltipWindow = DynAccessor(85)
-    LocaleDemo = DynAccessor(86)
-    PropsSupportDemo = DynAccessor(87)
-    StructuralDataBindDemo = DynAccessor(88)
-    TextFormat = DynAccessor(89)
-    VideoSupportView = DynAccessor(90)
+    Anchor = DynAccessor(80)
+    ComplexListView = DynAccessor(81)
+    ComponentsDemo = DynAccessor(82)
+    DataTrackerDemo = DynAccessor(83)
+    DemoContextMenu = DynAccessor(84)
+    GFDemoPopover = DynAccessor(85)
+    GFDemoRichTooltipWindow = DynAccessor(86)
+    GFDemoWindow = DynAccessor(87)
+    GFSimpleTooltipWindow = DynAccessor(88)
+    LocaleDemo = DynAccessor(89)
+    PropsSupportDemo = DynAccessor(90)
+    StructuralDataBindDemo = DynAccessor(91)
+    TextFormat = DynAccessor(92)
+    VideoSupportView = DynAccessor(93)

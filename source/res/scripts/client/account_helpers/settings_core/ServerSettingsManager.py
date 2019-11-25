@@ -44,9 +44,6 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     BATTLE_EVENTS = 'FEEDBACK_BATTLE_EVENTS'
     BATTLE_BORDER_MAP = 'FEEDBACK_BORDER_MAP'
     QUESTS_PROGRESS = 'QUESTS_PROGRESS'
-    ENCYCLOPEDIA_RECOMMENDATIONS_1 = 'ENCYCLOPEDIA_RECOMMENDATIONS_1'
-    ENCYCLOPEDIA_RECOMMENDATIONS_2 = 'ENCYCLOPEDIA_RECOMMENDATIONS_2'
-    ENCYCLOPEDIA_RECOMMENDATIONS_3 = 'ENCYCLOPEDIA_RECOMMENDATIONS_3'
     UI_STORAGE = 'UI_STORAGE'
     LINKEDSET_QUESTS = 'LINKEDSET_QUESTS'
 
@@ -57,6 +54,8 @@ class UI_STORAGE_KEYS(CONST_CONTAINER):
     DISABLE_ANIMATED_TOOLTIP = 'disable_animated_tooltip'
     FIELD_POST_HINT_IS_SHOWN = 'field_post_hint'
     REFERRAL_BUTTON_CIRCLES_SHOWN = 'referral_button_circles_shown'
+    DUAL_GUN_HIGHLIGHTS_COUNTER = 'dual_gun_highlights_count'
+    DUAL_GUN_MARK_IS_SHOWN = 'dual_gun_mark_shown'
 
 
 class ServerSettingsManager(object):
@@ -320,12 +319,6 @@ class ServerSettingsManager(object):
                                        BATTLE_EVENTS.ENEMIES_STUN: 18}, offsets={}),
      SETTINGS_SECTIONS.BATTLE_BORDER_MAP: Section(masks={}, offsets={BATTLE_BORDER_MAP.MODE_SHOW_BORDER: Offset(0, 3),
                                            BATTLE_BORDER_MAP.TYPE_BORDER: Offset(2, 12)}),
-     SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_1: Section(masks={'hasNew': 15}, offsets={'item_1': Offset(0, 32767),
-                                                        'item_2': Offset(16, 2147418112)}),
-     SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_2: Section(masks={}, offsets={'item_3': Offset(0, 32767),
-                                                        'item_4': Offset(16, 2147418112)}),
-     SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_3: Section(masks={}, offsets={'item_5': Offset(0, 32767),
-                                                        'item_6': Offset(16, 2147418112)}),
      SETTINGS_SECTIONS.UI_STORAGE: Section(masks={PM_TUTOR_FIELDS.GREETING_SCREEN_SHOWN: 0,
                                     PM_TUTOR_FIELDS.FIRST_ENTRY_AWARDS_SHOWN: 1,
                                     PM_TUTOR_FIELDS.ONE_FAL_SHOWN: 7,
@@ -335,8 +328,10 @@ class ServerSettingsManager(object):
                                     UI_STORAGE_KEYS.FIELD_POST_HINT_IS_SHOWN: 14,
                                     PM_TUTOR_FIELDS.PM2_ONE_FAL_SHOWN: 15,
                                     PM_TUTOR_FIELDS.PM2_MULTIPLE_FAL_SHOWN: 16,
-                                    UI_STORAGE_KEYS.REFERRAL_BUTTON_CIRCLES_SHOWN: 17}, offsets={PM_TUTOR_FIELDS.INITIAL_FAL_COUNT: Offset(2, 124),
-                                    UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER: Offset(10, 7168)}),
+                                    UI_STORAGE_KEYS.REFERRAL_BUTTON_CIRCLES_SHOWN: 17,
+                                    UI_STORAGE_KEYS.DUAL_GUN_MARK_IS_SHOWN: 18}, offsets={PM_TUTOR_FIELDS.INITIAL_FAL_COUNT: Offset(2, 124),
+                                    UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER: Offset(10, 7168),
+                                    UI_STORAGE_KEYS.DUAL_GUN_HIGHLIGHTS_COUNTER: Offset(19, 3670016)}),
      SETTINGS_SECTIONS.LINKEDSET_QUESTS: Section(masks={}, offsets={'shown': Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.QUESTS_PROGRESS: Section(masks={}, offsets={QUESTS_PROGRESS.VIEW_TYPE: Offset(0, 3),
                                          QUESTS_PROGRESS.DISPLAY_TYPE: Offset(2, 12)})}
@@ -354,6 +349,7 @@ class ServerSettingsManager(object):
      'reloaderTimer': 3,
      'zoomIndicator': 4}
     _MAX_AUTO_RELOAD_HIGHLIGHTS_COUNT = 5
+    _MAX_DUAL_GUN_HIGHLIGHTS_COUNT = 5
 
     def __init__(self, core):
         self._core = weakref.proxy(core)
@@ -377,9 +373,8 @@ class ServerSettingsManager(object):
 
     def getAimSetting(self, section, key, default=None):
         number = self.AIM_MAPPING[key]
-        storageKey = 'AIM_%(section)s_%(number)d' % {'section': section.upper(),
-         'number': number}
-        settingsKey = 'AIM_%(number)d' % {'number': number}
+        storageKey = 'AIM_{section}_{number}'.format(section=section.upper(), number=number)
+        settingsKey = 'AIM_{number}'.format(number=number)
         storedValue = self.settingsCache.getSectionSettings(storageKey, None)
         masks = self.SECTIONS[settingsKey].masks
         offsets = self.SECTIONS[settingsKey].offsets
@@ -394,12 +389,6 @@ class ServerSettingsManager(object):
     def setOnceOnlyHintsSettings(self, settings):
         self.setSectionSettings(SETTINGS_SECTIONS.ONCE_ONLY_HINTS, settings)
 
-    def getEncyclopediaRecommendations(self):
-        return self.getSections([SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_1, SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_2, SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_3], {})
-
-    def setEncyclopediaRecommendationsSections(self, ids):
-        self.setSections([SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_1, SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_2, SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_3], ids)
-
     def getUIStorage(self, defaults=None):
         return self.getSection(SETTINGS_SECTIONS.UI_STORAGE, defaults)
 
@@ -409,6 +398,13 @@ class ServerSettingsManager(object):
     def checkAutoReloadHighlights(self, increase=False):
         key = UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER
         res = self.getUIStorage().get(key) < self._MAX_AUTO_RELOAD_HIGHLIGHTS_COUNT
+        if res and increase:
+            self.updateUIStorageCounter(key)
+        return res
+
+    def checkDualGunHighlights(self, increase=False):
+        key = UI_STORAGE_KEYS.DUAL_GUN_HIGHLIGHTS_COUNTER
+        res = self.getUIStorage().get(key) < self._MAX_DUAL_GUN_HIGHLIGHTS_COUNT
         if res and increase:
             self.updateUIStorageCounter(key)
         return res
@@ -423,12 +419,6 @@ class ServerSettingsManager(object):
 
     def getDisableAnimTooltipFlag(self):
         return self.getUIStorage().get(UI_STORAGE_KEYS.DISABLE_ANIMATED_TOOLTIP) == 1
-
-    def getHasNewEncyclopediaRecommendations(self):
-        return self.getSectionSettings(SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_1, 'hasNew')
-
-    def setHasNewEncyclopediaRecommendations(self, value=True):
-        return self.setSectionSettings(SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_1, {'hasNew': value})
 
     def isLinkedSetQuestWasShowed(self, questID, missionID):
         section = self.getSectionSettings(SETTINGS_SECTIONS.LINKEDSET_QUESTS, 'shown')
@@ -454,9 +444,8 @@ class ServerSettingsManager(object):
                 mapping.setdefault(number, {})[key] = value
 
             for number, value in mapping.iteritems():
-                settingsKey = 'AIM_%(number)d' % {'number': number}
-                storageKey = 'AIM_%(section)s_%(number)d' % {'section': section.upper(),
-                 'number': number}
+                settingsKey = 'AIM_{number}'.format(number=number)
+                storageKey = 'AIM_{section}_{number}'.format(section=section.upper(), number=number)
                 storingValue = storedValue = self.settingsCache.getSetting(storageKey)
                 masks = self.SECTIONS[settingsKey].masks
                 offsets = self.SECTIONS[settingsKey].offsets
@@ -476,7 +465,7 @@ class ServerSettingsManager(object):
         self._core.onSettingsChanged(settings)
 
     def getMarkersSetting(self, section, key, default=None):
-        storageKey = 'MARKERS_%(section)s' % {'section': section.upper()}
+        storageKey = 'MARKERS_{section}'.format(section=section.upper())
         storedValue = self.settingsCache.getSectionSettings(storageKey, None)
         masks = self.SECTIONS[SETTINGS_SECTIONS.MARKERS].masks
         offsets = self.SECTIONS[SETTINGS_SECTIONS.MARKERS].offsets
@@ -485,7 +474,7 @@ class ServerSettingsManager(object):
     def _buildMarkersSettings(self, settings):
         settingToServer = {}
         for section, options in settings.iteritems():
-            storageKey = 'MARKERS_%(section)s' % {'section': section.upper()}
+            storageKey = 'MARKERS_{section}'.format(section=section.upper())
             storingValue = storedValue = self.settingsCache.getSetting(storageKey)
             masks = self.SECTIONS[SETTINGS_SECTIONS.MARKERS].masks
             offsets = self.SECTIONS[SETTINGS_SECTIONS.MARKERS].offsets

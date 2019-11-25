@@ -5,6 +5,9 @@ from frameworks.wulf import ViewModel
 class CounterModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=1, commands=0):
+        super(CounterModel, self).__init__(properties=properties, commands=commands)
+
     def getValue(self):
         return self._getNumber(0)
 

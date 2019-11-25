@@ -111,6 +111,7 @@ class MENU(object):
     LOGIN_STATUS_CLIENT_SERVER_VERSIONS_ARE_DIFFERENT = '#menu:login/status/CLIENT_SERVER_VERSIONS_ARE_DIFFERENT'
     LOADING_GAME = '#menu:loading/game'
     LOADING_GAMEINFO = '#menu:loading/gameInfo'
+    LOADING_GAMEINFO_AGE = '#menu:loading/gameInfo/age'
     LOADING_BATTLETYPES_0 = '#menu:loading/battleTypes/0'
     LOADING_BATTLETYPES_DESC_0 = '#menu:loading/battleTypes/desc/0'
     LOADING_BATTLETYPES_1 = '#menu:loading/battleTypes/1'
@@ -552,6 +553,7 @@ class MENU(object):
     TANK_PARAMS_GPS = '#menu:tank_params/gps'
     TANK_PARAMS_SPM = '#menu:tank_params/spm'
     TANK_PARAMS_S = '#menu:tank_params/s'
+    TANK_PARAMS_S_S = '#menu:tank_params/s_s'
     TANK_PARAMS_MM = '#menu:tank_params/mm'
     TANK_PARAMS_VAL = '#menu:tank_params/val'
     TANK_PARAMS_VPM = '#menu:tank_params/vpm'
@@ -565,6 +567,7 @@ class MENU(object):
     TANK_PARAMS_CLIPSEC = '#menu:tank_params/clipSec'
     TANK_PARAMS_STUNMAXDURATION = '#menu:tank_params/stunMaxDuration'
     TANK_PARAMS_STUNMINDURATION = '#menu:tank_params/stunMinDuration'
+    TANK_PARAMS_CHARGETIME = '#menu:tank_params/chargeTime'
     DESCRIPTIONS_VEHICLE = '#menu:descriptions/vehicle'
     DESCRIPTIONS_VEHICLEGUN = '#menu:descriptions/vehicleGun'
     DESCRIPTIONS_VEHICLEGUN_AUTORELOAD = '#menu:descriptions/vehicleGun/autoReload'
@@ -693,7 +696,6 @@ class MENU(object):
     HEADERBUTTONS_BARRACKS = '#menu:headerButtons/barracks'
     HEADERBUTTONS_CLAN = '#menu:headerButtons/clan'
     HEADERBUTTONS_CLANS = '#menu:headerButtons/clans'
-    HEADERBUTTONS_ENCYCLOPEDIA = '#menu:headerButtons/encyclopedia'
     HEADERBUTTONS_WIKI = '#menu:headerButtons/wiki'
     HEADERBUTTONS_BROWSER = '#menu:headerButtons/browser'
     HEADERBUTTONS_MENU = '#menu:headerButtons/menu'
@@ -948,6 +950,7 @@ class MENU(object):
     MODULEINFO_PARAMETERSCLIPGUNLABEL = '#menu:moduleInfo/parametersClipGunLabel'
     MODULEINFO_CLIPGUNLABEL = '#menu:moduleInfo/clipGunLabel'
     MODULEINFO_AUTORELOADGUNLABEL = '#menu:moduleInfo/autoReloadGunLabel'
+    MODULEINFO_DUALGUNLABEL = '#menu:moduleInfo/dualGunLabel'
     MODULEINFO_HYDRAULICCHASSISLABEL = '#menu:moduleInfo/hydraulicChassisLabel'
     MODULEINFO_HYDRAULICAUTOSIEGECHASSISLABEL = '#menu:moduleInfo/hydraulicAutoSiegeChassisLabel'
     MODULEINFO_HYDRAULICWHEELEDCHASSISLABEL = '#menu:moduleInfo/hydraulicWheeledChassisLabel'
@@ -968,6 +971,9 @@ class MENU(object):
     MODULEINFO_PARAMS_RELOADMAGAZINETIME = '#menu:moduleInfo/params/reloadMagazineTime'
     MODULEINFO_PARAMS_AUTORELOADTIME = '#menu:moduleInfo/params/autoReloadTime'
     MODULEINFO_PARAMS_RELOADTIME = '#menu:moduleInfo/params/reloadTime'
+    MODULEINFO_PARAMS_RELOADTIMESECS = '#menu:moduleInfo/params/reloadTimeSecs'
+    MODULEINFO_PARAMS_CHARGETIME = '#menu:moduleInfo/params/chargeTime'
+    MODULEINFO_PARAMS_RATETIME = '#menu:moduleInfo/params/rateTime'
     MODULEINFO_PARAMS_PIERCINGPOWER = '#menu:moduleInfo/params/piercingPower'
     MODULEINFO_ADDITIONALINFO = '#menu:moduleInfo/additionalInfo'
     MODULEINFO_PARAMS_DAMAGE = '#menu:moduleInfo/params/damage'
@@ -1033,6 +1039,8 @@ class MENU(object):
     VEHICLEINFO_PARAMS_INVISIBILITYSTILLFACTOR = '#menu:vehicleInfo/params/invisibilityStillFactor'
     VEHICLEINFO_PARAMS_INVISIBILITYMOVINGFACTOR = '#menu:vehicleInfo/params/invisibilityMovingFactor'
     VEHICLEINFO_PARAMS_RELOADTIMESECS = '#menu:vehicleInfo/params/reloadTimeSecs'
+    VEHICLEINFO_PARAMS_CHARGETIME = '#menu:vehicleInfo/params/chargeTime'
+    VEHICLEINFO_PARAMS_RATETIME = '#menu:vehicleInfo/params/rateTime'
     VEHICLEINFO_PARAMS_SWITCHONTIME = '#menu:vehicleInfo/params/switchOnTime'
     VEHICLEINFO_PARAMS_SWITCHOFFTIME = '#menu:vehicleInfo/params/switchOffTime'
     VEHICLEINFO_PARAMS_WHEELEDSWITCHONTIME = '#menu:vehicleInfo/params/wheeledSwitchOnTime'
@@ -1841,6 +1849,10 @@ class MENU(object):
     BOOSTERBUYWINDOW_INHANGARCOUNT = '#menu:boosterBuyWindow/inHangarCount'
     BOOSTERBUYWINDOW_TOTALPRICE = '#menu:boosterBuyWindow/totalPrice'
     BOOSTERBUYWINDOW_REARMCHECKBOXLABEL = '#menu:boosterBuyWindow/rearmCheckboxLabel'
+    BOOSTERBUYWINDOW_TITLE = '#menu:boosterBuyWindow/title'
+    BOOSTERBUYWINDOW_PRICEPERITEM = '#menu:boosterBuyWindow/pricePerItem'
+    BOOSTERSELLWINDOW_TITLE = '#menu:boosterSellWindow/title'
+    BOOSTERSELLWINDOW_PRICEPERITEM = '#menu:boosterSellWindow/pricePerItem'
     OPTIONALDEVICESELECTPOPOVER_TABS_SIMPLE = '#menu:optionalDeviceSelectPopover/tabs/simple'
     OPTIONALDEVICESELECTPOPOVER_TABS_DELUXE = '#menu:optionalDeviceSelectPopover/tabs/deluxe'
     FITTINGSELECTPOPOVER_TITLETEXT = '#menu:fittingSelectPopover/titleText'
@@ -2178,6 +2190,9 @@ class MENU(object):
      MODULEINFO_PARAMS_RELOADMAGAZINETIME,
      MODULEINFO_PARAMS_AUTORELOADTIME,
      MODULEINFO_PARAMS_RELOADTIME,
+     MODULEINFO_PARAMS_RELOADTIMESECS,
+     MODULEINFO_PARAMS_CHARGETIME,
+     MODULEINFO_PARAMS_RATETIME,
      MODULEINFO_PARAMS_PIERCINGPOWER,
      MODULEINFO_PARAMS_DAMAGE,
      MODULEINFO_PARAMS_AVGPIERCINGPOWER,
@@ -2354,6 +2369,7 @@ class MENU(object):
      TANK_PARAMS_GPS,
      TANK_PARAMS_SPM,
      TANK_PARAMS_S,
+     TANK_PARAMS_S_S,
      TANK_PARAMS_MM,
      TANK_PARAMS_VAL,
      TANK_PARAMS_VPM,
@@ -2366,7 +2382,8 @@ class MENU(object):
      TANK_PARAMS_KG,
      TANK_PARAMS_CLIPSEC,
      TANK_PARAMS_STUNMAXDURATION,
-     TANK_PARAMS_STUNMINDURATION)
+     TANK_PARAMS_STUNMINDURATION,
+     TANK_PARAMS_CHARGETIME)
     BROWSER_CUSTOMTITLE_ENUM = (BROWSER_CUSTOMTITLE_FORT_OFFENSIVERESULT, BROWSER_CUSTOMTITLE_FORT_CONGRATULATION)
     LOADING_BATTLETYPES_DESC_ENUM = (LOADING_BATTLETYPES_DESC_0,
      LOADING_BATTLETYPES_DESC_1,

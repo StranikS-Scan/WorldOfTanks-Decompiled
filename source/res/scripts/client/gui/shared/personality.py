@@ -140,6 +140,7 @@ def onAccountBecomeNonPlayer():
     g_currentPreviewVehicle.destroy()
     ServicesLocator.hangarSpace.destroy()
     g_prbLoader.onAccountBecomeNonPlayer()
+    ServicesLocator.gameState.onAccountBecomeNonPlayer()
     guiModsSendEvent('onAccountBecomeNonPlayer')
     UsersInfoHelper.clear()
     g_blueprintGenerator.fini()

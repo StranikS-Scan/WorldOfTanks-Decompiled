@@ -106,7 +106,6 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     TRADE_IN_VEHICLE_PREVIEW_20 = 'tradeInVehiclePreview'
     VEHICLE_COMPARE = 'vehicleCompare'
     VEHICLE_COMPARE_MAIN_CONFIGURATOR = 'vehicleCompareConfigurator'
-    LOBBY_ACADEMY = 'academy'
     LOBBY_STRONGHOLD = 'StrongholdView'
     BROWSER_VIEW = 'BrowserView'
     SIMPLE_DIALOG = 'simpleDialog'

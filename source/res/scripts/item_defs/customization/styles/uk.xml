@@ -398,6 +398,7 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
+    <priceGroup>	styles 700g	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	uk	</nations>
@@ -408,7 +409,6 @@
       <texture>	gui/maps/vehicles/styles/generic_custom_look_2_uk.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_2_uk_desc	</description>
       <userString>	#vehicle_customization:main_style/generic_custom_look_2_uk	</userString>
-      <priceGroup>	styles 700g	</priceGroup>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -515,6 +515,7 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
+    <priceGroup>	styles 700g	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	uk	</nations>
@@ -528,7 +529,6 @@
       <texture>	gui/maps/vehicles/styles/generic_custom_look_3_uk.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_3_uk_desc	</description>
       <userString>	#vehicle_customization:main_style/generic_custom_look_3_uk	</userString>
-      <priceGroup>	styles 700g	</priceGroup>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -625,6 +625,38 @@
               <appliedTo>	52416	</appliedTo>
             </item>
           </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 6000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB83_FV4005	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	87	</id>
+      <texture>	gui/maps/vehicles/styles/GB83_FV4005_3Dst.png	</texture>
+      <description>	#vehicle_customization:main_style/GB83_FV4005_3Dst_desc	</description>
+      <modelsSet>	GB83_FV4005_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/GB83_FV4005_3Dst	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
         </outfit>
       </outfits>
     </style>

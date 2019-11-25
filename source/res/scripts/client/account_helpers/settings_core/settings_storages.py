@@ -9,7 +9,7 @@ from adisp import async
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs import TimerConfirmDialogMeta
-from gui.shared.utils.graphics import g_monitorSettings
+from gui.shared.utils.monitor_settings import g_monitorSettings
 from messenger import g_settings as messenger_settings
 
 class ISettingsStorage(object):
@@ -200,7 +200,7 @@ class VideoSettingsStorage(ISettingsStorage):
 
                 @async
                 def confirmator(callback=None):
-                    BigWorld.callback(0.0, lambda : DialogsInterface.showI18nConfirmDialog('graphicsChangeConfirmation', callback, TimerConfirmDialogMeta('graphicsChangeConfirmation', timer=15)))
+                    BigWorld.callback(0.0, lambda : DialogsInterface.showI18nConfirmDialog('graphicsChangeConfirmation', callback, meta=TimerConfirmDialogMeta('graphicsChangeConfirmation', timer=15)))
 
                 return (confirmator, wrapper(monitorChanged, windowSizeChanged, borderlessSizeChanged, cMonitor, cWindowSize, cVideoMode, cWindowMode, cAspectRation))
         return super(VideoSettingsStorage, self).apply(restartApproved)

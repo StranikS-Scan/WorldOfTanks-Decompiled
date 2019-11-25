@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/customization/context.py
 from collections import defaultdict
+from copy import deepcopy
 from functools import partial
 from collections import namedtuple
 import logging
@@ -630,7 +631,7 @@ class CustomizationContext(object):
             else:
                 LOG_WARNING('Error occurred while trying to reset c11n items novelty, reason by resultId = {}: {}'.format(resultID, code2str(resultID)))
 
-        BigWorld.player().shop.resetC11nItemsNovelty([ (g_currentVehicle.item.intCompactDescr, intCD) for intCD in itemsList ], lambda resultId: _callback(self, resultId))
+        BigWorld.player().shop.resetC11nItemsNovelty([ (g_currentVehicle.item.intCD, intCD) for intCD in itemsList ], lambda resultId: _callback(self, resultId))
 
     def changeCamouflageColor(self, areaId, regionIdx, paletteIdx):
         component = self.currentOutfit.getContainer(areaId).slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).getComponent(regionIdx)
@@ -747,6 +748,7 @@ class CustomizationContext(object):
 
     @process('customizationApply')
     def applyItems(self, purchaseItems):
+        purchaseItems = deepcopy(purchaseItems)
         self.itemsCache.onSyncCompleted -= self.__onCacheResync
         groupHasItems = {AdditionalPurchaseGroups.STYLES_GROUP_ID: False,
          SeasonType.WINTER: False,

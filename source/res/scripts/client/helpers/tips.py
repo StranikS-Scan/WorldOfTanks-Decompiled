@@ -1,99 +1,95 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/tips.py
 import logging
+import random
 import re
 import sys
-from collections import defaultdict, namedtuple
-import constants
+from collections import namedtuple
 import nations
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import WATCHED_PRE_BATTLE_TIPS_SECTION
 from constants import ARENA_GUI_TYPE
+from gui.doc_loaders.prebattle_tips_loader import getPreBattleTipsConfig
 from gui.impl.gen import R
-from gui.shared.utils.functions import rnd_choice_loop
 from helpers import dependency
-from items.vehicles import VEHICLE_CLASS_TAGS
 from skeletons.gui.battle_session import IBattleSessionProvider
-ALL = 'all'
-ANY = 'any'
-EXCEPT = 'except'
-INFINITY_STR_VALUE = 'infinity'
-TIPS_ADD_PATTERN_PARTS_COUNT = 7
-EPIC_TIPS_ADD_PATTERN_PARTS_COUNT = 2
-BATTLE_CONDITIONS_PARTS_COUNT = 3
-_FoundTip = namedtuple('_FoundTip', 'status, body, icon')
+_TipData = namedtuple('_BattleLoadingTipData', 'status, body, icon')
 _logger = logging.getLogger(__name__)
+_SANDBOX_GEOMETRY_INDEX = ('100_thepit', '10_hills')
+_RANDOM_TIPS_PATTERN = '^(tip\\d+)'
+_EPIC_BATTLE_TIPS_PATTERN = '^(epicTip\\d+)'
+_EPIC_RANDOM_TIPS_PATTERN = '^(epicRandom\\d+)'
+_RANKED_BATTLES_TIPS_PATTERN = '^(ranked\\d+)'
+
+class _BattleLoadingTipPriority(object):
+    GENERIC = 1
+    PRECEDING = 2
+
 
 class _TipsCriteria(object):
-    __slots__ = ('_count', '_classTag', '_nation', '_level')
-    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    __slots__ = ('_battlesCount', '_vehicleType')
 
     def __init__(self):
         super(_TipsCriteria, self).__init__()
-        self._count = 0
-        self._classTag = ALL
-        self._nation = ALL
-        self._level = 1
-
-    def getBattleCount(self):
-        return self._count
+        self._battlesCount = 0
+        self._vehicleType = None
+        return
 
     def setBattleCount(self, count):
-        self._count = count
-        return self
+        self._battlesCount = count
 
-    def getClassTag(self):
-        return self._classTag
-
-    def setClassTag(self, tag):
-        self._classTag = tag
-        return self
-
-    def getNation(self):
-        return self._nation
-
-    def setNation(self, nation):
-        self._nation = nation
-        return self
-
-    def getLevel(self):
-        return self._level
-
-    def setLevel(self, level):
-        self._level = level
-        return self
+    def setVehicleType(self, vehicleType):
+        self._vehicleType = vehicleType
 
     def find(self):
-        raise NotImplementedError
-
-
-class RandomTipsCriteria(_TipsCriteria):
-
-    def find(self):
-        iterator = getTipsIterator(constants.ARENA_GUI_TYPE.RANDOM, self._count, self._classTag, self._nation, self._level)
-        if iterator is not None:
-            tip = _FoundTip(*next(iterator))
+        suitableTips = filter(self._suitableTipPredicate, self._getTargetList())
+        precedingTips = [ tip for tip in suitableTips if tip.getPriority() == _BattleLoadingTipPriority.PRECEDING ]
+        foundTip = None
+        if precedingTips:
+            foundTip = random.choice(precedingTips)
+        elif suitableTips:
+            foundTip = random.choice(suitableTips)
+        if foundTip is not None:
+            foundTip.markWatched()
+            return foundTip.getData()
         else:
-            tip = _FoundTip(R.invalid(), R.invalid(), '')
-        return tip
+            return _TipData(R.invalid(), R.invalid(), R.invalid())
+
+    def _getArenaGuiType(self):
+        return None
+
+    def _suitableTipPredicate(self, tip):
+        return False if tip is None else tip.test(self._getArenaGuiType(), self._battlesCount, self._vehicleType)
+
+    def _getTargetList(self):
+        _logger.error('Method _getTargetList has to be overridden')
+        return []
 
 
-class EpicBattleTipsCriteria(RandomTipsCriteria):
+class _RandomTipsCriteria(_TipsCriteria):
+
+    def _getTargetList(self):
+        return _randomTips
+
+    def _getArenaGuiType(self):
+        return ARENA_GUI_TYPE.RANDOM
+
+
+class _EpicBattleTipsCriteria(_TipsCriteria):
 
     def find(self):
-        iterator = self.__getTipsIterator(self._count)
-        if iterator is not None:
-            tip = _FoundTip(*next(iterator))
-        else:
-            tip = _FoundTip(R.invalid(), R.invalid(), '')
-        return tip
+        tipData = super(_EpicBattleTipsCriteria, self).find()
+        return _TipData(tipData.status, tipData.body, R.invalid())
 
-    def __getTipsIterator(self, battlesCount):
-        tipsItems = _getEpicBattleConditionedTips(battlesCount)
-        return rnd_choice_loop(*tipsItems) if tipsItems > 0 else None
+    def _getTargetList(self):
+        return _epicBattleTips
+
+    def _getArenaGuiType(self):
+        return ARENA_GUI_TYPE.EPIC_BATTLE
 
 
-_SANDBOX_GEOMETRY_INDEX = ('100_thepit', '10_hills')
-
-class SandboxTipsCriteria(_TipsCriteria):
+class _SandboxTipsCriteria(_TipsCriteria):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def find(self):
         playerBaseYPos = enemyBaseYPos = 0
@@ -115,163 +111,61 @@ class SandboxTipsCriteria(_TipsCriteria):
             geometryIndex = 0
         positionIndex = 0 if playerBaseYPos < enemyBaseYPos else 1
         iconKey = 'sandbox{0}{1}'.format(str(geometryIndex), str(positionIndex))
-        return _FoundTip(R.strings.tips.howToPlay(), R.strings.tips.dyn('sandbox{}'.format(geometryIndex))(), R.images.gui.maps.icons.battleLoading.tips.dyn(iconKey)())
+        return _TipData(R.strings.tips.howToPlay(), R.strings.tips.dyn('sandbox{}'.format(geometryIndex))(), R.images.gui.maps.icons.battleLoading.tips.dyn(iconKey)())
 
 
-class EventTipsCriteria(_TipsCriteria):
-
-    def find(self):
-        return _FoundTip(R.strings.tips.eventTitle(), R.strings.tips.eventMessage(), R.images.gui.maps.icons.battleLoading.tips.event())
-
-
-def _getRankedTipIterator():
-    tipSize = R.strings.tips.ranked.length()
-    if tipSize > 0:
-        items = [ key.strip('c_') for key in R.strings.tips.ranked.keys() ]
-        return rnd_choice_loop(*items)
-    else:
-        return None
-
-
-class RankedTipsCriteria(_TipsCriteria):
-    __tipIterator = None
-
-    def __init__(self):
-        super(RankedTipsCriteria, self).__init__()
-        if RankedTipsCriteria.__tipIterator is None:
-            RankedTipsCriteria.__tipIterator = _getRankedTipIterator()
-        return
+class _EventTipsCriteria(_TipsCriteria):
 
     def find(self):
-        iterator = RankedTipsCriteria.__tipIterator
-        if iterator is not None:
-            tipNum = next(iterator)
-            rankedTipRes = R.strings.tips.ranked.dyn('c_{}'.format(tipNum))
-            if rankedTipRes:
-                return _FoundTip(rankedTipRes.title(), rankedTipRes.body(), R.images.gui.maps.icons.battleLoading.tips.dyn('ranked{}'.format(tipNum))())
-        return _FoundTip(R.invalid(), R.invalid(), '')
+        return _TipData(R.strings.tips.eventTitle(), R.strings.tips.eventMessage(), R.images.gui.maps.icons.battleLoading.tips.event())
 
 
-def _getEpicRandomTipIterator():
-    tipSize = R.strings.tips.epicRandom.length()
-    if tipSize > 0:
-        items = range(tipSize)
-        return rnd_choice_loop(*items)
-    else:
-        return None
+class _RankedTipsCriteria(_TipsCriteria):
+
+    def _getTargetList(self):
+        return _rankedTips
 
 
-class EpicRandomTipsCriteria(_TipsCriteria):
-    __tipIterator = None
+class _EpicRandomTipsCriteria(_TipsCriteria):
 
-    def __init__(self):
-        super(EpicRandomTipsCriteria, self).__init__()
-        if EpicRandomTipsCriteria.__tipIterator is None:
-            EpicRandomTipsCriteria.__tipIterator = _getEpicRandomTipIterator()
-        return
-
-    def find(self):
-        iterator = EpicRandomTipsCriteria.__tipIterator
-        if iterator is not None:
-            tipNum = next(iterator)
-            epicTipRes = R.strings.tips.epicRandom.dyn('c_{}'.format(tipNum))
-            if epicTipRes:
-                return _FoundTip(epicTipRes.title(), epicTipRes.body(), R.images.gui.maps.icons.battleLoading.tips.dyn('epicRandom{}'.format(tipNum))())
-        return _FoundTip('', '', '')
+    def _getTargetList(self):
+        return _epicRandomTips
 
 
 def getTipsCriteria(arenaVisitor):
     if arenaVisitor.gui.isSandboxBattle():
-        return SandboxTipsCriteria()
+        return _SandboxTipsCriteria()
     if arenaVisitor.gui.isEventBattle():
-        return EventTipsCriteria()
+        return _EventTipsCriteria()
     if arenaVisitor.gui.isRankedBattle():
-        return RankedTipsCriteria()
+        return _RankedTipsCriteria()
     if arenaVisitor.gui.isEpicRandomBattle():
-        return EpicRandomTipsCriteria()
-    return EpicBattleTipsCriteria() if arenaVisitor.gui.isInEpicRange() else RandomTipsCriteria()
+        return _EpicRandomTipsCriteria()
+    return _EpicBattleTipsCriteria() if arenaVisitor.gui.isInEpicRange() else _RandomTipsCriteria()
 
 
-def getTipsIterator(arenaGuiType, battlesCount, vehicleType, vehicleNation, vehicleLvl):
-    tipsItems = _getConditionedTips(arenaGuiType, battlesCount, vehicleType, vehicleNation, vehicleLvl)
-    return rnd_choice_loop(*tipsItems) if tipsItems else None
-
-
-class _ArenaGuiTypeCondition(namedtuple('_SquadExtra', ('mainPart', 'additionalPart'))):
-
-    def validate(self, arenaGuiType):
-        if self.mainPart == ALL:
-            return True
-        if self.mainPart == ANY:
-            arenaGuiTypes = map(_getIntValue, self.additionalPart)
-            return arenaGuiType in arenaGuiTypes
-        if self.mainPart == EXCEPT:
-            arenaGuiTypes = map(_getIntValue, self.additionalPart)
-            return arenaGuiType not in arenaGuiTypes
-        return False
-
-
-_ArenaGuiTypeCondition.__new__.__defaults__ = (ALL, None)
-
-def _getAddTipsKeysAndResourceID(res):
+def _readTips(pattern):
     result = []
-    if res and res() != -1:
-        while not res.exists():
-            for key, nextRes in res.items():
-                result.append(key)
-                res = nextRes
-
-        return (result, res())
-    return (result, R.invalid())
-
-
-def _readTips():
-    result = defaultdict(lambda : defaultdict(lambda : defaultdict(lambda : defaultdict(lambda : defaultdict(list)))))
-    tipsPattern = re.compile('^tip(\\d+)')
-    for tipID, res in R.strings.tips.items():
+    tipsPattern = re.compile(pattern)
+    for tipID, descriptionResId in R.strings.tips.items():
         if tipID:
-            sreMatch = tipsPattern.match(tipID)
-            if sreMatch is not None and sreMatch.groups():
-                keys, tipRes = _getAddTipsKeysAndResourceID(res)
-                if len(keys) == TIPS_ADD_PATTERN_PARTS_COUNT:
-                    status, group, battlesCountConds, arenaGuiType, vehicleTypeCondition, nation, vehLevel = keys
-                    battlesCountConds = battlesCountConds.split('_')
-                    if len(battlesCountConds) == BATTLE_CONDITIONS_PARTS_COUNT:
-                        minBattlesCount = _getIntValue(battlesCountConds[1])
-                        maxBattlesCount = _getIntValue(battlesCountConds[2])
-                        if minBattlesCount is not None and maxBattlesCount is not None:
-                            battleCondition = (minBattlesCount, maxBattlesCount)
-                            arenaGuiTypeParts = arenaGuiType.split('_')
-                            arenaGuiTypeCondition = _ArenaGuiTypeCondition(arenaGuiTypeParts[0], arenaGuiTypeParts[1:])
-                            statusRes = R.strings.tips.dyn(status)()
-                            icon = _getTipIconRes(tipID, group)
-                            vehicleTypeCondition = vehicleTypeCondition.replace('_', '-')
-                            for arenaGuiType in ARENA_GUI_TYPE.RANGE:
-                                if arenaGuiTypeCondition.validate(arenaGuiType):
-                                    result[battleCondition][arenaGuiType][vehicleTypeCondition][nation][vehLevel].append((statusRes, tipRes, icon))
+            reMatch = tipsPattern.match(tipID)
+            if reMatch is not None:
+                result.append(_buildBattleLoadingTip(tipID, descriptionResId()))
 
     return result
 
 
-def _readEpicTips():
-    result = defaultdict(list)
-    tipsPattern = re.compile('^epicTip(\\d+)')
-    for tipID, res in R.strings.tips.items():
-        if tipID:
-            sreMatch = tipsPattern.match(tipID)
-            if sreMatch is not None and sreMatch.groups():
-                keys, tipRes = _getAddTipsKeysAndResourceID(res)
-                if len(keys) == EPIC_TIPS_ADD_PATTERN_PARTS_COUNT:
-                    status, battlesCountConditions = keys
-                    battlesCountConditions = battlesCountConditions.split('_')
-                    if len(battlesCountConditions) == BATTLE_CONDITIONS_PARTS_COUNT:
-                        minBattlesCount = _getIntValue(battlesCountConditions[1])
-                        maxBattlesCount = _getIntValue(battlesCountConditions[2])
-                        if minBattlesCount is not None and maxBattlesCount is not None:
-                            battleCondition = (minBattlesCount, maxBattlesCount)
-                            result[battleCondition].append((R.strings.tips.dyn(status)(), tipRes, R.invalid()))
-
-    return result
+def _buildBattleLoadingTip(tipID, descriptionResID):
+    tipConfig = _tipsConfig.get(tipID)
+    tipFilter = tipConfig.get('filter')
+    if tipFilter is not None and tipFilter['preceding'] is not None:
+        tip = _PrecedingBattleLoadingTip()
+        tip.setShowLimit(tipFilter['preceding']['showTimes'])
+    else:
+        tip = _BattleLoadingTip()
+    tip.build(tipID, descriptionResID, tipConfig)
+    return tip
 
 
 def _getTipIconRes(tipID, group):
@@ -279,48 +173,113 @@ def _getTipIconRes(tipID, group):
     return res() if res.exists() else R.images.gui.maps.icons.battleLoading.groups.dyn(group)()
 
 
-def _getIntValue(strCondition):
-    if strCondition == INFINITY_STR_VALUE:
-        return sys.maxint
-    else:
-        intValue = None
-        try:
-            intValue = int(strCondition)
-        except ValueError:
-            _logger.exception('Wrong strCondition, can not convert to int.')
+class _BattleLoadingTip(object):
+    __slots__ = ('_arenaTypes', '_battlesLimit', '_requiredTags', '_nation', '_level', '_vehicleClass', 'priority', '_tipId', '_statusResId', '_iconResId', '_descriptionResId')
 
-        return intValue
+    def __init__(self):
+        super(_BattleLoadingTip, self).__init__()
+        self._tipId = None
+        self._statusResId = R.invalid()
+        self._iconResId = R.invalid()
+        self._descriptionResId = R.invalid()
+        self._battlesLimit = (0, sys.maxint)
+        self._requiredTags = _SubsetValidator()
+        self._arenaTypes = _ValueValidator()
+        self._level = _ValueValidator()
+        self._nation = _ValueValidator()
+        self._vehicleClass = _ValueValidator()
+        return
+
+    def build(self, tipID, descriptionResID, config):
+        if config is not None:
+            self._statusResId = R.strings.tips.dyn(config['status'])()
+            self._iconResId = _getTipIconRes(tipID, config['group'])
+            tipFilter = config['filter']
+            if tipFilter is not None:
+                self._battlesLimit = (tipFilter['minBattles'], tipFilter['maxBattles'])
+                self._requiredTags.update(tipFilter['tags'])
+                self._arenaTypes.update(tipFilter['arenaTypes'])
+                self._level.update(tipFilter['levels'])
+                self._nation.update(tipFilter['nations'])
+                self._vehicleClass.update(tipFilter['vehicleClass'])
+        self._tipId = tipID
+        self._descriptionResId = descriptionResID
+        return
+
+    def markWatched(self):
+        pass
+
+    def getPriority(self):
+        return _BattleLoadingTipPriority.GENERIC
+
+    def getData(self):
+        return _TipData(self._statusResId, self._descriptionResId, self._iconResId)
+
+    def test(self, arenaGuiType, battlesCount, vehicleType):
+        minBattles, maxBattles = self._battlesLimit
+        return minBattles <= battlesCount <= maxBattles and self._requiredTags.validate(vehicleType.tags) and self._arenaTypes.validate(arenaGuiType) and self._level.validate(vehicleType.level) and self._nation.validate(nations.NAMES[vehicleType.nationID]) and self._vehicleClass.validate(vehicleType.classTag)
 
 
-_predefinedTips = _readTips()
-_predefinedEpicTips = _readEpicTips()
+class _PrecedingBattleLoadingTip(_BattleLoadingTip):
+    __slots__ = ('_showLimit', '_watchedTimes')
 
-def _getConditionedTips(arenaGuiType, battlesCount, vehicleType, vehicleNation, vehicleLvl):
-    result = []
-    battlesCountConditions = []
-    for item in _predefinedTips.iteritems():
-        (minBattlesCount, maxBattlesCount), _ = item
-        if minBattlesCount <= battlesCount <= maxBattlesCount:
-            battlesCountConditions.append(item)
+    def __init__(self):
+        super(_PrecedingBattleLoadingTip, self).__init__()
+        self._showLimit = 0
 
-    for _, vehicleTypeConditions in battlesCountConditions:
-        for vehType in (vehicleType, ALL):
-            for nation in (vehicleNation, ALL):
-                for level in (str(vehicleLvl), ALL):
-                    result.extend(vehicleTypeConditions[arenaGuiType][vehType][nation][level])
+    def setShowLimit(self, limit):
+        self._showLimit = limit
 
-    return result
+    def markWatched(self):
+        _increaseTipWatchedCounter(self._tipId)
+
+    def getPriority(self):
+        watchedTimes = _getTipWatchedCounter(self._tipId)
+        return _BattleLoadingTipPriority.PRECEDING if watchedTimes < self._showLimit else _BattleLoadingTipPriority.GENERIC
 
 
-def _getEpicBattleConditionedTips(battlesCount):
-    result = []
-    battlesCountConditions = []
-    for item in _predefinedEpicTips.iteritems():
-        (minBattlesCount, maxBattlesCount), _ = item
-        if minBattlesCount <= battlesCount <= maxBattlesCount:
-            battlesCountConditions.append(item)
+class _ValueValidator(object):
+    __slots__ = ('_possibleValues',)
 
-    for _, vehicleTypeConditions in battlesCountConditions:
-        result.extend(vehicleTypeConditions)
+    def __init__(self):
+        super(_ValueValidator, self).__init__()
+        self._possibleValues = frozenset()
 
-    return result
+    def update(self, values):
+        self._possibleValues = frozenset(values.split())
+
+    def validate(self, value):
+        return True if not self._possibleValues else str(value) in self._possibleValues
+
+
+class _SubsetValidator(_ValueValidator):
+
+    def validate(self, targetValues):
+        return True if not self._possibleValues else self._possibleValues.issubset(targetValues)
+
+
+def _getTipWatchedCounter(tipID):
+    cache = _getWatchedCache()
+    return cache.get(tipID, 0)
+
+
+def _increaseTipWatchedCounter(tipID):
+    cache = _getWatchedCache()
+    counter = cache.get(tipID, 0)
+    cache[tipID] = counter + 1
+    AccountSettings.setSettings(WATCHED_PRE_BATTLE_TIPS_SECTION, cache)
+
+
+def _getWatchedCache():
+    global _watchedTipsCache
+    if _watchedTipsCache is None:
+        _watchedTipsCache = AccountSettings.getSettings(WATCHED_PRE_BATTLE_TIPS_SECTION)
+    return _watchedTipsCache
+
+
+_watchedTipsCache = None
+_tipsConfig = getPreBattleTipsConfig()
+_randomTips = _readTips(_RANDOM_TIPS_PATTERN)
+_rankedTips = _readTips(_RANKED_BATTLES_TIPS_PATTERN)
+_epicBattleTips = _readTips(_EPIC_BATTLE_TIPS_PATTERN)
+_epicRandomTips = _readTips(_EPIC_RANDOM_TIPS_PATTERN)

@@ -52,6 +52,7 @@ BATTLE_RESULTS_KEYS = {'capturePoints': CONDITION_ICON.BASE_CAPTURE,
  'explosionHitsReceived': CONDITION_ICON.GET_HIT,
  'fortResource': CONDITION_ICON.FOLDER,
  'freeXP': CONDITION_ICON.EXPERIENCE,
+ 'subtotalXP': CONDITION_ICON.EXPERIENCE,
  'health': CONDITION_ICON.SAVE_HP,
  'inBattleMaxPiercingSeries': CONDITION_ICON.HIT,
  'inBattleMaxSniperSeries': CONDITION_ICON.HIT,
@@ -211,7 +212,10 @@ def getResultsData(condition):
     if topRangeLower < TOP_RANGE_LOWEST:
         labelKey = '%s/%s/%s' % (labelKey, condition.localeKey, 'bothTeams' if condition.isTotal() else 'halfTeam')
         if topRangeUpper == TOP_RANGE_HIGHEST:
-            label = _makeStr('%s/top' % labelKey, param=key, count=topRangeLower)
+            if topRangeLower == 1 and condition.isTotal():
+                label = i18n.makeString('#quests:details/conditions/results/single/bothTeams/top1', param=key)
+            else:
+                label = _makeStr('%s/top' % labelKey, param=key, count=topRangeLower)
         elif topRangeLower == topRangeUpper:
             label = _makeStr('%s/position' % labelKey, param=key, position=topRangeUpper)
         else:

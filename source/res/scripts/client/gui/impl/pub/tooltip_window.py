@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/pub/tooltip_window.py
-from frameworks.wulf import WindowFlags, View, ViewFlags
+from frameworks.wulf import WindowFlags, View, ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.windows.advanced_animated_tooltip_content_model import AdvancedAnimatedTooltipContentModel
 from gui.impl.gen.view_models.windows.advanced_tooltip_content_model import AdvancedTooltipContentModel
@@ -45,19 +45,24 @@ class SimpleTooltipContent(View):
     __slots__ = ()
 
     def __init__(self, contentID, header='', body='', note='', alert=''):
-        super(SimpleTooltipContent, self).__init__(contentID, ViewFlags.COMPONENT, SimpleTooltipContentModel, header, body, note, alert)
+        settings = ViewSettings(contentID)
+        settings.model = SimpleTooltipContentModel()
+        settings.args = (header,
+         body,
+         note,
+         alert)
+        super(SimpleTooltipContent, self).__init__(settings)
 
     @property
     def viewModel(self):
         return super(SimpleTooltipContent, self).getViewModel()
 
     def _onLoading(self, header, body, note, alert):
-        self.viewModel.hold()
-        self.viewModel.setHeader(header)
-        self.viewModel.setBody(body)
-        self.viewModel.setNote(note)
-        self.viewModel.setAlert(alert)
-        self.viewModel.commit()
+        with self.viewModel.transaction() as tx:
+            tx.setHeader(header)
+            tx.setBody(body)
+            tx.setNote(note)
+            tx.setAlert(alert)
 
 
 class AdvancedToolTipWindow(ToolTipWindow):
@@ -72,20 +77,21 @@ class AdvancedTooltipContent(View):
     __slots__ = ()
 
     def __init__(self, normalContent, advancedContent):
-        super(AdvancedTooltipContent, self).__init__(R.views.common.tooltip_window.advanced_tooltip_content.AdvandcedTooltipContent(), ViewFlags.COMPONENT, AdvancedTooltipContentModel, normalContent, advancedContent)
+        settings = ViewSettings(R.views.common.tooltip_window.advanced_tooltip_content.AdvandcedTooltipContent())
+        settings.model = AdvancedTooltipContentModel()
+        settings.args = (normalContent, advancedContent)
+        super(AdvancedTooltipContent, self).__init__(settings)
 
     @property
     def viewModel(self):
         return super(AdvancedTooltipContent, self).getViewModel()
 
-    def _initialize(self, normalContent, advancedContent):
+    def _onLoading(self, normalContent, advancedContent):
         super(AdvancedTooltipContent, self)._initialize()
         disableAnim = self._getDisableAnimFlag()
-        self.viewModel.hold()
-        self.viewModel.setNormalContent(normalContent)
-        self.viewModel.setAdvancedContent(advancedContent)
         self.viewModel.setShowAnim(not disableAnim)
-        self.viewModel.commit()
+        self.setChildView(R.dynamic_ids.tooltip.normal_content(), normalContent)
+        self.setChildView(R.dynamic_ids.tooltip.advanced_content(), advancedContent)
         if not disableAnim:
             self._setDisableAnimFlag()
 
@@ -100,16 +106,18 @@ class AdvancedAnimatedTooltipContent(View):
     __slots__ = ()
 
     def __init__(self, header='', body='', animation=''):
-        super(AdvancedAnimatedTooltipContent, self).__init__(R.views.common.tooltip_window.advanced_tooltip_content.AdvandcedAnimatedTooltipContent(), ViewFlags.COMPONENT, AdvancedAnimatedTooltipContentModel, header, body, animation)
+        settings = ViewSettings(R.views.common.tooltip_window.advanced_tooltip_content.AdvandcedAnimatedTooltipContent())
+        settings.model = AdvancedAnimatedTooltipContentModel()
+        settings.args = (header, body, animation)
+        super(AdvancedAnimatedTooltipContent, self).__init__(settings)
 
     @property
     def viewModel(self):
         return super(AdvancedAnimatedTooltipContent, self).getViewModel()
 
-    def _initialize(self, header, body, animation):
+    def _onLoading(self, header, body, animation):
         super(AdvancedAnimatedTooltipContent, self)._initialize()
-        self.viewModel.hold()
-        self.viewModel.setBody(body)
-        self.viewModel.setHeader(header)
-        self.viewModel.setAnimation(animation)
-        self.viewModel.commit()
+        with self.viewModel.transaction() as tx:
+            tx.setBody(body)
+            tx.setHeader(header)
+            tx.setAnimation(animation)

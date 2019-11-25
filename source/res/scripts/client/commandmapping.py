@@ -5,6 +5,7 @@ import ResMgr
 import Keys
 import Event
 import Settings
+from shared_utils import findFirst
 from debug_utils import LOG_DEBUG
 g_instance = None
 CMD_MOVE_FORWARD = 1
@@ -73,6 +74,8 @@ EPIC_GLOBAL_MSG_FOCUS_HQ = 65
 CMD_REQUEST_RECOVERY = 66
 CMD_QUEST_PROGRESS_SHOW = 67
 CMD_SHOW_HELP = 68
+CMD_CM_CHARGE_SHOT = 69
+CO_DEPENDENT_KEYS = {'CMD_CM_CHARGE_SHOT': 'CMD_CM_SHOOT'}
 
 class CommandMapping(object):
     __DEFAULT_CONFIG_FILE_NAME = 'scripts/command_mapping.xml'
@@ -299,12 +302,21 @@ class CommandMapping(object):
                 needsResave = True
             tempList.append((commandName, fireKeyName, satelliteKeyNames))
 
+        if asDefault is False:
+            for commandNameTarget, commandNameSrc in CO_DEPENDENT_KEYS.iteritems():
+                if findFirst(lambda a: a[0] == commandNameTarget, tempList, None) is None:
+                    src = findFirst(lambda a: a[0] == commandNameSrc, tempList, None)
+                    if src is not None:
+                        self.remove(commandNameTarget)
+                        tempList.append((commandNameTarget, src[1], src[2]))
+
         for commandName, fireKeyName, satelliteKeyNames in tempList:
             if not self.add(commandName, fireKeyName, satelliteKeyNames, asDefault):
                 LOG_DEBUG('<__loadFromSection>: ' + ('default' if asDefault else 'user') + ' command ' + str(commandName) + ' was not loaded')
 
         if needsResave:
             self.save()
+        return
 
     def getDefaults(self):
         section = ResMgr.openSection(CommandMapping.__DEFAULT_CONFIG_FILE_NAME)

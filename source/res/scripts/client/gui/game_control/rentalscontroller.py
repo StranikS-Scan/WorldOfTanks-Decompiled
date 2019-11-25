@@ -139,9 +139,7 @@ class RentalsController(IRentalsController):
 
     def __startRentTimeNotifyCallback(self):
         self.__vehiclesForUpdate = []
-        rentedVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.VEHICLE.ACTIVE_RENT).values()
-        rentableVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.VEHICLE.RENT_PROMOTION).values()
-        rentedVehicles.extend(rentableVehicles)
+        rentedVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.VEHICLE.RENT ^ REQ_CRITERIA.VEHICLE.RENT_PROMOTION).values()
         notificationList = []
         for vehicle in rentedVehicles:
             delta = vehicle.rentLeftTime
@@ -159,13 +157,14 @@ class RentalsController(IRentalsController):
         for seasonType in SEASON_NAME_BY_TYPE:
             currentSeason = self.seasonsController.getCurrentSeason(seasonType)
             if currentSeason:
-                if currentSeason.hasActiveCycle(time_utils.getCurrentLocalServerTimestamp()):
+                now = time_utils.getCurrentLocalServerTimestamp()
+                if currentSeason.hasActiveCycle(now):
                     nextCycleChange = currentSeason.getCycleEndDate()
                 else:
                     nextCycleChange = currentSeason.getCycleStartDate()
                 delta = int(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(nextCycleChange)))
                 if delta > 0:
-                    nextRentNotification = min(nextRentNotification, self.getDeltaPeriod(delta + 1))
+                    nextRentNotification = min(nextRentNotification, self.getDeltaPeriod(delta)) + 1
 
         if not notificationList and nextRentNotification == maxint:
             return

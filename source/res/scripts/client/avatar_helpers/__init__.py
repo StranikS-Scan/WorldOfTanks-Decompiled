@@ -12,3 +12,9 @@ def getAvatarDatabaseID():
         if vehID is not None and vehID in arena.vehicles:
             dbID = arena.vehicles[vehID]['accountDBID']
     return dbID
+
+
+def getAvatarSessionID():
+    player = BigWorld.player()
+    avatarSessionID = getattr(player, 'sessionID', '')
+    return avatarSessionID

@@ -14,6 +14,7 @@ class CalendarInvokeOrigin(CONST_CONTAINER):
 def getGameControllersConfig(manager):
     from gui.game_control.AOGAS import AOGASController as _AOGAS
     from gui.game_control.AwardController import AwardController as _Awards
+    from gui.game_control.anonymizer_controller import AnonymizerController as _Anonymizer
     from gui.game_control.BoostersController import BoostersController as _Boosters
     from gui.game_control.BrowserController import BrowserController as _Browser
     from gui.game_control.ChinaController import ChinaController as _China
@@ -30,7 +31,6 @@ def getGameControllersConfig(manager):
     from gui.game_control.SoundEventChecker import SoundEventChecker as _Sounds
     from gui.game_control.clan_lock_controller import ClanLockController as _ClanLocks
     from gui.game_control.events_notifications import EventsNotificationsController as _EventNotifications
-    from gui.game_control.prmp_controller import EncyclopediaController as _Exncyclopedia
     from gui.game_control.relogin_controller import ReloginController as _Relogin
     from gui.game_control.restore_contoller import RestoreController as _Restore
     from gui.game_control.screencast_controller import ScreenCastController as _ScreenCast
@@ -81,7 +81,6 @@ def getGameControllersConfig(manager):
     _config(_interface.IScreenCastController, _ScreenCast())
     _config(_interface.IClanLockController, _ClanLocks())
     _config(_interface.IVehicleComparisonBasket, _VehComparison())
-    _config(_interface.IEncyclopediaController, _Exncyclopedia())
     _config(_interface.ITradeInController, _TradeIn())
     _config(_interface.IQuestsController, _Quests())
     _config(_interface.IBootcampController, _Bootcamp())
@@ -100,3 +99,4 @@ def getGameControllersConfig(manager):
         _config(_interface.IChinaController, _NoChina())
     _config(_interface.ISeasonsController, _Seasons())
     _config(_interface.IBadgesController, _Badges())
+    _config(_interface.IAnonymizerController, _Anonymizer())

@@ -51,7 +51,7 @@ class ContactsListButton(ButtonWithCounterMeta):
             self.__friends[user.getID()] = 1 if user.isOnline() else 0
             self.__showContactsCount()
 
-    def __me_onUserActionReceived(self, actionID, user):
+    def __me_onUserActionReceived(self, actionID, user, shadowMode):
         dbID = user.getID()
         if actionID in (_ACTION_ID.FRIEND_REMOVED, _ACTION_ID.IGNORED_ADDED, _ACTION_ID.TMP_IGNORED_ADDED):
             self.__friends.pop(dbID, None)

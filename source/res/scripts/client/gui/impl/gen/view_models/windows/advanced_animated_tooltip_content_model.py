@@ -5,6 +5,9 @@ from frameworks.wulf import ViewModel
 class AdvancedAnimatedTooltipContentModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=3, commands=0):
+        super(AdvancedAnimatedTooltipContentModel, self).__init__(properties=properties, commands=commands)
+
     def getHeader(self):
         return self._getString(0)
 

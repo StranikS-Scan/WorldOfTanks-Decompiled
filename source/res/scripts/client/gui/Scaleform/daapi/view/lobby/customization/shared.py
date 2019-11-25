@@ -4,6 +4,7 @@ from collections import namedtuple, Counter
 import Math
 import nations
 from CurrentVehicle import g_currentVehicle
+from gui import GUI_NATIONS_ORDER_INDICES
 from gui.Scaleform import getNationsFilterAssetPath
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
@@ -227,7 +228,8 @@ def getSuitableText(item, currentVehicle=None):
     for node in item.descriptor.filter.include:
         separator = ' '.join(['&nbsp;&nbsp;', icons.makeImageTag(RES_ICONS.MAPS_ICONS_CUSTOMIZATION_TOOLTIP_SEPARATOR, 3, 21, -6), '  '])
         if node.nations:
-            for nation in node.nations:
+            sortedNations = sorted(node.nations, key=GUI_NATIONS_ORDER_INDICES.get)
+            for nation in sortedNations:
                 name = nations.NAMES[nation]
                 conditions.append(icons.makeImageTag(getNationsFilterAssetPath(name), 26, 16, -4))
                 conditions.append('  ')

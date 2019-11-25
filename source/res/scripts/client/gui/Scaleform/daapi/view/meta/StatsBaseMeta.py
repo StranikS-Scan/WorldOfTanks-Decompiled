@@ -4,11 +4,11 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class StatsBaseMeta(BaseDAAPIComponent):
 
-    def acceptSquad(self, uid):
+    def acceptSquad(self, sessionID):
         self._printOverrideError('acceptSquad')
 
-    def addToSquad(self, uid):
+    def addToSquad(self, sessionID):
         self._printOverrideError('addToSquad')
 
-    def as_setIsIntaractiveS(self, value):
-        return self.flashObject.as_setIsIntaractive(value) if self._isDAAPIInited() else None
+    def as_setIsInteractiveS(self, value):
+        return self.flashObject.as_setIsInteractive(value) if self._isDAAPIInited() else None

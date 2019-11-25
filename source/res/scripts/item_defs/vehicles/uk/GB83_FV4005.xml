@@ -56,6 +56,13 @@
       <undamaged>	vehicles/british/GB83_FV4005/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/british/GB83_FV4005/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/british/GB83_FV4005/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <GB83_FV4005_3Dst>
+          <undamaged>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3Dst/crash/lod0/Hull.model	</exploded>
+        </GB83_FV4005_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -79,9 +86,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.532993 0.394756 2.61664	</rayStart>
-        <rayEnd>	-0.532518 0.219945 2.51948	</rayEnd>
-        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <rayStart>	1.74511 0.0501436 2.67935	</rayStart>
+        <rayEnd>	1.54511 0.0501436 2.67935	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
@@ -1036,6 +1043,13 @@
         <undamaged>	vehicles/british/GB83_FV4005/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/british/GB83_FV4005/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/british/GB83_FV4005/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <GB83_FV4005_3Dst>
+            <undamaged>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3Dst/crash/lod0/Chassis.model	</exploded>
+          </GB83_FV4005_3Dst>
+        </sets>
       </models>
       <splineDesc>
         <segmentModelLeft>	vehicles/british/GB83_FV4005/track/segment.model	</segmentModelLeft>
@@ -2186,6 +2200,13 @@
             <undamaged>	vehicles/british/GB83_FV4005/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/british/GB83_FV4005/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/british/GB83_FV4005/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <GB83_FV4005_3Dst>
+                <undamaged>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </GB83_FV4005_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/british/GB83_FV4005/collision/Gun_01.model	</collisionModelServer>
@@ -2249,6 +2270,13 @@
         <undamaged>	vehicles/british/GB83_FV4005/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/british/GB83_FV4005/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/british/GB83_FV4005/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <GB83_FV4005_3Dst>
+            <undamaged>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/british/GB83_FV4005/_skin/GB83_FV4005_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </GB83_FV4005_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB83_FV4005/collision/Turret_01.model	</collisionModelServer>
@@ -2257,7 +2285,7 @@
       <gunPosition>	-0.000000 1.02488 0.774686	</gunPosition>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <physicsShape>	1.053 0.010 0.909 0.000 1.062 0.000 0.184 0.500 0.500 0.500 0.000 0.500 0.105 0.000 0.182	</physicsShape>
+      <physicsShape>	1.004 0.010 0.981 0.000 1.062 0.058 0.213 0.002 0.428 0.500 0.000 0.500 0.089 0.000 0.287	</physicsShape>
       <customizationSlots>
         <slot>
           <slotType>	paint	</slotType>

@@ -6,6 +6,9 @@ from frameworks.wulf import ViewModel
 class NationChangeTankmanModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=6, commands=0):
+        super(NationChangeTankmanModel, self).__init__(properties=properties, commands=commands)
+
     def getImage(self):
         return self._getResource(0)
 

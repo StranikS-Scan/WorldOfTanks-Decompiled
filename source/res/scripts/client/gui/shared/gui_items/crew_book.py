@@ -27,7 +27,7 @@ def sortItems(items):
 
 
 class CrewBook(FittingItem):
-    __slots__ = ('__id', '__count')
+    __slots__ = ('__id', '__count', 'nationID')
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, intCompactDescr, proxy=None):

@@ -141,12 +141,6 @@ class ClientChat(object):
     def removeIgnored(self, ignoredID):
         self.__baseChatCommand(CHAT_COMMANDS.removeIgnored, int64Arg=ignoredID)
 
-    def setMuted(self, mutedID, mutedName):
-        self.__baseChatCommand(CHAT_COMMANDS.setMuted, int64Arg=mutedID, stringArg1=mutedName)
-
-    def unsetMuted(self, mutedID):
-        self.__baseChatCommand(CHAT_COMMANDS.unsetMuted, int64Arg=mutedID)
-
     def createPrebattleInvite(self, receiverName, auxText, prebattleID, prebattleType, requestID=None):
         self.__baseInviteCommand(CHAT_COMMANDS.createInvite, INVITE_TYPES.PREBATTLE, receiverName, prebattleID, prebattleType, stringArg2=auxText, requestID=requestID)
 

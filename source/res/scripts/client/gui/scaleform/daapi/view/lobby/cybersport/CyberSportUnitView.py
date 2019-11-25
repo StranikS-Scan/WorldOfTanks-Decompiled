@@ -145,7 +145,7 @@ class CyberSportUnitView(CyberSportUnitMeta):
         if selected:
             vehicle = self.itemsCache.items.getItemByCD(selected[0])
             if not vehicle.activeInNationGroup:
-                itemCD = iterVehTypeCDsInNationGroup(vehicle.intCompactDescr).next()
+                itemCD = iterVehTypeCDsInNationGroup(vehicle.intCD).next()
                 self._selectVehicles([itemCD])
 
     def _updateLabels(self, entity):

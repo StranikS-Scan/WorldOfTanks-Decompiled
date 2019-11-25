@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/classic/player_menu_handler.py
 from gui.Scaleform.daapi.view.lobby.user_cm_handlers import USER
-from gui.Scaleform.daapi.view.lobby.user_cm_handlers import UserContextMenuInfo
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
 from gui.Scaleform.locale.MENU import MENU
 from gui.battle_control.arena_info.settings import INVITATION_DELIVERY_STATUS as _D_STATUS
@@ -10,7 +9,7 @@ from gui.shared.denunciator import DENUNCIATIONS, BattleDenunciator, DENUNCIATIO
 from helpers import dependency
 from helpers import i18n
 from constants import DENUNCIATIONS_PER_DAY
-from messenger.m_constants import PROTO_TYPE
+from messenger.m_constants import PROTO_TYPE, UserEntityScope
 from messenger.proto import proto_getter
 from messenger.storage import storage_getter
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -56,13 +55,31 @@ _OPTION_ICONS = {USER.ADD_TO_FRIENDS: 'addToFriends',
  DYN_SQUAD_OPTION_ID.REJECT_INVITATION: 'rejectInvitation'}
 _BOT_NO_ACTIONS_OPTION_ID = 'botNoActions'
 
-class PlayerContextMenuInfo(UserContextMenuInfo):
+class PlayerContextMenuInfo(object):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    __slots__ = ('avatarSessionID', 'isBot', 'isFriend', 'isIgnored', 'isTemporaryIgnored', 'isMuted', 'userName', 'isAlly', 'battleUser')
 
-    def __init__(self, databaseID, userName):
-        super(PlayerContextMenuInfo, self).__init__(databaseID, userName)
-        self.isAlly = self.sessionProvider.getCtx().isAlly(accID=databaseID)
-        self.isBot = databaseID <= 0
+    def __init__(self, avatarSessionID, userName):
+        super(PlayerContextMenuInfo, self).__init__()
+        self.avatarSessionID = avatarSessionID
+        self.isBot = not avatarSessionID
+        self.isFriend = False
+        self.isIgnored = False
+        self.isTemporaryIgnored = False
+        self.isMuted = False
+        self.userName = userName
+        self.isAlly = self.sessionProvider.getCtx().isAlly(avatarSessionID=avatarSessionID)
+        self.battleUser = self.usersStorage.getUser(avatarSessionID, scope=UserEntityScope.BATTLE)
+        if self.battleUser is not None:
+            self.isFriend = self.battleUser.isFriend()
+            self.isIgnored = self.battleUser.isIgnored()
+            self.isTemporaryIgnored = self.battleUser.isTemporaryIgnored()
+            self.isMuted = self.battleUser.isMuted()
+        return
+
+    @storage_getter('users')
+    def usersStorage(self):
+        return None
 
 
 class PlayerMenuHandler(AbstractContextMenuHandler):
@@ -73,14 +90,6 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
         self.__arenaUniqueID = BattleDenunciator.getArenaUniqueID()
         g_eventBus.addListener(events.GameEvent.HIDE_CURSOR, self.__handleHideCursor, EVENT_BUS_SCOPE.GLOBAL)
         super(PlayerMenuHandler, self).__init__(cmProxy, ctx=ctx, handlers=_OPTIONS_HANDLERS)
-
-    @proto_getter(PROTO_TYPE.MIGRATION)
-    def proto(self):
-        return None
-
-    @storage_getter('users')
-    def usersStorage(self):
-        return None
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
     def bwProto(self):
@@ -97,54 +106,54 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
         return
 
     def addFriend(self):
-        self.proto.contacts.addFriend(self.__userInfo.databaseID, self.__userInfo.userName)
+        self.sessionProvider.shared.anonymizerFakesCtrl.addBattleFriend(self.__userInfo.avatarSessionID)
 
     def removeFriend(self):
-        self.proto.contacts.removeFriend(self.__userInfo.databaseID)
+        self.sessionProvider.shared.anonymizerFakesCtrl.removeBattleFriend(self.__userInfo.avatarSessionID)
 
     def setIgnored(self):
-        self.proto.contacts.addIgnored(self.__userInfo.databaseID, self.__userInfo.userName)
+        self.sessionProvider.shared.anonymizerFakesCtrl.addBattleIgnored(self.__userInfo.avatarSessionID)
 
     def unsetIgnored(self):
-        self.proto.contacts.removeIgnored(self.__userInfo.databaseID)
+        self.sessionProvider.shared.anonymizerFakesCtrl.removeBattleIgnored(self.__userInfo.avatarSessionID)
 
     def disableCommunications(self):
-        self.proto.contacts.addTmpIgnored(self.__userInfo.databaseID, self.__userInfo.userName)
+        self.sessionProvider.shared.anonymizerFakesCtrl.addTmpIgnored(self.__userInfo.avatarSessionID, self.__userInfo.userName)
 
     def enableCommunications(self):
-        self.proto.contacts.removeTmpIgnored(self.__userInfo.databaseID)
+        self.sessionProvider.shared.anonymizerFakesCtrl.removeTmpIgnored(self.__userInfo.avatarSessionID)
 
     def setMuted(self):
-        self.proto.contacts.setMuted(self.__userInfo.databaseID, self.__userInfo.userName)
+        self.sessionProvider.shared.anonymizerFakesCtrl.mute(self.__userInfo.avatarSessionID, self.__userInfo.userName)
 
     def unsetMuted(self):
-        self.proto.contacts.unsetMuted(self.__userInfo.databaseID)
+        self.sessionProvider.shared.anonymizerFakesCtrl.unmute(self.__userInfo.avatarSessionID)
 
     def appealIncorrectBehavior(self):
-        self.__denunciator.makeAppeal(self.__userInfo.databaseID, self.__userInfo.userName, DENUNCIATIONS.INCORRECT_BEHAVIOR, self.__arenaUniqueID)
+        self.__denunciator.makeAppeal(self.__vInfo.vehicleID, self.__userInfo.userName, DENUNCIATIONS.INCORRECT_BEHAVIOR, self.__arenaUniqueID)
 
     def appealNotFairPlay(self):
-        self.__denunciator.makeAppeal(self.__userInfo.databaseID, self.__userInfo.userName, DENUNCIATIONS.NOT_FAIR_PLAY, self.__arenaUniqueID)
+        self.__denunciator.makeAppeal(self.__vInfo.vehicleID, self.__userInfo.userName, DENUNCIATIONS.NOT_FAIR_PLAY, self.__arenaUniqueID)
 
     def appealForbiddenNick(self):
-        self.__denunciator.makeAppeal(self.__userInfo.databaseID, self.__userInfo.userName, DENUNCIATIONS.FORBIDDEN_NICK, self.__arenaUniqueID)
+        self.__denunciator.makeAppeal(self.__vInfo.vehicleID, self.__userInfo.userName, DENUNCIATIONS.FORBIDDEN_NICK, self.__arenaUniqueID)
 
     def appealBot(self):
-        self.__denunciator.makeAppeal(self.__userInfo.databaseID, self.__userInfo.userName, DENUNCIATIONS.BOT, self.__arenaUniqueID)
+        self.__denunciator.makeAppeal(self.__vInfo.vehicleID, self.__userInfo.userName, DENUNCIATIONS.BOT, self.__arenaUniqueID)
 
     def sendInvitation(self):
-        self.sessionProvider.invitations.send(self.__userInfo.databaseID)
+        self.sessionProvider.invitations.send(self.__userInfo.avatarSessionID)
 
     def acceptInvitation(self):
-        self.sessionProvider.invitations.accept(self.__userInfo.databaseID)
+        self.sessionProvider.invitations.accept(self.__userInfo.avatarSessionID)
 
     def rejectInvitation(self):
-        self.sessionProvider.invitations.reject(self.__userInfo.databaseID)
+        self.sessionProvider.invitations.reject(self.__userInfo.avatarSessionID)
 
     def _initFlashValues(self, ctx):
-        self.__vInfo = self.sessionProvider.getArenaDP().getVehicleInfo(long(ctx.vehicleID))
+        self.__vInfo = self.sessionProvider.getArenaDP().getVehicleInfo(ctx.vehicleID)
         player = self.__vInfo.player
-        self.__userInfo = PlayerContextMenuInfo(player.accountDBID, player.name)
+        self.__userInfo = PlayerContextMenuInfo(player.avatarSessionID, player.name)
 
     def _clearFlashValues(self):
         self.__userInfo = None
@@ -181,8 +190,7 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
         elif not self.__userInfo.isAlly:
             return options
         else:
-            contact = self.usersStorage.getUser(self.__userInfo.databaseID)
-            isIgnored = contact is not None and contact.isIgnored()
+            isIgnored = self.__userInfo.isIgnored
             status = self.__vInfo.invitationDeliveryStatus
             if status & _D_STATUS.FORBIDDEN_BY_RECEIVER > 0 or status & _D_STATUS.RECEIVED_FROM > 0 and not status & _D_STATUS.RECEIVED_INACTIVE or status & _D_STATUS.SENT_TO > 0 and not status & _D_STATUS.SENT_INACTIVE:
                 optionID = DYN_SQUAD_OPTION_ID.SENT_INVITATION
@@ -201,7 +209,7 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
             return options
 
     def __addFriendshipInfo(self, options):
-        isEnabled = self.__userInfo.isSameRealm
+        isEnabled = True
         if self.__userInfo.isFriend:
             optionID = USER.REMOVE_FROM_FRIENDS
         else:
@@ -210,7 +218,7 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
         return options
 
     def __addIgnoreInfo(self, options):
-        isEnabled = self.__userInfo.isSameRealm
+        isEnabled = True
         if self.__userInfo.isTemporaryIgnored:
             optionID = USER.ADD_TO_IGNORED
             isEnabled = False
@@ -222,8 +230,9 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
         return options
 
     def __addCommunicationInfo(self, options):
-        if self.__userInfo.isAlly and not self.arenaGuiType.isTrainingBattle():
-            isEnabled = self.__userInfo.isSameRealm
+        isForbiddenBattleType = self.arenaGuiType.isTrainingBattle() or self.arenaGuiType.isTutorialBattle()
+        if self.__userInfo.isAlly and not isForbiddenBattleType:
+            isEnabled = True
             if self.__userInfo.isTemporaryIgnored:
                 optionID = BATTLE_CHAT_OPTION_ID.ENABLE_COMMUNICATIONS
             elif not self.__userInfo.isIgnored:
@@ -247,7 +256,7 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
 
     def __isAppealsForTopicEnabled(self, topic):
         topicID = DENUNCIATIONS_MAP[topic]
-        return self.__denunciator.isAppealsForTopicEnabled(self.__userInfo.databaseID, topicID, self.__arenaUniqueID)
+        return self.__denunciator.isAppealsForTopicEnabled(self.__userInfo.avatarSessionID, topicID, self.__arenaUniqueID)
 
     def __addDenunciationsInfo(self, options):
         make = self._makeItem

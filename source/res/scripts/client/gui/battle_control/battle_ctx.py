@@ -35,19 +35,22 @@ class BattleContext(IBattleContext):
     def getArenaDP(self):
         return self.__arenaDP
 
-    def getVehIDByAccDBID(self, accDBID):
-        return self.__arenaDP.getVehIDByAccDBID(accDBID)
+    def getVehIDBySessionID(self, avatarSessionID):
+        return self.__arenaDP.getVehIDBySessionID(avatarSessionID)
+
+    def getSessionIDByVehID(self, vehID):
+        return self.__arenaDP.getSessionIDByVehID(vehID)
 
     def setPlayerFullNameFormatter(self, formatter):
         self.__playerFormatter = formatter
 
-    def getVehicleInfo(self, vID=None, accID=None):
+    def getVehicleInfo(self, vID=None, avatarSessionID=None):
         if vID is None:
-            vID = self.getVehIDByAccDBID(accID)
+            vID = self.getVehIDBySessionID(avatarSessionID)
         return self.__arenaDP.getVehicleInfo(vID)
 
-    def getPlayerName(self, vID=None, accID=None):
-        return self.getVehicleInfo(vID, accID).player.name
+    def getPlayerName(self, vID=None, avatarSessionID=None):
+        return self.getVehicleInfo(vID, avatarSessionID).player.name
 
     def resetPlayerFullNameFormatter(self):
         self.__playerFormatter = player_format.PlayerFullNameFormatter()
@@ -55,31 +58,31 @@ class BattleContext(IBattleContext):
     def createPlayerFullNameFormatter(self, showVehShortName=True, showClan=True, showRegion=True):
         return self.__playerFormatter.create(showVehShortName and self.__isShowVehShortName, showClan, showRegion)
 
-    def getPlayerFullNameParts(self, vID=None, accID=None, pName=None, showVehShortName=True, showClan=True, showRegion=True):
+    def getPlayerFullNameParts(self, vID=None, avatarSessionID=None, pName=None, showVehShortName=True, showClan=True, showRegion=True):
         if vID is None:
-            vID = self.__arenaDP.getVehIDByAccDBID(accID)
+            vID = self.__arenaDP.getVehIDBySessionID(avatarSessionID)
         vInfo = self.__arenaDP.getVehicleInfo(vID)
         self.__playerFormatter.setVehicleShortNameShown(showVehShortName and self.__isShowVehShortName)
         self.__playerFormatter.setClanShown(showClan)
         self.__playerFormatter.setRegionShown(showRegion)
         return self.__playerFormatter.format(vInfo, playerName=pName)
 
-    def getPlayerFullName(self, vID=None, accID=None, pName=None, showVehShortName=True, showClan=True, showRegion=True):
-        return self.getPlayerFullNameParts(vID, accID, pName, showVehShortName, showClan, showRegion).playerFullName
+    def getPlayerFullName(self, vID=None, avatarSessionID=None, pName=None, showVehShortName=True, showClan=True, showRegion=True):
+        return self.getPlayerFullNameParts(vID, avatarSessionID, pName, showVehShortName, showClan, showRegion).playerFullName
 
-    def isSquadMan(self, vID=None, accID=None, prebattleID=None):
+    def isSquadMan(self, vID=None, avatarSessionID=None, prebattleID=None):
         if vID is None:
-            vID = self.__arenaDP.getVehIDByAccDBID(accID)
+            vID = self.__arenaDP.getVehIDBySessionID(avatarSessionID)
         return vID and self.__arenaDP.isSquadMan(vID, prebattleID)
 
-    def isGeneral(self, vID=None, accID=None, prebattleID=None):
+    def isGeneral(self, vID=None, avatarSessionID=None, prebattleID=None):
         if vID is None:
-            vID = self.__arenaDP.getVehIDByAccDBID(accID)
+            vID = self.__arenaDP.getVehIDBySessionID(avatarSessionID)
         return self.__arenaDP.isGeneral(vID)
 
-    def isTeamKiller(self, vID=None, accID=None):
+    def isTeamKiller(self, vID=None, avatarSessionID=None):
         if vID is None:
-            vID = self.__arenaDP.getVehIDByAccDBID(accID)
+            vID = self.__arenaDP.getVehIDBySessionID(avatarSessionID)
         return vID and self.__arenaDP.isTeamKiller(vID)
 
     def isObserver(self, vID):
@@ -88,14 +91,14 @@ class BattleContext(IBattleContext):
     def isPlayerObserver(self):
         return self.__arenaDP.isPlayerObserver()
 
-    def isInTeam(self, teamIdx, vID=None, accID=None):
-        return self._isInTeams([teamIdx], vID, accID)
+    def isInTeam(self, teamIdx, vID=None, avatarSessionID=None):
+        return self._isInTeams([teamIdx], vID, avatarSessionID)
 
-    def isAlly(self, vID=None, accID=None):
-        return self._isInTeams(self.__arenaDP.getAllyTeams(), vID, accID)
+    def isAlly(self, vID=None, avatarSessionID=None):
+        return self._isInTeams(self.__arenaDP.getAllyTeams(), vID, avatarSessionID)
 
-    def isEnemy(self, vID=None, accID=None):
-        return self._isInTeams(self.__arenaDP.getEnemyTeams(), vID, accID)
+    def isEnemy(self, vID=None, avatarSessionID=None):
+        return self._isInTeams(self.__arenaDP.getEnemyTeams(), vID, avatarSessionID)
 
     def isCurrentPlayer(self, vID):
         return self.__arenaDP.getPlayerVehicleID() == vID
@@ -170,7 +173,7 @@ class BattleContext(IBattleContext):
         self.__lastArenaWinStatus = None
         return value
 
-    def _isInTeams(self, teams, vID=None, accID=None):
+    def _isInTeams(self, teams, vID=None, sessionID=None):
         if vID is None:
-            vID = self.__arenaDP.getVehIDByAccDBID(accID)
+            vID = self.__arenaDP.getVehIDBySessionID(sessionID)
         return self.__arenaDP.getVehicleInfo(vID).team in teams

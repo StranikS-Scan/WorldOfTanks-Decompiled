@@ -8,15 +8,18 @@ from gui.impl.gen.view_models.ui_kit.list_model import ListModel
 class CrewBooksBuyDialogModel(ViewModel):
     __slots__ = ('onClosed', 'onStepperChanged', 'onBuyBtnClick')
 
+    def __init__(self, properties=8, commands=3):
+        super(CrewBooksBuyDialogModel, self).__init__(properties=properties, commands=commands)
+
     @property
     def bookPrice(self):
         return self._getViewModel(0)
 
     def getDialogTitle(self):
-        return self._getResource(1)
+        return self._getString(1)
 
     def setDialogTitle(self, value):
-        self._setResource(1, value)
+        self._setString(1, value)
 
     def getBookIcon(self):
         return self._getResource(2)
@@ -57,7 +60,7 @@ class CrewBooksBuyDialogModel(ViewModel):
     def _initialize(self):
         super(CrewBooksBuyDialogModel, self)._initialize()
         self._addViewModelProperty('bookPrice', ListModel())
-        self._addResourceProperty('dialogTitle', R.invalid())
+        self._addStringProperty('dialogTitle', '')
         self._addResourceProperty('bookIcon', R.invalid())
         self._addStringProperty('bookTitle', '')
         self._addResourceProperty('bookDescription', R.invalid())

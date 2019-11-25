@@ -5,6 +5,9 @@ from frameworks.wulf import ViewModel
 class DropDownMenuWindowModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=4, commands=0):
+        super(DropDownMenuWindowModel, self).__init__(properties=properties, commands=commands)
+
     def getX(self):
         return self._getReal(0)
 

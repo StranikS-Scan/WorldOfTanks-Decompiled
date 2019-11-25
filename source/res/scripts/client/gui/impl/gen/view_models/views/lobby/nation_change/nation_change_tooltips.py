@@ -10,5 +10,8 @@ class NationChangeTooltips(ViewModel):
     TOOLTIP_NC_HANGARSHELL = 'nationChangeHangarShell'
     TOOLTIP_NC_BATTLEBOOSTER = 'nationChangeBattleBooster'
 
+    def __init__(self, properties=0, commands=0):
+        super(NationChangeTooltips, self).__init__(properties=properties, commands=commands)
+
     def _initialize(self):
         super(NationChangeTooltips, self)._initialize()

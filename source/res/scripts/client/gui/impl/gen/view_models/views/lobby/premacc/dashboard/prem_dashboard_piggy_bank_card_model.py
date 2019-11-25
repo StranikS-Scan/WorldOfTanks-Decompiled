@@ -5,6 +5,9 @@ from gui.impl.gen.view_models.views.lobby.premacc.piggybank_base_model import Pi
 class PremDashboardPiggyBankCardModel(PiggybankBaseModel):
     __slots__ = ('onGoToPiggyView',)
 
+    def __init__(self, properties=7, commands=1):
+        super(PremDashboardPiggyBankCardModel, self).__init__(properties=properties, commands=commands)
+
     def getIsAvailable(self):
         return self._getBool(6)
 

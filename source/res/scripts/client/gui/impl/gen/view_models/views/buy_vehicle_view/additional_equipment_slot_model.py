@@ -6,6 +6,9 @@ from gui.impl.gen.view_models.ui_kit.list_model import ListModel
 class AdditionalEquipmentSlotModel(ViewModel):
     __slots__ = ('onSelectedChange',)
 
+    def __init__(self, properties=4, commands=1):
+        super(AdditionalEquipmentSlotModel, self).__init__(properties=properties, commands=commands)
+
     @property
     def actionPrices(self):
         return self._getViewModel(0)

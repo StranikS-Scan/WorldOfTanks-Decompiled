@@ -4,8 +4,8 @@ import copy
 import types
 from collections import namedtuple
 from Event import Event
-from constants import IS_TUTORIAL_ENABLED, SWITCH_STATE, PremiumConfigs
-from debug_utils import LOG_WARNING, LOG_ERROR, LOG_DEBUG
+from constants import IS_TUTORIAL_ENABLED, PremiumConfigs
+from debug_utils import LOG_WARNING, LOG_DEBUG
 from gui import GUI_SETTINGS, SystemMessages
 from gui.SystemMessages import SM_TYPE
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -644,6 +644,9 @@ class ServerSettings(object):
     def isLootBoxesEnabled(self):
         return self.__getGlobalSetting('isLootBoxesEnabled')
 
+    def isAnonymizerEnabled(self):
+        return self.__getGlobalSetting('isAnonymizerEnabled', False)
+
     def isSessionStatsEnabled(self):
         return self.__getGlobalSetting('sessionStats', {}).get('isSessionStatsEnabled', False)
 
@@ -729,19 +732,6 @@ class ServerSettings(object):
     def isVehicleComparingEnabled(self):
         return bool(self.__getGlobalSetting('isVehiclesCompareEnabled', True))
 
-    def isEncyclopediaEnabled(self, tokensCount):
-        switchState = self.__getGlobalSetting('isEncyclopediaEnabled')
-        if switchState == SWITCH_STATE.ALL:
-            state = True
-        elif switchState == SWITCH_STATE.NONE:
-            state = False
-        elif switchState == SWITCH_STATE.TOKEN:
-            state = tokensCount > 0
-        else:
-            LOG_ERROR('Wrong activation state for encyclopedia. Encyclopedia is considered to be disabled')
-            state = False
-        return state
-
     def isTankmanRestoreEnabled(self):
         return self.__getGlobalSetting('isTankmanRestoreEnabled', True)
 
@@ -780,6 +770,9 @@ class ServerSettings(object):
 
     def isGamefaceEnabled(self):
         return self.__getGlobalSetting('isGamefaceEnabled', False)
+
+    def isBattleBoostersEnabled(self):
+        return self.__getGlobalSetting('isBattleBoostersEnabled', False)
 
     def isCrewBooksEnabled(self):
         return self.__getGlobalSetting('isCrewBooksEnabled', False)

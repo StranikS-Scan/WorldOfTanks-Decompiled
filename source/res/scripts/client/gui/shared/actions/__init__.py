@@ -80,6 +80,41 @@ class LeavePrbModalEntity(Action):
         self._running = False
 
 
+class LeavePrbEntity(Action):
+
+    def __init__(self):
+        super(LeavePrbEntity, self).__init__()
+        self._running = False
+
+    def invoke(self):
+        from gui.prb_control.dispatcher import g_prbLoader
+        dispatcher = g_prbLoader.getDispatcher()
+        if dispatcher:
+            state = dispatcher.getFunctionalState()
+            factory = dispatcher.getControlFactories().get(state.ctrlTypeID)
+            if factory:
+                ctx = factory.createLeaveCtx(flags=FUNCTIONAL_FLAG.SWITCH)
+                if ctx:
+                    self._running = True
+                    self.__doLeave(dispatcher, ctx)
+                else:
+                    LOG_ERROR('Leave prb entity. Can not create leave ctx', state)
+            else:
+                LOG_ERROR('Leave prb entity. Factory is not found', state)
+
+    def isInstantaneous(self):
+        return False
+
+    @process
+    def __doLeave(self, dispatcher, ctx):
+        self._completed = yield dispatcher.leave(ctx)
+        if self._completed:
+            LOG_DEBUG('Leave prb entity. Player left prebattle.')
+        else:
+            LOG_DEBUG('Leave prb entity. Action was failed.')
+        self._running = False
+
+
 class SelectPrb(Action):
 
     def __init__(self, prbAction):

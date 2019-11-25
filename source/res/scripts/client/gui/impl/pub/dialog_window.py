@@ -6,7 +6,7 @@ from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
 from helpers import dependency
 from shared_utils import CONST_CONTAINER
 from async import async, await, AsyncEvent, AsyncReturn, AsyncScope, BrokenPromiseError
-from frameworks.wulf import ViewFlags, WindowSettings
+from frameworks.wulf import ViewFlags, WindowSettings, ViewSettings
 from frameworks.wulf import WindowFlags, Window
 from gui.impl.gen import R
 from gui.impl.gen.view_models.ui_kit.dialog_button_model import DialogButtonModel
@@ -37,8 +37,38 @@ class DialogLayer(CONST_CONTAINER):
 class DialogContent(ViewImpl):
     __slots__ = ()
 
-    def __init__(self, layoutID, viewModelClazz, *args, **kwargs):
-        super(DialogContent, self).__init__(layoutID, ViewFlags.VIEW, viewModelClazz, *args, **kwargs)
+
+class DialogDecorator(ViewImpl):
+    __slots__ = ()
+
+    def __init__(self, balanceContent=None, bottomContent=None):
+        settings = ViewSettings(R.views.common.dialog_view.dialog_window.DialogWindow())
+        settings.flags = ViewFlags.WINDOW_DECORATOR
+        settings.model = DialogWindowModel()
+        settings.args = (balanceContent, bottomContent)
+        super(DialogDecorator, self).__init__(settings)
+
+    @property
+    def balanceContent(self):
+        return self.getChildView(R.dynamic_ids.dialog_window.balance_content())
+
+    @property
+    def bottomContent(self):
+        return self.getChildView(R.dynamic_ids.dialog_window.bottom_content())
+
+    def _onLoading(self, balanceContent, bottomContent):
+        hasBalance = False
+        hasBottomContent = False
+        if balanceContent is not None:
+            hasBalance = True
+            self.setChildView(R.dynamic_ids.dialog_window.balance_content(), balanceContent)
+        if bottomContent is not None:
+            hasBottomContent = True
+            self.setChildView(R.dynamic_ids.dialog_window.bottom_content(), bottomContent)
+        with self.getViewModel().transaction() as tx:
+            tx.setHasBalance(hasBalance)
+            tx.setHasBottomContent(hasBottomContent)
+        return
 
 
 class DialogWindow(Window):
@@ -50,12 +80,10 @@ class DialogWindow(Window):
             pass
         settings = WindowSettings()
         settings.flags = layer
-        settings.decorator = ViewImpl(R.views.common.dialog_view.dialog_window.DialogWindow(), ViewFlags.WINDOW_DECORATOR, DialogWindowModel)
+        settings.decorator = DialogDecorator(balanceContent, bottomContent)
         settings.content = content
         settings.parent = parent
         super(DialogWindow, self).__init__(settings)
-        if bottomContent is not None:
-            self._setBottomContent(bottomContent)
         self.__scope = AsyncScope()
         self.__event = AsyncEvent(scope=self.__scope)
         self.__result = DialogButtons.CANCEL
@@ -66,8 +94,6 @@ class DialogWindow(Window):
             if layer > DialogLayer.WINDOW:
                 blurLayers.append(APP_CONTAINERS_NAMES.WINDOWS)
             self.__blur.enable(APP_CONTAINERS_NAMES.DIALOGS, blurLayers)
-        if balanceContent is not None:
-            self.viewModel.setBalanceContent(balanceContent)
         return
 
     @async
@@ -90,7 +116,11 @@ class DialogWindow(Window):
 
     @property
     def bottomContentViewModel(self):
-        return self.viewModel.getBottomContent().getViewModel()
+        if self.decorator is not None:
+            view = self.decorator.bottomContent
+            if view is not None:
+                return view.getViewModel()
+        return
 
     def _initialize(self):
         super(DialogWindow, self)._initialize()
@@ -139,9 +169,6 @@ class DialogWindow(Window):
 
     def _setBackgroundImage(self, value):
         self.viewModel.setBackgroundImage(value)
-
-    def _setBottomContent(self, value):
-        self.viewModel.setBottomContent(value)
 
     def _setIconHighlight(self, value):
         self.viewModel.setIconHighlight(value)

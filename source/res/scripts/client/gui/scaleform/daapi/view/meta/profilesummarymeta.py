@@ -4,9 +4,6 @@ from gui.Scaleform.daapi.view.lobby.profile.ProfileAchievementSection import Pro
 
 class ProfileSummaryMeta(ProfileAchievementSection):
 
-    def getPersonalScoreWarningText(self, data):
-        self._printOverrideError('getPersonalScoreWarningText')
-
     def getGlobalRating(self, userName):
         self._printOverrideError('getGlobalRating')
 

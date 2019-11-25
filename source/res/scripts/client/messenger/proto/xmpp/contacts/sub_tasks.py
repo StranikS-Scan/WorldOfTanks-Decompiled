@@ -3,14 +3,14 @@
 from messenger.m_constants import USER_TAG, USER_ACTION_ID, CLIENT_ACTION_ID
 from messenger.proto.xmpp import errors
 from messenger.proto.xmpp.contacts.roster_tasks import SyncSubscriptionTask
-from messenger.proto.xmpp.contacts.tasks import TASK_RESULT
+from messenger.proto.xmpp.contacts.tasks import TaskResult
 from messenger.proto.xmpp.gloox_constants import SUBSCRIPTION as _SUB
 
 class AskSubscriptionTask(SyncSubscriptionTask):
 
     def sync(self, name, groups, sub=None, clanInfo=None):
         if sub[0] != _SUB.OFF:
-            self._result = TASK_RESULT.REMOVE
+            self._result = TaskResult.REMOVE
         self._doSync(name, groups, sub, clanInfo)
         return self._result
 
@@ -42,13 +42,13 @@ class ApproveSubscriptionTask(_ChangeSubscriptionTask):
     def sync(self, name, groups, sub=None, clanInfo=None):
         if sub is not None and sub[1] == _SUB.ON:
             user = self._getUser()
-            self._result = TASK_RESULT.REMOVE
+            self._result = TaskResult.REMOVE
             if user and not self._auto:
                 user.removeTags({USER_TAG.SUB_IN_PROCESS})
                 user.addTags({USER_TAG.SUB_APPROVED})
             if self._auto and sub[0] == _SUB.PENDING:
                 self._tasks.append(AskSubscriptionTask(self._jid))
-                self._result |= TASK_RESULT.CLONE
+                self._result |= TaskResult.CLONE
         self._doSync(name, groups, sub, clanInfo)
         return self._result
 

@@ -30,12 +30,12 @@ def _checkPriceIsAllowed(price, itemsCache=None):
     return itemsCache.items.stats.money >= price or isPurchaseAllowed
 
 
-def _getFormattedPrice(price):
+def _getFormattedPrice(price, isBuying):
     format_ = backport.getGoldFormat
     postfix = ''
     template = 'html_templates:lobby/quests/actions'
     fmtCurrency = {currencyName:'' for currencyName in Currency.ALL}
-    if not _checkPriceIsAllowed(price):
+    if isBuying and not _checkPriceIsAllowed(price):
         postfix = 'Error'
     for currencyName in fmtCurrency:
         currencyValue = price.get(currencyName)
@@ -53,14 +53,14 @@ def _getFormattedPrice(price):
     return
 
 
-def formatActionPrices(oldPrice, newPrice):
+def formatActionPrices(oldPrice, newPrice, isBuying):
     oldPrice = Money.makeFromMoneyTuple(oldPrice)
     if not oldPrice.isDefined():
         oldPrice = Money(credits=0)
     newPrice = Money.makeFromMoneyTuple(newPrice)
     if not newPrice.isDefined():
         newPrice = Money.makeFrom(oldPrice.getCurrency(), 0)
-    return (_getFormattedPrice(oldPrice), _getFormattedPrice(newPrice))
+    return (_getFormattedPrice(oldPrice, isBuying), _getFormattedPrice(newPrice, isBuying))
 
 
 def formatPrice(price, reverse=False, currency=Currency.CREDITS, useIcon=False, useStyle=False, ignoreZeros=False):

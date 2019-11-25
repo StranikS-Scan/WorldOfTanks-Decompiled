@@ -9,7 +9,7 @@ from gui.impl.lobby.premacc.piggybank_base import PiggyBankBaseView, PiggyBankCo
 from gui.impl.lobby.premacc.premacc_helpers import toPercents
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.impl.gen.view_models.views.lobby.premacc.piggybank_model import PiggybankModel
-from frameworks.wulf import ViewFlags
+from frameworks.wulf import ViewFlags, ViewSettings
 from gui.shared import event_dispatcher
 from gui.shared.event_dispatcher import showTankPremiumAboutPage
 from gui.shared.utils.scheduled_notifications import _Notifier
@@ -36,8 +36,11 @@ class PiggyBankView(PiggyBankBaseView):
     _PERIOD = 7 * time_utils.ONE_DAY
     __slots__ = ()
 
-    def __init__(self, *args, **kwargs):
-        super(PiggyBankView, self).__init__(R.views.lobby.premacc.piggybank.Piggybank(), ViewFlags.LOBBY_TOP_SUB_VIEW, PiggybankModel)
+    def __init__(self, layoutID=R.views.lobby.premacc.piggybank.Piggybank()):
+        settings = ViewSettings(layoutID)
+        settings.flags = ViewFlags.LOBBY_TOP_SUB_VIEW
+        settings.model = PiggybankModel()
+        super(PiggyBankView, self).__init__(settings)
 
     def onPremAccProlong(self, _=None):
         event_dispatcher.showPremiumDialog()

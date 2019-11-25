@@ -2,13 +2,12 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/stats.py
 import itertools
 import logging
-from abc import ABCMeta, abstractmethod
 from collections import namedtuple, defaultdict
 import constants
 import nations
 from dossiers2.ui import layouts
 from dossiers2.ui.achievements import ACHIEVEMENT_MODE, ACHIEVEMENT_SECTION, ACHIEVEMENT_SECTIONS_INDICES, makeAchievesStorageName, ACHIEVEMENT_SECTIONS_ORDER, getSection as getAchieveSection
-from gui.shared.gui_items.dossier.achievements.MarkOfMasteryAchievement import MarkOfMasteryAchievement, MASTERY_IS_NOT_ACHIEVED, isMarkOfMasteryAchieved
+from gui.shared.gui_items.dossier.achievements import mark_of_mastery
 from gui.shared.gui_items.dossier.factories import getAchievementFactory, _SequenceAchieveFactory
 from items import vehicles
 from soft_exception import SoftException
@@ -42,7 +41,6 @@ class _StatsBlockAbstract(object):
 
 
 class _StatsBlock(_StatsBlockAbstract):
-    __metaclass__ = ABCMeta
 
     def __init__(self, dossier):
         self._stats = self._getStatsBlock(dossier)
@@ -50,7 +48,6 @@ class _StatsBlock(_StatsBlockAbstract):
     def getRecord(self, recordName):
         return self._stats[recordName]
 
-    @abstractmethod
     def _getStatsBlock(self, dossier):
         raise NotImplementedError
 
@@ -59,7 +56,6 @@ class _StatsBlock(_StatsBlockAbstract):
 
 
 class _StatsMaxBlock(_StatsBlockAbstract):
-    __metaclass__ = ABCMeta
 
     def __init__(self, dossier):
         self._statsMax = self._getStatsMaxBlock(dossier)
@@ -67,7 +63,6 @@ class _StatsMaxBlock(_StatsBlockAbstract):
     def getRecord(self, recordName):
         return self._statsMax[recordName]
 
-    @abstractmethod
     def _getStatsMaxBlock(self, dossier):
         raise NotImplementedError
 
@@ -98,15 +93,15 @@ class _VehiclesStatsBlock(_StatsBlockAbstract):
         return self._vehsList
 
     def getMarksOfMastery(self):
-        result = [0] * len(MarkOfMasteryAchievement.MARK_OF_MASTERY.ALL())
+        result = [0] * len(mark_of_mastery.MarkOfMasteryAchievement.MARK_OF_MASTERY.ALL())
         for _, markOfMastery in self._markOfMasteryCut.iteritems():
-            if isMarkOfMasteryAchieved(markOfMastery):
+            if mark_of_mastery.isMarkOfMasteryAchieved(markOfMastery):
                 result[markOfMastery - 1] += 1
 
         return result
 
     def getMarkOfMasteryForVehicle(self, intCD):
-        return self._markOfMasteryCut[intCD] if intCD in self._markOfMasteryCut else MASTERY_IS_NOT_ACHIEVED
+        return self._markOfMasteryCut[intCD] if intCD in self._markOfMasteryCut else mark_of_mastery.MASTERY_IS_NOT_ACHIEVED
 
     def getBattlesStats(self):
         return self._getBattlesStats(availableRange=range(1, constants.MAX_VEHICLE_LEVEL + 1))
@@ -130,7 +125,6 @@ class _VehiclesStatsBlock(_StatsBlockAbstract):
     def _packVehicle(self, *args, **kwargs):
         raise NotImplementedError
 
-    @abstractmethod
     def _getVehDossiersCut(self, dossier):
         raise NotImplementedError
 
@@ -161,7 +155,6 @@ class _MapStatsBlock(_StatsBlockAbstract):
     def _packMap(self, *args, **kwargs):
         raise NotImplementedError
 
-    @abstractmethod
     def _getMapDossiersCut(self, dossier):
         raise NotImplementedError
 
@@ -299,7 +292,6 @@ class _BattleStatsBlock(_CommonBattleStatsBlock):
 
 
 class _Battle2StatsBlock(_StatsBlockAbstract):
-    __metaclass__ = ABCMeta
 
     def __init__(self, dossier):
         self._stats2 = self._getStats2Block(dossier)
@@ -364,18 +356,15 @@ class _Battle2StatsBlock(_StatsBlockAbstract):
     def getAvgStunNumber(self):
         return self._getAvgValue(self.getBattlesCountWithStun, self.getStunNumber)
 
-    @abstractmethod
     def getBattlesCountVer2(self):
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
     def getBattlesCountVer3(self):
-        pass
+        raise NotImplementedError
 
     def getRecord(self, recordName):
         return self._stats2[recordName]
 
-    @abstractmethod
     def _getStats2Block(self, dossier):
         raise NotImplementedError
 
@@ -481,7 +470,6 @@ class _AchievementsBlock(_StatsBlockAbstract):
         result = itertools.chain(*map(mapQueryEntry, itertools.chain(sections)))
         return tuple(result)[:achievesCount]
 
-    @abstractmethod
     def _getAcceptableAchieves(self):
         raise NotImplementedError
 
@@ -1403,12 +1391,10 @@ class ClubTotalStats(_CommonBattleStatsBlock, _MapStatsBlock, _VehiclesStatsBloc
 
 
 class _DossierStats(object):
-    __metaclass__ = ABCMeta
 
     def _getDossierDescr(self):
         return self._getDossierItem()._getDossierDescr()
 
-    @abstractmethod
     def _getDossierItem(self):
         raise NotImplementedError
 

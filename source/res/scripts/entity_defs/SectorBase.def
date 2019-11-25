@@ -19,7 +19,6 @@
     <ownerStopsCapturing>
       <Type>	BOOL	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
-      <Default>	False	</Default>
       <Editable>	true	</Editable>
     </ownerStopsCapturing>
     <defaultPointsPerSecond>
@@ -73,7 +72,6 @@
     <capturingStopped>
       <Type>	BOOL	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
-      <Default>	False	</Default>
       <Editable>	true	</Editable>
     </capturingStopped>
     <onDamageCooldownTime>

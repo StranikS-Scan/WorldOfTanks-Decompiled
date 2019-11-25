@@ -215,6 +215,6 @@ class LobbyChannelController(_ChannelController):
     def __me_onUsersReceived(self, _):
         self._refreshMembersDP()
 
-    def __me_onUserActionReceived(self, _, user):
+    def __me_onUserActionReceived(self, _, user, shadowMode):
         if self._channel.hasMember(user.getID()):
             self._refreshMembersDP()

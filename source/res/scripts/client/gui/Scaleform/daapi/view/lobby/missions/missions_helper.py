@@ -17,6 +17,7 @@ from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
+from gui.impl.auxiliary.rewards_helper import BlueprintBonusTypes
 from gui.impl.gen import R
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.cond_formatters.prebattle import MissionsPreBattleConditionsFormatter
@@ -924,11 +925,11 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
 
     def _getAwards(self, mainQuest=None, extended=False):
         pawnedTokensCount = self.event.getPawnCost() if self.event.areTokensPawned() else 0
-        awards = _personalMissionsAwardsFormatter.getFormattedBonuses(self.event.getBonuses(isMain=True), size=AWARDS_SIZES.BIG, isObtained=self.event.isMainCompleted(), obtainedImage=RES_ICONS.MAPS_ICONS_LIBRARY_AWARDOBTAINED, obtainedImageOffset=16)
+        awards = _personalMissionsAwardsFormatter.getFormattedBonuses(self.event.getBonuses(isMain=True, filterFunc=self.__awardFilter), size=AWARDS_SIZES.BIG, isObtained=self.event.isMainCompleted(), obtainedImage=RES_ICONS.MAPS_ICONS_LIBRARY_AWARDOBTAINED, obtainedImageOffset=16)
         if not extended:
-            awardsFullyCompleted = _personalMissionsAwardsFormatter.getPawnedQuestBonuses(self.event.getBonuses(isMain=False), size=AWARDS_SIZES.BIG, isObtained=self.event.isFullCompleted(), pawnedTokensCount=pawnedTokensCount, freeTokenName=PM_BRANCH_TO_FREE_TOKEN_NAME[self.event.getQuestBranch()], obtainedImage=RES_ICONS.MAPS_ICONS_LIBRARY_AWARDOBTAINED, obtainedImageOffset=16)
+            awardsFullyCompleted = _personalMissionsAwardsFormatter.getPawnedQuestBonuses(self.event.getBonuses(isMain=False, filterFunc=self.__awardFilter), size=AWARDS_SIZES.BIG, isObtained=self.event.isFullCompleted(), pawnedTokensCount=pawnedTokensCount, freeTokenName=PM_BRANCH_TO_FREE_TOKEN_NAME[self.event.getQuestBranch()], obtainedImage=RES_ICONS.MAPS_ICONS_LIBRARY_AWARDOBTAINED, obtainedImageOffset=16)
         else:
-            awardsFullyCompleted = _personalMissionsAwardsFormatter.getReturnTokensQuestBonuses(self.event.getBonuses(isMain=False), size=AWARDS_SIZES.BIG, isObtained=self.event.isFullCompleted(), returnedTokensCount=self.event.getPawnCost(), freeTokenName=PM_BRANCH_TO_FREE_TOKEN_NAME[self.event.getQuestBranch()], obtainedImage=RES_ICONS.MAPS_ICONS_LIBRARY_AWARDOBTAINED, obtainedImageOffset=16)
+            awardsFullyCompleted = _personalMissionsAwardsFormatter.getReturnTokensQuestBonuses(self.event.getBonuses(isMain=False, filterFunc=self.__awardFilter), size=AWARDS_SIZES.BIG, isObtained=self.event.isFullCompleted(), returnedTokensCount=self.event.getPawnCost(), freeTokenName=PM_BRANCH_TO_FREE_TOKEN_NAME[self.event.getQuestBranch()], obtainedImage=RES_ICONS.MAPS_ICONS_LIBRARY_AWARDOBTAINED, obtainedImageOffset=16)
         return {'awards': awards,
          'awardsFullyCompleted': awardsFullyCompleted}
 
@@ -955,6 +956,9 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
         data.update({'buttonState': self.__getBtnStates(isAvailable)})
         data.update({'onPauseBtnIcon': self.__getPauseBtnIcon()})
         return data
+
+    def __awardFilter(self, n, v):
+        return n not in BlueprintBonusTypes.ALL
 
     def __getAddBottomInfo(self):
         quest = self.event

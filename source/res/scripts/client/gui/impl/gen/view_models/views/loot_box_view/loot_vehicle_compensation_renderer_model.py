@@ -5,6 +5,9 @@ from gui.impl.gen.view_models.views.loot_box_view.loot_compensation_renderer_mod
 class LootVehicleCompensationRendererModel(LootCompensationRendererModel):
     __slots__ = ()
 
+    def __init__(self, properties=25, commands=0):
+        super(LootVehicleCompensationRendererModel, self).__init__(properties=properties, commands=commands)
+
     def getVehicleName(self):
         return self._getString(21)
 

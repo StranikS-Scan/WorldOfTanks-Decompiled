@@ -51,3 +51,6 @@ class DualGunPanelMeta(BaseDAAPIComponent):
 
     def as_setTimerVisibleS(self, value):
         return self.flashObject.as_setTimerVisible(value) if self._isDAAPIInited() else None
+
+    def as_setChangeGunTweenPropsS(self, duration, delay):
+        return self.flashObject.as_setChangeGunTweenProps(duration, delay) if self._isDAAPIInited() else None

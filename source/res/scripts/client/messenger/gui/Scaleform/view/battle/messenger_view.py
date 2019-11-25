@@ -8,7 +8,7 @@ import BattleReplay
 from constants import CHAT_MESSAGE_MAX_LENGTH_IN_BATTLE
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_UNEXPECTED
 from gui import makeHtmlString
-from gui.shared.utils import getAvatarDatabaseID
+from avatar_helpers import getAvatarSessionID
 from gui.Scaleform.daapi.view.meta.BattleMessengerMeta import BattleMessengerMeta
 from gui.Scaleform.genConsts.BATTLE_MESSAGES_CONSTS import BATTLE_MESSAGES_CONSTS
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
@@ -23,7 +23,7 @@ from messenger import g_settings
 from messenger.ext import isBattleChatEnabled
 from messenger.gui.Scaleform import FILL_COLORS
 from messenger.gui.interfaces import IBattleChannelView
-from messenger.m_constants import BATTLE_CHANNEL, CLIENT_ACTION_ID, PROTO_TYPE
+from messenger.m_constants import BATTLE_CHANNEL, CLIENT_ACTION_ID, PROTO_TYPE, UserEntityScope
 from gui.shared.formatters import text_styles
 from gui.shared.events import ChannelManagementEvent
 from gui.shared.utils.functions import makeTooltip
@@ -112,18 +112,14 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
         self.__isFocused = False
         self._battleCtx = None
         self._arenaVisitor = None
-        self._accDbID = 0
-        self._toxicPanelMsgID = 0
+        self._avatarSessionID = ''
+        self._toxicPanelMsgID = ''
         self._addedMsgIDs = set()
-        self._ignoreActionCooldown = CooldownHelper((CLIENT_ACTION_ID.ADD_IGNORED, CLIENT_ACTION_ID.REMOVE_IGNORED), self._onIgnoreActionCooldownHandle, CoolDownEvent.XMPP)
+        self._ignoreActionCooldown = CooldownHelper((CLIENT_ACTION_ID.ADD_IGNORED, CLIENT_ACTION_ID.REMOVE_IGNORED), self._onIgnoreActionCooldownHandle, CoolDownEvent.BATTLE_ACTION)
         return
 
     @storage_getter('users')
     def usersStorage(self):
-        return None
-
-    @proto_getter(PROTO_TYPE.MIGRATION)
-    def protoMigration(self):
         return None
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
@@ -142,51 +138,49 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
         self._arenaVisitor = None
         return
 
-    def getToxicStatus(self, accountDbID):
+    def getToxicStatus(self, avatarSessionID):
         vo = None
-        accountDbID = long(accountDbID)
-        if 0 < accountDbID != self._accDbID:
-            vo = self.__buildToxicStateVO(accountDbID)
+        if avatarSessionID and avatarSessionID != self._avatarSessionID:
+            vo = self.__buildToxicStateVO(avatarSessionID)
         if vo is not None:
-            self._toxicPanelMsgID = accountDbID
+            self._toxicPanelMsgID = avatarSessionID
         return vo
 
-    def updateToxicStatus(self, accountDbID):
-        self.as_updateToxicPanelS(accountDbID, self.__buildToxicStateVO(accountDbID))
+    def updateToxicStatus(self, avatarSessionID):
+        self.as_updateToxicPanelS(avatarSessionID, self.__buildToxicStateVO(avatarSessionID))
 
-    def onToxicButtonClicked(self, accountDbID, actionID):
-        accDbID = long(accountDbID)
-        if accDbID > 0:
+    def onToxicButtonClicked(self, avatarSessionID, actionID):
+        if avatarSessionID:
             needUpdateUI = True
             if actionID == BATTLE_MESSAGES_CONSTS.ADD_IN_BLACKLIST:
                 if not self._ignoreActionCooldown.isInCooldown():
-                    self.protoMigration.contacts.addTmpIgnored(accDbID, self._battleCtx.getPlayerName(accID=accDbID))
+                    self.sessionProvider.shared.anonymizerFakesCtrl.addTmpIgnored(avatarSessionID, self._battleCtx.getPlayerName(avatarSessionID=avatarSessionID))
             elif actionID == BATTLE_MESSAGES_CONSTS.REMOVE_FROM_BLACKLIST:
                 if not self._ignoreActionCooldown.isInCooldown():
-                    self.protoMigration.contacts.removeTmpIgnored(accDbID)
+                    self.sessionProvider.shared.anonymizerFakesCtrl.removeTmpIgnored(avatarSessionID)
             else:
                 needUpdateUI = False
             if needUpdateUI:
-                self._invalidateToxicPanel(accDbID)
+                self._invalidateToxicPanel(avatarSessionID)
 
     def onToxicPanelClosed(self, messageID):
-        if 0 < self._toxicPanelMsgID == messageID:
-            self._toxicPanelMsgID = 0
+        if self._toxicPanelMsgID and self._toxicPanelMsgID == messageID:
+            self._toxicPanelMsgID = ''
 
     def invalidateUsersTags(self):
         self._invalidateToxicPanel(self._toxicPanelMsgID)
-        for msgID in self._addedMsgIDs:
-            self._invalidatePlayerMessages(msgID)
+        for messageID in self._addedMsgIDs:
+            self._invalidatePlayerMessages(messageID)
 
     def invalidateUserTags(self, user):
-        accDbID = user.getID()
-        self._invalidatePlayerMessages(accDbID)
-        self._invalidateToxicPanel(accDbID)
+        avatarSessionID = user.getID()
+        self._invalidatePlayerMessages(avatarSessionID)
+        self._invalidateToxicPanel(avatarSessionID)
 
     def invalidateInvitationsStatuses(self, vos, arenaDP):
-        if self._toxicPanelMsgID > 0:
+        if self._toxicPanelMsgID:
             for vInfo in vos:
-                if vInfo.player.accountDBID == self._toxicPanelMsgID:
+                if vInfo.player.avatarSessionID == self._toxicPanelMsgID:
                     self._invalidateToxicPanel(self._toxicPanelMsgID)
                     break
 
@@ -297,30 +291,30 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
         self.__controllers.pop(controller.getChannel().getClientID(), None)
         return
 
-    def addMessage(self, message, fillColor=FILL_COLORS.BLACK, accountDBID=0):
+    def addMessage(self, message, fillColor=FILL_COLORS.BLACK, avatarSessionID=''):
         if self.__isInTimeWarp:
             return
-        if accountDBID == self._accDbID:
-            accountDBID = 0
+        if avatarSessionID == self._avatarSessionID:
+            avatarSessionID = ''
         if fillColor == FILL_COLORS.BLACK:
-            self.as_showBlackMessageS(message, accountDBID)
+            self.as_showBlackMessageS(message, avatarSessionID)
         elif fillColor == FILL_COLORS.RED:
-            self.as_showRedMessageS(message, accountDBID)
+            self.as_showRedMessageS(message, avatarSessionID)
         elif fillColor == FILL_COLORS.BROWN:
-            self.as_showSelfMessageS(message, accountDBID)
+            self.as_showSelfMessageS(message, avatarSessionID)
         elif fillColor == FILL_COLORS.GREEN:
-            self.as_showGreenMessageS(message, accountDBID)
+            self.as_showGreenMessageS(message, avatarSessionID)
         else:
             LOG_UNEXPECTED('Unexpected fill color: ', fillColor)
-        if accountDBID > 0:
-            self._addedMsgIDs.add(accountDBID)
+        if avatarSessionID:
+            self._addedMsgIDs.add(avatarSessionID)
 
     def isToxicPanelAvailable(self):
         return not BattleReplay.g_replayCtrl.isPlaying and self._arenaVisitor is not None and not self._arenaVisitor.gui.isTrainingBattle()
 
     def _populate(self):
         super(BattleMessengerView, self)._populate()
-        self._accDbID = getAvatarDatabaseID()
+        self._avatarSessionID = getAvatarSessionID()
         self.__isInTimeWarp = BattleReplay.g_replayCtrl.isTimeWarpInProgress
         self.__receivers = []
         self.fireEvent(ChannelManagementEvent(0, ChannelManagementEvent.REGISTER_BATTLE, {'component': self}), scope=EVENT_BUS_SCOPE.BATTLE)
@@ -355,28 +349,28 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
         super(BattleMessengerView, self)._dispose()
         return
 
-    def _invalidateToxicPanel(self, msgID):
-        if 0 < self._toxicPanelMsgID == msgID:
-            self.updateToxicStatus(msgID)
+    def _invalidateToxicPanel(self, messageID):
+        if self._toxicPanelMsgID and self._toxicPanelMsgID == messageID:
+            self.updateToxicStatus(messageID)
 
-    def _invalidatePlayerMessages(self, accountDbID):
-        if accountDbID > 0:
-            contact = self.usersStorage.getUser(accountDbID)
+    def _invalidatePlayerMessages(self, avatarSessionID):
+        if avatarSessionID:
+            contact = self.usersStorage.getUser(avatarSessionID, scope=UserEntityScope.BATTLE)
             if contact is not None and contact.isIgnored():
-                pInfo = self._battleCtx.getPlayerFullNameParts(accID=accountDbID)
+                pInfo = self._battleCtx.getPlayerFullNameParts(avatarSessionID=avatarSessionID)
                 template = i18n.makeString(MESSENGER.CHAT_TOXICMESSAGES_BLOCKEDMESSAGE, playerName=pInfo.playerName)
-                self.as_updateMessagesS(accountDbID, text_styles.main(template))
+                self.as_updateMessagesS(avatarSessionID, text_styles.main(template))
             else:
-                self.as_restoreMessagesS(accountDbID)
+                self.as_restoreMessagesS(avatarSessionID)
         return
 
-    def _onIgnoreActionCooldownHandle(self, isInCooldown):
+    def _onIgnoreActionCooldownHandle(self, _):
         self._invalidateToxicPanel(self._toxicPanelMsgID)
 
-    def __buildToxicStateVO(self, accountDbID):
-        contact = self.usersStorage.getUser(accountDbID)
-        return {'messageID': accountDbID,
-         'vehicleID': self._battleCtx.getVehIDByAccDBID(accountDbID),
+    def __buildToxicStateVO(self, avatarSessionID):
+        contact = self.usersStorage.getUser(avatarSessionID, scope=UserEntityScope.BATTLE)
+        return {'messageID': avatarSessionID,
+         'vehicleID': self._battleCtx.getVehIDBySessionID(avatarSessionID),
          'blackList': self.__buildBlackListVO(contact)}
 
     def __buildBlackListVO(self, contact):

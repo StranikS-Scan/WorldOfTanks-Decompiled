@@ -173,6 +173,7 @@ class SYSTEM_MESSAGES(object):
     SQUAD_NOTSETREADYSTATUS = '#system_messages:squad/notSetReadyStatus'
     SQUAD_KICKEDFROMQUEUE = '#system_messages:squad/kickedFromQueue'
     SQUAD_NOTVALIDDELETED = '#system_messages:squad/notValidDeleted'
+    SQUAD_NOTVALIDDELETEDFILTER = '#system_messages:squad/notValidDeletedFilter'
     SQUAD_NOTVALIDMAXSPGDELETED = '#system_messages:squad/notValidMaxSpgDeleted'
     BATTLESESSION_KICKEDFROMQUEUE = '#system_messages:battleSession/kickedFromQueue'
     MEMBERROSTERCHANGEDMAIN = '#system_messages:memberRosterChangedMain'
@@ -440,6 +441,7 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_SELL_SUCCESS = '#system_messages:vehicle_sell/success'
     VEHICLE_SELL_SUCCESS_DISMANTLING = '#system_messages:vehicle_sell/success_dismantling'
     VEHICLE_SELL_SERVER_ERROR = '#system_messages:vehicle_sell/server_error'
+    VEHICLE_SELL_DISABLEDSERVICE = '#system_messages:vehicle_sell/disabledService'
     VEHICLE_SELL_INVALID_VEHICLE = '#system_messages:vehicle_sell/invalid_vehicle'
     VEHICLE_SELL_VEHICLE_CANNOT_BE_SOLD = '#system_messages:vehicle_sell/vehicle_cannot_be_sold'
     VEHICLE_SELL_VEHICLE_NEED_REPAIR = '#system_messages:vehicle_sell/vehicle_need_repair'
@@ -475,6 +477,7 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_REMOVE_WALLET_NOT_AVAILABLE = '#system_messages:vehicle_remove/wallet_not_available'
     VEHICLE_REMOVE_VEHICLE_SELL_LIMIT = '#system_messages:vehicle_remove/vehicle_sell_limit'
     VEHICLE_REMOVE_NOT_ENOUGH_SPACE = '#system_messages:vehicle_remove/not_enough_space'
+    VEHICLE_REMOVE_DISABLEDSERVICE = '#system_messages:vehicle_remove/disabledService'
     VEHICLE_RESTOREDURATION_HOURS = '#system_messages:vehicle/restoreDuration/hours'
     VEHICLE_RESTOREDURATION_DAYS = '#system_messages:vehicle/restoreDuration/days'
     VEHICLE_RESTORE_FINISHED = '#system_messages:vehicle/restore/finished'
@@ -549,6 +552,9 @@ class SYSTEM_MESSAGES(object):
     BATTLEBOOSTER_BUY_NOT_ENOUGH_CREDITS = '#system_messages:battleBooster_buy/not_enough_credits'
     BATTLEBOOSTER_BUY_NOT_ENOUGH_GOLD = '#system_messages:battleBooster_buy/not_enough_gold'
     BATTLEBOOSTER_BUY_NOT_ENOUGH_CRYSTAL = '#system_messages:battleBooster_buy/not_enough_crystal'
+    BATTLEBOOSTER_BUY_CREDITS_ERROR = '#system_messages:battleBooster_buy/credits_error'
+    BATTLEBOOSTER_BUY_GOLD_ERROR = '#system_messages:battleBooster_buy/gold_error'
+    BATTLEBOOSTER_BUY_CRYSTAL_ERROR = '#system_messages:battleBooster_buy/crystal_error'
     BATTLEBOOSTER_BUY_WALLET_NOT_AVAILABLE = '#system_messages:battleBooster_buy/wallet_not_available'
     BATTLEBOOSTER_BUY_SERVER_ERROR = '#system_messages:battleBooster_buy/server_error'
     BATTLEBOOSTER_BUY_SERVER_ERROR_CENTERDOWN = '#system_messages:battleBooster_buy/server_error_centerDown'
@@ -557,6 +563,8 @@ class SYSTEM_MESSAGES(object):
     BATTLEBOOSTER_BUY_VEHICLE_LOCKED = '#system_messages:battleBooster_buy/vehicle_locked'
     BATTLEBOOSTER_BUY_INVALID_VEHICLE = '#system_messages:battleBooster_buy/invalid_vehicle'
     BATTLEBOOSTER_BUY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE = '#system_messages:battleBooster_buy/error_not_for_this_vehicle_type'
+    BATTLEBOOSTER_SELL_SUCCESS = '#system_messages:battleBooster_sell/success'
+    BATTLEBOOSTER_SELL_SERVER_ERROR = '#system_messages:battleBooster_sell/server_error'
     MULTIPLESELLING_SUCCESS = '#system_messages:multipleSelling/success'
     SHELL_SELL_SUCCESS = '#system_messages:shell_sell/success'
     SHELL_SELL_INVALID_MODULE = '#system_messages:shell_sell/invalid_module'
@@ -1007,7 +1015,6 @@ class SYSTEM_MESSAGES(object):
     TELECOM_NOTIFICATIONS_VEHICLEREMOVED_SUBCOMMENT_TWITCHPRIME = '#system_messages:telecom/notifications/vehicleRemoved/subcomment/Twitchprime'
     VEHICLECOMPARE_DISABLED = '#system_messages:vehicleCompare/disabled'
     VEHICLECOMPARE_PREVIEWNOTALLOWED = '#system_messages:vehicleCompare/previewNotAllowed'
-    PRMP_NOTIFICATION_NEWENCYCLOPEDIARECOMMENDATION = '#system_messages:prmp/notification/newEncyclopediaRecommendation'
     RESTORECONTROLLER_HASLIMITEDRESTOREVEHICLES = '#system_messages:restoreController/hasLimitedRestoreVehicles'
     ROTATION_LOCK = '#system_messages:rotation/lock'
     ROTATION_UNLOCK = '#system_messages:rotation/unlock'
@@ -1379,6 +1386,7 @@ class SYSTEM_MESSAGES(object):
      SQUAD_NOTSETREADYSTATUS,
      SQUAD_KICKEDFROMQUEUE,
      SQUAD_NOTVALIDDELETED,
+     SQUAD_NOTVALIDDELETEDFILTER,
      SQUAD_NOTVALIDMAXSPGDELETED,
      BATTLESESSION_KICKEDFROMQUEUE,
      MEMBERROSTERCHANGEDMAIN,
@@ -1646,6 +1654,7 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_SELL_SUCCESS,
      VEHICLE_SELL_SUCCESS_DISMANTLING,
      VEHICLE_SELL_SERVER_ERROR,
+     VEHICLE_SELL_DISABLEDSERVICE,
      VEHICLE_SELL_INVALID_VEHICLE,
      VEHICLE_SELL_VEHICLE_CANNOT_BE_SOLD,
      VEHICLE_SELL_VEHICLE_NEED_REPAIR,
@@ -1681,6 +1690,7 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_REMOVE_WALLET_NOT_AVAILABLE,
      VEHICLE_REMOVE_VEHICLE_SELL_LIMIT,
      VEHICLE_REMOVE_NOT_ENOUGH_SPACE,
+     VEHICLE_REMOVE_DISABLEDSERVICE,
      VEHICLE_RESTOREDURATION_HOURS,
      VEHICLE_RESTOREDURATION_DAYS,
      VEHICLE_RESTORE_FINISHED,
@@ -1755,6 +1765,9 @@ class SYSTEM_MESSAGES(object):
      BATTLEBOOSTER_BUY_NOT_ENOUGH_CREDITS,
      BATTLEBOOSTER_BUY_NOT_ENOUGH_GOLD,
      BATTLEBOOSTER_BUY_NOT_ENOUGH_CRYSTAL,
+     BATTLEBOOSTER_BUY_CREDITS_ERROR,
+     BATTLEBOOSTER_BUY_GOLD_ERROR,
+     BATTLEBOOSTER_BUY_CRYSTAL_ERROR,
      BATTLEBOOSTER_BUY_WALLET_NOT_AVAILABLE,
      BATTLEBOOSTER_BUY_SERVER_ERROR,
      BATTLEBOOSTER_BUY_SERVER_ERROR_CENTERDOWN,
@@ -1763,6 +1776,8 @@ class SYSTEM_MESSAGES(object):
      BATTLEBOOSTER_BUY_VEHICLE_LOCKED,
      BATTLEBOOSTER_BUY_INVALID_VEHICLE,
      BATTLEBOOSTER_BUY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE,
+     BATTLEBOOSTER_SELL_SUCCESS,
+     BATTLEBOOSTER_SELL_SERVER_ERROR,
      MULTIPLESELLING_SUCCESS,
      SHELL_SELL_SUCCESS,
      SHELL_SELL_INVALID_MODULE,
@@ -2213,7 +2228,6 @@ class SYSTEM_MESSAGES(object):
      TELECOM_NOTIFICATIONS_VEHICLEREMOVED_SUBCOMMENT_TWITCHPRIME,
      VEHICLECOMPARE_DISABLED,
      VEHICLECOMPARE_PREVIEWNOTALLOWED,
-     PRMP_NOTIFICATION_NEWENCYCLOPEDIARECOMMENDATION,
      RESTORECONTROLLER_HASLIMITEDRESTOREVEHICLES,
      ROTATION_LOCK,
      ROTATION_UNLOCK,

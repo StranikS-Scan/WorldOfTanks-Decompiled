@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/contacts/tasks.py
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 import Event
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto.events import g_messengerEvents
@@ -8,8 +8,9 @@ from messenger.proto.xmpp.gloox_constants import IQ_TYPE
 from messenger.proto.xmpp.gloox_wrapper import ClientHolder
 from messenger.proto.xmpp.log_output import CLIENT_LOG_AREA as _LOG_AREA, g_logOutput
 from messenger.storage import storage_getter
+from shared_utils import CONST_CONTAINER
 
-class TASK_RESULT(object):
+class TaskResult(CONST_CONTAINER):
     UNDEFINED = 0
     RUNNING = 1
     CLONE = 2
@@ -18,22 +19,24 @@ class TASK_RESULT(object):
     CREATE_SEQ = 16
 
 
+_ShadowPath = namedtuple('_ShadowPath', 'actionID, isFinal')
+
 class _Task(ClientHolder):
     __slots__ = ('_result',)
 
     def __init__(self):
         super(_Task, self).__init__()
-        self._result = TASK_RESULT.UNDEFINED
+        self._result = TaskResult.UNDEFINED
 
     @storage_getter('users')
     def usersStorage(self):
         return None
 
     def clear(self):
-        self._result = TASK_RESULT.UNDEFINED
+        self._result = TaskResult.UNDEFINED
 
     def isRunning(self):
-        return self._result & TASK_RESULT.RUNNING > 0
+        return self._result & TaskResult.RUNNING > 0
 
     def isInstantaneous(self):
         return False
@@ -43,15 +46,21 @@ class _Task(ClientHolder):
 
 
 class IQTask(_Task):
-    __slots__ = ('_iqID',)
+    __slots__ = ('_iqID', '_shadowPath', '_error')
 
     def __init__(self):
         super(IQTask, self).__init__()
         self._iqID = ''
+        self._shadowPath = None
+        self._error = None
+        return
 
     def clear(self):
         self._iqID = ''
+        self._shadowPath = None
+        self._error = None
         super(IQTask, self).clear()
+        return
 
     def getID(self):
         return self._iqID
@@ -59,16 +68,25 @@ class IQTask(_Task):
     def setID(self, iqID):
         self._iqID = iqID
 
+    def canShadowMode(self):
+        return False
+
+    def setShadowMode(self, actionID, isFinal):
+        self._shadowPath = _ShadowPath(actionID, isFinal)
+
+    def getShadowData(self):
+        return (self._shadowPath, self._error)
+
     def run(self):
         client = self.client()
         if client:
             self._doRun(client)
             if self.isInstantaneous():
-                self._result = TASK_RESULT.REMOVE
+                self._result = TaskResult.REMOVE
             else:
-                self._result = TASK_RESULT.RUNNING
+                self._result = TaskResult.RUNNING
         else:
-            self._result = TASK_RESULT.CLEAR
+            self._result = TaskResult.CLEAR
         return self._result
 
     def handleIQ(self, iqID, iqType, pyGlooxTag):
@@ -87,13 +105,15 @@ class IQTask(_Task):
     def set(self, pyGlooxTag):
         pass
 
-    def error(self, pyGlooxTag):
-        error = self._getError(pyGlooxTag)
-        if error:
-            g_messengerEvents.onErrorReceived(error)
-        else:
-            g_logOutput.error(_LOG_AREA.PY_WRAPPER, 'Error is not resolved on the client', self.__class__.__name__, pyGlooxTag.getXml())
-        self._result = TASK_RESULT.CLEAR
+    def error(self, pyGlooxTag=None):
+        self._error = self._getError(pyGlooxTag) if pyGlooxTag is not None else None
+        if self._shadowPath is None:
+            if self._error:
+                g_messengerEvents.onErrorReceived(self._error)
+            else:
+                g_logOutput.error(_LOG_AREA.PY_WRAPPER, 'Error is not resolved on the client', self.__class__.__name__, pyGlooxTag.getXml())
+        self._result = TaskResult.CLEAR
+        return
 
     def _doRun(self, client):
         raise NotImplementedError
@@ -229,8 +249,11 @@ class ContactTask(IQTask):
 
     def sync(self, name, groups, sub=None, clanInfo=None):
         self._doSync(name, groups, sub, clanInfo)
-        self._result = TASK_RESULT.REMOVE
+        self._result = TaskResult.REMOVE
         return self._result
+
+    def canShadowMode(self):
+        return True
 
     def _doSync(self, name, groups=None, sub=None, clanInfo=None):
         raise NotImplementedError
@@ -239,9 +262,10 @@ class ContactTask(IQTask):
         return self.usersStorage.getUser(self._jid.getDatabaseID(), protoType)
 
     def _doNotify(self, actionID, user, nextRev=True):
-        g_messengerEvents.users.onUserActionReceived(actionID, user)
+        g_messengerEvents.users.onUserActionReceived(actionID, user, self._shadowPath is not None)
         if nextRev:
             self.usersStorage.nextRev()
+        return
 
 
 class ContactTaskQueue(object):
@@ -316,12 +340,24 @@ class ContactTaskQueue(object):
         if not isHandled and iqType == IQ_TYPE.SET:
             for task in self.__syncByIQ:
                 result = task.handleIQ(iqID, iqType, pyGlooxTag)
-                if result in (TASK_RESULT.CLEAR, TASK_RESULT.REMOVE):
+                if result in (TaskResult.CLEAR, TaskResult.REMOVE):
                     break
             else:
                 isHandled = True
 
         return isHandled
+
+    @staticmethod
+    def _notifyShadowFail(jid, shadowPath, error):
+        if shadowPath is not None:
+            g_messengerEvents.shadow.onActionFailed(jid.getDatabaseID(), shadowPath.actionID, error)
+        return
+
+    @staticmethod
+    def _notifyShadowDone(jid, shadowPath):
+        if shadowPath is not None and shadowPath.isFinal:
+            g_messengerEvents.shadow.onActionDone(jid.getDatabaseID(), shadowPath.actionID)
+        return
 
     def _getIQGenerator(self, jid, iqID, iqType, pyGlooxTag):
         for task in self.__queue[jid][:]:
@@ -338,14 +374,17 @@ class ContactTaskQueue(object):
             if task.isRunning():
                 return
             result = task.run()
-            if result & TASK_RESULT.CLEAR > 0:
+            shadowPath, error = task.getShadowData()
+            if result & TaskResult.CLEAR > 0:
                 self.removeTasks(jid)
+                self._notifyShadowFail(jid, shadowPath, error)
                 return
-            if result & TASK_RESULT.CLONE > 0:
+            if result & TaskResult.CLONE > 0:
                 newTasks.extend(task.clone())
-            if result & TASK_RESULT.REMOVE > 0:
+            if result & TaskResult.REMOVE > 0:
                 task.clear()
                 tasks.remove(task)
+                self._notifyShadowDone(jid, shadowPath)
                 continue
             if task.isRunning():
                 break
@@ -366,26 +405,29 @@ class ContactTaskQueue(object):
         isHandled = False
         for result, task in generator:
             isHandled = True
-            if result == TASK_RESULT.UNDEFINED:
+            shadowPath, error = task.getShadowData()
+            if result == TaskResult.UNDEFINED:
                 if not task.isRunning():
                     toRun.add(task.getJID())
                 continue
-            if result & TASK_RESULT.CREATE_SEQ > 0:
+            if result & TaskResult.CREATE_SEQ > 0:
                 seqTask = task.createSeqTask()
                 if seqTask:
                     self.onSeqTaskRequested(seqTask)
-            if result & TASK_RESULT.CLONE > 0:
+            if result & TaskResult.CLONE > 0:
                 for newTask in task.clone():
                     nextJID = newTask.getJID()
                     toRun.add(nextJID)
                     self.__queue[nextJID].append(newTask)
 
-            if result & TASK_RESULT.REMOVE > 0:
+            if result & TaskResult.REMOVE > 0:
                 task.clear()
                 tasks.remove(task)
-            if result & TASK_RESULT.CLEAR > 0:
+                self._notifyShadowDone(jid, shadowPath)
+            if result & TaskResult.CLEAR > 0:
                 toRun.discard(jid)
                 self.removeTasks(jid)
+                self._notifyShadowFail(jid, shadowPath, error)
                 break
 
         for taskJID in toRun:

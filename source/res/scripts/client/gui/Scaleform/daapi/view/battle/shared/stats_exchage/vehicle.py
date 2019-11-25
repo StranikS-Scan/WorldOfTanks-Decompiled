@@ -106,16 +106,19 @@ class VehicleInfoComponent(broker.ExchangeComponent):
         vTypeVO = vInfoVO.vehicleType
         playerVO = vInfoVO.player
         accountDBID = playerVO.accountDBID
+        sessionID = playerVO.avatarSessionID
         battleCtx = self.sessionProvider.getCtx()
-        isTeamKiller = playerVO.isTeamKiller or battleCtx.isTeamKiller(vID=vehicleID, accID=accountDBID) or overrides.isTeamKiller(vInfoVO)
+        isTeamKiller = playerVO.isTeamKiller or battleCtx.isTeamKiller(vehicleID, sessionID) or overrides.isTeamKiller(vInfoVO)
         parts = self._ctx.getPlayerFullName(vInfoVO)
         data = {'accountDBID': accountDBID,
+         'sessionID': sessionID,
          'playerName': parts.playerName,
+         'playerFakeName': parts.playerFakeName,
          'playerFullName': parts.playerFullName,
          'playerStatus': overrides.getPlayerStatus(vInfoVO, isTeamKiller),
          'clanAbbrev': playerVO.clanAbbrev,
          'region': parts.regionCode,
-         'userTags': self._ctx.getUserTags(accountDBID, playerVO.igrType),
+         'userTags': self._ctx.getUserTags(sessionID, playerVO.igrType),
          'squadIndex': vInfoVO.squadIndex,
          'invitationStatus': overrides.getInvitationDeliveryStatus(vInfoVO),
          'vehicleID': vehicleID,

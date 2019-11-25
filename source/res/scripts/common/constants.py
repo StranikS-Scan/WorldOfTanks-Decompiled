@@ -16,7 +16,8 @@ IS_BOT = BigWorld.component == 'bot'
 IS_CELLAPP = BigWorld.component == 'cell'
 IS_BASEAPP = BigWorld.component in ('base', 'service')
 IS_WEB = BigWorld.component == 'web'
-CURRENT_REALM = 'RU'
+IS_DYNAPDATER = False
+CURRENT_REALM = 'CT'
 DEFAULT_LANGUAGE = 'ru'
 AUTH_REALM = 'RU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
@@ -747,6 +748,11 @@ SPA_RESTR_NAME_TO_RESTR_TYPE = {'game': RESTRICTION_TYPE.BAN,
  'clan': RESTRICTION_TYPE.CLAN}
 RESTR_TYPE_TO_SPA_NAME = dict(((x[1], x[0]) for x in SPA_RESTR_NAME_TO_RESTR_TYPE.iteritems()))
 
+class SPA_ATTRS:
+    ANONYM_RESTRICTED = '/wot/game/anonym_restricted/'
+    GOLFISH_BONUS_APPLIED = '/common/goldfish_bonus_applied/'
+
+
 class CLAN_MEMBER_FLAGS(object):
     LEADER = 1
     VICE_LEADER = 2
@@ -817,6 +823,12 @@ class DUALGUN_CHARGER_STATUS:
     CANCELED = 1
     PREPARING = 2
     UNAVAILABLE = 3
+
+
+class DUALGUN_CHARGER_ACTION_TYPE:
+    CANCEL = 0
+    START_WITH_DELAY = 1
+    START_IMMEDIATELY = 2
 
 
 class EQUIPMENT_STAGES:
@@ -1325,6 +1337,9 @@ class REQUEST_COOLDOWN:
     LOG_CLIENT_SESSION_STATS = 5.0
     LOG_CLIENT_SYSTEM = 5.0
     LOG_CLIENT_PB_20_UX_STATS = 5.0
+    ANONYMIZER = 1.0
+    UPDATE_IN_BATTLE_PLAYER_RELATIONS = 1.0
+    FLUSH_RELATIONS = 1.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -1615,9 +1630,9 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  74: 'Carousel filter',
  75: '[Free]',
  76: '[Free]',
- 77: 'PRMP encyclopedia recommendations 1-2',
- 78: 'PRMP encyclopedia recommendations 3-4',
- 79: 'PRMP encyclopedia recommendations 5-6',
+ 77: '[Free]',
+ 78: '[Free]',
+ 79: '[Free]',
  80: 'Ranked carousel filter',
  81: 'Ranked carousel filter',
  82: 'feedback damage indicator',
@@ -1978,12 +1993,6 @@ class HIT_INDIRECTION:
     CEILING_HIT = 4
 
 
-class SWITCH_STATE(object):
-    ALL = 'all'
-    TOKEN = 'token'
-    NONE = 'none'
-
-
 class VEHICLE_FRICTION_STATE(object):
     VFS_START = 1
     VFS_UPDATE = 2
@@ -2263,3 +2272,10 @@ class DUAL_GUN:
         SWITCH = 2
         DEBUFF = 3
         COUNT = 4
+
+
+class BattleUserActions(object):
+    ADD_FRIEND = 1
+    REMOVE_FRIEND = 2
+    ADD_IGNORED = 4
+    REMOVE_IGNORED = 8

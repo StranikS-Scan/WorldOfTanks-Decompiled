@@ -26,6 +26,12 @@
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
     </name>
+    <sessionID>
+      <Type>	STRING	</Type>
+      <Flags>	BASE_AND_CLIENT	</Flags>
+      <Persistent>	false	</Persistent>
+      <Backupable>	false	</Backupable>
+    </sessionID>
     <account>
       <Type>	MAILBOX	</Type>
       <Flags>	BASE	</Flags>
@@ -38,6 +44,10 @@
       <Type>	MAILBOX	</Type>
       <Flags>	BASE	</Flags>
     </arena>
+    <arenaVehiclesDBIDs>
+      <Type>	PYTHON	</Type>
+      <Flags>	BASE	</Flags>
+    </arenaVehiclesDBIDs>
     <arenaUniqueID>
       <Type>	UINT64	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
@@ -602,7 +612,7 @@
     </confirmBattleResultsReceiving>
     <makeDenunciation>
       <Exposed></Exposed>
-      <Arg>	DB_ID	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
       <Arg>	INT32	</Arg>
       <Arg>	INT8	</Arg>
     </makeDenunciation>
@@ -636,6 +646,13 @@
       <Arg>	ARRAY	  <of>	DISCLOSE_EVENT	</of>
       </Arg>
     </updateArena>
+    <updateArenaVehicleListAddedUpdated>
+      <Arg>	UINT8	</Arg>
+      <Arg>	ARRAY	  <of>	CLIENT_VEHICLE_PUBLIC_INFO	</of>
+      </Arg>
+      <Arg>	ARRAY	  <of>	DISCLOSE_EVENT	</of>
+      </Arg>
+    </updateArenaVehicleListAddedUpdated>
     <updatePositions>
       <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
       </Arg>

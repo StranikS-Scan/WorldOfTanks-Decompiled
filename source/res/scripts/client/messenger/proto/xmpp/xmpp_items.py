@@ -140,8 +140,6 @@ class RosterItem(ContactItem):
         if newItem:
             if newItem.getItemType() == XMPP_ITEM_TYPE.BLOCK_ITEM:
                 return RosterBlockItem(self._jid, RosterItem(self._jid, sub=self._sub, groups=self._groups))
-            if newItem.getItemType() == XMPP_ITEM_TYPE.TMP_BLOCK_ITEM:
-                return RosterTmpBlockItem(self._jid, RosterItem(self._jid, sub=self._sub, groups=self._groups))
         return super(RosterItem, self).replace(newItem)
 
     def getJID(self):
@@ -199,26 +197,6 @@ class BlockItem(ContactItem):
         pass
 
 
-class TmpBlockItem(ContactItem):
-
-    def __init__(self, jid, trusted=True):
-        super(TmpBlockItem, self).__init__(jid, trusted, tags={_TAG.IGNORED_TMP})
-
-    @classmethod
-    def getItemType(cls):
-        return XMPP_ITEM_TYPE.TMP_BLOCK_ITEM
-
-    def setTrusted(self, value):
-        super(TmpBlockItem, self).setTrusted(value)
-        if not self._trusted:
-            self._tags.add(_TAG.CACHED)
-        else:
-            self._tags.discard(_TAG.CACHED)
-
-    def _setResource(self, jid, resource):
-        pass
-
-
 class RosterBlockItem(BlockItem):
     __slots__ = ('_rosterItem',)
 
@@ -248,42 +226,6 @@ class RosterBlockItem(BlockItem):
         return newItem
 
 
-class RosterTmpBlockItem(TmpBlockItem):
-    __slots__ = ('_rosterItem',)
-
-    def __init__(self, jid, rosterItem=None, trusted=True):
-        super(RosterTmpBlockItem, self).__init__(jid, trusted)
-        self._rosterItem = rosterItem or RosterItem(jid)
-
-    @classmethod
-    def getItemType(cls):
-        return XMPP_ITEM_TYPE.ROSTER_TMP_BLOCK_ITEM
-
-    def getTags(self):
-        tags = super(RosterTmpBlockItem, self).getTags()
-        tags.update(self._rosterItem.getTags())
-        return tags
-
-    def getRosterGroups(self):
-        return self._rosterItem.getGroups()
-
-    def getSubscription(self):
-        return self._rosterItem.getSubscription()
-
-    def update(self, **kwargs):
-        super(RosterTmpBlockItem, self).update(**kwargs)
-        self._rosterItem.update(**kwargs)
-
-    def replace(self, newItem):
-        if newItem is None:
-            newItem = self._rosterItem
-        elif newItem.getItemType() == XMPP_ITEM_TYPE.EMPTY_ITEM:
-            newItem = TmpBlockItem(self._jid, self.isTrusted())
-        else:
-            newItem = super(RosterTmpBlockItem, self).replace(newItem)
-        return newItem
-
-
 class SubPendingItem(ContactItem):
     __slots__ = ('_receivedAt',)
 
@@ -305,54 +247,11 @@ class SubPendingItem(ContactItem):
     def receivedAt(self):
         return self._receivedAt
 
-    def replace(self, newItem):
-        return SubPendingTmpBlockItem(self._jid, SubPendingItem(self._jid, trusted=self.isTrusted(), tags=self.getTags(), receivedAt=self.receivedAt())) if newItem and newItem.getItemType() == XMPP_ITEM_TYPE.TMP_BLOCK_ITEM else super(SubPendingItem, self).replace(newItem)
-
-
-class SubPendingTmpBlockItem(TmpBlockItem):
-    __slots__ = ('_pendingItem',)
-
-    def __init__(self, jid, pendingItem=None, trusted=True):
-        self._pendingItem = pendingItem or SubPendingItem(jid)
-        super(SubPendingTmpBlockItem, self).__init__(jid, trusted)
-
-    @classmethod
-    def getItemType(cls):
-        return XMPP_ITEM_TYPE.SUB_PENDING_TMP_BLOCK_ITEM
-
-    def getTags(self):
-        tags = super(SubPendingTmpBlockItem, self).getTags()
-        tags.update(self._pendingItem.getTags())
-        return tags
-
-    def setTrusted(self, value):
-        super(SubPendingTmpBlockItem, self).setTrusted(value)
-        self._pendingItem.setTrusted(value)
-
-    def update(self, **kwargs):
-        super(SubPendingTmpBlockItem, self).update(**kwargs)
-        self._pendingItem.update(**kwargs)
-
-    def replace(self, newItem):
-        if newItem is None:
-            newItem = self._pendingItem
-        elif newItem.getItemType() == XMPP_ITEM_TYPE.EMPTY_ITEM:
-            newItem = TmpBlockItem(self._jid, self.isTrusted())
-        else:
-            newItem = super(SubPendingTmpBlockItem, self).replace(newItem)
-        return newItem
-
-    def receivedAt(self):
-        return self._pendingItem.receivedAt()
-
 
 _SUPPORTED_ITEMS = (RosterItem,
  BlockItem,
- TmpBlockItem,
  SubPendingItem,
- SubPendingTmpBlockItem,
- RosterBlockItem,
- RosterTmpBlockItem)
+ RosterBlockItem)
 _SUPPORTED_ITEM_TYPE_TO_CLASS = dict(((clazz.getItemType(), clazz) for clazz in _SUPPORTED_ITEMS))
 
 def createItem(databaseID, itemType=XMPP_ITEM_TYPE.EMPTY_ITEM, trusted=True):

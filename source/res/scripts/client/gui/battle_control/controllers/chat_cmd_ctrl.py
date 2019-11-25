@@ -241,12 +241,12 @@ class ChatCommandsController(IBattleController):
                 soundNotifications.play(cmd.getSoundEventName())
             return
 
-    def __findVehicleInfoByDatabaseID(self, dbID):
+    def __findVehicleInfoBySessionID(self, avatarSessionID):
         result = None
         if self.__arenaDP is None:
             return result
         else:
-            vehicleID = self.__arenaDP.getVehIDByAccDBID(dbID)
+            vehicleID = self.__arenaDP.getVehIDBySessionID(avatarSessionID)
             if vehicleID:
                 result = self.__findVehicleInfoByVehicleID(vehicleID)
             return result
@@ -269,13 +269,13 @@ class ChatCommandsController(IBattleController):
     def __handleSimpleCommand(self, cmd):
         vMarker = cmd.getVehMarker()
         if vMarker:
-            vehicleInfo = self.__findVehicleInfoByDatabaseID(cmd.getSenderID())
+            vehicleInfo = self.__findVehicleInfoBySessionID(cmd.getSenderID())
             vehicleID = vehicleInfo.vehicleID if vehicleInfo else 0
             if vehicleID:
                 self.__feedback.showActionMarker(vehicleID, vMarker, vMarker)
 
     def __handlePrivateCommand(self, cmd):
-        vehicleInfo = self.__findVehicleInfoByDatabaseID(cmd.getSenderID())
+        vehicleInfo = self.__findVehicleInfoBySessionID(cmd.getSenderID())
         if cmd.isReceiver() or cmd.isSender():
             self.__playSound(cmd)
             if vehicleInfo is None:
@@ -287,7 +287,7 @@ class ChatCommandsController(IBattleController):
         return
 
     def __handlePublicCommand(self, cmd):
-        senderInfo = self.__findVehicleInfoByDatabaseID(cmd.getSenderID())
+        senderInfo = self.__findVehicleInfoBySessionID(cmd.getSenderID())
         if senderInfo is None:
             senderInfo = self.__findVehicleInfoByVehicleID(avatar_getter.getPlayerVehicleID())
         showReceiver = cmd.showMarkerForReceiver()

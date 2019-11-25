@@ -13,6 +13,7 @@ class QUERY_SIGN(object):
     GROUP_NAME = 3
     OPT_GROUP_NAME = 4
     NOTE_TEXT = 5
+    SHADOW_MODE = 6
 
 
 def _validateDatabaseID(dbID):
@@ -40,12 +41,17 @@ def _validateNoteText(note):
     return xmpp_string_utils.validateContactNote(note)[1]
 
 
+def _validateShadowMode(_):
+    return None
+
+
 _QUERY_SIGN_VALIDATORS = {QUERY_SIGN.DATABASE_ID: _validateDatabaseID,
  QUERY_SIGN.ACCOUNT_NAME: _validateAccountName,
  QUERY_SIGN.GROUP_NAME: _validateGroupName,
  QUERY_SIGN.OPT_GROUP_NAME: _validateOptionalGroupName,
- QUERY_SIGN.NOTE_TEXT: _validateNoteText}
-_QUERY_OPT_SIGNS = (QUERY_SIGN.OPT_GROUP_NAME,)
+ QUERY_SIGN.NOTE_TEXT: _validateNoteText,
+ QUERY_SIGN.SHADOW_MODE: _validateShadowMode}
+_QUERY_OPT_SIGNS = (QUERY_SIGN.OPT_GROUP_NAME, QUERY_SIGN.SHADOW_MODE)
 
 class local_query(ClientHolder):
     __slots__ = ('_sign',)

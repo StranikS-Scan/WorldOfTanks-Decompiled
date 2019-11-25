@@ -533,7 +533,7 @@ class RecruitHandler(ServiceChannelHandler):
         for tokenName in tokensDict:
             recruitInfo = recruit_helper.getRecruitInfo(tokenName)
             if recruitInfo is not None:
-                self._showWindow(recruitInfo.getLabel())
+                self._showWindow(recruitInfo.getEventName())
                 return
 
         return

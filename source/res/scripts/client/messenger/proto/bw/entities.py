@@ -6,9 +6,10 @@ import chat_shared
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from gui.shared.utils import getPlayerDatabaseID
+from gui.shared.utils.decorators import ReprInjector
 from messenger.ext import passCensor
 from messenger.proto.entities import ChannelEntity, MemberEntity, ChatEntity
-from messenger.proto.entities import UserEntity
+from messenger.proto.entities import LobbyUserEntity
 from messenger.m_constants import PROTO_TYPE, LAZY_CHANNEL, PRIMARY_CHANNEL_ORDER
 from messenger.proto.bw.wrappers import ChannelDataWrapper
 PREBATTLE_TYPE_CHAT_FLAG = {PREBATTLE_TYPE.SQUAD: chat_shared.CHAT_CHANNEL_SQUAD,
@@ -147,15 +148,13 @@ class BWMemberEntity(MemberEntity):
         return PROTO_TYPE.BW
 
 
-class BWUserEntity(UserEntity):
+@ReprInjector.withParent(('isOnline', 'isOnline'))
+class BWUserEntity(LobbyUserEntity):
     __slots__ = ('_isOnline',)
 
-    def __init__(self, databaseID, name=None, tags=None, isOnline=False, clanInfo=None):
-        super(BWUserEntity, self).__init__(databaseID, name, tags, clanInfo)
+    def __init__(self, userID, name=None, tags=None, isOnline=False, clanInfo=None, scope=None):
+        super(BWUserEntity, self).__init__(userID, name, tags, clanInfo, scope=scope)
         self._isOnline = isOnline
-
-    def __repr__(self):
-        return 'BWUserEntity(dbID={0!r:s}, fullName={1:>s}, tags={2!r:s}, isOnline={3!r:s}, clanInfo={4!r:s})'.format(self._databaseID, self.getFullName(), self.getTags(), self.isOnline(), self._clanInfo)
 
     def getProtoType(self):
         return PROTO_TYPE.BW

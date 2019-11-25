@@ -29,7 +29,7 @@ from gui.shared import event_dispatcher as shared_events
 from items import getTypeInfoByName
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
-from account_helpers.AccountSettings import AccountSettings, SHOW_OPT_DEVICE_HINT
+from account_helpers.AccountSettings import AccountSettings, SHOW_OPT_DEVICE_HINT, BOOSTERS_FOR_CREDITS_SLOT_COUNTER
 from skeletons.gui.game_control import IBootcampController, IEpicBattleMetaGameController
 from bootcamp.Bootcamp import g_bootcamp
 from gui.game_control.epic_meta_game_ctrl import FRONTLINE_SCREENS
@@ -48,11 +48,17 @@ def _extendByModuleData(targetData, vehicleModule, vehDescr):
     values, names = [], []
     paramsData = params_helper.getParameters(vehicleModule, vehDescr)
     paramsList = _PARAMS_LISTS[moduleType]
-    if vehicleModule.itemTypeID == GUI_ITEM_TYPE.GUN and vehicleModule.isAutoReloadable(vehDescr):
-        paramsList = paramsList[:-1] + ('autoReloadTime',)
-        serverSettings = dependency.instance(ISettingsCore).serverSettings
-        if serverSettings.checkAutoReloadHighlights():
-            targetData['highlightedParameterIdx'] = 2
+    if vehicleModule.itemTypeID == GUI_ITEM_TYPE.GUN:
+        if vehicleModule.isAutoReloadable(vehDescr):
+            paramsList = paramsList[:-1] + ('autoReloadTime',)
+            serverSettings = dependency.instance(ISettingsCore).serverSettings
+            if serverSettings.checkAutoReloadHighlights():
+                targetData['highlightedParameterIdx'] = 2
+        if vehicleModule.isDualGun(vehDescr):
+            paramsList = paramsList[:-1] + ('reloadTimeSecs',)
+            serverSettings = dependency.instance(ISettingsCore).serverSettings
+            if serverSettings.checkDualGunHighlights(increase=True):
+                targetData['highlightedParameterIdx'] = 2
     for paramName in paramsList:
         value = paramsData.get(paramName)
         if value is not None:
@@ -418,12 +424,24 @@ class BattleBoosterSelectPopover(HangarFittingSelectPopover):
         showBattleBoosterBuyDialog(int(moduleId), install=False)
         self.destroy()
 
+    def setCurrentTab(self, tabIndex):
+        if tabIndex not in _TAB_IDS:
+            return
+        if self._TABS[tabIndex]['id'] == 'boostersForCrew':
+            if self._getTabCounters()[tabIndex] > 0:
+                AccountSettings.setCounters(BOOSTERS_FOR_CREDITS_SLOT_COUNTER, 0)
+        super(BattleBoosterSelectPopover, self).setCurrentTab(tabIndex)
+
     def _prepareInitialData(self):
         result = super(BattleBoosterSelectPopover, self)._prepareInitialData()
         result['rearmCheckboxVisible'] = True
         vehicle = g_currentVehicle.item
         result['rearmCheckboxValue'] = vehicle.isAutoBattleBoosterEquip() if vehicle is not None else False
+        result['tabCounters'] = self._getTabCounters()
         return result
+
+    def _getTabCounters(self):
+        return [0, AccountSettings.getCounters(BOOSTERS_FOR_CREDITS_SLOT_COUNTER)]
 
     def _getCommonData(self):
         return (FITTING_TYPES.BOOSTER_FITTING_ITEM_RENDERER,
@@ -455,7 +473,8 @@ class PopoverLogicProvider(object):
         self.__modulesList = None
         self._selectedIdx = -1
         self._tabIndex = 0
-        self._needToResetCounters = False
+        self._needToResetAutoReload = False
+        self._needToResetDualGun = False
         return
 
     def getSelectedIdx(self):
@@ -484,12 +503,17 @@ class PopoverLogicProvider(object):
         return
 
     def resetCounters(self):
-        if self._needToResetCounters:
+        if self._needToResetAutoReload:
             self._settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.AUTO_RELOAD_MARK_IS_SHOWN: True})
+        if self._needToResetDualGun:
+            self._settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.DUAL_GUN_MARK_IS_SHOWN: True})
 
     def _checkCounters(self, vehicleModule):
-        if vehicleModule.itemTypeID == GUI_ITEM_TYPE.GUN and not self._needToResetCounters and vehicleModule.isAutoReloadable(self._vehicle.descriptor):
-            self._needToResetCounters = True
+        if vehicleModule.itemTypeID == GUI_ITEM_TYPE.GUN:
+            if not self._needToResetAutoReload and vehicleModule.isAutoReloadable(self._vehicle.descriptor):
+                self._needToResetAutoReload = True
+            elif not self._needToResetDualGun and vehicleModule.isDualGun(self._vehicle.descriptor):
+                self._needToResetDualGun = True
 
     def _buildCommonModuleData(self, module, reason):
         return {'id': module.intCD,

@@ -76,17 +76,21 @@ class StubItemPurchaseDescription(BasePurchaseDescription):
 
 
 class SeparateItemPurchaseDescription(BasePurchaseDescription):
-    __slots__ = ('intCD', 'identificator', 'selected', 'itemData', 'compoundPrice', 'quantity', 'isFromInventory', 'purchaseIndices')
+    __slots__ = ('intCD', 'identificator', 'selected', 'itemData', 'compoundPrice', 'quantity', 'isFromInventory', 'purchaseIndices', 'group')
 
     def __init__(self, purchaseItem, purchaseIdx):
         super(SeparateItemPurchaseDescription, self).__init__(purchaseItem.item, purchaseIdx, component=purchaseItem.component)
-        self.identificator = self.__generateID(purchaseItem)
         self.selected = purchaseItem.selected
         self.compoundPrice = purchaseItem.price
         self.isFromInventory = purchaseItem.isFromInventory
+        self.group = purchaseItem.group
+        self.identificator = self.__generateID()
 
-    def __generateID(self, item):
-        return hash((self.intCD, item.group, item.isFromInventory))
+    def __generateID(self):
+        return hash((self.intCD,
+         self.group,
+         self.isFromInventory,
+         self.component.number)) if self.item.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER and self.component is not None else hash((self.intCD, self.group, self.isFromInventory))
 
 
 class ItemsProcessor(object):
@@ -152,8 +156,8 @@ class SeparateItemsProcessor(ItemsProcessor):
         return itemsInfo
 
     @staticmethod
-    def _getKey(item):
-        return (not item.isFromInventory, item.intCD)
+    def _getKey(purchaseItem):
+        return (not purchaseItem.isFromInventory, purchaseItem.intCD, purchaseItem.component.number) if purchaseItem.item.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER and purchaseItem.component is not None else (not purchaseItem.isFromInventory, purchaseItem.intCD, '')
 
 
 class StyleItemsProcessor(ItemsProcessor):

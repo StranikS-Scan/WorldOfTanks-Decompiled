@@ -26,6 +26,8 @@ import WWISE
 from constants import CONTENT_TYPE
 from gui.Scaleform.genConsts.ACOUSTICS import ACOUSTICS
 from gui.app_loader import app_getter
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared import event_dispatcher
 from gui.sounds.sound_constants import SPEAKERS_CONFIG
 from helpers import dependency
@@ -44,14 +46,15 @@ from Vibroeffects import VibroManager
 from messenger import g_settings as messenger_settings
 from account_helpers.AccountSettings import AccountSettings, SPEAKERS_DEVICE
 from account_helpers.settings_core.settings_constants import SOUND
+from messenger.storage import storage_getter
 from shared_utils import CONST_CONTAINER, forEach
 from gui import GUI_SETTINGS
-from gui.shared.utils import graphics, functions
-from gui.shared.utils.graphics import g_monitorSettings
+from gui.shared.utils import graphics, functions, getPlayerDatabaseID
+from gui.shared.utils.monitor_settings import g_monitorSettings
 from gui.shared.utils.key_mapping import getScaleformKey, getBigworldKey, getBigworldNameFromKey
 from gui.Scaleform.locale.SETTINGS import SETTINGS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared.formatters import icons
+from gui.shared.formatters import icons, text_styles
 from gui.shared.utils.functions import makeTooltip, clamp
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
@@ -60,7 +63,7 @@ from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.sounds import ISoundsController
 from gui import makeHtmlString
-from skeletons.gui.game_control import ISpecialSoundCtrl
+from skeletons.gui.game_control import ISpecialSoundCtrl, IAnonymizerController
 _logger = logging.getLogger(__name__)
 
 class APPLY_METHOD(object):
@@ -1686,6 +1689,7 @@ class KeyboardSettings(SettingsContainer):
        ('block_tracks', 'CMD_BLOCK_TRACKS'))),
      ('cruis_control', (('forward_cruise', 'CMD_INCREMENT_CRUISE_MODE'), ('backward_cruise', 'CMD_DECREMENT_CRUISE_MODE'), ('stop_fire', 'CMD_STOP_UNTIL_FIRE'))),
      ('firing', (('fire', 'CMD_CM_SHOOT'),
+       ('chargeFire', 'CMD_CM_CHARGE_SHOT'),
        ('lock_target', 'CMD_CM_LOCK_TARGET'),
        ('lock_target_off', 'CMD_CM_LOCK_TARGET_OFF'),
        ('alternate_mode', 'CMD_CM_ALTERNATE_MODE'),
@@ -1721,7 +1725,8 @@ class KeyboardSettings(SettingsContainer):
      'to_base/to_back': 'SettingsKeyTurnBack',
      'sos/help_me': 'SettingsKeyNeedHelp',
      'reload/stop': 'SettingsKeyReload',
-     'auto_rotation': 'SettingKeySwitchMode'}
+     'auto_rotation': 'SettingKeySwitchMode',
+     'chargeFire': 'SettingsKeyChargeFire'}
     __hiddenGroups = {}
 
     def __init__(self):
@@ -2400,6 +2405,44 @@ class GraphicsQuality(SettingAbstract):
 
     def _set(self, value):
         pass
+
+
+class AnonymizerSetting(AccountDumpSetting):
+    __ctrl = dependency.descriptor(IAnonymizerController)
+
+    def __init__(self, settingName):
+        super(AnonymizerSetting, self).__init__(settingName, settingName, 'anonymized')
+
+    @storage_getter('users')
+    def usersStorage(self):
+        return None
+
+    def getExtraData(self):
+        isInClan = self.usersStorage.getUser(getPlayerDatabaseID()).getClanInfo().isInClan()
+        tooltip = R.strings.tooltips.anonymizer
+        if self.__ctrl.isRestricted:
+            footer = backport.text(tooltip.bodyFooter.restricted())
+        elif self.__ctrl.isInBattle:
+            footer = backport.text(tooltip.bodyFooter.inBattle())
+        else:
+            footer = backport.text(tooltip.bodyFooter.default())
+        body = '{body}{vspace}{footer}'.format(body=backport.text((tooltip.body.clan if isInClan else tooltip.body.noClan)()), vspace='\n\n' if footer else '', footer=text_styles.neutral(footer))
+        header = backport.text(tooltip.header())
+        return {'checkBoxLabel': backport.text(R.strings.settings.game.anonymizer()),
+         'tooltip': makeTooltip(header, body),
+         'visible': self.__ctrl.isEnabled,
+         'enabled': not (self.__ctrl.isInBattle or self.__ctrl.isRestricted)}
+
+    def pack(self):
+        return {'current': self._get(),
+         'options': self._getOptions(),
+         'extraData': self.getExtraData()}
+
+    def _get(self):
+        return self.__ctrl.isAnonymized
+
+    def _save(self, value):
+        self.__ctrl.setAnonymized(value)
 
 
 class ShowDamageIconSetting(StorageAccountSetting):

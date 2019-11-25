@@ -47,6 +47,7 @@ class RentalInfoProvider(_RentalInfoProvider):
         return availableRenewCycleInfo is not None and availableRenewCycleInfo.endDate > getCurrentLocalServerTimestamp()
 
     def getAvailableRentRenewCycleInfoForSeason(self, seasonType):
+        now = time_utils.getCurrentLocalServerTimestamp()
         currentSeason = self.seasonsController.getCurrentSeason(seasonType)
         if currentSeason is not None:
             lastRentedCycle = self.getLastCycleRentInfo(seasonType)
@@ -54,10 +55,10 @@ class RentalInfoProvider(_RentalInfoProvider):
                 currentCycle = currentSeason.getCycleInfo()
                 if currentCycle and currentCycle.ID > lastRentedCycle.ID:
                     return currentCycle
-                nextCycle = currentSeason.getNextCycleInfo()
+                nextCycle = currentSeason.getNextCycleInfo(now)
                 if nextCycle and nextCycle.ID > lastRentedCycle.ID:
                     return nextCycle
-                return currentSeason.getNextCycleInfo(lastRentedCycle.ID)
+                return currentSeason.getNextCycleInfo(now, lastRentedCycle.ID)
         return
 
     def getLastCycleRentInfo(self, seasonType):
@@ -87,8 +88,13 @@ class RentalInfoProvider(_RentalInfoProvider):
                 for rentType in cycleRents:
                     rentID, duration = rentType
                     currentSeason = self.seasonsController.getCurrentSeason(seasonType)
-                    if currentSeason is not None and currentSeason.getCycleID() == rentID:
-                        return SeasonRentInfo(seasonType, rentID, duration, currentSeason.getCycleEndDate())
+                    if currentSeason is not None:
+                        if currentSeason.getCycleID() == rentID:
+                            return SeasonRentInfo(seasonType, rentID, duration, currentSeason.getCycleEndDate())
+                        now = time_utils.getCurrentLocalServerTimestamp()
+                        nextCycle = currentSeason.getNextCycleInfo(now)
+                        if nextCycle and nextCycle.ID == rentID:
+                            return SeasonRentInfo(seasonType, rentID, duration, nextCycle.endDate)
 
         return
 
@@ -119,19 +125,22 @@ class RentalInfoProvider(_RentalInfoProvider):
                             return (curCycle,)
                         return (curCycle, lastCycle)
                 elif duration == SeasonRentDuration.SEASON_CYCLE:
+                    now = time_utils.getCurrentLocalServerTimestamp()
                     lastFutureCycleInfo = self._getLastFutureCycleRentInfo()
-                    curCycle = currentSeason.getCycleInfo()
+                    curCycle = currentSeason.getCycleInfo() or currentSeason.getNextCycleInfo(now)
                     if lastFutureCycleInfo:
                         lastCycle = currentSeason.getCycleInfo(lastFutureCycleInfo.seasonID)
-                        return (curCycle, lastCycle)
+                        if curCycle != lastCycle:
+                            return (curCycle, lastCycle)
                     return (curCycle,)
             return
 
     def _getLastFutureCycleRentInfo(self):
+        now = time_utils.getCurrentLocalServerTimestamp()
         for seasonType, rentTypes in self.seasonRent.iteritems():
             currentSeason = self.seasonsController.getCurrentSeason(seasonType)
             if currentSeason:
-                currentCycleID = currentSeason.getCycleID()
+                currentCycleID = currentSeason.getCycleID() or currentSeason.getLastActiveCycleID(now)
                 futureCycleRents = first(sorted([ item[0] for item in rentTypes if item[1] == SeasonRentDuration.SEASON_CYCLE and item[0] > currentCycleID ], reverse=True))
                 if futureCycleRents:
                     lastFutureCycleRentID = futureCycleRents
@@ -150,7 +159,7 @@ class RentalInfoProvider(_RentalInfoProvider):
             return activeSeasonRent.expiryTime
 
 
-class FittingItem(GUIItem, HasIntCD):
+class FittingItem(GUIItem):
     __slots__ = ('_buyPrices', '_sellPrices', '_mayConsumeWalletResources', '_personalDiscountPrice', '_isHidden', '_inventoryCount', '_isUnlocked', '_isBoughtForAltPrice', '_rentInfo', '_restoreInfo', '_fullyConfigured', '_isInitiallyUnlocked', '_descriptor')
 
     class TARGETS(object):
@@ -158,9 +167,8 @@ class FittingItem(GUIItem, HasIntCD):
         IN_INVENTORY = 2
         OTHER = 3
 
-    def __init__(self, intCompactDescr, proxy=None, isBoughtForAltPrice=False):
-        GUIItem.__init__(self, proxy)
-        HasIntCD.__init__(self, intCompactDescr)
+    def __init__(self, intCompactDescr, proxy=None, isBoughtForAltPrice=False, strCD=None):
+        super(FittingItem, self).__init__(intCD=HasIntCD(intCompactDescr), strCD=strCD)
         self._isBoughtForAltPrice = isBoughtForAltPrice
         self._rentInfo = RentalInfoProvider(None, None, None, None, None, None)
         self._restoreInfo = None
@@ -499,7 +507,7 @@ class FittingItem(GUIItem, HasIntCD):
         if other is None:
             return 1
         else:
-            res = HasIntCD.__cmp__(self, other)
+            res = cmp(self._intCD, other.intCDO)
             if res:
                 return res
             res = self._sortByType(other)

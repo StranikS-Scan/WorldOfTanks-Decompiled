@@ -33,6 +33,9 @@ class GameStateTracker(IGameStateTracker):
     def onAccountBecomePlayer(self):
         self._invoke('onAccountBecomePlayer')
 
+    def onAccountBecomeNonPlayer(self):
+        self._invoke('onAccountBecomeNonPlayer')
+
     def onLobbyStarted(self, ctx):
         self._invoke('onLobbyStarted', ctx)
 

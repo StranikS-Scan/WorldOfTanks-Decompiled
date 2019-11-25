@@ -244,7 +244,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta):
         if items:
             self.sendRequest(SetVehicleUnitCtx(vTypeCD=items[0], waitingID='prebattle/change_settings'))
 
-    def _onUserActionReceived(self, _, user):
+    def _onUserActionReceived(self, _, user, shadowMode):
         self._updateRallyData()
         if self._candidatesDP is not None and self._candidatesDP.hasCandidate(user.getID()):
             self.rebuildCandidatesDP()
@@ -348,7 +348,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta):
                     for changedVehCD in vehDiff:
                         vehicle = self.itemsCache.items.getItemByCD(changedVehCD)
                         if not vehicle.activeInNationGroup and selected[0] == changedVehCD:
-                            itemCD = iterVehTypeCDsInNationGroup(vehicle.intCompactDescr).next()
+                            itemCD = iterVehTypeCDsInNationGroup(vehicle.intCD).next()
                             self._selectVehicles([itemCD])
 
             return

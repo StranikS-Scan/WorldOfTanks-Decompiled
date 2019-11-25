@@ -3,12 +3,23 @@
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getBuyOptionalDevicesUrl, getBuyEquipmentUrl
 from gui.Scaleform.daapi.view.meta.RegularItemsTabViewMeta import RegularItemsTabViewMeta
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
-from gui.shared.event_dispatcher import showWebShop
+from gui.shared.event_dispatcher import showWebShop, showBattleBoosterSellDialog
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 
 class RegularItemsTabView(RegularItemsTabViewMeta):
+    itemsCache = dependency.descriptor(IItemsCache)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def sellItem(self, itemId):
-        self._sellItems(itemId)
+        dataCompactId = int(itemId)
+        item = self.itemsCache.items.getItemByCD(dataCompactId)
+        if item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER:
+            showBattleBoosterSellDialog(dataCompactId)
+        else:
+            self._sellItems(itemId)
 
     def navigateToStore(self):
         if self._currentTabId == STORAGE_CONSTANTS.INVENTORY_TAB_ALL:

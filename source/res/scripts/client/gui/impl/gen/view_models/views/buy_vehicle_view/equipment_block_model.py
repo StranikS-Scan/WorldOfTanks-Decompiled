@@ -10,6 +10,9 @@ from gui.impl.gen.view_models.views.buy_vehicle_view.additional_equipment_slot_m
 class EquipmentBlockModel(ViewModel):
     __slots__ = ('onSelectTradeOffVehicle', 'onCancelTradeOffVehicle')
 
+    def __init__(self, properties=22, commands=2):
+        super(EquipmentBlockModel, self).__init__(properties=properties, commands=commands)
+
     @property
     def totalPrice(self):
         return self._getViewModel(0)

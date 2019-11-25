@@ -31,7 +31,6 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.hangar.carousels import TankCarousel
     from gui.Scaleform.daapi.view.lobby.hangar.carousels import RankedTankCarousel
     from gui.Scaleform.daapi.view.lobby.hangar.carousels import EpicBattleTankCarousel
-    from gui.Scaleform.daapi.view.lobby.hangar.academy import Academy
     from gui.Scaleform.daapi.view.lobby.hangar.StrongholdView import StrongholdView
     from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import BrowserView
     from gui.Scaleform.daapi.view.lobby.hangar.hangar_header import HangarHeader
@@ -55,7 +54,6 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.manual.manual_chapter_view import ManualChapterView
     from gui.Scaleform.daapi.view.lobby.hangar.progressive_reward_widget import ProgressiveRewardWidget
     return (ConditionalViewSettings(VIEW_ALIAS.LOBBY_HANGAR, BootcampComponentOverride(Hangar, BCHangar), 'hangar.swf', ViewTypes.LOBBY_SUB, None, VIEW_ALIAS.LOBBY_HANGAR, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(VIEW_ALIAS.LOBBY_ACADEMY, Academy, 'academyView.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_ACADEMY, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.LOBBY_STRONGHOLD, StrongholdView, 'StrongholdView.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_STRONGHOLD, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.BROWSER_VIEW, BrowserView, 'browserScreen.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE, True),
      ViewSettings(VIEW_ALIAS.WIKI_VIEW, ManualMainView, 'manual.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.WIKI_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
@@ -96,7 +94,6 @@ class HangarPackageBusinessHandler(PackageBusinessHandler):
         listeners = ((VIEW_ALIAS.TANK_CAROUSEL_FILTER_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.CREW_ABOUT_DOG_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.LOBBY_HANGAR, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.LOBBY_ACADEMY, self.loadAcademy),
          (VIEW_ALIAS.LOBBY_STRONGHOLD, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BROWSER_VIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.TECHNICAL_MAINTENANCE, self.loadViewByCtxEvent),
@@ -111,11 +108,3 @@ class HangarPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.WIKI_VIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.MANUAL_CHAPTER_VIEW, self.loadViewByCtxEvent))
         super(HangarPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
-
-    def loadAcademy(self, event):
-        view = self.findViewByAlias(ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_ACADEMY)
-        if view is not None:
-            view.reload()
-        else:
-            self.loadViewByCtxEvent(event)
-        return

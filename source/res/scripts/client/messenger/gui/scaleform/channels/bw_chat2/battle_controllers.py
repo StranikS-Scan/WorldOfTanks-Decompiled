@@ -70,9 +70,9 @@ class _ChannelController(BattleLayout):
         return (False, getBroadcastIsInCoolDownMessage(MESSENGER_LIMITS.BROADCASTS_FROM_CLIENT_COOLDOWN_SEC)) if self.proto.arenaChat.isBroadcastInCooldown() else (True, '')
 
     def _formatMessage(self, message, doFormatting=True):
-        dbID = message.accountDBID
-        isCurrent = isCurrentPlayer(message.accountDBID)
-        return (isCurrent, message.text) if not doFormatting else (isCurrent, self._mBuilder.setColors(dbID).setName(dbID, message.accountName).setText(message.text).build())
+        avatarSessionID = message.avatarSessionID
+        isCurrent = isCurrentPlayer(avatarSessionID)
+        return (isCurrent, message.text) if not doFormatting else (isCurrent, self._mBuilder.setColors(avatarSessionID).setName(avatarSessionID, message.accountName).setText(message.text).build())
 
     def _formatCommand(self, command):
         raise SoftException('This method should not be reached in this context')
@@ -101,9 +101,9 @@ class TeamChannelController(_ChannelController):
     def _formatCommand(self, command):
         isCurrent = False
         if command.getCommandType() == MESSENGER_COMMAND_TYPE.BATTLE:
-            dbID = command.getSenderID()
+            avatarSessionID = command.getSenderID()
             isCurrent = command.isSender()
-            text = self._mBuilder.setColors(dbID).setName(dbID).setText(command.getCommandText()).build()
+            text = self._mBuilder.setColors(avatarSessionID).setName(avatarSessionID).setText(command.getCommandText()).build()
         else:
             text = command.getCommandText()
         return (isCurrent, text)
@@ -128,7 +128,7 @@ class EpicTeamChannelController(TeamChannelController):
         respawnCtrl = sessionProvider.dynamic.respawn
         if respawnCtrl and respawnCtrl.isRespawnVisible():
             return True
-        senderVID = sessionProvider.getCtx().getVehIDByAccDBID(senderID)
+        senderVID = sessionProvider.getCtx().getVehIDBySessionID(senderID)
 
         def validatePosition(position):
             minimapCenter = mapsCtrl.getMinimapCenterPosition()
@@ -150,7 +150,7 @@ class EpicTeamChannelController(TeamChannelController):
             targetInRange = validatePosition(markingPos)
         return senderInRange or targetInRange
 
-    def __getNameSuffix(self, dbID):
+    def __getNameSuffix(self, avatarSessionID):
         suffix = ''
         componentSystem = self.sessionProvider.arenaVisitor.getComponentSystem()
         sectorBaseComp = getattr(componentSystem, 'sectorBaseComponent', None)
@@ -162,7 +162,7 @@ class EpicTeamChannelController(TeamChannelController):
             if destructibleEntityComp is None:
                 LOG_ERROR('Expected DestructibleEntityComponent not present!')
                 return suffix
-            senderVID = self.sessionProvider.getCtx().getVehIDByAccDBID(dbID)
+            senderVID = self.sessionProvider.getCtx().getVehIDBySessionID(avatarSessionID)
             adp = self.sessionProvider.getArenaDP()
             vo = adp.getVehicleStats(senderVID)
             sectorID = vo.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.PHYSICAL_SECTOR)
@@ -172,27 +172,27 @@ class EpicTeamChannelController(TeamChannelController):
             if hqs:
                 hqActive = hqs[hqs.keys()[0]].isActive
             nonCapturedBases = sectorBaseComp.getNumNonCapturedBasesByLane(lane)
-            if nonCapturedBases == 0 or hqActive and sectorID > 6:
-                suffix = '&lt;' + i18n.makeString(EPIC_BATTLE.ZONE_HEADQUARTERS_TEXT) + '&gt;'
-            elif 0 < nonCapturedBases < 3:
+            if 0 < sectorID < 7:
                 suffix = 0 < lane < 4 and '&lt;' + i18n.makeString(EPIC_BATTLE.ZONE_ZONE_TEXT) + ' ' + ID_TO_BASENAME[sectorID] + '&gt;'
+            elif nonCapturedBases == 0 or hqActive and sectorID > 6:
+                suffix = '&lt;' + i18n.makeString(EPIC_BATTLE.ZONE_HEADQUARTERS_TEXT) + '&gt;'
             return suffix
 
     def _formatMessage(self, message, doFormatting=True):
-        dbID = message.accountDBID
-        isCurrent = isCurrentPlayer(message.accountDBID)
+        avatarSessionID = message.avatarSessionID
+        isCurrent = isCurrentPlayer(avatarSessionID)
         if not doFormatting:
             return (isCurrent, message.text)
-        suffix = self.__getNameSuffix(dbID)
-        return (isCurrent, self._mBuilder.setColors(dbID).setName(dbID, message.accountName, suffix=suffix).setText(message.text).build())
+        suffix = self.__getNameSuffix(avatarSessionID)
+        return (isCurrent, self._mBuilder.setColors(avatarSessionID).setName(avatarSessionID, message.accountName, suffix=suffix).setText(message.text).build())
 
     def _formatCommand(self, command):
         isCurrent = False
         if command.getCommandType() == MESSENGER_COMMAND_TYPE.BATTLE:
-            dbID = command.getSenderID()
+            avatarSessionID = command.getSenderID()
             isCurrent = command.isSender()
-            suffix = self.__getNameSuffix(dbID)
-            text = self._mBuilder.setColors(dbID).setName(dbID, suffix=suffix).setText(command.getCommandText()).build()
+            suffix = self.__getNameSuffix(avatarSessionID)
+            text = self._mBuilder.setColors(avatarSessionID).setName(avatarSessionID, suffix=suffix).setText(command.getCommandText()).build()
         else:
             text = command.getCommandText()
         return (isCurrent, text)

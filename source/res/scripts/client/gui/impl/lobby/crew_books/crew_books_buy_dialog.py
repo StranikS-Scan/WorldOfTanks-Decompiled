@@ -2,14 +2,15 @@
 # Embedded file name: scripts/client/gui/impl/lobby/crew_books/crew_books_buy_dialog.py
 import logging
 import adisp
-from gui.shared.utils.decorators import process
 from async import async, await, AsyncEvent, AsyncReturn, AsyncScope, BrokenPromiseError
-from frameworks.wulf import Window, WindowStatus, WindowSettings
+from frameworks.wulf import Window, WindowStatus, WindowSettings, ViewSettings
 from gui import SystemMessages, DialogsInterface
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsSingleItemModalMeta
 from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
+from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew_books.crew_books_buy_dialog_model import CrewBooksBuyDialogModel
+from gui.impl.lobby.dialogs.contents.common_balance_content import CommonBalanceContent
 from gui.impl.pub.dialog_window import DialogButtons, DialogLayer, DialogContent, DialogResult
 from gui.impl.wrappers.background_blur import WGUIBackgroundBlurSupportImpl
 from gui.impl.wrappers.user_format_string_arg_model import UserFormatStringArgModel
@@ -17,6 +18,7 @@ from gui.shared.formatters.tankmen import getItemPricesViewModel
 from gui.shared.gui_items.Vehicle import getIconResourceName
 from gui.shared.gui_items.processors.module import ModuleBuyer
 from gui.shared.money import Currency
+from gui.shared.utils.decorators import process
 from helpers.dependency import descriptor
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
@@ -30,7 +32,7 @@ class CrewBooksBuyDialog(Window):
     def __init__(self, parent, crewBookCD):
         settings = WindowSettings()
         settings.flags = DialogLayer.TOP_WINDOW
-        settings.content = DialogContent(R.views.lobby.crew_books.crew_books_buy_dialog.CrewBooksBuyDialog(), CrewBooksBuyDialogModel)
+        settings.content = DialogContent(ViewSettings(R.views.lobby.crew_books.crew_books_buy_dialog.CrewBooksBuyDialog(), model=CrewBooksBuyDialogModel()))
         settings.parent = parent
         super(CrewBooksBuyDialog, self).__init__(settings)
         self.__bookGuiItem = self.__itemsCache.items.getItemByCD(crewBookCD)
@@ -62,11 +64,13 @@ class CrewBooksBuyDialog(Window):
 
     def _initialize(self, *args, **kwargs):
         super(CrewBooksBuyDialog, self)._initialize()
+        self.content.setChildView(R.dynamic_ids.crew_books_buy_dialog.balance_content(), CommonBalanceContent())
         with self.viewModel.transaction() as vm:
+            vm.setDialogTitle(backport.text(R.strings.crew_books.buy.confirmation.dyn(self.__bookGuiItem.getBookType()).title(), nation=backport.text(R.strings.nations.dyn(self.__bookGuiItem.getNation())())))
             vm.setBookIcon(R.images.gui.maps.icons.crewBooks.books.large.dyn(getIconResourceName(self.__bookGuiItem.icon))())
             vm.setBookTitle(self.__bookGuiItem.getName())
             bookDescriptionFmtArgs = vm.getBookDescriptionFmtArgs()
-            bookDescriptionFmtArgs.addViewModel(UserFormatStringArgModel(self.__gui.systemLocale.getNumberFormat(self.__bookGuiItem.getXP()), 'exp', R.styles.VehicleStatusCriticalSmallTextStyle()))
+            bookDescriptionFmtArgs.addViewModel(UserFormatStringArgModel(self.__gui.systemLocale.getNumberFormat(self.__bookGuiItem.getXP()), 'exp', R.styles.HighlightTextStyle()))
             vm.setBookDescription(R.strings.crew_books.screen.bookType.dyn(self.__bookGuiItem.getBookSpread()).info.title())
             bookDescriptionFmtArgs.invalidate()
             self.__updateVMsInActionPriceList()

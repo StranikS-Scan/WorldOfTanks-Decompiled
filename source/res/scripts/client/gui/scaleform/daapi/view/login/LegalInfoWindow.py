@@ -29,7 +29,7 @@ class LegalInfoWindow(LegalInfoWindowMeta):
 
     def getLegalInfo(self):
         info = ''
-        LICENSES_PATH = '../licenses.txt'
+        LICENSES_PATH = 'licenses.txt'
         try:
             f = open(LICENSES_PATH, 'r')
         except IOError:

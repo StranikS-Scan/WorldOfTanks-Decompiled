@@ -331,9 +331,7 @@ class SectorBasePlugin(ProgressTimerPlugin):
 
     def __stopBlockState(self):
         self._sessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.CAPTURE_BLOCKED, 0)
-        if self.__blockedCB is not None:
-            BigWorld.cancelCallback(self.__blockedCB)
-            self.__blockedCB = None
+        self.__blockedCB = None
         return
 
 

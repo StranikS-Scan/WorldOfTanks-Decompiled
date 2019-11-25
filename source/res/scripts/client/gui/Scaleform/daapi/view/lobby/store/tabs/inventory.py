@@ -121,7 +121,7 @@ class InventoryShellTab(InventoryItemsTab, StoreShellTab):
             vehicle = self._items.getItemByCD(int(self._filterData['vehicleCD']))
             shellsList = [ x.intCD for x in vehicle.gun.defaultAmmo ]
             if vehicle.hasNationGroup:
-                targetVehicleCD = iterVehTypeCDsInNationGroup(vehicle.intCompactDescr).next()
+                targetVehicleCD = iterVehTypeCDsInNationGroup(vehicle.intCD).next()
                 targetVehicle = self._items.getItemByCD(targetVehicleCD)
                 for ammo in targetVehicle.gun.defaultAmmo:
                     shellsList.append(ammo.intCD)

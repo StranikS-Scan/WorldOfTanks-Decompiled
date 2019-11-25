@@ -525,7 +525,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__ctx.onEditModeStarted += self.__onEditModeStarted
         self.__ctx.onGetItemBackToHand += self.__onGetItemBackToHand
         self.__ctx.onAnchorsStateChanged += self.__onAnchorsStateChanged
-        self.__ctx.c11CameraManager.onTurretRotated += self.__onTurretRotated
+        self.__ctx.c11CameraManager.onTurretAndGunRotated += self.__onTurretAndGunRotated
         g_currentVehicle.onChangeStarted += self.__onVehicleChangeStarted
         g_currentVehicle.onChanged += self.__onVehicleChanged
         self.soundManager.playInstantSound(SOUNDS.ENTER)
@@ -616,7 +616,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__ctx.onEditModeStarted -= self.__onEditModeStarted
         self.__ctx.onGetItemBackToHand -= self.__onGetItemBackToHand
         self.__ctx.onAnchorsStateChanged -= self.__onAnchorsStateChanged
-        self.__ctx.c11CameraManager.onTurretRotated -= self.__onTurretRotated
+        self.__ctx.c11CameraManager.onTurretAndGunRotated -= self.__onTurretAndGunRotated
         g_currentVehicle.onChangeStarted -= self.__onVehicleChangeStarted
         g_currentVehicle.onChanged -= self.__onVehicleChanged
         if self.__initAnchorsPositionsCallback is not None:
@@ -1002,7 +1002,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         anchorStateVOs = [ CustomizationAnchorsStateVO(uid, state)._asdict() for uid, state in changedStates.iteritems() ]
         self.as_setAnchorsStateS({'anchorsData': anchorStateVOs})
 
-    def __onTurretRotated(self):
+    def __onTurretAndGunRotated(self):
         self.__setAnchorsInitData()
         tabIndex = self.__ctx.currentTab
         if tabIndex in C11nTabs.REGIONS:

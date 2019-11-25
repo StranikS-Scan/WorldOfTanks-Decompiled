@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/reward_window.py
 import logging
-from frameworks.wulf import ViewFlags
+from frameworks.wulf import ViewSettings
 from frameworks.wulf.gui_constants import WindowFlags
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import PackRentVehiclesAwardComposer, AnniversaryAwardComposer, CurtailingAwardsComposer, RawLabelBonusComposer
@@ -44,8 +44,8 @@ class BaseRewardWindowContent(ViewImpl):
      'tokens',
      'goodies')
 
-    def __init__(self, layoutID, viewModelClazz, ctx=None):
-        super(BaseRewardWindowContent, self).__init__(layoutID, ViewFlags.VIEW, viewModelClazz)
+    def __init__(self, settings, ctx=None):
+        super(BaseRewardWindowContent, self).__init__(settings)
         self.__items = {}
         if ctx is not None:
             self._eventName = ctx.get('eventName', BASE_EVENT_NAME)
@@ -109,8 +109,8 @@ class BaseRewardWindowContent(ViewImpl):
 class PiggyBankRewardWindowContent(BaseRewardWindowContent):
     __slots__ = ('_credits', '_isPremActive')
 
-    def __init__(self, layoutID, viewModelClazz, ctx=None):
-        super(PiggyBankRewardWindowContent, self).__init__(layoutID, viewModelClazz, ctx)
+    def __init__(self, settings, ctx=None):
+        super(PiggyBankRewardWindowContent, self).__init__(settings, ctx)
         if ctx is not None:
             self._isPremActive = ctx.get('isPremActive', False)
             self._credits = ctx.get('credits', 0)
@@ -144,8 +144,8 @@ class PiggyBankRewardWindowContent(BaseRewardWindowContent):
 class QuestRewardWindowContent(BaseRewardWindowContent):
     __slots__ = ('_quest', '_vehicles')
 
-    def __init__(self, layoutID, viewModelClazz, ctx=None):
-        super(QuestRewardWindowContent, self).__init__(layoutID, viewModelClazz, ctx)
+    def __init__(self, settings, ctx=None):
+        super(QuestRewardWindowContent, self).__init__(settings, ctx)
         if ctx is not None:
             self._quest = ctx.get('quest', None)
             self._vehicles = ctx.get('bonusVehicles', {})
@@ -230,14 +230,18 @@ class RewardWindow(RewardWindowBase):
     __slots__ = ()
 
     def __init__(self, ctx=None, parent=None):
-        super(RewardWindow, self).__init__(parent=parent, content=QuestRewardWindowContent(layoutID=R.views.lobby.reward_window.reward_window_content.RewardWindowContent(), viewModelClazz=RewardWindowContentModel, ctx=ctx))
+        contentSettings = ViewSettings(R.views.lobby.reward_window.reward_window_content.RewardWindowContent())
+        contentSettings.model = RewardWindowContentModel()
+        super(RewardWindow, self).__init__(parent=parent, content=QuestRewardWindowContent(contentSettings, ctx=ctx))
 
 
 class TwitchRewardWindow(RewardWindowBase):
     __slots__ = ()
 
     def __init__(self, ctx=None, parent=None):
-        super(TwitchRewardWindow, self).__init__(parent=parent, content=TwitchRewardWindowContent(layoutID=R.views.lobby.reward_window.twitch_reward_window_content.TwitchRewardWindowContent(), viewModelClazz=RewardWindowContentModel, ctx=ctx))
+        contentSettings = ViewSettings(R.views.lobby.reward_window.twitch_reward_window_content.TwitchRewardWindowContent())
+        contentSettings.model = RewardWindowContentModel()
+        super(TwitchRewardWindow, self).__init__(parent=parent, content=TwitchRewardWindowContent(contentSettings, ctx=ctx))
 
 
 class GiveAwayRewardWindowContent(QuestRewardWindowContent):
@@ -261,7 +265,9 @@ class GiveAwayRewardWindow(RewardWindowBase):
     __slots__ = ()
 
     def __init__(self, ctx=None, parent=None):
-        super(GiveAwayRewardWindow, self).__init__(parent=parent, content=GiveAwayRewardWindowContent(layoutID=R.views.lobby.reward_window.twitch_reward_window_content.TwitchRewardWindowContent(), viewModelClazz=RewardWindowContentModel, ctx=ctx))
+        contentSettings = ViewSettings(R.views.lobby.reward_window.twitch_reward_window_content.TwitchRewardWindowContent())
+        contentSettings.model = RewardWindowContentModel()
+        super(GiveAwayRewardWindow, self).__init__(parent=parent, content=GiveAwayRewardWindowContent(contentSettings, ctx=ctx))
 
     def _initialize(self):
         super(GiveAwayRewardWindow, self)._initialize()
@@ -272,7 +278,9 @@ class PiggyBankRewardWindow(RewardWindowBase):
     __slots__ = ()
 
     def __init__(self, ctx=None, parent=None):
-        super(PiggyBankRewardWindow, self).__init__(parent=parent, content=PiggyBankRewardWindowContent(layoutID=R.views.lobby.reward_window.piggy_bank_reward_window_content.PiggyBankRewardWindowContent(), viewModelClazz=PiggyBankRewardWindowContentModel, ctx=ctx))
+        contentSettings = ViewSettings(R.views.lobby.reward_window.piggy_bank_reward_window_content.PiggyBankRewardWindowContent())
+        contentSettings.model = PiggyBankRewardWindowContentModel()
+        super(PiggyBankRewardWindow, self).__init__(parent=parent, content=PiggyBankRewardWindowContent(contentSettings, ctx=ctx))
 
     def _initialize(self):
         super(PiggyBankRewardWindow, self)._initialize()

@@ -6,6 +6,9 @@ from gui.impl.gen.view_models.ui_kit.list_model import ListModel
 class MapsBlacklistViewModel(ViewModel):
     __slots__ = ('onBackAction', 'onCloseEvent', 'onMapAddToBlacklistEvent', 'onMapRemoveFromBlacklistEvent', 'onFilterReset', 'onInitialized')
 
+    def __init__(self, properties=7, commands=6):
+        super(MapsBlacklistViewModel, self).__init__(properties=properties, commands=commands)
+
     @property
     def disabledMaps(self):
         return self._getViewModel(0)

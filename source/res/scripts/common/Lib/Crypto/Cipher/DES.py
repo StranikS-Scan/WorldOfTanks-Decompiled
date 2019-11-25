@@ -2,7 +2,7 @@
 # Embedded file name: scripts/common/Lib/Crypto/Cipher/DES.py
 __revision__ = '$Id$'
 from Crypto.Cipher import blockalgo
-from Crypto.Cipher import _DES
+import _DES
 
 class DESCipher(blockalgo.BlockAlgo):
 

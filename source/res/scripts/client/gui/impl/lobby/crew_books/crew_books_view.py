@@ -3,7 +3,7 @@
 import WWISE
 from CurrentVehicle import g_currentVehicle
 from async import async, await
-from frameworks.wulf import ViewFlags, ViewStatus
+from frameworks.wulf import ViewFlags, ViewStatus, ViewSettings
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.framework import ScopeTemplates
 from gui.impl import backport
@@ -41,7 +41,12 @@ class CrewBooksView(ViewImpl):
     __slots__ = ('__vehicle', '__bookGuiItemList', '__selectedBookGuiItem', '__selectedTankmanVM', '__selectedBookIndex', '__selectedBookIndex', '__invalidTypes')
 
     def __init__(self, *args, **kwargs):
-        super(CrewBooksView, self).__init__(R.views.lobby.crew_books.crew_books_view.CrewBooksView(), ViewFlags.LOBBY_SUB_VIEW, CrewBooksViewModel, *args, **kwargs)
+        settings = ViewSettings(R.views.lobby.crew_books.crew_books_view.CrewBooksView())
+        settings.flags = ViewFlags.LOBBY_SUB_VIEW
+        settings.model = CrewBooksViewModel()
+        settings.args = args
+        settings.kwargs = kwargs
+        super(CrewBooksView, self).__init__(settings)
         self.__selectedTankmanVM = None
         self.__selectedBookGuiItem = None
         self.__selectedBookIndex = None
@@ -485,7 +490,12 @@ class CrewBooksLackView(ViewImpl):
     __slots__ = ('__vehicle', '__booksOnStock', '__existBooks')
 
     def __init__(self, *args, **kwargs):
-        super(CrewBooksLackView, self).__init__(R.views.lobby.crew_books.crew_books_lack_view.CrewBooksLackView(), ViewFlags.LOBBY_SUB_VIEW, CrewBooksLackViewModel, *args, **kwargs)
+        settings = ViewSettings(R.views.lobby.crew_books.crew_books_lack_view.CrewBooksLackView())
+        settings.flags = ViewFlags.LOBBY_SUB_VIEW
+        settings.model = CrewBooksLackViewModel()
+        settings.args = args
+        settings.kwargs = kwargs
+        super(CrewBooksLackView, self).__init__(settings)
         self.__vehicle = g_currentVehicle.item
         self.__booksOnStock = self.__itemsCache.items.getItems(GUI_ITEM_TYPE.CREW_BOOKS, REQ_CRITERIA.CREW_ITEM.IN_ACCOUNT)
         self.__existBooks = self.__itemsCache.items.getItems(GUI_ITEM_TYPE.CREW_BOOKS, REQ_CRITERIA.NATIONS([self.__vehicle.nationID]))

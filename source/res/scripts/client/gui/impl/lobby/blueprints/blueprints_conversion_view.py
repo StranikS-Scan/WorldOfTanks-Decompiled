@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/blueprints/blueprints_conversion_view.py
+from frameworks.wulf import ViewSettings
 from gui import SystemMessages
 from gui.SystemMessages import SM_TYPE
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -22,7 +23,10 @@ class BlueprintsConversionView(DialogWindow):
     __slots__ = ('__vehicle', '__countFragments')
 
     def __init__(self, vehicleCD, countFragments, parent):
-        content = DialogContent(R.views.common.dialog_view.simple_dialog_content.SimpleDialogContent(), SimpleDialogWindowModel) if countFragments > _MIN_COUNT_FRAGMENTS else None
+        if countFragments > _MIN_COUNT_FRAGMENTS:
+            content = DialogContent(ViewSettings(R.views.common.dialog_view.simple_dialog_content.SimpleDialogContent(), model=SimpleDialogWindowModel()))
+        else:
+            content = None
         super(BlueprintsConversionView, self).__init__(content=content, bottomContent=DialogPricesContent(), parent=parent, balanceContent=FragmentsBalanceContent(vehicleCD), enableBlur=True)
         self.__vehicle = self.__itemsCache.items.getItemByCD(vehicleCD)
         self.__countFragments = countFragments

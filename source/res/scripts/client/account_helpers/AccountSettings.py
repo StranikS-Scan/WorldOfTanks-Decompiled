@@ -12,6 +12,7 @@ import Event
 import WWISE
 from constants import VEHICLE_CLASSES, MAX_VEHICLE_LEVEL
 from items.components.crew_books_constants import CREW_BOOK_RARITY
+from account_helpers.settings_core.settings_constants import GAME
 from account_helpers import gameplay_ctx
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.Scaleform.genConsts.CUSTOMIZATION_ALIASES import CUSTOMIZATION_ALIASES
@@ -69,6 +70,7 @@ REFERRAL_COUNTER = 'referralButtonCounter'
 PROGRESSIVE_REWARD_VISITED = 'progressiveRewardVisited'
 RANKED_AWARDS_COUNTER = 'rankedAwardsCounter'
 RANKED_INFO_COUNTER = 'rankedInfoCounter'
+BOOSTERS_FOR_CREDITS_SLOT_COUNTER = 'boostersForCreditsSlotCounter'
 PROFILE_TECHNIQUE = 'profileTechnique'
 PROFILE_TECHNIQUE_MEMBER = 'profileTechniqueMember'
 SHOW_CRYSTAL_HEADER_BAND = 'showCrystalHeaderBand'
@@ -92,6 +94,7 @@ APPLIED_COLOR_SETTINGS = 'appliedColorSettings'
 SELECTED_QUEST_IN_REPLAY = 'SELECTED_QUEST_IN_REPLAY'
 LAST_SELECTED_PM_BRANCH = 'lastSelectedPMBranch'
 WHEELED_DEATH_DELAY_COUNT = 'wheeledDeathCounter'
+ANONYMIZER = GAME.ANONYMIZER
 CUSTOMIZATION_SECTION = 'customization'
 PROJECTION_DECAL_TAB_SHOWN_FIELD = CUSTOMIZATION_ALIASES.PROJECTION_DECAL_TAB_SHOWN_FIELD
 USER_NUMBER_TAB_SHOWN_FIELD = CUSTOMIZATION_ALIASES.USER_NUMBER_TAB_SHOWN_FIELD
@@ -105,6 +108,7 @@ TRAJECTORY_VIEW_HINT_SECTION = 'trajectoryViewHint'
 PRE_BATTLE_HINT_SECTION = 'preBattleHintSection'
 QUEST_PROGRESS_HINT_SECTION = 'questProgressHint'
 HELP_SCREEN_HINT_SECTION = 'helpScreenHint'
+WATCHED_PRE_BATTLE_TIPS_SECTION = 'watchedPreBattleTipsSection'
 LAST_DISPLAY_DAY = 'lastDisplayDay'
 HINTS_LEFT = 'hintsLeft'
 NUM_BATTLES = 'numBattles'
@@ -518,7 +522,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                         'c11nHistoricallyAccurate': True,
                                                         'hangarCamParallaxEnabled': True,
                                                         'hangarCamPeriod': True,
-                                                        'showDamageIcon': True},
+                                                        'showDamageIcon': True,
+                                                        ANONYMIZER: True},
                                        'GraphicSettings': {'ScreenSettings': {'gammaSetting': True,
                                                                               'colorFilter': True},
                                                            'AdvancedGraphicSettings': {'HAVOK_ENABLED': True,
@@ -528,7 +533,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                                                         'battleBorderMapMode': True},
                                                             'feedbackQuestsProgress': {'progressViewType': True,
                                                                                        'progressViewConditions': True}},
-                                       'ControlsSettings': {'showQuestProgress': True}},
+                                       'ControlsSettings': {'showQuestProgress': True,
+                                                            'chargeFire': True}},
                 SHOW_OPT_DEVICE_HINT: True,
                 'c11nHistoricallyAccurate': True,
                 LAST_BADGES_VISIT: 0,
@@ -545,6 +551,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                                         LAST_DISPLAY_DAY: 0,
                                                                         NUM_BATTLES: 0},
                                           HELP_SCREEN_HINT_SECTION: {}},
+                WATCHED_PRE_BATTLE_TIPS_SECTION: {},
                 SIEGE_HINT_SECTION: {HINTS_LEFT: 3,
                                      LAST_DISPLAY_DAY: 0,
                                      NUM_BATTLES: 0},
@@ -571,7 +578,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 NEW_LOBBY_TAB_COUNTER: {},
                 REFERRAL_COUNTER: 1,
                 RANKED_AWARDS_COUNTER: 1,
-                RANKED_INFO_COUNTER: 1},
+                RANKED_INFO_COUNTER: 1,
+                BOOSTERS_FOR_CREDITS_SLOT_COUNTER: 1},
  KEY_NOTIFICATIONS: {ELEN_NOTIFICATIONS: {MISSIONS_CONSTANTS.ELEN_EVENT_STARTED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_FINISHED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_TAB_VISITED: set()},

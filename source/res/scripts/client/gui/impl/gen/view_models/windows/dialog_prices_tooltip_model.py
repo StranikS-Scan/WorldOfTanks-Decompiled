@@ -6,6 +6,9 @@ from frameworks.wulf import ViewModel
 class DialogPricesTooltipModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=8, commands=0):
+        super(DialogPricesTooltipModel, self).__init__(properties=properties, commands=commands)
+
     def getValueMainCost(self):
         return self._getString(0)
 

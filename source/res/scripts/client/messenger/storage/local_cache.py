@@ -52,7 +52,10 @@ class RevCachedStorage(SimpleCachedStorage):
 
     def __init__(self):
         super(RevCachedStorage, self).__init__()
-        self.__reset()
+        self.__rev = None
+        self.__isRevRqSent = False
+        self.__record = []
+        return
 
     def init(self):
         self.__reset()
@@ -83,7 +86,6 @@ class RevCachedStorage(SimpleCachedStorage):
                 return
             prevRev = record.pop(0)
             if self.__rev == prevRev:
-                self.__isRevRqSent = True
                 restored = self._setCachedData(record)
                 self.onRestoredFromCache(restored)
             self.__record = []

@@ -3,7 +3,7 @@
 import collections
 import sys
 from gui.shared.items_parameters import params_cache
-from gui.shared.utils import WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME
+from gui.shared.utils import WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, DUAL_GUN_CHARGE_TIME
 _BACKWARD_QUALITY_PARAMS = ['aimingTime',
  'shotDispersionAngle',
  'weight',
@@ -18,7 +18,8 @@ _BACKWARD_QUALITY_PARAMS = ['aimingTime',
  'switchOnTime',
  'switchOffTime',
  WHEELED_SWITCH_ON_TIME,
- WHEELED_SWITCH_OFF_TIME]
+ WHEELED_SWITCH_OFF_TIME,
+ DUAL_GUN_CHARGE_TIME]
 NEGATIVE_PARAMS = ['switchOnTime', 'switchOffTime']
 _CUSTOM_QUALITY_PARAMS = {'vehicleWeight': (True, False),
  'clipFireRate': (True, True, False),

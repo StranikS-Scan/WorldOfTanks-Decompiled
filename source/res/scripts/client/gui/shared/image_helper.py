@@ -18,8 +18,12 @@ def getTextureLinkByID(imageID):
 class ImageHelper(object):
 
     @staticmethod
-    def getMemoryTexturePath(image):
-        return mapTextureToTheMemory(image)
+    def getMemoryTexturePath(image, temp=True):
+        return mapTextureToTheMemory(image, temp=temp)
+
+    @staticmethod
+    def removeTextureFromMemory(textureID):
+        removeTextureFromMemory(textureID)
 
     @staticmethod
     def requestImageByUrl(url, callback, size=None, defaultGetter=None):

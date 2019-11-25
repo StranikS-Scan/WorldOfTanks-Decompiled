@@ -519,7 +519,7 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
             self._invokeMarker(handle, 'updateHealth', newHealth, self.__getVehicleDamageType(aInfo), constants.ATTACK_REASONS[attackReasonID])
 
     def __onPlayerSpeaking(self, accountDBID, flag):
-        vehicleID = self.sessionProvider.getCtx().getVehIDByAccDBID(accountDBID)
+        vehicleID = self.sessionProvider.getArenaDP().getVehIDByAccDBID(accountDBID)
         if vehicleID in self._markers:
             marker = self._markers[vehicleID]
             if marker.setSpeaking(flag):

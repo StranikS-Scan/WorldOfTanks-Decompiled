@@ -8,6 +8,9 @@ from gui.impl.gen.view_models.ui_kit.list_model import ListModel
 class CrewBooksDialogContentModel(ViewModel):
     __slots__ = ('onClosed', 'onUseBtnClick')
 
+    def __init__(self, properties=7, commands=2):
+        super(CrewBooksDialogContentModel, self).__init__(properties=properties, commands=commands)
+
     @property
     def crewBookTankmenList(self):
         return self._getViewModel(0)

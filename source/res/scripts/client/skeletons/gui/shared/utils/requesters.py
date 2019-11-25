@@ -14,6 +14,17 @@ class IRequester(object):
         raise NotImplementedError
 
 
+class IAnonymizerRequester(IRequester):
+
+    @property
+    def isPlayerAnonymized(self):
+        raise NotImplementedError
+
+    @property
+    def contactsFeedback(self):
+        raise NotImplementedError
+
+
 class IInventoryRequester(IRequester):
 
     def invalidateItem(self, itemTypeID, invIdx):
@@ -275,6 +286,10 @@ class IStatsRequester(IRequester):
 
     @property
     def isGoldFishBonusApplied(self):
+        raise NotImplementedError
+
+    @property
+    def isAnonymousRestricted(self):
         raise NotImplementedError
 
     @property

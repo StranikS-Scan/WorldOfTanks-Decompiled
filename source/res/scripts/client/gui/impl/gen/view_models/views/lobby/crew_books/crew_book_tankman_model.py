@@ -7,6 +7,9 @@ from gui.impl.gen.view_models.ui_kit.list_model import ListModel
 class CrewBookTankmanModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=17, commands=0):
+        super(CrewBookTankmanModel, self).__init__(properties=properties, commands=commands)
+
     @property
     def tankmanSkillList(self):
         return self._getViewModel(0)

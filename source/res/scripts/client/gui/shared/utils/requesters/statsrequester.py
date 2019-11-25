@@ -7,6 +7,7 @@ from adisp import async
 from gui.shared.money import Money, Currency
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from helpers import time_utils, dependency
+from constants import SPA_ATTRS
 from skeletons.gui.game_control import IWalletController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.utils.requesters import IStatsRequester
@@ -228,7 +229,16 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
 
     @property
     def isGoldFishBonusApplied(self):
-        gfKey = '/common/goldfish_bonus_applied/'
+        gfKey = SPA_ATTRS.GOLFISH_BONUS_APPLIED
+        result = False
+        spaDict = self.SPA
+        if gfKey in spaDict:
+            result = int(spaDict[gfKey])
+        return result
+
+    @property
+    def isAnonymousRestricted(self):
+        gfKey = SPA_ATTRS.ANONYM_RESTRICTED
         result = False
         spaDict = self.SPA
         if gfKey in spaDict:

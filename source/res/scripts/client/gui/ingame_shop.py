@@ -105,8 +105,12 @@ def showBuyBoosterOverlay(itemId, source=None, origin=None):
     _showBuyItemWebOverlay(helpers.getBuyBoostersUrl(), itemId, source, origin)
 
 
-def showBuyBattleBoosterOverlay(itemId, source=None, origin=None):
-    _showBuyItemWebOverlay(helpers.getBuyBattleBoostersUrl(), itemId, source, origin)
+def showBuyCreditsBattleBoosterOverlay(itemId, source=None, origin=None):
+    _showBuyItemWebOverlay(helpers.getBuyCreditsBattleBoostersUrl(), itemId, source, origin)
+
+
+def showBuyBonBattleBoosterOverlay(itemId, source=None, origin=None):
+    _showBuyItemWebOverlay(helpers.getBuyBonBattleBoostersUrl(), itemId, source, origin)
 
 
 def showBuyEquipmentOverlay(itemId, source=None, origin=None):

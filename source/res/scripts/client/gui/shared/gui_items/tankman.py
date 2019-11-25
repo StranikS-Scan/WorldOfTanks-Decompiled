@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/Tankman.py
-from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from helpers import i18n
 from items import tankmen, vehicles, ITEM_TYPE_NAMES, special_crew
 from gui import nationCompareByIndex, TANKMEN_ROLES_ORDER_DICT
@@ -67,8 +66,8 @@ class TankmenComparator(object):
             return cmp(first.lastUserName, second.lastUserName) or 1
 
 
-class Tankman(GUIItem, HasStrCD):
-    __slots__ = ('__descriptor', '_invID', '_nationID', '_itemTypeID', '_itemTypeName', '_combinedRoles', '_dismissedAt', '_isDismissed', '_areClassesCompatible', '_vehicleNativeDescr', '_vehicleInvID', '_vehicleDescr', '_vehicleBonuses', '_vehicleSlotIdx', '_skills', '_skillsMap', '_skinID')
+class Tankman(GUIItem):
+    __slots__ = ('__descriptor', '_invID', '_nationID', '_itemTypeID', '_itemTypeName', '_combinedRoles', '_dismissedAt', '_isDismissed', '_areClassesCompatible', '_vehicleNativeDescr', '_vehicleInvID', '_vehicleDescr', '_vehicleBonuses', '_vehicleSlotIdx', '_skills', '_skillsMap', '_skinID', '_comparator')
 
     class ROLES(object):
         COMMANDER = 'commander'
@@ -85,8 +84,7 @@ class Tankman(GUIItem, HasStrCD):
     _NON_COMMANDER_SKILLS = skills_constants.ACTIVE_SKILLS.difference(skills_constants.COMMANDER_SKILLS)
 
     def __init__(self, strCompactDescr, inventoryID=-1, vehicle=None, dismissedAt=None, proxy=None):
-        GUIItem.__init__(self, proxy)
-        HasStrCD.__init__(self, strCompactDescr)
+        super(Tankman, self).__init__(strCD=HasStrCD(strCompactDescr))
         self.__descriptor = None
         self._invID = inventoryID
         self._nationID = self.descriptor.nationID
@@ -113,8 +111,11 @@ class Tankman(GUIItem, HasStrCD):
         self._skills = self._buildSkills(proxy)
         self._skillsMap = self._buildSkillsMap()
         self._skinID = self._equippedSkinID(proxy)
-        self.__cmp__ = TankmenComparator()
+        self._comparator = TankmenComparator()
         return
+
+    def __cmp__(self, other):
+        return self._comparator(self, other)
 
     def _buildSkills(self, proxy):
         return [ getTankmanSkill(skill, self, proxy) for skill in self.descriptor.skills ]
@@ -538,6 +539,7 @@ class TankmanSkill(GUIItem):
 
 
 class SabatonTankmanSkill(TankmanSkill):
+    __slots__ = ()
 
     def __init__(self, skillName, tankman=None, proxy=None):
         super(SabatonTankmanSkill, self).__init__(skillName, tankman, proxy)
@@ -548,7 +550,7 @@ class SabatonTankmanSkill(TankmanSkill):
         return 'sabaton_brotherhood.png' if skillName == 'brotherhood' else i18n.convert(tankmen.getSkillsConfig().getSkill(skillName).icon)
 
     def getSkillUserName(self, skillName):
-        return i18n.makeString(ITEM_TYPES.TANKMAN_SKILLS_BROTHERHOOD_SABATON) if skillName == 'brotherhood' else tankmen.getSkillsConfig().getSkill(skillName).userString
+        return backport.text(R.strings.item_types.tankman.skills.brotherhood_sabaton()) if skillName == 'brotherhood' else tankmen.getSkillsConfig().getSkill(skillName).userString
 
     @property
     def userName(self):
@@ -570,7 +572,7 @@ class OffspringTankmanSkill(TankmanSkill):
         return 'offspring_brotherhood.png' if skillName == 'brotherhood' else i18n.convert(tankmen.getSkillsConfig().getSkill(skillName).icon)
 
     def getSkillUserName(self, skillName):
-        return i18n.makeString(ITEM_TYPES.TANKMAN_SKILLS_BROTHERHOOD_OFFSPRING) if skillName == 'brotherhood' else tankmen.getSkillsConfig().getSkill(skillName).userString
+        return backport.text(R.strings.item_types.tankman.skills.brotherhood_offspring()) if skillName == 'brotherhood' else tankmen.getSkillsConfig().getSkill(skillName).userString
 
     @property
     def userName(self):

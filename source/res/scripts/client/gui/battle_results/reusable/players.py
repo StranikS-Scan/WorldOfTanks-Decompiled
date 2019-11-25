@@ -9,18 +9,20 @@ from skeletons.gui.lobby_context import ILobbyContext
 _ClanInfo = namedtuple('_ClanInfo', 'clanDBID clanAbbrev')
 
 class PlayerInfo(shared.ItemInfo):
-    __slots__ = ('__dbID', '__team', '__name', '__prebattleID', '__igrType', '__clanInfo', 'squadIndex', '__weakref__', '__isTeamKiller')
+    __slots__ = ('__dbID', '__team', '__fakeName', '__realName', '__prebattleID', '__igrType', '__clanInfo', '__isTeamKiller', 'squadIndex', '__tags', '__weakref__')
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, dbID=0, team=0, name=style.getUnknownPlayerName(), prebattleID=0, igrType=0, clanAbbrev='', clanDBID=0, wasInBattle=True):
+    def __init__(self, dbID=0, team=0, name='', realName=style.getUnknownPlayerName(), prebattleID=0, igrType=0, clanAbbrev='', clanDBID=0, wasInBattle=True):
         super(PlayerInfo, self).__init__(wasInBattle=wasInBattle)
         self.__dbID = dbID
         self.__team = team
-        self.__name = name
+        self.__fakeName = name or realName
+        self.__realName = realName
         self.__prebattleID = prebattleID
         self.__igrType = igrType
         self.__clanInfo = _ClanInfo(clanDBID, clanAbbrev)
         self.__isTeamKiller = False
+        self.__tags = set()
         self.squadIndex = 0
 
     @property
@@ -32,8 +34,8 @@ class PlayerInfo(shared.ItemInfo):
         return self.__team
 
     @property
-    def name(self):
-        return self.__name
+    def fakeName(self):
+        return self.__fakeName
 
     @property
     def prebattleID(self):
@@ -55,8 +57,19 @@ class PlayerInfo(shared.ItemInfo):
     def clanAbbrev(self):
         return self.__clanInfo.clanAbbrev
 
+    @property
+    def realName(self):
+        return self.__realName
+
+    @property
+    def tags(self):
+        return self.__tags
+
+    def addTag(self, tag):
+        self.__tags.add(tag)
+
     def getFullName(self):
-        return self.lobbyContext.getPlayerFullName(self.__name, clanAbbrev=self.clanAbbrev, pDBID=self.__dbID)
+        return self.lobbyContext.getPlayerFullName(self.__realName, clanAbbrev=self.clanAbbrev, pDBID=self.__dbID)
 
     def getRegionCode(self):
         return self.lobbyContext.getRegionCode(self.__dbID)
@@ -85,8 +98,9 @@ class PlayersInfo(shared.UnpackedInfo):
         return info
 
     @staticmethod
-    def makePlayerInfo(dbID=0, name='', isEnemy=False, wasInBattle=False):
-        return PlayerInfo(dbID=dbID, name=name or style.getUnknownPlayerName(isEnemy=isEnemy), wasInBattle=wasInBattle)
+    def makePlayerInfo(dbID=0, realName='', fakeName='', isEnemy=False, wasInBattle=False):
+        unknownPlayerName = style.getUnknownPlayerName(isEnemy=isEnemy)
+        return PlayerInfo(dbID=dbID, name=fakeName or unknownPlayerName, realName=realName or unknownPlayerName, wasInBattle=wasInBattle)
 
     def setSquadIndex(self, dbID, index):
         if dbID in self.__players:

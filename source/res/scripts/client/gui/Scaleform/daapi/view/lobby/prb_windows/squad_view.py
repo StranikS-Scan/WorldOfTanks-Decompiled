@@ -106,7 +106,8 @@ class SquadView(SquadViewMeta):
 
     def getCoolDownRequests(self):
         requests = super(SquadView, self).getCoolDownRequests()
-        requests.append(REQUEST_TYPE.SET_PLAYER_STATE)
+        if REQUEST_TYPE.SET_PLAYER_STATE not in requests:
+            requests.append(REQUEST_TYPE.SET_PLAYER_STATE)
         return requests
 
     def _populate(self):

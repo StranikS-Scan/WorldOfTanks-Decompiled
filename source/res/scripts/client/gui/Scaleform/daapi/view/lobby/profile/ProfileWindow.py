@@ -87,7 +87,7 @@ class ProfileWindow(ProfileWindowMeta, ClanListener):
     def proto(self):
         return None
 
-    def _onUserActionReceived(self, _, user):
+    def _onUserActionReceived(self, _, user, shadowMode):
         if user.getID() == self.__databaseID:
             self.__checkUserRosterInfo()
 

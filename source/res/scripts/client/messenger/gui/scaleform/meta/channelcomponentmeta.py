@@ -10,6 +10,9 @@ class ChannelComponentMeta(BaseDAAPIComponent):
     def sendMessage(self, message):
         self._printOverrideError('sendMessage')
 
+    def getInfo(self):
+        self._printOverrideError('getInfo')
+
     def getHistory(self):
         self._printOverrideError('getHistory')
 
@@ -18,6 +21,9 @@ class ChannelComponentMeta(BaseDAAPIComponent):
 
     def onLinkClick(self, linkCode):
         self._printOverrideError('onLinkClick')
+
+    def as_notifyInfoChangedS(self):
+        return self.flashObject.as_notifyInfoChanged() if self._isDAAPIInited() else None
 
     def as_setJoinedS(self, flag):
         return self.flashObject.as_setJoined(flag) if self._isDAAPIInited() else None

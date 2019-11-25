@@ -92,6 +92,7 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
     def _setViewData(self):
         self.__vehDP = VehiclesDataProvider()
         self.__vehDP.setFlashObject(self.as_getVehiclesDPS())
+        self.__clearParamsCache()
         self.__paramsCache = VehCompareBasketParamsCache(self.__vehDP)
         self.__updateUI()
 
@@ -101,11 +102,16 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
         self.comparisonBasket.onSwitchChange -= self.__onVehCmpBasketStateChanged
         self.comparisonBasket.onParametersChange -= self.__onVehicleParamsChanged
         self.comparisonBasket.onNationChange -= self._setViewData
-        self.__paramsCache.dispose()
-        self.__paramsCache = None
+        self.__clearParamsCache()
         self.__vehDP.fini()
         self.__vehDP = None
         self.comparisonBasket.writeCache()
+        return
+
+    def __clearParamsCache(self):
+        if self.__paramsCache is not None:
+            self.__paramsCache.dispose()
+            self.__paramsCache = None
         return
 
     def __updateUI(self, *data):

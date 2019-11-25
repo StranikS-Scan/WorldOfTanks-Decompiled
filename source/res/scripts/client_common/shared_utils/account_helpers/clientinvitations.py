@@ -8,10 +8,10 @@ import AccountCommands
 from constants import INVITATION_STATUS
 from helpers.time_utils import getCurrentTimestamp
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
-UniqueId = namedtuple('UniqueId', ['id', 'senderDBID'])
+UniqueId = namedtuple('UniqueId', ['id', 'senderID'])
 
 def _getUniqueId(invite):
-    return UniqueId(invite['id'], invite['senderDBID'])
+    return UniqueId(invite['id'], invite.get('senderDBID', 0) or invite.get('senderVehID', 0))
 
 
 class ClientInvitations(object):
@@ -49,21 +49,21 @@ class ClientInvitations(object):
             return
         self.__proxy._doCmdIntArrStrArr(AccountCommands.CMD_INVITATION_SEND, accountsToInvite, [comment], callback)
 
-    def acceptInvitation(self, invitationID, senderDBID, callback=None):
+    def acceptInvitation(self, invitationID, senderID, callback=None):
         if self.__playerEvents.isPlayerEntityChanging:
             return
-        proxy = partial(self._onInvitationResponseReceived, INVITATION_STATUS.ACCEPTED, invitationID, senderDBID, callback)
-        self.__proxy._doCmdInt3(AccountCommands.CMD_INVITATION_ACCEPT, invitationID, senderDBID, 0, proxy)
+        proxy = partial(self._onInvitationResponseReceived, INVITATION_STATUS.ACCEPTED, invitationID, senderID, callback)
+        self.__proxy._doCmdInt3(AccountCommands.CMD_INVITATION_ACCEPT, invitationID, senderID, 0, proxy)
 
-    def declineInvitation(self, invitationID, senderDBID, callback=None):
+    def declineInvitation(self, invitationID, senderID, callback=None):
         if self.__playerEvents.isPlayerEntityChanging:
             return
-        proxy = partial(self._onInvitationResponseReceived, INVITATION_STATUS.DECLINED, invitationID, senderDBID, callback)
-        self.__proxy._doCmdInt3(AccountCommands.CMD_INVITATION_DECLINE, invitationID, senderDBID, 0, proxy)
+        proxy = partial(self._onInvitationResponseReceived, INVITATION_STATUS.DECLINED, invitationID, senderID, callback)
+        self.__proxy._doCmdInt3(AccountCommands.CMD_INVITATION_DECLINE, invitationID, senderID, 0, proxy)
 
-    def _onInvitationResponseReceived(self, newStatus, invitationId, senderDBID, callback, _, code, errStr):
+    def _onInvitationResponseReceived(self, newStatus, invitationId, senderID, callback, _, code, errStr):
         if AccountCommands.isCodeValid(code):
-            uniqueId = UniqueId(invitationId, senderDBID)
+            uniqueId = UniqueId(invitationId, senderID)
             try:
                 self.__invitations[uniqueId]['status'] = newStatus
                 self.__playerEvents.onPrebattleInvitationsChanged(self.__invitations)

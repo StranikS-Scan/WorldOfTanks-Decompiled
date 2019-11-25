@@ -146,7 +146,7 @@ class BattleReplay(object):
         self.__gunWasLockedBeforePause = False
         self.__wasVideoBeforeRewind = False
         self.__videoCameraMatrix = Math.Matrix()
-        self.__replayDir = './../replays'
+        self.__replayDir = './replays'
         self.__replayCtrl.clientVersion = BigWorld.wg_getProductVersion()
         self.__enableTimeWarp = False
         self.__isChatPlaybackEnabled = True

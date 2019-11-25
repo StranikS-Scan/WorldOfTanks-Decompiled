@@ -6,6 +6,9 @@ from gui.impl.gen.view_models.ui_kit.list_model import ListModel
 class RewardWindowContentModel(ViewModel):
     __slots__ = ('onConfirmBtnClicked', 'onHyperLinkClicked')
 
+    def __init__(self, properties=3, commands=2):
+        super(RewardWindowContentModel, self).__init__(properties=properties, commands=commands)
+
     @property
     def rewardsList(self):
         return self._getViewModel(0)

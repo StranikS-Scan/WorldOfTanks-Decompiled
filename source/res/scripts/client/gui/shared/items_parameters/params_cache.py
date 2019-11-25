@@ -4,14 +4,14 @@ from collections import namedtuple
 import itertools
 import math
 import sys
-from gui.shared.items_parameters import calcGunParams, calcShellParams, getEquipmentParameters, isAutoReloadGun
+from gui.shared.items_parameters import calcGunParams, calcShellParams, getEquipmentParameters, isAutoReloadGun, isDualGun
 from gui.shared.items_parameters import xml_reader
 from gui.shared.utils.decorators import debugTime
 import nations
 from debug_utils import LOG_CURRENT_EXCEPTION
 from items import vehicles, ITEM_TYPES, EQUIPMENT_TYPES
 from items.vehicles import getVehicleType
-from gui.shared.utils import GUN_NORMAL, GUN_CAN_BE_CLIP, GUN_CLIP, GUN_CAN_BE_AUTO_RELOAD, GUN_AUTO_RELOAD
+from gui.shared.utils import GUN_NORMAL, GUN_CAN_BE_CLIP, GUN_CLIP, GUN_CAN_BE_AUTO_RELOAD, GUN_AUTO_RELOAD, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN
 from soft_exception import SoftException
 PrecachedShell = namedtuple('PrecachedShell', 'guns params')
 PrecachedEquipment = namedtuple('PrecachedEquipment', 'nations params')
@@ -32,7 +32,7 @@ class _PrecachedChassisTypes(object):
     MAP = dict((((pC.isHydraulic, pC.isWheeled, pC.hasAutoSiege), pC) for pC in ALL))
 
 
-class PrecachedGun(namedtuple('PrecachedGun', 'clipVehicles autoReloadVehicles params turretsByVehicles')):
+class PrecachedGun(namedtuple('PrecachedGun', 'clipVehicles autoReloadVehicles dualGunVehicles  params turretsByVehicles')):
 
     @property
     def clipVehiclesNames(self):
@@ -48,10 +48,14 @@ class PrecachedGun(namedtuple('PrecachedGun', 'clipVehicles autoReloadVehicles p
                 reloadingType = GUN_CAN_BE_AUTO_RELOAD
             elif self.clipVehicles:
                 reloadingType = GUN_CAN_BE_CLIP
+            elif self.dualGunVehicles:
+                reloadingType = GUN_CAN_BE_DUAL_GUN
         elif self.autoReloadVehicles and vehicleCD in self.autoReloadVehicles:
             reloadingType = GUN_AUTO_RELOAD
         elif self.clipVehicles is not None and vehicleCD in self.clipVehicles:
             reloadingType = GUN_CLIP
+        elif self.dualGunVehicles and vehicleCD in self.dualGunVehicles:
+            reloadingType = GUN_DUAL_GUN
         return reloadingType
 
     def getTurretsForVehicle(self, vehicleCD):
@@ -248,6 +252,7 @@ class _ParamsCache(object):
                 turretsIntCDs = {}
                 clipVehiclesList = set()
                 autoReloadVehsList = set()
+                dualGunVehsList = set()
                 for vDescr in vehiclesCache.generator(nationIdx):
                     del curVehicleTurretsCDs[:]
                     vehCD = vDescr.type.compactDescr
@@ -262,11 +267,13 @@ class _ParamsCache(object):
                                         clipVehiclesList.add(vehCD)
                                     if isAutoReloadGun(gun):
                                         autoReloadVehsList.add(vehCD)
+                                    if isDualGun(gun):
+                                        dualGunVehsList.add(vehCD)
 
                     if curVehicleTurretsCDs:
                         turretsIntCDs[vDescr.type.compactDescr] = tuple(curVehicleTurretsCDs)
 
-                self.__cache[nationIdx][ITEM_TYPES.vehicleGun][g.compactDescr] = PrecachedGun(clipVehicles=clipVehiclesList if clipVehiclesList else None, autoReloadVehicles=frozenset(autoReloadVehsList) if autoReloadVehsList else None, params=calcGunParams(g, descriptors), turretsByVehicles=turretsIntCDs)
+                self.__cache[nationIdx][ITEM_TYPES.vehicleGun][g.compactDescr] = PrecachedGun(clipVehicles=clipVehiclesList if clipVehiclesList else None, autoReloadVehicles=frozenset(autoReloadVehsList) if autoReloadVehsList else None, dualGunVehicles=frozenset(dualGunVehsList) if dualGunVehsList else None, params=calcGunParams(g, descriptors), turretsByVehicles=turretsIntCDs)
 
         return
 

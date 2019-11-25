@@ -89,7 +89,7 @@ class PlayerTeamOverrides(DefaultTeamOverrides):
 
 
 class PersonalInfo(object):
-    __slots__ = ('vehicleID', 'selectedID', 'prebattleID', 'teamKillSuspected')
+    __slots__ = ('realName', 'vehicleID', 'selectedID', 'prebattleID', 'teamKillSuspected')
 
     def __init__(self):
         super(PersonalInfo, self).__init__()

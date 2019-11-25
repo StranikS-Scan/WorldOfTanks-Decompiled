@@ -62,7 +62,7 @@ class ISharedControllersLocator(object):
         raise NotImplementedError
 
     @property
-    def battleCacheCtrl(self):
+    def anonymizerFakesCtrl(self):
         raise NotImplementedError
 
     @property
@@ -124,13 +124,13 @@ class ISquadInvitationsHandler(object):
     def clear(self):
         raise NotImplementedError
 
-    def send(self, playerID):
+    def send(self, uid):
         raise NotImplementedError
 
-    def accept(self, playerID):
+    def accept(self, uid):
         raise NotImplementedError
 
-    def reject(self, playerID):
+    def reject(self, uid):
         raise NotImplementedError
 
 
@@ -296,7 +296,7 @@ class IArenaDataProvider(object):
     def updateVehicleInteractiveStats(self, iStats):
         raise NotImplementedError
 
-    def updateInvitationStatus(self, accountDBID, include, exclude=0):
+    def updateInvitationStatus(self, avatarSessionID, include, exclude=0):
         raise NotImplementedError
 
     def isRequiredDataExists(self):
@@ -347,6 +347,9 @@ class IArenaDataProvider(object):
     def getVehiclesCountInPrebattle(self, team, prebattleID):
         raise NotImplementedError
 
+    def getSquadSizes(self):
+        raise NotImplementedError
+
     def getPlayerGuiProps(self, vID, team):
         raise NotImplementedError
 
@@ -365,7 +368,10 @@ class IArenaDataProvider(object):
     def getVehIDByAccDBID(self, accDBID):
         raise NotImplementedError
 
-    def getAccountDBIDByVehID(self, vID):
+    def getVehIDBySessionID(self, avatarSessionID):
+        raise NotImplementedError
+
+    def getSessionIDByVehID(self, vehID):
         raise NotImplementedError
 
     def getVehiclesInfoIterator(self):
@@ -398,16 +404,19 @@ class IBattleContext(object):
     def getArenaDP(self):
         raise NotImplementedError
 
-    def getVehIDByAccDBID(self, accDBID):
+    def getVehIDBySessionID(self, accID):
+        raise NotImplementedError
+
+    def getSessionIDByVehID(self, vehID):
         raise NotImplementedError
 
     def setPlayerFullNameFormatter(self, formatter):
         raise NotImplementedError
 
-    def getVehicleInfo(self, vID=None, accID=None):
+    def getVehicleInfo(self, vID=None, avatarSessionID=None):
         raise NotImplementedError
 
-    def getPlayerName(self, vID=None, accID=None):
+    def getPlayerName(self, vID=None, avatarSessionID=None):
         raise NotImplementedError
 
     def resetPlayerFullNameFormatter(self):
@@ -416,16 +425,16 @@ class IBattleContext(object):
     def createPlayerFullNameFormatter(self, showVehShortName=True, showClan=True, showRegion=True):
         raise NotImplementedError
 
-    def getPlayerFullNameParts(self, vID=None, accID=None, pName=None, showVehShortName=True, showClan=True, showRegion=True):
+    def getPlayerFullNameParts(self, vID=None, avatarSessionID=None, pName=None, showVehShortName=True, showClan=True, showRegion=True):
         raise NotImplementedError
 
-    def getPlayerFullName(self, vID=None, accID=None, pName=None, showVehShortName=True, showClan=True, showRegion=True):
+    def getPlayerFullName(self, vID=None, avatarSessionID=None, pName=None, showVehShortName=True, showClan=True, showRegion=True):
         raise NotImplementedError
 
-    def isSquadMan(self, vID=None, accID=None, prebattleID=None):
+    def isSquadMan(self, vID=None, avatarSessionID=None, prebattleID=None):
         raise NotImplementedError
 
-    def isTeamKiller(self, vID=None, accID=None):
+    def isTeamKiller(self, vID=None, avatarSessionID=None):
         raise NotImplementedError
 
     def isObserver(self, vID):
@@ -434,13 +443,13 @@ class IBattleContext(object):
     def isPlayerObserver(self):
         raise NotImplementedError
 
-    def isInTeam(self, teamIdx, vID=None, accID=None):
+    def isInTeam(self, teamIdx, vID=None, avatarSessionID=None):
         raise NotImplementedError
 
-    def isAlly(self, vID=None, accID=None):
+    def isAlly(self, vID=None, avatarSessionID=None):
         raise NotImplementedError
 
-    def isEnemy(self, vID=None, accID=None):
+    def isEnemy(self, vID=None, avatarSessionID=None):
         raise NotImplementedError
 
     def isCurrentPlayer(self, vID):

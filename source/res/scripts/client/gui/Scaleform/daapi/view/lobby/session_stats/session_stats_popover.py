@@ -90,7 +90,7 @@ class SessionStatsPopover(SessionStatsPopoverMeta):
         timeToClear = time.gmtime(time_utils.ONE_DAY - time_utils.getServerRegionalTimeCurrentDay())
         builder = ResSimpleDialogBuilder()
         builder.setMessagesAndButtons(R.strings.dialogs.sessionStats.confirmReset, btnDownSounds={DialogButtons.SUBMIT: R.sounds.session_stats_clear()})
-        builder.setMessageArgs([toIntegral(timeToClear.tm_hour), toIntegral(timeToClear.tm_min)])
+        builder.setMessageArgs([self.__timeToClearText(timeToClear)])
         result = yield await(dialogs.showSimple(builder.build(lobby)))
         if result:
             AccountSettings.setSessionSettings(SESSION_STATS_PREV_BATTLE_COUNT, 0)
@@ -154,6 +154,13 @@ class SessionStatsPopover(SessionStatsPopoverMeta):
             self._isHofAccessible = isSessionStatsEnabled and isLinkWithHoFEnabled
             self.as_setButtonsStateS(self.__getButtonStates())
 
+    def __timeToClearText(self, timeToClear):
+        if timeToClear.tm_hour == 0 and timeToClear.tm_min == 0:
+            result = ' ' + backport.text(R.strings.tooltips.template.time.lessThenMinute())
+        else:
+            result = backport.text(R.strings.dialogs.sessionStats.confirmReset.time(), hours=toIntegral(timeToClear.tm_hour), minutes=toIntegral(timeToClear.tm_min))
+        return result
+
     def __getButtonStates(self):
         stats = self._itemsCache.items.sessionStats.getAccountStats(ARENA_BONUS_TYPE.REGULAR)
         clearBtnEnabled = stats.battleCnt > 0 or stats.xp > 0 or stats.freeXP > 0
@@ -165,7 +172,7 @@ class SessionStatsPopover(SessionStatsPopoverMeta):
             moreBtnTooltip = makeTooltip(header=backport.text(R.strings.session_stats.tooltip.moreBtn.header()), body=backport.text(R.strings.session_stats.tooltip.moreBtn.unavailable.body()))
         if clearBtnEnabled:
             timeToClear = time.gmtime(time_utils.ONE_DAY - time_utils.getServerRegionalTimeCurrentDay())
-            dropSkillsBtnTooltip = makeTooltip(header=backport.text(R.strings.session_stats.tooltip.dropSkillsButton.header()), body=backport.text(R.strings.session_stats.tooltip.dropSkillsButton.available.body(), hours=toIntegral(timeToClear.tm_hour), minutes=toIntegral(timeToClear.tm_min)))
+            dropSkillsBtnTooltip = makeTooltip(header=backport.text(R.strings.session_stats.tooltip.dropSkillsButton.header()), body=backport.text(R.strings.session_stats.tooltip.dropSkillsButton.available.body(), time=self.__timeToClearText(timeToClear)))
         else:
             dropSkillsBtnTooltip = makeTooltip(header=backport.text(R.strings.session_stats.tooltip.dropSkillsButton.header()), body=backport.text(R.strings.session_stats.tooltip.dropSkillsButton.unavailable.body()))
         return [{'btnLabel': label,

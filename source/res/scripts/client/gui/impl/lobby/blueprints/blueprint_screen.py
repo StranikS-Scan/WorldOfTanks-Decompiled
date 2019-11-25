@@ -4,6 +4,7 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import VEHICLES_WITH_BLUEPRINT_CONFIRM
 from adisp import process
 from async import async, await
+from frameworks.wulf import ViewSettings
 from frameworks.wulf.gui_constants import ViewFlags, ViewStatus
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -35,7 +36,10 @@ class BlueprintScreen(ViewImpl):
     __slots__ = ('__vehicle', '__xpCost', '__fullXpCost', '__discount', '__convertedIndexes', '__exitEvent', '__accountSettings')
 
     def __init__(self, viewKey, viewModelClazz=BlueprintScreenModel, ctx=None):
-        super(BlueprintScreen, self).__init__(viewKey, ViewFlags.LOBBY_SUB_VIEW, viewModelClazz)
+        settings = ViewSettings(viewKey)
+        settings.flags = ViewFlags.LOBBY_SUB_VIEW
+        settings.model = viewModelClazz()
+        super(BlueprintScreen, self).__init__(settings)
         self.__vehicle = self.__itemsCache.items.getItemByCD(ctx.get('vehicleCD', None))
         self.__exitEvent = ctx.get('exitEvent') if ctx is not None else None
         self.__xpCost = 0
@@ -101,9 +105,9 @@ class BlueprintScreen(ViewImpl):
             conversionMaxCost.setIconMainCost(R.images.gui.maps.icons.blueprints.fragment.small.intelligence())
             conversionMaxCost.setIconAdditionalCost(R.images.gui.maps.icons.blueprints.fragment.small.dyn(self.__vehicle.nationName)())
             self.__updateConversionData(conversionMaxCost)
-            model.setBalanceContent(FragmentsBalanceContent(vehicle.intCD))
             model.setBackBtnLabel(getBackBtnLabel(self.__exitEvent, self.__exitEvent.name, vehicle.shortUserName))
             model.setCurrentStateView(BlueprintScreenModel.INIT)
+        self.setChildView(R.dynamic_ids.blueprint_screen.balance_content(), FragmentsBalanceContent(vehicle.intCD))
 
     def _finalize(self):
         if self.__vehicle is not None:

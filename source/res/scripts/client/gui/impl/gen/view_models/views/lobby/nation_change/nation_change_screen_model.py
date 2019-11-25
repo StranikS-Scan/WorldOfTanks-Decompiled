@@ -6,6 +6,9 @@ from gui.impl.gen.view_models.views.lobby.nation_change.nation_change_tank_slot_
 class NationChangeScreenModel(ViewModel):
     __slots__ = ('onCloseBtnClick', 'onSwitchBtnClick', 'onCancelBtnClick', 'onHangarBtnClick', 'onDogClick')
 
+    def __init__(self, properties=13, commands=5):
+        super(NationChangeScreenModel, self).__init__(properties=properties, commands=commands)
+
     @property
     def currentNation(self):
         return self._getViewModel(0)

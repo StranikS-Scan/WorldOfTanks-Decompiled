@@ -57,7 +57,7 @@ class SendInvitesUnitCtx(PrbCtrlRequestCtx):
             self.__comment = ''
 
     def getDatabaseIDs(self):
-        return self.__databaseIDs
+        return self.__databaseIDs[:]
 
     def getComment(self):
         return self.__comment

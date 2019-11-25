@@ -6,6 +6,7 @@ from web.web_client_api import webApiCollection
 from web.web_client_api.request import RequestWebApi
 from web.web_client_api.sound import SoundWebApi, HangarSoundWebApi
 from web.web_client_api.shop import ShopWebApi
+from web.web_client_api.hero_tank import HeroTankWebApi
 from web.web_client_api.ui import NotificationWebApi, OpenWindowWebApi, OpenTabWebApi, CloseWindowWebApi, UtilWebApi
 from web.web_client_api.frontline import FrontLineWebApi
 
@@ -22,4 +23,4 @@ class _OpenTabWebApi(OpenTabWebApi):
 
 
 def createShopWebHandlers():
-    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, _OpenTabWebApi, RequestWebApi, ShopWebApi, SoundWebApi, HangarSoundWebApi, UtilWebApi, FrontLineWebApi)
+    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, _OpenTabWebApi, RequestWebApi, ShopWebApi, SoundWebApi, HangarSoundWebApi, UtilWebApi, FrontLineWebApi, HeroTankWebApi)

@@ -29,6 +29,7 @@ from gui.shared.events import GameEvent
 from gui.shared.utils.TimeInterval import TimeInterval
 from gui.shared.utils.plugins import IPlugin
 from helpers import dependency
+from helpers.time_utils import MS_IN_SECOND
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IBootcampController
@@ -438,7 +439,6 @@ class AmmoPlugin(CrosshairPlugin):
                     BigWorld.cancelCallback(self.__autoReloadCallbackID)
                 self.__autoReloadCallbackID = BigWorld.callback(actualTime, self.__autoReloadFirstShellCallback)
                 self.__scaledInterval = clipInterval
-                self.__reloadAnimator.setClipAutoLoading(0, 0)
             else:
                 self.__reloadAnimator.setClipAutoLoading(actualTime, self.__reCalcFirstShellAutoReload(baseTime))
                 actualTime = baseTime = 0
@@ -448,7 +448,7 @@ class AmmoPlugin(CrosshairPlugin):
 
     def __autoReloadFirstShellCallback(self):
         timeLeft = min(self.__autoReloadSnapshot.getTimeLeft(), self.__autoReloadSnapshot.getActualValue())
-        self.__reloadAnimator.setClipAutoLoading(timeLeft, timeLeft)
+        self.__reloadAnimator.setClipAutoLoading(timeLeft, timeLeft, isTimerOn=True)
         self.__autoReloadCallbackID = None
         return
 
@@ -1110,6 +1110,8 @@ class DualGunPlugin(CrosshairPlugin):
             self.__onVehicleControlling(vehicle)
         if crosshairCtrl is not None:
             crosshairCtrl.onChargeMarkerStateUpdated += self.__dualGunMarkerStateUpdated
+        add = g_eventBus.addListener
+        add(GameEvent.SNIPER_CAMERA_TRANSITION, self.__onSniperCameraTransition, scope=EVENT_BUS_SCOPE.BATTLE)
         self.__dualGunMarkerStateUpdated(self.__chargeMarkerState)
         return
 
@@ -1121,6 +1123,8 @@ class DualGunPlugin(CrosshairPlugin):
             vStateCtrl.onVehicleControlling -= self.__onVehicleControlling
         if crosshairCtrl is not None:
             crosshairCtrl.onChargeMarkerStateUpdated -= self.__dualGunMarkerStateUpdated
+        remove = g_eventBus.removeListener
+        remove(GameEvent.SNIPER_CAMERA_TRANSITION, self.__onSniperCameraTransition, scope=EVENT_BUS_SCOPE.BATTLE)
         return
 
     def __onVehicleControlling(self, vehicle):
@@ -1145,14 +1149,18 @@ class DualGunPlugin(CrosshairPlugin):
 
     def __onDualGunChargeStateUpdated(self, value):
         state, time = value
-        msInSecond = 1000
-        pingCompensation = SERVER_TICK_LENGTH * msInSecond
+        pingCompensation = SERVER_TICK_LENGTH * MS_IN_SECOND
         if state == DUALGUN_CHARGER_STATUS.PREPARING:
             baseTime, timeLeft = time
-            self.parentObj.as_startDualGunChargingS(timeLeft * msInSecond - pingCompensation, baseTime * msInSecond)
+            self.parentObj.as_startDualGunChargingS(timeLeft * MS_IN_SECOND - pingCompensation, baseTime * MS_IN_SECOND)
         elif state in (DUALGUN_CHARGER_STATUS.CANCELED, DUALGUN_CHARGER_STATUS.UNAVAILABLE):
             self.parentObj.as_cancelDualGunChargeS()
 
     def __dualGunMarkerStateUpdated(self, markerState):
         dualGunMarkerState = _DUAL_GUN_MARKER_STATES_MAP[markerState]
         self.parentObj.as_updateDualGunMarkerStateS(dualGunMarkerState)
+
+    def __onSniperCameraTransition(self, event):
+        transitionTimeInSeconds = event.ctx.get('transitionTime')
+        gunIndex = event.ctx.get('currentGunIndex')
+        self.parentObj.as_runCameraTransitionFxS(gunIndex, transitionTimeInSeconds * MS_IN_SECOND)

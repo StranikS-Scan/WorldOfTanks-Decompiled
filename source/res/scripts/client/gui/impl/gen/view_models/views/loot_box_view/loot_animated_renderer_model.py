@@ -8,6 +8,9 @@ class LootAnimatedRendererModel(LootDefRendererModel):
     SWF_ANIMATION = 0
     MC_ANIMATION = 1
 
+    def __init__(self, properties=12, commands=0):
+        super(LootAnimatedRendererModel, self).__init__(properties=properties, commands=commands)
+
     def getAnimationType(self):
         return self._getNumber(9)
 

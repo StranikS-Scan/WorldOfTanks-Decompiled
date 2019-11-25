@@ -67,6 +67,7 @@ class _EventVehicleEntityExtension(object):
         self.__isEventsEnabled = False
         self._invalidate(resetSubscription=True)
         rv = self._callOriginalMethod('fini', *args, **kwargs)
+        self.unbound()
         return rv
 
     def getQueueType(self):
@@ -102,6 +103,7 @@ class _EventVehicleEntityExtension(object):
     def _invalidate(self, resetSubscription=False):
         from gui.prb_control.entities.event.pre_queue.entity import EventBattleSubscriber
         activate = self.__isEventsEnabled and g_currentVehicle.isEvent()
+        print 'activate {}'.format(activate)
         if self.__isActivated != activate:
             prevSubscriber = self.__getSubscriber()
             if activate:

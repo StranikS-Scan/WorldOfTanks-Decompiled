@@ -5,6 +5,9 @@ from frameworks.wulf import ViewModel
 class MapsBlacklistMapFilterModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=3, commands=0):
+        super(MapsBlacklistMapFilterModel, self).__init__(properties=properties, commands=commands)
+
     def getFilterName(self):
         return self._getString(0)
 

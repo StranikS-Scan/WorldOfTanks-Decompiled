@@ -5,6 +5,9 @@ from gui.impl.gen.view_models.windows.window_model import WindowModel
 class PopOverWindowModel(WindowModel):
     __slots__ = ()
 
+    def __init__(self, properties=9, commands=2):
+        super(PopOverWindowModel, self).__init__(properties=properties, commands=commands)
+
     def getBoundX(self):
         return self._getNumber(3)
 

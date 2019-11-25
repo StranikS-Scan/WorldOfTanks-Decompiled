@@ -433,7 +433,7 @@ class ReserveTooltipData(StrongholdTooltipData):
         reserveCount = reserves.getReserveCount(reserve.getType(), reserve.getLevel())
         if selected:
             reserveCount -= 1
-        infoCount = i18n.makeString(FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_INSTORAGE, count=reserveCount)
+        infoCount = i18n.makeString(FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_INSTORAGE, count=makeHtmlString('html_templates:lobby/fortifications/strongholdReserve', 'inStorage', {'text': reserveCount}))
         infoDescription1 = '+%s%%' % reserve.getBonusPercent()
         infoDescription2 = '%s' % reserve.getDescription()
         infoDescription3 = i18n.makeString(FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_CONDITIONREQUISITION) if reserve.isRequsition() else i18n.makeString(FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_CONDITION)
@@ -671,14 +671,14 @@ class ActionTooltipData(ToolTipBaseData):
         elif itemType == ACTION_TOOLTIPS_TYPE.ECONOMICS:
             itemName = key
         template = 'html_templates:lobby/quests/actions'
-        formatedOldPrice, formatedNewPrice = formatActionPrices(oldPrice, newPrice)
+        formatedOldPrice, formatedNewPrice = formatActionPrices(oldPrice, newPrice, isBuying)
         body = i18n.makeString(TOOLTIPS.ACTIONPRICE_BODY, oldPrice=formatedOldPrice, newPrice=formatedNewPrice)
         actionUserName = ''
         if itemName:
             affectedAction = self.eventsCache.getAffectedAction(itemName)
             if affectedAction:
                 action = self.eventsCache.getActions().get(affectedAction[ACTION_ENTITY_ITEM.ACTION_NAME_IDX])
-                if action:
+                if action and action.getUserName():
                     actionUserName = i18n.makeString(TOOLTIPS.ACTIONPRICE_ACTIONNAME, actionName=action.getUserName())
                 deviceName = _ITEM_TYPE_TO_TOOLTIP_DICT.get(deviceNameType, '')
                 hasAffectedActions = affectedAction[ACTION_ENTITY_ITEM.AFFECTED_ACTIONS_IDX]
@@ -719,7 +719,7 @@ class ActionSlotTooltipData(ToolTipBaseData):
             action = self.eventsCache.getActions().get(affectedAction[ACTION_ENTITY_ITEM.ACTION_NAME_IDX])
             if action:
                 actionUserName = i18n.makeString(TOOLTIPS.ACTIONPRICE_ACTIONNAMESLOT, actionName=action.getUserName())
-        formatedOldPrice, formatedNewPrice = formatActionPrices(oldPrice, newPrice)
+        formatedOldPrice, formatedNewPrice = formatActionPrices(oldPrice, newPrice, True)
         template = 'html_templates:lobby/tooltips/'
         headerText = i18n.makeString(TOOLTIPS.TANKS_CAROUSEL_BUY_SLOT_HEADER)
         bodyText = i18n.makeString(TOOLTIPS.TANKS_CAROUSEL_BUY_SLOT_BODY)
@@ -1044,6 +1044,7 @@ class SettingsBaseKey(BlocksTooltipData):
     def __init__(self, context):
         super(SettingsBaseKey, self).__init__(context, TOOLTIP_TYPE.CONTROL)
         self._setWidth(350)
+        self._headerKey = TOOLTIPS.SETTINGS_KEYFOLLOWME_TITLE
         self._enemyBlockImage = ''
         self._enemyBlockTitle = ''
         self._allyBlockImage = ''
@@ -1053,18 +1054,35 @@ class SettingsBaseKey(BlocksTooltipData):
         enemyDescriptionHtml = makeHtmlString(SettingsBaseKey.TEMPLATE_NAME, 'enemy_description')
         return text_styles.main(makeString(TOOLTIPS.SETTINGS_KEY_ENEMY_BODY, enemy=enemyDescriptionHtml % i18n.makeString(TOOLTIPS.SETTINGS_KEY_TARGET_ENEMY)))
 
+    def _getAllyDescription(self):
+        allyDescriptionHtml = makeHtmlString(SettingsBaseKey.TEMPLATE_NAME, 'ally_description')
+        return text_styles.main(makeString(TOOLTIPS.SETTINGS_KEY_ALLY_BODY, ally=allyDescriptionHtml % i18n.makeString(TOOLTIPS.SETTINGS_KEY_TARGET_ALLY)))
+
     def _packBlocks(self, *args):
         tooltipBlocks = super(SettingsBaseKey, self)._packBlocks()
-        headerBlock = formatters.packTitleDescBlock(text_styles.highTitle(TOOLTIPS.SETTINGS_KEYFOLLOWME_TITLE))
-        allyDescriptionHtml = makeHtmlString(SettingsBaseKey.TEMPLATE_NAME, 'ally_description')
-        allyDescription = text_styles.main(makeString(TOOLTIPS.SETTINGS_KEY_ALLY_BODY, ally=allyDescriptionHtml % i18n.makeString(TOOLTIPS.SETTINGS_KEY_TARGET_ALLY)))
+        headerBlock = formatters.packTitleDescBlock(text_styles.highTitle(self._headerKey))
         enemyBlock = formatters.packImageTextBlockData(title=text_styles.middleTitle(self._enemyBlockTitle), desc=self._getEnemyDescription(), img=self._enemyBlockImage, imgPadding={'left': -4,
          'right': 4}, imgAtLeft=True, txtPadding=None, txtGap=0, txtOffset=-1, txtAlign='left', linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGETEXT_BLOCK_LINKAGE, padding={'top': -8})
-        allyBlock = formatters.packImageTextBlockData(title=text_styles.middleTitle(self._allyBlockTitle), desc=allyDescription, img=self._allyBlockImage, imgPadding={'left': -4,
+        allyBlock = formatters.packImageTextBlockData(title=text_styles.middleTitle(self._allyBlockTitle), desc=self._getAllyDescription(), img=self._allyBlockImage, imgPadding={'left': -4,
          'right': 4}, imgAtLeft=True, txtPadding=None, txtGap=0, txtOffset=-1, txtAlign='left', linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGETEXT_BLOCK_LINKAGE, padding={'top': -8})
         tooltipBlocks.append(headerBlock)
         tooltipBlocks.append(enemyBlock)
         tooltipBlocks.append(allyBlock)
+        return tooltipBlocks
+
+
+class SettingsKeyChargeFire(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(SettingsKeyChargeFire, self).__init__(context, TOOLTIP_TYPE.CONTROL)
+        self._setWidth(350)
+        self._headerKey = TOOLTIPS.SETTINGS_KEYCHARGEFIRE_TITLE
+        self._enemyBlockImage = RES_ICONS.MAPS_ICONS_SETTINGS_DUAL_GUN
+
+    def _packBlocks(self, *args, **kwargs):
+        tooltipBlocks = super(SettingsKeyChargeFire, self)._packBlocks(*args, **kwargs)
+        tooltipBlocks.append(formatters.packBuildUpBlockData([formatters.packTitleDescBlock(text_styles.highTitle(self._headerKey)), formatters.packImageTextBlockData(desc=text_styles.main(TOOLTIPS.SETTINGS_KEYCHARGEFIRE_DEFAULTKEY), img=self._enemyBlockImage, imgPadding={'left': -4,
+          'right': 4}, imgAtLeft=True, txtPadding=None, txtGap=0, txtOffset=-1, txtAlign='left', linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGETEXT_BLOCK_LINKAGE, padding={'top': -8})]))
         return tooltipBlocks
 
 

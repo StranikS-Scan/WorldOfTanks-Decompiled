@@ -28,6 +28,7 @@ class RecruitSourceID(object):
     TWITCH_4 = 'twitch4'
     TWITCH_5 = 'twitch5'
     TWITCH_6 = 'twitch6'
+    TWITCH_7 = 'twitch7'
     BUFFON = 'buffon'
     LOOTBOX = 'lootbox'
     COMMANDER_MARINA = 'commander_marina'
@@ -39,11 +40,13 @@ class RecruitSourceID(object):
      TWITCH_4,
      TWITCH_5,
      TWITCH_6,
+     TWITCH_7,
      COMMANDER_MARINA,
      COMMANDER_PATRICK)
 
 
 _NEW_SKILL = 'new_skill'
+_BASE_NAME = 'base'
 _TANKWOMAN_ROLE_LEVEL = 100
 _TANKWOMAN_ICON = 'girl-empty.png'
 _TANKMAN_NAME = 'tankman'
@@ -74,6 +77,9 @@ class _BaseRecruitInfo(object):
 
     def getRecruitID(self):
         return self._recruitID
+
+    def getEventName(self):
+        return EMPTY_STRING
 
     def getLabel(self):
         return EMPTY_STRING
@@ -141,6 +147,9 @@ class _QuestRecruitInfo(_BaseRecruitInfo):
         super(_QuestRecruitInfo, self).__init__(recruitID=questID, expiryTime=0, nations=NationNames, learntSkills=_TANKWOMAN_LEARNT_SKILLS, freeXP=0, roleLevel=_TANKWOMAN_ROLE_LEVEL, lastSkillLevel=0, firstName=_ms(QUESTS.BONUSES_ITEM_TANKWOMAN), lastName=EMPTY_STRING, roles=[], icon=_TANKWOMAN_ICON, sourceID=RecruitSourceID.TANKWOMAN, isFemale=True, hasNewSkill=True)
         self.__operationName = operationName
 
+    def getEventName(self):
+        return self.getLabel()
+
     def getLabel(self):
         return _ms(PERSONAL_MISSIONS.OPERATIONTITLE_TITLE, title=self.__operationName)
 
@@ -167,6 +176,10 @@ class _TokenRecruitInfo(_BaseRecruitInfo):
 
             allowedRoles = [ skills_constants.SKILL_NAMES[role] for role in roles ]
         super(_TokenRecruitInfo, self).__init__(tokenName, expiryTime, nationNames, learntSkills, freeXP, roleLevel, lastSkillLevel, firstName, lastName, allowedRoles, icon, sourceID, isFemale, hasNewSkill)
+
+    def getEventName(self):
+        eventName = TOOLTIPS.getNotRecruitedTankmanEventName(self._sourceID)
+        return eventName if eventName is not None else TOOLTIPS.getNotRecruitedTankmanEventName(_BASE_NAME)
 
     def getLabel(self):
         label = TOOLTIPS.getNotRecruitedTankmanEventLabel(self._sourceID)

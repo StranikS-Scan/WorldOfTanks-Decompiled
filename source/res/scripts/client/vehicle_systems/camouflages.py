@@ -16,6 +16,7 @@ from items.customizations import parseOutfitDescr, CustomizationOutfit
 from vehicle_systems.tankStructure import VehiclePartsTuple
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.utils.graphics import isRendererPipelineDeferred
 from items.components.c11n_constants import ModificationType, C11N_MASK_REGION, DEFAULT_DECAL_SCALE_FACTORS, SeasonType, CustomizationType, DEFAULT_DECAL_CLIP_ANGLE, ApplyArea, ProjectionDecalPositionTags, MAX_PROJECTION_DECALS_PER_AREA, CamouflageTilingType, CustomizationTypeNames
 import math_utils
 from helpers import newFakeModel
@@ -50,13 +51,14 @@ ProjectionDecalGenericParams.__new__.__defaults__ = (Math.Vector4(0.0),
  False,
  False,
  True)
-SequenceParams = namedtuple('SequenceParams', ('transform', 'attachNode', 'sequenceName'))
-SequenceParams.__new__.__defaults__ = (math_utils.createIdentityMatrix(), '', '')
+ModelAnimatorParams = namedtuple('ModelAnimatorParams', ('transform', 'attachNode', 'animatorName'))
+ModelAnimatorParams.__new__.__defaults__ = (math_utils.createIdentityMatrix(), '', '')
 AttachmentParams = namedtuple('AttachmentParams', ('transform', 'attachNode', 'modelName'))
 AttachmentParams.__new__.__defaults__ = (math_utils.createIdentityMatrix(),
  Math.Vector3(0.0),
  '',
  '')
+_isDeferredRenderer = isRendererPipelineDeferred()
 _DEFAULT_GLOSS = 0.509
 _DEFAULT_METALLIC = 0.23
 _DEAD_VEH_WEIGHT_COEFF = 0.1
@@ -315,7 +317,7 @@ def getRepaint(outfit, containerId, vDesc):
     return RepaintParams(enabled, defaultColor, colors, metallics, glosses, fading, quality) if enabled else RepaintParams(enabled, defaultColor)
 
 
-def getSequencesPrereqs(outfit, spaceId):
+def getModelAnimatorsPrereqs(outfit, spaceId):
     multiSlot = outfit.misc.slotFor(GUI_ITEM_TYPE.SEQUENCE)
     prereqs = []
     for _, item, _ in multiSlot.items():
@@ -324,19 +326,21 @@ def getSequencesPrereqs(outfit, spaceId):
     return prereqs
 
 
-def getSequenceAnimators(outfit, vehicleDescr, spaceId, loadedAnimators, compoundModel):
+def getModelAnimators(outfit, vehicleDescr, spaceId, loadedAnimators, compoundModel):
     failedIds = loadedAnimators.failedIDs
-    sequences = __getSequences(outfit, vehicleDescr)
+    params = __getModelAnimators(outfit, vehicleDescr)
     animators = []
-    for sequence in sequences:
-        if sequence.sequenceName in failedIds:
+    for param in params:
+        if param.animatorName in failedIds:
             continue
-        animator = loadedAnimators[sequence.sequenceName]
+        animator = loadedAnimators.pop(param.animatorName)
         fakeModel = newFakeModel()
-        node = compoundModel.node(sequence.attachNode)
-        node.attach(fakeModel, sequence.transform)
+        node = compoundModel.node(param.attachNode)
+        node.attach(fakeModel, param.transform)
         wrapper = AnimationSequence.ModelWrapperContainer(fakeModel, spaceId)
         animator.bindTo(wrapper)
+        if hasattr(animator, 'setBoolParam'):
+            animator.setBoolParam('isDeferred', _isDeferredRenderer)
         animators.append(animator)
 
     return animators
@@ -368,12 +372,12 @@ def __createTransform(slotParams, slotData):
     return worldTransform
 
 
-def __getSequences(outfit, vehicleDescr):
+def __getModelAnimators(outfit, vehicleDescr):
 
-    def getSequenceParams(slotParams, slotData):
-        return SequenceParams(transform=__createTransform(slotParams, slotData), attachNode=slotParams.attachNode, sequenceName=slotData.item.sequenceName)
+    def getModelAnimatorParams(slotParams, slotData):
+        return ModelAnimatorParams(transform=__createTransform(slotParams, slotData), attachNode=slotParams.attachNode, animatorName=slotData.item.sequenceName)
 
-    return __getParams(outfit, vehicleDescr, 'sequence', GUI_ITEM_TYPE.SEQUENCE, getSequenceParams)
+    return __getParams(outfit, vehicleDescr, 'sequence', GUI_ITEM_TYPE.SEQUENCE, getModelAnimatorParams)
 
 
 def getAttachments(outfit, vehicleDescr):

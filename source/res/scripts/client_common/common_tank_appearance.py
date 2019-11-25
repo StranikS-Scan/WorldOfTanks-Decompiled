@@ -127,7 +127,7 @@ class CommonTankAppearance(ScriptGameObject):
         self._isTurretDetached = False
         self.__isObserver = False
         self.__attachments = []
-        self.__sequenceAnimators = []
+        self.__modelAnimators = []
         self.turretMatrix = None
         self.gunMatrix = None
         self.__allLodCalculators = []
@@ -149,7 +149,7 @@ class CommonTankAppearance(ScriptGameObject):
         self.__attachments = camouflages.getAttachments(self.outfit, self.typeDescriptor)
         prereqs = self.typeDescriptor.prerequisites(True)
         prereqs.extend(camouflages.getCamoPrereqs(self.outfit, self.typeDescriptor))
-        prereqs.extend(camouflages.getSequencesPrereqs(self.outfit, self.worldID))
+        prereqs.extend(camouflages.getModelAnimatorsPrereqs(self.outfit, self.worldID))
         splineDesc = self.typeDescriptor.chassis.splineDesc
         if splineDesc is not None:
             modelsSet = self.outfit.modelsSet
@@ -201,7 +201,7 @@ class CommonTankAppearance(ScriptGameObject):
         else:
             self.__trackScrollCtl = None
         self.__chassisDecal.create()
-        self.__sequenceAnimators = camouflages.getSequenceAnimators(self.outfit, self.typeDescriptor, self.worldID, resourceRefs, self.compoundModel)
+        self.__modelAnimators = camouflages.getModelAnimators(self.outfit, self.typeDescriptor, self.worldID, resourceRefs, self.compoundModel)
         self.transform = self.createComponent(GenericComponents.TransformComponent, Math.Vector3(0, 0, 0))
         self.areaTriggerTarget = self.createComponent(Triggers.AreaTriggerTarget)
         self.__filter = model_assembler.createVehicleFilter(self.typeDescriptor)
@@ -260,6 +260,7 @@ class CommonTankAppearance(ScriptGameObject):
         return
 
     def destroy(self):
+        self.__modelAnimators = []
         self._destroySystems()
         fashions = VehiclePartsTuple(None, None, None, None)
         self._setFashions(fashions, self._isTurretDetached)
@@ -290,7 +291,7 @@ class CommonTankAppearance(ScriptGameObject):
         for lodCalculator in self.allLodCalculators:
             lodCalculator.setupPosition(DataLinks.linkMatrixTranslation(self.compoundModel.matrix))
 
-        for animator in self.__sequenceAnimators:
+        for animator in self.__modelAnimators:
             animator.start()
 
         if hasattr(self.filter, 'placingCompensationMatrix') and self.swingingAnimator is not None:
@@ -308,10 +309,9 @@ class CommonTankAppearance(ScriptGameObject):
         return
 
     def deactivate(self):
-        for animator in self.__sequenceAnimators:
+        for animator in self.__modelAnimators:
             animator.stop()
 
-        self.__sequenceAnimators = []
         self.shadowManager.unregisterCompoundModel(self.compoundModel)
         self._stopSystems()
         super(CommonTankAppearance, self).deactivate()

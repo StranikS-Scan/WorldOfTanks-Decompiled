@@ -3,6 +3,7 @@
 import math
 from copy import copy
 from collections import namedtuple
+from functools import partial
 import BigWorld
 import Math
 import Event
@@ -54,7 +55,7 @@ class C11nHangarCameraManager(TimeDeltaMeter):
         self.__tankCentralPoint = None
         self.__screenSpaceOffset = 0.0
         self._eventsManager = Event.EventManager()
-        self.onTurretRotated = Event.Event(self._eventsManager)
+        self.onTurretAndGunRotated = Event.Event(self._eventsManager)
         return
 
     def init(self):
@@ -97,7 +98,7 @@ class C11nHangarCameraManager(TimeDeltaMeter):
             from gui.ClientHangarSpace import customizationHangarCFG, hangarCFG
             cfg = customizationHangarCFG()
             hangarConfig = hangarCFG()
-            self.__rotateTurret()
+            self.__rotateTurretAndGun()
             if self.__tankCentralPoint is None or updateTankCentralPoint:
                 self.__tankCentralPoint = self.__getTankCentralPoint()
             worldPos = self.__tankCentralPoint
@@ -155,7 +156,7 @@ class C11nHangarCameraManager(TimeDeltaMeter):
             return False
         else:
             self.__savePitch()
-            self.__rotateTurret(anchorId)
+            self.__rotateTurretAndGun(anchorId)
             from gui.ClientHangarSpace import hangarCFG
             hangarCfg = hangarCFG()
             width = width * hangarCfg['v_scale']
@@ -173,7 +174,7 @@ class C11nHangarCameraManager(TimeDeltaMeter):
             return False
         else:
             self.__savePitch()
-            self.__rotateTurret(anchorId)
+            self.__rotateTurretAndGun(anchorId)
             if normal is not None:
                 yaw, pitch = self.__getCameraYawPitch(up, normal)
             else:
@@ -238,18 +239,29 @@ class C11nHangarCameraManager(TimeDeltaMeter):
     def isStyleInfo(self):
         return self.__currentMode == C11nCameraModes.STYLE_INFO
 
-    def __rotateTurret(self, anchorId=None):
+    def __rotateTurretAndGun(self, anchorId=None):
         if self.vEntity is not None:
-            rotated = self.vEntity.appearance.rotateTurret(anchorId)
-            if rotated:
-                BigWorld.callback(0.0, lambda : BigWorld.callback(0.0, self.__onTurretRotatedCallback))
+            turretRotated = self.vEntity.appearance.rotateTurretForAnchor(anchorId)
+            gunRotated = self.vEntity.appearance.rotateGunToDefault()
+            if turretRotated or gunRotated:
+                BigWorld.callback(0.0, lambda : BigWorld.callback(0.0, partial(self.__onTurretAndGunRotatedCallback, turretRotated, gunRotated)))
         return
 
-    def __onTurretRotatedCallback(self):
-        if self.vEntity is not None:
-            self.vEntity.appearance.updateAnchorsParams(tankPartsToUpdate=(TankPartIndexes.TURRET, TankPartIndexes.GUN))
-            self.onTurretRotated()
-        return
+    def __onTurretAndGunRotatedCallback(self, isTurretRotated, isGunRotated):
+        if self.vEntity is None:
+            return
+        else:
+            tankPartsToUpdate = []
+            if isTurretRotated:
+                tankPartsToUpdate.append(TankPartIndexes.TURRET)
+                tankPartsToUpdate.append(TankPartIndexes.GUN)
+            elif isGunRotated:
+                tankPartsToUpdate.append(TankPartIndexes.GUN)
+            if not tankPartsToUpdate:
+                return
+            self.vEntity.appearance.updateAnchorsParams(tankPartsToUpdate=tuple(tankPartsToUpdate))
+            self.onTurretAndGunRotated()
+            return
 
     def enableMovementByMouse(self, enableRotation=True, enableZoom=True):
         if self.__hangarCameraManager is not None:

@@ -10,6 +10,9 @@ class DialogButtonModel(ViewModel):
     BTN_RESEARCH = 'research'
     BTN_PURCHASE = 'purchase'
 
+    def __init__(self, properties=8, commands=1):
+        super(DialogButtonModel, self).__init__(properties=properties, commands=commands)
+
     def getName(self):
         return self._getString(0)
 

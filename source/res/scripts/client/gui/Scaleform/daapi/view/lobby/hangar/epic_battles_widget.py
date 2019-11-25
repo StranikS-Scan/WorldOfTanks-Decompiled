@@ -81,7 +81,7 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
                     key = EPIC_BATTLE.WIDGETALERTMESSAGEBLOCK_SINGLEMODEHALT
                 else:
                     key = EPIC_BATTLE.WIDGETALERTMESSAGEBLOCK_ALLPERIPHERIESHALT
-                timeLeftStr = time_utils.getTillTimeString(timeLeft, EPIC_BATTLE.STATUS_TIMELEFT)
+                timeLeftStr = time_utils.getTillTimeString(timeLeft, EPIC_BATTLE.STATUS_TIMELEFT, removeLeadingZeros=True)
                 alertStr = _ms(key, time=timeLeftStr)
             else:
                 nextSeason = currSeason or self.epicMetaGameCtrl.getNextSeason()
@@ -89,7 +89,7 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
                     nextCycle = nextSeason.getNextByTimeCycle(currTime)
                     if nextCycle is not None:
                         cycleId = nextCycle.getEpicCycleNumber()
-                        timeLeftStr = time_utils.getTillTimeString(nextCycle.startDate - currTime, EPIC_BATTLE.STATUS_TIMELEFT)
+                        timeLeftStr = time_utils.getTillTimeString(nextCycle.startDate - currTime, EPIC_BATTLE.STATUS_TIMELEFT, removeLeadingZeros=True)
                         alertStr = _ms(EPIC_BATTLE.WIDGETALERTMESSAGEBLOCK_STARTIN, cycle=cycleId, time=timeLeftStr)
                 if not alertStr:
                     prevSeason = currSeason or self.epicMetaGameCtrl.getPreviousSeason()
@@ -155,5 +155,5 @@ class EpicBattlesWidgetTooltip(BlocksTooltipData):
             elif pMetaLevel == maxMetaLevel:
                 blocks.append(formatters.packTextBlockData(text=text_styles.main(TOOLTIPS.EPICBATTLEWIDGET_INFO_MAXLEVEL), padding=formatters.packPadding(top=-5, bottom=14)))
             if isNow and boundaryTime is not None:
-                blocks.append(formatters.packTextBlockData(text_styles.concatStylesToSingleLine(text_styles.main(EPIC_BATTLE.SELECTORTOOLTIP_EPICBATTLE_TIMELEFT), text_styles.middleTitle(time_utils.getTillTimeString(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(boundaryTime)), MENU.HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY))), padding=formatters.packPadding(top=-11)))
+                blocks.append(formatters.packTextBlockData(text_styles.concatStylesToSingleLine(text_styles.main(EPIC_BATTLE.SELECTORTOOLTIP_EPICBATTLE_TIMELEFT), text_styles.middleTitle(time_utils.getTillTimeString(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(boundaryTime)), MENU.HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY, removeLeadingZeros=True))), padding=formatters.packPadding(top=-11)))
             return blocks

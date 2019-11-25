@@ -82,6 +82,9 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
     def as_updatePingStatusS(self, pingStatus, isColorBlind):
         return self.flashObject.as_updatePingStatus(pingStatus, isColorBlind) if self._isDAAPIInited() else None
 
+    def as_updateAnonymizedStateS(self, isAnonymized):
+        return self.flashObject.as_updateAnonymizedState(isAnonymized) if self._isDAAPIInited() else None
+
     def as_setWalletStatusS(self, walletStatus):
         return self.flashObject.as_setWalletStatus(walletStatus) if self._isDAAPIInited() else None
 

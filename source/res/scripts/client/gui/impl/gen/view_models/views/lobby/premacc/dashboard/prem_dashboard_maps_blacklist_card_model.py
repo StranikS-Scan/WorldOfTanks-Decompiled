@@ -6,6 +6,9 @@ from gui.impl.gen.view_models.ui_kit.list_model import ListModel
 class PremDashboardMapsBlacklistCardModel(ViewModel):
     __slots__ = ('onGoToMapsBlacklistView',)
 
+    def __init__(self, properties=4, commands=1):
+        super(PremDashboardMapsBlacklistCardModel, self).__init__(properties=properties, commands=commands)
+
     @property
     def disabledMaps(self):
         return self._getViewModel(0)

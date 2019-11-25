@@ -5,6 +5,9 @@ from gui.impl.gen.view_models.views.lobby.premacc.daily_experience_base_model im
 class PremDashboardDoubleExperienceCardModel(DailyExperienceBaseModel):
     __slots__ = ('onGoToDoubleExpView',)
 
+    def __init__(self, properties=5, commands=1):
+        super(PremDashboardDoubleExperienceCardModel, self).__init__(properties=properties, commands=commands)
+
     def getIsAvailable(self):
         return self._getBool(4)
 

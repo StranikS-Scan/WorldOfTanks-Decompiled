@@ -6,12 +6,12 @@ from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.RES_SHOP_EXT import RES_SHOP_EXT
 from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.items_parameters.params_cache import g_paramsCache
 import nations
-from helpers import i18n
 from items import vehicles as veh_core
 from gui.shared.gui_items.fitting_item import FittingItem, ICONS_MASK
-from gui.shared.utils import GUN_CLIP, GUN_CAN_BE_CLIP, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD
+from gui.shared.utils import GUN_CLIP, GUN_CAN_BE_CLIP, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN
 from gui.shared.money import Currency
 MODULE_TYPES_ORDER = ('vehicleGun', 'vehicleTurret', 'vehicleEngine', 'vehicleChassis', 'vehicleRadio', 'vehicleFuelTank')
 MODULE_TYPES_ORDER_INDICES = dict(((n, i) for i, n in enumerate(MODULE_TYPES_ORDER)))
@@ -150,6 +150,10 @@ class VehicleGun(VehicleModule):
         typeToCheck = GUN_AUTO_RELOAD if vehicleDescr is not None else GUN_CAN_BE_AUTO_RELOAD
         return self.getReloadingType(vehicleDescr) == typeToCheck
 
+    def isDualGun(self, vehicleDescr=None):
+        typeToCheck = GUN_DUAL_GUN if vehicleDescr is not None else GUN_CAN_BE_DUAL_GUN
+        return self.getReloadingType(vehicleDescr) == typeToCheck
+
     def getInstalledVehicles(self, vehicles):
         result = set()
         for vehicle in vehicles:
@@ -170,11 +174,21 @@ class VehicleGun(VehicleModule):
     def icon(self):
         return RES_ICONS.MAPS_ICONS_MODULES_GUN
 
+    @property
+    def userType(self):
+        userType = super(VehicleGun, self).userType
+        return backport.text(R.strings.item_types.dualGun.name()) if self.isDualGun() else userType
+
     def getExtraIconInfo(self, vehDescr=None):
         if self.isClipGun(vehDescr):
             return RES_ICONS.MAPS_ICONS_MODULES_MAGAZINEGUNICON
+        elif self.isAutoReloadable(vehDescr):
+            return RES_ICONS.MAPS_ICONS_MODULES_AUTOLOADERGUN
         else:
-            return RES_ICONS.MAPS_ICONS_MODULES_AUTOLOADERGUN if self.isAutoReloadable(vehDescr) else None
+            return RES_ICONS.MAPS_ICONS_MODULES_DUALGUN if self.isDualGun(vehDescr) else None
+
+    def getGUIEmblemID(self):
+        return FITTING_TYPES.VEHICLE_DUAL_GUN if self.isDualGun() else super(VehicleGun, self).getGUIEmblemID()
 
     def _getMaxAmmo(self):
         return self.descriptor.maxAmmo
@@ -275,17 +289,14 @@ class Shell(FittingItem):
     def _getFormatLongUserName(self, kind):
         if self.nationID == nations.INDICES['germany']:
             caliber = float(self.descriptor.caliber) / 10
-            dimension = i18n.makeString('#item_types:shell/dimension/sm')
+            dimension = backport.text(R.strings.item_types.shell.dimension.sm())
         elif self.nationID == nations.INDICES['usa']:
             caliber = float(self.descriptor.caliber) / 25.4
-            dimension = i18n.makeString('#item_types:shell/dimension/inch')
+            dimension = backport.text(R.strings.item_types.shell.dimension.inch())
         else:
             caliber = self.descriptor.caliber
-            dimension = i18n.makeString('#item_types:shell/dimension/mm')
-        return i18n.makeString('#item_types:shell/name') % {'kind': i18n.makeString('#item_types:shell/%s/%s' % (kind, self.descriptor.kind)),
-         'name': self.userName,
-         'caliber': backport.getNiceNumberFormat(caliber),
-         'dimension': dimension}
+            dimension = backport.text(R.strings.item_types.shell.dimension.mm())
+        return backport.text(R.strings.item_types.shell.name(), kind=backport.text(R.strings.item_types.shell.dyn(kind).dyn(self.descriptor.kind)()), name=self.userName, caliber=backport.getNiceNumberFormat(caliber), dimension=dimension)
 
     @property
     def count(self):

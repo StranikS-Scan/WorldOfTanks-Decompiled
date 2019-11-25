@@ -5,6 +5,9 @@ from frameworks.wulf import ViewModel
 class SquadBonusItemRendererModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=4, commands=0):
+        super(SquadBonusItemRendererModel, self).__init__(properties=properties, commands=commands)
+
     def getLevel(self):
         return self._getString(0)
 

@@ -9,6 +9,9 @@ class FormatStringArgModel(ViewModel):
     ALIGN_RIGHT = 'right'
     ALIGN_CENTER = 'center'
 
+    def __init__(self, properties=5, commands=0):
+        super(FormatStringArgModel, self).__init__(properties=properties, commands=commands)
+
     def getValue(self):
         return self._getString(0)
 

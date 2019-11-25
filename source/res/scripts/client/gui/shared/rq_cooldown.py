@@ -19,6 +19,7 @@ class REQUEST_SCOPE(object):
     BATTLE_CONTROL = 5
     WGCG = 6
     STRONGHOLD = 7
+    BATTLE_ACTION = 8
 
 
 _REQUEST_SCOPE_TO_EVENT = {REQUEST_SCOPE.GLOBAL: events.CoolDownEvent.GLOBAL,
@@ -27,7 +28,8 @@ _REQUEST_SCOPE_TO_EVENT = {REQUEST_SCOPE.GLOBAL: events.CoolDownEvent.GLOBAL,
  REQUEST_SCOPE.XMPP: events.CoolDownEvent.XMPP,
  REQUEST_SCOPE.BATTLE_CONTROL: events.CoolDownEvent.BATTLE,
  REQUEST_SCOPE.WGCG: events.CoolDownEvent.WGCG,
- REQUEST_SCOPE.STRONGHOLD: events.CoolDownEvent.STRONGHOLD}
+ REQUEST_SCOPE.STRONGHOLD: events.CoolDownEvent.STRONGHOLD,
+ REQUEST_SCOPE.BATTLE_ACTION: events.CoolDownEvent.BATTLE_ACTION}
 _g_coolDowns = {}
 
 def isRequestInCoolDown(scopeID, rqTypeID):

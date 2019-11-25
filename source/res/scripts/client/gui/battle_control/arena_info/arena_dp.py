@@ -23,7 +23,7 @@ _OP = settings.INVALIDATE_OP
 _INVITATION_STATUS = settings.INVITATION_DELIVERY_STATUS
 
 class ArenaDataProvider(IArenaDataProvider):
-    __slots__ = ('__playerTeam', '__playerVehicleID', '__vInfoVOs', '__vStatsVOs', '__playersVIDs', '__weakref__', '__teamsOnArena', '__squadFinder', '__description', '__invitationStatuses')
+    __slots__ = ('__playerTeam', '__playerVehicleID', '__vInfoVOs', '__vStatsVOs', '__avatarsVIDs', '__accountVIDs', '__weakref__', '__teamsOnArena', '__squadFinder', '__description', '__invitationStatuses')
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, setup):
@@ -33,7 +33,8 @@ class ArenaDataProvider(IArenaDataProvider):
         self.__playerVehicleID = avatar_getter.getPlayerVehicleID(setup.avatar)
         self.__vInfoVOs = {}
         self.__vStatsVOs = arena_vos.VehicleArenaStatsDict()
-        self.__playersVIDs = {}
+        self.__avatarsVIDs = {}
+        self.__accountVIDs = {}
         self.__invitationStatuses = {}
         self.__squadFinder = squad_finder.createSquadFinder(setup.arenaVisitor)
         self.__description = arena_descrs.createDescription(setup.arenaVisitor)
@@ -43,7 +44,8 @@ class ArenaDataProvider(IArenaDataProvider):
 
     def clearInfo(self):
         self.__vInfoVOs.clear()
-        self.__playersVIDs.clear()
+        self.__avatarsVIDs.clear()
+        self.__accountVIDs.clear()
         self.__squadFinder.clear()
 
     def clearStats(self):
@@ -90,9 +92,12 @@ class ArenaDataProvider(IArenaDataProvider):
             result = self.__findSquads(exclude=(vID,))
         else:
             result = []
-        dbID = vInfoVO.player.accountDBID
-        if dbID:
-            self.__playersVIDs[dbID] = vID
+        avatarSessionID = vInfoVO.player.avatarSessionID
+        if avatarSessionID:
+            self.__avatarsVIDs[avatarSessionID] = vID
+        accountDBID = vInfoVO.player.accountDBID
+        if accountDBID:
+            self.__accountVIDs[accountDBID] = vID
         result.insert(0, (flags, vInfoVO))
         return result
 
@@ -136,13 +141,13 @@ class ArenaDataProvider(IArenaDataProvider):
         flags = vInfoVO.updateGameModeSpecificStats(stats)
         return (flags, vInfoVO)
 
-    def updateInvitationStatus(self, accountDBID, include, exclude=_INVITATION_STATUS.NONE):
-        vehicleID = self.getVehIDByAccDBID(accountDBID)
+    def updateInvitationStatus(self, avatarSessionID, include, exclude=_INVITATION_STATUS.NONE):
+        vehicleID = self.getVehIDBySessionID(avatarSessionID)
         if vehicleID:
             vInfoVO = self.__vInfoVOs[vehicleID]
             flags = vInfoVO.updateInvitationStatus(include=include, exclude=exclude)
         else:
-            self.__invitationStatuses[accountDBID] = (include, exclude)
+            self.__invitationStatuses[avatarSessionID] = (include, exclude)
             flags, vInfoVO = _OP.NONE, None
         return (flags, vInfoVO)
 
@@ -270,20 +275,27 @@ class ArenaDataProvider(IArenaDataProvider):
 
     def getVehIDByAccDBID(self, accDBID):
         try:
-            vID = self.__playersVIDs[accDBID]
+            vID = self.__accountVIDs[accDBID]
         except KeyError:
             vID = 0
 
         return vID
 
-    def getAccountDBIDByVehID(self, vID):
-        for accountDBID, vInfo in self.__playersVIDs:
-            if vInfo.vehicleID == vID:
-                break
-        else:
-            accountDBID = 0
+    def getVehIDBySessionID(self, avatarSessionID):
+        try:
+            vID = self.__avatarsVIDs[avatarSessionID]
+        except KeyError:
+            vID = 0
 
-        return accountDBID
+        return vID
+
+    def getSessionIDByVehID(self, vehID):
+        try:
+            sessionID = self.__vInfoVOs[vehID].player.avatarSessionID
+        except KeyError:
+            sessionID = ''
+
+        return sessionID
 
     def getVehiclesInfoIterator(self):
         return self.__vInfoVOs.itervalues()
@@ -325,13 +337,16 @@ class ArenaDataProvider(IArenaDataProvider):
         return result
 
     def __addVehicleInfoVO(self, vID, vInfoVO):
-        dbID = vInfoVO.player.accountDBID
+        avatarSessionID = vInfoVO.player.avatarSessionID
+        accountDBID = vInfoVO.player.accountDBID
         hasPrbID = False
         self.__vInfoVOs[vID] = vInfoVO
-        if dbID:
-            self.__playersVIDs[dbID] = vID
-            if dbID in self.__invitationStatuses:
-                include, exclude = self.__invitationStatuses.pop(dbID)
+        if accountDBID:
+            self.__accountVIDs[accountDBID] = vID
+        if avatarSessionID:
+            self.__avatarsVIDs[avatarSessionID] = vID
+            if avatarSessionID in self.__invitationStatuses:
+                include, exclude = self.__invitationStatuses.pop(avatarSessionID)
                 vInfoVO.updateInvitationStatus(include=include, exclude=exclude)
         prebattleID = vInfoVO.prebattleID
         if prebattleID > 0:

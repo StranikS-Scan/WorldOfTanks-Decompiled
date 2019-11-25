@@ -6,6 +6,9 @@ from gui.impl.gen.view_models.ui_kit.list_model import ListModel
 class DashboardPremiumCardModel(ViewModel):
     __slots__ = ('onClick',)
 
+    def __init__(self, properties=10, commands=1):
+        super(DashboardPremiumCardModel, self).__init__(properties=properties, commands=commands)
+
     @property
     def withoutPremium(self):
         return self._getViewModel(0)

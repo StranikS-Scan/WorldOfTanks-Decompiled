@@ -108,10 +108,8 @@ class DIALOGS(object):
     BUYINSTALLCONFIRMATION_CONFLICTEDMESSAGE_POSTFIX = '#dialogs:buyInstallConfirmation/conflictedMessage/postfix'
     BUYINSTALLCONFIRMATION_SUBMIT = '#dialogs:buyInstallConfirmation/submit'
     BUYINSTALLCONFIRMATION_CANCEL = '#dialogs:buyInstallConfirmation/cancel'
-    CHANGECONFIRMATIONNOTREMOVABLE_TITLE = '#dialogs:changeConfirmationNotRemovable/title'
-    CHANGECONFIRMATIONNOTREMOVABLE_MESSAGECOMBINE = '#dialogs:changeConfirmationNotRemovable/messageCombine'
-    CHANGECONFIRMATIONNOTREMOVABLE_SUBMIT = '#dialogs:changeConfirmationNotRemovable/submit'
-    CHANGECONFIRMATIONNOTREMOVABLE_CANCEL = '#dialogs:changeConfirmationNotRemovable/cancel'
+    CONFIRMATIONNOTREMOVABLE_MESSAGE_COMPLEX = '#dialogs:confirmationNotRemovable/message/complex'
+    CONFIRMATIONNOTREMOVABLE_MESSAGE_DESTROY = '#dialogs:confirmationNotRemovable/message/destroy'
     INSTALLCONFIRMATIONNOTREMOVABLE_GOLD_TITLE = '#dialogs:installConfirmationNotRemovable_gold/title'
     INSTALLCONFIRMATIONNOTREMOVABLE_GOLD_MESSAGE = '#dialogs:installConfirmationNotRemovable_gold/message'
     INSTALLCONFIRMATIONNOTREMOVABLE_GOLD_SUBMIT = '#dialogs:installConfirmationNotRemovable_gold/submit'
@@ -463,6 +461,7 @@ class DIALOGS(object):
     CONTROLSWRONGNOTIFICATION_CANCEL = '#dialogs:controlsWrongNotification/cancel'
     MINIMAPALPHANOTIFICATION_TITLE = '#dialogs:minimapAlphaNotification/title'
     MINIMAPALPHANOTIFICATION_MESSAGE = '#dialogs:minimapAlphaNotification/message'
+    MINIMAPALPHANOTIFICATION_MESSAGE_ALERT = '#dialogs:minimapAlphaNotification/message/alert'
     MINIMAPALPHANOTIFICATION_SUBMIT = '#dialogs:minimapAlphaNotification/submit'
     MINIMAPALPHANOTIFICATION_CANCEL = '#dialogs:minimapAlphaNotification/cancel'
     SOUNDMODEINVALID_TITLE = '#dialogs:soundModeInvalid/title'
@@ -484,7 +483,6 @@ class DIALOGS(object):
     MONEYTRANSFER_LABELTOTALPRICE = '#dialogs:moneyTransfer/labelTotalPrice'
     MONEYTRANSFER_LABELTO = '#dialogs:moneyTransfer/labelTo'
     MONEYTRANSFER_LABELGOLD = '#dialogs:moneyTransfer/labelGold'
-    MONEYTRANSFER_LABELNOTIFICATION = '#dialogs:moneyTransfer/labelNotification'
     MONEYTRANSFER_NOT_A_CLAN = '#dialogs:moneyTransfer/not_a_clan'
     MONEYTRANSFER_LABELFEEPRICE = '#dialogs:moneyTransfer/labelFeePrice'
     MONEYTRANSFER_LABELNORMAL = '#dialogs:moneyTransfer/labelNormal'
@@ -622,6 +620,7 @@ class DIALOGS(object):
     SKILLDROPWINDOW_CANCEL = '#dialogs:skillDropWindow/cancel'
     REMOVEINCOMPATIBLEEQS_TITLE = '#dialogs:removeIncompatibleEqs/title'
     REMOVEINCOMPATIBLEEQS_MESSAGE = '#dialogs:removeIncompatibleEqs/message'
+    REMOVEINCOMPATIBLEEQS_MESSAGE_REASON = '#dialogs:removeIncompatibleEqs/message/reason'
     REMOVEINCOMPATIBLEEQS_SUBMIT = '#dialogs:removeIncompatibleEqs/submit'
     REMOVEINCOMPATIBLEEQS_CANCEL = '#dialogs:removeIncompatibleEqs/cancel'
     REFUSETRAINING_TITLE = '#dialogs:refuseTraining/title'
@@ -639,6 +638,7 @@ class DIALOGS(object):
     CHANGEGRAPHICS_MESSAGE = '#dialogs:changeGraphics/message'
     CHANGEGRAPHICS_SUBMIT = '#dialogs:changeGraphics/submit'
     CHANGEGRAPHICS_CANCEL = '#dialogs:changeGraphics/cancel'
+    GRAPHICS_MESSAGE_ALERT = '#dialogs:graphics/message/alert'
     LOWFPSWARNING_TITLE = '#dialogs:lowFpsWarning/title'
     LOWFPSWARNING_MESSAGE = '#dialogs:lowFpsWarning/message'
     LOWFPSWARNING_SUBMIT = '#dialogs:lowFpsWarning/submit'
@@ -804,14 +804,17 @@ class DIALOGS(object):
     QUESTSCONFIRMDIALOG_CHECKBOX = '#dialogs:questsConfirmDialog/checkBox'
     QUESTSCONFIRMPROGRESSDIALOG_TITLE = '#dialogs:questsConfirmProgressDialog/title'
     QUESTSCONFIRMPROGRESSDIALOG_MESSAGE = '#dialogs:questsConfirmProgressDialog/message'
+    QUESTSCONFIRMPROGRESSDIALOG_MESSAGE_ALERT = '#dialogs:questsConfirmProgressDialog/message/alert'
     QUESTSCONFIRMPROGRESSDIALOG_SUBMIT = '#dialogs:questsConfirmProgressDialog/submit'
     QUESTSCONFIRMPROGRESSDIALOG_CANCEL = '#dialogs:questsConfirmProgressDialog/cancel'
     QUESTSDISMISSPROGRESSDIALOG_TITLE = '#dialogs:questsDismissProgressDialog/title'
     QUESTSCONFIRMDISCARDDIALOG_TITLE = '#dialogs:questsConfirmDiscardDialog/title'
     QUESTSDISMISSPROGRESSDIALOG_MESSAGE = '#dialogs:questsDismissProgressDialog/message'
+    QUESTSDISMISSPROGRESSDIALOG_MESSAGE_ALERT = '#dialogs:questsDismissProgressDialog/message/alert'
     QUESTSDISMISSPROGRESSDIALOG_SUBMIT = '#dialogs:questsDismissProgressDialog/submit'
     QUESTSDISMISSPROGRESSDIALOG_CANCEL = '#dialogs:questsDismissProgressDialog/cancel'
     QUESTSCONFIRMDISCARDDIALOG_MESSAGE = '#dialogs:questsConfirmDiscardDialog/message'
+    QUESTSCONFIRMDISCARDDIALOG_MESSAGE_ALERT = '#dialogs:questsConfirmDiscardDialog/message/alert'
     QUESTSCONFIRMDISCARDDIALOG_SUBMIT = '#dialogs:questsConfirmDiscardDialog/submit'
     QUESTSCONFIRMDISCARDDIALOG_CANCEL = '#dialogs:questsConfirmDiscardDialog/cancel'
     EPICBATTLECONFIRMDIALOG_TITLE = '#dialogs:epicBattleConfirmDialog/title'
@@ -966,6 +969,7 @@ class DIALOGS(object):
     LEAVESTARTEDEVENT_MESSAGE = '#dialogs:leaveStartedEvent/message'
     LEAVESTARTEDEVENT_SUBMIT = '#dialogs:leaveStartedEvent/submit'
     LEAVESTARTEDEVENT_CANCEL = '#dialogs:leaveStartedEvent/cancel'
+    LEAVEEVENT_MESSAGE_WARNING = '#dialogs:leaveEvent/message/warning'
     GAMMADIALOG_TITLE = '#dialogs:gammaDialog/title'
     GAMMADIALOG_MESSAGE_HEADER = '#dialogs:gammaDialog/message/header'
     GAMMADIALOG_MESSAGE_DESCRIPTION = '#dialogs:gammaDialog/message/description'
@@ -986,6 +990,7 @@ class DIALOGS(object):
     CREWSKINS_SKINWILLBEREMOVED_CANCEL = '#dialogs:crewSkins/skinWillBeRemoved/cancel'
     SESSIONSTATS_CONFIRMRESET_TITLE = '#dialogs:sessionStats/confirmReset/title'
     SESSIONSTATS_CONFIRMRESET_MESSAGE = '#dialogs:sessionStats/confirmReset/message'
+    SESSIONSTATS_CONFIRMRESET_TIME = '#dialogs:sessionStats/confirmReset/time'
     SESSIONSTATS_CONFIRMRESET_SUBMIT = '#dialogs:sessionStats/confirmReset/submit'
     SESSIONSTATS_CONFIRMRESET_CANCEL = '#dialogs:sessionStats/confirmReset/cancel'
     CREWBOOKS_CONFIRMATION_TITLE = '#dialogs:crewBooks/confirmation/title'
@@ -1107,10 +1112,8 @@ class DIALOGS(object):
      BUYINSTALLCONFIRMATION_CONFLICTEDMESSAGE_POSTFIX,
      BUYINSTALLCONFIRMATION_SUBMIT,
      BUYINSTALLCONFIRMATION_CANCEL,
-     CHANGECONFIRMATIONNOTREMOVABLE_TITLE,
-     CHANGECONFIRMATIONNOTREMOVABLE_MESSAGECOMBINE,
-     CHANGECONFIRMATIONNOTREMOVABLE_SUBMIT,
-     CHANGECONFIRMATIONNOTREMOVABLE_CANCEL,
+     CONFIRMATIONNOTREMOVABLE_MESSAGE_COMPLEX,
+     CONFIRMATIONNOTREMOVABLE_MESSAGE_DESTROY,
      INSTALLCONFIRMATIONNOTREMOVABLE_GOLD_TITLE,
      INSTALLCONFIRMATIONNOTREMOVABLE_GOLD_MESSAGE,
      INSTALLCONFIRMATIONNOTREMOVABLE_GOLD_SUBMIT,
@@ -1462,6 +1465,7 @@ class DIALOGS(object):
      CONTROLSWRONGNOTIFICATION_CANCEL,
      MINIMAPALPHANOTIFICATION_TITLE,
      MINIMAPALPHANOTIFICATION_MESSAGE,
+     MINIMAPALPHANOTIFICATION_MESSAGE_ALERT,
      MINIMAPALPHANOTIFICATION_SUBMIT,
      MINIMAPALPHANOTIFICATION_CANCEL,
      SOUNDMODEINVALID_TITLE,
@@ -1483,7 +1487,6 @@ class DIALOGS(object):
      MONEYTRANSFER_LABELTOTALPRICE,
      MONEYTRANSFER_LABELTO,
      MONEYTRANSFER_LABELGOLD,
-     MONEYTRANSFER_LABELNOTIFICATION,
      MONEYTRANSFER_NOT_A_CLAN,
      MONEYTRANSFER_LABELFEEPRICE,
      MONEYTRANSFER_LABELNORMAL,
@@ -1621,6 +1624,7 @@ class DIALOGS(object):
      SKILLDROPWINDOW_CANCEL,
      REMOVEINCOMPATIBLEEQS_TITLE,
      REMOVEINCOMPATIBLEEQS_MESSAGE,
+     REMOVEINCOMPATIBLEEQS_MESSAGE_REASON,
      REMOVEINCOMPATIBLEEQS_SUBMIT,
      REMOVEINCOMPATIBLEEQS_CANCEL,
      REFUSETRAINING_TITLE,
@@ -1638,6 +1642,7 @@ class DIALOGS(object):
      CHANGEGRAPHICS_MESSAGE,
      CHANGEGRAPHICS_SUBMIT,
      CHANGEGRAPHICS_CANCEL,
+     GRAPHICS_MESSAGE_ALERT,
      LOWFPSWARNING_TITLE,
      LOWFPSWARNING_MESSAGE,
      LOWFPSWARNING_SUBMIT,
@@ -1803,14 +1808,17 @@ class DIALOGS(object):
      QUESTSCONFIRMDIALOG_CHECKBOX,
      QUESTSCONFIRMPROGRESSDIALOG_TITLE,
      QUESTSCONFIRMPROGRESSDIALOG_MESSAGE,
+     QUESTSCONFIRMPROGRESSDIALOG_MESSAGE_ALERT,
      QUESTSCONFIRMPROGRESSDIALOG_SUBMIT,
      QUESTSCONFIRMPROGRESSDIALOG_CANCEL,
      QUESTSDISMISSPROGRESSDIALOG_TITLE,
      QUESTSCONFIRMDISCARDDIALOG_TITLE,
      QUESTSDISMISSPROGRESSDIALOG_MESSAGE,
+     QUESTSDISMISSPROGRESSDIALOG_MESSAGE_ALERT,
      QUESTSDISMISSPROGRESSDIALOG_SUBMIT,
      QUESTSDISMISSPROGRESSDIALOG_CANCEL,
      QUESTSCONFIRMDISCARDDIALOG_MESSAGE,
+     QUESTSCONFIRMDISCARDDIALOG_MESSAGE_ALERT,
      QUESTSCONFIRMDISCARDDIALOG_SUBMIT,
      QUESTSCONFIRMDISCARDDIALOG_CANCEL,
      EPICBATTLECONFIRMDIALOG_TITLE,
@@ -1965,6 +1973,7 @@ class DIALOGS(object):
      LEAVESTARTEDEVENT_MESSAGE,
      LEAVESTARTEDEVENT_SUBMIT,
      LEAVESTARTEDEVENT_CANCEL,
+     LEAVEEVENT_MESSAGE_WARNING,
      GAMMADIALOG_TITLE,
      GAMMADIALOG_MESSAGE_HEADER,
      GAMMADIALOG_MESSAGE_DESCRIPTION,
@@ -1985,6 +1994,7 @@ class DIALOGS(object):
      CREWSKINS_SKINWILLBEREMOVED_CANCEL,
      SESSIONSTATS_CONFIRMRESET_TITLE,
      SESSIONSTATS_CONFIRMRESET_MESSAGE,
+     SESSIONSTATS_CONFIRMRESET_TIME,
      SESSIONSTATS_CONFIRMRESET_SUBMIT,
      SESSIONSTATS_CONFIRMRESET_CANCEL,
      CREWBOOKS_CONFIRMATION_TITLE,

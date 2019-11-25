@@ -13,7 +13,6 @@ from gui.prb_control import prbInvitesProperty
 from gui.shared.SoundEffectsId import SoundEffectsId
 from gui.shared.utils.key_mapping import getKey, getReadableKey
 from helpers import dependency
-from helpers.i18n import makeString
 from messenger.m_constants import USER_TAG
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.shared_messages import ClientActionMessage
@@ -22,6 +21,9 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.shared import g_eventBus
 from gui.shared import EVENT_BUS_SCOPE, events
+from skeletons.gui.game_control import IAnonymizerController
+from gui.impl.gen import R
+from gui.impl import backport
 SQUAD_MEMBERS_COUNT = 2
 FULL_SQUAD_MEMBERS_COUNT = 3
 
@@ -187,50 +189,43 @@ class _DynSquadActionMessage(ClientActionMessage):
         return self.__squadNum
 
 
+_R_DYN_SQUAD = R.strings.messenger.client.dynSquad
+
 class DynSquadMessagesController(DynSquadArenaController):
 
-    def _inviteReceived(self, invite):
-        self.__sendMessage('#messenger:client/dynSquad/inviteReceived', creator=invite.creator)
+    @dependency.replace_none_kwargs(ctrl=IAnonymizerController)
+    def _inviteReceived(self, invite, ctrl=None):
+        self.__sendMessage(_R_DYN_SQUAD.inviteReceived if not ctrl.isAnonymized else _R_DYN_SQUAD.inviteReceived.anonymized, creator=invite.creator)
 
     def _inviteSent(self, invite):
-        self.__sendMessage('#messenger:client/dynSquad/inviteSent', receiver=invite.receiver)
+        self.__sendMessage(_R_DYN_SQUAD.inviteSent, receiver=invite.receiver)
 
     def _squadCreatedImOwner(self, squadNum):
-        keyName = getReadableKey(CommandMapping.CMD_VOICECHAT_ENABLE)
-        key = getKey(CommandMapping.CMD_VOICECHAT_ENABLE)
-        state = _getVIOPState(key)
-        message = '#messenger:client/dynSquad/created/owner/%s' % state
-        self.__sendMessage(message, squadNum=squadNum, keyName=keyName)
+        self.__sendMessage(_R_DYN_SQUAD.created.owner.dyn(self.__getState(CommandMapping.CMD_VOICECHAT_ENABLE)), squadNum=squadNum, keyName=getReadableKey(CommandMapping.CMD_VOICECHAT_ENABLE))
 
     def _squadCreatedImRecruit(self, squadNum):
-        keyName = getReadableKey(CommandMapping.CMD_VOICECHAT_ENABLE)
-        key = getKey(CommandMapping.CMD_VOICECHAT_ENABLE)
-        state = _getVIOPState(key)
-        message = '#messenger:client/dynSquad/created/recruit/%s' % state
-        self.__sendMessage(message, squadNum=squadNum, keyName=keyName)
+        self.__sendMessage(_R_DYN_SQUAD.created.recruit.dyn(self.__getState(CommandMapping.CMD_VOICECHAT_ENABLE)), squadNum=squadNum, keyName=getReadableKey(CommandMapping.CMD_VOICECHAT_ENABLE))
 
     def _squadCreatedByAllies(self, squadNum):
-        self.__sendMessage('#messenger:client/dynSquad/created/allies', squadNum=squadNum, squadType=DYN_SQUAD_TYPE.ALLY)
+        self.__sendMessage(_R_DYN_SQUAD.created.allies, squadNum=squadNum, squadType=DYN_SQUAD_TYPE.ALLY)
 
     def _squadCreatedByEnemies(self, squadNum):
-        self.__sendMessage('#messenger:client/dynSquad/created/enemies', squadNum=squadNum, squadType=DYN_SQUAD_TYPE.ENEMY)
+        self.__sendMessage(_R_DYN_SQUAD.created.enemies, squadNum=squadNum, squadType=DYN_SQUAD_TYPE.ENEMY)
 
     def _iAmJoinedSquad(self, squadNum):
-        keyName = getReadableKey(CommandMapping.CMD_VOICECHAT_ENABLE)
-        key = getKey(CommandMapping.CMD_VOICECHAT_ENABLE)
-        state = _getVIOPState(key)
-        message = '#messenger:client/dynSquad/inviteAccepted/myself/%s' % state
-        self.__sendMessage(message, squadNum=squadNum, keyName=keyName)
+        self.__sendMessage(_R_DYN_SQUAD.inviteAccepted.myself.dyn(self.__getState(CommandMapping.CMD_VOICECHAT_ENABLE)), squadNum=squadNum, keyName=getReadableKey(CommandMapping.CMD_VOICECHAT_ENABLE))
 
     def _someoneJoinedAlliedSquad(self, squadNum, receiver):
-        self.__sendMessage('#messenger:client/dynSquad/inviteAccepted/user', squadNum=squadNum, receiver=receiver, squadType=DYN_SQUAD_TYPE.ALLY)
+        self.__sendMessage(_R_DYN_SQUAD.inviteAccepted.user, squadNum=squadNum, receiver=receiver, squadType=DYN_SQUAD_TYPE.ALLY)
 
     def _someoneJoinedMySquad(self, squadNum, receiver):
-        self.__sendMessage('#messenger:client/dynSquad/inviteAccepted/user', squadNum=squadNum, receiver=receiver)
+        self.__sendMessage(_R_DYN_SQUAD.inviteAccepted.user, squadNum=squadNum, receiver=receiver)
 
-    def __sendMessage(self, key, **kwargs):
-        message = makeString(key, **kwargs)
-        g_messengerEvents.onWarningReceived(_DynSquadActionMessage(message, kwargs.get('squadType', DYN_SQUAD_TYPE.OWN), kwargs.get('squadNum')))
+    def __sendMessage(self, resource, **kwargs):
+        g_messengerEvents.onWarningReceived(_DynSquadActionMessage(backport.text(resource(), **kwargs), kwargs.get('squadType', DYN_SQUAD_TYPE.OWN), kwargs.get('squadNum')))
+
+    def __getState(self, command):
+        return _getVIOPState(getKey(command))
 
 
 _DYN_SQUAD_PLATOON_JOINED = 'dyn_squad_platoon_joined'

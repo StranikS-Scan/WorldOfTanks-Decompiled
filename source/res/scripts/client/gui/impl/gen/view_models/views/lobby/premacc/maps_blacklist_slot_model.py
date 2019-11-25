@@ -5,6 +5,9 @@ from frameworks.wulf import ViewModel
 class MapsBlacklistSlotModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=5, commands=0):
+        super(MapsBlacklistSlotModel, self).__init__(properties=properties, commands=commands)
+
     def getState(self):
         return self._getString(0)
 

@@ -340,9 +340,9 @@ class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
             elo = league.get('elo')
             if elo:
                 elo = backport.getNiceNumberFormat(elo)
-                label = text_styles.stats(elo) if league.get('position') else text_styles.standard(elo)
+                label = text_styles.stats(elo) if league.get('position') else text_styles.main(elo)
             else:
-                label = text_styles.standard(DUMMY_UNAVAILABLE_DATA)
+                label = text_styles.main(DUMMY_UNAVAILABLE_DATA)
             tooltip = league.get('tooltip')
             if tooltip:
                 tooltip = makeTooltip(tooltip.get('header'), tooltip.get('body'))

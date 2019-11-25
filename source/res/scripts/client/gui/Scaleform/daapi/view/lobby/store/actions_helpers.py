@@ -13,7 +13,7 @@ from gui.server_events.events_helpers import EventInfoModel
 from gui.server_events.formatters import formatStrDiscount, formatPercentValue, formatMultiplierValue, formatGoldPriceNormalCard, formatCreditPriceNormalCard, DECORATION_SIZES, formatGoldPrice, formatGoldPriceBig, formatCreditPrice, formatCreditPriceBig, formatVehicleLevel, DISCOUNT_TYPE
 from gui.shared.formatters import icons
 from gui.server_events import settings as quest_settings
-from gui.shared.utils import MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, WHEELED_SPEED_MODE_SPEED
+from gui.shared.utils import MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME
 from helpers import i18n, dependency, time_utils
 from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.server_events import IEventsCache
@@ -540,7 +540,11 @@ class VehPriceActionInfo(ActionInfo):
                                          WHEELED_SWITCH_ON_TIME,
                                          WHEELED_SWITCH_OFF_TIME),
          VEHICLE_CLASS_NAME.MEDIUM_TANK: ('avgDamagePerMinute', 'enginePowerPerTon', 'speedLimits', 'chassisRotationSpeed'),
-         VEHICLE_CLASS_NAME.HEAVY_TANK: ('avgDamage', 'avgPiercingPower', 'hullArmor', 'turretArmor'),
+         VEHICLE_CLASS_NAME.HEAVY_TANK: ('avgDamage',
+                                         'avgPiercingPower',
+                                         'hullArmor',
+                                         'turretArmor',
+                                         DUAL_GUN_CHARGE_TIME),
          VEHICLE_CLASS_NAME.SPG: ('avgDamage', 'stunMinDuration', 'stunMaxDuration', 'reloadTimeSecs', 'aimingTime', 'explosionRadius'),
          VEHICLE_CLASS_NAME.AT_SPG: ('avgPiercingPower', 'shotDispersionAngle', 'avgDamagePerMinute', 'speedLimits', 'chassisRotationSpeed', 'switchOnTime', 'switchOffTime'),
          'default': ('speedLimits', 'enginePower', 'chassisRotationSpeed')}

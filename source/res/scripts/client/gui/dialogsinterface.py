@@ -27,8 +27,8 @@ def showI18nInfoDialog(i18nKey, callback, meta=None):
 
 
 @dialog
-def showI18nConfirmDialog(i18nKey, callback, meta=None, focusedID=None):
-    showDialog(I18nConfirmDialogMeta(i18nKey, meta=meta, focusedID=focusedID), callback)
+def showI18nConfirmDialog(i18nKey, callback, ctx=None, meta=None, focusedID=None):
+    showDialog(I18nConfirmDialogMeta(i18nKey, messageCtx=ctx, meta=meta, focusedID=focusedID), callback)
 
 
 @dialog

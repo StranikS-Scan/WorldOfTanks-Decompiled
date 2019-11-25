@@ -18,7 +18,7 @@ def getUserActionReceivedMessage(actionIndex, user):
         return
     else:
         if actionIndex in _userTransferUserMsgKeys:
-            message = i18n.makeString(_userTransferUserMsgKeys[actionIndex], user.getFullName(isClan=True, isRegion=False))
+            message = i18n.makeString(_userTransferUserMsgKeys[actionIndex], user.getFullName())
         else:
             message = None
         return message

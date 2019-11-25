@@ -117,3 +117,6 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
 
     def as_updateDualGunMarkerStateS(self, markerState):
         return self.flashObject.as_updateDualGunMarkerState(markerState) if self._isDAAPIInited() else None
+
+    def as_runCameraTransitionFxS(self, activeGunId, animationDuration):
+        return self.flashObject.as_runCameraTransitionFx(activeGunId, animationDuration) if self._isDAAPIInited() else None

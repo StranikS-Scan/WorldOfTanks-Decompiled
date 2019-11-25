@@ -41,7 +41,7 @@ class RqFriendshipCriteria(IEntityFindCriteria):
 class MutedOnlyFindCriteria(IEntityFindCriteria):
 
     def filter(self, entity):
-        return entity.getProtoType() == PROTO_TYPE.XMPP and entity.isMuted() and not entity.isIgnored()
+        return entity.isMuted() and not entity.isIgnored()
 
 
 class XMPPChannelFindCriteria(IEntityFindCriteria):

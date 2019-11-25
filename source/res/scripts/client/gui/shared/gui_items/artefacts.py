@@ -16,7 +16,8 @@ from items import artefacts, vehicles as vehicleItems, tankmen
 from items.tankmen import PERKS
 from gui.Scaleform.locale.ARTEFACTS import ARTEFACTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
-from helpers import i18n
+from helpers import i18n, dependency
+from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
 from items.vehicles import ABILITY_SLOTS_BY_VEHICLE_CLASS, getVehicleClassFromVehicleType
 _TAG_NOT_FOR_SALE = 'notForSale'
@@ -181,14 +182,11 @@ class Equipment(VehicleArtefact):
 
 class BattleBooster(Equipment):
     __slots__ = ()
+    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, *args, **kwargs):
         super(BattleBooster, self).__init__(*args, **kwargs)
         self.itemTypeID = GUI_ITEM_TYPE.BATTLE_BOOSTER
-
-    @property
-    def isForSale(self):
-        return False
 
     @property
     def userType(self):
@@ -197,6 +195,10 @@ class BattleBooster(Equipment):
     @property
     def itemTypeName(self):
         return GUI_ITEM_TYPE_NAMES[self.itemTypeID]
+
+    @property
+    def isForSale(self):
+        return self.__lobbyContext.getServerSettings().isBattleBoostersEnabled() and super(BattleBooster, self).isForSale
 
     def isCrewBooster(self):
         return _TAG_CREW_BATTLE_BOOSTER in self.tags
@@ -211,7 +213,7 @@ class BattleBooster(Equipment):
         return False
 
     def isInstalled(self, vehicle, slotIdx=None):
-        return vehicle.equipment.battleBoosterConsumables.containsIntCD(self.intCD, slotIdx)
+        return False if vehicle is None else vehicle.equipment.battleBoosterConsumables.containsIntCD(self.intCD, slotIdx)
 
     def getInstalledVehicles(self, vehicles):
         result = set()

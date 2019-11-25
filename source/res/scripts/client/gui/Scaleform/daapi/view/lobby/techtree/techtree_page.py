@@ -26,8 +26,8 @@ from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.utils.requesters.blueprints_requester import getNationalFragmentCD
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
-_HEIGHT_LESS_THAN_SPECIFIED_TO_OVERRIDE = 768
-_HEIGHT_LESS_THAN_SPECIFIED_OVERRIDE_TAG = 'height_less_768'
+_HEIGHT_LESS_THAN_SPECIFIED_TO_OVERRIDE = 850
+_HEIGHT_LESS_THAN_SPECIFIED_OVERRIDE_TAG = 'height_less_850'
 
 class TechTree(TechTreeMeta):
     __lobbyContext = dependency.descriptor(ILobbyContext)

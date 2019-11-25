@@ -12,5 +12,8 @@ class DialogPresets(ViewModel):
     MAPS_BLACKLIST = 'mapsBlacklist'
     DEFAULT = 'default'
 
+    def __init__(self, properties=0, commands=0):
+        super(DialogPresets, self).__init__(properties=properties, commands=commands)
+
     def _initialize(self):
         super(DialogPresets, self)._initialize()

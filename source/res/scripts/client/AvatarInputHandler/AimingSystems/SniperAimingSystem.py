@@ -135,7 +135,8 @@ class SniperAimingSystem(IAimingSystem):
     def getDesiredShotPoint(self):
         start = self._matrix.translation
         scanDir = self._matrix.applyVector(Vector3(0.0, 0.0, 1.0))
-        return AimingSystems.getDesiredShotPoint(start, scanDir)
+        shotDistance = self._vehicleTypeDescriptor.shot.maxDistance
+        return AimingSystems.getDesiredShotPoint(start, scanDir, shotDistance=shotDistance)
 
     def resetIdealDirection(self):
         self.__idealTurretYaw, self.__idealGunPitch = self.__worldYawPitchToTurret(self.__worldYaw, self.__worldPitch)

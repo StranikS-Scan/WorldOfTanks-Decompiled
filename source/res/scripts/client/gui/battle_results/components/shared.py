@@ -26,30 +26,29 @@ class ClientIndexItem(base.StatsItem):
 
 
 class PlayerNameBlock(base.StatsBlock):
-    __slots__ = ('__dbID', 'nameLabel', 'fullNameLabel', 'clanLabel', 'regionLabel', 'isTeamKiller')
+    __slots__ = ('_dbID', 'fakeNameLabel', 'realNameLabel', 'clanLabel', 'fullNameLabel', 'regionLabel', 'isTeamKiller', 'tags')
 
     def __init__(self, meta=None, field='', *path):
         super(PlayerNameBlock, self).__init__(meta, field, *path)
-        self.__dbID = 0
-
-    def setAccountDBID(self, dbID):
-        self.__dbID = dbID
+        self._dbID = 0
 
     def setTeamKillerInfo(self):
-        self.nameLabel = makeTeamKillerText(self.nameLabel)
+        self.realNameLabel = makeTeamKillerText(self.realNameLabel)
         self.fullNameLabel = makeTeamKillerText(self.fullNameLabel)
         self.isTeamKiller = True
 
     def setPlayerInfo(self, playerInfo):
-        self.__dbID = playerInfo.dbID
-        self.nameLabel = playerInfo.name
-        self.fullNameLabel = playerInfo.getFullName()
+        self._dbID = playerInfo.dbID
+        self.fakeNameLabel = playerInfo.fakeName
+        self.realNameLabel = playerInfo.realName
         self.clanLabel = playerInfo.clanAbbrev
+        self.fullNameLabel = playerInfo.getFullName()
         self.regionLabel = playerInfo.getRegionCode()
+        self.tags = playerInfo.tags
 
     def setRecord(self, result, reusable):
         if reusable is not None:
-            self.setPlayerInfo(reusable.getPlayerInfo(self.__dbID))
+            self.setPlayerInfo(reusable.getPlayerInfo(self._dbID))
         else:
             LOG_ERROR('Player is not found', result, reusable)
         return

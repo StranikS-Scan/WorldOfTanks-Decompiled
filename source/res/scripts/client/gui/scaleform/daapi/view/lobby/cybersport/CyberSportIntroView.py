@@ -116,7 +116,7 @@ class CyberSportIntroView(CyberSportIntroMeta):
                 for vehIntCD in vehDiff:
                     vehicle = self.itemsCache.items.getItemByCD(vehIntCD)
                     if not vehicle.activeInNationGroup and self._currentVehCD == vehIntCD:
-                        itemCD = iterVehTypeCDsInNationGroup(vehicle.intCompactDescr).next()
+                        itemCD = iterVehTypeCDsInNationGroup(vehicle.intCD).next()
                         self.__setSelectedVehicle(itemCD)
 
             return

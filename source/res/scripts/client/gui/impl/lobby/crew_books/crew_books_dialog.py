@@ -3,7 +3,7 @@
 import logging
 from gui.ClientUpdateManager import g_clientUpdateManager
 from async import async, await, AsyncEvent, AsyncReturn, AsyncScope, BrokenPromiseError
-from frameworks.wulf import Window, WindowStatus, WindowSettings
+from frameworks.wulf import Window, WindowStatus, WindowSettings, ViewSettings
 from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
 from gui.impl.auxiliary.crew_books_helper import TankmanModelPresenterBase, TankmanSkillListPresenter
 from gui.impl.gen import R
@@ -32,7 +32,7 @@ class CrewBooksDialog(Window):
         self.__tankmanInvID = int(tankmanInvId)
         settings = WindowSettings()
         settings.flags = DialogLayer.TOP_WINDOW
-        settings.content = DialogContent(R.views.lobby.crew_books.crew_books_dialog_content.CrewBooksDialogContent(), CrewBooksDialogContentModel)
+        settings.content = DialogContent(ViewSettings(R.views.lobby.crew_books.crew_books_dialog_content.CrewBooksDialogContent(), model=CrewBooksDialogContentModel()))
         settings.parent = parent
         super(CrewBooksDialog, self).__init__(settings)
         self.__blur = WGUIBackgroundBlurSupportImpl()

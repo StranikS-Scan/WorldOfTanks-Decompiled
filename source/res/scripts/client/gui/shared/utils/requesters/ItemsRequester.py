@@ -205,7 +205,7 @@ class VehsMultiNationSuitableCriteria(VehsSuitableCriteria):
     def _selectAllSuitableItemsByVehicle(self, vehicle, itemTypeID, outSuitableCompDescrs):
         self._selectAllSuitableItemsByVehicleDescr(vehicle.descriptor, itemTypeID, outSuitableCompDescrs)
         if vehicle.hasNationGroup:
-            targetVehCD = iterVehTypeCDsInNationGroup(vehicle.intCompactDescr).next()
+            targetVehCD = iterVehTypeCDsInNationGroup(vehicle.intCD).next()
             if targetVehCD:
                 self._selectAllSuitableItemsByVehicleDescr(self.itemsCache.items.getItemByCD(targetVehCD).descriptor, itemTypeID, outSuitableCompDescrs)
 
@@ -257,6 +257,7 @@ class REQ_CRITERIA(object):
         IS_PREMIUM_IGR = RequestCriteria(PredicateCondition(lambda item: item.isPremiumIGR))
         ELITE = RequestCriteria(PredicateCondition(lambda item: item.isElite))
         IS_BOT = RequestCriteria(PredicateCondition(lambda item: item.name.endswith('_bot')))
+        IS_CREW_LOCKED = RequestCriteria(PredicateCondition(lambda item: item.isCrewLocked))
         FULLY_ELITE = RequestCriteria(PredicateCondition(lambda item: item.isFullyElite))
         EVENT = RequestCriteria(PredicateCondition(lambda item: item.isEvent))
         EVENT_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEventBattles))
@@ -345,7 +346,7 @@ class RESEARCH_CRITERIA(object):
 class ItemsRequester(IItemsRequester):
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
 
-    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None):
+    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None):
         self.__inventory = inventory
         self.__stats = stats
         self.__dossiers = dossiers
@@ -360,6 +361,7 @@ class ItemsRequester(IItemsRequester):
         self.__festivity = festivityRequester
         self.__tokens = tokens
         self.__sessionStats = sessionStatsRequester
+        self.__anonymizer = anonymizerRequester
         self.__itemsCache = defaultdict(dict)
         self.__brokenSyncAlreadyLoggedTypes = set()
         self.__vehCustomStateCache = defaultdict(dict)
@@ -420,6 +422,10 @@ class ItemsRequester(IItemsRequester):
     def sessionStats(self):
         return self.__sessionStats
 
+    @property
+    def anonymizer(self):
+        return self.__anonymizer
+
     @async
     @process
     def request(self, callback=None):
@@ -442,6 +448,9 @@ class ItemsRequester(IItemsRequester):
         Waiting.show('download/recycleBin')
         yield self.__recycleBin.request()
         Waiting.hide('download/recycleBin')
+        Waiting.show('download/anonymizer')
+        yield self.__anonymizer.request()
+        Waiting.hide('download/anonymizer')
         Waiting.show('download/ranked')
         yield self.__ranked.request()
         Waiting.hide('download/ranked')
@@ -464,7 +473,7 @@ class ItemsRequester(IItemsRequester):
         callback(self)
 
     def isSynced(self):
-        return self.__stats.isSynced() and self.__inventory.isSynced() and self.__recycleBin.isSynced() and self.__shop.isSynced() and self.__dossiers.isSynced() and self.__goodies.isSynced() and self.__vehicleRotation.isSynced() and self.ranked.isSynced() and self.epicMetaGame.isSynced() and self.__blueprints.isSynced() if self.__blueprints is not None else False
+        return self.__stats.isSynced() and self.__inventory.isSynced() and self.__recycleBin.isSynced() and self.__shop.isSynced() and self.__dossiers.isSynced() and self.__goodies.isSynced() and self.__vehicleRotation.isSynced() and self.ranked.isSynced() and self.__anonymizer.isSynced() and self.epicMetaGame.isSynced() and self.__blueprints.isSynced() if self.__blueprints is not None else False
 
     @async
     @process
@@ -515,6 +524,7 @@ class ItemsRequester(IItemsRequester):
         self.epicMetaGame.clear()
         self.__blueprints.clear()
         self.__festivity.clear()
+        self.__anonymizer.clear()
 
     def invalidateCache(self, diff=None):
         invalidate = defaultdict(set)

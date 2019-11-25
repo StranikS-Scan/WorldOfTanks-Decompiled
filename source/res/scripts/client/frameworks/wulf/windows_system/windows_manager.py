@@ -46,7 +46,11 @@ class WindowsManager(PyObjectEntity):
 
     def addWindowsArea(self, areaID):
         area = WindowsArea()
-        return area if self.proxy.addPyWindowsArea(areaID, area.proxy) else None
+        if self.proxy.addPyWindowsArea(areaID, area.proxy):
+            return area
+        else:
+            area.unbind()
+            return None
 
     def removeWindowsArea(self, areaID):
         return self.proxy.removePyWindowsArea(areaID)

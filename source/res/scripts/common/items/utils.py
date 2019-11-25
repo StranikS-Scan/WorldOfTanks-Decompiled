@@ -96,6 +96,14 @@ def getClipReloadTime(vehicleDescr, factors):
         return (0.0,)
 
 
+def getDualGunReloadTime(vehicleDescr, factors):
+    if 'dualGun' in vehicleDescr.gun.tags:
+        factor = vehicleDescr.miscAttrs['gunReloadTimeFactor'] * max(factors['gun/reloadTime'], 0.0)
+        return tuple((reloadTime * factor for reloadTime in vehicleDescr.gun.dualGun.reloadTimes))
+    else:
+        return (0.0,)
+
+
 def getTurretRotationSpeed(vehicleDescr, factors):
     return vehicleDescr.turret.rotationSpeed * max(factors['turret/rotationSpeed'], 0.0)
 

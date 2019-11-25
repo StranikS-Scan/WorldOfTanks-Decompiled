@@ -60,6 +60,18 @@
       <undamaged>	vehicles/russian/R95_Object_907/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/russian/R95_Object_907/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/russian/R95_Object_907/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <Burnout>
+          <undamaged>	vehicles/russian/R95_Object_907/_skins/Burnout/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R95_Object_907/_skins/Burnout/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R95_Object_907/_skins/Burnout/crash/lod0/Hull.model	</exploded>
+        </Burnout>
+        <R95_Object_907_stock_3Dst>
+          <undamaged>	vehicles/russian/R95_Object_907/_skins/R95_Object_907_stock_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R95_Object_907/_skins/R95_Object_907_stock_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R95_Object_907/_skins/R95_Object_907_stock_3Dst/crash/lod0/Hull.model	</exploded>
+        </R95_Object_907_stock_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -869,6 +881,13 @@
         <anchorPosition>	0.000009 -0.0693834 -2.79906	</anchorPosition>
         <anchorDirection>	0.000004 -0.086457 -0.996256	</anchorDirection>
       </slot>
+      <slot>
+        <slotType>	sequence	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 -0.598 -0.372	</position>
+        <rotation>	0 0 0	</rotation>
+        <attachNode>	HP_turretJoint	</attachNode>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -911,6 +930,18 @@
         <undamaged>	vehicles/russian/R95_Object_907/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R95_Object_907/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/russian/R95_Object_907/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <Burnout>
+            <undamaged>	vehicles/russian/R95_Object_907/_skins/Burnout/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R95_Object_907/_skins/Burnout/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R95_Object_907/_skins/Burnout/crash/lod0/Chassis.model	</exploded>
+          </Burnout>
+          <R95_Object_907_stock_3Dst>
+            <undamaged>	vehicles/russian/R95_Object_907/_skins/R95_Object_907_stock_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R95_Object_907/_skins/R95_Object_907_stock_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R95_Object_907/_skins/R95_Object_907_stock_3Dst/crash/lod0/Chassis.model	</exploded>
+          </R95_Object_907_stock_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1038,6 +1069,16 @@
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
         </atlas>
+        <modelSets>
+          <Burnout>
+            <segmentModelLeft>	vehicles/russian/R95_Object_907/_skins/Burnout/track/segment_L.model	</segmentModelLeft>
+            <segmentModelRight>	vehicles/russian/R95_Object_907/_skins/Burnout/track/segment_R.model	</segmentModelRight>
+          </Burnout>
+          <R95_Object_907_stock_3Dst>
+            <segmentModelLeft>	vehicles/russian/R95_Object_907/_skins/R95_Object_907_stock_3Dst/track/segment_L.model	</segmentModelLeft>
+            <segmentModelRight>	vehicles/russian/R95_Object_907/_skins/R95_Object_907_stock_3Dst/track/segment_R.model	</segmentModelRight>
+          </R95_Object_907_stock_3Dst>
+        </modelSets>
       </splineDesc>
       <trackThickness>	-0.0145	</trackThickness>
       <trackNodes>
@@ -1153,6 +1194,14 @@
             <model>	vehicles/russian/R95_Object_907/track/segment.model	</model>
             <length>	0.129654	</length>
           </mainSegment>
+          <modelSets>
+            <Burnout>
+              <mainSegmentModel>	vehicles/russian/R95_Object_907/_skins/Burnout/track/segment_L.model	</mainSegmentModel>
+            </Burnout>
+            <R95_Object_907_stock_3Dst>
+              <mainSegmentModel>	vehicles/russian/R95_Object_907/_skins/R95_Object_907_stock_3Dst/track/segment_L.model	</mainSegmentModel>
+            </R95_Object_907_stock_3Dst>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1355,6 +1404,14 @@
             <model>	vehicles/russian/R95_Object_907/track/segment.model	</model>
             <length>	0.127038	</length>
           </mainSegment>
+          <modelSets>
+            <Burnout>
+              <mainSegmentModel>	vehicles/russian/R95_Object_907/_skins/Burnout/track/segment_R.model	</mainSegmentModel>
+            </Burnout>
+            <R95_Object_907_stock_3Dst>
+              <mainSegmentModel>	vehicles/russian/R95_Object_907/_skins/R95_Object_907_stock_3Dst/track/segment_R.model	</mainSegmentModel>
+            </R95_Object_907_stock_3Dst>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1626,6 +1683,18 @@
             <undamaged>	vehicles/russian/R95_Object_907/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R95_Object_907/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R95_Object_907/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <Burnout>
+                <undamaged>	vehicles/russian/R95_Object_907/_skins/Burnout/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R95_Object_907/_skins/Burnout/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R95_Object_907/_skins/Burnout/crash/lod0/Gun_01.model	</exploded>
+              </Burnout>
+              <R95_Object_907_stock_3Dst>
+                <undamaged>	vehicles/russian/R95_Object_907/_skins/R95_Object_907_stock_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R95_Object_907/_skins/R95_Object_907_stock_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R95_Object_907/_skins/R95_Object_907_stock_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </R95_Object_907_stock_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R95_Object_907/collision/Gun_01.model	</collisionModelServer>
@@ -1709,6 +1778,18 @@
         <undamaged>	vehicles/russian/R95_Object_907/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/russian/R95_Object_907/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/russian/R95_Object_907/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <Burnout>
+            <undamaged>	vehicles/russian/R95_Object_907/_skins/Burnout/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R95_Object_907/_skins/Burnout/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R95_Object_907/_skins/Burnout/crash/lod0/Turret_01.model	</exploded>
+          </Burnout>
+          <R95_Object_907_stock_3Dst>
+            <undamaged>	vehicles/russian/R95_Object_907/_skins/R95_Object_907_stock_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R95_Object_907/_skins/R95_Object_907_stock_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R95_Object_907/_skins/R95_Object_907_stock_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </R95_Object_907_stock_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R95_Object_907/collision/Turret_01.model	</collisionModelServer>
@@ -2278,6 +2359,13 @@
           <clipAngle>	0.000947033	</clipAngle>
           <anchorPosition>	0.000041 0.536708 1.24494	</anchorPosition>
           <anchorDirection>	0.000036 0.479966 0.877287	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	sequence	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	0 -0.217 -1.203	</position>
+          <rotation>	0 0 0	</rotation>
+          <attachNode>	HP_gunJoint	</attachNode>
         </slot>
       </customizationSlots>
       <customization>

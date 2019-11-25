@@ -3,7 +3,7 @@
 from collections import namedtuple
 import logging
 import GUI
-from frameworks.wulf import ViewFlags
+from frameworks.wulf import ViewFlags, ViewSettings
 from adisp import process
 from CurrentVehicle import g_currentVehicle
 from gui import DialogsInterface
@@ -52,7 +52,10 @@ class CustomizationCartView(ViewImpl):
     __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, layoutID, ctx=None):
-        super(CustomizationCartView, self).__init__(layoutID, ViewFlags.LOBBY_TOP_SUB_VIEW, CartModel)
+        settings = ViewSettings(layoutID)
+        settings.flags = ViewFlags.LOBBY_TOP_SUB_VIEW
+        settings.model = CartModel()
+        super(CustomizationCartView, self).__init__(settings)
         self.__ctx = None
         self.__purchaseItems = []
         self.__isStyle = False
@@ -290,6 +293,7 @@ class CustomizationCartView(ViewImpl):
 
     @staticmethod
     def __fillItemsListModel(listModel, items):
+        listModel.reserve(len(items))
         for item in items:
             listModel.addViewModel(item.getUIData())
 

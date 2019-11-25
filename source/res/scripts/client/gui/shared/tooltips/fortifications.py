@@ -10,6 +10,7 @@ from gui.shared.tooltips.common import ToolTipBaseData
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.shared import IItemsCache
+from gui import makeHtmlString
 __buildsDirectionMap = {'A': FORTIFICATIONS.STRONGHOLDBUILDS_DIRECTION_A,
  'B': FORTIFICATIONS.STRONGHOLDBUILDS_DIRECTION_B,
  'C': FORTIFICATIONS.STRONGHOLDBUILDS_DIRECTION_C,
@@ -89,7 +90,7 @@ class ToolTipRefSysDirects(ToolTipBaseData):
             arenaType = ArenaType.g_cache[battle.getMapId()] if mapVisible else None
             clan = header.getClan()
             if arenaType:
-                mapName = _ms(FORTIFICATIONS.STRONGHOLDBUILDS_MAPNAME, mapName=arenaType.name)
+                mapName = _ms(FORTIFICATIONS.STRONGHOLDBUILDS_MAPNAME, mapName=makeHtmlString('html_templates:lobby/fortifications/strongholdBuilds', 'mapName', {'text': arenaType.name}))
             else:
                 mapName = _ms(FORTIFICATIONS.STRONGHOLDBUILDS_MAPUNKNOWN)
             isEnemyBuilding = isEnemyBattleIndex(battleIndex)

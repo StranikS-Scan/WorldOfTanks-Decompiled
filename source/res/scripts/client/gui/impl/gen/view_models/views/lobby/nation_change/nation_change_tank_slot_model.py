@@ -8,6 +8,9 @@ from gui.impl.gen.view_models.views.lobby.nation_change.nation_change_instructio
 class NationChangeTankSlotModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=10, commands=0):
+        super(NationChangeTankSlotModel, self).__init__(properties=properties, commands=commands)
+
     @property
     def instructionSlot(self):
         return self._getViewModel(0)

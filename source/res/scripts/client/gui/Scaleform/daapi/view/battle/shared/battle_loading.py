@@ -77,12 +77,9 @@ class BattleLoading(BaseBattleLoadingMeta, IArenaVehiclesController):
         if not isBattleLoadingShowed():
             if self.lobbyContext.getBattlesCount() is not None:
                 battlesCount = self._getBattlesCount()
-            classTag, vLvl, nation = arenaDP.getVehicleInfo().getTypeInfo()
             criteria = tips.getTipsCriteria(self._arenaVisitor)
             criteria.setBattleCount(battlesCount)
-            criteria.setClassTag(classTag)
-            criteria.setLevel(vLvl)
-            criteria.setNation(nation)
+            criteria.setVehicleType(arenaDP.getVehicleInfo().vehicleType)
             translation = self.gui.resourceManager.getTranslatedText
             tip = criteria.find()
             self.as_setTipTitleS(text_styles.highTitle(translation(tip.status)))

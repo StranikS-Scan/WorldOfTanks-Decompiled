@@ -8,6 +8,9 @@ from gui.impl.gen.view_models.views.lobby.premacc.dashboard.prem_dashboard_heade
 class PremDashboardHeaderModel(ViewModel):
     __slots__ = ('onShowBadges',)
 
+    def __init__(self, properties=8, commands=1):
+        super(PremDashboardHeaderModel, self).__init__(properties=properties, commands=commands)
+
     @property
     def userName(self):
         return self._getViewModel(0)

@@ -20,25 +20,19 @@ class ContactsManagerProxy(MigrationProxy):
     def isBidiFriendshipSupported(self):
         return False
 
-    def addFriend(self, dbID, name, group=None):
+    def addFriend(self, dbID, name, group=None, shadowMode=False):
         raise NotImplementedError
 
     def approveFriendship(self, dbID):
         raise NotImplementedError
 
-    def removeFriend(self, dbID):
+    def removeFriend(self, dbID, shadowMode=False):
         raise NotImplementedError
 
-    def addIgnored(self, dbID, name):
+    def addIgnored(self, dbID, name, shadowMode=False):
         raise NotImplementedError
 
-    def addTmpIgnored(self, dbID, name):
-        raise NotImplementedError
-
-    def removeIgnored(self, dbID):
-        raise NotImplementedError
-
-    def removeTmpIgnored(self, dbID):
+    def removeIgnored(self, dbID, shadowMode=False):
         raise NotImplementedError
 
     def setMuted(self, dbID, name):
@@ -88,29 +82,21 @@ def _showClientActionError(actionID, errorID=CLIENT_ERROR_ID.NOT_SUPPORTED):
 class BWContactsManagerProxy(ContactsManagerProxy):
     __slots__ = ()
 
-    def addFriend(self, dbID, name, group=None):
-        self._proto.users.addFriend(dbID, name)
+    def addFriend(self, dbID, name, group=None, shadowMode=False):
+        self._proto.users.addFriend(dbID, name, shadowMode)
         return True
 
-    def removeFriend(self, dbID):
-        self._proto.users.removeFriend(dbID)
+    def removeFriend(self, dbID, shadowMode=False):
+        self._proto.users.removeFriend(dbID, shadowMode)
         return True
 
-    def addIgnored(self, dbID, name):
-        self._proto.users.addIgnored(dbID, name)
+    def addIgnored(self, dbID, name, shadowMode=False):
+        self._proto.users.addIgnored(dbID, name, shadowMode)
         return True
 
-    def addTmpIgnored(self, dbID, name):
-        _showClientActionError(CLIENT_ACTION_ID.ADD_IGNORED)
-        return False
-
-    def removeIgnored(self, dbID):
-        self._proto.users.removeIgnored(dbID)
+    def removeIgnored(self, dbID, shadowMode=False):
+        self._proto.users.removeIgnored(dbID, shadowMode)
         return True
-
-    def removeTmpIgnored(self, dbID):
-        _showClientActionError(CLIENT_ACTION_ID.REMOVE_IGNORED)
-        return False
 
     def setMuted(self, dbID, name):
         self._proto.users.setMuted(dbID, name)
@@ -181,10 +167,10 @@ class XMPPContactsManagerProxy(ContactsManagerProxy):
     def isBidiFriendshipSupported(self):
         return True
 
-    def addFriend(self, dbID, name, group=None):
-        result, error = self._proto.contacts.addFriend(dbID, name, group)
+    def addFriend(self, dbID, name, group=None, shadowMode=False):
+        result, error = self._proto.contacts.addFriend(dbID, name, group, shadowMode)
         if not result:
-            g_messengerEvents.onErrorReceived(error)
+            self._notifyError(dbID, CLIENT_ACTION_ID.ADD_FRIEND, error, shadowMode)
         return result
 
     def approveFriendship(self, dbID):
@@ -193,34 +179,22 @@ class XMPPContactsManagerProxy(ContactsManagerProxy):
             g_messengerEvents.onErrorReceived(error)
         return result
 
-    def removeFriend(self, dbID):
-        result, error = self._proto.contacts.removeFriend(dbID)
+    def removeFriend(self, dbID, shadowMode=False):
+        result, error = self._proto.contacts.removeFriend(dbID, shadowMode)
         if not result:
-            g_messengerEvents.onErrorReceived(error)
+            self._notifyError(dbID, CLIENT_ACTION_ID.REMOVE_FRIEND, error, shadowMode)
         return result
 
-    def addIgnored(self, dbID, name):
-        result, error = self._proto.contacts.addIgnored(dbID, name)
+    def addIgnored(self, dbID, name, shadowMode=False):
+        result, error = self._proto.contacts.addIgnored(dbID, name, shadowMode)
         if not result:
-            g_messengerEvents.onErrorReceived(error)
+            self._notifyError(dbID, CLIENT_ACTION_ID.ADD_IGNORED, error, shadowMode)
         return result
 
-    def addTmpIgnored(self, dbID, name):
-        result, error = self._proto.contacts.addTmpIgnored(dbID, name)
+    def removeIgnored(self, dbID, shadowMode=False):
+        result, error = self._proto.contacts.removeIgnored(dbID, shadowMode)
         if not result:
-            g_messengerEvents.onErrorReceived(error)
-        return result
-
-    def removeIgnored(self, dbID):
-        result, error = self._proto.contacts.removeIgnored(dbID)
-        if not result:
-            g_messengerEvents.onErrorReceived(error)
-        return result
-
-    def removeTmpIgnored(self, dbID):
-        result, error = self._proto.contacts.removeTmpIgnored(dbID)
-        if not result:
-            g_messengerEvents.onErrorReceived(error)
+            self._notifyError(dbID, CLIENT_ACTION_ID.REMOVE_IGNORED, error, shadowMode)
         return result
 
     def setMuted(self, dbID, name):
@@ -294,3 +268,10 @@ class XMPPContactsManagerProxy(ContactsManagerProxy):
     def getUserSearchCooldownInfo(self):
         coolDown = coolDownEventParams(CoolDownEvent.XMPP, REQUEST_SCOPE.XMPP, CLIENT_ACTION_ID.FIND_USERS_BY_PREFIX)
         return coolDown
+
+    @staticmethod
+    def _notifyError(dbID, actionID, error, shadowMode=False):
+        if shadowMode:
+            g_messengerEvents.shadow.onActionFailed(dbID, actionID, error)
+        else:
+            g_messengerEvents.onErrorReceived(error)

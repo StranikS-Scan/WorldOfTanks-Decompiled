@@ -583,9 +583,57 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 4500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R95_Object_907	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	19	</id>
+      <texture>	gui/maps/vehicles/styles/burnout.png	</texture>
+      <description>	#vehicle_customization:special_style/burnout_desc	</description>
+      <modelsSet>	Burnout	</modelsSet>
+      <userString>	#vehicle_customization:special_style/burnout	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	65520	</appliedTo>
+            </item>
+          </decals>
+          <sequences>
+            <item>
+              <id>	1	</id>
+              <slotId>	18000	</slotId>
+            </item>
+            <item>
+              <id>	2	</id>
+              <slotId>	38000	</slotId>
+            </item>
+          </sequences>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
+    <priceGroup>	styles 700g	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	ussr	</nations>
@@ -599,7 +647,6 @@
       <texture>	gui/maps/vehicles/styles/generic_custom_look_2_ussr.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_2_ussr_desc	</description>
       <userString>	#vehicle_customization:main_style/generic_custom_look_2_ussr	</userString>
-      <priceGroup>	styles 700g	</priceGroup>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -706,6 +753,7 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
+    <priceGroup>	styles 700g	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	ussr	</nations>
@@ -719,7 +767,6 @@
       <texture>	gui/maps/vehicles/styles/generic_custom_look_3_ussr.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_3_ussr_desc	</description>
       <userString>	#vehicle_customization:main_style/generic_custom_look_3_ussr	</userString>
-      <priceGroup>	styles 700g	</priceGroup>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -795,6 +842,170 @@
       <modelsSet>	halloween	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:main_style/R40_T-54_Halloween_3Dst	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 3500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R159_SU_130PM	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	90	</id>
+      <texture>	gui/maps/vehicles/styles/R159_SU_130PM_3Dst_10_additional_FULL3D.png	</texture>
+      <description>	#vehicle_customization:main_style/R159_SU_130PM_3Dst_10_additional_FULL3D_desc	</description>
+      <modelsSet>	R159_SU_130PM_3Dst_10_additional_FULL3D	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/R159_SU_130PM_3Dst_10_additional_FULL3D	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 6000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R132_VNII_100LT	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	94	</id>
+      <texture>	gui/maps/vehicles/styles/R132_VNII_100LT_3Dst.png	</texture>
+      <description>	#vehicle_customization:main_style/R132_VNII_100LT_3Dst_desc	</description>
+      <modelsSet>	R132_VNII_100LT_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/R132_VNII_100LT_3Dst	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 6000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R148_Object_430_U	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	99	</id>
+      <texture>	gui/maps/vehicles/styles/R148_Object_430_U_3Dst.png	</texture>
+      <description>	#vehicle_customization:main_style/R148_Object_430_U_3Dst_desc	</description>
+      <modelsSet>	R148_Object_430_U_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/R148_Object_430_U_3Dst	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+          <insignias>
+            <item>
+              <id>	5	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 4000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R95_Object_907	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	116	</id>
+      <texture>	gui/maps/vehicles/styles/R95_Object_907_stock_3Dst.png	</texture>
+      <description>	#vehicle_customization:main_style/R95_Object_907_stock_3Dst_desc	</description>
+      <modelsSet>	R95_Object_907_stock_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/R95_Object_907_stock_3Dst	</userString>
       <outfits>
         <outfit>
           <season>	ALL	</season>

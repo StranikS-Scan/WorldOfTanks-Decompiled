@@ -12,6 +12,8 @@ from gui.shared.utils import decorators
 from gui.shared.gui_items.processors.module import ModuleBuyer
 from gui.shared.gui_items.processors.vehicle import VehicleAutoBattleBoosterEquipProcessor
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
+from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
+from gui.shared.tooltips.formatters import packActionTooltipData
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 
@@ -22,6 +24,7 @@ class BoosterBuyWindow(BoosterBuyWindowMeta):
         super(BoosterBuyWindow, self).__init__()
         self.__item = self.itemsCache.items.getItemByCD(ctx['typeCompDescr'])
         self.__install = ctx['install']
+        self.__itemCD = ctx['typeCompDescr']
 
     def onWindowClose(self):
         self.destroy()
@@ -62,7 +65,11 @@ class BoosterBuyWindow(BoosterBuyWindowMeta):
         itemPrice = self.__getItemPrice()
         currency = itemPrice.getCurrency(byWeight=True)
         vehicle = g_currentVehicle.item
-        self.as_updateDataS({'itemPrice': itemPrice.price.getSignValue(currency),
+        actionPriceData = None
+        if itemPrice.isActionPrice():
+            actionPriceData = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ITEM, str(self.__itemCD), True, itemPrice.price, itemPrice.defPrice)
+        self.as_updateDataS({'actionPriceData': actionPriceData,
+         'itemPrice': itemPrice.price.getSignValue(currency),
          'itemCount': self.__item.inventoryCount,
          'currency': currency,
          'currencyCount': stats.money.getSignValue(currency),

@@ -9,6 +9,9 @@ class CongratsViewModel(ViewModel):
     ADVANCED_SHINE_ORANGE = 'advancedShine'
     ADVANCED_SHINE_BLUE = 'advancedShineBlue'
 
+    def __init__(self, properties=10, commands=0):
+        super(CongratsViewModel, self).__init__(properties=properties, commands=commands)
+
     def getVehicleIsElite(self):
         return self._getBool(0)
 

@@ -17,6 +17,9 @@ from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import INotifyController
+from gui.impl import backport
+from gui.impl.gen import R
+from gui import makeHtmlString
 _Settings = namedtuple('_Settings', ['presetChangingVersion', 'lastBattleAvgFps'])
 
 class NotifyController(INotifyController):
@@ -72,13 +75,13 @@ class NotifyController(INotifyController):
             return
         graphicsStatus = graphics.getStatus()
         if not self.__graphicsResetShown and graphicsStatus.isReset():
-            isOk = yield self.__showI18nDialog('resetGraphics')
+            isOk = yield self.__showI18nDialog('resetGraphics', ctx={'alert': self.__wrapHtmlMessage(backport.text(R.strings.dialogs.graphics.message.alert()))})
             self.__graphicsResetShown = True
             if isOk:
                 event_dispatcher.showSettingsWindow(redefinedKeyMode=False, tabIndex=event_dispatcher.SETTINGS_TAB_INDEX.GRAPHICS)
         elif graphicsStatus.isShowWarning():
             event_dispatcher.showSettingsWindow(redefinedKeyMode=False, tabIndex=event_dispatcher.SETTINGS_TAB_INDEX.GRAPHICS)
-            isOk = yield self.__showI18nDialog('changeGraphics')
+            isOk = yield self.__showI18nDialog('changeGraphics', ctx={'alert': self.__wrapHtmlMessage(backport.text(R.strings.dialogs.graphics.message.alert()))})
             if isOk:
                 self.__updatePresetSetting()
         elif self.__isNeedToShowPresetChangingDialog():
@@ -104,9 +107,9 @@ class NotifyController(INotifyController):
             self.__settings = self.__settings._replace(lastBattleAvgFps=avgBattleFps)
 
     @async
-    def __showI18nDialog(self, key, callback):
+    def __showI18nDialog(self, key, callback, ctx=None):
         from gui import DialogsInterface
-        return DialogsInterface.showI18nConfirmDialog(key, callback)
+        return DialogsInterface.showI18nConfirmDialog(key, callback, ctx)
 
     def __getSettingsWindow(self):
         from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -170,3 +173,7 @@ class NotifyController(INotifyController):
 
     def __writeSettings(self):
         Settings.g_instance.userPrefs.write(Settings.KEY_GUI_NOTIFY_INFO, base64.b64encode(cPickle.dumps(self.__settings._asdict())))
+
+    @classmethod
+    def __wrapHtmlMessage(cls, message):
+        return makeHtmlString('html_templates:lobby/dialogs', 'graphicsAlert', {'message': message})

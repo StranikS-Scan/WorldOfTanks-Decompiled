@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/AmmunitionPanel.py
 import logging
+from account_helpers.AccountSettings import BOOSTERS_FOR_CREDITS_SLOT_COUNTER
+from account_helpers.AccountSettings import AccountSettings
 from constants import QUEUE_TYPE, PREBATTLE_TYPE
 from gui.prb_control.entities.listener import IGlobalListener
 from items.vehicles import NUM_OPTIONAL_DEVICE_SLOTS
@@ -116,11 +118,13 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
         g_clientUpdateManager.addMoneyCallback(self.__moneyUpdateCallback)
         g_clientUpdateManager.addCallbacks({'inventory': self.__inventoryUpdateCallBack})
         self.update()
+        AccountSettings.onSettingsChanging += self.__onAccountSettingsChanging
 
     def _dispose(self):
         self.stopGlobalListening()
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.__hangarMessage = None
+        AccountSettings.onSettingsChanging -= self.__onAccountSettingsChanging
         super(AmmunitionPanel, self)._dispose()
         return
 
@@ -140,6 +144,7 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
                 msgLvl = Vehicle.VEHICLE_STATE_LEVEL.INFO
             isBackground = statusId == Vehicle.VEHICLE_STATE.NOT_PRESENT
             self.__applyCustomizationNewCounter(vehicle)
+            self.__applyBoosterNewCounter()
             msgString = makeHtmlString('html_templates:vehicleStatus', msgLvl, {'message': i18n.makeString(msg)})
             self.__updateDevices(vehicle)
             self.as_updateVehicleStatusS({'message': msgString,
@@ -152,6 +157,10 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     def __applyCustomizationNewCounter(self, vehicle):
         counter = vehicle.getC11nItemsNoveltyCounter(self.itemsCache.items) if vehicle.isCustomizationEnabled() else 0
         self.as_setCustomizationBtnCounterS(counter)
+
+    def __applyBoosterNewCounter(self):
+        counter = AccountSettings.getCounters(BOOSTERS_FOR_CREDITS_SLOT_COUNTER)
+        self.as_setBoosterBtnCounterS(counter)
 
     def __moneyUpdateCallback(self, *_):
         self._update(onlyMoneyUpdate=True)
@@ -181,3 +190,7 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
 
     def __getSlotsRange(self):
         return HANGAR_FITTING_SLOTS if self.prbDispatcher is not None and self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC) or self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.EPIC) else VEHICLE_FITTING_SLOTS
+
+    def __onAccountSettingsChanging(self, key, _):
+        if key == BOOSTERS_FOR_CREDITS_SLOT_COUNTER:
+            self.__applyBoosterNewCounter()

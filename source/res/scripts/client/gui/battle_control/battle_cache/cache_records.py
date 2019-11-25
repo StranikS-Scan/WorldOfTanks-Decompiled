@@ -1,15 +1,25 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/battle_cache/cache_records.py
+from collections import defaultdict
 import struct
 import weakref
 from debug_utils import LOG_ERROR
 from gui.battle_control.battle_constants import CACHE_RECORDS_IDS
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
-_IGNORE_LIST_SIZE_FORMAT = '<B'
-_IGNORE_LIST_FORMAT = '{}L'
-_IGNORE_LIST_RECORD_FORMAT = _IGNORE_LIST_SIZE_FORMAT + _IGNORE_LIST_FORMAT
-_IGNORE_LIST_SIZE_LEN = struct.calcsize(_IGNORE_LIST_SIZE_FORMAT)
+from shared_utils import CONST_CONTAINER
+
+class _Relations(CONST_CONTAINER):
+    FRIEND = 1
+    IGNORED = 2
+    TMP_IGNORED = 4
+
+
+_RELATIONS_SIZE_FORMAT = '<B'
+_RELATIONS_KEYS_LIST_FORMAT = '{}L'
+_RELATIONS_VALUES_LIST_FORMAT = '{}B'
+_IGNORE_LIST_RECORD_FORMAT = _RELATIONS_SIZE_FORMAT + _RELATIONS_KEYS_LIST_FORMAT + _RELATIONS_VALUES_LIST_FORMAT
+_RELATIONS_SIZE_LEN = struct.calcsize(_RELATIONS_SIZE_FORMAT)
 
 class AbstractCacheRecord(object):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -42,49 +52,76 @@ class AbstractCacheRecord(object):
         return self.__cache.load()
 
 
-class TmpIgnoredCacheRecord(AbstractCacheRecord):
+class RelationsCacheRecord(AbstractCacheRecord):
 
     def __init__(self, cache):
-        super(TmpIgnoredCacheRecord, self).__init__(cache)
-        self._ignoredIDs = set()
+        super(RelationsCacheRecord, self).__init__(cache)
+        self.__relations = defaultdict(int)
 
     @classmethod
     def getRecordID(cls):
-        return CACHE_RECORDS_IDS.TMP_IGNORED
+        return CACHE_RECORDS_IDS.RELATIONS
 
     def unpack(self, record):
         if record:
             try:
-                ignoredCount = struct.unpack(_IGNORE_LIST_SIZE_FORMAT, record[:_IGNORE_LIST_SIZE_LEN])[0]
-                if ignoredCount > 0:
-                    self._ignoredIDs = set(struct.unpack_from(_IGNORE_LIST_FORMAT.format(ignoredCount), record, offset=_IGNORE_LIST_SIZE_LEN))
+                count = struct.unpack(_RELATIONS_SIZE_FORMAT, record[:_RELATIONS_SIZE_LEN])[0]
+                if count > 0:
+                    keys = struct.unpack_from(_RELATIONS_KEYS_LIST_FORMAT.format(count), record, offset=_RELATIONS_SIZE_LEN)
+                    values = struct.unpack_from(_RELATIONS_VALUES_LIST_FORMAT.format(count), record, offset=_RELATIONS_SIZE_LEN + struct.calcsize(_RELATIONS_KEYS_LIST_FORMAT.format(count)))
+                    self.__relations.clear()
+                    self.__relations = {key:val for key, val in zip(keys, values)}
             except struct.error as e:
                 LOG_ERROR('Could not unpack the following record: ', record, e)
 
         else:
-            self._ignoredIDs.clear()
+            self.__relations.clear()
 
     def pack(self):
-        ignoredCount = len(self._ignoredIDs)
-        return struct.pack(_IGNORE_LIST_RECORD_FORMAT.format(ignoredCount), ignoredCount, *self._ignoredIDs)
+        amount = len(self.__relations)
+        return struct.pack(_IGNORE_LIST_RECORD_FORMAT.format(amount, amount), amount, *(self.__relations.keys() + self.__relations.values()))
 
     def clear(self):
-        self._ignoredIDs.clear()
+        self.__relations.clear()
 
-    def addToTmpIgnored(self, accDBID):
-        if accDBID not in self._ignoredIDs:
-            self._ignoredIDs.add(accDBID)
+    def addFriend(self, vehicleID):
+        return self.__addRelation(vehicleID, _Relations.FRIEND)
+
+    def removeFriend(self, vehicleID):
+        return self.__removeRelation(vehicleID, _Relations.FRIEND)
+
+    def isFriend(self, vehicleID):
+        return self.__checkRelation(vehicleID, _Relations.FRIEND)
+
+    def addIgnored(self, vehicleID):
+        return self.__addRelation(vehicleID, _Relations.IGNORED)
+
+    def removeIgnored(self, vehicleID):
+        return self.__removeRelation(vehicleID, _Relations.IGNORED)
+
+    def isIgnored(self, vehicleID):
+        return self.__checkRelation(vehicleID, _Relations.IGNORED)
+
+    def addTmpIgnored(self, vehicleID):
+        return self.__addRelation(vehicleID, _Relations.TMP_IGNORED)
+
+    def removeTmpIgnored(self, vehicleID):
+        return self.__removeRelation(vehicleID, _Relations.TMP_IGNORED)
+
+    def isTmpIgnored(self, vehicleID):
+        return self.__checkRelation(vehicleID, _Relations.TMP_IGNORED)
+
+    def __addRelation(self, vehicleID, relationID):
+        if not self.__relations[vehicleID] & relationID:
+            self.__relations[vehicleID] |= relationID
             return True
         return False
 
-    def removeTmpIgnored(self, accDBID):
-        if accDBID in self._ignoredIDs:
-            self._ignoredIDs.discard(accDBID)
+    def __removeRelation(self, vehicleID, relationID):
+        if self.__relations[vehicleID] & relationID:
+            self.__relations[vehicleID] ^= relationID
             return True
         return False
 
-    def isTmpIgnored(self, accDBID):
-        return accDBID in self._ignoredIDs
-
-    def getTmpIgnored(self):
-        return set(self._ignoredIDs)
+    def __checkRelation(self, vehicleID, relationID):
+        return bool(self.__relations[vehicleID] & relationID)

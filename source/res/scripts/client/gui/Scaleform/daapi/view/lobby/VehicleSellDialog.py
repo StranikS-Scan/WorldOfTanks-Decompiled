@@ -225,9 +225,17 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         onVehicleBattleBoosters = []
         for booster in vehicle.equipment.battleBoosterConsumables.getInstalledItems():
             data = {'intCD': booster.intCD,
-             'userName': booster.userName,
-             'sellPrice': MONEY_UNDEFINED.toMoneyTuple(),
-             'onlyToInventory': True}
+             'userName': booster.userName}
+            if booster.isForSale:
+                action = None
+                if booster.sellPrices.itemPrice.isActionPrice():
+                    action = packItemActionTooltipData(booster, False)
+                data.update({'sellPrice': booster.sellPrices.itemPrice.price.toMoneyTuple(),
+                 'toInventory': True,
+                 'action': action})
+            else:
+                data.update({'sellPrice': MONEY_UNDEFINED.toMoneyTuple(),
+                 'onlyToInventory': True})
             onVehicleBattleBoosters.append(data)
 
         installedCustomizations = items.getItems(itemTypeID=GUI_ITEM_TYPE.STYLE, criteria=REQ_CRITERIA.CUSTOMIZATION.IS_INSTALLED_ON_VEHICLE(vehicle)).values()
@@ -290,8 +298,8 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         self.as_checkGoldS(gold)
 
     @decorators.process('sellVehicle')
-    def __doSellVehicle(self, vehicle, shells, eqs, optDevicesToSell, inventory, customizationItems, isDismissCrew):
-        vehicleSeller = VehicleSeller(vehicle, shells, eqs, optDevicesToSell, inventory, customizationItems, isDismissCrew)
+    def __doSellVehicle(self, vehicle, shells, eqs, optDevicesToSell, inventory, customizationItems, boosters, isDismissCrew):
+        vehicleSeller = VehicleSeller(vehicle, shells, eqs, optDevicesToSell, inventory, customizationItems, boosters, isDismissCrew)
         currentMoneyGold = self.itemsCache.items.stats.money.get(Currency.GOLD, 0)
         spendMoneyGold = vehicleSeller.spendMoney.get(Currency.GOLD, 0)
         if isIngameShopEnabled() and currentMoneyGold < spendMoneyGold:
@@ -301,7 +309,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
             SystemMessages.pushMessages(result)
             self.destroy()
 
-    def sell(self, vehicleCD, shells, eqs, optDevicesToSell, inventory, customizationItems, isDismissCrew):
+    def sell(self, vehicleCD, shells, eqs, optDevicesToSell, inventory, customizationItems, boosters, isDismissCrew):
 
         def getItem(data):
             return self.itemsCache.items.getItemByCD(int(data['intCD']))
@@ -312,11 +320,12 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         try:
             vehicle = self.itemsCache.items.getItemByCD(int(vehicleCD))
             shells = [ getShellItem(flashObject2Dict(shell)) for shell in shells ]
+            boosters = [ item for item in (getItem(flashObject2Dict(booster)) for booster in boosters) if not item.isBuiltIn ]
             eqs = [ item for item in (getItem(flashObject2Dict(eq)) for eq in eqs) if not item.isBuiltIn ]
             optDevicesToSell = [ getItem(flashObject2Dict(dev)) for dev in optDevicesToSell ]
             inventory = [ getItem(flashObject2Dict(module)) for module in inventory ]
             customizationItems = [ getItem(flashObject2Dict(cust_item)) for cust_item in customizationItems ]
-            self.__doSellVehicle(vehicle, shells, eqs, optDevicesToSell, inventory, customizationItems, isDismissCrew)
+            self.__doSellVehicle(vehicle, shells, eqs, optDevicesToSell, inventory, customizationItems, boosters, isDismissCrew)
         except Exception:
             LOG_ERROR('There is error while selling vehicle')
             LOG_CURRENT_EXCEPTION()

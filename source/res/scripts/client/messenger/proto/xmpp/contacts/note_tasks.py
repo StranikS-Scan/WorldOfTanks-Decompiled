@@ -4,7 +4,7 @@ from messenger.m_constants import USER_ACTION_ID, CLIENT_ACTION_ID, USER_TAG
 from messenger.proto.entities import SharedUserEntity
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp import errors
-from messenger.proto.xmpp.contacts.tasks import TASK_RESULT, ContactTask, SeqTask
+from messenger.proto.xmpp.contacts.tasks import TaskResult, ContactTask, SeqTask
 from messenger.proto.xmpp.extensions import contact_note
 from messenger.proto.xmpp.xmpp_constants import CONTACT_LIMIT
 from soft_exception import SoftException
@@ -39,7 +39,7 @@ class NotesListTask(SeqTask):
             self._iqID = self.client().sendIQ(contact_note.NotesListQuery(CONTACT_LIMIT.NOTES_PER_PAGE, last))
         else:
             g_messengerEvents.users.onNotesListReceived()
-            self._result = TASK_RESULT.REMOVE
+            self._result = TaskResult.REMOVE
 
     def _doRun(self, client):
         self._iqID = client.sendIQ(contact_note.NotesListQuery(CONTACT_LIMIT.NOTES_PER_PAGE))
@@ -74,7 +74,7 @@ class SetNoteTask(_NoteTask):
 
     def result(self, pyGlooxTag):
         self._update(self._text)
-        self._result = TASK_RESULT.REMOVE
+        self._result = TaskResult.REMOVE
 
     def _doRun(self, client):
         self._iqID = client.sendIQ(contact_note.SetNoteQuery(self._jid.getDatabaseID(), self._text))
@@ -87,7 +87,7 @@ class RemoveNoteTask(_NoteTask):
 
     def result(self, pyGlooxTag):
         self._update('')
-        self._result = TASK_RESULT.REMOVE
+        self._result = TaskResult.REMOVE
 
     def _doRun(self, client):
         self._iqID = client.sendIQ(contact_note.RemoveNoteQuery(self._jid.getDatabaseID()))
@@ -113,7 +113,7 @@ class RemoveNotesTask(SeqTask):
 
         if updated:
             g_messengerEvents.users.onNotesListReceived()
-        self._result = TASK_RESULT.REMOVE
+        self._result = TaskResult.REMOVE
 
     def _doRun(self, client):
         self._iqID = client.sendIQ(contact_note.RemoveNotesQuery(self._ids))

@@ -153,8 +153,8 @@ def _calculateGunPointOffsetFromHullCenter(vehicleTypeDescriptor, steadyMatrix, 
     return upVector * (upOffsetGunPitch + upOffsetHullPitch)
 
 
-def _getDesiredShotPointUncached(start, direction, onlyOnGround, isStrategicMode, terrainOnlyCheck):
-    end = start + direction.scale(10000.0)
+def _getDesiredShotPointUncached(start, direction, onlyOnGround, isStrategicMode, terrainOnlyCheck, shotDistance):
+    end = start + direction.scale(shotDistance)
     if isStrategicMode:
         if terrainOnlyCheck:
             return __collideTerrainOnly(start, end)
@@ -176,14 +176,14 @@ def _getDesiredShotPointUncached(start, direction, onlyOnGround, isStrategicMode
 g_desiredShotPoint = Vector3(0)
 g_frameStamp = -1
 
-def getDesiredShotPoint(start, direction, onlyOnGround=False, isStrategicMode=False, terrainOnlyCheck=False):
+def getDesiredShotPoint(start, direction, onlyOnGround=False, isStrategicMode=False, terrainOnlyCheck=False, shotDistance=10000.0):
     global g_desiredShotPoint
     global g_frameStamp
     currentFrameStamp = BigWorld.wg_getFrameTimestamp()
     if g_frameStamp == currentFrameStamp:
         return g_desiredShotPoint
     g_frameStamp = currentFrameStamp
-    g_desiredShotPoint = _getDesiredShotPointUncached(start, direction, onlyOnGround, isStrategicMode, terrainOnlyCheck)
+    g_desiredShotPoint = _getDesiredShotPointUncached(start, direction, onlyOnGround, isStrategicMode, terrainOnlyCheck, shotDistance)
     return g_desiredShotPoint
 
 

@@ -122,7 +122,6 @@ class PROFILE(object):
     PROFILE_SUMMARY_CLUB_BTNLABEL = '#profile:profile/summary/club/btnLabel'
     SECTION_SUMMARY_ERRORTEXT_SIGNIFICANTAWARDS = '#profile:section/summary/errorText/significantAwards'
     SECTION_SUMMARY_ERRORTEXT_NEXTAWARDS = '#profile:section/summary/errorText/nextAwards'
-    SECTION_SUMMARY_WARNING_PERSONALSCORE = '#profile:section/summary/warning/personalScore'
     SECTION_AWARDS_TITLE = '#profile:section/awards/title'
     SECTION_AWARDS_LABELS_MARKSONGUN = '#profile:section/awards/labels/marksOnGun'
     SECTION_AWARDS_LABELS_BATTLEHEROES = '#profile:section/awards/labels/battleHeroes'

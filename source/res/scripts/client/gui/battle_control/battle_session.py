@@ -113,10 +113,10 @@ class BattleSessionProvider(IBattleSessionProvider):
         ctrl = self.__sharedRepo.equipments
         if ctrl is not None:
             ctrl.clear(False)
-            ctrl.notifyPlayerVehicleSet()
             for intCD, quantity, stage, timeRemaining, totalTime in extraData.orderedEquipment:
                 ctrl.setEquipment(intCD, quantity, stage, timeRemaining, totalTime)
 
+            ctrl.notifyPlayerVehicleSet()
         ctrl = self.__sharedRepo.optionalDevices
         if ctrl is not None:
             ctrl.clear(False)

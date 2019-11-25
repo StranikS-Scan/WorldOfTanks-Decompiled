@@ -4,7 +4,7 @@ import weakref
 from contextlib import contextmanager
 import Event
 from constants import IGR_TYPE
-from messenger.m_constants import USER_TAG
+from messenger.m_constants import USER_TAG, UserEntityScope
 from messenger.storage import storage_getter
 from shared_utils import AlwaysValidObject
 
@@ -298,8 +298,8 @@ class ExchangeCtx(object):
     def getPlayerFullName(self, vInfoVO):
         return self.__playerFormatter.format(vInfoVO)
 
-    def getUserTags(self, accountDBID, igrType):
-        contact = self.usersStorage.getUser(accountDBID)
+    def getUserTags(self, avatarSessionID, igrType):
+        contact = self.usersStorage.getUser(avatarSessionID, scope=UserEntityScope.BATTLE)
         if contact is not None:
             userTags = contact.getTags()
         else:

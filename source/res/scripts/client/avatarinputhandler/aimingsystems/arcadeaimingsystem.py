@@ -71,6 +71,7 @@ class ArcadeAimingSystem(IAimingSystem):
         self.__cursor.focusRadius = focusRadius
         self.__idealMatrix = Math.Matrix(self._matrix)
         self.__shotPointCalculator = ShotPointCalculatorPlanar() if enableSmartShotPointCalc else None
+        self._vehicleTypeDescriptor = None
         self.__cachedScanDirection = Vector3(0.0, 0.0, 0.0)
         self.__cachedScanStart = Vector3(0.0, 0.0, 0.0)
         return
@@ -90,6 +91,11 @@ class ArcadeAimingSystem(IAimingSystem):
             self.focusOnPos(targetPos)
             if turretYaw is not None and gunPitch is not None:
                 self.__adjustFocus((turretYaw, gunPitch))
+        player = BigWorld.player()
+        if player.vehicle is not None:
+            self._vehicleTypeDescriptor = player.vehicle.typeDescriptor
+        if self.__shotPointCalculator is not None:
+            self.__shotPointCalculator.updateVehicleDescr(self._vehicleTypeDescriptor)
         return
 
     def getShotPoint(self):
@@ -160,7 +166,11 @@ class ArcadeAimingSystem(IAimingSystem):
         return self.getThirdPersonShotPoint() if self.__shotPointCalculator is None else self.__shotPointCalculator.getDesiredShotPoint(scanStart, scanDir)
 
     def getThirdPersonShotPoint(self):
-        return self.__shotPointCalculator.aimPlane.intersectRay(*self.__getScanRay()) if self.__shotPointCalculator is not None else AimingSystems.getDesiredShotPoint(*self.__getScanRay())
+        if self.__shotPointCalculator is not None:
+            return self.__shotPointCalculator.aimPlane.intersectRay(*self.__getScanRay())
+        else:
+            shotDistance = self._vehicleTypeDescriptor.shot.maxDistance if self._vehicleTypeDescriptor else 10000.0
+            return AimingSystems.getDesiredShotPoint(shotDistance=shotDistance, *self.__getScanRay())
 
     def handleMovement(self, dx, dy):
         self.yaw += dx
@@ -244,6 +254,11 @@ class ShotPointCalculatorPlanar(object):
         self.__getTurretMat = functools.partial(AimingSystems.getTurretJointMat, self.__vehicleDesc, self.__vehicleMat)
         self.__cachedResult = ShotPointCalculatorPlanar.CachedResult()
 
+    def updateVehicleDescr(self, vehicleDesr):
+        if vehicleDesr is not None:
+            self.__vehicleDesc = vehicleDesr
+        return
+
     def update(self, scanStart, scanDir):
         point, isPointConvenient = self.__testMouseTargetPoint(scanStart, scanDir)
         if isPointConvenient:
@@ -275,11 +290,13 @@ class ShotPointCalculatorPlanar(object):
         turretYaw, gunPitch = AimingSystems.getTurretYawGunPitch(self.__vehicleDesc, self.__vehicleMat, planePos, True)
         gunMat = AimingSystems.getGunJointMat(self.__vehicleDesc, self.__getTurretMat(turretYaw), gunPitch)
         aimDir = gunMat.applyVector(Vector3(0.0, 0.0, 1.0))
-        return AimingSystems.getDesiredShotPoint(gunMat.translation, aimDir)
+        shotDistance = self.__vehicleDesc.shot.maxDistance
+        return AimingSystems.getDesiredShotPoint(gunMat.translation, aimDir, shotDistance=shotDistance)
 
     def __calculateClosestPoint(self, start, direction):
         direction.normalise()
-        end = start + direction.scale(10000.0)
+        distance = self.__vehicleDesc.shot.maxDistance if self.__vehicleDesc is not None else 10000.0
+        end = start + direction.scale(distance)
         testResStatic = BigWorld.wg_collideSegment(BigWorld.player().spaceID, start, end, 128)
         testResDynamic = collideDynamic(start, end, (BigWorld.player().playerVehicleID,), False)
         closestPoint = None

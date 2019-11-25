@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/premacc/dashboard/dashboard_premium_card.py
 from constants import PREMIUM_TYPE
-from frameworks.wulf import ViewFlags
+from frameworks.wulf import ViewSettings
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.premacc.dashboard.card_prem_info_model import CardPremInfoModel
@@ -20,8 +20,10 @@ class DashboardPremiumCard(ViewImpl):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __gameSession = dependency.descriptor(IGameSessionController)
 
-    def __init__(self, *args, **kwargs):
-        super(DashboardPremiumCard, self).__init__(R.views.lobby.premacc.dashboard.dashboard_premium_card.DashboardPremiumCard(), ViewFlags.COMPONENT, DashboardPremiumCardModel, *args, **kwargs)
+    def __init__(self, layoutID=R.views.lobby.premacc.dashboard.dashboard_premium_card.DashboardPremiumCard()):
+        settings = ViewSettings(layoutID)
+        settings.model = DashboardPremiumCardModel()
+        super(DashboardPremiumCard, self).__init__(settings)
 
     @property
     def viewModel(self):

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/common/Lib/Crypto/Cipher/ARC4.py
 __revision__ = '$Id$'
 from Crypto.Util.py3compat import *
-from Crypto.Cipher import _ARC4
+import _ARC4
 
 class ARC4Cipher:
 

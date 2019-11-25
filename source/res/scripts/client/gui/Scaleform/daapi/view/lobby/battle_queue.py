@@ -139,7 +139,8 @@ class _RandomQueueProvider(_QueueProvider):
     def additionalInfo(self):
         return text_styles.main(makeString(MENU.PREBATTLE_WAITINGTIMEWARNING))
 
-    def _isStartButtonDisplayed(self, vClasses):
+    @staticmethod
+    def _isStartButtonDisplayed(vClasses):
         return constants.IS_DEVELOPMENT and sum(vClasses) > 1
 
 
@@ -175,7 +176,7 @@ def _providerFactory(proxy, qType):
 class BattleQueue(BattleQueueMeta, LobbySubView):
     __sound_env__ = BattleQueueEnv
 
-    def __init__(self, ctx=None):
+    def __init__(self, _=None):
         super(BattleQueue, self).__init__()
         self.__createTime = 0
         self.__timerCallback = None
@@ -299,7 +300,7 @@ class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmble
     itemsCache = dependency.descriptor(IItemsCache)
     ANIMATION_DEFAULT_DURATION = 5
 
-    def __init__(self, ctx=None):
+    def __init__(self, _=None):
         super(BattleStrongholdsQueue, self).__init__()
         self.__timerCallback = None
         self.__startAnimationTime = None

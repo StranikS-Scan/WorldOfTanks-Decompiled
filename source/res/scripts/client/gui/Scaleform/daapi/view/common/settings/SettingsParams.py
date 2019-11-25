@@ -3,7 +3,7 @@
 import BigWorld
 from account_helpers.settings_core import settings_constants, options
 from gui.shared.utils import graphics
-from gui.shared.utils.graphics import g_monitorSettings
+from gui.shared.utils.monitor_settings import g_monitorSettings
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 _DEFERRED_RENDER_IDX = 0

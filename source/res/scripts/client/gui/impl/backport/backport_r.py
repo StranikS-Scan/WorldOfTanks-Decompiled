@@ -35,3 +35,7 @@ def image(resId):
 
 def sound(resId):
     return wulf.getSoundEffectId(resId)
+
+
+def layout(resId):
+    return wulf.getLayoutPath(resId)

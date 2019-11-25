@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/INVITES.py
-from debug_utils import LOG_WARNING
+
 
 class INVITES(object):
     INVITES_TEXT_EPIC = '#invites:invites/text/EPIC'
@@ -48,7 +48,6 @@ class INVITES(object):
     CLAN_INVITE_TITLE = '#invites:clan/invite/title'
     CLAN_INVITE_COMMENT = '#invites:clan/invite/comment'
     INVITES_COMMENT = '#invites:invites/comment'
-    INVITES_STATE_PENDING = '#invites:invites/state/PENDING'
     INVITES_STATE_ACCEPTED = '#invites:invites/state/ACCEPTED'
     INVITES_STATE_DECLINED = '#invites:invites/state/DECLINED'
     INVITES_STATE_REVOKED = '#invites:invites/state/REVOKED'
@@ -80,9 +79,7 @@ class INVITES(object):
     INVITES_NOTE_CHANGE_AND_LEAVE_FORT_BATTLE = '#invites:invites/note/change_and_leave/FORT_BATTLE'
     INVITES_NOTE_LEAVE_EXTERNAL = '#invites:invites/note/leave/EXTERNAL'
     INVITES_NOTE_CHANGE_AND_LEAVE_EXTERNAL = '#invites:invites/note/change_and_leave/EXTERNAL'
-    INVITES_NOTE_LEAVE_RANDOMS = '#invites:invites/note/leave/RANDOMS'
     INVITES_NOTE_CHANGE_AND_LEAVE_RANDOMS = '#invites:invites/note/change_and_leave/RANDOMS'
-    INVITES_NOTE_LEAVE_EVENT = '#invites:invites/note/leave/EVENT'
     INVITES_NOTE_CHANGE_AND_LEAVE_EVENT_BATTLES = '#invites:invites/note/change_and_leave/EVENT_BATTLES'
     INVITES_NOTE_LEAVE_SANDBOX = '#invites:invites/note/leave/SANDBOX'
     INVITES_NOTE_CHANGE_AND_LEAVE_SANDBOX = '#invites:invites/note/change_and_leave/SANDBOX'
@@ -90,6 +87,7 @@ class INVITES(object):
     INVITES_NOTE_CHANGE_AND_LEAVE_EPIC = '#invites:invites/note/change_and_leave/EPIC'
     INVITES_NOTE_LEAVE_RANKED = '#invites:invites/note/leave/RANKED'
     INVITES_NOTE_CHANGE_AND_LEAVE_RANKED = '#invites:invites/note/change_and_leave/RANKED'
+    INVITES_WARNING_ANONYMIZED = '#invites:invites/warning/anonymized'
     GUI_TITLES_RECEIVEDINVITES = '#invites:gui/titles/receivedInvites'
     GUI_TITLES_INVITE = '#invites:gui/titles/invite'
     GUI_TITLES_BARTER = '#invites:gui/titles/barter'
@@ -107,107 +105,10 @@ class INVITES(object):
     FRIENDSHIP_NOTE_PROCESS = '#invites:friendship/note/process'
     FRIENDSHIP_NOTE_MAXROSTER = '#invites:friendship/note/maxRoster'
     FRIENDSHIP_NOTE_NOTCONNECTED = '#invites:friendship/note/notConnected'
-    CLANS_STATE_APP_ACTIVE = '#invites:clans/state/app/active'
     CLANS_STATE_APP_ACCEPTED = '#invites:clans/state/app/accepted'
     CLANS_STATE_APP_DECLINED = '#invites:clans/state/app/declined'
     CLANS_STATE_APP_ERROR_INCLANENTERCOOLDOWN = '#invites:clans/state/app/error/inClanEnterCooldown'
-    CLANS_STATE_INVITE_ACTIVE = '#invites:clans/state/invite/active'
     CLANS_STATE_INVITE_ACCEPTED = '#invites:clans/state/invite/accepted'
     CLANS_STATE_INVITE_DECLINED = '#invites:clans/state/invite/declined'
     CLANS_STATE_INVITE_ERROR_INCLANENTERCOOLDOWN = '#invites:clans/state/invite/error/inClanEnterCooldown'
     STRONGHOLD_INVITE_SENDINVITETOUSERNAME = '#invites:stronghold/invite/sendInviteToUsername'
-    INVITES_STATE_ENUM = (INVITES_STATE_PENDING,
-     INVITES_STATE_ACCEPTED,
-     INVITES_STATE_DECLINED,
-     INVITES_STATE_REVOKED,
-     INVITES_STATE_EXPIRED,
-     INVITES_STATE_ERROR)
-    INVITES_NOTE_LEAVE_ENUM = (INVITES_NOTE_LEAVE_SQUAD,
-     INVITES_NOTE_LEAVE_FALLOUT,
-     INVITES_NOTE_LEAVE_TRAINING,
-     INVITES_NOTE_LEAVE_EPIC_TRAINING,
-     INVITES_NOTE_LEAVE_UNIT,
-     INVITES_NOTE_LEAVE_CLAN,
-     INVITES_NOTE_LEAVE_TOURNAMENT,
-     INVITES_NOTE_LEAVE_SORTIE,
-     INVITES_NOTE_LEAVE_FORT_COMMON,
-     INVITES_NOTE_LEAVE_E_SPORT_COMMON,
-     INVITES_NOTE_LEAVE_FORT_BATTLE,
-     INVITES_NOTE_LEAVE_EXTERNAL,
-     INVITES_NOTE_LEAVE_RANDOMS,
-     INVITES_NOTE_LEAVE_EVENT,
-     INVITES_NOTE_LEAVE_SANDBOX,
-     INVITES_NOTE_LEAVE_EPIC,
-     INVITES_NOTE_LEAVE_RANKED)
-    INVITES_NOTE_CHANGE_AND_LEAVE_ENUM = (INVITES_NOTE_CHANGE_AND_LEAVE_EVENT,
-     INVITES_NOTE_CHANGE_AND_LEAVE_SQUAD,
-     INVITES_NOTE_CHANGE_AND_LEAVE_FALLOUT,
-     INVITES_NOTE_CHANGE_AND_LEAVE_TRAINING,
-     INVITES_NOTE_CHANGE_AND_LEAVE_EPIC_TRAINING,
-     INVITES_NOTE_CHANGE_AND_LEAVE_UNIT,
-     INVITES_NOTE_CHANGE_AND_LEAVE_CLAN,
-     INVITES_NOTE_CHANGE_AND_LEAVE_TOURNAMENT,
-     INVITES_NOTE_CHANGE_AND_LEAVE_SORTIE,
-     INVITES_NOTE_CHANGE_AND_LEAVE_FORT_COMMON,
-     INVITES_NOTE_CHANGE_AND_LEAVE_E_SPORT_COMMON,
-     INVITES_NOTE_CHANGE_AND_LEAVE_FORT_BATTLE,
-     INVITES_NOTE_CHANGE_AND_LEAVE_EXTERNAL,
-     INVITES_NOTE_CHANGE_AND_LEAVE_RANDOMS,
-     INVITES_NOTE_CHANGE_AND_LEAVE_EVENT_BATTLES,
-     INVITES_NOTE_CHANGE_AND_LEAVE_SANDBOX,
-     INVITES_NOTE_CHANGE_AND_LEAVE_EPIC,
-     INVITES_NOTE_CHANGE_AND_LEAVE_RANKED)
-    INVITES_PREBATTLE_ACCEPTNOTALLOWED_ENUM = (INVITES_PREBATTLE_ACCEPTNOTALLOWED_UNDEFINEDPERIPHERY, INVITES_PREBATTLE_ACCEPTNOTALLOWED_OTHERPERIPHERY)
-    INVITES_PREBATTLE_ALREADYJOINED_ENUM = (INVITES_PREBATTLE_ALREADYJOINED_SQUAD,
-     INVITES_PREBATTLE_ALREADYJOINED_FALLOUT,
-     INVITES_PREBATTLE_ALREADYJOINED_TRAINING,
-     INVITES_PREBATTLE_ALREADYJOINED_EPIC_TRAINING,
-     INVITES_PREBATTLE_ALREADYJOINED_CLAN,
-     INVITES_PREBATTLE_ALREADYJOINED_TOURNAMENT,
-     INVITES_PREBATTLE_ALREADYJOINED_UNIT,
-     INVITES_PREBATTLE_ALREADYJOINED_SORTIE)
-
-    @classmethod
-    def invites_state(cls, key0):
-        outcome = '#invites:invites/state/{}'.format(key0)
-        if outcome not in cls.INVITES_STATE_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def invites_note_leave(cls, key0):
-        outcome = '#invites:invites/note/leave/{}'.format(key0)
-        if outcome not in cls.INVITES_NOTE_LEAVE_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def invites_note_change_and_leave(cls, key0):
-        outcome = '#invites:invites/note/change_and_leave/{}'.format(key0)
-        if outcome not in cls.INVITES_NOTE_CHANGE_AND_LEAVE_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def invites_prebattle_acceptnotallowed(cls, key0):
-        outcome = '#invites:invites/prebattle/acceptNotAllowed/{}'.format(key0)
-        if outcome not in cls.INVITES_PREBATTLE_ACCEPTNOTALLOWED_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def invites_prebattle_alreadyjoined(cls, key0):
-        outcome = '#invites:invites/prebattle/alreadyJoined/{}'.format(key0)
-        if outcome not in cls.INVITES_PREBATTLE_ALREADYJOINED_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome

@@ -43,6 +43,7 @@ class BlueprintFragment(object):
 
 
 class NationalBlueprintFragment(BlueprintFragment):
+    __slots__ = ()
     FTYPE = BlueprintTypes.NATIONAL
 
     @staticmethod
@@ -61,6 +62,7 @@ class NationalBlueprintFragment(BlueprintFragment):
 
 
 class VehicleBlueprintFragment(BlueprintFragment):
+    __slots__ = ('progressPerFragment', 'require', 'decays')
     FTYPE = BlueprintTypes.VEHICLE
 
     @staticmethod
@@ -109,6 +111,7 @@ class VehicleBlueprintFragment(BlueprintFragment):
 
 
 class IntelligenceDataFragment(BlueprintFragment):
+    __slots__ = ()
     FTYPE = BlueprintTypes.INTELLIGENCE_DATA
     nationID = property(lambda self: nations.NONE_INDEX)
 

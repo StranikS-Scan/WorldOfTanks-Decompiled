@@ -62,6 +62,7 @@ class GameEvent(HasCtxEvent):
     CHARGE_RELEASED = 'game/chargeReleased'
     PRE_CHARGE = 'game/preCharge'
     CONTROL_MODE_CHANGE = 'game/controlModeChange'
+    SNIPER_CAMERA_TRANSITION = 'game/sniperCameraTransition'
 
 
 class GUICommonEvent(SharedEvent):
@@ -369,6 +370,7 @@ class CoolDownEvent(SharedEvent):
     BATTLE = 'battleCoolDown'
     WGCG = 'wgcg'
     STRONGHOLD = 'stronghold'
+    BATTLE_ACTION = 'battleAction'
 
     def __init__(self, eventType=None, requestID=0, coolDown=5.0):
         super(CoolDownEvent, self).__init__(eventType)

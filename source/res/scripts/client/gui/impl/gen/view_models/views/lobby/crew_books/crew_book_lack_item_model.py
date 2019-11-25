@@ -7,6 +7,9 @@ from frameworks.wulf import ViewModel
 class CrewBookLackItemModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=5, commands=0):
+        super(CrewBookLackItemModel, self).__init__(properties=properties, commands=commands)
+
     def getIcon(self):
         return self._getResource(0)
 

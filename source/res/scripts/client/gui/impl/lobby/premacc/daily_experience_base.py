@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/premacc/daily_experience_base.py
 import logging
+import typing
 from constants import PREMIUM_TYPE, PremiumConfigs
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl.pub import ViewImpl
 from gui.impl.gen.view_models.views.lobby.premacc.daily_experience_base_model import DailyExperienceBaseModel
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.impl.lobby.premacc.premacc_helpers import SoundViewMixin
-from frameworks.wulf import ViewFlags
 from helpers import dependency
 from skeletons.gui.game_control import IGameSessionController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -19,9 +19,6 @@ class DailyExperienceBaseView(ViewImpl, SoundViewMixin):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __gameSession = dependency.descriptor(IGameSessionController)
     __slots__ = ()
-
-    def __init__(self, layoutID, wsFlags=ViewFlags.LOBBY_SUB_VIEW, viewModelClazz=DailyExperienceBaseModel, ctx=None, *args, **kwargs):
-        super(DailyExperienceBaseView, self).__init__(layoutID, wsFlags, viewModelClazz, *args, **kwargs)
 
     @property
     def viewModel(self):

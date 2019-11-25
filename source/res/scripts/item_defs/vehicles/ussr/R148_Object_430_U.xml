@@ -49,6 +49,13 @@
       <undamaged>	vehicles/russian/R148_Object_430_U/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/russian/R148_Object_430_U/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/russian/R148_Object_430_U/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <R148_Object_430_U_3Dst>
+          <undamaged>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_3Dst/crash/lod0/Hull.model	</exploded>
+        </R148_Object_430_U_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -72,10 +79,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.255485 0.220207 2.94785	</rayStart>
-        <rayEnd>	0.255485 0.097235 2.87684	</rayEnd>
+        <rayStart>	-0.640364 0.668324 1.88831	</rayStart>
+        <rayEnd>	-0.640364 0.526322 1.88831	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
-        <size>	0.3	</size>
+        <size>	0.25	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
       </slot>
@@ -874,6 +881,13 @@
         <undamaged>	vehicles/russian/R148_Object_430_U/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R148_Object_430_U/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/russian/R148_Object_430_U/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <R148_Object_430_U_3Dst>
+            <undamaged>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_3Dst/crash/lod0/Chassis.model	</exploded>
+          </R148_Object_430_U_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1746,6 +1760,13 @@
             <undamaged>	vehicles/russian/R148_Object_430_U/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R148_Object_430_U/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R148_Object_430_U/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <R148_Object_430_U_3Dst>
+                <undamaged>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </R148_Object_430_U_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R148_Object_430_U/collision/Gun_01.model	</collisionModelServer>
@@ -1842,6 +1863,13 @@
         <undamaged>	vehicles/russian/R148_Object_430_U/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/russian/R148_Object_430_U/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/russian/R148_Object_430_U/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <R148_Object_430_U_3Dst>
+            <undamaged>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R148_Object_430_U/_skins/R148_Object_430_U_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </R148_Object_430_U_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R148_Object_430_U/collision/Turret_01.model	</collisionModelServer>

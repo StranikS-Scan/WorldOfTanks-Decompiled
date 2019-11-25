@@ -16,7 +16,7 @@ from ClientUnitMgr import ClientUnitMgr, ClientUnitBrowser
 from ContactInfo import ContactInfo
 from OfflineMapCreator import g_offlineMapCreator
 from PlayerEvents import g_playerEvents as events
-from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings
+from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings, client_anonymizer
 from account_helpers import ClientInvitations, vehicle_rotation
 from account_helpers import ClientRanked, ClientBadges
 from account_helpers import client_epic_meta_game, tokens
@@ -150,6 +150,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.blueprints = g_accountRepository.blueprints
         self.festivities = g_accountRepository.festivities
         self.sessionStats = g_accountRepository.sessionStats
+        self.anonymizer = g_accountRepository.anonymizer
         self.customFilesCache = g_accountRepository.customFilesCache
         self.syncData.setAccount(self)
         self.inventory.setAccount(self)
@@ -170,6 +171,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.epicMetaGame.setAccount(self)
         self.blueprints.setAccount(self)
         self.sessionStats.setAccount(self)
+        self.anonymizer.setAccount(self)
         g_accountRepository.commandProxy.setGateway(self.__doCmd)
         self.isLongDisconnectedFromCenter = False
         self.prebattle = None
@@ -221,6 +223,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.blueprints.onAccountBecomePlayer()
         self.festivities.onAccountBecomePlayer()
         self.sessionStats.onAccountBecomePlayer()
+        self.anonymizer.onAccountBecomePlayer()
         chatManager.switchPlayerProxy(self)
         events.onAccountBecomePlayer()
         BigWorld.target.source = BigWorld.MouseTargetingMatrix()
@@ -254,6 +257,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.blueprints.onAccountBecomeNonPlayer()
         self.festivities.onAccountBecomeNonPlayer()
         self.sessionStats.onAccountBecomeNonPlayer()
+        self.anonymizer.onAccountBecomeNonPlayer()
         self.__cancelCommands()
         self.syncData.setAccount(None)
         self.inventory.setAccount(None)
@@ -273,6 +277,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.epicMetaGame.setAccount(None)
         self.blueprints.setAccount(None)
         self.sessionStats.setAccount(None)
+        self.anonymizer.setAccount(None)
         g_accountRepository.commandProxy.setGateway(None)
         self.unitMgr.clear()
         self.unitBrowser.clear()
@@ -524,6 +529,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInTutorialQueue = False
         self.isInEventBattles = False
         self.isInSandboxQueue = False
+        self.isInRankedQueue = False
         self.isInBootcampQueue = False
         self.isInEpicQueue = False
         events.isPlayerEntityChanging = False
@@ -581,6 +587,8 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInBootcampQueue = False
         self.isInEventBattles = False
         self.isInSandboxQueue = False
+        self.isInRankedQueue = False
+        self.isInEpicQueue = False
         events.isPlayerEntityChanging = False
         events.onPlayerEntityChangeCanceled()
         events.onKickedFromArena(reasonCode)
@@ -1039,6 +1047,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self._doCmdIntArrStrArr(AccountCommands.CMD_BAN_UNBAN_USER, intArr, strArr, proxy)
         return
 
+    def flushArenaRelations(self, arenaUniqueID, callback=None):
+        self._doCmdInt2(AccountCommands.CMD_FLUSH_ARENA_RELATIONS, arenaUniqueID, 0, callback)
+
     def chooseQuestReward(self, eventType, questID, rewardID, callback=None):
         if callback is not None:
             proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
@@ -1156,6 +1167,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.blueprints.synchronize(isFullSync, diff)
             self.festivities.synchronize(isFullSync, diff)
             self.sessionStats.synchronize(isFullSync, diff)
+            self.anonymizer.synchronize(isFullSync, diff)
             self.__synchronizeServerSettings(diff)
             self.__synchronizeDisabledPersonalMissions(diff)
             self.__synchronizeEventNotifications(diff)
@@ -1390,6 +1402,7 @@ class _AccountRepository(object):
         self.blueprints = client_blueprints.ClientBlueprints(self.syncData)
         self.festivities = FestivityManager(self.syncData, self.commandProxy)
         self.sessionStats = SessionStatistics(self.syncData)
+        self.anonymizer = client_anonymizer.ClientAnonymizer(self.syncData)
         self.gMap = ClientGlobalMap()
         self.onTokenReceived = Event.Event()
         self.requestID = AccountCommands.REQUEST_ID_UNRESERVED_MIN

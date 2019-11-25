@@ -8,6 +8,9 @@ from gui.impl.gen.view_models.ui_kit.list_model import ListModel
 class CrewBooksLackViewModel(ViewModel):
     __slots__ = ('onCloseBtnClick', 'onBuyBtnClick', 'onHangarBtnClick')
 
+    def __init__(self, properties=8, commands=3):
+        super(CrewBooksLackViewModel, self).__init__(properties=properties, commands=commands)
+
     @property
     def noBooksList(self):
         return self._getViewModel(0)

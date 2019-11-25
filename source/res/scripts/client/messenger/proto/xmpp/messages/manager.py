@@ -18,7 +18,7 @@ from messenger.proto.xmpp.messages.muc import MUCProvider, ACTION_RESULT
 from messenger.proto.xmpp.xmpp_constants import XMPP_MUC_CHANNEL_TYPE
 from messenger.proto.xmpp.xmpp_limits import MessageLimits
 from messenger.storage import storage_getter
-_REQUIRED_USER_TAGS = {USER_TAG.FRIEND, USER_TAG.IGNORED, USER_TAG.IGNORED_TMP}
+_REQUIRED_USER_TAGS = {USER_TAG.FRIEND, USER_TAG.IGNORED}
 
 class MessagesManager(ClientEventsHandler):
     __slots__ = ('__msgFilters', '__limits', '__chatSessions', '__muc', '__receivedTags', '__pending', '__cooldown')
@@ -187,7 +187,7 @@ class MessagesManager(ClientEventsHandler):
                 if msgType == MESSAGE_TYPE.CHAT:
                     self.__chatSessions.addMessage(*data)
 
-    def __me_onUserActionReceived(self, actionID, contact):
+    def __me_onUserActionReceived(self, actionID, contact, shadowMode):
         self.__chatSessions.setUserAction(actionID, contact)
         self.__muc.setUserAction(actionID, contact)
 

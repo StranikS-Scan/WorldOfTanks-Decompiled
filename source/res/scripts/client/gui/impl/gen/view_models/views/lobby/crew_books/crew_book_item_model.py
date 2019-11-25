@@ -7,6 +7,9 @@ from frameworks.wulf import ViewModel
 class CrewBookItemModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=12, commands=0):
+        super(CrewBookItemModel, self).__init__(properties=properties, commands=commands)
+
     def getIdx(self):
         return self._getNumber(0)
 

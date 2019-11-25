@@ -11,6 +11,7 @@ from gui.battle_control.arena_info import settings
 from gui.doc_loaders.badges_loader import getSelectedByLayout
 from gui.shared.gui_items import Vehicle
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS, VEHICLE_CLASS_NAME
+from gui.shared.utils.decorators import ReprInjector
 from helpers import dependency, i18n
 from skeletons.gui.server_events import IEventsCache
 _INVALIDATE_OP = settings.INVALIDATE_OP
@@ -96,14 +97,17 @@ def isPremiumIGR(tags):
     return VEHICLE_TAGS.PREMIUM_IGR in tags
 
 
+@ReprInjector.simple(('avatarSessionID', 'avatarSessionID'), ('name', 'name'))
 class PlayerInfoVO(object):
-    __slots__ = ('accountDBID', 'name', 'clanAbbrev', 'igrType', 'personaMissionIDs', 'personalMissionInfo', 'isPrebattleCreator', 'forbidInBattleInvitations', 'isTeamKiller')
+    __slots__ = ('accountDBID', 'avatarSessionID', 'name', 'fakeName', 'clanAbbrev', 'igrType', 'personaMissionIDs', 'personalMissionInfo', 'isPrebattleCreator', 'forbidInBattleInvitations', 'isTeamKiller')
     eventsCache = dependency.descriptor(IEventsCache)
 
-    def __init__(self, accountDBID=0L, name=None, clanAbbrev='', igrType=IGR_TYPE.NONE, personalMissionIDs=None, personalMissionInfo=None, isPrebattleCreator=False, forbidInBattleInvitations=False, **kwargs):
+    def __init__(self, accountDBID=0, avatarSessionID='', name=None, clanAbbrev='', igrType=IGR_TYPE.NONE, personalMissionIDs=None, personalMissionInfo=None, isPrebattleCreator=False, forbidInBattleInvitations=False, fakeName='', **kwargs):
         super(PlayerInfoVO, self).__init__()
         self.accountDBID = accountDBID
+        self.avatarSessionID = avatarSessionID
         self.name = name
+        self.fakeName = fakeName or ''
         self.clanAbbrev = clanAbbrev
         self.igrType = igrType
         self.personaMissionIDs = personalMissionIDs or []
@@ -112,17 +116,17 @@ class PlayerInfoVO(object):
         self.forbidInBattleInvitations = forbidInBattleInvitations
         self.isTeamKiller = False
 
-    def __repr__(self):
-        return 'PlayerInfoVO(accountDBID = {0:n}, name = {1:>s})'.format(self.accountDBID, self.name)
-
     def __cmp__(self, other):
         return cmp(self.name, other.name)
 
-    def update(self, invalidate=_INVALIDATE_OP.NONE, name=None, accountDBID=0L, clanAbbrev='', isPrebattleCreator=False, igrType=IGR_TYPE.NONE, forbidInBattleInvitations=False, **kwargs):
-        if self.name != name:
+    def update(self, invalidate=_INVALIDATE_OP.NONE, name=None, accountDBID=0, avatarSessionID='', clanAbbrev='', isPrebattleCreator=False, igrType=IGR_TYPE.NONE, forbidInBattleInvitations=False, fakeName='', **kwargs):
+        if name != self.name:
             self.name = name
             invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.SORTING)
+        if fakeName and fakeName != self.fakeName:
+            self.fakeName = fakeName
         self.accountDBID = accountDBID
+        self.avatarSessionID = avatarSessionID
         self.clanAbbrev = clanAbbrev
         self.igrType = igrType
         self.isPrebattleCreator = isPrebattleCreator
@@ -131,6 +135,9 @@ class PlayerInfoVO(object):
 
     def getPlayerLabel(self):
         return self.name if self.name else i18n.makeString(settings.UNKNOWN_PLAYER_NAME)
+
+    def getPlayerFakeLabel(self):
+        return self.fakeName or ''
 
     def getRandomPersonalMissions(self):
         pQuests = self.eventsCache.getPersonalMissions().getAllQuests()
@@ -145,7 +152,7 @@ class PlayerInfoVO(object):
 
 
 class VehicleTypeInfoVO(object):
-    __slots__ = ('compactDescr', 'shortName', 'name', 'level', 'iconName', 'iconPath', 'isObserver', 'isPremiumIGR', 'isDualGunVehicle', 'guiName', 'shortNameWithPrefix', 'classTag', 'nationID', 'turretYawLimits', 'maxHealth')
+    __slots__ = ('compactDescr', 'shortName', 'name', 'level', 'iconName', 'iconPath', 'isObserver', 'isPremiumIGR', 'isDualGunVehicle', 'guiName', 'shortNameWithPrefix', 'classTag', 'nationID', 'turretYawLimits', 'maxHealth', 'tags')
 
     def __init__(self, vehicleType=None, **kwargs):
         super(VehicleTypeInfoVO, self).__init__()
@@ -172,6 +179,7 @@ class VehicleTypeInfoVO(object):
             vehicleType = vehicleDescr.type
             self.compactDescr = vehicleType.compactDescr
             tags = vehicleType.tags
+            self.tags = tags
             self.classTag = Vehicle.getVehicleClassTag(tags)
             self.isObserver = isObserver(tags)
             self.isPremiumIGR = isPremiumIGR(tags)
@@ -189,6 +197,7 @@ class VehicleTypeInfoVO(object):
             self.iconPath = settings.makeContourIconSFPath(vName)
         else:
             vehicleName = i18n.makeString(settings.UNKNOWN_VEHICLE_NAME)
+            self.tags = frozenset()
             self.compactDescr = 0
             self.classTag = None
             self.isObserver = False
@@ -236,7 +245,7 @@ class VehicleArenaInfoVO(object):
         return
 
     def __repr__(self):
-        return 'VehicleArenaInfoVO(vehicleID = {0!r:s}, team = {1!r:s}, player = {2!r:s}, playerStatus = {3:n}, vehicleType = {4!r:s}, vehicleStatus = {5:n}, prebattleID = {6!r:s})'.format(self.vehicleID, self.team, self.player, self.playerStatus, self.vehicleType, self.vehicleStatus, self.prebattleID)
+        return 'VehicleArenaInfoVO(vehicleID = {0!r:s}, team = {1!r:n}, player = {2!r:s}, playerStatus = {3:n}, vehicleType = {4!r:s}, vehicleStatus = {5:n}, prebattleID = {6!r:s})'.format(self.vehicleID, self.team, self.player, self.playerStatus, self.vehicleType, self.vehicleStatus, self.prebattleID)
 
     def __eq__(self, other):
         return self.vehicleID == other.vehicleID
@@ -351,10 +360,10 @@ class VehicleArenaInfoVO(object):
         return self.vehicleType.isDualGunVehicle
 
     def isActionsDisabled(self):
-        return not self.player.accountDBID
+        return not self.player.avatarSessionID
 
     def isChatCommandsDisabled(self, isAlly):
-        if not self.player.accountDBID:
+        if not self.player.avatarSessionID:
             if isAlly:
                 return True
             arena = avatar_getter.getArena()

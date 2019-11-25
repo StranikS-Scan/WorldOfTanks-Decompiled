@@ -25,6 +25,7 @@ def dumpDossier(dossierItem):
 
 
 class _Dossier(GUIItem):
+    __slots__ = ('_dossier', '_dossierType', '_playerDBID')
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, dossier, dossierType, playerDBID=None):

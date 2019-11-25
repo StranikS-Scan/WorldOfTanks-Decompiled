@@ -6,6 +6,9 @@ from gui.impl.wrappers.user_compound_price_model import UserCompoundPriceModel
 class CartSlotModel(ViewModel):
     __slots__ = ()
 
+    def __init__(self, properties=14, commands=0):
+        super(CartSlotModel, self).__init__(properties=properties, commands=commands)
+
     @property
     def price(self):
         return self._getViewModel(0)

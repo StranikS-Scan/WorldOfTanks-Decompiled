@@ -148,7 +148,7 @@ class ConcealmentBonus(object):
 
 
 class Customization(FittingItem):
-    __slots__ = ('_boundInventoryCount', '_bonus', '_installedVehicles')
+    __slots__ = ('_boundInventoryCount', '_bonus', '_installedVehicles', '__noveltyData')
     eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, intCompactDescr, proxy=None):
@@ -343,6 +343,7 @@ class Customization(FittingItem):
 
 
 class Paint(Customization):
+    __slots__ = ()
 
     def __init__(self, *args, **kwargs):
         super(Paint, self).__init__(*args, **kwargs)
@@ -362,6 +363,7 @@ class Paint(Customization):
 
 
 class Camouflage(Customization):
+    __slots__ = ('_bonus',)
 
     def __init__(self, *args, **kwargs):
         super(Camouflage, self).__init__(*args, **kwargs)
@@ -412,6 +414,7 @@ class Camouflage(Customization):
 
 
 class Modification(Customization):
+    __slots__ = ()
 
     def __init__(self, *args, **kwargs):
         super(Modification, self).__init__(*args, **kwargs)
@@ -429,6 +432,7 @@ class Modification(Customization):
 
 
 class Decal(Customization):
+    __slots__ = ()
 
     @property
     def canBeMirrored(self):
@@ -436,6 +440,7 @@ class Decal(Customization):
 
 
 class Emblem(Decal):
+    __slots__ = ()
 
     def __init__(self, *args, **kwargs):
         super(Emblem, self).__init__(*args, **kwargs)
@@ -443,6 +448,7 @@ class Emblem(Decal):
 
 
 class Inscription(Decal):
+    __slots__ = ()
 
     def __init__(self, *args, **kwargs):
         super(Inscription, self).__init__(*args, **kwargs)
@@ -453,6 +459,7 @@ class Inscription(Decal):
 
 
 class Insignia(Customization):
+    __slots__ = ()
 
     def __init__(self, *args, **kwargs):
         super(Insignia, self).__init__(*args, **kwargs)
@@ -472,6 +479,7 @@ class Insignia(Customization):
 
 
 class ProjectionDecal(Decal):
+    __slots__ = ()
 
     def __init__(self, *args, **kwargs):
         super(ProjectionDecal, self).__init__(*args, **kwargs)
@@ -509,6 +517,7 @@ class ProjectionDecal(Decal):
 
 
 class PersonalNumber(Customization):
+    __slots__ = ()
 
     def __init__(self, *args, **kwargs):
         super(PersonalNumber, self).__init__(*args, **kwargs)
@@ -548,6 +557,7 @@ class PersonalNumber(Customization):
 
 
 class Sequence(Customization):
+    __slots__ = ()
 
     def __init__(self, *args, **kwargs):
         super(Sequence, self).__init__(*args, **kwargs)
@@ -559,6 +569,7 @@ class Sequence(Customization):
 
 
 class Attachment(Customization):
+    __slots__ = ()
 
     def __init__(self, *args, **kwargs):
         super(Attachment, self).__init__(*args, **kwargs)

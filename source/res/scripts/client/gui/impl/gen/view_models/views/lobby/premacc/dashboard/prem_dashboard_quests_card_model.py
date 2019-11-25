@@ -9,6 +9,9 @@ class PremDashboardQuestsCardModel(ViewModel):
     IN_PROGRESS = 'inprogress'
     COMPLETED = 'complete'
 
+    def __init__(self, properties=3, commands=1):
+        super(PremDashboardQuestsCardModel, self).__init__(properties=properties, commands=commands)
+
     @property
     def premiumQuests(self):
         return self._getViewModel(0)

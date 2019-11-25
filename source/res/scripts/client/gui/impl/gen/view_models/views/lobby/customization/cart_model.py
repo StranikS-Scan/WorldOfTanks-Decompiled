@@ -3,9 +3,13 @@
 from frameworks.wulf import ViewModel
 from gui.impl.wrappers.user_compound_price_model import UserCompoundPriceModel
 from gui.impl.wrappers.user_list_model import UserListModel
+from gui.impl.gen.view_models.views.lobby.customization.cart_season_model import CartSeasonModel
 
 class CartModel(ViewModel):
     __slots__ = ('onSelectItem', 'onSelectAutoRent', 'onBuyAction', 'onTutorialClose')
+
+    def __init__(self, properties=15, commands=4):
+        super(CartModel, self).__init__(properties=properties, commands=commands)
 
     @property
     def seasons(self):

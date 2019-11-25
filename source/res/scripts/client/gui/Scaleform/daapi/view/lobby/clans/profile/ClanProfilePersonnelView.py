@@ -336,7 +336,7 @@ class _ClanMembersDataProvider(SortableDAAPIDataProvider, UsersInfoHelper):
         self.__sortMapping.clear()
         super(_ClanMembersDataProvider, self)._dispose()
 
-    def __me_onUserActionReceived(self, actionID, contact):
+    def __me_onUserActionReceived(self, actionID, contact, shadowMode):
         if actionID == USER_ACTION_ID.FRIEND_REMOVED or actionID == USER_ACTION_ID.FRIEND_ADDED or actionID == USER_ACTION_ID.MUTE_SET or actionID == USER_ACTION_ID.MUTE_UNSET or actionID == USER_ACTION_ID.NOTE_CHANGED or actionID == USER_ACTION_ID.IGNORED_ADDED or actionID == USER_ACTION_ID.IGNORED_REMOVED or actionID == USER_ACTION_ID.TMP_IGNORED_ADDED or actionID == USER_ACTION_ID.TMP_IGNORED_REMOVED:
             self.buildList(self.__accountsList)
             self.refresh()

@@ -6,6 +6,9 @@ from frameworks.wulf import ViewModel
 class ProgressiveRewardAwardModel(ViewModel):
     __slots__ = ('onCloseAction', 'onSpecialActionBtnClick', 'onDestroyEvent')
 
+    def __init__(self, properties=8, commands=3):
+        super(ProgressiveRewardAwardModel, self).__init__(properties=properties, commands=commands)
+
     def getAwardType(self):
         return self._getString(0)
 

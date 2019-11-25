@@ -3,6 +3,7 @@
 import logging
 from contextlib import contextmanager
 import typing
+from soft_exception import SoftException
 from .command import Command
 from .array import Array
 from ..py_object_binder import PyObjectEntity
@@ -13,8 +14,8 @@ _logger.addHandler(logging.NullHandler())
 class ViewModel(PyObjectEntity):
     __slots__ = ()
 
-    def __init__(self):
-        super(ViewModel, self).__init__(PyObjectViewModel())
+    def __init__(self, properties=0, commands=0):
+        super(ViewModel, self).__init__(PyObjectViewModel(properties, commands))
 
     def hold(self):
         self.proxy.hold()
@@ -87,12 +88,7 @@ class ViewModel(PyObjectEntity):
         self.proxy.setViewModel(index, value.proxy)
 
     def _setView(self, index, pyValue):
-        if pyValue is not None:
-            proxy = pyValue.proxy
-        else:
-            proxy = None
-        self.proxy.setView(index, proxy)
-        return
+        raise SoftException('Property with type PropertyType.VIEW is not longer supported. Use View.setChildView method to add sub views.')
 
     def _setArray(self, index, value):
         self.proxy.setArray(index, value.proxy)
@@ -127,12 +123,7 @@ class ViewModel(PyObjectEntity):
         self.proxy.addViewModelField(name, defaultValue.proxy)
 
     def _addViewProperty(self, name, defaultValue=None):
-        if defaultValue is not None:
-            proxy = defaultValue.proxy
-        else:
-            proxy = None
-        self.proxy.addViewField(name, proxy)
-        return
+        raise SoftException('Property with type PropertyType.VIEW is not longer supported. Use View.setChildView method to add sub views.')
 
     def _addArrayProperty(self, name, defaultValue=None):
         if defaultValue is None:

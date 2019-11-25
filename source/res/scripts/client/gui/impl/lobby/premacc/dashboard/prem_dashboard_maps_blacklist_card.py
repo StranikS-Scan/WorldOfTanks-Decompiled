@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/premacc/dashboard/prem_dashboard_maps_blacklist_card.py
-from frameworks.wulf import ViewFlags
+from frameworks.wulf import ViewSettings
 from constants import PremiumConfigs
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl.gen import R
@@ -21,8 +21,10 @@ class PremDashboardMapsBlacklistCard(ViewImpl):
     __gameSession = dependency.descriptor(IGameSessionController)
     __slots__ = ('__notifier',)
 
-    def __init__(self, *args, **kwargs):
-        super(PremDashboardMapsBlacklistCard, self).__init__(R.views.lobby.premacc.dashboard.prem_dashboard_maps_blacklist_card.PremDashboardMapsBlacklistCard(), ViewFlags.VIEW, PremDashboardMapsBlacklistCardModel, *args, **kwargs)
+    def __init__(self, layoutID=R.views.lobby.premacc.dashboard.prem_dashboard_maps_blacklist_card.PremDashboardMapsBlacklistCard()):
+        settings = ViewSettings(layoutID)
+        settings.model = PremDashboardMapsBlacklistCardModel()
+        super(PremDashboardMapsBlacklistCard, self).__init__(settings)
         self.__notifier = None
         return
 

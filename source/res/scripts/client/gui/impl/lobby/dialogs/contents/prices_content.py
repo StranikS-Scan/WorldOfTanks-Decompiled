@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/dialogs/contents/prices_content.py
+from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.dialog_prices_content_model import DialogPricesContentModel
 from gui.impl.lobby.dialogs.dialog_prices_tooltip import DialogPricesTooltip
@@ -9,7 +10,9 @@ class DialogPricesContent(DialogContent):
     __slots__ = ('__valueMainCost', '__iconMainCost', '__labelMainCost', '__valueAdditionalCost', '__iconAdditionalCost', '__labelAdditionalCost', '__totalCost', '__labelTotalCost')
 
     def __init__(self):
-        super(DialogPricesContent, self).__init__(layoutID=R.views.common.dialog_view.components.dialog_prices_content.DialogPricesContent(), viewModelClazz=DialogPricesContentModel)
+        settings = ViewSettings(R.views.common.dialog_view.components.dialog_prices_content.DialogPricesContent())
+        settings.model = DialogPricesContentModel()
+        super(DialogPricesContent, self).__init__(settings)
 
     @property
     def viewModel(self):

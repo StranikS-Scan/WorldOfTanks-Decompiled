@@ -119,7 +119,7 @@ class SendInvitesWindow(SendInvitesWindowMeta, ISearchHandler):
         if event.requestID is REQUEST_TYPE.SEND_INVITE:
             self.as_onReceiveSendInvitesCooldownS(event.coolDown)
 
-    def __onUserDataChanged(self, _, user):
+    def __onUserDataChanged(self, _, user, shadowMode):
         self.as_onContactUpdatedS(self._converter.makeVO(user))
 
     def __onUserStatusUpdated(self, user):

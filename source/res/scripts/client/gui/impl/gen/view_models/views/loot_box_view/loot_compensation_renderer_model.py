@@ -5,6 +5,9 @@ from gui.impl.gen.view_models.views.loot_box_view.loot_animated_renderer_model i
 class LootCompensationRendererModel(LootAnimatedRendererModel):
     __slots__ = ()
 
+    def __init__(self, properties=21, commands=0):
+        super(LootCompensationRendererModel, self).__init__(properties=properties, commands=commands)
+
     def getIconFrom(self):
         return self._getString(12)
 

@@ -151,9 +151,9 @@ class LobbyEntry(IGUIEntry):
     def __me_onChannelInfoUpdated(self, channel):
         self.__carouselHandler.updateChannel(channel)
 
-    def __me_onUserActionReceived(self, action, user):
+    def __me_onUserActionReceived(self, action, user, shadowMode):
         message = getUserActionReceivedMessage(action, user)
-        if message:
+        if message and not shadowMode:
             SystemMessages.pushMessage(message)
 
     def __me_onErrorReceived(self, error):

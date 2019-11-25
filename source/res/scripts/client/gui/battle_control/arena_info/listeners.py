@@ -251,18 +251,18 @@ class ContactsListener(_Listener):
     def start(self, setup):
         super(ContactsListener, self).start(setup)
         g_messengerEvents.users.onUsersListReceived += self.__me_onUsersListReceived
-        g_messengerEvents.users.onUserActionReceived += self.__me_onUserActionReceived
+        g_messengerEvents.users.onBattleUserActionReceived += self.__me_onBattleUserActionReceived
 
     def stop(self):
         g_messengerEvents.users.onUsersListReceived -= self.__me_onUsersListReceived
-        g_messengerEvents.users.onUserActionReceived -= self.__me_onUserActionReceived
+        g_messengerEvents.users.onBattleUserActionReceived -= self.__me_onBattleUserActionReceived
         super(ContactsListener, self).stop()
 
     def __me_onUsersListReceived(self, tags):
         if _TAGS_TO_UPDATE & tags:
             self._invokeListenersMethod('invalidateUsersTags')
 
-    def __me_onUserActionReceived(self, actionID, user):
+    def __me_onBattleUserActionReceived(self, actionID, user):
         if actionID in (USER_ACTION_ID.FRIEND_ADDED,
          USER_ACTION_ID.FRIEND_REMOVED,
          USER_ACTION_ID.IGNORED_ADDED,
@@ -309,10 +309,10 @@ class PersonalInvitationsListener(_Listener):
     def __updateFilteredStatuses(self, filtered):
         update = self._arenaDP.updateInvitationStatus
         vos = []
-        for dbID, include, exclude in filtered:
-            flags, vo = update(dbID, include=include, exclude=exclude)
+        for avatarSessionID, include, exclude in filtered:
+            flags, vo = update(avatarSessionID, include=include, exclude=exclude)
             if vo is not None and flags != INVALIDATE_OP.NONE:
-                LOG_DEBUG('Invitation status has been changed', dbID, vo.invitationDeliveryStatus)
+                LOG_DEBUG('Invitation status has been changed', avatarSessionID, vo.invitationDeliveryStatus)
                 vos.append(vo)
 
         if vos:

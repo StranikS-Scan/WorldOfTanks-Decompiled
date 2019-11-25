@@ -43,6 +43,9 @@ class VehCmpBattleBoosterSelectPopover(BattleBoosterSelectPopover):
          FITTING_TYPES.LARGE_POPOVER_WIDTH,
          MENU.BOOSTERSELECTPOPOVER_TITLE)
 
+    def _getTabCounters(self):
+        return [0, 0]
+
 
 class _CmpVehBattleBoosterLogicProvider(PopoverLogicProvider):
 

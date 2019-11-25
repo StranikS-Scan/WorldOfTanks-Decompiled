@@ -406,7 +406,7 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
         if VIEW_ALIAS.MINIMAP_LOBBY in self.components:
             self.components[VIEW_ALIAS.MINIMAP_LOBBY].swapTeams(team)
 
-    def __me_onUserActionReceived(self, _, user):
+    def __me_onUserActionReceived(self, _, user, shadowMode):
         dbID = user.getID()
         playerInfo = self.prbEntity.getPlayerInfoByDbID(dbID)
         if playerInfo is None:

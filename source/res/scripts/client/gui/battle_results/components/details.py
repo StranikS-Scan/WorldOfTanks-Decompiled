@@ -616,7 +616,7 @@ class PremiumBonusDetailsBlock(base.StatsBlock):
         self.__arenaBonusType = reusable.common.arenaBonusType
         self.__xpFactor = reusable.personal.getPremiumXPAddRecords().getFactor('additionalXPFactor10')
         _, vehicle = first(reusable.personal.getVehicleItemsIterator())
-        self.__vehicleCD = vehicle.intCompactDescr
+        self.__vehicleCD = vehicle.intCD
 
     def __getIsApplied(self):
         return self.__battleResults.isAddXPBonusApplied(self.__arenaUniqueID)

@@ -40,6 +40,7 @@ class DualGunHelper(object):
             if debuff.leftTime > 0 and error is not None and error != 'no_ammo':
                 self.__debuffTrigger = True
                 totalDebuffTime = cooldownTimes[activeGun].baseTime + debuff.leftTime
+                ammoCtrl.onDebuffStarted(debuff.leftTime / 10.0)
                 __callReloadTimeWrapper(totalDebuffTime, cooldownTimes[activeGun].baseTime + debuff.baseTime)
             else:
                 avatar.updateVehicleGunReloadTime(vehicleID, -1, cooldownTimes[activeGun].baseTime / 10.0)

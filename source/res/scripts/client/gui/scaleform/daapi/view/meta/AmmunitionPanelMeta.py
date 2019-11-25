@@ -27,3 +27,6 @@ class AmmunitionPanelMeta(ModulesPanelMeta):
 
     def as_setCustomizationBtnCounterS(self, value):
         return self.flashObject.as_setCustomizationBtnCounter(value) if self._isDAAPIInited() else None
+
+    def as_setBoosterBtnCounterS(self, value):
+        return self.flashObject.as_setBoosterBtnCounter(value) if self._isDAAPIInited() else None

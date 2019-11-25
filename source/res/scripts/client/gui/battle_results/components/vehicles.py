@@ -14,6 +14,7 @@ from gui.impl.gen import R
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import getSmallIconPath, getIconPath
 from helpers import dependency, i18n
+from messenger.m_constants import USER_TAG
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -434,6 +435,8 @@ class TeamStatsBlock(base.StatsBlock):
                 continue
             player = item.player
             isPersonal = player.dbID == personalDBID
+            if isPersonal:
+                player.addTag(USER_TAG.CURRENT)
             block = self.__class()
             block.vehicleSort = idx
             block.isPersonal = isPersonal
@@ -635,16 +638,19 @@ class RankedResultsTeamPartDataStatsBlock(base.StatsBlock):
 
 
 class RankedResultsListItemStatsBlock(base.StatsBlock):
-    __slots__ = ('nickName', 'points', 'selected', 'standoff', 'nickNameHuge', 'pointsHuge')
+    __slots__ = ('nickName', 'nickNameHuge', 'fakeName', 'fakeNameHuge', 'points', 'pointsHuge', 'selected', 'standoff', 'tags')
     settingsCore = dependency.descriptor(ISettingsCore)
 
     def setRecord(self, result, reusable):
         item, standoff = result
-        self.nickName = style.makeRankedNickNameValue(item.player.name)
-        self.nickNameHuge = style.makeRankedNickNameHugeValue(item.player.name)
+        self.nickName = style.makeRankedNickNameValue(item.player.realName)
+        self.nickNameHuge = style.makeRankedNickNameHugeValue(item.player.realName)
+        self.fakeName = style.makeRankedNickNameValue(item.player.fakeName)
+        self.fakeNameHuge = style.makeRankedNickNameHugeValue(item.player.fakeName)
         self.points = style.makeRankedPointValue(item.xp - item.xpPenalty)
         self.pointsHuge = style.makeRankedPointHugeValue(item.xp - item.xpPenalty)
         self.selected = item.player.dbID == reusable.personal.avatar.accountDBID
         if self.settingsCore.getSetting('isColorBlind') and standoff == RANKEDBATTLES_ALIASES.STANDOFF_MINUS:
             standoff = RANKEDBATTLES_ALIASES.STANDOFF_MINUS_BLIND
         self.standoff = standoff
+        self.tags = item.player.tags

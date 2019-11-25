@@ -191,7 +191,7 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
 
     def __destroyComponent(self):
         app = self.app
-        if app is not None:
+        if app is not None and self.__component is not None:
             app.component.delChild(self.__component)
         self.__component = None
         return

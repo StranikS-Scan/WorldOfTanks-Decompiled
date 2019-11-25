@@ -7,6 +7,9 @@ from gui.impl.gen.view_models.ui_kit.counter_model import CounterModel
 class ButtonCommonModel(ViewModel):
     __slots__ = ('onClicked', 'onSelected')
 
+    def __init__(self, properties=6, commands=2):
+        super(ButtonCommonModel, self).__init__(properties=properties, commands=commands)
+
     @property
     def Counter(self):
         return self._getViewModel(0)

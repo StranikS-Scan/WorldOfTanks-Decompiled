@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/dialogs/dialogs.py
-from typing import Any, Optional, Iterable
+from typing import Any, Optional, Iterable, Union, TYPE_CHECKING
 from async import async, await
 from BWUtil import AsyncReturn
 from gui.impl.lobby.blueprints.blueprints_conversion_view import BlueprintsConversionView
@@ -8,8 +8,10 @@ from gui.impl.lobby.crew_books.crew_books_buy_dialog import CrewBooksBuyDialog
 from gui.impl.lobby.crew_books.crew_books_dialog import CrewBooksDialog
 from gui.impl.lobby.dialogs.quit_game_dialog import QuitGameDialogWindow
 from gui.impl.lobby.premacc.maps_blacklist_confirm_view import MapsBlacklistConfirmView
-from gui.impl.pub.dialog_window import DialogWindow
 from gui.impl.pub.dialog_window import DialogButtons
+if TYPE_CHECKING:
+    from gui.impl.pub.dialog_window import DialogWindow
+    from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogView
 
 @async
 def show(dialog):

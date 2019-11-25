@@ -2,9 +2,13 @@
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/customization/cart_season_model.py
 from frameworks.wulf import ViewModel
 from gui.impl.wrappers.user_list_model import UserListModel
+from gui.impl.gen.view_models.views.lobby.customization.cart_slot_model import CartSlotModel
 
 class CartSeasonModel(ViewModel):
     __slots__ = ()
+
+    def __init__(self, properties=5, commands=0):
+        super(CartSeasonModel, self).__init__(properties=properties, commands=commands)
 
     @property
     def items(self):

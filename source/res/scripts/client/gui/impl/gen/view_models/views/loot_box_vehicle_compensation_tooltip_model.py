@@ -5,6 +5,9 @@ from gui.impl.gen.view_models.views.loot_box_compensation_tooltip_model import L
 class LootBoxVehicleCompensationTooltipModel(LootBoxCompensationTooltipModel):
     __slots__ = ()
 
+    def __init__(self, properties=11, commands=0):
+        super(LootBoxVehicleCompensationTooltipModel, self).__init__(properties=properties, commands=commands)
+
     def getIsElite(self):
         return self._getBool(7)
 

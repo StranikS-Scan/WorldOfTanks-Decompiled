@@ -773,6 +773,12 @@
       <premMask>
         <Type>	INT8	</Type>
       </premMask>
+      <needsAnonymization>
+        <Type>	BOOL	</Type>
+      </needsAnonymization>
+      <wtr>
+        <Type>	INT16	</Type>
+      </wtr>
     </Properties>
   </ARENA_ADDPLAYER_INFO>
   <AVATAR_VEHICLE_ROSTER>	FIXED_DICT	  <Properties>
@@ -833,6 +839,9 @@
       <attackerType>
         <Type>	UINT8	</Type>
       </attackerType>
+      <attackerSiegeState>
+        <Type>	INT8	</Type>
+      </attackerSiegeState>
     </Properties>
   </ATTACKER_INFO>
   <DESTRUCTIBLE_ATTACK_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -1165,4 +1174,75 @@
       </baseTime>
     </Properties>
   </COOLDOWN_INFO>
+  <CLIENT_VEHICLE_PUBLIC_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <vehID>
+        <Type>	OBJECT_ID	</Type>
+      </vehID>
+      <name>
+        <Type>	STRING	</Type>
+      </name>
+      <realName>
+        <Type>	STRING	</Type>
+      </realName>
+      <compDescr>
+        <Type>	STRING	</Type>
+      </compDescr>
+      <team>
+        <Type>	INT8	</Type>
+      </team>
+      <isAlive>
+        <Type>	INT8	</Type>
+      </isAlive>
+      <isAvatarReady>
+        <Type>	INT8	</Type>
+      </isAvatarReady>
+      <isTeamKiller>
+        <Type>	INT8	</Type>
+      </isTeamKiller>
+      <accountDBID>
+        <Type>	DB_ID	</Type>
+      </accountDBID>
+      <clanAbbrev>
+        <Type>	STRING	</Type>
+      </clanAbbrev>
+      <clanDBID>
+        <Type>	DB_ID	</Type>
+      </clanDBID>
+      <prebattleID>
+        <Type>	OBJECT_ID	</Type>
+      </prebattleID>
+      <isPrebattleCreator>
+        <Type>	INT8	</Type>
+      </isPrebattleCreator>
+      <forbidInBattleInvitations>
+        <Type>	INT8	</Type>
+      </forbidInBattleInvitations>
+      <events>
+        <Type>	PYTHON	</Type>
+      </events>
+      <igrType>
+        <Type>	INT8	</Type>
+      </igrType>
+      <potapovQuestIDs>
+        <Type>	ARRAY	  <of>	UINT16	</of>
+        </Type>
+      </potapovQuestIDs>
+      <potapovQuestInfo>
+        <Type>	PYTHON	</Type>
+      </potapovQuestInfo>
+      <ranked>
+        <Type>	PYTHON	</Type>
+      </ranked>
+      <outfit>
+        <Type>	STRING	</Type>
+      </outfit>
+      <sessionID>
+        <Type>	STRING	</Type>
+      </sessionID>
+      <wtr>
+        <Type>	INT16	</Type>
+      </wtr>
+    </Properties>
+  </CLIENT_VEHICLE_PUBLIC_INFO>
 </alias.xml>

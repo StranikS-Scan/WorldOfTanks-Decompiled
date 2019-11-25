@@ -32,7 +32,7 @@ from gui.shared.money import Currency
 from gui.shared.tooltips import formatters, ToolTipBaseData
 from gui.shared.tooltips import getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makeCompoundPriceBlock, CURRENCY_SETTINGS
-from gui.shared.utils import MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED
+from gui.shared.utils import MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME
 from helpers import i18n, time_utils, int2roman, dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import ITradeInController
@@ -674,7 +674,11 @@ class CommonStatsBlockConstructor(VehicleTooltipBlockConstructor):
                                      WHEELED_SWITCH_TIME,
                                      'circularVisionRadius'),
      VEHICLE_CLASS_NAME.MEDIUM_TANK: ('avgDamagePerMinute', 'enginePowerPerTon', 'speedLimits', 'chassisRotationSpeed'),
-     VEHICLE_CLASS_NAME.HEAVY_TANK: ('avgDamage', 'avgPiercingPower', 'hullArmor', 'turretArmor'),
+     VEHICLE_CLASS_NAME.HEAVY_TANK: ('avgDamage',
+                                     'avgPiercingPower',
+                                     'hullArmor',
+                                     'turretArmor',
+                                     DUAL_GUN_CHARGE_TIME),
      VEHICLE_CLASS_NAME.SPG: ('avgDamage', 'stunMinDuration', 'stunMaxDuration', 'reloadTimeSecs', 'aimingTime', 'explosionRadius'),
      VEHICLE_CLASS_NAME.AT_SPG: ('avgPiercingPower', 'shotDispersionAngle', 'avgDamagePerMinute', 'speedLimits', 'chassisRotationSpeed', 'switchTime'),
      'default': ('speedLimits', 'enginePower', 'chassisRotationSpeed')}

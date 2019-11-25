@@ -6,6 +6,7 @@ import functools
 import logging
 import BigWorld
 import Keys
+import SoundGroups
 from gui.Scaleform.managers.cursor_mgr import CursorManager
 from gui.shared import event_dispatcher
 from Event import Event, EventManager
@@ -48,12 +49,14 @@ class WebBrowser(object):
     height = property(lambda self: 0 if self.__browser is None else self.__browser.height)
     isNavigationComplete = property(lambda self: self.__isNavigationComplete)
     isFocused = property(lambda self: self.__isFocused)
+    isAudioPlaying = property(lambda self: self.__isAudioPlaying)
     updateInterval = 0.01
     isSuccessfulLoad = property(lambda self: self.__successfulLoad)
     skipEscape = property(lambda self: self.__skipEscape)
     ignoreKeyEvents = property(lambda self: self.__ignoreKeyEvents)
     ignoreAltKey = property(lambda self: self.__ignoreAltKey)
     useSpecialKeys = property(lambda self: self.__useSpecialKeys)
+    allowMiddleClick = property(lambda self: self.__allowMiddleClick)
     allowRightClick = property(lambda self: self.__allowRightClick)
     allowMouseWheel = property(lambda self: self.__allowMouseWheel)
 
@@ -77,6 +80,11 @@ class WebBrowser(object):
         _logger.debug('useSpecialKeys set %s (was: %s)', value, self.__useSpecialKeys)
         self.__useSpecialKeys = value
 
+    @allowMiddleClick.setter
+    def allowMiddleClick(self, value):
+        _logger.debug('allowMiddleClick set %s (was: %s)', value, self.__allowMiddleClick)
+        self.__allowMiddleClick = value
+
     @allowRightClick.setter
     def allowRightClick(self, value):
         _logger.debug('allowRightClick set %s (was: %s)', value, self.__allowRightClick)
@@ -98,15 +106,18 @@ class WebBrowser(object):
         self.__browser = None
         self.__isNavigationComplete = False
         self.__isFocused = False
+        self.__isAudioPlaying = False
         self.__navigationFilters = handlers or set()
         self.__skipEscape = True
         self.__ignoreKeyEvents = False
         self.__ignoreAltKey = False
         self.__useSpecialKeys = True
+        self.__allowMiddleClick = False
         self.__allowRightClick = False
         self.__allowMouseWheel = True
         self.__allowAutoLoadingScreenChange = True
         self.__isCloseTriggered = False
+        self.__isAudioMutable = False
         self.__eventMgr = EventManager()
         self.onLoadStart = Event(self.__eventMgr)
         self.onLoadEnd = Event(self.__eventMgr)
@@ -119,6 +130,7 @@ class WebBrowser(object):
         self.onFailedCreation = Event(self.__eventMgr)
         self.onCanCreateNewBrowser = Event(self.__eventMgr)
         self.onUserRequestToClose = Event(self.__eventMgr)
+        self.onAudioStatusChanged = Event(self.__eventMgr)
         _logger.info('INIT %s texture: %s, size %s, id: %s', self.__baseUrl, texName, size, self.__browserID)
         return
 
@@ -139,6 +151,8 @@ class WebBrowser(object):
             self.__browser.script.onJsHostQuery += self.__onJsHostQuery
             self.__browser.script.onTitleChange += self.__onTitleChange
             self.__browser.script.onDestroy += self.__onDestroy
+            self.__browser.script.onAudioStatusChanged += self.__onAudioStatusChanged
+            self.__browser.script.isBrowserPlayingAudio = False
 
             def injectBrowserKeyEvent(me, e):
                 if _BROWSER_KEY_LOGGING:
@@ -263,6 +277,7 @@ class WebBrowser(object):
             self.__eventMgr = None
         if self.__browser is not None:
             _logger.info('DESTROYED %s - %r', self.__baseUrl, self.__browserID)
+            self.__onAudioStatusChanged(isPlaying=False)
             self.__browser.script.clear()
             self.__browser.script = None
             self.__browser.resetScaleformRender(self.__uiObj.movie, self.__texName)
@@ -339,7 +354,10 @@ class WebBrowser(object):
          isAltDown,
          isShiftDown,
          isCtrlDown)
-        matches = lambda t: t[0] is None or t[0] == t[1]
+
+        def matches(t):
+            return t[0] is None or t[0] == t[1]
+
         browserKeyHandlers = tuple(self.__disableKeyHandlers) + self.__browserKeyHandlers
         if self.useSpecialKeys:
             browserKeyHandlers = self.__specialKeyHandlers + browserKeyHandlers
@@ -362,6 +380,8 @@ class WebBrowser(object):
         if self.__ignoreAltKey and e.key in (Keys.KEY_LALT, Keys.KEY_RALT):
             return False
         if not (self.hasBrowser and self.enableUpdate):
+            return False
+        if not self.allowMiddleClick and e.key == Keys.KEY_MIDDLEMOUSE:
             return False
         if not self.allowRightClick and e.key == Keys.KEY_RIGHTMOUSE:
             return False
@@ -480,6 +500,9 @@ class WebBrowser(object):
         _logger.debug('setAllowAutoLoadingScreen %s', enabled)
         self.__allowAutoLoadingScreenChange = enabled
 
+    def setIsAudioMutable(self, isAudioMutable):
+        self.__isAudioMutable = isAudioMutable
+
     def changeTitle(self, title):
         self.onTitleChange(title)
 
@@ -492,12 +515,12 @@ class WebBrowser(object):
             self.__readyToShow = False
             self.__successfulLoad = False
 
-    def __onLoadEnd(self, url, isLoaded=True, httpStatusCode=None):
-        if url == self.__browser.url:
+    def __onLoadEnd(self, url, isLoaded=True, httpStatusCode=None, errorDesc=None):
+        if url == self.__browser.url or errorDesc:
             self.__isNavigationComplete = True
             self.__successfulLoad = isLoaded
-            if not isLoaded or httpStatusCode and httpStatusCode >= 400:
-                _logger.error('FAILED %s Code: %r', self.__browser.url, httpStatusCode)
+            if not isLoaded or httpStatusCode and httpStatusCode >= 400 or errorDesc:
+                _logger.error('FAILED Url: %s, Http code: %r, Browser error:%s', self.__browser.url, httpStatusCode, errorDesc)
             self.onLoadEnd(self.__browser.url, isLoaded, httpStatusCode)
 
     def __onLoadingStateChange(self, isLoading):
@@ -550,6 +573,11 @@ class WebBrowser(object):
     def __onJsHostQuery(self, command):
         self.onJsHostQuery(command)
 
+    def __onAudioStatusChanged(self, isPlaying):
+        if self.__isAudioMutable:
+            self.__isAudioPlaying = bool(isPlaying)
+            g_mgr.updateGameAudio()
+
     def executeJavascript(self, script, frame):
         if self.hasBrowser:
             self.__browser.executeJavascript(script, frame)
@@ -557,6 +585,7 @@ class WebBrowser(object):
 
 class EventListener(object):
     cursorType = property(lambda self: self.__cursorType)
+    isBrowserPlayingAudio = False
 
     def __init__(self, browser):
         self.__cursorTypes = {CURSOR_TYPES.Hand: CursorManager.HAND,
@@ -576,6 +605,7 @@ class EventListener(object):
         self.onJsHostQuery = Event(self.__eventMgr)
         self.onTitleChange = Event(self.__eventMgr)
         self.onDestroy = Event(self.__eventMgr)
+        self.onAudioStatusChanged = Event(self.__eventMgr)
         self.__urlFailed = False
         self.__browserProxy = weakref.proxy(browser)
         return
@@ -611,6 +641,7 @@ class EventListener(object):
         if isMainFrame:
             _logger.debug('onFailLoadingFrame(isMainFrame) %s, %r, %r', url, errorCode, errorDesc)
             self.__urlFailed = True
+            self.onLoadEnd(url, not self.__urlFailed, errorDesc=errorDesc)
 
     def onFinishLoadingFrame(self, frameId, isMainFrame, url, httpStatusCode):
         if isMainFrame:
@@ -653,6 +684,7 @@ class EventListener(object):
 class WebBrowserManager(object):
     first = property(lambda self: next(iter(self.__browsers)))
     len = property(lambda self: len(self.__browsers))
+    isBackgroundAudioMuted = False
 
     def __init__(self):
         self.__browsers = set()
@@ -663,12 +695,29 @@ class WebBrowserManager(object):
     def delBrowser(self, browser):
         self.__browsers.discard(browser)
 
+    def getBrowserPlayingAudioCount(self):
+        count = 0
+        for browser in self.__browsers:
+            if browser.isAudioPlaying:
+                count += 1
+
+        return count
+
+    def updateGameAudio(self):
+        openedBrowsersPresented = g_mgr.getBrowserPlayingAudioCount() > 0
+        self.__muteBackgroundAudio(isMute=openedBrowsersPresented)
+
     def handleKeyEvent(self, event):
         for browser in self.__browsers:
             if browser.handleKeyEvent(event):
                 return True
 
         return False
+
+    def __muteBackgroundAudio(self, isMute):
+        if self.isBackgroundAudioMuted != isMute:
+            SoundGroups.g_instance.playSound2D('ue_master_mute' if isMute else 'ue_master_unmute')
+            self.isBackgroundAudioMuted = isMute
 
 
 g_mgr = WebBrowserManager()

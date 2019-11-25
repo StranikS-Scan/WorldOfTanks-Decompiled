@@ -172,3 +172,34 @@ class IViewPointsController(IArenaLoadController):
 
     def updateAttachedVehicle(self, vehicleID):
         pass
+
+
+class IAnonymizerFakesController(IArenaVehiclesController):
+    __slots__ = ()
+
+    def getCtrlScope(self):
+        return _SCOPE.VEHICLES
+
+    def addBattleFriend(self, avatarSessionID):
+        raise NotImplementedError
+
+    def removeBattleFriend(self, avatarSessionID):
+        raise NotImplementedError
+
+    def addBattleIgnored(self, avatarSessionID):
+        raise NotImplementedError
+
+    def removeBattleIgnored(self, avatarSessionID):
+        raise NotImplementedError
+
+    def mute(self, avatarSessionID, name):
+        raise NotImplementedError
+
+    def unmute(self, avatarSessionID):
+        raise NotImplementedError
+
+    def addTmpIgnored(self, avatarSessionID, name):
+        raise NotImplementedError
+
+    def removeTmpIgnored(self, avatarSessionID):
+        raise NotImplementedError

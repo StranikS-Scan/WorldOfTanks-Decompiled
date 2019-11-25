@@ -3,9 +3,7 @@
 import BigWorld
 import chat_shared
 from gui.shared.utils import getPlayerDatabaseID
-from messenger.m_constants import USER_ACTION_ID as _ACTION_ID
-from messenger.m_constants import USER_TAG as _TAG
-from messenger.m_constants import MESSENGER_SCOPE, PROTO_TYPE
+from messenger.m_constants import USER_ACTION_ID as _ACTION_ID, USER_TAG as _TAG, MESSENGER_SCOPE, PROTO_TYPE, CLIENT_ACTION_ID
 from messenger.proto import notations
 from messenger.proto.bw import entities
 from messenger.proto.bw.ChatActionsListener import ChatActionsListener
@@ -20,20 +18,7 @@ def _getTagsByRoster(bwRoster):
         tags.add(_TAG.SUB_TO)
     elif bwRoster & chat_shared.USERS_ROSTER_IGNORED > 0:
         tags.add(_TAG.IGNORED)
-    if bwRoster & chat_shared.USERS_ROSTER_VOICE_MUTED > 0:
-        tags.add(_TAG.MUTED)
     return tags
-
-
-def _getRosterByTags(tags):
-    bwRoster = 0
-    if _TAG.FRIEND in tags:
-        bwRoster |= chat_shared.USERS_ROSTER_FRIEND
-    elif _TAG.IGNORED in tags:
-        bwRoster |= chat_shared.USERS_ROSTER_IGNORED
-    if _TAG.MUTED:
-        bwRoster |= chat_shared.USERS_ROSTER_VOICE_MUTED
-    return bwRoster
 
 
 class UsersManager(ChatActionsListener):
@@ -69,31 +54,51 @@ class UsersManager(ChatActionsListener):
     @notations.contacts(PROTO_TYPE.BW, log=False)
     def view(self, scope):
         if scope is MESSENGER_SCOPE.BATTLE and not self.__isRosterReceivedOnce:
-            g_messengerEvents.users.onUsersListReceived({_TAG.FRIEND, _TAG.IGNORED, _TAG.MUTED})
+            g_messengerEvents.users.onUsersListReceived({_TAG.FRIEND, _TAG.IGNORED})
 
     @notations.contacts(PROTO_TYPE.BW)
-    def addFriend(self, friendID, friendName):
-        BigWorld.player().addFriend(friendID, friendName)
+    def addFriend(self, friendID, friendName, shadowMode):
+        if shadowMode:
+            g_messengerEvents.shadow.onActionFailed(friendID, CLIENT_ACTION_ID.ADD_FRIEND, None)
+            return
+        else:
+            BigWorld.player().addFriend(friendID, friendName)
+            return
+
+    @notations.contacts(PROTO_TYPE.BW)
+    def removeFriend(self, dbID, shadowMode):
+        if shadowMode:
+            g_messengerEvents.shadow.onActionFailed(dbID, CLIENT_ACTION_ID.REMOVE_FRIEND, None)
+            return
+        else:
+            BigWorld.player().removeFriend(dbID)
+            return
+
+    @notations.contacts(PROTO_TYPE.BW)
+    def addIgnored(self, dbID, ignoredName, shadowMode):
+        if shadowMode:
+            g_messengerEvents.shadow.onActionFailed(dbID, CLIENT_ACTION_ID.ADD_IGNORED, None)
+            return
+        else:
+            BigWorld.player().addIgnored(dbID, ignoredName)
+            return
+
+    @notations.contacts(PROTO_TYPE.BW)
+    def removeIgnored(self, dbID, shadowMode):
+        if shadowMode:
+            g_messengerEvents.shadow.onActionFailed(dbID, CLIENT_ACTION_ID.REMOVE_IGNORED, None)
+            return
+        else:
+            BigWorld.player().removeIgnored(dbID)
+            return
 
     @notations.contacts(PROTO_TYPE.BW)
     def setMuted(self, dbID, userName):
-        BigWorld.player().setMuted(dbID, userName)
-
-    @notations.contacts(PROTO_TYPE.BW)
-    def addIgnored(self, dbID, ignoredName):
-        BigWorld.player().addIgnored(dbID, ignoredName)
-
-    @notations.contacts(PROTO_TYPE.BW)
-    def removeFriend(self, dbID):
-        BigWorld.player().removeFriend(dbID)
+        self.__onSetMuted({'data': (dbID, userName, 0)})
 
     @notations.contacts(PROTO_TYPE.BW)
     def unsetMuted(self, dbID):
-        BigWorld.player().unsetMuted(dbID)
-
-    @notations.contacts(PROTO_TYPE.BW)
-    def removeIgnored(self, dbID):
-        BigWorld.player().removeIgnored(dbID)
+        self.__onUnsetMuted({'data': dbID})
 
     @notations.contacts(PROTO_TYPE.BW, log=False)
     def requestUsersRoster(self):
@@ -116,8 +121,6 @@ class UsersManager(ChatActionsListener):
         self.addListener(self.__onFriendStatusUpdate, _ACTIONS.friendStatusUpdate)
         self.addListener(self.__onAddIgnored, _ACTIONS.addIgnored)
         self.addListener(self.__onRemoveIgnored, _ACTIONS.removeIgnored)
-        self.addListener(self.__onSetMuted, _ACTIONS.setMuted)
-        self.addListener(self.__onUnsetMuted, _ACTIONS.unsetMuted)
 
     def __onUserRosterChange(self, chatAction, actionID, include, exclude=None):
         userData = [-1, 'Unknown', 0]
@@ -134,7 +137,7 @@ class UsersManager(ChatActionsListener):
         else:
             user = entities.BWUserEntity(dbID, name=name, tags=include)
             self.usersStorage.setUser(user)
-        g_messengerEvents.users.onUserActionReceived(actionID, user)
+        g_messengerEvents.users.onUserActionReceived(actionID, user, False)
 
     def __onUserRosterRemoved(self, chatAction, actionID, exclude):
         userData = chatAction['data'] if chatAction.has_key('data') else -1
@@ -149,7 +152,7 @@ class UsersManager(ChatActionsListener):
                 user.update(tags=tags)
             else:
                 user.update(tags=tags, isOnline=False)
-            g_messengerEvents.users.onUserActionReceived(actionID, user)
+            g_messengerEvents.users.onUserActionReceived(actionID, user, False)
 
     def __onAddFriend(self, chatAction):
         self.__onUserRosterChange(chatAction, _ACTION_ID.FRIEND_ADDED, {_TAG.FRIEND, _TAG.SUB_TO}, exclude={_TAG.IGNORED})
@@ -183,7 +186,7 @@ class UsersManager(ChatActionsListener):
         result = data.get('data', [])
         flags = data.get('flags', 0)
         if not flags:
-            self.usersStorage.removeTags({_TAG.FRIEND, _TAG.IGNORED, _TAG.MUTED}, ProtoFindCriteria(PROTO_TYPE.BW))
+            self.usersStorage.removeTags({_TAG.FRIEND, _TAG.IGNORED}, ProtoFindCriteria(PROTO_TYPE.BW))
         getter = self.usersStorage.getUser
         setter = self.usersStorage.setUser
         for userData in result:
@@ -194,7 +197,7 @@ class UsersManager(ChatActionsListener):
                 user.addTags(tags)
             setter(entities.BWUserEntity(dbID, name=name, tags=tags))
 
-        g_messengerEvents.users.onUsersListReceived({_TAG.FRIEND, _TAG.IGNORED, _TAG.MUTED})
+        g_messengerEvents.users.onUsersListReceived({_TAG.FRIEND, _TAG.IGNORED})
 
     def __onCommandInCooldown(self, actionResponse, chatAction):
         data = chatAction.get('data', {'command': None,

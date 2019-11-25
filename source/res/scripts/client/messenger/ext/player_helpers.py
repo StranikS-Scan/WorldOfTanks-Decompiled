@@ -1,14 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/ext/player_helpers.py
+import logging
 import BigWorld
-from debug_utils import LOG_ERROR
+from avatar_helpers import getAvatarSessionID
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.utils import getPlayerDatabaseID, getPlayerName
 from helpers import dependency
 from messenger.m_constants import USER_TAG
-from messenger.proto.entities import ClanInfo
+from messenger.proto.entities import ClanInfo, CurrentLobbyUserEntity
 from messenger.storage import storage_getter
 from skeletons.gui.shared import IItemsCache
+_logger = logging.getLogger(__name__)
 _CLAN_INFO_ABBREV_INDEX = 1
 _CLAN_INFO_ROLE_INDEX = 3
 
@@ -30,8 +32,8 @@ def _getInfo4AvatarPlayer():
     return (dbID, name, clanAbbrev)
 
 
-def isCurrentPlayer(dbID):
-    return getPlayerDatabaseID() == dbID
+def isCurrentPlayer(userID):
+    return getPlayerDatabaseID() == userID or getAvatarSessionID() == userID
 
 
 class CurrentPlayerHelper(object):
@@ -52,12 +54,11 @@ class CurrentPlayerHelper(object):
         dbID, name, clanAbbrev = _getInfo4AccountPlayer()
         if dbID:
             if self.usersStorage.getUser(dbID) is None:
-                from messenger.proto.entities import CurrentUserEntity
-                user = CurrentUserEntity(dbID, name, ClanInfo(abbrev=clanAbbrev))
+                user = CurrentLobbyUserEntity(dbID, name, ClanInfo(abbrev=clanAbbrev))
                 user.addTags({USER_TAG.CLAN_MEMBER})
                 self.usersStorage.addUser(user)
         else:
-            LOG_ERROR('Current player is not found')
+            _logger.error('Current player is not found')
         return
 
     def initCachedData(self):
@@ -73,10 +74,9 @@ class CurrentPlayerHelper(object):
         user = self.usersStorage.getUser(dbID)
         if dbID:
             if user is None:
-                from messenger.proto.entities import CurrentUserEntity
-                self.usersStorage.addUser(CurrentUserEntity(dbID, name, clanInfo=ClanInfo(abbrev=clanAbbrev)))
+                self.usersStorage.addUser(CurrentLobbyUserEntity(dbID, name, clanInfo=ClanInfo(abbrev=clanAbbrev)))
         else:
-            LOG_ERROR('Current player is not found')
+            _logger.error('Current player is not found')
         return
 
     def onAvatarBecomePlayer(self):

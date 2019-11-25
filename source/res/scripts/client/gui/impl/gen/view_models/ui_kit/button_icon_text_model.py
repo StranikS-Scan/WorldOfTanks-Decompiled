@@ -6,6 +6,9 @@ from gui.impl.gen.view_models.ui_kit.button_common_model import ButtonCommonMode
 class ButtonIconTextModel(ButtonCommonModel):
     __slots__ = ()
 
+    def __init__(self, properties=7, commands=2):
+        super(ButtonIconTextModel, self).__init__(properties=properties, commands=commands)
+
     def getIcon(self):
         return self._getResource(6)
 

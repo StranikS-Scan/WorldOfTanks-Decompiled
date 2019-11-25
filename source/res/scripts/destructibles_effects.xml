@@ -3924,7 +3924,7 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_pole	</wwsound>
+            <wwsound>	obj_broken_treefall_down	</wwsound>
           </destructionSound>
         </effects>
       </variant1>
@@ -3978,7 +3978,7 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_pole	</wwsound>
+            <wwsound>	obj_broken_treefall	</wwsound>
           </destructionSound>
         </effects>
       </variant1>
@@ -3996,7 +3996,7 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_pole_down	</wwsound>
+            <wwsound>	obj_broken_treefall_down	</wwsound>
             <params></params>
           </destructionSound>
         </effects>
@@ -4015,7 +4015,7 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_pole_down	</wwsound>
+            <wwsound>	obj_broken_treefall_down	</wwsound>
             <params></params>
           </destructionSound>
         </effects>
@@ -29445,6 +29445,42 @@
         </effects>
       </variant1>
     </hd_env_SU_032_TramPost>
+    <hd_env_SU_032_TramPost_01>
+      <variant1>
+        <stages>
+          <base>	35.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_SU_032_TramPost_02.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_toilet	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_SU_032_TramPost_01>
+    <hd_env_SU_032_TramPost_01_hit>
+      <variant1>
+        <stages>
+          <base>	35.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_SU_032_TramPost_02.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_toilet	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_SU_032_TramPost_01_hit>
     <hd_env_SU_032_TramPost_hit>
       <variant1>
         <stages>
@@ -29468,6 +29504,52 @@
         </effects>
       </variant1>
     </hd_env_SU_032_TramPost_hit>
+    <hd_env_SU_032_TramPost_01>
+      <variant1>
+        <stages>
+          <base>	35.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_SU_032_TramPost_02.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_2>	24	</metal_2>
+              <debrisAmount>	40	</debrisAmount>
+              <weight>	7100	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_SU_032_TramPost_01>
+    <hd_env_SU_032_TramPost_01_hit>
+      <variant1>
+        <stages>
+          <base>	35.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_SU_032_TramPost_02.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_2>	24	</metal_2>
+              <debrisAmount>	40	</debrisAmount>
+              <weight>	7100	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_SU_032_TramPost_01_hit>
     <hd_env_SU_071_AdvertisingPillar>
       <variant1>
         <stages>

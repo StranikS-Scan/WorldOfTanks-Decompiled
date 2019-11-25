@@ -8,6 +8,7 @@ from functools import partial
 import AnimationSequence
 import BigWorld
 import Math
+import WWISE
 import DecalMap
 import SoundGroups
 import helpers
@@ -543,6 +544,24 @@ class _ModelEffectDesc(_EffectDesc):
         return True
 
 
+def _getDamageSize(args):
+    damageFactor = args.get('damageFactor', -1)
+    if damageFactor > -1:
+        damage_size = 'SWITCH_ext_damage_size_medium'
+        if damageFactor < 4335.0 / 100.0:
+            damage_size = 'SWITCH_ext_damage_size_small'
+        elif damageFactor > 8925.0 / 100.0:
+            damage_size = 'SWITCH_ext_damage_size_large'
+        return damage_size
+    else:
+        return None
+
+
+def _isVehiclePresent(args):
+    vehicle = args.get('entity', None)
+    return vehicle.isAlive() and vehicle.isStarted if vehicle is not None else True
+
+
 class _BaseSoundEvent(_EffectDesc):
     __slots__ = ('_soundName', '_parameters')
 
@@ -633,41 +652,16 @@ class _NodeSoundEffectDesc(_BaseSoundEvent):
 
     def create(self, model, effects, args):
         soundName, _ = self._getName(args)
-        if len(soundName) < 1:
+        if soundName is None or len(soundName) < 1:
             return
         else:
-            isPresent = True
-            vehicle = args.get('entity', None)
-            if vehicle is not None:
-                isPresent = vehicle.isAlive() and vehicle.isStarted
-            if isPresent:
-                nodeDesc = args.get('position', None)
-                nodeName = self._nodeName
-                nodeLocalPos = None
-                if nodeDesc is not None:
-                    nodeName = string.split(nodeDesc[0], '/') if nodeDesc[0] else []
-                    nodeLocalPos = nodeDesc[1]
-                node = _findTargetNode(model, nodeName, nodeLocalPos)
-                hitPoint = args.get('hitPoint', None)
-                if hitPoint is None:
-                    if nodeLocalPos is not None:
-                        local = nodeLocalPos.translation
-                    else:
-                        local = (0.0, 0.0, 0.0)
-                else:
-                    local = hitPoint - node.actualNode.position
+            if _isVehiclePresent(args):
+                node, local = _getHitPoint(model, self._nodeName, args)
                 objectName = soundName[0] + str(self.nextUniqueID())
                 soundObject = SoundGroups.g_instance.WWgetSoundObject(objectName, node.actualNode, local)
                 if soundObject is not None:
-                    damageFactor = args.get('damageFactor', None)
-                    if damageFactor is not None:
-                        damage_size = 'SWITCH_ext_damage_size_medium'
-                        factor = args.get('damageFactor', 0.0)
-                        if factor < 4335.0 / 100.0:
-                            damage_size = 'SWITCH_ext_damage_size_small'
-                        elif factor > 8925.0 / 100.0:
-                            damage_size = 'SWITCH_ext_damage_size_large'
-                        _logger.debug('Sound Name = %s Damage Size = %s', soundName[0], damage_size)
+                    damage_size = _getDamageSize(args)
+                    if damage_size is not None:
                         soundObject.setSwitch('SWITCH_ext_damage_size', damage_size)
                     startParams = args.get('soundParams', ())
                     for soundStartParam in startParams:
@@ -720,8 +714,8 @@ class _TracerSoundEffectDesc(_NodeSoundEffectDesc):
         return (attackerID == BigWorld.player().playerVehicleID, attackerID) if not avatar.isVehicleAlive and attackerID is not None else super(_TracerSoundEffectDesc, self)._isPlayer(args)
 
 
-class _CollisionSoundEffectDesc(_NodeSoundEffectDesc):
-    __slots__ = ('_soundName', '_parameters')
+class _CollisionSoundEffectDesc(_BaseSoundEvent):
+    __slots__ = ('_soundName',)
     TYPE = '_CollisionSoundEffectDesc'
 
     def __init__(self, dataSection):
@@ -757,21 +751,31 @@ class _CollisionSoundEffectDesc(_NodeSoundEffectDesc):
         return (sounds[1 if isTracks else 0], pID) if sounds is not None else ('', pID)
 
     def create(self, model, effects, args):
-        damageFactor = args.get('damageFactor', None)
-        if damageFactor < 1.0:
-            args['damageFactor'] = None
-            damageFactor = None
-        impulse = args.get('impulse', None)
-        if impulse is not None:
-            impulseParam = SoundStartParam('RTPC_ext_collision_impulse_object', impulse)
+        soundNames, _ = self._getName(args)
+        if soundNames is None or len(soundNames) < 1 or not _isVehiclePresent(args):
+            return
+        else:
             soundParams = args.get('soundParams', [])
-            soundParams.append(impulseParam)
-            args['soundParams'] = soundParams
-        object = _NodeSoundEffectDesc.create(self, model, effects, args)
-        isPlayer, _ = self._isPlayer(args)
-        if damageFactor is not None and object is not None and isPlayer:
-            object.play('collision_static_object_damage')
-        return
+            impulse = args.get('impulse', None)
+            if impulse is not None:
+                impulseParam = SoundStartParam('RTPC_ext_collision_impulse_object', impulse)
+                soundParams.append(impulseParam)
+            damage_size = _getDamageSize(args)
+            soundSwitches = None
+            if damage_size is not None:
+                soundSwitches = ('SWITCH_ext_damage_size', damage_size)
+            node, local = _getHitPoint(model, self._nodeName, args)
+            position = Math.Matrix(node.actualNode)
+            position.translation += local
+            for soundName in soundNames:
+                WWISE.playSound(soundName, position, soundParams, soundSwitches)
+
+            isPlayer, _ = self._isPlayer(args)
+            if isPlayer:
+                damageFactor = args.get('damageFactor', 0.0)
+                if damageFactor >= 1.0:
+                    WWISE.playSound('collision_static_object_damage', position, [], soundSwitches)
+            return
 
 
 class _DestructionSoundEffectDesc(_BaseSoundEvent):
@@ -784,21 +788,12 @@ class _DestructionSoundEffectDesc(_BaseSoundEvent):
         self.__readParameters(dataSection)
 
     def create(self, model, list, args):
-        soundName = self._soundName
-        if soundName == '':
-            return
+        if self._soundName == '':
+            return None
         else:
             node = _findTargetNodeSafe(model, self._nodeName)
-            objectName = soundName
-            sound = SoundGroups.g_instance.WWgetSoundObject(objectName, node.actualNode)
-            if sound is None:
-                return
-            for soundStartParam in self._parameters:
-                sound.setRTPC(soundStartParam.name, soundStartParam.value)
-
-            sound.play(soundName)
-            self._register(list, node, sound)
-            return sound
+            WWISE.playSound(self._soundName, Math.Matrix(node.actualNode), self._parameters)
+            return None
 
     def __readParameters(self, dataSection):
         self._parameters = []
@@ -936,14 +931,9 @@ class _SoundEffectDesc(_EffectDesc):
                 if self._switch_impact_surface:
                     sound.setSwitch('SWITCH_ext_impact_surface', self._switch_impact_surface)
                 sound.setSwitch('SWITCH_ext_shell_type', self._switch_shell_type)
-                damage_size = 'SWITCH_ext_damage_size_medium'
-                if args.has_key('damageFactor'):
-                    factor = args.get('damageFactor', 0.0)
-                    if factor < 4335.0 / 100.0:
-                        damage_size = 'SWITCH_ext_damage_size_small'
-                    elif factor > 8925.0 / 100.0:
-                        damage_size = 'SWITCH_ext_damage_size_large'
-                sound.setSwitch('SWITCH_ext_damage_size', damage_size)
+                damage_size = _getDamageSize(args)
+                if damage_size is not None:
+                    sound.setSwitch('SWITCH_ext_damage_size', damage_size)
                 self.__setFriendlyFireRTPC(attackerID, sound, soundName)
                 sound.play(soundName)
                 for soundStartParam in startParams:
@@ -1380,6 +1370,24 @@ def _findTargetModel(model, nodes):
             raise SoftException("can't find model attachments in %s" % nodes[iter])
 
     return targetNode
+
+
+def _getHitPoint(model, nodeName, args):
+    nodeDesc = args.get('position', None)
+    nodeLocalPos = None
+    if nodeDesc is not None:
+        nodeName = string.split(nodeDesc[0], '/') if nodeDesc[0] else []
+        nodeLocalPos = nodeDesc[1]
+    node = _findTargetNode(model, nodeName, nodeLocalPos)
+    hitPoint = args.get('hitPoint', None)
+    if hitPoint is None:
+        if nodeLocalPos is not None:
+            local = nodeLocalPos.translation
+        else:
+            local = (0.0, 0.0, 0.0)
+    else:
+        local = hitPoint - node.actualNode.position
+    return (node, local)
 
 
 def __keyPointsFromStagesSection(stagesSection):

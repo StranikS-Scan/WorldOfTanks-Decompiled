@@ -12,7 +12,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items.dossier.achievements.MarkOfMasteryAchievement import isMarkOfMasteryAchieved
+from gui.shared.gui_items.dossier.achievements import isMarkOfMasteryAchieved
 from gui.shared.tooltips import formatters
 from gui.shared.tooltips.common import BlocksTooltipData
 from helpers import dependency, int2roman

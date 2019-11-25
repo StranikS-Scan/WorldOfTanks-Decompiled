@@ -12,11 +12,11 @@ class StatsBase(StatsBaseMeta):
     def hasTabs(self):
         return False
 
-    def acceptSquad(self, playerID):
-        self.sessionProvider.invitations.accept(long(playerID))
+    def acceptSquad(self, sessionID):
+        self.sessionProvider.invitations.accept(sessionID)
 
-    def addToSquad(self, playerID):
-        self.sessionProvider.invitations.send(long(playerID))
+    def addToSquad(self, sessionID):
+        self.sessionProvider.invitations.send(sessionID)
 
     def _populate(self):
         self.addListener(events.GameEvent.SHOW_CURSOR, self.__handleShowCursor, EVENT_BUS_SCOPE.GLOBAL)
@@ -31,7 +31,7 @@ class StatsBase(StatsBaseMeta):
         return
 
     def __handleShowCursor(self, _):
-        self.as_setIsIntaractiveS(True)
+        self.as_setIsInteractiveS(True)
 
     def __handleHideCursor(self, _):
-        self.as_setIsIntaractiveS(False)
+        self.as_setIsInteractiveS(False)

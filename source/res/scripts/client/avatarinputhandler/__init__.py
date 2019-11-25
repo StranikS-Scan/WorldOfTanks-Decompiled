@@ -572,7 +572,6 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         self.__curCtrl.onMinimapClicked(worldPos)
 
     def onVehicleShaken(self, vehicle, impulsePosition, impulseDir, caliber, shakeReason):
-        LOG_DEBUG('AIH::OnVehicleShaken {}, {}'.format(caliber, shakeReason))
         if shakeReason == _ShakeReason.OWN_SHOT_DELAYED:
             shakeFuncBound = functools.partial(self.onVehicleShaken, vehicle, impulsePosition, impulseDir, caliber, _ShakeReason.OWN_SHOT)
             delayTime = self.__dynamicCameraSettings.settings['ownShotImpulseDelay']

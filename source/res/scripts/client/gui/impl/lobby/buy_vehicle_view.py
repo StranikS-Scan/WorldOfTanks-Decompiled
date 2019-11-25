@@ -50,7 +50,7 @@ from helpers import i18n, dependency, int2roman, func_utils
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IRentalsController, ITradeInController, IRestoreController, IBootcampController, IWalletController, IEpicBattleMetaGameController
 from skeletons.gui.shared import IItemsCache
-from frameworks.wulf import ViewFlags, WindowFlags, ViewStatus, Window, WindowSettings
+from frameworks.wulf import WindowFlags, ViewStatus, Window, WindowSettings, ViewSettings
 _logger = logging.getLogger(__name__)
 
 class VehicleBuyActionTypes(CONST_CONTAINER):
@@ -78,8 +78,10 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
     __CREW_NOT_SELECTED_IDX = -1
     __TRADE_OFF_NOT_SELECTED = -1
 
-    def __init__(self, *args, **kwargs):
-        super(BuyVehicleView, self).__init__(R.views.lobby.shop.buy_vehicle_view.BuyVehicleView(), ViewFlags.COMPONENT, BuyVehicleViewModel, *args, **kwargs)
+    def __init__(self, **kwargs):
+        settings = ViewSettings(R.views.lobby.shop.buy_vehicle_view.BuyVehicleView())
+        settings.model = BuyVehicleViewModel()
+        super(BuyVehicleView, self).__init__(settings)
         self.__shop = self.__itemsCache.items.shop
         self.__stats = self.__itemsCache.items.stats
         ctx = kwargs.get('ctx')

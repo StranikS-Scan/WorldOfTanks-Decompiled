@@ -7,7 +7,7 @@ from constants import PREBATTLE_TYPE
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_DEBUG
 from gui import GUI_SETTINGS
 from helpers import dependency
-from messenger.m_constants import BATTLE_CHANNEL, MESSENGER_SCOPE, USER_TAG
+from messenger.m_constants import BATTLE_CHANNEL, MESSENGER_SCOPE, USER_TAG, UserEntityScope
 from messenger.proto.bw_chat2 import admin_chat_cmd
 from messenger.proto.bw_chat2 import entities, limits, wrappers, errors
 from messenger.proto.bw_chat2 import provider as bw2_provider
@@ -134,11 +134,15 @@ class _EntityChatHandler(bw2_provider.ResponseSeqHandler):
         return None
 
     def _addMessage(self, message):
+        self._preprocessMessageVO(message)
         message = self.provider().filterInMessage(message)
         if message:
-            user = self.usersStorage.getUser(message.accountDBID)
+            user = self._getUser(message)
             if not (user and user.isIgnored()):
                 g_messengerEvents.channels.onMessageReceived(message, self._getChannel(message))
+
+    def _getUser(self, message):
+        raise NotImplementedError
 
     def _onEntityChatInit(self, _, args):
         if self.__isInited:
@@ -169,8 +173,11 @@ class _EntityChatHandler(bw2_provider.ResponseSeqHandler):
             if error:
                 g_messengerEvents.onErrorReceived(error)
 
+    def _preprocessMessageVO(self, message):
+        pass
+
     def __me_onUsersListReceived(self, tags):
-        if USER_TAG.IGNORED not in tags and USER_TAG.IGNORED_TMP not in tags:
+        if USER_TAG.IGNORED not in tags:
             return
         self.__isEnabled = True
         while self.__messagesQueue:
@@ -178,6 +185,7 @@ class _EntityChatHandler(bw2_provider.ResponseSeqHandler):
 
 
 class ArenaChatHandler(_EntityChatHandler):
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, provider, adminChat):
         super(ArenaChatHandler, self).__init__(provider, adminChat, _ActionsCollection(_ACTIONS.INIT_BATTLE_CHAT, _ACTIONS.DEINIT_BATTLE_CHAT, _ACTIONS.ON_BATTLE_MESSAGE_BROADCAST, _ACTIONS.BROADCAST_BATTLE_MESSAGE), wrappers.ArenaDataFactory(), limits.ArenaLimits())
@@ -213,12 +221,19 @@ class ArenaChatHandler(_EntityChatHandler):
     def _getClientIDForCommand(self):
         return self.__teamChannel.getClientID() if self.__teamChannel else 0
 
+    def _getUser(self, message):
+        return self.usersStorage.getUser(message.avatarSessionID, scope=UserEntityScope.BATTLE)
+
+    def _preprocessMessageVO(self, message):
+        message.avatarSessionID = self.__sessionProvider.getArenaDP().getSessionIDByVehID(message.vehicleID)
+
     def __doRemoveChannels(self):
         self.__teamChannel = self._removeChannel(self.__teamChannel)
         self.__commonChannel = self._removeChannel(self.__commonChannel)
 
 
 class UnitChatHandler(_EntityChatHandler):
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, provider, adminChat):
         super(UnitChatHandler, self).__init__(provider, adminChat, _ActionsCollection(_ACTIONS.INIT_UNIT_CHAT, _ACTIONS.DEINIT_UNIT_CHAT, _ACTIONS.ON_UNIT_MESSAGE_BROADCAST, _ACTIONS.BROADCAST_UNIT_MESSAGE), wrappers.UnitDataFactory(), limits.UnitLimits())
@@ -292,9 +307,20 @@ class UnitChatHandler(_EntityChatHandler):
     def _getClientIDForCommand(self):
         return self.__channel.getClientID() if self.__channel else 0
 
+    def _getUser(self, message):
+        battleUser = self.usersStorage.getUser(message.avatarSessionID, scope=UserEntityScope.BATTLE)
+        return battleUser if battleUser is not None else self.usersStorage.getUser(message.accountDBID)
+
     def _onMessageBroadcast(self, _, args):
         self.addHistory()
         super(UnitChatHandler, self)._onMessageBroadcast(_, args)
+
+    def _preprocessMessageVO(self, message):
+        arenaDP = self.__sessionProvider.getArenaDP()
+        if arenaDP is not None:
+            vInfo = arenaDP.getVehicleInfo(arenaDP.getVehIDByAccDBID(message.accountDBID))
+            message.avatarSessionID = vInfo.player.avatarSessionID
+        return
 
     def __doCreateChannel(self, prbType):
         if self.__channel:
@@ -319,7 +345,7 @@ class UnitChatHandler(_EntityChatHandler):
 
 
 class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandFactory):
-    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, provider):
         super(BattleChatCommandHandler, self).__init__(provider)
@@ -341,7 +367,7 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
         if scope != MESSENGER_SCOPE.BATTLE:
             return
         else:
-            arena = self.sessionProvider.arenaVisitor.getArenaSubscription()
+            arena = self.__sessionProvider.arenaVisitor.getArenaSubscription()
             if arena is not None:
                 arena.onVehicleKilled += self.__onVehicleKilled
             return

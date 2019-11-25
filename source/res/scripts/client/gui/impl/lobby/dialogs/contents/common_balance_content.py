@@ -3,7 +3,7 @@
 import logging
 from gui.impl.gen.view_models.views.common_balance_content_model import CommonBalanceContentModel
 from shared_utils import CONST_CONTAINER
-from frameworks.wulf import ViewFlags, NumberFormatType
+from frameworks.wulf import NumberFormatType, ViewSettings
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl.gen import R
 from gui.impl.gen.view_models.ui_kit.currency_item_model import CurrencyItemModel
@@ -30,7 +30,9 @@ class CommonBalanceContent(ViewImpl):
      'freeXP': NumberFormatType.INTEGRAL}
 
     def __init__(self, *args, **kwargs):
-        super(CommonBalanceContent, self).__init__(R.views.common.dialog_view.components.balance_contents.CommonBalanceContent(), ViewFlags.COMPONENT, CommonBalanceContentModel, *args, **kwargs)
+        settings = ViewSettings(R.views.common.dialog_view.components.balance_contents.CommonBalanceContent())
+        settings.model = CommonBalanceContentModel()
+        super(CommonBalanceContent, self).__init__(settings)
         self.__currencyIndexes = []
 
     @property

@@ -795,7 +795,7 @@ class ContactsDataProvider(DAAPIDataProvider):
             self.refresh()
             self.onTotalStatusChanged()
 
-    def __me_onUserActionReceived(self, actionID, contact):
+    def __me_onUserActionReceived(self, actionID, contact, shadowMode):
         result, data = self.__categories.setAction(actionID, contact)
         if result:
             self.__updateCollection(data)

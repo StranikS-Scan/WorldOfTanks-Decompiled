@@ -349,7 +349,10 @@ class HangarVehicleAppearance(ScriptGameObject):
         else:
             vehicle = g_currentVehicle.item
             if not vehicle:
-                return None
+                return
+            nyOutfit = vehicle.getNewYearOutfit()
+            if nyOutfit is not None:
+                return nyOutfit
             season = g_tankActiveCamouflage.get(vehicle.intCD, SeasonType.UNDEFINED)
             if season == SeasonType.UNDEFINED:
                 season = vehicle.getAnyOutfitSeason()

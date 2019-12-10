@@ -287,6 +287,14 @@ class ISoundEventChecker(IGameController):
 class IHeroTankController(IGameController):
     onUpdated = None
     onInteractive = None
+    onHeroTankChanged = None
+    onHeroTankBought = None
+
+    def hasAdventHero(self):
+        raise NotImplementedError
+
+    def isAdventHero(self):
+        raise NotImplementedError
 
     def getRandomTankCD(self):
         raise NotImplementedError
@@ -970,6 +978,9 @@ class IManualController(IGameController):
 
 class ICalendarController(IGameController):
 
+    def mustShow(self):
+        raise NotImplementedError
+
     def showWindow(self, url=None, invokedFrom=None):
         raise NotImplementedError
 
@@ -998,7 +1009,16 @@ class IFestivityController(IGameController):
     def isEnabled(self):
         raise NotImplementedError
 
+    def isPostEvent(self):
+        raise NotImplementedError
+
     def getHangarQuestsFlagData(self):
+        raise NotImplementedError
+
+    def getHangarWidgetLinkage(self):
+        raise NotImplementedError
+
+    def getHangarEdgeColor(self):
         raise NotImplementedError
 
 

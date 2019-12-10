@@ -56,6 +56,10 @@ class IItemsRequester(requesters.IRequester):
     def anonymizer(self):
         raise NotImplementedError
 
+    @property
+    def festivity(self):
+        raise NotImplementedError
+
     def requestUserDossier(self, databaseID, callback):
         raise NotImplementedError
 
@@ -139,6 +143,7 @@ class IHangarSpace(object):
     onSpaceRefresh = None
     onHeroTankReady = None
     onSpaceChanged = None
+    onNotifyCursorOver3dScene = None
 
     @property
     def space(self):

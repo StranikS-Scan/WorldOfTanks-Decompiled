@@ -10,7 +10,7 @@ class DialogButtonModel(ViewModel):
     BTN_RESEARCH = 'research'
     BTN_PURCHASE = 'purchase'
 
-    def __init__(self, properties=8, commands=1):
+    def __init__(self, properties=9, commands=1):
         super(DialogButtonModel, self).__init__(properties=properties, commands=commands)
 
     def getName(self):
@@ -61,6 +61,12 @@ class DialogButtonModel(ViewModel):
     def setSoundDown(self, value):
         self._setResource(7, value)
 
+    def getIsVisible(self):
+        return self._getBool(8)
+
+    def setIsVisible(self, value):
+        self._setBool(8, value)
+
     def _initialize(self):
         super(DialogButtonModel, self)._initialize()
         self._addStringProperty('name', '')
@@ -71,4 +77,5 @@ class DialogButtonModel(ViewModel):
         self._addResourceProperty('icon', R.invalid())
         self._addBoolProperty('iconAfterText', True)
         self._addResourceProperty('soundDown', R.invalid())
+        self._addBoolProperty('isVisible', True)
         self.onClicked = self._addCommand('onClicked')

@@ -21,6 +21,8 @@ from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltipContent
+from gui.impl.new_year.tooltips.new_year_total_bonus_tooltip import NewYearTotalBonusTooltip
+from gui.impl.new_year.tooltips.new_year_vehicles_bonus_tooltip import NewYearVehiclesBonusTooltip
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.clans import formatters as clans_fmts
@@ -1333,3 +1335,36 @@ class SquadBonusTooltipWindowData(ToolTipBaseData):
 
     def getDisplayableData(self, *args, **kwargs):
         return SquadBonusTooltipContent()
+
+
+class NYCreditBonusTooltipWindowData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(NYCreditBonusTooltipWindowData, self).__init__(context, TOOLTIP_TYPE.NY_CREDIT_BONUS)
+
+    def getDisplayableData(self, *args, **kwargs):
+        return NewYearTotalBonusTooltip()
+
+
+class NYVehicleBonusTooltipWindowData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(NYVehicleBonusTooltipWindowData, self).__init__(context, TOOLTIP_TYPE.NY_VEHICLE_BONUS)
+
+    def getDisplayableData(self, *args, **kwargs):
+        return NewYearVehiclesBonusTooltip()
+
+
+class NewYearFillers(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(NewYearFillers, self).__init__(context, None)
+        self._setWidth(365)
+        self._setContentMargin(0, 0, 0, 0)
+        return
+
+    def _packBlocks(self, *args, **kwargs):
+        items = super(NewYearFillers, self)._packBlocks(*args, **kwargs)
+        blocks = [formatters.packImageBlockData(backport.image(R.images.gui.maps.icons.new_year.infotype.icon_filler())), formatters.packTextBlockData(text_styles.highTitle(backport.text(R.strings.ny.fillersTooltip.header())), padding=formatters.packPadding(-364, 30, 0, 30)), formatters.packTextBlockData(text_styles.mainBig(backport.text(R.strings.ny.fillersTooltip.description())), padding=formatters.packPadding(240, 30, 30, 30))]
+        items.append(formatters.packBuildUpBlockData(blocks=blocks))
+        return items

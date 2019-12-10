@@ -20,13 +20,15 @@ from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.map_activities import IMapActivities
 from skeletons.gui.shared.utils import IHangarSpace
 _DEFAULT_SPACES_PATH = 'spaces'
+_DEFAULT_HANGAR = 'hangar_v3'
 _SERVER_CMD_CHANGE_HANGAR = 'cmd_change_hangar'
 _SERVER_CMD_CHANGE_HANGAR_PREM = 'cmd_change_hangar_prem'
 _CUSTOMIZATION_HANGAR_SETTINGS_SEC = 'customizationHangarSettings'
 _SPACE_FULL_VISIBILITY_MASK = ~0
 
 def _getDefaultHangarPath(isPremium):
-    return '%s/hangar_v3' % _DEFAULT_SPACES_PATH
+    global _DEFAULT_HANGAR
+    return '%s/%s' % (_DEFAULT_SPACES_PATH, _DEFAULT_HANGAR)
 
 
 def _getHangarPath(isPremium, isPremIGR):
@@ -65,6 +67,7 @@ def customizationHangarCFG():
 
 
 def _readHangarSettings():
+    global _DEFAULT_HANGAR
     hangarsXml = ResMgr.openSection('gui/hangars.xml')
     paths = [ path for path, _ in ResMgr.openSection(_DEFAULT_SPACES_PATH).items() ]
     configset = {}
@@ -90,6 +93,9 @@ def _readHangarSettings():
         configset[spaceKey] = cfg
         _validateConfigValues(cfg)
 
+    defaultHangar = hangarsXml.readString('default_hangar')
+    if defaultHangar:
+        _DEFAULT_HANGAR = defaultHangar
     return configset
 
 
@@ -376,7 +382,7 @@ class ClientHangarSpace(object):
 
     @property
     def camera(self):
-        return self.__cameraManager.camera
+        return None if self.__cameraManager is None else self.__cameraManager.camera
 
 
 class _ClientHangarSpacePathOverride(object):

@@ -164,6 +164,7 @@ class RecruitWindow(RecruitWindowMeta):
 
     def __getVehicleTypeCriteria(self, nationID, vclass):
         criteria = self.__getClassesCriteria(nationID) | REQ_CRITERIA.VEHICLE.CLASSES([vclass])
+        criteria |= ~REQ_CRITERIA.VEHICLE.IS_CREW_LOCKED
         if not constants.IS_IGR_ENABLED:
             criteria |= ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
         if constants.IS_DEVELOPMENT:

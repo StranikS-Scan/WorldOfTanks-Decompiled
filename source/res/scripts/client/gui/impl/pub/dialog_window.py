@@ -75,7 +75,7 @@ class DialogWindow(Window):
     gui = dependency.descriptor(IGuiLoader)
     __slots__ = ('__blur', '__scope', '__event', '__result')
 
-    def __init__(self, content=None, bottomContent=None, parent=None, balanceContent=None, enableBlur=True, layer=DialogLayer.TOP_WINDOW):
+    def __init__(self, content=None, bottomContent=None, parent=None, balanceContent=None, enableBlur=True, enableBlur3dScene=True, layer=DialogLayer.TOP_WINDOW):
         if content is not None:
             pass
         settings = WindowSettings()
@@ -89,7 +89,7 @@ class DialogWindow(Window):
         self.__result = DialogButtons.CANCEL
         self.__blur = None
         if enableBlur:
-            self.__blur = WGUIBackgroundBlurSupportImpl()
+            self.__blur = WGUIBackgroundBlurSupportImpl(blur3dScene=enableBlur3dScene)
             blurLayers = [APP_CONTAINERS_NAMES.VIEWS, APP_CONTAINERS_NAMES.SUBVIEW, APP_CONTAINERS_NAMES.BROWSER]
             if layer > DialogLayer.WINDOW:
                 blurLayers.append(APP_CONTAINERS_NAMES.WINDOWS)
@@ -122,6 +122,14 @@ class DialogWindow(Window):
                 return view.getViewModel()
         return
 
+    @property
+    def balanceContentViewModel(self):
+        if self.decorator is not None:
+            view = self.decorator.balanceContent
+            if view is not None:
+                return view.getViewModel()
+        return
+
     def _initialize(self):
         super(DialogWindow, self)._initialize()
         self.viewModel.onClosed += self._onClosed
@@ -139,8 +147,10 @@ class DialogWindow(Window):
     def _onClosed(self, _=None):
         self.destroy()
 
-    def _removeAllButtons(self):
+    def _removeAllButtons(self, invalidateAll=False):
         self.viewModel.buttons.getItems().clear()
+        if invalidateAll:
+            self.viewModel.buttons.invalidate()
 
     def _addButton(self, name, label, isFocused=False, invalidateAll=False, isEnabled=True, soundDown=None):
         button = DialogButtonModel()

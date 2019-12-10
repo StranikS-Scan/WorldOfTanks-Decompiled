@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/invites.py
+import operator
 import logging
 from collections import namedtuple, defaultdict
 import BigWorld
@@ -73,6 +74,10 @@ def isInviteSenderIgnored(user, areFriendsOnly, isFromBattle):
     return isNotFriendSenderIgnored(user, False) if isFromBattle else isNotFriendSenderIgnored(user, areFriendsOnly)
 
 
+def _getOldInviteOrderKey(item):
+    return item[1]['createTime']
+
+
 class PrbInviteWrapper(_PrbInviteData):
     lobbyContext = dependency.descriptor(ILobbyContext)
     connectionMgr = dependency.descriptor(IConnectionManager)
@@ -88,7 +93,7 @@ class PrbInviteWrapper(_PrbInviteData):
         return result
 
     def __eq__(self, other):
-        if isinstance(other, PrbInviteWrapper) and self.clientID == other.clientID and self.createTime == other.createTime and self.type == other.type and self.creatorID == other.creatorID and self.receiverID == other.receiverID and self.state == other.state and self.count == other.count and self.peripheryID == other.peripheryID and self.prebattleID == other.prebattleID:
+        if isinstance(other, PrbInviteWrapper) and self.clientID == other.clientID and self.createTime == other.createTime and self.type == other.type and self.creatorID == other.creatorID and self.receiverID == other.receiverID and self.creator == other.creator and self.state == other.state and self.count == other.count and self.peripheryID == other.peripheryID and self.prebattleID == other.prebattleID:
             if self.id == other.id:
                 return True
         return False
@@ -485,7 +490,10 @@ class InvitesManager(UsersInfoHelper):
         prebattleInvitations = _getNewInvites()
         for invite in self.getInvites(version=_InviteVersion.NEW):
             if invite.creatorID in names or invite.receiverID in names:
-                inviteUniqueId = UniqueId(id=invite.id, senderID=invite.creatorVehID or invite.creatorID)
+                senderID = invite.creatorID
+                if self.appLoader.getSpaceID() == GuiGlobalSpaceID.BATTLE:
+                    senderID = invite.creatorVehID
+                inviteUniqueId = UniqueId(id=invite.id, senderID=senderID)
                 inviteData = prebattleInvitations.get(inviteUniqueId)
                 inviteID, invite = inviteMaker(inviteData)
                 if inviteData and self._updateInvite(invite):
@@ -559,7 +567,7 @@ class InvitesManager(UsersInfoHelper):
 
     def _rebuildInvitesLists(self):
         rosterGetter = self.users.getUser
-        self._buildReceivedInvitesList([(_getOldInvites().items(), self._getOldInviteMaker()), (_getNewInvites().values(), self._getNewInviteMaker(rosterGetter))])
+        self._buildReceivedInvitesList([(sorted(_getOldInvites().items(), key=_getOldInviteOrderKey, reverse=False), self._getOldInviteMaker()), (sorted(_getNewInvites().values(), key=operator.itemgetter('sentAt'), reverse=False), self._getNewInviteMaker(rosterGetter))])
 
     def _getOldInviteMaker(self):
         receiver = getPlayerName()
@@ -719,7 +727,7 @@ class InvitesManager(UsersInfoHelper):
         rosterGetter = self.users.getUser
         inviteMaker = self._getNewInviteMaker(rosterGetter)
         newInvites = {}
-        for data in prbInvites.itervalues():
+        for data in sorted(prbInvites.itervalues(), key=operator.itemgetter('sentAt')):
             inviteID, invite = inviteMaker(data)
             if self.appLoader.getSpaceID() != GuiGlobalSpaceID.BATTLE and invite.creatorVehID:
                 continue

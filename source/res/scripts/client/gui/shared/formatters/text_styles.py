@@ -22,6 +22,7 @@ __all__ = ('standard',
  'promoTitle',
  'promoSubTitle',
  'alert',
+ 'alertBig',
  'success',
  'statsIncrease',
  'error',
@@ -54,7 +55,9 @@ __all__ = ('standard',
  'heroTitleTK',
  'grandTitle',
  'grandTitleYellow',
- 'grandTitleTK')
+ 'grandTitleTK',
+ 'middleTitleNY',
+ 'mainNY')
 
 def _getStyle(style, ctx=None):
     if ctx is None:
@@ -194,6 +197,10 @@ def promoSubTitle(text):
 
 def alert(text):
     return _formatText('alertText', text)
+
+
+def alertBig(text):
+    return _formatText('alertBigText', text)
 
 
 def success(text):
@@ -368,6 +375,18 @@ def grandTitleTK(text):
 
 def failedStatusText(text):
     return _formatText('failedStatusText', text)
+
+
+def middleTitleNY(text):
+    return _formatText('middleTitleNY', text)
+
+
+def mainNY(text):
+    return _formatText('mainTextNY', text)
+
+
+def vehicleNameNY(text):
+    return _formatText('vehicleNameNY', text)
 
 
 def getRawStyles(names):

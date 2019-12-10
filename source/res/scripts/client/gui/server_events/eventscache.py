@@ -26,9 +26,12 @@ from gui.shared.utils.requesters.QuestsProgressRequester import QuestsProgressRe
 from helpers import dependency
 from helpers import isPlayerAccount
 from items import getTypeOfCompactDescr
+from items.components.ny_constants import TOKEN_FREE_TALISMANS, TOKEN_TALISMAN_BONUS
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
+from new_year.ny_constants import NY_LEVEL_PREFIX
 from personal_missions import PERSONAL_MISSIONS_XML_PATH
 from quest_cache_helpers import readQuestsFromFile
+from shared_utils import first
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -156,7 +159,7 @@ class EventsCache(IEventsCache):
                 isQPUpdated = 'quests' in diff or 'potapovQuests' in diff
                 if not isQPUpdated and 'tokens' in diff:
                     for tokenID in diff['tokens'].iterkeys():
-                        if not tokenID.startswith(LOOTBOX_TOKEN_PREFIX) and not tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX) and not tokenID.startswith('ny19:level:'):
+                        if not tokenID.startswith(LOOTBOX_TOKEN_PREFIX) and not tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX) and not tokenID.startswith(NY_LEVEL_PREFIX) and not tokenID.startswith(TOKEN_FREE_TALISMANS) and not tokenID.startswith(TOKEN_TALISMAN_BONUS):
                             isQPUpdated = True
                             break
 
@@ -285,6 +288,33 @@ class EventsCache(IEventsCache):
         battles = self.__getEventBattles()
         return EventBattles(battles.get('vehicleTags', set()), battles.get('vehicles', []), bool(battles.get('enabled', 0)), battles.get('arenaTypeID')) if battles else EventBattles(set(), [], 0, None)
 
+    def getQuestByID(self, qID):
+        quest = self._getCachedQuest(qID)
+        if quest is not None:
+            return quest
+        else:
+            questsData = self.__getQuestsData()
+            questsData.update(self.__getPersonalQuestsData())
+            questsData.update(self.__getPersonalMissionsHiddenQuests())
+            return self._makeQuest(qID, questsData[qID]) if qID in questsData else None
+
+    def getQuestsByIDs(self, qIDs):
+        result = {}
+        data = {}
+        for qID in qIDs:
+            quest = self._getCachedQuest(qID)
+            if quest is not None:
+                result[qID] = quest
+            if not data:
+                data = self.__getQuestsData()
+                data.update(self.__getPersonalQuestsData())
+                data.update(self.__getPersonalMissionsHiddenQuests())
+            if qID in data:
+                result[qID] = self._makeQuest(qID, data[qID])
+            result[qID] = None
+
+        return result
+
     def isEventEnabled(self):
         return len(self.__getEventBattles()) > 0 and len(self.getEventVehicles()) > 0
 
@@ -376,6 +406,22 @@ class EventsCache(IEventsCache):
         result = self.__actionsCache[ACTION_SECTION_TYPE.ECONOMICS][ACTION_MODIFIER_TYPE.DISCOUNT].get(name, [])
         resultMult = self.__actionsCache[ACTION_SECTION_TYPE.ECONOMICS][ACTION_MODIFIER_TYPE.DISCOUNT].get('%sMultiplier' % name, [])
         return tuple(result + resultMult)
+
+    def getHeroTankAdventCalendarRedirectAction(self):
+        isEnabled = False
+        start, finish = (0, 0)
+
+        def containsHeroToAdvent(a):
+            return any((step.get('name') == 'HeroTankAdventCalendarRedirect' for step in a.getData().get('steps', [])))
+
+        action = first(self.getActions(containsHeroToAdvent).values())
+        if action is not None:
+            start = action.getStartTimeRaw()
+            finish = action.getFinishTimeRaw()
+            isEnabled = any((m.getIsEnabled() for m in action.getModifiers()))
+        return {'isEnabled': isEnabled,
+         'start': start,
+         'finish': finish}
 
     def getTradeInActions(self):
 
@@ -530,6 +576,10 @@ class EventsCache(IEventsCache):
                 result[a.getID()] = a
 
         return result
+
+    def _getCachedQuest(self, qID):
+        storage = self.__cache['quests']
+        return storage[qID] if qID in storage else None
 
     def _makeQuest(self, qID, qData, maker=_defaultQuestMaker, **kwargs):
         storage = self.__cache['quests']

@@ -4467,6 +4467,215 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	103	</id>
+      <texture>	gui/maps/vehicles/styles/NY2020_regular.png	</texture>
+      <description>	#vehicle_customization:special_style/NY2020_regular_desc	</description>
+      <userString>	#vehicle_customization:special_style/NY2020_regular	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	59	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	104	</id>
+      <texture>	gui/maps/vehicles/styles/NY2020_magic.png	</texture>
+      <description>	#vehicle_customization:special_style/NY2020_magic_desc	</description>
+      <userString>	#vehicle_customization:special_style/NY2020_magic	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	60	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	23	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	105	</id>
+      <texture>	gui/maps/vehicles/styles/NY2020_east.png	</texture>
+      <description>	#vehicle_customization:special_style/NY2020_east_desc	</description>
+      <userString>	#vehicle_customization:special_style/NY2020_east	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	61	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	24	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	106	</id>
+      <texture>	gui/maps/vehicles/styles/NY2020_new_year.png	</texture>
+      <description>	#vehicle_customization:special_style/NY2020_new_year_desc	</description>
+      <userString>	#vehicle_customization:special_style/NY2020_new_year	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	62	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	25	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	107	</id>
+      <texture>	gui/maps/vehicles/styles/NY2020_christmas.png	</texture>
+      <description>	#vehicle_customization:special_style/NY2020_christmas_desc	</description>
+      <userString>	#vehicle_customization:special_style/NY2020_christmas	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	63	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	26	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	117	</id>
+      <texture>	gui/maps/vehicles/styles/NY2020_regular.png	</texture>
+      <description>	#vehicle_customization:special_style/NY2020_regular_clone_desc	</description>
+      <userString>	#vehicle_customization:special_style/NY2020_regular_clone	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	64	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:styles/rented_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
@@ -6240,6 +6449,40 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/unique_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 6000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F88_AMX_13_105	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	97	</id>
+      <texture>	gui/maps/vehicles/styles/F88_AMX_13_105_3Dst.png	</texture>
+      <description>	#vehicle_customization:unique_style/F88_AMX_13_105_3Dst_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:unique_style/F88_AMX_13_105_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	F88_AMX_13_105_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:unique_style/F88_AMX_13_105_3Dst	</userString>
+      <tags>	NY2020_style	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:styles/rented_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
@@ -6981,6 +7224,84 @@
         </outfit>
         <outfit>
           <season>	event	</season>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/unique_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 6000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G56_E-100	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	100	</id>
+      <texture>	gui/maps/vehicles/styles/G56_E-100_3Dst.png	</texture>
+      <description>	#vehicle_customization:unique_style/G56_E-100_3Dst_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:unique_style/G56_E-100_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	G56_E-100_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:unique_style/G56_E-100_3Dst	</userString>
+      <tags>	NY2020_style	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/unique_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 6000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G72_JagdPz_E100	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	112	</id>
+      <texture>	gui/maps/vehicles/styles/G72_JagdPz_E100_3Dst.png	</texture>
+      <description>	#vehicle_customization:unique_style/G72_JagdPz_E100_3Dst_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:unique_style/G72_JagdPz_E100_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	G72_JagdPz_E100_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:unique_style/G72_JagdPz_E100_3Dst	</userString>
+      <tags>	NY2020_style	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
         </outfit>
       </outfits>
     </style>
@@ -9648,6 +9969,89 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 1750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A124_T54E2	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	102	</id>
+      <texture>	gui/maps/vehicles/styles/A124_T54E2_Renegade_3Dst.png	</texture>
+      <description>	#vehicle_customization:special_style/A124_T54E2_Renegade_3Dst_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/A124_T54E2_Renegade_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	A124_T54E2_Renegade_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/A124_T54E2_Renegade_3Dst	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/unique_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 6000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A83_T110E4	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	101	</id>
+      <texture>	gui/maps/vehicles/styles/T110E4_NYst.png	</texture>
+      <description>	#vehicle_customization:unique_style/T110E4_NYst_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:unique_style/T110E4_NYst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	NY_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:unique_style/T110E4_NYst	</userString>
+      <tags>	NY2020_style	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:styles/rented_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
@@ -10243,9 +10647,9 @@
     <style>
       <id>	19	</id>
       <texture>	gui/maps/vehicles/styles/burnout.png	</texture>
-      <description>	#vehicle_customization:special_style/burnout_desc	</description>
+      <description>	#vehicle_customization:unique_style/burnout_desc	</description>
       <modelsSet>	Burnout	</modelsSet>
-      <userString>	#vehicle_customization:special_style/burnout	</userString>
+      <userString>	#vehicle_customization:unique_style/burnout	</userString>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -10590,7 +10994,7 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <userString>	#vehicle_customization:styles/unique_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
     <priceGroup>	styles 6000g notInShop	</priceGroup>
@@ -10602,10 +11006,12 @@
     <style>
       <id>	99	</id>
       <texture>	gui/maps/vehicles/styles/R148_Object_430_U_3Dst.png	</texture>
-      <description>	#vehicle_customization:main_style/R148_Object_430_U_3Dst_desc	</description>
+      <description>	#vehicle_customization:unique_style/R148_Object_430_U_3Dst_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:unique_style/R148_Object_430_U_3Dst_desc/long	</longDescriptionSpecial>
       <modelsSet>	R148_Object_430_U_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:main_style/R148_Object_430_U_3Dst	</userString>
+      <userString>	#vehicle_customization:unique_style/R148_Object_430_U_3Dst	</userString>
+      <tags>	NY2020_style	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -10638,7 +11044,7 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
     <priceGroup>	styles 4000g notInShop	</priceGroup>
@@ -10650,10 +11056,10 @@
     <style>
       <id>	116	</id>
       <texture>	gui/maps/vehicles/styles/R95_Object_907_stock_3Dst.png	</texture>
-      <description>	#vehicle_customization:main_style/R95_Object_907_stock_3Dst_desc	</description>
+      <description>	#vehicle_customization:unique_style/R95_Object_907_stock_3Dst_desc	</description>
       <modelsSet>	R95_Object_907_stock_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:main_style/R95_Object_907_stock_3Dst	</userString>
+      <userString>	#vehicle_customization:unique_style/R95_Object_907_stock_3Dst	</userString>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -10675,6 +11081,40 @@
               <appliedTo>	52416	</appliedTo>
             </item>
           </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/unique_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 6000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R97_Object_140	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	98	</id>
+      <texture>	gui/maps/vehicles/styles/R97_Object_140_3Dst.png	</texture>
+      <description>	#vehicle_customization:unique_style/R97_Object_140_3Dst_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:unique_style/R97_Object_140_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	R97_Object_140_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:unique_style/R97_Object_140_3Dst	</userString>
+      <tags>	NY2020_style	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
         </outfit>
       </outfits>
     </style>

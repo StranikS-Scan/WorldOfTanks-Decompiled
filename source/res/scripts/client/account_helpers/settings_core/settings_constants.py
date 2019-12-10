@@ -116,6 +116,9 @@ class GAME(CONST_CONTAINER):
     MINIMAP_ALPHA_ENABLED = 'minimapAlphaEnabled'
     C11N_HISTORICALLY_ACCURATE = 'c11nHistoricallyAccurate'
     LOGIN_SERVER_SELECTION = 'loginServerSelection'
+    LOOT_BOX_VIDEO_OFF = 'lootBoxVideoOff'
+    NY_VEHICLES_PROGRESS_ENTRY = 'nyVehiclesProgressEntry'
+    NY_VEHICLES_POST_EVENT_ENTRY = 'nyVehiclesPostEventEntry'
 
 
 class TUTORIAL(CONST_CONTAINER):

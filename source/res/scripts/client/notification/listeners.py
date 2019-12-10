@@ -4,7 +4,7 @@ import collections
 import weakref
 from collections import defaultdict
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED
+from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED, SENIORITY_AWARDS_COUNTER
 from chat_shared import SYS_MESSAGE_TYPE
 from constants import AUTO_MAINTENANCE_RESULT, PremiumConfigs
 from adisp import process
@@ -42,6 +42,8 @@ from skeletons.gui.game_control import IBootcampController, IGameSessionControll
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.login_manager import ILoginManager
 from skeletons.gui.shared import IItemsCache
+from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityAwardsBoxesCount
+from skeletons.new_year import INewYearController
 
 class _FeatureState(object):
     OFF = 0
@@ -784,7 +786,10 @@ class ProgressiveRewardListener(_NotificationListener):
             return
         else:
             model.removeNotification(NOTIFICATION_TYPE.PROGRESSIVE_REWARD, ProgressiveRewardDecorator.ENTITY_ID)
-            AccountSettings.setNotifications(PROGRESSIVE_REWARD_VISITED, True)
+            if self.__seniorityAwardsIsActive():
+                AccountSettings.setCounters(SENIORITY_AWARDS_COUNTER, 1)
+            else:
+                AccountSettings.setNotifications(PROGRESSIVE_REWARD_VISITED, True)
             return
 
     def __onServerSettingsChange(self, diff):
@@ -806,6 +811,8 @@ class ProgressiveRewardListener(_NotificationListener):
         else:
             model.removeNotificationsByType(NOTIFICATION_TYPE.PROGRESSIVE_REWARD)
             wasVisited = AccountSettings.getNotifications(PROGRESSIVE_REWARD_VISITED)
+            if self.__seniorityAwardsIsActive():
+                wasVisited = wasVisited and AccountSettings.getCounters(SENIORITY_AWARDS_COUNTER)
             if wasVisited:
                 return
             progressiveConfig = self.__lobbyContext.getServerSettings().getProgressiveRewardConfig()
@@ -813,6 +820,9 @@ class ProgressiveRewardListener(_NotificationListener):
                 return
             model.addNotification(ProgressiveRewardDecorator())
             return
+
+    def __seniorityAwardsIsActive(self):
+        return getSeniorityAwardsBoxesCount() > 0
 
 
 class SwitcherListener(_NotificationListener):
@@ -891,6 +901,40 @@ class TankPremiumListener(_NotificationListener):
             SystemMessages.pushMessage(priority=priority, text=backport.text(R.strings.messenger.serviceChannelMessages.piggyBank.onPause()))
 
 
+class TalismanNotificationListener(_NotificationListener):
+    _itemsCache = dependency.descriptor(IItemsCache)
+    _nyController = dependency.descriptor(INewYearController)
+
+    def __init__(self):
+        super(TalismanNotificationListener, self).__init__()
+        self.__freeTalismans = 0
+
+    def start(self, model):
+        result = super(TalismanNotificationListener, self).start(model)
+        if self._nyController.getFreeTalisman():
+            SystemMessages.pushMessage(backport.text(R.strings.ny.notification.freeTalisman()), SystemMessages.SM_TYPE.TalismanFree)
+        if self._nyController.getTalismans(isInInventory=True) and not self._nyController.isTalismanToyTaken():
+            SystemMessages.pushMessage(backport.text(R.strings.ny.notification.giftTalisman()), SystemMessages.SM_TYPE.TalismanGift)
+        self.__freeTalismans = self._nyController.getFreeTalisman()
+        self.__addListeners()
+        return result
+
+    def stop(self):
+        super(TalismanNotificationListener, self).stop()
+        self.__removeListeners()
+
+    def __addListeners(self):
+        g_clientUpdateManager.addCallbacks({'tokens': self.__onTokensChanged})
+
+    def __removeListeners(self):
+        g_clientUpdateManager.removeCallback('tokens', self.__onTokensChanged)
+
+    def __onTokensChanged(self, _):
+        if self._nyController.getFreeTalisman() > self.__freeTalismans:
+            SystemMessages.pushMessage(backport.text(R.strings.ny.notification.freeTalisman()), SystemMessages.SM_TYPE.TalismanFree)
+        self.__freeTalismans = self._nyController.getFreeTalisman()
+
+
 class NotificationsListeners(_NotificationListener):
 
     def __init__(self):
@@ -903,7 +947,8 @@ class NotificationsListeners(_NotificationListener):
          RecruitNotificationListener(),
          ProgressiveRewardListener(),
          SwitcherListener(),
-         TankPremiumListener())
+         TankPremiumListener(),
+         TalismanNotificationListener())
 
     def start(self, model):
         for listener in self.__listeners:

@@ -3,12 +3,15 @@
 from constants import ENDLESS_TOKEN_TIME
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
+from gui.impl.gen import R
 from items.tankmen import TankmanDescr
 from nations import NONE_INDEX, NAMES as NationNames
-from items import tankmen
+from items import tankmen, new_year
 from items.components.component_constants import EMPTY_STRING
 from items.components import skills_constants
 from helpers import dependency
+from new_year.talismans import TalismanItem
+from shared_utils import first
 from skeletons.gui.server_events import IEventsCache
 from gui.shared.gui_items import Tankman
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -45,6 +48,7 @@ class RecruitSourceID(object):
      COMMANDER_PATRICK)
 
 
+DEFAULT_NY_GIRL = 'ny20_girl'
 _NEW_SKILL = 'new_skill'
 _BASE_NAME = 'base'
 _TANKWOMAN_ROLE_LEVEL = 100
@@ -104,6 +108,12 @@ class _BaseRecruitInfo(object):
 
     def getExpiryTime(self):
         return backport.getShortDateFormat(self._expiryTime) if self._expiryTime and self._expiryTime < ENDLESS_TOKEN_TIME else ''
+
+    def getHowToGetInfo(self):
+        pass
+
+    def getAdditionalAlert(self):
+        pass
 
     def getExpiryTimeStamp(self):
         return self._expiryTime
@@ -242,6 +252,22 @@ class _TokenRecruitInfo(_BaseRecruitInfo):
          False)
 
 
+class _DefaultNyGirlInfo(_TokenRecruitInfo):
+
+    def __init__(self, *args, **kwargs):
+        super(_DefaultNyGirlInfo, self).__init__(*args, **kwargs)
+        self._sourceID = 'ny20defaultGirl'
+
+    def getAdditionalAlert(self):
+        return backport.text(R.strings.tooltips.notrecruitedtankman.ny20defaultGirl.additionalAlert())
+
+    def getFullUserName(self):
+        return backport.text(R.strings.ny.levelsRewards.tankWoman())
+
+    def getSpecialIcon(self):
+        return RES_ICONS.MAPS_ICONS_TANKMEN_ICONS_SPECIAL_NY20_DEFAULT_GIRL
+
+
 def _getRecruitInfoFromQuest(questID):
     for quest, opName in getTankmanRewardQuests():
         if questID == quest.getID():
@@ -257,6 +283,18 @@ def _getRecruitInfoFromToken(tokenName, eventsCache=None):
     return None if tokenData is None else _TokenRecruitInfo(tokenName, expiryTime, **tokenData)
 
 
+def _getDefaultNyGirl():
+    talismanID = first(new_year.g_cache.talismans.iterkeys())
+    if talismanID is not None:
+        talismanItem = TalismanItem(talismanID)
+        tokenData = tankmen.getRecruitInfoFromToken(talismanItem.getTankmanToken())
+        if tokenData is None:
+            return
+        return _DefaultNyGirlInfo(DEFAULT_NY_GIRL, ENDLESS_TOKEN_TIME, **tokenData)
+    else:
+        return
+
+
 def _getRecruitUniqueIDs():
     result = []
     for recruitID, count in getRecruitIDs().iteritems():
@@ -266,6 +304,8 @@ def _getRecruitUniqueIDs():
 
 
 def getRecruitInfo(recruitID):
+    if recruitID == DEFAULT_NY_GIRL:
+        return _getDefaultNyGirl()
     try:
         questID = int(recruitID)
         return _getRecruitInfoFromQuest(questID)

@@ -66,11 +66,11 @@ class VehiclePreviewTradeInBuyingPanel(VehiclePreviewTradeInBuyingPanelMeta):
     def __getStatus(self):
         if not self.__tradeIn.isEnabled():
             return (backport.text(_RScopeTradeIn.expired()), False, True)
-        elif self.__tradeOffVehicle is not None:
+        elif self.__tradeOffVehicle is not None and self.__tradeInVehicle is not None:
             tradeOffVehicles = self.__tradeIn.getTradeOffVehicles(self.__tradeInVehicle.level)
             isValidSelected = self.__tradeOffVehicle.intCD in tradeOffVehicles
             return (backport.text(_RScopeTradeIn.tradeOffPriceText() if isValidSelected else _RScopeTradeIn.invalidTradeOffVehicle()), isValidSelected, isValidSelected)
-        elif self.__tradeIn.getTradeOffVehicles():
+        elif self.__tradeIn.getTradeOffVehicles() and self.__tradeInVehicle is not None:
             levels = self.__tradeIn.getAllowedVehicleLevels(maxLevel=self.__tradeInVehicle.level)
             romanLevels = text_styles.neutral(toRomanRangeString(sequence=levels, rangeDelimiter=backport.text(R.strings.menu.rangeDelimiter())))
             return (backport.text(_RScopeTradeIn.availableLevels()).format(levels=romanLevels), True, True)

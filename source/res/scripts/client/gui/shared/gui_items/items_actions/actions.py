@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/items_actions/actions.py
+import logging
 from collections import namedtuple
 from adisp import process, async
-from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import SystemMessages, DialogsInterface
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import BuyModuleMeta
@@ -45,6 +45,7 @@ from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
+_logger = logging.getLogger(__name__)
 ItemSellSpec = namedtuple('ItemSellSpec', ('typeIdx', 'intCD', 'count'))
 
 def showMessage(scopeMsg, msg, item, msgType=SystemMessages.SM_TYPE.Error, **kwargs):
@@ -218,7 +219,7 @@ class VehicleBuyAction(BuyAction):
     def doAction(self):
         item = self._itemsCache.items.getItemByCD(self.__vehCD)
         if item.itemTypeID is not GUI_ITEM_TYPE.VEHICLE:
-            LOG_ERROR('Value of int-type descriptor is not refer to vehicle', self.__vehCD)
+            _logger.error('Value of int-type descriptor is not refer to vehicle %r', self.__vehCD)
             return
         else:
             if item.isInInventory and not item.isRented:
@@ -439,7 +440,7 @@ class SetVehicleModuleAction(BuyAction):
             return
         else:
             isUseMoney = self.__isRemove and self.__oldItemCD is not None
-            LOG_DEBUG('isUseMoney, self.__isRemove, self.__oldItemCD', isUseMoney, self.__isRemove, self.__oldItemCD)
+            _logger.debug('isUseMoney - %r, self.__isRemove - %r, self.__oldItemCD - %r', isUseMoney, self.__isRemove, self.__oldItemCD)
             newComponentItem = self._itemsCache.items.getItemByCD(int(self.__newItemCD))
             if newComponentItem is None:
                 return
@@ -534,7 +535,7 @@ class BuyAndInstallItemVehicleLayout(SetVehicleLayoutAction):
             result = yield BuyAndInstallBattleBoosterProcessor(self._vehicle, self._battleBooster, helper, self._count, self.skipConfirm).request()
             self._showResult(result)
         else:
-            LOG_ERROR('Extend BuyAndInstallItemVehicleLayout action to support a new type of item!')
+            _logger.error('Extend BuyAndInstallItemVehicleLayout action to support a new type of item!')
         return
 
 

@@ -188,14 +188,16 @@ class AwardContext(ShopContext):
         self._rentBattlesLeft = None
         self._rentWinsLeft = None
         self._rentSeason = None
+        self._isSeniority = False
         return
 
-    def buildItem(self, intCD, tmanCrewLevel=None, rentExpiryTime=None, rentBattles=None, rentWins=None, rentSeason=None):
+    def buildItem(self, intCD, tmanCrewLevel=None, rentExpiryTime=None, rentBattles=None, rentWins=None, rentSeason=None, isSeniority=False):
         self._tmanRoleLevel = tmanCrewLevel
         self._rentExpiryTime = rentExpiryTime
         self._rentBattlesLeft = rentBattles
         self._rentWinsLeft = rentWins
         self._rentSeason = rentSeason
+        self._isSeniority = isSeniority
         return self.itemsCache.items.getItemByCD(int(intCD))
 
     def getStatsConfiguration(self, item):
@@ -225,7 +227,8 @@ class AwardContext(ShopContext):
          'rentExpiryTime': self._rentExpiryTime,
          'rentBattlesLeft': self._rentBattlesLeft,
          'rentWinsLeft': self._rentWinsLeft,
-         'rentSeason': self._rentSeason}
+         'rentSeason': self._rentSeason,
+         'isSeniority': self._isSeniority}
 
 
 class Shop20Context(AwardContext):

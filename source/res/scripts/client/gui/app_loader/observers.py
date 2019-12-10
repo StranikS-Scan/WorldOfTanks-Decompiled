@@ -68,6 +68,8 @@ class LobbyObserver(AppLoaderObserver):
     __slots__ = ()
 
     def onEnterState(self, event=None):
+        self._proxy.destroyBattle()
+        self._proxy.createLobby()
         self._proxy.changeSpace(spaces.LobbySpace())
 
 

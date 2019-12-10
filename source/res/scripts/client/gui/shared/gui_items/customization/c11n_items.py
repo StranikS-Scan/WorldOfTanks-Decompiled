@@ -49,24 +49,28 @@ STYLE_GROUP_ID_TO_FULL_GROUP_NAME_MAP = {VEHICLE_CUSTOMIZATION.STYLES_SPECIAL_ST
 class SpecialEvents(object):
     NY18 = 'NY2018_style'
     NY19 = 'NY2019_style'
+    NY20 = 'NY2020_style'
     FOOTBALL18 = 'football2018'
     WINTER_HUNT = 'winter_hunt'
     KURSK_BATTLE = 'Kursk_battle'
     HALLOWEEN = 'Halloween'
     ALL = (NY18,
      NY19,
+     NY20,
      FOOTBALL18,
      WINTER_HUNT,
      KURSK_BATTLE,
      HALLOWEEN)
     ICONS = {NY18: backport.image(R.images.gui.maps.icons.customization.style_info.newYear()),
      NY19: backport.image(R.images.gui.maps.icons.customization.style_info.newYear()),
+     NY20: backport.image(R.images.gui.maps.icons.customization.style_info.newYear()),
      FOOTBALL18: backport.image(R.images.gui.maps.icons.customization.style_info.football()),
      WINTER_HUNT: backport.image(R.images.gui.maps.icons.customization.style_info.marathon()),
      KURSK_BATTLE: backport.image(R.images.gui.maps.icons.customization.style_info.marathon()),
      HALLOWEEN: backport.image(R.images.gui.maps.icons.customization.style_info.halloween())}
     NAMES = {NY18: backport.text(R.strings.vehicle_customization.styleInfo.event.ny18()),
      NY19: backport.text(R.strings.vehicle_customization.styleInfo.event.ny19()),
+     NY20: backport.text(R.strings.vehicle_customization.styleInfo.event.ny20()),
      FOOTBALL18: backport.text(R.strings.vehicle_customization.styleInfo.event.football18()),
      WINTER_HUNT: backport.text(R.strings.vehicle_customization.styleInfo.event.winter_hunt()),
      KURSK_BATTLE: backport.text(R.strings.vehicle_customization.styleInfo.event.kursk_battle()),

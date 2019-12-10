@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/shared_utils/account_helpers/ClientInvitations.py
-import operator
 from collections import namedtuple
 from functools import partial
 import BigWorld
@@ -10,8 +9,9 @@ from helpers.time_utils import getCurrentTimestamp
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
 UniqueId = namedtuple('UniqueId', ['id', 'senderID'])
 
-def _getUniqueId(invite):
-    return UniqueId(invite['id'], invite.get('senderDBID', 0) or invite.get('senderVehID', 0))
+class InvitationScope(object):
+    AVATAR = 0
+    ACCOUNT = 1
 
 
 class ClientInvitations(object):
@@ -38,9 +38,22 @@ class ClientInvitations(object):
     def onProxyBecomeNonPlayer(self):
         pass
 
-    def processInvitations(self, invitations):
+    def processInvitations(self, invitations, scope):
         LOG_DEBUG('ClientInvitations::processInvitations', invitations)
-        self.__invitations.update(dict(((_getUniqueId(inv), inv) for inv in invitations)))
+        for inv in invitations:
+            senderID = inv.get('senderDBID', 0)
+            senderVehID = inv.get('senderVehID', 0)
+            if scope == InvitationScope.ACCOUNT:
+                if senderVehID:
+                    uniqueId = UniqueId(inv['id'], senderVehID)
+                    if uniqueId in self.__invitations:
+                        del self.__invitations[uniqueId]
+            elif scope == InvitationScope.AVATAR:
+                senderID = senderVehID
+            if senderID:
+                uniqueId = UniqueId(inv['id'], senderID)
+                self.__invitations[uniqueId] = inv
+
         self._loadExpiryCallback()
         self.__playerEvents.onPrebattleInvitationsChanged(self.__invitations)
 
@@ -84,10 +97,11 @@ class ClientInvitations(object):
     def _loadExpiryCallback(self):
         self._clearExpiryCallback()
         if self.__invitations:
-            invite = min(self.__invitations.values(), key=operator.itemgetter('expiresAt'))
+            inviteId = min(self.__invitations, key=lambda k: self.__invitations[k]['expiresAt'])
+            invite = self.__invitations[inviteId]
             expTime = max(invite['expiresAt'] - getCurrentTimestamp(), 0.0)
-            self.__expCbID = BigWorld.callback(expTime, partial(self.__onInviteExpired, invite))
-            LOG_DEBUG('Invite expiration callback has been loaded', _getUniqueId(invite), expTime)
+            self.__expCbID = BigWorld.callback(expTime, partial(self.__onInviteExpired, inviteId))
+            LOG_DEBUG('Invite expiration callback has been loaded', inviteId, expTime)
 
     def _clearExpiryCallback(self):
         if self.__expCbID is not None:
@@ -95,9 +109,9 @@ class ClientInvitations(object):
             self.__expCbID = None
         return
 
-    def __onInviteExpired(self, invite):
+    def __onInviteExpired(self, inviteId):
         try:
-            del self.__invitations[_getUniqueId(invite)]
+            del self.__invitations[inviteId]
             self.__playerEvents.onPrebattleInvitationsChanged(self.__invitations)
         except KeyError:
             LOG_ERROR('There is error while removing expired invite')
@@ -108,8 +122,8 @@ class ClientInvitations(object):
 
 class ReplayClientInvitations(ClientInvitations):
 
-    def processInvitations(self, invitations):
+    def processInvitations(self, invitations, scope):
         for inv in invitations:
             inv['expiresAt'] = getCurrentTimestamp() + 86400
 
-        super(ReplayClientInvitations, self).processInvitations(invitations)
+        super(ReplayClientInvitations, self).processInvitations(invitations, scope)

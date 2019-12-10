@@ -16,6 +16,12 @@ class AmmunitionPanelMeta(ModulesPanelMeta):
     def showChangeNation(self):
         self._printOverrideError('showChangeNation')
 
+    def toggleNYCustomization(self, selected):
+        self._printOverrideError('toggleNYCustomization')
+
+    def onNYBonusPanelClicked(self):
+        self._printOverrideError('onNYBonusPanelClicked')
+
     def as_setAmmoS(self, shells, stateWarning):
         return self.flashObject.as_setAmmo(shells, stateWarning) if self._isDAAPIInited() else None
 
@@ -30,3 +36,9 @@ class AmmunitionPanelMeta(ModulesPanelMeta):
 
     def as_setBoosterBtnCounterS(self, value):
         return self.flashObject.as_setBoosterBtnCounter(value) if self._isDAAPIInited() else None
+
+    def as_setNeyYearVehicleBonusS(self, enabled, bonusIcon, bonusValue, label, nyBranchTooltip):
+        return self.flashObject.as_setNeyYearVehicleBonus(enabled, bonusIcon, bonusValue, label, nyBranchTooltip) if self._isDAAPIInited() else None
+
+    def as_setNYCustomizationSlotStateS(self, selected, enabled):
+        return self.flashObject.as_setNYCustomizationSlotState(selected, enabled) if self._isDAAPIInited() else None

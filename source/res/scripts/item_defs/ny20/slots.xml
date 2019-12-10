@@ -1,0 +1,169 @@
+<slots.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <slots>
+    <slot>
+      <id>	0	</id>
+      <type>	top	</type>
+      <object>	Fir	</object>
+      <nodes>	HP_mount_01	</nodes>
+      <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_top.seq	</hoverEffect>
+    </slot>
+    <slot>
+      <id>	1	</id>
+      <type>	ball	</type>
+      <object>	Fir	</object>
+      <nodes>	HP_mount_03 HP_mount_09 HP_mount_15 HP_mount_18	</nodes>
+      <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_ball.seq	</hoverEffect>
+    </slot>
+    <slot>
+      <id>	2	</id>
+      <type>	ball	</type>
+      <object>	Fir	</object>
+      <nodes>	HP_mount_02 HP_mount_07 HP_mount_17	</nodes>
+      <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_ball.seq	</hoverEffect>
+    </slot>
+    <slot>
+      <id>	3	</id>
+      <type>	ball	</type>
+      <object>	Fir	</object>
+      <nodes>	HP_mount_04 HP_mount_05 HP_mount_10 HP_mount_14	</nodes>
+      <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_ball.seq	</hoverEffect>
+    </slot>
+    <slot>
+      <id>	4	</id>
+      <type>	ball	</type>
+      <object>	Fir	</object>
+      <nodes>	HP_mount_06 HP_mount_13 HP_mount_16	</nodes>
+      <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_ball.seq	</hoverEffect>
+    </slot>
+    <slot>
+      <id>	5	</id>
+      <type>	garland	</type>
+      <object>	Fir	</object>
+      <nodes>	HP_mount_19	</nodes>
+      <direction>	left	</direction>
+      <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_garland_left.seq	</hoverEffect>
+    </slot>
+    <slot>
+      <id>	6	</id>
+      <type>	garland	</type>
+      <object>	Fir	</object>
+      <nodes>	HP_mount_08	</nodes>
+      <direction>	right	</direction>
+      <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_garland.seq	</hoverEffect>
+    </slot>
+    <slot>
+      <id>	7	</id>
+      <type>	floor	</type>
+      <object>	Fir	</object>
+      <nodes>	HP_mount_11	</nodes>
+      <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_floor.seq	</hoverEffect>
+    </slot>
+    <slot>
+      <id>	8	</id>
+      <type>	floor	</type>
+      <object>	Fir	</object>
+      <nodes>	HP_mount_12	</nodes>
+      <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_floor.seq	</hoverEffect>
+    </slot>
+    <slot>
+      <id>	9	</id>
+      <type>	mega_fir	</type>
+      <object>	Fir	</object>
+      <nodes>	HP_mega_fir	</nodes>
+      <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_megafir.seq	</hoverEffect>
+    </slot>
+    <slot>
+      <id>	10	</id>
+      <type>	table	</type>
+      <object>	Tableful	</object>
+      <nodes>	HP_table	</nodes>
+      <defaultToy>	2	</defaultToy>
+      <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_table.seq	</hoverEffect>
+    </slot>
+    <slot>
+      <id>	11	</id>
+      <type>	kitchen	</type>
+      <object>	Tableful	</object>
+      <nodes>	HP_kitchen	</nodes>
+      <selectable>	false	</selectable>
+      <defaultToy>	3	</defaultToy>
+      <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_kitchen.seq	</hoverEffect>
+    </slot>
+    <slot>
+      <id>	12	</id>
+      <type>	tent	</type>
+      <object>	Tableful	</object>
+      <nodes>	HP_tent	</nodes>
+      <defaultToy>	5	</defaultToy>
+      <selectable>	true	</selectable>
+      <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_tent.seq	</hoverEffect>
+    </slot>
+    <slot>
+      <id>	13	</id>
+      <type>	mega_tableful	</type>
+      <object>	Tableful	</object>
+      <nodes>	HP_mega_tableful	</nodes>
+      <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_megatablefull.seq	</hoverEffect>
+    </slot>
+    <slot>
+      <id>	14	</id>
+      <type>	sculpture	</type>
+      <object>	Installation	</object>
+      <nodes>	HP_sculpture	</nodes>
+      <selectable>	true	</selectable>
+      <defaultToy>	1	</defaultToy>
+      <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_sculpture.seq	</hoverEffect>
+    </slot>
+    <slot>
+      <id>	15	</id>
+      <type>	decoration	</type>
+      <object>	Installation	</object>
+      <nodes>	HP_decoration	</nodes>
+      <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_decoration.seq	</hoverEffect>
+    </slot>
+    <slot>
+      <id>	16	</id>
+      <type>	snow_item	</type>
+      <object>	Installation	</object>
+      <nodes>	HP_snow_item	</nodes>
+      <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_snowitem.seq	</hoverEffect>
+    </slot>
+    <slot>
+      <id>	17	</id>
+      <type>	mega_installation	</type>
+      <object>	Installation	</object>
+      <nodes>	HP_mega_installation	</nodes>
+      <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_megainstallation.seq	</hoverEffect>
+    </slot>
+    <slot>
+      <id>	18	</id>
+      <type>	trees	</type>
+      <object>	Illumination	</object>
+      <nodes>	HP_trees	</nodes>
+      <defaultToy>	4	</defaultToy>
+      <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_trees.seq	</hoverEffect>
+    </slot>
+    <slot>
+      <id>	19	</id>
+      <type>	ground_light	</type>
+      <object>	Illumination	</object>
+      <nodes>	HP_groundlight01 HP_groundlight02 HP_groundlight03 HP_groundlight04 HP_groundlight05 HP_groundlight06 HP_groundlight07 HP_groundlight08 HP_groundlight09 HP_groundlight10 HP_groundlight11 HP_groundlight12 HP_groundlight13 HP_groundlight14 HP_groundlight15 HP_groundlight16 HP_groundlight17 HP_groundlight18 HP_groundlight19 HP_groundlight20 HP_groundlight21 HP_groundlight22	</nodes>
+      <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_groundlight.seq	</hoverEffect>
+    </slot>
+    <slot>
+      <id>	20	</id>
+      <type>	pyro	</type>
+      <object>	Illumination	</object>
+      <nodes>	HP_pyro	</nodes>
+      <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_pyro.seq	</hoverEffect>
+    </slot>
+    <slot>
+      <id>	21	</id>
+      <type>	mega_illumination	</type>
+      <object>	Illumination	</object>
+      <nodes>	HP_mega_illumination	</nodes>
+      <hoverEffect>	particles/eff_sequence/New_Year/h23_slot_megaillumination.seq	</hoverEffect>
+    </slot>
+  </slots>
+</slots.xml>

@@ -17,6 +17,7 @@ class NewYearCategories(CONST_CONTAINER):
     FAIRYTALE = 'Fairytale'
 
 
+SENIORITY_AWARDS_LOOT_BOXES_TYPE = 'seniorityAwards'
 GUI_ORDER = (NewYearLootBoxes.COMMON, NewYearLootBoxes.PREMIUM)
 CATEGORIES_GUI_ORDER = (NewYearCategories.NEWYEAR,
  NewYearCategories.CHRISTMAS,

@@ -13,7 +13,7 @@ from gui.shared.events import PersonalMissionsEvent
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
-from gui.impl.lobby.reward_window import TwitchRewardWindow, GiveAwayRewardWindow, PiggyBankRewardWindow
+from gui.impl.lobby.reward_window import TwitchRewardWindow, GiveAwayRewardWindow, PiggyBankRewardWindow, LootBoxRewardWindow
 from shared_utils import first
 OPERATIONS = {PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_1_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS_PAGE_ALIAS,
  PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_2_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS2_OPERATIONS_PAGE_ALIAS}
@@ -228,7 +228,12 @@ def showMissionAward(quest, ctx):
 
 
 def showLootboxesAward(lootboxId, lootboxCount, isFree):
-    pass
+    ctx = {'eventName': recruit_helper.RecruitSourceID.LOOTBOX,
+     'lootboxType': lootboxId,
+     'lootboxesCount': lootboxCount,
+     'isFree': isFree}
+    rewardWindow = LootBoxRewardWindow(ctx)
+    rewardWindow.load()
 
 
 def showPiggyBankRewardWindow(creditsValue, isPremActive):

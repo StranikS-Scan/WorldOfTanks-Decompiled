@@ -15,10 +15,11 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.marathon.marathon_event_controller import DEFAULT_MARATHON_PREFIX
 from gui.server_events import finders
-from gui.server_events.events_dispatcher import showMissionsForCurrentVehicle, showPersonalMission, showMissionsElen, showMissionsMarathon, showPersonalMissionOperationsPage, showPersonalMissionsOperationsMap
+from gui.server_events.events_dispatcher import showMissionsForCurrentVehicle, showPersonalMission, showMissionsElen, showMissionsMarathon, showPersonalMissionOperationsPage, showPersonalMissionsOperationsMap, showMissionsCategories
 from gui.shared.formatters import text_styles, icons
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from items.components.ny_constants import NEW_YEAR_QUEST_GROUP_ID
 from personal_missions import PM_BRANCH
 from helpers import dependency
 from helpers.i18n import makeString as _ms
@@ -27,11 +28,14 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.game_control import IQuestsController, IMarathonEventsController, IFestivityController
 from skeletons.gui.event_boards_controllers import IEventBoardController
+from skeletons.new_year import INewYearController
 from skeletons.connection_mgr import IConnectionManager
 from gui.prb_control import prb_getters
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.event_boards.listener import IEventBoardsListener
+from gui.impl import backport
+from gui.impl.gen import R
 
 class WIDGET_PM_STATE(object):
     DISABLED = 0
@@ -191,6 +195,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     _lobbyContext = dependency.descriptor(ILobbyContext)
     _marathonsCtrl = dependency.descriptor(IMarathonEventsController)
     _festivityController = dependency.descriptor(IFestivityController)
+    _nyController = dependency.descriptor(INewYearController)
 
     def __init__(self):
         super(HangarHeader, self).__init__()
@@ -201,7 +206,10 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     def onQuestBtnClick(self, questType, questID):
         if questType == HANGAR_HEADER_QUESTS.QUEST_TYPE_COMMON:
             missions_page.setHideDoneFilter()
-            showMissionsForCurrentVehicle()
+            if self._festivityController.isEnabled():
+                showMissionsCategories(groupID=NEW_YEAR_QUEST_GROUP_ID)
+            else:
+                showMissionsForCurrentVehicle()
         elif questType in QUEST_TYPE_BY_PM_BRANCH.itervalues():
             if questID:
                 showPersonalMission(missionID=int(questID))
@@ -258,11 +266,18 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         if self.app.tutorialManager.hangarHeaderEnabled and self._currentVehicle.isPresent():
             vehicle = self._currentVehicle.item
             quests = self._getQuestsToHeaderVO(vehicle)
+            shouldShowCreditsBonus = self._festivityController.isPostEvent() and self._nyController.isVehicleBranchEnabled() and self._nyController.getVehicleBranch().isVehicleInBranch(vehicle)
+            nyCreditBonus = ''
+            if shouldShowCreditsBonus or self._festivityController.isEnabled():
+                nyCreditBonus = backport.text(R.strings.ny.totalBonusWidget.pbBonus()).format(100 * self._nyController.getActiveSettingBonusValue())
             headerVO = {'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
              'tankInfo': text_styles.concatStylesToMultiLine(text_styles.promoSubTitle(vehicle.shortUserName), text_styles.stats(MENU.levels_roman(vehicle.level))),
              'isPremIGR': vehicle.isPremiumIGR,
              'isVisible': True,
-             'quests': quests}
+             'quests': quests,
+             'isNYWidgetVisible': self._festivityController.isEnabled(),
+             'isPostNYEnabled': shouldShowCreditsBonus,
+             'nyCreditBonus': nyCreditBonus}
         else:
             headerVO = {'isVisible': False,
              'quests': []}

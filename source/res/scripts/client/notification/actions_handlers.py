@@ -12,17 +12,23 @@ from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.battle_results import RequestResultsContext
 from gui.clans.clan_helpers import showAcceptClanInviteDialog
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.impl.new_year.navigation import NewYearNavigation, ViewAliases
 from gui.prb_control import prbInvitesProperty, prbDispatcherProperty
 from gui.ranked_battles import ranked_helpers
 from gui.server_events.events_dispatcher import showPersonalMission
 from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events
-from gui.shared.event_dispatcher import showProgressiveRewardWindow
+from gui.shared.event_dispatcher import showProgressiveRewardWindow, showLootBoxAutoOpenWindow
 from gui.shared.utils import decorators
 from gui.wgcg.clan import contexts as clan_ctxs
 from gui.wgnc import g_wgncProvider
+from new_year.ny_constants import AdditionalCameraObject
+from skeletons.new_year import INewYearController, ITalismanSceneController
 from web.web_client_api import webApiCollection
 from web.web_client_api.sound import HangarSoundWebApi
 from helpers import dependency
+from items.components.ny_constants import CustomizationObjects
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
@@ -652,7 +658,7 @@ class _OpenLootBoxesHandler(_NavigationDisabledActionHandler):
         notification = model.getNotification(self.getNotType(), entityID)
         savedData = notification.getSavedData()
         if savedData is not None:
-            pass
+            shared_events.showLootBoxEntry(lootBoxType=savedData)
         return
 
 
@@ -670,7 +676,7 @@ class _LootBoxesAutoOpenHandler(_NavigationDisabledActionHandler):
         notification = model.getNotification(self.getNotType(), entityID)
         savedData = notification.getSavedData()
         if savedData is not None and 'rewards' in savedData:
-            pass
+            showLootBoxAutoOpenWindow(savedData['rewards'])
         return
 
 
@@ -686,6 +692,94 @@ class _OpenProgressiveRewardView(_NavigationDisabledActionHandler):
 
     def doAction(self, model, entityID, action):
         showProgressiveRewardWindow()
+
+
+class _LootBoxesGiftHandler(_ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        super(_LootBoxesGiftHandler, self).handleAction(model, entityID, action)
+        shared_events.showLootBoxGiftWindow()
+
+
+class _NewYearOpenRewardsScreenHandler(_NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        NewYearNavigation.showMainView(CustomizationObjects.FIR, ViewAliases.REWARDS_VIEW)
+
+
+class _NewYearOpenGiftTalismanHandler(_NavigationDisabledActionHandler):
+    _nyController = dependency.descriptor(INewYearController)
+    _talismanController = dependency.descriptor(ITalismanSceneController)
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        if not self._nyController.isEnabled():
+            BigWorld.callback(0.0, self.__showDisabledEventMessage)
+            return
+        if not self._talismanController.hasTalismanGiftBubble():
+            BigWorld.callback(0.0, self.__showCanDoActionMessage)
+            return
+        NewYearNavigation.showMainView(AdditionalCameraObject.MASCOT, ViewAliases.GLADE_VIEW)
+
+    @staticmethod
+    def __showDisabledEventMessage():
+        SystemMessages.pushI18nMessage(backport.text(R.strings.ny.notification.suspend()), type=SystemMessages.SM_TYPE.Information, priority='medium')
+
+    @staticmethod
+    def __showCanDoActionMessage():
+        SystemMessages.pushI18nMessage(backport.text(R.strings.ny.notification.disabledGiftTalisman()), type=SystemMessages.SM_TYPE.Information, priority='medium')
+
+
+class _NewYearOpenFreeTalismanHandler(_NavigationDisabledActionHandler):
+    _nyController = dependency.descriptor(INewYearController)
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        if not self._nyController.isEnabled():
+            BigWorld.callback(0.0, self.__showDisabledEventMessage)
+            return
+        if not self._nyController.getFreeTalisman():
+            BigWorld.callback(0.0, self.__showCanDoActionMessage)
+            return
+        NewYearNavigation.showMainView(AdditionalCameraObject.MASCOT, ViewAliases.GLADE_VIEW)
+
+    @staticmethod
+    def __showDisabledEventMessage():
+        SystemMessages.pushI18nMessage(backport.text(R.strings.ny.notification.suspend()), type=SystemMessages.SM_TYPE.Information, priority='medium')
+
+    @staticmethod
+    def __showCanDoActionMessage():
+        SystemMessages.pushI18nMessage(backport.text(R.strings.ny.notification.disabledFreeTalisman()), type=SystemMessages.SM_TYPE.Information, priority='medium')
 
 
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
@@ -716,7 +810,11 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenLootBoxesHandler,
  _LootBoxesAutoOpenHandler,
  _OpenProgressiveRewardView,
- ProlongStyleRent)
+ ProlongStyleRent,
+ _LootBoxesGiftHandler,
+ _NewYearOpenRewardsScreenHandler,
+ _NewYearOpenGiftTalismanHandler,
+ _NewYearOpenFreeTalismanHandler)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

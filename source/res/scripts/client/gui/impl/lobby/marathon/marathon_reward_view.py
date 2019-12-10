@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/marathon/marathon_reward_view.py
 import logging
-from frameworks.wulf import ViewSettings, WindowFlags
+from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.marathon.marathon_reward_view_model import MarathonRewardViewModel
 from gui.impl.lobby.marathon.marathon_reward_sounds import MarathonVideos, onVideoStart, onVideoDone
 from gui.impl.pub import ViewImpl
-from gui.impl.pub.lobby_window import LobbyWindow
+from gui.impl.pub.lobby_window import LobbyOverlay
 from gui.server_events.events_dispatcher import showMissionsMarathon
 from gui.shared.event_dispatcher import selectVehicleInHangar
 _logger = logging.getLogger(__name__)
@@ -53,6 +53,7 @@ class MarathonRewardView(ViewImpl):
         self.viewModel.onCloseBtnClick -= self.__onCloseWindow
         self.viewModel.onVideoStarted -= self.__onVideoStarted
         self.viewModel.onVideoStopped -= self.__onVideoStopped
+        onVideoDone()
 
     def __onGoToVehicle(self, _=None):
         self.destroyWindow()
@@ -72,9 +73,9 @@ class MarathonRewardView(ViewImpl):
         onVideoDone()
 
 
-class MarathonRewardViewWindow(LobbyWindow):
+class MarathonRewardViewWindow(LobbyOverlay):
     __slots__ = ()
 
     def __init__(self, *args, **kwargs):
-        super(MarathonRewardViewWindow, self).__init__(content=MarathonRewardView(*args, **kwargs), wndFlags=WindowFlags.OVERLAY, decorator=None)
+        super(MarathonRewardViewWindow, self).__init__(content=MarathonRewardView(*args, **kwargs), decorator=None)
         return

@@ -4,7 +4,7 @@ import BigWorld
 from CurrentVehicle import g_currentVehicle
 from HeroTank import HeroTank
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-from constants import QUEUE_TYPE, PREBATTLE_TYPE
+from constants import QUEUE_TYPE, PREBATTLE_TYPE, SENIORITY_AWARDS_CONFIG
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.LobbySelectableView import LobbySelectableView
@@ -39,6 +39,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IIGRController
 from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController
+from skeletons.gui.game_control import IFestivityController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -49,6 +50,7 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
 from gui.impl.gen import R
 from gui.impl import backport
+from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityAwardsBoxesCount
 
 def predicateNotEmptyWindow(window):
     return window.content is not None
@@ -71,6 +73,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     hangarSpace = dependency.descriptor(IHangarSpace)
     _promoController = dependency.descriptor(IPromoController)
     _connectionMgr = dependency.descriptor(IConnectionManager)
+    _festivityController = dependency.descriptor(IFestivityController)
     _COMMON_SOUND_SPACE = __SOUND_SETTINGS
 
     def __init__(self, _=None):
@@ -81,6 +84,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__isVehicleCameraReadyForC11n = False
         self.__urlMacros = URLMacros()
         self.__teaser = None
+        self.__seniorityAwardsIsActive = False
         return
 
     def onEscape(self):
@@ -123,6 +127,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.hangarSpace.onVehicleChanged += self.__onVehicleLoaded
         self.hangarSpace.onSpaceRefresh += self.__onSpaceRefresh
         self.hangarSpace.onSpaceCreate += self.__onSpaceCreate
+        self._festivityController.onStateChanged += self.__updateFestivityState
         self.igrCtrl.onIgrTypeChanged += self.__onIgrTypeChanged
         self.itemsCache.onSyncCompleted += self.onCacheResync
         self.rankedController.onUpdated += self.onRankedUpdate
@@ -145,6 +150,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         isCrewBooksEnabled = lobbyContext.getServerSettings().isCrewBooksEnabled()
         getTutorialGlobalStorage().setValue(GLOBAL_FLAG.CREW_BOOKS_ENABLED, isCrewBooksEnabled)
         self.as_setNotificationEnabledS(crewBooksViewedCache().haveNewCrewBooks())
+        self.__updateSenorityEntryPoint()
 
     def _dispose(self):
         self.removeListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
@@ -156,6 +162,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.hangarSpace.onVehicleChanged -= self.__onVehicleLoaded
         self.hangarSpace.onSpaceRefresh -= self.__onSpaceRefresh
         self.hangarSpace.onSpaceCreate -= self.__onSpaceCreate
+        self._festivityController.onStateChanged -= self.__updateFestivityState
         self.igrCtrl.onIgrTypeChanged -= self.__onIgrTypeChanged
         self.rankedController.onUpdated -= self.onRankedUpdate
         self.rankedController.onPrimeTimeStatusUpdated -= self.__updateAlertMessage
@@ -173,6 +180,16 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.stopGlobalListening()
         LobbySelectableView._dispose(self)
         return
+
+    def __updateSenorityEntryPoint(self):
+        curStatus = self.__seniorityAwardsIsActive
+        hasBoxes = getSeniorityAwardsBoxesCount() > 0
+        config = self.lobbyContext.getServerSettings().getSeniorityAwardsConfig()
+        seniorityAwardsWidgetVisibility = config.hangarWidgetIsVisible()
+        self.__seniorityAwardsIsActive = config.isEnabled and hasBoxes and seniorityAwardsWidgetVisibility
+        if curStatus != self.__seniorityAwardsIsActive:
+            self.__seniorityAwardsIsActive = hasBoxes and self.__seniorityAwardsIsActive
+            self.as_updateSeniorityAwardsEntryPointS(self.__seniorityAwardsIsActive)
 
     def __onViewAddedToContainer(self, _, pyEntity):
         self.closeHelpLayout()
@@ -280,13 +297,11 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         return
 
     def _highlight3DEntityAndShowTT(self, entity):
-        LobbySelectableView._highlight3DEntityAndShowTT(self, entity)
         itemId = entity.selectionId
         if itemId:
             self.as_show3DSceneTooltipS(TOOLTIPS_CONSTANTS.ENVIRONMENT, [itemId])
 
     def _fade3DEntityAndHideTT(self, entity):
-        LobbySelectableView._fade3DEntityAndHideTT(self, entity)
         self.as_hide3DSceneTooltipS()
 
     @property
@@ -330,6 +345,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         else:
             if diff is not None and GUI_ITEM_TYPE.VEHICLE in diff:
                 self.__updateAmmoPanel()
+                self.__updateParams()
+            self.__updateSenorityEntryPoint()
             return
 
     def onPlayerStateChanged(self, entity, roster, accountInfo):
@@ -383,6 +400,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateHeaderRankedWidget()
         self.__updateCrew()
         self.__updateAlertMessage()
+        self.__updateFestivityState()
         Waiting.hide('updateVehicle')
 
     def __onCurrentVehicleChanged(self):
@@ -485,6 +503,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             self.__updateHeaderEpicWidget()
         if 'isCustomizationEnabled' in diff:
             self.__updateState()
+        if SENIORITY_AWARDS_CONFIG in diff:
+            self.__updateSenorityEntryPoint()
 
     def __onSettingsChanged(self, diff):
         if SETTINGS_SECTIONS.UI_STORAGE in diff:
@@ -498,3 +518,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         else:
             self.__isVehicleCameraReadyForC11n = vehicleEntity.state == CameraMovementStates.ON_OBJECT
             return
+
+    def __updateFestivityState(self):
+        self.as_setLootboxesVisibleS(self._festivityController.isEnabled())

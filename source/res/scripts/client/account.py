@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/Account.py
 import cPickle
 import copy
+import weakref
 import zlib
 from collections import namedtuple
 import AccountCommands
@@ -11,7 +12,6 @@ import Event
 from ChatManager import chatManager
 from ClientChat import ClientChat
 from ClientGlobalMap import ClientGlobalMap
-from ClientSelectableObject import ClientSelectableObject
 from ClientUnitMgr import ClientUnitMgr, ClientUnitBrowser
 from ContactInfo import ContactInfo
 from OfflineMapCreator import g_offlineMapCreator
@@ -40,6 +40,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.utils import IHangarSpace
+from skeletons.new_year import ITalismanSceneController
 from soft_exception import SoftException
 from streamIDs import RangeStreamIDCallbacks, STREAM_ID_CHAT_MAX, STREAM_ID_CHAT_MIN
 StreamData = namedtuple('StreamData', ['data',
@@ -73,6 +74,8 @@ def _isStrList(l):
 class _ClientCommandProxy(object):
     _COMMAND_SIGNATURES = (('doCmdStr', lambda args: len(args) == 1 and _isStr(args[0])),
      ('doCmdIntStr', lambda args: len(args) == 2 and _isInt(args[0]) and _isStr(args[1])),
+     ('doCmdInt', lambda args: len(args) == 1 and all([ _isInt(arg) for arg in args ])),
+     ('doCmdInt2', lambda args: len(args) == 2 and all([ _isInt(arg) for arg in args ])),
      ('doCmdInt3', lambda args: len(args) == 3 and all([ _isInt(arg) for arg in args ])),
      ('doCmdInt4', lambda args: len(args) == 4 and all([ _isInt(arg) for arg in args ])),
      ('doCmdInt2Str', lambda args: len(args) == 3 and _isStr(args[2]) and all([ _isInt(arg) for arg in args[:2] ])),
@@ -109,6 +112,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     lobbyContext = dependency.descriptor(ILobbyContext)
     connectionMgr = dependency.descriptor(IConnectionManager)
     hangarSpace = dependency.descriptor(IHangarSpace)
+    talismanCtrl = dependency.descriptor(ITalismanSceneController)
 
     def __init__(self):
         global g_accountRepository
@@ -422,57 +426,13 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInTutorialQueue = True
         events.onTutorialEnqueued(number, queueLen, avgWaitingTime)
 
-    def debugSelectEntity(self, selectionId):
-        entitiesIDs = BigWorld.entities.keys()
-        for key in entitiesIDs:
-            e = BigWorld.entities[key]
-            if isinstance(e, ClientSelectableObject) and e.selectionId == selectionId:
-                self.targetFocus(e)
-                break
-        else:
-            LOG_DEBUG('No ClientSelectableObject with selectionID', selectionId)
-
-    def debugUnselectEntity(self, selectionId):
-        entitiesIDs = BigWorld.entities.keys()
-        for key in entitiesIDs:
-            e = BigWorld.entities[key]
-            if isinstance(e, ClientSelectableObject) and e.selectionId == selectionId:
-                self.targetBlur(e)
-                break
-        else:
-            LOG_DEBUG('No ClientSelectableObject with selectionID', selectionId)
-
-    def debugSelectAllEntities(self):
-        count = 0
-        entitiesIDs = BigWorld.entities.keys()
-        for key in entitiesIDs:
-            e = BigWorld.entities[key]
-            if isinstance(e, ClientSelectableObject):
-                self.targetFocus(e)
-                count += 1
-
-        if count == 0:
-            LOG_DEBUG('No any ClientSelectableObject to select')
-
-    def debugUnselectAllEntites(self):
-        count = 0
-        entitiesIDs = BigWorld.entities.keys()
-        for key in entitiesIDs:
-            e = BigWorld.entities[key]
-            if isinstance(e, ClientSelectableObject):
-                self.targetBlur(e)
-                count += 1
-
-        if count == 0:
-            LOG_DEBUG('No any ClientSelectableObject to unselect')
-
     def targetFocus(self, entity):
-        if self.__objectsSelectionEnabled and isinstance(entity, ClientSelectableObject) and entity.enabled:
+        if self.__objectsSelectionEnabled:
             self.hangarSpace.onMouseEnter(entity)
-            self.__selectedEntity = entity
+            self.__selectedEntity = weakref.proxy(entity)
 
     def targetBlur(self, prevEntity):
-        if self.__objectsSelectionEnabled and isinstance(prevEntity, ClientSelectableObject):
+        if self.__objectsSelectionEnabled:
             self.hangarSpace.onMouseExit(prevEntity)
             self.__selectedEntity = None
         return
@@ -1114,10 +1074,13 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_BPF_ADD_FRAGMENTS_DEV, requestedCount, fragmentTypeCD, other)
 
     def processInvitations(self, invitations):
-        self.prebattleInvitations.processInvitations(invitations)
+        self.prebattleInvitations.processInvitations(invitations, ClientInvitations.InvitationScope.ACCOUNT)
 
     def _doCmdStr(self, cmd, s, callback):
         return self.__doCmd('doCmdStr', cmd, callback, s)
+
+    def _doCmdInt(self, cmd, int1, callback):
+        return self.__doCmd('doCmdInt', cmd, callback, int1)
 
     def _doCmdIntStr(self, cmd, int1, s, callback):
         return self.__doCmd('doCmdIntStr', cmd, callback, int1, s)
@@ -1136,6 +1099,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def _doCmdIntArr(self, cmd, arr, callback):
         return self.__doCmd('doCmdIntArr', cmd, callback, arr)
+
+    def _doCmdIntArrStr(self, cmd, arr, s, callback):
+        return self.__doCmd('doCmdIntArrStr', cmd, callback, arr, s)
 
     def _doCmdIntStrArr(self, cmd, int1, strArr, callback):
         return self.__doCmd('doCmdIntStrArr', cmd, callback, int1, strArr)

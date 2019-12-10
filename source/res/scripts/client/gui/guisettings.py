@@ -137,7 +137,8 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'referralProgram': {},
  'easterEgg': EasterEggProps(True, []),
  'adventCalendar': {'popupIntervalInHours': 24,
-                    'baseURL': ''},
+                    'baseURL': '',
+                    'herotankURL': ''},
  'premiumInfo': {},
  'checkPromoFrequencyInBattles': 5}
 

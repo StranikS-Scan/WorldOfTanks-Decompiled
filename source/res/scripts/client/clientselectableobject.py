@@ -4,8 +4,9 @@ import BigWorld
 import SoundGroups
 from vehicle_systems.tankStructure import ColliderTypes
 from svarog_script.script_game_object import ScriptGameObject, ComponentDescriptor
+from hangar_selectable_objects import ISelectableObject
 
-class ClientSelectableObject(BigWorld.Entity, ScriptGameObject):
+class ClientSelectableObject(BigWorld.Entity, ScriptGameObject, ISelectableObject):
     collisions = ComponentDescriptor()
 
     @property
@@ -15,6 +16,7 @@ class ClientSelectableObject(BigWorld.Entity, ScriptGameObject):
     def __init__(self):
         BigWorld.Entity.__init__(self)
         ScriptGameObject.__init__(self, self.spaceID)
+        ISelectableObject.__init__(self)
         self.__enabled = True
         self.__edged = False
         self.__clickSound = None
@@ -49,15 +51,15 @@ class ClientSelectableObject(BigWorld.Entity, ScriptGameObject):
                 self.__clickSound.stop()
             self.__clickSound.releaseMatrix()
             self.__clickSound = None
-        self.highlight(False)
+        self.setHighlight(False)
         return
 
-    def enable(self, enabled):
+    def setEnable(self, enabled):
         self.__enabled = enabled
         if not self.__enabled:
-            self.highlight(False)
+            self.setHighlight(False)
 
-    def highlight(self, show):
+    def setHighlight(self, show):
         if show:
             if not self.__edged and self.__enabled:
                 self._addEdgeDetect()

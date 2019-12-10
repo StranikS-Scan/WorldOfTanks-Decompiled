@@ -314,7 +314,7 @@ class WarplaneActivity(BaseMapActivity):
             return
         else:
             if self.__firstLaunch is True:
-                BigWorld.addModel(self.__model)
+                BigWorld.player().addModel(self.__model)
                 self.__model.forceReflect = True
                 self.__motor = BigWorld.WGWarplaneMotor(self.__curve, 0)
                 self.__model.addMotor(self.__motor)
@@ -347,8 +347,8 @@ class WarplaneActivity(BaseMapActivity):
         if self.__model is not None:
             if self.__motor is not None and self.__motor in self.__model.motors:
                 self.__model.delMotor(self.__motor)
-            if self.__model in BigWorld.models():
-                BigWorld.delModel(self.__model)
+            if self.__model in BigWorld.player().models:
+                BigWorld.player().delModel(self.__model)
             self.__model = None
             self.__motor = None
             self.__curve = None
@@ -504,7 +504,7 @@ class ExplosionActivity(BaseMapActivity):
             return
         else:
             if self.__firstLaunch is True:
-                BigWorld.addModel(self.__model)
+                BigWorld.player().addModel(self.__model)
                 self.__model.forceReflect = True
                 self.__firstLaunch = False
             else:

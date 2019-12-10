@@ -3,15 +3,22 @@
 import copy
 import types
 from collections import namedtuple
+import logging
 from Event import Event
 from constants import IS_TUTORIAL_ENABLED, PremiumConfigs
 from debug_utils import LOG_WARNING, LOG_DEBUG
 from gui import GUI_SETTINGS, SystemMessages
-from gui.SystemMessages import SM_TYPE
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.SystemMessages import SM_TYPE
 from gui.shared.utils.decorators import ReprInjector
+from ny_common.CraftCost import CraftCostConfig
+from ny_common.GeneralConfig import GeneralConfig
+from ny_common.SettingBonus import SettingBonusConfig
+from ny_common.ToyDecayCost import ToyDecayCostConfig
+from ny_common.settings import SettingBonusConsts, NYVehBranchConsts, NYLootBoxConsts, NYGeneralConsts, CraftCostConsts, ToyDecayCostConsts, NY_CONFIG_NAME
 from personal_missions import PM_BRANCH
 from shared_utils import makeTupleByDict, updateDict
+_logger = logging.getLogger(__name__)
 _CLAN_EMBLEMS_SIZE_MAPPING = {16: 'clan_emblems_16',
  32: 'clan_emblems_small',
  64: 'clan_emblems_big',
@@ -412,6 +419,32 @@ class _BlueprintsConfig(namedtuple('_BlueprintsConfig', ('allowBlueprintsConvers
         return 'isEnabled' in diff or 'useBlueprintsForUnlock' in diff
 
 
+class _SeniorityAwardsConfig(namedtuple('_SeniorityAwardsConfig', ('enabled', 'autoOpenTime', 'hangarWidgetVisibility'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(enabled=False, autoOpenTime=0, hangarWidgetVisibility=False)
+        defaults.update(kwargs)
+        return super(_SeniorityAwardsConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    def isEnabled(self):
+        return self.enabled
+
+    def autoOpenTimestamp(self):
+        return self.autoOpenTime
+
+    def hangarWidgetIsVisible(self):
+        return self.hangarWidgetVisibility
+
+
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
@@ -486,6 +519,10 @@ class ServerSettings(object):
             self.__progressiveReward = makeTupleByDict(_ProgressiveReward, self.__serverSettings['progressive_reward_config'])
         else:
             self.__progressiveReward = _ProgressiveReward()
+        if 'seniority_awards_config' in self.__serverSettings:
+            self.__seniorityAwardsConfig = makeTupleByDict(_SeniorityAwardsConfig, self.__serverSettings['seniority_awards_config'])
+        else:
+            self.__seniorityAwardsConfig = _SeniorityAwardsConfig()
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -517,6 +554,8 @@ class ServerSettings(object):
             self.__serverSettings['lootBoxes_config'] = serverSettingsDiff['lootBoxes_config']
         if 'progressive_reward_config' in serverSettingsDiff:
             self.__updateProgressiveReward(serverSettingsDiff)
+        if 'seniority_awards_config' in serverSettingsDiff:
+            self.__updateSeniorityAwards(serverSettingsDiff)
         if PremiumConfigs.PIGGYBANK in serverSettingsDiff:
             self.__serverSettings[PremiumConfigs.PIGGYBANK] = serverSettingsDiff[PremiumConfigs.PIGGYBANK]
         if PremiumConfigs.DAILY_BONUS in serverSettingsDiff:
@@ -789,6 +828,30 @@ class ServerSettings(object):
     def getProgressiveRewardConfig(self):
         return self.__progressiveReward
 
+    def getSeniorityAwardsConfig(self):
+        return self.__seniorityAwardsConfig
+
+    def getNewYearBonusConfig(self):
+        return SettingBonusConfig(self.__getNYConfig(SettingBonusConsts.CONFIG_NAME))
+
+    def getNewYearToyDecayCostConfig(self):
+        return ToyDecayCostConfig(self.__getNYConfig(ToyDecayCostConsts.CONFIG_NAME))
+
+    def getNewYearCraftCostConfig(self):
+        return CraftCostConfig(self.__getNYConfig(CraftCostConsts.CONFIG_NAME))
+
+    def getLootBoxShop(self):
+        return self.__getNYConfig(NYLootBoxConsts.CONFIG_NAME)
+
+    def getNewYearVehBranchConfig(self):
+        return self.__getNYConfig(NYVehBranchConsts.CONFIG_NAME)
+
+    def getNewYearGeneralConfig(self):
+        return GeneralConfig(self.__getNYConfig(NYGeneralConsts.CONFIG_NAME))
+
+    def __getNYConfig(self, configName):
+        return self.__getGlobalSetting(NY_CONFIG_NAME, {}).get(configName, {})
+
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)
 
@@ -823,3 +886,6 @@ class ServerSettings(object):
 
     def __updateProgressiveReward(self, targetSettings):
         self.__progressiveReward = self.__progressiveReward.replace(targetSettings['progressive_reward_config'])
+
+    def __updateSeniorityAwards(self, targetSettings):
+        self.__seniorityAwardsConfig = self.__seniorityAwardsConfig.replace(targetSettings['seniority_awards_config'])

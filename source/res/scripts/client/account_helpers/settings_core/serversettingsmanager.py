@@ -46,6 +46,11 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     QUESTS_PROGRESS = 'QUESTS_PROGRESS'
     UI_STORAGE = 'UI_STORAGE'
     LINKEDSET_QUESTS = 'LINKEDSET_QUESTS'
+    LOOT_BOX_VIEWED = 'LOOT_BOX_VIEWED'
+    LOOT_BOX_ORIENTAL = 'LOOT_BOX_ORIENTAL'
+    LOOT_BOX_NEW_YEAR = 'LOOT_BOX_NEW_YEAR'
+    LOOT_BOX_FAIRYTALE = 'LOOT_BOX_FAIRYTALE'
+    LOOT_BOX_CHRISTMAS = 'LOOT_BOX_CHRISTMAS'
 
 
 class UI_STORAGE_KEYS(CONST_CONTAINER):
@@ -104,7 +109,10 @@ class ServerSettingsManager(object):
                                        GAME.MINIMAP_ALPHA_ENABLED: 15,
                                        GAME.HANGAR_CAM_PARALLAX_ENABLED: 16,
                                        GAME.C11N_HISTORICALLY_ACCURATE: 17,
-                                       GAME.ENABLE_SPEEDOMETER: 23}, offsets={GAME.BATTLE_LOADING_INFO: Offset(4, 48),
+                                       GAME.ENABLE_SPEEDOMETER: 23,
+                                       GAME.LOOT_BOX_VIDEO_OFF: 24,
+                                       GAME.NY_VEHICLES_PROGRESS_ENTRY: 25,
+                                       GAME.NY_VEHICLES_POST_EVENT_ENTRY: 26}, offsets={GAME.BATTLE_LOADING_INFO: Offset(4, 48),
                                        GAME.BATTLE_LOADING_RANKED_INFO: Offset(21, 6291456),
                                        GAME.HANGAR_CAM_PERIOD: Offset(18, 1835008)}),
      SETTINGS_SECTIONS.GAMEPLAY: Section(masks={}, offsets={GAME.GAMEPLAY_MASK: Offset(0, 65535)}),
@@ -173,7 +181,8 @@ class ServerSettingsManager(object):
                                            'igr': 3,
                                            'favorite': 5,
                                            'bonus': 6,
-                                           'event': 7}, offsets={}),
+                                           'event': 7,
+                                           'newYear': 8}, offsets={}),
      SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
                                                   'germany': 1,
                                                   'usa': 2,
@@ -207,7 +216,8 @@ class ServerSettingsManager(object):
                                                   'gameMode': 4,
                                                   'favorite': 5,
                                                   'bonus': 6,
-                                                  'event': 7}, offsets={}),
+                                                  'event': 7,
+                                                  'newYear': 8}, offsets={}),
      SETTINGS_SECTIONS.EPICBATTLE_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
                                                       'germany': 1,
                                                       'usa': 2,
@@ -241,7 +251,8 @@ class ServerSettingsManager(object):
                                                       'gameMode': 4,
                                                       'favorite': 5,
                                                       'bonus': 6,
-                                                      'event': 7}, offsets={}),
+                                                      'event': 7,
+                                                      'newYear': 8}, offsets={}),
      SETTINGS_SECTIONS.GUI_START_BEHAVIOR: Section(masks={GuiSettingsBehavior.FREE_XP_INFO_DIALOG_SHOWED: 0,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED: 1,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_STARTED: 2,
@@ -334,7 +345,12 @@ class ServerSettingsManager(object):
                                     UI_STORAGE_KEYS.DUAL_GUN_HIGHLIGHTS_COUNTER: Offset(19, 3670016)}),
      SETTINGS_SECTIONS.LINKEDSET_QUESTS: Section(masks={}, offsets={'shown': Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.QUESTS_PROGRESS: Section(masks={}, offsets={QUESTS_PROGRESS.VIEW_TYPE: Offset(0, 3),
-                                         QUESTS_PROGRESS.DISPLAY_TYPE: Offset(2, 12)})}
+                                         QUESTS_PROGRESS.DISPLAY_TYPE: Offset(2, 12)}),
+     SETTINGS_SECTIONS.LOOT_BOX_VIEWED: Section(masks={}, offsets={'count': Offset(0, 4294967295L)}),
+     SETTINGS_SECTIONS.LOOT_BOX_ORIENTAL: Section(masks={}, offsets={'count': Offset(0, 4294967295L)}),
+     SETTINGS_SECTIONS.LOOT_BOX_NEW_YEAR: Section(masks={}, offsets={'count': Offset(0, 4294967295L)}),
+     SETTINGS_SECTIONS.LOOT_BOX_FAIRYTALE: Section(masks={}, offsets={'count': Offset(0, 4294967295L)}),
+     SETTINGS_SECTIONS.LOOT_BOX_CHRISTMAS: Section(masks={}, offsets={'count': Offset(0, 4294967295L)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,

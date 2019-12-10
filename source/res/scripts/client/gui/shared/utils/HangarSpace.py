@@ -167,6 +167,7 @@ class HangarSpace(IHangarSpace):
         self.onHeroTankReady = Event.Event()
         self.onVehicleChanged = Event.Event()
         self.onVehicleChangeStarted = Event.Event()
+        self.onNotifyCursorOver3dScene = Event.Event()
         self.__isCursorOver3DScene = False
         return
 
@@ -201,6 +202,7 @@ class HangarSpace(IHangarSpace):
 
     def __onNotifyCursorOver3dScene(self, event):
         self.__isCursorOver3DScene = event.ctx.get('isOver3dScene', False)
+        self.onNotifyCursorOver3dScene(self.__isCursorOver3DScene)
 
     @uniprof.regionDecorator(label='hangar.space.loading', scope='enter')
     def init(self, isPremium):

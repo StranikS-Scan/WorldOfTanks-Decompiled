@@ -73,7 +73,9 @@ class BaseAdvancedTooltip(BlocksTooltipData):
 
     def _packAdvancedBlocks(self, movie, header, description):
         descrText = TOOLTIPS.getAdvancedDescription(description)
-        if descrText is None:
+        if descrText is None and description == 'camouflageBattleBooster':
+            descrText = TOOLTIPS.ADVANCED_CAMOUFLAGE
+        elif descrText is None:
             descrText = '#advanced/' + description
         items = [formatters.packTextBlockData(text=text_styles.highTitle(header), padding=formatters.packPadding(left=20, top=20)), formatters.packImageBlockData(BaseAdvancedTooltip.getMovieAnimationPath(movie), BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, padding=5, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_ADVANCED_CLIP_BLOCK_LINKAGE), formatters.packTextBlockData(text=text_styles.main(descrText), padding=formatters.packPadding(left=20, top=10, bottom=20))]
         return items
@@ -214,6 +216,7 @@ class BattleTraining(BaseAdvancedTooltip):
 
 _SKILL_MOVIES = {'repair': 'skillRepairs',
  'camouflage': 'skillConcealment',
+ 'camouflageBattleBooster': 'skillConcealment',
  'fireFighting': 'skillFirefighting',
  'brotherhood': 'skillBrothersInArms',
  'commander_tutor': 'skillMentor',

@@ -116,15 +116,15 @@ class CrewBooksView(ViewImpl):
 
     def __setBooksViewModelData(self, screenVM):
         bookListVM = screenVM.getCrewBookItemList()
+        bookListVM.clear()
         booksIcons = R.images.gui.maps.icons.crewBooks.books.large
         self.__updateGuiItemList()
         notInShopItems = self.__itemsCache.items.shop.getHiddens()
         isCrewBooksPurchaseEnabled = self.__lobbyContext.getServerSettings().isCrewBooksPurchaseEnabled()
-        for i, book in enumerate(self.__bookGuiItemList):
+        for _, book in enumerate(self.__bookGuiItemList):
             amount = book.getFreeCount()
             bookSpread = book.getBookSpread()
             bookVM = CrewBookItemModel()
-            bookVM.setIdx(i)
             bookVM.setAmount(amount)
             bookVM.setCompactDesc(book.intCD)
             bookVM.setIsSelected(False)
@@ -136,9 +136,10 @@ class CrewBooksView(ViewImpl):
             descriptionFmtArgsVM.addViewModel(UserFormatStringArgModel(self.__gui.systemLocale.getNumberFormat(book.getXP()), 'exp', R.styles.ExpTextStyle()))
             bookVM.setDescription(R.strings.crew_books.screen.bookType.dyn(bookSpread).info.title())
             bookNation = book.getNation()
-            if bookNation is not None:
+            if bookSpread != CREW_BOOK_SPREAD.PERSONAL_BOOK:
                 overlayDescriptionFmtArgsVM = bookVM.getOverlayDescriptionFmtArgs()
                 overlayDescriptionFmtArgsVM.addViewModel(UserFormatStringArgModel(self.__vehicle.shortUserName, 'short_name', R.styles.NeutralTextStyle()))
+            if bookNation is not None:
                 bookVM.setOverlayDescription(R.strings.crew_books.screen.bookType.dyn(bookSpread).info.body.dyn(bookNation)())
             else:
                 bookVM.setOverlayDescription(R.strings.crew_books.screen.bookType.dyn(bookSpread).info.body())
@@ -178,31 +179,19 @@ class CrewBooksView(ViewImpl):
             if GUI_ITEM_TYPE.TANKMAN in invDiff:
                 self.__updateTankmenListModelData(vm, invDiff[GUI_ITEM_TYPE.TANKMAN])
             if GUI_ITEM_TYPE.CREW_BOOKS in invDiff:
-                self.__updateBooksViewModelData(vm, invDiff[GUI_ITEM_TYPE.CREW_BOOKS])
+                self.__updateBooksViewModelData(vm)
 
     def __updateGuiItemList(self):
-        items = self.__itemsCache.items.getItems(GUI_ITEM_TYPE.CREW_BOOKS, REQ_CRITERIA.CREW_ITEM.NATIONS([self.__vehicle.nationID]))
+        criteria = REQ_CRITERIA.CREW_ITEM.IN_ACCOUNT ^ ~REQ_CRITERIA.CREW_ITEM.BOOK_RARITIES(CREW_BOOK_RARITY.UNIVERSAL)
+        criteria |= REQ_CRITERIA.CREW_ITEM.NATIONS([self.__vehicle.nationID])
+        items = self.__itemsCache.items.getItems(GUI_ITEM_TYPE.CREW_BOOKS, criteria)
         self.__bookGuiItemList = sortItems(items.values())
 
-    def __updateBooksViewModelData(self, screenVM, diff):
-        bookListVM = screenVM.getCrewBookItemList()
-        self.__updateGuiItemList()
-        for i, bookVM in enumerate(bookListVM):
-            bookItem = self.__bookGuiItemList[i]
-            if bookItem.intCD not in diff:
-                continue
-            amount = bookItem.getFreeCount()
-            bookVM.setAmount(amount)
-            bookVM.setIsSelected(False)
-            bookVM.setIsDisabled(amount == 0)
-
-        bookListVM.invalidate()
+    def __updateBooksViewModelData(self, screenVM):
+        self.__setBooksViewModelData(screenVM)
         self.__selectedBookGuiItem = None
-        if self.__selectedBookIndex is not None:
-            rewBookItemList = self.viewModel.getCrewBookItemList()
-            rewBookItemList[self.__selectedBookIndex].setIsSelected(False)
-            rewBookItemList.invalidate()
-            self.__selectedBookIndex = None
+        self.__selectedBookIndex = None
+        bookListVM = screenVM.getCrewBookItemList()
         availableBookCount = sum((not book.getIsDisabled() for book in bookListVM))
         if availableBookCount == 0 and self.viewStatus == ViewStatus.LOADED and not self.viewModel.getIsDialogOpen():
             self.__openLackView()
@@ -210,6 +199,7 @@ class CrewBooksView(ViewImpl):
             self.__updateCrew()
             self.__updateIsBookUseEnable()
             self.__updateFooterDescription()
+            bookListVM.invalidate()
         return
 
     def __openLackView(self):

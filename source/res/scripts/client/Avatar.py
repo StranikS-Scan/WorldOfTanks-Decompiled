@@ -2039,7 +2039,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         MessengerEntry.g_instance.protos.BW_CHAT2.onActionReceived(actionID, reqID, args)
 
     def processInvitations(self, invitations):
-        self.prebattleInvitations.processInvitations(invitations)
+        self.prebattleInvitations.processInvitations(invitations, ClientInvitations.InvitationScope.AVATAR)
 
     def onUnitError(self, requestID, curUnitMgrID, errorCode, errorString):
         LOG_DEBUG('PlayerAvatar.onUnitError: requestID=%s, unitMgrID=%s, errorCode=%s, errorString=%s' % (requestID,

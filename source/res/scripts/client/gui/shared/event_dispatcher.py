@@ -6,6 +6,7 @@ from CurrentVehicle import HeroTankPreviewAppearance
 from adisp import process
 from constants import RentType, GameSeasonType
 from debug_utils import LOG_WARNING
+from frameworks.wulf import ViewStatus
 from gui import SystemMessages, DialogsInterface, GUI_SETTINGS
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import SellModuleMeta
@@ -36,6 +37,7 @@ from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.shared import events, g_eventBus, money
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
+from gui.shared.gui_items.loot_box import NewYearLootBoxes
 from gui.shared.gui_items.processors.goodies import BoosterActivator
 from gui.shared.money import Currency
 from gui.shared.notifications import NotificationPriorityLevel
@@ -47,12 +49,14 @@ from items import vehicles as vehicles_core
 from helpers import dependency
 from helpers.aop import pointcutable
 from helpers.i18n import makeString as _ms
+from ny_common.settings import NYLootBoxConsts
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IHeroTankController, IReferralProgramController, IEpicBattleMetaGameController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.new_year import INewYearController
 from soft_exception import SoftException
 from async import async, await
 _logger = logging.getLogger(__name__)
@@ -623,6 +627,95 @@ def showBubbleTooltip(msg):
     g_eventBus.handleEvent(events.BubbleTooltipEvent(events.BubbleTooltipEvent.SHOW, msg), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
+@dependency.replace_none_kwargs(lobbyCtx=ILobbyContext, nyCtrl=INewYearController)
+def showLootBoxEntry(lootBoxType=NewYearLootBoxes.PREMIUM, category='', lobbyCtx=None, nyCtrl=None):
+    enabled = lobbyCtx.getServerSettings().isLootBoxesEnabled() and nyCtrl.isEnabled()
+    if not enabled:
+        from gui.impl.lobby.loot_box.loot_box_helper import showRestrictedSysMessage
+        showRestrictedSysMessage()
+        return
+    else:
+        uiLoader = dependency.instance(IGuiLoader)
+        contentResId = R.views.lobby.loot_box.views.loot_box_entry_view.LootBoxEntryView()
+        lootBoxEntryView = uiLoader.windowsManager.getViewByLayoutID(contentResId)
+        if lootBoxEntryView is not None:
+            lootBoxEntryView.destroyWindow()
+        from gui.impl.lobby.loot_box.loot_box_entry_view import LootBoxEntryWindow
+        window = LootBoxEntryWindow(lootBoxType, category)
+        window.load()
+        return
+
+
+@process
+@dependency.replace_none_kwargs(lobbyCtx=ILobbyContext)
+def showLootBoxBuyWindow(category='', lobbyCtx=None):
+    if not lobbyCtx.getServerSettings().isLootBoxesEnabled():
+        _logger.error('LootBoxes are disabled on server. Nothing will be shown!')
+        return
+    shopConfig = lobbyCtx.getServerSettings().getLootBoxShop()
+    rawUrl = shopConfig.get(NYLootBoxConsts.URL, '')
+    if not rawUrl:
+        _logger.error('No Loot Box Shop URL is specified. Nothing will be shown!')
+        return
+    source = shopConfig.get(NYLootBoxConsts.SOURCE, NYLootBoxConsts.IGB)
+    url = yield URLMacros().parse(rawUrl)
+    if source == NYLootBoxConsts.IGB:
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOOT_BOX_SHOP_OVERLAY, ctx={'url': url,
+         'category': category}), EVENT_BUS_SCOPE.LOBBY)
+    elif source == NYLootBoxConsts.EXTERNAL:
+        g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.SPECIFIED, url))
+    else:
+        _logger.error('Invalid source is specified. Can not open loot box buy window!')
+
+
+def showLootBoxGiftWindow():
+    g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.LOOT_BOX_GIFT_URL))
+
+
+def showLootBoxAutoOpenWindow(rewards):
+    from gui.impl.lobby.loot_box.loot_box_auto_open_view import LootBoxAutoOpenWindow
+    window = LootBoxAutoOpenWindow(rewards)
+    window.load()
+
+
+def showNYLevelUpWindow(context):
+    from gui.impl.new_year.views.new_year_level_up_view import NewYearLevelUpWindow
+    uiLoader = dependency.instance(IGuiLoader)
+    contentResId = R.views.lobby.new_year.views.new_year_level_up_view.NewYearLevelUpView()
+    levelUpView = uiLoader.windowsManager.getViewByLayoutID(contentResId)
+    if levelUpView is not None and levelUpView.viewStatus == ViewStatus.LOADED:
+        levelUpView.appendRewards(context)
+        return
+    else:
+        window = NewYearLevelUpWindow(context)
+        window.load()
+        return
+
+
+def showNyCollectionCongratsWindow(context):
+    from gui.impl.new_year.views.new_year_style_reward_view import NewYearStyleRewardWindow
+    uiLoader = dependency.instance(IGuiLoader)
+    contentResId = R.views.lobby.loot_box.views.loot_box_special_reward_view.LootBoxSpecialRewardView()
+    specialVideoResID = uiLoader.windowsManager.getViewByLayoutID(contentResId)
+    if specialVideoResID is not None:
+        return
+    else:
+        window = NewYearStyleRewardWindow(context)
+        window.load()
+        return
+
+
+def showVideoView(videoResID, parent=None, onVideoStartHandler=None, onVideoStopHandler=None):
+    from gui.impl.lobby.video_view import VideoViewWindow
+    VideoViewWindow(videoResID, parent=parent, onVideoStartHandler=onVideoStartHandler, onVideoStopHandler=onVideoStopHandler).load()
+
+
+def showNewYearSpecialWindow():
+    from gui.impl.new_year.views.new_year_special_reward_view import NewYearSpecialRewardWindow
+    window = NewYearSpecialRewardWindow()
+    window.load()
+
+
 def showReferralProgramWindow(url=None):
     referralController = dependency.instance(IReferralProgramController)
     if url is None:
@@ -648,6 +741,16 @@ def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=N
          'callbackOnLoad': callbackOnLoad}), EVENT_BUS_SCOPE.LOBBY)
 
 
+def showSeniorityRewardWindow():
+    from gui.impl.lobby.seniority_awards.seniority_reward_view import SeniorityRewardWindow
+    uiLoader = dependency.instance(IGuiLoader)
+    contentResId = R.views.lobby.seniority_awards.seniority_reward_view.SeniorityRewardView()
+    if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
+        window = SeniorityRewardWindow(contentResId)
+        window.load()
+    return
+
+
 def showProgressiveRewardWindow():
     lobbyContext = dependency.instance(ILobbyContext)
     if not lobbyContext.getServerSettings().getProgressiveRewardConfig().isEnabled:
@@ -669,11 +772,18 @@ def showProgressiveRewardAwardWindow(bonuses, specialRewardType, currentStep):
     window.load()
 
 
-def showStylePreview(vehCD, style, styleDescr, backCallback, backBtnDescrLabel=''):
+def showSeniorityRewardAwardWindow(qID, data):
+    from gui.impl.lobby.seniority_awards.seniority_reward_award_view import SeniorityRewardAwardWindow
+    window = SeniorityRewardAwardWindow(qID, data)
+    window.load()
+
+
+def showStylePreview(vehCD, style, styleDescr, backCallback, destoryCallback=None, backBtnDescrLabel=''):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.STYLE_PREVIEW, ctx={'itemCD': vehCD,
      'style': style,
      'styleDescr': styleDescr,
      'backCallback': backCallback,
+     'destroyCallback': destoryCallback,
      'backBtnDescrLabel': backBtnDescrLabel}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
@@ -701,3 +811,29 @@ def showFrontlineExchangePrestigePoints(ctx):
     if result:
         exchangePrestigePoints()
     __ctrl.showCustomScreen(FRONTLINE_SCREENS.REWARDS_SCREEN)
+
+
+def showNewYearMainView(loadingViewParams=None, *args, **kwargs):
+    from gui.impl.new_year.views.new_year_main_view import NewYearMainView
+    uiLoader = dependency.instance(IGuiLoader)
+    contentResId = R.views.lobby.new_year.views.new_year_main_view.NewYearMainView()
+    newYearView = uiLoader.windowsManager.getViewByLayoutID(contentResId)
+    if newYearView is not None:
+        newYearView.switchView(loadingViewParams, *args, **kwargs)
+    else:
+        g_eventBus.handleEvent(events.LoadUnboundViewEvent(contentResId, NewYearMainView, ScopeTemplates.LOBBY_SUB_SCOPE, loadingViewParams=loadingViewParams, *args, **kwargs), scope=EVENT_BUS_SCOPE.LOBBY)
+    return
+
+
+def showNewYearVehiclesView(*args, **kwargs):
+    from gui.impl.new_year.views.new_year_vehicles_view import NewYearVehiclesView
+    contentResId = R.views.lobby.new_year.views.new_year_vehicles_view.NewYearVehiclesView()
+    g_eventBus.handleEvent(events.LoadUnboundViewEvent(contentResId, NewYearVehiclesView, ScopeTemplates.LOBBY_SUB_SCOPE, *args, **kwargs), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showNewYearInfoPage():
+    url = GUI_SETTINGS.newYearInfo.get('baseURL')
+    if url is None:
+        _logger.error('newYearInfo.baseURL is missed')
+    showBrowserOverlayView(url, alias=VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW)
+    return

@@ -447,36 +447,36 @@ class DualGunReload(CallbackDelayer):
         CallbackDelayer.__init__(self)
         self.__desc = effectDesc
         self.__sound = None
+        self.__ammoLowSound = None
         return
 
     def __del__(self):
-        if self.__sound is not None:
-            self.__sound.stop()
-            self.__sound = None
+        self.stop()
         CallbackDelayer.destroy(self)
-        return
 
     def start(self, shellReloadTime, ammoLow, directTrigger=False):
         if gEffectsDisabled() or not directTrigger:
             return
         else:
             self.stopCallback(self.__onReloadStart)
-            if self.__sound is not None:
-                self.__sound.stop()
-            if ammoLow:
-                timeToStart = shellReloadTime - self.__desc.runTimeDeltaAmmoLow
-                self.__sound = SoundGroups.g_instance.getSound2D(self.__desc.ammoLowSound)
-            else:
-                timeToStart = shellReloadTime - self.__desc.runTimeDelta
+            timeToStart = shellReloadTime - self.__desc.runTimeDelta
+            if self.__sound is None:
                 self.__sound = SoundGroups.g_instance.getSound2D(self.__desc.soundEvent)
             if timeToStart > 0:
                 self.delayCallback(timeToStart, self.__onReloadStart, BigWorld.time() + timeToStart)
+            if ammoLow:
+                timeToStart = shellReloadTime - self.__desc.runTimeDeltaAmmoLow
+                self.__ammoLowSound = SoundGroups.g_instance.getSound2D(self.__desc.ammoLowSound)
+                self.delayCallback(timeToStart, self.__onAmmoLow, BigWorld.time() + timeToStart)
             return
 
     def stop(self):
-        if self.__sound is not None:
-            self.__sound.stop()
+        for sound in (self.__sound, self.__ammoLowSound):
+            if sound is not None:
+                sound.stop()
+
         self.__sound = None
+        self.__ammoLowSound = None
         self.stopCallback(self.__onReloadStart)
         return
 
@@ -490,4 +490,16 @@ class DualGunReload(CallbackDelayer):
                 if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
                     return
                 self.__sound.play()
+            return
+
+    def __onAmmoLow(self, time):
+        if fabs(time - BigWorld.time()) > 0.1:
+            return
+        else:
+            if self.__ammoLowSound is not None:
+                import BattleReplay
+                replayCtrl = BattleReplay.g_replayCtrl
+                if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
+                    return
+                self.__ammoLowSound.play()
             return

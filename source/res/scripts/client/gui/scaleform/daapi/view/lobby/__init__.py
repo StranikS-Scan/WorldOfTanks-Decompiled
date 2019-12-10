@@ -85,6 +85,8 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.bootcamp.BCBattleResult import BCBattleResult
     from gui.Scaleform.daapi.view.bootcamp.BCVehiclePreview import BCVehiclePreview
     from gui.Scaleform.daapi.view.lobby.vehiclePreview20.style_preview import VehicleStylePreview
+    from gui.impl.new_year.views.new_year_select_vehicle_popover import NewYearSelectVehiclePopover
+    from gui.Scaleform.daapi.view.lobby.loot_box_shop import LootBoxShopOverlay
     return (ViewSettings(VIEW_ALIAS.LOBBY, LobbyView, 'lobbyPage.swf', ViewTypes.DEFAULT, None, ScopeTemplates.DEFAULT_SCOPE, False, (ContainerSettings(ViewTypes.LOBBY_SUB, containers.DefaultContainer), ContainerSettings(ViewTypes.LOBBY_TOP_SUB, containers.PopUpContainer))),
      ViewSettings(VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW, LobbyVehicleMarkerView, 'lobbyVehicleMarkerView.swf', ViewTypes.MARKER, VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BATTLE_QUEUE, BattleQueue, 'battleQueue.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.BATTLE_QUEUE, ScopeTemplates.DEFAULT_SCOPE),
@@ -146,8 +148,10 @@ def getViewSettings():
      GroupedViewSettings(VIEW_ALIAS.CRYSTALS_PROMO_WINDOW, CrystalsPromoWindow, 'crystalsPromoWindow.swf', ViewTypes.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.GET_PREMIUM_POPOVER, GetPremiumPopover, 'getPremiumPopover.swf', ViewTypes.TOP_WINDOW, 'getPremiumPopover', VIEW_ALIAS.GET_PREMIUM_POPOVER, ScopeTemplates.WINDOW_VIEWED_MULTISCOPE),
      GroupedViewSettings(VIEW_ALIAS.TRADEIN_POPOVER, TradeInPopup, 'TradeInPopover.swf', ViewTypes.TOP_WINDOW, 'TradeInPopover', VIEW_ALIAS.TRADEIN_POPOVER, ScopeTemplates.TOP_WINDOW_SCOPE),
+     GroupedViewSettings(VIEW_ALIAS.NY_SELECT_VEHICLE_POPOVER, NewYearSelectVehiclePopover, 'NYSelectVehiclePopover.swf', ViewTypes.TOP_WINDOW, VIEW_ALIAS.NY_SELECT_VEHICLE_POPOVER, VIEW_ALIAS.NY_SELECT_VEHICLE_POPOVER, ScopeTemplates.TOP_WINDOW_SCOPE),
      ViewSettings(VIEW_ALIAS.REFERRAL_PROGRAM_WINDOW, BrowserView, 'browserScreen.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE, True),
      ViewSettings(VIEW_ALIAS.BADGES_PAGE, BadgesPage, 'badgesPage.swf', ViewTypes.LOBBY_TOP_SUB, VIEW_ALIAS.BADGES_PAGE, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ViewSettings(VIEW_ALIAS.LOOT_BOX_SHOP_OVERLAY, LootBoxShopOverlay, 'browserScreen.swf', ViewTypes.OVERLAY, VIEW_ALIAS.BROWSER_OVERLAY, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.CALENDAR, CalendarComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.MINIMAP_LOBBY, MinimapLobby, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.MINIMAP_GRID, MinimapGrid, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
@@ -205,13 +209,23 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.VEHICLE_SELL_DIALOG, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_INFO_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.SANDBOX_QUEUE_DIALOG, self.loadViewBySharedEvent),
+         (VIEW_ALIAS.ADVENT_CALENDAR, self.showAdventCalendarWindow),
          (VIEW_ALIAS.MISSION_AWARD_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.ACOUSTIC_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.TRADEIN_POPOVER, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.NY_SELECT_VEHICLE_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.CRYSTALS_PROMO_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BADGES_PAGE, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.UNBOUND_INJECT_WINDOW, self.loadViewByCtxEvent))
+         (VIEW_ALIAS.UNBOUND_INJECT_WINDOW, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.LOOT_BOX_SHOP_OVERLAY, self.loadViewByCtxEvent))
         super(LobbyPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
+
+    def showAdventCalendarWindow(self, event):
+        if self.findViewByName(ViewTypes.WINDOW, event.name) is not None:
+            self.bringViewToFront(event.name)
+        else:
+            self.loadViewByCtxEvent(event)
+        return
 
 
 class LobbyDialogsHandler(PackageBusinessHandler):

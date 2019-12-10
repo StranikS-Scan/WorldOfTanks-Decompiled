@@ -47,7 +47,7 @@ def makeNationalCD(vehicleCD):
     return toIntFragmentCD(NationalBlueprintFragment(vehicleCD))
 
 
-def getUniqueBlueprints(blueprints):
+def getUniqueBlueprints(blueprints, isFullNationCD=False):
     vehicleFragments = defaultdict(int)
     nationalFragments = defaultdict(int)
     intelligenceData = 0
@@ -56,7 +56,8 @@ def getUniqueBlueprints(blueprints):
         if fragmentType == BlueprintTypes.VEHICLE:
             vehicleFragments[getVehicleCD(fragmentCD)] += count
         if fragmentType == BlueprintTypes.NATIONAL:
-            nationalFragments[getFragmentNationID(fragmentCD)] += count
+            nationID = fragmentCD & 255 if isFullNationCD else getFragmentNationID(fragmentCD)
+            nationalFragments[nationID] += count
         if fragmentType == BlueprintTypes.INTELLIGENCE_DATA:
             intelligenceData += count
 

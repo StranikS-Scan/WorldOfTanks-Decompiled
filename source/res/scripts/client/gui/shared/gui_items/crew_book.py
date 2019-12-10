@@ -56,10 +56,15 @@ class CrewBook(FittingItem):
         return CREW_BOOK_RARITY.ORDER[self.getBookType()]
 
     def getBookSpread(self):
-        return CREW_BOOK_SPREAD.PERSONAL_BOOK if self.isPersonal() else CREW_BOOK_SPREAD.CREW_BOOK
+        if self.isPersonal():
+            return CREW_BOOK_SPREAD.PERSONAL_BOOK
+        return CREW_BOOK_SPREAD.CREW_BOOK_NO_NATION if self.getNationID() == nations.NONE_INDEX else CREW_BOOK_SPREAD.CREW_BOOK
 
     def isPersonal(self):
         return self.getBookType() == CREW_BOOK_RARITY.PERSONAL
+
+    def hasNoNation(self):
+        return self.getBookType() in CREW_BOOK_RARITY.NO_NATION_TYPES
 
     def getFreeCount(self):
         return 0 if not self.__count else self.__count
@@ -82,7 +87,7 @@ class CrewBook(FittingItem):
 
     def getBonusIconName(self):
         iconName = self.getBookType()
-        if not self.isPersonal():
+        if not self.hasNoNation():
             iconName += '_' + self.getNation()
         return iconName
 
@@ -108,7 +113,7 @@ class CrewBook(FittingItem):
     @property
     def userName(self):
         params = {}
-        if not self.isPersonal():
+        if self.nationID != nations.NONE_INDEX:
             params['nation'] = backport.text(R.strings.nations.dyn(self.getNation())())
         return backport.text(R.strings.crew_books.items.dyn(self.getBookType()).Name(), **params)
 

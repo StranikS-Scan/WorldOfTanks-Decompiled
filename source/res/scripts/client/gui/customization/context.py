@@ -134,6 +134,7 @@ class CustomizationContext(object):
         self._autoRentChangeSource = CLIENT_COMMAND_SOURCES.UNDEFINED
         self._carouselItems = None
         self.__prolongStyleRent = False
+        self._exitCallback = None
         self.onCustomizationSeasonChanged = Event.Event(self._eventsManager)
         self.onCustomizationModeChanged = Event.Event(self._eventsManager)
         self.onCustomizationTabChanged = Event.Event(self._eventsManager)
@@ -161,6 +162,7 @@ class CustomizationContext(object):
         self.onStyleInfoHidden = Event.Event(self._eventsManager)
         self.onLocateToStyleInfo = Event.Event(self._eventsManager)
         self.onCustomizationItemDataChanged = Event.Event(self._eventsManager)
+        self.onStylePreview = Event.Event(self._eventsManager)
         self.onClearItem = Event.Event(self._eventsManager)
         self.onProlongStyleRent = Event.Event(self._eventsManager)
         self.onChangeAutoRent = Event.Event(self._eventsManager)
@@ -176,9 +178,13 @@ class CustomizationContext(object):
         self.onAnchorUnhovered = Event.Event(self._eventsManager)
         self.onAnchorsStateChanged = Event.Event(self._eventsManager)
         g_currentVehicle.onChangeStarted += self.__onChangeStarted
+        self.onCloseWindow = Event.Event(self._eventsManager)
         g_currentVehicle.onChanged += self.__onVehicleChanged
         self._storedPersonalNumber = None
         return
+
+    def getExitCallback(self):
+        return self._exitCallback
 
     def setCarouselItems(self, carouselItems):
         self._carouselItems = carouselItems
@@ -807,6 +813,7 @@ class CustomizationContext(object):
         nextTick(partial(self.onCustomizationItemSold, item=item, count=count))()
 
     def init(self):
+        g_currentVehicle.onChanged += self.__onVehicleChanged
         if not g_currentVehicle.isPresent():
             raise SoftException('There is not vehicle in hangar for customization.')
         self._autoRentEnabled = g_currentVehicle.item.isAutoRentStyle
@@ -1173,6 +1180,11 @@ class CustomizationContext(object):
 
             return
             return
+
+    def previewStyle(self, style, exitCallback=None):
+        self.switchToStyle()
+        self.onShowStyleInfo(style)
+        self._exitCallback = exitCallback
 
     def __manageStoredPersonalNumber(self, slotData, item):
         if slotData.item.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER and item.itemTypeID == GUI_ITEM_TYPE.INSCRIPTION:

@@ -4802,7 +4802,7 @@ def _readGunDualGunParams(xmlCtx, section):
     if subSection is None:
         return
     else:
-        res = component_constants.DualGun(chargeTime=_xml.readNonNegativeFloat(xmlCtx, subSection, 'chargeTime'), shootImpulse=_xml.readNonNegativeInt(xmlCtx, subSection, 'shootImpulse'), reloadLockTime=_xml.readNonNegativeFloat(xmlCtx, subSection, 'reloadLockTime'), reloadTimes=_xml.readTupleOfPositiveFloats(xmlCtx, subSection, 'reloadTimes'), rateTime=_xml.readNonNegativeFloat(xmlCtx, subSection, 'rateTime'), chargeThreshold=_xml.readNonNegativeFloat(xmlCtx, subSection, 'chargeThreshold'), afterShotDelay=_xml.readNonNegativeFloat(xmlCtx, subSection, 'afterShotDelay'), preChargeIndication=_xml.readNonNegativeFloat(xmlCtx, subSection, 'preChargeIndication'), chargeCancelTime=_xml.readNonNegativeFloat(xmlCtx, subSection, 'chargeCancelTime'))
+        res = component_constants.DualGun(chargeTime=_xml.readNonNegativeFloat(xmlCtx, subSection, 'chargeTime'), shootImpulse=_xml.readNonNegativeInt(xmlCtx, subSection, 'shootImpulse'), reloadLockTime=_xml.readNonNegativeFloat(xmlCtx, subSection, 'reloadLockTime'), reloadTimes=_xml.readTupleOfPositiveFloats(xmlCtx, subSection, 'reloadTimes'), rateTime=_xml.readNonNegativeFloat(xmlCtx, subSection, 'rateTime'), chargeThreshold=_xml.readNonNegativeFloat(xmlCtx, subSection, 'chargeThreshold'), afterShotDelay=_xml.readNonNegativeFloat(xmlCtx, subSection, 'afterShotDelay'), preChargeIndication=_xml.readNonNegativeFloat(xmlCtx, subSection, 'preChargeIndication'), chargeCancelTime=_xml.readNonNegativeFloat(xmlCtx, subSection, 'chargeCancelTime', 0.2))
         return res
 
 

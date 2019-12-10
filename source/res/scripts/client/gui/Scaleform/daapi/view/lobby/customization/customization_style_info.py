@@ -97,6 +97,9 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
             self.__installStyle(self.__prevStyle)
         self.__prevStyle = None
         self.__ctx.onClearItem()
+        exitCallback = self.__ctx.getExitCallback()
+        if exitCallback:
+            exitCallback.close()
         return
 
     def onApply(self):
@@ -104,6 +107,9 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
         self.__blur.removeRect(_STYLE_INFO_BLUR_RECTANGLE_ID)
         self.service.setDOFenabled(False)
         self.__visible = False
+        exitCallback = self.__ctx.getExitCallback()
+        if exitCallback:
+            exitCallback.apply()
 
     def hide(self):
         self.stopCallback(self.__enableBlur)

@@ -247,18 +247,15 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
          'inFormationAlert': inFormationAlert,
          'totalPrice': totalPriceVO[0],
          'prolongationCondition': rentalInfoText})
-        self.__setBuyButtonState(validTransaction, inGameShopOn)
+        self.__setBuyButtonState(validTransaction, inGameShopOn, cart.numBought, cart.numSelected)
 
-    def __setBuyButtonState(self, validTransaction, inGameShopOn):
-        purchase = 1 if self.__isStyle else 0
-        purchase += sum([ self.__counters[season][0] for season in SeasonType.COMMON_SEASONS ])
-        inventory = sum([ self.__counters[season][1] for season in SeasonType.COMMON_SEASONS ])
+    def __setBuyButtonState(self, validTransaction, inGameShopOn, boughtNumber, selectedNumber):
         tooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_BUYDISABLED_BODY
-        if purchase > 0:
+        if boughtNumber > 0:
             label = VEHICLE_CUSTOMIZATION.WINDOW_PURCHASE_BTNBUY
         else:
             label = VEHICLE_CUSTOMIZATION.WINDOW_PURCHASE_BTNAPPLY
-        isAnySelected = purchase + inventory > 0
+        isAnySelected = selectedNumber > 0
         if not isAnySelected:
             label = ''
             tooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_NOTSELECTEDITEMS

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehiclePreview20/vehicle_preview_buying_panel.py
+import math
 import time
 from collections import namedtuple
 import BigWorld
@@ -19,6 +20,7 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
+from gui.game_control import CalendarInvokeOrigin
 from gui.game_control.wallet import WalletController
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.impl import backport
@@ -44,7 +46,7 @@ from helpers.i18n import makeString as _ms
 from items_kit_helper import lookupItem, BOX_TYPE, showItemTooltip
 from items_kit_helper import OFFER_CHANGED_EVENT, getActiveOffer, mayObtainForMoney, mayObtainWithMoneyExchange
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.game_control import IVehicleComparisonBasket, ICalendarController
 from skeletons.gui.game_control import ITradeInController, IRestoreController, IHeroTankController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
@@ -86,19 +88,24 @@ class _CouponData(object):
         return self.__discount
 
 
+def _buildRestoreButtonTooltip(key, timeLeft):
+    return makeTooltip(header=TOOLTIPS.vehiclepreview_buybutton_all(key, 'header'), body=backport.text(R.strings.tooltips.vehiclePreview.buyButton.dyn(key).dyn('body')(), days=int(math.ceil(timeLeft / 86400))))
+
+
 class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
+    appLoader = dependency.descriptor(IAppLoader)
     _itemsCache = dependency.descriptor(IItemsCache)
     _goodiesCache = dependency.descriptor(IGoodiesCache)
     _comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
     _tradeIn = dependency.descriptor(ITradeInController)
     _restores = dependency.descriptor(IRestoreController)
-    _heroTanksControl = dependency.descriptor(IHeroTankController)
+    _heroTanks = dependency.descriptor(IHeroTankController)
     _lobbyContext = dependency.descriptor(ILobbyContext)
-    appLoader = dependency.descriptor(IAppLoader)
+    __calendarController = dependency.descriptor(ICalendarController)
 
     def __init__(self, skipConfirm=False):
         super(VehiclePreviewBuyingPanel, self).__init__()
-        heroTankCD = self._heroTanksControl.getCurrentTankCD()
+        heroTankCD = self._heroTanks.getCurrentTankCD()
         self._vehicleCD = g_currentPreviewVehicle.item.intCD
         self._vehicleLevel = g_currentPreviewVehicle.item.level
         self._actionType = None
@@ -257,6 +264,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
          'serverSettings.blueprints_config': self.__onBlueprintsModeChanged})
         g_currentPreviewVehicle.onVehicleUnlocked += self.__updateBtnState
         g_currentPreviewVehicle.onChanged += self.__onVehicleChanged
+        self._heroTanks.onUpdated += self.__updateBtnState
         self._restores.onRestoreChangeNotify += self.__onRestoreChanged
         self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
         self.addListener(CameraRelatedEvents.VEHICLE_LOADING, self.__onVehicleLoading)
@@ -265,6 +273,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         g_clientUpdateManager.removeObjectCallbacks(self)
         g_currentPreviewVehicle.onVehicleUnlocked -= self.__updateBtnState
         g_currentPreviewVehicle.onChanged -= self.__onVehicleChanged
+        self._heroTanks.onUpdated -= self.__updateBtnState
         self._restores.onRestoreChangeNotify -= self.__onRestoreChanged
         self._lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
         self.removeListener(CameraRelatedEvents.VEHICLE_LOADING, self.__onVehicleLoading)
@@ -325,7 +334,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
                     g_currentPreviewVehicle.previewStyle(style)
             return
 
-    def __updateBtnState(self, *args):
+    def __updateBtnState(self, *_):
         item = g_currentPreviewVehicle.item
         if item is None:
             return
@@ -342,7 +351,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
             self.as_setBuyDataS(buyingPanelData)
             return
 
-    def __onVehicleChanged(self, *args):
+    def __onVehicleChanged(self, *_):
         if g_currentPreviewVehicle.isPresent():
             self._vehicleCD = g_currentPreviewVehicle.item.intCD
             if not self.__price:
@@ -422,6 +431,8 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
             buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.restore())
         elif priceType == ActualPrice.RENT_PRICE:
             buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.rent())
+        elif self.__isHeroTank and self._heroTanks.isAdventHero():
+            buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.toCalendar())
         else:
             buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.buy())
         isAction = False
@@ -444,7 +455,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
             elif not mayObtain and isBuyingAvailable:
                 notEnoughMoneyTooltip = _buildBuyButtonTooltip('notEnoughCredits')
                 isMoneyEnough = False
-        if self._disableBuyButton:
+        if self._disableBuyButton or self.__isHeroTank and self._vehicleCD != self._heroTanks.getCurrentTankCD():
             mayObtain = False
             isMoneyEnough = False
         return _ButtonState(enabled=mayObtain, itemPrice=itemPrice, label=buttonLabel, isAction=isAction, actionTooltip=actionTooltip, tooltip=notEnoughMoneyTooltip, title=self.__title, isMoneyEnough=isMoneyEnough, isUnlock=False, isPrevItemsUnlock=True)
@@ -571,11 +582,14 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         event_dispatcher.showVehicleBuyDialog(vehicle)
 
     def __purchaseHeroTank(self):
-        ingameshopUrl = self._heroTanksControl.getCurrentIngameshopUrl()
+        if self._heroTanks.isAdventHero():
+            self.__calendarController.showWindow(invokedFrom=CalendarInvokeOrigin.HANGAR)
+            return
+        ingameshopUrl = self._heroTanks.getCurrentIngameshopUrl()
         if ingameshopUrl:
             event_dispatcher.showWebShop(ingameshopUrl)
         else:
-            url = self._heroTanksControl.getCurrentRelatedURL()
+            url = self._heroTanks.getCurrentRelatedURL()
             self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.SPECIFIED, url=url))
 
     def __research(self):

@@ -259,6 +259,7 @@ def fini():
     global g_scenario
     LOG_DEBUG('fini')
     if OfflineMode.enabled():
+        dependency.clear()
         return
     elif LightingGenerationMode.enabled():
         return

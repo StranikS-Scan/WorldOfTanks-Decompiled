@@ -10,6 +10,7 @@ from skeletons.gui.shared.utils.requesters import ITokensRequester
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.gui.lobby_context import ILobbyContext
 _logger = logging.getLogger(__name__)
+TOTAL_KEY = 'total'
 
 class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
@@ -51,9 +52,9 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
             boxType = box.getType()
             boxCount = box.getInventoryCount()
             boxCategory = box.getCategory()
-            boxResult = result.setdefault(boxType, {'total': 0,
+            boxResult = result.setdefault(boxType, {TOTAL_KEY: 0,
              'categories': {}})
-            boxResult['total'] += boxCount
+            boxResult[TOTAL_KEY] += boxCount
             categories = boxResult['categories']
             categories[boxCategory] = categories.get(boxCategory, 0) + boxCount
 

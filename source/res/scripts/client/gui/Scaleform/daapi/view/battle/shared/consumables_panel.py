@@ -108,6 +108,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         else:
             self.__reloadTicker = None
         self.delayedReload = None
+        self.__delayedNextShellID = None
         return
 
     def onClickedToSlot(self, bwKey):
@@ -377,6 +378,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
 
     def __onNextShellChanged(self, intCD):
         if intCD in self.__cds:
+            self.__delayedNextShellID = intCD
             self.as_setNextShellS(self.__cds.index(intCD))
         else:
             LOG_ERROR('Ammo is not found in panel', intCD, self.__cds)
@@ -394,7 +396,11 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         leftTimeDelayed = state.getActualValue() - self.delayedReload
         baseTimeDelayed = state.getBaseValue() - self.delayedReload
         if leftTimeDelayed > 0 and baseTimeDelayed > 0:
-            self.as_setCoolDownTimeS(shellIndex, leftTimeDelayed, baseTimeDelayed, 0, not state.isReloadingFinished())
+            shellReload = shellIndex
+            if self.__delayedNextShellID is not None:
+                shellReload = self.__cds.index(self.__delayedNextShellID)
+                self.__delayedNextShellID = None
+            self.as_setCoolDownTimeS(shellReload, leftTimeDelayed, baseTimeDelayed, 0, not state.isReloadingFinished())
         else:
             LOG_ERROR('Incorrect delayed reload timings', leftTimeDelayed, baseTimeDelayed)
         self.delayedReload = None
@@ -530,6 +536,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         self.__keys.clear()
         self.__currentActivatedSlotIdx = -1
         self.delayedReload = None
+        self.__delayedNextShellID = None
         self.as_resetS()
         return
 

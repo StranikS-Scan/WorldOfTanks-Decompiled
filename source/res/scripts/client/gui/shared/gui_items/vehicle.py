@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/Vehicle.py
 import math
 import random
+import typing
 from itertools import izip
 from operator import itemgetter
 from collections import namedtuple
@@ -11,9 +12,9 @@ from AccountCommands import LOCK_REASON, VEHICLE_SETTINGS_FLAG, VEHICLE_EXTRA_SE
 from account_shared import LayoutIterator
 from constants import WIN_XP_FACTOR_MODE, RentType
 from gui.impl import backport
-from gui.impl.gen import R
 from rent_common import parseRentID
 from gui import makeHtmlString
+from gui.impl.gen import R
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -41,6 +42,9 @@ from skeletons.gui.game_control import IIGRController, IRentalsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from nation_change.nation_change_helpers import hasNationGroup, iterVehTypeCDsInNationGroup
+from skeletons.new_year import INewYearController
+if typing.TYPE_CHECKING:
+    from skeletons.gui.shared import IItemsRequester
 
 class VEHICLE_CLASS_NAME(CONST_CONTAINER):
     LIGHT_TANK = 'lightTank'
@@ -162,6 +166,7 @@ class Vehicle(FittingItem):
     lobbyContext = dependency.descriptor(ILobbyContext)
     eventsCache = dependency.descriptor(IEventsCache)
     igrCtrl = dependency.descriptor(IIGRController)
+    nyController = dependency.descriptor(INewYearController)
 
     def __init__(self, strCompactDescr=None, inventoryID=-1, typeCompDescr=None, proxy=None):
         if strCompactDescr is not None:
@@ -202,7 +207,7 @@ class Vehicle(FittingItem):
         invData = dict()
         tradeInData = None
         if proxy is not None and proxy.inventory.isSynced() and proxy.stats.isSynced() and proxy.shop.isSynced() and proxy.vehicleRotation.isSynced() and proxy.recycleBin.isSynced():
-            invDataTmp = proxy.inventory.getItems(GUI_ITEM_TYPE.VEHICLE, inventoryID)
+            invDataTmp = proxy.inventory.getItems(GUI_ITEM_TYPE.VEHICLE, self._inventoryID)
             if invDataTmp is not None:
                 invData = invDataTmp
             tradeInData = proxy.shop.tradeIn
@@ -890,11 +895,13 @@ class Vehicle(FittingItem):
         newItems = proxy.inventory.getC11nItemsNoveltyCounters(self._descriptor.type)
         return newItems.get(item.intCD, 0)
 
-    def getC11nItemsNoveltyCounter(self, proxy, itemTypes=None, season=None):
+    def getC11nItemsNoveltyCounter(self, proxy, itemTypes=None, season=None, itemFilter=None):
         count = 0
         newItems = proxy.inventory.getC11nItemsNoveltyCounters(self._descriptor.type)
         for itemCD, qtyItems in newItems.iteritems():
             item = proxy.getItemByCD(itemCD)
+            if itemFilter is not None and not itemFilter(item):
+                continue
             if (itemTypes is None or item.itemTypeID in itemTypes) and (season is None or item.season & season):
                 count += qtyItems
 
@@ -1402,6 +1409,11 @@ class Vehicle(FittingItem):
             if camo:
                 return camo
 
+        outfit = self.getNewYearOutfit()
+        if outfit:
+            camo = outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).getItem()
+            if camo:
+                return camo
         return None
 
     def getAnyOutfitSeason(self):
@@ -1426,6 +1438,17 @@ class Vehicle(FittingItem):
 
     def isRecentlyRestored(self):
         return self.isPurchased and self.restoreInfo.isInCooldown() if self.restoreInfo is not None else False
+
+    def getNewYearOutfit(self):
+        outfit = self._customOutfits.get(SeasonType.EVENT)
+        if self.nyController.checkNyOutfit(outfit):
+            styleIntCD = vehicles.makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, outfit.id)
+            style = vehicles.getItemByCompactDescr(styleIntCD)
+            outfitComp = style.outfits.get(SeasonType.EVENT)
+            nyOutfit = self.itemsFactory.createOutfit(component=outfitComp, isEnabled=outfit.isEnabled(), isInstalled=outfit.isInstalled())
+            return nyOutfit
+        else:
+            return None
 
     def __cmp__(self, other):
         if self.isRestorePossible() and not other.isRestorePossible():

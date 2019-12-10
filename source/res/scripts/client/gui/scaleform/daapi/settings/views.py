@@ -127,6 +127,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     SQUAD_TYPE_SELECT_POPOVER = 'squadTypeSelectPopover'
     ACCOUNT_POPOVER = 'accountPopover'
     TRADEIN_POPOVER = 'TradeInPopover'
+    NY_SELECT_VEHICLE_POPOVER = 'NYSelectVehiclePopover'
     ACOUSTIC_POPOVER = 'acousticPopover'
     DISMISS_TANKMAN_DIALOG = 'dismissTankmanDialog'
     RESTORE_TANKMAN_DIALOG = 'restoreTankmanDialog'
@@ -227,6 +228,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     FEEDBACK_DAMAGE_INDICATOR = 'feedbackDamageIndicator'
     FEEDBACK_BATTLE_BORDER_MAP = 'feedbackBattleBorderMap'
     FEEDBACK_QUESTS_PROGRESS = 'feedbackQuestsProgress'
+    LOOT_BOX_SHOP_OVERLAY = 'overlayBrowserLootBoxShop'
     LOADINGS = (BATTLE_LOADING, TUTORIAL_LOADING)
     BATTLE_PAGES = (CLASSIC_BATTLE_PAGE,
      TUTORIAL_BATTLE_PAGE,

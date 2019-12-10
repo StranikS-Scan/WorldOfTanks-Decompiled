@@ -54,7 +54,7 @@ class _CrewBooksViewedCache(object):
     def addViewedItems(self, nationID):
         if self.__needUpdate:
             for bookType, count in self.__booksCountByNation.iteritems():
-                if bookType == CREW_BOOK_RARITY.PERSONAL:
+                if bookType in CREW_BOOK_RARITY.NO_NATION_TYPES:
                     self.__viewedItems[bookType] = count
                 self.__viewedItems[bookType][nationID] = count[nationID]
 
@@ -68,8 +68,9 @@ class _CrewBooksViewedCache(object):
         else:
             currentNation = vehicle.nationID
             for bookType, count in self.__booksCountByNation.iteritems():
-                if bookType == CREW_BOOK_RARITY.PERSONAL:
-                    if self.__viewedItems[bookType] < count:
+                if bookType in CREW_BOOK_RARITY.NO_NATION_TYPES:
+                    viewedCount = self.__viewedItems.setdefault(bookType, 0)
+                    if viewedCount < count:
                         self.__needUpdate = True
                         return True
                 if self.__viewedItems[bookType].setdefault(currentNation, 0) < count[currentNation]:
@@ -86,7 +87,7 @@ class _CrewBooksViewedCache(object):
                 item = tankmen.getItemByCompactDescr(cd)
                 if count is None:
                     count = 0
-                if item.type == CREW_BOOK_RARITY.PERSONAL:
+                if item.type in CREW_BOOK_RARITY.NO_NATION_TYPES:
                     self.__booksCountByNation[item.type] = count
                 self.__booksCountByNation[item.type][self.__getNationID(item.nation)] = count
 
@@ -107,7 +108,7 @@ class _CrewBooksViewedCache(object):
         items = self._itemsCache.items.getItems(GUI_ITEM_TYPE.CREW_BOOKS, REQ_CRITERIA.CREW_ITEM.IN_ACCOUNT)
         for item in items.itervalues():
             bookType = item.getBookType()
-            if bookType == CREW_BOOK_RARITY.PERSONAL:
+            if bookType in CREW_BOOK_RARITY.NO_NATION_TYPES:
                 self.__booksCountByNation[bookType] = item.getFreeCount()
             self.__booksCountByNation[bookType][item.getNationID()] = item.getFreeCount()
 

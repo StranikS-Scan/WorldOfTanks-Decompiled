@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/tooltips/element.py
-from CurrentVehicle import g_currentVehicle
+from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from gui.Scaleform.daapi.view.lobby.customization.shared import getItemInventoryCount, getItemAppliedCount, makeVehiclesShortNamesString, getSuitableText
 from gui.customization.shared import SEASON_TYPE_TO_NAME
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
@@ -134,7 +134,8 @@ class ElementTooltip(BlocksTooltipData):
         self.bonusDescription = VEHICLE_CUSTOMIZATION.BONUS_CONDITION_SEASON
         topBlocks = [self._packTitleBlock(), self._packIconBlock(self._item.isHistorical(), self._item.isDim())]
         items = [formatters.packBuildUpBlockData(blocks=topBlocks, gap=10)]
-        self.currentVehicle = g_currentVehicle.item
+        isInPreview = g_currentPreviewVehicle.isPresent()
+        self.currentVehicle = g_currentPreviewVehicle.item if isInPreview else g_currentVehicle.item
         self.boundVehs = [ vehicleCD for vehicleCD in self._item.boundInventoryCount if vehicleCD != -1 ]
         self.installedToVehs = self._item.getInstalledVehicles()
         if self.currentVehicle is not None:
@@ -144,9 +145,10 @@ class ElementTooltip(BlocksTooltipData):
         camo = None
         self._appliedCount = 0
         bonusEnabled = False
+        isApplied = False
         if self._item.itemTypeID != GUI_ITEM_TYPE.STYLE:
             bonus = self._item.bonus
-            if self.__ctx is not None:
+            if self.__ctx is not None and not isInPreview:
                 self._appliedCount = getItemAppliedCount(self._item, self.__ctx.getOutfitsInfo())
                 hullContainer = self.__ctx.currentOutfit.hull
                 bonusEnabled = hullContainer.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).getItem() == self._item
@@ -160,7 +162,7 @@ class ElementTooltip(BlocksTooltipData):
             else:
                 bonus = None
 
-            if self.__ctx is not None:
+            if self.__ctx is not None and not isInPreview:
                 originalStyle = self.__ctx.originalStyle
                 modifiedStyle = self.__ctx.modifiedStyle
                 if modifiedStyle:
@@ -237,9 +239,11 @@ class ElementTooltip(BlocksTooltipData):
             else:
                 specials.append(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_BOUND_SPECIAL_TEXT))
         if self._item.isLimited:
-            purchaseLimit = self.__ctx.getPurchaseLimit(self._item) if self.__ctx is not None else self._item.buyCount
-            if self._item.buyCount > 0 and (purchaseLimit > 0 or self._appliedCount > 0):
-                specials.append(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_LIMITED_SPECIAL_RULES_TEXT, available=text_styles.neutral(purchaseLimit)))
+            isInPreview = g_currentPreviewVehicle.isPresent()
+            if not isInPreview:
+                purchaseLimit = self.__ctx.getPurchaseLimit(self._item) if self.__ctx is not None else self._item.buyCount
+                if self._item.buyCount > 0 and (purchaseLimit > 0 or self._appliedCount > 0):
+                    specials.append(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_LIMITED_SPECIAL_RULES_TEXT, available=text_styles.neutral(purchaseLimit)))
         if not specials:
             return
         else:

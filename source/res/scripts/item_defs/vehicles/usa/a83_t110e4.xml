@@ -55,6 +55,13 @@
       <undamaged>	vehicles/american/A83_T110E4/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/american/A83_T110E4/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/american/A83_T110E4/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <NY_3Dst>
+          <undamaged>	vehicles/american/A83_T110E4/_skins/NY_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A83_T110E4/_skins/NY_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A83_T110E4/_skins/NY_3Dst/crash/lod0/Hull.model	</exploded>
+        </NY_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -78,8 +85,8 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.0265929 0.594795 3.03016	</rayStart>
-        <rayEnd>	0.00574188 0.0517824 2.77579	</rayEnd>
+        <rayStart>	-0.626111 0.619534 2.40293	</rayStart>
+        <rayEnd>	-0.525574 0.0444532 2.26446	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
@@ -620,6 +627,13 @@
         <undamaged>	vehicles/american/A83_T110E4/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A83_T110E4/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/american/A83_T110E4/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <NY_3Dst>
+            <undamaged>	vehicles/american/A83_T110E4/_skins/NY_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A83_T110E4/_skins/NY_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A83_T110E4/_skins/NY_3Dst/crash/lod0/Chassis.model	</exploded>
+          </NY_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1668,6 +1682,13 @@
             <undamaged>	vehicles/american/A83_T110E4/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A83_T110E4/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/american/A83_T110E4/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <NY_3Dst>
+                <undamaged>	vehicles/american/A83_T110E4/_skins/NY_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/american/A83_T110E4/_skins/NY_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/american/A83_T110E4/_skins/NY_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </NY_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A83_T110E4/collision/Gun_01.model	</collisionModelServer>
@@ -1725,6 +1746,13 @@
         <undamaged>	vehicles/american/A83_T110E4/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/american/A83_T110E4/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/american/A83_T110E4/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <NY_3Dst>
+            <undamaged>	vehicles/american/A83_T110E4/_skins/NY_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A83_T110E4/_skins/NY_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A83_T110E4/_skins/NY_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </NY_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/american/A83_T110E4/collision/Turret_01.model	</collisionModelServer>

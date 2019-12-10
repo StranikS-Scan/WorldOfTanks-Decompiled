@@ -8,7 +8,7 @@ from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import InfoItemBase
 from gui.Scaleform.genConsts.SEASONS_CONSTANTS import SEASONS_CONSTANTS
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
-from gui.shared.money import Money, Currency
+from gui.shared.money import Currency, ZERO_MONEY
 from items.components.c11n_constants import CustomizationType, C11N_MASK_REGION, MAX_USERS_PROJECTION_DECALS, ProjectionDecalFormTags, SeasonType, ApplyArea, C11N_GUN_APPLY_REGIONS
 from shared_utils import CONST_CONTAINER, isEmpty
 from skeletons.gui.shared import IItemsCache
@@ -93,7 +93,7 @@ SEASON_TYPE_TO_IDX = {SeasonType.SUMMER: SEASONS_CONSTANTS.SUMMER_INDEX,
  SeasonType.WINTER: SEASONS_CONSTANTS.WINTER_INDEX,
  SeasonType.DESERT: SEASONS_CONSTANTS.DESERT_INDEX}
 SEASONS_ORDER = (SeasonType.SUMMER, SeasonType.WINTER, SeasonType.DESERT)
-CartInfo = namedtuple('CartInfo', 'totalPrice numSelected numApplying numTotal minPriceItem isAtLeastOneItemFromInventory isAtLeastOneItemDismantled')
+CartInfo = namedtuple('CartInfo', 'totalPrice numSelected numApplying numBought numTotal isAtLeastOneItemFromInventory isAtLeastOneItemDismantled')
 
 class MoneyForPurchase(object):
     NOT_ENOUGH = 0
@@ -251,27 +251,34 @@ def getVehiclePartByIdx(vehicle, partIdx):
 
 
 def getTotalPurchaseInfo(purchaseItems):
-    totalPrice = ITEM_PRICE_EMPTY
     numSelectedItems = 0
     numApplyingItems = 0
     isAtLeastOneItemFromInventory = False
     isAtLeastOneItemDismantled = False
-    minPriceItem = Money()
+    itemCartInfo = {}
     for purchaseItem in purchaseItems:
-        if not purchaseItem.isDismantling:
-            numApplyingItems += 1
-        else:
-            isAtLeastOneItemDismantled = True
-        if purchaseItem.selected and not purchaseItem.isDismantling:
-            numSelectedItems += 1
-            if not purchaseItem.isFromInventory:
-                totalPrice += purchaseItem.price
-                if not minPriceItem.isDefined() or purchaseItem.price.price < minPriceItem:
-                    minPriceItem = purchaseItem.price.price
+        if purchaseItem.item is not None:
+            itemCD = purchaseItem.item.intCD
+            if itemCD not in itemCartInfo.keys():
+                itemCartInfo.update({itemCD: {'totalPrice': ITEM_PRICE_EMPTY,
+                          'quantity': 0}})
+            if not purchaseItem.isDismantling:
+                numApplyingItems += 1
+                if purchaseItem.selected:
+                    numSelectedItems += 1
+                    itemCartInfo[itemCD]['totalPrice'] += purchaseItem.price
+                    itemCartInfo[itemCD]['quantity'] += 1
+                    if purchaseItem.isFromInventory:
+                        isAtLeastOneItemFromInventory = True
+                if purchaseItem.isFromInventory:
+                    itemCartInfo[itemCD]['totalPrice'] -= purchaseItem.price
+                    itemCartInfo[itemCD]['quantity'] -= 1
             else:
-                isAtLeastOneItemFromInventory = True
+                isAtLeastOneItemDismantled = True
 
-    return CartInfo(totalPrice, numSelectedItems, numApplyingItems, len(purchaseItems), minPriceItem, isAtLeastOneItemFromInventory, isAtLeastOneItemDismantled)
+    totalPrice = sum([ item['totalPrice'] for item in itemCartInfo.itervalues() if item['totalPrice'].price > ZERO_MONEY ], ITEM_PRICE_EMPTY)
+    numBoughtItems = sum((item['quantity'] for item in itemCartInfo.itervalues() if item['quantity'] > 0))
+    return CartInfo(totalPrice, numSelectedItems, numApplyingItems, numBoughtItems, len(purchaseItems), isAtLeastOneItemFromInventory, isAtLeastOneItemDismantled)
 
 
 def containsVehicleBound(purchaseItems):

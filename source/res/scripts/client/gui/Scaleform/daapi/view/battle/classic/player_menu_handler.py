@@ -256,7 +256,7 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
 
     def __isAppealsForTopicEnabled(self, topic):
         topicID = DENUNCIATIONS_MAP[topic]
-        return self.__denunciator.isAppealsForTopicEnabled(self.__userInfo.avatarSessionID, topicID, self.__arenaUniqueID)
+        return self.__denunciator.isAppealsForTopicEnabled(self.__vInfo.vehicleID, topicID, self.__arenaUniqueID)
 
     def __addDenunciationsInfo(self, options):
         make = self._makeItem

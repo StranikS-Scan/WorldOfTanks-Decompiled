@@ -524,6 +524,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__ctx.onResetC11nItemsNovelty += self.__onResetC11nItemsNovelty
         self.__ctx.onEditModeStarted += self.__onEditModeStarted
         self.__ctx.onGetItemBackToHand += self.__onGetItemBackToHand
+        self.__ctx.onCloseWindow += self.onCloseWindow
         self.__ctx.onAnchorsStateChanged += self.__onAnchorsStateChanged
         self.__ctx.c11CameraManager.onTurretAndGunRotated += self.__onTurretAndGunRotated
         g_currentVehicle.onChangeStarted += self.__onVehicleChangeStarted
@@ -617,6 +618,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__ctx.onGetItemBackToHand -= self.__onGetItemBackToHand
         self.__ctx.onAnchorsStateChanged -= self.__onAnchorsStateChanged
         self.__ctx.c11CameraManager.onTurretAndGunRotated -= self.__onTurretAndGunRotated
+        self.__ctx.onCloseWindow -= self.onCloseWindow
         g_currentVehicle.onChangeStarted -= self.__onVehicleChangeStarted
         g_currentVehicle.onChanged -= self.__onVehicleChanged
         if self.__initAnchorsPositionsCallback is not None:
@@ -625,6 +627,9 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         if self.__setCollisionsCallback is not None:
             BigWorld.cancelCallback(self.__setCollisionsCallback)
             self.__setCollisionsCallback = None
+        exitCallback = self.__ctx.getExitCallback()
+        if exitCallback:
+            exitCallback.destroy()
         self.__ctx = None
         self.service.closeCustomization()
         super(MainView, self)._dispose()
@@ -808,9 +813,10 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             itemTypes = (GUI_ITEM_TYPE.STYLE,)
         else:
             itemTypes = GUI_ITEM_TYPE.CUSTOMIZATIONS_WITHOUT_STYLE
+        itemsFilter = lambda item: not item.isAllSeason()
         for season in SEASONS_ORDER:
             if currentSeason != season:
-                seasonCounters[season] = g_currentVehicle.item.getC11nItemsNoveltyCounter(g_currentVehicle.itemsCache.items, itemTypes, season)
+                seasonCounters[season] = g_currentVehicle.item.getC11nItemsNoveltyCounter(g_currentVehicle.itemsCache.items, itemTypes, season, itemsFilter)
             seasonCounters[season] = 0
 
         self.as_setNotificationCountersS([ seasonCounters[season] for season in SEASONS_ORDER ])

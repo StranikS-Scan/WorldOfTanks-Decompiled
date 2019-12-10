@@ -96,6 +96,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
         self.crewSkinsHAConfig.initHistoricalSettings()
         self.tmanInvID = ctx.get('tankmanID')
         self.tabIndex = ctx.get('page', -1)
+        self.isBootcamp = False
         self.dataProvider = PersonalCaseDataProvider(self.tmanInvID)
         tankman = self.itemsCache.items.getTankman(self.tmanInvID)
         self.vehicle = self.itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
@@ -260,7 +261,8 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
     @decorators.process('updating')
     def __setCommonData(self):
         data = yield self.dataProvider.getCommonData()
-        data.update({'tabIndex': self.tabIndex})
+        data.update({'tabIndex': self.tabIndex,
+         'isBootcamp': self.isBootcamp})
         self.as_setCommonDataS(data)
 
     @decorators.process('updating')

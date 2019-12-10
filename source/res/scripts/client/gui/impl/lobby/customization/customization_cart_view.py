@@ -179,10 +179,7 @@ class CustomizationCartView(ViewImpl):
         money = self.__itemsCache.items.stats.money
         shortage = money.getShortage(price)
         inGameShopOn = Currency.GOLD in shortage.getCurrency() and isIngameShopEnabled()
-        purchasedCnt = 1 if self.__isStyle else 0
-        purchasedCnt += sum([ self.__counters[season][0] for season in SeasonType.COMMON_SEASONS ])
-        inventoryCnt = sum([ self.__counters[season][1] for season in SeasonType.COMMON_SEASONS ])
-        isAnySelected = purchasedCnt + inventoryCnt > 0
+        isAnySelected = cart.numSelected > 0
         if self.__isStyle:
             item = self.__purchaseItems[0].item
             model.setIsRentable(item.isRentable)
@@ -191,7 +188,7 @@ class CustomizationCartView(ViewImpl):
         model.totalPrice.assign(cart.totalPrice)
         model.setIsEnoughMoney(validTransaction)
         model.setIsShopEnabled(inGameShopOn)
-        model.setPurchasedCount(purchasedCnt)
+        model.setPurchasedCount(cart.numBought)
         model.setIsAnySelected(isAnySelected)
 
     def __addListeners(self):

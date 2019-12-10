@@ -13,6 +13,7 @@ from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.managers.ColorSchemeManager import ColorSchemeManager
 from gui.impl import backport
 from gui.shared import events
@@ -249,7 +250,7 @@ class _ExchangeDialogMeta(I18nConfirmDialogMeta):
          'maxGoldValue': submitter.maxExchangeValue,
          'goldTextColorId': TEXT_MANAGER_STYLES.GOLD_TEXT,
          'itemsTextColorId': submitter.colorScheme,
-         'exchangeHeaderData': {'labelText': '',
+         'exchangeHeaderData': {'labelText': MENU.EXCHANGE_RATE,
                                 'rateFromIcon': ICON_TEXT_FRAMES.GOLD,
                                 'rateToIcon': submitter.exchangeRateItemsIcon,
                                 'rateFromTextColor': self._getRGB(TEXT_COLOR_ID_XP),

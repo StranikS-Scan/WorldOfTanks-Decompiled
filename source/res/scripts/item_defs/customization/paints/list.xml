@@ -949,6 +949,60 @@
     </usages>
   </itemGroup>
   <itemGroup>
+    <name>	NY2020	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	23	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_29.png	</texture>
+      <color>	173 186 201 255	</color>
+      <gloss>	0.714	</gloss>
+      <metallic>	0.199	</metallic>
+      <userString>	#vehicle_customization:repaint/NY2020_magic	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	24	</id>
+      <texture>	gui/maps/vehicles/repaints/france_base_color.png	</texture>
+      <color>	39 62 71 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.36	</metallic>
+      <userString>	#vehicle_customization:repaint/NY2020_east	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	25	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_18.png	</texture>
+      <color>	112 16 29 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.203	</metallic>
+      <userString>	#vehicle_customization:repaint/NY2020_new_year	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	26	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_11.png	</texture>
+      <color>	196 194 186 255	</color>
+      <gloss>	0.75	</gloss>
+      <metallic>	0.6	</metallic>
+      <userString>	#vehicle_customization:repaint/NY2020_christmas	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
     <name>	chinese colors	</name>
     <userString>	#vehicle_customization:repaint/color_group_02	</userString>
     <season>	ALL	</season>

@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/filter_contexts.py
-
+from new_year.ny_constants import NY_FILTER
 
 class FilterSetupContext(object):
 
@@ -15,7 +15,8 @@ def getFilterSetupContexts(xpRateMultiplier):
      'elite': FilterSetupContext(asset='elite_small_icon'),
      'premium': FilterSetupContext(asset='prem_small_icon'),
      'igr': FilterSetupContext(asset='premium_small'),
-     'bonus': FilterSetupContext(ctx={'multiplier': xpRateMultiplier}, asset='bonus_x{multiplier}')}
+     'bonus': FilterSetupContext(ctx={'multiplier': xpRateMultiplier}, asset='bonus_x{multiplier}'),
+     NY_FILTER: FilterSetupContext(asset='newYear_small')}
 
 
 def getFilterPopoverSetupContexts(xpRateMultiplier):
@@ -23,4 +24,5 @@ def getFilterPopoverSetupContexts(xpRateMultiplier):
      'elite': FilterSetupContext(asset='elite_small_icon'),
      'premium': FilterSetupContext(asset='prem_small_icon'),
      'igr': FilterSetupContext(asset='premium_igr_small'),
-     'bonus': FilterSetupContext(ctx={'multiplier': xpRateMultiplier}, asset='bonus_x')}
+     'bonus': FilterSetupContext(ctx={'multiplier': xpRateMultiplier}, asset='bonus_x'),
+     NY_FILTER: FilterSetupContext(asset='newYear_small')}

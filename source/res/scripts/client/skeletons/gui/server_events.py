@@ -85,6 +85,12 @@ class IEventsCache(object):
     def getEventBattles(self):
         raise NotImplementedError
 
+    def getQuestByID(self, qID):
+        raise NotImplementedError
+
+    def getQuestsByIDs(self, qIDs):
+        raise NotImplementedError
+
     def isEventEnabled(self):
         raise NotImplementedError
 
@@ -113,6 +119,9 @@ class IEventsCache(object):
         raise NotImplementedError
 
     def getEconomicsAction(self, name):
+        raise NotImplementedError
+
+    def getHeroTankAdventCalendarRedirectAction(self):
         raise NotImplementedError
 
     def getTradeInActions(self):

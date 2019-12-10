@@ -73,9 +73,9 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
     comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
     tradeIn = dependency.descriptor(ITradeInController)
     restores = dependency.descriptor(IRestoreController)
-    __heroTanksControl = dependency.descriptor(IHeroTankController)
     lobbyContext = dependency.descriptor(ILobbyContext)
     hangarSpace = dependency.descriptor(IHangarSpace)
+    __heroTanksControl = dependency.descriptor(IHeroTankController)
 
     def __init__(self, ctx=None):
         self._backAlias = ctx.get('previewAlias', VIEW_ALIAS.LOBBY_HANGAR)
@@ -194,14 +194,18 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
         return
 
     def _highlight3DEntityAndShowTT(self, entity):
-        LobbySelectableView._highlight3DEntityAndShowTT(self, entity)
         itemId = entity.selectionId
         if itemId:
             self.as_show3DSceneTooltipS(TOOLTIPS_CONSTANTS.ENVIRONMENT, [itemId])
 
     def _fade3DEntityAndHideTT(self, entity):
-        LobbySelectableView._fade3DEntityAndHideTT(self, entity)
         self.as_hide3DSceneTooltipS()
+
+    def _createSelectableLogic(self):
+        if self.__isHeroTank:
+            return super(VehiclePreview20, self)._createSelectableLogic()
+        from new_year.custom_selectable_logic import WithoutNewYearObjectsSelectableLogic
+        return WithoutNewYearObjectsSelectableLogic()
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(VehiclePreview20, self)._onRegisterFlashComponent(viewPy, alias)

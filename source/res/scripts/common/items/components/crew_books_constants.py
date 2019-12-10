@@ -24,17 +24,21 @@ class CREW_BOOK_RARITY:
     CREW_RARE = 'guide'
     CREW_EPIC = 'crewBook'
     PERSONAL = 'personalBook'
+    UNIVERSAL = 'universalBook'
     ALL_TYPES = (CREW_COMMON,
      CREW_RARE,
      CREW_EPIC,
-     PERSONAL)
+     PERSONAL,
+     UNIVERSAL)
+    NO_NATION_TYPES = (PERSONAL, UNIVERSAL)
     ORDER = dict(zip(ALL_TYPES, range(len(ALL_TYPES))))
 
 
 class CREW_BOOK_SPREAD:
     CREW_BOOK = 'crewBook'
     PERSONAL_BOOK = 'personalBook'
-    ALL_SPREADS = (CREW_BOOK, PERSONAL_BOOK)
+    CREW_BOOK_NO_NATION = 'universalBook'
+    ALL_SPREADS = (CREW_BOOK, PERSONAL_BOOK, CREW_BOOK_NO_NATION)
 
 
 class CREW_BOOK_INVALID_TYPE(object):

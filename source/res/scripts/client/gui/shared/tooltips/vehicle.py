@@ -18,7 +18,7 @@ from gui.shared.gui_items.gui_item_economics import getMinRentItemPrice
 from gui.shared.formatters import text_styles, moneyWithIcon, icons, getItemPricesVO
 from gui.shared.formatters.time_formatters import RentLeftFormatter, getTimeLeftInfo
 from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE
-from gui.shared.gui_items.Tankman import Tankman, getRoleUserName
+from gui.shared.gui_items.Tankman import Tankman, getRoleUserName, CrewTypes
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from gui.shared.gui_items.Vehicle import Vehicle, getBattlesLeft, getTypeBigIconPath
 from gui.shared.gui_items.fitting_item import RentalInfoProvider
@@ -42,6 +42,7 @@ _logger = logging.getLogger(__name__)
 _EQUIPMENT = 'equipment'
 _OPTION_DEVICE = 'optionalDevice'
 _BATTLE_BOOSTER = 'battleBooster'
+_IS_SENIORITY = 'isSeniority'
 _ARTEFACT_TYPES = (_EQUIPMENT, _OPTION_DEVICE)
 _SKILL_BONUS_TYPE = 'skill'
 _ROLE_BONUS_TYPE = 'role'
@@ -127,6 +128,10 @@ class VehicleInfoTooltipData(BlocksTooltipData):
                 items.append(formatters.packBuildUpBlockData(statusBlock, padding=blockPadding, blockWidth=440))
             else:
                 self._setContentMargin(bottom=bottomPadding)
+        if self.context.getParams().get(_IS_SENIORITY, False):
+            awardCrewAndHangarBlock = AwardCrewAndHangar(vehicle, paramsConfig, leftPadding, rightPadding).construct()
+            if awardCrewAndHangarBlock:
+                items.append(formatters.packBuildUpBlockData(awardCrewAndHangarBlock))
         return items
 
     def _getCrewIconBlock(self):
@@ -702,6 +707,20 @@ class CommonStatsBlockConstructor(VehicleTooltipBlockConstructor):
         if block:
             title = text_styles.middleTitle(TOOLTIPS.VEHICLEPARAMS_COMMON_TITLE)
             block.insert(0, formatters.packTextBlockData(title, padding=formatters.packPadding(bottom=8)))
+        return block
+
+
+class AwardCrewAndHangar(VehicleTooltipBlockConstructor):
+
+    def construct(self):
+        block = []
+        if self.configuration.params:
+            leftPaddingImg = 30
+            leftPaddingTxtCrew = 2
+            leftPaddingTxtSlot = leftPaddingTxtCrew + 30
+            block.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.SENIORITYAWARDS_ADDITIONAL_TOOLTIP_HEADER), padding=formatters.packPadding(left=20)))
+            block.append(formatters.packImageTextBlockData(title='', desc=text_styles.main(_ms(TOOLTIPS.CUSTOMCREW_REFERRAL_BODY, value=CrewTypes.SKILL_100)), img=RES_ICONS.MAPS_ICONS_CREWBUNDLES_BONUSES_BASICROLEBOOST_100, imgPadding=formatters.packPadding(left=leftPaddingImg, top=10), txtPadding=formatters.packPadding(left=leftPaddingTxtCrew, top=20)))
+            block.append(formatters.packImageTextBlockData(title='', desc=text_styles.main(TOOLTIPS.SENIORITYAWARDS_HANGARSLOT_TOOLTIP_HEADER), img=RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_SLOTS, imgPadding=formatters.packPadding(left=leftPaddingImg, top=10), txtPadding=formatters.packPadding(left=leftPaddingTxtSlot, top=20)))
         return block
 
 

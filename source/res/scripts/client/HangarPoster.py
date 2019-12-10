@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/HangarPoster.py
 import BigWorld
 from ClientSelectableObject import ClientSelectableObject
+from gui.game_control import CalendarInvokeOrigin
 from gui.shared import g_eventBus
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraRelatedEvents
 from helpers import dependency
@@ -10,7 +11,7 @@ from skeletons.gui.shared.utils import IHangarSpace
 
 class HangarPoster(ClientSelectableObject):
     _hangarSpace = dependency.descriptor(IHangarSpace)
-    _adventCalendarCtrl = dependency.descriptor(ICalendarController)
+    _calendarController = dependency.descriptor(ICalendarController)
 
     def __init__(self):
         super(HangarPoster, self).__init__()
@@ -31,7 +32,7 @@ class HangarPoster(ClientSelectableObject):
 
     def onMouseClick(self):
         super(HangarPoster, self).onMouseClick()
-        self._adventCalendarCtrl.showCalendar('')
+        self._calendarController.showWindow(invokedFrom=CalendarInvokeOrigin.HANGAR)
 
     def __onCameraEntityUpdated(self, event):
         ctx = event.ctx
@@ -39,11 +40,11 @@ class HangarPoster(ClientSelectableObject):
         entityId = ctx['entityId']
         if state == CameraMovementStates.FROM_OBJECT:
             if self.__isHangarVehicleEntity(entityId):
-                self.enable(False)
+                self.setEnable(False)
         elif state == CameraMovementStates.ON_OBJECT:
             if self.__isHangarVehicleEntity(entityId):
                 if not self.enabled:
-                    self.enable(True)
+                    self.setEnable(True)
 
     def __isHangarVehicleEntity(self, entityId):
         return entityId == self._hangarSpace.space.vehicleEntityId

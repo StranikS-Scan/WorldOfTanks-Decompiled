@@ -15,10 +15,15 @@ from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
+from new_year.ny_constants import NY_FILTER
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IRentalsController, IIGRController, IClanLockController, IEpicBattleMetaGameController, IRankedBattlesController
 from skeletons.gui.shared import IItemsCache
-_CAROUSEL_FILTERS = ('bonus', 'favorite', 'elite', 'premium')
+_CAROUSEL_FILTERS = ('bonus',
+ 'favorite',
+ 'elite',
+ 'premium',
+ NY_FILTER)
 if constants.IS_KOREA:
     _CAROUSEL_FILTERS += ('igr',)
 

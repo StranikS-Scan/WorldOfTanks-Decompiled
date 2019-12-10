@@ -59,4 +59,5 @@ class BCPersonalCase(PersonalCase):
         LOG_DEBUG('BCPersonalCase.__init__')
         super(BCPersonalCase, self).__init__(ctx)
         self.tabIndex = 0
+        self.isBootcamp = True
         self.dataProvider = BCPersonalCaseDataProvider(self.tmanInvID)

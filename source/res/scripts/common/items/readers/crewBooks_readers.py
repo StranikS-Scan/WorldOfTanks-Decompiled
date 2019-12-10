@@ -85,7 +85,7 @@ def _readBookItem(pricesCache, cache, xmlCtx, section, storage):
             if nation and nation not in nations.NAMES:
                 _xml.raiseWrongXml(xmlCtx, 'nation', "unknown nation '%s'" % nation)
             crewBookItem.nation = nation if nation else None
-    if not crewBookItem.nation and type != crew_books_constants.CREW_BOOK_RARITY.PERSONAL:
+    if not crewBookItem.nation and type not in crew_books_constants.CREW_BOOK_RARITY.NO_NATION_TYPES:
         _xml.raiseWrongXml(xmlCtx, 'nation', "crew book with rarity type '%s' should have nation" % type)
     storage[bookID] = crewBookItem
     groupsDict = cache.priceGroups

@@ -20,8 +20,7 @@ _INVENTORY_TABS = {STORE_CONSTANTS.SHELL: inventory.InventoryShellTab,
  STORE_CONSTANTS.VEHICLE: inventory.InventoryVehicleTab,
  STORE_CONSTANTS.OPTIONAL_DEVICE: inventory.InventoryOptionalDeviceTab,
  STORE_CONSTANTS.EQUIPMENT: inventory.InventoryEquipmentTab,
- STORE_CONSTANTS.BATTLE_BOOSTER: inventory.InventoryBattleBoosterTab,
- STORE_CONSTANTS.CREW_BOOKS: inventory.InventoryCrewBookTab}
+ STORE_CONSTANTS.BATTLE_BOOSTER: inventory.InventoryBattleBoosterTab}
 
 class Inventory(InventoryMeta):
 

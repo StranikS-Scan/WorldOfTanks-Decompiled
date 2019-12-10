@@ -212,7 +212,7 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
         nation = g_currentVehicle.item.nationName
 
         def filterBooks(book):
-            return True if book.getNation() == nation or book.isPersonal() else None
+            return True if book.getNation() == nation or book.hasNoNation() else None
 
         allCrewBooks = self.itemsCache.items.getItems(GUI_ITEM_TYPE.CREW_BOOKS, REQ_CRITERIA.CREW_ITEM.IN_ACCOUNT)
         availableCrewBooksTypes = allCrewBooks.filter(filterBooks)

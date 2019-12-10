@@ -5,11 +5,12 @@ import random
 from collections import namedtuple
 import ResMgr
 import Event
+from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
-from skeletons.gui.game_control import IHeroTankController, IBootcampController
+from skeletons.gui.game_control import IHeroTankController, IBootcampController, ICalendarController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.server_events import IEventsCache
@@ -18,6 +19,7 @@ from shared_utils import first
 _logger = logging.getLogger(__name__)
 _HERO_VEHICLES = 'hero_vehicles'
 _ADD_HERO_STEP_NAME = 'add_HeroVehicle'
+_CALENDAR_ACTION_CHANGED = events.AdventCalendarEvent.HERO_ADVENT_ACTION_STATE_CHANGED
 _HeroTankInfo = namedtuple('_HeroTankInfo', ('url', 'styleID', 'crew', 'name', 'ingameshopUrl'))
 _HeroTankInfo.__new__.__defaults__ = ('', None, None, '', '')
 
@@ -25,25 +27,31 @@ class HeroTankController(IHeroTankController):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
     bootcampController = dependency.descriptor(IBootcampController)
+    calendarController = dependency.descriptor(ICalendarController)
     _eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self):
         self.__data = {}
-        self.__invVehsIntCD = []
+        self.__invVehiclesIntCD = []
         self.__isEnabled = False
         self.__currentTankCD = None
+        self.__actionInfo = None
         self.onUpdated = Event.Event()
         self.onInteractive = Event.Event()
+        self.onHeroTankChanged = Event.Event()
+        self.onHeroTankBought = Event.Event()
         return
 
     def init(self):
-        self.itemsCache.onSyncCompleted += self.__updateInventoryVehsData
+        self.itemsCache.onSyncCompleted += self.__updateInventoryVehiclesData
+        g_eventBus.addListener(_CALENDAR_ACTION_CHANGED, self.__updateActionInfo, EVENT_BUS_SCOPE.LOBBY)
 
     def fini(self):
-        self.itemsCache.onSyncCompleted -= self.__updateInventoryVehsData
+        g_eventBus.removeListener(_CALENDAR_ACTION_CHANGED, self.__updateActionInfo, EVENT_BUS_SCOPE.LOBBY)
+        self.itemsCache.onSyncCompleted -= self.__updateInventoryVehiclesData
 
     def __onEventsCacheSyncCompleted(self, *_):
-        self.__applyActions()
+        self.__updateSettings()
 
     def onLobbyStarted(self, ctx):
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
@@ -59,12 +67,17 @@ class HeroTankController(IHeroTankController):
     def isEnabled(self):
         return self.__isEnabled and not self.bootcampController.isInBootcamp()
 
+    def hasAdventHero(self):
+        return self.__actionInfo is not None and self.__actionInfo.isEnabled
+
+    def isAdventHero(self):
+        return self.hasAdventHero() and self.__currentTankCD == self.__actionInfo.vehicleCD
+
     def getRandomTankCD(self):
-        if self.isEnabled():
-            items = self.__data.keys() or [None]
-            self.__currentTankCD = random.choice(items)
+        if self.hasAdventHero() and not self.__containsVehicle(self.__actionInfo.vehicleCD):
+            self.__currentTankCD = self.__actionInfo.vehicleCD
         else:
-            self.__currentTankCD = None
+            self.__currentTankCD = random.choice(self.__data.keys() or [None]) if self.isEnabled() else None
         return self.__currentTankCD
 
     def getCurrentTankCD(self):
@@ -89,12 +102,12 @@ class HeroTankController(IHeroTankController):
         self.onInteractive(interactive)
 
     def __fullUpdate(self):
-        self.__invVehsIntCD = []
+        self.__invVehiclesIntCD = []
         invVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.CUSTOM(lambda item: item.inventoryCount > 0 or item.isRestorePossible())).values()
         for invVeh in invVehicles:
-            self.__invVehsIntCD.append(invVeh.intCD)
+            self.__invVehiclesIntCD.append(invVeh.intCD)
 
-    def __updateInventoryVehsData(self, reason, diff):
+    def __updateInventoryVehiclesData(self, reason, diff):
         if reason != CACHE_SYNC_REASON.CLIENT_UPDATE:
             return
         else:
@@ -108,6 +121,10 @@ class HeroTankController(IHeroTankController):
 
             return
 
+    def __updateActionInfo(self, *_):
+        self.__actionInfo = self.calendarController.getHeroAdventActionInfo()
+        self.onUpdated()
+
     def __onServerSettingsChanged(self, diff):
         if _HERO_VEHICLES in diff:
             self.__updateSettings()
@@ -115,12 +132,12 @@ class HeroTankController(IHeroTankController):
 
     def __updateSettings(self):
         self.__data = {}
-        heroVehsDict = self.lobbyContext.getServerSettings().getHeroVehicles()
-        self.__isEnabled = heroVehsDict.get('isEnabled', False)
-        if 'vehicles' in heroVehsDict:
-            heroVehicles = heroVehsDict['vehicles']
+        heroVehiclesDict = self.lobbyContext.getServerSettings().getHeroVehicles()
+        self.__isEnabled = heroVehiclesDict.get('isEnabled', False)
+        if 'vehicles' in heroVehiclesDict:
+            heroVehicles = heroVehiclesDict['vehicles']
             for vCompDescr, vData in heroVehicles.iteritems():
-                if vCompDescr in self.__invVehsIntCD:
+                if vCompDescr in self.__invVehiclesIntCD:
                     continue
                 self.__data[vCompDescr] = _HeroTankInfo(name=vData.get('name'), url=vData.get('url'), ingameshopUrl=vData.get('ingameshopUrl'), styleID=vData.get('styleID'), crew=self.__createCrew(vData.get('crew'), vCompDescr))
 
@@ -145,7 +162,7 @@ class HeroTankController(IHeroTankController):
         if not vCompDescr:
             _logger.error('Could not apply action, vehicle name = %s', vName)
             return
-        elif vCompDescr in self.__invVehsIntCD:
+        elif vCompDescr in self.__invVehiclesIntCD:
             return
         else:
             styleStr = params.get('styleID')
@@ -196,3 +213,10 @@ class HeroTankController(IHeroTankController):
                     crew['tankmen'].append(tmanDict)
 
             return crew
+
+    def __containsVehicle(self, vehicleCD):
+
+        def contains(i):
+            return i.intCD == vehicleCD and (i.inventoryCount > 0 or i.isRestorePossible())
+
+        return any(self.itemsCache.items.getVehicles(REQ_CRITERIA.CUSTOM(contains)))

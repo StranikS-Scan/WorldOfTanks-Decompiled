@@ -2,7 +2,9 @@
 # Embedded file name: scripts/client/gui/game_control/calendar_controller.py
 import functools
 import logging
+from collections import namedtuple
 from datetime import timedelta
+import BigWorld
 from account_helpers.AccountSettings import AccountSettings, LAST_CALENDAR_SHOW_TIMESTAMP
 from adisp import process
 from gui import GUI_SETTINGS
@@ -16,6 +18,7 @@ from gui.game_control.links import URLMacros
 from gui.server_events.modifiers import CalendarSplashModifier
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showHangar
+from gui.wgcg.advent_calendar.contexts import AdventCalendarFetchHeroTankInfoCtx
 from helpers import dependency, time_utils, i18n
 from helpers.time_utils import ONE_HOUR
 from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
@@ -23,6 +26,7 @@ from skeletons.gui.game_control import ICalendarController, IBrowserController
 from skeletons.gui.game_window_controller import GameWindowController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.web import IWebController
 from web.web_client_api import w2capi, webApiCollection, w2c, W2CSchema
 from web.web_client_api.request import RequestWebApi
 from web.web_client_api.shop import ShopWebApi
@@ -65,6 +69,70 @@ def calendarEnabledActionFilter(act):
     return any((isinstance(mod, CalendarSplashModifier) for mod in act.getModifiers()))
 
 
+_HeroAdventActionInfo = namedtuple('HeroAdventActionInfo', ('isEnabled', 'vehicleCD', 'endTimestamp'))
+_HeroAdventActionInfo.__new__.__defaults__ = (False, 0, 0)
+
+class _HeroAdventActionHelper(object):
+    __webController = dependency.descriptor(IWebController)
+    __eventsCache = dependency.descriptor(IEventsCache)
+
+    def __init__(self):
+        self.__timer = None
+        self.__actionInfo = _HeroAdventActionInfo()
+        self.__eventsCache.onSyncCompleted += self.__onSyncCompleted
+        return
+
+    def fini(self):
+        self.__eventsCache.onSyncCompleted -= self.__onSyncCompleted
+        self.__stopUpdate()
+
+    def getInfo(self):
+        return self.__actionInfo
+
+    def update(self):
+        self.__stopUpdate()
+        self.__fetchInfo()
+
+    def __stopUpdate(self):
+        if self.__timer is not None:
+            BigWorld.cancelCallback(self.__timer)
+            self.__timer = None
+        return
+
+    @process
+    def __fetchInfo(self):
+        if self.__isByServerSwitchEnabled():
+            response = yield self.__webController.sendRequest(ctx=AdventCalendarFetchHeroTankInfoCtx())
+            if response.isSuccess():
+                data = (response.getData() or {}).get('data', {})
+                self.__updateInfo(data.get('vehicle_cd', 0), data.get('finish_date', 0))
+                self.__postponeRecall()
+            else:
+                _logger.warning('Unable to fetch Hero-Tank info. Code: %s.', response.getCode())
+        else:
+            _logger.debug('Unable to fetch Hero-Tank info. Reason: Disabled by Server.')
+
+    def __postponeRecall(self):
+        if 0 < self.__actionInfo.endTimestamp > time_utils.getServerUTCTime():
+            self.__timer = BigWorld.callback(self.__actionInfo.endTimestamp - time_utils.getServerUTCTime(), self.update)
+
+    def __onSyncCompleted(self, *_):
+        self.__updateInfo(self.__actionInfo.vehicleCD, self.__actionInfo.endTimestamp)
+
+    def __updateInfo(self, vehicleCD, endTimestamp):
+        oldInfo = self.getInfo()
+        self.__actionInfo = _HeroAdventActionInfo(self.__isByServerSwitchEnabled() and vehicleCD > 0 and endTimestamp > time_utils.getServerUTCTime(), vehicleCD, endTimestamp)
+        if self.__actionInfo != oldInfo:
+            self.__dispatchStateChanged()
+
+    def __isByServerSwitchEnabled(self):
+        action = self.__eventsCache.getHeroTankAdventCalendarRedirectAction()
+        return action['isEnabled'] and action['start'] <= time_utils.getServerUTCTime() < action['finish']
+
+    def __dispatchStateChanged(self):
+        g_eventBus.handleEvent(events.AdventCalendarEvent(events.AdventCalendarEvent.HERO_ADVENT_ACTION_STATE_CHANGED), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
 class CalendarController(GameWindowController, ICalendarController):
     browserCtrl = dependency.descriptor(IBrowserController)
     eventsCache = dependency.descriptor(IEventsCache)
@@ -73,6 +141,7 @@ class CalendarController(GameWindowController, ICalendarController):
 
     def __init__(self):
         super(CalendarController, self).__init__()
+        self.__heroAdventHelper = None
         self.__browserID = None
         self.__showOnSplash = False
         self.__urlMacros = URLMacros()
@@ -84,10 +153,22 @@ class CalendarController(GameWindowController, ICalendarController):
         self._updateActions()
         if self.__showOnSplash and self.mustShow():
             self.showWindow(invokedFrom=CalendarInvokeOrigin.SPLASH)
+        self.__clearHeroTankHelper()
+        self.__heroAdventHelper = _HeroAdventActionHelper()
+        self.updateHeroAdventActionInfo()
+
+    def onDisconnected(self):
+        self.__clearHeroTankHelper()
+
+    def updateHeroAdventActionInfo(self):
+        self.__heroAdventHelper.update()
+
+    def getHeroAdventActionInfo(self):
+        return self.__heroAdventHelper.getInfo()
 
     def fini(self):
-        super(CalendarController, self).fini()
         self.browserCtrl.onBrowserDeleted -= self.__onBrowserDeleted
+        super(CalendarController, self).fini()
 
     def mustShow(self):
         result = False
@@ -189,6 +270,12 @@ class CalendarController(GameWindowController, ICalendarController):
 
     def __setShowTimestamp(self, tstamp):
         AccountSettings.setSettings(LAST_CALENDAR_SHOW_TIMESTAMP, str(tstamp))
+
+    def __clearHeroTankHelper(self):
+        if self.__heroAdventHelper:
+            self.__heroAdventHelper.fini()
+        self.__heroAdventHelper = None
+        return
 
     @process
     def __openBrowser(self, browserID, url, browserSize, invokedFrom):

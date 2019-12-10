@@ -51,6 +51,10 @@ def getGameControllersConfig(manager):
     from gui.game_control.referral_program_controller import ReferralProgramController as _ReferralController
     from gui.game_control.badges_controller import BadgesController as _Badges
     from gui.game_control.special_sound_ctrl import SpecialSoundCtrl as _SpecialSoundCtrl
+    from skeletons import new_year as _NYInterface
+    from new_year.ny_piano_controller import PianoController as _PianoController
+    from new_year.talisman_scene_ctrl import TalismanSceneController as _TalismanSceneController
+    from new_year.craft_settings_storage import CraftMachineSettingsStorage as _CraftMachineSettingsStorage
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -100,3 +104,6 @@ def getGameControllersConfig(manager):
     _config(_interface.ISeasonsController, _Seasons())
     _config(_interface.IBadgesController, _Badges())
     _config(_interface.IAnonymizerController, _Anonymizer())
+    _config(_NYInterface.IPianoController, _PianoController())
+    _config(_NYInterface.ITalismanSceneController, _TalismanSceneController())
+    _config(_NYInterface.ICraftMachineSettingsStorage, _CraftMachineSettingsStorage())

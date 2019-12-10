@@ -1,14 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/bonus_readers.py
+import calendar
 import time
 import items
-import calendar
 from account_shared import validateCustomizationItem
+from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE
 from invoices_helpers import checkAccountDossierOperation
-from items import vehicles, tankmen
+from items import vehicles, tankmen, new_year, collectibles
 from items.components.c11n_constants import SeasonType
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
-from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE
+from items.components.ny_constants import YEARS_INFO, TOY_TYPE_IDS_BY_NAME
 from soft_exception import SoftException
 __all__ = ['readBonusSection', 'readUTC', 'SUPPORTED_BONUSES']
 
@@ -711,6 +712,60 @@ def __readMetaSection(bonus, _name, section, eventType):
         return
 
 
+def __readBonus_ny20Toy(bonus, _name, section, eventType):
+    if section.has_key('id'):
+        tid = section['id'].asInt
+        if tid not in new_year.g_cache.toys:
+            raise SoftException('Unknown NY20 toyID: {}'.format(tid))
+        count = section['count'].asInt if section.has_key('count') else 0
+        ny20Toys = bonus.setdefault('ny20Toys', {})
+        ny20Toys[tid] = ny20Toys.get(tid, 0) + count
+
+
+def __readBonus_ny20ToyFragments(bonus, _name, section, eventType):
+    count = section.asInt
+    bonus['ny20ToyFragments'] = bonus.get('ny20ToyFragments', 0) + count
+
+
+def __readBonus_ny20AnyOf(bonus, _name, section, eventType):
+    if section.has_key('setting'):
+        settingID = YEARS_INFO.CURRENT_SETTING_IDS_BY_NAME[section.readString('setting')]
+    else:
+        settingID = -1
+    if section.has_key('type'):
+        typeID = TOY_TYPE_IDS_BY_NAME[section.readString('type')]
+    else:
+        typeID = -1
+    if section.has_key('rank'):
+        rank = section['rank'].asInt
+    else:
+        rank = -1
+    bonus.setdefault('ny20AnyOf', []).append((typeID, settingID, rank))
+
+
+def __readBonus_ny20Fillers(bonus, _name, section, eventType):
+    count = section.asInt
+    bonus['ny20Fillers'] = bonus.get('ny20Fillers', 0) + count
+
+
+def __readBonus_ny19Toy(bonus, _name, section, eventType):
+    if section.has_key('id'):
+        tid = section['id'].asInt
+        if tid not in collectibles.g_cache.ny19.toys:
+            raise SoftException('Unknown NY19 toyID: {}'.format(tid))
+        count = section['count'].asInt if section.has_key('count') else 0
+        ny19Toys = bonus.setdefault('ny19Toys', {})
+        ny19Toys[tid] = ny19Toys.get(tid, 0) + count
+
+
+def __readBonus_ny18Toy(bonus, _name, section, eventType):
+    if section.has_key('id'):
+        tid = section['id'].asInt
+        count = section['count'].asInt if section.has_key('count') else 0
+        ny18Toys = bonus.setdefault('ny18Toys', {})
+        ny18Toys[tid] = ny18Toys.get(tid, 0) + count
+
+
 def __readBonus_optionalData(config, bonusReaders, section, eventType):
     limitIDs, bonus = __readBonusSubSection(config, bonusReaders, section, eventType)
     probability = section['probability']
@@ -837,7 +892,13 @@ __BONUS_READERS = {'meta': __readMetaSection,
  'crewSkin': __readBonus_crewSkin,
  'vehicleChoice': __readBonus_vehicleChoice,
  'blueprint': __readBonus_blueprint,
- 'blueprintAny': __readBonus_blueprintAny}
+ 'blueprintAny': __readBonus_blueprintAny,
+ 'ny20Toy': __readBonus_ny20Toy,
+ 'ny20ToyFragments': __readBonus_ny20ToyFragments,
+ 'ny20AnyOf': __readBonus_ny20AnyOf,
+ 'ny20Fillers': __readBonus_ny20Fillers,
+ 'ny19Toy': __readBonus_ny19Toy,
+ 'ny18Toy': __readBonus_ny18Toy}
 __PROBABILITY_READERS = {'optional': __readBonus_optional,
  'oneof': __readBonus_oneof,
  'group': __readBonus_group}

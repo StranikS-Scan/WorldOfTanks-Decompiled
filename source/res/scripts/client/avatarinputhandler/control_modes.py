@@ -1571,10 +1571,10 @@ class _ShellingControl(object):
             result = BigWorld.Model(_ShellingControl.__TARGET_MODEL_FILE_NAME)
             result.addMotor(BigWorld.Servo(Math.Matrix()))
             result.visible = False
-            BigWorld.addModel(result)
+            BigWorld.player().addModel(result)
         elif self.__targetModel is not None:
             self.setTargetModelAutoUpdate(None)
-            BigWorld.delModel(self.__targetModel)
+            BigWorld.player().delModel(self.__targetModel)
             self.__targetModel = None
         return result
 

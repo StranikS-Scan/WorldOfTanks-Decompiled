@@ -150,7 +150,9 @@ class AS3_AppFactory(IAppFactory):
             battle = self.__apps[_SPACE.SF_BATTLE]
             if battle:
                 battle.close()
-            self.__importer.unload(self.__packages[_SPACE.SF_BATTLE])
+            seq = self.__packages[_SPACE.SF_BATTLE]
+            if seq is not None:
+                self.__importer.unload(seq)
             self.__apps[_SPACE.SF_BATTLE] = None
             self.__ctrlModeFlags[_SPACE.SF_BATTLE] = _CTRL_FLAG.CURSOR_DETACHED
         return

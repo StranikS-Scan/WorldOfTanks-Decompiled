@@ -37,7 +37,7 @@ class CrewBook(object):
 
     def getUserName(self):
         name = self.type
-        if name is not CREW_BOOK_RARITY.PERSONAL:
+        if name not in CREW_BOOK_RARITY.NO_NATION_TYPES:
             name += ':' + self.nation
         return name
 

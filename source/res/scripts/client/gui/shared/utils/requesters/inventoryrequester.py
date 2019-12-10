@@ -64,7 +64,8 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
                         continue
                     outfit = Outfit(strCompactDescr=outfitData.compDescr)
                     if outfit.style is not None:
-                        self.__c11nItemsAppliedCounts[outfit.style.compactDescr][vehicleIntCD] = 1
+                        if season != SeasonType.EVENT:
+                            self.__c11nItemsAppliedCounts[outfit.style.compactDescr][vehicleIntCD] = 1
                     for itemCD, count in outfit.itemsCounter.iteritems():
                         self.__c11nItemsAppliedCounts[itemCD][vehicleIntCD] += count
 

@@ -49,6 +49,13 @@
       <undamaged>	vehicles/french/F88_AMX_13_105/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/french/F88_AMX_13_105/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/french/F88_AMX_13_105/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <F88_AMX_13_105_3Dst>
+          <undamaged>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3Dst/crash/lod0/Hull.model	</exploded>
+        </F88_AMX_13_105_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -75,8 +82,8 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.508408 0.423197 1.5735	</rayStart>
-        <rayEnd>	0.508408 0.0522281 1.42391	</rayEnd>
+        <rayStart>	1.05545 0.412479 1.9221	</rayStart>
+        <rayEnd>	1.05548 0.0126026 1.93181	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
@@ -1248,6 +1255,13 @@
         <undamaged>	vehicles/french/F88_AMX_13_105/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/french/F88_AMX_13_105/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/french/F88_AMX_13_105/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <F88_AMX_13_105_3Dst>
+            <undamaged>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3Dst/crash/lod0/Chassis.model	</exploded>
+          </F88_AMX_13_105_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -2065,6 +2079,13 @@
             <undamaged>	vehicles/french/F88_AMX_13_105/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/french/F88_AMX_13_105/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/french/F88_AMX_13_105/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <F88_AMX_13_105_3Dst>
+                <undamaged>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </F88_AMX_13_105_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/french/F88_AMX_13_105/collision/Gun_01.model	</collisionModelServer>
@@ -2266,9 +2287,9 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	0.000044 0.000218323 3.27108	</rayStart>
+              <rayStart>	0.000044 0.000218323 4.09731	</rayStart>
               <rayEnd>	-0.0128293 0.0049236 3.27018	</rayEnd>
-              <rayUp>	0.08 0.000000 0.000000	</rayUp>
+              <rayUp>	0.075 0.000000 0.000000	</rayUp>
               <applyToFabric>	true	</applyToFabric>
               <size>	0.5	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
@@ -2292,6 +2313,13 @@
         <undamaged>	vehicles/french/F88_AMX_13_105/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/french/F88_AMX_13_105/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/french/F88_AMX_13_105/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <F88_AMX_13_105_3Dst>
+            <undamaged>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/french/F88_AMX_13_105/_skins/F88_AMX_13_105_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </F88_AMX_13_105_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/french/F88_AMX_13_105/collision/Turret_01.model	</collisionModelServer>

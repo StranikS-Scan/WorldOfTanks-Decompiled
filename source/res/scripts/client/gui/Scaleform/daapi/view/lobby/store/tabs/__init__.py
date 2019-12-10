@@ -404,17 +404,3 @@ class StoreBattleBoosterTab(StoreArtefactTab):
         if targetType == STORE_CONSTANTS.FOR_EQUIPMENT_FIT:
             return REQ_CRITERIA.BATTLE_BOOSTER.OPTIONAL_DEVICE_EFFECT
         return REQ_CRITERIA.BATTLE_BOOSTER.CREW_EFFECT if targetType == STORE_CONSTANTS.FOR_CREW_FIT else REQ_CRITERIA.BATTLE_BOOSTER.ALL
-
-
-class StoreCrewBookTab(StoreArtefactTab):
-
-    @classmethod
-    def getFilterInitData(cls):
-        return (STORE_CONSTANTS.CREW_BOOK_FILTER_VO_CLASS, False)
-
-    @classmethod
-    def getTableType(cls):
-        return STORE_CONSTANTS.CREW_BOOKS
-
-    def _getItemTypeID(self):
-        return GUI_ITEM_TYPE.CREW_BOOKS

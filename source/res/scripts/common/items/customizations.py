@@ -871,6 +871,9 @@ def getOutfitType(arenaKind, bonusType):
 
 
 def getBattleOutfit(getter, vehType, arenaKind, bonusType):
+    styleOutfitDescr, enabled = getter(vehType, SeasonType.EVENT)
+    if styleOutfitDescr and enabled:
+        return parseOutfitDescr(styleOutfitDescr)
     styleOutfitDescr, enabled = getter(vehType, SeasonType.ALL)
     if styleOutfitDescr and enabled:
         return parseOutfitDescr(styleOutfitDescr)

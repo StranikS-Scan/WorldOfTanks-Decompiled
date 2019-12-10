@@ -323,7 +323,7 @@ class _VehCompareData(object):
         return dataClone
 
     def __addBuiltInEquipment(self, equipmentIDs):
-        if not self.__isInInventory:
+        if not self.__isInInventory and self.itemsCache.isSynced():
             vehicle = self.itemsCache.items.getItemByCD(self.getVehicleCD())
             builtInEquipmentIDs = vehicle.getBuiltInEquipmentIDs()
             for slotId, eqID in enumerate(builtInEquipmentIDs):

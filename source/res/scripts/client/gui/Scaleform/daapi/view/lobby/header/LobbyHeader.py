@@ -57,6 +57,7 @@ from gui.shared.tooltips import formatters
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.view_helpers.emblems import ClanEmblemsHelper
+from gui.shared.ny_vignette_settings_switcher import checkVignetteSettings
 from helpers import dependency
 from helpers import i18n, time_utils, isPlayerAccount
 from predefined_hosts import g_preDefinedHosts, PING_STATUSES
@@ -64,6 +65,7 @@ from shared_utils import CONST_CONTAINER, BitmaskHelper
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IAnonymizerController, IBadgesController, IBoostersController, IBootcampController, IChinaController, IEpicBattleMetaGameController, IGameSessionController, IIGRController, IRankedBattlesController, IServerStatsController, IWalletController
+from skeletons.gui.game_control import IFestivityController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.server_events import IEventsCache
@@ -177,6 +179,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     serverStats = dependency.descriptor(IServerStatsController)
     settingsCore = dependency.descriptor(ISettingsCore)
     wallet = dependency.descriptor(IWalletController)
+    _festivityController = dependency.descriptor(IFestivityController)
 
     def __init__(self):
         super(LobbyHeader, self).__init__()
@@ -188,6 +191,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__isIngameShopEnabled = isIngameShopEnabled()
         self.__isSubscriptionEnabled = isSubscriptionEnabled()
         self.__clanIconID = None
+        self.__addedTopSubViews = []
         return
 
     def onClanEmblem16x16Received(self, clanDbID, emblem):
@@ -314,6 +318,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__viewLifecycleWatcher.start(self.app.containerManager, [_RankedBattlesWelcomeViewLifecycleHandler(self)])
         if self.bootcampController.isInBootcamp():
             self.as_disableFightButtonS(self.__isFightBtnDisabled)
+        self.__updateNYVisibility(self.__currentScreen)
         self._onPopulateEnd()
         return
 
@@ -368,6 +373,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.epicController.onPrimeTimeStatusUpdated += self.__updateEpic
         self.badgesController.onUpdated += self.__updateBadge
         self.anonymizerController.onStateChanged += self.__updateAnonymizedState
+        self._festivityController.onStateChanged += self.__festivityStateChanged
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.BubbleTooltipEvent.SHOW, self.__showBubbleTooltip, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -432,6 +438,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.epicController.onUpdated -= self.__updateEpic
         self.epicController.onPrimeTimeStatusUpdated -= self.__updateEpic
         self.badgesController.onUpdated -= self.__updateBadge
+        self._festivityController.onStateChanged -= self.__festivityStateChanged
         self.app.containerManager.onViewAddedToContainer -= self.__onViewAddedToContainer
         if constants.IS_SHOW_SERVER_STATS:
             self.serverStats.onStatsReceived -= self.__onStatsReceived
@@ -443,6 +450,11 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.removeListener(events.TutorialEvent.OVERRIDE_HEADER_MENU_BUTTONS, self.__onOverrideHeaderMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, self.__onToggleVisibilityMenu, scope=EVENT_BUS_SCOPE.LOBBY)
         AccountSettings.onSettingsChanging -= self.__onAccountSettingsChanging
+        for pyView in self.__addedTopSubViews:
+            pyView.onDispose -= self.__onViewDisposed
+
+        self.__addedTopSubViews = None
+        return
 
     def __updateAccountAttrs(self):
         accAttrs = self.itemsCache.items.stats.attributes
@@ -494,8 +506,9 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                 self.requestClanEmblem16x16(g_clanCache.clanDBID)
             else:
                 self._updateHangarMenuData()
-            if diff is not None and any((self.goodiesCache.haveBooster(itemId) for itemId in diff.keys())):
-                SoundGroupsInstance.playSound2D('warehouse_booster')
+            if diff is not None and SoundGroupsInstance is not None:
+                if any((self.goodiesCache.haveBooster(itemId) for itemId in diff.keys())):
+                    SoundGroupsInstance.playSound2D('warehouse_booster')
             return
 
     def __updateAnonymizedState(self, **_):
@@ -674,9 +687,31 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__updateAccountAttrs()
 
     def __onViewAddedToContainer(self, _, pyEntity):
-        if pyEntity.viewType is ViewTypes.LOBBY_SUB:
+        if not pyEntity.isDisposed() and pyEntity.viewType is ViewTypes.LOBBY_SUB:
             if pyEntity.alias in self.TABS.ALL():
                 self.__setCurrentScreen(pyEntity.alias)
+            self.__updateNYVisibility(pyEntity.alias)
+        if not pyEntity.isDisposed() and pyEntity.viewType is ViewTypes.LOBBY_TOP_SUB:
+            self.as_showOrHideNyWidgetS(False)
+            self.__addedTopSubViews.append(pyEntity)
+            pyEntity.onDispose += self.__onViewDisposed
+
+    def __onViewDisposed(self, pyView):
+        pyView.onDispose -= self.__onViewDisposed
+        self.__addedTopSubViews.remove(pyView)
+        if not self.__addedTopSubViews:
+            self.as_showOrHideNyWidgetS(True)
+
+    def __updateNYVisibility(self, alias):
+        isShowMainMenuGlow = False
+        isShowBattleBtnGlow = False
+        nyWidgetVisible = False
+        if self._festivityController.isEnabled():
+            if alias in (self.TABS.HANGAR, R.views.lobby.new_year.views.new_year_main_view.NewYearMainView()):
+                isShowBattleBtnGlow = True
+                nyWidgetVisible = True
+            isShowMainMenuGlow = alias == self.TABS.HANGAR
+        self.as_updateNYVisibilityS(isShowBattleBtnGlow, isShowMainMenuGlow, nyWidgetVisible)
 
     def __getContainer(self, viewType):
         return self.app.containerManager.getContainer(viewType) if self.app is not None and self.app.containerManager is not None else None
@@ -864,6 +899,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     def __onHangarSpaceDestroy(self, inited):
         if inited and self.bootcampController.isInBootcamp():
             self.as_disableFightButtonS(True)
+        checkVignetteSettings(None)
+        return
 
     def __onToggleVisibilityMenu(self, event):
         state = event.ctx['state']
@@ -1224,6 +1261,9 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             self.removeTextureFromMemory(self.__clanIconID)
             self.__clanIconID = None
         return
+
+    def __festivityStateChanged(self):
+        self.__updateNYVisibility(self.__currentScreen)
 
 
 class _BoosterInfoPresenter(object):

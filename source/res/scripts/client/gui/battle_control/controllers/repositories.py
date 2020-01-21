@@ -3,7 +3,7 @@
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_control.arena_info.interfaces import IArenaController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, REUSABLE_BATTLE_CTRL_IDS, getBattleCtrlName
-from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, bootcamp_ctrl, chat_cmd_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, respawn_ctrl, team_bases_ctrl, team_health_bar_ctrl, vehicle_state_ctrl, view_points_ctrl, epic_respawn_ctrl, progress_circle_ctrl, epic_maps_ctrl, epic_spectator_ctrl, epic_missions_ctrl, game_notification_ctrl, epic_team_bases_ctrl, anonymizer_fakes_ctrl
+from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, bootcamp_ctrl, chat_cmd_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, respawn_ctrl, team_bases_ctrl, team_health_bar_ctrl, vehicle_state_ctrl, view_points_ctrl, epic_respawn_ctrl, progress_circle_ctrl, epic_maps_ctrl, epic_spectator_ctrl, epic_missions_ctrl, game_notification_ctrl, epic_team_bases_ctrl, anonymizer_fakes_ctrl, korea_msgs_ctrl
 from gui.battle_control.controllers.quest_progress import quest_progress_ctrl
 from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicControllersLocator
 
@@ -283,6 +283,7 @@ class SharedControllersRepository(_ControllersRepository):
         repository.addController(chat_cmd_ctrl.ChatCommandsController(setup, feedback, ammo))
         repository.addController(drr_scale_ctrl.DRRScaleController(messages))
         repository.addController(personal_efficiency_ctrl.createEfficiencyCtrl(setup, feedback, state))
+        repository.addController(korea_msgs_ctrl.createKoreaMessagesController())
         repository.addArenaController(bootcamp_ctrl.BootcampController(), setup)
         repository.addArenaController(quest_progress_ctrl.createQuestProgressController(), setup)
         repository.addArenaController(view_points_ctrl.ViewPointsController(setup), setup)

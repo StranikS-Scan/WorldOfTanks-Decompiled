@@ -172,7 +172,7 @@ class _EmptyShellVOBuilder(_ShellVOBuilder):
 class _DamageShellVOBuilder(_ShellVOBuilder):
 
     def buildVO(self, info, arenaDP):
-        if info.isShot():
+        if info.isShot() or info.isFire():
             shellVOBuilder = _ShellVOBuilder()
         else:
             shellVOBuilder = _EmptyShellVOBuilder()

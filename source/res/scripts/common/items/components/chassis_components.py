@@ -2,24 +2,26 @@
 # Embedded file name: scripts/common/items/components/chassis_components.py
 from collections import namedtuple
 from copy import deepcopy
+from wrapped_reflection_framework import reflectedNamedTuple, ReflectionMetaclass
 from items.components import component_constants
 from items.components import path_builder
 from items.components import shared_components
 __all__ = ('Wheel', 'WheelGroup', 'TrackNode', 'TrackBasicParams', 'GroundNode', 'GroundNodeGroup', 'Traces', 'LeveredSuspensionConfig', 'SuspensionLever', 'SplineSegmentModelSet')
-Wheel = namedtuple('Wheel', ('index', 'isLeft', 'radius', 'nodeName', 'isLeading', 'leadingSyncAngle', 'hitTester', 'materials', 'position'))
-WheelGroup = namedtuple('WheelGroup', ('isLeft', 'template', 'count', 'startIndex', 'radius'))
-WheelsConfig = namedtuple('WheelsConfig', ('groups', 'wheels'))
-TrackNode = namedtuple('TrackNode', ('name', 'isLeft', 'initialOffset', 'leftNodeName', 'rightNodeName', 'damping', 'elasticity', 'forwardElasticityCoeff', 'backwardElasticityCoeff'))
-TrackBasicParams = namedtuple('TrackNode', ('lodDist', 'leftMaterial', 'rightMaterial', 'textureScale', 'pairsCount'))
-TrackSplineParams = namedtuple('TrackNode', ('thickness', 'maxAmplitude', 'maxOffset', 'gravity'))
+Wheel = reflectedNamedTuple('Wheel', ('index', 'isLeft', 'radius', 'nodeName', 'isLeading', 'leadingSyncAngle', 'hitTester', 'materials', 'position'))
+WheelGroup = reflectedNamedTuple('WheelGroup', ('isLeft', 'template', 'count', 'startIndex', 'radius'))
+WheelsConfig = reflectedNamedTuple('WheelsConfig', ('groups', 'wheels'))
+TrackNode = reflectedNamedTuple('TrackNode', ('name', 'isLeft', 'initialOffset', 'leftNodeName', 'rightNodeName', 'damping', 'elasticity', 'forwardElasticityCoeff', 'backwardElasticityCoeff'))
+TrackBasicParams = reflectedNamedTuple('TrackBasicParams', ('lodDist', 'leftMaterial', 'rightMaterial', 'textureScale', 'pairsCount'))
+TrackSplineParams = reflectedNamedTuple('TrackSplineParams', ('thickness', 'maxAmplitude', 'maxOffset', 'gravity'))
 GroundNode = namedtuple('GroundNode', ('nodeName', 'affectedWheelName', 'isLeft', 'minOffset', 'maxOffset', 'collisionSamplesCount', 'hasLiftMode'))
 GroundNodeGroup = namedtuple('GroundNodeGroup', ('isLeft', 'minOffset', 'maxOffset', 'nodesTemplate', 'affectedWheelsTemplate', 'nodesCount', 'startIndex', 'collisionSamplesCount', 'hasLiftMode'))
-Traces = namedtuple('Traces', ('lodDist', 'bufferPrefs', 'textureSet', 'centerOffset', 'size', 'activePostmortem'))
+Traces = reflectedNamedTuple('Traces', ('lodDist', 'bufferPrefs', 'textureSet', 'centerOffset', 'size', 'activePostmortem'))
 LeveredSuspensionConfig = namedtuple('LeveredSuspensionConfig', ('levers', 'interpolationSpeedMul', 'lodSettings', 'activePostmortem'))
 SuspensionLever = namedtuple('SuspensionLever', ('startNodeName', 'jointNodeName', 'trackNodeName', 'minAngle', 'maxAngle', 'collisionSamplesCount', 'hasLiftMode', 'affectedWheelName'))
-SplineSegmentModelSet = namedtuple('SplineSegmentModelSet', ('left', 'right', 'secondLeft', 'secondRight'))
+SplineSegmentModelSet = reflectedNamedTuple('SplineSegmentModelSet', ('left', 'right', 'secondLeft', 'secondRight'))
 
 class SplineConfig(object):
+    __metaclass__ = ReflectionMetaclass
     __slots__ = ('__segmentModelSets', '__leftDesc', '__rightDesc', '__lodDist', '__atlasUTiles', '__atlasVTiles')
 
     def __init__(self, segmentModelSets=None, leftDesc=None, rightDesc=None, lodDist=None, atlasUTiles=component_constants.ZERO_INT, atlasVTiles=component_constants.ZERO_INT):
@@ -94,22 +96,26 @@ class SplineConfig(object):
     def atlasVTiles(self):
         return self.__atlasVTiles
 
-    def segmentModelLeft(self, modelSet=''):
-        set = self._getModelSet(modelSet)
-        return path_builder.makePath(*set.left)
+    @property
+    def segmentModelSets(self):
+        return self.__segmentModelSets
 
-    def segmentModelRight(self, modelSet=''):
-        set = self._getModelSet(modelSet)
-        return path_builder.makePath(*set.right)
+    def segmentModelLeft(self, modelSetName=''):
+        modelSet = self._getModelSet(modelSetName)
+        return path_builder.makePath(*modelSet.left)
 
-    def segment2ModelLeft(self, modelSet=''):
-        set = self._getModelSet(modelSet)
-        return path_builder.makePath(*set.secondLeft) if set.secondLeft else None
+    def segmentModelRight(self, modelSetName=''):
+        modelSet = self._getModelSet(modelSetName)
+        return path_builder.makePath(*modelSet.right)
 
-    def segment2ModelRight(self, modelSet=''):
-        set = self._getModelSet(modelSet)
-        return path_builder.makePath(*set.secondRight) if set.secondRight else None
+    def segment2ModelLeft(self, modelSetName=''):
+        modelSet = self._getModelSet(modelSetName)
+        return path_builder.makePath(*modelSet.secondLeft) if modelSet.secondLeft else None
 
-    def _getModelSet(self, modelSet):
-        set = modelSet if modelSet in self.__segmentModelSets else 'default'
-        return self.__segmentModelSets[set]
+    def segment2ModelRight(self, modelSetName=''):
+        modelSet = self._getModelSet(modelSetName)
+        return path_builder.makePath(*modelSet.secondRight) if modelSet.secondRight else None
+
+    def _getModelSet(self, modelSetName):
+        modelSet = modelSetName if modelSetName in self.__segmentModelSets else 'default'
+        return self.__segmentModelSets[modelSet]

@@ -17,7 +17,7 @@ IS_CELLAPP = BigWorld.component == 'cell'
 IS_BASEAPP = BigWorld.component in ('base', 'service')
 IS_WEB = BigWorld.component == 'web'
 IS_DYNAPDATER = False
-CURRENT_REALM = 'RU'
+CURRENT_REALM = 'CT'
 DEFAULT_LANGUAGE = 'ru'
 AUTH_REALM = 'RU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
@@ -727,6 +727,7 @@ class PremiumConfigs(object):
     PREM_SQUAD = 'premSquad_config'
 
 
+IS_LOOT_BOXES_ENABLED = 'isLootBoxesEnabled'
 SENIORITY_AWARDS_CONFIG = 'seniority_awards_config'
 
 class RESTRICTION_TYPE:
@@ -1326,7 +1327,7 @@ class REQUEST_COOLDOWN:
     SEND_INVITATION_COOLDOWN = 1.0
     RUN_QUEST = 1.0
     PAWN_FREE_AWARD_LIST = 1.0
-    LOOTBOX = 0.5
+    LOOTBOX = 1.0
     BADGES = 2.0
     CREW_SKINS = 0.3
     BPF_COMMAND = 1.0
@@ -1342,20 +1343,7 @@ class REQUEST_COOLDOWN:
     ANONYMIZER = 1.0
     UPDATE_IN_BATTLE_PLAYER_RELATIONS = 1.0
     FLUSH_RELATIONS = 1.0
-    NEW_YEAR_SLOT_FILL = 0.4
-    NEW_YEAR_CRAFT = 0.5
-    NEW_YEAR_CRAFT_OLD_TOYS = 0.5
-    NEW_YEAR_BREAK_TOYS = 1.0
-    NEW_YEAR_SEE_INVENTORY_TOYS = 0.5
-    NEW_YEAR_SEE_COLLECTION_TOYS = 0.5
-    NEW_YEAR_SELECT_DISCOUNT = 1.0
-    NEW_YEAR_VIEW_ALBUM = 0.5
-    NEW_YEAR_CONVERT_FILLERS = 1.0
-    NEW_YEAR_GET_TALISMAN_TOY = 1.0
-    NEW_YEAR_ADD_TALISMAN = 0.5
-    NEW_YEAR_FILL_OLD_COLLECTION = 0.5
-    NEW_YEAR_SET_NY_VEHICLE = 0.5
-    NEW_YEAR_SET_CAMOUFLAGE = 0.75
+    EQUIP_ENHANCEMENT = 1.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -1659,11 +1647,7 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  USER_SERVER_SETTINGS.HIDE_MARKS_ON_GUN: 'Hide marks on gun',
  USER_SERVER_SETTINGS.LINKEDSET_QUESTS: 'linkedset quests show reward info',
  USER_SERVER_SETTINGS.QUESTS_PROGRESS: 'feedback quests progress',
- 91: 'Loot box last viewed count',
- 92: 'Oriental loot box last viewed count',
- 93: 'New year loot box last viewed count',
- 94: 'Fairytale loot box last viewed count',
- 95: 'Christmas loot box last viewed count'}
+ 91: 'Loot box last viewed count'}
 
 class WG_GAMES:
     TANKS = 'wot'
@@ -2294,8 +2278,21 @@ class DUAL_GUN:
         COUNT = 4
 
 
+class MarathonConfig(object):
+    EMPTY_PATH = ''
+    URL = 'marathonUrl'
+    REWARD_VEHICLE_URL = 'rewardVehicleUrl'
+
+
+SECONDS_IN_DAY = 86400
+
 class BattleUserActions(object):
     ADD_FRIEND = 1
     REMOVE_FRIEND = 2
     ADD_IGNORED = 4
     REMOVE_IGNORED = 8
+
+
+class OVERRIDEN_BADGE(object):
+    NONE = 0
+    ENHANCEMENTS_LEVEL_1 = 1

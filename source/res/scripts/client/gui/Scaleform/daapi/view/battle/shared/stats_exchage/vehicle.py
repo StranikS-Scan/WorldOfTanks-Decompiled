@@ -132,7 +132,9 @@ class VehicleInfoComponent(broker.ExchangeComponent):
          'vehicleAction': overrides.getAction(vInfoVO),
          'isVehiclePremiumIgr': vTypeVO.isPremiumIGR,
          'teamColor': overrides.getColorScheme()}
-        if vInfoVO.ranked.selectedBadge:
+        if vInfoVO.ranked.overridenBadge:
+            data['badgeType'] = 'override_badge_{}'.format(vInfoVO.ranked.overridenBadge)
+        elif vInfoVO.ranked.selectedBadge:
             data['badgeType'] = 'badge_{}'.format(vInfoVO.ranked.selectedBadge)
         if vInfoVO.ranked.selectedSuffixBadge:
             data['suffixBadgeType'] = 'badge_{}'.format(vInfoVO.ranked.selectedSuffixBadge)

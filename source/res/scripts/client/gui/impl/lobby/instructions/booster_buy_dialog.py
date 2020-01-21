@@ -29,8 +29,8 @@ class BoosterBuyWindowView(DialogBuySellItemBaseView):
     def isBuying(self):
         return True
 
-    def _onUpdateStats(self, *args, **kwargs):
-        super(BoosterBuyWindowView, self)._onUpdateStats(*args, **kwargs)
+    def _onInventoryResync(self, *args, **kwargs):
+        super(BoosterBuyWindowView, self)._onInventoryResync(*args, **kwargs)
         shortage = self._stats.money.getShortage(self._getItemPrice().price)
         maxCount = self.__calculateMaxCount()
         with self.viewModel.transaction() as model:
@@ -67,17 +67,18 @@ class BoosterBuyWindowView(DialogBuySellItemBaseView):
         self.viewModel.onSetIsRearm -= self._onSetIsRearm
         super(BoosterBuyWindowView, self)._finalize()
 
-    @process
-    def _onSetIsRearm(self):
-        vehicle = g_currentVehicle.item
-        isRearm = self.viewModel.getIsRearm()
-        if vehicle is not None:
-            yield VehicleAutoBattleBoosterEquipProcessor(vehicle, isRearm).request()
+    def _onSetIsRearm(self, args=None):
+        if args is not None:
+            self.viewModel.setIsRearm(args.get('isRearm'))
         return
 
     @process
     def _onAcceptClicked(self):
         count = self.viewModel.getItemCount()
+        isRearm = self.viewModel.getIsRearm()
+        vehicle = g_currentVehicle.item
+        if vehicle is not None:
+            yield VehicleAutoBattleBoosterEquipProcessor(vehicle, isRearm).request()
         if self.__install and g_currentVehicle.isPresent():
             ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_AND_INSTALL_ITEM_VEHICLE_LAYOUT, g_currentVehicle.item, None, None, self._item, count, skipConfirm=True)
         else:

@@ -539,13 +539,18 @@ class VehicleArenaStatsVO(object):
 
 
 class PlayerRankedInfoVO(object):
-    __slots__ = ('rank', 'rankStep', 'badges', 'selectedBadge', '__prefixBadge', '__suffixBadge')
+    __slots__ = ('rank', 'rankStep', 'badges', 'selectedBadge', '__prefixBadge', '__suffixBadge', '_overridenBadge')
 
-    def __init__(self, rank=None, badges=None):
+    def __init__(self, rank=None, badges=None, overridenBadge=None):
         super(PlayerRankedInfoVO, self).__init__()
         self.rank, self.rankStep = rank or (0, 0)
         self.badges = badges or ()
         self.__prefixBadge, self.__suffixBadge = getSelectedByLayout(self.badges)
+        self._overridenBadge = overridenBadge
+
+    @property
+    def overridenBadge(self):
+        return self._overridenBadge
 
     @property
     def selectedBadge(self):

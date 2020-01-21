@@ -948,6 +948,40 @@
     <priceGroup>	styles 6000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
+        <vehicles>	ussr:R97_Object_140	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	98	</id>
+      <texture>	gui/maps/vehicles/styles/R97_Object_140_3Dst.png	</texture>
+      <description>	#vehicle_customization:unique_style/R97_Object_140_3Dst_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:unique_style/R97_Object_140_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	R97_Object_140_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:unique_style/R97_Object_140_3Dst	</userString>
+      <tags>	NY2020_style	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/unique_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 6000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
         <vehicles>	ussr:R148_Object_430_U	</vehicles>
       </include>
     </vehicleFilter>
@@ -987,6 +1021,80 @@
               <appliedTo>	4096	</appliedTo>
             </item>
           </insignias>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 3500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R19_IS-3	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	111	</id>
+      <texture>	gui/maps/vehicles/styles/R19_IS-3_3Dst.png	</texture>
+      <description>	#vehicle_customization:main_style/R19_IS-3_3Dst_desc	</description>
+      <modelsSet>	R19_IS-3_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/R19_IS-3_3Dst	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 6000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R52_Object_261	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	114	</id>
+      <texture>	gui/maps/vehicles/styles/R52_Object_261_3Dst.png	</texture>
+      <description>	#vehicle_customization:main_style/R52_Object_261_3Dst_desc	</description>
+      <modelsSet>	R52_Object_261_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/R52_Object_261_3Dst	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
         </outfit>
       </outfits>
     </style>
@@ -1034,24 +1142,64 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/unique_styles	</userString>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
-    <priceGroup>	styles 6000g notInShop	</priceGroup>
+    <priceGroup>	styles 3500g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <vehicles>	ussr:R97_Object_140	</vehicles>
+        <vehicles>	ussr:R127_T44_100_P	</vehicles>
       </include>
     </vehicleFilter>
     <style>
-      <id>	98	</id>
-      <texture>	gui/maps/vehicles/styles/R97_Object_140_3Dst.png	</texture>
-      <description>	#vehicle_customization:unique_style/R97_Object_140_3Dst_desc	</description>
-      <longDescriptionSpecial>	#vehicle_customization:unique_style/R97_Object_140_3Dst_desc/long	</longDescriptionSpecial>
-      <modelsSet>	R97_Object_140_3Dst	</modelsSet>
+      <id>	119	</id>
+      <texture>	gui/maps/vehicles/styles/R127_T44_100_P_3Dst.png	</texture>
+      <description>	#vehicle_customization:main_style/R127_T44_100_P_3Dst_desc	</description>
+      <modelsSet>	FULL3D	</modelsSet>
       <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:unique_style/R97_Object_140_3Dst	</userString>
-      <tags>	NY2020_style	</tags>
+      <userString>	#vehicle_customization:main_style/R127_T44_100_P_3Dst	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 2500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R19_IS-3	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	59	</id>
+      <texture>	gui/maps/vehicles/styles/R19_IS-3_Defender_Day_3Dst.png	</texture>
+      <description>	#vehicle_customization:main_style/R19_IS-3_Defender_Day_3Dst_desc	</description>
+      <modelsSet>	Defender_Day	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/R19_IS-3_Defender_Day_3Dst	</userString>
       <outfits>
         <outfit>
           <season>	ALL	</season>

@@ -314,6 +314,10 @@ class ShopCommonStats(IShopCommonStats):
     def discounts(self):
         return self.getGoodiesByVariety(GOODIE_VARIETY.DISCOUNT)
 
+    @property
+    def demountKits(self):
+        return self.getGoodiesByVariety(GOODIE_VARIETY.DEMOUNT_KIT)
+
     def getPremiumPacketCost(self, days):
         return self.premiumCost.get(days)
 

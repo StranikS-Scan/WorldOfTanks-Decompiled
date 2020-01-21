@@ -35,10 +35,19 @@ class IGoodiesCache(object):
     def getDiscount(self, discoutID):
         raise NotImplementedError
 
+    def getDemountKit(self, demountKitID=None):
+        raise NotImplementedError
+
+    def getGoodieByID(self, goodieID):
+        raise NotImplementedError
+
     def getBoosters(self, criteria=None):
         raise NotImplementedError
 
     def getDiscounts(self, criteria=None):
+        raise NotImplementedError
+
+    def getDemountKits(self, criteria=None):
         raise NotImplementedError
 
     def getClanReserves(self):

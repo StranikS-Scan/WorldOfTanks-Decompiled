@@ -51,7 +51,7 @@ class MissionsTokenPopover(MissionsTokenPopoverMeta):
                 break
 
         result = []
-        for quest in sorted(quests.values(), missionsSortFunc, reverse=True):
+        for quest in sorted(quests.values(), cmp=missionsSortFunc, reverse=True):
             header = text_styles.main(quest.getUserName())
             if quest.isCompleted():
                 icon = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_CHECKMARK

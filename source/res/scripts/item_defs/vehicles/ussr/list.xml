@@ -548,7 +548,7 @@
     <description>	#ussr_vehicles:Object_140_descr	</description>
     <shortUserString>	#ussr_vehicles:Object_140_short	</shortUserString>
     <price>	6100000	</price>
-    <tags>	mediumTank improvedVentilation_class2_user enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD NY2020_style	</tags>
+    <tags>	mediumTank improvedVentilation_class2_user enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
     <level>	10	</level>
   </R97_Object_140>
   <R96_Object_430B>
@@ -628,7 +628,7 @@
     <description>	#ussr_vehicles:R148_Object_430_U_descr	</description>
     <shortUserString>	#ussr_vehicles:R148_Object_430_U_short	</shortUserString>
     <price>	6100000	</price>
-    <tags>	mediumTank mediumTank3 improvedVentilation_class2_user enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD NY2020_style	</tags>
+    <tags>	mediumTank mediumTank3 improvedVentilation_class2_user enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
     <level>	10	</level>
   </R148_Object_430_U>
   <R149_Object_268_4>
@@ -703,6 +703,33 @@
     <tags>	heavyTank improvedVentilation_class3_user enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD	</tags>
     <level>	10	</level>
   </R155_Object_277>
+  <R169_ST_II>
+    <id>	87	</id>
+    <userString>	#ussr_vehicles:R169_ST_II	</userString>
+    <description>	#ussr_vehicles:R169_ST_II_descr	</description>
+    <shortUserString>	#ussr_vehicles:R169_ST_II_short	</shortUserString>
+    <price>	6100000	</price>
+    <tags>	heavyTank improvedVentilation_class3_user enhancedTorsions5t_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD siegeMode dualgun charger	</tags>
+    <level>	10	</level>
+  </R169_ST_II>
+  <R171_IS_3_II>
+    <id>	88	</id>
+    <userString>	#ussr_vehicles:R171_IS_3_II	</userString>
+    <description>	#ussr_vehicles:R171_IS_3_II_descr	</description>
+    <shortUserString>	#ussr_vehicles:R171_IS_3_II_short	</shortUserString>
+    <price>	3570000	</price>
+    <tags>	heavyTank improvedVentilation_class3_user enhancedTorsions5t_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD siegeMode dualgun charger	</tags>
+    <level>	9	</level>
+  </R171_IS_3_II>
+  <R170_IS_2_II>
+    <id>	89	</id>
+    <userString>	#ussr_vehicles:R170_IS_2_II	</userString>
+    <description>	#ussr_vehicles:R170_IS_2_II_descr	</description>
+    <shortUserString>	#ussr_vehicles:R170_IS_2_II_short	</shortUserString>
+    <price>	2480000	</price>
+    <tags>	heavyTank improvedVentilation_class3_user sinai enhancedTorsions5t_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD siegeMode dualgun charger	</tags>
+    <level>	8	</level>
+  </R170_IS_2_II>
   <R38_KV-220_beta>
     <id>	200	</id>
     <userString>	#ussr_vehicles:KV-220_test	</userString>
@@ -1431,7 +1458,7 @@
     <price>	10900	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG mediumAT-SPG AT-SPG1 enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class1_user HD NY2020_video	</tags>
+    <tags>	AT-SPG mediumAT-SPG AT-SPG1 enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
     <level>	8	</level>
   </R159_SU_130PM>
   <R161_T_116>
@@ -1457,9 +1484,22 @@
     <price>	11500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank heavyTank1 improvedVentilation_class3_user enhancedTorsions5t_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD siegeMode dualgun charger NY2020_video	</tags>
+    <tags>	heavyTank heavyTank1 improvedVentilation_class3_user enhancedTorsions5t_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD siegeMode dualgun charger	</tags>
     <level>	8	</level>
   </R165_Object_703_II>
+  <R172_Object_752>
+    <id>	119	</id>
+    <userString>	#ussr_vehicles:R172_Object_752	</userString>
+    <description>	#ussr_vehicles:R172_Object_752_descr	</description>
+    <shortUserString>	#ussr_vehicles:R172_Object_752_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R172_Object_752_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R172_Object_752_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank heavyTank2 improvedVentilation_class3_user enhancedTorsions5t_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD special secret testTank	</tags>
+    <level>	9	</level>
+  </R172_Object_752>
   <R165_Object_703_II_2>
     <id>	120	</id>
     <userString>	#ussr_vehicles:R165_Object_703_II_2	</userString>

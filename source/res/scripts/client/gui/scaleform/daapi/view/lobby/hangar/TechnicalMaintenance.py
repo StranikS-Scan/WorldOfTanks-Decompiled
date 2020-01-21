@@ -24,10 +24,12 @@ from helpers import dependency
 from helpers import i18n
 from helpers.i18n import makeString
 from account_helpers.settings_core.settings_constants import TUTORIAL
+from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.shared import IItemsCache
 
 class TechnicalMaintenance(TechnicalMaintenanceMeta):
     itemsCache = dependency.descriptor(IItemsCache)
+    bootcamp = dependency.descriptor(IBootcampController)
 
     def __init__(self, _=None, skipConfirm=False):
         super(TechnicalMaintenance, self).__init__()
@@ -148,7 +150,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
                 currency = shell.buyPrices.itemPrice.price.getCurrency(byWeight=True)
                 action = None
                 buyPrice = shell.getBuyPrice()
-                if buyPrice.isActionPrice():
+                if buyPrice.isActionPrice() and not self.bootcamp.isInBootcamp():
                     action = packItemActionTooltipData(shell)
                 shells.append({'id': str(shell.intCD),
                  'type': shell.type,
@@ -220,7 +222,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
             else:
                 priceCurrency = buyPrice.getCurrency(byWeight=True)
             action = None
-            if buyPrice.isActionPrice():
+            if buyPrice.isActionPrice() and not self.bootcamp.isInBootcamp():
                 action = packItemActionTooltipData(module)
             highlightType = getSlotOverlayIconType(module)
             disabledOption = self.__isSlotDisabled(module, selectedItems)

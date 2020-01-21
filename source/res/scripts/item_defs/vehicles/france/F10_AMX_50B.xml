@@ -52,6 +52,13 @@
       <undamaged>	vehicles/french/F10_AMX_50B/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/french/F10_AMX_50B/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/french/F10_AMX_50B/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <FULL3D>
+          <undamaged>	vehicles/french/F10_AMX_50B/_skins/FULL3D/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/french/F10_AMX_50B/_skins/FULL3D/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/french/F10_AMX_50B/_skins/FULL3D/crash/lod0/Hull.model	</exploded>
+        </FULL3D>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -835,6 +842,13 @@
         <undamaged>	vehicles/french/F10_AMX_50B/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/french/F10_AMX_50B/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/french/F10_AMX_50B/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <FULL3D>
+            <undamaged>	vehicles/french/F10_AMX_50B/_skins/FULL3D/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/french/F10_AMX_50B/_skins/FULL3D/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/french/F10_AMX_50B/_skins/FULL3D/crash/lod0/Chassis.model	</exploded>
+          </FULL3D>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1587,6 +1601,13 @@
             <undamaged>	vehicles/french/F10_AMX_50B/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/french/F10_AMX_50B/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/french/F10_AMX_50B/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <FULL3D>
+                <undamaged>	vehicles/french/F10_AMX_50B/_skins/FULL3D/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/french/F10_AMX_50B/_skins/FULL3D/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/french/F10_AMX_50B/_skins/FULL3D/crash/lod0/Gun_01.model	</exploded>
+              </FULL3D>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/french/F10_AMX_50B/collision/Gun_01.model	</collisionModelServer>
@@ -2086,6 +2107,13 @@
         <undamaged>	vehicles/french/F10_AMX_50B/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/french/F10_AMX_50B/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/french/F10_AMX_50B/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <FULL3D>
+            <undamaged>	vehicles/french/F10_AMX_50B/_skins/FULL3D/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/french/F10_AMX_50B/_skins/FULL3D/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/french/F10_AMX_50B/_skins/FULL3D/crash/lod0/Turret_01.model	</exploded>
+          </FULL3D>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/french/F10_AMX_50B/collision/Turret_01.model	</collisionModelServer>

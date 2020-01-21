@@ -151,7 +151,7 @@ class BattleResultsService(IBattleResultsService):
                 SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
             if result.success:
                 self.__appliedAddXPBonus.add(arenaUniqueID)
-                self.__updateComposer(arenaUniqueID)
+                yield self.__updateComposer(arenaUniqueID)
                 self.__onAddXPBonusChanged()
             return
 
@@ -287,20 +287,22 @@ class BattleResultsService(IBattleResultsService):
             battleCtx.lastArenaUniqueID = None
         return
 
+    @async
     @process
-    def __updateComposer(self, arenaUniqueID):
+    def __updateComposer(self, arenaUniqueID, callback):
         results = yield BattleResultsGetter(arenaUniqueID).request()
         if results.success:
             result = results.auxData
             reusableInfo = reusable.createReusableInfo(result)
             if reusableInfo is None:
                 SystemMessages.pushI18nMessage(BATTLE_RESULTS.NODATA, type=SystemMessages.SM_TYPE.Warning)
-                return
+                callback(False)
             self.__updateReusableInfo(reusableInfo)
             arenaUniqueID = reusableInfo.arenaUniqueID
             composerObj = composer.createComposer(reusableInfo)
             composerObj.setResults(result, reusableInfo)
             self.__composers[arenaUniqueID] = composerObj
+        callback(True)
         return
 
     def __updateReusableInfo(self, reusableInfo):

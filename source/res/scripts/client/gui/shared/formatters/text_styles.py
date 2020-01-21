@@ -55,9 +55,7 @@ __all__ = ('standard',
  'heroTitleTK',
  'grandTitle',
  'grandTitleYellow',
- 'grandTitleTK',
- 'middleTitleNY',
- 'mainNY')
+ 'grandTitleTK')
 
 def _getStyle(style, ctx=None):
     if ctx is None:
@@ -239,6 +237,10 @@ def goldSmall(text):
     return _formatText('goldTextSmall', text)
 
 
+def demountKitText(text):
+    return _formatText('demountKitText', text)
+
+
 def credits(text):
     return _formatText('creditsText', text)
 
@@ -375,18 +377,6 @@ def grandTitleTK(text):
 
 def failedStatusText(text):
     return _formatText('failedStatusText', text)
-
-
-def middleTitleNY(text):
-    return _formatText('middleTitleNY', text)
-
-
-def mainNY(text):
-    return _formatText('mainTextNY', text)
-
-
-def vehicleNameNY(text):
-    return _formatText('vehicleNameNY', text)
 
 
 def getRawStyles(names):

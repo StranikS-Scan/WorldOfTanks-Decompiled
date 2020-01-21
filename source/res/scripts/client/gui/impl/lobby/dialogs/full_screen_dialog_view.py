@@ -1,15 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/dialogs/full_screen_dialog_view.py
-from abc import abstractproperty
 import logging
+from abc import abstractproperty
 from PlayerEvents import g_playerEvents
-from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.impl.pub import ViewImpl
-from gui.impl.pub.dialog_window import DialogResult, DialogButtons
-from gui.impl.wrappers.background_blur import WGUIBackgroundBlurSupportImpl
+from async import AsyncScope, AsyncEvent, await, async, BrokenPromiseError, AsyncReturn
+from frameworks.wulf import WindowSettings, Window
 from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
 from gui.impl.gen.view_models.windows.full_screen_dialog_window_model import FullScreenDialogWindowModel
-from async import AsyncScope, AsyncEvent, await, async, BrokenPromiseError, AsyncReturn
+from gui.impl.pub import ViewImpl
+from gui.impl.pub.dialog_window import DialogResult, DialogButtons, DialogLayer
+from gui.impl.wrappers.background_blur import WGUIBackgroundBlurSupportImpl
 from gui.shared.money import Currency
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
@@ -38,6 +38,9 @@ class FullScreenDialogView(ViewImpl):
     def viewModel(self):
         pass
 
+    def _getAdditionalData(self):
+        return None
+
     @async
     def wait(self):
         try:
@@ -45,17 +48,16 @@ class FullScreenDialogView(ViewImpl):
         except BrokenPromiseError:
             _logger.debug('%s has been destroyed without user decision', self)
 
-        raise AsyncReturn(DialogResult(self.__result, None))
-        return
+        raise AsyncReturn(DialogResult(self.__result, self._getAdditionalData()))
 
     def _initialize(self):
         super(FullScreenDialogView, self)._initialize()
         self.viewModel.onAcceptClicked += self._onAcceptClicked
         self.viewModel.onCancelClicked += self._onCancelClicked
-        g_clientUpdateManager.addMoneyCallback(self._onUpdateStats)
+        self._itemsCache.onSyncCompleted += self._onInventoryResync
         g_playerEvents.onAccountBecomeNonPlayer += self.destroyWindow
 
-    def _onUpdateStats(self, *args, **kwargs):
+    def _onInventoryResync(self, *args, **kwargs):
         with self.viewModel.transaction() as model:
             self.__setStats(model)
 
@@ -75,7 +77,7 @@ class FullScreenDialogView(ViewImpl):
         super(FullScreenDialogView, self)._finalize()
         self.viewModel.onAcceptClicked -= self._onAcceptClicked
         self.viewModel.onCancelClicked -= self._onCancelClicked
-        g_clientUpdateManager.removeObjectCallbacks(self)
+        self._itemsCache.onSyncCompleted -= self._onInventoryResync
         g_playerEvents.onAccountBecomeNonPlayer -= self.destroyWindow
         self.__scope.destroy()
         if self.__blur:
@@ -103,3 +105,17 @@ class FullScreenDialogView(ViewImpl):
         model.setGolds(int(self._stats.money.getSignValue(Currency.GOLD)))
         model.setCrystals(int(self._stats.money.getSignValue(Currency.CRYSTAL)))
         model.setFreexp(self._stats.freeXP)
+
+
+class FullScreenDialogWindowWrapper(Window):
+    __slots__ = ('__wrappedView',)
+
+    def __init__(self, wrappedView):
+        self.__wrappedView = wrappedView
+        settings = WindowSettings()
+        settings.flags = DialogLayer.TOP_WINDOW
+        settings.content = wrappedView
+        super(FullScreenDialogWindowWrapper, self).__init__(settings)
+
+    def wait(self):
+        return self.__wrappedView.wait()

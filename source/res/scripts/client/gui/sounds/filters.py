@@ -3,6 +3,7 @@
 import WWISE
 from gui.sounds.sound_constants import SoundFilters
 STATE_HANGAR_FILTERED = 'STATE_hangar_filtered'
+STATE_BOOTCAMP_ARENA_FILTERED = 'STATE_bootcamp_arena_filtered'
 
 class _SoundFilterAbstract(object):
 
@@ -80,7 +81,7 @@ class WWISEFilteredHangarFilter(_WWISEStateAmbient):
 class WWISEFilteredBootcampArenaFilter(_WWISEStateAmbient):
 
     def __init__(self):
-        _WWISEStateAmbient.__init__(self, 'STATE_bootcamp_arena_filtered')
+        _WWISEStateAmbient.__init__(self, STATE_BOOTCAMP_ARENA_FILTERED)
 
 
 def getEmptyFilter():

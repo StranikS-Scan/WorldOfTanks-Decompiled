@@ -3,6 +3,7 @@
 import BigWorld
 import ResMgr
 import material_kinds
+from constants import IS_EDITOR
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 g_instance = None
 
@@ -12,6 +13,8 @@ class DecalMap(object):
         self.__cfg = dict()
         self.__texMap = dict()
         self.__textureSets = dict()
+        if IS_EDITOR:
+            self.__chassisEffectGroups = dict()
         self._readCfg(dataSec)
 
     def initGroups(self, scaleFactor):
@@ -43,6 +46,16 @@ class DecalMap(object):
             return dict()
         return self.__textureSets[name]
 
+    if IS_EDITOR:
+
+        @property
+        def textureSets(self):
+            return self.__textureSets
+
+        @property
+        def chassisEffectGroups(self):
+            return self.__chassisEffectGroups
+
     def _readCfg(self, dataSec):
         if dataSec is None:
             LOG_ERROR('Invalid dataSection.')
@@ -73,6 +86,8 @@ class DecalMap(object):
                 desc['lifeTime'] = _readFloat(group, 'lifeTime', 0, 1000, 1)
                 desc['trianglesCount'] = _readFloat(group, 'trianglesCount', 1000, 100000, 1000)
                 groups[group.name] = desc
+                if IS_EDITOR:
+                    self.__chassisEffectGroups[group.name] = desc
 
             for sMatId in dataSec['scales'].values():
                 scaleU = _readFloat(sMatId, 'scaleU', 1, 2, 1)

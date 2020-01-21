@@ -6,6 +6,7 @@ from items.components import component_constants
 from items.components import gun_components
 from items.components.component_constants import ZERO_FLOAT
 from items.readers import shared_readers
+from constants import IS_EDITOR
 
 def readRecoilEffect(xmlCtx, section, cache):
     effName = _xml.readStringOrNone(xmlCtx, section, 'recoil/recoilEffect')
@@ -20,7 +21,10 @@ def readRecoilEffect(xmlCtx, section, cache):
     else:
         backoffTime = _xml.readNonNegativeFloat(xmlCtx, section, 'recoil/backoffTime')
         returnTime = _xml.readNonNegativeFloat(xmlCtx, section, 'recoil/returnTime')
-    return gun_components.RecoilEffect(lodDist=shared_readers.readLodDist(xmlCtx, section, 'recoil/lodDist', cache), amplitude=_xml.readNonNegativeFloat(xmlCtx, section, 'recoil/amplitude'), backoffTime=backoffTime, returnTime=returnTime)
+    recoil = gun_components.RecoilEffect(lodDist=shared_readers.readLodDist(xmlCtx, section, 'recoil/lodDist', cache), amplitude=_xml.readNonNegativeFloat(xmlCtx, section, 'recoil/amplitude'), backoffTime=backoffTime, returnTime=returnTime)
+    if IS_EDITOR:
+        recoil.effectName = effName
+    return recoil
 
 
 def readShot(xmlCtx, section, nationID, projectileSpeedFactor, cache):

@@ -13,7 +13,7 @@ from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared.formatters import getItemUnlockPricesVO, getItemRestorePricesVO, getItemSellPricesVO
+from gui.shared.formatters import getItemUnlockPricesVO, getItemRestorePricesVO, getItemSellPricesVO, getMoneyVO
 from gui.shared.gui_items.gui_item_economics import getMinRentItemPrice
 from gui.shared.formatters import text_styles, moneyWithIcon, icons, getItemPricesVO
 from gui.shared.formatters.time_formatters import RentLeftFormatter, getTimeLeftInfo
@@ -35,7 +35,7 @@ from gui.shared.tooltips.common import BlocksTooltipData, makeCompoundPriceBlock
 from gui.shared.utils import MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME
 from helpers import i18n, time_utils, int2roman, dependency
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import ITradeInController
+from skeletons.gui.game_control import ITradeInController, IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
@@ -70,6 +70,7 @@ _SHORTEN_TOOLTIP_CASES = ('shopVehicle',)
 
 class VehicleInfoTooltipData(BlocksTooltipData):
     __itemsCache = dependency.descriptor(IItemsCache)
+    __bootcamp = dependency.descriptor(IBootcampController)
 
     def __init__(self, context):
         super(VehicleInfoTooltipData, self).__init__(context, TOOLTIP_TYPE.VEHICLE)
@@ -150,7 +151,7 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         frontlineBlock = FrontlineRentBlockConstructor(vehicle, statsConfig, ctxParams, valueWidth, leftPadding=20, rightPadding=20).construct()
         if frontlineBlock:
             items.append(formatters.packBuildUpBlockData(frontlineBlock, gap=-4, padding=formatters.packPadding(left=25, right=20, top=0, bottom=-11)))
-        if vehicle.canTradeIn:
+        if vehicle.canTradeIn and not self.__bootcamp.isInBootcamp():
             items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_TRADE), value='', icon=ICON_TEXT_FRAMES.TRADE, valueWidth=valueWidth, padding=formatters.packPadding(left=-5, top=0, bottom=-10)))
         if not vehicle.isPremiumIGR and not frontlineBlock and vehicle.getRentPackage() and (vehicle.rentalIsOver or not vehicle.isRented):
             items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main('#tooltips:vehicle/rentAvailable'), value='', icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, valueWidth=valueWidth, padding=formatters.packPadding(left=-5, top=0, bottom=-10)))
@@ -186,16 +187,15 @@ class BaseVehicleParametersTooltipData(BlocksTooltipData):
         super(BaseVehicleParametersTooltipData, self).__init__(context, TOOLTIP_TYPE.VEHICLE)
         self._setMargins(11, 14)
         self._setWidth(520)
-        self.__paramName = None
+        self._paramName = None
         self.__iconPadding = formatters.packPadding(left=6, top=-2)
         self.__titlePadding = formatters.packPadding(left=8)
         self.__listPadding = formatters.packPadding(bottom=6)
         return
 
-    def _packBlocks(self, paramName):
+    def _packData(self, paramName):
         self._extendedData = self.context.getComparator().getExtendedData(paramName)
-        self.__paramName = self._extendedData.name
-        return []
+        self._paramName = self._extendedData.name
 
     def _getPenalties(self):
         notFullCrew = False
@@ -209,7 +209,7 @@ class BaseVehicleParametersTooltipData(BlocksTooltipData):
             result.append(formatters.packTitleDescParameterWithIconBlockData(text_styles.main(_ms(TOOLTIPS.VEHICLEPARAMS_PENALTY_CREWNOTFULL_TEMPLATE)), icon=RES_ICONS.MAPS_ICONS_VEHPARAMS_TOOLTIPS_PENALTIES_ALL, iconPadding=self.__iconPadding, titlePadding=self.__titlePadding, padding=self.__listPadding))
         if numNotNullPenaltyTankman > 0:
             for penalty in penalties:
-                valueStr = _formatValueChange(self.__paramName, penalty.value)
+                valueStr = _formatValueChange(self._paramName, penalty.value)
                 if valueStr:
                     if penalty.vehicleIsNotNative:
                         locKey = TOOLTIPS.VEHICLEPARAMS_PENALTY_TANKMANDIFFERENTVEHICLE_TEMPLATE
@@ -269,6 +269,7 @@ class VehicleAvgParameterTooltipData(BaseVehicleAdvancedParametersTooltipData):
 
     def _packBlocks(self, paramName):
         blocks = super(VehicleAvgParameterTooltipData, self)._packBlocks(paramName)
+        self._packData(paramName)
         rangeParamName = self._AVG_TO_RANGE_PARAMETER_NAME[paramName]
         value = self.context.getComparator().getExtendedData(rangeParamName).value
         fmtValue = param_formatter.formatParameter(rangeParamName, value)
@@ -302,16 +303,14 @@ class VehicleAdvancedParametersTooltipData(BaseVehicleAdvancedParametersTooltipD
 
     def __init__(self, context):
         super(VehicleAdvancedParametersTooltipData, self).__init__(context)
-        self.__paramName = None
         self.__iconPadding = formatters.packPadding(left=6, top=-2)
         self.__titlePadding = formatters.packPadding(left=8)
         self.__listPadding = formatters.packPadding(bottom=6)
         self.__iconDisabledAlpha = 0.5
-        return
 
     def _packBlocks(self, paramName):
         blocks = super(VehicleAdvancedParametersTooltipData, self)._packBlocks(paramName)
-        self.__paramName = self._extendedData.name
+        self._packData(paramName)
         bonuses, hasSituational = self._getBonuses()
         self._packListBlock(blocks, bonuses, text_styles.warning(_ms(TOOLTIPS.VEHICLEPARAMS_BONUSES_TITLE)))
         notFullCrew, penalties = self._getPenalties()
@@ -346,7 +345,7 @@ class VehicleAdvancedParametersTooltipData(BaseVehicleAdvancedParametersTooltipD
         result = []
         bonuses = sorted(self._extendedData.bonuses, cmp=_bonusCmp)
         item = self.context.buildItem()
-        bonusExtractor = bonus_helper.BonusExtractor(item, bonuses, self.__paramName)
+        bonusExtractor = bonus_helper.BonusExtractor(item, bonuses, self._paramName)
         hasSituational = False
         for bnsType, bnsId, pInfo in bonusExtractor.getBonusInfo():
             isSituational = isSituationalBonus(bnsId)
@@ -377,14 +376,8 @@ class VehicleAdvancedParametersTooltipData(BaseVehicleAdvancedParametersTooltipD
 
 class VehicleListDescParameterTooltipData(BaseVehicleAdvancedParametersTooltipData):
 
-    def __init__(self, context):
-        super(VehicleListDescParameterTooltipData, self).__init__(context)
-        self.__paramName = None
-        return
-
     def _packBlocks(self, paramName):
         blocks = super(VehicleListDescParameterTooltipData, self)._packBlocks(paramName)
-        self.__paramName = self._extendedData.name
         blocks.append(formatters.packTextBlockData(text_styles.main(TOOLTIPS.TANK_PARAMS_DESC_EFFECTIVEARMORDESC)))
         return blocks
 
@@ -561,6 +554,7 @@ class TelecomBlockConstructor(VehicleTooltipBlockConstructor):
 
 
 class PriceBlockConstructor(VehicleTooltipBlockConstructor):
+    bootcamp = dependency.descriptor(IBootcampController)
 
     def __init__(self, vehicle, configuration, params, valueWidth, leftPadding, rightPadding):
         super(PriceBlockConstructor, self).__init__(vehicle, configuration, leftPadding, rightPadding)
@@ -626,12 +620,17 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
             elif not isInInventory or vehicle.isRentable or vehicle.isRented and not (vehicle.isDisabledForBuy or vehicle.isPremiumIGR or vehicle.isTelecom):
                 itemPrice = vehicle.buyPrices.itemPrice
                 price = itemPrice.price
-                actionPrc = itemPrice.getActionPrc()
                 currency = price.getCurrency()
                 neededValue = _getNeedValue(price, currency)
                 if isInInventory or not isInInventory and not isUnlocked and not isNextToUnlock:
                     neededValue = None
-                block.append(makeCompoundPriceBlock(CURRENCY_SETTINGS.getBuySetting(currency), getItemPricesVO(itemPrice)))
+                if self.bootcamp.isInBootcamp():
+                    itemPricesVO = [{'price': getMoneyVO(itemPrice.price)}]
+                    actionPrc = 0
+                else:
+                    itemPricesVO = getItemPricesVO(itemPrice)
+                    actionPrc = itemPrice.getActionPrc()
+                block.append(makeCompoundPriceBlock(CURRENCY_SETTINGS.getBuySetting(currency), itemPricesVO))
         notEnoughMoney = neededValue > 0
         hasAction = actionPrc > 0
         return (block, notEnoughMoney or hasAction)

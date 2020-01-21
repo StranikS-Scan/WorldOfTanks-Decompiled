@@ -33,9 +33,6 @@ class GameInputMgr(GameInputManagerMeta):
             self._setupChatKeyHandlers()
         return
 
-    def setIgnoredKeyCode(self, keyCode):
-        self.as_setIgnoredKeyCodeS(keyCode)
-
     def _populate(self):
         super(GameInputMgr, self)._populate()
         self._setupChatKeyHandlers()

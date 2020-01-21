@@ -10,6 +10,9 @@ class DestroyTimersPanelMeta(BaseDAAPIComponent):
     def as_hideS(self, timerTypeID):
         return self.flashObject.as_hide(timerTypeID) if self._isDAAPIInited() else None
 
+    def as_setVerticalOffsetS(self, offsetY):
+        return self.flashObject.as_setVerticalOffset(offsetY) if self._isDAAPIInited() else None
+
     def as_setTimeInSecondsS(self, timerTypeID, totalSeconds, currentTime):
         return self.flashObject.as_setTimeInSeconds(timerTypeID, totalSeconds, currentTime) if self._isDAAPIInited() else None
 

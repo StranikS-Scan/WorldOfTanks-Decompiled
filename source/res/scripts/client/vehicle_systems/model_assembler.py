@@ -16,7 +16,7 @@ import math_utils
 from helpers import DecalMap
 from items.components import shared_components, component_constants
 from vehicle_systems.vehicle_damage_state import VehicleDamageState
-from vehicle_systems.tankStructure import getPartModelsFromDesc, TankNodeNames, TankPartNames, TankPartIndexes
+from vehicle_systems.tankStructure import getPartModelsFromDesc, getCollisionModelsFromDesc, TankNodeNames, TankPartNames, TankPartIndexes, RenderStates, TankCollisionPartNames
 from vehicle_systems.components.hull_aiming_controller import HullAimingController
 DEFAULT_MAX_LOD_PRIORITY = None
 _INFINITY = 10000
@@ -38,25 +38,15 @@ def __getWheelsRiseTime(vehicleDesc):
     return wheelsRiseTime
 
 
-def prepareCompoundAssembler(vehicleDesc, modelsSetParams, spaceID, isTurretDetached=False, lodIdx=_DEFAULT_LOD_INDEX, skipMaterials=False):
+def prepareCompoundAssembler(vehicleDesc, modelsSetParams, spaceID, isTurretDetached=False, lodIdx=_DEFAULT_LOD_INDEX, skipMaterials=False, renderState=None):
     if IS_DEVELOPMENT and modelsSetParams.state not in VehicleDamageState.MODEL_STATE_NAMES:
         raise SoftException('Invalid modelStateName %s, must be in %s' % (modelsSetParams.state, VehicleDamageState.MODEL_STATE_NAMES))
     if spaceID is None:
         spaceID = BigWorld.player().spaceID
-    partModels = getPartModelsFromDesc(vehicleDesc, modelsSetParams)
-    chassis, hull, turret, gun = partModels
     assembler = BigWorld.CompoundAssembler()
-    assembler.addRootPart(chassis, TankPartNames.CHASSIS)
-    assembler.emplacePart(hull, 'V', TankPartNames.HULL)
-    turretJointName = vehicleDesc.hull.turretHardPoints[0]
-    assembler.addNodeAlias(turretJointName, TankNodeNames.TURRET_JOINT)
-    if not isTurretDetached:
-        assembler.addPart(turret, turretJointName, TankPartNames.TURRET)
-        assembler.addPart(gun, TankNodeNames.GUN_JOINT, TankPartNames.GUN)
-        if modelsSetParams.state == 'undamaged':
-            for idx, attachment in enumerate(modelsSetParams.attachments):
-                assembler.addPart(attachment.modelName, attachment.attachNode, 'attachment' + str(idx), attachment.transform)
-
+    attachModels(assembler, vehicleDesc, modelsSetParams, isTurretDetached, renderState)
+    if renderState == RenderStates.OVERLAY_COLLISION:
+        attachModels(assembler, vehicleDesc, modelsSetParams, isTurretDetached, RenderStates.SERVER_COLLISION, True)
     cornerPoint = vehicleDesc.chassis.topRightCarryingPoint
     assembler.addNode(TankNodeNames.TRACK_LEFT_MID, TankPartNames.CHASSIS, math_utils.createTranslationMatrix((-cornerPoint[0], 0, 0)))
     assembler.addNode(TankNodeNames.TRACK_RIGHT_MID, TankPartNames.CHASSIS, math_utils.createTranslationMatrix((cornerPoint[0], 0, 0)))
@@ -66,6 +56,37 @@ def prepareCompoundAssembler(vehicleDesc, modelsSetParams, spaceID, isTurretDeta
     assembler.lodIdx = lodIdx
     assembler.skipMaterials = skipMaterials
     return assembler
+
+
+def attachModels(assembler, vehicleDesc, modelsSetParams, isTurretDetached, renderState=None, overlayCollision=False):
+    collisionState = renderState == RenderStates.CLIENT_COLLISION or renderState == RenderStates.SERVER_COLLISION
+    if collisionState:
+        partModels = getCollisionModelsFromDesc(vehicleDesc, renderState)
+    else:
+        partModels = getPartModelsFromDesc(vehicleDesc, modelsSetParams)
+    chassis, hull, turret, gun = partModels
+    partNames = TankPartNames
+    if overlayCollision:
+        partNames = TankCollisionPartNames
+    if not overlayCollision:
+        assembler.addRootPart(chassis, TankPartNames.CHASSIS)
+    else:
+        assembler.addPart(chassis, TankPartNames.CHASSIS, TankCollisionPartNames.CHASSIS)
+    if collisionState and not overlayCollision:
+        assembler.addNode('V', TankPartNames.CHASSIS, math_utils.createTranslationMatrix(vehicleDesc.chassis.hullPosition))
+    assembler.emplacePart(hull, 'V', partNames.HULL)
+    turretJointName = vehicleDesc.hull.turretHardPoints[0]
+    assembler.addNodeAlias(turretJointName, TankNodeNames.TURRET_JOINT)
+    if not isTurretDetached:
+        if collisionState and not overlayCollision:
+            assembler.addNode(turretJointName, 'V', math_utils.createTranslationMatrix(vehicleDesc.hull.turretPositions[0]))
+        assembler.addPart(turret, turretJointName, partNames.TURRET)
+        if collisionState and not overlayCollision:
+            assembler.addNode(TankNodeNames.GUN_JOINT, TankPartNames.TURRET, math_utils.createTranslationMatrix(vehicleDesc.turret.gunPosition))
+        assembler.addPart(gun, TankNodeNames.GUN_JOINT, partNames.GUN)
+        if modelsSetParams.state == 'undamaged':
+            for idx, attachment in enumerate(modelsSetParams.attachments):
+                assembler.addPart(attachment.modelName, attachment.attachNode, 'attachment' + str(idx), attachment.transform)
 
 
 def createGunAnimator(gameObject, vehicleDesc, basisMatrix=None, lodLink=None):
@@ -404,6 +425,9 @@ def setupTurretRotations(appearance):
         compoundModel.node(TankNodeNames.GUN_INCLINATION, appearance.gunMatrix)
     else:
         compoundModel.node(TankPartNames.GUN, appearance.gunMatrix)
+    if appearance.renderState == RenderStates.OVERLAY_COLLISION:
+        compoundModel.node(TankCollisionPartNames.TURRET, appearance.turretMatrix)
+        compoundModel.node(TankCollisionPartNames.GUN, appearance.gunMatrix)
 
 
 def createVehicleFilter(typeDescriptor):
@@ -560,7 +584,7 @@ def setupTracksFashion(vehicleDesc, fashion):
     return
 
 
-def __assembleSimpleTracks(appearance, vehicleDesc, fashion, wheelsDataProvider, tracks):
+def assembleSimpleTracks(appearance, vehicleDesc, fashion, wheelsDataProvider, tracks):
     tracksCfg = vehicleDesc.chassis.tracks
     if tracksCfg is None:
         return
@@ -582,7 +606,7 @@ def __assembleSimpleTracks(appearance, vehicleDesc, fashion, wheelsDataProvider,
         return
 
 
-def __assemblePhysicalTracks(resourceRefs, trackPairsCount, appearance, tracks, instantWarmup):
+def assemblePhysicalTracks(resourceRefs, trackPairsCount, appearance, tracks, instantWarmup):
     inited = True
     allTracks = []
     for i in xrange(trackPairsCount):
@@ -617,7 +641,7 @@ def __assemblePhysicalTracks(resourceRefs, trackPairsCount, appearance, tracks, 
     return inited
 
 
-def __assembleSplineTracks(vehicleDesc, appearance, splineTracksImpl, tracks):
+def assembleSplineTracks(vehicleDesc, appearance, splineTracksImpl, tracks):
     if splineTracksImpl is None:
         return
     else:
@@ -641,9 +665,9 @@ def assembleTracks(resourceRefs, vehicleDesc, appearance, splineTracksImpl, inst
         trackPairsCount = tracksCfg.pairsCount
     tracks = Vehicular.VehicleTracks(appearance.worldID, appearance.compoundModel, TankPartIndexes.CHASSIS, _AREA_LOD_FOR_NONSIMPLE_TRACKS, trackPairsCount)
     appearance.tracks = tracks
-    __assemblePhysicalTracks(resourceRefs, trackPairsCount, appearance, tracks, instantWarmup)
-    __assembleSplineTracks(vehicleDesc, appearance, splineTracksImpl, tracks)
-    __assembleSimpleTracks(appearance, vehicleDesc, appearance.fashion, appearance.wheelsAnimator, tracks)
+    assemblePhysicalTracks(resourceRefs, trackPairsCount, appearance, tracks, instantWarmup)
+    assembleSplineTracks(vehicleDesc, appearance, splineTracksImpl, tracks)
+    assembleSimpleTracks(appearance, vehicleDesc, appearance.fashion, appearance.wheelsAnimator, tracks)
     vehicleFilter = getattr(appearance, 'filter', None)
     if vehicleFilter is not None:
         tracks.setTrackScrollLink(DataLinks.createFloatLink(vehicleFilter, 'leftTrackScroll'), DataLinks.createFloatLink(vehicleFilter, 'rightTrackScroll'))

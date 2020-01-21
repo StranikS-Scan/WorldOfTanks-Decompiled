@@ -61,12 +61,11 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     BLUEPRINTS = 'blueprintsInfo'
     FRONTLINE = 'frontlineInfo'
     SQUAD_BONUS = 'squadBonus'
-    NY_CREDIT_BONUS = 'nyTotalCreditBonus'
-    NY_VEHICLE_BONUS = 'nyVehicleBonus'
     SESSION_STATS = 'sessionStats'
     TRADE_IN_INFO = 'tradeInInfo'
     TRADE_IN_INFO_NOT_AVAILABLE = 'tradeInInfoNotAvailable'
     TRADE_IN_STATE_NOT_AVAILABLE = 'tradeInStateNotAvailable'
+    DEMOUNT_KIT = 'demountKit'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):
@@ -97,6 +96,7 @@ class TOOLTIP_COMPONENT(CONST_CONTAINER):
     CREW = 'crew'
     CREW_BOOK = 'crewBook'
     TRADE_IN = 'tradeIn'
+    DEMOUNT_KIT = 'demountKit'
 
 
 class ACTION_TOOLTIPS_TYPE(CONST_CONTAINER):

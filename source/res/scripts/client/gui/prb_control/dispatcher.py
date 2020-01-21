@@ -464,9 +464,9 @@ class _PreBattleDispatcher(ListenersCollection):
             if isPlayTimeBan:
                 SystemMessages.pushI18nMessage(key.format('playTimeNotification'), timeTillBlock, type=SystemMessages.SM_TYPE.Warning)
             else:
-                notifyStartTime, blockTime = self.gameSession.getCurfewBlockTime()
+                _, blockTime = self.gameSession.getCurfewBlockTime()
                 formatter = lambda t: time.strftime('%H:%M', time.localtime(t))
-                SystemMessages.pushI18nMessage(key.format('midnightNotification'), type=SystemMessages.SM_TYPE.Warning, preBlockTime=formatter(notifyStartTime), blockTime=formatter(blockTime))
+                SystemMessages.pushI18nMessage(key.format('midnightNotification'), type=SystemMessages.SM_TYPE.Warning, blockTime=formatter(blockTime))
 
     def rc_onRentChange(self, vehicles):
         if g_currentVehicle.isPresent() and g_currentVehicle.item.intCD in vehicles and g_currentVehicle.isDisabledInRent() and g_currentVehicle.isInPrebattle():

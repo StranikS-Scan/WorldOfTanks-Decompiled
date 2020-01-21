@@ -8,14 +8,9 @@ from Event import Event
 from constants import IS_TUTORIAL_ENABLED, PremiumConfigs
 from debug_utils import LOG_WARNING, LOG_DEBUG
 from gui import GUI_SETTINGS, SystemMessages
-from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.SystemMessages import SM_TYPE
+from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.shared.utils.decorators import ReprInjector
-from ny_common.CraftCost import CraftCostConfig
-from ny_common.GeneralConfig import GeneralConfig
-from ny_common.SettingBonus import SettingBonusConfig
-from ny_common.ToyDecayCost import ToyDecayCostConfig
-from ny_common.settings import SettingBonusConsts, NYVehBranchConsts, NYLootBoxConsts, NYGeneralConsts, CraftCostConsts, ToyDecayCostConsts, NY_CONFIG_NAME
 from personal_missions import PM_BRANCH
 from shared_utils import makeTupleByDict, updateDict
 _logger = logging.getLogger(__name__)
@@ -828,29 +823,11 @@ class ServerSettings(object):
     def getProgressiveRewardConfig(self):
         return self.__progressiveReward
 
+    def getMarathonConfig(self):
+        return self.__getGlobalSetting('marathon_config', {})
+
     def getSeniorityAwardsConfig(self):
         return self.__seniorityAwardsConfig
-
-    def getNewYearBonusConfig(self):
-        return SettingBonusConfig(self.__getNYConfig(SettingBonusConsts.CONFIG_NAME))
-
-    def getNewYearToyDecayCostConfig(self):
-        return ToyDecayCostConfig(self.__getNYConfig(ToyDecayCostConsts.CONFIG_NAME))
-
-    def getNewYearCraftCostConfig(self):
-        return CraftCostConfig(self.__getNYConfig(CraftCostConsts.CONFIG_NAME))
-
-    def getLootBoxShop(self):
-        return self.__getNYConfig(NYLootBoxConsts.CONFIG_NAME)
-
-    def getNewYearVehBranchConfig(self):
-        return self.__getNYConfig(NYVehBranchConsts.CONFIG_NAME)
-
-    def getNewYearGeneralConfig(self):
-        return GeneralConfig(self.__getNYConfig(NYGeneralConsts.CONFIG_NAME))
-
-    def __getNYConfig(self, configName):
-        return self.__getGlobalSetting(NY_CONFIG_NAME, {}).get(configName, {})
 
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)

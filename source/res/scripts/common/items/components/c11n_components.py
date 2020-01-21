@@ -7,9 +7,12 @@ from soft_exception import SoftException
 from items.components.c11n_constants import ApplyArea, SeasonType, Options, ItemTags, CustomizationType, MAX_CAMOUFLAGE_PATTERN_SIZE, DecalType, PROJECTION_DECALS_SCALE_ID_VALUES, MAX_USERS_PROJECTION_DECALS, CustomizationTypeNames, DecalTypeNames, ProjectionDecalFormTags, CUSTOMIZATION_SLOTS_VEHICLE_PARTS, CamouflageTilingType
 from typing import List, Dict, Type, Tuple, Optional, Union, TypeVar, FrozenSet
 from string import lower, upper
+from constants import IS_EDITOR
+from wrapped_reflection_framework import ReflectionMetaclass
 Item = TypeVar('TypeVar')
 
 class BaseCustomizationItem(object):
+    __metaclass__ = ReflectionMetaclass
     __slots__ = ('id', 'tags', 'filter', 'parentGroup', 'season', 'historical', 'i18n', 'priceGroup', 'requiredToken', 'priceGroupTags', 'maxNumber', 'texture')
     allSlots = __slots__
     itemType = 0
@@ -28,7 +31,8 @@ class BaseCustomizationItem(object):
         self.texture = ''
         if parentGroup and parentGroup.itemPrototype:
             for field in self.allSlots:
-                setattr(self, field, getattr(parentGroup.itemPrototype, field))
+                if hasattr(parentGroup.itemPrototype, field):
+                    setattr(self, field, getattr(parentGroup.itemPrototype, field))
 
         self.parentGroup = parentGroup
         return
@@ -82,6 +86,7 @@ class BaseCustomizationItem(object):
 
 
 class PaintItem(BaseCustomizationItem):
+    __metaclass__ = ReflectionMetaclass
     itemType = CustomizationType.PAINT
     __slots__ = ('color', 'usageCosts', 'gloss', 'metallic')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
@@ -105,6 +110,7 @@ class PaintItem(BaseCustomizationItem):
 
 
 class DecalItem(BaseCustomizationItem):
+    __metaclass__ = ReflectionMetaclass
     itemType = CustomizationType.DECAL
     __slots__ = ('type', 'canBeMirrored')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
@@ -116,6 +122,7 @@ class DecalItem(BaseCustomizationItem):
 
 
 class ProjectionDecalItem(BaseCustomizationItem):
+    __metaclass__ = ReflectionMetaclass
     itemType = CustomizationType.PROJECTION_DECAL
     __slots__ = ('canBeMirrored',)
     allSlots = BaseCustomizationItem.__slots__ + __slots__
@@ -126,6 +133,7 @@ class ProjectionDecalItem(BaseCustomizationItem):
 
 
 class CamouflageItem(BaseCustomizationItem):
+    __metaclass__ = ReflectionMetaclass
     itemType = CustomizationType.CAMOUFLAGE
     __slots__ = ('palettes', 'compatibleParts', 'componentsCovering', 'invisibilityFactor', 'tiling', 'tilingSettings', 'scales', 'rotation')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
@@ -146,6 +154,7 @@ class CamouflageItem(BaseCustomizationItem):
 
 
 class PersonalNumberItem(BaseCustomizationItem):
+    __metaclass__ = ReflectionMetaclass
     itemType = CustomizationType.PERSONAL_NUMBER
     __prohibitedNumbers = ()
     __slots__ = ('compatibleParts', 'digitsCount', 'previewTexture', 'fontInfo', 'isMirrored')
@@ -192,6 +201,7 @@ class AttachmentItem(BaseCustomizationItem):
 
 
 class ModificationItem(BaseCustomizationItem):
+    __metaclass__ = ReflectionMetaclass
     itemType = CustomizationType.MODIFICATION
     __slots__ = ('effects',)
     allSlots = BaseCustomizationItem.__slots__ + __slots__
@@ -205,6 +215,7 @@ class ModificationItem(BaseCustomizationItem):
 
 
 class StyleItem(BaseCustomizationItem):
+    __metaclass__ = ReflectionMetaclass
     itemType = CustomizationType.STYLE
     __slots__ = ('outfits', 'isRent', 'rentCount', 'modelsSet')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
@@ -221,6 +232,7 @@ class StyleItem(BaseCustomizationItem):
 
 
 class InsigniaItem(BaseCustomizationItem):
+    __metaclass__ = ReflectionMetaclass
     itemType = CustomizationType.INSIGNIA
     __slots__ = ('atlas', 'alphabet', 'canBeMirrored')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
@@ -271,6 +283,7 @@ class PriceGroup(object):
 
 
 class Font(object):
+    __metaclass__ = ReflectionMetaclass
     itemType = CustomizationType.FONT
     __slots__ = ('id', 'texture', 'alphabet', 'mask')
 
@@ -286,8 +299,10 @@ class Font(object):
 
 
 class VehicleFilter(object):
+    __metaclass__ = ReflectionMetaclass
 
     class FilterNode(object):
+        __metaclass__ = ReflectionMetaclass
         __slots__ = ('nations', 'levels', 'tags', 'vehicles')
 
         def __init__(self):
@@ -349,6 +364,7 @@ class VehicleFilter(object):
 
 
 class CustomizationCache(object):
+    __metaclass__ = ReflectionMetaclass
     __slots__ = ('paints', 'camouflages', 'decals', 'projection_decals', 'modifications', 'levels', 'itemToPriceGroup', 'priceGroups', 'priceGroupNames', 'insignias', 'styles', 'defaultColors', 'defaultInsignias', 'itemTypes', 'priceGroupTags', '__victimStyles', 'personal_numbers', 'fonts', 'sequences', 'attachments')
 
     def __init__(self):

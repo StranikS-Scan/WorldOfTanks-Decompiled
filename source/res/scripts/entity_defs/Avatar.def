@@ -183,6 +183,10 @@
       <Type>	PYTHON	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
     </inBattleQuestProgresses>
+    <playLimits>
+      <Type>	PYTHON	</Type>
+      <Flags>	BASE_AND_CLIENT	</Flags>
+    </playLimits>
   </Properties>
   <TempProperties>
     <_Avatar__p></_Avatar__p>
@@ -193,6 +197,7 @@
     <questProgresses></questProgresses>
     <arenaCell></arenaCell>
     <_components></_components>
+    <_TimerManager__unpersistedTimers></_TimerManager__unpersistedTimers>
   </TempProperties>
   <ClientMethods>
     <update>

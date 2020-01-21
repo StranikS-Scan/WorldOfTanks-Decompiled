@@ -81,6 +81,12 @@ class IInventoryRequester(IRequester):
     def getCacheValue(self, key, defaultValue):
         raise NotImplementedError
 
+    def getInventoryEnhancements(self):
+        raise NotImplementedError
+
+    def getInstalledEnhancements(self):
+        raise NotImplementedError
+
 
 class IStatsRequester(IRequester):
 
@@ -496,6 +502,10 @@ class IShopCommonStats(object):
 
     @property
     def discounts(self):
+        raise NotImplementedError
+
+    @property
+    def demountKits(self):
         raise NotImplementedError
 
     def getPremiumPacketCost(self, days):

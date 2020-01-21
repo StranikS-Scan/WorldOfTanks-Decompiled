@@ -67,8 +67,8 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
     def as_setNetTypeS(self, netType):
         return self.flashObject.as_setNetType(netType) if self._isDAAPIInited() else None
 
-    def as_autoloaderUpdateS(self, timeLeft, baseTime, isPause=False, isStun=False, isTimerOn=False):
-        return self.flashObject.as_autoloaderUpdate(timeLeft, baseTime, isPause, isStun, isTimerOn) if self._isDAAPIInited() else None
+    def as_autoloaderUpdateS(self, timeLeft, baseTime, isPause=False, isStun=False, isTimerOn=False, isRedText=False):
+        return self.flashObject.as_autoloaderUpdate(timeLeft, baseTime, isPause, isStun, isTimerOn, isRedText) if self._isDAAPIInited() else None
 
     def as_setAutoloaderReloadingS(self, duration, baseTime):
         return self.flashObject.as_setAutoloaderReloading(duration, baseTime) if self._isDAAPIInited() else None

@@ -26,8 +26,7 @@ _LISTENERS = {OpenLinkEvent.SPECIFIED: '_handleSpecifiedURL',
  OpenLinkEvent.GLOBAL_MAP_PROMO: '_handleGmPromoURL',
  OpenLinkEvent.PREM_SHOP: '_handleOpenPremShopURL',
  OpenLinkEvent.FRONTLINE_CHANGES: '_handleFrontlineChangesURL',
- OpenLinkEvent.TOKEN_SHOP: '_handleTokenShopURL',
- OpenLinkEvent.LOOT_BOX_GIFT_URL: '_handleLootBoxGiftURL'}
+ OpenLinkEvent.TOKEN_SHOP: '_handleTokenShopURL'}
 
 class ExternalLinksHandler(IExternalLinksController):
 
@@ -145,6 +144,3 @@ class ExternalLinksHandler(IExternalLinksController):
 
     def _handleTokenShopURL(self, event):
         self.__openParsedUrl('tokenShopURL', event.params)
-
-    def _handleLootBoxGiftURL(self, _):
-        self.__openParsedUrl('lootBoxGiftURL')

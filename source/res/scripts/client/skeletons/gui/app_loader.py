@@ -56,6 +56,9 @@ class IWaitingWidget(object):
     def hideWaiting(self):
         pass
 
+    def showAwards(self, value):
+        pass
+
     def setCallback(self, callback=None):
         pass
 

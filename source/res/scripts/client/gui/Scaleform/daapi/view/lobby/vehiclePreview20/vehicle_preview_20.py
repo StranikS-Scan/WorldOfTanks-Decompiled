@@ -73,14 +73,14 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
     comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
     tradeIn = dependency.descriptor(ITradeInController)
     restores = dependency.descriptor(IRestoreController)
+    __heroTanksControl = dependency.descriptor(IHeroTankController)
     lobbyContext = dependency.descriptor(ILobbyContext)
     hangarSpace = dependency.descriptor(IHangarSpace)
-    __heroTanksControl = dependency.descriptor(IHeroTankController)
 
     def __init__(self, ctx=None):
         self._backAlias = ctx.get('previewAlias', VIEW_ALIAS.LOBBY_HANGAR)
-        self.__itemsPack = ctx.get('itemsPack')
-        if self._backAlias == VIEW_ALIAS.LOBBY_STORE or self.__itemsPack is not None:
+        self._itemsPack = ctx.get('itemsPack')
+        if self._backAlias == VIEW_ALIAS.LOBBY_STORE or self._itemsPack is not None:
             self._COMMON_SOUND_SPACE = INGAMESHOP_PREVIEW_SOUND_SPACE
         elif self._backAlias in (VIEW_ALIAS.LOBBY_TECHTREE, VIEW_ALIAS.LOBBY_RESEARCH):
             self._COMMON_SOUND_SPACE = RESEARCH_PREVIEW_SOUND_SPACE
@@ -93,15 +93,15 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
         vehParams = ctx.get('vehParams') or {}
         self.__customizationCD = vehParams.get('styleCD')
         self.__offers = ctx.get('offers')
-        self.__price = ctx.get('price')
-        self.__oldPrice = ctx.get('oldPrice', MONEY_UNDEFINED)
-        self.__title = ctx.get('title')
+        self._price = ctx.get('price', MONEY_UNDEFINED)
+        self._oldPrice = ctx.get('oldPrice', MONEY_UNDEFINED)
+        self._title = ctx.get('title')
         self.__description = ctx.get('description')
         self.__endTime = ctx.get('endTime')
         self.__buyParams = ctx.get('buyParams')
-        addBuiltInEquipment(self.__itemsPack, self.itemsCache, self._vehicleCD)
-        self._heroInteractive = not (self.__itemsPack or self.__offers or self._backAlias == VIEW_ALIAS.LOBBY_STORE)
-        self.__haveCustomCrew = any((item.type == ItemPackType.CREW_CUSTOM for item in self.__itemsPack)) if self.__itemsPack else False
+        addBuiltInEquipment(self._itemsPack, self.itemsCache, self._vehicleCD)
+        self._heroInteractive = not (self._itemsPack or self.__offers or self._backAlias == VIEW_ALIAS.LOBBY_STORE)
+        self.__haveCustomCrew = any((item.type == ItemPackType.CREW_CUSTOM for item in self._itemsPack)) if self._itemsPack else False
         if 'previewAppearance' in ctx:
             self.__vehAppearanceChanged = True
             g_currentPreviewVehicle.resetAppearance(ctx['previewAppearance'])
@@ -201,27 +201,21 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
     def _fade3DEntityAndHideTT(self, entity):
         self.as_hide3DSceneTooltipS()
 
-    def _createSelectableLogic(self):
-        if self.__isHeroTank:
-            return super(VehiclePreview20, self)._createSelectableLogic()
-        from new_year.custom_selectable_logic import WithoutNewYearObjectsSelectableLogic
-        return WithoutNewYearObjectsSelectableLogic()
-
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(VehiclePreview20, self)._onRegisterFlashComponent(viewPy, alias)
         if alias == VEHPREVIEW_CONSTANTS.BUYING_PANEL_PY_ALIAS:
             viewPy.setIsHeroTank(self.__isHeroTank)
-            if self.__itemsPack:
-                viewPy.setPackItems(self.__itemsPack, self.__price, self.__oldPrice, self.__title)
+            if self._itemsPack:
+                viewPy.setPackItems(self._itemsPack, self._price, self._oldPrice, self._title)
                 viewPy.setTimerData(self.__endTime)
                 viewPy.setBuyParams(self.__buyParams)
                 viewPy.setBackAlias(self._backAlias)
             elif self.__offers:
-                viewPy.setOffers(self.__offers, self.__title, self.__description)
+                viewPy.setOffers(self.__offers, self._title, self.__description)
         elif alias == VEHPREVIEW_CONSTANTS.CREW_LINKAGE:
-            if self.__itemsPack:
-                crewItems = tuple((item for item in self.__itemsPack if item.type in ItemPackTypeGroup.CREW))
-                vehicleItems = tuple((item for item in self.__itemsPack if item.type in ItemPackTypeGroup.VEHICLE))
+            if self._itemsPack:
+                crewItems = tuple((item for item in self._itemsPack if item.type in ItemPackTypeGroup.CREW))
+                vehicleItems = tuple((item for item in self._itemsPack if item.type in ItemPackTypeGroup.VEHICLE))
                 viewPy.setVehicleCrews(vehicleItems, crewItems)
             elif self.__offers:
                 offer = getActiveOffer(self.__offers)

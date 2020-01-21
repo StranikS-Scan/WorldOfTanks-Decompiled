@@ -26,8 +26,6 @@ class HangarVehicle(ClientSelectableCameraVehicle):
         self.yawLimits = None
         self.pitchLimitMin = 0.0
         self.pitchLimitMax = 0.0
-        self.vehicleGunPitch = 0.0
-        self.vehicleTurretYaw = 0.0
         self.cameraBackwardDuration = 10.0
         self.cameraUpcomingDuration = 10.0
         super(HangarVehicle, self).__init__()

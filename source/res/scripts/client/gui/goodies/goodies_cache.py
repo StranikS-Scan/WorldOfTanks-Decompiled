@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/gui/goodies/goodies_cache.py
 from collections import defaultdict
 from debug_utils import LOG_WARNING
-from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_STATE, GOODIE_TARGET_TYPE
-from gui.goodies.goodie_items import Booster, PersonalVehicleDiscount, ClanReservePresenter
+from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_STATE, GOODIE_TARGET_TYPE, DEMOUNT_KIT_ID
+from gui.goodies.goodie_items import Booster, PersonalVehicleDiscount, ClanReservePresenter, DemountKit
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.money import Money
 from helpers import dependency
@@ -23,8 +23,13 @@ def _createDiscount(discountID, discountDescription, proxy):
         return None
 
 
+def _createDemountKit(demountKitID, demountKitDescription, proxy):
+    return DemountKit(demountKitID, demountKitDescription, proxy)
+
+
 _GOODIES_VARIETY_MAPPING = {GOODIE_VARIETY.BOOSTER: _createBooster,
- GOODIE_VARIETY.DISCOUNT: _createDiscount}
+ GOODIE_VARIETY.DISCOUNT: _createDiscount,
+ GOODIE_VARIETY.DEMOUNT_KIT: _createDemountKit}
 _DISCOUNT_TYPES_MAPPING = {GOODIE_TARGET_TYPE.ON_BUY_VEHICLE: PersonalVehicleDiscount}
 
 class GoodiesCache(IGoodiesCache):
@@ -104,11 +109,21 @@ class GoodiesCache(IGoodiesCache):
         discountDescription = self._items.shop.discounts.get(discoutID, None)
         return self.__makeGoodie(discoutID, discountDescription)
 
+    def getDemountKit(self, demountKitID=DEMOUNT_KIT_ID):
+        description = self._items.shop.demountKits.get(demountKitID, None)
+        return self.__makeGoodie(demountKitID, description)
+
     def getBoosters(self, criteria=REQ_CRITERIA.EMPTY):
         return self.__getGoodies(self._items.shop.boosters, criteria)
 
     def getDiscounts(self, criteria=REQ_CRITERIA.EMPTY):
         return self.__getGoodies(self._items.shop.discounts, criteria)
+
+    def getDemountKits(self, criteria=REQ_CRITERIA.EMPTY):
+        return self.__getGoodies(self._items.shop.demountKits, criteria)
+
+    def getGoodieByID(self, goodieID):
+        return self._items.shop.goodies.get(goodieID)
 
     def getClanReserves(self):
         result = {}

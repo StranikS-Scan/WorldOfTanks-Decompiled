@@ -2,7 +2,7 @@
 # Embedded file name: scripts/common/items/_xml.py
 from functools import wraps, partial
 from soft_exception import SoftException
-from constants import SEASON_TYPE_BY_NAME, RentType, IS_BASEAPP
+from constants import SEASON_TYPE_BY_NAME, RentType, IS_BASEAPP, IS_EDITOR
 _g_floats = {'count': 0}
 _g_intTuples = {'count': 0}
 _g_floatTuples = {'count': 0}
@@ -244,6 +244,10 @@ def readVector3OrNone(xmlCtx, section, subsectionName):
         return v
 
 
+def readMatrix(xmlCtx, section, subsectionName):
+    return section.readMatrix(subsectionName)
+
+
 @cacheFloatTuples
 def readTupleOfFloats(xmlCtx, section, subsectionName, count=None):
     strings = getSubsection(xmlCtx, section, subsectionName).asString.split()
@@ -435,3 +439,70 @@ def readIcon(xmlCtx, section, subsectionName):
         return (strings[0], int(strings[1]), int(strings[2]))
     except Exception:
         raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
+
+
+def rewriteBool(section, subsectionName, value, defaultValue=None, createNew=True):
+    return rewriteData(section, subsectionName, value, defaultValue, createNew, 'Bool')
+
+
+def rewriteInt(section, subsectionName, value, defaultValue=None, createNew=True):
+    return rewriteData(section, subsectionName, value, defaultValue, createNew, 'Int')
+
+
+def rewriteFloat(section, subsectionName, value, defaultValue=None, createNew=True):
+
+    def cmp(x, y):
+        if x is None or y is None:
+            return x == y
+        else:
+            return abs(x - y) < 1e-05
+            return
+
+    return rewriteData(section, subsectionName, value, defaultValue, createNew, 'Float', cmp)
+
+
+def rewriteString(section, subsectionName, value, defaultValue=None, createNew=True):
+
+    def cmp(x, y):
+        if x is None or y is None:
+            return x == y
+        else:
+            return x.lower() == y.lower()
+            return
+
+    return rewriteData(section, subsectionName, value, defaultValue, createNew, 'String', cmp)
+
+
+def rewriteVector2(section, subsectionName, value, defaultValue=None, createNew=True):
+    return rewriteData(section, subsectionName, value, defaultValue, createNew, 'Vector2')
+
+
+def rewriteVector3(section, subsectionName, value, defaultValue=None, createNew=True):
+    return rewriteData(section, subsectionName, value, defaultValue, createNew, 'Vector3')
+
+
+def rewriteVector4(section, subsectionName, value, defaultValue=None, createNew=True):
+    return rewriteData(section, subsectionName, value, defaultValue, createNew, 'Vector4')
+
+
+def rewriteMatrix(section, subsectionName, value, defaultValue=None, createNew=True):
+    return rewriteData(section, subsectionName, value, defaultValue, createNew, 'Matrix')
+
+
+def rewriteData(section, subsectionName, value, defaultValue, createNew, accessFunSuffix, cmp=None):
+    readFunc = getattr(section, 'read{}'.format(accessFunSuffix))
+    writeFunc = getattr(section, 'write{}'.format(accessFunSuffix))
+    if cmp is None:
+        cmp = lambda x, y: x == y
+    if section.has_key(subsectionName):
+        sectionValue = readFunc(subsectionName)
+        if cmp(value, defaultValue) and not cmp(value, sectionValue):
+            section.deleteSection(subsectionName)
+            return True
+        if not cmp(sectionValue, value):
+            writeFunc(subsectionName, value)
+            return True
+    elif createNew and not cmp(value, defaultValue):
+        writeFunc(subsectionName, value)
+        return True
+    return False

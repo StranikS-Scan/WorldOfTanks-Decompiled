@@ -182,6 +182,7 @@ def makeVehicleFormatter(includeInventoryFields=False):
     inHangarField = Field('inHangar', lambda i: i.isInInventory)
     ownershipField = Field('ownership', _formatVehicleOwnership)
     nationChangeField = Field('nationChange', _formatVehicleNationChange)
+    clanLockField = Field('clanLock', lambda i: i.clanLock)
     fields = [idField,
      nameField,
      shortName,
@@ -205,7 +206,8 @@ def makeVehicleFormatter(includeInventoryFields=False):
      restore,
      inHangarField,
      ownershipField,
-     nationChangeField]
+     nationChangeField,
+     clanLockField]
     if includeInventoryFields:
         shellFormatter = makeShellFormatter(includeCount=True)
         shellsField = Field('shells', lambda i: [ shellFormatter.format(s) for s in i.shells ])
@@ -359,4 +361,14 @@ def makeCustomizationFormatter():
      Field('priceGroup', lambda i: i.priceGroup),
      buyPriceField,
      sellPriceField]
+    return Formatter(fields)
+
+
+def makeInventoryEnhancementsFormatter():
+    fields = [Field('id', lambda i: i.id), Field('count', lambda i: i.count)]
+    return Formatter(fields)
+
+
+def makeInstalledEnhancementsFormatter():
+    fields = [Field('vehicle_int_cd', lambda i: i.vehIntCD), Field('enhancements', lambda i: i.enhancements)]
     return Formatter(fields)

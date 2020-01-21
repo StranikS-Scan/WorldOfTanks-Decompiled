@@ -133,9 +133,13 @@ class OptionalDevice(Artefact):
     def updateVehicleDescrAttrs(self, vehicleDescr):
         pass
 
+    @property
+    def isDeluxe(self):
+        return 'deluxe' in self.tags
+
 
 class Equipment(Artefact):
-    __slots__ = ('equipmentType', 'reuseCount', 'cooldownSeconds', 'soundNotification', 'offload')
+    __slots__ = ('equipmentType', 'reuseCount', 'cooldownSeconds', 'soundNotification')
 
     def __init__(self):
         super(Equipment, self).__init__(items.ITEM_TYPES.equipment, 0, '', 0)

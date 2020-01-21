@@ -135,7 +135,7 @@ class BCIntroPage(BCIntroVideoPageMeta):
 
         pageCount = len(listSmall)
         label = BOOTCAMP.BTN_TUTORIAL_START if self._showSkipOption and self._lessonNumber == 0 else BOOTCAMP.BTN_CONTINUE_PREBATTLE
-        self.as_playVideoS({'isReferralEnabled': self._isReferralEnabled,
+        self.as_setDataS({'isReferralEnabled': self._isReferralEnabled,
          'isBootcampCloseEnabled': self._isReferralEnabled,
          'referralDescription': BOOTCAMP.WELLCOME_BOOTCAMP_REFERRAL,
          'showTutorialPages': pageCount > 0,

@@ -11,6 +11,35 @@ class ModelStates(object):
 
 ModelsSetParams = namedtuple('ModelsSetParams', ('skin', 'state', 'attachments'))
 
+class RenderStates(object):
+    NORMAL = 0
+    CRASH = 1
+    SERVER_COLLISION = 2
+    CLIENT_COLLISION = 3
+    OVERLAY_COLLISION = 4
+    ARMOR_WIDTH_COLLISION = 5
+    DISABLE = 6
+
+
+class TankCollisionPartNames(object):
+    CHASSIS = 'chassisCollision'
+    HULL = 'hullCollision'
+    TURRET = 'turretCollision'
+    GUN = 'gunCollision'
+    ALL = (CHASSIS,
+     HULL,
+     TURRET,
+     GUN)
+
+    @staticmethod
+    def getIdx(name):
+        for idx, n in enumerate(TankCollisionPartNames.ALL):
+            if n == name:
+                return idx
+
+        return None
+
+
 class TankPartNames(object):
     CHASSIS = 'chassis'
     HULL = 'hull'
@@ -155,5 +184,17 @@ def getPartModelsFromDesc(vehicleDesc, modelsSetParams):
             skin = part.modelsSets['default']
         path = skin.getPathByStateName(modelsSetParams.state)
         paths.append(path)
+
+    return VehiclePartsTuple(*paths)
+
+
+def getCollisionModelsFromDesc(vehicleDesc, state):
+    paths = []
+    for partName in TankPartNames.ALL:
+        part = getattr(vehicleDesc, partName)
+        if state == RenderStates.CLIENT_COLLISION:
+            paths.append(part.hitTester.edClientBspModel)
+        if state == RenderStates.SERVER_COLLISION:
+            paths.append(part.hitTester.edServerBspModel)
 
     return VehiclePartsTuple(*paths)

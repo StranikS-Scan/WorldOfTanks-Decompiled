@@ -3,16 +3,14 @@
 from constants import ENDLESS_TOKEN_TIME
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
-from gui.impl.gen import R
 from items.tankmen import TankmanDescr
 from nations import NONE_INDEX, NAMES as NationNames
-from items import tankmen, new_year
+from items import tankmen
 from items.components.component_constants import EMPTY_STRING
 from items.components import skills_constants
 from helpers import dependency
-from new_year.talismans import TalismanItem
-from shared_utils import first
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.login_manager import ILoginManager
 from gui.shared.gui_items import Tankman
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
@@ -20,6 +18,10 @@ from gui.Scaleform.locale.QUESTS import QUESTS
 from helpers.i18n import makeString as _ms
 from account_helpers.AccountSettings import AccountSettings, RECRUIT_NOTIFICATIONS
 from soft_exception import SoftException
+from gui.impl.gen.resources import R
+from gui import SystemMessages
+from gui.shared.notifications import NotificationPriorityLevel
+from shared_utils import first
 from .events_helpers import getTankmanRewardQuests
 
 class RecruitSourceID(object):
@@ -32,6 +34,7 @@ class RecruitSourceID(object):
     TWITCH_5 = 'twitch5'
     TWITCH_6 = 'twitch6'
     TWITCH_7 = 'twitch7'
+    TWITCH_8 = 'twitch8'
     BUFFON = 'buffon'
     LOOTBOX = 'lootbox'
     COMMANDER_MARINA = 'commander_marina'
@@ -44,11 +47,11 @@ class RecruitSourceID(object):
      TWITCH_5,
      TWITCH_6,
      TWITCH_7,
+     TWITCH_8,
      COMMANDER_MARINA,
      COMMANDER_PATRICK)
 
 
-DEFAULT_NY_GIRL = 'ny20_girl'
 _NEW_SKILL = 'new_skill'
 _BASE_NAME = 'base'
 _TANKWOMAN_ROLE_LEVEL = 100
@@ -56,6 +59,7 @@ _TANKWOMAN_ICON = 'girl-empty.png'
 _TANKMAN_NAME = 'tankman'
 _TANKMAN_ICON = 'tankman.png'
 _TANKWOMAN_LEARNT_SKILLS = ['brotherhood']
+_INCREASE_LIMIT_LOGIN = 5
 
 class _BaseRecruitInfo(object):
     __slots__ = ('_recruitID', '_expiryTime', '_nations', '_learntSkills', '_freeXP', '_roleLevel', '_lastSkillLevel', '_roles', '_firstName', '_lastName', '_icon', '_sourceID', '_isFemale', '_hasNewSkill')
@@ -109,12 +113,6 @@ class _BaseRecruitInfo(object):
     def getExpiryTime(self):
         return backport.getShortDateFormat(self._expiryTime) if self._expiryTime and self._expiryTime < ENDLESS_TOKEN_TIME else ''
 
-    def getHowToGetInfo(self):
-        pass
-
-    def getAdditionalAlert(self):
-        pass
-
     def getExpiryTimeStamp(self):
         return self._expiryTime
 
@@ -165,6 +163,9 @@ class _QuestRecruitInfo(_BaseRecruitInfo):
 
     def getDescription(self):
         return _ms(TOOLTIPS.NOTRECRUITEDTANKMAN_TANKWOMAN_DESC)
+
+    def getHowToGetInfo(self):
+        pass
 
 
 class _TokenRecruitInfo(_BaseRecruitInfo):
@@ -252,22 +253,6 @@ class _TokenRecruitInfo(_BaseRecruitInfo):
          False)
 
 
-class _DefaultNyGirlInfo(_TokenRecruitInfo):
-
-    def __init__(self, *args, **kwargs):
-        super(_DefaultNyGirlInfo, self).__init__(*args, **kwargs)
-        self._sourceID = 'ny20defaultGirl'
-
-    def getAdditionalAlert(self):
-        return backport.text(R.strings.tooltips.notrecruitedtankman.ny20defaultGirl.additionalAlert())
-
-    def getFullUserName(self):
-        return backport.text(R.strings.ny.levelsRewards.tankWoman())
-
-    def getSpecialIcon(self):
-        return RES_ICONS.MAPS_ICONS_TANKMEN_ICONS_SPECIAL_NY20_DEFAULT_GIRL
-
-
 def _getRecruitInfoFromQuest(questID):
     for quest, opName in getTankmanRewardQuests():
         if questID == quest.getID():
@@ -283,18 +268,6 @@ def _getRecruitInfoFromToken(tokenName, eventsCache=None):
     return None if tokenData is None else _TokenRecruitInfo(tokenName, expiryTime, **tokenData)
 
 
-def _getDefaultNyGirl():
-    talismanID = first(new_year.g_cache.talismans.iterkeys())
-    if talismanID is not None:
-        talismanItem = TalismanItem(talismanID)
-        tokenData = tankmen.getRecruitInfoFromToken(talismanItem.getTankmanToken())
-        if tokenData is None:
-            return
-        return _DefaultNyGirlInfo(DEFAULT_NY_GIRL, ENDLESS_TOKEN_TIME, **tokenData)
-    else:
-        return
-
-
 def _getRecruitUniqueIDs():
     result = []
     for recruitID, count in getRecruitIDs().iteritems():
@@ -304,8 +277,6 @@ def _getRecruitUniqueIDs():
 
 
 def getRecruitInfo(recruitID):
-    if recruitID == DEFAULT_NY_GIRL:
-        return _getDefaultNyGirl()
     try:
         questID = int(recruitID)
         return _getRecruitInfoFromQuest(questID)
@@ -358,3 +329,53 @@ def getNewRecruitsCounter():
 
 def setNewRecruitsVisited():
     AccountSettings.setNotifications(RECRUIT_NOTIFICATIONS, _getRecruitUniqueIDs())
+
+
+class NonRecruitNotifierSingleton(object):
+    __loginManager = dependency.descriptor(ILoginManager)
+    _instance = None
+
+    @staticmethod
+    def getInstance():
+        if NonRecruitNotifierSingleton._instance is None:
+            NonRecruitNotifierSingleton()
+        return NonRecruitNotifierSingleton._instance
+
+    def __init__(self):
+        if NonRecruitNotifierSingleton._instance is None:
+            NonRecruitNotifierSingleton._instance = self
+            self._isFirstShow = True
+            self._cachedRecruitCount = -1
+        return
+
+    def resetFirstShowState(self):
+        self._isFirstShow = True
+        self._cachedRecruitCount = -1
+
+    def notifyNonRecruitCount(self):
+        recruits = getAllRecruitsInfo(sortByExpireTime=True)
+        recruitsCount = len(recruits)
+        if recruitsCount == self._cachedRecruitCount:
+            return
+        self._cachedRecruitCount = recruitsCount
+        time = ''
+        message = ''
+        rMessage = R.strings.messenger.serviceChannelMessages
+        if recruitsCount <= 0:
+            if self._isFirstShow:
+                self._isFirstShow = False
+                return
+            message = rMessage.recruitReminderNotRemain.text()
+        else:
+            time = first(recruits).getExpiryTime()
+            if time:
+                message = rMessage.recruitReminder.text()
+            else:
+                message = rMessage.recruitReminderTermless.text()
+        msgPrLevel = NotificationPriorityLevel.LOW
+        lc = self.__loginManager.getPreference('loginCount')
+        if lc == _INCREASE_LIMIT_LOGIN:
+            msgPrLevel = NotificationPriorityLevel.MEDIUM
+        msgType = SystemMessages.SM_TYPE.RecruitReminder
+        SystemMessages.pushMessage(backport.text(message, count=recruitsCount, date=time), msgType, msgPrLevel)
+        self._isFirstShow = False

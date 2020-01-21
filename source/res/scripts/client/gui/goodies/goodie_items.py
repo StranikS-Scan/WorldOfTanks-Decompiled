@@ -4,24 +4,27 @@ import time
 import weakref
 import typing
 import BigWorld
+import nations
 from constants import FORT_ORDER_TYPE
 from goodies.goodie_constants import GOODIE_RESOURCE_TYPE, GOODIE_STATE, GOODIE_VARIETY, GOODIE_TARGET_TYPE
 from goodies.goodie_helpers import GOODIE_TEXT_TO_RESOURCE
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.impl import backport
-from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, KPI
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.RES_SHOP_EXT import RES_SHOP_EXT
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.settings import ICONS_SIZES
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.economics import getActionPrc
 from gui.shared.formatters import text_styles
-from gui.shared.money import Currency, MONEY_UNDEFINED
+from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, KPI, GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.gui_item_economics import ItemPrices, ItemPrice, ITEM_PRICE_EMPTY, ITEM_PRICES_EMPTY
-from shared_utils import CONST_CONTAINER, first
+from gui.shared.money import Currency, MONEY_UNDEFINED
 from helpers import time_utils, dependency
 from helpers.i18n import makeString as _ms
+from shared_utils import CONST_CONTAINER, first
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 if typing.TYPE_CHECKING:
     from skeletons.gui.goodies import IGoodiesCache
@@ -53,6 +56,7 @@ GOODIE_TYPE_TO_KPI_NAME_MAP = {GOODIE_RESOURCE_TYPE.XP: KPI.Name.GAME_XP,
  GOODIE_RESOURCE_TYPE.CREW_XP: KPI.Name.GAME_CREW_XP,
  GOODIE_RESOURCE_TYPE.CREDITS: KPI.Name.GAME_CREDITS,
  GOODIE_RESOURCE_TYPE.FL_XP: KPI.Name.GAME_FL_XP}
+DEMOUNT_KIT_NAMES = {GOODIE_RESOURCE_TYPE.GOLD: 'common'}
 
 class _Goodie(object):
 
@@ -456,3 +460,83 @@ class ClanReservePresenter(BoosterUICommon):
         else:
             strValue = '{}%-{}%'.format(min(valuesSet), max(valuesSet))
         return formatter(strValue) if formatter is not None else strValue
+
+
+class DemountKit(_Goodie):
+
+    def __init__(self, goodieID, goodieDescription, stateProvider=None):
+        super(DemountKit, self).__init__(goodieID, goodieDescription, stateProvider)
+        self.__sellPrices = ITEM_PRICES_EMPTY
+
+    @property
+    def userName(self):
+        return backport.text(R.strings.demount_kit.userName.dyn(self.demountKitGuiType)())
+
+    @property
+    def description(self):
+        pass
+
+    def getIcon(self, size):
+        return backport.image(R.images.gui.maps.icons.demountKit.dyn('{}_{}'.format(self.demountKitGuiType, size))())
+
+    def getFormattedValue(self, formatter=None):
+        pass
+
+    @property
+    def icon(self):
+        return self.getIcon(STORE_CONSTANTS.ICON_SIZE_SMALL)
+
+    @property
+    def bigIcon(self):
+        pass
+
+    @property
+    def iconInfo(self):
+        return self.getIcon(ICONS_SIZES.X48)
+
+    @property
+    def itemTypeID(self):
+        return GUI_ITEM_TYPE.DEMOUNT_KIT
+
+    @property
+    def itemTypeName(self):
+        return GUI_ITEM_TYPE_NAMES[self.itemTypeID]
+
+    @property
+    def nationID(self):
+        return nations.NONE_INDEX
+
+    @property
+    def isForSale(self):
+        return False
+
+    def getSellPrice(self):
+        return self.__sellPrices.itemPrice
+
+    @property
+    def intCD(self):
+        return self._goodieID
+
+    @property
+    def shortDescription(self):
+        return backport.text(R.strings.demount_kit.storage.description.dyn(self.demountKitGuiType)())
+
+    @property
+    def longDescription(self):
+        return backport.text(R.strings.demount_kit.dialogue.description.dyn(self.demountKitGuiType)())
+
+    def formattedShortDescription(self, formatter):
+        description = self.shortDescription
+        return description.format(**formatter)
+
+    @property
+    def inventoryCount(self):
+        return self.count
+
+    @property
+    def demountKitType(self):
+        return self._goodieDescription.resource.resourceType
+
+    @property
+    def demountKitGuiType(self):
+        return DEMOUNT_KIT_NAMES[self.demountKitType]

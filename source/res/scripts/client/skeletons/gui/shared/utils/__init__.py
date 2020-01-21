@@ -56,10 +56,6 @@ class IItemsRequester(requesters.IRequester):
     def anonymizer(self):
         raise NotImplementedError
 
-    @property
-    def festivity(self):
-        raise NotImplementedError
-
     def requestUserDossier(self, databaseID, callback):
         raise NotImplementedError
 
@@ -194,9 +190,6 @@ class IHangarSpace(object):
         raise NotImplementedError
 
     def onPremiumChanged(self, isPremium, attrs, premiumExpiryTime):
-        raise NotImplementedError
-
-    def leftButtonClicked(self):
         raise NotImplementedError
 
     def setVehicleSelectable(self, flag):

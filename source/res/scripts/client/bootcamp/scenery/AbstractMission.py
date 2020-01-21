@@ -17,7 +17,6 @@ from debug_utils import LOG_ERROR
 from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP
 import TriggersManager
 import MusicControllerWWISE as MC
-from gui.sounds.filters import WWISEFilteredBootcampArenaFilter as BCFilter
 from helpers import dependency, isPlayerAvatar
 from skeletons.gui.battle_session import IBattleSessionProvider
 
@@ -40,7 +39,6 @@ class AbstractMission(object):
          BOOTCAMP_BATTLE_ACTION.PLAYER_SPOTTED: self.__onActionPlayerSpoted,
          BOOTCAMP_BATTLE_ACTION.PLAYER_HIT_VEHICLE: self.__onActionPlayerHitVehicle,
          BOOTCAMP_BATTLE_ACTION.SET_SCENERY_CONSTANT: self.__onActionSetSceneryConstant}
-        self._soundFilter = BCFilter()
         self.__combatMusic = None
         BigWorld.player().arena.onPeriodChange += self._onPeriodChange
         return
@@ -76,7 +74,6 @@ class AbstractMission(object):
             if vehLink is None:
                 self.createVehicle(vehicle['name'])
 
-        self._soundFilter.stop()
         MC.g_musicController.skipArenaChanges = True
         self._avatar.muteSounds(())
         for vehicle in self._avatar.vehicles:

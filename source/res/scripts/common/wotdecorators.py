@@ -9,6 +9,8 @@ import time_tracking
 
 def _argsToLogID(args):
     for arg in args:
+        if hasattr(arg, '__getattribute__') or hasattr(arg, '__getattr__'):
+            continue
         logID = getattr(arg, 'logID', None)
         if logID is not None:
             return logID

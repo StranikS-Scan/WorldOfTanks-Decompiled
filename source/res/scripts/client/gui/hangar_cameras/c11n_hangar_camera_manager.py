@@ -159,7 +159,6 @@ class C11nHangarCameraManager(TimeDeltaMeter):
             self.__rotateTurretAndGun(anchorId)
             from gui.ClientHangarSpace import hangarCFG
             hangarCfg = hangarCFG()
-            width = width * hangarCfg['v_scale']
             halfF = width / (2 * relativeSize)
             dist = halfF / math.tan(BigWorld.projection().fov * 0.5)
             distConstraints = self.__getDistConstraints(location.position)

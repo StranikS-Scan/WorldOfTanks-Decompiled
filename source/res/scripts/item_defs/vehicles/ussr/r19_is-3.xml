@@ -56,6 +56,18 @@
       <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/russian/R19_IS-3/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <R19_IS-3_3Dst>
+          <undamaged>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Hull.model	</exploded>
+        </R19_IS-3_3Dst>
+        <Defender_Day>
+          <undamaged>	vehicles/russian/R19_IS-3/_skins/Defender_Day/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Hull.model	</exploded>
+        </Defender_Day>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -311,6 +323,18 @@
         <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/russian/R19_IS-3/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <R19_IS-3_3Dst>
+            <undamaged>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Chassis.model	</exploded>
+          </R19_IS-3_3Dst>
+          <Defender_Day>
+            <undamaged>	vehicles/russian/R19_IS-3/_skins/Defender_Day/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Chassis.model	</exploded>
+          </Defender_Day>
+        </sets>
       </models>
       <splineDesc>
         <segmentModelLeft>	vehicles/russian/R19_IS-3/track/segment1.model	</segmentModelLeft>
@@ -338,7 +362,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-3	</textureScale>
+        <textureScale>	-1.5	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -1013,6 +1037,18 @@
         <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/russian/R19_IS-3/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <R19_IS-3_3Dst>
+            <undamaged>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Chassis.model	</exploded>
+          </R19_IS-3_3Dst>
+          <Defender_Day>
+            <undamaged>	vehicles/russian/R19_IS-3/_skins/Defender_Day/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Chassis.model	</exploded>
+          </Defender_Day>
+        </sets>
       </models>
       <splineDesc>
         <segmentModelLeft>	vehicles/russian/R19_IS-3/track/segment1.model	</segmentModelLeft>
@@ -1040,7 +1076,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-3	</textureScale>
+        <textureScale>	-1.5	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -1201,31 +1237,6 @@
           <backwardElastK>	3	</backwardElastK>
         </node>
       </trackNodes>
-      <effects>
-        <lodDist>	MEDIUM	</lodDist>
-        <mud>	largeTankMud	</mud>
-      </effects>
-      <wwsoundPC>	treads_type_pc	</wwsoundPC>
-      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.927233 0.000000	</hullPosition>
-      <hitTester>
-        <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Chassis.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Chassis.model	</collisionModelClient>
-      </hitTester>
-      <topRightCarryingPoint>	1.24432 2.22363	</topRightCarryingPoint>
-      <maxClimbAngle>	25	</maxClimbAngle>
-      <navmeshGirth>	6.0	</navmeshGirth>
-      <AODecals>
-        <decal>
-          <transform>
-            <row0>	4.348460 0.000000 0.000000	</row0>
-            <row1>	0.000000 1.500000 0.000000	</row1>
-            <row2>	0.000000 0.000000 8.574320	</row2>
-            <row3>	0.000000 0.000000 0.000000	</row3>
-          </transform>
-        </decal>
-      </AODecals>
-      <trackThickness>	-0.0245	</trackThickness>
       <physicalTracks>
         <left>
           <segmentsCount>	84	</segmentsCount>
@@ -1667,6 +1678,31 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.927233 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.24432 2.22363	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.348460 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.500000 0.000000	</row1>
+            <row2>	0.000000 0.000000 8.574320	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <trackThickness>	-0.0245	</trackThickness>
       <customization>
         <customizableVehicleAreas>
           <paint>	CHASSIS	</paint>
@@ -1769,12 +1805,67 @@
             <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/russian/R19_IS-3/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <R19_IS-3_3Dst>
+                <undamaged>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Gun_02.model	</exploded>
+              </R19_IS-3_3Dst>
+              <Defender_Day>
+                <undamaged>	vehicles/russian/R19_IS-3/_skins/Defender_Day/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Gun_02.model	</exploded>
+              </Defender_Day>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <drivenJoints>
+            <master>
+              <node>	Gun	</node>
+              <table>
+                <row>	-23.0	</row>
+                <row>	-18.0	</row>
+                <row>	-14.0	</row>
+                <row>	-12.0	</row>
+                <row>	-10.0	</row>
+                <row>	-6.0	</row>
+                <row>	0.0	</row>
+                <row>	5.0	</row>
+              </table>
+              <slaves>
+                <slave>
+                  <node>	Joint_01	</node>
+                  <table>
+                    <row>	-0.6	</row>
+                    <row>	2.0	</row>
+                    <row>	3.0	</row>
+                    <row>	3.6	</row>
+                    <row>	4.0	</row>
+                    <row>	5.3	</row>
+                    <row>	6.983	</row>
+                    <row>	8.796	</row>
+                  </table>
+                </slave>
+                <slave>
+                  <node>	Joint_02	</node>
+                  <table>
+                    <row>	-1.5	</row>
+                    <row>	1.5	</row>
+                    <row>	3.0	</row>
+                    <row>	3.6	</row>
+                    <row>	4.0	</row>
+                    <row>	5.903	</row>
+                    <row>	6.983	</row>
+                    <row>	6.5	</row>
+                  </table>
+                </slave>
+              </slaves>
+            </master>
+          </drivenJoints>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -1868,12 +1959,67 @@
             <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R19_IS-3/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <R19_IS-3_3Dst>
+                <undamaged>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </R19_IS-3_3Dst>
+              <Defender_Day>
+                <undamaged>	vehicles/russian/R19_IS-3/_skins/Defender_Day/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Gun_01.model	</exploded>
+              </Defender_Day>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <drivenJoints>
+            <master>
+              <node>	Gun	</node>
+              <table>
+                <row>	-23.0	</row>
+                <row>	-18.0	</row>
+                <row>	-14.0	</row>
+                <row>	-12.0	</row>
+                <row>	-10.0	</row>
+                <row>	-6.0	</row>
+                <row>	0.0	</row>
+                <row>	5.0	</row>
+              </table>
+              <slaves>
+                <slave>
+                  <node>	Joint_01	</node>
+                  <table>
+                    <row>	-0.6	</row>
+                    <row>	2.0	</row>
+                    <row>	3.0	</row>
+                    <row>	3.6	</row>
+                    <row>	4.0	</row>
+                    <row>	5.3	</row>
+                    <row>	6.983	</row>
+                    <row>	8.796	</row>
+                  </table>
+                </slave>
+                <slave>
+                  <node>	Joint_02	</node>
+                  <table>
+                    <row>	-1.5	</row>
+                    <row>	1.5	</row>
+                    <row>	3.0	</row>
+                    <row>	3.6	</row>
+                    <row>	4.0	</row>
+                    <row>	5.903	</row>
+                    <row>	6.983	</row>
+                    <row>	6.5	</row>
+                  </table>
+                </slave>
+              </slaves>
+            </master>
+          </drivenJoints>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -1973,12 +2119,67 @@
             <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/russian/R19_IS-3/crash/lod0/Gun_03.model	</exploded>
+            <sets>
+              <R19_IS-3_3Dst>
+                <undamaged>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/normal/lod0/Gun_03.model	</undamaged>
+                <destroyed>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Gun_03.model	</destroyed>
+                <exploded>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Gun_03.model	</exploded>
+              </R19_IS-3_3Dst>
+              <Defender_Day>
+                <undamaged>	vehicles/russian/R19_IS-3/_skins/Defender_Day/normal/lod0/Gun_03.model	</undamaged>
+                <destroyed>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Gun_03.model	</destroyed>
+                <exploded>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Gun_03.model	</exploded>
+              </Defender_Day>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <drivenJoints>
+            <master>
+              <node>	Gun	</node>
+              <table>
+                <row>	-23.0	</row>
+                <row>	-18.0	</row>
+                <row>	-14.0	</row>
+                <row>	-12.0	</row>
+                <row>	-10.0	</row>
+                <row>	-6.0	</row>
+                <row>	0.0	</row>
+                <row>	5.0	</row>
+              </table>
+              <slaves>
+                <slave>
+                  <node>	Joint_01	</node>
+                  <table>
+                    <row>	-0.6	</row>
+                    <row>	2.0	</row>
+                    <row>	3.0	</row>
+                    <row>	3.6	</row>
+                    <row>	4.0	</row>
+                    <row>	5.3	</row>
+                    <row>	6.983	</row>
+                    <row>	8.796	</row>
+                  </table>
+                </slave>
+                <slave>
+                  <node>	Joint_02	</node>
+                  <table>
+                    <row>	-1.5	</row>
+                    <row>	1.5	</row>
+                    <row>	3.0	</row>
+                    <row>	3.6	</row>
+                    <row>	4.0	</row>
+                    <row>	5.903	</row>
+                    <row>	6.983	</row>
+                    <row>	6.5	</row>
+                  </table>
+                </slave>
+              </slaves>
+            </master>
+          </drivenJoints>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -2075,12 +2276,67 @@
             <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/russian/R19_IS-3/crash/lod0/Gun_04.model	</exploded>
+            <sets>
+              <R19_IS-3_3Dst>
+                <undamaged>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/normal/lod0/Gun_04.model	</undamaged>
+                <destroyed>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Gun_04.model	</destroyed>
+                <exploded>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Gun_04.model	</exploded>
+              </R19_IS-3_3Dst>
+              <Defender_Day>
+                <undamaged>	vehicles/russian/R19_IS-3/_skins/Defender_Day/normal/lod0/Gun_04.model	</undamaged>
+                <destroyed>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Gun_04.model	</destroyed>
+                <exploded>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Gun_04.model	</exploded>
+              </Defender_Day>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <drivenJoints>
+            <master>
+              <node>	Gun	</node>
+              <table>
+                <row>	-23.0	</row>
+                <row>	-18.0	</row>
+                <row>	-14.0	</row>
+                <row>	-12.0	</row>
+                <row>	-10.0	</row>
+                <row>	-6.0	</row>
+                <row>	0.0	</row>
+                <row>	5.0	</row>
+              </table>
+              <slaves>
+                <slave>
+                  <node>	Joint_01	</node>
+                  <table>
+                    <row>	-0.6	</row>
+                    <row>	2.0	</row>
+                    <row>	3.0	</row>
+                    <row>	3.6	</row>
+                    <row>	4.0	</row>
+                    <row>	5.3	</row>
+                    <row>	6.983	</row>
+                    <row>	8.796	</row>
+                  </table>
+                </slave>
+                <slave>
+                  <node>	Joint_02	</node>
+                  <table>
+                    <row>	-1.5	</row>
+                    <row>	1.5	</row>
+                    <row>	3.0	</row>
+                    <row>	3.6	</row>
+                    <row>	4.0	</row>
+                    <row>	5.903	</row>
+                    <row>	6.983	</row>
+                    <row>	6.5	</row>
+                  </table>
+                </slave>
+              </slaves>
+            </master>
+          </drivenJoints>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -2145,6 +2401,18 @@
         <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/russian/R19_IS-3/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <R19_IS-3_3Dst>
+            <undamaged>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </R19_IS-3_3Dst>
+          <Defender_Day>
+            <undamaged>	vehicles/russian/R19_IS-3/_skins/Defender_Day/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Turret_01.model	</exploded>
+          </Defender_Day>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Turret_01.model	</collisionModelServer>
@@ -2482,12 +2750,67 @@
             <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Gun_06.model	</destroyed>
             <exploded>	vehicles/russian/R19_IS-3/crash/lod0/Gun_06.model	</exploded>
+            <sets>
+              <R19_IS-3_3Dst>
+                <undamaged>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/normal/lod0/Gun_06.model	</undamaged>
+                <destroyed>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Gun_06.model	</destroyed>
+                <exploded>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Gun_06.model	</exploded>
+              </R19_IS-3_3Dst>
+              <Defender_Day>
+                <undamaged>	vehicles/russian/R19_IS-3/_skins/Defender_Day/normal/lod0/Gun_06.model	</undamaged>
+                <destroyed>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Gun_06.model	</destroyed>
+                <exploded>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Gun_06.model	</exploded>
+              </Defender_Day>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <drivenJoints>
+            <master>
+              <node>	Gun	</node>
+              <table>
+                <row>	-23.0	</row>
+                <row>	-18.0	</row>
+                <row>	-14.0	</row>
+                <row>	-12.0	</row>
+                <row>	-10.0	</row>
+                <row>	-6.0	</row>
+                <row>	0.0	</row>
+                <row>	5.0	</row>
+              </table>
+              <slaves>
+                <slave>
+                  <node>	Joint_01	</node>
+                  <table>
+                    <row>	-0.6	</row>
+                    <row>	2.0	</row>
+                    <row>	3.0	</row>
+                    <row>	3.6	</row>
+                    <row>	4.0	</row>
+                    <row>	5.3	</row>
+                    <row>	6.983	</row>
+                    <row>	8.796	</row>
+                  </table>
+                </slave>
+                <slave>
+                  <node>	Joint_02	</node>
+                  <table>
+                    <row>	-1.5	</row>
+                    <row>	1.5	</row>
+                    <row>	3.0	</row>
+                    <row>	3.6	</row>
+                    <row>	4.0	</row>
+                    <row>	5.903	</row>
+                    <row>	6.983	</row>
+                    <row>	6.5	</row>
+                  </table>
+                </slave>
+              </slaves>
+            </master>
+          </drivenJoints>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -2532,10 +2855,10 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	-0.000441574 -0.0360616 1.37	</rayStart>
+              <rayStart>	-0.000441574 -0.0360616 1.04609	</rayStart>
               <rayEnd>	0.112644 -0.0959168 1.18545	</rayEnd>
-              <rayUp>	0.108 0.000000 0.000000	</rayUp>
-              <applyToFabric>	true	</applyToFabric>
+              <rayUp>	0.114127 0.000000 0.000000	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
               <size>	0.552	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
@@ -2573,12 +2896,67 @@
             <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Gun_05.model	</destroyed>
             <exploded>	vehicles/russian/R19_IS-3/crash/lod0/Gun_05.model	</exploded>
+            <sets>
+              <R19_IS-3_3Dst>
+                <undamaged>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/normal/lod0/Gun_05.model	</undamaged>
+                <destroyed>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Gun_05.model	</destroyed>
+                <exploded>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Gun_05.model	</exploded>
+              </R19_IS-3_3Dst>
+              <Defender_Day>
+                <undamaged>	vehicles/russian/R19_IS-3/_skins/Defender_Day/normal/lod0/Gun_05.model	</undamaged>
+                <destroyed>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Gun_05.model	</destroyed>
+                <exploded>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Gun_05.model	</exploded>
+              </Defender_Day>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <drivenJoints>
+            <master>
+              <node>	Gun	</node>
+              <table>
+                <row>	-23.0	</row>
+                <row>	-18.0	</row>
+                <row>	-14.0	</row>
+                <row>	-12.0	</row>
+                <row>	-10.0	</row>
+                <row>	-6.0	</row>
+                <row>	0.0	</row>
+                <row>	5.0	</row>
+              </table>
+              <slaves>
+                <slave>
+                  <node>	Joint_01	</node>
+                  <table>
+                    <row>	-0.6	</row>
+                    <row>	2.0	</row>
+                    <row>	3.0	</row>
+                    <row>	3.6	</row>
+                    <row>	4.0	</row>
+                    <row>	5.3	</row>
+                    <row>	6.983	</row>
+                    <row>	8.796	</row>
+                  </table>
+                </slave>
+                <slave>
+                  <node>	Joint_02	</node>
+                  <table>
+                    <row>	-1.5	</row>
+                    <row>	1.5	</row>
+                    <row>	3.0	</row>
+                    <row>	3.6	</row>
+                    <row>	4.0	</row>
+                    <row>	5.903	</row>
+                    <row>	6.983	</row>
+                    <row>	6.5	</row>
+                  </table>
+                </slave>
+              </slaves>
+            </master>
+          </drivenJoints>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -2623,10 +3001,10 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	0.000026 -0.0357391 1.33404	</rayStart>
+              <rayStart>	0.000026 -0.0357391 1.04609	</rayStart>
               <rayEnd>	-0.00671441 -0.0180673 1.33304	</rayEnd>
-              <rayUp>	0.092 0.000000 0.000000	</rayUp>
-              <applyToFabric>	true	</applyToFabric>
+              <rayUp>	0.114127 0.000000 0.000000	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
               <size>	0.514	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
@@ -2664,12 +3042,67 @@
             <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Gun_07.model	</undamaged>
             <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Gun_07.model	</destroyed>
             <exploded>	vehicles/russian/R19_IS-3/crash/lod0/Gun_07.model	</exploded>
+            <sets>
+              <R19_IS-3_3Dst>
+                <undamaged>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/normal/lod0/Gun_07.model	</undamaged>
+                <destroyed>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Gun_07.model	</destroyed>
+                <exploded>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Gun_07.model	</exploded>
+              </R19_IS-3_3Dst>
+              <Defender_Day>
+                <undamaged>	vehicles/russian/R19_IS-3/_skins/Defender_Day/normal/lod0/Gun_07.model	</undamaged>
+                <destroyed>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Gun_07.model	</destroyed>
+                <exploded>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Gun_07.model	</exploded>
+              </Defender_Day>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Gun_07.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <drivenJoints>
+            <master>
+              <node>	Gun	</node>
+              <table>
+                <row>	-23.0	</row>
+                <row>	-18.0	</row>
+                <row>	-14.0	</row>
+                <row>	-12.0	</row>
+                <row>	-10.0	</row>
+                <row>	-6.0	</row>
+                <row>	0.0	</row>
+                <row>	5.0	</row>
+              </table>
+              <slaves>
+                <slave>
+                  <node>	Joint_01	</node>
+                  <table>
+                    <row>	-0.6	</row>
+                    <row>	2.0	</row>
+                    <row>	3.0	</row>
+                    <row>	3.6	</row>
+                    <row>	4.0	</row>
+                    <row>	5.3	</row>
+                    <row>	6.983	</row>
+                    <row>	8.796	</row>
+                  </table>
+                </slave>
+                <slave>
+                  <node>	Joint_02	</node>
+                  <table>
+                    <row>	-1.5	</row>
+                    <row>	1.5	</row>
+                    <row>	3.0	</row>
+                    <row>	3.6	</row>
+                    <row>	4.0	</row>
+                    <row>	5.903	</row>
+                    <row>	6.983	</row>
+                    <row>	6.5	</row>
+                  </table>
+                </slave>
+              </slaves>
+            </master>
+          </drivenJoints>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -2714,10 +3147,10 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	0.000058 -0.0360616 1.24179	</rayStart>
-              <rayEnd>	0.126605 -0.0795514 1.24038	</rayEnd>
-              <rayUp>	0.109 0.000000 0.000000	</rayUp>
-              <applyToFabric>	true	</applyToFabric>
+              <rayStart>	0.000058 -0.0360616 1.04609	</rayStart>
+              <rayEnd>	-0.0399205 -0.0455638 1.04512	</rayEnd>
+              <rayUp>	0.114127 0.000000 0.000000	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
               <size>	0.552	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
@@ -2754,12 +3187,67 @@
             <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Gun_08.model	</undamaged>
             <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Gun_08.model	</destroyed>
             <exploded>	vehicles/russian/R19_IS-3/crash/lod0/Gun_08.model	</exploded>
+            <sets>
+              <R19_IS-3_3Dst>
+                <undamaged>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/normal/lod0/Gun_08.model	</undamaged>
+                <destroyed>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Gun_08.model	</destroyed>
+                <exploded>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Gun_08.model	</exploded>
+              </R19_IS-3_3Dst>
+              <Defender_Day>
+                <undamaged>	vehicles/russian/R19_IS-3/_skins/Defender_Day/normal/lod0/Gun_08.model	</undamaged>
+                <destroyed>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Gun_08.model	</destroyed>
+                <exploded>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Gun_08.model	</exploded>
+              </Defender_Day>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Gun_08.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Gun_08.model	</collisionModelClient>
           </hitTester>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <drivenJoints>
+            <master>
+              <node>	Gun	</node>
+              <table>
+                <row>	-23.0	</row>
+                <row>	-18.0	</row>
+                <row>	-14.0	</row>
+                <row>	-12.0	</row>
+                <row>	-10.0	</row>
+                <row>	-6.0	</row>
+                <row>	0.0	</row>
+                <row>	5.0	</row>
+              </table>
+              <slaves>
+                <slave>
+                  <node>	Joint_01	</node>
+                  <table>
+                    <row>	-0.6	</row>
+                    <row>	2.0	</row>
+                    <row>	3.0	</row>
+                    <row>	3.6	</row>
+                    <row>	4.0	</row>
+                    <row>	5.3	</row>
+                    <row>	6.983	</row>
+                    <row>	8.796	</row>
+                  </table>
+                </slave>
+                <slave>
+                  <node>	Joint_02	</node>
+                  <table>
+                    <row>	-1.5	</row>
+                    <row>	1.5	</row>
+                    <row>	3.0	</row>
+                    <row>	3.6	</row>
+                    <row>	4.0	</row>
+                    <row>	5.903	</row>
+                    <row>	6.983	</row>
+                    <row>	6.5	</row>
+                  </table>
+                </slave>
+              </slaves>
+            </master>
+          </drivenJoints>
           <customization>
             <customizableVehicleAreas>
               <paint>	GUN GUN_2	</paint>
@@ -2807,7 +3295,7 @@
               <rayStart>	0.001 -0.035 1.22119	</rayStart>
               <rayEnd>	0.121045 -0.0638274 1.21885	</rayEnd>
               <rayUp>	0.106 0.000000 0.000000	</rayUp>
-              <applyToFabric>	true	</applyToFabric>
+              <applyToFabric>	false	</applyToFabric>
               <size>	0.552	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
@@ -2824,6 +3312,18 @@
         <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Turret_02.model	</undamaged>
         <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Turret_02.model	</destroyed>
         <exploded>	vehicles/russian/R19_IS-3/crash/lod0/Turret_02.model	</exploded>
+        <sets>
+          <R19_IS-3_3Dst>
+            <undamaged>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/normal/lod0/Turret_02.model	</undamaged>
+            <destroyed>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Turret_02.model	</destroyed>
+            <exploded>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Turret_02.model	</exploded>
+          </R19_IS-3_3Dst>
+          <Defender_Day>
+            <undamaged>	vehicles/russian/R19_IS-3/_skins/Defender_Day/normal/lod0/Turret_02.model	</undamaged>
+            <destroyed>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Turret_02.model	</destroyed>
+            <exploded>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Turret_02.model	</exploded>
+          </Defender_Day>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Turret_02.model	</collisionModelServer>

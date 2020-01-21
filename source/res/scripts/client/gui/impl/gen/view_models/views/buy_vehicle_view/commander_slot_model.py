@@ -61,10 +61,10 @@ class CommanderSlotModel(ViewModel):
     def setSlotIsEnabled(self, value):
         self._setBool(8, value)
 
-    def getShowBootcampAnim(self):
+    def getIsBootcamp(self):
         return self._getBool(9)
 
-    def setShowBootcampAnim(self, value):
+    def setIsBootcamp(self, value):
         self._setBool(9, value)
 
     def _initialize(self):
@@ -78,4 +78,4 @@ class CommanderSlotModel(ViewModel):
         self._addBoolProperty('isFree', False)
         self._addNumberProperty('discount', -1)
         self._addBoolProperty('slotIsEnabled', True)
-        self._addBoolProperty('showBootcampAnim', False)
+        self._addBoolProperty('isBootcamp', False)

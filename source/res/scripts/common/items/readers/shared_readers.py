@@ -2,7 +2,7 @@
 # Embedded file name: scripts/common/items/readers/shared_readers.py
 from collections import defaultdict
 import ResMgr
-from constants import IS_CLIENT, IS_BOT, ITEM_DEFS_PATH
+from constants import IS_CLIENT, IS_BOT, ITEM_DEFS_PATH, IS_EDITOR
 from debug_utils import LOG_ERROR
 from items import _xml
 from items.components import component_constants
@@ -57,8 +57,12 @@ def _readCustomizationSlot(ctx, subsection, slotType):
 
 __customizationSlotIdRanges = None
 
-def _readCustomizationSlotIdRanges():
+def getCustomizationSlotIdRanges():
     global __customizationSlotIdRanges
+    return __customizationSlotIdRanges if IS_EDITOR else None
+
+
+def _readCustomizationSlotIdRanges():
     filePath = _CUSTOMIZATION_CONSTANTS_PATH
     section = ResMgr.openSection(filePath)
     if section is None:

@@ -4,7 +4,7 @@
 
 class GoodieTarget(object):
 
-    def __init__(self, targetID, limit):
+    def __init__(self, targetID, limit=None):
         self._targetID = targetID
         self._limit = limit
 
@@ -63,3 +63,7 @@ class EpicMeta(GoodieTarget):
 
     def __init__(self, targetID=None, limit=None):
         super(EpicMeta, self).__init__(targetID, limit)
+
+
+class DemountOptionalDevice(GoodieTarget):
+    pass

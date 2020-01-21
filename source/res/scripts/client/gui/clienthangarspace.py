@@ -17,18 +17,17 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IIGRController
 from gui.hangar_cameras.hangar_camera_manager import HangarCameraManager
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
+from skeletons.gui.turret_gun_angles import ITurretAndGunAngles
 from skeletons.map_activities import IMapActivities
 from skeletons.gui.shared.utils import IHangarSpace
 _DEFAULT_SPACES_PATH = 'spaces'
-_DEFAULT_HANGAR = 'hangar_v3'
 _SERVER_CMD_CHANGE_HANGAR = 'cmd_change_hangar'
 _SERVER_CMD_CHANGE_HANGAR_PREM = 'cmd_change_hangar_prem'
 _CUSTOMIZATION_HANGAR_SETTINGS_SEC = 'customizationHangarSettings'
 _SPACE_FULL_VISIBILITY_MASK = ~0
 
 def _getDefaultHangarPath(isPremium):
-    global _DEFAULT_HANGAR
-    return '%s/%s' % (_DEFAULT_SPACES_PATH, _DEFAULT_HANGAR)
+    return '%s/hangar_v3' % _DEFAULT_SPACES_PATH
 
 
 def _getHangarPath(isPremium, isPremIGR):
@@ -67,7 +66,6 @@ def customizationHangarCFG():
 
 
 def _readHangarSettings():
-    global _DEFAULT_HANGAR
     hangarsXml = ResMgr.openSection('gui/hangars.xml')
     paths = [ path for path, _ in ResMgr.openSection(_DEFAULT_SPACES_PATH).items() ]
     configset = {}
@@ -93,9 +91,6 @@ def _readHangarSettings():
         configset[spaceKey] = cfg
         _validateConfigValues(cfg)
 
-    defaultHangar = hangarsXml.readString('default_hangar')
-    if defaultHangar:
-        _DEFAULT_HANGAR = defaultHangar
     return configset
 
 
@@ -104,7 +99,6 @@ def loadConfig(cfg, xml, defaultCfg=None):
         defaultCfg = cfg
     defaultFakeShadowOffsetsCfg = {'shadow_forward_y_offset': 0.0,
      'shadow_deferred_y_offset': 0.0}
-    loadConfigValue('v_scale', xml, xml.readFloat, cfg, defaultCfg)
     loadConfigValue('v_start_angles', xml, xml.readVector3, cfg, defaultCfg)
     loadConfigValue('v_start_pos', xml, xml.readVector3, cfg, defaultCfg)
     loadConfigValue('cam_start_target_pos', xml, xml.readVector3, cfg, defaultCfg)
@@ -190,6 +184,7 @@ class ClientHangarSpace(object):
     settingsCore = dependency.descriptor(ISettingsCore)
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
     mapActivities = dependency.descriptor(IMapActivities)
+    turretAndGunAngles = dependency.descriptor(ITurretAndGunAngles)
 
     def __init__(self, onVehicleLoadedCallback):
         global _HANGAR_CFGS
@@ -240,6 +235,7 @@ class ClientHangarSpace(object):
 
         spaceKey = _getHangarKey(spacePath)
         _CFG = copy.deepcopy(_HANGAR_CFGS[spaceKey])
+        self.turretAndGunAngles.init()
         self.__vEntityId = BigWorld.createEntity('HangarVehicle', self.__spaceId, 0, _CFG['v_start_pos'], (_CFG['v_start_angles'][2], _CFG['v_start_angles'][1], _CFG['v_start_angles'][0]), dict())
         self.__cameraManager = HangarCameraManager(self.__spaceId)
         self.__cameraManager.init()
@@ -275,7 +271,7 @@ class ClientHangarSpace(object):
     def moveVehicleTo(self, position):
         try:
             vehicle = BigWorld.entity(self.__vEntityId)
-            vehicle.model.motors[0].signal = _createMatrix(_CFG['v_scale'], _CFG['v_start_angles'], position)
+            vehicle.model.motors[0].signal = _createMatrix(1.0, _CFG['v_start_angles'], position)
         except Exception:
             LOG_CURRENT_EXCEPTION()
 
@@ -382,7 +378,7 @@ class ClientHangarSpace(object):
 
     @property
     def camera(self):
-        return None if self.__cameraManager is None else self.__cameraManager.camera
+        return self.__cameraManager.camera
 
 
 class _ClientHangarSpacePathOverride(object):

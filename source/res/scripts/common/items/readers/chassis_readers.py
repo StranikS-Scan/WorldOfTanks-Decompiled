@@ -8,6 +8,7 @@ from items.components import component_constants
 from items.components.shared_components import LodSettings
 from items.readers import shared_readers
 from debug_utils import LOG_ERROR
+from constants import IS_EDITOR
 
 def readWheelsAndGroups(xmlCtx, section):
     wheelGroups = []
@@ -106,9 +107,16 @@ def readTrackNodes(xmlCtx, section):
 
 def readTrackSplineParams(xmlCtx, section):
     trackSplineParams = None
+    if IS_EDITOR:
+        if not section.has_key('trackThickness'):
+            return
     if section['trackNodes'] is not None:
         ctx = (xmlCtx, 'trackNodes')
         trackSplineParams = chassis_components.TrackSplineParams(thickness=_xml.readFloat(ctx, section, 'trackThickness'), maxAmplitude=_xml.readFloat(ctx, section, 'trackNodes/maxAmplitude'), maxOffset=_xml.readFloat(ctx, section, 'trackNodes/maxOffset'), gravity=_xml.readFloat(ctx, section, 'trackNodes/gravity'))
+        if IS_EDITOR:
+            trackSplineParams.editorData._enable = _xml.readBool(ctx, section, 'trackNodes/enable', True)
+            trackSplineParams.editorData.elasticity = _xml.readFloat(ctx, section, 'trackNodes/elasticity', 1500.0)
+            trackSplineParams.editorData.linkBones = _xml.readBool(ctx, section, 'trackNodes/linkBones', False)
     elif section['splineDesc'] is not None or section['physicalTracks'] is not None:
         trackSplineParams = chassis_components.TrackSplineParams(thickness=_xml.readFloat(xmlCtx, section, 'trackThickness'), maxAmplitude=component_constants.ZERO_FLOAT, maxOffset=component_constants.ZERO_FLOAT, gravity=component_constants.ZERO_FLOAT)
     return trackSplineParams
@@ -143,14 +151,14 @@ def readLeveredSuspension(xmlCtx, section, cache):
 
 
 def readSplineConfig(xmlCtx, section, cache):
-    if section['splineDesc'] is None:
+    if not section.has_key('splineDesc'):
         return
     else:
         splineSegmentModelSets = {'default': chassis_components.SplineSegmentModelSet(left=_xml.readNonEmptyString(xmlCtx, section, 'splineDesc/segmentModelLeft'), right=_xml.readNonEmptyString(xmlCtx, section, 'splineDesc/segmentModelRight'), secondLeft=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/segment2ModelLeft') or '', secondRight=_xml.readStringOrNone(xmlCtx, section, 'splineDesc/segment2ModelRight') or '')}
         modelSetsSection = section['splineDesc/modelSets']
         if modelSetsSection:
             for sname, subSection in modelSetsSection.items():
-                splineSegmentModelSets[sname] = chassis_components.SplineSegmentModelSet(left=_xml.readNonEmptyString(xmlCtx, subSection, 'segmentModelLeft'), right=_xml.readNonEmptyString(xmlCtx, subSection, 'segmentModelRight'), secondLeft=_xml.readStringOrNone(xmlCtx, subSection, 'segment2ModelLeft'), secondRight=_xml.readStringOrNone(xmlCtx, subSection, 'segment2ModelRight'))
+                splineSegmentModelSets[sname] = chassis_components.SplineSegmentModelSet(left=_xml.readNonEmptyString(xmlCtx, subSection, 'segmentModelLeft'), right=_xml.readNonEmptyString(xmlCtx, subSection, 'segmentModelRight'), secondLeft=_xml.readStringOrNone(xmlCtx, subSection, 'segment2ModelLeft') or '', secondRight=_xml.readStringOrNone(xmlCtx, subSection, 'segment2ModelRight') or '')
 
         leftDescs = []
         rightDescs = []

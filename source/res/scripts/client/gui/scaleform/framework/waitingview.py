@@ -26,7 +26,7 @@ class WaitingView(WaitingViewMeta, IWaitingWidget):
         super(WaitingView, self).destroy()
         return
 
-    def setCallback(self, value):
+    def setCallback(self, value=None):
         self.__callback = value
 
     def cancelCallback(self):
@@ -35,6 +35,9 @@ class WaitingView(WaitingViewMeta, IWaitingWidget):
 
     def showWaiting(self, messageID):
         self.as_showWaitingS(backport.text(messageID))
+
+    def showAwards(self, value):
+        self.as_showAwardsS(value)
 
     def hideWaiting(self):
         self.__callback = None

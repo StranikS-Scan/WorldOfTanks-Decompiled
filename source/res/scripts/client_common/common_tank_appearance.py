@@ -16,7 +16,7 @@ from svarog_script.auto_properties import AutoProperty
 from vehicle_systems import model_assembler
 from vehicle_systems import camouflages
 from vehicle_systems.vehicle_damage_state import VehicleDamageState
-from vehicle_systems.tankStructure import VehiclePartsTuple, ModelsSetParams, TankPartNames, ColliderTypes, TankPartIndexes, TankNodeNames
+from vehicle_systems.tankStructure import VehiclePartsTuple, ModelsSetParams, TankPartNames, ColliderTypes, TankPartIndexes, TankNodeNames, RenderStates
 from vehicle_systems.components.CrashedTracks import CrashedTrackController
 from vehicle_systems.components.vehicleDecal import VehicleDecal
 from vehicle_systems.components.siegeEffectsController import SiegeEffectsController
@@ -41,6 +41,7 @@ class CommonTankAppearance(ScriptGameObject):
     isAlive = property(lambda self: self.__isAlive)
     isObserver = property(lambda self: self.__isObserver)
     outfit = property(lambda self: self.__outfit)
+    renderState = property(lambda self: self.__renderState)
 
     def _setFashions(self, fashions, isTurretDetached=False):
         self.__fashions = fashions
@@ -138,15 +139,17 @@ class CommonTankAppearance(ScriptGameObject):
         self.__filterRetrievers = []
         self.__vehicleStickers = None
         self.__vID = 0
+        self.__renderState = None
         return
 
-    def prerequisites(self, typeDescriptor, vID, health, isCrewActive, isTurretDetached, outfitCD):
+    def prerequisites(self, typeDescriptor, vID, health, isCrewActive, isTurretDetached, outfitCD, renderState=None):
         self.damageState.update(health, isCrewActive, False)
         self.__typeDesc = typeDescriptor
         self.__vID = vID
         self._isTurretDetached = isTurretDetached
         self.__outfit = self._prepareOutfit(outfitCD)
         self.__attachments = camouflages.getAttachments(self.outfit, self.typeDescriptor)
+        self.__renderState = renderState
         prereqs = self.typeDescriptor.prerequisites(True)
         prereqs.extend(camouflages.getCamoPrereqs(self.outfit, self.typeDescriptor))
         prereqs.extend(camouflages.getModelAnimatorsPrereqs(self.outfit, self.worldID))
@@ -162,8 +165,10 @@ class CommonTankAppearance(ScriptGameObject):
             if segment2ModelRight is not None:
                 prereqs.append(segment2ModelRight)
         modelsSetParams = self.modelsSetParams
-        compoundAssembler = model_assembler.prepareCompoundAssembler(self.typeDescriptor, modelsSetParams, self.worldID, self.isTurretDetached)
+        compoundAssembler = model_assembler.prepareCompoundAssembler(self.typeDescriptor, modelsSetParams, self.worldID, self.isTurretDetached, renderState=self.renderState)
         prereqs.append(compoundAssembler)
+        if renderState == RenderStates.OVERLAY_COLLISION:
+            self.damageState.update(0, isCrewActive, False)
         if not isTurretDetached:
             bspModels = ((TankPartNames.getIdx(TankPartNames.CHASSIS), typeDescriptor.chassis.hitTester.bspModelName),
              (TankPartNames.getIdx(TankPartNames.HULL), typeDescriptor.hull.hitTester.bspModelName),
@@ -186,6 +191,7 @@ class CommonTankAppearance(ScriptGameObject):
         self.typeDescriptor.hull.hitTester.bbox = self.collisions.getBoundingBox(TankPartNames.getIdx(TankPartNames.HULL))
         self.typeDescriptor.turret.hitTester.bbox = self.collisions.getBoundingBox(TankPartNames.getIdx(TankPartNames.TURRET))
         self.typeDescriptor.gun.hitTester.bbox = self.collisions.getBoundingBox(TankPartNames.getIdx(TankPartNames.GUN))
+        self.__isObserver = 'observer' in self.typeDescriptor.type.tags
         self._compoundModel = resourceRefs[self.typeDescriptor.name]
         self.__boundEffects = bound_effects.ModelBoundEffects(self.compoundModel)
         isCurrentModelDamaged = self.damageState.isCurrentModelDamaged
@@ -279,10 +285,10 @@ class CommonTankAppearance(ScriptGameObject):
             self.collisions.removeAttachment(TankPartNames.getIdx(TankPartNames.TURRET))
             self.collisions.removeAttachment(TankPartNames.getIdx(TankPartNames.GUN))
         super(CommonTankAppearance, self).activate()
-        self.__isObserver = 'observer' in self.typeDescriptor.type.tags
         if not self.isObserver:
             self.__chassisDecal.attach()
-        self.__createAndAttachStickers()
+        if not IS_EDITOR:
+            self.__createAndAttachStickers()
         if not self.isObserver:
             if not self.damageState.isCurrentModelDamaged:
                 self._startSystems()
@@ -312,12 +318,18 @@ class CommonTankAppearance(ScriptGameObject):
         for animator in self.__modelAnimators:
             animator.stop()
 
+        if self.damageState and self.damageState.isCurrentModelDamaged:
+            self.__modelAnimators = []
         self.shadowManager.unregisterCompoundModel(self.compoundModel)
         self._stopSystems()
         super(CommonTankAppearance, self).deactivate()
         self.__chassisDecal.detach()
         self.filter.enableLagDetection(False)
-        self.vehicleStickers.detach()
+        if IS_EDITOR:
+            if self.vehicleStickers:
+                self.vehicleStickers.detach()
+        else:
+            self.vehicleStickers.detach()
 
     def setupGunMatrixTargets(self, target):
         self.turretMatrix = target.turretMatrix
@@ -363,7 +375,7 @@ class CommonTankAppearance(ScriptGameObject):
         if self.isAlive:
             _, gunLength = self.computeVehicleHeight()
             self.__weaponEnergy = gunLength * self.typeDescriptor.shot.shell.caliber
-        if MAX_DISTANCE > 0:
+        if MAX_DISTANCE > 0 and not self.isObserver:
             transform = self.typeDescriptor.chassis.AODecals[0]
             splodge = BigWorld.Splodge(transform, MAX_DISTANCE, self.typeDescriptor.chassis.hullPosition.y)
             if splodge:
@@ -371,8 +383,8 @@ class CommonTankAppearance(ScriptGameObject):
                 node = self.compoundModel.node(TankPartNames.HULL)
                 node.attach(splodge)
 
-    def _createStickers(self):
-        return VehicleStickers(self.typeDescriptor, 0, self.outfit)
+    def _createStickers(self, insigniaRank=0):
+        return VehicleStickers(self.typeDescriptor, insigniaRank, self.outfit)
 
     @property
     def _vehicleColliderInfo(self):
@@ -480,3 +492,16 @@ class CommonTankAppearance(ScriptGameObject):
         self.vehicleStickers.alpha = stickersAlpha
         self.vehicleStickers.attach(compoundModel=self.compoundModel, isDamaged=self.damageState.isCurrentModelDamaged, showDamageStickers=not isCurrentModelDamaged)
         return
+
+    def editorCreateStickers(self, insigniaRank):
+        if self.vehicleStickers is None:
+            self.__vehicleStickers = self._createStickers(insigniaRank)
+        return
+
+    def editorAttachStickers(self):
+        isCurrentModelDamaged = self.damageState.isCurrentModelDamaged
+        stickersAlpha = _DEFAULT_STICKERS_ALPHA
+        if isCurrentModelDamaged:
+            stickersAlpha = items.vehicles.g_cache.commonConfig['miscParams']['damageStickerAlpha']
+        self.vehicleStickers.alpha = stickersAlpha
+        self.vehicleStickers.attach(compoundModel=self.compoundModel, isDamaged=self.damageState.isCurrentModelDamaged, showDamageStickers=not isCurrentModelDamaged)

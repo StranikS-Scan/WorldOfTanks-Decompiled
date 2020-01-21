@@ -13972,7 +13972,7 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_fuel_tank	</wwsound>
+            <wwsound>	inf_fuel_mle008_Canisters2	</wwsound>
           </destructionSound>
         </effects>
       </variant1>
@@ -16802,30 +16802,6 @@
         </effects>
       </variant1>
     </inf_mle009_BoxCamouflage_02>
-    <hd_mle_UNI_811_CamouflageTent_01>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_mle_UNI_811_CamouflageTent_01.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <wood_2>	18.78	</wood_2>
-              <cloth>	74	</cloth>
-              <debrisAmount>	72.65	</debrisAmount>
-              <weight>	2800	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_mle_UNI_811_CamouflageTent_01>
     <inf_mle009_BoxCamouflage1>
       <variant1>
         <stages>
@@ -16852,6 +16828,78 @@
         </effects>
       </variant1>
     </inf_mle009_BoxCamouflage1>
+    <hd_mle_UNI_811_CamouflageTent_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_mle_UNI_811_CamouflageTent_01.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_2>	18.78	</wood_2>
+              <cloth>	74	</cloth>
+              <debrisAmount>	72.65	</debrisAmount>
+              <weight>	2800	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_mle_UNI_811_CamouflageTent_01>
+    <hd_mle_UNI_811_CamouflageTent_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_mle_UNI_811_CamouflageTent_02.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_2>	18.78	</wood_2>
+              <cloth>	74	</cloth>
+              <debrisAmount>	72.65	</debrisAmount>
+              <weight>	2800	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_mle_UNI_811_CamouflageTent_02>
+    <hd_mle_UNI_811_CamouflageTent_03>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_mle_UNI_811_CamouflageTent_03.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_2>	18.78	</wood_2>
+              <cloth>	74	</cloth>
+              <debrisAmount>	72.65	</debrisAmount>
+              <weight>	2800	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_mle_UNI_811_CamouflageTent_03>
     <inf_mle009_BoxCamouflage1_01>
       <variant1>
         <stages>
@@ -29555,24 +29603,6 @@
         </effects>
       </variant1>
     </hd_env_SU_071_AdvertisingPillar>
-    <hd_env_SU_036_SpaceGirl>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_env_SU_036_SpaceGirl.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_fence_stone_mid	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_env_SU_036_SpaceGirl>
     <hd_env_SU_002_YoungLenin>
       <variant1>
         <stages>
@@ -36113,7 +36143,12 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_stone_crash_mid	</wwsound>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <weight>	7238.810059	</weight>
+              <stone_2>	57.840000	</stone_2>
+              <debrisAmount>	49.259998	</debrisAmount>
+            </params>
           </destructionSound>
         </effects>
       </variant1>
@@ -38862,7 +38897,13 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_stone_building_mid	</wwsound>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <weight>	5000.000000	</weight>
+              <stone_1>	50.000000	</stone_1>
+              <stone_2>	40.000000	</stone_2>
+              <debrisAmount>	30.000000	</debrisAmount>
+            </params>
           </destructionSound>
         </effects>
       </variant1>
@@ -38907,7 +38948,13 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_stone_building_mid	</wwsound>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <weight>	5000.000000	</weight>
+              <stone_1>	40.000000	</stone_1>
+              <stone_2>	50.000000	</stone_2>
+              <debrisAmount>	35.000000	</debrisAmount>
+            </params>
           </destructionSound>
         </effects>
       </variant1>
@@ -38951,7 +38998,13 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_stone_building_mid	</wwsound>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <weight>	5000.000000	</weight>
+              <stone_1>	30.000000	</stone_1>
+              <stone_2>	40.000000	</stone_2>
+              <debrisAmount>	40.000000	</debrisAmount>
+            </params>
           </destructionSound>
         </effects>
       </variant1>
@@ -46661,7 +46714,13 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_stone_building_mid	</wwsound>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <weight>	9000.000000	</weight>
+              <stone_1>	80.000000	</stone_1>
+              <stone_2>	24.000000	</stone_2>
+              <debrisAmount>	100.000000	</debrisAmount>
+            </params>
           </destructionSound>
         </effects>
       </variant1>
@@ -50939,7 +50998,13 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_stone_crash_mid	</wwsound>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <weight>	7238.810059	</weight>
+              <stone_1>	25.000000	</stone_1>
+              <stone_2>	57.840000	</stone_2>
+              <debrisAmount>	70.000000	</debrisAmount>
+            </params>
           </destructionSound>
         </effects>
       </variant1>

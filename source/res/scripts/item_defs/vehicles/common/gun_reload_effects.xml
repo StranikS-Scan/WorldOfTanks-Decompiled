@@ -140,11 +140,20 @@
     <almostCompleteDuration>	6000.0	</almostCompleteDuration>
     <caliber>	SWITCH_ext_rld_autoloader_caliber_85_107mm	</caliber>
   </autoloader_reload85_107>
+  <dualgun_reload85_107>
+    <type>	DualGunReload	</type>
+    <sound>	gun_rld_dual_reloading_oneshell	</sound>
+    <runTimeDelta>	0.9	</runTimeDelta>
+    <ammoLowSound>	gun_rld_dual_reloading_oneshell_last	</ammoLowSound>
+    <runTimeDeltaAmmoLow>	0.5	</runTimeDeltaAmmoLow>
+    <caliber>	SWITCH_ext_rld_autoloader_caliber_85_107mm	</caliber>
+  </dualgun_reload85_107>
   <dualgun_reload115_152>
     <type>	DualGunReload	</type>
     <sound>	gun_rld_dual_reloading_oneshell	</sound>
     <runTimeDelta>	1.8	</runTimeDelta>
     <ammoLowSound>	gun_rld_dual_reloading_oneshell_last	</ammoLowSound>
     <runTimeDeltaAmmoLow>	0.5	</runTimeDeltaAmmoLow>
+    <caliber>	SWITCH_ext_rld_autoloader_caliber_115_152mm	</caliber>
   </dualgun_reload115_152>
 </gun_reload_effects.xml>

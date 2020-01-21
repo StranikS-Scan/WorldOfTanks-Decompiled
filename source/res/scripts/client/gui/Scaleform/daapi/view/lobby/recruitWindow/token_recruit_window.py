@@ -18,6 +18,7 @@ from gui.sounds.filters import STATE_HANGAR_FILTERED
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from gui.server_events.recruit_helper import NonRecruitNotifierSingleton
 
 class TokenRecruitWindow(QuestRecruitWindowMeta):
     eventsCache = dependency.descriptor(IEventsCache)
@@ -92,4 +93,5 @@ class TokenRecruitWindow(QuestRecruitWindowMeta):
         if msg:
             SystemMessages.pushMessage(msg, type=msgType)
         callback(None)
+        NonRecruitNotifierSingleton().getInstance().notifyNonRecruitCount()
         return

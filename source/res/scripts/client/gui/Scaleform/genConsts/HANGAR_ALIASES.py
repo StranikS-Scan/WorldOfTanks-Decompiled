@@ -23,6 +23,4 @@ class HANGAR_ALIASES(object):
     VEH_PARAM_RENDERER_STATE_SIMPLE_BOTTOM = 'simpleBottom'
     VEH_PARAM_RENDERER_STATE_ADVANCED = 'advanced'
     VEH_PARAM_RENDERER_STATE_SEPARATOR = 'separator'
-    NY_MAIN_WIDGET_UI = 'NYMainWidgetUI'
-    LOOTBOXES_ENTRANCE_POINT = 'lootboxesEntrancePoint'
     PROGRESSIVE_REWARD_WIDGET = 'progressiveRewardWdgt'

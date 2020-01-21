@@ -3,10 +3,13 @@
 from collections import namedtuple
 from items.components import legacy_stuff
 from soft_exception import SoftException
-RecoilEffect = namedtuple('RecoilEffect', ('lodDist', 'amplitude', 'backoffTime', 'returnTime'))
+from wrapped_reflection_framework import reflectedNamedTuple
+from wrapped_reflection_framework import ReflectionMetaclass
+RecoilEffect = reflectedNamedTuple('RecoilEffect', ('lodDist', 'amplitude', 'backoffTime', 'returnTime'))
 
 class GunShot(legacy_stuff.LegacyStuff):
     __slots__ = ('shell', 'defaultPortion', 'piercingPower', 'speed', 'gravity', 'maxDistance', 'maxHeight')
+    __metaclass__ = ReflectionMetaclass
 
     def __init__(self, shell, defaultPortion, piercingPower, speed, gravity, maxDistance, maxHeight):
         super(GunShot, self).__init__()

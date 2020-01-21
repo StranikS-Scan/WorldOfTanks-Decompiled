@@ -53,6 +53,13 @@
       <undamaged>	vehicles/italy/It13_Progetto_M35_mod_46/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/italy/It13_Progetto_M35_mod_46/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/italy/It13_Progetto_M35_mod_46/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <FULL3D>
+          <undamaged>	vehicles/italy/It13_Progetto_M35_mod_46/_skins/FULL3D/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/italy/It13_Progetto_M35_mod_46/_skins/FULL3D/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/italy/It13_Progetto_M35_mod_46/_skins/FULL3D/crash/lod0/Hull.model	</exploded>
+        </FULL3D>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -76,8 +83,8 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.218897 0.183824 2.80026	</rayStart>
-        <rayEnd>	-0.218897 0.0200332 2.68549	</rayEnd>
+        <rayStart>	0.345107 0.522577 1.93199	</rayStart>
+        <rayEnd>	0.345107 0.322579 1.93199	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.34	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
@@ -1008,6 +1015,13 @@
         <undamaged>	vehicles/italy/It13_Progetto_M35_mod_46/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/italy/It13_Progetto_M35_mod_46/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/italy/It13_Progetto_M35_mod_46/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <FULL3D>
+            <undamaged>	vehicles/italy/It13_Progetto_M35_mod_46/_skins/FULL3D/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/italy/It13_Progetto_M35_mod_46/_skins/FULL3D/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/italy/It13_Progetto_M35_mod_46/_skins/FULL3D/crash/lod0/Chassis.model	</exploded>
+          </FULL3D>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1740,6 +1754,13 @@
             <undamaged>	vehicles/italy/It13_Progetto_M35_mod_46/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/italy/It13_Progetto_M35_mod_46/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/italy/It13_Progetto_M35_mod_46/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <FULL3D>
+                <undamaged>	vehicles/italy/It13_Progetto_M35_mod_46/_skins/FULL3D/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/italy/It13_Progetto_M35_mod_46/_skins/FULL3D/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/italy/It13_Progetto_M35_mod_46/_skins/FULL3D/crash/lod0/Gun_01.model	</exploded>
+              </FULL3D>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/italy/It13_Progetto_M35_mod_46/collision/Gun_01.model	</collisionModelServer>
@@ -1824,6 +1845,13 @@
         <undamaged>	vehicles/italy/It13_Progetto_M35_mod_46/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/italy/It13_Progetto_M35_mod_46/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/italy/It13_Progetto_M35_mod_46/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <FULL3D>
+            <undamaged>	vehicles/italy/It13_Progetto_M35_mod_46/_skins/FULL3D/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/italy/It13_Progetto_M35_mod_46/_skins/FULL3D/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/italy/It13_Progetto_M35_mod_46/_skins/FULL3D/crash/lod0/Turret_01.model	</exploded>
+          </FULL3D>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/italy/It13_Progetto_M35_mod_46/collision/Turret_01.model	</collisionModelServer>

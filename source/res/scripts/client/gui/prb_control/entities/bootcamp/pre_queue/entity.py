@@ -132,3 +132,6 @@ class BootcampEntity(PreQueueEntity):
                 self.dequeue(DequeueCtx(waitingID='prebattle/leave'), callback=__leave)
             else:
                 __leave()
+
+    def _validateParentControl(self):
+        return False

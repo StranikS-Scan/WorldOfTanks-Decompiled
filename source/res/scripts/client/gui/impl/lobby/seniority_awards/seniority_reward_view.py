@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/seniority_awards/seniority_reward_view.py
 import logging
-from frameworks.wulf import WindowFlags, ViewFlags
+from frameworks.wulf import ViewSettings, WindowFlags
 from constants import SENIORITY_AWARDS_CONFIG
 from gui.impl.gen.view_models.views.lobby.seniority_awards.seniority_reward_view_model import SeniorityRewardViewModel
 from gui.impl.lobby.progressive_reward.progressive_award_sounds import setSoundState, ProgressiveRewardSoundEvents
@@ -22,7 +22,11 @@ class SeniorityRewardView(ViewImpl):
     _lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, contentResId, *args, **kwargs):
-        super(SeniorityRewardView, self).__init__(contentResId, ViewFlags.VIEW, SeniorityRewardViewModel, *args, **kwargs)
+        settings = ViewSettings(contentResId)
+        settings.model = SeniorityRewardViewModel()
+        settings.args = args
+        settings.kwargs = kwargs
+        super(SeniorityRewardView, self).__init__(settings)
 
     @property
     def viewModel(self):

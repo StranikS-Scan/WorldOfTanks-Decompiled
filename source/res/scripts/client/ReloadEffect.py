@@ -7,6 +7,7 @@ from debug_utils import LOG_DEBUG
 import SoundGroups
 import BigWorld
 BARREL_DEBUG_ENABLED = False
+_CALIBER_RELOAD_SOUND_SWITCH = 'SWITCH_ext_rld_autoloader_caliber'
 
 class ReloadEffectsType(object):
     SIMPLE_RELOAD = 'SimpleReload'
@@ -51,13 +52,14 @@ class _SimpleReloadDesc(_ReloadDesc):
 
 
 class _DualGunReloadDesc(_SimpleReloadDesc):
-    __slots__ = ('ammoLowSound', 'soundEvent', 'runTimeDelta', 'runTimeDeltaAmmoLow')
+    __slots__ = ('ammoLowSound', 'soundEvent', 'runTimeDelta', 'runTimeDeltaAmmoLow', 'caliber')
 
     def __init__(self, dataSection):
         super(_DualGunReloadDesc, self).__init__(dataSection)
         self.ammoLowSound = dataSection.readString('ammoLowSound', '')
         self.runTimeDelta = dataSection.readFloat('runTimeDelta', 0.0)
         self.runTimeDeltaAmmoLow = dataSection.readFloat('runTimeDeltaAmmoLow', 0.0)
+        self.caliber = dataSection.readString('caliber', '')
 
     def create(self):
         return DualGunReload(self)
@@ -358,7 +360,7 @@ class AutoReload(CallbackDelayer):
         else:
             if BARREL_DEBUG_ENABLED:
                 LOG_DEBUG('AutoReload::start time = {0} {1} {2} {3} {4} {5} {6} '.format(BigWorld.time(), shellReloadTime, alert, shellCount, reloadShellCount, shellID, reloadStart))
-            SoundGroups.g_instance.setSwitch('SWITCH_ext_rld_autoloader_caliber', self._desc.caliber)
+            SoundGroups.g_instance.setSwitch(_CALIBER_RELOAD_SOUND_SWITCH, self._desc.caliber)
             self.stopCallback(self.__onShellInTheBarrel)
             self._almostCompleteSnd = None
             if self._sound is None:
@@ -458,6 +460,7 @@ class DualGunReload(CallbackDelayer):
         if gEffectsDisabled() or not directTrigger:
             return
         else:
+            SoundGroups.g_instance.setSwitch(_CALIBER_RELOAD_SOUND_SWITCH, self.__desc.caliber)
             self.stopCallback(self.__onReloadStart)
             timeToStart = shellReloadTime - self.__desc.runTimeDelta
             if self.__sound is None:

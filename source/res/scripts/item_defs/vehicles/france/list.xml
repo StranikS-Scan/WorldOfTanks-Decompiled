@@ -452,7 +452,7 @@
     <shortUserString>	#france_vehicles:F88_AMX_13_105_short	</shortUserString>
     <description>	#france_vehicles:F88_AMX_13_105_descr	</description>
     <price>	6100000	</price>
-    <tags>	lightTank improvedVentilation_class1_user scout wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions1t_user HD NY2020_style	</tags>
+    <tags>	lightTank improvedVentilation_class1_user scout wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions1t_user HD	</tags>
     <level>	10	</level>
   </F88_AMX_13_105>
   <F87_Batignolles-Chatillon_12t>
@@ -557,6 +557,32 @@
     <tags>	lightTank improvedVentilation_class1_user wetCombatPack_class1_user enhancedVertical_springs_user HD	</tags>
     <level>	2	</level>
   </F42_AMR_35>
+  <F116_Bat_Chatillon_Bourrasque>
+    <id>	235	</id>
+    <userString>	#france_vehicles:F116_Bat_Chatillon_Bourrasque	</userString>
+    <shortUserString>	#france_vehicles:F116_Bat_Chatillon_Bourrasque_short	</shortUserString>
+    <description>	#france_vehicles:F116_Bat_Chatillon_Bourrasque_descr	</description>
+    <shortDescriptionSpecial>	#france_vehicles:F116_Bat_Chatillon_Bourrasque_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#france_vehicles:F116_Bat_Chatillon_Bourrasque_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank mediumTank2 improvedVentilation_class2_user wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user HD secret testTank	</tags>
+    <level>	8	</level>
+  </F116_Bat_Chatillon_Bourrasque>
+  <F114_Projet_4_1>
+    <id>	236	</id>
+    <userString>	#france_vehicles:F114_Projet_4_1	</userString>
+    <shortUserString>	#france_vehicles:F114_Projet_4_1_short	</shortUserString>
+    <description>	#france_vehicles:F114_Projet_4_1_descr	</description>
+    <shortDescriptionSpecial>	#france_vehicles:F114_Projet_4_1_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#france_vehicles:F114_Projet_4_1_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank mediumTank2 improvedVentilation_class2_user wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user HD builtinRepairkit_user special secret testTank	</tags>
+    <level>	9	</level>
+  </F114_Projet_4_1>
   <F113_Bretagne_Panther>
     <id>	237	</id>
     <userString>	#france_vehicles:F113_Bretagne_Panther	</userString>
@@ -605,7 +631,6 @@
     <longDescriptionSpecial>	#france_vehicles:F97_ELC_EVEN_90_long_special	</longDescriptionSpecial>
     <price>	6500	  <gold></gold>
     </price>
-    <notInShop>	true	</notInShop>
     <tags>	lightTank improvedVentilation_class1_user scout wetCombatPack_class1_user enhancedTorsions1t_user aimingStabilizer_Mk1_user HD	</tags>
     <level>	8	</level>
   </F97_ELC_EVEN_90>

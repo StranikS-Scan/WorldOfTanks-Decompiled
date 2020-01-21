@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class CurrencyItemModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=3, commands=0):
+    def __init__(self, properties=2, commands=0):
         super(CurrencyItemModel, self).__init__(properties=properties, commands=commands)
 
     def getValue(self):
@@ -20,14 +20,7 @@ class CurrencyItemModel(ViewModel):
     def setCurrency(self, value):
         self._setString(1, value)
 
-    def getIsEnough(self):
-        return self._getBool(2)
-
-    def setIsEnough(self, value):
-        self._setBool(2, value)
-
     def _initialize(self):
         super(CurrencyItemModel, self)._initialize()
         self._addStringProperty('value', '--')
         self._addStringProperty('currency', '')
-        self._addBoolProperty('isEnough', True)

@@ -18,6 +18,7 @@ from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore, ISettingsCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from gui.server_events.recruit_helper import NonRecruitNotifierSingleton
 _SETTINGS_SYNCED = 1
 _EVENTS_CACHE_UPDATED = 2
 _ALL_SYNCED = _SETTINGS_SYNCED | _EVENTS_CACHE_UPDATED
@@ -282,6 +283,7 @@ class PersonalMissionsCache(object):
 
             eventsCache.onProgressUpdated(branch)
 
+        NonRecruitNotifierSingleton().getInstance().notifyNonRecruitCount()
         self.updateDisabledStateForQuests()
 
     def getIncompleteOperation(self, branch):

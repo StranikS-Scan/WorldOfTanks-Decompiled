@@ -14,8 +14,9 @@ from gui.Scaleform.daapi.view.meta.DestroyTimersPanelMeta import DestroyTimersPa
 from gui.Scaleform.genConsts.BATTLE_DESTROY_TIMER_STATES import BATTLE_DESTROY_TIMER_STATES as _TIMER_STATES
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from gui.battle_control import avatar_getter
-from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
+from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CROSSHAIR_VIEW_ID
 from gui.battle_control import event_dispatcher as gui_event_dispatcher
+from gui.shared.items_parameters import isAutoReloadGun
 from helpers import dependency, i18n
 from items import vehicles
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -41,6 +42,7 @@ _SECONDARY_TIMERS = (_TIMER_STATES.STUN,
  _TIMER_STATES.INSPIRE,
  _TIMER_STATES.INSPIRE_CD)
 _MAX_DISPLAYED_SECONDARY_STATUS_TIMERS = 2
+_VERTICAL_SHIFT_WITH_AUTOLOADER_IN_SNIPER_MODE = 42
 
 def _showTimerView(typeID, viewID, view, totalTime, isBubble, currentTime=0, secondInRow=False):
     if typeID in _SECONDARY_TIMERS:
@@ -364,6 +366,8 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
             self._mapping = _mapping.FrontendMapping()
         self._timers = _createTimersCollection(self)
         self.__sound = None
+        self.__vehicle = None
+        self.__viewID = CROSSHAIR_VIEW_ID.UNDEFINED
         return
 
     def _populate(self):
@@ -379,6 +383,9 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
             vehicle = ctrl.getControllingVehicle()
             if vehicle is not None:
                 self.__onVehicleControlling(vehicle)
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if crosshairCtrl is not None:
+            crosshairCtrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
         return
 
     def _dispose(self):
@@ -386,6 +393,9 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
         if ctrl is not None:
             ctrl.onVehicleStateUpdated -= self._onVehicleStateUpdated
             ctrl.onVehicleControlling -= self.__onVehicleControlling
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if crosshairCtrl is not None:
+            crosshairCtrl.onCrosshairViewChanged -= self.__onCrosshairViewChanged
         handler = avatar_getter.getInputHandler()
         if handler is not None:
             if isinstance(handler, AvatarInputHandler):
@@ -517,6 +527,25 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
                 self._onVehicleStateUpdated(stateID, stateValue)
 
         vehicle.updateStunInfo()
+        self.__vehicle = vehicle
+        self.__updatePanelPosition()
+
+    def __onCrosshairViewChanged(self, viewID):
+        self.__viewID = viewID
+        self.__updatePanelPosition()
+
+    def __updatePanelPosition(self):
+        if self.__vehicle is None or self.__vehicle.typeDescriptor is None:
+            self.as_setVerticalOffsetS(0)
+            return
+        else:
+            verticalOffset = 0
+            vTypeDescr = self.__vehicle.typeDescriptor
+            hasAutoloaderInterface = vTypeDescr.isDualgunVehicle or isAutoReloadGun(vTypeDescr.gun)
+            if self.__viewID is CROSSHAIR_VIEW_ID.SNIPER and hasAutoloaderInterface:
+                verticalOffset = _VERTICAL_SHIFT_WITH_AUTOLOADER_IN_SNIPER_MODE
+            self.as_setVerticalOffsetS(verticalOffset)
+            return
 
     def _onVehicleStateUpdated(self, state, value):
         if state == VEHICLE_VIEW_STATE.SWITCHING:

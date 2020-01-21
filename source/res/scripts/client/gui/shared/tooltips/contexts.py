@@ -5,10 +5,10 @@ import constants
 import gui
 import nations
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
-from dossiers2.custom.records import DB_ID_TO_RECORD
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE
+from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
@@ -938,6 +938,16 @@ class BoosterContext(ToolTipContext):
 
     def buildItem(self, boosterID):
         return self._goodiesCache.getBooster(boosterID)
+
+
+class DemountKitContext(ToolTipContext):
+    _goodiesCache = dependency.descriptor(IGoodiesCache)
+
+    def __init__(self, fieldsToExclude=None):
+        super(DemountKitContext, self).__init__(TOOLTIP_COMPONENT.DEMOUNT_KIT, fieldsToExclude)
+
+    def buildItem(self, demountKitID):
+        return self._goodiesCache.getDemountKit(demountKitID)
 
 
 class ShopBoosterContext(BoosterContext):

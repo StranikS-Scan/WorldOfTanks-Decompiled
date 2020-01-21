@@ -4,8 +4,8 @@ import time
 import calendar
 import datetime
 import XmlConfigReader
-from debug_utils import LOG_DEBUG, LOG_WARNING
-from . import goodie_constants
+from debug_utils import LOG_WARNING
+from goodie_constants import GOODIE_VARIETY
 from . import goodie_helpers
 from items.vehicles import makeVehicleTypeCompDescrByName
 from soft_exception import SoftException
@@ -77,7 +77,7 @@ def _validator(uid, variety, resource, price):
     t, value, isPercentage = resource
     if value < 0:
         raise SoftException('Bad goodie %d value (negative) %d' % uid % value)
-    if variety == goodie_constants.GOODIE_VARIETY.DISCOUNT and isPercentage and value > 100:
+    if variety in GOODIE_VARIETY.DISCOUNT_LIKE and isPercentage and value > 100:
         raise SoftException('Bad goodie %d value %d' % uid % value)
     if price is not None and price <= 0:
         raise SoftException('Bad goodie %d price (negative or zero) %d' % uid % price)
@@ -93,32 +93,18 @@ def _readGoodies(reader, subsectionName):
          'prices': {},
          'notInShop': set()}
         for packet_name, packet in section.items():
+            v, uid = (None, -1)
             if '_' in packet_name:
                 v, uid = packet_name.split('_')
-            if v == 'discount':
-                variety = goodie_constants.GOODIE_VARIETY.DISCOUNT
-            elif v == 'booster':
-                variety = goodie_constants.GOODIE_VARIETY.BOOSTER
-            else:
-                raise SoftException('No <uid> parameter')
+            variety = GOODIE_VARIETY.NAME_TO_ID.get(v, None)
+            if variety is None:
+                raise SoftException('No <%s> parameter' % 'variety')
             uid = int(uid)
             if uid < 0:
                 raise SoftException('No <uid> parameter')
-            isEnabled = packet.readInt('enabled', 1)
-            if isEnabled == 0:
-                enabled = False
-            else:
-                enabled = True
-            isAutostart = packet.readInt('autostart', 0)
-            if isAutostart == 0:
-                autostart = False
-            else:
-                autostart = True
-            notInShop = packet.readInt('notInShop', 1)
-            if notInShop == 0:
-                notInShop = False
-            else:
-                notInShop = True
+            enabled = bool(packet.readInt('enabled', 1))
+            autostart = bool(packet.readInt('autostart', 0))
+            notInShop = bool(packet.readInt('notInShop', 1))
             counter = packet.readInt('counter', 1)
             lifetime = XmlConfigReader.parseDuration(packet.readString('lifetime', '0'))
             if lifetime == 0:

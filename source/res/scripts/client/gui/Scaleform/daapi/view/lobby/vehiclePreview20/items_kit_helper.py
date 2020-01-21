@@ -183,7 +183,7 @@ def getCompensateItemsCount(rawItem, itemsCache):
         item = itemsCache.items.getItemByCD(rawItem.id) if isVehicle or isCustomisation else None
         if item is not None:
             if isVehicle:
-                if item.isInInventory:
+                if item.isInInventory and not item.isRented:
                     return 1
                 return 0
             if item.isLimited:
@@ -229,7 +229,7 @@ def getItemIcon(rawItem, item):
 def getItemTitle(rawItem, item, forBox=False):
     if item is not None:
         title = item.userName
-        if forBox:
+        if forBox and item.itemTypeName != '':
             tooltipKey = TOOLTIPS.getItemBoxTooltip(item.itemTypeName)
             if tooltipKey:
                 title = _ms(tooltipKey, group=item.userType, value=item.userName)
@@ -239,7 +239,7 @@ def getItemTitle(rawItem, item, forBox=False):
     elif rawItem.type == ItemPackType.CUSTOM_GOLD:
         title = _ms(key=QUESTS.BONUSES_GOLD_DESCRIPTION, value=rawItem.count)
     elif rawItem.type == ItemPackType.CUSTOM_CREDITS:
-        title = _ms(key=QUESTS.BONUSES_CREDITS_DESCRIPTION, value=rawItem.count)
+        title = backport.text(R.strings.quests.bonuses.credits.description(), value=text_styles.credits(backport.getIntegralFormat(rawItem.count)))
     elif rawItem.type == ItemPackType.CUSTOM_CRYSTAL:
         title = _ms(key=QUESTS.BONUSES_CRYSTAL_DESCRIPTION, value=rawItem.count)
     elif rawItem.type == ItemPackType.CUSTOM_SUPPLY_POINT:
@@ -287,7 +287,8 @@ def getItemDescription(rawItem, item):
         else:
             description = _ms(TOOLTIPS.CREW_BODY, value={ItemPackType.CREW_50: CrewTypes.SKILL_50,
              ItemPackType.CREW_75: CrewTypes.SKILL_75,
-             ItemPackType.CREW_100: CrewTypes.SKILL_100}.get(rawItem.type))
+             ItemPackType.CREW_100: CrewTypes.SKILL_100,
+             ItemPackType.CUSTOM_CREW_100: CrewTypes.SKILL_100}.get(rawItem.type))
     else:
         description = rawItem.description or ''
     return description
@@ -356,7 +357,7 @@ def _createItemVO(rawItem, itemsCache, goodiesCache, slotIndex, rawTooltipData=N
 
 
 def _formatCrew(item):
-    if item.type == ItemPackType.CREW_100:
+    if item.type in (ItemPackType.CREW_100, ItemPackType.CUSTOM_CREW_100):
         return '100%'
     if item.type == ItemPackType.CREW_75:
         return '75%'
@@ -375,7 +376,7 @@ def _getBoxTooltipVO(rawItems, itemsCache, goodiesCache):
         overlay = getSlotOverlayIconType(fittingItem)
         items.append({'id': rawItem.id,
          'type': rawItem.type,
-         'count': str(rawItem.count) if rawItem.type not in _UNCOUNTABLE_ITEM_TYPE else '',
+         'count': str(rawItem.count) if rawItem.type not in _UNCOUNTABLE_ITEM_TYPE and rawItem.count > 1 else '',
          'icon': icon,
          'overlay': overlay,
          'desc': getItemTitle(rawItem, fittingItem, forBox=True)})

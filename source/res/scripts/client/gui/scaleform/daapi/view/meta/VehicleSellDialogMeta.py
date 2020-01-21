@@ -7,26 +7,20 @@ class VehicleSellDialogMeta(AbstractWindowView):
     def setDialogSettings(self, isOpen):
         self._printOverrideError('setDialogSettings')
 
-    def sell(self, vehicleData, shells, eqs, optDevices, inventory, customizationItems, boosters, isDismissCrew):
+    def sell(self):
         self._printOverrideError('sell')
 
     def setUserInput(self, value):
         self._printOverrideError('setUserInput')
 
-    def setResultCredit(self, isGold, value):
-        self._printOverrideError('setResultCredit')
+    def setCrewDismissal(self, value):
+        self._printOverrideError('setCrewDismissal')
 
-    def checkControlQuestion(self, dismiss):
-        self._printOverrideError('checkControlQuestion')
-
-    def onChangeConfiguration(self, optDevices):
-        self._printOverrideError('onChangeConfiguration')
+    def onSelectionChanged(self, itemID, toInventory, currency):
+        self._printOverrideError('onSelectionChanged')
 
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
-
-    def as_checkGoldS(self, gold):
-        return self.flashObject.as_checkGold(gold) if self._isDAAPIInited() else None
 
     def as_visibleControlBlockS(self, value):
         return self.flashObject.as_visibleControlBlock(value) if self._isDAAPIInited() else None
@@ -36,3 +30,9 @@ class VehicleSellDialogMeta(AbstractWindowView):
 
     def as_setControlQuestionDataS(self, isGold, value, question):
         return self.flashObject.as_setControlQuestionData(isGold, value, question) if self._isDAAPIInited() else None
+
+    def as_setTotalS(self, common, total):
+        return self.flashObject.as_setTotal(common, total) if self._isDAAPIInited() else None
+
+    def as_updateAccountMoneyS(self, currency, value):
+        return self.flashObject.as_updateAccountMoney(currency, value) if self._isDAAPIInited() else None

@@ -36,8 +36,6 @@ class BCTechTree(TechTree):
                         node['state'] |= NODE_STATE_FLAGS.ANNOUNCEMENT
                         node['state'] |= NODE_STATE_FLAGS.NOT_CLICKABLE
 
-        data['nodes'][0]['displayInfo']['position'] = [16, 90]
-        data['nodes'][0]['displayInfo']['lines'][0]['outPin'] = [144, 108]
         return data
 
     def setupContextHints(self, hintID):

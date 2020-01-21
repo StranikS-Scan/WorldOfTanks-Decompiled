@@ -460,10 +460,7 @@ class Source(object):
          'crewSkin',
          'blueprint',
          'blueprintAny',
-         'ny20ToyFragments',
-         'ny20Fillers',
-         'ny20Toy',
-         'ny20AnyOf'}
+         'enhancement'}
         if eventType in (EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST, EVENT_TYPE.NT_QUEST):
             bonusTypes.update(('xp', 'tankmenXP', 'xpFactor', 'creditsFactor', 'freeXPFactor', 'tankmenXPFactor'))
         if eventType in (EVENT_TYPE.NT_QUEST,):
@@ -625,10 +622,10 @@ class Source(object):
         node.addChild(section.has_key('force'))
 
     def __readCondition_attackReason(self, _, section, node):
-        attackReason = section.asInt
-        if not 0 <= attackReason < len(ATTACK_REASONS):
+        attackReasons = set([ int(id) for id in section.asString.split() ])
+        if any((not 0 <= x < len(ATTACK_REASONS) for x in attackReasons)):
             raise SoftException('Invalid attack reason index')
-        node.addChild(section.asInt)
+        node.addChild(attackReasons)
 
     def __readCondition_set(self, _, section, node):
         node.addChild(set([ int(id) for id in section.asString.split() ]))

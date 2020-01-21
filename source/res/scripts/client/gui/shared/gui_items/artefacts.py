@@ -4,22 +4,22 @@ from itertools import chain, imap
 import nations
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
-from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
-from gui.shared.gui_items.fitting_item import FittingItem
-from gui.shared.gui_items.Tankman import isSkillLearnt
-from gui.shared.gui_items.gui_item_economics import ItemPrice, ITEM_PRICE_EMPTY
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.locale.RES_SHOP_EXT import RES_SHOP_EXT
-from gui.shared.money import Money, Currency, MONEY_UNDEFINED
-from gui.shared.utils.functions import stripColorTagDescrTags
-from items import artefacts, vehicles as vehicleItems, tankmen
-from items.tankmen import PERKS
 from gui.Scaleform.locale.ARTEFACTS import ARTEFACTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.RES_SHOP_EXT import RES_SHOP_EXT
+from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
+from gui.shared.gui_items.Tankman import isSkillLearnt
+from gui.shared.gui_items.fitting_item import FittingItem
+from gui.shared.gui_items.gui_item_economics import ItemPrice, ITEM_PRICE_EMPTY
+from gui.shared.money import Money, Currency, MONEY_UNDEFINED
+from gui.shared.utils.functions import stripColorTagDescrTags
 from helpers import i18n, dependency
+from items import artefacts, vehicles as vehicleItems, tankmen
+from items.tankmen import PERKS
+from items.vehicles import ABILITY_SLOTS_BY_VEHICLE_CLASS, getVehicleClassFromVehicleType
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
-from items.vehicles import ABILITY_SLOTS_BY_VEHICLE_CLASS, getVehicleClassFromVehicleType
 _TAG_NOT_FOR_SALE = 'notForSale'
 _TAG_TRIGGER = 'trigger'
 _TAG_CREW_BATTLE_BOOSTER = 'crewSkillBattleBooster'

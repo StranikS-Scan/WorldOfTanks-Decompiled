@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/shop/stock.py
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 from functools import partial
 from itertools import chain
 from WeakMethod import WeakMethodProxy
@@ -49,6 +49,8 @@ class PremiumPack(object):
         return i18n.makeString(MENU.PREMIUM_PACKET_LONGDESCRIPTIONSPECIAL)
 
 
+_InventoryEnhancements = namedtuple('_InventoryEnhancements', ('id', 'count'))
+_InstalledEnhancements = namedtuple('_InstalledEnhancements', ('vehIntCD', 'enhancements'))
 _GUI_ITEMS_TYPE_MAP = {ShopItemType.VEHICLE: GUI_ITEM_TYPE.VEHICLE,
  ShopItemType.EQUIPMENT: GUI_ITEM_TYPE.EQUIPMENT,
  ShopItemType.DEVICE: GUI_ITEM_TYPE.OPTIONALDEVICE,
@@ -100,7 +102,8 @@ _ITEMS_CRITERIA_MAP = {ShopItemType.VEHICLE: {'inventory': REQ_CRITERIA.INVENTOR
  ShopItemType.DECAL: {},
  ShopItemType.EMBLEM: {},
  ShopItemType.INSCRIPTION: {},
- ShopItemType.PROJECTION_DECAL: {}}
+ ShopItemType.PROJECTION_DECAL: {},
+ ShopItemType.ENHANCEMENT: {'inventory': REQ_CRITERIA.INVENTORY}}
 
 class IdInListCriteria(RequestCriteria):
 
@@ -199,6 +202,11 @@ class ItemsWebApiMixin(object):
                 fmt = formatters.makeShellFormatter()
             elif itemType in _SHOP_CUSTOMIZATION_TYPES:
                 fmt = formatters.makeCustomizationFormatter()
+            elif itemType == ShopItemType.ENHANCEMENT:
+                if criteria.lookInInventory():
+                    fmt = formatters.makeInventoryEnhancementsFormatter()
+                else:
+                    fmt = formatters.makeInstalledEnhancementsFormatter()
             self.__formattersMap[key] = fmt
             return fmt
 
@@ -206,12 +214,23 @@ class ItemsWebApiMixin(object):
         entries = [itemType]
         if itemType == ShopItemType.VEHICLE and criteria.lookInInventory():
             entries.append('inventory')
+        elif itemType == ShopItemType.ENHANCEMENT:
+            if criteria.lookInInventory():
+                entries.append('inventory')
+            else:
+                entries.append('installed')
         return ','.join(entries)
 
     def __collectItems(self, itemType, criteria):
         if itemType == ShopItemType.BOOSTER:
             return self.__collectBoosters(criteria)
-        return self.__collectPremiumPacks() if itemType == ShopItemType.PREMIUM else self.__collectGuiItems(itemType, criteria)
+        if itemType == ShopItemType.PREMIUM:
+            return self.__collectPremiumPacks()
+        if itemType == ShopItemType.ENHANCEMENT:
+            if criteria.lookInInventory():
+                return self.__collectInventoryEnhancements()
+            return self.__collectInstalledEnhancements()
+        return self.__collectGuiItems(itemType, criteria)
 
     def __collectBoosters(self, criteria):
         return self.goodiesCache.getBoosters(criteria=criteria).itervalues()
@@ -224,6 +243,28 @@ class ItemsWebApiMixin(object):
         defaultPrem = shop.defaults.premiumCost
         discountedPrem = shop.getPremiumCostWithDiscount()
         return [ PremiumPack(duration, discountedPrem.get(duration, cost), cost) for duration, cost in defaultPrem.iteritems() ]
+
+    def __collectInventoryEnhancements(self):
+        inventory = self.itemsCache.items.inventory
+        fromInventory = inventory.getInventoryEnhancements()
+        inventoryEnhancements = {}
+        for enhancements in fromInventory.itervalues():
+            for enhancementID, count in enhancements.iteritems():
+                inventoryEnhancements[enhancementID] = count
+
+        return [ _InventoryEnhancements(enhancementID, count) for enhancementID, count in inventoryEnhancements.iteritems() ]
+
+    def __collectInstalledEnhancements(self):
+        inventory = self.itemsCache.items.inventory
+        fromVehicles = inventory.getInstalledEnhancements()
+        installedEnhancements = {}
+        for vehs in fromVehicles.itervalues():
+            for vehInvID, enhancements in vehs.iteritems():
+                vehInfo = self.itemsCache.items.getVehicle(vehInvID)
+                if vehInfo:
+                    installedEnhancements[vehInfo.intCD] = enhancements
+
+        return [ _InstalledEnhancements(vehIntCD, enhancements) for vehIntCD, enhancements in installedEnhancements.iteritems() ]
 
     def getCompatVehicles(self, itemType, itemID):
         return self.__compatVehiclesCache[itemType][itemID]

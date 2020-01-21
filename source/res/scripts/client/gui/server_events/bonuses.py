@@ -48,10 +48,8 @@ from helpers.i18n import makeString as _ms
 from items import vehicles, tankmen
 from items.components import c11n_components as cc
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
-from items.components.ny_constants import TOKEN_FREE_TALISMANS, TOKEN_TALISMAN_BONUS
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from nations import NAMES
-from new_year.ny_constants import CURRENT_NY_TOYS_BONUS, CURRENT_NY_FRAGMENTS_BONUS, CURRENT_NY_FILLERS_BONUS
 from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME
 from shared_utils import makeTupleByDict, CONST_CONTAINER
 from skeletons.gui.customization import ICustomizationService
@@ -500,25 +498,6 @@ class X5BattleTokensBonus(TokensBonus):
         return True
 
 
-class FreeTalismansTokensBonus(TokensBonus):
-    itemsCache = dependency.descriptor(IItemsCache)
-
-    def __init__(self, value, isCompensation=False, ctx=None):
-        super(TokensBonus, self).__init__('tokens', value, isCompensation, ctx)
-
-    def isShowInGUI(self):
-        return True
-
-
-class TalismanTokensBonus(TokensBonus):
-
-    def __init__(self, value, isCompensation=False, ctx=None):
-        super(TokensBonus, self).__init__('tokens', value, isCompensation, ctx)
-
-    def isShowInGUI(self):
-        return True
-
-
 def personalMissionsTokensFactory(name, value, isCompensation=False, ctx=None):
     from gui.server_events.finders import PERSONAL_MISSION_TOKEN
     completionTokenID = PERSONAL_MISSION_TOKEN % (ctx['campaignID'], ctx['operationID'])
@@ -542,10 +521,6 @@ def tokensFactory(name, value, isCompensation=False, ctx=None):
             result.append(TmanTemplateTokensBonus({tID: tValue}, isCompensation, ctx))
         if tID.startswith(BATTLE_BONUS_X5_TOKEN):
             result.append(X5BattleTokensBonus({tID: tValue}, isCompensation, ctx))
-        if tID.startswith(TOKEN_FREE_TALISMANS):
-            result.append(FreeTalismansTokensBonus({tID: tValue}, isCompensation, ctx))
-        if tID.startswith(TOKEN_TALISMAN_BONUS):
-            result.append(TalismanTokensBonus({tID: tValue}, isCompensation, ctx))
         result.append(BattleTokensBonus(name, {tID: tValue}, isCompensation, ctx))
 
     return result
@@ -681,6 +656,9 @@ class GoodiesBonus(SimpleBonus):
 
     def getDiscounts(self):
         return self._getGoodies(self.goodiesCache.getDiscount)
+
+    def getDemountKits(self):
+        return self._getGoodies(self.goodiesCache.getDemountKit)
 
     def _getGoodies(self, goodieGetter):
         goodies = {}
@@ -1401,12 +1379,6 @@ class BlueprintsBonusSubtypes(CONST_CONTAINER):
     USE_CONGRATS = (FINAL_FRAGMENT, VEHICLE_FRAGMENT)
 
 
-class BlueprintsIconsNames(CONST_CONTAINER):
-    FINAL_FRAGMENT = 'vehicle_complete'
-    UNIVERSAL_FRAGMENT = 'intelligence'
-    VEHICLE_FRAGMENT = 'vehicle'
-
-
 class VehicleBlueprintBonus(SimpleBonus):
     _HTML_TEMPLATE = 'vehicleBlueprints'
 
@@ -1427,14 +1399,8 @@ class VehicleBlueprintBonus(SimpleBonus):
     def formatBlueprintValue(self):
         return text_styles.neutral(self.itemsCache.items.getItemByCD(self._getFragmentCD()).shortUserName)
 
-    def formatUserNameValue(self):
-        pass
-
     def getImage(self, size='big'):
-        return RES_ICONS.getBlueprintFragment(size, BlueprintsIconsNames.FINAL_FRAGMENT) if self._isFinalFragment() else RES_ICONS.getBlueprintFragment(size, BlueprintsIconsNames.VEHICLE_FRAGMENT)
-
-    def getImageIconName(self):
-        return BlueprintsIconsNames.FINAL_FRAGMENT if self._isFinalFragment() else BlueprintsIconsNames.VEHICLE_FRAGMENT
+        return RES_ICONS.getBlueprintFragment(size, 'vehicle_complete') if self._isFinalFragment() else RES_ICONS.getBlueprintFragment(size, 'vehicle')
 
     def getCount(self):
         return self._value[1]
@@ -1493,19 +1459,13 @@ class IntelligenceBlueprintBonus(VehicleBlueprintBonus):
         return int(makeIntelligenceCD(self._getFragmentCD()))
 
     def getImage(self, size='big'):
-        return RES_ICONS.getBlueprintFragment(size, BlueprintsIconsNames.UNIVERSAL_FRAGMENT)
-
-    def getImageIconName(self):
-        return BlueprintsIconsNames.UNIVERSAL_FRAGMENT
+        return RES_ICONS.getBlueprintFragment(size, 'intelligence')
 
     def getBlueprintSpecialAlias(self):
         return TOOLTIPS_CONSTANTS.BLUEPRINT_FRAGMENT_INFO
 
     def formatBlueprintValue(self):
         pass
-
-    def formatUserNameValue(self):
-        return self._getBlueprintTooltipName()
 
     def canPacked(self):
         return self._ctx.get('isPacked', False) and self.getCount() > 1
@@ -1533,17 +1493,12 @@ class NationalBlueprintBonus(VehicleBlueprintBonus):
         return int(makeNationalCD(self._getFragmentCD()))
 
     def getImage(self, size='big'):
-        return RES_ICONS.getBlueprintFragment(size, self.getImageIconName())
-
-    def getImageIconName(self):
         import nations
-        return nations.NAMES[self.__getNationID()]
+        nationName = nations.NAMES[self.__getNationID()]
+        return RES_ICONS.getBlueprintFragment(size, nationName)
 
     def getBlueprintSpecialAlias(self):
         return TOOLTIPS_CONSTANTS.BLUEPRINT_FRAGMENT_INFO
-
-    def formatUserNameValue(self):
-        return self._getBlueprintTooltipName()
 
     def formatBlueprintValue(self):
         pass
@@ -1743,10 +1698,7 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  'oneof': BoxBonus,
  'badgesGroup': BadgesGroupBonus,
  'blueprints': blueprintBonusFactory,
- 'crewSkins': crewSkinsBonusFactory,
- CURRENT_NY_TOYS_BONUS: SimpleBonus,
- CURRENT_NY_FRAGMENTS_BONUS: SimpleBonus,
- CURRENT_NY_FILLERS_BONUS: CountableIntegralBonus}
+ 'crewSkins': crewSkinsBonusFactory}
 HIDDEN_BONUSES = (MetaBonus,)
 _BONUSES_PRIORITY = ('tokens', 'oneof')
 _BONUSES_ORDER = dict(((n, idx) for idx, n in enumerate(_BONUSES_PRIORITY)))

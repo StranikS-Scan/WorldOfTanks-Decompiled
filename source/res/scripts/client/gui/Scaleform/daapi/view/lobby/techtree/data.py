@@ -16,13 +16,14 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from items import ITEM_TYPE_NAMES, getTypeOfCompactDescr as getTypeOfCD, vehicles as vehicles_core
-from skeletons.gui.game_control import ITradeInController
+from skeletons.gui.game_control import ITradeInController, IBootcampController
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 __all__ = ('ResearchItemsData', 'NationTreeData')
 
 class _ItemsData(object):
     tradeIn = dependency.descriptor(ITradeInController)
+    bootcamp = dependency.descriptor(IBootcampController)
 
     @dependency.replace_none_kwargs(itemsCache=IItemsCache)
     def __init__(self, dumper, itemsCache=None):
@@ -519,7 +520,7 @@ class ResearchItemsData(_ItemsData):
                 state |= NODE_STATE_FLAGS.ENOUGH_MONEY
             if nodeCD in self._wereInBattle:
                 state |= NODE_STATE_FLAGS.WAS_IN_BATTLE
-            if guiItem.buyPrices.itemPrice.isActionPrice():
+            if guiItem.buyPrices.itemPrice.isActionPrice() and not self.bootcamp.isInBootcamp():
                 state |= NODE_STATE_FLAGS.ACTION
         else:
             if not topLevel:

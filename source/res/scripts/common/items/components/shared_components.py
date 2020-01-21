@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/shared_components.py
 from collections import namedtuple
-from constants import IS_CLIENT, IS_WEB
+from constants import IS_CLIENT, IS_WEB, IS_EDITOR
 from items.components import component_constants
 from items.components import path_builder
 from soft_exception import SoftException
+from wrapped_reflection_framework import ReflectionMetaclass, reflectedNamedTuple
 if IS_CLIENT:
     from helpers import i18n
 elif IS_WEB:
@@ -21,14 +22,14 @@ else:
 __all__ = ('MaterialInfo', 'DEFAULT_MATERIAL_INFO', 'EmblemSlot', 'LodSettings', 'NodesAndGroups', 'Camouflage', 'DEFAULT_CAMOUFLAGE', 'SwingingSettings', 'I18nComponent', 'DeviceHealth', 'ModelStatesPaths')
 MaterialInfo = namedtuple('MaterialInfo', ('kind', 'armor', 'extra', 'multipleExtra', 'vehicleDamageFactor', 'useArmorHomogenization', 'useHitAngle', 'useAntifragmentationLining', 'mayRicochet', 'collideOnceOnly', 'checkCaliberForRichet', 'checkCaliberForHitAngleNorm', 'damageKind', 'chanceToHitByProjectile', 'chanceToHitByExplosion', 'continueTraceIfNoHit'))
 DEFAULT_MATERIAL_INFO = MaterialInfo(0, 0, None, False, 0.0, False, False, False, False, False, False, False, 0, 0.0, 0.0, False)
-EmblemSlot = namedtuple('EmblemSlot', ('rayStart', 'rayEnd', 'rayUp', 'size', 'hideIfDamaged', 'type', 'isMirrored', 'isUVProportional', 'emblemId', 'slotId', 'applyToFabric'))
-CustomizationSlotDescription = namedtuple('CustomizationSlotDescription', ('type', 'slotId', 'anchorPosition', 'anchorDirection', 'applyTo', 'position', 'rotation', 'scale', 'scaleFactors', 'doubleSided', 'showOn', 'tags', 'clipAngle', 'attachedParts'))
+EmblemSlot = reflectedNamedTuple('EmblemSlot', ('rayStart', 'rayEnd', 'rayUp', 'size', 'hideIfDamaged', 'type', 'isMirrored', 'isUVProportional', 'emblemId', 'slotId', 'applyToFabric'))
+CustomizationSlotDescription = reflectedNamedTuple('CustomizationSlotDescription', ('type', 'slotId', 'anchorPosition', 'anchorDirection', 'applyTo', 'position', 'rotation', 'scale', 'scaleFactors', 'doubleSided', 'showOn', 'tags', 'clipAngle', 'attachedParts'))
 MiscSlot = namedtuple('MiscSlot', ('type', 'slotId', 'position', 'rotation', 'attachNode'))
 LodSettings = namedtuple('LodSettings', ('maxLodDistance', 'maxPriority'))
-NodesAndGroups = namedtuple('NodesAndGroups', ('nodes', 'groups', 'activePostmortem', 'lodSettings'))
-Camouflage = namedtuple('Camouflage', ('tiling', 'exclusionMask', 'density', 'aoTextureSize'))
+NodesAndGroups = reflectedNamedTuple('NodesAndGroups', ('nodes', 'groups', 'activePostmortem', 'lodSettings'))
+Camouflage = reflectedNamedTuple('Camouflage', ('tiling', 'exclusionMask', 'density', 'aoTextureSize'))
 DEFAULT_CAMOUFLAGE = Camouflage(None, None, None, None)
-SwingingSettings = namedtuple('SwingingSettings', ('lodDist', 'sensitivityToImpulse', 'pitchParams', 'rollParams'))
+SwingingSettings = reflectedNamedTuple('SwingingSettings', ('lodDist', 'sensitivityToImpulse', 'pitchParams', 'rollParams'))
 
 class I18nString(object):
     __slots__ = ('__value', '__converted')
@@ -185,6 +186,7 @@ DEFAULT_DEVICE_HEALTH = DeviceHealth(1)
 
 class ModelStatesPaths(object):
     __slots__ = ('__undamaged', '__destroyed', '__exploded')
+    __metaclass__ = ReflectionMetaclass
 
     def __init__(self, undamaged, destroyed, exploded):
         super(ModelStatesPaths, self).__init__()
@@ -206,6 +208,17 @@ class ModelStatesPaths(object):
     @property
     def exploded(self):
         return path_builder.makePath(*self.__exploded)
+
+    if IS_EDITOR:
+
+        def setUndamaged(self, value):
+            self.__undamaged = tuple(path_builder.makeIndexes(value))
+
+        def setDestroyed(self, value):
+            self.__destroyed = tuple(path_builder.makeIndexes(value))
+
+        def setExploded(self, value):
+            self.__exploded = tuple(path_builder.makeIndexes(value))
 
     def getPathByStateName(self, stateName):
         path = getattr(self, stateName, None)

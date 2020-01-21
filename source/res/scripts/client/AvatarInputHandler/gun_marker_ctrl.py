@@ -340,6 +340,12 @@ class IGunMarkerController(object):
     def onRecreateDevice(self):
         raise NotImplementedError
 
+    def getSize(self):
+        raise NotImplementedError
+
+    def setSize(self, newSize):
+        raise NotImplementedError
+
 
 class _GunMarkersDPFactory(object):
     __clientDataProvider = aih_global_binding.bindRW(_BINDING_ID.CLIENT_GUN_MARKER_DATA_PROVIDER)
@@ -443,6 +449,7 @@ class _GunMarkersDecorator(IGunMarkerController):
             self.__gunMarkersFlags |= bit
             if bit == _MARKER_FLAG.SERVER_MODE_ENABLED:
                 self.__serverMarker.setPosition(self.__clientMarker.getPosition())
+                self.__serverMarker.setSize(self.__clientMarker.getSize())
         else:
             self.__gunMarkersFlags &= ~bit
 
@@ -459,6 +466,12 @@ class _GunMarkersDecorator(IGunMarkerController):
             _logger.warning('Gun maker control is not found by type: %d', markerType)
 
     def setVisible(self, flag):
+        pass
+
+    def getSize(self):
+        pass
+
+    def setSize(self, newSize):
         pass
 
 
@@ -515,6 +528,12 @@ class _GunMarkerController(IGunMarkerController):
         self._updateMatrixProvider(positionMatrix)
 
     def setVisible(self, flag):
+        pass
+
+    def getSize(self):
+        pass
+
+    def setSize(self, newSize):
         pass
 
     def _updateMatrixProvider(self, positionMatrix, relaxTime=0.0):
@@ -578,6 +597,13 @@ class _DefaultGunMarkerController(_GunMarkerController):
             self._dataProvider.updateSize(self.__curSize, 0.0)
         else:
             self._dataProvider.updateSize(self.__curSize, relaxTime)
+
+    def getSize(self):
+        return self.__curSize
+
+    def setSize(self, newSize):
+        self.__curSize = newSize
+        self._dataProvider.setStartSize(newSize)
 
     def onRecreateDevice(self):
         self.__updateScreenRatio()

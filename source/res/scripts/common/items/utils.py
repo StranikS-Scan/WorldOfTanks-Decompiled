@@ -2,12 +2,22 @@
 # Embedded file name: scripts/common/items/utils.py
 import copy
 from operator import sub
-from constants import IS_CLIENT, VEHICLE_TTC_ASPECTS
+from VehicleDescrCrew import VehicleDescrCrew
+from constants import VEHICLE_TTC_ASPECTS
+from debug_utils import *
 from items import tankmen
+from items import vehicles
 from items.tankmen import MAX_SKILL_LEVEL, MIN_ROLE_LEVEL
 from items.vehicles import VEHICLE_ATTRIBUTE_FACTORS
-from VehicleDescrCrew import VehicleDescrCrew
-from debug_utils import *
+
+def getItemDescrByCompactDescr(compDescr):
+    itemTypeID, _, _ = vehicles.parseIntCompactDescr(compDescr)
+    if itemTypeID in vehicles.VEHICLE_ITEM_TYPES:
+        descr = vehicles.getItemByCompactDescr(compDescr)
+    else:
+        descr = tankmen.getItemByCompactDescr(compDescr)
+    return descr
+
 
 def _makeDefaultVehicleFactors(sample):
     default = {}

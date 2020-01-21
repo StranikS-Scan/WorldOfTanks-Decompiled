@@ -10800,6 +10800,7 @@
       <health>	1	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	hd_mle_UNI_811_CamouflageTent_01	</effect>
+      <hitEffect>	hd_mle_UNI_811_CamouflageTent_01	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_metal1	</matName>
@@ -10809,7 +10810,8 @@
       <filename>	content/MilitaryEnvironment/hd_mle_UNI_811_CamouflageTent/normal/lod0/hd_mle_UNI_811_CamouflageTent_02.model	</filename>
       <health>	1	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	inf_mle009_BoxCamouflage_02	</effect>
+      <effect>	hd_mle_UNI_811_CamouflageTent_02	</effect>
+      <hitEffect>	hd_mle_UNI_811_CamouflageTent_02	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_metal1	</matName>
@@ -10819,7 +10821,8 @@
       <filename>	content/MilitaryEnvironment/hd_mle_UNI_811_CamouflageTent/normal/lod0/hd_mle_UNI_811_CamouflageTent_03.model	</filename>
       <health>	1	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	inf_mle009_BoxCamouflage1_01	</effect>
+      <effect>	hd_mle_UNI_811_CamouflageTent_03	</effect>
+      <hitEffect>	hd_mle_UNI_811_CamouflageTent_03	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_metal1	</matName>
@@ -13278,6 +13281,28 @@
       <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
     <entry>
+      <filename>	content/Environment/hd_env_SU_060_Memorial/normal/lod0/hd_env_SU_060_Memorial_01.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	inf_env024_Memorial2	</effect>
+      <hitEffect>	inf_env024_Memorial2	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1	</effectScale>
+      <matName>	n_wood0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_SU_060_Memorial/normal/lod0/hd_env_SU_060_Memorial_02.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	inf_env024_Memorial2	</effect>
+      <hitEffect>	inf_env024_Memorial2	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1	</effectScale>
+      <matName>	n_wood0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
       <filename>	content/Environment/hd_env_AM_065_Signboards/normal/lod0/hd_env_AM_065_Signboards_01.model	</filename>
       <health>	10	</health>
       <decayEffect>	none	</decayEffect>
@@ -13751,7 +13776,7 @@
       <filename>	content/Environment/hd_env_SU_045_GAZm20/normal/lod0/hd_env_SU_045_GAZm20_02.model	</filename>
       <health>	10	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_SU_045_GAZm20	</effect>
+      <effect>	hd_env_SU_045_GAZm20_ram	</effect>
       <hitEffect>	hd_env_SU_045_GAZm20	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
@@ -13762,7 +13787,7 @@
       <filename>	content/Environment/hd_env_SU_045_GAZm20/normal/lod0/hd_env_SU_045_GAZm20_03.model	</filename>
       <health>	10	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	hd_env_SU_045_GAZm20	</effect>
+      <effect>	hd_env_SU_045_GAZm20_ram	</effect>
       <hitEffect>	hd_env_SU_045_GAZm20	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>

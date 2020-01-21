@@ -94,3 +94,6 @@ class STORAGE(object):
     CREWBOOKS_FILTERS_TITLE = '#storage:crewBooks/filters/title'
     CREWBOOKS_FILTERS_NATION = '#storage:crewBooks/filters/nation'
     CREWBOOKS_FILTERS_NATION_ALL = '#storage:crewBooks/filters/nation/all'
+    INVENTORY_FILTERTYPE_CONSUMABLES = '#storage:inventory/filterType/consumables'
+    INVENTORY_FILTERTYPE_INSTRUCTIONS = '#storage:inventory/filterType/instructions'
+    INVENTORY_FILTERTYPE_OTHER = '#storage:inventory/filterType/other'

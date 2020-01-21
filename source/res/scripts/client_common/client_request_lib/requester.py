@@ -333,6 +333,7 @@ class Requester(object):
     available_data_sources = {'stagings': StagingDataAccessor,
      'fake': FakeDataAccessor,
      'gateway': GatewayDataAccessor}
+    advent_calendar = RequestDescriptor(AdventCalendarAccessor)
     global_map = RequestDescriptor(GmAccessor)
     ratings = RequestDescriptor(RatingAccessor)
     strongholds = RequestDescriptor(StrongholdsAccessor)
@@ -345,7 +346,6 @@ class Requester(object):
     wgrms = RequestDescriptor(WgrmsAccessor)
     promo_screens = RequestDescriptor(PromoScreensAccessor)
     freya = RequestDescriptor(FreyaAccessor)
-    advent_calendar = RequestDescriptor(AdventCalendarAccessor)
 
     @classmethod
     def create_requester(cls, url_fetcher, config, client_lang=None, user_agent=None):

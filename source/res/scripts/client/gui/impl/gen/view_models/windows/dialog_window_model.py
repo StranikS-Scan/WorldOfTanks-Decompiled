@@ -4,12 +4,11 @@ from frameworks.wulf import Array
 from gui.impl.gen import R
 from frameworks.wulf import ViewModel
 from gui.impl.wrappers.user_list_model import UserListModel
-from gui.impl.gen.view_models.windows.dialog_window_adaptive_settings_model import DialogWindowAdaptiveSettingsModel
 
 class DialogWindowModel(ViewModel):
     __slots__ = ('onClosed', 'onBtnClicked')
 
-    def __init__(self, properties=16, commands=2):
+    def __init__(self, properties=13, commands=2):
         super(DialogWindowModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -88,24 +87,6 @@ class DialogWindowModel(ViewModel):
     def setHasBottomContent(self, value):
         self._setBool(12, value)
 
-    def getIsDividerVisible(self):
-        return self._getBool(13)
-
-    def setIsDividerVisible(self, value):
-        self._setBool(13, value)
-
-    def getDialogTitleTextStyle(self):
-        return self._getString(14)
-
-    def setDialogTitleTextStyle(self, value):
-        self._setString(14, value)
-
-    def getAdaptiveSettings(self):
-        return self._getArray(15)
-
-    def setAdaptiveSettings(self, value):
-        self._setArray(15, value)
-
     def _initialize(self):
         super(DialogWindowModel, self)._initialize()
         self._addViewModelProperty('buttons', UserListModel())
@@ -121,8 +102,5 @@ class DialogWindowModel(ViewModel):
         self._addStringProperty('preset', 'default')
         self._addBoolProperty('hasBalance', False)
         self._addBoolProperty('hasBottomContent', False)
-        self._addBoolProperty('isDividerVisible', True)
-        self._addStringProperty('dialogTitleTextStyle', '')
-        self._addArrayProperty('adaptiveSettings', Array())
         self.onClosed = self._addCommand('onClosed')
         self.onBtnClicked = self._addCommand('onBtnClicked')

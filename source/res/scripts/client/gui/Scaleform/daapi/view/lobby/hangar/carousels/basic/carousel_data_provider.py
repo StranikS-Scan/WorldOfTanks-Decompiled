@@ -5,18 +5,13 @@ from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_data_provider imp
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.impl.gen import R
-from gui.impl import backport
-from gui.impl.new_year.views.new_year_vehicles_view import VehicleCooldownNotifier
 from gui.shared.formatters import text_styles
 from gui.shared.money import Money
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
-from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.new_year import INewYearController
 
 class _SUPPLY_ITEMS(object):
     BUY_TANK = 0
@@ -25,30 +20,21 @@ class _SUPPLY_ITEMS(object):
     ALL = (BUY_TANK, RESTORE_TANK, BUY_SLOT)
 
 
-class _BEFORE_SUPPLY_ITEMS(object):
-    NY_SLOT = 0
-    ALL = (NY_SLOT,)
-
-
 class HangarCarouselDataProvider(CarouselDataProvider):
-    _nyController = dependency.descriptor(INewYearController)
 
     def __init__(self, carouselFilter, itemsCache, currentVehicle):
         super(HangarCarouselDataProvider, self).__init__(carouselFilter, itemsCache, currentVehicle)
         self._baseCriteria = REQ_CRITERIA.INVENTORY
-        self._vehicleBranch = []
         self._supplyItems = []
         self._emptySlotsCount = 0
         self._restorableVehiclesCount = 0
-        self.vehicleCooldownNotifier = None
-        return
 
     @property
     def collection(self):
-        return self._vehicleItems + self._supplyItems + self._vehicleBranch
+        return self._vehicleItems + self._supplyItems
 
     def getCurrentVehiclesCount(self):
-        return len(self._filteredIndices) - len(self._getAdditionalItemsIndexes()) - len(self._getBeforeAdditionalItemsIndexes())
+        return len(self._filteredIndices) - len(self._getAdditionalItemsIndexes())
 
     def updateSupplies(self):
         self._supplyItems = []
@@ -56,16 +42,9 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         self.flashObject.invalidateItems(self.__getSupplyIndices(), self._supplyItems)
         self.applyFilter()
 
-    def updateVehicleBranch(self):
-        self._vehicleBranch = []
-        self._buildVehicleBranch()
-        self.flashObject.invalidateItems(self.__getVehicleBranchIndices(), self._vehicleBranch)
-        self.applyFilter()
-
     def clear(self):
         super(HangarCarouselDataProvider, self).clear()
         self._supplyItems = []
-        self._verifySlotNotifier()
 
     def _buildRentPromitionVehicleItems(self):
         rentPromotionCriteria = REQ_CRITERIA.VEHICLE.RENT_PROMOTION | ~self._baseCriteria
@@ -75,7 +54,6 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         super(HangarCarouselDataProvider, self)._buildVehicleItems()
         self._buildRentPromitionVehicleItems()
         self._buildSupplyItems()
-        self._buildVehicleBranch()
 
     def _getAdditionalItemsIndexes(self):
         supplyIndices = self.__getSupplyIndices()
@@ -88,9 +66,6 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         if self._restorableVehiclesCount == 0 or not restoreEnabled or not storageEnabled and isIngameShopEnabled():
             pruneIndices.add(_SUPPLY_ITEMS.RESTORE_TANK)
         return [ suppIdx for suppIdx in supplyIndices if supplyIndices.index(suppIdx) not in pruneIndices ]
-
-    def _getBeforeAdditionalItemsIndexes(self):
-        return [] if not self._nyController.isVehicleBranchEnabled() else self.__getVehicleBranchIndices()
 
     def _buildSupplyItems(self):
         self._supplyItems = []
@@ -134,42 +109,8 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         self._supplyItems.append(buySlotVO)
         return
 
-    def _buildVehicleBranch(self):
-        self._verifySlotNotifier()
-        self._startSlotNotifier()
-        self._vehicleBranch = []
-        freeSlotsCount = len(self._nyController.getVehicleBranch().getFreeVehicleSlots())
-        tankTreeAvailable = self._nyController.getVehicleBranch().hasAvailableSlots()
-        smallNyTankString, nyTankString = getStatusStrings('nyTank', style=text_styles.middleTitleNY)
-        if freeSlotsCount == 0 and tankTreeAvailable:
-            smallNyStatusSlotsString, nyStatusSlotsString = getStatusStrings('nyTankSlotsFull', style=text_styles.mainNY)
-        else:
-            smallNyStatusSlotsString, nyStatusSlotsString = getStatusStrings('nyTankEmptyCount', style=text_styles.mainNY, ctx={'count': freeSlotsCount})
-        self._vehicleBranch.append({'nySlot': True,
-         'smallInfoText': text_styles.concatStylesToMultiLine(smallNyTankString, smallNyStatusSlotsString),
-         'infoText': text_styles.concatStylesToMultiLine(nyTankString, nyStatusSlotsString),
-         'icon': RES_ICONS.MAPS_ICONS_NEW_YEAR_VEHICLES_VIEW_NY_SLOT,
-         'iconSmall': RES_ICONS.MAPS_ICONS_NEW_YEAR_VEHICLES_VIEW_NY_SLOT_SMALL,
-         'tooltip': makeTooltip(header=backport.text(R.strings.tooltips.tankCarusel.newYearSlot.header()), body=backport.text(R.strings.tooltips.tankCarusel.newYearSlot.body())),
-         'nyBlinkEnabled': freeSlotsCount > 0 or not tankTreeAvailable})
-
-    def _startSlotNotifier(self):
-        if self._nyController.isVehicleBranchEnabled():
-            self.vehicleCooldownNotifier = VehicleCooldownNotifier(self.updateVehicleBranch, self._nyController.getVehicleBranch().getVehicleSlots())
-            self.vehicleCooldownNotifier.startNotification()
-
-    def _verifySlotNotifier(self):
-        if self.vehicleCooldownNotifier is not None:
-            self.vehicleCooldownNotifier.stopNotification()
-            self.vehicleCooldownNotifier.clear()
-            self.vehicleCooldownNotifier = None
-        return
-
     def __getSupplyIndices(self):
         return [ len(self._vehicles) + idx for idx in _SUPPLY_ITEMS.ALL ]
-
-    def __getVehicleBranchIndices(self):
-        return [ len(self._vehicles) + len(_SUPPLY_ITEMS.ALL) + idx for idx in _BEFORE_SUPPLY_ITEMS.ALL ]
 
 
 class BCCarouselDataProvider(CarouselDataProvider):

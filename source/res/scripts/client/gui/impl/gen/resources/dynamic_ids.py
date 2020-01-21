@@ -7,49 +7,44 @@ class DynamicIds(DynAccessor):
 
     class _dialog_window(DynAccessor):
         __slots__ = ()
-        bottom_content = DynAccessor(38182)
-        balance_content = DynAccessor(38183)
+        bottom_content = DynAccessor(34231)
+        balance_content = DynAccessor(34232)
 
     dialog_window = _dialog_window()
 
     class _tooltip(DynAccessor):
         __slots__ = ()
-        normal_content = DynAccessor(38184)
-        advanced_content = DynAccessor(38185)
+        normal_content = DynAccessor(34233)
+        advanced_content = DynAccessor(34234)
 
     tooltip = _tooltip()
 
     class _blueprint_screen(DynAccessor):
         __slots__ = ()
-        balance_content = DynAccessor(38186)
+        balance_content = DynAccessor(34235)
 
     blueprint_screen = _blueprint_screen()
 
     class _crew_books_buy_dialog(DynAccessor):
         __slots__ = ()
-        balance_content = DynAccessor(38187)
+        balance_content = DynAccessor(34236)
 
     crew_books_buy_dialog = _crew_books_buy_dialog()
-    newYearAlbumView = DynAccessor(38188)
-    newYearAlbumMain = DynAccessor(38189)
-    lootBoxEntryPointHolder = DynAccessor(38190)
-    newYearMainView = DynAccessor(38191)
-    newYearRewardsView = DynAccessor(38192)
 
     class _prem_dashboard(DynAccessor):
         __slots__ = ()
-        header = DynAccessor(38193)
-        premium_card = DynAccessor(38194)
-        double_xp_card = DynAccessor(38195)
-        piggy_bank_card = DynAccessor(38196)
-        premium_quests_card = DynAccessor(38197)
-        maps_black_list_card = DynAccessor(38198)
+        header = DynAccessor(34237)
+        premium_card = DynAccessor(34238)
+        double_xp_card = DynAccessor(34239)
+        piggy_bank_card = DynAccessor(34240)
+        premium_quests_card = DynAccessor(34241)
+        maps_black_list_card = DynAccessor(34242)
 
     prem_dashboard = _prem_dashboard()
 
     class _demo_window(DynAccessor):
         __slots__ = ()
-        image_props = DynAccessor(38199)
-        bottom_panel = DynAccessor(38200)
+        image_props = DynAccessor(34243)
+        bottom_panel = DynAccessor(34244)
 
     demo_window = _demo_window()

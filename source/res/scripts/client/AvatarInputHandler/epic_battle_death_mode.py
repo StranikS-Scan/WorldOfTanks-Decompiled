@@ -148,7 +148,7 @@ class DeathFreeCamMode(VideoCameraControlMode):
     def selectPlayer(self, vehID):
         self.__switchToVehicle(vehID)
 
-    def alwaysReceiveKeyEvents(self):
+    def alwaysReceiveKeyEvents(self, isDown=True):
         return True
 
     def setForcedGuiControlMode(self, enable):

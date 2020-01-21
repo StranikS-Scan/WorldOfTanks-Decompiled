@@ -9,7 +9,7 @@ from collections import namedtuple, OrderedDict, defaultdict
 from soft_exception import SoftException
 from items.components.c11n_constants import ApplyArea, SeasonType, Options, CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID, StyleFlags, NO_OUTFIT_DATA, MAX_USERS_PROJECTION_DECALS, CUSTOMIZATION_SLOTS_VEHICLE_PARTS
 from items.components import c11n_components as cn
-from constants import IS_CELLAPP, IS_BASEAPP
+from constants import IS_CELLAPP, IS_BASEAPP, IS_EDITOR
 from items import decodeEnum, makeIntCompactDescrByID
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from typing import List, Dict, Type, Tuple, Any, TypeVar, Optional, MutableMapping
@@ -488,7 +488,7 @@ class ProjectionDecalComponent(SerializableComponent):
      ('scale', xmlOnlyFloatArrayField()),
      ('rotation', xmlOnlyFloatArrayField()),
      ('position', xmlOnlyFloatArrayField()),
-     ('tintColor', intArrayField(xmlOnly=True)),
+     ('tintColor', intArrayField(xmlOnly=not IS_EDITOR)),
      ('doubleSided', xmlOnlyIntField(0)),
      ('tags', xmlOnlyTagsField(())),
      ('preview', xmlOnlyIntField(0))))
@@ -871,9 +871,6 @@ def getOutfitType(arenaKind, bonusType):
 
 
 def getBattleOutfit(getter, vehType, arenaKind, bonusType):
-    styleOutfitDescr, enabled = getter(vehType, SeasonType.EVENT)
-    if styleOutfitDescr and enabled:
-        return parseOutfitDescr(styleOutfitDescr)
     styleOutfitDescr, enabled = getter(vehType, SeasonType.ALL)
     if styleOutfitDescr and enabled:
         return parseOutfitDescr(styleOutfitDescr)

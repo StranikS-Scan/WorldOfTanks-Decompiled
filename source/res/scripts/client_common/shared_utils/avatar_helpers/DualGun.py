@@ -17,8 +17,14 @@ class DualGunHelper(object):
             secondGun = DUAL_GUN.ACTIVE_GUN.RIGHT
         else:
             secondGun = DUAL_GUN.ACTIVE_GUN.LEFT
-        if gunStates[secondGun] == DUAL_GUN.GUN_STATE.RELOADING and ammoCtrl is not None:
-            ammoCtrl.triggerReloadEffect(cooldownTimes[secondGun].leftTime / 10.0, cooldownTimes[secondGun].baseTime / 10.0, directTrigger=True)
+        if ammoCtrl is not None:
+            reloadingGun = None
+            if gunStates[activeGun] == DUAL_GUN.GUN_STATE.RELOADING:
+                reloadingGun = activeGun
+            if gunStates[secondGun] == DUAL_GUN.GUN_STATE.RELOADING:
+                reloadingGun = secondGun
+            if reloadingGun is not None:
+                ammoCtrl.triggerReloadEffect(cooldownTimes[reloadingGun].leftTime / 10.0, cooldownTimes[reloadingGun].baseTime / 10.0, directTrigger=True)
         if gunStates[activeGun] == DUAL_GUN.GUN_STATE.RELOADING:
             if not self.__debuffTrigger:
                 __callReloadTimeWrapper(cooldownTimes[activeGun].leftTime, cooldownTimes[activeGun].baseTime)

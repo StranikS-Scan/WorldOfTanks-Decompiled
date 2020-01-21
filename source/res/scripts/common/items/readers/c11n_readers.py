@@ -12,6 +12,31 @@ import items.customizations as c11n
 from constants import IS_CLIENT, IS_EDITOR, IS_WEB
 from items.components.c11n_constants import SeasonType, ApplyArea, DecalType, ModificationType, RENT_DEFAULT_BATTLES, ItemTags
 from typing import Dict, Type, Tuple, Any, TypeVar
+from contextlib import contextmanager
+if IS_EDITOR:
+    from reflection_framework import EditorSharedPropertiesInfo, EditorSharedPropertiesConnector
+    from meta_objects.items.components.c11n_components_meta import I18nExposedComponentMeta
+
+    @contextmanager
+    def storeChangedProperties(obj, props):
+
+        def storeCallback(changedObject, propertyName, flags):
+            props.add(propertyName)
+
+        obj.onChanged += storeCallback
+        yield
+        obj.onChanged -= storeCallback
+        return
+
+
+else:
+
+    @contextmanager
+    def storeChangedProperties(obj, props):
+        yield
+        return
+
+
 _itemType = TypeVar('_itemType', bound=cc.BaseCustomizationItem)
 
 class BaseCustomizationItemXmlReader(object):
@@ -41,11 +66,18 @@ class BaseCustomizationItemXmlReader(object):
             target.maxNumber = ix.readPositiveInt(xmlCtx, section, 'maxNumber')
             if target.maxNumber <= 0:
                 ix.raiseWrongXml(xmlCtx, 'maxNumber', 'should not be less then 1')
+        if IS_EDITOR:
+            refs = section.references
+            if len(refs) == 1:
+                target.editorData.reference = refs[0]
         if IS_CLIENT or IS_EDITOR or IS_WEB:
             self._readClientOnlyFromXml(target, xmlCtx, section, cache)
 
     def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):
-        target.i18n = shared_components.I18nExposedComponent(section.readString('userString'), section.readString('description'), section.readString('longDescriptionSpecial'))
+        if IS_EDITOR:
+            target.i18n = I18nExposedComponentMeta(section.readString('name'), section.readString('userString'), section.readString('description'), section.readString('longDescriptionSpecial'))
+        else:
+            target.i18n = shared_components.I18nExposedComponent(section.readString('userString'), section.readString('description'), section.readString('longDescriptionSpecial'))
 
     @staticmethod
     def readVehicleFilterFromXml(xmlCtx, section):
@@ -362,8 +394,11 @@ def _readItems(cache, itemCls, xmlCtx, section, itemSectionName, storage):
         group = cc.ItemGroup(itemCls)
         gCtx = (xmlCtx, 'itemGroup {0}'.format(i))
         itemPrototype = itemCls()
-        reader._readFromXml(itemPrototype, gCtx, gsection, cache)
+        sharedProps = set()
+        with storeChangedProperties(itemPrototype, sharedProps):
+            reader._readFromXml(itemPrototype, gCtx, gsection, cache)
         group.itemPrototype = itemPrototype
+        groupItems = []
         j = 0
         for iname, isection in gsection.items():
             if iname != itemSectionName:
@@ -371,7 +406,13 @@ def _readItems(cache, itemCls, xmlCtx, section, itemSectionName, storage):
             iCtx = (gCtx, '{0} {1}'.format(iname, j))
             j += 1
             item = itemCls(group)
-            reader._readFromXml(item, iCtx, isection, cache)
+            overrideProps = set()
+            with storeChangedProperties(item, overrideProps):
+                reader._readFromXml(item, iCtx, isection, cache)
+            if IS_EDITOR:
+                item.editorData.sharedPropertiesInfo = EditorSharedPropertiesInfo()
+                item.editorData.sharedPropertiesInfo.markAsOverride(*overrideProps)
+            groupItems.append(item)
             if item.compactDescr in itemToGroup:
                 ix.raiseWrongXml(iCtx, 'id', 'duplicate item. id: %s found in group %s' % (item.id, itemToGroup[item.compactDescr]))
             storage[item.id] = item
@@ -386,6 +427,15 @@ def _readItems(cache, itemCls, xmlCtx, section, itemSectionName, storage):
                 itemNotInShop = isection.readBool('notInShop', False)
                 iv._copyPriceForItem(groupsDict[priceGroupId].compactDescr, item.compactDescr, itemNotInShop)
             ix.raiseWrongXml(iCtx, 'priceGroup', 'no price for item %s' % item.id)
+
+        if IS_EDITOR:
+            if len(groupItems) > 1 and len(sharedProps) > 0:
+                for item in groupItems:
+                    for p in sharedProps:
+                        if not item.editorData.sharedPropertiesInfo.isOverriden(p):
+                            item.editorData.sharedPropertiesInfo.markAsShared(p)
+
+                EditorSharedPropertiesConnector(groupItems).connect()
 
 
 def _readPriceGroups(cache, xmlCtx, section, sectionName):

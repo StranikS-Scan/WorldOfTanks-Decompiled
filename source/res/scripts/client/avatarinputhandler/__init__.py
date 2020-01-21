@@ -242,7 +242,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         if isRepeat:
             return False
         elif self.__isStarted and self.__isDetached:
-            if self.__curCtrl.alwaysReceiveKeyEvents() and not self.isObserverFPV or CommandMapping.g_instance.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key):
+            if self.__curCtrl.alwaysReceiveKeyEvents(isDown=isDown) and not self.isObserverFPV or CommandMapping.g_instance.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key):
                 self.__curCtrl.handleKeyEvent(isDown, key, mods, event)
             return BigWorld.player().handleKey(isDown, key, mods)
         elif not self.__isStarted or self.__isDetached:

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/vehicle.py
 import logging
+from functools import partial
 import BigWorld
 import AccountCommands
 from constants import RentType, SEASON_NAME_BY_TYPE, CLIENT_COMMAND_SOURCES
@@ -264,22 +265,25 @@ class VehicleSeller(ItemProcessor):
     restore = dependency.descriptor(IRestoreController)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, vehicle, shells=None, eqs=None, optDevs=None, inventory=None, customizationItems=None, boosters=None, isCrewDismiss=False):
+    def __init__(self, vehicle, shells=None, eqs=None, optDevs=None, inventory=None, customizationItems=None, boosters=None, isCrewDismiss=False, itemsForDemountKit=None):
         shells = shells or []
         eqs = eqs or []
+        boosters = boosters or []
         optDevs = optDevs or []
         inventory = inventory or []
         customizationItems = customizationItems or []
+        itemsForDemountKit = itemsForDemountKit or []
         nationGroupVehs = vehicle.getAllNationGroupVehs(self.itemsCache.items)
         self.vehicle = vehicle
         self.nationGroupVehs = nationGroupVehs
         self.shells = shells
         self.eqs = eqs
         self.optDevs = optDevs
-        self.gainMoney, self.spendMoney = self.__getGainSpendMoney(vehicle, nationGroupVehs, shells, eqs, boosters, optDevs, inventory, customizationItems)
+        self.gainMoney, self.spendMoney = self.__getGainSpendMoney(vehicle, nationGroupVehs, shells, eqs, boosters, optDevs, inventory, customizationItems, itemsForDemountKit)
         self.inventory = set((m.intCD for m in inventory))
         self.customizationItems = set(customizationItems)
-        self.boosters = boosters or []
+        self.boosters = boosters
+        self.itemsForDemountKit = itemsForDemountKit
         barracksBerthsNeeded = getCrewCount(nationGroupVehs)
         bufferOverflowCtx = {}
         isBufferOverflowed = False
@@ -316,6 +320,7 @@ class VehicleSeller(ItemProcessor):
          proc_plugs.BarracksSlotsValidator(barracksBerthsNeeded, isEnabled=not isCrewDismiss),
          proc_plugs.BufferOverflowConfirmator(bufferOverflowCtx, isEnabled=isBufferOverflowed),
          proc_plugs.BattleBoosterValidator(boosters),
+         proc_plugs.DismountForDemountKitValidator(vehicle, itemsForDemountKit),
          _getUniqueVehicleSellConfirmator(vehicle)]
         if self.lobbyContext.getServerSettings().isCrewSkinsEnabled():
             ctx = {'price': self.__compensationAmount,
@@ -327,6 +332,7 @@ class VehicleSeller(ItemProcessor):
         self.isCrewDismiss = isCrewDismiss
         self.isDismantlingForMoney = bool(self.spendMoney)
         self.isRemovedAfterRent = vehicle.isRented
+        self.usedDemountKitsCount = len(itemsForDemountKit)
         return
 
     def _errorHandler(self, code, errStr='', ctx=None):
@@ -347,31 +353,30 @@ class VehicleSeller(ItemProcessor):
         if self.__compensationRequired:
             compMsg = makeCrewSkinCompensationMessage(self.__compensationAmount)
         g_tankActiveCamouflage[self.vehicle.intCD] = SeasonType.UNDEFINED
+        makeMsg = partial(makeI18nSuccess, vehName=self.vehicle.userName, auxData=compMsg)
+        if self.usedDemountKitsCount:
+            makeMsg = partial(makeMsg, countDK=self.usedDemountKitsCount)
         if self.isDismantlingForMoney:
-            localKey = 'vehicle_sell/success_dismantling'
-            smType = SM_TYPE.Selling
-            if self.isRemovedAfterRent:
-                localKey = 'vehicle_remove/success_dismantling'
-                smType = SM_TYPE.Remove
-            return makeI18nSuccess(sysMsgKey=localKey, vehName=self.vehicle.userName, gainMoney=formatPrice(self.gainMoney), spendMoney=formatPrice(self.spendMoney), restoreInfo=restoreInfo, type=smType, auxData=compMsg)
+            makeMsg = partial(makeMsg, gainMoney=formatPrice(self.gainMoney), spendMoney=formatPrice(self.spendMoney))
         else:
-            localKey = 'vehicle_sell/success'
-            if not sellForGold:
-                smType = SM_TYPE.Selling
-            else:
-                smType = SM_TYPE.SellingForGold
-            if self.isRemovedAfterRent:
-                localKey = 'vehicle_remove/success'
-                smType = SM_TYPE.Remove
-            return makeI18nSuccess(sysMsgKey=localKey, vehName=self.vehicle.userName, money=formatPrice(self.gainMoney), restoreInfo=restoreInfo, type=smType, auxData=compMsg)
-            return
+            makeMsg = partial(makeMsg, money=formatPrice(self.gainMoney))
+        if not self.isRemovedAfterRent:
+            makeMsg = partial(makeMsg, restoreInfo=restoreInfo)
+        sysMsgKey = '{}{}{}'.format('vehicle_remove' if self.isRemovedAfterRent else 'vehicle_sell', '/success_dismantling' if self.isDismantlingForMoney else '/success', '/with_demount_kit' if self.usedDemountKitsCount else '')
+        if self.isRemovedAfterRent:
+            smType = SM_TYPE.Remove
+        elif sellForGold:
+            smType = SM_TYPE.SellingForGold
+        else:
+            smType = SM_TYPE.Selling
+        return makeMsg(sysMsgKey=sysMsgKey, type=smType)
 
     def _request(self, callback):
         saleData = self.__splitDataByVehicle()
         _logger.debug('Make server request: %s, %s, %s, %s, %s, %s, %s, %s, %s', self.nationGroupVehs, bool(self.shells), bool(self.eqs), bool(self.boosters), bool(self.inventory), bool(self.optDevs), self.isDismantlingForMoney, self.isCrewDismiss, saleData)
         BigWorld.player().inventory.sellVehicle(saleData, lambda code, errStr='': self._response(code, callback, errStr=errStr))
 
-    def __getGainSpendMoney(self, currentVehicle, vehicles, vehShells, vehEqs, boosters, optDevicesToSell, inventory, customizationItems):
+    def __getGainSpendMoney(self, currentVehicle, vehicles, vehShells, vehEqs, boosters, optDevicesToSell, inventory, customizationItems, itemsForDemountKit):
         moneyGain = currentVehicle.sellPrices.itemPrice.price
         for shell in vehShells:
             moneyGain += shell.sellPrices.itemPrice.price * shell.count
@@ -386,7 +391,7 @@ class VehicleSeller(ItemProcessor):
             getCount = module.getInstalledOnVehicleCount
             moneyGain += module.sellPrices.itemPrice.price * reduce(lambda acc, veh: acc + getCount(veh.intCD), vehicles, 0)
 
-        dismantlingToInventoryDevices = getDismantlingToInventoryDevices(optDevicesToSell, *vehicles)
+        dismantlingToInventoryDevices = getDismantlingForMoneyToInventoryDevices(optDevicesToSell, itemsForDemountKit, *vehicles)
         moneySpend = calculateSpendMoney(self.itemsCache.items, dismantlingToInventoryDevices)
         return (moneyGain, moneySpend)
 
@@ -397,7 +402,7 @@ class VehicleSeller(ItemProcessor):
     def __splitInventory(self):
         result = {}
         for vehicle in self.nationGroupVehs:
-            vehInv = self.itemsCache.items.getItems(criteria=REQ_CRITERIA.VEHICLE.SUITABLE([vehicle], [GUI_ITEM_TYPE.SHELL, GUI_ITEM_TYPE.VEHICLE_MODULES]) | REQ_CRITERIA.INVENTORY).values()
+            vehInv = self.itemsCache.items.getItems(criteria=REQ_CRITERIA.VEHICLE.SUITABLE([vehicle], (GUI_ITEM_TYPE.SHELL,) + GUI_ITEM_TYPE.VEHICLE_MODULES) | REQ_CRITERIA.INVENTORY).values()
             result[vehicle.invID] = set((m.intCD for m in vehInv)) & self.inventory
 
         full = reduce(lambda acc, inv: acc | inv, result.itervalues())
@@ -415,6 +420,7 @@ class VehicleSeller(ItemProcessor):
         for vehicle in self.nationGroupVehs:
             itemsFromVehicle = set()
             seenCustItems = set()
+            itemsForDemountKit = set()
             customizationItems = []
             for shell in list(self.shells):
                 if shell.isInstalled(vehicle) and shell.intCD not in itemsFromVehicle:
@@ -444,13 +450,30 @@ class VehicleSeller(ItemProcessor):
                     seenCustItems.add(ci.intCD)
                     self.customizationItems.remove(ci)
 
+            for od in list(self.itemsForDemountKit):
+                if od.isInstalled(vehicle) and od.intCD not in itemsForDemountKit and od.intCD not in itemsFromVehicle:
+                    itemsForDemountKit.add(od.intCD)
+                    self.itemsForDemountKit.remove(od)
+
             result.append((vehicle.invID,
              self.isCrewDismiss,
              list(itemsFromVehicle),
              list(itemsFromInventory[vehicle.invID]),
-             customizationItems))
+             customizationItems,
+             list(itemsForDemountKit)))
 
         return result
+
+
+def getDismantlingForMoneyToInventoryDevices(optDevicesToSell, itemsForDemountKit, *vehicles):
+    result = []
+    itemsForDk = [ dev.intCD for dev in itemsForDemountKit ]
+    for dev in getDismantlingToInventoryDevices(optDevicesToSell, *vehicles):
+        if dev.intCD in itemsForDk:
+            itemsForDk.remove(dev.intCD)
+        result.append(dev)
+
+    return result
 
 
 def getDismantlingToInventoryDevices(optDevicesToSell, *vehicles):
@@ -736,3 +759,15 @@ def _getUniqueVehicleSellConfirmator(vehicle, lobbyContext=None):
     else:
         dialogI18n = 'vehicleSell/unique'
     return proc_plugs.MessageConfirmator(dialogI18n, isEnabled=vehicle.isUnique)
+
+
+class SetEnhancementProcessor(Processor):
+
+    def __init__(self, slot, enhancementID, vehicle):
+        super(SetEnhancementProcessor, self).__init__(plugins=[proc_plugs.VehicleValidator(vehicle)])
+        self.vehicleInvID = vehicle.invID
+        self.slot = slot
+        self.enhancementID = enhancementID
+
+    def _request(self, callback):
+        BigWorld.player().setEnhancement(self.vehicleInvID, self.slot, self.enhancementID, lambda code, errStr: self._response(code, callback, errStr))

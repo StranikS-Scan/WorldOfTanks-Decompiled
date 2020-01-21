@@ -75,6 +75,3 @@ class HangarMeta(View):
 
     def as_updateSeniorityAwardsEntryPointS(self, isVisible):
         return self.flashObject.as_updateSeniorityAwardsEntryPoint(isVisible) if self._isDAAPIInited() else None
-
-    def as_setLootboxesVisibleS(self, value):
-        return self.flashObject.as_setLootboxesVisible(value) if self._isDAAPIInited() else None

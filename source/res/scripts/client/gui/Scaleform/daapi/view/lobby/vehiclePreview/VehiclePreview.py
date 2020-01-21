@@ -29,7 +29,7 @@ from gui.ingame_shop import canBuyGoldForVehicleThroughWeb
 from gui.shared import event_dispatcher, events, event_bus_handlers, EVENT_BUS_SCOPE
 from gui.shared.gui_items.gui_item_economics import getPriceTypeAndValue
 from gui.shared.event_dispatcher import showWebShop, showOldShop
-from gui.shared.formatters import text_styles, icons, chooseItemPriceVO, getItemUnlockPricesVO
+from gui.shared.formatters import text_styles, icons, chooseItemPriceVO, getItemUnlockPricesVO, getMoneyVO
 from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
@@ -250,9 +250,12 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             minRentPricePackage = vehicle.getRentPackage()
             if minRentPricePackage:
                 isAction = minRentPricePackage['rentPrice'] != minRentPricePackage['defaultRentPrice']
-            elif not vehicle.isRestoreAvailable():
+            elif not vehicle.isRestoreAvailable() and not self.bootcamp.isInBootcamp():
                 isAction = vehicle.buyPrices.getSum().isActionPrice()
-            itemPrice = chooseItemPriceVO(priceType, price)
+            if self.bootcamp.isInBootcamp():
+                itemPrice = [{'price': getMoneyVO(price.price)}]
+            else:
+                itemPrice = chooseItemPriceVO(priceType, price)
             mayObtainForMoney = self.__isHeroTank or vehicle.mayObtainWithMoneyExchange(money, exchangeRate)
             isBuyingAvailable = not vehicle.isHidden or vehicle.isRentable or vehicle.isRestorePossible()
             isMoneyEnough = mayObtainForMoney

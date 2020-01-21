@@ -315,7 +315,7 @@ class _ReloadingAnimationsProxy(object):
     def setShellLoading(self, actualTime, baseTime):
         raise NotImplementedError
 
-    def setClipAutoLoading(self, timeLeft, baseTime, isStun=False, isTimerOn=False):
+    def setClipAutoLoading(self, timeLeft, baseTime, isStun=False, isTimerOn=False, isRedText=False):
         raise NotImplementedError
 
     def setReloading(self, state):
@@ -327,8 +327,8 @@ class _ASAutoReloadProxy(_ReloadingAnimationsProxy):
     def setShellLoading(self, actualTime, baseTime):
         self._panel.as_setAutoloaderReloadingS(actualTime, baseTime)
 
-    def setClipAutoLoading(self, timeLeft, baseTime, isStun=False, isTimerOn=False):
-        self._panel.as_autoloaderUpdateS(timeLeft, baseTime, isStun=isStun, isTimerOn=isTimerOn)
+    def setClipAutoLoading(self, timeLeft, baseTime, isStun=False, isTimerOn=False, isRedText=False):
+        self._panel.as_autoloaderUpdateS(timeLeft, baseTime, isStun=isStun, isTimerOn=isTimerOn, isRedText=isRedText)
 
     def setReloading(self, state):
         self._panel.as_setReloadingS(state.getActualValue(), state.getBaseValue(), state.getTimePassed(), state.isReloading())
@@ -345,7 +345,7 @@ class _PythonAutoReloadProxy(_ReloadingAnimationsProxy):
     def setShellLoading(self, actualTime, baseTime):
         self.__shellTicker.startAnimation(actualTime, baseTime)
 
-    def setClipAutoLoading(self, timeLeft, baseTime, isStun=False, isTimerOn=False):
+    def setClipAutoLoading(self, timeLeft, baseTime, isStun=False, isTimerOn=False, isRedText=False):
         self.__clipTicker.setStun(isStun)
         self.__clipTicker.setShowTimer(isTimerOn)
         self.__clipTicker.startAnimation(timeLeft, baseTime)
@@ -393,6 +393,7 @@ class AmmoPlugin(CrosshairPlugin):
         super(AmmoPlugin, self).fini()
 
     def __setup(self, ctrl, isReplayPlaying=False):
+        self.__shellsInClip = ctrl.getCurrentShells()[1]
         if isReplayPlaying:
             self._parentObj.as_setReloadingCounterShownS(False)
             self.__reloadAnimator = _PythonAutoReloadProxy(self._parentObj)
@@ -429,7 +430,7 @@ class AmmoPlugin(CrosshairPlugin):
     def __notifyAutoLoader(self, state):
         actualTime = state.getActualValue()
         baseTime = state.getBaseValue()
-        if self.__shellsInClip == 0 and state.isReloading():
+        if self.__shellsInClip <= 0 and state.isReloading():
             timeGone = baseTime - actualTime
             clipInterval = self.__guiSettings.getClipInterval()
             if clipInterval > timeGone:
@@ -440,7 +441,7 @@ class AmmoPlugin(CrosshairPlugin):
                 self.__autoReloadCallbackID = BigWorld.callback(actualTime, self.__autoReloadFirstShellCallback)
                 self.__scaledInterval = clipInterval
             else:
-                self.__reloadAnimator.setClipAutoLoading(actualTime, self.__reCalcFirstShellAutoReload(baseTime))
+                self.__reloadAnimator.setClipAutoLoading(actualTime, self.__reCalcFirstShellAutoReload(baseTime), isRedText=True)
                 actualTime = baseTime = 0
             self.__autoReloadSnapshot = state
         self.__reloadAnimator.setShellLoading(actualTime, baseTime)
@@ -448,7 +449,7 @@ class AmmoPlugin(CrosshairPlugin):
 
     def __autoReloadFirstShellCallback(self):
         timeLeft = min(self.__autoReloadSnapshot.getTimeLeft(), self.__autoReloadSnapshot.getActualValue())
-        self.__reloadAnimator.setClipAutoLoading(timeLeft, timeLeft, isTimerOn=True)
+        self.__reloadAnimator.setClipAutoLoading(timeLeft, timeLeft, isTimerOn=True, isRedText=True)
         self.__autoReloadCallbackID = None
         return
 
@@ -458,7 +459,7 @@ class AmmoPlugin(CrosshairPlugin):
             baseValue = state.getBaseValue()
             if self.__shellsInClip == 0:
                 baseValue = self.__reCalcFirstShellAutoReload(baseValue)
-            self.__reloadAnimator.setClipAutoLoading(timeLeft, baseValue, isStun=stunned, isTimerOn=True)
+            self.__reloadAnimator.setClipAutoLoading(timeLeft, baseValue, isStun=stunned, isTimerOn=True, isRedText=self.__shellsInClip == 0)
         self.__autoReloadSnapshot = state
 
     def __reCalcFirstShellAutoReload(self, baseTime):
@@ -864,6 +865,7 @@ class SiegeModePlugin(CrosshairPlugin):
         if vehicle is not None:
             vTypeDescr = vehicle.typeDescriptor
             if vTypeDescr.isWheeledVehicle or vTypeDescr.hasAutoSiegeMode or vTypeDescr.isDualgunVehicle:
+                self._parentObj.as_setNetTypeS(NET_TYPE_OVERRIDE.DISABLED)
                 return
         else:
             return

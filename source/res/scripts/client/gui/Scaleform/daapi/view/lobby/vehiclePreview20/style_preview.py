@@ -30,17 +30,13 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         self.__style = ctx['style']
         self.__styleDescr = ctx.get('styleDescr')
         self.__backCallback = ctx.get('backCallback', event_dispatcher.showHangar)
-        self.__destroyCallback = ctx.get('destroyCallback', None)
         self.__backBtnDescrLabel = ctx.get('backBtnDescrLabel', backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.personalAwards()))
-        return
 
     def closeView(self):
         event_dispatcher.showHangar()
 
     def onBackClick(self):
-        self.__destroyCallback = None
         self.__backCallback()
-        return
 
     def _populate(self):
         super(VehicleStylePreview, self)._populate()
@@ -66,14 +62,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         self.__hangarSpace.onSpaceCreate -= self.__onHangarCreateOrRefresh
         g_currentPreviewVehicle.selectNoVehicle()
         g_currentPreviewVehicle.resetAppearance()
-        if self.__destroyCallback is not None:
-            self.__destroyCallback()
         super(VehicleStylePreview, self)._dispose()
-        return
-
-    def _createSelectableLogic(self):
-        from new_year.custom_selectable_logic import WithoutNewYearObjectsSelectableLogic
-        return WithoutNewYearObjectsSelectableLogic()
 
     def __onVehicleLoading(self, ctxEvent):
         g_currentPreviewVehicle.previewStyle(self.__style)

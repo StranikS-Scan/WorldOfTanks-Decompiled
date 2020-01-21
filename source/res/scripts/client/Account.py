@@ -40,7 +40,6 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.utils import IHangarSpace
-from skeletons.new_year import ITalismanSceneController
 from soft_exception import SoftException
 from streamIDs import RangeStreamIDCallbacks, STREAM_ID_CHAT_MAX, STREAM_ID_CHAT_MIN
 StreamData = namedtuple('StreamData', ['data',
@@ -74,8 +73,6 @@ def _isStrList(l):
 class _ClientCommandProxy(object):
     _COMMAND_SIGNATURES = (('doCmdStr', lambda args: len(args) == 1 and _isStr(args[0])),
      ('doCmdIntStr', lambda args: len(args) == 2 and _isInt(args[0]) and _isStr(args[1])),
-     ('doCmdInt', lambda args: len(args) == 1 and all([ _isInt(arg) for arg in args ])),
-     ('doCmdInt2', lambda args: len(args) == 2 and all([ _isInt(arg) for arg in args ])),
      ('doCmdInt3', lambda args: len(args) == 3 and all([ _isInt(arg) for arg in args ])),
      ('doCmdInt4', lambda args: len(args) == 4 and all([ _isInt(arg) for arg in args ])),
      ('doCmdInt2Str', lambda args: len(args) == 3 and _isStr(args[2]) and all([ _isInt(arg) for arg in args[:2] ])),
@@ -112,7 +109,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     lobbyContext = dependency.descriptor(ILobbyContext)
     connectionMgr = dependency.descriptor(IConnectionManager)
     hangarSpace = dependency.descriptor(IHangarSpace)
-    talismanCtrl = dependency.descriptor(ITalismanSceneController)
 
     def __init__(self):
         global g_accountRepository
@@ -1076,11 +1072,16 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def processInvitations(self, invitations):
         self.prebattleInvitations.processInvitations(invitations, ClientInvitations.InvitationScope.ACCOUNT)
 
+    def setEnhancement(self, vehicleInvID, slot, enhancementID, callback):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorStr: callback(resultID, errorStr)
+        else:
+            proxy = None
+        self._doCmdInt3(AccountCommands.CMD_EQUIP_ENHANCEMENT, vehicleInvID, slot, enhancementID, proxy)
+        return
+
     def _doCmdStr(self, cmd, s, callback):
         return self.__doCmd('doCmdStr', cmd, callback, s)
-
-    def _doCmdInt(self, cmd, int1, callback):
-        return self.__doCmd('doCmdInt', cmd, callback, int1)
 
     def _doCmdIntStr(self, cmd, int1, s, callback):
         return self.__doCmd('doCmdIntStr', cmd, callback, int1, s)
@@ -1099,9 +1100,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def _doCmdIntArr(self, cmd, arr, callback):
         return self.__doCmd('doCmdIntArr', cmd, callback, arr)
-
-    def _doCmdIntArrStr(self, cmd, arr, s, callback):
-        return self.__doCmd('doCmdIntArrStr', cmd, callback, arr, s)
 
     def _doCmdIntStrArr(self, cmd, int1, strArr, callback):
         return self.__doCmd('doCmdIntStrArr', cmd, callback, int1, strArr)

@@ -240,7 +240,7 @@ def isBattleSession(settings=None):
 
 @dependency.replace_none_kwargs(gameSession=IGameSessionController)
 def isParentControlActivated(gameSession=None):
-    return gameSession is not None and gameSession.isParentControlActive and not isTraining()
+    return gameSession is not None and gameSession.isParentControlActive
 
 
 def getClientUnitMgr():

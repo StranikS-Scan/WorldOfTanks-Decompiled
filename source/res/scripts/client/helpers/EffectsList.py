@@ -14,13 +14,13 @@ import SoundGroups
 import helpers
 import material_kinds
 from PixieBG import PixieBG
-from ReplayEvents import g_replayEvents
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
 from vehicle_systems.tankStructure import TankSoundObjectsIndexes
 from constants import IS_EDITOR
+from debug_utils import LOG_WARNING
 if not IS_EDITOR:
     from gui.Scaleform.genConsts.EPIC_CONSTS import EPIC_CONSTS
 _logger = logging.getLogger(__name__)
@@ -132,6 +132,11 @@ class EffectsListPlayer(object):
         import BattleReplay
         replayCtrl = BattleReplay.g_replayCtrl
         if not replayCtrl.isPlaying:
+            EffectsListPlayer.clearInProgress = True
+            for effect in EffectsListPlayer.activeEffects:
+                LOG_WARNING('[EFFECT LIST] There is an active effect during the space destroying process.Effects must be stopped before {0}'.format(effect))
+                effect.stop()
+
             return
         else:
             warpDelta = replayCtrl.warpTime - replayCtrl.currentTime
@@ -139,7 +144,6 @@ class EffectsListPlayer(object):
             for effect in EffectsListPlayer.activeEffects:
                 if effect.__waitForKeyOff and warpDelta > 0.0:
                     continue
-                effectCurTime = 0
                 if effect.__curKeyPoint is not None:
                     effectCurTime = effect.__curKeyPoint.time
                 else:
@@ -166,10 +170,6 @@ class EffectsListPlayer(object):
         self.__data = dict()
         return
 
-    @property
-    def isStarted(self):
-        return self.__isStarted
-
     def play(self, model, startKeyPoint=None, callbackFunc=None, waitForKeyOff=False):
         needPlay, newKey = self.__isNeedToPlay(waitForKeyOff)
         if not needPlay:
@@ -180,9 +180,7 @@ class EffectsListPlayer(object):
             if self.__isStarted:
                 _logger.error('player already started. To restart it you must before call stop().')
                 return
-            import BattleReplay
-            if BattleReplay.g_replayCtrl.isPlaying:
-                EffectsListPlayer.activeEffects.add(self)
+            EffectsListPlayer.activeEffects.add(self)
             self.__isStarted = True
             self.__callbackID = None
             self.__model = model
@@ -238,7 +236,7 @@ class EffectsListPlayer(object):
         if self.__isStarted:
             if forceCallback and self.__callbackFunc is not None:
                 self.__callbackFunc()
-        if g_replayEvents.isPlaying and not EffectsListPlayer.clearInProgress:
+        if not EffectsListPlayer.clearInProgress:
             EffectsListPlayer.activeEffects.discard(self)
         self.__isStarted = False
         if self.__callbackID is not None:

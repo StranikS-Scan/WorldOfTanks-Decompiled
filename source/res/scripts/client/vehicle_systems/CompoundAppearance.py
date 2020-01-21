@@ -25,7 +25,7 @@ from vehicle_systems.components.peripherals_controller import PeripheralsControl
 from vehicle_systems.components.highlighter import Highlighter
 from vehicle_systems.components.tutorial_mat_kinds_controller import TutorialMatKindsController
 from helpers.CallbackDelayer import CallbackDelayer
-from helpers.EffectsList import EffectsListPlayer, SpecialKeyPointNames
+from helpers.EffectsList import SpecialKeyPointNames
 from vehicle_systems import camouflages
 from svarog_script.script_game_object import ComponentDescriptor
 from vehicle_systems import model_assembler
@@ -65,7 +65,6 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         self.gunMatrix = Math.WGAdaptiveMatrixProvider()
         self.__vehicle = None
         self.__originalFilter = None
-        self.__effectsPlayer = None
         self.__engineMode = (0, 0)
         self.__terrainCircle = None
         self.onModelChanged = Event()
@@ -166,7 +165,6 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
                 self.__terrainCircle.detach()
             if stopEffects:
                 self.__stopEffects()
-                self.boundEffects.stop()
             self.__vehicle.model = None
             self.compoundModel.matrix = Math.Matrix()
             self.__vehicle = None
@@ -526,8 +524,6 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
 
     def __reattachComponents(self, model):
         self.boundEffects.reattachTo(model)
-        if self.__effectsPlayer is not None:
-            self.__effectsPlayer.reattachTo(model)
         if self.engineAudition is not None:
             self.engineAudition.setWeaponEnergy(self._weaponEnergy)
             self.engineAudition.attachToModel(model)
@@ -549,15 +545,11 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
                 return
             vehicle = self.__vehicle
             effects = random.choice(effects)
-            self.__effectsPlayer = EffectsListPlayer(effects[1], effects[0], showShockWave=vehicle.isPlayerVehicle, showFlashBang=vehicle.isPlayerVehicle, isPlayer=vehicle.isPlayerVehicle, showDecal=enableDecal, start=vehicle.position + Math.Vector3(0.0, 1.0, 0.0), end=vehicle.position + Math.Vector3(0.0, -1.0, 0.0), entity_id=vehicle.id)
-            self.__effectsPlayer.play(self.compoundModel, *modifs)
+            self.boundEffects.addNew(None, effects[1], effects[0], isPlayerVehicle=vehicle.isPlayerVehicle, showShockWave=vehicle.isPlayerVehicle, showFlashBang=vehicle.isPlayerVehicle, entity_id=vehicle.id, isPlayer=vehicle.isPlayerVehicle, showDecal=enableDecal, start=vehicle.position + Math.Vector3(0.0, 1.0, 0.0), end=vehicle.position + Math.Vector3(0.0, -1.0, 0.0))
             return
 
     def __stopEffects(self):
-        if self.__effectsPlayer is not None:
-            self.__effectsPlayer.stop()
-        self.__effectsPlayer = None
-        return
+        self.boundEffects.stop()
 
     def __onCrewKilled(self):
         self.__destroyEngineAudition()
@@ -571,12 +563,11 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         self.__vehicle.showCollisionEffect(waterHitPoint, effectName, Math.Vector3(0.0, 1.0, 0.0))
 
     def onUnderWaterSwitch(self, isUnderWater):
-        if isUnderWater and self.__effectsPlayer is not None and self.damageState.effect not in ('submersionDeath',):
+        if isUnderWater and self.damageState.effect not in ('submersionDeath',):
             self.__stopEffects()
         extra = self.__vehicle.typeDescriptor.extrasDict['fire']
         if extra.isRunningFor(self.__vehicle):
             extra.checkUnderwater(self.__vehicle, isUnderWater)
-        return
 
     def updateTracksScroll(self, leftScroll, rightScroll):
         if self.trackScrollController is not None:

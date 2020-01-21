@@ -94,6 +94,8 @@
     <Continental_R975C>	109	</Continental_R975C>
     <Maybach_HL_230_TRM_P30_B>	110	</Maybach_HL_230_TRM_P30_B>
     <Renault_Reinastella>	111	</Renault_Reinastella>
+    <E_9>	112	</E_9>
+    <Mathis_300_exp>	113	</Mathis_300_exp>
     <Maybach_HL_295_IGR>	60001	</Maybach_HL_295_IGR>
     <Detroit_Diesel_6V53T-S_IGR>	60002	</Detroit_Diesel_6V53T-S_IGR>
     <Renault_A_IGR>	60003	</Renault_A_IGR>
@@ -1152,6 +1154,23 @@
       <rpm_min>	374	</rpm_min>
       <rpm_max>	2601	</rpm_max>
     </Mathis_300>
+    <Mathis_300_exp>
+      <userString>	#france_vehicles:Mathis_300_exp	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	40000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	310	</power>
+      <weight>	400	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	431	</rpm_min>
+      <rpm_max>	2420	</rpm_max>
+    </Mathis_300_exp>
     <Maybach_HL_295_F>
       <userString>	#france_vehicles:Maybach_HL_295_F	</userString>
       <tags>	gasoline	</tags>
@@ -1665,6 +1684,23 @@
       <rpm_min>	399	</rpm_min>
       <rpm_max>	2321	</rpm_max>
     </Renault_Reinastella>
+    <E_9>
+      <userString>	#france_vehicles:E_9	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	85000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	620	</power>
+      <weight>	1426	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	354	</rpm_min>
+      <rpm_max>	2136	</rpm_max>
+    </E_9>
     <Maybach_HL_295_IGR>
       <userString>	#igr_vehicles:Maybach_HL_295_IGR	</userString>
       <tags>	gasoline	</tags>

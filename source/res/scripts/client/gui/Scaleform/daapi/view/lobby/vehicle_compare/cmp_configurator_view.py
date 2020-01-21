@@ -5,7 +5,7 @@ from adisp import process
 from debug_utils import LOG_WARNING, LOG_DEBUG, LOG_ERROR
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.hangar.AmmunitionPanel import getFittingSlotsData, getAmmo, VEHICLE_FITTING_SLOTS, ARTEFACTS_SLOTS, FITTING_MODULES
+from gui.Scaleform.daapi.view.lobby.hangar.ammunition_panel import getFittingSlotsData, getAmmo, VEHICLE_FITTING_SLOTS, ARTEFACTS_SLOTS, FITTING_MODULES
 from gui.Scaleform.daapi.view.lobby.shared.fitting_slot_vo import FittingSlotVO
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_base import VehicleCompareConfiguratorBaseView

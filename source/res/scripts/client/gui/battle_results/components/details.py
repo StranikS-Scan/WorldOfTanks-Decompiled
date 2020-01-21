@@ -177,7 +177,6 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         showSquadLabels, _ = reusable.getPersonalSquadFlags()
         if showSquadLabels:
             self.__addSquadBonus(baseCredits, premiumCredits)
-        isTotalShown |= self.__addStatsItemIfExists('newYear', baseCredits, premiumCredits, None, 'newYearCreditsFactor')
         isTotalShown |= self.__addStatsItemIfExists('noPenalty', baseCredits, premiumCredits, None, 'achievementCredits')
         isTotalShown |= self.__addStatsItemIfExists('boosters', baseCredits, premiumCredits, None, 'boosterCredits', 'boosterCreditsFactor100')
         isTotalShown |= self.__addStatsItemIfExists('battlePayments', baseCredits, premiumCredits, None, 'orderCreditsFactor100')
@@ -209,17 +208,6 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         premiumLabel = style.makeCreditsLabel(premiumValue, canBeFaded=self.hasAnyPremium)
         self._addStatsRow(label, column1=baseLabel, column3=premiumLabel)
         return baseValue != 0 or premiumValue != 0
-
-    def __addNewYearCreditsIfExists(self, baseRecords, premiumRecords):
-        baseValue = baseRecords.getRecord('newYearCredits', 'newYearCreditsFactor')
-        premiumValue = premiumRecords.getRecord('newYearCredits', 'newYearCreditsFactor')
-        result = False
-        if baseValue or premiumValue:
-            result = True
-            baseValue = style.makeCreditsLabel(baseValue, canBeFaded=not self.isPremium)
-            premiumValue = style.makeCreditsLabel(premiumValue, canBeFaded=self.isPremium)
-            self._addStatsRow('newYear', column1=baseValue, column3=premiumValue)
-        return result
 
     def __addStatsItemIfExists(self, label, baseRecords, premiumRecords, labelArgs=None, *names):
         baseValue = baseRecords.getRecord(*names)
@@ -263,8 +251,8 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         return self.__addStatsItemIfExists('referralBonus', baseCredits, premiumCredits, labelArgs, 'referral20CreditsFactor100')
 
     def __addEventsMoney(self, baseCredits, premiumCredits, goldRecords):
-        baseEventCredits = baseCredits.findRecord('eventCreditsList_') + baseCredits.findRecord('eventCreditsFactor1000List_')
-        premiumEventCredits = premiumCredits.findRecord('eventCreditsList_') + premiumCredits.findRecord('eventCreditsFactor1000List_')
+        baseEventCredits = baseCredits.findRecord('eventCreditsList_') + baseCredits.findRecord('eventCreditsFactor100List_')
+        premiumEventCredits = premiumCredits.findRecord('eventCreditsList_') + premiumCredits.findRecord('eventCreditsFactor100List_')
         baseEventGold = goldRecords.findRecord('eventGoldList_')
         result = False
         if baseEventCredits or premiumEventCredits or baseEventGold:
@@ -342,7 +330,6 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
         baseXP, premiumXP, baseFreeXP, premiumFreeXP = result
         self.__addBaseXPs(baseXP, premiumXP, baseFreeXP, premiumFreeXP)
         self.__addComplexXPsItemIfExists('noPenalty', baseXP, premiumXP, baseFreeXP, premiumFreeXP, 'achievementXP', 'achievementFreeXP')
-        self.__addNewYearXPs(baseXP, premiumXP, baseFreeXP, premiumFreeXP)
         penaltyKey = 'friendlyFirePenalty'
         if reusable.common.arenaVisitor.gui.isRankedBattle():
             penaltyKey = 'friendlyFireRankedXpPenalty'
@@ -437,20 +424,6 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
              'column2': style.makeFreeXpLabel(baseFreeXPValue, canBeFaded=baseCanBeFaded),
              'column4': style.makeFreeXpLabel(premiumFreeXPValue, canBeFaded=premiumCanBeFaded)}
             self._addStatsRow('boosters', **columns)
-
-    def __addNewYearXPs(self, baseXP, premiumXP, baseFreeXP, premiumFreeXP):
-        baseXPValue = baseXP.getRecord('newYearXp') + baseXP.findRecord('newYearXpFactor')
-        premiumXPValue = premiumXP.getRecord('newYearXp') + premiumXP.findRecord('newYearXpFactor')
-        baseFreeXPValue = baseFreeXP.getRecord('newYearFreeXp') + baseFreeXP.findRecord('newYearFreeXpFactor')
-        premiumFreeXPValue = premiumFreeXP.getRecord('newYearFreeXp') + premiumFreeXP.findRecord('newYearFreeXpFactor')
-        if baseXPValue or premiumXPValue or baseFreeXPValue or premiumFreeXPValue:
-            baseCanBeFaded = not self.hasAnyPremium
-            premiumCanBeFaded = self.hasAnyPremium
-            columns = {'column1': style.makeXpLabel(baseXPValue, canBeFaded=baseCanBeFaded),
-             'column3': style.makeXpLabel(premiumXPValue, canBeFaded=premiumCanBeFaded),
-             'column2': style.makeFreeXpLabel(baseFreeXPValue, canBeFaded=baseCanBeFaded),
-             'column4': style.makeFreeXpLabel(premiumFreeXPValue, canBeFaded=premiumCanBeFaded)}
-            self._addStatsRow('vehicleBranch', **columns)
 
     def __addEventXPs(self, baseXP, premiumXP, baseFreeXP, premiumFreeXP):
         baseXPValue = baseXP.findRecord('eventXPList_') + baseXP.findRecord('eventXPFactor100List_')

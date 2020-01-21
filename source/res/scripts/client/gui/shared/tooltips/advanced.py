@@ -1,22 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/advanced.py
 from constants import SHELL_TYPES
-from helpers.i18n import makeString
-from helpers import dependency
-from skeletons.account_helpers.settings_core import ISettingsCore
-from gui.shared.formatters import text_styles
-from gui.shared.tooltips.common import BlocksTooltipData
-from gui.shared.tooltips import formatters
-from gui.shared.items_parameters import formatters as param_formatter
-from gui.shared.gui_items.artefacts import OptionalDevice
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.goodies.goodie_items import DemountKit
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
+from gui.shared.formatters import text_styles
+from gui.shared.gui_items.artefacts import OptionalDevice
+from gui.shared.items_parameters import formatters as param_formatter
+from gui.shared.tooltips import formatters
+from gui.shared.tooltips.common import BlocksTooltipData
+from helpers import dependency
 from helpers import i18n
+from helpers.i18n import makeString
+from skeletons.account_helpers.settings_core import ISettingsCore
 DISABLED_ITEMS_ID = 12793
 
 class ComplexTooltip(BlocksTooltipData):
@@ -73,9 +74,7 @@ class BaseAdvancedTooltip(BlocksTooltipData):
 
     def _packAdvancedBlocks(self, movie, header, description):
         descrText = TOOLTIPS.getAdvancedDescription(description)
-        if descrText is None and description == 'camouflageBattleBooster':
-            descrText = TOOLTIPS.ADVANCED_CAMOUFLAGE
-        elif descrText is None:
+        if descrText is None:
             descrText = '#advanced/' + description
         items = [formatters.packTextBlockData(text=text_styles.highTitle(header), padding=formatters.packPadding(left=20, top=20)), formatters.packImageBlockData(BaseAdvancedTooltip.getMovieAnimationPath(movie), BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, padding=5, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_ADVANCED_CLIP_BLOCK_LINKAGE), formatters.packTextBlockData(text=text_styles.main(descrText), padding=formatters.packPadding(left=20, top=10, bottom=20))]
         return items
@@ -212,6 +211,14 @@ class BattleTraining(BaseAdvancedTooltip):
 
     def _getBlocksList(self, *args, **kwargs):
         return self._packAdvancedBlocks('gamemodeProving', TOOLTIPS.BATTLETYPES_BATTLETEACHING_HEADER, PREBATTLE_ACTION_NAME.SANDBOX)
+
+
+class DemountKitTooltipAdvanced(BaseAdvancedTooltip):
+
+    def _packBlocks(self, *args, **kwargs):
+        demountKit = self.context.buildItem(*args, **kwargs)
+        dkType = demountKit.demountKitGuiType
+        return self._packAdvancedBlocks('demountKit', demountKit.userName, 'demountKit/{}'.format(dkType))
 
 
 _SKILL_MOVIES = {'repair': 'skillRepairs',

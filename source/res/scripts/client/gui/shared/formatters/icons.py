@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/formatters/icons.py
 from gui import makeHtmlString
-from gui.shared.utils.functions import getAbsoluteUrl
 from gui.shared.money import Currency
+from gui.shared.utils.functions import getAbsoluteUrl
 __all__ = ('noSeason', 'swords', 'alert', 'arrow', 'xp', 'notAvailable', 'notAvailableRed', 'checkmark', 'info', 'premiumIgrBig', 'premiumIgrSmall', 'freeXP', 'nut', 'clock', 'makeImageTag') + Currency.ALL
 _IMG_TAG_TPL = "<img src='{0}' width='{1}' height='{2}' vspace='{3}' hspace='{4}'/>"
 
@@ -105,6 +105,10 @@ def crystal():
 
 def crystalBig():
     return _getIcon('crystalBig')
+
+
+def demountKit():
+    return _getIcon('demountKit')
 
 
 def nut():

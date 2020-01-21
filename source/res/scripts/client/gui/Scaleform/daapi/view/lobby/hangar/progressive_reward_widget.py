@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/progressive_reward_widget.py
 import logging
-from constants import SENIORITY_AWARDS_CONFIG
+from constants import SENIORITY_AWARDS_CONFIG, IS_LOOT_BOXES_ENABLED
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED
 from gui.Scaleform.daapi.view.meta.ProgressiveRewardWidgetMeta import ProgressiveRewardWidgetMeta
@@ -49,7 +49,7 @@ class ProgressiveRewardWidget(ProgressiveRewardWidgetMeta):
         self.__update()
 
     def __onServerSettingsChange(self, diff):
-        configs = {'progressive_reward_config', SENIORITY_AWARDS_CONFIG}
+        configs = {'progressive_reward_config', SENIORITY_AWARDS_CONFIG, IS_LOOT_BOXES_ENABLED}
         if configs.intersection(diff):
             self.__update()
 

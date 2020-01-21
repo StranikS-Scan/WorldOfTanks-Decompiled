@@ -15,11 +15,9 @@ from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from new_year.ny_constants import NY_FILTER
 from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
-from skeletons.new_year import INewYearController
 
 class _SECTION(CONST_CONTAINER):
     NATIONS, VEHICLE_TYPES, LEVELS, SPECIALS, HIDDEN, TEXT_SEARCH = range(0, 6)
@@ -164,7 +162,6 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
 
 
 class TankCarouselFilterPopover(VehiclesFilterPopover):
-    _nyController = dependency.descriptor(INewYearController)
     settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, ctx):
@@ -188,12 +185,7 @@ class TankCarouselFilterPopover(VehiclesFilterPopover):
         super(TankCarouselFilterPopover, self)._update(isInitial)
         self._carousel.updateHotFilters()
 
-    def _populate(self):
-        super(TankCarouselFilterPopover, self)._populate()
-        self._nyController.onStateChanged += self.__onNyStateChanged
-
     def _dispose(self):
-        self._nyController.onStateChanged -= self.__onNyStateChanged
         super(TankCarouselFilterPopover, self)._dispose()
         self.settingsCore.serverSettings.setSectionSettings(SETTINGS_SECTIONS.GAME_EXTENDED, {settings_constants.GAME.CAROUSEL_TYPE: self.__carouselRowCount})
 
@@ -206,12 +198,7 @@ class TankCarouselFilterPopover(VehiclesFilterPopover):
          'elite'])
         if constants.IS_KOREA:
             mapping[_SECTION.SPECIALS].append('igr')
-        if cls._nyController.isVehicleBranchEnabled():
-            mapping[_SECTION.SPECIALS].append(NY_FILTER)
         return mapping
-
-    def __onNyStateChanged(self):
-        self.destroy()
 
 
 class BattleTankCarouselFilterPopover(TankCarouselFilterPopover):

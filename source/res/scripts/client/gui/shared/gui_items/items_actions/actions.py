@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/items_actions/actions.py
-import logging
 from collections import namedtuple
 from adisp import process, async
+from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import SystemMessages, DialogsInterface
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import BuyModuleMeta
@@ -45,7 +45,6 @@ from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
-_logger = logging.getLogger(__name__)
 ItemSellSpec = namedtuple('ItemSellSpec', ('typeIdx', 'intCD', 'count'))
 
 def showMessage(scopeMsg, msg, item, msgType=SystemMessages.SM_TYPE.Error, **kwargs):
@@ -219,7 +218,7 @@ class VehicleBuyAction(BuyAction):
     def doAction(self):
         item = self._itemsCache.items.getItemByCD(self.__vehCD)
         if item.itemTypeID is not GUI_ITEM_TYPE.VEHICLE:
-            _logger.error('Value of int-type descriptor is not refer to vehicle %r', self.__vehCD)
+            LOG_ERROR('Value of int-type descriptor is not refer to vehicle', self.__vehCD)
             return
         else:
             if item.isInInventory and not item.isRented:
@@ -373,13 +372,16 @@ class InstallItemAction(BuyAction):
         conflictedEqs = item.getConflictedEquipments(vehicle)
         RequestState.sent(state)
         if item.isInInventory:
-            Waiting.show('applyModule')
-            result = yield getInstallerProcessor(vehicle, item, conflictedEqs=conflictedEqs, skipConfirm=self.skipConfirm).request()
+            proc = getInstallerProcessor(vehicle, item, conflictedEqs=conflictedEqs, skipConfirm=self.skipConfirm)
+            if not proc.gamefaceEnabled:
+                Waiting.show('applyModule')
+            result = yield proc.request()
             processMsg(result)
             if result.success and item.itemTypeID in (GUI_ITEM_TYPE.TURRET, GUI_ITEM_TYPE.GUN):
                 vehicle = self._itemsCache.items.getItemByCD(vehicle.intCD)
                 yield tryToLoadDefaultShellsLayout(vehicle)
-            Waiting.hide('applyModule')
+            if not proc.gamefaceEnabled:
+                Waiting.hide('applyModule')
         RequestState.received(state)
         yield lambda callback=None: callback
         return
@@ -407,17 +409,20 @@ class BuyAndInstallItemAction(InstallItemAction):
             if not isOk:
                 return
         if self._mayObtainForMoney(item):
-            Waiting.show('buyAndInstall')
             vehicle = self._itemsCache.items.getItemByCD(rootCD)
             gunCD = getGunCD(item, vehicle)
-            result = yield BuyAndInstallItemProcessor(vehicle, item, 0, gunCD, conflictedEqs=conflictedEqs, skipConfirm=self.skipConfirm).request()
+            proc = BuyAndInstallItemProcessor(vehicle, item, 0, gunCD, conflictedEqs=conflictedEqs, skipConfirm=self.skipConfirm)
+            if not proc.gamefaceEnabled:
+                Waiting.show('buyAndInstall')
+            result = yield proc.request()
             processMsg(result)
             if result.success and item.itemTypeID in (GUI_ITEM_TYPE.TURRET, GUI_ITEM_TYPE.GUN):
                 item = self._itemsCache.items.getItemByCD(itemCD)
                 vehicle = self._itemsCache.items.getItemByCD(rootCD)
                 if item.isInstalled(vehicle):
                     yield tryToLoadDefaultShellsLayout(vehicle)
-            Waiting.hide('buyAndInstall')
+            if not proc.gamefaceEnabled:
+                Waiting.hide('buyAndInstall')
         RequestState.received(state)
         yield lambda callback=None: callback
         return
@@ -440,7 +445,7 @@ class SetVehicleModuleAction(BuyAction):
             return
         else:
             isUseMoney = self.__isRemove and self.__oldItemCD is not None
-            _logger.debug('isUseMoney - %r, self.__isRemove - %r, self.__oldItemCD - %r', isUseMoney, self.__isRemove, self.__oldItemCD)
+            LOG_DEBUG('isUseMoney, self.__isRemove, self.__oldItemCD', isUseMoney, self.__isRemove, self.__oldItemCD)
             newComponentItem = self._itemsCache.items.getItemByCD(int(self.__newItemCD))
             if newComponentItem is None:
                 return
@@ -448,44 +453,53 @@ class SetVehicleModuleAction(BuyAction):
             if self.__oldItemCD:
                 oldComponentItem = self._itemsCache.items.getItemByCD(int(self.__oldItemCD))
             if not self.__isRemove:
-                if oldComponentItem and oldComponentItem.itemTypeID in (GUI_ITEM_TYPE.OPTIONALDEVICE, GUI_ITEM_TYPE.BATTLE_BOOSTER):
-                    Waiting.show('installEquipment')
-                    result = yield getInstallerProcessor(vehicle, oldComponentItem, self.__slotIdx, False, True, skipConfirm=self.skipConfirm).request()
-                    processMsg(result)
-                    Waiting.hide('installEquipment')
-                    if not result.success:
-                        return
-            if not self.__isRemove and not newComponentItem.isInInventory and not newComponentItem.itemTypeID == GUI_ITEM_TYPE.BATTLE_ABILITY:
-                conflictedEqs = newComponentItem.getConflictedEquipments(vehicle)
-                if not self._mayObtainForMoney(newComponentItem) and self._mayObtainWithMoneyExchange(newComponentItem):
-                    isOk, _ = yield DialogsInterface.showDialog(ExchangeCreditsSingleItemMeta(newComponentItem.intCD, vehicle.intCD))
-                    if not isOk:
-                        return
-                if self._mayObtainForMoney(newComponentItem):
-                    Waiting.show('buyAndInstall')
-                    vehicle = self._itemsCache.items.getVehicle(self.__vehInvID)
-                    gunCD = getGunCD(newComponentItem, vehicle)
-                    result = yield BuyAndInstallItemProcessor(vehicle, newComponentItem, self.__slotIdx, gunCD, conflictedEqs=conflictedEqs, skipConfirm=self.skipConfirm).request()
-                    processMsg(result)
-                    if result.success and newComponentItem.itemTypeID in (GUI_ITEM_TYPE.TURRET, GUI_ITEM_TYPE.GUN):
-                        newComponentItem = self._itemsCache.items.getItemByCD(int(self.__newItemCD))
-                        vehicle = self._itemsCache.items.getItemByCD(vehicle.intCD)
-                        if newComponentItem.isInstalled(vehicle):
-                            yield tryToLoadDefaultShellsLayout(vehicle)
-                    Waiting.hide('buyAndInstall')
+                if oldComponentItem:
+                    if oldComponentItem.itemTypeID in (GUI_ITEM_TYPE.OPTIONALDEVICE, GUI_ITEM_TYPE.BATTLE_BOOSTER):
+                        proc = getInstallerProcessor(vehicle, oldComponentItem, self.__slotIdx, False, True, skipConfirm=self.skipConfirm)
+                        if not proc.gamefaceEnabled:
+                            Waiting.show('installEquipment')
+                        result = yield proc.request()
+                        processMsg(result)
+                        if not proc.gamefaceEnabled:
+                            Waiting.hide('installEquipment')
+                        if not result.success:
+                            return
+                if not self.__isRemove and not newComponentItem.isInInventory and not newComponentItem.itemTypeID == GUI_ITEM_TYPE.BATTLE_ABILITY:
+                    conflictedEqs = newComponentItem.getConflictedEquipments(vehicle)
+                    if not self._mayObtainForMoney(newComponentItem) and self._mayObtainWithMoneyExchange(newComponentItem):
+                        isOk, _ = yield DialogsInterface.showDialog(ExchangeCreditsSingleItemMeta(newComponentItem.intCD, vehicle.intCD))
+                        if not isOk:
+                            return
+                    if self._mayObtainForMoney(newComponentItem):
+                        vehicle = self._itemsCache.items.getVehicle(self.__vehInvID)
+                        gunCD = getGunCD(newComponentItem, vehicle)
+                        proc = BuyAndInstallItemProcessor(vehicle, newComponentItem, self.__slotIdx, gunCD, conflictedEqs=conflictedEqs, skipConfirm=self.skipConfirm)
+                        if not proc.gamefaceEnabled:
+                            Waiting.show('buyAndInstall')
+                        result = yield proc.request()
+                        processMsg(result)
+                        if result.success and newComponentItem.itemTypeID in (GUI_ITEM_TYPE.TURRET, GUI_ITEM_TYPE.GUN):
+                            newComponentItem = self._itemsCache.items.getItemByCD(int(self.__newItemCD))
+                            vehicle = self._itemsCache.items.getItemByCD(vehicle.intCD)
+                            if newComponentItem.isInstalled(vehicle):
+                                yield tryToLoadDefaultShellsLayout(vehicle)
+                        proc.gamefaceEnabled or Waiting.hide('buyAndInstall')
                 else:
                     yield lambda callback=None: callback
             else:
-                Waiting.show('applyModule')
                 conflictedEqs = newComponentItem.getConflictedEquipments(vehicle)
-                result = yield getInstallerProcessor(vehicle, newComponentItem, self.__slotIdx, not self.__isRemove, isUseMoney, conflictedEqs, self.skipConfirm).request()
+                proc = getInstallerProcessor(vehicle, newComponentItem, self.__slotIdx, not self.__isRemove, isUseMoney, conflictedEqs, self.skipConfirm)
+                if not proc.gamefaceEnabled:
+                    Waiting.show('applyModule')
+                result = yield proc.request()
                 processMsg(result)
                 if result.success and newComponentItem.itemTypeID in (GUI_ITEM_TYPE.TURRET, GUI_ITEM_TYPE.GUN):
                     newComponentItem = self._itemsCache.items.getItemByCD(int(self.__newItemCD))
                     vehicle = self._itemsCache.items.getItemByCD(vehicle.intCD)
                     if newComponentItem.isInstalled(vehicle):
                         yield tryToLoadDefaultShellsLayout(vehicle)
-                Waiting.hide('applyModule')
+                if not proc.gamefaceEnabled:
+                    Waiting.hide('applyModule')
             return
 
 
@@ -535,7 +549,7 @@ class BuyAndInstallItemVehicleLayout(SetVehicleLayoutAction):
             result = yield BuyAndInstallBattleBoosterProcessor(self._vehicle, self._battleBooster, helper, self._count, self.skipConfirm).request()
             self._showResult(result)
         else:
-            _logger.error('Extend BuyAndInstallItemVehicleLayout action to support a new type of item!')
+            LOG_ERROR('Extend BuyAndInstallItemVehicleLayout action to support a new type of item!')
         return
 
 

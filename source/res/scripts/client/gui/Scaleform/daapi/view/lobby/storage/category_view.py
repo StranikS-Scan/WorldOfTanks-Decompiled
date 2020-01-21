@@ -5,8 +5,11 @@ from gui.Scaleform.daapi.view.lobby.storage import storage_helpers
 from gui.Scaleform.daapi.view.meta.BaseStorageCategoryViewMeta import BaseStorageCategoryViewMeta
 from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
 from gui.shared.formatters import text_styles
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
+from skeletons.gui.demount_kit import IDemountKitNovelty
+from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
 
 class StorageDataProvider(DAAPIDataProvider):
@@ -34,6 +37,7 @@ class StorageDataProvider(DAAPIDataProvider):
 
 class BaseCategoryView(BaseStorageCategoryViewMeta):
     _itemsCache = dependency.descriptor(IItemsCache)
+    _goodiesCache = dependency.descriptor(IGoodiesCache)
 
     def __init__(self):
         super(BaseCategoryView, self).__init__()
@@ -86,6 +90,15 @@ class InventoryCategoryView(BaseCategoryView):
         self._invVehicles = None
         return
 
+    def scrolledToBottom(self):
+        if self.containItemType(GUI_ITEM_TYPE.DEMOUNT_KIT):
+            demountKitNovelty = dependency.instance(IDemountKitNovelty)
+            if demountKitNovelty.showNovelty:
+                demountKitNovelty.setAsSeen()
+
+    def containItemType(self, itemType):
+        return next((item for item in self._getItemList().values() if item.itemTypeID == itemType), None) is not None
+
     def _populate(self):
         super(InventoryCategoryView, self)._populate()
         self._invVehicles = self._itemsCache.items.getVehicles(self._getInvVehicleCriteria()).values()
@@ -109,17 +122,28 @@ class InventoryCategoryView(BaseCategoryView):
     def _getItemTypeID(self):
         raise NotImplementedError
 
+    def _getItemTypeIDs(self):
+        itemTypeID = self._getItemTypeID()
+        return itemTypeID if isinstance(itemTypeID, tuple) else (itemTypeID,)
+
     def _buildItems(self):
         self._dataProvider.buildList(self._getVoList())
 
     def _getVoList(self):
-        criteria = self._getRequestCriteria(self._invVehicles)
-        items = self._itemsCache.items.getItems(self._getItemTypeID(), criteria, nationID=None)
+        items = self._getItemList()
         dataProviderValues = []
         for item in sorted(items.itervalues(), cmp=self._getComparator()):
             dataProviderValues.append(self._getVO(item))
 
         return dataProviderValues
+
+    def _getItemList(self):
+        criteria = self._getRequestCriteria(self._invVehicles)
+        items = {}
+        for itemType in self._getItemTypeIDs():
+            items.update(self._itemsCache.items.getItems(itemType, criteria, nationID=None))
+
+        return items
 
     def _getVO(self, item):
         raise NotImplementedError

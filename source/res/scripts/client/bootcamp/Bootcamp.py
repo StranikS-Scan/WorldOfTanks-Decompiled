@@ -377,6 +377,7 @@ class Bootcamp(EventSystemEntity):
     def onBattleLessonFinished(self, lessonId, lessonResults):
         self.__lessonId = lessonId
         self.__currentState.deactivate()
+        MC.g_musicController.stop()
         if self.requestBootcampFinishFromBattle:
             self.onRequestBootcampFinish()
             return
@@ -431,7 +432,7 @@ class Bootcamp(EventSystemEntity):
 
     def showFinalVideo(self, callback):
         LOG_DEBUG_DEV_BOOTCAMP('showFinalVideo')
-        MC.g_musicController.muteMusic(True)
+        MC.g_musicController.stopAmbient(True)
         self.__finalVideoCallback = callback
         self.__currentState.deactivate()
         self.__currentState = StateOutroVideo()

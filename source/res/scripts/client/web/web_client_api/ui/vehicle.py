@@ -297,6 +297,12 @@ class _VehiclePackPreviewSchema(W2CSchema):
     buy_params = Field(required=False, type=dict)
 
 
+class _MarathonVehiclePackPreviewSchema(W2CSchema):
+    title = Field(required=True, type=basestring)
+    items = Field(required=True, type=(list, NoneType), validator=lambda value, _: _validateItemsPack(value))
+    marathon_prefix = Field(required=True, type=basestring)
+
+
 class _VehicleStylePreviewSchema(W2CSchema):
     vehicle_cd = Field(required=True, type=int)
     style_id = Field(required=True, type=int)
@@ -373,23 +379,28 @@ class VehiclePreviewWebApiMixin(object):
     def openVehicleOffersPreview(self, cmd):
         event_dispatcher.showVehiclePreview(vehTypeCompDescr=int(cmd.vehicle_id), offers=_parseOffers(cmd.offers), price=MONEY_UNDEFINED, oldPrice=MONEY_UNDEFINED, previewAlias=self._getVehiclePreviewReturnAlias(cmd), previewBackCb=self._getVehiclePreviewReturnCallback(cmd))
 
+    @w2c(_MarathonVehiclePackPreviewSchema, 'marathon_vehicle_pack_preview')
+    def openMarathonVehiclePackPreview(self, cmd):
+        items = _parseItemsPack(cmd.items)
+        vehiclesIDs = self.__getVehiclesIDs(items)
+        if vehiclesIDs:
+            event_dispatcher.showMarathonVehiclePreview(vehTypeCompDescr=vehiclesIDs[0], itemsPack=items, title=cmd.title, marathonPrefix=cmd.marathon_prefix)
+        else:
+            _pushInvalidPreviewMessage()
+
     @w2c(_VehiclePackPreviewSchema, 'vehicle_pack_preview')
     def openVehiclePackPreview(self, cmd):
         items = _parseItemsPack(cmd.items)
         price, oldPrice = _parseBuyPrice(cmd.buy_price)
-        vehiclesID = []
-        for item in items:
-            if item.type in ItemPackTypeGroup.VEHICLE:
-                vehiclesID.append(item.id)
-
-        if vehiclesID and self.__validVehiclePreviewPack(vehiclesID):
+        vehiclesIDs = self.__getVehiclesIDs(items)
+        if vehiclesIDs:
             localEndTime = None
             if cmd.end_date:
                 timestamp = getTimestampFromISO(cmd.end_date)
                 datetimeInUTC = getDateTimeInUTC(timestamp)
                 localDatetime = utcToLocalDatetime(datetimeInUTC)
                 localEndTime = (localDatetime - getDateTimeInLocal(0)).total_seconds()
-            event_dispatcher.showVehiclePreview(vehTypeCompDescr=vehiclesID[0], itemsPack=items, price=price, oldPrice=oldPrice, title=cmd.title, endTime=localEndTime, previewAlias=self._getVehiclePreviewReturnAlias(cmd), previewBackCb=self._getVehiclePreviewReturnCallback(cmd), buyParams=cmd.buy_params)
+            event_dispatcher.showVehiclePreview(vehTypeCompDescr=vehiclesIDs[0], itemsPack=items, price=price, oldPrice=oldPrice, title=cmd.title, endTime=localEndTime, previewAlias=self._getVehiclePreviewReturnAlias(cmd), previewBackCb=self._getVehiclePreviewReturnCallback(cmd), buyParams=cmd.buy_params)
         else:
             _pushInvalidPreviewMessage()
         return
@@ -450,6 +461,10 @@ class VehiclePreviewWebApiMixin(object):
     def __showStylePreview(self, vehicleCD, styleID, backBtnDescr):
         style = self.c11n.getItemByID(GUI_ITEM_TYPE.STYLE, styleID)
         showStylePreview(vehicleCD, style, style.getDescription(), self._getVehicleStylePreviewCallback(), backBtnDescrLabel=backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.dyn(backBtnDescr)()))
+
+    def __getVehiclesIDs(self, items):
+        vehiclesIDs = [ item.id for item in items if item.type in ItemPackTypeGroup.VEHICLE ]
+        return vehiclesIDs if vehiclesIDs and self.__validVehiclePreviewPack(vehiclesIDs) else None
 
     def __validVehiclePreview(self, intCD):
         vehicle = None

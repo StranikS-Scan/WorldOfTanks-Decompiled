@@ -114,7 +114,6 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         self.__isRentVisible = self.__vehicle.hasRentPackages and not self.__isTradeIn()
         self.__popoverIsAvailable = True
         self.__tradeInInProgress = False
-        self.__successOperation = False
         self.__purchaseInProgress = False
         return
 
@@ -136,7 +135,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             return super(BuyVehicleView, self).createToolTip(event)
 
     def showCongratulations(self):
-        self.__successOperation = True
+        self.__showHangar()
         if self.__isRenting() or self.__bootcamp.isInBootcamp():
             self.__onWindowClose()
         else:
@@ -370,7 +369,6 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         self.viewModel.commit()
 
     def __onWindowClose(self, *_):
-        self.__showHangar()
         self.__destroyWindow()
 
     def __destroyWindow(self):
@@ -378,7 +376,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         self.destroyWindow()
 
     def __showHangar(self):
-        if not self.__bootcamp.isInBootcamp() and self.__successOperation:
+        if not self.__bootcamp.isInBootcamp():
             if self.__previousAlias in _VP_SHOW_HANGAR_ON_SUCCESS_ALIASES:
                 event_dispatcher.selectVehicleInHangar(self.__vehicle.intCD)
             elif self.__previousAlias == VIEW_ALIAS.FRONTLINE_VEHICLE_PREVIEW_20:
@@ -518,6 +516,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         priceModel.setIsWithAction(hasAction)
         if hasAction:
             updateActionInViewModel(currencyType, priceModel, itemPrice)
+        priceModel.setIsBootcamp(self.__bootcamp.isInBootcamp())
         return
 
     def __updateSlotPrice(self):
@@ -564,6 +563,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
                 commanderLvlModel.setIdx(idx)
                 commanderLvlModel.setPercents(commanderLvlPercents[idx])
                 commanderLvlModel.setTitle(i18n.makeString(STORE.BUYVEHICLEWINDOW_SLOT_ENUM[idx]))
+                commanderLvlModel.setIsBootcamp(self.__bootcamp.isInBootcamp())
                 if not self.__vehicle.hasCrew:
                     commanderLvlModel.setIsSelected(idx == self.__selectedCardIdx)
             else:
@@ -695,6 +695,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
                 isAction = totalPrice.getActionPrcAsMoney().get(currencyType) is not None and currencyValue < currencyDefValue
                 model.setShowOldValue(isAction)
                 model.setIsWithAction(isAction and (self.__tradeOffVehicle is None or not self.__isValidTradeOffSelected()))
+                model.setIsBootcamp(self.__bootcamp.isInBootcamp())
                 if isAction:
                     updateActionInViewModel(currencyType, model, totalPrice)
 
@@ -802,7 +803,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             return TooltipData(tooltip=tooltipId, isSpecial=True, specialAlias=tooltipId, specialArgs=args)
 
     def __addVMsInActionPriceList(self, listArray, itemPrice, fontNotEnoughIsEnabled=True, tooltipData=None):
-        actionPriceModels = getItemPricesViewModel(self.__stats.money, itemPrice)[0]
+        actionPriceModels = getItemPricesViewModel(self.__stats.money, itemPrice, isBootcamp=self.__bootcamp.isInBootcamp())[0]
         for model in actionPriceModels:
             if tooltipData is not None:
                 model.setKey(tooltipData.key)

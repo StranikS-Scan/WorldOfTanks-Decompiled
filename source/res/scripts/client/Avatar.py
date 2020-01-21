@@ -470,6 +470,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         except Exception:
             LOG_CURRENT_EXCEPTION()
 
+        from helpers import EffectsList
+        EffectsList.EffectsListPlayer.clear()
         self.__vehicleToVehicleCollisions = None
         if self.intUserSettings is not None:
             self.intUserSettings.onProxyBecomeNonPlayer()
@@ -1175,6 +1177,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     self.__startWaitingForCharge(timeLeft)
                 elif status in (DUALGUN_CHARGER_STATUS.CANCELED, DUALGUN_CHARGER_STATUS.UNAVAILABLE):
                     self.__cancelWaitingForCharge()
+                elif status == DUALGUN_CHARGER_STATUS.APPLIED:
+                    self.__dropStopUntilFireMode()
             return
 
     def updateVehicleSetting(self, vehicleID, code, value):
@@ -1695,6 +1699,14 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.__gunDamagedShootSound.play()
         return
 
+    def __dropStopUntilFireMode(self):
+        if self.__stopUntilFire:
+            self.__stopUntilFire = False
+            if BigWorld.time() - self.__stopUntilFireStartTime > 60.0:
+                self.__cruiseControlMode = _CRUISE_CONTROL_MODE.NONE
+            self.__updateCruiseControlPanel()
+            self.moveVehicle(self.makeVehicleMovementCommandByKeys(), True)
+
     def shoot(self, isRepeat=False):
         if self.__tryShootCallbackId is None:
             self.__tryShootCallbackId = BigWorld.callback(0.0, self.__tryShootCallback)
@@ -1739,12 +1751,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     shotArgs = (vehicle.activeGunIndex, False)
             self.__startWaitingForShot(error != CANT_SHOOT_ERROR.EMPTY_CLIP, shotArgs)
             TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.PLAYER_SHOOT, aimingInfo=self.__aimingInfo)
-            if self.__stopUntilFire:
-                self.__stopUntilFire = False
-                if BigWorld.time() - self.__stopUntilFireStartTime > 60.0:
-                    self.__cruiseControlMode = _CRUISE_CONTROL_MODE.NONE
-                self.__updateCruiseControlPanel()
-                self.moveVehicle(self.makeVehicleMovementCommandByKeys(), True)
+            self.__dropStopUntilFireMode()
             return
 
     def shootDualGun(self, chargeActionType, isPrepared=False, isRepeat=False):

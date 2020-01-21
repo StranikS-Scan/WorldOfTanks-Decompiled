@@ -436,6 +436,19 @@ def _migrateTo48(core, data, initialized):
             clear['onceOnlyHints'] = clear.get('onceOnlyHints', 0) | settingOffset
 
 
+def _migrateTo49(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    data['delete'].extend((91, 92, 93, 94, 95))
+    clear = data['clear']
+    newYearFilter = 256
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.CAROUSEL_FILTER_2, 0)
+    if storedValue & newYearFilter:
+        clear['carousel_filter'] = clear.get('carousel_filter', 0) | newYearFilter
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.EPICBATTLE_CAROUSEL_FILTER_2, 0)
+    if storedValue & newYearFilter:
+        clear['epicCarouselFilter2'] = clear.get('epicCarouselFilter2', 0) | newYearFilter
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -622,6 +635,10 @@ _versions = ((1,
   False),
  (48,
   _migrateTo48,
+  False,
+  False),
+ (49,
+  _migrateTo49,
   False,
   False))
 

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/sound_components.py
 from collections import namedtuple
+from wrapped_reflection_framework import ReflectionMetaclass
 __all__ = ('SoundPair', 'StatedSounds', 'HullAimingSound', 'SoundSiegeModeStateChange', 'WWTripleSoundConfig')
 SoundPair = namedtuple('SoundPair', ('PC', 'NPC'))
 StatedSounds = namedtuple('StatedSound', ('state', 'underLimitSounds', 'overLimitSounds'))
@@ -9,9 +10,13 @@ SoundSiegeModeStateChange = namedtuple('SoundSiegeModeStateChange', ['on', 'off'
 
 class WWTripleSoundConfig(object):
     __slots__ = ('__eventNames',)
+    __metaclass__ = ReflectionMetaclass
 
     def __init__(self, wwsound, wwsoundPC, wwsoundNPC):
         super(WWTripleSoundConfig, self).__init__()
+        self._configure(wwsound, wwsoundPC, wwsoundNPC)
+
+    def _configure(self, wwsound, wwsoundPC, wwsoundNPC):
         if wwsoundPC:
             if wwsoundNPC:
                 self.__eventNames = (wwsoundPC, wwsoundNPC)

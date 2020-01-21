@@ -128,16 +128,20 @@ class TrajectoryViewHintPlugin(HintPanelPlugin):
 
     def start(self):
         arenaDP = self.sessionProvider.getArenaDP()
+        if arenaDP is not None:
+            vInfo = arenaDP.getVehicleInfo()
+            self.__isObserver = vInfo.isObserver()
         crosshairCtrl = self.sessionProvider.shared.crosshair
+        if crosshairCtrl is not None:
+            crosshairCtrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
+            crosshairCtrl.onStrategicCameraChanged += self.__onStrategicCameraChanged
         vehicleCtrl = self.sessionProvider.shared.vehicleState
-        vInfo = arenaDP.getVehicleInfo()
-        self.__isObserver = vInfo.isObserver()
-        crosshairCtrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
-        crosshairCtrl.onStrategicCameraChanged += self.__onStrategicCameraChanged
-        vehicleCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+        if vehicleCtrl is not None:
+            vehicleCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
         self.__settings = AccountSettings.getSettings(TRAJECTORY_VIEW_HINT_SECTION)
         self._updateCounterOnStart(self.__settings, self._HINT_DAY_COOLDOWN, self._HINT_BATTLES_COOLDOWN)
         self.__setup(crosshairCtrl, vehicleCtrl)
+        return
 
     def stop(self):
         ctrl = self.sessionProvider.shared.crosshair
@@ -322,7 +326,7 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
 
     def __updateHint(self):
         LOG_DEBUG('Updating siege mode: hint')
-        if self.__isInPostmortem or self.__isObserver:
+        if self.__isInPostmortem or self.__isObserver or self.sessionProvider.isReplayPlaying:
             return
 
         def _showHint():

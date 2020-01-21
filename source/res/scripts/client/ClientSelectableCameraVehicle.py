@@ -46,6 +46,7 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         self.__shadowModelFashion = None
         if self.__fakeShadowModel is not None and self.__fakeShadowModel in BigWorld.models():
             BigWorld.delModel(self.__fakeShadowModel)
+            self.__fakeShadowModel.fashion = None
             self.__fakeShadowModel = None
         super(ClientSelectableCameraVehicle, self).onLeaveWorld()
         return

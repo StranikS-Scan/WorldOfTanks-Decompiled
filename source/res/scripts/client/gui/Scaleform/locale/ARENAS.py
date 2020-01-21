@@ -46,12 +46,6 @@ class ARENAS(object):
     TYPE_CTF30X30_DESCRIPTION = '#arenas:type/ctf30x30/description'
     TYPE_DOMINATION30X30_NAME = '#arenas:type/domination30x30/name'
     TYPE_DOMINATION30X30_DESCRIPTION = '#arenas:type/domination30x30/description'
-    TYPE_CTF_DESCRIPTIONNEWYEAR = '#arenas:type/ctf/descriptionNewYear'
-    TYPE_DOMINATION_DESCRIPTIONNEWYEAR = '#arenas:type/domination/descriptionNewYear'
-    TYPE_ASSAULT_DESCRIPTIONNEWYEAR1 = '#arenas:type/assault/descriptionNewYear1'
-    TYPE_ASSAULT_DESCRIPTIONNEWYEAR2 = '#arenas:type/assault/descriptionNewYear2'
-    TYPE_CTF30X30_DESCRIPTIONNEWYEAR = '#arenas:type/ctf30x30/descriptionNewYear'
-    TYPE_DOMINATION30X30_DESCRIPTIONNEWYEAR = '#arenas:type/domination30x30/descriptionNewYear'
     C_01_KARELIA_NAME = '#arenas:01_karelia/name'
     C_01_KARELIA_DESCRIPTION = '#arenas:01_karelia/description'
     C_02_MALINOVKA_NAME = '#arenas:02_malinovka/name'
@@ -185,12 +179,6 @@ class ARENAS(object):
      TYPE_CTF30X30_DESCRIPTION,
      TYPE_DOMINATION30X30_NAME,
      TYPE_DOMINATION30X30_DESCRIPTION,
-     TYPE_CTF_DESCRIPTIONNEWYEAR,
-     TYPE_DOMINATION_DESCRIPTIONNEWYEAR,
-     TYPE_ASSAULT_DESCRIPTIONNEWYEAR1,
-     TYPE_ASSAULT_DESCRIPTIONNEWYEAR2,
-     TYPE_CTF30X30_DESCRIPTIONNEWYEAR,
-     TYPE_DOMINATION30X30_DESCRIPTIONNEWYEAR,
      C_01_KARELIA_NAME,
      C_01_KARELIA_DESCRIPTION,
      C_02_MALINOVKA_NAME,

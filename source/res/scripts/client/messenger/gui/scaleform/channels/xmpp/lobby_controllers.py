@@ -10,6 +10,7 @@ from messenger.gui.Scaleform.channels.layout import LobbyLayout
 from messenger.m_constants import PROTO_TYPE, CLIENT_ACTION_ID, USER_TAG
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
+from messenger.proto.xmpp.errors import ServerActionError
 from messenger.proto.xmpp.gloox_constants import ERROR_TYPE
 from messenger.proto.xmpp.jid import makeContactJID
 from messenger.proto.xmpp.messages.formatters import XmppLobbyMessageBuilder, XmppLobbyUsersChatBuilder
@@ -286,7 +287,7 @@ class ClanUserRoomController(UserRoomController):
         self.__reJoinCallbackID = BigWorld.callback(delay, self.__doNextRejoin)
 
     def __me_onErrorReceived(self, error):
-        if error.getActionID() == CLIENT_ACTION_ID.JOIN_CLAN_ROOM and error.getErrorType() == ERROR_TYPE.AUTH and error.getCondition() == 'registration-required':
+        if isinstance(error, ServerActionError) and error.getActionID() == CLIENT_ACTION_ID.JOIN_CLAN_ROOM and error.getErrorType() == ERROR_TYPE.AUTH and error.getCondition() == 'registration-required':
             if self.__reJoinCallbackID is None:
                 self.__setRejoinCallback()
         return

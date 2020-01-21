@@ -7,7 +7,7 @@ from frameworks.wulf import ViewModel
 class FullScreenDialogWindowModel(ViewModel):
     __slots__ = ('onAcceptClicked', 'onCancelClicked')
 
-    def __init__(self, properties=8, commands=2):
+    def __init__(self, properties=10, commands=2):
         super(FullScreenDialogWindowModel, self).__init__(properties=properties, commands=commands)
 
     def getDialogType(self):
@@ -58,6 +58,18 @@ class FullScreenDialogWindowModel(ViewModel):
     def setTitleArgs(self, value):
         self._setArray(7, value)
 
+    def getAcceptButtonText(self):
+        return self._getResource(8)
+
+    def setAcceptButtonText(self, value):
+        self._setResource(8, value)
+
+    def getCancelButtonText(self):
+        return self._getResource(9)
+
+    def setCancelButtonText(self, value):
+        self._setResource(9, value)
+
     def _initialize(self):
         super(FullScreenDialogWindowModel, self)._initialize()
         self._addStringProperty('dialogType', 'simple')
@@ -68,5 +80,7 @@ class FullScreenDialogWindowModel(ViewModel):
         self._addBoolProperty('isAcceptDisabled', False)
         self._addResourceProperty('titleBody', R.invalid())
         self._addArrayProperty('titleArgs', Array())
+        self._addResourceProperty('acceptButtonText', R.invalid())
+        self._addResourceProperty('cancelButtonText', R.invalid())
         self.onAcceptClicked = self._addCommand('onAcceptClicked')
         self.onCancelClicked = self._addCommand('onCancelClicked')

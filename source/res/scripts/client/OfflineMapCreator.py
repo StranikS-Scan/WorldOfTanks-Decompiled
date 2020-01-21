@@ -8,8 +8,7 @@ import constants
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
 from helpers import dependency
 from skeletons.map_activities import IMapActivities
-_CFG = {'basic': {'v_scale': 1.3,
-           'v_start_angles': Math.Vector3(0, 0, 0),
+_CFG = {'basic': {'v_start_angles': Math.Vector3(0, 0, 0),
            'v_start_pos': Math.Vector3(50, 0, 50),
            'cam_start_dist': 9.0,
            'cam_start_angles': [-25.0, 110.0],
@@ -24,7 +23,6 @@ _CFG = {'basic': {'v_scale': 1.3,
            'emblems_alpha_undamaged': 0.9,
            'shadow_light_dir': (0.55, -1, -1.7)}}
 _SPACE_NAME = None
-_V_SCALE = None
 _V_START_ANGLES = None
 _V_START_POS = None
 _CAM_START_DIST = None
@@ -185,7 +183,6 @@ class OfflineMapCreator(object):
         global _CAM_FLUENCY
         global _SHADOW_LIGHT_DIR
         global _CAM_START_TARGET_POS
-        global _V_SCALE
         global _SPACE_NAME
         global _CAM_START_ANGLES
         global _V_START_POS
@@ -195,7 +192,6 @@ class OfflineMapCreator(object):
         global _CAM_SENS
         cfg = _CFG[t]
         _SPACE_NAME = mapName
-        _V_SCALE = cfg['v_scale']
         _V_START_ANGLES = cfg['v_start_angles']
         _V_START_POS = cfg['v_start_pos']
         _CAM_START_DIST = cfg['cam_start_dist']

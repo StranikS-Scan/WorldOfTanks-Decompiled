@@ -56,7 +56,6 @@ class PrimaryHintController(object):
             self.hideWithTimeout()
         if self.typeId == HINT_TYPE.HINT_SNIPER_LEVEL0:
             self.playSound(self.TASK_DONE_SOUND_ID)
-            self.muted = True
         if self.typeId in self.HINT_IDS_TO_COMPLETE:
             if not self._completed:
                 self.playSound(self.TASK_START_SOUND_ID)

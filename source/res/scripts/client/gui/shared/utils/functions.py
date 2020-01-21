@@ -192,15 +192,8 @@ def getArenaFullName(arenaTypeID):
     return arenaName
 
 
-def getBattleSubTypeWinText(arenaTypeID, teamID, isNewYear=False):
+def getBattleSubTypeWinText(arenaTypeID, teamID):
     root = R.strings.arenas.type.dyn(ArenaType.g_cache[arenaTypeID].gameplayName)
-    if isNewYear and random.random() <= 1.0 / 3.0:
-        nyDescription = root.dyn('descriptionNewYear')
-        if nyDescription.exists():
-            return backport.text(nyDescription())
-        nyDescription = root.dyn('descriptionNewYear{}'.format(teamID))
-        if nyDescription.exists():
-            return backport.text(nyDescription())
     description = root.dyn('description')
     if not description:
         description = root.dyn('description{}'.format(teamID))

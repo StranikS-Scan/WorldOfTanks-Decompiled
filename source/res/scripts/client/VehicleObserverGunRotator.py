@@ -7,12 +7,8 @@ from VehicleGunRotator import VehicleGunRotator
 
 class VehicleObserverGunRotator(VehicleGunRotator):
 
-    def __init__(self, avatar):
-        self.__avatar = avatar
-        super(VehicleObserverGunRotator, self).__init__(avatar)
-
     def start(self):
-        if not self.__avatar.isVehicleAlive:
+        if not self._avatar.isVehicleAlive:
             return
         super(VehicleObserverGunRotator, self).start()
 
@@ -27,8 +23,10 @@ class VehicleObserverGunRotator(VehicleGunRotator):
         return
 
     def setShotPosition(self, vehicleID, shotPos, shotVec, dispersionAngle, forceValueRefresh=False):
-        self.__avatar.observedVehicleData[vehicleID].dispAngle = dispersionAngle
+        self._avatar.observedVehicleData[vehicleID].dispAngle = dispersionAngle
         super(VehicleObserverGunRotator, self).setShotPosition(vehicleID, shotPos, shotVec, dispersionAngle, True)
+        if self._avatar.inCharge:
+            self._updateMultiGunCollisionData()
 
     def updateRotationAndGunMarker(self, shotPoint, timeDiff):
         pass
@@ -59,5 +57,5 @@ class VehicleObserverGunRotator(VehicleGunRotator):
         return Math.Matrix(vehicle.matrix) if vehicle is not None else super(VehicleObserverGunRotator, self).getAvatarOwnVehicleStabilisedMatrix()
 
     def getAttachedVehicleID(self):
-        vehicle = self.__avatar.getVehicleAttached()
+        vehicle = self._avatar.getVehicleAttached()
         return vehicle.id if vehicle is not None else super(VehicleObserverGunRotator, self).getAttachedVehicleID()

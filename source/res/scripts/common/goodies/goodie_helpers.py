@@ -5,7 +5,7 @@ from copy import deepcopy
 from GoodieConditions import MaxVehicleLevel
 from GoodieDefinition import GoodieDefinition
 from GoodieResources import Gold, Credits, Experience, CrewExperience, FreeExperience, FrontlineExperience
-from GoodieTargets import BuyPremiumAccount, BuySlot, PostBattle, BuyGoldTankmen, FreeExperienceConversion, BuyVehicle, EpicMeta
+from GoodieTargets import BuyPremiumAccount, BuySlot, PostBattle, BuyGoldTankmen, FreeExperienceConversion, BuyVehicle, EpicMeta, DemountOptionalDevice
 from GoodieValue import GoodieValue
 from Goodies import GoodieException
 from debug_utils import LOG_ERROR
@@ -18,7 +18,8 @@ _TARGETS = {GOODIE_TARGET_TYPE.ON_BUY_PREMIUM: BuyPremiumAccount,
  GOODIE_TARGET_TYPE.ON_BUY_GOLD_TANKMEN: BuyGoldTankmen,
  GOODIE_TARGET_TYPE.ON_FREE_XP_CONVERSION: FreeExperienceConversion,
  GOODIE_TARGET_TYPE.ON_BUY_VEHICLE: BuyVehicle,
- GOODIE_TARGET_TYPE.ON_EPIC_META: EpicMeta}
+ GOODIE_TARGET_TYPE.ON_EPIC_META: EpicMeta,
+ GOODIE_TARGET_TYPE.ON_DEMOUNT_OPTIONAL_DEVICE: DemountOptionalDevice}
 _RESOURCES = {GOODIE_RESOURCE_TYPE.GOLD: Gold,
  GOODIE_RESOURCE_TYPE.CREDITS: Credits,
  GOODIE_RESOURCE_TYPE.XP: Experience,
@@ -38,7 +39,8 @@ GOODIE_TARGET_TO_TEXT = {BuyPremiumAccount: 'premium',
  BuyGoldTankmen: 'gold_tankmen',
  FreeExperienceConversion: 'free_xp_conversion',
  BuyVehicle: 'vehicle',
- EpicMeta: 'epic_meta'}
+ EpicMeta: 'epic_meta',
+ DemountOptionalDevice: 'demount_optional_device'}
 GOODIE_TEXT_TO_CONDITION = {'max_vehicle_level': GOODIE_CONDITION_TYPE.MAX_VEHICLE_LEVEL}
 GOODIE_TEXT_TO_RESOURCE = {'credits': GOODIE_RESOURCE_TYPE.CREDITS,
  'experience': GOODIE_RESOURCE_TYPE.XP,
@@ -52,7 +54,8 @@ GOODIE_TEXT_TO_TARGET = {'premium': GOODIE_TARGET_TYPE.ON_BUY_PREMIUM,
  'gold_tankmen': GOODIE_TARGET_TYPE.ON_BUY_GOLD_TANKMEN,
  'free_xp_conversion': GOODIE_TARGET_TYPE.ON_FREE_XP_CONVERSION,
  'vehicle': GOODIE_TARGET_TYPE.ON_BUY_VEHICLE,
- 'epic_meta': GOODIE_TARGET_TYPE.ON_EPIC_META}
+ 'epic_meta': GOODIE_TARGET_TYPE.ON_EPIC_META,
+ 'demount_optional_device': GOODIE_TARGET_TYPE.ON_DEMOUNT_OPTIONAL_DEVICE}
 
 def loadDefinitions(d):
     goodies = {'goodies': {},

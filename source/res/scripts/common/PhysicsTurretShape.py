@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/PhysicsTurretShape.py
-import BigWorld
 import Math
+import collections
+from wrapped_reflection_framework import ReflectionMetaclass
 _DEBUG_WITH_SVG = False
 
 class PhysicsTurretShape:
+    __metaclass__ = ReflectionMetaclass
     PARAMS_DESC = {'zScale': (0.0, 2.0, 1.0, 0),
      'zPos': (-2.0, 2.0, 0.0, 1),
      'xScale': (0.0, 2.0, 1.0, 2),
@@ -22,16 +24,28 @@ class PhysicsTurretShape:
      'topSlope': (0.0, 1.0, 0.5, 14)}
     PARAM_NAME_BY_INDEX = dict(((desc[3], name) for name, desc in PARAMS_DESC.iteritems()))
 
-    def __init__(self, bbMin, bbMax):
+    def __init__(self, bbMin=None, bbMax=None):
         self.__polys = None
         self.__params = dict(zip(PhysicsTurretShape.PARAMS_DESC.iterkeys(), (d[2] for d in PhysicsTurretShape.PARAMS_DESC.itervalues())))
         self.setTurretBox(bbMin, bbMax)
         self.__isDirty = True
+        self.__isSetParams = False
         return
 
+    def getIsDirty(self):
+        return self.__isDirty
+
+    def getIsSetParams(self):
+        return self.__isSetParams
+
     def setTurretBox(self, bbMin, bbMax):
-        self.__box = (Math.Vector3(bbMin), Math.Vector3(bbMax))
-        self.__isDirty = True
+        if bbMin is None or bbMax is None:
+            return
+        else:
+            self.__box = (Math.Vector3(bbMin), Math.Vector3(bbMax))
+            if (bbMin, bbMax != self.__box):
+                self.__isDirty = True
+            return
 
     def setParam(self, name, value):
         d = PhysicsTurretShape.PARAMS_DESC[name]
@@ -42,11 +56,25 @@ class PhysicsTurretShape:
         self.setParam(PhysicsTurretShape.PARAM_NAME_BY_INDEX[index], value)
 
     def setParams(self, params):
-        for i, value in enumerate(params):
-            self.setParamByIndex(i, value)
+        if params is None:
+            return
+        else:
+            for i, value in enumerate(params):
+                self.setParamByIndex(i, value)
+
+            self.__isSetParams = True
+            return
 
     def getParam(self, name):
         return self.__params[name]
+
+    def getParamsValues(self):
+        values = []
+        names = collections.OrderedDict(sorted(PhysicsTurretShape.PARAM_NAME_BY_INDEX.iteritems())).values()
+        for name in names:
+            values.append(self.getParam(name))
+
+        return values
 
     def getPolygons(self):
         if self.__isDirty:
@@ -138,16 +166,16 @@ class PhysicsTurretShape:
             t = _intersectPlaneSegment(plPt, plN, s1, s2)
             verts[i + 8] = s1 + t * (s2 - s1)
 
-        inds = ((7, 6, 5, 4, 3, 2, 1, 0),
-         (8, 9, 10, 11, 12, 13, 14, 15),
-         (0, 1, 9, 8),
-         (1, 2, 10, 9),
-         (2, 3, 11, 10),
-         (3, 4, 12, 11),
-         (4, 5, 13, 12),
-         (5, 6, 14, 13),
-         (6, 7, 15, 14),
-         (7, 0, 8, 15))
+        inds = ((0, 7, 1, 6, 2, 5, 3, 4),
+         (8, 15, 9, 14, 10, 13, 11, 12),
+         (0, 1, 8, 9),
+         (1, 2, 9, 10),
+         (2, 3, 10, 11),
+         (3, 4, 11, 12),
+         (4, 5, 12, 13),
+         (5, 6, 13, 14),
+         (6, 7, 14, 15),
+         (7, 0, 15, 8))
         self.__polys = (tuple(verts), inds)
         if _DEBUG_WITH_SVG:
             scene = _Scene('turret')

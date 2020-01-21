@@ -136,6 +136,18 @@ def getVehicleDeviceStates(avatar=None):
     return result
 
 
+def getAvatarPlayLimits(avatar=None):
+    if avatar is None:
+        avatar = BigWorld.player()
+    try:
+        result = avatar.playLimits
+    except AttributeError:
+        _logger.exception('Attribute "playLimits" not found')
+        result = {}
+
+    return result
+
+
 def getVehicleTypeDescriptor(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()

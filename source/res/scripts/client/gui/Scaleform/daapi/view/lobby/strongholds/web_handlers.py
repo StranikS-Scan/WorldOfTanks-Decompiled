@@ -4,9 +4,11 @@ from web.web_client_api import webApiCollection
 from web.web_client_api.clans import ClansWebApi
 from web.web_client_api.request import RequestWebApi
 from web.web_client_api.shop import ShopWebApi
-from web.web_client_api.sound import SoundWebApi
+from web.web_client_api.sound import SoundWebApi, SoundStateWebApi
 from web.web_client_api.strongholds import StrongholdsWebApi
 from web.web_client_api.ui import NotificationWebApi, OpenWindowWebApi, OpenTabWebApi, ContextMenuWebApi, CloseWindowWebApi
+from web.web_client_api.vehicles import VehiclesWebApi
+from web.web_client_api.arenas import ArenasWebApi
 
 class _OpenWindowWebApi(OpenWindowWebApi):
 
@@ -53,4 +55,4 @@ def _createCloseWindowWebApi(onBrowserClose=None):
 
 
 def createStrongholdsWebHandlers(onBrowserOpen=None, onBrowserClose=None):
-    return webApiCollection(_createCloseWindowWebApi(onBrowserClose=onBrowserClose), _createOpenWindowWebApi(onBrowserOpen=onBrowserOpen, onBrowserClose=onBrowserClose), ClansWebApi, ContextMenuWebApi, NotificationWebApi, OpenTabWebApi, RequestWebApi, StrongholdsWebApi, ShopWebApi, SoundWebApi)
+    return webApiCollection(_createCloseWindowWebApi(onBrowserClose=onBrowserClose), _createOpenWindowWebApi(onBrowserOpen=onBrowserOpen, onBrowserClose=onBrowserClose), ClansWebApi, ContextMenuWebApi, NotificationWebApi, OpenTabWebApi, RequestWebApi, StrongholdsWebApi, ShopWebApi, SoundWebApi, SoundStateWebApi, VehiclesWebApi, ArenasWebApi)

@@ -45,6 +45,7 @@ from helpers import dependency
 from helpers import i18n, strcmp
 from items import tankmen
 from items.components.crew_skins_constants import CREW_SKIN_PROPERTIES_MASKS, NO_CREW_SKIN_ID, NO_CREW_SKIN_SOUND_SET, TANKMAN_SEX
+from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -365,6 +366,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
 class PersonalCaseDataProvider(object):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.instance(ILobbyContext)
+    bootcamp = dependency.descriptor(IBootcampController)
 
     def __init__(self, tmanInvID):
         self.tmanInvID = tmanInvID
@@ -375,7 +377,7 @@ class PersonalCaseDataProvider(object):
         tankman = items.getTankman(self.tmanInvID)
         changeRoleCost = items.shop.changeRoleCost
         defaultChangeRoleCost = items.shop.defaults.changeRoleCost
-        if changeRoleCost != defaultChangeRoleCost:
+        if changeRoleCost != defaultChangeRoleCost and not self.bootcamp.isInBootcamp():
             discount = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'changeRoleCost', True, Money(gold=changeRoleCost), Money(gold=defaultChangeRoleCost))
         else:
             discount = None

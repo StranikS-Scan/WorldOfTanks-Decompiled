@@ -1,21 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/marathon/marathon_reward_view.py
 import logging
-from frameworks.wulf import ViewSettings
+from account_helpers import AccountSettings
+from frameworks.wulf import ViewSettings, WindowFlags
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.marathon.marathon_reward_view_model import MarathonRewardViewModel
 from gui.impl.lobby.marathon.marathon_reward_sounds import MarathonVideos, onVideoStart, onVideoDone
 from gui.impl.pub import ViewImpl
-from gui.impl.pub.lobby_window import LobbyOverlay
+from gui.impl.pub.lobby_window import LobbyWindow
 from gui.server_events.events_dispatcher import showMissionsMarathon
 from gui.shared.event_dispatcher import selectVehicleInHangar
 _logger = logging.getLogger(__name__)
 
 class MarathonRewardView(ViewImpl):
-    __slots__ = ('__congratsSourceId',)
+    __slots__ = ('__congratsSourceId', '__videoShownKey')
 
     def __init__(self, *args, **kwargs):
         self.__congratsSourceId = 0
+        self.__videoShownKey = ''
         settings = ViewSettings(R.views.lobby.marathon.marathon_reward_view.MarathonRewardView())
         settings.model = MarathonRewardViewModel()
         settings.args = args
@@ -31,6 +33,7 @@ class MarathonRewardView(ViewImpl):
         if args:
             specialRewardData = args[0]
             self.__congratsSourceId = specialRewardData.congratsSourceId
+            self.__videoShownKey = specialRewardData.videoShownKey
             with self.viewModel.transaction() as model:
                 model.setIsGoToVehicleBtnEnabled(specialRewardData.goToVehicleBtn)
                 model.setVideoSource(specialRewardData.sourceName)
@@ -54,6 +57,7 @@ class MarathonRewardView(ViewImpl):
         self.viewModel.onVideoStarted -= self.__onVideoStarted
         self.viewModel.onVideoStopped -= self.__onVideoStopped
         onVideoDone()
+        AccountSettings.setUIFlag(self.__videoShownKey, True)
 
     def __onGoToVehicle(self, _=None):
         self.destroyWindow()
@@ -73,9 +77,9 @@ class MarathonRewardView(ViewImpl):
         onVideoDone()
 
 
-class MarathonRewardViewWindow(LobbyOverlay):
+class MarathonRewardViewWindow(LobbyWindow):
     __slots__ = ()
 
     def __init__(self, *args, **kwargs):
-        super(MarathonRewardViewWindow, self).__init__(content=MarathonRewardView(*args, **kwargs), decorator=None)
+        super(MarathonRewardViewWindow, self).__init__(content=MarathonRewardView(*args, **kwargs), wndFlags=WindowFlags.OVERLAY, decorator=None)
         return

@@ -30,10 +30,11 @@ _INTRO_VIDEO_MUSIC_START_EVENT = 'bc_music_video_intro_start'
 _INTRO_VIDEO_MUSIC_STOP_EVENT = 'bc_music_video_intro_stop'
 _INTRO_VIDEO_MUSIC_PAUSE_EVENT = 'bc_music_video_intro_pause'
 _INTRO_VIDEO_MUSIC_RESUME_EVENT = 'bc_music_video_intro_resume'
+_INTRO_VIDEO_MUSIC_TO_LOOP_EVENT = 'bc_music_transition_to_loop'
 _DEFAULT_VIDEO_BUFFERING_TIME = 0.5
 
 class StateBattlePreparing(AbstractState):
-    soundController = dependency.instance(ISoundsController)
+    soundController = dependency.descriptor(ISoundsController)
     appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self, lessonNum, account):
@@ -64,8 +65,8 @@ class StateBattlePreparing(AbstractState):
         weave(self.__weaver, self)
         if self.isVideoPlayingLesson:
             self.__isIntroVideoFinished = False
-            BigWorld.delaySpaceLoad(True)
             self.__oldSpaceEnv = self.soundController.setEnvForSpace(GuiGlobalSpaceID.BATTLE_LOADING, BCBattleLoadingSpaceEnv)
+        self._soundFilter.start()
 
     def deactivate(self):
         LOG_DEBUG_DEV_BOOTCAMP('StateBattlePreparing.deactivate')
@@ -78,14 +79,12 @@ class StateBattlePreparing(AbstractState):
             self.soundController.setEnvForSpace(GuiGlobalSpaceID.BATTLE_LOADING, self.__oldSpaceEnv)
         self.onAvatarBecomeNonPlayer()
         self.__weaver.clear()
+        self._soundFilter.stop()
         return
 
     @property
     def isVideoPlayingLesson(self):
         return False if BattleReplay.g_replayCtrl.isTimeWarpInProgress else self.__lessonId == 0
-
-    def onAvatarBecomeNonPlayer(self):
-        BigWorld.finishDelayedLoading()
 
     def handleKeyEvent(self, event):
         pass
@@ -124,6 +123,7 @@ class StateBattlePreparing(AbstractState):
              'backgroundMusicStopEvent': _INTRO_VIDEO_MUSIC_STOP_EVENT,
              'backgroundMusicPauseEvent': _INTRO_VIDEO_MUSIC_PAUSE_EVENT,
              'backgroundMusicResumeEvent': _INTRO_VIDEO_MUSIC_RESUME_EVENT,
+             'backgroundMusicToLoopEvent': _INTRO_VIDEO_MUSIC_TO_LOOP_EVENT,
              'bufferTime': Settings.g_instance.userPrefs.readFloat(Settings.VIDEO_BUFFERING_TIME, _DEFAULT_VIDEO_BUFFERING_TIME)})
         return introVideoData
 
@@ -138,12 +138,7 @@ class StateBattlePreparing(AbstractState):
          bb[0][1],
          bb[1][0],
          bb[1][1]))
-        g_bootcampEvents.onIntroVideoLoaded()
-        noSounds = BattleReplay.g_replayCtrl.isTimeWarpInProgress
-        if not noSounds:
-            SoundGroups.g_instance.playSound2D('bc_loading_tips')
-        if self.isVideoPlayingLesson and not noSounds:
-            SoundGroups.g_instance.playSound2D('vo_bc_welcome')
+        g_bootcampEvents.onBootcampSpaceLoaded()
         return True
 
     def onVehicleOnEnterWorld(self, vehicle):
@@ -177,13 +172,14 @@ class StateBattlePreparing(AbstractState):
 
     def __onBCIntroVideoStop(self):
         from bootcamp.Bootcamp import g_bootcamp
-        self._soundFilter.start()
+        noSounds = BattleReplay.g_replayCtrl.isTimeWarpInProgress
+        if not noSounds:
+            SoundGroups.g_instance.playSound2D('bc_loading_tips')
+            if self.isVideoPlayingLesson:
+                SoundGroups.g_instance.playSound2D('vo_bc_welcome')
         LOG_DEBUG_DEV_BOOTCAMP('__onBCIntroVideoStop called')
         self.__isIntroVideoFinished = True
         g_bootcamp.setIntroVideoPlayed()
-        if self.isVideoPlayingLesson:
-            BigWorld.delaySpaceLoad(False)
-            BigWorld.finishDelayedLoading()
         for vehicle in self.__onEnterWorldVehicles:
             BigWorld.player().vehicle_onEnterWorld(vehicle)
 

@@ -19,8 +19,8 @@ class BCIntroVideoPageMeta(View):
     def handleError(self, data):
         self._printOverrideError('handleError')
 
-    def as_playVideoS(self, data):
-        return self.flashObject.as_playVideo(data) if self._isDAAPIInited() else None
+    def as_setDataS(self, data):
+        return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
     def as_updateProgressS(self, percent):
         return self.flashObject.as_updateProgress(percent) if self._isDAAPIInited() else None

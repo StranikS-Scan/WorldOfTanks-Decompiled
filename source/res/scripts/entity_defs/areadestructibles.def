@@ -79,32 +79,6 @@
   <ClientMethods></ClientMethods>
   <CellMethods>
     <reset></reset>
-    <damageDestructibleAndTakeOverProjectile>
-      <Arg>	UINT8	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	FLOAT32	</Arg>
-      <Arg>	VECTOR3	</Arg>
-      <Arg>	VECTOR3	</Arg>
-      <Arg>	ATTACKER_INFO	</Arg>
-      <Arg>	SHOT_ID	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	ARRAY	  <of>	MAILBOX	</of>
-      </Arg>
-      <Arg>	TUPLE	  <of>	FLOAT32	</of>
-        <size>	2	</size>
-      </Arg>
-      <Arg>	FLOAT32	</Arg>
-      <Arg>	FLOAT64	</Arg>
-      <Arg>	VECTOR3	</Arg>
-      <Arg>	VECTOR3	</Arg>
-      <Arg>	FLOAT32	</Arg>
-      <Arg>	FLOAT32	</Arg>
-      <Arg>	FLOAT32	</Arg>
-      <Arg>	FLOAT32	</Arg>
-      <Arg>	FLOAT64	</Arg>
-    </damageDestructibleAndTakeOverProjectile>
     <damageDestructible>
       <Arg>	UINT8	</Arg>
       <Arg>	UINT8	</Arg>

@@ -53,6 +53,13 @@
       <undamaged>	vehicles/russian/R127_T44_100_P/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/russian/R127_T44_100_P/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/russian/R127_T44_100_P/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <FULL3D>
+          <undamaged>	vehicles/russian/R127_T44_100_P/_skins/FULL3D/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R127_T44_100_P/_skins/FULL3D/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R127_T44_100_P/_skins/FULL3D/crash/lod0/Hull.model	</exploded>
+        </FULL3D>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -930,6 +937,13 @@
         <undamaged>	vehicles/russian/R127_T44_100_P/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R127_T44_100_P/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/russian/R127_T44_100_P/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <FULL3D>
+            <undamaged>	vehicles/russian/R127_T44_100_P/_skins/FULL3D/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R127_T44_100_P/_skins/FULL3D/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R127_T44_100_P/_skins/FULL3D/crash/lod0/Chassis.model	</exploded>
+          </FULL3D>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1657,6 +1671,13 @@
             <undamaged>	vehicles/russian/R127_T44_100_P/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R127_T44_100_P/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R127_T44_100_P/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <FULL3D>
+                <undamaged>	vehicles/russian/R127_T44_100_P/_skins/FULL3D/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R127_T44_100_P/_skins/FULL3D/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R127_T44_100_P/_skins/FULL3D/crash/lod0/Gun_01.model	</exploded>
+              </FULL3D>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R127_T44_100_P/collision/Gun_01.model	</collisionModelServer>
@@ -1727,6 +1748,13 @@
         <undamaged>	vehicles/russian/R127_T44_100_P/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/russian/R127_T44_100_P/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/russian/R127_T44_100_P/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <FULL3D>
+            <undamaged>	vehicles/russian/R127_T44_100_P/_skins/FULL3D/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R127_T44_100_P/_skins/FULL3D/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R127_T44_100_P/_skins/FULL3D/crash/lod0/Turret_01.model	</exploded>
+          </FULL3D>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R127_T44_100_P/collision/Turret_01.model	</collisionModelServer>

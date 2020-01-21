@@ -9,7 +9,7 @@ from web.web_client_api.request.wgni_token import WgniTokenWebApiMixin
 from web.web_client_api.rewards import RewardsWebApi
 from web.web_client_api.shop import ShopWebApi
 from web.web_client_api.social import SocialWebApi
-from web.web_client_api.sound import SoundStateWebApi, HangarSoundWebApi
+from web.web_client_api.sound import HangarSoundWebApi, SoundStateWebApi
 from web.web_client_api.ui import CloseWindowWebApi, NotificationWebApi
 from web.web_client_api.sound import SoundWebApi
 from web.web_client_api.ui import ContextMenuWebApi, OpenWindowWebApi, VehiclePreviewWebApiMixin, UtilWebApi

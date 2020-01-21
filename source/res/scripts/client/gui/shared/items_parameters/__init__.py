@@ -33,7 +33,7 @@ def _addAutoReload(result, configReloadTimes, shellsCount):
 
 
 def isAutoReloadGun(gun):
-    return _AUTO_RELOAD_TAG in gun.tags
+    return _AUTO_RELOAD_TAG in gun.tags if gun is not None else False
 
 
 def isDualGun(gun):

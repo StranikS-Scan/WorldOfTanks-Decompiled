@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehiclePreview20/vehicle_preview_buying_panel.py
-import math
 import time
 from collections import namedtuple
 import BigWorld
@@ -32,7 +31,7 @@ from gui.shared import events
 from gui.shared.event_dispatcher import showVehicleRentDialog
 from gui.shared.events import HasCtxEvent
 from gui.shared.formatters import icons, text_styles, formatPrice
-from gui.shared.gui_items.gui_item_economics import getPriceTypeAndValue, ActualPrice
+from gui.shared.gui_items.gui_item_economics import getPriceTypeAndValue, ActualPrice, ITEM_PRICE_EMPTY
 from gui.shared.formatters import getItemPricesVO, getItemUnlockPricesVO, chooseItemPriceVO
 from gui.shared.tooltips.formatters import getActionPriceData
 from gui.shared.gui_items.items_actions import factory
@@ -46,14 +45,14 @@ from helpers.i18n import makeString as _ms
 from items_kit_helper import lookupItem, BOX_TYPE, showItemTooltip
 from items_kit_helper import OFFER_CHANGED_EVENT, getActiveOffer, mayObtainForMoney, mayObtainWithMoneyExchange
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IVehicleComparisonBasket, ICalendarController
+from skeletons.gui.game_control import IVehicleComparisonBasket, ICalendarController, IMarathonEventsController
 from skeletons.gui.game_control import ITradeInController, IRestoreController, IHeroTankController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from web.web_client_api.common import ItemPackTypeGroup, ItemPackEntry
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.hero_tank_preview_constants import getHeroTankPreviewParams
-_ButtonState = namedtuple('_ButtonState', ('enabled', 'itemPrice', 'label', 'isAction', 'actionTooltip', 'tooltip', 'title', 'isMoneyEnough', 'isUnlock', 'isPrevItemsUnlock'))
+_ButtonState = namedtuple('_ButtonState', ('enabled', 'itemPrice', 'label', 'icon', 'iconAlign', 'isAction', 'actionTooltip', 'tooltip', 'title', 'isMoneyEnough', 'isUnlock', 'isPrevItemsUnlock', 'customOffer'))
 
 def _buildBuyButtonTooltip(key):
     return makeTooltip(TOOLTIPS.vehiclepreview_buybutton_all(key, 'header'), TOOLTIPS.vehiclepreview_buybutton_all(key, 'body'))
@@ -88,10 +87,6 @@ class _CouponData(object):
         return self.__discount
 
 
-def _buildRestoreButtonTooltip(key, timeLeft):
-    return makeTooltip(header=TOOLTIPS.vehiclepreview_buybutton_all(key, 'header'), body=backport.text(R.strings.tooltips.vehiclePreview.buyButton.dyn(key).dyn('body')(), days=int(math.ceil(timeLeft / 86400))))
-
-
 class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
     appLoader = dependency.descriptor(IAppLoader)
     _itemsCache = dependency.descriptor(IItemsCache)
@@ -101,6 +96,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
     _restores = dependency.descriptor(IRestoreController)
     _heroTanks = dependency.descriptor(IHeroTankController)
     _lobbyContext = dependency.descriptor(ILobbyContext)
+    _marathonsCtrl = dependency.descriptor(IMarathonEventsController)
     __calendarController = dependency.descriptor(ICalendarController)
 
     def __init__(self, skipConfirm=False):
@@ -111,6 +107,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         self._actionType = None
         self._skipConfirm = skipConfirm
         self._disableBuyButton = False
+        self._marathonEvent = None
         self.__previewDP = DefaultVehPreviewDataProvider()
         self.__isHeroTank = heroTankCD and heroTankCD == self._vehicleCD
         self.__price = None
@@ -139,7 +136,9 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         vehicle = g_currentPreviewVehicle.item
         shopPackage = self.__items is not None and self.__couponInfo is None
         frontlineCouponPackage = self.__couponInfo is not None and self.__couponInfo.selected
-        if shopPackage or frontlineCouponPackage:
+        if self._marathonEvent:
+            self.__purchaseMarathonPackage()
+        elif shopPackage or frontlineCouponPackage:
             self.__purchasePackage()
         elif self.__offers is not None:
             self.__purchaseOffer()
@@ -162,6 +161,9 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
                 self.__title = backport.text(R.strings.vehicle_preview.buyingPanel.frontlinePack.titleLabel.inactive())
             self.__update()
 
+    def setMarathonEvent(self, prefix):
+        self._marathonEvent = self._marathonsCtrl.getMarathon(prefix)
+
     def setTimerData(self, endTime):
         if self.__couponInfo is not None:
             return
@@ -171,6 +173,10 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
                 self.__onLeftTimeUpdated()
             self.__updateBtnState()
             return
+
+    def setInfoTooltip(self):
+        tooltip = self._marathonEvent.getVehiclePreviewTitleTooltip()
+        self.as_setSetTitleTooltipS(tooltip)
 
     def setBuyParams(self, buyParams):
         self.__buyParams = buyParams
@@ -210,7 +216,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         self.__update()
         return
 
-    def onCarouselVehilceSelected(self, intCD):
+    def onCarouselVehicleSelected(self, intCD):
         self._vehicleCD = intCD
         g_currentPreviewVehicle.selectVehicle(intCD)
 
@@ -379,6 +385,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
     def __getBtnDataPack(self):
         tooltip = ''
         actionTooltip = None
+        customOffer = None
         price = self.__getPackPrice()
         currency = price.getCurrency()
         if self._disableBuyButton:
@@ -390,11 +397,23 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
             enabled = True
         if self.__currentOffer and self.__currentOffer.bestOffer and self.__currentOffer.eventType:
             actionTooltip = self.__getBestOfferTooltipData(self.__currentOffer.eventType)
+        buttonIcon = None
+        buttonIconAlign = None
+        itemPrices = ItemPrice(price=price, defPrice=self.__oldPrice)
         specialData = getHeroTankPreviewParams() if self.__isHeroTank else None
         if specialData is not None and specialData.buyButtonLabel:
             buttonLabel = backport.text(specialData.buyButtonLabel)
         elif self.__isReferralWindow():
             buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.obtain())
+        elif self._marathonEvent is not None:
+            itemPrices = ITEM_PRICE_EMPTY
+            buttonData = self._marathonEvent.getPreviewBuyBtnData()
+            buttonLabel = buttonData['label']
+            enabled = buttonData['enabled']
+            buttonIcon = buttonData['btnIcon']
+            buttonIconAlign = buttonData['btnIconAlign']
+            tooltip = buttonData['btnTooltip']
+            customOffer = buttonData['customOffer']
         elif self.__items and self.__couponInfo is None:
             buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.buyItemPack())
         elif self.__offers and self.__currentOffer:
@@ -403,7 +422,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         else:
             buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.buy())
         isAction = self.__oldPrice.isDefined() and self.__oldPrice != self.__price or actionTooltip is not None or self.__couponInfo and self.__couponInfo.selected
-        return _ButtonState(enabled=enabled, itemPrice=getItemPricesVO(ItemPrice(price=price, defPrice=self.__oldPrice)), label=buttonLabel, isAction=isAction, actionTooltip=actionTooltip, tooltip=tooltip, title=self.__title, isMoneyEnough=True, isUnlock=False, isPrevItemsUnlock=True)
+        return _ButtonState(enabled=enabled, itemPrice=getItemPricesVO(itemPrices), label=buttonLabel, icon=buttonIcon, iconAlign=buttonIconAlign, isAction=isAction, actionTooltip=actionTooltip, tooltip=tooltip, title=self.__title, isMoneyEnough=True, isUnlock=False, isPrevItemsUnlock=True, customOffer=customOffer)
 
     def __getPackPrice(self):
         if self.__couponInfo and self.__couponInfo.selected:
@@ -424,6 +443,9 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         itemPrice = chooseItemPriceVO(priceType, price)
         currency = price.getCurrency(byWeight=True)
         walletAvailable = self.__walletAvailableForCurrency(currency)
+        buttonLabel = None
+        buttonIcon = None
+        buttonIconAlign = None
         specialData = getHeroTankPreviewParams() if self.__isHeroTank else None
         if specialData is not None and specialData.buyButtonLabel:
             buttonLabel = backport.text(specialData.buyButtonLabel)
@@ -432,7 +454,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         elif priceType == ActualPrice.RENT_PRICE:
             buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.rent())
         elif self.__isHeroTank and self._heroTanks.isAdventHero():
-            buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.toCalendar())
+            buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.showAdventCalendar())
         else:
             buttonLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.buy())
         isAction = False
@@ -458,11 +480,13 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         if self._disableBuyButton or self.__isHeroTank and self._vehicleCD != self._heroTanks.getCurrentTankCD():
             mayObtain = False
             isMoneyEnough = False
-        return _ButtonState(enabled=mayObtain, itemPrice=itemPrice, label=buttonLabel, isAction=isAction, actionTooltip=actionTooltip, tooltip=notEnoughMoneyTooltip, title=self.__title, isMoneyEnough=isMoneyEnough, isUnlock=False, isPrevItemsUnlock=True)
+        return _ButtonState(enabled=mayObtain, itemPrice=itemPrice, label=buttonLabel, icon=buttonIcon, iconAlign=buttonIconAlign, isAction=isAction, actionTooltip=actionTooltip, tooltip=notEnoughMoneyTooltip, title=self.__title, isMoneyEnough=isMoneyEnough, isUnlock=False, isPrevItemsUnlock=True, customOffer=None)
 
     def __getBtnDataLockedVehicle(self, vehicle):
         stats = self._itemsCache.items.stats
         tooltip = ''
+        buttonIcon = None
+        buttonIconAlign = None
         nodeCD = vehicle.intCD
         _, isXpEnough = g_techTreeDP.isVehicleAvailableToUnlock(nodeCD, self._vehicleLevel)
         unlocks = self._itemsCache.items.stats.unlocks
@@ -480,7 +504,7 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
             buyLabel = backport.text(specialData.buyButtonLabel)
         else:
             buyLabel = backport.text(R.strings.vehicle_preview.buyingPanel.buyBtn.label.research())
-        return _ButtonState(enabled=isAvailableToUnlock, itemPrice=getItemUnlockPricesVO(unlockProps), label=buyLabel, isAction=unlockProps.discount > 0, actionTooltip=None, tooltip=tooltip, title=self.__title, isMoneyEnough=isXpEnough, isUnlock=True, isPrevItemsUnlock=isNext2Unlock)
+        return _ButtonState(enabled=isAvailableToUnlock, itemPrice=getItemUnlockPricesVO(unlockProps), label=buyLabel, icon=buttonIcon, iconAlign=buttonIconAlign, isAction=unlockProps.discount > 0, actionTooltip=None, tooltip=tooltip, title=self.__title, isMoneyEnough=isXpEnough, isUnlock=True, isPrevItemsUnlock=isNext2Unlock, customOffer=None)
 
     @staticmethod
     def __getBestOfferTooltipData(eventType=None):
@@ -516,10 +540,10 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         self.as_updateLeftTimeS(formattedTime='{} {}'.format(self.__timeLeftIcon, text_styles.tutorial(time_utils.getTillTimeString(leftTime, MENU.VEHICLEPREVIEW_TIMELEFTSHORT))), hasHoursAndMinutes=True)
 
     def __setDateLeftTime(self):
-        gmTime = time_utils.getTimeStructInLocal(self.__endTime)
-        monthName = _ms(MENU.datetime_months(gmTime.tm_mon))
-        fmtValues = _ms('%s %s %s' % (gmTime.tm_mday, monthName, gmTime.tm_year))
-        tooltip = makeTooltip(header=TOOLTIPS.VEHICLEPREVIEW_SHOPPACK_DATETIMETOOLTIP_HEADER, body=_ms(TOOLTIPS.VEHICLEPREVIEW_SHOPPACK_DATETIMETOOLTIP_BODY, namePack=text_styles.neutral(self.__title), date=fmtValues))
+        tm = time_utils.getTimeStructInLocal(self.__endTime)
+        monthName = backport.text(R.strings.menu.dateTime.months.num(tm.tm_mon)())
+        fmtValues = backport.text(R.strings.menu.dateTime.order(), day=tm.tm_mday, month=monthName, year=tm.tm_year)
+        tooltip = makeTooltip(header=backport.text(R.strings.tooltips.vehiclePreview.shopPack.dateTimeTooltip.header()), body=backport.text(R.strings.tooltips.vehiclePreview.shopPack.dateTimeTooltip.body(), namePack=text_styles.neutral(self.__title), date=fmtValues))
         self.as_setSetTitleTooltipS(tooltip)
         self.as_updateLeftTimeS(formattedTime='')
 
@@ -591,6 +615,9 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         else:
             url = self._heroTanks.getCurrentRelatedURL()
             self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.SPECIFIED, url=url))
+
+    def __purchaseMarathonPackage(self):
+        self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.SPECIFIED, url=self._marathonEvent.getMarathonVehicleUrl()))
 
     def __research(self):
         if self._actionType == factory.UNLOCK_ITEM:

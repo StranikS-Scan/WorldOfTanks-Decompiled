@@ -89,7 +89,7 @@ class BattleContext(IBattleContext):
         return self.__arenaDP.isObserver(vID) if self.__arenaDP is not None else False
 
     def isPlayerObserver(self):
-        return self.__arenaDP.isPlayerObserver()
+        return self.__arenaDP.isPlayerObserver() if self.__arenaDP is not None else False
 
     def isInTeam(self, teamIdx, vID=None, avatarSessionID=None):
         return self._isInTeams([teamIdx], vID, avatarSessionID)

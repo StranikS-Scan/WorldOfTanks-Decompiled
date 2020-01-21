@@ -60,8 +60,6 @@ GOLD_FISH_LAST_SHOW_TIME = 'goldFishWindowShowCooldown'
 BOOSTERS_FILTER = 'boostersFilter'
 LAST_PROMO_PATCH_VERSION = 'lastPromoPatchVersion'
 LAST_CALENDAR_SHOW_TIMESTAMP = 'lastCalendarShowTimestamp'
-LAST_HEROTANK_SHOW_TIMESTAMP = 'lastHerotankShowTimestamp'
-LAST_HEROTANK_SHOW_ID = 'lastHerotankShowId'
 LAST_STORAGE_VISITED_TIMESTAMP = 'lastStorageVisitedTimestamp'
 LAST_RESTORE_NOTIFICATION = 'lastRestoreNotification'
 PREVIEW_INFO_PANEL_IDX = 'previewInfoPanelIdx'
@@ -74,6 +72,7 @@ RANKED_AWARDS_COUNTER = 'rankedAwardsCounter'
 RANKED_INFO_COUNTER = 'rankedInfoCounter'
 BOOSTERS_FOR_CREDITS_SLOT_COUNTER = 'boostersForCreditsSlotCounter'
 SENIORITY_AWARDS_COUNTER = 'seniorityAwardsCounter'
+DEMOUNT_KIT_SEEN = 'demountKitSeen'
 PROFILE_TECHNIQUE = 'profileTechnique'
 PROFILE_TECHNIQUE_MEMBER = 'profileTechniqueMember'
 SHOW_CRYSTAL_HEADER_BAND = 'showCrystalHeaderBand'
@@ -129,8 +128,6 @@ RANKED_WEB_LEAGUE_UPDATE = 'rankedWebLeagueUpdate'
 RANKED_AWARDS_BUBBLE_YEAR_REACHED = 'rankedAwardsBubbleYearReached'
 MARATHON_REWARD_WAS_SHOWN_PREFIX = 'marathonRewardScreenWasShown'
 MARATHON_VIDEO_WAS_SHOWN_PREFIX = 'marathonRewardVideoWasShown'
-NEW_YEAR_POPOVER_VIEWED = 'newYearPopoverViewed'
-NEW_YEAR_POPOVER_BREAKED = 'newYearPopoverBreaker'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
@@ -226,8 +223,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                    'rented': True,
                                    'event': True,
                                    'favorite': False,
-                                   'bonus': False,
-                                   'newYear': False},
+                                   'bonus': False},
                CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                RANKED_CAROUSEL_FILTER_1: {'ussr': False,
                                           'germany': False,
@@ -262,8 +258,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'event': True,
                                           'gameMode': False,
                                           'favorite': False,
-                                          'bonus': False,
-                                          'newYear': False},
+                                          'bonus': False},
                RANKED_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                EPICBATTLE_CAROUSEL_FILTER_1: {'ussr': False,
                                               'germany': False,
@@ -298,8 +293,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'event': True,
                                               'gameMode': False,
                                               'favorite': False,
-                                              'bonus': False,
-                                              'newYear': False},
+                                              'bonus': False},
                EPICBATTLE_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                MISSION_SELECTOR_FILTER: {'inventory': False},
                PM_SELECTOR_FILTER: {'inventory': False},
@@ -514,8 +508,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'isEpicPerformanceWarningClicked': False,
                 LAST_PROMO_PATCH_VERSION: '',
                 LAST_CALENDAR_SHOW_TIMESTAMP: '',
-                LAST_HEROTANK_SHOW_TIMESTAMP: '',
-                LAST_HEROTANK_SHOW_ID: '',
                 LAST_RESTORE_NOTIFICATION: None,
                 'dynamicRange': 0,
                 'soundDevice': 0,
@@ -528,7 +520,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'doubleCarouselType': 0,
                 'vehicleCarouselStats': True,
                 WHEELED_DEATH_DELAY_COUNT: 10,
-                'lootBoxVideoOff': False,
                 NEW_SETTINGS_COUNTER: {'GameSettings': {'gameplay_epicStandard': True,
                                                         'c11nHistoricallyAccurate': True,
                                                         'hangarCamParallaxEnabled': True,
@@ -591,8 +582,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 REFERRAL_COUNTER: 1,
                 RANKED_AWARDS_COUNTER: 1,
                 RANKED_INFO_COUNTER: 1,
+                BOOSTERS_FOR_CREDITS_SLOT_COUNTER: 1,
                 SENIORITY_AWARDS_COUNTER: 1,
-                BOOSTERS_FOR_CREDITS_SLOT_COUNTER: 1},
+                DEMOUNT_KIT_SEEN: False},
  KEY_NOTIFICATIONS: {ELEN_NOTIFICATIONS: {MISSIONS_CONSTANTS.ELEN_EVENT_STARTED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_FINISHED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_TAB_VISITED: set()},
@@ -637,13 +629,13 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                            'vehicleCD': None},
                         'storage_crew_books': {'filterMask': 0,
                                                'nationID': nations.NONE_INDEX},
+                        'storage_consumables_tab': {'filterMask': 0},
                         'storage_modules': {'filterMask': 0,
                                             'vehicleCD': None},
                         'storage_reserves': {'filterMask': 0},
                         LAST_STORAGE_VISITED_TIMESTAMP: -1,
                         SESSION_STATS_PREV_BATTLE_COUNT: 0},
- KEY_UI_FLAGS: {NEW_YEAR_POPOVER_BREAKED: False,
-                NEW_YEAR_POPOVER_VIEWED: False}}
+ KEY_UI_FLAGS: {}}
 
 def _filterAccountSection(dataSec):
     for key, section in dataSec.items()[:]:

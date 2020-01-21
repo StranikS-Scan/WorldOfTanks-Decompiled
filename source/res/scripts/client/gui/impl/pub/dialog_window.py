@@ -2,17 +2,17 @@
 # Embedded file name: scripts/client/gui/impl/pub/dialog_window.py
 import logging
 from collections import namedtuple
-from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
-from helpers import dependency
-from shared_utils import CONST_CONTAINER
 from async import async, await, AsyncEvent, AsyncReturn, AsyncScope, BrokenPromiseError
 from frameworks.wulf import ViewFlags, WindowSettings, ViewSettings
 from frameworks.wulf import WindowFlags, Window
+from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
 from gui.impl.gen import R
 from gui.impl.gen.view_models.ui_kit.dialog_button_model import DialogButtonModel
 from gui.impl.gen.view_models.windows.dialog_window_model import DialogWindowModel
 from gui.impl.pub.view_impl import ViewImpl
 from gui.impl.wrappers.background_blur import WGUIBackgroundBlurSupportImpl
+from helpers import dependency
+from shared_utils import CONST_CONTAINER
 from skeletons.gui.impl import IGuiLoader
 _logger = logging.getLogger(__name__)
 DialogResult = namedtuple('DialogResult', ('result', 'data'))
@@ -26,6 +26,7 @@ class DialogButtons(CONST_CONTAINER):
      CANCEL,
      PURCHASE,
      RESEARCH)
+    ACCEPT_BUTTONS = (SUBMIT, PURCHASE, RESEARCH)
 
 
 class DialogLayer(CONST_CONTAINER):
@@ -75,7 +76,7 @@ class DialogWindow(Window):
     gui = dependency.descriptor(IGuiLoader)
     __slots__ = ('__blur', '__scope', '__event', '__result')
 
-    def __init__(self, content=None, bottomContent=None, parent=None, balanceContent=None, enableBlur=True, enableBlur3dScene=True, layer=DialogLayer.TOP_WINDOW):
+    def __init__(self, content=None, bottomContent=None, parent=None, balanceContent=None, enableBlur=True, layer=DialogLayer.TOP_WINDOW):
         if content is not None:
             pass
         settings = WindowSettings()
@@ -89,7 +90,7 @@ class DialogWindow(Window):
         self.__result = DialogButtons.CANCEL
         self.__blur = None
         if enableBlur:
-            self.__blur = WGUIBackgroundBlurSupportImpl(blur3dScene=enableBlur3dScene)
+            self.__blur = WGUIBackgroundBlurSupportImpl()
             blurLayers = [APP_CONTAINERS_NAMES.VIEWS, APP_CONTAINERS_NAMES.SUBVIEW, APP_CONTAINERS_NAMES.BROWSER]
             if layer > DialogLayer.WINDOW:
                 blurLayers.append(APP_CONTAINERS_NAMES.WINDOWS)
@@ -122,14 +123,6 @@ class DialogWindow(Window):
                 return view.getViewModel()
         return
 
-    @property
-    def balanceContentViewModel(self):
-        if self.decorator is not None:
-            view = self.decorator.balanceContent
-            if view is not None:
-                return view.getViewModel()
-        return
-
     def _initialize(self):
         super(DialogWindow, self)._initialize()
         self.viewModel.onClosed += self._onClosed
@@ -147,10 +140,8 @@ class DialogWindow(Window):
     def _onClosed(self, _=None):
         self.destroy()
 
-    def _removeAllButtons(self, invalidateAll=False):
+    def _removeAllButtons(self):
         self.viewModel.buttons.getItems().clear()
-        if invalidateAll:
-            self.viewModel.buttons.invalidate()
 
     def _addButton(self, name, label, isFocused=False, invalidateAll=False, isEnabled=True, soundDown=None):
         button = DialogButtonModel()

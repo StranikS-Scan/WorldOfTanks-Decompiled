@@ -125,8 +125,6 @@ class SessionStatsTankInfo(BlocksTooltipData):
         markOfMastery = self.randomStats.getMarkOfMasteryForVehicle(self.vehicle.intCD)
         if isMarkOfMasteryAchieved(markOfMastery):
             tankItems.append(self._getTankParamVO(text_styles.main(backport.text(R.strings.achievements.markOfMastery(), name=text_styles.stats(_TANK_MASTER_TYPES_TEXT[markOfMastery - 1]))), backport.image(R.images.gui.maps.icons.library.proficiency.dyn('class_icons_{}_small'.format(markOfMastery))())))
-        else:
-            tankItems.append(self._getTankParamVO(text_styles.main(backport.text(R.strings.session_stats.tankInfo.mastery.warning())), backport.image(R.images.gui.maps.icons.library.class_icon())))
         vehDossier = self.itemsCache.items.getVehicleDossier(self.vehicle.intCD)
         vehStats = vehDossier.getTotalStats()
         marksOnGun = vehStats.getAchievement(MARK_ON_GUN_RECORD)

@@ -93,7 +93,7 @@ class PrbInviteWrapper(_PrbInviteData):
         return result
 
     def __eq__(self, other):
-        if isinstance(other, PrbInviteWrapper) and self.clientID == other.clientID and self.createTime == other.createTime and self.type == other.type and self.creatorID == other.creatorID and self.receiverID == other.receiverID and self.creator == other.creator and self.state == other.state and self.count == other.count and self.peripheryID == other.peripheryID and self.prebattleID == other.prebattleID:
+        if isinstance(other, PrbInviteWrapper) and self.clientID == other.clientID and self.createTime == other.createTime and self.type == other.type and self.creatorID == other.creatorID and self.creator == other.creator and self.receiverID == other.receiverID and self.state == other.state and self.count == other.count and self.peripheryID == other.peripheryID and self.prebattleID == other.prebattleID:
             if self.id == other.id:
                 return True
         return False
@@ -558,12 +558,11 @@ class InvitesManager(UsersInfoHelper):
             for item in invitesData:
                 _, invite = maker(item)
                 if invite:
-                    creator = self.users.getUser(invite.creatorID, scope=UserEntityScope.BATTLE if invite.creatorVehID is not None else UserEntityScope.LOBBY)
+                    creator = self.users.getUser(invite.creatorID, scope=UserEntityScope.BATTLE if invite.creatorVehID else UserEntityScope.LOBBY)
                     self._addInvite(invite, creator)
 
         if self.appLoader.getSpaceID() != GuiGlobalSpaceID.BATTLE:
             self.syncUsersInfo()
-        return
 
     def _rebuildInvitesLists(self):
         rosterGetter = self.users.getUser
@@ -744,7 +743,7 @@ class InvitesManager(UsersInfoHelper):
         for inviteID, invite in newInvites.iteritems():
             isIncoming = invite.isIncoming()
             if inviteID not in self.__invites and inviteID not in self.__invitesIgnored:
-                creator = rosterGetter(invite.creatorID, scope=UserEntityScope.BATTLE if invite.creatorVehID is not None else UserEntityScope.LOBBY)
+                creator = rosterGetter(invite.creatorID, scope=UserEntityScope.BATTLE if invite.creatorVehID else UserEntityScope.LOBBY)
                 if self._addInvite(invite, creator):
                     modified[isIncoming] = True
                     added[isIncoming].append(inviteID)
@@ -758,7 +757,6 @@ class InvitesManager(UsersInfoHelper):
 
         if self.appLoader.getSpaceID() != GuiGlobalSpaceID.BATTLE:
             self.syncUsersInfo()
-        return
 
     def __accept_onPostActionsStopped(self, isCompleted):
         if not isCompleted:

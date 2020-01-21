@@ -16,6 +16,7 @@ from vehicle_systems.tankStructure import DetachedTurretPartIndexes, DetachedTur
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization.outfit import Outfit
 from VehicleEffects import DamageFromShotDecoder
+import wrapped_options
 if not IS_EDITOR:
     import BattleReplay
 
@@ -24,6 +25,11 @@ def _getAccountRepository():
     return Account.g_accountRepository
 
 
+def isUseDebugStickers():
+    return wrapped_options.getOptionBool('Vehicle/useDebugStickers', False)
+
+
+DEBUG_STICKER_TEXTURE = 'gui/maps/vehicles/decals/player_stickers/cool/sticker_15.dds'
 _TextureParams = namedtuple('TextureParams', ('textureName', 'bumpTextureName', 'mirror'))
 _CounterParams = namedtuple('CounterParams', ('atlas', 'alphabet', 'mirror'))
 _StickerSlotPair = namedtuple('_StickerSlotPair', ('componentSlot', 'stickerParams'))
@@ -174,6 +180,9 @@ class StickerPack(object):
         self._outfit = outfit
         self._data = {idx:[] for idx in self._ALLOWED_PART_IDX}
         self._handles = {idx:{} for idx in self._ALLOWED_PART_IDX}
+
+    def getData(self, componentIdx):
+        return self._data[componentIdx]
 
     def bind(self, componentIdx, componentSlot):
         raise NotImplementedError
@@ -379,7 +388,10 @@ class ClanStickerPack(StickerPack):
         self._data[componentIdx].append(_StickerSlotPair(componentSlot, _TextureParams('', '', False)))
 
     def attach(self, componentIdx, stickerModel, isDamaged):
-        if not self._isValidComponentIdx(componentIdx):
+        if IS_EDITOR:
+            self.__onClanEmblemLoaded(None, None, componentIdx, stickerModel, isDamaged)
+            return
+        elif not self._isValidComponentIdx(componentIdx):
             return
         elif not self._data[componentIdx]:
             return
@@ -411,18 +423,18 @@ class ClanStickerPack(StickerPack):
             return
 
     def _isValidComponentIdx(self, componentIdx):
-        return self._clanId != ClanStickerPack._NO_CLAN_ID and super(ClanStickerPack, self)._isValidComponentIdx(componentIdx)
+        return super(ClanStickerPack, self)._isValidComponentIdx(componentIdx) if IS_EDITOR else self._clanId != ClanStickerPack._NO_CLAN_ID and super(ClanStickerPack, self)._isValidComponentIdx(componentIdx)
 
     def _useTexture(self):
-        return True
+        return False if IS_EDITOR else True
 
     def __onClanEmblemLoaded(self, _, data, componentIdx, stickerModel, isDamaged):
-        if data is None:
-            return
-        else:
+        if not IS_EDITOR:
+            if data is None:
+                return
             stickerModel.setTextureData(data)
-            super(ClanStickerPack, self).attach(componentIdx, stickerModel, isDamaged)
-            return
+        super(ClanStickerPack, self).attach(componentIdx, stickerModel, isDamaged)
+        return
 
 
 class InsigniaStickerPack(StickerPack):
@@ -517,6 +529,31 @@ class InsigniaStickerPack(StickerPack):
         return _CounterParams(item.atlas, item.alphabet, item.canBeMirrored)
 
 
+class DebugStickerPack(StickerPack):
+    _ALLOWED_PART_IDX = TankPartIndexes.ALL + Insignia.Indexes.ALL
+
+    def bind(self, componentIdx, componentSlot):
+        if not self._isValidComponentIdx(componentIdx):
+            return
+        params = self._data[componentIdx]
+        stickerParam = _TextureParams(DEBUG_STICKER_TEXTURE, '', True)
+        params.append(_StickerSlotPair(componentSlot, stickerParam))
+
+    def setClanId(self, clanId):
+        pass
+
+    def _getStickerSize(self, slot):
+        return (slot.size, slot.size * 0.5) if slot.type in (SlotTypes.INSCRIPTION, SlotTypes.FIXED_INSCRIPTION) else super(DebugStickerPack, self)._getStickerSize(slot)
+
+    def _getStickerAttributes(self, slot, sticker):
+        stickerAttributes = super(DebugStickerPack, self)._getStickerAttributes(slot, sticker)
+        if slot.type in (SlotTypes.INSIGNIA, SlotTypes.INSIGNIA_ON_GUN):
+            stickerAttributes |= StickerAttributes.DOUBLESIDED
+            if slot.applyToFabric:
+                stickerAttributes |= StickerAttributes.APPLY_TO_FABRIC
+        return stickerAttributes
+
+
 class VehicleStickers(object):
 
     def setClanID(self, clanID):
@@ -558,14 +595,10 @@ class VehicleStickers(object):
             componentSlots += ((Insignia.Types.DUAL_LEFT, (vehicleDesc.gun.emblemSlots[0],)), (Insignia.Types.DUAL_RIGHT, (vehicleDesc.gun.emblemSlots[1],)))
         else:
             componentSlots += ((Insignia.Types.SINGLE, vehicleDesc.gun.emblemSlots),)
-        insignias = InsigniaStickerPack(vehicleDesc, outfit, insigniaRank)
-        self.__stickerPacks = {SlotTypes.PLAYER: (EmblemStickerPack(vehicleDesc, outfit),),
-         SlotTypes.FIXED_EMBLEM: (FixedEmblemStickerPack(vehicleDesc, outfit),),
-         SlotTypes.INSCRIPTION: (InscriptionStickerPack(vehicleDesc, outfit), PersonalNumStickerPack(vehicleDesc, outfit)),
-         SlotTypes.FIXED_INSCRIPTION: (FixedInscriptionStickerPack(vehicleDesc, outfit),),
-         SlotTypes.INSIGNIA: (insignias,),
-         SlotTypes.INSIGNIA_ON_GUN: (insignias,),
-         SlotTypes.CLAN: (ClanStickerPack(vehicleDesc),)}
+        if not isUseDebugStickers():
+            self.__stickerPacks = self._createStickerPacks(vehicleDesc, outfit, insigniaRank)
+        else:
+            self.__stickerPacks = self._createDebugStickerPacks(vehicleDesc, outfit, insigniaRank)
         self.__stickers = {}
         for componentName, emblemSlots in componentSlots:
             if componentName == Insignia.Types.SINGLE:
@@ -583,6 +616,9 @@ class VehicleStickers(object):
 
     def getCurrentInsigniaRank(self):
         return self.__currentInsigniaRank
+
+    def getStickerPack(self, packType):
+        return self.__stickerPacks[packType]
 
     def attach(self, compoundModel, isDamaged, showDamageStickers, isDetachedTurret=False):
         for componentName, attachNodeName in self.__componentNames:
@@ -649,6 +685,26 @@ class VehicleStickers(object):
                 del componentStickers.damageStickers[code]
 
         return
+
+    def _createStickerPacks(self, vehicleDesc, outfit, insigniaRank):
+        insignias = InsigniaStickerPack(vehicleDesc, outfit, insigniaRank)
+        return {SlotTypes.PLAYER: (EmblemStickerPack(vehicleDesc, outfit),),
+         SlotTypes.FIXED_EMBLEM: (FixedEmblemStickerPack(vehicleDesc, outfit),),
+         SlotTypes.INSCRIPTION: (InscriptionStickerPack(vehicleDesc, outfit), PersonalNumStickerPack(vehicleDesc, outfit)),
+         SlotTypes.FIXED_INSCRIPTION: (FixedInscriptionStickerPack(vehicleDesc, outfit),),
+         SlotTypes.INSIGNIA: (insignias,),
+         SlotTypes.INSIGNIA_ON_GUN: (insignias,),
+         SlotTypes.CLAN: (ClanStickerPack(vehicleDesc),)}
+
+    def _createDebugStickerPacks(self, vehicleDesc, outfit, insigniaRank):
+        debugStickerPack = DebugStickerPack(vehicleDesc, outfit)
+        return {SlotTypes.PLAYER: (debugStickerPack,),
+         SlotTypes.FIXED_EMBLEM: (debugStickerPack,),
+         SlotTypes.INSCRIPTION: (debugStickerPack,),
+         SlotTypes.FIXED_INSCRIPTION: (debugStickerPack,),
+         SlotTypes.INSIGNIA: (debugStickerPack,),
+         SlotTypes.INSIGNIA_ON_GUN: (debugStickerPack,),
+         SlotTypes.CLAN: (debugStickerPack,)}
 
     def __getInsigniaAttachNode(self, insigniaType, isDamaged, compoundModel):
         if isDamaged:

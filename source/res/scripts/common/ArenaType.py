@@ -693,7 +693,7 @@ def __readTeamsCount(key, section, defaultXml):
 def __readTeamNumbers(section, maxTeamsInArena):
     if not (section.has_key('squadTeamNumbers') or section.has_key('soloTeamNumbers')):
         if maxTeamsInArena > 2:
-            raise 'For multiteam mode squadTeamNumbers and (or) soloTeamNumbers must be set'
+            raise SoftException('For multiteam mode squadTeamNumbers and (or) soloTeamNumbers must be set')
         return (set(), set())
     squadTeamNumbers = set([ int(v) for v in section.readString('squadTeamNumbers', '').split() ])
     soloTeamNumbers = set([ int(v) for v in section.readString('soloTeamNumbers', '').split() ])

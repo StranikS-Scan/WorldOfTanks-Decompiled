@@ -80,6 +80,7 @@ class Inventory(object):
               True,
               [],
               [],
+              [],
               [])], callback)
             return
         elif itemTypeIdx == _TANKMAN:
@@ -184,13 +185,13 @@ class Inventory(object):
             self.__account._doCmdInt3(AccountCommands.CMD_EQUIP, vehInvID, turretCompDescr, gunCompDescr, proxy)
             return
 
-    def equipOptionalDevice(self, vehInvID, deviceCompDescr, slotIdx, isPaidRemoval, callback):
+    def equipOptionalDevice(self, vehInvID, deviceCompDescr, slotIdx, isPaidRemoval, callback, useDemountKit):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER, 0, [])
             return
         else:
-            self.__account.shop.waitForSync(partial(self.__equipOptionDevice_onShopSynced, vehInvID, deviceCompDescr, slotIdx, isPaidRemoval, callback))
+            self.__account.shop.waitForSync(partial(self.__equipOptionDevice_onShopSynced, vehInvID, deviceCompDescr, slotIdx, isPaidRemoval, callback, useDemountKit))
             return
 
     def equipShells(self, vehInvID, shells, callback):
@@ -487,10 +488,11 @@ class Inventory(object):
                 proxy = None
             arr = [shopRev]
             for data in vehiclesSellData:
-                vehInvID, flags, itemsFromVehicle, itemsFromInventory, customizationItems = data
+                vehInvID, flags, itemsFromVehicle, itemsFromInventory, customizationItems, itemsForDemountKit = data
                 arr += [vehInvID, flags, len(itemsFromVehicle)] + itemsFromVehicle
                 arr += [len(itemsFromInventory)] + itemsFromInventory
                 arr += [len(customizationItems)] + customizationItems
+                arr += [len(itemsForDemountKit)] + itemsForDemountKit
 
             self.__account._doCmdIntArr(AccountCommands.CMD_SELL_VEHICLE, arr, proxy)
             return
@@ -616,20 +618,21 @@ class Inventory(object):
             self.__account._doCmdIntArr(AccountCommands.CMD_SET_AND_FILL_LAYOUTS, arr, proxy)
             return
 
-    def __equipOptionDevice_onShopSynced(self, vehInvID, deviceCompDescr, slotIdx, isPaidRemoval, callback, resultID, shopRev):
+    def __equipOptionDevice_onShopSynced(self, vehInvID, deviceCompDescr, slotIdx, isPaidRemoval, callback, useDemountKit, resultID, shopRev):
         if resultID < 0:
             if callback is not None:
                 callback(resultID)
             return
         else:
             if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+                proxy = lambda requestID, resultID, errorStr, ext=None: callback(resultID, ext)
             else:
                 proxy = None
             arr = [shopRev,
              vehInvID,
              deviceCompDescr,
              slotIdx,
-             int(isPaidRemoval)]
+             int(isPaidRemoval),
+             int(useDemountKit)]
             self.__account._doCmdIntArr(AccountCommands.CMD_EQUIP_OPTDEV, arr, proxy)
             return

@@ -101,7 +101,6 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
     def onEnterWorld(self, prereqs):
         ClientSelectableCameraObject.allCameraObjects.add(self)
         ClientSelectableObject.onEnterWorld(self, prereqs)
-        g_eventBus.addListener(CameraRelatedEvents.CUSTOMIZATION_CAMERA_ACTIVATED, self.__forcedFinish)
 
     def onLeaveWorld(self):
         if self in ClientSelectableCameraObject.allCameraObjects:
@@ -111,7 +110,6 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
             BigWorld.worldDrawEnabled(False)
         self.__camera.destroy()
         self.__camera = None
-        g_eventBus.removeListener(CameraRelatedEvents.CUSTOMIZATION_CAMERA_ACTIVATED, self.__forcedFinish)
         ClientSelectableObject.onLeaveWorld(self)
         CallbackDelayer.destroy(self)
         return
@@ -242,6 +240,7 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
         self.__curTime += self.measureDeltaTime() / self.cameraUpcomingDuration
         isCameraDone = self.__curTime >= 1.0
         if isCameraDone:
+            self.stopCallback(self.__update)
             self._finishCameraMovement()
         else:
             self.__updateCameraLocation()
@@ -266,7 +265,6 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
         return math_utils.easeOutQuad(time, easedInValue - startValue, self.__easeInDuration) + startValue if time < self.__easeInDuration else angleCalculation(currentPosition, goalPosition)
 
     def _finishCameraMovement(self):
-        self.stopCallback(self.__update)
         self.setState(CameraMovementStates.ON_OBJECT)
         self.__camera.disable()
         BigWorld.camera(self.hangarSpace.space.camera)
@@ -274,7 +272,3 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
         self.__goalFov = None
         self.__curTime = None
         return
-
-    def __forcedFinish(self, _):
-        if self.__state == CameraMovementStates.MOVING_TO_OBJECT:
-            self._finishCameraMovement()

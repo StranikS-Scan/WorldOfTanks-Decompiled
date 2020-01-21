@@ -8,6 +8,7 @@ import nations
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
+from gui.impl.gen import R
 from gui.server_events.event_items import ActionData
 from gui.server_events.events_helpers import EventInfoModel
 from gui.server_events.formatters import formatStrDiscount, formatPercentValue, formatMultiplierValue, formatGoldPriceNormalCard, formatCreditPriceNormalCard, DECORATION_SIZES, formatGoldPrice, formatGoldPriceBig, formatCreditPrice, formatCreditPriceBig, formatVehicleLevel, DISCOUNT_TYPE
@@ -878,8 +879,8 @@ class MarathonEventActionInfo(ActionInfo):
         if self._marathonEvent is None:
             return ''
         elif stepName == 'set_MarathonFinished':
-            locKey = QUESTS.getActionDescription('hero/full/{}'.format(stepName))
-            return i18n.makeString(locKey, value=self._marathonEvent.getExtraDaysToBuy())
+            locKey = R.strings.quests.action.hero.full.dyn(stepName)()
+            return backport.text(locKey, value=self._marathonEvent.getExtraTimeToBuy())
         else:
             return super(MarathonEventActionInfo, self)._getFullDescription(stepName, discount, forHeroCard)
 

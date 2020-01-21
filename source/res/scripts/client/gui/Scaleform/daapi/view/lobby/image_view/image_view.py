@@ -2,41 +2,24 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/image_view/image_view.py
 import WWISE
 from gui.Scaleform.daapi.view.meta.ImageViewMeta import ImageViewMeta
-from gui.shared import g_eventBus
-from gui.shared.events import GameEvent
+from gui.sounds.filters import STATE_HANGAR_FILTERED
 _IMAGE_ROOT_PATH = '../maps/icons/imageView'
 
 class ImageView(ImageViewMeta):
 
     def __init__(self, ctx=None):
         super(ImageView, self).__init__(ctx)
-        self.__soundConfig = ctx['soundConfig']
         self.__image = ctx['img']
 
     def _populate(self):
         super(ImageView, self)._populate()
         self.setBgPath()
-        self.__updateSounds('entrance')
+        WWISE.WW_setState(STATE_HANGAR_FILTERED, '{}_on'.format(STATE_HANGAR_FILTERED))
 
     def onClose(self):
         self.destroy()
-        self.__updateSounds('exit')
-        g_eventBus.handleEvent(GameEvent(GameEvent.IMAGE_VIEW_DONE))
+        WWISE.WW_setState(STATE_HANGAR_FILTERED, '{}_off'.format(STATE_HANGAR_FILTERED))
 
     def setBgPath(self):
         image = ''.join((_IMAGE_ROOT_PATH, '/', self.__image))
         self.flashObject.as_setBgPath(image)
-
-    def __updateSounds(self, key):
-        if self.__soundConfig is None:
-            return
-        else:
-            actionSoundConfig = self.__soundConfig.get(key)
-            if actionSoundConfig is not None:
-                event = actionSoundConfig.get('event')
-                state = actionSoundConfig.get('state')
-                if event is not None:
-                    WWISE.WW_eventGlobal(event)
-                if state is not None:
-                    WWISE.WW_setState(state[0], state[1])
-            return

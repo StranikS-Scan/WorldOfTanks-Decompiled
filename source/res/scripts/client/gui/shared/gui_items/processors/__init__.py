@@ -31,10 +31,6 @@ def makeI18nError(sysMsgKey='', defaultSysMsgKey='', auxData=None, *args, **kwar
     return makeError(i18n.makeString(localKey, *args, **kwargs), kwargs.get('type', SM_TYPE.Error), auxData)
 
 
-def makeNYSuccess(sysMsgKey='', auxData=None, *args, **kwargs):
-    return makeSuccess(i18n.makeString('#ny:{}'.format(sysMsgKey), *args, **kwargs), kwargs.get('type', SM_TYPE.Information), auxData)
-
-
 def makeCrewSkinCompensationMessage(comp):
     compMsg = None
     if comp is not None:
@@ -46,11 +42,13 @@ def makeCrewSkinCompensationMessage(comp):
 
 class Processor(object):
     itemsCache = dependency.descriptor(IItemsCache)
+    IS_GAMEFACE_SUPPORTED = False
     PLUGIN_RES_CODE = -33
 
     def __init__(self, plugins=None):
         self.plugins = []
         self.addPlugins(plugins or [])
+        self.requestCtx = {}
 
     def getPluginsByType(self, pluginType):
         return [ plugin for plugin in self.plugins if plugin.type == pluginType ]
@@ -65,6 +63,11 @@ class Processor(object):
     def addPlugins(self, plugins):
         for plugin in plugins:
             self.addPlugin(plugin)
+
+    @property
+    def gamefaceEnabled(self):
+        from gui.shared.event_dispatcher import gamefaceEnabled
+        return self.IS_GAMEFACE_SUPPORTED and gamefaceEnabled()
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeError(errStr, auxData=ctx)
@@ -110,6 +113,7 @@ class Processor(object):
             if not pres.success:
                 callback(makeError())
                 return
+            self.requestCtx.update(pres.ctx)
 
         callback(makeSuccess())
 

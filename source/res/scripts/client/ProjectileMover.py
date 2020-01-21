@@ -8,6 +8,7 @@ from TriggersManager import TRIGGER_TYPE
 import FlockManager
 from vehicle_systems.tankStructure import TankPartNames, TankNodeNames, ColliderTypes
 from helpers import gEffectsDisabled
+from helpers.trajectory_drawer import TrajectoryDrawer
 
 def ownVehicleGunPositionGetter():
     ownVehicle = BigWorld.entities.get(BigWorld.player().playerVehicleID, None)
@@ -39,6 +40,7 @@ class ProjectileMover(object):
         player = BigWorld.player()
         if player is not None and player.inputHandler is not None:
             player.inputHandler.onCameraChanged += self.__onCameraChanged
+        self.__debugDrawer = None
         return
 
     def destroy(self):
@@ -46,6 +48,8 @@ class ProjectileMover(object):
         if player is not None and player.inputHandler is not None:
             player.inputHandler.onCameraChanged -= self.__onCameraChanged
         self.__ballistics = None
+        if self.__debugDrawer is not None:
+            self.__debugDrawer.destroy()
         shotIDs = self.__projectiles.keys()
         for shotID in shotIDs:
             self.__delProjectile(shotID)
@@ -63,11 +67,13 @@ class ProjectileMover(object):
             if artID is not None:
                 self.salvo.addProjectile(artID, gravity, refStartPoint, refVelocity)
                 return
-            projectileMotor = self.__ballistics.addProjectile(shotID, gravity, refStartPoint, refVelocity, startPoint, maxDistance, attackerID, ownVehicleGunPositionGetter(), tracerCameraPos)
+            isOwnShoot = attackerID == BigWorld.player().playerVehicleID
+            projectileMotor = self.__ballistics.addProjectile(shotID, gravity, refStartPoint, refVelocity, startPoint, maxDistance, isOwnShoot, attackerID, ownVehicleGunPositionGetter(), tracerCameraPos)
+            if self.__debugDrawer is not None:
+                self.__debugDrawer.addProjectile(shotID, attackerID, refStartPoint, refVelocity, Math.Vector3(0.0, -gravity, 0.0), maxDistance, isOwnShoot)
             if projectileMotor is None:
                 return
             projModelName, projModelOwnShotName, projEffects = effectsDescr['projectile']
-            isOwnShoot = attackerID == BigWorld.player().playerVehicleID
             model = BigWorld.Model(projModelOwnShotName if isOwnShoot else projModelName)
             proj = {'model': model,
              'motor': projectileMotor,
@@ -133,6 +139,7 @@ class ProjectileMover(object):
     def setSpaceID(self, spaceID):
         if self.__ballistics:
             self.__ballistics.setVariableBallisticsParams(spaceID)
+        self.__debugDrawer = TrajectoryDrawer(spaceID)
 
     def __notifyProjectileHit(self, hitPosition, proj):
         caliber = proj['effectsDescr']['caliber']
@@ -190,6 +197,8 @@ class ProjectileMover(object):
 
     def __delProjectile(self, shotID):
         proj = self.__projectiles.pop(shotID)
+        if self.__debugDrawer is not None:
+            self.__debugDrawer.removeProjectile(shotID if shotID > 0 else -shotID)
         if proj is None:
             return
         else:

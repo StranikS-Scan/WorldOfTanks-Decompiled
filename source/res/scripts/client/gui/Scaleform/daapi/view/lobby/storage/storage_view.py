@@ -11,13 +11,15 @@ from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageShe
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.StorageViewMeta import StorageViewMeta
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showHangar
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from helpers.time_utils import getCurrentTimestamp
+from skeletons.gui.demount_kit import IDemountKitNovelty
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 
@@ -25,6 +27,7 @@ class StorageView(LobbySubView, StorageViewMeta):
     __background_alpha__ = 1.0
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __itemsCache = dependency.descriptor(IItemsCache)
+    __demountKitNovelty = dependency.descriptor(IDemountKitNovelty)
     _COMMON_SOUND_SPACE = STORAGE_SOUND_SPACE
     _AUTO_TAB_SELECT_ENABLE = [STORAGE_CONSTANTS.IN_HANGAR_VIEW, STORAGE_CONSTANTS.STORAGE_VIEW]
 
@@ -36,7 +39,6 @@ class StorageView(LobbySubView, StorageViewMeta):
         self.__activeSectionIdx = 0
         self.__activeTab = None
         self.__switchSection(sectionName=(ctx or {}).get('defaultSection', STORAGE_CONSTANTS.FOR_SELL), sectionTab=(ctx or {}).get('defaultTab'), skipRefresh=True)
-        self.__addHandlers()
         return
 
     def onClose(self):
@@ -49,6 +51,7 @@ class StorageView(LobbySubView, StorageViewMeta):
         super(StorageView, self)._populate()
         self.__showDummyScreen = not self.__lobbyContext.getServerSettings().isIngameStorageEnabled()
         self.__initialize()
+        self.__addHandlers()
 
     def _invalidate(self, *args, **kwargs):
         super(StorageView, self)._invalidate(args, kwargs)
@@ -65,10 +68,11 @@ class StorageView(LobbySubView, StorageViewMeta):
             viewPy.setActiveTab(self.__activeTab)
 
     def __initialize(self):
-        self.as_setDataS({'bgSource': RES_ICONS.MAPS_ICONS_STORAGE_BACKGROUND,
+        self.as_setDataS({'bgSource': backport.image(R.images.gui.maps.icons.storage.background()),
          'sections': self.__sections,
          'showDummyScreen': self.__showDummyScreen})
         self.as_selectSectionS(self.__activeSectionIdx)
+        self.__onDemountKitNoveltyUpdated()
 
     def __saveLastTimestamp(self):
         AccountSettings.setSessionSettings(LAST_STORAGE_VISITED_TIMESTAMP, getCurrentTimestamp())
@@ -78,11 +82,13 @@ class StorageView(LobbySubView, StorageViewMeta):
         serverSettings.onServerSettingsChange += self.__onServerSettingChanged
         g_clientUpdateManager.addCallbacks({'inventory': self.__onInventoryUpdated,
          'serverSettings.blueprints_config': self.__onBlueprintsModeChanged})
+        self.__demountKitNovelty.onUpdated += self.__onDemountKitNoveltyUpdated
 
     def __removeHandlers(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
         serverSettings = self.__lobbyContext.getServerSettings()
         serverSettings.onServerSettingsChange -= self.__onServerSettingChanged
+        self.__demountKitNovelty.onUpdated -= self.__onDemountKitNoveltyUpdated
 
     def __onServerSettingChanged(self, diff):
         if 'ingameShop' in diff:
@@ -153,3 +159,12 @@ class StorageView(LobbySubView, StorageViewMeta):
             if section['linkage'] == sectionAlias:
                 self.__activeSectionIdx = idx
                 return section['id']
+
+    def __onDemountKitNoveltyUpdated(self):
+        self.__setTabCounter(STORAGE_CONSTANTS.STORAGE, self.__demountKitNovelty.noveltyCount)
+
+    def __setTabCounter(self, tabId, value):
+        for i, section in enumerate(self.__sections):
+            if section['id'] == tabId:
+                self.as_setButtonCounterS(i, value)
+                break

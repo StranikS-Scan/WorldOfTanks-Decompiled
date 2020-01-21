@@ -207,7 +207,7 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
         self.__onUpdateBoosters()
 
     def __sort(self, a, b):
-        return cmp(a.quality, b.quality) or cmp(BOOSTERS_ORDERS[a.boosterType], BOOSTERS_ORDERS[b.boosterType]) or cmp(b.effectValue, a.effectValue) or cmp(b.effectTime, a.effectTime)
+        return cmp(BOOSTERS_ORDERS[a.boosterType], BOOSTERS_ORDERS[b.boosterType]) or cmp(b.effectValue, a.effectValue) or cmp(b.effectTime, a.effectTime)
 
     def __updateActiveBoostersCounter(self, active, total):
         self.as_initS({'activeText': text_styles.main(_ms(STORAGE.PERSONALRESERVES_ACTIVECOUNTLABEL, activeCount=text_styles.error(active) if active == 0 else text_styles.stats(active), totalCount=MAX_ACTIVE_BOOSTERS_COUNT)),

@@ -10,6 +10,7 @@ import constants
 from debug_utils import LOG_DEBUG
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier, SimpleNotifier
+from gui.prb_control import prbEntityProperty
 from helpers import dependency
 from helpers import time_utils
 from skeletons.gui.game_control import IGameSessionController
@@ -20,6 +21,12 @@ _BAN_RESTR = constants.RESTRICTION_TYPE.BAN
 def _checkForNegative(t):
     if t <= 0:
         t += time_utils.ONE_DAY
+    return t
+
+
+def _checkForThisDay(t):
+    if t >= time_utils.ONE_DAY:
+        t -= time_utils.ONE_DAY
     return t
 
 
@@ -43,6 +50,7 @@ class GameSessionController(IGameSessionController, Notifiable):
     NOTIFY_PERIOD = time_utils.ONE_HOUR
     TIME_RESERVE = 59
     PLAY_TIME_LEFT_NOTIFY = time_utils.QUARTER_HOUR + TIME_RESERVE
+    TIME_LEFT_NOTIFY_FROM_EPIC = time_utils.HALF_HOUR + TIME_RESERVE
     onClientNotify = Event.Event()
     onTimeTillBan = Event.Event()
     onNewDayNotify = Event.Event()
@@ -95,11 +103,12 @@ class GameSessionController(IGameSessionController, Notifiable):
     def onDisconnected(self):
         self._stop()
         self.__lastNotifyTime = None
+        self.__lastBanMsg = None
         return
 
     def isSessionStartedThisDay(self):
         svrDaysCount = int(_getSvrLocal()) / time_utils.ONE_DAY
-        clientDaysCount = int(self.__sessionStartedAt + self.__regionals().getDayStartingTime()) / time_utils.ONE_DAY
+        clientDaysCount = int(self.__sessionStartedAt - self.__regionals().getDayStartingTime()) / time_utils.ONE_DAY
         return svrDaysCount == clientDaysCount
 
     def getDailyPlayTimeLeft(self):
@@ -116,11 +125,15 @@ class GameSessionController(IGameSessionController, Notifiable):
     @property
     def isParentControlActive(self):
         playTimeLeft = min([self.getDailyPlayTimeLeft(), self.getWeeklyPlayTimeLeft()])
-        parentControl = self.isParentControlEnabled and playTimeLeft <= self.PLAY_TIME_LEFT_NOTIFY
+        parentControl = self.isParentControlEnabled and playTimeLeft <= self.getPlayTimeNotify()
         _, _ = self.getCurfewBlockTime()
         banTimeLeft = min(*self.__getBlockTimeLeft())
-        curfewControl = self.__curfewBlockTime is not None and banTimeLeft <= self.PLAY_TIME_LEFT_NOTIFY
+        curfewControl = self.__curfewBlockTime is not None and banTimeLeft <= self.getPlayTimeNotify()
         return parentControl or curfewControl
+
+    @prbEntityProperty
+    def prbEntity(self):
+        pass
 
     @property
     def sessionDuration(self):
@@ -146,10 +159,13 @@ class GameSessionController(IGameSessionController, Notifiable):
     def incBattlesCounter(self):
         self.__battles += 1
 
+    def getPlayTimeNotify(self):
+        return self.TIME_LEFT_NOTIFY_FROM_EPIC if self.prbEntity.getQueueType() == constants.QUEUE_TYPE.EPIC else self.PLAY_TIME_LEFT_NOTIFY
+
     def getCurfewBlockTime(self):
         if self.__curfewBlockTime is not None:
-            blockTime = self.__curfewBlockTime - self.__regionals().getDayStartingTime()
-            notifyStart = blockTime - self.PLAY_TIME_LEFT_NOTIFY
+            blockTime = self.__curfewBlockTime
+            notifyStart = blockTime - self.getPlayTimeNotify()
         else:
             notifyStart = blockTime = 0
         return (_checkForNegative(notifyStart), _checkForNegative(blockTime))
@@ -158,13 +174,16 @@ class GameSessionController(IGameSessionController, Notifiable):
         from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta
         if self.isPlayTimeBlock:
             return I18nInfoDialogMeta('koreaPlayTimeNotification')
-        notifyStartTime, blockTime = self.getCurfewBlockTime()
+        elif self.__curfewBlockTime is not None:
+            notifyStartTime, blockTime = self.getCurfewBlockTime()
 
-        def formatter(t):
-            return time.strftime('%H:%M', time.localtime(t))
+            def formatter(t):
+                return time.strftime('%H:%M', time.localtime(t))
 
-        return I18nInfoDialogMeta('koreaParentNotification', messageCtx={'preBlockTime': formatter(notifyStartTime),
-         'blockTime': formatter(blockTime)})
+            return I18nInfoDialogMeta('koreaParentNotification', messageCtx={'preBlockTime': formatter(notifyStartTime),
+             'blockTime': formatter(blockTime)})
+        else:
+            return
 
     @property
     def _stats(self):
@@ -215,7 +234,7 @@ class GameSessionController(IGameSessionController, Notifiable):
     def __getBlockTimeLeft(self):
         playTimeLeft = min(self.getDailyPlayTimeLeft(), self.getWeeklyPlayTimeLeft())
         if self.__curfewBlockTime is not None:
-            curfewTimeLeft = self.__curfewBlockTime - _getSvrLocalToday()
+            curfewTimeLeft = self.__curfewBlockTime - _getSvrUtcToday()
         else:
             curfewTimeLeft = sys.maxint
         return (playTimeLeft, _checkForNegative(curfewTimeLeft))
@@ -224,10 +243,11 @@ class GameSessionController(IGameSessionController, Notifiable):
         self.__clearBanCallback()
         if not banTimeLeft:
             banTimeLeft = min(*self.__getBlockTimeLeft()) - self.PLAY_TIME_LEFT_NOTIFY
-        banTimeLeft = max(banTimeLeft, 0)
+        banTimeLeft = max(banTimeLeft, 1)
         LOG_DEBUG('Game session block callback', banTimeLeft)
-        if banTimeLeft:
+        if banTimeLeft and self.__lastBanMsg is None:
             self.__banCallback = BigWorld.callback(banTimeLeft, self.__onBanNotifyHandler)
+        return
 
     def __clearBanCallback(self):
         if self.__banCallback is not None:
@@ -254,7 +274,9 @@ class GameSessionController(IGameSessionController, Notifiable):
 
     def __onBanNotifyHandler(self):
         LOG_DEBUG('GameSessionController:__onBanNotifyHandler')
-        banTime = time.strftime('%H:%M', time.localtime(time_utils.getCurrentTimestamp() + self.PLAY_TIME_LEFT_NOTIFY))
+        playTimeLeft = min([self.getDailyPlayTimeLeft(), self.getWeeklyPlayTimeLeft()])
+        playTimeLeft = max(playTimeLeft, 0)
+        banTime = time.strftime('%H:%M', time.localtime(time_utils.getCurrentTimestamp() + playTimeLeft))
         self.__lastBanMsg = (self.isPlayTimeBlock, banTime)
         self.onTimeTillBan(*self.__lastBanMsg)
         self.__loadBanCallback()
@@ -268,10 +290,14 @@ class GameSessionController(IGameSessionController, Notifiable):
 
     def __onRestrictionsChanged(self, _):
         self.__curfewBlockTime, self.__curfewUnblockTime = self.__getCurfewBlockTime(self._stats.restrictions)
+        self.__lastBanMsg = None
         self.__loadBanCallback()
+        return
 
     def __onPlayLimitsChanged(self, _):
+        self.__lastBanMsg = None
         self.__loadBanCallback()
+        return
 
     @classmethod
     def __getCurfewBlockTime(cls, restrictions):

@@ -12,6 +12,7 @@ class STORAGE_CONSTANTS(object):
     FOR_SELL_VIEW = 'StorageCategoryForSellViewUI'
     STORAGE_VIEW = 'StorageCategoryStorageViewUI'
     STORAGE_REGULAR_ITEMS_TAB = 'RegularItemsTabViewUI'
+    STORAGE_CONSUMABLES_TAB = 'ConsumablesTabViewUI'
     STORAGE_MODULES_TAB = 'ModulesTabViewUI'
     STORAGE_SHELLS_TAB = 'ShellsTabViewUI'
     STORAGE_CREW_BOOKS_TAB = 'CrewBooksTabViewUI'

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/game_messages_panel.py
 from collections import namedtuple
+import BattleReplay
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.Scaleform.daapi.view.meta.GameMessagesPanelMeta import GameMessagesPanelMeta
@@ -38,3 +39,10 @@ class GameMessagesPanel(GameMessagesPanelMeta):
          'subTitle': makeRegularFinishResultLabel(reason, messageType)}
         msg = PlayerMessageData(messageType, GAME_MESSAGES_CONSTS.DEFAULT_MESSAGE_LENGTH, GAME_MESSAGES_CONSTS.GAME_MESSAGE_PRIORITY_END_GAME, endGameMsgData)
         self._addMessage(msg.getDict())
+
+    def setFlashObject(self, movieClip, autoPopulate=True, setScript=True):
+        if movieClip is None and BattleReplay.g_replayCtrl.isPlaying:
+            return
+        else:
+            super(GameMessagesPanel, self).setFlashObject(movieClip, autoPopulate, setScript)
+            return

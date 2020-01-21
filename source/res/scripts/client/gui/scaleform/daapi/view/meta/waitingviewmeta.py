@@ -9,3 +9,6 @@ class WaitingViewMeta(View):
 
     def as_hideWaitingS(self):
         return self.flashObject.as_hideWaiting() if self._isDAAPIInited() else None
+
+    def as_showAwardsS(self, value):
+        return self.flashObject.as_showAwards(value) if self._isDAAPIInited() else None

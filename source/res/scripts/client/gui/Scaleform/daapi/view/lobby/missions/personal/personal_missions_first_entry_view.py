@@ -7,6 +7,8 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.PersonalMissionFirstEntryViewMeta import PersonalMissionFirstEntryViewMeta
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.server_events.events_dispatcher import showPersonalMissionBrowserView
 from gui.game_control.links import URLMacros
 from gui.server_events.pm_constants import PERSONAL_MISSIONS_SOUND_SPACE, SOUNDS, PM_TUTOR_FIELDS
@@ -21,6 +23,7 @@ class PersonalMissionFirstEntryView(LobbySubView, PersonalMissionFirstEntryViewM
     _COMMON_SOUND_SPACE = PERSONAL_MISSIONS_SOUND_SPACE
     __settingsCore = dependency.descriptor(ISettingsCore)
     __CARDS = (3, 3, 4, 4)
+    __R_PERSONAL_MISSION_FIRST_ENTRY_VIEW = R.strings.personal_missions.PersonalMissionFirstEntryView
 
     def __init__(self, ctx):
         super(PersonalMissionFirstEntryView, self).__init__(ctx)
@@ -78,13 +81,14 @@ class PersonalMissionFirstEntryView(LobbySubView, PersonalMissionFirstEntryViewM
              'description': PERSONAL_MISSIONS.getBlockDescription(cardIndex, blockIndex),
              'image': RES_ICONS.getBlockImageByStep(cardIndex, blockIndex)})
 
+        item = self.__R_PERSONAL_MISSION_FIRST_ENTRY_VIEW.dyn('item{}'.format(cardIndex))
         data = {'index': cardIndex,
          'icon': RES_ICONS.getInfoIcon(cardIndex),
          'title': PERSONAL_MISSIONS.getCardHeader(cardIndex),
          'description': PERSONAL_MISSIONS.getCardInnerDescription(cardIndex),
          'blocks': blocks,
          'notificationIcon': RES_ICONS.MAPS_ICONS_LIBRARY_WARNINGICON_1,
-         'notificationLabel': i18n.makeString(PERSONAL_MISSIONS.getBlockWarning(cardIndex))}
+         'notificationLabel': backport.text(item.warning()) if item and 'warning' in item.keys() else ''}
         self.as_setDetailedCardDataS(data)
 
     @process

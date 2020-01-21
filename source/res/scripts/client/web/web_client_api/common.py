@@ -36,6 +36,7 @@ class ShopItemType(CONST_CONTAINER):
     EMBLEM = 'emblem'
     INSCRIPTION = 'inscription'
     PROJECTION_DECAL = 'projectionDecal'
+    ENHANCEMENT = 'enhancements'
 
 
 class ItemPackType(CONST_CONTAINER):
@@ -56,6 +57,7 @@ class ItemPackType(CONST_CONTAINER):
     CREW_50 = 'crew/50'
     CREW_75 = 'crew/75'
     CREW_100 = 'crew/100'
+    CUSTOM_CREW_100 = 'custom_crew/100'
     CREW_BUNDLE = 'crew/bundle'
     CREW_CUSTOM = 'crew/custom'
     CUSTOM_PREMIUM = 'custom/premium'
@@ -129,6 +131,7 @@ class ItemPackTypeGroup(CONST_CONTAINER):
     CREW = (ItemPackType.CREW_50,
      ItemPackType.CREW_75,
      ItemPackType.CREW_100,
+     ItemPackType.CUSTOM_CREW_100,
      ItemPackType.CREW_BUNDLE,
      ItemPackType.CREW_CUSTOM)
     TOKEN = (ItemPackType.TOKEN,)

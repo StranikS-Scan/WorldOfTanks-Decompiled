@@ -163,7 +163,7 @@ class TeamLimits(object):
         self.__team = team
 
     def __getitem__(self, key):
-        if key in self.__limits[self.__team]:
+        if key in self.__limits.get(self.__team, {}):
             return self.__limits[self.__team][key]
         return self.__limits[0][key] if key in self.__limits.get(0, {}) else LIMIT_DEFAULTS[key]
 

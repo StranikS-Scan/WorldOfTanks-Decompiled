@@ -8,86 +8,86 @@ class BuySellItemsDialogModel(FullScreenDialogWindowModel):
     BATTLE_BOOSTER_CREW_REPLACE = 'battleBoosterReplace'
     BATTLE_BOOSTER = 'battleBooster'
 
-    def __init__(self, properties=21, commands=2):
+    def __init__(self, properties=23, commands=2):
         super(BuySellItemsDialogModel, self).__init__(properties=properties, commands=commands)
 
     def getBackgroundImg(self):
-        return self._getResource(8)
-
-    def setBackgroundImg(self, value):
-        self._setResource(8, value)
-
-    def getDescription(self):
-        return self._getResource(9)
-
-    def setDescription(self, value):
-        self._setResource(9, value)
-
-    def getUpperDescription(self):
         return self._getResource(10)
 
-    def setUpperDescription(self, value):
+    def setBackgroundImg(self, value):
         self._setResource(10, value)
 
-    def getLowerDescription(self):
+    def getDescription(self):
         return self._getResource(11)
 
-    def setLowerDescription(self, value):
+    def setDescription(self, value):
         self._setResource(11, value)
 
+    def getUpperDescription(self):
+        return self._getResource(12)
+
+    def setUpperDescription(self, value):
+        self._setResource(12, value)
+
+    def getLowerDescription(self):
+        return self._getResource(13)
+
+    def setLowerDescription(self, value):
+        self._setResource(13, value)
+
     def getIsAlert(self):
-        return self._getBool(12)
+        return self._getBool(14)
 
     def setIsAlert(self, value):
-        self._setBool(12, value)
+        self._setBool(14, value)
 
     def getCurrencyType(self):
-        return self._getString(13)
+        return self._getString(15)
 
     def setCurrencyType(self, value):
-        self._setString(13, value)
+        self._setString(15, value)
 
     def getItemPrice(self):
-        return self._getNumber(14)
-
-    def setItemPrice(self, value):
-        self._setNumber(14, value)
-
-    def getItemCount(self):
-        return self._getNumber(15)
-
-    def setItemCount(self, value):
-        self._setNumber(15, value)
-
-    def getItemMaxCount(self):
         return self._getNumber(16)
 
-    def setItemMaxCount(self, value):
+    def setItemPrice(self, value):
         self._setNumber(16, value)
 
-    def getItemMinCount(self):
+    def getItemCount(self):
         return self._getNumber(17)
 
-    def setItemMinCount(self, value):
+    def setItemCount(self, value):
         self._setNumber(17, value)
 
-    def getItemTotalPrice(self):
+    def getItemMaxCount(self):
         return self._getNumber(18)
 
-    def setItemTotalPrice(self, value):
+    def setItemMaxCount(self, value):
         self._setNumber(18, value)
 
+    def getItemMinCount(self):
+        return self._getNumber(19)
+
+    def setItemMinCount(self, value):
+        self._setNumber(19, value)
+
+    def getItemTotalPrice(self):
+        return self._getNumber(20)
+
+    def setItemTotalPrice(self, value):
+        self._setNumber(20, value)
+
     def getTooltipMsg(self):
-        return self._getString(19)
+        return self._getString(21)
 
     def setTooltipMsg(self, value):
-        self._setString(19, value)
+        self._setString(21, value)
 
     def getItemType(self):
-        return self._getString(20)
+        return self._getString(22)
 
     def setItemType(self, value):
-        self._setString(20, value)
+        self._setString(22, value)
 
     def _initialize(self):
         super(BuySellItemsDialogModel, self)._initialize()

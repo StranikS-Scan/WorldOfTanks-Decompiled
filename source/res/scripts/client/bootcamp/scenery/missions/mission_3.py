@@ -428,8 +428,7 @@ class Mission3(AbstractMission):
     def onEnemyObserved(self, isObserved):
         if isObserved:
             self._playerDetected = True
-            if self._hints[HINT.PLAYERDETECTED].isNotShown:
-                self.showHint(HINT.PLAYERDETECTED)
+            self.__showHintPlayerDetected()
         else:
             self._playerDetected = False
 
@@ -439,6 +438,7 @@ class Mission3(AbstractMission):
                 if vehicle not in self._detectedEnemiesList and vehicle.isAlive:
                     self._detectedEnemiesList.add(vehicle)
 
+            self.__showHintPlayerDetected()
         if lost is not None:
             for vehicle in lost:
                 if vehicle in self._detectedEnemiesList:
@@ -509,3 +509,7 @@ class Mission3(AbstractMission):
             if value is not None:
                 self._inZoneData[idx] = value
         return
+
+    def __showHintPlayerDetected(self):
+        if self._hints[HINT.PLAYERDETECTED].isNotShown:
+            self.showHint(HINT.PLAYERDETECTED)

@@ -16,7 +16,8 @@ from gui.Scaleform.daapi.view.lobby.storage.inhangar.inhangar_cm_handlers import
 from gui.Scaleform.daapi.view.lobby.storage.inhangar.inhangar_cm_handlers import VehiclesRentedCMHandler
 from gui.Scaleform.daapi.view.lobby.storage.inhangar.rent_vehicles_tab import RentVehiclesTabView
 from gui.Scaleform.daapi.view.lobby.storage.inhangar.restore_vehicles_tab import RestoreVehiclesTabView
-from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_cm_handlers import ModulesShellsCMHandler, ModulesShellsNoSaleCMHandler
+from gui.Scaleform.daapi.view.lobby.storage.inventory.consumables_tab import ConsumablesTabView
+from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_cm_handlers import ModulesShellsCMHandler, ModulesShellsNoSaleCMHandler, DemountKitsCMHandler
 from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_cm_handlers import EquipmentCMHandler
 from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_cm_handlers import BattleBoostersCMHandler
 from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_view import InventoryCategoryStorageView
@@ -41,6 +42,7 @@ def getContextMenuHandlers():
      (CONTEXT_MENU_HANDLER_TYPE.STORAGE_CREW_BOOKS_NO_SALE_ITEM, ModulesShellsNoSaleCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.STORAGE_EQUIPMENT_ITEM, EquipmentCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.STORAGE_BONS_ITEM, BattleBoostersCMHandler),
+     (CONTEXT_MENU_HANDLER_TYPE.STORAGE_DEMOUNT_KIT_ITEM, DemountKitsCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_REGULAR_ITEM, VehiclesRegularCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_RESTORE_ITEM, VehiclesRestoreCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_RENTED_ITEM, VehiclesRentedCMHandler),
@@ -59,6 +61,7 @@ def getViewSettings():
      ViewSettings(STORAGE_CONSTANTS.IN_HANGAR_RENT_VEHICLES_TAB, RentVehiclesTabView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(STORAGE_CONSTANTS.STORAGE_VIEW, InventoryCategoryStorageView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(STORAGE_CONSTANTS.STORAGE_REGULAR_ITEMS_TAB, RegularItemsTabView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(STORAGE_CONSTANTS.STORAGE_CONSUMABLES_TAB, ConsumablesTabView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(STORAGE_CONSTANTS.STORAGE_MODULES_TAB, ModulesTabView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(STORAGE_CONSTANTS.STORAGE_SHELLS_TAB, ShellsTabView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(STORAGE_CONSTANTS.STORAGE_CREW_BOOKS_TAB, CrewBooksTabView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),

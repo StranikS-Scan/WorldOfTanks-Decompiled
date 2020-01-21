@@ -1,18 +1,30 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/inventory/filters/filter_by_type.py
 import copy
+import typing
 from account_helpers import AccountSettings
-from gui.Scaleform.daapi.view.meta.ItemsWithTypeFilterTabViewMeta import ItemsWithTypeFilterTabViewMeta
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from adisp import process
 from gui import DialogsInterface
 from gui import GUI_NATIONS_ORDER_INDICES
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import SellModuleMeta
 from gui.Scaleform.daapi.view.lobby.storage import storage_helpers
-from gui.Scaleform.locale.STORAGE import STORAGE
-from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_view import IN_GROUP_COMPARATOR
 from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_view import TABS_SORT_ORDER
+from gui.Scaleform.daapi.view.meta.ItemsWithTypeFilterTabViewMeta import ItemsWithTypeFilterTabViewMeta
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.impl.gen_utils import DynAccessor
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.utils.functions import makeTooltip
+from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+if typing.TYPE_CHECKING:
+    from typing import Dict, Union, Callable
+
+def processFilterEntry(item, field, calculator):
+    entry = item.get(field, '')
+    if isinstance(entry, DynAccessor):
+        item[field] = calculator(entry)
+
 
 class FiltrableInventoryCategoryByTypeTabView(ItemsWithTypeFilterTabViewMeta):
     filterItems = None
@@ -56,6 +68,8 @@ class FiltrableInventoryCategoryByTypeTabView(ItemsWithTypeFilterTabViewMeta):
     def _initFilter(self):
         items = self._getInitFilterItems()
         for item in items:
+            processFilterEntry(item, 'tooltip', lambda da: makeTooltip(body=backport.text(da())))
+            processFilterEntry(item, 'icon', lambda da: backport.image(da()))
             if self._filterMask & item['filterValue'] == item['filterValue']:
                 item.update({'selected': True})
 
@@ -82,10 +96,9 @@ class FiltrableInventoryCategoryByTypeTabView(ItemsWithTypeFilterTabViewMeta):
         return storage_helpers.getItemVo(item)
 
     def _getVoList(self):
-        baseCriteria = self._getRequestCriteria(self._invVehicles)
-        filterCriteria = self._getFilteredCriteria()
-        totalItems = self._itemsCache.items.getItems(self._getItemTypeID(), baseCriteria, nationID=None)
+        totalItems = self._getItemList()
         self._totalCount = sum((item.inventoryCount for item in totalItems.values()))
+        filterCriteria = self._getFilteredCriteria()
         dataProviderListVoItems = []
         for item in sorted(totalItems.itervalues(), cmp=self._getComparator()):
             if filterCriteria(item):
@@ -93,6 +106,10 @@ class FiltrableInventoryCategoryByTypeTabView(ItemsWithTypeFilterTabViewMeta):
 
         self._currentCount = sum((item['count'] for item in dataProviderListVoItems))
         return dataProviderListVoItems
+
+    def containItemType(self, itemType):
+        values = filter(self._getFilteredCriteria(), self._getItemList().values())
+        return next((item for item in values if item.itemTypeID == itemType), None) is not None
 
     def _getComparator(self):
 
@@ -133,10 +150,23 @@ class FiltrableInventoryCategoryByTypeTabView(ItemsWithTypeFilterTabViewMeta):
         hasNoFilterResults = not hasNoItems and self._currentCount == 0
         filterWarningVO = None
         if hasNoFilterResults:
-            filterWarningVO = self._makeFilterWarningVO(STORAGE.FILTER_WARNINGMESSAGE, STORAGE.FILTER_NORESULTSBTN_LABEL, TOOLTIPS.STORAGE_FILTER_NORESULTSBTN)
+            filterWarningVO = self._makeFilterWarningVO(backport.text(R.strings.storage.filter.warningMessage()), backport.text(R.strings.storage.filter.noResultsBtn.label()), backport.text(R.strings.tooltips.storage.filter.noResultsBtn()))
         self.as_showDummyScreenS(hasNoItems)
         self.as_showFilterWarningS(filterWarningVO)
         return
 
     def __onCacheResync(self, *args):
         self._buildItems()
+
+
+class FiltrableRegularCategoryByTypeTabView(FiltrableInventoryCategoryByTypeTabView):
+
+    def _getItemList(self):
+        criteria = self._getRequestCriteria(self._invVehicles)
+        items = {}
+        for itemType in self._getItemTypeIDs():
+            if itemType == GUI_ITEM_TYPE.DEMOUNT_KIT:
+                items.update(self._goodiesCache.getDemountKits(REQ_CRITERIA.DEMOUNT_KIT.IN_ACCOUNT | REQ_CRITERIA.DEMOUNT_KIT.IS_ENABLED))
+            items.update(self._itemsCache.items.getItems(itemType, criteria, nationID=None))
+
+        return items

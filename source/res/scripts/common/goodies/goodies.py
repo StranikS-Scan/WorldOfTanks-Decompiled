@@ -2,7 +2,7 @@
 # Embedded file name: scripts/common/goodies/Goodies.py
 import collections
 from WeakMethod import WeakMethod
-from goodie_constants import GOODIE_STATE, MAX_ACTIVE_GOODIES, GOODIE_NOTIFICATION_TYPE
+from goodie_constants import GOODIE_STATE, MAX_ACTIVE_GOODIES, GOODIE_NOTIFICATION_TYPE, DEMOUNT_KIT_ID
 from soft_exception import SoftException
 
 class GoodieException(SoftException):
@@ -110,13 +110,13 @@ class Goodies(object):
                 callbackRef(goodieID)
         return
 
-    def __append(self, goodieDefinition, state=None, expiration=None, counter=None):
+    def __append(self, goodieDefinition, state=None, expiration=None, counter=None, notificationType=GOODIE_NOTIFICATION_TYPE.EMPTY):
         goodie = goodieDefinition.createGoodie(state, expiration, counter)
         if goodie is None:
             return
         else:
             self.actualGoodies[goodieDefinition.uid] = goodie
-            self.__updateCallback(goodie)
+            self.__updateCallback(goodie, notificationType)
             return
 
     def __erase(self, goodieID):
@@ -179,6 +179,14 @@ class Goodies(object):
     def actualIds(self):
         return set(self.actualGoodies.iterkeys())
 
+    def getDemountKitCount(self):
+        demountKit = self.actualGoodies.get(DEMOUNT_KIT_ID)
+        return demountKit.counter if demountKit else 0
+
+    def isDemountKitAllowed(self):
+        dkDefinition = self.definedGoodies.get(DEMOUNT_KIT_ID)
+        return dkDefinition.enabled if dkDefinition else False
+
     def load(self, goodieID, state, expiration, counter):
         try:
             goodieDefinition = self.definedGoodies[goodieID]
@@ -188,7 +196,7 @@ class Goodies(object):
         if not goodieDefinition.enabled:
             self.__updateCallback(goodieDefinition.createDisabledGoodie(counter), GOODIE_NOTIFICATION_TYPE.DISABLED)
         else:
-            self.__append(goodieDefinition, state, expiration, counter)
+            self.__append(goodieDefinition, state, expiration, counter, GOODIE_NOTIFICATION_TYPE.ENABLED)
 
     def extend(self, goodieID, state, expiration, counter):
         goodieDefinition = self.definedGoodies[goodieID]

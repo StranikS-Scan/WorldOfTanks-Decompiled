@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/plugins.py
+from functools import partial
 import logging
 from collections import namedtuple
-import adisp
-import async
+from adisp import process, async
 from account_helpers import isLongDisconnectedFromCenter
 from account_helpers.AccountSettings import AccountSettings
-from gui.Scaleform.Waiting import Waiting
+from gui.shared.gui_items.artefacts import OptionalDevice
 from items import tankmen
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.daapi.view.dialogs.missions_dialogs_meta import UseAwardSheetDialogMeta
@@ -20,6 +20,7 @@ from gui.shared.money import Currency
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta, DIALOG_BUTTON_ID, IconPriceDialogMeta, IconDialogMeta, PMConfirmationDialogMeta, DemountDeviceDialogMeta, DestroyDeviceDialogMeta, TankmanOperationDialogMeta, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta, CheckBoxDialogMeta, CrewSkinsRemovalCompensationDialogMeta, CrewSkinsRemovalDialogMeta
 from helpers import dependency
 from items.components import skills_constants
+from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -79,13 +80,13 @@ class AsyncValidator(ProcessorPlugin):
     def __init__(self, isEnabled=True):
         super(AsyncValidator, self).__init__(self.TYPE.VALIDATOR, True, isEnabled=isEnabled)
 
-    @adisp.async
-    @adisp.process
+    @async
+    @process
     def validate(self, callback):
         result = yield self._validate()
         callback(result)
 
-    @adisp.async
+    @async
     def _validate(self, callback):
         callback(makeSuccess())
 
@@ -95,13 +96,13 @@ class AsyncConfirmator(ProcessorPlugin):
     def __init__(self, isEnabled=True):
         super(AsyncConfirmator, self).__init__(self.TYPE.CONFIRMATOR, True, isEnabled=isEnabled)
 
-    @adisp.async
-    @adisp.process
+    @async
+    @process
     def confirm(self, callback):
         result = yield self._confirm()
         callback(result)
 
-    @adisp.async
+    @async
     def _confirm(self, callback):
         callback(makeSuccess())
 
@@ -399,7 +400,10 @@ class DialogAbstractConfirmator(AsyncConfirmator):
     def _makeMeta(self):
         raise NotImplementedError
 
-    @adisp.async
+    def _gfMakeMeta(self):
+        return None
+
+    @async
     def _showDialog(self, callback):
         callback(None)
         return
@@ -407,11 +411,18 @@ class DialogAbstractConfirmator(AsyncConfirmator):
     def _activeHandler(self):
         return self.activeHandler()
 
-    @adisp.async
-    @adisp.process
+    @async
+    @process
     def _confirm(self, callback):
+        from gui.shared import event_dispatcher
         yield lambda callback: callback(None)
         if self._activeHandler():
+            gfMetaData = self._gfMakeMeta()
+            if gfMetaData and event_dispatcher.gamefaceEnabled():
+                isOk, data = yield gfMetaData
+                result = makeSuccess(**data) if isOk else makeError()
+                callback(result)
+                return
             isOk = yield DialogsInterface.showDialog(meta=self._makeMeta())
             if not isOk:
                 callback(makeError())
@@ -439,6 +450,28 @@ class ModuleBuyerConfirmator(I18nMessageAbstractConfirmator):
         return I18nConfirmDialogMeta(self.localeKey, meta=HtmlMessageLocalDialogMeta('html_templates:lobby/dialogs', self.localeKey, ctx=self.ctx))
 
 
+class BuyAndInstallConfirmator(ModuleBuyerConfirmator):
+
+    def __init__(self, localeKey, ctx=None, activeHandler=None, isEnabled=True, item=None):
+        super(BuyAndInstallConfirmator, self).__init__(localeKey, ctx, activeHandler, isEnabled)
+        self.item = item
+
+    def _gfMakeMeta(self):
+        from gui.shared.event_dispatcher import showOptionalDeviceBuyAndInstall
+        return partial(showOptionalDeviceBuyAndInstall, self.item.intCD) if self.item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE else None
+
+
+class BuyAndStorageConfirmator(ModuleBuyerConfirmator):
+
+    def __init__(self, localeKey, ctx=None, activeHandler=None, isEnabled=True, item=None):
+        super(BuyAndStorageConfirmator, self).__init__(localeKey, ctx, activeHandler, isEnabled)
+        self.item = item
+
+    def _gfMakeMeta(self):
+        from gui.shared.event_dispatcher import showOptionalDeviceBuyAndStorage
+        return partial(showOptionalDeviceBuyAndStorage, self.item.intCD) if self.item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE else None
+
+
 class HtmlMessageConfirmator(I18nMessageAbstractConfirmator):
 
     def __init__(self, localeKey, metaPath, metaKey, ctx=None, activeHandler=None, isEnabled=True, sourceKey='text'):
@@ -459,8 +492,8 @@ class TankmanOperationConfirmator(I18nMessageAbstractConfirmator):
         self.__previousPrice, _ = restore_contoller.getTankmenRestoreInfo(tankman)
         return
 
-    @adisp.async
-    @adisp.process
+    @async
+    @process
     def _confirm(self, callback):
         if self._activeHandler():
             isOk = yield DialogsInterface.showDialog(meta=self._makeMeta())
@@ -519,9 +552,24 @@ class IconPriceMessageConfirmator(I18nMessageAbstractConfirmator):
 
 
 class DemountDeviceConfirmator(IconPriceMessageConfirmator):
+    _goodiesCache = dependency.descriptor(IGoodiesCache)
+
+    def __init__(self, localeKey, ctx=None, activeHandler=None, isEnabled=True, item=None):
+        super(DemountDeviceConfirmator, self).__init__(localeKey, ctx, activeHandler, isEnabled)
+        self.item = item
 
     def _makeMeta(self):
         return DemountDeviceDialogMeta(self.localeKey, self.ctx, self.ctx, focusedID=DIALOG_BUTTON_ID.SUBMIT)
+
+    def _gfMakeMeta(self):
+        from gui.shared import event_dispatcher
+        demountKit = self._goodiesCache.getDemountKit()
+        isDkEnabled = demountKit and demountKit.enabled
+        if self.item.isDeluxe() or not isDkEnabled:
+            showDialog = partial(event_dispatcher.showOptionalDeviceDemountSinglePrice, self.item.intCD)
+        else:
+            showDialog = partial(event_dispatcher.showOptionalDeviceDemount, self.item.intCD)
+        return showDialog
 
 
 class IconMessageConfirmator(I18nMessageAbstractConfirmator):
@@ -530,16 +578,32 @@ class IconMessageConfirmator(I18nMessageAbstractConfirmator):
         return IconDialogMeta(self.localeKey, self.ctx, self.ctx, focusedID=DIALOG_BUTTON_ID.SUBMIT)
 
 
+class InstallDeviceConfirmator(MessageConfirmator):
+
+    def __init__(self, localeKey, ctx=None, activeHandler=None, isEnabled=True, item=None):
+        super(InstallDeviceConfirmator, self).__init__(localeKey, ctx, activeHandler, isEnabled)
+        self.item = item
+
+    def _gfMakeMeta(self):
+        from gui.shared import event_dispatcher
+        return partial(event_dispatcher.showOptionalDeviceInstall, self.item.intCD)
+
+
 class DestroyDeviceConfirmator(IconMessageConfirmator):
     __DESTROY_DEVICE_PATH = '../maps/icons/modules/destroyDevice.png'
 
-    def __init__(self, localeKey, itemName=None, destroyText='', activeHandler=None, isEnabled=True):
+    def __init__(self, localeKey, itemName=None, destroyText='', activeHandler=None, isEnabled=True, item=None):
         super(DestroyDeviceConfirmator, self).__init__(localeKey, {'name': itemName,
          'icon': self.__DESTROY_DEVICE_PATH,
          'destroy': destroyText}, activeHandler, isEnabled)
+        self.item = item
 
     def _makeMeta(self):
         return DestroyDeviceDialogMeta(self.localeKey, self.ctx, self.ctx, focusedID=DIALOG_BUTTON_ID.SUBMIT)
+
+    def _gfMakeMeta(self):
+        from gui.shared import event_dispatcher
+        return partial(event_dispatcher.showOptionalDeviceDestroy, self.item.intCD)
 
 
 class MessageInformator(I18nMessageAbstractConfirmator):
@@ -662,8 +726,8 @@ class CheckBoxConfirmator(DialogAbstractConfirmator):
     def _activeHandler(self):
         return self._getSetting().get(self.settingFieldName)
 
-    @adisp.async
-    @adisp.process
+    @async
+    @process
     def _confirm(self, callback):
         yield lambda callback: callback(None)
         if self._activeHandler():
@@ -862,33 +926,26 @@ class BattleBoosterValidator(SyncValidator):
         return makeError('disabledService') if self.boosters and not self.__lobbyContext.getServerSettings().isBattleBoostersEnabled() else makeSuccess()
 
 
-class AsyncDialogConfirmator(AsyncConfirmator):
+class DismountForDemountKitValidator(SyncValidator):
+    goodiesCache = dependency.descriptor(IGoodiesCache)
 
-    def __init__(self, dialogMethod, *args, **kwargs):
-        super(AsyncDialogConfirmator, self).__init__()
-        self.__dialogMethod = dialogMethod
-        self.__dialogArgs = args
-        self.__dialogKwargs = kwargs
-        self.__dialogResult = None
-        return
+    def __init__(self, vehicle, itemsForDemountKit):
+        super(DismountForDemountKitValidator, self).__init__(isEnabled=bool(itemsForDemountKit))
+        self.vehicle = vehicle
+        self.itemsForDemountKit = itemsForDemountKit
+        self.demountKit = self.goodiesCache.getDemountKit()
 
-    def getResult(self):
-        return self.__dialogResult
+    def _validate(self):
+        if not self.demountKit:
+            return makeError()
+        if not self.demountKit.enabled:
+            return makeError('demount_kit_disabled')
+        if self.demountKit.inventoryCount < len(self.itemsForDemountKit):
+            return makeError()
+        for opDev in self.itemsForDemountKit:
+            if opDev.itemTypeID != GUI_ITEM_TYPE.OPTIONALDEVICE:
+                return makeError()
+            if opDev.isDeluxe():
+                return makeError()
 
-    @adisp.async
-    def _confirm(self, callback):
-        self._makeConfirm(callback)
-
-    @async.async
-    def _makeConfirm(self, callback):
-        Waiting.suspend()
-        self.__dialogResult = yield async.await(self.__dialogMethod(*self.__dialogArgs, **self.__dialogKwargs))
-        Waiting.resume()
-        if isinstance(self.__dialogResult, tuple):
-            result, _ = self.__dialogResult
-        else:
-            result = self.__dialogResult
-        if result:
-            callback(makeSuccess())
-            return
-        callback(makeError())
+        return makeSuccess()

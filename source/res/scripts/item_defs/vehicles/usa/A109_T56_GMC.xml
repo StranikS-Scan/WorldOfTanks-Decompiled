@@ -1987,10 +1987,18 @@
       <physicsShape>	1.281 0.157 1.020 -0.017 0.586 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
       <customization>
         <customizableVehicleAreas>
-          <paint>	CHASSIS	</paint>
+          <paint>	TURRET	</paint>
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	31000	</slotId>
+          <anchorPosition>	0.000010 0.427447 0.000000	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
       <camouflage>
         <density>	102.475 102.34	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
@@ -2106,10 +2114,18 @@
       <physicsShape>	1.177 0.000 1.000 0.052 1.000 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
       <customization>
         <customizableVehicleAreas>
-          <paint>	CHASSIS	</paint>
+          <paint>	TURRET	</paint>
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	31000	</slotId>
+          <anchorPosition>	0.000010 0.481181 0.000000	</anchorPosition>
+          <anchorDirection>	-0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
     </Turret_2_A109_T56_GMC>
   </turrets0>
   <engines>

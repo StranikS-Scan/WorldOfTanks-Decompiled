@@ -279,9 +279,6 @@ class MENU(object):
     TANKCAROUSEL_VEHICLESTATES_INPREMIUMIGRONLY = '#menu:tankCarousel/vehicleStates/inPremiumIgrOnly'
     TANKCAROUSEL_VEHICLESTATES_BUYTANK = '#menu:tankCarousel/vehicleStates/buyTank'
     TANKCAROUSEL_VEHICLESTATES_BUYTANKEMPTYCOUNT = '#menu:tankCarousel/vehicleStates/buyTankEmptyCount'
-    TANKCAROUSEL_VEHICLESTATES_NYTANK = '#menu:tankCarousel/vehicleStates/nyTank'
-    TANKCAROUSEL_VEHICLESTATES_NYTANKEMPTYCOUNT = '#menu:tankCarousel/vehicleStates/nyTankEmptyCount'
-    TANKCAROUSEL_VEHICLESTATES_NYTANKSLOTSFULL = '#menu:tankCarousel/vehicleStates/nyTankSlotsFull'
     TANKCAROUSEL_VEHICLESTATES_BUYSLOT = '#menu:tankCarousel/vehicleStates/buySlot'
     TANKCAROUSEL_VEHICLESTATES_RESTORETANK = '#menu:tankCarousel/vehicleStates/restoreTank'
     TANKCAROUSEL_VEHICLESTATES_RESTORETANKCOUNT = '#menu:tankCarousel/vehicleStates/restoreTankCount'
@@ -574,6 +571,7 @@ class MENU(object):
     DESCRIPTIONS_VEHICLE = '#menu:descriptions/vehicle'
     DESCRIPTIONS_VEHICLEGUN = '#menu:descriptions/vehicleGun'
     DESCRIPTIONS_VEHICLEGUN_AUTORELOAD = '#menu:descriptions/vehicleGun/autoReload'
+    DESCRIPTIONS_VEHICLEGUN_DUALGUN = '#menu:descriptions/vehicleGun/dualGun'
     DESCRIPTIONS_VEHICLETURRET = '#menu:descriptions/vehicleTurret'
     DESCRIPTIONS_VEHICLEENGINE = '#menu:descriptions/vehicleEngine'
     DESCRIPTIONS_VEHICLECHASSIS = '#menu:descriptions/vehicleChassis'
@@ -1593,6 +1591,7 @@ class MENU(object):
     DATETIME_MONTHS_11 = '#menu:dateTime/months/11'
     DATETIME_MONTHS_12 = '#menu:dateTime/months/12'
     DATETIME_FROMTOWITHYEAR = '#menu:dateTime/fromToWithYear'
+    DATETIME_ORDER = '#menu:dateTime/order'
     DATETIME_UNLIMITED = '#menu:dateTime/unlimited'
     DATETIME_MONTHS_SHORT_1 = '#menu:dateTime/months/short/1'
     DATETIME_MONTHS_SHORT_2 = '#menu:dateTime/months/short/2'
@@ -1947,6 +1946,7 @@ class MENU(object):
     BOOSTER_BONUS_BOOSTER_FL_XP = '#menu:booster/bonus/booster_fl_xp'
     BOOSTER_LIMIT_BOOSTER_FL_XP = '#menu:booster/limit/booster_fl_xp'
     COUNTER_NEWCOUNTER = '#menu:counter/newCounter'
+    MODULEFITS_DESTROYEQUIPMENT = '#menu:moduleFits/destroyEquipment'
     CONTEXTMENU_ENUM = (CONTEXTMENU_EXCHANGE,
      CONTEXTMENU_VEHICLEINFO,
      CONTEXTMENU_VEHICLEINFOEX,
@@ -2089,9 +2089,6 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_INPREMIUMIGRONLY,
      TANKCAROUSEL_VEHICLESTATES_BUYTANK,
      TANKCAROUSEL_VEHICLESTATES_BUYTANKEMPTYCOUNT,
-     TANKCAROUSEL_VEHICLESTATES_NYTANK,
-     TANKCAROUSEL_VEHICLESTATES_NYTANKEMPTYCOUNT,
-     TANKCAROUSEL_VEHICLESTATES_NYTANKSLOTSFULL,
      TANKCAROUSEL_VEHICLESTATES_BUYSLOT,
      TANKCAROUSEL_VEHICLESTATES_RESTORETANK,
      TANKCAROUSEL_VEHICLESTATES_RESTORETANKCOUNT,

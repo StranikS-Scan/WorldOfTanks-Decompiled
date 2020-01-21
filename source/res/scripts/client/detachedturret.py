@@ -116,7 +116,8 @@ class DetachedTurret(BigWorld.Entity, ScriptGameObject):
             effectIdx = surfaceMaterial.effectIdx
             groundEffect = True
             distToWater = BigWorld.wg_collideWater(self.position, surfaceMaterial.point)
-            if distToWater != -1:
+            collisionPointDest = surfaceMaterial.point - self.position
+            if distToWater != -1 and distToWater <= collisionPointDest.length:
                 vel = Math.Vector3(self.velocity).length
                 if vel < _MIN_COLLISION_SPEED:
                     groundEffect = False

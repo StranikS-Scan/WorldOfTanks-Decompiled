@@ -10,6 +10,9 @@ class BaseStorageCategoryViewMeta(BaseDAAPIComponent):
     def playInfoSound(self):
         self._printOverrideError('playInfoSound')
 
+    def scrolledToBottom(self):
+        self._printOverrideError('scrolledToBottom')
+
     def as_showDummyScreenS(self, show):
         return self.flashObject.as_showDummyScreen(show) if self._isDAAPIInited() else None
 

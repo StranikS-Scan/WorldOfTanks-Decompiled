@@ -5,6 +5,8 @@ import WWISE
 from gui.Scaleform.daapi.view.meta.SeniorityAwardsEntryPointMeta import SeniorityAwardsEntryPointMeta
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.shared.event_dispatcher import showSeniorityRewardWindow
+from gui.shared.gui_items.loot_box import SENIORITY_AWARDS_LOOT_BOXES_TYPE
 from helpers import dependency, time_utils
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
@@ -15,7 +17,7 @@ class SeniorityAwardsHangarEntryPoint(SeniorityAwardsEntryPointMeta):
     _itemsCache = dependency.descriptor(IItemsCache)
 
     def onClick(self):
-        pass
+        showSeniorityRewardWindow()
 
     def _populate(self):
         super(SeniorityAwardsHangarEntryPoint, self)._populate()
@@ -59,10 +61,10 @@ def getSeniorityAwardsWidgetVisibility(lobbyContext=None):
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache, lobbyContext=ILobbyContext)
 def getSeniorityAwardsBoxesCount(itemsCache=None, lobbyContext=None):
-    from gui.shared.gui_items.loot_box import SENIORITY_AWARDS_LOOT_BOXES_TYPE
-    config = lobbyContext.getServerSettings().getSeniorityAwardsConfig()
+    settings = lobbyContext.getServerSettings()
+    config = settings.getSeniorityAwardsConfig()
     totalCount = 0
-    if config.isEnabled():
+    if config.isEnabled() and settings.isLootBoxesEnabled():
         itemsByType = itemsCache.items.tokens.getLootBoxesCountByType()
         seniorityAwardsCategories = itemsByType.get(SENIORITY_AWARDS_LOOT_BOXES_TYPE, {})
         totalCount = seniorityAwardsCategories.get(TOTAL_KEY, -1)
@@ -71,7 +73,6 @@ def getSeniorityAwardsBoxesCount(itemsCache=None, lobbyContext=None):
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def getSeniorityAwardsBox(itemsCache=None):
-    from gui.shared.gui_items.loot_box import SENIORITY_AWARDS_LOOT_BOXES_TYPE
     lootBoxes = itemsCache.items.tokens.getLootBoxes()
     for item in lootBoxes.values():
         if item.getType() == SENIORITY_AWARDS_LOOT_BOXES_TYPE:

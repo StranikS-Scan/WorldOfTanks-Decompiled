@@ -451,6 +451,9 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_SELL_WALLET_NOT_AVAILABLE = '#system_messages:vehicle_sell/wallet_not_available'
     VEHICLE_SELL_VEHICLE_SELL_LIMIT = '#system_messages:vehicle_sell/vehicle_sell_limit'
     VEHICLE_SELL_NOT_ENOUGH_SPACE = '#system_messages:vehicle_sell/not_enough_space'
+    VEHICLE_SELL_SUCCESS_WITH_DEMOUNT_KIT = '#system_messages:vehicle_sell/success/with_demount_kit'
+    VEHICLE_SELL_SUCCESS_DISMANTLING_WITH_DEMOUNT_KIT = '#system_messages:vehicle_sell/success_dismantling/with_demount_kit'
+    VEHICLE_SELL_DEMOUNT_KIT_DISABLED = '#system_messages:vehicle_sell/demount_kit_disabled'
     VEHICLE_TRADE_IN_SERVER_ERROR = '#system_messages:vehicle_trade_in/server_error'
     VEHICLE_TRADE_IN_SERVER_ERROR_CENTERDOWN = '#system_messages:vehicle_trade_in/server_error_centerDown'
     VEHICLE_TRADE_IN_NOT_ENOUGH_CREDITS = '#system_messages:vehicle_trade_in/not_enough_credits'
@@ -477,10 +480,12 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_REMOVE_WALLET_NOT_AVAILABLE = '#system_messages:vehicle_remove/wallet_not_available'
     VEHICLE_REMOVE_VEHICLE_SELL_LIMIT = '#system_messages:vehicle_remove/vehicle_sell_limit'
     VEHICLE_REMOVE_NOT_ENOUGH_SPACE = '#system_messages:vehicle_remove/not_enough_space'
-    VEHICLE_REMOVE_DISABLEDSERVICE = '#system_messages:vehicle_remove/disabledService'
+    VEHICLE_REMOVE_DEMOUNT_KIT_DISABLED = '#system_messages:vehicle_remove/demount_kit_disabled'
     VEHICLE_RESTOREDURATION_HOURS = '#system_messages:vehicle/restoreDuration/hours'
     VEHICLE_RESTOREDURATION_DAYS = '#system_messages:vehicle/restoreDuration/days'
     VEHICLE_RESTORE_FINISHED = '#system_messages:vehicle/restore/finished'
+    VEHICLE_REMOVE_SUCCESS_WITH_DEMOUNT_KIT = '#system_messages:vehicle_remove/success/with_demount_kit'
+    VEHICLE_REMOVE_SUCCESS_DISMANTLING_WITH_DEMOUNT_KIT = '#system_messages:vehicle_remove/success_dismantling/with_demount_kit'
     VEHICLE_TMENXP_ACCELERATOR_SUCCESSFALSE = '#system_messages:vehicle_tmenxp_accelerator/successFalse'
     VEHICLE_TMENXP_ACCELERATOR_SUCCESSTRUE = '#system_messages:vehicle_tmenxp_accelerator/successTrue'
     VEHICLE_TMENXP_ACCELERATOR_INVALID_VEHICLE = '#system_messages:vehicle_tmenxp_accelerator/invalid_vehicle'
@@ -547,6 +552,7 @@ class SYSTEM_MESSAGES(object):
     ARTEFACT_BUY_VEHICLE_LOCKED = '#system_messages:artefact_buy/vehicle_locked'
     ARTEFACT_BUY_INVALID_VEHICLE = '#system_messages:artefact_buy/invalid_vehicle'
     ARTEFACT_BUY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE = '#system_messages:artefact_buy/error_not_for_this_vehicle_type'
+    ARTEFACT_DEMOUNT_ERROR_NOT_ENOUGH_RESOURCES = '#system_messages:artefact_demount/error_not_enough_resources'
     BATTLEBOOSTER_BUY_SUCCESS = '#system_messages:battleBooster_buy/success'
     BATTLEBOOSTER_BUY_INVALID_MODULE = '#system_messages:battleBooster_buy/invalid_module'
     BATTLEBOOSTER_BUY_NOT_ENOUGH_CREDITS = '#system_messages:battleBooster_buy/not_enough_credits'
@@ -597,6 +603,7 @@ class SYSTEM_MESSAGES(object):
     ARTEFACT_APPLY_MONEY_SUCCESS = '#system_messages:artefact_apply/money_success'
     ARTEFACT_REMOVE_SUCCESS = '#system_messages:artefact_remove/success'
     ARTEFACT_REMOVE_MONEY_SUCCESS = '#system_messages:artefact_remove/money_success'
+    ARTEFACT_REMOVE_DEMOUNT_KIT_SUCCESS = '#system_messages:artefact_remove/demount_kit_success'
     ARTEFACT_REMOVE_INCOMPATIBLEEQS = '#system_messages:artefact_remove/incompatibleEqs'
     ARTEFACT_DESTROY_SUCCESS = '#system_messages:artefact_destroy/success'
     ARTEFACT_APPLY_SERVER_ERROR = '#system_messages:artefact_apply/server_error'
@@ -1106,20 +1113,8 @@ class SYSTEM_MESSAGES(object):
     NATION_CHANGE_FAILED = '#system_messages:nation_change/FAILED'
     NATION_CHANGE_WRONG_ARG_VALUE = '#system_messages:nation_change/WRONG_ARG_VALUE'
     NATION_CHANGE_ERROR = '#system_messages:nation_change/error'
-    NEWYEAR_CRAFTTOY_SERVER_ERROR = '#system_messages:newYear/craftToy/server_error'
-    NEWYEAR_BUYTOY_SERVER_ERROR = '#system_messages:newYear/buyToy/server_error'
-    NEWYEAR_APPLYVEHICLEDISCOUNT_SUCCESS = '#system_messages:newYear/applyVehicleDiscount/success'
-    NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR = '#system_messages:newYear/applyVehicleDiscount/server_error'
-    NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_NODISCOUNTS = '#system_messages:newYear/applyVehicleDiscount/server_error/noDiscounts'
-    NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_ALREADYACTIVE = '#system_messages:newYear/applyVehicleDiscount/server_error/alreadyActive'
-    NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_ALREADYBOUGHT = '#system_messages:newYear/applyVehicleDiscount/server_error/alreadyBought'
-    NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_NODISCOUNTFORVEHICLE = '#system_messages:newYear/applyVehicleDiscount/server_error/noDiscountForVehicle'
-    NEWYEAR_HANGTOY_SERVER_ERROR = '#system_messages:newYear/hangToy/server_error'
-    NEWYEAR_BREAKTOYS_SERVER_ERROR = '#system_messages:newYear/breakToys/server_error'
-    NEWYEAR_SETVEHICLEBRANCH_SERVER_ERROR = '#system_messages:newYear/setVehicleBranch/server_error'
-    NEWYEAR_ADDTALISMAN_SERVER_ERROR = '#system_messages:newYear/addTalisman/server_error'
-    NEWYEAR_GETTALISMANTOY_SERVER_ERROR = '#system_messages:newYear/getTalismanToy/server_error'
-    NEWYEAR_BUYCOLLECTION_SERVER_ERROR = '#system_messages:newYear/buyCollection/server_error'
+    DEMOUNTKIT_RESTORED_SWITCHEDON = '#system_messages:demountKit_restored/switchedOn'
+    DEMOUNTKIT_FAILED_SWITCHEDOFF = '#system_messages:demountKit_failed/switchedOff'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -1678,6 +1673,9 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_SELL_WALLET_NOT_AVAILABLE,
      VEHICLE_SELL_VEHICLE_SELL_LIMIT,
      VEHICLE_SELL_NOT_ENOUGH_SPACE,
+     VEHICLE_SELL_SUCCESS_WITH_DEMOUNT_KIT,
+     VEHICLE_SELL_SUCCESS_DISMANTLING_WITH_DEMOUNT_KIT,
+     VEHICLE_SELL_DEMOUNT_KIT_DISABLED,
      VEHICLE_TRADE_IN_SERVER_ERROR,
      VEHICLE_TRADE_IN_SERVER_ERROR_CENTERDOWN,
      VEHICLE_TRADE_IN_NOT_ENOUGH_CREDITS,
@@ -1704,10 +1702,12 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_REMOVE_WALLET_NOT_AVAILABLE,
      VEHICLE_REMOVE_VEHICLE_SELL_LIMIT,
      VEHICLE_REMOVE_NOT_ENOUGH_SPACE,
-     VEHICLE_REMOVE_DISABLEDSERVICE,
+     VEHICLE_REMOVE_DEMOUNT_KIT_DISABLED,
      VEHICLE_RESTOREDURATION_HOURS,
      VEHICLE_RESTOREDURATION_DAYS,
      VEHICLE_RESTORE_FINISHED,
+     VEHICLE_REMOVE_SUCCESS_WITH_DEMOUNT_KIT,
+     VEHICLE_REMOVE_SUCCESS_DISMANTLING_WITH_DEMOUNT_KIT,
      VEHICLE_TMENXP_ACCELERATOR_SUCCESSFALSE,
      VEHICLE_TMENXP_ACCELERATOR_SUCCESSTRUE,
      VEHICLE_TMENXP_ACCELERATOR_INVALID_VEHICLE,
@@ -1774,6 +1774,7 @@ class SYSTEM_MESSAGES(object):
      ARTEFACT_BUY_VEHICLE_LOCKED,
      ARTEFACT_BUY_INVALID_VEHICLE,
      ARTEFACT_BUY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE,
+     ARTEFACT_DEMOUNT_ERROR_NOT_ENOUGH_RESOURCES,
      BATTLEBOOSTER_BUY_SUCCESS,
      BATTLEBOOSTER_BUY_INVALID_MODULE,
      BATTLEBOOSTER_BUY_NOT_ENOUGH_CREDITS,
@@ -1824,6 +1825,7 @@ class SYSTEM_MESSAGES(object):
      ARTEFACT_APPLY_MONEY_SUCCESS,
      ARTEFACT_REMOVE_SUCCESS,
      ARTEFACT_REMOVE_MONEY_SUCCESS,
+     ARTEFACT_REMOVE_DEMOUNT_KIT_SUCCESS,
      ARTEFACT_REMOVE_INCOMPATIBLEEQS,
      ARTEFACT_DESTROY_SUCCESS,
      ARTEFACT_APPLY_SERVER_ERROR,
@@ -2333,20 +2335,8 @@ class SYSTEM_MESSAGES(object):
      NATION_CHANGE_FAILED,
      NATION_CHANGE_WRONG_ARG_VALUE,
      NATION_CHANGE_ERROR,
-     NEWYEAR_CRAFTTOY_SERVER_ERROR,
-     NEWYEAR_BUYTOY_SERVER_ERROR,
-     NEWYEAR_APPLYVEHICLEDISCOUNT_SUCCESS,
-     NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR,
-     NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_NODISCOUNTS,
-     NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_ALREADYACTIVE,
-     NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_ALREADYBOUGHT,
-     NEWYEAR_APPLYVEHICLEDISCOUNT_SERVER_ERROR_NODISCOUNTFORVEHICLE,
-     NEWYEAR_HANGTOY_SERVER_ERROR,
-     NEWYEAR_BREAKTOYS_SERVER_ERROR,
-     NEWYEAR_SETVEHICLEBRANCH_SERVER_ERROR,
-     NEWYEAR_ADDTALISMAN_SERVER_ERROR,
-     NEWYEAR_GETTALISMANTOY_SERVER_ERROR,
-     NEWYEAR_BUYCOLLECTION_SERVER_ERROR)
+     DEMOUNTKIT_RESTORED_SWITCHEDON,
+     DEMOUNTKIT_FAILED_SWITCHEDOFF)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

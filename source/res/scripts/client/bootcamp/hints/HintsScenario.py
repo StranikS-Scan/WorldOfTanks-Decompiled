@@ -160,43 +160,6 @@ class HintAvoidAndDestroy(HintBase, TriggersManager.ITriggerListener):
         pass
 
 
-class HintAllyShoot(HintBase):
-
-    def __init__(self, avatar, params):
-        super(HintAllyShoot, self).__init__(avatar, HINT_TYPE.HINT_SHOOT_ALLY, params['timeout'])
-        self.__alliesIds = [ vehId for vehId, vehInfo in self._avatar.arena.vehicles.items() if vehInfo['team'] == avatar.team ]
-        self.__allyShooted = False
-
-    def start(self):
-        self._state = HintBase.STATE_DEFAULT
-
-    def stop(self):
-        self._state = HintBase.STATE_INACTIVE
-
-    def update(self):
-        command = None
-        if self._state == HintBase.STATE_DEFAULT:
-            if self.__allyShooted:
-                self._state = HintBase.STATE_HINT
-                command = HINT_COMMAND.SHOW
-                self._timeStart = time.time()
-                self.__allyShooted = False
-        elif self._state == HintBase.STATE_HINT:
-            if time.time() - self._timeStart > self._timeout:
-                self._state = HintBase.STATE_DEFAULT
-                command = HINT_COMMAND.HIDE
-        return command
-
-    def onAction(self, actionId, actionParams):
-        if actionId != BOOTCAMP_BATTLE_ACTION.PLAYER_HIT_VEHICLE:
-            return
-        if self._state != HintBase.STATE_DEFAULT:
-            return
-        vehicleId = actionParams[0]
-        if vehicleId in self.__alliesIds and not self.__allyShooted:
-            self.__allyShooted = True
-
-
 class HintUselessConsumable(HintBase):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 

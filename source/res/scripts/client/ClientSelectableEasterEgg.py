@@ -56,8 +56,7 @@ class ClientSelectableEasterEgg(ClientSelectableObject):
 
     def onMouseClick(self):
         super(ClientSelectableEasterEgg, self).onMouseClick()
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.IMAGE_VIEW, ctx={'img': self.__getImageName(),
-         'soundConfig': {}}), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.IMAGE_VIEW, ctx={'img': self.__getImageName()}), EVENT_BUS_SCOPE.LOBBY)
 
     def __getImageName(self):
         nameParts = [self.imageName]

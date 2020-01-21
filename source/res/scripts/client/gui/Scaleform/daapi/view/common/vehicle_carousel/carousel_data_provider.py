@@ -7,19 +7,12 @@ from gui.Scaleform import getButtonsAssetPath
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.Scaleform.locale.MENU import MENU
 from gui.impl import backport
-from gui.impl.gen import R
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.time_formatters import RentLeftFormatter
 from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES, getVehicleStateIcon, getVehicleStateAddIcon, getBattlesLeft, getSmallIconPath, getIconPath
 from gui.shared.gui_items.dossier.achievements import isMarkOfMasteryAchieved
 from gui.shared.utils.requesters import REQ_CRITERIA
-from helpers import dependency
 from helpers.i18n import makeString as ms
-from new_year.vehicle_branch import getBonusByVehicle
-from skeletons.new_year import INewYearController
-_BONUS_ICONS_EXTRA_SMALL = {'xpFactor': backport.image(R.images.gui.maps.icons.new_year.vehicles_view.icons.icon_battle_exp_small()),
- 'freeXPFactor': backport.image(R.images.gui.maps.icons.new_year.vehicles_view.icons.icon_free_exp_small()),
- 'tankmenXPFactor': backport.image(R.images.gui.maps.icons.new_year.vehicles_view.icons.icon_crew_exp_small())}
 
 def sortedIndices(seq, getter, reverse=False):
     return sorted(range(len(seq)), key=lambda idx: getter(seq[idx]), reverse=reverse)
@@ -61,7 +54,6 @@ def getStatusStrings(vState, vStateLvl=Vehicle.VEHICLE_STATE_LEVEL.INFO, substit
 
 
 def getVehicleDataVO(vehicle):
-    nyController = dependency.instance(INewYearController)
     rentInfoText = RentLeftFormatter(vehicle.rentInfo, vehicle.isPremiumIGR).getRentLeftStr()
     vState, vStateLvl = vehicle.getState()
     if vehicle.isRotationApplied():
@@ -84,16 +76,8 @@ def getVehicleDataVO(vehicle):
         bonusImage = getButtonsAssetPath('bonus_x{}'.format(vehicle.dailyXPFactor))
     else:
         bonusImage = ''
-    vehicleBranchEnabled = nyController.isVehicleBranchEnabled()
-    isNYVehicle = vehicleBranchEnabled and nyController.getVehicleBranch().isVehicleInBranch(vehicle)
     label = vehicle.shortUserName if vehicle.isPremiumIGR else vehicle.userName
-    labelStyle = text_styles.vehicleNameNY if isNYVehicle else (text_styles.premiumVehicleName if vehicle.isPremium else text_styles.vehicleName)
-    bonusValue = ''
-    bonusIcon = ''
-    if isNYVehicle:
-        bonusType, bonusValue = getBonusByVehicle(vehicle)
-        bonusValue = backport.text(R.strings.ny.vehiclesView.bonusFormat(), bonus=int(bonusValue * 100))
-        bonusIcon = _BONUS_ICONS_EXTRA_SMALL[bonusType]
+    labelStyle = text_styles.premiumVehicleName if vehicle.isPremium else text_styles.vehicleName
     return {'id': vehicle.invID,
      'intCD': vehicle.intCD,
      'infoText': largeStatus,
@@ -120,10 +104,7 @@ def getVehicleDataVO(vehicle):
      'additionalImgSrc': getVehicleStateAddIcon(vState),
      'isCritInfo': vStateLvl == Vehicle.VEHICLE_STATE_LEVEL.CRITICAL,
      'isRentPromotion': vehicle.isRentPromotion and not vehicle.isRented,
-     'isNationChangeAvailable': vehicle.hasNationGroup,
-     'hasNyBonus': isNYVehicle,
-     'nyBonusValue': bonusValue,
-     'nyBonusIcon': bonusIcon}
+     'isNationChangeAvailable': vehicle.hasNationGroup}
 
 
 class CarouselDataProvider(SortableDAAPIDataProvider):
@@ -237,7 +218,6 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         currentVehicleInvID = self._currentVehicle.invID
         visibleVehiclesIntCDs = [ vehicle.intCD for vehicle in self._getCurrentVehicles() ]
         sortedVehicleIndices = self._getSortedIndices()
-        self._filteredIndices += self._getBeforeAdditionalItemsIndexes()
         for idx in sortedVehicleIndices:
             vehicle = self._vehicles[idx]
             if vehicle.intCD in visibleVehiclesIntCDs:
@@ -270,9 +250,6 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         return
 
     def _getAdditionalItemsIndexes(self):
-        return []
-
-    def _getBeforeAdditionalItemsIndexes(self):
         return []
 
     def _syncRandomStats(self):

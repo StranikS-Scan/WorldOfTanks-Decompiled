@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle_results_window.py
+import BigWorld
 from adisp import process
 from constants import PremiumConfigs
 from gui import SystemMessages
@@ -76,7 +77,8 @@ class BattleResultsWindow(BattleResultsMeta):
         self.__battleResults.applyAdditionalBonus(self.__arenaUniqueID)
 
     def onShowDetailsPremium(self):
-        showTankPremiumAboutPage()
+        BigWorld.callback(0.0, showTankPremiumAboutPage)
+        self.destroy()
 
     def _populate(self):
         super(BattleResultsWindow, self)._populate()

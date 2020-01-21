@@ -10,7 +10,7 @@ from HintControllers import createPrimaryHintController, createSecondaryHintCont
 from soft_exception import SoftException
 from HintsBase import HINT_COMMAND
 from HintsMove import HintMove, HintMoveTurret, HintNoMove, HintNoMoveTurret, HintMoveToMarker
-from HintsScenario import HintAllyShoot, HintUselessConsumable, HintExitGameArea, HintAvoidAndDestroy, HintStartNarrative, HintSectorClear, HintSniperOnDistance, HintLowHP
+from HintsScenario import HintUselessConsumable, HintExitGameArea, HintAvoidAndDestroy, HintStartNarrative, HintSectorClear, HintSniperOnDistance, HintLowHP
 from HintsDamage import HintCompositeDetrack, HintCompositeHealCommander, HintCompositeBurn
 from HintsLobby import HintLobbyRotate
 from HintsShoot import HintSniper, HintSniperLevel0, HintShoot, HintAdvancedSniper, HintAim, HintTargetLock, HintWaitReload, HintShootWhileMoving, HintSecondarySniper, HintTargetUnLock
@@ -31,7 +31,6 @@ class HintSystem(object):
      HINT_TYPE.HINT_HEAL_CREW: HintCompositeHealCommander,
      HINT_TYPE.HINT_EXIT_GAME_AREA: HintExitGameArea,
      HINT_TYPE.HINT_SNIPER_ON_DISTANCE: HintSniperOnDistance,
-     HINT_TYPE.HINT_SHOOT_ALLY: HintAllyShoot,
      HINT_TYPE.HINT_AIM: HintAim,
      HINT_TYPE.HINT_TARGET_LOCK: HintTargetLock,
      HINT_TYPE.HINT_WAIT_RELOAD: HintWaitReload,
@@ -124,7 +123,7 @@ class HintSystem(object):
                     self.__hintsCompleted.append(createPrimaryHintController(self, hintId, typeId, True, timeCompleted, cooldownTimeout, message, voiceover))
             if commandId == HINT_COMMAND.HIDE:
                 if self.__currentHint is not None and self.__currentHint.id == hintId:
-                    self.__currentHint.close()
+                    self.__currentHint.hide()
                     self.__currentHint = None
                 else:
                     hintToRemove = None

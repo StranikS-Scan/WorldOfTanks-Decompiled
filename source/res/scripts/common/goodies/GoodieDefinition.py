@@ -58,7 +58,7 @@ class GoodieDefinition(object):
             if resource.value == 0 and not applyToZero:
                 continue
             if resource.__class__ == self.resource:
-                if self.variety == GOODIE_VARIETY.DISCOUNT:
+                if self.variety in GOODIE_VARIETY.DISCOUNT_LIKE:
                     result = self.value.reduce(resource.value)
                     if self.target.limit is not None and resource.value - result > self.target.limit:
                         raise OverLimitException('Discount is over the limit' % self.target.limit)

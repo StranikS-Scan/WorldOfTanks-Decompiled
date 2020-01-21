@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/CustomEffect.py
-import copy
 import Math
 import material_kinds
 from items import _xml
@@ -8,9 +7,7 @@ from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from helpers.PixieNode import EffectNode
 from helpers import EffectsList
 from soft_exception import SoftException
-gTemplates = {}
 gNodes = {}
-gConstantGroup = {}
 gEffectLists = dict()
 
 def getEffectList(name):
@@ -39,35 +36,13 @@ class SelectorDescFactory(object):
 
     @staticmethod
     def initFactory(section):
-        SelectorDescFactory.readConstants(section)
         SelectorDescFactory.readNodes(section)
-        SelectorDescFactory.readTemplates(section)
         SelectorDescFactory.readEffectLists(section)
 
     @staticmethod
     def releseFactory():
         global gNodes
-        global gTemplates
-        global gConstantGroup
-        gTemplates.clear()
         gNodes.clear()
-        gConstantGroup.clear()
-
-    @staticmethod
-    def readTemplates(dataSection):
-        gTemplates.clear()
-        try:
-            section = dataSection['templates']
-            for _, template in section.items():
-                templateName = template.readString('name')
-                selectorTemplate = SelectorDescFactory.create(template['selector'])
-                if selectorTemplate is not None and templateName:
-                    gTemplates[templateName] = selectorTemplate
-
-        except Exception:
-            LOG_CURRENT_EXCEPTION()
-
-        return
 
     @staticmethod
     def readEffectLists(dataSection):
@@ -104,30 +79,6 @@ class SelectorDescFactory(object):
         return
 
     @staticmethod
-    def readConstants(dataSection):
-        gConstantGroup.clear()
-        try:
-            section = dataSection['constants']
-            for group in section.items():
-                groupName = group[1].readString('name', '')
-                groupValues = dict()
-                for constDesc in group[1].items():
-                    name = constDesc[1].readString('name', '').strip()
-                    if name:
-                        value = constDesc[1].readString('value', '').strip()
-                        try:
-                            value = float(value)
-                        except Exception:
-                            pass
-
-                        groupValues[name] = value
-
-                gConstantGroup[groupName] = groupValues
-
-        except Exception:
-            LOG_CURRENT_EXCEPTION()
-
-    @staticmethod
     def create(selectorDesc, effects=None):
         selectorType = selectorDesc.readString('type')
         selector = None
@@ -143,35 +94,6 @@ class SelectorDescFactory(object):
             selector = MatkindSelectorDesc()
         elif selectorType == 'union':
             selector = UnionSelectorDesc()
-        elif selectorType == 'template':
-            templateName = selectorDesc.readString('name')
-            templateArgs = selectorDesc.readString('parameters')
-            constantGroupName = selectorDesc.readString('constantsGroup')
-            if templateName is not None:
-                template = gTemplates.get(templateName, None)
-                if template is not None:
-                    selector = copy.deepcopy(template)
-                    templateArgsDict = dict()
-                    if templateArgs:
-                        templateArgsList = templateArgs.split(';')
-                        for argument in templateArgsList:
-                            argumetSplit = argument.split(':')
-                            if len(argumetSplit) < 2:
-                                continue
-                            name = argumetSplit[0].strip()
-                            value = argumetSplit[1].strip()
-                            try:
-                                value = float(value)
-                            except Exception:
-                                pass
-
-                            templateArgsDict[name] = value
-
-                    constantGroupDict = gConstantGroup.get(constantGroupName, None)
-                    if constantGroupDict is not None:
-                        templateArgsDict.update(constantGroupDict)
-                    selector.fillTemplate(templateArgsDict, effects)
-                    return selector
         if selector is not None:
             selector.read(selectorDesc, effects)
         return selector

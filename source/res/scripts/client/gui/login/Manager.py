@@ -24,6 +24,7 @@ from gui.Scaleform.Waiting import Waiting
 from Event import Event
 from PlayerEvents import g_playerEvents
 from connection_mgr import LOGIN_STATUS
+from gui.server_events.recruit_helper import NonRecruitNotifierSingleton
 _PERIPHERY_DEFAULT_LIFETIME = 15 * ONE_MINUTE
 _LIMIT_LOGIN_COUNT = 5
 _logger = logging.getLogger(__name__)
@@ -127,15 +128,18 @@ class Manager(ILoginManager):
             email = self._preferences['login']
             serverName = self._preferences['server_name']
             session = self._preferences['session']
+            loginCount = self._preferences['loginCount']
             self._preferences.clear()
             if not constants.IS_SINGAPORE and not GUI_SETTINGS.igrCredentialsReset:
                 self._preferences['login'] = email
             if not AUTO_LOGIN_QUERY_ENABLED:
                 self._preferences['server_name'] = serverName
             self._preferences['session'] = session
+            self._preferences['loginCount'] = loginCount
         self._preferences.writeLoginInfo()
         self.__dumpUserName(name)
         self._showSecurityMessage(responseData)
+        NonRecruitNotifierSingleton().getInstance().resetFirstShowState()
 
     def _showSecurityMessage(self, responseData):
         securityWarningType = responseData.get('security_msg')

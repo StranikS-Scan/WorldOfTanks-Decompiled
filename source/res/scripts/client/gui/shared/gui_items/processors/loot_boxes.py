@@ -3,7 +3,7 @@
 import logging
 import BigWorld
 from gui import SystemMessages
-from gui.impl.auxiliary.rewards_helper import getMergedLootBoxBonuses
+from gui.impl.lobby.loot_box.loot_box_helper import getMergedLootBoxBonuses
 from gui.shared.gui_items.processors import Processor, makeI18nError
 from messenger.formatters.service_channel import TokenQuestsFormatter
 _logger = logging.getLogger(__name__)

@@ -15,3 +15,6 @@ class StorageViewMeta(View):
 
     def as_selectSectionS(self, sectionIdx):
         return self.flashObject.as_selectSection(sectionIdx) if self._isDAAPIInited() else None
+
+    def as_setButtonCounterS(self, sectionIdx, value):
+        return self.flashObject.as_setButtonCounter(sectionIdx, value) if self._isDAAPIInited() else None

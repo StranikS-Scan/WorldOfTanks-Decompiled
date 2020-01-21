@@ -53,10 +53,6 @@
         <text>	#bootcamp:loading/tip/penetration/description/2	</text>
         <autoSize>	left	</autoSize>
       </description2>
-      <description3>
-        <text>	510	</text>
-        <autoSize>	center	</autoSize>
-      </description3>
     </penetration>
     <visibility>
       <header1>
@@ -137,14 +133,6 @@
         <text>	#bootcamp:loading/tip/crosshair/header/2	</text>
         <autoSize>	center	</autoSize>
       </header2>
-      <description1>
-        <text>	1050	</text>
-        <autoSize>	center	</autoSize>
-      </description1>
-      <description2>
-        <text>	500	</text>
-        <autoSize>	center	</autoSize>
-      </description2>
     </crosshair>
     <modules>
       <header1>
@@ -159,10 +147,6 @@
         <text>	#bootcamp:loading/tip/modules/header/3	</text>
         <autoSize>	left	</autoSize>
       </header3>
-      <description1>
-        <text>	1550	</text>
-        <autoSize>	center	</autoSize>
-      </description1>
       <description2>
         <text>	#bootcamp:loading/tip/modules/description/2	</text>
         <autoSize>	left	</autoSize>
@@ -334,12 +318,6 @@
       <seconds>	60.0	</seconds>
       <cooldown_after>	5.0	</cooldown_after>
     </hintNoMoveTurret>
-    <hintAllyShoot>
-      <message>	#bootcamp:hint/ally/shoot	</message>
-      <timeout>	4.0	</timeout>
-      <time_completed>	0	</time_completed>
-      <cooldown_after>	2.0	</cooldown_after>
-    </hintAllyShoot>
     <hintUselessConsumable>
       <message>	#bootcamp:hint/useless/consumables	</message>
       <timeout>	4.0	</timeout>

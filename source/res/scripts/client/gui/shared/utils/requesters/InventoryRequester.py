@@ -64,8 +64,7 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
                         continue
                     outfit = Outfit(strCompactDescr=outfitData.compDescr)
                     if outfit.style is not None:
-                        if season != SeasonType.EVENT:
-                            self.__c11nItemsAppliedCounts[outfit.style.compactDescr][vehicleIntCD] = 1
+                        self.__c11nItemsAppliedCounts[outfit.style.compactDescr][vehicleIntCD] = 1
                     for itemCD, count in outfit.itemsCounter.iteritems():
                         self.__c11nItemsAppliedCounts[itemCD][vehicleIntCD] += count
 
@@ -168,6 +167,12 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
 
         activeVehicles = sum(imap(checker, self.__getVehiclesData().itervalues()))
         return vehiclesSlots - activeVehicles
+
+    def getInventoryEnhancements(self):
+        return self.getCacheValue('enhancements', {})
+
+    def getInstalledEnhancements(self):
+        return self.getCacheValue(GUI_ITEM_TYPE.VEHICLE, {}).get('enhancements', {})
 
     @async
     def _requestCache(self, callback=None):

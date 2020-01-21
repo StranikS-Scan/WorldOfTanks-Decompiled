@@ -53,7 +53,7 @@ def getTankmanSkill(skillName, tankman=None):
             return SabatonTankmanSkill(skillName)
         if _isOffspringCrew(tankman):
             return OffspringTankmanSkill(skillName)
-    return TankmanSkill(skillName)
+    return TankmanSkill(skillName, proxy=(0,))
 
 
 class PreviewTankman(object):
@@ -288,10 +288,14 @@ class VehiclePreviewCrewTab(VehiclePreviewCrewTabMeta):
     def __getCrewCommentAndIcon(self, itemCrew):
         if self.__customCrew:
             return self._getCustomCrewComment()
-        if itemCrew and itemCrew.type in (ItemPackType.CREW_50, ItemPackType.CREW_75, ItemPackType.CREW_100):
+        if itemCrew and itemCrew.type in (ItemPackType.CREW_50,
+         ItemPackType.CREW_75,
+         ItemPackType.CREW_100,
+         ItemPackType.CUSTOM_CREW_100):
             pctValue = {ItemPackType.CREW_50: 50,
              ItemPackType.CREW_75: 75,
-             ItemPackType.CREW_100: 100}.get(itemCrew.type)
+             ItemPackType.CREW_100: 100,
+             ItemPackType.CUSTOM_CREW_100: 100}.get(itemCrew.type)
             return (_ms(TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_WITHCREW, pctValue), '', '')
         return (_ms(TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_NOCREW), '', '')
 
@@ -306,7 +310,7 @@ def getCrewComment(skill, crewLevel, role, forOne):
         tKey = TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_CREW_ONESKILL_FORONE
     else:
         tKey = TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_CREW_ONESKILL_FORALL
-    return _ms(key=tKey, level=crewLevel, role=_ms(TOOLTIPS.crewRole(role)), skillType=_ms(TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_CREW_ISPERK if skill.isPerk else TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_CREW_ISABILLITY), skillName=text_styles.statusAttention(_ms(MENU.QUOTE, string=skill.userName)))
+    return _ms(key=tKey, level=crewLevel, role=_ms(TOOLTIPS.crewRole(role)) if role != '' else None, skillType=_ms(TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_CREW_ISPERK if skill.isPerk else TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER_CREW_ISABILLITY), skillName=text_styles.statusAttention(_ms(MENU.QUOTE, string=skill.userName)))
 
 
 def _isSabatonBrotherhood(skill):

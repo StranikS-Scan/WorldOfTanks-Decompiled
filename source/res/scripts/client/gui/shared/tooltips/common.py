@@ -4,8 +4,8 @@ import cPickle
 import logging
 import math
 from collections import namedtuple
-import ResMgr
 import ArenaType
+import ResMgr
 import constants
 from gui import g_htmlTemplates, makeHtmlString
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import getReserveNameVO, getDirection
@@ -20,20 +20,18 @@ from gui.Scaleform.locale.ARENAS import ARENAS
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.MESSENGER import MESSENGER
-from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltipContent
-from gui.impl.new_year.tooltips.new_year_total_bonus_tooltip import NewYearTotalBonusTooltip
-from gui.impl.new_year.tooltips.new_year_vehicles_bonus_tooltip import NewYearVehiclesBonusTooltip
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.clans import formatters as clans_fmts
 from gui.clans.items import formatField
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared.formatters import formatActionPrices
+from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltipContent
 from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from gui.server_events.events_helpers import missionsSortFunc
 from gui.server_events.formatters import TOKEN_SIZES, DISCOUNT_TYPE
+from gui.shared.formatters import formatActionPrices
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.servers import formatPingStatus, wrapServerName
 from gui.shared.formatters.text_styles import concatStylesToMultiLine
@@ -62,12 +60,15 @@ from skeletons.gui.web import IWebController
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 _UNAVAILABLE_DATA_PLACEHOLDER = '--'
-_ITEM_TYPE_TO_TOOLTIP_DICT = {GUI_ITEM_TYPE.SHELL: i18n.makeString(TOOLTIPS.ACTIONPRICE_SELL_TYPE_SHELL),
- GUI_ITEM_TYPE.EQUIPMENT: i18n.makeString(TOOLTIPS.ACTIONPRICE_SELL_TYPE_EQUIPMENT),
- GUI_ITEM_TYPE.OPTIONALDEVICE: i18n.makeString(TOOLTIPS.ACTIONPRICE_SELL_TYPE_OPTIONALDEVICE),
- GUI_ITEM_TYPE.VEHICLE_MODULES: i18n.makeString(TOOLTIPS.ACTIONPRICE_SELL_TYPE_MODULE),
- GUI_ITEM_TYPE.VEHICLE: i18n.makeString(TOOLTIPS.ACTIONPRICE_SELL_TYPE_VEHICLE),
- ACTION_TOOLTIPS_TYPE.BOOSTER: i18n.makeString(TOOLTIPS.ACTIONPRICE_SELL_TYPE_BOOSTERS)}
+_PARENTHESES_OPEN = '('
+_PARENTHESES_CLOSE = ')'
+_SPACE = ' '
+_ITEM_TYPE_TO_TOOLTIP_DICT = {GUI_ITEM_TYPE.SHELL: backport.text(R.strings.tooltips.actionPrice.sell.type.shell()),
+ GUI_ITEM_TYPE.EQUIPMENT: backport.text(R.strings.tooltips.actionPrice.sell.type.equipment()),
+ GUI_ITEM_TYPE.OPTIONALDEVICE: backport.text(R.strings.tooltips.actionPrice.sell.type.optionalDevice()),
+ GUI_ITEM_TYPE.VEHICLE_MODULES: backport.text(R.strings.tooltips.actionPrice.sell.type.module()),
+ GUI_ITEM_TYPE.VEHICLE: backport.text(R.strings.tooltips.actionPrice.sell.type.vehicle()),
+ ACTION_TOOLTIPS_TYPE.BOOSTER: backport.text(R.strings.tooltips.actionPrice.sell.type.boosters())}
 
 class FortOrderParamField(ToolTipParameterField):
 
@@ -121,7 +122,7 @@ class IgrTooltipData(ToolTipBaseData):
         igrPercent = (self.igrCtrl.getXPFactor() - 1) * 100
         igrType = self.igrCtrl.getRoomType()
         icon = makeHtmlString('html_templates:igr/iconBig', 'premium' if igrType == constants.IGR_TYPE.PREMIUM else 'basic')
-        return {'title': i18n.makeString(TOOLTIPS.IGR_TITLE, igrIcon=icon),
+        return {'title': backport.text(R.strings.tooltips.igr.title(), igrIcon=icon),
          'description': makeHtmlString('html_templates:lobby/tooltips', descriptionTemplate, {'igrValue': '{0}%'.format(backport.getIntegralFormat(igrPercent))}),
          'quests': [ i.format(**template.ctx) for i in qLabels ],
          'progressHeader': makeHtmlString('html_templates:lobby/tooltips', 'igr_progress_header', {}),
@@ -150,7 +151,7 @@ class BlocksTooltipData(ToolTipBaseData):
     @classmethod
     def addAdvancedBlock(cls, data, disableAnim):
         displayableData = data['data']
-        block = formatters.packImageTextBlockData(img=RES_ICONS.MAPS_ICONS_LOBBY_ICONBTNALT, txtOffset=40, padding=formatters.packPadding(bottom=-7, top=-5, left=20 - displayableData['contentMargin']['left']), desc=text_styles.main(TOOLTIPS.ADVANCED_INFO), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_ADVANCED_KEY_BLOCK_LINKAGE)
+        block = formatters.packImageTextBlockData(img=RES_ICONS.MAPS_ICONS_LOBBY_ICONBTNALT, txtOffset=40, padding=formatters.packPadding(bottom=-7, top=-5, left=20 - displayableData['contentMargin']['left']), desc=text_styles.main(backport.text(R.strings.tooltips.advanced.info())), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_ADVANCED_KEY_BLOCK_LINKAGE)
         block['data']['animated'] = not disableAnim
         displayableData['blocksData'].append(block)
 
@@ -996,9 +997,38 @@ def _getCurrencySetting(key):
         return _OPERATIONS_SETTINGS[key]
 
 
+def getFormattedPriceString(price, currencySetting, neededValue=None):
+    _int = backport.getIntegralFormat
+    settings = _getCurrencySetting(currencySetting)
+    if settings is None:
+        return
+    else:
+        valueFormatted = settings.textStyle(_int(price))
+        icon = settings.icon
+        neededText = getFormattedNeededValue(settings, _int(neededValue)) if neededValue else ''
+        return text_styles.concatStylesWithSpace(valueFormatted, icon, neededText)
+
+
+def getFormattedNeededValue(settings, neededValue):
+    needFormatted = settings.textStyle(neededValue)
+    neededText = text_styles.concatStylesToSingleLine(text_styles.standard(_PARENTHESES_OPEN), text_styles.error(backport.text(R.strings.tooltips.vehicle.graph.body.notEnough())), _SPACE, needFormatted, _SPACE, settings.icon, text_styles.standard(_PARENTHESES_CLOSE))
+    return neededText
+
+
+def getFormattedDiscountPriceString(currencySetting, percent, oldPrice):
+    _int = backport.getIntegralFormat
+    settings = _getCurrencySetting(currencySetting)
+    if settings is None:
+        return
+    else:
+        icon = settings.icon
+        oldPriceText = text_styles.concatStylesToSingleLine(settings.textStyle(_int(oldPrice)), icon)
+        text = text_styles.standard(backport.text(R.strings.tooltips.vehicle.action_prc(), actionPrc=text_styles.stats(str(percent) + '%'), oldPrice=oldPriceText))
+        return text
+
+
 def makePriceBlock(price, currencySetting, neededValue=None, oldPrice=None, percent=0, valueWidth=-1, leftPadding=61, forcedText=''):
     _int = backport.getIntegralFormat
-    needFormatted = ''
     oldPriceText = ''
     hasAction = percent != 0
     settings = _getCurrencySetting(currencySetting)
@@ -1006,13 +1036,9 @@ def makePriceBlock(price, currencySetting, neededValue=None, oldPrice=None, perc
         return
     valueFormatted = settings.textStyle(_int(price))
     icon = settings.icon
-    if neededValue is not None:
-        needFormatted = settings.textStyle(_int(neededValue))
     if hasAction:
         oldPriceText = text_styles.concatStylesToSingleLine(icon, settings.textStyle(_int(oldPrice)))
-    neededText = ''
-    if neededValue is not None:
-        neededText = text_styles.concatStylesToSingleLine(text_styles.main('('), text_styles.error(TOOLTIPS.VEHICLE_GRAPH_BODY_NOTENOUGH), ' ', needFormatted, ' ', icon, text_styles.main(')'))
+    neededText = getFormattedNeededValue(settings, _int(neededValue)) if neededValue else ''
     text = text_styles.concatStylesWithSpace(text_styles.main(settings.text if not forcedText else forcedText), neededText)
     if hasAction:
         actionText = text_styles.main(makeString(TOOLTIPS.VEHICLE_ACTION_PRC, actionPrc=text_styles.stats(str(percent) + '%'), oldPrice=oldPriceText))
@@ -1335,36 +1361,3 @@ class SquadBonusTooltipWindowData(ToolTipBaseData):
 
     def getDisplayableData(self, *args, **kwargs):
         return SquadBonusTooltipContent()
-
-
-class NYCreditBonusTooltipWindowData(ToolTipBaseData):
-
-    def __init__(self, context):
-        super(NYCreditBonusTooltipWindowData, self).__init__(context, TOOLTIP_TYPE.NY_CREDIT_BONUS)
-
-    def getDisplayableData(self, *args, **kwargs):
-        return NewYearTotalBonusTooltip()
-
-
-class NYVehicleBonusTooltipWindowData(ToolTipBaseData):
-
-    def __init__(self, context):
-        super(NYVehicleBonusTooltipWindowData, self).__init__(context, TOOLTIP_TYPE.NY_VEHICLE_BONUS)
-
-    def getDisplayableData(self, *args, **kwargs):
-        return NewYearVehiclesBonusTooltip()
-
-
-class NewYearFillers(BlocksTooltipData):
-
-    def __init__(self, context):
-        super(NewYearFillers, self).__init__(context, None)
-        self._setWidth(365)
-        self._setContentMargin(0, 0, 0, 0)
-        return
-
-    def _packBlocks(self, *args, **kwargs):
-        items = super(NewYearFillers, self)._packBlocks(*args, **kwargs)
-        blocks = [formatters.packImageBlockData(backport.image(R.images.gui.maps.icons.new_year.infotype.icon_filler())), formatters.packTextBlockData(text_styles.highTitle(backport.text(R.strings.ny.fillersTooltip.header())), padding=formatters.packPadding(-364, 30, 0, 30)), formatters.packTextBlockData(text_styles.mainBig(backport.text(R.strings.ny.fillersTooltip.description())), padding=formatters.packPadding(240, 30, 30, 30))]
-        items.append(formatters.packBuildUpBlockData(blocks=blocks))
-        return items

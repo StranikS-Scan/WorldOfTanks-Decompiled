@@ -66,10 +66,6 @@ class GameEvent(HasCtxEvent):
     PRE_CHARGE = 'game/preCharge'
     CONTROL_MODE_CHANGE = 'game/controlModeChange'
     SNIPER_CAMERA_TRANSITION = 'game/sniperCameraTransition'
-    SHOW_LOOT_BOX_WINDOWS = 'game/showLootBoxWindows'
-    HIDE_LOOT_BOX_WINDOWS = 'game/hideLootBoxWindows'
-    CLOSE_LOOT_BOX_WINDOWS = 'game/closeLootBoxWindows'
-    IMAGE_VIEW_DONE = 'game/imageViewDone'
 
 
 class GUICommonEvent(SharedEvent):
@@ -299,8 +295,6 @@ class LobbySimpleEvent(HasCtxEvent):
     PREMIUM_XP_BONUS_CHANGED = 'premiumXPBonusChanged'
     WAITING_SHOWN = 'waitingShown'
     BATTLE_RESULTS_POSTED = 'battleResultsPosted'
-    TURN_LOBBY_DRAGGING_ON = 'turnLobbyDraggingOn'
-    TURN_LOBBY_DRAGGING_OFF = 'turnLobbyDraggingOff'
 
 
 class MissionsEvent(HasCtxEvent):
@@ -558,7 +552,6 @@ class OpenLinkEvent(SharedEvent):
     PREM_SHOP = 'premShopURL'
     TOKEN_SHOP = 'tokenShopUrl'
     FRONTLINE_CHANGES = 'frontlineChangesURL'
-    LOOT_BOX_GIFT_URL = 'lootBoxGiftURL'
 
     def __init__(self, eventType, url='', title='', params=None):
         super(OpenLinkEvent, self).__init__(eventType)
@@ -627,7 +620,6 @@ class VehicleBuyEvent(HasCtxEvent):
 
 
 class HangarVehicleEvent(HasCtxEvent):
-    ON_HERO_TANK_LABEL_UPDATE_REQUIRED = 'hangarVehicle/onHeroTankLabelUpdateRequired'
     ON_HERO_TANK_LOADED = 'hangarVehicle/onHeroTankLoaded'
     ON_HERO_TANK_DESTROY = 'hangarVehicle/onHeroTankDestroy'
     HERO_TANK_MARKER = 'hangarVehicle/heroTankMarker'
@@ -657,19 +649,6 @@ class SeniorityAwardsEvent(HasCtxEvent):
     ON_ENTRY_VIEW_LOADED = 'seniorityAwards/onEntryViewLoaded'
 
 
-class NewYearEvent(HasCtxEvent):
-    ON_BREAK_TOYS_FILTER_APPLIED = 'newYear/onBreakToysFilterApplied'
-    ON_PRE_SWITCH_VIEW_TO = 'newYear/onPreSwitchViewTo'
-    ON_CHANGE_MAIN_MENU = 'newYear/onChangeMainMenu'
-
-
-class LootboxesEvent(HasCtxEvent):
-    ON_REWARD_VIEW_CLOSED = 'lootboxes/onRewardViewClosed'
-    ON_MULTI_OPEN_VIEW_CLOSED = 'lootboxes/onMultiOpenViewClosed'
-    ON_SHOW_SPECIAL_REWARDS_CLOSED = 'lootboxes/onShowSpecialRewardsClosed'
-    ON_ENTRY_VIEW_LOADED = 'lootboxes/onEntryViewLoaded'
-
-
 class ReferralProgramEvent(HasCtxEvent):
     REFERRAL_PROGRAM_ACTIVATED = 'referralProgramActivated'
     REFERRAL_PROGRAM_DEACTIVATED = 'referralProgrammDeactivated'
@@ -689,3 +668,12 @@ class ProgressiveRewardEvent(HasCtxEvent):
 class HangarCameraManagerEvent(HasCtxEvent):
     ON_CREATE = 'hangarCameraManagerEvent/onCreate'
     ON_DESTROY = 'hangarCameraManagerEvent/onDestroy'
+
+
+class ItemRemovalByDemountKitEvent(HasCtxEvent):
+    DECLARED = 'item_removal_by_dk_declared'
+    CANCELED = 'item_removal_by_dk_canceled'
+
+    def __init__(self, eventType=None, slotIndex=None):
+        self.slotIndex = slotIndex
+        super(ItemRemovalByDemountKitEvent, self).__init__(eventType)

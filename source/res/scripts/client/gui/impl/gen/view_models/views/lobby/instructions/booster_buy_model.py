@@ -5,26 +5,26 @@ from gui.impl.gen.view_models.views.lobby.common.buy_sell_items_dialog_model imp
 class BoosterBuyModel(BuySellItemsDialogModel):
     __slots__ = ('onSetIsRearm',)
 
-    def __init__(self, properties=24, commands=3):
+    def __init__(self, properties=26, commands=3):
         super(BoosterBuyModel, self).__init__(properties=properties, commands=commands)
 
     def getIsRearm(self):
-        return self._getBool(21)
+        return self._getBool(23)
 
     def setIsRearm(self, value):
-        self._setBool(21, value)
+        self._setBool(23, value)
 
     def getIsDiscount(self):
-        return self._getBool(22)
+        return self._getBool(24)
 
     def setIsDiscount(self, value):
-        self._setBool(22, value)
+        self._setBool(24, value)
 
     def getDiscountValue(self):
-        return self._getNumber(23)
+        return self._getNumber(25)
 
     def setDiscountValue(self, value):
-        self._setNumber(23, value)
+        self._setNumber(25, value)
 
     def _initialize(self):
         super(BoosterBuyModel, self)._initialize()

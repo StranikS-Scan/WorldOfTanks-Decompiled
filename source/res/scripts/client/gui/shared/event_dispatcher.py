@@ -2,63 +2,63 @@
 # Embedded file name: scripts/client/gui/shared/event_dispatcher.py
 import logging
 from operator import attrgetter
+import typing
 from CurrentVehicle import HeroTankPreviewAppearance
 from adisp import process
+from async import async, await
 from constants import RentType, GameSeasonType
 from debug_utils import LOG_WARNING
-from frameworks.wulf import ViewStatus
 from gui import SystemMessages, DialogsInterface, GUI_SETTINGS
 from gui.Scaleform import MENU
-from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import SellModuleMeta
-from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
-from gui.Scaleform.locale.MESSENGER import MESSENGER
-from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta, I18nConfirmDialogMeta, DIALOG_BUTTON_ID
+from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import SellModuleMeta
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsWebProductMeta
 from gui.Scaleform.daapi.view.dialogs.rent_confirm_dialog import RentConfirmDialogMeta
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getWebShopURL, isIngameShopEnabled, getBuyPremiumUrl
+from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
-from gui.impl import backport
+from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
+from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.game_control.links import URLMacros
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.impl.lobby.demount_kit.optional_device_dialogs import BuyAndInstallOpDevDialog, BuyAndStorageOpDevDialog, DemountOpDevSinglePriceDialog, DestroyOpDevDialog, InstallOpDevDialog
+from gui.impl.lobby.demount_kit.selector_dialog import DemountOpDevDialog
+from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
 from gui.impl.pub import UIImplType
 from gui.ingame_shop import generateShopRentRenewProductID, showBuyGoldForRentWebOverlay
 from gui.ingame_shop import getShopProductInfo
 from gui.ingame_shop import makeBuyParamsByProductInfo
 from gui.ingame_shop import showBuyVehicleOverlay
-from gui.impl.gen import R
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.shared import events, g_eventBus, money
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items.loot_box import NewYearLootBoxes
+from gui.shared.gui_items.Vehicle import getUserName
 from gui.shared.gui_items.processors.goodies import BoosterActivator
 from gui.shared.money import Currency
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.functions import getViewName, getUniqueViewName
 from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.shared.gui_items.Vehicle import getUserName
-from items import vehicles as vehicles_core
 from helpers import dependency
 from helpers.aop import pointcutable
 from helpers.i18n import makeString as _ms
-from ny_common.settings import NYLootBoxConsts
+from items import vehicles as vehicles_core
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IHeroTankController, IReferralProgramController, IEpicBattleMetaGameController
-from skeletons.gui.impl import IGuiLoader
-from skeletons.gui.shared import IItemsCache
 from skeletons.gui.goodies import IGoodiesCache
+from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.new_year import INewYearController
+from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
-from async import async, await
 _logger = logging.getLogger(__name__)
 
 class SETTINGS_TAB_INDEX(object):
@@ -189,6 +189,11 @@ def showStorageBoosterInfo(boosterID):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOSTER_INFO_WINDOW, getViewName(VIEW_ALIAS.BOOSTER_INFO_WINDOW, boosterID), {'boosterID': boosterID}), EVENT_BUS_SCOPE.LOBBY)
 
 
+def showDemountKitInfo(demountKitID):
+    demountKitID = int(demountKitID)
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.DEMOUNT_KIT_INFO_WINDOW, getViewName(VIEW_ALIAS.DEMOUNT_KIT_INFO_WINDOW, demountKitID), {'demountKitID': demountKitID}), EVENT_BUS_SCOPE.LOBBY)
+
+
 def showVehicleSellDialog(vehInvID):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_SELL_DIALOG, ctx={'vehInvID': int(vehInvID)}), EVENT_BUS_SCOPE.LOBBY)
 
@@ -256,7 +261,8 @@ def showBattleBoosterBuyDialog(battleBoosterIntCD, install=False):
     from gui.impl.dialogs import dialogs
     from gui.impl.lobby.instructions.booster_buy_dialog import BoosterBuyWindowView
     if gamefaceEnabled():
-        yield dialogs.showSimple(BoosterBuyWindowView(battleBoosterIntCD, install))
+        wrapper = FullScreenDialogWindowWrapper(BoosterBuyWindowView(battleBoosterIntCD, install))
+        yield dialogs.showSimple(wrapper)
     else:
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOSTER_BUY_WINDOW, ctx={'typeCompDescr': battleBoosterIntCD,
          'install': install}), EVENT_BUS_SCOPE.LOBBY)
@@ -266,7 +272,8 @@ def showBattleBoosterBuyDialog(battleBoosterIntCD, install=False):
 def _showBattleBoosterGFSellDialog(battleBoosterIntCD):
     from gui.impl.lobby.instructions.booster_sell_dialog import BoosterSellWindowView
     from gui.impl.dialogs import dialogs
-    yield dialogs.showSimple(BoosterSellWindowView(battleBoosterIntCD))
+    wrapper = FullScreenDialogWindowWrapper(BoosterSellWindowView(battleBoosterIntCD))
+    yield dialogs.showSimple(wrapper)
 
 
 @process
@@ -359,6 +366,13 @@ def showOldVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR
      'previewAlias': previewAlias,
      'vehicleStrCD': vehStrCD,
      'previewBackCb': previewBackCb}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showMarathonVehiclePreview(vehTypeCompDescr, itemsPack=None, title='', marathonPrefix=''):
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.MARATHON_VEHICLE_PREVIEW_20, ctx={'itemCD': vehTypeCompDescr,
+     'itemsPack': itemsPack,
+     'title': title,
+     'marathonPrefix': marathonPrefix}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None, previewBackCb=None, itemsPack=None, offers=None, price=money.MONEY_UNDEFINED, oldPrice=None, title='', description=None, endTime=None, buyParams=None, vehParams=None, isFrontline=False):
@@ -627,95 +641,6 @@ def showBubbleTooltip(msg):
     g_eventBus.handleEvent(events.BubbleTooltipEvent(events.BubbleTooltipEvent.SHOW, msg), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-@dependency.replace_none_kwargs(lobbyCtx=ILobbyContext, nyCtrl=INewYearController)
-def showLootBoxEntry(lootBoxType=NewYearLootBoxes.PREMIUM, category='', lobbyCtx=None, nyCtrl=None):
-    enabled = lobbyCtx.getServerSettings().isLootBoxesEnabled() and nyCtrl.isEnabled()
-    if not enabled:
-        from gui.impl.lobby.loot_box.loot_box_helper import showRestrictedSysMessage
-        showRestrictedSysMessage()
-        return
-    else:
-        uiLoader = dependency.instance(IGuiLoader)
-        contentResId = R.views.lobby.loot_box.views.loot_box_entry_view.LootBoxEntryView()
-        lootBoxEntryView = uiLoader.windowsManager.getViewByLayoutID(contentResId)
-        if lootBoxEntryView is not None:
-            lootBoxEntryView.destroyWindow()
-        from gui.impl.lobby.loot_box.loot_box_entry_view import LootBoxEntryWindow
-        window = LootBoxEntryWindow(lootBoxType, category)
-        window.load()
-        return
-
-
-@process
-@dependency.replace_none_kwargs(lobbyCtx=ILobbyContext)
-def showLootBoxBuyWindow(category='', lobbyCtx=None):
-    if not lobbyCtx.getServerSettings().isLootBoxesEnabled():
-        _logger.error('LootBoxes are disabled on server. Nothing will be shown!')
-        return
-    shopConfig = lobbyCtx.getServerSettings().getLootBoxShop()
-    rawUrl = shopConfig.get(NYLootBoxConsts.URL, '')
-    if not rawUrl:
-        _logger.error('No Loot Box Shop URL is specified. Nothing will be shown!')
-        return
-    source = shopConfig.get(NYLootBoxConsts.SOURCE, NYLootBoxConsts.IGB)
-    url = yield URLMacros().parse(rawUrl)
-    if source == NYLootBoxConsts.IGB:
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOOT_BOX_SHOP_OVERLAY, ctx={'url': url,
-         'category': category}), EVENT_BUS_SCOPE.LOBBY)
-    elif source == NYLootBoxConsts.EXTERNAL:
-        g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.SPECIFIED, url))
-    else:
-        _logger.error('Invalid source is specified. Can not open loot box buy window!')
-
-
-def showLootBoxGiftWindow():
-    g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.LOOT_BOX_GIFT_URL))
-
-
-def showLootBoxAutoOpenWindow(rewards):
-    from gui.impl.lobby.loot_box.loot_box_auto_open_view import LootBoxAutoOpenWindow
-    window = LootBoxAutoOpenWindow(rewards)
-    window.load()
-
-
-def showNYLevelUpWindow(context):
-    from gui.impl.new_year.views.new_year_level_up_view import NewYearLevelUpWindow
-    uiLoader = dependency.instance(IGuiLoader)
-    contentResId = R.views.lobby.new_year.views.new_year_level_up_view.NewYearLevelUpView()
-    levelUpView = uiLoader.windowsManager.getViewByLayoutID(contentResId)
-    if levelUpView is not None and levelUpView.viewStatus == ViewStatus.LOADED:
-        levelUpView.appendRewards(context)
-        return
-    else:
-        window = NewYearLevelUpWindow(context)
-        window.load()
-        return
-
-
-def showNyCollectionCongratsWindow(context):
-    from gui.impl.new_year.views.new_year_style_reward_view import NewYearStyleRewardWindow
-    uiLoader = dependency.instance(IGuiLoader)
-    contentResId = R.views.lobby.loot_box.views.loot_box_special_reward_view.LootBoxSpecialRewardView()
-    specialVideoResID = uiLoader.windowsManager.getViewByLayoutID(contentResId)
-    if specialVideoResID is not None:
-        return
-    else:
-        window = NewYearStyleRewardWindow(context)
-        window.load()
-        return
-
-
-def showVideoView(videoResID, parent=None, onVideoStartHandler=None, onVideoStopHandler=None):
-    from gui.impl.lobby.video_view import VideoViewWindow
-    VideoViewWindow(videoResID, parent=parent, onVideoStartHandler=onVideoStartHandler, onVideoStopHandler=onVideoStopHandler).load()
-
-
-def showNewYearSpecialWindow():
-    from gui.impl.new_year.views.new_year_special_reward_view import NewYearSpecialRewardWindow
-    window = NewYearSpecialRewardWindow()
-    window.load()
-
-
 def showReferralProgramWindow(url=None):
     referralController = dependency.instance(IReferralProgramController)
     if url is None:
@@ -778,12 +703,11 @@ def showSeniorityRewardAwardWindow(qID, data):
     window.load()
 
 
-def showStylePreview(vehCD, style, styleDescr, backCallback, destoryCallback=None, backBtnDescrLabel=''):
+def showStylePreview(vehCD, style, styleDescr, backCallback, backBtnDescrLabel=''):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.STYLE_PREVIEW, ctx={'itemCD': vehCD,
      'style': style,
      'styleDescr': styleDescr,
      'backCallback': backCallback,
-     'destroyCallback': destoryCallback,
      'backBtnDescrLabel': backBtnDescrLabel}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
@@ -813,27 +737,56 @@ def showFrontlineExchangePrestigePoints(ctx):
     __ctrl.showCustomScreen(FRONTLINE_SCREENS.REWARDS_SCREEN)
 
 
-def showNewYearMainView(loadingViewParams=None, *args, **kwargs):
-    from gui.impl.new_year.views.new_year_main_view import NewYearMainView
-    uiLoader = dependency.instance(IGuiLoader)
-    contentResId = R.views.lobby.new_year.views.new_year_main_view.NewYearMainView()
-    newYearView = uiLoader.windowsManager.getViewByLayoutID(contentResId)
-    if newYearView is not None:
-        newYearView.switchView(loadingViewParams, *args, **kwargs)
+@async
+def showDialog(dialog, callback):
+    from gui.impl.dialogs import dialogs
+    isOk = yield await(dialogs.showSimple(dialog))
+    callback((isOk, {}))
+
+
+@async
+def showOptionalDeviceDestroy(deviceDescr, callback):
+    dialog = FullScreenDialogWindowWrapper(DestroyOpDevDialog(deviceDescr))
+    yield showDialog(dialog, callback)
+
+
+@async
+def showOptionalDeviceInstall(deviceDescr, callback):
+    dialog = FullScreenDialogWindowWrapper(InstallOpDevDialog(deviceDescr))
+    yield showDialog(dialog, callback)
+
+
+@async
+def showOptionalDeviceDemount(deviceDescr, callback):
+    from gui.impl.dialogs import dialogs
+    view = DemountOpDevDialog(deviceDescr)
+    dialog = FullScreenDialogWindowWrapper(view)
+    isOK, data = yield await(dialogs.showSimpleWithResultData(dialog))
+    if data.get('openSingleDemountWindow', False):
+        showOptionalDeviceDemountSinglePrice(deviceDescr, callback)
     else:
-        g_eventBus.handleEvent(events.LoadUnboundViewEvent(contentResId, NewYearMainView, ScopeTemplates.LOBBY_SUB_SCOPE, loadingViewParams=loadingViewParams, *args, **kwargs), scope=EVENT_BUS_SCOPE.LOBBY)
-    return
+        callback((isOK, data))
 
 
-def showNewYearVehiclesView(*args, **kwargs):
-    from gui.impl.new_year.views.new_year_vehicles_view import NewYearVehiclesView
-    contentResId = R.views.lobby.new_year.views.new_year_vehicles_view.NewYearVehiclesView()
-    g_eventBus.handleEvent(events.LoadUnboundViewEvent(contentResId, NewYearVehiclesView, ScopeTemplates.LOBBY_SUB_SCOPE, *args, **kwargs), scope=EVENT_BUS_SCOPE.LOBBY)
+@async
+def showOptionalDeviceDemountSinglePrice(deviceDescr, callback):
+    from gui.impl.dialogs import dialogs
+    view = DemountOpDevSinglePriceDialog(deviceDescr)
+    dialog = FullScreenDialogWindowWrapper(view)
+    isOK, data = yield await(dialogs.showSimpleWithResultData(dialog))
+    if data.get('openDemountSelectorWindow', False):
+        showOptionalDeviceDemount(deviceDescr, callback)
+    else:
+        callback((isOK, data))
 
 
-def showNewYearInfoPage():
-    url = GUI_SETTINGS.newYearInfo.get('baseURL')
-    if url is None:
-        _logger.error('newYearInfo.baseURL is missed')
-    showBrowserOverlayView(url, alias=VIEW_ALIAS.OVERLAY_PREM_CONTENT_VIEW)
-    return
+@async
+def showOptionalDeviceBuyAndInstall(deviceDescr, callback):
+    wrapper = FullScreenDialogWindowWrapper(BuyAndInstallOpDevDialog(deviceDescr))
+    yield showDialog(wrapper, callback)
+
+
+@async
+def showOptionalDeviceBuyAndStorage(deviceDescr, callback):
+    wrapper = FullScreenDialogWindowWrapper(BuyAndStorageOpDevDialog(deviceDescr))
+    yield showDialog(wrapper, callback)

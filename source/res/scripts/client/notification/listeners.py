@@ -5,31 +5,29 @@ import weakref
 from collections import defaultdict
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED, SENIORITY_AWARDS_COUNTER
+from adisp import process
 from chat_shared import SYS_MESSAGE_TYPE
 from constants import AUTO_MAINTENANCE_RESULT, PremiumConfigs
-from adisp import process
 from debug_utils import LOG_DEBUG, LOG_ERROR
+from gui import SystemMessages
+from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.locale.CLANS import CLANS
-from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.clans.clan_account_profile import SYNC_KEYS
 from gui.clans.clan_helpers import ClanListener, isInClanEnterCooldown
 from gui.clans.settings import CLAN_APPLICATION_STATES
-from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl import backport
-from gui.impl.lobby.premacc.premacc_helpers import PiggyBankConstants, getDeltaTimeHelper
 from gui.impl.gen import R
+from gui.impl.lobby.premacc.premacc_helpers import PiggyBankConstants, getDeltaTimeHelper
 from gui.prb_control import prbInvitesProperty
 from gui.prb_control.entities.listener import IGlobalListener
-from gui.server_events import recruit_helper
 from gui.shared import g_eventBus, events
+from gui.shared.formatters import time_formatters
+from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import showInvitationInWindowsBar
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
-from gui.shared.notifications import NotificationPriorityLevel
-from gui.shared.formatters import time_formatters
 from gui.wgcg.clan.contexts import GetClanInfoCtx
 from gui.wgnc import g_wgncProvider, g_wgncEvents, wgnc_settings
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
-from gui import SystemMessages
 from helpers import time_utils, i18n, dependency
 from messenger.m_constants import PROTO_TYPE, USER_ACTION_ID
 from messenger.proto import proto_getter
@@ -40,10 +38,8 @@ from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMe
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from skeletons.gui.game_control import IBootcampController, IGameSessionController
 from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.login_manager import ILoginManager
 from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityAwardsBoxesCount
-from skeletons.new_year import INewYearController
 
 class _FeatureState(object):
     OFF = 0
@@ -732,32 +728,6 @@ class BattleTutorialListener(_NotificationListener, IGlobalListener):
             return
 
 
-class RecruitNotificationListener(_NotificationListener):
-    loginManager = dependency.descriptor(ILoginManager)
-    _INCREASE_LIMIT_LOGIN = 5
-
-    def start(self, model):
-        result = super(RecruitNotificationListener, self).start(model)
-        if model is not None and model.getFirstEntry():
-            recruits = recruit_helper.getAllRecruitsInfo(sortByExpireTime=True)
-            for recruitInfo in recruits:
-                if recruitInfo.getExpiryTimeStamp() > 0:
-                    self.__pushMessage(len(recruits), recruitInfo.getExpiryTime())
-                    break
-
-        return result
-
-    def __pushMessage(self, count, time):
-        priority = NotificationPriorityLevel.LOW
-        if self.loginManager.getPreference('loginCount') == self._INCREASE_LIMIT_LOGIN:
-            priority = NotificationPriorityLevel.MEDIUM
-        if time:
-            message = i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_RECRUITREMINDER_TEXT, count=count, date=time)
-        else:
-            message = i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_RECRUITREMINDERTERMLESS_TEXT, count=count)
-        SystemMessages.pushMessage(message, SystemMessages.SM_TYPE.RecruitReminder, priority=priority)
-
-
 class ProgressiveRewardListener(_NotificationListener):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __bootcampController = dependency.descriptor(IBootcampController)
@@ -901,40 +871,6 @@ class TankPremiumListener(_NotificationListener):
             SystemMessages.pushMessage(priority=priority, text=backport.text(R.strings.messenger.serviceChannelMessages.piggyBank.onPause()))
 
 
-class TalismanNotificationListener(_NotificationListener):
-    _itemsCache = dependency.descriptor(IItemsCache)
-    _nyController = dependency.descriptor(INewYearController)
-
-    def __init__(self):
-        super(TalismanNotificationListener, self).__init__()
-        self.__freeTalismans = 0
-
-    def start(self, model):
-        result = super(TalismanNotificationListener, self).start(model)
-        if self._nyController.getFreeTalisman():
-            SystemMessages.pushMessage(backport.text(R.strings.ny.notification.freeTalisman()), SystemMessages.SM_TYPE.TalismanFree)
-        if self._nyController.getTalismans(isInInventory=True) and not self._nyController.isTalismanToyTaken():
-            SystemMessages.pushMessage(backport.text(R.strings.ny.notification.giftTalisman()), SystemMessages.SM_TYPE.TalismanGift)
-        self.__freeTalismans = self._nyController.getFreeTalisman()
-        self.__addListeners()
-        return result
-
-    def stop(self):
-        super(TalismanNotificationListener, self).stop()
-        self.__removeListeners()
-
-    def __addListeners(self):
-        g_clientUpdateManager.addCallbacks({'tokens': self.__onTokensChanged})
-
-    def __removeListeners(self):
-        g_clientUpdateManager.removeCallback('tokens', self.__onTokensChanged)
-
-    def __onTokensChanged(self, _):
-        if self._nyController.getFreeTalisman() > self.__freeTalismans:
-            SystemMessages.pushMessage(backport.text(R.strings.ny.notification.freeTalisman()), SystemMessages.SM_TYPE.TalismanFree)
-        self.__freeTalismans = self._nyController.getFreeTalisman()
-
-
 class NotificationsListeners(_NotificationListener):
 
     def __init__(self):
@@ -944,11 +880,9 @@ class NotificationsListeners(_NotificationListener):
          FriendshipRqsListener(),
          _WGNCListenersContainer(),
          BattleTutorialListener(),
-         RecruitNotificationListener(),
          ProgressiveRewardListener(),
          SwitcherListener(),
-         TankPremiumListener(),
-         TalismanNotificationListener())
+         TankPremiumListener())
 
     def start(self, model):
         for listener in self.__listeners:

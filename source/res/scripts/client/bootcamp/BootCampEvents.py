@@ -12,7 +12,7 @@ class _BootCampEvents(object):
         self.onBootcampFinished = self._createEvent()
         self.onIntroVideoStop = self._createEvent()
         self.onOutroVideoStop = self._createEvent()
-        self.onIntroVideoLoaded = self._createEvent()
+        self.onBootcampSpaceLoaded = self._createEvent()
         self.onBootcampGoNext = self._createEvent()
         self.onUIStateChanged = self._createEvent()
         self.onBattleAction = self._createEvent()

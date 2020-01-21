@@ -1654,4 +1654,37 @@
     <name>	WoT Racing_2019	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <decal>
+      <id>	196	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_289.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/inscription_289	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Waitangi Day	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F116_Bat_Chatillon_Bourrasque	</vehicles>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	197	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_290.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/inscription_290	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Bourrasque	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
 </inscriptions_special.xml>

@@ -809,11 +809,13 @@ class RibbonsAggregator(object):
         self.__isStarted = True
         if self.__feedbackProvider is None:
             self.__feedbackProvider = self.sessionProvider.shared.feedback
-            self.__feedbackProvider.onPlayerFeedbackReceived += self._onPlayerFeedbackReceived
+            if self.__feedbackProvider is not None:
+                self.__feedbackProvider.onPlayerFeedbackReceived += self._onPlayerFeedbackReceived
         if self.__vehicleStateCtrl is None:
             self.__vehicleStateCtrl = self.sessionProvider.shared.vehicleState
-            self.__vehicleStateCtrl.onPostMortemSwitched += self._onPostMortemSwitched
-            self.__vehicleStateCtrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
+            if self.__vehicleStateCtrl is not None:
+                self.__vehicleStateCtrl.onPostMortemSwitched += self._onPostMortemSwitched
+                self.__vehicleStateCtrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
         return
 
     def suspend(self):

@@ -276,7 +276,7 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  WHEELED_SWITCH_TIME: _niceListFormat,
  WHEELED_SPEED_MODE_SPEED: _niceListFormat,
  DUAL_GUN_CHARGE_TIME: _niceListFormat,
- DUAL_GUN_RATE_TIME: _niceFormat}
+ DUAL_GUN_RATE_TIME: _niceListFormat}
 
 def _deltaWrapper(fn):
 
@@ -375,7 +375,7 @@ def formatParameter(parameterName, paramValue, parameterState=None, colorScheme=
             if values[0] > 0:
                 return _applyFormat(values[0], parameterState[0], settings, doSmartRound, colorScheme)
             return
-        separator = separator or settings['separator']
+        separator = separator or settings.get('separator', '')
         paramsList = [ _applyFormat(val, state, settings, doSmartRound, colorScheme) for val, state in zip(values, parameterState) ]
         return separator.join(paramsList)
     else:

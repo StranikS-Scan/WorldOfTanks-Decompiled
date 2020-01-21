@@ -2,6 +2,14 @@
 # Embedded file name: scripts/client/account_helpers/counter_settings.py
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NEW_SETTINGS_COUNTER
+from account_helpers.settings_core import settings_constants
+from helpers import dependency
+from skeletons.gui.game_control import IAnonymizerController
+_NEW_SETTING_COUNTER_VISIBILITY_VALIDATORS = {settings_constants.GAME.ANONYMIZER: lambda : dependency.instance(IAnonymizerController).isEnabled}
+
+def isNewSettingCounterVisible(settingKey):
+    return _NEW_SETTING_COUNTER_VISIBILITY_VALIDATORS.get(settingKey, lambda : True)()
+
 
 def getCountNewSettings():
     settings = _getSettingsFromStorage()
@@ -97,8 +105,12 @@ def _packCounter(tabData, state, subTabID, controlID):
 
 
 def _getSettingsFromStorage():
-    return AccountSettings.getSettings(NEW_SETTINGS_COUNTER)
+    return _filterSettings(AccountSettings.getSettings(NEW_SETTINGS_COUNTER))
 
 
 def _setSettingsToStorage(value):
-    AccountSettings.setSettings(NEW_SETTINGS_COUNTER, value)
+    AccountSettings.setSettings(NEW_SETTINGS_COUNTER, _filterSettings(value))
+
+
+def _filterSettings(value):
+    return {category:{settingKey:settingValue for settingKey, settingValue in settings.iteritems() if isNewSettingCounterVisible(settingKey)} for category, settings in value.iteritems()}

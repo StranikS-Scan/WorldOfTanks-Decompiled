@@ -89,7 +89,7 @@ class BootcampLobbyHintsConfig:
                            'path': 'btnLeft',
                            'customHint': 'BCHudHintUI'},
      'StartBattleButton': {'viewAlias': VIEW_ALIAS.BOOTCAMP_INTRO_VIDEO,
-                           'path': 'loadingProgress.btnSelect',
+                           'path': 'btnSelect',
                            'hideBorder': True}}
 
     def getItems(self):

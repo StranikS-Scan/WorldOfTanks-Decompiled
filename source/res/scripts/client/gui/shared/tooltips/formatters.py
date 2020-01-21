@@ -42,9 +42,9 @@ def packBlockDataItem(linkage, data, padding=None, blockWidth=0):
     return data
 
 
-def packTextBlockData(text, useHtml=True, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_BLOCK_LINKAGE, padding=None):
+def packTextBlockData(text, useHtml=True, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_BLOCK_LINKAGE, padding=None, blockWidth=0):
     return packBlockDataItem(linkage, {'text': text,
-     'useHtml': useHtml}, padding)
+     'useHtml': useHtml}, padding, blockWidth)
 
 
 def packTextWithBgBlockData(text, useHtml=True, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_WITH_BG_BLOCK_LINKAGE, padding=None, bgColor=-1, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT):
@@ -121,11 +121,12 @@ def packDashLineItemPriceBlockData(title, value, icon, desc=None, linkage=BLOCKS
     return packBlockDataItem(linkage, data, padding)
 
 
-def packBuildUpBlockData(blocks, gap=0, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE, padding=None, stretchBg=True, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_VERTICAL, blockWidth=0, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT):
+def packBuildUpBlockData(blocks, gap=0, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE, padding=None, stretchBg=True, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_VERTICAL, blockWidth=0, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, stretchLast=False):
     data = {'blocksData': blocks,
      'stretchBg': stretchBg,
      'layout': layout,
-     'align': align}
+     'align': align,
+     'stretchLast': stretchLast}
     if gap != 0:
         data['gap'] = gap
     return packBlockDataItem(linkage, data, padding, blockWidth)
@@ -435,18 +436,19 @@ def packMoneyAndXpValueBlock(value, icon, iconYoffset, paddingBottom=15, valueWi
     return valueBlock
 
 
-def packMoneyAndXpBlocks(tooltipBlocks, btnType, valueBlocks):
+def packMoneyAndXpBlocks(tooltipBlocks, btnType, valueBlocks, alternativeData=None):
     titleBlocks = list()
-    titleBlocks.append(packTitleDescBlock(text_styles.highTitle(TOOLTIPS.getHeaderBtnTitle(btnType)), None, padding=packPadding(bottom=15)))
+    alternativeData = alternativeData or {}
+    titleBlocks.append(packTitleDescBlock(text_styles.highTitle(TOOLTIPS.getHeaderBtnTitle(alternativeData.get('title') or btnType)), None, padding=packPadding(bottom=15)))
     tooltipBlocks.append(packBuildUpBlockData(titleBlocks))
     if valueBlocks is not None:
         tooltipBlocks.append(packBuildUpBlockData(valueBlocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
     if btnType != CURRENCIES_CONSTANTS.GOLD:
         decsBlocks = list()
-        decsBlocks.append(packTextBlockData(text_styles.main(TOOLTIPS.getHeaderBtnDesc(btnType)), padding=packPadding(bottom=15)))
+        decsBlocks.append(packTextBlockData(text_styles.main(TOOLTIPS.getHeaderBtnDesc(alternativeData.get('btnDesc') or btnType)), padding=packPadding(bottom=15)))
         tooltipBlocks.append(packBuildUpBlockData(decsBlocks))
     actionBlocks = list()
-    actionBlocks.append(packAlignedTextBlockData(text=text_styles.standard(TOOLTIPS.getHeaderBtnClickDesc(btnType)), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
+    actionBlocks.append(packAlignedTextBlockData(text=text_styles.standard(TOOLTIPS.getHeaderBtnClickDesc(alternativeData.get('btnClickDesc') or btnType)), align=alternativeData.get('btnClickDescAlign') or BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
     tooltipBlocks.append(packBuildUpBlockData(actionBlocks))
     return tooltipBlocks
 

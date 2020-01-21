@@ -4,15 +4,16 @@ import functools
 import Math
 from ModelHitTester import ModelHitTester
 from constants import SHELL_TYPES
-from soft_exception import SoftException
 from items import ITEM_TYPES, ITEM_TYPE_NAMES, makeIntCompactDescrByID
 from items.basic_item import BasicItem
-from items.components import component_constants
 from items.components import chassis_components
+from items.components import component_constants
 from items.components import gun_components
 from items.components import shared_components
 from items.components import shell_components
 from items.components import sound_components
+from soft_exception import SoftException
+from wrapped_reflection_framework import ReflectionMetaclass
 
 class VEHICLE_ITEM_STATUS(object):
     UNDEFINED = 0
@@ -30,8 +31,6 @@ class _ShallowCopyWrapper(object):
 
     def __call__(self, clazz):
         fields = getattr(clazz, '__slots__', None)
-        if fields is None:
-            raise ValueError('Slots are not defined in {}'.format(clazz))
         method = getattr(clazz, 'copy', None)
         if method is None or not callable(method):
             raise ValueError('Method "copy" is not found in {}'.format(clazz))
@@ -73,6 +72,7 @@ class VehicleItem(BasicItem):
 @add_shallow_copy('unlocks')
 class InstallableItem(VehicleItem):
     __slots__ = ('weight', 'modelsSets', 'models', 'materials', 'hitTester', 'unlocks', 'armorHomogenization', 'camouflage', 'healthParams', 'sounds', 'emblemSlots', 'slotsAnchors')
+    __metaclass__ = ReflectionMetaclass
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(InstallableItem, self).__init__(typeID, componentID, componentName, compactDescr, level=level, status=VEHICLE_ITEM_STATUS.EMPTY)
@@ -125,6 +125,7 @@ class InstallableItem(VehicleItem):
 
 @add_shallow_copy()
 class Chassis(InstallableItem):
+    __metaclass__ = ReflectionMetaclass
     __slots__ = ('hullPosition', 'topRightCarryingPoint', 'navmeshGirth', 'minPlaneNormalY', 'maxLoad', 'specificFriction', 'rotationSpeed', 'rotationSpeedLimit', 'rotationIsAroundCenter', 'shotDispersionFactors', 'terrainResistance', 'bulkHealthFactor', 'carryingTriangles', 'drivingWheelsSizes', 'chassisLodDistance', 'traces', 'tracks', 'wheels', 'groundNodes', 'trackNodes', 'trackSplineParams', 'splineDesc', 'leveredSuspension', 'suspensionSpringsLength', 'hullAimingSound', 'effects', 'customEffects', 'AODecals', 'brakeForce', 'physicalTracks', 'customizableVehicleAreas', 'generalWheelsAnimatorConfig', 'wheelHealthParams')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
@@ -196,6 +197,7 @@ class Radio(InstallableItem):
 
 @add_shallow_copy()
 class Turret(InstallableItem):
+    __metaclass__ = ReflectionMetaclass
     __slots__ = ('gunPosition', 'rotationSpeed', 'turretRotatorHealth', 'surveyingDeviceHealth', 'invisibilityFactor', 'primaryArmor', 'ceilless', 'showEmblemsOnGun', 'guns', 'turretRotatorSoundManual', 'turretRotatorSoundGear', 'AODecals', 'turretDetachmentEffects', 'physicsShape', 'circularVisionRadius', 'customizableVehicleAreas', 'multiGun')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
@@ -226,6 +228,7 @@ class Turret(InstallableItem):
 
 @add_shallow_copy()
 class Gun(InstallableItem):
+    __metaclass__ = ReflectionMetaclass
     __slots__ = ('rotationSpeed', 'reloadTime', 'aimingTime', 'maxAmmo', 'invisibilityFactorAtShot', 'effects', 'reloadEffect', 'impulse', 'recoil', 'animateEmblemSlots', 'turretYawLimits', 'pitchLimits', 'staticTurretYaw', 'staticPitch', 'shotDispersionAngle', 'shotDispersionFactors', 'burst', 'clip', 'shots', 'autoreload', 'drivenJoints', 'customizableVehicleAreas', 'dualGun')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
@@ -258,6 +261,7 @@ class Gun(InstallableItem):
 
 @add_shallow_copy('variantName')
 class Hull(BasicItem):
+    __metaclass__ = ReflectionMetaclass
     __slots__ = ('variantName', 'hitTester', 'materials', 'weight', 'maxHealth', 'ammoBayHealth', 'armorHomogenization', 'turretPositions', 'turretHardPoints', 'variantMatch', 'fakeTurrets', 'emblemSlots', 'slotsAnchors', 'modelsSets', 'models', 'swinging', 'customEffects', 'AODecals', 'camouflage', 'hangarShadowTexture', 'primaryArmor', 'customizableVehicleAreas', 'burnoutAnimation')
 
     def __init__(self):

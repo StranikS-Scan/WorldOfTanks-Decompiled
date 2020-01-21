@@ -10,7 +10,6 @@ class DialogPresets(ViewModel):
     INFO = 'info'
     BLUEPRINTS_CONVERSION = 'blueprintsConversion'
     MAPS_BLACKLIST = 'mapsBlacklist'
-    TRANSPARENT_DEFAULT = 'transparentDefault'
     DEFAULT = 'default'
 
     def __init__(self, properties=0, commands=0):

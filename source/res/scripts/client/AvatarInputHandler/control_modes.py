@@ -59,7 +59,7 @@ class IControlMode(object):
     def handleKeyEvent(self, isDown, key, mods, event=None):
         pass
 
-    def alwaysReceiveKeyEvents(self):
+    def alwaysReceiveKeyEvents(self, isDown=True):
         return False
 
     def handleMouseEvent(self, dx, dy, dz):
@@ -600,8 +600,8 @@ class ArcadeControlMode(_GunControlMode):
     def updateTargetedEnemiesForGuns(self, gunsData):
         self.__chargeMarkerState = CHARGE_MARKER_STATE.VISIBLE if any(gunsData) else CHARGE_MARKER_STATE.DIMMED
 
-    def alwaysReceiveKeyEvents(self):
-        return True if self._aih.dualGunControl and BigWorld.player().inCharge else False
+    def alwaysReceiveKeyEvents(self, isDown=True):
+        return True if self._aih.dualGunControl is not None and isDown is False else False
 
     def __activateAlternateMode(self, pos=None, bByScroll=False):
         ownVehicle = BigWorld.entity(BigWorld.player().playerVehicleID)
@@ -1068,8 +1068,8 @@ class DualGunControlMode(SniperControlMode):
         self.__chargeMarkerState = chargeState
         return
 
-    def alwaysReceiveKeyEvents(self):
-        return True if BigWorld.player().inCharge else False
+    def alwaysReceiveKeyEvents(self, isDown=True):
+        return True if not isDown else False
 
     def __onActiveGunChanged(self, gunIndex, switchTime):
         self._cam.aimingSystem.onActiveGunChanged(gunIndex, switchTime)

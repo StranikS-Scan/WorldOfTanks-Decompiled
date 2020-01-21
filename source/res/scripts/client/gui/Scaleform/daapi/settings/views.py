@@ -88,6 +88,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     VEHICLE_INFO_WINDOW = 'vehicleInfoWindow'
     MODULE_INFO_WINDOW = 'moduleInfoWindow'
     BOOSTER_INFO_WINDOW = 'boosterInfoWindow'
+    DEMOUNT_KIT_INFO_WINDOW = 'demountKitInfoWindow'
     VEHICLE_SELL_DIALOG = 'vehicleSellDialog'
     SETTINGS_WINDOW = 'settingsWindow'
     BATTLE_RESULTS = 'battleResults'
@@ -104,6 +105,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     HERO_VEHICLE_PREVIEW_20 = 'heroVehiclePreview20Page'
     FRONTLINE_VEHICLE_PREVIEW_20 = 'frontLineVehiclePreview'
     TRADE_IN_VEHICLE_PREVIEW_20 = 'tradeInVehiclePreview'
+    MARATHON_VEHICLE_PREVIEW_20 = 'marathonVehiclePreview'
     VEHICLE_COMPARE = 'vehicleCompare'
     VEHICLE_COMPARE_MAIN_CONFIGURATOR = 'vehicleCompareConfigurator'
     LOBBY_STRONGHOLD = 'StrongholdView'
@@ -127,7 +129,6 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     SQUAD_TYPE_SELECT_POPOVER = 'squadTypeSelectPopover'
     ACCOUNT_POPOVER = 'accountPopover'
     TRADEIN_POPOVER = 'TradeInPopover'
-    NY_SELECT_VEHICLE_POPOVER = 'NYSelectVehiclePopover'
     ACOUSTIC_POPOVER = 'acousticPopover'
     DISMISS_TANKMAN_DIALOG = 'dismissTankmanDialog'
     RESTORE_TANKMAN_DIALOG = 'restoreTankmanDialog'
@@ -228,7 +229,6 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     FEEDBACK_DAMAGE_INDICATOR = 'feedbackDamageIndicator'
     FEEDBACK_BATTLE_BORDER_MAP = 'feedbackBattleBorderMap'
     FEEDBACK_QUESTS_PROGRESS = 'feedbackQuestsProgress'
-    LOOT_BOX_SHOP_OVERLAY = 'overlayBrowserLootBoxShop'
     LOADINGS = (BATTLE_LOADING, TUTORIAL_LOADING)
     BATTLE_PAGES = (CLASSIC_BATTLE_PAGE,
      TUTORIAL_BATTLE_PAGE,

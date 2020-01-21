@@ -355,6 +355,8 @@ class AmmoController(MethodsRules, IBattleController):
                 clipCapacity = shellCounts[0]
             reloadStart = fabs(timeLeft - baseTime) < 0.001
             if isinstance(self.__gunSettings.reloadEffect, DualGunReload):
+                if self.getShellsQuantityLeft() == 1:
+                    ammoLow = True
                 self.__gunSettings.reloadEffect.start(timeLeft, ammoLow, directTrigger)
             else:
                 self.__gunSettings.reloadEffect.start(timeLeft, ammoLow, shellCounts[1], clipCapacity, self.__currShellCD, reloadStart)

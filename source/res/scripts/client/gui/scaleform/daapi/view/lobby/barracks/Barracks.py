@@ -147,7 +147,7 @@ def _getTankmanLockMessage(invVehicle):
     if invVehicle.isInBattle:
         return (True, i18n.makeString('#menu:tankmen/lockReason/inbattle'))
     if invVehicle.isBroken:
-        return (True, i18n.makeString('#menu:tankmen/lockReason/broken'))
+        return (False, i18n.makeString('#menu:tankmen/lockReason/broken'))
     if invVehicle.invID == g_currentVehicle.invID and (g_currentVehicle.isInPrebattle() or g_currentVehicle.isInBattle()):
         return (True, i18n.makeString('#menu:tankmen/lockReason/prebattle'))
     return (True, i18n.makeString('#menu:tankmen/lockReason/disabled')) if invVehicle.isDisabled else (False, '')

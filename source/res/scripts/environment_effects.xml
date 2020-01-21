@@ -873,7 +873,7 @@
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Hedge/Hedge_Bushy.srt	</modelName>
       <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound></wwsound>
+      <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
     </model>
     <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Hedge/Hedge_Half_Rare.srt	</modelName>
@@ -1854,16 +1854,6 @@
       <modelName>	vegetation/Broadleaves/Shrubs/Bush_Wild_Dry_Frost/Bush_Wild_Dry_Frost_5m.srt	</modelName>
       <offset>	0.000000 2.000000 0.000000	</offset>
       <wwsound>	ambient_trees_without_foliage_bush_big_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	content/Hangars/h23_newyear/environment/normal/lod0/hd_h23_033_Floodlight.model	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	hangar_newyear_ambient_floodlight	</wwsound>
-    </model>
-    <model>
-      <modelName>	content/Hangars/h23_newyear/environment/normal/lod0/hd_h23_019_Projector.model	</modelName>
-      <offset>	0.000000 0.000000 0.000000	</offset>
-      <wwsound>	hangar_newyear_ambient_floodlight	</wwsound>
     </model>
   </lightSounds>
   <birds>
@@ -9910,6 +9900,7 @@
         <alphaFadeDistances>	0.100000 0.100000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	particles/Environment/scenarios/208_smoke_east_01.eff	</effectName>
+        <wwsoundName>	fr_scenario_IL2_smoke_center_02	</wwsoundName>
       </channel0>
       <point>
         <position>	-236.838028 2.700085 -1590.418335	</position>
@@ -9935,6 +9926,7 @@
         <alphaFadeDistances>	5.000000 25.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	particles/Environment/scenarios/208_aircraft_damaged_center_02.eff	</effectName>
+        <wwsoundName>	fr_scenario_IL2_attack_failed_center_01	</wwsoundName>
       </channel0>
       <point>
         <position>	-351.283966 120.121994 -2464.754150	</position>
@@ -10008,6 +10000,7 @@
         <alphaFadeDistances>	5.000000 25.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	particles/Environment/scenarios/208_aircraft_damaged_center_01.eff	</effectName>
+        <wwsoundName>	fr_scenario_IL2_attack_failed_center_02	</wwsoundName>
       </channel0>
       <point>
         <position>	148.975983 100.661995 -2556.960693	</position>
@@ -10081,6 +10074,7 @@
         <alphaFadeDistances>	5.000000 25.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	particles/Environment/scenarios/208_aircraft_damaged_center_03.eff	</effectName>
+        <wwsoundName>	fr_scenario_IL2_attack_failed_center_03	</wwsoundName>
       </channel0>
       <point>
         <position>	-278.829956 122.033989 -2468.619141	</position>
@@ -10136,7 +10130,7 @@
         <alphaFadeDistances>	5.000000 25.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
-        <wwsoundName>	plane_stalingrad_yak_3_01	</wwsoundName>
+        <wwsoundName>	plane_not_gun_yak_3_01	</wwsoundName>
       </channel0>
       <point>
         <position>	-175.578979 118.707993 -2529.814697	</position>
@@ -10192,7 +10186,7 @@
         <alphaFadeDistances>	5.000000 25.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
-        <wwsoundName>	plane_stalingrad_yak_3_01	</wwsoundName>
+        <wwsoundName>	plane_not_gun_yak_3_02	</wwsoundName>
       </channel0>
       <point>
         <position>	-66.294395 126.935989 -2519.791748	</position>
@@ -10248,7 +10242,7 @@
         <alphaFadeDistances>	5.000000 25.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
-        <wwsoundName>	plane_stalingrad_yak_3_01	</wwsoundName>
+        <wwsoundName>	plane_not_gun_mustang_01	</wwsoundName>
       </channel0>
       <point>
         <position>	37.889698 118.846992 -2524.939697	</position>
@@ -10380,6 +10374,7 @@
         <alphaFadeDistances>	0.100000 0.100000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	particles/Environment/scenarios/208_aircraft_crash_east_01.eff	</effectName>
+        <wwsoundName>	fr_scenario_IL2_crash_center_01	</wwsoundName>
       </channel0>
       <point>
         <position>	-534.396729 47.065056 -204.216309	</position>
@@ -10456,6 +10451,7 @@
         <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	particles/Environment/scenarios/208_aircraft_damaged_east_01.eff	</effectName>
+        <wwsoundName>	fr_scenario_IL2_attack_failed_east_01	</wwsoundName>
       </channel0>
       <point>
         <position>	1121.099976 91.544296 -2440.219971	</position>
@@ -10541,6 +10537,7 @@
         <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	particles/Environment/scenarios/208_aircraft_damaged_east_02.eff	</effectName>
+        <wwsoundName>	fr_scenario_IL2_attack_failed_east_02	</wwsoundName>
       </channel0>
       <point>
         <position>	721.593018 100.760002 -2390.040039	</position>
@@ -10626,7 +10623,7 @@
         <alphaFadeDistances>	5.000000 25.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
-        <wwsoundName>	plane_stalingrad_yak_3_01	</wwsoundName>
+        <wwsoundName>	plane_not_gun_yak_3_01	</wwsoundName>
       </channel0>
       <point>
         <position>	1030.189941 91.609100 -2416.040039	</position>
@@ -10682,7 +10679,7 @@
         <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
-        <wwsoundName>	plane_stalingrad_yak_3_01	</wwsoundName>
+        <wwsoundName>	plane_not_gun_yak_3_02	</wwsoundName>
       </channel0>
       <point>
         <position>	806.862000 98.703300 -2422.139893	</position>
@@ -10738,7 +10735,7 @@
         <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
-        <wwsoundName>	plane_stalingrad_yak_3_01	</wwsoundName>
+        <wwsoundName>	plane_not_gun_mustang_01	</wwsoundName>
       </channel0>
       <point>
         <position>	950.695984 97.448700 -2430.689941	</position>
@@ -10794,7 +10791,7 @@
         <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
-        <wwsoundName>	plane_stalingrad_yak_3_01	</wwsoundName>
+        <wwsoundName>	plane_not_gun_mustang_02	</wwsoundName>
       </channel0>
       <point>
         <position>	876.642029 100.200996 -2424.159912	</position>
@@ -10926,6 +10923,7 @@
         <alphaFadeDistances>	0.100000 0.100000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	particles/Environment/scenarios/208_aircraft_crash_east_01.eff	</effectName>
+        <wwsoundName>	fr_scenario_IL2_crash_east_01	</wwsoundName>
       </channel0>
       <point>
         <position>	1553.971680 84.500961 -376.890137	</position>
@@ -10951,6 +10949,7 @@
         <alphaFadeDistances>	0.100000 0.100000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	particles/Environment/scenarios/208_aircraft_crash_east_01.eff	</effectName>
+        <wwsoundName>	fr_scenario_IL2_crash_east_02	</wwsoundName>
       </channel0>
       <point>
         <position>	1111.329956 45.684799 -1259.859985	</position>
@@ -11001,6 +11000,7 @@
         <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	particles/Environment/scenarios/208_aircraft_damaged_west_01.eff	</effectName>
+        <wwsoundName>	fr_scenario_IL2_attack_failed_west_01	</wwsoundName>
       </channel0>
       <point>
         <position>	-799.910950 91.227791 -2811.929199	</position>
@@ -11074,6 +11074,7 @@
         <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	particles/Environment/scenarios/208_aircraft_damaged_west_02.eff	</effectName>
+        <wwsoundName>	fr_scenario_IL2_attack_failed_west_02	</wwsoundName>
       </channel0>
       <point>
         <position>	-1452.377808 102.864990 -2736.009766	</position>
@@ -11129,7 +11130,7 @@
         <alphaFadeDistances>	5.000000 25.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
-        <wwsoundName>	plane_stalingrad_yak_3_01	</wwsoundName>
+        <wwsoundName>	plane_not_gun_yak_3_01	</wwsoundName>
       </channel0>
       <point>
         <position>	-1231.910034 108.642998 -2769.929932	</position>
@@ -11185,7 +11186,7 @@
         <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
-        <wwsoundName>	plane_stalingrad_yak_3_01	</wwsoundName>
+        <wwsoundName>	plane_not_gun_yak_3_02	</wwsoundName>
       </channel0>
       <point>
         <position>	-1140.089966 95.166100 -2778.060059	</position>
@@ -11241,7 +11242,7 @@
         <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
-        <wwsoundName>	plane_stalingrad_yak_3_01	</wwsoundName>
+        <wwsoundName>	plane_not_gun_mustang_01	</wwsoundName>
       </channel0>
       <point>
         <position>	-1025.079956 96.909103 -2771.060059	</position>
@@ -11297,7 +11298,7 @@
         <alphaFadeDistances>	5.000000 5.000000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	particles/Environment/scenarios/plane_engine_sc_all.eff	</effectName>
-        <wwsoundName>	plane_stalingrad_yak_3_01	</wwsoundName>
+        <wwsoundName>	plane_not_gun_mustang_02	</wwsoundName>
       </channel0>
       <point>
         <position>	-919.515991 95.392899 -2764.370117	</position>
@@ -11429,6 +11430,7 @@
         <alphaFadeDistances>	0.100000 0.100000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	particles/Environment/scenarios/208_aircraft_crash_east_01.eff	</effectName>
+        <wwsoundName>	fr_scenario_IL2_crash_west_01	</wwsoundName>
       </channel0>
       <point>
         <position>	-1559.698120 72.764214 -382.453003	</position>
@@ -11454,6 +11456,7 @@
         <alphaFadeDistances>	0.100000 0.100000	</alphaFadeDistances>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	particles/Environment/scenarios/208_aircraft_crash_east_01.eff	</effectName>
+        <wwsoundName>	fr_scenario_IL2_crash_west_02	</wwsoundName>
       </channel0>
       <point>
         <position>	-737.163391 33.720150 -1466.056519	</position>

@@ -5,6 +5,8 @@ from debug_utils import LOG_WARNING
 class BOOTCAMP(object):
     WELLCOME_BOOTCAMP = '#bootcamp:wellcome/bootcamp'
     WELLCOME_BOOTCAMP_DESCRIPTION = '#bootcamp:wellcome/bootcamp/description'
+    WELLCOME_BOOTCAMP_WAIT = '#bootcamp:wellcome/bootcamp/wait'
+    WELLCOME_BOOTCAMP_SKIP = '#bootcamp:wellcome/bootcamp/skip'
     WELLCOME_BOOTCAMP_REFERRAL = '#bootcamp:wellcome/bootcamp/referral'
     FINISH_BOOTCAMP_REFERRAL = '#bootcamp:finish/bootcamp/referral'
     REQUEST_BOOTCAMP_RETURN = '#bootcamp:request/bootcamp/return'

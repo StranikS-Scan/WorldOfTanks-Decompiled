@@ -365,6 +365,7 @@ class Tutorial(object):
                 self.setState(states.STATE_WAIT_SCENE)
             else:
                 self._sceneChanging = True
+                self.evaluateState()
             return
 
     def __onItemFound(self, itemID):

@@ -115,11 +115,10 @@ class PromoController(IPromoController):
 
     @process
     def showLastTeaserPromo(self):
-        if self.__promoData:
-            rowUrl = self.__promoData.get('url', '')
-            loadingCallback = self.__logger.getLoggingFuture(self.__promoData, action=PromoLogActions.OPEN_FROM_TEASER, type=PromoLogSubjectType.PROMO_SCREEN, url=rowUrl)
-            url = yield self.__addAuthParams(rowUrl)
-            self.__showBrowserView(url, loadingCallback)
+        rowUrl = self.__promoData.get('url', '')
+        loadingCallback = self.__logger.getLoggingFuture(self.__promoData, action=PromoLogActions.OPEN_FROM_TEASER, type=PromoLogSubjectType.PROMO_SCREEN, url=rowUrl)
+        url = yield self.__addAuthParams(rowUrl)
+        self.__showBrowserView(url, loadingCallback)
 
     def setUnreadPromoCount(self, count):
         self.__updatePromoCount(count)
@@ -234,7 +233,6 @@ class PromoController(IPromoController):
         self.__isLobbyInited = False
         self.__isInHangar = False
         self.__isPromoOpen = False
-        self.__currentVersionBrowserID = None
         self.__externalCloseCallback = None
         self.__isTeaserOpen = False
         self.__notificationsCtrl.onEventNotificationsChanged -= self.__onEventNotification

@@ -31,9 +31,6 @@ class VehicleAnchorsUpdater(object):
         self.__menuAnchorId = None
         self.__changedStates = {}
         self.__closeGroups = DisjointSet()
-        from gui.ClientHangarSpace import hangarCFG
-        cfg = hangarCFG()
-        self.__vScale = cfg['v_scale'] if 'v_scale' in cfg else 1.0
         return
 
     def startUpdater(self, interfaceScale):
@@ -92,7 +89,7 @@ class VehicleAnchorsUpdater(object):
                 if self.__ctx.currentTab in (C11nTabs.EMBLEM, C11nTabs.INSCRIPTION):
                     slotWidth = anchorParams.descriptor.size
                     slotHeight = slotWidth * SLOT_ASPECT_RATIO[anchorId.slotType]
-                    linesShift = slotHeight * _LINES_SHIFT * self.__vScale
+                    linesShift = slotHeight * _LINES_SHIFT
                     linesPosition -= location.up * linesShift
                 position = location.position
                 direction = location.normal
@@ -132,7 +129,7 @@ class VehicleAnchorsUpdater(object):
     def setAnchorShift(self, anchorId, shift):
         if anchorId in self.__processedAnchors:
             anchor = self.__processedAnchors[anchorId]
-            self.__vehicleCustomizationAnchors.setAnchorShift(anchor.uid, shift * self.__vScale)
+            self.__vehicleCustomizationAnchors.setAnchorShift(anchor.uid, shift)
 
     def changeAnchorParams(self, anchorId, isDisplayed, isAutoScalable, isCollidable=False, isActive=True):
         if anchorId in self.__processedAnchors:

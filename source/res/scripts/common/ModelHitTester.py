@@ -7,9 +7,12 @@ from Math import Vector2, Matrix
 from constants import IS_DEVELOPMENT, IS_CLIENT, IS_BOT
 from debug_utils import LOG_DEBUG
 from soft_exception import SoftException
+from constants import IS_EDITOR
+from wrapped_reflection_framework import ReflectionMetaclass
 
 class ModelHitTester(object):
     __slots__ = ('__bspModel', '__bspModelName', '__bspModelDown', '__bspModelNameDown', '__bspModelUp', '__bspModelNameUp', 'bbox', 'bboxDown', 'bboxUp')
+    __metaclass__ = ReflectionMetaclass
 
     def __init__(self, dataSection=None):
         self.bbox = None
@@ -20,7 +23,7 @@ class ModelHitTester(object):
         self.__bspModelUp = None
         self.__bspModelNameUp = None
         if dataSection is not None:
-            modelTag = 'collisionModelClient' if IS_CLIENT or IS_BOT else 'collisionModelServer'
+            modelTag = 'collisionModelClient' if IS_CLIENT or IS_EDITOR or IS_BOT else 'collisionModelServer'
             self.__bspModelName = dataSection.readString(modelTag)
             if not self.__bspModelName:
                 raise SoftException('<%s> is missing or wrong' % modelTag)
@@ -119,6 +122,11 @@ class ModelHitTester(object):
             return self.__bspModelDown
         else:
             return self.__bspModel
+
+    def save(self, section):
+        if IS_EDITOR:
+            section.writeString('collisionModelClient', self.edClientBspModel)
+            section.writeString('collisionModelServer', self.edServerBspModel)
 
 
 def segmentMayHitVolume(boundingRadius, center, segmentStart, segmentEnd):

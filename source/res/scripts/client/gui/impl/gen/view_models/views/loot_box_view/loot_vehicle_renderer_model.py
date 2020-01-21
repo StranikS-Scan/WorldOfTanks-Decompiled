@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/loot_box_view/loot_vehicle_renderer_model.py
-from gui.impl.gen.view_models.views.loot_box_view.loot_def_renderer_model import LootDefRendererModel
 from gui.impl.gen.view_models.views.loot_box_view.congrats_view_model import CongratsViewModel
+from gui.impl.gen.view_models.views.loot_box_view.loot_def_renderer_model import LootDefRendererModel
 
 class LootVehicleRendererModel(LootDefRendererModel):
     __slots__ = ()

@@ -108,6 +108,8 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
          'isMoneyEnough': data.isMoneyEnough,
          'buyButtonEnabled': data.enabled,
          'buyButtonLabel': data.label,
+         'buyButtonIcon': data.icon,
+         'buyButtonIconAlign': data.iconAlign,
          'buyButtonTooltip': data.tooltip,
          'itemPrice': data.itemPrice,
          'isUnlock': data.isUnlock,
@@ -116,14 +118,14 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
          'hasCompensation': compensationData is not None,
          'compensation': compensationData if compensationData is not None else {},
          'showCannotResearchWarning': data.isUnlock and not data.isPrevItemsUnlock}
-        customOfferData = self.__getCustomOfferData(data)
-        if customOfferData is not None:
-            resultVO.update({'customOffer': customOfferData})
+        customOffer = self.__getCustomOfferData(data)
+        if customOffer is not None:
+            resultVO.update({'customOffer': customOffer})
         return resultVO
 
     def getItemPackBuyingPanelData(self, data, itemsPack, couponSelected, price):
         compensationData = self.__getCompensationData(itemsPack)
-        return {'setTitle': data.title,
+        resultVO = {'setTitle': data.title,
          'uniqueVehicleTitle': '',
          'vehicleId': 0,
          'couponDiscount': getCouponDiscountForItemPack(itemsPack, price).gold if couponSelected else 0,
@@ -131,6 +133,8 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
          'isMoneyEnough': data.enabled,
          'buyButtonEnabled': data.enabled,
          'buyButtonLabel': data.label,
+         'buyButtonIcon': data.icon,
+         'buyButtonIconAlign': data.iconAlign,
          'buyButtonTooltip': data.tooltip,
          'itemPrice': data.itemPrice,
          'isUnlock': False,
@@ -138,6 +142,9 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
          'hasCompensation': compensationData is not None,
          'compensation': compensationData if compensationData is not None else {},
          'showCannotResearchWarning': False}
+        if data.customOffer is not None:
+            resultVO.update({'customOffer': data.customOffer})
+        return resultVO
 
     def getOffersBuyingPanelData(self, data):
         return {'setTitle': data.title,
@@ -148,6 +155,8 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
          'isMoneyEnough': data.enabled,
          'buyButtonEnabled': data.enabled,
          'buyButtonLabel': data.label,
+         'buyButtonIcon': data.icon,
+         'buyButtonIconAlign': data.iconAlign,
          'buyButtonTooltip': data.tooltip,
          'itemPrice': data.itemPrice,
          'showAction': data.isAction,
@@ -234,7 +243,8 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
             for action in actions:
                 actionType, actionValue = action
                 if actionValue == _CUSTOM_OFFER_ACTION_PERCENT:
-                    return {'name': backport.text(R.strings.vehicle_preview.buyingPanel.customOffer.buy()) if actionType in Currency.ALL else backport.text(R.strings.vehicle_preview.buyingPanel.customOffer.research()),
-                     'value': '{}%'.format(backport.getIntegralFormat(actionValue))}
+                    label = backport.text(R.strings.vehicle_preview.buyingPanel.customOffer.buy() if actionType in Currency.ALL else R.strings.vehicle_preview.buyingPanel.customOffer.research())
+                    value = ' {}'.format(backport.text(R.strings.quests.action.discount.percent(), value=backport.getIntegralFormat(actionValue)))
+                    return text_styles.promoSubTitle(''.join((label, value)))
 
         return None

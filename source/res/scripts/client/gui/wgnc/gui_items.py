@@ -3,8 +3,6 @@
 from collections import namedtuple
 from functools import partial
 from debug_utils import LOG_WARNING, LOG_DEBUG
-from gui.impl import backport
-from gui.impl.gen import R
 from gui.promo.promo_logger import PromoLogSourceType
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import WGNCShowItemEvent
@@ -16,7 +14,6 @@ from gui.wgnc.settings import WGNC_GUI_TYPE, WGNC_GUI_INVALID_SEQS, convertToLoc
 from helpers import dependency
 from ids_generators import SequenceIDGenerator
 from skeletons.gui.game_control import IPromoController
-from gui import SystemMessages
 _ButtonData = namedtuple('_ButtonData', ['label',
  'action',
  'visible',
@@ -277,17 +274,3 @@ class GUIHolder(object):
             return
         for _, item in self.__items.iteritems():
             item.validate(actionsHolder)
-
-
-class _LootBoxGiftPopUp(PopUpItem):
-
-    def show(self, _):
-        SystemMessages.pushMessage(backport.text(R.strings.messenger.serviceChannelMessages.lootBoxesGift.body()), type=SystemMessages.SM_TYPE.LootBoxesGift)
-
-
-def createPopUpItem(body, topic, priority, buttons, icon, bg, group, isNotify):
-    if topic == 'gift_received':
-        item = _LootBoxGiftPopUp(body, topic, priority, buttons, icon, bg, group, isNotify)
-    else:
-        item = PopUpItem(body, topic, priority, buttons, icon, bg, group, isNotify)
-    return item

@@ -107,6 +107,8 @@ class _ServiceHelpersMixin(object):
 class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomizationService):
     hangarSpace = dependency.descriptor(IHangarSpace)
     __FADE_OUT_DELAY = 0.15
+    __TURRET_YAW_ANGLE = 0.0
+    __GUN_PITCH_ANGLE = 0.0
 
     @property
     def isHighlighterActive(self):
@@ -160,6 +162,8 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
             _logger.error('Space or vehicle is not presented, could not show customization view, return')
             return
         else:
+            if self.hangarSpace.space is not None:
+                self.hangarSpace.space.turretAndGunAngles.set(gunPitch=self.__GUN_PITCH_ANGLE, turretYaw=self.__TURRET_YAW_ANGLE)
             self.__createCtx()
             loadCallback = lambda : self.__loadCustomization(vehInvID, callback)
             if self.__showCustomizationCallbackId is None:
@@ -168,7 +172,10 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
             return
 
     def closeCustomization(self):
+        if self.hangarSpace.space is not None:
+            self.hangarSpace.space.turretAndGunAngles.reset()
         self.__destroyCtx()
+        return
 
     def getCtx(self):
         return self.__customizationCtx

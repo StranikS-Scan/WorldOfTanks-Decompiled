@@ -7,8 +7,8 @@ class VehiclePreviewBuyingPanelMeta(BaseDAAPIComponent):
     def onBuyOrResearchClick(self):
         self._printOverrideError('onBuyOrResearchClick')
 
-    def onCarouselVehilceSelected(self, intCD):
-        self._printOverrideError('onCarouselVehilceSelected')
+    def onCarouselVehicleSelected(self, intCD):
+        self._printOverrideError('onCarouselVehicleSelected')
 
     def onOfferSelected(self, offerID):
         self._printOverrideError('onOfferSelected')

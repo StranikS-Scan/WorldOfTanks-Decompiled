@@ -203,7 +203,9 @@ class VehicleGun(VehicleModule):
 
     def _getShortInfoKey(self, vehicleDescr=None):
         key = super(VehicleGun, self)._getShortInfoKey()
-        return '/'.join((key, 'autoReload')) if self.isAutoReloadable(vehicleDescr) else key
+        if self.isAutoReloadable(vehicleDescr):
+            return '/'.join((key, 'autoReload'))
+        return '/'.join((key, 'dualGun')) if self.isDualGun(vehicleDescr) else key
 
 
 class VehicleEngine(VehicleModule):

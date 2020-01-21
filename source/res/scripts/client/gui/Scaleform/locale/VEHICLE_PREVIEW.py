@@ -15,7 +15,7 @@ class VEHICLE_PREVIEW(object):
     HEADER_BACKBTN_DESCRLABEL_REFERRALPROGRAM = '#vehicle_preview:header/backBtn/descrLabel/referralProgram'
     HEADER_BACKBTN_DESCRLABEL_FRONTLINE = '#vehicle_preview:header/backBtn/descrLabel/frontline'
     HEADER_BACKBTN_DESCRLABEL_MARATHON = '#vehicle_preview:header/backBtn/descrLabel/marathon'
-    HEADER_BACKBTN_DESCRLABEL_LOOTBOXREWARDS = '#vehicle_preview:header/backBtn/descrLabel/lootBoxRewards'
+    HEADER_BACKBTN_DESCRLABEL_WINTERMARATHON = '#vehicle_preview:header/backBtn/descrLabel/winterMarathon'
     HEADER_TITLE = '#vehicle_preview:header/title'
     HERO_HEADER_TITLE = '#vehicle_preview:hero/header/title'
     HEADER_CLOSEBTN_LABEL = '#vehicle_preview:header/closeBtn/label'
@@ -54,12 +54,11 @@ class VEHICLE_PREVIEW(object):
     BUYINGPANEL_BUYBTN_LABEL_BUYITEMPACK = '#vehicle_preview:buyingPanel/buyBtn/label/buyItemPack'
     BUYINGPANEL_BUYBTN_LABEL_RENT = '#vehicle_preview:buyingPanel/buyBtn/label/rent'
     BUYINGPANEL_BUYBTN_LABEL_RESTORE = '#vehicle_preview:buyingPanel/buyBtn/label/restore'
-    BUYINGPANEL_BUYBTN_LABEL_RESTOREREQUESTED = '#vehicle_preview:buyingPanel/buyBtn/label/restoreRequested'
     BUYINGPANEL_BUYBTN_LABEL_RESEARCH = '#vehicle_preview:buyingPanel/buyBtn/label/research'
     BUYINGPANEL_BUYBTN_LABEL_OBTAIN = '#vehicle_preview:buyingPanel/buyBtn/label/obtain'
+    BUYINGPANEL_BUYBTN_LABEL_SHOWADVENTCALENDAR = '#vehicle_preview:buyingPanel/buyBtn/label/showAdventCalendar'
     BUYINGPANEL_BUYBTN_LABEL_OFFSPRING = '#vehicle_preview:buyingPanel/buyBtn/label/offspring'
     BUYINGPANEL_NOTRESEARCHEDVEHICLEWARNING = '#vehicle_preview:buyingPanel/notResearchedVehicleWarning'
-    BUYINGPANEL_BUYBTN_LABEL_TOCALENDAR = '#vehicle_preview:buyingPanel/buyBtn/label/toCalendar'
     BUYINGPANEL_COMPENSATION = '#vehicle_preview:buyingPanel/compensation'
     BUYINGPANEL_COMPENSATION_BODY = '#vehicle_preview:buyingPanel/compensation/body'
     BUYINGPANEL_PRESENT = '#vehicle_preview:buyingPanel/present'
@@ -97,7 +96,7 @@ class VEHICLE_PREVIEW(object):
      HEADER_BACKBTN_DESCRLABEL_REFERRALPROGRAM,
      HEADER_BACKBTN_DESCRLABEL_FRONTLINE,
      HEADER_BACKBTN_DESCRLABEL_MARATHON,
-     HEADER_BACKBTN_DESCRLABEL_LOOTBOXREWARDS)
+     HEADER_BACKBTN_DESCRLABEL_WINTERMARATHON)
     BUYINGPANEL_OFFER_RENT_NAME_ENUM = (BUYINGPANEL_OFFER_RENT_NAME_CYCLE, BUYINGPANEL_OFFER_RENT_NAME_CYCLES, BUYINGPANEL_OFFER_RENT_NAME_SEASON)
     BUYINGPANEL_OFFER_RENT_LABEL_ENUM = (BUYINGPANEL_OFFER_RENT_LABEL_CYCLE, BUYINGPANEL_OFFER_RENT_LABEL_CYCLES, BUYINGPANEL_OFFER_RENT_LABEL_SEASON)
 

@@ -26,9 +26,7 @@ from gui.shared.utils.requesters.QuestsProgressRequester import QuestsProgressRe
 from helpers import dependency
 from helpers import isPlayerAccount
 from items import getTypeOfCompactDescr
-from items.components.ny_constants import TOKEN_FREE_TALISMANS, TOKEN_TALISMAN_BONUS
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
-from new_year.ny_constants import NY_LEVEL_PREFIX
 from personal_missions import PERSONAL_MISSIONS_XML_PATH
 from quest_cache_helpers import readQuestsFromFile
 from shared_utils import first
@@ -159,7 +157,7 @@ class EventsCache(IEventsCache):
                 isQPUpdated = 'quests' in diff or 'potapovQuests' in diff
                 if not isQPUpdated and 'tokens' in diff:
                     for tokenID in diff['tokens'].iterkeys():
-                        if not tokenID.startswith(LOOTBOX_TOKEN_PREFIX) and not tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX) and not tokenID.startswith(NY_LEVEL_PREFIX) and not tokenID.startswith(TOKEN_FREE_TALISMANS) and not tokenID.startswith(TOKEN_TALISMAN_BONUS):
+                        if not tokenID.startswith(LOOTBOX_TOKEN_PREFIX) and not tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX) and not tokenID.startswith('ny19:level:'):
                             isQPUpdated = True
                             break
 
@@ -287,33 +285,6 @@ class EventsCache(IEventsCache):
     def getEventBattles(self):
         battles = self.__getEventBattles()
         return EventBattles(battles.get('vehicleTags', set()), battles.get('vehicles', []), bool(battles.get('enabled', 0)), battles.get('arenaTypeID')) if battles else EventBattles(set(), [], 0, None)
-
-    def getQuestByID(self, qID):
-        quest = self._getCachedQuest(qID)
-        if quest is not None:
-            return quest
-        else:
-            questsData = self.__getQuestsData()
-            questsData.update(self.__getPersonalQuestsData())
-            questsData.update(self.__getPersonalMissionsHiddenQuests())
-            return self._makeQuest(qID, questsData[qID]) if qID in questsData else None
-
-    def getQuestsByIDs(self, qIDs):
-        result = {}
-        data = {}
-        for qID in qIDs:
-            quest = self._getCachedQuest(qID)
-            if quest is not None:
-                result[qID] = quest
-            if not data:
-                data = self.__getQuestsData()
-                data.update(self.__getPersonalQuestsData())
-                data.update(self.__getPersonalMissionsHiddenQuests())
-            if qID in data:
-                result[qID] = self._makeQuest(qID, data[qID])
-            result[qID] = None
-
-        return result
 
     def isEventEnabled(self):
         return len(self.__getEventBattles()) > 0 and len(self.getEventVehicles()) > 0
@@ -577,10 +548,6 @@ class EventsCache(IEventsCache):
 
         return result
 
-    def _getCachedQuest(self, qID):
-        storage = self.__cache['quests']
-        return storage[qID] if qID in storage else None
-
     def _makeQuest(self, qID, qData, maker=_defaultQuestMaker, **kwargs):
         storage = self.__cache['quests']
         if qID in storage:
@@ -601,9 +568,8 @@ class EventsCache(IEventsCache):
         needTokens = defaultdict(list)
         for qID, q in quests.iteritems():
             if q.getType() not in (EVENT_TYPE.GROUP, EVENT_TYPE.PERSONAL_MISSION):
-                tokens = q.getBonuses('tokens')
-                if tokens:
-                    for t in tokens[0].getTokens():
+                for tokenBonus in q.getBonuses('tokens'):
+                    for t in tokenBonus.getTokens():
                         makeTokens[t].append(qID)
 
                 for t in q.accountReqs.getTokens():

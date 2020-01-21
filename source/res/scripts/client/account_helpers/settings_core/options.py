@@ -769,7 +769,7 @@ class VerticalSyncSetting(SettingAbstract):
 class DynamicRendererSetting(SettingAbstract):
 
     def _get(self):
-        return round(BigWorld.getDRRScale(), 2) * 100
+        return round(BigWorld.getDRRAutoscalerBaseScale(), 2) * 100
 
     def _set(self, value):
         value = float(value) / 100

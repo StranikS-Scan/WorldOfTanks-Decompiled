@@ -3,7 +3,7 @@
 from CurrentVehicle import g_currentVehicle
 from gui import makeHtmlString
 from gui.impl import backport
-from gui.marathon.marathon_event_dp import MARATHON_STATE, MARATHON_WARNING
+from gui.marathon.marathon_event_dp import MARATHON_STATE, MARATHON_WARNING, TIME_FORMAT_HOURS
 from gui.shared.formatters import text_styles, icons
 from gui.shared.tooltips import TOOLTIP_TYPE, formatters
 from gui.shared.tooltips.common import BlocksTooltipData
@@ -16,7 +16,7 @@ class MarathonEventTooltipData(BlocksTooltipData):
     def __init__(self, context):
         super(MarathonEventTooltipData, self).__init__(context, TOOLTIP_TYPE.QUESTS)
         self._setContentMargin(top=2, bottom=3, left=1, right=1)
-        self._setMargins(afterBlock=0)
+        self._setMargins(afterBlock=-1)
         self._setWidth(303)
 
     def _packBlocks(self, questType, prefix, *args, **kwargs):
@@ -34,14 +34,14 @@ class MarathonEventTooltipData(BlocksTooltipData):
     def _getHeader(self, _):
         icon, text = self._marathonEvent.getTooltipHeader()
         if icon:
-            formattedText = '{} {}'.format(icons.makeImageTag(icon, width=16, height=16), text_styles.main(text))
+            formattedText = '{}{}'.format(icons.makeImageTag(icon, width=32, height=32, vSpace=-10, hSpace=-10), text_styles.main(text))
         else:
             formattedText = '{}'.format(text_styles.main(text))
-        return formatters.packImageTextBlockData(title=text_styles.highTitle(backport.text(self.__tooltipData.header)), img=self.__iconsData.tooltipHeader, txtPadding=formatters.packPadding(top=25), txtOffset=20, txtGap=-8, desc=formattedText)
+        return formatters.packImageTextBlockData(title=text_styles.highTitle(backport.text(self.__tooltipData.header)), img=self.__iconsData.tooltipHeader, imgPadding=formatters.packPadding(top=-1, left=1), txtPadding=formatters.packPadding(top=25), txtOffset=20, txtGap=-8, desc=formattedText, descPadding=formatters.packPadding(top=25, left=-8))
 
     def _getBody(self, state):
         if state == MARATHON_STATE.FINISHED:
-            text = text_styles.main(backport.text(self.__tooltipData.bodyExtra, day=self._marathonEvent.getExtraDaysToBuy()))
+            text = text_styles.main(backport.text(self.__tooltipData.bodyExtra, hours=self._marathonEvent.getExtraTimeToBuy(timeFormat=TIME_FORMAT_HOURS), daysForBuying=self._marathonEvent.getAdditionalBuyingTime()))
         else:
             text = text_styles.main(backport.text(self.__tooltipData.body))
         return formatters.packTextBlockData(text=text, padding=formatters.packPadding(left=20, top=10, bottom=20, right=10))
@@ -50,7 +50,7 @@ class MarathonEventTooltipData(BlocksTooltipData):
         vehicle = g_currentVehicle.item
         isObtained = self._marathonEvent.isRewardObtained()
         if isObtained:
-            statusLabel = text_styles.bonusAppliedText(icons.makeImageTag(self.__iconsData.libraryOkIcon, vSpace=-2) + ' ' + backport.text(self.__tooltipData.extraStateCompleted))
+            statusLabel = text_styles.bonusAppliedText(icons.makeImageTag(self.__iconsData.okIcon, width=32, height=32, vSpace=-10, hSpace=-10) + backport.text(self.__tooltipData.extraStateCompleted))
             return formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'alignText', {'align': 'center',
              'message': statusLabel}), padding=formatters.packPadding(bottom=20))
         if state == MARATHON_STATE.IN_PROGRESS:

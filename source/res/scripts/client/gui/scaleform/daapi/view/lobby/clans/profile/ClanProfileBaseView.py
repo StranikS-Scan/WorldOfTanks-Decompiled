@@ -73,7 +73,7 @@ class ClanProfileBaseView(ClanProfileBaseViewMeta, ClanEmblemsHelper, ClanListen
         self._updateHeaderState()
 
     def _updateClanInfo(self, clanInfo):
-        creationDate = i18n.makeString(CLANS.CLAN_HEADER_CREATIONDATE, creationDate=items.formatField(getter=clanInfo.getCreatedAt, formatter=backport.getLongDateFormat))
+        creationDate = i18n.makeString(CLANS.CLAN_HEADER_CREATIONDATE, creationDate=items.formatField(getter=clanInfo.getCreatedAt, formatter=backport.getShortDateFormat))
         self.as_setClanInfoS({'name': items.formatField(getter=clanInfo.getFullName),
          'bgIcon': RES_ICONS.MAPS_ICONS_CLANS_CLAN_CARD_HEADER,
          'creationDate': creationDate})

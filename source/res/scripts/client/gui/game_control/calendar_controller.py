@@ -14,7 +14,6 @@ from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.game_control import CalendarInvokeOrigin
-from gui.game_control.links import URLMacros
 from gui.server_events.modifiers import CalendarSplashModifier
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showHangar
@@ -144,7 +143,6 @@ class CalendarController(GameWindowController, ICalendarController):
         self.__heroAdventHelper = None
         self.__browserID = None
         self.__showOnSplash = False
-        self.__urlMacros = URLMacros()
         return
 
     def onLobbyInited(self, event):

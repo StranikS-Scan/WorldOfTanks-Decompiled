@@ -100,8 +100,7 @@ class SimpleDialogBuilder(object):
 class ResSimpleDialogBuilder(SimpleDialogBuilder):
 
     def setMessagesAndButtons(self, message, buttons=R.strings.dialogs.common, focused=DialogButtons.SUBMIT, btnDownSounds=None):
-        messageSection = self._getMessageSectionName()
-        self.setMessage(message.dyn(messageSection)())
+        self.setMessage(message.dyn('message')())
         self.setTitle(message.dyn('title')())
         for _id in DialogButtons.ALL:
             button = message.dyn(_id) or buttons.dyn(_id)
@@ -110,9 +109,6 @@ class ResSimpleDialogBuilder(SimpleDialogBuilder):
                 self.addButton(_id, button(), _id == focused, soundDown=soundDown)
 
         return self
-
-    def _getMessageSectionName(self):
-        pass
 
 
 class InfoDialogBuilder(ResSimpleDialogBuilder):
@@ -134,13 +130,3 @@ class ErrorDialogBuilder(ResSimpleDialogBuilder):
     def __init__(self):
         super(ErrorDialogBuilder, self).__init__()
         self.setPreset(DialogPresets.ERROR)
-
-
-class InfoDialogBuilderEx(InfoDialogBuilder):
-
-    def __init__(self, customMessageSection=''):
-        super(InfoDialogBuilderEx, self).__init__()
-        self.__customMessageSection = customMessageSection
-
-    def _getMessageSectionName(self):
-        return self.__customMessageSection if self.__customMessageSection else super(InfoDialogBuilderEx, self)._getMessageSectionName()

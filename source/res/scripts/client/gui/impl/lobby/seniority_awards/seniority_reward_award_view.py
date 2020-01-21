@@ -3,7 +3,7 @@
 import logging
 import re
 from collections import defaultdict
-from frameworks.wulf import WindowFlags, ViewFlags
+from frameworks.wulf import WindowFlags, ViewSettings
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.auxiliary.rewards_helper import getRewardRendererModelPresenter, getRewardTooltipContent
 from gui.impl.backport import TooltipData, BackportTooltipWindow, createTooltipData
@@ -55,7 +55,11 @@ class SeniorityRewardAwardView(ViewImpl):
     __slots__ = ('__bonuses', '__vehicles', '__countBoxes', '__tooltipData', '__bonusOrder')
 
     def __init__(self, contentResId, *args, **kwargs):
-        super(SeniorityRewardAwardView, self).__init__(contentResId, ViewFlags.VIEW, SeniorityRewardAwardViewModel, *args, **kwargs)
+        settings = ViewSettings(contentResId)
+        settings.model = SeniorityRewardAwardViewModel()
+        settings.args = args
+        settings.kwargs = kwargs
+        super(SeniorityRewardAwardView, self).__init__(settings)
 
     @property
     def viewModel(self):

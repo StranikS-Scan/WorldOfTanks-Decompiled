@@ -30,8 +30,10 @@ from gui.impl.gen.view_models.views.loot_box_view.loot_vehicle_compensation_rend
 from gui.impl.gen.view_models.views.loot_box_view.loot_conversion_renderer_model import LootConversionRendererModel
 from gui.impl.gen.view_models.views.loot_box_view.loot_renderer_types import LootRendererTypes
 from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker, getLootboxesAwardsPacker
+from gui.server_events.awards_formatters import getBobRentVehiclesAwardPacker
 from gui.server_events.bonuses import getNonQuestBonuses, BlueprintsBonusSubtypes
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import BonusNameQuestsBonusComposer
+from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import BobQuestsBonusComposer
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import LootBoxBonusComposer
 from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityAwardsEntryPointVO, getSeniorityAwardsBoxesCount
 from gui.server_events.recruit_helper import getRecruitInfo
@@ -143,6 +145,7 @@ class LootRewardDefModelPresenter(object):
             m.setLabelAlign(self._reward.get('align', _DEFAULT_ALIGN) or _DEFAULT_ALIGN)
             m.setHighlightType(self._reward.get('highlightIcon') or '')
             m.setOverlayType(self._reward.get('overlayIcon') or '')
+            m.setIsVehicle(self._reward.get('isVehicle') or False)
 
 
 class LootRewardAnimatedModelPresenter(LootRewardDefModelPresenter):
@@ -472,6 +475,22 @@ _DEF_MODEL_PRESENTERS = {CrewBonusTypes.CREW_BOOK_BONUSES: CrewBookModelPresente
 
 def getRewardsBonuses(rewards, size='big', awardsCount=_DEFAULT_DISPLAYED_AWARDS_COUNT):
     formatter = BonusNameQuestsBonusComposer(awardsCount, getPackRentVehiclesAwardPacker())
+    bonuses = []
+    if rewards:
+        for bonusType, bonusValue in rewards.iteritems():
+            if bonusType == 'vehicles' and isinstance(bonusValue, list):
+                for vehicleData in bonusValue:
+                    bonuses.extend(getNonQuestBonuses(bonusType, vehicleData))
+
+            bonus = getNonQuestBonuses(bonusType, bonusValue)
+            bonuses.extend(bonus)
+
+    formattedBonuses = formatter.getFormattedBonuses(bonuses, size)
+    return formattedBonuses
+
+
+def getBobTeamRewardsBonuses(rewards, size='big', awardsCount=_DEFAULT_DISPLAYED_AWARDS_COUNT):
+    formatter = BobQuestsBonusComposer(awardsCount, getBobRentVehiclesAwardPacker())
     bonuses = []
     if rewards:
         for bonusType, bonusValue in rewards.iteritems():

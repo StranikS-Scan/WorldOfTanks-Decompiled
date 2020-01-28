@@ -14,6 +14,7 @@ from gui.shared.gui_items.customization.c11n_items import STYLE_GROUP_ID_TO_FULL
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
+from skeletons.gui.game_control import IBobSoundController
 _SHOW_CLOSE_BTN = False
 _SHOW_BACK_BTN = True
 
@@ -22,6 +23,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
     __metaclass__ = event_bus_handlers.EventBusListener
     __itemsCache = dependency.descriptor(IItemsCache)
     __hangarSpace = dependency.descriptor(IHangarSpace)
+    __bobSounds = dependency.descriptor(IBobSoundController)
     _COMMON_SOUND_SPACE = RANKED_OVERLAY_SOUND_SPACE
 
     def __init__(self, ctx=None):
@@ -62,6 +64,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         self.__hangarSpace.onSpaceCreate -= self.__onHangarCreateOrRefresh
         g_currentPreviewVehicle.selectNoVehicle()
         g_currentPreviewVehicle.resetAppearance()
+        self.__bobSounds.onStylePreviewClose()
         super(VehicleStylePreview, self)._dispose()
 
     def __onVehicleLoading(self, ctxEvent):

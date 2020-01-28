@@ -5,14 +5,14 @@ from gui.impl.gen.view_models.views.loot_box_view.loot_def_renderer_model import
 class LootVideoRendererModel(LootDefRendererModel):
     __slots__ = ()
 
-    def __init__(self, properties=10, commands=0):
+    def __init__(self, properties=11, commands=0):
         super(LootVideoRendererModel, self).__init__(properties=properties, commands=commands)
 
     def getVideoSrc(self):
-        return self._getString(9)
+        return self._getString(10)
 
     def setVideoSrc(self, value):
-        self._setString(9, value)
+        self._setString(10, value)
 
     def _initialize(self):
         super(LootVideoRendererModel, self)._initialize()

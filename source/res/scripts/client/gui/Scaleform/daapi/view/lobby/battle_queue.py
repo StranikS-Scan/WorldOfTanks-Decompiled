@@ -164,10 +164,15 @@ class _RankedQueueProvider(_RandomQueueProvider):
     pass
 
 
+class _BobQueueProvider(_RandomQueueProvider):
+    pass
+
+
 _PROVIDER_BY_QUEUE_TYPE = {constants.QUEUE_TYPE.RANDOMS: _RandomQueueProvider,
  constants.QUEUE_TYPE.EVENT_BATTLES: _EventQueueProvider,
  constants.QUEUE_TYPE.RANKED: _RankedQueueProvider,
- constants.QUEUE_TYPE.EPIC: _EpicQueueProvider}
+ constants.QUEUE_TYPE.EPIC: _EpicQueueProvider,
+ constants.QUEUE_TYPE.BOB: _BobQueueProvider}
 
 def _providerFactory(proxy, qType):
     return _PROVIDER_BY_QUEUE_TYPE.get(qType, _QueueProvider)(proxy, qType)

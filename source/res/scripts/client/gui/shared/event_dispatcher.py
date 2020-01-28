@@ -25,6 +25,7 @@ from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
+from gui.Scaleform.genConsts.BATTLE_OF_BLOGGERS_ALIASES import BATTLE_OF_BLOGGERS_ALIASES
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.game_control.links import URLMacros
 from gui.impl import backport
@@ -96,6 +97,10 @@ def showRankedPrimeTimeWindow():
 
 def showEpicBattlesPrimeTimeWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(alias=EPICBATTLES_ALIASES.EPIC_BATTLES_PRIME_TIME_ALIAS, ctx={}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showBobPrimeTimeWindow():
+    g_eventBus.handleEvent(events.LoadViewEvent(alias=BATTLE_OF_BLOGGERS_ALIASES.BOB_PRIME_TIME_ALIAS, ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showFrontlineBuyConfirmView(ctx):
@@ -700,6 +705,12 @@ def showProgressiveRewardAwardWindow(bonuses, specialRewardType, currentStep):
 def showSeniorityRewardAwardWindow(qID, data):
     from gui.impl.lobby.seniority_awards.seniority_reward_award_view import SeniorityRewardAwardWindow
     window = SeniorityRewardAwardWindow(qID, data)
+    window.load()
+
+
+def showBobRewardWindow(bonuses, rewardType):
+    from gui.impl.lobby.bob.bob_reward_view import BobRewardWindow
+    window = BobRewardWindow(bonuses, rewardType)
     window.load()
 
 

@@ -189,6 +189,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     REFERRAL_PROGRAM_WINDOW = 'referralProgramWindow'
     EPIC_RANDOM_PAGE = 'epicRandomPage'
     EPIC_BATTLE_PAGE = 'epicBattlePage'
+    BOB_BATTLE_PAGE = 'bobBattlePage'
     EVENT_BATTLE_PAGE = 'classicBattlePage'
     RANKED_BATTLE_PAGE = 'rankedBattlePage'
     MISSION_AWARD_WINDOW = 'missionAwardWindow'
@@ -236,4 +237,5 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
      EVENT_BATTLE_PAGE,
      RANKED_BATTLE_PAGE,
      BOOTCAMP_BATTLE_PAGE,
-     EPIC_BATTLE_PAGE)
+     EPIC_BATTLE_PAGE,
+     BOB_BATTLE_PAGE)

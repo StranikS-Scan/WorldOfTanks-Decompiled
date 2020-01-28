@@ -6,6 +6,7 @@ import logging
 from itertools import ifilter
 from abc import ABCMeta, abstractmethod
 from copy import deepcopy
+import BigWorld
 import ArenaType
 import gui.awards.event_dispatcher as shared_events
 import personal_missions
@@ -17,6 +18,7 @@ from chat_shared import SYS_MESSAGE_TYPE
 from constants import EVENT_TYPE, INVOICE_ASSET, PREMIUM_TYPE
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.layouts import PERSONAL_MISSIONS_GROUP
+from helpers import time_utils
 from gui import DialogsInterface
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -38,7 +40,7 @@ from gui.server_events import events_dispatcher as quests_events, recruit_helper
 from gui.server_events.events_dispatcher import showLootboxesAward, showPiggyBankRewardWindow
 from gui.server_events.finders import PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
-from gui.shared.event_dispatcher import showProgressiveRewardAwardWindow, showSeniorityRewardAwardWindow
+from gui.shared.event_dispatcher import showProgressiveRewardAwardWindow, showSeniorityRewardAwardWindow, showBobRewardWindow
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.utils import isPopupsWindowsOpenDisabled
@@ -61,7 +63,12 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.sounds import ISoundsController
 from gui.awards.event_dispatcher import showCrewSkinAward
-from gui.impl.auxiliary.rewards_helper import getProgressiveRewardBonuses
+from gui.impl.auxiliary.rewards_helper import getProgressiveRewardBonuses, getBobTeamRewardsBonuses
+from skeletons.gui.game_control import IBobController
+from gui.impl.lobby.bob.bob_reward_view import BobRewardType
+from shared_utils import findFirst
+from gui.Scaleform.Waiting import Waiting
+from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityAwardsBox
 _logger = logging.getLogger(__name__)
 
 class QUEST_AWARD_POSTFIX(object):
@@ -105,7 +112,9 @@ class AwardController(IAwardController, IGlobalListener):
          LootBoxByInvoiceHandler(self),
          ProgressiveRewardHandler(self),
          PiggyBankOpenHandler(self),
-         SeniorityAwardsWindowHandler(self)]
+         SeniorityAwardsWindowHandler(self),
+         BobPersonalRewardHandler(self),
+         BobTeamRewardHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -354,35 +363,99 @@ class TokenQuestsWindowHandler(ServiceChannelHandler):
 
 
 class SeniorityAwardsWindowHandler(ServiceChannelHandler):
+    itemsCache = dependency.descriptor(IItemsCache)
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, awardCtrl):
         super(SeniorityAwardsWindowHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
         self._qID = None
+        self.__mergedRewards = {}
+        self.__questData = None
+        self.__autoOpenData = None
+        self.__callback = None
         return
 
     def fini(self):
+        self.__resetCallback()
         self._qID = None
+        self.itemsCache.onSyncCompleted -= self.__onItemCacheSyncCompleted
+        self.eventsCache.onSyncCompleted -= self.__onEventCacheSyncCompleted
         super(SeniorityAwardsWindowHandler, self).fini()
         return
 
     def _needToShowAward(self, ctx):
-        if not super(SeniorityAwardsWindowHandler, self)._needToShowAward(ctx):
-            return False
         _, message = ctx
+        isLootBoxesAutoOpenType = SYS_MESSAGE_TYPE.lootBoxesAutoOpenReward.index() == message.type
+        if not isLootBoxesAutoOpenType and not super(SeniorityAwardsWindowHandler, self)._needToShowAward(ctx):
+            return False
         data = message.data
-        for qID in data.get('completedQuestIDs', set()):
-            if SENIORITY_AWARDS_TOKEN_QUEST in qID:
-                self._qID = qID
-                return True
+        if isLootBoxesAutoOpenType:
+            self.__autoOpenData = data
+            self.__callback = BigWorld.callback(time_utils.ONE_MINUTE, self.__onShowAutoOpenRewards)
+            self.__update()
+        else:
+            for qID in data.get('completedQuestIDs', set()):
+                if SENIORITY_AWARDS_TOKEN_QUEST in qID:
+                    self._qID = qID
+                    self.__questData = data
+                    self.__update()
 
         return False
 
-    def _showAward(self, ctx):
+    def _showAward(self, ctx=None):
+        self.__resetCallback()
+        if self.__mergedRewards:
+            showSeniorityRewardAwardWindow(self._qID, self.__mergedRewards)
+            self.__mergedRewards = {}
+            self.__autoOpenData = None
+            self.__questData = None
+        return
+
+    def __update(self, isCallback=False):
+        if self.__questData and self.__autoOpenData:
+            if self.__isValidAutoOpenBoxData():
+                self.__mergedRewards.update(self.__autoOpenData.get('rewards', {}))
+            else:
+                self.itemsCache.onSyncCompleted += self.__onItemCacheSyncCompleted
+                return
+            if isCallback:
+                self._showAward()
+                return
+            allQuests = self.eventsCache.getAllQuests()
+            if self._qID in allQuests and self.isShowCongrats(allQuests[self._qID]):
+                self.__mergedRewards.update(self.__questData.get('detailedRewards', {}).get(self._qID, {}))
+            else:
+                self.eventsCache.onSyncCompleted += self.__onEventCacheSyncCompleted
+                return
+            self.itemsCache.onSyncCompleted -= self.__onItemCacheSyncCompleted
+            self.eventsCache.onSyncCompleted -= self.__onEventCacheSyncCompleted
+            self._showAward()
+
+    def __resetCallback(self):
+        if self.__callback:
+            BigWorld.cancelCallback(self.__callback)
+            self.__callback = None
+        return
+
+    def __onShowAutoOpenRewards(self):
+        self.__callback = None
+        self.__update(True)
+        return
+
+    def __onItemCacheSyncCompleted(self, *_):
+        self.itemsCache.onSyncCompleted -= self.__onItemCacheSyncCompleted
+        self.__update()
+
+    def __onEventCacheSyncCompleted(self, *_):
+        self.eventsCache.onSyncCompleted -= self.__onEventCacheSyncCompleted
         allQuests = self.eventsCache.getAllQuests()
-        if self._qID in allQuests and self.isShowCongrats(allQuests[self._qID]):
-            _, message = ctx
-            data = message.data.get('detailedRewards', {}).get(self._qID, {})
-            showSeniorityRewardAwardWindow(self._qID, data)
+        if self._qID in allQuests:
+            self.__update()
+
+    def __isValidAutoOpenBoxData(self):
+        boxIDs = self.__autoOpenData.get('boxIDs', {})
+        box = getSeniorityAwardsBox()
+        return True if boxIDs and box and box.getID() in boxIDs else False
 
 
 class LootBoxByInvoiceHandler(ServiceChannelHandler):
@@ -519,6 +592,8 @@ class CrewBooksQuestHandler(MultiTypeServiceChannelHandler):
 
     def __init__(self, awardCtrl):
         super(CrewBooksQuestHandler, self).__init__((SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index()), awardCtrl)
+        self._qId = None
+        return
 
     def _needToShowAward(self, ctx):
 
@@ -595,9 +670,18 @@ class MotiveQuestsWindowHandler(ServiceChannelHandler):
 
 class QuestBoosterAwardHandler(ServiceChannelHandler):
     goodiesCache = dependency.descriptor(IGoodiesCache)
+    bobController = dependency.descriptor(IBobController)
 
     def __init__(self, awardCtrl):
         super(QuestBoosterAwardHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
+
+    def _needToShowAward(self, ctx):
+        _, msg = ctx
+        if msg is not None and msg.data and isinstance(msg.data, types.DictType):
+            questIDs = msg.data.get('completedQuestIDs', [])
+            if _hasBobPersonalRewardQuest(questIDs) or _hasBobTeamRewardQuest(questIDs):
+                return False
+        return super(QuestBoosterAwardHandler, self)._needToShowAward(ctx)
 
     def _showAward(self, ctx):
         data = ctx[1].data
@@ -1126,6 +1210,80 @@ class ProgressiveRewardHandler(ServiceChannelHandler):
             showProgressiveRewardAwardWindow(bonuses, specialRewardType, message.data['level'])
         else:
             _logger.error("Can't show empty or invalid reward!")
+
+
+class BobPersonalRewardHandler(ServiceChannelHandler):
+    __bobController = dependency.descriptor(IBobController)
+
+    def __init__(self, awardCtrl):
+        super(BobPersonalRewardHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
+
+    def _needToShowAward(self, ctx):
+        _, message = ctx
+        if message is not None and message.data and isinstance(message.data, types.DictType):
+            if _hasBobPersonalRewardQuest(message.data.get('completedQuestIDs', [])):
+                return super(BobPersonalRewardHandler, self)._needToShowAward(ctx)
+        return False
+
+    def _showAward(self, ctx):
+        _, message = ctx
+        for questId, rewards in message.data.get('detailedRewards', {}).iteritems():
+            if _isBobPersonalRewardQuest(questId):
+                bonuses, _ = getProgressiveRewardBonuses(rewards)
+                if bonuses:
+                    showBobRewardWindow(bonuses, BobRewardType.PERSONAL_REWARD)
+                else:
+                    _logger.error('Could not show empty bonuses')
+
+        Waiting.hide('bob/claimReward')
+
+
+class BobTeamRewardHandler(ServiceChannelHandler):
+    __bobController = dependency.descriptor(IBobController)
+
+    def __init__(self, awardCtrl):
+        super(BobTeamRewardHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
+
+    def _needToShowAward(self, ctx):
+        _, message = ctx
+        if message is not None and message.data and isinstance(message.data, types.DictType):
+            if _hasBobTeamRewardQuest(message.data.get('completedQuestIDs', [])):
+                return super(BobTeamRewardHandler, self)._needToShowAward(ctx)
+        return False
+
+    def _showAward(self, ctx):
+        _, message = ctx
+        for questId, rewards in message.data.get('detailedRewards', {}).iteritems():
+            if _isBobTeamRewardQuest(questId):
+                bonuses = getBobTeamRewardsBonuses(rewards)
+                if bonuses:
+                    showBobRewardWindow(bonuses, BobRewardType.TEAM_REWARD)
+                else:
+                    _logger.error('Could not show empty bonuses')
+
+        Waiting.hide('bob/claimReward')
+
+
+@dependency.replace_none_kwargs(bobCtrl=IBobController)
+def _isBobTeamRewardQuest(questId, bobCtrl=None):
+    return questId.startswith(bobCtrl.teamRewardQuestPrefix)
+
+
+@dependency.replace_none_kwargs(bobCtrl=IBobController)
+def _isBobPersonalRewardQuest(questId, bobCtrl=None):
+    return questId == bobCtrl.personalRewardQuestName
+
+
+@dependency.replace_none_kwargs(bobCtrl=IBobController)
+def _hasBobTeamRewardQuest(completedQuestIds, bobCtrl=None):
+    teamRewardQuestPrefix = bobCtrl.teamRewardQuestPrefix
+    teamRewardQuestId = findFirst(lambda qId: qId.startswith(teamRewardQuestPrefix), completedQuestIds)
+    return teamRewardQuestId is not None
+
+
+@dependency.replace_none_kwargs(bobCtrl=IBobController)
+def _hasBobPersonalRewardQuest(completedQuestIds, bobCtrl=None):
+    return bobCtrl.personalRewardQuestName in completedQuestIds
 
 
 def _getBlueprintActualBonus(data, quest):

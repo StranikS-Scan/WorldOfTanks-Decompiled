@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/formatters/invites.py
 import logging
-from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_TYPE
+from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_TYPE, QUEUE_TYPE
 from constants import QUEUE_TYPE_NAMES
 from gui import makeHtmlString
 from gui.impl import backport
@@ -91,8 +91,9 @@ def getAcceptNotAllowedText(prbType, peripheryID, isInviteActive=True, isAlready
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def getLeaveOrChangeText(funcState, invitePrbType, peripheryID, lobbyContext=None):
     isAnotherPeriphery = lobbyContext is not None and lobbyContext.isAnotherPeriphery(peripheryID)
+    isBobInviteAndBobQueue = invitePrbType == PREBATTLE_TYPE.BOB and funcState.entityTypeID == QUEUE_TYPE.BOB
     text = ''
-    if funcState.doLeaveToAcceptInvite(invitePrbType):
+    if funcState.doLeaveToAcceptInvite(invitePrbType) and not isBobInviteAndBobQueue:
         if funcState.isInLegacy() or funcState.isInUnit():
             entityName = getPrbName(funcState.entityTypeID)
         elif funcState.isInPreQueue():

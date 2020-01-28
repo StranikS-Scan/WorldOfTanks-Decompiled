@@ -533,6 +533,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_CUSTOMIZATION = '#messenger:serviceChannelMessages/sysMsg/titles/customization'
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_PRIMETIME = '#messenger:serviceChannelMessages/sysMsg/titles/primeTime'
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_RANKEDBATTLESAVAILABLE = '#messenger:serviceChannelMessages/sysMsg/titles/rankedBattlesAvailable'
+    SERVICECHANNELMESSAGES_SYSMSG_TITLES_BOBBATTLESAVAILABLE = '#messenger:serviceChannelMessages/sysMsg/titles/bobBattlesAvailable'
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_PAYMENTMETHODLINK = '#messenger:serviceChannelMessages/sysMsg/titles/paymentMethodLink'
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_PAYMENTMETHODUNLINK = '#messenger:serviceChannelMessages/sysMsg/titles/paymentMethodUnlink'
     SERVICECHANNELMESSAGES_PREBATTLE_BATTLETYPE_TOURNAMENT = '#messenger:serviceChannelMessages/prebattle/battleType/tournament'

@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences_ct.xml	</preferences>
+  <preferences>	preferences.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -139,10 +139,10 @@
     <PS_PERFORMANCE_LOD_MULT>	1.2	</PS_PERFORMANCE_LOD_MULT>
   </ParticleSystem>
   <debug>
-    <fullDump>	false	</fullDump>
-    <clientUrl>	http://cat-st1.wargaming.net	</clientUrl>
+    <fullDump>	true	</fullDump>
+    <clientUrl></clientUrl>
     <botsUrl>	http://cat-st1.wargaming.net	</botsUrl>
-    <dxdiag>	false	</dxdiag>
+    <dxdiag>	true	</dxdiag>
     <framesCount>	0	</framesCount>
     <enableServers>	false	</enableServers>
     <profilerBufferSize>	12582912	</profilerBufferSize>
@@ -303,6 +303,12 @@
         </project>
         <project>
           <name>	researches.bnk	</name>
+        </project>
+        <project>
+          <name>	Battle_of_bloggers.pck	</name>
+        </project>
+        <project>
+          <name>	battle_of_bloggers.bnk	</name>
         </project>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>
@@ -562,8 +568,8 @@
       <source>	SCRIPT	</source>
       <source>	UI	</source>
       <openMode>	a	</openMode>
-      <maxSizeKB>	512	</maxSizeKB>
-      <trimToKB>	0	</trimToKB>
+      <maxSizeKB>	2048	</maxSizeKB>
+      <trimToKB>	512	</trimToKB>
       <showTime>	true	</showTime>
       <disableBuffering>	false	</disableBuffering>
       <messageLength>	8192	</messageLength>
@@ -571,8 +577,8 @@
     <file>	ui.log	  <enabled>	true	</enabled>
       <source>	UI	</source>
       <openMode>	a	</openMode>
-      <maxSizeKB>	512	</maxSizeKB>
-      <trimToKB>	0	</trimToKB>
+      <maxSizeKB>	2048	</maxSizeKB>
+      <trimToKB>	512	</trimToKB>
       <showTime>	true	</showTime>
       <disableBuffering>	false	</disableBuffering>
       <messageLength>	8192	</messageLength>

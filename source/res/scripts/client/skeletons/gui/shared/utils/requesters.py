@@ -889,3 +889,26 @@ class ISessionStatsRequester(IRequester):
 
     def getAccountWtr(self):
         raise NotImplementedError
+
+
+class IBobRequester(IRequester):
+
+    @property
+    def teamToken(self):
+        raise NotImplementedError
+
+    @property
+    def teamRank(self):
+        raise NotImplementedError
+
+    @property
+    def teamScore(self):
+        raise NotImplementedError
+
+    @property
+    def activeSkill(self):
+        raise NotImplementedError
+
+    @property
+    def skillExpiresTime(self):
+        raise NotImplementedError

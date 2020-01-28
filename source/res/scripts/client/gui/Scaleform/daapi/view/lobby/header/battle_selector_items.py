@@ -19,6 +19,7 @@ from helpers import i18n, time_utils, dependency
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.game_control import IBootcampController
+from skeletons.gui.game_control import IBobController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from gui.clans.clan_helpers import isStrongholdsEnabled
@@ -90,7 +91,7 @@ class _SelectorItem(object):
         return False
 
     def isInSquad(self, state):
-        return state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInUnit(PREBATTLE_TYPE.EVENT) or state.isInUnit(PREBATTLE_TYPE.EPIC)
+        return state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInUnit(PREBATTLE_TYPE.EVENT) or state.isInUnit(PREBATTLE_TYPE.EPIC) or state.isInUnit(PREBATTLE_TYPE.BOB)
 
     def setLocked(self, value):
         self._isLocked = value
@@ -341,6 +342,18 @@ class _EpicQueueItem(_SelectorItem):
         return icons.makeImageTag(iconPath, vSpace=-3) + ' ' + attentionText if attentionText and iconPath else None
 
 
+class _BobItem(_SelectorItem):
+    bobController = dependency.descriptor(IBobController)
+
+    def isRandomBattle(self):
+        return True
+
+    def _update(self, state):
+        self._isSelected = state.isQueueSelected(QUEUE_TYPE.BOB)
+        self._isDisabled = state.hasLockedState
+        self._isVisible = self.bobController.needShowEventMode()
+
+
 class _BattleSelectorItems(object):
 
     def __init__(self, items):
@@ -509,6 +522,7 @@ def _createItems(eventsCache=None, lobbyContext=None):
     items = []
     _addRandomBattleType(items)
     _addEpicQueueBattleType(items)
+    _addBobBattleType(items)
     _addRankedBattleType(items, settings)
     _addCommandBattleType(items, settings)
     _addStrongholdsBattleType(items, isInRoaming)
@@ -572,6 +586,10 @@ def _addSandboxType(items):
 
 def _addEpicQueueBattleType(items):
     items.append(_EpicQueueItem(MENU.HEADERBUTTONS_BATTLE_TYPES_EPIC, PREBATTLE_ACTION_NAME.EPIC, 1, SELECTOR_BATTLE_TYPES.EPIC))
+
+
+def _addBobBattleType(items):
+    items.append(_BobItem(MENU.HEADERBUTTONS_BATTLE_TYPES_BOB, PREBATTLE_ACTION_NAME.BOB, 1, SELECTOR_BATTLE_TYPES.BOB))
 
 
 def _addSimpleSquadType(items):

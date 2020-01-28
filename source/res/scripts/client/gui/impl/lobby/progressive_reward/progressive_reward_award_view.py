@@ -26,7 +26,7 @@ class ProgressiveRewardAwardView(ViewImpl):
 
     def __init__(self, contentResId, *args, **kwargs):
         settings = ViewSettings(contentResId)
-        settings.model = ProgressiveRewardAwardModel()
+        settings.model = self._getInitViewModel()
         settings.args = args
         settings.kwargs = kwargs
         super(ProgressiveRewardAwardView, self).__init__(settings)
@@ -54,6 +54,9 @@ class ProgressiveRewardAwardView(ViewImpl):
         tooltipData = self.__getBackportTooltipData(event)
         return getRewardTooltipContent(event, tooltipData)
 
+    def _getInitViewModel(self):
+        return ProgressiveRewardAwardModel()
+
     def _initialize(self, bonuses, specialRewardType, currentStep):
         super(ProgressiveRewardAwardView, self)._initialize()
         self.viewModel.onDestroyEvent += self.__onDestroy
@@ -79,8 +82,8 @@ class ProgressiveRewardAwardView(ViewImpl):
 
     def __update(self, _=None):
         if self.__specialRewardType != LootCongratsTypes.INIT_CONGRAT_TYPE_CREW_BOOKS:
-            self.__setSteps(self.__currentStep)
-        self.__setBonuses(self.__bonuses)
+            self._setSteps(self.__currentStep)
+        self._setBonuses(self.__bonuses)
 
     def __onWindowClose(self, _=None):
         if self.viewModel.getHardReset():
@@ -92,7 +95,7 @@ class ProgressiveRewardAwardView(ViewImpl):
         setSoundState(groupName=ProgressiveRewardSoundEvents.PROGRESSIVE_REWARD_AWARD_GROUP, stateName=ProgressiveRewardSoundEvents.PROGRESSIVE_REWARD_AWARD_EXIT)
         self.destroyWindow()
 
-    def __setSteps(self, currentStep):
+    def _setSteps(self, currentStep):
         progressive = self._eventsCache.getProgressiveReward()
         if progressive is None:
             _logger.warning('Progressive config is missing on server!')
@@ -107,7 +110,7 @@ class ProgressiveRewardAwardView(ViewImpl):
                 tx.setInitialCongratsType(LootCongratsTypes.INIT_CONGRAT_TYPE_PROGRESSIVE_REWARDS)
             return
 
-    def __setBonuses(self, bonuses):
+    def _setBonuses(self, bonuses):
         with self.getViewModel().transaction() as tx:
             rewardsList = tx.getRewards()
             rewardsList.clear()

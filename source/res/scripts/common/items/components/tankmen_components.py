@@ -12,11 +12,12 @@ class SPECIAL_VOICE_TAG(object):
     OFFSPRING = 'offspringSpecialVoice'
     RACER = 'racerSpecialVoice'
     RACER_EN = 'racerSpecialVoiceEn'
+    BATTLE_OF_BLOGGERS = ('ru1_LebwaSpecialVoice', 'ru2_YushaSpecialVoice', 'ru3_Amway921SpecialVoice', 'ru4_KorbenDallasSpecialVoice', 'eu1_MailandSpecialVoice', 'eu2_Skill4ltuSpecialVoice', 'eu3_DezgamezSpecialVoice', 'eu4_AwesomeEpicGuysSpecialVoice')
     ALL = (BUFFON,
      SABATON,
      OFFSPRING,
      RACER,
-     RACER_EN)
+     RACER_EN) + BATTLE_OF_BLOGGERS
 
 
 class SPECIAL_CREW_TAG(object):

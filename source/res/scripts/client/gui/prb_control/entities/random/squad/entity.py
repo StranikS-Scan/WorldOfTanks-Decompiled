@@ -63,13 +63,13 @@ class RandomSquadEntity(SquadEntity):
     eventsCache = dependency.descriptor(IEventsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self):
+    def __init__(self, modeFlags=FUNCTIONAL_FLAG.RANDOM, prbType=PREBATTLE_TYPE.SQUAD):
         self._isBalancedSquad = False
         self._isUseSPGValidateRule = True
         self._maxSpgCount = False
         self._mapID = 0
         self.__watcher = None
-        super(RandomSquadEntity, self).__init__(FUNCTIONAL_FLAG.RANDOM, PREBATTLE_TYPE.SQUAD)
+        super(RandomSquadEntity, self).__init__(modeFlags, prbType)
         return
 
     def init(self, ctx=None):
@@ -82,7 +82,7 @@ class RandomSquadEntity(SquadEntity):
         self.lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingChanged
         self.eventsCache.onSyncCompleted += self._onServerSettingChanged
         g_clientUpdateManager.addCallbacks({'inventory.1': self._onInventoryVehiclesUpdated})
-        self.__watcher = RandomVehiclesWatcher()
+        self.__watcher = self._createVehiclesWatcher()
         self.__watcher.start()
         return rv
 
@@ -167,6 +167,9 @@ class RandomSquadEntity(SquadEntity):
 
     def getMaxSPGCount(self):
         return self.lobbyContext.getServerSettings().getMaxSPGinSquads()
+
+    def _createVehiclesWatcher(self):
+        return RandomVehiclesWatcher()
 
     def _createRosterSettings(self):
         if self._isBalancedSquad:

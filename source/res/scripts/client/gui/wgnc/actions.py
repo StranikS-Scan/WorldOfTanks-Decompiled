@@ -11,6 +11,8 @@ from gui.wgnc.settings import WGNC_GUI_TYPE
 from gui.wgnc.common import WebHandlersContainer
 from helpers import dependency
 from skeletons.gui.game_control import IBrowserController, IPromoController
+from web.web_client_api.sound import HangarSoundWebApi
+from web.web_client_api import webApiCollection
 
 @ReprInjector.simple(('_name', 'name'))
 class _Action(object):
@@ -87,9 +89,17 @@ class OpenInternalBrowser(_OpenBrowser, WebHandlersContainer):
         self._doInvoke(title)
         return
 
+    def _getHandlers(self):
+        predefinedHandlers = self.getWebHandler(self._webHandlerName) or []
+        return predefinedHandlers + webApiCollection(HangarSoundWebApi)
+
     @process
     def _doInvoke(self, title):
-        self._browserID = yield self.browserCtrl.load(self._url, browserID=self._browserID, title=title, browserSize=self._size, showActionBtn=self._showRefresh, handlers=self.getWebHandler(self._webHandlerName), isSolidBorder=self._isSolidBorder)
+        self._browserID = yield self.browserCtrl.load(self._url, browserID=self._browserID, title=title, browserSize=self._size, showActionBtn=self._showRefresh, handlers=self._getHandlers(), isSolidBorder=self._isSolidBorder)
+        browser = self.browserCtrl.getBrowser(self._browserID)
+        if browser is not None:
+            browser.setIsAudioMutable(True)
+        return
 
 
 @ReprInjector.withParent()

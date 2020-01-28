@@ -95,7 +95,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         if self.currentTab and self.__currentTabAlias != QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS:
             self.__updateFilterLabel()
             self.currentTab.setFilters(self.__filterData)
-        self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_TAB_CHANGED, ctx=alias), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_TAB_CHANGED, ctx={'alias': alias,
+         'marathonPrefix': prefix}), EVENT_BUS_SCOPE.LOBBY)
         self.__showFilter()
         if alias == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS:
             self.currentTab.setMarathon(prefix)
@@ -194,7 +195,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         self.__scrollToGroup()
         caches.getNavInfo().setMissionsTab(self.__currentTabAlias)
         caches.getNavInfo().setMarathonPrefix(self.__marathonPrefix)
-        self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_TAB_CHANGED, ctx=self.__currentTabAlias), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_TAB_CHANGED, ctx={'alias': self.__currentTabAlias,
+         'marathonPrefix': self.__marathonPrefix}), EVENT_BUS_SCOPE.LOBBY)
         return
 
     def __showMarathonReward(self, isAccessible, prefix):

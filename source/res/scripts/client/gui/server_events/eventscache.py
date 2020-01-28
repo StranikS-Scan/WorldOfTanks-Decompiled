@@ -11,7 +11,7 @@ import nations
 from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
 from adisp import async, process
-from constants import EVENT_TYPE, EVENT_CLIENT_DATA, LOOTBOX_TOKEN_PREFIX
+from constants import EVENT_TYPE, EVENT_CLIENT_DATA, LOOTBOX_TOKEN_PREFIX, TWITCH_TOKEN_PREFIX
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.server_events import caches as quests_caches
@@ -157,7 +157,7 @@ class EventsCache(IEventsCache):
                 isQPUpdated = 'quests' in diff or 'potapovQuests' in diff
                 if not isQPUpdated and 'tokens' in diff:
                     for tokenID in diff['tokens'].iterkeys():
-                        if not tokenID.startswith(LOOTBOX_TOKEN_PREFIX) and not tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX) and not tokenID.startswith('ny19:level:'):
+                        if not tokenID.startswith(LOOTBOX_TOKEN_PREFIX) and not tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX) and not tokenID.startswith(TWITCH_TOKEN_PREFIX):
                             isQPUpdated = True
                             break
 

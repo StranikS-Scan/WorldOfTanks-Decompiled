@@ -15,6 +15,7 @@ from gui.shared.gui_items.processors import Processor, makeError, makeSuccess, m
 from gui.shared.money import Money, Currency
 from helpers import dependency
 from skeletons.gui.game_control import IVehicleComparisonBasket
+from gui.Scaleform.Waiting import Waiting
 _logger = logging.getLogger(__name__)
 
 class TankmanBerthsBuyer(Processor):
@@ -275,6 +276,21 @@ class EpicPrestigePointsExchange(Processor):
     def _request(self, callback):
         _logger.debug('Make server request to exchange prestige points')
         BigWorld.player().epicMetaGame.exchangePrestigePoints(lambda code, errStr: self._response(code, callback, errStr=errStr))
+
+
+class BobRewardClaimer(Processor):
+
+    def __init__(self, token):
+        super(BobRewardClaimer, self).__init__()
+        self.__token = token
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        Waiting.hide('bob/claimReward')
+        return super(BobRewardClaimer, self)._errorHandler(code, errStr, ctx)
+
+    def _request(self, callback):
+        _logger.debug('Make server request to claim BoB2 reward')
+        BigWorld.player().bob.claimReward(self.__token, lambda code, errStr: self._response(code, callback, errStr=errStr))
 
 
 class EpicRewardsClaimer(Processor):

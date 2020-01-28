@@ -24,7 +24,7 @@ class HangarCarouselDataProvider(CarouselDataProvider):
 
     def __init__(self, carouselFilter, itemsCache, currentVehicle):
         super(HangarCarouselDataProvider, self).__init__(carouselFilter, itemsCache, currentVehicle)
-        self._baseCriteria = REQ_CRITERIA.INVENTORY
+        self._baseCriteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.BOB_BATTLE
         self._supplyItems = []
         self._emptySlotsCount = 0
         self._restorableVehiclesCount = 0
@@ -71,11 +71,9 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         self._supplyItems = []
         items = self._itemsCache.items
         slots = items.stats.vehicleSlots
-        vehicles = self.getTotalVehiclesCount()
-        rentPromotion = self.getRentPromotionVehiclesCount()
         slotPrice = items.shop.getVehicleSlotsPrice(slots)
         defaultSlotPrice = items.shop.defaults.getVehicleSlotsPrice(slots)
-        self._emptySlotsCount = slots - (vehicles - rentPromotion)
+        self._emptySlotsCount = self._itemsCache.items.inventory.getFreeSlots(self._itemsCache.items.stats.vehicleSlots)
         criteria = REQ_CRITERIA.IN_CD_LIST(items.recycleBin.getVehiclesIntCDs()) | REQ_CRITERIA.VEHICLE.IS_RESTORE_POSSIBLE
         self._restorableVehiclesCount = len(items.getVehicles(criteria))
         if slotPrice != defaultSlotPrice:

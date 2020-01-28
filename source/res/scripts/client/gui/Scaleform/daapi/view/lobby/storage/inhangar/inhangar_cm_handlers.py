@@ -194,7 +194,15 @@ class VehiclesRentedCMHandler(ContextMenu):
 
     def __canRenewRent(self):
         vehicle = self.__itemsCache.items.getItemByCD(self._id)
-        return vehicle is not None and vehicle.isOnlyForEpicBattles and vehicle.rentInfo.canCycleRentRenewForSeason(GameSeasonType.EPIC)
+        canRenew = False
+        if vehicle is None:
+            return canRenew
+        else:
+            if vehicle.isOnlyForEpicBattles:
+                canRenew = vehicle.rentInfo.canCycleRentRenewForSeason(GameSeasonType.EPIC)
+            elif vehicle.isOnlyForBob:
+                canRenew = vehicle.rentInfo.canCycleRentRenewForSeason(GameSeasonType.BOB)
+            return canRenew
 
     def __canRemove(self):
         vehicle = self.__itemsCache.items.getItemByCD(self._id)

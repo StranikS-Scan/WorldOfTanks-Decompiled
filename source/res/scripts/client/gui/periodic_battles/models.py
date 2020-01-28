@@ -11,6 +11,10 @@ class PrimeTime(object):
         self.__peripheryID = peripheryID
         self.__periods = periods or {}
 
+    @property
+    def periods(self):
+        return self.__periods
+
     def hasAnyPeriods(self):
         return bool(self.__periods)
 

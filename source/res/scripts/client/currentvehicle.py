@@ -237,6 +237,9 @@ class _CurrentVehicle(_CachedVehicle):
     def isOnlyForEpicBattles(self):
         return self.isPresent() and self.item.isOnlyForEpicBattles
 
+    def isOnlyForBob(self):
+        return self.isPresent() and self.item.isOnlyForBob
+
     def isOutfitLocked(self):
         return self.isPresent() and self.item.isOutfitLocked
 

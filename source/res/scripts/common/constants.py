@@ -17,7 +17,7 @@ IS_CELLAPP = BigWorld.component == 'cell'
 IS_BASEAPP = BigWorld.component in ('base', 'service')
 IS_WEB = BigWorld.component == 'web'
 IS_DYNAPDATER = False
-CURRENT_REALM = 'CT'
+CURRENT_REALM = 'RU'
 DEFAULT_LANGUAGE = 'ru'
 AUTH_REALM = 'RU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
@@ -170,6 +170,7 @@ class ARENA_GUI_TYPE:
     EPIC_RANDOM_TRAINING = 20
     EPIC_BATTLE = 21
     EPIC_TRAINING = 22
+    BOB = 23
     RANGE = (UNKNOWN,
      RANDOM,
      TRAINING,
@@ -188,7 +189,8 @@ class ARENA_GUI_TYPE:
      EPIC_RANDOM,
      EPIC_RANDOM_TRAINING,
      EPIC_BATTLE,
-     EPIC_TRAINING)
+     EPIC_TRAINING,
+     BOB)
     SANDBOX_RANGE = (SANDBOX, RATED_SANDBOX)
     FALLOUT_RANGE = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
     EPIC_RANGE = (EPIC_BATTLE, EPIC_TRAINING)
@@ -212,7 +214,8 @@ class ARENA_GUI_TYPE_LABEL:
      ARENA_GUI_TYPE.EPIC_RANDOM: 'epic_random',
      ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING: 'epic_random_training',
      ARENA_GUI_TYPE.EPIC_BATTLE: 'epicbattle',
-     ARENA_GUI_TYPE.EPIC_TRAINING: 'epicbattle'}
+     ARENA_GUI_TYPE.EPIC_TRAINING: 'epicbattle',
+     ARENA_GUI_TYPE.BOB: 'bob'}
 
 
 class ARENA_BONUS_TYPE:
@@ -241,6 +244,7 @@ class ARENA_BONUS_TYPE:
     EPIC_BATTLE = 27
     EPIC_BATTLE_TRAINING = 28
     TOURNAMENT_EVENT = 31
+    BOB = 32
     RANGE = (UNKNOWN,
      REGULAR,
      TRAINING,
@@ -265,7 +269,8 @@ class ARENA_BONUS_TYPE:
      EPIC_RANDOM_TRAINING,
      EPIC_BATTLE,
      EPIC_BATTLE_TRAINING,
-     TOURNAMENT_EVENT)
+     TOURNAMENT_EVENT,
+     BOB)
     RANDOM_RANGE = (REGULAR, EPIC_RANDOM)
     SANDBOX_RANGE = (RATED_SANDBOX, SANDBOX)
     FALLOUT_RANGE = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
@@ -421,6 +426,7 @@ class PREBATTLE_TYPE:
     E_SPORT_COMMON = 14
     EPIC = 15
     EPIC_TRAINING = 16
+    BOB = 17
     RANGE = (SQUAD,
      TRAINING,
      COMPANY,
@@ -433,7 +439,8 @@ class PREBATTLE_TYPE:
      EXTERNAL,
      E_SPORT_COMMON,
      EPIC,
-     EPIC_TRAINING)
+     EPIC_TRAINING,
+     BOB)
     LEGACY_PREBATTLES = (TRAINING,
      TOURNAMENT,
      CLAN,
@@ -441,7 +448,8 @@ class PREBATTLE_TYPE:
     SQUAD_PREBATTLES = (SQUAD,
      FALLOUT,
      EVENT,
-     EPIC)
+     EPIC,
+     BOB)
     UNIT_MGR_PREBATTLES = (UNIT,
      SQUAD,
      CLAN,
@@ -449,20 +457,26 @@ class PREBATTLE_TYPE:
      EVENT,
      EXTERNAL,
      E_SPORT_COMMON,
-     EPIC)
+     EPIC,
+     BOB)
     CREATE_FROM_CLIENT = (UNIT,
      SQUAD,
      EPIC,
      FALLOUT,
-     EVENT)
+     EVENT,
+     BOB)
     CREATE_FROM_WEB = (UNIT, SQUAD, EXTERNAL)
     TRAININGS = (TRAINING, EPIC_TRAINING)
     CREATE_EX_FROM_SERVER = (SQUAD,
      CLAN,
      EPIC,
-     EVENT)
+     EVENT,
+     BOB)
     CREATE_EX_FROM_WEB = (SQUAD, CLAN)
-    JOIN_EX = (SQUAD, EPIC, EVENT)
+    JOIN_EX = (SQUAD,
+     EPIC,
+     EVENT,
+     BOB)
     EPIC_PREBATTLES = (EPIC, EPIC_TRAINING)
     REMOVED = (COMPANY, CLUBS)
 
@@ -1086,6 +1100,7 @@ PERSONAL_MISSION_2_FINAL_PAWN_COST = 3
 PERSONAL_MISSION_FREE_TOKENS_LIMIT = 21
 ENDLESS_TOKEN_TIME = 4104777660L
 LOOTBOX_TOKEN_PREFIX = 'lootBox:'
+TWITCH_TOKEN_PREFIX = 'token:twitch'
 PREMIUM_TOKEN_PREFIX = 'prem_acc'
 
 def personalMissionFreeTokenName(branch):
@@ -1143,6 +1158,7 @@ class QUEUE_TYPE:
     RANKED = 17
     BOOTCAMP = 18
     EPIC = 19
+    BOB = 20
     FALLOUT = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
     ALL = (RANDOMS,
      COMPANIES,
@@ -1159,7 +1175,8 @@ class QUEUE_TYPE:
      EXTERNAL_UNITS,
      RANKED,
      BOOTCAMP,
-     EPIC)
+     EPIC,
+     BOB)
     REMOVED = (COMPANIES,)
 
 
@@ -1241,10 +1258,12 @@ class GameSeasonType(object):
     NONE = 0
     RANKED = 1
     EPIC = 2
+    BOB = 3
 
 
 SEASON_TYPE_BY_NAME = {'ranked': GameSeasonType.RANKED,
- 'epic': GameSeasonType.EPIC}
+ 'epic': GameSeasonType.EPIC,
+ 'bob': GameSeasonType.BOB}
 SEASON_NAME_BY_TYPE = {val:key for key, val in SEASON_TYPE_BY_NAME.iteritems()}
 CHANNEL_SEARCH_RESULTS_LIMIT = 50
 USER_SEARCH_RESULTS_LIMIT = 50
@@ -1647,7 +1666,9 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  USER_SERVER_SETTINGS.HIDE_MARKS_ON_GUN: 'Hide marks on gun',
  USER_SERVER_SETTINGS.LINKEDSET_QUESTS: 'linkedset quests show reward info',
  USER_SERVER_SETTINGS.QUESTS_PROGRESS: 'feedback quests progress',
- 91: 'Loot box last viewed count'}
+ 91: 'Loot box last viewed count',
+ 92: 'Battle of Bloggers carousel filter',
+ 93: 'Battle of Bloggers carousel filter'}
 
 class WG_GAMES:
     TANKS = 'wot'
@@ -1842,7 +1863,11 @@ class INVITATION_TYPE:
     SQUAD = PREBATTLE_TYPE.SQUAD
     EPIC = PREBATTLE_TYPE.EPIC
     EVENT = PREBATTLE_TYPE.EVENT
-    RANGE = (SQUAD, EVENT, EPIC)
+    BOB = PREBATTLE_TYPE.BOB
+    RANGE = (SQUAD,
+     EVENT,
+     EPIC,
+     BOB)
 
 
 class REPAIR_FLAGS:

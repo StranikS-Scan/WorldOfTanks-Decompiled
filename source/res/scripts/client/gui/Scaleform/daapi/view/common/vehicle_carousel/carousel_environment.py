@@ -16,7 +16,7 @@ from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IRentalsController, IIGRController, IClanLockController, IEpicBattleMetaGameController, IRankedBattlesController
+from skeletons.gui.game_control import IRentalsController, IIGRController, IClanLockController, IEpicBattleMetaGameController, IRankedBattlesController, IBobController
 from skeletons.gui.shared import IItemsCache
 _CAROUSEL_FILTERS = ('bonus', 'favorite', 'elite', 'premium')
 if constants.IS_KOREA:
@@ -57,6 +57,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
     itemsCache = dependency.descriptor(IItemsCache)
     epicController = dependency.descriptor(IEpicBattleMetaGameController)
     rankedController = dependency.descriptor(IRankedBattlesController)
+    bobEventController = dependency.descriptor(IBobController)
 
     def __init__(self):
         super(CarouselEnvironment, self).__init__()
@@ -135,8 +136,10 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
         self.applyFilter()
 
     def updateAviability(self):
-        state = self._currentVehicle.getViewState()
-        self.as_setEnabledS(not state.isLocked())
+        if self._currentVehicle is not None:
+            state = self._currentVehicle.getViewState()
+            self.as_setEnabledS(not state.isLocked())
+        return
 
     def _populate(self):
         super(CarouselEnvironment, self)._populate()
@@ -154,6 +157,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
         self._currentVehicle.onChanged += self.__onCurrentVehicleChanged
         self.epicController.onUpdated += self.__updateEpicSeasonRent
         self.rankedController.onUpdated += self.__updateRankedBonusBattles
+        self.bobEventController.onUpdated += self.__bobConfigChanged
         self.settingsCore.onSettingsChanged += self._onCarouselSettingsChange
         g_playerEvents.onVehicleBecomeElite += self.__onVehicleBecomeElite
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
@@ -163,6 +167,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
         self.as_setInitDataS({'counterCloseTooltip': makeTooltip('#tooltips:tanksFilter/counter/close/header', '#tooltips:tanksFilter/counter/close/body')})
 
     def _dispose(self):
+        self.bobEventController.onUpdated -= self.__bobConfigChanged
         self.rentals.onRentChangeNotify -= self.__updateRent
         self.igrCtrl.onIgrTypeChanged -= self.__updateIgrType
         self.clanLock.onClanLockUpdate -= self.__updateClanLocks
@@ -235,3 +240,6 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
 
     def __onVehicleClientStateChanged(self, vehicles):
         self.updateVehicles(vehicles)
+
+    def __bobConfigChanged(self):
+        self.updateVehicles()

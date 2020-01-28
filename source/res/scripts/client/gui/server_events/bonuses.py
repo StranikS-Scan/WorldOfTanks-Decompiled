@@ -53,6 +53,7 @@ from nations import NAMES
 from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME
 from shared_utils import makeTupleByDict, CONST_CONTAINER
 from skeletons.gui.customization import ICustomizationService
+from skeletons.gui.game_control import IBobController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -498,6 +499,15 @@ class X5BattleTokensBonus(TokensBonus):
         return True
 
 
+class BobPointsTokensBonus(TokensBonus):
+
+    def __init__(self, value, isCompensation=False, ctx=None):
+        super(TokensBonus, self).__init__('tokens', value, isCompensation, ctx)
+
+    def isShowInGUI(self):
+        return True
+
+
 def personalMissionsTokensFactory(name, value, isCompensation=False, ctx=None):
     from gui.server_events.finders import PERSONAL_MISSION_TOKEN
     completionTokenID = PERSONAL_MISSION_TOKEN % (ctx['campaignID'], ctx['operationID'])
@@ -513,6 +523,7 @@ def personalMissionsTokensFactory(name, value, isCompensation=False, ctx=None):
 
 
 def tokensFactory(name, value, isCompensation=False, ctx=None):
+    bobController = dependency.instance(IBobController)
     result = []
     for tID, tValue in value.iteritems():
         if tID.startswith(LOOTBOX_TOKEN_PREFIX):
@@ -521,6 +532,8 @@ def tokensFactory(name, value, isCompensation=False, ctx=None):
             result.append(TmanTemplateTokensBonus({tID: tValue}, isCompensation, ctx))
         if tID.startswith(BATTLE_BONUS_X5_TOKEN):
             result.append(X5BattleTokensBonus({tID: tValue}, isCompensation, ctx))
+        if bobController.isBobPointsToken(tID):
+            result.append(BobPointsTokensBonus({tID: tValue}, isCompensation, ctx))
         result.append(BattleTokensBonus(name, {tID: tValue}, isCompensation, ctx))
 
     return result

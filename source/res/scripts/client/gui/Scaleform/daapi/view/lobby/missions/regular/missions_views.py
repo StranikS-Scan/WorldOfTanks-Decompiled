@@ -113,7 +113,7 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
         if browser is not None and self._marathonEvent and self.__browserView:
             url = yield self._marathonEvent.getUrl()
             if url:
-                self.__browserView.as_loadingStartS()
+                self.__browserView.showLoading(True)
                 browser.navigate(url)
         else:
             yield lambda callback: callback(True)
@@ -142,10 +142,7 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
                 self.__browserID = browserID
                 viewPy.init(browserID, self._marathonEvent.createMarathonWebHandlers(), alias=alias)
                 self.__browserView = viewPy
-                browser = self._browserCtrl.getBrowser(browserID)
-                if browser is not None:
-                    browser.setAllowAutoLoadingScreen(False)
-                    browser.onReadyToShowContent = self.__removeLoadingScreen
+                self.__browserView.showContentUnderLoading = False
             else:
                 LOG_ERROR('Attampt to initialize browser 2nd time!')
         return
@@ -177,12 +174,6 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
     def __loadBrowser(self):
         self.__loadBrowserCallbackID = None
         self.as_loadBrowserS()
-        return
-
-    def __removeLoadingScreen(self, url):
-        browser = self._browserCtrl.getBrowser(self.__browserID)
-        if browser is not None:
-            browser.setLoadingScreenVisible(False)
         return
 
     def __updateEvents(self):

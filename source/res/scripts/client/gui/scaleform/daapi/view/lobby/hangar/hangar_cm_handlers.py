@@ -245,7 +245,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                     isNavigationEnabled = not self.prbDispatcher.getFunctionalState().isNavigationDisabled()
                 else:
                     isNavigationEnabled = True
-                if not vehicle.isOnlyForEpicBattles:
+                if not vehicle.isOnlyForEpicBattles and not vehicle.isOnlyForBob:
                     options.append(self._makeItem(VEHICLE.RESEARCH, MENU.contextmenu(VEHICLE.RESEARCH), {'enabled': isNavigationEnabled}))
                 if vehicle.hasNationGroup:
                     isNew = not AccountSettings.getSettings(NATION_CHANGE_VIEWED)
@@ -258,7 +258,9 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                         label = MENU.CONTEXTMENU_RESTORE if vehicle.isRestoreAvailable() else MENU.CONTEXTMENU_BUY
                         options.append(self._makeItem(VEHICLE.BUY, label, {'enabled': enabled}))
                     options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.REMOVE), {'enabled': vehicle.canSell and vehicle.rentalIsOver}))
-                    options.append(self._makeItem(VEHICLE.RENEW, MENU.contextmenu(VEHICLE.RENEW), {'enabled': vehicle.isOnlyForEpicBattles and vehicle.rentInfo.canCycleRentRenewForSeason(GameSeasonType.EPIC)}))
+                    rentRenewEnabled = vehicle.isOnlyForEpicBattles and vehicle.rentInfo.canCycleRentRenewForSeason(GameSeasonType.EPIC)
+                    rentRenewEnabled = rentRenewEnabled or vehicle.isOnlyForBob and vehicle.rentInfo.canCycleRentRenewForSeason(GameSeasonType.BOB)
+                    options.append(self._makeItem(VEHICLE.RENEW, MENU.contextmenu(VEHICLE.RENEW), {'enabled': rentRenewEnabled}))
                 else:
                     options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.SELL), {'enabled': vehicle.canSell and not isEventVehicle}))
                 if vehicle.isFavorite:

@@ -512,6 +512,8 @@ class TankmanSkill(GUIItem):
                 return i18n.makeString('#item_types:tankman/skills/brotherhood_female_descr')
             if self.isPermanent:
                 return i18n.makeString('#item_types:tankman/skills/brotherhood_permanent_descr')
+        elif self.name == 'commander_sixthSense' and self.isPermanent:
+            return i18n.makeString('#item_types:tankman/skills/commander_sixthSense_permanent_descr')
         return getSkillUserDescription(self.name)
 
     @property

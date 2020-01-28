@@ -82,11 +82,15 @@ class HeroTank(ClientSelectableCameraVehicle):
         return _HeroTankAppearance(self.spaceID, self, turretYaw=vehicleTurretYaw, gunPitch=vehicleGunPitch)
 
     def _updateHeroTank(self):
+        if g_currentPreviewVehicle.item is not None:
+            if g_currentPreviewVehicle.item.intCD == self.__heroTankCD:
+                return
         self.__heroTankCD = self._heroTankCtrl.getRandomTankCD()
         if self.__heroTankCD:
             self.recreateVehicle()
         else:
             self.removeModelFromScene()
+        return
 
     def _updateInteractive(self, interactive):
         if self.enabled != interactive:

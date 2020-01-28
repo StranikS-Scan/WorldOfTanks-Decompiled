@@ -55,7 +55,8 @@ class FUNCTIONAL_FLAG(BitmaskHelper):
     BOOTCAMP = 2097152
     EPIC_TRAINING = 4194304
     EPIC = 8388608
-    DEFAULT = 16777216
+    BOB = 16777216
+    DEFAULT = 33554432
     LEGACY_BITMASK = LEGACY_INTRO | LEGACY
     UNIT_BITMASK = UNIT_INTRO | UNIT_BROWSER | UNIT
     PRE_QUEUE_BITMASK = PRE_QUEUE_INTRO | PRE_QUEUE
@@ -151,6 +152,9 @@ class PREBATTLE_ACTION_NAME(object):
     EPIC_TRAINING_LIST = 'epicTrainingsList'
     EPIC = 'epicQueue'
     EPIC_FORCED = 'epicForced'
+    BOB = 'bob'
+    BOB_SQUAD = 'bobSquad'
+    BOB_FORCED = 'bobForced'
 
 
 class PREBATTLE_INIT_STEP(object):
@@ -165,6 +169,7 @@ class SELECTOR_BATTLE_TYPES(object):
     SORTIE = 'sortie'
     RANKED = 'ranked'
     EPIC = 'epic'
+    BOB = 'bob'
 
 
 class REQUEST_TYPE(object):
@@ -234,6 +239,7 @@ class PREBATTLE_RESTRICTION(object):
     VEHICLE_IN_PREMIUM_IGR_ONLY = 'vehicle/inPremiumIgrOnly'
     VEHICLE_NOT_SUPPORTED = 'vehicle/not_supported'
     VEHICLE_EPIC_ONLY = 'vehicle/epic_only'
+    VEHICLE_BOB_ONLY = 'vehicle/bob_only'
     VEHICLE_ROTATION_GROUP_LOCKED = 'vehicle/rotationGroupLocked'
     CREW_NOT_FULL = 'crew/notFull'
     TUTORIAL_NOT_FINISHED = 'tutorial/notFinished'
@@ -321,6 +327,8 @@ class UNIT_RESTRICTION(object):
     UNIT_MIN_CLAN_MEMBERS = 40
     UNIT_WILL_SEARCH_PLAYERS = 41
     UNIT_IS_IN_PLAYERS_MATCHING = 42
+    BOB_TEAM_MISMATCH = 43
+    BOB_LEADER_FORBIDDEN = 44
 
 
 class PRE_QUEUE_RESTRICTION(object):

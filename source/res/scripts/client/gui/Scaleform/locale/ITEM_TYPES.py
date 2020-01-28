@@ -80,6 +80,7 @@ class ITEM_TYPES(object):
     TANKMAN_SKILLS_COMMANDER_UNIVERSALIST_DESCR = '#item_types:tankman/skills/commander_universalist_descr'
     TANKMAN_SKILLS_COMMANDER_SIXTHSENSE = '#item_types:tankman/skills/commander_sixthSense'
     TANKMAN_SKILLS_COMMANDER_SIXTHSENSE_DESCR = '#item_types:tankman/skills/commander_sixthSense_descr'
+    TANKMAN_SKILLS_COMMANDER_SIXTHSENSE_PERMANENT_DESCR = '#item_types:tankman/skills/commander_sixthSense_permanent_descr'
     TANKMAN_SKILLS_COMMANDER_EAGLEEYE = '#item_types:tankman/skills/commander_eagleEye'
     TANKMAN_SKILLS_COMMANDER_EAGLEEYE_DESCR = '#item_types:tankman/skills/commander_eagleEye_descr'
     TANKMAN_SKILLS_DRIVER_TIDYPERSON = '#item_types:tankman/skills/driver_tidyPerson'
@@ -189,6 +190,7 @@ class ITEM_TYPES(object):
      TANKMAN_SKILLS_COMMANDER_UNIVERSALIST_DESCR,
      TANKMAN_SKILLS_COMMANDER_SIXTHSENSE,
      TANKMAN_SKILLS_COMMANDER_SIXTHSENSE_DESCR,
+     TANKMAN_SKILLS_COMMANDER_SIXTHSENSE_PERMANENT_DESCR,
      TANKMAN_SKILLS_COMMANDER_EAGLEEYE,
      TANKMAN_SKILLS_COMMANDER_EAGLEEYE_DESCR,
      TANKMAN_SKILLS_DRIVER_TIDYPERSON,

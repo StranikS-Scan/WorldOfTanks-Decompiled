@@ -169,6 +169,16 @@ class BonusNameQuestsBonusComposer(PackRentVehiclesAwardComposer):
         return packBonus
 
 
+class BobQuestsBonusComposer(BonusNameQuestsBonusComposer):
+
+    def _packBonus(self, bonus, size=AWARDS_SIZES.SMALL):
+        packBonus = super(BobQuestsBonusComposer, self)._packBonus(bonus, size)
+        packBonus['userName'] = bonus.userName
+        packBonus['label'] = '' if bonus.bonusName == 'vehicles' else bonus.label
+        packBonus['isVehicle'] = bonus.bonusName == 'vehicles'
+        return packBonus
+
+
 class LootBoxBonusComposer(BonusNameQuestsBonusComposer):
 
     def getVisibleFormattedBonuses(self, bonuses, alwaysVisibleBonuses, size=AWARDS_SIZES.SMALL):

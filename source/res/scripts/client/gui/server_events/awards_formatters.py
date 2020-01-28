@@ -28,6 +28,7 @@ from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from personal_missions import PM_BRANCH
 from shared_utils import CONST_CONTAINER, findFirst
 from skeletons.gui.customization import ICustomizationService
+from skeletons.gui.game_control import IBobController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
@@ -174,6 +175,14 @@ def getPackRentVehiclesFormattersMap():
     return mapping
 
 
+def getBobRentVehiclesFormattersMap():
+    mapping = getDefaultFormattersMap()
+    mapping.update({'vehicles': BobRentVehiclesBonusFormatter(),
+     'customizations': BobCustomizationsBonusFormatter(),
+     'dossier': BobDossierBonusFormatter()})
+    return mapping
+
+
 def getLootboxesFormatterMap():
     mapping = getDefaultFormattersMap()
     mapping.update({'vehicles': RentVehiclesBonusFormatter(),
@@ -213,6 +222,10 @@ def getEventBoardsAwardPacker():
 
 def getPackRentVehiclesAwardPacker():
     return AwardsPacker(getPackRentVehiclesFormattersMap())
+
+
+def getBobRentVehiclesAwardPacker():
+    return AwardsPacker(getBobRentVehiclesFormattersMap())
 
 
 def getLootboxesAwardsPacker():
@@ -536,6 +549,7 @@ class LinkedSetPremiumDaysBonusFormatter(PremiumDaysBonusFormatter):
 class TokenBonusFormatter(SimpleBonusFormatter):
     eventsCache = dependency.descriptor(IEventsCache)
     itemsCache = dependency.descriptor(IItemsCache)
+    bobController = dependency.descriptor(IBobController)
 
     def _format(self, bonus):
         result = []
@@ -549,6 +563,10 @@ class TokenBonusFormatter(SimpleBonusFormatter):
                     result.append(formatted)
             if tokenID.startswith(BATTLE_BONUS_X5_TOKEN):
                 formatted = self._formatBattleBonusToken(token, bonus)
+                if formatted is not None:
+                    result.append(formatted)
+            if self.bobController.isBobPointsToken(tokenID):
+                formatted = self._formatBobPointsToken(token, bonus)
                 if formatted is not None:
                     result.append(formatted)
 
@@ -588,19 +606,52 @@ class TokenBonusFormatter(SimpleBonusFormatter):
             return PreformattedBonus(label=self._formatBonusLabel(token.count), userName=lootBox.getUserName(), labelFormatter=self._getLabelFormatter(bonus), images=images, tooltip=makeTooltip(header=lootBox.getUserName(), body=''), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus))
 
     def _formatBattleBonusToken(self, token, bonus):
-        if token.count <= 0:
-            return None
-        else:
-            images = {}
-            for size in AWARDS_SIZES.ALL():
-                images[size] = backport.image(R.images.gui.maps.icons.quests.bonuses.dyn(size).bonus_battle_task())
+        image = lambda size: R.images.gui.maps.icons.quests.bonuses.dyn(size).bonus_battle_task()
+        return self._formatBonusToken(token, bonus, header=backport.text(R.strings.tooltips.quests.bonuses.token.battle_bonus_x5.header()), body=backport.text(R.strings.tooltips.quests.bonuses.token.battle_bonus_x5.body()), images={size:backport.image(image(size)) for size in AWARDS_SIZES.ALL()})
 
-            header = backport.text(R.strings.tooltips.quests.bonuses.token.battle_bonus_x5.header())
-            body = backport.text(R.strings.tooltips.quests.bonuses.token.battle_bonus_x5.body())
-            return PreformattedBonus(bonusName=bonus.getName(), label=self._formatBonusLabel(token.count), userName=header, labelFormatter=self._getLabelFormatter(bonus), images=images, tooltip=makeTooltip(header=header, body=body), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus))
+    def _formatBobPointsToken(self, token, bonus):
+        header = R.strings.bob.quests.bonuses.token.bob_points.header()
+        body = R.strings.bob.quests.bonuses.token.bob_points.body()
+        image = lambda size: R.images.gui.maps.icons.quests.bonuses.dyn(size).bob_points()
+        if self.bobController.isNaAsiaRealm():
+            header = R.strings.bob.quests.bonuses.token.bob_points.na_asia.header()
+            body = R.strings.bob.quests.bonuses.token.bob_points.na_asia.body()
+            image = lambda size: R.images.gui.maps.icons.quests.bonuses.dyn(size).bob_points_na_asia()
+        return self._formatBonusToken(token, bonus, header=backport.text(header), body=backport.text(body), images={size:backport.image(image(size)) for size in AWARDS_SIZES.ALL()})
+
+    def _formatBonusToken(self, token, bonus, header, body, images):
+        return None if token.count <= 0 else PreformattedBonus(bonusName=bonus.getName(), label=self._formatBonusLabel(token.count), userName=header, labelFormatter=self._getLabelFormatter(bonus), images=images, tooltip=makeTooltip(header=header, body=body), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus))
 
 
 class RankedPointFormatter(TokenBonusFormatter):
+
+    def _format(self, bonus):
+        result = []
+        for tokenID, token in bonus.getTokens().iteritems():
+            if tokenID.startswith(YEAR_POINTS_TOKEN):
+                formatted = self.__formatRankedPointToken(tokenID, token, bonus)
+                if formatted is not None:
+                    result.append(formatted)
+
+        return result
+
+    @classmethod
+    def _getUserName(cls, bonus):
+        return backport.text(R.strings.tooltips.rankedBattleView.scorePoint.short.header())
+
+    def __formatRankedPointToken(self, tokenID, token, bonus):
+        images = {}
+        for size in AWARDS_SIZES.ALL():
+            images[size] = backport.image(R.images.gui.maps.icons.quests.bonuses.dyn(size).rankedPoint())
+
+        return PreformattedBonus(label=self._formatBonusLabel(token.count), userName=self._getUserName(bonus), labelFormatter=self._getLabelFormatter(bonus), images=images, tooltip=makeTooltip(header=backport.text(R.strings.tooltips.rankedBattleView.scorePoint.header()), body=backport.text(R.strings.tooltips.rankedBattleView.scorePoint.body())), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus))
+
+    @classmethod
+    def _getLabelAlign(cls, bonus):
+        return LABEL_ALIGN.RIGHT
+
+
+class BobTokenBonusFormatter(TokenBonusFormatter):
 
     def _format(self, bonus):
         result = []
@@ -1281,3 +1332,36 @@ class CrewSkinsCompensationFormatter(CrewSkinsBonusFormatter):
         defaultStr = text_styles.stats(backport.text(R.strings.item_types.crewSkins.itemType.dyn(Rarity.STRINGS[item.getRarity()])()))
         formattedStr = formatCountLabel(count=compensatedNumber, defaultStr=defaultStr)
         return formattedStr
+
+
+class BobRentVehiclesBonusFormatter(RentVehiclesBonusFormatter):
+
+    @classmethod
+    def _getImages(cls, vehicle, isRent=False):
+        fullVehicleName = vehicle.name
+        vehicleName = fullVehicleName.split(':')[1]
+        imagePath = '../maps/icons/quests/bonuses/bob/vehicles/{}.png'.format(vehicleName)
+        return {AWARDS_SIZES.BIG: imagePath}
+
+
+class BobCustomizationsBonusFormatter(CustomizationsBonusFormatter):
+    __bobController = dependency.descriptor(IBobController)
+
+    @classmethod
+    def _getImages(cls, c11nItem):
+        bloggerId = cls.__bobController.getBloggerId()
+        if c11nItem.itemTypeName == 'style':
+            customizationName = c11nItem.itemTypeName
+        else:
+            customizationName = '{}_{}'.format(c11nItem.itemTypeName, bloggerId)
+        imagePath = '../maps/icons/quests/bonuses/bob/customization/{}.png'.format(customizationName)
+        return {AWARDS_SIZES.BIG: imagePath}
+
+
+class BobDossierBonusFormatter(DossierBonusFormatter):
+
+    @classmethod
+    def _getImages(cls, badge):
+        achievementName = badge.getName()
+        imagePath = '../maps/icons/quests/bonuses/bob/achievements/{}.png'.format(achievementName)
+        return {AWARDS_SIZES.BIG: imagePath}

@@ -59,7 +59,7 @@ from messenger import g_settings
 from messenger.ext import passCensor
 from messenger.formatters import TimeFormatter, NCContextItemFormatter
 from shared_utils import BoundMethodWeakref, findFirst, first
-from skeletons.gui.game_control import IRankedBattlesController
+from skeletons.gui.game_control import IRankedBattlesController, IBobController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -72,7 +72,6 @@ _TEMPLATE = 'template'
 _RENT_TYPES = {'time': 'rentDays',
  'battles': 'rentBattles',
  'wins': 'rentWins'}
-_logger = logging.getLogger(__name__)
 _PREMIUM_MESSAGES = {PREMIUM_TYPE.BASIC: {str(SYS_MESSAGE_TYPE.premiumBought): R.strings.messenger.serviceChannelMessages.premiumBought(),
                       str(SYS_MESSAGE_TYPE.premiumExtended): R.strings.messenger.serviceChannelMessages.premiumExtended(),
                       str(SYS_MESSAGE_TYPE.premiumExpired): R.strings.messenger.serviceChannelMessages.premiumExpired()},
@@ -1979,7 +1978,9 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
     _eventsCache = dependency.descriptor(IEventsCache)
     _goodiesCache = dependency.descriptor(IGoodiesCache)
     __lobbyContext = dependency.descriptor(ILobbyContext)
+    __bobCtrl = dependency.descriptor(IBobController)
     __PERSONAL_MISSIONS_CUSTOM_TEMPLATE = 'personalMissionsCustom'
+    __BOB_REWARD_CUSTOM_TEMPLATE = 'bobRewardCustom'
     __FRONTLINE_REWARD_QUEST_TEMPLATE = 'bought_frontline_reward_veh_'
     _FRONTLINE_PRESTIGE_POINTS_EXCHANGE_TEMPLATE = 'PrestigePointsExchange'
 
@@ -2271,6 +2272,8 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
                 templateName = self.__PERSONAL_MISSIONS_CUSTOM_TEMPLATE
                 campaignNameKey = 'both' if len(campaigns) == 2 else 'c_{}'.format(first(campaigns))
                 templateParams['text'] = backport.text(R.strings.messenger.serviceChannelMessages.battleResults.personalMissions.dyn(campaignNameKey)())
+            elif self.__bobCtrl.personalRewardQuestName in questIDs or findFirst(lambda qId: qId.startswith(self.__bobCtrl.teamRewardQuestPrefix), questIDs):
+                templateName = self.__BOB_REWARD_CUSTOM_TEMPLATE
             else:
                 templateName = self._templateName
             settings = self._getGuiSettings(message, templateName)
@@ -3122,10 +3125,12 @@ class LootBoxAutoOpenFormatter(WaitItemsSyncFormatter):
     @async
     @process
     def format(self, message, callback=None):
+        from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityAwardsBox
         isSynced = yield self._waitForSyncItems()
         if message.data and isSynced:
             data = message.data
             if 'boxIDs' in data and 'rewards' in data:
+                seniorityBox = getSeniorityAwardsBox()
                 formatted = g_settings.msgTemplates.format(self._template, ctx={'count': sum(data['boxIDs'].values())}, data={'savedData': {'rewards': data['rewards']}})
                 settings = self._getGuiSettings(message, self._template)
                 settings.groupID = NotificationGroup.OFFER
@@ -3134,7 +3139,10 @@ class LootBoxAutoOpenFormatter(WaitItemsSyncFormatter):
                 formattedRewards = g_settings.msgTemplates.format(self._templateRewards, ctx={'text': fmt})
                 settingsRewards = self._getGuiSettings(message, self._templateRewards)
                 settingsRewards.showAt = BigWorld.time()
-                callback([_MessageData(formatted, settings), _MessageData(formattedRewards, settingsRewards)])
+                if seniorityBox is not None and seniorityBox.getID() in data['boxIDs']:
+                    callback([_MessageData(None, None), _MessageData(formattedRewards, settingsRewards)])
+                else:
+                    callback([_MessageData(formatted, settings), _MessageData(formattedRewards, settingsRewards)])
             else:
                 callback([_MessageData(None, None)])
         else:

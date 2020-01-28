@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/ui/vehicle.py
+import random
 from itertools import groupby
 from types import NoneType
 from logging import getLogger
@@ -21,6 +22,7 @@ from gui.shared.event_dispatcher import showStylePreview, showHangar
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization.outfit import Area
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency
+from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from helpers.time_utils import getCurrentLocalServerTimestamp, getTimeStructInLocal
@@ -304,9 +306,10 @@ class _MarathonVehiclePackPreviewSchema(W2CSchema):
 
 
 class _VehicleStylePreviewSchema(W2CSchema):
-    vehicle_cd = Field(required=True, type=int)
+    vehicle_cd = Field(required=False, type=int)
     style_id = Field(required=True, type=int)
     back_btn_descr = Field(required=True, type=basestring)
+    back_url = Field(required=False, type=basestring)
 
 
 class _VehicleListStylePreviewSchema(W2CSchema):
@@ -314,6 +317,7 @@ class _VehicleListStylePreviewSchema(W2CSchema):
     vehicle_min_level = Field(required=False, type=int, default=10)
     vehicle_list = Field(required=False, type=(list, NoneType), validator=lambda value, _: _validateVehiclesCDList(value), default=DEFAULT_STYLED_VEHICLES)
     back_btn_descr = Field(required=True, type=basestring)
+    back_url = Field(required=False, type=basestring)
 
 
 class _VehicleCustomizationPreviewSchema(W2CSchema):
@@ -407,7 +411,10 @@ class VehiclePreviewWebApiMixin(object):
 
     @w2c(_VehicleStylePreviewSchema, 'vehicle_style_preview')
     def openVehicleStylePreview(self, cmd):
-        self.__showStylePreview(cmd.vehicle_cd, cmd.style_id, cmd.back_btn_descr)
+        if cmd.vehicle_cd:
+            return self._showStylePreview(cmd.vehicle_cd, cmd)
+        styledVehicleCD = self.__getStyledVehicleCD(cmd.style_id)
+        return False if not styledVehicleCD else self._showStylePreview(styledVehicleCD, cmd)
 
     @w2c(_VehicleListStylePreviewSchema, 'vehicle_list_style_preview')
     def openVehicleListStylePreview(self, cmd):
@@ -429,7 +436,7 @@ class VehiclePreviewWebApiMixin(object):
                 styledVehicleCD = vehiclesPool.pop(0)
                 vehiclesPool.append(styledVehicleCD)
                 AccountSettings.setSettings(STYLE_PREVIEW_VEHICLES_POOL, vehiclesPool)
-        self.__showStylePreview(styledVehicleCD, cmd.style_id, cmd.back_btn_descr)
+        self._showStylePreview(styledVehicleCD, cmd)
         return
 
     @w2c(_VehicleCustomizationPreviewSchema, 'vehicle_customization_preview')
@@ -449,7 +456,35 @@ class VehiclePreviewWebApiMixin(object):
         self.c11n.showCustomization(result.vehicle.invID, callback=styleCallback)
         return {'installed': result.canInstall}
 
-    def _getVehicleStylePreviewCallback(self):
+    def __getStyledVehicleCD(self, styleId):
+        styledVehicleCD = None
+        style = self.c11n.getItemByID(GUI_ITEM_TYPE.STYLE, styleId)
+        vehicle = g_currentVehicle.item if g_currentVehicle.isPresent() else None
+        if vehicle is not None and style.mayInstall(vehicle):
+            styledVehicleCD = vehicle.intCD
+        else:
+            accDossier = self.itemsCache.items.getAccountDossier()
+            vehiclesStats = accDossier.getRandomStats().getVehicles()
+            vehicleGetter = self.itemsCache.items.getItemByCD
+            vehiclesStats = {vehicleCD:value for vehicleCD, value in vehiclesStats.iteritems() if style.mayInstall(vehicleGetter(vehicleCD))}
+            if vehiclesStats:
+                sortedVehicles = sorted(vehiclesStats.items(), key=lambda vStat: vStat[1].battlesCount, reverse=True)
+                styledVehicleCD = sortedVehicles[0][0] if sortedVehicles else None
+            if not styledVehicleCD:
+                criteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.FOR_ITEM(style)
+                vehicle = first(self.__getVehiclesForStylePreview(criteria=criteria))
+                styledVehicleCD = vehicle.intCD if vehicle else None
+            if not styledVehicleCD:
+                criteria = ~REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.EVENT | REQ_CRITERIA.VEHICLE.FOR_ITEM(style)
+                vehicle = random.choice(self.__getVehiclesForStylePreview(criteria=criteria))
+                styledVehicleCD = vehicle.intCD if vehicle else None
+        return styledVehicleCD
+
+    def __getVehiclesForStylePreview(self, criteria=None):
+        vehs = self.itemsCache.items.getVehicles(criteria=criteria).values()
+        return sorted(vehs, key=lambda item: item.level, reverse=True)
+
+    def _getVehicleStylePreviewCallback(self, cmd):
         return showHangar
 
     def _getVehiclePreviewReturnCallback(self, cmd):
@@ -458,9 +493,14 @@ class VehiclePreviewWebApiMixin(object):
     def _getVehiclePreviewReturnAlias(self, cmd):
         return VIEW_ALIAS.LOBBY_HANGAR
 
-    def __showStylePreview(self, vehicleCD, styleID, backBtnDescr):
-        style = self.c11n.getItemByID(GUI_ITEM_TYPE.STYLE, styleID)
-        showStylePreview(vehicleCD, style, style.getDescription(), self._getVehicleStylePreviewCallback(), backBtnDescrLabel=backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.dyn(backBtnDescr)()))
+    def _showStylePreview(self, vehicleCD, cmd):
+        style = self.c11n.getItemByID(GUI_ITEM_TYPE.STYLE, cmd.style_id)
+        vehicle = self.itemsCache.items.getItemByCD(vehicleCD)
+        if vehicle is not None and style.mayInstall(vehicle):
+            showStylePreview(vehicleCD, style, style.getDescription(), self._getVehicleStylePreviewCallback(cmd), backBtnDescrLabel=backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.dyn(cmd.back_btn_descr)()))
+            return True
+        else:
+            return False
 
     def __getVehiclesIDs(self, items):
         vehiclesIDs = [ item.id for item in items if item.type in ItemPackTypeGroup.VEHICLE ]

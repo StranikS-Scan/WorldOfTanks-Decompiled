@@ -106,6 +106,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     FRONTLINE_VEHICLE_PREVIEW_20 = 'frontLineVehiclePreview'
     TRADE_IN_VEHICLE_PREVIEW_20 = 'tradeInVehiclePreview'
     MARATHON_VEHICLE_PREVIEW_20 = 'marathonVehiclePreview'
+    CONFIGURABLE_VEHICLE_PREVIEW_20 = 'configurableVehiclePreview20'
     VEHICLE_COMPARE = 'vehicleCompare'
     VEHICLE_COMPARE_MAIN_CONFIGURATOR = 'vehicleCompareConfigurator'
     LOBBY_STRONGHOLD = 'StrongholdView'

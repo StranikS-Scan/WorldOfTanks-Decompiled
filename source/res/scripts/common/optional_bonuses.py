@@ -5,8 +5,6 @@ import copy
 import time
 from account_shared import getCustomizationItem
 from soft_exception import SoftException
-from items import tankmen
-from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 
 def _packTrack(track):
     result = []
@@ -51,12 +49,16 @@ def __mergeItems(total, key, value, isLeaf=False, count=1, *args):
         items[itemCompDescr] = items.get(itemCompDescr, 0) + count * itemCount
 
 
+def __mergeMeta(total, key, value, isLeaf=False, count=1, *args):
+    total[key] = value
+
+
 def __mergeList(total, key, value, count):
     items = total.setdefault(key, [])
     items.extend((value if isinstance(value, list) else [value]) * count)
 
 
-def __mergeVehicles(total, key, value, isLeaf, count, *args):
+def __mergeVehicles(total, key, value, isLeaf, count=1, *args):
     __mergeList(total, key, value, count)
 
 
@@ -163,7 +165,7 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'blueprintsAny': __mergeItems,
  'blueprints': __mergeBlueprints,
  'enhancements': __mergeItems,
- 'meta': lambda *args, **kwargs: None}
+ 'meta': __mergeMeta}
 ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._inventory.getVehicleInvID(key) != 0,
  'customizations': lambda account, key: account._customizations20.getItems((key,), 0)[key] > 0,
  'tokens': lambda account, key: account._quests.hasToken(key)}
@@ -349,13 +351,13 @@ class NodeVisitor(object):
         self._mergersArgs = args
 
     def onOneOf(self, storage, values):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def onAllOf(self, storage, values):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def onGroup(self, storage, values):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def onMergeValue(self, storage, name, value, isLeaf):
         self._mergers[name](storage, name, value, isLeaf, *self._mergersArgs)

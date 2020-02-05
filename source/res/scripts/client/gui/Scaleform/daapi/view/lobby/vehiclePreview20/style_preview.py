@@ -7,7 +7,9 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.ranked_battles.ranked_helpers.sound_manager import RANKED_OVERLAY_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.LobbySelectableView import LobbySelectableView
+from gui.Scaleform.daapi.view.lobby.store.browser.sound_constants import INGAMESHOP_PREVIEW_SOUND_SPACE
 from gui.Scaleform.daapi.view.meta.VehicleBasePreviewMeta import VehicleBasePreviewMeta
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared import event_dispatcher, events, event_bus_handlers, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.customization.c11n_items import STYLE_GROUP_ID_TO_FULL_GROUP_NAME_MAP
@@ -24,15 +26,18 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
     __itemsCache = dependency.descriptor(IItemsCache)
     __hangarSpace = dependency.descriptor(IHangarSpace)
     __bobSounds = dependency.descriptor(IBobSoundController)
-    _COMMON_SOUND_SPACE = RANKED_OVERLAY_SOUND_SPACE
 
     def __init__(self, ctx=None):
-        super(VehicleStylePreview, self).__init__(ctx)
         self.__vehicleCD = ctx['itemCD']
         self.__style = ctx['style']
         self.__styleDescr = ctx.get('styleDescr')
         self.__backCallback = ctx.get('backCallback', event_dispatcher.showHangar)
         self.__backBtnDescrLabel = ctx.get('backBtnDescrLabel', backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.personalAwards()))
+        if ctx.get('backAlias', VIEW_ALIAS.LOBBY_HANGAR) == VIEW_ALIAS.LOBBY_STORE:
+            self._COMMON_SOUND_SPACE = INGAMESHOP_PREVIEW_SOUND_SPACE
+        else:
+            self._COMMON_SOUND_SPACE = RANKED_OVERLAY_SOUND_SPACE
+        super(VehicleStylePreview, self).__init__(ctx)
 
     def closeView(self):
         event_dispatcher.showHangar()

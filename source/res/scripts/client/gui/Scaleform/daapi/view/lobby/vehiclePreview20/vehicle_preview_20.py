@@ -63,8 +63,8 @@ _TABS_DATA = ({'id': VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE,
   'linkage': VEHPREVIEW_CONSTANTS.MODULES_LINKAGE}, {'id': VEHPREVIEW_CONSTANTS.CREW_LINKAGE,
   'label': VEHICLE_PREVIEW.INFOPANEL_TAB_CREWINFO_NAME,
   'linkage': VEHPREVIEW_CONSTANTS.CREW_LINKAGE})
-_SHOW_CLOSE_BTN = True
 _SHOW_BACK_BTN = True
+_SHOW_CLOSE_BTN = True
 
 class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
     __background_alpha__ = 0.0
@@ -216,6 +216,9 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
             if self._itemsPack:
                 crewItems = tuple((item for item in self._itemsPack if item.type in ItemPackTypeGroup.CREW))
                 vehicleItems = tuple((item for item in self._itemsPack if item.type in ItemPackTypeGroup.VEHICLE))
+                if not vehicleItems and crewItems:
+                    groupID = crewItems[0].groupID
+                    vehicleItems = (ItemPackEntry(id=g_currentPreviewVehicle.item.intCD, groupID=groupID),)
                 viewPy.setVehicleCrews(vehicleItems, crewItems)
             elif self.__offers:
                 offer = getActiveOffer(self.__offers)
@@ -230,6 +233,33 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
                 viewPy.setVehicleCrews((ItemPackEntry(id=g_currentPreviewVehicle.item.intCD, groupID=1),), ())
         elif alias == VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE:
             viewPy.setHeroTank(self.__isHeroTank)
+
+    def _getData(self):
+        vehicle = g_currentPreviewVehicle.item
+        if vehicle.isPremium:
+            vehicleTitle = '{} {},'.format(_ms(MENU.header_vehicletype_elite(vehicle.type)), _ms(VEHICLE_PREVIEW.INFOPANEL_LEVEL, level=_ms(MENU.header_level(vehicle.level))))
+            vehicleName = makeHtmlString('html_templates:lobby/vehicle_preview', 'vehicleNamePremium', {'name': vehicle.descriptor.type.shortUserString.upper()})
+        else:
+            vehicleTitle = '{} {},'.format(_ms(MENU.header_vehicletype(vehicle.type)), _ms(VEHICLE_PREVIEW.INFOPANEL_LEVEL, level=_ms(MENU.header_level(vehicle.level))))
+            vehicleName = makeHtmlString('html_templates:lobby/vehicle_preview', 'vehicleNameRegular', {'name': vehicle.descriptor.type.shortUserString.upper()})
+        if vehicle.isPremiumIGR:
+            vehicleTitle = makeHtmlString('html_templates:igr/premium-vehicle', 'name', {'vehicle': vehicleTitle})
+        compareBtnEnabled, compareBtnTooltip = resolveStateTooltip(self.comparisonBasket, vehicle, VEH_COMPARE.STORE_COMPAREVEHICLEBTN_TOOLTIPS_ADDTOCOMPARE, VEH_COMPARE.STORE_COMPAREVEHICLEBTN_TOOLTIPS_DISABLED)
+        result = {'closeBtnLabel': VEHICLE_PREVIEW.HEADER_CLOSEBTN_LABEL,
+         'backBtnLabel': VEHICLE_PREVIEW.HEADER_BACKBTN_LABEL,
+         'backBtnDescrLabel': self._getBackBtnLabel(),
+         'showCloseBtn': _SHOW_CLOSE_BTN,
+         'showBackButton': _SHOW_BACK_BTN,
+         'vehicleTitle': vehicleTitle,
+         'vehicleTypeIcon': getTypeSmallIconPath(vehicle.type, vehicle.isElite),
+         'nationFlagIcon': RES_ICONS.getFilterNation(vehicle.nationName),
+         'vehicleName': vehicleName,
+         'nationName': MENU.nations(vehicle.nationName),
+         'compareBtnTooltip': compareBtnTooltip,
+         'showCompareBtn': compareBtnEnabled,
+         'listDesc': self.__getInfoPanelListDescription(vehicle),
+         'isMultinational': vehicle.hasNationGroup}
+        return result
 
     def __onVehicleLoading(self, ctxEvent):
         if self.__customizationCD is not None and not ctxEvent.ctx.get('started'):
@@ -279,34 +309,7 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
             self.__updateHeaderData()
 
     def __updateHeaderData(self):
-        self.as_setDataS(self.__getData())
-
-    def __getData(self):
-        vehicle = g_currentPreviewVehicle.item
-        if vehicle.isPremium:
-            vehicleTitle = '{} {},'.format(_ms(MENU.header_vehicletype_elite(vehicle.type)), _ms(VEHICLE_PREVIEW.INFOPANEL_LEVEL, level=_ms(MENU.header_level(vehicle.level))))
-            vehicleName = makeHtmlString('html_templates:lobby/vehicle_preview', 'vehicleNamePremium', {'name': vehicle.descriptor.type.shortUserString.upper()})
-        else:
-            vehicleTitle = '{} {},'.format(_ms(MENU.header_vehicletype(vehicle.type)), _ms(VEHICLE_PREVIEW.INFOPANEL_LEVEL, level=_ms(MENU.header_level(vehicle.level))))
-            vehicleName = makeHtmlString('html_templates:lobby/vehicle_preview', 'vehicleNameRegular', {'name': vehicle.descriptor.type.shortUserString.upper()})
-        if vehicle.isPremiumIGR:
-            vehicleTitle = makeHtmlString('html_templates:igr/premium-vehicle', 'name', {'vehicle': vehicleTitle})
-        compareBtnEnabled, compareBtnTooltip = resolveStateTooltip(self.comparisonBasket, vehicle, VEH_COMPARE.STORE_COMPAREVEHICLEBTN_TOOLTIPS_ADDTOCOMPARE, VEH_COMPARE.STORE_COMPAREVEHICLEBTN_TOOLTIPS_DISABLED)
-        result = {'closeBtnLabel': VEHICLE_PREVIEW.HEADER_CLOSEBTN_LABEL,
-         'backBtnLabel': VEHICLE_PREVIEW.HEADER_BACKBTN_LABEL,
-         'backBtnDescrLabel': self._getBackBtnLabel(),
-         'showCloseBtn': _SHOW_CLOSE_BTN,
-         'showBackButton': _SHOW_BACK_BTN,
-         'vehicleTitle': vehicleTitle,
-         'vehicleTypeIcon': getTypeSmallIconPath(vehicle.type, vehicle.isElite),
-         'nationFlagIcon': RES_ICONS.getFilterNation(vehicle.nationName),
-         'vehicleName': vehicleName,
-         'nationName': MENU.nations(vehicle.nationName),
-         'compareBtnTooltip': compareBtnTooltip,
-         'showCompareBtn': compareBtnEnabled,
-         'listDesc': self.__getInfoPanelListDescription(vehicle),
-         'isMultinational': vehicle.hasNationGroup}
-        return result
+        self.as_setDataS(self._getData())
 
     @staticmethod
     def __getInfoPanelListDescription(vehicle):

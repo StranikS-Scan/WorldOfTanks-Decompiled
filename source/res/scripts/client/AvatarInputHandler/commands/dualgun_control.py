@@ -28,13 +28,18 @@ class ShotController(CallbackDelayer):
         self.__chargeCancelTime = chargeCancelTime
         self.__shotUnavailable = False
 
-    def updateState(self, state, _):
+    def updateState(self, state, value):
         if state == DUALGUN_CHARGER_STATUS.CANCELED:
-            if not self.__shotUnavailable:
+            cancelTime = value[0] if value else 0.0
+            if cancelTime > 0.0:
                 self.__shotUnavailable = True
-                self.delayCallback(self.__chargeCancelTime, self.__setShootAvailable)
+                self.stopCallback(self.__setShootAvailable)
+                self.delayCallback(cancelTime, self.__setShootAvailable)
+            else:
+                self.__setShootAvailable()
         elif state == DUALGUN_CHARGER_STATUS.APPLIED:
             self.clearCallbacks()
+            self.__setShootAvailable()
 
     def shootKeyEvent(self, actionType):
         if actionType == DUALGUN_CHARGER_ACTION_TYPE.CANCEL:
@@ -44,7 +49,6 @@ class ShotController(CallbackDelayer):
         BigWorld.player().shootDualGun(actionType, wasInCharging)
         if actionType == DUALGUN_CHARGER_ACTION_TYPE.START_IMMEDIATELY:
             gui_event_dispatcher.chargeReleased(keyDown=True)
-            self.__shotUnavailable = True
         elif actionType == DUALGUN_CHARGER_ACTION_TYPE.START_WITH_DELAY:
             if self.__state == ShotStates.DISABLED:
                 self.delayCallback(self.__singleShotThreshold, self.__disable)
@@ -86,14 +90,10 @@ class DualGunController(InputHandlerCommand):
     def __init__(self, typeDescr):
         self.__activeGun = DUAL_GUN.ACTIVE_GUN.LEFT
         dualGunParams = typeDescr.gun.dualGun
-        singleShotTreshold = None
-        preChargeDelay = None
-        chargeCancelTime = None
         if dualGunParams is not None:
-            singleShotTreshold = typeDescr.gun.dualGun.chargeThreshold
-            preChargeDelay = typeDescr.gun.dualGun.preChargeIndication
-            chargeCancelTime = typeDescr.gun.dualGun.chargeCancelTime
-        self.__shotControl = ShotController(singleShotTreshold, preChargeDelay, chargeCancelTime)
+            self.__shotControl = ShotController(dualGunParams.chargeThreshold, dualGunParams.preChargeIndication, dualGunParams.chargeCancelTime)
+        else:
+            self.__shotControl = ShotController()
         return
 
     def updateChargeState(self, state, value):

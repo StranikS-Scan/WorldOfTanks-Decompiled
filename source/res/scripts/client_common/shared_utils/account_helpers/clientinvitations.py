@@ -48,7 +48,7 @@ class ClientInvitations(object):
                     uniqueId = UniqueId(inv['id'], senderVehID)
                     if uniqueId in self.__invitations:
                         del self.__invitations[uniqueId]
-            elif scope == InvitationScope.AVATAR:
+            elif scope == InvitationScope.AVATAR and senderVehID:
                 senderID = senderVehID
             if senderID:
                 uniqueId = UniqueId(inv['id'], senderID)

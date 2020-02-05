@@ -3,6 +3,7 @@
 import logging
 from operator import attrgetter
 import typing
+from BWUtil import AsyncReturn
 from CurrentVehicle import HeroTankPreviewAppearance
 from adisp import process
 from async import async, await
@@ -380,6 +381,14 @@ def showMarathonVehiclePreview(vehTypeCompDescr, itemsPack=None, title='', marat
      'marathonPrefix': marathonPrefix}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
+def showConfigurableVehiclePreview(vehTypeCompDescr, previewAlias, previewBackCb, hiddenBlocks, itemPack):
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW_20, ctx={'itemCD': vehTypeCompDescr,
+     'previewAlias': previewAlias,
+     'previewBackCb': previewBackCb,
+     'hiddenBlocks': hiddenBlocks,
+     'itemsPack': itemPack}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
 def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None, previewBackCb=None, itemsPack=None, offers=None, price=money.MONEY_UNDEFINED, oldPrice=None, title='', description=None, endTime=None, buyParams=None, vehParams=None, isFrontline=False):
     itemsCache = dependency.instance(IItemsCache)
     lobbyContext = dependency.instance(ILobbyContext)
@@ -714,12 +723,23 @@ def showBobRewardWindow(bonuses, rewardType):
     window.load()
 
 
-def showStylePreview(vehCD, style, styleDescr, backCallback, backBtnDescrLabel=''):
+def showStylePreview(vehCD, style, styleDescr, backCallback, backBtnDescrLabel='', backAlias=VIEW_ALIAS.LOBBY_HANGAR):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.STYLE_PREVIEW, ctx={'itemCD': vehCD,
      'style': style,
      'styleDescr': styleDescr,
      'backCallback': backCallback,
-     'backBtnDescrLabel': backBtnDescrLabel}), scope=EVENT_BUS_SCOPE.LOBBY)
+     'backBtnDescrLabel': backBtnDescrLabel,
+     'backAlias': backAlias}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+@async
+def showPreformattedDialog(preset, title, message, buttons, focusedButton, btnDownSounds):
+    from gui.impl.dialogs import dialogs
+    from gui.impl.dialogs.builders import FormattedSimpleDialogBuilder
+    builder = FormattedSimpleDialogBuilder()
+    builder.setMessagesAndButtons(preset, title, message, buttons, focusedButton, btnDownSounds)
+    result = yield await(dialogs.show(builder.build()))
+    raise AsyncReturn(result)
 
 
 @async

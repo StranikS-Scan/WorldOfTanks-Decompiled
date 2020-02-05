@@ -181,15 +181,15 @@ class EventsCache(IEventsCache):
                 callback(True)
             return
 
-    def getQuests(self, filterFunc=None):
+    def getQuests(self, filterFunc=None, getAll=False):
         filterFunc = filterFunc or (lambda a: True)
 
         def userFilterFunc(q):
-            return not q.isHidden() and filterFunc(q)
+            return (not q.isHidden() or getAll) and filterFunc(q)
 
         return self._getQuests(userFilterFunc)
 
-    def getActiveQuests(self, filterFunc=None):
+    def getActiveQuests(self, filterFunc=None, getAll=False):
         filterFunc = filterFunc or (lambda a: True)
         isPremiumQuestsEnable = self.lobbyContext.getServerSettings().getPremQuestsConfig().get('enabled', False)
 
@@ -198,7 +198,7 @@ class EventsCache(IEventsCache):
                 return False
             return False if not isPremiumQuestsEnable and isPremium(q.getGroupID()) else q.getFinishTimeLeft() and filterFunc(q)
 
-        return self.getQuests(userFilterFunc)
+        return self.getQuests(userFilterFunc, getAll)
 
     def getAdvisableQuests(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
@@ -458,6 +458,19 @@ class EventsCache(IEventsCache):
             currentStep = self.questsProgress.getTokenCount(progressiveConfig.levelTokenID)
             probability = self.questsProgress.getTokenCount(progressiveConfig.probabilityTokenID) / 100
             return _ProgressiveReward(currentStep, probability, maxSteps)
+
+    def getLobbyHeaderTabCounter(self):
+        counterValue = None
+        alias = None
+
+        def containsLobbyHeaderTabCounter(a):
+            return any((step.get('name') == 'LobbyHeaderTabCounterModification' for step in a.getData().get('steps', [])))
+
+        action = first(self.getActions(containsLobbyHeaderTabCounter).values())
+        if action is not None:
+            counterValue = first((m.getCounterValue() for m in action.getModifiers()))
+            alias = first((m.getAlias() for m in action.getModifiers()))
+        return (alias, counterValue)
 
     def _getQuests(self, filterFunc=None, includePersonalMissions=False):
         result = {}

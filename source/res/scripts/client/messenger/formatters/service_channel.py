@@ -58,6 +58,7 @@ from items.components.crew_books_constants import CREW_BOOK_RARITY
 from messenger import g_settings
 from messenger.ext import passCensor
 from messenger.formatters import TimeFormatter, NCContextItemFormatter
+from messenger.proto.bw.wrappers import ServiceChannelMessage
 from shared_utils import BoundMethodWeakref, findFirst, first
 from skeletons.gui.game_control import IRankedBattlesController, IBobController
 from skeletons.gui.goodies import IGoodiesCache
@@ -659,16 +660,27 @@ class AchievementFormatter(ServiceChannelFormatter):
 
 
 class CurrencyUpdateFormatter(ServiceChannelFormatter):
+    _BLACK_MARKET_EMITTER_ID = 2525
+    _EMITTER_ID_TO_TITLE = {_BLACK_MARKET_EMITTER_ID: R.strings.messenger.serviceChannelMessages.currencyUpdate.auction()}
+    _DEFAULT_TITLE = R.strings.messenger.serviceChannelMessages.currencyUpdate.financial_transaction()
 
     def format(self, message, *args):
         data = message.data
         currencyCode = data['currency_code']
         amountDelta = data['amount_delta']
         transactionTime = data['date']
+        emitterID = data.get('emitterID')
+        if amountDelta < 0:
+            currencyOperation = 'debited'
+        elif emitterID == self._BLACK_MARKET_EMITTER_ID:
+            currencyOperation = 'restored'
+        else:
+            currencyOperation = 'received'
         if currencyCode and amountDelta and transactionTime:
             xmlKey = 'currencyUpdate'
-            formatted = g_settings.msgTemplates.format(xmlKey, ctx={'date': TimeFormatter.getLongDatetimeFormat(transactionTime),
-             'currency': backport.text(R.strings.messenger.serviceChannelMessages.currencyUpdate.dyn('debited' if amountDelta < 0 else 'received').dyn(currencyCode)()),
+            formatted = g_settings.msgTemplates.format(xmlKey, ctx={'title': backport.text(self._EMITTER_ID_TO_TITLE.get(emitterID, self._DEFAULT_TITLE)),
+             'date': TimeFormatter.getLongDatetimeFormat(transactionTime),
+             'currency': backport.text(R.strings.messenger.serviceChannelMessages.currencyUpdate.dyn(currencyOperation).dyn(currencyCode)()),
              'amount': getStyle(currencyCode)(getBWFormatter(currencyCode)(abs(amountDelta)))}, data={'icon': currencyCode.title() + 'Icon'})
             return [_MessageData(formatted, self._getGuiSettings(message, xmlKey))]
         else:
@@ -1981,6 +1993,7 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
     __bobCtrl = dependency.descriptor(IBobController)
     __PERSONAL_MISSIONS_CUSTOM_TEMPLATE = 'personalMissionsCustom'
     __BOB_REWARD_CUSTOM_TEMPLATE = 'bobRewardCustom'
+    __TOKEN_QUEST_LOOTBOX_TEMPLATE = 'tokenQuestLootbox'
     __FRONTLINE_REWARD_QUEST_TEMPLATE = 'bought_frontline_reward_veh_'
     _FRONTLINE_PRESTIGE_POINTS_EXCHANGE_TEMPLATE = 'PrestigePointsExchange'
 
@@ -1994,7 +2007,8 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
             completedQuestIDs = data.get('completedQuestIDs', set())
             completedQuestIDs.update(data.get('rewardsGottenQuestIDs', set()))
             for qID in completedQuestIDs:
-                self.__processMetaActions(qID)
+                bonusTrackID = data.get('detailedRewards', {}).get(qID, {}).get('bonusTrack', '00')
+                self.__processMetaActions(qID, bonusTrackID)
 
             if getSourceIdFromQuest(first(completedQuestIDs, '')):
                 result = yield RecruitQuestsFormatter().format(message)
@@ -2011,6 +2025,10 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
                 return
             if self._FRONTLINE_PRESTIGE_POINTS_EXCHANGE_TEMPLATE in first(completedQuestIDs, ''):
                 result = yield FrontlineExchangeQuestFormatter().format(message)
+                callback(result)
+                return
+            if self.__TOKEN_QUEST_LOOTBOX_TEMPLATE in first(completedQuestIDs, ''):
+                result = yield InvoiceReceivedFormatter().format(self.__getInvoiceFormatMessage(message))
                 callback(result)
                 return
             messageData = self.__buildMessageData(message, completedQuestIDs)
@@ -2156,7 +2174,7 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
         return g_settings.htmlTemplates.format(key, kwargs)
 
     @classmethod
-    def __processMetaActions(cls, questID):
+    def __processMetaActions(cls, questID, trackID):
         quest = cls._eventsCache.getAllQuests().get(questID)
         if quest is None:
             _logger.debug('Could not find quest with ID: %s', questID)
@@ -2165,7 +2183,7 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
             for bonus in quest.getBonuses():
                 if not isinstance(bonus, MetaBonus):
                     continue
-                for action, params in bonus.getActions():
+                for action, params in bonus.getActions(trackID).iteritems():
                     bonus.handleAction(action, params)
 
             return
@@ -2281,6 +2299,24 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
             return _MessageData(formatted, settings)
         else:
             return
+
+    def __getInvoiceFormatMessage(self, message):
+        data = {'active': message.active,
+         'createdAt': message.createdAt,
+         'finishedAt': message.finishedAt,
+         'importance': message.importance,
+         'isHighImportance': message.isHighImportance,
+         'messageId': message.messageId,
+         'personal': message.personal,
+         'sentTime': message.sentTime,
+         'startedAt': message.startedAt,
+         'type': message.type,
+         'userId': message.userId,
+         'data': {'data': {'assetType': INVOICE_ASSET.DATA,
+                           'at': message.sentTime,
+                           'data': {'vehicles': first(message.data.get('vehicles', [])),
+                                    'slots': message.data.get('slots', 0)}}}}
+        return ServiceChannelMessage.fromChatAction(data, message.personal)
 
 
 class NCMessageFormatter(ServiceChannelFormatter):

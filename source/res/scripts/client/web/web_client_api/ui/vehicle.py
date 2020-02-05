@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/ui/vehicle.py
 import random
+from functools import partial
 from itertools import groupby
 from types import NoneType
 from logging import getLogger
@@ -11,6 +12,7 @@ from constants import NC_MESSAGE_PRIORITY
 from debug_utils import LOG_ERROR
 from gui import SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.vehiclePreview20.configurable_vehicle_preview import OptionalBlocks
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.items_kit_helper import getCDFromId, canInstallStyle
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import checkIfVehicleIsHidden
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
@@ -278,9 +280,15 @@ def _validatePrice(tData, errorStr=''):
     return
 
 
+def _validateHiddenBlocks(hiddenBlocks):
+    return all((block in OptionalBlocks.ALL for block in hiddenBlocks))
+
+
 class _VehiclePreviewSchema(W2CSchema):
     vehicle_id = Field(required=True, type=int)
     back_url = Field(required=False, type=basestring)
+    items = Field(required=False, type=list, validator=lambda value, _: _validateItemsPack(value))
+    hidden_blocks = Field(required=False, type=list, default=None, validator=lambda hiddenBlocks, _: _validateHiddenBlocks(hiddenBlocks))
 
 
 class _VehicleOffersPreviewSchema(W2CSchema):
@@ -364,11 +372,16 @@ class VehiclePreviewWebApiMixin(object):
 
     @w2c(_VehiclePreviewSchema, 'vehicle_preview')
     def openVehiclePreview(self, cmd):
+        if cmd.hidden_blocks is not None:
+            showPreviewFunc = partial(event_dispatcher.showConfigurableVehiclePreview, hiddenBlocks=cmd.hidden_blocks, itemPack=_parseItemsPack(cmd.items))
+        else:
+            showPreviewFunc = event_dispatcher.showVehiclePreview
         vehicleID = cmd.vehicle_id
         if self.__validVehiclePreview(vehicleID):
-            event_dispatcher.showVehiclePreview(vehTypeCompDescr=vehicleID, previewAlias=self._getVehiclePreviewReturnAlias(cmd), previewBackCb=self._getVehiclePreviewReturnCallback(cmd))
+            showPreviewFunc(vehTypeCompDescr=vehicleID, previewAlias=self._getVehiclePreviewReturnAlias(cmd), previewBackCb=self._getVehiclePreviewReturnCallback(cmd))
         else:
             _pushInvalidPreviewMessage()
+        return
 
     @w2c(_VehiclePreviewSchema, 'vehicle_frontline_preview')
     def openFrontLineVehiclePreview(self, cmd):
@@ -497,7 +510,7 @@ class VehiclePreviewWebApiMixin(object):
         style = self.c11n.getItemByID(GUI_ITEM_TYPE.STYLE, cmd.style_id)
         vehicle = self.itemsCache.items.getItemByCD(vehicleCD)
         if vehicle is not None and style.mayInstall(vehicle):
-            showStylePreview(vehicleCD, style, style.getDescription(), self._getVehicleStylePreviewCallback(cmd), backBtnDescrLabel=backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.dyn(cmd.back_btn_descr)()))
+            showStylePreview(vehicleCD, style, style.getDescription(), self._getVehicleStylePreviewCallback(cmd), backBtnDescrLabel=backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.dyn(cmd.back_btn_descr)()), backAlias=self._getVehiclePreviewReturnAlias(cmd))
             return True
         else:
             return False

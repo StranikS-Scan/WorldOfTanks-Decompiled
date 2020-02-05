@@ -7,8 +7,8 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled, getWebShopURL
 from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import dependency
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.shared import IItemsCache
 from sound_constants import INGAMESHOP_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.shared.web_view import WebView
 _logger = logging.getLogger(__name__)
@@ -43,12 +43,12 @@ class IngameShopBase(_IngameShopOverlayBase):
 
 
 class IngameShopView(LobbySubView, IngameShopBase):
-    lobbyContext = dependency.descriptor(ILobbyContext)
-    itemsCache = dependency.descriptor(IItemsCache)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+    __appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self, ctx=None):
         super(IngameShopView, self).__init__(ctx)
-        self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
         g_playerEvents.onShopResync += self.__onShopResync
 
     def onCloseBtnClick(self):
@@ -59,7 +59,8 @@ class IngameShopView(LobbySubView, IngameShopBase):
 
     def _dispose(self):
         g_playerEvents.onShopResync -= self.__onShopResync
-        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
+        self.__playSound('black_market_exit')
         super(IngameShopView, self)._dispose()
 
     def __onServerSettingsChanged(self, diff):
@@ -69,6 +70,12 @@ class IngameShopView(LobbySubView, IngameShopBase):
 
     def __onShopResync(self):
         self._refresh()
+
+    def __playSound(self, soundID):
+        app = self.__appLoader.getApp()
+        if app is not None and app.soundManager is not None:
+            app.soundManager.playEffectSound(soundID)
+        return
 
 
 class IngameShopOverlay(_IngameShopOverlayBase):

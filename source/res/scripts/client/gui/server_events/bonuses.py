@@ -13,6 +13,7 @@ from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from dossiers2.custom.records import RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
 from gui import makeHtmlString
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.app_loader.decorators import sf_lobby
 from gui.game_control.links import URLMacros
 from gui.impl import backport
@@ -50,6 +51,7 @@ from items.components import c11n_components as cc
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from nations import NAMES
+from optional_bonuses import TrackVisitor
 from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME
 from shared_utils import makeTupleByDict, CONST_CONTAINER
 from skeletons.gui.customization import ICustomizationService
@@ -65,6 +67,8 @@ _EPIC_AWARD_STATIC_VO_ENTRIES = {'compensationTooltip': QUESTS.BONUSES_COMPENSAT
  'highlightType': '',
  'overlayType': ''}
 _ZERO_COMPENSATION_MONEY = Money(credits=0, gold=0)
+_META_BONUS_BROWSER_VIEW_TYPE = {'internal': VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB,
+ 'overlay': VIEW_ALIAS.WEB_VIEW_TRANSPARENT}
 _logger = logging.getLogger(__name__)
 
 def _getAchievement(block, record, value):
@@ -332,8 +336,8 @@ class MetaBonus(SimpleBonus):
     def formatValue(self):
         return getLocalizedData({'value': self._value}, 'value')
 
-    def getActions(self):
-        return self._value.get('actions', {}).iteritems()
+    def getActions(self, trackID='00'):
+        return self._value.get('actions', {})
 
     def handleAction(self, action, params):
         if action == 'browse':
@@ -354,12 +358,13 @@ class MetaBonus(SimpleBonus):
             if target is None:
                 _logger.warning('Browse target is empty')
                 return
-            if target == 'internal':
+            if target in _META_BONUS_BROWSER_VIEW_TYPE:
+                viewType = _META_BONUS_BROWSER_VIEW_TYPE[target]
                 if self.__isLobbyLoaded():
-                    showBrowserOverlayView(url)
+                    showBrowserOverlayView(url, viewType)
                 else:
                     self.__app.loaderManager.onViewLoaded += self.__onViewLoaded
-                    self.__onLobbyLoadedCallbacks.append(partial(showBrowserOverlayView, url))
+                    self.__onLobbyLoadedCallbacks.append(partial(showBrowserOverlayView, url, viewType))
             elif target == 'external':
                 BigWorld.wg_openWebBrowser(url)
             else:
@@ -506,6 +511,16 @@ class BobPointsTokensBonus(TokensBonus):
 
     def isShowInGUI(self):
         return True
+
+    def format(self):
+        return ', '.join(self.formattedList())
+
+    def formattedList(self):
+        result = []
+        for tokenVal in self._value.itervalues():
+            result.append(makeHtmlString('html_templates:lobby/quests/bonuses', 'bobPoints', {'value': tokenVal['count']}))
+
+        return result
 
 
 def personalMissionsTokensFactory(name, value, isCompensation=False, ctx=None):
@@ -1311,13 +1326,10 @@ class CustomizationsBonus(SimpleBonus):
          'specialArgs': [ data[o] for o in self.INFOTIP_ARGS_ORDER ]}
 
 
-class BoxBonus(SimpleBonus):
-
-    class HandlerNames(object):
-        pass
+class OneOfBoxBonus(SimpleBonus):
 
     def __init__(self, name, value, isCompensation=False, ctx=None):
-        super(BoxBonus, self).__init__(name, value, isCompensation)
+        super(OneOfBoxBonus, self).__init__(name, value, isCompensation)
         self.__iconsHandlerData = ('', None)
         self.__tooltipType = None
         self.__iconHandlers = {}
@@ -1342,6 +1354,32 @@ class BoxBonus(SimpleBonus):
         if self.__tooltipType is not None:
             name = '/'.join([name, self.__tooltipType])
         return _getItemTooltip(name)
+
+
+class AllOfBoxBonus(MetaBonus):
+
+    def __init__(self, name, value, isCompensation=False, ctx=None):
+        super(AllOfBoxBonus, self).__init__(name, value, isCompensation)
+
+    def getActions(self, trackID='00'):
+        return self.getBonus(trackID).get('meta', {}).get('actions', {})
+
+    def getBonus(self, trackID):
+        return TrackVisitor(trackID).walkBonuses({self._name: self._value})
+
+    def getBonusList(self):
+        result = []
+        for item in self._value:
+            _, _, data = item
+            groups = data.get('groups', [])
+            for group in groups:
+                oneOf = group.get('oneof', [])
+                _, bonuses = oneOf
+                for bonus in bonuses:
+                    _, _, bonusData = bonus
+                    result.append(bonusData)
+
+        return result
 
 
 def itemsBonusFactory(name, value, isCompensation=False, ctx=None):
@@ -1708,7 +1746,8 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  'customizations': CustomizationsBonus,
  'goodies': GoodiesBonus,
  'items': itemsBonusFactory,
- 'oneof': BoxBonus,
+ 'oneof': OneOfBoxBonus,
+ 'allof': AllOfBoxBonus,
  'badgesGroup': BadgesGroupBonus,
  'blueprints': blueprintBonusFactory,
  'crewSkins': crewSkinsBonusFactory}

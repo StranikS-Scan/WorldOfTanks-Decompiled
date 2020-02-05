@@ -9,7 +9,7 @@ import constants
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from account_helpers.AccountSettings import AccountSettings
 from account_helpers.AccountSettings import KNOWN_SELECTOR_BATTLES
-from account_helpers.AccountSettings import NEW_LOBBY_TAB_COUNTER, RECRUIT_NOTIFICATIONS
+from account_helpers.AccountSettings import NEW_LOBBY_TAB_COUNTER, RECRUIT_NOTIFICATIONS, IS_SHOP_VISITED
 from adisp import process
 from debug_utils import LOG_ERROR
 from frameworks.wulf import ViewFlags
@@ -1149,10 +1149,15 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         else:
             if alias in self.ACCOUNT_SETTINGS_COUNTERS:
                 counters = AccountSettings.getCounters(NEW_LOBBY_TAB_COUNTER)
-                if alias not in counters:
-                    counters[alias] = backport.text(R.strings.menu.headerButtons.defaultCounter())
-                elif counter is not None:
+                if counter is not None:
                     counters[alias] = counter
+                    AccountSettings.setSessionSettings(IS_SHOP_VISITED, True)
+                else:
+                    actionAlias, actionModification = self.eventsCache.getLobbyHeaderTabCounter()
+                    defaultCounter = backport.text(R.strings.menu.headerButtons.defaultCounter())
+                    isTabVisited = AccountSettings.getSessionSettings(IS_SHOP_VISITED)
+                    counter = actionModification if actionAlias == alias and not isTabVisited else counters.get(alias)
+                    counters[alias] = counter if counter is not None else defaultCounter
                 AccountSettings.setCounters(NEW_LOBBY_TAB_COUNTER, counters)
                 counter = counters[alias]
             if counter:

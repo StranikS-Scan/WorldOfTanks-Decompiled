@@ -8,7 +8,7 @@ from gui.impl.wrappers.user_list_model import UserListModel
 class DialogWindowModel(ViewModel):
     __slots__ = ('onClosed', 'onBtnClicked')
 
-    def __init__(self, properties=13, commands=2):
+    def __init__(self, properties=14, commands=2):
         super(DialogWindowModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -39,53 +39,59 @@ class DialogWindowModel(ViewModel):
     def setTitle(self, value):
         self._setResource(4, value)
 
+    def getFormattedTitle(self):
+        return self._getString(5)
+
+    def setFormattedTitle(self, value):
+        self._setString(5, value)
+
     def getTitleArgs(self):
-        return self._getArray(5)
-
-    def setTitleArgs(self, value):
-        self._setArray(5, value)
-
-    def getTitleFmtArgs(self):
         return self._getArray(6)
 
-    def setTitleFmtArgs(self, value):
+    def setTitleArgs(self, value):
         self._setArray(6, value)
 
+    def getTitleFmtArgs(self):
+        return self._getArray(7)
+
+    def setTitleFmtArgs(self, value):
+        self._setArray(7, value)
+
     def getIsTitleFmtArgsNamed(self):
-        return self._getBool(7)
+        return self._getBool(8)
 
     def setIsTitleFmtArgsNamed(self, value):
-        self._setBool(7, value)
+        self._setBool(8, value)
 
     def getBackgroundImage(self):
-        return self._getResource(8)
-
-    def setBackgroundImage(self, value):
-        self._setResource(8, value)
-
-    def getShowSoundId(self):
         return self._getResource(9)
 
-    def setShowSoundId(self, value):
+    def setBackgroundImage(self, value):
         self._setResource(9, value)
 
+    def getShowSoundId(self):
+        return self._getResource(10)
+
+    def setShowSoundId(self, value):
+        self._setResource(10, value)
+
     def getPreset(self):
-        return self._getString(10)
+        return self._getString(11)
 
     def setPreset(self, value):
-        self._setString(10, value)
+        self._setString(11, value)
 
     def getHasBalance(self):
-        return self._getBool(11)
-
-    def setHasBalance(self, value):
-        self._setBool(11, value)
-
-    def getHasBottomContent(self):
         return self._getBool(12)
 
-    def setHasBottomContent(self, value):
+    def setHasBalance(self, value):
         self._setBool(12, value)
+
+    def getHasBottomContent(self):
+        return self._getBool(13)
+
+    def setHasBottomContent(self, value):
+        self._setBool(13, value)
 
     def _initialize(self):
         super(DialogWindowModel, self)._initialize()
@@ -94,6 +100,7 @@ class DialogWindowModel(ViewModel):
         self._addResourceProperty('iconHighlight', R.invalid())
         self._addResourceProperty('animationHighlight', R.invalid())
         self._addResourceProperty('title', R.invalid())
+        self._addStringProperty('formattedTitle', '')
         self._addArrayProperty('titleArgs', Array())
         self._addArrayProperty('titleFmtArgs', Array())
         self._addBoolProperty('isTitleFmtArgsNamed', True)

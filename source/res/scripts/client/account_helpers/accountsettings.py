@@ -84,6 +84,7 @@ ELEN_NOTIFICATIONS = 'elenNotifications'
 RECRUIT_NOTIFICATIONS = 'recruitNotifications'
 SPEAKERS_DEVICE = 'speakersDevice'
 SESSION_STATS_PREV_BATTLE_COUNT = 'sessionStatsPrevBattleCnt'
+IS_SHOP_VISITED = 'isShopVisited'
 DEFAULT_QUEUE = 'defaultQueue'
 STORE_TAB = 'store_tab'
 STATS_REGULAR_SORTING = 'statsSorting'
@@ -674,7 +675,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                             'vehicleCD': None},
                         'storage_reserves': {'filterMask': 0},
                         LAST_STORAGE_VISITED_TIMESTAMP: -1,
-                        SESSION_STATS_PREV_BATTLE_COUNT: 0},
+                        SESSION_STATS_PREV_BATTLE_COUNT: 0,
+                        IS_SHOP_VISITED: False},
  KEY_UI_FLAGS: {}}
 
 def _filterAccountSection(dataSec):

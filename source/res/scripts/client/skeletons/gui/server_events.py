@@ -46,7 +46,7 @@ class IEventsCache(object):
     def update(self, diff=None, callback=None):
         raise NotImplementedError
 
-    def getQuests(self, filterFunc=None):
+    def getQuests(self, filterFunc=None, getAll=False):
         raise NotImplementedError
 
     def getMotiveQuests(self, filterFunc=None):
@@ -160,8 +160,11 @@ class IEventsCache(object):
     def getAdvisableQuests(self, filterFunc=None):
         raise NotImplementedError
 
-    def getActiveQuests(self, filterFunc=None):
+    def getActiveQuests(self, filterFunc=None, getAll=False):
         raise NotImplementedError
 
     def getProgressiveReward(self):
+        raise NotImplementedError
+
+    def getLobbyHeaderTabCounter(self):
         raise NotImplementedError

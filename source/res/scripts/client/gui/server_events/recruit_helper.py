@@ -215,7 +215,7 @@ class _TokenRecruitInfo(_BaseRecruitInfo):
 
     def __parseTankmanData(self, nationID):
         config = tankmen.getNationGroups(nationID, self.__isPremium)
-        found = [ c for c in config if c.name == self.__group ]
+        found = [ c for c in config.itervalues() if c.name == self.__group ]
         if found:
             nationGroup = found[0]
             firstNamesList = nationGroup.firstNamesList

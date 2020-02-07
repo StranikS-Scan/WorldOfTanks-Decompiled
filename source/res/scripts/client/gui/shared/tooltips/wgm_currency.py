@@ -60,7 +60,10 @@ class WGMCurrencyTooltip(DynamicBlocksTooltipData):
             LOG_ERROR('WGMGoldCurrencyTooltip empty btnType!')
             return tooltipBlocks
         else:
-            return formatters.packMoneyAndXpBlocks(tooltipBlocks, btnType=self._btnType, valueBlocks=self.__getValueBlocks())
+            return formatters.packMoneyAndXpBlocks(tooltipBlocks, btnType=self._btnType, valueBlocks=self.__getValueBlocks(), alternativeData=self._getAlternativeData())
+
+    def _getAlternativeData(self):
+        return None
 
     def __onDataResponse(self, data):
         if self.__data is None or self.__checkDiff(self.__data, data):

@@ -25,17 +25,13 @@ class AmmoQuantityAspect(aop.Aspect):
 class CameraZoomModeIgnoreAspect(aop.Aspect):
 
     def atCall(self, cd):
-        function = cd.function.__name__
         args = list(cd.args)
         kwargs = cd.kwargs
-        if function == 'restoreDefaultsState':
-            cd.avoid()
+        if len(args) > 5:
+            args[-2] = False
         else:
-            if len(args) > 5:
-                args[-2] = False
-            else:
-                kwargs['zoomMode'] = False
-            cd.change()
+            kwargs['zoomMode'] = False
+        cd.change()
         return (args, kwargs)
 
 
@@ -64,7 +60,7 @@ class AltModeTogglePointcut(aop.Pointcut):
 class CameraUpdatePointcut(aop.Pointcut):
 
     def __init__(self):
-        super(CameraUpdatePointcut, self).__init__('AvatarInputHandler.DynamicCameras.ArcadeCamera', 'ArcadeCamera', '^restoreDefaultsState|_ArcadeCamera__update$')
+        super(CameraUpdatePointcut, self).__init__('AvatarInputHandler.DynamicCameras.ArcadeCamera', 'ArcadeCamera', '^_ArcadeCamera__update$')
 
 
 class ArcadeCtrlMouseEventsPointcut(aop.Pointcut):

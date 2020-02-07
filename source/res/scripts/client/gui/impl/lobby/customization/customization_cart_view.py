@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/customization/customization_cart_view.py
 from collections import namedtuple
 import logging
+import typing
 import GUI
 from frameworks.wulf import ViewFlags, ViewSettings
 from adisp import process
@@ -37,12 +38,26 @@ from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from gui.impl.backport import createTooltipData, BackportTooltipWindow
 from gui.impl.gen import R
 from tutorial.hints_manager import HINT_SHOWN_STATUS
+if typing.TYPE_CHECKING:
+    from gui.impl.gen.view_models.views.lobby.customization.cart_seasons_model import CartSeasonsModel
 _logger = logging.getLogger(__name__)
 _SelectItemData = namedtuple('_SelectItemData', ('season',
  'quantity',
  'purchaseIndices',
  'idx',
  'intCD'))
+
+def _getSeasonModel(seasonType, seasons):
+    if seasonType not in SEASON_TYPE_TO_NAME:
+        _logger.error('Season type is not valid: %d', seasonType)
+        return
+    else:
+        name = SEASON_TYPE_TO_NAME[seasonType]
+        season = getattr(seasons, name, None)
+        if season is None:
+            _logger.error('CartSeasonsModel does not have field %s', name)
+        return season
+
 
 class CustomizationCartView(ViewImpl):
     __slots__ = ('__c11nView', '__ctx', '__purchaseItems', '__isStyle', '__counters', '__items', '__blur', '__moneyState', '__isProlongStyleRent')
@@ -73,13 +88,18 @@ class CustomizationCartView(ViewImpl):
 
     def createToolTip(self, event):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
-            itemID = event.getArgument('id')
-            if itemID in self.__items:
-                intCD = self.__items[itemID].intCD
+            tooltipId = event.getArgument('tooltip')
+            if tooltipId == TOOLTIPS_CONSTANTS.PRICE_DISCOUNT:
+                args = (event.getArgument('price'), event.getArgument('defPrice'), event.getArgument('currencyType'))
             else:
-                _logger.error('Invalid itemID is received: %r', itemID)
-                return None
-            window = BackportTooltipWindow(self.__getTooltpData(intCD, event.getArgument('tooltip'), event.getArgument('showInventoryBlock')), self.getParentWindow())
+                itemID = event.getArgument('id')
+                if itemID in self.__items:
+                    intCD = self.__items[itemID].intCD
+                else:
+                    _logger.error('Invalid itemID is received: %r', itemID)
+                    return None
+                args = (intCD, event.getArgument('showInventoryBlock'))
+            window = BackportTooltipWindow(createTooltipData(isSpecial=True, specialAlias=tooltipId, specialArgs=args), self.getParentWindow())
             window.load()
             return window
         else:
@@ -112,31 +132,31 @@ class CustomizationCartView(ViewImpl):
                         self.__counters[season][int(item.isFromInventory)] += item.quantity
 
             with self.getViewModel().transaction() as model:
-                model.setIsStyle(self.__isStyle)
-                model.setIsProlongStyleRent(self.__isProlongStyleRent)
+                style = model.style
+                style.setIsStyle(self.__isStyle)
+                style.setIsProlongStyleRent(self.__isProlongStyleRent)
                 if self.__isProlongStyleRent or not autoRentHintShown:
-                    model.setShowProlongHint(True)
+                    model.tutorial.setShowProlongHint(True)
                 if self.__isStyle:
                     item = self.__purchaseItems[0].item
-                    model.setStyleTypeName(item.userType)
-                    model.setStyleName(item.userName)
+                    style.setStyleTypeName(item.userTypeID)
+                    style.setStyleName(item.userName)
+                    rent = model.rent
                     if item.isRentable:
-                        model.setHasAutoRent(True)
-                        model.setIsAutoRentSelected(self.__ctx.autoRentEnabled())
+                        rent.setHasAutoRent(True)
+                        rent.setIsAutoRentSelected(self.__ctx.autoRentEnabled())
                 seasons = model.seasons
                 for seasonType in SEASONS_ORDER:
-                    seasonName = SEASON_TYPE_TO_NAME.get(seasonType)
-                    seasonModel = CartSeasonModel()
-                    seasonModel.setName(seasonName)
-                    if not self.__isStyle:
-                        purchase, inventory = self.__counters[seasonType]
-                        count = purchase + inventory
-                        seasonModel.setCount(count)
-                    self.__fillItemsListModel(seasonModel.items, itemDescriptors[seasonType])
-                    seasons.addViewModel(seasonModel)
+                    seasonModel = _getSeasonModel(seasonType, seasons)
+                    if seasonModel is not None:
+                        seasonModel.setName(SEASON_TYPE_TO_NAME[seasonType])
+                        if not self.__isStyle:
+                            purchase, inventory = self.__counters[seasonType]
+                            count = purchase + inventory
+                            seasonModel.setCount(count)
+                        self.__fillItemsListModel(seasonModel.items, itemDescriptors[seasonType])
 
-                seasons.invalidate()
-                self.__setBonuses(seasons.getItems())
+                self.__setBonuses(seasons)
                 self.__setTotalData(model)
             return
 
@@ -180,32 +200,34 @@ class CustomizationCartView(ViewImpl):
         shortage = money.getShortage(price)
         inGameShopOn = Currency.GOLD in shortage.getCurrency() and isIngameShopEnabled()
         isAnySelected = cart.numSelected > 0
+        rent = model.rent
         if self.__isStyle:
             item = self.__purchaseItems[0].item
-            model.setIsRentable(item.isRentable)
+            rent.setIsRentable(item.isRentable)
             if item.isRentable:
-                model.setRentCount(item.rentCount)
-        model.totalPrice.assign(cart.totalPrice)
-        model.setIsEnoughMoney(validTransaction)
-        model.setIsShopEnabled(inGameShopOn)
-        model.setPurchasedCount(cart.numBought)
+                rent.setRentCount(item.rentCount)
+        purchase = model.purchase
+        purchase.totalPrice.assign(cart.totalPrice)
+        purchase.setIsEnoughMoney(validTransaction)
+        purchase.setIsShopEnabled(inGameShopOn)
+        purchase.setPurchasedCount(cart.numBought)
         model.setIsAnySelected(isAnySelected)
 
     def __addListeners(self):
         model = self.viewModel
-        model.onSelectItem += self.__onSelectItem
-        model.onSelectAutoRent += self.__onSelectAutoRent
-        model.onBuyAction += self.__onBuy
-        model.onTutorialClose += self.__onTutorialClose
+        model.seasons.onSelectItem += self.__onSelectItem
+        model.rent.onSelectAutoRent += self.__onSelectAutoRent
+        model.purchase.onBuyAction += self.__onBuy
+        model.tutorial.onTutorialClose += self.__onTutorialClose
         g_clientUpdateManager.addMoneyCallback(self.__updateMoney)
         g_currentVehicle.onChanged += self.__onVehicleChanged
 
     def __removeListeners(self):
         model = self.viewModel
-        model.onSelectItem -= self.__onSelectItem
-        model.onSelectAutoRent -= self.__onSelectAutoRent
-        model.onBuyAction -= self.__onBuy
-        model.onTutorialClose -= self.__onTutorialClose
+        model.seasons.onSelectItem -= self.__onSelectItem
+        model.rent.onSelectAutoRent -= self.__onSelectAutoRent
+        model.purchase.onBuyAction -= self.__onBuy
+        model.tutorial.onTutorialClose -= self.__onTutorialClose
         g_clientUpdateManager.removeObjectCallbacks(self)
         g_currentVehicle.onChanged -= self.__onVehicleChanged
 
@@ -219,18 +241,16 @@ class CustomizationCartView(ViewImpl):
         for idx in itemData.purchaseIndices:
             self.__purchaseItems[idx].selected = selected
 
-        seasonInd = SEASONS_ORDER.index(season)
         with self.getViewModel().transaction() as model:
             self.__setTotalData(model)
-            seasonModel = model.seasons.getItem(seasonInd)
-            purchase, inventory = self.__counters[season]
-            seasonModel.setCount(purchase + inventory)
-            itemModel = seasonModel.items.getItem(itemData.idx)
-            itemModel.setSelected(selected)
-            self.__setBonuses(model.seasons.getItems())
-
-    def __getTooltpData(self, intCD, tooltip, showInventoryBlock):
-        return createTooltipData(isSpecial=True, specialAlias=tooltip, specialArgs=(intCD, showInventoryBlock))
+            seasonModel = _getSeasonModel(season, model.seasons)
+            if seasonModel is not None:
+                purchase, inventory = self.__counters[season]
+                seasonModel.setCount(purchase + inventory)
+                itemModel = seasonModel.items.getItem(itemData.idx)
+                itemModel.setSelected(selected)
+            self.__setBonuses(model.seasons)
+        return
 
     @process
     def __onBuy(self):
@@ -264,29 +284,32 @@ class CustomizationCartView(ViewImpl):
 
     def __onSelectAutoRent(self, _=None):
         self.__ctx.changeAutoRent()
-        self.viewModel.setIsAutoRentSelected(self.__ctx.autoRentEnabled())
+        self.viewModel.rent.setIsAutoRentSelected(self.__ctx.autoRentEnabled())
 
-    def __setBonuses(self, seasonsModelItems):
-        seasonsMap = dict(((season.getName(), season) for season in seasonsModelItems))
+    def __setBonuses(self, seasons):
         if self.__isStyle:
             item = self.__purchaseItems[0].item
-            for season in SeasonType.COMMON_SEASONS:
-                outfit = item.getOutfit(season)
+            for seasonType in SeasonType.COMMON_SEASONS:
+                outfit = item.getOutfit(seasonType)
                 if outfit:
                     container = outfit.hull
                     camouflage = container.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).getItem()
-                    seasonModel = seasonsMap[SEASON_TYPE_TO_NAME.get(season)]
-                    bonusValue = self.__getCamoBonusValue(camouflage)
-                    seasonModel.setBonusValue(bonusValue)
-                    seasonModel.setBonusType(GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.CAMOUFLAGE] if bonusValue else '')
+                    seasonModel = _getSeasonModel(seasonType, seasons)
+                    if seasonModel is not None:
+                        bonusValue = self.__getCamoBonusValue(camouflage)
+                        seasonModel.setBonusValue(bonusValue)
+                        seasonModel.setBonusType(GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.CAMOUFLAGE] if bonusValue else '')
 
         else:
             for item in self.__purchaseItems:
                 if item.areaID == Area.HULL and item.item.itemTypeID == GUI_ITEM_TYPE.CAMOUFLAGE and item.group in SEASON_TYPE_TO_NAME:
-                    seasonModel = seasonsMap[SEASON_TYPE_TO_NAME.get(item.group)]
-                    bonusValue = self.__getCamoBonusValue(item.item) if item.selected else ''
-                    seasonModel.setBonusValue(bonusValue)
-                    seasonModel.setBonusType(GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.CAMOUFLAGE] if bonusValue else '')
+                    seasonModel = _getSeasonModel(item.group, seasons)
+                    if seasonModel is not None:
+                        bonusValue = self.__getCamoBonusValue(item.item) if item.selected else ''
+                        seasonModel.setBonusValue(bonusValue)
+                        seasonModel.setBonusType(GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.CAMOUFLAGE] if bonusValue else '')
+
+        return
 
     @staticmethod
     def __fillItemsListModel(listModel, items):

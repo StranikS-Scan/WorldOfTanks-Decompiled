@@ -10,9 +10,9 @@ _NONE_PLAYER_ATTACK_REASON_TAG = {ATTACK_REASON_INDICES['artillery_protection']:
  ATTACK_REASON_INDICES['bombers']: (INGAME_GUI.ATTACKREASON_BOMBERS, 'bomber')}
 
 class HitData(object):
-    __slots__ = ('__yaw', '__attackerID', '__damage', '__attackerVehName', '__attackerVehClassTag', '__playerVehMaxHP', '__hitFlags', '__critFlags', '__critsCount', '__attackReasonID')
+    __slots__ = ('__yaw', '__attackerID', '__damage', '__attackerVehName', '__friendlyFireMode', '__attackerVehClassTag', '__playerVehMaxHP', '__hitFlags', '__critFlags', '__critsCount', '__attackReasonID')
 
-    def __init__(self, yaw=0, attackerID=0, attackerVehName='', attackerVehClassTag=None, playerVehMaxHP=0, damage=0, critFlags=0, isAlly=False, isBlocked=False, isHighExplosive=False, attackReasonID=0):
+    def __init__(self, yaw=0, attackerID=0, attackerVehName='', attackerVehClassTag=None, playerVehMaxHP=0, damage=0, critFlags=0, isAlly=False, isBlocked=False, isHighExplosive=False, attackReasonID=0, friendlyFireMode=False):
         super(HitData, self).__init__()
         self.__yaw = yaw
         self.__attackerID = attackerID
@@ -21,6 +21,7 @@ class HitData(object):
         self.__attackerVehClassTag = attackerVehClassTag or ''
         self.__playerVehMaxHP = playerVehMaxHP
         self.__attackReasonID = attackReasonID
+        self.__friendlyFireMode = friendlyFireMode
         self.__critFlags = critFlags
         self.__critsCount = BitmaskHelper.getSetBitsCount(self.__critFlags)
         self.__hitFlags = self.__buildFlags(attackerID=attackerID, damage=damage, isAlly=isAlly, isBlocked=isBlocked, critFlags=critFlags, isHighExplosive=isHighExplosive, attackReasonID=attackReasonID)
@@ -82,6 +83,9 @@ class HitData(object):
 
     def isDamage(self):
         return self.isCritical() or not self.isBlocked() and self.__damage > 0
+
+    def isFriendlyFire(self):
+        return self.__friendlyFireMode and self.isAttackerAlly()
 
     def extend(self, hitData):
         self.__yaw = hitData.getYaw()

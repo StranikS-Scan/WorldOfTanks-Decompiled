@@ -257,7 +257,7 @@ class BattleSpaceEnv(SoundEnv, IArenaPeriodController):
         self.sessionProvider.removeArenaCtrl(self)
         super(BattleSpaceEnv, self).stop()
 
-    def setPeriodInfo(self, period, endTime, length, additionalInfo, soundID):
+    def setPeriodInfo(self, period, endTime, length, additionalInfo):
         self._updateBattleAmbient(period)
 
     def invalidatePeriodInfo(self, period, endTime, length, additionalInfo):

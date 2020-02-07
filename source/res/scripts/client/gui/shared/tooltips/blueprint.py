@@ -230,6 +230,29 @@ class VehicleBlueprintTooltipData(BlueprintTooltipData, DynamicBlocksTooltipData
         return formatters.packImageTextBlockData(desc=text_styles.main(TOOLTIPS.BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_FREEUNLOCK), img=RES_ICONS.MAPS_ICONS_BLUEPRINTS_TOOLTIP_DISCOUNT, txtPadding=formatters.packPadding(left=2), descLeading=4, padding=formatters.packPadding(top=4, left=-20))
 
 
+class BlueprintFragmentRandomTooltipData(BlueprintTooltipData):
+
+    def __init__(self, context):
+        super(BlueprintFragmentRandomTooltipData, self).__init__(context)
+        self._setWidth(390)
+        self.__nationName = None
+        return
+
+    def _packBlocks(self, fragmentCD):
+        super(BlueprintFragmentRandomTooltipData, self)._packBlocks(fragmentCD)
+        self.__packRandomFragmentBlocks()
+        return self._items
+
+    @staticmethod
+    def __packDiscountBlock():
+        return formatters.packImageTextBlockData(desc=text_styles.main(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_RANDOM_DISCOUNT), img=RES_ICONS.MAPS_ICONS_BLUEPRINTS_TOOLTIP_DISCOUNT_SMALL, imgPadding=formatters.packPadding(top=2, right=5), padding=formatters.packPadding(left=40))
+
+    def __packRandomFragmentBlocks(self):
+        self._items.append(formatters.packImageTextBlockData(title=text_styles.highTitle(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_RANDOM_HEADER), img=RES_ICONS.getBlueprintFragment('medium', 'random'), imgPadding=formatters.packPadding(top=3), txtPadding=formatters.packPadding(left=21)))
+        descriptionBlock = formatters.packImageTextBlockData(desc=text_styles.main(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_RANDOM_DESCRIPTION), img=RES_ICONS.MAPS_ICONS_BLUEPRINTS_PLUS, imgPadding=formatters.packPadding(top=0, right=5), padding=formatters.packPadding(left=40))
+        self._items.append(formatters.packBuildUpBlockData(blocks=[descriptionBlock, self.__packDiscountBlock()], gap=5, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
+
+
 class BlueprintFragmentTooltipData(BlueprintTooltipData):
 
     def __init__(self, context):

@@ -126,7 +126,7 @@ class DualGunComponent(DualGunPanelMeta):
         self.__bulletCollapsed = False
         self.__debuffInProgress = False
         self.__debuffBaseTime = 0
-        self.__inNonActiveBattleState = False
+        self.__inBattle = False
         self.__reloadEventReceived = False
         self.__isObserver = False
         self.__currentTotalTimeTimer = 0
@@ -230,7 +230,7 @@ class DualGunComponent(DualGunPanelMeta):
         self.as_setViewS(viewID)
 
     def __onArenaPeriodChange(self, arenaPeriod, endTime, *_):
-        self.__inNonActiveBattleState = arenaPeriod in (ARENA_PERIOD.PREBATTLE, ARENA_PERIOD.AFTERBATTLE)
+        self.__inBattle = arenaPeriod == ARENA_PERIOD.BATTLE
 
     def __onVehicleControlling(self, vehicle):
         vTypeDesc = vehicle.typeDescriptor
@@ -335,7 +335,7 @@ class DualGunComponent(DualGunPanelMeta):
             self.as_readyForChargeS()
 
     def __onPreCharge(self, _):
-        if not self.__inNonActiveBattleState:
+        if self.__inBattle:
             self.__soundManager.onPreChargeStarted()
 
     def __onSniperCameraTransition(self, _):
@@ -353,9 +353,9 @@ class DualGunComponent(DualGunPanelMeta):
         canShot, error = self.__sessionProvider.shared.ammo.canShoot()
         canMakeDualShoot = BigWorld.player().canMakeDualShot
         keyDown = event.ctx.get('keyDown')
-        if keyDown:
+        if keyDown and self.__inBattle:
             self.__soundManager.onChargeReleased(canShot, error, canMakeDualShoot)
-        if keyDown is not None and not self.__debuffInProgress and not self.__inNonActiveBattleState:
+        if keyDown is not None and not self.__debuffInProgress and self.__inBattle:
             if keyDown:
                 self.__bulletCollapsed = True
                 self.as_collapsePanelS()

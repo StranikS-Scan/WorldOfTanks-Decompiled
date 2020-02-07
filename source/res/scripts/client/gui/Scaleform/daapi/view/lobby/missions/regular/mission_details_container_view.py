@@ -4,6 +4,7 @@ from async import async, await
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.view.lobby.missions import missions_helper
 from gui.Scaleform.daapi.view.lobby.missions.regular.group_packers import getGroupPackerByContextID
+from gui.Scaleform.daapi.view.lobby.missions.regular.missions_views import MissionsCategoriesView
 from gui.Scaleform.daapi.view.meta.MissionDetailsContainerViewMeta import MissionDetailsContainerViewMeta
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.server_events.formatters import parseComplexToken
@@ -13,6 +14,7 @@ from skeletons.gui.server_events import IEventsCache
 
 class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta):
     eventsCache = dependency.descriptor(IEventsCache)
+    __showDQInMissionsTab = False
     __metaclass__ = event_bus_handlers.EventBusListener
 
     def __init__(self, ctx=None):
@@ -47,6 +49,10 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
                 vehicleSelector.as_hideSelectedVehicleS()
             return
 
+    @classmethod
+    def setShowDQInMissionsTab(cls, value):
+        cls.__showDQInMissionsTab = value
+
     def _populate(self):
         super(MissionDetailsContainerView, self)._populate()
         self.eventsCache.onSyncCompleted += self.__setData
@@ -69,7 +75,12 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
     def __setData(self, needDemand=True):
         if needDemand:
             yield await(self.eventsCache.prefetcher.demand())
-        self.__quests = self.eventsCache.getQuests(lambda q: q.getFinishTimeLeft())
+        filterFunc = MissionsCategoriesView.getQuestFilterIncludingDailyQuests() if self.__showDQInMissionsTab else MissionsCategoriesView.getViewQuestFilter()
+
+        def missionsFilter(q):
+            return filterFunc(q) and q.getFinishTimeLeft()
+
+        self.__quests = self.eventsCache.getQuests(missionsFilter)
         eventID = self.__ctx.get('eventID')
         groupID = self.__ctx.get('groupID')
         if self.__groupPacker is not None:

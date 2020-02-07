@@ -569,9 +569,6 @@ class ArcadeControlMode(_GunControlMode):
         elif cmdMap.isFired(CommandMapping.CMD_CM_ALTERNATE_MODE, key) and isDown:
             self.__activateAlternateMode()
             return True
-        elif cmdMap.isFired(CommandMapping.CMD_CM_CAMERA_RESTORE_DEFAULT, key) and isDown:
-            self._cam.restoreDefaultsState()
-            return True
         else:
             return False
 
@@ -705,40 +702,36 @@ class _TrajectoryControlMode(_GunControlMode):
                 pos = self._gunMarker.getPosition()
             self._aih.onControlModeChanged(CTRL_MODE_NAME.ARCADE, preferredPos=pos, aimingMode=self._aimingMode, closesDist=False)
             return True
-        if cmdMap.isFired(CommandMapping.CMD_CM_FREE_CAMERA, key):
-            self.setAimingMode(isDown, AIMING_MODE.USER_DISABLED)
-        if cmdMap.isFiredList((CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT,
-         CommandMapping.CMD_CM_CAMERA_ROTATE_RIGHT,
-         CommandMapping.CMD_CM_CAMERA_ROTATE_UP,
-         CommandMapping.CMD_CM_CAMERA_ROTATE_DOWN,
-         CommandMapping.CMD_CM_INCREASE_ZOOM,
-         CommandMapping.CMD_CM_DECREASE_ZOOM), key):
-            replayCtrl = BattleReplay.g_replayCtrl
-            if replayCtrl.isPlaying and replayCtrl.isControllingCamera:
-                return True
-            dx = dy = dz = 0.0
-            if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT):
-                dx = -1.0
-            if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_RIGHT):
-                dx = 1.0
-            if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_UP):
-                dy = -1.0
-            if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_DOWN):
-                dy = 1.0
-            if cmdMap.isActive(CommandMapping.CMD_CM_INCREASE_ZOOM):
-                dz = 1.0
-            if cmdMap.isActive(CommandMapping.CMD_CM_DECREASE_ZOOM):
-                dz = -1.0
-            self._cam.update(dx, dy, dz, False if dx == dy == dz == 0.0 else True)
-            return True
-        if cmdMap.isFired(CommandMapping.CMD_CM_TRAJECTORY_VIEW, key) and isDown:
-            if self.__switchToNextControlMode():
-                return True
-        if cmdMap.isFired(CommandMapping.CMD_CM_CAMERA_RESTORE_DEFAULT, key) and isDown:
-            self._cam.update(0, 0, 0, False)
-            self._cam.restoreDefaultsState()
-            return True
         else:
+            if cmdMap.isFired(CommandMapping.CMD_CM_FREE_CAMERA, key):
+                self.setAimingMode(isDown, AIMING_MODE.USER_DISABLED)
+            if cmdMap.isFiredList((CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT,
+             CommandMapping.CMD_CM_CAMERA_ROTATE_RIGHT,
+             CommandMapping.CMD_CM_CAMERA_ROTATE_UP,
+             CommandMapping.CMD_CM_CAMERA_ROTATE_DOWN,
+             CommandMapping.CMD_CM_INCREASE_ZOOM,
+             CommandMapping.CMD_CM_DECREASE_ZOOM), key):
+                replayCtrl = BattleReplay.g_replayCtrl
+                if replayCtrl.isPlaying and replayCtrl.isControllingCamera:
+                    return True
+                dx = dy = dz = 0.0
+                if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT):
+                    dx = -1.0
+                if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_RIGHT):
+                    dx = 1.0
+                if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_UP):
+                    dy = -1.0
+                if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_DOWN):
+                    dy = 1.0
+                if cmdMap.isActive(CommandMapping.CMD_CM_INCREASE_ZOOM):
+                    dz = 1.0
+                if cmdMap.isActive(CommandMapping.CMD_CM_DECREASE_ZOOM):
+                    dz = -1.0
+                self._cam.update(dx, dy, dz, False if dx == dy == dz == 0.0 else True)
+                return True
+            if cmdMap.isFired(CommandMapping.CMD_CM_TRAJECTORY_VIEW, key) and isDown:
+                if self.__switchToNextControlMode():
+                    return True
             return False
 
     def handleMouseEvent(self, dx, dy, dz):

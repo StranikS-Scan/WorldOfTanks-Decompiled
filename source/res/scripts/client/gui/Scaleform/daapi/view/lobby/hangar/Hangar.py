@@ -5,6 +5,7 @@ from CurrentVehicle import g_currentVehicle
 from HeroTank import HeroTank
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
 from constants import QUEUE_TYPE, PREBATTLE_TYPE, SENIORITY_AWARDS_CONFIG, IS_LOOT_BOXES_ENABLED
+from frameworks.wulf import WindowFlags, ViewFlags
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.LobbySelectableView import LobbySelectableView
@@ -23,6 +24,7 @@ from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.constants import PrimeTimeStatus
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showRankedPrimeTimeWindow
 from gui.shared.events import LobbySimpleEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
@@ -36,7 +38,7 @@ from helpers.i18n import makeString as _ms
 from helpers.statistics import HANGAR_LOADING_STATE
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IIGRController, IBobController
+from skeletons.gui.game_control import IIGRController
 from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
@@ -49,10 +51,9 @@ from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
 from gui.impl.gen import R
 from gui.impl import backport
 from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityAwardsBoxesCount
-from gui.Scaleform.daapi.view.lobby.bob import bob_helpers
 
 def predicateNotEmptyWindow(window):
-    return window.content is not None
+    return window.content is not None and window.windowFlags != WindowFlags.TOOLTIP and window.content.viewFlags != ViewFlags.COMPONENT
 
 
 class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
@@ -72,7 +73,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     hangarSpace = dependency.descriptor(IHangarSpace)
     _promoController = dependency.descriptor(IPromoController)
     _connectionMgr = dependency.descriptor(IConnectionManager)
-    _bobController = dependency.descriptor(IBobController)
     _COMMON_SOUND_SPACE = __SOUND_SETTINGS
 
     def __init__(self, _=None):
@@ -129,12 +129,10 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.igrCtrl.onIgrTypeChanged += self.__onIgrTypeChanged
         self.itemsCache.onSyncCompleted += self.onCacheResync
         self.rankedController.onUpdated += self.onRankedUpdate
-        self.rankedController.onPrimeTimeStatusUpdated += self.__updateAlertMessage
+        self.rankedController.onGameModeStatusTick += self.__updateAlertMessage
         self.epicController.onUpdated += self.__onEpicSkillsUpdate
         self.epicController.onPrimeTimeStatusUpdated += self.__onEpicSkillsUpdate
         self._promoController.onNewTeaserReceived += self.__onTeaserReceived
-        self._bobController.onUpdated += self.onBobUpdate
-        self._bobController.onPrimeTimeStatusUpdated += self.__updateAlertMessage
         self.hangarSpace.setVehicleSelectable(True)
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
@@ -164,12 +162,10 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.hangarSpace.onSpaceCreate -= self.__onSpaceCreate
         self.igrCtrl.onIgrTypeChanged -= self.__onIgrTypeChanged
         self.rankedController.onUpdated -= self.onRankedUpdate
-        self.rankedController.onPrimeTimeStatusUpdated -= self.__updateAlertMessage
+        self.rankedController.onGameModeStatusTick -= self.__updateAlertMessage
         self.epicController.onUpdated -= self.__onEpicSkillsUpdate
         self.epicController.onPrimeTimeStatusUpdated -= self.__onEpicSkillsUpdate
         self._promoController.onNewTeaserReceived -= self.__onTeaserReceived
-        self._bobController.onUpdated -= self.onBobUpdate
-        self._bobController.onPrimeTimeStatusUpdated -= self.__updateAlertMessage
         if self.__teaser is not None:
             self.__teaser.stop()
             self.__teaser = None
@@ -206,9 +202,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             elif self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC) or self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.EPIC):
                 linkage = HANGAR_ALIASES.TANK_CAROUSEL_UI
                 newCarouselAlias = HANGAR_ALIASES.EPICBATTLE_TANK_CAROUSEL
-            elif self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.BOB) or self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.BOB):
-                linkage = HANGAR_ALIASES.TANK_CAROUSEL_UI
-                newCarouselAlias = HANGAR_ALIASES.BOB_TANK_CAROUSEL
         if prevCarouselAlias != newCarouselAlias:
             self.as_setCarouselS(linkage, newCarouselAlias)
             self.__currentCarouselAlias = newCarouselAlias
@@ -234,18 +227,12 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def __updateHeader(self):
         if self.prbDispatcher is not None:
-            isBobMode = self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.BOB) or self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.BOB)
-            showBobWidget = self._bobController.needShowEventWidget(isBobMode)
             if self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED):
                 if not self.rankedWidget:
                     self.as_setHeaderTypeS(HANGAR_ALIASES.RANKED_WIDGET)
             elif self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC) or self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.EPIC):
                 if not self.epicWidget:
                     self.as_setHeaderTypeS(HANGAR_ALIASES.EPIC_WIDGET)
-            elif showBobWidget:
-                self.as_setHeaderTypeS(HANGAR_ALIASES.BOB_WIDGET)
-                if self._bobController.isNaAsiaRealm():
-                    self.as_setDefaultHeaderS()
             elif not self.headerComponent:
                 self.as_setDefaultHeaderS()
         return
@@ -265,35 +252,32 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             self.rankedWidget.update()
         return
 
-    def __updateHeaderBobWidget(self):
-        if self.prbDispatcher is not None:
-            isBobMode = self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.BOB) or self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.BOB)
-            isEnabled = self._bobController.needShowEventWidget(isBobMode)
-            self.as_toggleBobS(isEnabled)
-        return
-
     def __updateCrew(self):
         if self.crewPanel is not None:
             self.crewPanel.updateTankmen()
         return
 
-    def __updateAlertMessage(self, _=None):
-        if self.prbDispatcher is not None and self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED):
-            status, _, _ = self.rankedController.getPrimeTimeStatus()
-            self.as_setAlertMessageBlockVisibleS(status == PrimeTimeStatus.NOT_AVAILABLE)
-            visible = status == PrimeTimeStatus.NOT_AVAILABLE and self.alertMessage is not None
-            if visible:
-                statusVO = ranked_helpers.getPrimeTimeStatusVO(status, self.rankedController.hasAvailablePrimeTimeServers())
-                self.alertMessage.update(statusVO._asdict(), onBtnClickCallback=shared_events.showRankedPrimeTimeWindow)
-        elif self.prbDispatcher is not None and self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.BOB) and self._bobController.getCurrentSeason():
-            status, _, _ = self._bobController.getPrimeTimeStatus()
-            self.as_setAlertMessageBlockVisibleS(status == PrimeTimeStatus.NOT_AVAILABLE)
-            visible = status == PrimeTimeStatus.NOT_AVAILABLE and self.alertMessage is not None
-            if visible:
-                statusVO = bob_helpers.getPrimeTimeStatusVO(status, self._bobController.hasAvailablePrimeTimeServers())
-                self.alertMessage.update(statusVO._asdict(), onBtnClickCallback=shared_events.showBobPrimeTimeWindow)
-        else:
-            self.as_setAlertMessageBlockVisibleS(False)
+    def __updateAlertMessage(self, *args):
+        if self.prbDispatcher is not None:
+            if self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED):
+                self.__updateRankedAlertMsg()
+                return
+        self.as_setAlertMessageBlockVisibleS(False)
+        return
+
+    def __updateRankedAlertMsg(self):
+        status, _, _ = self.rankedController.getPrimeTimeStatus()
+        visible = self.__isAlertBlockVisible(status)
+        data = ranked_helpers.getAlertStatusVO()
+        self.__updateAlertBlock(showRankedPrimeTimeWindow, data, visible)
+
+    def __isAlertBlockVisible(self, status):
+        return status in (PrimeTimeStatus.NOT_AVAILABLE, PrimeTimeStatus.NOT_SET, PrimeTimeStatus.FROZEN)
+
+    def __updateAlertBlock(self, callback, data, visible):
+        self.as_setAlertMessageBlockVisibleS(visible)
+        if visible and self.alertMessage is not None:
+            self.alertMessage.update(data._asdict(), onBtnClickCallback=callback)
         return
 
     def __onWaitingShown(self, _):
@@ -401,12 +385,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateHeaderComponent()
         self.__updateHeaderRankedWidget()
 
-    def onBobUpdate(self):
-        self.__updateHeader()
-        self.__updateHeaderComponent()
-        self.__updateHeaderBobWidget()
-        self.__updateAlertMessage()
-
     def _onPopulateEnd(self):
         pass
 
@@ -428,7 +406,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateHeaderComponent()
         self.__updateHeaderEpicWidget()
         self.__updateHeaderRankedWidget()
-        self.__updateHeaderBobWidget()
         self.__updateCrew()
         self.__updateAlertMessage()
         Waiting.hide('updateVehicle')
@@ -442,7 +419,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateHeader()
         self.__updateHeaderComponent()
         self.__updateHeaderEpicWidget()
-        self.__updateHeaderBobWidget()
         self.__updateCrew()
         self.as_setNotificationEnabledS(crewBooksViewedCache().haveNewCrewBooks())
         Waiting.hide('updateVehicle')
@@ -522,7 +498,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateHeaderComponent()
         self.__updateHeaderEpicWidget()
         self.__updateHeaderRankedWidget()
-        self.__updateHeaderBobWidget()
         self.__switchCarousels()
 
     def __onVehicleClientStateChanged(self, vehicles):

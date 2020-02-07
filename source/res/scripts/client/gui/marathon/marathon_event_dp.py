@@ -149,7 +149,7 @@ class MarathonEventDataProvider(object):
 class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
     _eventsCache = dependency.descriptor(IEventsCache)
     _bootcamp = dependency.descriptor(IBootcampController)
-    _lobbyContext = dependency.descriptor(ILobbyContext)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(MarathonEvent, self).__init__()
@@ -415,7 +415,7 @@ class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
         return self._getUrl(urlType=MarathonConfig.REWARD_VEHICLE_URL)
 
     def _getUrl(self, urlType=MarathonConfig.URL):
-        baseUrl = self._lobbyContext.getServerSettings().getMarathonConfig().get(urlType, MarathonConfig.EMPTY_PATH)
+        baseUrl = self.__lobbyContext.getServerSettings().getMarathonConfig().get(urlType, MarathonConfig.EMPTY_PATH)
         if not baseUrl:
             _logger.warning('Marathon url from marathon_config.xml is absent or invalid: %s', baseUrl)
         return baseUrl

@@ -1,9 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/messengerBar/messenger_bar.py
+from account_helpers.settings_core.settings_constants import SESSION_STATS
+from adisp import process
 from constants import PREBATTLE_TYPE
 from gui import makeHtmlString
+from gui import SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import isReferralProgramEnabled
+from gui.Scaleform.daapi.view.lobby.session_stats.session_stats_settings_controller import SessionStatsSettingsController
 from gui.Scaleform.daapi.view.meta.MessengerBarMeta import MessengerBarMeta
 from gui.Scaleform.framework import ViewTypes, g_entitiesFactories
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
@@ -17,7 +21,7 @@ from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.utils.functions import makeTooltip
-from gui.shared.utils.requesters.session_stats_requester import SessionStatsRequester
+from gui.shared.gui_items.processors.session_stats import ResetSessionStatsProcessor
 from helpers import int2roman, dependency
 from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 from skeletons.gui.game_control import IVehicleComparisonBasket, IReferralProgramController
@@ -112,6 +116,10 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
     def referralButtonClick(self):
         self.fireEvent(events.ReferralProgramEvent(events.ReferralProgramEvent.SHOW_REFERRAL_PROGRAM_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
 
+    def sessionStatsButtonClick(self):
+        if self.__sessionStatsBtnOnlyOnceHintShow:
+            self.__onSessionStatsBtnOnlyOnceHintHidden(True)
+
     def destroy(self):
         if self.__compareBasketCtrl is not None:
             self.__compareBasketCtrl.dispose()
@@ -142,6 +150,8 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
          'contactsTooltip': TOOLTIPS.LOBY_MESSENGER_CONTACTS_BUTTON,
          'vehicleCompareTooltip': TOOLTIPS.LOBY_MESSENGER_VEHICLE_COMPARE_BUTTON,
          'sessionStatsHtmlIcon': _formatIcon('iconSessionStats')})
+        sessionStatsSettings = SessionStatsSettingsController().getSettings()
+        self.__sessionStatsBtnOnlyOnceHintShow = not sessionStatsSettings[SESSION_STATS.ONLY_ONCE_HINT_SHOWN_FIELD]
         self.__updateSessionStatsBtn()
 
     def _dispose(self):
@@ -183,6 +193,10 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
         if 'sessionStats' in diff or ('sessionStats', '_r') in diff:
             self.__updateSessionStatsBtn()
 
+    def __updateSessionStatsHint(self, visible):
+        self.as_setSessionStatsButtonSettingsUpdateS(visible, '!')
+
+    @process
     def __updateSessionStatsBtn(self):
         dispatcher = self.prbDispatcher
         if dispatcher is not None:
@@ -192,11 +206,22 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
         isSessionStatsEnabled = self._lobbyContext.getServerSettings().isSessionStatsEnabled()
         tooltip = self.__getSessionStatsBtnTooltip(isInSupportedMode and isSessionStatsEnabled)
         if not isSessionStatsEnabled:
-            SessionStatsRequester.resetStats()
+            result = yield ResetSessionStatsProcessor().request()
+            if result and result.userMsg:
+                SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         self.as_setSessionStatsButtonVisibleS(isSessionStatsEnabled)
         self.as_setSessionStatsButtonEnableS(isSessionStatsEnabled and isInSupportedMode, tooltip)
+        self.__updateSessionStatsHint(self.__sessionStatsBtnOnlyOnceHintShow and isSessionStatsEnabled and isInSupportedMode)
         return
 
     @staticmethod
     def __getSessionStatsBtnTooltip(btnEnabled):
         return makeTooltip(backport.text(R.strings.session_stats.tooltip.mainBtn.header()), backport.text(R.strings.session_stats.tooltip.mainBtn.body.enabled())) if btnEnabled else makeTooltip(backport.text(R.strings.session_stats.tooltip.mainBtn.header()), backport.text(R.strings.session_stats.tooltip.mainBtn.body.disabled()))
+
+    def __onSessionStatsBtnOnlyOnceHintHidden(self, record=False):
+        if record:
+            sessionStatsSettings = SessionStatsSettingsController().getSettings()
+            sessionStatsSettings[SESSION_STATS.ONLY_ONCE_HINT_SHOWN_FIELD] = True
+            SessionStatsSettingsController().setSettings(sessionStatsSettings)
+        self.__sessionStatsBtnOnlyOnceHintShow = False
+        self.__updateSessionStatsHint(self.__sessionStatsBtnOnlyOnceHintShow)

@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/epic/page.py
+from gui.Scaleform.daapi.view.battle.classic.page import DynamicAliases as ClassicDynAliases
+from gui.Scaleform.daapi.view.battle.shared.start_countdown_sound_player import StartCountdownSoundPlayer
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.Scaleform.daapi.view.meta.EpicBattlePageMeta import EpicBattlePageMeta
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
@@ -29,7 +31,8 @@ class _EpicBattleComponentsConfig(ComponentsConfig):
         super(_EpicBattleComponentsConfig, self).__init__(((BATTLE_CTRL_ID.ARENA_PERIOD, (BATTLE_VIEW_ALIASES.BATTLE_TIMER,
            BATTLE_VIEW_ALIASES.PREBATTLE_TIMER,
            DynamicAliases.EPIC_DRONE_MUSIC_PLAYER,
-           DynamicAliases.PERIOD_MUSIC_LISTENER)),
+           DynamicAliases.PERIOD_MUSIC_LISTENER,
+           ClassicDynAliases.PREBATTLE_TIMER_SOUND_PLAYER)),
          (BATTLE_CTRL_ID.DEBUG, (BATTLE_VIEW_ALIASES.DEBUG_PANEL,)),
          (BATTLE_CTRL_ID.RESPAWN, (BATTLE_VIEW_ALIASES.EPIC_RESPAWN_VIEW,)),
          (BATTLE_CTRL_ID.MAPS, (BATTLE_VIEW_ALIASES.EPIC_OVERVIEW_MAP_SCREEN, BATTLE_VIEW_ALIASES.MINIMAP)),
@@ -39,7 +42,7 @@ class _EpicBattleComponentsConfig(ComponentsConfig):
          (BATTLE_CTRL_ID.TEAM_BASES, (BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, DynamicAliases.EPIC_DRONE_MUSIC_PLAYER)),
          (BATTLE_CTRL_ID.BATTLE_FIELD_CTRL, (DynamicAliases.EPIC_DRONE_MUSIC_PLAYER,)),
          (BATTLE_CTRL_ID.ARENA_LOAD_PROGRESS, (DynamicAliases.EPIC_DRONE_MUSIC_PLAYER,)),
-         (BATTLE_CTRL_ID.GAME_MESSAGES_PANEL, (BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL,))), ((DynamicAliases.PERIOD_MUSIC_LISTENER, period_music_listener.PeriodMusicListener), (DynamicAliases.EPIC_DRONE_MUSIC_PLAYER, drone_music_player.EpicDroneMusicPlayer)))
+         (BATTLE_CTRL_ID.GAME_MESSAGES_PANEL, (BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL,))), ((DynamicAliases.PERIOD_MUSIC_LISTENER, period_music_listener.PeriodMusicListener), (DynamicAliases.EPIC_DRONE_MUSIC_PLAYER, drone_music_player.EpicDroneMusicPlayer), (ClassicDynAliases.PREBATTLE_TIMER_SOUND_PLAYER, StartCountdownSoundPlayer)))
 
 
 EPIC_BATTLE_CLASSIC_CONFIG = _EpicBattleComponentsConfig()

@@ -20,7 +20,7 @@ class RankedBattlesResults(RankedBattlesBattleResultsMeta):
         if self.__showRankedWidget:
             prevAccProgress = (self.__rankInfo.prevAccRank, self.__rankInfo.prevAccStep)
             accProgress = (self.__rankInfo.accRank, self.__rankInfo.accStep)
-            maxProgress = max(accProgress, prevAccProgress)
+            maxProgress = (self.__rankInfo.prevMaxRank, self.__rankInfo.prevMaxStep)
             prevShields = self.__rankInfo.prevShields
             shields = self.__rankInfo.shields
             isBonusBattle = self.__rankInfo.isBonusBattle

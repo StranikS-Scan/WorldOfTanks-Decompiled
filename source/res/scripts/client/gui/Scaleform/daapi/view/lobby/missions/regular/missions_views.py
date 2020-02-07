@@ -28,7 +28,7 @@ from gui.server_events import settings, caches
 from gui.server_events.event_items import DEFAULTS_GROUPS
 from gui.server_events.events_dispatcher import hideMissionDetails
 from gui.server_events.events_dispatcher import showMissionsCategories
-from gui.server_events.events_helpers import isMarathon, isRegularQuest, isPremium
+from gui.server_events.events_helpers import isMarathon, isRegularQuest, isDailyQuest, isPremium
 from gui.shared import actions
 from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -113,7 +113,7 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
         if browser is not None and self._marathonEvent and self.__browserView:
             url = yield self._marathonEvent.getUrl()
             if url:
-                self.__browserView.showLoading(True)
+                self.__browserView.as_loadingStartS()
                 browser.navigate(url)
         else:
             yield lambda callback: callback(True)
@@ -142,7 +142,10 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
                 self.__browserID = browserID
                 viewPy.init(browserID, self._marathonEvent.createMarathonWebHandlers(), alias=alias)
                 self.__browserView = viewPy
-                self.__browserView.showContentUnderLoading = False
+                browser = self._browserCtrl.getBrowser(browserID)
+                if browser is not None:
+                    browser.setAllowAutoLoadingScreen(False)
+                    browser.onReadyToShowContent = self.__removeLoadingScreen
             else:
                 LOG_ERROR('Attampt to initialize browser 2nd time!')
         return
@@ -174,6 +177,12 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
     def __loadBrowser(self):
         self.__loadBrowserCallbackID = None
         self.as_loadBrowserS()
+        return
+
+    def __removeLoadingScreen(self, url):
+        browser = self._browserCtrl.getBrowser(self.__browserID)
+        if browser is not None:
+            browser.setLoadingScreenVisible(False)
         return
 
     def __updateEvents(self):
@@ -323,6 +332,19 @@ class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
 class MissionsCategoriesView(_GroupedMissionsView):
     QUESTS_COUNT_LINKEDSET_BLOCK = 1
     _lobbyContext = dependency.descriptor(ILobbyContext)
+    __showDQInMissionsTab = False
+
+    @classmethod
+    def setShowDQInMissionsTab(cls, value):
+        cls.__showDQInMissionsTab = value
+
+    @staticmethod
+    def getViewQuestFilter():
+        return lambda q: isRegularQuest(q.getGroupID()) and not isDailyQuest(q.getID())
+
+    @staticmethod
+    def getQuestFilterIncludingDailyQuests():
+        return lambda q: isRegularQuest(q.getGroupID()) or isPremium(q.getGroupID()) or isDailyQuest(q.getID())
 
     def openMissionDetailsView(self, eventID, blockID):
         if blockID == DEFAULTS_GROUPS.LINKEDSET_QUESTS:
@@ -370,7 +392,7 @@ class MissionsCategoriesView(_GroupedMissionsView):
         return RES_ICONS.MAPS_ICONS_MISSIONS_BACKGROUNDS_CATEGORIES
 
     def _getViewQuestFilter(self):
-        return lambda q: isRegularQuest(q.getGroupID()) or isPremium(q.getGroupID())
+        return self.getQuestFilterIncludingDailyQuests() if self.__showDQInMissionsTab else self.getViewQuestFilter()
 
     def __onServerSettingsChange(self, diff):
         if PremiumConfigs.PREM_QUESTS not in diff:

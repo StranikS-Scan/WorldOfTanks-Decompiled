@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/inventory/consumables_tab.py
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getBuyEquipmentUrl
-from gui.Scaleform.daapi.view.meta.RegularItemsWithTypeFilterTabViewMeta import RegularItemsWithTypeFilterTabViewMeta
+from gui.Scaleform.daapi.view.lobby.storage.inventory.filters.filter_by_type import FiltrableRegularCategoryByTypeTabView
 from gui.impl.gen import R
 from gui.shared.event_dispatcher import showWebShop
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -28,7 +28,7 @@ _TYPE_ID_BIT_TO_TYPE_ID_MAP = {_ConsumableFilterBit.CONSUMABLES: (GUI_ITEM_TYPE.
  _ConsumableFilterBit.BATTLE_BOOSTERS: (GUI_ITEM_TYPE.BATTLE_BOOSTER,),
  _ConsumableFilterBit.DEMOUNT_KITS: (GUI_ITEM_TYPE.DEMOUNT_KIT,)}
 
-class ConsumablesTabView(RegularItemsWithTypeFilterTabViewMeta):
+class ConsumablesTabView(FiltrableRegularCategoryByTypeTabView):
     filterItems = _TYPE_FILTER_ITEMS
 
     def navigateToStore(self):

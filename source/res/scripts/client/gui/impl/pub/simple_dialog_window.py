@@ -30,14 +30,6 @@ class SimpleDialogWindow(DialogWindow):
         elif args:
             self.__addArgsOfString(model.getTitleArgs(), args)
 
-    def setFormattedTitle(self, formattedTitle=''):
-        if formattedTitle != '':
-            self.viewModel.setFormattedTitle(formattedTitle)
-
-    def setFormattedMessage(self, formattedMessage=''):
-        if formattedMessage != '':
-            self.contentViewModel.setFormattedMessage(formattedMessage)
-
     def setMessage(self, message, args=None, fmtArgs=None, namedFmtArgs=True):
         model = self.contentViewModel
         model.setMessage(message)
@@ -50,8 +42,8 @@ class SimpleDialogWindow(DialogWindow):
     def setIcon(self, icon):
         self.viewModel.setIcon(icon)
 
-    def addButton(self, name, label, isFocused=False, invalidateAll=False, soundDown=None, rawLabel=''):
-        self._addButton(name, label, isFocused, invalidateAll, soundDown=soundDown, rawLabel=rawLabel)
+    def addButton(self, name, label, isFocused=False, invalidateAll=False, soundDown=None):
+        self._addButton(name, label, isFocused, invalidateAll, soundDown=soundDown)
 
     def setBackground(self, backImg):
         self.viewModel.setBackgroundImage(backImg)

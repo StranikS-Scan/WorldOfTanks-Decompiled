@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -139,10 +139,10 @@
     <PS_PERFORMANCE_LOD_MULT>	1.2	</PS_PERFORMANCE_LOD_MULT>
   </ParticleSystem>
   <debug>
-    <fullDump>	true	</fullDump>
-    <clientUrl></clientUrl>
+    <fullDump>	false	</fullDump>
+    <clientUrl>	http://cat-st1.wargaming.net	</clientUrl>
     <botsUrl>	http://cat-st1.wargaming.net	</botsUrl>
-    <dxdiag>	true	</dxdiag>
+    <dxdiag>	false	</dxdiag>
     <framesCount>	0	</framesCount>
     <enableServers>	false	</enableServers>
     <profilerBufferSize>	12582912	</profilerBufferSize>
@@ -208,6 +208,9 @@
         </project>
         <project>
           <name>	ambient_2D.pck	</name>
+        </project>
+        <project>
+          <name>	hangar_places.pck	</name>
         </project>
         <project>
           <name>	combat_atmosphere.pck	</name>
@@ -296,6 +299,9 @@
           <name>	shop.bnk	</name>
         </project>
         <project>
+          <name>	tasks.bnk	</name>
+        </project>
+        <project>
           <name>	gui_hangar.bnk	</name>
         </project>
         <project>
@@ -303,12 +309,6 @@
         </project>
         <project>
           <name>	researches.bnk	</name>
-        </project>
-        <project>
-          <name>	Battle_of_bloggers.pck	</name>
-        </project>
-        <project>
-          <name>	battle_of_bloggers.bnk	</name>
         </project>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>
@@ -568,8 +568,8 @@
       <source>	SCRIPT	</source>
       <source>	UI	</source>
       <openMode>	a	</openMode>
-      <maxSizeKB>	2048	</maxSizeKB>
-      <trimToKB>	512	</trimToKB>
+      <maxSizeKB>	512	</maxSizeKB>
+      <trimToKB>	0	</trimToKB>
       <showTime>	true	</showTime>
       <disableBuffering>	false	</disableBuffering>
       <messageLength>	8192	</messageLength>
@@ -577,8 +577,8 @@
     <file>	ui.log	  <enabled>	true	</enabled>
       <source>	UI	</source>
       <openMode>	a	</openMode>
-      <maxSizeKB>	2048	</maxSizeKB>
-      <trimToKB>	512	</trimToKB>
+      <maxSizeKB>	512	</maxSizeKB>
+      <trimToKB>	0	</trimToKB>
       <showTime>	true	</showTime>
       <disableBuffering>	false	</disableBuffering>
       <messageLength>	8192	</messageLength>

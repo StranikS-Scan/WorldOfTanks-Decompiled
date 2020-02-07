@@ -587,7 +587,7 @@ class PersonalCaseDataProvider(object):
     def __getDocGroupValues(tankman, config, listGetter, valueGetter, sortNeeded=True):
         result = []
         isPremium, isFemale = tankman.descriptor.isPremium, tankman.descriptor.isFemale
-        for gIdx, group in enumerate(config.getGroups(isPremium)):
+        for gIdx, group in config.getGroups(isPremium).iteritems():
             if not group.notInShop and group.isFemales == isFemale:
                 for idx in listGetter(group):
                     result.append({'id': idx,

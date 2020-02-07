@@ -238,7 +238,8 @@ class SettingsCore(ISettingsCore):
          (TUTORIAL.FIRE_EXTINGUISHER_USED, options.TutorialSetting(TUTORIAL.FIRE_EXTINGUISHER_USED, storage=TUTORIAL_SETTINGS_STORAGE)),
          (TUTORIAL.WAS_QUESTS_TUTORIAL_STARTED, options.TutorialSetting(TUTORIAL.WAS_QUESTS_TUTORIAL_STARTED, storage=TUTORIAL_SETTINGS_STORAGE)),
          (DAMAGE_INDICATOR.TYPE, options.DamageIndicatorTypeSetting(DAMAGE_INDICATOR.TYPE, storage=DAMAGE_INDICATOR_SETTINGS_STORAGE)),
-         (DAMAGE_INDICATOR.PRESETS, options.DamageIndicatorPresetsSetting(DAMAGE_INDICATOR.PRESETS, storage=DAMAGE_INDICATOR_SETTINGS_STORAGE)),
+         (DAMAGE_INDICATOR.PRESET_CRITS, options.SettingTrueByDefault(DAMAGE_INDICATOR.PRESET_CRITS, storage=DAMAGE_INDICATOR_SETTINGS_STORAGE)),
+         (DAMAGE_INDICATOR.PRESET_ALLIES, options.SettingTrueByDefault(DAMAGE_INDICATOR.PRESET_ALLIES, storage=DAMAGE_INDICATOR_SETTINGS_STORAGE)),
          (DAMAGE_INDICATOR.DAMAGE_VALUE, options.SettingFalseByDefault(DAMAGE_INDICATOR.DAMAGE_VALUE, storage=DAMAGE_INDICATOR_SETTINGS_STORAGE)),
          (DAMAGE_INDICATOR.VEHICLE_INFO, options.SettingFalseByDefault(DAMAGE_INDICATOR.VEHICLE_INFO, storage=DAMAGE_INDICATOR_SETTINGS_STORAGE)),
          (DAMAGE_INDICATOR.ANIMATION, options.SettingFalseByDefault(DAMAGE_INDICATOR.ANIMATION, storage=DAMAGE_INDICATOR_SETTINGS_STORAGE)),
@@ -373,5 +374,4 @@ class SettingsCore(ISettingsCore):
             storage.clear()
 
     def __onAccountSettingsChanging(self, key, value):
-        LOG_DEBUG('Apply account setting: ', {key: value})
         self.onSettingsChanged({key: value})

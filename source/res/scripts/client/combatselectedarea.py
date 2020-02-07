@@ -15,6 +15,7 @@ class CombatSelectedArea(object):
 
     def __init__(self, enableConstrainToArenaBounds=False):
         self.__terrainSelectedArea = None
+        self.__terrainAndObjectsSelectedArea = None
         self.__pixelQuad = None
         self.__terrainRotatedArea = None
         self.__fakeModel = None
@@ -32,6 +33,11 @@ class CombatSelectedArea(object):
         self.__terrainSelectedArea = area = BigWorld.PyTerrainSelectedArea()
         area.setup(visualPath, size, self.__overTerrainHeight, color)
         area.enableAccurateCollision(True)
+        area.setYCutOffDistance(MARKER_HEIGHT)
+        rootNode.attach(area)
+        self.__terrainAndObjectsSelectedArea = area = BigWorld.PyTerrainSelectedArea()
+        area.setup(visualPath, size, self.__overTerrainHeight, color)
+        area.enableAccurateCollision(False)
         area.setYCutOffDistance(MARKER_HEIGHT)
         rootNode.attach(area)
         self.__size = size
@@ -73,6 +79,8 @@ class CombatSelectedArea(object):
     def setOverTerrainOffset(self, offset):
         if self.__terrainSelectedArea is not None:
             self.__terrainSelectedArea.setOverTerrainOffset(offset)
+        if self.__terrainAndObjectsSelectedArea is not None:
+            self.__terrainAndObjectsSelectedArea.setOverTerrainOffset(offset)
         if self.__terrainRotatedArea is not None:
             self.__terrainRotatedArea.setOverTerrainOffset(offset)
         return
@@ -101,6 +109,7 @@ class CombatSelectedArea(object):
 
                 self.__matrix.translation = position + correction
             self.__terrainSelectedArea.updateHeights()
+            self.__terrainAndObjectsSelectedArea.updateHeights()
             if self.__terrainRotatedArea:
                 self.__terrainRotatedArea.updateHeights()
             return
@@ -127,6 +136,7 @@ class CombatSelectedArea(object):
     def destroy(self):
         BigWorld.delModel(self.__fakeModel)
         self.__terrainSelectedArea = None
+        self.__terrainAndObjectsSelectedArea = None
         self.__terrainRotatedArea = None
         self.__pixelQuad = None
         self.__fakeModel = None

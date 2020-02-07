@@ -16,7 +16,7 @@ from gui.prb_control import prbInvitesProperty, prbDispatcherProperty
 from gui.ranked_battles import ranked_helpers
 from gui.server_events.events_dispatcher import showPersonalMission
 from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events
-from gui.shared.event_dispatcher import showProgressiveRewardWindow
+from gui.shared.event_dispatcher import showProgressiveRewardWindow, showRankedYeardAwardWindow
 from gui.shared.utils import decorators
 from gui.wgcg.clan import contexts as clan_ctxs
 from gui.wgnc import g_wgncProvider
@@ -338,6 +338,28 @@ class ShowRankedSeasonCompleteHandler(_ActionHandler):
              'awards': data,
              'season': season}), scope=EVENT_BUS_SCOPE.LOBBY)
         return
+
+
+class ShowRankedFinalYearHandler(_ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        notification = model.getNotification(self.getNotType(), entityID)
+        savedData = notification.getSavedData()
+        if savedData is not None:
+            self.__showFinalAward(savedData['questID'], savedData['awards'])
+        return
+
+    def __showFinalAward(self, questID, data):
+        points = ranked_helpers.getDataFromFinalTokenQuestID(questID)
+        showRankedYeardAwardWindow(data, points)
 
 
 class ShowBattleResultsHandler(_ShowArenaResultHandler):
@@ -699,6 +721,7 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  WGNCActionsHandler,
  SecurityLinkHandler,
  ShowRankedSeasonCompleteHandler,
+ ShowRankedFinalYearHandler,
  _ShowClanAppsHandler,
  _ShowClanInvitesHandler,
  _AcceptClanAppHandler,

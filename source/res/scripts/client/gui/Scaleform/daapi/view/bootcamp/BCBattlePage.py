@@ -9,6 +9,7 @@ from gui.Scaleform.daapi.view.battle.shared.crosshair import CrosshairPanelConta
 from gui.Scaleform.daapi.view.battle.shared.minimap import common
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings
 from gui.Scaleform.daapi.view.battle.shared.page import ComponentsConfig
+from gui.Scaleform.daapi.view.battle.shared.start_countdown_sound_player import StartCountdownSoundPlayer
 from gui.Scaleform.daapi.view.bootcamp.battle.bc_finish_sound_player import BCFinishSoundPlayer
 from gui.Scaleform.daapi.view.meta.BCBattlePageMeta import BCBattlePageMeta
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
@@ -31,6 +32,7 @@ class _BCComponentsConfig(ComponentsConfig):
     def __init__(self):
         super(_BCComponentsConfig, self).__init__(((BATTLE_CTRL_ID.ARENA_PERIOD, (BATTLE_VIEW_ALIASES.BATTLE_TIMER,
            BATTLE_VIEW_ALIASES.PREBATTLE_TIMER,
+           DynamicAliases.PREBATTLE_TIMER_SOUND_PLAYER,
            BATTLE_VIEW_ALIASES.PLAYERS_PANEL,
            BATTLE_VIEW_ALIASES.BATTLE_END_WARNING_PANEL,
            self.BC_FINISH_SOUND_PLAYER,
@@ -38,7 +40,7 @@ class _BCComponentsConfig(ComponentsConfig):
          (BATTLE_CTRL_ID.TEAM_BASES, (BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, self.BC_FINISH_SOUND_PLAYER)),
          (BATTLE_CTRL_ID.BATTLE_FIELD_CTRL, (self.BC_FINISH_SOUND_PLAYER,)),
          (BATTLE_CTRL_ID.DEBUG, (BATTLE_VIEW_ALIASES.DEBUG_PANEL,)),
-         (BATTLE_CTRL_ID.GAME_MESSAGES_PANEL, (BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL,))), viewsConfig=((self.BC_FINISH_SOUND_PLAYER, lambda : BCFinishSoundPlayer()), (DynamicAliases.PERIOD_MUSIC_LISTENER, lambda : period_music_listener.PeriodMusicListener())))
+         (BATTLE_CTRL_ID.GAME_MESSAGES_PANEL, (BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL,))), viewsConfig=((self.BC_FINISH_SOUND_PLAYER, BCFinishSoundPlayer), (DynamicAliases.PERIOD_MUSIC_LISTENER, period_music_listener.PeriodMusicListener), (DynamicAliases.PREBATTLE_TIMER_SOUND_PLAYER, StartCountdownSoundPlayer)))
 
 
 _BC_COMPONENTS_CONFIG = _BCComponentsConfig()

@@ -17,7 +17,7 @@ IS_CELLAPP = BigWorld.component == 'cell'
 IS_BASEAPP = BigWorld.component in ('base', 'service')
 IS_WEB = BigWorld.component == 'web'
 IS_DYNAPDATER = False
-CURRENT_REALM = 'RU'
+CURRENT_REALM = 'CT'
 DEFAULT_LANGUAGE = 'ru'
 AUTH_REALM = 'RU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
@@ -83,7 +83,7 @@ elif CURRENT_REALM == 'KR':
     DEFAULT_LANGUAGE = 'ko'
     AUTH_REALM = 'KR'
 elif CURRENT_REALM == 'CT':
-    AUTH_REALM = 'CT'
+    AUTH_REALM = 'RU'
 elif CURRENT_REALM in ('RU', 'ST', 'QA', 'DEV', 'SB'):
     pass
 SPECIAL_OL_FILTER = IS_KOREA or IS_SINGAPORE
@@ -170,7 +170,6 @@ class ARENA_GUI_TYPE:
     EPIC_RANDOM_TRAINING = 20
     EPIC_BATTLE = 21
     EPIC_TRAINING = 22
-    BOB = 23
     RANGE = (UNKNOWN,
      RANDOM,
      TRAINING,
@@ -189,8 +188,7 @@ class ARENA_GUI_TYPE:
      EPIC_RANDOM,
      EPIC_RANDOM_TRAINING,
      EPIC_BATTLE,
-     EPIC_TRAINING,
-     BOB)
+     EPIC_TRAINING)
     SANDBOX_RANGE = (SANDBOX, RATED_SANDBOX)
     FALLOUT_RANGE = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
     EPIC_RANGE = (EPIC_BATTLE, EPIC_TRAINING)
@@ -214,8 +212,7 @@ class ARENA_GUI_TYPE_LABEL:
      ARENA_GUI_TYPE.EPIC_RANDOM: 'epic_random',
      ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING: 'epic_random_training',
      ARENA_GUI_TYPE.EPIC_BATTLE: 'epicbattle',
-     ARENA_GUI_TYPE.EPIC_TRAINING: 'epicbattle',
-     ARENA_GUI_TYPE.BOB: 'bob'}
+     ARENA_GUI_TYPE.EPIC_TRAINING: 'epicbattle'}
 
 
 class ARENA_BONUS_TYPE:
@@ -244,7 +241,6 @@ class ARENA_BONUS_TYPE:
     EPIC_BATTLE = 27
     EPIC_BATTLE_TRAINING = 28
     TOURNAMENT_EVENT = 31
-    BOB = 32
     RANGE = (UNKNOWN,
      REGULAR,
      TRAINING,
@@ -269,8 +265,7 @@ class ARENA_BONUS_TYPE:
      EPIC_RANDOM_TRAINING,
      EPIC_BATTLE,
      EPIC_BATTLE_TRAINING,
-     TOURNAMENT_EVENT,
-     BOB)
+     TOURNAMENT_EVENT)
     RANDOM_RANGE = (REGULAR, EPIC_RANDOM)
     SANDBOX_RANGE = (RATED_SANDBOX, SANDBOX)
     FALLOUT_RANGE = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
@@ -426,7 +421,6 @@ class PREBATTLE_TYPE:
     E_SPORT_COMMON = 14
     EPIC = 15
     EPIC_TRAINING = 16
-    BOB = 17
     RANGE = (SQUAD,
      TRAINING,
      COMPANY,
@@ -439,8 +433,7 @@ class PREBATTLE_TYPE:
      EXTERNAL,
      E_SPORT_COMMON,
      EPIC,
-     EPIC_TRAINING,
-     BOB)
+     EPIC_TRAINING)
     LEGACY_PREBATTLES = (TRAINING,
      TOURNAMENT,
      CLAN,
@@ -448,8 +441,7 @@ class PREBATTLE_TYPE:
     SQUAD_PREBATTLES = (SQUAD,
      FALLOUT,
      EVENT,
-     EPIC,
-     BOB)
+     EPIC)
     UNIT_MGR_PREBATTLES = (UNIT,
      SQUAD,
      CLAN,
@@ -457,26 +449,20 @@ class PREBATTLE_TYPE:
      EVENT,
      EXTERNAL,
      E_SPORT_COMMON,
-     EPIC,
-     BOB)
+     EPIC)
     CREATE_FROM_CLIENT = (UNIT,
      SQUAD,
      EPIC,
      FALLOUT,
-     EVENT,
-     BOB)
+     EVENT)
     CREATE_FROM_WEB = (UNIT, SQUAD, EXTERNAL)
     TRAININGS = (TRAINING, EPIC_TRAINING)
     CREATE_EX_FROM_SERVER = (SQUAD,
      CLAN,
      EPIC,
-     EVENT,
-     BOB)
+     EVENT)
     CREATE_EX_FROM_WEB = (SQUAD, CLAN)
-    JOIN_EX = (SQUAD,
-     EPIC,
-     EVENT,
-     BOB)
+    JOIN_EX = (SQUAD, EPIC, EVENT)
     EPIC_PREBATTLES = (EPIC, EPIC_TRAINING)
     REMOVED = (COMPANY, CLUBS)
 
@@ -741,6 +727,7 @@ class PremiumConfigs(object):
     PREM_SQUAD = 'premSquad_config'
 
 
+DAILY_QUESTS_CONFIG = 'daily_quests_config'
 IS_LOOT_BOXES_ENABLED = 'isLootBoxesEnabled'
 SENIORITY_AWARDS_CONFIG = 'seniority_awards_config'
 
@@ -1073,6 +1060,15 @@ class EVENT_TYPE:
     QUEST_WITHOUT_DYNAMIC_UPDATE = (POTAPOV_QUEST, NT_QUEST)
 
 
+class QUEST_SOURCE:
+    DYNAMIC = 1
+    STATIC = 2
+    AUTO_GENERATED = 3
+    ALIAS_PREFIXES = {DYNAMIC: 'd',
+     STATIC: 's',
+     AUTO_GENERATED: 'g'}
+
+
 class QUEST_RUN_FLAGS:
     POSTBATTLE = 1
     LOGIN = 2
@@ -1158,7 +1154,6 @@ class QUEUE_TYPE:
     RANKED = 17
     BOOTCAMP = 18
     EPIC = 19
-    BOB = 20
     FALLOUT = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
     ALL = (RANDOMS,
      COMPANIES,
@@ -1175,8 +1170,7 @@ class QUEUE_TYPE:
      EXTERNAL_UNITS,
      RANKED,
      BOOTCAMP,
-     EPIC,
-     BOB)
+     EPIC)
     REMOVED = (COMPANIES,)
 
 
@@ -1258,12 +1252,10 @@ class GameSeasonType(object):
     NONE = 0
     RANKED = 1
     EPIC = 2
-    BOB = 3
 
 
 SEASON_TYPE_BY_NAME = {'ranked': GameSeasonType.RANKED,
- 'epic': GameSeasonType.EPIC,
- 'bob': GameSeasonType.BOB}
+ 'epic': GameSeasonType.EPIC}
 SEASON_NAME_BY_TYPE = {val:key for key, val in SEASON_TYPE_BY_NAME.iteritems()}
 CHANNEL_SEARCH_RESULTS_LIMIT = 50
 USER_SEARCH_RESULTS_LIMIT = 50
@@ -1567,10 +1559,12 @@ class USER_SERVER_SETTINGS:
     SNIPER_AIM_4 = 64
     LINKEDSET_QUESTS = 89
     QUESTS_PROGRESS = 90
+    SESSION_STATS = 96
     _ALL = (HIDE_MARKS_ON_GUN,
      EULA_VERSION,
      GAME_EXTENDED,
-     LINKEDSET_QUESTS)
+     LINKEDSET_QUESTS,
+     SESSION_STATS)
 
     @classmethod
     def isBattleInvitesForbidden(cls, settings):
@@ -1667,8 +1661,7 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  USER_SERVER_SETTINGS.LINKEDSET_QUESTS: 'linkedset quests show reward info',
  USER_SERVER_SETTINGS.QUESTS_PROGRESS: 'feedback quests progress',
  91: 'Loot box last viewed count',
- 92: 'Battle of Bloggers carousel filter',
- 93: 'Battle of Bloggers carousel filter'}
+ USER_SERVER_SETTINGS.SESSION_STATS: 'sessiong statistics settings'}
 
 class WG_GAMES:
     TANKS = 'wot'
@@ -1807,6 +1800,8 @@ class EVENT_CLIENT_DATA:
     ACTION_ENTITIES_REV = 22
     ANNOUNCED_ACTION_DATA = 23
     ANNOUNCED_ACTION_DATA_REV = 24
+    DAILY_QUESTS = 25
+    DAILY_QUESTS_REV = 26
     NUMBER_OF_ANNOUNCED_ACTIONS_STEPS = 1
 
     @staticmethod
@@ -1863,11 +1858,7 @@ class INVITATION_TYPE:
     SQUAD = PREBATTLE_TYPE.SQUAD
     EPIC = PREBATTLE_TYPE.EPIC
     EVENT = PREBATTLE_TYPE.EVENT
-    BOB = PREBATTLE_TYPE.BOB
-    RANGE = (SQUAD,
-     EVENT,
-     EPIC,
-     BOB)
+    RANGE = (SQUAD, EVENT, EPIC)
 
 
 class REPAIR_FLAGS:
@@ -2233,11 +2224,13 @@ class ACTIONS_GROUP_TYPE:
     SPG = 8
     HASH_SUPPORT_ONE = 9
     SCOUT_TWO = 10
+    FIRST_LINE_SUPPORT_THREE = 11
 
 
 ACTIONS_GROUP_LABEL_TO_TYPE = {'tank': ACTIONS_GROUP_TYPE.TANK,
  'firstLineSupport1': ACTIONS_GROUP_TYPE.FIRST_LINE_SUPPORT_ONE,
  'firstLineSupport2': ACTIONS_GROUP_TYPE.FIRST_LINE_SUPPORT_TWO,
+ 'firstLineSupport3': ACTIONS_GROUP_TYPE.FIRST_LINE_SUPPORT_THREE,
  'fireSupport1': ACTIONS_GROUP_TYPE.FIRE_SUPPORT_ONE,
  'fireSupport2': ACTIONS_GROUP_TYPE.FIRE_SUPPORT_TWO,
  'sniper': ACTIONS_GROUP_TYPE.SNIPER,
@@ -2316,6 +2309,56 @@ class BattleUserActions(object):
     REMOVE_FRIEND = 2
     ADD_IGNORED = 4
     REMOVE_IGNORED = 8
+
+
+class DailyQuestsDecorations(object):
+    WIN = 'win'
+    DEAL_DAMAGE = 'hurt_vehicles'
+    GET_EXPERIENCE = 'experience'
+    DESTROY_TANK = 'kill_vehicles'
+    DAMAGE_TANK = 'damage'
+    FINISH_TOP1 = 'top1'
+    FINISH_TOP3 = 'top3'
+    FINISH_TOP5 = 'top5'
+    FINISH_TOP7 = 'top7'
+    DAMAGE_A_MODULE = 'module_crit'
+    SPOT = 'discover'
+
+
+class DailyQuestsLevels(object):
+    NONE = ''
+    EASY = 'easy'
+    MEDIUM = 'medium'
+    HARD = 'hard'
+    BONUS = 'bonus'
+    EPIC = 'epic'
+    ALL = (EASY,
+     MEDIUM,
+     HARD,
+     BONUS,
+     EPIC)
+    DAILY = (EASY,
+     MEDIUM,
+     HARD,
+     BONUS)
+    DAILY_SIMPLE = (EASY, MEDIUM, HARD)
+
+
+DailyQuestDecorationMap = {1: DailyQuestsDecorations.WIN,
+ 2: DailyQuestsDecorations.DEAL_DAMAGE,
+ 3: DailyQuestsDecorations.GET_EXPERIENCE,
+ 4: DailyQuestsDecorations.DESTROY_TANK,
+ 5: DailyQuestsDecorations.DAMAGE_TANK,
+ 6: DailyQuestsDecorations.FINISH_TOP1,
+ 7: DailyQuestsDecorations.FINISH_TOP3,
+ 8: DailyQuestsDecorations.FINISH_TOP5,
+ 9: DailyQuestsDecorations.FINISH_TOP7,
+ 10: DailyQuestsDecorations.DAMAGE_A_MODULE,
+ 11: DailyQuestsDecorations.SPOT}
+
+class DailyQuestsTokensPrefixes(object):
+    QUEST_TOKEN = 'dq:'
+    QUEST_TICKET = 'dqt:'
 
 
 class OVERRIDEN_BADGE(object):

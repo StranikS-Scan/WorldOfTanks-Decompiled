@@ -24,7 +24,6 @@ class Browser(BrowserMeta):
         self.__httpStatusCode = None
         self.__webCommandHandler = None
         self.__webEventSender = None
-        self.showContentUnderLoading = True
         self.onError = Event()
         return
 
@@ -106,7 +105,7 @@ class Browser(BrowserMeta):
 
     def showLoading(self, show):
         if show:
-            self.as_loadingStartS(self.showContentUnderLoading)
+            self.as_loadingStartS()
         else:
             self.as_loadingStopS()
 
@@ -142,8 +141,8 @@ class Browser(BrowserMeta):
             self.showDataUnavailableView()
 
     def __onLoadingStateChange(self, isLoading, manageLoadingScreen):
-        if isLoading and manageLoadingScreen:
-            self.as_loadingStartS(self.showContentUnderLoading)
+        if isLoading:
+            self.as_loadingStartS()
         elif not self.__checkIsPageLoaded():
             self.showDataUnavailableView()
         elif manageLoadingScreen:

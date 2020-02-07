@@ -19,7 +19,7 @@ class IEventsCache(object):
     def start(self):
         raise NotImplementedError
 
-    def stop(self):
+    def stop(self, isDisconnected=False):
         raise NotImplementedError
 
     def clear(self):
@@ -31,6 +31,10 @@ class IEventsCache(object):
 
     @property
     def prefetcher(self):
+        raise NotImplementedError
+
+    @property
+    def dailyQuests(self):
         raise NotImplementedError
 
     @property
@@ -46,7 +50,7 @@ class IEventsCache(object):
     def update(self, diff=None, callback=None):
         raise NotImplementedError
 
-    def getQuests(self, filterFunc=None, getAll=False):
+    def getQuests(self, filterFunc=None):
         raise NotImplementedError
 
     def getMotiveQuests(self, filterFunc=None):
@@ -56,6 +60,18 @@ class IEventsCache(object):
         raise NotImplementedError
 
     def getPremiumQuests(self, filterFunc=None):
+        raise NotImplementedError
+
+    def getDailyQuests(self, filterFunc=None):
+        raise NotImplementedError
+
+    def getAllDailyQuests(self):
+        raise NotImplementedError
+
+    def getAllAvailableDailyQuests(self, filterFunc=None):
+        raise NotImplementedError
+
+    def getDailyEpicQuest(self, filterFunc=None):
         raise NotImplementedError
 
     def getBattleQuests(self, filterFunc=None):
@@ -160,11 +176,8 @@ class IEventsCache(object):
     def getAdvisableQuests(self, filterFunc=None):
         raise NotImplementedError
 
-    def getActiveQuests(self, filterFunc=None, getAll=False):
+    def getActiveQuests(self, filterFunc=None):
         raise NotImplementedError
 
     def getProgressiveReward(self):
-        raise NotImplementedError
-
-    def getLobbyHeaderTabCounter(self):
         raise NotImplementedError

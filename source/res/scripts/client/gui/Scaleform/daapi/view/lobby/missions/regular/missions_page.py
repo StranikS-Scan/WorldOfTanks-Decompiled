@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/missions_page.py
+import weakref
 from collections import namedtuple
 import BigWorld
 import Windowing
@@ -26,6 +27,7 @@ from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events import caches, settings
 from gui.server_events.events_dispatcher import showMissionDetails, hideMissionDetails
+from gui.server_events.events_helpers import isLinkedSet
 from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import MissionsEvent
@@ -36,11 +38,10 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items import getTypeOfCompactDescr
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IMarathonEventsController
+from skeletons.gui.game_control import IMarathonEventsController, IGameSessionController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.linkedset import ILinkedSetController
-from gui.server_events.events_helpers import isLinkedSet
 TabData = namedtuple('TabData', ('alias',
  'linkage',
  'tooltip',
@@ -50,8 +51,9 @@ TabData = namedtuple('TabData', ('alias',
 TABS_DATA_ORDERED = [TabData(QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_EVENTBOARDS, QUESTS.MISSIONS_TAB_EVENTBOARDS_DISABLED, _ms(QUESTS.MISSIONS_TAB_LABEL_EVENTBOARDS), None),
  TabData(QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_MARATHONS, QUESTS.MISSIONS_TAB_MARATHONS, _ms(QUESTS.MISSIONS_TAB_LABEL_MARATHONS), None),
  TabData(QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_CATEGORIES, QUESTS.MISSIONS_TAB_CATEGORIES, _ms(QUESTS.MISSIONS_TAB_LABEL_CATEGORIES), None),
- TabData(QUESTS_ALIASES.CURRENT_VEHICLE_MISSIONS_VIEW_PY_ALIAS, QUESTS_ALIASES.CURRENT_VEHICLE_MISSIONS_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_CURRENTVEHICLE, QUESTS.MISSIONS_TAB_CURRENTVEHICLE, _ms(QUESTS.MISSIONS_TAB_LABEL_CURRENTVEHICLE), None)]
+ TabData(QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_DAILY, QUESTS.MISSIONS_TAB_DAILY, _ms(QUESTS.MISSIONS_TAB_LABEL_DAILY), None)]
 MARATHONS_START_TAB_INDEX = 1
+NON_FLASH_TABS = (QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS)
 for marathonIndex, marathon in enumerate(MARATHON_EVENTS, MARATHONS_START_TAB_INDEX):
     TABS_DATA_ORDERED.insert(marathonIndex, TabData(QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_LINKAGE, marathon.tabTooltip, marathon.tabTooltip, backport.text(marathon.label), marathon.prefix))
 
@@ -84,6 +86,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
          QUESTS_ALIASES.CURRENT_VEHICLE_MISSIONS_VIEW_PY_ALIAS: group_packers.VehicleGroupBuilder(),
          QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS: group_packers.ElenGroupsBuilder()}
         self.__currentTabAlias = None
+        self.__subTab = None
         self._initialize(ctx)
         return
 
@@ -92,11 +95,12 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         self.__marathonPrefix = prefix
         caches.getNavInfo().setMissionsTab(alias)
         caches.getNavInfo().setMarathonPrefix(prefix)
-        if self.currentTab and self.__currentTabAlias != QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS:
+        if self.currentTab and self.__currentTabAlias not in NON_FLASH_TABS:
             self.__updateFilterLabel()
             self.currentTab.setFilters(self.__filterData)
-        self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_TAB_CHANGED, ctx={'alias': alias,
-         'marathonPrefix': prefix}), EVENT_BUS_SCOPE.LOBBY)
+        elif self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS:
+            self.__onPageUpdate()
+        self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_TAB_CHANGED, ctx=alias), EVENT_BUS_SCOPE.LOBBY)
         self.__showFilter()
         if alias == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS:
             self.currentTab.setMarathon(prefix)
@@ -168,10 +172,14 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
     def _onRegisterFlashComponent(self, viewPy, alias):
         if alias in QUESTS_ALIASES.MISSIONS_VIEW_PY_ALIASES:
             viewPy.setBuilder(self.__builders.get(alias), self.__filterData, self._eventID)
+        if alias == QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS:
+            viewPy.setProxy(weakref.proxy(self))
+            viewPy.setDefaultTab(self.__subTab)
 
     def _initialize(self, ctx=None):
         ctx = ctx or {}
         requestedTab = ctx.get('tab')
+        self.__subTab = ctx.get('subTab')
         self.__marathonPrefix = ctx.get('marathonPrefix') or caches.getNavInfo().getMarathonPrefix()
         if requestedTab:
             self.__currentTabAlias = requestedTab
@@ -195,8 +203,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         self.__scrollToGroup()
         caches.getNavInfo().setMissionsTab(self.__currentTabAlias)
         caches.getNavInfo().setMarathonPrefix(self.__marathonPrefix)
-        self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_TAB_CHANGED, ctx={'alias': self.__currentTabAlias,
-         'marathonPrefix': self.__marathonPrefix}), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_TAB_CHANGED, ctx=self.__currentTabAlias), EVENT_BUS_SCOPE.LOBBY)
         return
 
     def __showMarathonReward(self, isAccessible, prefix):
@@ -236,7 +243,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
 
     def __updateFilterLabel(self):
         filterApplied = False
-        if self.__currentTabAlias != QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS:
+        if self.__currentTabAlias not in NON_FLASH_TABS:
             totalQuests = self.currentTab.getTotalQuestsCount()
             currentQuests = self.currentTab.getCurrentQuestsCount()
             style = text_styles.error if currentQuests == 0 else text_styles.stats
@@ -303,12 +310,21 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
                 vehicle = g_currentVehicle.item
                 vehName = vehicle.shortUserName if vehicle else ''
                 tab['label'] = tabData.label % {'vehName': vehName}
-            if alias in (QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS):
-                if self.currentTab is not None and self.__currentTabAlias == alias:
+            if alias in (QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS,
+             QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS,
+             QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS,
+             QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS):
+                newEvents = []
+                if alias == QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS:
+                    quests = self.eventsCache.getAllAvailableDailyQuests()
+                    if quests:
+                        newEvents = settings.getNewCommonEvents(quests)
+                elif self.currentTab is not None and self.__currentTabAlias == alias:
                     suitableEvents = [ quest for quest in self.currentTab.getSuitableEvents() if not isLinkedSet(quest.getGroupID()) or quest.isAvailable().isValid ]
                     newEvents = settings.getNewCommonEvents(suitableEvents)
                 else:
-                    advisableQuests = self.eventsCache.getAdvisableQuests()
+                    from gui.Scaleform.daapi.view.lobby.missions.regular.missions_views import MissionsCategoriesView
+                    advisableQuests = self.eventsCache.getAdvisableQuests(MissionsCategoriesView.getViewQuestFilter())
                     advisableEvents = self.__builders[alias].getBlocksAdvisableEvents(advisableQuests)
                     newEvents = settings.getNewCommonEvents(advisableEvents)
                 tab['value'] = len(newEvents)
@@ -331,7 +347,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
             hideMissionDetails()
 
     def __showFilter(self):
-        self.as_showFilterS(self.__currentTabAlias not in (QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS), self.__currentTabAlias != QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS)
+        self.as_showFilterS(self.__currentTabAlias not in (QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS), self.__currentTabAlias not in NON_FLASH_TABS)
 
 
 class MissionViewBase(MissionsViewBaseMeta):
@@ -413,6 +429,7 @@ class MissionView(MissionViewBase):
     __sound_env__ = LobbySubViewEnv
     eventsCache = dependency.descriptor(IEventsCache)
     linkedSetController = dependency.descriptor(ILinkedSetController)
+    gameSession = dependency.descriptor(IGameSessionController)
 
     def __init__(self):
         super(MissionView, self).__init__()
@@ -443,12 +460,14 @@ class MissionView(MissionViewBase):
         super(MissionView, self)._populate()
         self.eventsCache.onSyncCompleted += self._onEventsUpdate
         self.linkedSetController.onStateChanged += self._onLinkedSetStateChanged
+        self.gameSession.onPremiumTypeChanged += self.__onPremiumTypeChanged
         g_clientUpdateManager.addCallbacks({'inventory.1': self._onEventsUpdate,
          'stats.unlocks': self.__onUnlocksUpdate})
 
     def _dispose(self):
         self.eventsCache.onSyncCompleted -= self._onEventsUpdate
         self.linkedSetController.onStateChanged -= self._onLinkedSetStateChanged
+        self.gameSession.onPremiumTypeChanged -= self.__onPremiumTypeChanged
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(MissionView, self)._dispose()
 
@@ -516,6 +535,9 @@ class MissionView(MissionViewBase):
 
     def _getViewQuestFilter(self):
         return None
+
+    def __onPremiumTypeChanged(self, newAcctType):
+        self.markVisited()
 
 
 class ElenMissionView(MissionViewBase):

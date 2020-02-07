@@ -622,7 +622,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
                             hasContact = 0 if self.trackScrollController.hasContact() else 1
                         self.dirtComponent.update(self.filter.averageSpeed, waterHeight, self.waterSensor.waterHeightWorld, self.terrainMatKind[2], hasContact, simDt)
                     self.__dirtUpdateTime = time
-                if distanceFromPlayer <= _PERIODIC_TIME_DIRT[1][0]:
+                if distanceFromPlayer <= _PERIODIC_TIME_DIRT[1][0] or self.__vehicle.isPlayerVehicle:
                     dt = _PERIODIC_TIME_DIRT[0][0]
                 else:
                     dt = _PERIODIC_TIME_DIRT[0][0] + _DIRT_ALPHA * distanceFromPlayer
@@ -746,7 +746,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         self._setFashions(VehiclePartsTuple(None, None, None, None))
         return
 
-    def onSiegeStateChanged(self, newState):
+    def onSiegeStateChanged(self, newState, timeToNextMode):
         if self.engineAudition is not None:
             self.engineAudition.onSiegeStateChanged(newState)
         if self.hullAimingController is not None:
@@ -754,7 +754,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         if self.suspensionSound is not None:
             self.suspensionSound.vehicleState = newState
         if self.siegeEffects is not None:
-            self.siegeEffects.onSiegeStateChanged(newState)
+            self.siegeEffects.onSiegeStateChanged(newState, timeToNextMode)
         enabled = newState == VEHICLE_SIEGE_STATE.ENABLED or newState == VEHICLE_SIEGE_STATE.SWITCHING_ON
         if self.suspension is not None:
             self.suspension.setLiftMode(enabled)

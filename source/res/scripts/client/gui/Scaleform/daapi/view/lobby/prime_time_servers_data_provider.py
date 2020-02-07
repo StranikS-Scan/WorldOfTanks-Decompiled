@@ -12,11 +12,33 @@ class PrimeTimesServersDataProvider(ServersDataProvider):
         self.__maxPeriodLen = self.__getMaxPrimeTimes()
 
     def getDefaultSelectedServer(self, serversList):
-        if not serversList:
-            return
+        periodStartMin = None
+        chosenServer = None
+        getByPing = False
+        for server in serversList:
+            serverPeriods = self.primeTimes[server['shortname']]
+            for periodStart, _ in serverPeriods:
+                if periodStartMin is None:
+                    chosenServer = server['id']
+                    periodStartMin = periodStart
+                if periodStart < periodStartMin:
+                    chosenServer = server['id']
+                    periodStartMin = periodStart
+                if periodStart == periodStartMin:
+                    chosenServer = None
+                    getByPing = True
+
+        if not getByPing or not serversList:
+            return chosenServer
+        elif getByPing:
+            minPingServer = serversList[0]
+            for server in serversList:
+                if server['pingValue'] < minPingServer['pingValue']:
+                    minPingServer = server
+
+            return minPingServer['id']
         else:
-            import random
-            return random.choice(serversList)['id']
+            return
 
     def _makeVO(self, index, item):
         vo = super(PrimeTimesServersDataProvider, self)._makeVO(index, item)

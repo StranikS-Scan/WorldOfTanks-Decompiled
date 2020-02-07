@@ -76,8 +76,11 @@ class Processor(object):
         return makeSuccess(auxData=ctx)
 
     def _response(self, code, callback, errStr='', ctx=None):
-        _logger.debug('Server response: code=%r, error=%r, ctx=%r', code, errStr, ctx)
-        return callback(self._errorHandler(code, errStr=errStr, ctx=ctx)) if code < 0 else callback(self._successHandler(code, ctx=ctx))
+        if code >= 0:
+            _logger.debug('Server success response: code=%r, error=%r, ctx=%r', code, errStr, ctx)
+            return callback(self._successHandler(code, ctx=ctx))
+        _logger.warning('Server fail response: code=%r, error=%r, ctx=%r', code, errStr, ctx)
+        return callback(self._errorHandler(code, errStr=errStr, ctx=ctx))
 
     @async
     @process

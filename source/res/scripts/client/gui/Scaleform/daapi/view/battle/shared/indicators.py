@@ -20,6 +20,8 @@ from gui.battle_control.controllers.hit_direction_ctrl import IHitIndicator
 from gui.shared.crits_mask_parser import critsParserGenerator
 from helpers import dependency
 from helpers import i18n
+from gui.impl import backport
+from gui.impl.gen import R
 from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -177,9 +179,10 @@ class _ExtendedMarkerVOBuilder(_MarkerVOBuilder):
     def buildVO(self, markerData):
         vo = super(_ExtendedMarkerVOBuilder, self).buildVO(markerData)
         vo.update({'circleStr': self._getCircleBackground(markerData),
-         'tankTypeStr': markerData.hitData.getAttackerVehicleClassTag(),
+         'tankTypeStr': self._getTankType(markerData),
          'tankName': markerData.hitData.getAttackerVehicleName(),
-         'damageValue': self._getDamageLabel(markerData)})
+         'damageValue': self._getDamageLabel(markerData),
+         'isFriendlyFire': markerData.hitData.isFriendlyFire()})
         return vo
 
     def _getBackground(self, markerData):
@@ -193,8 +196,14 @@ class _ExtendedMarkerVOBuilder(_MarkerVOBuilder):
     def _getCircleBackground(self, markerData):
         return _EXTENDED_BLIND_MARKER_TYPE_TO_CIRCLE_BG[markerData.markerType] if markerData.isBlind else _EXTENDED_MARKER_TYPE_TO_CIRCLE_BG[markerData.markerType]
 
+    def _getTankType(self, markerData):
+        tankTypeStr = markerData.hitData.getAttackerVehicleClassTag()
+        if markerData.hitData.isFriendlyFire():
+            tankTypeStr = 'ally_' + tankTypeStr
+        return tankTypeStr
+
     def _getDamageLabel(self, markerData):
-        return str(markerData.hitData.getDamage())
+        return backport.text(R.strings.ingame_gui.damageIndicator.friendlyFire.noDamageLabel()) if markerData.hitData.isFriendlyFire() else str(markerData.hitData.getDamage())
 
     def _getSizeType(self, hp, damage):
         sizeType = _MARKER_SIZE_TYPE.SMALL
@@ -294,8 +303,8 @@ class DamageIndicatorMeta(Flash):
     def as_showStandardS(self, itemIdx, bgStr, frame):
         return self._as_showStandard(itemIdx, bgStr, frame)
 
-    def as_showExtendedS(self, itemIdx, bgStr, circleStr, frame, tankName, tankTypeStr, damageValue):
-        return self._as_showExtended(itemIdx, bgStr, circleStr, frame, tankName, tankTypeStr, damageValue)
+    def as_showExtendedS(self, itemIdx, bgStr, circleStr, frame, tankName, tankTypeStr, damageValue, isFriendlyFire):
+        return self._as_showExtended(itemIdx, bgStr, circleStr, frame, tankName, tankTypeStr, damageValue, isFriendlyFire)
 
     def as_hideS(self, itemIdx):
         return self._as_hide(itemIdx)

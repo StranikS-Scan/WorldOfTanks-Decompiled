@@ -3,11 +3,13 @@
 from functools import partial
 import logging
 from collections import namedtuple
+import async as future_async
 from adisp import process, async
 from account_helpers import isLongDisconnectedFromCenter
 from account_helpers.AccountSettings import AccountSettings
 from gui.shared.gui_items.artefacts import OptionalDevice
 from items import tankmen
+from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.daapi.view.dialogs.missions_dialogs_meta import UseAwardSheetDialogMeta
 from gui import DialogsInterface
@@ -103,6 +105,23 @@ class AsyncConfirmator(ProcessorPlugin):
         callback(result)
 
     @async
+    def _confirm(self, callback):
+        callback(makeSuccess())
+
+
+class AwaitConfirmator(ProcessorPlugin):
+
+    def __init__(self, isEnabled=True):
+        super(AwaitConfirmator, self).__init__(self.TYPE.CONFIRMATOR, isAsync=True, isEnabled=isEnabled)
+
+    @async
+    @future_async.async
+    def confirm(self, callback):
+        Waiting.suspend()
+        yield future_async.await(self._confirm(callback))
+        Waiting.resume()
+
+    @future_async.async
     def _confirm(self, callback):
         callback(makeSuccess())
 

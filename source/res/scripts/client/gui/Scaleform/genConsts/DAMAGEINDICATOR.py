@@ -3,6 +3,11 @@
 
 
 class DAMAGEINDICATOR(object):
+    ALLY_AT_SPG = 'ally_AT-SPG'
+    ALLY_HEAVY_TANK = 'ally_heavyTank'
+    ALLY_LIGHT_TANK = 'ally_lightTank'
+    ALLY_MEDIUM_TANK = 'ally_mediumTank'
+    ALLY_SPG = 'ally_SPG'
     AMMO_CIRCLE = 'ammoCircle'
     ARTILLERY = 'artillery'
     AT_SPG = 'AT-SPG'

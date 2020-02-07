@@ -108,7 +108,7 @@ def _readTankmenGroup(xmlCtx, groupName, subsection, firstNames, lastNames, icon
         parseIcon = _parseIcon
     else:
         parseName = parseIcon = None
-    return tankmen_components.NationGroup(groupName, 'female' == _xml.readNonEmptyString(xmlCtx, subsection, 'sex'), subsection.readBool('notInShop', False), _readIDs((xmlCtx, 'firstNames'), _xml.getChildren(xmlCtx, subsection, 'firstNames'), firstNames, parseName), _readIDs((xmlCtx, 'lastNames'), _xml.getChildren(xmlCtx, subsection, 'lastNames'), lastNames, parseName), _readIDs((xmlCtx, 'icons'), _xml.getChildren(xmlCtx, subsection, 'icons'), icons, parseIcon), _xml.readNonNegativeFloat(xmlCtx, subsection, 'weight'), _readGroupTags((xmlCtx, 'tags'), subsection, 'tags'), _readGroupRoles((xmlCtx, 'roles'), subsection, 'roles'))
+    return tankmen_components.NationGroup(_xml.readNonNegativeInt(xmlCtx, subsection, 'groupID'), groupName, 'female' == _xml.readNonEmptyString(xmlCtx, subsection, 'sex'), subsection.readBool('notInShop', False), _readIDs((xmlCtx, 'firstNames'), _xml.getChildren(xmlCtx, subsection, 'firstNames'), firstNames, parseName), _readIDs((xmlCtx, 'lastNames'), _xml.getChildren(xmlCtx, subsection, 'lastNames'), lastNames, parseName), _readIDs((xmlCtx, 'icons'), _xml.getChildren(xmlCtx, subsection, 'icons'), icons, parseIcon), _xml.readNonNegativeFloat(xmlCtx, subsection, 'weight'), _readGroupTags((xmlCtx, 'tags'), subsection, 'tags'), _readGroupRoles((xmlCtx, 'roles'), subsection, 'roles'))
 
 
 def _readNationConfigSection(xmlCtx, section):
@@ -119,9 +119,14 @@ def _readNationConfigSection(xmlCtx, section):
     for kindName in component_constants.TANKMEN_GROUPS:
         groups = []
         totalWeight = 0.0
+        groupIDs = set()
         for sname, subsection in _xml.getChildren(xmlCtx, section, kindName):
             ctx = (xmlCtx, kindName + '/' + sname)
             group = _readTankmenGroup(ctx, sname, subsection, firstNames, lastNames, icons)
+            groupID = group.groupID
+            if groupID in groupIDs:
+                _xml.raiseWrongXml(xmlCtx, sname, 'duplicate groupID %d' % groupID)
+            groupIDs.add(groupID)
             totalWeight += group.weight
             groups.append(group)
 
@@ -129,7 +134,7 @@ def _readNationConfigSection(xmlCtx, section):
         for group in groups:
             group.weight /= totalWeight
 
-        config[kindName] = tuple(groups)
+        config[kindName] = {group.groupID:group for group in groups}
 
     ranks = _readRanks((xmlCtx, 'ranks'), _xml.getChildren(xmlCtx, section, 'ranks'))
     config['roleRanks'] = _readRoleRanks((xmlCtx, 'roleRanks'), _xml.getSubsection(xmlCtx, section, 'roleRanks'), ranks)

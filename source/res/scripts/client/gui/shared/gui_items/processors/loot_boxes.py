@@ -5,7 +5,7 @@ import BigWorld
 from gui import SystemMessages
 from gui.impl.lobby.loot_box.loot_box_helper import getMergedLootBoxBonuses
 from gui.shared.gui_items.processors import Processor, makeI18nError
-from messenger.formatters.service_channel import TokenQuestsFormatter
+from messenger.formatters.service_channel import QuestAchievesFormatter
 _logger = logging.getLogger(__name__)
 
 class LootBoxOpenProcessor(Processor):
@@ -20,7 +20,7 @@ class LootBoxOpenProcessor(Processor):
         return makeI18nError('/'.join((defaultKey, errStr)), defaultKey)
 
     def _successHandler(self, code, ctx=None):
-        fmt = TokenQuestsFormatter.formatQuestAchieves(getMergedLootBoxBonuses(ctx), False)
+        fmt = QuestAchievesFormatter.formatQuestAchieves(getMergedLootBoxBonuses(ctx), False)
         if fmt is not None:
             SystemMessages.pushMessage(fmt, SystemMessages.SM_TYPE.LootBoxRewards)
         return super(LootBoxOpenProcessor, self)._successHandler(code, ctx)

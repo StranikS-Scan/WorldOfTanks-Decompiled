@@ -93,7 +93,7 @@ class BlueprintsRequester(AbstractSyncDataRequester, IBlueprintsRequester):
             return None
         else:
             vehicle = self.__itemsCache.items.getItemByCD(vehicleCD)
-            if vehicle.isPremium or vehicle.isSecret or vehicle.isEvent or vehicle.isOnlyForEpicBattles or vehicle.isOnlyForBob:
+            if vehicle.isPremium or vehicle.isSecret or vehicle.isEvent or vehicle.isOnlyForEpicBattles:
                 return None
             filledCount, totalCount = self.getBlueprintCount(vehicleCD, vLevel)
             canConvert = False

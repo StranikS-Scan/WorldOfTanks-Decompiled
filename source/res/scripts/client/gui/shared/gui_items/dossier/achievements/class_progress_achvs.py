@@ -3,7 +3,6 @@
 from abstract import ClassProgressAchievement
 from abstract.mixins import Deprecated, Fortification, NoProgressBar
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB
-from dossiers2.custom.config import RECORD_CONFIGS
 from gui.shared.gui_items.dossier.achievements import validators
 
 class BattleTestedAchievement(ClassProgressAchievement):
@@ -231,6 +230,7 @@ class MedalRotmistrovAchievement(ClassProgressAchievement):
 class RankedStayingPowerAchievement(ClassProgressAchievement):
     __slots__ = ()
     __ACHIEVEMENT_NAME = 'rankedStayingPower'
+    __ACHIEVEMENT_COUNTER = 'rankedStayingCounter'
     __DEFAULT_LEVEL = 0
 
     def __init__(self, dossier, value=None):
@@ -240,32 +240,27 @@ class RankedStayingPowerAchievement(ClassProgressAchievement):
         return ('stepsLeft', self._lvlUpValue)
 
     def _readValue(self, dossier):
-        return self.__getRankValue(self._readCurrentProgressValue(dossier))
+        return self.__getLvlValue(dossier)
 
     def _readCurrentProgressValue(self, dossier):
-        return dossier.getRecordValue(_AB.TOTAL, self.__ACHIEVEMENT_NAME)
+        return dossier.getRecordValue(_AB.TOTAL, self.__ACHIEVEMENT_COUNTER)
 
     @classmethod
     def checkIsInDossier(cls, block, name, dossier):
-        if dossier is not None:
-            currentValue = dossier.getRecordValue(_AB.TOTAL, cls.__ACHIEVEMENT_NAME)
-            return cls.__getRankValue(currentValue) > cls.__DEFAULT_LEVEL
-        else:
-            return False
+        return cls.__getLvlValue(dossier) > cls.__DEFAULT_LEVEL if dossier is not None else False
 
     def _readProgressValue(self, dossier):
-        return self.__getRankValue(self._readCurrentProgressValue(dossier))
+        return self.__getLvlValue(dossier)
 
     @classmethod
-    def __getRankValue(cls, currentValue):
-        medalCfg = RECORD_CONFIGS[cls.__ACHIEVEMENT_NAME]
-        values = [ cls.MIN_LVL - i for i, values in enumerate(medalCfg) if values <= currentValue ]
-        return min(values) if values else cls.__DEFAULT_LEVEL
+    def __getLvlValue(cls, dossier):
+        return dossier.getRecordValue(_AB.TOTAL, cls.__ACHIEVEMENT_NAME)
 
 
 class RankedDivisionFighterAchievement(ClassProgressAchievement):
     __slots__ = ()
     __ACHIEVEMENT_NAME = 'rankedDivisionFighter'
+    __ACHIEVEMENT_COUNTER = 'rankedDivisionCounter'
     __DEFAULT_LEVEL = 0
 
     def __init__(self, dossier, value=None):
@@ -275,27 +270,21 @@ class RankedDivisionFighterAchievement(ClassProgressAchievement):
         return ('battlesLeft', self._lvlUpValue)
 
     def _readValue(self, dossier):
-        return self.__getRankValue(self._readCurrentProgressValue(dossier))
+        return self.__getLvlValue(dossier)
 
     def _readCurrentProgressValue(self, dossier):
-        return dossier.getRecordValue(_AB.TOTAL, self.__ACHIEVEMENT_NAME)
+        return dossier.getRecordValue(_AB.TOTAL, self.__ACHIEVEMENT_COUNTER)
 
     @classmethod
     def checkIsInDossier(cls, block, name, dossier):
-        if dossier is not None:
-            currentValue = dossier.getRecordValue(_AB.TOTAL, cls.__ACHIEVEMENT_NAME)
-            return cls.__getRankValue(currentValue) > cls.__DEFAULT_LEVEL
-        else:
-            return False
+        return cls.__getLvlValue(dossier) > cls.__DEFAULT_LEVEL if dossier is not None else False
 
     def _readProgressValue(self, dossier):
-        return self.__getRankValue(self._readCurrentProgressValue(dossier))
+        return self.__getLvlValue(dossier)
 
     @classmethod
-    def __getRankValue(cls, currentValue):
-        medalCfg = RECORD_CONFIGS[cls.__ACHIEVEMENT_NAME]
-        values = [ cls.MIN_LVL - i for i, values in enumerate(medalCfg) if values <= currentValue ]
-        return min(values) if values else cls.__DEFAULT_LEVEL
+    def __getLvlValue(cls, dossier):
+        return dossier.getRecordValue(_AB.TOTAL, cls.__ACHIEVEMENT_NAME)
 
 
 class ReferralProgramClassAchievement(ClassProgressAchievement):

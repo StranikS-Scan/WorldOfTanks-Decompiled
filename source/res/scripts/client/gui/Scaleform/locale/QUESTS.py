@@ -6,11 +6,10 @@ class QUESTS(object):
     BONUSES_COMPENSATION = '#quests:bonuses/compensation'
     MISSIONS_TAB_KURSK = '#quests:missions/tab/kursk'
     MISSIONS_TAB_MARATHONS = '#quests:missions/tab/marathons'
-    MISSIONS_TAB_BATTLEOFBLOGGERS = '#quests:missions/tab/battleOfBloggers'
-    MISSIONS_TAB_BATTLEOFBLOGGERS_NAASIA = '#quests:missions/tab/battleOfBloggers/naasia'
     MISSIONS_TAB_EVENTBOARDS = '#quests:missions/tab/eventBoards'
     MISSIONS_TAB_CATEGORIES = '#quests:missions/tab/categories'
     MISSIONS_TAB_CURRENTVEHICLE = '#quests:missions/tab/currentVehicle'
+    MISSIONS_TAB_DAILY = '#quests:missions/tab/daily'
     IGR_TOOLTIP_BATTLESLABEL = '#quests:igr/tooltip/battlesLabel'
     IGR_TOOLTIP_WINSLABEL = '#quests:igr/tooltip/winsLabel'
     POSTBATTLE_PROGRESSRESET = '#quests:postBattle/progressReset'
@@ -50,8 +49,11 @@ class QUESTS(object):
     BONUSES_ITEM_PREMIUM = '#quests:bonuses/item/premium'
     BONUSES_ITEM_PREMIUMPLUS = '#quests:bonuses/item/premiumPlus'
     BONUSES_ITEM_CREWSKIN = '#quests:bonuses/item/crewSkin'
+    BONUSNAME_BLUEPRINTS_ANY = '#quests:bonusName/blueprints/any'
     BONUSNAME_BLUEPRINTS_VEHICLE = '#quests:bonusName/blueprints/vehicle'
+    BONUSNAME_BLUEPRINTS_VEHICLE_ANY = '#quests:bonusName/blueprints/vehicle/any'
     BONUSNAME_BLUEPRINTS_NATION = '#quests:bonusName/blueprints/nation'
+    BONUSNAME_BLUEPRINTS_NATION_ANY = '#quests:bonusName/blueprints/nation/any'
     BONUSNAME_BLUEPRINTS_UNIVERSAL = '#quests:bonusName/blueprints/universal'
     BONUSES_CREDITS_DESCRIPTION = '#quests:bonuses/credits/description'
     BONUSES_GOLD_DESCRIPTION = '#quests:bonuses/gold/description'
@@ -909,27 +911,6 @@ class QUESTS(object):
     DETAILS_DOSSIER_LADDER_ORIGINALXP = '#quests:details/dossier/ladder/originalXP'
     DETAILS_DOSSIER_LADDER_DAMAGEASSISTEDTRACK = '#quests:details/dossier/ladder/damageAssistedTrack'
     DETAILS_DOSSIER_LADDER_DAMAGEASSISTEDRADIO = '#quests:details/dossier/ladder/damageAssistedRadio'
-    DETAILS_DOSSIER_BOB_XP = '#quests:details/dossier/bob/xp'
-    DETAILS_DOSSIER_BOB_BATTLESCOUNT = '#quests:details/dossier/bob/battlesCount'
-    DETAILS_DOSSIER_BOB_WINS = '#quests:details/dossier/bob/wins'
-    DETAILS_DOSSIER_BOB_LOSSES = '#quests:details/dossier/bob/losses'
-    DETAILS_DOSSIER_BOB_SURVIVEDBATTLES = '#quests:details/dossier/bob/survivedBattles'
-    DETAILS_DOSSIER_BOB_FRAGS = '#quests:details/dossier/bob/frags'
-    DETAILS_DOSSIER_BOB_DIRECTHITS = '#quests:details/dossier/bob/directHits'
-    DETAILS_DOSSIER_BOB_SPOTTED = '#quests:details/dossier/bob/spotted'
-    DETAILS_DOSSIER_BOB_DAMAGEDEALT = '#quests:details/dossier/bob/damageDealt'
-    DETAILS_DOSSIER_BOB_MAXDAMAGE = '#quests:details/dossier/bob/maxDamage'
-    DETAILS_DOSSIER_BOB_DAMAGERECEIVED = '#quests:details/dossier/bob/damageReceived'
-    DETAILS_DOSSIER_BOB_CAPTUREPOINTS = '#quests:details/dossier/bob/capturePoints'
-    DETAILS_DOSSIER_BOB_DROPPEDCAPTUREPOINTS = '#quests:details/dossier/bob/droppedCapturePoints'
-    DETAILS_DOSSIER_BOB_PIERCINGS = '#quests:details/dossier/bob/piercings'
-    DETAILS_DOSSIER_BOB_NODAMAGEDIRECTHITSRECEIVED = '#quests:details/dossier/bob/noDamageDirectHitsReceived'
-    DETAILS_DOSSIER_BOB_PIERCINGSRECEIVED = '#quests:details/dossier/bob/piercingsReceived'
-    DETAILS_DOSSIER_BOB_POTENTIALDAMAGERECEIVED = '#quests:details/dossier/bob/potentialDamageReceived'
-    DETAILS_DOSSIER_BOB_DAMAGEBLOCKEDBYARMOR = '#quests:details/dossier/bob/damageBlockedByArmor'
-    DETAILS_DOSSIER_BOB_ORIGINALXP = '#quests:details/dossier/bob/originalXP'
-    DETAILS_DOSSIER_BOB_DAMAGEASSISTEDTRACK = '#quests:details/dossier/bob/damageAssistedTrack'
-    DETAILS_DOSSIER_BOB_DAMAGEASSISTEDRADIO = '#quests:details/dossier/bob/damageAssistedRadio'
     DETAILS_DOSSIER_BATTLESCOUNT = '#quests:details/dossier/battlesCount'
     DETAILS_DOSSIER_0_BATTLESCOUNT = '#quests:details/dossier/0/battlesCount'
     DETAILS_DOSSIER_1_BATTLESCOUNT = '#quests:details/dossier/1/battlesCount'
@@ -948,7 +929,6 @@ class QUESTS(object):
     DETAILS_DOSSIER_22_BATTLESCOUNT = '#quests:details/dossier/22/battlesCount'
     DETAILS_DOSSIER_24_BATTLESCOUNT = '#quests:details/dossier/24/battlesCount'
     DETAILS_DOSSIER_27_BATTLESCOUNT = '#quests:details/dossier/27/battlesCount'
-    DETAILS_DOSSIER_32_BATTLESCOUNT = '#quests:details/dossier/32/battlesCount'
     DETAILS_MODIFIERS_TITLE_DISCOUNT = '#quests:details/modifiers/title/discount'
     DETAILS_MODIFIERS_TITLE_SELLING = '#quests:details/modifiers/title/selling'
     DETAILS_MODIFIERS_TITLE_AVAILABILITY = '#quests:details/modifiers/title/availability'
@@ -1022,20 +1002,15 @@ class QUESTS(object):
     MISSIONS_AWARDS_MERGED = '#quests:missions/awards/merged'
     MISSIONS_TAB_LABEL_KURSK = '#quests:missions/tab/label/kursk'
     MISSIONS_TAB_LABEL_MARATHONS = '#quests:missions/tab/label/marathons'
-    MISSIONS_TAB_LABEL_BATTLEOFBLOGGERS = '#quests:missions/tab/label/battleOfBloggers'
-    MISSIONS_TAB_LABEL_BATTLEOFBLOGGERS_NAASIA = '#quests:missions/tab/label/battleOfBloggers/naasia'
     MISSIONS_TAB_KURSK_HEADER = '#quests:missions/tab/kursk/header'
     MISSIONS_TAB_KURSK_BODY = '#quests:missions/tab/kursk/body'
-    MISSIONS_TAB_BATTLEOFBLOGGERS_HEADER = '#quests:missions/tab/battleOfBloggers/header'
-    MISSIONS_TAB_BATTLEOFBLOGGERS_NAASIA_HEADER = '#quests:missions/tab/battleOfBloggers/naasia/header'
-    MISSIONS_TAB_BATTLEOFBLOGGERS_BODY = '#quests:missions/tab/battleOfBloggers/body'
-    MISSIONS_TAB_BATTLEOFBLOGGERS_NAASIA_BODY = '#quests:missions/tab/battleOfBloggers/naasia/body'
     MISSIONS_TAB_MARATHONS_HEADER = '#quests:missions/tab/marathons/header'
     MISSIONS_TAB_MARATHONS_BODY = '#quests:missions/tab/marathons/body'
     MISSIONS_TAB_MISSIONS_HEADER = '#quests:missions/tab/missions/header'
     MISSIONS_TAB_MISSIONS_BODY = '#quests:missions/tab/missions/body'
     MISSIONS_TAB_LABEL_MISSIONS = '#quests:missions/tab/label/missions'
     MISSIONS_TAB_LABEL_EVENTBOARDS = '#quests:missions/tab/label/eventBoards'
+    MISSIONS_TAB_LABEL_DAILY = '#quests:missions/tab/label/daily'
     MISSIONS_TAB_EVENTBOARDS_HEADER = '#quests:missions/tab/eventBoards/header'
     MISSIONS_TAB_EVENTBOARDS_BODY = '#quests:missions/tab/eventBoards/body'
     MISSIONS_TAB_EVENTBOARDS_DISABLED = '#quests:missions/tab/eventBoards/disabled'
@@ -1047,6 +1022,8 @@ class QUESTS(object):
     MISSIONS_TAB_LABEL_CATEGORIES = '#quests:missions/tab/label/categories'
     MISSIONS_TAB_CATEGORIES_HEADER = '#quests:missions/tab/categories/header'
     MISSIONS_TAB_CATEGORIES_BODY = '#quests:missions/tab/categories/body'
+    MISSIONS_TAB_DAILY_HEADER = '#quests:missions/tab/daily/header'
+    MISSIONS_TAB_DAILY_BODY = '#quests:missions/tab/daily/body'
     MISSIONS_TAB_LABEL_CURRENTVEHICLE = '#quests:missions/tab/label/currentVehicle'
     MISSIONS_TAB_CURRENTVEHICLE_HEADER = '#quests:missions/tab/currentVehicle/header'
     MISSIONS_TAB_CURRENTVEHICLE_BODY = '#quests:missions/tab/currentVehicle/body'
@@ -1565,16 +1542,106 @@ class QUESTS(object):
     QUEST_FLAG_STATUS_COMPLETED = '#quests:quest/flag/status/completed'
     QUEST_FLAG_STATUS_IN_PROGRESS = '#quests:quest/flag/status/in_progress'
     QUEST_FLAG_STATUS_COMPLETED_PERFECTLY = '#quests:quest/flag/status/completed_perfectly'
-    PREMIUMQUEST_BODY_TITLE = '#quests:premiumQuest/body/title'
-    PREMIUMQUEST_BODY_DESCRIPTION = '#quests:premiumQuest/body/description'
-    PREMIUMQUEST_BODY_BUTTONDETAILS = '#quests:premiumQuest/body/buttonDetails'
-    PREMIUMQUEST_BODY_COMPLETE = '#quests:premiumQuest/body/complete'
-    PREMIUMQUEST_HEADER_TITLE = '#quests:premiumQuest/header/title'
-    PREMIUMQUEST_QUESTS_PREM_ACC_Q01_TITLE = '#quests:premiumQuest/quests/prem_acc_q01/title'
-    PREMIUMQUEST_QUESTS_PREM_ACC_Q02_TITLE = '#quests:premiumQuest/quests/prem_acc_q02/title'
-    PREMIUMQUEST_QUESTS_PREM_ACC_Q03_TITLE = '#quests:premiumQuest/quests/prem_acc_q03/title'
-    PREMIUMQUEST_DETAILEDQUESTS_REQUIREMENTS_PREMIUMACCOUNT = '#quests:premiumQuest/detailedQuests/requirements/premiumAccount'
-    PREMIUMQUEST_DETAILEDQUESTS_REQUIREMENTS_TOKEN = '#quests:premiumQuest/detailedQuests/requirements/token'
+    PREMIUMQUESTS_BODY_TITLE = '#quests:premiumQuests/body/title'
+    PREMIUMQUESTS_BODY_DESCRIPTION = '#quests:premiumQuests/body/description'
+    PREMIUMQUESTS_BODY_BUTTONDETAILS = '#quests:premiumQuests/body/buttonDetails'
+    PREMIUMQUESTS_BODY_COMPLETE = '#quests:premiumQuests/body/complete'
+    PREMIUMQUESTS_QUESTS_PREM_ACC_Q01_TITLE = '#quests:premiumQuests/quests/prem_acc_q01/title'
+    PREMIUMQUESTS_QUESTS_PREM_ACC_Q02_TITLE = '#quests:premiumQuests/quests/prem_acc_q02/title'
+    PREMIUMQUESTS_QUESTS_PREM_ACC_Q03_TITLE = '#quests:premiumQuests/quests/prem_acc_q03/title'
+    PREMIUMQUESTS_DETAILEDQUESTS_REQUIREMENTS_PREMIUMACCOUNT = '#quests:premiumQuests/detailedQuests/requirements/premiumAccount'
+    PREMIUMQUESTS_DETAILEDQUESTS_REQUIREMENTS_TOKEN = '#quests:premiumQuests/detailedQuests/requirements/token'
+    PREMIUMQUESTS_CONDITION_DMGTOP_5 = '#quests:premiumQuests/condition/dmgTop_5'
+    PREMIUMQUESTS_CONDITION_WIN_WINLONG = '#quests:premiumQuests/condition/win/winLong'
+    DAILYQUESTS_HEADER_TITLE = '#quests:dailyQuests/header/title'
+    PREMIUMQUESTS_HEADER_TITLE = '#quests:premiumQuests/header/title'
+    DAILYQUESTS_TAB_LABEL = '#quests:dailyQuests/tab/label'
+    PREMIUMQUESTS_TAB_LABEL = '#quests:premiumQuests/tab/label'
+    DAILYQUESTS_BODY_REROLL = '#quests:dailyQuests/body/reroll'
+    DAILYQUESTS_MISSIONSWITCH_TOOLTIP_HEADER = '#quests:dailyQuests/missionSwitch/tooltip/header'
+    DAILYQUESTS_MISSIONSWITCH_TOOLTIP_BODY_AVAILABLE = '#quests:dailyQuests/missionSwitch/tooltip/body/available'
+    DAILYQUESTS_MISSIONSWITCH_TOOLTIP_BODY_DESC_HRS = '#quests:dailyQuests/missionSwitch/tooltip/body/desc_hrs'
+    DAILYQUESTS_MISSIONSWITCH_TOOLTIP_BODY_DESC_HRS_MIN = '#quests:dailyQuests/missionSwitch/tooltip/body/desc_hrs_min'
+    DAILYQUESTS_MISSIONSWITCH_TOOLTIP_BODY_DESC_MIN_ONLY = '#quests:dailyQuests/missionSwitch/tooltip/body/desc_min_only'
+    DAILYQUESTS_MISSIONSWITCH_TOOLTIP_BODY_DESC = '#quests:dailyQuests/missionSwitch/tooltip/body/desc'
+    PREMIUMQUESTS_TOOLTIPS_LOCKED_HEADER = '#quests:premiumQuests/tooltips/locked/header'
+    PREMIUMQUESTS_TOOLTIPS_LOCKED_BODY = '#quests:premiumQuests/tooltips/locked/body'
+    PREMIUMQUESTS_NOTPREMIUMACCOUNT_TITLE = '#quests:premiumQuests/notPremiumAccount/title'
+    PREMIUMQUESTS_NOTPREMIUMACCOUNT_PARAGRAPH = '#quests:premiumQuests/notPremiumAccount/paragraph'
+    PREMIUMQUESTS_NOTPREMIUMACCOUNT_BUTTON = '#quests:premiumQuests/notPremiumAccount/button'
+    PREMIUMQUESTS_COUNTDOWN_TITLE = '#quests:premiumQuests/countDown/title'
+    PREMIUMQUESTS_COUNTDOWN_REMAININGTEXT = '#quests:premiumQuests/countDown/remainingText'
+    DAILYQUESTS_COUNTDOWN_TITLE = '#quests:dailyQuests/countDown/title'
+    DAILYQUESTS_COUNTDOWN_REMAININGTEXT = '#quests:dailyQuests/countDown/remainingText'
+    DAILYQUESTS_FOOTER_TITLE = '#quests:dailyQuests/footer/title'
+    DAILYQUESTS_FOOTER_PARAGRAPH = '#quests:dailyQuests/footer/paragraph'
+    DAILYQUESTS_BONUS_TOOLTIPTITLE = '#quests:dailyQuests/bonus/tooltipTitle'
+    DAILYQUESTS_BONUS_TOOLTIPDESCRIPTION = '#quests:dailyQuests/bonus/tooltipDescription'
+    DAILYQUESTS_POSTBATTLE_GENERICTITLE_EASY = '#quests:dailyQuests/postBattle/genericTitle_easy'
+    DAILYQUESTS_POSTBATTLE_GENERICTITLE_MEDIUM = '#quests:dailyQuests/postBattle/genericTitle_medium'
+    DAILYQUESTS_POSTBATTLE_GENERICTITLE_HARD = '#quests:dailyQuests/postBattle/genericTitle_hard'
+    DAILYQUESTS_POSTBATTLE_GENERICTITLE_BONUS = '#quests:dailyQuests/postBattle/genericTitle_bonus'
+    DAILYQUESTS_POSTBATTLE_GENERICTITLE_EPIC = '#quests:dailyQuests/postBattle/genericTitle_epic'
+    DAILYQUESTS_BONUSQUEST_COUNTDOWN_HRS = '#quests:dailyQuests/bonusQuest/countDown_hrs'
+    DAILYQUESTS_BONUSQUEST_COUNTDOWN_MINSEC = '#quests:dailyQuests/bonusQuest/countDown_minSec'
+    PREMIUMQUESTS_POSTBATTLE_GENERICTITLE_EASY = '#quests:premiumQuests/postBattle/genericTitle_easy'
+    PREMIUMQUESTS_POSTBATTLE_GENERICTITLE_MEDIUM = '#quests:premiumQuests/postBattle/genericTitle_medium'
+    PREMIUMQUESTS_POSTBATTLE_GENERICTITLE_HARD = '#quests:premiumQuests/postBattle/genericTitle_hard'
+    GENERAL_COUNTDOWN_TEXT_TIMER_HRS = '#quests:general/countdown/text/timer_hrs'
+    GENERAL_COUNTDOWN_TEXT_TIMER_HRS_ONLY = '#quests:general/countdown/text/timer_hrs_only'
+    GENERAL_COUNTDOWN_TEXT_TIMER_MIN_ONLY = '#quests:general/countdown/text/timer_min_only'
+    GENERAL_COUNTDOWN_TEXT_TIMER_MIN = '#quests:general/countdown/text/timer_min'
+    GENERAL_COUNTDOWN_TEXT_TIMER_SEC = '#quests:general/countdown/text/timer_sec'
+    GENERAL_COUNTDOWN_TIMER_HRS = '#quests:general/countdown/timer_hrs'
+    GENERAL_COUNTDOWN_TIMER_HRS_ONLY = '#quests:general/countdown/timer_hrs_only'
+    GENERAL_COUNTDOWN_TIMER_MIN_ONLY = '#quests:general/countdown/timer_min_only'
+    GENERAL_COUNTDOWN_TIMER_MIN = '#quests:general/countdown/timer_min'
+    GENERAL_COUNTDOWN_TIMER_SEC = '#quests:general/countdown/timer_sec'
+    DAILYQUESTS_POSTBATTLE_GENERICAMPERSAND = '#quests:dailyQuests/postBattle/genericAmpersand'
+    DAILYQUESTS_POSTBATTLE_AND = '#quests:dailyQuests/postBattle/and'
+    DAILYQUESTS_HEADER_ABOUTINFO = '#quests:dailyQuests/header/aboutInfo'
+    PREMIUMQUESTS_HEADER_ABOUTINFO = '#quests:premiumQuests/header/aboutInfo'
+    DAILYQUESTS_HEADER_ABOUTTOOLTIP_BODY = '#quests:dailyQuests/header/aboutTooltip/body'
+    DAILYQUESTS_HEADER_ABOUTTOOLTIP_HEADER = '#quests:dailyQuests/header/aboutTooltip/header'
+    PREMIUMQUESTS_HEADER_ABOUTTOOLTIP_BODY = '#quests:premiumQuests/header/aboutTooltip/body'
+    PREMIUMQUESTS_HEADER_ABOUTTOOLTIP_HEADER = '#quests:premiumQuests/header/aboutTooltip/header'
+    GENERAL_INFO_BACK_TITLE = '#quests:general/info/back/title'
+    GENERAL_INFO_BACK_GOTO = '#quests:general/info/back/goto'
+    DAILYQUESTS_INFO_DAILYMISSIONS = '#quests:dailyQuests/info/dailyMissions'
+    DAILYQUESTS_INFO_DAILYMISSIONTITLE = '#quests:dailyQuests/info/dailyMissionTitle'
+    PREMIUMQUESTS_INFO_PREMIUMMISSIONS = '#quests:premiumQuests/info/premiumMissions'
+    PREMIUMQUESTS_INFO_PREMIUMMISSIONSTITLE = '#quests:premiumQuests/info/premiumMissionsTitle'
+    PREMIUMQUESTS_INFO_CONDITIONS = '#quests:premiumQuests/info/conditions'
+    PREMIUMQUESTS_INFO_CONDITIONSTITLE = '#quests:premiumQuests/info/conditionsTitle'
+    DAILYQUESTS_INFO_BONUSMISSION = '#quests:dailyQuests/info/bonusMission'
+    DAILYQUESTS_INFO_BONUSMISSIONTITLE = '#quests:dailyQuests/info/bonusMissionTitle'
+    PREMIUMQUESTS_INFO_EPICREWARDS = '#quests:premiumQuests/info/epicRewards'
+    PREMIUMQUESTS_INFO_EPICREWARDSTITLE = '#quests:premiumQuests/info/epicRewardsTitle'
+    DAILYQUESTS_INFO_MISSIONSWITCH_HRS = '#quests:dailyQuests/info/missionSwitch_hrs'
+    DAILYQUESTS_INFO_MISSIONSWITCH_MIN = '#quests:dailyQuests/info/missionSwitch_min'
+    DAILYQUESTS_INFO_MISSIONSWITCHTITLE = '#quests:dailyQuests/info/missionSwitchTitle'
+    DAILYQUESTS_CONDITION_DODAMAGE = '#quests:dailyQuests/condition/doDamage'
+    DAILYQUESTS_CONDITION_EARNEXP = '#quests:dailyQuests/condition/earnExp'
+    DAILYQUESTS_CONDITION_DESTROYMODULE_FEW = '#quests:dailyQuests/condition/destroyModule_few'
+    DAILYQUESTS_CONDITION_DESTROYMODULE_PLURAL = '#quests:dailyQuests/condition/destroyModule_plural'
+    DAILYQUESTS_CONDITION_DESTROYVEH_SINGULAR = '#quests:dailyQuests/condition/destroyVeh_singular'
+    DAILYQUESTS_CONDITION_DESTROYVEH_FEW = '#quests:dailyQuests/condition/destroyVeh_few'
+    DAILYQUESTS_CONDITION_DESTROYVEH_PLURAL = '#quests:dailyQuests/condition/destroyVeh_plural'
+    DAILYQUESTS_CONDITION_DODAMAGEVEH = '#quests:dailyQuests/condition/doDamageVeh'
+    DAILYQUESTS_CONDITION_EXPTOP = '#quests:dailyQuests/condition/expTop'
+    DAILYQUESTS_CONDITION_EXPTOP_FIRST = '#quests:dailyQuests/condition/expTop_first'
+    DAILYQUESTS_CONDITION_DMGTOP = '#quests:dailyQuests/condition/dmgTop'
+    DAILYQUESTS_CONDITION_DMGTOP_FIRST = '#quests:dailyQuests/condition/dmgTop_first'
+    DAILYQUESTS_CONDITION_SPOTVEH_FEW = '#quests:dailyQuests/condition/spotVeh_few'
+    DAILYQUESTS_CONDITION_WINBATTLE = '#quests:dailyQuests/condition/winBattle'
+    DAILYQUESTS_CONDITION_WINBATTLE_ACCUM = '#quests:dailyQuests/condition/winBattle_accum'
+    DAILYQUESTS_CONDITION_DODAMAGE_ACCUM = '#quests:dailyQuests/condition/doDamage_accum'
+    DAILYQUESTS_CONDITION_EARNEXP_ACCUM = '#quests:dailyQuests/condition/earnExp_accum'
+    DAILYQUESTS_CONDITION_DESTROYMODULE_FEW_ACCUM = '#quests:dailyQuests/condition/destroyModule_few_accum'
+    DAILYQUESTS_CONDITION_DESTROYMODULE_PLURAL_ACCUM = '#quests:dailyQuests/condition/destroyModule_plural_accum'
+    DAILYQUESTS_CONDITION_DODAMAGEVEH_ACCUM = '#quests:dailyQuests/condition/doDamageVeh_accum'
+    DAILYQUESTS_CONDITION_DESTROYVEH_FEW_ACCUM = '#quests:dailyQuests/condition/destroyVeh_few_accum'
+    DAILYQUESTS_CONDITION_DESTROYVEH_PLURAL_ACCUM = '#quests:dailyQuests/condition/destroyVeh_plural_accum'
     TOKEN_DEFAULT_ENUM = (TOKEN_DEFAULT_USSR,
      TOKEN_DEFAULT_GERMANY,
      TOKEN_DEFAULT_USA,
@@ -1604,8 +1671,11 @@ class QUESTS(object):
      TOKEN_DEFAULT_WHEEL,
      TOKEN_DEFAULT_BOX,
      TOKEN_DEFAULT_TANKREWARDS)
-    BONUSNAME_ENUM = (BONUSNAME_BLUEPRINTS_VEHICLE,
+    BONUSNAME_ENUM = (BONUSNAME_BLUEPRINTS_ANY,
+     BONUSNAME_BLUEPRINTS_VEHICLE,
+     BONUSNAME_BLUEPRINTS_VEHICLE_ANY,
      BONUSNAME_BLUEPRINTS_NATION,
+     BONUSNAME_BLUEPRINTS_NATION_ANY,
      BONUSNAME_BLUEPRINTS_UNIVERSAL,
      BONUSNAME_CREDITS,
      BONUSNAME_GOLD,
@@ -2047,27 +2117,6 @@ class QUESTS(object):
      DETAILS_DOSSIER_LADDER_ORIGINALXP,
      DETAILS_DOSSIER_LADDER_DAMAGEASSISTEDTRACK,
      DETAILS_DOSSIER_LADDER_DAMAGEASSISTEDRADIO,
-     DETAILS_DOSSIER_BOB_XP,
-     DETAILS_DOSSIER_BOB_BATTLESCOUNT,
-     DETAILS_DOSSIER_BOB_WINS,
-     DETAILS_DOSSIER_BOB_LOSSES,
-     DETAILS_DOSSIER_BOB_SURVIVEDBATTLES,
-     DETAILS_DOSSIER_BOB_FRAGS,
-     DETAILS_DOSSIER_BOB_DIRECTHITS,
-     DETAILS_DOSSIER_BOB_SPOTTED,
-     DETAILS_DOSSIER_BOB_DAMAGEDEALT,
-     DETAILS_DOSSIER_BOB_MAXDAMAGE,
-     DETAILS_DOSSIER_BOB_DAMAGERECEIVED,
-     DETAILS_DOSSIER_BOB_CAPTUREPOINTS,
-     DETAILS_DOSSIER_BOB_DROPPEDCAPTUREPOINTS,
-     DETAILS_DOSSIER_BOB_PIERCINGS,
-     DETAILS_DOSSIER_BOB_NODAMAGEDIRECTHITSRECEIVED,
-     DETAILS_DOSSIER_BOB_PIERCINGSRECEIVED,
-     DETAILS_DOSSIER_BOB_POTENTIALDAMAGERECEIVED,
-     DETAILS_DOSSIER_BOB_DAMAGEBLOCKEDBYARMOR,
-     DETAILS_DOSSIER_BOB_ORIGINALXP,
-     DETAILS_DOSSIER_BOB_DAMAGEASSISTEDTRACK,
-     DETAILS_DOSSIER_BOB_DAMAGEASSISTEDRADIO,
      DETAILS_DOSSIER_0_BATTLESCOUNT,
      DETAILS_DOSSIER_1_BATTLESCOUNT,
      DETAILS_DOSSIER_2_BATTLESCOUNT,
@@ -2084,8 +2133,7 @@ class QUESTS(object):
      DETAILS_DOSSIER_21_BATTLESCOUNT,
      DETAILS_DOSSIER_22_BATTLESCOUNT,
      DETAILS_DOSSIER_24_BATTLESCOUNT,
-     DETAILS_DOSSIER_27_BATTLESCOUNT,
-     DETAILS_DOSSIER_32_BATTLESCOUNT)
+     DETAILS_DOSSIER_27_BATTLESCOUNT)
     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ENUM = (PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_USSR,
      PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_GERMANY,
      PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_USA,

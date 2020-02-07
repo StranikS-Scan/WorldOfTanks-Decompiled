@@ -7,13 +7,10 @@ import Math
 import ResMgr
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
 from gui.shared.gui_items.fitting_item import FittingItem, RentalInfoProvider
 from gui.shared.image_helper import getTextureLinkByID
-from helpers import i18n, dependency
+from helpers import dependency
 from items.components.c11n_constants import SeasonType, ItemTags, ProjectionDecalDirectionTags, ProjectionDecalFormTags, UNBOUND_VEH_KEY, NUM_ALL_ITEMS_KEY
 from shared_utils import first
 from skeletons.gui.server_events import IEventsCache
@@ -35,16 +32,32 @@ _PREVIEW_ICON_INNER_SIZE_BY_FORMFACTOR = {'formfactor_square': (74, 74),
  'formfactor_rect1x3': (186, 62),
  'formfactor_rect1x4': (220, 55),
  'formfactor_rect1x6': (220, 37)}
-STYLE_GROUP_ID_TO_GROUP_NAME_MAP = {VEHICLE_CUSTOMIZATION.STYLES_SPECIAL_STYLES: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_TYPE_STYLE_SPECIAL,
- VEHICLE_CUSTOMIZATION.STYLES_MAIN_STYLES: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_TYPE_STYLE_MAIN,
- VEHICLE_CUSTOMIZATION.STYLES_RENTED_STYLES: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_TYPE_STYLE_RENTAL,
- VEHICLE_CUSTOMIZATION.STYLES_UNIQUE_STYLES: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_TYPE_STYLE_UNIQUE,
- VEHICLE_CUSTOMIZATION.STYLES_HISTORICAL_STYLES: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_TYPE_STYLE_HISTORICAL}
-STYLE_GROUP_ID_TO_FULL_GROUP_NAME_MAP = {VEHICLE_CUSTOMIZATION.STYLES_SPECIAL_STYLES: VEHICLE_CUSTOMIZATION.CAROUSEL_SWATCH_STYLE_SPECIAL,
- VEHICLE_CUSTOMIZATION.STYLES_MAIN_STYLES: VEHICLE_CUSTOMIZATION.CAROUSEL_SWATCH_STYLE_MAIN,
- VEHICLE_CUSTOMIZATION.STYLES_RENTED_STYLES: VEHICLE_CUSTOMIZATION.CAROUSEL_SWATCH_STYLE_RENTED,
- VEHICLE_CUSTOMIZATION.STYLES_UNIQUE_STYLES: VEHICLE_CUSTOMIZATION.CAROUSEL_SWATCH_STYLE_UNIQUE,
- VEHICLE_CUSTOMIZATION.STYLES_HISTORICAL_STYLES: VEHICLE_CUSTOMIZATION.CAROUSEL_SWATCH_STYLE_HISTORICAL}
+_STYLE_GROUP_ID_TO_GROUP_NAME_MAP = {}
+_STYLE_GROUP_ID_TO_FULL_GROUP_NAME_MAP = {}
+
+def getStyleGroupNameResourceID(groupID):
+    if not _STYLE_GROUP_ID_TO_GROUP_NAME_MAP:
+        _groupIDs = R.strings.vehicle_customization.styles
+        _groupNames = R.strings.vehicle_customization.customization.infotype.type.style
+        _STYLE_GROUP_ID_TO_GROUP_NAME_MAP.update({backport.msgid(_groupIDs.special_styles()): _groupNames.special(),
+         backport.msgid(_groupIDs.main_styles()): _groupNames.main(),
+         backport.msgid(_groupIDs.rented_styles()): _groupNames.rental(),
+         backport.msgid(_groupIDs.unique_styles()): _groupNames.unique(),
+         backport.msgid(_groupIDs.historical_styles()): _groupNames.historical()})
+    return _STYLE_GROUP_ID_TO_GROUP_NAME_MAP[groupID] if groupID in _STYLE_GROUP_ID_TO_GROUP_NAME_MAP else R.invalid()
+
+
+def getGroupFullNameResourceID(groupID):
+    if not _STYLE_GROUP_ID_TO_FULL_GROUP_NAME_MAP:
+        _groupIDs = R.strings.vehicle_customization.styles
+        _groupNames = R.strings.vehicle_customization.carousel.swatch.style
+        _STYLE_GROUP_ID_TO_FULL_GROUP_NAME_MAP.update({backport.msgid(_groupIDs.special_styles()): _groupNames.special(),
+         backport.msgid(_groupIDs.main_styles()): _groupNames.main(),
+         backport.msgid(_groupIDs.rented_styles()): _groupNames.rented(),
+         backport.msgid(_groupIDs.unique_styles()): _groupNames.unique(),
+         backport.msgid(_groupIDs.historical_styles()): _groupNames.historical()})
+    return _STYLE_GROUP_ID_TO_FULL_GROUP_NAME_MAP[groupID] if groupID in _STYLE_GROUP_ID_TO_FULL_GROUP_NAME_MAP else R.invalid()
+
 
 class SpecialEvents(object):
     NY18 = 'NY2018_style'
@@ -128,23 +141,23 @@ class ConcealmentBonus(object):
 
     @property
     def icon(self):
-        return RES_ICONS.getItemBonus42x42('camouflage')
+        return backport.image(R.images.gui.maps.icons.library.qualifiers.c_42x42.camouflage())
 
     @property
     def iconSmall(self):
-        return RES_ICONS.getItemBonus16x16('camouflage')
+        return backport.image(R.images.gui.maps.icons.library.qualifiers.c_16x16.camouflage())
 
     @property
     def description(self):
-        return i18n.makeString(VEHICLE_CUSTOMIZATION.BONUS_CONDITION_SEASON)
+        return backport.text(R.strings.vehicle_customization.bonus.condition.season())
 
     @property
     def userName(self):
-        return i18n.makeString(VEHICLE_CUSTOMIZATION.getBonusName('camouflage'))
+        return backport.text(R.strings.vehicle_customization.bonus.name.extended.camouflage())
 
     @property
     def shortUserName(self):
-        return i18n.makeString(VEHICLE_CUSTOMIZATION.getShortBonusName('camouflage'))
+        return backport.text(R.strings.vehicle_customization.bonus.name.camouflage())
 
 
 class Customization(FittingItem):
@@ -199,8 +212,12 @@ class Customization(FittingItem):
         return self.descriptor.parentGroup.itemPrototype.userString
 
     @property
+    def userTypeID(self):
+        return R.strings.item_types.customization.dyn(self.itemFullTypeName)()
+
+    @property
     def userType(self):
-        return i18n.makeString(ITEM_TYPES.customization(self.itemFullTypeName))
+        return backport.text(self.userTypeID)
 
     @property
     def boundInventoryCount(self):
@@ -605,8 +622,12 @@ class Style(Customization):
         return self.descriptor.modelsSet
 
     @property
+    def userTypeID(self):
+        return getStyleGroupNameResourceID(self.groupID)
+
+    @property
     def userType(self):
-        return i18n.makeString(STYLE_GROUP_ID_TO_GROUP_NAME_MAP[self.groupID])
+        return backport.text(self.userTypeID)
 
     def getDescription(self):
         return self.longDescriptionSpecial or self.fullDescription or self.shortDescriptionSpecial or self.shortDescription

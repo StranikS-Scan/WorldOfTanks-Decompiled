@@ -10,9 +10,8 @@ from gui.prb_control.entities.random.pre_queue.entity import RandomEntity, Rando
 from gui.prb_control.entities.sandbox.pre_queue.entity import SandboxEntity, SandboxEntryPoint
 from gui.prb_control.entities.bootcamp.pre_queue.entity import BootcampEntity, BootcampEntryPoint
 from gui.prb_control.entities.tutorial.pre_queue.entity import TutorialEntity, TutorialEntryPoint
-from gui.prb_control.entities.ranked.pre_queue.entity import RankedEntity, RankedEntryPoint, RankedForcedEntryPoint
+from gui.prb_control.entities.ranked.pre_queue.entity import RankedEntity, RankedEntryPoint
 from gui.prb_control.entities.epic.pre_queue.entity import EpicEntity, EpicEntryPoint, EpicForcedEntryPoint
-from gui.prb_control.entities.bob.pre_queue.entity import BobEntity, BobEntryPoint, BobForcedEntryPoint
 from gui.prb_control.items import FunctionalState
 from gui.prb_control.settings import FUNCTIONAL_FLAG as _FLAG
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE
@@ -23,18 +22,14 @@ _SUPPORTED_QUEUES = {QUEUE_TYPE.RANDOMS: RandomEntity,
  QUEUE_TYPE.SANDBOX: SandboxEntity,
  QUEUE_TYPE.RANKED: RankedEntity,
  QUEUE_TYPE.BOOTCAMP: BootcampEntity,
- QUEUE_TYPE.EPIC: EpicEntity,
- QUEUE_TYPE.BOB: BobEntity}
+ QUEUE_TYPE.EPIC: EpicEntity}
 _SUPPORTED_ENTRY_BY_ACTION = {PREBATTLE_ACTION_NAME.RANDOM: RandomEntryPoint,
  PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL: TutorialEntryPoint,
  PREBATTLE_ACTION_NAME.SANDBOX: SandboxEntryPoint,
  PREBATTLE_ACTION_NAME.RANKED: RankedEntryPoint,
- PREBATTLE_ACTION_NAME.RANKED_FORCED: RankedForcedEntryPoint,
  PREBATTLE_ACTION_NAME.BOOTCAMP: BootcampEntryPoint,
  PREBATTLE_ACTION_NAME.EPIC: EpicEntryPoint,
- PREBATTLE_ACTION_NAME.EPIC_FORCED: EpicForcedEntryPoint,
- PREBATTLE_ACTION_NAME.BOB: BobEntryPoint,
- PREBATTLE_ACTION_NAME.BOB_FORCED: BobForcedEntryPoint}
+ PREBATTLE_ACTION_NAME.EPIC_FORCED: EpicForcedEntryPoint}
 
 class PreQueueFactory(ControlFactory):
 
@@ -48,10 +43,6 @@ class PreQueueFactory(ControlFactory):
 
     @prequeue_storage_getter(QUEUE_TYPE.EPIC)
     def epicStorage(self):
-        return None
-
-    @prequeue_storage_getter(QUEUE_TYPE.BOB)
-    def bobStorage(self):
         return None
 
     def createEntry(self, ctx):
@@ -106,7 +97,5 @@ class PreQueueFactory(ControlFactory):
             return SandboxEntity()
         elif self.rankedStorage.isModeSelected():
             return RankedEntity()
-        elif self.epicStorage.isModeSelected():
-            return EpicEntity()
         else:
-            return BobEntity() if self.bobStorage.isModeSelected() else None
+            return EpicEntity() if self.epicStorage.isModeSelected() else None

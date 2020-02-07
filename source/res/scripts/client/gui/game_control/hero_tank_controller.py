@@ -185,7 +185,7 @@ class HeroTankController(IHeroTankController):
                         continue
                     tData = None
                     tIdx = None
-                    for idx, tMan in enumerate(tankmen.getNationConfig(nationId).premiumGroups):
+                    for idx, tMan in tankmen.getNationConfig(nationId).premiumGroups.iteritems():
                         if tMan.name == tmanId:
                             tData = tMan
                             tIdx = idx

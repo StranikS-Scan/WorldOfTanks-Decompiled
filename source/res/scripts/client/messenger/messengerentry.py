@@ -71,6 +71,7 @@ class MessengerEntry(object):
         self.__playerHelper.onAvatarShowGUI()
         import BattleReplay
         if BattleReplay.g_replayCtrl.isPlaying:
+            self.__protoPlugins.connect(MESSENGER_SCOPE.BATTLE)
             self.__gui.switch(MESSENGER_SCOPE.BATTLE)
             return
         self.__storage.restoreFromCache()

@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/parsers.py
 import weakref
+from typing import Union
 from gui.server_events import formatters, conditions
+from gui.server_events.conditions import _Cumulativable, CumulativeResult, _ConditionsGroup
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
@@ -282,8 +284,15 @@ class BonusConditions(ConditionsParser):
             return conditions.VehicleStunCumulative(uniqueName, data, self)
         if name == 'cumulative':
             result = []
+            description = tuple()
             for idx, element in enumerate(data):
-                result.append(conditions.CumulativeResult('%s%d' % (uniqueName, idx), (element,), self))
+                if element[0] == 'description':
+                    description = (element,)
+                    del data[idx]
+                    break
+
+            for idx, element in enumerate(data):
+                result.append(conditions.CumulativeResult('%s%d' % (uniqueName, idx), (element,) + description, self))
 
             return result
         if name == 'unit':

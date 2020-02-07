@@ -13,6 +13,9 @@ class ItemsWithTypeFilterTabViewMeta(InventoryCategoryView):
     def onFiltersChange(self, filters):
         self._printOverrideError('onFiltersChange')
 
+    def navigateToStore(self):
+        self._printOverrideError('navigateToStore')
+
     def as_initTypeFilterS(self, typeFiltersVO):
         return self.flashObject.as_initTypeFilter(typeFiltersVO) if self._isDAAPIInited() else None
 

@@ -87,7 +87,7 @@ class RankedUnavailableTooltip(BlocksTooltipData):
         body = backport.text(tooltipData.body())
         nextSeason = self.rankedController.getNextSeason()
         if hasSuitableVehicles:
-            if self.rankedController.isFrozen():
+            if self.rankedController.isFrozen() and self.rankedController.getCurrentSeason() is not None:
                 additionalInfo = backport.text(tooltipData.body.frozen())
             elif nextSeason is not None:
                 additionalInfo = backport.text(tooltipData.body.coming(), date=backport.getShortDateFormat(time_utils.makeLocalServerTime(nextSeason.getStartDate())))

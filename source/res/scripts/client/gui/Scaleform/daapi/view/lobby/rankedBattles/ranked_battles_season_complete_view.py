@@ -9,7 +9,6 @@ from gui.ranked_battles.constants import RankedDossierKeys
 from gui.ranked_battles.ranked_builders import season_comple_vos
 from gui.ranked_battles.ranked_formatters import getRankedAwardsFormatter
 from gui.ranked_battles.ranked_helpers.league_provider import UNDEFINED_LEAGUE_ID
-from gui.ranked_battles.ranked_helpers.sound_manager import RANKED_OVERLAY_SOUND_SPACE
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.bonuses import getBonuses
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
@@ -21,7 +20,6 @@ _logger = logging.getLogger(__name__)
 class RankedBattlesSeasonCompleteView(RankedBattlesSeasonCompleteViewMeta):
     __rankedController = dependency.descriptor(IRankedBattlesController)
     __itemsCache = dependency.descriptor(IItemsCache)
-    _COMMON_SOUND_SPACE = RANKED_OVERLAY_SOUND_SPACE
 
     def __init__(self, ctx=None):
         super(RankedBattlesSeasonCompleteView, self).__init__(ctx)
@@ -42,6 +40,7 @@ class RankedBattlesSeasonCompleteView(RankedBattlesSeasonCompleteViewMeta):
 
     def _populate(self):
         super(RankedBattlesSeasonCompleteView, self)._populate()
+        self.__rankedController.getSoundManager().setOverlayStateOn()
         if self._quest is not None and self._awards is not None:
             self.__setData()
         else:
@@ -49,8 +48,9 @@ class RankedBattlesSeasonCompleteView(RankedBattlesSeasonCompleteViewMeta):
         return
 
     def _dispose(self):
-        super(RankedBattlesSeasonCompleteView, self)._dispose()
+        self.__rankedController.getSoundManager().setOverlayStateOff()
         self.__closeCallback()
+        super(RankedBattlesSeasonCompleteView, self)._dispose()
 
     def _packAwards(self):
         result = []

@@ -7,7 +7,7 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED, SENIORITY_AWARDS_COUNTER
 from adisp import process
 from chat_shared import SYS_MESSAGE_TYPE
-from constants import AUTO_MAINTENANCE_RESULT, PremiumConfigs
+from constants import AUTO_MAINTENANCE_RESULT, PremiumConfigs, DAILY_QUESTS_CONFIG
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -71,22 +71,29 @@ class _StateExtractor(object):
     def getPreferredMapsState(cls):
         return cls.__lobbyContext.getServerSettings().isPreferredMapsEnabled()
 
+    @classmethod
+    def getDailyQuestsState(cls):
+        return cls.__lobbyContext.getServerSettings().getDailyQuestConfig().get('enabled', False)
 
-_FEATURES_DATA = {PremiumConfigs.DAILY_BONUS: {_FeatureState.ON: (R.strings.system_messages.daily_xp_bonus.switch_on.title(), R.strings.system_messages.daily_xp_bonus.switch_on.body()),
-                              _FeatureState.OFF: (R.strings.system_messages.daily_xp_bonus.switch_off.title(), R.strings.system_messages.daily_xp_bonus.switch_off.body()),
+
+_FEATURES_DATA = {PremiumConfigs.DAILY_BONUS: {_FeatureState.ON: (R.strings.system_messages.daily_xp_bonus.switch_on.title(), R.strings.system_messages.daily_xp_bonus.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
+                              _FeatureState.OFF: (R.strings.system_messages.daily_xp_bonus.switch_off.title(), R.strings.system_messages.daily_xp_bonus.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
                               _FUNCTION: _StateExtractor.getAdditionalBonusState},
- PremiumConfigs.PREM_SQUAD: {_FeatureState.ON: (R.strings.system_messages.squad_bonus.switch_on.title(), R.strings.system_messages.squad_bonus.switch_on.body()),
-                             _FeatureState.OFF: (R.strings.system_messages.squad_bonus.switch_off.title(), R.strings.system_messages.squad_bonus.switch_off.body()),
+ PremiumConfigs.PREM_SQUAD: {_FeatureState.ON: (R.strings.system_messages.squad_bonus.switch_on.title(), R.strings.system_messages.squad_bonus.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
+                             _FeatureState.OFF: (R.strings.system_messages.squad_bonus.switch_off.title(), R.strings.system_messages.squad_bonus.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
                              _FUNCTION: _StateExtractor.getSquadPremiumState},
- PremiumConfigs.IS_PREFERRED_MAPS_ENABLED: {_FeatureState.ON: (R.strings.system_messages.maps_black_list.switch_on.title(), R.strings.system_messages.maps_black_list.switch_on.body()),
-                                            _FeatureState.OFF: (R.strings.system_messages.maps_black_list.switch_off.title(), R.strings.system_messages.maps_black_list.switch_off.body()),
+ PremiumConfigs.IS_PREFERRED_MAPS_ENABLED: {_FeatureState.ON: (R.strings.system_messages.maps_black_list.switch_on.title(), R.strings.system_messages.maps_black_list.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
+                                            _FeatureState.OFF: (R.strings.system_messages.maps_black_list.switch_off.title(), R.strings.system_messages.maps_black_list.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
                                             _FUNCTION: _StateExtractor.getPreferredMapsState},
- PremiumConfigs.PIGGYBANK: {_FeatureState.ON: (R.strings.system_messages.piggybank.switch_on.title(), R.strings.system_messages.piggybank.switch_on.body()),
-                            _FeatureState.OFF: (R.strings.system_messages.piggybank.switch_off.title(), R.strings.system_messages.piggybank.switch_off.body()),
+ PremiumConfigs.PIGGYBANK: {_FeatureState.ON: (R.strings.system_messages.piggybank.switch_on.title(), R.strings.system_messages.piggybank.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
+                            _FeatureState.OFF: (R.strings.system_messages.piggybank.switch_off.title(), R.strings.system_messages.piggybank.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
                             _FUNCTION: _StateExtractor.getPiggyBankState},
- PremiumConfigs.PREM_QUESTS: {_FeatureState.ON: (R.strings.system_messages.premium_quests.switch_on.title(), R.strings.system_messages.premium_quests.switch_on.body()),
-                              _FeatureState.OFF: (R.strings.system_messages.premium_quests.switch_off.title(), R.strings.system_messages.premium_quests.switch_off.body()),
-                              _FUNCTION: _StateExtractor.getPremQuestsState}}
+ PremiumConfigs.PREM_QUESTS: {_FeatureState.ON: (R.strings.system_messages.premium_quests.switch_on.title(), R.strings.system_messages.premium_quests.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
+                              _FeatureState.OFF: (R.strings.system_messages.premium_quests.switch_off.title(), R.strings.system_messages.premium_quests.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
+                              _FUNCTION: _StateExtractor.getPremQuestsState},
+ DAILY_QUESTS_CONFIG: {_FeatureState.ON: (R.strings.system_messages.daily_quests.switch_on.title(), R.strings.system_messages.daily_quests.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
+                       _FeatureState.OFF: (R.strings.system_messages.daily_quests.switch_off.title(), R.strings.system_messages.daily_quests.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
+                       _FUNCTION: _StateExtractor.getDailyQuestsState}}
 
 class _NotificationListener(object):
 
@@ -830,9 +837,11 @@ class SwitcherListener(_NotificationListener):
         if self.__currentStates[featureName] != newState:
             msg = _FEATURES_DATA[featureName]
             if newState:
-                SystemMessages.pushMessage(type=SystemMessages.SM_TYPE.PremiumFeatureOn, text=backport.text(msg[_FeatureState.ON][1]), messageData={'header': backport.text(msg[_FeatureState.ON][0])})
+                msgTitle, msgBody, msgType = msg[_FeatureState.ON]
+                SystemMessages.pushMessage(type=msgType, text=backport.text(msgBody), messageData={'header': backport.text(msgTitle)})
             else:
-                SystemMessages.pushMessage(type=SystemMessages.SM_TYPE.PremiumFeatureOff, text=backport.text(msg[_FeatureState.OFF][1]), messageData={'header': backport.text(msg[_FeatureState.OFF][0])})
+                msgTitle, msgBody, msgType = msg[_FeatureState.OFF]
+                SystemMessages.pushMessage(type=msgType, text=backport.text(msgBody), messageData={'header': backport.text(msgTitle)})
 
 
 class TankPremiumListener(_NotificationListener):

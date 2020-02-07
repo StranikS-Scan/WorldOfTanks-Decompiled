@@ -20,7 +20,7 @@ class EpicReinforcementPanel(EpicReinforcementPanelMeta, IArenaPeriodController)
         self.__timeCB = None
         return
 
-    def setPeriodInfo(self, period, endTime, length, additionalInfo, soundID):
+    def setPeriodInfo(self, period, endTime, length, additionalInfo):
         self.__onPeriodChange(period)
 
     def invalidatePeriodInfo(self, period, endTime, length, additionalInfo):

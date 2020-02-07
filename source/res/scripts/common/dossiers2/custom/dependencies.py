@@ -83,8 +83,8 @@ def _set_ACHIEVEMENT15X15_DEPENDENCIES():
      'tankwomenProgress': [_updateTankwomen],
      'EFC2016WinSeries': [_updateMaxEFC2016WinSeries],
      'rankedBattlesHeroProgress': [_updateRankedBattlesHeroProgress],
-     'rankedStayingPower': [_updateRankedAchievementsProgress],
-     'rankedDivisionFighter': [_updateRankedAchievementsProgress]})
+     'rankedStayingCounter': [_updateRankedStayingPower],
+     'rankedDivisionCounter': [_updateRankedDivisionFighter]})
 
 
 ACHIEVEMENT7X7_DEPENDENCIES = {}
@@ -540,11 +540,22 @@ def _updateRankedBattlesHeroProgress(dossierDescr, dossierBlockDescr, key, value
         dossierDescr['singleAchievements']['rankedBattlesHero'] = 0
 
 
-def _updateRankedAchievementsProgress(dossierDescr, dossierBlockDescr, key, value, prevValue):
-    prevClass = __getNewMedalClass(key, prevValue, 0)
-    curClass = __getNewMedalClass(key, value, 0)
+def _updateRankedDivisionFighter(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    achievmentName = 'rankedDivisionFighter'
+    prevClass = __getNewMedalClass(achievmentName, prevValue, 0)
+    curClass = __getNewMedalClass(achievmentName, value, 0)
     if prevClass != curClass:
-        dossierDescr.addPopUp('achievements', key, curClass)
+        dossierBlockDescr[achievmentName] = curClass
+        dossierDescr.addPopUp('achievements', achievmentName, curClass)
+
+
+def _updateRankedStayingPower(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    achievmentName = 'rankedStayingPower'
+    prevClass = __getNewMedalClass(achievmentName, prevValue, 0)
+    curClass = __getNewMedalClass(achievmentName, value, 0)
+    if prevClass != curClass:
+        dossierBlockDescr[achievmentName] = curClass
+        dossierDescr.addPopUp('achievements', achievmentName, curClass)
 
 
 def _updateMaxDeathTrackWinSeries(dossierDescr, dossierBlockDescr, key, value, prevValue):

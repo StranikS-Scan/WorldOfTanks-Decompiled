@@ -3,7 +3,6 @@
 import logging
 import typing
 import BigWorld
-import constants
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
 from constants import QUEUE_TYPE
@@ -25,11 +24,9 @@ from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG, PRE
 from account_helpers.AccountSettings import AccountSettings, GUI_START_BEHAVIOR
 from gui.prb_control.storages import prequeue_storage_getter
 from gui.ranked_battles.constants import PrimeTimeStatus
-from gui.shared.event_dispatcher import showRankedPrimeTimeWindow
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IRankedBattlesController
-from skeletons.connection_mgr import IConnectionManager
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from gui.prb_control.storages.local_storage import LocalStorage
@@ -55,44 +52,22 @@ class RankedSubscriber(PreQueueSubscriber):
 
 
 class RankedEntryPoint(PreQueueEntryPoint):
-    __connectionMgr = dependency.descriptor(IConnectionManager)
     __rankedController = dependency.descriptor(IRankedBattlesController)
-    __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(RankedEntryPoint, self).__init__(FUNCTIONAL_FLAG.RANKED, QUEUE_TYPE.RANKED)
 
     def select(self, ctx, callback=None):
         status, _, _ = self.__rankedController.getPrimeTimeStatus()
-        if status in (PrimeTimeStatus.DISABLED, PrimeTimeStatus.FROZEN, PrimeTimeStatus.NO_SEASON):
+        if status == PrimeTimeStatus.FROZEN:
             SystemMessages.pushMessage(backport.text(R.strings.system_messages.ranked.notification.notAvailable()), type=SystemMessages.SM_TYPE.Error)
             if callback is not None:
                 callback(False)
             g_prbCtrlEvents.onPreQueueJoinFailure(PRE_QUEUE_JOIN_ERRORS.DISABLED)
             return
-        elif not self.__isFirstEnter() and status in self._getFilterStates() and not constants.IS_CHINA:
-            showRankedPrimeTimeWindow()
-            if callback is not None:
-                callback(False)
-            g_prbCtrlEvents.onPreQueueJoinFailure(PRE_QUEUE_JOIN_ERRORS.NOT_AVAILABLE)
-            return
         else:
             super(RankedEntryPoint, self).select(ctx, callback)
             return
-
-    def _getFilterStates(self):
-        return (PrimeTimeStatus.NOT_SET, PrimeTimeStatus.NOT_AVAILABLE)
-
-    def __isFirstEnter(self):
-        defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
-        filters = self.__settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
-        return not filters['isRankedWelcomeViewShowed']
-
-
-class RankedForcedEntryPoint(RankedEntryPoint):
-
-    def _getFilterStates(self):
-        return (PrimeTimeStatus.NOT_SET,)
 
 
 class RankedEntity(PreQueueEntity):
@@ -142,8 +117,7 @@ class RankedEntity(PreQueueEntity):
         super(RankedEntity, self).queue(ctx, callback=callback)
 
     def doSelectAction(self, action):
-        name = action.actionName
-        return SelectResult(True) if name in (PREBATTLE_ACTION_NAME.RANKED, PREBATTLE_ACTION_NAME.RANKED_FORCED) else super(RankedEntity, self).doSelectAction(action)
+        return SelectResult(True) if action.actionName == PREBATTLE_ACTION_NAME.RANKED else super(RankedEntity, self).doSelectAction(action)
 
     def getPermissions(self, pID=None, **kwargs):
         return RankedPermissions(self.isInQueue())

@@ -9,6 +9,31 @@ _REGION_FORMAT = 'view.{}.{}'
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 
+def args2params(*types):
+
+    def _decorator(func):
+
+        def _wrapper(*args):
+            signature = inspect.getargspec(func).args
+            if 'self' in signature:
+                args, kwargs = (args[0],), args[1]
+                signature.remove('self')
+            else:
+                args, kwargs = tuple(), args[0]
+            if types:
+                for idx, name in enumerate(signature):
+                    try:
+                        kwargs[name] = types[idx](kwargs[name])
+                    except (ValueError, TypeError) as e:
+                        _logger.warning('There is an error while converting arg @%s[%s] to %s: %s', name, kwargs[name], str(types[idx]), e.message)
+
+            return func(*args, **kwargs)
+
+        return _wrapper
+
+    return _decorator
+
+
 def trackLifeCycle(uniqueName):
     return ViewLifeCycleToRegions(uniqueName)
 

@@ -585,7 +585,7 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
-    <historical>	false	</historical>
+    <historical>	true	</historical>
     <priceGroup>	styles 4500g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -1053,6 +1053,12 @@
               <palette>	0	</palette>
             </item>
           </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+          </decals>
         </outfit>
       </outfits>
     </style>

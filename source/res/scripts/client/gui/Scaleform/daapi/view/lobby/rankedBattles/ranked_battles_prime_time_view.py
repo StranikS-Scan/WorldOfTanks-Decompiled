@@ -7,6 +7,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.ranked_battles.ranked_helpers.sound_manager import RANKED_OVERLAY_SOUND_SPACE
+from gui.ranked_battles.constants import PrimeTimeStatus
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.time_formatters import formatDate
 from helpers import dependency
@@ -58,57 +59,41 @@ class RankedBattlesPrimeTimeView(RankedPrimeTimeMeta):
          'serversText': text_styles.expText(self._getServerText(serverList, serverInfo, True)),
          'serversDDEnabled': not isSingleServer,
          'serverDDVisible': not isSingleServer,
-         'timeText': text_styles.expText(self.__getTimeText(serverInfo)),
-         'background': backport.image(R.images.gui.maps.icons.rankedBattles.bg.main())}
+         'timeText': text_styles.expText(self.__getTimeText(serverInfo))}
 
     def _getPrbActionName(self):
-        if self._hasAvailableServers():
-            prbAction = PREBATTLE_ACTION_NAME.RANKED
-        else:
-            prbAction = PREBATTLE_ACTION_NAME.RANKED_FORCED
-        return prbAction
+        return self._getPrbForcedActionName()
 
     def _getPrbForcedActionName(self):
-        return PREBATTLE_ACTION_NAME.RANKED_FORCED
-
-    def _getWarningIcon(self):
-        if self._hasAvailableServers():
-            icon = R.images.gui.maps.icons.library.icon_clock_100x100()
-        else:
-            icon = R.images.gui.maps.icons.library.icon_alert_90x84()
-        return backport.image(icon)
+        return PREBATTLE_ACTION_NAME.RANKED
 
     def __getStatusTitle(self):
-        if not self._hasAvailableServers():
-            status = backport.text(R.strings.ranked_battles.primeTime.status.allServersDisabled())
-        else:
-            currServerName = self._connectionMgr.serverUserNameShort
-            primeTime = self.__rankedController.getPrimeTimes().get(self._connectionMgr.peripheryID)
-            if primeTime:
-                currTime = time_utils.getCurrentLocalServerTimestamp()
-                currentCycleEnd = self.__rankedController.getCurrentSeason().getCycleEndDate()
-                period = primeTime.getNextPeriodStart(currTime, currentCycleEnd)
-                startTime = formatDate('%H:%M', period)
-                status = backport.text(R.strings.ranked_battles.primeTime.status.untill(), startTime=startTime, server=currServerName)
-            else:
-                status = backport.text(R.strings.ranked_battles.primeTime.status.disableFirst(), server=currServerName)
-        return text_styles.grandTitle(status)
+        currServerName = self._connectionMgr.serverUserNameShort
+        status, timeLeft, _ = self.__rankedController.getPrimeTimeStatus()
+        if status == PrimeTimeStatus.NOT_AVAILABLE:
+            if not timeLeft:
+                currentSeason = self.__rankedController.getCurrentSeason()
+                return text_styles.grandTitle(backport.text(R.strings.ranked_battles.primeTime.status.seasonDisabled(), season=currentSeason.getUserName(), server=currServerName))
+            if not self._hasAvailableServers():
+                return text_styles.grandTitle(backport.text(R.strings.ranked_battles.primeTime.status.allServersDisabled()))
+            startTime = formatDate('%H:%M', time_utils.getCurrentLocalServerTimestamp() + timeLeft)
+            return text_styles.grandTitle(backport.text(R.strings.ranked_battles.primeTime.status.untill(), startTime=startTime, server=currServerName))
+        return text_styles.grandTitle(backport.text(R.strings.ranked_battles.primeTime.status.disableFirst(), server=currServerName))
 
     def __getTimeText(self, serverInfo):
-        controller = self._getController()
-        if serverInfo:
+        if serverInfo is None:
+            return ''
+        else:
+            controller = self._getController()
             timeLeft = serverInfo.getTimeLeft()
             isAvailable = serverInfo.isAvailable()
             serverName = serverInfo.getShortName()
-        else:
-            _, timeLeft, isAvailable = controller.getPrimeTimeStatus()
-            serverName = ''
-        currentSeason = controller.getCurrentSeason()
-        if currentSeason and not timeLeft:
-            return backport.text(R.strings.ranked_battles.primeTime.status.seasonDisabled(), season=controller.getCurrentSeason().getUserName(), server=serverName)
-        if isAvailable:
-            resId = R.strings.ranked_battles.primeTime.status.primeIsAvailable()
-        else:
-            resId = R.strings.ranked_battles.primeTime.status.primeWillBeAvailable()
-        timeLeftStr = backport.getTillTimeStringByRClass(timeLeft, R.strings.menu.Time.timeValueShort)
-        return backport.text(resId, server=serverName, time=text_styles.neutral(timeLeftStr))
+            currentSeason = controller.getCurrentSeason()
+            if currentSeason and not timeLeft:
+                return backport.text(R.strings.ranked_battles.primeTime.status.seasonDisabled(), season=controller.getCurrentSeason().getUserName(), server=serverName)
+            timeLeftStr = backport.getTillTimeStringByRClass(timeLeft, R.strings.menu.Time.timeValueShort)
+            if isAvailable:
+                resId = R.strings.ranked_battles.primeTime.status.primeIsAvailable()
+            else:
+                resId = R.strings.ranked_battles.primeTime.status.primeWillBeAvailable()
+            return backport.text(resId, server=serverName, time=text_styles.neutral(timeLeftStr))

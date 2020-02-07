@@ -13,7 +13,7 @@ from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import LoadViewEvent
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from helpers import dependency
-from skeletons.gui.game_control import IRankedBattlesController, IBobController
+from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.lobby_context import ILobbyContext
 
@@ -22,7 +22,6 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
     rankedController = dependency.descriptor(IRankedBattlesController)
     epicQueueController = dependency.descriptor(IEpicBattleMetaGameController)
     lobbyContext = dependency.descriptor(ILobbyContext)
-    bobController = dependency.descriptor(IBobController)
 
     def __init__(self, _=None):
         super(BattleTypeSelectPopover, self).__init__()
@@ -64,9 +63,6 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
             elif itemData == PREBATTLE_ACTION_NAME.SANDBOX:
                 isSpecial = True
                 tooltip = TOOLTIPS_CONSTANTS.BATTLE_TRAINING
-            elif itemData == PREBATTLE_ACTION_NAME.BOB or itemData == PREBATTLE_ACTION_NAME.BOB_SQUAD:
-                isSpecial = True
-                tooltip = TOOLTIPS_CONSTANTS.BOB_SELECTOR_INFO
             result = {'isSpecial': isSpecial,
              'tooltip': tooltip}
             return result

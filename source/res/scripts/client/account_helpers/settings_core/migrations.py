@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/migrations.py
 import BigWorld
 import constants
-from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS
+from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS
 from adisp import process, async
 from debug_utils import LOG_DEBUG
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
@@ -245,7 +245,7 @@ def _migrateTo26(core, data, initialized):
         clear[SETTINGS_SECTIONS.GAME_EXTENDED] = clear.get(SETTINGS_SECTIONS.GAME_EXTENDED, 0) | maskOffset
     feedbackData = data.get('feedbackData', {})
     feedbackData[DAMAGE_INDICATOR.TYPE] = 1
-    feedbackData[DAMAGE_INDICATOR.PRESETS] = 0
+    feedbackData[DAMAGE_INDICATOR.PRESET_CRITS] = 0
     feedbackData[DAMAGE_INDICATOR.DAMAGE_VALUE] = True
     feedbackData[DAMAGE_INDICATOR.VEHICLE_INFO] = True
     feedbackData[DAMAGE_INDICATOR.ANIMATION] = True
@@ -320,7 +320,7 @@ def _migrateTo35(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
     currentVal = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.FEEDBACK, 0)
     feedbackDamageIndicator[DAMAGE_INDICATOR.TYPE] = __migrateMaskValue(currentVal, 1, 0)
-    feedbackDamageIndicator[DAMAGE_INDICATOR.PRESETS] = __migrateMaskValue(currentVal, 1, 1)
+    feedbackDamageIndicator[DAMAGE_INDICATOR.PRESET_CRITS] = __migrateMaskValue(currentVal, 1, 1)
     feedbackDamageIndicator[DAMAGE_INDICATOR.DAMAGE_VALUE] = __migrateMaskValue(currentVal, 1, 2)
     feedbackDamageIndicator[DAMAGE_INDICATOR.VEHICLE_INFO] = __migrateMaskValue(currentVal, 1, 3)
     feedbackDamageIndicator[DAMAGE_INDICATOR.ANIMATION] = __migrateMaskValue(currentVal, 1, 4)
@@ -447,6 +447,25 @@ def _migrateTo49(core, data, initialized):
     storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.EPICBATTLE_CAROUSEL_FILTER_2, 0)
     if storedValue & newYearFilter:
         clear['epicCarouselFilter2'] = clear.get('epicCarouselFilter2', 0) | newYearFilter
+
+
+def _migrateTo50(core, data, initialized):
+    data['sessionStats'][SESSION_STATS.SHOW_WTR] = True
+    data['sessionStats'][SESSION_STATS.SHOW_RATIO_DAMAGE] = True
+    data['sessionStats'][SESSION_STATS.SHOW_RATIO_KILL] = True
+    data['sessionStats'][SESSION_STATS.SHOW_WINS] = True
+    data['sessionStats'][SESSION_STATS.SHOW_AVERAGE_DAMAGE] = True
+    data['sessionStats'][SESSION_STATS.SHOW_HELP_DAMAGE] = True
+    data['sessionStats'][SESSION_STATS.SHOW_BLOCKED_DAMAGE] = True
+    data['sessionStats'][SESSION_STATS.SHOW_AVERAGE_XP] = True
+
+
+def _migrateTo51(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    currentVal = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.DAMAGE_INDICATOR, 0)
+    feedbackDamageIndicator = data.get('feedbackDamageIndicator', {})
+    feedbackDamageIndicator[DAMAGE_INDICATOR.PRESET_CRITS] = not __migrateMaskValue(currentVal, 1, 1)
+    feedbackDamageIndicator[DAMAGE_INDICATOR.PRESET_ALLIES] = True
 
 
 _versions = ((1,
@@ -639,6 +658,14 @@ _versions = ((1,
   False),
  (49,
   _migrateTo49,
+  False,
+  False),
+ (50,
+  _migrateTo50,
+  False,
+  False),
+ (51,
+  _migrateTo51,
   False,
   False))
 

@@ -5,7 +5,7 @@ import types
 from collections import namedtuple
 import logging
 from Event import Event
-from constants import IS_TUTORIAL_ENABLED, PremiumConfigs
+from constants import IS_TUTORIAL_ENABLED, PremiumConfigs, DAILY_QUESTS_CONFIG
 from debug_utils import LOG_WARNING, LOG_DEBUG
 from gui import GUI_SETTINGS, SystemMessages
 from gui.SystemMessages import SM_TYPE
@@ -440,27 +440,6 @@ class _SeniorityAwardsConfig(namedtuple('_SeniorityAwardsConfig', ('enabled', 'a
         return self.hangarWidgetVisibility
 
 
-class _BobConfig(namedtuple('_BobConfig', ('isEnabled', 'registration', 'url', 'peripheryIDs', 'primeTimes', 'seasons', 'cycleTimes', 'levels', 'teams', 'teamTokens', 'leaderTokens', 'leaderTokenFirstType', 'pointsToken', 'addPersonalRewardToken', 'claimPersonalRewardToken', 'personalRewardQuest', 'teamRewardQuestPrefix'))):
-    __slots__ = ()
-
-    def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, registration={}, url='', peripheryIDs={}, primeTimes={}, seasons={}, cycleTimes={}, levels=set(), teams={}, teamTokens=set(), leaderTokens=set(), leaderTokenFirstType='', pointsToken='', addPersonalRewardToken='', claimPersonalRewardToken='', personalRewardQuest='', teamRewardQuestPrefix='')
-        defaults.update(kwargs)
-        return super(_BobConfig, cls).__new__(cls, **defaults)
-
-    def asDict(self):
-        return self._asdict()
-
-    def replace(self, data):
-        allowedFields = self._fields
-        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
-        return self._replace(**dataToUpdate)
-
-    @classmethod
-    def defaults(cls):
-        return cls()
-
-
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
@@ -539,11 +518,6 @@ class ServerSettings(object):
             self.__seniorityAwardsConfig = makeTupleByDict(_SeniorityAwardsConfig, self.__serverSettings['seniority_awards_config'])
         else:
             self.__seniorityAwardsConfig = _SeniorityAwardsConfig()
-        if 'bob_config' in self.__serverSettings:
-            LOG_DEBUG('bob_config', self.__serverSettings['bob_config'])
-            self.__bobSettings = makeTupleByDict(_BobConfig, self.__serverSettings['bob_config'])
-        else:
-            self.__bobSettings = _BobConfig.defaults()
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -561,8 +535,6 @@ class ServerSettings(object):
         if 'epic_config' in serverSettingsDiff:
             self.__updateEpic(serverSettingsDiff)
             self.__serverSettings['epic_config'] = serverSettingsDiff['epic_config']
-        if 'bob_config' in serverSettingsDiff:
-            self.__updateBob(serverSettingsDiff)
         if 'telecom_config' in serverSettingsDiff:
             self.__telecomConfig = _TelecomConfig(self.__serverSettings['telecom_config'])
         if 'disabledPMOperations' in serverSettingsDiff:
@@ -652,10 +624,6 @@ class ServerSettings(object):
     @property
     def epicBattles(self):
         return self.__epicGameSettings
-
-    @property
-    def bobConfig(self):
-        return self.__bobSettings
 
     @property
     def telecomConfig(self):
@@ -764,6 +732,9 @@ class ServerSettings(object):
 
     def getPremQuestsConfig(self):
         return self.__getGlobalSetting(PremiumConfigs.PREM_QUESTS, {})
+
+    def getDailyQuestConfig(self):
+        return self.__getGlobalSetting(DAILY_QUESTS_CONFIG, {})
 
     def getPreferredMapsConfig(self):
         return self.__getGlobalSetting(PremiumConfigs.PREFERRED_MAPS, {})
@@ -878,9 +849,6 @@ class ServerSettings(object):
     def __updateEpic(self, targetSettings):
         self.__epicMetaGameSettings = self.__epicMetaGameSettings.replace(targetSettings['epic_config'].get('epicMetaGame', {}))
         self.__epicGameSettings = self.__epicGameSettings.replace(targetSettings['epic_config'])
-
-    def __updateBob(self, targetSettings):
-        self.__bobSettings = self.__bobSettings.replace(targetSettings['bob_config'])
 
     def __updateSquadBonus(self, sourceSettings):
         self.__squadPremiumBonus = self.__squadPremiumBonus.replace(sourceSettings[PremiumConfigs.PREM_SQUAD])

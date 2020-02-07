@@ -18,7 +18,7 @@ from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX, PREMIUM_GROUP_PREFIX
+from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX, PREMIUM_GROUP_PREFIX, DAILY_QUEST_ID_PREFIX
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.locale.LINKEDSET import LINKEDSET
 from gui.server_events.conditions import getProgressFromQuestWithSingleAccumulative
@@ -69,6 +69,15 @@ class EventInfoModel(object):
         else:
             newDayUTC = 0
         return newDayUTC
+
+    @classmethod
+    def getDailyProgressResetTimeDelta(cls):
+        currentDayUTC = time_utils.getServerTimeCurrentDay()
+        dailyProgressResetTimeUTC = cls._getDailyProgressResetTimeUTC()
+        untilRest = dailyProgressResetTimeUTC - currentDayUTC
+        if untilRest < 0:
+            untilRest += time_utils.ONE_DAY
+        return untilRest
 
     def _getActiveDateTimeString(self):
         i18nKey, args = None, {}
@@ -169,6 +178,10 @@ def premMissionsSortFunc(a, b):
     return isChild(a, b) - isChild(b, a)
 
 
+def dailyQuestsSortFunc(a, b):
+    return cmp(a.getSortKey(), b.getSortKey())
+
+
 def hasAnySavedProgresses(savedProgresses):
     return True if savedProgresses else False
 
@@ -225,6 +238,10 @@ def isLinkedSet(eventID):
 
 def isPremium(eventID):
     return eventID.startswith(PREMIUM_GROUP_PREFIX) if eventID else False
+
+
+def isDailyQuest(eventID):
+    return eventID.startswith(DAILY_QUEST_ID_PREFIX) if eventID else False
 
 
 def isRegularQuest(eventID):
@@ -364,3 +381,23 @@ def getPremiumGroup(eventsCache=None):
 @dependency.replace_none_kwargs(eventsCache=IEventsCache, lobbyContext=ILobbyContext)
 def isPremiumQuestsEnable(lobbyContext=None, eventsCache=None):
     return lobbyContext.getServerSettings().getPremQuestsConfig().get('enabled', False) and len(eventsCache.getPremiumQuests()) > 0
+
+
+@dependency.replace_none_kwargs(eventsCache=IEventsCache, lobbyContext=ILobbyContext)
+def isDailyQuestsEnable(lobbyContext=None, eventsCache=None):
+    return lobbyContext.getServerSettings().getDailyQuestConfig().get('enabled', False)
+
+
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def getRerollTimeout(lobbyContext=None):
+    return lobbyContext.getServerSettings().getDailyQuestConfig().get('rerollTimeout', 0)
+
+
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def isRerollEnabled(lobbyContext=None):
+    return lobbyContext.getServerSettings().getDailyQuestConfig().get('rerollEnabled', False)
+
+
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def isEpicQuestEnabled(lobbyContext=None):
+    return lobbyContext.getServerSettings().getDailyQuestConfig().get('epicRewardEnabled', False)

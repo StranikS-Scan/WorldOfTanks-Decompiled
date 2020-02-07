@@ -1,0 +1,664 @@
+<S30_UDES_03_Alt_3.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <crew>
+    <commander>	radioman
+			loader	</commander>
+    <driver></driver>
+    <gunner>	loader	</gunner>
+  </crew>
+  <speedLimits>
+    <forward>	50	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.226	</moving>
+    <still>	0.301	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.452	</firePenalty>
+  </invisibility>
+  <repairCost>	10.0	</repairCost>
+  <premiumVehicleXPFactor>	0.05	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+    <density>	1 1	</density>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	35	</armor_1>
+      <armor_2>	50	</armor_2>
+      <armor_3>	35	</armor_3>
+      <armor_4>	20	</armor_4>
+      <armor_5>	20	</armor_5>
+      <armor_6>	10	</armor_6>
+      <armor_7>	40	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	35	</armor_9>
+      <armor_10>	15	</armor_10>
+      <armor_11>	10	</armor_11>
+      <leftTrack>	20	</leftTrack>
+      <rightTrack>	20	</rightTrack>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	12273	</weight>
+    <maxHealth>	1280	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/sweden/S30_UDES_03_Alt_3/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/sweden/S30_UDES_03_Alt_3/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/sweden/S30_UDES_03_Alt_3/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.34 38.00 0.36 1.00 0.05 0.34	</pitchParams>
+      <rollParams>	1.00 0.34 38.00 0.36 1.00 0.06 0.40	</rollParams>
+      <sensitivityToImpulse>	0.34	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	diesel_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.510268 -1.19	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/sweden/S30_UDES_03_Alt_3/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/sweden/S30_UDES_03_Alt_3/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <hangarShadowTexture>	vehicles/sweden/S30_UDES_03_Alt_3/UDES_03_Alt_3_HangarShadowMap.dds	</hangarShadowTexture>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	10000	</slotId>
+        <rayStart>	0.606576 0.376899 2.70854	</rayStart>
+        <rayEnd>	0.606576 0.177906 2.68849	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.25	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+        <isUVProportional>	true	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	11000	</slotId>
+        <anchorPosition>	0.000000 0.380148 1.67895	</anchorPosition>
+        <anchorDirection>	0.000000 0.22083 0.975312	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	12000	</slotId>
+        <anchorPosition>	0.000000 0.380148 1.67895	</anchorPosition>
+        <anchorDirection>	0.000000 0.22083 0.975312	</anchorDirection>
+      </slot>
+    </customizationSlots>
+    <camouflage>
+      <density>	132.255 132.708	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+      <tiling>	2 2 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_S30_UDES_03_Alt_3>
+      <userString>	#sweden_vehicles:Chassis_S30_UDES_03_Alt_3	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	50000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	6500	</weight>
+      <maxLoad>	33000	</maxLoad>
+      <terrainResistance>	1 1.1 2.2	</terrainResistance>
+      <brakeForce>	30000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	44	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.16	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/sweden/S30_UDES_03_Alt_3/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/sweden/S30_UDES_03_Alt_3/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/sweden/S30_UDES_03_Alt_3/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	MEDIUM	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	ussr_02	</textureSet>
+        <size>	0.7 0.5	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.8	</textureScale>
+      </tracks>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.616330 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.342020 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.970650	</row2>
+            <row3>	0.000000 0.000000 0.000021	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.249066	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.201263	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.344926	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.249066	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.201263	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.344925	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.781544 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/sweden/S30_UDES_03_Alt_3/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/sweden/S30_UDES_03_Alt_3/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.27972 1.85754	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <hullAiming>
+        <audio>
+          <lodDist>	MEDIUM	</lodDist>
+          <angleLimitValue>	5.0	</angleLimitValue>
+          <sounds>
+            <upStart>
+              <underLimitSounds>
+                <wwsoundPC>	tangage_gidro_small_angle_up_start_PC	</wwsoundPC>
+                <wwsoundNPC>	tangage_gidro_small_angle_up_start_NPC	</wwsoundNPC>
+              </underLimitSounds>
+              <overLimitSounds>
+                <wwsoundPC>	tangage_gidro_high_angle_up_start_PC	</wwsoundPC>
+                <wwsoundNPC>	tangage_gidro_high_angle_up_start_NPC	</wwsoundNPC>
+              </overLimitSounds>
+            </upStart>
+            <upStop>
+              <underLimitSounds>
+                <wwsoundPC>	tangage_gidro_small_angle_up_stop_PC	</wwsoundPC>
+                <wwsoundNPC>	tangage_gidro_small_angle_up_stop_NPC	</wwsoundNPC>
+              </underLimitSounds>
+              <overLimitSounds>
+                <wwsoundPC>	tangage_gidro_high_angle_up_stop_PC	</wwsoundPC>
+                <wwsoundNPC>	tangage_gidro_high_angle_up_stop_NPC	</wwsoundNPC>
+              </overLimitSounds>
+            </upStop>
+            <downStart>
+              <underLimitSounds>
+                <wwsoundPC>	tangage_gidro_small_angle_down_start_PC	</wwsoundPC>
+                <wwsoundNPC>	tangage_gidro_small_angle_down_start_NPC	</wwsoundNPC>
+              </underLimitSounds>
+              <overLimitSounds>
+                <wwsoundPC>	tangage_gidro_high_angle_down_start_PC	</wwsoundPC>
+                <wwsoundNPC>	tangage_gidro_high_angle_down_start_NPC	</wwsoundNPC>
+              </overLimitSounds>
+            </downStart>
+            <downStop>
+              <underLimitSounds>
+                <wwsoundPC>	tangage_gidro_small_angle_down_stop_PC	</wwsoundPC>
+                <wwsoundNPC>	tangage_gidro_small_angle_down_stop_NPC	</wwsoundNPC>
+              </underLimitSounds>
+              <overLimitSounds>
+                <wwsoundPC>	tangage_gidro_high_angle_down_stop_PC	</wwsoundPC>
+                <wwsoundNPC>	tangage_gidro_high_angle_down_stop_NPC	</wwsoundNPC>
+              </overLimitSounds>
+            </downStop>
+          </sounds>
+        </audio>
+      </hullAiming>
+      <leveredSuspension>
+        <lodSettings>
+          <maxLodDistance>	LEVERED_SUSPENSION	</maxLodDistance>
+          <maxPriority>	15	</maxPriority>
+        </lodSettings>
+        <lever>
+          <startNode>	Lever_Start_L0	</startNode>
+          <jointNode>	Lever_Joint_L0	</jointNode>
+          <trackNode>	Track_L0	</trackNode>
+          <limits>	186.5 140.0	</limits>
+        </lever>
+        <lever>
+          <startNode>	Lever_Start_R0	</startNode>
+          <jointNode>	Lever_Joint_R0	</jointNode>
+          <trackNode>	Track_R0	</trackNode>
+          <limits>	186.5 140.0	</limits>
+        </lever>
+        <lever>
+          <startNode>	Lever_Start_L1	</startNode>
+          <jointNode>	Lever_Joint_L1	</jointNode>
+          <trackNode>	Track_L1	</trackNode>
+          <limits>	186.5 150.0	</limits>
+        </lever>
+        <lever>
+          <startNode>	Lever_Start_R1	</startNode>
+          <jointNode>	Lever_Joint_R1	</jointNode>
+          <trackNode>	Track_R1	</trackNode>
+          <limits>	186.5 150.0	</limits>
+        </lever>
+        <lever>
+          <startNode>	Lever_Start_L2	</startNode>
+          <jointNode>	Lever_Joint_L2	</jointNode>
+          <trackNode>	Track_L2	</trackNode>
+          <limits>	186.5 140.0	</limits>
+        </lever>
+        <lever>
+          <startNode>	Lever_Start_R2	</startNode>
+          <jointNode>	Lever_Joint_R2	</jointNode>
+          <trackNode>	Track_R2	</trackNode>
+          <limits>	186.5 140.0	</limits>
+        </lever>
+        <lever>
+          <startNode>	Lever_Start_L3	</startNode>
+          <jointNode>	Lever_Joint_L3	</jointNode>
+          <trackNode>	Track_L3	</trackNode>
+          <limits>	186.5 130.0	</limits>
+        </lever>
+        <lever>
+          <startNode>	Lever_Start_R3	</startNode>
+          <jointNode>	Lever_Joint_R3	</jointNode>
+          <trackNode>	Track_R3	</trackNode>
+          <limits>	186.5 130.0	</limits>
+        </lever>
+        <lever>
+          <startNode>	Lever_Start_L4	</startNode>
+          <jointNode>	Lever_Joint_L4	</jointNode>
+          <trackNode>	Track_L4	</trackNode>
+          <limits>	186.5 120.0	</limits>
+        </lever>
+        <lever>
+          <startNode>	Lever_Start_R4	</startNode>
+          <jointNode>	Lever_Joint_R4	</jointNode>
+          <trackNode>	Track_R4	</trackNode>
+          <limits>	186.5 120.0	</limits>
+        </lever>
+        <lever>
+          <startNode>	Lever_Start_L5	</startNode>
+          <jointNode>	Lever_Joint_L5	</jointNode>
+          <trackNode>	Track_L5	</trackNode>
+          <limits>	186.5 110.0	</limits>
+        </lever>
+        <lever>
+          <startNode>	Lever_Start_R5	</startNode>
+          <jointNode>	Lever_Joint_R5	</jointNode>
+          <trackNode>	Track_R5	</trackNode>
+          <limits>	186.5 110.0	</limits>
+        </lever>
+      </leveredSuspension>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	21000	</slotId>
+          <anchorPosition>	-1.53014 0.459525 0.0676135	</anchorPosition>
+          <anchorDirection>	-0.956886 0.287368 0.0422827	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	29000	</slotId>
+          <anchorPosition>	0.000839472 3.6472 -1.73098	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+      </customizationSlots>
+    </Chassis_S30_UDES_03_Alt_3>
+  </chassis>
+  <turrets0>
+    <Turret_1_S30_UDES_03_Alt_3>
+      <userString>	#sweden_vehicles:Turret_1_S30_UDES_03_Alt_3	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	50000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	66	</armor_1>
+        <armor_2>	50	</armor_2>
+        <armor_3>	30	</armor_3>
+        <armor_4>	20	</armor_4>
+        <armor_5>	20	</armor_5>
+        <armor_6>	15	</armor_6>
+        <armor_7>	35	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	25	</armor_9>
+        <armor_10>	40	</armor_10>
+        <armor_11>	30	</armor_11>
+        <armor_12>	25	</armor_12>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	8000	</weight>
+      <maxHealth>	320	</maxHealth>
+      <rotationSpeed>	40	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	150	</maxHealth>
+        <maxRegenHealth>	75	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	380	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_105mm_strvkan_L_45_Alt_3>	shared	  <maxAmmo>	40	</maxAmmo>
+          <armor>
+            <armor_1>	70	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	20	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 7 1 7	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
+          <reloadTime>	9.3	</reloadTime>
+          <aimingTime>	1.9	</aimingTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.06	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/sweden/S30_UDES_03_Alt_3/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/sweden/S30_UDES_03_Alt_3/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/sweden/S30_UDES_03_Alt_3/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/sweden/S30_UDES_03_Alt_3/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/sweden/S30_UDES_03_Alt_3/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	-0.00138878 -0.000762789 1.95937	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	0.000000 0.282337 0.282337	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	-0.00138878 -0.000762789 1.95937	</anchorPosition>
+              <anchorDirection>	0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49000	</slotId>
+              <rayStart>	0.000000 0.000000 3.05257	</rayStart>
+              <rayEnd>	-0.0772344 -0.468941 3.04721	</rayEnd>
+              <rayUp>	0.0905 0.000000 0.000000	</rayUp>
+              <applyToFabric>	true	</applyToFabric>
+              <size>	0.67	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
+          </customizationSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <density>	138.54 140.911	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
+        </_105mm_strvkan_L_45_Alt_3>
+      </guns>
+      <models>
+        <undamaged>	vehicles/sweden/S30_UDES_03_Alt_3/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/sweden/S30_UDES_03_Alt_3/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/sweden/S30_UDES_03_Alt_3/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/sweden/S30_UDES_03_Alt_3/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/sweden/S30_UDES_03_Alt_3/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.315799 1.00623	</gunPosition>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.004 -0.009 1.000 0.000 0.681 0.098 0.311 0.000 0.667 0.500 0.216 0.500 0.030 0.000 0.098	</physicsShape>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	31000	</slotId>
+          <anchorPosition>	0.000000 0.795704 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	32000	</slotId>
+          <anchorPosition>	0.000000 0.795704 0.000000	</anchorPosition>
+          <anchorDirection>	0.000000 1 0.000000	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	33000	</slotId>
+          <rayStart>	-1.15106 0.379682 0.408826	</rayStart>
+          <rayEnd>	-0.972787 0.311735 0.348826	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	33001	</slotId>
+          <rayStart>	1.14083 0.381609 0.437059	</rayStart>
+          <rayEnd>	0.962551 0.313662 0.377059	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <isMirrored>	true	</isMirrored>
+          <size>	0.3	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	34000	</slotId>
+          <rayStart>	-1.18623 0.220078 -0.877931	</rayStart>
+          <rayEnd>	-1.00164 0.145151 -0.860275	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.56	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	34001	</slotId>
+          <rayStart>	1.18623 0.220078 -0.877931	</rayStart>
+          <rayEnd>	1.00164 0.145151 -0.860275	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.56	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isUVProportional>	true	</isUVProportional>
+        </slot>
+      </customizationSlots>
+      <camouflage>
+        <density>	112.549 112.388	</density>
+        <aoTextureSize>	1024 512	</aoTextureSize>
+        <tiling>	2.5 1.25 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_S30_UDES_03_Alt_3>
+  </turrets0>
+  <engines>
+    <Saab_Scania_DS14_Alt_3>	shared	</Saab_Scania_DS14_Alt_3>
+  </engines>
+  <fuelTanks>
+    <Large>	shared	</Large>
+  </fuelTanks>
+  <radios>
+    <Ra_421_1>	shared	</Ra_421_1>
+  </radios>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <Saab_Scania_DS14_Alt_3>
+          <smplEnginePower>	600	</smplEnginePower>
+          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
+        </Saab_Scania_DS14_Alt_3>
+      </engines>
+      <chassis>
+        <Chassis_S30_UDES_03_Alt_3>
+          <axleCount>	5	</axleCount>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_S30_UDES_03_Alt_3>
+      </chassis>
+    </detailed>
+  </physics>
+  <siege_mode>
+    <switchOnTime>	0	</switchOnTime>
+    <switchOffTime>	0	</switchOffTime>
+    <engineDamageCoeff>	2	</engineDamageCoeff>
+    <soundStateChange>
+      <on>	strv_siege_mode_on_PC	</on>
+      <off>	strv_siege_mode_off_PC	</off>
+    </soundStateChange>
+    <autoSwitchOffRequiredVehicleSpeed>	19	</autoSwitchOffRequiredVehicleSpeed>
+    <autoSwitchOnRequiredVehicleSpeed>	10	</autoSwitchOnRequiredVehicleSpeed>
+  </siege_mode>
+  <hull_aiming>
+    <pitch>
+      <isFlexible>	True	</isFlexible>
+      <wheelCorrectionCenterZ>	1.165	</wheelCorrectionCenterZ>
+      <wheelsCorrectionSpeed>	10	</wheelsCorrectionSpeed>
+      <wheelsCorrectionAngles>
+        <pitchMin>	-5	</pitchMin>
+        <pitchMax>	6	</pitchMax>
+      </wheelsCorrectionAngles>
+    </pitch>
+    <yawDisabled></yawDisabled>
+  </hull_aiming>
+  <useHullZSize>	True	</useHullZSize>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	15515	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.86	</alpha>
+  </emblems>
+</S30_UDES_03_Alt_3.xml>

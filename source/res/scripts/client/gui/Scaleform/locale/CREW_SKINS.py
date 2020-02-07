@@ -157,3 +157,6 @@ class CREW_SKINS(object):
     RACE15_NAME = '#crew_skins:Race15/Name'
     RACE15_LASTNAME = '#crew_skins:Race15/LastName'
     RACE15_DESCR = '#crew_skins:Race15/Descr'
+    EEKEEBOO_NAME = '#crew_skins:Eekeeboo/Name'
+    EEKEEBOO_LASTNAME = '#crew_skins:Eekeeboo/LastName'
+    EEKEEBOO_DESCR = '#crew_skins:Eekeeboo/Descr'

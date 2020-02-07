@@ -466,15 +466,14 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         mayObtain = self.__isHeroTank or walletAvailable and vehicle.mayObtainWithMoneyExchange(money, exchangeRate)
         isBuyingAvailable = not vehicle.isHidden or vehicle.isRentable or vehicle.isRestorePossible()
         isMoneyEnough = True
-        if walletAvailable:
+        if walletAvailable and not mayObtain and isBuyingAvailable:
             if currency == Currency.GOLD:
-                if not mayObtain:
-                    if isBuyingAvailable:
-                        notEnoughMoneyTooltip = _buildBuyButtonTooltip('notEnoughGold')
-                        isMoneyEnough = False
-                        if isIngameShopEnabled():
-                            mayObtain = True
-            elif not mayObtain and isBuyingAvailable:
+                if isIngameShopEnabled():
+                    mayObtain = True
+                else:
+                    notEnoughMoneyTooltip = _buildBuyButtonTooltip('notEnoughGold')
+                    isMoneyEnough = False
+            else:
                 notEnoughMoneyTooltip = _buildBuyButtonTooltip('notEnoughCredits')
                 isMoneyEnough = False
         if self._disableBuyButton or self.__isHeroTank and self._vehicleCD != self._heroTanks.getCurrentTankCD():

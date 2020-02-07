@@ -15,7 +15,10 @@ class RankedPrimeTimeValidator(BaseActionsValidator):
     def _validate(self):
         rankedController = dependency.instance(IRankedBattlesController)
         status, _, _ = rankedController.getPrimeTimeStatus()
-        return ValidationResult(False, PRE_QUEUE_RESTRICTION.MODE_DISABLED) if status != PrimeTimeStatus.AVAILABLE else super(RankedPrimeTimeValidator, self)._validate()
+        if status == PrimeTimeStatus.NOT_SET:
+            return ValidationResult(False, PRE_QUEUE_RESTRICTION.MODE_NOT_SET, None)
+        else:
+            return ValidationResult(False, PRE_QUEUE_RESTRICTION.MODE_DISABLED, None) if status != PrimeTimeStatus.AVAILABLE else super(RankedPrimeTimeValidator, self)._validate()
 
 
 class RankedVehicleValidator(BaseActionsValidator):

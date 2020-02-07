@@ -52,8 +52,9 @@ class RankedBattlesLeagueProvider(object):
         return _LEAGUE_SYNC_TIME
 
     def clear(self):
-        self.__lastUpdateTime = None
+        self.__fakeWebLeague = None
         self.__webLeague = UNDEFINED_WEB_LEAGUE
+        self.__lastUpdateTime = None
         return
 
     @process

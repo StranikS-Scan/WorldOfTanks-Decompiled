@@ -508,9 +508,9 @@ class ArenaPeriodListener(_Listener):
             period = self._visitor.getArenaPeriod()
             periodAddInfo = _getPeriodAdditionalInfo(self._arenaDP, period, self._visitor.getArenaPeriodAdditionalInfo())
             if controller is not None:
-                controller.setPeriodInfo(period, self._visitor.getArenaPeriodEndTime(), self._visitor.getArenaPeriodLength(), periodAddInfo, self._visitor.type.getCountdownTimerSound())
+                controller.setPeriodInfo(period, self._visitor.getArenaPeriodEndTime(), self._visitor.getArenaPeriodLength(), periodAddInfo)
             else:
-                self._invokeListenersMethod('setPeriodInfo', period, self._visitor.getArenaPeriodEndTime(), self._visitor.getArenaPeriodLength(), periodAddInfo, self._visitor.type.getCountdownTimerSound())
+                self._invokeListenersMethod('setPeriodInfo', period, self._visitor.getArenaPeriodEndTime(), self._visitor.getArenaPeriodLength(), periodAddInfo)
         return
 
     def __arena_onPeriodChange(self, period, endTime, length, additionalInfo):

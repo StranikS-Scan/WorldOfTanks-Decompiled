@@ -14,6 +14,7 @@ from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from gui.impl.lobby.reward_window import TwitchRewardWindow, GiveAwayRewardWindow, PiggyBankRewardWindow
+from gui.impl.lobby.missions.daily_quests_view import DailyTabs
 from shared_utils import first
 OPERATIONS = {PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_1_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS_PAGE_ALIAS,
  PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_2_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS2_OPERATIONS_PAGE_ALIAS}
@@ -36,8 +37,9 @@ def showPQSeasonAwardsWindow(questsType):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.QUESTS_SEASON_AWARDS_WINDOW, ctx={'questsType': questsType}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showMissions(tab=None, missionID=None, groupID=None, marathonPrefix=None, anchor=None, showDetails=True):
+def showMissions(tab=None, missionID=None, groupID=None, marathonPrefix=None, anchor=None, showDetails=True, subTab=None):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MISSIONS, ctx={'tab': tab,
+     'subTab': subTab,
      'eventID': missionID,
      'groupID': groupID,
      'marathonPrefix': marathonPrefix,
@@ -121,6 +123,10 @@ def showMissionsLinkedSet():
     showMissions(tab=QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS)
 
 
+def showDailyQuests(subTab):
+    showMissions(tab=QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS, subTab=subTab)
+
+
 def showMissionDetails(missionID, groupID):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MISSION_DETAILS, ctx={'eventID': missionID,
      'groupID': groupID}), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -157,7 +163,7 @@ def showMission(eventID, eventType=None):
     if quest is None:
         prefix = events_helpers.getMarathonPrefix(eventID)
         if prefix is not None:
-            showMissionsMarathon(marathonPrefix=prefix)
+            return showMissionsMarathon(marathonPrefix=prefix)
     if eventType is not None and eventType == constants.EVENT_TYPE.PERSONAL_MISSION:
         showPersonalMission(eventID)
     elif quest is not None:
@@ -172,6 +178,10 @@ def showMission(eventID, eventType=None):
                 showMissionsGrouped(anchor=group.getID())
         elif events_helpers.isLinkedSet(quest.getGroupID()):
             showMissionsLinkedSet()
+        elif events_helpers.isDailyQuest(quest.getID()):
+            showDailyQuests(subTab=DailyTabs.QUESTS)
+        elif events_helpers.isPremium(quest.getID()):
+            showDailyQuests(subTab=DailyTabs.PREMIUM_MISSIONS)
         else:
             showMissionsCategories(missionID=quest.getID(), groupID=quest.getGroupID(), anchor=quest.getGroupID())
     return
@@ -224,7 +234,7 @@ def showMissionAward(quest, ctx):
                     showLootboxesAward(lootboxId=lootboxId, lootboxCount=lootboxInfo['count'], isFree=lootboxInfo['isFree'])
 
             else:
-                missionAward = awards.MissionAward(quest, ctx, showMissionsForCurrentVehicle)
+                missionAward = awards.MissionAward(quest, ctx, showMissionsCategories())
                 if missionAward.getAwards():
                     shared_events.showMissionAwardWindow(missionAward)
 

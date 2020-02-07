@@ -978,7 +978,7 @@ class _SoundEffectDesc(_EffectDesc):
 
     def __setFriendlyFireRTPC(self, attackerID, sound, soundName):
         if soundName == self._impactNames.impactFNPC_PC and attackerID is not None:
-            playerVehiclePosition = BigWorld.player().vehicle.position
+            playerVehiclePosition = BigWorld.player().getOwnVehiclePosition()
             attackerVehicle = BigWorld.entity(attackerID)
             if attackerVehicle is not None:
                 distance = (playerVehiclePosition - attackerVehicle.position).length

@@ -26,7 +26,7 @@ class ProgressiveRewardAwardView(ViewImpl):
 
     def __init__(self, contentResId, *args, **kwargs):
         settings = ViewSettings(contentResId)
-        settings.model = self._getInitViewModel()
+        settings.model = ProgressiveRewardAwardModel()
         settings.args = args
         settings.kwargs = kwargs
         super(ProgressiveRewardAwardView, self).__init__(settings)
@@ -54,9 +54,6 @@ class ProgressiveRewardAwardView(ViewImpl):
         tooltipData = self.__getBackportTooltipData(event)
         return getRewardTooltipContent(event, tooltipData)
 
-    def _getInitViewModel(self):
-        return ProgressiveRewardAwardModel()
-
     def _initialize(self, bonuses, specialRewardType, currentStep):
         super(ProgressiveRewardAwardView, self)._initialize()
         self.viewModel.onDestroyEvent += self.__onDestroy
@@ -81,9 +78,11 @@ class ProgressiveRewardAwardView(ViewImpl):
         super(ProgressiveRewardAwardView, self)._finalize()
 
     def __update(self, _=None):
-        if self.__specialRewardType != LootCongratsTypes.INIT_CONGRAT_TYPE_CREW_BOOKS:
-            self._setSteps(self.__currentStep)
-        self._setBonuses(self.__bonuses)
+        if self.__specialRewardType != LootCongratsTypes.INIT_CONGRAT_TYPE_CREW_BOOKS and self.__specialRewardType != LootCongratsTypes.INIT_CONGRAT_TYPE_EPIC_REWARDS:
+            self.__setSteps(self.__currentStep)
+        if self.__isEpicReward():
+            self.viewModel.setInitialCongratsType(self.__specialRewardType)
+        self.__setBonuses(self.__bonuses)
 
     def __onWindowClose(self, _=None):
         if self.viewModel.getHardReset():
@@ -95,7 +94,7 @@ class ProgressiveRewardAwardView(ViewImpl):
         setSoundState(groupName=ProgressiveRewardSoundEvents.PROGRESSIVE_REWARD_AWARD_GROUP, stateName=ProgressiveRewardSoundEvents.PROGRESSIVE_REWARD_AWARD_EXIT)
         self.destroyWindow()
 
-    def _setSteps(self, currentStep):
+    def __setSteps(self, currentStep):
         progressive = self._eventsCache.getProgressiveReward()
         if progressive is None:
             _logger.warning('Progressive config is missing on server!')
@@ -110,7 +109,7 @@ class ProgressiveRewardAwardView(ViewImpl):
                 tx.setInitialCongratsType(LootCongratsTypes.INIT_CONGRAT_TYPE_PROGRESSIVE_REWARDS)
             return
 
-    def _setBonuses(self, bonuses):
+    def __setBonuses(self, bonuses):
         with self.getViewModel().transaction() as tx:
             rewardsList = tx.getRewards()
             rewardsList.clear()
@@ -118,7 +117,7 @@ class ProgressiveRewardAwardView(ViewImpl):
             for index, reward in enumerate(bonuses):
                 formatter = getRewardRendererModelPresenter(reward)
                 showCongrats = index is lastCongratsIndex
-                rewardRender = formatter.getModel(reward, index, showCongrats=showCongrats)
+                rewardRender = formatter.getModel(reward, index, showCongrats=showCongrats, isEpic=self.__isEpicReward())
                 rewardsList.addViewModel(rewardRender)
                 compensationReason = reward.get('compensationReason', None)
                 ttTarget = compensationReason if compensationReason is not None else reward
@@ -153,6 +152,9 @@ class ProgressiveRewardAwardView(ViewImpl):
                 if vehicleCD is not None:
                     return createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BLUEPRINT_CONVERT_INFO, specialArgs=[vehicleCD])
             return
+
+    def __isEpicReward(self):
+        return self.__specialRewardType == LootCongratsTypes.INIT_CONGRAT_TYPE_EPIC_REWARDS
 
 
 class ProgressiveRewardAwardWindow(LobbyWindow):

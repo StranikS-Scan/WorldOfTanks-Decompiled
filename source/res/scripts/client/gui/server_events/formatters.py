@@ -3,6 +3,7 @@
 import re
 import types
 from collections import namedtuple
+import logging
 import ArenaType
 from constants import ARENA_BONUS_TYPE, GAMEPLAY_NAMES_WITH_DISABLED_QUESTS
 from gui import makeHtmlString
@@ -16,6 +17,7 @@ from helpers import i18n
 from shared_utils import CONST_CONTAINER
 COMPLEX_TOKEN_TEMPLATE = 'img:(?P<styleID>.+):(?P<webID>.+)'
 TokenComplex = namedtuple('TokenComplex', 'isDisplayable styleID webID')
+_logger = logging.getLogger(__name__)
 
 def getLinkedActionID(groupID, actions):
     delimiter = ':'
@@ -87,6 +89,7 @@ class DECORATION_SIZES(CONST_CONTAINER):
     BONUS = '300x110'
     DISCOUNT = '480x280'
     DETAILS = '750x264'
+    DAILY = 'N/A'
 
 
 class UiElement(object):
@@ -304,10 +307,10 @@ def packProgressData(rendererLinkage, progressList):
     return ProgressData(rendererLinkage, progressList)
 
 
-PreFormattedCondition = namedtuple('PreForamttedCondition', 'titleData, descrData, iconKey, current, total, progressData, conditionData, progressType, sortKey, progressID')
+PreFormattedCondition = namedtuple('PreForamttedCondition', 'titleData, descrData, iconKey, current, total, earned, progressData, conditionData,progressType, sortKey, progressID')
 
-def packMissionIconCondition(titleData, progressType, descrData, iconKey, current=None, total=None, progressData=None, conditionData=None, sortKey='', progressID=None):
-    return PreFormattedCondition(titleData, descrData, iconKey, current, total, progressData, conditionData, progressType, sortKey, progressID)
+def packMissionIconCondition(titleData, progressType, descrData, iconKey, current=None, total=None, earned=None, progressData=None, conditionData=None, sortKey='', progressID=None):
+    return PreFormattedCondition(titleData, descrData, iconKey, current, total, earned, progressData, conditionData, progressType, sortKey, progressID)
 
 
 _IconData = namedtuple('_IconData', 'icon, iconLabel')
@@ -387,6 +390,10 @@ def titleFormat(title):
     return text_styles.promoSubTitle(title)
 
 
+def titleFormatPlain(title):
+    return text_styles.promoSubTitlePlain(title)
+
+
 def simpleFormat(title):
     return i18n.makeString(title)
 
@@ -413,6 +420,10 @@ def titleRelationFormat(value, relation, relationI18nType=RELATIONS_SCHEME.DEFAU
     return text_styles.promoSubTitle(_titleRelationFormat(value, relation, relationI18nType, titleKey))
 
 
+def titleRelationFormatPlain(value, relation, relationI18nType=RELATIONS_SCHEME.DEFAULT, titleKey=None):
+    return text_styles.promoSubTitlePlain(_titleRelationFormat(value, relation, relationI18nType, titleKey))
+
+
 def personalTitleRelationFormat(value, relation, relationI18nType=RELATIONS_SCHEME.DEFAULT, titleKey=None):
     return i18n.makeString(_titleRelationFormat(value, relation, relationI18nType, titleKey))
 
@@ -425,6 +436,11 @@ def titleComplexRelationFormat(value, relation, titleKey=None):
     return titleRelationFormat(value, relation, RELATIONS_SCHEME.DEFAULT, titleKey) + gui_icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_STORE_CONDITION_ON, 16, 16, 8, -4)
 
 
+def titleComplexRelationFormatPlain(value, relation, titleKey=None):
+    _logger.error('Information loss: We are loosing information about the image.')
+    return titleRelationFormatPlain(value, relation, RELATIONS_SCHEME.DEFAULT, titleKey)
+
+
 def minimizedTitleRelationFormat(value, relation, relationI18nType=RELATIONS_SCHEME.DEFAULT, titleKey=None):
     return text_styles.stats(_titleRelationFormat(value, relation, relationI18nType, titleKey))
 
@@ -435,6 +451,10 @@ def minimizedTitleComplexRelationFormat(value, relation, titleKey=None):
 
 def titleCumulativeFormat(current, total):
     return text_styles.promoSubTitle('%s / %s' % (backport.getNiceNumberFormat(int(current)), backport.getNiceNumberFormat(int(total))))
+
+
+def titleCumulativeFormatPlain(current, total):
+    return text_styles.promoSubTitlePlain('%s / %s' % (backport.getNiceNumberFormat(int(current)), backport.getNiceNumberFormat(int(total))))
 
 
 def personalTitleCumulativeFormat(current, total):
@@ -452,6 +472,10 @@ def minimizedTitleCumulativeFormat(current, total):
 
 def titleComplexFormat(current, total):
     return titleCumulativeFormat(current, total) + gui_icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_STORE_CONDITION_ON, 16, 16, 8, -4)
+
+
+def titleComplexFormatPlain(current, total):
+    return titleCumulativeFormatPlain(current, total) + gui_icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_STORE_CONDITION_ON, 16, 16, 8, -4)
 
 
 def minimizedTitleComplexFormat(current, total):

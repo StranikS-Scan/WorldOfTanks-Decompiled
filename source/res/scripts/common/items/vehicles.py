@@ -4884,7 +4884,10 @@ def _readCamouflage(xmlCtx, section, ids, groups, nationID, priceFactors, notInS
     if IS_CLIENT or IS_EDITOR:
         isNew = section.readBool('isNew', False)
         camouflage['isNew'] = isNew
-        camouflage['tiling'] = _readCamouflageTilings(xmlCtx, section, 'tiling', nationID)
+        if IS_EDITOR:
+            camouflage['tiling'], camouflage['tilingName'] = _readCamouflageTilings(xmlCtx, section, 'tiling', nationID)
+        else:
+            camouflage['tiling'] = _readCamouflageTilings(xmlCtx, section, 'tiling', nationID)
         camouflage['tilingSettings'] = _readCamouflageTilingSettings(xmlCtx, section)
     groupDescr['ids'].append(id)
     if isNew:
@@ -4989,13 +4992,16 @@ def _vehicleValues(xmlCtx, section, sectionName, defNationID):
 
 def _readCamouflageTilings(xmlCtx, section, sectionName, defNationID):
     res = {}
+    nameMap = {}
     for v in _vehicleValues(xmlCtx, section, sectionName, defNationID):
         tiling = _xml.readTupleOfFloats(v.ctx, v.subsection, '', 4)
         if tiling[0] <= 0 or tiling[1] <= 0:
             _xml.raiseWrongSection(v.ctx, v.vehicle_name)
         res[v.compact_descriptor] = tiling
+        if IS_EDITOR:
+            nameMap[v.compact_descriptor] = v.vehicle_name
 
-    return res
+    return (res, nameMap) if IS_EDITOR else res
 
 
 def _readCamouflageTilingSettings(xmlCtx, section):

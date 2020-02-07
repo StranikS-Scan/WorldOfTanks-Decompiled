@@ -13,7 +13,6 @@ from web.web_client_api.ui.browser import OpenExternalBrowserWebApiMixin
 from web.web_client_api.ui.browser import OpenBrowserOverlayWebApiMixin, OpenBuyGoldWebApiMixin
 from web.web_client_api.ui.barracks import BarracksWebApiMixin
 from web.web_client_api.ui.clan import ClanWindowWebApiMixin
-from web.web_client_api.ui.dialogs import DialogsWebApiMixin
 from web.web_client_api.ui import hangar
 from web.web_client_api.ui.manual import ManualPageWebApiMixin
 from web.web_client_api.ui.menu import UserMenuWebApiMixin
@@ -34,7 +33,7 @@ from web.web_client_api.ui.vehicle import VehicleComparisonBasketWebApiMixin
 from web.web_client_api.ui.waiting import WaitingWebApiMixin
 
 @w2capi(name='open_window', key='window_id')
-class OpenWindowWebApi(OpenBrowserWindowWebApiMixin, ClanWindowWebApiMixin, ProfileWindowWebApiMixin, OpenExternalBrowserWebApiMixin, VehicleSellWebApiMixin, hangar.HangarWindowsWebApiMixin, BoostersWindowWebApiMixin, PremiumWindowWebApiMixin, ManualPageWebApiMixin, ChatWebApiMixin, SquadWebApiMixin, OpenBrowserOverlayWebApiMixin, PremiumViewsWebApiMixin, OpenCalendarWindowWebApiMixin, OpenBuyGoldWebApiMixin, OpenTankmanWebApiMixin, DialogsWebApiMixin):
+class OpenWindowWebApi(OpenBrowserWindowWebApiMixin, ClanWindowWebApiMixin, ProfileWindowWebApiMixin, OpenExternalBrowserWebApiMixin, VehicleSellWebApiMixin, hangar.HangarWindowsWebApiMixin, BoostersWindowWebApiMixin, PremiumWindowWebApiMixin, ManualPageWebApiMixin, ChatWebApiMixin, SquadWebApiMixin, OpenBrowserOverlayWebApiMixin, PremiumViewsWebApiMixin, OpenCalendarWindowWebApiMixin, OpenBuyGoldWebApiMixin, OpenTankmanWebApiMixin):
     pass
 
 

@@ -13,6 +13,9 @@ class Sounds(CONST_CONTAINER):
     OVERLAY_HANGAR_GENERAL = 'STATE_overlay_hangar_general'
     OVERLAY_HANGAR_GENERAL_ON = 'STATE_overlay_hangar_general_on'
     OVERLAY_HANGAR_GENERAL_OFF = 'STATE_overlay_hangar_general_off'
+    OVERLAY_HANGAR_FILTERED = 'STATE_hangar_filtered'
+    OVERLAY_HANGAR_FILTERED_ON = 'STATE_hangar_filtered_on'
+    OVERLAY_HANGAR_FILTERED_OFF = 'STATE_hangar_filtered_off'
     MAIN_PAGE_SPACE_NAME = 'ranked_main_page'
     MAIN_PAGE_STATE = 'STATE_gamemode_progress_page'
     MAIN_PAGE_STATE_ON = 'STATE_gamemode_progress_page_on'
@@ -57,6 +60,14 @@ class RankedSoundManager(object):
             if stateSound is not None:
                 WWISE.WW_setState(Sounds.PROGRESSION_STATE, stateSound)
         return
+
+    def setOverlayStateOn(self):
+        WWISE.WW_setState(Sounds.OVERLAY_HANGAR_GENERAL, Sounds.OVERLAY_HANGAR_GENERAL_ON)
+        WWISE.WW_setState(Sounds.OVERLAY_HANGAR_FILTERED, Sounds.OVERLAY_HANGAR_FILTERED_ON)
+
+    def setOverlayStateOff(self):
+        WWISE.WW_setState(Sounds.OVERLAY_HANGAR_FILTERED, Sounds.OVERLAY_HANGAR_FILTERED_OFF)
+        WWISE.WW_setState(Sounds.OVERLAY_HANGAR_GENERAL, Sounds.OVERLAY_HANGAR_GENERAL_OFF)
 
     def clear(self):
         self.__isFirstEntrance = True

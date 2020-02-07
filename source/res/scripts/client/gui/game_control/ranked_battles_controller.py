@@ -21,7 +21,7 @@ from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.ranked_battles import ranked_helpers
-from gui.ranked_battles.constants import PrimeTimeStatus, ZERO_RANK_ID, YEAR_POINTS_TOKEN, YEAR_AWARDS_ORDER, FINAL_QUEST_PATTERN
+from gui.ranked_battles.constants import PrimeTimeStatus, ZERO_RANK_ID, YEAR_POINTS_TOKEN, YEAR_AWARDS_ORDER, FINAL_QUEST_PATTERN, STANDARD_POINTS_COUNT, MAX_GROUPS_IN_DIVISION
 from gui.ranked_battles.ranked_builders.postbattle_awards_vos import AwardBlock
 from gui.ranked_battles.ranked_formatters import getRankedAwardsFormatter
 from gui.ranked_battles.ranked_helpers.league_provider import RankedBattlesLeagueProvider, UNDEFINED_WEB_LEAGUE, UNDEFINED_LEAGUE_ID
@@ -31,8 +31,9 @@ from gui.ranked_battles.ranked_models import RankChangeStates, ShieldStatus, Div
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.event_items import RankedQuest
 from gui.shared import event_dispatcher, events, EVENT_BUS_SCOPE, g_eventBus
+from gui.shared.money import Currency
 from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
+from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier, PeriodicNotifier
 from helpers import dependency, time_utils
 from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY
 from season_provider import SeasonProvider
@@ -44,6 +45,9 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
+if typing.TYPE_CHECKING:
+    from gui.server_events.bonuses import SimpleBonus
+    from gui.ranked_battles.constants import YearAwardsNames
 ZERO_RANK_COUNT = 1
 if typing.TYPE_CHECKING:
     from gui.ranked_battles.ranked_helpers.league_provider import WebLeague
@@ -80,7 +84,8 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def __init__(self):
         super(RankedBattlesController, self).__init__()
         self.onUpdated = Event.Event()
-        self.onPrimeTimeStatusUpdated = Event.Event()
+        self.onGameModeStatusTick = Event.Event()
+        self.onGameModeStatusUpdated = Event.Event()
         self.onYearPointsChanges = Event.Event()
         self._setSeasonSettingsProvider(self.__getCachedSettings)
         self.__rankedWelcomeCallback = None
@@ -107,11 +112,13 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
 
     def init(self):
         super(RankedBattlesController, self).init()
-        self.addNotificator(SimpleNotifier(self.__getTimer, self.__timerUpdate))
+        self.addNotificator(SimpleNotifier(self.getTimer, self.__timerUpdate))
+        self.addNotificator(PeriodicNotifier(self.getTimer, self.__timerTick))
 
     def fini(self):
         self.onUpdated.clear()
-        self.onPrimeTimeStatusUpdated.clear()
+        self.onGameModeStatusTick.clear()
+        self.onGameModeStatusUpdated.clear()
         self.onYearPointsChanges.clear()
         self.clearNotification()
         super(RankedBattlesController, self).fini()
@@ -143,11 +150,17 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
             self.__clientLeague = AccountSettings.getSettings(RANKED_WEB_LEAGUE)
             self.__clientLeagueUpdateTime = AccountSettings.getSettings(RANKED_WEB_LEAGUE_UPDATE)
             self.__leagueProvider.clear()
-            if self.__clientLeague is None:
-                self.__clientLeague = UNDEFINED_WEB_LEAGUE
-                AccountSettings.setSettings(RANKED_WEB_LEAGUE, self.__clientLeague)
             self.updateClientValues()
             self.__clientValuesInited = True
+        shouldInitPrefs = self.__clientLeague is None
+        isDefinedLeague = not shouldInitPrefs and self.__clientLeague.league != UNDEFINED_LEAGUE_ID
+        shouldFlushPrefs = isDefinedLeague and not self.isAccountMastered()
+        if shouldInitPrefs or shouldFlushPrefs:
+            self.__leagueProvider.clear()
+            self.__clientLeague = UNDEFINED_WEB_LEAGUE
+            self.__clientLeagueUpdateTime = None
+            AccountSettings.setSettings(RANKED_WEB_LEAGUE, self.__clientLeague)
+            AccountSettings.setSettings(RANKED_WEB_LEAGUE_UPDATE, self.__clientLeagueUpdateTime)
         if self.isAccountMastered() and not self.__leagueProvider.isStarted:
             self.__leagueProvider.start()
         self.__updateSounds()
@@ -173,26 +186,16 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def isEnabled(self):
         return self.__rankedSettings.isEnabled
 
+    def isUnset(self):
+        status, _, _ = self.getPrimeTimeStatus()
+        return status == PrimeTimeStatus.NOT_SET
+
     def isFrozen(self):
-        peripheryPrimeTime = self.getPrimeTimes().get(self.__connectionMgr.peripheryID)
-        return True if peripheryPrimeTime is not None and not peripheryPrimeTime.hasAnyPeriods() else False
+        status, _, _ = self.getPrimeTimeStatus()
+        return status == PrimeTimeStatus.FROZEN
 
     def isRankedPrbActive(self):
         return False if self.prbEntity is None else bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.RANKED)
-
-    def hasAnyPeripheryWithPrimeTime(self):
-        if not self.isAvailable():
-            return False
-        currentSeason = self.getCurrentSeason()
-        currentTime = time_utils.getCurrentLocalServerTimestamp()
-        endTime = currentSeason.getCycleEndDate()
-        for primeTime in self.getPrimeTimes().itervalues():
-            if primeTime.hasAnyPeriods():
-                isAvailable, _ = primeTime.getAvailability(currentTime, endTime)
-                if isAvailable:
-                    return True
-
-        return False
 
     def hasAnySeason(self):
         return bool(self.__rankedSettings.seasons)
@@ -278,23 +281,23 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
             divisionID = division.getID()
             if division.isQualification() and rankID == ZERO_RANK_ID:
                 return BattleRankInfo(rankID, divisionID, False)
-            if self.__hasMatchMakerGroups():
-                groups = self.__getGroupsForBattle()
-                if rankID == division.lastRank:
-                    divisionID += 1
-                if rankID == self.getMaxPossibleRank():
-                    return BattleRankInfo(ZERO_RANK_ID, divisionID, False)
-                if divisionID in groups:
-                    for idx, ranksRange in enumerate(reversed(groups[divisionID]), start=1):
-                        if rankID in ranksRange:
-                            return BattleRankInfo(idx, divisionID, True)
+            if rankID == self.getMaxPossibleRank():
+                return BattleRankInfo(ZERO_RANK_ID, divisionID + 1, False)
+            isShifted = False
+            if rankID == division.lastRank:
+                isShifted = True
+                division = self.getDivision(rankID + 1)
+                divisionID += 1
+            groups = self.__getGroupsForBattle()
+            if self.__hasMatchMakerGroups(division, groups[divisionID]):
+                for idx, ranksRange in enumerate(reversed(groups[divisionID]), start=1):
+                    if rankID in ranksRange:
+                        return BattleRankInfo(idx, divisionID, True)
 
             else:
-                if rankID == division.lastRank:
-                    level = ZERO_RANK_ID
-                    divisionID += 1
-                else:
-                    level = division.getRankUserId(rankID) if rankID else rankID
+                if isShifted:
+                    return BattleRankInfo(ZERO_RANK_ID, divisionID, False)
+                level = division.getRankUserId(rankID) if rankID else rankID
                 return BattleRankInfo(level, divisionID, False)
             _logger.error('Wrong ranked_config.xml, wrong rankGroups section!!!')
             return BattleRankInfo(-1, -1, False)
@@ -326,9 +329,10 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
 
         return result
 
-    def getYearRewards(self, boxType=None):
-        finalQuest = self.__eventsCache.getHiddenQuests().get(FINAL_QUEST_PATTERN.format(boxType))
-        return finalQuest.getBonuses() if finalQuest else list()
+    def getYearRewards(self, points):
+        quests = self.__eventsCache.getHiddenQuests()
+        finalTokenQuest = quests.get(FINAL_QUEST_PATTERN.format(points))
+        return finalTokenQuest.getBonuses() if finalTokenQuest else []
 
     def getMaxPossibleRank(self):
         return self.__rankedSettings.accRanks
@@ -441,11 +445,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
             return True
         if rankChangeInfo.accRank == self.getMaxPossibleRank():
             return True
-        if rankChangeInfo.stepChanges > 0:
-            rankedData = self.__itemsCache.items.ranked
-            if self.getClientMaxRank()[0] < rankChangeInfo.accRank and rankedData.maxRank[0] == rankChangeInfo.accRank:
-                return True
-        return False
+        return True if rankChangeInfo.stepChanges > 0 and rankChangeInfo.prevMaxRank < rankChangeInfo.accRank else False
 
     def runQuests(self, quests):
         notCompletedQuests = []
@@ -522,6 +522,34 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         self.__clientBonusBattlesCount = statsComposer.bonusBattlesCount
         return
 
+    def getRanksTops(self, isLoser=False, stepDiff=None):
+        rankChanges = self.__rankedSettings.loserRankChanges if isLoser else self.__rankedSettings.winnerRankChanges
+        if stepDiff is None:
+            return len(rankChanges)
+        else:
+            if stepDiff == RANKEDBATTLES_ALIASES.STEP_VALUE_EARN:
+                total = sum((1 for i in rankChanges if i > 0))
+            elif stepDiff == RANKEDBATTLES_ALIASES.STEP_VALUE_NO_CHANGE:
+                total = sum((1 for i in rankChanges if i == 0))
+            else:
+                total = sum((1 for i in rankChanges if i < 0))
+            return total
+
+    def getTimer(self):
+        primeTimeStatus, timeLeft, _ = self.getPrimeTimeStatus()
+        if primeTimeStatus != PrimeTimeStatus.AVAILABLE and not self.__connectionMgr.isStandalone():
+            allPeripheryIDs = set([ host.peripheryID for host in g_preDefinedHosts.hostsWithRoaming() ])
+            for peripheryID in allPeripheryIDs:
+                peripheryStatus, peripheryTime, _ = self.getPrimeTimeStatus(peripheryID)
+                if peripheryStatus == PrimeTimeStatus.NOT_AVAILABLE and peripheryTime < timeLeft:
+                    timeLeft = peripheryTime
+
+        seasonsChangeTime = self.getClosestStateChangeTime()
+        currTime = time_utils.getCurrentLocalServerTimestamp()
+        if seasonsChangeTime and (currTime + timeLeft > seasonsChangeTime or timeLeft == 0):
+            timeLeft = seasonsChangeTime - currTime
+        return timeLeft + 1 if timeLeft > 0 else time_utils.ONE_MINUTE
+
     def getPrimeTimes(self):
         primeTimes = self.__rankedSettings.primeTimes
         peripheryIDs = self.__rankedSettings.peripheryIDs
@@ -561,70 +589,63 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         return serversPeriodsMapping
 
     def getPrimeTimeStatus(self, peripheryID=None):
-        if not self.isEnabled():
-            return (PrimeTimeStatus.DISABLED, 0, False)
+        if peripheryID is None:
+            peripheryID = self.__connectionMgr.peripheryID
+        primeTime = self.getPrimeTimes().get(peripheryID)
+        if primeTime is None:
+            return (PrimeTimeStatus.NOT_SET, 0, False)
+        elif not primeTime.hasAnyPeriods():
+            return (PrimeTimeStatus.FROZEN, 0, False)
         else:
-            if peripheryID is None:
-                peripheryID = self.__connectionMgr.peripheryID
-            primeTimes = self.getPrimeTimes()
-            hasAnyPeriods = False
-            for pId in primeTimes:
-                hasAnyPeriods = primeTimes[pId].hasAnyPeriods()
-                if hasAnyPeriods:
-                    break
+            season = self.getCurrentSeason()
+            currTime = time_utils.getCurrentLocalServerTimestamp()
+            if season and season.hasActiveCycle(currTime):
+                isNow, timeTillUpdate = primeTime.getAvailability(currTime, season.getCycleEndDate())
+            else:
+                timeTillUpdate = 0
+                if season:
+                    nextCycle = season.getNextByTimeCycle(currTime)
+                    if nextCycle:
+                        primeTimeStart = primeTime.getNextPeriodStart(nextCycle.startDate, season.getEndDate(), includeBeginning=True)
+                        if primeTimeStart:
+                            timeTillUpdate = max(primeTimeStart, nextCycle.startDate) - currTime
+                isNow = False
+            return (PrimeTimeStatus.AVAILABLE, timeTillUpdate, isNow) if isNow else (PrimeTimeStatus.NOT_AVAILABLE, timeTillUpdate, False)
 
-            if not hasAnyPeriods:
-                _logger.warning('RankedBattles enabled but primetimes did not have any period to play or they are frozen!')
-            primeTime = primeTimes.get(peripheryID)
-            if primeTime is None:
-                if hasAnyPeriods:
-                    return (PrimeTimeStatus.NOT_SET, 0, False)
-                _logger.warning('RankedBattles primetimes did not have playable period on pID: %s', peripheryID)
-                return (PrimeTimeStatus.DISABLED, 0, False)
-            if not primeTime.hasAnyPeriods():
-                return (PrimeTimeStatus.FROZEN, 0, False)
-            currentSeason = self.getCurrentSeason()
-            if currentSeason is None:
-                return (PrimeTimeStatus.NO_SEASON, 0, False)
-            isNow, timeLeft = primeTime.getAvailability(time_utils.getCurrentLocalServerTimestamp(), currentSeason.getCycleEndDate())
-            return (PrimeTimeStatus.AVAILABLE, timeLeft, isNow) if isNow else (PrimeTimeStatus.NOT_AVAILABLE, timeLeft, False)
+    def hasConfiguredPrimeTimeServers(self):
+        return self.__hasPrimeStatusServer((PrimeTimeStatus.AVAILABLE, PrimeTimeStatus.NOT_AVAILABLE))
 
     def hasAvailablePrimeTimeServers(self):
-        if self.isAvailable():
-            peripheryIDs = self.__rankedSettings.peripheryIDs
-            hostsList = self.__getHostList()
-            avalaiblePeripheryIDS = []
-            for _, _, _, _, peripheryID in hostsList:
-                if peripheryID in peripheryIDs:
-                    avalaiblePeripheryIDS.append(peripheryID)
+        return self.__hasPrimeStatusServer((PrimeTimeStatus.AVAILABLE,))
 
-            if not avalaiblePeripheryIDS:
-                if peripheryIDs:
-                    _logger.warning('RankedBattles no any playable periphery! Peripheries setup: %s', peripheryIDs)
-                return False
-            primeTimes = self.__rankedSettings.primeTimes
-            canShowPrimeTime = False
-            for primeTime in primeTimes.itervalues():
-                for pID in primeTime['peripheryIDs']:
-                    if pID not in avalaiblePeripheryIDS:
-                        continue
-                    canShowPrimeTime = True
+    def getCurrentPointToCrystalRate(self):
+        rate = 0
+        bonuses = self.getYearRewards(STANDARD_POINTS_COUNT)
+        for bonus in bonuses:
+            if bonus.getName() == Currency.CRYSTAL:
+                rate = bonus.getCount()
 
-            return canShowPrimeTime
-        return False
+        return rate
 
-    def getRanksTops(self, isLoser=False, stepDiff=None):
-        rankChanges = self.__rankedSettings.loserRankChanges if isLoser else self.__rankedSettings.winnerRankChanges
-        if stepDiff is None:
-            return len(rankChanges)
-        else:
-            if stepDiff == RANKEDBATTLES_ALIASES.STEP_VALUE_EARN:
-                total = sum((1 for i in rankChanges if i > 0))
-            elif stepDiff == RANKEDBATTLES_ALIASES.STEP_VALUE_NO_CHANGE:
-                total = sum((1 for i in rankChanges if i == 0))
-            else:
-                total = sum((1 for i in rankChanges if i < 0))
-            return total
+    def calculateCompensation(self, points):
+        pointMap = self.getYearAwardsPointsMap()
+        awardPoints = 0
+        for boxName in YEAR_AWARDS_ORDER:
+            minPoints, _ = pointMap[boxName]
+            if minPoints <= points:
+                awardPoints = minPoints
+
+        return points - awardPoints
+
+    def getAwardTypeByPoints(self, points):
+        pointMap = self.getYearAwardsPointsMap()
+        awardType = None
+        for boxName in YEAR_AWARDS_ORDER:
+            minPoints, _ = pointMap[boxName]
+            if minPoints <= points:
+                awardType = boxName
+
+        return awardType
 
     def _createSeason(self, cycleInfo, seasonData):
         return RankedSeason(cycleInfo, seasonData)
@@ -714,9 +735,21 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
 
         return generalSettings
 
+    def __hasPrimeStatusServer(self, states):
+        if self.__connectionMgr.isStandalone():
+            allPeripheryIDs = {self.__connectionMgr.peripheryID}
+        else:
+            allPeripheryIDs = set([ host.peripheryID for host in g_preDefinedHosts.hostsWithRoaming() ])
+        for peripheryID in allPeripheryIDs:
+            primeTimeStatus, _, _ = self.getPrimeTimeStatus(peripheryID)
+            if primeTimeStatus in states:
+                return True
+
+        return False
+
     @process
     def __switchForcedToRankedPrb(self):
-        result = yield g_prbLoader.getDispatcher().doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.RANKED_FORCED))
+        result = yield g_prbLoader.getDispatcher().doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.RANKED))
         if not result:
             self.clearRankedWelcomeCallback()
 
@@ -915,17 +948,17 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
             self.__soundManager.onSoundModeChanged(isRankedSoundMode, Sounds.PROGRESSION_STATE_LEAGUES if self.isAccountMastered() else Sounds.PROGRESSION_STATE_DEFAULT)
             self.__isRankedSoundMode = isRankedSoundMode
 
-    def __getTimer(self):
-        _, timeLeft, _ = self.getPrimeTimeStatus()
-        return timeLeft + 1 if timeLeft > 0 else time_utils.ONE_MINUTE
-
     def __resetTimer(self):
         self.startNotification()
         self.__timerUpdate()
+        self.__timerTick()
 
     def __timerUpdate(self):
         status, _, _ = self.getPrimeTimeStatus()
-        self.onPrimeTimeStatusUpdated(status)
+        self.onGameModeStatusUpdated(status)
+
+    def __timerTick(self):
+        self.onGameModeStatusTick()
 
     def __getHostList(self):
         hostsList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming(), withShortName=True)
@@ -945,31 +978,24 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
             self.__battlesGroups = self.__makeGroupsForBattle()
         return self.__battlesGroups
 
-    def __hasMatchMakerGroups(self):
-        groups = self.__rankedSettings.rankGroups
-        if groups:
-            if len(groups) != self.getRanksCount() and sum(groups) == self.__rankedSettings.accRanks + ZERO_RANK_COUNT:
-                return True
-            _logger.warning('Wrong ranked_config.xml, wrong rankGroups section')
-            return False
-        return False
+    def __hasMatchMakerGroups(self, division, divisionLayout):
+        matchMakerUnits = len(divisionLayout)
+        amountRanks = len(division.getRanksIDs())
+        return matchMakerUnits != amountRanks and matchMakerUnits <= MAX_GROUPS_IN_DIVISION
 
     def __makeGroupsForBattle(self):
-        if self.__hasMatchMakerGroups():
-            divisionsGroups = defaultdict(list)
-            groups = self.__rankedSettings.rankGroups
-            position = 0
-            previousPosition = 0
-            for ranksNum in groups:
-                position += ranksNum
-                maxRankInGroup = position - 1
-                division = self.getDivision(maxRankInGroup)
-                divisionID = division.getID()
-                if maxRankInGroup == division.lastRank:
-                    divisionID += 1
-                divisionsGroups[divisionID].append(range(previousPosition, position))
-                previousPosition = position
+        groups = self.__rankedSettings.rankGroups
+        divisionsGroups = defaultdict(list)
+        position = 0
+        previousPosition = 0
+        for ranksNum in groups:
+            position += ranksNum
+            maxRankInGroup = position - 1
+            division = self.getDivision(maxRankInGroup)
+            divisionID = division.getID()
+            if maxRankInGroup == division.lastRank:
+                divisionID += 1
+            divisionsGroups[divisionID].append(range(previousPosition, position))
+            previousPosition = position
 
-            return divisionsGroups
-        else:
-            return None
+        return divisionsGroups

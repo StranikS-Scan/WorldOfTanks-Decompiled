@@ -56,10 +56,6 @@ class IItemsRequester(requesters.IRequester):
     def anonymizer(self):
         raise NotImplementedError
 
-    @property
-    def bob(self):
-        raise NotImplementedError
-
     def requestUserDossier(self, databaseID, callback):
         raise NotImplementedError
 
@@ -127,6 +123,9 @@ class IItemsRequester(requesters.IRequester):
         raise NotImplementedError
 
     def doesVehicleExist(self, intCD):
+        raise NotImplementedError
+
+    def onDisconnected(self):
         raise NotImplementedError
 
 

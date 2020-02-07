@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/session_stats/session_stats_tooltips.py
 import logging
 from collections import namedtuple
+from account_helpers.settings_core.settings_constants import SESSION_STATS
 from constants import ARENA_BONUS_TYPE
 from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
 from gui.Scaleform.daapi.view.lobby.session_stats.shared import packLastBattleData, packBattleEfficiencyData, packEfficiencyPropData, packTotalPropData
@@ -101,7 +102,8 @@ class SessionStatsTankInfo(BlocksTooltipData):
         return formatters.packBlockDataItem(linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_SESSION_STATS_TANK_INFO_BATTLE_EFFICIENCY_BLOCK, data=data, padding=formatters.packPadding(bottom=35))
 
     def _getBattleEfficiencyData(self):
-        return TankBattleEfficiencyStatsVO(battleEfficiency=packBattleEfficiencyData(self.vehicleStats), collapseLabel='')
+        parameters = SESSION_STATS.getVehiclesEfficiencyBlock()
+        return TankBattleEfficiencyStatsVO(battleEfficiency=packBattleEfficiencyData(self.vehicleStats, parameters), collapseLabel='')
 
     def _packHeaderBlock(self):
         data = self._getHeaderBlockData()._asdict()

@@ -55,7 +55,8 @@ __all__ = ('standard',
  'heroTitleTK',
  'grandTitle',
  'grandTitleYellow',
- 'grandTitleTK')
+ 'grandTitleTK',
+ 'textEpic')
 
 def _getStyle(style, ctx=None):
     if ctx is None:
@@ -193,6 +194,10 @@ def promoSubTitle(text):
     return _formatText('promoSubTitle', text)
 
 
+def promoSubTitlePlain(text):
+    return _formatText('promoSubTitlePlain', text)
+
+
 def alert(text):
     return _formatText('alertText', text)
 
@@ -251,6 +256,10 @@ def creditsSmall(text):
 
 def crystal(text):
     return _formatText('crystalText', text)
+
+
+def textEpic(text):
+    return _formatText('textEpic', text)
 
 
 def defRes(text):
@@ -333,6 +342,10 @@ def superPromoTitleEm(text):
 
 def highlightText(text):
     return _formatText('highlightText', text)
+
+
+def highlightTextPlain(text):
+    return _formatText('highlightTextPlain', text)
 
 
 def unavailable(text):

@@ -4,6 +4,7 @@ import weakref
 import base64
 import cPickle
 from functools import partial
+import math
 import Math
 import BigWorld
 import SoundGroups
@@ -22,6 +23,13 @@ from skeletons.gui.game_control import IBootcampController
 
 class _IMarker(object):
 
+    def __init__(self, switchedToSniperMode):
+        self.__switchedToSniperMode = switchedToSniperMode
+
+    @property
+    def isSwitchedToSniperMode(self):
+        return self.__switchedToSniperMode
+
     def update(self, *args, **kwargs):
         pass
 
@@ -34,16 +42,14 @@ class _IMarker(object):
 
 class _DirectionIndicatorCtrl(_IMarker):
     settingsCore = dependency.descriptor(ISettingsCore)
+    __INFOCUS_ANGLE = 45
 
-    def __init__(self, shapes, position, switchedToSniperMode=False):
-        super(_DirectionIndicatorCtrl, self).__init__()
+    def __init__(self, shapes, position, switchedToSniperMode=True):
+        super(_DirectionIndicatorCtrl, self).__init__(switchedToSniperMode)
         self.__shapes = shapes
         self.__indicator = None
         self.__position = position
         self.__isMarkerVisible = False
-        visible = not switchedToSniperMode
-        if visible:
-            self.setVisible(visible)
         return
 
     def getShape(self):
@@ -52,19 +58,15 @@ class _DirectionIndicatorCtrl(_IMarker):
     def attachGUI(self, indicator):
         self.__indicator = indicator
         self.__indicator.setShape(self.getShape())
-        if self.__isMarkerVisible:
-            self.__isMarkerVisible = False
-            self.setVisible(True)
+        self.__indicator.track(self.__position)
+        self.__updateVisibility()
+        self.settingsCore.onSettingsChanged += self.__as_onSettingsChanged
 
     def detachGUI(self):
+        self.settingsCore.onSettingsChanged -= self.__as_onSettingsChanged
         if self.__indicator is not None:
             self.__indicator.remove()
-        self.__indicator = None
-        return
-
-    def setIndicatorTrack(self):
-        if self.__indicator is not None and self.__position is not None:
-            self.__indicator.track(self.__position)
+            self.__indicator = None
         return
 
     def update(self, distance, position=None):
@@ -72,23 +74,19 @@ class _DirectionIndicatorCtrl(_IMarker):
             self.__indicator.setDistance(distance)
             if position is not None:
                 self.__indicator.setPosition(position)
+        self.__updateVisibility()
         return
 
     def clear(self):
         LOG_DEBUG_DEV_BOOTCAMP('_DirectionIndicatorCtrl.clear', hex(id(self)))
-        self.setVisible(False)
         if self.__indicator is not None:
             self.__indicator.remove()
-        self.__indicator = None
+            self.__indicator = None
         return
 
     def setVisible(self, isVisible):
         if not self.__isMarkerVisible and isVisible:
-            self.__isMarkerVisible = True
-            self.setIndicatorTrack()
-            if self.__indicator is not None:
-                self.__indicator.setVisibility(True)
-            self.settingsCore.onSettingsChanged += self.__as_onSettingsChanged
+            self.__updateVisibility()
         elif self.__isMarkerVisible and not isVisible:
             self.__isMarkerVisible = False
             self.settingsCore.onSettingsChanged -= self.__as_onSettingsChanged
@@ -102,16 +100,35 @@ class _DirectionIndicatorCtrl(_IMarker):
                 self.__indicator.setShape(self.getShape())
         return
 
+    def __updateVisibility(self):
+        if self.__indicator is not None:
+            self.__isMarkerVisible = True
+            camera = BigWorld.player().inputHandler.ctrl.camera.camera
+            camMat = Math.Matrix(camera.invViewMatrix)
+            if camMat is not None:
+                view = camMat.applyV4Point(Math.Vector4(0, 0, 1, 0))
+                view = view.tuple()
+                direction = self.__position - BigWorld.player().getOwnVehiclePosition()
+                direction.normalise()
+                direction = direction.tuple()
+                for acosi in (abs(v * p) for v, p in zip(view, direction)):
+                    if acosi > math.cos(self.__INFOCUS_ANGLE * math.pi / 180):
+                        self.__isMarkerVisible = False
+                        break
+
+            self.__indicator.setVisibility(self.__isMarkerVisible)
+        return
+
 
 class _AimMarker(_IMarker):
 
-    def __init__(self, typeID, triggerID, marker2D, marker3D, dIndicator=None, isSniperModeEnabled=False):
+    def __init__(self, typeID, triggerID, marker2D, marker3D, dIndicator=None, switchedToSniperMode=True):
+        super(_AimMarker, self).__init__(switchedToSniperMode)
         self.__typeID = typeID
         self.__triggerID = triggerID
         self.__marker2D = marker2D
         self.__marker3D = marker3D
         self.__dIndicator = dIndicator
-        self.__isSniperModeEnabled = isSniperModeEnabled
 
     def attachGUI(self, markers2D, minimap):
         self.__marker2D.attachGUI(markers2D)
@@ -152,12 +169,11 @@ class _AimMarker(_IMarker):
 
 class _AreaMarker(_AimMarker):
 
-    def __init__(self, typeID, triggerID, position, worldMarker2D, minimapMarker2D, worldMarker3D, groundMarker3D, dIndicator=None, isSniperModeEnabled=False):
-        super(_AreaMarker, self).__init__(typeID, triggerID, worldMarker2D, worldMarker3D, dIndicator, isSniperModeEnabled)
+    def __init__(self, typeID, triggerID, position, worldMarker2D, minimapMarker2D, worldMarker3D, groundMarker3D, dIndicator=None, switchedToSniperMode=True):
+        super(_AreaMarker, self).__init__(typeID, triggerID, worldMarker2D, worldMarker3D, dIndicator, switchedToSniperMode)
         self.__groundMarker = groundMarker3D
         self.__minimapMarker = minimapMarker2D
         self.__position = position
-        self.__isSniperModeEnabled = isSniperModeEnabled
 
     def attachGUI(self, markers2D, minimap):
         super(_AreaMarker, self).attachGUI(markers2D, minimap)
@@ -189,13 +205,13 @@ class _AreaMarker(_AimMarker):
 
 class _StaticWorldMarker2D(_IMarker):
 
-    def __init__(self, objectID, data, position, distance, switchedToSniperMode=False):
-        super(_StaticWorldMarker2D, self).__init__()
+    def __init__(self, objectID, data, position, distance, switchedToSniperMode=True):
+        super(_StaticWorldMarker2D, self).__init__(switchedToSniperMode)
         self.__initData = data
         self.__initPosition = position
         self.__objectID = objectID
         self.__distance = distance
-        self.__visible = not switchedToSniperMode
+        self.__visible = True
         self.__markers2D = lambda : None
 
     def attachGUI(self, markers2D):
@@ -249,8 +265,8 @@ class _StaticWorldMarker2D(_IMarker):
 
 class _StaticMinimapMarker2D(_IMarker):
 
-    def __init__(self, markerID, position):
-        super(_StaticMinimapMarker2D, self).__init__()
+    def __init__(self, markerID, position, switchedToSniperMode=True):
+        super(_StaticMinimapMarker2D, self).__init__(switchedToSniperMode)
         self.__position = position[:]
         self.__markerID = markerID
         self.__minimap = lambda : None
@@ -282,12 +298,12 @@ class _StaticMinimapMarker2D(_IMarker):
 
 class _StaticObjectMarker3D(_IMarker):
 
-    def __init__(self, data, position, switchedToSniperMode=False):
-        super(_StaticObjectMarker3D, self).__init__()
+    def __init__(self, data, position, switchedToSniperMode=True):
+        super(_StaticObjectMarker3D, self).__init__(switchedToSniperMode)
         self.__path = data.get('path')
         offset = data.get('offset', Math.Vector3(0, 0, 0))
         self.__model = None
-        self.__isMarkerVisible = not switchedToSniperMode
+        self.__isMarkerVisible = True
         self.__action = data.get('action')
         self.__animator = None
         self.__modelOwner = None
@@ -360,6 +376,7 @@ class BootcampMarkersManager(object):
     bootcamp = dependency.descriptor(IBootcampController)
     SHOW_SOUND_ID = 'bc_arrow_appears'
     HIDE_SOUND_ID = 'bc_arrow_disappears'
+    STATIC_MARKER_DIST = 50
 
     def __init__(self):
         super(BootcampMarkersManager, self).__init__()
@@ -453,7 +470,8 @@ class BootcampMarkersManager(object):
             self.serializeMethod(CallbackDataNames.BC_MARKERS_ONTRIGGERACTIVATED, (params,))
             self.__switchedToSniperMode = True
             for marker in self.__markers.values():
-                marker.setVisible(False)
+                if not marker.isSwitchedToSniperMode:
+                    marker.setVisible(False)
 
             return
         else:
@@ -589,15 +607,14 @@ class BootcampMarkersManager(object):
         typeID = 1
         self.__triggerID += 1
         position = markerParams['position']
-        distance = 50
         if position is None:
             LOG_ERROR_BOOTCAMP('Can not determine position of object', self.__triggerID)
             return
         else:
             indicatorCtrl = None
             if data.isIndicatorCreate():
-                indicatorCtrl = _DirectionIndicatorCtrl(('yellow', 'yellow'), position, self.__switchedToSniperMode)
-            areaMarker = _AreaMarker(typeID, self.__triggerID, position, _StaticWorldMarker2D(self.__triggerID, data.getWorldData(), position, distance, self.__switchedToSniperMode), _StaticMinimapMarker2D(data.getID(), position), _StaticObjectMarker3D(data.getModelData(), position, self.__switchedToSniperMode), _StaticObjectMarker3D(data.getGroundData(), position, self.__switchedToSniperMode), indicatorCtrl, self.__switchedToSniperMode)
+                indicatorCtrl = _DirectionIndicatorCtrl(('yellow', 'yellow'), position)
+            areaMarker = _AreaMarker(typeID, self.__triggerID, position, _StaticWorldMarker2D(self.__triggerID, data.getWorldData(), position, self.STATIC_MARKER_DIST), _StaticMinimapMarker2D(data.getID(), position), _StaticObjectMarker3D(data.getModelData(), position), _StaticObjectMarker3D(data.getGroundData(), position), indicatorCtrl)
             if self.__gui is not None and self.__gui.inited:
                 minimap = self.__gui.getMinimapPlugin()
                 marker2D = self.__gui.getMarkers2DPlugin()

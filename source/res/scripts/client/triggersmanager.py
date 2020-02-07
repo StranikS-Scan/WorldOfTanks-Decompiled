@@ -132,8 +132,11 @@ class TriggersManager(object):
         return
 
     def activateTrigger(self, triggerType, **args):
+        params = dict(args) if args is not None else {}
+        params['type'] = triggerType
         if triggerType in self.__activeManualTriggers:
-            self.deactivateTrigger(triggerType)
+            if not params.get('repeatable', False):
+                self.deactivateTrigger(triggerType)
         params = dict(args) if args is not None else {}
         params['type'] = triggerType
         if triggerType not in self.__pendingManualTriggers:

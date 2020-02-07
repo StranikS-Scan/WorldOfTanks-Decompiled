@@ -19,11 +19,9 @@ from helpers import i18n, time_utils, dependency
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.game_control import IBootcampController
-from skeletons.gui.game_control import IBobController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from gui.clans.clan_helpers import isStrongholdsEnabled
-from gui.ranked_battles.ranked_helpers import getRankedBattlesUrl
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.game_control.epic_meta_game_ctrl import EPIC_PERF_GROUP
@@ -91,7 +89,7 @@ class _SelectorItem(object):
         return False
 
     def isInSquad(self, state):
-        return state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInUnit(PREBATTLE_TYPE.EVENT) or state.isInUnit(PREBATTLE_TYPE.EPIC) or state.isInUnit(PREBATTLE_TYPE.BOB)
+        return state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInUnit(PREBATTLE_TYPE.EVENT) or state.isInUnit(PREBATTLE_TYPE.EPIC)
 
     def setLocked(self, value):
         self._isLocked = value
@@ -342,18 +340,6 @@ class _EpicQueueItem(_SelectorItem):
         return icons.makeImageTag(iconPath, vSpace=-3) + ' ' + attentionText if attentionText and iconPath else None
 
 
-class _BobItem(_SelectorItem):
-    bobController = dependency.descriptor(IBobController)
-
-    def isRandomBattle(self):
-        return True
-
-    def _update(self, state):
-        self._isSelected = state.isQueueSelected(QUEUE_TYPE.BOB)
-        self._isDisabled = state.hasLockedState
-        self._isVisible = self.bobController.needShowEventMode()
-
-
 class _BattleSelectorItems(object):
 
     def __init__(self, items):
@@ -453,7 +439,6 @@ class _RankedItem(_SelectorItem):
 
     def __init__(self, label, data, order, selectorType=None, isVisible=True):
         super(_RankedItem, self).__init__(label, data, order, selectorType, isVisible)
-        self.__ladderURL = getRankedBattlesUrl()
         self.__hasPastSeason = False
 
     def isRandomBattle(self):
@@ -462,7 +447,7 @@ class _RankedItem(_SelectorItem):
     def getVO(self):
         vo = super(_RankedItem, self).getVO()
         if self.rankedController.isAvailable():
-            vo['specialBgIcon'] = RES_ICONS.MAPS_ICONS_BUTTONS_SELECTORRENDERERBGEVENT
+            vo['specialBgIcon'] = backport.image(R.images.gui.maps.icons.buttons.selectorRendererBGEvent())
         return vo
 
     def getFormattedLabel(self):
@@ -470,7 +455,7 @@ class _RankedItem(_SelectorItem):
         availabilityStr = None
         if self.rankedController.hasSuitableVehicles():
             availabilityStr = self.__getAvailabilityStr()
-        return battleTypeName if availabilityStr is None else '%s\n%s' % (battleTypeName, availabilityStr)
+        return battleTypeName if availabilityStr is None else '%s\n%s' % (battleTypeName, text_styles.main(availabilityStr))
 
     def select(self):
         if not self.rankedController.hasSuitableVehicles():
@@ -484,25 +469,26 @@ class _RankedItem(_SelectorItem):
 
     def _update(self, state):
         self._isSelected = state.isInPreQueue(QUEUE_TYPE.RANKED)
-        self.__hasPastSeason = self.rankedController.getPreviousSeason() is not None and self.__ladderURL is not None
-        cantPlayRanked = not self.rankedController.hasAvailablePrimeTimeServers() and not self.__hasPastSeason
-        self._isDisabled = state.hasLockedState or cantPlayRanked
+        self.__hasPastSeason = self.rankedController.getPreviousSeason() is not None
+        isDisabled = self.rankedController.isFrozen() and self.rankedController.getCurrentSeason() is not None
+        self._isDisabled = state.hasLockedState or isDisabled
         self._isVisible = self.rankedController.isEnabled()
         return
 
     def __getAvailabilityStr(self):
         if self._isVisible and self.rankedController.hasAnySeason():
-            if self.rankedController.isFrozen():
-                return text_styles.main(i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY_FROZEN))
             currentSeason = self.rankedController.getCurrentSeason()
             if currentSeason is not None:
-                return text_styles.main(i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY_SEASON, season=currentSeason.getUserName() or currentSeason.getNumber()))
+                if self.rankedController.isUnset():
+                    return backport.text(R.strings.menu.headerButtons.battle.types.ranked.availability.notSet())
+                if self.rankedController.isFrozen():
+                    return backport.text(R.strings.menu.headerButtons.battle.types.ranked.availability.frozen())
+                return backport.text(R.strings.menu.headerButtons.battle.types.ranked.availability.season(), season=currentSeason.getUserName() or currentSeason.getNumber())
             nextSeason = self.rankedController.getNextSeason()
             if nextSeason is not None:
-                message = MENU.HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY_UNTIL
                 time = backport.getDateTimeFormat(nextSeason.getStartDate())
-                return text_styles.main(i18n.makeString(message, time=time))
-            return text_styles.main(i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY_ENDED))
+                return backport.text(R.strings.menu.headerButtons.battle.types.ranked.availability.until(), time=time)
+            return backport.text(R.strings.menu.headerButtons.battle.types.ranked.availability.ended())
         else:
             return
 
@@ -522,7 +508,6 @@ def _createItems(eventsCache=None, lobbyContext=None):
     items = []
     _addRandomBattleType(items)
     _addEpicQueueBattleType(items)
-    _addBobBattleType(items)
     _addRankedBattleType(items, settings)
     _addCommandBattleType(items, settings)
     _addStrongholdsBattleType(items, isInRoaming)
@@ -586,10 +571,6 @@ def _addSandboxType(items):
 
 def _addEpicQueueBattleType(items):
     items.append(_EpicQueueItem(MENU.HEADERBUTTONS_BATTLE_TYPES_EPIC, PREBATTLE_ACTION_NAME.EPIC, 1, SELECTOR_BATTLE_TYPES.EPIC))
-
-
-def _addBobBattleType(items):
-    items.append(_BobItem(MENU.HEADERBUTTONS_BATTLE_TYPES_BOB, PREBATTLE_ACTION_NAME.BOB, 1, SELECTOR_BATTLE_TYPES.BOB))
 
 
 def _addSimpleSquadType(items):

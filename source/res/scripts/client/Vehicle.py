@@ -622,7 +622,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         else:
             if self.typeDescriptor is not None and self.typeDescriptor.hasSiegeMode:
                 self.typeDescriptor.onSiegeStateChanged(newState)
-                self.appearance.onSiegeStateChanged(newState)
+                self.appearance.onSiegeStateChanged(newState, timeToNextMode)
                 if self.isPlayerVehicle:
                     inputHandler = BigWorld.player().inputHandler
                     inputHandler.siegeModeControl.notifySiegeModeChanged(self, newState, timeToNextMode)

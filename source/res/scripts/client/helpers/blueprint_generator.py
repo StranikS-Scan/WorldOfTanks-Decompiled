@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/blueprint_generator.py
 import logging
+import typing
 from collections import namedtuple
 import BigWorld
 import Math
@@ -13,9 +14,9 @@ _logger = logging.getLogger(__name__)
 _BLUEPRINT_BG_TEXTURE = 'gui/maps/blueprint_bg.png'
 _BLUEPRINT_TEXTURE_PATH = 'img://customTexture:blueprint'
 _BLUEPRINT_LAYOUTS_PATH = 'gui/blueprint_layouts.xml'
-_BLUEPRINT_TANK_LOD = 3
-_BpLayout = namedtuple('BpLayout', ('front', 'left', 'top', 'isometric'))
-_BLUEPRINT_DEFAULT_LAYOUT = _BpLayout(front=Math.Vector4(220, 140, 0.25, 0.94), left=Math.Vector4(560, 140, 0.25, 0.94), top=Math.Vector4(220, 350, 0.25, 0.94), isometric=Math.Vector4(644, 433, 0.5, 0.94))
+_BpProjections = namedtuple('BpProjections', ('front', 'left', 'top', 'isometric'))
+_BpLayout = namedtuple('BpLayout', ('projections', 'lodIdx'))
+_BLUEPRINT_DEFAULT_LAYOUT = _BpLayout(_BpProjections(front=Math.Vector4(220, 140, 0.25, 0.94), left=Math.Vector4(560, 140, 0.25, 0.94), top=Math.Vector4(220, 350, 0.25, 0.94), isometric=Math.Vector4(644, 433, 0.5, 0.94)), lodIdx=3)
 
 class BlueprintGenerator(object):
 
@@ -66,10 +67,10 @@ class BlueprintGenerator(object):
 
     def __loadVehicleCompound(self, vehicleDescr):
         vehicleName = vehicleDescr.name
+        layout = self.__layouts.get(vehicleName, self.__layouts['default'])
         if vehicleName in self.__cachedCompound:
             _logger.debug('Loaded vehicle compound of "%s" from cache', vehicleName)
-            layout = self.__layouts.get(vehicleName, self.__layouts['default'])
-            BigWorld.buildBlueprint(self.__cachedCompound[vehicleName], _BLUEPRINT_BG_TEXTURE, layout)
+            BigWorld.buildBlueprint(self.__cachedCompound[vehicleName], _BLUEPRINT_BG_TEXTURE, layout.projections)
             self.__inProgress = None
             return
         elif vehicleName in self.__pendingCompound:
@@ -78,7 +79,7 @@ class BlueprintGenerator(object):
         else:
             _logger.debug('Loading vehicle compound of "%s".', vehicleName)
             self.__pendingCompound.add(vehicleName)
-            resources = (ma.prepareCompoundAssembler(vehicleDescr, ModelsSetParams('', 'undamaged', []), BigWorld.camera().spaceID, lodIdx=_BLUEPRINT_TANK_LOD, skipMaterials=True),)
+            resources = (ma.prepareCompoundAssembler(vehicleDescr, ModelsSetParams('', 'undamaged', []), BigWorld.camera().spaceID, lodIdx=layout.lodIdx, skipMaterials=True),)
             BigWorld.loadResourceListBG(resources, makeCallbackWeak(self.__onResourcesLoaded, vehicleName))
             return
 
@@ -95,7 +96,7 @@ class BlueprintGenerator(object):
             if vehicleName != self.__inProgress:
                 return
             layout = self.__layouts.get(vehicleName, self.__layouts['default'])
-            BigWorld.buildBlueprint(compound, _BLUEPRINT_BG_TEXTURE, layout)
+            BigWorld.buildBlueprint(compound, _BLUEPRINT_BG_TEXTURE, layout.projections)
             self.__inProgress = None
             return
 
@@ -107,7 +108,7 @@ class BlueprintGenerator(object):
                 if layoutsSection is None:
                     return layouts
                 for layout in layoutsSection.values():
-                    bpLayout = _BpLayout(front=layout['front'].asVector4, left=layout['left'].asVector4, top=layout['top'].asVector4, isometric=layout['isometric'].asVector4)
+                    bpLayout = _BpLayout(_BpProjections(front=layout['front'].asVector4, left=layout['left'].asVector4, top=layout['top'].asVector4, isometric=layout['isometric'].asVector4), lodIdx=layout['lodIdx'].asInt)
                     if layout.name == 'default':
                         layouts['default'] = bpLayout
                         continue

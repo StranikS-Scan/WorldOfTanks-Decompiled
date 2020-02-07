@@ -395,6 +395,7 @@ class SoundGroups(object):
         if WWISE.enabled:
             if spaceID == GuiGlobalSpaceID.LOGIN:
                 WWISE.WG_loadLogin()
+                self.enableLobbySounds(True)
         self.__spaceID = spaceID
 
     def setMasterVolume(self, volume):

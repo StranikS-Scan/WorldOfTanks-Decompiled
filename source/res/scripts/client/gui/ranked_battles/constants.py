@@ -32,12 +32,17 @@ class PrimeTimeStatus(CONST_CONTAINER):
 
 ZERO_RANK_ID = 0
 ZERO_DIVISION_ID = 0
-AWARDS_ORDER = ['battleToken',
+MAX_GROUPS_IN_DIVISION = 3
+AWARDS_ORDER = ('battleToken',
  'items',
  Currency.CREDITS,
  'premium',
  Currency.GOLD,
- Currency.CRYSTAL]
+ Currency.CRYSTAL)
+YEAR_AWARDS_BONUS_ORDER = (Currency.CRYSTAL,
+ 'customizations',
+ 'items',
+ 'vehicles')
 DEFAULT_REWARDS_COUNT = 7
 
 class RankedDossierKeys(CONST_CONTAINER):
@@ -46,8 +51,9 @@ class RankedDossierKeys(CONST_CONTAINER):
 
 
 ARCHIVE_SEASON_ID = 0
+STANDARD_POINTS_COUNT = 1
 NOT_IN_LEAGUES_QUEST = 'ranked_{}_0_common'
-FINAL_QUEST_PATTERN = 'ranked_2019_{}_final'
+FINAL_QUEST_PATTERN = 'ranked_{}_final'
 RANKED_QUEST_ID_PREFIX = 'ranked'
 YEAR_POINTS_TOKEN = 'rb2019'
 

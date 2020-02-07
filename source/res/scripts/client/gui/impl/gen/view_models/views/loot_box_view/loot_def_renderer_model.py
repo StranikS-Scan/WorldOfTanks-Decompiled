@@ -38,35 +38,35 @@ class LootDefRendererModel(ViewModel):
     def setIsSmall(self, value):
         self._setBool(4, value)
 
-    def getHasCompensation(self):
+    def getIsEpic(self):
         return self._getBool(5)
 
-    def setHasCompensation(self, value):
+    def setIsEpic(self, value):
         self._setBool(5, value)
 
+    def getHasCompensation(self):
+        return self._getBool(6)
+
+    def setHasCompensation(self, value):
+        self._setBool(6, value)
+
     def getLabelAlign(self):
-        return self._getString(6)
-
-    def setLabelAlign(self, value):
-        self._setString(6, value)
-
-    def getHighlightType(self):
         return self._getString(7)
 
-    def setHighlightType(self, value):
+    def setLabelAlign(self, value):
         self._setString(7, value)
 
-    def getOverlayType(self):
+    def getHighlightType(self):
         return self._getString(8)
 
-    def setOverlayType(self, value):
+    def setHighlightType(self, value):
         self._setString(8, value)
 
-    def getIsVehicle(self):
-        return self._getBool(9)
+    def getOverlayType(self):
+        return self._getString(9)
 
-    def setIsVehicle(self, value):
-        self._setBool(9, value)
+    def setOverlayType(self, value):
+        self._setString(9, value)
 
     def _initialize(self):
         super(LootDefRendererModel, self)._initialize()
@@ -75,8 +75,8 @@ class LootDefRendererModel(ViewModel):
         self._addNumberProperty('tooltipId', 0)
         self._addStringProperty('rendererType', '')
         self._addBoolProperty('isSmall', False)
+        self._addBoolProperty('isEpic', False)
         self._addBoolProperty('hasCompensation', False)
         self._addStringProperty('labelAlign', 'center')
         self._addStringProperty('highlightType', '')
         self._addStringProperty('overlayType', '')
-        self._addBoolProperty('isVehicle', False)

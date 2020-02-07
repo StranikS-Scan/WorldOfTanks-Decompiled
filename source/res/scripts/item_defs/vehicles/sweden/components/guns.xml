@@ -42,6 +42,7 @@
     <_105mm_strvkan_L_45>	43	</_105mm_strvkan_L_45>
     <_105mm_strvkan_L_51>	44	</_105mm_strvkan_L_51>
     <_120mm_strvkan_L_40>	46	</_120mm_strvkan_L_40>
+    <_105mm_strvkan_L_45_Alt_3>	47	</_105mm_strvkan_L_45_Alt_3>
   </ids>
   <shared>
     <_20mm_akan_m_Madsen>
@@ -2069,6 +2070,64 @@
         </_105mm_slsgr_m_61B>
       </shots>
     </_105mm_strvkan_L_45>
+    <_105mm_strvkan_L_45_Alt_3>
+      <userString>	#sweden_vehicles:_105mm_strvkan_L_45_Alt_3	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	200000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 7.0 1.0 7.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	50	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <weight>	1670	</weight>
+      <maxHealth>	208	</maxHealth>
+      <maxRegenHealth>	104	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_slpprj_m_61B>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	1385	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	252 240	</piercingPower>
+        </_105mm_slpprj_m_61B>
+        <_105mm_slpprj_m_66B>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1560	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	284 269	</piercingPower>
+        </_105mm_slpprj_m_66B>
+        <_105mm_slsgr_m_61B>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	640	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	53 53	</piercingPower>
+        </_105mm_slsgr_m_61B>
+      </shots>
+    </_105mm_strvkan_L_45_Alt_3>
     <_105mm_kan_UDES_03>
       <userString>	#sweden_vehicles:_105mm_kan_UDES_03	</userString>
       <tags></tags>

@@ -51,9 +51,6 @@ def getGameControllersConfig(manager):
     from gui.game_control.referral_program_controller import ReferralProgramController as _ReferralController
     from gui.game_control.badges_controller import BadgesController as _Badges
     from gui.game_control.special_sound_ctrl import SpecialSoundCtrl as _SpecialSoundCtrl
-    from gui.game_control.bob_controller import BobController as _BobController
-    from gui.game_control.bob_announcement_controller import BobAnnouncementController as _BobAnnouncementController
-    from gui.game_control.bob_sound_controller import BobSoundController as _BobSoundController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -100,9 +97,6 @@ def getGameControllersConfig(manager):
         _config(_interface.IChinaController, _China())
     else:
         _config(_interface.IChinaController, _NoChina())
-    _config(_interface.IBobController, _BobController())
     _config(_interface.ISeasonsController, _Seasons())
     _config(_interface.IBadgesController, _Badges())
     _config(_interface.IAnonymizerController, _Anonymizer())
-    _config(_interface.IBobAnnouncementController, _BobAnnouncementController())
-    _config(_interface.IBobSoundController, _BobSoundController())

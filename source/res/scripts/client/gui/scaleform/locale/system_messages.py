@@ -84,7 +84,6 @@ class SYSTEM_MESSAGES(object):
     PREBATTLE_VEHICLEINVALID_NO_READYVEHICLE = '#system_messages:prebattle/vehicleInvalid/no_readyVehicle'
     PREBATTLE_VEHICLEINVALID_VEHICLENOTSUPPORTED = '#system_messages:prebattle/vehicleInvalid/vehicleNotSupported'
     PREBATTLE_VEHICLEINVALID_EPICONLY = '#system_messages:prebattle/vehicleInvalid/epicOnly'
-    PREBATTLE_VEHICLEINVALID_BOBONLY = '#system_messages:prebattle/vehicleInvalid/bobOnly'
     PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS = '#system_messages:prebattle/vehicleInvalid/notSetReadyStatus'
     PREBATTLE_VEHICLEINVALID_FALLOUTONLY = '#system_messages:prebattle/vehicleInvalid/falloutOnly'
     PREBATTLE_VEHICLEINVALID_LIMITS_NATIONS = '#system_messages:prebattle/vehicleInvalid/limits/nations'
@@ -1057,6 +1056,7 @@ class SYSTEM_MESSAGES(object):
     RANKED_NOTIFICATIONS_BONUSNAME_STYLES = '#system_messages:ranked/notifications/bonusName/styles'
     RANKED_NOTIFICATION_PRIMETIME = '#system_messages:ranked/notification/primeTime'
     RANKED_NOTIFICATION_NOTAVAILABLE = '#system_messages:ranked/notification/notAvailable'
+    RANKED_NOTIFICATION_NOTSET = '#system_messages:ranked/notification/notSet'
     RANKED_NOTIFICATION_AVAILABLE = '#system_messages:ranked/notification/available'
     TOKENS_NOTIFICATION_MARK_ACQUIRED = '#system_messages:tokens/notification/mark_acquired'
     EPICBATTLES_NOTIFICATION_NOTAVAILABLE = '#system_messages:epicBattles/notification/notAvailable'
@@ -1116,6 +1116,15 @@ class SYSTEM_MESSAGES(object):
     NATION_CHANGE_ERROR = '#system_messages:nation_change/error'
     DEMOUNTKIT_RESTORED_SWITCHEDON = '#system_messages:demountKit_restored/switchedOn'
     DEMOUNTKIT_FAILED_SWITCHEDOFF = '#system_messages:demountKit_failed/switchedOff'
+    DAILY_QUESTS_SWITCH_OFF_TITLE = '#system_messages:daily_quests/switch_off/title'
+    DAILY_QUESTS_SWITCH_OFF_BODY = '#system_messages:daily_quests/switch_off/body'
+    DAILY_QUESTS_SWITCH_ON_TITLE = '#system_messages:daily_quests/switch_on/title'
+    DAILY_QUESTS_SWITCH_ON_BODY = '#system_messages:daily_quests/switch_on/body'
+    DAILY_QUESTS_REROLL_SUCCESS = '#system_messages:daily_quests/reroll/success'
+    DAILY_QUESTS_REROLL_REROLL_DISABLED = '#system_messages:daily_quests/reroll/reroll_disabled'
+    DAILY_QUESTS_REROLL_REROLL_IN_COOLDOWN = '#system_messages:daily_quests/reroll/reroll_in_cooldown'
+    DAILY_QUESTS_REROLL_QUEST_IS_ALREADY_COMPLETED = '#system_messages:daily_quests/reroll/quest_is_already_completed'
+    DAILY_QUESTS_REROLL_UNKNOWN_ERROR = '#system_messages:daily_quests/reroll/unknown_error'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -1307,7 +1316,6 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_VEHICLEINVALID_NO_READYVEHICLE,
      PREBATTLE_VEHICLEINVALID_VEHICLENOTSUPPORTED,
      PREBATTLE_VEHICLEINVALID_EPICONLY,
-     PREBATTLE_VEHICLEINVALID_BOBONLY,
      PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS,
      PREBATTLE_VEHICLEINVALID_FALLOUTONLY,
      PREBATTLE_VEHICLEINVALID_LIMITS_NATIONS,
@@ -2280,6 +2288,7 @@ class SYSTEM_MESSAGES(object):
      RANKED_NOTIFICATIONS_BONUSNAME_STYLES,
      RANKED_NOTIFICATION_PRIMETIME,
      RANKED_NOTIFICATION_NOTAVAILABLE,
+     RANKED_NOTIFICATION_NOTSET,
      RANKED_NOTIFICATION_AVAILABLE,
      TOKENS_NOTIFICATION_MARK_ACQUIRED,
      EPICBATTLES_NOTIFICATION_NOTAVAILABLE,
@@ -2338,7 +2347,16 @@ class SYSTEM_MESSAGES(object):
      NATION_CHANGE_WRONG_ARG_VALUE,
      NATION_CHANGE_ERROR,
      DEMOUNTKIT_RESTORED_SWITCHEDON,
-     DEMOUNTKIT_FAILED_SWITCHEDOFF)
+     DEMOUNTKIT_FAILED_SWITCHEDOFF,
+     DAILY_QUESTS_SWITCH_OFF_TITLE,
+     DAILY_QUESTS_SWITCH_OFF_BODY,
+     DAILY_QUESTS_SWITCH_ON_TITLE,
+     DAILY_QUESTS_SWITCH_ON_BODY,
+     DAILY_QUESTS_REROLL_SUCCESS,
+     DAILY_QUESTS_REROLL_REROLL_DISABLED,
+     DAILY_QUESTS_REROLL_REROLL_IN_COOLDOWN,
+     DAILY_QUESTS_REROLL_QUEST_IS_ALREADY_COMPLETED,
+     DAILY_QUESTS_REROLL_UNKNOWN_ERROR)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

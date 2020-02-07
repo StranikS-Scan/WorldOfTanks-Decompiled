@@ -165,11 +165,7 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
             flag = vehData.get('extraSettings', 0)
             return activeInNationGroup(flag)
 
-        vehData = self.__getVehiclesData()
-        if vehData:
-            activeVehicles = sum(imap(checker, vehData.itervalues()))
-        else:
-            activeVehicles = 0
+        activeVehicles = sum(imap(checker, self.__getVehiclesData().itervalues()))
         return vehiclesSlots - activeVehicles
 
     def getInventoryEnhancements(self):

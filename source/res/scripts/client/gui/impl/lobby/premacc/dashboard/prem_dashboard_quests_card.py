@@ -4,13 +4,13 @@ from Event import Event
 from constants import PREMIUM_TYPE, PremiumConfigs
 from frameworks.wulf import ViewSettings
 from gui.Scaleform.genConsts.MISSIONS_STATES import MISSIONS_STATES
-from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.premacc.dashboard.card_quests_tasks_model import CardQuestsTasksModel
 from gui.impl.gen.view_models.views.lobby.premacc.dashboard.prem_dashboard_quests_card_model import PremDashboardQuestsCardModel
+from gui.impl.lobby.missions.daily_quests_view import DailyTabs
 from gui.impl.pub import ViewImpl
-from gui.server_events.events_dispatcher import showMissions
-from gui.server_events.events_helpers import premMissionsSortFunc, isPremiumQuestsEnable, getPremiumGroup
+from gui.server_events.events_dispatcher import showDailyQuests
+from gui.server_events.events_helpers import premMissionsSortFunc, isPremiumQuestsEnable
 from helpers import dependency
 from skeletons.gui.game_control import IGameSessionController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -142,5 +142,4 @@ class PremDashboardQuestsCard(ViewImpl):
 
     def __onGoToQuestsView(self):
         if isPremiumQuestsEnable():
-            group = getPremiumGroup()
-            showMissions(tab=QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS, groupID=group.getID())
+            showDailyQuests(subTab=DailyTabs.PREMIUM_MISSIONS)

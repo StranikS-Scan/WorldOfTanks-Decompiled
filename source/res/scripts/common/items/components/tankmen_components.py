@@ -12,12 +12,11 @@ class SPECIAL_VOICE_TAG(object):
     OFFSPRING = 'offspringSpecialVoice'
     RACER = 'racerSpecialVoice'
     RACER_EN = 'racerSpecialVoiceEn'
-    BATTLE_OF_BLOGGERS = ('ru1_LebwaSpecialVoice', 'ru2_YushaSpecialVoice', 'ru3_Amway921SpecialVoice', 'ru4_KorbenDallasSpecialVoice', 'eu1_MailandSpecialVoice', 'eu2_Skill4ltuSpecialVoice', 'eu3_DezgamezSpecialVoice', 'eu4_AwesomeEpicGuysSpecialVoice')
     ALL = (BUFFON,
      SABATON,
      OFFSPRING,
      RACER,
-     RACER_EN) + BATTLE_OF_BLOGGERS
+     RACER_EN)
 
 
 class SPECIAL_CREW_TAG(object):
@@ -153,10 +152,11 @@ class RoleRanks(legacy_stuff.LegacyStuff):
 
 
 class NationGroup(legacy_stuff.LegacyStuff):
-    __slots__ = ('__name', '__isFemales', '__notInShop', '__firstNamesIDs', '__lastNamesIDs', '__iconsIDs', '__weight', '__tags', '__roles')
+    __slots__ = ('__name', '__isFemales', '__notInShop', '__firstNamesIDs', '__lastNamesIDs', '__iconsIDs', '__weight', '__tags', '__roles', '__groupID')
 
-    def __init__(self, name, isFemales, notInShop, firstNamesIDs, lastNamesIDs, iconsIDs, weight, tags, roles):
+    def __init__(self, groupID, name, isFemales, notInShop, firstNamesIDs, lastNamesIDs, iconsIDs, weight, tags, roles):
         super(NationGroup, self).__init__()
+        self.__groupID = groupID
         self.__name = name
         self.__isFemales = isFemales
         self.__notInShop = notInShop
@@ -168,7 +168,11 @@ class NationGroup(legacy_stuff.LegacyStuff):
         self.__roles = roles
 
     def __repr__(self):
-        return 'NationGroup(name={}, isFemales={}, notInShop={}, weight={}, tags={}, roles={})'.format(self.__name, self.__isFemales, self.__notInShop, self.__weight, self.__tags, self.__roles)
+        return 'NationGroup(groupID={}, name={}, isFemales={}, notInShop={}, weight={}, tags={}, roles={})'.format(self.__groupID, self.__name, self.__isFemales, self.__notInShop, self.__weight, self.__tags, self.__roles)
+
+    @property
+    def groupID(self):
+        return self.__groupID
 
     @property
     def name(self):

@@ -21,8 +21,8 @@ class IItemsCache(requesters.IRequester):
     def fini(self):
         raise NotImplementedError
 
-    def clear(self):
+    def update(self, updateReason, diff=None, notify=True, callback=None):
         raise NotImplementedError
 
-    def update(self, updateReason, diff=None, notify=True, callback=None):
+    def onDisconnected(self):
         raise NotImplementedError

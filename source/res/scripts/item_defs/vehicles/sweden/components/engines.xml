@@ -42,6 +42,7 @@
     <Saab_Scania_DSI_14A>	44	</Saab_Scania_DSI_14A>
     <Saab_Scania_DSI_14B>	45	</Saab_Scania_DSI_14B>
     <Saab_Scania_DSI_14C>	46	</Saab_Scania_DSI_14C>
+    <Saab_Scania_DS14_Alt_3>	47	</Saab_Scania_DS14_Alt_3>
     <Development_Engine>	65535	</Development_Engine>
   </ids>
   <shared>
@@ -745,5 +746,22 @@
       <rpm_min>	357	</rpm_min>
       <rpm_max>	2128	</rpm_max>
     </Saab_Scania_DSI_14C>
+    <Saab_Scania_DS14_Alt_3>
+      <userString>	#sweden_vehicles:Saab_Scania_DS14_Alt_3	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	83000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	600	</power>
+      <weight>	1230	</weight>
+      <maxHealth>	285	</maxHealth>
+      <maxRegenHealth>	142	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	360	</rpm_min>
+      <rpm_max>	2120	</rpm_max>
+    </Saab_Scania_DS14_Alt_3>
   </shared>
 </engines.xml>

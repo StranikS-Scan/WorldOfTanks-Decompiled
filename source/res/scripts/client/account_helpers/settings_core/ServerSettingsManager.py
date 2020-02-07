@@ -31,8 +31,6 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     RANKED_CAROUSEL_FILTER_2 = 'RANKED_CAROUSEL_FILTER_2'
     EPICBATTLE_CAROUSEL_FILTER_1 = 'EPICBATTLE_CAROUSEL_FILTER_1'
     EPICBATTLE_CAROUSEL_FILTER_2 = 'EPICBATTLE_CAROUSEL_FILTER_2'
-    BOB_CAROUSEL_FILTER_1 = 'BOB_CAROUSEL_FILTER_1'
-    BOB_CAROUSEL_FILTER_2 = 'BOB_CAROUSEL_FILTER_2'
     GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
     EULA_VERSION = 'EULA_VERSION'
     MARKS_ON_GUN = 'MARKS_ON_GUN'
@@ -48,6 +46,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     QUESTS_PROGRESS = 'QUESTS_PROGRESS'
     UI_STORAGE = 'UI_STORAGE'
     LINKEDSET_QUESTS = 'LINKEDSET_QUESTS'
+    SESSION_STATS = 'SESSION_STATS'
 
 
 class UI_STORAGE_KEYS(CONST_CONTAINER):
@@ -74,6 +73,7 @@ class ServerSettingsManager(object):
     BATTLE_EVENTS = settings_constants.BATTLE_EVENTS
     BATTLE_BORDER_MAP = settings_constants.BATTLE_BORDER_MAP
     QUESTS_PROGRESS = settings_constants.QUESTS_PROGRESS
+    SESSION_STATS = settings_constants.SESSION_STATS
     SECTIONS = {SETTINGS_SECTIONS.GAME: Section(masks={GAME.ENABLE_OL_FILTER: 0,
                               GAME.ENABLE_SPAM_FILTER: 1,
                               GAME.INVITES_FROM_FRIENDS: 2,
@@ -244,40 +244,6 @@ class ServerSettingsManager(object):
                                                       'favorite': 5,
                                                       'bonus': 6,
                                                       'event': 7}, offsets={}),
-     SETTINGS_SECTIONS.BOB_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
-                                               'germany': 1,
-                                               'usa': 2,
-                                               'china': 3,
-                                               'france': 4,
-                                               'uk': 5,
-                                               'japan': 6,
-                                               'czech': 7,
-                                               'sweden': 8,
-                                               'poland': 9,
-                                               'italy': 10,
-                                               'lightTank': 15,
-                                               'mediumTank': 16,
-                                               'heavyTank': 17,
-                                               'SPG': 18,
-                                               'AT-SPG': 19,
-                                               'level_1': 20,
-                                               'level_2': 21,
-                                               'level_3': 22,
-                                               'level_4': 23,
-                                               'level_5': 24,
-                                               'level_6': 25,
-                                               'level_7': 26,
-                                               'level_8': 27,
-                                               'level_9': 28,
-                                               'level_10': 29}, offsets={}),
-     SETTINGS_SECTIONS.BOB_CAROUSEL_FILTER_2: Section(masks={'premium': 0,
-                                               'elite': 1,
-                                               'rented': 2,
-                                               'igr': 3,
-                                               'gameMode': 4,
-                                               'favorite': 5,
-                                               'bonus': 6,
-                                               'event': 7}, offsets={}),
      SETTINGS_SECTIONS.GUI_START_BEHAVIOR: Section(masks={GuiSettingsBehavior.FREE_XP_INFO_DIALOG_SHOWED: 0,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED: 1,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_STARTED: 2,
@@ -321,13 +287,15 @@ class ServerSettingsManager(object):
                                          OnceOnlyHints.SESSION_STATS_OPEN_BTN_HINT: 18,
                                          OnceOnlyHints.BATTLE_SESSION_UP_BUTTON_TOURNAMENT_HINT: 19,
                                          OnceOnlyHints.CREW_OPERATION_BTN_HINT: 20,
-                                         OnceOnlyHints.SOUND_BUTTONEX_HINT: 21}, offsets={}),
+                                         OnceOnlyHints.SOUND_BUTTONEX_HINT: 21,
+                                         OnceOnlyHints.SESSION_STATS_SETTINGS_BTN_HINT: 22}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
-                                          DAMAGE_INDICATOR.PRESETS: 1,
+                                          DAMAGE_INDICATOR.PRESET_CRITS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
                                           DAMAGE_INDICATOR.VEHICLE_INFO: 3,
                                           DAMAGE_INDICATOR.ANIMATION: 4,
-                                          DAMAGE_INDICATOR.DYNAMIC_INDICATOR: 5}, offsets={}),
+                                          DAMAGE_INDICATOR.DYNAMIC_INDICATOR: 5,
+                                          DAMAGE_INDICATOR.PRESET_ALLIES: 6}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_LOG: Section(masks={DAMAGE_LOG.TOTAL_DAMAGE: 0,
                                     DAMAGE_LOG.BLOCKED_DAMAGE: 1,
                                     DAMAGE_LOG.ASSIST_DAMAGE: 2,
@@ -370,7 +338,25 @@ class ServerSettingsManager(object):
                                     UI_STORAGE_KEYS.DUAL_GUN_HIGHLIGHTS_COUNTER: Offset(19, 3670016)}),
      SETTINGS_SECTIONS.LINKEDSET_QUESTS: Section(masks={}, offsets={'shown': Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.QUESTS_PROGRESS: Section(masks={}, offsets={QUESTS_PROGRESS.VIEW_TYPE: Offset(0, 3),
-                                         QUESTS_PROGRESS.DISPLAY_TYPE: Offset(2, 12)})}
+                                         QUESTS_PROGRESS.DISPLAY_TYPE: Offset(2, 12)}),
+     SETTINGS_SECTIONS.SESSION_STATS: Section(masks={SESSION_STATS.IS_NOT_NEEDED_RESET_STATS_EVERY_DAY: 0,
+                                       SESSION_STATS.IS_NEEDED_SAVE_CURRENT_TAB: 1,
+                                       SESSION_STATS.CURRENT_TAB: 2,
+                                       SESSION_STATS.ECONOMIC_BLOCK_VIEW: 3,
+                                       SESSION_STATS.SHOW_WTR: 4,
+                                       SESSION_STATS.SHOW_RATIO_DAMAGE: 5,
+                                       SESSION_STATS.SHOW_RATIO_KILL: 6,
+                                       SESSION_STATS.SHOW_WINS: 7,
+                                       SESSION_STATS.SHOW_AVERAGE_DAMAGE: 8,
+                                       SESSION_STATS.SHOW_HELP_DAMAGE: 9,
+                                       SESSION_STATS.SHOW_BLOCKED_DAMAGE: 10,
+                                       SESSION_STATS.SHOW_AVERAGE_XP: 11,
+                                       SESSION_STATS.SHOW_WIN_RATE: 12,
+                                       SESSION_STATS.SHOW_AVERAGE_VEHICLE_LEVEL: 13,
+                                       SESSION_STATS.SHOW_AVERAGE_FRAGS: 14,
+                                       SESSION_STATS.SHOW_SURVIVED_RATE: 15,
+                                       SESSION_STATS.SHOW_SPOTTED: 16,
+                                       SESSION_STATS.ONLY_ONCE_HINT_SHOWN_FIELD: 17}, offsets={})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -529,6 +515,12 @@ class ServerSettingsManager(object):
         LOG_DEBUG('Applying MARKER server settings: ', settings)
         self._core.onSettingsChanged(settings)
 
+    def setSessionStatsSettings(self, settings):
+        self.setSectionSettings(SETTINGS_SECTIONS.SESSION_STATS, settings)
+
+    def getSessionStatsSettings(self):
+        return self.getSection(SETTINGS_SECTIONS.SESSION_STATS)
+
     def getVersion(self):
         return self.settingsCache.getVersion()
 
@@ -651,6 +643,7 @@ class ServerSettingsManager(object):
          'onceOnlyHints': {},
          'uiStorage': {},
          'epicCarouselFilter2': {},
+         'sessionStats': {},
          GUI_START_BEHAVIOR: {},
          'clear': {},
          'delete': []}
@@ -718,6 +711,10 @@ class ServerSettingsManager(object):
         clearUIStorage = clear.get('uiStorage', 0)
         if uiStorage or clearUIStorage:
             settings[SETTINGS_SECTIONS.UI_STORAGE] = self._buildSectionSettings(SETTINGS_SECTIONS.UI_STORAGE, uiStorage) ^ clearUIStorage
+        sessionStats = data.get('sessionStats', {})
+        clearSessionStats = clear.get('sessionStats', 0)
+        if sessionStats or clearSessionStats:
+            settings[SETTINGS_SECTIONS.SESSION_STATS] = self._buildSectionSettings(SETTINGS_SECTIONS.SESSION_STATS, sessionStats) ^ clearSessionStats
         guiStartBehavior = data.get(GUI_START_BEHAVIOR, {})
         clearGuiStartBehavior = clear.get(GUI_START_BEHAVIOR, 0)
         if guiStartBehavior or clearGuiStartBehavior:

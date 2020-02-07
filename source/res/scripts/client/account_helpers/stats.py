@@ -3,9 +3,11 @@
 import cPickle
 from functools import partial
 import AccountCommands
+import constants
 import items
 from account_helpers.premium_info import PremiumInfo
 from debug_utils import LOG_DEBUG_DEV, LOG_WARNING, LOG_ERROR
+from helpers import time_utils
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
 from items import vehicles
 from gui.shared.money import Currency
@@ -208,6 +210,19 @@ class Stats(object):
             self.__account._doCmdInt4(AccountCommands.CMD_SET_MONEY, credit, gold, freeXP, crystal, proxy)
             return
 
+    def setPremium(self, premType=constants.PREMIUM_TYPE.PLUS, seconds=time_utils.ONE_DAY, callback=None):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            else:
+                proxy = None
+            self.__account._doCmdIntArr(AccountCommands.CMD_SET_PREMIUM, [premType, seconds], proxy)
+            return
+
     def addExperience(self, vehTypeName, xp, callback=None):
         if self.__ignore:
             if callback is not None:
@@ -310,6 +325,84 @@ class Stats(object):
             else:
                 proxy = None
             self.__account._doCmdIntArr(AccountCommands.CMD_COMPLETE_PERSONAL_MISSION, [questID, int(withAdditional)], proxy)
+            return
+
+    def rerollDailyQuest(self, token, callback=None):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER, 0)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            else:
+                proxy = None
+            self.__account._doCmdStr(AccountCommands.CMD_REROLL_DAILY_QUEST, token, proxy)
+            return
+
+    def rerollDailyQuestDev(self, level, callback=None):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER, 0)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            else:
+                proxy = None
+            self.__account._doCmdStr(AccountCommands.CMD_REROLL_DAILY_QUEST_DEV, level, proxy)
+            return
+
+    def resetRerollTimeout(self, callback=None):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER, 0)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            else:
+                proxy = None
+            self.__account._doCmdInt3(AccountCommands.CMD_RESET_REROLL_TIMEOUT, 0, 0, 0, proxy)
+            return
+
+    def completeDailyQuest(self, token, callback=None):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER, 0)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            else:
+                proxy = None
+            self.__account._doCmdStr(AccountCommands.CMD_COMPLETE_DAILY_QUEST, token, proxy)
+            return
+
+    def setEpicRewardTokens(self, count, callback=None):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER, 0)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            else:
+                proxy = None
+            self.__account._doCmdInt3(AccountCommands.CMD_SET_EPIC_REWARD_TOKENS, count, 0, 0, proxy)
+            return
+
+    def resetBonusQuest(self, callback=None):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER, 0)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            else:
+                proxy = None
+            self.__account._doCmdInt3(AccountCommands.CMD_RESET_BONUS_QUEST, 0, 0, 0, proxy)
             return
 
     def __onGetResponse(self, statName, callback, resultID):

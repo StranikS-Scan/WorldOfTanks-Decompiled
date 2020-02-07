@@ -17,7 +17,6 @@ from gui.battle_control.battle_cache import BattleClientCache
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui.battle_control.battle_constants import VIEW_COMPONENT_RULE
 from gui.battle_control.battle_ctx import BattleContext
-from gui.battle_control.hit_data import HitData
 from gui.battle_control.requests import AvatarRequestsController
 from gui.battle_control.view_components import createComponentsBridge
 from items.components.c11n_constants import SeasonType
@@ -302,13 +301,7 @@ class BattleSessionProvider(IBattleSessionProvider):
     def addHitDirection(self, hitDirYaw, attackerID, damage, isBlocked, critFlags, isHighExplosive, damagedID, attackReasonID):
         hitDirectionCtrl = self.__sharedRepo.hitDirection
         if hitDirectionCtrl is not None:
-            atackerVehInfo = self.__arenaDP.getVehicleInfo(attackerID)
-            atackerVehType = atackerVehInfo.vehicleType
-            isAlly = self.__arenaDP.isAllyTeam(atackerVehInfo.team)
-            playerVehType = self.__arenaDP.getVehicleInfo(damagedID).vehicleType
-            hitData = HitData(yaw=hitDirYaw, attackerID=attackerID, isAlly=isAlly, damage=damage, attackerVehName=atackerVehType.shortNameWithPrefix, isBlocked=isBlocked, attackerVehClassTag=atackerVehType.classTag, critFlags=critFlags, playerVehMaxHP=playerVehType.maxHealth, isHighExplosive=isHighExplosive, attackReasonID=attackReasonID)
-            if not hitData.isNonPlayerAttackReason() and not hitData.isBattleAbilityConsumable():
-                hitDirectionCtrl.addHit(hitData)
+            hitDirectionCtrl.addHit(hitDirYaw, attackerID, damage, isBlocked, critFlags, isHighExplosive, damagedID, attackReasonID)
         return
 
     def startVehicleVisual(self, vProxy, isImmediate=False):

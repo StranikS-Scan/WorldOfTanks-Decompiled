@@ -93,7 +93,7 @@ def passportProducer(nationID, isPremium=False):
     w = random.random()
     summWeight = 0.0
     group = None
-    for group in groups:
+    for group in groups.itervalues():
         weight = group.weight
         if summWeight <= w < summWeight + weight:
             break
@@ -109,7 +109,7 @@ def passportProducer(nationID, isPremium=False):
 
 def crewMemberPreviewProducer(nationID, isPremium=False, vehicleTypeID=None, role=None):
     vehicleName = vehicles.g_cache.vehicle(nationID, vehicleTypeID).name if vehicleTypeID else None
-    nationalGroups = getNationGroups(nationID, isPremium)
+    nationalGroups = getNationGroups(nationID, isPremium).values()
     groups = [ g for g in nationalGroups if vehicleName in g.tags and role in g.tags ]
     if not groups:
         groups = [ g for g in nationalGroups if vehicleName in g.tags ]
@@ -312,7 +312,7 @@ class TankmanDescr(object):
     @property
     def isUnique(self):
         groups = getNationGroups(self.nationID, self.isPremium)
-        if 0 <= self.gid < len(groups):
+        if self.gid in groups:
             return groups[self.gid].isUnique
         else:
             return False
@@ -470,7 +470,7 @@ class TankmanDescr(object):
         config = getNationConfig(self.nationID)
         groups = config.getGroups(isPremium)
         if firstNameID is not None:
-            if fnGroupID >= len(groups):
+            if fnGroupID not in groups:
                 return (False, 'Invalid fn group', None)
             group = groups[fnGroupID]
             if group.notInShop:
@@ -480,7 +480,7 @@ class TankmanDescr(object):
             if firstNameID not in group.firstNames:
                 return (False, 'Invalid first name', None)
         if lastNameID is not None:
-            if lnGroupID >= len(groups):
+            if lnGroupID not in groups:
                 return (False, 'Invalid ln group', None)
             group = groups[lnGroupID]
             if group.notInShop:
@@ -490,7 +490,7 @@ class TankmanDescr(object):
             if lastNameID not in group.lastNames:
                 return (False, 'Invalid last name', None)
         if iconID is not None:
-            if iGroupID >= len(groups):
+            if iGroupID not in groups:
                 return (False, 'Invalid i group', None)
             group = groups[iGroupID]
             if group.notInShop:
@@ -670,7 +670,7 @@ def makeTmanDescrByTmanData(tmanData):
     iGroupID = tmanData.get('iGroupID', 0)
     iconID = tmanData.get('iconID', None)
     groups = getNationConfig(nationID).getGroups(isPremium)
-    if fnGroupID >= len(groups):
+    if fnGroupID not in groups:
         raise SoftException('Invalid group fn ID')
     group = groups[fnGroupID]
     if bool(group.isFemales) != bool(isFemale):
@@ -680,7 +680,7 @@ def makeTmanDescrByTmanData(tmanData):
             raise SoftException('firstNameID is not in valid group')
     else:
         firstNameID = random.choice(group.firstNamesList)
-    if lnGroupID >= len(groups):
+    if lnGroupID not in groups:
         raise SoftException('Invalid group ln ID')
     group = groups[lnGroupID]
     if bool(group.isFemales) != bool(isFemale):
@@ -690,7 +690,7 @@ def makeTmanDescrByTmanData(tmanData):
             raise SoftException('lastNameID is not in valid group')
     else:
         lastNameID = random.choice(group.lastNamesList)
-    if iGroupID >= len(groups):
+    if iGroupID not in groups:
         raise SoftException('Invalid group ln ID')
     group = groups[iGroupID]
     if bool(group.isFemales) != bool(isFemale):
@@ -728,8 +728,8 @@ def ownVehicleHasTags(tankmanCD, tags=()):
 
 def hasTagInTankmenGroup(nationID, groupID, isPremium, tag):
     nationGroups = getNationGroups(nationID, isPremium)
-    if groupID < 0 or groupID >= len(nationGroups):
-        LOG_WARNING('tankmen.hasTagInTankmenGroup: wrong value of the groupID (index out of range)', groupID)
+    if groupID not in nationGroups:
+        LOG_WARNING('tankmen.hasTagInTankmenGroup: wrong value of the groupID (unknown groupID)', groupID)
         return False
     return tag in nationGroups[groupID].tags
 
@@ -766,7 +766,7 @@ def getCommanderSkinID(crewDescs, crewIDs, crewSkins):
 
 def tankmenGroupHasRole(nationID, groupID, isPremium, role):
     nationGroups = getNationGroups(nationID, isPremium)
-    if 0 <= groupID < len(nationGroups):
+    if groupID in nationGroups:
         return role in nationGroups[groupID].roles
     else:
         return False
@@ -774,7 +774,7 @@ def tankmenGroupHasRole(nationID, groupID, isPremium, role):
 
 def tankmenGroupCanChangeRole(nationID, groupID, isPremium):
     nationGroups = getNationGroups(nationID, isPremium)
-    if 0 <= groupID < len(nationGroups):
+    if groupID in nationGroups:
         return len(nationGroups[groupID].roles) > 1
     else:
         return True
@@ -786,7 +786,7 @@ def getNationGroups(nationID, isPremium):
 
 def findGroupsByIDs(groups, isFemale, firstNameID, secondNameID, iconID):
     found = [(-1, 0)]
-    for groupID, group in enumerate(groups):
+    for groupID, group in groups.iteritems():
         if isFemale != group.isFemales:
             continue
         overlap = 0
@@ -881,7 +881,7 @@ def getRecruitInfoFromToken(tokenName):
             elif parts[2] != 'false':
                 return None
             for nation in result['nations']:
-                if len(filter(lambda g: g.name == parts[3], getNationGroups(nation, result['isPremium']))) != 1:
+                if len(filter(lambda g: g.name == parts[3], getNationGroups(nation, result['isPremium']).itervalues())) != 1:
                     return None
 
             result['group'] = parts[3]
@@ -958,7 +958,7 @@ def generateRecruitToken(group, sourceID, nationList=(), isPremium=True, freeXP=
         tokenParts.append('!'.join(selectedNations))
     tokenParts.append('' if isPremium else 'false')
     for nation in selectedNations:
-        if len(filter(lambda g: g.name == group, getNationGroups(nations.INDICES[nation], isPremium))) != 1:
+        if len(filter(lambda g: g.name == group, getNationGroups(nations.INDICES[nation], isPremium).itervalues())) != 1:
             return None
 
     tokenParts.append(group)

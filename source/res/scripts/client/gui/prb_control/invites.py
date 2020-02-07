@@ -7,7 +7,7 @@ import BigWorld
 import Event
 from PlayerEvents import g_playerEvents
 from account_helpers import isRoamingEnabled
-from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_INVITE_STATUS_NAMES, PREBATTLE_TYPE
+from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_INVITE_STATUS_NAMES
 from gui import SystemMessages
 from gui.impl import backport
 from gui.impl.gen import R
@@ -34,7 +34,6 @@ from shared_utils.account_helpers.ClientInvitations import UniqueId
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
 from skeletons.gui.game_control import IAnonymizerController
-from skeletons.gui.game_control import IBobController
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -82,7 +81,6 @@ def _getOldInviteOrderKey(item):
 class PrbInviteWrapper(_PrbInviteData):
     lobbyContext = dependency.descriptor(ILobbyContext)
     connectionMgr = dependency.descriptor(IConnectionManager)
-    __bobController = dependency.descriptor(IBobController)
     __anonymizerController = dependency.descriptor(IAnonymizerController)
 
     @staticmethod
@@ -153,12 +151,6 @@ class PrbInviteWrapper(_PrbInviteData):
         return self.getState() in (PRB_INVITE_STATE.PENDING, PRB_INVITE_STATE.POSTPONED)
 
     def isExpired(self):
-        return False
-
-    def isIgnored(self):
-        if self.type == PREBATTLE_TYPE.BOB and not self.__bobController.isRegistered():
-            SystemMessages.pushMessage(backport.text(R.strings.bob.systemMessage.squad.notRegistered()), type=SystemMessages.SM_TYPE.Error)
-            return True
         return False
 
     def getState(self):
@@ -258,9 +250,6 @@ class PrbInvitationWrapper(PrbInviteWrapper):
         return PRB_INVITE_STATE.getFromNewState(self)
 
     def accept(self, callback=None):
-        if self.isIgnored():
-            self.decline()
-            return
         if self.connectionMgr.peripheryID == self.peripheryID:
             BigWorld.player().prebattleInvitations.acceptInvitation(self.id, self.creatorVehID or self.creatorID, callback)
         else:
@@ -676,8 +665,17 @@ class InvitesManager(UsersInfoHelper):
     def __onUserActionReceived(self, actionID, user, *args):
         if actionID in (USER_ACTION_ID.IGNORED_REMOVED, USER_ACTION_ID.TMP_IGNORED_REMOVED):
             self.__refreshIgnoredInvitesRemove(user)
-        if actionID in (USER_ACTION_ID.IGNORED_ADDED, USER_ACTION_ID.TMP_IGNORED_ADDED):
+        elif actionID in (USER_ACTION_ID.IGNORED_ADDED, USER_ACTION_ID.TMP_IGNORED_ADDED):
             self.__refreshIgnoredInvitesAdd(user)
+        elif actionID == USER_ACTION_ID.FRIEND_ADDED:
+            self.__refreshFriendInvitesAdd(user)
+        elif actionID == USER_ACTION_ID.FRIEND_REMOVED:
+            self.__refreshFriendInvitesRemove(user)
+        elif actionID == USER_ACTION_ID.SUBSCRIPTION_CHANGED:
+            if user.isFriend():
+                self.__refreshFriendInvitesAdd(user)
+            else:
+                self.__refreshFriendInvitesRemove(user)
 
     def __onPrebattleInvitesChanged(self, diff):
         step = PRB_INVITES_INIT_STEP.CONTACTS_RECEIVED
@@ -812,6 +810,32 @@ class InvitesManager(UsersInfoHelper):
             self.__invitesIgnored[inviteID] = self.__invites.pop(inviteID)
 
         self.onReceivedInviteListModified([], [], invitations)
+        if self.appLoader.getSpaceID() != GuiGlobalSpaceID.BATTLE:
+            self.syncUsersInfo()
+
+    def __refreshFriendInvitesRemove(self, user):
+        invitations = []
+        for invite in self.__invites.itervalues():
+            if invite.creatorID == user.getID() and self.__isInviteSenderIgnored(invite, user):
+                invitations.append(invite.clientID)
+
+        for inviteID in invitations:
+            self.__invitesIgnored[inviteID] = self.__invites.pop(inviteID)
+
+        self.onReceivedInviteListModified([], [], invitations)
+        if self.appLoader.getSpaceID() != GuiGlobalSpaceID.BATTLE:
+            self.syncUsersInfo()
+
+    def __refreshFriendInvitesAdd(self, user):
+        invitations = []
+        for invite in self.__invitesIgnored.itervalues():
+            if invite.creatorID == user.getID() and not self.__isInviteSenderIgnored(invite, user):
+                invitations.append(invite.clientID)
+
+        for inviteID in invitations:
+            self.__invites[inviteID] = self.__invitesIgnored.pop(inviteID)
+
+        self.onReceivedInviteListModified(invitations, [], [])
         if self.appLoader.getSpaceID() != GuiGlobalSpaceID.BATTLE:
             self.syncUsersInfo()
 

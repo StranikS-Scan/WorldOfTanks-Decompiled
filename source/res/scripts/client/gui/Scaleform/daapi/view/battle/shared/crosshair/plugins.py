@@ -961,6 +961,8 @@ class SpeedometerWheeledTech(CrosshairPlugin):
     def __onVehicleStateUpdated(self, stateID, value):
         if stateID == VEHICLE_VIEW_STATE.SPEED and self.parentObj is not None:
             self.parentObj.as_updateSpeedS(value)
+        elif stateID == VEHICLE_VIEW_STATE.DESTROYED and self.parentObj is not None:
+            self.parentObj.as_removeSpeedometerS()
         elif stateID == VEHICLE_VIEW_STATE.SIEGE_MODE:
             self.__changeSpeedoType(*value)
         elif stateID == VEHICLE_VIEW_STATE.BURNOUT:

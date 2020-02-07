@@ -45,8 +45,12 @@ class SessionStatistics(object):
             self.__syncData.waitForSync(partial(self.__onGetCacheResponse, callback))
             return
 
-    def resetStats(self):
-        self.__account._doCmdStr(AccountCommands.CMD_RESET_SESSION_STAT, '', None)
+    def resetStats(self, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr, ext)
+        else:
+            proxy = None
+        self.__account._doCmdStr(AccountCommands.CMD_RESET_SESSION_STAT, '', proxy)
         return
 
     def __onGetCacheResponse(self, callback, resultID):

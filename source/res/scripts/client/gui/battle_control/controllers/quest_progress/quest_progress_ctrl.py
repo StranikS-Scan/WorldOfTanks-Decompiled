@@ -111,7 +111,7 @@ class QuestProgressController(IArenaPeriodController, IArenaVehiclesController):
         self.__isInited = False
         return
 
-    def setPeriodInfo(self, period, endTime, length, additionalInfo, soundID):
+    def setPeriodInfo(self, period, endTime, length, additionalInfo):
         self.__updatePeriodInfo(period, endTime, length)
 
     def invalidatePeriodInfo(self, period, endTime, length, additionalInfo):

@@ -33,8 +33,7 @@ SHOP_RENT_TYPE_MAP = {RentType.NO_RENT: 'none',
  RentType.SEASON_CYCLE_RENT: 'cycle'}
 SHOP_RENT_SEASON_TYPE_MAP = {GameSeasonType.NONE: 'none',
  GameSeasonType.RANKED: 'ranked',
- GameSeasonType.EPIC: 'frontline',
- GameSeasonType.BOB: 'bob'}
+ GameSeasonType.EPIC: 'frontline'}
 
 def generateShopRentRenewProductID(intCD, rentType, num=0, seasonType=GameSeasonType.NONE):
     rentType = SHOP_RENT_TYPE_MAP[rentType]

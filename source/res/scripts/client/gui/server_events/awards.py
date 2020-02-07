@@ -3,7 +3,7 @@
 from collections import namedtuple
 import constants
 from gui import makeHtmlString
-from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData, getAwardsWindowBonuses
+from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData, getAwardsWindowBonuses, getEpicAwardsWindowBonuses
 from gui.Scaleform.genConsts.AWARDWINDOW_CONSTANTS import AWARDWINDOW_CONSTANTS
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -470,3 +470,10 @@ class OperationUnlockedAward(MissionAward):
 
     def handleBodyButton(self):
         self._proxyEvent(self._nextOperation.getID(), 1)
+
+
+class EpicAward(MissionAward):
+
+    def getAwards(self):
+        bonuses = getMissionInfoData(self._quest).getSubstituteBonuses()
+        return getEpicAwardsWindowBonuses(bonuses)

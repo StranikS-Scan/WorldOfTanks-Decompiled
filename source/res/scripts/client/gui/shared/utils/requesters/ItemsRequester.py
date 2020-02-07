@@ -262,7 +262,6 @@ class REQ_CRITERIA(object):
         EVENT = RequestCriteria(PredicateCondition(lambda item: item.isEvent))
         EVENT_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEventBattles))
         EPIC_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEpicBattles))
-        BOB_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForBob))
         HAS_XP_FACTOR = RequestCriteria(PredicateCondition(lambda item: item.dailyXPFactor != -1))
         IS_RESTORE_POSSIBLE = RequestCriteria(PredicateCondition(lambda item: item.isRestorePossible()))
         CAN_TRADE_IN = RequestCriteria(PredicateCondition(lambda item: item.canTradeIn))
@@ -275,7 +274,6 @@ class REQ_CRITERIA(object):
         NAME_VEHICLE_WITH_SHORT = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableShortUserName or nameVehicle in item.searchableUserName)))
         DISCOUNT_RENT_OR_BUY = RequestCriteria(PredicateCondition(lambda item: (item.buyPrices.itemPrice.isActionPrice() or item.getRentPackageActionPrc() != 0) and not item.isRestoreAvailable()))
         HAS_TAGS = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: item.tags.issuperset(tags))))
-        FOR_ITEM = staticmethod(lambda style: RequestCriteria(PredicateCondition(style.mayInstall)))
 
     class TANKMAN(object):
         IN_TANK = RequestCriteria(PredicateCondition(lambda item: item.isInTank))
@@ -352,7 +350,7 @@ class RESEARCH_CRITERIA(object):
 class ItemsRequester(IItemsRequester):
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
 
-    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, bobRequester=None):
+    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, badges, epicMetaGame, tokens, festivityRequester, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None):
         self.__inventory = inventory
         self.__stats = stats
         self.__dossiers = dossiers
@@ -368,7 +366,6 @@ class ItemsRequester(IItemsRequester):
         self.__tokens = tokens
         self.__sessionStats = sessionStatsRequester
         self.__anonymizer = anonymizerRequester
-        self.__bob = bobRequester
         self.__itemsCache = defaultdict(dict)
         self.__brokenSyncAlreadyLoggedTypes = set()
         self.__vehCustomStateCache = defaultdict(dict)
@@ -433,10 +430,6 @@ class ItemsRequester(IItemsRequester):
     def anonymizer(self):
         return self.__anonymizer
 
-    @property
-    def bob(self):
-        return self.__bob
-
     @async
     @process
     def request(self, callback=None):
@@ -480,14 +473,11 @@ class ItemsRequester(IItemsRequester):
         Waiting.show('download/festivity')
         yield self.__festivity.request()
         Waiting.hide('download/festivity')
-        Waiting.show('download/inventory')
-        yield self.__bob.request()
-        Waiting.hide('download/inventory')
         self.__brokenSyncAlreadyLoggedTypes.clear()
         callback(self)
 
     def isSynced(self):
-        return self.__stats.isSynced() and self.__inventory.isSynced() and self.__recycleBin.isSynced() and self.__shop.isSynced() and self.__dossiers.isSynced() and self.__goodies.isSynced() and self.__vehicleRotation.isSynced() and self.ranked.isSynced() and self.__anonymizer.isSynced() and self.epicMetaGame.isSynced() and self.__bob.isSynced() and self.__blueprints.isSynced() if self.__blueprints is not None else False
+        return self.__stats.isSynced() and self.__inventory.isSynced() and self.__recycleBin.isSynced() and self.__shop.isSynced() and self.__dossiers.isSynced() and self.__goodies.isSynced() and self.__vehicleRotation.isSynced() and self.ranked.isSynced() and self.__anonymizer.isSynced() and self.epicMetaGame.isSynced() and self.__blueprints.isSynced() if self.__blueprints is not None else False
 
     @async
     @process
@@ -539,7 +529,9 @@ class ItemsRequester(IItemsRequester):
         self.__blueprints.clear()
         self.__festivity.clear()
         self.__anonymizer.clear()
-        self.__bob.clear()
+
+    def onDisconnected(self):
+        self.__tokens.onDisconnected()
 
     def invalidateCache(self, diff=None):
         invalidate = defaultdict(set)
@@ -998,7 +990,6 @@ class ItemsRequester(IItemsRequester):
          self.__dossiers,
          self.__goodies,
          self.__vehicleRotation,
-         self.ranked,
-         self.__bob)
+         self.ranked)
         unsyncedList = [ r.__class__.__name__ for r in [ r for r in requesters if not r.isSynced() ] ]
         LOG_ERROR('Trying to create fitting item when requesters are not fully synced:', unsyncedList, stack=True)

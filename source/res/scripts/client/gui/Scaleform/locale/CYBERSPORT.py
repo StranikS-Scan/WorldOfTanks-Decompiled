@@ -109,8 +109,6 @@ class CYBERSPORT(object):
     WINDOW_UNIT_MESSAGE_FORTIFICATIONNOTAVAILABLE = '#cyberSport:window/unit/message/fortificationNotAvailable'
     WINDOW_UNIT_MESSAGE_MAINTENANCE = '#cyberSport:window/unit/message/maintenance'
     WINDOW_UNIT_MESSAGE_INACTIVEPERIPHERY = '#cyberSport:window/unit/message/inactivePeriphery'
-    WINDOW_UNIT_MESSAGE_BOB_TEAM_MISMATCH = '#cyberSport:window/unit/message/bob_team_mismatch'
-    WINDOW_UNIT_MESSAGE_BOB_LEADER_FORBIDDEN = '#cyberSport:window/unit/message/bob_leader_forbidden'
     WINDOW_UNIT_MESSAGE_INACTIVEPERIPHERYSORTIE = '#cyberSport:window/unit/message/inactivePeripherySortie'
     WINDOW_UNIT_MESSAGE_INACTIVEPERIPHERYBATTLE = '#cyberSport:window/unit/message/inactivePeripheryBattle'
     WINDOW_UNIT_MESSAGE_IN_PLAYERS_MATCHING = '#cyberSport:window/unit/message/in_players_matching'

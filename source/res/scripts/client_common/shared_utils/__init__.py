@@ -4,8 +4,10 @@ import collections
 import weakref
 import itertools
 import types
+import logging
 import BigWorld
 from debug_utils import LOG_ERROR
+_logger = logging.getLogger(__name__)
 ScalarTypes = (types.IntType,
  types.LongType,
  types.FloatType,
@@ -51,7 +53,7 @@ def safeCancelCallback(callbackID):
     try:
         BigWorld.cancelCallback(callbackID)
     except ValueError:
-        LOG_ERROR('Cannot cancel BigWorld callback: incorrect callback ID.')
+        _logger.error('Cannot cancel BigWorld callback: incorrect callback ID.')
 
 
 def prettyPrint(dictValue, sort_keys=True, indent=4):

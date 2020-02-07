@@ -1,14 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/conditions.py
 import operator
+import typing
 import weakref
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta, abstractmethod, abstractproperty
 import constants
 from constants import ATTACK_REASON, ATTACK_REASONS
 from debug_utils import LOG_WARNING
 from gui import GUI_NATIONS_ORDER_INDICES
 from gui.Scaleform.locale.QUESTS import QUESTS
-from gui.server_events import formatters
+from gui.server_events import formatters, events_constants
 from gui.server_events.formatters import getUniqueBonusTypes
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils.requesters.ItemsRequester import RESEARCH_CRITERIA
@@ -19,6 +20,8 @@ from skeletons.gui.game_control import IIGRController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from typing import Optional
 _AVAILABLE_GUI_TYPES_LABELS = {constants.ARENA_BONUS_TYPE.REGULAR: constants.ARENA_GUI_TYPE.RANDOM,
  constants.ARENA_BONUS_TYPE.TRAINING: constants.ARENA_GUI_TYPE.TRAINING,
  constants.ARENA_BONUS_TYPE.TOURNAMENT_REGULAR: constants.ARENA_GUI_TYPE.TRAINING}
@@ -85,9 +88,43 @@ def _getNodeValue(node, key, default=None):
     return default
 
 
+def _getRelationValueFromConditionData(conditionData):
+    relation = _findRelation(conditionData.keys())
+    relationValue = _getNodeValue(conditionData, relation)
+    return relationValue
+
+
+def _getCustomTitleValueFromConditionData(conditionData):
+    generalValue = conditionData.get('value')
+    if generalValue:
+        if isinstance(generalValue, tuple):
+            return generalValue[1]
+        return generalValue
+    generalValue = _getNodeValue(conditionData, 'max')
+    if generalValue:
+        return generalValue
+    generalValue = _getNodeValue(conditionData, 'count')
+    if generalValue:
+        return generalValue
+    generalValue = _getRelationValueFromConditionData(conditionData)
+    return generalValue
+
+
+def _getCustomDescriptionValueFromConditionData(conditionData):
+    return _getCustomTitleValueFromConditionData(conditionData)
+
+
 def _prepareVehData(vehsList, predicate=None):
     predicate = predicate or (lambda *args: True)
     return [ (v, (not v.isInInventory or predicate(v), None, None)) for v in vehsList ]
+
+
+class _Typeable(object):
+    __metaclass__ = ABCMeta
+
+    @abstractproperty
+    def classType(self):
+        pass
 
 
 class _Negatable(object):
@@ -116,13 +153,17 @@ class _AvailabilityCheckable(object):
         return True
 
 
-class _Condition(object):
+class _Condition(_Typeable):
 
     def __init__(self, name, data, uniqueName):
         super(_Condition, self).__init__()
         self._name = name
         self._data = data
         self._uniqueName = uniqueName
+
+    @property
+    def classType(self):
+        pass
 
     def getName(self):
         return self._name
@@ -143,7 +184,7 @@ class _Condition(object):
         titleData = self._data.get('title')
         if titleData:
             if 'key' in titleData:
-                return i18n.makeString(titleData['key'])
+                return i18n.makeString(titleData['key'], value=_getCustomTitleValueFromConditionData(self._data))
             return getLocalizedData(self._data, 'title')
         else:
             return None
@@ -152,7 +193,7 @@ class _Condition(object):
         descrData = self._data.get('description')
         if descrData:
             if 'key' in descrData:
-                return i18n.makeString(descrData['key'])
+                return i18n.makeString(descrData['key'], value=_getCustomDescriptionValueFromConditionData(self._data))
             return getLocalizedData(self._data, 'description')
         else:
             return None
@@ -164,8 +205,12 @@ class _Condition(object):
     def progressID(self):
         return self._data.get('progressID')
 
+    def getProgressID(self):
+        data = self._data.get('value', {})
+        return None if not data or not len(data) > 1 else data[0]
 
-class _ConditionsGroup(_AvailabilityCheckable, _Negatable):
+
+class _ConditionsGroup(_AvailabilityCheckable, _Negatable, _Typeable):
 
     def __init__(self, groupType, isNegative=False):
         super(_ConditionsGroup, self).__init__()
@@ -175,6 +220,10 @@ class _ConditionsGroup(_AvailabilityCheckable, _Negatable):
 
     def __repr__(self):
         return '%s<count=%d>' % (self.__class__.__name__, len(self.items))
+
+    @property
+    def classType(self):
+        pass
 
     def getName(self):
         return self.type
@@ -554,6 +603,9 @@ class Token(_Requirement):
 
     def isDisplayable(self):
         return self._complex.isDisplayable
+
+    def isDailyQuest(self):
+        return self.getID().startswith(events_constants.DAILY_QUEST_TOKEN_PREFIX)
 
     def getUserName(self):
         userName = self.eventsCache.prefetcher.getTokenInfo(self._complex.styleID)
@@ -1017,6 +1069,7 @@ class _Cumulativable(_Condition):
         result = {}
         bonus = self.getBonusData()
         curProgData = bonus.getProgress() if curProgData is None else curProgData
+        prevProgData = {} if prevProgData is None else prevProgData
         if bonus is None:
             return result
         else:
@@ -1024,24 +1077,17 @@ class _Cumulativable(_Condition):
             groupBy = bonus.getGroupByValue()
             total = self.getTotalValue()
             if groupBy is None:
-                diff = 0
                 curProg = curProgData.get(None, {})
-                current = min(curProg.get(key, 0), total)
-                if prevProgData is not None:
-                    prevProg = prevProgData.get(None, {})
-                    diff = current - min(prevProg.get(key, 0), total)
+                prevProg = prevProgData.get(None, {})
+                diff = self.__getProgDiff(curProg, prevProg)
                 result[None] = (min(curProg.get(key, 0), total),
                  total,
                  diff,
                  self.__isProgressCompleted(curProg))
             else:
                 for gByKey, progress in curProgData.iteritems():
-                    diff = 0
-                    current = min(progress.get(key, 0), total)
-                    if prevProgData is not None:
-                        prevProg = prevProgData.get(gByKey, {})
-                        diff = current - min(prevProg.get(key, 0), total)
-                    result[gByKey] = (current,
+                    diff = self.__getProgDiff(progress, prevProgData.get(gByKey, {}))
+                    result[gByKey] = (min(progress.get(key, 0), total),
                      total,
                      diff,
                      self.__isProgressCompleted(progress))
@@ -1049,11 +1095,16 @@ class _Cumulativable(_Condition):
             return result
 
     def __getProgDiff(self, curProg, prevProg):
-        if prevProg is None:
-            return 0
-        else:
-            key = self._getKey()
-            return curProg.get(key, 0) - prevProg.get(key, 0)
+        key = self._getKey()
+        total = self.getTotalValue()
+        current = min(curProg.get(key, 0), total)
+        curBonusCount = curProg.get('bonusCount', 0)
+        prevBonusCount = prevProg.get('bonusCount', 0) if prevProg else 0
+        if curBonusCount > prevBonusCount:
+            if self.__isProgressCompleted(curProg):
+                return total - min(prevProg.get(key, 0), total)
+            return current
+        return current - min(prevProg.get(key, 0), total)
 
     def __isProgressCompleted(self, progress):
         bonusLimit = self.getBonusData().getBonusLimit()

@@ -2,7 +2,16 @@
 # Embedded file name: scripts/client/messenger/formatters/collections_by_type.py
 from chat_shared import SYS_MESSAGE_TYPE as _SM_TYPE
 from messenger.formatters import service_channel as _sc
+from messenger.formatters import token_quest_subformatters
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
+_TOKEN_QUEST_SUB_FORMATTERS = (token_quest_subformatters.RecruitQuestsFormatter(),
+ token_quest_subformatters.FrontlineExchangeQuestFormatter(),
+ token_quest_subformatters.FrontlineRewardQuestFormatter(),
+ token_quest_subformatters.RankedSeasonTokenQuestFormatter(),
+ token_quest_subformatters.RankedFinalTokenQuestFormatter(),
+ token_quest_subformatters.SeniorityAwardsFormatter(),
+ token_quest_subformatters.PersonalMissionsTokenQuestsFormatter())
+_PERSONAL_MISSIONS_SUB_FORMATTERS = (token_quest_subformatters.PersonalMissionsFormatter(),)
 SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.serverRebootCancelled.index(): _sc.ServerRebootCancelledFormatter(),
  _SM_TYPE.battleResults.index(): _sc.BattleResultsFormatter(),
@@ -24,13 +33,13 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.serverDowntimeCompensation.index(): _sc.ServerDowntimeCompensation(),
  _SM_TYPE.achievementReceived.index(): _sc.AchievementFormatter(),
  _SM_TYPE.converter.index(): _sc.ConverterFormatter(),
- _SM_TYPE.tokenQuests.index(): _sc.TokenQuestsFormatter(),
+ _SM_TYPE.tokenQuests.index(): _sc.TokenQuestsFormatter(subFormatters=_TOKEN_QUEST_SUB_FORMATTERS),
  _SM_TYPE.notificationsCenter.index(): _sc.NCMessageFormatter(),
  _SM_TYPE.clanEvent.index(): _sc.ClanMessageFormatter(),
  _SM_TYPE.fortEvent.index(): _sc.StrongholdMessageFormatter(),
  _SM_TYPE.vehicleRented.index(): _sc.VehicleRentedFormatter(),
  _SM_TYPE.rentalsExpired.index(): _sc.RentalsExpiredFormatter(),
- _SM_TYPE.potapovQuestBonus.index(): _sc.PersonalMissionsFormatter(),
+ _SM_TYPE.potapovQuestBonus.index(): _sc.TokenQuestsFormatter(subFormatters=_PERSONAL_MISSIONS_SUB_FORMATTERS),
  _SM_TYPE.goodieRemoved.index(): _sc.GoodyRemovedFormatter(),
  _SM_TYPE.goodieDisabled.index(): _sc.GoodyDisabledFormatter(),
  _SM_TYPE.goodieEnabled.index(): _sc.GoodieEnabledFormatter(),

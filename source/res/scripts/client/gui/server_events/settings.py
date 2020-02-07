@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/settings.py
 import time
+from contextlib import contextmanager
 from gui.shared import utils
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
@@ -14,10 +15,22 @@ class _PMSettings(utils.SettingRecord):
         self.update(operationsVisited=self.operationsVisited | {operationID})
 
 
+class _DQSettings(utils.SettingRecord):
+
+    def __init__(self, lastVisitedDQTabIdx=None, premMissionsTabDiscovered=False, *args, **kwargs):
+        super(_DQSettings, self).__init__(lastVisitedDQTabIdx=lastVisitedDQTabIdx, premMissionsTabDiscovered=premMissionsTabDiscovered)
+
+    def setLastVisitedDQTab(self, lastVisitedDQTabIdx):
+        self.update(lastVisitedDQTabIdx=lastVisitedDQTabIdx)
+
+    def onPremMissionsTabDiscovered(self):
+        self.update(premMissionsTabDiscovered=True)
+
+
 class _QuestSettings(utils.SettingRootRecord):
 
-    def __init__(self, lastVisitTime=-1, visited=None, naVisited=None, minimized=None, personalMissions=None):
-        super(_QuestSettings, self).__init__(lastVisitTime=lastVisitTime, visited=visited or set(), naVisited=naVisited or set(), minimized=minimized or set(), personalMissions=_PMSettings(**(personalMissions or {})))
+    def __init__(self, lastVisitTime=-1, visited=None, naVisited=None, minimized=None, personalMissions=None, dailyQuests=None):
+        super(_QuestSettings, self).__init__(lastVisitTime=lastVisitTime, visited=visited or set(), naVisited=naVisited or set(), minimized=minimized or set(), personalMissions=_PMSettings(**(personalMissions or {})), dailyQuests=_DQSettings(**(dailyQuests or {})))
 
     def updateVisited(self, visitSettingName, eventID):
         settingsValue = set(self[visitSettingName])
@@ -44,6 +57,7 @@ class _QuestSettings(utils.SettingRootRecord):
     def _asdict(self):
         result = super(_QuestSettings, self)._asdict()
         result.update(personalMissions=self.personalMissions._asdict())
+        result.update(dailyQuests=self.dailyQuests._asdict())
         return result
 
     @classmethod
@@ -97,8 +111,9 @@ def visitEventGUI(event, counters=(), eventsCache=None):
 
 
 def visitEventsGUI(events):
-    for event in events:
-        visitEventGUI(event)
+    if events:
+        for event in events:
+            visitEventGUI(event)
 
 
 def expandGroup(groupID, isExpanded):
@@ -134,3 +149,14 @@ def isNeedToShowHeaderAlert():
 
 def markHeaderAlertAsVisited():
     _updatePMSettings(headerAlert=True)
+
+
+def getDQSettings():
+    return get().dailyQuests
+
+
+@contextmanager
+def dailyQuestSettings():
+    s = get()
+    yield s.dailyQuests
+    s.save()

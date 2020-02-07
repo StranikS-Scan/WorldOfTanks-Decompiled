@@ -86,9 +86,10 @@ class BWChatProvider(object):
         senderDBID = message.accountDBID
         if senderDBID > 0:
             text = self.__msgFilters.chainIn(senderDBID, text)
-        senderAvatarID = message.avatarSessionID
-        if senderAvatarID:
-            text = self.__msgFilters.chainIn(senderAvatarID, text)
+        else:
+            senderAvatarID = message.avatarSessionID
+            if senderAvatarID:
+                text = self.__msgFilters.chainIn(senderAvatarID, text)
         if not text:
             result = None
         else:

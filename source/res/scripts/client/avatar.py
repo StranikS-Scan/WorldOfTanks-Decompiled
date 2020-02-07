@@ -1227,7 +1227,12 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.gunRotator.setShotPosition(vehicleID, shotPos, shotVec, dispersionAngle)
 
     def updateTargetVehicleID(self, targetID):
-        LOG_DEBUG_DEV('targetID', targetID)
+        vehicle = BigWorld.entity(targetID)
+        if vehicle is not None:
+            gui_event_dispatcher.addAutoAimMarker(vehicle)
+        else:
+            gui_event_dispatcher.hideAutoAimMarker()
+        return
 
     def updateOwnVehiclePosition(self, position, direction, speed, rspeed):
         self.__lastVehicleSpeeds = (speed, rspeed)
@@ -2245,7 +2250,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             curFireState = self.__fireInVehicle
             soundNotificationCheckFn = lambda : curFireState == self.__fireInVehicle
             if self.__fireInVehicle:
-                TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.PLAYER_VEHICLE_IN_FIRE)
+                TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.PLAYER_VEHICLE_IN_FIRE, repeatable=True)
             else:
                 TriggersManager.g_manager.deactivateTrigger(TRIGGER_TYPE.PLAYER_VEHICLE_IN_FIRE)
         elif extra is not None:

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/ranked_battles/ranked_helpers/__init__.py
 import logging
+from collections import namedtuple
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.periodic_battles.models import CalendarStatusVO
@@ -14,6 +15,7 @@ from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
 _logger = logging.getLogger(__name__)
+_AlertMessage = namedtuple('_AlertMessage', 'isPrimeAlert, alertStr, buttonVisible')
 
 def getBonusBattlesLabel(bonusBattlesCount):
     label = ''
@@ -30,32 +32,43 @@ def getBonusMultiplierLabel():
     return label
 
 
-def getPrimeTimeStatusText():
-    ranked = dependency.instance(IRankedBattlesController)
+def getAlertStatusVO():
+    alertMessage = _getAlertMessage()
+    return CalendarStatusVO(alertIcon=backport.image(R.images.gui.maps.icons.library.alertBigIcon()) if alertMessage.isPrimeAlert else None, buttonIcon='', buttonLabel=backport.text(R.strings.ranked_battles.alertMessage.button()), buttonVisible=alertMessage.buttonVisible, buttonTooltip=None, statusText=text_styles.vehicleStatusCriticalText(alertMessage.alertStr), popoverAlias=None, bgVisible=True, shadowFilterVisible=alertMessage.isPrimeAlert, tooltip=TOOLTIPS_CONSTANTS.RANKED_CALENDAR_DAY_INFO)
+
+
+def _getAlertMessage():
+    rankedController = dependency.instance(IRankedBattlesController)
     connectionMgr = dependency.instance(IConnectionManager)
-    hasAvailableServers = ranked.hasAvailablePrimeTimeServers()
-    _, timeLeft, _ = ranked.getPrimeTimeStatus()
+    hasAvailableServers = rankedController.hasAvailablePrimeTimeServers()
+    hasConfiguredServers = rankedController.hasConfiguredPrimeTimeServers()
+    status, _, _ = rankedController.getPrimeTimeStatus()
     if hasAvailableServers:
+        if status in (PrimeTimeStatus.NOT_SET, PrimeTimeStatus.FROZEN):
+            alertStr = backport.text(R.strings.ranked_battles.alertMessage.unsuitablePeriphery(), serverName=connectionMgr.serverUserNameShort)
+            return _AlertMessage(True, alertStr, True)
         alertStr = backport.text(R.strings.ranked_battles.alertMessage.somePeripheriesHalt(), serverName=connectionMgr.serverUserNameShort)
-    else:
-        currSeason = ranked.getCurrentSeason()
-        currTime = time_utils.getCurrentLocalServerTimestamp()
-        isCycleNow = currSeason and currSeason.hasActiveCycle(currTime)
-        if isCycleNow:
-            if connectionMgr.isStandalone():
-                key = R.strings.ranked_battles.alertMessage.singleModeHalt()
-            else:
-                key = R.strings.ranked_battles.alertMessage.allPeripheriesHalt()
-            timeLeftStr = backport.getTillTimeStringByRClass(timeLeft, R.strings.ranked_battles.status.timeLeft)
-            alertStr = backport.text(key, time=timeLeftStr)
+        return _AlertMessage(True, alertStr, True)
+    currSeason = rankedController.getCurrentSeason()
+    currTime = time_utils.getCurrentLocalServerTimestamp()
+    if currSeason:
+        if status in (PrimeTimeStatus.NOT_SET, PrimeTimeStatus.FROZEN):
+            alertStr = backport.text(R.strings.ranked_battles.alertMessage.unsuitablePeriphery(), serverName=connectionMgr.serverUserNameShort)
+            return _AlertMessage(True, alertStr, hasConfiguredServers)
+        timeLeft = rankedController.getTimer()
+        timeLeftStr = backport.getTillTimeStringByRClass(timeLeft, R.strings.ranked_battles.status.timeLeft)
+        seasonsChangeTime = currSeason.getEndDate()
+        if seasonsChangeTime and currTime + timeLeft >= seasonsChangeTime:
+            alertStr = backport.text(R.strings.ranked_battles.alertMessage.seasonFinished(), seasonName=currSeason.getUserName())
+            return _AlertMessage(False, alertStr, False)
+        if connectionMgr.isStandalone():
+            key = R.strings.ranked_battles.alertMessage.singleModeHalt()
         else:
-            alertStr = backport.text(R.strings.ranked_battles.alertMessage.seasonFinished())
-    return alertStr
-
-
-def getPrimeTimeStatusVO(status, hasAvailableServers):
-    showPrimeTimeAlert = status != PrimeTimeStatus.AVAILABLE
-    return CalendarStatusVO(alertIcon=backport.image(R.images.gui.maps.icons.library.alertBigIcon()) if showPrimeTimeAlert else None, buttonIcon='', buttonLabel=backport.text(R.strings.ranked_battles.alertMessage.button()), buttonVisible=showPrimeTimeAlert and hasAvailableServers, buttonTooltip=None, statusText=text_styles.vehicleStatusCriticalText(getPrimeTimeStatusText()), popoverAlias=None, bgVisible=True, shadowFilterVisible=showPrimeTimeAlert, tooltip=TOOLTIPS_CONSTANTS.RANKED_CALENDAR_DAY_INFO)
+            key = R.strings.ranked_battles.alertMessage.allPeripheriesHalt()
+        alertStr = backport.text(key, time=timeLeftStr)
+        return _AlertMessage(True, alertStr, False)
+    _logger.warning('This codepoint should not be reached')
+    return _AlertMessage(False, '', False)
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
@@ -77,6 +90,10 @@ def isSeasonTokenQuest(questID):
     return questID.split('_')[-1] in (RankedTokenQuestPostfix.SPRINTER, RankedTokenQuestPostfix.COMMON)
 
 
+def isFinalTokenQuest(questID):
+    return questID.split('_')[-1] == RankedTokenQuestPostfix.FINAL
+
+
 def getDataFromSeasonTokenQuestID(questID):
     seasonID, leagueID, postfix = questID.split('_')[-3:]
     if postfix not in (RankedTokenQuestPostfix.SPRINTER, RankedTokenQuestPostfix.COMMON):
@@ -85,10 +102,10 @@ def getDataFromSeasonTokenQuestID(questID):
 
 
 def getDataFromFinalTokenQuestID(questID):
-    awardsPackID, postfix = questID.split('_')[-2:]
+    points, postfix = questID.split('_')[-2:]
     if postfix != RankedTokenQuestPostfix.FINAL:
-        _logger.error('getDataFromFinalTokenQuestID usage not for final token quest')
-    return awardsPackID
+        _logger.error('getDataFromFinalTokenQuestID usage only for final token quest')
+    return int(points)
 
 
 def getShieldSizeByRankSize(rankSize):

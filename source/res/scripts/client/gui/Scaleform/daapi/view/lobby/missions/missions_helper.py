@@ -17,9 +17,9 @@ from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
-from gui.impl.auxiliary.rewards_helper import BlueprintBonusTypes
 from gui.impl.gen import R
-from gui.server_events.awards_formatters import AWARDS_SIZES
+from gui.server_events.awards_formatters import AWARDS_SIZES, getEpicAwardFormatter
+from gui.server_events.bonuses import SimpleBonus
 from gui.server_events.cond_formatters.prebattle import MissionsPreBattleConditionsFormatter
 from gui.server_events.cond_formatters.requirements import AccountRequirementsFormatter, TQAccountRequirementsFormatter
 from gui.server_events.conditions import GROUP_TYPE
@@ -39,6 +39,7 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 CARD_AWARDS_COUNT = 6
 CARD_AWARDS_BIG_COUNT = 5
+CARD_AWARDS_EPIC_COUNT = 2
 LINKED_SET_CARD_AWARDS_COUNT = 8
 DETAILED_CARD_AWARDS_COUNT = 10
 _preBattleConditionFormatter = MissionsPreBattleConditionsFormatter()
@@ -51,6 +52,7 @@ _detailedCardTokenConditionFormatter = cards_formatters.DetailedCardTokenConditi
 _cardAwardsFormatter = CurtailingAwardsComposer(CARD_AWARDS_COUNT)
 _detailedCardAwardsFormatter = DetailedCardAwardComposer(DETAILED_CARD_AWARDS_COUNT)
 _awardsWindowBonusFormatter = AwardsWindowComposer(CARD_AWARDS_BIG_COUNT)
+_epicAwardsWindowBonusFormatter = CurtailingAwardsComposer(CARD_AWARDS_EPIC_COUNT, getEpicAwardFormatter())
 _personalMissionsAwardsFormatter = PersonalMissionsAwardComposer(DETAILED_CARD_AWARDS_COUNT)
 _linkedSetAwardsComposer = LinkedSetAwardsComposer(LINKED_SET_CARD_AWARDS_COUNT)
 HIDE_DONE = 'hideDone'
@@ -559,7 +561,7 @@ class _DetailedMissionInfo(_MissionInfo):
 
     def _getUnavailableStatusFields(self, errorMsg):
         result = {'status': MISSIONS_STATES.NOT_AVAILABLE}
-        if errorMsg not in ('requirement', 'requirements'):
+        if errorMsg != 'requirement':
             timeLeft = self.event.getNearestActivityTimeLeft()
             if timeLeft is not None:
                 clockIcon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_TIMERICON, 16, 16, -2, 8)
@@ -655,9 +657,9 @@ class _PremiumDetailedMissionInfo(_DetailedMissionInfo):
                 statusText = _ms(QUESTS.MISSIONDETAILS_STATUS_NOTAVAILABLE)
                 isPremEnabled = _isPremiumEnabled()
                 if not isPremEnabled:
-                    addStatusMsg = backport.text(R.strings.quests.premiumQuest.detailedQuests.requirements.premiumAccount())
+                    addStatusMsg = backport.text(R.strings.quests.premiumQuests.detailedQuests.requirements.premiumAccount())
                 else:
-                    addStatusMsg = backport.text(R.strings.quests.premiumQuest.detailedQuests.requirements.token())
+                    addStatusMsg = backport.text(R.strings.quests.premiumQuests.detailedQuests.requirements.token())
             notAvailableIcon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_MARKER_BLOCKED, 14, 14, -2, 10)
             statusMsg = text_styles.concatStylesWithSpace(notAvailableIcon, text_styles.error(statusText))
         else:
@@ -925,11 +927,11 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
 
     def _getAwards(self, mainQuest=None, extended=False):
         pawnedTokensCount = self.event.getPawnCost() if self.event.areTokensPawned() else 0
-        awards = _personalMissionsAwardsFormatter.getFormattedBonuses(self.event.getBonuses(isMain=True, filterFunc=self.__awardFilter), size=AWARDS_SIZES.BIG, isObtained=self.event.isMainCompleted(), obtainedImage=RES_ICONS.MAPS_ICONS_LIBRARY_AWARDOBTAINED, obtainedImageOffset=16)
+        awards = _personalMissionsAwardsFormatter.getFormattedBonuses(self.event.getBonuses(isMain=True), size=AWARDS_SIZES.BIG, isObtained=self.event.isMainCompleted(), obtainedImage=RES_ICONS.MAPS_ICONS_LIBRARY_AWARDOBTAINED, obtainedImageOffset=16)
         if not extended:
-            awardsFullyCompleted = _personalMissionsAwardsFormatter.getPawnedQuestBonuses(self.event.getBonuses(isMain=False, filterFunc=self.__awardFilter), size=AWARDS_SIZES.BIG, isObtained=self.event.isFullCompleted(), pawnedTokensCount=pawnedTokensCount, freeTokenName=PM_BRANCH_TO_FREE_TOKEN_NAME[self.event.getQuestBranch()], obtainedImage=RES_ICONS.MAPS_ICONS_LIBRARY_AWARDOBTAINED, obtainedImageOffset=16)
+            awardsFullyCompleted = _personalMissionsAwardsFormatter.getPawnedQuestBonuses(self.event.getBonuses(isMain=False), size=AWARDS_SIZES.BIG, isObtained=self.event.isFullCompleted(), pawnedTokensCount=pawnedTokensCount, freeTokenName=PM_BRANCH_TO_FREE_TOKEN_NAME[self.event.getQuestBranch()], obtainedImage=RES_ICONS.MAPS_ICONS_LIBRARY_AWARDOBTAINED, obtainedImageOffset=16)
         else:
-            awardsFullyCompleted = _personalMissionsAwardsFormatter.getReturnTokensQuestBonuses(self.event.getBonuses(isMain=False, filterFunc=self.__awardFilter), size=AWARDS_SIZES.BIG, isObtained=self.event.isFullCompleted(), returnedTokensCount=self.event.getPawnCost(), freeTokenName=PM_BRANCH_TO_FREE_TOKEN_NAME[self.event.getQuestBranch()], obtainedImage=RES_ICONS.MAPS_ICONS_LIBRARY_AWARDOBTAINED, obtainedImageOffset=16)
+            awardsFullyCompleted = _personalMissionsAwardsFormatter.getReturnTokensQuestBonuses(self.event.getBonuses(isMain=False), size=AWARDS_SIZES.BIG, isObtained=self.event.isFullCompleted(), returnedTokensCount=self.event.getPawnCost(), freeTokenName=PM_BRANCH_TO_FREE_TOKEN_NAME[self.event.getQuestBranch()], obtainedImage=RES_ICONS.MAPS_ICONS_LIBRARY_AWARDOBTAINED, obtainedImageOffset=16)
         return {'awards': awards,
          'awardsFullyCompleted': awardsFullyCompleted}
 
@@ -956,9 +958,6 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
         data.update({'buttonState': self.__getBtnStates(isAvailable)})
         data.update({'onPauseBtnIcon': self.__getPauseBtnIcon()})
         return data
-
-    def __awardFilter(self, n, v):
-        return n not in BlueprintBonusTypes.ALL
 
     def __getAddBottomInfo(self):
         quest = self.event
@@ -1079,6 +1078,14 @@ def getDetailedMissionData(event):
 
 def getAwardsWindowBonuses(bonuses):
     result = _awardsWindowBonusFormatter.getFormattedBonuses(bonuses, AWARDS_SIZES.BIG)
+    while len(result) % AWARDS_PER_SINGLE_PAGE != 0 and len(result) > AWARDS_PER_SINGLE_PAGE:
+        result.append({})
+
+    return result
+
+
+def getEpicAwardsWindowBonuses(bonuses):
+    result = _epicAwardsWindowBonusFormatter.getFormattedBonuses(bonuses, AWARDS_SIZES.SIZE_360_270)
     while len(result) % AWARDS_PER_SINGLE_PAGE != 0 and len(result) > AWARDS_PER_SINGLE_PAGE:
         result.append({})
 

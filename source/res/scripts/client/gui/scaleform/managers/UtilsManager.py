@@ -13,6 +13,7 @@ from helpers import i18n, getClientLanguage
 SECONDS_IN_MINUTE = 60
 MINUTES_IN_HOUR = 60
 HOURS_IN_DAY = 24
+ONE_SECOND = 1
 
 class UtilsManager(UtilsManagerMeta):
 

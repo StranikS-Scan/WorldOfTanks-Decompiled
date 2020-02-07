@@ -79,6 +79,11 @@ class ServicesLocator(object):
         cls.eventsCache.clear()
         cls.lobbyContext.clear()
 
+    @classmethod
+    def onDisconnected(cls):
+        cls.itemsCache.onDisconnected()
+        cls.clear()
+
 
 @process
 def onAccountShowGUI(ctx):
@@ -305,7 +310,7 @@ def onDisconnected():
     ServicesLocator.webCtrl.stop()
     ServicesLocator.eventsCache.getPersonalMissions().stop()
     g_wgncProvider.clear()
-    ServicesLocator.clear()
+    ServicesLocator.onDisconnected()
     UsersInfoHelper.clear()
     Waiting.rollback()
     Waiting.cancelCallback()

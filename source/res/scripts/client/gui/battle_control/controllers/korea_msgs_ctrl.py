@@ -38,13 +38,16 @@ class KoreaMessagesController(Notifiable, IBattleController):
         self.clearNotification()
 
     def __getDailyPlayTimeLeft(self):
-        return self.__playLimits.get('dailyPlayLimit') if self.__playLimits.get('dailyPlayLimit') is not None else sys.maxint
+        res = self.__playLimits['dailyPlayLimit']
+        return res if res != -1 else sys.maxint
 
     def __getWeeklyPlayTimeLeft(self):
-        return self.__playLimits.get('weeklyPlayLimit') if self.__playLimits.get('weeklyPlayLimit') is not None else sys.maxint
+        res = self.__playLimits['weeklyPlayLimit']
+        return res if res != -1 else sys.maxint
 
     def __getCurfew(self):
-        return self.__playLimits.get('curfew') if self.__playLimits.get('curfew') is not None else sys.maxint
+        res = self.__playLimits['curfew']
+        return res if res != -1 else sys.maxint
 
     def __getTimeLeft(self):
         return min(self.__getCurfew(), self.__getDailyPlayTimeLeft(), self.__getWeeklyPlayTimeLeft())

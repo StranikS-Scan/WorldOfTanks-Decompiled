@@ -29,11 +29,10 @@ from gui.impl.gen.view_models.views.loot_box_view.loot_animated_renderer_model i
 from gui.impl.gen.view_models.views.loot_box_view.loot_vehicle_compensation_renderer_model import LootVehicleCompensationRendererModel
 from gui.impl.gen.view_models.views.loot_box_view.loot_conversion_renderer_model import LootConversionRendererModel
 from gui.impl.gen.view_models.views.loot_box_view.loot_renderer_types import LootRendererTypes
+from gui.impl.gen.view_models.views.loot_box_view.loot_vehicle_renderer_model import LootVehicleRendererModel
 from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker, getLootboxesAwardsPacker
-from gui.server_events.awards_formatters import getBobRentVehiclesAwardPacker
 from gui.server_events.bonuses import getNonQuestBonuses, BlueprintsBonusSubtypes
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import BonusNameQuestsBonusComposer
-from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import BobQuestsBonusComposer
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import LootBoxBonusComposer
 from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityAwardsEntryPointVO, getSeniorityAwardsBoxesCount
 from gui.server_events.recruit_helper import getRecruitInfo
@@ -70,7 +69,7 @@ class CrewBonusTypes(object):
     ALL = (CREW_BOOK_BONUSES, CREW_SKIN_BONUSES)
 
 
-NEW_STYLE_FORMATTED_BONUSES = tuple(itertools.chain((TMAN_TOKENS,), BlueprintBonusTypes.ALL, CrewBonusTypes.ALL))
+NEW_STYLE_FORMATTED_BONUSES = tuple(itertools.chain((TMAN_TOKENS,)))
 _BONUSES_ORDER = (Currency.CREDITS,
  'premium',
  Currency.GOLD,
@@ -102,14 +101,6 @@ _MAX_PROBABILITY = 15
 _MIN_VEHICLE_LVL_BLUEPRINT_AWARD = 8
 VehicleAward = namedtuple('VehicleAward', 'vehicleCD level name')
 
-def getVehByStyleCD(styleIntCD):
-    itemsCache = dependency.instance(IItemsCache)
-    items = itemsCache.items
-    style = items.getItemByCD(styleIntCD)
-    vehicles = items.getVehicles(REQ_CRITERIA.CUSTOM(style.mayInstall))
-    return first(vehicles.itervalues()) if vehicles else None
-
-
 class LootRewardDefModelPresenter(object):
     __slots__ = ('_reward',)
 
@@ -118,13 +109,14 @@ class LootRewardDefModelPresenter(object):
         self._reward = None
         return
 
-    def getModel(self, reward, ttId, isSmall=False, showCongrats=False):
+    def getModel(self, reward, ttId, isSmall=False, showCongrats=False, isEpic=False):
         self._setReward(reward)
         model = self._createModel()
         with model.transaction() as m:
             self._formatModel(m, ttId, showCongrats)
             m.setRendererType(self._getRendererType())
             m.setIsSmall(isSmall)
+            m.setIsEpic(isEpic)
         return model
 
     def _setReward(self, reward):
@@ -145,7 +137,6 @@ class LootRewardDefModelPresenter(object):
             m.setLabelAlign(self._reward.get('align', _DEFAULT_ALIGN) or _DEFAULT_ALIGN)
             m.setHighlightType(self._reward.get('highlightIcon') or '')
             m.setOverlayType(self._reward.get('overlayIcon') or '')
-            m.setIsVehicle(self._reward.get('isVehicle') or False)
 
 
 class LootRewardAnimatedModelPresenter(LootRewardDefModelPresenter):
@@ -370,8 +361,51 @@ class BlueprintFragmentRewardPresenter(LootRewardDefModelPresenter):
         return False if not vehicle else vehicle is not None and vehicle.level >= _MIN_VEHICLE_LVL_BLUEPRINT_AWARD
 
 
-DEF_COMPENSATION_PRESENTERS = {'vehicles': VehicleCompensationModelPresenter(),
- CrewBonusTypes.CREW_SKIN_BONUSES: CrewSkinsCompensationModelPresenter()}
+class LootVehicleRewardPresenter(LootRewardDefModelPresenter):
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __slots__ = ('_vehicle',)
+
+    def __init__(self):
+        super(LootVehicleRewardPresenter, self).__init__()
+        self._vehicle = None
+        return
+
+    def _setReward(self, reward):
+        super(LootVehicleRewardPresenter, self)._setReward(reward=reward)
+        self._vehicle = None
+        specialArgs = self._reward.get('specialArgs', None)
+        if specialArgs and isinstance(specialArgs, (types.ListType, types.TupleType)):
+            compactDescr = specialArgs[0]
+            self._vehicle = self.__itemsCache.items.getItemByCD(compactDescr)
+        else:
+            _logger.error('Can not find vehicle compactDescr in specialArgs!')
+        return
+
+    def _getRendererType(self):
+        return LootRendererTypes.VEHICLE if self._vehicle is not None else super(LootVehicleRewardPresenter, self)._getRendererType()
+
+    def _createModel(self):
+        return LootVehicleRendererModel() if self._vehicle is not None else super(LootVehicleRewardPresenter, self)._createModel()
+
+    def _formatModel(self, model, ttId, showCongrats):
+        super(LootVehicleRewardPresenter, self)._formatModel(model, ttId, showCongrats)
+        if self._vehicle is not None:
+            self._formatVehicle(self._vehicle, model, showCongrats)
+        return
+
+    def _formatVehicle(self, vehicle, model, showCongrats):
+        with model.congratsViewModel.transaction() as tx:
+            vehicleType = formatEliteVehicle(vehicle.isElite, vehicle.type)
+            image = makeFlashPath(vehicle.getShopIcon())
+            tx.setVehicleIsElite(vehicle.isElite)
+            tx.setVehicleType(vehicleType)
+            tx.setVehicleLvl(int2roman(vehicle.level))
+            tx.setVehicleName(vehicle.userName)
+            tx.setVehicleImage(image)
+            tx.setCongratsType(LootCongratsTypes.CONGRAT_TYPE_VEHICLE)
+            tx.setCongratsSourceId(str(vehicle.intCD))
+            tx.setShowCongrats(showCongrats)
+
 
 def getVehicleStrID(vehicleName):
     return vehicleName.split(':')[1]
@@ -465,32 +499,17 @@ _DEF_CONGRATS_VALIDATORS = {BlueprintsBonusSubtypes.FINAL_FRAGMENT: BlueprintFin
  BlueprintsBonusSubtypes.VEHICLE_FRAGMENT: BlueprintFragmentRewardPresenter.validate,
  CrewBonusTypes.CREW_BOOK_BONUSES: CrewBookModelPresenter.validate}
 _DEF_MODEL_PRESENTER = LootRewardDefModelPresenter()
-_DEF_COMPENSATION_PRESENTERS = {'vehicles': VehicleCompensationModelPresenter(),
+DEF_COMPENSATION_PRESENTERS = {'vehicles': VehicleCompensationModelPresenter(),
  CrewBonusTypes.CREW_SKIN_BONUSES: CrewSkinsCompensationModelPresenter()}
 _DEF_MODEL_PRESENTERS = {CrewBonusTypes.CREW_BOOK_BONUSES: CrewBookModelPresenter(),
  BlueprintsBonusSubtypes.FINAL_FRAGMENT: BlueprintFinalFragmentModelPresenter(),
  BlueprintsBonusSubtypes.UNIVERSAL_FRAGMENT: LootRewardConversionModelPresenter(R.images.gui.maps.icons.blueprints.fragment.big.vehicle(), R.sounds.gui_blueprint_fragment_convert()),
  BlueprintsBonusSubtypes.NATION_FRAGMENT: LootRewardConversionModelPresenter(R.images.gui.maps.icons.blueprints.fragment.big.vehicle(), R.sounds.gui_blueprint_fragment_convert()),
  BlueprintsBonusSubtypes.VEHICLE_FRAGMENT: BlueprintFragmentRewardPresenter()}
+RANKED_MODEL_PRESENTERS = {'vehicles': LootVehicleRewardPresenter()}
 
 def getRewardsBonuses(rewards, size='big', awardsCount=_DEFAULT_DISPLAYED_AWARDS_COUNT):
     formatter = BonusNameQuestsBonusComposer(awardsCount, getPackRentVehiclesAwardPacker())
-    bonuses = []
-    if rewards:
-        for bonusType, bonusValue in rewards.iteritems():
-            if bonusType == 'vehicles' and isinstance(bonusValue, list):
-                for vehicleData in bonusValue:
-                    bonuses.extend(getNonQuestBonuses(bonusType, vehicleData))
-
-            bonus = getNonQuestBonuses(bonusType, bonusValue)
-            bonuses.extend(bonus)
-
-    formattedBonuses = formatter.getFormattedBonuses(bonuses, size)
-    return formattedBonuses
-
-
-def getBobTeamRewardsBonuses(rewards, size='big', awardsCount=_DEFAULT_DISPLAYED_AWARDS_COUNT):
-    formatter = BobQuestsBonusComposer(awardsCount, getBobRentVehiclesAwardPacker())
     bonuses = []
     if rewards:
         for bonusType, bonusValue in rewards.iteritems():
@@ -509,7 +528,7 @@ def getRewardRendererModelPresenter(reward, presenters=None, compensationPresent
     if presenters is None:
         presenters = _DEF_MODEL_PRESENTERS
     if compensationPresenters is None:
-        compensationPresenters = _DEF_COMPENSATION_PRESENTERS
+        compensationPresenters = DEF_COMPENSATION_PRESENTERS
     bonusName = reward.get('bonusName', '')
     hasCompensation = reward.get('hasCompensation', False)
     if hasCompensation:

@@ -689,6 +689,7 @@ class INGAME_GUI(object):
     REWARDWINDOW_COMMANDER_PATRICK_SUBHEADERTEXT = '#ingame_gui:rewardWindow/commander_patrick/subHeaderText'
     REWARDWINDOW_COMMANDER_PATRICK_DESCTEXT = '#ingame_gui:rewardWindow/commander_patrick/descText'
     REWARDWINDOW_COMMANDER_PATRICK_BTNLABEL = '#ingame_gui:rewardWindow/commander_patrick/btnLabel'
+    DAMAGEINDICATOR_FRIENDLYFIRE_NODAMAGELABEL = '#ingame_gui:damageIndicator/friendlyFire/noDamageLabel'
     CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_TURN_BACK,
      CHAT_SHORTCUTS_SUPPORT_ME_WITH_FIRE,
      CHAT_SHORTCUTS_RELOADING_GUN,

@@ -519,7 +519,7 @@ class TankmanChangePassport(ItemProcessor):
     def __hasUniqueData(cls, tankman, firstNameID, lastNameID, iconID):
         tDescr = tankman.descriptor
         nationConfig = tankmen.getNationConfig(tankman.nationID)
-        for group in nationConfig.normalGroups:
+        for group in nationConfig.normalGroups.itervalues():
             if group.notInShop:
                 if tDescr.firstNameID != firstNameID and firstNameID is not None and tDescr.firstNameID in group.firstNamesList or tDescr.lastNameID != lastNameID and lastNameID is not None and tDescr.lastNameID in group.lastNamesList or tDescr.iconID != iconID and iconID is not None and tDescr.iconID in group.iconsList:
                     return True

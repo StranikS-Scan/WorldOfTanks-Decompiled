@@ -4,9 +4,9 @@ from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
 
 class ProgressiveRewardAwardModel(ViewModel):
-    __slots__ = ('onCloseAction', 'onSpecialActionBtnClick', 'onDestroyEvent', 'onNextAction')
+    __slots__ = ('onCloseAction', 'onSpecialActionBtnClick', 'onDestroyEvent')
 
-    def __init__(self, properties=9, commands=4):
+    def __init__(self, properties=8, commands=3):
         super(ProgressiveRewardAwardModel, self).__init__(properties=properties, commands=commands)
 
     def getAwardType(self):
@@ -57,12 +57,6 @@ class ProgressiveRewardAwardModel(ViewModel):
     def setInitialCongratsType(self, value):
         self._setString(7, value)
 
-    def getShowNextBtn(self):
-        return self._getBool(8)
-
-    def setShowNextBtn(self, value):
-        self._setBool(8, value)
-
     def _initialize(self):
         super(ProgressiveRewardAwardModel, self)._initialize()
         self._addStringProperty('awardType', '')
@@ -73,8 +67,6 @@ class ProgressiveRewardAwardModel(ViewModel):
         self._addArrayProperty('rewards', Array())
         self._addStringProperty('specialRewardType', '')
         self._addStringProperty('initialCongratsType', '')
-        self._addBoolProperty('showNextBtn', False)
         self.onCloseAction = self._addCommand('onCloseAction')
         self.onSpecialActionBtnClick = self._addCommand('onSpecialActionBtnClick')
         self.onDestroyEvent = self._addCommand('onDestroyEvent')
-        self.onNextAction = self._addCommand('onNextAction')

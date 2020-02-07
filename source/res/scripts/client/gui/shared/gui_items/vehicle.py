@@ -101,7 +101,6 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     OUTFIT_LOCKED = 'lockOutfit'
     EPIC_BATTLES = 'epic_battles'
     RENT_PROMOTION = 'rent_promotion'
-    BOB = 'bob'
 
 
 _NOT_FULL_AMMO_MULTIPLIER = 0.2
@@ -1162,10 +1161,6 @@ class Vehicle(FittingItem):
     @property
     def isOnlyForEpicBattles(self):
         return checkForTags(self.tags, VEHICLE_TAGS.EPIC_BATTLES)
-
-    @property
-    def isOnlyForBob(self):
-        return checkForTags(self.tags, VEHICLE_TAGS.BOB)
 
     @property
     def isTelecom(self):

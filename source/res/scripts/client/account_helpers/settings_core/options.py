@@ -486,6 +486,12 @@ class SettingFalseByDefault(StorageDumpSetting):
         return False
 
 
+class SettingTrueByDefault(StorageDumpSetting):
+
+    def getDefaultValue(self):
+        return True
+
+
 class TutorialSetting(StorageDumpSetting):
 
     def getDefaultValue(self):
@@ -1070,8 +1076,8 @@ class ResolutionSetting(PreferencesSetting):
                 gcd = fractions.gcd(width, height)
                 widthOpt = width / gcd
                 heightOpt = height / gcd
-                if widthOpt > 24:
-                    p = self._findBestAspect(float(widthOpt) / heightOpt, 23)
+                if widthOpt > 32:
+                    p = self._findBestAspect(float(widthOpt) / heightOpt, 32)
                     widthOpt = p[0]
                     heightOpt = p[1]
                 if widthOpt == 8:
@@ -2542,17 +2548,6 @@ class DamageIndicatorTypeSetting(GroupSetting):
 
     def __init__(self, settingName, storage, isPreview=False):
         super(DamageIndicatorTypeSetting, self).__init__(settingName, storage, options=self.OPTIONS, settingsKey='#settings:feedback/tab/damageIndicator/type/%s', isPreview=isPreview)
-
-    def getDefaultValue(self):
-        pass
-
-
-class DamageIndicatorPresetsSetting(GroupSetting):
-    OPTIONS = {0: 'all',
-     1: 'withoutCrit'}
-
-    def __init__(self, settingName, storage, isPreview=False):
-        super(DamageIndicatorPresetsSetting, self).__init__(settingName, storage, options=self.OPTIONS, settingsKey='#settings:feedback/tab/damageIndicator/presets/%s', isPreview=isPreview)
 
     def getDefaultValue(self):
         pass

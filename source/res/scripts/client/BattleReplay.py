@@ -860,6 +860,7 @@ class BattleReplay(object):
             if 'spgRedesignFeatures' in serverSettings:
                 self.__serverSettings['spgRedesignFeatures'] = serverSettings['spgRedesignFeatures']
             self.__serverSettings['ranked_config'] = serverSettings['ranked_config']
+            self.__serverSettings['isNoAllyDamage'] = serverSettings['isNoAllyDamage']
             if player.databaseID is None:
                 BigWorld.callback(0.1, self.__onAccountBecomePlayer)
             else:

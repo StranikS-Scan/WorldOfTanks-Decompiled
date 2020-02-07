@@ -795,6 +795,18 @@ class ITokensRequester(IRequester):
     def getLootBoxesCountByType(self):
         raise NotImplementedError
 
+    def getLastViewedProgress(self, tokenId):
+        raise NotImplementedError
+
+    def markTokenProgressAsViewed(self, tokenId):
+        raise NotImplementedError
+
+    def hasTokenCountChanged(self, tokenId):
+        raise NotImplementedError
+
+    def onDisconnected(self):
+        raise NotImplementedError
+
 
 class IBaseSessionStats(object):
 
@@ -843,7 +855,23 @@ class IBaseSessionStats(object):
         raise NotImplementedError
 
     @property
-    def winRatio(self):
+    def winRate(self):
+        raise NotImplementedError
+
+    @property
+    def wins(self):
+        raise NotImplementedError
+
+    @property
+    def averageFrags(self):
+        raise NotImplementedError
+
+    @property
+    def survivedRatio(self):
+        raise NotImplementedError
+
+    @property
+    def spotted(self):
         raise NotImplementedError
 
 
@@ -855,6 +883,10 @@ class IBaseAccountStats(IBaseSessionStats):
 
     @property
     def netCrystal(self):
+        raise NotImplementedError
+
+    @property
+    def averageVehicleLevel(self):
         raise NotImplementedError
 
 
@@ -888,27 +920,4 @@ class ISessionStatsRequester(IRequester):
         raise NotImplementedError
 
     def getAccountWtr(self):
-        raise NotImplementedError
-
-
-class IBobRequester(IRequester):
-
-    @property
-    def teamToken(self):
-        raise NotImplementedError
-
-    @property
-    def teamRank(self):
-        raise NotImplementedError
-
-    @property
-    def teamScore(self):
-        raise NotImplementedError
-
-    @property
-    def activeSkill(self):
-        raise NotImplementedError
-
-    @property
-    def skillExpiresTime(self):
         raise NotImplementedError

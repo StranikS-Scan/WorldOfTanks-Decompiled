@@ -35,9 +35,8 @@ class AbstractRequester(object):
         return self.__synced
 
     def clear(self):
-        self._data = None
+        self._data = self._getDefaultDataValue()
         self.__synced = False
-        return
 
     def _response(self, resID, value, callback=None):
         _logger.debug('Response %r is received for requester %s', resID, self.__class__.__name__)
@@ -65,11 +64,6 @@ class AbstractSyncDataRequester(AbstractRequester):
 
     def getCacheValue(self, key, defaultValue=None):
         return self._data[key] if key in self._data else defaultValue
-
-    def clear(self):
-        self._data.clear()
-        super(AbstractSyncDataRequester, self).clear()
-        self._data = {}
 
     def _getDefaultDataValue(self):
         return {}

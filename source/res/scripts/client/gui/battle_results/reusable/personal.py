@@ -413,7 +413,7 @@ class PersonalInfo(shared.UnpackedInfo):
         self.__lifeTimeInfo = _LifeTimeInfo(False, 0)
         self.__questsProgress = {}
         self.__PM2Progress = {}
-        self.__rankInfo = PostBattleRankInfo(0, 0, 0, 0, 0, 0, {}, {}, False, 0, 0)
+        self.__rankInfo = PostBattleRankInfo(0, 0, 0, 0, 0, 0, 0, 0, {}, {}, False, 0, 0)
         if not self.hasUnpackedItems():
             self.__collectRequiredData(personal)
         return

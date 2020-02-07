@@ -9,16 +9,19 @@ from gui.Scaleform.daapi.view.meta.RankedBattlesRewardsMeta import RankedBattles
 from gui.Scaleform.daapi.view.meta.RankedBattlesRewardsRanksMeta import RankedBattlesRewardsRanksMeta
 from gui.Scaleform.daapi.view.meta.RankedBattlesRewardsYearMeta import RankedBattlesRewardsYearMeta
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
-from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
+from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS as _RBC
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.ranked_battles.constants import YEAR_AWARDS_ORDER
+from gui.ranked_battles.constants import YEAR_AWARDS_ORDER, STANDARD_POINTS_COUNT, FINAL_QUEST_PATTERN
 from gui.ranked_battles.ranked_builders import rewards_vos
 from gui.ranked_battles.ranked_formatters import getRankedAwardsFormatter
+from gui.ranked_battles.ranked_helpers import getDataFromFinalTokenQuestID
 from gui.shared.event_dispatcher import showStylePreview
-from helpers import dependency
+from gui.shared.utils.scheduled_notifications import AcyclicNotifier
+from helpers import dependency, time_utils
 from items.vehicles import VehicleDescriptor
 from shared_utils import first
+from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.shared import IItemsCache
 _REWARDS_COMPONENTS = (RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_RANKS_UI, RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_LEAGUES_UI, RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_YEAR_UI)
@@ -142,7 +145,7 @@ class RankedBattlesRewardsRanksView(RankedBattlesRewardsRanksMeta, IResetablePag
         self.__bonusFormatter.setMaxRewardsCount(rewardsCount)
         currentRankID, _ = self.__rankedController.getMaxRank()
         if division.isQualification():
-            iconSize = RANKEDBATTLES_CONSTS.RANKED_REWARDS_REWARD_SIZE_BIG
+            iconSize = _RBC.RANKED_REWARDS_REWARD_SIZE_BIG
         for rankID in division.getRanksIDs():
             rank = self.__rankedController.getRank(rankID)
             rewards.append(rewards_vos.getRankRewardsVO(rank, self.__getRankRewards(rank, iconSize), currentRankID))
@@ -179,7 +182,7 @@ class RankedBattlesRewardsLeaguesView(RankedBattlesRewardsLeaguesMeta, IResetabl
 
     @classmethod
     def _backToLeaguesCallback(cls):
-        cls.__rankedController.showRankedBattlePage(ctx={'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_REWARDS_ID,
+        cls.__rankedController.showRankedBattlePage(ctx={'selectedItemID': _RBC.RANKED_BATTLES_REWARDS_ID,
          'rewardsSelectedTab': RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_LEAGUES_UI})
 
     def _populate(self):
@@ -230,41 +233,75 @@ class RankedBattlesRewardsLeaguesView(RankedBattlesRewardsLeaguesMeta, IResetabl
 
 
 class RankedBattlesRewardsYearView(RankedBattlesRewardsYearMeta, IResetablePage):
+    __eventsCache = dependency.descriptor(IEventsCache)
     __rankedController = dependency.descriptor(IRankedBattlesController)
+
+    def __init__(self):
+        super(RankedBattlesRewardsYearView, self).__init__()
+        self.__acyclicNotifier = None
+        return
 
     def reset(self):
         pass
 
     def _populate(self):
         super(RankedBattlesRewardsYearView, self)._populate()
-        self.__rankedController.onYearPointsChanges += self.__updatePoints
-        self.__updatePoints()
+        self.__rankedController.onYearPointsChanges += self.__update
+        self.__acyclicNotifier = AcyclicNotifier(self.__getTillUpdateTime, self.__update)
+        self.__update()
+        self.__acyclicNotifier.startNotification()
 
     def _dispose(self):
-        self.__rankedController.onYearPointsChanges -= self.__updatePoints
+        self.__rankedController.onYearPointsChanges -= self.__update
+        self.__acyclicNotifier.stopNotification()
+        self.__acyclicNotifier.clear()
         super(RankedBattlesRewardsYearView, self)._dispose()
 
-    def __updatePoints(self):
-        points = self.__rankedController.getYearRewardPoints()
-        data = {'title': backport.text(R.strings.ranked_battles.rewardsView.tabs.year.title(), points=points),
-         'titleIcon': backport.image(R.images.gui.maps.icons.rankedBattles.ranked_point_28x28()),
-         'points': points,
-         'rewards': self.__getAwardsData(points)}
-        self.as_setDataS(data)
+    def __update(self):
+        currentPoints = self.__rankedController.getYearRewardPoints()
+        isAwarded, awardPoints = self.__getAwardingStatus(currentPoints)
+        points = awardPoints if isAwarded else currentPoints
+        awardType = self.__rankedController.getAwardTypeByPoints(points)
+        exchange = self.__rankedController.getCurrentPointToCrystalRate()
+        compensation = self.__rankedController.calculateCompensation(points)
+        awards = self.__getAwardsData(points, isAwarded)
+        self.as_setDataS(rewards_vos.getYearRewardDataVO(points, awards, isAwarded, awardType, compensation, exchange))
 
-    @classmethod
-    def __getAwardsData(cls, points):
+    def __getAwardingStatus(self, currentPoints):
+        awardPoints = 0
+        if currentPoints > 0:
+            return (False, awardPoints)
+        else:
+            maxPoints, _ = self.__rankedController.getYearAwardsPointsMap().get(YEAR_AWARDS_ORDER[-1], (0, 0))
+            for points in range(STANDARD_POINTS_COUNT, maxPoints + 1):
+                finalQuest = self.__eventsCache.getHiddenQuests().get(FINAL_QUEST_PATTERN.format(points))
+                if finalQuest is None:
+                    return (False, awardPoints)
+                if finalQuest.isCompleted():
+                    return (True, getDataFromFinalTokenQuestID(finalQuest.getID()))
+
+            standardQuest = self.__getStandardFinalQuest()
+            return (standardQuest is not None and standardQuest.getStartTimeLeft() == 0, awardPoints)
+
+    def __getAwardsData(self, points, isRewarded):
         data = []
-        awardsMap = cls.__rankedController.getYearAwardsPointsMap()
+        awardsMap = self.__rankedController.getYearAwardsPointsMap()
         for awardName in YEAR_AWARDS_ORDER:
             minPoints, maxPoints = awardsMap[awardName]
             if points > maxPoints:
-                status = RANKEDBATTLES_CONSTS.YEAR_REWARD_STATUS_PASSED
+                status = _RBC.YEAR_REWARD_STATUS_PASSED_FINAL if isRewarded else _RBC.YEAR_REWARD_STATUS_PASSED
             elif maxPoints >= points >= minPoints:
-                status = RANKEDBATTLES_CONSTS.YEAR_REWARD_STATUS_CURRENT
+                status = _RBC.YEAR_REWARD_STATUS_CURRENT_FINAL if isRewarded else _RBC.YEAR_REWARD_STATUS_CURRENT
             else:
-                status = RANKEDBATTLES_CONSTS.YEAR_REWARD_STATUS_LOCKED
+                status = _RBC.YEAR_REWARD_STATUS_LOCKED_FINAL if isRewarded else _RBC.YEAR_REWARD_STATUS_LOCKED
             data.append({'id': awardName,
              'status': status})
 
         return data
+
+    def __getStandardFinalQuest(self):
+        return self.__eventsCache.getHiddenQuests().get(FINAL_QUEST_PATTERN.format(STANDARD_POINTS_COUNT))
+
+    def __getTillUpdateTime(self):
+        standardFinalQuest = self.__getStandardFinalQuest()
+        return standardFinalQuest.getStartTimeLeft() if standardFinalQuest is not None else time_utils.ONE_MINUTE

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/session_stats/session_stats_views.py
+from account_helpers.settings_core.settings_constants import SESSION_STATS
 from constants import ARENA_BONUS_TYPE
 from gui.Scaleform.daapi.view.lobby.session_stats.shared import packLastBattleData, packBattleEfficiencyData, packTotalData, toIntegral, toNiceNumber, getDeltaAsData, getNationIcon
 from gui.Scaleform.daapi.view.meta.SessionBattleStatsViewMeta import SessionBattleStatsViewMeta
@@ -15,6 +16,9 @@ _VEH_LIST_LEN = 12
 class SessionBattleStatsView(SessionBattleStatsViewMeta):
     itemsCache = dependency.descriptor(IItemsCache)
 
+    def updateData(self):
+        self.as_setDataS(self.__makeVO())
+
     def _populate(self):
         super(SessionBattleStatsView, self)._populate()
         self.as_setDataS(self.__makeVO())
@@ -28,14 +32,18 @@ class SessionBattleStatsView(SessionBattleStatsViewMeta):
 
     def __makeVO(self):
         data = self.itemsCache.items.sessionStats.getAccountStats(ARENA_BONUS_TYPE.REGULAR)
+        parameters = SESSION_STATS.getAccountEfficiencyBlock()
         return {'collapseLabel': text_styles.middleTitle(backport.text(R.strings.session_stats.label.battleEfficiency())),
          'lastBattle': packLastBattleData(data),
          'total': packTotalData(data),
-         'battleEfficiency': packBattleEfficiencyData(data)}
+         'battleEfficiency': packBattleEfficiencyData(data, parameters)}
 
 
 class SessionVehicleStatsView(SessionVehicleStatsViewMeta):
     itemsCache = dependency.descriptor(IItemsCache)
+
+    def updateData(self):
+        self.as_setDataS(self.__makeVO)
 
     def _populate(self):
         super(SessionVehicleStatsView, self)._populate()

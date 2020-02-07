@@ -4,12 +4,11 @@ import logging
 from CurrentVehicle import g_currentVehicle
 from account_helpers.AccountSettings import AccountSettings, BARRACKS_FILTER, RECRUIT_NOTIFICATIONS
 from gui import SystemMessages
-from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.barracks.sound_constants import BARRACKS_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.BarracksMeta import BarracksMeta
-from gui.Scaleform.daapi.view.lobby.barracks.sound_constants import BARRACKS_SOUND_SPACE
 from gui.Scaleform.flash_wrapper import InputKeyMode
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
@@ -18,6 +17,7 @@ from gui.game_control.restore_contoller import getTankmenRestoreInfo
 from gui.impl import backport
 from gui.ingame_shop import showBuyGoldForBerth
 from gui.prb_control.entities.listener import IGlobalListener
+from gui.server_events import recruit_helper
 from gui.server_events.events_dispatcher import showRecruitWindow
 from gui.shared import events, event_dispatcher as shared_events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -35,14 +35,13 @@ from gui.shared.utils import decorators, flashObject2Dict
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.sounds.ambients import LobbySubViewEnv
-from gui.server_events import recruit_helper
 from helpers import i18n, time_utils, dependency
 from helpers.i18n import makeString as _ms
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from skeletons.gui.game_control import IRestoreController
-from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 _COUNTERS_MAP = {RECRUIT_NOTIFICATIONS: ('locationButtonBar', 5)}
 
@@ -199,7 +198,9 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         super(Barracks, self).__init__()
         self.filter = dict(AccountSettings.getFilter(BARRACKS_FILTER))
         self.__updateLocationFilter(ctx)
+        self.__sortedCachedTankmen = None
         self.__notRecruitedTankmen = []
+        return
 
     def openPersonalCase(self, tankmanInvID, tabNumber):
         if self.filter['location'] == BARRACKS_CONSTANTS.LOCATION_FILTER_NOT_RECRUITED:
@@ -292,10 +293,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         super(Barracks, self)._populate()
         self.app.component.wg_inputKeyMode = InputKeyMode.IGNORE_RESULT
         self.startGlobalListening()
-        self.itemsCache.onSyncCompleted += self.__updateTankmen
-        g_clientUpdateManager.addCallbacks({'inventory.8': self.__updateTankmen,
-         'stats.berths': self.__updateTankmen,
-         'recycleBin.tankmen': self.__updateTankmen})
+        self.itemsCache.onSyncCompleted += self.__updateCachedTankmenList
         self.eventsCache.onProgressUpdated += self.__updateNotRecruitedTankmen
         self.restore.onTankmenBufferUpdated += self.__updateDismissedTankmen
         self.__updateNotRecruitedTankmen()
@@ -309,10 +307,12 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
     def _dispose(self):
         self.eventsCache.onProgressUpdated -= self.__updateNotRecruitedTankmen
         self.restore.onTankmenBufferUpdated -= self.__updateDismissedTankmen
-        g_clientUpdateManager.removeObjectCallbacks(self)
-        self.itemsCache.onSyncCompleted -= self.__updateTankmen
+        self.itemsCache.onSyncCompleted -= self.__updateCachedTankmenList
         self.stopGlobalListening()
+        self.__sortedCachedTankmen = None
+        self.__notRecruitedTankmen = None
         super(LobbySubView, self)._dispose()
+        return
 
     def __updateLocationFilter(self, ctx):
         if ctx is not None:
@@ -346,11 +346,19 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         else:
             self.__showActiveTankmen(self.__buildCriteria())
 
+    def __updateCachedTankmenList(self, *args):
+        self.__sortedCachedTankmen = self.__getSortedTankmen()
+        self.__updateTankmen()
+
+    def __getSortedTankmen(self):
+        return sorted(self.itemsCache.items.getTankmen().itervalues(), cmp=TankmenComparator(self.itemsCache.items.getVehicle))
+
     def __showActiveTankmen(self, criteria):
-        allTankmen = self.itemsCache.items.getTankmen().values()
+        if self.__sortedCachedTankmen is None:
+            self.__sortedCachedTankmen = self.__getSortedTankmen()
         tankmenInBarracks = 0
         tankmenList = [_packBuyBerthsSlot()]
-        for tankman in sorted(allTankmen, cmp=TankmenComparator(self.itemsCache.items.getVehicle)):
+        for tankman in self.__sortedCachedTankmen:
             if not tankman.isInTank:
                 tankmenInBarracks += 1
             if not criteria(tankman):
@@ -376,7 +384,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         if tankmenInBarracks < slots:
             tankmenList.insert(1, {'empty': True,
              'freePlaces': slots - tankmenInBarracks})
-        self.as_setTankmenS({'tankmenCount': self.__getTankmenCountStr(tankmenInSlots=tankmenInSlots, totalCount=len(allTankmen)),
+        self.as_setTankmenS({'tankmenCount': self.__getTankmenCountStr(tankmenInSlots=tankmenInSlots, totalCount=len(self.__sortedCachedTankmen)),
          'placesCount': self.__getPlaceCountStr(free=max(slots - tankmenInBarracks, 0), totalCount=slots),
          'placesCountTooltip': None,
          'tankmenData': tankmenList,

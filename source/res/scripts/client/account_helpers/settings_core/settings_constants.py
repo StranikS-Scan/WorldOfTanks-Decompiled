@@ -212,7 +212,8 @@ class FEEDBACK(CONST_CONTAINER):
 
 class DAMAGE_INDICATOR(CONST_CONTAINER):
     TYPE = 'damageIndicatorType'
-    PRESETS = 'damageIndicatorPresets'
+    PRESET_CRITS = 'damageIndicatorCrits'
+    PRESET_ALLIES = 'damageIndicatorAllies'
     DAMAGE_VALUE = 'damageIndicatorDamageValue'
     VEHICLE_INFO = 'damageIndicatorVehicleInfo'
     ANIMATION = 'damageIndicatorAnimation'
@@ -307,6 +308,91 @@ class OnceOnlyHints(CONST_CONTAINER):
     BLUEPRINT_SCREEN_CONVERT_FRAGMENT_HINT = 'BlueprintScreenConvertFragmentHint'
     ACCOUNT_BUTTON_HINT = 'AccountButtonHint'
     SESSION_STATS_OPEN_BTN_HINT = 'SessionStatsOpenBtnHint'
+    SESSION_STATS_SETTINGS_BTN_HINT = 'SessionStatsSettingsBtnHint'
     BATTLE_SESSION_UP_BUTTON_TOURNAMENT_HINT = 'BattleSessionUpButtonTournamentHint'
     CREW_OPERATION_BTN_HINT = 'CrewOperationBtnHint'
     SOUND_BUTTONEX_HINT = 'SoundButtonExHint'
+
+
+class SESSION_STATS(CONST_CONTAINER):
+    IS_NOT_NEEDED_RESET_STATS_EVERY_DAY = 'IsNotNeededResetStatsEveryDay'
+    IS_NEEDED_SAVE_CURRENT_TAB = 'IsNeededSaveCurrentTab'
+    CURRENT_TAB = 'CurrentTab'
+    ECONOMIC_BLOCK_VIEW = 'EconomicBlockView'
+    SHOW_WTR = 'ShowWtr'
+    SHOW_RATIO_DAMAGE = 'ShowRatioDamage'
+    SHOW_RATIO_KILL = 'ShowRatioKill'
+    SHOW_WINS = 'ShowWins'
+    SHOW_AVERAGE_DAMAGE = 'ShowAverageDamage'
+    SHOW_HELP_DAMAGE = 'ShowHelpDamage'
+    SHOW_BLOCKED_DAMAGE = 'ShowBlockedDamage'
+    SHOW_AVERAGE_XP = 'ShowAverageXp'
+    SHOW_WIN_RATE = 'ShowWinRate'
+    SHOW_AVERAGE_VEHICLE_LEVEL = 'ShowAverageVehicleLevel'
+    SHOW_AVERAGE_FRAGS = 'ShowAverageFrags'
+    SHOW_SURVIVED_RATE = 'ShowSurvivedRate'
+    SHOW_SPOTTED = 'ShowSpotted'
+    ONLY_ONCE_HINT_SHOWN_FIELD = 'OnlyOnceHintShownField'
+    ECONOMIC_BLOCK_VIEW_WITH_SPENDING = 0
+    ECONOMIC_BLOCK_VIEW_WITHOUT_SPENDING = 1
+    BATTLES_TAB = 0
+    VEHICLES_TAB = 1
+
+    @classmethod
+    def getEfficiencyBlock(cls):
+        return (cls.SHOW_WTR,
+         cls.SHOW_WINS,
+         cls.SHOW_WIN_RATE,
+         cls.SHOW_AVERAGE_FRAGS,
+         cls.SHOW_RATIO_KILL,
+         cls.SHOW_AVERAGE_DAMAGE,
+         cls.SHOW_RATIO_DAMAGE,
+         cls.SHOW_HELP_DAMAGE,
+         cls.SHOW_BLOCKED_DAMAGE,
+         cls.SHOW_SPOTTED,
+         cls.SHOW_AVERAGE_VEHICLE_LEVEL,
+         cls.SHOW_SURVIVED_RATE,
+         cls.SHOW_AVERAGE_XP)
+
+    @classmethod
+    def getAccountEfficiencyBlock(cls):
+        return (cls.SHOW_WTR,
+         cls.SHOW_WINS,
+         cls.SHOW_WIN_RATE,
+         cls.SHOW_AVERAGE_FRAGS,
+         cls.SHOW_RATIO_KILL,
+         cls.SHOW_AVERAGE_DAMAGE,
+         cls.SHOW_RATIO_DAMAGE,
+         cls.SHOW_HELP_DAMAGE,
+         cls.SHOW_BLOCKED_DAMAGE,
+         cls.SHOW_SPOTTED,
+         cls.SHOW_AVERAGE_VEHICLE_LEVEL,
+         cls.SHOW_SURVIVED_RATE,
+         cls.SHOW_AVERAGE_XP)
+
+    @classmethod
+    def getVehiclesEfficiencyBlock(cls):
+        return (cls.SHOW_WTR,
+         cls.SHOW_WINS,
+         cls.SHOW_WIN_RATE,
+         cls.SHOW_AVERAGE_FRAGS,
+         cls.SHOW_RATIO_KILL,
+         cls.SHOW_AVERAGE_DAMAGE,
+         cls.SHOW_RATIO_DAMAGE,
+         cls.SHOW_HELP_DAMAGE,
+         cls.SHOW_BLOCKED_DAMAGE,
+         cls.SHOW_SPOTTED,
+         cls.SHOW_SURVIVED_RATE,
+         cls.SHOW_AVERAGE_XP)
+
+    @classmethod
+    def getImmutableEfficiencyBlockParameters(cls):
+        return (cls.SHOW_WTR,)
+
+    @classmethod
+    def getCommonBlock(cls):
+        return (cls.IS_NOT_NEEDED_RESET_STATS_EVERY_DAY, cls.IS_NEEDED_SAVE_CURRENT_TAB)
+
+    @classmethod
+    def getEconomicBlockView(cls):
+        return (cls.ECONOMIC_BLOCK_VIEW_WITHOUT_SPENDING, cls.ECONOMIC_BLOCK_VIEW_WITH_SPENDING)

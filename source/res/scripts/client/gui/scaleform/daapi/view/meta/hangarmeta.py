@@ -76,5 +76,8 @@ class HangarMeta(View):
     def as_updateSeniorityAwardsEntryPointS(self, isVisible):
         return self.flashObject.as_updateSeniorityAwardsEntryPoint(isVisible) if self._isDAAPIInited() else None
 
-    def as_toggleBobS(self, isBob):
-        return self.flashObject.as_toggleBob(isBob) if self._isDAAPIInited() else None
+    def as_createDQWidgetS(self):
+        return self.flashObject.as_createDQWidget() if self._isDAAPIInited() else None
+
+    def as_destroyDQWidgetS(self):
+        return self.flashObject.as_destroyDQWidget() if self._isDAAPIInited() else None

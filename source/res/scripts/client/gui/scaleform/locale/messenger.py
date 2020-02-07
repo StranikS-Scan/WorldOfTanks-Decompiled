@@ -384,11 +384,8 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BOOTCAMP_NO_AWARDS = '#messenger:serviceChannelMessages/bootcamp/no_awards'
     SERVICECHANNELMESSAGES_BOOTCAMP_DEVICES = '#messenger:serviceChannelMessages/bootcamp/devices'
     SERVICECHANNELMESSAGES_BOOTCAMP_CREW = '#messenger:serviceChannelMessages/bootcamp/crew'
-    SERVICECHANNELMESSAGES_CURRENCYUPDATE_AUCTION = '#messenger:serviceChannelMessages/currencyUpdate/auction'
     SERVICECHANNELMESSAGES_CURRENCYUPDATE_FINANCIAL_TRANSACTION = '#messenger:serviceChannelMessages/currencyUpdate/financial_transaction'
     SERVICECHANNELMESSAGES_CURRENCYUPDATE_DATE = '#messenger:serviceChannelMessages/currencyUpdate/date'
-    SERVICECHANNELMESSAGES_CURRENCYUPDATE_RESTORED_CREDITS = '#messenger:serviceChannelMessages/currencyUpdate/restored/credits'
-    SERVICECHANNELMESSAGES_CURRENCYUPDATE_RESTORED_GOLD = '#messenger:serviceChannelMessages/currencyUpdate/restored/gold'
     SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_CREDITS = '#messenger:serviceChannelMessages/currencyUpdate/received/credits'
     SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_GOLD = '#messenger:serviceChannelMessages/currencyUpdate/received/gold'
     SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_CRYSTAL = '#messenger:serviceChannelMessages/currencyUpdate/received/crystal'
@@ -536,7 +533,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_CUSTOMIZATION = '#messenger:serviceChannelMessages/sysMsg/titles/customization'
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_PRIMETIME = '#messenger:serviceChannelMessages/sysMsg/titles/primeTime'
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_RANKEDBATTLESAVAILABLE = '#messenger:serviceChannelMessages/sysMsg/titles/rankedBattlesAvailable'
-    SERVICECHANNELMESSAGES_SYSMSG_TITLES_BOBBATTLESAVAILABLE = '#messenger:serviceChannelMessages/sysMsg/titles/bobBattlesAvailable'
+    SERVICECHANNELMESSAGES_SYSMSG_TITLES_RANKEDBATTLESNOTSET = '#messenger:serviceChannelMessages/sysMsg/titles/rankedBattlesNotSet'
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_PAYMENTMETHODLINK = '#messenger:serviceChannelMessages/sysMsg/titles/paymentMethodLink'
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_PAYMENTMETHODUNLINK = '#messenger:serviceChannelMessages/sysMsg/titles/paymentMethodUnlink'
     SERVICECHANNELMESSAGES_PREBATTLE_BATTLETYPE_TOURNAMENT = '#messenger:serviceChannelMessages/prebattle/battleType/tournament'
@@ -878,6 +875,19 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_FLEXCHANGE_QUESTS = '#messenger:serviceChannelMessages/flExchange/quests'
     SERVICECHANNELMESSAGES_FLEXCHANGE_QUESTS_POINTS = '#messenger:serviceChannelMessages/flExchange/quests/points'
     SERVICECHANNELMESSAGES_FLEXCHANGE_QUESTS_REWARD = '#messenger:serviceChannelMessages/flExchange/quests/reward'
+    SERVICECHANNELMESSAGES_RANKEDFINALEAWARDSNOTIFICATION_TITLE = '#messenger:serviceChannelMessages/rankedFinaleAwardsNotification/title'
+    SERVICECHANNELMESSAGES_RANKEDFINALEAWARDSNOTIFICATION_CONGRATULATION = '#messenger:serviceChannelMessages/rankedFinaleAwardsNotification/congratulation'
+    SERVICECHANNELMESSAGES_RANKEDFINALEAWARDSNOTIFICATION_TEXT = '#messenger:serviceChannelMessages/rankedFinaleAwardsNotification/text'
+    SERVICECHANNELMESSAGES_RANKEDFINALEAWARDSNOTIFICATION_COMPENSATION = '#messenger:serviceChannelMessages/rankedFinaleAwardsNotification/compensation'
+    SERVICECHANNELMESSAGES_RANKEDFINALEAWARDSNOTIFICATION_BUTTONLABEL = '#messenger:serviceChannelMessages/rankedFinaleAwardsNotification/buttonLabel'
+    SERVICECHANNELMESSAGES_RANKEDFINALEAWARDSNOTIFICATION_SMALL_AWARDSTITLE = '#messenger:serviceChannelMessages/rankedFinaleAwardsNotification/small/awardsTitle'
+    SERVICECHANNELMESSAGES_RANKEDFINALEAWARDSNOTIFICATION_MEDIUM_AWARDSTITLE = '#messenger:serviceChannelMessages/rankedFinaleAwardsNotification/medium/awardsTitle'
+    SERVICECHANNELMESSAGES_RANKEDFINALEAWARDSNOTIFICATION_BIG_AWARDSTITLE = '#messenger:serviceChannelMessages/rankedFinaleAwardsNotification/big/awardsTitle'
+    SERVICECHANNELMESSAGES_RANKEDFINALEAWARDSNOTIFICATION_LARGE_AWARDSTITLE = '#messenger:serviceChannelMessages/rankedFinaleAwardsNotification/large/awardsTitle'
+    SERVICECHANNELMESSAGES_SPECIALREWARD_TITLE = '#messenger:serviceChannelMessages/specialReward/title'
+    SERVICECHANNELMESSAGES_SPECIALREWARD_VEHICLEBLUEPRINTS = '#messenger:serviceChannelMessages/specialReward/vehicleBlueprints'
+    SERVICECHANNELMESSAGES_SPECIALREWARD_NATIONALBLUEPRINTS = '#messenger:serviceChannelMessages/specialReward/nationalBlueprints'
+    SERVICECHANNELMESSAGES_SPECIALREWARD_INTELLIGENCEBLUEPRINTS = '#messenger:serviceChannelMessages/specialReward/intelligenceBlueprints'
     CHAT_KOREAMESSAGE_DAILYLIMIT = '#messenger:chat/koreaMessage/dailyLimit'
     CHAT_KOREAMESSAGE_WEEKLYLIMIT = '#messenger:chat/koreaMessage/weeklyLimit'
     CHAT_KOREAMESSAGE_CURFEW = '#messenger:chat/koreaMessage/curfew'
@@ -965,9 +975,7 @@ class MESSENGER(object):
      LISTVIEW_EMPTYLIST_INVITE,
      LISTVIEW_EMPTYLIST_OFFER)
     SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_ENUM = (SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_1, SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_2, SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS_BOTH)
-    SERVICECHANNELMESSAGES_CURRENCYUPDATE_ALL_ENUM = (SERVICECHANNELMESSAGES_CURRENCYUPDATE_RESTORED_CREDITS,
-     SERVICECHANNELMESSAGES_CURRENCYUPDATE_RESTORED_GOLD,
-     SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_CREDITS,
+    SERVICECHANNELMESSAGES_CURRENCYUPDATE_ALL_ENUM = (SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_CREDITS,
      SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_GOLD,
      SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_CRYSTAL,
      SERVICECHANNELMESSAGES_CURRENCYUPDATE_DEBITED_CREDITS,

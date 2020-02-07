@@ -99,6 +99,10 @@ class Source(object):
             raise SoftException("Can not open '%s'" % path)
         return {} if not section.has_key('quests') else self.__readXML(section['quests'], curTime)
 
+    def readFromString(self, xml, curTime):
+        section = ResMgr.DataSection('root').createSectionFromString(xml)
+        return {} if not section.has_key('quests') else self.__readXML(section['quests'], curTime)
+
     def __readXML(self, section, curTime, gStartTime=DEFAULT_QUEST_START_TIME, gFinishTime=DEFAULT_QUEST_FINISH_TIME):
         nodes = {}
         for typeName, questSection in section.items():
@@ -267,8 +271,7 @@ class Source(object):
          'peripheryIDs': {int(p) for p in onlyForPeripheriesList.split()} if onlyForPeripheriesList else set(),
          'runFlags': runFlags,
          'showPostBattleStat': questSection.readBool('showPostBattleStat', False),
-         'saveBonusHistory': questSection.readBool('saveBonusHistory', False),
-         'sendBonusHistory': questSection.readBool('sendBonusHistory', False)}
+         'saveBonusHistory': questSection.readBool('saveBonusHistory', False)}
         if eventType == EVENT_TYPE.MOTIVE_QUEST:
             extraSubsectionsNames = ('advice', 'requirements', 'congratulation')
             for subsectionName in extraSubsectionsNames:
@@ -527,6 +530,9 @@ class Source(object):
 
     def __readCondition_cumulative(self, _, section, node):
         for name, sub in section.items():
+            if name in ('meta', 'title', 'description'):
+                node.questClientConditions.append((name, self.__readMetaSection(sub)))
+                continue
             if name not in battle_results_shared.VEH_FULL_RESULTS.names() and name not in battle_results_shared.VEH_BASE_RESULTS.names():
                 raise SoftException("Unsupported misc variable '%s'" % name)
             node.addChild((name, int(sub.asFloat)))

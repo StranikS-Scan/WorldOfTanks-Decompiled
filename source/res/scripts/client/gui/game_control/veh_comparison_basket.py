@@ -370,6 +370,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
         self.writeCache()
         self.__disposeCache()
         self.__vehicles = []
+        self.__isFull = False
         self.__disposeHandlers()
         super(VehComparisonBasket, self).onDisconnected()
 

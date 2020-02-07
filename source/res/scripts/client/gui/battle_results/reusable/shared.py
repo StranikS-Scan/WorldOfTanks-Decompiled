@@ -446,7 +446,7 @@ class VehicleDetailedInfo(_VehicleInfo):
 
     @property
     def damageDealt(self):
-        return self._damageDealt
+        return self._damageDealt + self.destructiblesDamageDealt
 
     @property
     def tdamageDealt(self):
@@ -750,7 +750,6 @@ class VehicleSummarizeInfo(_VehicleInfo):
         value = self.__accumulate('damageDealt')
         if self.__avatar is not None:
             value += self.__avatar.avatarDamageDealt
-        value += self.destructiblesDamageDealt
         return value
 
     @property

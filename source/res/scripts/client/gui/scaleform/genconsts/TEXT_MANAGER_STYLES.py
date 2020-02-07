@@ -21,6 +21,7 @@ class TEXT_MANAGER_STYLES(object):
     ALERT_TEXT = 'alertText'
     ERROR_TEXT = 'errorText'
     NEUTRAL_TEXT = 'neutralText'
+    NEUTRAL_TEXT_BIG = 'neutralTextBig'
     DEFRES_TEXT = 'defresText'
     GOLD_TEXT = 'goldText'
     GOLD_TEXT_BIG = 'goldTextBig'

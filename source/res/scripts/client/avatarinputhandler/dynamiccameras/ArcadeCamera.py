@@ -369,9 +369,6 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
             self.__autoUpdateDxDyDz.set(0)
             self.__update(dx, dy, dz, rotateMode, zoomMode, False)
 
-    def restoreDefaultsState(self):
-        LOG_ERROR('ArcadeCamera::restoreDefaultState is obsolete!')
-
     def getConfigValue(self, name):
         return self.__cfg.get(name)
 

@@ -4,6 +4,8 @@ import logging
 import BigWorld
 from adisp import async, process
 from constants import LOOTBOX_TOKEN_PREFIX
+from gui.shared.utils.requesters.common import BaseDelta
+from gui.shared.utils.requesters.QuestsProgressRequester import _Token
 from helpers import dependency
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from skeletons.gui.shared.utils.requesters import ITokensRequester
@@ -20,6 +22,7 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
         self.__lastShopRev = None
         self.__lootBoxCache = {}
         self.__lootBoxTotalCount = 0
+        self.__tokensProgressDelta = TokensProgressDelta()
         super(TokensRequester, self).__init__()
         return
 
@@ -27,6 +30,9 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
         self.__lootBoxCache.clear()
         self.__lootBoxTotalCount = 0
         super(TokensRequester, self).clear()
+
+    def onDisconnected(self):
+        self.__tokensProgressDelta.clear()
 
     def getTokens(self):
         return self.getCacheValue('tokens', {})
@@ -67,6 +73,19 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
 
     def getLootBoxByTokenID(self, tokenID):
         return self.__lootBoxCache.get(tokenID)
+
+    def getLastViewedProgress(self, tokenId):
+        return self.__tokensProgressDelta.getPrevValue(tokenId)
+
+    def markTokenProgressAsViewed(self, tokenId):
+        self.__tokensProgressDelta.updatePrevValueToCurrentValue(tokenId)
+
+    def hasTokenCountChanged(self, tokenId):
+        return self.__tokensProgressDelta.hasDiff(tokenId)
+
+    def _preprocessValidData(self, data):
+        self.__tokensProgressDelta.update(data)
+        return data
 
     @async
     @process
@@ -114,3 +133,16 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
                     item.updateCount(invCount=0)
                 else:
                     del self.__lootBoxCache[lootBoxID]
+
+
+class TokensProgressDelta(BaseDelta):
+
+    def _hasEntryChanged(self, entryId):
+        return self._currValues[entryId] != self._prevValues[entryId]
+
+    def _getDataIterator(self, data):
+        for tokenId, value in data.get('tokens', {}).iteritems():
+            yield (tokenId, _Token(*value).count)
+
+    def _getDefaultValue(self):
+        pass

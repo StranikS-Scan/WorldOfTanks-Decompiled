@@ -66,6 +66,8 @@ class PromoController(IPromoController):
         self.__em = EventManager()
         self.onNewTeaserReceived = Event(self.__em)
         self.onPromoCountChanged = Event(self.__em)
+        self.onTeaserShown = Event(self.__em)
+        self.onTeaserClosed = Event(self.__em)
         return
 
     @sf_lobby
@@ -123,6 +125,9 @@ class PromoController(IPromoController):
     def setUnreadPromoCount(self, count):
         self.__updatePromoCount(count)
 
+    def isTeaserOpen(self):
+        return self.__isTeaserOpen
+
     def onAvatarBecomePlayer(self):
         if self.__isLobbyInited:
             self.__battlesFromLastTeaser += 1
@@ -149,6 +154,7 @@ class PromoController(IPromoController):
 
     def __onTeaserClosed(self, byUser=False):
         self.__isTeaserOpen = False
+        self.onTeaserClosed()
         if byUser:
             self.__showBubbleTooltip()
 
@@ -219,6 +225,7 @@ class PromoController(IPromoController):
     @process
     def __onTeaserShown(self, promoID):
         self.__isTeaserOpen = True
+        self.onTeaserShown()
         yield self.__webController.sendRequest(PromoSendTeaserShownRequestCtx(promoID))
 
     def __tryToShowTeaser(self):

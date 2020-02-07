@@ -11,6 +11,7 @@ from gui.server_events.cond_formatters.postbattle import VehiclesDamageFormatter
 from gui.server_events.cond_formatters.postbattle import VehiclesKillFormatter
 from gui.server_events.cond_formatters.postbattle import VehiclesStunFormatter
 from helpers import i18n, dependency
+from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 ZERO_COUNT = 0
 DEFAULT_GROUP_BY_KEY = None
@@ -107,6 +108,7 @@ class _CumulativableFormatter(MissionFormatter, CumulativableFormatter):
 
 
 class _CumulativeResultFormatter(_CumulativableFormatter):
+    __eventsCache = dependency.descriptor(IEventsCache)
 
     def _groupedByFormat(self, condition, event, progressData):
         result = []
@@ -119,7 +121,7 @@ class _CumulativeResultFormatter(_CumulativableFormatter):
                 current = ZERO_COUNT
                 total = condition.getTotalValue()
             title = self._getTitle(current, total)
-            result.append(self._packGui(title, condition, progressType, current, total, progressData))
+            result.append(self._packGui(title, condition, progressType, current, total, progressData=progressData))
         return result
 
     @classmethod
@@ -136,26 +138,26 @@ class _CumulativeResultFormatter(_CumulativableFormatter):
     def _getDescription(self, condition):
         return packDescriptionField(condition.getUserString())
 
-    def _packGui(self, title, condition, progressType, current, total, progressData=None):
-        description = self._getDescription(condition)
+    def _packGui(self, title, condition, progressType, current, total, earned=None, progressData=None):
+        description = self.getDescription(condition)
         iconKey = self._getIconKey(condition)
-        return formatters.packMissionIconCondition(title, progressType, description, iconKey, current=current, total=total, progressData=progressData, sortKey=self._getSortKey(condition), progressID=condition.progressID)
+        return formatters.packMissionIconCondition(title, progressType, description, iconKey, current=current, total=total, earned=earned, progressData=progressData, sortKey=self._getSortKey(condition), progressID=condition.progressID)
 
     def _cumulativeFormat(self, condition, event):
         result = []
         if not event.isGuiDisabled():
-            progress = condition.getProgressPerGroup()
             groupByKey = DEFAULT_GROUP_BY_KEY
             progressType = MISSIONS_ALIASES.CUMULATIVE
+            current = ZERO_COUNT
+            earned = ZERO_COUNT
+            total = condition.getTotalValue()
+            progress = condition.getProgressPerGroup(prevProgData=self.__eventsCache.questsProgress.getLastViewedProgress(event.getID()))
             if groupByKey in progress:
-                current, total, _, isGroupCompleted = progress[groupByKey]
+                current, total, earned, isGroupCompleted = progress[groupByKey]
                 if event.isCompleted() or isGroupCompleted:
                     current = total = condition.getTotalValue()
-            else:
-                current = ZERO_COUNT
-                total = condition.getTotalValue()
             title = self._getTitle(current, total)
-            result.append(self._packGui(title, condition, progressType, current, total))
+            result.append(self._packGui(title, condition, progressType, current, total, earned))
         return result
 
 

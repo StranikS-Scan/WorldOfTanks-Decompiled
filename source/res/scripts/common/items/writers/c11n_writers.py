@@ -1,12 +1,33 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/writers/c11n_writers.py
 import Math
+import math
 from items import _xml
 import os
 from realm_utils import ResMgr
 from soft_exception import SoftException
 import items.vehicles as iv
 from items.components.c11n_constants import SeasonType, DecalType
+
+def findOrCreate(section, subsectionName):
+    if not section.has_key(subsectionName):
+        return section.createSection(subsectionName)
+    else:
+        return section[subsectionName]
+
+
+def resizeSection(section, newSize, newName):
+    if len(section) == newSize:
+        return False
+    while len(section) > newSize:
+        lastSection = section.child(len(section) - 1)
+        section.deleteSection(lastSection)
+
+    while len(section) < newSize:
+        section.createSection(newName(len(section)))
+
+    return True
+
 
 def saveCustomizationItems(cache, folder):
     writeItemType(PaintXmlWriter(), cache.paints, folder, 'paint')
@@ -17,6 +38,7 @@ def saveCustomizationItems(cache, folder):
     writeItemType(StyleXmlWriter(), cache.styles, folder, 'style')
     writeItemType(PersonalNumberXmlWriter(), cache.personal_numbers, folder, 'personal_number')
     writeItemType(InsigniaXmlWriter(), cache.insignias, folder, 'insignia')
+    writeFontType(FontXmlWriter(), cache.fonts, folder, 'font')
 
 
 def writeItemType(writer, items, folder, itemName):
@@ -34,6 +56,43 @@ def writeItemType(writer, items, folder, itemName):
         if gsection is None or isection is None:
             SoftException("Can't open section {}".format(ref))
         changed = writer.write(item, gsection, isection)
+        if changed:
+            changedRefs.add(ref)
+
+    for ref, refsection in refsections.items():
+        if ref in changedRefs:
+            refsection.save()
+
+    return
+
+
+def writeFontType(writer, items, folder, itemName):
+    refsections = {}
+    isections = {}
+    changedRefs = set()
+
+    def parseRefSection(ref, isections, refsections):
+        if ref not in refsections:
+            section = ResMgr.openSection(ref)
+            if section is None:
+                _xml.raiseWrongXml(None, ref, "can't find datasection")
+            refsections[ref] = section
+            for name, isection in section.items():
+                if isection.has_key('id'):
+                    id = isection['id'].asInt
+                    isections[id] = isection
+
+        return
+
+    for id, item in items.items():
+        ref = item.editorData.reference
+        if ref is None:
+            SoftException('Item {} has no reference, data format has changed?'.format(itemName + str(id)))
+        parseRefSection(ref, isections, refsections)
+        isection = isections[id]
+        if isection is None:
+            SoftException("Can't open section {}".format(ref))
+        changed = writer.write(item, isection)
         if changed:
             changedRefs.add(ref)
 
@@ -76,6 +135,8 @@ class BaseCustomizationItemXmlWriter(object):
         changed |= rewriteInt(gsection, isection, 'maxNumber', item.maxNumber, 0)
         changed |= rewriteTags(gsection, isection, item.tags)
         changed |= rewriteString(gsection, isection, 'season', encodeEnum(SeasonType, item.season), 'UNDEFINED')
+        changed |= rewriteString(gsection, isection, 'userString', item.i18n.userKey)
+        changed |= rewriteString(gsection, isection, 'description', item.i18n.descriptionKey)
         return changed
 
 
@@ -85,6 +146,15 @@ class PaintXmlWriter(BaseCustomizationItemXmlWriter):
         changed = super(PaintXmlWriter, self).write(item, gsection, isection)
         changed |= rewriteFloat(gsection, isection, 'gloss', item.gloss, 0.0)
         changed |= rewriteFloat(gsection, isection, 'metallic', item.metallic, 0.0)
+        color = item.color
+        c_a, c_r, c_g, c_b = (0, 0, 0, 0)
+        if color > 0:
+            c_a = color >> 24 & 255
+            c_r = color >> 16 & 255
+            c_g = color >> 8 & 255
+            c_b = color & 255
+        color = Math.Vector4(c_b, c_g, c_r, c_a)
+        changed |= rewriteVector4(gsection, isection, 'color', color, 0.0)
         return changed
 
 
@@ -111,13 +181,49 @@ class CamouflageXmlWriter(BaseCustomizationItemXmlWriter):
         changed = super(CamouflageXmlWriter, self).write(item, gsection, isection)
         changed |= rewriteFloat(gsection, isection, 'invisibilityFactor', item.invisibilityFactor, 1.0)
         changed |= rewritePalettes(gsection, isection, item.palettes)
+        changed |= rewriteCamouflageRotation(gsection, isection, item)
+        changed |= rewriteCamouflageScales(gsection, isection, item)
+        changed |= rewriteCamouflageTiling(gsection, isection, item)
         return changed
+
+
+def rewriteEffects(item, gsection, isection):
+    changed = False
+    section = selectSection(gsection, isection, 'effects')
+    effectsSection = findOrCreate(section, 'effects')
+    changed |= resizeSection(effectsSection, 2, lambda id: 'effect')
+    index = 0
+
+    def writeEffectValue(effectSection, type, value):
+        result = _xml.rewriteString(effectSection, 'type', type)
+        result |= _xml.rewriteFloat(effectSection, 'value', value)
+        return result
+
+    while index < 2:
+        effectSection = effectsSection.child(index)
+        typeSection = findOrCreate(effectSection, 'type')
+        effectType = typeSection.asString
+        if effectType is None or effectType == '':
+            if index == 0:
+                effectType = 'paint_age'
+            if index == 1:
+                effectType = 'paint_fading'
+        effectValue = 0
+        if effectType == 'paint_age':
+            effectValue = item.strength
+        elif effectType == 'paint_fading':
+            effectValue = item.fading
+        changed |= writeEffectValue(effectSection, effectType, effectValue)
+        index += 1
+
+    return changed
 
 
 class ModificationXmlWriter(BaseCustomizationItemXmlWriter):
 
     def write(self, item, gsection, isection):
         changed = super(ModificationXmlWriter, self).write(item, gsection, isection)
+        changed |= rewriteEffects(item, gsection, isection)
         return changed
 
 
@@ -127,6 +233,7 @@ class StyleXmlWriter(BaseCustomizationItemXmlWriter):
         changed = super(StyleXmlWriter, self).write(item, gsection, isection)
         changed |= rewriteBool(gsection, isection, 'isRent', item.isRent, False)
         changed |= rewriteString(gsection, isection, 'modelsSet', item.modelsSet, '')
+        changed |= rewriteInt(gsection, isection, 'rentCount', item.rentCount, 0)
         return changed
 
 
@@ -149,7 +256,40 @@ class InsigniaXmlWriter(BaseCustomizationItemXmlWriter):
         return changed
 
 
-def writeSection(gsection, isection, subsectionName):
+def writeFintAlphabet(item):
+    xmlPath = item.editorData.alphabet
+    section = ResMgr.openSection(xmlPath)
+    if section is None:
+        return
+    else:
+        changed = False
+        if len(section.items()) != len(item.editorData.alphabetList):
+            changed |= resizeSection(section, len(item.editorData.alphabetList), lambda id: 'glyph')
+        itemIndex = 0
+        for name, isection in section.items():
+            glyphItem = item.editorData.alphabetList[itemIndex]
+            changed |= _xml.rewriteString(isection, 'name', glyphItem.name)
+            vBegin = Math.Vector2(glyphItem.position[0], glyphItem.position[1])
+            changed |= _xml.rewriteVector2(isection, 'begin', vBegin)
+            vEnd = Math.Vector2(glyphItem.position[2], glyphItem.position[3])
+            changed |= _xml.rewriteVector2(isection, 'end', vEnd)
+            itemIndex += 1
+
+        if changed:
+            section.save()
+        return
+
+
+class FontXmlWriter(object):
+
+    def write(self, item, isection):
+        changed = _xml.rewriteString(isection, 'texture', item.texture)
+        changed |= _xml.rewriteString(isection, 'alphabet', item.alphabet)
+        writeFintAlphabet(item)
+        return changed
+
+
+def selectSection(gsection, isection, subsectionName):
     if isection.has_key(subsectionName) or not gsection.has_key(subsectionName):
         return isection
     else:
@@ -157,23 +297,35 @@ def writeSection(gsection, isection, subsectionName):
 
 
 def rewriteInt(gsection, isection, subsectionName, value, defaultValue=None, createNew=True):
-    return _xml.rewriteInt(writeSection(gsection, isection, subsectionName), subsectionName, value, defaultValue, createNew)
+    return _xml.rewriteInt(selectSection(gsection, isection, subsectionName), subsectionName, value, defaultValue, createNew)
 
 
 def rewriteBool(gsection, isection, subsectionName, value, defaultValue=None, createNew=True):
-    return _xml.rewriteBool(writeSection(gsection, isection, subsectionName), subsectionName, value, defaultValue, createNew)
+    return _xml.rewriteBool(selectSection(gsection, isection, subsectionName), subsectionName, value, defaultValue, createNew)
 
 
 def rewriteString(gsection, isection, subsectionName, value, defaultValue=None, createNew=True):
-    return _xml.rewriteString(writeSection(gsection, isection, subsectionName), subsectionName, value, defaultValue, createNew)
+    return _xml.rewriteString(selectSection(gsection, isection, subsectionName), subsectionName, value, defaultValue, createNew)
 
 
 def rewriteFloat(gsection, isection, subsectionName, value, defaultValue=None, createNew=True):
-    return _xml.rewriteFloat(writeSection(gsection, isection, subsectionName), subsectionName, value, defaultValue, createNew)
+    return _xml.rewriteFloat(selectSection(gsection, isection, subsectionName), subsectionName, value, defaultValue, createNew)
+
+
+def rewriteVector2(gsection, isection, subsectionName, value, defaultValue=None, createNew=True):
+    return _xml.rewriteVector2(selectSection(gsection, isection, subsectionName), subsectionName, value, defaultValue, createNew)
+
+
+def rewriteVector3(gsection, isection, subsectionName, value, defaultValue=None, createNew=True):
+    return _xml.rewriteVector3(selectSection(gsection, isection, subsectionName), subsectionName, value, defaultValue, createNew)
+
+
+def rewriteVector4(gsection, isection, subsectionName, value, defaultValue=None, createNew=True):
+    return _xml.rewriteVector4(selectSection(gsection, isection, subsectionName), subsectionName, value, defaultValue, createNew)
 
 
 def rewriteTags(gsection, isection, tags):
-    section = writeSection(gsection, isection, 'tags')
+    section = selectSection(gsection, isection, 'tags')
     rewrite = len(tags) > 0
     if section.has_key('tags'):
         if not rewrite:
@@ -190,28 +342,9 @@ def rewriteTags(gsection, isection, tags):
 
 def rewritePalettes(gsection, isection, items):
     changed = False
-    section = writeSection(gsection, isection, 'palettes')
+    section = selectSection(gsection, isection, 'palettes')
     if not items or len(items) == 0:
         return section.deleteSection('palettes')
-
-    def findOrCreate(section, subsectionName):
-        if not section.has_key(subsectionName):
-            return section.createSection(subsectionName)
-        else:
-            return section[subsectionName]
-
-    def resizeSection(section, newSize, newName):
-        if len(section) == newSize:
-            return False
-        while len(section) > newSize:
-            lastSection = section.child(len(section) - 1)
-            section.deleteSection(lastSection)
-
-        while len(section) < newSize:
-            section.createSection(newName(len(section)))
-
-        return True
-
     palettesSection = findOrCreate(section, 'palettes')
     changed |= resizeSection(palettesSection, len(items), lambda id: 'palette')
     for index, palette in enumerate(items):
@@ -231,6 +364,55 @@ def rewritePalettes(gsection, isection, items):
              str(b),
              str(a)])
             changed |= _xml.rewriteString(paletteSection, sectName(i), colorStr)
+
+    return changed
+
+
+def rewriteCamouflageRotation(gsection, isection, camouflageItem):
+    changed = False
+    hullRotation = camouflageItem.rotation['hull']
+    gunRotation = camouflageItem.rotation['gun']
+    turretRotation = camouflageItem.rotation['turret']
+
+    def rewritePartRotation(section, partName, value):
+        return _xml.rewriteFloat(section, partName, value)
+
+    if hullRotation > 0 or gunRotation > 0 or turretRotation > 0:
+        section = selectSection(gsection, isection, 'rotation')
+        rotationSection = findOrCreate(section, 'rotation')
+        changed |= rewritePartRotation(rotationSection, 'HULL', hullRotation)
+        changed |= rewritePartRotation(rotationSection, 'TURRET', turretRotation)
+        changed |= rewritePartRotation(rotationSection, 'GUN', gunRotation)
+    return changed
+
+
+def rewriteCamouflageScales(gsection, isection, camouflageItem):
+    scalesResult = Math.Vector3(camouflageItem.scales[0], camouflageItem.scales[1], camouflageItem.scales[2])
+    return rewriteVector3(gsection, isection, 'scales', scalesResult)
+
+
+def correctTankNameByCurrentSectionName(section, tankName):
+    if section.has_key(tankName):
+        return tankName
+    index = tankName.find(':')
+    if index > 0:
+        tmpTankName = tankName[index + 1:len(tankName)]
+        if section.has_key(tmpTankName):
+            return tmpTankName
+    return tankName
+
+
+def rewriteCamouflageTiling(gsection, isection, camouflageItem):
+    changed = False
+    tilingSection = selectSection(gsection, isection, 'tiling')
+    tilingSection = findOrCreate(tilingSection, 'tiling')
+    for key, value in camouflageItem.tiling.items():
+        if value is None:
+            continue
+        tankName = camouflageItem.editorData.tilingName[key]
+        correctedTankName = correctTankNameByCurrentSectionName(tilingSection, tankName)
+        tilingRes = Math.Vector4(value[0], value[1], value[2], value[3])
+        changed |= _xml.rewriteVector4(tilingSection, correctedTankName, tilingRes)
 
     return changed
 

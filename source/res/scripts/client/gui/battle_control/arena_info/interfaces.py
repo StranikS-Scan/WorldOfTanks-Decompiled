@@ -110,7 +110,7 @@ class IArenaPeriodController(IArenaController):
     def getCtrlScope(self):
         return _SCOPE.PERIOD
 
-    def setPeriodInfo(self, period, endTime, length, additionalInfo, soundID):
+    def setPeriodInfo(self, period, endTime, length, additionalInfo):
         pass
 
     def invalidatePeriodInfo(self, period, endTime, length, additionalInfo):

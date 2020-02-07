@@ -16,7 +16,7 @@ from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.server_events import formatters, conditions, settings as quest_settings
-from gui.server_events.events_helpers import EventInfoModel, MISSIONS_STATES, QuestInfoModel, isLinkedSet
+from gui.server_events.events_helpers import EventInfoModel, MISSIONS_STATES, QuestInfoModel, isLinkedSet, isDailyQuest
 from gui.server_events.events_helpers import getLocalizedMissionNameForLinkedSetQuest, getLocalizedQuestNameForLinkedSetQuest, getLocalizedQuestDescForLinkedSetQuest
 from gui.server_events.personal_progress.formatters import PostBattleConditionsFormatter
 from gui.shared.formatters import text_styles, icons
@@ -67,11 +67,15 @@ class _EventInfo(EventInfoModel):
     def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData):
         index = 0
         progresses = []
+        isQuestDailyQuest = isDailyQuest(str(self.event.getID()))
         if not isProgressReset and not isCompleted:
             for cond in self.event.bonusCond.getConditions().items:
                 if isinstance(cond, conditions._Cumulativable):
                     for _, (curProg, totalProg, diff, _) in cond.getProgressPerGroup(pCur, pPrev).iteritems():
-                        label = cond.getUserString()
+                        if not isQuestDailyQuest:
+                            label = cond.getUserString()
+                        else:
+                            label = cond.getCustomDescription()
                         if not diff or not label:
                             continue
                         index += 1

@@ -16,7 +16,7 @@ from ClientUnitMgr import ClientUnitMgr, ClientUnitBrowser
 from ContactInfo import ContactInfo
 from OfflineMapCreator import g_offlineMapCreator
 from PlayerEvents import g_playerEvents as events
-from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings, client_anonymizer, client_bob
+from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings, client_anonymizer
 from account_helpers import ClientInvitations, vehicle_rotation
 from account_helpers import ClientRanked, ClientBadges
 from account_helpers import client_epic_meta_game, tokens
@@ -151,7 +151,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.festivities = g_accountRepository.festivities
         self.sessionStats = g_accountRepository.sessionStats
         self.anonymizer = g_accountRepository.anonymizer
-        self.bob = g_accountRepository.bob
+        self.dailyQuests = g_accountRepository.dailyQuests
         self.customFilesCache = g_accountRepository.customFilesCache
         self.syncData.setAccount(self)
         self.inventory.setAccount(self)
@@ -173,7 +173,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.blueprints.setAccount(self)
         self.sessionStats.setAccount(self)
         self.anonymizer.setAccount(self)
-        self.bob.setAccount(self)
         g_accountRepository.commandProxy.setGateway(self.__doCmd)
         self.isLongDisconnectedFromCenter = False
         self.prebattle = None
@@ -194,7 +193,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInSandboxQueue = False
         self.isInRankedQueue = False
         self.isInEpicQueue = False
-        self.isInBobQueue = False
         self.__onCmdResponse = {}
         self.__onStreamComplete = {}
         self.__objectsSelectionEnabled = True
@@ -227,7 +225,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.festivities.onAccountBecomePlayer()
         self.sessionStats.onAccountBecomePlayer()
         self.anonymizer.onAccountBecomePlayer()
-        self.bob.onAccountBecomePlayer()
         chatManager.switchPlayerProxy(self)
         events.onAccountBecomePlayer()
         BigWorld.target.source = BigWorld.MouseTargetingMatrix()
@@ -262,7 +259,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.festivities.onAccountBecomeNonPlayer()
         self.sessionStats.onAccountBecomeNonPlayer()
         self.anonymizer.onAccountBecomeNonPlayer()
-        self.bob.onAccountBecomeNonPlayer()
         self.__cancelCommands()
         self.syncData.setAccount(None)
         self.inventory.setAccount(None)
@@ -283,7 +279,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.blueprints.setAccount(None)
         self.sessionStats.setAccount(None)
         self.anonymizer.setAccount(None)
-        self.bob.setAccount(None)
         g_accountRepository.commandProxy.setGateway(None)
         self.unitMgr.clear()
         self.unitBrowser.clear()
@@ -376,9 +371,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.EPIC:
             self.isInEpicQueue = True
             events.onEnqueuedEpic()
-        elif queueType == QUEUE_TYPE.BOB:
-            self.isInBobQueue = True
-            events.onEnqueuedBob()
 
     def onEnqueueFailure(self, queueType, errorCode, errorStr):
         LOG_DEBUG('onEnqueueFailure', queueType, errorCode, errorStr)
@@ -398,8 +390,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             events.onEnqueuedRankedFailure(errorCode, errorStr)
         elif queueType == QUEUE_TYPE.EPIC:
             events.onEnqueuedEpicFailure(errorCode, errorStr)
-        elif queueType == QUEUE_TYPE.BOB:
-            events.onEnqueuedBobFailure(errorCode, errorStr)
 
     def onDequeued(self, queueType):
         LOG_DEBUG('onDequeued', queueType)
@@ -427,9 +417,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.EPIC:
             self.isInEpicQueue = False
             events.onDequeuedEpic()
-        elif queueType == QUEUE_TYPE.BOB:
-            self.isInBobQueue = False
-            events.onDequeuedBob()
 
     def onTutorialEnqueued(self, number, queueLen, avgWaitingTime):
         LOG_DEBUG('onTutorialEnqueued', number, queueLen, avgWaitingTime)
@@ -484,9 +471,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.EPIC:
             self.isInEpicQueue = False
             events.onKickedFromEpicQueue()
-        elif queueType == QUEUE_TYPE.BOB:
-            self.isInBobQueue = False
-            events.onKickedFromBobQueue()
 
     def onArenaCreated(self):
         LOG_DEBUG('onArenaCreated')
@@ -505,7 +489,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInRankedQueue = False
         self.isInBootcampQueue = False
         self.isInEpicQueue = False
-        self.isInBobQueue = False
         events.isPlayerEntityChanging = False
         events.onPlayerEntityChangeCanceled()
         events.onArenaJoinFailure(errorCode, errorStr)
@@ -824,14 +807,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def dequeueEpic(self):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_EPIC, 0, 0, 0)
-
-    def enqueueBob(self, vehInvID):
-        if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_BOB, vehInvID, 0, 0)
-
-    def dequeueBob(self):
-        if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_BOB, 0, 0, 0)
 
     def forceEpicDevStart(self):
         if not events.isPlayerEntityChanging:
@@ -1158,7 +1133,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.festivities.synchronize(isFullSync, diff)
             self.sessionStats.synchronize(isFullSync, diff)
             self.anonymizer.synchronize(isFullSync, diff)
-            self.bob.synchronize(isFullSync, diff)
             self.__synchronizeServerSettings(diff)
             self.__synchronizeDisabledPersonalMissions(diff)
             self.__synchronizeEventNotifications(diff)
@@ -1167,6 +1141,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.__synchronizeCacheDict(self.clanMembers, diff.get('cache', None), 'clanMembers', 'replace', events.onClanMembersListChanged)
             self.__synchronizeCacheDict(self.eventsData, diff, 'eventsData', 'replace', events.onEventsDataChanged)
             self.__synchronizeCacheDict(self.personalMissionsLock, diff.get('cache', None), 'potapovQuestIDs', 'replace', events.onPMLocksChanged)
+            self.__synchronizeCacheDict(self.dailyQuests, diff, 'dailyQuests', 'replace', events.onDailyQuestsInfoChange)
             self.__synchronizeCacheSimpleValue('globalRating', diff.get('account', None), 'globalRating', events.onAccountGlobalRatingChanged)
             events.onClientUpdated(diff, not triggerEvents)
             if triggerEvents and not isFullSync:
@@ -1394,7 +1369,7 @@ class _AccountRepository(object):
         self.festivities = FestivityManager(self.syncData, self.commandProxy)
         self.sessionStats = SessionStatistics(self.syncData)
         self.anonymizer = client_anonymizer.ClientAnonymizer(self.syncData)
-        self.bob = client_bob.ClientBob(self.syncData)
+        self.dailyQuests = {}
         self.gMap = ClientGlobalMap()
         self.onTokenReceived = Event.Event()
         self.requestID = AccountCommands.REQUEST_ID_UNRESERVED_MIN

@@ -45,6 +45,7 @@ FORT_MAPPING = {'wwfort': AMBIENT_EVENT_LOBBY_FORT,
 _ARENA_EVENTS = (MUSIC_EVENT_COMBAT, AMBIENT_EVENT_COMBAT, MUSIC_EVENT_COMBAT_LOADING)
 _CMD_SERVER_CHANGE_HANGAR_AMBIENT = 'cmd_change_hangar_ambient'
 _CMD_SERVER_CHANGE_HANGAR_MUSIC = 'cmd_change_hangar_music'
+_ON_VEHICLE_KILLED_EVENT = 'music_stinger'
 _SERVER_OVERRIDDEN = 0
 _CLIENT_OVERRIDDEN = 1
 g_musicController = None
@@ -163,6 +164,7 @@ class MusicController(object):
         self.__soundEvents = {MUSIC_EVENT_NONE: None,
          AMBIENT_EVENT_NONE: None}
         self._skipArenaChanges = False
+        self.__vehicleKilled = False
         self.init()
         return
 
@@ -229,11 +231,14 @@ class MusicController(object):
 
     def onEnterArena(self):
         BigWorld.player().arena.onPeriodChange += self.__onArenaStateChanged
+        BigWorld.player().arena.onVehicleKilled += self.__onArenaVehicleKilled
         self.__isOnArena = True
+        self.__vehicleKilled = False
         self.__onArenaStateChanged()
 
     def onLeaveArena(self):
         self.__isOnArena = False
+        BigWorld.player().arena.onVehicleKilled -= self.__onArenaVehicleKilled
         BigWorld.player().arena.onPeriodChange -= self.__onArenaStateChanged
 
     def setAccountPremiumState(self, isPremium, restart=False):
@@ -289,6 +294,11 @@ class MusicController(object):
                 else:
                     MusicController.__lastBattleResultEventName = arena.arenaType.battleLoseMusic if hasattr(arena.arenaType, 'battleLoseMusic') else ''
             return
+
+    def __onArenaVehicleKilled(self, *args):
+        if not self.__vehicleKilled:
+            WWISE.WW_eventGlobal(_ON_VEHICLE_KILLED_EVENT)
+            self.__vehicleKilled = True
 
     def __getArenaSoundEvent(self, eventId):
         soundEventName = None

@@ -15,7 +15,7 @@ from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, Camer
 from AvatarInputHandler.cameras import ICamera, getWorldRayAndPoint, readFloat, readVec2, ImpulseReason, FovExtended
 from ClientArena import Plane
 from Math import Vector2, Vector3
-from debug_utils import LOG_WARNING, LOG_ERROR
+from debug_utils import LOG_WARNING
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -129,9 +129,6 @@ class StrategicCamera(ICamera, CallbackDelayer):
         distRange = self.__getDistRange()
         if len(distRange) > 1:
             self.__camDist = distRange[1]
-
-    def restoreDefaultsState(self):
-        LOG_ERROR('StrategiCamera::restoreDefaultState is obsolete!')
 
     def getConfigValue(self, name):
         return self.__cfg.get(name)

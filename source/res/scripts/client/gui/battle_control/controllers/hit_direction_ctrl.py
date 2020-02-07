@@ -11,21 +11,19 @@ from gui.shared.events import GameEvent
 from gui.battle_control.battle_constants import HIT_FLAGS
 from gui.battle_control import avatar_getter
 from helpers import dependency
-from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.lobby_context import ILobbyContext
+from gui.battle_control.hit_data import HitData
 _AGGREGATED_HIT_BITS = HIT_FLAGS.IS_BLOCKED | HIT_FLAGS.HP_DAMAGE | HIT_FLAGS.IS_CRITICAL
 _VISUAL_DAMAGE_INDICATOR_SETTINGS = (DAMAGE_INDICATOR.TYPE,
  DAMAGE_INDICATOR.VEHICLE_INFO,
  DAMAGE_INDICATOR.DAMAGE_VALUE,
  DAMAGE_INDICATOR.ANIMATION,
  GRAPHICS.COLOR_BLIND,
- DAMAGE_INDICATOR.DYNAMIC_INDICATOR)
-
-class DAMAGE_INDICATOR_PRESETS(CONST_CONTAINER):
-    ALL = (0,)
-    WITHOUT_CRITS = 1
-
+ DAMAGE_INDICATOR.DYNAMIC_INDICATOR,
+ DAMAGE_INDICATOR.PRESET_CRITS,
+ DAMAGE_INDICATOR.PRESET_ALLIES)
 
 class IHitIndicator(object):
 
@@ -132,9 +130,10 @@ class _HitDirection(object):
 
 
 class HitDirectionController(IViewComponentsController):
-    __slots__ = ('__pull', '__ui', '__isVisible', '__callbackIDs', '__damageIndicatorPreset', '__arenaDP', '__weakref__')
+    __slots__ = ('__pull', '__ui', '__isVisible', '__callbackIDs', '__damageIndicatorCrits', '__damageIndicatorAllies', '__damageIndicatorExtType', '__arenaDP', '__weakref__')
     settingsCore = dependency.descriptor(ISettingsCore)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, setup):
         super(HitDirectionController, self).__init__()
@@ -142,7 +141,9 @@ class HitDirectionController(IViewComponentsController):
         self.__ui = None
         self.__isVisible = False
         self.__callbackIDs = {}
-        self.__damageIndicatorPreset = DAMAGE_INDICATOR_PRESETS.ALL
+        self.__damageIndicatorExtType = False
+        self.__damageIndicatorCrits = False
+        self.__damageIndicatorAllies = False
         self.__arenaDP = weakref.proxy(setup.arenaDP)
         return
 
@@ -151,7 +152,9 @@ class HitDirectionController(IViewComponentsController):
 
     def startControl(self):
         g_eventBus.addListener(GameEvent.GUI_VISIBILITY, self.__handleGUIVisibility, scope=EVENT_BUS_SCOPE.BATTLE)
-        self.__damageIndicatorPreset = self.settingsCore.getSetting(DAMAGE_INDICATOR.PRESETS)
+        self.__damageIndicatorExtType = bool(self.settingsCore.getSetting(DAMAGE_INDICATOR.TYPE))
+        self.__damageIndicatorCrits = bool(self.settingsCore.getSetting(DAMAGE_INDICATOR.PRESET_CRITS))
+        self.__damageIndicatorAllies = bool(self.settingsCore.getSetting(DAMAGE_INDICATOR.PRESET_ALLIES))
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
 
     def stopControl(self):
@@ -217,7 +220,12 @@ class HitDirectionController(IViewComponentsController):
         self.__ui = None
         return
 
-    def addHit(self, hitData):
+    def addHit(self, hitDirYaw, attackerID, damage, isBlocked, critFlags, isHighExplosive, damagedID, attackReasonID):
+        atackerVehInfo = self.__arenaDP.getVehicleInfo(attackerID)
+        atackerVehType = atackerVehInfo.vehicleType
+        isAlly = self.__arenaDP.isAllyTeam(atackerVehInfo.team)
+        playerVehType = self.__arenaDP.getVehicleInfo(damagedID).vehicleType
+        hitData = HitData(yaw=hitDirYaw, attackerID=attackerID, isAlly=isAlly, damage=damage, attackerVehName=atackerVehType.shortNameWithPrefix, isBlocked=isBlocked, attackerVehClassTag=atackerVehType.classTag, critFlags=critFlags, playerVehMaxHP=playerVehType.maxHealth, isHighExplosive=isHighExplosive, attackReasonID=attackReasonID, friendlyFireMode=self.__isFriendlyFireMode())
         if not self._isValidHit(hitData):
             return
         else:
@@ -235,11 +243,12 @@ class HitDirectionController(IViewComponentsController):
             return hit
 
     def _isValidHit(self, hitData):
-        if hitData.isNonPlayerAttackReason():
-            return True
-        if hitData.isBattleConsumables():
+        if hitData.isNonPlayerAttackReason() or hitData.isBattleAbilityConsumable() or hitData.isBattleConsumables():
             return False
-        return False if self.__damageIndicatorPreset == DAMAGE_INDICATOR_PRESETS.WITHOUT_CRITS and hitData.isCritical() and hitData.getDamage() == 0 else True
+        isCriticalNoDamage = hitData.isCritical() and hitData.getDamage() == 0
+        if self.__damageIndicatorExtType and not self.__damageIndicatorCrits and isCriticalNoDamage:
+            return False
+        return False if self.__damageIndicatorExtType and not self.__damageIndicatorAllies and hitData.isFriendlyFire() else True
 
     def _hideAllHits(self):
         for hit in self.__pull:
@@ -254,6 +263,12 @@ class HitDirectionController(IViewComponentsController):
                 find = hit
 
         return find
+
+    def __isFriendlyFireMode(self):
+        friendlyFireBonusTypes = self.lobbyContext.getServerSettings().getFriendlyFireBonusTypes()
+        isFriendlyFireMode = self.sessionProvider.arenaVisitor.bonus.isFriendlyFireMode(friendlyFireBonusTypes)
+        isCustomAllyDamageEffect = self.sessionProvider.arenaVisitor.bonus.hasCustomAllyDamageEffect()
+        return isFriendlyFireMode and isCustomAllyDamageEffect
 
     def __findHit(self, hitData):
         for hit in self.__pull:
@@ -295,8 +310,12 @@ class HitDirectionController(IViewComponentsController):
         self.setVisible(event.ctx['visible'])
 
     def __onSettingsChanged(self, diff):
-        if DAMAGE_INDICATOR.PRESETS in diff:
-            self.__damageIndicatorPreset = diff[DAMAGE_INDICATOR.PRESETS]
+        if DAMAGE_INDICATOR.TYPE in diff:
+            self.__damageIndicatorExtType = bool(diff[DAMAGE_INDICATOR.TYPE])
+        if DAMAGE_INDICATOR.PRESET_CRITS in diff:
+            self.__damageIndicatorCrits = bool(diff[DAMAGE_INDICATOR.PRESET_CRITS])
+        if DAMAGE_INDICATOR.PRESET_ALLIES in diff:
+            self.__damageIndicatorAllies = bool(diff[DAMAGE_INDICATOR.PRESET_ALLIES])
         if self.__ui is not None:
             for key in _VISUAL_DAMAGE_INDICATOR_SETTINGS:
                 if key in diff:

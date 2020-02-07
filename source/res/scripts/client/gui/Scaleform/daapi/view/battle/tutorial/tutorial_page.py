@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/tutorial/tutorial_page.py
+from gui.Scaleform.daapi.view.battle.classic.page import DynamicAliases
 from gui.Scaleform.daapi.view.battle.shared import SharedPage
 from gui.Scaleform.daapi.view.battle.shared.crosshair import CrosshairPanelContainer
 from gui.Scaleform.daapi.view.battle.shared.markers2d import MarkersManager, plugins
@@ -8,6 +9,7 @@ from gui.Scaleform.daapi.view.battle.shared.minimap import common
 from gui.Scaleform.daapi.view.battle.shared.minimap import component
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings as _minimap_settings
 from gui.Scaleform.daapi.view.battle.shared.page import ComponentsConfig
+from gui.Scaleform.daapi.view.battle.shared.start_countdown_sound_player import StartCountdownSoundPlayer
 from gui.Scaleform.daapi.view.meta.BattleTutorialMeta import BattleTutorialMeta
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
@@ -77,7 +79,7 @@ class TutorialMarkersManager(MarkersManager):
         return setup
 
 
-_TUTORIAL_COMPONENTS_CONFIG = ComponentsConfig(((BATTLE_CTRL_ID.ARENA_PERIOD, (BATTLE_VIEW_ALIASES.BATTLE_TIMER, BATTLE_VIEW_ALIASES.PREBATTLE_TIMER)), (BATTLE_CTRL_ID.GAME_MESSAGES_PANEL, (BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL,))))
+_TUTORIAL_COMPONENTS_CONFIG = ComponentsConfig(config=((BATTLE_CTRL_ID.ARENA_PERIOD, (BATTLE_VIEW_ALIASES.BATTLE_TIMER, BATTLE_VIEW_ALIASES.PREBATTLE_TIMER, DynamicAliases.PREBATTLE_TIMER_SOUND_PLAYER)), (BATTLE_CTRL_ID.GAME_MESSAGES_PANEL, (BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL,))), viewsConfig=((DynamicAliases.PREBATTLE_TIMER_SOUND_PLAYER, StartCountdownSoundPlayer),))
 _TUTORIAL_EXTERNAL_COMPONENTS = (CrosshairPanelContainer, TutorialMarkersManager)
 
 class TutorialPage(SharedPage):

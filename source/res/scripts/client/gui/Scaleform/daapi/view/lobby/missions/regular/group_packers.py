@@ -176,7 +176,7 @@ class VehicleGroupBuilder(_EventsBlockBuilder):
         g_currentVehicle.onChanged += self.__onVehicleChanged
 
     def clear(self):
-        super(VehicleGroupBuilder, self).init()
+        super(VehicleGroupBuilder, self).clear()
         g_currentVehicle.onChanged -= self.__onVehicleChanged
         self.__em.clear()
 
@@ -819,7 +819,7 @@ class _PremiumGroupedQuestsBlockInfo(_GroupedQuestsBlockInfo):
         return sorted(self._findEvents(srvEvents), cmp=premMissionsSortFunc, reverse=False)
 
     def getTitle(self):
-        title = backport.text(R.strings.quests.premiumQuest.header.title())
+        title = backport.text(R.strings.quests.premiumQuests.header.title())
         return '{}{}'.format(makeImageTag(backport.image(R.images.gui.maps.icons.premacc.icons.premium_40x40()), 40, 40, -12), title)
 
     def _getVO(self):
@@ -842,11 +842,11 @@ class _PremiumGroupedQuestsBlockInfo(_GroupedQuestsBlockInfo):
         isPremEnabled = self.__isPremiumEnabled()
         isAllCompleted = self._completedQuestsCount == self._totalQuestsCount
         timeStr = self.__getDailyResetStatus()
-        completeTitle = text_styles.missionStatusAvailable(backport.text(R.strings.quests.premiumQuest.body.complete(), time=timeStr) if isAllCompleted else '')
+        completeTitle = text_styles.missionStatusAvailable(backport.text(R.strings.quests.premiumQuests.body.complete(), time=timeStr) if isAllCompleted else '')
         return {'missions': cardsList,
-         'title': text_styles.promoTitle(QUESTS.PREMIUMQUEST_BODY_TITLE),
-         'description': text_styles.highlightText(QUESTS.PREMIUMQUEST_BODY_DESCRIPTION),
-         'buttonDetails': QUESTS.PREMIUMQUEST_BODY_BUTTONDETAILS,
+         'title': text_styles.promoTitle(QUESTS.PREMIUMQUESTS_BODY_TITLE),
+         'description': text_styles.highlightText(QUESTS.PREMIUMQUESTS_BODY_DESCRIPTION),
+         'buttonDetails': QUESTS.PREMIUMQUESTS_BODY_BUTTONDETAILS,
          'icon': backport.image(R.images.gui.maps.icons.premacc.icons.premium_256x242()),
          'hasPremium': isPremEnabled,
          'completeTitle': completeTitle,

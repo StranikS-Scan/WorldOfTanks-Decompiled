@@ -164,7 +164,7 @@ class ContinuousNumberingFinder(_SquadFinder):
 def createSquadFinder(arenaVisitor):
     teams = arenaVisitor.type.getTeamsOnArenaRange()
     guiVisitor = arenaVisitor.gui
-    if guiVisitor.isRandomBattle() or guiVisitor.isEventBattle() or guiVisitor.isEpicBattle() or guiVisitor.isBobBattle():
+    if guiVisitor.isRandomBattle() or guiVisitor.isEventBattle() or guiVisitor.isEpicBattle():
         finder = TeamScopeNumberingFinder(teams)
     elif guiVisitor.isMultiTeam():
         finder = ContinuousNumberingFinder(teams)

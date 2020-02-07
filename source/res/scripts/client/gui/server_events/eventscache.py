@@ -5,6 +5,7 @@ import math
 import sys
 import zlib
 from collections import defaultdict, namedtuple
+from typing import Union, Any, Callable
 import BigWorld
 import motivation_quests
 import nations
@@ -15,16 +16,16 @@ from constants import EVENT_TYPE, EVENT_CLIENT_DATA, LOOTBOX_TOKEN_PREFIX, TWITC
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.server_events import caches as quests_caches
-from gui.server_events.event_items import EventBattles, createQuest, createAction, MotiveQuest
-from gui.server_events.events_helpers import isMarathon, isLinkedSet, isPremium
+from gui.server_events.event_items import EventBattles, createQuest, createAction, MotiveQuest, ServerEventAbstract, Quest
+from gui.server_events.events_helpers import isMarathon, isLinkedSet, isPremium, isDailyQuest
+from gui.server_events.events_helpers import getRerollTimeout
 from gui.server_events.formatters import getLinkedActionID
 from gui.server_events.modifiers import ACTION_SECTION_TYPE, ACTION_MODIFIER_TYPE, clearModifiersCache
 from gui.server_events.personal_missions_cache import PersonalMissionsCache
 from gui.server_events.prefetcher import Prefetcher
 from gui.shared.gui_items import GUI_ITEM_TYPE, ACTION_ENTITY_ITEM as aei
 from gui.shared.utils.requesters.QuestsProgressRequester import QuestsProgressRequester
-from helpers import dependency
-from helpers import isPlayerAccount
+from helpers import dependency, time_utils, isPlayerAccount
 from items import getTypeOfCompactDescr
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from personal_missions import PERSONAL_MISSIONS_XML_PATH
@@ -37,8 +38,24 @@ from skeletons.gui.shared.utils import IRaresCache
 from skeletons.gui.linkedset import ILinkedSetController
 _ProgressiveReward = namedtuple('_ProgressiveReward', ('currentStep', 'probability', 'maxSteps'))
 
-def _defaultQuestMaker(qID, qData, progress):
-    return createQuest(qData.get('type', 0), qID, qData, progress.getQuestProgress(qID), progress.getTokenExpiryTime(qData.get('requiredToken')))
+class _DailyQuestsData(object):
+    __slots__ = ('_lastReroll',)
+
+    def __init__(self, last_reroll=sys.maxint, **kwargs):
+        self._lastReroll = last_reroll
+
+    def getLastRerollTimestamp(self):
+        return self._lastReroll
+
+    def getNextAvailableRerollTimestamp(self):
+        return self.getLastRerollTimestamp() + getRerollTimeout()
+
+    def isRerollInCooldown(self):
+        return self.getNextAvailableRerollTimestamp() > time_utils.getCurrentLocalServerTimestamp()
+
+
+def _defaultQuestMaker(qID, qData, progressRequester):
+    return createQuest(qData.get('type', 0), qID, qData, progressRequester.getQuestProgress(qID), progressRequester.getTokenExpiryTime(qData.get('requiredToken')))
 
 
 def _motiveQuestMaker(qID, qData, progress):
@@ -65,7 +82,7 @@ class EventsCache(IEventsCache):
         self.__questsDossierBonuses = defaultdict(set)
         self.__compensations = {}
         self.__personalMissions = PersonalMissionsCache()
-        self.__questsProgress = QuestsProgressRequester()
+        self.__questsProgressRequester = QuestsProgressRequester()
         self.__em = EventManager()
         self.__prefetcher = Prefetcher(self)
         self.onSyncStarted = Event(self.__em)
@@ -76,6 +93,7 @@ class EventsCache(IEventsCache):
         self.onProfileVisited = Event(self.__em)
         self.onPersonalQuestsVisited = Event(self.__em)
         self.__lockedQuestIds = {}
+        self.__dailyQuests = None
         return
 
     def init(self):
@@ -90,17 +108,24 @@ class EventsCache(IEventsCache):
         self.__clearInvalidateCallback()
 
     def start(self):
-        self.__lockedQuestIds = BigWorld.player().personalMissionsLock
+        self.__onLockedQuestsChanged()
+        self.__onDailyQuestsInfoChange()
         g_playerEvents.onPMLocksChanged += self.__onLockedQuestsChanged
+        g_playerEvents.onDailyQuestsInfoChange += self.__onDailyQuestsInfoChange
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
 
-    def stop(self):
+    def stop(self, isDisconnected=False):
+        if isDisconnected:
+            self.__questsProgressRequester.clear()
+        self.__dailyQuests = None
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
+        g_playerEvents.onDailyQuestsInfoChange -= self.__onDailyQuestsInfoChange
         g_playerEvents.onPMLocksChanged -= self.__onLockedQuestsChanged
         self.__clearCache()
+        return
 
     def clear(self):
-        self.stop()
+        self.stop(isDisconnected=True)
         quests_caches.clearNavInfo()
 
     @property
@@ -109,7 +134,7 @@ class EventsCache(IEventsCache):
 
     @property
     def questsProgress(self):
-        return self.__questsProgress
+        return self.__questsProgressRequester
 
     def getPersonalMissions(self):
         return self.__personalMissions
@@ -117,6 +142,10 @@ class EventsCache(IEventsCache):
     @property
     def prefetcher(self):
         return self.__prefetcher
+
+    @property
+    def dailyQuests(self):
+        return self.__dailyQuests
 
     def getLockedQuestTypes(self, branch):
         questIDs = set()
@@ -141,8 +170,8 @@ class EventsCache(IEventsCache):
             callback(False)
             return
         else:
-            yield self.__questsProgress.request()
-            if not self.__questsProgress.isSynced():
+            yield self.__questsProgressRequester.request()
+            if not self.__questsProgressRequester.isSynced():
                 callback(False)
                 return
             isNeedToInvalidate = True
@@ -181,15 +210,15 @@ class EventsCache(IEventsCache):
                 callback(True)
             return
 
-    def getQuests(self, filterFunc=None, getAll=False):
+    def getQuests(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
 
         def userFilterFunc(q):
-            return (not q.isHidden() or getAll) and filterFunc(q)
+            return not q.isHidden() and filterFunc(q)
 
         return self._getQuests(userFilterFunc)
 
-    def getActiveQuests(self, filterFunc=None, getAll=False):
+    def getActiveQuests(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
         isPremiumQuestsEnable = self.lobbyContext.getServerSettings().getPremQuestsConfig().get('enabled', False)
 
@@ -198,7 +227,7 @@ class EventsCache(IEventsCache):
                 return False
             return False if not isPremiumQuestsEnable and isPremium(q.getGroupID()) else q.getFinishTimeLeft() and filterFunc(q)
 
-        return self.getQuests(userFilterFunc, getAll)
+        return self.getQuests(userFilterFunc)
 
     def getAdvisableQuests(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
@@ -208,7 +237,9 @@ class EventsCache(IEventsCache):
                 return False
             if q.getType() == EVENT_TYPE.TOKEN_QUEST and isMarathon(q.getID()):
                 return False
-            return False if isLinkedSet(q.getGroupID()) and not q.isAvailable().isValid else filterFunc(q)
+            if isLinkedSet(q.getGroupID()) and not q.isAvailable().isValid:
+                return False
+            return False if isPremium(q.getGroupID()) and not q.isAvailable().isValid else filterFunc(q)
 
         return self.getActiveQuests(userFilterFunc)
 
@@ -235,6 +266,34 @@ class EventsCache(IEventsCache):
             return isPremium(q.getGroupID()) and filterFunc(q)
 
         return self.getQuests(userFilterFunc)
+
+    def getDailyQuests(self, filterFunc=None):
+        filterFunc = filterFunc or (lambda a: True)
+
+        def userFilterFunc(q):
+            return False if q.getType() == EVENT_TYPE.TOKEN_QUEST else isDailyQuest(q.getID()) and filterFunc(q)
+
+        return self.getQuests(userFilterFunc)
+
+    def getDailyEpicQuest(self, filterFunc=None):
+        filterFunc = filterFunc or (lambda a: True)
+
+        def userFilterFunc(q):
+            return isDailyQuest(q.getID()) and not q.isCompleted() and filterFunc(q) if q.getType() == EVENT_TYPE.TOKEN_QUEST else False
+
+        return self.getQuests(userFilterFunc)
+
+    def getAllDailyQuests(self):
+        result = self.getPremiumQuests().values()
+        result.extend(self.getDailyQuests().values())
+        result.extend(self.getDailyEpicQuest().values())
+        return result
+
+    def getAllAvailableDailyQuests(self):
+        result = self.getPremiumQuests(lambda q: q.isAvailable().isValid).values()
+        result.extend(self.getDailyQuests().values())
+        result.extend(self.getDailyEpicQuest().values())
+        return result
 
     def getBattleQuests(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
@@ -447,7 +506,7 @@ class EventsCache(IEventsCache):
         return self.__compensations.get(tokenID)
 
     def hasQuestDelayedRewards(self, questID):
-        return self.__questsProgress.hasQuestDelayedRewards(questID)
+        return self.__questsProgressRequester.hasQuestDelayedRewards(questID)
 
     def getProgressiveReward(self):
         progressiveConfig = self.lobbyContext.getServerSettings().getProgressiveRewardConfig()
@@ -458,19 +517,6 @@ class EventsCache(IEventsCache):
             currentStep = self.questsProgress.getTokenCount(progressiveConfig.levelTokenID)
             probability = self.questsProgress.getTokenCount(progressiveConfig.probabilityTokenID) / 100
             return _ProgressiveReward(currentStep, probability, maxSteps)
-
-    def getLobbyHeaderTabCounter(self):
-        counterValue = None
-        alias = None
-
-        def containsLobbyHeaderTabCounter(a):
-            return any((step.get('name') == 'LobbyHeaderTabCounterModification' for step in a.getData().get('steps', [])))
-
-        action = first(self.getActions(containsLobbyHeaderTabCounter).values())
-        if action is not None:
-            counterValue = first((m.getCounterValue() for m in action.getModifiers()))
-            alias = first((m.getAlias() for m in action.getModifiers()))
-        return (alias, counterValue)
 
     def _getQuests(self, filterFunc=None, includePersonalMissions=False):
         result = {}
@@ -565,7 +611,7 @@ class EventsCache(IEventsCache):
         storage = self.__cache['quests']
         if qID in storage:
             return storage[qID]
-        q = storage[qID] = maker(qID, qData, self.__questsProgress)
+        q = storage[qID] = maker(qID, qData, self.__questsProgressRequester)
         return q
 
     def _makeAction(self, aID, aData):
@@ -714,6 +760,9 @@ class EventsCache(IEventsCache):
     def __getPersonalQuestsData(self):
         return self.__getEventsData(EVENT_CLIENT_DATA.PERSONAL_QUEST)
 
+    def __getDailyQuestsData(self):
+        return self.__getEventsData(EVENT_CLIENT_DATA.DAILY_QUESTS)
+
     def __getActionsData(self):
         return self.__getEventsData(EVENT_CLIENT_DATA.ACTION)
 
@@ -742,6 +791,7 @@ class EventsCache(IEventsCache):
         questsData = self.__getQuestsData()
         questsData.update(self.__getPersonalQuestsData())
         questsData.update(self.__getPersonalMissionsHiddenQuests())
+        questsData.update(self.__getDailyQuestsData())
         for qID, qData in questsData.iteritems():
             yield (qID, self._makeQuest(qID, qData))
 
@@ -778,6 +828,9 @@ class EventsCache(IEventsCache):
 
     def __onLockedQuestsChanged(self):
         self.__lockedQuestIds = BigWorld.player().personalMissionsLock
+
+    def __onDailyQuestsInfoChange(self):
+        self.__dailyQuests = _DailyQuestsData(**BigWorld.player().dailyQuests)
 
     def __onServerSettingsChange(self, *args, **kwargs):
         self.__personalMissions.updateDisabledStateForQuests()

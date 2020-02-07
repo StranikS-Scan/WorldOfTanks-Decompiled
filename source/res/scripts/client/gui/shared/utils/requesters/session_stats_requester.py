@@ -5,6 +5,8 @@ import BigWorld
 from adisp import async
 from constants import ARENA_BONUS_TYPE
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared.utils.requesters import IRandomAccountStats, IRandomVehStats, ISessionStatsRequester
 ValueWithDelta = namedtuple('ValueWithDelta', ['value', 'delta'])
 RatioValue = namedtuple('RatioValue', ['ratio', 'dealt', 'received'])
@@ -83,15 +85,37 @@ class BaseStats(object):
         return ValueWithDelta(value=self.data.get('blocked_damage', {}).get('value', (None, None))[0], delta=self.data.get('blocked_damage', {}).get('diff', None))
 
     @property
-    def winRatio(self):
-        return ValueWithDelta(value=self.data.get('winner_ratio', {}).get('value', (None, None))[0], delta=None)
+    def winRate(self):
+        ratio, dealt, received = self.data.get('winner_ratio', {}).get('value', (None, None, None))
+        return ValueWithDelta(value=RatioValue(ratio, dealt, received), delta=self.data.get('winner_ratio', {}).get('diff', None))
 
+    @property
+    def wins(self):
+        return ValueWithDelta(value=self.data.get('winner_ratio', {}).get('value', (None, None, None))[1], delta=None)
 
-class BaseAccountStats(BaseStats):
+    @property
+    def averageFrags(self):
+        return self.data.get('average_frags', {}).get('value', (None, None))[0]
+
+    @property
+    def survivedRatio(self):
+        ratio, dealt, received = self.data.get('survived_rate', {}).get('value', (None, None, None))
+        return ValueWithDelta(value=RatioValue(ratio, dealt, received), delta=self.data.get('survived_rate', {}).get('diff', None))
+
+    @property
+    def spotted(self):
+        return ValueWithDelta(value=self.data.get('spotted', {}).get('value', (None, None))[0], delta=self.data.get('spotted', {}).get('diff', None))
 
     @property
     def netCredits(self):
         return self.data.get('net_credits', {}).get('value', None)
+
+    @property
+    def netCrystal(self):
+        return self.data.get('net_crystal', {}).get('value', None)
+
+
+class BaseAccountStats(BaseStats):
 
     @property
     def creditsDetails(self):
@@ -103,13 +127,13 @@ class BaseAccountStats(BaseStats):
         return CreditsDetails(base=replayCreditsData.get('originalCredits', 0) + self._sumRecords(replayCreditsData, 'appliedPremiumCreditsFactor') - creditsToDraw - achievementCredits, noPenalty=self.data.get('achievement_credits', {}).get('value', 0), boosters=replayCreditsData.get('boosterCredits', 0) + replayCreditsData.get('boosterCreditsFactor100', 0), event=self._sumRecords(replayCreditsData, 'eventCreditsList_', 'eventCreditsFactor100List_'), battlePayments=replayCreditsData.get('orderCreditsFactor100', 0), friendlyFirePenalty=replayCreditsData.get('originalCreditsPenalty', 0) + replayCreditsData.get('originalCreditsContributionOut', 0) + replayCreditsData.get('originalCreditsPenaltySquad', 0) + replayCreditsData.get('originalCreditsContributionOutSquad', 0), friendlyFireCompensation=replayCreditsData.get('originalCreditsContributionIn', 0) + replayCreditsData.get('originalCreditsContributionInSquad', 0), aogasFactor=replayCreditsData.get('aogasFactor10', 0), autoRepair=self.data.get('auto_repair_cost_credits', {}).get('value', 0), autoLoad=self.data.get('auto_load_cost_credits', {}).get('value', 0), autoEquip=self.data.get('auto_equip_cost_credits', {}).get('value', 0), squadBonus=replayCreditsData.get('originalPremSquadCredits', 0) + replayCreditsData.get('premSquadCreditsFactor100', 0) + replayCreditsData.get('originalCreditsToDrawSquad', 0))
 
     @property
-    def netCrystal(self):
-        return self.data.get('net_crystal', {}).get('value', None)
-
-    @property
     def crystalDetails(self):
         replayCrystalData = self.data.get('crystals_replay', {})
         return CrystalDetails(base=replayCrystalData.get('originalCrystal', 0), achievement=self._sumRecords(replayCrystalData, 'eventCrystalList_'), event=0, autoEquip=self.data.get('auto_equip_cost_crystal', {}).get('value', 0))
+
+    @property
+    def averageVehicleLevel(self):
+        return self.data.get('average_level', {}).get('value', (None, None))[0]
 
     @staticmethod
     def _sumRecords(data, *startWithStrings):
@@ -142,6 +166,7 @@ class RandomVehStats(BaseVehicleStats, IRandomVehStats):
 _ARENA_TYPE_TO_RETURN_CLASS_MAP = {ARENA_BONUS_TYPE.REGULAR: (RandomAccountStats, RandomVehStats)}
 
 class SessionStatsRequester(AbstractSyncDataRequester, ISessionStatsRequester):
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def getAccountStats(self, arenaType):
         return self.__getStats(arenaType, statsKind=_StatKind.DAY_STAT, isVehStats=False)
@@ -155,10 +180,6 @@ class SessionStatsRequester(AbstractSyncDataRequester, ISessionStatsRequester):
 
     def getAccountWtr(self):
         return self.getCacheValue('wtr', {}).get('wtr_general', None)
-
-    @staticmethod
-    def resetStats():
-        BigWorld.player().sessionStats.resetStats()
 
     @async
     def _requestCache(self, callback):

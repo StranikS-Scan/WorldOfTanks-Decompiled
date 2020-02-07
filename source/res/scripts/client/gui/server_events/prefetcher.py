@@ -6,14 +6,14 @@ import weakref
 import BigWorld
 import ResMgr
 from async import async, await, await_callback, AsyncScope, AsyncSemaphore
-from constants import EVENT_TYPE
+from constants import DailyQuestDecorationMap, EVENT_TYPE
 from debug_utils import LOG_WARNING
 from gui import GUI_SETTINGS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events.formatters import TOKEN_SIZES, DECORATION_SIZES
-from gui.server_events.events_helpers import isMarathon
+from gui.server_events.events_helpers import isMarathon, isDailyQuest, isPremium
 from gui.shared.utils import mapTextureToTheMemory, getImageSize
 from helpers import getClientLanguage, dependency
 from helpers.i18n import makeString as ms
@@ -160,6 +160,8 @@ class DecorationRequester(SubRequester):
                 return RES_ICONS.getQuestDecoration(decorationID)
             default = RES_ICONS.MAPS_ICONS_MISSIONS_DECORATIONS_UNDEFINED
         else:
+            if size == DECORATION_SIZES.DAILY:
+                return DailyQuestDecorationMap.get(decorationID, '')
             default = ''
         content = self._storage.get(ticket)
         return 'img://{}'.format(mapTextureToTheMemory(content)) if content else default
@@ -181,6 +183,8 @@ class DecorationRequester(SubRequester):
         for quest in self._eventsCache.getQuests().itervalues():
             decorationID = quest.getIconID()
             if not decorationID:
+                continue
+            if isDailyQuest(quest.getID()) or isPremium(quest.getID()):
                 continue
             if isMarathon(quest.getID()):
                 if str(decorationID) not in _DEFAULT_DECORATIONS:

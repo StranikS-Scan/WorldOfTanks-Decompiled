@@ -6,8 +6,11 @@
     <actions>	doOwnDamage blockAndTakeDamage	</actions>
   </firstLineSupport1>
   <firstLineSupport2>
-    <actions>	doOwnDamage blockDamage	</actions>
+    <actions>	doOwnDamage blockAndTakeDamage	</actions>
   </firstLineSupport2>
+  <firstLineSupport3>
+    <actions>	doOwnDamage blockDamage	</actions>
+  </firstLineSupport3>
   <fireSupport1>
     <actions>	doOwnDamage searchEnemy	</actions>
   </fireSupport1>

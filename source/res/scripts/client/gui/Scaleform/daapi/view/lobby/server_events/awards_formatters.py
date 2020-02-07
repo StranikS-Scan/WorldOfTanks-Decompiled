@@ -1,9 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/awards_formatters.py
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import NewStyleBonusComposer
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.impl.auxiliary.rewards_helper import NEW_STYLE_FORMATTED_BONUSES
 from gui.server_events import formatters
 from gui.server_events.awards_formatters import AWARDS_SIZES, AwardsPacker, QuestsBonusComposer, getPostBattleAwardsPacker
+from gui.server_events.bonuses import BlueprintsBonusSubtypes
 SIMPLE_BONUSES_MAX_ITEMS = 5
 _DISPLAYED_AWARDS_COUNT = 2
 _END_LINE_SEPARATOR = ','
@@ -70,6 +73,55 @@ class VehiclesFormatter(OldStyleBonusFormatter):
             self._result.append(formatters.packVehiclesBonusBlock(vehiclesLbl, self.__eventID))
 
 
+class CrewBookFormatter(OldStyleBonusFormatter):
+
+    @classmethod
+    def getOrder(cls):
+        pass
+
+    def accumulateBonuses(self, bonus):
+        result = []
+        for book, count in sorted(bonus.getItems()):
+            if book is None or not count:
+                continue
+            result.append(self._formatBook(book, count))
+
+        if result:
+            self._result.append(formatters.packSimpleBonusesBlock(result))
+        return
+
+    @classmethod
+    def _formatBook(cls, book, count):
+        return backport.text(R.strings.quests.bonuses.items.name(), name=book.userName, count=count)
+
+
+class BlueprintsFormatter(OldStyleBonusFormatter):
+
+    @classmethod
+    def getOrder(cls):
+        pass
+
+    def accumulateBonuses(self, bonus):
+        result = [self._formatBlueprint(bonus, bonus.getCount())]
+        if result:
+            self._result.append(formatters.packSimpleBonusesBlock(result))
+
+    @classmethod
+    def _formatBlueprint(cls, bonus, count):
+        blueprintType = bonus.getBlueprintName()
+        if blueprintType == BlueprintsBonusSubtypes.FINAL_FRAGMENT:
+            blueprintString = backport.text(R.strings.quests.bonusName.blueprints.any())
+        elif blueprintType == BlueprintsBonusSubtypes.UNIVERSAL_FRAGMENT:
+            blueprintString = backport.text(R.strings.quests.bonusName.blueprints.universal())
+        elif blueprintType == BlueprintsBonusSubtypes.NATION_FRAGMENT:
+            blueprintString = backport.text(R.strings.quests.bonusName.blueprints.nation.any())
+        elif blueprintType == BlueprintsBonusSubtypes.VEHICLE_FRAGMENT:
+            blueprintString = backport.text(R.strings.quests.bonusName.blueprints.vehicle.any())
+        elif blueprintType == BlueprintsBonusSubtypes.RANDOM_FRAGMENT:
+            blueprintString = backport.text(R.strings.quests.bonusName.blueprints.any())
+        return ' '.join([blueprintString, str(count)])
+
+
 class SimpleBonusFormatter(OldStyleBonusFormatter):
 
     def accumulateBonuses(self, bonus, event=None):
@@ -107,7 +159,9 @@ class NewStyleBonusFormatter(OldStyleBonusFormatter):
 def getFormattersMap(event):
     return {'dossier': DossierFormatter(),
      'customizations': CustomizationsFormatter(),
-     'vehicles': VehiclesFormatter(event)}
+     'vehicles': VehiclesFormatter(event),
+     'crewBooks': CrewBookFormatter(),
+     'blueprints': BlueprintsFormatter()}
 
 
 class OldStyleAwardsPacker(AwardsPacker):

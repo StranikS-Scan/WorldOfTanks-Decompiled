@@ -43,9 +43,6 @@ RANKED_CAROUSEL_FILTER_CLIENT_1 = 'RANKED_CAROUSEL_FILTER_CLIENT_1'
 EPICBATTLE_CAROUSEL_FILTER_1 = 'EPICBATTLE_CAROUSEL_FILTER_1'
 EPICBATTLE_CAROUSEL_FILTER_2 = 'EPICBATTLE_CAROUSEL_FILTER_2'
 EPICBATTLE_CAROUSEL_FILTER_CLIENT_1 = 'EPICBATTLE_CAROUSEL_FILTER_CLIENT_1'
-BOB_CAROUSEL_FILTER_1 = 'BOB_CAROUSEL_FILTER_1'
-BOB_CAROUSEL_FILTER_2 = 'BOB_CAROUSEL_FILTER_2'
-BOB_CAROUSEL_FILTER_CLIENT_1 = 'BOB_CAROUSEL_FILTER_CLIENT_1'
 STORAGE_VEHICLES_CAROUSEL_FILTER_1 = 'STORAGE_CAROUSEL_FILTER_1'
 BARRACKS_FILTER = 'barracks_filter'
 ORDERS_FILTER = 'ORDERS_FILTER'
@@ -69,7 +66,6 @@ PREVIEW_INFO_PANEL_IDX = 'previewInfoPanelIdx'
 NEW_SETTINGS_COUNTER = 'newSettingsCounter'
 NEW_HOF_COUNTER = 'newHofCounter'
 NEW_LOBBY_TAB_COUNTER = 'newLobbyTabCounter'
-BOB_BANNER_COUNTER = 'bobBannerCounter'
 REFERRAL_COUNTER = 'referralButtonCounter'
 PROGRESSIVE_REWARD_VISITED = 'progressiveRewardVisited'
 RANKED_AWARDS_COUNTER = 'rankedAwardsCounter'
@@ -84,7 +80,6 @@ ELEN_NOTIFICATIONS = 'elenNotifications'
 RECRUIT_NOTIFICATIONS = 'recruitNotifications'
 SPEAKERS_DEVICE = 'speakersDevice'
 SESSION_STATS_PREV_BATTLE_COUNT = 'sessionStatsPrevBattleCnt'
-IS_SHOP_VISITED = 'isShopVisited'
 DEFAULT_QUEUE = 'defaultQueue'
 STORE_TAB = 'store_tab'
 STATS_REGULAR_SORTING = 'statsSorting'
@@ -300,41 +295,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'favorite': False,
                                               'bonus': False},
                EPICBATTLE_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
-               BOB_CAROUSEL_FILTER_1: {'ussr': False,
-                                       'germany': False,
-                                       'usa': False,
-                                       'china': False,
-                                       'france': False,
-                                       'uk': False,
-                                       'japan': False,
-                                       'czech': False,
-                                       'sweden': False,
-                                       'poland': False,
-                                       'italy': False,
-                                       'lightTank': False,
-                                       'mediumTank': False,
-                                       'heavyTank': False,
-                                       'SPG': False,
-                                       'AT-SPG': False,
-                                       'level_1': False,
-                                       'level_2': False,
-                                       'level_3': False,
-                                       'level_4': False,
-                                       'level_5': False,
-                                       'level_6': False,
-                                       'level_7': False,
-                                       'level_8': False,
-                                       'level_9': False,
-                                       'level_10': True},
-               BOB_CAROUSEL_FILTER_2: {'premium': False,
-                                       'elite': False,
-                                       'igr': False,
-                                       'rented': True,
-                                       'event': True,
-                                       'gameMode': False,
-                                       'favorite': False,
-                                       'bonus': False},
-               BOB_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                MISSION_SELECTOR_FILTER: {'inventory': False},
                PM_SELECTOR_FILTER: {'inventory': False},
                BLUEPRINTS_STORAGE_FILTER: {'unlock_available': False,
@@ -526,7 +486,11 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                            'naVisited': [],
                            'personalMissions': {'introShown': False,
                                                 'operationsVisited': set(),
-                                                'headerAlert': False}},
+                                                'headerAlert': False},
+                           'dailyQuests': {'lastVisitedDQTabIdx': None,
+                                           'seenCompleted': False,
+                                           'visitedBonus': False,
+                                           'premMissionsTabDiscovered': False}},
                 'checkBoxConfirmator': {'questsConfirmDialogShow': True,
                                         'questsConfirmDialogShowPM2': True},
                 CUSTOMIZATION_SECTION: {},
@@ -574,7 +538,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                        'FeedbackSettings': {'feedbackBattleBorderMap': {'battleBorderMapType': True,
                                                                                         'battleBorderMapMode': True},
                                                             'feedbackQuestsProgress': {'progressViewType': True,
-                                                                                       'progressViewConditions': True}},
+                                                                                       'progressViewConditions': True},
+                                                            'feedbackDamageIndicator': {'damageIndicatorAllies': True}},
                                        'ControlsSettings': {'showQuestProgress': True,
                                                             'chargeFire': True}},
                 SHOW_OPT_DEVICE_HINT: True,
@@ -619,7 +584,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
                 NEW_LOBBY_TAB_COUNTER: {},
-                BOB_BANNER_COUNTER: {},
                 REFERRAL_COUNTER: 1,
                 RANKED_AWARDS_COUNTER: 1,
                 RANKED_INFO_COUNTER: 1,
@@ -675,8 +639,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                             'vehicleCD': None},
                         'storage_reserves': {'filterMask': 0},
                         LAST_STORAGE_VISITED_TIMESTAMP: -1,
-                        SESSION_STATS_PREV_BATTLE_COUNT: 0,
-                        IS_SHOP_VISITED: False},
+                        SESSION_STATS_PREV_BATTLE_COUNT: 0},
  KEY_UI_FLAGS: {}}
 
 def _filterAccountSection(dataSec):

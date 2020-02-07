@@ -4,6 +4,7 @@ import operator
 import time
 from abc import ABCMeta
 from collections import namedtuple
+from typing import Union
 import constants
 import nations
 from debug_utils import LOG_ERROR
@@ -16,7 +17,7 @@ from gui.impl.gen import R
 from gui.server_events import finders
 from gui.server_events.bonuses import getBonuses, compareBonuses
 from gui.server_events import events_helpers
-from gui.server_events.events_helpers import isPremium
+from gui.server_events.events_helpers import isPremium, isDailyQuest
 from gui.server_events.formatters import getLinkedActionID
 from gui.server_events.modifiers import getModifierObj, compareModifiers
 from gui.server_events.parsers import AccountRequirements, VehicleRequirements, TokenQuestAccountRequirements, PreBattleConditions, PostBattleConditions, BonusConditions
@@ -285,12 +286,14 @@ class Group(ServerEventAbstract):
 
 class Quest(ServerEventAbstract):
     itemsCache = dependency.descriptor(IItemsCache)
-    __slots__ = ServerEventAbstract.__slots__ + ('_progress', '_children', '_parents', '_parentsName', 'accountReqs', 'vehicleReqs', 'preBattleCond', 'bonusCond', 'postBattleCond', '__linkedActions')
+    eventsCache = dependency.descriptor(IEventsCache)
+    __slots__ = ServerEventAbstract.__slots__ + ('_progress', '_children', '_parents', '_parentsName', 'accountReqs', 'vehicleReqs', 'preBattleCond', 'bonusCond', 'postBattleCond', '__linkedActions', '_meta')
 
     def __init__(self, qID, data, progress=None):
         super(Quest, self).__init__(qID, data)
         self._progress = progress
         self._children, self._parents, self._parentsName = {}, {}, {}
+        self._meta = data.get('meta', {})
         conds = dict(data['conditions'])
         preBattle = dict(conds['preBattle'])
         self.accountReqs = AccountRequirements(preBattle['account'])
@@ -490,7 +493,28 @@ class LinkedSetQuest(Quest):
 class PremiumQuest(Quest):
 
     def getUserName(self):
-        return backport.text(R.strings.quests.premiumQuest.quests.dyn(self.getID()).title())
+        return backport.text(R.strings.quests.premiumQuests.quests.dyn(self.getID()).title())
+
+
+class DailyQuest(Quest):
+
+    def getLevel(self):
+        return self._meta and self._meta.get('level')
+
+    def isBonus(self):
+        return self.getLevel() == constants.DailyQuestsLevels.BONUS
+
+    def getSortKey(self):
+        return constants.DailyQuestsLevels.DAILY.index(self.getLevel())
+
+    def getUserName(self):
+        return backport.text(R.strings.quests.dailyQuests.postBattle.dyn('genericTitle_%s' % self.getLevel())())
+
+
+class DailyEpicTokenQuest(TokenQuest):
+
+    def getUserName(self):
+        return backport.text(R.strings.quests.dailyQuests.postBattle.genericTitle_epic())
 
 
 class PersonalQuest(Quest):
@@ -1250,13 +1274,20 @@ def createQuest(questType, qID, data, progress=None, expiryTime=None):
     if questType == constants.EVENT_TYPE.RANKED_QUEST:
         return RankedQuest(qID, data, progress)
     if questType == constants.EVENT_TYPE.TOKEN_QUEST:
-        tokenClass = LinkedSetTokenQuest if qID.startswith('linkedset_') else TokenQuest
+        if qID.startswith('linkedset_'):
+            tokenClass = LinkedSetTokenQuest
+        elif isDailyQuest(qID):
+            tokenClass = DailyEpicTokenQuest
+        else:
+            tokenClass = TokenQuest
         return tokenClass(qID, data, progress)
     questClass = Quest
     if qID.startswith('linkedset_'):
         questClass = LinkedSetQuest
     elif isPremium(qID):
         questClass = PremiumQuest
+    elif isDailyQuest(qID):
+        questClass = DailyQuest
     return questClass(qID, data, progress)
 
 

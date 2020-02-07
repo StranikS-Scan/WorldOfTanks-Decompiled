@@ -15,7 +15,8 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.marathon.marathon_event_controller import DEFAULT_MARATHON_PREFIX
 from gui.server_events import finders
-from gui.server_events.events_dispatcher import showMissionsForCurrentVehicle, showPersonalMission, showMissionsElen, showMissionsMarathon, showPersonalMissionOperationsPage, showPersonalMissionsOperationsMap
+from gui.server_events.events_dispatcher import showPersonalMission, showMissionsElen, showMissionsMarathon, showPersonalMissionOperationsPage, showPersonalMissionsOperationsMap, showMissionsCategories
+from gui.server_events.events_helpers import isPremium, isDailyQuest
 from gui.shared.formatters import text_styles, icons
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -201,7 +202,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     def onQuestBtnClick(self, questType, questID):
         if questType == HANGAR_HEADER_QUESTS.QUEST_TYPE_COMMON:
             missions_page.setHideDoneFilter()
-            showMissionsForCurrentVehicle()
+            showMissionsCategories(missionID=questID)
         elif questType in QUEST_TYPE_BY_PM_BRANCH.itervalues():
             if questID:
                 showPersonalMission(missionID=int(questID))
@@ -376,6 +377,11 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
 
     def __getBattleQuestsVO(self, vehicle):
         quests = self._questController.getQuestForVehicle(vehicle)
+        if quests:
+            for quest in quests.copy():
+                if isDailyQuest(quest.getID()) or isPremium(quest.getID()):
+                    quests.remove(quest)
+
         totalCount = len(quests)
         completedQuests = len([ q for q in quests if q.isCompleted() ])
         festivityFlagData = self._festivityController.getHangarQuestsFlagData()

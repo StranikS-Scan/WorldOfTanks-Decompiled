@@ -15,6 +15,8 @@ class QUESTS_ALIASES(object):
     RENDERER_TYPE_QUEST = 2
     MISSIONS_MARATHON_VIEW_PY_ALIAS = 'MissionsMarathonView'
     MISSIONS_MARATHON_VIEW_LINKAGE = 'MissionsMarathonViewUI'
+    MISSIONS_PREMIUM_VIEW_PY_ALIAS = 'MissionsPremiumView'
+    MISSIONS_PREMIUM_VIEW_LINKAGE = 'MissionsPremiumViewUI'
     MISSIONS_GROUPED_VIEW_PY_ALIAS = 'MissionsGroupedView'
     MISSIONS_GROUPED_VIEW_LINKAGE = 'MissionsGroupedViewUI'
     MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS = 'MissionsEventBoardsView'

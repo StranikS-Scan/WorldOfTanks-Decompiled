@@ -154,8 +154,6 @@ class MENU(object):
     LOADING_BATTLETYPES_DESC_21 = '#menu:loading/battleTypes/desc/21'
     LOADING_BATTLETYPES_22 = '#menu:loading/battleTypes/22'
     LOADING_BATTLETYPES_DESC_22 = '#menu:loading/battleTypes/desc/22'
-    LOADING_BATTLETYPES_23 = '#menu:loading/battleTypes/23'
-    LOADING_BATTLETYPES_DESC_23 = '#menu:loading/battleTypes/desc/23'
     LOADING_TEAM1 = '#menu:loading/team1'
     LOADING_TEAM2 = '#menu:loading/team2'
     LOADING_TEAMS_ALLIES = '#menu:loading/teams/allies'
@@ -599,6 +597,7 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY_ENDED = '#menu:headerButtons/battle/types/ranked/availability/ended'
     HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY_UNTIL = '#menu:headerButtons/battle/types/ranked/availability/until'
     HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY_FROZEN = '#menu:headerButtons/battle/types/ranked/availability/frozen'
+    HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY_NOTSET = '#menu:headerButtons/battle/types/ranked/availability/notSet'
     HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY = '#menu:headerButtons/battle/types/ranked/availability'
     HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY_DAYS = '#menu:headerButtons/battle/types/ranked/availability/days'
     HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY_HOURS = '#menu:headerButtons/battle/types/ranked/availability/hours'
@@ -609,7 +608,6 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_SQUAD_RANDOMBATTLE = '#menu:headerButtons/battle/types/squad/randomBattle'
     HEADERBUTTONS_BATTLE_TYPES_SQUAD_EVENT = '#menu:headerButtons/battle/types/squad/event'
     HEADERBUTTONS_BATTLE_TYPES_SQUAD_EPIC = '#menu:headerButtons/battle/types/squad/epic'
-    HEADERBUTTONS_BATTLE_TYPES_SQUAD_BOB = '#menu:headerButtons/battle/types/squad/bob'
     HEADERBUTTONS_BATTLE_TYPES_SQUADLEAVEOWNER = '#menu:headerButtons/battle/types/squadLeaveOwner'
     HEADERBUTTONS_BATTLE_TYPES_SQUADLEAVE = '#menu:headerButtons/battle/types/squadLeave'
     HEADERBUTTONS_BATTLE_TYPES_SQUAD_DESCR = '#menu:headerButtons/battle/types/squad/descr'
@@ -623,7 +621,6 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_TRAININGLEAVEOWNER = '#menu:headerButtons/battle/types/trainingLeaveOwner'
     HEADERBUTTONS_BATTLE_TYPES_SIMPLESQUAD = '#menu:headerButtons/battle/types/simpleSquad'
     HEADERBUTTONS_BATTLE_TYPES_EVENTSQUAD = '#menu:headerButtons/battle/types/eventSquad'
-    HEADERBUTTONS_BATTLE_TYPES_BOBSQUAD = '#menu:headerButtons/battle/types/bobSquad'
     HEADERBUTTONS_BATTLE_TYPES_TRAININGLEAVE = '#menu:headerButtons/battle/types/trainingLeave'
     HEADERBUTTONS_BATTLE_TYPES_BATTLETEACHING = '#menu:headerButtons/battle/types/battleTeaching'
     HEADERBUTTONS_BATTLE_TYPES_SPEC = '#menu:headerButtons/battle/types/spec'
@@ -640,8 +637,6 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_HISTORICALBATTLESLEAVE = '#menu:headerButtons/battle/types/historicalBattlesLeave'
     HEADERBUTTONS_BATTLE_TYPES_BATTLETUTORIAL = '#menu:headerButtons/battle/types/battleTutorial'
     HEADERBUTTONS_BATTLE_TYPES_FALLOUT = '#menu:headerButtons/battle/types/fallout'
-    HEADERBUTTONS_BATTLE_TYPES_BOB = '#menu:headerButtons/battle/types/bob'
-    HEADERBUTTONS_BATTLE_TYPES_BOB_DESCR = '#menu:headerButtons/battle/types/bob/descr'
     HEADERBUTTONS_BATTLE_AVAILABLESINCE = '#menu:headerButtons/battle/availableSince'
     HEADERBUTTONS_BATTLE_AVAILABLESINCESOON = '#menu:headerButtons/battle/availableSinceSoon'
     HEADERBUTTONS_BATTLE_AVAILABLEUNTIL = '#menu:headerButtons/battle/availableUntil'
@@ -686,10 +681,10 @@ class MENU(object):
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICLEVELREQUIRED_BODYEND = '#menu:headerButtons/fightBtn/tooltip/epicLevelRequired/bodyEnd'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICBATTLEONLY_HEADER = '#menu:headerButtons/fightBtn/tooltip/epicBattleOnly/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICBATTLEONLY_BODY = '#menu:headerButtons/fightBtn/tooltip/epicBattleOnly/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_BOBONLY_HEADER = '#menu:headerButtons/fightBtn/tooltip/bobOnly/header'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_BOBONLY_BODY = '#menu:headerButtons/fightBtn/tooltip/bobOnly/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDDISABLED_HEADER = '#menu:headerButtons/fightBtn/tooltip/rankedDisabled/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDDISABLED_BODY = '#menu:headerButtons/fightBtn/tooltip/rankedDisabled/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDNOTSET_HEADER = '#menu:headerButtons/fightBtn/tooltip/rankedNotSet/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDNOTSET_BODY = '#menu:headerButtons/fightBtn/tooltip/rankedNotSet/body'
     HEADERBUTTONS_DEFAULTCOUNTER = '#menu:headerButtons/defaultCounter'
     PVESANDBOX_QUEUE_TITLE = '#menu:pveSandbox/queue/title'
     PVESANDBOX_QUEUE_UNITS = '#menu:pveSandbox/queue/units'
@@ -1549,7 +1544,6 @@ class MENU(object):
     BONUSTYPE_21 = '#menu:bonusType/21'
     BONUSTYPE_22 = '#menu:bonusType/22'
     BONUSTYPE_24 = '#menu:bonusType/24'
-    BONUSTYPE_32 = '#menu:bonusType/32'
     FORTIFICATIONCTX_ASSIGNEDPLAYERS = '#menu:fortificationCtx/assignedPlayers'
     FORTIFICATIONCTX_PREPAREORDER = '#menu:fortificationCtx/prepareOrder'
     FORTIFICATIONCTX_CLANDESCRIPTION_OPENCLANCARD = '#menu:fortificationCtx/clanDescription/openClanCard'
@@ -2417,8 +2411,7 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_19,
      LOADING_BATTLETYPES_DESC_20,
      LOADING_BATTLETYPES_DESC_21,
-     LOADING_BATTLETYPES_DESC_22,
-     LOADING_BATTLETYPES_DESC_23)
+     LOADING_BATTLETYPES_DESC_22)
     LOADING_BATTLETYPES_ENUM = (LOADING_BATTLETYPES_0,
      LOADING_BATTLETYPES_DESC_0,
      LOADING_BATTLETYPES_1,
@@ -2460,9 +2453,7 @@ class MENU(object):
      LOADING_BATTLETYPES_21,
      LOADING_BATTLETYPES_DESC_21,
      LOADING_BATTLETYPES_22,
-     LOADING_BATTLETYPES_DESC_22,
-     LOADING_BATTLETYPES_23,
-     LOADING_BATTLETYPES_DESC_23)
+     LOADING_BATTLETYPES_DESC_22)
     CST_ITEM_CTX_MENU_ENUM = (CST_ITEM_CTX_MENU_BUY,
      CST_ITEM_CTX_MENU_EXCHANGE,
      CST_ITEM_CTX_MENU_BUYMORE,

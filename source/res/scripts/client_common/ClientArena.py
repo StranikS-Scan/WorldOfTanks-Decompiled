@@ -294,8 +294,7 @@ class ClientArena(object):
          'outfitCD': info[18],
          'avatarSessionID': info[19],
          'wtr': int(info[20]),
-         'fakeName': info[21],
-         'bobInfo': info[22]}
+         'fakeName': info[21]}
         return (info[0], infoAsDict)
 
     def __getVehicleType(self, intCD):

@@ -39,8 +39,14 @@ class VehicleDescrCrew(object):
         self._factorsDirty = True
 
     def discardSkillBoostBy(self, equipment):
-        del self._boostedSkills[equipment.skillName]
-        self._factorsDirty = True
+        skill = self._boostedSkills.get(equipment.skillName)
+        if skill is None:
+            LOG_ERROR('Failed to discard skill (arenaUniqueID, vehicleID, skillName):', self.__getUniqueArenaID(), self.__getVehicleID(), equipment.skillName, stack=True)
+            return
+        else:
+            del self._boostedSkills[equipment.skillName]
+            self._factorsDirty = True
+            return
 
     def callSkillProcessor(self, skillName, *args):
         try:

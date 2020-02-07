@@ -1120,7 +1120,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-2.15	</textureScale>
+        <textureScale>	-2.0	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -1214,30 +1214,35 @@
           <name>	Track_VD_L0	</name>
           <forwardElastK>	0.6	</forwardElastK>
           <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.0560821	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
           <forwardElastK>	0.6	</forwardElastK>
           <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.0560821	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
           <forwardElastK>	1.5	</forwardElastK>
           <backwardElastK>	0.6	</backwardElastK>
+          <offset>	-0.127172	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
           <forwardElastK>	1.5	</forwardElastK>
           <backwardElastK>	0.6	</backwardElastK>
+          <offset>	-0.127172	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
           <forwardElastK>	0.85	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.0813586	</offset>
           <rightSibling>	Track_VT_L1	</rightSibling>
         </node>
         <node>
@@ -1245,6 +1250,7 @@
           <name>	Track_VT_L1	</name>
           <forwardElastK>	0.83	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.0323855	</offset>
           <leftSibling>	Track_VT_L0	</leftSibling>
           <rightSibling>	Track_VT_L2	</rightSibling>
         </node>
@@ -1253,6 +1259,7 @@
           <name>	Track_VT_L2	</name>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.0734597	</offset>
           <leftSibling>	Track_VT_L1	</leftSibling>
           <rightSibling>	Track_VT_L3	</rightSibling>
         </node>
@@ -1261,6 +1268,7 @@
           <name>	Track_VT_L3	</name>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	3	</backwardElastK>
+          <offset>	-0.0576619	</offset>
           <leftSibling>	Track_VT_L2	</leftSibling>
         </node>
         <node>
@@ -1268,6 +1276,7 @@
           <name>	Track_VT_R0	</name>
           <forwardElastK>	0.85	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.0813586	</offset>
           <rightSibling>	Track_VT_R1	</rightSibling>
         </node>
         <node>
@@ -1275,6 +1284,7 @@
           <name>	Track_VT_R1	</name>
           <forwardElastK>	0.83	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.0323855	</offset>
           <leftSibling>	Track_VT_R0	</leftSibling>
           <rightSibling>	Track_VT_R2	</rightSibling>
         </node>
@@ -1283,6 +1293,7 @@
           <name>	Track_VT_R2	</name>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.0734597	</offset>
           <leftSibling>	Track_VT_R1	</leftSibling>
           <rightSibling>	Track_VT_R3	</rightSibling>
         </node>
@@ -1291,6 +1302,7 @@
           <name>	Track_VT_R3	</name>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	3	</backwardElastK>
+          <offset>	-0.0576619	</offset>
           <leftSibling>	Track_VT_R2	</leftSibling>
         </node>
       </trackNodes>
@@ -2453,11 +2465,11 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	-0.000446592 0.0800498 2.26585	</rayStart>
-              <rayEnd>	0.00698083 0.088874 2.26585	</rayEnd>
-              <rayUp>	0.108 0.000000 0.000000	</rayUp>
+              <rayStart>	0.013 0.076 2.12105	</rayStart>
+              <rayEnd>	-0.0774068 0.0234324 2.12105	</rayEnd>
+              <rayUp>	0.117 0.000000 0.000000	</rayUp>
               <applyToFabric>	true	</applyToFabric>
-              <size>	0.356	</size>
+              <size>	0.67	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
             </slot>

@@ -265,7 +265,10 @@ class CamouflageXmlReader(BaseCustomizationItemXmlReader):
         if section.has_key('texture'):
             target.texture = section.readString('texture')
         if section.has_key('tiling'):
-            target.tiling = iv._readCamouflageTilings(xmlCtx, section, 'tiling', self.getDefaultNationId(target))
+            if IS_EDITOR:
+                target.tiling, target.editorData.tilingName = iv._readCamouflageTilings(xmlCtx, section, 'tiling', self.getDefaultNationId(target))
+            else:
+                target.tiling = iv._readCamouflageTilings(xmlCtx, section, 'tiling', self.getDefaultNationId(target))
         if section.has_key('tilingSettings'):
             target.tilingSettings = iv._readCamouflageTilingSettings(xmlCtx, section)
         if section.has_key('scales'):
@@ -475,6 +478,10 @@ def _readFonts(cache, xmlCtx, section, sectionName):
         font.alphabet = ix.readString(xmlCtx, iSection, 'alphabet')
         if iSection.has_key('mask'):
             font.mask = ix.readString(xmlCtx, iSection, 'mask')
+        if IS_EDITOR:
+            refs = iSection.references
+            if len(refs) == 1:
+                font.editorData.reference = refs[0]
         cache.fonts[font.id] = font
 
 

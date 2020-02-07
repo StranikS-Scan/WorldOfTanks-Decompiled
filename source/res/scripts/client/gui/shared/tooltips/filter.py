@@ -45,7 +45,7 @@ class VehicleFilterTooltip(BlocksTooltipData):
         if view.alias == VIEW_ALIAS.LOBBY_HANGAR:
             tankCarousel = view.getComponent(HANGAR_ALIASES.TANK_CAROUSEL)
         elif view.alias == VIEW_ALIAS.LOBBY_MISSIONS:
-            currentTab = view.getComponent(QUESTS_ALIASES.CURRENT_VEHICLE_MISSIONS_VIEW_PY_ALIAS)
+            currentTab = view.getComponent(QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS)
             tankCarousel = currentTab.getComponent(HANGAR_ALIASES.TANK_CAROUSEL)
         else:
             tankCarousel = None

@@ -61,6 +61,7 @@ class MessageTemplates(templates.XMLCollection):
          'timestamp': -1,
          'savedData': None,
          'bgIcon': self._makeBgIconsData(source['bgIcon']),
+         'bgIconSizeAuto': source.readBool('bgIconSizeAuto'),
          'icon': source.readString('icon'),
          'defaultIcon': source.readString('defaultIcon'),
          'filters': [],

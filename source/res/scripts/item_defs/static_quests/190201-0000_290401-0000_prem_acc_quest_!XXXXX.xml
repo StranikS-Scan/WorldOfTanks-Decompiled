@@ -27,7 +27,11 @@
           </battle>
         </preBattle>
         <postBattle>
-          <win></win>
+          <win>
+            <description>
+              <key>	#quests:premiumQuests/condition/win/winLong	</key>
+            </description>
+          </win>
         </postBattle>
         <common>
           <daily></daily>
@@ -42,11 +46,17 @@
             <endOfGameDay></endOfGameDay>
           </expires>
         </token>
+        <token>
+          <id>	dqt:control:ticket:epic_reward	</id>
+          <expires>	01.12.2050 06:00	</expires>
+          <count>	1	</count>
+        </token>
       </bonus>
     </battleQuest>
     <battleQuest>
       <enabled>	true	</enabled>
       <id>	prem_acc_q02	</id>
+      <uiDecoration>	8	</uiDecoration>
       <conditions>
         <preBattle>
           <account>
@@ -65,8 +75,15 @@
         </preBattle>
         <postBattle>
           <and>
-            <win></win>
+            <win>
+              <description>
+                <key>	#quests:details/conditions/win/title	</key>
+              </description>
+            </win>
             <results>
+              <description>
+                <key>	#quests:premiumQuests/condition/dmgTop_5	</key>
+              </description>
               <key>	damageDealt	</key>
               <max>	5	</max>
             </results>
@@ -84,6 +101,11 @@
           <expires>
             <endOfGameDay></endOfGameDay>
           </expires>
+        </token>
+        <token>
+          <id>	dqt:control:ticket:epic_reward	</id>
+          <expires>	01.12.2050 06:00	</expires>
+          <count>	1	</count>
         </token>
       </bonus>
     </battleQuest>
@@ -116,6 +138,11 @@
       </conditions>
       <bonus>
         <crystal>	25	</crystal>
+        <token>
+          <id>	dqt:control:ticket:epic_reward	</id>
+          <expires>	01.12.2050 06:00	</expires>
+          <count>	1	</count>
+        </token>
       </bonus>
     </battleQuest>
   </quests>

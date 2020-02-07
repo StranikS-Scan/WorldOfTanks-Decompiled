@@ -5,7 +5,7 @@ import svarog_script.py_component
 from constants import VEHICLE_SIEGE_STATE
 
 class SiegeEffectsController(svarog_script.py_component.Component):
-    SIEGE_TIMEOUT = 2.0
+    SIEGE_TIMEOUT = 0.5
     SIEGE_IMPULSE = 0.1
     HIGH_PRIORITY_TICK_RATE = 0.1
     NPC_TICK_RATE = 0.25
@@ -31,17 +31,18 @@ class SiegeEffectsController(svarog_script.py_component.Component):
         impulseDir = -matrix.applyToAxis(2)
         self.__appearance.receiveShotImpulse(impulseDir, self.SIEGE_IMPULSE)
 
-    def onSiegeStateChanged(self, newState):
+    def onSiegeStateChanged(self, newState, timeToNextMode):
+        switchingTime = timeToNextMode if timeToNextMode > 0.0 else self.SIEGE_TIMEOUT
         if self.__state != newState:
             if newState == VEHICLE_SIEGE_STATE.SWITCHING_ON:
                 self.__siegeInProgress = 1
-                self.__siegeTimeOut = self.SIEGE_TIMEOUT
+                self.__siegeTimeOut = switchingTime
                 self.__shake()
             elif newState == VEHICLE_SIEGE_STATE.ENABLED:
                 self.__siegeInProgress = 0
             elif newState == VEHICLE_SIEGE_STATE.SWITCHING_OFF:
                 self.__siegeInProgress = 1
-                self.__siegeTimeOut = self.SIEGE_TIMEOUT
+                self.__siegeTimeOut = switchingTime
                 self.__shake()
             elif newState == VEHICLE_SIEGE_STATE.DISABLED:
                 self.__siegeInProgress = 0

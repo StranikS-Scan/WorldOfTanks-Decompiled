@@ -45,7 +45,6 @@ class TOOLTIPS(object):
     HEADER_EVENTSQUAD = '#tooltips:header/eventSquad'
     HEADER_DOMINATIONSQUAD = '#tooltips:header/dominationSquad'
     HEADER_RANKEDSQUAD = '#tooltips:header/rankedSquad'
-    HEADER_BOBSQUAD = '#tooltips:header/bobSquad'
     HEADER_SQUAD_MEMBER = '#tooltips:header/squad_member'
     HEADER_BATTLETYPE = '#tooltips:header/battleType'
     HEADER_INFO_PLAYERS_ONLINE_FULL = '#tooltips:header/info/players_online_full'
@@ -341,6 +340,8 @@ class TOOLTIPS(object):
     SETTINGS_FEEDBACK_INDICATORS_DYNAMICWIDTH_BODY = '#tooltips:settings/feedback/indicators/dynamicWidth/body'
     SETTINGS_FEEDBACK_INDICATORS_ANIMATION_HEADER = '#tooltips:settings/feedback/indicators/animation/header'
     SETTINGS_FEEDBACK_INDICATORS_ANIMATION_BODY = '#tooltips:settings/feedback/indicators/animation/body'
+    SETTINGS_FEEDBACK_INDICATORS_SHOWALLIES_HEADER = '#tooltips:settings/feedback/indicators/showAllies/header'
+    SETTINGS_FEEDBACK_INDICATORS_SHOWALLIES_BODY = '#tooltips:settings/feedback/indicators/showAllies/body'
     SETTINGS_SOUND_DEVICEALERT_HEADER = '#tooltips:settings/sound/deviceAlert/header'
     SETTINGS_SOUND_DEVICEALERT_BODY = '#tooltips:settings/sound/deviceAlert/body'
     LOBBYMENU_VERSIONINFOBUTTON_BODY = '#tooltips:lobbyMenu/versionInfoButton/body'
@@ -678,8 +679,6 @@ class TOOLTIPS(object):
     HEADER_DOMINATIONSQUAD_BODY = '#tooltips:header/dominationSquad/body'
     HEADER_RANKEDSQUAD_HEADER = '#tooltips:header/rankedSquad/header'
     HEADER_RANKEDSQUAD_BODY = '#tooltips:header/rankedSquad/body'
-    HEADER_BOBSQUAD_HEADER = '#tooltips:header/bobSquad/header'
-    HEADER_BOBSQUAD_BODY = '#tooltips:header/bobSquad/body'
     HEADER_BATTLETYPE_HEADER = '#tooltips:header/battleType/header'
     HEADER_BATTLETYPE_BODY = '#tooltips:header/battleType/body'
     HEADER_REFILL_ACTION_ATTENTION = '#tooltips:header/refill_action/attention'
@@ -1126,7 +1125,6 @@ class TOOLTIPS(object):
     VEHICLE_DEAL_TELECOM_MAIN_TWITCHPRIME = '#tooltips:vehicle/deal/telecom/main/Twitchprime'
     VEHICLE_TRADE = '#tooltips:vehicle/trade'
     VEHICLE_DEAL_EPIC_MAIN = '#tooltips:vehicle/deal/epic/main'
-    VEHICLE_DEAL_BOB_MAIN = '#tooltips:vehicle/deal/bob/main'
     ANONYMIZER_TEAMSTATS_HEADER = '#tooltips:anonymizer/teamStats/header'
     ANONYMIZER_TEAMSTATS_BODY = '#tooltips:anonymizer/teamStats/body'
     BUYSKILL_FULLY = '#tooltips:buySkill/fully'
@@ -1314,6 +1312,11 @@ class TOOLTIPS(object):
     BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_NATIONALFRAGMENT = '#tooltips:blueprint/BlueprintFragmentTooltip/nationalFragment'
     BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_NATIONALDESCRIPTION = '#tooltips:blueprint/BlueprintFragmentTooltip/nationalDescription'
     BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_INTELFRAGMENT = '#tooltips:blueprint/BlueprintFragmentTooltip/intelFragment'
+    BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_RANDOMNATIONAL_HEADER = '#tooltips:blueprint/BlueprintFragmentTooltip/randomNational/header'
+    BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_RANDOMNATIONAL_DESCRIPTION = '#tooltips:blueprint/BlueprintFragmentTooltip/randomNational/description'
+    BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_RANDOM_DISCOUNT = '#tooltips:blueprint/BlueprintFragmentTooltip/random/discount'
+    BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_RANDOM_HEADER = '#tooltips:blueprint/BlueprintFragmentTooltip/random/header'
+    BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_RANDOM_DESCRIPTION = '#tooltips:blueprint/BlueprintFragmentTooltip/random/description'
     BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_INTELDESCRIPTION = '#tooltips:blueprint/BlueprintFragmentTooltip/intelDescription'
     BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_COMPENSATION = '#tooltips:blueprint/BlueprintFragmentTooltip/compensation'
     BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_INSTORAGE = '#tooltips:blueprint/BlueprintFragmentTooltip/inStorage'
@@ -1709,9 +1712,13 @@ class TOOLTIPS(object):
     CLANCOMMONINFO_ACTIVITY = '#tooltips:clanCommonInfo/activity'
     CLANCOMMONINFO_YES = '#tooltips:clanCommonInfo/yes'
     CLANCOMMONINFO_NO = '#tooltips:clanCommonInfo/no'
+    AWARDITEM_GROUPS_HEADER = '#tooltips:awardItem/groups/header'
+    AWARDITEM_GROUPS_BODY = '#tooltips:awardItem/groups/body'
     AWARDITEM_CREDITS_HEADER = '#tooltips:awardItem/credits/header'
     AWARDITEM_CREDITS_BODY = '#tooltips:awardItem/credits/body'
     AWARDITEM_CRYSTAL_HEADER = '#tooltips:awardItem/crystal/header'
+    AWARDITEM_RANDOMBOOKLET_HEADER = '#tooltips:awardItem/randomBooklet/header'
+    AWARDITEM_RANDOMBOOKLET_BODY = '#tooltips:awardItem/randomBooklet/body'
     AWARDITEM_CRYSTAL_BODY = '#tooltips:awardItem/crystal/body'
     AWARDITEM_GOLD_HEADER = '#tooltips:awardItem/gold/header'
     AWARDITEM_GOLD_BODY = '#tooltips:awardItem/gold/body'
@@ -1827,6 +1834,9 @@ class TOOLTIPS(object):
     RANKEDBATTLEVIEW_SCOREPOINT_SHORT_HEADER = '#tooltips:rankedBattleView/scorePoint/short/header'
     RANKEDBATTLEVIEW_SCOREPOINT_HEADER = '#tooltips:rankedBattleView/scorePoint/header'
     RANKEDBATTLEVIEW_SCOREPOINT_BODY = '#tooltips:rankedBattleView/scorePoint/body'
+    RANKEDBATTLEVIEW_REWARDSVIEW_TABS_YEAR_SCOREPOINT_HEADER = '#tooltips:rankedBattleView/rewardsView/tabs/year/scorePoint/header'
+    RANKEDBATTLEVIEW_REWARDSVIEW_TABS_YEAR_SCOREPOINT_BODY_MAINTEXT = '#tooltips:rankedBattleView/rewardsView/tabs/year/scorePoint/body/mainText'
+    RANKEDBATTLEVIEW_REWARDSVIEW_TABS_YEAR_SCOREPOINT_BODY_EXCHANGETEXT = '#tooltips:rankedBattleView/rewardsView/tabs/year/scorePoint/body/exchangeText'
     RANKEDBATTLEVIEW_STATS_DIVISIONEFFICIENCY_HEADER = '#tooltips:rankedBattleView/stats/divisionEfficiency/header'
     RANKEDBATTLEVIEW_STATS_DIVISIONEFFICIENCY_BODY = '#tooltips:rankedBattleView/stats/divisionEfficiency/body'
     RANKEDBATTLEVIEW_STATS_QUALIFICATIONEFFICIENCY_HEADER = '#tooltips:rankedBattleView/stats/qualificationEfficiency/header'
@@ -2788,30 +2798,6 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_NY20SNOWMEN_DESC = '#tooltips:notrecruitedtankman/ny20snowmen/desc'
     NOTRECRUITEDTANKMAN_NY20SNOWMEN_HOWTOGETINFO = '#tooltips:notrecruitedtankman/ny20snowmen/howToGetInfo'
     NOTRECRUITEDTANKMAN_NY20SNOWMEN_ADDITIONALALERT = '#tooltips:notrecruitedtankman/ny20snowmen/additionalAlert'
-    NOTRECRUITEDTANKMAN_BOB20_COMMANDER1_RU_LABEL = '#tooltips:notrecruitedtankman/bob20_commander1_ru/label'
-    NOTRECRUITEDTANKMAN_BOB20_COMMANDER1_RU_DESC = '#tooltips:notrecruitedtankman/bob20_commander1_ru/desc'
-    NOTRECRUITEDTANKMAN_BOB20_COMMANDER2_RU_LABEL = '#tooltips:notrecruitedtankman/bob20_commander2_ru/label'
-    NOTRECRUITEDTANKMAN_BOB20_COMMANDER2_RU_DESC = '#tooltips:notrecruitedtankman/bob20_commander2_ru/desc'
-    NOTRECRUITEDTANKMAN_BOB20_COMMANDER3_RU_LABEL = '#tooltips:notrecruitedtankman/bob20_commander3_ru/label'
-    NOTRECRUITEDTANKMAN_BOB20_COMMANDER3_RU_DESC = '#tooltips:notrecruitedtankman/bob20_commander3_ru/desc'
-    NOTRECRUITEDTANKMAN_BOB20_COMMANDER4_RU_LABEL = '#tooltips:notrecruitedtankman/bob20_commander4_ru/label'
-    NOTRECRUITEDTANKMAN_BOB20_COMMANDER4_RU_DESC = '#tooltips:notrecruitedtankman/bob20_commander4_ru/desc'
-    NOTRECRUITEDTANKMAN_BOB20_COMMANDER1_EU_LABEL = '#tooltips:notrecruitedtankman/bob20_commander1_eu/label'
-    NOTRECRUITEDTANKMAN_BOB20_COMMANDER1_EU_DESC = '#tooltips:notrecruitedtankman/bob20_commander1_eu/desc'
-    NOTRECRUITEDTANKMAN_BOB20_COMMANDER2_EU_LABEL = '#tooltips:notrecruitedtankman/bob20_commander2_eu/label'
-    NOTRECRUITEDTANKMAN_BOB20_COMMANDER2_EU_DESC = '#tooltips:notrecruitedtankman/bob20_commander2_eu/desc'
-    NOTRECRUITEDTANKMAN_BOB20_COMMANDER3_EU_LABEL = '#tooltips:notrecruitedtankman/bob20_commander3_eu/label'
-    NOTRECRUITEDTANKMAN_BOB20_COMMANDER3_EU_DESC = '#tooltips:notrecruitedtankman/bob20_commander3_eu/desc'
-    NOTRECRUITEDTANKMAN_BOB20_COMMANDER4_EU_LABEL = '#tooltips:notrecruitedtankman/bob20_commander4_eu/label'
-    NOTRECRUITEDTANKMAN_BOB20_COMMANDER4_EU_DESC = '#tooltips:notrecruitedtankman/bob20_commander4_eu/desc'
-    NOTRECRUITEDTANKMAN_BOB20_COMMANDER1_NA_LABEL = '#tooltips:notrecruitedtankman/bob20_commander1_na/label'
-    NOTRECRUITEDTANKMAN_BOB20_COMMANDER1_NA_DESC = '#tooltips:notrecruitedtankman/bob20_commander1_na/desc'
-    NOTRECRUITEDTANKMAN_BOB20_COMMANDER2_NA_LABEL = '#tooltips:notrecruitedtankman/bob20_commander2_na/label'
-    NOTRECRUITEDTANKMAN_BOB20_COMMANDER2_NA_DESC = '#tooltips:notrecruitedtankman/bob20_commander2_na/desc'
-    NOTRECRUITEDTANKMAN_BOB20_COMMANDER1_ASIA_LABEL = '#tooltips:notrecruitedtankman/bob20_commander1_asia/label'
-    NOTRECRUITEDTANKMAN_BOB20_COMMANDER1_ASIA_DESC = '#tooltips:notrecruitedtankman/bob20_commander1_asia/desc'
-    NOTRECRUITEDTANKMAN_BOB20_COMMANDER2_ASIA_LABEL = '#tooltips:notrecruitedtankman/bob20_commander2_asia/label'
-    NOTRECRUITEDTANKMAN_BOB20_COMMANDER2_ASIA_DESC = '#tooltips:notrecruitedtankman/bob20_commander2_asia/desc'
     QUESTS_AWARDS_VEHICLERENT_HEADER = '#tooltips:quests/awards/vehicleRent/header'
     QUESTS_AWARDS_VEHICLERENT_EXPIRE = '#tooltips:quests/awards/vehicleRent/expire'
     QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTDAYS = '#tooltips:quests/awards/vehicleRent/rentLeft/rentDays'
@@ -3012,8 +2998,10 @@ class TOOLTIPS(object):
      BATTLERESULTS_EFFICIENCYHEADER_SUMMKILL,
      BATTLERESULTS_EFFICIENCYHEADER_SUMMSTUN,
      BATTLERESULTS_EFFICIENCYHEADER_VALUE)
-    AWARDITEM_ALL_HEADER_ENUM = (AWARDITEM_CREDITS_HEADER,
+    AWARDITEM_ALL_HEADER_ENUM = (AWARDITEM_GROUPS_HEADER,
+     AWARDITEM_CREDITS_HEADER,
      AWARDITEM_CRYSTAL_HEADER,
+     AWARDITEM_RANDOMBOOKLET_HEADER,
      AWARDITEM_GOLD_HEADER,
      AWARDITEM_FREEXP_HEADER,
      AWARDITEM_PREMIUM_HEADER,
@@ -3068,7 +3056,9 @@ class TOOLTIPS(object):
      AWARDITEM_ONEOF_HEADER,
      AWARDITEM_ONEOF_RANKEDCYCLE_HEADER,
      AWARDITEM_ONEOF_RANKEDSEASON_HEADER)
-    AWARDITEM_ALL_BODY_ENUM = (AWARDITEM_CREDITS_BODY,
+    AWARDITEM_ALL_BODY_ENUM = (AWARDITEM_GROUPS_BODY,
+     AWARDITEM_CREDITS_BODY,
+     AWARDITEM_RANDOMBOOKLET_BODY,
      AWARDITEM_CRYSTAL_BODY,
      AWARDITEM_GOLD_BODY,
      AWARDITEM_FREEXP_BODY,
@@ -3413,19 +3403,7 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_NY20WOMAN_LABEL,
      NOTRECRUITEDTANKMAN_NY20DEFAULTGIRL_LABEL,
      NOTRECRUITEDTANKMAN_NY20MEN_LABEL,
-     NOTRECRUITEDTANKMAN_NY20SNOWMEN_LABEL,
-     NOTRECRUITEDTANKMAN_BOB20_COMMANDER1_RU_LABEL,
-     NOTRECRUITEDTANKMAN_BOB20_COMMANDER2_RU_LABEL,
-     NOTRECRUITEDTANKMAN_BOB20_COMMANDER3_RU_LABEL,
-     NOTRECRUITEDTANKMAN_BOB20_COMMANDER4_RU_LABEL,
-     NOTRECRUITEDTANKMAN_BOB20_COMMANDER1_EU_LABEL,
-     NOTRECRUITEDTANKMAN_BOB20_COMMANDER2_EU_LABEL,
-     NOTRECRUITEDTANKMAN_BOB20_COMMANDER3_EU_LABEL,
-     NOTRECRUITEDTANKMAN_BOB20_COMMANDER4_EU_LABEL,
-     NOTRECRUITEDTANKMAN_BOB20_COMMANDER1_NA_LABEL,
-     NOTRECRUITEDTANKMAN_BOB20_COMMANDER2_NA_LABEL,
-     NOTRECRUITEDTANKMAN_BOB20_COMMANDER1_ASIA_LABEL,
-     NOTRECRUITEDTANKMAN_BOB20_COMMANDER2_ASIA_LABEL)
+     NOTRECRUITEDTANKMAN_NY20SNOWMEN_LABEL)
     NOTRECRUITEDTANKMAN_ALL_DESC_ENUM = (NOTRECRUITEDTANKMAN_BASE_DESC,
      NOTRECRUITEDTANKMAN_BUFFON_DESC,
      NOTRECRUITEDTANKMAN_TANKWOMAN_DESC,
@@ -3453,19 +3431,7 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_NY20WOMAN_DESC,
      NOTRECRUITEDTANKMAN_NY20DEFAULTGIRL_DESC,
      NOTRECRUITEDTANKMAN_NY20MEN_DESC,
-     NOTRECRUITEDTANKMAN_NY20SNOWMEN_DESC,
-     NOTRECRUITEDTANKMAN_BOB20_COMMANDER1_RU_DESC,
-     NOTRECRUITEDTANKMAN_BOB20_COMMANDER2_RU_DESC,
-     NOTRECRUITEDTANKMAN_BOB20_COMMANDER3_RU_DESC,
-     NOTRECRUITEDTANKMAN_BOB20_COMMANDER4_RU_DESC,
-     NOTRECRUITEDTANKMAN_BOB20_COMMANDER1_EU_DESC,
-     NOTRECRUITEDTANKMAN_BOB20_COMMANDER2_EU_DESC,
-     NOTRECRUITEDTANKMAN_BOB20_COMMANDER3_EU_DESC,
-     NOTRECRUITEDTANKMAN_BOB20_COMMANDER4_EU_DESC,
-     NOTRECRUITEDTANKMAN_BOB20_COMMANDER1_NA_DESC,
-     NOTRECRUITEDTANKMAN_BOB20_COMMANDER2_NA_DESC,
-     NOTRECRUITEDTANKMAN_BOB20_COMMANDER1_ASIA_DESC,
-     NOTRECRUITEDTANKMAN_BOB20_COMMANDER2_ASIA_DESC)
+     NOTRECRUITEDTANKMAN_NY20SNOWMEN_DESC)
     NOTRECRUITEDTANKMAN_ALL_HOWTOGETINFO_ENUM = (NOTRECRUITEDTANKMAN_TANKMAN_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERB_HOWTOGETINFO,

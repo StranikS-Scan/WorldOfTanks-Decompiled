@@ -10,24 +10,21 @@ from gui.impl.lobby.dialogs.contents.common_balance_content import CommonBalance
 from gui.impl.gen.view_models.constants.dialog_presets import DialogPresets
 from gui.impl.gen_utils import DynAccessor
 from gui.impl.gen.view_models.common.format_string_arg_model import FormatStringArgModel
-from shared_utils import first
 _logger = logging.getLogger(__name__)
 _MessageArgs = namedtuple('_MessageArgs', ('args', 'fmtArgs', 'namedFmtArgs'))
-_DialogButton = namedtuple('DialogButton', ('name', 'label', 'isFocused', 'soundDown', 'rawLabel'))
+_DialogButton = namedtuple('DialogButton', ('name', 'label', 'isFocused', 'soundDown'))
 
 def _makeMessageArgs(args=None, fmtArgs=None, namedFmtArgs=None):
     return _MessageArgs(args, fmtArgs, namedFmtArgs)
 
 
 class SimpleDialogBuilder(object):
-    __slots__ = ('__message', '__title', '__formattedMessage', '__formattedTitle', '__messageArgs', '__titleArgs', '__buttons', '__icon', '__backImg', '__showBalance', '__preset', '__layer')
+    __slots__ = ('__message', '__title', '__messageArgs', '__titleArgs', '__buttons', '__icon', '__backImg', '__showBalance', '__preset', '__layer')
 
     def __init__(self):
         super(SimpleDialogBuilder, self).__init__()
         self.__message = R.invalid()
         self.__title = R.invalid()
-        self.__formattedMessage = ''
-        self.__formattedTitle = ''
         self.__messageArgs = _makeMessageArgs()
         self.__titleArgs = _makeMessageArgs()
         self.__buttons = []
@@ -38,7 +35,7 @@ class SimpleDialogBuilder(object):
         self.__layer = DialogLayer.TOP_WINDOW
 
     def build(self, parent=None):
-        if self.__message == R.invalid() and self.__formattedMessage == '':
+        if self.__message == R.invalid():
             _logger.error("Dialog message can't be empty")
             return
         elif not self.__buttons:
@@ -47,12 +44,10 @@ class SimpleDialogBuilder(object):
         else:
             dialog = SimpleDialogWindow(parent=parent.getParentWindow() if parent else None, preset=self.__preset, balanceContent=CommonBalanceContent() if self.__showBalance else None, layer=self.__layer)
             for btn in self.__buttons:
-                dialog.addButton(btn.name, btn.label, btn.isFocused, soundDown=btn.soundDown, rawLabel=btn.rawLabel)
+                dialog.addButton(btn.name, btn.label, btn.isFocused, soundDown=btn.soundDown)
 
             messageArgs = self.__messageArgs
             titleArgs = self.__titleArgs
-            dialog.setFormattedMessage(self.__formattedMessage)
-            dialog.setFormattedTitle(self.__formattedTitle)
             dialog.setTitle(self.__title, titleArgs.args, titleArgs.fmtArgs, titleArgs.namedFmtArgs)
             dialog.setMessage(self.__message, messageArgs.args, messageArgs.fmtArgs, messageArgs.namedFmtArgs)
             if self.__icon is not None:
@@ -60,14 +55,6 @@ class SimpleDialogBuilder(object):
             if self.__backImg is not None:
                 dialog.setBackground(self.__backImg)
             return dialog
-
-    def setFormattedMessage(self, formattedMessage):
-        self.__formattedMessage = formattedMessage
-        return self
-
-    def setFormattedTitle(self, formattedTitle):
-        self.__formattedTitle = formattedTitle
-        return self
 
     def setMessage(self, message):
         self.__message = message
@@ -85,8 +72,8 @@ class SimpleDialogBuilder(object):
         self.__titleArgs = _MessageArgs(args, fmtArgs, namedFmtArgs)
         return self
 
-    def addButton(self, name, label, isFocused, soundDown=None, rawLabel=''):
-        self.__buttons.append(_DialogButton(name, label, isFocused, soundDown, rawLabel))
+    def addButton(self, name, label, isFocused, soundDown=None):
+        self.__buttons.append(_DialogButton(name, label, isFocused, soundDown))
         return self
 
     def setIcon(self, icon):
@@ -108,29 +95,6 @@ class SimpleDialogBuilder(object):
     def setShowBalance(self, showBalance):
         self.__showBalance = showBalance
         return self
-
-
-class FormattedSimpleDialogBuilder(SimpleDialogBuilder):
-    _DIALOG_PRESETS = (DialogPresets.BLUEPRINTS_CONVERSION,
-     DialogPresets.DEFAULT,
-     DialogPresets.ERROR,
-     DialogPresets.INFO,
-     DialogPresets.QUIT_GAME,
-     DialogPresets.WARNING,
-     DialogPresets.MAPS_BLACKLIST)
-
-    def setMessagesAndButtons(self, preset, title, message, buttons, focusedButton=None, btnDownSounds=None):
-        focusedButton = focusedButton if focusedButton is not None else first(first(buttons).keys())
-        self.setPreset(preset)
-        self.setFormattedTitle(title)
-        self.setFormattedMessage(message)
-        for button in buttons:
-            name = first(button.keys())
-            text = button.get(name)
-            soundDown = btnDownSounds.get(name) if btnDownSounds else None
-            self.addButton(name, R.invalid(), name == focusedButton, soundDown=soundDown, rawLabel=text)
-
-        return
 
 
 class ResSimpleDialogBuilder(SimpleDialogBuilder):

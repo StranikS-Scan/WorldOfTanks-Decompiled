@@ -340,6 +340,10 @@ def superPromoTitleEm(text):
     return _formatText('superPromoTitleEm', text)
 
 
+def superPromoTitleErr(text):
+    return _formatText('superPromoTitleErr', text)
+
+
 def highlightText(text):
     return _formatText('highlightText', text)
 

@@ -27,7 +27,8 @@ _RANK_TO_TITLE = {0: '',
  2: EPIC_BATTLE.RANK_RANK2,
  3: EPIC_BATTLE.RANK_RANK3,
  4: EPIC_BATTLE.RANK_RANK4,
- 5: EPIC_BATTLE.RANK_RANK5}
+ 5: EPIC_BATTLE.RANK_RANK5,
+ 6: EPIC_BATTLE.RANK_RANK6}
 MSG_ID_TO_DURATION = defaultdict(lambda : 4.5)
 MSG_ID_TO_DURATION.update({GAME_MESSAGES_CONSTS.OVERTIME: 4.5})
 MSG_ID_TO_PRIORITY = defaultdict(lambda : GAME_MESSAGES_CONSTS.GAME_MESSAGE_PRIORITY_LOW)
@@ -119,8 +120,6 @@ class EpicMissionsController(IViewComponentsController):
         self.__ui.start()
 
     def clearViewComponents(self):
-        if self.__ui:
-            self.__ui.destroy()
         self.__ui = None
         return
 

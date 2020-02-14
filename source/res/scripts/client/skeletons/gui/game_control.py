@@ -73,6 +73,12 @@ class ISeasonProvider(object):
     def getSeasonPassed(self):
         raise NotImplementedError
 
+    def getClosestStateChangeTime(self):
+        raise NotImplementedError
+
+    def getCurrentOrNextActiveCycleNumber(self, season):
+        raise NotImplementedError
+
     def getPreviousSeason(self):
         raise NotImplementedError
 
@@ -863,14 +869,63 @@ class IMarathonEventsController(IGameController):
         raise NotImplementedError
 
 
+class IEventProgressionController(IGameController):
+    onUpdated = None
+
+    @property
+    def isEnabled(self):
+        raise NotImplementedError
+
+    @property
+    def url(self):
+        raise NotImplementedError
+
+    @property
+    def actualRewardPoints(self):
+        raise NotImplementedError
+
+    @property
+    def maxRewardPoints(self):
+        raise NotImplementedError
+
+    @property
+    def seasonRewardPoints(self):
+        raise NotImplementedError
+
+    @property
+    def rewardPointsTokenID(self):
+        raise NotImplementedError
+
+    @property
+    def rewardVehicles(self):
+        raise NotImplementedError
+
+    @property
+    def questIDs(self):
+        raise NotImplementedError
+
+    def getRewardVehiclePrice(self, vehicleCD):
+        raise NotImplementedError
+
+    def openURL(self, url=None):
+        raise NotImplementedError
+
+    def showCustomScreen(self, screen):
+        raise NotImplementedError
+
+
 class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
     onUpdated = None
     onPrimeTimeStatusUpdated = None
+    onEventEnded = None
 
     def isEnabled(self):
         raise NotImplementedError
 
     def isAvailable(self):
+        raise NotImplementedError
+
+    def isActive(self):
         raise NotImplementedError
 
     def isInPrimeTime(self):
@@ -880,9 +935,6 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
         raise NotImplementedError
 
     def getMaxPlayerLevel(self):
-        raise NotImplementedError
-
-    def getRewardVehicles(self):
         raise NotImplementedError
 
     def getStageLimit(self):
@@ -945,7 +997,7 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
     def getCurrentCycleInfo(self):
         raise NotImplementedError
 
-    def getCycleInfo(self, cycleID):
+    def getCycleInfo(self, cycleID=None):
         raise NotImplementedError
 
     def getCycleOrdinalNumber(self, cycleID):
@@ -970,12 +1022,6 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
         raise NotImplementedError
 
     def getTimer(self):
-        raise NotImplementedError
-
-    def openURL(self, url=None):
-        raise NotImplementedError
-
-    def showCustomScreen(self, screen):
         raise NotImplementedError
 
     def getStoredEpicDiscount(self):

@@ -4,6 +4,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from web.web_client_api import webApiCollection
 from web.web_client_api.frontline import FrontLineWebApi
+from web.web_client_api.quests import QuestsWebApi
 from web.web_client_api.request import RequestWebApi
 from web.web_client_api.sound import SoundWebApi, HangarSoundWebApi, SoundStateWebApi
 from web.web_client_api.shop import ShopWebApi
@@ -31,4 +32,4 @@ def _goBack(url):
 
 
 def createFrontlineWebHandlers():
-    return webApiCollection(FrontLineWebApi, VehiclesWebApi, RequestWebApi, ShopWebApi, OpenWindowWebApi, CloseWindowWebApi, _OpenTabWebApi, NotificationWebApi, ContextMenuWebApi, UtilWebApi, SoundWebApi, SoundStateWebApi, HangarSoundWebApi)
+    return webApiCollection(FrontLineWebApi, VehiclesWebApi, RequestWebApi, ShopWebApi, OpenWindowWebApi, CloseWindowWebApi, _OpenTabWebApi, NotificationWebApi, ContextMenuWebApi, UtilWebApi, SoundWebApi, SoundStateWebApi, HangarSoundWebApi, QuestsWebApi)

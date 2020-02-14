@@ -18,17 +18,17 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.lobby_context import ILobbyContext
 
 class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
-    eventsCache = dependency.descriptor(IEventsCache)
-    rankedController = dependency.descriptor(IRankedBattlesController)
-    epicQueueController = dependency.descriptor(IEpicBattleMetaGameController)
-    lobbyContext = dependency.descriptor(ILobbyContext)
+    __epicQueueController = dependency.descriptor(IEpicBattleMetaGameController)
+    __rankedController = dependency.descriptor(IRankedBattlesController)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+    __eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, _=None):
         super(BattleTypeSelectPopover, self).__init__()
 
     @process
     def selectFight(self, actionName):
-        navigationPossible = yield self.lobbyContext.isHeaderNavigationPossible()
+        navigationPossible = yield self.__lobbyContext.isHeaderNavigationPossible()
         if not navigationPossible:
             return
         battle_selector_items.getItems().select(actionName)
@@ -84,8 +84,8 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
         self.update()
 
     def __getRankedAvailabilityData(self):
-        hasSuitableVehicles = self.rankedController.hasSuitableVehicles()
-        return (TOOLTIPS_CONSTANTS.RANKED_SELECTOR_INFO, True) if self.rankedController.isAvailable() and hasSuitableVehicles else (TOOLTIPS_CONSTANTS.RANKED_UNAVAILABLE_INFO, True)
+        hasSuitableVehicles = self.__rankedController.hasSuitableVehicles()
+        return (TOOLTIPS_CONSTANTS.RANKED_SELECTOR_INFO, True) if self.__rankedController.isAvailable() and hasSuitableVehicles else (TOOLTIPS_CONSTANTS.RANKED_UNAVAILABLE_INFO, True)
 
     def __getEpicAvailabilityData(self):
-        return (TOOLTIPS_CONSTANTS.EPIC_SELECTOR_INFO, True)
+        return (TOOLTIPS_CONSTANTS.EVENT_PROGRESSION_SELECTOR_INFO, True)

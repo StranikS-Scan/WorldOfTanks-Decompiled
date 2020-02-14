@@ -18,7 +18,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.server_events.awards_formatters import AWARDS_SIZES, getEpicAwardFormatter
+from gui.server_events.awards_formatters import AWARDS_SIZES, getEpicAwardFormatter, EPIC_AWARD_SIZE
 from gui.server_events.bonuses import SimpleBonus
 from gui.server_events.cond_formatters.prebattle import MissionsPreBattleConditionsFormatter
 from gui.server_events.cond_formatters.requirements import AccountRequirementsFormatter, TQAccountRequirementsFormatter
@@ -37,6 +37,7 @@ from quest_xml_source import MAX_BONUS_LIMIT
 from shared_utils import first
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.game_control import IEventProgressionController, IEpicBattleMetaGameController
 CARD_AWARDS_COUNT = 6
 CARD_AWARDS_BIG_COUNT = 5
 CARD_AWARDS_EPIC_COUNT = 2
@@ -484,6 +485,8 @@ class _PremiumMissionInfo(_MissionInfo):
 
 class _DetailedMissionInfo(_MissionInfo):
     __AWARDS_COUNT = 6
+    __eventProgressionController = dependency.descriptor(IEventProgressionController)
+    __epicController = dependency.descriptor(IEpicBattleMetaGameController)
 
     def getVehicleRequirementsCriteria(self):
         conds = self.event.vehicleReqs.getConditions()
@@ -517,8 +520,20 @@ class _DetailedMissionInfo(_MissionInfo):
 
     def _getInfo(self, statusData, isAvailable, errorMsg, mainQuest=None):
         data = super(_DetailedMissionInfo, self)._getInfo(statusData, isAvailable, errorMsg, mainQuest)
-        data.update({'statusLabel': statusData.get('statusLabel', ''),
-         'resetDateLabel': statusData.get('scheduleOrResetLabel', ''),
+        resetDateLabel = statusData.get('scheduleOrResetLabel', '')
+        statusLabel = statusData.get('statusLabel', '')
+        if 'eventID' in data:
+            if data['eventID'] in self.__eventProgressionController.questIDs and not isAvailable:
+                _, level, _ = self.__epicController.getPlayerLevelInfo()
+                maxLevel = self.__epicController.getMaxPlayerLevel()
+                if level < maxLevel:
+                    iconSrc = backport.image(R.images.gui.maps.icons.library.marker_blocked())
+                    notAvailableIcon = icons.makeImageTag(source=iconSrc, width=14, height=14, vSpace=-2, hSpace=10)
+                    statusText = backport.text(R.strings.quests.missionDetails.status.notAvailable())
+                    statusLabel = text_styles.concatStylesWithSpace(notAvailableIcon, text_styles.error(statusText))
+                    resetDateLabel = text_styles.main(backport.text(R.strings.event_progression.questsCard.frontLine.getLevel(), level=maxLevel))
+        data.update({'statusLabel': statusLabel,
+         'resetDateLabel': resetDateLabel,
          'scheduleTooltip': statusData.get('scheduleTooltip'),
          'titleTooltip': self.__getDescription(),
          'dateLabel': statusData.get('dateLabel', ''),
@@ -1085,7 +1100,7 @@ def getAwardsWindowBonuses(bonuses):
 
 
 def getEpicAwardsWindowBonuses(bonuses):
-    result = _epicAwardsWindowBonusFormatter.getFormattedBonuses(bonuses, AWARDS_SIZES.SIZE_360_270)
+    result = _epicAwardsWindowBonusFormatter.getFormattedBonuses(bonuses, EPIC_AWARD_SIZE)
     while len(result) % AWARDS_PER_SINGLE_PAGE != 0 and len(result) > AWARDS_PER_SINGLE_PAGE:
         result.append({})
 

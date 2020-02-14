@@ -1,16 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/frontline/__init__.py
-from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import triggerPrestige, checkIfVehicleIsHidden
-from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import checkExchangeToken, checkEpicRewardVehAlreadyBought
-from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import getAwardsForLevel, getAwardsForPrestige
-from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import getFrontLineSkills, getEpicGamePlayerPrestigePoints
-from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import getPrestigePointsExchangeRate, getVehsAvailableToBuy
-from gui.shared.event_dispatcher import showFrontlineExchangePrestigePoints
+from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import checkIfVehicleIsHidden
+from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import checkEpicRewardVehAlreadyBought
+from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import getAwardsForLevel
+from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import getFrontLineSkills
 from helpers import dependency
-from skeletons.gui.game_control import IEpicBattleMetaGameController
+from shared_utils import first
+from skeletons.gui.game_control import IEpicBattleMetaGameController, IEventProgressionController
 from skeletons.gui.server_events import IEventsCache
 from web.web_client_api import w2c, w2capi, W2CSchema, Field
-from gui.shared.utils.requesters import REQ_CRITERIA
 from skeletons.gui.shared import IItemsCache
 
 class _RewardsSchema(W2CSchema):
@@ -21,38 +19,60 @@ class _SkillSchema(W2CSchema):
     skill_id = Field(required=False, type=int)
 
 
+_REWARD_VEHICLE_AVAILABLE = 'available'
+_REWARD_VEHICLE_OWNED = 'owned'
+_REWARD_VEHICLE_PURCHASED = 'purchased'
+
 @w2capi(name='frontline', key='action')
 class FrontLineWebApi(W2CSchema):
-    _frontLineCtrl = dependency.descriptor(IEpicBattleMetaGameController)
-    _eventsCache = dependency.descriptor(IEventsCache)
-    _itemsCache = dependency.descriptor(IItemsCache)
+    __frontlineCtrl = dependency.descriptor(IEpicBattleMetaGameController)
+    __eventProgCtrl = dependency.descriptor(IEventProgressionController)
+    __eventsCache = dependency.descriptor(IEventsCache)
+    __itemsCache = dependency.descriptor(IItemsCache)
 
     @w2c(W2CSchema, name='get_metascreen_data')
     def handleGetMetaScreenData(self, _):
-        prestige, level, exp = self._frontLineCtrl.getPlayerLevelInfo()
-        nextLevelExp = self._frontLineCtrl.getPointsProgressForLevel(level)
-        maxPrestige = self._frontLineCtrl.getMaxPlayerPrestigeLevel()
-        data = {'lvl': level if prestige < maxPrestige else '',
-         'max_lvl': self._frontLineCtrl.getMaxPlayerLevel(),
-         'prestige': prestige,
-         'max_prestige': maxPrestige,
-         'stageLimit': self._frontLineCtrl.getStageLimit(),
+        _, level, exp = self.__frontlineCtrl.getPlayerLevelInfo()
+        nextLevelExp = self.__frontlineCtrl.getPointsProgressForLevel(level)
+        metaGameStats = self.__itemsCache.items.epicMetaGame
+        dossier = self.__itemsCache.items.getAccountDossier()
+        achievements = dossier.getDossierDescr().expand('epicSeasons')
+        seasonsAchievements = []
+        for seasonID, episodeID in achievements:
+            key = (seasonID, episodeID)
+            battleCount, averageXp, awardPoints, lvl = achievements[key]
+            seasonsAchievements.append({'season_id': seasonID,
+             'episode_id': episodeID,
+             'battle_count': battleCount,
+             'average_xp': averageXp,
+             'award_points': awardPoints,
+             'lvl': lvl})
+
+        data = {'lvl': level,
+         'max_lvl': self.__frontlineCtrl.getMaxPlayerLevel(),
          'exp': exp,
          'exp_for_lvl': nextLevelExp,
          'rewards_for_lvl': getAwardsForLevel(level + 1),
-         'rewards_for_prestige': getAwardsForPrestige(prestige + 1)}
+         'quest_ids': self.__eventProgCtrl.questIDs,
+         'average_xp': metaGameStats.averageXP,
+         'battle_count': metaGameStats.battleCount,
+         'award_points': self.__eventProgCtrl.actualRewardPoints,
+         'season_award_points': self.__eventProgCtrl.seasonRewardPoints,
+         'max_award_points': self.__eventProgCtrl.maxRewardPoints,
+         'seasons_achievements': seasonsAchievements}
         return data
 
     @w2c(W2CSchema, name='get_calendar_info')
     def handleGetCalendarInfo(self, _):
         calendarData = dict()
-        currentSeason = self._frontLineCtrl.getCurrentSeason()
-        if currentSeason is not None:
-            calendarData['season'] = {'id': currentSeason.getSeasonID(),
-             'start': currentSeason.getStartDate(),
-             'end': currentSeason.getEndDate()}
+        seasons = (self.__frontlineCtrl.getCurrentSeason(), self.__frontlineCtrl.getNextSeason(), self.__frontlineCtrl.getPreviousSeason())
+        selectedSeason = first(filter(None, seasons))
+        if selectedSeason is not None:
+            calendarData['season'] = {'id': selectedSeason.getSeasonID(),
+             'start': selectedSeason.getStartDate(),
+             'end': selectedSeason.getEndDate()}
             calendarData['cycles'] = list()
-            for cycle in currentSeason.getAllCycles().values():
+            for cycle in selectedSeason.getAllCycles().values():
                 calendarData['cycles'].append({'id': cycle.ID,
                  'start': cycle.startDate,
                  'end': cycle.endDate})
@@ -64,27 +84,27 @@ class FrontLineWebApi(W2CSchema):
         if hasattr(cmd, 'category') and cmd.category:
             if cmd.category == 'level':
                 return getAwardsForLevel()
-            if cmd.category == 'prestige':
-                return getAwardsForPrestige()
             if cmd.category == 'vehicles':
-                rewardsData = dict()
-                rewardsData['prestige_points'] = getEpicGamePlayerPrestigePoints()
+                rewardsData = {}
                 vehicleInfo = []
-                inventoryVehicles = self._itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY)
-                for intCD, price in self._frontLineCtrl.getRewardVehicles().iteritems():
+                for intCD, price in self.__eventProgCtrl.rewardVehicles:
+                    vehicle = self.__itemsCache.items.getItemByCD(intCD)
+                    obtained = checkEpicRewardVehAlreadyBought(intCD)
+                    owned = bool(vehicle.inventoryCount)
+                    if owned:
+                        state = _REWARD_VEHICLE_OWNED
+                    elif obtained:
+                        state = _REWARD_VEHICLE_PURCHASED
+                    else:
+                        state = _REWARD_VEHICLE_AVAILABLE
                     vehicleInfo.append({'vehIntCD': intCD,
-                     'price_in_prestige_points': price,
-                     'is_in_inventory': intCD in inventoryVehicles,
-                     'already_bought_by_rewards_points': checkEpicRewardVehAlreadyBought(intCD),
+                     'price': price,
+                     'state': state,
                      'show_ttc': not checkIfVehicleIsHidden(intCD)})
 
-                rewardsData['vehicles'] = sorted(vehicleInfo, key=lambda v: v['price_in_prestige_points'])
+                rewardsData['vehicles'] = sorted(vehicleInfo, key=lambda v: v['price'])
                 return rewardsData
         return None
-
-    @w2c(W2CSchema, name='up_prestige')
-    def handlePrestigeUp(self, _):
-        triggerPrestige()
 
     @w2c(W2CSchema, name='get_all_skills')
     def handleSkillsInfo(self, _):
@@ -93,7 +113,7 @@ class FrontLineWebApi(W2CSchema):
     @w2c(W2CSchema, name='get_player_skills_status')
     def handleSkillStatus(self, _):
         result = {}
-        for skillID, epicSkillsListGenerator in self._frontLineCtrl.getAllUnlockedSkillLevelsBySkillId().iteritems():
+        for skillID, epicSkillsListGenerator in self.__frontlineCtrl.getAllUnlockedSkillLevelsBySkillId().iteritems():
             skills = list(epicSkillsListGenerator)
             if skills:
                 result[skillID] = skills[-1].level
@@ -103,28 +123,13 @@ class FrontLineWebApi(W2CSchema):
 
     @w2c(W2CSchema, name='get_player_skill_points')
     def handleGetSkillPoints(self, _):
-        return self._frontLineCtrl.getSkillPoints()
+        return self.__frontlineCtrl.getSkillPoints()
 
     @w2c(_SkillSchema, name='increase_player_skill')
     def handleIncreaseSkillLevel(self, cmd):
         if hasattr(cmd, 'skill_id') and cmd.skill_id:
-            self._frontLineCtrl.increaseSkillLevel(cmd.skill_id)
+            self.__frontlineCtrl.increaseSkillLevel(cmd.skill_id)
 
     @w2c(W2CSchema, name='get_player_discount')
     def handleGetPlayerDiscount(self, _):
-        return self._frontLineCtrl.getStoredEpicDiscount()
-
-    @w2c(W2CSchema, name='exchange_prestige_points')
-    def handleExchangePrestigePoints(self, _):
-        if getEpicGamePlayerPrestigePoints() > 0:
-            ctx = getPrestigePointsExchangeRate()
-            ctx.update({'canBuy': getVehsAvailableToBuy()})
-            showFrontlineExchangePrestigePoints(ctx)
-
-    @w2c(W2CSchema, name='get_exchange_rate')
-    def handleGetExchangeRate(self, _):
-        return getPrestigePointsExchangeRate()
-
-    @w2c(W2CSchema, name='get_exchange_token')
-    def handleGetExchangeToken(self, _):
-        return checkExchangeToken()
+        return self.__frontlineCtrl.getStoredEpicDiscount()

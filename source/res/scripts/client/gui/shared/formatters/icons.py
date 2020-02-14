@@ -39,6 +39,10 @@ def arrow(vspace=-5):
     return _getIcon('arrowButton', vspace=vspace)
 
 
+def attention(vspace=-3):
+    return _getIcon('attention', vspace=vspace)
+
+
 def xp():
     return _getIcon('xp')
 
@@ -61,6 +65,10 @@ def notAvailableRed():
 
 def checkmark(vspace=-4):
     return _getIcon('checkmark', vspace=vspace)
+
+
+def check(vspace=-6, hspace=-6):
+    return _getIcon('check', vspace=vspace, hspace=hspace)
 
 
 def envelop():
@@ -121,6 +129,10 @@ def nutStat():
 
 def clock():
     return _getIcon('clock')
+
+
+def clockGold():
+    return _getIcon('clockGold')
 
 
 def quest():

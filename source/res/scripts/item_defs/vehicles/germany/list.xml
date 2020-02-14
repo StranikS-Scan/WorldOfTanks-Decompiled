@@ -875,6 +875,8 @@
     <userString>	#germany_vehicles:G119_Panzer58_BF	</userString>
     <shortUserString>	#germany_vehicles:G119_Panzer58_BF_short	</shortUserString>
     <description>	#germany_vehicles:G119_Panzer58_BF_descr	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:G119_Panzer58_BF_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:G119_Panzer58_BF_long_special	</longDescriptionSpecial>
     <price>	8700	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -921,6 +923,8 @@
     <userString>	#germany_vehicles:G120_M41_90_GrandFinal	</userString>
     <shortUserString>	#germany_vehicles:G120_M41_90_GrandFinal_short	</shortUserString>
     <description>	#germany_vehicles:G120_M41_90_GrandFinal_descr	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:G120_M41_90_GrandFinal_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:G120_M41_90_GrandFinal_long_special	</longDescriptionSpecial>
     <price>	6500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -1108,6 +1112,8 @@
     <userString>	#germany_vehicles:PzIV_schmalturm	</userString>
     <shortUserString>	#germany_vehicles:PzIV_schmalturm_short	</shortUserString>
     <description>	#germany_vehicles:PzIV_schmalturm_descr	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:PzIV_schmalturm_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:PzIV_schmalturm_long_special	</longDescriptionSpecial>
     <price>	3750	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -1423,6 +1429,17 @@
     <tags>	heavyTank improvedVentilation_class3_user antifragmentationLining_superheavy_user enhancedLongitudinalTorsions_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD	</tags>
     <level>	8	</level>
   </G141_VK7501K>
+  <G134_PzKpfw_VII_bob>
+    <id>	168	</id>
+    <userString>	#germany_vehicles:G134_PzKpfw_VII_bob	</userString>
+    <shortUserString>	#germany_vehicles:G134_PzKpfw_VII_bob_short	</shortUserString>
+    <description>	#germany_vehicles:G134_PzKpfw_VII_descr	</description>
+    <price>	6100000	</price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	heavyTank heavyTank1 improvedVentilation_class3_user antifragmentationLining_superheavy_user enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user cannot_be_sold HD bob secret	</tags>
+    <level>	10	</level>
+  </G134_PzKpfw_VII_bob>
   <G65_JagdTiger_SdKfz_185_IGR>
     <id>	151	</id>
     <userString>	#igr_vehicles:JagdTiger_SdKfz_185_IGR	</userString>

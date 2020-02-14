@@ -10,5 +10,8 @@ class GameMessagesPanelMeta(BaseDAAPIComponent):
     def onMessageEnded(self, type, id):
         self._printOverrideError('onMessageEnded')
 
+    def onMessageHiding(self, type, id):
+        self._printOverrideError('onMessageHiding')
+
     def as_addMessageS(self, messageVO):
         return self.flashObject.as_addMessage(messageVO) if self._isDAAPIInited() else None

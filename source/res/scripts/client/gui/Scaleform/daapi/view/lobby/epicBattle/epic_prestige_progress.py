@@ -48,15 +48,15 @@ class PrestigeProgressBlockUI(object):
 _AVAILABLE_LEVELS = sum(_ICON_NAME_TO_PRESTIGE_LEVEL.values(), [])
 
 def getPrestigeProgressVO(allQuests, metaLevel, pPrestigeLevel, isMaxMetaLevel):
-    maxPrestigeLevel = metaLevel.get('maxPrestigeRewardLevel', 0)
-    prestigeAwards = _getPrestigeLevelUpAwards(allQuests, maxPrestigeLevel)
+    maxRewardTokens = metaLevel.get('maxRewardTokens', 0)
+    prestigeAwards = _getPrestigeLevelUpAwards(allQuests, maxRewardTokens)
     epicMetaGameCtrl = dependency.instance(IEpicBattleMetaGameController)
-    _, maxRewardClaimed = epicMetaGameCtrl.getSeasonData()
+    _, maxRewardClaimed, _ = epicMetaGameCtrl.getSeasonData()
     blocksVO = []
     for index, prestigeAward in enumerate(prestigeAwards):
         isSpecialReward = prestigeAward is not None
         isVehicleReward = isSpecialReward and prestigeAward > 0
-        isNextBlockFinalReward = index + 1 == maxPrestigeLevel
+        isNextBlockFinalReward = index + 1 == maxRewardTokens
         isCurrentOrNextToCurrentBlock = index == pPrestigeLevel or pPrestigeLevel > 0 and index == pPrestigeLevel - 1
         icon = _getPrestigeBlockIconPath(index, pPrestigeLevel, isMaxMetaLevel, isSpecialReward)
         lineStyle = _getLineSeparatorLinkageForPrestigeLevel(index, pPrestigeLevel, isMaxMetaLevel) if not isNextBlockFinalReward else ''
@@ -72,7 +72,7 @@ def getPrestigeProgressVO(allQuests, metaLevel, pPrestigeLevel, isMaxMetaLevel):
         blocksVO.append({'prestigeLevel': index + 1,
          'levelText': levelText,
          'descText': tankText,
-         'canClaimVehicleReward': pPrestigeLevel == maxPrestigeLevel - 1 and isMaxMetaLevel and not maxRewardClaimed,
+         'canClaimVehicleReward': pPrestigeLevel == maxRewardTokens - 1 and isMaxMetaLevel and not maxRewardClaimed,
          'blockStyle': _getBlockStyle(index, pPrestigeLevel, isVehicleReward),
          'useShortSeparatorLine': isCurrentOrNextToCurrentBlock,
          'lineSeparatorStyle': lineStyle,

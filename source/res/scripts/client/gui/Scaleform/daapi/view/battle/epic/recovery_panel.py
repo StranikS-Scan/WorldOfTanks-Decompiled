@@ -65,6 +65,7 @@ class RecoveryPanel(RecoveryPanelMeta):
         if ctrl is not None:
             ctrl.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
         g_playerEvents.onRoundFinished -= self.__onRoundFinished
+        CommandMapping.g_instance.onMappingChanged -= self.__onMappingChanged
         return
 
     def __onVehicleFeedbackReceived(self, eventID, vehicleID, value):

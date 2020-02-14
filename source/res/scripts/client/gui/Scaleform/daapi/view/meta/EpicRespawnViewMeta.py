@@ -4,8 +4,8 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class EpicRespawnViewMeta(BaseDAAPIComponent):
 
-    def onLaneSelected(self, laneID):
-        self._printOverrideError('onLaneSelected')
+    def onLocationSelected(self, pointIdx):
+        self._printOverrideError('onLocationSelected')
 
     def onRespawnBtnClick(self):
         self._printOverrideError('onRespawnBtnClick')
@@ -22,8 +22,8 @@ class EpicRespawnViewMeta(BaseDAAPIComponent):
     def as_resetRespawnStateS(self):
         return self.flashObject.as_resetRespawnState() if self._isDAAPIInited() else None
 
-    def as_setSelectedLaneS(self, laneId):
-        return self.flashObject.as_setSelectedLane(laneId) if self._isDAAPIInited() else None
+    def as_setSelectedLocationS(self, pointIdx):
+        return self.flashObject.as_setSelectedLocation(pointIdx) if self._isDAAPIInited() else None
 
     def as_setLaneStateS(self, laneId, value, blockReasonText):
         return self.flashObject.as_setLaneState(laneId, value, blockReasonText) if self._isDAAPIInited() else None
@@ -31,5 +31,5 @@ class EpicRespawnViewMeta(BaseDAAPIComponent):
     def as_setMapDimensionsS(self, mapWidth, mapHeight):
         return self.flashObject.as_setMapDimensions(mapWidth, mapHeight) if self._isDAAPIInited() else None
 
-    def as_setRespawnLocationsS(self, respawnLocationData):
-        return self.flashObject.as_setRespawnLocations(respawnLocationData) if self._isDAAPIInited() else None
+    def as_setRespawnLocationsS(self, locations):
+        return self.flashObject.as_setRespawnLocations(locations) if self._isDAAPIInited() else None

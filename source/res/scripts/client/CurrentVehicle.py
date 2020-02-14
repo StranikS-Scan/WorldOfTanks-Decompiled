@@ -184,7 +184,7 @@ class _CurrentVehicle(_CachedVehicle):
 
     @property
     def item(self):
-        return self.itemsCache.items.getVehicle(self.__vehInvID) if self.__vehInvID > 0 else None
+        return self.itemsCache.items.getVehicle(self.__vehInvID) if self.__vehInvID > 0 and self.itemsCache.isSynced() else None
 
     def isBroken(self):
         return self.isPresent() and self.item.isBroken

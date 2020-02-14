@@ -19,7 +19,7 @@ from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import event_dispatcher as shared_events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import LoadViewEvent, ItemRemovalByDemountKitEvent
-from gui.shared.gui_items import GUI_ITEM_TYPE_INDICES, GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
+from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.gui_items.vehicle_equipment import BATTLE_BOOSTER_LAYOUT_SIZE
@@ -46,27 +46,42 @@ _EMPTY_ID = -1
 _logger = logging.getLogger(__name__)
 ANIMATION_REMOVE_DK = ('animations/ammunitionPanel/removedDK.swf', 'gui_hangar_ammunition_panel_removed_dk')
 
-@dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def getFittingSlotsData(vehicle, slotsRange, voClass=None, itemsCache=None):
+def getFittingSlotsData(vehicle, slotsRange, voClass=None):
     devices = []
     voClass = voClass or FittingSlotVO
+    modulesData = _getVehicleModulesBySlotType(vehicle)
     for slotType in slotsRange:
-        data = itemsCache.items.getItems(GUI_ITEM_TYPE_INDICES[slotType], REQ_CRITERIA.CUSTOM(lambda item: item.isInstalled(vehicle))).values()
         if slotType in ARTEFACTS_SLOTS:
             for slotId in xrange(NUM_OPTIONAL_DEVICE_SLOTS):
-                devices.append(voClass(data, vehicle, slotType, slotId, TOOLTIPS_CONSTANTS.HANGAR_MODULE))
+                devices.append(voClass(modulesData[slotType], vehicle, slotType, slotId, TOOLTIPS_CONSTANTS.HANGAR_MODULE))
 
         if slotType in _BOOSTERS_SLOTS:
             for slotId in xrange(BATTLE_BOOSTER_LAYOUT_SIZE):
-                devices.append(voClass(data, vehicle, slotType, slotId, tooltipType=TOOLTIPS_CONSTANTS.BATTLE_BOOSTER))
+                devices.append(voClass(modulesData[slotType], vehicle, slotType, slotId, tooltipType=TOOLTIPS_CONSTANTS.BATTLE_BOOSTER))
 
         if slotType in _ABILITY_SLOTS:
             for slotId, _ in enumerate(vehicle.equipment.battleAbilityConsumables.getIntCDs()):
-                devices.append(voClass(data, vehicle, slotType, slotId, tooltipType=TOOLTIPS_CONSTANTS.EPIC_SKILL_SLOT_INFO))
+                devices.append(voClass(modulesData[slotType], vehicle, slotType, slotId, tooltipType=TOOLTIPS_CONSTANTS.EPIC_SKILL_SLOT_INFO))
 
-        devices.append(voClass(data, vehicle, slotType, tooltipType=TOOLTIPS_CONSTANTS.HANGAR_MODULE))
+        devices.append(voClass(modulesData[slotType], vehicle, slotType, tooltipType=TOOLTIPS_CONSTANTS.HANGAR_MODULE))
 
     return devices
+
+
+def _getVehicleModulesBySlotType(vehicle):
+    equipment = vehicle.equipment.regularConsumables.getInstalledItems()
+    battleBoosters = vehicle.equipment.battleBoosterConsumables.getInstalledItems()
+    battleAbilities = vehicle.equipment.battleAbilityConsumables.getInstalledItems()
+    modules = {GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.CHASSIS]: (vehicle.chassis,),
+     GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.TURRET]: (vehicle.turret,),
+     GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.GUN]: (vehicle.gun,),
+     GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.ENGINE]: (vehicle.engine,),
+     GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.RADIO]: (vehicle.radio,),
+     GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.OPTIONALDEVICE]: filter(None, vehicle.optDevices),
+     GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.EQUIPMENT]: equipment,
+     GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.BATTLE_BOOSTER]: battleBoosters,
+     GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.BATTLE_ABILITY]: battleAbilities}
+    return modules
 
 
 def getAmmo(shells):
@@ -138,7 +153,6 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
         g_eventBus.removeListener(ItemRemovalByDemountKitEvent.CANCELED, self.__itemRemovalByDKCancelHandler, EVENT_BUS_SCOPE.LOBBY)
         self.__hangarMessage = None
         AccountSettings.onSettingsChanging -= self.__onAccountSettingsChanging
-        self.__devices = None
         self.__declaredItemRemovalByDK = None
         super(AmmunitionPanel, self)._dispose()
         return

@@ -41,6 +41,10 @@
     <respawnController_updatePlayerLives>
       <Arg>	UINT8	</Arg>
     </respawnController_updatePlayerLives>
+    <respawnController_chooseRespawnZone>
+      <Arg>	VECTOR3	</Arg>
+      <Exposed></Exposed>
+    </respawnController_chooseRespawnZone>
   </BaseMethods>
   <ClientMethods>
     <redrawVehicleOnRespawn>

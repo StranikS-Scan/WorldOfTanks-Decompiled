@@ -521,7 +521,7 @@ class TooltipConfigReader(object):
 
 
 class ArtilleryConfigReader(object):
-    _ARTILLERY_SLOTS = ('delay', 'duration', 'shotsNumber', 'areaRadius', 'shellCompactDescr', 'piercingPower', 'areaVisual', 'areaColor', 'areaMarker', 'areaLength', 'noOwner', 'shotSoundPreDelay', 'wwsoundShot')
+    _ARTILLERY_SLOTS = ('delay', 'duration', 'shotsNumber', 'areaRadius', 'shellCompactDescr', 'piercingPower', 'areaVisual', 'areaColor', 'areaMarker', 'areaLength', 'noOwner', 'shotSoundPreDelay', 'wwsoundShot', 'wwsoundEquipmentUsed')
 
     def initArtillerySlots(self):
         self.delay = component_constants.ZERO_FLOAT
@@ -537,6 +537,7 @@ class ArtilleryConfigReader(object):
         self.areaWidth = component_constants.ZERO_FLOAT
         self.shotSoundPreDelay = component_constants.ZERO_FLOAT
         self.wwsoundShot = None
+        self.wwsoundEquipmentUsed = None
         return
 
     def readArtilleryConfig(self, xmlCtx, section):
@@ -553,6 +554,7 @@ class ArtilleryConfigReader(object):
         self.noOwner = _xml.readBool(xmlCtx, section, 'noOwner')
         self.shotSoundPreDelay = _xml.readIntOrNone(xmlCtx, section, 'shotSoundPreDelay')
         self.wwsoundShot = _xml.readStringOrNone(xmlCtx, section, 'wwsoundShot')
+        self.wwsoundEquipmentUsed = _xml.readStringOrNone(xmlCtx, section, 'wwsoundEquipmentUsed')
 
 
 class PlaneConfigReader(object):
@@ -582,7 +584,7 @@ class PlaneConfigReader(object):
 
 
 class BomberConfigReader(PlaneConfigReader):
-    _BOMBER_SLOTS = PlaneConfigReader._PLANE_SLOTS + ('areaLength', 'areaWidth', 'antepositions', 'lateropositions', 'bombingMask', 'waveFraction', 'bombsNumber', 'shellCompactDescr', 'tracerKind', 'piercingPower', 'gravity', 'noOwner')
+    _BOMBER_SLOTS = PlaneConfigReader._PLANE_SLOTS + ('areaLength', 'areaWidth', 'antepositions', 'lateropositions', 'bombingMask', 'waveFraction', 'bombsNumber', 'shellCompactDescr', 'tracerKind', 'piercingPower', 'gravity', 'noOwner', 'wwsoundEquipmentUsed')
 
     def initBomberSlots(self):
         self.initPlaneSlots()
@@ -598,6 +600,8 @@ class BomberConfigReader(PlaneConfigReader):
         self.piercingPower = component_constants.EMPTY_TUPLE
         self.gravity = component_constants.ZERO_FLOAT
         self.noOwner = False
+        self.wwsoundEquipmentUsed = None
+        return
 
     def readBomberConfig(self, xmlCtx, section):
         self.readPlaneConfig(xmlCtx, section)
@@ -615,6 +619,7 @@ class BomberConfigReader(PlaneConfigReader):
         self.piercingPower = _xml.readTupleOfPositiveInts(xmlCtx, section, 'piercingPower', 2)
         self.gravity = _xml.readPositiveFloat(xmlCtx, section, 'gravity')
         self.noOwner = _xml.readBool(xmlCtx, section, 'noOwner')
+        self.wwsoundEquipmentUsed = _xml.readStringOrNone(xmlCtx, section, 'wwsoundEquipmentUsed')
 
 
 class SmokeConfigReader(object):
@@ -675,7 +680,7 @@ class SmokeConfigReader(object):
 
 
 class ReconConfigReader(PlaneConfigReader):
-    _RECON_SLOTS = PlaneConfigReader._PLANE_SLOTS + ('areaRadius', 'scanPointsAmount', 'spottingDuration', 'antepositions', 'lateropositions', 'areaWidth', 'areaLength')
+    _RECON_SLOTS = PlaneConfigReader._PLANE_SLOTS + ('areaRadius', 'scanPointsAmount', 'spottingDuration', 'antepositions', 'lateropositions', 'areaWidth', 'areaLength', 'wwsoundEquipmentUsed')
 
     def initReconSlots(self):
         self.initPlaneSlots()
@@ -686,6 +691,8 @@ class ReconConfigReader(PlaneConfigReader):
         self.lateropositions = component_constants.EMPTY_TUPLE
         self.areaLength = component_constants.ZERO_FLOAT
         self.areaWidth = component_constants.ZERO_FLOAT
+        self.wwsoundEquipmentUsed = None
+        return
 
     def readReconConfig(self, xmlCtx, section):
         self.readPlaneConfig(xmlCtx, section)
@@ -696,22 +703,26 @@ class ReconConfigReader(PlaneConfigReader):
         self.lateropositions = _xml.readTupleOfFloats(xmlCtx, section, 'lateropositions')
         self.areaWidth = self.areaRadius * 2
         self.areaLength = self.areaRadius * (2 + self.scanPointsAmount - 1)
+        self.wwsoundEquipmentUsed = _xml.readStringOrNone(xmlCtx, section, 'wwsoundEquipmentUsed')
 
 
 class InspireConfigReader(object):
-    _INSPIRE_SLOTS = ('duration', 'crewIncreaseFactor', 'inactivationDelay', 'radius')
+    _INSPIRE_SLOTS = ('duration', 'crewIncreaseFactor', 'inactivationDelay', 'radius', 'wwsoundEquipmentUsed')
 
     def initInspireSlots(self):
         self.duration = component_constants.ZERO_FLOAT
         self.crewIncreaseFactor = component_constants.ZERO_FLOAT
         self.inactivationDelay = component_constants.ZERO_FLOAT
         self.radius = component_constants.ZERO_FLOAT
+        self.wwsoundEquipmentUsed = None
+        return
 
     def readInspireConfig(self, xmlCtx, section):
         self.duration = _xml.readPositiveFloat(xmlCtx, section, 'duration')
         self.crewIncreaseFactor = _xml.readPositiveFloat(xmlCtx, section, 'crewIncreaseFactor')
         self.inactivationDelay = _xml.readNonNegativeFloat(xmlCtx, section, 'inactivationDelay')
         self.radius = _xml.readPositiveFloat(xmlCtx, section, 'radius')
+        self.wwsoundEquipmentUsed = _xml.readStringOrNone(xmlCtx, section, 'wwsoundEquipmentUsed')
 
 
 class DynamicEquipment(Equipment):

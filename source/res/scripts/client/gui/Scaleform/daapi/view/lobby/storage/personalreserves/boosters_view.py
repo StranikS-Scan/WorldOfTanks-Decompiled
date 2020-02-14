@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/personalreserves/boosters_view.py
 import copy
 from account_helpers import AccountSettings
+from adisp import process
 from goodies.goodie_constants import GOODIE_RESOURCE_TYPE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform import MENU
@@ -122,8 +123,9 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
         self.__filterMask = filterMask
         self.__onUpdateBoosters()
 
+    @process
     def activateReserve(self, boosterID):
-        shared_events.showBoosterActivateDialog(boosterID)
+        _ = yield shared_events.showBoosterActivateDialog(boosterID)
 
     def _getClientSectionKey(self):
         pass

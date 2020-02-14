@@ -4,6 +4,7 @@
     <team>
       <Type>	UINT8	</Type>
       <Editable>	true	</Editable>
+      <Default>	0	</Default>
     </team>
     <preferableType>
       <Type>	STRING	</Type>
@@ -18,23 +19,48 @@
     </positionNumber>
     <arenaBonusMask>
       <Type>	INT32	</Type>
-      <Default>	2147483647	</Default>
       <Editable>	true	</Editable>
+      <Default>	2147483647	</Default>
     </arenaBonusMask>
     <isLowLevel>
       <Type>	UINT8	</Type>
-      <Default>	0	</Default>
       <Editable>	true	</Editable>
+      <Default>	0	</Default>
     </isLowLevel>
     <spawnMode>
       <Type>	UINT8	</Type>
-      <Default>	0	</Default>
       <Editable>	true	</Editable>
+      <Default>	0	</Default>
     </spawnMode>
     <spawnPointGroup>
       <Type>	UINT8	</Type>
-      <Default>	0	</Default>
       <Editable>	true	</Editable>
+      <Default>	0	</Default>
     </spawnPointGroup>
+    <groupName>
+      <Type>	STRING	</Type>
+      <Editable>	true	</Editable>
+      <Default></Default>
+    </groupName>
+    <groupPosition>
+      <Type>	VECTOR3	</Type>
+      <Editable>	True	</Editable>
+      <Default>	0.0 0.0 0.0	</Default>
+    </groupPosition>
+    <safeAreaRadius>
+      <Type>	UINT32	</Type>
+      <Editable>	true	</Editable>
+      <Default>	0	</Default>
+    </safeAreaRadius>
+    <respawnGroupPriority>
+      <Type>	STRING	</Type>
+      <Editable>	true	</Editable>
+      <Default>	none	</Default>
+    </respawnGroupPriority>
+    <overgroupFlank>
+      <Type>	UINT8	</Type>
+      <Editable>	true	</Editable>
+      <Default>	0	</Default>
+    </overgroupFlank>
   </Properties>
 </SpawnPoint.def>

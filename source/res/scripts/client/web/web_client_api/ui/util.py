@@ -84,7 +84,7 @@ class _AccountAttribute(W2CSchema):
 
 class _PlatformProductListSchema(W2CSchema):
     storefront = Field(required=True, type=basestring)
-    wgid = Field(required=True, type=int)
+    wgid = Field(required=True, type=basestring)
     language = Field(required=True, type=basestring)
     additional_data = Field(required=True, type=dict)
     country = Field(required=True, type=basestring)

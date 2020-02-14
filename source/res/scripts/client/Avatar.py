@@ -53,6 +53,7 @@ from constants import TARGET_LOST_FLAGS
 from constants import VEHICLE_MISC_STATUS, VEHICLE_HIT_FLAGS
 from constants import VEHICLE_SIEGE_STATE
 from constants import DUAL_GUN, DUALGUN_CHARGER_STATUS, DUALGUN_CHARGER_ACTION_TYPE
+from constants import DEFAULT_VECTOR_3
 from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG_DEV, LOG_CODEPOINT_WARNING, LOG_NOTE
 from gui import GUI_CTRL_MODE_FLAG, IngameSoundNotifications, SystemMessages
 from gui.Scaleform.locale.MESSENGER import MESSENGER
@@ -222,6 +223,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__initProgress = 0
         self.__shotWaitingTimerID = None
         self.__chargeWaitingTimerID = None
+        self.__dualGunHelper = None
         self.__isWaitingForShot = False
         self.__projectileMover = None
         self.positionControl = None
@@ -403,6 +405,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 LOG_CURRENT_EXCEPTION()
 
         self.guiSessionProvider.stop()
+        self.__dualGunHelper = None
         try:
             if self.positionControl is not None:
                 self.positionControl.destroy()
@@ -515,10 +518,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             ctrl = self.guiSessionProvider.shared.vehicleState
             if self.vehicle.stunInfo > 0.0 and (self.isObserver() or ctrl.isInPostmortem):
                 self.vehicle.updateStunInfo()
-            if self.vehicle.typeDescriptor.isDualgunVehicle:
-                self.__dualGunHelper = DualGun.DualGunHelper()
-            else:
-                self.__dualGunHelper = None
+            if self.__dualGunHelper is not None:
+                self.__dualGunHelper.reset()
             if self.vehicle.typeDescriptor.hasSiegeMode:
                 siegeState = self.vehicle.siegeState
                 siegeModeParams = self.vehicle.typeDescriptor.type.siegeModeParams
@@ -1851,9 +1852,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             replayCtrl.stop()
         return
 
-    def addBotToArena(self, vehicleTypeName, team):
+    def addBotToArena(self, vehicleTypeName, team, pos=DEFAULT_VECTOR_3, group=0):
         compactDescr = vehicles.VehicleDescr(typeName=vehicleTypeName).makeCompactDescr()
-        self.base.addBotToArena(compactDescr, team, self.name)
+        self.base.addBotToArena(compactDescr, team, self.name, pos, group)
 
     def addBotToArenaEx(self, vehicleTypeName, team, *moduleIDs):
         ids = [0,
@@ -2148,6 +2149,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             import VehicleGunRotator
             self.gunRotator = VehicleGunRotator.VehicleGunRotator(self)
         self.positionControl = AvatarPositionControl.AvatarPositionControl(self)
+        self.__dualGunHelper = DualGun.DualGunHelper()
         self.__startGUI()
 
     def __initGUI(self):

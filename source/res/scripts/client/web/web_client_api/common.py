@@ -67,7 +67,7 @@ class ItemPackType(CONST_CONTAINER):
     CUSTOM_CREDITS = 'custom/credits'
     CUSTOM_SLOT = 'custom/slot'
     CUSTOM_REFERRAL_CREW = 'custom/crew'
-    CUSTOM_REWARD_POINT = 'custom/prestige_point'
+    CUSTOM_REWARD_POINT = 'custom/reward_point'
     CUSTOM_SUPPLY_POINT = 'custom/supply_point'
     TOKEN = 'token'
     PAINT_ALL = 'paint/all'
@@ -143,3 +143,12 @@ CompensationSpec = namedtuple('CompensationSpec', ('type', 'value', 'count'))
 
 class CompensationType(CONST_CONTAINER):
     MONEY = 'money'
+
+
+def sanitizeResPath(relPath):
+    if relPath:
+        if relPath.startswith('img://'):
+            relPath = relPath.strip('img://')
+        if relPath.startswith('..'):
+            relPath = 'gui' + relPath[2:]
+        return relPath

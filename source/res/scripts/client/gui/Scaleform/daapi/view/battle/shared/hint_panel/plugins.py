@@ -140,7 +140,8 @@ class TrajectoryViewHintPlugin(HintPanelPlugin):
             vehicleCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
         self.__settings = AccountSettings.getSettings(TRAJECTORY_VIEW_HINT_SECTION)
         self._updateCounterOnStart(self.__settings, self._HINT_DAY_COOLDOWN, self._HINT_BATTLES_COOLDOWN)
-        self.__setup(crosshairCtrl, vehicleCtrl)
+        if crosshairCtrl is not None and vehicleCtrl is not None:
+            self.__setup(crosshairCtrl, vehicleCtrl)
         return
 
     def stop(self):

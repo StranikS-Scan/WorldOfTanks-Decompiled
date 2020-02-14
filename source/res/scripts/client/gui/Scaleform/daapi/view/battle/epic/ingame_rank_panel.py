@@ -41,7 +41,7 @@ class InGameRankPanel(EpicInGameRankMeta):
          'isMaxRank': self.__currentRank == _MAX_IN_GAME_RANK,
          'previousProgress': 0,
          'newProgress': self.__getThresholdPercentage(self.__currentExp),
-         'rankText': EPIC_BATTLE.getRankLabel(self.__currentRank)})
+         'rankText': EPIC_BATTLE.getRankLabel(self.__currentRank + 1)})
 
     def __getThresholdPercentage(self, expValue):
         activeRank = self.__getRank(expValue)

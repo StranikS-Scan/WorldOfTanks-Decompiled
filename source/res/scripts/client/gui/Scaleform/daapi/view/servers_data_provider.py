@@ -66,6 +66,9 @@ class ServersDataProvider(SortableDAAPIDataProvider):
     def setSelectedID(self, sid):
         self.__selectedID = sid
 
+    def resetSelectedIndex(self):
+        self.flashObject.resetSelectedIndex(self.getSelectedIdx())
+
     def getVO(self, index):
         vo = None
         if index > -1:
@@ -84,7 +87,11 @@ class ServersDataProvider(SortableDAAPIDataProvider):
             self.__mapping[vo['id']] = index
 
         if self.__selectedID not in self.__mapping:
-            self.__selectedID = None
+            if len(self._list) == 1:
+                vo = self.getVO(0)
+                self.setSelectedID(vo['id'])
+            else:
+                self.__selectedID = None
         return
 
     def rebuildList(self, cache):

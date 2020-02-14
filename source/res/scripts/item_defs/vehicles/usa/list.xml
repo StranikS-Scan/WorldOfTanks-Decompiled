@@ -778,6 +778,8 @@
     <userString>	#usa_vehicles:A102_T28_concept	</userString>
     <description>	#usa_vehicles:A102_T28_concept_descr	</description>
     <shortUserString>	#usa_vehicles:A102_T28_concept_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:A102_T28_concept_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A102_T28_concept_long_special	</longDescriptionSpecial>
     <price>	7000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -813,6 +815,8 @@
     <userString>	#usa_vehicles:A111_T25_Pilot	</userString>
     <description>	#usa_vehicles:A111_T25_Pilot_descr	</description>
     <shortUserString>	#usa_vehicles:A111_T25_Pilot_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:A111_T25_Pilot_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A111_T25_Pilot_long_special	</longDescriptionSpecial>
     <price>	7450	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -884,6 +888,8 @@
     <id>	232	</id>
     <userString>	#usa_vehicles:T34_hvy_BF	</userString>
     <description>	#usa_vehicles:T34_hvy_BF_descr	</description>
+    <shortDescriptionSpecial>	#usa_vehicles:T34_hvy_BF_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:T34_hvy_BF_long_special	</longDescriptionSpecial>
     <price>	12000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -1018,6 +1024,32 @@
     <tags>	AT-SPG mediumAT-SPG mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedTorsions1t_user lockOutfit HD special	</tags>
     <level>	7	</level>
   </A130_Super_Hellcat>
+  <A117_T26E5_FL>
+    <id>	246	</id>
+    <userString>	#usa_vehicles:A117_T26E5_FL	</userString>
+    <description>	#usa_vehicles:A117_T26E5_descr	</description>
+    <shortUserString>	#usa_vehicles:A117_T26E5_FL_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:A117_T26E5_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A117_T26E5_long_special	</longDescriptionSpecial>
+    <price>	9700	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	heavyTank improvedVentilation_class3_user aimingStabilizer_Mk2_user mediumCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD epic_battles	</tags>
+    <level>	8	</level>
+  </A117_T26E5_FL>
+  <A12_T32_FL>
+    <id>	247	</id>
+    <userString>	#usa_vehicles:T32_FL	</userString>
+    <shortUserString>	#usa_vehicles:T32_FL_short	</shortUserString>
+    <description>	#usa_vehicles:T32_descr	</description>
+    <price>	1	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	heavyTank improvedVentilation_class3_user aimingStabilizer_Mk2_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD epic_battles	</tags>
+    <level>	8	</level>
+  </A12_T32_FL>
   <A103_T71E1_IGR>
     <id>	151	</id>
     <userString>	#igr_vehicles:T71_IGR	</userString>

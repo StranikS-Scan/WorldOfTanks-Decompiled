@@ -88,7 +88,7 @@ class EpicPrestigeProgressTooltip(BlocksTooltipData):
                         vehicleAwardBlocks = self._packVehicleBlock(specialArgs[0])
                 regularAwardBlocks.append(self._packRegularAwardBlock(bonus))
 
-            _, maxRewardClaimed = self.epicMetaGameCtrl.getSeasonData()
+            _, maxRewardClaimed, _ = self.epicMetaGameCtrl.getSeasonData()
             pPrestigeLevel, pMetaLevel, _ = self.epicMetaGameCtrl.getPlayerLevelInfo()
             alreadyReceivedAwards = prestigeOver <= pPrestigeLevel + 1 or maxRewardClaimed
             desc = ''

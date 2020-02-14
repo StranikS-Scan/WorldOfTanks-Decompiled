@@ -138,6 +138,8 @@ class RentalsController(IRentalsController):
         return filteredPackages
 
     def __startRentTimeNotifyCallback(self):
+        if not self.itemsCache.isSynced():
+            return
         self.__vehiclesForUpdate = []
         rentedVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.VEHICLE.RENT ^ REQ_CRITERIA.VEHICLE.RENT_PROMOTION).values()
         notificationList = []

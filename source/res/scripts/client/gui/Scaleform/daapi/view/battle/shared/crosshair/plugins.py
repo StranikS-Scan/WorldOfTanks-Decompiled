@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/crosshair/plugins.py
+import logging
 import math
 from collections import defaultdict
 import BattleReplay
@@ -33,6 +34,8 @@ from helpers.time_utils import MS_IN_SECOND
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IBootcampController
+from soft_exception import SoftException
+_logger = logging.getLogger(__name__)
 _SETTINGS_KEY_TO_VIEW_ID = {AIM.ARCADE: CROSSHAIR_VIEW_ID.ARCADE,
  AIM.SNIPER: CROSSHAIR_VIEW_ID.SNIPER}
 _SETTINGS_KEYS = set(_SETTINGS_KEY_TO_VIEW_ID.keys())
@@ -151,12 +154,15 @@ class CorePlugin(CrosshairPlugin):
 
     def start(self):
         ctrl = self.sessionProvider.shared.crosshair
+        if ctrl is None:
+            raise SoftException('Crosshair controller is not found')
         self.__setup(ctrl)
         ctrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
         ctrl.onCrosshairScaleChanged += self.__onCrosshairScaleChanged
         ctrl.onCrosshairSizeChanged += self.__onCrosshairSizeChanged
         ctrl.onCrosshairPositionChanged += self.__onCrosshairPositionChanged
         ctrl.onCrosshairZoomFactorChanged += self.__onCrosshairZoomFactorChanged
+        return
 
     def stop(self):
         ctrl = self.sessionProvider.shared.crosshair
@@ -370,21 +376,33 @@ class AmmoPlugin(CrosshairPlugin):
 
     def start(self):
         ctrl = self.sessionProvider.shared.ammo
+        vehStateCtrl = self.sessionProvider.shared.vehicleState
+        if vehStateCtrl is None or ctrl is None:
+            raise SoftException('Vehicle state controller or ammo controller is None')
         self.__setup(ctrl, self.sessionProvider.isReplayPlaying)
         ctrl.onGunSettingsSet += self.__onGunSettingsSet
         ctrl.onGunReloadTimeSet += self.__onGunReloadTimeSet
         ctrl.onGunAutoReloadTimeSet += self.__onGunAutoReloadTimeSet
         ctrl.onShellsUpdated += self.__onShellsUpdated
         ctrl.onCurrentShellChanged += self.__onCurrentShellChanged
+        vehStateCtrl.onVehicleControlling += self.__onVehicleControlling
+        return
+
+    def __onVehicleControlling(self, _):
+        self.__scaledInterval = None
+        return
 
     def stop(self):
         ctrl = self.sessionProvider.shared.ammo
+        vehStateCtrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onGunSettingsSet -= self.__onGunSettingsSet
             ctrl.onGunAutoReloadTimeSet -= self.__onGunAutoReloadTimeSet
             ctrl.onGunReloadTimeSet -= self.__onGunReloadTimeSet
             ctrl.onShellsUpdated -= self.__onShellsUpdated
             ctrl.onCurrentShellChanged -= self.__onCurrentShellChanged
+        if vehStateCtrl is not None:
+            vehStateCtrl.onVehicleControlling -= self.__onVehicleControlling
         return
 
     def fini(self):
@@ -499,6 +517,8 @@ class VehicleStatePlugin(CrosshairPlugin):
 
     def start(self):
         ctrl = self.sessionProvider.shared.vehicleState
+        if ctrl is None:
+            raise SoftException('Vehicles state controller is not found')
         vehicle = ctrl.getControllingVehicle()
         if vehicle is not None:
             self.__setPlayerInfo(vehicle.id)
@@ -507,6 +527,8 @@ class VehicleStatePlugin(CrosshairPlugin):
         ctrl.onVehicleControlling += self.__onVehicleControlling
         ctrl.onPostMortemSwitched += self.__onPostMortemSwitched
         ctrl = self.sessionProvider.shared.feedback
+        if ctrl is None:
+            raise SoftException('Feedback adaptor is not found')
         ctrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
         return
 
@@ -530,6 +552,8 @@ class VehicleStatePlugin(CrosshairPlugin):
 
     def __updateVehicleInfo(self):
         if self._parentObj.getViewID() == CROSSHAIR_VIEW_ID.POSTMORTEM:
+            if self.__playerInfo is None:
+                raise SoftException('Player info must be defined at first, see vehicle_state_ctrl')
             if self.__isPlayerVehicle:
                 ctx = {'type': self.__playerInfo.vehicleName}
                 template = 'personal'
@@ -540,6 +564,7 @@ class VehicleStatePlugin(CrosshairPlugin):
             self._parentObj.as_updatePlayerInfoS(makeHtmlString('html_templates:battle/postmortemMessages', template, ctx=ctx))
         else:
             self._parentObj.as_setHealthS(self.__healthPercent)
+        return
 
     def __onVehicleControlling(self, vehicle):
         self.__maxHealth = vehicle.typeDescriptor.maxHealth
@@ -577,7 +602,10 @@ class _DistancePlugin(CrosshairPlugin):
     def start(self):
         self._interval = TimeInterval(_TARGET_UPDATE_INTERVAL, self, '_update')
         ctrl = self.sessionProvider.shared.crosshair
+        if ctrl is None:
+            raise SoftException('Crosshair controller is not found')
         ctrl.onCrosshairViewChanged += self._onCrosshairViewChanged
+        return
 
     def stop(self):
         if self._interval is not None:
@@ -605,7 +633,10 @@ class TargetDistancePlugin(_DistancePlugin):
     def start(self):
         super(TargetDistancePlugin, self).start()
         ctrl = self.sessionProvider.shared.feedback
+        if ctrl is None:
+            raise SoftException('Feedback adaptor is not found')
         ctrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
+        return
 
     def stop(self):
         super(TargetDistancePlugin, self).stop()
@@ -676,9 +707,13 @@ class GunMarkersInvalidatePlugin(CrosshairPlugin):
 
     def start(self):
         ctrl = self.sessionProvider.shared.crosshair
+        if ctrl is None:
+            raise SoftException('Crosshair controller is not found')
         self.__setup(ctrl)
         ctrl.onGunMarkersSetChanged += self.__onGunMarkersSetChanged
         ctrl = self.sessionProvider.shared.vehicleState
+        if ctrl is None:
+            raise SoftException('Vehicle state controller is not found')
         ctrl.onVehicleControlling += self.__onVehicleControlling
         ctrl = self.sessionProvider.shared.ammo
         if ctrl is not None:
@@ -738,6 +773,8 @@ class ShotResultIndicatorPlugin(CrosshairPlugin):
 
     def start(self):
         ctrl = self.sessionProvider.shared.crosshair
+        if ctrl is None:
+            raise SoftException('Crosshair controller is not found')
         ctrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
         ctrl.onGunMarkerStateChanged += self.__onGunMarkerStateChanged
         g_playerEvents.onTeamChanged += self.__onTeamChanged
@@ -746,6 +783,7 @@ class ShotResultIndicatorPlugin(CrosshairPlugin):
         self.__setMapping(_SETTINGS_KEYS)
         self.__setEnabled(self._parentObj.getViewID())
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
+        return
 
     def stop(self):
         ctrl = self.sessionProvider.shared.crosshair

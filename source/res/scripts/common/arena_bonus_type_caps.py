@@ -11,6 +11,7 @@ class ARENA_BONUS_TYPE_CAPS():
     RANSOM_IN = 'RANSOM_IN'
     REWARD_FOR_ACHIEVEMENT = 'REWARD_FOR_ACHIEVEMENT'
     QUESTS = 'QUESTS'
+    AVATAR_QUESTS = 'AVATAR_QUESTS'
     DOSSIER_TOTAL = 'DOSSIER_TOTAL'
     DOSSIER_KILL_LIST = 'DOSSIER_KILL_LIST'
     DOSSIER_15X15 = 'DOSSIER_15X15'
@@ -446,7 +447,8 @@ class ARENA_BONUS_TYPE_CAPS():
      PREM_SQUAD_CREDITS,
      META,
      CUSTOM_ALLY_DAMAGE_EFFECT,
-     ANONYMIZER))
+     ANONYMIZER,
+     AVATAR_QUESTS))
     EPIC_BATTLE_TRAINING = frozenset((RESULTS,
      RESPAWN,
      SECTOR_MECHANICS,
@@ -473,7 +475,8 @@ class ARENA_BONUS_TYPE_CAPS():
     __RULES = (lambda caps: not set(ARENA_BONUS_TYPE_CAPS.DOSSIER_ACHIEVEMENTS) & set(caps) or ARENA_BONUS_TYPE_CAPS.MULTITEAMS not in caps,
      lambda caps: not set(ARENA_BONUS_TYPE_CAPS.DOSSIER_ACHIEVEMENTS) & set(caps) or ARENA_BONUS_TYPE_CAPS.RESPAWN not in caps or ARENA_BONUS_TYPE_CAPS.DOSSIER_ACHIEVEMENTS_EPIC_BATTLE in caps,
      lambda caps: ARENA_BONUS_TYPE_CAPS.CYBERSPORT_RATING not in caps or ARENA_BONUS_TYPE_CAPS.MULTITEAMS not in caps,
-     lambda caps: ARENA_BONUS_TYPE_CAPS.WIN_POINTS_MECHANICS not in caps or ARENA_BONUS_TYPE_CAPS.INTERACTIVE_STATS in caps)
+     lambda caps: ARENA_BONUS_TYPE_CAPS.WIN_POINTS_MECHANICS not in caps or ARENA_BONUS_TYPE_CAPS.INTERACTIVE_STATS in caps,
+     lambda caps: (ARENA_BONUS_TYPE_CAPS.QUESTS in caps) != (ARENA_BONUS_TYPE_CAPS.AVATAR_QUESTS in caps) or ARENA_BONUS_TYPE_CAPS.QUESTS not in caps)
     _typeToCaps = {ARENA_BONUS_TYPE.REGULAR: REGULAR,
      ARENA_BONUS_TYPE.TRAINING: TRAINING,
      ARENA_BONUS_TYPE.TOURNAMENT: TOURNAMENT,
@@ -501,10 +504,10 @@ class ARENA_BONUS_TYPE_CAPS():
 
     @staticmethod
     def init():
-        for caps in ARENA_BONUS_TYPE_CAPS._typeToCaps.itervalues():
+        for nameIdx, caps in ARENA_BONUS_TYPE_CAPS._typeToCaps.iteritems():
             for rule in ARENA_BONUS_TYPE_CAPS.__RULES:
                 if not rule(caps):
-                    raise SoftException('Caps is invalid')
+                    raise SoftException('Caps is invalid for ARENA_BONUS_TYPE={}'.format(nameIdx))
 
     @staticmethod
     def get(arenaBonusType):

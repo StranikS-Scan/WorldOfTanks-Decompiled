@@ -491,7 +491,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     def __onEntityChanged(self):
         self.__updateState()
         self.__updateAmmoPanel()
-        self.__switchCarousels()
         self.__updateAlertMessage()
         self.__updateNavigationInResearchPanel()
         self.__updateHeader()

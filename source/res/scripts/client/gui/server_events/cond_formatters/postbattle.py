@@ -222,8 +222,10 @@ class _BattleResultsFormatter(SimpleMissionsFormatter):
             return packSimpleTitle(i18n.makeString(QUESTS.DETAILS_CONDITIONS_TOP_TITLE, value=topRangeLower))
         elif value is None:
             return super(_BattleResultsFormatter, cls)._getTitle()
+        elif condition.keyName == 'markOfMastery':
+            return packSimpleTitle(value)
         else:
-            return packSimpleTitle(value) if condition.keyName == 'markOfMastery' else FormattableField(FORMATTER_IDS.RELATION, (value, relation, relationI18nType))
+            return packSimpleTitle(i18n.makeString('#epic_battle:rank/rank%d' % int(value))) if condition.keyName == 'rankChange' else FormattableField(FORMATTER_IDS.RELATION, (value, relation, relationI18nType))
 
     def _getDescription(self, condition):
         label, _, _, _ = getResultsData(condition)

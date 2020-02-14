@@ -366,12 +366,12 @@ class VehiclePreviewWebApiMixin(object):
         else:
             _pushInvalidPreviewMessage()
 
-    @w2c(_VehiclePreviewSchema, 'vehicle_frontline_preview')
-    def openFrontLineVehiclePreview(self, cmd):
+    @w2c(_VehiclePreviewSchema, 'vehicle_event_progression_preview')
+    def openEventProgressionVehiclePreview(self, cmd):
         vehicleID = cmd.vehicle_id
         if self.__validVehiclePreview(vehicleID):
             if not checkIfVehicleIsHidden(vehicleID):
-                event_dispatcher.showVehiclePreview(vehTypeCompDescr=vehicleID, previewAlias=cmd.back_url, previewBackCb=self._getVehiclePreviewReturnCallback(cmd), isFrontline=True)
+                event_dispatcher.showEventProgressionVehiclePreview(vehTypeCompDescr=vehicleID, previewAlias=cmd.back_url, previewBackCb=self._getVehiclePreviewReturnCallback(cmd))
         else:
             _pushInvalidPreviewMessage()
 

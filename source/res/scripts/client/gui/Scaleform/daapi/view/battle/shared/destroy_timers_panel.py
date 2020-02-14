@@ -366,7 +366,7 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
             self._mapping = _mapping.FrontendMapping()
         self._timers = _createTimersCollection(self)
         self.__sound = None
-        self.__vehicle = None
+        self.__vehicleID = None
         self.__viewID = CROSSHAIR_VIEW_ID.UNDEFINED
         return
 
@@ -404,6 +404,8 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
         self._timers.clear()
         self._mapping.clear()
         self.__stopSound()
+        self._mapping = None
+        self._timers = None
         super(DestroyTimersPanel, self)._dispose()
         return
 
@@ -527,7 +529,7 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
                 self._onVehicleStateUpdated(stateID, stateValue)
 
         vehicle.updateStunInfo()
-        self.__vehicle = vehicle
+        self.__vehicleID = vehicle.id
         self.__updatePanelPosition()
 
     def __onCrosshairViewChanged(self, viewID):
@@ -535,12 +537,13 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
         self.__updatePanelPosition()
 
     def __updatePanelPosition(self):
-        if self.__vehicle is None or self.__vehicle.typeDescriptor is None:
+        vehicle = BigWorld.entity(self.__vehicleID)
+        if vehicle is None or vehicle.typeDescriptor is None:
             self.as_setVerticalOffsetS(0)
             return
         else:
             verticalOffset = 0
-            vTypeDescr = self.__vehicle.typeDescriptor
+            vTypeDescr = vehicle.typeDescriptor
             hasAutoloaderInterface = vTypeDescr.isDualgunVehicle or isAutoReloadGun(vTypeDescr.gun)
             if self.__viewID is CROSSHAIR_VIEW_ID.SNIPER and hasAutoloaderInterface:
                 verticalOffset = _VERTICAL_SHIFT_WITH_AUTOLOADER_IN_SNIPER_MODE

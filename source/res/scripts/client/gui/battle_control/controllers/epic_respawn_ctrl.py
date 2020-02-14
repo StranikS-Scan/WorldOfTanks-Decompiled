@@ -16,7 +16,10 @@ class IEpicRespawnView(IRespawnView):
     def setSelectedLane(self, laneId):
         raise NotImplementedError
 
-    def setRespawnPositions(self, frontlineCenters, vehicleClassOffsets):
+    def setSelectedPoint(self, pointId):
+        raise NotImplementedError
+
+    def setRespawnInfo(self, respawnInfo):
         raise NotImplementedError
 
     def setLaneState(self, laneID, enabled, blockedText):
@@ -32,7 +35,6 @@ class EpicRespawnsController(RespawnsController):
         if playerDataComp is not None:
             playerDataComp.onPlayerRespawnLaneUpdated += self.__onPlayerRespawnLaneUpdated
             playerDataComp.onPlayerGroupsChanged += self.__onPlayerGroupsChanged
-            playerDataComp.onFrontlineCenterUpdated += self.__onFrontlineCenterUpdated
         else:
             LOG_ERROR('Expected PlayerDataComponent not present!')
         return
@@ -43,7 +45,6 @@ class EpicRespawnsController(RespawnsController):
         if playerDataComp is not None:
             playerDataComp.onPlayerRespawnLaneUpdated -= self.__onPlayerRespawnLaneUpdated
             playerDataComp.onPlayerGroupsChanged -= self.__onPlayerGroupsChanged
-            playerDataComp.onFrontlineCenterUpdated -= self.__onFrontlineCenterUpdated
         return
 
     def updateVehicleLimits(self, limits):
@@ -53,20 +54,21 @@ class EpicRespawnsController(RespawnsController):
 
     def updateRespawnInfo(self, respawnInfo):
         super(EpicRespawnsController, self).updateRespawnInfo(respawnInfo)
-        playerDataComp = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'playerDataComponent', None)
-        if playerDataComp is not None:
-            self.__onFrontlineCenterUpdated(playerDataComp.getFrontlineCenters())
-        return
+        self.__onRespawnInfoUpdated(self.respawnInfo)
 
     @staticmethod
     def requestLaneForRespawn(laneID):
         BigWorld.player().base.respawnController_requestRespawnGroupChange(laneID)
 
+    @staticmethod
+    def requestPointForRespawn(respawnZone):
+        BigWorld.player().base.respawnController_chooseRespawnZone(respawnZone)
+
     def _show(self):
         super(EpicRespawnsController, self)._show()
         playerDataComp = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'playerDataComponent', None)
         if playerDataComp is not None:
-            self.__onFrontlineCenterUpdated(playerDataComp.getFrontlineCenters())
+            self.__onRespawnInfoUpdated(self.respawnInfo)
             self.__onPlayerRespawnLaneUpdated(playerDataComp.respawnLane)
             self.__onPlayerGroupsChanged(None)
         return
@@ -78,19 +80,17 @@ class EpicRespawnsController(RespawnsController):
         self.__onPlayerGroupsChanged(None)
         return
 
-    def __onFrontlineCenterUpdated(self, frontlineCenters):
+    def __onRespawnInfoUpdated(self, respawnInfo):
         if not self.isRespawnVisible():
             return
         else:
-            playerDataComp = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'playerDataComponent', None)
-            if playerDataComp is not None:
-                respawnOffsets = playerDataComp.getRespawnOffsetsForTeam(avatar_getter.getPlayerTeam())
-                for viewCmp in self._viewComponents:
-                    viewCmp.setRespawnPositions(frontlineCenters, respawnOffsets)
+            for viewCmp in self._viewComponents:
+                viewCmp.setRespawnInfo(respawnInfo)
 
+            self.__onPlayerGroupsChanged(None)
             return
 
-    def __onPlayerGroupsChanged(self, args):
+    def __onPlayerGroupsChanged(self, _):
         if not self.isRespawnVisible():
             return
         else:
@@ -103,17 +103,14 @@ class EpicRespawnsController(RespawnsController):
                 return
             vehicleLimits = self.getLimits()
             limit = arena.arenaType.playerGroupLimit
-            respawnLane = playerDataComp.respawnLane
             selectedVehicleID = 0
+            availableLanes = [ lane for lane in range(EB_MIN_RESPAWN_LANE_IDX, EB_MAX_RESPAWN_LANE_IDX) if playerDataComp.getPlayersForTeamAndGroup(avatar_getter.getPlayerTeam(), lane) < limit ]
             if self.respawnInfo:
                 selectedVehicleID = self.respawnInfo.vehicleID
             for lane in range(EB_MIN_RESPAWN_LANE_IDX, EB_MAX_RESPAWN_LANE_IDX):
                 isEnoughPlace = playerDataComp.getPlayersForTeamAndGroup(avatar_getter.getPlayerTeam(), lane) < limit
                 isVehicleBlocked = lane in vehicleLimits and selectedVehicleID in vehicleLimits[lane]
-                if lane == respawnLane:
-                    isAvailableForPlayer = True
-                else:
-                    isAvailableForPlayer = isEnoughPlace and not isVehicleBlocked
+                isAvailableForPlayer = (isEnoughPlace or playerDataComp.respawnLane == lane and not availableLanes) and not isVehicleBlocked
                 reasonText = ''
                 if not isEnoughPlace:
                     reasonText = EPIC_BATTLE.DEPLOYMENTMAP_LANEPLAYERLIMITREACHED

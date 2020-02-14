@@ -5,7 +5,6 @@ from collections import namedtuple
 import nations
 import GUI
 import constants
-from gui.game_control.epic_meta_game_ctrl import FRONTLINE_SCREENS
 from items import UNDEFINED_ITEM_CD
 from rent_common import parseRentID
 from gui import GUI_SETTINGS
@@ -48,7 +47,7 @@ from gui.shared.events import VehicleBuyEvent
 from gui.shared.gui_items.processors.vehicle import VehicleBuyer, VehicleSlotBuyer, VehicleRenter, VehicleTradeInProcessor, VehicleRestoreProcessor
 from helpers import i18n, dependency, int2roman, func_utils
 from shared_utils import CONST_CONTAINER
-from skeletons.gui.game_control import IRentalsController, ITradeInController, IRestoreController, IBootcampController, IWalletController, IEpicBattleMetaGameController
+from skeletons.gui.game_control import IRentalsController, ITradeInController, IRestoreController, IBootcampController, IWalletController, IEventProgressionController
 from skeletons.gui.shared import IItemsCache
 from frameworks.wulf import WindowFlags, ViewStatus, Window, WindowSettings, ViewSettings
 _logger = logging.getLogger(__name__)
@@ -72,7 +71,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
     __wallet = dependency.descriptor(IWalletController)
     __restore = dependency.descriptor(IRestoreController)
     __bootcamp = dependency.descriptor(IBootcampController)
-    __epicCtrl = dependency.descriptor(IEpicBattleMetaGameController)
+    __progressionCtrl = dependency.descriptor(IEventProgressionController)
     __RENT_NOT_SELECTED_IDX = -2
     __RENT_UNLIM_IDX = -1
     __CREW_NOT_SELECTED_IDX = -1
@@ -379,8 +378,8 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         if not self.__bootcamp.isInBootcamp():
             if self.__previousAlias in _VP_SHOW_HANGAR_ON_SUCCESS_ALIASES:
                 event_dispatcher.selectVehicleInHangar(self.__vehicle.intCD)
-            elif self.__previousAlias == VIEW_ALIAS.FRONTLINE_VEHICLE_PREVIEW_20:
-                self.__epicCtrl.showCustomScreen(FRONTLINE_SCREENS.REWARDS_SCREEN)
+            elif self.__previousAlias == VIEW_ALIAS.EVENT_PROGRESSION_VEHICLE_PREVIEW_20:
+                self.__progressionCtrl.openURL()
 
     def __playSlotAnimation(self):
         if self.viewStatus != ViewStatus.LOADED:

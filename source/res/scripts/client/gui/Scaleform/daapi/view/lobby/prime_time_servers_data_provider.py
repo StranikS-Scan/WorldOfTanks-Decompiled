@@ -8,6 +8,12 @@ class PrimeTimesServersDataProvider(ServersDataProvider):
 
     def __init__(self, primeTimesForDay):
         super(PrimeTimesServersDataProvider, self).__init__()
+        self.primeTimes = None
+        self.__maxPeriodLen = 0
+        self.updatePrimeTimes(primeTimesForDay)
+        return
+
+    def updatePrimeTimes(self, primeTimesForDay):
         self.primeTimes = primeTimesForDay
         self.__maxPeriodLen = self.__getMaxPrimeTimes()
 

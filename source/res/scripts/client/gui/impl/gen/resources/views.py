@@ -434,19 +434,31 @@ class Views(DynAccessor):
 
         demountkit = _demountkit()
 
+        class _epic(DynAccessor):
+            __slots__ = ()
+            PostbattleQuestProgress = DynAccessor(84)
+
+            class _tooltips(DynAccessor):
+                __slots__ = ()
+                QuestProgressTooltip = DynAccessor(85)
+
+            tooltips = _tooltips()
+
+        epic = _epic()
+
         class _instructions(DynAccessor):
             __slots__ = ()
-            BuyWindow = DynAccessor(84)
-            SellWindow = DynAccessor(85)
+            BuyWindow = DynAccessor(86)
+            SellWindow = DynAccessor(87)
 
         instructions = _instructions()
 
         class _missions(DynAccessor):
             __slots__ = ()
-            Daily = DynAccessor(86)
-            DailyQuestsTooltip = DynAccessor(87)
-            DailyQuestsWidget = DynAccessor(88)
-            RerollTooltip = DynAccessor(89)
+            Daily = DynAccessor(88)
+            DailyQuestsTooltip = DynAccessor(89)
+            DailyQuestsWidget = DynAccessor(90)
+            RerollTooltip = DynAccessor(91)
 
         missions = _missions()
 
@@ -662,19 +674,19 @@ class Views(DynAccessor):
         views = _views()
 
     wtypes_view = _wtypes_view()
-    Anchor = DynAccessor(90)
-    ComplexListView = DynAccessor(91)
-    ComponentsDemo = DynAccessor(92)
-    DataTrackerDemo = DynAccessor(93)
-    DemoContextMenu = DynAccessor(94)
-    Easings = DynAccessor(95)
-    GFDemoPopover = DynAccessor(96)
-    GFDemoRichTooltipWindow = DynAccessor(97)
-    GFDemoWindow = DynAccessor(98)
-    GFInjectView = DynAccessor(99)
-    GFSimpleTooltipWindow = DynAccessor(100)
-    LocaleDemo = DynAccessor(101)
-    PropsSupportDemo = DynAccessor(102)
-    StructuralDataBindDemo = DynAccessor(103)
-    TextFormat = DynAccessor(104)
-    VideoSupportView = DynAccessor(105)
+    Anchor = DynAccessor(92)
+    ComplexListView = DynAccessor(93)
+    ComponentsDemo = DynAccessor(94)
+    DataTrackerDemo = DynAccessor(95)
+    DemoContextMenu = DynAccessor(96)
+    Easings = DynAccessor(97)
+    GFDemoPopover = DynAccessor(98)
+    GFDemoRichTooltipWindow = DynAccessor(99)
+    GFDemoWindow = DynAccessor(100)
+    GFInjectView = DynAccessor(101)
+    GFSimpleTooltipWindow = DynAccessor(102)
+    LocaleDemo = DynAccessor(103)
+    PropsSupportDemo = DynAccessor(104)
+    StructuralDataBindDemo = DynAccessor(105)
+    TextFormat = DynAccessor(106)
+    VideoSupportView = DynAccessor(107)

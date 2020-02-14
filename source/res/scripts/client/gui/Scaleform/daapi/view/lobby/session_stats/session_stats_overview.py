@@ -84,6 +84,7 @@ class SessionStatsOverview(SessionStatsOverviewMeta):
         super(SessionStatsOverview, self)._populate()
         self._itemsCache.onSyncCompleted += self.__updateViewHandler
         self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+        self.__settingsController.start()
         self.updateData()
 
     def _dispose(self):
@@ -91,6 +92,8 @@ class SessionStatsOverview(SessionStatsOverviewMeta):
         self._itemsCache.onSyncCompleted -= self.__updateViewHandler
         self.__sessionVehicleStatsView = None
         self.__sessionBattleStatsView = None
+        self.__settingsController.stop()
+        self.__settingsController = None
         super(SessionStatsOverview, self)._dispose()
         return
 

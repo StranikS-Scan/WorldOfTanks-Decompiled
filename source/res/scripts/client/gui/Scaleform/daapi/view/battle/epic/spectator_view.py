@@ -58,6 +58,9 @@ class EpicSpectatorView(EpicSpectatorViewMeta):
         if ctrl is not None:
             ctrl.onSpectatorViewModeChanged -= self.__onSpectatorModeChanged
             ctrl.onSpectatedVehicleChanged -= self.__onSpectatedVehicleChanged
+        if self.__timeCB:
+            BigWorld.cancelCallback(self.__timeCB)
+            self.__timeCB = None
         return
 
     def _updateVehicleInfo(self):

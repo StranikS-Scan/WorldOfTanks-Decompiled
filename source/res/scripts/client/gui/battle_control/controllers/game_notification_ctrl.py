@@ -37,6 +37,9 @@ class GameNotificationsController(IViewComponentsController, TriggersManager.ITr
     def onMessagePlaybackStarted(self, notificationID, data):
         pass
 
+    def onMessagePlaybackHide(self, notificationID, data):
+        pass
+
     def _setupNotificationMap(self):
         pass
 
@@ -160,10 +163,10 @@ class EpicGameNotificationsController(GameNotificationsController):
             self.__playSound(bfVoMessage)
         return
 
-    def onMessagePlaybackEnded(self, notificationID, data):
-        notifyID = self._notificationMap[notificationID]
-        if notifyID != -1:
-            self.onGameNotificationRecieved(notifyID, data)
+    def onMessagePlaybackEnded(self, messageID, data):
+        notificationID = self._notificationMap[messageID]
+        if notificationID != -1:
+            self.onGameNotificationRecieved(notificationID, data)
 
     def onMessagePlaybackStarted(self, messageID, data):
         componentSystem = self._sessionProvider.arenaVisitor.getComponentSystem()
@@ -203,11 +206,23 @@ class EpicGameNotificationsController(GameNotificationsController):
                     return
                 self.__playMsgOvertimeTriggered = True
                 bfVoMessage = bfVoMessage.get(isAttacker, None)
+            elif notificationID == EPIC_NOTIFICATION.RANK_CHANGE:
+                bfVoMessage = bfVoMessage.get('show', None)
             if messageID == GAME_MESSAGES_CONSTS.OVERTIME:
                 if data['id'] in OVERTIME_DURATION_WARNINGS:
                     return
             self.__playSound(bfVoMessage)
             return
+
+    def onMessagePlaybackHide(self, messageID, data):
+        notificationID = self._notificationMap[messageID]
+        if notificationID == EPIC_NOTIFICATION.RANK_CHANGE:
+            bfVoMessage = EPIC_SOUND.BF_EB_VO_MESSAGES.get(messageID, None)
+            if bfVoMessage is None:
+                return
+            bfVoMessage = bfVoMessage.get('hide', None)
+            self.__playSound(bfVoMessage)
+        return
 
     def overtimeSoundTriggered(self, val):
         self.__playMsgOvertimeTriggered = val

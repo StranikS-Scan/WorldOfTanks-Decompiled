@@ -1076,8 +1076,8 @@ class SYSTEM_MESSAGES(object):
     PROGRESSIVEREWARD_SWITCH_OFF = '#system_messages:progressiveReward/switch_off'
     PROGRESSIVEREWARD_SWITCH_ON = '#system_messages:progressiveReward/switch_on'
     PROGRESSIVEREWARD_ERROR = '#system_messages:progressiveReward/error'
-    FRONTLINE_BUY_VEHICLE_SERVER_ERROR = '#system_messages:frontline_buy_vehicle/server_error'
-    FRONTLINE_BUY_VEHICLE_BUY = '#system_messages:frontline_buy_vehicle/buy'
+    EVENT_PROGRESSION_BUY_VEHICLE_SERVER_ERROR = '#system_messages:event_progression_buy_vehicle/server_error'
+    EVENT_PROGRESSION_BUY_VEHICLE_BUY = '#system_messages:event_progression_buy_vehicle/buy'
     MAPS_BLACK_LIST_SELECT_SUCCESS = '#system_messages:maps_black_list/select/success'
     MAPS_BLACK_LIST_SELECT_SERVER_ERROR_COOLDOWN = '#system_messages:maps_black_list/select/server_error/COOLDOWN'
     MAPS_BLACK_LIST_SELECT_SERVER_ERROR = '#system_messages:maps_black_list/select/server_error'
@@ -2308,8 +2308,8 @@ class SYSTEM_MESSAGES(object):
      PROGRESSIVEREWARD_SWITCH_OFF,
      PROGRESSIVEREWARD_SWITCH_ON,
      PROGRESSIVEREWARD_ERROR,
-     FRONTLINE_BUY_VEHICLE_SERVER_ERROR,
-     FRONTLINE_BUY_VEHICLE_BUY,
+     EVENT_PROGRESSION_BUY_VEHICLE_SERVER_ERROR,
+     EVENT_PROGRESSION_BUY_VEHICLE_BUY,
      MAPS_BLACK_LIST_SELECT_SUCCESS,
      MAPS_BLACK_LIST_SELECT_SERVER_ERROR_COOLDOWN,
      MAPS_BLACK_LIST_SELECT_SERVER_ERROR,

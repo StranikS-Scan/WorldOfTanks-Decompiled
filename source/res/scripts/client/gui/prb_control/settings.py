@@ -150,6 +150,7 @@ class PREBATTLE_ACTION_NAME(object):
     EPIC_TRAINING_LIST = 'epicTrainingsList'
     EPIC = 'epicQueue'
     EPIC_FORCED = 'epicForced'
+    EVENT_PROGRESSION = 'eventProgression'
 
 
 class PREBATTLE_INIT_STEP(object):
@@ -164,6 +165,7 @@ class SELECTOR_BATTLE_TYPES(object):
     SORTIE = 'sortie'
     RANKED = 'ranked'
     EPIC = 'epic'
+    EVENT_PROGRESSION = 'eventProgression'
 
 
 class REQUEST_TYPE(object):

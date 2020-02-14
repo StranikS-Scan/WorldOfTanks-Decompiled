@@ -256,6 +256,8 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         self._randomStats = self._itemsCache.items.getAccountDossier().getRandomStats()
 
     def _addVehicleItemsByCriteria(self, criteria):
+        if not self._itemsCache.isSynced():
+            return
         vehiclesDict = self._itemsCache.items.getVehicles(criteria)
         vehicleIcons = []
         for vehicle in vehiclesDict.itervalues():

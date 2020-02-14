@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/hangar_header.py
+from copy import copy
 import BigWorld
 import constants
 import nations
@@ -13,26 +14,26 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.event_boards.listener import IEventBoardsListener
 from gui.marathon.marathon_event_controller import DEFAULT_MARATHON_PREFIX
+from gui.prb_control import prb_getters
+from gui.prb_control.entities.listener import IGlobalListener
 from gui.server_events import finders
 from gui.server_events.events_dispatcher import showPersonalMission, showMissionsElen, showMissionsMarathon, showPersonalMissionOperationsPage, showPersonalMissionsOperationsMap, showMissionsCategories
 from gui.server_events.events_helpers import isPremium, isDailyQuest
-from gui.shared.formatters import text_styles, icons
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from personal_missions import PM_BRANCH
+from gui.shared.formatters import text_styles, icons
+from gui.shared.personality import ServicesLocator
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from gui.shared.personality import ServicesLocator
-from skeletons.gui.shared import IItemsCache
-from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.game_control import IQuestsController, IMarathonEventsController, IFestivityController
-from skeletons.gui.event_boards_controllers import IEventBoardController
+from personal_missions import PM_BRANCH
 from skeletons.connection_mgr import IConnectionManager
-from gui.prb_control import prb_getters
+from skeletons.gui.event_boards_controllers import IEventBoardController
+from skeletons.gui.game_control import IQuestsController, IMarathonEventsController, IFestivityController, IEventProgressionController
 from skeletons.gui.lobby_context import ILobbyContext
-from gui.prb_control.entities.listener import IGlobalListener
-from gui.event_boards.listener import IEventBoardsListener
+from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 
 class WIDGET_PM_STATE(object):
     DISABLED = 0
@@ -192,6 +193,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     _lobbyContext = dependency.descriptor(ILobbyContext)
     _marathonsCtrl = dependency.descriptor(IMarathonEventsController)
     _festivityController = dependency.descriptor(IFestivityController)
+    _eventProgressionController = dependency.descriptor(IEventProgressionController)
 
     def __init__(self):
         super(HangarHeader, self).__init__()
@@ -376,9 +378,9 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             self.update()
 
     def __getBattleQuestsVO(self, vehicle):
-        quests = self._questController.getQuestForVehicle(vehicle)
+        quests = [ q for q in self._questController.getQuestForVehicle(vehicle) if q.getID() not in self._eventProgressionController.questIDs ]
         if quests:
-            for quest in quests.copy():
+            for quest in copy(quests):
                 if isDailyQuest(quest.getID()) or isPremium(quest.getID()):
                     quests.remove(quest)
 

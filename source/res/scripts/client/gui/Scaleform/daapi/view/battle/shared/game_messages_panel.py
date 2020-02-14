@@ -27,6 +27,9 @@ class GameMessagesPanel(GameMessagesPanelMeta):
     def onMessageEnded(self, msgType, msgID):
         pass
 
+    def onMessageHiding(self, msgType, msgID):
+        pass
+
     def sendEndGameMessage(self, winningTeam, reason):
         messageType = GAME_MESSAGES_CONSTS.DRAW
         if winningTeam != 0:

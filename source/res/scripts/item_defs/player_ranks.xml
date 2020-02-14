@@ -1,12 +1,13 @@
 <player_ranks.xml>
   <DEFAULT>
+    <initialRank>	private	</initialRank>
     <BasicThreshold>
-      <private>
-        <threshold>	150	</threshold>
-      </private>
       <sergeant>
-        <threshold>	350	</threshold>
+        <threshold>	150	</threshold>
       </sergeant>
+      <lieutenant>
+        <threshold>	350	</threshold>
+      </lieutenant>
       <captain>
         <threshold>	550	</threshold>
       </captain>
@@ -18,8 +19,9 @@
       </general>
     </BasicThreshold>
     <bonus>
-      <private>	10	</private>
-      <sergeant>	25	</sergeant>
+      <private>	0	</private>
+      <sergeant>	10	</sergeant>
+      <lieutenant>	25	</lieutenant>
       <captain>	50	</captain>
       <major>	100	</major>
       <general>	200	</general>

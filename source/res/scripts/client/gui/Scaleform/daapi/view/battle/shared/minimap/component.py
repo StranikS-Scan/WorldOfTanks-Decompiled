@@ -55,7 +55,9 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
         self.__plugins.setAttentionToCell(x, y, isRightClick)
 
     def applyNewSize(self, sizeIndex):
-        self.__plugins.applyNewSize(sizeIndex)
+        if self.__plugins is not None:
+            self.__plugins.applyNewSize(sizeIndex)
+        return
 
     def addEntry(self, symbol, container, matrix=None, active=False, transformProps=settings.TRANSFORM_FLAG.DEFAULT):
         entryID = self.__component.addEntry(symbol, container, matrix, active, transformProps)
@@ -68,31 +70,31 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
             self.__component.delEntry(entryID)
             self.__ids.discard(entryID)
         else:
-            _logger.error('Entry is not added by given ID = %d, available = %r', entryID, self.__ids)
+            self.__logEntryError(entryID)
 
     def invoke(self, entryID, *signature):
         if entryID in self.__ids:
             self.__component.entryInvoke(entryID, signature)
         else:
-            _logger.error('Entry is not added by given ID = %d, available = %r', entryID, self.__ids)
+            self.__logEntryError(entryID)
 
     def move(self, entryID, container):
         if entryID in self.__ids:
             self.__component.moveEntry(entryID, container)
         else:
-            _logger.error('Entry is not added by given ID = %d, available = %r', entryID, self.__ids)
+            self.__logEntryError(entryID)
 
     def setMatrix(self, entryID, matrix):
         if entryID in self.__ids:
             self.__component.entrySetMatrix(entryID, matrix)
         else:
-            _logger.error('Entry is not added by given ID = %d, available = %r', entryID, self.__ids)
+            self.__logEntryError(entryID)
 
     def setActive(self, entryID, active):
         if entryID in self.__ids:
             self.__component.entrySetActive(entryID, active)
         else:
-            _logger.error('Entry is not added by given ID = %d, available = %r', entryID, self.__ids)
+            self.__logEntryError(entryID)
 
     def playSound2D(self, soundID):
         if soundID:
@@ -107,7 +109,7 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
     def getPlugins(self):
         return self.__plugins
 
-    def getComponent(self):
+    def getComponent(self, *_):
         return self.__component
 
     def _populate(self):
@@ -195,6 +197,9 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
             app.component.delChild(self.__component)
         self.__component = None
         return
+
+    def __logEntryError(self, entryID):
+        _logger.error('Entry is not added by given ID = %d, available = %r', entryID, self.__ids)
 
 
 class MinimapPluginsCollection(PluginsCollection):

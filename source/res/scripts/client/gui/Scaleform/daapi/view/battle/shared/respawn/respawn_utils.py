@@ -28,7 +28,7 @@ def getSlotsStatesData(vehsList, cooldowns, disabled, limits={}):
         cooldown = cooldownTime - BigWorld.serverTime()
         enabled = cooldown <= 0 and not disabled and compactDescr not in limits
         if not enabled:
-            if cooldownTime is not 0:
+            if cooldown > 0:
                 if disabled:
                     cooldownStr = i18n.makeString('#ingame_gui:respawnView/disabledLbl')
                 else:

@@ -85,7 +85,7 @@ class BaseDAAPIComponent(BaseDAAPIComponentMeta):
             c.validate()
 
     def _dispose(self):
-        self.__destroyPythonComponents(pyReloading=False)
+        self.__destroyPythonComponents(pyReloading=self._getPyReloading())
         super(BaseDAAPIComponent, self)._dispose()
 
     def _disposeWithReloading(self):

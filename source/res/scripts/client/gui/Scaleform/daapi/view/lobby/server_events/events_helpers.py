@@ -95,6 +95,7 @@ class _EventInfo(EventInfoModel):
         if not isProgressReset and isCompleted:
             awards = self._getBonuses(svrEvents)
         return {'title': self.event.getUserName(),
+         'descr': self.event.getDescription(),
          'awards': awards,
          'progressList': progresses,
          'alertMsg': alertMsg,

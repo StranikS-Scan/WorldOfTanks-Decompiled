@@ -60,7 +60,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
         self.vehicle = None
         self.tradeOffVehicle = None
         self.__state = VehicleBuyWindowState(False, False, -1, -1)
-        self.__isGoldAutoPurhaseEnabled = isIngameShopEnabled()
+        self.__isGoldAutoPurchaseEnabled = isIngameShopEnabled()
         if ctx.get('isTradeIn', False):
             self.selectedTab = _TABS.TRADE
         else:
@@ -71,7 +71,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
         self.destroy()
 
     def submit(self, data):
-        if self.__isGoldAutoPurhaseEnabled:
+        if self.__isGoldAutoPurchaseEnabled:
             availableGold = self.itemsCache.items.stats.money.gold
             requiredGold = (self._getVehiclePrice(self.vehicle) + self._getSetupPrice()).price.gold
             if availableGold < requiredGold:
@@ -154,7 +154,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
         setupPrice = self._getSetupPrice()
         totalPrice = vehiclePrice + setupPrice
         canBuy = totalPrice.price <= money
-        canBuy |= self.__isGoldAutoPurhaseEnabled and totalPrice.price.gold > money.gold and totalPrice.price.credits <= money.credits
+        canBuy |= self.__isGoldAutoPurchaseEnabled and totalPrice.price.gold > money.gold and totalPrice.price.credits <= money.credits
         return canBuy
 
     def _initData(self, *args):

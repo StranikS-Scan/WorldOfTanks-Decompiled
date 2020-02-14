@@ -5,7 +5,7 @@ from web.web_client_api.ui.calendar import OpenCalendarWindowWebApiMixin
 from web.web_client_api.ui.chat import ChatWebApiMixin
 from web.web_client_api.ui.shop import ShopWebApiMixin
 from web.web_client_api.ui.badges import BadgesWebApiMixin
-from web.web_client_api.ui.boosters import BoostersWindowWebApiMixin, BoostersInfoWebApiMixin
+from web.web_client_api.ui.boosters import BoostersWindowWebApiMixin
 from web.web_client_api.ui.browser import OpenBrowserWindowWebApiMixin
 from web.web_client_api.ui.browser import CloseBrowserWindowWebApiMixin
 from web.web_client_api.ui.browser import CloseBrowserViewWebApiMixin
@@ -63,5 +63,5 @@ class ContextMenuWebApi(UserMenuWebApiMixin):
 
 
 @w2capi(name='util', key='action')
-class UtilWebApi(UtilWebApiMixin, VehicleCompareWebApiMixin, WaitingWebApiMixin, BoostersInfoWebApiMixin):
+class UtilWebApi(UtilWebApiMixin, VehicleCompareWebApiMixin, WaitingWebApiMixin):
     pass

@@ -1967,6 +1967,8 @@ class TOOLTIPS(object):
     VEHICLEPARAMS_VALUECHANGE_TEMPLATE = '#tooltips:vehicleParams/valueChange/template'
     VEHICLEPARAMS_COMMON_TITLE = '#tooltips:vehicleParams/common/title'
     VEHICLEPARAMS_SIMPLIFIED_TITLE = '#tooltips:vehicleParams/simplified/title'
+    VEHICLEPREVIEW_BUYINGPANEL_EVENTPROGRESSION_PRICE_HEADER = '#tooltips:vehiclePreview/buyingPanel/eventProgression/price/header'
+    VEHICLEPREVIEW_BUYINGPANEL_EVENTPROGRESSION_PRICE_BODY = '#tooltips:vehiclePreview/buyingPanel/eventProgression/price/body'
     VEHICLEPREVIEW_CREW_COMMANDER = '#tooltips:vehiclePreview/crew/commander'
     VEHICLEPREVIEW_CREW_DRIVER = '#tooltips:vehiclePreview/crew/driver'
     VEHICLEPREVIEW_CREW_RADIOMAN = '#tooltips:vehiclePreview/crew/radioman'
@@ -2005,8 +2007,6 @@ class TOOLTIPS(object):
     VEHICLEPREVIEW_BUYBUTTON_NOTENOUGHGOLD_HEADER = '#tooltips:vehiclePreview/buyButton/notEnoughGold/header'
     VEHICLEPREVIEW_BUYBUTTON_NOTENOUGHGOLD_BODY = '#tooltips:vehiclePreview/buyButton/notEnoughGold/body'
     VEHICLEPREVIEW_BUYBUTTON_NOTENOUGHPRESTIGEPOINTS_HEADER = '#tooltips:vehiclePreview/buyButton/notEnoughPrestigePoints/header'
-    VEHICLEPREVIEW_BUYBUTTON_NOTENOUGHPRESTIGELEVEL_HEADER = '#tooltips:vehiclePreview/buyButton/notEnoughPrestigeLevel/header'
-    VEHICLEPREVIEW_BUYBUTTON_NOTENOUGHPRESTIGELEVELANDPOINTS_HEADER = '#tooltips:vehiclePreview/buyButton/notEnoughPrestigeLevelAndPoints/header'
     VEHICLEPREVIEW_BUYBUTTON_ENDTIME_HEADER = '#tooltips:vehiclePreview/buyButton/endTime/header'
     VEHICLEPREVIEW_BUYBUTTON_ENDTIME_BODY = '#tooltips:vehiclePreview/buyButton/endTime/body'
     VEHICLEPREVIEW_MODULS_HEADER = '#tooltips:vehiclePreview/moduls/header'
@@ -2863,6 +2863,17 @@ class TOOLTIPS(object):
     SENIORITYAWARDS_HANGARENTRYPOINT_TOOLTIP_BODY = '#tooltips:seniorityAwards/hangarEntryPoint/tooltip/body'
     SENIORITYAWARDS_ADDITIONAL_TOOLTIP_HEADER = '#tooltips:seniorityAwards/additional/tooltip/header'
     SENIORITYAWARDS_HANGARSLOT_TOOLTIP_HEADER = '#tooltips:seniorityAwards/hangarSlot/tooltip/header'
+    EVENTPROGRESSION_HEADER = '#tooltips:eventProgression/header'
+    EVENTPROGRESSION_CURRENCY = '#tooltips:eventProgression/currency'
+    EVENTPROGRESSION_DESCRIPTION = '#tooltips:eventProgression/description'
+    EVENTPROGRESSION_SEASON = '#tooltips:eventProgression/season'
+    EVENTPROGRESSION_TIMETOSTART = '#tooltips:eventProgression/timeToStart'
+    EVENTPROGRESSION_TIMETOLEFT = '#tooltips:eventProgression/timeToLeft'
+    EVENTPROGRESSION_DISABLED = '#tooltips:eventProgression/disabled'
+    EVENTPROGRESSION_LEVEL = '#tooltips:eventProgression/level'
+    EVENTPROGRESSION_UNLOCKEDDAILYMISSIONS = '#tooltips:eventProgression/unlockedDailyMissions'
+    EVENTPROGRESSION_ALLSEASONSAREOVER = '#tooltips:eventProgression/allSeasonsAreOver'
+    EVENTPROGRESSION_FRONTLINE = '#tooltips:eventProgression/frontLine'
     ELEN_SUMMARY_RANK_ENUM = (ELEN_SUMMARY_RANK_1,
      ELEN_SUMMARY_RANK_2,
      ELEN_SUMMARY_RANK_3,
@@ -3133,8 +3144,6 @@ class TOOLTIPS(object):
      VEHICLEPREVIEW_BUYBUTTON_NOTENOUGHGOLD_HEADER,
      VEHICLEPREVIEW_BUYBUTTON_NOTENOUGHGOLD_BODY,
      VEHICLEPREVIEW_BUYBUTTON_NOTENOUGHPRESTIGEPOINTS_HEADER,
-     VEHICLEPREVIEW_BUYBUTTON_NOTENOUGHPRESTIGELEVEL_HEADER,
-     VEHICLEPREVIEW_BUYBUTTON_NOTENOUGHPRESTIGELEVELANDPOINTS_HEADER,
      VEHICLEPREVIEW_BUYBUTTON_ENDTIME_HEADER,
      VEHICLEPREVIEW_BUYBUTTON_ENDTIME_BODY)
     TANK_PARAMS_AVGPARAMCOMMENT_ENUM = (TANK_PARAMS_AVGPARAMCOMMENT_DAMAGE, TANK_PARAMS_AVGPARAMCOMMENT_PIERCINGPOWER)

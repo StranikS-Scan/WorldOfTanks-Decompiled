@@ -52,8 +52,6 @@ class RankedBattlesPrimeTimeView(RankedPrimeTimeMeta):
 
     def _prepareData(self, serverList, serverInfo):
         isSingleServer = len(serverList) == 1
-        if serverInfo is None and serverList:
-            serverInfo = serverList[0]
         return {'warningIconSrc': self._getWarningIcon(),
          'status': self.__getStatusTitle(),
          'serversText': text_styles.expText(self._getServerText(serverList, serverInfo, True)),

@@ -29,18 +29,21 @@ from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from personal_missions import PM_BRANCH
 from shared_utils import CONST_CONTAINER, findFirst
 from skeletons.gui.customization import ICustomizationService
+from skeletons.gui.game_control import IEventProgressionController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from typing import Callable
-    from gui.server_events.bonuses import SimpleBonus, CrystalBonus, GoodiesBonus
+    from gui.goodies.goodie_items import Booster
+    from gui.server_events.bonuses import SimpleBonus, CrystalBonus, GoodiesBonus, PlusPremiumDaysBonus
     from gui.server_events.cond_formatters.formatters import ConditionFormatter
+    from gui.shared.gui_items.crew_book import CrewBook
 _logger = logging.getLogger(__name__)
+EPIC_AWARD_SIZE = 's360x270'
 
 class AWARDS_SIZES(CONST_CONTAINER):
     SMALL = 'small'
     BIG = 'big'
-    SIZE_360_270 = 's360x270'
 
 
 class COMPLETION_TOKENS_SIZES(CONST_CONTAINER):
@@ -150,8 +153,8 @@ def getDefaultFormattersMap():
 def getEpicFormattersMap():
     return {Currency.CRYSTAL: CrystalEpicBonusFormatter(),
      'goodies': GoodiesEpicBonusFormatter(),
-     'crewBooks': CrewBooksBonusFormatter(),
-     PREMIUM_ENTITLEMENTS.PLUS: PremiumDaysBonusFormatter()}
+     'crewBooks': CrewBooksEpicBonusFormatter(),
+     PREMIUM_ENTITLEMENTS.PLUS: PremiumDaysEpicBonusFormatter()}
 
 
 def getEventBoardsFormattersMap():
@@ -176,7 +179,11 @@ def getLinkedSetFormattersMap():
 
 def getEpicSetFormattersMap():
     mapping = getDefaultFormattersMap()
-    mapping.update({'items': EpicItemsBonusFormatter(),
+    tokenBonusFormatter = EpicTokensFormatter()
+    mapping.update({'abilityPts': EpicAbilityPtsFormatter(),
+     'tokens': tokenBonusFormatter,
+     'battleToken': tokenBonusFormatter,
+     'items': EpicItemsBonusFormatter(),
      'dossier': EpicDossierBonusFormatter()})
     return mapping
 
@@ -471,11 +478,8 @@ class CrystalEpicBonusFormatter(SimpleBonusFormatter):
 
     @classmethod
     def _getImages(cls, bonus):
-        result = {}
-        for size in AWARDS_SIZES.ALL():
-            result[size] = RES_ICONS.getBonusIcon(size, bonus.getName())
-
-        return result
+        size = EPIC_AWARD_SIZE
+        return {size: RES_ICONS.getBonusIcon(size, bonus.getName())}
 
 
 class CountableIntegralBonusFormatter(SimpleBonusFormatter):
@@ -562,6 +566,14 @@ class PremiumDaysBonusFormatter(SimpleBonusFormatter):
             result[size] = RES_ICONS.getPremiumDaysAwardIcon(size, bonus.getName(), bonus.getValue())
 
         return result
+
+
+class PremiumDaysEpicBonusFormatter(PremiumDaysBonusFormatter):
+
+    @classmethod
+    def _getImages(cls, bonus):
+        size = EPIC_AWARD_SIZE
+        return {size: RES_ICONS.getPremiumDaysAwardIcon(size, bonus.getName(), bonus.getValue())}
 
 
 class LinkedSetPremiumDaysBonusFormatter(PremiumDaysBonusFormatter):
@@ -661,6 +673,56 @@ class RankedPointFormatter(TokenBonusFormatter):
             images[size] = backport.image(rankedPointRes()) if rankedPointRes else None
 
         return PreformattedBonus(label=self._formatBonusLabel(token.count), userName=self._getUserName(bonus), labelFormatter=self._getLabelFormatter(bonus), images=images, tooltip=makeTooltip(header=backport.text(R.strings.tooltips.rankedBattleView.scorePoint.header()), body=backport.text(R.strings.tooltips.rankedBattleView.scorePoint.body())), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus))
+
+    @classmethod
+    def _getLabelAlign(cls, bonus):
+        return LABEL_ALIGN.RIGHT
+
+
+class EpicTokensFormatter(TokenBonusFormatter):
+    __eventProgCtrl = dependency.descriptor(IEventProgressionController)
+
+    def _format(self, bonus):
+        result = []
+        for tokenID, token in bonus.getTokens().iteritems():
+            if tokenID.startswith(self.__eventProgCtrl.rewardPointsTokenID):
+                formatted = self.__formatRewardPointToken(tokenID, token, bonus)
+                if formatted is not None:
+                    result.append(formatted)
+
+        return result
+
+    def __formatRewardPointToken(self, tokenID, token, bonus):
+        images = {}
+        for size in AWARDS_SIZES.ALL():
+            res = R.images.gui.maps.icons.quests.bonuses.dyn(size).dyn('epicRewardPoint')
+            if res:
+                images[size] = backport.image(res())
+
+        return PreformattedBonus(label=self._formatBonusLabel(token.count), userName=backport.text(R.strings.epic_battle.epicBattleItem.rewardPoints.header()), labelFormatter=self._getLabelFormatter(bonus), images=images, tooltip=makeTooltip(header=backport.text(R.strings.epic_battle.epicBattleItem.rewardPoints.header()), body=backport.text(R.strings.epic_battle.epicBattleItem.rewardPoints.description())), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus))
+
+    @classmethod
+    def _getLabelAlign(cls, bonus):
+        return LABEL_ALIGN.RIGHT
+
+
+class EpicAbilityPtsFormatter(SimpleBonusFormatter):
+
+    def _format(self, bonus):
+        return [PreformattedBonus(label=self._formatBonusLabel(bonus.getValue()), userName=backport.text(R.strings.epic_battle.epicBattleItem.rewardPoints.header()), labelFormatter=self._getLabelFormatter(bonus), images=self._getImages(bonus), tooltip=makeTooltip(header=backport.text(R.strings.epic_battle.epicBattleItem.supplyPoints.header()), body=backport.text(R.strings.epic_battle.epicBattleItem.supplyPoints.description())), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus))]
+
+    def _formatBonusLabel(self, count):
+        return formatCountLabel(count)
+
+    @classmethod
+    def _getImages(cls, bonus):
+        images = {}
+        for size in AWARDS_SIZES.ALL():
+            res = R.images.gui.maps.icons.quests.bonuses.dyn(size).dyn('epicAbilityPoint')
+            if res:
+                images[size] = backport.image(res())
+
+        return images
 
     @classmethod
     def _getLabelAlign(cls, bonus):
@@ -1107,6 +1169,11 @@ class GoodiesEpicBonusFormatter(GoodiesBonusFormatter):
     def _getLabelFormatter(cls, bonus):
         return text_styles.textEpic
 
+    @classmethod
+    def _getImages(cls, booster):
+        size = EPIC_AWARD_SIZE
+        return {size: RES_ICONS.getBonusIcon(size, booster.boosterGuiType)}
+
 
 class ItemsBonusFormatter(SimpleBonusFormatter):
 
@@ -1336,6 +1403,20 @@ class CrewBooksBonusFormatter(SimpleBonusFormatter):
                 if img is not None and img.exists():
                     result[size] = backport.image(img())
 
+        return result
+
+
+class CrewBooksEpicBonusFormatter(CrewBooksBonusFormatter):
+
+    @classmethod
+    def _getImages(cls, item):
+        result = {}
+        size = EPIC_AWARD_SIZE
+        sizePath = R.images.gui.maps.icons.crewBooks.books.dyn(size, None)
+        if sizePath is not None:
+            img = sizePath.dyn(item.getBonusIconName())
+            if img is not None and img.exists():
+                result[size] = backport.image(img())
         return result
 
 

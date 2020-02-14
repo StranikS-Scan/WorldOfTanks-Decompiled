@@ -65,6 +65,15 @@ class ShadowEffect(object):
         self.cachedPosition = 2.0
         return
 
+    def destroy(self):
+        if self.__shadowUp is not None:
+            GUI.delRoot(self.__shadowUp)
+            self.__shadowUp = None
+        if self.__shadowDown is not None:
+            GUI.delRoot(self.__shadowDown)
+            self.__shadowDown = None
+        return
+
     def __spawnShadow(self, position, path, rotateAngle=None):
         shadow = GUI.Simple(path)
         if rotateAngle is not None:
@@ -209,6 +218,7 @@ class DualGunAimingSystem(IAimingSystem):
         self.__interpolator.disable()
         if self.__transitionCallbackID is not None:
             BigWorld.cancelCallback(self.__transitionCallbackID)
+        self.__shadowEffect.destroy()
         return
 
     def enableHorizontalStabilizerRuntime(self, enable):

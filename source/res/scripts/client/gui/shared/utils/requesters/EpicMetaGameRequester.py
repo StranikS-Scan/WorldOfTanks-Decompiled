@@ -14,7 +14,7 @@ class EpicMetaGameRequester(AbstractSyncDataRequester, IEpicMetaGameRequester):
 
     @property
     def seasonData(self):
-        return self.getCacheValue('seasonData', (0, False))
+        return self.getCacheValue('seasonData', (0, False, None))
 
     @property
     def skillPoints(self):
@@ -27,6 +27,14 @@ class EpicMetaGameRequester(AbstractSyncDataRequester, IEpicMetaGameRequester):
     @property
     def skillLevels(self):
         return self.getCacheValue('abilities', {})
+
+    @property
+    def battleCount(self):
+        return self.getCacheValue('battleCount', 0)
+
+    @property
+    def averageXP(self):
+        return self.getCacheValue('famePts', 0) / self.battleCount if self.battleCount > 0 else 0
 
     @async
     def _requestCache(self, callback):

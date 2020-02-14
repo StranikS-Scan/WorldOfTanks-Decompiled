@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/messages/player_messages.py
+import logging
+import SoundGroups
 from constants import EQUIPMENT_STAGES
-from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.battle.shared.messages import fading_messages
 from gui.battle_control import avatar_getter
 from items import vehicles
 from gui.sounds.epic_sound_constants import EPIC_SOUND
+_logger = logging.getLogger(__name__)
 _ID_TO_DESTRUCTIBLE_ENTITY_NAME = {1: '1',
  2: '2',
  3: '3',
@@ -18,7 +20,7 @@ class PlayerMessages(fading_messages.FadingMessages):
         super(PlayerMessages, self).__init__('PlayerMessagesPanel', 'player_messages_panel.xml')
 
     def __del__(self):
-        LOG_DEBUG('PlayerMessages panel is deleted')
+        _logger.debug('PlayerMessages panel is deleted')
 
     def _addGameListeners(self):
         super(PlayerMessages, self)._addGameListeners()
@@ -51,13 +53,13 @@ class PlayerMessages(fading_messages.FadingMessages):
         return
 
     def __onShowDestructibleEntityMessageByCode(self, code, entityID, attackerID):
-        LOG_DEBUG('onShowDestructibleEntityMessage', code, entityID, attackerID)
+        _logger.debug('onShowDestructibleEntityMessage %r %r %r', code, entityID, attackerID)
         getFullName = self.sessionProvider.getCtx().getPlayerFullName
         self.showMessage(code, {'target': _ID_TO_DESTRUCTIBLE_ENTITY_NAME[entityID],
          'attacker': getFullName(attackerID, showClan=False)})
 
     def __onShowPlayerMessageByCode(self, code, postfix, targetID, attackerID, equipmentID):
-        LOG_DEBUG('onShowPlayerMessage', code, postfix, targetID, attackerID, equipmentID)
+        _logger.debug('onShowPlayerMessage %r %r %r %r %r', code, postfix, targetID, attackerID, equipmentID)
         getFullName = self.sessionProvider.getCtx().getPlayerFullName
         if equipmentID:
             equipment = vehicles.g_cache.equipments().get(equipmentID)
@@ -94,4 +96,10 @@ class PlayerMessages(fading_messages.FadingMessages):
                     notification = EPIC_SOUND.BF_EB_ABILITY_USED.get(postfix, None)
                     if notification is not None:
                         soundNotifications.play(notification)
+            elif postfix in EPIC_SOUND.BF_EB_EQUIPMENT_SOUND_LIST:
+                if equipment.wwsoundEquipmentUsed:
+                    if SoundGroups.g_instance:
+                        SoundGroups.g_instance.playSound2D(equipment.wwsoundEquipmentUsed)
+                    else:
+                        _logger.warning('Can not play "%s" ability. SoundGroups.g_instance is None', postfix)
         return

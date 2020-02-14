@@ -64,7 +64,7 @@ from shared_utils import CONST_CONTAINER, BitmaskHelper
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.demount_kit import IDemountKitNovelty
-from skeletons.gui.game_control import IAnonymizerController, IBadgesController, IBoostersController, IBootcampController, IChinaController, IEpicBattleMetaGameController, IGameSessionController, IIGRController, IRankedBattlesController, IServerStatsController, IWalletController
+from skeletons.gui.game_control import IAnonymizerController, IBadgesController, IBoostersController, IBootcampController, IChinaController, IEpicBattleMetaGameController, IEventProgressionController, IGameSessionController, IIGRController, IRankedBattlesController, IServerStatsController, IWalletController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.server_events import IEventsCache
@@ -165,20 +165,21 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     bootcampController = dependency.descriptor(IBootcampController)
     chinaCtrl = dependency.descriptor(IChinaController)
     connectionMgr = dependency.descriptor(IConnectionManager)
+    demountKitNovelty = dependency.descriptor(IDemountKitNovelty)
     epicController = dependency.descriptor(IEpicBattleMetaGameController)
+    eventProgressionController = dependency.descriptor(IEventProgressionController)
     eventsCache = dependency.descriptor(IEventsCache)
     gameSession = dependency.descriptor(IGameSessionController)
     goodiesCache = dependency.descriptor(IGoodiesCache)
     gui = dependency.descriptor(IGuiLoader)
-    igrCtrl = dependency.descriptor(IIGRController)
     hangarSpace = dependency.descriptor(IHangarSpace)
+    igrCtrl = dependency.descriptor(IIGRController)
     itemsCache = dependency.descriptor(IItemsCache)
     linkedSetController = dependency.descriptor(ILinkedSetController)
     rankedController = dependency.descriptor(IRankedBattlesController)
     serverStats = dependency.descriptor(IServerStatsController)
     settingsCore = dependency.descriptor(ISettingsCore)
     wallet = dependency.descriptor(IWalletController)
-    demountKitNovelty = dependency.descriptor(IDemountKitNovelty)
 
     def __init__(self):
         super(LobbyHeader, self).__init__()
@@ -371,6 +372,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.rankedController.onUpdated += self.__updateRanked
         self.rankedController.onGameModeStatusUpdated += self.__updateRanked
         self.epicController.onUpdated += self.__updateEpic
+        self.epicController.onEventEnded += self.__switchToRandom
+        self.eventProgressionController.onUpdated += self.__updateEventProgression
         self.epicController.onPrimeTimeStatusUpdated += self.__updateEpic
         self.badgesController.onUpdated += self.__updateBadge
         self.anonymizerController.onStateChanged += self.__updateAnonymizedState
@@ -438,6 +441,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.rankedController.onUpdated -= self.__updateRanked
         self.rankedController.onGameModeStatusUpdated -= self.__updateRanked
         self.epicController.onUpdated -= self.__updateEpic
+        self.epicController.onEventEnded -= self.__switchToRandom
+        self.eventProgressionController.onUpdated -= self.__updateEventProgression
         self.epicController.onPrimeTimeStatusUpdated -= self.__updateEpic
         self.badgesController.onUpdated -= self.__updateBadge
         self.app.containerManager.onViewAddedToContainer -= self.__onViewAddedToContainer
@@ -822,7 +827,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             else:
                 iconSquad = RES_ICONS.MAPS_ICONS_BATTLETYPES_40X40_SQUAD
             self.as_updateSquadS(isInSquad, tooltip, TOOLTIP_TYPES.COMPLEX, isEvent, iconSquad)
-        self.__isFightBtnDisabled = self._checkFightButtonDisabled(canDo, selected.isFightButtonForcedDisabled())
+        self.__isFightBtnDisabled = self._checkFightButtonDisabled(canDo, selected.isLocked())
         if self.__isFightBtnDisabled and not state.hasLockedState:
             if isSandbox:
                 self.as_setFightBtnTooltipS(self.__getSandboxTooltipData(result), False)
@@ -848,7 +853,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             self.as_disableFightButtonS(self.__isFightBtnDisabled)
         self.as_setFightButtonS(selected.getFightButtonLabel(state, playerInfo))
         if self.__isHeaderButtonPresent(LobbyHeader.BUTTONS.BATTLE_SELECTOR):
-            eventEnabled = self.rankedController.isAvailable() or self.epicController.isAvailable()
+            eventEnabled = self.rankedController.isAvailable() or self.eventProgressionController.isEnabled
             self.as_updateBattleTypeS(i18n.makeString(selected.getLabel()), selected.getSmallIcon(), selected.isSelectorBtnEnabled(), TOOLTIPS.HEADER_BATTLETYPE, TOOLTIP_TYPES.COMPLEX, selected.getData(), eventEnabled, eventEnabled and not WWISE.WG_isMSR())
         else:
             self.as_updateBattleTypeS('', '', False, '', TOOLTIP_TYPES.NONE, '', False, False)
@@ -881,8 +886,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         state = event.ctx['state']
         self.as_toggleVisibilityMenuS(state)
 
-    def _checkFightButtonDisabled(self, canDo, isFightButtonForcedDisabled):
-        return not canDo or isFightButtonForcedDisabled
+    def _checkFightButtonDisabled(self, canDo, isLocked):
+        return not canDo or isLocked
 
     def _updateTabCounters(self):
         self.__onEventsVisited()
@@ -969,6 +974,13 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self._updatePrebattleControls()
 
     def __updateEpic(self, *_):
+        self._updatePrebattleControls()
+
+    def __switchToRandom(self, *_):
+        self.__doSelect(PREBATTLE_ACTION_NAME.RANDOM)
+        self._updatePrebattleControls()
+
+    def __updateEventProgression(self, *_):
         self._updatePrebattleControls()
 
     def _updateStrongholdsSelector(self):
@@ -1184,8 +1196,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             self.as_removeButtonCounterS(alias)
 
     @process
-    def __doSelect(self, prebattelActionName):
-        yield self.prbDispatcher.doSelectAction(PrbAction(prebattelActionName))
+    def __doSelect(self, prebattleActionName):
+        yield self.prbDispatcher.doSelectAction(PrbAction(prebattleActionName))
 
     def __onStatsReceived(self):
         clusterUsers, regionUsers, tooltipType = self.serverStats.getStats()

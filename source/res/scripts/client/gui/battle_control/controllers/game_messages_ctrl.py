@@ -34,8 +34,6 @@ class GameMessagesController(IViewComponentsController):
         self.__ui = component
 
     def clearViewComponents(self):
-        if self.__ui:
-            self.__ui.destroy()
         self.__ui = None
         return
 

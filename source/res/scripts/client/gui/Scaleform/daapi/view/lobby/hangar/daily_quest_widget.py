@@ -51,7 +51,7 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
         return DailyQuestsWidgetView()
 
     def _isRandomBattleSelected(self):
-        return self.prbDispatcher.getFunctionalState().isQueueSelected(QUEUE_TYPE.RANDOMS)
+        return self.prbDispatcher.getFunctionalState().isQueueSelected(QUEUE_TYPE.RANDOMS) if self.prbDispatcher is not None else False
 
     def __show(self):
         self.as_showWidgetS()

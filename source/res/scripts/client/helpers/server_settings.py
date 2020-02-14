@@ -279,6 +279,30 @@ _ProgressiveReward.__new__.__defaults__ = (True,
  'pr:probability',
  0)
 
+class _EventProgressionConfig(namedtuple('_EventProgressionConfig', ('isEnabled', 'url', 'rewardVehicles', 'rewardPointsTokenID', 'seasonPointsTokenID', 'maxRewardPoints', 'questIDs'))):
+
+    def __new__(cls, *args, **kwargs):
+        defaults = {attr:copy.deepcopy(cls.__new__.__defaults__[i]) for i, attr in enumerate(cls._fields)}
+        defaults.update(kwargs)
+        return super(_EventProgressionConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+
+_EventProgressionConfig.__new__.__defaults__ = (False,
+ '',
+ [],
+ '',
+ '',
+ 0,
+ [])
+
 class _EpicMetaGameConfig(namedtuple('_EpicMetaGameConfig', ['maxCombatReserveLevel',
  'seasonData',
  'metaLevel',
@@ -459,6 +483,7 @@ class ServerSettings(object):
         self.__bwIngameShop = _BwIngameShop()
         self.__rankedBattlesSettings = _RankedBattlesConfig.defaults()
         self.__epicMetaGameSettings = _EpicMetaGameConfig()
+        self.__eventProgressionSettings = _EventProgressionConfig()
         self.__epicGameSettings = _EpicGameConfig()
         self.__telecomConfig = _TelecomConfig.defaults()
         self.__squadPremiumBonus = _SquadPremiumBonus.defaults()
@@ -498,6 +523,8 @@ class ServerSettings(object):
             self.__bwIngameShop = makeTupleByDict(_BwIngameShop, self.__serverSettings['ingameShop'])
         if 'ranked_config' in self.__serverSettings:
             self.__rankedBattlesSettings = makeTupleByDict(_RankedBattlesConfig, self.__serverSettings['ranked_config'])
+        if 'event_progression_config' in self.__serverSettings:
+            self.__eventProgressionSettings = makeTupleByDict(_EventProgressionConfig, self.__serverSettings['event_progression_config'])
         if 'epic_config' in self.__serverSettings:
             LOG_DEBUG('epic_config', self.__serverSettings['epic_config'])
             self.__epicMetaGameSettings = makeTupleByDict(_EpicMetaGameConfig, self.__serverSettings['epic_config']['epicMetaGame'])
@@ -532,6 +559,9 @@ class ServerSettings(object):
             self.__bwHallOfFame = makeTupleByDict(_BwHallOfFame, serverSettingsDiff['hallOfFame'])
         if 'wgcg' in serverSettingsDiff:
             self.__updateWgcg(serverSettingsDiff)
+        if 'event_progression_config' in serverSettingsDiff:
+            self.__updateEventProgression(serverSettingsDiff)
+            self.__serverSettings['event_progression_config'] = serverSettingsDiff['event_progression_config']
         if 'epic_config' in serverSettingsDiff:
             self.__updateEpic(serverSettingsDiff)
             self.__serverSettings['epic_config'] = serverSettingsDiff['epic_config']
@@ -616,6 +646,10 @@ class ServerSettings(object):
     @property
     def rankedBattles(self):
         return self.__rankedBattlesSettings
+
+    @property
+    def eventProgression(self):
+        return self.__eventProgressionSettings
 
     @property
     def epicMetaGame(self):
@@ -842,6 +876,9 @@ class ServerSettings(object):
     def __updateWgcg(self, targetSettings):
         cProfile = targetSettings['wgcg']
         self.__wgcg = _Wgcg(cProfile.get('isEnabled', False), cProfile.get('gateUrl', ''), cProfile.get('type', 'gateway'), cProfile.get('loginOnStart', False))
+
+    def __updateEventProgression(self, targetSettings):
+        self.__eventProgressionSettings = self.__eventProgressionSettings.replace(targetSettings['event_progression_config'])
 
     def __updateRanked(self, targetSettings):
         self.__rankedBattlesSettings = self.__rankedBattlesSettings.replace(targetSettings['ranked_config'])

@@ -7,7 +7,6 @@ from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.Scaleform.daapi.view.meta.EpicRespawnViewMeta import EpicRespawnViewMeta
 from gui.battle_control.controllers.epic_respawn_ctrl import IEpicRespawnView
-from gui.battle_control.controllers.epic_respawn_ctrl import EB_MIN_RESPAWN_LANE_IDX, EB_MAX_RESPAWN_LANE_IDX
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from helpers import i18n
 from debug_utils import LOG_DEBUG, LOG_ERROR
@@ -17,6 +16,8 @@ from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.sounds.epic_sound_constants import EPIC_SOUND, EPIC_TIME_WWEVENTS
 import SoundGroups
 _BF_EB_COUNT_DOWN_SOUND_SECONDS = 10
+_DEFAULT_RESPAWN_POSITIONS = ({'position': (0, 0, 0),
+  'isEnemyNear': 0},)
 
 class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -24,12 +25,13 @@ class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
     def __init__(self):
         super(EpicBattleRespawn, self).__init__()
         self.__selectedLaneID = None
+        self.__selectedPointID = None
         self.__disabled = False
         self.__buttonStates = {}
         self.__timeOver = False
         self.__countDownIsPlaying = False
         self.__mapDim = (0, 0)
-        self.__lastRespawnPositions = {}
+        self.__lastRespawnPositions = _DEFAULT_RESPAWN_POSITIONS
         self.__carousel = None
         self.__shop = None
         self.__battleCtx = None
@@ -38,6 +40,11 @@ class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
     def _onRegisterFlashComponent(self, componentPy, alias):
         if alias == BATTLE_VIEW_ALIASES.BATTLE_TANK_CAROUSEL:
             self.__carousel = componentPy
+
+    def _onUnregisterFlashComponent(self, viewPy, alias):
+        self.__carousel = None
+        super(EpicBattleRespawn, self)._onUnregisterFlashComponent(viewPy, alias)
+        return
 
     def _populate(self):
         super(EpicBattleRespawn, self)._populate()
@@ -48,22 +55,20 @@ class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
             LOG_ERROR('Respawn Controller not available!')
         minSize, maxSize = self.sessionProvider.arenaVisitor.type.getBoundingBox()
         self.__mapDim = (abs(maxSize[0] - minSize[0]) * 1.0, abs(maxSize[1] - minSize[1]) * 1.0)
-        dimx, dimy = self.__mapDim
-        mapWidthPx = int(dimx * 0.001 * minimap_utils.EPIC_1KM_IN_PX)
-        mapHeightPx = int(dimy * 0.001 * minimap_utils.EPIC_1KM_IN_PX)
+        dimX, dimY = self.__mapDim
+        mapWidthPx = int(dimX * 0.001 * minimap_utils.EPIC_1KM_IN_PX)
+        mapHeightPx = int(dimY * 0.001 * minimap_utils.EPIC_1KM_IN_PX)
         self.as_setMapDimensionsS(mapWidthPx, mapHeightPx)
-        for lane in range(EB_MIN_RESPAWN_LANE_IDX, EB_MAX_RESPAWN_LANE_IDX):
-            self.__lastRespawnPositions[lane] = [0, 0]
-
+        self.__lastRespawnPositions = _DEFAULT_RESPAWN_POSITIONS
         return
 
     def _dispose(self):
-        super(EpicBattleRespawn, self)._dispose()
         ctrl = self.sessionProvider.dynamic.respawn
         if ctrl is not None:
             ctrl.onRespawnInfoUpdated -= self.onRespawnInfoUpdated
         self.__buttonStates.clear()
-        self.__lastRespawnPositions.clear()
+        self.__lastRespawnPositions = _DEFAULT_RESPAWN_POSITIONS
+        super(EpicBattleRespawn, self)._dispose()
         return
 
     def onRespawnBtnClick(self):
@@ -77,11 +82,9 @@ class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
             self.__playCountDownSound(False)
         return
 
-    def onLaneSelected(self, laneID):
-        ctrl = self.sessionProvider.dynamic.respawn
-        if ctrl is not None:
-            ctrl.requestLaneForRespawn(laneID)
-        return
+    def onLocationSelected(self, pointId):
+        if self.__selectedPointID != pointId:
+            self.setSelectedPoint(pointId)
 
     def onDeploymentReady(self):
         self.__playSound(EPIC_SOUND.EB_READY_FOR_DEPLOYMENT_ID[True])
@@ -93,6 +96,13 @@ class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
             vehicle = self.__carousel.getSelectedVehicle()
         if not vehicle:
             LOG_ERROR('RESPAWN: THIS SHOULD NEVER HAPPEN! Selected Veh ID: ', respawnInfo.vehicleID, ' available Vehicles: ', self.__carousel.getTotalVehiclesCount())
+
+    def isVehicleChanged(self, respawnInfo):
+        vehicle = self.__carousel.getSelectedVehicle()
+        isVehicleChanged = True
+        if vehicle:
+            isVehicleChanged = vehicle.intCD != respawnInfo.vehicleID
+        return isVehicleChanged
 
     def updateTimer(self, timeLeft, vehsList, cooldowns, limits=0):
         mainTimer = i18n.makeString(EPIC_BATTLE.RESPAWNSCREEN_SECONDSTIMERTEXT, seconds=int(round(timeLeft[0])))
@@ -141,27 +151,35 @@ class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
 
     def setSelectedLane(self, laneId):
         self.__selectedLaneID = laneId
-        self.as_setSelectedLaneS(laneId)
 
-    def setRespawnPositions(self, frontlineCenters, respawnOffsets):
+    def setSelectedPoint(self, pointId):
+        ctrl = self.sessionProvider.dynamic.respawn
+        if ctrl is not None:
+            0 <= pointId < len(self.__lastRespawnPositions) and ctrl.requestPointForRespawn(self.__lastRespawnPositions[pointId]['position'])
+            self.__selectedPointID = pointId
+        return
+
+    def setRespawnInfo(self, respawnInfo):
+        self.__lastRespawnPositions = respawnInfo.respawnZones
         width, height = self.__mapDim
-        if frontlineCenters is None or width * height == 0:
+        if self.__lastRespawnPositions is None or width * height == 0:
             return
         else:
-            classTag = None
-            vehicle = self.__carousel.getSelectedVehicle()
-            if vehicle:
-                classTag = vehicle.type
-            offset = respawnOffsets.get(classTag, 0.0)
-            for key in frontlineCenters:
-                xPos = frontlineCenters[key][0]
-                yPos = frontlineCenters[key][1] + offset
-                xPos = xPos / width + 0.5
-                yPos = yPos / height + 0.5
-                yPos = max(0, min(1, yPos))
-                self.__lastRespawnPositions[key] = [xPos, yPos]
 
-            self.as_setRespawnLocationsS(self.__lastRespawnPositions)
+            def convert(val, dim):
+                return val / dim + 0.5
+
+            def getX(p):
+                return convert(p[0], width)
+
+            def getY(p):
+                return convert(p[2], height)
+
+            self.as_setRespawnLocationsS([ self.__makePointVO(getX(point['position']), getY(point['position']), bool(point['isEnemyNear'])) for point in self.__lastRespawnPositions ])
+            positions = [ point['position'] for point in self.__lastRespawnPositions ]
+            if respawnInfo.chosenRespawnZone in positions:
+                self.__selectedPointID = positions.index(respawnInfo.chosenRespawnZone)
+                self.as_setSelectedLocationS(self.__selectedPointID)
             return
 
     def setLaneState(self, laneID, enabled, blockedText):
@@ -171,6 +189,11 @@ class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
 
     def setBattleCtx(self, battleCtx):
         self.__battleCtx = battleCtx
+
+    def __makePointVO(self, x=0, y=0, isEnemyNear=False):
+        return {'x': x,
+         'y': y,
+         'isEnemyNear': isEnemyNear}
 
     def __playCountDownSound(self, play):
         if play is True:
@@ -190,6 +213,14 @@ class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
     def __updateSlotData(self, vehsList, cooldowns, limits):
         if not isinstance(limits, dict):
             return
-        laneLimits = limits.get(self.__selectedLaneID, {})
-        slotsStatesData = respawn_utils.getSlotsStatesData(vehsList, cooldowns, self.__disabled, laneLimits)
+        vehLimits = self.__getVehicleLimits(limits)
+        slotsStatesData = respawn_utils.getSlotsStatesData(vehsList, cooldowns, self.__disabled, vehLimits)
         self.__carousel.updateVehicleStates(slotsStatesData)
+
+    def __getVehicleLimits(self, limits):
+        result = []
+        for vehCD in next(limits.itervalues()):
+            if all([ vehCD in cdList for cdList in limits.itervalues() ]):
+                result.append(vehCD)
+
+        return result

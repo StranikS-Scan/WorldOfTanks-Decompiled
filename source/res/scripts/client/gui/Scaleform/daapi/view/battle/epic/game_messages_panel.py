@@ -33,13 +33,21 @@ class EpicMessagePanel(GameMessagesPanelMeta):
 
     def onMessageStarted(self, messageType, id_):
         ctrl = self.sessionProvider.dynamic.gameNotifications
-        if ctrl:
+        if ctrl is not None:
             ctrl.onMessagePlaybackStarted(messageType, {'id': id_})
+        return
 
     def onMessageEnded(self, messageType, id_):
         ctrl = self.sessionProvider.dynamic.gameNotifications
-        if ctrl:
+        if ctrl is not None:
             ctrl.onMessagePlaybackEnded(messageType, {'id': id_})
+        return
+
+    def onMessageHiding(self, messageType, id_):
+        ctrl = self.sessionProvider.dynamic.gameNotifications
+        if ctrl is not None:
+            ctrl.onMessagePlaybackHide(messageType, {'id': id_})
+        return
 
     def _populate(self):
         super(EpicMessagePanel, self)._populate()

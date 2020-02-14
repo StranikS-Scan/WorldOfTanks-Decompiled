@@ -24,6 +24,9 @@ class BaseDAAPIModule(BaseDAAPIModuleMeta):
     def setPyReloading(self, flag):
         self.__isPyReloading = flag
 
+    def _getPyReloading(self):
+        return self.__isPyReloading
+
     def setFlashObject(self, movieClip, autoPopulate=True, setScript=True):
         if movieClip is not None:
             self.__isScriptSet = setScript
@@ -54,6 +57,7 @@ class BaseDAAPIModule(BaseDAAPIModuleMeta):
             except Exception:
                 _logger.exception('Error during flash disposing: %r', self)
 
+            self.setPyReloading(False)
             self.turnDAAPIoff(self.__isScriptSet)
         self.__app = None
         return

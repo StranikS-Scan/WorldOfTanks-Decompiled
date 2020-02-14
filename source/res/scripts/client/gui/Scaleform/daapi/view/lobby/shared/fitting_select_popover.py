@@ -4,6 +4,7 @@ import BigWorld
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
 from gui import g_htmlTemplates
 from constants import MAX_VEHICLE_LEVEL
+from gui.game_control.epic_meta_game_ctrl import FRONTLINE_SCREENS
 from gui.Scaleform.daapi.view.meta.FittingSelectPopoverMeta import FittingSelectPopoverMeta
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -30,9 +31,8 @@ from items import getTypeInfoByName
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
 from account_helpers.AccountSettings import AccountSettings, SHOW_OPT_DEVICE_HINT, BOOSTERS_FOR_CREDITS_SLOT_COUNTER
-from skeletons.gui.game_control import IBootcampController, IEpicBattleMetaGameController
+from skeletons.gui.game_control import IBootcampController, IEpicBattleMetaGameController, IEventProgressionController
 from bootcamp.Bootcamp import g_bootcamp
-from gui.game_control.epic_meta_game_ctrl import FRONTLINE_SCREENS
 _PARAMS_LISTS = {GUI_ITEM_TYPE.RADIO: ('radioDistance',),
  GUI_ITEM_TYPE.CHASSIS: ('rotationSpeed', 'maxSteeringLockAngle', 'maxLoad'),
  GUI_ITEM_TYPE.ENGINE: ('enginePower', 'fireStartingChance'),
@@ -307,13 +307,13 @@ class HangarFittingSelectPopover(CommonFittingSelectPopover):
 
 class BattleAbilitySelectPopover(HangarFittingSelectPopover):
     __itemsCache = dependency.descriptor(IItemsCache)
-    __epicController = dependency.descriptor(IEpicBattleMetaGameController)
+    __progressionController = dependency.descriptor(IEventProgressionController)
 
     def __init__(self, ctx, *_):
         super(BattleAbilitySelectPopover, self).__init__(ctx, _BattleAbilityLogicProvider)
 
     def onManageBattleAbilitiesClicked(self):
-        self.__epicController.showCustomScreen(FRONTLINE_SCREENS.RESERVES_SCREEN)
+        self.__progressionController.showCustomScreen(FRONTLINE_SCREENS.RESERVES_SCREEN)
         self.destroy()
 
     def _prepareInitialData(self):

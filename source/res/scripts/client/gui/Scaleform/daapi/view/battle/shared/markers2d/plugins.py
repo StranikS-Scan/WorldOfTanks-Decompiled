@@ -624,9 +624,11 @@ class VehicleMarkerTargetPlugin(MarkerPlugin, IArenaVehiclesController):
 
     def _destroyVehicleMarker(self, vehicleID):
         if vehicleID in self._markers:
+            self._vehicleID = None
             marker = self._markers.pop(vehicleID)
             self._destroyMarker(marker.getMarkerID())
             marker.destroy()
+        return
 
     def _onVehicleMarkerAdded(self, vehicleID):
         feedback = self.sessionProvider.shared.feedback

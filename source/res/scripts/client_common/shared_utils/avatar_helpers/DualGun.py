@@ -51,3 +51,6 @@ class DualGunHelper(object):
             else:
                 avatar.updateVehicleGunReloadTime(vehicleID, -1, cooldownTimes[activeGun].baseTime / 10.0)
         return
+
+    def reset(self):
+        self.__debuffTrigger = False

@@ -5,7 +5,7 @@
 class VEHPREVIEW_CONSTANTS(object):
     CREW_INFO_LINKAGE = 'VehPreviewCrewInfoUI'
     BUYING_PANEL_LINKAGE = 'VehiclePreview20BuyingPanelUI'
-    FRONTLINE_BUYING_PANEL_LINKAGE = 'VehiclePreview20FrontlineBuyingPanelUI'
+    EVENT_PROGRESSION_BUYING_PANEL_LINKAGE = 'VehiclePreview20EventProgressionBuyingPanelUI'
     TRADE_IN_BUYING_PANEL_LINKAGE = 'VehiclePreview20TradeInBuyingPanelUI'
     FACT_SHEET_LINKAGE = 'VehPreviewFactSheetUI'
     ELITE_FACT_SHEET_LINKAGE = 'VehPreviewEliteFactSheetUI'
@@ -18,7 +18,7 @@ class VEHPREVIEW_CONSTANTS(object):
     MODULES_PY_ALIAS = 'vehPreviewModules'
     PARAMETERS_PY_ALIAS = 'vehPreviewParams'
     BUYING_PANEL_PY_ALIAS = 'vehPreviewBuyingPanel'
-    FRONTLINE_BUYING_PANEL_PY_ALIAS = 'vehPreviewFrontlineBuyingPanel'
+    EVENT_PROGRESSION_BUYING_PANEL_PY_ALIAS = 'vehPreviewEventProgressionBuyingPanel'
     TRADE_IN_BUYING_PANEL_PY_ALIAS = 'vehPreviewTradeInBuyingPanel'
     TRADE_OFF_WIDGET_ALIAS = 'vehPreviewTradeOffWidget'
     CREW_BONUS = 0

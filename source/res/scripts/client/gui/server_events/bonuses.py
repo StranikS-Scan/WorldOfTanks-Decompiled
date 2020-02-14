@@ -53,6 +53,7 @@ from nations import NAMES
 from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME
 from shared_utils import makeTupleByDict, CONST_CONTAINER
 from skeletons.gui.customization import ICustomizationService
+from skeletons.gui.game_control import IEventProgressionController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -404,6 +405,7 @@ class TokensBonus(SimpleBonus):
 
 class BattleTokensBonus(TokensBonus):
     eventsCache = dependency.descriptor(IEventsCache)
+    __eventProgCtrl = dependency.descriptor(IEventProgressionController)
 
     def __init__(self, name, value, isCompensation=False, ctx=None):
         super(TokensBonus, self).__init__(name, value, isCompensation, ctx)
@@ -425,12 +427,12 @@ class BattleTokensBonus(TokensBonus):
     def getWrappedEpicBonusList(self):
         result = []
         for tokenID, value in self._value.iteritems():
-            if tokenID == 'prestige_point':
+            if tokenID == self.__eventProgCtrl.rewardPointsTokenID:
                 result.append({'id': 0,
                  'value': value.get('count', 1),
-                 'icon': {AWARDS_SIZES.SMALL: RES_ICONS.getEpicBattlesPrestigePoints('48x48'),
-                          AWARDS_SIZES.BIG: RES_ICONS.getEpicBattlesPrestigePoints('80x80')},
-                 'type': 'custom/{}'.format(tokenID)})
+                 'icon': {AWARDS_SIZES.SMALL: backport.image(R.images.gui.maps.icons.epicBattles.rewardPoints.c_48x48()),
+                          AWARDS_SIZES.BIG: backport.image(R.images.gui.maps.icons.epicBattles.rewardPoints.c_80x80())},
+                 'type': 'custom/reward_point'.format(tokenID)})
 
         return result
 
@@ -1717,6 +1719,10 @@ class CrewBooksBonus(SimpleBonus):
         if withCounts:
             itemInfo['count'] = count
         return itemInfo
+
+
+class EpicAbilityPtsBonus(SimpleBonus):
+    pass
 
 
 _BONUSES = {Currency.CREDITS: CreditsBonus,

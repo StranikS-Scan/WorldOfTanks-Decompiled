@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/epic/deployment_map.py
 import GUI
 from gui.Scaleform.daapi.view.meta.EpicDeploymentMapMeta import EpicDeploymentMapMeta
-from gui.Scaleform.daapi.view.battle.epic.minimap import StepRepairPointEntriesPlugin, EpicGlobalSettingsPlugin, RespawningPersonalEntriesPlugin, SectorBaseEntriesPlugin, MarkPositionPlugin, SectorStatusEntriesPlugin, HeadquartersStatusEntriesPlugin, DevelopmentRespawnEntriesPlugin, ProtectionZoneEntriesPlugin, _FRONT_LINE_DEV_VISUALIZATION_SUPPORTED, RecoveringVehiclesPlugin, MINIMAP_SCALE_TYPES, SectorOverlayEntriesPlugin
+from gui.Scaleform.daapi.view.battle.epic.minimap import _FRONT_LINE_DEV_VISUALIZATION_SUPPORTED, DevelopmentRespawnEntriesPlugin, EpicGlobalSettingsPlugin, HeadquartersStatusEntriesPlugin, MarkPositionPlugin, MINIMAP_SCALE_TYPES, ProtectionZoneEntriesPlugin, RespawningPersonalEntriesPlugin, RecoveringVehiclesPlugin, SectorBaseEntriesPlugin, SectorOverlayEntriesPlugin, SectorStatusEntriesPlugin, StepRepairPointEntriesPlugin
 from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider

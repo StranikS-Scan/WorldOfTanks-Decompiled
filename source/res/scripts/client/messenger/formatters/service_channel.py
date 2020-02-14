@@ -53,7 +53,7 @@ from messenger import g_settings
 from messenger.ext import passCensor
 from messenger.formatters import TimeFormatter, NCContextItemFormatter
 from shared_utils import BoundMethodWeakref, first
-from skeletons.gui.game_control import IRankedBattlesController
+from skeletons.gui.game_control import IRankedBattlesController, IEventProgressionController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -2004,6 +2004,7 @@ class QuestAchievesFormatter(object):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __goodiesCache = dependency.descriptor(IGoodiesCache)
     __itemsCache = dependency.descriptor(IItemsCache)
+    __eventProgCtrl = dependency.descriptor(IEventProgressionController)
 
     @classmethod
     def formatQuestAchieves(cls, data, asBattleFormatter, processCustomizations=True):
@@ -2068,6 +2069,16 @@ class QuestAchievesFormatter(object):
                 if demountKit is not None and demountKit.enabled:
                     itemsNames.append(backport.text(R.strings.demount_kit.demountKit.gained.count(), count=ginfo.get('count')))
 
+        abilityPts = data.get(constants.EPIC_ABILITY_PTS_NAME)
+        if abilityPts:
+            name = backport.text(R.strings.messenger.serviceChannelMessages.battleResults.epicAbilityPoints())
+            itemsNames.append(backport.text(R.strings.messenger.serviceChannelMessages.battleResults.quests.items.name(), name=name, count=backport.getIntegralFormat(abilityPts)))
+        tokens = data.get('tokens')
+        rewardTokenID = cls.__eventProgCtrl.rewardPointsTokenID
+        if tokens and rewardTokenID in tokens:
+            name = backport.text(R.strings.messenger.serviceChannelMessages.battleResults.epicRewardPoints())
+            count = tokens[rewardTokenID].get('count', 1)
+            itemsNames.append(backport.text(R.strings.messenger.serviceChannelMessages.battleResults.quests.items.name(), name=name, count=backport.getIntegralFormat(count)))
         if itemsNames:
             result.append(cls.__makeQuestsAchieve('battleQuestsItems', names=', '.join(itemsNames)))
         _extendCrewSkinsData(data, result)

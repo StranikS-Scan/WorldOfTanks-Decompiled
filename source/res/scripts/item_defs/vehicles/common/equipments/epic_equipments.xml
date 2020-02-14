@@ -60,26 +60,26 @@
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
       <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
-      <cooldownTime>	240.0	</cooldownTime>
+      <cooldownTime>	360.0	</cooldownTime>
       <cooldownFactors></cooldownFactors>
       <sharedCooldownTime>	3.0	</sharedCooldownTime>
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
-      <delay>	6.0	</delay>
+      <delay>	2.0	</delay>
       <speed>	80	</speed>
       <heights>	170 120	</heights>
-      <areaLength>	55	</areaLength>
-      <areaWidth>	35	</areaWidth>
+      <areaLength>	45	</areaLength>
+      <areaWidth>	45	</areaWidth>
       <antepositions>	0	</antepositions>
       <lateropositions>	0	</lateropositions>
       <bombingMask>	1	</bombingMask>
       <waveFraction>	1	</waveFraction>
-      <bombsNumber>	130	</bombsNumber>
+      <bombsNumber>	55	</bombsNumber>
       <shellCompactDescr>	33050	</shellCompactDescr>
       <tracerKind>	1	</tracerKind>
-      <piercingPower>	100 100	</piercingPower>
+      <piercingPower>	5 5	</piercingPower>
       <gravity>	10000	</gravity>
-      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
+      <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
       <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
       <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
       <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
@@ -170,6 +170,7 @@
       <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
       <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
       <areaVisual>	content/Interface/TargetPoint/ReconFlight.visual	</areaVisual>
+      <wwsoundEquipmentUsed>	eb_ability_airScout_apply	</wwsoundEquipmentUsed>
     </script>
   </recon_epic_level1>
   <recon_epic_level2>
@@ -214,6 +215,7 @@
       <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
       <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
       <areaVisual>	content/Interface/TargetPoint/ReconFlight.visual	</areaVisual>
+      <wwsoundEquipmentUsed>	eb_ability_airScout_apply	</wwsoundEquipmentUsed>
     </script>
   </recon_epic_level2>
   <recon_epic_level3>
@@ -258,6 +260,7 @@
       <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
       <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
       <areaVisual>	content/Interface/TargetPoint/ReconFlight.visual	</areaVisual>
+      <wwsoundEquipmentUsed>	eb_ability_airScout_apply	</wwsoundEquipmentUsed>
     </script>
   </recon_epic_level3>
   <recon_epic_level4>
@@ -302,6 +305,7 @@
       <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
       <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
       <areaVisual>	content/Interface/TargetPoint/ReconFlight.visual	</areaVisual>
+      <wwsoundEquipmentUsed>	eb_ability_airScout_apply	</wwsoundEquipmentUsed>
     </script>
   </recon_epic_level4>
   <recon_epic_level5>
@@ -346,6 +350,7 @@
       <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
       <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
       <areaVisual>	content/Interface/TargetPoint/ReconFlight.visual	</areaVisual>
+      <wwsoundEquipmentUsed>	eb_ability_airScout_apply	</wwsoundEquipmentUsed>
     </script>
   </recon_epic_level5>
   <bomber_epic_level1>
@@ -378,25 +383,26 @@
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
       <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
-      <delay>	5.0	</delay>
+      <delay>	2.0	</delay>
       <speed>	80	</speed>
       <heights>	100 60	</heights>
-      <areaLength>	50	</areaLength>
-      <areaWidth>	30	</areaWidth>
+      <areaLength>	45	</areaLength>
+      <areaWidth>	45	</areaWidth>
       <antepositions>	0	</antepositions>
       <lateropositions>	0	</lateropositions>
       <bombingMask>	1	</bombingMask>
       <waveFraction>	1	</waveFraction>
-      <bombsNumber>	40	</bombsNumber>
+      <bombsNumber>	55	</bombsNumber>
       <shellCompactDescr>	66842	</shellCompactDescr>
       <tracerKind>	1	</tracerKind>
-      <piercingPower>	10 10	</piercingPower>
+      <piercingPower>	5 5	</piercingPower>
       <gravity>	10000	</gravity>
-      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
+      <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
       <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
       <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
       <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
       <noOwner>	false	</noOwner>
+      <wwsoundEquipmentUsed>	eb_ability_airStrike_apply	</wwsoundEquipmentUsed>
     </script>
   </bomber_epic_level1>
   <bomber_epic_level2>
@@ -429,25 +435,26 @@
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
       <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
-      <delay>	5.0	</delay>
+      <delay>	2.0	</delay>
       <speed>	80	</speed>
       <heights>	100 60	</heights>
-      <areaLength>	50	</areaLength>
-      <areaWidth>	30	</areaWidth>
+      <areaLength>	45	</areaLength>
+      <areaWidth>	45	</areaWidth>
       <antepositions>	0	</antepositions>
       <lateropositions>	0	</lateropositions>
       <bombingMask>	1	</bombingMask>
       <waveFraction>	1	</waveFraction>
-      <bombsNumber>	45	</bombsNumber>
+      <bombsNumber>	60	</bombsNumber>
       <shellCompactDescr>	67098	</shellCompactDescr>
       <tracerKind>	1	</tracerKind>
-      <piercingPower>	10 10	</piercingPower>
+      <piercingPower>	5 5	</piercingPower>
       <gravity>	10000	</gravity>
-      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
+      <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
       <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
       <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
       <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
       <noOwner>	false	</noOwner>
+      <wwsoundEquipmentUsed>	eb_ability_airStrike_apply	</wwsoundEquipmentUsed>
     </script>
   </bomber_epic_level2>
   <bomber_epic_level3>
@@ -480,25 +487,26 @@
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
       <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
-      <delay>	5.0	</delay>
+      <delay>	2.0	</delay>
       <speed>	80	</speed>
       <heights>	100 60	</heights>
-      <areaLength>	50	</areaLength>
-      <areaWidth>	30	</areaWidth>
+      <areaLength>	45	</areaLength>
+      <areaWidth>	45	</areaWidth>
       <antepositions>	0	</antepositions>
       <lateropositions>	0	</lateropositions>
       <bombingMask>	1	</bombingMask>
       <waveFraction>	1	</waveFraction>
-      <bombsNumber>	50	</bombsNumber>
+      <bombsNumber>	67	</bombsNumber>
       <shellCompactDescr>	67354	</shellCompactDescr>
       <tracerKind>	1	</tracerKind>
-      <piercingPower>	10 10	</piercingPower>
+      <piercingPower>	5 5	</piercingPower>
       <gravity>	10000	</gravity>
-      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
+      <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
       <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
       <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
       <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
       <noOwner>	false	</noOwner>
+      <wwsoundEquipmentUsed>	eb_ability_airStrike_apply	</wwsoundEquipmentUsed>
     </script>
   </bomber_epic_level3>
   <bomber_epic_level4>
@@ -531,25 +539,26 @@
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
       <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
-      <delay>	5.0	</delay>
+      <delay>	2.0	</delay>
       <speed>	80	</speed>
       <heights>	100 60	</heights>
-      <areaLength>	50	</areaLength>
-      <areaWidth>	30	</areaWidth>
+      <areaLength>	45	</areaLength>
+      <areaWidth>	45	</areaWidth>
       <antepositions>	0	</antepositions>
       <lateropositions>	0	</lateropositions>
       <bombingMask>	1	</bombingMask>
       <waveFraction>	1	</waveFraction>
-      <bombsNumber>	55	</bombsNumber>
+      <bombsNumber>	75	</bombsNumber>
       <shellCompactDescr>	67610	</shellCompactDescr>
       <tracerKind>	1	</tracerKind>
-      <piercingPower>	10 10	</piercingPower>
+      <piercingPower>	5 5	</piercingPower>
       <gravity>	10000	</gravity>
-      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
+      <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
       <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
       <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
       <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
       <noOwner>	false	</noOwner>
+      <wwsoundEquipmentUsed>	eb_ability_airStrike_apply	</wwsoundEquipmentUsed>
     </script>
   </bomber_epic_level4>
   <bomber_epic_level5>
@@ -582,25 +591,26 @@
       <consumeAmmo>	false	</consumeAmmo>
       <disableAllyDamage>	false	</disableAllyDamage>
       <cooldownTimeRespawnFactor>	0.5	</cooldownTimeRespawnFactor>
-      <delay>	5.0	</delay>
+      <delay>	2.0	</delay>
       <speed>	80	</speed>
       <heights>	100 60	</heights>
-      <areaLength>	50	</areaLength>
-      <areaWidth>	30	</areaWidth>
+      <areaLength>	45	</areaLength>
+      <areaWidth>	45	</areaWidth>
       <antepositions>	0	</antepositions>
       <lateropositions>	0	</lateropositions>
       <bombingMask>	1	</bombingMask>
       <waveFraction>	1	</waveFraction>
-      <bombsNumber>	60	</bombsNumber>
+      <bombsNumber>	81	</bombsNumber>
       <shellCompactDescr>	67866	</shellCompactDescr>
       <tracerKind>	1	</tracerKind>
-      <piercingPower>	10 10	</piercingPower>
+      <piercingPower>	5 5	</piercingPower>
       <gravity>	10000	</gravity>
-      <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
+      <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
       <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
       <wwsoundEvent>	eb_bomber_engine	</wwsoundEvent>
       <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
       <noOwner>	false	</noOwner>
+      <wwsoundEquipmentUsed>	eb_ability_airStrike_apply	</wwsoundEquipmentUsed>
     </script>
   </bomber_epic_level5>
   <artillery_epic_level1>
@@ -643,6 +653,7 @@
       <noOwner>	false	</noOwner>
       <shotSoundPreDelay>	2	</shotSoundPreDelay>
       <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <wwsoundEquipmentUsed>	eb_ability_artillery_apply	</wwsoundEquipmentUsed>
     </script>
   </artillery_epic_level1>
   <artillery_epic_level2>
@@ -685,6 +696,7 @@
       <noOwner>	false	</noOwner>
       <shotSoundPreDelay>	2	</shotSoundPreDelay>
       <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <wwsoundEquipmentUsed>	eb_ability_artillery_apply	</wwsoundEquipmentUsed>
     </script>
   </artillery_epic_level2>
   <artillery_epic_level3>
@@ -727,6 +739,7 @@
       <noOwner>	false	</noOwner>
       <shotSoundPreDelay>	2	</shotSoundPreDelay>
       <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <wwsoundEquipmentUsed>	eb_ability_artillery_apply	</wwsoundEquipmentUsed>
     </script>
   </artillery_epic_level3>
   <artillery_epic_level4>
@@ -769,6 +782,7 @@
       <noOwner>	false	</noOwner>
       <shotSoundPreDelay>	2	</shotSoundPreDelay>
       <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <wwsoundEquipmentUsed>	eb_ability_artillery_apply	</wwsoundEquipmentUsed>
     </script>
   </artillery_epic_level4>
   <artillery_epic_level5>
@@ -811,6 +825,7 @@
       <noOwner>	false	</noOwner>
       <shotSoundPreDelay>	2	</shotSoundPreDelay>
       <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <wwsoundEquipmentUsed>	eb_ability_artillery_apply	</wwsoundEquipmentUsed>
     </script>
   </artillery_epic_level5>
   <smoke_epic_level1>
@@ -1117,6 +1132,7 @@
       <crewIncreaseFactor>	1.1	</crewIncreaseFactor>
       <inactivationDelay>	10	</inactivationDelay>
       <radius>	40	</radius>
+      <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
     </script>
   </inspire_level1>
   <inspire_level2>
@@ -1153,6 +1169,7 @@
       <crewIncreaseFactor>	1.11	</crewIncreaseFactor>
       <inactivationDelay>	10	</inactivationDelay>
       <radius>	40	</radius>
+      <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
     </script>
   </inspire_level2>
   <inspire_level3>
@@ -1189,6 +1206,7 @@
       <crewIncreaseFactor>	1.125	</crewIncreaseFactor>
       <inactivationDelay>	10	</inactivationDelay>
       <radius>	40	</radius>
+      <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
     </script>
   </inspire_level3>
   <inspire_level4>
@@ -1225,6 +1243,7 @@
       <crewIncreaseFactor>	1.14	</crewIncreaseFactor>
       <inactivationDelay>	10	</inactivationDelay>
       <radius>	40	</radius>
+      <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
     </script>
   </inspire_level4>
   <inspire_level5>
@@ -1261,6 +1280,7 @@
       <crewIncreaseFactor>	1.15	</crewIncreaseFactor>
       <inactivationDelay>	10	</inactivationDelay>
       <radius>	40	</radius>
+      <wwsoundEquipmentUsed>	eb_ability_inspiration_apply	</wwsoundEquipmentUsed>
     </script>
   </inspire_level5>
   <passive_engineering_level1>

@@ -58,12 +58,12 @@ class EPIC_BATTLE(object):
     PROGRESS_TIMERS_FULLY_EQUIPPED = '#epic_battle:progress_timers/fully_equipped'
     DESTROY_TIMERS_AIRSTRIKE_TXT = '#epic_battle:destroy_timers/airstrike_txt'
     RESPAWN_AUTO_TIMER_TXT = '#epic_battle:respawn/auto_timer_txt'
-    RANK_RANK0 = '#epic_battle:rank/rank0'
     RANK_RANK1 = '#epic_battle:rank/rank1'
     RANK_RANK2 = '#epic_battle:rank/rank2'
     RANK_RANK3 = '#epic_battle:rank/rank3'
     RANK_RANK4 = '#epic_battle:rank/rank4'
     RANK_RANK5 = '#epic_battle:rank/rank5'
+    RANK_RANK6 = '#epic_battle:rank/rank6'
     RANK_NO_NAME = '#epic_battle:rank/no_name'
     RANK_PROMOTION = '#epic_battle:rank/promotion'
     MISSION_PRIMARY_TITLE = '#epic_battle:mission/primary/title'
@@ -172,10 +172,15 @@ class EPIC_BATTLE(object):
     SCOREPANEL_STAGE2 = '#epic_battle:scorePanel/stage2'
     SCOREPANEL_STAGE3 = '#epic_battle:scorePanel/stage3'
     REINFORCEMENTSPANEL_INTEXT = '#epic_battle:reinforcementsPanel/inText'
+    RESPAWNSCREEN_DEPLOYMENTLANE1 = '#epic_battle:respawnScreen/deploymentLane1'
+    RESPAWNSCREEN_DEPLOYMENTLANE2 = '#epic_battle:respawnScreen/deploymentLane2'
+    RESPAWNSCREEN_DEPLOYMENTLANE3 = '#epic_battle:respawnScreen/deploymentLane3'
     RESPAWNSCREEN_SECONDSTIMERTEXT = '#epic_battle:respawnScreen/secondsTimerText'
     RESPAWNSCREEN_HEADERTITLE = '#epic_battle:respawnScreen/headerTitle'
+    RESPAWNSCREEN_RESPAWNWARNING = '#epic_battle:respawnScreen/respawnWarning'
     DEPLOYMENTMAP_SPGLIMITREACHED = '#epic_battle:deploymentMap/spgLimitReached'
     DEPLOYMENTMAP_LANEPLAYERLIMITREACHED = '#epic_battle:deploymentMap/lanePlayerLimitReached'
+    DEPLOYMENTMAP_RESPAWNWARNING = '#epic_battle:deploymentMap/respawnWarning'
     EPICBATTLESINFOVIEW_BATTLEMODETITLE = '#epic_battle:epicBattlesInfoView/battleModeTitle'
     EPICBATTLESINFOVIEW_MAXMETASTRING = '#epic_battle:epicBattlesInfoView/maxMetaString'
     EPICBATTLESINFOVIEW_FAMELABELHIGHLIGHT = '#epic_battle:epicBattlesInfoView/fameLabelHighlight'
@@ -214,10 +219,8 @@ class EPIC_BATTLE(object):
     EPIC_BATTLES_AFTER_BATTLE_TITLE = '#epic_battle:epic_battles_after_battle/Title'
     EPIC_BATTLES_AFTER_BATTLE_ACHIEVED_RANK = '#epic_battle:epic_battles_after_battle/Achieved_Rank'
     EPIC_BATTLES_AFTER_BATTLE_LEVEL_UP_TITLE = '#epic_battle:epic_battles_after_battle/Level_Up_Title'
-    EPIC_BATTLES_AFTER_BATTLE_LEVEL_UP_MAX_TITLE = '#epic_battle:epic_battles_after_battle/Level_Up_Max_Title'
-    EPIC_BATTLES_AFTER_BATTLE_MAX_LEVEL_INFO = '#epic_battle:epic_battles_after_battle/max_level_info'
-    EPIC_BATTLES_AFTER_BATTLE_MAX_PRESTIGE_IN_CYCLE_INFO = '#epic_battle:epic_battles_after_battle/max_prestige_in_cycle_info'
-    EPIC_BATTLES_AFTER_BATTLE_MAX_PRESTIGE_IN_SEASON_INFO = '#epic_battle:epic_battles_after_battle/max_prestige_in_season_info'
+    EPIC_BATTLES_AFTER_BATTLE_MAX_LEVEL_INFO_TITLE = '#epic_battle:epic_battles_after_battle/max_level_info/title'
+    EPIC_BATTLES_AFTER_BATTLE_MAX_LEVEL_INFO_DESCRIPTION = '#epic_battle:epic_battles_after_battle/max_level_info/description'
     SELECTORTOOLTIP_EPICBATTLE_HEADER = '#epic_battle:selectorTooltip/epicBattle/header'
     SELECTORTOOLTIP_EPICBATTLE_BODY = '#epic_battle:selectorTooltip/epicBattle/body'
     SELECTORTOOLTIP_EPICBATTLE_FROZEN = '#epic_battle:selectorTooltip/epicBattle/frozen'
@@ -233,6 +236,12 @@ class EPIC_BATTLE(object):
     SELECTORTOOLTIP_EPICBATTLE_ATTENTION_POSSIBLELOWPERFORMANCE_DESCRIPTION = '#epic_battle:selectorTooltip/epicBattle/attention/possibleLowPerformance/description'
     SELECTORTOOLTIP_EPICBATTLE_ATTENTION_INFORMATIVELOWPERFORMANCE_TITLE = '#epic_battle:selectorTooltip/epicBattle/attention/informativeLowPerformance/title'
     SELECTORTOOLTIP_EPICBATTLE_ATTENTION_INFORMATIVELOWPERFORMANCE_DESCRIPTION = '#epic_battle:selectorTooltip/epicBattle/attention/informativeLowPerformance/description'
+    QUESTSTOOLTIP_EPICBATTLE_HEADER = '#epic_battle:questsTooltip/epicBattle/header'
+    QUESTSTOOLTIP_EPICBATTLE_TIMELEFT = '#epic_battle:questsTooltip/epicBattle/timeLeft'
+    QUESTSTOOLTIP_EPICBATTLE_STARTIN = '#epic_battle:questsTooltip/epicBattle/startIn'
+    QUESTSTOOLTIP_EPICBATTLE_LESSTHANDAY = '#epic_battle:questsTooltip/epicBattle/lessThanDay'
+    QUESTSTOOLTIP_EPICBATTLE_UNAVAILABLE = '#epic_battle:questsTooltip/epicBattle/unavailable'
+    QUESTSTOOLTIP_EPICBATTLE_RESTRICT_LEVEL = '#epic_battle:questsTooltip/epicBattle/restrict/level'
     WIDGETALERTMESSAGEBLOCK_NOCYCLEMESSAGE = '#epic_battle:widgetAlertMessageBlock/noCycleMessage'
     WIDGETALERTMESSAGEBLOCK_ALLPERIPHERIESHALT = '#epic_battle:widgetAlertMessageBlock/allPeripheriesHalt'
     WIDGETALERTMESSAGEBLOCK_SOMEPERIPHERIESHALT = '#epic_battle:widgetAlertMessageBlock/somePeripheriesHalt'
@@ -252,6 +261,9 @@ class EPIC_BATTLE(object):
     METAABILITYSCREEN_ABILITY_MAX_LEVEL = '#epic_battle:metaAbilityScreen/Ability_max_level'
     METAABILITYSCREEN_ABILITY_LOCKED = '#epic_battle:metaAbilityScreen/Ability_locked'
     METAABILITYSCREEN_ABILITY_NOT_POINTS = '#epic_battle:metaAbilityScreen/Ability_not_points'
+    BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_XP = '#epic_battle:booster/description/bonusValueTime/booster_xp'
+    BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_FREE_XP = '#epic_battle:booster/description/bonusValueTime/booster_free_xp'
+    BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_CREW_XP = '#epic_battle:booster/description/bonusValueTime/booster_crew_xp'
     FITTINGSELECTPOPOVER_REMOVEBUTTON = '#epic_battle:fittingSelectPopover/RemoveButton'
     FITTINGSELECTPOPOVER_CHANGEORDER = '#epic_battle:fittingSelectPopover/ChangeOrder'
     FITTINGSELECTPOPOVER_NOTACTIVATED = '#epic_battle:fittingSelectPopover/notActivated'
@@ -280,21 +292,16 @@ class EPIC_BATTLE(object):
     TUTORIAL_HINT_EPICRESERVESBTNHINT = '#epic_battle:tutorial/hint/epicReservesBtnHint'
     SEASON_201902_NAME = '#epic_battle:season/201902/name'
     SEASON_202002_NAME = '#epic_battle:season/202002/name'
-    VEHICLE_PREVIEW_TITLE = '#epic_battle:vehicle_preview/title'
     EPICBATTLEITEM_REWARDPOINTS_HEADER = '#epic_battle:epicBattleItem/rewardPoints/header'
     EPICBATTLEITEM_REWARDPOINTS_DESCRIPTION = '#epic_battle:epicBattleItem/rewardPoints/description'
     EPICBATTLEITEM_SUPPLYPOINTS_HEADER = '#epic_battle:epicBattleItem/supplyPoints/header'
     EPICBATTLEITEM_SUPPLYPOINTS_DESCRIPTION = '#epic_battle:epicBattleItem/supplyPoints/description'
-    BUYCONFIRM_TITLE = '#epic_battle:buyConfirm/title'
-    BUYCONFIRM_CONTENT = '#epic_battle:buyConfirm/content'
-    BUYCONFIRM_BUYLABEL = '#epic_battle:buyConfirm/buyLabel'
-    BUYCONFIRM_BACKLABEL = '#epic_battle:buyConfirm/backLabel'
-    RANK_RANK_ENUM = (RANK_RANK0,
-     RANK_RANK1,
+    RANK_RANK_ENUM = (RANK_RANK1,
      RANK_RANK2,
      RANK_RANK3,
      RANK_RANK4,
-     RANK_RANK5)
+     RANK_RANK5,
+     RANK_RANK6)
     SEASON_ALL_NAME_ENUM = (SEASON_201902_NAME, SEASON_202002_NAME)
 
     @classmethod

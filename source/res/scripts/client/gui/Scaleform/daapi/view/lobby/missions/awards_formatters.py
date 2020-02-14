@@ -421,9 +421,10 @@ class EpicCurtailingAwardsComposer(CurtailingAwardsComposer):
     def _getShortBonusesData(cls, preformattedBonuses, size=AWARDS_SIZES.SMALL):
         bonuses = []
         for bonus in preformattedBonuses:
+            specialTooltipImg = bonus.getImage('tooltip')
             shortData = {'name': bonus.userName,
              'label': bonus.getFormattedLabel(),
-             'imgSource': bonus.getImage('tooltip')}
+             'imgSource': specialTooltipImg if specialTooltipImg else bonus.getImage(size)}
             bonuses.append(shortData)
 
         return bonuses

@@ -106,7 +106,6 @@ class EpicScorePanel(EpicScorePanelMeta):
             self.__prebattleTimeSent = True
 
     def _dispose(self):
-        super(EpicScorePanel, self)._dispose()
         componentSystem = self.sessionProvider.arenaVisitor.getComponentSystem()
         destructEntityComp = getattr(componentSystem, 'destructibleEntityComponent', None)
         if destructEntityComp is not None:
@@ -133,6 +132,7 @@ class EpicScorePanel(EpicScorePanelMeta):
         arena = self.sessionProvider.arenaVisitor.getArenaSubscription()
         if arena is not None:
             arena.onPeriodChange -= self.__onArenaPeriodChange
+        super(EpicScorePanel, self)._dispose()
         return
 
     def __onHQDestroyed(self, id_):

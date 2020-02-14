@@ -15,7 +15,7 @@ class EpicBattlePlayerDataComponent(PlayerDataComponent):
     physicalLane = property(lambda self: self.__physicalLane)
     physicalSectorGroup = property(lambda self: self.__physicalSectorGroup)
     playerXP = property(lambda self: self.__playerXP)
-    reinforcementTimer = property(lambda self: self.__nextReinforcmentTimer)
+    reinforcementTimer = property(lambda self: self.__nextReinforcementTimer)
     playerSectorID = property(lambda self: self.__getPlayerSectorID())
     hqSectorID = property(lambda self: self.__getHQSectorID())
 
@@ -26,7 +26,7 @@ class EpicBattlePlayerDataComponent(PlayerDataComponent):
         self.__physicalLane = None
         self.__physicalSectorGroup = None
         self.__playerSectorID = -1
-        self.__nextReinforcmentTimer = None
+        self.__nextReinforcementTimer = None
         self.__lastTeamLives = defaultdict(int)
         self.__playerXP = 0
         self.__hqSectorID = None
@@ -217,7 +217,7 @@ class EpicBattlePlayerDataComponent(PlayerDataComponent):
         return self.__hqSectorID
 
     def __onLiveUpdateTimerUpdated(self, args):
-        self.__nextReinforcmentTimer = args
+        self.__nextReinforcementTimer = args
         self.onReinforcementTimerUpdated(args)
 
     def __vehiclePlayerSectorUpdated(self, args):

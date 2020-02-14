@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/epic/minimap.py
-import sys
+import os
 import Math
 import BigWorld
 import GUI
@@ -30,7 +30,7 @@ _EPIC_ICONS = settings.CONTAINER_NAME.ICONS
 _RESPAWN_VISUALIZATION_ENTRY_1 = 0
 _RESPAWN_VISUALIZATION_ENTRY_2 = 1
 _RESPAWN_VISUALIZATION_ENTRY_3 = 2
-_IS_COORDINATOR = len(sys.argv) >= 2 and sys.argv[1] == 'coordinator'
+_IS_COORDINATOR = bool(os.getenv('WOT_COORDINATOR', False))
 _FRONT_LINE_DEV_VISUALIZATION_SUPPORTED = IS_DEVELOPMENT
 _MINI_MINIMAP_HIGHLIGHT_PATH = '_level0.root.{}.main.minimap.mapShortcutLabel.sectorOverview.mmapAreaHighlight'.format(APP_CONTAINERS_NAMES.VIEWS)
 _MINI_MINIMAP_SIZE = 46
@@ -42,11 +42,11 @@ EPIC_MINIMAP_HIT_AREA = 210
 EPIC_1KM_IN_PX = 210
 
 def makeMousePositionToEpicWorldPosition(clickedX, clickedY, bounds, hitArea=EPIC_MINIMAP_HIT_AREA):
-    upperLeftX, upperLeftZ, lowerRightX, lowerrightZ = bounds
-    upperleft = Math.Vector3(upperLeftX, 0, upperLeftZ)
-    lowerright = Math.Vector3(lowerRightX, 0, lowerrightZ)
-    dis = lowerright - upperleft
-    pos = upperleft + Math.Vector3(clickedX / hitArea * dis.x, 0, clickedY / hitArea * dis.z)
+    upperLeftX, upperLeftZ, lowerRightX, lowerRightZ = bounds
+    upperLeft = Math.Vector3(upperLeftX, 0, upperLeftZ)
+    lowerRight = Math.Vector3(lowerRightX, 0, lowerRightZ)
+    dis = lowerRight - upperLeft
+    pos = upperLeft + Math.Vector3(clickedX / hitArea * dis.x, 0, clickedY / hitArea * dis.z)
     return pos
 
 
@@ -242,7 +242,6 @@ class CenteredPersonalEntriesPlugin(RespawningPersonalEntriesPlugin):
         self.__centerMapBasedOnMode()
 
     def __centerMapBasedOnMode(self):
-        newEntryID = self.__savedEntry
         if self._isInPostmortemMode():
             iah = avatar_getter.getInputHandler()
             if iah and iah.ctrls[CTRL_MODE_NAME.POSTMORTEM].altTargetMode == CTRL_MODE_NAME.DEATH_FREE_CAM:

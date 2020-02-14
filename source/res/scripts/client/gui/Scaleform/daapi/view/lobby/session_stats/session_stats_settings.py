@@ -47,25 +47,32 @@ class SessionStatsSettings(SessionStatsSettingsMeta):
 
     def __init__(self):
         super(SessionStatsSettings, self).__init__()
-        self.__sessionStasSettings = SessionStatsSettingsController()
-        self.__currentSettings = self.__sessionStasSettings.getSettings()
+        self.__sessionStatsSettings = SessionStatsSettingsController()
+        self.__currentSettings = self.__sessionStatsSettings.getSettings()
         self.onShowStats = Event.Event()
         self.__lastChangedIdentifier = None
         return
 
     def _populate(self):
         super(SessionStatsSettings, self)._populate()
+        self.__sessionStatsSettings.start()
         self.__setSettings()
 
+    def _dispose(self):
+        self.__sessionStatsSettings.stop()
+        self.__sessionStatsSettings = None
+        super(SessionStatsSettings, self)._dispose()
+        return
+
     def onClickResetBtn(self):
-        self.__currentSettings = self.__sessionStasSettings.getDefaultSettings()
+        self.__currentSettings = self.__sessionStatsSettings.getDefaultSettings()
         self.__setSettings()
         self.as_setControlsStateS(self.__getControlsData())
 
     def onClickApplyBtn(self):
         if not self.__currentSettings[SESSION_STATS.IS_NEEDED_SAVE_CURRENT_TAB]:
             self.__currentSettings[SESSION_STATS.CURRENT_TAB] = SESSION_STATS.BATTLES_TAB
-        self.__sessionStasSettings.setSettings(self.__currentSettings)
+        self.__sessionStatsSettings.setSettings(self.__currentSettings)
         self.as_setControlsStateS(self.__getControlsData())
         self.onShowStats()
 
@@ -88,7 +95,7 @@ class SessionStatsSettings(SessionStatsSettingsMeta):
         self.__setBattleSettingsStatus()
 
     def __getHeader(self):
-        enableResetBtn = self.__currentSettings != self.__sessionStasSettings.getDefaultSettings()
+        enableResetBtn = self.__currentSettings != self.__sessionStatsSettings.getDefaultSettings()
         return {'title': text_styles.promoSubTitle(backport.text(R.strings.session_stats.settings.header())),
          'resetBtnIcon': RES_ICONS.MAPS_ICONS_STATISTIC_ICON_BUTTON_REFRESH_093,
          'resetBtnTooltip': makeTooltip(header=backport.text(R.strings.session_stats.tooltip.settings.resetBtn.header()), body=backport.text(R.strings.session_stats.tooltip.settings.resetBtn.body())),
@@ -133,7 +140,7 @@ class SessionStatsSettings(SessionStatsSettingsMeta):
          'inputs': inputs}
 
     def __getControlsData(self):
-        enableApplyBtn = self.__sessionStasSettings.validateSettings(self.__currentSettings)
+        enableApplyBtn = self.__sessionStatsSettings.validateSettings(self.__currentSettings)
         warning = {}
         if not enableApplyBtn:
             maxStats = MAX_STATS - len(SESSION_STATS.getImmutableEfficiencyBlockParameters())
@@ -141,14 +148,14 @@ class SessionStatsSettings(SessionStatsSettingsMeta):
             warning['text'] = text_styles.alert(text)
             warning['icon'] = backport.image(R.images.gui.maps.icons.library.alertBigIcon())
         else:
-            enableApplyBtn = self.__currentSettings != self.__sessionStasSettings.getSettings()
+            enableApplyBtn = self.__currentSettings != self.__sessionStatsSettings.getSettings()
         return {'warning': warning,
          'states': [{'btnEnabled': enableApplyBtn,
                      'btnLabel': backport.text(R.strings.session_stats.settings.controls.applyBtn())}, {'btnEnabled': True,
                      'btnLabel': backport.text(R.strings.session_stats.settings.controls.backBtn())}]}
 
     def __setBattleSettingsStatus(self):
-        if self.__sessionStasSettings.validateSettings(self.__currentSettings):
+        if self.__sessionStatsSettings.validateSettings(self.__currentSettings):
             textStyle = text_styles.neutral
             warningFlag = False
         else:

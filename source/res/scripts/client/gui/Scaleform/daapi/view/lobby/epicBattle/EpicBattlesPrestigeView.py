@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/epicBattle/EpicBattlesPrestigeView.py
+import logging
 import SoundGroups
-from debug_utils import LOG_ERROR
 from gui import SystemMessages
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -21,6 +21,7 @@ from helpers import dependency, i18n, int2roman
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+_logger = logging.getLogger(__name__)
 _PRESTIGE_TOKEN_TEMPLATE = 'epicmetagame:prestige:%d'
 _PRESTIGE_TOKEN_INFINITE = 'epicmetagame:prestige:infinite'
 
@@ -47,21 +48,21 @@ class EpicBattlesPrestigeView(LobbySubView, EpicBattlesPrestigeViewMeta):
         nextPrestigeLevel = pPrestigeLevel + 1
         metaLevel = self.lobbyCtx.getServerSettings().epicMetaGame.metaLevel
         maxPrestigeLevel = metaLevel.get('maxPrestigeLevel', 0)
-        maxMetaLevel = metaLevel.get('maxMetaLevel', 0)
-        if maxPrestigeLevel >= 0 and pPrestigeLevel >= maxPrestigeLevel:
-            LOG_ERROR('This line of code should never be reached!')
+        if 0 <= maxPrestigeLevel <= pPrestigeLevel:
+            _logger.error('This line of code should never be reached!')
             self.fireEvent(events.LoadViewEvent(EPICBATTLES_ALIASES.EPIC_BATTLES_INFO_ALIAS), EVENT_BUS_SCOPE.LOBBY)
             return
         awardsVO = getPrestigeLevelAwardsVOs(self.eventsCache.getAllQuests(), nextPrestigeLevel, AWARDS_SIZES.BIG)
         prestigeLvlTxt = i18n.makeString(EPIC_BATTLE.EPICBATTLESPRESTIGEVIEW_PRESTIGELEVEL, level=int2roman(nextPrestigeLevel + 1))
+        iconData = getEpicMetaIconVODict(nextPrestigeLevel, 1)
         data = {'prestigeLevelText': prestigeLvlTxt,
          'prestigeTitleText': i18n.makeString(EPIC_BATTLE.EPICBATTLESPRESTIGEVIEW_MAINTITLE),
          'removeAbilitiesContainerTitleText': i18n.makeString(EPIC_BATTLE.EPICBATTLESPRESTIGEVIEW_REMOVEABILITIES_TITLE),
          'resetLevelContainerTitleText': i18n.makeString(EPIC_BATTLE.EPICBATTLESPRESTIGEVIEW_RESETLEVEL_TITLE),
          'rewardTitleText': i18n.makeString(EPIC_BATTLE.EPICBATTLESPRESTIGEVIEW_CONGRATULATIONS),
          'awards': awardsVO,
-         'metaLevelIconPrestige': getEpicMetaIconVODict(nextPrestigeLevel, 1, maxPrestigeLevel, maxMetaLevel),
-         'epicMetaLevelIconData': getEpicMetaIconVODict(nextPrestigeLevel, 1, maxPrestigeLevel, maxMetaLevel),
+         'metaLevelIconPrestige': iconData,
+         'epicMetaLevelIconData': iconData,
          'backgroundImageSrc': RES_ICONS.MAPS_ICONS_EPICBATTLES_BACKGROUNDS_META_BG}
         self.as_setDataS(data)
 

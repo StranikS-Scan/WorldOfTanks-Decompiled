@@ -1,21 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/epicBattle/epic_helpers.py
 import logging
-from web.web_client_api.common import ItemPackType
-from gui.shared.utils.requesters import REQ_CRITERIA
-from skeletons.gui.shared import IItemsCache
 from gui import SystemMessages
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.shared.gui_items.processors.common import EpicPrestigeTrigger, EpicPrestigePointsExchange
 from gui.shared.items_parameters.formatters import _cutDigits
+from gui.shared.utils import decorators
+from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency, i18n
 from items import vehicles
 from shared_utils import first
-from gui.shared.utils import decorators
-from skeletons.gui.game_control import IEpicBattleMetaGameController
+from skeletons.gui.game_control import IEpicBattleMetaGameController, IEventProgressionController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
-from gui.server_events.awards_formatters import AWARDS_SIZES
-from gui.impl import backport
-from gui.impl.gen import R
+from skeletons.gui.shared import IItemsCache
+from web.web_client_api.common import ItemPackType
 _logger = logging.getLogger(__name__)
 FRONTLINE_PRESTIGE_TOKEN_BASE = 'epicmetagame:prestige:'
 FRONTLINE_LEVEL_TOKEN_BASE = 'epicmetagame:levelup:'
@@ -197,25 +198,22 @@ epicEquipmentParameterFormaters = {'cooldownTime': DirectNumericTextParam.update
  'captureSpeedFactor': PercentNumericTextParam.updateParams,
  'captureBlockBonusTime': DirectNumericTextParam.updateParams}
 
-def getAwardsForLevel(level=None):
-    return _getAwardsForTokenBase(FRONTLINE_LEVEL_TOKEN_BASE, level=level)
+def _trimIcon(path):
+    return path.replace('img://gui', '..')
 
 
-def getAwardsForPrestige(level=None):
-    return _getAwardsForTokenBase(FRONTLINE_PRESTIGE_TOKEN_BASE, level=level)
-
-
-@dependency.replace_none_kwargs(eventsCache=IEventsCache)
-def _getAwardsForTokenBase(tokenBase, level=None, eventsCache=None):
+@dependency.replace_none_kwargs(eventsCache=IEventsCache, lobbyCtx=ILobbyContext)
+def getAwardsForLevel(level=None, eventsCache=None, lobbyCtx=None):
     awardsData = dict()
-    packSP = tokenBase == FRONTLINE_LEVEL_TOKEN_BASE
+    abilityPts = lobbyCtx.getServerSettings().epicMetaGame.metaLevel['abilityPointsForLevel']
     allQuests = eventsCache.getAllQuests()
     for questKey, questData in allQuests.iteritems():
-        if tokenBase in questKey:
-            _, _, questNum = questKey.partition(tokenBase)
+        if FRONTLINE_LEVEL_TOKEN_BASE in questKey:
+            _, _, questNum = questKey.partition(FRONTLINE_LEVEL_TOKEN_BASE)
             if questNum:
+                questLvl = int(questNum)
                 questBonuses = questData.getBonuses()
-                awardsData[int(questNum)] = _packBonuses(questBonuses, packSP)
+                awardsData[questLvl] = _packBonuses(questBonuses, questLvl, abilityPts)
 
     if level:
         if level in awardsData:
@@ -224,21 +222,18 @@ def _getAwardsForTokenBase(tokenBase, level=None, eventsCache=None):
     return awardsData
 
 
-def _packBonuses(bonuses, packSP=False):
-    if packSP:
-
-        def trimIcon(path):
-            return path.replace('img://gui', '..')
-
-        result = [{'id': 0,
-          'type': ItemPackType.CUSTOM_SUPPLY_POINT,
-          'value': 1,
-          'icon': {AWARDS_SIZES.SMALL: trimIcon(backport.image(R.images.gui.maps.icons.epicBattles.awards.c_48x48.abilityToken())),
-                   AWARDS_SIZES.BIG: trimIcon(backport.image(R.images.gui.maps.icons.epicBattles.awards.c_80x80.abilityToken()))}}]
-    else:
-        result = []
+def _packBonuses(bonuses, level, abilityPts):
+    result = [{'id': 0,
+      'type': ItemPackType.CUSTOM_SUPPLY_POINT,
+      'value': abilityPts[level - 1],
+      'icon': {AWARDS_SIZES.SMALL: _trimIcon(backport.image(R.images.gui.maps.icons.epicBattles.awards.c_48x48.abilityToken())),
+               AWARDS_SIZES.BIG: _trimIcon(backport.image(R.images.gui.maps.icons.epicBattles.awards.c_80x80.abilityToken()))}}]
     for bonus in bonuses:
-        result.extend(bonus.getWrappedEpicBonusList())
+        bonusList = bonus.getWrappedEpicBonusList()
+        for bonusEntry in bonusList:
+            bonusEntry['icon'] = {size:_trimIcon(path) for size, path in bonusEntry['icon'].iteritems()}
+
+        result.extend(bonusList)
 
     return result
 
@@ -313,8 +308,8 @@ def exchangePrestigePoints():
 
 
 def getFrontlineRewardVehPrice(intCD):
-    epicMetaGameCtrl = dependency.instance(IEpicBattleMetaGameController)
-    return epicMetaGameCtrl.getRewardVehicles().get(intCD, 0)
+    eventProgCtrl = dependency.instance(IEventProgressionController)
+    return {intCD:price for intCD, price in eventProgCtrl.rewardVehicles}.get(intCD, 0)
 
 
 @dependency.replace_none_kwargs(eventsCache=IEventsCache)
@@ -329,12 +324,12 @@ def getPrestigePointsExchangeRate(eventsCache=None):
     return result
 
 
-@dependency.replace_none_kwargs(itemsCache=IItemsCache, frontLineCtrl=IEpicBattleMetaGameController)
-def getVehsAvailableToBuy(itemsCache=None, frontLineCtrl=None):
+@dependency.replace_none_kwargs(itemsCache=IItemsCache, eventProgressionCtrl=IEventProgressionController)
+def getVehsAvailableToBuy(itemsCache=None, eventProgressionCtrl=None):
     currentPrestigePoints = getEpicGamePlayerPrestigePoints()
     inventoryVehicles = itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY)
     result = []
-    for intCD, price in frontLineCtrl.getRewardVehicles().iteritems():
+    for intCD, price in eventProgressionCtrl.rewardVehicles:
         if intCD not in inventoryVehicles and not checkEpicRewardVehAlreadyBought(intCD) and price <= currentPrestigePoints:
             result.append(intCD)
 

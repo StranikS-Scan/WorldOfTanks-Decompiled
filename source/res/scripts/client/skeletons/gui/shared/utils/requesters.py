@@ -723,6 +723,14 @@ class IEpicMetaGameRequester(IRequester):
     def skillLevels(self):
         raise NotImplementedError
 
+    @property
+    def battleCount(self):
+        raise NotImplementedError
+
+    @property
+    def averageXP(self):
+        raise NotImplementedError
+
 
 class IBlueprintsRequester(IRequester):
 

@@ -1037,6 +1037,17 @@
       </endOfCooldownPiT>
     </Properties>
   </RESPAWN_COOLDOWN_ITEM>
+  <RESPAWN_ZONE>	FIXED_DICT	  <Properties>
+      <position>
+        <Type>	VECTOR3	</Type>
+      </position>
+      <isEnemyNear>
+        <Type>	BOOL	</Type>
+      </isEnemyNear>
+    </Properties>
+  </RESPAWN_ZONE>
+  <LIST_OF_RESPAWN_ZONE>	ARRAY	  <of>	RESPAWN_ZONE	</of>
+  </LIST_OF_RESPAWN_ZONE>
   <RESPAWN_INFO>	FIXED_DICT	  <Properties>
       <compDescr>
         <Type>	STRING	</Type>
@@ -1050,6 +1061,12 @@
       <manualRespawnPiT>
         <Type>	FLOAT32	</Type>
       </manualRespawnPiT>
+      <respawnZones>
+        <Type>	LIST_OF_RESPAWN_ZONE	</Type>
+      </respawnZones>
+      <chosenRespawnZone>
+        <Type>	VECTOR3	</Type>
+      </chosenRespawnZone>
     </Properties>
   </RESPAWN_INFO>
   <RESPAWN_LIMITED_VEHICLES>	FIXED_DICT	  <Properties>

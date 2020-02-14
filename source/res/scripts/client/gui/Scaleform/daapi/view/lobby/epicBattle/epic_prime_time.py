@@ -41,15 +41,12 @@ class EpicBattlesPrimeTimeView(PrimeTimeViewBase):
         return self.__epicController
 
     def _prepareData(self, serverList, serverInfo):
-        if len(serverList) == 1:
-            serversDDEnabled = serverDDVisible = False
-        else:
-            serversDDEnabled = serverDDVisible = True
+        isSingleServer = len(serverList) == 1
         return {'warningIconSrc': self._getWarningIcon(),
          'status': text_styles.grandTitle(self.__getStatusText()),
          'serversText': text_styles.expText(self._getServerText(serverList, serverInfo)),
-         'serversDDEnabled': serversDDEnabled,
-         'serverDDVisible': serverDDVisible,
+         'serversDDEnabled': not isSingleServer,
+         'serverDDVisible': not isSingleServer,
          'timeText': text_styles.expText(self.__getTimeText(serverInfo)),
          'showAlertBG': not self.__epicController.hasAvailablePrimeTimeServers()}
 
@@ -62,6 +59,21 @@ class EpicBattlesPrimeTimeView(PrimeTimeViewBase):
 
     def _getPrbForcedActionName(self):
         return PREBATTLE_ACTION_NAME.EPIC_FORCED
+
+    def _getActualServers(self):
+        activeServers = []
+        currentServer = None
+        for server in self._allServers.values():
+            if server.isActive():
+                if server.getPeripheryID() == self._connectionMgr.peripheryID:
+                    currentServer = server
+                else:
+                    activeServers.append(server)
+
+        if activeServers:
+            return sorted(activeServers)
+        else:
+            return [currentServer] if currentServer else []
 
     def __getStatusText(self):
         if not self.__epicController.hasAvailablePrimeTimeServers():

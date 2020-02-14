@@ -53,6 +53,8 @@ class PlayerRanksSettings(object):
         algorithmName = algorithmKeys.__iter__().next()
         self.algorithm = self.ALGORITHM_SETTINGS[algorithmName](section[algorithmName])
         self.bonus = BonusSettings(section['bonus'])
+        initialRankName = section.readString('initialRank', PLAYER_RANK.NAMES[PLAYER_RANK.NO_RANK])
+        self.initialRank = PLAYER_RANK.RANK_BY_NAME[initialRankName]
 
 
 g_cache = None

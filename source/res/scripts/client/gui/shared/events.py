@@ -295,6 +295,7 @@ class LobbySimpleEvent(HasCtxEvent):
     PREMIUM_XP_BONUS_CHANGED = 'premiumXPBonusChanged'
     WAITING_SHOWN = 'waitingShown'
     BATTLE_RESULTS_POSTED = 'battleResultsPosted'
+    BATTLE_RESULTS_SHOW_QUEST = 'battleResultsWindowShowQuest'
 
 
 class MissionsEvent(HasCtxEvent):

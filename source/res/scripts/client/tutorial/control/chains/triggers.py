@@ -248,7 +248,7 @@ class FightButtonDisabledTrigger(Trigger, IGlobalListener):
         state = self.prbDispatcher.getFunctionalState()
         selected = items.update(state)
         result = self.prbEntity.canPlayerDoAction()
-        isFightBtnDisabled = not result.isValid or selected.isFightButtonForcedDisabled()
+        isFightBtnDisabled = not result.isValid or selected.isLocked()
         return isFightBtnDisabled
 
     def onPlayerStateChanged(self, entity, roster, accountInfo):

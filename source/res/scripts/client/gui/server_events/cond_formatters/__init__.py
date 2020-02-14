@@ -93,7 +93,8 @@ BATTLE_RESULTS_KEYS = {'capturePoints': CONDITION_ICON.BASE_CAPTURE,
  'spottedBeforeWeBecameSpotted': CONDITION_ICON.DISCOVER,
  'isEnemyBaseCaptured': CONDITION_ICON.BASE_CAPTURE,
  'isAnyOurCrittedInnerModules': CONDITION_ICON.SURVIVE,
- 'isNotSpotted': CONDITION_ICON.SURVIVE}
+ 'isNotSpotted': CONDITION_ICON.SURVIVE,
+ 'rankChange': CONDITION_ICON.RANK_UP}
 BATTLE_RESULTS_AGGREGATED_KEYS = {tuple(sorted(['damagedVehicleCntAssistedTrack', 'damagedVehicleCntAssistedRadio'])): CONDITION_ICON.ASSIST,
  tuple(sorted(['killsAssistedTrack', 'killsAssistedRadio'])): CONDITION_ICON.ASSIST,
  tuple(sorted(['damageAssistedStun', 'damageAssistedTrack'])): CONDITION_ICON.ASSIST,

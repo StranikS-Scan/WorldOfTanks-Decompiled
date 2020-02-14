@@ -10,7 +10,7 @@ from items import vehicles
 from gui.battle_control.view_components import ViewComponentsController
 from PlayerEvents import g_playerEvents
 _Vehicle = namedtuple('_Vehicle', ('intCD', 'type', 'settings'))
-_RespawnInfo = namedtuple('_RespawnInfo', ('vehicleID', 'respawnTime', 'respawnType', 'autoRespawnTime'))
+_RespawnInfo = namedtuple('_RespawnInfo', ('vehicleID', 'respawnTime', 'respawnType', 'autoRespawnTime', 'respawnZones', 'chosenRespawnZone'))
 
 class IRespawnView(object):
 
@@ -127,7 +127,7 @@ class RespawnsController(ViewComponentsController):
 
     def updateRespawnInfo(self, respawnInfo):
         intCD = vehicles.getVehicleTypeCompactDescr(respawnInfo['compDescr'])
-        self.__respawnInfo = _RespawnInfo(intCD, respawnInfo['manualRespawnPiT'], respawnInfo['respawnType'], respawnInfo['autoRespawnPiT'])
+        self.__respawnInfo = _RespawnInfo(intCD, respawnInfo['manualRespawnPiT'], respawnInfo['respawnType'], respawnInfo['autoRespawnPiT'], respawnInfo['respawnZones'], respawnInfo['chosenRespawnZone'])
         self.__refresh()
         self.onRespawnInfoUpdated(self.__respawnInfo)
 

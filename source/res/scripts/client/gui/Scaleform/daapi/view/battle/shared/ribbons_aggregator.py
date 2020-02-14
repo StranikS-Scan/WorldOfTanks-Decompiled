@@ -833,7 +833,7 @@ class RibbonsAggregator(object):
         if self.__feedbackProvider is not None:
             self.__feedbackProvider.onPlayerFeedbackReceived -= self._onPlayerFeedbackReceived
             self.__feedbackProvider = None
-        if self.__vehicleStateCtrl is None:
+        if self.__vehicleStateCtrl is not None:
             self.__vehicleStateCtrl.onPostMortemSwitched -= self._onPostMortemSwitched
             self.__vehicleStateCtrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
             self.__vehicleStateCtrl = None

@@ -83,7 +83,7 @@ elif CURRENT_REALM == 'KR':
     DEFAULT_LANGUAGE = 'ko'
     AUTH_REALM = 'KR'
 elif CURRENT_REALM == 'CT':
-    AUTH_REALM = 'RU'
+    AUTH_REALM = 'CT'
 elif CURRENT_REALM in ('RU', 'ST', 'QA', 'DEV', 'SB'):
     pass
 SPECIAL_OL_FILTER = IS_KOREA or IS_SINGAPORE
@@ -1098,6 +1098,7 @@ ENDLESS_TOKEN_TIME = 4104777660L
 LOOTBOX_TOKEN_PREFIX = 'lootBox:'
 TWITCH_TOKEN_PREFIX = 'token:twitch'
 PREMIUM_TOKEN_PREFIX = 'prem_acc'
+EPIC_ABILITY_PTS_NAME = 'abilityPts'
 
 def personalMissionFreeTokenName(branch):
     return PERSONAL_MISSION_FREE_TOKEN_NAME if branch <= 1 else '_'.join([PERSONAL_MISSION_FREE_TOKEN_NAME, str(branch)])
@@ -2092,14 +2093,16 @@ class PLAYER_RANK:
     NO_RANK = 0
     PRIVATE = 1
     SERGEANT = 2
-    CAPTAIN = 3
-    MAJOR = 4
-    GENERAL = 5
+    LIEUTENANT = 3
+    CAPTAIN = 4
+    MAJOR = 5
+    GENERAL = 6
     DEFAULT_RANK = NO_RANK
     MAX_RANK = GENERAL
     NAMES = {NO_RANK: 'norank',
      PRIVATE: 'private',
      SERGEANT: 'sergeant',
+     LIEUTENANT: 'lieutenant',
      CAPTAIN: 'captain',
      MAJOR: 'major',
      GENERAL: 'general'}
@@ -2364,3 +2367,6 @@ class DailyQuestsTokensPrefixes(object):
 class OVERRIDEN_BADGE(object):
     NONE = 0
     ENHANCEMENTS_LEVEL_1 = 1
+
+
+DEFAULT_VECTOR_3 = (0.0, 0.0, 0.0)

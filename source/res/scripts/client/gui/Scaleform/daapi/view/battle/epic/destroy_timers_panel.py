@@ -46,6 +46,8 @@ class EpicDestroyTimersPanel(EpicDestroyTimersPanelMeta):
         g_playerEvents.onRoundFinished += self.__onRoundFinished
 
     def _dispose(self):
+        super(EpicDestroyTimersPanel, self)._dispose()
+        g_playerEvents.onRoundFinished -= self.__onRoundFinished
         ctrl = self.sessionProvider.dynamic.progressTimer
         if not ctrl:
             return
@@ -54,8 +56,6 @@ class EpicDestroyTimersPanel(EpicDestroyTimersPanelMeta):
         ctrl.onVehicleLeft -= self.__onVehicleLeft
         ctrl.onCircleStatusChanged -= self.__onCircleStatusChanged
         ctrl.onProgressUpdate -= self.__onProgressUpdate
-        g_playerEvents.onRoundFinished -= self.__onRoundFinished
-        super(EpicDestroyTimersPanel, self)._dispose()
 
     def _showDeathZoneTimer(self, value):
         if value.needToCloseAll() or value.needToCloseTimer():

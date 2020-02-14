@@ -13,8 +13,8 @@ class BattleTypeSelectPopoverMeta(SmartPopOverView):
     def getTooltipData(self, itemData, itemIsDisabled):
         self._printOverrideError('getTooltipData')
 
-    def as_updateS(self, items, isShowDemonstrator, demonstratorEnabled):
-        return self.flashObject.as_update(items, isShowDemonstrator, demonstratorEnabled) if self._isDAAPIInited() else None
+    def as_updateS(self, items, extraItems, isShowDemonstrator, demonstratorEnabled):
+        return self.flashObject.as_update(items, extraItems, isShowDemonstrator, demonstratorEnabled) if self._isDAAPIInited() else None
 
     def as_showMiniClientInfoS(self, description, hyperlink):
         return self.flashObject.as_showMiniClientInfo(description, hyperlink) if self._isDAAPIInited() else None

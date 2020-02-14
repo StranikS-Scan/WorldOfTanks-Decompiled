@@ -41,6 +41,9 @@ class BattleResultsWindow(BattleResultsMeta):
         self.__arenaUniqueID = ctx['arenaUniqueID']
         self.__dataSet = False
 
+    def _onRegisterFlashComponent(self, viewPy, alias):
+        viewPy.updateQuestsInfo(arenaUniqueID=self.__arenaUniqueID)
+
     def onWindowClose(self):
         self.destroy()
 
@@ -83,6 +86,7 @@ class BattleResultsWindow(BattleResultsMeta):
     def _populate(self):
         super(BattleResultsWindow, self)._populate()
         g_eventBus.addListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__onUpdatePremiumBonus)
+        g_eventBus.addListener(events.LobbySimpleEvent.BATTLE_RESULTS_SHOW_QUEST, self.__onBattleResultWindowShowQuest)
         g_clientUpdateManager.addCallbacks({'account._additionalXPCache': self.__onUpdatePremiumBonus,
          'inventory.1': self.__onUpdatePremiumBonus,
          'inventory.8': self.__onUpdatePremiumBonus})
@@ -93,6 +97,7 @@ class BattleResultsWindow(BattleResultsMeta):
 
     def _dispose(self):
         g_eventBus.removeListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__onUpdatePremiumBonus)
+        g_eventBus.removeListener(events.LobbySimpleEvent.BATTLE_RESULTS_SHOW_QUEST, self.__onBattleResultWindowShowQuest)
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.__gameSession.onPremiumTypeChanged -= self.__onPremiumStateChanged
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
@@ -134,6 +139,15 @@ class BattleResultsWindow(BattleResultsMeta):
 
     def __onPremiumStateChanged(self, *_):
         self.__onUpdatePremiumBonus()
+
+    def __onBattleResultWindowShowQuest(self, event):
+        ctx = event.ctx if event is not None else None
+        if ctx is None:
+            return
+        else:
+            if 'questId' in ctx and 'eventType' in ctx:
+                self.showEventsWindow(ctx['questId'], ctx['eventType'])
+            return
 
     def __onUpdatePremiumBonus(self, _=None):
         battleResultsVO = self.__battleResults.getResultsVO(self.__arenaUniqueID)

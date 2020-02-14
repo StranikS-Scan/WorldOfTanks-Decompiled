@@ -43,6 +43,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.epic_mode_controller import EpicModeController as _Epic
     from gui.game_control.bootcamp_controller import BootcampController as _Bootcamp
     from gui.game_control.hero_tank_controller import HeroTankController as _HeroTankController
+    from gui.game_control.event_progression_controller import EventProgressionController as _EventProgression
     from gui.game_control.epic_meta_game_ctrl import EpicBattleMetaGameController as _EpicMeta
     from gui.game_control.manual_controller import ManualController as _ManualController
     from gui.game_control.calendar_controller import CalendarController as _Calendar
@@ -89,6 +90,7 @@ def getGameControllersConfig(manager):
     _config(_interface.IHeroTankController, _HeroTankController())
     _config(_interface.IMarathonEventsController, _MarathonEventsController())
     _config(_interface.ICalendarController, _Calendar())
+    _config(_interface.IEventProgressionController, _EventProgression())
     _config(_interface.IEpicBattleMetaGameController, _EpicMeta())
     _config(_interface.IManualController, _ManualController())
     _config(_interface.IReferralProgramController, _ReferralController())

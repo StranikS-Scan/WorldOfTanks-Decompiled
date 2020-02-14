@@ -33,9 +33,11 @@ class SessionStatsSettingsController(object):
 
     def __init__(self):
         self.__cacheSettings = self.settingsCore.serverSettings.getSessionStatsSettings()
+
+    def start(self):
         self.itemsCache.onSyncCompleted += self.__updateSettingsCache
 
-    def __del__(self):
+    def stop(self):
         self.itemsCache.onSyncCompleted -= self.__updateSettingsCache
 
     def setSettings(self, settings):

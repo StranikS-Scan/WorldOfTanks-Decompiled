@@ -50,8 +50,8 @@ class EpicBattlesInfoView(LobbySubView, EpicBattlesInfoViewMeta):
 
     def onShowRewardVehicleInGarageBtnClick(self):
         self.__close()
-        maxPrestigeLevel = self.lobbyCtx.getServerSettings().epicMetaGame.metaLevel.get('maxPrestigeRewardLevel', 0)
-        vehID = getFinalTankRewardVehicleID(self.eventsCache.getAllQuests(), maxPrestigeLevel)
+        maxRewardPoints = self.lobbyCtx.getServerSettings().epicMetaGame.metaLevel.get('maxRewardTokens', 0)
+        vehID = getFinalTankRewardVehicleID(self.eventsCache.getAllQuests(), maxRewardPoints)
         event_dispatcher.selectVehicleInHangar(vehID)
 
     def onPrestigeBtnClick(self):
@@ -142,10 +142,10 @@ class EpicBattlesInfoView(LobbySubView, EpicBattlesInfoViewMeta):
 
     def _packInfoViewVO(self):
         pPrestigeLevel, pMetaLevel, _ = self.epicMetaGameCtrl.getPlayerLevelInfo()
-        _, maxRewardClaimed = self.epicMetaGameCtrl.getSeasonData()
-        maxPrestigeLevel = self.lobbyCtx.getServerSettings().epicMetaGame.metaLevel.get('maxPrestigeRewardLevel', 0)
+        _, maxRewardClaimed, _ = self.epicMetaGameCtrl.getSeasonData()
+        maxRewardTokens = self.lobbyCtx.getServerSettings().epicMetaGame.metaLevel.get('maxRewardTokens', 0)
         maxMetaLevel = self.lobbyCtx.getServerSettings().epicMetaGame.metaLevel.get('maxLevel', 0)
-        prestigeAllowed = (maxPrestigeLevel < 0 or pPrestigeLevel != maxPrestigeLevel) and pMetaLevel == maxMetaLevel
+        prestigeAllowed = (maxRewardTokens < 0 or pPrestigeLevel != maxRewardTokens) and pMetaLevel == maxMetaLevel
         currentSeason = self.epicMetaGameCtrl.getCurrentSeason()
         cycleTimes = getActiveCycleTimeFrameStrings(currentSeason)
         if cycleTimes.startDay is not None:
@@ -158,8 +158,8 @@ class EpicBattlesInfoView(LobbySubView, EpicBattlesInfoViewMeta):
          'pageDescriptionHtmlText': text_styles.promoSubTitle(cycleDescText),
          'aboutButtonLabel': i18n.makeString(EPIC_BATTLE.INFOVIEW_ABOUTBUTTON_ABOUTFRONTLINE).upper(),
          'canClaimFinalReward': self.__canClaimFinalReward(),
-         'epicMetaLevelIconData': getEpicMetaIconVODict(pPrestigeLevel, pMetaLevel, maxPrestigeLevel, maxMetaLevel),
-         'epicRewardRibbonData': self._packRewardRibbonData(pPrestigeLevel + 1, self.eventsCache.getAllQuests(), maxPrestigeLevel),
+         'epicMetaLevelIconData': getEpicMetaIconVODict(pPrestigeLevel, pMetaLevel),
+         'epicRewardRibbonData': self._packRewardRibbonData(pPrestigeLevel + 1, self.eventsCache.getAllQuests(), maxRewardTokens),
          'epicCombatReservesData': self._packCombatReservesVO(self.epicMetaGameCtrl.getSkillPoints()),
          'epicMetaProgressData': self._packMetaProgressVO(prestigeAllowed, maxRewardClaimed),
          'epicPrestigeProgressData': getPrestigeProgressVO(self.eventsCache.getAllQuests(), self.lobbyCtx.getServerSettings().epicMetaGame.metaLevel, pPrestigeLevel, prestigeAllowed)}
@@ -173,14 +173,14 @@ class EpicBattlesInfoView(LobbySubView, EpicBattlesInfoViewMeta):
         elif result.success:
             self.as_showFinalRewardClaimedS()
 
-    def __getPrestigeAwards(self, pPrestigeLevel, size=AWARDS_SIZES.SMALL):
+    def __getPrestigeAwards(self, maxRewardTokens, size=AWARDS_SIZES.SMALL):
         metaLevelComp = self.lobbyCtx.getServerSettings().epicMetaGame.metaLevel
-        if pPrestigeLevel > metaLevelComp.get('maxPrestigeRewardLevel', -1):
+        if maxRewardTokens > metaLevelComp.get('maxRewardTokens', -1):
             LOG_CODEPOINT_WARNING()
             LOG_ERROR('This line of code should never be reached!')
             self.fireEvent(events.LoadViewEvent(EPICBATTLES_ALIASES.EPIC_BATTLES_INFO_ALIAS), EVENT_BUS_SCOPE.LOBBY)
             return []
-        return getPrestigeLevelAwardsVOs(self.eventsCache.getAllQuests(), pPrestigeLevel, size)
+        return getPrestigeLevelAwardsVOs(self.eventsCache.getAllQuests(), maxRewardTokens, size)
 
     def __getNextMetaLevelAwards(self, pMetaLevel, size=AWARDS_SIZES.SMALL):
         currentPrestigeQuest = self.eventsCache.getAllQuests().get(_META_LEVEL_TOKEN_TEMPLATE % pMetaLevel, None)
@@ -196,10 +196,10 @@ class EpicBattlesInfoView(LobbySubView, EpicBattlesInfoViewMeta):
 
     def __canClaimFinalReward(self):
         pPrestigeLevel, pMetaLevel, _ = self.epicMetaGameCtrl.getPlayerLevelInfo()
-        _, maxRewardClaimed = self.epicMetaGameCtrl.getSeasonData()
-        maxPrestigeLevel = self.lobbyCtx.getServerSettings().epicMetaGame.metaLevel.get('maxPrestigeRewardLevel', 0)
+        _, maxRewardClaimed, _ = self.epicMetaGameCtrl.getSeasonData()
+        maxRewardTokens = self.lobbyCtx.getServerSettings().epicMetaGame.metaLevel.get('maxRewardTokens', 0)
         maxMetaLevel = self.lobbyCtx.getServerSettings().epicMetaGame.metaLevel.get('maxLevel', 0)
-        return pMetaLevel == maxMetaLevel and pPrestigeLevel + 1 == maxPrestigeLevel and not maxRewardClaimed
+        return pMetaLevel == maxMetaLevel and pPrestigeLevel + 1 == maxRewardTokens and not maxRewardClaimed
 
     def __close(self):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)

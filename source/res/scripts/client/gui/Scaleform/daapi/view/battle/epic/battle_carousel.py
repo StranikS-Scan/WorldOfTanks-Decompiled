@@ -171,6 +171,9 @@ class VehicleData(object):
         self.__carousel.latePopulate()
         self.onSyncCompleted()
 
+    def isSynced(self):
+        return True
+
 
 class BattleTankCarousel(BattleTankCarouselMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)

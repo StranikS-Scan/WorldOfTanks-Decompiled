@@ -158,7 +158,8 @@
     <userString>	#ussr_vehicles:T-44_FL	</userString>
     <shortUserString>	#ussr_vehicles:T-44_FL_short	</shortUserString>
     <description>	#ussr_vehicles:T-44_descr	</description>
-    <price>	2390000	</price>
+    <price>	1	  <gold></gold>
+    </price>
     <notInShop>	true	</notInShop>
     <cannotBeBought>	true	</cannotBeBought>
     <tags>	mediumTank improvedVentilation_class2_user enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD epic_battles	</tags>
@@ -980,6 +981,8 @@
     <userString>	#ussr_vehicles:R113_Object_730	</userString>
     <description>	#ussr_vehicles:R113_Object_730_descr	</description>
     <shortUserString>	#ussr_vehicles:R113_Object_730_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R113_Object_730_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R113_Object_730_long_special	</longDescriptionSpecial>
     <price>	12000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -1003,6 +1006,8 @@
     <userString>	#ussr_vehicles:R117_T34_85_Rudy	</userString>
     <description>	#ussr_vehicles:R117_T34_85_Rudy_descr	</description>
     <shortUserString>	#ussr_vehicles:R117_T34_85_Rudy_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R117_T34_85_Rudy_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R117_T34_85_Rudy_long_special	</longDescriptionSpecial>
     <price>	3550	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -1013,6 +1018,8 @@
     <id>	233	</id>
     <userString>	#ussr_vehicles:R116_ISU122C_Berlin	</userString>
     <description>	#ussr_vehicles:R116_ISU122C_Berlin_descr	</description>
+    <shortDescriptionSpecial>	#ussr_vehicles:R116_ISU122C_Berlin_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R116_ISU122C_Berlin_long_special	</longDescriptionSpecial>
     <price>	4750	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -1261,6 +1268,8 @@
     <id>	193	</id>
     <userString>	#ussr_vehicles:IS-6_BF	</userString>
     <description>	#ussr_vehicles:IS-6_BF_descr	</description>
+    <shortDescriptionSpecial>	#ussr_vehicles:IS-6_BF_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:IS-6_BF_long_special	</longDescriptionSpecial>
     <price>	11800	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -1545,6 +1554,17 @@
     <tags>	heavyTank improvedVentilation_class3_user enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD fallout secret	</tags>
     <level>	10	</level>
   </R45_IS-7_fallout>
+  <R97_Object_140_bob>
+    <id>	123	</id>
+    <userString>	#ussr_vehicles:Object_140_bob	</userString>
+    <description>	#ussr_vehicles:Object_140_descr	</description>
+    <shortUserString>	#ussr_vehicles:Object_140__bob_short	</shortUserString>
+    <price>	6100000	</price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	mediumTank improvedVentilation_class2_user enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user cannot_be_sold HD bob secret	</tags>
+    <level>	10	</level>
+  </R97_Object_140_bob>
   <R47_ISU-152_IGR>
     <id>	151	</id>
     <userString>	#igr_vehicles:ISU-152_IGR	</userString>
@@ -1716,6 +1736,8 @@
     <id>	253	</id>
     <userString>	#ussr_vehicles:KV2_W	</userString>
     <description>	#ussr_vehicles:KV2_W_descr	</description>
+    <shortDescriptionSpecial>	#ussr_vehicles:KV2_W_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:KV2_W_long_special	</longDescriptionSpecial>
     <price>	4200	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>

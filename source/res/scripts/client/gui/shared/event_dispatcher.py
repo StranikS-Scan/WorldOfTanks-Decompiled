@@ -4,7 +4,7 @@ import logging
 from operator import attrgetter
 import typing
 from CurrentVehicle import HeroTankPreviewAppearance
-from adisp import process
+import adisp
 from async import async, await
 from constants import RentType, GameSeasonType
 from debug_utils import LOG_WARNING
@@ -22,6 +22,7 @@ from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
+from gui.Scaleform.genConsts.EVENTPROGRESSION_ALIASES import EVENTPROGRESSION_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
@@ -98,8 +99,8 @@ def showEpicBattlesPrimeTimeWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(alias=EPICBATTLES_ALIASES.EPIC_BATTLES_PRIME_TIME_ALIAS, ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showFrontlineBuyConfirmView(ctx):
-    g_eventBus.handleEvent(events.LoadViewEvent(alias=EPICBATTLES_ALIASES.FRONTLINE_BUY_CONFIRM_VIEW_ALIAS, ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
+def showEventProgressionBuyConfirmView(ctx):
+    g_eventBus.handleEvent(events.LoadViewEvent(alias=EVENTPROGRESSION_ALIASES.EVENT_PROGRESION_BUY_CONFIRM_VIEW_ALIAS, ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showEpicBattlesWelcomeBackWindow():
@@ -121,7 +122,7 @@ def showVehicleRentDialog(intCD, rentType, nums, seasonType, price, buyParams):
     _purchaseOffer(intCD, rentType, nums, price, seasonType, buyParams, renew=False)
 
 
-@process
+@adisp.process
 def showVehicleRentRenewDialog(intCD, rentType, num, seasonType):
     if not (seasonType == GameSeasonType.EPIC and rentType == RentType.SEASON_CYCLE_RENT):
         _logger.debug('GameSeasonType %s with RentType %s is not supported', seasonType, rentType)
@@ -135,7 +136,7 @@ def showVehicleRentRenewDialog(intCD, rentType, num, seasonType):
     _purchaseOffer(intCD, rentType, [num], productInfo.price, seasonType, buyParams, renew=True)
 
 
-@process
+@adisp.process
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def _purchaseOffer(vehicleCD, rentType, nums, price, seasonType, buyParams, renew, itemsCache=None):
     if mayObtainForMoney(price):
@@ -152,7 +153,7 @@ def _purchaseOffer(vehicleCD, rentType, nums, price, seasonType, buyParams, rene
         SystemMessages.pushMessage(backport.text(R.strings.system_messages.vehicle_rent.dyn('not_enough_{}'.format(price.getCurrency()))(), vehName=vehicleName), type=SystemMessages.SM_TYPE.Error)
 
 
-@process
+@adisp.process
 def _doPurchaseOffer(vehicleCD, rentType, nums, price, seasonType, buyParams, renew):
     requestConfirmed = yield DialogsInterface.showDialog(meta=RentConfirmDialogMeta(vehicleCD, rentType, nums, price, seasonType, renew))
     if requestConfirmed:
@@ -276,7 +277,7 @@ def _showBattleBoosterGFSellDialog(battleBoosterIntCD):
     yield dialogs.showSimple(wrapper)
 
 
-@process
+@adisp.process
 def showBattleBoosterSellDialog(battleBoosterIntCD):
     if gamefaceEnabled():
         _showBattleBoosterGFSellDialog(battleBoosterIntCD)
@@ -323,7 +324,7 @@ def openManualPage(chapterIndex):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.MANUAL_CHAPTER_VIEW, ctx={'chapterIndex': chapterIndex}), EVENT_BUS_SCOPE.LOBBY)
 
 
-@process
+@adisp.process
 def showWebShop(url='', path='', params=None):
     parse = URLMacros().parse
     if path:
@@ -375,7 +376,13 @@ def showMarathonVehiclePreview(vehTypeCompDescr, itemsPack=None, title='', marat
      'marathonPrefix': marathonPrefix}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None, previewBackCb=None, itemsPack=None, offers=None, price=money.MONEY_UNDEFINED, oldPrice=None, title='', description=None, endTime=None, buyParams=None, vehParams=None, isFrontline=False):
+def showEventProgressionVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previewBackCb=None):
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.EVENT_PROGRESSION_VEHICLE_PREVIEW_20, ctx={'itemCD': vehTypeCompDescr,
+     'previewAlias': previewAlias,
+     'previewBackCb': previewBackCb}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None, previewBackCb=None, itemsPack=None, offers=None, price=money.MONEY_UNDEFINED, oldPrice=None, title='', description=None, endTime=None, buyParams=None, vehParams=None):
     itemsCache = dependency.instance(IItemsCache)
     lobbyContext = dependency.instance(ILobbyContext)
     newPreviewEnabled = lobbyContext.getServerSettings().isIngamePreviewEnabled()
@@ -384,10 +391,6 @@ def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, v
     isHeroTank = heroTankCD and heroTankCD == vehTypeCompDescr
     if isHeroTank and not (itemsPack or offers):
         goToHeroTankOnScene(vehTypeCompDescr, previewAlias)
-    elif isFrontline:
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.FRONTLINE_VEHICLE_PREVIEW_20, ctx={'itemCD': vehTypeCompDescr,
-         'previewAlias': previewAlias,
-         'previewBackCb': previewBackCb}), scope=EVENT_BUS_SCOPE.LOBBY)
     elif newPreviewEnabled:
         vehicle = itemsCache.items.getItemByCD(vehTypeCompDescr)
         if not (itemsPack or offers) and vehicle.canTradeIn:
@@ -550,13 +553,13 @@ def showBoostersWindow(tabID=None):
     return
 
 
-@process
+@adisp.async
+@adisp.process
 @dependency.replace_none_kwargs(goodiesCache=IGoodiesCache)
-def showBoosterActivateDialog(boosterIntCD, goodiesCache=None):
+def showBoosterActivateDialog(boosterIntCD, callback=None, goodiesCache=None):
+    success = False
     newBooster = goodiesCache.getBooster(boosterIntCD)
-    if not newBooster.isReadyToActivate:
-        return
-    else:
+    if newBooster.isReadyToActivate:
         criteria = REQ_CRITERIA.BOOSTER.ACTIVE | REQ_CRITERIA.BOOSTER.BOOSTER_TYPES([newBooster.boosterType])
         activeBoosters = goodiesCache.getBoosters(criteria=criteria).values()
         curBooster = max(activeBoosters, key=attrgetter('effectValue')) if activeBoosters else None
@@ -571,7 +574,10 @@ def showBoosterActivateDialog(boosterIntCD, goodiesCache=None):
             result = yield BoosterActivator(newBooster).request()
             if result.userMsg:
                 SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
-        return
+            success = result.success
+    if callback is not None:
+        callback(success)
+    return
 
 
 def stopTutorial():
@@ -592,7 +598,7 @@ def changeAppResolution(width, height, scale):
      'scale': scale}), scope=EVENT_BUS_SCOPE.GLOBAL)
 
 
-@process
+@adisp.process
 def requestProfile(databaseID, userName, successCallback):
     itemsCache = dependency.instance(IItemsCache)
     userDossier, _, isHidden = yield itemsCache.items.requestUserDossier(databaseID)
@@ -657,7 +663,7 @@ def showTankPremiumAboutPage():
     return
 
 
-@process
+@adisp.process
 def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=None, callbackOnLoad=None):
     if url:
         url = yield URLMacros().parse(url, params=params)
@@ -724,7 +730,6 @@ def showFrontlineExchangePrestigePoints(ctx):
     from gui.impl.wrappers.user_format_string_arg_model import UserFormatStringArgModel as FmtArgs
     from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import exchangePrestigePoints
     from gui.server_events.formatters import formatGoldPrice, formatCrystalPrice
-    from gui.game_control.epic_meta_game_ctrl import FRONTLINE_SCREENS
     __ctrl = dependency.instance(IEpicBattleMetaGameController)
     prestigePoints = ctx.get('prestige_points', 0)
     gold = ctx.get('gold', 1) * prestigePoints
@@ -740,7 +745,6 @@ def showFrontlineExchangePrestigePoints(ctx):
     result = yield await(dialogs.showSimple(builder.build()))
     if result:
         exchangePrestigePoints()
-    __ctrl.showCustomScreen(FRONTLINE_SCREENS.REWARDS_SCREEN)
 
 
 @async

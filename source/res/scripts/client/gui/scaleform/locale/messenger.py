@@ -319,6 +319,8 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLERESULTS_CREDITS = '#messenger:serviceChannelMessages/battleResults/credits'
     SERVICECHANNELMESSAGES_BATTLERESULTS_GOLD = '#messenger:serviceChannelMessages/battleResults/gold'
     SERVICECHANNELMESSAGES_BATTLERESULTS_CRYSTAL = '#messenger:serviceChannelMessages/battleResults/crystal'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_EPICABILITYPOINTS = '#messenger:serviceChannelMessages/battleResults/epicAbilityPoints'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_EPICREWARDPOINTS = '#messenger:serviceChannelMessages/battleResults/epicRewardPoints'
     SERVICECHANNELMESSAGES_BATTLERESULTS_DOUBLEXPFACTOR = '#messenger:serviceChannelMessages/battleResults/doubleXpFactor'
     SERVICECHANNELMESSAGES_BATTLERESULTS_PENALTYFORDAMAGEALLIES = '#messenger:serviceChannelMessages/battleResults/penaltyForDamageAllies'
     SERVICECHANNELMESSAGES_BATTLERESULTS_CONTRIBUTIONFORDAMAGEALLIES = '#messenger:serviceChannelMessages/battleResults/contributionForDamageAllies'

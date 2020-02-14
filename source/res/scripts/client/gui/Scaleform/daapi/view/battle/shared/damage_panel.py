@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/damage_panel.py
+import logging
 import math
 import weakref
 import BattleReplay
@@ -8,7 +9,6 @@ import GUI
 import Math
 from ReplayEvents import g_replayEvents
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE
-from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.battle.shared.formatters import formatHealthProgress, normalizeHealthPercent
 from gui.Scaleform.daapi.view.battle.shared.timers_common import PythonTimer
 from gui.Scaleform.daapi.view.meta.DamagePanelMeta import DamagePanelMeta
@@ -22,6 +22,7 @@ from helpers import dependency
 from helpers import i18n
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.battle_session import IBattleSessionProvider
+_logger = logging.getLogger(__name__)
 _STATE_HANDLERS = {VEHICLE_VIEW_STATE.HEALTH: '_updateHealth',
  VEHICLE_VIEW_STATE.SPEED: 'as_updateSpeedS',
  VEHICLE_VIEW_STATE.CRUISE_MODE: 'as_setCruiseModeS',
@@ -111,7 +112,7 @@ class _TankIndicatorCtrl(object):
         self.__app.component.addChild(self.__component, 'tankIndicator')
 
     def __del__(self):
-        LOG_DEBUG('_TankIndicatorCtrl is deleted')
+        _logger.debug('_TankIndicatorCtrl is deleted')
 
     def clear(self):
         if self.__app is not None:
@@ -150,7 +151,7 @@ class DamagePanel(DamagePanelMeta):
         return
 
     def __del__(self):
-        LOG_DEBUG('DamagePanel is deleted')
+        _logger.debug('DamagePanel is deleted')
 
     def showAll(self, isShow):
         if self.__isShow != isShow:
@@ -255,19 +256,25 @@ class DamagePanel(DamagePanelMeta):
         self.hideStatusImmediate()
 
     def _updateStun(self, stunInfo):
-        stunDuration = stunInfo.duration
-        if stunDuration > 0:
-            self.__statusAnimPlayers[STATUS_ID.STUN].showStatus(stunDuration, True)
+        if STATUS_ID.STUN in self.__statusAnimPlayers:
+            stunDuration = stunInfo.duration
+            if stunDuration > 0:
+                self.__statusAnimPlayers[STATUS_ID.STUN].showStatus(stunDuration, True)
+            else:
+                self.__statusAnimPlayers[STATUS_ID.STUN].hideStatus(True)
         else:
-            self.__statusAnimPlayers[STATUS_ID.STUN].hideStatus(True)
+            _logger.warning('Animations times are not initialized, stun status can be lost: %r', stunInfo)
 
     def _updateInspire(self, values):
-        if values['isInactivation'] is not None:
-            time = values['endTime'] - BigWorld.serverTime()
-            if time > 0:
-                self.__statusAnimPlayers[STATUS_ID.INSPIRE].showStatus(time, True)
+        if STATUS_ID.INSPIRE in self.__statusAnimPlayers:
+            if values['isInactivation'] is not None:
+                time = values['endTime'] - BigWorld.serverTime()
+                if time > 0:
+                    self.__statusAnimPlayers[STATUS_ID.INSPIRE].showStatus(time, True)
+            else:
+                self.__statusAnimPlayers[STATUS_ID.INSPIRE].hideStatus(True)
         else:
-            self.__statusAnimPlayers[STATUS_ID.INSPIRE].hideStatus(True)
+            _logger.warning('Animations times are not initialized, inspire status can be lost: %r', values)
         return
 
     def __changeVehicleSetting(self, tag, entityName):

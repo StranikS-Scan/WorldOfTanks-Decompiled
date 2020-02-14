@@ -109,6 +109,16 @@ class SeasonProvider(ISeasonProvider):
             season = self.getNextSeason()
             return season.getStartDate() if season else 0
 
+    def getCurrentOrNextActiveCycleNumber(self, season):
+        currTime = time_utils.getCurrentLocalServerTimestamp()
+        if season.hasActiveCycle(currTime):
+            return season.getCycleOrdinalNumber()
+        else:
+            cycle = season.getNextByTimeCycle(currTime)
+            if cycle is None:
+                cycle = season.getLastCycleInfo()
+            return cycle.ordinalNumber if cycle else 0
+
     def _setSeasonSettingsProvider(self, settingsProvider):
         self.__settingsProvider = settingsProvider
 

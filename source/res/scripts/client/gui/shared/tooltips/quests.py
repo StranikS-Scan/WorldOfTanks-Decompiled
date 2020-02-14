@@ -8,7 +8,6 @@ from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.server_events import events_helpers
@@ -25,8 +24,9 @@ from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from shared_utils import findFirst
-from skeletons.gui.game_control import IQuestsController
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.game_control import IQuestsController, IEpicBattleMetaGameController, IEventProgressionController
+from gui.impl.gen import R
 _MAX_AWARDS_PER_TOOLTIP = 5
 _MAX_QUESTS_PER_TOOLTIP = 4
 _MAX_BONUSES_PER_QUEST = 2
@@ -39,14 +39,16 @@ class _StringTokenBonusFormatter(TokenBonusFormatter):
         return [ b.userName for b in result ]
 
     def _formatComplexToken(self, complexToken, token, bonus):
+        rTokenAlias = R.strings.tooltips.quests.bonuses.token
         userName = self._getUserName(complexToken.styleID)
-        tooltip = makeTooltip(_ms(TOOLTIPS.QUESTS_BONUSES_TOKEN_HEADER, userName=userName), _ms(TOOLTIPS.QUESTS_BONUSES_TOKEN_BODY))
-        return PreformattedBonus(bonusName=bonus.getName(), images=self._getTokenImages(complexToken.styleID), label=self._formatBonusLabel(token.count), userName=_ms(TOOLTIPS.QUESTS_BONUSES_TOKEN_HEADER, userName=self._getUserName(complexToken.styleID)), labelFormatter=self._getLabelFormatter(bonus), tooltip=tooltip, align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus))
+        tooltip = makeTooltip(backport.text(rTokenAlias.header(), userName=userName), backport.text(rTokenAlias.body()))
+        return PreformattedBonus(bonusName=bonus.getName(), images=self._getTokenImages(complexToken.styleID), label=self._formatBonusLabel(token.count), userName=backport.text(rTokenAlias.header(), userName=userName), labelFormatter=self._getLabelFormatter(bonus), tooltip=tooltip, align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus))
 
 
 class QuestsPreviewTooltipData(BlocksTooltipData):
-    _eventsCache = dependency.descriptor(IEventsCache)
+    _eventProgressionController = dependency.descriptor(IEventProgressionController)
     _questController = dependency.descriptor(IQuestsController)
+    _eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, context):
         super(QuestsPreviewTooltipData, self).__init__(context, TOOLTIP_TYPE.QUESTS)
@@ -57,10 +59,9 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
     def _packBlocks(self, *args, **kwargs):
         items = super(QuestsPreviewTooltipData, self)._packBlocks()
         vehicle = g_currentVehicle.item
-        quests = self._questController.getQuestForVehicle(vehicle)
-        quests = sorted([ q for q in quests if not q.isCompleted() ], events_helpers.questsSortFunc)
+        quests = sorted([ q for q in self._questController.getQuestForVehicle(vehicle) if not q.isCompleted() and q.getID() not in self._eventProgressionController.questIDs ], events_helpers.questsSortFunc)
         if quests:
-            items.append(self._getHeader(len(quests), vehicle.shortUserName, TOOLTIPS.HANGAR_HEADER_QUESTS_DESCRIPTION_VEHICLE))
+            items.append(self._getHeader(len(quests), vehicle.shortUserName, R.strings.tooltips.hangar.header.quests.description.vehicle()))
             for quest in quests:
                 bonusNames = []
                 for bonus in quest.getBonuses():
@@ -96,40 +97,40 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
 
             allQuests = self._eventsCache.getQuests(filterFunc=_filter)
             if allQuests:
-                items.append(self._getHeader(len(quests), vehicle.shortUserName, TOOLTIPS.HANGAR_HEADER_QUESTS_DESCRIPTION_VEHICLE))
+                items.append(self._getHeader(len(quests), vehicle.shortUserName, R.strings.tooltips.hangar.header.quests.description.vehicle()))
                 items.append(self._getBody(TOOLTIPS.HANGAR_HEADER_QUESTS_EMPTY_VEHICLE))
             else:
-                items.append(self._getHeader(len(quests), vehicle.shortUserName, TOOLTIPS.HANGAR_HEADER_QUESTS_DESCRIPTION))
+                items.append(self._getHeader(len(quests), vehicle.shortUserName, R.strings.tooltips.hangar.header.quests.description()))
                 items.append(self._getBody(TOOLTIPS.HANGAR_HEADER_QUESTS_EMPTY))
             items.append(self._getBottom(0))
         return items
 
     def _getHeader(self, count, vehicleName, description):
-        return formatters.packImageTextBlockData(title=text_styles.highTitle(_ms(TOOLTIPS.HANGAR_HEADER_QUESTS_HEADER, count=count)), img=RES_ICONS.MAPS_ICONS_QUESTS_QUESTTOOLTIPHEADER, txtPadding=formatters.packPadding(top=20), txtOffset=20, desc=text_styles.main(_ms(description, vehicle=vehicleName)))
+        return formatters.packImageTextBlockData(title=text_styles.highTitle(backport.text(R.strings.tooltips.hangar.header.quests.header(), count=count)), img=backport.image(R.images.gui.maps.icons.quests.questTooltipHeader()), txtPadding=formatters.packPadding(top=20), txtOffset=20, desc=text_styles.main(backport.text(description, vehicle=vehicleName)))
 
     def _getBottom(self, value):
         if value > 0:
             formater = text_styles.main
             icon = ''
-            tooltipText = TOOLTIPS.HANGAR_HEADER_QUESTS_BOTTOM
+            tooltipText = R.strings.tooltips.hangar.header.quests.bottom()
         else:
             formater = text_styles.success
             icon = icons.checkmark()
-            tooltipText = TOOLTIPS.HANGAR_HEADER_QUESTS_BOTTOM_EMPTY
+            tooltipText = R.strings.tooltips.hangar.header.quests.bottom.empty()
         return formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'alignText', {'align': 'center',
-         'message': formater('{0}{1}'.format(icon, _ms(tooltipText, count=value)))}), padding=formatters.packPadding(top=-10, bottom=10))
+         'message': formater('{0}{1}'.format(icon, backport.text(tooltipText, count=value)))}), padding=formatters.packPadding(top=-10, bottom=10))
 
     def _packQuest(self, questName, bonuses, isAvailable):
         blocks = []
         bonusesLength = len(bonuses)
         if bonusesLength > _MAX_BONUSES_PER_QUEST:
             bonuses = bonuses[:_MAX_BONUSES_PER_QUEST]
-            formater = '{{}} {}'.format(text_styles.stats(_ms(TOOLTIPS.HANGAR_HEADER_QUESTS_REWARD_REST, count=bonusesLength - _MAX_BONUSES_PER_QUEST)))
+            formater = '{{}} {}'.format(text_styles.stats(backport.text(R.strings.tooltips.hangar.header.quests.reward.rest(), count=bonusesLength - _MAX_BONUSES_PER_QUEST)))
         else:
             formater = '{}'
         strBonus = ', '.join(bonuses)
         title = questName if isAvailable else '{} {}'.format(icons.notAvailableRed(), questName)
-        blocks.append(formatters.packImageTextBlockData(title=text_styles.middleTitle(title), desc=text_styles.neutral(_ms(TOOLTIPS.HANGAR_HEADER_QUESTS_REWARD, rewards=text_styles.main(formater.format(strBonus)))), imgPadding=formatters.packPadding(top=-13, left=-2), txtPadding=formatters.packPadding(top=-2), txtGap=6, padding=formatters.packPadding(bottom=15), txtOffset=20))
+        blocks.append(formatters.packImageTextBlockData(title=text_styles.middleTitle(title), desc=text_styles.neutral(backport.text(R.strings.tooltips.hangar.header.quests.reward(), rewards=text_styles.main(formater.format(strBonus)))), imgPadding=formatters.packPadding(top=-13, left=-2), txtPadding=formatters.packPadding(top=-2), txtGap=6, padding=formatters.packPadding(bottom=15), txtOffset=20))
         return formatters.packBuildUpBlockData(blocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)
 
     def _getBody(self, text):
@@ -179,6 +180,8 @@ class ScheduleQuestTooltipData(BlocksTooltipData):
 
 class UnavailableQuestTooltipData(BlocksTooltipData):
     _eventsCache = dependency.descriptor(IEventsCache)
+    __epicController = dependency.descriptor(IEpicBattleMetaGameController)
+    __eventProgressionController = dependency.descriptor(IEventProgressionController)
 
     def __init__(self, context):
         super(UnavailableQuestTooltipData, self).__init__(context, TOOLTIP_TYPE.QUESTS)
@@ -188,6 +191,13 @@ class UnavailableQuestTooltipData(BlocksTooltipData):
         source = self._eventsCache.getQuests()
         quest = source.get(args[0])
         items = super(UnavailableQuestTooltipData, self)._packBlocks()
+        if quest.getID() in self.__eventProgressionController.questIDs:
+            _, level, _ = self.__epicController.getPlayerLevelInfo()
+            maxLevel = self.__epicController.getMaxPlayerLevel()
+            if level < maxLevel:
+                msg = backport.text(R.strings.event_progression.questsTooltip.frontLine.notReachLevel(), level=maxLevel)
+                items.append(formatters.packAlignedTextBlockData(text=text_styles.main(msg), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=5)))
+                return items
         accountRequirementsFormatter = MissionsAccountRequirementsFormatter()
         requirements = accountRequirementsFormatter.format(quest.accountReqs, quest)
         reqList = self._getList(requirements)
@@ -205,7 +215,7 @@ class UnavailableQuestTooltipData(BlocksTooltipData):
 
     def _getBootom(self):
         return formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'alignText', {'align': 'center',
-         'message': text_styles.error('{0} {1}'.format(icons.notAvailable(), _ms(TOOLTIPS.QUESTS_UNAVAILABLE_BOTTOM)))}))
+         'message': text_styles.error('{0} {1}'.format(icons.notAvailable(), backport.text(R.strings.tooltips.quests.unavailable.bottom())))}))
 
     def _getList(self, items):
         blocks = []
@@ -242,7 +252,7 @@ class AdditionalAwardTooltipData(BlocksTooltipData):
             if len(items) > _MAX_AWARDS_PER_TOOLTIP:
                 count = len(args) - len(items) + 1
                 if count > 0:
-                    items.append(formatters.packTextBlockData(text_styles.main(_ms(TOOLTIPS.QUESTS_AWARDS_ADDITIONAL_BOTTOM, count=count))))
+                    items.append(formatters.packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.quests.awards.additional.bottom(), count=count))))
                 break
 
         return items
@@ -287,7 +297,7 @@ class RentVehicleAwardTooltipData(BlocksTooltipData):
             if vehiclesCount >= _MAX_AWARDS_PER_TOOLTIP:
                 count = len(args) - vehiclesCount
                 if count > 0:
-                    blocks.append(formatters.packTextBlockData(text_styles.main(_ms(TOOLTIPS.QUESTS_AWARDS_ADDITIONAL_BOTTOM, count=count))))
+                    blocks.append(formatters.packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.quests.awards.additional.bottom(), count=count))))
                 break
 
         items.append(formatters.packBuildUpBlockData(blocks, padding=formatters.packPadding(bottom=-12)))
@@ -306,7 +316,7 @@ class MissionVehiclesConditionTooltipData(BlocksTooltipData):
         lst = args[0].list
         if len(lst) > 6:
             blocks.append(formatters.packMissionVehiclesBlockData(lst[:6], padding=formatters.packPadding(top=20)))
-            blocks.append(formatters.packTextBlockData(text_styles.main(_ms(TOOLTIPS.QUESTS_VEHICLES_BOTTOM, count=len(lst[6:])))))
+            blocks.append(formatters.packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.quests.vehicles.bottom(), count=len(lst[6:])))))
         else:
             blocks.append(formatters.packMissionVehiclesBlockData(lst, padding=formatters.packPadding(top=20)))
         items.append(formatters.packBuildUpBlockData(blocks))

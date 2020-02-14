@@ -103,7 +103,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     IMAGE_VIEW = 'imageView'
     HERO_VEHICLE_PREVIEW = 'heroVehiclePreview'
     HERO_VEHICLE_PREVIEW_20 = 'heroVehiclePreview20Page'
-    FRONTLINE_VEHICLE_PREVIEW_20 = 'frontLineVehiclePreview'
+    EVENT_PROGRESSION_VEHICLE_PREVIEW_20 = 'eventProgressionVehiclePreview'
     TRADE_IN_VEHICLE_PREVIEW_20 = 'tradeInVehiclePreview'
     MARATHON_VEHICLE_PREVIEW_20 = 'marathonVehiclePreview'
     VEHICLE_COMPARE = 'vehicleCompare'

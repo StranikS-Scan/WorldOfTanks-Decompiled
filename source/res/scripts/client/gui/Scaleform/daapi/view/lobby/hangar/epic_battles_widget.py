@@ -2,40 +2,72 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/epic_battles_widget.py
 from collections import namedtuple
 import SoundGroups
-from gui.Scaleform import MENU
+from CurrentVehicle import g_currentVehicle
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_meta_level_icon import getEpicMetaIconVODict
-from gui.periodic_battles.models import CalendarStatusVO
+from gui.Scaleform.daapi.view.lobby.hangar.hangar_header import LABEL_STATE
+from gui.Scaleform.daapi.view.lobby.missions.regular import missions_page
 from gui.Scaleform.daapi.view.meta.EpicBattlesWidgetMeta import EpicBattlesWidgetMeta
-from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
+from gui.Scaleform.genConsts.HANGAR_HEADER_QUESTS import HANGAR_HEADER_QUESTS
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.locale.MENU import MENU
+from gui.impl import backport
+from gui.impl.gen.resources import R
+from gui.periodic_battles.models import CalendarStatusVO
 from gui.ranked_battles.constants import PrimeTimeStatus
+from gui.server_events.events_dispatcher import showMissionsCategories
 from gui.shared import event_dispatcher
 from gui.shared.formatters import text_styles, icons
-from gui.shared.tooltips import TOOLTIP_TYPE
-from gui.shared.tooltips import formatters
-from gui.shared.tooltips.common import BlocksTooltipData
-from helpers import dependency, i18n, int2roman
-from helpers import time_utils
-from helpers.i18n import makeString as _ms
-from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IEpicBattleMetaGameController
-from skeletons.gui.lobby_context import ILobbyContext
 from gui.shared.utils.scheduled_notifications import PeriodicNotifier
-EpicBattlesWidgetVO = namedtuple('EpicBattlesWidgetVO', ('skillPoints', 'calendarStatus', 'canPrestige', 'showAlert', 'epicMetaLevelIconData'))
-EpicBattlesWidgetTooltipVO = namedtuple('EpicBattlesWidgetTooltipVO', 'progressBarData')
+from helpers import dependency, int2roman
+from helpers import time_utils
+from helpers.time_utils import ONE_DAY
+from skeletons.connection_mgr import IConnectionManager
+from skeletons.gui.game_control import IEpicBattleMetaGameController, IQuestsController, IEventProgressionController
+EpicBattlesWidgetVO = namedtuple('EpicBattlesWidgetVO', ('calendarStatus', 'showAlert', 'epicMetaLevelIconData', 'quests'))
+
+def _getTimeTo(timeStamp, textId):
+    timeLeft = time_utils.getTillTimeString(timeStamp, MENU.HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY, removeLeadingZeros=True)
+    return backport.text(textId, value=text_styles.stats(timeLeft))
+
+
+def getTimeToStartStr(timeStamp):
+    return _getTimeTo(timeStamp, R.strings.tooltips.eventProgression.timeToStart())
+
+
+def getTimeToLeftStr(timeStamp):
+    return _getTimeTo(timeStamp, R.strings.tooltips.eventProgression.timeToLeft())
+
+
+def getCycleRomanNumberStr(cycleNumber):
+    txtId = R.strings.tooltips.eventProgression.season()
+    return backport.text(txtId, season=int2roman(cycleNumber))
+
+
+def getLevelStr(level):
+    txtId = R.strings.tooltips.eventProgression.level()
+    return backport.text(txtId, level=level)
+
 
 class EpicBattlesWidget(EpicBattlesWidgetMeta):
-    epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
+    __epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
     __connectionMgr = dependency.descriptor(IConnectionManager)
+    __questController = dependency.descriptor(IQuestsController)
+    __eventProgressionController = dependency.descriptor(IEventProgressionController)
 
     def __init__(self):
         super(EpicBattlesWidget, self).__init__()
-        self.__periodicNotifier = PeriodicNotifier(self.epicMetaGameCtrl.getTimer, self.update)
+        self.__periodicNotifier = PeriodicNotifier(self.__epicMetaGameCtrl.getTimer, self.update)
+        self._currentVehicle = None
+        return
 
     def onWidgetClick(self):
-        self.epicMetaGameCtrl.openURL()
+        self.__eventProgressionController.openURL()
+
+    def onQuestBtnClick(self, questType, questID):
+        if questType == HANGAR_HEADER_QUESTS.QUEST_TYPE_COMMON:
+            missions_page.setHideDoneFilter()
+            showMissionsCategories()
 
     def onSoundTrigger(self, triggerName):
         SoundGroups.g_instance.playSound2D(triggerName)
@@ -50,110 +82,105 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
     def _populate(self):
         super(EpicBattlesWidget, self)._populate()
         self.__periodicNotifier.startNotification()
+        self._currentVehicle = g_currentVehicle
 
     def _dispose(self):
         self.__periodicNotifier.stopNotification()
         super(EpicBattlesWidget, self)._dispose()
+        self.__periodicNotifier = None
+        self._currentVehicle = None
+        return
 
     def _buildVO(self):
-        pPrestigeLevel, pLevel, _ = self.epicMetaGameCtrl.getPlayerLevelInfo()
-        maxMetaLevel = self.epicMetaGameCtrl.getMaxPlayerLevel()
-        maxPrestigeLevel = self.epicMetaGameCtrl.getMaxPlayerPrestigeLevel()
-        showAlert = not self.epicMetaGameCtrl.isInPrimeTime() and self.epicMetaGameCtrl.isEnabled()
-        return EpicBattlesWidgetVO(skillPoints=self.epicMetaGameCtrl.getSkillPoints(), calendarStatus=self.__getStatusBlock()._asdict(), canPrestige=pLevel == maxMetaLevel, showAlert=showAlert, epicMetaLevelIconData=getEpicMetaIconVODict(pPrestigeLevel, pLevel, maxPrestigeLevel, maxMetaLevel))
+        showAlert = not self.__epicMetaGameCtrl.isInPrimeTime() and self.__epicMetaGameCtrl.isEnabled()
+        season = self.__epicMetaGameCtrl.getCurrentSeason() or self.__epicMetaGameCtrl.getNextSeason()
+        if self.__epicMetaGameCtrl.isActive():
+            _, plLevel, _ = self.__epicMetaGameCtrl.getPlayerLevelInfo()
+        else:
+            plLevel = None
+        cycleNumber = 1
+        if season is not None:
+            cycleNumber = self.__epicMetaGameCtrl.getCurrentOrNextActiveCycleNumber(season)
+        return EpicBattlesWidgetVO(calendarStatus=self.__getStatusBlock()._asdict(), showAlert=showAlert, epicMetaLevelIconData=getEpicMetaIconVODict(cycleNumber, plLevel), quests=self.__getQuestsVO(self._currentVehicle.item, plLevel))
+
+    def __getQuestsVO(self, vehicle, level):
+        if not self.__epicMetaGameCtrl.isAvailable():
+            return []
+        quests = [ q for q in self.__questController.getQuestForVehicle(vehicle) if q.getID() in self.__eventProgressionController.questIDs ]
+        totalCount = len(quests)
+        completedQuests = len([ q for q in quests if q.isCompleted() ])
+        libraryIcons = R.images.gui.maps.icons.library
+        commonQuestsIcon = libraryIcons.outline.quests_available()
+        if not totalCount:
+            commonQuestsIcon = libraryIcons.outline.quests_disabled()
+            label = ''
+        elif level < self.__epicMetaGameCtrl.getMaxPlayerLevel():
+            label = icons.makeImageTag(backport.image(libraryIcons.CancelIcon_1()))
+        elif completedQuests != totalCount:
+            label = backport.text(R.strings.menu.hangar_header.battle_quests_label.dyn(LABEL_STATE.ACTIVE)(), total=totalCount - completedQuests)
+        else:
+            currentCycleEndTime, _ = self.__epicMetaGameCtrl.getCurrentCycleInfo()
+            cycleTimeLeft = currentCycleEndTime - time_utils.getCurrentLocalServerTimestamp()
+            if cycleTimeLeft < ONE_DAY:
+                label = icons.makeImageTag(backport.image(libraryIcons.ConfirmIcon_1()))
+            else:
+                label = icons.makeImageTag(backport.image(libraryIcons.time_icon()))
+        quests = [self._headerQuestFormatterVo(totalCount > 0, backport.image(commonQuestsIcon), label, HANGAR_HEADER_QUESTS.QUEST_TYPE_COMMON, flag=backport.image(libraryIcons.hangarFlag.flag_epic()), tooltip=TOOLTIPS_CONSTANTS.EPIC_QUESTS_PREVIEW, isTooltipSpecial=True)]
+        return [self.__wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_COMMON, '', quests)]
+
+    def __wrapQuestGroup(self, groupID, icon, quests):
+        return {'groupID': groupID,
+         'groupIcon': icon,
+         'quests': quests}
+
+    def _headerQuestFormatterVo(self, enable, icon, label, questType, flag=None, stateIcon=None, questID=None, isReward=False, tooltip='', isTooltipSpecial=False):
+        return {'enable': enable,
+         'flag': flag,
+         'icon': icon,
+         'stateIcon': stateIcon,
+         'label': label,
+         'questType': questType,
+         'questID': str(questID),
+         'isReward': isReward,
+         'tooltip': tooltip,
+         'isTooltipSpecial': isTooltipSpecial}
 
     def __getStatusBlock(self):
-        status, timeLeft, _ = self.epicMetaGameCtrl.getPrimeTimeStatus()
+        status, timeLeft, _ = self.__epicMetaGameCtrl.getPrimeTimeStatus()
         showPrimeTimeAlert = status != PrimeTimeStatus.AVAILABLE
-        hasAvailableServers = self.epicMetaGameCtrl.hasAvailablePrimeTimeServers()
-        return CalendarStatusVO(alertIcon=RES_ICONS.MAPS_ICONS_LIBRARY_ALERTBIGICON if showPrimeTimeAlert else None, buttonIcon='', buttonLabel=i18n.makeString(EPIC_BATTLE.WIDGETALERTMESSAGEBLOCK_BUTTON), buttonVisible=showPrimeTimeAlert and hasAvailableServers, buttonTooltip=None, statusText=self.__getAlertStatusText(timeLeft, hasAvailableServers), popoverAlias=None, bgVisible=True, shadowFilterVisible=showPrimeTimeAlert, tooltip=None)
+        hasAvailableServers = self.__epicMetaGameCtrl.hasAvailablePrimeTimeServers()
+        return CalendarStatusVO(alertIcon=backport.image(R.images.gui.maps.icons.library.alertBigIcon()) if showPrimeTimeAlert else None, buttonIcon='', buttonLabel=backport.text(R.strings.epic_battle.widgetAlertMessageBlock.button()), buttonVisible=showPrimeTimeAlert and hasAvailableServers, buttonTooltip=None, statusText=self.__getAlertStatusText(timeLeft, hasAvailableServers), popoverAlias=None, bgVisible=True, shadowFilterVisible=showPrimeTimeAlert, tooltip=None)
 
     def __getAlertStatusText(self, timeLeft, hasAvailableServers):
+        rAlertMsgBlock = R.strings.epic_battle.widgetAlertMessageBlock
         alertStr = ''
         if hasAvailableServers:
-            alertStr = _ms(EPIC_BATTLE.WIDGETALERTMESSAGEBLOCK_SOMEPERIPHERIESHALT, serverName=self.__connectionMgr.serverUserNameShort)
+            alertStr = backport.text(rAlertMsgBlock.somePeripheriesHalt(), serverName=self.__connectionMgr.serverUserNameShort)
         else:
-            currSeason = self.epicMetaGameCtrl.getCurrentSeason()
+            currSeason = self.__epicMetaGameCtrl.getCurrentSeason()
             currTime = time_utils.getCurrentLocalServerTimestamp()
-            isCycleNow = currSeason and currSeason.hasActiveCycle(currTime)
+            primeTime = self.__epicMetaGameCtrl.getPrimeTimes().get(self.__connectionMgr.peripheryID)
+            isCycleNow = currSeason and currSeason.hasActiveCycle(currTime) and primeTime.getPeriodsBetween(currTime, currSeason.getCycleEndDate())
             if isCycleNow:
                 if self.__connectionMgr.isStandalone():
-                    key = EPIC_BATTLE.WIDGETALERTMESSAGEBLOCK_SINGLEMODEHALT
+                    key = rAlertMsgBlock.singleModeHalt
                 else:
-                    key = EPIC_BATTLE.WIDGETALERTMESSAGEBLOCK_ALLPERIPHERIESHALT
+                    key = rAlertMsgBlock.allPeripheriesHalt
                 timeLeftStr = time_utils.getTillTimeString(timeLeft, EPIC_BATTLE.STATUS_TIMELEFT, removeLeadingZeros=True)
-                alertStr = _ms(key, time=timeLeftStr)
+                alertStr = backport.text(key(), time=timeLeftStr)
             else:
-                nextSeason = currSeason or self.epicMetaGameCtrl.getNextSeason()
+                nextSeason = currSeason or self.__epicMetaGameCtrl.getNextSeason()
                 if nextSeason is not None:
                     nextCycle = nextSeason.getNextByTimeCycle(currTime)
                     if nextCycle is not None:
                         cycleId = nextCycle.getEpicCycleNumber()
                         timeLeftStr = time_utils.getTillTimeString(nextCycle.startDate - currTime, EPIC_BATTLE.STATUS_TIMELEFT, removeLeadingZeros=True)
-                        alertStr = _ms(EPIC_BATTLE.WIDGETALERTMESSAGEBLOCK_STARTIN, cycle=cycleId, time=timeLeftStr)
+                        alertStr = backport.text(rAlertMsgBlock.startIn(), cycle=cycleId, time=timeLeftStr)
                 if not alertStr:
-                    prevSeason = currSeason or self.epicMetaGameCtrl.getPreviousSeason()
+                    prevSeason = currSeason or self.__epicMetaGameCtrl.getPreviousSeason()
                     if prevSeason is not None:
                         prevCycle = prevSeason.getLastActiveCycleInfo(currTime)
                         if prevCycle is not None:
                             cycleId = prevCycle.getEpicCycleNumber()
-                            alertStr = _ms(EPIC_BATTLE.WIDGETALERTMESSAGEBLOCK_NOCYCLEMESSAGE, cycle=cycleId)
+                            alertStr = backport.text(rAlertMsgBlock.noCycleMessage(), cycle=cycleId)
         return text_styles.vehicleStatusCriticalText(alertStr)
-
-
-class EpicBattlesWidgetTooltip(BlocksTooltipData):
-    epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
-    lobbyContext = dependency.descriptor(ILobbyContext)
-
-    def __init__(self, context):
-        super(EpicBattlesWidgetTooltip, self).__init__(context, TOOLTIP_TYPE.EPIC_META_LEVEL_PROGRESS_INFO)
-        self._setWidth(width=358)
-        self._setContentMargin(top=17)
-        self._setMargins(afterBlock=4, afterSeparator=21)
-
-    def _packBlocks(self):
-        blocks = super(EpicBattlesWidgetTooltip, self)._packBlocks()
-        season = self.epicMetaGameCtrl.getCurrentSeason()
-        if season is None:
-            return blocks
-        else:
-            serverSettings = dependency.instance(ILobbyContext).getServerSettings()
-            pPrestigeLevel, pMetaLevel, pFamePts = self.epicMetaGameCtrl.getPlayerLevelInfo()
-            maxMetaLevel = self.epicMetaGameCtrl.getMaxPlayerLevel()
-            maxPrestigeRewardLevel = serverSettings.epicMetaGame.metaLevel.get('maxPrestigeRewardLevel', None)
-            maxPrestigeInSeason = self.epicMetaGameCtrl.getStageLimit()
-            famePtsToProgress = self.epicMetaGameCtrl.getPointsProgressForLevel(pMetaLevel)
-            boundaryTime, isNow = self.epicMetaGameCtrl.getCurrentCycleInfo()
-            currentTime = time_utils.getCurrentLocalServerTimestamp()
-            cycle = season.getLastActiveCycleInfo(currentTime) or season.getNextByTimeCycle(currentTime)
-            cycleID = cycle.getEpicCycleNumber()
-            if isNow:
-                title = text_styles.highTitle(_ms(TOOLTIPS.EPICBATTLEWIDGET_HEADER, season=cycleID))
-            else:
-                title = text_styles.highTitle(_ms(EPIC_BATTLE.SELECTORTOOLTIP_EPICBATTLE_HEADER))
-            if pPrestigeLevel == 0:
-                desc = text_styles.main(_ms(TOOLTIPS.EPICBATTLEWIDGET_DESC_NOPRESTIGE, level=pMetaLevel))
-            elif pPrestigeLevel == maxPrestigeRewardLevel:
-                desc = text_styles.main(_ms(TOOLTIPS.EPICBATTLEWIDGET_DESC_MAXPRESTIGE, prestige=int2roman(pPrestigeLevel), maxPrestige=int2roman(maxPrestigeRewardLevel)))
-            else:
-                desc = text_styles.main(_ms(TOOLTIPS.EPICBATTLEWIDGET_DESC_NORMAL, prestige=int2roman(pPrestigeLevel), maxPrestige=int2roman(maxPrestigeInSeason), level=pMetaLevel))
-            blocks.append(formatters.packTitleDescBlock(title=title, desc=desc, gap=1))
-            if pPrestigeLevel < maxPrestigeInSeason and pMetaLevel < maxMetaLevel:
-                items = []
-                items.append(formatters.packTextBlockData(text=text_styles.main(TOOLTIPS.EPICBATTLESWIDGET_FAMEPOINTS), useHtml=True))
-                items.append(formatters.packAlignedTextBlockData(text=text_styles.concatStylesWithSpace(icons.makeImageTag(RES_ICONS.MAPS_ICONS_EPICBATTLES_FAME_POINT_TINY, width=24, height=24, vSpace=-7), text_styles.main(text_styles.concatStylesWithSpace(text_styles.neutral(str(pFamePts)), '/', str(famePtsToProgress)))), align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT, padding=formatters.packPadding(top=-22, right=7)))
-                data = EpicBattlesWidgetTooltipVO(progressBarData={'value': pFamePts,
-                 'maxValue': famePtsToProgress})._asdict()
-                items.append(formatters.packBlockDataItem(linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_META_LEVEL_PROGRESS_BLOCK_LINKAGE, data=data, padding=formatters.packPadding(left=2, top=-2)))
-                items.append(formatters.packTextBlockData(text_styles.main(_ms(TOOLTIPS.EPICBATTLESWIDGET_FAMEPOINTSDESCRIPTION, level=text_styles.neutral(_ms(TOOLTIPS.EPICBATTLESWIDGET_FAMEPOINTSTOLEVEL, level=str(pMetaLevel + 1))), famePoints=text_styles.neutral(str(famePtsToProgress - pFamePts)))), useHtml=True, padding=formatters.packPadding(top=21)))
-                blocks.append(formatters.packBuildUpBlockData(blocks=items, padding=formatters.packPadding(bottom=10)))
-            elif pPrestigeLevel == maxPrestigeRewardLevel:
-                blocks.append(formatters.packTextBlockData(text=text_styles.neutral(TOOLTIPS.EPICBATTLEWIDGET_INFO_MAXPRESTIGE), padding=formatters.packPadding(top=-5, bottom=14)))
-            elif pPrestigeLevel == maxPrestigeInSeason:
-                prestigeStr = _ms(TOOLTIPS.EPICBATTLEWIDGET_INFO_PRESTIGE, prestige=int2roman(pPrestigeLevel))
-                blocks.append(formatters.packTextBlockData(text_styles.main(_ms(TOOLTIPS.EPICBATTLEWIDGET_INFO_MAXPRESTIGEINSEASON, prestigeStr=text_styles.neutral(prestigeStr), season=str(cycleID), nextSeason=str(cycleID + 1))), padding=formatters.packPadding(top=-5, bottom=14)))
-            elif pMetaLevel == maxMetaLevel:
-                blocks.append(formatters.packTextBlockData(text=text_styles.main(TOOLTIPS.EPICBATTLEWIDGET_INFO_MAXLEVEL), padding=formatters.packPadding(top=-5, bottom=14)))
-            if isNow and boundaryTime is not None:
-                blocks.append(formatters.packTextBlockData(text_styles.concatStylesToSingleLine(text_styles.main(EPIC_BATTLE.SELECTORTOOLTIP_EPICBATTLE_TIMELEFT), text_styles.middleTitle(time_utils.getTillTimeString(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(boundaryTime)), MENU.HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY, removeLeadingZeros=True))), padding=formatters.packPadding(top=-11)))
-            return blocks

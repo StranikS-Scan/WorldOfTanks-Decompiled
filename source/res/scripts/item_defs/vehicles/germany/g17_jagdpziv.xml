@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.626	</firePenalty>
   </invisibility>
-  <repairCost>	7.3	</repairCost>
+  <repairCost>	5.407	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.2	</priceFactor>
@@ -52,7 +52,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	14000	</weight>
-    <maxHealth>	480	</maxHealth>
+    <maxHealth>	648	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	110	</maxRegenHealth>
@@ -183,8 +183,8 @@
         <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	110	</maxHealth>
-      <maxRegenHealth>	85	</maxRegenHealth>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	98	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
       <models>
         <undamaged>	vehicles/german/G17_JagdPzIV/normal/lod0/Chassis.model	</undamaged>
@@ -1031,8 +1031,8 @@
         <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	90	</maxRegenHealth>
+      <maxHealth>	145	</maxHealth>
+      <maxRegenHealth>	109	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
       <models>
         <undamaged>	vehicles/german/G17_JagdPzIV/normal/lod0/Chassis.model	</undamaged>
@@ -1871,7 +1871,7 @@
         <armor_1>	0	</armor_1>
       </armor>
       <weight>	50	</weight>
-      <maxHealth>	120	</maxHealth>
+      <maxHealth>	162	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1902,7 +1902,7 @@
             </armor_4>
             <gun>	20	</gun>
           </armor>
-          <maxAmmo>	79	</maxAmmo>
+          <maxAmmo>	120	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
@@ -1982,7 +1982,7 @@
             </armor_4>
             <gun>	20	</gun>
           </armor>
-          <maxAmmo>	62	</maxAmmo>
+          <maxAmmo>	75	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>

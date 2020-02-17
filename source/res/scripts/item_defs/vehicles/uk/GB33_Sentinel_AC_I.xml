@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.362	</firePenalty>
   </invisibility>
-  <repairCost>	3.0	</repairCost>
+  <repairCost>	1.563	</repairCost>
   <premiumVehicleXPFactor>	0.5	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
@@ -45,7 +45,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	17521	</weight>
-    <maxHealth>	296	</maxHealth>
+    <maxHealth>	568	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	120	</maxHealth>
       <maxRegenHealth>	69	</maxRegenHealth>
@@ -142,8 +142,8 @@
         <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	80	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
+      <maxHealth>	95	</maxHealth>
+      <maxRegenHealth>	71	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB33_Sentinel_AC_I/normal/lod0/Chassis.model	</undamaged>
@@ -944,7 +944,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_1 armor_4	</primaryArmor>
       <weight>	4000	</weight>
-      <maxHealth>	74	</maxHealth>
+      <maxHealth>	142	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -958,7 +958,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_2pdr_Gun_Mk_X_A>	shared	  <maxAmmo>	130	</maxAmmo>
+        <_2pdr_Gun_Mk_X_A>	shared	  <maxAmmo>	195	</maxAmmo>
           <armor>
             <armor_1>	65	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

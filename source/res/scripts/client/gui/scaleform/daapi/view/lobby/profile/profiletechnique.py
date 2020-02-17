@@ -4,9 +4,11 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PROFILE_TECHNIQUE_MEMBER
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, MARK_ON_GUN_RECORD
 from gui import GUI_NATIONS_ORDER_INDEX
+from gui.shared.formatters import text_styles
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
 from gui.Scaleform.daapi.view.lobby.hof.hof_helpers import getHofRatingUrlForVehicle, getHofDisabledKeys, onServerSettingsChange, isHofButtonNew, setHofButtonOld
+from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import StatisticTypes
 from gui.Scaleform.daapi.view.lobby.hof.web_handlers import createHofWebHandlers
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils, DetailedStatisticsUtils, STATISTICS_LAYOUT, FALLOUT_STATISTICS_LAYOUT
 from gui.Scaleform.daapi.view.meta.ProfileTechniqueMeta import ProfileTechniqueMeta
@@ -15,6 +17,8 @@ from gui.Scaleform.genConsts.PROFILE_CONSTANTS import PROFILE_CONSTANTS
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui import makeHtmlString
+from gui.impl.gen import R
 from gui.impl import backport
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.gui_items.Vehicle import VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED
@@ -150,7 +154,13 @@ class ProfileTechnique(ProfileTechniqueMeta):
     def _sendAccountData(self, targetData, accountDossier):
         super(ProfileTechnique, self)._sendAccountData(targetData, accountDossier)
         self.as_setInitDataS(self._getInitData(accountDossier, self._battlesType == PROFILE_DROPDOWN_KEYS.FALLOUT))
-        self.as_responseDossierS(self._battlesType, self._getTechniqueListVehicles(targetData), '', self.getEmptyScreenLabel())
+        vo = {'vehiclesList': self._getTechniqueListVehicles(targetData),
+         'seasonTime': '',
+         'available': False if self._statisticType == StatisticTypes.SEASON else True,
+         'unavailableMsg': makeHtmlString('html_templates:lobby/season_stats', 'unavailable', {'header': backport.text(R.strings.profile.profile.seasonRating.title()),
+                            'textFirst': backport.text(R.strings.profile.profile.seasonRating.desc.firstBlock(), seasonStatText=text_styles.highlightText(backport.text(R.strings.profile.profile.seasonRating.desc.seasonStatText()))),
+                            'textSecond': backport.text(R.strings.profile.profile.seasonRating.desc.secondBlock(), commonStatText=text_styles.highlightText(backport.text(R.strings.profile.profile.seasonRating.desc.commonStatText())))})}
+        self.as_responseDossierS(self._battlesType, vo, '', self.getEmptyScreenLabel())
 
     def _getTechniqueListVehicles(self, targetData, addVehiclesThatInHangarOnly=False):
         result = []
@@ -274,3 +284,9 @@ class ProfileTechnique(ProfileTechniqueMeta):
 
     def __showMarksOnGun(self, vehicleIntCD):
         return self.itemsCache.items.getItemByCD(int(vehicleIntCD)).level >= _MARK_ON_GUN_MIN_LVL
+
+    def setSeasonStatisticsFilter(self, value):
+        self._statisticType = StatisticTypes.ALL_TIME
+        if value == StatisticTypes.SEASON:
+            self._statisticType = StatisticTypes.SEASON
+        self.invokeUpdate()

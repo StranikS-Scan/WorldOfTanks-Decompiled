@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.393	</firePenalty>
   </invisibility>
-  <repairCost>	3.000	</repairCost>
+  <repairCost>	1.28	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
@@ -43,7 +43,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	4000	</weight>
-    <maxHealth>	112	</maxHealth>
+    <maxHealth>	300	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	85	</maxHealth>
       <maxRegenHealth>	55	</maxRegenHealth>
@@ -133,8 +133,8 @@
         <vehicleRotation>	0.28	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	50	</maxHealth>
-      <maxRegenHealth>	40	</maxRegenHealth>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A02_M2_lt/normal/lod0/Chassis.model	</undamaged>
@@ -968,8 +968,8 @@
         <vehicleRotation>	0.25	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	53	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A02_M2_lt/normal/lod0/Chassis.model	</undamaged>
@@ -1802,7 +1802,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	700	</weight>
-      <maxHealth>	28	</maxHealth>
+      <maxHealth>	55	</maxHealth>
       <rotationSpeed>	32	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -1816,7 +1816,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_12.7mm_MG_HB_M2>	shared	  <maxAmmo>	1800	</maxAmmo>
+        <_12.7mm_MG_HB_M2>	shared	  <maxAmmo>	3600	</maxAmmo>
           <reloadTime>	22.9	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
@@ -1883,7 +1883,7 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_12.7mm_MG_HB_M2>
-        <_20mm_Hispano_Suiza_Birgikt_gun>	shared	  <maxAmmo>	1200	</maxAmmo>
+        <_20mm_Hispano_Suiza_Birgikt_gun>	shared	  <maxAmmo>	2400	</maxAmmo>
           <reloadTime>	8	</reloadTime>
           <aimingTime>	1.9	</aimingTime>
           <shotDispersionFactors>
@@ -2045,7 +2045,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	800	</weight>
-      <maxHealth>	48	</maxHealth>
+      <maxHealth>	75	</maxHealth>
       <rotationSpeed>	35	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -2060,7 +2060,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.908	</invisibilityFactor>
       <guns>
-        <_12.7mm_MG_HB_M2>	shared	  <maxAmmo>	1800	</maxAmmo>
+        <_12.7mm_MG_HB_M2>	shared	  <maxAmmo>	3600	</maxAmmo>
           <reloadTime>	17.1	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -19 1 -19	</minPitch>
@@ -2122,7 +2122,7 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_12.7mm_MG_HB_M2>
-        <_20mm_Hispano_Suiza_Birgikt_gun>	shared	  <maxAmmo>	1200	</maxAmmo>
+        <_20mm_Hispano_Suiza_Birgikt_gun>	shared	  <maxAmmo>	2400	</maxAmmo>
           <reloadTime>	7.7	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
@@ -2189,7 +2189,7 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_20mm_Hispano_Suiza_Birgikt_gun>
-        <_37mm_M-5>	shared	  <maxAmmo>	103	</maxAmmo>
+        <_37mm_M-5>	shared	  <maxAmmo>	205	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.389791 10 0.398288 10 0.401671 9 0.416667 9 0.430556 10 0.433871 10 0.574639 10 0.583333 9 0.596775 9 0.606409 10 1 10	</maxPitch>

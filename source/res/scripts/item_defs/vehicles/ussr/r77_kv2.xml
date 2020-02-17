@@ -19,7 +19,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.078	</firePenalty>
   </invisibility>
-  <repairCost>	5.2	</repairCost>
+  <repairCost>	3.666	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.2	</priceFactor>
@@ -47,7 +47,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	26950	</weight>
-    <maxHealth>	648	</maxHealth>
+    <maxHealth>	976	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	100	</maxRegenHealth>
@@ -139,8 +139,8 @@
         <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	130	</maxHealth>
-      <maxRegenHealth>	100	</maxRegenHealth>
+      <maxHealth>	155	</maxHealth>
+      <maxRegenHealth>	116	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R77_KV2/normal/lod0/Chassis.model	</undamaged>
@@ -806,8 +806,8 @@
         <vehicleRotation>	0.28	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	140	</maxHealth>
-      <maxRegenHealth>	105	</maxRegenHealth>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	128	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R77_KV2/normal/lod0/Chassis.model	</undamaged>
@@ -1478,7 +1478,7 @@
       </armor>
       <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
       <weight>	11050	</weight>
-      <maxHealth>	162	</maxHealth>
+      <maxHealth>	184	</maxHealth>
       <rotationSpeed>	14	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -1492,7 +1492,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_122mm_cannon_U-11>	shared	  <maxAmmo>	80	</maxAmmo>
+        <_122mm_cannon_U-11>	shared	  <maxAmmo>	95	</maxAmmo>
           <unlocks>
             <gun>	_107mm_ZiS-6	  <cost>	14400	</cost>
             </gun>
@@ -1579,7 +1579,7 @@
         </_122mm_cannon_U-11>
         <_152mm_M-10>	shared	  <maxAmmo>	36	</maxAmmo>
           <unlocks>
-            <vehicle>	R15_S-51	  <cost>	93000	</cost>
+            <vehicle>	R18_SU-152	  <cost>	93000	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -1838,7 +1838,7 @@
       </armor>
       <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
       <weight>	12050	</weight>
-      <maxHealth>	212	</maxHealth>
+      <maxHealth>	244	</maxHealth>
       <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -1853,7 +1853,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.365	</invisibilityFactor>
       <guns>
-        <_122mm_cannon_U-11>	shared	  <maxAmmo>	80	</maxAmmo>
+        <_122mm_cannon_U-11>	shared	  <maxAmmo>	95	</maxAmmo>
           <armor>
             <armor_1>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2182,11 +2182,7 @@
         </engine>
       </unlocks>
     </V-2K>
-    <V-5>	shared	  <unlocks>
-        <vehicle>	R72_T150	  <cost>	13000	</cost>
-        </vehicle>
-      </unlocks>
-    </V-5>
+    <V-5>	shared	</V-5>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>

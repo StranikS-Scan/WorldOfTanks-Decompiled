@@ -2142,6 +2142,7 @@ class RES_ICONS(object):
     MAPS_ICONS_LIBRARY_CLASS_ICON = '../maps/icons/library/class_icon.png'
     MAPS_ICONS_LIBRARY_CLOCK = '../maps/icons/library/clock.png'
     MAPS_ICONS_LIBRARY_CLOCKICON_1 = '../maps/icons/library/ClockIcon-1.png'
+    MAPS_ICONS_LIBRARY_COLLECTIBLES_PIC = '../maps/icons/library/collectibles_pic.png'
     MAPS_ICONS_LIBRARY_COMMANDERICON = '../maps/icons/library/commanderIcon.png'
     MAPS_ICONS_LIBRARY_COMPLETE = '../maps/icons/library/complete.png'
     MAPS_ICONS_LIBRARY_COMPLETEDINDICATOR = '../maps/icons/library/completedIndicator.png'

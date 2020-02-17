@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.53	</firePenalty>
   </invisibility>
-  <repairCost>	5.5	</repairCost>
+  <repairCost>	2.906	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
@@ -42,7 +42,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_10	</primaryArmor>
     <weight>	6060	</weight>
-    <maxHealth>	224	</maxHealth>
+    <maxHealth>	424	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	110	</maxHealth>
       <maxRegenHealth>	75	</maxRegenHealth>
@@ -176,8 +176,8 @@
         <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	55	</maxRegenHealth>
+      <maxHealth>	85	</maxHealth>
+      <maxRegenHealth>	64	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <unlocks>
         <chassis>	Chassis_Ch32_SU-76G_FT_2	  <cost>	1030	</cost>
@@ -936,8 +936,8 @@
         <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	80	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
+      <maxHealth>	95	</maxHealth>
+      <maxRegenHealth>	71	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/chinese/Ch32_SU-76G_FT/normal/lod0/Chassis.model	</undamaged>
@@ -1687,7 +1687,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_3	</primaryArmor>
       <weight>	100	</weight>
-      <maxHealth>	56	</maxHealth>
+      <maxHealth>	106	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1701,7 +1701,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_57mm_ZiS_2>	shared	  <maxAmmo>	80	</maxAmmo>
+        <_57mm_ZiS_2>	shared	  <maxAmmo>	140	</maxAmmo>
           <armor>
             <armor_1>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1774,7 +1774,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_57mm_ZiS_2>
-        <_76mm_ZiS_3>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_76mm_ZiS_3>	shared	  <maxAmmo>	105	</maxAmmo>
           <unlocks>
             <gun>	_85mm_56_85TG_FT	  <cost>	5200	</cost>
             </gun>
@@ -1848,7 +1848,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_76mm_ZiS_3>
-        <_85mm_56_85TG_FT>	shared	  <maxAmmo>	42	</maxAmmo>
+        <_85mm_56_85TG_FT>	shared	  <maxAmmo>	65	</maxAmmo>
           <unlocks>
             <vehicle>	Ch33_60G_FT	  <cost>	10300	</cost>
             </vehicle>

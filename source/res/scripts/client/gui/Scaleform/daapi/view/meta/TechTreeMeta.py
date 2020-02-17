@@ -10,6 +10,9 @@ class TechTreeMeta(ResearchView):
     def getNationTreeData(self, nationName):
         self._printOverrideError('getNationTreeData')
 
+    def getPremiumPanelLabels(self):
+        self._printOverrideError('getPremiumPanelLabels')
+
     def request4Unlock(self, itemCD):
         self._printOverrideError('request4Unlock')
 
@@ -24,6 +27,12 @@ class TechTreeMeta(ResearchView):
 
     def onBlueprintModeSwitch(self, enabled):
         self._printOverrideError('onBlueprintModeSwitch')
+
+    def onGoToTankCollector(self, nationName):
+        self._printOverrideError('onGoToTankCollector')
+
+    def onGoToPremiumShop(self, nationName, level):
+        self._printOverrideError('onGoToPremiumShop')
 
     def as_setAvailableNationsS(self, nations):
         return self.flashObject.as_setAvailableNations(nations) if self._isDAAPIInited() else None
@@ -51,3 +60,6 @@ class TechTreeMeta(ResearchView):
 
     def as_setBlueprintBalanceS(self, balanceVO):
         return self.flashObject.as_setBlueprintBalance(balanceVO) if self._isDAAPIInited() else None
+
+    def as_closePremiumPanelS(self):
+        return self.flashObject.as_closePremiumPanel() if self._isDAAPIInited() else None

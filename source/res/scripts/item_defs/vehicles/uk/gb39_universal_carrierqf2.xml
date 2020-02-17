@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.513	</firePenalty>
   </invisibility>
-  <repairCost>	5	</repairCost>
+  <repairCost>	2.034	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
@@ -47,7 +47,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	2192	</weight>
-    <maxHealth>	96	</maxHealth>
+    <maxHealth>	236	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	80	</maxHealth>
       <maxRegenHealth>	55	</maxRegenHealth>
@@ -168,8 +168,8 @@
         <vehicleRotation>	0.36	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	50	</maxHealth>
-      <maxRegenHealth>	40	</maxRegenHealth>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB39_Universal_CarrierQF2/normal/lod0/Chassis.model	</undamaged>
@@ -998,8 +998,8 @@
         <vehicleRotation>	0.34	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	53	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB39_Universal_CarrierQF2/normal/lod0/Chassis.model	</undamaged>
@@ -1823,7 +1823,7 @@
         <armor_3>	5	</armor_3>
       </armor>
       <weight>	200	</weight>
-      <maxHealth>	24	</maxHealth>
+      <maxHealth>	59	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1837,7 +1837,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_2pdr_AT_Gun_Mk_IX>	shared	  <maxAmmo>	112	</maxAmmo>
+        <_2pdr_AT_Gun_Mk_IX>	shared	  <maxAmmo>	225	</maxAmmo>
           <unlocks>
             <gun>	QF_6_pounder_8cwt_Mk_II_AT	  <cost>	170	</cost>
             </gun>
@@ -1905,7 +1905,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_2pdr_AT_Gun_Mk_IX>
-        <QF_6_pounder_8cwt_Mk_II_AT>	shared	  <maxAmmo>	64	</maxAmmo>
+        <QF_6_pounder_8cwt_Mk_II_AT>	shared	  <maxAmmo>	130	</maxAmmo>
           <unlocks>
             <gun>	QF_6_pounder_8cwt_Mk_I_AT	  <cost>	1200	</cost>
             </gun>
@@ -1972,11 +1972,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </QF_6_pounder_8cwt_Mk_II_AT>
-        <QF_6_pounder_8cwt_Mk_I_AT>	shared	  <maxAmmo>	64	</maxAmmo>
-          <unlocks>
-            <vehicle>	GB42_Valentine_AT	  <cost>	1050	</cost>
-            </vehicle>
-          </unlocks>
+        <QF_6_pounder_8cwt_Mk_I_AT>	shared	  <maxAmmo>	130	</maxAmmo>
           <armor>
             <gun>	10	</gun>
             <gunBreech>	0	</gunBreech>

@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.362	</firePenalty>
   </invisibility>
-  <repairCost>	3.2	</repairCost>
+  <repairCost>	1.502	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
@@ -42,7 +42,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	12200	</weight>
-    <maxHealth>	168	</maxHealth>
+    <maxHealth>	392	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	100	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -156,8 +156,8 @@
         <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	55	</maxRegenHealth>
+      <maxHealth>	85	</maxHealth>
+      <maxRegenHealth>	64	</maxRegenHealth>
       <repairCost>	2.5	</repairCost>
       <models>
         <undamaged>	vehicles/french/F03_D2/normal/lod0/Chassis.model	</undamaged>
@@ -1036,8 +1036,8 @@
         <vehicleRotation>	0.28	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	80	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
+      <maxHealth>	95	</maxHealth>
+      <maxRegenHealth>	71	</maxRegenHealth>
       <repairCost>	2.5	</repairCost>
       <models>
         <undamaged>	vehicles/french/F03_D2/normal/lod0/Chassis.model	</undamaged>
@@ -1917,7 +1917,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1000	</weight>
-      <maxHealth>	42	</maxHealth>
+      <maxHealth>	73	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -1935,7 +1935,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.125 10 0.188662 5 0.811338 5 0.875 10 1 10	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	120	</maxAmmo>
+          <maxAmmo>	240	</maxAmmo>
           <unlocks>
             <gun>	_47mm_SA35	  <cost>	265	</cost>
             </gun>
@@ -2012,7 +2012,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.125 10 0.188662 5 0.811338 5 0.875 10 1 10	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	120	</maxAmmo>
+          <maxAmmo>	210	</maxAmmo>
           <unlocks>
             <turret>	Turret_2_D2	  <cost>	340	</cost>
             </turret>
@@ -2087,7 +2087,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.125 10 0.188662 5 0.811338 5 0.875 10 1 10	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	240	</maxAmmo>
+          <maxAmmo>	480	</maxAmmo>
           <armor>
             <armor_1>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2231,7 +2231,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1350	</weight>
-      <maxHealth>	62	</maxHealth>
+      <maxHealth>	98	</maxHealth>
       <rotationSpeed>	28	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -2250,7 +2250,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.125 10 0.188662 5 0.811338 5 0.875 10 1 10	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	120	</maxAmmo>
+          <maxAmmo>	240	</maxAmmo>
           <armor>
             <armor_1>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2321,7 +2321,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.125 10 0.188662 5 0.811338 5 0.875 10 1 10	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	120	</maxAmmo>
+          <maxAmmo>	210	</maxAmmo>
           <armor>
             <armor_1>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2392,7 +2392,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.125 10 0.188662 5 0.811338 5 0.875 10 1 10	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	240	</maxAmmo>
+          <maxAmmo>	480	</maxAmmo>
           <armor>
             <armor_1>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2451,6 +2451,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.125 10 0.188662 5 0.811338 5 0.875 10 1 10	</maxPitch>
           </pitchLimits>
+          <maxAmmo>	210	</maxAmmo>
           <armor>
             <armor_1>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2585,11 +2586,7 @@
         </engine>
       </unlocks>
     </Renault_S6>
-    <Renault_S6Bis>	shared	  <unlocks>
-        <vehicle>	F04_B1	  <cost>	4200	</cost>
-        </vehicle>
-      </unlocks>
-    </Renault_S6Bis>
+    <Renault_S6Bis>	shared	</Renault_S6Bis>
   </engines>
   <fuelTanks>
     <Medium>	shared	</Medium>

@@ -16,7 +16,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.392	</firePenalty>
   </invisibility>
-  <repairCost>	3	</repairCost>
+  <repairCost>	1.171	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
@@ -40,7 +40,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	5500	</weight>
-    <maxHealth>	112	</maxHealth>
+    <maxHealth>	328	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	75	</maxHealth>
       <maxRegenHealth>	50	</maxRegenHealth>
@@ -150,8 +150,8 @@
         <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	50	</maxHealth>
-      <maxRegenHealth>	40	</maxRegenHealth>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R08_BT-2/normal/lod0/Chassis.model	</undamaged>
@@ -459,8 +459,8 @@
         <vehicleRotation>	0.29	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	53	</maxRegenHealth>
       <repairCost>	6.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R08_BT-2/normal/lod0/Chassis.model	</undamaged>
@@ -769,7 +769,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	700	</weight>
-      <maxHealth>	28	</maxHealth>
+      <maxHealth>	62	</maxHealth>
       <rotationSpeed>	32	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -783,7 +783,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_B-3>	shared	  <maxAmmo>	92	</maxAmmo>
+        <_37mm_B-3>	shared	  <maxAmmo>	185	</maxAmmo>
           <reloadTime>	2.5	</reloadTime>
           <aimingTime>	2.5	</aimingTime>
           <unlocks>
@@ -855,7 +855,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_37mm_B-3>
-        <_20mm_TNSH>	shared	  <maxAmmo>	420	</maxAmmo>
+        <_20mm_TNSH>	shared	  <maxAmmo>	840	</maxAmmo>
           <reloadTime>	9.4	</reloadTime>
           <aimingTime>	1.9	</aimingTime>
           <shotDispersionFactors>
@@ -1008,7 +1008,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	800	</weight>
-      <maxHealth>	48	</maxHealth>
+      <maxHealth>	82	</maxHealth>
       <rotationSpeed>	35	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -1023,7 +1023,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.005	</invisibilityFactor>
       <guns>
-        <_37mm_B-3>	shared	  <maxAmmo>	92	</maxAmmo>
+        <_37mm_B-3>	shared	  <maxAmmo>	185	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -1094,7 +1094,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_37mm_B-3>
-        <_20mm_TNSH>	shared	  <maxAmmo>	420	</maxAmmo>
+        <_20mm_TNSH>	shared	  <maxAmmo>	840	</maxAmmo>
           <reloadTime>	8.6	</reloadTime>
           <armor>
             <armor_1>	13	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -1165,14 +1165,14 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_20mm_TNSH>
-        <_45mm_20K>	shared	  <maxAmmo>	80	</maxAmmo>
+        <_45mm_20K>	shared	  <maxAmmo>	160	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <unlocks>
-            <vehicle>	R03_BT-7	  <cost>	1500	</cost>
+            <vehicle>	R174_BT-5	  <cost>	1500	</cost>
             </vehicle>
           </unlocks>
           <armor>

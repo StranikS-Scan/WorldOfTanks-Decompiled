@@ -1872,6 +1872,9 @@ class MENU(object):
     FITTINGSELECTPOPOVER_DESCTEXT_CRYSTAL = '#menu:fittingSelectPopover/descText/crystal'
     QUOTE = '#menu:quote'
     TECHTREE_ANNOUNCEMENT = '#menu:techtree/Announcement'
+    TECHTREE_PREMIUMPANEL_TITLE = '#menu:techtree/premiumPanel/title'
+    TECHTREE_PREMIUMPANEL_BTNLABEL = '#menu:techtree/premiumPanel/btnLabel'
+    TECHTREE_PREMIUMPANEL_BTNLABEL_COUNT = '#menu:techtree/premiumPanel/btnLabel/count'
     CST_ITEM_CTX_MENU_BUY = '#menu:cst_item_ctx_menu/buy'
     CST_ITEM_CTX_MENU_EXCHANGE = '#menu:cst_item_ctx_menu/exchange'
     CST_ITEM_CTX_MENU_BUYMORE = '#menu:cst_item_ctx_menu/buyMore'
@@ -1956,6 +1959,9 @@ class MENU(object):
     BOOSTER_LIMIT_BOOSTER_FL_XP = '#menu:booster/limit/booster_fl_xp'
     COUNTER_NEWCOUNTER = '#menu:counter/newCounter'
     MODULEFITS_DESTROYEQUIPMENT = '#menu:moduleFits/destroyEquipment'
+    TECHTREEOVERLAY_OKBUTTONLABEL = '#menu:techTreeOverlay/okButtonLabel'
+    TECHTREEOVERLAY_HEADER = '#menu:techTreeOverlay/header'
+    TECHTREEOVERLAY_MESSAGE = '#menu:techTreeOverlay/message'
     CONTEXTMENU_ENUM = (CONTEXTMENU_EXCHANGE,
      CONTEXTMENU_VEHICLEINFO,
      CONTEXTMENU_VEHICLEINFOEX,

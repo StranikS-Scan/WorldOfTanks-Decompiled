@@ -13,8 +13,8 @@ class _OpenProfileWindowSchema(W2CSchema):
 _PROFILE_TAB_ALIASES = {'hof': VIEW_ALIAS.PROFILE_HOF,
  'technique': VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE,
  'summary': VIEW_ALIAS.PROFILE_SUMMARY_PAGE,
- 'awards': VIEW_ALIAS.PROFILE_AWARDS,
- 'statistics': VIEW_ALIAS.PROFILE_STATISTICS}
+ 'awards': VIEW_ALIAS.PROFILE_AWARDS_PAGE,
+ 'statistics': VIEW_ALIAS.PROFILE_STATISTICS_PAGE}
 
 class _OpenProfileTabSchema(W2CSchema):
     selected_id = Field(type=basestring, validator=lambda value, data: value in _PROFILE_TAB_ALIASES)

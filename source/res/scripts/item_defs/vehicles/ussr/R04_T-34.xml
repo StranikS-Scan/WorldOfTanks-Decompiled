@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.432	</firePenalty>
   </invisibility>
-  <repairCost>	5.34	</repairCost>
+  <repairCost>	3.204	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
@@ -44,7 +44,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_11 armor_4	</primaryArmor>
     <weight>	15000	</weight>
-    <maxHealth>	320	</maxHealth>
+    <maxHealth>	600	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	130	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
@@ -135,8 +135,8 @@
         <vehicleRotation>	0.28	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	90	</maxHealth>
-      <maxRegenHealth>	70	</maxRegenHealth>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	83	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R04_T-34/normal/lod0/Chassis.model	</undamaged>
@@ -886,8 +886,8 @@
         <vehicleRotation>	0.25	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R04_T-34/normal/lod0/Chassis.model	</undamaged>
@@ -1642,7 +1642,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3200	</weight>
-      <maxHealth>	80	</maxHealth>
+      <maxHealth>	110	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1656,7 +1656,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_L-11>	shared	  <maxAmmo>	77	</maxAmmo>
+        <_76mm_L-11>	shared	  <maxAmmo>	90	</maxAmmo>
           <reloadTime>	6	</reloadTime>
           <unlocks>
             <gun>	_76mm_F-34	  <cost>	1650	</cost>
@@ -1734,7 +1734,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_76mm_L-11>
-        <_76mm_F-34>	shared	  <maxAmmo>	77	</maxAmmo>
+        <_76mm_F-34>	shared	  <maxAmmo>	90	</maxAmmo>
           <reloadTime>	5.1	</reloadTime>
           <unlocks>
             <gun>	_57mm_ZiS-4	  <cost>	2200	</cost>
@@ -1814,7 +1814,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_76mm_F-34>
-        <_57mm_ZiS-4>	shared	  <maxAmmo>	77	</maxAmmo>
+        <_57mm_ZiS-4>	shared	  <maxAmmo>	115	</maxAmmo>
           <reloadTime>	3.4	</reloadTime>
           <armor>
             <armor_1>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -1995,7 +1995,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3900	</weight>
-      <maxHealth>	130	</maxHealth>
+      <maxHealth>	150	</maxHealth>
       <rotationSpeed>	49	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2010,7 +2010,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.88	</invisibilityFactor>
       <guns>
-        <_76mm_L-11>	shared	  <maxAmmo>	77	</maxAmmo>
+        <_76mm_L-11>	shared	  <maxAmmo>	90	</maxAmmo>
           <armor>
             <armor_1>	52	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2086,7 +2086,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_76mm_L-11>
-        <_76mm_F-34>	shared	  <maxAmmo>	77	</maxAmmo>
+        <_76mm_F-34>	shared	  <maxAmmo>	90	</maxAmmo>
           <armor>
             <armor_1>	52	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2160,7 +2160,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_76mm_F-34>
-        <_57mm_ZiS-4>	shared	  <maxAmmo>	77	</maxAmmo>
+        <_57mm_ZiS-4>	shared	  <maxAmmo>	115	</maxAmmo>
           <reloadTime>	2.3	</reloadTime>
           <armor>
             <armor_1>	52	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -2234,7 +2234,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_57mm_ZiS-4>
-        <_76mm_S-54>	shared	  <maxAmmo>	70	</maxAmmo>
+        <_76mm_S-54>	shared	  <maxAmmo>	85	</maxAmmo>
           <reloadTime>	5.7	</reloadTime>
           <unlocks>
             <vehicle>	R07_T-34-85	  <cost>	27825	</cost>
@@ -2413,11 +2413,7 @@
         </radio>
       </unlocks>
     </_9R>
-    <_9RM>	shared	  <unlocks>
-        <vehicle>	R101_MT25	  <cost>	34210	</cost>
-        </vehicle>
-      </unlocks>
-    </_9RM>
+    <_9RM>	shared	</_9RM>
   </radios>
   <physics>
     <detailed>

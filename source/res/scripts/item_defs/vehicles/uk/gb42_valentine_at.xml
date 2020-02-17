@@ -17,10 +17,10 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.527	</firePenalty>
   </invisibility>
-  <repairCost>	6	</repairCost>
+  <repairCost>	3	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
-    <priceFactor>	0.6	</priceFactor>
+    <priceFactor>	0.8	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
     <exclusionMask></exclusionMask>
   </camouflage>
@@ -48,7 +48,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_7 armor_4	</primaryArmor>
     <weight>	9960	</weight>
-    <maxHealth>	136	</maxHealth>
+    <maxHealth>	400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	100	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -144,7 +144,7 @@
       <level>	3	</level>
       <price>	1420	</price>
       <unlocks>
-        <chassis>	Chassis_GB42_Valentine_AT_2	  <cost>	400	</cost>
+        <chassis>	Chassis_GB42_Valentine_AT_2	  <cost>	1200	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -162,8 +162,8 @@
         <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	85	</maxHealth>
+      <maxRegenHealth>	64	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB42_Valentine_AT/normal/lod0/Chassis.model	</undamaged>
@@ -1153,8 +1153,8 @@
     <Chassis_GB42_Valentine_AT_2>
       <userString>	#gb_vehicles:Chassis_GB42_Valentine_AT_2	</userString>
       <tags></tags>
-      <level>	3	</level>
-      <price>	2100	</price>
+      <level>	4	</level>
+      <price>	4200	</price>
       <armor>
         <leftTrack>	10	</leftTrack>
         <rightTrack>	10	</rightTrack>
@@ -1170,8 +1170,8 @@
         <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	55	</maxRegenHealth>
+      <maxHealth>	95	</maxHealth>
+      <maxRegenHealth>	71	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB42_Valentine_AT/normal/lod0/Chassis.model	</undamaged>
@@ -2164,7 +2164,7 @@
       <ceilless>	true	</ceilless>
       <userString>	#gb_vehicles:Turret_1_GB42_Valentine_AT	</userString>
       <tags>	cannotDetach	</tags>
-      <level>	3	</level>
+      <level>	4	</level>
       <price>	100	</price>
       <notInShop>	true	</notInShop>
       <armor>
@@ -2178,7 +2178,7 @@
         <armor_8>	0	</armor_8>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	34	</maxHealth>
+      <maxHealth>	100	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2187,12 +2187,12 @@
       </turretRotatorHealth>
       <circularVisionRadius>	320	</circularVisionRadius>
       <surveyingDeviceHealth>
-        <maxHealth>	50	</maxHealth>
-        <maxRegenHealth>	25	</maxRegenHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <QF_6_pounder_Mk_II_AT>	shared	  <maxAmmo>	102	</maxAmmo>
+        <QF_6_pounder_Mk_II_AT>	shared	  <maxAmmo>	180	</maxAmmo>
           <unlocks>
             <gun>	_3.7inch_AT_Howitzer	  <cost>	2300	</cost>
             </gun>
@@ -2263,7 +2263,11 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </QF_6_pounder_Mk_II_AT>
-        <_3.7inch_AT_Howitzer>	shared	  <maxAmmo>	42	</maxAmmo>
+        <_3.7inch_AT_Howitzer>	shared	  <unlocks>
+            <vehicle>	GB28_Bishop	  <cost>	14750	</cost>
+            </vehicle>
+          </unlocks>
+          <maxAmmo>	70	</maxAmmo>
           <armor>
             <armor_1>	65	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2328,9 +2332,9 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_3.7inch_AT_Howitzer>
-        <QF_6_pounder_Mk_IV_AT>	shared	  <maxAmmo>	102	</maxAmmo>
+        <QF_6_pounder_Mk_IV_AT>	shared	  <maxAmmo>	208	</maxAmmo>
           <unlocks>
-            <vehicle>	GB57_Alecto	  <cost>	3700	</cost>
+            <vehicle>	GB73_AT2	  <cost>	13500	</cost>
             </vehicle>
           </unlocks>
           <armor>

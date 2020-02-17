@@ -6,20 +6,20 @@
     <driver></driver>
   </crew>
   <speedLimits>
-    <forward>	44	</forward>
+    <forward>	50	</forward>
     <backward>	22	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.221	</moving>
+    <moving>	0.294	</moving>
     <still>	0.294	</still>
     <camouflageBonus>	0.03	</camouflageBonus>
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.441	</firePenalty>
   </invisibility>
-  <repairCost>	5.66	</repairCost>
+  <repairCost>	4.8	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
-    <priceFactor>	1.0	</priceFactor>
+    <priceFactor>	1.2	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
     <exclusionMask></exclusionMask>
   </camouflage>
@@ -40,7 +40,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_3	</primaryArmor>
     <weight>	9040	</weight>
-    <maxHealth>	328	</maxHealth>
+    <maxHealth>	704	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	170	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -120,10 +120,10 @@
     <Chassis_GB20_Crusader>
       <userString>	#gb_vehicles:Chassis_GB20_Crusader	</userString>
       <tags></tags>
-      <level>	4	</level>
-      <price>	2000	</price>
+      <level>	5	</level>
+      <price>	4000	</price>
       <unlocks>
-        <chassis>	Chassis_GB20_Crusader_2	  <cost>	1900	</cost>
+        <chassis>	Chassis_GB20_Crusader_2	  <cost>	5200	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -135,14 +135,14 @@
       <terrainResistance>	1 1.2 2	</terrainResistance>
       <brakeForce>	17000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	38	</rotationSpeed>
+      <rotationSpeed>	40	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.26	</vehicleMovement>
-        <vehicleRotation>	0.26	</vehicleRotation>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	90	</maxHealth>
-      <maxRegenHealth>	70	</maxRegenHealth>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	98	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB20_Crusader/normal/lod0/Chassis.model	</undamaged>
@@ -928,8 +928,8 @@
     <Chassis_GB20_Crusader_2>
       <userString>	#gb_vehicles:Chassis_GB20_Crusader_2	</userString>
       <tags></tags>
-      <level>	5	</level>
-      <price>	9500	</price>
+      <level>	6	</level>
+      <price>	18500	</price>
       <armor>
         <leftTrack>	15	</leftTrack>
         <rightTrack>	15	</rightTrack>
@@ -939,14 +939,14 @@
       <terrainResistance>	0.9 1 1.8	</terrainResistance>
       <brakeForce>	20000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	40	</rotationSpeed>
+      <rotationSpeed>	45	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.24	</vehicleMovement>
-        <vehicleRotation>	0.24	</vehicleRotation>
+        <vehicleMovement>	0.23	</vehicleMovement>
+        <vehicleRotation>	0.23	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
+      <maxHealth>	145	</maxHealth>
+      <maxRegenHealth>	109	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB20_Crusader/normal/lod0/Chassis.model	</undamaged>
@@ -1734,10 +1734,10 @@
     <Turret_1_GB20_Crusader>
       <userString>	#gb_vehicles:Turret_1_GB20_Crusader	</userString>
       <tags></tags>
-      <level>	4	</level>
-      <price>	3980	</price>
+      <level>	5	</level>
+      <price>	7960	</price>
       <unlocks>
-        <turret>	Turret_2_GB20_Crusader	  <cost>	2400	</cost>
+        <turret>	Turret_2_GB20_Crusader	  <cost>	4200	</cost>
         </turret>
       </unlocks>
       <armor>
@@ -1752,7 +1752,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2953	</weight>
-      <maxHealth>	82	</maxHealth>
+      <maxHealth>	136	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1766,7 +1766,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_2pdr_Gun_Mk_X>	shared	  <maxAmmo>	180	</maxAmmo>
+        <_2pdr_Gun_Mk_X>	shared	  <maxAmmo>	260	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.097222 10 0.160884 15 0.325227 15 0.388889 1 0.611111 1 0.674773 15 0.839116 15 0.902778 10 1 10	</maxPitch>
@@ -1778,7 +1778,7 @@
           <armor>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <reloadTime>	2.1	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
@@ -1844,7 +1844,7 @@
             <gun>	20	</gun>
           </armor>
           <shotDispersionRadius>	0.55	</shotDispersionRadius>
-          <reloadTime>	4.3	</reloadTime>
+          <reloadTime>	4.1	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -1964,8 +1964,8 @@
     <Turret_2_GB20_Crusader>
       <userString>	#gb_vehicles:Turret_2_GB20_Crusader	</userString>
       <tags></tags>
-      <level>	5	</level>
-      <price>	11000	</price>
+      <level>	6	</level>
+      <price>	21000	</price>
       <unlocks>
         <gun>	QF_6_pounder_Mk_III	  <cost>	1500	</cost>
         </gun>
@@ -1984,7 +1984,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3390	</weight>
-      <maxHealth>	122	</maxHealth>
+      <maxHealth>	176	</maxHealth>
       <rotationSpeed>	46	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1998,7 +1998,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_2pdr_Gun_Mk_X>	shared	  <maxAmmo>	180	</maxAmmo>
+        <_2pdr_Gun_Mk_X>	shared	  <maxAmmo>	260	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 7 0.111111 7 0.174773 12 0.325227 12 0.388889 1 0.611111 1 0.674773 12 0.825227 12 0.888889 7 1 7	</maxPitch>
@@ -2006,7 +2006,7 @@
           <armor>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <reloadTime>	2.1	</reloadTime>
           <aimingTime>	1.5	</aimingTime>
           <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
@@ -2142,7 +2142,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_76mm_Howitzer_MkI>
-        <QF_6_pounder_Mk_III>	shared	  <maxAmmo>	65	</maxAmmo>
+        <QF_6_pounder_Mk_III>	shared	  <maxAmmo>	130	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 7 0.111111 7 0.174773 12 0.325227 12 0.388889 1 0.611111 1 0.674773 12 0.825227 12 0.888889 7 1 7	</maxPitch>
@@ -2150,8 +2150,6 @@
           <unlocks>
             <gun>	QF_6_pounder_Mk_V	  <cost>	3700	</cost>
             </gun>
-            <vehicle>	GB21_Cromwell	  <cost>	25000	</cost>
-            </vehicle>
           </unlocks>
           <armor>
             <gun>	10	</gun>
@@ -2220,7 +2218,11 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </QF_6_pounder_Mk_III>
-        <QF_6_pounder_Mk_V>	shared	  <maxAmmo>	65	</maxAmmo>
+        <QF_6_pounder_Mk_V>	shared	  <maxAmmo>	130	</maxAmmo>
+          <unlocks>
+            <vehicle>	GB104_GSR_3301_Setter	  <cost>	63000	</cost>
+            </vehicle>
+          </unlocks>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 7 0.111111 7 0.174773 12 0.325227 12 0.388889 1 0.611111 1 0.674773 12 0.825227 12 0.888889 7 1 7	</maxPitch>
@@ -2388,11 +2390,11 @@
       <engines>
         <Nuffield_liberty_MKIV>
           <smplEnginePower>	417.626	</smplEnginePower>
-          <smplFwMaxSpeed>	44	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </Nuffield_liberty_MKIV>
         <Nuffield_liberty_MKV>
           <smplEnginePower>	433.4853	</smplEnginePower>
-          <smplFwMaxSpeed>	44	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </Nuffield_liberty_MKV>
       </engines>
       <chassis>

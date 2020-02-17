@@ -38,7 +38,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	3890	</weight>
-    <maxHealth>	96	</maxHealth>
+    <maxHealth>	264	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	65	</maxHealth>
       <maxRegenHealth>	45	</maxRegenHealth>
@@ -135,8 +135,8 @@
         <vehicleRotation>	0.38	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	50	</maxHealth>
-      <maxRegenHealth>	40	</maxRegenHealth>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/italy/It04_Fiat_3000/normal/lod0/Chassis.model	</undamaged>
@@ -832,7 +832,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	200	</weight>
-      <maxHealth>	24	</maxHealth>
+      <maxHealth>	66	</maxHealth>
       <rotationSpeed>	34	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	50	</maxHealth>
@@ -846,7 +846,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <Cannone_da_37_20>	shared	  <maxAmmo>	237	</maxAmmo>
+        <Cannone_da_37_20>	shared	  <maxAmmo>	545	</maxAmmo>
           <unlocks>
             <gun>	Cannone_da_37_40	  <cost>	40	</cost>
             </gun>
@@ -898,11 +898,9 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </Cannone_da_37_20>
-        <Cannone_da_37_40>	shared	  <maxAmmo>	68	</maxAmmo>
+        <Cannone_da_37_40>	shared	  <maxAmmo>	155	</maxAmmo>
           <unlocks>
             <vehicle>	It06_M14_41	  <cost>	270	</cost>
-            </vehicle>
-            <vehicle>	It05_Carro_L6_40	  <cost>	270	</cost>
             </vehicle>
           </unlocks>
           <armor>

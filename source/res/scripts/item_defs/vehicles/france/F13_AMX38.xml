@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.42	</firePenalty>
   </invisibility>
-  <repairCost>	4.2	</repairCost>
+  <repairCost>	2.053	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
@@ -45,7 +45,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	9500	</weight>
-    <maxHealth>	176	</maxHealth>
+    <maxHealth>	360	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	100	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -145,8 +145,8 @@
         <vehicleRotation>	0.38	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	55	</maxRegenHealth>
+      <maxHealth>	85	</maxHealth>
+      <maxRegenHealth>	64	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F13_AMX38/normal/lod0/Chassis.model	</undamaged>
@@ -974,8 +974,8 @@
         <vehicleRotation>	0.36	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	80	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
+      <maxHealth>	95	</maxHealth>
+      <maxRegenHealth>	71	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F13_AMX38/normal/lod0/Chassis.model	</undamaged>
@@ -1803,7 +1803,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2500	</weight>
-      <maxHealth>	44	</maxHealth>
+      <maxHealth>	90	</maxHealth>
       <rotationSpeed>	28	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -1817,7 +1817,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_SA38>	shared	  <maxAmmo>	162	</maxAmmo>
+        <_37mm_SA38>	shared	  <maxAmmo>	325	</maxAmmo>
           <reloadTime>	2.4	</reloadTime>
           <aimingTime>	2	</aimingTime>
           <unlocks>
@@ -1883,7 +1883,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_37mm_SA38>
-        <_25mm_Canon_Raccourci_Mle.1934>	shared	  <maxAmmo>	258	</maxAmmo>
+        <_25mm_Canon_Raccourci_Mle.1934>	shared	  <maxAmmo>	515	</maxAmmo>
           <reloadTime>	1.8	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
           <armor>
@@ -1937,7 +1937,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_25mm_Canon_Raccourci_Mle.1934>
-        <_47mm_SA34>	shared	  <maxAmmo>	148	</maxAmmo>
+        <_47mm_SA34>	shared	  <maxAmmo>	295	</maxAmmo>
           <reloadTime>	3.2	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <shotDispersionFactors>
@@ -2009,7 +2009,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_47mm_SA34>
-        <_47mm_SA35>	shared	  <maxAmmo>	120	</maxAmmo>
+        <_47mm_SA35>	shared	  <maxAmmo>	210	</maxAmmo>
           <armor>
             <armor_1>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

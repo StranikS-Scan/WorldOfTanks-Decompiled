@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.674	</firePenalty>
   </invisibility>
-  <repairCost>	2	</repairCost>
+  <repairCost>	0.771	</repairCost>
   <premiumVehicleXPFactor>	0.7	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
@@ -44,7 +44,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_2 armor_2	</primaryArmor>
     <weight>	1463	</weight>
-    <maxHealth>	128	</maxHealth>
+    <maxHealth>	332	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	80	</maxHealth>
       <maxRegenHealth>	55	</maxRegenHealth>
@@ -172,8 +172,8 @@
         <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	53	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/poland/Pl01_TKS_20mm/normal/lod0/Chassis.model	</undamaged>
@@ -891,7 +891,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
       <weight>	100	</weight>
-      <maxHealth>	32	</maxHealth>
+      <maxHealth>	83	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -905,7 +905,7 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_20mm_n_k_m_20_A>	shared	  <maxAmmo>	250	</maxAmmo>
+        <_20mm_n_k_m_20_A>	shared	  <maxAmmo>	500	</maxAmmo>
           <armor>
             <armor_1>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

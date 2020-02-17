@@ -120,6 +120,7 @@
     <_105mm_Rheinmetall_V1>	137	</_105mm_Rheinmetall_V1>
     <_105mm_Kw_K_L_73>	138	</_105mm_Kw_K_L_73>
     <_90mm_Kanone_M41>	139	</_90mm_Kanone_M41>
+    <_20mm_Solothurn_S_18_1000>	140	</_20mm_Solothurn_S_18_1000>
     <_20mm_KwK_30_bot>	244	</_20mm_KwK_30_bot>
     <_37mm_KwK_L46_bot>	245	</_37mm_KwK_L46_bot>
     <Gun_Env_Artillery>	248	</Gun_Env_Artillery>
@@ -656,6 +657,56 @@
         </_20cm_Pzgr40>
       </shots>
     </_20mm_KwK_30A>
+    <_20mm_Solothurn_S_18_1000>
+      <userString>	#germany_vehicles:_20mm_Solothurn_S_18_1000	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	1910	</price>
+      <impulse>	0.22	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.2	</amplitude>
+        <recoilEffect>	small	</recoilEffect>
+      </recoil>
+      <effects>	shot_small	</effects>
+      <reloadEffect>	reload20_45	</reloadEffect>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <pitchLimits>
+        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <rotationSpeed>	43.75	</rotationSpeed>
+      <reloadTime>	2.28571428571429	</reloadTime>
+      <maxAmmo>	100	</maxAmmo>
+      <aimingTime>	1.6	</aimingTime>
+      <weight>	70	</weight>
+      <maxHealth>	54	</maxHealth>
+      <maxRegenHealth>	27	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_20mm_Pzgr39_S>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	400	</maxDistance>
+          <piercingPower>	40 25	</piercingPower>
+        </_20mm_Pzgr39_S>
+        <_20cm_Pzgr40_S>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1125	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	400	</maxDistance>
+          <piercingPower>	51 30	</piercingPower>
+        </_20cm_Pzgr40_S>
+      </shots>
+    </_20mm_Solothurn_S_18_1000>
     <_30mm_MK103>
       <userString>	#germany_vehicles:_30mm_MK103	</userString>
       <tags></tags>
@@ -717,7 +768,7 @@
           <speed>	940	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	400	</maxDistance>
-          <piercingPower>	15 15	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_30mm_M>
       </shots>
     </_30mm_MK103>
@@ -782,7 +833,7 @@
           <speed>	940	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	400	</maxDistance>
-          <piercingPower>	15 15	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_30mm_M>
       </shots>
     </_30mm_MK103A>
@@ -840,7 +891,7 @@
           <speed>	705	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	18 18	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_37mm_Sprg.18t>
       </shots>
     </_37mm_SA_38f_L34>
@@ -897,7 +948,7 @@
           <speed>	675	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	18 18	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_37mm_Sprg.18t>
       </shots>
     </_37mm_KwK_34t_L40>
@@ -954,7 +1005,7 @@
           <speed>	750	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	18 18	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_37mm_Sprg.18t>
       </shots>
     </_37mm_KwK_38t_L47>
@@ -1070,7 +1121,7 @@
           <speed>	750	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	18 18	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_37mm_Sprg.18t>
       </shots>
     </_37mm_KwK_38t_L47_A>
@@ -1127,7 +1178,7 @@
           <speed>	750	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	18 18	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_37mm_Sprg.18t>
       </shots>
     </_37mm_PaK_38t_L47>
@@ -1242,7 +1293,7 @@
           <speed>	750	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	18 18	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_37mm_Sprg.18>
       </shots>
     </_37mm_KwK_L46>
@@ -1460,7 +1511,7 @@
           <speed>	800	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	20 20	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_40mm_39_M_Repeszgranat>
       </shots>
     </_40mm_37_42_M_L45_A>
@@ -1576,7 +1627,7 @@
           <speed>	500	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	23 23	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_45mm_Sprgr>
       </shots>
     </_45mm_Kanone>
@@ -1633,7 +1684,7 @@
           <speed>	775	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	24 24	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_47mm_Sprg.18t>
       </shots>
     </_47mm_PaK_38t_L43>
@@ -1690,7 +1741,7 @@
           <speed>	775	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	24 24	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_47mm_Sprg.18t>
       </shots>
     </_47mm_PaK_38t_L43AT>
@@ -1748,7 +1799,7 @@
           <speed>	700	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	24 24	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_47mm_Sprg.18f>
       </shots>
     </_47mm_SA35_L34>
@@ -1805,7 +1856,7 @@
           <speed>	685	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	25 25	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_50mm_Sprg.18>
       </shots>
     </_50mm_KwK_38_L42>
@@ -1920,7 +1971,7 @@
           <speed>	835	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	25 25	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_50mm_Sprg.18>
       </shots>
     </_50mm_KwK_39_L60>
@@ -1977,7 +2028,7 @@
           <speed>	835	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	25 25	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_50mm_Sprg.18>
       </shots>
     </_50mm_KwK_39_L60L>
@@ -2035,7 +2086,7 @@
           <speed>	835	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	25 25	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_50mm_Sprg.18>
       </shots>
     </Gun_Auf_Panther>
@@ -2150,7 +2201,7 @@
           <speed>	385	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_75mm_Sprg.18>
       </shots>
     </_75mm_KwK_37_L24>
@@ -2207,7 +2258,7 @@
           <speed>	385	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_75mm_Sprg.18>
       </shots>
     </_75mm_StuK_37_L24>
@@ -2265,7 +2316,7 @@
           <speed>	385	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_75mm_Sprg.18>
       </shots>
     </_75mm_KwK_37_L24A>
@@ -2367,7 +2418,7 @@
           <speed>	685	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_75mm_Sprg.18>
       </shots>
     </_75mm_KwK_L40>
@@ -2424,7 +2475,7 @@
           <speed>	740	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_75mm_Sprg.18>
       </shots>
     </_75mm_KwK_40_L43>
@@ -2482,7 +2533,7 @@
           <speed>	740	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_75mm_Sprg.18>
       </shots>
     </_75mm_KwK_40_L43A>
@@ -2539,7 +2590,7 @@
           <speed>	740	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_75mm_Sprg.18>
       </shots>
     </_75mm_StuK_40_L43>
@@ -2597,7 +2648,7 @@
           <speed>	550	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_75mm_43_M_Repeszgranat>
       </shots>
     </_75mm_43_M_L43>
@@ -2654,7 +2705,7 @@
           <speed>	790	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_75mm_Sprg.18>
       </shots>
     </_75mm_KwK_40_L48>
@@ -2711,7 +2762,7 @@
           <speed>	790	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_75mm_Sprg.18>
       </shots>
     </_75mm_KwK_40_L48L>
@@ -2769,7 +2820,7 @@
           <speed>	790	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_75mm_Sprg.18>
       </shots>
     </_75mm_KwK_40_L48A>
@@ -2827,7 +2878,7 @@
           <speed>	925	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_75mm_Sprg.18L>
       </shots>
     </_75mm_KwK_40_L48A_CN>
@@ -2885,7 +2936,7 @@
           <speed>	810	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_75mm_Sprg.18>
       </shots>
     </_75mm_A18KwK>
@@ -2942,7 +2993,7 @@
           <speed>	790	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_75mm_Sprg.18>
       </shots>
     </_75mm_PaK_39_L48>
@@ -3000,7 +3051,7 @@
           <speed>	790	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_75mm_Sprg.18>
       </shots>
     </_75mm_StuK_40_L48A>
@@ -3057,7 +3108,7 @@
           <speed>	790	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_75mm_Sprg.18>
       </shots>
     </_75mm_PaK_40_2>
@@ -3114,7 +3165,7 @@
           <speed>	790	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_75mm_Sprg.18>
       </shots>
     </_75mm_PaK_40_3>
@@ -3171,7 +3222,7 @@
           <speed>	740	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_76mm_Sprg.18r>
       </shots>
     </_76mm_PaK_36r>
@@ -3228,7 +3279,7 @@
           <speed>	860	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_75mm_Sprg.18L>
       </shots>
     </_75mm_Flak_L60>
@@ -3285,7 +3336,7 @@
           <speed>	925	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_75mm_Sprg.18L>
       </shots>
     </_75mm_KwK_L70>
@@ -3401,7 +3452,7 @@
           <speed>	925	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_75mm_Sprg.18L>
       </shots>
     </_75mm_KwK_L70_A>
@@ -3503,7 +3554,7 @@
           <speed>	925	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_75mm_Sprg.18L>
       </shots>
     </_75mm_KwK_441_A>
@@ -3560,7 +3611,7 @@
           <speed>	945	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_75mm_Sprg.18L>
       </shots>
     </_75mm_KwK45_L100>
@@ -3617,7 +3668,7 @@
           <speed>	925	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_75mm_Sprg.18L>
       </shots>
     </_75mm_StuK42_L70>
@@ -3675,7 +3726,7 @@
           <speed>	925	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_75mm_Sprg.18L>
       </shots>
     </_75mm_StuK42_L70A>
@@ -3776,7 +3827,7 @@
           <speed>	925	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	38 38	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </APCNRHE1945>
       </shots>
     </_75mm_Waffe0725_1944>
@@ -3833,7 +3884,7 @@
           <speed>	773	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	44 44	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_88mm_Sprg.18>
       </shots>
     </_88mm_Flak_37_L56>
@@ -3890,7 +3941,7 @@
           <speed>	773	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	44 44	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_88mm_Sprg.18>
       </shots>
     </_88mm_KwK_36_L56>
@@ -3948,7 +3999,7 @@
           <speed>	773	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	44 44	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_88mm_Sprg.18>
       </shots>
     </_88mm_KwK_36_L56A>
@@ -4005,7 +4056,7 @@
           <speed>	773	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	44 44	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_88mm_Sprg.18>
       </shots>
     </_88mm_PaK_36_L56>
@@ -4062,7 +4113,7 @@
           <speed>	1000	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	44 44	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_88mm_Sprgr.Flak_41>
       </shots>
     </_88mm_Flak_41_L74>
@@ -4119,7 +4170,7 @@
           <speed>	1000	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	44 44	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_88mm_Sprg.43>
       </shots>
     </_88mm_KwK_43_L71>
@@ -4176,7 +4227,7 @@
           <speed>	1000	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	44 44	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_88mm_Sprg.43>
       </shots>
     </_88mm_PaK_43_L71>
@@ -4234,7 +4285,7 @@
           <speed>	1000	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	44 44	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_88mm_Sprg.43>
       </shots>
     </_88mm_KwK_43_L71A>
@@ -4292,7 +4343,7 @@
           <speed>	1000	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	44 44	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_88mm_Sprg.43>
       </shots>
     </_88mm_Pak_43_L71A>
@@ -4350,7 +4401,7 @@
           <speed>	1000	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	44 44	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_88mm_Sprg.43>
       </shots>
     </_88mm_KwK_43_L71B>
@@ -4465,7 +4516,7 @@
           <speed>	1150	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	44 44	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_88mm_Sprg.18L>
       </shots>
     </_88mm_KwK_L100>
@@ -4522,7 +4573,7 @@
           <speed>	640	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	45 45	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_90mm_OE_90>
       </shots>
     </_90mm_D921_F1>
@@ -4579,7 +4630,7 @@
           <speed>	338	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	45 45	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_90mm_Mecar_HE>
       </shots>
     </_90mm_Mecar>
@@ -4637,7 +4688,7 @@
           <speed>	338	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	45 45	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_90mm_Mecar_N_HE>
       </shots>
     </_90mm_Mecar_N>
@@ -4753,7 +4804,7 @@
           <speed>	755	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	102 102	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_90mm_DM502>
       </shots>
     </_90mm_Rheinmetall_90_L40>
@@ -4811,7 +4862,7 @@
           <speed>	755	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	102 102	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_90mm_DM502>
       </shots>
     </_90mm_Rheinmetall_90_L40A>
@@ -4869,7 +4920,7 @@
           <speed>	755	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	102 102	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_90mm_DM502>
       </shots>
     </_90mm_Rheinmetall_DM1M>
@@ -4926,7 +4977,7 @@
           <speed>	1000	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	90 90	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_90mm_Sprg48>
       </shots>
     </_9cm_KwK_51_L71>
@@ -4984,7 +5035,7 @@
           <speed>	1150	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	90 90	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_90mm_Sprg48>
       </shots>
     </_9cm_Kan>
@@ -5042,7 +5093,7 @@
           <speed>	773	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	102 102	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_90mm_HEP_T_142>
       </shots>
     </_90_76mm_US_Kanone_M_32>
@@ -5100,7 +5151,7 @@
           <speed>	853	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	45 45	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_90mm_HE_M71>
       </shots>
     </_90mm_Kanone_M41>
@@ -5158,7 +5209,7 @@
           <speed>	895	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	50 50	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_100mm_UOF-412>
       </shots>
     </_100mm_Typ_D-10T2S>
@@ -5215,7 +5266,7 @@
           <speed>	470	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	53 53	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_105mm_Sprg_K>
       </shots>
     </_105mm_StuH42_L28Pz>
@@ -5272,7 +5323,7 @@
           <speed>	470	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	53 53	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_105mm_Sprg_K>
       </shots>
     </_105mm_StuH42_L28>
@@ -5329,7 +5380,7 @@
           <speed>	950	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	60 60	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_105mm_Sprg_L>
       </shots>
     </_105mm_K18_L52>
@@ -5386,7 +5437,7 @@
           <speed>	805	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	53 53	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_105mm_Gr19>
       </shots>
     </_105mm_K18_L52_R>
@@ -5444,7 +5495,7 @@
           <speed>	805	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	53 53	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_105mm_Gr19>
       </shots>
     </_105mm_K18_L52A>
@@ -5589,7 +5640,7 @@
           <speed>	950	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	60 60	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_105mm_Sprg_L>
       </shots>
     </_105mm_KwK45_L52>
@@ -5647,7 +5698,7 @@
           <speed>	1200	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	60 60	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_105mm_Sprg.18G>
       </shots>
     </_105mm_KwK45_L52_ausf_B>
@@ -5706,7 +5757,7 @@
           <speed>	1200	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	60 60	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_105mm_Sprg.18K>
       </shots>
     </_105mm_KwK45_L52_ausf_K>
@@ -5763,7 +5814,7 @@
           <speed>	1173	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	105 105	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_105mm_HE_DM11>
       </shots>
     </_105mm_L7A1>
@@ -5821,7 +5872,7 @@
           <speed>	1173	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	105 105	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_105mm_HE_DM11>
       </shots>
     </_105mm_BK_L7A3_L51>
@@ -5879,7 +5930,7 @@
           <speed>	1173	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	53 53	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_105mm_HE_M68M2>
       </shots>
     </_105mm_BK_L7>
@@ -5937,7 +5988,7 @@
           <speed>	1173	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	53 53	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_105mm_Exp_HE>
       </shots>
     </_105mm_Rheinmetall_V1>
@@ -5994,7 +6045,7 @@
           <speed>	1100	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	60 60	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_105mm_Sprg_L>
       </shots>
     </_105mm_KwK46_L68>
@@ -6052,7 +6103,7 @@
           <speed>	1150	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	60 60	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_105mm_Sprg_L1>
       </shots>
     </_105mm_KwK46_L70>
@@ -6110,7 +6161,7 @@
           <speed>	1100	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	60 60	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_105mm_Sprgr_45>
       </shots>
     </_105mm_Kw_K_L_73>
@@ -6168,7 +6219,7 @@
           <speed>	700	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	120 120	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_105mm_Exp_HE>
       </shots>
     </_105mm_Kanone>
@@ -6226,7 +6277,7 @@
           <speed>	810	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	65 65	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_128mm_SprG18>
       </shots>
     </_128mm_L50>
@@ -6283,7 +6334,7 @@
           <speed>	810	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	65 65	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_128mm_SprG18>
       </shots>
     </_128mm_L50A>
@@ -6341,7 +6392,7 @@
           <speed>	810	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	65 65	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_128mm_SprG18>
       </shots>
     </_128mm_L50P>
@@ -6398,7 +6449,7 @@
           <speed>	920	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	65 65	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_128mm_SprG18>
       </shots>
     </_128mm_KwK44_L55>
@@ -6456,7 +6507,7 @@
           <speed>	920	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	65 65	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_128mm_SprG18>
       </shots>
     </Gun_VK4502P>
@@ -6513,7 +6564,7 @@
           <speed>	1200	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	65 65	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_128mm_SprG19>
       </shots>
     </_128mm_PaK44_2_L61>
@@ -6571,7 +6622,7 @@
           <speed>	1100	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	65 65	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_128mm_SprG19>
       </shots>
     </_128mm_KwK46_L61>
@@ -6621,7 +6672,7 @@
           <speed>	880	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	65 65	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_128mm_Sprgr_N9>
       </shots>
     </_128mm_SF_L61>
@@ -6678,7 +6729,7 @@
           <speed>	920	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	65 65	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_128mm_SprG18>
       </shots>
     </_128mm_PaK44_L55>
@@ -6736,7 +6787,7 @@
           <speed>	920	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	65 65	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_128mm_SprG18>
       </shots>
     </_128mm_PaK44_L55A>
@@ -6794,7 +6845,7 @@
           <speed>	920	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	65 65	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_128mm_SprG18>
       </shots>
     </_128mm_K43_L55>
@@ -6851,7 +6902,7 @@
           <speed>	920	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	65 65	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_128mm_SprG18>
       </shots>
     </_128mm_K44_L55>
@@ -6908,7 +6959,7 @@
           <speed>	1200	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	65 65	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_128mm_SprG19>
       </shots>
     </_128mm_K44_2_L61>
@@ -6966,7 +7017,7 @@
           <speed>	1200	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	65 65	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_128mm_SprG19>
       </shots>
     </_128mm_K44_2_L61_WT>
@@ -7024,7 +7075,7 @@
           <speed>	920	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	65 65	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_128mm_SprG18A>
       </shots>
     </_128mm_Kw_K_L_61K>
@@ -7070,6 +7121,22 @@
           <piercingPower>	38 38	</piercingPower>
           <maxHeight>	267	</maxHeight>
         </_150mm_Sprg>
+        <_150mm_Gr_19_Stg>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	355	</speed>
+          <gravity>	150	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	38 38	</piercingPower>
+          <maxHeight>	267	</maxHeight>
+        </_150mm_Gr_19_Stg>
+        <_150mmGr_39H1A>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	355	</speed>
+          <gravity>	150	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	136 136	</piercingPower>
+          <maxHeight>	267	</maxHeight>
+        </_150mmGr_39H1A>
       </shots>
     </_150mm_sFH13_L17>
     <_150mm_sFH18_L30>
@@ -7114,6 +7181,22 @@
           <piercingPower>	39 39	</piercingPower>
           <maxHeight>	390	</maxHeight>
         </_150mm_SprgG>
+        <_150mm_Gr_19_Stg_FES>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	420	</speed>
+          <gravity>	140	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	39 39	</piercingPower>
+          <maxHeight>	390	</maxHeight>
+        </_150mm_Gr_19_Stg_FES>
+        <_150mmGr_39H1A_G>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	420	</speed>
+          <gravity>	140	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	164 164	</piercingPower>
+          <maxHeight>	390	</maxHeight>
+        </_150mmGr_39H1A_G>
       </shots>
     </_150mm_sFH18_L30>
     <Gun_Env_Artillery>
@@ -7219,6 +7302,14 @@
           <piercingPower>	39 39	</piercingPower>
           <maxHeight>	401	</maxHeight>
         </_150mm_SprgG36>
+        <_150mmGr_39H2A_G>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	440	</speed>
+          <gravity>	149	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	196 196	</piercingPower>
+          <maxHeight>	401	</maxHeight>
+        </_150mmGr_39H2A_G>
       </shots>
     </_150mm_sFH36_L43>
     <_150mm_sIG33L11>
@@ -7315,6 +7406,14 @@
           <piercingPower>	44 44	</piercingPower>
           <maxHeight>	444	</maxHeight>
         </_170mm_Sprg18_Ausf_G>
+        <_170mm_Pzgr_73>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	510	</speed>
+          <gravity>	180	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	244 230	</piercingPower>
+          <maxHeight>	444	</maxHeight>
+        </_170mm_Pzgr_73>
       </shots>
     </_170mm_K72_Sf_>
     <_210mm_Morser_21>
@@ -7367,6 +7466,14 @@
           <piercingPower>	53 53	</piercingPower>
           <maxHeight>	411	</maxHeight>
         </_210mm_Sprg18_Ausf_G>
+        <_210mm_Gr.18Be>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	435	</speed>
+          <gravity>	142	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	270 254	</piercingPower>
+          <maxHeight>	411	</maxHeight>
+        </_210mm_Gr.18Be>
       </shots>
     </_210mm_Morser_21>
     <_210mm_Morser_18>
@@ -7420,6 +7527,14 @@
           <piercingPower>	53 53	</piercingPower>
           <maxHeight>	411	</maxHeight>
         </_210mm_Sprg18_Ausf_G>
+        <_210mm_Gr.18Be>
+          <defaultPortion>	0.00	</defaultPortion>
+          <speed>	435	</speed>
+          <gravity>	142	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	338 317	</piercingPower>
+          <maxHeight>	411	</maxHeight>
+        </_210mm_Gr.18Be>
       </shots>
     </_210mm_Morser_18>
     <_150mm_KwK44_L38>
@@ -7475,7 +7590,7 @@
           <speed>	757	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	85 85	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_150mm_SprgG_ausf_45>
       </shots>
     </_150mm_KwK44_L38>
@@ -7532,7 +7647,7 @@
           <speed>	757	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	85 85	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_150mm_SprgG_ausf_45>
       </shots>
     </_150mm_Rohr_L38>
@@ -7589,7 +7704,7 @@
           <speed>	645	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	85 85	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_150mm_SprgG_ausf_45>
       </shots>
     </_150mm_Rohr_L29_5>
@@ -7647,7 +7762,7 @@
           <speed>	757	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	85 85	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_150mm_SprgG_ausf_45>
       </shots>
     </_150mm_KwK44_L38_A>
@@ -7705,7 +7820,7 @@
           <speed>	1000	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	75 75	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_150mm_Sprgr>
       </shots>
     </_150mm_Pak_L63>
@@ -7763,7 +7878,7 @@
           <speed>	925	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	85 85	</piercingPower>
+          <piercingPower>	0 0	</piercingPower>
         </_170mm_PaK_K72_SprgG_ausf_46>
       </shots>
     </_170mm_PaK_K72>

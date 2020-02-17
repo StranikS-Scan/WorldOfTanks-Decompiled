@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.456	</firePenalty>
   </invisibility>
-  <repairCost>	7.70	</repairCost>
+  <repairCost>	4.797	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
@@ -51,7 +51,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	7190	</weight>
-    <maxHealth>	152	</maxHealth>
+    <maxHealth>	244	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	70	</maxHealth>
       <maxRegenHealth>	35	</maxRegenHealth>
@@ -170,8 +170,8 @@
         <vehicleRotation>	0.44	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	53	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
       <models>
         <undamaged>	vehicles/german/G22_Sturmpanzer_II/normal/lod0/Chassis.model	</undamaged>
@@ -942,8 +942,8 @@
         <vehicleRotation>	0.4	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	50	</maxRegenHealth>
+      <maxHealth>	85	</maxHealth>
+      <maxRegenHealth>	64	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
       <models>
         <undamaged>	vehicles/german/G22_Sturmpanzer_II/normal/lod0/Chassis.model	</undamaged>
@@ -1714,7 +1714,7 @@
         <armor_8>	0	</armor_8>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	38	</maxHealth>
+      <maxHealth>	61	</maxHealth>
       <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1728,12 +1728,8 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_150mm_sIG33L11>	shared	  <maxAmmo>	30	</maxAmmo>
+        <_150mm_sIG33L11>	shared	  <maxAmmo>	55	</maxAmmo>
           <reloadTime>	17.4	</reloadTime>
-          <unlocks>
-            <vehicle>	G23_Grille	  <cost>	16330	</cost>
-            </vehicle>
-          </unlocks>
           <shotDispersionFactors>
             <turretRotation>	0.48	</turretRotation>
             <afterShot>	6.0	</afterShot>

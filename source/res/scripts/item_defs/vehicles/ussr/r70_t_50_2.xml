@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.456	</firePenalty>
   </invisibility>
-  <repairCost>	16	</repairCost>
+  <repairCost>	8.081	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
@@ -41,7 +41,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	8700	</weight>
-    <maxHealth>	400	</maxHealth>
+    <maxHealth>	792	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	130	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
@@ -115,8 +115,8 @@
         <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	110	</maxHealth>
-      <maxRegenHealth>	85	</maxRegenHealth>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	98	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R00_Placeholder/normal/lod0/Chassis.model	</undamaged>
@@ -230,7 +230,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	500	</weight>
-      <maxHealth>	100	</maxHealth>
+      <maxHealth>	198	</maxHealth>
       <rotationSpeed>	45	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -244,7 +244,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <Gun_T-50-2>	shared	  <maxAmmo>	150	</maxAmmo>
+        <Gun_T-50-2>	shared	  <maxAmmo>	180	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 7 1 7	</maxPitch>

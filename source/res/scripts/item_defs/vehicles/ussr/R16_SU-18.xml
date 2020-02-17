@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.348	</firePenalty>
   </invisibility>
-  <repairCost>	5.45	</repairCost>
+  <repairCost>	2.631	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
@@ -46,7 +46,7 @@
     </armor>
     <primaryArmor>	armor_5 armor_3 armor_4	</primaryArmor>
     <weight>	3354	</weight>
-    <maxHealth>	56	</maxHealth>
+    <maxHealth>	116	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	40	</maxHealth>
       <maxRegenHealth>	20	</maxRegenHealth>
@@ -177,8 +177,8 @@
         <vehicleRotation>	0.26	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	40	</maxHealth>
-      <maxRegenHealth>	30	</maxRegenHealth>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	38	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R16_SU-18/normal/lod0/Chassis.model	</undamaged>
@@ -832,8 +832,8 @@
         <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	50	</maxHealth>
-      <maxRegenHealth>	40	</maxRegenHealth>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R16_SU-18/normal/lod0/Chassis.model	</undamaged>
@@ -1479,7 +1479,7 @@
         <armor_1>	0	</armor_1>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	14	</maxHealth>
+      <maxHealth>	29	</maxHealth>
       <rotationSpeed>	18	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1499,7 +1499,7 @@
           </armor>
           <shotDispersionRadius>	0.76	</shotDispersionRadius>
           <aimingTime>	4.5	</aimingTime>
-          <maxAmmo>	24	</maxAmmo>
+          <maxAmmo>	48	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -45 1 -45	</minPitch>
             <maxPitch>	0 3 1 3	</maxPitch>
@@ -1598,8 +1598,6 @@
     <_71-TK-3>	shared	  <unlocks>
         <radio>	_9RK	  <cost>	540	</cost>
         </radio>
-        <vehicle>	R66_SU-26	  <cost>	1400	</cost>
-        </vehicle>
       </unlocks>
     </_71-TK-3>
     <_9RK>	shared	</_9RK>

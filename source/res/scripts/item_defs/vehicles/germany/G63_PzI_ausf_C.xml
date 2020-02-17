@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.483	</firePenalty>
   </invisibility>
-  <repairCost>	4	</repairCost>
+  <repairCost>	1.804	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
@@ -39,7 +39,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	3670	</weight>
-    <maxHealth>	168	</maxHealth>
+    <maxHealth>	408	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	100	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -139,8 +139,8 @@
         <vehicleRotation>	0.26	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	53	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G63_PzI_ausf_C/normal/lod0/Chassis.model	</undamaged>
@@ -925,8 +925,8 @@
         <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	55	</maxRegenHealth>
+      <maxHealth>	85	</maxHealth>
+      <maxRegenHealth>	64	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G63_PzI_ausf_C/normal/lod0/Chassis.model	</undamaged>
@@ -1709,7 +1709,7 @@
       </armor>
       <primaryArmor>	armor_2 armor_3 armor_3	</primaryArmor>
       <weight>	600	</weight>
-      <maxHealth>	42	</maxHealth>
+      <maxHealth>	77	</maxHealth>
       <rotationSpeed>	42	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -1723,7 +1723,7 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_20mm_KwK_38_L55>	shared	  <maxAmmo>	260	</maxAmmo>
+        <_20mm_KwK_38_L55>	shared	  <maxAmmo>	520	</maxAmmo>
           <unlocks>
             <gun>	_20mm_Flak_38_L112	  <cost>	160	</cost>
             </gun>
@@ -1776,7 +1776,7 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_20mm_KwK_38_L55>
-        <_20mm_Flak_38_L112>	shared	  <maxAmmo>	260	</maxAmmo>
+        <_20mm_Flak_38_L112>	shared	  <maxAmmo>	520	</maxAmmo>
           <unlocks>
             <turret>	Turret_2_PzI_ausf_C	  <cost>	400	</cost>
             </turret>
@@ -1915,7 +1915,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	900	</weight>
-      <maxHealth>	62	</maxHealth>
+      <maxHealth>	102	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -1930,7 +1930,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.037	</invisibilityFactor>
       <guns>
-        <_20mm_KwK_38_L55>	shared	  <maxAmmo>	320	</maxAmmo>
+        <_20mm_KwK_38_L55>	shared	  <maxAmmo>	640	</maxAmmo>
           <armor>
             <armor_1>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1985,7 +1985,7 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_20mm_KwK_38_L55>
-        <_20mm_Flak_38_L112>	shared	  <maxAmmo>	320	</maxAmmo>
+        <_20mm_Flak_38_L112>	shared	  <maxAmmo>	640	</maxAmmo>
           <armor>
             <armor_1>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2040,7 +2040,7 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_20mm_Flak_38_L112>
-        <_7.92mm_Mauser_EW_141>	shared	  <maxAmmo>	640	</maxAmmo>
+        <_7.92mm_Mauser_EW_141>	shared	  <maxAmmo>	1120	</maxAmmo>
           <armor>
             <armor_1>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2181,11 +2181,7 @@
         </engine>
       </unlocks>
     </Maybach_HL_45P>
-    <Maybach_HL66P>	shared	  <unlocks>
-        <vehicle>	G25_PzII_Luchs	  <cost>	4200	</cost>
-        </vehicle>
-      </unlocks>
-    </Maybach_HL66P>
+    <Maybach_HL66P>	shared	</Maybach_HL66P>
   </engines>
   <fuelTanks>
     <Medium>	shared	</Medium>

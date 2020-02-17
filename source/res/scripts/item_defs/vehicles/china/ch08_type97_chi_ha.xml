@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.449	</firePenalty>
   </invisibility>
-  <repairCost>	2.68	</repairCost>
+  <repairCost>	1.191	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
@@ -41,7 +41,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_9 armor_4	</primaryArmor>
     <weight>	7600	</weight>
-    <maxHealth>	176	</maxHealth>
+    <maxHealth>	432	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	100	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -141,8 +141,8 @@
         <vehicleRotation>	0.26	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	53	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/chinese/Ch08_Type97_Chi_Ha/normal/lod0/Chassis.model	</undamaged>
@@ -879,8 +879,8 @@
         <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	55	</maxRegenHealth>
+      <maxHealth>	85	</maxHealth>
+      <maxRegenHealth>	64	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/chinese/Ch08_Type97_Chi_Ha/normal/lod0/Chassis.model	</undamaged>
@@ -1627,7 +1627,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1300	</weight>
-      <maxHealth>	44	</maxHealth>
+      <maxHealth>	78	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -1641,7 +1641,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_57mm_Gun_Type_97>	shared	  <maxAmmo>	120	</maxAmmo>
+        <_57mm_Gun_Type_97>	shared	  <maxAmmo>	210	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 9 1 9	</maxPitch>
@@ -1714,7 +1714,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_57mm_Gun_Type_97>
-        <_45mm_20K>	shared	  <maxAmmo>	120	</maxAmmo>
+        <_45mm_20K>	shared	  <maxAmmo>	240	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 9 1 9	</maxPitch>
@@ -1884,7 +1884,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1839	</weight>
-      <maxHealth>	64	</maxHealth>
+      <maxHealth>	108	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -1899,7 +1899,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.968	</invisibilityFactor>
       <guns>
-        <_57mm_Gun_Type_97>	shared	  <maxAmmo>	120	</maxAmmo>
+        <_57mm_Gun_Type_97>	shared	  <maxAmmo>	210	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 15 0.388889 15 0.402778 9 0.444444 9 0.458333 15 0.541667 15 0.555556 9 0.597222 9 0.611111 15 1 15	</maxPitch>
@@ -1963,7 +1963,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_57mm_Gun_Type_97>
-        <_45mm_20K>	shared	  <maxAmmo>	120	</maxAmmo>
+        <_45mm_20K>	shared	  <maxAmmo>	240	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 15 0.388889 15 0.402778 9 0.444444 9 0.458333 14 0.541667 14 0.555556 9 0.597222 9 0.611111 15 1 15	</maxPitch>
@@ -2030,7 +2030,11 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_45mm_20K>
-        <_47mm_Gun_Type_1>	shared	  <maxAmmo>	104	</maxAmmo>
+        <_47mm_Gun_Type_1>	shared	  <unlocks>
+            <vehicle>	Ch32_SU-76G_FT	  <cost>	3100	</cost>
+            </vehicle>
+          </unlocks>
+          <maxAmmo>	180	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 15 0.388889 15 0.402778 9 0.444444 9 0.458333 13 0.541667 13 0.555556 9 0.597222 9 0.611111 15 1 15	</maxPitch>

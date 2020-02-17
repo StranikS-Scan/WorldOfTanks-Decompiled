@@ -4,9 +4,11 @@ import cPickle
 import logging
 import math
 from collections import namedtuple
+from itertools import chain
 import ArenaType
 import ResMgr
 import constants
+import nations
 from gui import g_htmlTemplates, makeHtmlString
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import getReserveNameVO, getDirection
 from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES
@@ -1361,3 +1363,29 @@ class SquadBonusTooltipWindowData(ToolTipBaseData):
 
     def getDisplayableData(self, *args, **kwargs):
         return SquadBonusTooltipContent()
+
+
+class VehicleCollectorTooltipData(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(VehicleCollectorTooltipData, self).__init__(context, TOOLTIP_TYPE.VEHICLE_COLLECTOR)
+        self._setContentMargin(top=0, left=20, bottom=20, right=20)
+        self._setMargins(10, 15)
+        self._setWidth(400)
+
+    def _packBlocks(self, nationName):
+        self.__nationName = nationName
+        nationID = nations.INDICES.get(self.__nationName)
+        if nationID is None:
+            _logger.error('Incorrect nation %s', self.__nationName)
+            return []
+        else:
+            items = [formatters.packBuildUpBlockData(blocks=list(chain(self.__getHeader(), self.__getDescription())))]
+            return items
+
+    def __getHeader(self):
+        return [formatters.packImageBlockData(img=RES_ICONS.getTooltipFlag(self.__nationName), align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, padding=formatters.packPadding(bottom=-80, left=-20)), formatters.packTextBlockData(text=text_styles.highTitle(backport.text(R.strings.tooltips.vehicleCollectorInfo.header(), nation=backport.text(R.strings.nations.dyn(self.__nationName).genetiveCase()))))]
+
+    @staticmethod
+    def __getDescription():
+        return [formatters.packImageBlockData(img=backport.image(R.images.gui.maps.icons.library.collectibles_pic()), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(bottom=10)), formatters.packTextBlockData(text=text_styles.main(backport.text(R.strings.tooltips.vehicleCollectorInfo.body())), padding=formatters.packPadding(bottom=10)), formatters.packTextBlockData(text=text_styles.main(backport.text(R.strings.tooltips.vehicleCollectorInfo.note())))]

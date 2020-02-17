@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.348	</firePenalty>
   </invisibility>
-  <repairCost>	5.0	</repairCost>
+  <repairCost>	2.961	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
@@ -44,7 +44,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_7	</primaryArmor>
     <weight>	13000	</weight>
-    <maxHealth>	320	</maxHealth>
+    <maxHealth>	608	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	130	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
@@ -137,8 +137,8 @@
         <vehicleRotation>	0.28	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	90	</maxHealth>
-      <maxRegenHealth>	70	</maxRegenHealth>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	83	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/poland/Pl12_25TP_KSUST_II/normal/lod0/Chassis.model	</undamaged>
@@ -1065,8 +1065,8 @@
         <vehicleRotation>	0.25	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/poland/Pl12_25TP_KSUST_II/normal/lod0/Chassis.model	</undamaged>
@@ -2001,7 +2001,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3200	</weight>
-      <maxHealth>	80	</maxHealth>
+      <maxHealth>	112	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2015,7 +2015,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_40mm_auto_Boforsa>	shared	  <maxAmmo>	120	</maxAmmo>
+        <_40mm_auto_Boforsa>	shared	  <maxAmmo>	180	</maxAmmo>
           <armor>
             <armor_1>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2205,7 +2205,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3900	</weight>
-      <maxHealth>	130	</maxHealth>
+      <maxHealth>	152	</maxHealth>
       <rotationSpeed>	49	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2220,7 +2220,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.766	</invisibilityFactor>
       <guns>
-        <_40mm_auto_Boforsa>	shared	  <maxAmmo>	120	</maxAmmo>
+        <_40mm_auto_Boforsa>	shared	  <maxAmmo>	180	</maxAmmo>
           <armor>
             <armor_1>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2301,7 +2301,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_40mm_auto_Boforsa>
-        <_75mm_wz_1897>	shared	  <maxAmmo>	77	</maxAmmo>
+        <_75mm_wz_1897>	shared	  <maxAmmo>	90	</maxAmmo>
           <unlocks>
             <gun>	_75mm_wz_36_37	  <cost>	4500	</cost>
             </gun>
@@ -2387,7 +2387,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_wz_1897>
-        <_75mm_wz_36_37>	shared	  <maxAmmo>	70	</maxAmmo>
+        <_75mm_wz_36_37>	shared	  <maxAmmo>	85	</maxAmmo>
           <armor>
             <armor_1>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

@@ -8,17 +8,17 @@
     <loader></loader>
   </crew>
   <speedLimits>
-    <forward>	60	</forward>
-    <backward>	20	</backward>
+    <forward>	45	</forward>
+    <backward>	12	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.125	</moving>
-    <still>	0.167	</still>
-    <camouflageBonus>	0.03	</camouflageBonus>
-    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <moving>	0.046	</moving>
+    <still>	0.092	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.251	</firePenalty>
   </invisibility>
-  <repairCost>	7.20	</repairCost>
+  <repairCost>	3.6	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.2	</priceFactor>
@@ -42,7 +42,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	18000	</weight>
-    <maxHealth>	600	</maxHealth>
+    <maxHealth>	1120	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	110	</maxRegenHealth>
@@ -139,14 +139,14 @@
       <terrainResistance>	1 1.5 2.9	</terrainResistance>
       <brakeForce>	37000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	28	</rotationSpeed>
+      <rotationSpeed>	26	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.25	</vehicleMovement>
         <vehicleRotation>	0.25	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	110	</maxHealth>
-      <maxRegenHealth>	85	</maxRegenHealth>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	98	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G27_VK3001P/normal/lod0/Chassis.model	</undamaged>
@@ -850,8 +850,8 @@
         <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	90	</maxRegenHealth>
+      <maxHealth>	145	</maxHealth>
+      <maxRegenHealth>	109	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G27_VK3001P/normal/lod0/Chassis.model	</undamaged>
@@ -1560,8 +1560,8 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	6000	</weight>
-      <maxHealth>	50	</maxHealth>
-      <rotationSpeed>	33	</rotationSpeed>
+      <maxHealth>	220	</maxHealth>
+      <rotationSpeed>	28	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
@@ -1578,7 +1578,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.380783 10 0.444444 8 0.555556 8 0.619218 10 1 10	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	78	</maxAmmo>
+          <maxAmmo>	96	</maxAmmo>
           <unlocks>
             <gun>	_88mm_KwK_36_L56	  <cost>	9500	</cost>
             </gun>
@@ -1661,7 +1661,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.366894 10 0.430556 4 0.569444 4 0.633106 10 1 10	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	50	</maxAmmo>
+          <maxAmmo>	61	</maxAmmo>
           <reloadTime>	7.4	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.16	</turretRotation>
@@ -1848,8 +1848,8 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8000	</weight>
-      <maxHealth>	150	</maxHealth>
-      <rotationSpeed>	28	</rotationSpeed>
+      <maxHealth>	280	</maxHealth>
+      <rotationSpeed>	23	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
@@ -1867,7 +1867,7 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 8 0.353005 8 0.416667 7 0.583333 7 0.646995 8 1 8	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	78	</maxAmmo>
+          <maxAmmo>	96	</maxAmmo>
           <reloadTime>	4	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
@@ -1954,7 +1954,7 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 8 0.353005 8 0.416667 7 0.583333 7 0.646995 8 1 8	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	60	</maxAmmo>
+          <maxAmmo>	74	</maxAmmo>
           <unlocks>
             <vehicle>	G57_PzVI_Tiger_P	  <cost>	45100	</cost>
             </vehicle>
@@ -2041,7 +2041,7 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 8 0.353005 8 0.416667 5 0.583333 5 0.646995 8 1 8	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	28	</maxAmmo>
+          <maxAmmo>	35	</maxAmmo>
           <armor>
             <armor_1>	135	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2128,7 +2128,7 @@
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <maxAmmo>	50	</maxAmmo>
+          <maxAmmo>	61	</maxAmmo>
           <armor>
             <armor_1>	135	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2322,16 +2322,16 @@
     <detailed>
       <engines>
         <Porsche_Typ_100>
-          <smplEnginePower>	444.0581	</smplEnginePower>
-          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
+          <smplEnginePower>	420	</smplEnginePower>
+          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </Porsche_Typ_100>
         <Porsche_Typ_100_1>
-          <smplEnginePower>	634.3687	</smplEnginePower>
-          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
+          <smplEnginePower>	480	</smplEnginePower>
+          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </Porsche_Typ_100_1>
         <Porsche_Typ_100_3>
-          <smplEnginePower>	708.3784	</smplEnginePower>
-          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
+          <smplEnginePower>	520	</smplEnginePower>
+          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </Porsche_Typ_100_3>
       </engines>
       <chassis>

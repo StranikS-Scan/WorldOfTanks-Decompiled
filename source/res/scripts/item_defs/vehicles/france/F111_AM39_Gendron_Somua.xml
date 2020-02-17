@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.401	</firePenalty>
   </invisibility>
-  <repairCost>	2.0	</repairCost>
+  <repairCost>	0.789	</repairCost>
   <premiumVehicleXPFactor>	0.7	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
@@ -37,7 +37,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	3529	</weight>
-    <maxHealth>	112	</maxHealth>
+    <maxHealth>	284	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	80	</maxHealth>
       <maxRegenHealth>	55	</maxRegenHealth>
@@ -144,8 +144,8 @@
         <vehicleRotation>	0.15	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	53	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F111_AM39_Gendron_Somua/normal/lod0/Chassis.model	</undamaged>
@@ -485,7 +485,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	800	</weight>
-      <maxHealth>	28	</maxHealth>
+      <maxHealth>	71	</maxHealth>
       <rotationSpeed>	42	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -499,7 +499,7 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_25mm_SA35>	shared	  <maxAmmo>	150	</maxAmmo>
+        <_25mm_SA35>	shared	  <maxAmmo>	300	</maxAmmo>
           <armor>
             <gun>	10	</gun>
           </armor>

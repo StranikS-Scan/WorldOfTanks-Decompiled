@@ -228,6 +228,11 @@ def showBlueprintView(vehicleCD, exitEvent=None, itemsCache=None):
      'exitEvent': exitEvent}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
+def showTechTreeOverlay():
+    from gui.impl.lobby.tech_tree.tech_tree_overlay_view import TechTreeOverlayView
+    g_eventBus.handleEvent(events.LoadUnboundViewEvent(layoutID=R.views.lobby.tech_tree.tech_tree_overlay_view.TechTreeOverlayView(), viewClass=TechTreeOverlayView, scope=ScopeTemplates.LOBBY_SUB_SCOPE), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
 def showChangeVehicleNationDialog(vehicleCD):
     from gui.impl.lobby.nation_change.nation_change_screen import NationChangeScreen
     g_eventBus.handleEvent(events.LoadUnboundViewEvent(R.views.lobby.nation_change.nation_change_screen.NationChangeScreen(), NationChangeScreen, ScopeTemplates.LOBBY_SUB_SCOPE, ctx={'vehicleCD': vehicleCD}), scope=EVENT_BUS_SCOPE.LOBBY)

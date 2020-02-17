@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.404	</firePenalty>
   </invisibility>
-  <repairCost>	3.3	</repairCost>
+  <repairCost>	1.32	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
@@ -36,7 +36,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	4554	</weight>
-    <maxHealth>	136	</maxHealth>
+    <maxHealth>	340	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	75	</maxHealth>
       <maxRegenHealth>	50	</maxRegenHealth>
@@ -146,8 +146,8 @@
         <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	50	</maxHealth>
-      <maxRegenHealth>	40	</maxRegenHealth>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/italy/It05_Carro_L6_40/normal/lod0/Chassis.model	</undamaged>
@@ -950,8 +950,8 @@
         <vehicleRotation>	0.28	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	53	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/italy/It05_Carro_L6_40/normal/lod0/Chassis.model	</undamaged>
@@ -1753,7 +1753,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	350	</weight>
-      <maxHealth>	34	</maxHealth>
+      <maxHealth>	85	</maxHealth>
       <rotationSpeed>	42	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -1767,7 +1767,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <Cannone_da_37_40>	shared	  <maxAmmo>	68	</maxAmmo>
+        <Cannone_da_37_40>	shared	  <maxAmmo>	155	</maxAmmo>
           <unlocks>
             <gun>	Mitragliera_Breda_cal_20_mod_35	  <cost>	150	</cost>
             </gun>
@@ -1833,11 +1833,7 @@
             <aoTextureSize>	256 128	</aoTextureSize>
           </camouflage>
         </Cannone_da_37_40>
-        <Mitragliera_Breda_cal_20_mod_35>	shared	  <maxAmmo>	300	</maxAmmo>
-          <unlocks>
-            <vehicle>	It03_M15_42	  <cost>	1275	</cost>
-            </vehicle>
-          </unlocks>
+        <Mitragliera_Breda_cal_20_mod_35>	shared	  <maxAmmo>	600	</maxAmmo>
           <armor>
             <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

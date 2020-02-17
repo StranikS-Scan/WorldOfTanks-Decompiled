@@ -17,10 +17,10 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.405	</firePenalty>
   </invisibility>
-  <repairCost>	3.15	</repairCost>
+  <repairCost>	2.5	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
-    <priceFactor>	0.6	</priceFactor>
+    <priceFactor>	0.8	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
     <exclusionMask></exclusionMask>
   </camouflage>
@@ -38,7 +38,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	6850	</weight>
-    <maxHealth>	168	</maxHealth>
+    <maxHealth>	536	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	110	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -117,10 +117,10 @@
     <Chassis_GB59_Cruiser_Mk_IV>
       <userString>	#gb_vehicles:Chassis_GB59_Cruiser_Mk_IV	</userString>
       <tags></tags>
-      <level>	2	</level>
-      <price>	670	</price>
+      <level>	3	</level>
+      <price>	1340	</price>
       <unlocks>
-        <chassis>	Chassis_GB59_Cruiser_Mk_IV_2	  <cost>	330	</cost>
+        <chassis>	Chassis_GB59_Cruiser_Mk_IV_2	  <cost>	1330	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -134,12 +134,12 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	35	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.3	</vehicleMovement>
-        <vehicleRotation>	0.3	</vehicleRotation>
+        <vehicleMovement>	0.25	</vehicleMovement>
+        <vehicleRotation>	0.25	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	85	</maxHealth>
+      <maxRegenHealth>	64	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB59_Cruiser_Mk_IV/normal/lod0/Chassis.model	</undamaged>
@@ -875,10 +875,10 @@
     <Chassis_GB59_Cruiser_Mk_IV_2>
       <userString>	#gb_vehicles:Chassis_GB59_Cruiser_Mk_IV_2	</userString>
       <tags></tags>
-      <level>	3	</level>
-      <price>	1900	</price>
+      <level>	4	</level>
+      <price>	3800	</price>
       <unlocks>
-        <vehicle>	GB60_Covenanter	  <cost>	2300	</cost>
+        <vehicle>	GB60_Covenanter	  <cost>	12300	</cost>
         </vehicle>
       </unlocks>
       <armor>
@@ -892,12 +892,12 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	38	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.28	</vehicleMovement>
-        <vehicleRotation>	0.28	</vehicleRotation>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	55	</maxRegenHealth>
+      <maxHealth>	95	</maxHealth>
+      <maxRegenHealth>	71	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB59_Cruiser_Mk_IV/normal/lod0/Chassis.model	</undamaged>
@@ -1635,10 +1635,10 @@
     <Turret_1_GB59_Cruiser_Mk_IV>
       <userString>	#gb_vehicles:Turret_1_GB59_Cruiser_Mk_IV	</userString>
       <tags></tags>
-      <level>	2	</level>
-      <price>	730	</price>
+      <level>	3	</level>
+      <price>	1460	</price>
       <unlocks>
-        <turret>	Turret_2_GB59_Cruiser_Mk_IV	  <cost>	325	</cost>
+        <turret>	Turret_2_GB59_Cruiser_Mk_IV	  <cost>	1325	</cost>
         </turret>
       </unlocks>
       <armor>
@@ -1658,21 +1658,21 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2650	</weight>
-      <maxHealth>	42	</maxHealth>
+      <maxHealth>	104	</maxHealth>
       <rotationSpeed>	42	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
         <maxRegenHealth>	35	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	320	</circularVisionRadius>
+      <circularVisionRadius>	330	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	50	</maxHealth>
         <maxRegenHealth>	25	</maxRegenHealth>
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_2pdr_Gun_Mk_IX>	shared	  <maxAmmo>	130	</maxAmmo>
+        <_2pdr_Gun_Mk_IX>	shared	  <maxAmmo>	240	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 15 0.366894 15 0.430556 5 0.569444 5 0.633106 15 1 15	</maxPitch>
@@ -1741,7 +1741,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_2pdr_Gun_Mk_IX>
-        <_40mm_Pom_Pom>	shared	  <maxAmmo>	200	</maxAmmo>
+        <_40mm_Pom_Pom>	shared	  <maxAmmo>	360	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 15 0.366894 15 0.430556 5 0.569444 5 0.633106 15 1 15	</maxPitch>
@@ -1888,8 +1888,8 @@
     <Turret_2_GB59_Cruiser_Mk_IV>
       <userString>	#gb_vehicles:Turret_2_GB59_Cruiser_Mk_IV	</userString>
       <tags></tags>
-      <level>	3	</level>
-      <price>	1900	</price>
+      <level>	4	</level>
+      <price>	3800	</price>
       <unlocks>
         <gun>	_40mm_Bofors_MkI	  <cost>	1200	</cost>
         </gun>
@@ -1909,21 +1909,21 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2650	</weight>
-      <maxHealth>	62	</maxHealth>
+      <maxHealth>	134	</maxHealth>
       <rotationSpeed>	42	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
         <maxRegenHealth>	35	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	330	</circularVisionRadius>
+      <circularVisionRadius>	340	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	50	</maxHealth>
         <maxRegenHealth>	25	</maxRegenHealth>
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_2pdr_Gun_Mk_IX>	shared	  <maxAmmo>	130	</maxAmmo>
+        <_2pdr_Gun_Mk_IX>	shared	  <maxAmmo>	240	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 15 0.366894 15 0.430556 5 0.569444 5 0.633106 15 1 15	</maxPitch>
@@ -1983,7 +1983,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_2pdr_Gun_Mk_IX>
-        <_40mm_Pom_Pom>	shared	  <maxAmmo>	200	</maxAmmo>
+        <_40mm_Pom_Pom>	shared	  <maxAmmo>	360	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 15 0.366894 15 0.430556 5 0.569444 5 0.633106 15 1 15	</maxPitch>
@@ -2056,7 +2056,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_40mm_Pom_Pom>
-        <_40mm_Bofors_MkI>	shared	  <maxAmmo>	120	</maxAmmo>
+        <_40mm_Bofors_MkI>	shared	  <maxAmmo>	240	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 15 0.366894 15 0.430556 5 0.569444 5 0.633106 15 1 15	</maxPitch>

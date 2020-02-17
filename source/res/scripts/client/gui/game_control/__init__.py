@@ -51,6 +51,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.referral_program_controller import ReferralProgramController as _ReferralController
     from gui.game_control.badges_controller import BadgesController as _Badges
     from gui.game_control.special_sound_ctrl import SpecialSoundCtrl as _SpecialSoundCtrl
+    from gui.game_control.statistic_controller import StatisticController as _StatisticController
     from gui.game_control.bob_controller import BobController as _BobController
     from gui.game_control.bob_announcement_controller import BobAnnouncementController as _BobAnnouncementController
     from gui.game_control.bob_sound_controller import BobSoundController as _BobSoundController
@@ -105,4 +106,5 @@ def getGameControllersConfig(manager):
     _config(_interface.IBadgesController, _Badges())
     _config(_interface.IAnonymizerController, _Anonymizer())
     _config(_interface.IBobAnnouncementController, _BobAnnouncementController())
+    _config(_interface.IWebStatisticsController, _StatisticController())
     _config(_interface.IBobSoundController, _BobSoundController())

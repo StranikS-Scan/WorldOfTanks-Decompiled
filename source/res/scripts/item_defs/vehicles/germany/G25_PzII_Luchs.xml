@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.456	</firePenalty>
   </invisibility>
-  <repairCost>	5	</repairCost>
+  <repairCost>	2.656	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
@@ -38,7 +38,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	6830	</weight>
-    <maxHealth>	248	</maxHealth>
+    <maxHealth>	512	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	125	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
@@ -138,8 +138,8 @@
         <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	55	</maxRegenHealth>
+      <maxHealth>	85	</maxHealth>
+      <maxRegenHealth>	64	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G25_PzII_Luchs/normal/lod0/Chassis.model	</undamaged>
@@ -894,8 +894,8 @@
         <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	80	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
+      <maxHealth>	95	</maxHealth>
+      <maxRegenHealth>	71	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G25_PzII_Luchs/normal/lod0/Chassis.model	</undamaged>
@@ -1603,7 +1603,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	950	</weight>
-      <maxHealth>	62	</maxHealth>
+      <maxHealth>	98	</maxHealth>
       <rotationSpeed>	42	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -1617,7 +1617,7 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_20mm_KwK_38_L55>	shared	  <maxAmmo>	330	</maxAmmo>
+        <_20mm_KwK_38_L55>	shared	  <maxAmmo>	660	</maxAmmo>
           <reloadTime>	3	</reloadTime>
           <aimingTime>	1.5	</aimingTime>
           <shotDispersionRadius>	0.57	</shotDispersionRadius>
@@ -1685,7 +1685,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_20mm_KwK_38_L55>
-        <_37mm_KwK_L46>	shared	  <maxAmmo>	77	</maxAmmo>
+        <_37mm_KwK_L46>	shared	  <maxAmmo>	175	</maxAmmo>
           <unlocks>
             <turret>	PzIIL_Grosseturm	  <cost>	1980	</cost>
             </turret>
@@ -1758,7 +1758,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_37mm_KwK_L46>
-        <_20mm_Flak_38_L112>	shared	  <maxAmmo>	330	</maxAmmo>
+        <_20mm_Flak_38_L112>	shared	  <maxAmmo>	660	</maxAmmo>
           <reloadTime>	3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
@@ -1824,7 +1824,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_20mm_Flak_38_L112>
-        <_30mm_MK103>	shared	  <maxAmmo>	240	</maxAmmo>
+        <_30mm_MK103>	shared	  <maxAmmo>	424	</maxAmmo>
           <armor>
             <armor_1>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1979,7 +1979,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2000	</weight>
-      <maxHealth>	92	</maxHealth>
+      <maxHealth>	128	</maxHealth>
       <rotationSpeed>	38	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -1994,7 +1994,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.985	</invisibilityFactor>
       <guns>
-        <_20mm_KwK_38_L55>	shared	  <maxAmmo>	330	</maxAmmo>
+        <_20mm_KwK_38_L55>	shared	  <maxAmmo>	660	</maxAmmo>
           <reloadTime>	2.7	</reloadTime>
           <aimingTime>	1.4	</aimingTime>
           <shotDispersionRadius>	0.57	</shotDispersionRadius>
@@ -2056,7 +2056,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_20mm_KwK_38_L55>
-        <_37mm_KwK_L46>	shared	  <maxAmmo>	77	</maxAmmo>
+        <_37mm_KwK_L46>	shared	  <maxAmmo>	175	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -2125,7 +2125,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_37mm_KwK_L46>
-        <_20mm_Flak_38_L112>	shared	  <maxAmmo>	330	</maxAmmo>
+        <_20mm_Flak_38_L112>	shared	  <maxAmmo>	660	</maxAmmo>
           <reloadTime>	2.7	</reloadTime>
           <aimingTime>	1.4	</aimingTime>
           <shotDispersionFactors>
@@ -2187,7 +2187,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_20mm_Flak_38_L112>
-        <_30mm_MK103>	shared	  <maxAmmo>	240	</maxAmmo>
+        <_30mm_MK103>	shared	  <maxAmmo>	420	</maxAmmo>
           <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2257,7 +2257,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_30mm_MK103>
-        <_50mm_KwK_38_L42>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_50mm_KwK_38_L42>	shared	  <maxAmmo>	90	</maxAmmo>
           <unlocks>
             <gun>	_50mm_KwK_39_L60	  <cost>	1350	</cost>
             </gun>
@@ -2335,7 +2335,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.1 8 0.163662 10 0.369671 10 0.433333 8 0.566667 8 0.630329 10 0.836338 10 0.9 8 1 8	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	50	</maxAmmo>
+          <maxAmmo>	75	</maxAmmo>
           <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

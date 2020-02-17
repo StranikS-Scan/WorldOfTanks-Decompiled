@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.387	</firePenalty>
   </invisibility>
-  <repairCost>	3.2	</repairCost>
+  <repairCost>	1.538	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
@@ -42,7 +42,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_5 armor_6	</primaryArmor>
     <weight>	10860	</weight>
-    <maxHealth>	184	</maxHealth>
+    <maxHealth>	416	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	100	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -156,8 +156,8 @@
         <vehicleRotation>	0.25	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	55	</maxRegenHealth>
+      <maxHealth>	85	</maxHealth>
+      <maxRegenHealth>	64	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F44_Somua_S35/normal/lod0/Chassis.model	</undamaged>
@@ -1060,8 +1060,8 @@
         <vehicleRotation>	0.23	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	80	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
+      <maxHealth>	95	</maxHealth>
+      <maxRegenHealth>	71	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F44_Somua_S35/normal/lod0/Chassis.model	</undamaged>
@@ -1965,7 +1965,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2000	</weight>
-      <maxHealth>	46	</maxHealth>
+      <maxHealth>	79	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -1979,7 +1979,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_47mm_SA34>	shared	  <maxAmmo>	118	</maxAmmo>
+        <_47mm_SA34>	shared	  <maxAmmo>	235	</maxAmmo>
           <unlocks>
             <gun>	_47mm_SA35	  <cost>	265	</cost>
             </gun>
@@ -2054,7 +2054,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_47mm_SA34>
-        <_47mm_SA35>	shared	  <maxAmmo>	118	</maxAmmo>
+        <_47mm_SA35>	shared	  <maxAmmo>	205	</maxAmmo>
           <unlocks>
             <turret>	Turret_2_Somua_S35	  <cost>	350	</cost>
             </turret>
@@ -2206,7 +2206,7 @@
       <unlocks>
         <gun>	_47mm_SA37	  <cost>	450	</cost>
         </gun>
-        <vehicle>	F70_SARL42	  <cost>	3230	</cost>
+        <vehicle>	F04_B1	  <cost>	4200	</cost>
         </vehicle>
       </unlocks>
       <armor>
@@ -2226,7 +2226,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2340	</weight>
-      <maxHealth>	66	</maxHealth>
+      <maxHealth>	104	</maxHealth>
       <rotationSpeed>	42	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -2241,7 +2241,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.013	</invisibilityFactor>
       <guns>
-        <_47mm_SA34>	shared	  <maxAmmo>	118	</maxAmmo>
+        <_47mm_SA34>	shared	  <maxAmmo>	235	</maxAmmo>
           <armor>
             <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
@@ -2316,7 +2316,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_47mm_SA34>
-        <_47mm_SA35>	shared	  <maxAmmo>	118	</maxAmmo>
+        <_47mm_SA35>	shared	  <maxAmmo>	205	</maxAmmo>
           <armor>
             <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
@@ -2387,7 +2387,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_47mm_SA35>
-        <_47mm_SA37>	shared	  <maxAmmo>	69	</maxAmmo>
+        <_47mm_SA37>	shared	  <maxAmmo>	120	</maxAmmo>
           <armor>
             <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
@@ -2543,7 +2543,11 @@
         </engine>
       </unlocks>
     </Hispano_219CV_V8>
-    <Somua_230_V8>	shared	</Somua_230_V8>
+    <Somua_230_V8>	shared	  <unlocks>
+        <vehicle>	F32_Somua_Sau_40	  <cost>	3100	</cost>
+        </vehicle>
+      </unlocks>
+    </Somua_230_V8>
   </engines>
   <fuelTanks>
     <Medium>	shared	</Medium>

@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.576	</firePenalty>
   </invisibility>
-  <repairCost>	6.7	</repairCost>
+  <repairCost>	3.35	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
@@ -41,7 +41,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	2450	</weight>
-    <maxHealth>	256	</maxHealth>
+    <maxHealth>	512	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	130	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
@@ -141,8 +141,8 @@
         <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	90	</maxHealth>
-      <maxRegenHealth>	70	</maxRegenHealth>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	83	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F62_ELC_AMX/normal/lod0/Chassis.model	</undamaged>
@@ -752,8 +752,8 @@
         <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F62_ELC_AMX/normal/lod0/Chassis.model	</undamaged>
@@ -1369,7 +1369,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	500	</weight>
-      <maxHealth>	64	</maxHealth>
+      <maxHealth>	128	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1383,7 +1383,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_SA32L>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_75mm_SA32L>	shared	  <maxAmmo>	70	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -13 1 -13	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -1462,7 +1462,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_SA32L>
-        <_75mm_Long_44L>	shared	  <maxAmmo>	48	</maxAmmo>
+        <_75mm_Long_44L>	shared	  <maxAmmo>	60	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -13 1 -13	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -1545,7 +1545,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_Long_44L>
-        <_90mm_D914>	shared	  <maxAmmo>	36	</maxAmmo>
+        <_90mm_D914>	shared	  <maxAmmo>	44	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -13 1 -13	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>

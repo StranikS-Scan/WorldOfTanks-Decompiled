@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileTechniqueWindow.py
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.Scaleform.daapi.view.lobby.profile.QueuedVehicleDossierReceiver import QueuedVehicleDossierReceiver
 from gui.Scaleform.daapi.view.lobby.profile.ProfileTechnique import ProfileTechnique
 
@@ -11,6 +13,20 @@ class ProfileTechniqueWindow(ProfileTechnique):
         self.__currentlyRequestingVehicleId = None
         self.__dataReceiver.onDataReceived += self.__requestedDataReceived
         return
+
+    def _populate(self):
+        super(ProfileTechniqueWindow, self)._populate()
+        self.as_setTabsDataS([{'id': 'all',
+          'label': backport.text(R.strings.profile.profile.tabs.title.allTime()),
+          'linkage': 'RegularItemsTabViewUI',
+          'selected': True,
+          'enabled': True,
+          'tooltip': backport.text(R.strings.profile.profile.tabs.tooltip.forAllTime())}, {'id': 'season',
+          'label': backport.text(R.strings.profile.profile.tabs.title.season()),
+          'linkage': 'RegularItemsTabViewUI',
+          'selected': False,
+          'enabled': True,
+          'tooltip': backport.text(R.strings.profile.profile.tabs.tooltip.forTime(), time='--')}])
 
     def requestData(self, vehicleId):
         self.as_responseVehicleDossierS(None)

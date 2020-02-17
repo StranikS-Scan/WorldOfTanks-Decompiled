@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.42	</firePenalty>
   </invisibility>
-  <repairCost>	2.0	</repairCost>
+  <repairCost>	0.774	</repairCost>
   <premiumVehicleXPFactor>	0.7	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
@@ -45,7 +45,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	3400	</weight>
-    <maxHealth>	144	</maxHealth>
+    <maxHealth>	372	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	80	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -152,8 +152,8 @@
         <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	55	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	53	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F42_AMR_35/normal/lod0/Chassis.model	</undamaged>
@@ -648,7 +648,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1030	</weight>
-      <maxHealth>	36	</maxHealth>
+      <maxHealth>	93	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -662,7 +662,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_25mm_SA35>	shared	  <maxAmmo>	78	</maxAmmo>
+        <_25mm_SA35>	shared	  <maxAmmo>	155	</maxAmmo>
           <armor>
             <gun>	10	</gun>
           </armor>

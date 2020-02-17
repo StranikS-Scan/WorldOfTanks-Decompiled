@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.458	</firePenalty>
   </invisibility>
-  <repairCost>	2.49	</repairCost>
+  <repairCost>	1.092	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
@@ -39,7 +39,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	4200.0	</weight>
-    <maxHealth>	160	</maxHealth>
+    <maxHealth>	456	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	100	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -139,8 +139,8 @@
         <vehicleRotation>	0.25	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	53	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G08_Pz38t/normal/lod0/Chassis.model	</undamaged>
@@ -874,8 +874,8 @@
         <vehicleRotation>	0.21	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	55	</maxRegenHealth>
+      <maxHealth>	85	</maxHealth>
+      <maxRegenHealth>	64	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G08_Pz38t/normal/lod0/Chassis.model	</undamaged>
@@ -1616,7 +1616,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1200	</weight>
-      <maxHealth>	40	</maxHealth>
+      <maxHealth>	84	</maxHealth>
       <rotationSpeed>	32	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -1634,7 +1634,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	90	</maxAmmo>
+          <maxAmmo>	180	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -1707,7 +1707,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	340	</maxAmmo>
+          <maxAmmo>	680	</maxAmmo>
           <reloadTime>	3.9	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
@@ -1852,7 +1852,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1800.0	</weight>
-      <maxHealth>	90	</maxHealth>
+      <maxHealth>	114	</maxHealth>
       <rotationSpeed>	32	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -1871,7 +1871,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	90	</maxAmmo>
+          <maxAmmo>	180	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -1942,7 +1942,7 @@
           </pitchLimits>
           <reloadTime>	3.4	</reloadTime>
           <aimingTime>	1.4	</aimingTime>
-          <maxAmmo>	340	</maxAmmo>
+          <maxAmmo>	680	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.07	</turretRotation>
             <afterShot>	1.3	</afterShot>
@@ -2002,7 +2002,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	56	</maxAmmo>
+          <maxAmmo>	100	</maxAmmo>
           <aimingTime>	1.7	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
@@ -2141,11 +2141,7 @@
         </engine>
       </unlocks>
     </Praga_EPA_2>
-    <Praga_EPA_3>	shared	  <unlocks>
-        <vehicle>	G52_Pz38_NA	  <cost>	3800	</cost>
-        </vehicle>
-      </unlocks>
-    </Praga_EPA_3>
+    <Praga_EPA_3>	shared	</Praga_EPA_3>
   </engines>
   <fuelTanks>
     <Medium>	shared	</Medium>

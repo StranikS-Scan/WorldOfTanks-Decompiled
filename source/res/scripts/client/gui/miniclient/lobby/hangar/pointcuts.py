@@ -18,13 +18,13 @@ class DisableTankServiceButtons(aop.Pointcut):
 class MaintenanceButtonFlickering(aop.Pointcut):
 
     def __init__(self, config):
-        aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.hangar.AmmunitionPanel', 'AmmunitionPanel', 'as_setAmmoS', aspects=(aspects.MaintenanceButtonFlickering(config),))
+        aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.hangar.ammunition_panel', 'AmmunitionPanel', 'as_setAmmoS', aspects=(aspects.MaintenanceButtonFlickering(config),))
 
 
 class DeviceButtonsFlickering(aop.Pointcut):
 
     def __init__(self, config):
-        aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.hangar.AmmunitionPanel', 'AmmunitionPanel', 'as_setDataS', aspects=(aspects.DeviceButtonsFlickering(config),))
+        aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.hangar.ammunition_panel', 'AmmunitionPanel', 'as_setDataS', aspects=(aspects.DeviceButtonsFlickering(config),))
 
 
 class TankModelHangarVisibility(aop.Pointcut):

@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.383	</firePenalty>
   </invisibility>
-  <repairCost>	3.50	</repairCost>
+  <repairCost>	1.524	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
@@ -46,7 +46,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	7830	</weight>
-    <maxHealth>	200	</maxHealth>
+    <maxHealth>	496	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	100	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -146,8 +146,8 @@
         <vehicleRotation>	0.32	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	53	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G83_Pz_IV_AusfA/normal/lod0/Chassis.model	</undamaged>
@@ -894,8 +894,8 @@
         <vehicleRotation>	0.29	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	55	</maxRegenHealth>
+      <maxHealth>	85	</maxHealth>
+      <maxRegenHealth>	64	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G83_Pz_IV_AusfA/normal/lod0/Chassis.model	</undamaged>
@@ -1650,7 +1650,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1650	</weight>
-      <maxHealth>	50	</maxHealth>
+      <maxHealth>	94	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -1664,7 +1664,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_50mm_KwK_38_L42>	shared	  <maxAmmo>	150	</maxAmmo>
+        <_50mm_KwK_38_L42>	shared	  <maxAmmo>	265	</maxAmmo>
           <unlocks>
             <gun>	_75mm_KwK_37_L24	  <cost>	800	</cost>
             </gun>
@@ -1729,7 +1729,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_50mm_KwK_38_L42>
-        <_75mm_KwK_37_L24>	shared	  <maxAmmo>	122	</maxAmmo>
+        <_75mm_KwK_37_L24>	shared	  <maxAmmo>	215	</maxAmmo>
           <armor>
             <armor_1>	16	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1872,7 +1872,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1800	</weight>
-      <maxHealth>	70	</maxHealth>
+      <maxHealth>	124	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -1886,7 +1886,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_50mm_KwK_38_L42>	shared	  <maxAmmo>	150	</maxAmmo>
+        <_50mm_KwK_38_L42>	shared	  <maxAmmo>	265	</maxAmmo>
           <armor>
             <armor_2>	14.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
@@ -1947,7 +1947,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_50mm_KwK_38_L42>
-        <_75mm_KwK_37_L24>	shared	  <maxAmmo>	122	</maxAmmo>
+        <_75mm_KwK_37_L24>	shared	  <maxAmmo>	215	</maxAmmo>
           <armor>
             <armor_2>	14.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
@@ -2074,11 +2074,7 @@
         </engine>
       </unlocks>
     </Maybach_HL_108TR>
-    <Maybach_HL_120_TR>	shared	  <unlocks>
-        <vehicle>	G80_Pz_IV_AusfD	  <cost>	4140	</cost>
-        </vehicle>
-      </unlocks>
-    </Maybach_HL_120_TR>
+    <Maybach_HL_120_TR>	shared	</Maybach_HL_120_TR>
   </engines>
   <fuelTanks>
     <Medium>	shared	</Medium>

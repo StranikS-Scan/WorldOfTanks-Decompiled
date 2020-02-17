@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.378	</firePenalty>
   </invisibility>
-  <repairCost>	4.0	</repairCost>
+  <repairCost>	1.818	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
@@ -45,7 +45,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	7827	</weight>
-    <maxHealth>	184	</maxHealth>
+    <maxHealth>	440	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	110	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -155,8 +155,8 @@
         <vehicleRotation>	0.25	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	53	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB15_Stuart_I/normal/lod0/Chassis.model	</undamaged>
@@ -1053,8 +1053,8 @@
         <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	55	</maxRegenHealth>
+      <maxHealth>	85	</maxHealth>
+      <maxRegenHealth>	64	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB15_Stuart_I/normal/lod0/Chassis.model	</undamaged>
@@ -1955,7 +1955,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1250	</weight>
-      <maxHealth>	46	</maxHealth>
+      <maxHealth>	80	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -1969,7 +1969,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_M-5>	shared	  <maxAmmo>	103	</maxAmmo>
+        <_37mm_M-5>	shared	  <maxAmmo>	205	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.388889 10 0.402778 5 0.597222 5 0.611111 10 1 10	</maxPitch>
@@ -2122,7 +2122,7 @@
       </armor>
       <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
       <weight>	1472	</weight>
-      <maxHealth>	66	</maxHealth>
+      <maxHealth>	110	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -2137,7 +2137,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.047	</invisibilityFactor>
       <guns>
-        <_37mm_M-5>	shared	  <maxAmmo>	106	</maxAmmo>
+        <_37mm_M-5>	shared	  <maxAmmo>	210	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.388889 10 0.402778 5 0.597222 5 0.611111 10 1 10	</maxPitch>
@@ -2199,11 +2199,7 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_37mm_M-5>
-        <_37mm_M-6_L53>	shared	  <maxAmmo>	106	</maxAmmo>
-          <unlocks>
-            <vehicle>	GB17_Grant_I	  <cost>	3720	</cost>
-            </vehicle>
-          </unlocks>
+        <_37mm_M-6_L53>	shared	  <maxAmmo>	185	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.388889 10 0.402778 4 0.597222 4 0.611111 10 1 10	</maxPitch>
@@ -2270,7 +2266,7 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_37mm_M-6_L53>
-        <_2pdr_Gun_Mk_IX>	shared	  <maxAmmo>	98	</maxAmmo>
+        <_2pdr_Gun_Mk_IX>	shared	  <maxAmmo>	170	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.388889 10 0.402778 4 0.597222 4 0.611111 10 1 10	</maxPitch>

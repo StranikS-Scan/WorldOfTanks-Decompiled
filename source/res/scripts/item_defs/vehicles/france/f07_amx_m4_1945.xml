@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.158	</firePenalty>
   </invisibility>
-  <repairCost>	6.78	</repairCost>
+  <repairCost>	5.322	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.4	</priceFactor>
@@ -45,7 +45,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	37000	</weight>
-    <maxHealth>	960	</maxHealth>
+    <maxHealth>	1376	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -144,8 +144,8 @@
         <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	170	</maxHealth>
-      <maxRegenHealth>	130	</maxRegenHealth>
+      <maxHealth>	205	</maxHealth>
+      <maxRegenHealth>	154	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F07_AMX_M4_1945/normal/lod0/Chassis.model	</undamaged>
@@ -1053,8 +1053,8 @@
         <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	145	</maxRegenHealth>
+      <maxHealth>	230	</maxHealth>
+      <maxRegenHealth>	173	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F07_AMX_M4_1945/normal/lod0/Chassis.model	</undamaged>
@@ -1967,7 +1967,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4000	</weight>
-      <maxHealth>	240	</maxHealth>
+      <maxHealth>	264	</maxHealth>
       <rotationSpeed>	32	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -1981,7 +1981,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_90mm_canon_DCA_30>	shared	  <maxAmmo>	74	</maxAmmo>
+        <_90mm_canon_DCA_30>	shared	  <maxAmmo>	90	</maxAmmo>
           <unlocks>
             <gun>	_90mm_F3	  <cost>	15000	</cost>
             </gun>
@@ -2323,7 +2323,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	6400	</weight>
-      <maxHealth>	390	</maxHealth>
+      <maxHealth>	344	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -2338,7 +2338,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.039	</invisibilityFactor>
       <guns>
-        <_90mm_canon_DCA_30>	shared	  <maxAmmo>	74	</maxAmmo>
+        <_90mm_canon_DCA_30>	shared	  <maxAmmo>	90	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -12 1 -12	</minPitch>
             <maxPitch>	0 10 0.158333 10 0.222222 1 0.777778 1 0.841667 10 1 10	</maxPitch>

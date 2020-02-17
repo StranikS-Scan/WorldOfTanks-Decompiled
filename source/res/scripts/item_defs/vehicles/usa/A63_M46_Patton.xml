@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.315	</firePenalty>
   </invisibility>
-  <repairCost>	10.476	</repairCost>
+  <repairCost>	8.283	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.8	</priceFactor>
@@ -43,7 +43,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	20050	</weight>
-    <maxHealth>	1280	</maxHealth>
+    <maxHealth>	1720	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	160	</maxRegenHealth>
@@ -133,8 +133,8 @@
         <vehicleRotation>	0.13	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	230	</maxHealth>
-      <maxRegenHealth>	175	</maxRegenHealth>
+      <maxHealth>	275	</maxHealth>
+      <maxRegenHealth>	206	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A63_M46_Patton/normal/lod0/Chassis.model	</undamaged>
@@ -1026,8 +1026,8 @@
         <vehicleRotation>	0.11	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	240	</maxHealth>
-      <maxRegenHealth>	180	</maxRegenHealth>
+      <maxHealth>	290	</maxHealth>
+      <maxRegenHealth>	218	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A63_M46_Patton/normal/lod0/Chassis.model	</undamaged>
@@ -1928,7 +1928,7 @@
       </armor>
       <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
       <weight>	8000	</weight>
-      <maxHealth>	320	</maxHealth>
+      <maxHealth>	330	</maxHealth>
       <rotationSpeed>	38	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -2383,7 +2383,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	9700	</weight>
-      <maxHealth>	420	</maxHealth>
+      <maxHealth>	430	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -2750,7 +2750,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_105mm_Gun_T5E1M2>
-        <_105mm_SPH_M4_L23>	shared	  <maxAmmo>	54	</maxAmmo>
+        <_105mm_SPH_M4_L23>	shared	  <maxAmmo>	80	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	4.0	</afterShot>

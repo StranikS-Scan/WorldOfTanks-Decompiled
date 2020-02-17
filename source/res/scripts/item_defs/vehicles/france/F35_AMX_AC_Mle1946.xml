@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.272	</firePenalty>
   </invisibility>
-  <repairCost>	7.5	</repairCost>
+  <repairCost>	6.15	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.4	</priceFactor>
@@ -51,7 +51,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	35200	</weight>
-    <maxHealth>	656	</maxHealth>
+    <maxHealth>	800	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -181,8 +181,8 @@
         <vehicleRotation>	0.26	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	170	</maxHealth>
-      <maxRegenHealth>	130	</maxRegenHealth>
+      <maxHealth>	205	</maxHealth>
+      <maxRegenHealth>	154	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F35_AMX_AC_Mle1946/normal/lod0/Chassis.model	</undamaged>
@@ -931,8 +931,8 @@
         <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	145	</maxRegenHealth>
+      <maxHealth>	230	</maxHealth>
+      <maxRegenHealth>	173	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F35_AMX_AC_Mle1946/normal/lod0/Chassis.model	</undamaged>
@@ -1680,7 +1680,7 @@
         <armor_8>	0	</armor_8>
       </armor>
       <weight>	170	</weight>
-      <maxHealth>	164	</maxHealth>
+      <maxHealth>	200	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1694,7 +1694,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_90mm_canon_DCA_30_CA>	shared	  <maxAmmo>	96	</maxAmmo>
+        <_90mm_canon_DCA_30_CA>	shared	  <maxAmmo>	115	</maxAmmo>
           <unlocks>
             <gun>	_90mm_canon_DCA_45_AC	  <cost>	18500	</cost>
             </gun>

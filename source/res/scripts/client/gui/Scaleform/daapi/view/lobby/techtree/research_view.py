@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/research_view.py
-from debug_utils import LOG_DEBUG
+import logging
 from gui import SystemMessages
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.view.lobby.techtree.listeners import TTListenerDecorator
@@ -13,6 +13,7 @@ from gui.sounds.ambients import LobbySubViewEnv
 from helpers import dependency
 from skeletons.gui.game_control import IWalletController, IVehicleComparisonBasket
 from skeletons.gui.shared import IItemsCache
+_logger = logging.getLogger(__name__)
 
 class ResearchView(LobbySubView, ResearchViewMeta):
     __sound_env__ = LobbySubViewEnv
@@ -72,13 +73,16 @@ class ResearchView(LobbySubView, ResearchViewMeta):
             self.as_setNodesStatesS(NODE_STATE_FLAGS.ENOUGH_XP, result)
 
     def invalidateUnlocks(self, unlocks):
-        next2Unlock, unlocked = self._data.invalidateUnlocks(unlocks)
+        next2Unlock, unlocked, prevUnlocked = self._data.invalidateUnlocks(unlocks)
         if unlocked:
-            LOG_DEBUG('unlocked', unlocked)
+            _logger.info('unlocked: %s', unlocked)
             self.as_setNodesStatesS(NODE_STATE_FLAGS.UNLOCKED, unlocked)
         if next2Unlock:
-            LOG_DEBUG('next2Unlock', next2Unlock)
+            _logger.info('next2Unlock: %s', next2Unlock)
             self.as_setNext2UnlockS(next2Unlock)
+        if prevUnlocked:
+            _logger.info('previouslyUnlocked %s', prevUnlocked)
+            self.as_setNodesStatesS(NODE_STATE_FLAGS.LAST_2_BUY, prevUnlocked)
 
     def invalidateInventory(self, data):
         result = self._data.invalidateInventory(data)

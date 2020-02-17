@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.587	</firePenalty>
   </invisibility>
-  <repairCost>	6.5	</repairCost>
+  <repairCost>	4.063	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
@@ -51,7 +51,7 @@
     </armor>
     <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
     <weight>	18850	</weight>
-    <maxHealth>	280	</maxHealth>
+    <maxHealth>	448	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	130	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
@@ -182,8 +182,8 @@
         <vehicleRotation>	0.28	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	90	</maxHealth>
-      <maxRegenHealth>	70	</maxRegenHealth>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	83	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R02_SU-85/normal/lod0/Chassis.model	</undamaged>
@@ -910,8 +910,8 @@
         <vehicleRotation>	0.25	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R02_SU-85/normal/lod0/Chassis.model	</undamaged>
@@ -1629,7 +1629,7 @@
         <armor_1>	0	</armor_1>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	70	</maxHealth>
+      <maxHealth>	112	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1643,7 +1643,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_S-54_S>	shared	  <maxAmmo>	52	</maxAmmo>
+        <_76mm_S-54_S>	shared	  <maxAmmo>	60	</maxAmmo>
           <unlocks>
             <gun>	_85mm_D-5S	  <cost>	4600	</cost>
             </gun>
@@ -1726,7 +1726,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_76mm_S-54_S>
-        <_85mm_D-5S>	shared	  <maxAmmo>	48	</maxAmmo>
+        <_85mm_D-5S>	shared	  <maxAmmo>	60	</maxAmmo>
           <unlocks>
             <gun>	_85mm_D5S-85BM	  <cost>	15500	</cost>
             </gun>
@@ -1809,7 +1809,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_85mm_D-5S>
-        <_122mm_cannon_M-30S>	shared	  <maxAmmo>	32	</maxAmmo>
+        <_122mm_cannon_M-30S>	shared	  <maxAmmo>	39	</maxAmmo>
           <armor>
             <armor_1>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1888,7 +1888,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_122mm_cannon_M-30S>
-        <_85mm_D5S-85BM>	shared	  <maxAmmo>	38	</maxAmmo>
+        <_85mm_D5S-85BM>	shared	  <maxAmmo>	46	</maxAmmo>
           <armor>
             <armor_1>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

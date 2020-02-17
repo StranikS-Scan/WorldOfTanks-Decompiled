@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.384	</firePenalty>
   </invisibility>
-  <repairCost>	7.00	</repairCost>
+  <repairCost>	5.37	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.2	</priceFactor>
@@ -43,7 +43,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	11056	</weight>
-    <maxHealth>	224	</maxHealth>
+    <maxHealth>	292	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	100	</maxHealth>
       <maxRegenHealth>	50	</maxRegenHealth>
@@ -163,8 +163,8 @@
         <vehicleRotation>	0.4	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	80	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
+      <maxHealth>	95	</maxHealth>
+      <maxRegenHealth>	71	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB77_FV304/normal/lod0/Chassis.model	</undamaged>
@@ -807,8 +807,8 @@
         <vehicleRotation>	0.38	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	90	</maxHealth>
-      <maxRegenHealth>	70	</maxRegenHealth>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	83	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB77_FV304/normal/lod0/Chassis.model	</undamaged>
@@ -1447,7 +1447,7 @@
         <armor_5>	10	</armor_5>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	56	</maxHealth>
+      <maxHealth>	73	</maxHealth>
       <rotationSpeed>	20	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1461,7 +1461,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <OQF_25pdr_Gun_Mk_II>	shared	  <maxAmmo>	64	</maxAmmo>
+        <OQF_25pdr_Gun_Mk_II>	shared	  <maxAmmo>	110	</maxAmmo>
           <unlocks>
             <gun>	_4.5inch_SPG_Howitzer	  <cost>	4100	</cost>
             </gun>
@@ -1603,7 +1603,7 @@
         <armor_5>	10	</armor_5>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	56	</maxHealth>
+      <maxHealth>	73	</maxHealth>
       <rotationSpeed>	20	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1617,7 +1617,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_4.5inch_SPG_Howitzer>	shared	  <maxAmmo>	64	</maxAmmo>
+        <_4.5inch_SPG_Howitzer>	shared	  <maxAmmo>	75	</maxAmmo>
           <unlocks>
             <vehicle>	GB29_Crusader_5inch	  <cost>	64750	</cost>
             </vehicle>

@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.51	</firePenalty>
   </invisibility>
-  <repairCost>	2.5	</repairCost>
+  <repairCost>	1.034	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
@@ -46,7 +46,7 @@
     </armor>
     <primaryArmor>	armor_6 armor_6 armor_4	</primaryArmor>
     <weight>	3250	</weight>
-    <maxHealth>	96	</maxHealth>
+    <maxHealth>	232	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	80	</maxHealth>
       <maxRegenHealth>	55	</maxRegenHealth>
@@ -177,8 +177,8 @@
         <vehicleRotation>	0.34	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	50	</maxHealth>
-      <maxRegenHealth>	40	</maxRegenHealth>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
       <models>
         <undamaged>	vehicles/german/G21_PanzerJager_I/normal/lod0/Chassis.model	</undamaged>
@@ -894,8 +894,8 @@
         <vehicleRotation>	0.32	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	53	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
       <models>
         <undamaged>	vehicles/german/G21_PanzerJager_I/normal/lod0/Chassis.model	</undamaged>
@@ -1604,7 +1604,7 @@
         <armor_2>	5	</armor_2>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	24	</maxHealth>
+      <maxHealth>	58	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1622,7 +1622,7 @@
             <minPitch>	0 -10 1 -10	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	160	</maxAmmo>
+          <maxAmmo>	320	</maxAmmo>
           <aimingTime>	1.7	</aimingTime>
           <reloadTime>	2.1	</reloadTime>
           <unlocks>
@@ -1690,7 +1690,7 @@
             <minPitch>	0 -10 1 -10	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	84	</maxAmmo>
+          <maxAmmo>	170	</maxAmmo>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <aimingTime>	1.7	</aimingTime>
           <shotDispersionFactors>
@@ -1698,10 +1698,6 @@
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <unlocks>
-            <vehicle>	G20_Marder_II	  <cost>	1600	</cost>
-            </vehicle>
-          </unlocks>
           <armor>
             <armor_1>	5	</armor_1>
             <gun>	10	</gun>

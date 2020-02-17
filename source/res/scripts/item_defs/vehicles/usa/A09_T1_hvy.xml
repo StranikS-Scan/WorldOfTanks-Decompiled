@@ -19,7 +19,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.12	</firePenalty>
   </invisibility>
-  <repairCost>	5.16	</repairCost>
+  <repairCost>	3.153	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
@@ -48,7 +48,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	37470	</weight>
-    <maxHealth>	480	</maxHealth>
+    <maxHealth>	864	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	185	</maxHealth>
       <maxRegenHealth>	125	</maxRegenHealth>
@@ -157,8 +157,8 @@
         <vehicleRotation>	0.26	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	130	</maxHealth>
-      <maxRegenHealth>	100	</maxRegenHealth>
+      <maxHealth>	155	</maxHealth>
+      <maxRegenHealth>	116	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A09_T1_hvy/normal/lod0/Chassis.model	</undamaged>
@@ -1100,8 +1100,8 @@
         <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	140	</maxHealth>
-      <maxRegenHealth>	105	</maxRegenHealth>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	128	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A09_T1_hvy/normal/lod0/Chassis.model	</undamaged>
@@ -2045,7 +2045,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7020	</weight>
-      <maxHealth>	120	</maxHealth>
+      <maxHealth>	156	</maxHealth>
       <rotationSpeed>	31	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -2059,7 +2059,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_Gun_M7_L50>	shared	  <maxAmmo>	75	</maxAmmo>
+        <_75mm_Gun_M7_L50>	shared	  <maxAmmo>	90	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -30 1 -30	</minPitch>
             <maxPitch>	0 10 0.366894 10 0.430556 7 0.569444 7 0.633106 10 1 10	</maxPitch>
@@ -2215,7 +2215,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8020	</weight>
-      <maxHealth>	180	</maxHealth>
+      <maxHealth>	216	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -2230,7 +2230,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.959	</invisibilityFactor>
       <guns>
-        <_75mm_Gun_M7_L50>	shared	  <maxAmmo>	75	</maxAmmo>
+        <_75mm_Gun_M7_L50>	shared	  <maxAmmo>	90	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -30 1 -30	</minPitch>
             <maxPitch>	0 10 0.366894 10 0.430556 7 0.569444 7 0.633106 10 1 10	</maxPitch>
@@ -2298,7 +2298,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_Gun_M7_L50>
-        <_76mm_Gun_M1A1>	shared	  <maxAmmo>	75	</maxAmmo>
+        <_76mm_Gun_M1A1>	shared	  <maxAmmo>	90	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -30 1 -30	</minPitch>
             <maxPitch>	0 10 0.366894 10 0.430556 7 0.569444 7 0.633106 10 1 10	</maxPitch>

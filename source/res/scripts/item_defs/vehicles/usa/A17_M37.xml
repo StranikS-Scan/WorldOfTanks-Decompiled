@@ -19,7 +19,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.378	</firePenalty>
   </invisibility>
-  <repairCost>	8.86	</repairCost>
+  <repairCost>	5.499	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
@@ -43,7 +43,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	9518	</weight>
-    <maxHealth>	144	</maxHealth>
+    <maxHealth>	232	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	80	</maxHealth>
       <maxRegenHealth>	40	</maxRegenHealth>
@@ -174,8 +174,8 @@
         <vehicleRotation>	0.44	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	53	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
       <models>
         <undamaged>	vehicles/american/A17_M37/normal/lod0/Chassis.model	</undamaged>
@@ -1133,8 +1133,8 @@
         <vehicleRotation>	0.4	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	50	</maxRegenHealth>
+      <maxHealth>	85	</maxHealth>
+      <maxRegenHealth>	64	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
       <models>
         <undamaged>	vehicles/american/A17_M37/normal/lod0/Chassis.model	</undamaged>
@@ -2142,7 +2142,7 @@
         <armor_1>	12.7	</armor_1>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	36	</maxHealth>
+      <maxHealth>	58	</maxHealth>
       <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2157,7 +2157,7 @@
       </surveyingDeviceHealth>
       <guns>
         <_105mm_Howitzer_M3>	shared	  <reloadTime>	15	</reloadTime>
-          <maxAmmo>	126	</maxAmmo>
+          <maxAmmo>	220	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -42.8 1 -42.8	</minPitch>
             <maxPitch>	0 10.5 1 10.5	</maxPitch>
@@ -2223,16 +2223,12 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_105mm_Howitzer_M3>
-        <_105mm_Howitzer_M4>	shared	  <maxAmmo>	126	</maxAmmo>
+        <_105mm_Howitzer_M4>	shared	  <maxAmmo>	190	</maxAmmo>
           <reloadTime>	15	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -42.8 1 -42.8	</minPitch>
             <maxPitch>	0 10.5 1 10.5	</maxPitch>
           </pitchLimits>
-          <unlocks>
-            <vehicle>	A18_M41	  <cost>	13150	</cost>
-            </vehicle>
-          </unlocks>
           <armor>
             <gun>	20	</gun>
             <gunBreech>	0	</gunBreech>

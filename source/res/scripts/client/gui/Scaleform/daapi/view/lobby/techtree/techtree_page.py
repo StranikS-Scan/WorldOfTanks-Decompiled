@@ -1,13 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/techtree_page.py
+import datetime
 import Keys
 import GUI
 import nations
+from account_helpers.settings_core.settings_constants import GuiSettingsBehavior
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import GUI_START_BEHAVIOR
+from helpers import time_utils
 from constants import IS_DEVELOPMENT
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from blueprints.BlueprintTypes import BlueprintTypes
-from gui import g_guiResetters
+from gui import g_guiResetters, GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.lobby.go_back_helper import BackButtonContextKeys
 from gui.Scaleform.daapi.view.lobby.techtree import dumpers
 from gui.Scaleform.daapi.view.lobby.techtree.data import NationTreeData
@@ -16,6 +22,8 @@ from gui.Scaleform.daapi.view.lobby.techtree.sound_constants import Sounds
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.meta.TechTreeMeta import TechTreeMeta
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
+from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
 from gui.impl import backport
 from gui.impl.gen.resources import R
 from gui.ingame_shop import canBuyGoldForVehicleThroughWeb
@@ -25,12 +33,17 @@ from gui.shared.formatters import text_styles
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.utils.requesters.blueprints_requester import getNationalFragmentCD
 from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.lobby_context import ILobbyContext
+from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
+from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
+from gui.Scaleform.genConsts.SESSION_STATS_CONSTANTS import SESSION_STATS_CONSTANTS
 _HEIGHT_LESS_THAN_SPECIFIED_TO_OVERRIDE = 850
 _HEIGHT_LESS_THAN_SPECIFIED_OVERRIDE_TAG = 'height_less_850'
 
 class TechTree(TechTreeMeta):
     __lobbyContext = dependency.descriptor(ILobbyContext)
+    __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, ctx=None):
         super(TechTree, self).__init__(NationTreeData(dumpers.NationObjDumper()))
@@ -60,6 +73,12 @@ class TechTree(TechTreeMeta):
         self._data.load(nationIdx, override=self._getOverride())
         self.__playBlueprintPlusSound()
         return self._data.dump()
+
+    def getPremiumPanelLabels(self):
+        vehicleLabel = backport.text(R.strings.menu.techtree.premiumPanel.btnLabel(), count=text_styles.gold(backport.text(R.strings.menu.techtree.premiumPanel.btnLabel.count())))
+        labels = {'panelTitle': backport.text(R.strings.menu.techtree.premiumPanel.title()),
+         'vehicleLabel': vehicleLabel.split(backport.text(R.strings.menu.techtree.premiumPanel.btnLabel.count()))}
+        return labels
 
     def request4Unlock(self, itemCD):
         itemCD = int(itemCD)
@@ -101,6 +120,16 @@ class TechTree(TechTreeMeta):
             self.__playBlueprintPlusSound()
         else:
             self.soundManager.playInstantSound(Sounds.BLUEPRINT_VIEW_OFF_SOUND_ID)
+
+    def onGoToTankCollector(self, nationName):
+        shared_events.showTechTreeOverlay()
+
+    def onGoToPremiumShop(self, nationName, level):
+        if isIngameShopEnabled():
+            shared_events.showWebShop()
+        else:
+            shared_events.showOldShop(ctx={'tabId': STORE_TYPES.SHOP,
+             'component': STORE_CONSTANTS.VEHICLE})
 
     def invalidateBlueprintMode(self, isEnabled):
         if isEnabled:
@@ -158,6 +187,12 @@ class TechTree(TechTreeMeta):
             self.as_setBlueprintModeS(True)
         isBlueprintsEnabled = self.__lobbyContext.getServerSettings().blueprintsConfig.isBlueprintsAvailable()
         self.__disableBlueprintsSwitchButton(isBlueprintsEnabled)
+        self.addListener(MESSENGER_VIEW_ALIAS.CHANNEL_MANAGEMENT_WINDOW, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(CONTACTS_ALIASES.CONTACTS_POPOVER, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(SESSION_STATS_CONSTANTS.SESSION_STATS_POPOVER, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(VIEW_ALIAS.NOTIFICATIONS_LIST, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.ReferralProgramEvent.SHOW_REFERRAL_PROGRAM_WINDOW, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.ChannelCarouselEvent.OPEN_BUTTON_CLICK, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
         self._populateAfter()
 
     def _populateAfter(self):
@@ -168,6 +203,12 @@ class TechTree(TechTreeMeta):
         if IS_DEVELOPMENT:
             from gui import InputHandler
             InputHandler.g_instance.onKeyUp -= self.__handleReloadData
+        self.removeListener(MESSENGER_VIEW_ALIAS.CHANNEL_MANAGEMENT_WINDOW, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(CONTACTS_ALIASES.CONTACTS_POPOVER, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(SESSION_STATS_CONSTANTS.SESSION_STATS_POPOVER, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(VIEW_ALIAS.NOTIFICATIONS_LIST, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.ReferralProgramEvent.SHOW_REFERRAL_PROGRAM_WINDOW, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.ChannelCarouselEvent.OPEN_BUTTON_CLICK, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
         super(TechTree, self)._dispose()
         self._disposeAfter()
 
@@ -185,6 +226,9 @@ class TechTree(TechTreeMeta):
         g_techTreeDP.setOverride(self._getOverride())
         if g_techTreeDP.load():
             self.redraw()
+
+    def __onClosePremiumPanel(self, _=None):
+        self.as_closePremiumPanelS()
 
     def __handleReloadData(self, event):
         if event.key is Keys.KEY_R:
@@ -227,3 +271,11 @@ class TechTree(TechTreeMeta):
 
     def __updateBlueprintBalance(self):
         self.as_setBlueprintBalanceS(self.__formatBlueprintBalance())
+
+    def __needShowTechTreeIntro(self, settings):
+        isShowed = settings[GuiSettingsBehavior.TECHTREE_INTRO_SHOWED]
+        startTime = time_utils.getTimestampFromLocal(datetime.date(GUI_SETTINGS.techTreeIntroStartDate.get('year'), GUI_SETTINGS.techTreeIntroStartDate.get('month'), GUI_SETTINGS.techTreeIntroStartDate.get('day')).timetuple())
+        isOverdue = time_utils.getTimeDeltaFromNowInLocal(startTime) > time_utils.ONE_YEAR
+        registrationTime = self._itemsCache.items.getAccountDossier().getGlobalStats().getCreationTime()
+        isNewPlayer = registrationTime >= startTime
+        return not (isShowed or isOverdue or isNewPlayer)

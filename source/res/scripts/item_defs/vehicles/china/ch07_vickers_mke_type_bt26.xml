@@ -16,7 +16,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.374	</firePenalty>
   </invisibility>
-  <repairCost>	2.35	</repairCost>
+  <repairCost>	0.918	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
@@ -40,7 +40,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	3736	</weight>
-    <maxHealth>	124	</maxHealth>
+    <maxHealth>	348	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	75	</maxHealth>
       <maxRegenHealth>	50	</maxRegenHealth>
@@ -140,8 +140,8 @@
         <vehicleRotation>	0.28	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	50	</maxHealth>
-      <maxRegenHealth>	40	</maxRegenHealth>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
       <repairCost>	2.5	</repairCost>
       <models>
         <undamaged>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/normal/lod0/Chassis.model	</undamaged>
@@ -831,8 +831,8 @@
         <vehicleRotation>	0.26	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	53	</maxRegenHealth>
       <repairCost>	2.5	</repairCost>
       <models>
         <undamaged>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/normal/lod0/Chassis.model	</undamaged>
@@ -1527,7 +1527,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	650	</weight>
-      <maxHealth>	31	</maxHealth>
+      <maxHealth>	67	</maxHealth>
       <rotationSpeed>	24	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -1541,7 +1541,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_47mm_QFSA>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_47mm_QFSA>	shared	  <maxAmmo>	100	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -1697,7 +1697,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1050	</weight>
-      <maxHealth>	46	</maxHealth>
+      <maxHealth>	87	</maxHealth>
       <rotationSpeed>	24	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -1712,7 +1712,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.011	</invisibilityFactor>
       <guns>
-        <_47mm_QFSA>	shared	  <maxAmmo>	96	</maxAmmo>
+        <_47mm_QFSA>	shared	  <maxAmmo>	190	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
@@ -1781,7 +1781,7 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_47mm_QFSA>
-        <_45mm_20K>	shared	  <maxAmmo>	136	</maxAmmo>
+        <_45mm_20K>	shared	  <maxAmmo>	270	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
@@ -1850,7 +1850,7 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_45mm_20K>
-        <_40mm_Pom_Pom>	shared	  <maxAmmo>	160	</maxAmmo>
+        <_40mm_Pom_Pom>	shared	  <maxAmmo>	320	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -23 1 -23	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>

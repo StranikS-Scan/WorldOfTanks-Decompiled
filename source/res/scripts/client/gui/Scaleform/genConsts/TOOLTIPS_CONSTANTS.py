@@ -11,6 +11,7 @@ class TOOLTIPS_CONSTANTS(object):
     ACHIEVEMENT = 'achievement'
     ACHIEVEMENT_ATTR = 'achievementAttr'
     GLOBAL_RATING = 'globalRating'
+    WOT_RATING = 'wotRating'
     MARK_OF_MASTERY = 'markOfMastery'
     MARKS_ON_GUN_ACHIEVEMENT = 'marksOnGun'
     BATTLE_STATS_MARKS_ON_GUN_ACHIEVEMENT = 'battleStatsMarksOnGun'
@@ -34,6 +35,7 @@ class TOOLTIPS_CONSTANTS(object):
     CREW_SKIN_SOUND = 'crewSkinSound'
     CREW_BOOK = 'crewBook'
     CREW_BOOK_RESTRICTED = 'crewBookRestricted'
+    VEHICLE_COLLECTOR_INFO = 'vehicleCollectorInfo'
     NATION_CHANGE_HANGAR_MODULE = 'nationChangeHangarModule'
     COMPARE_MODULE = 'compareModule'
     DIRECT_MODULE = 'directModule'
@@ -297,6 +299,7 @@ class TOOLTIPS_CONSTANTS(object):
      ACHIEVEMENT,
      MARKS_ON_GUN_ACHIEVEMENT,
      GLOBAL_RATING,
+     WOT_RATING,
      MARK_OF_MASTERY,
      ACHIEVEMENT_ATTR,
      SHOP_20_ACHIEVEMENT,
@@ -341,7 +344,8 @@ class TOOLTIPS_CONSTANTS(object):
      VEHICLE_ELITE_BONUS,
      VEHICLE_HISTORICAL_REFERENCE,
      BATTLE_TRAINING,
-     SQUAD_BONUS]
+     SQUAD_BONUS,
+     VEHICLE_COLLECTOR_INFO]
     CUSTOMIZATION_SET = [TECH_CUSTOMIZATION_ITEM,
      TECH_CUSTOMIZATION_HISTORIC_ITEM,
      TECH_CUSTOMIZATION_ITEM_ICON,

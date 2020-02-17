@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.356	</firePenalty>
   </invisibility>
-  <repairCost>	2.00	</repairCost>
+  <repairCost>	0.779	</repairCost>
   <premiumVehicleXPFactor>	0.7	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
@@ -41,7 +41,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	5085	</weight>
-    <maxHealth>	120	</maxHealth>
+    <maxHealth>	308	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	90	</maxHealth>
       <maxRegenHealth>	60	</maxRegenHealth>
@@ -128,8 +128,8 @@
         <vehicleRotation>	0.26	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	53	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A93_T7_Combat_Car/normal/lod0/Chassis.model	</undamaged>
@@ -859,7 +859,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	800	</weight>
-      <maxHealth>	30	</maxHealth>
+      <maxHealth>	77	</maxHealth>
       <rotationSpeed>	24	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -873,7 +873,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_12.7mm_MG_HB_M2_A>	shared	  <maxAmmo>	1350	</maxAmmo>
+        <_12.7mm_MG_HB_M2_A>	shared	  <maxAmmo>	2700	</maxAmmo>
           <reloadTime>	24	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>

@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.444	</firePenalty>
   </invisibility>
-  <repairCost>	2.0	</repairCost>
+  <repairCost>	0.848	</repairCost>
   <premiumVehicleXPFactor>	0.7	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
@@ -40,7 +40,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	2890	</weight>
-    <maxHealth>	112	</maxHealth>
+    <maxHealth>	264	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	75	</maxHealth>
       <maxRegenHealth>	50	</maxRegenHealth>
@@ -136,8 +136,8 @@
         <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	53	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <notInShop>	true	</notInShop>
       <models>
@@ -998,7 +998,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1000	</weight>
-      <maxHealth>	28	</maxHealth>
+      <maxHealth>	66	</maxHealth>
       <rotationSpeed>	34	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -1012,7 +1012,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_45mm_20KL>	shared	  <maxAmmo>	66	</maxAmmo>
+        <_45mm_20KL>	shared	  <maxAmmo>	130	</maxAmmo>
           <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.632	</firePenalty>
   </invisibility>
-  <repairCost>	4.75	</repairCost>
+  <repairCost>	2.515	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
@@ -42,7 +42,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	11600	</weight>
-    <maxHealth>	216	</maxHealth>
+    <maxHealth>	408	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	125	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
@@ -152,8 +152,8 @@
         <vehicleRotation>	0.25	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	55	</maxRegenHealth>
+      <maxHealth>	85	</maxHealth>
+      <maxRegenHealth>	64	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
       <models>
         <undamaged>	vehicles/german/G09_Hetzer/normal/lod0/Chassis.model	</undamaged>
@@ -809,8 +809,8 @@
         <vehicleRotation>	0.23	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	80	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
+      <maxHealth>	95	</maxHealth>
+      <maxRegenHealth>	71	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
       <models>
         <undamaged>	vehicles/german/G09_Hetzer/normal/lod0/Chassis.model	</undamaged>
@@ -1458,7 +1458,7 @@
         <armor_1>	0	</armor_1>
       </armor>
       <weight>	0	</weight>
-      <maxHealth>	54	</maxHealth>
+      <maxHealth>	102	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1475,13 +1475,11 @@
         <_75mm_StuK_40_L43>	shared	  <unlocks>
             <gun>	_75mm_PaK_39_L48	  <cost>	3400	</cost>
             </gun>
-            <vehicle>	G05_StuG_40_AusfG	  <cost>	12435	</cost>
-            </vehicle>
             <gun>	_105mm_StuH42_L28	  <cost>	3800	</cost>
             </gun>
           </unlocks>
           <reloadTime>	3.9	</reloadTime>
-          <maxAmmo>	40	</maxAmmo>
+          <maxAmmo>	60	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
@@ -1543,7 +1541,7 @@
           </camouflage>
         </_75mm_StuK_40_L43>
         <_75mm_PaK_39_L48>	shared	  <reloadTime>	3.9	</reloadTime>
-          <maxAmmo>	40	</maxAmmo>
+          <maxAmmo>	60	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
@@ -1605,7 +1603,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_PaK_39_L48>
-        <_105mm_StuH42_L28>	shared	  <maxAmmo>	20	</maxAmmo>
+        <_105mm_StuH42_L28>	shared	  <maxAmmo>	30	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 7 1 7	</maxPitch>

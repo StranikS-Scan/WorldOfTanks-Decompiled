@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.458	</firePenalty>
   </invisibility>
-  <repairCost>	8.15	</repairCost>
+  <repairCost>	6.011	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.2	</priceFactor>
@@ -41,7 +41,7 @@
     </armor>
     <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
     <weight>	14300	</weight>
-    <maxHealth>	448	</maxHealth>
+    <maxHealth>	640	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -144,8 +144,8 @@
         <vehicleRotation>	0.25	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	110	</maxHealth>
-      <maxRegenHealth>	85	</maxRegenHealth>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	98	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A31_M36_Slagger/normal/lod0/Chassis.model	</undamaged>
@@ -1133,8 +1133,8 @@
         <vehicleRotation>	0.23	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	90	</maxRegenHealth>
+      <maxHealth>	145	</maxHealth>
+      <maxRegenHealth>	109	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A31_M36_Slagger/normal/lod0/Chassis.model	</undamaged>
@@ -2124,7 +2124,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4500	</weight>
-      <maxHealth>	112	</maxHealth>
+      <maxHealth>	120	</maxHealth>
       <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -2138,7 +2138,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_AT_Gun_M1A2>	shared	  <maxAmmo>	54	</maxAmmo>
+        <_76mm_AT_Gun_M1A2>	shared	  <maxAmmo>	65	</maxAmmo>
           <reloadTime>	3.1	</reloadTime>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <unlocks>
@@ -2394,7 +2394,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4800	</weight>
-      <maxHealth>	142	</maxHealth>
+      <maxHealth>	160	</maxHealth>
       <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -2409,7 +2409,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.878	</invisibilityFactor>
       <guns>
-        <_76mm_AT_Gun_M1A2>	shared	  <maxAmmo>	54	</maxAmmo>
+        <_76mm_AT_Gun_M1A2>	shared	  <maxAmmo>	65	</maxAmmo>
           <reloadTime>	3.1	</reloadTime>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <shotDispersionFactors>

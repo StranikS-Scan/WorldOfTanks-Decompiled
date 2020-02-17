@@ -10,6 +10,7 @@ from gui.shared.rq_cooldown import RequestCooldownManager, REQUEST_SCOPE
 from gui.shared.utils.requesters.RequestsController import RequestsController
 from gui.shared.utils.requesters.abstract import Response, ClientRequestsByIDProcessor
 from gui.wgcg.advent_calendar.handlers import AdventCalendarRequestHandlers
+from gui.wgcg.statistic.handlers import StatisticRequestHandlers
 from gui.wgcg.base.handlers import BaseRequestHandlers
 from gui.wgcg.clan.handlers import ClanRequestHandlers
 from gui.wgcg.elen.handlers import ElenRequestHandlers
@@ -90,6 +91,7 @@ class WgcgRequestsController(RequestsController):
         self.__webCtrl = weakref.proxy(webCtrl)
         self.__handlers = dict()
         self.__handlers.update(AdventCalendarRequestHandlers(requester).get())
+        self.__handlers.update(StatisticRequestHandlers(requester).get())
         self.__handlers.update(BaseRequestHandlers(requester).get())
         self.__handlers.update(ClanRequestHandlers(requester, self.__webCtrl).get())
         self.__handlers.update(StrongholdsRequestHandlers(requester).get())

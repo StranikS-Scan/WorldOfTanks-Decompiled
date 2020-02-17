@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.239	</firePenalty>
   </invisibility>
-  <repairCost>	9.4	</repairCost>
+  <repairCost>	7.477	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.8	</priceFactor>
@@ -39,7 +39,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	32450	</weight>
-    <maxHealth>	1320	</maxHealth>
+    <maxHealth>	1760	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -146,8 +146,8 @@
         <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	240	</maxHealth>
-      <maxRegenHealth>	180	</maxRegenHealth>
+      <maxHealth>	290	</maxHealth>
+      <maxRegenHealth>	218	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G54_E-50/normal/lod0/Chassis.model	</undamaged>
@@ -932,8 +932,8 @@
         <vehicleRotation>	0.14	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	190	</maxRegenHealth>
+      <maxHealth>	300	</maxHealth>
+      <maxRegenHealth>	225	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G54_E-50/normal/lod0/Chassis.model	</undamaged>
@@ -1720,7 +1720,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8438	</weight>
-      <maxHealth>	330	</maxHealth>
+      <maxHealth>	340	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -1734,7 +1734,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_KwK_L70>	shared	  <maxAmmo>	80	</maxAmmo>
+        <_75mm_KwK_L70>	shared	  <maxAmmo>	95	</maxAmmo>
           <reloadTime>	3.8	</reloadTime>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <shotDispersionFactors>
@@ -2205,7 +2205,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	10500	</weight>
-      <maxHealth>	430	</maxHealth>
+      <maxHealth>	440	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -2219,7 +2219,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_KwK_L70>	shared	  <maxAmmo>	90	</maxAmmo>
+        <_75mm_KwK_L70>	shared	  <maxAmmo>	110	</maxAmmo>
           <reloadTime>	3.5	</reloadTime>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <shotDispersionFactors>

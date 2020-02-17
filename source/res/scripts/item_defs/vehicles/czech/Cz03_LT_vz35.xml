@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.399	</firePenalty>
   </invisibility>
-  <repairCost>	3.3	</repairCost>
+  <repairCost>	1.305	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
@@ -36,7 +36,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	4935	</weight>
-    <maxHealth>	120	</maxHealth>
+    <maxHealth>	364	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	80	</maxHealth>
       <maxRegenHealth>	55	</maxRegenHealth>
@@ -126,8 +126,8 @@
         <vehicleRotation>	0.36	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	50	</maxHealth>
-      <maxRegenHealth>	40	</maxRegenHealth>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/czech/Cz03_LT_vz35/normal/lod0/Chassis.model	</undamaged>
@@ -1120,8 +1120,8 @@
         <vehicleRotation>	0.34	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	53	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/czech/Cz03_LT_vz35/normal/lod0/Chassis.model	</undamaged>
@@ -2119,7 +2119,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1000	</weight>
-      <maxHealth>	30	</maxHealth>
+      <maxHealth>	66	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -2133,7 +2133,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_Skoda_A3>	shared	  <maxAmmo>	76	</maxAmmo>
+        <_37mm_Skoda_A3>	shared	  <maxAmmo>	150	</maxAmmo>
           <unlocks>
             <gun>	_37mm_Skoda_A8	  <cost>	120	</cost>
             </gun>
@@ -2205,7 +2205,7 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_37mm_Skoda_A3>
-        <_37mm_Skoda_A8>	shared	  <maxAmmo>	76	</maxAmmo>
+        <_37mm_Skoda_A8>	shared	  <maxAmmo>	150	</maxAmmo>
           <armor>
             <armor_1>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2375,7 +2375,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1000	</weight>
-      <maxHealth>	60	</maxHealth>
+      <maxHealth>	91	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -2389,7 +2389,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_Skoda_A3>	shared	  <maxAmmo>	76	</maxAmmo>
+        <_37mm_Skoda_A3>	shared	  <maxAmmo>	150	</maxAmmo>
           <armor>
             <armor_1>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2462,7 +2462,7 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_37mm_Skoda_A3>
-        <_37mm_Skoda_A8>	shared	  <maxAmmo>	76	</maxAmmo>
+        <_37mm_Skoda_A8>	shared	  <maxAmmo>	150	</maxAmmo>
           <armor>
             <armor_1>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

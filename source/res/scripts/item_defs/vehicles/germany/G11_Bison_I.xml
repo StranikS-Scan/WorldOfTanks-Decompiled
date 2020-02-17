@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.233	</firePenalty>
   </invisibility>
-  <repairCost>	6.12	</repairCost>
+  <repairCost>	3.247	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
@@ -45,7 +45,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	2690	</weight>
-    <maxHealth>	104	</maxHealth>
+    <maxHealth>	196	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	60	</maxHealth>
       <maxRegenHealth>	30	</maxRegenHealth>
@@ -155,8 +155,8 @@
         <vehicleRotation>	0.46	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	50	</maxHealth>
-      <maxRegenHealth>	40	</maxRegenHealth>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
       <models>
         <undamaged>	vehicles/german/G11_Bison_I/normal/lod0/Chassis.model	</undamaged>
@@ -1010,8 +1010,8 @@
         <vehicleRotation>	0.42	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	53	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
       <models>
         <undamaged>	vehicles/german/G11_Bison_I/normal/lod0/Chassis.model	</undamaged>
@@ -1864,7 +1864,7 @@
         <armor_8>	0	</armor_8>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	26	</maxHealth>
+      <maxHealth>	49	</maxHealth>
       <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1878,7 +1878,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_150mm_sIG33L11>	shared	  <maxAmmo>	12	</maxAmmo>
+        <_150mm_sIG33L11>	shared	  <maxAmmo>	21	</maxAmmo>
           <reloadTime>	22.8	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.5	</turretRotation>
@@ -1983,8 +1983,6 @@
     <FuG5>	shared	  <unlocks>
         <radio>	FuG_Spr.A	  <cost>	4500	</cost>
         </radio>
-        <vehicle>	G22_Sturmpanzer_II	  <cost>	5120	</cost>
-        </vehicle>
       </unlocks>
     </FuG5>
     <FuG_Spr.A>	shared	</FuG_Spr.A>

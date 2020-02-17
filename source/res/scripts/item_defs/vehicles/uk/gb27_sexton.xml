@@ -19,7 +19,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.383	</firePenalty>
   </invisibility>
-  <repairCost>	7.00	</repairCost>
+  <repairCost>	3.843	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
@@ -51,7 +51,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	13455	</weight>
-    <maxHealth>	112	</maxHealth>
+    <maxHealth>	204	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	70	</maxHealth>
       <maxRegenHealth>	35	</maxRegenHealth>
@@ -182,8 +182,8 @@
         <vehicleRotation>	0.48	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	53	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB27_Sexton/normal/lod0/Chassis.model	</undamaged>
@@ -1024,8 +1024,8 @@
         <vehicleRotation>	0.44	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	50	</maxRegenHealth>
+      <maxHealth>	85	</maxHealth>
+      <maxRegenHealth>	64	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB27_Sexton/normal/lod0/Chassis.model	</undamaged>
@@ -1866,7 +1866,7 @@
         <armor_8>	0	</armor_8>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	28	</maxHealth>
+      <maxHealth>	51	</maxHealth>
       <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1880,7 +1880,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_18_pdr_SPG_Gun>	shared	  <maxAmmo>	112	</maxAmmo>
+        <_18_pdr_SPG_Gun>	shared	  <maxAmmo>	195	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -37.5 1 -37.5	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -1888,8 +1888,6 @@
           <unlocks>
             <gun>	OQF_25pdr_Gun_Mk_II	  <cost>	2250	</cost>
             </gun>
-            <vehicle>	GB26_Birch_Gun	  <cost>	5250	</cost>
-            </vehicle>
           </unlocks>
           <armor>
             <armor_1>	19.1	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -2011,7 +2009,7 @@
         <armor_8>	0	</armor_8>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	28	</maxHealth>
+      <maxHealth>	51	</maxHealth>
       <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2025,7 +2023,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <OQF_25pdr_Gun_Mk_II>	shared	  <maxAmmo>	112	</maxAmmo>
+        <OQF_25pdr_Gun_Mk_II>	shared	  <maxAmmo>	195	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -40 1 -40	</minPitch>
             <maxPitch>	0 9 1 9	</maxPitch>

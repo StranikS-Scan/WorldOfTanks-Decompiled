@@ -1,38 +1,47 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileSummary.py
-from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
-from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils, getProfileCommonInfo
+from gui import makeHtmlString
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.shared.formatters import text_styles
+from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import StatisticTypes, ProfileUtils, getProfileCommonInfo
 from gui.Scaleform.daapi.view.meta.ProfileSummaryMeta import ProfileSummaryMeta
 from gui.Scaleform.locale.PROFILE import PROFILE
-from helpers import dependency
 from PlayerEvents import g_playerEvents
 from helpers.i18n import makeString
 from gui.Scaleform.locale.MENU import MENU
-from gui.shared.gui_items.dossier import dumpDossier
-from skeletons.gui.shared import IItemsCache
 
 class ProfileSummary(ProfileSummaryMeta):
-    itemsCache = dependency.descriptor(IItemsCache)
 
     def _sendAccountData(self, targetData, accountDossier):
         super(ProfileSummary, self)._sendAccountData(targetData, accountDossier)
-        outcome = ProfileUtils.packProfileDossierInfo(targetData, accountDossier)
-        outcome['avgDamage'] = ProfileUtils.getValueOrUnavailable(targetData.getAvgDamage())
-        outcome['maxDestroyed'] = targetData.getMaxFrags()
-        vehicle = self.itemsCache.items.getItemByCD(targetData.getMaxFragsVehicle())
-        outcome['maxDestroyedByVehicle'] = vehicle.shortUserName if vehicle is not None else ''
-        outcome['globalRating'] = self.getGlobalRating(self._databaseID)
-        totalStats = accountDossier.getTotalStats()
-        outcome['significantAchievements'] = AchievementsUtils.packAchievementList(totalStats.getSignificantAchievements(), accountDossier.getDossierType(), dumpDossier(accountDossier), self._userID is None, False)
-        outcome['nearestAchievements'] = AchievementsUtils.packAchievementList(totalStats.getNearestAchievements(), accountDossier.getDossierType(), dumpDossier(accountDossier), self._userID is None, True)
-        self.as_responseDossierS(self._battlesType, outcome, '', '')
-        return
+        if self._statisticType == StatisticTypes.SEASON:
+            data = self.statisticsController.getStatisticData(self._userID, self._battlesType)
+            data['available'] = False if self._statisticType == StatisticTypes.SEASON else True
+            data['unavailableMsg'] = makeHtmlString('html_templates:lobby/season_stats', 'unavailable', {'header': backport.text(R.strings.profile.profile.seasonRating.title()),
+             'textFirst': backport.text(R.strings.profile.profile.seasonRating.desc.firstBlock(), seasonStatText=text_styles.highlightText(backport.text(R.strings.profile.profile.seasonRating.desc.seasonStatText()))),
+             'textSecond': backport.text(R.strings.profile.profile.seasonRating.desc.secondBlock(), commonStatText=text_styles.highlightText(backport.text(R.strings.profile.profile.seasonRating.desc.commonStatText())))})
+            data['seasonTime'] = ''
+        else:
+            data = ProfileUtils.packProfileDossierInfo(targetData, accountDossier, self._userID)
+        self.as_responseDossierS(self._battlesType, data, '', '')
 
     def _populate(self):
         super(ProfileSummary, self)._populate()
         g_playerEvents.onDossiersResync += self.__dossierResyncHandler
         self.__updateUserInfo()
         self.as_setInitDataS(self._getInitData())
+        self.as_setTabsDataS([{'id': 'all',
+          'label': backport.text(R.strings.profile.profile.tabs.title.allTime()),
+          'linkage': 'RegularItemsTabViewUI',
+          'selected': True,
+          'enabled': True,
+          'tooltip': backport.text(R.strings.profile.profile.tabs.tooltip.forAllTime())}, {'id': 'season',
+          'label': backport.text(R.strings.profile.profile.tabs.title.season()),
+          'linkage': 'RegularItemsTabViewUI',
+          'selected': False,
+          'enabled': True,
+          'tooltip': backport.text(R.strings.profile.profile.tabs.tooltip.forTime(), time='--')}])
 
     def __dossierResyncHandler(self, *args):
         self.__updateUserInfo()
@@ -68,3 +77,9 @@ class ProfileSummary(ProfileSummaryMeta):
         g_playerEvents.onDossiersResync -= self.__dossierResyncHandler
         self._disposeRequester()
         super(ProfileSummary, self)._dispose()
+
+    def setSeasonStatisticsFilter(self, value):
+        self._statisticType = StatisticTypes.ALL_TIME
+        if value == StatisticTypes.SEASON:
+            self._statisticType = StatisticTypes.SEASON
+        self.invokeUpdate()

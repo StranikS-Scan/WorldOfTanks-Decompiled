@@ -16,7 +16,7 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.564	</firePenalty>
   </invisibility>
-  <repairCost>	4.95	</repairCost>
+  <repairCost>	2.269	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
@@ -49,7 +49,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	6590	</weight>
-    <maxHealth>	132	</maxHealth>
+    <maxHealth>	288	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	100	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -161,8 +161,8 @@
         <vehicleRotation>	0.32	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	53	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
       <models>
         <undamaged>	vehicles/german/G20_Marder_II/normal/lod0/Chassis.model	</undamaged>
@@ -865,10 +865,6 @@
       <tags></tags>
       <level>	3	</level>
       <price>	1750	</price>
-      <unlocks>
-        <vehicle>	G39_Marder_III	  <cost>	3800	</cost>
-        </vehicle>
-      </unlocks>
       <armor>
         <leftTrack>	10	</leftTrack>
         <rightTrack>	10	</rightTrack>
@@ -884,8 +880,8 @@
         <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	55	</maxRegenHealth>
+      <maxHealth>	85	</maxHealth>
+      <maxRegenHealth>	64	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
       <models>
         <undamaged>	vehicles/german/G20_Marder_II/normal/lod0/Chassis.model	</undamaged>
@@ -1717,7 +1713,7 @@
         <armor_8>	8	</armor_8>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	33	</maxHealth>
+      <maxHealth>	72	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1731,7 +1727,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_PaK_36r>	shared	  <maxAmmo>	36	</maxAmmo>
+        <_76mm_PaK_36r>	shared	  <maxAmmo>	65	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -10 1 -10	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
@@ -1802,16 +1798,12 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_76mm_PaK_36r>
-        <_75mm_PaK_40_2>	shared	  <maxAmmo>	37	</maxAmmo>
+        <_75mm_PaK_40_2>	shared	  <maxAmmo>	65	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -10 1 -10	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
           <reloadTime>	4.8	</reloadTime>
-          <unlocks>
-            <vehicle>	G09_Hetzer	  <cost>	3600	</cost>
-            </vehicle>
-          </unlocks>
           <shotDispersionFactors>
             <turretRotation>	0.18	</turretRotation>
             <afterShot>	4	</afterShot>
@@ -1932,8 +1924,6 @@
     <FuG5>	shared	  <unlocks>
         <radio>	FuG8	  <cost>	4040	</cost>
         </radio>
-        <vehicle>	G22_Sturmpanzer_II	  <cost>	7900	</cost>
-        </vehicle>
       </unlocks>
     </FuG5>
     <FuG8>	shared	</FuG8>

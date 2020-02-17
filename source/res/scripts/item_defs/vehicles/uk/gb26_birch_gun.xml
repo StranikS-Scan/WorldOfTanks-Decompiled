@@ -19,7 +19,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.389	</firePenalty>
   </invisibility>
-  <repairCost>	8.00	</repairCost>
+  <repairCost>	4.984	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
@@ -45,7 +45,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	5103	</weight>
-    <maxHealth>	152	</maxHealth>
+    <maxHealth>	244	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	80	</maxHealth>
       <maxRegenHealth>	40	</maxRegenHealth>
@@ -155,8 +155,8 @@
         <vehicleRotation>	0.44	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	53	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB26_Birch_Gun/normal/lod0/Chassis.model	</undamaged>
@@ -939,8 +939,8 @@
         <vehicleRotation>	0.4	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	50	</maxRegenHealth>
+      <maxHealth>	85	</maxHealth>
+      <maxRegenHealth>	64	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB26_Birch_Gun/normal/lod0/Chassis.model	</undamaged>
@@ -1718,7 +1718,7 @@
         <armor_3>	0	</armor_3>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	38	</maxHealth>
+      <maxHealth>	61	</maxHealth>
       <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1732,7 +1732,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_18_pdr_SPG_Gun>	shared	  <maxAmmo>	150	</maxAmmo>
+        <_18_pdr_SPG_Gun>	shared	  <maxAmmo>	265	</maxAmmo>
           <unlocks>
             <gun>	OQF_25pdr_Gun_Mk_II	  <cost>	2250	</cost>
             </gun>
@@ -1866,7 +1866,7 @@
         <armor_3>	0	</armor_3>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	38	</maxHealth>
+      <maxHealth>	61	</maxHealth>
       <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1880,11 +1880,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <OQF_25pdr_Gun_Mk_II>	shared	  <maxAmmo>	150	</maxAmmo>
-          <unlocks>
-            <vehicle>	GB28_Bishop	  <cost>	14750	</cost>
-            </vehicle>
-          </unlocks>
+        <OQF_25pdr_Gun_Mk_II>	shared	  <maxAmmo>	265	</maxAmmo>
           <armor>
             <armor_1>	6	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
             </armor_1>

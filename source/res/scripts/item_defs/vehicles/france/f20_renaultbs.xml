@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.365	</firePenalty>
   </invisibility>
-  <repairCost>	4.95	</repairCost>
+  <repairCost>	2.4	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
@@ -40,7 +40,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	4224	</weight>
-    <maxHealth>	64	</maxHealth>
+    <maxHealth>	132	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	50	</maxHealth>
       <maxRegenHealth>	25	</maxRegenHealth>
@@ -171,8 +171,8 @@
         <vehicleRotation>	0.33	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	40	</maxHealth>
-      <maxRegenHealth>	30	</maxRegenHealth>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	38	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F20_RenaultBS/normal/lod0/Chassis.model	</undamaged>
@@ -484,10 +484,6 @@
       <tags></tags>
       <level>	2	</level>
       <price>	560	</price>
-      <unlocks>
-        <vehicle>	F21_Lorraine39_L_AM	  <cost>	1450	</cost>
-        </vehicle>
-      </unlocks>
       <armor>
         <leftTrack>	5	</leftTrack>
         <rightTrack>	5	</rightTrack>
@@ -503,8 +499,8 @@
         <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	50	</maxHealth>
-      <maxRegenHealth>	40	</maxRegenHealth>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F20_RenaultBS/normal/lod0/Chassis.model	</undamaged>
@@ -823,7 +819,7 @@
         <armor_17>	0	</armor_17>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	16	</maxHealth>
+      <maxHealth>	33	</maxHealth>
       <rotationSpeed>	18	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -837,7 +833,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_Schneider>	shared	  <maxAmmo>	24	</maxAmmo>
+        <_76mm_Schneider>	shared	  <maxAmmo>	48	</maxAmmo>
           <armor>
             <armor_1>	16	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.179	</firePenalty>
   </invisibility>
-  <repairCost>	9.0	</repairCost>
+  <repairCost>	7.364	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.8	</priceFactor>
@@ -47,7 +47,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	23750	</weight>
-    <maxHealth>	1440	</maxHealth>
+    <maxHealth>	1760	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -969,8 +969,8 @@
         <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	220	</maxHealth>
-      <maxRegenHealth>	165	</maxRegenHealth>
+      <maxHealth>	265	</maxHealth>
+      <maxRegenHealth>	199	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R171_IS_3_II/normal/lod0/Chassis.model	</undamaged>
@@ -1655,8 +1655,8 @@
         <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	240	</maxHealth>
-      <maxRegenHealth>	180	</maxRegenHealth>
+      <maxHealth>	290	</maxHealth>
+      <maxRegenHealth>	218	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R171_IS_3_II/normal/lod0/Chassis.model	</undamaged>
@@ -2439,7 +2439,7 @@
           <reloadTime>	8	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.095	</invisibilityFactorAtShot>
-          <multiGunEffects>	shot_dualgun_mainext_L shot_dualgun_mainext_R	</multiGunEffects>
+          <multiGunEffects>	shot_dualgun_large_L shot_dualgun_large_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	2.5	</chargeTime>
             <shootImpulse>	200	</shootImpulse>
@@ -3378,7 +3378,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	12700	</weight>
-      <maxHealth>	360	</maxHealth>
+      <maxHealth>	440	</maxHealth>
       <rotationSpeed>	22	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	160	</maxHealth>
@@ -3453,7 +3453,7 @@
           <reloadTime>	7.5	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.095	</invisibilityFactorAtShot>
-          <multiGunEffects>	shot_dualgun_mainext_L shot_dualgun_mainext_R	</multiGunEffects>
+          <multiGunEffects>	shot_dualgun_large_L shot_dualgun_large_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	2	</chargeTime>
             <shootImpulse>	200	</shootImpulse>

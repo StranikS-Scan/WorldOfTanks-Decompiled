@@ -9,6 +9,7 @@ from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import GUI_NATIONS_ORDER_INDEX
 from gui.Scaleform.daapi.view.lobby.techtree.nodes import BaseNode
 from gui.Scaleform.daapi.view.lobby.techtree.settings import NATION_TREE_REL_FILE_PATH
+from gui.Scaleform.daapi.view.lobby.techtree.settings import NATION_TREE_REL_PREMIUM_FILE_PATH
 from gui.Scaleform.daapi.view.lobby.techtree.settings import TREE_SHARED_REL_FILE_PATH, UnlockStats
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UNKNOWN_VEHICLE_LEVEL
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockProps, DEFAULT_UNLOCK_PROPS
@@ -49,7 +50,7 @@ _AnnouncementInfo = namedtuple('_AnnouncementInfo', ('userString',
  'isElite'))
 
 class _TechTreeDataProvider(object):
-    __slots__ = ('__loaded', '__availableNations', '__override', '__displayInfo', '__displaySettings', '__topLevels', '__topItems', '__nextLevels', '__unlockPrices', '__announcements', '__announcementCDToName', '__nextAnnouncements', '__nodes', '__nextTypeIDs')
+    __slots__ = ('__loaded', '__availableNations', '__override', '__displayInfo', '__displaySettings', '__gridSettings', '__premiumGridSettings', '__topLevels', '__topItems', '__nextLevels', '__unlockPrices', '__announcements', '__announcementCDToName', '__nextAnnouncements', '__nodes', '__nextTypeIDs')
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
@@ -94,6 +95,14 @@ class _TechTreeDataProvider(object):
             result = {}
 
         return result
+
+    def getGridSettings(self, nationID):
+        result = self.__gridSettings[nationID]
+        return result if result is not None else {}
+
+    def getPremiumGridSettings(self, nationID):
+        result = self.__premiumGridSettings[nationID]
+        return result if result is not None else {}
 
     def getNationTreeIterator(self, nationID):
         if nationID >= len(self.__nodes):
@@ -252,6 +261,8 @@ class _TechTreeDataProvider(object):
         self.__nextTypeIDs = [0] * len(nations.NAMES)
         self.__nodes = [None] * len(nations.NAMES)
         self.__displaySettings = {}
+        self.__gridSettings = [None] * len(nations.NAMES)
+        self.__premiumGridSettings = [None] * len(nations.NAMES)
         self.__topLevels = defaultdict(set)
         self.__topItems = defaultdict(set)
         self.__nextLevels = defaultdict(dict)
@@ -521,31 +532,42 @@ class _TechTreeDataProvider(object):
 
     def __readNation(self, shared, nation, clearCache=False):
         xmlPath = NATION_TREE_REL_FILE_PATH.format(nation)
+        displayInfo, displaySettings, gridSettings = self.__readNodeList(shared, nation, xmlPath, clearCache)
+        xmlPath = NATION_TREE_REL_PREMIUM_FILE_PATH.format(nation)
+        premDisplayInfo, _, gridPremiumSettings = self.__readNodeList(shared, nation, xmlPath, clearCache)
+        nationID = nations.INDICES[nation]
+        self.__displaySettings[nationID] = displaySettings
+        self.__gridSettings[nationID] = gridSettings
+        self.__premiumGridSettings[nationID] = gridPremiumSettings
+        displayInfo.update(premDisplayInfo)
+        return displayInfo
+
+    def __readNodeList(self, shared, nation, xmlPath, clearCache=False):
         if clearCache:
             ResMgr.purge(xmlPath)
         section = ResMgr.openSection(xmlPath)
         if section is None:
             LOG_ERROR('can not open or read nation tree: ', nation, xmlPath)
-            return {}
+            return ({}, {}, {})
         else:
             xmlCtx = (None, xmlPath)
             settingsName = _xml.readString(xmlCtx, section, 'settings')
             if settingsName not in shared['settings']:
                 LOG_ERROR('not found settings (<settings> tag): ', settingsName, xmlPath)
-                return {}
+                return ({}, {}, {})
             precessed = _xml.getSubsection(xmlCtx, section, 'grid')
             gridName = precessed.asString
             if gridName not in shared['grids']:
                 LOG_ERROR('not found grid (<grid> tag): ', gridName, xmlPath)
-                return {}
+                return ({}, {}, {})
             xPath = '{0:>s}/grid'.format(xmlPath)
             xmlCtx = (None, xPath)
             grid = shared['grids'][gridName]
+            settings = {}
             settings = shared['settings'][settingsName]
             rows = _xml.readInt(xmlCtx, precessed, 'rows')
             columns = _xml.readInt(xmlCtx, precessed, 'columns')
             nationID = nations.INDICES[nation]
-            self.__displaySettings[nationID] = settings
             hasRoot = settings['hasRoot']
             if hasRoot:
                 coords = self.__makeGridCoordsWithRoot(grid, rows, columns)
@@ -587,7 +609,7 @@ class _TechTreeDataProvider(object):
                  'position': coords[column - 1][row - 1],
                  'lines': lines}
 
-            return displayInfo
+            return (displayInfo, settings, self.__makeGridSettings(grid, rows, columns))
 
     def __makeAbsoluteCoordinates(self):
         for displayInfo in self.__displayInfo:
@@ -634,6 +656,14 @@ class _TechTreeDataProvider(object):
             coordinates.append([ (x, y) for y in vRange ])
 
         return coordinates
+
+    def __makeGridSettings(self, grid, rows, columns):
+        _, hStep = grid['horizontal']
+        _, vStep = grid['vertical']
+        gridSettings = {'start': list(grid['root']['start']),
+         'step': [hStep, vStep],
+         'size': [rows, columns]}
+        return gridSettings
 
 
 g_techTreeDP = _TechTreeDataProvider()

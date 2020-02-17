@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.213	</firePenalty>
   </invisibility>
-  <repairCost>	5.66	</repairCost>
+  <repairCost>	3.416	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
@@ -49,7 +49,7 @@
     </armor>
     <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
     <weight>	21953	</weight>
-    <maxHealth>	520	</maxHealth>
+    <maxHealth>	928	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	185	</maxHealth>
       <maxRegenHealth>	125	</maxRegenHealth>
@@ -149,8 +149,8 @@
         <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	130	</maxHealth>
-      <maxRegenHealth>	100	</maxRegenHealth>
+      <maxHealth>	155	</maxHealth>
+      <maxRegenHealth>	116	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB08_Churchill_I/normal/lod0/Chassis.model	</undamaged>
@@ -758,10 +758,6 @@
       <tags></tags>
       <level>	5	</level>
       <price>	8500	</price>
-      <unlocks>
-        <vehicle>	GB40_Gun_Carrier_Churchill	  <cost>	49050	</cost>
-        </vehicle>
-      </unlocks>
       <armor>
         <leftTrack>	20	</leftTrack>
         <rightTrack>	20	</rightTrack>
@@ -777,8 +773,8 @@
         <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	140	</maxHealth>
-      <maxRegenHealth>	105	</maxRegenHealth>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	128	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB08_Churchill_I/normal/lod0/Chassis.model	</undamaged>
@@ -1407,7 +1403,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7200	</weight>
-      <maxHealth>	130	</maxHealth>
+      <maxHealth>	172	</maxHealth>
       <rotationSpeed>	34	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -1421,7 +1417,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_2pdr_Gun_Mk_X>	shared	  <maxAmmo>	150	</maxAmmo>
+        <_2pdr_Gun_Mk_X>	shared	  <maxAmmo>	265	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.339116 10 0.402778 5 0.597222 5 0.660884 10 1 10	</maxPitch>
@@ -1494,7 +1490,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_2pdr_Gun_Mk_X>
-        <_76mm_Howitzer_MkI>	shared	  <maxAmmo>	115	</maxAmmo>
+        <_76mm_Howitzer_MkI>	shared	  <maxAmmo>	175	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.339116 10 0.402778 5 0.597222 5 0.660884 10 1 10	</maxPitch>
@@ -1659,7 +1655,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_14 armor_4	</primaryArmor>
       <weight>	7500	</weight>
-      <maxHealth>	180	</maxHealth>
+      <maxHealth>	232	</maxHealth>
       <rotationSpeed>	34	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -1673,7 +1669,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_2pdr_Gun_Mk_X>	shared	  <maxAmmo>	150	</maxAmmo>
+        <_2pdr_Gun_Mk_X>	shared	  <maxAmmo>	265	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.339116 10 0.402778 5 0.597222 5 0.660884 10 1 10	</maxPitch>
@@ -1749,7 +1745,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_2pdr_Gun_Mk_X>
-        <_76mm_Howitzer_MkI>	shared	  <maxAmmo>	115	</maxAmmo>
+        <_76mm_Howitzer_MkI>	shared	  <maxAmmo>	175	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.339116 10 0.402778 5 0.597222 5 0.660884 10 1 10	</maxPitch>
@@ -1825,7 +1821,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_76mm_Howitzer_MkI>
-        <QF_6_pounder_Mk_III>	shared	  <maxAmmo>	84	</maxAmmo>
+        <QF_6_pounder_Mk_III>	shared	  <maxAmmo>	145	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.339116 10 0.402778 5 0.597222 5 0.660884 10 1 10	</maxPitch>
@@ -1905,7 +1901,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </QF_6_pounder_Mk_III>
-        <QF_6_pounder_Mk_V>	shared	  <maxAmmo>	84	</maxAmmo>
+        <QF_6_pounder_Mk_V>	shared	  <maxAmmo>	145	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 9 0.339116 9 0.402778 5 0.597222 5 0.660884 9 1 9	</maxPitch>
@@ -1987,7 +1983,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </QF_6_pounder_Mk_V>
-        <_75mm_Gun_Mk_V>	shared	  <maxAmmo>	84	</maxAmmo>
+        <_75mm_Gun_Mk_V>	shared	  <maxAmmo>	100	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 9 0.339116 9 0.402778 5 0.597222 5 0.660884 9 1 9	</maxPitch>
@@ -2067,7 +2063,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_75mm_Gun_Mk_V>
-        <_75mm_Gun_Vickers_HV>	shared	  <maxAmmo>	84	</maxAmmo>
+        <_75mm_Gun_Vickers_HV>	shared	  <maxAmmo>	100	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -12 1 -12	</minPitch>
             <maxPitch>	0 4 0.339116 4 0.402778 3 0.597222 3 0.660884 4 1 4	</maxPitch>

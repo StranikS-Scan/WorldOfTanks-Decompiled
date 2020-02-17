@@ -89,6 +89,9 @@ class ModelHitTester(object):
     def localHitTest(self, start, stop, value=0):
         return self.__getBspModel(value).collideSegment(start, stop)
 
+    def localNearestHitTest(self, start, stop, value=0):
+        return self.__getBspModel(value).collideSegmentNearest(start, stop)
+
     def localHitTestFull_debug(self, start, stop, value=0):
         LOG_DEBUG('localHitTestFull_debug', self.bspModelName, start, stop)
         return self.__getBspModel(value).collideSegmentFull_debug(start, stop)
@@ -122,6 +125,9 @@ class ModelHitTester(object):
             return self.__bspModelDown
         else:
             return self.__bspModel
+
+    def getModel(self, value):
+        return self.__getBspModel(value)
 
     def save(self, section):
         if IS_EDITOR:

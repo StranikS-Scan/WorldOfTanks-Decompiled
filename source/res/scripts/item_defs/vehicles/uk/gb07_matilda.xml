@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.398	</firePenalty>
   </invisibility>
-  <repairCost>	4.17	</repairCost>
+  <repairCost>	2.204	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
@@ -47,7 +47,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	12923	</weight>
-    <maxHealth>	272	</maxHealth>
+    <maxHealth>	560	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	140	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -147,8 +147,8 @@
         <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	55	</maxRegenHealth>
+      <maxHealth>	85	</maxHealth>
+      <maxRegenHealth>	64	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB07_Matilda/normal/lod0/Chassis.model	</undamaged>
@@ -827,8 +827,8 @@
         <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	80	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
+      <maxHealth>	95	</maxHealth>
+      <maxRegenHealth>	71	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB07_Matilda/normal/lod0/Chassis.model	</undamaged>
@@ -1510,7 +1510,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5650	</weight>
-      <maxHealth>	68	</maxHealth>
+      <maxHealth>	110	</maxHealth>
       <rotationSpeed>	34	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -1524,7 +1524,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_2pdr_Gun_Mk_X>	shared	  <maxAmmo>	92	</maxAmmo>
+        <_2pdr_Gun_Mk_X>	shared	  <maxAmmo>	160	</maxAmmo>
           <unlocks>
             <gun>	QF_2pdr_Littlejohn	  <cost>	1800	</cost>
             </gun>
@@ -1603,7 +1603,7 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_2pdr_Gun_Mk_X>
-        <_76mm_Howitzer_MkI>	shared	  <maxAmmo>	35	</maxAmmo>
+        <_76mm_Howitzer_MkI>	shared	  <maxAmmo>	55	</maxAmmo>
           <unlocks>
             <turret>	Turret_2_GB07_Matilda	  <cost>	1200	</cost>
             </turret>
@@ -1680,9 +1680,9 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_76mm_Howitzer_MkI>
-        <QF_2pdr_Littlejohn>	shared	  <maxAmmo>	92	</maxAmmo>
+        <QF_2pdr_Littlejohn>	shared	  <maxAmmo>	140	</maxAmmo>
           <unlocks>
-            <vehicle>	GB20_Crusader	  <cost>	15000	</cost>
+            <vehicle>	GB107_Cavalier	  <cost>	15000	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -1842,7 +1842,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	6050	</weight>
-      <maxHealth>	98	</maxHealth>
+      <maxHealth>	140	</maxHealth>
       <rotationSpeed>	34	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -1856,7 +1856,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_2pdr_Gun_Mk_X>	shared	  <maxAmmo>	92	</maxAmmo>
+        <_2pdr_Gun_Mk_X>	shared	  <maxAmmo>	160	</maxAmmo>
           <armor>
             <armor_1>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1929,7 +1929,7 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_2pdr_Gun_Mk_X>
-        <_76mm_Howitzer_MkI>	shared	  <maxAmmo>	35	</maxAmmo>
+        <_76mm_Howitzer_MkI>	shared	  <maxAmmo>	55	</maxAmmo>
           <armor>
             <armor_1>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2002,7 +2002,7 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_76mm_Howitzer_MkI>
-        <QF_2pdr_Littlejohn>	shared	  <maxAmmo>	92	</maxAmmo>
+        <QF_2pdr_Littlejohn>	shared	  <maxAmmo>	140	</maxAmmo>
           <armor>
             <armor_1>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

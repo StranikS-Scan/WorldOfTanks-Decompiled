@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ProfileTechniqueMeta.py
-from gui.Scaleform.daapi.view.lobby.profile.ProfileSection import ProfileSection
+from gui.Scaleform.daapi.view.meta.ProfileSectionWithTabsMeta import ProfileSectionWithTabsMeta
 
-class ProfileTechniqueMeta(ProfileSection):
+class ProfileTechniqueMeta(ProfileSectionWithTabsMeta):
 
     def setSelectedTableColumn(self, index, sortDirection):
         self._printOverrideError('setSelectedTableColumn')

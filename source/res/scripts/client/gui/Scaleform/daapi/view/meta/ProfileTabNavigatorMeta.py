@@ -7,8 +7,8 @@ class ProfileTabNavigatorMeta(BaseDAAPIComponent):
     def onTabChange(self, tabId):
         self._printOverrideError('onTabChange')
 
-    def as_setInitDataS(self, data):
-        return self.flashObject.as_setInitData(data) if self._isDAAPIInited() else None
+    def as_setDataS(self, data):
+        return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
     def as_setBtnTabCountersS(self, counters):
         return self.flashObject.as_setBtnTabCounters(counters) if self._isDAAPIInited() else None

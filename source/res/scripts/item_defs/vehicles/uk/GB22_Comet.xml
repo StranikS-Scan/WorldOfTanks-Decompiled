@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.38	</firePenalty>
   </invisibility>
-  <repairCost>	6	</repairCost>
+  <repairCost>	4.662	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.4	</priceFactor>
@@ -56,7 +56,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_7 armor_4	</primaryArmor>
     <weight>	16960	</weight>
-    <maxHealth>	840	</maxHealth>
+    <maxHealth>	1184	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -152,8 +152,8 @@
         <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	130	</maxHealth>
-      <maxRegenHealth>	100	</maxRegenHealth>
+      <maxHealth>	155	</maxHealth>
+      <maxRegenHealth>	116	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB22_Comet/normal/lod0/Chassis.model	</undamaged>
@@ -980,8 +980,8 @@
         <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	140	</maxHealth>
-      <maxRegenHealth>	105	</maxRegenHealth>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	128	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB22_Comet/normal/lod0/Chassis.model	</undamaged>
@@ -1814,7 +1814,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5000	</weight>
-      <maxHealth>	210	</maxHealth>
+      <maxHealth>	216	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -1828,7 +1828,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_Gun_Mk_V>	shared	  <maxAmmo>	61	</maxAmmo>
+        <_75mm_Gun_Mk_V>	shared	  <maxAmmo>	75	</maxAmmo>
           <unlocks>
             <gun>	_3.7inch_Howitzer	  <cost>	2300	</cost>
             </gun>
@@ -1905,7 +1905,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_Gun_Mk_V>
-        <_3.7inch_Howitzer>	shared	  <maxAmmo>	48	</maxAmmo>
+        <_3.7inch_Howitzer>	shared	  <maxAmmo>	60	</maxAmmo>
           <armor>
             <gun>	40	</gun>
           </armor>
@@ -1972,7 +1972,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_3.7inch_Howitzer>
-        <_75mm_Gun_Vickers_HV>	shared	  <maxAmmo>	61	</maxAmmo>
+        <_75mm_Gun_Vickers_HV>	shared	  <maxAmmo>	75	</maxAmmo>
           <armor>
             <gun>	20	</gun>
           </armor>
@@ -2127,7 +2127,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7000	</weight>
-      <maxHealth>	310	</maxHealth>
+      <maxHealth>	296	</maxHealth>
       <rotationSpeed>	46	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -2142,7 +2142,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.033	</invisibilityFactor>
       <guns>
-        <_75mm_Gun_Mk_V>	shared	  <maxAmmo>	61	</maxAmmo>
+        <_75mm_Gun_Mk_V>	shared	  <maxAmmo>	75	</maxAmmo>
           <armor>
             <armor_1>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2226,7 +2226,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_Gun_Mk_V>
-        <_3.7inch_Howitzer>	shared	  <maxAmmo>	48	</maxAmmo>
+        <_3.7inch_Howitzer>	shared	  <maxAmmo>	60	</maxAmmo>
           <armor>
             <armor_1>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2310,7 +2310,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_3.7inch_Howitzer>
-        <_75mm_Gun_Vickers_HV>	shared	  <maxAmmo>	61	</maxAmmo>
+        <_75mm_Gun_Vickers_HV>	shared	  <maxAmmo>	75	</maxAmmo>
           <armor>
             <armor_1>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

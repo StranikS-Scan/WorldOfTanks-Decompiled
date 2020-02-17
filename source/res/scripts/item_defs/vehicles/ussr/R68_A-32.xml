@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.42	</firePenalty>
   </invisibility>
-  <repairCost>	4.0	</repairCost>
+  <repairCost>	2.057	</repairCost>
   <premiumVehicleXPFactor>	0.5	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
@@ -42,7 +42,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_2 armor_3	</primaryArmor>
     <weight>	9600	</weight>
-    <maxHealth>	288	</maxHealth>
+    <maxHealth>	560	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	140	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -139,8 +139,8 @@
         <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R68_A-32/normal/lod0/Chassis.model	</undamaged>
@@ -879,7 +879,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_2 armor_3	</primaryArmor>
       <weight>	3200	</weight>
-      <maxHealth>	72	</maxHealth>
+      <maxHealth>	140	</maxHealth>
       <rotationSpeed>	40.25	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -893,7 +893,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_L-10U>	shared	  <maxAmmo>	72	</maxAmmo>
+        <_76mm_L-10U>	shared	  <maxAmmo>	110	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -22 1 -22	</minPitch>
             <maxPitch>	0 7 0.311338 7 0.375 4 0.625 4 0.688662 7 1 7	</maxPitch>

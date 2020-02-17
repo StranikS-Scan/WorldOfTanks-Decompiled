@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.726	</firePenalty>
   </invisibility>
-  <repairCost>	5.1	</repairCost>
+  <repairCost>	2.318	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
@@ -40,7 +40,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	3961	</weight>
-    <maxHealth>	120	</maxHealth>
+    <maxHealth>	264	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	90	</maxHealth>
       <maxRegenHealth>	60	</maxRegenHealth>
@@ -174,8 +174,8 @@
         <vehicleRotation>	0.28	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	53	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/sweden/S20_Ikv_72/normal/lod0/Chassis.model	</undamaged>
@@ -948,8 +948,8 @@
         <vehicleRotation>	0.26	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	55	</maxRegenHealth>
+      <maxHealth>	85	</maxHealth>
+      <maxRegenHealth>	64	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/sweden/S20_Ikv_72/normal/lod0/Chassis.model	</undamaged>
@@ -1715,7 +1715,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
       <weight>	100	</weight>
-      <maxHealth>	30	</maxHealth>
+      <maxHealth>	66	</maxHealth>
       <rotationSpeed>	36	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1729,7 +1729,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_kan_m_41_ikv>	shared	  <maxAmmo>	42	</maxAmmo>
+        <_75mm_kan_m_41_ikv>	shared	  <maxAmmo>	75	</maxAmmo>
           <unlocks>
             <gun>	_75mm_kan_m_41_ikv_L_50	  <cost>	2100	</cost>
             </gun>
@@ -1792,11 +1792,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_75mm_kan_m_41_ikv>
-        <_75mm_kan_m_41_ikv_L_50>	shared	  <maxAmmo>	42	</maxAmmo>
-          <unlocks>
-            <vehicle>	S19_Sav_M43	  <cost>	3170	</cost>
-            </vehicle>
-          </unlocks>
+        <_75mm_kan_m_41_ikv_L_50>	shared	  <maxAmmo>	75	</maxAmmo>
           <armor>
             <armor_1>	18.5	</armor_1>
             <gun>	20	</gun>

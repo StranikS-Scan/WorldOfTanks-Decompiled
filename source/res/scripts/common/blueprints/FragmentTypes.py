@@ -66,17 +66,17 @@ class VehicleBlueprintFragment(BlueprintFragment):
     FTYPE = BlueprintTypes.VEHICLE
 
     @staticmethod
-    def fromVehicleType(vehNameOrTypeDescr):
+    def fromVehicleType(vehNameOrTypeDescr, enableException=True):
         vehTypeCD = vehicles.makeVehicleTypeCompDescrByName(vehNameOrTypeDescr) if type(vehNameOrTypeDescr) is str else vehNameOrTypeDescr
-        if vehTypeCD not in getAllResearchedVehicles():
+        if enableException and vehTypeCD not in getAllResearchedVehicles():
             raise BlueprintsException('Cannot create blueprint for non-researched vehicle {}'.format(vehTypeCD))
-        return VehicleBlueprintFragment(vehTypeCD)
+        return VehicleBlueprintFragment(vehTypeCD, enableException)
 
-    def __init__(self, vehTypeCD):
+    def __init__(self, vehTypeCD, enableException=True):
         super(VehicleBlueprintFragment, self).__init__(vehTypeCD)
         vehicleLevel = vehicles.getVehicleType(vehTypeCD).level
         availableLevels = g_cache.levels
-        if vehicleLevel not in availableLevels:
+        if enableException and vehicleLevel not in availableLevels:
             raise BlueprintsException('Invalid vehicle level for having blueprints')
         self.total, self.progressPerFragment, self.require, self.decays = availableLevels.get(vehicleLevel, (0,
          0,

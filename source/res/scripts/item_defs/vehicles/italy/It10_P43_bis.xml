@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.396	</firePenalty>
   </invisibility>
-  <repairCost>	7.0	</repairCost>
+  <repairCost>	4.887	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.2	</priceFactor>
@@ -38,7 +38,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	16714	</weight>
-    <maxHealth>	560	</maxHealth>
+    <maxHealth>	848	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	110	</maxRegenHealth>
@@ -131,8 +131,8 @@
         <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	110	</maxHealth>
-      <maxRegenHealth>	85	</maxRegenHealth>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	98	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/italy/It10_P43_bis/normal/lod0/Chassis.model	</undamaged>
@@ -851,8 +851,8 @@
         <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	90	</maxRegenHealth>
+      <maxHealth>	145	</maxHealth>
+      <maxRegenHealth>	109	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/italy/It10_P43_bis/normal/lod0/Chassis.model	</undamaged>
@@ -1570,7 +1570,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3500	</weight>
-      <maxHealth>	140	</maxHealth>
+      <maxHealth>	152	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1584,7 +1584,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <Cannone_da_75_50_Skoda>	shared	  <maxAmmo>	63	</maxAmmo>
+        <Cannone_da_75_50_Skoda>	shared	  <maxAmmo>	75	</maxAmmo>
           <unlocks>
             <turret>	Turret_2_It10_P43_bis	  <cost>	5200	</cost>
             </turret>
@@ -1757,7 +1757,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5000	</weight>
-      <maxHealth>	180	</maxHealth>
+      <maxHealth>	212	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -1771,7 +1771,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <Cannone_da_75_50_Skoda>	shared	  <maxAmmo>	63	</maxAmmo>
+        <Cannone_da_75_50_Skoda>	shared	  <maxAmmo>	75	</maxAmmo>
           <armor>
             <gun>	20	</gun>
           </armor>

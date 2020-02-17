@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.473	</firePenalty>
   </invisibility>
-  <repairCost>	7.04	</repairCost>
+  <repairCost>	4.861	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.2	</priceFactor>
@@ -41,7 +41,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	5000	</weight>
-    <maxHealth>	464	</maxHealth>
+    <maxHealth>	672	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -141,8 +141,8 @@
         <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	110	</maxHealth>
-      <maxRegenHealth>	85	</maxRegenHealth>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	98	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F15_AMX_12t/normal/lod0/Chassis.model	</undamaged>
@@ -927,10 +927,6 @@
       <tags></tags>
       <level>	6	</level>
       <price>	16250	</price>
-      <unlocks>
-        <vehicle>	F23_AMX_13F3AM	  <cost>	64250	</cost>
-        </vehicle>
-      </unlocks>
       <armor>
         <leftTrack>	15	</leftTrack>
         <rightTrack>	15	</rightTrack>
@@ -946,8 +942,8 @@
         <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	90	</maxRegenHealth>
+      <maxHealth>	145	</maxHealth>
+      <maxRegenHealth>	109	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F15_AMX_12t/normal/lod0/Chassis.model	</undamaged>
@@ -1749,7 +1745,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_10	</primaryArmor>
       <weight>	1500	</weight>
-      <maxHealth>	116	</maxHealth>
+      <maxHealth>	168	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>

@@ -2678,6 +2678,7 @@ class TOOLTIPS(object):
     MARATHON_HEADER = '#tooltips:marathon/header'
     MARATHON_BODY = '#tooltips:marathon/body'
     MARATHON_BODY_EXTRA = '#tooltips:marathon/body/extra'
+    MARATHON_BODY_EXTRA_SMART = '#tooltips:marathon/body/extra_smart'
     MARATHON_STATE_START = '#tooltips:marathon/state/start'
     MARATHON_STATE_END = '#tooltips:marathon/state/end'
     MARATHON_STATE_COMPLETE = '#tooltips:marathon/state/complete'

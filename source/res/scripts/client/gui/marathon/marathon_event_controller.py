@@ -4,13 +4,14 @@ import Event
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewTypes
 from gui.marathon.bob_event import BobEvent
+from gui.marathon.spring_marathon import SpringMarathon
 from gui.app_loader.decorators import sf_lobby
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from helpers import dependency, isPlayerAccount
 from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-MARATHON_EVENTS = [BobEvent()]
+MARATHON_EVENTS = [BobEvent(), SpringMarathon()]
 DEFAULT_MARATHON_PREFIX = MARATHON_EVENTS[0].prefix if any(MARATHON_EVENTS) else None
 
 class MarathonEventsController(IMarathonEventsController, Notifiable):
@@ -133,8 +134,13 @@ class MarathonEventsController(IMarathonEventsController, Notifiable):
         self.onFlagUpdateNotify()
 
     def __getClosestStatusUpdateTime(self):
-        if self.__marathons:
-            return min([ marathon.getClosestStatusUpdateTime() for marathon in self.__marathons ])
+        timeList = []
+        for marathon in self.__marathons:
+            time = marathon.getClosestStatusUpdateTime()
+            if time != 0:
+                timeList.append(time)
+
+        return min(timeList) if timeList else 0
 
     def __reloadNotification(self):
         self.clearNotification()

@@ -616,8 +616,10 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
             url = self._heroTanks.getCurrentRelatedURL()
             self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.SPECIFIED, url=url))
 
+    @process
     def __purchaseMarathonPackage(self):
-        self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.SPECIFIED, url=self._marathonEvent.getMarathonVehicleUrl()))
+        url = yield self._marathonEvent.getMarathonVehicleUrl()
+        self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.SPECIFIED, url=url))
 
     def __research(self):
         if self._actionType == factory.UNLOCK_ITEM:

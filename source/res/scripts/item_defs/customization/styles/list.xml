@@ -7613,6 +7613,48 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 3500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F116_Bat_Chatillon_Bourrasque	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	266	</id>
+      <texture>	gui/maps/vehicles/styles/F116_Bat_Chatillon_Bourrasque_3Dst.png	</texture>
+      <description>	#vehicle_customization:special_style/F116_Bat_Chatillon_Bourrasque_3Dst_desc	</description>
+      <modelsSet>	F116_Bat_Chatillon_Bourrasque_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/F116_Bat_Chatillon_Bourrasque_3Dst	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	201	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:styles/rented_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>

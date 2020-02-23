@@ -20,7 +20,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.money import Currency
 from messenger import g_settings
 from messenger.formatters import TimeFormatter
-from messenger.formatters.service_channel import WaitItemsSyncFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, ServiceChannelFormatter, PersonalMissionsQuestAchievesFormatter
+from messenger.formatters.service_channel import WaitItemsSyncFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, ServiceChannelFormatter, PersonalMissionsQuestAchievesFormatter, BattlePassQuestAchievesFormatter
 from messenger.formatters.service_channel_helpers import getRewardsForQuests, EOL, MessageData, getCustomizationItemData, getDefaultMessage, DEFAULT_MESSAGE
 from shared_utils import findFirst, first
 from skeletons.gui.server_events import IEventsCache
@@ -587,6 +587,53 @@ class SeniorityAwardsFormatter(AsyncTokenQuestsSubFormatter):
         fmt = self._achievesFormatter.formatQuestAchieves(questData, asBattleFormatter=False)
         if fmt is not None:
             templateParams = {'achieves': fmt}
+            settings = self._getGuiSettings(message, self.__MESSAGE_TEMPLATE)
+            formatted = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, templateParams)
+            return MessageData(formatted, settings)
+        else:
+            return
+
+
+class BattlePassDefaultAwardsFormatter(WaitItemsSyncFormatter, TokenQuestsSubFormatter):
+    __MESSAGE_TEMPLATE = 'BattlePassDefaultRewardMessage'
+    __BATTLE_PASS_TOKEN_QUEST_PATTERN = 'battle_pass'
+
+    def __init__(self):
+        super(BattlePassDefaultAwardsFormatter, self).__init__()
+        self._achievesFormatter = BattlePassQuestAchievesFormatter()
+
+    @async
+    @process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        messageDataList = []
+        if isSynced:
+            data = message.data or {}
+            completedQuestIDs = self.getQuestOfThisGroup(data.get('completedQuestIDs', set()))
+            for qID in completedQuestIDs:
+                messageData = self.__buildMessage(qID, message)
+                if messageData is not None:
+                    messageDataList.append(messageData)
+
+        if messageDataList:
+            callback(messageDataList)
+        callback([MessageData(None, None)])
+        return
+
+    @classmethod
+    def _isQuestOfThisGroup(cls, questID):
+        return cls.__BATTLE_PASS_TOKEN_QUEST_PATTERN in questID
+
+    def __buildMessage(self, questID, message):
+        data = message.data or {}
+        questData = {}
+        rewards = data.get('detailedRewards', {}).get(questID, {})
+        questData.update(rewards)
+        header = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.header.voted())
+        fmt = self._achievesFormatter.formatQuestAchieves(questData, asBattleFormatter=False)
+        if fmt is not None:
+            templateParams = {'text': fmt,
+             'header': header}
             settings = self._getGuiSettings(message, self.__MESSAGE_TEMPLATE)
             formatted = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, templateParams)
             return MessageData(formatted, settings)

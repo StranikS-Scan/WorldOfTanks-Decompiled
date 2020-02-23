@@ -310,6 +310,12 @@ VEHICLE_STATS_BLOCK_VO_META = base.PropertyMeta((('shots', 0, 'shots'),
  ('capturePointsVal', style.SlashedValuesBlock('capturePointsVal'), 'capturePoints'),
  ('mileage', style.MetersToKillometersItem('mileage'), 'mileage')))
 VEHICLE_STATS_BLOCK_VO_META.bind(vehicles.RegularVehicleStatValuesBlock)
+_BADGE_VO_META = base.PropertyMeta((('icon', '', 'icon'),
+ ('content', '', 'content'),
+ ('sizeContent', '', 'sizeContent'),
+ ('isDynamic', False, 'isDynamic'),
+ ('isAtlasSource', False, 'isAtlasSource')))
+_BADGE_VO_META.bind(vehicles.BadgeBlock)
 TEAM_ITEM_VO_META = base.PropertyMeta((('achievements', shared.AchievementsBlock(base.ListMeta(), 'achievements'), 'achievements'),
  ('medalsCount', 0, 'achievementsCount'),
  ('vehicleStateStr', '', 'vehicleState'),
@@ -341,8 +347,8 @@ TEAM_ITEM_VO_META = base.PropertyMeta((('achievements', shared.AchievementsBlock
  ('resourceCount', 0, 'fortResource'),
  ('rank', 0, 'rank'),
  ('rankIcon', '', 'rankIcon'),
- ('badge', 0, 'badge'),
- ('badgeIcon', '', 'badgeIcon'),
+ ('hasSelectedBadge', False, 'hasSelectedBadge'),
+ ('badgeVO', vehicles.BadgeBlock(field='badgeVO'), 'badge'),
  ('playerRank', 0, 'playerRank'),
  ('respawns', 0, 'respawns'),
  ('suffixBadgeIcon', '', 'suffixBadgeIcon')))

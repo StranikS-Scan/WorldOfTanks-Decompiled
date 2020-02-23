@@ -52,10 +52,7 @@ class FullScreenDialogView(ViewImpl):
 
     def _initialize(self):
         super(FullScreenDialogView, self)._initialize()
-        self.viewModel.onAcceptClicked += self._onAcceptClicked
-        self.viewModel.onCancelClicked += self._onCancelClicked
-        self._itemsCache.onSyncCompleted += self._onInventoryResync
-        g_playerEvents.onAccountBecomeNonPlayer += self.destroyWindow
+        self._addListeners()
 
     def _onInventoryResync(self, *args, **kwargs):
         with self.viewModel.transaction() as model:
@@ -75,13 +72,22 @@ class FullScreenDialogView(ViewImpl):
 
     def _finalize(self):
         super(FullScreenDialogView, self)._finalize()
+        self._removeListeners()
+        self.__scope.destroy()
+        if self.__blur:
+            self.__blur.disable()
+
+    def _addListeners(self):
+        self.viewModel.onAcceptClicked += self._onAcceptClicked
+        self.viewModel.onCancelClicked += self._onCancelClicked
+        self._itemsCache.onSyncCompleted += self._onInventoryResync
+        g_playerEvents.onAccountBecomeNonPlayer += self.destroyWindow
+
+    def _removeListeners(self):
         self.viewModel.onAcceptClicked -= self._onAcceptClicked
         self.viewModel.onCancelClicked -= self._onCancelClicked
         self._itemsCache.onSyncCompleted -= self._onInventoryResync
         g_playerEvents.onAccountBecomeNonPlayer -= self.destroyWindow
-        self.__scope.destroy()
-        if self.__blur:
-            self.__blur.disable()
 
     def _blurBackGround(self):
         if self.__blur:

@@ -77,7 +77,7 @@ def createReusableInfo(results):
 
 
 class _ReusableInfo(object):
-    __slots__ = ('__arenaUniqueID', '__clientIndex', '__premiumState', '__common', '__personal', '__players', '__vehicles', '__avatars', '__squadFinder', '__premiumPlusState', '__isAddXPBonusApplied')
+    __slots__ = ('__arenaUniqueID', '__clientIndex', '__premiumState', '__common', '__personal', '__players', '__vehicles', '__avatars', '__squadFinder', '__premiumPlusState', '__isAddXPBonusApplied', '__battlePassProgress')
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
@@ -95,6 +95,7 @@ class _ReusableInfo(object):
         self.__avatars = avatars
         self.__squadFinder = squad_finder.createSquadFinder(self.__common.arenaVisitor)
         self.__findSquads()
+        self.__battlePassProgress = {}
 
     @property
     def arenaUniqueID(self):
@@ -191,6 +192,14 @@ class _ReusableInfo(object):
     @property
     def avatars(self):
         return self.__avatars
+
+    @property
+    def battlePassProgress(self):
+        return self.__battlePassProgress
+
+    @battlePassProgress.setter
+    def battlePassProgress(self, progress):
+        self.__battlePassProgress = progress
 
     def getAvatarInfo(self, dbID=0):
         if not dbID:

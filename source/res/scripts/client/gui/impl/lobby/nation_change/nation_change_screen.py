@@ -178,7 +178,9 @@ class NationChangeScreen(ViewImpl):
             deviceModel = NationChangeDeviceModel()
             deviceModel.setImage(self.__icons.artefact.dyn(getIconResourceName(device.descriptor.iconName))())
             deviceModel.setIsRemovable(device.isRemovable)
-            deviceModel.setIsImproved(device.isDeluxe())
+            deviceModel.setIsImproved(device.isDeluxe)
+            deviceModel.setIsTrophyBasic(device.isUpgradable)
+            deviceModel.setIsTrophyUpgraded(device.isUpgraded)
             deviceModel.setIntCD(device.intCD)
             slotVM.addViewModel(deviceModel)
 

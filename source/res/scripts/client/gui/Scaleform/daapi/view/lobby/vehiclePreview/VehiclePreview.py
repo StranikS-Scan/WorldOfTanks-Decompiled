@@ -26,7 +26,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
 from gui.ingame_shop import canBuyGoldForVehicleThroughWeb
-from gui.shared import event_dispatcher, events, event_bus_handlers, EVENT_BUS_SCOPE
+from gui.shared import event_dispatcher, events, event_bus_handlers, EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.gui_items.gui_item_economics import getPriceTypeAndValue
 from gui.shared.event_dispatcher import showWebShop, showOldShop
 from gui.shared.formatters import text_styles, icons, chooseItemPriceVO, getItemUnlockPricesVO, getMoneyVO
@@ -166,6 +166,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         if self._needToResetAppearance:
             g_currentPreviewVehicle.selectNoVehicle()
             g_currentPreviewVehicle.resetAppearance()
+        g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.VEHICLE_PREVIEW_HIDDEN), scope=EVENT_BUS_SCOPE.LOBBY)
         if self._backAlias == VIEW_ALIAS.VEHICLE_PREVIEW:
             g_currentVehicle.refreshModel()
         self._previewBackCb = None

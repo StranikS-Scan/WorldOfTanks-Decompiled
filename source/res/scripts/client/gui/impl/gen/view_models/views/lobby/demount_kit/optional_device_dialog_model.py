@@ -8,12 +8,12 @@ class OptionalDeviceDialogModel(ItemPriceDialogModel):
     def __init__(self, properties=17, commands=2):
         super(OptionalDeviceDialogModel, self).__init__(properties=properties, commands=commands)
 
-    def getIsDeluxe(self):
-        return self._getBool(16)
+    def getSpecialType(self):
+        return self._getString(16)
 
-    def setIsDeluxe(self, value):
-        self._setBool(16, value)
+    def setSpecialType(self, value):
+        self._setString(16, value)
 
     def _initialize(self):
         super(OptionalDeviceDialogModel, self)._initialize()
-        self._addBoolProperty('isDeluxe', False)
+        self._addStringProperty('specialType', '')

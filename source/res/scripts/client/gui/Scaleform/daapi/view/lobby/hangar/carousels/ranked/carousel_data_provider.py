@@ -14,7 +14,7 @@ class RankedCarouselDataProvider(HangarCarouselDataProvider):
 
     @classmethod
     def _vehicleComparisonKey(cls, vehicle):
-        return (vehicle.getCustomState() == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE,
+        return (cls._isSuitableForQueue(vehicle),
          not vehicle.isInInventory,
          not vehicle.isEvent,
          not vehicle.isFavorite,

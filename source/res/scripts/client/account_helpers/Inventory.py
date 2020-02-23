@@ -32,11 +32,12 @@ def getAmmoAsDict(ammo):
 
 class Inventory(object):
 
-    def __init__(self, syncData):
+    def __init__(self, syncData, clientCommandsProxy):
         self.__account = None
         self.__syncData = syncData
         self.__cache = {}
         self.__ignore = True
+        self.__commandsProxy = clientCommandsProxy
         return
 
     def onAccountBecomePlayer(self):
@@ -390,6 +391,15 @@ class Inventory(object):
             self.__account._doCmdIntArr(AccountCommands.CMD_TMAN_ADD_CREW_SKIN, skinList, proxy)
             return
 
+    def upgradeOptDev(self, optDevID, vehInvID, slotIdx, callback=None):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            self.__account.shop.waitForSync(partial(self.__upgradeOptDev_onShopSynced, optDevID, vehInvID, slotIdx, callback))
+            return
+
     def switchNation(self, itemName, nextItemName, callback):
         if self.__ignore:
             if callback is not None:
@@ -635,4 +645,16 @@ class Inventory(object):
              int(isPaidRemoval),
              int(useDemountKit)]
             self.__account._doCmdIntArr(AccountCommands.CMD_EQUIP_OPTDEV, arr, proxy)
+            return
+
+    def __upgradeOptDev_onShopSynced(self, optDevID, vehInvID, slotIdx, callback, resultID, shopRev):
+        if resultID < 0:
+            if callback is not None:
+                callback(resultID)
+            return
+        else:
+            proxy = None
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr)
+            self.__commandsProxy.perform(AccountCommands.CMD_UPGRADE_OPTDEV, shopRev, optDevID, vehInvID, slotIdx, proxy)
             return

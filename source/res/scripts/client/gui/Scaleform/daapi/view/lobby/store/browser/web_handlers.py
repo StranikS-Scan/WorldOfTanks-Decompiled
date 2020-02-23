@@ -7,6 +7,7 @@ from web.web_client_api.request import RequestWebApi
 from web.web_client_api.sound import SoundWebApi, HangarSoundWebApi
 from web.web_client_api.shop import ShopWebApi
 from web.web_client_api.hero_tank import HeroTankWebApi
+from web.web_client_api.battle_pass import BattlePassWebApi
 from web.web_client_api.ui import NotificationWebApi, OpenWindowWebApi, OpenTabWebApi, CloseWindowWebApi, UtilWebApi
 from web.web_client_api.frontline import FrontLineWebApi
 
@@ -18,9 +19,12 @@ class _OpenTabWebApi(OpenTabWebApi):
     def _getVehiclePreviewReturnCallback(self, cmd):
         return self.__getReturnCallback(cmd.back_url)
 
+    def _getVehicleStylePreviewCallback(self, cmd):
+        return self.__getReturnCallback(cmd.back_url)
+
     def __getReturnCallback(self, backUrl):
         return (lambda : showWebShop(backUrl)) if backUrl is not None else None
 
 
 def createShopWebHandlers():
-    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, _OpenTabWebApi, RequestWebApi, ShopWebApi, SoundWebApi, HangarSoundWebApi, UtilWebApi, FrontLineWebApi, HeroTankWebApi)
+    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, _OpenTabWebApi, RequestWebApi, ShopWebApi, SoundWebApi, HangarSoundWebApi, UtilWebApi, FrontLineWebApi, HeroTankWebApi, BattlePassWebApi)

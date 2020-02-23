@@ -38,3 +38,4 @@ class CONTEXT_MENU_HANDLER_TYPE(object):
     STORAGE_CREW_BOOKS_ITEM = 'storageCrewBooksItem'
     STORAGE_CREW_BOOKS_NO_SALE_ITEM = 'storageCrewBooksNoSaleItem'
     STORAGE_DEMOUNT_KIT_ITEM = 'storageDemountKitItem'
+    STORAGE_OPTIONAL_DEVICE_ITEM = 'storageOptionalDeviceItem'

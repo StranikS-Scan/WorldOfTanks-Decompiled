@@ -7,6 +7,9 @@ class FittingSelectPopoverMeta(SmartPopOverView):
     def setVehicleModule(self, newId, oldId, isRemove):
         self._printOverrideError('setVehicleModule')
 
+    def upgradeVehicleModule(self, moduleId):
+        self._printOverrideError('upgradeVehicleModule')
+
     def showModuleInfo(self, moduleId):
         self._printOverrideError('showModuleInfo')
 

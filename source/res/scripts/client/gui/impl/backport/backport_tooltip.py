@@ -11,6 +11,8 @@ _STATE_TYPE_INFO = 'INFO'
 TooltipData = namedtuple('TooltipData', ('tooltip', 'isSpecial', 'specialAlias', 'specialArgs'))
 
 def createTooltipData(tooltip=None, isSpecial=False, specialAlias=None, specialArgs=None):
+    if specialArgs is None:
+        specialArgs = ()
     return TooltipData(tooltip, isSpecial, specialAlias, specialArgs)
 
 

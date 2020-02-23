@@ -57,6 +57,13 @@
       <undamaged>	vehicles/russian/R77_KV2/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/russian/R77_KV2/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/russian/R77_KV2/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <R77_KV2_Postap_3Dst>
+          <undamaged>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/crash/lod0/Hull.model	</exploded>
+        </R77_KV2_Postap_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -146,6 +153,13 @@
         <undamaged>	vehicles/russian/R77_KV2/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R77_KV2/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/russian/R77_KV2/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <R77_KV2_Postap_3Dst>
+            <undamaged>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/crash/lod0/Chassis.model	</exploded>
+          </R77_KV2_Postap_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -246,18 +260,21 @@
       <splineDesc>
         <segmentModelLeft>	vehicles/russian/R77_KV2/track/segment.model	</segmentModelLeft>
         <segmentModelRight>	vehicles/russian/R77_KV2/track/segment.model	</segmentModelRight>
-        <segment2ModelLeft>	vehicles/russian/R77_KV2/track/segment.model	</segment2ModelLeft>
-        <segment2ModelRight>	vehicles/russian/R77_KV2/track/segment.model	</segment2ModelRight>
         <left>	vehicles/russian/R77_KV2/track/left.track	</left>
         <right>	vehicles/russian/R77_KV2/track/right.track	</right>
         <segmentLength>	0.153	</segmentLength>
         <segmentOffset>	0.11	</segmentOffset>
-        <segment2Offset>	0.000000	</segment2Offset>
         <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
         </atlas>
+        <modelSets>
+          <R77_KV2_Postap_3Dst>
+            <segmentModelLeft>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/track/segment_L.model	</segmentModelLeft>
+            <segmentModelRight>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/track/segment_R.model	</segmentModelRight>
+          </R77_KV2_Postap_3Dst>
+        </modelSets>
       </splineDesc>
       <trackThickness>	0.000000	</trackThickness>
       <trackNodes>
@@ -387,6 +404,11 @@
             <model>	vehicles/russian/R77_KV2/track/segment.model	</model>
             <length>	0.153442	</length>
           </mainSegment>
+          <modelSets>
+            <R77_KV2_Postap_3Dst>
+              <mainSegmentModel>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/track/segment_L.model	</mainSegmentModel>
+            </R77_KV2_Postap_3Dst>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -587,6 +609,11 @@
             <model>	vehicles/russian/R77_KV2/track/segment.model	</model>
             <length>	0.153443	</length>
           </mainSegment>
+          <modelSets>
+            <R77_KV2_Postap_3Dst>
+              <mainSegmentModel>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/track/segment_R.model	</mainSegmentModel>
+            </R77_KV2_Postap_3Dst>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -813,6 +840,13 @@
         <undamaged>	vehicles/russian/R77_KV2/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R77_KV2/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/russian/R77_KV2/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <R77_KV2_Postap_3Dst>
+            <undamaged>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/crash/lod0/Chassis.model	</exploded>
+          </R77_KV2_Postap_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -913,18 +947,21 @@
       <splineDesc>
         <segmentModelLeft>	vehicles/russian/R77_KV2/track/segment.model	</segmentModelLeft>
         <segmentModelRight>	vehicles/russian/R77_KV2/track/segment.model	</segmentModelRight>
-        <segment2ModelLeft>	vehicles/russian/R77_KV2/track/segment.model	</segment2ModelLeft>
-        <segment2ModelRight>	vehicles/russian/R77_KV2/track/segment.model	</segment2ModelRight>
         <left>	vehicles/russian/R77_KV2/track/left.track	</left>
         <right>	vehicles/russian/R77_KV2/track/right.track	</right>
         <segmentLength>	0.153	</segmentLength>
         <segmentOffset>	0.11	</segmentOffset>
-        <segment2Offset>	0.000000	</segment2Offset>
         <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
         </atlas>
+        <modelSets>
+          <R77_KV2_Postap_3Dst>
+            <segmentModelLeft>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/track/segment_L.model	</segmentModelLeft>
+            <segmentModelRight>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/track/segment_R.model	</segmentModelRight>
+          </R77_KV2_Postap_3Dst>
+        </modelSets>
       </splineDesc>
       <trackThickness>	0.000000	</trackThickness>
       <trackNodes>
@@ -1054,6 +1091,11 @@
             <model>	vehicles/russian/R77_KV2/track/segment.model	</model>
             <length>	0.153442	</length>
           </mainSegment>
+          <modelSets>
+            <R77_KV2_Postap_3Dst>
+              <mainSegmentModel>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/track/segment_L.model	</mainSegmentModel>
+            </R77_KV2_Postap_3Dst>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1254,6 +1296,11 @@
             <model>	vehicles/russian/R77_KV2/track/segment.model	</model>
             <length>	0.153443	</length>
           </mainSegment>
+          <modelSets>
+            <R77_KV2_Postap_3Dst>
+              <mainSegmentModel>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/track/segment_R.model	</mainSegmentModel>
+            </R77_KV2_Postap_3Dst>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1526,6 +1573,13 @@
             <undamaged>	vehicles/russian/R77_KV2/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R77_KV2/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R77_KV2/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <R77_KV2_Postap_3Dst>
+                <undamaged>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </R77_KV2_Postap_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R77_KV2/collision/Gun_01.model	</collisionModelServer>
@@ -1608,6 +1662,13 @@
             <undamaged>	vehicles/russian/R77_KV2/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/russian/R77_KV2/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/russian/R77_KV2/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <R77_KV2_Postap_3Dst>
+                <undamaged>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/crash/lod0/Gun_02.model	</exploded>
+              </R77_KV2_Postap_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R77_KV2/collision/Gun_02.model	</collisionModelServer>
@@ -1687,6 +1748,13 @@
             <undamaged>	vehicles/russian/R77_KV2/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/russian/R77_KV2/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/russian/R77_KV2/crash/lod0/Gun_03.model	</exploded>
+            <sets>
+              <R77_KV2_Postap_3Dst>
+                <undamaged>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/normal/lod0/Gun_03.model	</undamaged>
+                <destroyed>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/crash/lod0/Gun_03.model	</destroyed>
+                <exploded>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/crash/lod0/Gun_03.model	</exploded>
+              </R77_KV2_Postap_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R77_KV2/collision/Gun_03.model	</collisionModelServer>
@@ -1743,6 +1811,13 @@
         <undamaged>	vehicles/russian/R77_KV2/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/russian/R77_KV2/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/russian/R77_KV2/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <R77_KV2_Postap_3Dst>
+            <undamaged>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </R77_KV2_Postap_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R77_KV2/collision/Turret_01.model	</collisionModelServer>
@@ -1881,6 +1956,13 @@
             <undamaged>	vehicles/russian/R77_KV2/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/russian/R77_KV2/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/russian/R77_KV2/crash/lod0/Gun_04.model	</exploded>
+            <sets>
+              <R77_KV2_Postap_3Dst>
+                <undamaged>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/normal/lod0/Gun_04.model	</undamaged>
+                <destroyed>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/crash/lod0/Gun_04.model	</destroyed>
+                <exploded>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/crash/lod0/Gun_04.model	</exploded>
+              </R77_KV2_Postap_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R77_KV2/collision/Gun_04.model	</collisionModelServer>
@@ -1959,6 +2041,13 @@
             <undamaged>	vehicles/russian/R77_KV2/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/russian/R77_KV2/crash/lod0/Gun_05.model	</destroyed>
             <exploded>	vehicles/russian/R77_KV2/crash/lod0/Gun_05.model	</exploded>
+            <sets>
+              <R77_KV2_Postap_3Dst>
+                <undamaged>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/normal/lod0/Gun_05.model	</undamaged>
+                <destroyed>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/crash/lod0/Gun_05.model	</destroyed>
+                <exploded>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/crash/lod0/Gun_05.model	</exploded>
+              </R77_KV2_Postap_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R77_KV2/collision/Gun_05.model	</collisionModelServer>
@@ -2038,6 +2127,13 @@
             <undamaged>	vehicles/russian/R77_KV2/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/russian/R77_KV2/crash/lod0/Gun_06.model	</destroyed>
             <exploded>	vehicles/russian/R77_KV2/crash/lod0/Gun_06.model	</exploded>
+            <sets>
+              <R77_KV2_Postap_3Dst>
+                <undamaged>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/normal/lod0/Gun_06.model	</undamaged>
+                <destroyed>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/crash/lod0/Gun_06.model	</destroyed>
+                <exploded>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/crash/lod0/Gun_06.model	</exploded>
+              </R77_KV2_Postap_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R77_KV2/collision/Gun_06.model	</collisionModelServer>
@@ -2094,6 +2190,13 @@
         <undamaged>	vehicles/russian/R77_KV2/normal/lod0/Turret_02.model	</undamaged>
         <destroyed>	vehicles/russian/R77_KV2/crash/lod0/Turret_02.model	</destroyed>
         <exploded>	vehicles/russian/R77_KV2/crash/lod0/Turret_02.model	</exploded>
+        <sets>
+          <R77_KV2_Postap_3Dst>
+            <undamaged>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/normal/lod0/Turret_02.model	</undamaged>
+            <destroyed>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/crash/lod0/Turret_02.model	</destroyed>
+            <exploded>	vehicles/russian/R77_KV2/_skins/R77_KV2_Postap_3Dst/crash/lod0/Turret_02.model	</exploded>
+          </R77_KV2_Postap_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R77_KV2/collision/Turret_02.model	</collisionModelServer>

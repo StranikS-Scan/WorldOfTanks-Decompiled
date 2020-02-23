@@ -75,7 +75,8 @@ class FrontLineWebApi(W2CSchema):
             for cycle in selectedSeason.getAllCycles().values():
                 calendarData['cycles'].append({'id': cycle.ID,
                  'start': cycle.startDate,
-                 'end': cycle.endDate})
+                 'end': cycle.endDate,
+                 'announce_only': cycle.announceOnly})
 
         return calendarData
 

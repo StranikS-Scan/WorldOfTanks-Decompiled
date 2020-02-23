@@ -17,6 +17,7 @@ from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.items import prb_seqs
 from gui.prb_control.settings import PRB_INVITE_STATE
 from gui.shared.actions import ActionsChain
+from gui.shared.formatters.icons import makeImageTag
 from gui.shared.utils import getPlayerDatabaseID, getPlayerName, showInvitationInWindowsBar
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
 from helpers import dependency
@@ -127,10 +128,12 @@ class PrbInviteWrapper(_PrbInviteData):
         return _WarningType.ANONYMIZED if self.__anonymizerController.isAnonymized else ''
 
     def getCreatorBadgeID(self):
-        return self.creatorBadges.getBadgeID()
+        badge = self.creatorBadges.getBadge()
+        return 0 if badge is None else badge.badgeID
 
     def getCreatorBadgeImgStr(self, size=24, vspace=-6):
-        return self.creatorBadges.getBadgeImgStr(size, vspace)
+        badge = self.creatorBadges.getBadge()
+        return '' if badge is None or badge.hasDynamicContent() else makeImageTag(badge.getThumbnailIcon(), size, size, vspace)
 
     def getCreateTime(self):
         return int(time_utils.makeLocalServerTime(self.createTime)) if self.createTime is not None else None

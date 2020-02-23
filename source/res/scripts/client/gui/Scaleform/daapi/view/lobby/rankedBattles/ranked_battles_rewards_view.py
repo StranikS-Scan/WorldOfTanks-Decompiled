@@ -16,6 +16,7 @@ from gui.ranked_battles.constants import YEAR_AWARDS_ORDER, STANDARD_POINTS_COUN
 from gui.ranked_battles.ranked_builders import rewards_vos
 from gui.ranked_battles.ranked_formatters import getRankedAwardsFormatter
 from gui.ranked_battles.ranked_helpers import getDataFromFinalTokenQuestID
+from gui.ranked_battles.ranked_helpers.sound_manager import AmbientType
 from gui.shared.event_dispatcher import showStylePreview
 from gui.shared.utils.scheduled_notifications import AcyclicNotifier
 from helpers import dependency, time_utils
@@ -54,7 +55,9 @@ class RankedRewardsSeasonOffView(RankedBattlesRewardsView):
         self.as_setTabsDataS(tabs)
 
     def _updateSounds(self, _):
-        self._rankedController.getSoundManager().setProgressSound()
+        soundManager = self._rankedController.getSoundManager()
+        soundManager.setAmbient(AmbientType.HANGAR)
+        soundManager.setProgressSound()
 
 
 class RankedRewardsSeasonOnView(RankedBattlesRewardsView):
@@ -88,8 +91,10 @@ class RankedRewardsSeasonOnView(RankedBattlesRewardsView):
         isMastered = self._rankedController.isAccountMastered()
         soundManager = self._rankedController.getSoundManager()
         if linkage == RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_YEAR_UI or isMastered:
+            soundManager.setAmbient(AmbientType.HANGAR)
             soundManager.setProgressSound()
         else:
+            soundManager.setAmbient()
             soundManager.setProgressSound(self._rankedController.getCurrentDivision().getUserID())
 
 

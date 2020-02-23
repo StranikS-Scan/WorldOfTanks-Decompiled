@@ -584,7 +584,7 @@ class DemountDeviceConfirmator(IconPriceMessageConfirmator):
         from gui.shared import event_dispatcher
         demountKit = self._goodiesCache.getDemountKit()
         isDkEnabled = demountKit and demountKit.enabled
-        if self.item.isDeluxe() or not isDkEnabled:
+        if self.item.isDeluxe or not isDkEnabled:
             showDialog = partial(event_dispatcher.showOptionalDeviceDemountSinglePrice, self.item.intCD)
         else:
             showDialog = partial(event_dispatcher.showOptionalDeviceDemount, self.item.intCD)
@@ -964,7 +964,7 @@ class DismountForDemountKitValidator(SyncValidator):
         for opDev in self.itemsForDemountKit:
             if opDev.itemTypeID != GUI_ITEM_TYPE.OPTIONALDEVICE:
                 return makeError()
-            if opDev.isDeluxe():
+            if opDev.isDeluxe:
                 return makeError()
 
         return makeSuccess()

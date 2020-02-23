@@ -23,7 +23,7 @@ from gui.prb_control import prb_getters, prbDispatcherProperty
 from gui.prb_control.settings import PREBATTLE_SETTING_NAME
 from gui.shared.economics import calcRentPackages, getActionPrc, calcVehicleRestorePrice
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items import CLAN_LOCK, GUI_ITEM_TYPE, getItemIconName, GUI_ITEM_ECONOMY_CODE
+from gui.shared.gui_items import CLAN_LOCK, GUI_ITEM_TYPE, getItemIconName, GUI_ITEM_ECONOMY_CODE, checkForTags
 from gui.shared.gui_items.customization.slots import ProjectionDecalSlot, BaseCustomizationSlot, EmblemSlot
 from gui.shared.gui_items.customization.slots import ANCHOR_TYPE_TO_SLOT_TYPE_MAP
 from gui.shared.gui_items.customization.outfit import Area, REGIONS_BY_SLOT_TYPE
@@ -1575,12 +1575,6 @@ def _getActualName(name, tags, textPrefix=False):
             return i18n.makeString(ITEM_TYPES.MARKER_IGR, vehName=name)
         return makeHtmlString('html_templates:igr/premium-vehicle', 'name', {'vehicle': name})
     return name
-
-
-def checkForTags(vTags, tags):
-    if not hasattr(tags, '__iter__'):
-        tags = (tags,)
-    return bool(vTags & frozenset(tags))
 
 
 def findVehicleArmorMinMax(vd):

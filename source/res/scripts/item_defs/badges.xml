@@ -2244,5 +2244,26 @@
         </item>
       </value>
     </badge>
+    <badge>
+      <name>	battle_pass_season_1	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	90	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.01	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+        <item>	BattlePassBadge	  <name>	customLogicImpl	</name>
+          <type>	string	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+      </value>
+    </badge>
   </badges>
 </badges.xml>

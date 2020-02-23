@@ -23,4 +23,7 @@ def getFilterPopoverSetupContexts(xpRateMultiplier):
      'elite': FilterSetupContext(asset='elite_small_icon'),
      'premium': FilterSetupContext(asset='prem_small_icon'),
      'igr': FilterSetupContext(asset='premium_igr_small'),
-     'bonus': FilterSetupContext(ctx={'multiplier': xpRateMultiplier}, asset='bonus_x')}
+     'bonus': FilterSetupContext(ctx={'multiplier': xpRateMultiplier}, asset='bonus_x'),
+     'rented': FilterSetupContext(asset='marathon/time_icon'),
+     'event': FilterSetupContext(asset='event-1'),
+     'isCommonProgression': FilterSetupContext(asset='common_progression')}

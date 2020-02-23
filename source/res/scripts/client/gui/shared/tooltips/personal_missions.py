@@ -16,6 +16,7 @@ from gui.Scaleform.locale.NATIONS import NATIONS
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.settings import ICONS_SIZES
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.server_events.awards_formatters import AWARDS_SIZES, CompletionTokensBonusFormatter
@@ -126,10 +127,10 @@ class BadgeTooltipData(BlocksTooltipData):
     def _packBlocks(self, badgeID):
         blocks = super(BadgeTooltipData, self)._packBlocks()
         badge = self.__itemsCache.items.getBadges()[badgeID]
-        tooltipData = [formatters.packTextBlockData(text_styles.highTitle(badge.getUserName())), formatters.packImageBlockData(badge.getHugeIcon(), BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=-5, bottom=11))]
+        tooltipData = [formatters.packTextBlockData(text_styles.highTitle(badge.getUserName())), formatters.packImageBlockData(badge.getAwardBadgeIcon(ICONS_SIZES.X220), BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=-5, bottom=11))]
         if g_currentVehicle.isPresent():
             vehicle = g_currentVehicle.item
-            tooltipData.append(formatters.packBadgeInfoBlockData(badge.getThumbnailIcon(), vehicle.iconContour, text_styles.bonusPreviewText(getPlayerName()), text_styles.bonusPreviewText(vehicle.shortUserName)))
+            tooltipData.append(formatters.packBadgeInfoBlockData(badge.getAwardBadgeIcon(ICONS_SIZES.X24), vehicle.iconContour, text_styles.bonusPreviewText(getPlayerName()), text_styles.bonusPreviewText(vehicle.shortUserName)))
         blocks.append(formatters.packBuildUpBlockData(tooltipData))
         blocks.append(formatters.packTextBlockData(text_styles.main(backport.text(R.strings.badge.dyn('badge_{}_descr'.format(badgeID))()))))
         return blocks

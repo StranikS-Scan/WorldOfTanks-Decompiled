@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class LootDefRendererModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=10, commands=0):
+    def __init__(self, properties=11, commands=0):
         super(LootDefRendererModel, self).__init__(properties=properties, commands=commands)
 
     def getLabelStr(self):
@@ -68,6 +68,12 @@ class LootDefRendererModel(ViewModel):
     def setOverlayType(self, value):
         self._setString(9, value)
 
+    def getIsEnabled(self):
+        return self._getBool(10)
+
+    def setIsEnabled(self, value):
+        self._setBool(10, value)
+
     def _initialize(self):
         super(LootDefRendererModel, self)._initialize()
         self._addStringProperty('labelStr', '')
@@ -80,3 +86,4 @@ class LootDefRendererModel(ViewModel):
         self._addStringProperty('labelAlign', 'center')
         self._addStringProperty('highlightType', '')
         self._addStringProperty('overlayType', '')
+        self._addBoolProperty('isEnabled', True)

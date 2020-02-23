@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/shared/fitting_slot_vo.py
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
-from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.utils import EXTRA_MODULE_INFO
@@ -94,32 +93,27 @@ class HangarFittingSlotVO(FittingSlotVO):
         if slotId is not None:
             module = findFirst(lambda item: item.isInstalled(vehicle, slotId), modulesData)
             self['slotIndex'] = slotId
+            if module is None:
+                return module
             if slotType == FITTING_TYPES.OPTIONAL_DEVICE:
                 for battleBooster in vehicle.equipment.battleBoosterConsumables:
                     if battleBooster is not None and battleBooster.isOptionalDeviceCompatible(module):
                         self['highlight'] = True
                         break
 
-                if module is not None and module.isDeluxe():
-                    self['bgHighlightType'] = SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
-                else:
-                    self['bgHighlightType'] = SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+                self['bgHighlightType'] = module.getHighlightType()
+                self['overlayType'] = module.getOverlayType()
             elif slotType == FITTING_TYPES.EQUIPMENT:
-                if module is not None and module.isBuiltIn:
-                    self['bgHighlightType'] = SLOT_HIGHLIGHT_TYPES.BUILT_IN_EQUIPMENT
-                else:
-                    self['bgHighlightType'] = SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
-            elif slotType == FITTING_TYPES.BOOSTER and module is not None:
+                self['bgHighlightType'] = module.getHighlightType()
+                self['overlayType'] = module.getOverlayType()
+            elif slotType == FITTING_TYPES.BOOSTER:
                 affectsAtTTC = module.isAffectsOnVehicle(vehicle)
                 self['affectsAtTTC'] = affectsAtTTC
                 if affectsAtTTC:
-                    if module.isCrewBooster():
-                        isPerkReplace = not module.isAffectedSkillLearnt(vehicle)
-                        bgType = SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_CREW_REPLACE if isPerkReplace else SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER
-                        self['bgHighlightType'] = bgType
-                    else:
+                    self['bgHighlightType'] = module.getHighlightType(vehicle=vehicle)
+                    self['overlayType'] = module.getOverlayType(vehicle=vehicle)
+                    if not module.isCrewBooster():
                         self['highlight'] = affectsAtTTC
-                        self['bgHighlightType'] = SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER
             elif slotType == FITTING_TYPES.BATTLE_ABILITY:
                 self['level'] = 0 if module is None else module.level
         else:

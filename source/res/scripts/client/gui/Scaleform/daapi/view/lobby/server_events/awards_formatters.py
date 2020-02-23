@@ -7,6 +7,7 @@ from gui.impl.auxiliary.rewards_helper import NEW_STYLE_FORMATTED_BONUSES
 from gui.server_events import formatters
 from gui.server_events.awards_formatters import AWARDS_SIZES, AwardsPacker, QuestsBonusComposer, getPostBattleAwardsPacker
 from gui.server_events.bonuses import BlueprintsBonusSubtypes
+from gui.battle_pass.battle_pass_bonuses_helper import BonusesHelper
 SIMPLE_BONUSES_MAX_ITEMS = 5
 _DISPLAYED_AWARDS_COUNT = 2
 _END_LINE_SEPARATOR = ','
@@ -137,11 +138,26 @@ class SimpleBonusFormatter(OldStyleBonusFormatter):
         return result
 
 
+class TextBonusFormatter(OldStyleBonusFormatter):
+
+    def accumulateBonuses(self, bonus, event=None):
+        formattedList = BonusesHelper.getTextStrings(bonus)
+        if formattedList:
+            self._result.extend(formattedList)
+
+    def extractFormattedBonuses(self, addLineSeparator=False):
+        simpleBonusesList = super(TextBonusFormatter, self).extractFormattedBonuses()
+        result = []
+        if simpleBonusesList:
+            result.append(formatters.packSimpleBonusesBlock(simpleBonusesList, endlineSymbol=_END_LINE_SEPARATOR if addLineSeparator else _EMPTY_STRING))
+        return result
+
+
 class NewStyleBonusFormatter(OldStyleBonusFormatter):
 
-    def __init__(self):
+    def __init__(self, awardsPacker=None):
         super(NewStyleBonusFormatter, self).__init__()
-        self.__formatter = NewStyleBonusComposer(_DISPLAYED_AWARDS_COUNT, getPostBattleAwardsPacker())
+        self.__formatter = NewStyleBonusComposer(_DISPLAYED_AWARDS_COUNT, awardsPacker or getPostBattleAwardsPacker())
 
     def accumulateBonuses(self, bonus, event=None):
         formattedBonuses = self.__formatter.getVisibleFormattedBonuses([], [bonus], 'big')
@@ -191,6 +207,34 @@ class OldStyleAwardsPacker(AwardsPacker):
 
     def _getBonusFormatter(self, bonusName):
         return self.__newStyleFormatter if bonusName in NEW_STYLE_FORMATTED_BONUSES else self.getFormatters().get(bonusName, self.__defaultFormatter)
+
+
+def getTextFormattersMap():
+    return {'default': TextBonusFormatter(),
+     'customizations': CustomizationsFormatter()}
+
+
+class BattlePassTextBonusesPacker(AwardsPacker):
+
+    def __init__(self):
+        super(BattlePassTextBonusesPacker, self).__init__(getTextFormattersMap())
+
+    def format(self, bonuses, event=None):
+        formattedBonuses = []
+        for b in bonuses:
+            if b.isShowInGUI():
+                formatter = self._getBonusFormatter(b.getName())
+                if formatter:
+                    formatter.accumulateBonuses(b)
+
+        for formatter in sorted(self.getFormatters().itervalues(), key=lambda f: f.getOrder()):
+            formattedBonuses.extend(formatter.extractFormattedBonuses())
+
+        return formattedBonuses
+
+    def _getBonusFormatter(self, bonusName):
+        formattersMap = self.getFormatters()
+        return formattersMap[bonusName] if bonusName in formattersMap else formattersMap.get('default', None)
 
 
 class OldStyleBonusesFormatter(QuestsBonusComposer):

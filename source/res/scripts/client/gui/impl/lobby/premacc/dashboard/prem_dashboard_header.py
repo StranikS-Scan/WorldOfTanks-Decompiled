@@ -167,12 +167,20 @@ class PremDashboardHeader(ViewImpl):
 
     @replaceNoneKwargsModel
     def __updateBadges(self, model=None):
-        self.__setBadge(model.setPrefixBadgeId, self.__badgesController.getPrefix())
+        prefixBadge = self.__badgesController.getPrefix()
+        self.__setBadge(model.setPrefixBadgeId, prefixBadge)
         self.__setBadge(model.setSuffixBadgeId, self.__badgesController.getSuffix())
+        if prefixBadge is not None:
+            model.setIsDynamicBadge(prefixBadge.hasDynamicContent())
+            model.setBadgeContent(prefixBadge.getDynamicContent() or '')
+        else:
+            model.setIsDynamicBadge(False)
+            model.setBadgeContent('')
+        return
 
     @staticmethod
     def __setBadge(setter, badge):
-        setter(str(badge.badgeID) if badge is not None and badge.isSelected else '')
+        setter(badge.getIconPostfix() if badge is not None and badge.isSelected else '')
         return
 
     @staticmethod
@@ -180,14 +188,14 @@ class PremDashboardHeader(ViewImpl):
         event_dispatcher.showBadges(backViewName=backport.text(R.strings.badge.badgesPage.header.backBtn.descrLabel()))
 
     @staticmethod
-    def __onPersonalReserveClick(item):
+    def __onPersonalReserveClick(_):
         if shouldOpenNewStorage():
             event_dispatcher.showStorage(defaultSection=STORAGE_CONSTANTS.PERSONAL_RESERVES)
         else:
             g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOSTERS_WINDOW), EVENT_BUS_SCOPE.LOBBY)
 
     @staticmethod
-    def __onClanReserveClick(item):
+    def __onClanReserveClick(_):
         showStrongholds(getStrongholdClanCardUrl())
 
     @staticmethod

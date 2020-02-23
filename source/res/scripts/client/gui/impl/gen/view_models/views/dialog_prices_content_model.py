@@ -1,62 +1,37 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/dialog_prices_content_model.py
-from gui.impl.gen import R
 from frameworks.wulf import ViewModel
+from gui.impl.gen.view_models.views.value_price import ValuePrice
 
 class DialogPricesContentModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=7, commands=0):
+    def __init__(self, properties=4, commands=0):
         super(DialogPricesContentModel, self).__init__(properties=properties, commands=commands)
 
-    def getValueMainCost(self):
-        return self._getString(0)
+    @property
+    def valueMain(self):
+        return self._getViewModel(0)
 
-    def setValueMainCost(self, value):
-        self._setString(0, value)
-
-    def getIconMainCost(self):
-        return self._getResource(1)
-
-    def setIconMainCost(self, value):
-        self._setResource(1, value)
-
-    def getNotEnoughMain(self):
-        return self._getBool(2)
-
-    def setNotEnoughMain(self, value):
-        self._setBool(2, value)
-
-    def getValueAdditionalCost(self):
-        return self._getString(3)
-
-    def setValueAdditionalCost(self, value):
-        self._setString(3, value)
-
-    def getIconAdditionalCost(self):
-        return self._getResource(4)
-
-    def setIconAdditionalCost(self, value):
-        self._setResource(4, value)
-
-    def getNotEnoughAdditional(self):
-        return self._getBool(5)
-
-    def setNotEnoughAdditional(self, value):
-        self._setBool(5, value)
+    @property
+    def valueAdditional(self):
+        return self._getViewModel(1)
 
     def getTooltipId(self):
-        return self._getNumber(6)
+        return self._getNumber(2)
 
     def setTooltipId(self, value):
-        self._setNumber(6, value)
+        self._setNumber(2, value)
+
+    def getHasAdditionalCost(self):
+        return self._getBool(3)
+
+    def setHasAdditionalCost(self, value):
+        self._setBool(3, value)
 
     def _initialize(self):
         super(DialogPricesContentModel, self)._initialize()
-        self._addStringProperty('valueMainCost', '0')
-        self._addResourceProperty('iconMainCost', R.invalid())
-        self._addBoolProperty('notEnoughMain', False)
-        self._addStringProperty('valueAdditionalCost', '0')
-        self._addResourceProperty('iconAdditionalCost', R.invalid())
-        self._addBoolProperty('notEnoughAdditional', False)
+        self._addViewModelProperty('valueMain', ValuePrice())
+        self._addViewModelProperty('valueAdditional', ValuePrice())
         self._addNumberProperty('tooltipId', 0)
+        self._addBoolProperty('hasAdditionalCost', False)

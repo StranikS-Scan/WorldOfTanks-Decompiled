@@ -879,10 +879,12 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         self.appearance.updateTurretVisibility()
 
     def drawEdge(self, forceSimpleEdge=False):
-        self.appearance.highlighter.highlight(True, forceSimpleEdge)
+        if self.appearance and self.appearance.highlighter:
+            self.appearance.highlighter.highlight(True, forceSimpleEdge)
 
     def removeEdge(self, forceSimpleEdge=False):
-        self.appearance.highlighter.highlight(False, forceSimpleEdge)
+        if self.appearance and self.appearance.highlighter:
+            self.appearance.highlighter.highlight(False, forceSimpleEdge)
 
     def addModel(self, model):
         super(Vehicle, self).addModel(model)

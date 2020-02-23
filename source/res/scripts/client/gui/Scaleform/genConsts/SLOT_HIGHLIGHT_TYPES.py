@@ -13,6 +13,12 @@ class SLOT_HIGHLIGHT_TYPES(object):
     EQUIPMENT_PLUS_BIG = 'equipmentPlusBig'
     BUILT_IN_EQUIPMENT = 'builtIn'
     BUILT_IN_EQUIPMENT_BIG = 'builtInBig'
+    EQUIPMENT_TROPHY = 'equipmentTrophy'
+    EQUIPMENT_TROPHY_BASIC = 'equipmentTrophyBasic'
+    EQUIPMENT_TROPHY_UPGRADED = 'equipmentTrophyUpgraded'
+    EQUIPMENT_TROPHY_BIG = 'equipmentTrophyBig'
+    EQUIPMENT_TROPHY_BASIC_BIG = 'equipmentTrophyBasicBig'
+    EQUIPMENT_TROPHY_UPGRADED_BIG = 'equipmentTrophyUpgradedBig'
     NO_HIGHLIGHT = ''
     TOOLTIP_OVERLAY_PADDING_LEFT = -25
     TOOLTIP_OVERLAY_PADDING_TOP = -23

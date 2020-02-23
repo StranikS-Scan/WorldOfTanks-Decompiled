@@ -223,7 +223,7 @@ def fromHangarVehicleToWorldCoords(hangarVehicleCoords):
     return modelMatrix.applyPoint(hangarVehicleCoords)
 
 
-def getSuitableText(item, currentVehicle=None):
+def getSuitableText(item, currentVehicle=None, formatVehicle=True):
     conditions = []
     for node in item.descriptor.filter.include:
         separator = ' '.join(['&nbsp;&nbsp;', icons.makeImageTag(RES_ICONS.MAPS_ICONS_CUSTOMIZATION_TOOLTIP_SEPARATOR, 3, 21, -6), '  '])
@@ -256,7 +256,8 @@ def getSuitableText(item, currentVehicle=None):
             conditions = conditions[:-1]
             conditions.append(separator)
         if node.vehicles:
-            conditions.append(text_styles.main(makeVehiclesShortNamesString(set(node.vehicles), currentVehicle, flat=True)))
+            vehicleName = makeVehiclesShortNamesString(set(node.vehicles), currentVehicle, flat=True)
+            conditions.append(text_styles.main(vehicleName) if formatVehicle else vehicleName)
             conditions.append(separator)
 
     return text_styles.concatStylesToSingleLine(*conditions[:-1])

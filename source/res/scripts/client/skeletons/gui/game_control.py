@@ -1108,3 +1108,169 @@ class ISpecialSoundCtrl(IGameController):
 
     def setPlayerVehicle(self, vehiclePublicInfo, isPlayerVehicle):
         raise NotImplementedError
+
+
+class IBattlePassController(IGameController):
+    onPointsUpdated = None
+    onLevelUp = None
+    onVoted = None
+    onBattlePassIsBought = None
+    onSeasonStateChange = None
+    onUnlimitedPurchaseUnlocked = None
+    onBattlePassSettingsChange = None
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def isActive(self):
+        raise NotImplementedError
+
+    def isVisible(self):
+        raise NotImplementedError
+
+    def isDisabled(self):
+        raise NotImplementedError
+
+    def isPaused(self):
+        raise NotImplementedError
+
+    def isPlayerVoted(self):
+        raise NotImplementedError
+
+    def isSeasonStarted(self):
+        raise NotImplementedError
+
+    def isSeasonFinished(self):
+        raise NotImplementedError
+
+    def isSellAnyLevelsUnlocked(self):
+        raise NotImplementedError
+
+    def isValidBattleType(self, prbEntity):
+        raise NotImplementedError
+
+    def getLevelByPoints(self, points):
+        raise NotImplementedError
+
+    def getProgressionByPoints(self, points, state, level):
+        raise NotImplementedError
+
+    def getCurrentLevel(self):
+        raise NotImplementedError
+
+    def getState(self):
+        raise NotImplementedError
+
+    def getMaxLevel(self, isBase=True):
+        raise NotImplementedError
+
+    def isBought(self):
+        raise NotImplementedError
+
+    def getLevelPoints(self, level, isBase=True):
+        raise NotImplementedError
+
+    def isRareLevel(self, level, isBase=True):
+        raise NotImplementedError
+
+    def getSplitFinalAwards(self):
+        raise NotImplementedError
+
+    def getFinalAwardsForPurchaseLevels(self):
+        raise NotImplementedError
+
+    def getSingleAward(self, level, awardType='free', needSort=True):
+        raise NotImplementedError
+
+    def getAwardsInterval(self, fromLevel, toLevel, awardType='free'):
+        raise NotImplementedError
+
+    def getPackedAwardsInterval(self, fromLevel, toLevel, awardType='free'):
+        raise NotImplementedError
+
+    def getAwardsList(self, awardType='free'):
+        raise NotImplementedError
+
+    def getLevelsConfig(self, isBase=True):
+        raise NotImplementedError
+
+    def getFinalRewards(self):
+        raise NotImplementedError
+
+    def getFreeFinalRewardDict(self):
+        raise NotImplementedError
+
+    def getBadgeData(self):
+        raise NotImplementedError
+
+    def getFinalFlowSM(self):
+        raise NotImplementedError
+
+    def getCurrentPoints(self, aligned=False):
+        raise NotImplementedError
+
+    def getMaxPoints(self, isBase=True):
+        raise NotImplementedError
+
+    def getLevelProgression(self):
+        raise NotImplementedError
+
+    def getPerBattlePoints(self, vehCompDesc=None):
+        raise NotImplementedError
+
+    def isSpecialVehicle(self, intCD):
+        raise NotImplementedError
+
+    def getSpecialVehicles(self):
+        raise NotImplementedError
+
+    def getPointsDiffForVehicle(self, intCD):
+        raise NotImplementedError
+
+    def getVehicleProgression(self, intCD):
+        raise NotImplementedError
+
+    def getVehicleCapBonus(self, intCD):
+        raise NotImplementedError
+
+    def getSeasonTimeLeft(self):
+        raise NotImplementedError
+
+    def getSellAnyLevelsUnlockTimeLeft(self):
+        raise NotImplementedError
+
+    def getSeasonStartTime(self):
+        raise NotImplementedError
+
+    def getSeasonFinishTime(self):
+        raise NotImplementedError
+
+    def getSellAnyLevelsUnlockTime(self):
+        raise NotImplementedError
+
+    def hasMaxPointsOnVehicle(self, intCD):
+        raise NotImplementedError
+
+    def isProgressionOnVehiclePossible(self, intCD):
+        raise NotImplementedError
+
+    def getSeasonID(self):
+        raise NotImplementedError
+
+    def getCapacityList(self):
+        raise NotImplementedError
+
+    def getFinalOfferTime(self):
+        raise NotImplementedError
+
+    def getMaxSoldLevelsBeforeUnlock(self):
+        raise NotImplementedError
+
+    def getBoughtLevels(self):
+        raise NotImplementedError
+
+    def getVoteOption(self):
+        raise NotImplementedError
+
+    def getAlternativeVoteOption(self):
+        raise NotImplementedError

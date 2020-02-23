@@ -5,62 +5,62 @@ from gui.impl.gen.view_models.views.loot_box_view.loot_animated_renderer_model i
 class LootCompensationRendererModel(LootAnimatedRendererModel):
     __slots__ = ()
 
-    def __init__(self, properties=22, commands=0):
+    def __init__(self, properties=23, commands=0):
         super(LootCompensationRendererModel, self).__init__(properties=properties, commands=commands)
 
     def getIconFrom(self):
-        return self._getString(13)
-
-    def setIconFrom(self, value):
-        self._setString(13, value)
-
-    def getLabelBeforeStr(self):
         return self._getString(14)
 
-    def setLabelBeforeStr(self, value):
+    def setIconFrom(self, value):
         self._setString(14, value)
 
-    def getIconBefore(self):
+    def getLabelBeforeStr(self):
         return self._getString(15)
 
-    def setIconBefore(self, value):
+    def setLabelBeforeStr(self, value):
         self._setString(15, value)
 
-    def getIconAfter(self):
+    def getIconBefore(self):
         return self._getString(16)
 
-    def setIconAfter(self, value):
+    def setIconBefore(self, value):
         self._setString(16, value)
 
-    def getLabelBefore(self):
+    def getIconAfter(self):
         return self._getString(17)
 
-    def setLabelBefore(self, value):
+    def setIconAfter(self, value):
         self._setString(17, value)
 
-    def getLabelAfter(self):
+    def getLabelBefore(self):
         return self._getString(18)
 
-    def setLabelAfter(self, value):
+    def setLabelBefore(self, value):
         self._setString(18, value)
 
-    def getBonusName(self):
+    def getLabelAfter(self):
         return self._getString(19)
 
-    def setBonusName(self, value):
+    def setLabelAfter(self, value):
         self._setString(19, value)
 
+    def getBonusName(self):
+        return self._getString(20)
+
+    def setBonusName(self, value):
+        self._setString(20, value)
+
     def getCountBefore(self):
-        return self._getNumber(20)
+        return self._getNumber(21)
 
     def setCountBefore(self, value):
-        self._setNumber(20, value)
+        self._setNumber(21, value)
 
     def getLabelAlignAfter(self):
-        return self._getString(21)
+        return self._getString(22)
 
     def setLabelAlignAfter(self, value):
-        self._setString(21, value)
+        self._setString(22, value)
 
     def _initialize(self):
         super(LootCompensationRendererModel, self)._initialize()

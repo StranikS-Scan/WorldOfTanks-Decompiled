@@ -14,7 +14,7 @@ from gui.server_events.pm_constants import SOUNDS
 from gui.shared.gui_items import Tankman
 from gui.shared.gui_items.processors.tankman import TankmanTokenRecruit
 from gui.shared.utils import decorators
-from gui.sounds.filters import STATE_HANGAR_FILTERED
+from gui.sounds.filters import States, StatesGroup
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -24,7 +24,7 @@ class TokenRecruitWindow(QuestRecruitWindowMeta):
     eventsCache = dependency.descriptor(IEventsCache)
     itemsCache = dependency.descriptor(IItemsCache)
     __SOUND_SETTINGS = CommonSoundSpaceSettings(name='hangar', entranceStates={SOUNDS.STATE_PLACE: SOUNDS.STATE_PLACE_GARAGE,
-     STATE_HANGAR_FILTERED: '{}_off'.format(STATE_HANGAR_FILTERED)}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent=SOUNDS.WOMAN_AWARD_WINDOW, exitEvent='')
+     StatesGroup.OVERLAY_HANGAR_GENERAL: States.OVERLAY_HANGAR_GENERAL_ON}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent=SOUNDS.WOMAN_AWARD_WINDOW, exitEvent='')
     _COMMON_SOUND_SPACE = __SOUND_SETTINGS
 
     def __init__(self, ctx=None):

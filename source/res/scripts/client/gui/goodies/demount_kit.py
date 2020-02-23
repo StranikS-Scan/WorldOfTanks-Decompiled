@@ -12,7 +12,7 @@ from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
 
 def isDemountKitApplicableTo(module):
-    if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and not module.isRemovable and not module.isDeluxe():
+    if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and not module.isRemovable and not module.isDeluxe:
         goodiesCache = dependency.instance(IGoodiesCache)
         demountKit = goodiesCache.getDemountKit(DEMOUNT_KIT_ID)
         return demountKit and demountKit.enabled

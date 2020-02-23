@@ -5,10 +5,10 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.ranked_battles.ranked_helpers.sound_manager import RANKED_OVERLAY_SOUND_SPACE
+from gui.Scaleform.daapi.view.lobby.vehiclePreview20.sound_constants import STYLE_PREVIEW_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.LobbySelectableView import LobbySelectableView
 from gui.Scaleform.daapi.view.meta.VehicleBasePreviewMeta import VehicleBasePreviewMeta
-from gui.shared import event_dispatcher, events, event_bus_handlers, EVENT_BUS_SCOPE
+from gui.shared import event_dispatcher, events, event_bus_handlers, EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.customization.c11n_items import getGroupFullNameResourceID
 from helpers import dependency
@@ -22,7 +22,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
     __metaclass__ = event_bus_handlers.EventBusListener
     __itemsCache = dependency.descriptor(IItemsCache)
     __hangarSpace = dependency.descriptor(IHangarSpace)
-    _COMMON_SOUND_SPACE = RANKED_OVERLAY_SOUND_SPACE
+    _COMMON_SOUND_SPACE = STYLE_PREVIEW_SOUND_SPACE
 
     def __init__(self, ctx=None):
         super(VehicleStylePreview, self).__init__(ctx)
@@ -62,6 +62,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         self.__hangarSpace.onSpaceCreate -= self.__onHangarCreateOrRefresh
         g_currentPreviewVehicle.selectNoVehicle()
         g_currentPreviewVehicle.resetAppearance()
+        g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.VEHICLE_PREVIEW_HIDDEN), scope=EVENT_BUS_SCOPE.LOBBY)
         super(VehicleStylePreview, self)._dispose()
 
     def __onVehicleLoading(self, ctxEvent):
@@ -71,6 +72,8 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         self.__handleWindowClose()
 
     @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_VEHICLE_PREVIEW, EVENT_BUS_SCOPE.LOBBY)
-    def __handleWindowClose(self):
-        self.onBackClick()
+    def __handleWindowClose(self, event=None):
+        if event is not None and not event.ctx.get('noCallback', False):
+            self.onBackClick()
         self.destroy()
+        return

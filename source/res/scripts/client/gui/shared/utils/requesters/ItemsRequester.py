@@ -16,6 +16,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES, ItemsCollec
 from gui.shared.utils.requesters import vehicle_items_getter
 from gui.shared.gui_items.customization.outfit import Outfit
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
+from gui.shared.utils.requesters.battle_pass_requester import BattlePassRequester
 from helpers import dependency
 from items import vehicles, tankmen, getTypeOfCompactDescr, makeIntCompactDescrByID
 from items.components.c11n_constants import SeasonType, StyleFlags
@@ -23,6 +24,7 @@ from items.components.crew_skins_constants import CrewSkinType
 from skeletons.gui.shared import IItemsRequester, IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from nation_change.nation_change_helpers import iterVehiclesWithNationGroupInOrder, iterVehTypeCDsInNationGroup, isMainInNationGroupSafe
+from shared_utils.account_helpers.diff_utils import synchronizeDicts
 if TYPE_CHECKING:
     import skeletons.gui.shared.utils.requesters as requesters
 
@@ -274,6 +276,7 @@ class REQ_CRITERIA(object):
         NAME_VEHICLE_WITH_SHORT = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableShortUserName or nameVehicle in item.searchableUserName)))
         DISCOUNT_RENT_OR_BUY = RequestCriteria(PredicateCondition(lambda item: (item.buyPrices.itemPrice.isActionPrice() or item.getRentPackageActionPrc() != 0) and not item.isRestoreAvailable()))
         HAS_TAGS = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: item.tags.issuperset(tags))))
+        FOR_ITEM = staticmethod(lambda style: RequestCriteria(PredicateCondition(style.mayInstall)))
 
     class TANKMAN(object):
         IN_TANK = RequestCriteria(PredicateCondition(lambda item: item.isInTank))
@@ -316,8 +319,9 @@ class REQ_CRITERIA(object):
         DESCRIPTOR_NAME = staticmethod(lambda descriptorName: RequestCriteria(PredicateCondition(lambda item: item.name == descriptorName)))
 
     class OPTIONAL_DEVICE(object):
-        SIMPLE = RequestCriteria(PredicateCondition(lambda item: not item.isDeluxe()))
-        DELUXE = RequestCriteria(PredicateCondition(lambda item: item.isDeluxe()))
+        SIMPLE = RequestCriteria(PredicateCondition(lambda item: not item.isDeluxe))
+        DELUXE = RequestCriteria(PredicateCondition(lambda item: item.isDeluxe))
+        TROPHY = RequestCriteria(PredicateCondition(lambda item: item.isTrophy))
 
     class BADGE(object):
         SELECTED = RequestCriteria(PredicateCondition(lambda item: item.isSelected))
@@ -366,6 +370,7 @@ class ItemsRequester(IItemsRequester):
         self.__tokens = tokens
         self.__sessionStats = sessionStatsRequester
         self.__anonymizer = anonymizerRequester
+        self.__battlePass = BattlePassRequester()
         self.__itemsCache = defaultdict(dict)
         self.__brokenSyncAlreadyLoggedTypes = set()
         self.__vehCustomStateCache = defaultdict(dict)
@@ -430,6 +435,10 @@ class ItemsRequester(IItemsRequester):
     def anonymizer(self):
         return self.__anonymizer
 
+    @property
+    def battlePass(self):
+        return self.__battlePass
+
     @async
     @process
     def request(self, callback=None):
@@ -470,6 +479,9 @@ class ItemsRequester(IItemsRequester):
         Waiting.show('download/tokens')
         yield self.__tokens.request()
         Waiting.hide('download/tokens')
+        Waiting.show('download/battlePass')
+        yield self.__battlePass.request()
+        Waiting.hide('download/battlePass')
         Waiting.show('download/festivity')
         yield self.__festivity.request()
         Waiting.hide('download/festivity')
@@ -553,7 +565,10 @@ class ItemsRequester(IItemsRequester):
                     invalidate[GUI_ITEM_TYPE.VEHICLE].update(iterVehiclesWithNationGroupInOrder(data.keys()))
                 if statName in (('multipliedXPVehs', '_r'), ('multipliedRankedBattlesVehs', '_r')):
                     getter = vehicles.getVehicleTypeCompactDescr
-                    inventoryVehiclesCDs = [ getter(v['compDescr']) for v in self.__inventory.getItems(GUI_ITEM_TYPE.VEHICLE).itervalues() ]
+                    vehiclesDict = self.__inventory.getItems(GUI_ITEM_TYPE.VEHICLE)
+                    inventoryVehiclesCDs = []
+                    if vehiclesDict:
+                        inventoryVehiclesCDs = [ getter(v['compDescr']) for v in vehiclesDict.itervalues() ]
                     invalidate[GUI_ITEM_TYPE.VEHICLE].update(inventoryVehiclesCDs)
                 if statName in ('oldVehInvIDs',):
                     invalidate[GUI_ITEM_TYPE.VEHICLE].update(data)
@@ -652,6 +667,11 @@ class ItemsRequester(IItemsRequester):
                     invalidate[GUI_ITEM_TYPE.TANKMAN].add(itemID * -1)
                 invalidate[GUI_ITEM_TYPE.VEHICLE].add(itemID)
 
+        if ('battlePass', '_r') in diff or 'battlePass' in diff:
+            if ('battlePass', '_r') in diff:
+                invalidate['battlePass'] = diff[('battlePass', '_r')]
+            if 'battlePass' in diff:
+                synchronizeDicts(diff['battlePass'], invalidate.setdefault('battlePass', {}))
         if 'goodies' in diff:
             vehicleDiscounts = self.__shop.getVehicleDiscountDescriptions()
             for goodieID in diff['goodies'].iterkeys():

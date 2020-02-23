@@ -275,6 +275,7 @@ class HideWindowEvent(HasCtxEvent):
     HIDE_BOOSTERS_WINDOW = 'hideBoostersWindow'
     HIDE_VEHICLE_PREVIEW = 'hideVehiclePreview'
     HIDE_OVERLAY_BROWSER_VIEW = 'hideOverlayBrowserView'
+    HIDE_MISSIONS_PAGE_VIEW = 'hideMissionsPageView'
 
 
 class HidePopoverEvent(HasCtxEvent):
@@ -296,6 +297,10 @@ class LobbySimpleEvent(HasCtxEvent):
     WAITING_SHOWN = 'waitingShown'
     BATTLE_RESULTS_POSTED = 'battleResultsPosted'
     BATTLE_RESULTS_SHOW_QUEST = 'battleResultsWindowShowQuest'
+    CHANGE_SOUND_ENVIRONMENT = 'changeSoundEnvironment'
+    LOCK_OVERLAY_SCREEN = 'lockOverlayScreen'
+    UNLOCK_OVERLAY_SCREEN = 'unlockOverlayScreen'
+    VEHICLE_PREVIEW_HIDDEN = 'vehiclePreviewHidden'
 
 
 class MissionsEvent(HasCtxEvent):
@@ -669,6 +674,11 @@ class ProgressiveRewardEvent(HasCtxEvent):
 class HangarCameraManagerEvent(HasCtxEvent):
     ON_CREATE = 'hangarCameraManagerEvent/onCreate'
     ON_DESTROY = 'hangarCameraManagerEvent/onDestroy'
+
+
+class BattlePassEvent(HasCtxEvent):
+    BUYING_THINGS = 'buyingThings'
+    AWARD_VIEW_CLOSE = 'onAwardViewClose'
 
 
 class ItemRemovalByDemountKitEvent(HasCtxEvent):

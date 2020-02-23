@@ -6,6 +6,7 @@ from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIn
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import text_styles
+from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.money import Money
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
@@ -71,11 +72,9 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         self._supplyItems = []
         items = self._itemsCache.items
         slots = items.stats.vehicleSlots
-        vehicles = self.getTotalVehiclesCount()
-        rentPromotion = self.getRentPromotionVehiclesCount()
         slotPrice = items.shop.getVehicleSlotsPrice(slots)
         defaultSlotPrice = items.shop.defaults.getVehicleSlotsPrice(slots)
-        self._emptySlotsCount = slots - (vehicles - rentPromotion)
+        self._emptySlotsCount = self._itemsCache.items.inventory.getFreeSlots(self._itemsCache.items.stats.vehicleSlots)
         criteria = REQ_CRITERIA.IN_CD_LIST(items.recycleBin.getVehiclesIntCDs()) | REQ_CRITERIA.VEHICLE.IS_RESTORE_POSSIBLE
         self._restorableVehiclesCount = len(items.getVehicles(criteria))
         if slotPrice != defaultSlotPrice:
@@ -108,6 +107,10 @@ class HangarCarouselDataProvider(CarouselDataProvider):
             buySlotVO.update({'slotPriceActionData': discount})
         self._supplyItems.append(buySlotVO)
         return
+
+    @staticmethod
+    def _isSuitableForQueue(vehicle):
+        return vehicle.getCustomState() != Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE
 
     def __getSupplyIndices(self):
         return [ len(self._vehicles) + idx for idx in _SUPPLY_ITEMS.ALL ]

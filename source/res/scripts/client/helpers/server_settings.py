@@ -7,6 +7,7 @@ import logging
 from Event import Event
 from constants import IS_TUTORIAL_ENABLED, PremiumConfigs, DAILY_QUESTS_CONFIG
 from debug_utils import LOG_WARNING, LOG_DEBUG
+from battle_pass_common import BattlePassConfig, BATTLE_PASS_CONFIG_NAME
 from gui import GUI_SETTINGS, SystemMessages
 from gui.SystemMessages import SM_TYPE
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -487,6 +488,7 @@ class ServerSettings(object):
         self.__epicGameSettings = _EpicGameConfig()
         self.__telecomConfig = _TelecomConfig.defaults()
         self.__squadPremiumBonus = _SquadPremiumBonus.defaults()
+        self.__battlePassConfig = BattlePassConfig({})
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -545,6 +547,10 @@ class ServerSettings(object):
             self.__seniorityAwardsConfig = makeTupleByDict(_SeniorityAwardsConfig, self.__serverSettings['seniority_awards_config'])
         else:
             self.__seniorityAwardsConfig = _SeniorityAwardsConfig()
+        if BATTLE_PASS_CONFIG_NAME in self.__serverSettings:
+            self.__battlePassConfig = BattlePassConfig(self.__serverSettings.get(BATTLE_PASS_CONFIG_NAME, {}))
+        else:
+            self.__battlePassConfig = BattlePassConfig({})
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -591,6 +597,9 @@ class ServerSettings(object):
             self.__updateSquadBonus(serverSettingsDiff)
         if PremiumConfigs.PREFERRED_MAPS in serverSettingsDiff:
             self.__serverSettings[PremiumConfigs.PREFERRED_MAPS] = serverSettingsDiff[PremiumConfigs.PREFERRED_MAPS]
+        if BATTLE_PASS_CONFIG_NAME in serverSettingsDiff:
+            self.__serverSettings[BATTLE_PASS_CONFIG_NAME] = serverSettingsDiff[BATTLE_PASS_CONFIG_NAME]
+            self.__battlePassConfig = BattlePassConfig(self.__serverSettings.get(BATTLE_PASS_CONFIG_NAME, {}))
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -854,6 +863,9 @@ class ServerSettings(object):
     def isCrewBooksSaleEnabled(self):
         return self.__getGlobalSetting('isCrewBooksSaleEnabled', False)
 
+    def isTrophyDevicesEnabled(self):
+        return self.__getGlobalSetting('isTrophyDevicesEnabled', False)
+
     def getFriendlyFireBonusTypes(self):
         return self.__getGlobalSetting('isNoAllyDamage', set())
 
@@ -865,6 +877,9 @@ class ServerSettings(object):
 
     def getSeniorityAwardsConfig(self):
         return self.__seniorityAwardsConfig
+
+    def getBattlePassConfig(self):
+        return self.__battlePassConfig
 
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)

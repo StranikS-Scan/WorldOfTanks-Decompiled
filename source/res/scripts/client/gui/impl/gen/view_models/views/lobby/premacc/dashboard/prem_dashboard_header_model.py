@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.premacc.dashboard.prem_dashboard_heade
 class PremDashboardHeaderModel(ViewModel):
     __slots__ = ('onShowBadges',)
 
-    def __init__(self, properties=8, commands=1):
+    def __init__(self, properties=10, commands=1):
         super(PremDashboardHeaderModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -39,17 +39,29 @@ class PremDashboardHeaderModel(ViewModel):
     def setSuffixBadgeId(self, value):
         self._setString(5, value)
 
-    def getIsInClan(self):
-        return self._getBool(6)
+    def getBadgeContent(self):
+        return self._getString(6)
 
-    def setIsInClan(self, value):
-        self._setBool(6, value)
+    def setBadgeContent(self, value):
+        self._setString(6, value)
 
-    def getHasClanReserves(self):
+    def getIsDynamicBadge(self):
         return self._getBool(7)
 
-    def setHasClanReserves(self, value):
+    def setIsDynamicBadge(self, value):
         self._setBool(7, value)
+
+    def getIsInClan(self):
+        return self._getBool(8)
+
+    def setIsInClan(self, value):
+        self._setBool(8, value)
+
+    def getHasClanReserves(self):
+        return self._getBool(9)
+
+    def setHasClanReserves(self, value):
+        self._setBool(9, value)
 
     def _initialize(self):
         super(PremDashboardHeaderModel, self)._initialize()
@@ -59,6 +71,8 @@ class PremDashboardHeaderModel(ViewModel):
         self._addViewModelProperty('clanReserves', UserListModel())
         self._addStringProperty('prefixBadgeId', '')
         self._addStringProperty('suffixBadgeId', '')
+        self._addStringProperty('badgeContent', '')
+        self._addBoolProperty('isDynamicBadge', False)
         self._addBoolProperty('isInClan', False)
         self._addBoolProperty('hasClanReserves', False)
         self.onShowBadges = self._addCommand('onShowBadges')

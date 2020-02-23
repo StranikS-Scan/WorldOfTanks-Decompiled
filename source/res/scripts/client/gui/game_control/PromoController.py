@@ -29,6 +29,7 @@ from skeletons.gui.shared.promo import IPromoLogger
 from skeletons.gui.web import IWebController
 from web.web_client_api import webApiCollection, ui as ui_web_api, sound as sound_web_api
 from web.web_client_api.promo import PromoWebApi
+from web.web_client_api.battle_pass import BattlePassWebApi
 from web.web_client_api.ranked_battles import RankedBattlesWebApi
 from web.web_client_api.request import RequestWebApi
 from web.web_client_api.vehicles import VehiclesWebApi
@@ -336,7 +337,7 @@ class PromoController(IPromoController):
 
 
 def _showBrowserView(url, returnClb):
-    webHandlers = webApiCollection(PromoWebApi, VehiclesWebApi, RequestWebApi, RankedBattlesWebApi, ui_web_api.OpenWindowWebApi, ui_web_api.CloseWindowWebApi, ui_web_api.OpenTabWebApi, ui_web_api.NotificationWebApi, ui_web_api.ContextMenuWebApi, ui_web_api.UtilWebApi, sound_web_api.SoundWebApi, sound_web_api.HangarSoundWebApi)
+    webHandlers = webApiCollection(PromoWebApi, VehiclesWebApi, RequestWebApi, RankedBattlesWebApi, BattlePassWebApi, ui_web_api.OpenWindowWebApi, ui_web_api.CloseWindowWebApi, ui_web_api.OpenTabWebApi, ui_web_api.NotificationWebApi, ui_web_api.ContextMenuWebApi, ui_web_api.UtilWebApi, sound_web_api.SoundWebApi, sound_web_api.HangarSoundWebApi)
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BROWSER_VIEW, ctx={'url': url,
      'returnClb': returnClb,
      'webHandlers': webHandlers,

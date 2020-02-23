@@ -4,13 +4,18 @@ import math
 import os
 from functools import partial
 from itertools import chain
+from typing import TYPE_CHECKING, NamedTuple, Tuple, Set
 import items
 import nations
 from constants import IS_CLIENT, IS_CELLAPP, IS_WEB, VEHICLE_TTC_ASPECTS
+from items import ITEM_OPERATION
 from items import _xml, vehicles
 from items.basic_item import BasicItem
 from items.components import shared_components, component_constants
 from tankmen import MAX_SKILL_LEVEL
+from vehicles import _readPriceForOperation
+if TYPE_CHECKING:
+    from ResMgr import DataSection
 
 class Artefact(BasicItem):
     __slots__ = ('name', 'id', 'compactDescr', 'tags', 'i18n', 'icon', 'removable', 'price', 'showInShop', 'stunResistanceEffect', 'stunResistanceDuration', 'repeatedStunDurationFactor', '_vehWeightFraction', '_weight', '_maxWeightChange', '__vehicleFilter', '__artefactFilter', 'isImproved', 'kpi', 'iconName')
@@ -1130,6 +1135,58 @@ class EpicEngineering(PassiveEngineering):
     pass
 
 
+class UpgradableItem(object):
+    UpgradeInfo = NamedTuple('UpgradeInfo', [('upgradedCompDescr', int)])
+
+    @property
+    def upgradeInfo(self):
+        return self.__upgradeInfo
+
+    def initUpgradableItem(self):
+        self.__upgradeInfo = None
+        return
+
+    def _readUpgradableConfig(self, xmlCtx, scriptSection, itemCompDescr):
+        upgradeInfoSection = scriptSection['upgradeInfo']
+        upgradedCD = _xml.readInt(xmlCtx, upgradeInfoSection, 'upgradedCompDescr')
+        self.__upgradeInfo = UpgradableItem.UpgradeInfo(upgradedCD)
+        _readPriceForOperation(xmlCtx, upgradeInfoSection, ITEM_OPERATION.UPGRADE, (itemCompDescr, upgradedCD))
+
+
+class UpgradedItem(object):
+    __slots__ = ()
+
+
+class UpgradableStaticFactorDevice(StaticFactorDevice, UpgradableItem):
+
+    def __init__(self):
+        super(UpgradableStaticFactorDevice, self).__init__()
+        self.initUpgradableItem()
+
+    def _readConfig(self, xmlCtx, section):
+        super(UpgradableStaticFactorDevice, self)._readConfig(xmlCtx, section)
+        self._readUpgradableConfig(xmlCtx, section, self.compactDescr)
+
+
+class UpgradableStaticAdditiveDevice(StaticAdditiveDevice, UpgradableItem):
+
+    def __init__(self):
+        super(UpgradableStaticAdditiveDevice, self).__init__()
+        self.initUpgradableItem()
+
+    def _readConfig(self, xmlCtx, section):
+        super(UpgradableStaticAdditiveDevice, self)._readConfig(xmlCtx, section)
+        self._readUpgradableConfig(xmlCtx, section, self.compactDescr)
+
+
+class UpgradedStaticFactorDevice(StaticFactorDevice, UpgradedItem):
+    pass
+
+
+class UpgradedStaticAdditiveDevice(StaticAdditiveDevice, UpgradedItem):
+    pass
+
+
 class _VehicleFilter(object):
 
     def __init__(self, xmlCtx, section):
@@ -1300,3 +1357,15 @@ def _readStun(xmlCtx, scriptSection):
 
 def _readReuseParams(xmlCtx, scriptSection):
     return (_xml.readInt(xmlCtx, scriptSection, 'reuseCount', minVal=-1) if scriptSection.has_key('reuseCount') else 0, _xml.readInt(xmlCtx, scriptSection, 'cooldownSeconds', minVal=0) if scriptSection.has_key('cooldownSeconds') else 0)
+
+
+class OPT_DEV_TYPE_TAG(object):
+    TROPHY_BASIC = 'trophyBasic'
+    TROPHY_UPGRADED = 'trophyUpgraded'
+    DELUXE = 'deluxe'
+    ALL = {TROPHY_BASIC, TROPHY_UPGRADED, DELUXE}
+
+    @staticmethod
+    def checkTags(tags):
+        intersectionTags = tags & OPT_DEV_TYPE_TAG.ALL
+        return len(intersectionTags) < 2

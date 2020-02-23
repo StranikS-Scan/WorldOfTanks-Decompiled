@@ -21,7 +21,7 @@ from gui.impl.lobby.premacc.premacc_helpers import PiggyBankConstants, getDeltaT
 from gui.prb_control import prbInvitesProperty
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import g_eventBus, events
-from gui.shared.formatters import time_formatters
+from gui.shared.formatters import time_formatters, text_styles
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import showInvitationInWindowsBar
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
@@ -33,10 +33,11 @@ from messenger.m_constants import PROTO_TYPE, USER_ACTION_ID
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
+from messenger.formatters import TimeFormatter
 from notification import tutorial_helper
 from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
-from skeletons.gui.game_control import IBootcampController, IGameSessionController
+from skeletons.gui.game_control import IBootcampController, IGameSessionController, IBattlePassController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityAwardsBoxesCount
@@ -880,6 +881,95 @@ class TankPremiumListener(_NotificationListener):
             SystemMessages.pushMessage(priority=priority, text=backport.text(R.strings.messenger.serviceChannelMessages.piggyBank.onPause()))
 
 
+class BattlePassListener(_NotificationListener):
+    __slots__ = ('__isStarted', '__isFinished')
+    __battlePassController = dependency.descriptor(IBattlePassController)
+
+    def __init__(self):
+        super(BattlePassListener, self).__init__()
+        self.__isStarted = None
+        self.__isFinished = None
+        return
+
+    def start(self, model):
+        super(BattlePassListener, self).start(model)
+        self.__isStarted = self.__battlePassController.isSeasonStarted()
+        self.__isFinished = self.__battlePassController.isSeasonFinished()
+        self.__battlePassController.onSeasonStateChange += self.__onSeasonStateChange
+        self.__battlePassController.onBattlePassSettingsChange += self.__onBattlePassSettingsChange
+        return True
+
+    def stop(self):
+        self.__battlePassController.onSeasonStateChange -= self.__onSeasonStateChange
+        self.__battlePassController.onBattlePassSettingsChange -= self.__onBattlePassSettingsChange
+        super(BattlePassListener, self).stop()
+
+    def __onBattlePassSettingsChange(self, newMode, oldMode):
+        self.__checkAndNotify(oldMode, newMode)
+
+    def __onSeasonStateChange(self):
+        self.__checkAndNotify()
+
+    def __checkAndNotify(self, oldMode=None, newMode=None):
+        isStarted = self.__battlePassController.isSeasonStarted()
+        isFinished = self.__battlePassController.isSeasonFinished()
+        if self.__isStarted != isStarted:
+            self.__pushStarted()
+        elif self.__isFinished != isFinished:
+            self.__pushFinished()
+        if oldMode is not None and newMode is not None and oldMode != newMode:
+            if newMode == 'paused':
+                self.__pushPause()
+            elif newMode == 'enabled' and oldMode == 'paused':
+                self.__pushEnabled()
+            elif newMode == 'disabled':
+                self.__pushFinished()
+        self.__isStarted = isStarted
+        self.__isFinished = isFinished
+        return
+
+    def __pushPause(self):
+        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.switch_pause.body()), type=SystemMessages.SM_TYPE.ErrorSimple, priority=NotificationPriorityLevel.HIGH)
+
+    def __pushFinished(self):
+        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.switch_disable.body()), priority=NotificationPriorityLevel.MEDIUM, type=SystemMessages.SM_TYPE.BattlePassInfo, messageData={'header': backport.text(R.strings.system_messages.battlePass.switch_disable.title())})
+
+    def __pushStarted(self):
+        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.switch_started.body()), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.BattlePassInfo, messageData={'header': backport.text(R.strings.system_messages.battlePass.switch_started.title())})
+
+    def __pushEnabled(self):
+        expiryTime = self.__battlePassController.getSeasonFinishTime()
+        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePass.switch_enabled.body(), expiryTime=text_styles.titleFont(TimeFormatter.getLongDatetimeFormat(expiryTime))), type=SystemMessages.SM_TYPE.Warning)
+
+
+class UpgradeTrophyDeviceListener(_NotificationListener):
+    __slots__ = ('__enabled',)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+
+    def __init__(self):
+        super(UpgradeTrophyDeviceListener, self).__init__()
+        self.__enabled = None
+        return
+
+    def start(self, model):
+        super(UpgradeTrophyDeviceListener, self).start(model)
+        self.__enabled = self.__lobbyContext.getServerSettings().isTrophyDevicesEnabled()
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
+        return True
+
+    def stop(self):
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
+        super(UpgradeTrophyDeviceListener, self).stop()
+
+    def __onServerSettingsChange(self, diff):
+        if 'isTrophyDevicesEnabled' in diff and self.__enabled != diff['isTrophyDevicesEnabled']:
+            self.__enabled = diff['isTrophyDevicesEnabled']
+            if self.__enabled:
+                SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.upgradeTrophyDevice.switch_on.body()), priority=NotificationPriorityLevel.MEDIUM)
+            else:
+                SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.upgradeTrophyDevice.switch_off.body()), type=SystemMessages.SM_TYPE.ErrorSimple, priority=NotificationPriorityLevel.MEDIUM)
+
+
 class NotificationsListeners(_NotificationListener):
 
     def __init__(self):
@@ -891,7 +981,9 @@ class NotificationsListeners(_NotificationListener):
          BattleTutorialListener(),
          ProgressiveRewardListener(),
          SwitcherListener(),
-         TankPremiumListener())
+         TankPremiumListener(),
+         BattlePassListener(),
+         UpgradeTrophyDeviceListener())
 
     def start(self, model):
         for listener in self.__listeners:

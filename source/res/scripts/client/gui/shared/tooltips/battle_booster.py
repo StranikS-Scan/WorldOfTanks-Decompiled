@@ -21,6 +21,7 @@ _TOOLTIP_MIN_WIDTH = 420
 _TOOLTIP_MAX_WIDTH = 480
 _AUTOCANNON_SHOT_DISTANCE = 400
 _MAX_INSTALLED_LIST_LEN = 10
+_ICON_SIZE = 'small'
 
 class BattleBoosterTooltipBlockConstructor(object):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -51,12 +52,8 @@ class HeaderBlockConstructor(BattleBoosterTooltipBlockConstructor):
         return block
 
     def _getOverlayAndHighlight(self):
-        module = self.module
-        if module.isCrewBooster():
-            isLearnt = module.isAffectedSkillLearnt(self.configuration.vehicle)
-            overlayPath = RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_BATTLEBOOSTER_OVERLAY if isLearnt else RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_BATTLEBOOSTERREPLACE_OVERLAY
-        else:
-            overlayPath = RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_BATTLEBOOSTER_OVERLAY
+        overlayType = self.module.getOverlayType(vehicle=self.configuration.vehicle)
+        overlayPath = RES_ICONS.getBonusOverlay(_ICON_SIZE, overlayType)
         highlightPath = RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_BATTLEBOOSTER_HIGHLIGHT
         return (overlayPath, highlightPath)
 

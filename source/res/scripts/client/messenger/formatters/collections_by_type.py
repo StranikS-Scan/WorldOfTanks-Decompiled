@@ -10,7 +10,8 @@ _TOKEN_QUEST_SUB_FORMATTERS = (token_quest_subformatters.RecruitQuestsFormatter(
  token_quest_subformatters.RankedSeasonTokenQuestFormatter(),
  token_quest_subformatters.RankedFinalTokenQuestFormatter(),
  token_quest_subformatters.SeniorityAwardsFormatter(),
- token_quest_subformatters.PersonalMissionsTokenQuestsFormatter())
+ token_quest_subformatters.PersonalMissionsTokenQuestsFormatter(),
+ token_quest_subformatters.BattlePassDefaultAwardsFormatter())
 _PERSONAL_MISSIONS_SUB_FORMATTERS = (token_quest_subformatters.PersonalMissionsFormatter(),)
 SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.serverRebootCancelled.index(): _sc.ServerRebootCancelledFormatter(),
@@ -62,7 +63,10 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.piggyBankSmashed.index(): _sc.PiggyBankSmashedFormatter(),
  _SM_TYPE.blackMapRemoved.index(): _sc.BlackMapRemovedFormatter(),
  _SM_TYPE.enhancementRemoved.index(): _sc.EnhancementRemovedFormatter(),
- _SM_TYPE.enhancementsWiped.index(): _sc.EnhancementsWipedFormatter()}
+ _SM_TYPE.enhancementsWiped.index(): _sc.EnhancementsWipedFormatter(),
+ _SM_TYPE.battlePassReward.index(): _sc.BattlePassRewardFormatter(),
+ _SM_TYPE.battlePassReachedCap.index(): _sc.BattlePassReachedCapFormatter(),
+ _SM_TYPE.badges.index(): _sc.BadgesFormatter()}
 CLIENT_FORMATTERS = {SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE: _sc.ClientSysMessageFormatter(),
  SCH_CLIENT_MSG_TYPE.PREMIUM_ACCOUNT_EXPIRY_MSG: _sc.PremiumAccountExpiryFormatter(),
  SCH_CLIENT_MSG_TYPE.AOGAS_NOTIFY_TYPE: _sc.AOGASNotifyFormatter(),

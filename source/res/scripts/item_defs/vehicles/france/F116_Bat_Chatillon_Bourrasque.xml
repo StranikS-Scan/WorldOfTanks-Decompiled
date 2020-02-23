@@ -52,6 +52,13 @@
       <undamaged>	vehicles/french/F116_Bat_Chatillon_Bourrasque/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/french/F116_Bat_Chatillon_Bourrasque/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/french/F116_Bat_Chatillon_Bourrasque/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <F116_Bat_Chatillon_Bourrasque_3Dst>
+          <undamaged>	vehicles/french/F116_Bat_Chatillon_Bourrasque/_skins/F116_Bat_Chatillon_Bourrasque_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/french/F116_Bat_Chatillon_Bourrasque/_skins/F116_Bat_Chatillon_Bourrasque_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/french/F116_Bat_Chatillon_Bourrasque/_skins/F116_Bat_Chatillon_Bourrasque_3Dst/crash/lod0/Hull.model	</exploded>
+        </F116_Bat_Chatillon_Bourrasque_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -968,6 +975,13 @@
         <undamaged>	vehicles/french/F116_Bat_Chatillon_Bourrasque/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/french/F116_Bat_Chatillon_Bourrasque/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/french/F116_Bat_Chatillon_Bourrasque/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <F116_Bat_Chatillon_Bourrasque_3Dst>
+            <undamaged>	vehicles/french/F116_Bat_Chatillon_Bourrasque/_skins/F116_Bat_Chatillon_Bourrasque_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/french/F116_Bat_Chatillon_Bourrasque/_skins/F116_Bat_Chatillon_Bourrasque_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/french/F116_Bat_Chatillon_Bourrasque/_skins/F116_Bat_Chatillon_Bourrasque_3Dst/crash/lod0/Chassis.model	</exploded>
+          </F116_Bat_Chatillon_Bourrasque_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1095,39 +1109,11 @@
         <elasticity>	1300	</elasticity>
         <damping>	2	</damping>
         <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R0	</name>
-          <forwardElastK>	1	</forwardElastK>
-          <backwardElastK>	1.5	</backwardElastK>
-          <offset>	-0.140751	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L0	</name>
-          <forwardElastK>	1	</forwardElastK>
-          <backwardElastK>	1.5	</backwardElastK>
-          <offset>	-0.140751	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L1	</name>
-          <forwardElastK>	1.5	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
-          <offset>	-0.101877	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R1	</name>
-          <forwardElastK>	1.5	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
-          <offset>	-0.101877	</offset>
-        </node>
-        <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
           <forwardElastK>	1	</forwardElastK>
           <backwardElastK>	0.75	</backwardElastK>
-          <offset>	-0.26	</offset>
+          <offset>	-0.129726	</offset>
           <rightSibling>	Track_VT_L1	</rightSibling>
         </node>
         <node>
@@ -1135,7 +1121,7 @@
           <name>	Track_VT_L1	</name>
           <forwardElastK>	1.5	</forwardElastK>
           <backwardElastK>	0.75	</backwardElastK>
-          <offset>	-0.295	</offset>
+          <offset>	-0.232725	</offset>
           <leftSibling>	Track_VT_L0	</leftSibling>
           <rightSibling>	Track_VT_L2	</rightSibling>
         </node>
@@ -1144,7 +1130,7 @@
           <name>	Track_VT_L2	</name>
           <forwardElastK>	1.7	</forwardElastK>
           <backwardElastK>	0.75	</backwardElastK>
-          <offset>	-0.335	</offset>
+          <offset>	-0.274446	</offset>
           <leftSibling>	Track_VT_L1	</leftSibling>
           <rightSibling>	Track_VT_L3	</rightSibling>
         </node>
@@ -1257,10 +1243,38 @@
         </node>
         <node>
           <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.140751	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.140751	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.101877	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.101877	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
           <forwardElastK>	1	</forwardElastK>
           <backwardElastK>	0.75	</backwardElastK>
-          <offset>	-0.26	</offset>
+          <offset>	-0.129726	</offset>
           <rightSibling>	Track_VT_R1	</rightSibling>
         </node>
         <node>
@@ -1268,7 +1282,7 @@
           <name>	Track_VT_R1	</name>
           <forwardElastK>	1.5	</forwardElastK>
           <backwardElastK>	0.75	</backwardElastK>
-          <offset>	-0.295	</offset>
+          <offset>	-0.232725	</offset>
           <leftSibling>	Track_VT_R0	</leftSibling>
           <rightSibling>	Track_VT_R2	</rightSibling>
         </node>
@@ -1277,7 +1291,7 @@
           <name>	Track_VT_R2	</name>
           <forwardElastK>	1.7	</forwardElastK>
           <backwardElastK>	0.75	</backwardElastK>
-          <offset>	-0.335	</offset>
+          <offset>	-0.274446	</offset>
           <leftSibling>	Track_VT_R1	</leftSibling>
           <rightSibling>	Track_VT_R3	</rightSibling>
         </node>
@@ -1854,6 +1868,13 @@
             <undamaged>	vehicles/french/F116_Bat_Chatillon_Bourrasque/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/french/F116_Bat_Chatillon_Bourrasque/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/french/F116_Bat_Chatillon_Bourrasque/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <F116_Bat_Chatillon_Bourrasque_3Dst>
+                <undamaged>	vehicles/french/F116_Bat_Chatillon_Bourrasque/_skins/F116_Bat_Chatillon_Bourrasque_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/french/F116_Bat_Chatillon_Bourrasque/_skins/F116_Bat_Chatillon_Bourrasque_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/french/F116_Bat_Chatillon_Bourrasque/_skins/F116_Bat_Chatillon_Bourrasque_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </F116_Bat_Chatillon_Bourrasque_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/french/F116_Bat_Chatillon_Bourrasque/collision/Gun_01.model	</collisionModelServer>
@@ -1916,6 +1937,13 @@
         <undamaged>	vehicles/french/F116_Bat_Chatillon_Bourrasque/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/french/F116_Bat_Chatillon_Bourrasque/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/french/F116_Bat_Chatillon_Bourrasque/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <F116_Bat_Chatillon_Bourrasque_3Dst>
+            <undamaged>	vehicles/french/F116_Bat_Chatillon_Bourrasque/_skins/F116_Bat_Chatillon_Bourrasque_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/french/F116_Bat_Chatillon_Bourrasque/_skins/F116_Bat_Chatillon_Bourrasque_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/french/F116_Bat_Chatillon_Bourrasque/_skins/F116_Bat_Chatillon_Bourrasque_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </F116_Bat_Chatillon_Bourrasque_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/french/F116_Bat_Chatillon_Bourrasque/collision/Turret_01.model	</collisionModelServer>

@@ -6,7 +6,6 @@ from gui.impl.gen import R
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.impl.gen.view_models.views.lobby.instructions.booster_buy_model import BoosterBuyModel
 from gui.impl.lobby.common.buy_sell_item_base_dialog import DialogBuySellItemBaseView
-from gui.impl.lobby.instructions import getBattleBoosterItemType
 from gui.shared.gui_items.processors.module import ModuleBuyer
 from gui.shared.gui_items.processors.vehicle import VehicleAutoBattleBoosterEquipProcessor
 from adisp import process
@@ -51,7 +50,7 @@ class BoosterBuyWindowView(DialogBuySellItemBaseView):
         model.setDiscountValue(int(100.0 * newPrice / oldPrice) - 100)
         shortage = self._stats.money.getShortage(itemPrice.price)
         model.setIsAcceptDisabled(bool(shortage))
-        model.setItemType(getBattleBoosterItemType(self._item))
+        model.setSpecialType(self._item.getOverlayType())
         model.setIsRearm(vehicle.isAutoBattleBoosterEquip() if vehicle is not None else False)
         if vehicle is not None and not self._item.isAffectsOnVehicle(vehicle):
             model.setUpperDescription(R.strings.tooltips.battleBooster.buy.useless.upper_description())

@@ -3,12 +3,13 @@
 import logging
 from collections import defaultdict
 from Event import Event
+from constants import IGR_TYPE
 from debug_utils import LOG_DEBUG
 from gui.shared import formatters as shared_fmts
 from gui.shared.view_helpers.UsersInfoController import UsersInfoController
 from helpers import dependency
 from messenger import g_settings
-from messenger.m_constants import USER_GUI_TYPE, UserEntityScope
+from messenger.m_constants import USER_GUI_TYPE, UserEntityScope, USER_TAG
 from messenger.storage import storage_getter
 from messenger.proto import proto_getter, PROTO_TYPE
 from messenger.proto.entities import SharedUserEntity
@@ -107,6 +108,18 @@ class UsersInfoHelper(object):
     def getGuiUserRating(self, userDbID, formatter=lambda v: v):
         userRating = self.getUserRating(userDbID)
         return formatter(shared_fmts.getGlobalRatingFmt(userRating)) if userRating != '0' else '-1'
+
+    def getUserTags(self, userID, igrType):
+        contact = self.users.getUser(userID, scope=UserEntityScope.BATTLE)
+        if contact is not None:
+            userTags = contact.getTags()
+        else:
+            userTags = set()
+        if igrType == IGR_TYPE.BASE:
+            userTags.add(USER_TAG.IGR_BASE)
+        elif igrType == IGR_TYPE.PREMIUM:
+            userTags.add(USER_TAG.IGR_PREMIUM)
+        return userTags
 
     def syncUsersInfo(self):
         if self._invalid['names']:

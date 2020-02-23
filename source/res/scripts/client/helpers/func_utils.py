@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/func_utils.py
 from functools import partial
-from time import sleep
+from time import sleep, time
 import BigWorld
 from debug_utils import LOG_DEBUG
 
@@ -46,3 +46,19 @@ def freeze(seconds, nextFrame=True):
         return
     LOG_DEBUG('Actual Freezing at', BigWorld.time())
     sleep(seconds)
+
+
+def oncePerPeriod(period):
+    timeHolder = {intern('lastRequest'): 0.0}
+
+    def wrapper(func):
+
+        def caller(*args, **kwargs):
+            currTime = time()
+            if currTime - timeHolder['lastRequest'] > period:
+                timeHolder['lastRequest'] = currTime
+                func(*args, **kwargs)
+
+        return caller
+
+    return wrapper

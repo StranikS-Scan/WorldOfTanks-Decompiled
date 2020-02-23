@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/module.py
 from debug_utils import LOG_ERROR
-from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getSlotOverlayIconType
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
@@ -45,7 +44,7 @@ class ModuleBlockTooltipData(BlocksTooltipData):
         return
 
     def _getHighLightType(self):
-        return getSlotOverlayIconType(self.item)
+        return self.item.getHighlightType()
 
     def _packBlocks(self, *args, **kwargs):
         self.item = self.context.buildItem(*args, **kwargs)
@@ -123,6 +122,16 @@ class ModuleBlockTooltipData(BlocksTooltipData):
             items.append(formatters.packImageTextBlockData(title='', desc=text_styles.standard(backport.text(R.strings.tooltips.vehicleParams.bonus.situational())), img=backport.image(R.images.gui.maps.icons.tooltip.asterisk_optional()), imgPadding=formatters.packPadding(left=4, top=3), txtGap=-4, txtOffset=20, padding=formatters.packPadding(left=59, right=20)))
         if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and statsConfig.vehicle is not None and not module.isInstalled(statsConfig.vehicle) and module.hasSimilarDevicesInstalled(statsConfig.vehicle):
             items.append(formatters.packBuildUpBlockData(SimilarOptionalDeviceBlockConstructor(module, statusConfig, leftPadding, rightPadding).construct(), gap=-4, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding, bottom=2), stretchBg=False))
+        if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and module.isTrophy:
+            state = ''
+            headerStyle = None
+            if module.isUpgradable:
+                headerStyle = text_styles.statusAttention
+                state = 'basic'
+            elif module.isUpgraded:
+                headerStyle = text_styles.statInfo
+                state = 'upgraded'
+            items.append(formatters.packItemTitleDescBlockData(title=headerStyle(backport.text(R.strings.tooltips.moduleFits.trophyEquipment.dyn(state).header())), desc=text_styles.main(backport.text(R.strings.tooltips.moduleFits.trophyEquipment.dyn(state).description())), padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding, bottom=2)))
         return items
 
 
@@ -280,16 +289,22 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
     def __getOverlayData(self):
         blockPadding = formatters.packPadding(top=-6)
         bottomBlockPadding = -12
-        if self.module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and self.module.isDeluxe():
+        padding = formatters.packPadding(top=SLOT_HIGHLIGHT_TYPES.TOOLTIP_OVERLAY_PADDING_TOP, left=SLOT_HIGHLIGHT_TYPES.TOOLTIP_OVERLAY_PADDING_LEFT)
+        blockPadding['bottom'] = bottomBlockPadding
+        if self.module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and self.module.isDeluxe:
             overlayPath = backport.image(R.images.gui.maps.icons.quests.bonuses.small.equipmentPlus_overlay())
-            padding = formatters.packPadding(top=SLOT_HIGHLIGHT_TYPES.TOOLTIP_OVERLAY_PADDING_TOP, left=SLOT_HIGHLIGHT_TYPES.TOOLTIP_OVERLAY_PADDING_LEFT)
-            blockPadding['bottom'] = bottomBlockPadding
         elif self.module.itemTypeID is GUI_ITEM_TYPE.EQUIPMENT and self.module.isBuiltIn:
             overlayPath = backport.image(R.images.gui.maps.icons.quests.bonuses.small.builtInEquipment_overlay())
-            padding = formatters.packPadding(top=SLOT_HIGHLIGHT_TYPES.TOOLTIP_OVERLAY_PADDING_TOP, left=SLOT_HIGHLIGHT_TYPES.TOOLTIP_OVERLAY_PADDING_LEFT)
-            blockPadding['bottom'] = bottomBlockPadding
+        elif self.module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and self.module.isTrophy:
+            suffix = ''
+            if self.module.isUpgradable:
+                suffix = 'Basic'
+            elif self.module.isUpgraded:
+                suffix = 'Upgraded'
+            overlayPath = backport.image(R.images.gui.maps.icons.quests.bonuses.small.dyn('equipmentTrophy{}_overlay'.format(suffix))())
         else:
             overlayPath = padding = None
+            blockPadding['bottom'] = 0
         return (overlayPath, padding, blockPadding)
 
 
@@ -347,7 +362,7 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
                     block.append(makePriceBlock(cost, CURRENCY_SETTINGS.UNLOCK_PRICE, neededValue, leftPadding=leftPadding, valueWidth=self._valueWidth))
             notEnoughMoney = False
             hasAction = False
-            if buyPrice and not isAutoUnlock:
+            if buyPrice and not isAutoUnlock and not module.isHidden:
                 shop = self.itemsCache.items.shop
                 money = self.itemsCache.items.stats.money
                 rootInInv = vehicle is not None and vehicle.isInInventory
@@ -358,7 +373,6 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
                     isModuleInInventory = module.isInInventory
                     showNeeded = not isModuleInInventory and isModuleUnlocked
                 showDelimiter = False
-                leftPadding = 92
                 for itemPrice in module.buyPrices.iteritems(directOrder=False):
                     if not isItemBuyPriceAvailable(module, itemPrice, shop):
                         continue
@@ -385,6 +399,21 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
                     block.append(makePriceBlock(value, CURRENCY_SETTINGS.getBuySetting(currency), needValue, defValue if defValue > 0 else None, actionPercent, valueWidth=self._valueWidth, leftPadding=leftPadding))
                     showDelimiter = True
 
+            if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and module.isUpgradable:
+                money = self.itemsCache.items.stats.money
+                itemPrice = module.getUpgradePrice(self.itemsCache.items)
+                currency = itemPrice.getCurrency()
+                value = itemPrice.price.getSignValue(currency)
+                defValue = itemPrice.defPrice.getSignValue(currency)
+                if isEqOrDev:
+                    needValue = value - money.getSignValue(currency)
+                    if needValue > 0:
+                        notEnoughMoney = True
+                    else:
+                        needValue = None
+                else:
+                    needValue = None
+                block.append(makePriceBlock(value, CURRENCY_SETTINGS.getUpgradableSetting(currency), needValue, defValue if defValue > 0 else None, valueWidth=self._valueWidth, leftPadding=leftPadding))
             if sellPrice and module.sellPrices:
                 block.append(makePriceBlock(module.sellPrices.itemPrice.price.credits, CURRENCY_SETTINGS.SELL_PRICE, oldPrice=module.sellPrices.itemPrice.defPrice.credits, percent=module.sellPrices.itemPrice.getActionPrc() if not self.bootcamp.isInBootcamp() else 0, valueWidth=self._valueWidth, leftPadding=leftPadding))
             if inventoryCount:
@@ -469,7 +498,7 @@ class ModuleReplaceBlockConstructor(ModuleTooltipBlockConstructor):
         vehicle = self.configuration.vehicle
         optionalDevice = vehicle.optDevices[self.configuration.slotIdx]
         if optionalDevice is not None:
-            if self.module.isDeluxe() != optionalDevice.isDeluxe():
+            if self.module.isDeluxe != optionalDevice.isDeluxe:
                 msgKey = R.strings.tooltips.moduleFits.replace()
             else:
                 msgKey = R.strings.tooltips.moduleFits.dismantling()
@@ -693,7 +722,12 @@ class ComplexDeviceBlockConstructor(ModuleTooltipBlockConstructor):
         dkIcon = icons.demountKit()
         dkText = text_styles.concatStylesWithSpace(dkCount, dkIcon)
         descr = R.strings.demount_kit.equipmentInstall.demountDescription
-        dynAccId = descr.bonds() if self.module.isDeluxe() else descr.common()
+        if self.module.isDeluxe:
+            dynAccId = descr.bonds()
+        elif self.module.isTrophy:
+            dynAccId = descr.trophy()
+        else:
+            dynAccId = descr.common()
         text = backport.text(dynAccId, count=priceText, countDK=dkText)
         if discountText:
             text += '\n' + discountText

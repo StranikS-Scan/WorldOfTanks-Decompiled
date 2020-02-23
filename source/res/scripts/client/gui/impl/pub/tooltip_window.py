@@ -15,7 +15,7 @@ class ToolTipWindow(WindowImpl):
     __slots__ = ()
 
     def __init__(self, event, content, parent):
-        if event.decoratorID:
+        if event is not None and event.decoratorID:
             decorator = WindowView(layoutID=event.decoratorID)
         else:
             decorator = None

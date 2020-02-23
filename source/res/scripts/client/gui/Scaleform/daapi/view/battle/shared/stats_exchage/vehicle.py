@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/stats_exchage/vehicle.py
+from gui.shared.badges import buildBadge
 from gui.Scaleform.daapi.view.battle.shared.stats_exchage import broker
+from gui.Scaleform.settings import ICONS_SIZES
 from gui.battle_control.arena_info import vos_collections
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -87,7 +89,7 @@ class TotalStatsComposer(broker.IExchangeComposer):
 
 
 class VehicleInfoComponent(broker.ExchangeComponent):
-    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     __slots__ = ('_data',)
 
     def __init__(self):
@@ -107,9 +109,10 @@ class VehicleInfoComponent(broker.ExchangeComponent):
         playerVO = vInfoVO.player
         accountDBID = playerVO.accountDBID
         sessionID = playerVO.avatarSessionID
-        battleCtx = self.sessionProvider.getCtx()
+        battleCtx = self.__sessionProvider.getCtx()
         isTeamKiller = playerVO.isTeamKiller or battleCtx.isTeamKiller(vehicleID, sessionID) or overrides.isTeamKiller(vInfoVO)
         parts = self._ctx.getPlayerFullName(vInfoVO)
+        hasPrefixBadge = bool(vInfoVO.selectedBadge or vInfoVO.overriddenBadge)
         data = {'accountDBID': accountDBID,
          'sessionID': sessionID,
          'playerName': parts.playerName,
@@ -131,13 +134,21 @@ class VehicleInfoComponent(broker.ExchangeComponent):
          'isObserver': vInfoVO.isObserver(),
          'vehicleAction': overrides.getAction(vInfoVO),
          'isVehiclePremiumIgr': vTypeVO.isPremiumIGR,
-         'teamColor': overrides.getColorScheme()}
-        if vInfoVO.ranked.overridenBadge:
-            data['badgeType'] = 'override_badge_{}'.format(vInfoVO.ranked.overridenBadge)
-        elif vInfoVO.ranked.selectedBadge:
-            data['badgeType'] = 'badge_{}'.format(vInfoVO.ranked.selectedBadge)
-        if vInfoVO.ranked.selectedSuffixBadge:
-            data['suffixBadgeType'] = 'badge_{}'.format(vInfoVO.ranked.selectedSuffixBadge)
+         'teamColor': overrides.getColorScheme(),
+         'hasSelectedBadge': hasPrefixBadge}
+        if vInfoVO.overriddenBadge:
+            data['badge'] = {'icon': 'override_badge_{}'.format(vInfoVO.overriddenBadge),
+             'content': None,
+             'sizeContent': ICONS_SIZES.X24,
+             'isDynamic': False,
+             'isAtlasSource': True}
+        elif vInfoVO.selectedBadge:
+            badgeID = vInfoVO.selectedBadge
+            badge = buildBadge(badgeID, vInfoVO.getBadgeExtraInfo())
+            if badge is not None:
+                data['badge'] = badge.getBadgeVO(ICONS_SIZES.X24, {'isAtlasSource': True}, shortIconName=True)
+        if vInfoVO.selectedSuffixBadge:
+            data['suffixBadgeType'] = 'badge_{}'.format(vInfoVO.selectedSuffixBadge)
         return self._data.update(data)
 
 

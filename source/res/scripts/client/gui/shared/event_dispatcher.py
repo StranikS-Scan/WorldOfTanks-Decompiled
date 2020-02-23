@@ -8,6 +8,7 @@ import adisp
 from async import async, await
 from constants import RentType, GameSeasonType
 from debug_utils import LOG_WARNING
+from frameworks.wulf import ViewFlags
 from gui import SystemMessages, DialogsInterface, GUI_SETTINGS
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -442,8 +443,11 @@ def showHeroTankPreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, 
      'previousBackAlias': previousBackAlias}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def hideVehiclePreview():
-    g_eventBus.handleEvent(events.HideWindowEvent(events.HideWindowEvent.HIDE_VEHICLE_PREVIEW), scope=EVENT_BUS_SCOPE.LOBBY)
+def hideVehiclePreview(noCallback=False):
+    ctx = {}
+    if noCallback:
+        ctx = {'noCallback': True}
+    g_eventBus.handleEvent(events.HideWindowEvent(events.HideWindowEvent.HIDE_VEHICLE_PREVIEW, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def hideBattleResults():
@@ -715,6 +719,29 @@ def showSeniorityRewardAwardWindow(qID, data):
     window.load()
 
 
+def showBattlePassAwardsWindow(bonuses, data):
+    from gui.impl.lobby.battle_pass.battle_pass_awards_view import BattlePassAwardsView
+    g_eventBus.handleEvent(events.LoadUnboundViewEvent(layoutID=R.views.lobby.battle_pass.BattlePassAwardsView(), viewClass=BattlePassAwardsView, scope=ScopeTemplates.DEFAULT_SCOPE, wsFlags=ViewFlags.OVERLAY_VIEW, bonuses=bonuses, data=data), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showBattlePassVehicleAwardWindow(data):
+    from gui.impl.lobby.battle_pass.battle_pass_vehicle_award_view import BattlePassVehicleAwardView
+    g_eventBus.handleEvent(events.LoadUnboundViewEvent(layoutID=R.views.lobby.battle_pass.BattlePassVehicleAwardView(), viewClass=BattlePassVehicleAwardView, scope=ScopeTemplates.DEFAULT_SCOPE, wsFlags=ViewFlags.OVERLAY_VIEW, data=data), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showBattlePassBuyWindow(backCallback=None):
+    from gui.impl.lobby.battle_pass.battle_pass_buy_view import BattlePassBuyView
+    ctx = {'backCallback': backCallback}
+    g_eventBus.handleEvent(events.LoadUnboundViewEvent(layoutID=R.views.lobby.battle_pass.BattlePassBuyView(), viewClass=BattlePassBuyView, scope=ScopeTemplates.LOBBY_SUB_SCOPE, wsFlags=ViewFlags.LOBBY_TOP_SUB_VIEW, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showBattleVotingResultWindow(isOverlay=False):
+    from gui.impl.lobby.battle_pass.battle_pass_voting_result_view import BattlePassVotingResultView
+    layoutID = R.views.lobby.battle_pass.BattlePassVotingResultView()
+    _killOldView(layoutID)
+    g_eventBus.handleEvent(events.LoadUnboundViewEvent(layoutID=layoutID, viewClass=BattlePassVotingResultView, scope=ScopeTemplates.LOBBY_SUB_SCOPE, wsFlags=ViewFlags.OVERLAY_VIEW if isOverlay else ViewFlags.LOBBY_TOP_SUB_VIEW, isOverlay=isOverlay), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
 def showStylePreview(vehCD, style, styleDescr, backCallback, backBtnDescrLabel=''):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.STYLE_PREVIEW, ctx={'itemCD': vehCD,
      'style': style,
@@ -800,3 +827,14 @@ def showOptionalDeviceBuyAndInstall(deviceDescr, callback):
 def showOptionalDeviceBuyAndStorage(deviceDescr, callback):
     wrapper = FullScreenDialogWindowWrapper(BuyAndStorageOpDevDialog(deviceDescr))
     yield showDialog(wrapper, callback)
+
+
+def _killOldView(layoutID):
+    uiLoader = dependency.instance(IGuiLoader)
+    if not uiLoader or not uiLoader.windowsManager:
+        return
+    view = uiLoader.windowsManager.getViewByLayoutID(layoutID)
+    if view:
+        view.destroyWindow()
+        return True
+    return False

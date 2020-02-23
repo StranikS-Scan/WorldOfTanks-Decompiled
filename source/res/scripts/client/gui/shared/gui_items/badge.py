@@ -2,12 +2,15 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/badge.py
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import LAST_BADGES_VISIT
+from battle_pass_common import MAX_BADGE_LEVEL, BattlePassState
 from dossiers2.ui.achievements import BADGES_BLOCK
 from gui.Scaleform.locale.BADGE import BADGE
-from gui.Scaleform.settings import getBadgeIconPath, getBadgeHighlightIconPath, BADGES_ICONS
+from gui.Scaleform.settings import getBadgeIconPath, getAwardBadgeIconPath, getBadgeHighlightIconPath, BADGES_ICONS
 from gui.shared.gui_items.gui_item import GUIItem
-from helpers import i18n
-from shared_utils import CONST_CONTAINER
+from helpers import i18n, dependency
+from shared_utils import CONST_CONTAINER, first
+from skeletons.gui.game_control import IBattlePassController
+CUSTOM_LOGIC_KEY = 'customLogicImpl'
 
 class BadgeTypes(CONST_CONTAINER):
     OBSOLETE = 1
@@ -47,6 +50,12 @@ class Badge(GUIItem):
         else:
             return -1 if other.achievedAt is None else cmp(other.achievedAt, self.achievedAt)
 
+    def hasDynamicContent(self):
+        return False
+
+    def getDynamicContent(self):
+        return None
+
     def getBadgeClass(self):
         return self.data.get('class', 0)
 
@@ -68,23 +77,29 @@ class Badge(GUIItem):
     def isSuffixLayout(self):
         return self.__checkLayout(BadgeLayouts.SUFFIX)
 
+    def isVisibleAsAchievable(self):
+        return self.isAchievable
+
     def getHugeIcon(self):
-        return getBadgeIconPath(BADGES_ICONS.X220, self.badgeID)
+        return self.__getIconPath(BADGES_ICONS.X220)
 
     def getBigIcon(self):
         return self.getBigIconById(self.badgeID)
 
     def getIconX110(self):
-        return getBadgeIconPath(BADGES_ICONS.X110, self.badgeID)
+        return self.__getIconPath(BADGES_ICONS.X110)
 
     def getSmallIcon(self):
         return self.getSmallIconById(self.badgeID)
 
     def getThumbnailIcon(self):
-        return getBadgeIconPath(BADGES_ICONS.X24, self.badgeID)
+        return self.__getIconPath(BADGES_ICONS.X24)
 
     def getSuffixSmallIcon(self):
         return self.getSuffixSmallIconByID(self.badgeID)
+
+    def getAwardBadgeIcon(self, size):
+        return getAwardBadgeIconPath(size, self.badgeID)
 
     @classmethod
     def getSuffixSmallIconByID(cls, badgeID):
@@ -124,8 +139,71 @@ class Badge(GUIItem):
                 result = True
         return result
 
+    def getBadgeVO(self, size, extraData=None, shortIconName=False):
+        iconPath = self.__getIconPath(size, shortIconName)
+        result = {'icon': iconPath,
+         'content': self.getDynamicContent(),
+         'sizeContent': size,
+         'isDynamic': self.hasDynamicContent()}
+        if extraData:
+            result.update(extraData)
+        return result
+
+    def getIconPostfix(self):
+        return str(self.badgeID)
+
+    def __getIconPath(self, size, shortIconName=False):
+        iconPostfix = self.getIconPostfix()
+        if shortIconName:
+            iconPath = 'badge_%s' % iconPostfix
+        else:
+            iconPath = getBadgeIconPath(size, iconPostfix)
+        return iconPath
+
     def __checkType(self, badgeType):
         return self.data['type'] & badgeType > 0
 
     def __checkLayout(self, badgeLayout):
         return self.data['layout'] & badgeLayout > 0
+
+
+class BattlePassBadge(Badge):
+    __slots__ = ('__level',)
+    __battlePassController = dependency.descriptor(IBattlePassController)
+
+    def __init__(self, data, proxy=None, extraData=None):
+        super(BattlePassBadge, self).__init__(data, proxy)
+        self.__level = first(extraData) if extraData else None
+        return
+
+    def isVisibleAsAchievable(self):
+        return self.isAchievable and self.__battlePassController.isVisible()
+
+    def hasDynamicContent(self):
+        return True
+
+    def getDynamicContent(self):
+        if self.__getState() == BattlePassState.BASE:
+            level = 0
+        else:
+            level = self.__getLevel()
+        if level >= MAX_BADGE_LEVEL:
+            return ''
+        if level == 0:
+            level = 1
+        return str(level)
+
+    def getIconPostfix(self):
+        namePostfix = super(BattlePassBadge, self).getIconPostfix()
+        if self.__getLevel() >= MAX_BADGE_LEVEL and self.__getState() == BattlePassState.COMPLETED:
+            namePostfix += '_gold'
+        return namePostfix
+
+    def __getLevel(self):
+        return self.__level or self.__battlePassController.getCurrentLevel()
+
+    def __getState(self):
+        if self.__level is None:
+            return self.__battlePassController.getState()
+        else:
+            return BattlePassState.COMPLETED if self.__level >= MAX_BADGE_LEVEL else BattlePassState.POST

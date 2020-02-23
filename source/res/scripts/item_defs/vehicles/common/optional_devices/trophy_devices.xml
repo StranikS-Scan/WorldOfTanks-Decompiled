@@ -1,0 +1,124 @@
+<trophy_devices.xml>
+  <trophyBasicAimDrives>
+    <id>	50	</id>
+    <userString>	#artefacts:trophyBasicAimDrives/name	</userString>
+    <description>	#artefacts:enhancedAimDrives/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:enhancedAimDrives/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:enhancedAimDrives/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/enhancedAimDrives.png 0 0	</icon>
+    <price>	100000	</price>
+    <notInShop>	true	</notInShop>
+    <removable>	false	</removable>
+    <tags>	enhancedAimDrives firepower trophyBasic	</tags>
+    <incompatibleTags>
+      <installed>	enhancedAimDrives	</installed>
+    </incompatibleTags>
+    <script>	UpgradableStaticFactorDevice	  <weight>	100	</weight>
+      <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
+      <factor>	0.91	</factor>
+      <upgradeInfo>
+        <upgradedCompDescr>	13305	</upgradedCompDescr>
+        <price>	3000000	</price>
+      </upgradeInfo>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunAimSpeed	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+  </trophyBasicAimDrives>
+  <trophyUpgradedAimDrives>
+    <id>	51	</id>
+    <userString>	#artefacts:trophyBasicAimDrives/name	</userString>
+    <description>	#artefacts:deluxEnhancedAimDrives/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:deluxEnhancedAimDrives/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:deluxEnhancedAimDrives/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/enhancedAimDrives.png 0 0	</icon>
+    <price>	100000	</price>
+    <notInShop>	true	</notInShop>
+    <removable>	false	</removable>
+    <tags>	enhancedAimDrives firepower trophyUpgraded	</tags>
+    <incompatibleTags>
+      <installed>	enhancedAimDrives	</installed>
+    </incompatibleTags>
+    <script>	UpgradedStaticFactorDevice	  <weight>	100	</weight>
+      <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
+      <factor>	0.89	</factor>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunAimSpeed	</name>
+        <value>	1.125	</value>
+      </mul>
+    </kpi>
+  </trophyUpgradedAimDrives>
+  <trophyBasicTankRammer>
+    <id>	52	</id>
+    <userString>	#artefacts:trophyBasicTankRammer/name	</userString>
+    <description>	#artefacts:rammer/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:rammer/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:rammer/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/rammer.png 0 0	</icon>
+    <price>	100000	</price>
+    <notInShop>	true	</notInShop>
+    <removable>	false	</removable>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	mediumCaliberTankRammer_user largeCaliberTankRammer_user mediumCaliberHowitzerRammer_user largeCaliberHowitzerRammer_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <tags>	rammer firepower trophyBasic	</tags>
+    <incompatibleTags>
+      <installed>	rammer	</installed>
+    </incompatibleTags>
+    <script>	UpgradableStaticFactorDevice	  <weight>	200	</weight>
+      <attribute>	miscAttrs/gunReloadTimeFactor	</attribute>
+      <factor>	0.9	</factor>
+      <upgradeInfo>
+        <upgradedCompDescr>	13817	</upgradedCompDescr>
+        <price>	3000000	</price>
+      </upgradeInfo>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunReloadTime	</name>
+        <value>	0.9	</value>
+      </mul>
+    </kpi>
+  </trophyBasicTankRammer>
+  <trophyUpgradedTankRammer>
+    <id>	53	</id>
+    <userString>	#artefacts:trophyBasicTankRammer/name	</userString>
+    <description>	#artefacts:deluxRammer/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:deluxRammer/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:deluxRammer/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/rammer.png 0 0	</icon>
+    <price>	100000	</price>
+    <removable>	false	</removable>
+    <notInShop>	true	</notInShop>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	mediumCaliberTankRammer_user largeCaliberTankRammer_user mediumCaliberHowitzerRammer_user largeCaliberHowitzerRammer_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <tags>	rammer firepower trophyUpgraded	</tags>
+    <incompatibleTags>
+      <installed>	rammer	</installed>
+    </incompatibleTags>
+    <script>	UpgradedStaticFactorDevice	  <weight>	200	</weight>
+      <attribute>	miscAttrs/gunReloadTimeFactor	</attribute>
+      <factor>	0.875	</factor>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunReloadTime	</name>
+        <value>	0.875	</value>
+      </mul>
+    </kpi>
+  </trophyUpgradedTankRammer>
+</trophy_devices.xml>

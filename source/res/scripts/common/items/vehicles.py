@@ -8,6 +8,7 @@ import struct
 import itertools
 import copy
 import os
+from typing import List, Optional, Tuple, Dict, Any, TYPE_CHECKING
 import BigWorld
 from Math import Vector2, Vector3
 import nation_change
@@ -61,6 +62,8 @@ elif IS_WEB:
     from web_stubs import *
 if IS_CELLAPP:
     from vehicle_constants import OVERMATCH_MECHANICS_VER
+if TYPE_CHECKING:
+    from ResMgr import DataSection
 VEHICLE_CLASS_TAGS = frozenset(('lightTank',
  'mediumTank',
  'heavyTank',
@@ -4185,6 +4188,13 @@ def _readPriceForItem(xmlCtx, section, compactDescr):
         pricesDest['itemPrices'][compactDescr] = _xml.readPrice(xmlCtx, section, 'price')
         if section.readBool('notInShop', False):
             pricesDest['notInShopItems'].add(compactDescr)
+    return
+
+
+def _readPriceForOperation(xmlCtx, section, opType, opKey):
+    pricesDest = _g_prices
+    if pricesDest is not None:
+        pricesDest['operationPrices'].setdefault(opType, {})[opKey] = _xml.readPrice(xmlCtx, section, 'price')
     return
 
 

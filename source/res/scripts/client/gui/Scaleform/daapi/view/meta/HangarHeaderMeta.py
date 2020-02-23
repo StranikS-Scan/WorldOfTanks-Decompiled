@@ -9,3 +9,9 @@ class HangarHeaderMeta(BaseDAAPIComponent):
 
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
+
+    def as_createBattlePassS(self):
+        return self.flashObject.as_createBattlePass() if self._isDAAPIInited() else None
+
+    def as_removeBattlePassS(self):
+        return self.flashObject.as_removeBattlePass() if self._isDAAPIInited() else None

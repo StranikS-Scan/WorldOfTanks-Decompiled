@@ -5,6 +5,7 @@ from epic_constants import EPIC_BATTLE_TEAM_ID
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.settings import ICONS_SIZES
 from gui.battle_results.components import base, shared, style, ranked
 from gui.battle_results.components.base import PropertyValue
 from gui.battle_results.components.personal import fillKillerInfoBlock
@@ -42,7 +43,7 @@ class TeamPlayerNameBlock(shared.PlayerNameBlock):
 
 
 class RegularVehicleStatsBlock(base.StatsBlock):
-    __slots__ = ('_isObserver', 'achievements', 'achievementsCount', 'vehicleState', 'vehicleStatePrefix', 'vehicleStateSuffix', 'killerID', 'deathReason', 'isPrematureLeave', 'vehicleName', 'vehicleShortName', 'vehicleIcon', 'vehicleSort', 'isPersonal', 'isTeamKiller', 'kills', 'tkills', 'realKills', 'xp', 'damageDealt', 'vehicles', 'playerID', 'player', 'statValues', 'fortResource', 'squadIndex', 'isPersonalSquad', 'xpSort', 'intCD', 'rank', 'rankIcon', 'badge', 'badgeIcon', 'suffixBadgeIcon', 'isKilledByTeamKiller', 'playerRank', 'respawns')
+    __slots__ = ('_isObserver', 'achievements', 'achievementsCount', 'vehicleState', 'vehicleStatePrefix', 'vehicleStateSuffix', 'killerID', 'deathReason', 'isPrematureLeave', 'vehicleName', 'vehicleShortName', 'vehicleIcon', 'vehicleSort', 'isPersonal', 'isTeamKiller', 'kills', 'tkills', 'realKills', 'xp', 'damageDealt', 'vehicles', 'playerID', 'player', 'statValues', 'fortResource', 'squadIndex', 'isPersonalSquad', 'xpSort', 'intCD', 'rank', 'rankIcon', 'suffixBadgeIcon', 'isKilledByTeamKiller', 'playerRank', 'respawns', 'badge', 'hasSelectedBadge')
 
     def __init__(self, meta=None, field='', *path):
         super(RegularVehicleStatsBlock, self).__init__(meta, field, *path)
@@ -52,24 +53,21 @@ class RegularVehicleStatsBlock(base.StatsBlock):
         self.isTeamKiller = False
         self.isKilledByTeamKiller = False
         self.vehicleSort = None
-        self.badge = 0
-        self.badgeIcon = None
         self.suffixBadgeIcon = None
+        self.hasSelectedBadge = False
         return
 
     def setRecord(self, result, reusable):
         player = result.player
         avatar = reusable.avatars.getAvatarInfo(player.dbID)
         noPenalties = not avatar.hasPenalties()
-        badgeIcon = None
         self.suffixBadgeIcon = None
         if avatar is not None:
-            self.badge = avatar.badge
-            if self.badge > 0:
-                badgeIcon = style.makeBadgeIcon(self.badge)
+            self.hasSelectedBadge = avatar.badge > 0
+            if self.hasSelectedBadge:
+                self._setBadge(result, reusable)
             if avatar.suffixBadge:
                 self.suffixBadgeIcon = style.makeBadgeIcon(avatar.suffixBadge)
-        self.badgeIcon = badgeIcon
         self._processVehicles(result)
         self._setPlayerInfo(player)
         self._setTotalStats(result, noPenalties)
@@ -79,6 +77,9 @@ class RegularVehicleStatsBlock(base.StatsBlock):
         if not self._isObserver:
             self._setVehicleState(result, reusable)
         return
+
+    def _setBadge(self, result, reusable):
+        self.badge = PropertyValue(result, reusable)
 
     def _processVehicles(self, result):
         self._setVehicleInfo(result.vehicle)
@@ -654,3 +655,26 @@ class RankedResultsListItemStatsBlock(base.StatsBlock):
             standoff = RANKEDBATTLES_ALIASES.STANDOFF_MINUS_BLIND
         self.standoff = standoff
         self.tags = item.player.tags
+
+
+class BadgeBlock(base.StatsBlock):
+    __slots__ = ('icon', 'content', 'sizeContent', 'isDynamic', 'isAtlasSource')
+
+    def __init__(self, meta=None, field='', *path):
+        super(BadgeBlock, self).__init__(meta, field, *path)
+        self.icon = ''
+        self.content = ''
+        self.sizeContent = ''
+        self.isDynamic = False
+        self.isAtlasSource = False
+
+    def setRecord(self, result, reusable):
+        player = result.player
+        avatar = reusable.avatars.getAvatarInfo(player.dbID)
+        badgeInfo = avatar.getFullBadgeInfo()
+        if badgeInfo is not None:
+            self.icon = badgeInfo.getThumbnailIcon()
+            self.isDynamic = badgeInfo.hasDynamicContent()
+            self.content = badgeInfo.getDynamicContent()
+            self.sizeContent = ICONS_SIZES.X24
+        return

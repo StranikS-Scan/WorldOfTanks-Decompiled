@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/battle_results_shared.py
 import struct
 from itertools import izip
+from items.badges_common import BadgesCommon
 from items.vehicles import VEHICLE_DEVICE_TYPE_NAMES, VEHICLE_TANKMAN_TYPE_NAMES
 from constants import FLAG_ACTION, PREMIUM_TYPE, PREM_BONUS_TYPES
 from DictPackers import Meta, DictPacker, SimpleDictPacker, DeltaPacker, ValueReplayPacker, BunchProxyPacker, roundToInt
@@ -778,6 +779,10 @@ _AVATAR_BASE_PRIVATE_RESULTS = Meta(('accountDBID',
  int,
  0,
  None,
+ 'skip'), ('fareTeamXPPosition',
+ int,
+ 0,
+ None,
  'skip'))
 _AVATAR_BASE_PUBLIC_RESULTS_EXTS = {'playerRank': _buildMapsForExt(('rank',
                 int,
@@ -824,7 +829,20 @@ _AVATAR_BASE_PUBLIC_RESULTS_EXTS = {'playerRank': _buildMapsForExt(('rank',
                   str,
                   '',
                   ValueReplayPacker(),
-                  'skip'))}
+                  'skip')),
+ 'battlePass': _buildMapsForExt(('basePointsDiff',
+                int,
+                0,
+                None,
+                'skip'), ('sumPoints',
+                int,
+                0,
+                None,
+                'skip'), ('hasBattlePass',
+                bool,
+                False,
+                None,
+                'skip'))}
 _AVATAR_BASE_PUBLIC_RESULTS = Meta(('avatarDamaged',
  int,
  0,
@@ -842,8 +860,8 @@ _AVATAR_BASE_PUBLIC_RESULTS = Meta(('avatarDamaged',
  (0, 0),
  None,
  'skip'), ('badges',
- list,
- [],
+ tuple,
+ BadgesCommon.selectedBadgesEmpty(),
  None,
  'skip'), ('ext',
  dict,

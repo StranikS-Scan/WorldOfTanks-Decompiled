@@ -72,14 +72,20 @@ class BlueprintsConversionView(DialogWindow):
 
     def __createUniversalFragmentsBlock(self, countFragments):
         nationValue, intelligenceValue = self.__itemsCache.items.blueprints.getRequiredIntelligenceAndNational(self.__vehicle.level)
+        valueMainCost = self.gui.systemLocale.getNumberFormat(countFragments * intelligenceValue)
+        valueAdditionalCost = self.gui.systemLocale.getNumberFormat(countFragments * nationValue)
+        hasAdditionalCost = valueAdditionalCost != '0'
         with self.bottomContentViewModel.transaction() as model:
-            model.setValueMainCost(self.gui.systemLocale.getNumberFormat(countFragments * intelligenceValue))
-            model.setIconMainCost(R.images.gui.maps.icons.blueprints.fragment.small.intelligence())
-            model.setValueAdditionalCost(self.gui.systemLocale.getNumberFormat(countFragments * nationValue))
-            model.setIconAdditionalCost(R.images.gui.maps.icons.blueprints.fragment.small.dyn(self.__vehicle.nationName)())
+            model.setHasAdditionalCost(hasAdditionalCost)
+            model.valueMain.setValue(valueMainCost)
+            model.valueMain.setIcon(R.images.gui.maps.icons.blueprints.fragment.small.intelligence())
+            model.valueAdditional.setValue(valueAdditionalCost)
+            model.valueAdditional.setIcon(R.images.gui.maps.icons.blueprints.fragment.small.dyn(self.__vehicle.nationName)())
 
     def __updateUniversalFragmentsBlock(self):
         nationValue, intelligenceValue = self.__itemsCache.items.blueprints.getRequiredIntelligenceAndNational(self.__vehicle.level)
+        hasAdditionalCost = intelligenceValue != '0'
         with self.bottomContentViewModel.transaction() as model:
-            model.setValueMainCost(self.gui.systemLocale.getNumberFormat(nationValue))
-            model.setValueAdditionalCost(self.gui.systemLocale.getNumberFormat(intelligenceValue))
+            model.valueMain.setValue(self.gui.systemLocale.getNumberFormat(nationValue))
+            model.setHasAdditionalCost(hasAdditionalCost)
+            model.valueAdditional.setValue(self.gui.systemLocale.getNumberFormat(intelligenceValue))

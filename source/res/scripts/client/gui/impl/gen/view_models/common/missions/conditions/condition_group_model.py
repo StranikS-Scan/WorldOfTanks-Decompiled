@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/common/missions/conditions/condition_group_model.py
-from frameworks.wulf import Array
 from gui.impl.gen.view_models.common.missions.conditions.condition_base_model import ConditionBaseModel
 
 class ConditionGroupModel(ConditionBaseModel):
@@ -17,4 +16,4 @@ class ConditionGroupModel(ConditionBaseModel):
 
     def _initialize(self):
         super(ConditionGroupModel, self)._initialize()
-        self._addArrayProperty('items', Array())
+        self._addArrayProperty('items')

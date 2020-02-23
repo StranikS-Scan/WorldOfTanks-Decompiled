@@ -224,9 +224,9 @@ class VehicleTypeInfoVO(object):
 
 
 class VehicleArenaInfoVO(object):
-    __slots__ = ('vehicleID', 'team', 'player', 'playerStatus', 'vehicleType', 'vehicleStatus', 'prebattleID', 'events', 'squadIndex', 'invitationDeliveryStatus', 'ranked', 'gameModeSpecific')
+    __slots__ = ('vehicleID', 'team', 'player', 'playerStatus', 'vehicleType', 'vehicleStatus', 'prebattleID', 'events', 'squadIndex', 'invitationDeliveryStatus', 'ranked', 'gameModeSpecific', 'overriddenBadge', 'badges', '__prefixBadge', '__suffixBadge')
 
-    def __init__(self, vehicleID, team=0, isAlive=None, isAvatarReady=None, isTeamKiller=None, prebattleID=None, events=None, forbidInBattleInvitations=False, ranked=None, **kwargs):
+    def __init__(self, vehicleID, team=0, isAlive=None, isAvatarReady=None, isTeamKiller=None, prebattleID=None, events=None, forbidInBattleInvitations=False, ranked=None, badges=None, overriddenBadge=None, **kwargs):
         super(VehicleArenaInfoVO, self).__init__()
         self.vehicleID = vehicleID
         self.team = team
@@ -238,10 +238,13 @@ class VehicleArenaInfoVO(object):
         self.invitationDeliveryStatus = self.__getInvitationStatus(forbidInBattleInvitations)
         self.events = events or {}
         self.squadIndex = 0
-        self.ranked = PlayerRankedInfoVO(*ranked) if ranked is not None else PlayerRankedInfoVO()
+        self.ranked = PlayerRankedInfoVO(ranked) if ranked is not None else PlayerRankedInfoVO()
         arena = avatar_getter.getArena()
         guiType = None if not arena else arena.guiType
         self.gameModeSpecific = GameModeDataVO(guiType, True)
+        self.overriddenBadge = overriddenBadge
+        self.badges = badges or ((), ())
+        self.__prefixBadge, self.__suffixBadge = getSelectedByLayout(self.badges[0])
         return
 
     def __repr__(self):
@@ -259,6 +262,21 @@ class VehicleArenaInfoVO(object):
             return result
         result = cmp(self.vehicleType, other.vehicleType)
         return result if result else cmp(self.player, other.player)
+
+    @property
+    def selectedBadge(self):
+        return self.__prefixBadge
+
+    @property
+    def selectedSuffixBadge(self):
+        return self.__suffixBadge
+
+    def getBadgeExtraInfo(self):
+        if self.badges:
+            _, extraInfo = self.badges
+            return extraInfo
+        else:
+            return None
 
     def updateVehicleStatus(self, invalidate=_INVALIDATE_OP.NONE, isAlive=None, isAvatarReady=None, stopRespawn=False, **kwargs):
         prev, self.vehicleStatus = self.vehicleStatus, self.__getVehicleStatus(isAlive, isAvatarReady, stopRespawn)
@@ -300,7 +318,7 @@ class VehicleArenaInfoVO(object):
 
     def updateRanked(self, invalidate=_INVALIDATE_OP.NONE, ranked=None, **kwargs):
         if ranked is not None:
-            self.ranked = PlayerRankedInfoVO(*ranked)
+            self.ranked = PlayerRankedInfoVO(ranked)
             invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.VEHICLE_INFO)
         return invalidate
 
@@ -539,26 +557,11 @@ class VehicleArenaStatsVO(object):
 
 
 class PlayerRankedInfoVO(object):
-    __slots__ = ('rank', 'rankStep', 'badges', 'selectedBadge', '__prefixBadge', '__suffixBadge', '_overridenBadge')
+    __slots__ = ('rank', 'rankStep')
 
-    def __init__(self, rank=None, badges=None, overridenBadge=None):
+    def __init__(self, rank=None):
         super(PlayerRankedInfoVO, self).__init__()
         self.rank, self.rankStep = rank or (0, 0)
-        self.badges = badges or ()
-        self.__prefixBadge, self.__suffixBadge = getSelectedByLayout(self.badges)
-        self._overridenBadge = overridenBadge
-
-    @property
-    def overridenBadge(self):
-        return self._overridenBadge
-
-    @property
-    def selectedBadge(self):
-        return self.__prefixBadge
-
-    @property
-    def selectedSuffixBadge(self):
-        return self.__suffixBadge
 
 
 class VehicleArenaStatsDict(defaultdict):

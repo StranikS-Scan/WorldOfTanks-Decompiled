@@ -129,6 +129,14 @@ class ARTEFACTS(object):
     DELUXENHANCEDAIMDRIVES_DESCR = '#artefacts:deluxEnhancedAimDrives/descr'
     DELUXENHANCEDAIMDRIVES_SHORT_SPECIAL = '#artefacts:deluxEnhancedAimDrives/short_special'
     DELUXENHANCEDAIMDRIVES_LONG_SPECIAL = '#artefacts:deluxEnhancedAimDrives/long_special'
+    TROPHYBASICTANKRAMMER_NAME = '#artefacts:trophyBasicTankRammer/name'
+    TROPHYBASICTANKRAMMER_DESCR = '#artefacts:trophyBasicTankRammer/descr'
+    TROPHYBASICAIMDRIVES_NAME = '#artefacts:trophyBasicAimDrives/name'
+    TROPHYBASICAIMDRIVES_DESCR = '#artefacts:trophyBasicAimDrives/descr'
+    TROPHYUPGRADEDTANKRAMMER_NAME = '#artefacts:trophyUpgradedTankRammer/name'
+    TROPHYUPGRADEDTANKRAMMER_DESCR = '#artefacts:trophyUpgradedTankRammer/descr'
+    TROPHYUPGRADEDAIMDRIVES_NAME = '#artefacts:trophyUpgradedAimDrives/name'
+    TROPHYUPGRADEDAIMDRIVES_DESCR = '#artefacts:trophyUpgradedAimDrives/descr'
     HANDEXTINGUISHERS_NAME = '#artefacts:handExtinguishers/name'
     HANDEXTINGUISHERS_DESCR = '#artefacts:handExtinguishers/descr'
     HANDEXTINGUISHERS_SHORT_SPECIAL = '#artefacts:handExtinguishers/short_special'
@@ -406,6 +414,8 @@ class ARTEFACTS(object):
     PASSIVE_ENGINEERING_LONGDESCR = '#artefacts:passive_engineering/longDescr'
     PASSIVE_ENGINEERING_SHORTFILTERALERT = '#artefacts:passive_engineering/shortFilterAlert'
     PASSIVE_ENGINEERING_LONGFILTERALERT = '#artefacts:passive_engineering/longFilterAlert'
+    TROPHYOPTICS_NAME = '#artefacts:trophyOptics/name'
+    TROPHYOPTICS_DESCR = '#artefacts:trophyOptics/descr'
     ALL_GAIN_ENUM = (TOOLBOXBATTLEBOOSTER_GAIN_SIMPLE,
      TOOLBOXBATTLEBOOSTER_GAIN_DELUXE,
      IMPROVEDVENTILATIONBATTLEBOOSTER_GAIN_SIMPLE,

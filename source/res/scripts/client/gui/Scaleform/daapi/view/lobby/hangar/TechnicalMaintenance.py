@@ -4,7 +4,6 @@ from CurrentVehicle import g_currentVehicle
 from adisp import process
 from gui import SystemMessages, DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getSlotOverlayIconType
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.items_parameters import isAutoReloadGun
@@ -224,7 +223,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
             action = None
             if buyPrice.isActionPrice() and not self.bootcamp.isInBootcamp():
                 action = packItemActionTooltipData(module)
-            highlightType = getSlotOverlayIconType(module)
+            highlightType = module.getHighlightType()
             disabledOption = self.__isSlotDisabled(module, selectedItems)
             modules.append({'id': str(module.intCD),
              'name': module.userName,

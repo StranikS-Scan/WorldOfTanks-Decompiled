@@ -112,7 +112,7 @@ class _State(object):
         if self.connectionMgr.isConnected():
             if self.lobbyContext.getServerSettings().roaming.isInRoaming():
                 state = RoamingState(self._webCtrl)
-            elif not self.lobbyContext.getServerSettings().wgcg.isEnabled():
+            elif not self._webCtrl.getRequesterConfig().isEnabled():
                 state = DisabledState(self._webCtrl)
         else:
             state = UndefinedState(self._webCtrl)
@@ -173,9 +173,9 @@ class _WebState(_State):
 
     def init(self):
         super(_WebState, self).init()
-        wgcg = self.lobbyContext.getServerSettings().wgcg
-        self.__webRequester = g_webFactory.createWebRequester(wgcg, client_lang=getClientLanguage())
-        self.__gateUrl = wgcg.getGateUrl()
+        settings = self._webCtrl.getRequesterConfig()
+        self.__webRequester = g_webFactory.createWebRequester(settings, client_lang=getClientLanguage())
+        self.__gateUrl = settings.getGateUrl()
         self.__requestsCtrl = g_webFactory.createWgcgRequestsController(self._webCtrl, g_webFactory.createWgcgRequester(self.__webRequester))
 
     def fini(self):
@@ -369,7 +369,7 @@ class AvailableState(_WebState):
     def _getNextState(self):
         state = super(AvailableState, self)._getNextState()
         gateUrl = self.getGateUrl()
-        if self.connectionMgr.isConnected() and state is None and gateUrl is not None and gateUrl != self.lobbyContext.getServerSettings().wgcg.getGateUrl():
+        if self.connectionMgr.isConnected() and state is None and gateUrl is not None and gateUrl != self._webCtrl.getRequesterConfig().getGateUrl():
             state = AvailableState(self._webCtrl)
         return state
 

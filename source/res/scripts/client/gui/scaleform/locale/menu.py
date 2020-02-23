@@ -3,6 +3,7 @@
 from debug_utils import LOG_WARNING
 
 class MENU(object):
+    MODULEFITS_UPGRADEBTN_TOOLTIP = '#menu:moduleFits/upgradeBtn/tooltip'
     VEHICLEPREVIEW_TIMELEFT = '#menu:vehiclePreview/timeLeft'
     VEHICLEPREVIEW_TIMELEFTSHORT = '#menu:vehiclePreview/timeLeftShort'
     VEHICLERESTORE_TIMELEFTSHORT = '#menu:vehicleRestore/timeLeftShort'
@@ -800,10 +801,13 @@ class MENU(object):
     MODULEFITS_ALREADY_INSTALLED = '#menu:moduleFits/already_installed'
     MODULEFITS_SIMILAR_DEVICE_ALREADY_INSTALLED = '#menu:moduleFits/similar_device_already_installed'
     MODULEFITS_NOT_WITH_INSTALLED_EQUIPMENT = '#menu:moduleFits/not_with_installed_equipment'
-    MODULEFITS_DESTROYNAME = '#menu:moduleFits/destroyName'
     MODULEFITS_DESTROYDESCR = '#menu:moduleFits/destroyDescr'
-    MODULEFITS_DESTROYTOOLTIP = '#menu:moduleFits/destroyToolTip'
+    MODULEFITS_DESTROYBTN_TOOLTIP_HEADER = '#menu:moduleFits/destroyBtn/tooltip/header'
+    MODULEFITS_DESTROYBTN_TOOLTIP_BODY = '#menu:moduleFits/destroyBtn/tooltip/body'
     MODULEFITS_REMOVENAME = '#menu:moduleFits/removeName'
+    MODULEFITS_UPGRADEBTN_LABEL = '#menu:moduleFits/upgradeBtn/label'
+    MODULEFITS_UPGRADEBTN_TOOLTIP_HEADER = '#menu:moduleFits/upgradeBtn/tooltip/header'
+    MODULEFITS_UPGRADEBTN_TOOLTIP_BODY = '#menu:moduleFits/upgradeBtn/tooltip/body'
     MODULEFITS_REMOVEDESCR = '#menu:moduleFits/removeDescr'
     MODULEFITS_REMOVETOOLTIP = '#menu:moduleFits/removeToolTip'
     MODULEFITS_TITLE = '#menu:moduleFits/title'
@@ -1871,6 +1875,9 @@ class MENU(object):
     FITTINGSELECTPOPOVER_OKBTNLABEL = '#menu:fittingSelectPopover/okBtnLabel'
     FITTINGSELECTPOPOVER_DESCTEXT = '#menu:fittingSelectPopover/descText'
     FITTINGSELECTPOPOVER_DESCTEXT_CRYSTAL = '#menu:fittingSelectPopover/descText/crystal'
+    FITTINGSELECTPOPOVER_TROPHYOVERLAY_TITLETEXT = '#menu:fittingSelectPopover/trophyOverlay/titleText'
+    FITTINGSELECTPOPOVER_TROPHYOVERLAY_DESCTEXT = '#menu:fittingSelectPopover/trophyOverlay/descText'
+    FITTINGSELECTPOPOVER_TROPHYOVERLAY_OKBTNLABEL = '#menu:fittingSelectPopover/trophyOverlay/okBtnLabel'
     QUOTE = '#menu:quote'
     TECHTREE_ANNOUNCEMENT = '#menu:techtree/Announcement'
     CST_ITEM_CTX_MENU_BUY = '#menu:cst_item_ctx_menu/buy'
@@ -1901,6 +1908,7 @@ class MENU(object):
     CST_ITEM_CTX_MENU_CONVERTBLUEPRINTMAXCOUNT = '#menu:cst_item_ctx_menu/convertBlueprintMaxCount'
     CST_ITEM_CTX_MENU_SHOWBLUEPRINT = '#menu:cst_item_ctx_menu/showBlueprint'
     CST_ITEM_CTX_MENU_STYLEINFO = '#menu:cst_item_ctx_menu/styleInfo'
+    CST_ITEM_CTX_MENU_UPGRADE = '#menu:cst_item_ctx_menu/upgrade'
     VIEWHEADER_BACKBTN_LABEL = '#menu:viewHeader/backBtn/label'
     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE = '#menu:viewHeader/backBtn/descrLabel/techtree'
     VIEWHEADER_BACKBTN_DESCRLABEL_HANGAR = '#menu:viewHeader/backBtn/descrLabel/hangar'
@@ -2488,7 +2496,8 @@ class MENU(object):
      CST_ITEM_CTX_MENU_CONVERTBLUEPRINTMAX,
      CST_ITEM_CTX_MENU_CONVERTBLUEPRINTMAXCOUNT,
      CST_ITEM_CTX_MENU_SHOWBLUEPRINT,
-     CST_ITEM_CTX_MENU_STYLEINFO)
+     CST_ITEM_CTX_MENU_STYLEINFO,
+     CST_ITEM_CTX_MENU_UPGRADE)
     INTERNET_PROVIDER_ALL_NAME_ENUM = (INTERNET_PROVIDER_ROSTELECOM_NAME,
      INTERNET_PROVIDER_BELTELECOM_NAME,
      INTERNET_PROVIDER_KYIVSTAR_NAME,

@@ -439,6 +439,32 @@ class Shop(object):
             self.__account._doCmdInt3(AccountCommands.CMD_APPLY_ADDITIONAL_XP, self.__getCacheRevision(), arenaUniqueID, vehTypeCompDescr, proxy)
             return
 
+    def buyBattlePass(self, seasonID, callback):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER, {})
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(requestID, resultID, errorStr)
+            else:
+                proxy = None
+            self.__account._doCmdInt2(AccountCommands.CMD_BUY_BATTLE_PASS, self.__getCacheRevision(), seasonID, proxy)
+            return
+
+    def buyBattlePassLevels(self, seasonID, levels, callback):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER, {})
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(requestID, resultID, errorStr)
+            else:
+                proxy = None
+            self.__account._doCmdInt3(AccountCommands.CMD_BUY_BATTLE_PASS_LEVELS, self.__getCacheRevision(), seasonID, levels, proxy)
+            return
+
     def __onSyncResponse(self, syncID, resultID, ext=None):
         ext = ext or {}
         if resultID == AccountCommands.RES_NON_PLAYER:

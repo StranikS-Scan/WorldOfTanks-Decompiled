@@ -4,7 +4,7 @@ from constants import ENDLESS_TOKEN_TIME
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
 from items.tankmen import TankmanDescr
-from nations import NONE_INDEX, NAMES as NationNames
+from nations import NONE_INDEX, INDICES, NAMES as NationNames
 from items import tankmen
 from items.components.component_constants import EMPTY_STRING
 from items.components import skills_constants
@@ -206,12 +206,21 @@ class _TokenRecruitInfo(_BaseRecruitInfo):
         sourceID = self._sourceID if TOOLTIPS.hasNotRecruitedTankmanEventGetInfo(self._sourceID) else _TANKMAN_NAME
         return TOOLTIPS.getNotRecruitedTankmanEventGetInfo(sourceID)
 
-    def getFullUserNameByNation(self, nationID):
+    def getFullUserNameByNation(self, nationID=None):
+        if nationID is None:
+            nationID = self._getDefaultNation()
         _, firstName, lastName, _, _ = self.__parseTankmanData(nationID)
         return '{} {}'.format(firstName, lastName)
 
+    def getIconByNation(self, nationID):
+        _, _, _, icon, _ = self.__parseTankmanData(nationID)
+        return icon
+
     def getGroupName(self):
         return self.__group
+
+    def _getDefaultNation(self):
+        return INDICES.get(first(self._nations), NONE_INDEX)
 
     def __parseTankmanData(self, nationID):
         config = tankmen.getNationGroups(nationID, self.__isPremium)

@@ -12,10 +12,12 @@ import personal_missions
 from adisp import async, process
 from chat_shared import decompressSysMessage, SYS_MESSAGE_TYPE, MapRemovedFromBLReason
 from constants import INVOICE_ASSET, AUTO_MAINTENANCE_TYPE, AUTO_MAINTENANCE_RESULT, PREBATTLE_TYPE, FINISH_REASON, KICK_REASON_NAMES, KICK_REASON, NC_MESSAGE_TYPE, NC_MESSAGE_PRIORITY, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, ARENA_GUI_TYPE, SYS_MESSAGE_FORT_EVENT_NAMES, PREMIUM_ENTITLEMENTS, PREMIUM_TYPE
+from battle_pass_common import BATTLE_PASS_BADGE_ID
 from blueprints.BlueprintTypes import BlueprintTypes
 from goodies.goodie_constants import GOODIE_VARIETY
 from gui.shared.utils.requesters.ShopRequester import _NamedGoodieData
 from messenger.formatters.service_channel_helpers import EOL, getCustomizationItemData, MessageData, getRewardsForQuests
+from battle_pass_common import BattlePassRewardReason, BattlePassState
 from nations import NAMES
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
@@ -29,8 +31,9 @@ from gui.prb_control.formatters import getPrebattleFullDescription
 from gui.ranked_battles.constants import YEAR_POINTS_TOKEN
 from gui.ranked_battles.ranked_models import PostBattleRankInfo, RankChangeStates
 from gui.server_events.awards_formatters import CompletionTokensBonusFormatter
-from gui.server_events.bonuses import VehiclesBonus, DEFAULT_CREW_LVL, MetaBonus
+from gui.server_events.bonuses import VehiclesBonus, DEFAULT_CREW_LVL, MetaBonus, getMergedBonusesFromDicts
 from gui.server_events.finders import PERSONAL_MISSION_TOKEN
+from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared import formatters as shared_fmts
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.currency import getBWFormatter, getStyle, applyAll
@@ -53,12 +56,11 @@ from messenger import g_settings
 from messenger.ext import passCensor
 from messenger.formatters import TimeFormatter, NCContextItemFormatter
 from shared_utils import BoundMethodWeakref, first
-from skeletons.gui.game_control import IRankedBattlesController, IEventProgressionController
+from skeletons.gui.game_control import IRankedBattlesController, IEventProgressionController, IBattlePassController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from gui.impl.lobby.loot_box.loot_box_helper import getMergedLootBoxBonuses
 _logger = logging.getLogger(__name__)
 _TEMPLATE = 'template'
 _RENT_TYPES = {'time': 'rentDays',
@@ -369,6 +371,7 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                 ctx['achieves'], ctx['badges'] = self.__makeAchievementsAndBadgesStrings(battleResults)
                 ctx['rankedProgress'] = self.__makeRankedFlowStrings(battleResults)
                 ctx['rankedBonusBattles'] = self.__makeRankedBonusString(battleResults)
+                ctx['battlePassProgress'] = self.__makeBattlePassProgressionString(battleResults.get('ext', {}))
                 ctx['lock'] = self.__makeVehicleLockString(vehicleNames, battleResults)
                 ctx['quests'] = self.__makeQuestsAchieve(message)
                 team = battleResults.get('team', 0)
@@ -527,6 +530,13 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
         if rankedBonusBattlesString:
             rankedBonusBattlesBlock = g_settings.htmlTemplates.format('battleResultRankedBonusBattles', {'rankedBonusBattles': rankedBonusBattlesString})
         return rankedBonusBattlesBlock
+
+    def __makeBattlePassProgressionString(self, extBattleResults):
+        battlePassString = ''
+        battlePass = extBattleResults.get('battlePass', {})
+        if battlePass.get('basePointsDiff', 0) > 0:
+            battlePassString = backport.text(R.strings.messenger.serviceChannelMessages.battleResults.battlePass(), pointsDiff=text_styles.neutral(battlePass['basePointsDiff']))
+        return g_settings.htmlTemplates.format('battlePass', ctx={'battlePassProgression': battlePassString})
 
     def __makePiggyBankString(self, credits_):
         return '' if not credits_ else g_settings.htmlTemplates.format('piggyBank', ctx={'credits': self.__makeCurrencyString(Currency.CREDITS, credits_)})
@@ -2107,20 +2117,22 @@ class QuestAchievesFormatter(object):
                 if strBlueprints:
                     result.append(strBlueprints)
         if not asBattleFormatter:
-            achievementsNames = cls.__extractAchievements(data)
+            achievementsNames = cls._extractAchievements(data)
             if achievementsNames:
                 result.append(cls.__makeQuestsAchieve('battleQuestsPopUps', achievements=', '.join(achievementsNames)))
-            badgesNames = cls.__extractBadges(data)
-            if badgesNames:
-                result.append(cls.__makeQuestsAchieve('badgeAchievement', badges=', '.join(badgesNames)))
+            addBadgesStrings, removedBadgesStrings = cls.__extractBadges(data)
+            if addBadgesStrings:
+                result.append(cls.__makeQuestsAchieve('badgeAchievement', badges=', '.join(addBadgesStrings)))
+            if removedBadgesStrings:
+                result.append(cls.__makeQuestsAchieve('removedBadgeAchievement', badges=', '.join(removedBadgesStrings)))
         return '<br/>'.join(result) if result else None
 
     @classmethod
     def _processTokens(cls, tokens):
         pass
 
-    @staticmethod
-    def __extractAchievements(data):
+    @classmethod
+    def _extractAchievements(cls, data):
         achieves = data.get('popUpRecords', [])
         result = set()
         for recordIdx, value in achieves:
@@ -2137,13 +2149,18 @@ class QuestAchievesFormatter(object):
 
     @staticmethod
     def __extractBadges(data):
-        result = set()
-        for block in data.get('dossier', {}).values():
-            for record in block.keys():
-                if record[0] == BADGES_BLOCK:
-                    result.add(backport.text(R.strings.badge.dyn('badge_{}'.format(record[1]))()))
+        addBadgesStrings, removedBadgesStrings = [], []
+        for rec in data.get('dossier', {}).values():
+            for (block, name), recData in rec.iteritems():
+                if name != '':
+                    isRemoving = recData['value'] < 0
+                    if block == BADGES_BLOCK:
+                        if isRemoving:
+                            removedBadgesStrings.append(backport.text(R.strings.badge.dyn('badge_{}'.format(name))()))
+                        else:
+                            addBadgesStrings.append(backport.text(R.strings.badge.dyn('badge_{}'.format(name))()))
 
-        return result
+        return (addBadgesStrings, removedBadgesStrings)
 
     @classmethod
     def __makeQuestsAchieve(cls, key, **kwargs):
@@ -2417,6 +2434,32 @@ class PersonalMissionsQuestAchievesFormatter(QuestAchievesFormatter):
                             result.append(g_settings.htmlTemplates.format('completionTokens', {'completionToken': tUserName}))
 
             return ', '.join(result)
+
+
+class BattlePassQuestAchievesFormatter(QuestAchievesFormatter):
+
+    @classmethod
+    def _processTokens(cls, data):
+        for token, _ in data.get('tokens', {}).iteritems():
+            tankmanInfo = getRecruitInfo(token)
+            if tankmanInfo is not None:
+                return g_settings.htmlTemplates.format('battlePassTMan', {'name': tankmanInfo.getFullUserNameByNation()})
+
+        return ''
+
+    @classmethod
+    def _extractAchievements(cls, data):
+        achievesList = []
+        for achieves in data.get('dossier', {}).values():
+            for (block, name), value in achieves.iteritems():
+                if block not in ACHIEVEMENT_BLOCK.ALL:
+                    continue
+                achieve = getAchievementFactory((block, name)).create(value['actualValue'])
+                if achieve is not None:
+                    achievesList.append(achieve.getUserName())
+                achievesList.append(backport.text(R.strings.achievements.dyn(name)()))
+
+        return achievesList
 
 
 class _GoodyFormatter(WaitItemsSyncFormatter):
@@ -2876,10 +2919,12 @@ class LootBoxAutoOpenFormatter(WaitItemsSyncFormatter):
     @async
     @process
     def format(self, message, callback=None):
+        from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityAwardsBox
         isSynced = yield self._waitForSyncItems()
         if message.data and isSynced:
             data = message.data
             if 'boxIDs' in data and 'rewards' in data:
+                seniorityBox = getSeniorityAwardsBox()
                 formatted = g_settings.msgTemplates.format(self._template, ctx={'count': sum(data['boxIDs'].values())}, data={'savedData': {'rewards': data['rewards']}})
                 settings = self._getGuiSettings(message, self._template)
                 settings.groupID = NotificationGroup.OFFER
@@ -2888,7 +2933,10 @@ class LootBoxAutoOpenFormatter(WaitItemsSyncFormatter):
                 formattedRewards = g_settings.msgTemplates.format(self._templateRewards, ctx={'text': fmt})
                 settingsRewards = self._getGuiSettings(message, self._templateRewards)
                 settingsRewards.showAt = BigWorld.time()
-                callback([MessageData(formatted, settings), MessageData(formattedRewards, settingsRewards)])
+                if seniorityBox is not None and seniorityBox.getID() in data['boxIDs']:
+                    callback([MessageData(None, None), MessageData(formattedRewards, settingsRewards)])
+                else:
+                    callback([MessageData(formatted, settings), MessageData(formattedRewards, settingsRewards)])
             else:
                 callback([MessageData(None, None)])
         else:
@@ -2898,7 +2946,7 @@ class LootBoxAutoOpenFormatter(WaitItemsSyncFormatter):
     @classmethod
     def formatAchieves(cls, data):
         result = []
-        items = getMergedLootBoxBonuses((data['rewards'],))
+        items = getMergedBonusesFromDicts((data['rewards'],))
         result.append(QuestAchievesFormatter.formatQuestAchieves(items, False))
         achievementsNames = cls.__extractAchievements(items)
         if achievementsNames:
@@ -3013,3 +3061,124 @@ class EnhancementsWipedFormatter(ServiceChannelFormatter):
             return [MessageData(formatted, guiSettings)]
         else:
             return [MessageData(None, None)]
+
+
+class BattlePassRewardFormatter(WaitItemsSyncFormatter):
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __battlePassController = dependency.descriptor(IBattlePassController)
+    __TEMPLATE = 'BattlePassRewardSysMessage'
+    __TEMPLATE_BUTTON = 'BattlePassRewardWithButtonMessage'
+    __GOLD_TEMPLATE_KEY = 'battlePassGold'
+
+    @async
+    @process
+    def format(self, message, callback=None):
+        isSynced = yield self._waitForSyncItems()
+        resultMessage = MessageData(None, None)
+        if message.data and isSynced:
+            data = message.data
+            if 'reward' in data and 'ctx' in data:
+                rewards = data.get('reward')
+                ctx = data.get('ctx')
+                reason = ctx.get('reason')
+                description = ''
+                additionalText = ''
+                template = self.__TEMPLATE
+                header = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.header.default(), newLevel=text_styles.credits(ctx.get('newLevel')))
+                if reason == BattlePassRewardReason.BATTLE:
+                    description, additionalText, template = self.__makeAfterBattle(ctx)
+                elif reason == BattlePassRewardReason.PURCHASE_BATTLE_PASS:
+                    header = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.header.buyBP())
+                    description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.buyWithRewards.text())
+                    price = self.__itemsCache.items.shop.getBattlePassCost().get(Currency.GOLD, 0)
+                    additionalText = self.__makeGoldString(price)
+                elif reason == BattlePassRewardReason.PURCHASE_BATTLE_PASS_LEVELS:
+                    header = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.header.buyProgress())
+                    newState = ctx.get('newState')
+                    currentLevel = ctx.get('newLevel')
+                    if newState == BattlePassState.BASE:
+                        newLevel = ctx.get('newLevel')
+                        descrID = R.strings.messenger.serviceChannelMessages.battlePassReward.buyProgress.text
+                    else:
+                        newLevel = self.__battlePassController.getMaxLevel()
+                        descrID = R.strings.messenger.serviceChannelMessages.battlePassReward.buyProgress.postText
+                    prevLevel = ctx.get('prevLevel')
+                    countLevels = newLevel - prevLevel
+                    description = backport.text(descrID(), countLevels=text_styles.credits(countLevels), currentLevel=text_styles.credits(currentLevel + 1))
+                    price = self.__itemsCache.items.shop.getBattlePassLevelCost().get(Currency.GOLD, 0) * countLevels
+                    additionalText = self.__makeGoldString(price)
+                elif reason == BattlePassRewardReason.INVOICE:
+                    description, additionalText, template = self.__makeAfterBattle(ctx)
+                elif reason == BattlePassRewardReason.VOTE:
+                    header = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.header.voted())
+                    description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.voting.text())
+                formattedBonuses = BattlePassQuestAchievesFormatter.formatQuestAchieves(rewards, False)
+                if formattedBonuses is None:
+                    formattedBonuses = ''
+                formatted = g_settings.msgTemplates.format(template, ctx={'header': header,
+                 'description': description,
+                 'text': formattedBonuses,
+                 'additionalText': additionalText})
+                settings = self._getGuiSettings(message, template)
+                settings.showAt = BigWorld.time()
+                resultMessage = MessageData(formatted, settings)
+        callback([resultMessage])
+        return
+
+    def __makeAfterBattle(self, ctx):
+        additionalText = ''
+        template = self.__TEMPLATE
+        newState = ctx.get('newState')
+        prevState = ctx.get('prevState')
+        if newState == BattlePassState.BASE:
+            description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.battle.base.text(), newLevel=text_styles.credits(ctx.get('newLevel')))
+            template = self.__TEMPLATE_BUTTON
+        elif prevState == BattlePassState.BASE and newState == BattlePassState.POST:
+            description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.battle.finalBase.text())
+            additionalText = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.battle.finalBase.additionalText())
+        elif newState == BattlePassState.POST:
+            description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.battle.post.text(), newLevel=text_styles.credits(ctx.get('newLevel')))
+            template = self.__TEMPLATE_BUTTON
+        else:
+            description = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.battle.final.text())
+            additionalText = backport.text(R.strings.messenger.serviceChannelMessages.battlePassReward.battle.final.additionalText())
+        return (description, additionalText, template)
+
+    def __makeGoldString(self, gold):
+        if not gold:
+            return ''
+        formatter = getBWFormatter(Currency.GOLD)
+        return g_settings.htmlTemplates.format(self.__GOLD_TEMPLATE_KEY, {Currency.GOLD: formatter(gold)})
+
+
+class BattlePassReachedCapFormatter(ServiceChannelFormatter):
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __template = 'BattlePassReachedCapMessage'
+
+    def format(self, message, *args):
+        if message.data:
+            data = message.data
+            vehCD = data.get('vehTypeCompDescr')
+            limitPoints = data.get('vehiclePoints')
+            bonusPoints = data.get('bonusPoints')
+            if vehCD and limitPoints and bonusPoints:
+                text = backport.text(R.strings.messenger.serviceChannelMessages.battlePass.reachedCap.text(), vehName=self.__itemsCache.items.getItemByCD(vehCD).userName, bonusPoints=text_styles.neutral(bonusPoints))
+                formatted = g_settings.msgTemplates.format(self.__template, {'text': text})
+                return [MessageData(formatted, self._getGuiSettings(message, self.__template))]
+
+
+class BadgesFormatter(ServiceChannelFormatter):
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __template = 'BattlePassBadgesMessage'
+
+    def format(self, message, *args):
+        if message.data:
+            badges = message.data
+            if badges:
+                for badgeID, value in badges.iteritems():
+                    if badgeID == BATTLE_PASS_BADGE_ID and value.get('amount', 0) < 0:
+                        header = backport.text(R.strings.messenger.serviceChannelMessages.battlePass.badges.header.remove())
+                        text = backport.text(R.strings.messenger.serviceChannelMessages.battlePass.badges.text.remove(), badgeName=backport.text(R.strings.badge.dyn('badge_{}'.format(badgeID))()))
+                        formatted = g_settings.msgTemplates.format(self.__template, {'text': text,
+                         'header': header})
+                        return [MessageData(formatted, self._getGuiSettings(message, self.__template))]

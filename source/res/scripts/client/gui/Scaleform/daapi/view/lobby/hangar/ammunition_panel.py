@@ -24,7 +24,7 @@ from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.gui_items.vehicle_equipment import BATTLE_BOOSTER_LAYOUT_SIZE
 from gui.shared.utils.requesters import REQ_CRITERIA
-from helpers import i18n, dependency
+from helpers import i18n, dependency, int2roman
 from items.vehicles import NUM_OPTIONAL_DEVICE_SLOTS
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
@@ -171,14 +171,18 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
                 rentAvailable = vehicle.isRentable and canBuyOrRent
             if msgLvl == Vehicle.VEHICLE_STATE_LEVEL.RENTABLE:
                 msgLvl = Vehicle.VEHICLE_STATE_LEVEL.INFO
-            isBackground = statusId == Vehicle.VEHICLE_STATE.NOT_PRESENT
             self.__applyCustomizationNewCounter(vehicle)
             self.__applyBoosterNewCounter()
-            msgString = makeHtmlString('html_templates:vehicleStatus', msgLvl, {'message': i18n.makeString(msg)})
+            msgString = ''
+            if statusId != Vehicle.VEHICLE_STATE.UNDAMAGED:
+                msgString = makeHtmlString('html_templates:vehicleStatus', msgLvl, {'message': i18n.makeString(msg)})
             self.__updateDevices(vehicle)
             self.as_updateVehicleStatusS({'message': msgString,
              'rentAvailable': rentAvailable,
-             'isBackground': isBackground})
+             'isElite': vehicle.isElite,
+             'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
+             'vehicleLevel': '{}'.format(int2roman(vehicle.level)),
+             'vehicleName': '{}'.format(vehicle.shortUserName)})
 
     def __inventoryUpdateCallBack(self, *args):
         self.update()

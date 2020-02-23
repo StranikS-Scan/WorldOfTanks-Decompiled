@@ -31,13 +31,13 @@ def getBadgeIconPath(size, badgeID):
     return RES_ICONS.getBadgeIcon(size, badgeID)
 
 
+def getAwardBadgeIconPath(size, badgeID):
+    return RES_ICONS.getAwardBadgeIcon(size, badgeID)
+
+
 def getBadgeHighlightIconPath(value):
     return RES_ICONS.getBadgeHighlightIcon(value)
 
 
 def getPersonalMissionVehicleAwardImage(size, vehicleName):
     return RES_ICONS.getPersonalMissionVehicleAwardImage(size, vehicleName)
-
-
-def getBadgeIconPathByDimension(dimension, badgeID):
-    return RES_ICONS.getBadgeIconBySize(dimension, dimension, badgeID)

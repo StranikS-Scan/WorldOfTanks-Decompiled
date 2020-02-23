@@ -79,11 +79,8 @@ class PrbListItem(object):
     def getCensoredComment(self):
         return passCensor(self.comment) if self.comment else ''
 
-    def getBadgeID(self):
-        return self.badges.getBadgeID()
-
-    def getBadgeImgStr(self, size=24, vspace=-6):
-        return self.badges.getBadgeImgStr(size, vspace)
+    def getBadge(self):
+        return self.badges.getBadge()
 
 
 class AutoInviteItem(object):

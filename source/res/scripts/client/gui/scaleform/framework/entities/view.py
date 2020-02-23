@@ -149,7 +149,7 @@ class View(AbstractViewMeta, ViewInterface):
         return
 
     def onFocusIn(self, alias):
-        self.fireEvent(FocusEvent(FocusEvent.COMPONENT_FOCUSED))
+        self.fireEvent(FocusEvent(FocusEvent.COMPONENT_FOCUSED, ctx={'alias': alias}))
 
     def getParentWindow(self, parent=None):
         if self.__windowImplTracker is None:

@@ -5,7 +5,7 @@ import math
 import operator
 from collections import namedtuple
 import personal_missions
-from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import getEventPostBattleInfo
+from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import getEventPostBattleInfo, getBattlePassQuestInfo
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.genConsts.PROGRESSIVEREWARD_CONSTANTS import PROGRESSIVEREWARD_CONSTANTS as prConst
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
@@ -27,6 +27,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
+from battle_pass_common import BattlePassConsts
 MIN_BATTLES_TO_SHOW_PROGRESS = 5
 _logger = logging.getLogger(__name__)
 
@@ -269,6 +270,13 @@ class QuestsProgressBlock(base.StatsBlock):
                 progress = personalMissions.setdefault(quest, {})
                 progress.update(data)
 
+        if reusable.battlePassProgress is not None:
+            if BattlePassConsts.PROGRESSION_INFO_PREV in reusable.battlePassProgress:
+                info = reusable.battlePassProgress[BattlePassConsts.PROGRESSION_INFO_PREV]
+                self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', getBattlePassQuestInfo(info)))
+            if BattlePassConsts.PROGRESSION_INFO in reusable.battlePassProgress:
+                info = reusable.battlePassProgress[BattlePassConsts.PROGRESSION_INFO]
+                self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', getBattlePassQuestInfo(info)))
         for quest, data in sorted(personalMissions.items(), key=operator.itemgetter(0), cmp=self.__sortPersonalMissions):
             if data.get(quest.getAddQuestID(), False):
                 complete = PMComplete(True, True)

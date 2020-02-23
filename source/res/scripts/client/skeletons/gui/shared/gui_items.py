@@ -55,7 +55,7 @@ class IGuiItemsFactory(object):
     def createVehicleDossier(self, dossier, vehTypeCompDescr, playerDBID=None):
         raise NotImplementedError
 
-    def createBadge(self, descriptor, proxy=None):
+    def createBadge(self, descriptor, proxy=None, extraData=None):
         raise NotImplementedError
 
     def createLootBox(self, lootBoxID, lootBoxType, lootBoxCategory, count):

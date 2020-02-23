@@ -20,6 +20,7 @@ from gui.Scaleform.daapi.view.lobby.storage.inventory.consumables_tab import Con
 from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_cm_handlers import ModulesShellsCMHandler, ModulesShellsNoSaleCMHandler, DemountKitsCMHandler
 from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_cm_handlers import EquipmentCMHandler
 from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_cm_handlers import BattleBoostersCMHandler
+from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_cm_handlers import OptionalDeviceCMHandler
 from gui.Scaleform.daapi.view.lobby.storage.inventory.inventory_view import InventoryCategoryStorageView
 from gui.Scaleform.daapi.view.lobby.storage.inventory.modules_tab import ModulesTabView
 from gui.Scaleform.daapi.view.lobby.storage.inventory.regular_items_tab import RegularItemsTabView
@@ -41,6 +42,7 @@ def getContextMenuHandlers():
      (CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM, ModulesShellsCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.STORAGE_CREW_BOOKS_NO_SALE_ITEM, ModulesShellsNoSaleCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.STORAGE_EQUIPMENT_ITEM, EquipmentCMHandler),
+     (CONTEXT_MENU_HANDLER_TYPE.STORAGE_OPTIONAL_DEVICE_ITEM, OptionalDeviceCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.STORAGE_BONS_ITEM, BattleBoostersCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.STORAGE_DEMOUNT_KIT_ITEM, DemountKitsCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.STORAGE_VEHICLES_REGULAR_ITEM, VehiclesRegularCMHandler),

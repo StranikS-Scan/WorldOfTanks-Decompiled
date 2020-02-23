@@ -24,7 +24,7 @@ class PlayerPrbInfo(object):
         self.clanDBID = clanDBID
         self.clanAbbrev = clanAbbrev
         self.roster = roster
-        self.badges = BadgesHelper(badges or [])
+        self.badges = BadgesHelper(badges or ())
         self.group = group
         if entity is not None:
             self.isCreator = entity.isCommander(pDatabaseID=self.dbID)
@@ -33,7 +33,8 @@ class PlayerPrbInfo(object):
         return
 
     def __repr__(self):
-        return 'PlayerPrbInfo(accID = {0:n}, dbID = {1:n}, fullName = {2:>s}, state = {3:n}, isCreator = {4!r:s}, time = {5:n}, vehCompDescr = {6!r:s}, badgeID = {7})'.format(self.accID, self.dbID, self.getFullName(), self.state, self.isCreator, self.time, self.getVehicle().name if self.isVehicleSpecified() else None, self.badges.getBadgeID())
+        badge = self.badges.getBadge()
+        return 'PlayerPrbInfo(accID = {0:n}, dbID = {1:n}, fullName = {2:>s}, state = {3:n}, isCreator = {4!r:s}, time = {5:n}, vehCompDescr = {6!r:s}, badgeID = {7})'.format(self.accID, self.dbID, self.getFullName(), self.state, self.isCreator, self.time, self.getVehicle().name if self.isVehicleSpecified() else None, badge.badgeID if badge else None)
 
     def getFullName(self, isClan=True, isRegion=True):
         if isClan:
@@ -68,11 +69,8 @@ class PlayerPrbInfo(object):
     def isOffline(self):
         return self.state & PREBATTLE_ACCOUNT_STATE.OFFLINE != 0
 
-    def getBadgeID(self):
-        return self.badges.getBadgeID()
-
-    def getBadgeImgStr(self, size=24, vspace=-7):
-        return self.badges.getBadgeImgStr(size, vspace)
+    def getBadge(self):
+        return self.badges.getBadge()
 
 
 class TeamStateInfo(object):

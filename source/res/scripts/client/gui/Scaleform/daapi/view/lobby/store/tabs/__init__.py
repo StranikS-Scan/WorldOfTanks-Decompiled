@@ -3,7 +3,6 @@
 import constants
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveStateTooltip
-from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
@@ -22,6 +21,8 @@ from helpers.i18n import makeString
 from items import ITEM_TYPE_INDICES
 from skeletons.gui.game_control import IVehicleComparisonBasket
 from skeletons.gui.shared import IItemsCache
+from gui.impl import backport
+from gui.impl.gen import R
 
 def _getBtnVehCompareData(vehicle):
     comparisonBasket = dependency.instance(IVehicleComparisonBasket)
@@ -29,6 +30,13 @@ def _getBtnVehCompareData(vehicle):
     return {'modeAvailable': comparisonBasket.isEnabled(),
      'btnEnabled': state,
      'btnTooltip': tooltip}
+
+
+def _getUpgradeModuleData(item):
+    return None if item.itemTypeID != GUI_ITEM_TYPE.OPTIONALDEVICE else {'btnVisible': item.isUpgradable,
+     'btnLabel': backport.text(R.strings.menu.moduleFits.upgradeBtn.label()),
+     'btnTooltip': MENU.MODULEFITS_UPGRADEBTN_TOOLTIP,
+     'moduleId': item.intCD}
 
 
 class StoreItemsTab(object):
@@ -120,16 +128,15 @@ class StoreItemsTab(object):
          'moduleLabel': item.getGUIEmblemID(),
          EXTRA_MODULE_INFO: extraModuleInfo,
          'vehCompareData': _getBtnVehCompareData(item) if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE else {},
-         'highlightType': self._getItemHighlightType(item),
+         'upgradeModuleData': _getUpgradeModuleData(item),
+         'highlightType': item.getHighlightType(),
+         'overlayType': item.getOverlayType(),
          'showActionGoldAndCredits': showActionGoldAndCredits,
          'actionPercent': actionPercent,
          'notForSaleText': '' if item.isForSale else MENU.SHOP_TABLE_NOTFORSALE}
 
     def _getItemTypeIcon(self, item):
         return item.icon
-
-    def _getItemHighlightType(self, item):
-        return SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
 
     def _getItemInventoryID(self, item):
         return None
@@ -360,9 +367,6 @@ class StoreOptionalDeviceTab(StoreArtefactTab):
     def _isItemRemovable(self, item):
         return item.isRemovable
 
-    def _getItemHighlightType(self, item):
-        return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS if item.isDeluxe() else super(StoreOptionalDeviceTab, self)._getItemHighlightType(item)
-
 
 class StoreEquipmentTab(StoreArtefactTab):
 
@@ -391,9 +395,6 @@ class StoreBattleBoosterTab(StoreArtefactTab):
 
     def _getItemTypeID(self):
         return GUI_ITEM_TYPE.BATTLE_BOOSTER
-
-    def _getItemHighlightType(self, item):
-        return SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER
 
     def _parseFilter(self, filtersList):
         extra = filtersList

@@ -27,10 +27,11 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.hangar.TechnicalMaintenance import TechnicalMaintenance
     from gui.Scaleform.daapi.view.lobby.hangar.TmenXpPanel import TmenXpPanel
     from gui.Scaleform.daapi.view.lobby.hangar.VehicleParameters import VehicleParameters
-    from gui.Scaleform.daapi.view.common.filter_popover import TankCarouselFilterPopover
+    from gui.Scaleform.daapi.view.common.filter_popover import TankCarouselFilterPopover, BattlePassCarouselFilterPopover
     from gui.Scaleform.daapi.view.lobby.hangar.carousels import TankCarousel
     from gui.Scaleform.daapi.view.lobby.hangar.carousels import RankedTankCarousel
     from gui.Scaleform.daapi.view.lobby.hangar.carousels import EpicBattleTankCarousel
+    from gui.Scaleform.daapi.view.lobby.hangar.carousels import BattlePassTankCarousel
     from gui.Scaleform.daapi.view.lobby.hangar.StrongholdView import StrongholdView
     from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import BrowserView
     from gui.Scaleform.daapi.view.lobby.hangar.hangar_header import HangarHeader
@@ -39,6 +40,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.shared.fitting_select_popover import OptionalDeviceSelectPopover
     from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_fitting_popover import VehCmpConfigSelectPopover
     from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_fitting_popover import VehCmpBattleBoosterSelectPopover
+    from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_fitting_popover import VehCmpOptionalDeviceSelectPopover
     from gui.Scaleform.daapi.view.lobby.shared.fitting_select_popover import BattleBoosterSelectPopover
     from gui.Scaleform.daapi.view.lobby.booster_buy_window import BoosterBuyWindow
     from gui.Scaleform.daapi.view.lobby.hangar.ranked_battles_widget import RankedBattlesHangarWidget
@@ -55,6 +57,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import SeniorityAwardsHangarEntryPoint
     from gui.Scaleform.daapi.view.lobby.hangar.daily_quest_widget import DailyQuestWidget
     from gui.Scaleform.daapi.view.lobby.hangar.progressive_reward_widget import ProgressiveRewardWidget
+    from gui.impl.lobby.battle_pass.battle_pass_entry_point_view import BattlePassEntryPointComponent
     return (ConditionalViewSettings(VIEW_ALIAS.LOBBY_HANGAR, BootcampComponentOverride(Hangar, BCHangar), 'hangar.swf', ViewTypes.LOBBY_SUB, None, VIEW_ALIAS.LOBBY_HANGAR, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.LOBBY_STRONGHOLD, StrongholdView, 'StrongholdView.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_STRONGHOLD, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.BROWSER_VIEW, BrowserView, 'browserScreen.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE, True),
@@ -64,11 +67,13 @@ def getViewSettings():
      ConditionalViewSettings(VIEW_ALIAS.TECHNICAL_MAINTENANCE, BootcampComponentOverride(TechnicalMaintenance, BCTechnicalMaintenance), 'technicalMaintenance.swf', ViewTypes.WINDOW, '', None, BootcampComponentOverride(ScopeTemplates.DEFAULT_SCOPE, ScopeTemplates.LOBBY_SUB_SCOPE)),
      GroupedViewSettings(VIEW_ALIAS.BOOSTER_BUY_WINDOW, BoosterBuyWindow, 'boosterBuyWindow.swf', ViewTypes.WINDOW, VIEW_ALIAS.BOOSTER_BUY_WINDOW, None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.TANK_CAROUSEL_FILTER_POPOVER, TankCarouselFilterPopover, 'filtersPopoverView.swf', ViewTypes.WINDOW, VIEW_ALIAS.TANK_CAROUSEL_FILTER_POPOVER, VIEW_ALIAS.TANK_CAROUSEL_FILTER_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
+     GroupedViewSettings(VIEW_ALIAS.BATTLEPASS_CAROUSEL_FILTER_POPOVER, BattlePassCarouselFilterPopover, 'filtersPopoverView.swf', ViewTypes.WINDOW, VIEW_ALIAS.BATTLEPASS_CAROUSEL_FILTER_POPOVER, VIEW_ALIAS.BATTLEPASS_CAROUSEL_FILTER_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.FITTING_SELECT_POPOVER, HangarFittingSelectPopover, 'fittingSelectPopover.swf', ViewTypes.WINDOW, VIEW_ALIAS.FITTING_SELECT_POPOVER, VIEW_ALIAS.FITTING_SELECT_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.FITTING_CMP_SELECT_POPOVER, VehCmpConfigSelectPopover, 'fittingSelectPopover.swf', ViewTypes.WINDOW, VIEW_ALIAS.FITTING_CMP_SELECT_POPOVER, VIEW_ALIAS.FITTING_CMP_SELECT_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.BOOSTER_CMP_SELECT_POPOVER, VehCmpBattleBoosterSelectPopover, 'fittingSelectPopover.swf', ViewTypes.WINDOW, VIEW_ALIAS.BOOSTER_CMP_SELECT_POPOVER, VIEW_ALIAS.BOOSTER_CMP_SELECT_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.BOOSTER_SELECT_POPOVER, BattleBoosterSelectPopover, 'fittingSelectPopover.swf', ViewTypes.WINDOW, VIEW_ALIAS.BOOSTER_SELECT_POPOVER, VIEW_ALIAS.BOOSTER_SELECT_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.OPT_DEVICES_SELECT_POPOVER, OptionalDeviceSelectPopover, 'fittingSelectPopover.swf', ViewTypes.WINDOW, VIEW_ALIAS.OPT_DEVICES_SELECT_POPOVER, VIEW_ALIAS.OPT_DEVICES_SELECT_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
+     GroupedViewSettings(VIEW_ALIAS.OPT_DEVICES_CMP_SELECT_POPOVER, VehCmpOptionalDeviceSelectPopover, 'fittingSelectPopover.swf', ViewTypes.WINDOW, VIEW_ALIAS.OPT_DEVICES_CMP_SELECT_POPOVER, VIEW_ALIAS.OPT_DEVICES_CMP_SELECT_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.BATTLE_ABILITY_SELECT_POPOVER, BattleAbilitySelectPopover, 'fittingSelectPopover.swf', ViewTypes.WINDOW, VIEW_ALIAS.BATTLE_ABILITY_SELECT_POPOVER, VIEW_ALIAS.BATTLE_ABILITY_SELECT_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(HANGAR_ALIASES.AMMUNITION_PANEL, AmmunitionPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ConditionalViewSettings(HANGAR_ALIASES.RESEARCH_PANEL, BootcampComponentOverride(ResearchPanel, BCResearchPanel), None, ViewTypes.COMPONENT, None, None, ScopeTemplates.DEFAULT_SCOPE),
@@ -85,7 +90,9 @@ def getViewSettings():
      ViewSettings(HANGAR_ALIASES.EPIC_WIDGET, EpicBattlesWidget, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(HANGAR_ALIASES.PROGRESSIVE_REWARD_WIDGET, ProgressiveRewardWidget, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(HANGAR_ALIASES.SENIORITY_AWARDS_ENTRY_POINT, SeniorityAwardsHangarEntryPoint, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(HANGAR_ALIASES.DAILY_QUEST_WIDGET, DailyQuestWidget, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
+     ViewSettings(HANGAR_ALIASES.DAILY_QUEST_WIDGET, DailyQuestWidget, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(HANGAR_ALIASES.BATTLEPASS_TANK_CAROUSEL, BattlePassTankCarousel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(HANGAR_ALIASES.BATTLE_PASSS_ENTRY_POINT, BattlePassEntryPointComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():
@@ -96,6 +103,7 @@ class HangarPackageBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):
         listeners = ((VIEW_ALIAS.TANK_CAROUSEL_FILTER_POPOVER, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.BATTLEPASS_CAROUSEL_FILTER_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.CREW_ABOUT_DOG_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.LOBBY_HANGAR, self.loadViewByCtxEvent),
          (VIEW_ALIAS.LOBBY_STRONGHOLD, self.loadViewByCtxEvent),
@@ -106,6 +114,7 @@ class HangarPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.FITTING_CMP_SELECT_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BOOSTER_CMP_SELECT_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BOOSTER_SELECT_POPOVER, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.OPT_DEVICES_CMP_SELECT_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.OPT_DEVICES_SELECT_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLES_FILTER_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_ABILITY_SELECT_POPOVER, self.loadViewByCtxEvent),

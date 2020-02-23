@@ -471,6 +471,39 @@ class BuyAndInstallItemProcessor(ModuleBuyer):
             Waiting.hide('applyModule')
 
 
+class ModuleUpgradeProcessor(ModuleProcessor):
+
+    def __init__(self, item, vehicle, slotIdx, plugs=tuple()):
+        super(ModuleUpgradeProcessor, self).__init__(item, 'upgrade', plugs)
+        addPlugins = []
+        self.__upgradePrice = item.getUpgradePrice(self.itemsCache.items)
+        addPlugins += (plugins.MoneyValidator(self.__upgradePrice.price),)
+        if vehicle is not None:
+            addPlugins += (plugins.VehicleValidator(vehicle, True, prop={'isBroken': True,
+              'isLocked': True}),)
+        self.vehicle = vehicle
+        self.slotIdx = slotIdx
+        self.addPlugins(addPlugins)
+        return
+
+    def _getMsgCtx(self):
+        return {'name': self.item.userName,
+         'kind': self.item.userType,
+         'money': formatPrice(self.__upgradePrice.price)}
+
+    def _successHandler(self, code, ctx=None):
+        return makeI18nSuccess(sysMsgKey=self._formMessage('success'), type=SM_TYPE.UpgradeForCredits, **self._getMsgCtx())
+
+    def _request(self, callback):
+        if self.vehicle is not None and self.item.isInstalled(self.vehicle):
+            _logger.debug('Request to upgrade module: %s, %s %s', self.item.intCD, self.vehicle.invID, self.slotIdx)
+            BigWorld.player().inventory.upgradeOptDev(0, self.vehicle.invID, self.slotIdx, lambda code, _: self._response(code, callback))
+        else:
+            _logger.debug('Request to upgrade module: %s', self.item.intCD)
+            BigWorld.player().inventory.upgradeOptDev(self.item.intCD, 0, 0, lambda code, _: self._response(code, callback))
+        return
+
+
 class BattleAbilityInstaller(ModuleInstallProcessor):
 
     def __init__(self, vehicle, item, slotIdx, install=True, conflictedEqs=None, skipConfirm=False):

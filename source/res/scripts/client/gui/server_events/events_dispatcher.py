@@ -14,8 +14,8 @@ from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from gui.impl.lobby.reward_window import TwitchRewardWindow, GiveAwayRewardWindow, PiggyBankRewardWindow
-from gui.impl.lobby.missions.daily_quests_view import DailyTabs
 from shared_utils import first
+from battle_pass_common import BattlePassConsts
 OPERATIONS = {PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_1_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS_PAGE_ALIAS,
  PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_2_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS2_OPERATIONS_PAGE_ALIAS}
 _EVENTS_REWARD_WINDOW = {recruit_helper.RecruitSourceID.TWITCH_0: TwitchRewardWindow,
@@ -127,6 +127,10 @@ def showDailyQuests(subTab):
     showMissions(tab=QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS, subTab=subTab)
 
 
+def showMissionsBattlePassCommonProgression():
+    showMissions(tab=QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS)
+
+
 def showMissionDetails(missionID, groupID):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MISSION_DETAILS, ctx={'eventID': missionID,
      'groupID': groupID}), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -157,34 +161,39 @@ def showPersonalMissionBrowserView(ctx):
 
 
 def showMission(eventID, eventType=None):
+    from gui.impl.lobby.missions.daily_quests_view import DailyTabs
     eventsCache = dependency.instance(IEventsCache)
     quests = eventsCache.getQuests()
     quest = quests.get(eventID)
-    if quest is None:
-        prefix = events_helpers.getMarathonPrefix(eventID)
-        if prefix is not None:
-            return showMissionsMarathon(marathonPrefix=prefix)
-    if eventType is not None and eventType == constants.EVENT_TYPE.PERSONAL_MISSION:
-        showPersonalMission(eventID)
-    elif quest is not None:
-        if events_helpers.isMarathon(quest.getGroupID()):
-            groups = eventsCache.getGroups()
-            group = groups.get(quest.getGroupID())
-            groupContent = group.getGroupContent(quests)
-            mainQuest = group.getMainQuest(groupContent)
-            if mainQuest and quest.getID() != mainQuest.getID():
-                showMissionsGrouped(missionID=quest.getID(), groupID=group.getID(), anchor=group.getID())
+    if eventID == BattlePassConsts.FAKE_QUEST_ID:
+        showMissionsBattlePassCommonProgression()
+        return
+    else:
+        if quest is None:
+            prefix = events_helpers.getMarathonPrefix(eventID)
+            if prefix is not None:
+                return showMissionsMarathon(marathonPrefix=prefix)
+        if eventType is not None and eventType == constants.EVENT_TYPE.PERSONAL_MISSION:
+            showPersonalMission(eventID)
+        elif quest is not None:
+            if events_helpers.isMarathon(quest.getGroupID()):
+                groups = eventsCache.getGroups()
+                group = groups.get(quest.getGroupID())
+                groupContent = group.getGroupContent(quests)
+                mainQuest = group.getMainQuest(groupContent)
+                if mainQuest and quest.getID() != mainQuest.getID():
+                    showMissionsGrouped(missionID=quest.getID(), groupID=group.getID(), anchor=group.getID())
+                else:
+                    showMissionsGrouped(anchor=group.getID())
+            elif events_helpers.isLinkedSet(quest.getGroupID()):
+                showMissionsLinkedSet()
+            elif events_helpers.isDailyQuest(quest.getID()):
+                showDailyQuests(subTab=DailyTabs.QUESTS)
+            elif events_helpers.isPremium(quest.getID()):
+                showDailyQuests(subTab=DailyTabs.PREMIUM_MISSIONS)
             else:
-                showMissionsGrouped(anchor=group.getID())
-        elif events_helpers.isLinkedSet(quest.getGroupID()):
-            showMissionsLinkedSet()
-        elif events_helpers.isDailyQuest(quest.getID()):
-            showDailyQuests(subTab=DailyTabs.QUESTS)
-        elif events_helpers.isPremium(quest.getID()):
-            showDailyQuests(subTab=DailyTabs.PREMIUM_MISSIONS)
-        else:
-            showMissionsCategories(missionID=quest.getID(), groupID=quest.getGroupID(), anchor=quest.getGroupID())
-    return
+                showMissionsCategories(missionID=quest.getID(), groupID=quest.getGroupID(), anchor=quest.getGroupID())
+        return
 
 
 def showAchievementsAward(achievements):

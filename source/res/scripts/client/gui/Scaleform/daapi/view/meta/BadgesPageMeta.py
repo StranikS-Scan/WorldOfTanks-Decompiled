@@ -31,8 +31,8 @@ class BadgesPageMeta(WrapperViewMeta):
     def as_setNotReceivedBadgesS(self, data):
         return self.flashObject.as_setNotReceivedBadges(data) if self._isDAAPIInited() else None
 
-    def as_setSelectedBadgeImgS(self, value):
-        return self.flashObject.as_setSelectedBadgeImg(value) if self._isDAAPIInited() else None
+    def as_setSelectedBadgeS(self, data, selected):
+        return self.flashObject.as_setSelectedBadge(data, selected) if self._isDAAPIInited() else None
 
     def as_setSuffixBadgeImgS(self, value, descrText, selected):
         return self.flashObject.as_setSuffixBadgeImg(value, descrText, selected) if self._isDAAPIInited() else None

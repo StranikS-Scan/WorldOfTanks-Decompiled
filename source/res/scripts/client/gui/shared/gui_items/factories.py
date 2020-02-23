@@ -12,7 +12,7 @@ from gui.shared.gui_items.vehicle_modules import Shell, VehicleGun, VehicleChass
 from gui.shared.gui_items.artefacts import Equipment, BattleBooster, BattleAbility, OptionalDevice
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import Vehicle
-from gui.shared.gui_items.badge import Badge
+import gui.shared.gui_items.badge as badges
 from gui.shared.gui_items.loot_box import LootBox
 from gui.shared.gui_items.crew_skin import CrewSkin
 from gui.shared.gui_items.crew_book import CrewBook
@@ -85,8 +85,15 @@ class GuiItemFactory(IGuiItemsFactory):
     def createVehicleDossier(self, dossier, vehTypeCompDescr, playerDBID=None):
         return VehicleDossier(dossier, vehTypeCompDescr, playerDBID)
 
-    def createBadge(self, descriptor, proxy=None):
-        return Badge(descriptor, proxy)
+    def createBadge(self, descriptor, proxy=None, extraData=None):
+        badgeData = descriptor.copy()
+        if badges.CUSTOM_LOGIC_KEY in badgeData:
+            className = badgeData.pop(badges.CUSTOM_LOGIC_KEY)
+            cls = getattr(badges, className, None)
+            if cls:
+                return cls(badgeData, proxy=proxy, extraData=extraData)
+            _logger.error('Wrong name of custom badge class %r', className)
+        return badges.Badge(badgeData, proxy=proxy)
 
     def createLootBox(self, lootBoxID, lootBoxType, lootBoxCategory, count):
         return LootBox(lootBoxID, lootBoxType, lootBoxCategory, count)

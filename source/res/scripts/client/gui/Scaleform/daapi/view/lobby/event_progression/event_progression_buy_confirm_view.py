@@ -1,13 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/event_progression/event_progression_buy_confirm_view.py
-import WWISE
 from adisp import process
 from gui import SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.EventProgressionBuyConfirmViewMeta import EventProgressionBuyConfirmViewMeta
 from gui.shared import event_dispatcher as shared_event
 from gui.shared.gui_items.processors.event_progression import EventProgressionBuyRewardVehicle
-from gui.sounds.filters import STATE_HANGAR_FILTERED
+from gui.sounds.filters import switchHangarOverlaySoundFilter
 from gui.impl.wrappers.background_blur import WGUIBackgroundBlurSupportImpl
 from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
 from gui.shared.formatters import text_styles, icons
@@ -29,7 +28,7 @@ class EventProgressionBuyConfirmView(EventProgressionBuyConfirmViewMeta):
     def _populate(self):
         super(EventProgressionBuyConfirmView, self)._populate()
         self.setData()
-        WWISE.WW_setState(STATE_HANGAR_FILTERED, '{}_on'.format(STATE_HANGAR_FILTERED))
+        switchHangarOverlaySoundFilter(on=True)
 
     def destroy(self):
         self.__blur.disable()
@@ -37,7 +36,7 @@ class EventProgressionBuyConfirmView(EventProgressionBuyConfirmViewMeta):
 
     def onClose(self):
         self.destroy()
-        WWISE.WW_setState(STATE_HANGAR_FILTERED, '{}_off'.format(STATE_HANGAR_FILTERED))
+        switchHangarOverlaySoundFilter(on=False)
 
     def onBack(self):
         self.onClose()

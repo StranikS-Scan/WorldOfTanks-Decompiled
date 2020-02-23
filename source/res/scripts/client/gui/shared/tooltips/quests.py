@@ -14,6 +14,7 @@ from gui.server_events import events_helpers
 from gui.server_events.awards_formatters import TokenBonusFormatter, PreformattedBonus, LABEL_ALIGN
 from gui.server_events.bonuses import CustomizationsBonus
 from gui.server_events.cond_formatters.tooltips import MissionsAccountRequirementsFormatter
+from gui.server_events.events_helpers import isDailyQuest, isPremium
 from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import getTypeSmallIconPath
@@ -59,7 +60,7 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
     def _packBlocks(self, *args, **kwargs):
         items = super(QuestsPreviewTooltipData, self)._packBlocks()
         vehicle = g_currentVehicle.item
-        quests = sorted([ q for q in self._questController.getQuestForVehicle(vehicle) if not q.isCompleted() and q.getID() not in self._eventProgressionController.questIDs ], events_helpers.questsSortFunc)
+        quests = sorted([ q for q in self._questController.getQuestForVehicle(vehicle) if not q.isCompleted() and q.getID() not in self._eventProgressionController.questIDs and not isDailyQuest(q.getID()) and not isPremium(q.getID()) ], events_helpers.questsSortFunc)
         if quests:
             items.append(self._getHeader(len(quests), vehicle.shortUserName, R.strings.tooltips.hangar.header.quests.description.vehicle()))
             for quest in quests:
@@ -274,7 +275,7 @@ class RentVehicleAwardTooltipData(BlocksTooltipData):
             rentVehicleData = flashObject2Dict(rentVehicleData)
             vehicleName = rentVehicleData.get('vehicleName', '')
             vehicleType = rentVehicleData.get('vehicleType', '')
-            isPremium = rentVehicleData.get('isPremium', True)
+            isPremiumVehicle = rentVehicleData.get('isPremium', True)
             rentLeftCount = 0
             rentTypeName = None
             for rentType in _RENT_TYPES:
@@ -284,11 +285,11 @@ class RentVehicleAwardTooltipData(BlocksTooltipData):
                     rentLeftCount = rentTypeValue
                     break
 
-            if isPremium:
+            if isPremiumVehicle:
                 imgPaddings = formatters.packPadding(right=2)
             else:
                 imgPaddings = formatters.packPadding(left=5, right=5, top=4)
-            blocks.append(formatters.packImageTextBlockData(title=text_styles.highlightText(vehicleName), img=getTypeSmallIconPath(vehicleType, isPremium), imgPadding=imgPaddings, txtPadding=formatters.packPadding(left=2)))
+            blocks.append(formatters.packImageTextBlockData(title=text_styles.highlightText(vehicleName), img=getTypeSmallIconPath(vehicleType, isPremiumVehicle), imgPadding=imgPaddings, txtPadding=formatters.packPadding(left=2)))
             if rentTypeName is not None and rentLeftCount > 0:
                 rentCountStr = text_styles.premiumVehicleName(rentLeftCount)
                 rentLeftStr = _ms(TOOLTIPS.getRentLeftTypeLabel(rentTypeName), count=rentCountStr)

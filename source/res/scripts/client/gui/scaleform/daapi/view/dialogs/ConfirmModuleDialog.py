@@ -4,7 +4,6 @@ from PlayerEvents import g_playerEvents
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.meta.ConfirmItemWindowMeta import ConfirmItemWindowMeta
 from gui.Scaleform.genConsts.CONFIRM_DIALOG_ALIASES import CONFIRM_DIALOG_ALIASES
-from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.shared.formatters import getMoneyVO
 from gui.shared.utils import EXTRA_MODULE_INFO, FIELD_HIGHLIGHT_TYPE
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -81,7 +80,8 @@ class ConfirmModuleDialog(ConfirmItemWindowMeta):
              'level': item.level,
              'linkage': CONFIRM_DIALOG_ALIASES.MODULE_ICON,
              EXTRA_MODULE_INFO: extraData,
-             FIELD_HIGHLIGHT_TYPE: self.__getHighlightType(item)}
+             FIELD_HIGHLIGHT_TYPE: item.getHighlightType(),
+             'overlayType': item.getOverlayType()}
             self.as_setDataS(resultData)
         else:
             LOG_ERROR("Couldn't find module with given compact:", self.meta.getTypeCompDescr())
@@ -94,12 +94,6 @@ class ConfirmModuleDialog(ConfirmItemWindowMeta):
          GUI_ITEM_TYPE.SHELL,
          GUI_ITEM_TYPE.EQUIPMENT,
          GUI_ITEM_TYPE.CREW_BOOKS) else item.icon
-
-    @staticmethod
-    def __getHighlightType(item):
-        if item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER:
-            return SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER
-        return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS if item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and item.isDeluxe() else SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
 
     def onWindowClose(self):
         self._callHandler(False)

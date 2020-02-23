@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/ModuleInfoWindow.py
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
-from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getSlotOverlayIconType
 from gui.Scaleform.daapi.view.meta.ModuleInfoMeta import ModuleInfoMeta
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
@@ -168,8 +167,8 @@ class ModuleInfoWindow(ModuleInfoMeta):
                 moduleData['effects'] = {effectsKey: stripColorTagDescrTags(_ms(module.fullDescription))}
             if isShell and self.__isAdditionalInfoShow is not None:
                 moduleData['additionalInfo'] = self.__isAdditionalInfoShow
-            moduleData['overlayType'] = getSlotOverlayIconType(module)
-            moduleData['highlightType'] = getSlotOverlayIconType(module, isBig=True)
+            moduleData['overlayType'] = module.getOverlayType()
+            moduleData['highlightType'] = module.getBigHighlightType()
             self._updateModuleInfo(moduleData)
             return
 

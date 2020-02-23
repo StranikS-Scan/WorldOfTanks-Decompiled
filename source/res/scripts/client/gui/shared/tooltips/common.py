@@ -5,8 +5,9 @@ import logging
 import math
 from collections import namedtuple
 import ArenaType
-import ResMgr
 import constants
+from soft_exception import SoftException
+import ResMgr
 from gui import g_htmlTemplates, makeHtmlString
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import getReserveNameVO, getDirection
 from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES
@@ -26,6 +27,11 @@ from gui.clans import formatters as clans_fmts
 from gui.clans.items import formatField
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.lobby.battle_pass.tooltips.battle_pass_chose_winner_tooltip_view import BattlePassChoseWinnerTooltipView
+from gui.impl.lobby.battle_pass.tooltips.battle_pass_completed_tooltip_view import BattlePassCompletedTooltipView
+from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view import BattlePassInProgressTooltipView
+from gui.impl.lobby.battle_pass.tooltips.battle_pass_not_started_tooltip_view import BattlePassNotStartedTooltipView
+from gui.impl.lobby.battle_pass.tooltips.vehicle_points_tooltip_view import VehiclePointsTooltipView
 from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltipContent
 from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
@@ -57,7 +63,6 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
-from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 _UNAVAILABLE_DATA_PLACEHOLDER = '--'
 _PARENTHESES_OPEN = '('
@@ -955,6 +960,7 @@ class CURRENCY_SETTINGS(object):
     REMOVAL_CREDITS_PRICE = 'removalCreditsPrice'
     REMOVAL_GOLD_PRICE = 'removalGoldPrice'
     REMOVAL_CRYSTAL_PRICE = 'removalCrystalPrice'
+    UPGRADABLE_CREDITS_PRICE = 'upgradableCreditsPrice'
     __BUY_SETTINGS = {Currency.CREDITS: BUY_CREDITS_PRICE,
      Currency.GOLD: BUY_GOLD_PRICE,
      Currency.CRYSTAL: BUY_CRYSTAL_PRICE}
@@ -963,6 +969,7 @@ class CURRENCY_SETTINGS(object):
     __REMOVAL_SETTINGS = {Currency.CREDITS: REMOVAL_CREDITS_PRICE,
      Currency.GOLD: REMOVAL_GOLD_PRICE,
      Currency.CRYSTAL: REMOVAL_CRYSTAL_PRICE}
+    __UPGRADABLE_SETTINGS = {Currency.CREDITS: UPGRADABLE_CREDITS_PRICE}
 
     @classmethod
     def getRentSetting(cls, currency):
@@ -976,6 +983,10 @@ class CURRENCY_SETTINGS(object):
     def getRemovalSetting(cls, currency):
         return cls.__REMOVAL_SETTINGS.get(currency, cls.REMOVAL_GOLD_PRICE)
 
+    @classmethod
+    def getUpgradableSetting(cls, currency):
+        return cls.__UPGRADABLE_SETTINGS.get(currency, cls.UPGRADABLE_CREDITS_PRICE)
+
 
 _OPERATIONS_SETTINGS = {CURRENCY_SETTINGS.BUY_CREDITS_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_BUY_PRICE, icons.credits(), text_styles.credits, ICON_TEXT_FRAMES.CREDITS),
  CURRENCY_SETTINGS.RESTORE_PRICE: _CurrencySetting('#tooltips:vehicle/restore_price', icons.credits(), text_styles.credits, ICON_TEXT_FRAMES.CREDITS),
@@ -987,7 +998,8 @@ _OPERATIONS_SETTINGS = {CURRENCY_SETTINGS.BUY_CREDITS_PRICE: _CurrencySetting(TO
  CURRENCY_SETTINGS.UNLOCK_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_UNLOCK_PRICE, icons.xpCost(), text_styles.expText, ICON_TEXT_FRAMES.XP_PRICE),
  CURRENCY_SETTINGS.REMOVAL_CREDITS_PRICE: _CurrencySetting(TOOLTIPS.MODULEFITS_NOT_REMOVABLE_DISMANTLING_PRICE, icons.credits(), text_styles.credits, ICON_TEXT_FRAMES.CREDITS),
  CURRENCY_SETTINGS.REMOVAL_GOLD_PRICE: _CurrencySetting(TOOLTIPS.MODULEFITS_NOT_REMOVABLE_DISMANTLING_PRICE, icons.gold(), text_styles.gold, ICON_TEXT_FRAMES.GOLD),
- CURRENCY_SETTINGS.REMOVAL_CRYSTAL_PRICE: _CurrencySetting(TOOLTIPS.MODULEFITS_NOT_REMOVABLE_DISMANTLING_PRICE, icons.crystal(), text_styles.crystal, ICON_TEXT_FRAMES.CRYSTAL)}
+ CURRENCY_SETTINGS.REMOVAL_CRYSTAL_PRICE: _CurrencySetting(TOOLTIPS.MODULEFITS_NOT_REMOVABLE_DISMANTLING_PRICE, icons.crystal(), text_styles.crystal, ICON_TEXT_FRAMES.CRYSTAL),
+ CURRENCY_SETTINGS.UPGRADABLE_CREDITS_PRICE: _CurrencySetting(TOOLTIPS.MODULEFITS_UPGRADABLE_PRICE, icons.credits(), text_styles.credits, ICON_TEXT_FRAMES.CREDITS)}
 
 def _getCurrencySetting(key):
     if key not in _OPERATIONS_SETTINGS:
@@ -1361,3 +1373,48 @@ class SquadBonusTooltipWindowData(ToolTipBaseData):
 
     def getDisplayableData(self, *args, **kwargs):
         return SquadBonusTooltipContent()
+
+
+class VehiclePointsTooltipContentWindowData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(VehiclePointsTooltipContentWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.BATTLE_PASS_VEHICLE_POINTS)
+
+    def getDisplayableData(self, intCD, *args, **kwargs):
+        return VehiclePointsTooltipView(intCD)
+
+
+class BattlePassInProgressTooltipContentWindowData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(BattlePassInProgressTooltipContentWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.BATTLE_PASS_IN_PROGRESS)
+
+    def getDisplayableData(self, *args, **kwargs):
+        return BattlePassInProgressTooltipView()
+
+
+class BattlePassCompletedTooltipContentWindowData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(BattlePassCompletedTooltipContentWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.BATTLE_PASS_COMPLETED)
+
+    def getDisplayableData(self, *args, **kwargs):
+        return BattlePassCompletedTooltipView()
+
+
+class BattlePassChoseWinnerTooltipContentWindowData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(BattlePassChoseWinnerTooltipContentWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.BATTLE_PASS_CHOSE_WINNER)
+
+    def getDisplayableData(self, *args, **kwargs):
+        return BattlePassChoseWinnerTooltipView()
+
+
+class BattlePassNotStartedTooltipWindowData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(BattlePassNotStartedTooltipWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.BATTLE_PASS_NOT_STARTED)
+
+    def getDisplayableData(self, *args, **kwargs):
+        return BattlePassNotStartedTooltipView()

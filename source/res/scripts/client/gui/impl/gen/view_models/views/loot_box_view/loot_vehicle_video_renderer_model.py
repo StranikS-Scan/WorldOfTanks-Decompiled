@@ -6,12 +6,12 @@ from gui.impl.gen.view_models.views.loot_box_view.loot_video_renderer_model impo
 class LootVehicleVideoRendererModel(LootVideoRendererModel):
     __slots__ = ()
 
-    def __init__(self, properties=12, commands=0):
+    def __init__(self, properties=13, commands=0):
         super(LootVehicleVideoRendererModel, self).__init__(properties=properties, commands=commands)
 
     @property
     def congratsViewModel(self):
-        return self._getViewModel(11)
+        return self._getViewModel(12)
 
     def _initialize(self):
         super(LootVehicleVideoRendererModel, self)._initialize()

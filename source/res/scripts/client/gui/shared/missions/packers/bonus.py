@@ -13,7 +13,6 @@ from gui.server_events.awards_formatters import TOKEN_SIZES, ItemsBonusFormatter
 from gui.server_events.formatters import parseComplexToken, TokenComplex
 from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
-from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getSlotOverlayIconType
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from helpers import i18n, dependency
@@ -167,7 +166,7 @@ class ItemBonusUIPacker(BaseBonusUIPacker):
         cls._packCommon(bonus, model)
         model.setValue(str(count))
         model.setItem(item.getGUIEmblemID())
-        model.setOverlayType(getSlotOverlayIconType(item, False))
+        model.setOverlayType(item.getOverlayType())
         return model
 
     @classmethod

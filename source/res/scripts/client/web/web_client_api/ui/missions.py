@@ -8,6 +8,7 @@ from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.lobby_context import ILobbyContext
 from web.web_client_api import w2c, W2CSchema, Field
 from gui.server_events import events_dispatcher as server_events
+from gui.shared.event_dispatcher import showBattlePassBuyWindow, showWebShop
 
 class _PersonalMissionsSchema(W2CSchema):
     branch = Field(required=True, type=basestring, validator=lambda v, _: v in PM_BRANCH.NAME_TO_TYPE)
@@ -49,6 +50,15 @@ class MissionsWebApiMixin(object):
     @w2c(_MarathonMissionsSchema, 'missions_marathon')
     def openMissionMarathon(self, cmd):
         server_events.showMissionsMarathon(cmd.prefix)
+
+    @w2c(W2CSchema, 'battle_pass_common')
+    def openBattlePassMainProgression(self, _):
+        server_events.showMissionsBattlePassCommonProgression()
+
+    @w2c(W2CSchema, 'battle_pass_buy:')
+    def openBattlePassMainWithBuy(self, _):
+        server_events.showMissionsBattlePassCommonProgression()
+        showBattlePassBuyWindow(backCallback=showWebShop)
 
 
 class PersonalMissionsWebApiMixin(object):

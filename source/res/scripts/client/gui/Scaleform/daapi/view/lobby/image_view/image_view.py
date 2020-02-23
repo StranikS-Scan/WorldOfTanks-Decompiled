@@ -1,8 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/image_view/image_view.py
-import WWISE
 from gui.Scaleform.daapi.view.meta.ImageViewMeta import ImageViewMeta
-from gui.sounds.filters import STATE_HANGAR_FILTERED
+from gui.sounds.filters import switchHangarOverlaySoundFilter
 _IMAGE_ROOT_PATH = '../maps/icons/imageView'
 
 class ImageView(ImageViewMeta):
@@ -14,11 +13,11 @@ class ImageView(ImageViewMeta):
     def _populate(self):
         super(ImageView, self)._populate()
         self.setBgPath()
-        WWISE.WW_setState(STATE_HANGAR_FILTERED, '{}_on'.format(STATE_HANGAR_FILTERED))
+        switchHangarOverlaySoundFilter(on=True)
 
     def onClose(self):
         self.destroy()
-        WWISE.WW_setState(STATE_HANGAR_FILTERED, '{}_off'.format(STATE_HANGAR_FILTERED))
+        switchHangarOverlaySoundFilter(on=False)
 
     def setBgPath(self):
         image = ''.join((_IMAGE_ROOT_PATH, '/', self.__image))

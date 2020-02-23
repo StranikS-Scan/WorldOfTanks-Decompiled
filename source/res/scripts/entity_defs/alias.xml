@@ -525,8 +525,7 @@
         <Type>	STRING	</Type>
       </creator>
       <creatorBadges>
-        <Type>	ARRAY	  <of>	UINT32	</of>
-        </Type>
+        <Type>	PYTHON	</Type>
       </creatorBadges>
       <creatorDBID>
         <Type>	DB_ID	</Type>
@@ -762,7 +761,8 @@
         <Type>	UINT32	</Type>
       </battlesNum>
       <ranked>
-        <Type>	PYTHON	</Type>
+        <Type>	TUPLE	  <of>	INT8	</of>
+        </Type>
       </ranked>
       <group>
         <Type>	UINT8	</Type>
@@ -782,6 +782,12 @@
       <wtr>
         <Type>	INT16	</Type>
       </wtr>
+      <badges>
+        <Type>	PYTHON	</Type>
+      </badges>
+      <overriddenBadge>
+        <Type>	UINT8	</Type>
+      </overriddenBadge>
     </Properties>
   </ARENA_ADDPLAYER_INFO>
   <AVATAR_VEHICLE_ROSTER>	FIXED_DICT	  <Properties>
@@ -1263,6 +1269,12 @@
       <wtr>
         <Type>	INT16	</Type>
       </wtr>
+      <badges>
+        <Type>	PYTHON	</Type>
+      </badges>
+      <overriddenBadge>
+        <Type>	UINT8	</Type>
+      </overriddenBadge>
     </Properties>
   </CLIENT_VEHICLE_PUBLIC_INFO>
   <PLAY_LIMITS>	FIXED_DICT	  <Properties>

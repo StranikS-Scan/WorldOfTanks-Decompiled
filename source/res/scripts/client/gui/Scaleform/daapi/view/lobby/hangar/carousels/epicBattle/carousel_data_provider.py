@@ -9,7 +9,7 @@ class EpicBattleCarouselDataProvider(HangarCarouselDataProvider):
 
     @classmethod
     def _vehicleComparisonKey(cls, vehicle):
-        result = [vehicle.getCustomState() == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE]
+        result = [cls._isSuitableForQueue(vehicle)]
         result.extend(super(EpicBattleCarouselDataProvider, cls)._vehicleComparisonKey(vehicle))
         return result
 

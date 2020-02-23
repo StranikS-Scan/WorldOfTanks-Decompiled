@@ -36,7 +36,11 @@ def getTooltipBuilders():
      DataBuilder(TOOLTIPS_CONSTANTS.VEHICLE_ELITE_BONUS, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, common.VehicleEliteBonusTooltipData(contexts.VehicleEliteBonusContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.VEHICLE_HISTORICAL_REFERENCE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, common.VehicleHistoricalReferenceTooltipData(contexts.VehicleHistoricalReferenceContext())),
      AdvancedDataBuilder(TOOLTIPS_CONSTANTS.BATTLE_TRAINING, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, common.BattleTraining(contexts.ToolTipContext(None)), advanced.BattleTraining(contexts.ToolTipContext(None))),
-     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.SQUAD_BONUS, None, common.SquadBonusTooltipWindowData(contexts.ToolTipContext(None))))
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.SQUAD_BONUS, None, common.SquadBonusTooltipWindowData(contexts.ToolTipContext(None))),
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BATTLE_PASS_VEHICLE_POINTS, None, common.VehiclePointsTooltipContentWindowData(contexts.ToolTipContext(None))),
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BATTLE_PASS_IN_PROGRESS, None, common.BattlePassInProgressTooltipContentWindowData(contexts.ToolTipContext(None))),
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BATTLE_PASS_COMPLETED, None, common.BattlePassCompletedTooltipContentWindowData(contexts.ToolTipContext(None))),
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BATTLE_PASS_CHOSE_WINNER, None, common.BattlePassChoseWinnerTooltipContentWindowData(contexts.ToolTipContext(None))))
 
 
 class HeaderMoneyAndXpBuilder(DataBuilder):

@@ -396,3 +396,12 @@ class SESSION_STATS(CONST_CONTAINER):
     @classmethod
     def getEconomicBlockView(cls):
         return (cls.ECONOMIC_BLOCK_VIEW_WITHOUT_SPENDING, cls.ECONOMIC_BLOCK_VIEW_WITH_SPENDING)
+
+
+class BattlePassStorageKeys(CONST_CONTAINER):
+    INTRO_SHOWN = 'introShown'
+    INTRO_VIDEO_SHOWN = 'introVideoShown'
+    BUY_BUTTON_HINT_IS_SHOWN = 'buyButtonHintIsShown'
+    VOTED_WITH_BOUGHT_BP = 'votedWithBoughtBP'
+    SHOWN_VIDEOS_FLAGS = 'shownVideosFlags'
+    BUY_ANIMATION_WAS_SHOWN = 'buyAnimationWasShown'

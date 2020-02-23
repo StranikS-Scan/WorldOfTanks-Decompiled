@@ -28,6 +28,7 @@ class SoundFilters(CONST_CONTAINER):
     EMPTY = 1
     FILTERED_HANGAR = 2
     FORT_FILTER = 3
+    BATTLE_PASS_FILTER = 4
 
 
 class SPEAKERS_CONFIG(object):

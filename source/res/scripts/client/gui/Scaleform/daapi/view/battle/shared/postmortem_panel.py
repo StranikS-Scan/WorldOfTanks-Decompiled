@@ -1,17 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/postmortem_panel.py
-from gui.Scaleform import settings
 from gui.Scaleform.daapi.view.battle.shared.formatters import normalizeHealthPercent
+from gui.Scaleform.settings import ICONS_SIZES
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
 from gui.doc_loaders import messages_panel_reader
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.meta.PostmortemPanelMeta import PostmortemPanelMeta
-from gui.shared.formatters import icons
+from gui.shared.badges import buildBadge
 from gui.shared.gui_items import Vehicle
 from constants import ATTACK_REASON_INDICES
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from debug_utils import LOG_CURRENT_EXCEPTION
+from gui.shared.view_helpers import UsersInfoHelper
 from helpers import dependency
 from helpers import int2roman
 from items import vehicles
@@ -175,6 +176,7 @@ class PostmortemPanel(_SummaryPostmortemPanel):
         self.__isInPostmortem = False
         self._deathAlreadySet = False
         self.__isColorBlind = self.settingsCore.getSetting('isColorBlind')
+        self.__userInfoHelper = UsersInfoHelper()
         return
 
     def _addGameListeners(self):
@@ -263,15 +265,32 @@ class PostmortemPanel(_SummaryPostmortemPanel):
                     vehImg = _VEHICLE_SMALL_ICON_RES_PATH.format(vTypeInfoVO.iconName)
                     vehClass = Vehicle.getTypeBigIconPath(vTypeInfoVO.classTag)
                     vehName = vTypeInfoVO.shortNameWithPrefix
+                    killerUserVO = self.__makeKillerVO(vInfoVO)
                 else:
                     showVehicle = False
                     vehLvl = vehImg = vehClass = vehName = None
+                    killerUserVO = {}
                 reason = self.__makeReasonInfo(deathInfo)
-                self.as_setDeadReasonInfoS(reason, showVehicle, vehLvl, vehImg, vehClass, vehName)
+                self.as_setDeadReasonInfoS(reason, showVehicle, vehLvl, vehImg, vehClass, vehName, killerUserVO)
                 self._deathAlreadySet = True
             else:
-                self.as_setDeadReasonInfoS('', False, None, None, None, None)
+                self.as_setDeadReasonInfoS('', False, None, None, None, None, None)
         return
+
+    def __makeKillerVO(self, vInfoVO):
+        fullName = self.sessionProvider.getCtx().getPlayerFullNameParts(vInfoVO.vehicleID, showVehShortName=False)
+        playerVO = vInfoVO.player
+        userVO = {'userName': fullName.playerName,
+         'fakeName': fullName.playerFakeName,
+         'clanAbbrev': playerVO.clanAbbrev,
+         'region': fullName.regionCode,
+         'igrType': playerVO.igrType,
+         'tags': self.__userInfoHelper.getUserTags(playerVO.avatarSessionID, playerVO.igrType)}
+        badgeID = vInfoVO.selectedBadge
+        badge = buildBadge(badgeID, vInfoVO.getBadgeExtraInfo())
+        if badge is not None:
+            userVO['badgeVisualVO'] = badge.getBadgeVO(ICONS_SIZES.X24, {'isAtlasSource': True}, shortIconName=True)
+        return userVO
 
     def __makeReasonInfo(self, deathInfo):
         colors = deathInfo['colors']
@@ -283,15 +302,6 @@ class PostmortemPanel(_SummaryPostmortemPanel):
          'entity': '',
          'killer': '',
          'color': color}
-        entityID = deathInfo['killerVehicle']
-        if entityID:
-            context = self.sessionProvider.getCtx()
-            vInfoVO = context.getArenaDP().getVehicleInfo(entityID)
-            prefixBadgeID = vInfoVO.ranked.selectedBadge
-            prefixIcon = ''
-            if prefixBadgeID > 0:
-                prefixIcon = icons.makeImageTag(settings.getBadgeIconPath(settings.BADGES_ICONS.X24, prefixBadgeID), 24, 24, -5, 0)
-            names['killer'] = '{0}{1}'.format(prefixIcon, context.getPlayerFullName(entityID, showVehShortName=False))
         device = deathInfo['device']
         if device:
             names['device'] = device

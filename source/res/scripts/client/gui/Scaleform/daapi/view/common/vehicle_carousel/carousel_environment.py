@@ -48,6 +48,9 @@ class ICarouselEnvironment(object):
     def hasEventVehicles(self):
         return False
 
+    def setPopoverCallback(self, callback=None):
+        pass
+
 
 class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnvironment):
     rentals = dependency.descriptor(IRentalsController)
@@ -68,7 +71,11 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
         self._carouselFilterCls = CarouselFilter
         self._carouselDP = None
         self._currentVehicle = None
+        self.__filterPopoverRemoveCallback = None
         return
+
+    def setPopoverCallback(self, callback=None):
+        self.__filterPopoverRemoveCallback = callback
 
     def onPlayerStateChanged(self, entity, roster, accountInfo):
         if accountInfo.isCurrentPlayer():
@@ -178,6 +185,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
         self._carouselDP.fini()
         self._carouselDP = None
         self._carouselDPConfig.clear()
+        self.__callPopoverCallback()
         super(CarouselEnvironment, self)._dispose()
         return
 
@@ -235,3 +243,10 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
 
     def __onVehicleClientStateChanged(self, vehicles):
         self.updateVehicles(vehicles)
+
+    def __callPopoverCallback(self):
+        if callable(self.__filterPopoverRemoveCallback):
+            callback = self.__filterPopoverRemoveCallback
+            self.__filterPopoverRemoveCallback = None
+            callback()
+        return

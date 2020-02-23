@@ -5,8 +5,6 @@ from gui.impl.gen.view_models.windows.full_screen_dialog_window_model import Ful
 
 class BuySellItemsDialogModel(FullScreenDialogWindowModel):
     __slots__ = ()
-    BATTLE_BOOSTER_CREW_REPLACE = 'battleBoosterReplace'
-    BATTLE_BOOSTER = 'battleBooster'
 
     def __init__(self, properties=23, commands=2):
         super(BuySellItemsDialogModel, self).__init__(properties=properties, commands=commands)
@@ -83,10 +81,10 @@ class BuySellItemsDialogModel(FullScreenDialogWindowModel):
     def setTooltipMsg(self, value):
         self._setString(21, value)
 
-    def getItemType(self):
+    def getSpecialType(self):
         return self._getString(22)
 
-    def setItemType(self, value):
+    def setSpecialType(self, value):
         self._setString(22, value)
 
     def _initialize(self):
@@ -103,4 +101,4 @@ class BuySellItemsDialogModel(FullScreenDialogWindowModel):
         self._addNumberProperty('itemMinCount', 1)
         self._addNumberProperty('itemTotalPrice', 0)
         self._addStringProperty('tooltipMsg', '')
-        self._addStringProperty('itemType', '')
+        self._addStringProperty('specialType', '')

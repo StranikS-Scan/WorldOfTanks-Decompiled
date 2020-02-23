@@ -97,7 +97,7 @@ class RankedMainPage(LobbySubView, RankedBattlesPageMeta):
         raise NotImplementedError
 
     def _updateSounds(self):
-        raise NotImplementedError
+        self._rankedController.getSoundManager().setAmbient()
 
     def __getShowStateFlags(self):
         defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
@@ -166,6 +166,7 @@ class RankedMainSeasonOffPage(RankedMainPage):
          'selectedIndex': self._getSelectedIdx(menuItems)})
 
     def _updateSounds(self):
+        super(RankedMainSeasonOffPage, self)._updateSounds()
         soundManager = self._rankedController.getSoundManager()
         if self._rankedController.getMaxPossibleRank() == self.__achievedRankID:
             soundManager.setProgressSound()
@@ -189,12 +190,10 @@ class RankedMainSeasonOnPage(RankedMainPage):
         self.__periodicNotifier = PeriodicNotifier(self.__getTimeTillCurrentSeasonEnd, self._updateHeader)
         return
 
-    def onClose(self):
-        super(RankedMainSeasonOnPage, self).onClose()
-        self._updateSounds(True)
-
     def _dispose(self):
+        self._updateSounds(True)
         self.__periodicNotifier.stopNotification()
+        self.__periodicNotifier.clear()
         super(RankedMainSeasonOnPage, self)._dispose()
 
     def _populate(self):
@@ -221,6 +220,7 @@ class RankedMainSeasonOnPage(RankedMainPage):
          'selectedIndex': self._getSelectedIdx(menuItems)})
 
     def _updateSounds(self, onClose=False):
+        super(RankedMainSeasonOnPage, self)._updateSounds()
         soundManager = self._rankedController.getSoundManager()
         if self._rankedController.isAccountMastered():
             soundManager.setProgressSound()

@@ -42,6 +42,11 @@ class EQUIPMENT_TYPES(dict):
 
 EQUIPMENT_TYPES = EQUIPMENT_TYPES()
 
+class ITEM_OPERATION:
+    UPGRADE = 'upgrade'
+    ALL = (UPGRADE,)
+
+
 class ItemsPrices(object):
 
     def __init__(self, prices=None):
@@ -139,6 +144,7 @@ def init(preloadEverything, pricesToCollect=None):
         pricesToCollect['notInShopInscriptionGroups'] = [ set() for x in nations.NAMES ]
         pricesToCollect['playerEmblemGroupPriceFactors'] = {}
         pricesToCollect['notInShopPlayerEmblemGroups'] = set()
+        pricesToCollect['operationPrices'] = {}
     from items import stun
     stun.init()
     from items import vehicles

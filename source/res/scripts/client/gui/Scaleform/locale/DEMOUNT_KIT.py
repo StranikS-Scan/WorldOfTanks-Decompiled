@@ -10,6 +10,7 @@ class DEMOUNT_KIT(object):
     DIALOGUE_DESCRIPTION_COMMON = '#demount_kit:dialogue/description/common'
     EQUIPMENTINSTALL_DEMOUNTDESCRIPTION_COMMON = '#demount_kit:equipmentInstall/demountDescription/common'
     EQUIPMENTINSTALL_DEMOUNTDESCRIPTION_BONDS = '#demount_kit:equipmentInstall/demountDescription/bonds'
+    EQUIPMENTINSTALL_DEMOUNTDESCRIPTION_TROPHY = '#demount_kit:equipmentInstall/demountDescription/trophy'
     EQUIPMENTDEMOUNT_OPTIONFREE = '#demount_kit:equipmentDemount/optionFree'
     EQUIPMENTDEMOUNT_CONFIRMATION = '#demount_kit:equipmentDemount/confirmation'
     EQUIPMENTDEMOUNT_CONFIRMATION_DESCRIPTION = '#demount_kit:equipmentDemount/confirmation/description'

@@ -492,10 +492,6 @@ class WebBrowser(object):
         result = urlparse.urlparse(url)
         return result.netloc + result.path if result.scheme == _WOT_RESOURCE_CUSTOM_SCHEME else _g_webCache.get(url)
 
-    def setLoadingScreenVisible(self, visible):
-        _logger.debug('setLoadingScreenVisible %s', visible)
-        self.onLoadingStateChange(visible, True)
-
     def setAllowAutoLoadingScreen(self, enabled):
         _logger.debug('setAllowAutoLoadingScreen %s', enabled)
         self.__allowAutoLoadingScreenChange = enabled

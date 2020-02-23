@@ -32,6 +32,7 @@ from constants import ARENA_BONUS_TYPE
 from soft_exception import SoftException
 from shared_utils import first
 from shared_utils.account_helpers.battle_results_helpers import getEmptyClientPB20UXStats
+from gui.battle_pass.battle_pass_helpers import setInBattleProgress
 _logger = logging.getLogger(__name__)
 
 class BattleResultsService(IBattleResultsService):
@@ -109,6 +110,7 @@ class BattleResultsService(IBattleResultsService):
             return False
         else:
             self.__updateReusableInfo(reusableInfo)
+            self.__updateBattlePassInfo(reusableInfo)
             arenaUniqueID = reusableInfo.arenaUniqueID
             composerObj = composer.createComposer(reusableInfo)
             composerObj.setResults(result, reusableInfo)
@@ -298,6 +300,7 @@ class BattleResultsService(IBattleResultsService):
                 SystemMessages.pushI18nMessage(BATTLE_RESULTS.NODATA, type=SystemMessages.SM_TYPE.Warning)
                 callback(False)
             self.__updateReusableInfo(reusableInfo)
+            self.__updateBattlePassInfo(reusableInfo)
             arenaUniqueID = reusableInfo.arenaUniqueID
             composerObj = composer.createComposer(reusableInfo)
             composerObj.setResults(result, reusableInfo)
@@ -311,6 +314,13 @@ class BattleResultsService(IBattleResultsService):
         reusableInfo.premiumPlusState = self.__makePremiumState(arenaUniqueID, PREMIUM_TYPE.PLUS)
         reusableInfo.isAddXPBonusApplied = self.isAddXPBonusApplied(arenaUniqueID)
         reusableInfo.clientIndex = self.lobbyContext.getClientIDByArenaUniqueID(arenaUniqueID)
+
+    def __updateBattlePassInfo(self, reusableInfo):
+        battlePass = reusableInfo.personal.avatar.extensionInfo.get('battlePass', {})
+        basePoints = battlePass.get('basePointsDiff', 0)
+        sumPoints = battlePass.get('sumPoints', 0)
+        hasBattlePass = battlePass.get('hasBattlePass', False)
+        setInBattleProgress(reusableInfo.battlePassProgress, basePoints, sumPoints, hasBattlePass)
 
     def __onPremiumBought(self, event):
         ctx = event.ctx

@@ -621,6 +621,9 @@ class SYSTEM_MESSAGES(object):
     ARTEFACT_APPLY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE = '#system_messages:artefact_apply/error_not_for_this_vehicle_type'
     ARTEFACT_APPLY_ERROR_TOO_HEAVY = '#system_messages:artefact_apply/error_too_heavy'
     ARTEFACT_REMOVE_ERROR_TOO_HEAVY = '#system_messages:artefact_remove/error_too_heavy'
+    ARTEFACT_UPGRADE_SUCCESS = '#system_messages:artefact_upgrade/success'
+    ARTEFACT_UPGRADE_SERVER_ERROR = '#system_messages:artefact_upgrade/server_error'
+    ARTEFACT_UPGRADE_VEHICLE_NEED_REPAIR = '#system_messages:artefact_upgrade/vehicle_need_repair'
     LAYOUT_APPLY_SUCCESS_MONEY_SPENT = '#system_messages:layout_apply/success_money_spent'
     LAYOUT_APPLY_SERVER_ERROR = '#system_messages:layout_apply/server_error'
     LAYOUT_APPLY_WRONG_ARGS_TYPE = '#system_messages:layout_apply/WRONG_ARGS_TYPE'
@@ -1125,6 +1128,18 @@ class SYSTEM_MESSAGES(object):
     DAILY_QUESTS_REROLL_REROLL_IN_COOLDOWN = '#system_messages:daily_quests/reroll/reroll_in_cooldown'
     DAILY_QUESTS_REROLL_QUEST_IS_ALREADY_COMPLETED = '#system_messages:daily_quests/reroll/quest_is_already_completed'
     DAILY_QUESTS_REROLL_UNKNOWN_ERROR = '#system_messages:daily_quests/reroll/unknown_error'
+    BATTLEPASS_BUY_SERVER_ERROR = '#system_messages:battlePass_buy/server_error'
+    BATTLEPASSLEVELS_BUY_SERVER_ERROR = '#system_messages:battlePassLevels_buy/server_error'
+    CHOOSE_BATTLEPASS_REWARD_SERVER_ERROR = '#system_messages:choose_battlePass_reward/server_error'
+    BATTLEPASS_SWITCH_STARTED_TITLE = '#system_messages:battlePass/switch_started/title'
+    BATTLEPASS_SWITCH_STARTED_BODY = '#system_messages:battlePass/switch_started/body'
+    BATTLEPASS_SWITCH_PAUSE_BODY = '#system_messages:battlePass/switch_pause/body'
+    BATTLEPASS_SWITCH_DISABLE_TITLE = '#system_messages:battlePass/switch_disable/title'
+    BATTLEPASS_SWITCH_DISABLE_BODY = '#system_messages:battlePass/switch_disable/body'
+    BATTLEPASS_SWITCH_ENABLED_BODY = '#system_messages:battlePass/switch_enabled/body'
+    UPGRADETROPHYDEVICE_SWITCH_ON_BODY = '#system_messages:upgradeTrophyDevice/switch_on/body'
+    UPGRADETROPHYDEVICE_SWITCH_OFF_BODY = '#system_messages:upgradeTrophyDevice/switch_off/body'
+    BATTLEPASS_BADGEREMOVED_TEXT = '#system_messages:battlePass/badgeRemoved/text'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -1853,6 +1868,9 @@ class SYSTEM_MESSAGES(object):
      ARTEFACT_APPLY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE,
      ARTEFACT_APPLY_ERROR_TOO_HEAVY,
      ARTEFACT_REMOVE_ERROR_TOO_HEAVY,
+     ARTEFACT_UPGRADE_SUCCESS,
+     ARTEFACT_UPGRADE_SERVER_ERROR,
+     ARTEFACT_UPGRADE_VEHICLE_NEED_REPAIR,
      LAYOUT_APPLY_SUCCESS_MONEY_SPENT,
      LAYOUT_APPLY_SERVER_ERROR,
      LAYOUT_APPLY_WRONG_ARGS_TYPE,
@@ -2356,7 +2374,19 @@ class SYSTEM_MESSAGES(object):
      DAILY_QUESTS_REROLL_REROLL_DISABLED,
      DAILY_QUESTS_REROLL_REROLL_IN_COOLDOWN,
      DAILY_QUESTS_REROLL_QUEST_IS_ALREADY_COMPLETED,
-     DAILY_QUESTS_REROLL_UNKNOWN_ERROR)
+     DAILY_QUESTS_REROLL_UNKNOWN_ERROR,
+     BATTLEPASS_BUY_SERVER_ERROR,
+     BATTLEPASSLEVELS_BUY_SERVER_ERROR,
+     CHOOSE_BATTLEPASS_REWARD_SERVER_ERROR,
+     BATTLEPASS_SWITCH_STARTED_TITLE,
+     BATTLEPASS_SWITCH_STARTED_BODY,
+     BATTLEPASS_SWITCH_PAUSE_BODY,
+     BATTLEPASS_SWITCH_DISABLE_TITLE,
+     BATTLEPASS_SWITCH_DISABLE_BODY,
+     BATTLEPASS_SWITCH_ENABLED_BODY,
+     UPGRADETROPHYDEVICE_SWITCH_ON_BODY,
+     UPGRADETROPHYDEVICE_SWITCH_OFF_BODY,
+     BATTLEPASS_BADGEREMOVED_TEXT)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

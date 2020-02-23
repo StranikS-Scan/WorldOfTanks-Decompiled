@@ -6,7 +6,6 @@ from gui.impl.gen.view_models.views.lobby.common.buy_sell_items_dialog_model imp
 from gui.impl.lobby.common.buy_sell_item_base_dialog import DialogBuySellItemBaseView
 from gui.impl.gen import R
 from frameworks.wulf import ViewFlags, ViewSettings
-from gui.impl.lobby.instructions import getBattleBoosterItemType
 from gui.shared.gui_items.processors.module import ModuleSeller
 from adisp import process
 
@@ -32,7 +31,7 @@ class BoosterSellWindowView(DialogBuySellItemBaseView):
         self._setTitleArgs(model.getTitleArgs(), (('name', R.strings.artefacts.dyn(self._item.name).name()),))
         model.setItemMaxCount(min(itemCount, MAX_ITEMS_FOR_OPERATION))
         model.setItemCount(itemCount)
-        model.setItemType(getBattleBoosterItemType(self._item))
+        model.setSpecialType(self._item.getOverlayType())
         super(BoosterSellWindowView, self)._setBaseParams(model)
 
     @process

@@ -51,6 +51,8 @@ class _GoldPurchaseReason(object):
     EQUIPMENT = 'equipment'
     CUSTOMIZATION = 'customization'
     BUNDLE = 'bundle'
+    BATTLE_PASS = 'battle_pass'
+    BATTLE_PASS_LEVELS = 'battle_pass_levels'
 
 
 class Source(object):
@@ -155,6 +157,14 @@ def showBuyGoldForEquipment(fullPrice):
 
 def showBuyGoldForCustomization(fullPrice):
     showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.CUSTOMIZATION, fullPrice))
+
+
+def showBuyGoldForBattlePass(fullPrice):
+    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.BATTLE_PASS, fullPrice))
+
+
+def showBuyGoldForBattlePassLevels(fullPrice):
+    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.BATTLE_PASS_LEVELS, fullPrice))
 
 
 def showBuyGoldForBundle(fullPrice, params=None):

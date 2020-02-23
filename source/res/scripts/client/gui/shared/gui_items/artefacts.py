@@ -3,19 +3,20 @@
 from itertools import chain, imap
 import nations
 from debug_utils import LOG_CURRENT_EXCEPTION
+from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.ARTEFACTS import ARTEFACTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.RES_SHOP_EXT import RES_SHOP_EXT
-from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
+from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE, checkForTags
 from gui.shared.gui_items.Tankman import isSkillLearnt
 from gui.shared.gui_items.fitting_item import FittingItem
 from gui.shared.gui_items.gui_item_economics import ItemPrice, ITEM_PRICE_EMPTY
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from gui.shared.utils.functions import stripColorTagDescrTags
 from helpers import i18n, dependency
-from items import artefacts, vehicles as vehicleItems, tankmen
+from items import artefacts, vehicles as vehicleItems, tankmen, ITEM_OPERATION
 from items.tankmen import PERKS
 from items.vehicles import ABILITY_SLOTS_BY_VEHICLE_CLASS, getVehicleClassFromVehicleType
 from skeletons.gui.lobby_context import ILobbyContext
@@ -25,6 +26,8 @@ _TAG_TRIGGER = 'trigger'
 _TAG_CREW_BATTLE_BOOSTER = 'crewSkillBattleBooster'
 _TAG_EQUEPMENT_BUILTIN = 'builtin'
 _TAG_OPT_DEVICE_DELUXE = 'deluxe'
+_TAG_OPT_DEVICE_TROPHY_BASIC = 'trophyBasic'
+_TAG_OPT_DEVICE_TROPHY_UPGRADED = 'trophyUpgraded'
 _TOKEN_OPT_DEVICE_SIMPLE = 'simple'
 _TOKEN_OPT_DEVICE_DELUXE = 'deluxe'
 _TOKEN_CREW_PERK_REPLACE = 'perk'
@@ -81,8 +84,12 @@ class VehicleArtefact(FittingItem):
     def isRemovingStun(self):
         return False
 
-    def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
-        return RES_SHOP_EXT.getArtefactIcon(size, self.descriptor.iconName)
+    @property
+    def isUpgradable(self):
+        return False
+
+    def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM, store=RES_SHOP_EXT):
+        return store.getArtefactIcon(size, self.descriptor.iconName)
 
 
 class Equipment(VehicleArtefact):
@@ -178,6 +185,9 @@ class Equipment(VehicleArtefact):
 
     def getOptDeviceBoosterDescription(self, vehicle, valueFormatter=None):
         pass
+
+    def getHighlightType(self, vehicle=None):
+        return SLOT_HIGHLIGHT_TYPES.BUILT_IN_EQUIPMENT if self.isBuiltIn else SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
 
 
 class BattleBooster(Equipment):
@@ -278,7 +288,7 @@ class BattleBooster(Equipment):
         deviceType = _TOKEN_OPT_DEVICE_SIMPLE
         if vehicle is not None:
             for device in vehicle.optDevices:
-                if self.isOptionalDeviceCompatible(device) and device.isDeluxe():
+                if self.isOptionalDeviceCompatible(device) and device.isDeluxe:
                     deviceType = _TOKEN_OPT_DEVICE_DELUXE
                     break
 
@@ -291,6 +301,14 @@ class BattleBooster(Equipment):
 
     def _getAltPrice(self, buyPrice, proxy):
         return MONEY_UNDEFINED
+
+    def getHighlightType(self, vehicle=None):
+        if self.isCrewBooster():
+            skillLearnt = self.isAffectedSkillLearnt(vehicle)
+            if skillLearnt:
+                return SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER
+            return SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_CREW_REPLACE
+        return SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER
 
 
 class BattleAbility(Equipment):
@@ -379,14 +397,35 @@ class OptionalDevice(RemovableDevice):
         description = super(OptionalDevice, self).shortDescription
         return description.format(colorTagOpen='', colorTagClose='')
 
+    @property
+    def isUpgradable(self):
+        return checkForTags(self.tags, _TAG_OPT_DEVICE_TROPHY_BASIC)
+
+    @property
+    def isUpgraded(self):
+        return checkForTags(self.tags, _TAG_OPT_DEVICE_TROPHY_UPGRADED)
+
+    @property
     def isDeluxe(self):
-        return _TAG_OPT_DEVICE_DELUXE in self.tags
+        return checkForTags(self.tags, _TAG_OPT_DEVICE_DELUXE)
+
+    @property
+    def isTrophy(self):
+        return checkForTags(self.tags, (_TAG_OPT_DEVICE_TROPHY_BASIC, _TAG_OPT_DEVICE_TROPHY_UPGRADED))
 
     def getRemovalPrice(self, proxy=None):
         if not self.isRemovable and proxy is not None:
-            if self.isDeluxe():
+            if self.isDeluxe:
                 cost = proxy.shop.paidDeluxeRemovalCost
                 defaultCost = proxy.shop.defaults.paidDeluxeRemovalCost
+                return ItemPrice(price=cost, defPrice=defaultCost)
+            if self.isUpgradable:
+                cost = proxy.shop.paidTrophyBasicRemovalCost
+                defaultCost = proxy.shop.defaults.paidTrophyBasicRemovalCost
+                return ItemPrice(price=cost, defPrice=defaultCost)
+            if self.isUpgraded:
+                cost = proxy.shop.paidTrophyUpgradedRemovalCost
+                defaultCost = proxy.shop.defaults.paidTrophyUpgradedRemovalCost
                 return ItemPrice(price=cost, defPrice=defaultCost)
             cost = proxy.shop.paidRemovalCost
             defaultCost = proxy.shop.defaults.paidRemovalCost
@@ -443,3 +482,35 @@ class OptionalDevice(RemovableDevice):
 
     def getGUIEmblemID(self):
         return self._GUIEmblemID
+
+    def getHighlightType(self, vehicle=None):
+        if self.isDeluxe:
+            return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
+        return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_TROPHY if self.isUpgradable or self.isUpgraded else SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+
+    def getOverlayType(self, vehicle=None):
+        if self.isDeluxe:
+            return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
+        if self.isUpgradable:
+            return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_TROPHY_BASIC
+        return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_TROPHY_UPGRADED if self.isUpgraded else SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+
+    def getUpgradePrice(self, proxy=None):
+        if self.isUpgradable and proxy is not None:
+            price = proxy.shop.getOperationPrices().get(ITEM_OPERATION.UPGRADE, {}).get((self.intCD, self.descriptor.upgradeInfo.upgradedCompDescr), None)
+            defaultPrice = proxy.shop.defaults.getOperationPrices().get(ITEM_OPERATION.UPGRADE, {}).get((self.intCD, self.descriptor.upgradeInfo.upgradedCompDescr), None)
+            return ItemPrice(price=Money(**price), defPrice=Money(**defaultPrice))
+        else:
+            return ITEM_PRICE_EMPTY
+
+    def mayPurchaseUpgrage(self, proxy):
+        canBuy, _ = self._isEnoughMoney(self.getUpgradePrice(proxy).price, proxy.stats.money)
+        return canBuy
+
+    def mayPurchaseUpgrageWithExchange(self, proxy):
+        money = proxy.stats.money
+        if not money.isSet(Currency.GOLD):
+            return False
+        money = money.exchange(Currency.GOLD, Currency.CREDITS, proxy.shop.exchangeRate, default=0)
+        canBuy, _ = self._isEnoughMoney(self.getUpgradePrice(proxy).price, money)
+        return canBuy

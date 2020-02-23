@@ -4,6 +4,7 @@ import BigWorld
 from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL, PREBATTLE_TYPE
 from constants import VEHICLE_CLASS_INDICES, VEHICLE_CLASSES
 from gui import makeHtmlString
+from gui.Scaleform.settings import ICONS_SIZES
 from helpers import dependency
 from gui.impl import backport
 from gui.impl.gen.resources import R
@@ -170,6 +171,8 @@ def makePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking=False):
         colors = colorGetter(USER_GUI_TYPE.OTHER)
         tags = []
     rating = backport.getIntegralFormat(pInfo.rating)
+    badge = pInfo.getBadge()
+    badgeVO = badge.getBadgeVO(ICONS_SIZES.X24, {'isAtlasSource': False}) if badge else {}
     return {'isInvite': pInfo.isInvite(),
      'dbID': pInfo.dbID,
      'accID': pInfo.accID,
@@ -186,8 +189,7 @@ def makePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking=False):
      'isOffline': pInfo.isOffline(),
      'igrType': pInfo.igrType,
      'isRatingAvailable': True,
-     'badge': pInfo.getBadgeID(),
-     'badgeImgStr': pInfo.getBadgeImgStr()}
+     'badgeVisualVO': badgeVO}
 
 
 def makeSortiePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking=False):

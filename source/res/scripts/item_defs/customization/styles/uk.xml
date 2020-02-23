@@ -703,4 +703,78 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 3750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB70_N_FV4202_105	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	271	</id>
+      <texture>	gui/maps/vehicles/styles/GB70_FV4202_PatDay_3Dst.png	</texture>
+      <description>	#vehicle_customization:main_style/GB70_FV4202_PatDay_3Dst_desc	</description>
+      <modelsSet>	GB70_FV4202_PatDay_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/GB70_FV4202_PatDay_3Dst	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 6000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB91_Super_Conqueror	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	89	</id>
+      <texture>	gui/maps/vehicles/styles/GB91_Super_Conqueror_3Dst.png	</texture>
+      <description>	#vehicle_customization:main_style/GB91_Super_Conqueror_3Dst_desc	</description>
+      <modelsSet>	GB91_Super_Conqueror_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/GB91_Super_Conqueror_3Dst	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </uk.xml>

@@ -2,12 +2,13 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/tooltip_mgr.py
 import logging
 import Keys
+from gui import InputHandler
 from gui.Scaleform.framework.entities.abstract.ToolTipMgrMeta import ToolTipMgrMeta
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.backport.backport_tooltip import DecoratedTooltipWindow
+from gui.impl.pub import ToolTipWindow
 from gui.shared import events
 from gui.shared.tooltips import builders
-from gui import InputHandler
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.impl import IGuiLoader
@@ -78,7 +79,7 @@ class ToolTip(ToolTipMgrMeta):
                     self._dynamic[tooltipType] = data
             return
 
-    def onCreateWulfTooltip(self, tooltipType, args, x, y):
+    def onCreateWulfTooltip(self, tooltipType, args, x, y, isUnbound=False):
         if not self._isAllowedTypedTooltip:
             return
         else:
@@ -88,7 +89,11 @@ class ToolTip(ToolTipMgrMeta):
             else:
                 _logger.warning('Tooltip can not be displayed: type "%s" is not found', tooltipType)
                 return
-            window = DecoratedTooltipWindow(data.getDisplayableData(*args), None)
+            content = data.getDisplayableData(*args)
+            if isUnbound:
+                window = DecoratedTooltipWindow(content, None)
+            else:
+                window = ToolTipWindow(None, content, None)
             window.load()
             window.move(x, y)
             self.__tooltipWindowId = window.uniqueID

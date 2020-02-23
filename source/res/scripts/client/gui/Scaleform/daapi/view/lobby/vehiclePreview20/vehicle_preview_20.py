@@ -27,7 +27,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
-from gui.shared import event_dispatcher, events, event_bus_handlers, EVENT_BUS_SCOPE
+from gui.shared import event_dispatcher, events, event_bus_handlers, EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.event_dispatcher import showWebShop, showOldShop
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -158,6 +158,7 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
         if self._needToResetAppearance:
             g_currentPreviewVehicle.selectNoVehicle()
             g_currentPreviewVehicle.resetAppearance()
+        g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.VEHICLE_PREVIEW_HIDDEN), scope=EVENT_BUS_SCOPE.LOBBY)
         if self._backAlias == VIEW_ALIAS.VEHICLE_PREVIEW_20:
             g_currentVehicle.refreshModel()
         self._previewBackCb = None

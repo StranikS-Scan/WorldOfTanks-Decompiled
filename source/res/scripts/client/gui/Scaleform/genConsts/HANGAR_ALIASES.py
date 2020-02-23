@@ -6,6 +6,7 @@ class HANGAR_ALIASES(object):
     TANK_CAROUSEL = 'tankCarousel'
     RANKED_TANK_CAROUSEL = 'rankedTankCarousel'
     EPICBATTLE_TANK_CAROUSEL = 'epicBattleTankCarousel'
+    BATTLEPASS_TANK_CAROUSEL = 'battlePassTankCarousel'
     CREW = 'crew'
     AMMUNITION_PANEL = 'ammunitionPanel'
     RESEARCH_PANEL = 'researchPanel'
@@ -25,3 +26,4 @@ class HANGAR_ALIASES(object):
     VEH_PARAM_RENDERER_STATE_SEPARATOR = 'separator'
     PROGRESSIVE_REWARD_WIDGET = 'progressiveRewardWdgt'
     DAILY_QUEST_WIDGET = 'dqWidget'
+    BATTLE_PASSS_ENTRY_POINT = 'battlePassEntryPoint'

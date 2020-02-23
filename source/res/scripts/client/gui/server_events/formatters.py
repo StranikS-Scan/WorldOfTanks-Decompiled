@@ -9,6 +9,7 @@ from constants import ARENA_BONUS_TYPE, GAMEPLAY_NAMES_WITH_DISABLED_QUESTS
 from gui import makeHtmlString
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.settings import ICONS_SIZES
 from gui.impl import backport
 from gui.Scaleform.genConsts.QUEST_AWARD_BLOCK_ALIASES import QUEST_AWARD_BLOCK_ALIASES
 from gui.shared.formatters import text_styles, icons as gui_icons
@@ -289,7 +290,7 @@ def packAchieveElementByItem(item):
 
 
 def packBadgeElementByItem(item):
-    return _packAchieveElement(item.getUserName(), item.getSmallIcon(), None, item.getName())
+    return _packAchieveElement(item.getUserName(), item.getAwardBadgeIcon(ICONS_SIZES.X24), None, item.getName())
 
 
 def _packAchieveElement(userName, iconPath, block, record, value=0):

@@ -4,7 +4,7 @@ import weakref
 from collections import namedtuple
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.migrations import migrateToVersion
-from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, GuiSettingsBehavior, OnceOnlyHints
+from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, GuiSettingsBehavior, OnceOnlyHints, BattlePassStorageKeys
 from adisp import process, async
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
@@ -31,6 +31,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     RANKED_CAROUSEL_FILTER_2 = 'RANKED_CAROUSEL_FILTER_2'
     EPICBATTLE_CAROUSEL_FILTER_1 = 'EPICBATTLE_CAROUSEL_FILTER_1'
     EPICBATTLE_CAROUSEL_FILTER_2 = 'EPICBATTLE_CAROUSEL_FILTER_2'
+    BATTLEPASS_CAROUSEL_FILTER_1 = 'BATTLEPASS_CAROUSEL_FILTER_1'
     GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
     EULA_VERSION = 'EULA_VERSION'
     MARKS_ON_GUN = 'MARKS_ON_GUN'
@@ -47,6 +48,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     UI_STORAGE = 'UI_STORAGE'
     LINKEDSET_QUESTS = 'LINKEDSET_QUESTS'
     SESSION_STATS = 'SESSION_STATS'
+    BATTLE_PASS_STORAGE = 'BATTLE_PASS_STORAGE'
 
 
 class UI_STORAGE_KEYS(CONST_CONTAINER):
@@ -244,6 +246,7 @@ class ServerSettingsManager(object):
                                                       'favorite': 5,
                                                       'bonus': 6,
                                                       'event': 7}, offsets={}),
+     SETTINGS_SECTIONS.BATTLEPASS_CAROUSEL_FILTER_1: Section(masks={'isCommonProgression': 0}, offsets={}),
      SETTINGS_SECTIONS.GUI_START_BEHAVIOR: Section(masks={GuiSettingsBehavior.FREE_XP_INFO_DIALOG_SHOWED: 0,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED: 1,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_STARTED: 2,
@@ -356,7 +359,12 @@ class ServerSettingsManager(object):
                                        SESSION_STATS.SHOW_AVERAGE_FRAGS: 14,
                                        SESSION_STATS.SHOW_SURVIVED_RATE: 15,
                                        SESSION_STATS.SHOW_SPOTTED: 16,
-                                       SESSION_STATS.ONLY_ONCE_HINT_SHOWN_FIELD: 17}, offsets={})}
+                                       SESSION_STATS.ONLY_ONCE_HINT_SHOWN_FIELD: 17}, offsets={}),
+     SETTINGS_SECTIONS.BATTLE_PASS_STORAGE: Section(masks={BattlePassStorageKeys.INTRO_SHOWN: 16,
+                                             BattlePassStorageKeys.BUY_BUTTON_HINT_IS_SHOWN: 17,
+                                             BattlePassStorageKeys.VOTED_WITH_BOUGHT_BP: 18,
+                                             BattlePassStorageKeys.BUY_ANIMATION_WAS_SHOWN: 19,
+                                             BattlePassStorageKeys.INTRO_VIDEO_SHOWN: 20}, offsets={BattlePassStorageKeys.SHOWN_VIDEOS_FLAGS: Offset(0, 65535)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -416,6 +424,12 @@ class ServerSettingsManager(object):
 
     def saveInUIStorage(self, fields):
         return self.setSections([SETTINGS_SECTIONS.UI_STORAGE], fields)
+
+    def getBPStorage(self, defaults=None):
+        return self.getSection(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, defaults)
+
+    def saveInBPStorage(self, settings):
+        return self.setSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, settings)
 
     def checkAutoReloadHighlights(self, increase=False):
         key = UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER
@@ -645,6 +659,7 @@ class ServerSettingsManager(object):
          'epicCarouselFilter2': {},
          'sessionStats': {},
          GUI_START_BEHAVIOR: {},
+         'battlePassStorage': {},
          'clear': {},
          'delete': []}
         yield migrateToVersion(currentVersion, self._core, data)
@@ -719,6 +734,10 @@ class ServerSettingsManager(object):
         clearGuiStartBehavior = clear.get(GUI_START_BEHAVIOR, 0)
         if guiStartBehavior or clearGuiStartBehavior:
             settings[SETTINGS_SECTIONS.GUI_START_BEHAVIOR] = self._buildSectionSettings(SETTINGS_SECTIONS.GUI_START_BEHAVIOR, guiStartBehavior) ^ clearGuiStartBehavior
+        BPStorage = data.get('battlePassStorage', {})
+        clearBPStorage = clear.get('battlePassStorage', 0)
+        if BPStorage or clearBPStorage:
+            settings[SETTINGS_SECTIONS.BATTLE_PASS_STORAGE] = self._buildSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, BPStorage) ^ clearBPStorage
         version = data.get(VERSION)
         if version is not None:
             settings[VERSION] = version

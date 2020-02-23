@@ -19,6 +19,9 @@ class StoreComponentMeta(BaseDAAPIComponent):
     def onAddVehToCompare(self, itemCD):
         self._printOverrideError('onAddVehToCompare')
 
+    def onUpgradeModule(self, moduleId):
+        self._printOverrideError('onUpgradeModule')
+
     def as_initFiltersDataS(self, nations, actionsFilterName):
         return self.flashObject.as_initFiltersData(nations, actionsFilterName) if self._isDAAPIInited() else None
 

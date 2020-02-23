@@ -502,6 +502,9 @@ class DemountKit(_Goodie):
     def itemTypeName(self):
         return GUI_ITEM_TYPE_NAMES[self.itemTypeID]
 
+    def getOverlayType(self, vehicle=None):
+        pass
+
     @property
     def nationID(self):
         return nations.NONE_INDEX

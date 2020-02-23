@@ -360,6 +360,9 @@ class IShopCommonStats(object):
     def getBoosterPricesTuple(self, boosterID):
         raise NotImplementedError
 
+    def getOperationPrices(self):
+        raise NotImplementedError
+
     def getItem(self, intCD):
         raise NotImplementedError
 
@@ -376,6 +379,14 @@ class IShopCommonStats(object):
 
     @property
     def paidDeluxeRemovalCost(self):
+        raise NotImplementedError
+
+    @property
+    def paidTrophyBasicRemovalCost(self):
+        raise NotImplementedError
+
+    @property
+    def paidTrophyUpgradedRemovalCost(self):
         raise NotImplementedError
 
     @property
@@ -494,6 +505,12 @@ class IShopCommonStats(object):
         raise NotImplementedError
 
     def getGoodiesByVariety(self, variety):
+        raise NotImplementedError
+
+    def getBattlePassCost(self):
+        raise NotImplementedError
+
+    def getBattlePassLevelCost(self):
         raise NotImplementedError
 
     @property

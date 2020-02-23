@@ -102,8 +102,8 @@ class BlueprintScreen(ViewImpl):
             self.__updateLayout(model, layout)
             model.setShowUnavailableConfirm(not isAvailableForUnlock and not isSchemeFullCompleted and vehicle.intCD not in self.__accountSettings)
             conversionMaxCost = model.conversionMaxCost
-            conversionMaxCost.setIconMainCost(R.images.gui.maps.icons.blueprints.fragment.small.intelligence())
-            conversionMaxCost.setIconAdditionalCost(R.images.gui.maps.icons.blueprints.fragment.small.dyn(self.__vehicle.nationName)())
+            conversionMaxCost.valueMain.setIcon(R.images.gui.maps.icons.blueprints.fragment.small.intelligence())
+            conversionMaxCost.valueAdditional.setIcon(R.images.gui.maps.icons.blueprints.fragment.small.dyn(self.__vehicle.nationName)())
             self.__updateConversionData(conversionMaxCost)
             model.setBackBtnLabel(getBackBtnLabel(self.__exitEvent, self.__exitEvent.name, vehicle.shortUserName))
             model.setCurrentStateView(BlueprintScreenModel.INIT)
@@ -235,10 +235,11 @@ class BlueprintScreen(ViewImpl):
         intelligenceFragCount = bpRequester.getIntelligenceData()
         nationFragCount = bpRequester.getNationalFragments(self.__vehicle.intCD)
         nationFragCost, intelligenceFragCost = bpRequester.getRequiredIntelligenceAndNational(self.__vehicle.level)
-        model.setValueMainCost(self.gui.systemLocale.getNumberFormat(intelligenceFragCost))
-        model.setValueAdditionalCost(self.gui.systemLocale.getNumberFormat(nationFragCost))
-        model.setNotEnoughMain(intelligenceFragCount < intelligenceFragCost)
-        model.setNotEnoughAdditional(nationFragCount < nationFragCost)
+        model.setHasAdditionalCost(nationFragCost != 0)
+        model.valueMain.setValue(self.gui.systemLocale.getNumberFormat(intelligenceFragCost))
+        model.valueAdditional.setValue(self.gui.systemLocale.getNumberFormat(nationFragCost))
+        model.valueMain.setNotEnough(intelligenceFragCount < intelligenceFragCost)
+        model.valueAdditional.setNotEnough(nationFragCount < nationFragCost)
 
     def __updateResearchPrice(self):
         if not self.__vehicle.isUnlocked:

@@ -28,6 +28,7 @@ class _BootCampEvents(object):
         self.onRequestBootcampMessageWindowClose = self._createEvent()
         self.onBattleFinishAnimationComplete = self._createEvent()
         self.onGameplayChoice = self._createEvent()
+        self.onPostMortemSwitch = self._createEvent()
 
     def destroy(self):
         self.__manager.clear()

@@ -3,6 +3,7 @@
 import ArenaType
 from adisp import process
 from constants import PREBATTLE_MAX_OBSERVERS_IN_TEAM, OBSERVERS_BONUS_TYPES
+from gui.Scaleform.settings import ICONS_SIZES
 from helpers import dependency
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.daapi import LobbySubView
@@ -57,6 +58,8 @@ class TrainingsListBase(LobbySubView, TrainingFormMeta, ILegacyListener):
             maxPlayersInTeam = arena.maxPlayersInTeam
             if addObservers:
                 maxPlayersInTeam += PREBATTLE_MAX_OBSERVERS_IN_TEAM
+            badge = item.getBadge()
+            badgeVO = badge.getBadgeVO(ICONS_SIZES.X24, {'isAtlasSource': False}) if badge else {}
             listData.append({'id': item.prbID,
              'comment': item.getCensoredComment(),
              'arena': getArenaFullName(item.arenaTypeID),
@@ -69,7 +72,7 @@ class TrainingsListBase(LobbySubView, TrainingFormMeta, ILegacyListener):
              'creatorRegion': self._lobbyContext.getRegionCode(item.creatorDbId),
              'icon': formatters.getMapIconPath(arena, prefix='small/'),
              'disabled': not item.isOpened,
-             'badgeImgStr': item.getBadgeImgStr()})
+             'badgeVisualVO': badgeVO})
 
         self.sendData(listData, playersTotal)
 

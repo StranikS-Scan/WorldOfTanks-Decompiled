@@ -5,7 +5,6 @@ import typing
 from collections import Container, namedtuple
 from sys import maxint
 from CurrentVehicle import g_currentPreviewVehicle, g_currentVehicle
-from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getSlotOverlayIconType
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.locale.COMMON import COMMON
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
@@ -239,7 +238,7 @@ def getItemTitle(rawItem, item, forBox=False):
     elif rawItem.type == ItemPackType.CUSTOM_GOLD:
         title = _ms(key=QUESTS.BONUSES_GOLD_DESCRIPTION, value=rawItem.count)
     elif rawItem.type == ItemPackType.CUSTOM_CREDITS:
-        title = backport.text(R.strings.quests.bonuses.credits.description(), value=text_styles.credits(backport.getIntegralFormat(rawItem.count)))
+        title = backport.text(R.strings.quests.bonuses.credits.description(), value=backport.getIntegralFormat(rawItem.count))
     elif rawItem.type == ItemPackType.CUSTOM_CRYSTAL:
         title = _ms(key=QUESTS.BONUSES_CRYSTAL_DESCRIPTION, value=rawItem.count)
     elif rawItem.type == ItemPackType.CUSTOM_SUPPLY_POINT:
@@ -338,7 +337,7 @@ def _createItemVO(rawItem, itemsCache, goodiesCache, slotIndex, rawTooltipData=N
         fittingItem = lookupItem(rawItem, itemsCache, goodiesCache)
         cd = fittingItem.intCD if fittingItem is not None else rawItem.id
         icon = getItemIcon(rawItem, fittingItem)
-        overlay = getSlotOverlayIconType(fittingItem)
+        overlay = fittingItem.getHighlightType() if fittingItem is not None else SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
         if rawItem.type in ItemPackTypeGroup.CREW:
             countFormat = _formatCrew(rawItem)
         elif rawItem.type in _UNCOUNTABLE_ITEM_TYPE:
@@ -373,7 +372,10 @@ def _getBoxTooltipVO(rawItems, itemsCache, goodiesCache):
             icon = RES_ICONS.getBonusIcon('small', fittingItem.itemTypeName)
         else:
             icon = getItemIcon(rawItem, fittingItem)
-        overlay = getSlotOverlayIconType(fittingItem)
+        if fittingItem is not None:
+            overlay = fittingItem.getHighlightType()
+        else:
+            overlay = SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
         items.append({'id': rawItem.id,
          'type': rawItem.type,
          'count': str(rawItem.count) if rawItem.type not in _UNCOUNTABLE_ITEM_TYPE and rawItem.count > 1 else '',

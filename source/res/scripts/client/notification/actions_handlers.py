@@ -14,7 +14,7 @@ from gui.battle_results import RequestResultsContext
 from gui.clans.clan_helpers import showAcceptClanInviteDialog
 from gui.prb_control import prbInvitesProperty, prbDispatcherProperty
 from gui.ranked_battles import ranked_helpers
-from gui.server_events.events_dispatcher import showPersonalMission
+from gui.server_events.events_dispatcher import showPersonalMission, showMissionsBattlePassCommonProgression
 from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events
 from gui.shared.event_dispatcher import showProgressiveRewardWindow, showRankedYeardAwardWindow
 from gui.shared.utils import decorators
@@ -710,6 +710,20 @@ class _OpenProgressiveRewardView(_NavigationDisabledActionHandler):
         showProgressiveRewardWindow()
 
 
+class _OpenBattlePassProgressionView(_NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        showMissionsBattlePassCommonProgression()
+
+
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowTutorialBattleHistoryHandler,
  ShowFortBattleResultsHandler,
@@ -739,7 +753,8 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenLootBoxesHandler,
  _LootBoxesAutoOpenHandler,
  _OpenProgressiveRewardView,
- ProlongStyleRent)
+ ProlongStyleRent,
+ _OpenBattlePassProgressionView)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

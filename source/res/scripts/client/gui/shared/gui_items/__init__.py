@@ -219,6 +219,12 @@ def getItemIconName(itemName):
     return '%s.png' % itemName.replace(':', '-')
 
 
+def checkForTags(vTags, tags):
+    if not hasattr(tags, '__iter__'):
+        tags = (tags,)
+    return bool(vTags & frozenset(tags))
+
+
 class ACTION_ENTITY_ITEM(object):
     ACTION_NAME_IDX = 0
     ACTION_STEP_IDX = 1

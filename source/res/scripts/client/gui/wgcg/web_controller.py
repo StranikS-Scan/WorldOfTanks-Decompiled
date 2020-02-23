@@ -477,6 +477,9 @@ class WebController(WebListeners, IWebController):
         self.__simWGCGEnabled = True
         return
 
+    def getRequesterConfig(self):
+        return self.lobbyContext.getServerSettings().wgcg
+
     def simEnableWGCG(self, enable):
         self.__simWGCGEnabled = enable
         if self.__profile:

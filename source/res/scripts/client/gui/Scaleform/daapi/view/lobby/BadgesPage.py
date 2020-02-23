@@ -3,9 +3,9 @@
 import operator
 from collections import defaultdict
 import BigWorld
+from gui.Scaleform.settings import ICONS_SIZES
 from gui.impl import backport
 from gui.impl.gen.resources import R
-from gui.shared.gui_items.badge import Badge
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from helpers import dependency, i18n
 from account_helpers.AccountSettings import AccountSettings, LAST_BADGES_VISIT
@@ -21,13 +21,13 @@ from tutorial.control.context import GLOBAL_FLAG
 
 def _makeBadgeVO(badge):
     return {'id': badge.badgeID,
-     'icon': badge.getBigIcon(),
      'title': text_styles.stats(badge.getUserName()),
      'description': text_styles.main(badge.getUserDescription()),
      'enabled': badge.isAchieved,
      'selected': badge.isSelected,
      'highlightIcon': badge.getHighlightIcon(),
-     'isFirstLook': badge.isNew()}
+     'isFirstLook': badge.isNew(),
+     'visual': badge.getBadgeVO(ICONS_SIZES.X80)}
 
 
 class BadgesPage(BadgesPageMeta):
@@ -55,12 +55,10 @@ class BadgesPage(BadgesPageMeta):
     def onSelectBadge(self, badgeID):
         self.__prefixBadgeID = badgeID
         self.__selectBadges()
-        self.as_setSelectedBadgeImgS(Badge.getBigIconById(badgeID))
 
     def onDeselectBadge(self):
         self.__prefixBadgeID = None
         self.__selectBadges()
-        self.as_setSelectedBadgeImgS('')
         return
 
     def onSelectSuffixBadge(self):
@@ -95,7 +93,10 @@ class BadgesPage(BadgesPageMeta):
         prefixSelected, prefixBadges, lastSuffixBadge = self.__preprocessBadges()
         if prefixSelected is not None:
             self.__prefixBadgeID = prefixSelected.badgeID
-            self.as_setSelectedBadgeImgS(prefixSelected.getBigIcon())
+            self.as_setSelectedBadgeS(prefixSelected.getBadgeVO(ICONS_SIZES.X80), selected=True)
+        else:
+            self.as_setSelectedBadgeS({'icon': backport.image(R.images.gui.maps.icons.library.badges.c_80x80.badge_empty()),
+             'isDynamic': False}, selected=False)
         self.__suffixBadgeSelected = False
         self.__receivedSuffixBadgeID = None
         sbImgPath = ''
@@ -132,7 +133,7 @@ class BadgesPage(BadgesPageMeta):
         prefixBadges = []
         cache = defaultdict(list)
         for badge in self.itemsCache.items.getBadges().itervalues():
-            if not badge.isAchievable and not badge.isAchieved:
+            if not badge.isVisibleAsAchievable() and not badge.isAchieved:
                 continue
             if not badge.isPrefixLayout():
                 continue

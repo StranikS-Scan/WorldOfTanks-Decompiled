@@ -44,6 +44,8 @@ EPICBATTLE_CAROUSEL_FILTER_1 = 'EPICBATTLE_CAROUSEL_FILTER_1'
 EPICBATTLE_CAROUSEL_FILTER_2 = 'EPICBATTLE_CAROUSEL_FILTER_2'
 EPICBATTLE_CAROUSEL_FILTER_CLIENT_1 = 'EPICBATTLE_CAROUSEL_FILTER_CLIENT_1'
 STORAGE_VEHICLES_CAROUSEL_FILTER_1 = 'STORAGE_CAROUSEL_FILTER_1'
+BATTLEPASS_CAROUSEL_FILTER_1 = 'BATTLEPASS_CAROUSEL_FILTER_1'
+BATTLEPASS_CAROUSEL_FILTER_CLIENT_1 = 'BATTLEPASS_CAROUSEL_FILTER_CLIENT_1'
 BARRACKS_FILTER = 'barracks_filter'
 ORDERS_FILTER = 'ORDERS_FILTER'
 CURRENT_VEHICLE = 'current'
@@ -88,6 +90,7 @@ MISSIONS_PAGE = 'missions_page'
 DEFAULT_VEHICLE_TYPES_FILTER = [False] * len(VEHICLE_CLASSES)
 DEFAULT_LEVELS_FILTERS = [False] * MAX_VEHICLE_LEVEL
 SHOW_OPT_DEVICE_HINT = 'showOptDeviceHint'
+SHOW_OPT_DEVICE_HINT_TROPHY = 'showOptDeviceHintTrophy'
 LAST_BADGES_VISIT = 'lastBadgesVisit'
 ENABLE_RANKED_ANIMATIONS = 'enableRankedAnimations'
 COLOR_SETTINGS_TAB_IDX = 'colorSettingsTabIdx'
@@ -96,6 +99,8 @@ APPLIED_COLOR_SETTINGS = 'appliedColorSettings'
 SELECTED_QUEST_IN_REPLAY = 'SELECTED_QUEST_IN_REPLAY'
 LAST_SELECTED_PM_BRANCH = 'lastSelectedPMBranch'
 WHEELED_DEATH_DELAY_COUNT = 'wheeledDeathCounter'
+LAST_BATTLE_PASS_POINTS_SEEN = 'lastBattlePassPointsSeen'
+BATTLE_PASS_VIDEOS_CONFIG = 'battlePassVideosConfig'
 ANONYMIZER = GAME.ANONYMIZER
 CUSTOMIZATION_SECTION = 'customization'
 PROJECTION_DECAL_TAB_SHOWN_FIELD = CUSTOMIZATION_ALIASES.PROJECTION_DECAL_TAB_SHOWN_FIELD
@@ -225,6 +230,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                    'favorite': False,
                                    'bonus': False},
                CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
+               BATTLEPASS_CAROUSEL_FILTER_CLIENT_1: {'battlePassSeason': 0},
                RANKED_CAROUSEL_FILTER_1: {'ussr': False,
                                           'germany': False,
                                           'usa': False,
@@ -295,6 +301,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'favorite': False,
                                               'bonus': False},
                EPICBATTLE_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
+               BATTLEPASS_CAROUSEL_FILTER_1: {'isCommonProgression': False},
                MISSION_SELECTOR_FILTER: {'inventory': False},
                PM_SELECTOR_FILTER: {'inventory': False},
                BLUEPRINTS_STORAGE_FILTER: {'unlock_available': False,
@@ -543,6 +550,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                        'ControlsSettings': {'showQuestProgress': True,
                                                             'chargeFire': True}},
                 SHOW_OPT_DEVICE_HINT: True,
+                SHOW_OPT_DEVICE_HINT_TROPHY: True,
                 'c11nHistoricallyAccurate': True,
                 LAST_BADGES_VISIT: 0,
                 ENABLE_RANKED_ANIMATIONS: True,
@@ -579,7 +587,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 RANKED_WEB_LEAGUE: None,
                 RANKED_WEB_LEAGUE_UPDATE: None,
                 RANKED_AWARDS_BUBBLE_YEAR_REACHED: False,
-                NATION_CHANGE_VIEWED: False},
+                NATION_CHANGE_VIEWED: False,
+                LAST_BATTLE_PASS_POINTS_SEEN: 0,
+                BATTLE_PASS_VIDEOS_CONFIG: {}},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},

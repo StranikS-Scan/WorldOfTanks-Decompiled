@@ -29,6 +29,7 @@ class CMLabel(object):
     CONVERT_BLUEPRINT_MAX = 'convertBlueprintMax'
     SHOW_BLUEPRINT = 'showBlueprint'
     NATION_CHANGE = 'nationChange'
+    UPGRADE = 'upgrade'
 
 
 def option(order, label):

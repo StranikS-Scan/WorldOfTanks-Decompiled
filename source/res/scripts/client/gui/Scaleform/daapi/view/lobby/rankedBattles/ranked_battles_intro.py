@@ -19,9 +19,9 @@ from web.web_client_api import webApiCollection, ui as ui_web_api, sound as soun
 BLOCKS_COUNT = 3
 
 class RankedBattlesIntro(LobbySubView, RankedBattlesIntroMeta):
+    _COMMON_SOUND_SPACE = RANKED_MAIN_PAGE_SOUND_SPACE
     __rankedController = dependency.descriptor(IRankedBattlesController)
     __settingsCore = dependency.descriptor(ISettingsCore)
-    _COMMON_SOUND_SPACE = RANKED_MAIN_PAGE_SOUND_SPACE
 
     def onAcceptClick(self):
         self.__setShowStateFlags()
@@ -40,6 +40,7 @@ class RankedBattlesIntro(LobbySubView, RankedBattlesIntroMeta):
 
     def _populate(self):
         super(RankedBattlesIntro, self)._populate()
+        self.__rankedController.getSoundManager().setAmbient()
         headerData = {'title': backport.text(R.strings.ranked_battles.rankedBattle.title()),
          'leftSideText': backport.text(R.strings.ranked_battles.intoPage.description()),
          'rightSideText': None,

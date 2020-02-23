@@ -137,6 +137,7 @@ class LootRewardDefModelPresenter(object):
             m.setLabelAlign(self._reward.get('align', _DEFAULT_ALIGN) or _DEFAULT_ALIGN)
             m.setHighlightType(self._reward.get('highlightIcon') or '')
             m.setOverlayType(self._reward.get('overlayIcon') or '')
+            m.setIsEnabled(bool(self._reward.get('isEnabled', True)))
 
 
 class LootRewardAnimatedModelPresenter(LootRewardDefModelPresenter):

@@ -5,6 +5,11 @@ from gui.Scaleform.framework.entities.View import CommonSoundSpaceSettings
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from shared_utils import CONST_CONTAINER
 
+class AmbientType(CONST_CONTAINER):
+    NATURE = 1
+    HANGAR = 2
+
+
 class Sounds(CONST_CONTAINER):
     FIRST_SELECT_EVENT = 'gui_rb_rank_Entrance_first'
     SELECT_EVENT = 'gui_rb_rank_Entrance'
@@ -20,6 +25,11 @@ class Sounds(CONST_CONTAINER):
     MAIN_PAGE_STATE = 'STATE_gamemode_progress_page'
     MAIN_PAGE_STATE_ON = 'STATE_gamemode_progress_page_on'
     MAIN_PAGE_STATE_OFF = 'STATE_gamemode_progress_page_off'
+    MAIN_PAGE_AMBIENT_ON_EVENT = 'gui_rb_rank_progress_page_ambient_Entrance'
+    MAIN_PAGE_AMBIENT_OFF_EVENT = 'gui_rb_rank_progress_page_ambient_Exit'
+    MAIN_PAGE_AMBIENT_STATE = 'STATE_rank_ambient'
+    MAIN_PAGE_AMBIENT_STATE_1 = 'STATE_rank_ambient_01'
+    MAIN_PAGE_AMBIENT_STATE_2 = 'STATE_rank_ambient_02'
     PROGRESSION_STATE = 'STATE_rank_level'
     PROGRESSION_STATE_DEFAULT = 'STATE_rank_level_00'
     PROGRESSION_STATE_QUALIFICATION = 'STATE_rank_level_01'
@@ -30,12 +40,16 @@ class Sounds(CONST_CONTAINER):
 
 
 RANKED_MAIN_PAGE_SOUND_SPACE = CommonSoundSpaceSettings(name=Sounds.MAIN_PAGE_SPACE_NAME, entranceStates={Sounds.MAIN_PAGE_STATE: Sounds.MAIN_PAGE_STATE_ON}, exitStates={Sounds.MAIN_PAGE_STATE: Sounds.MAIN_PAGE_STATE_OFF,
- Sounds.OVERLAY_HANGAR_GENERAL: Sounds.OVERLAY_HANGAR_GENERAL_OFF}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True)
-RANKED_OVERLAY_SOUND_SPACE = CommonSoundSpaceSettings(name=Sounds.OVERLAY_SPACE_NAME, entranceStates={Sounds.OVERLAY_HANGAR_GENERAL: Sounds.OVERLAY_HANGAR_GENERAL_ON}, exitStates={Sounds.OVERLAY_HANGAR_GENERAL: Sounds.OVERLAY_HANGAR_GENERAL_OFF}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True)
+ Sounds.OVERLAY_HANGAR_GENERAL: Sounds.OVERLAY_HANGAR_GENERAL_OFF}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent=Sounds.MAIN_PAGE_AMBIENT_ON_EVENT, exitEvent=Sounds.MAIN_PAGE_AMBIENT_OFF_EVENT)
+RANKED_OVERLAY_SOUND_SPACE = CommonSoundSpaceSettings(name=Sounds.OVERLAY_SPACE_NAME, entranceStates={Sounds.OVERLAY_HANGAR_GENERAL: Sounds.OVERLAY_HANGAR_GENERAL_ON,
+ Sounds.OVERLAY_HANGAR_FILTERED: Sounds.OVERLAY_HANGAR_FILTERED_ON}, exitStates={Sounds.OVERLAY_HANGAR_GENERAL: Sounds.OVERLAY_HANGAR_GENERAL_OFF,
+ Sounds.OVERLAY_HANGAR_FILTERED: Sounds.OVERLAY_HANGAR_FILTERED_OFF}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True)
 _DIVISION_TO_PROGRESSION_SOUND = {RANKEDBATTLES_ALIASES.DIVISIONS_CLASSIFICATION: Sounds.PROGRESSION_STATE_QUALIFICATION,
  RANKEDBATTLES_ALIASES.DIVISIONS_BRONZE: Sounds.PROGRESSION_STATE_3_DIVISION,
  RANKEDBATTLES_ALIASES.DIVISIONS_SILVER: Sounds.PROGRESSION_STATE_2_DIVISION,
  RANKEDBATTLES_ALIASES.DIVISIONS_GOLD: Sounds.PROGRESSION_STATE_1_DIVISION}
+_TYPE_TO_AMBIENT = {AmbientType.NATURE: Sounds.MAIN_PAGE_AMBIENT_STATE_1,
+ AmbientType.HANGAR: Sounds.MAIN_PAGE_AMBIENT_STATE_2}
 
 class RankedSoundManager(object):
     __slots__ = ('__isFirstEntrance',)
@@ -60,6 +74,9 @@ class RankedSoundManager(object):
             if stateSound is not None:
                 WWISE.WW_setState(Sounds.PROGRESSION_STATE, stateSound)
         return
+
+    def setAmbient(self, ambientType=AmbientType.NATURE):
+        WWISE.WW_setState(Sounds.MAIN_PAGE_AMBIENT_STATE, _TYPE_TO_AMBIENT.get(ambientType))
 
     def setOverlayStateOn(self):
         WWISE.WW_setState(Sounds.OVERLAY_HANGAR_GENERAL, Sounds.OVERLAY_HANGAR_GENERAL_ON)

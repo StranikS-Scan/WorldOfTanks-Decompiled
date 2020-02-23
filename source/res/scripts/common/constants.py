@@ -1356,6 +1356,9 @@ class REQUEST_COOLDOWN:
     UPDATE_IN_BATTLE_PLAYER_RELATIONS = 1.0
     FLUSH_RELATIONS = 1.0
     EQUIP_ENHANCEMENT = 1.0
+    BUY_BATTLE_PASS = 1.0
+    BUY_BATTLE_PASS_LEVELS = 1.0
+    BATTLE_PASS_VOTE = 2.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -1662,7 +1665,9 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  USER_SERVER_SETTINGS.LINKEDSET_QUESTS: 'linkedset quests show reward info',
  USER_SERVER_SETTINGS.QUESTS_PROGRESS: 'feedback quests progress',
  91: 'Loot box last viewed count',
- USER_SERVER_SETTINGS.SESSION_STATS: 'sessiong statistics settings'}
+ USER_SERVER_SETTINGS.SESSION_STATS: 'sessiong statistics settings',
+ 97: 'BattlePass carouse filter 1',
+ 98: 'Battle Pass Storage'}
 
 class WG_GAMES:
     TANKS = 'wot'

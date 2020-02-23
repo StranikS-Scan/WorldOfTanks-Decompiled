@@ -4,6 +4,7 @@ from collections import namedtuple
 import BigWorld
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui import GUI_SETTINGS
+from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_ECONOMY_CODE
 from gui.shared.gui_items.gui_item_economics import ItemPrice, ItemPrices, ITEM_PRICE_EMPTY, ITEM_PRICES_EMPTY
 from gui.shared.gui_items.gui_item import GUIItem, HasIntCD
@@ -19,6 +20,14 @@ from rent_common import SeasonRentDuration
 ICONS_MASK = '../maps/icons/%(type)s/%(subtype)s%(unicName)s.png'
 _RentalInfoProvider = namedtuple('RentalInfoProvider', ('rentExpiryTime', 'compensations', 'battlesLeft', 'winsLeft', 'seasonRent', 'isRented'))
 SeasonRentInfo = namedtuple('SeasonRentInfo', ('seasonType', 'seasonID', 'duration', 'expiryTime'))
+_BIG_HIGHLIGHT_TYPES_MAP = {SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_CREW_REPLACE: SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_CREW_REPLACE_BIG,
+ SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER: SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_BIG,
+ SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS: SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS_BIG,
+ SLOT_HIGHLIGHT_TYPES.BUILT_IN_EQUIPMENT: SLOT_HIGHLIGHT_TYPES.BUILT_IN_EQUIPMENT_BIG,
+ SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT: SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT,
+ SLOT_HIGHLIGHT_TYPES.EQUIPMENT_TROPHY: SLOT_HIGHLIGHT_TYPES.EQUIPMENT_TROPHY_BIG,
+ SLOT_HIGHLIGHT_TYPES.EQUIPMENT_TROPHY_BASIC: SLOT_HIGHLIGHT_TYPES.EQUIPMENT_TROPHY_BASIC_BIG,
+ SLOT_HIGHLIGHT_TYPES.EQUIPMENT_TROPHY_UPGRADED: SLOT_HIGHLIGHT_TYPES.EQUIPMENT_TROPHY_UPGRADED_BIG}
 
 def canBuyWithGoldExchange(price, money, exchangeRate):
     money = money.exchange(Currency.GOLD, Currency.CREDITS, exchangeRate, default=0)
@@ -387,6 +396,18 @@ class FittingItem(GUIItem):
 
     def getSellPrice(self, preferred=True):
         return self.sellPrices.itemPrice
+
+    def getHighlightType(self, vehicle=None):
+        return SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+
+    def getBigHighlightType(self, vehicle=None):
+        return _BIG_HIGHLIGHT_TYPES_MAP[self.getHighlightType(vehicle)]
+
+    def getOverlayType(self, vehicle=None):
+        return self.getHighlightType(vehicle)
+
+    def getBigOverlayType(self, vehicle=None):
+        return _BIG_HIGHLIGHT_TYPES_MAP[self.getOverlayType(vehicle)]
 
     def isInstalled(self, vehicle, slotIdx=None):
         return False

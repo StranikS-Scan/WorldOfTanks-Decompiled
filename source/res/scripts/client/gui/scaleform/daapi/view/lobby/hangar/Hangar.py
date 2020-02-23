@@ -30,16 +30,17 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.shared.utils.functions import makeTooltip
-from gui.sounds.filters import STATE_HANGAR_FILTERED
+from gui.sounds.filters import States, StatesGroup
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.auxiliary.crew_books_helper import crewBooksViewedCache
+from battle_pass_common import BATTLE_PASS_CONFIG_NAME
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from helpers.statistics import HANGAR_LOADING_STATE
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IIGRController
-from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController
+from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController, IBattlePassController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -61,9 +62,10 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     _SOUND_STATE_PLACE_GARAGE = 'STATE_hangar_place_garage'
     __background_alpha__ = 0.0
     __SOUND_SETTINGS = CommonSoundSpaceSettings(name='hangar', entranceStates={_SOUND_STATE_PLACE: _SOUND_STATE_PLACE_GARAGE,
-     STATE_HANGAR_FILTERED: '{}_off'.format(STATE_HANGAR_FILTERED)}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
+     StatesGroup.OVERLAY_HANGAR_GENERAL: States.OVERLAY_HANGAR_GENERAL_ON}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
     rankedController = dependency.descriptor(IRankedBattlesController)
     epicController = dependency.descriptor(IEpicBattleMetaGameController)
+    battlePassController = dependency.descriptor(IBattlePassController)
     itemsCache = dependency.descriptor(IItemsCache)
     igrCtrl = dependency.descriptor(IIGRController)
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -137,6 +139,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         self._settingsCore.onSettingsChanged += self.__onSettingsChanged
+        self.battlePassController.onSeasonStateChange += self.__switchCarousels
         self.startGlobalListening()
         self.__updateAll()
         self.addListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
@@ -173,6 +176,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         g_prbCtrlEvents.onVehicleClientStateChanged -= self.__onVehicleClientStateChanged
         self._settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
+        self.battlePassController.onSeasonStateChange -= self.__switchCarousels
         self.closeHelpLayout()
         self.stopGlobalListening()
         LobbySelectableView._dispose(self)
@@ -196,7 +200,9 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         linkage = HANGAR_ALIASES.TANK_CAROUSEL_UI
         newCarouselAlias = HANGAR_ALIASES.TANK_CAROUSEL
         if self.prbDispatcher is not None:
-            if self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED):
+            if self.battlePassController.isVisible() and self.battlePassController.isValidBattleType(self.prbDispatcher.getEntity()):
+                newCarouselAlias = HANGAR_ALIASES.BATTLEPASS_TANK_CAROUSEL
+            elif self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED):
                 linkage = HANGAR_ALIASES.TANK_CAROUSEL_UI
                 newCarouselAlias = HANGAR_ALIASES.RANKED_TANK_CAROUSEL
             elif self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC) or self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.EPIC):
@@ -511,6 +517,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             self.__updateState()
         if {SENIORITY_AWARDS_CONFIG, IS_LOOT_BOXES_ENABLED}.intersection(diff):
             self.__updateSenorityEntryPoint()
+        if BATTLE_PASS_CONFIG_NAME in diff:
+            self.__switchCarousels()
 
     def __onSettingsChanged(self, diff):
         if SETTINGS_SECTIONS.UI_STORAGE in diff:

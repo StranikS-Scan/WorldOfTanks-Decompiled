@@ -61,8 +61,8 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
     def as_nameResponseS(self, data):
         return self.flashObject.as_nameResponse(data) if self._isDAAPIInited() else None
 
-    def as_setBadgeIconS(self, tID):
-        return self.flashObject.as_setBadgeIcon(tID) if self._isDAAPIInited() else None
+    def as_setBadgeS(self, data, selected):
+        return self.flashObject.as_setBadge(data, selected) if self._isDAAPIInited() else None
 
     def as_setBoosterDataS(self, data):
         return self.flashObject.as_setBoosterData(data) if self._isDAAPIInited() else None

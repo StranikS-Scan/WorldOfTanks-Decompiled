@@ -12,6 +12,7 @@ class STORAGE(object):
     BUTTONLABEL_RESTORE = '#storage:buttonLabel/restore'
     BUTTONLABEL_REMOVE = '#storage:buttonLabel/remove'
     BUTTONLABEL_PREVIEW = '#storage:buttonLabel/preview'
+    BUTTONUPGRADE_TOOLTIP_BODY = '#storage:buttonUpgrade/tooltip/body'
     CARD_CANNOTSELLTITLE = '#storage:card/cannotSellTitle'
     CARD_VEHICLE_HOVER_MAXADDITIONALPRICELABEL = '#storage:card/vehicle/hover/maxAdditionalPriceLabel'
     CARD_VEHICLE_HOVER_RESTOREAVAILABLELABEL = '#storage:card/vehicle/hover/restoreAvailableLabel'

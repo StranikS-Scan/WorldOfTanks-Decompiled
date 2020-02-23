@@ -3,6 +3,7 @@
 from adisp import process
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.trainings import formatters
+from gui.Scaleform.settings import ICONS_SIZES
 from gui.prb_control.items.prb_items import getPlayersComparator
 from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE
 from gui.shared import events, EVENT_BUS_SCOPE
@@ -145,6 +146,8 @@ class EpicBattleTrainingRoom(EpicBattleTrainingRoomMeta):
                     vContourIcon = vehicle.iconContour
                     vShortName = vehicle.shortUserName
                     vLevel = int2roman(vehicle.level)
+                badge = account.getBadge()
+                badgeVO = badge.getBadgeVO(ICONS_SIZES.X24, {'isAtlasSource': False}) if badge else {}
                 listData.append({'accID': account.accID,
                  'dbID': account.dbID,
                  'userName': account.name,
@@ -158,8 +161,7 @@ class EpicBattleTrainingRoom(EpicBattleTrainingRoomMeta):
                  'clanAbbrev': account.clanAbbrev,
                  'region': self.lobbyContext.getRegionCode(account.dbID),
                  'igrType': account.igrType,
-                 'badge': account.getBadgeID(),
-                 'badgeImgStr': account.getBadgeImgStr()})
+                 'badgeVisualVO': badgeVO})
 
         label = ''
         if rLabel is not None:

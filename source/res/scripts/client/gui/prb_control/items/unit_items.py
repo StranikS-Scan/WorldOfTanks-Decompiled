@@ -41,7 +41,7 @@ class PlayerUnitInfo(object):
         self.clanAbbrev = clanAbbrev
         self.timeJoin = timeJoin
         self.igrType = igrType
-        self.badges = BadgesHelper(badges or [])
+        self.badges = BadgesHelper(badges or ())
         self.hasPremium = kwargs.get('isPremium', False)
         return
 
@@ -130,11 +130,8 @@ class PlayerUnitInfo(object):
 
         return result
 
-    def getBadgeID(self):
-        return self.badges.getBadgeID()
-
-    def getBadgeImgStr(self, size=24, vspace=-7):
-        return self.badges.getBadgeImgStr(size, vspace)
+    def getBadge(self):
+        return self.badges.getBadge()
 
 
 class VehicleInfo(object):

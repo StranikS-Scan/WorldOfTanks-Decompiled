@@ -218,7 +218,9 @@ class ElementTooltip(BlocksTooltipData):
             vehicles.add(self.currentVehicle.intCD)
         elif not self.installedToVehs:
             return None
-        if self._item.mayApply or self.currentVehicle.intCD in self.installedToVehs:
+        if self.currentVehicle.intCD not in vehicles and not self._item.descriptor.filter.match(self.currentVehicle.descriptor):
+            return None
+        elif self._item.mayApply or self.currentVehicle.intCD in self.installedToVehs:
             return formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_LIMITED_ON_VEHICLE), desc=text_styles.main(makeVehiclesShortNamesString(vehicles, self.currentVehicle)), padding=formatters.packPadding(top=-2))
         else:
             blocks = [formatters.packImageTextBlockData(title=text_styles.critical(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_LIMITED_ON_OTHER_VEHICLE), img=RES_ICONS.MAPS_ICONS_LIBRARY_MARKER_BLOCKED, imgPadding=formatters.packPadding(left=-3, top=2)), formatters.packTextBlockData(text=text_styles.main(_ms(makeVehiclesShortNamesString(vehicles, self.currentVehicle))))]

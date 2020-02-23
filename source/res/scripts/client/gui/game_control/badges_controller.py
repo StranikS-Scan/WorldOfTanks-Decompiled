@@ -77,7 +77,7 @@ class BadgesController(IBadgesController, Notifiable):
         self.__currentSelectedPrefix = None
         self.__currentAchievedSuffix = None
         for badge in self.itemsCache.items.getBadges().itervalues():
-            if badge.isPrefixLayout() and badge.isSelected:
+            if badge.isPrefixLayout() and badge.isSelected and badge.isAchieved:
                 self.__currentSelectedPrefix = badge
             if badge.isSuffixLayout() and badge.isAchieved:
                 self.__currentAchievedSuffix = badge

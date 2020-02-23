@@ -45,7 +45,7 @@ class RankChangeStates(CONST_CONTAINER):
     NOTHING_CHANGED = 'nothingChanged'
 
 
-class RankedCycle(namedtuple('RankedCycle', 'ID, status, startDate, endDate, ordinalNumber')):
+class RankedCycle(namedtuple('RankedCycle', 'ID, status, startDate, endDate, ordinalNumber announceOnly')):
 
     def __cmp__(self, other):
         return cmp(self.ID, other.ID)
@@ -53,8 +53,8 @@ class RankedCycle(namedtuple('RankedCycle', 'ID, status, startDate, endDate, ord
 
 class RankedSeason(GameSeason):
 
-    def _buildCycle(self, idx, status, start, end, number):
-        return RankedCycle(idx, status, start, end, number)
+    def _buildCycle(self, idx, status, start, end, number, announceOnly):
+        return RankedCycle(idx, status, start, end, number, announceOnly)
 
 
 class RankStep(object):

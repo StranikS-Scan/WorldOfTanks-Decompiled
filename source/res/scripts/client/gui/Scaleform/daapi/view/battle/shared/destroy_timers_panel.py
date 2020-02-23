@@ -537,7 +537,7 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
         self.__updatePanelPosition()
 
     def __updatePanelPosition(self):
-        vehicle = BigWorld.entity(self.__vehicleID)
+        vehicle = BigWorld.entity(self.__vehicleID) if self.__vehicleID is not None else None
         if vehicle is None or vehicle.typeDescriptor is None:
             self.as_setVerticalOffsetS(0)
             return

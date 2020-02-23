@@ -100,7 +100,7 @@ class Crew(CrewMeta):
                      'tankmanID': tankman.invID,
                      'level': lastNewSkillLvl})
                 tankmanData = {'fullName': tankman.fullUserName,
-                 'lastName': tankman.lastUserName,
+                 'lastName': tankman.lastUserName or tankman.firstUserName,
                  'rank': tankman.rankUserName,
                  'specializationLevel': tankman.realRoleLevel[0],
                  'role': tankman.roleUserName,

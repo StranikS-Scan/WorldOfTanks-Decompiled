@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/StoreComponent.py
+from async import await, async
 import nations
 from CurrentVehicle import g_currentVehicle
 from account_helpers.AccountSettings import AccountSettings
@@ -17,8 +18,10 @@ from gui.shared import events, EVENT_BUS_SCOPE, event_dispatcher as shared_event
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
+from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.utils.functions import getViewName, makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.impl.dialogs import dialogs
 from helpers import i18n, dependency
 from skeletons.gui.game_control import IVehicleComparisonBasket, IRentalsController, IRestoreController, ITradeInController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -65,6 +68,9 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
 
     def onAddVehToCompare(self, itemCD):
         self.comparisonBasket.addVehicle(int(itemCD))
+
+    def onUpgradeModule(self, moduleId):
+        self.__upgradeItem(moduleId)
 
     def requestFilterData(self, filterType):
         self.__updateFilterOptions(filterType)
@@ -200,6 +206,14 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
     def __onInventoryUpdate(self, *args):
         self.__invVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).values()
         self.__populateFilters()
+
+    @async
+    def __upgradeItem(self, moduleId):
+        module = self.itemsCache.items.getItemByCD(int(moduleId))
+        result, _ = yield await(dialogs.trophyDeviceUpgradeConfirm(module))
+        if result:
+            ItemsActionsFactory.doAction(ItemsActionsFactory.UPGRADE_MODULE, module, None, None)
+        return
 
     def __updateFilterOptions(self, filterType):
         voClassName, showExtra = self._getTabClass(filterType).getFilterInitData()

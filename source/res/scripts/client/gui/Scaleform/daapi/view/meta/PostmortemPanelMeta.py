@@ -1,11 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/PostmortemPanelMeta.py
-from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
+from gui.Scaleform.daapi.view.meta.BasePostmortemPanelMeta import BasePostmortemPanelMeta
 
-class PostmortemPanelMeta(BaseDAAPIComponent):
-
-    def as_setDeadReasonInfoS(self, reason, showVehicle, vehicleLevel, vehicleImg, vehicleType, vehicleName):
-        return self.flashObject.as_setDeadReasonInfo(reason, showVehicle, vehicleLevel, vehicleImg, vehicleType, vehicleName) if self._isDAAPIInited() else None
+class PostmortemPanelMeta(BasePostmortemPanelMeta):
 
     def as_showDeadReasonS(self):
         return self.flashObject.as_showDeadReason() if self._isDAAPIInited() else None

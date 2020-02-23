@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/crew_books/crew_books_view.py
-import WWISE
 from CurrentVehicle import g_currentVehicle
 from async import async, await
 from frameworks.wulf import ViewFlags, ViewStatus, ViewSettings
@@ -25,7 +24,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import sortCrew, getIconResourceName
 from gui.shared.gui_items.crew_book import sortItems
 from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.sounds.filters import STATE_HANGAR_FILTERED
+from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers.dependency import descriptor
 from items.components.component_constants import EMPTY_STRING
 from items.components.crew_books_constants import CREW_BOOK_INVALID_TYPE, CREW_BOOK_SPREAD, CREW_BOOK_RARITY
@@ -68,7 +67,7 @@ class CrewBooksView(ViewImpl):
 
     def _initialize(self, *args, **kwargs):
         super(CrewBooksView, self)._initialize()
-        WWISE.WW_setState(STATE_HANGAR_FILTERED, '{}_on'.format(STATE_HANGAR_FILTERED))
+        switchHangarOverlaySoundFilter(on=True)
         with self.viewModel.transaction() as vm:
             vm.setFlagIcon(R.images.gui.maps.icons.crewBooks.flags.dyn(getIconResourceName(self.__vehicle.nationName))())
             self.__setBooksViewModelData(vm)
@@ -87,7 +86,7 @@ class CrewBooksView(ViewImpl):
         self.__selectedTankmanVM = None
         self.__selectedBookIndex = None
         self.__invalidTypes = None
-        WWISE.WW_setState(STATE_HANGAR_FILTERED, '{}_off'.format(STATE_HANGAR_FILTERED))
+        switchHangarOverlaySoundFilter(on=False)
         super(CrewBooksView, self)._finalize()
         return
 
@@ -496,12 +495,12 @@ class CrewBooksLackView(ViewImpl):
 
     def _initialize(self, *args, **kwargs):
         super(CrewBooksLackView, self)._initialize()
-        WWISE.WW_setState(STATE_HANGAR_FILTERED, '{}_on'.format(STATE_HANGAR_FILTERED))
+        switchHangarOverlaySoundFilter(on=True)
         self.__setNoBooksViewModelData()
         self.__addListeners()
 
     def _finalize(self):
-        WWISE.WW_setState(STATE_HANGAR_FILTERED, '{}_off'.format(STATE_HANGAR_FILTERED))
+        switchHangarOverlaySoundFilter(on=False)
         self.__removeListeners()
         self.__vehicle = None
         self.__booksOnStock = None

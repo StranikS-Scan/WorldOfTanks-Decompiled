@@ -133,7 +133,7 @@ class _MissionsCarouselDataProvider(CarouselDataProvider):
     def setCriteria(self, criteria, extraConditions):
         self._baseCriteria = criteria
         self.__extraConditions = extraConditions
-        self._filter.reset(exceptions=('inventory',))
+        self._filter.reset()
 
     def getSuitableVehicles(self):
         return self.__suitableVehiclesIDs

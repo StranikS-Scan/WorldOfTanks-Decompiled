@@ -4,9 +4,9 @@ from async import async, await
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.view.lobby.missions import missions_helper
 from gui.Scaleform.daapi.view.lobby.missions.regular.group_packers import getGroupPackerByContextID
-from gui.Scaleform.daapi.view.lobby.missions.regular.missions_views import MissionsCategoriesView
 from gui.Scaleform.daapi.view.meta.MissionDetailsContainerViewMeta import MissionDetailsContainerViewMeta
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
+from gui.server_events.events_helpers import isDailyQuest, isPremium
 from gui.server_events.formatters import parseComplexToken
 from gui.shared import events, event_bus_handlers, EVENT_BUS_SCOPE
 from helpers import dependency
@@ -75,10 +75,10 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
     def __setData(self, needDemand=True):
         if needDemand:
             yield await(self.eventsCache.prefetcher.demand())
-        filterFunc = MissionsCategoriesView.getQuestFilterIncludingDailyQuests() if self.__showDQInMissionsTab else MissionsCategoriesView.getViewQuestFilter()
 
         def missionsFilter(q):
-            return filterFunc(q) and q.getFinishTimeLeft()
+            checkDaily = True if self.__showDQInMissionsTab else not isDailyQuest(q.getID()) and not isPremium(q.getID())
+            return checkDaily and q.getFinishTimeLeft()
 
         self.__quests = self.eventsCache.getQuests(missionsFilter)
         eventID = self.__ctx.get('eventID')

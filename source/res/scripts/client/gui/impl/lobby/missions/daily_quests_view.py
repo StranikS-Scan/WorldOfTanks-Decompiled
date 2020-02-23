@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/missions/daily_quests_view.py
+from math import floor
+import time
 import typing
 import logging
 from constants import PREMIUM_TYPE, PremiumConfigs, DAILY_QUESTS_CONFIG
@@ -71,7 +73,9 @@ class DailyQuestsView(ViewImpl, ClientMainWindowStateWatcher):
 
     def createToolTipContent(self, event, contentID):
         _logger.debug('DailyQuests::createToolTipContent')
-        return RerollTooltip(self.__getCountdown(), getRerollTimeout()) if contentID == R.views.lobby.missions.RerollTooltip() else super(DailyQuestsView, self).createToolTipContent(event=event, contentID=contentID)
+        if contentID == R.views.lobby.missions.RerollTooltip():
+            return RerollTooltip(self.__getCountdown(), getRerollTimeout())
+        return RerollTooltip(self.__getCountdown(), getRerollTimeout(), True) if contentID == R.views.lobby.missions.RerollTooltipWithCountdown() else super(DailyQuestsView, self).createToolTipContent(event=event, contentID=contentID)
 
     def createToolTip(self, event):
         missionParam = event.getArgument('tooltipId', '')
@@ -138,7 +142,7 @@ class DailyQuestsView(ViewImpl, ClientMainWindowStateWatcher):
         self._updateDailyQuestModel(model)
         self._updateEpicQuestModel(model)
 
-    def _updateDailyQuestModel(self, model):
+    def _updateDailyQuestModel(self, model, fullUpdate=False):
         _logger.debug('DailyQuestsView::_updateDailyQuestModel')
         isEnabled = isDailyQuestsEnable()
         quests = sorted(self.eventsCache.getDailyQuests().values(), cmp=dailyQuestsSortFunc)
@@ -148,13 +152,13 @@ class DailyQuestsView(ViewImpl, ClientMainWindowStateWatcher):
             tx.setIsEnabled(isEnabled)
             if not isEnabled:
                 return
-            if not needToUpdateQuestsInModel(quests + bonusQuests, tx.getQuests()):
+            if not fullUpdate and not needToUpdateQuestsInModel(quests + bonusQuests, tx.getQuests()):
                 return
             self.__updateQuestsInModel(tx.getQuests(), quests)
             self.__updateMissionVisitedArray(tx.getMissionsCompletedVisited(), quests)
             tx.setBonusMissionVisited(not bonusQuests)
 
-    def _updateEpicQuestModel(self, model):
+    def _updateEpicQuestModel(self, model, fullUpdate=False):
         _logger.debug('DailyQuestsView::_updateEpicQuestModel')
         epicQuest = first(self.eventsCache.getDailyEpicQuest().values())
         isEnabled = isEpicQuestEnabled() and epicQuest is not None
@@ -171,7 +175,7 @@ class DailyQuestsView(ViewImpl, ClientMainWindowStateWatcher):
             isTokeCountChanged = self.itemsCache.items.tokens.hasTokenCountChanged(dqToken.getID())
             isTokenNeededChanged = dqToken.getNeededCount() != tx.getTotal()
             isEpicQuestIdChanged = epicQuestId != tx.getId()
-            if not isTokeCountChanged and not isEpicQuestIdChanged and not isTokenNeededChanged:
+            if not fullUpdate and not isTokeCountChanged and not isEpicQuestIdChanged and not isTokenNeededChanged:
                 return
             _logger.debug('DailyQuestsView::__updateQuestInModel')
             lastViewedTokenCount = self.itemsCache.items.tokens.getLastViewedProgress(dqToken.getID())
@@ -188,7 +192,7 @@ class DailyQuestsView(ViewImpl, ClientMainWindowStateWatcher):
             epicQuestBonusesModel.invalidate()
         return
 
-    def _updatePremiumMissionsModel(self, model):
+    def _updatePremiumMissionsModel(self, model, fullUpdate=False):
         _logger.debug('DailyQuestsView::_updatePremiumMissionsModel')
         quests = sorted(self.eventsCache.getPremiumQuests().values(), cmp=premMissionsSortFunc)
         isPremAcc = _isPremiumPlusAccount()
@@ -199,7 +203,7 @@ class DailyQuestsView(ViewImpl, ClientMainWindowStateWatcher):
             if not isPremAcc or not isEnabled:
                 return
             missionsModel = tx.getMissions()
-            if not needToUpdateQuestsInModel(quests, missionsModel):
+            if not fullUpdate and not needToUpdateQuestsInModel(quests, missionsModel):
                 return
             self.__updateQuestsInModel(missionsModel, quests)
             self.__updateMissionVisitedArray(tx.getMissionsCompletedVisited(), quests)
@@ -305,16 +309,24 @@ class DailyQuestsView(ViewImpl, ClientMainWindowStateWatcher):
     def __onTabClick(self, tabIdx):
         with self.viewModel.transaction() as tx:
             if tabIdx == DailyTabs.QUESTS:
-                self._updateDailyQuestModel(tx)
+                self._updateDailyQuestModel(tx, True)
             elif tabIdx == DailyTabs.PREMIUM_MISSIONS:
-                self._updatePremiumMissionsModel(tx)
+                self._updatePremiumMissionsModel(tx, True)
             self._updateCountDowns(tx)
             self.__setCurrentTab(tabIdx, tx)
 
     def __onInfoToggle(self):
         with self.viewModel.transaction() as tx:
+            isVisible = tx.getInfoVisible()
+            if not isVisible:
+                tabIdx = self.viewModel.getCurrentTabIdx()
+                if tabIdx == DailyTabs.QUESTS:
+                    self._updateDailyQuestModel(tx, True)
+                elif tabIdx == DailyTabs.PREMIUM_MISSIONS:
+                    self._updatePremiumMissionsModel(tx, True)
+                self._updateEpicQuestModel(tx, True)
             self._updateCountDowns(tx)
-            tx.setInfoVisible(not tx.getInfoVisible())
+            tx.setInfoVisible(not isVisible)
 
     def __onCloseView(self):
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), EVENT_BUS_SCOPE.LOBBY)
@@ -398,3 +410,7 @@ class DailyQuestsView(ViewImpl, ClientMainWindowStateWatcher):
             missionVisitedArray.addBool(missionCompletedVisited)
 
         missionVisitedArray.invalidate()
+
+    @staticmethod
+    def __getCurrentTimeStampInMilli():
+        return floor(time.time() * 1000)

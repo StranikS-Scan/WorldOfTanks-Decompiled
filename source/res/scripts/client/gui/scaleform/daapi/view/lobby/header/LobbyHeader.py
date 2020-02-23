@@ -34,6 +34,7 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.settings import ICONS_SIZES
 from gui.clans.clan_helpers import isStrongholdsEnabled, isClansTabReplaceStrongholds
 from gui.game_control.ServerStats import STATS_TYPE
 from gui.game_control.wallet import WalletController
@@ -525,7 +526,11 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
 
     def __updateBadge(self):
         badge = self.badgesController.getPrefix()
-        self.as_setBadgeIconS(badge.getSmallIcon() if badge is not None else None)
+        selected = badge is not None
+        data = {}
+        if selected:
+            data = badge.getBadgeVO(ICONS_SIZES.X48)
+        self.as_setBadgeS(data, selected)
         return
 
     def __onPremiumExpireTimeChanged(self, _):

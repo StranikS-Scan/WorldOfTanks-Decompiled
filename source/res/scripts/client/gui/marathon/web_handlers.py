@@ -38,7 +38,7 @@ class _RequestWebApi(AccessTokenWebApiMixin, WgniTokenWebApiMixin, SpaIdWebApiMi
 @w2capi(name='open_tab', key='tab_id')
 class _OpenTabWebApi(HangarTabWebApiMixin, ProfileTabWebApiMixin, VehiclePreviewWebApiMixin):
 
-    def _getVehicleStylePreviewCallback(self):
+    def _getVehicleStylePreviewCallback(self, cmd):
         return showMissionsMarathon
 
 

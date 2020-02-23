@@ -26,7 +26,7 @@ class OpDevBaseDialog(ItemPriceDialog):
         super(OpDevBaseDialog, self)._setBaseParams(model)
         self._setTitleArgs(model.getTitleArgs(), (('equipment', R.strings.artefacts.dyn(self._item.name).name()),))
         if model.getDialogType() == DIALOG_TYPES.SIMPLE:
-            model.setIsDeluxe(self._item.isDeluxe())
+            model.setSpecialType(self._item.getOverlayType())
             model.setImage(R.images.gui.maps.shop.artefacts.c_180x135.dyn(self._item.descriptor.iconName)())
         model.setCancelButtonText(R.strings.dialogs.confirmBuyAndInstall.cancel())
 
@@ -88,7 +88,7 @@ class InstallOpDevDialog(OpDevBaseDialog):
     def _setDescription(self, model):
         if self._item.isRemovable:
             return
-        if self._item.isDeluxe():
+        if self._item.isDeluxe:
             description = R.strings.dialogs.equipmentDestroy.DemountOptions.bonds()
         else:
             description = R.strings.dialogs.equipmentDestroy.DemountOptions.goldOrDemoKit()

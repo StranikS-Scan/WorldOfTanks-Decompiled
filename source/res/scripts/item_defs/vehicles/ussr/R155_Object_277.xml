@@ -56,6 +56,13 @@
       <undamaged>	vehicles/russian/R155_Object_277/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/russian/R155_Object_277/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/russian/R155_Object_277/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <R155_Object_277_3Dst>
+          <undamaged>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3Dst/crash/lod0/Hull.model	</exploded>
+        </R155_Object_277_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -79,10 +86,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.619212 0.543579 2.53629	</rayStart>
-        <rayEnd>	-0.614348 0.35533 2.46893	</rayEnd>
+        <rayStart>	-0.548905 0.516947 2.61639	</rayStart>
+        <rayEnd>	-0.541596 0.32895 2.54855	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
-        <size>	0.35	</size>
+        <size>	0.3	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
       </slot>
@@ -998,6 +1005,13 @@
         <undamaged>	vehicles/russian/R155_Object_277/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R155_Object_277/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/russian/R155_Object_277/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <R155_Object_277_3Dst>
+            <undamaged>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3Dst/crash/lod0/Chassis.model	</exploded>
+          </R155_Object_277_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1763,6 +1777,13 @@
             <undamaged>	vehicles/russian/R155_Object_277/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R155_Object_277/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R155_Object_277/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <R155_Object_277_3Dst>
+                <undamaged>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </R155_Object_277_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R155_Object_277/collision/Gun_01.model	</collisionModelServer>
@@ -1809,7 +1830,7 @@
               <slotId>	49000	</slotId>
               <rayStart>	-0.00495621 -0.000356634 1.81431	</rayStart>
               <rayEnd>	-0.00873851 0.020173 1.81044	</rayEnd>
-              <rayUp>	0.13 0.000000 0.000000	</rayUp>
+              <rayUp>	0.146 0.000000 0.000000	</rayUp>
               <applyToFabric>	true	</applyToFabric>
               <size>	0.73	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
@@ -1833,6 +1854,13 @@
         <undamaged>	vehicles/russian/R155_Object_277/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/russian/R155_Object_277/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/russian/R155_Object_277/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <R155_Object_277_3Dst>
+            <undamaged>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R155_Object_277/_skin/R155_Object_277_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </R155_Object_277_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R155_Object_277/collision/Turret_01.model	</collisionModelServer>

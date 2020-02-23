@@ -2,11 +2,14 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/__init__.py
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.missions.regular.daily_quests_injector_view import DailyQuestsInjectorView
+from gui.Scaleform.daapi.view.lobby.missions.regular.missions_tab_bar import MissionsTabBarComponent
 from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ViewTypes, ScopeTemplates
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
+from gui.Scaleform.genConsts.MISSIONS_ALIASES import MISSIONS_ALIASES
 from gui.Scaleform.genConsts.EVENTBOARDS_ALIASES import EVENTBOARDS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.app_loader import settings as app_settings
+from gui.impl.lobby.battle_pass.battle_pass_progressions_view import BattlePassProgressionsComponent
 from gui.shared import EVENT_BUS_SCOPE
 
 def getContextMenuHandlers():
@@ -40,6 +43,7 @@ def getViewSettings():
      ViewSettings(QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS, MissionsGroupedView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
      ViewSettings(QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS, DailyQuestsInjectorView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
      ViewSettings(QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS, MissionsMarathonView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
+     ViewSettings(QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS, BattlePassProgressionsComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
      ViewSettings(QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS, MissionsEventBoardsView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
      ViewSettings(QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS, MissionsCategoriesView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
      ViewSettings(QUESTS_ALIASES.CURRENT_VEHICLE_MISSIONS_VIEW_PY_ALIAS, CurrentVehicleMissionsView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),

@@ -4,17 +4,8 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class MissionsViewBaseMeta(BaseDAAPIComponent):
 
-    def openMissionDetailsView(self, id, blockId):
-        self._printOverrideError('openMissionDetailsView')
-
     def dummyClicked(self, clickType):
         self._printOverrideError('dummyClicked')
-
-    def as_getDPS(self):
-        return self.flashObject.as_getDP() if self._isDAAPIInited() else None
-
-    def as_setBackgroundS(self, source):
-        return self.flashObject.as_setBackground(source) if self._isDAAPIInited() else None
 
     def as_showDummyS(self, data):
         return self.flashObject.as_showDummy(data) if self._isDAAPIInited() else None
@@ -25,5 +16,5 @@ class MissionsViewBaseMeta(BaseDAAPIComponent):
     def as_setWaitingVisibleS(self, visible):
         return self.flashObject.as_setWaitingVisible(visible) if self._isDAAPIInited() else None
 
-    def as_scrollToItemS(self, idFieldName, itemId):
-        return self.flashObject.as_scrollToItem(idFieldName, itemId) if self._isDAAPIInited() else None
+    def as_setBackgroundS(self, source):
+        return self.flashObject.as_setBackground(source) if self._isDAAPIInited() else None

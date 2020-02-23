@@ -468,6 +468,11 @@ def _migrateTo51(core, data, initialized):
     feedbackDamageIndicator[DAMAGE_INDICATOR.PRESET_ALLIES] = True
 
 
+def _migrateTo52(core, data, initialized):
+    data['onceOnlyHints']['CrewOperationBtnHint'] = True
+    data['onceOnlyHints']['SoundButtonExHint'] = True
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -666,6 +671,10 @@ _versions = ((1,
   False),
  (51,
   _migrateTo51,
+  False,
+  False),
+ (52,
+  _migrateTo52,
   False,
   False))
 

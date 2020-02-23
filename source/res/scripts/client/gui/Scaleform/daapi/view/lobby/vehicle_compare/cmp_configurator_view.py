@@ -94,18 +94,18 @@ class _ConfigFittingSlotVO(FittingSlotVO):
             if slotType == FITTING_TYPES.VEHICLE_TURRET and not vehicle.hasTurrets:
                 self['tooltipType'] = ''
             if slotType == FITTING_TYPES.OPTIONAL_DEVICE:
-                optDev = findFirst(lambda item: item.isInstalled(vehicle, slotId), modulesData)
-                if optDev is not None and optDev.isDeluxe():
-                    self['bgHighlightType'] = SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
-                else:
-                    self['bgHighlightType'] = SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
                 self['tooltipType'] = TOOLTIPS_CONSTANTS.COMPARE_MODULE
+                optDev = findFirst(lambda item: item.isInstalled(vehicle, slotId), modulesData)
+                if optDev is not None:
+                    self['bgHighlightType'] = optDev.getHighlightType()
+                    self['overlayType'] = optDev.getOverlayType()
             elif slotType == FITTING_TYPES.BOOSTER:
                 self['tooltipType'] = TOOLTIPS_CONSTANTS.BATTLE_BOOSTER_COMPARE
             elif slotType == FITTING_TYPES.EQUIPMENT:
                 self['tooltipType'] = TOOLTIPS_CONSTANTS.COMPARE_MODULE
                 equipment = findFirst(lambda item: item.isInstalled(vehicle, slotId), modulesData)
                 if equipment is not None and equipment.isBuiltIn:
+                    self['overlayType'] = SLOT_HIGHLIGHT_TYPES.BUILT_IN_EQUIPMENT
                     self['bgHighlightType'] = SLOT_HIGHLIGHT_TYPES.BUILT_IN_EQUIPMENT
                     self['showRemoveBtn'] = False
                     self['slotLocked'] = True
@@ -120,13 +120,10 @@ class _ConfigFittingSlotVO(FittingSlotVO):
                 affectsAtTTC = vehicleModule.isAffectsOnVehicle(vehicle)
                 self['affectsAtTTC'] = affectsAtTTC
                 if affectsAtTTC:
-                    if vehicleModule.isCrewBooster():
-                        isPerkReplace = not vehicleModule.isAffectedSkillLearnt(vehicle)
-                        bgType = SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_CREW_REPLACE if isPerkReplace else SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER
-                        self['bgHighlightType'] = bgType
-                    else:
+                    self['bgHighlightType'] = vehicleModule.getHighlightType(vehicle=vehicle)
+                    self['overlayType'] = vehicleModule.getOverlayType(vehicle=vehicle)
+                    if not vehicleModule.isCrewBooster():
                         self['highlight'] = affectsAtTTC
-                        self['bgHighlightType'] = SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER
         else:
             vehicleModule = super(_ConfigFittingSlotVO, self)._prepareModule(modulesData, vehicle, slotType, slotId)
             if slotType == FITTING_TYPES.OPTIONAL_DEVICE:

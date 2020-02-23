@@ -116,6 +116,12 @@ class ShopCommonStats(IShopCommonStats):
     def getBoosterPricesTuple(self, boosterID):
         return self.getBoosterPrices().get(boosterID, tuple())
 
+    def getOperationPrices(self):
+        try:
+            return self.getItemsData()['operationPrices']
+        except KeyError:
+            return {}
+
     def getItem(self, intCD):
         return (self.getItemPrice(intCD), intCD in self.getHiddens())
 
@@ -160,7 +166,17 @@ class ShopCommonStats(IShopCommonStats):
 
     @property
     def paidDeluxeRemovalCost(self):
-        cost = self.getValue('paidDeluxeRemovalCost', defaultValue={Currency.CRYSTAL: 100})
+        cost = self.getValue('paidDeluxeRemovalCost', {Currency.CRYSTAL: 100})
+        return Money(**cost)
+
+    @property
+    def paidTrophyBasicRemovalCost(self):
+        cost = self.getValue('paidTrophyBasicRemovalCost', {Currency.GOLD: 10})
+        return Money(**cost)
+
+    @property
+    def paidTrophyUpgradedRemovalCost(self):
+        cost = self.getValue('paidTrophyUpgradedRemovalCost', {Currency.GOLD: 10})
         return Money(**cost)
 
     @property
@@ -235,6 +251,12 @@ class ShopCommonStats(IShopCommonStats):
     @property
     def berthsPrices(self):
         return self.getValue('berthsPrices', (0, 1, [300]))
+
+    def getBattlePassCost(self):
+        return Money(**self.getValue('battlePassCost', defaultValue={Currency.GOLD: 6500}))
+
+    def getBattlePassLevelCost(self):
+        return Money(**self.getValue('battlePassLevelCost', defaultValue={Currency.GOLD: 250}))
 
     def getTankmanBerthPrice(self, berthsCount):
         prices = self.berthsPrices
@@ -614,6 +636,9 @@ class DefaultShopRequester(ShopCommonStats):
     def getBoosterPricesTuple(self, boosterID):
         return self.getBoosterPrices().get(boosterID, self.__proxy.getBoosterPricesTuple(boosterID))
 
+    def getOperationPrices(self):
+        return self.getItemsData().get('operationPrices', self.__proxy.getOperationPrices())
+
     @property
     def paidRemovalCost(self):
         cost = self.getValue('paidRemovalCost')
@@ -623,6 +648,16 @@ class DefaultShopRequester(ShopCommonStats):
     def paidDeluxeRemovalCost(self):
         cost = self.getValue('paidDeluxeRemovalCost')
         return self.__proxy.paidDeluxeRemovalCost if cost is None else Money(**cost)
+
+    @property
+    def paidTrophyBasicRemovalCost(self):
+        cost = self.getValue('paidTrophyBasicRemovalCost')
+        return self.__proxy.paidTrophyBasicRemovalCost if cost is None else Money(**cost)
+
+    @property
+    def paidTrophyUpgradedRemovalCost(self):
+        cost = self.getValue('paidTrophyUpgradedRemovalCost')
+        return self.__proxy.paidTrophyUpgradedRemovalCost if cost is None else Money(**cost)
 
     @property
     def exchangeRate(self):
@@ -671,6 +706,14 @@ class DefaultShopRequester(ShopCommonStats):
     @property
     def berthsPrices(self):
         return self.getValue('berthsPrices', self.__proxy.berthsPrices)
+
+    def getBattlePassCost(self):
+        cost = self.getValue('battlePassCost')
+        return self.__proxy.getBattlePassCost() if cost is None else Money(**cost)
+
+    def getBattlePassLevelCost(self):
+        cost = self.getValue('battlePassLevelCost')
+        return self.__proxy.getBattlePassLevelCost() if cost is None else Money(**cost)
 
     @property
     def isEnabledBuyingGoldShellsForCredits(self):

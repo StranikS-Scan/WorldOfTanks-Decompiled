@@ -258,9 +258,11 @@ class _WgcModeManager(object):
         self.__wgcCheck()
 
     def relogin(self, token2, selectedServer):
+        self.__selectedServer = selectedServer
         loginParams = BigWorld.WGC_loginData()
         loginParams['token2'] = token2
         loginParams['auth_method'] = CONNECTION_METHOD.TOKEN2
+        loginParams['auth_realm'] = constants.AUTH_REALM
         self.connectionMgr.initiateConnection(loginParams, '', selectedServer)
 
     def checkWgcCouldRetry(self, status):

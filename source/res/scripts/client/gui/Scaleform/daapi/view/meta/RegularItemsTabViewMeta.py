@@ -9,3 +9,6 @@ class RegularItemsTabViewMeta(RegularInventoryCategoryTabView):
 
     def sellItem(self, itemId):
         self._printOverrideError('sellItem')
+
+    def upgradeItem(self, itemId):
+        self._printOverrideError('upgradeItem')

@@ -11,6 +11,7 @@ from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import MAX_ITEMS_FOR_OPE
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsSingleItemMeta
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeXpMeta
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import RestoreExchangeCreditsMeta
+from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import UpgradeExchangeCreditsMeta
 from gui.Scaleform.daapi.view.lobby.techtree import unlock
 from gui.Scaleform.daapi.view.lobby.techtree.settings import RequestState
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockStats
@@ -28,6 +29,7 @@ from gui.shared.gui_items.processors.module import BuyAndInstallItemProcessor
 from gui.shared.gui_items.processors.module import ModuleSeller
 from gui.shared.gui_items.processors.module import MultipleModulesSeller
 from gui.shared.gui_items.processors.module import getInstallerProcessor
+from gui.shared.gui_items.processors.module import ModuleUpgradeProcessor
 from gui.shared.gui_items.processors.vehicle import BuyAndInstallBattleBoosterProcessor
 from gui.shared.gui_items.processors.vehicle import VehicleBattleBoosterLayoutProcessor
 from gui.shared.gui_items.processors.vehicle import VehicleLayoutProcessor
@@ -618,3 +620,28 @@ class UseCrewBookAction(object):
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         else:
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.CREWBOOKS_FAILED, type=result.sysMsgType)
+
+
+class UpgradeModuleAction(CachedItemAction):
+
+    def __init__(self, module, vehicle, slotIdx):
+        super(UpgradeModuleAction, self).__init__()
+        self.__module = module
+        self.__vehicle = vehicle
+        self.__slotIdx = slotIdx
+
+    def __canPurchaseUpgrade(self):
+        return not self.__module.mayPurchaseUpgrage(self._itemsCache.items) and self.__module.mayPurchaseUpgrageWithExchange(self._itemsCache.items)
+
+    @process
+    def doAction(self):
+        if self.__canPurchaseUpgrade():
+            isOk, _ = yield DialogsInterface.showDialog(UpgradeExchangeCreditsMeta(self.__module.intCD))
+            if not isOk:
+                return
+        Waiting.show('moduleUpgrade')
+        result = yield ModuleUpgradeProcessor(self.__module, self.__vehicle, self.__slotIdx).request()
+        processMsg(result)
+        Waiting.hide('moduleUpgrade')
+        yield lambda callback=None: callback
+        return

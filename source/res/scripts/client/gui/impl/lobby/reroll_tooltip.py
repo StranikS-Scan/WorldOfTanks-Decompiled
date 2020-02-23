@@ -7,10 +7,10 @@ from gui.impl.pub import ViewImpl
 
 class RerollTooltip(ViewImpl):
 
-    def __init__(self, timeLeft, rerollInterval):
+    def __init__(self, timeLeft, rerollInterval, withCountdown=False):
         self._timeLeft = timeLeft
         self._rerollInterval = rerollInterval
-        settings = ViewSettings(R.views.lobby.missions.RerollTooltip(), model=RerollTooltipModel())
+        settings = ViewSettings(R.views.lobby.missions.RerollTooltipWithCountdown() if withCountdown else R.views.lobby.missions.RerollTooltip(), model=RerollTooltipModel())
         super(RerollTooltip, self).__init__(settings)
 
     @property

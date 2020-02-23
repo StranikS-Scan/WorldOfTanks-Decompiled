@@ -2,9 +2,10 @@
 # Embedded file name: scripts/client/gui/battle_results/reusable/avatars.py
 from gui.battle_results.reusable import shared
 from gui.doc_loaders.badges_loader import getSelectedByLayout
+from gui.shared.badges import buildBadge
 
 class AvatarInfo(shared.ItemInfo):
-    __slots__ = ('__totalDamaged', '__avatarKills', '__avatarDamaged', '__avatarDamageDealt', '__badge', '__suffixBadge', '__fairplayViolations', '__accRank', '__prevAccRank', '__extInfo', '__weakref__')
+    __slots__ = ('__totalDamaged', '__avatarKills', '__avatarDamaged', '__avatarDamageDealt', '__badge', '__suffixBadge', '__fairplayViolations', '__accRank', '__prevAccRank', '__extInfo', '__badgesInfo', '__weakref__')
 
     def __init__(self, totalDamaged=0, avatarKills=0, avatarDamaged=0, avatarDamageDealt=0, fairplayViolations=None, wasInBattle=True, accRank=None, prevAccRank=None, badges=(), ext=None, **kwargs):
         super(AvatarInfo, self).__init__(wasInBattle=wasInBattle)
@@ -15,8 +16,13 @@ class AvatarInfo(shared.ItemInfo):
         self.__fairplayViolations = shared.FairplayViolationsInfo(*(fairplayViolations or ()))
         self.__accRank = accRank
         self.__prevAccRank = prevAccRank
-        self.__badge, self.__suffixBadge = getSelectedByLayout(badges)
+        if badges:
+            self.__badge, self.__suffixBadge = getSelectedByLayout(badges[0])
+            self.__badgesInfo = badges[1]
+        else:
+            self.__badge, self.__suffixBadge, self.__badgesInfo = (0, 0, None)
         self.__extInfo = ext
+        return None
 
     @property
     def totalDamaged(self):
@@ -57,21 +63,23 @@ class AvatarInfo(shared.ItemInfo):
     def suffixBadge(self):
         return self.__suffixBadge
 
+    def getFullBadgeInfo(self):
+        return buildBadge(self.badge, extraData=self.__badgesInfo)
+
 
 class AvatarsInfo(shared.UnpackedInfo):
     __slots__ = ('__avatars',)
 
     def __init__(self, avatars):
         super(AvatarsInfo, self).__init__()
-
-        def _convert(item):
-            dbID, data = item
+        self.__avatars = {}
+        for dbID, data in avatars.iteritems():
             if data is None:
                 self._addUnpackedItemID(dbID)
                 data = {}
-            return (dbID, AvatarInfo(**data))
+            self.__avatars[dbID] = AvatarInfo(**data)
 
-        self.__avatars = dict(map(_convert, avatars.iteritems()))
+        return
 
     def getAvatarInfo(self, dbID):
         if dbID in self.__avatars:

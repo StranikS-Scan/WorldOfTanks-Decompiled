@@ -1,18 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/UnitBase.py
-import struct
+import cPickle
 import copy
+import struct
 import weakref
 from collections import namedtuple
-from items import vehicles
-from constants import VEHICLE_CLASS_INDICES, PREBATTLE_TYPE, QUEUE_TYPE, INVITATION_TYPE
 from UnitRoster import BaseUnitRosterSlot, _BAD_CLASS_INDEX, buildNamesDict, reprBitMaskFromDict
-from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, FalloutClassicRoster, FalloutMultiteamRoster, EventRoster, EpicRoster
+from constants import VEHICLE_CLASS_INDICES, PREBATTLE_TYPE, QUEUE_TYPE, INVITATION_TYPE
+from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV
+from items import vehicles
+from items.badges_common import BadgesCommon
 from ops_pack import OpsUnpacker, packPascalString, unpackPascalString, initOpsFormatDef
 from unit_helpers.ExtrasHandler import EmptyExtrasHandler, ClanBattleExtrasHandler
 from unit_helpers.ExtrasHandler import SquadExtrasHandler, ExternalExtrasHandler
-from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV
-from collections import defaultdict
+from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, FalloutClassicRoster, FalloutMultiteamRoster, EventRoster, EpicRoster
 UnitVehicle = namedtuple('UnitVehicle', ('vehInvID', 'vehTypeCompDescr', 'vehLevel', 'vehClassIdx'))
 
 class UNIT_MGR_STATE:
@@ -1120,27 +1121,21 @@ class UnitBase(OpsUnpacker):
         packed = struct.pack(self._PLAYER_DATA, accountDBID, kwargs.get('accountID', 0), kwargs.get('timeJoin', 0), kwargs.get('role', 0), kwargs.get('igrType', 0), kwargs.get('rating', 0), kwargs.get('peripheryID', 0), kwargs.get('clanDBID', 0), kwargs.get('isPremium', False))
         packed += packPascalString(kwargs.get('nickName', ''))
         packed += packPascalString(kwargs.get('clanAbbrev', ''))
-        badges = kwargs.get('badges', [])
-        packed += struct.pack('<B', len(badges))
-        if badges:
-            packed += struct.pack(('<%dI' % len(badges)), *badges)
+        badges = kwargs.get('badges', BadgesCommon.selectedBadgesEmpty())
+        packed += BadgesCommon.packPlayerBadges(badges)
         return packed
 
     def __unpackPlayerData(self, packedData):
         sz = self._PLAYER_DATA_SIZE
         accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID, clanDBID, isPremium = struct.unpack_from(self._PLAYER_DATA, packedData)
-        nickName, lenNickBytes = unpackPascalString(packedData, sz)
-        clanAbbrev, lenClanBytes = unpackPascalString(packedData, sz + lenNickBytes)
-        blockLength = sz + lenNickBytes + lenClanBytes
-        badgesLength = struct.unpack_from('<B', packedData, blockLength)[0]
-        blockLength += struct.calcsize('<B')
-        if badgesLength:
-            fmt = '<%dI' % badgesLength
-            badges = list(struct.unpack_from(fmt, packedData, blockLength))
-            blockLength += struct.calcsize(fmt)
-        else:
-            badges = list()
-        return (blockLength,
+        offset = sz
+        nickName, lenNickBytes = unpackPascalString(packedData, offset)
+        offset += lenNickBytes
+        clanAbbrev, lenClanBytes = unpackPascalString(packedData, offset)
+        offset += lenClanBytes
+        badges, lenBadgesInfo = BadgesCommon.unpackPlayerBadges(packedData, offset)
+        offset += lenBadgesInfo
+        return (offset,
          accountDBID,
          accountID,
          timeJoin,

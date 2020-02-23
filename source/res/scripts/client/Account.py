@@ -21,6 +21,7 @@ from account_helpers import ClientInvitations, vehicle_rotation
 from account_helpers import ClientRanked, ClientBadges
 from account_helpers import client_epic_meta_game, tokens
 from account_helpers.AccountSettings import CURRENT_VEHICLE
+from account_helpers.battle_pass import BattlePassManager
 from account_helpers.festivity_manager import FestivityManager
 from account_helpers.settings_core import IntUserSettings
 from account_helpers.session_statistics import SessionStatistics
@@ -73,6 +74,7 @@ def _isStrList(l):
 class _ClientCommandProxy(object):
     _COMMAND_SIGNATURES = (('doCmdStr', lambda args: len(args) == 1 and _isStr(args[0])),
      ('doCmdIntStr', lambda args: len(args) == 2 and _isInt(args[0]) and _isStr(args[1])),
+     ('doCmdInt2', lambda args: len(args) == 2 and all([ _isInt(arg) for arg in args ])),
      ('doCmdInt3', lambda args: len(args) == 3 and all([ _isInt(arg) for arg in args ])),
      ('doCmdInt4', lambda args: len(args) == 4 and all([ _isInt(arg) for arg in args ])),
      ('doCmdInt2Str', lambda args: len(args) == 3 and _isStr(args[2]) and all([ _isInt(arg) for arg in args[:2] ])),
@@ -152,6 +154,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.sessionStats = g_accountRepository.sessionStats
         self.anonymizer = g_accountRepository.anonymizer
         self.dailyQuests = g_accountRepository.dailyQuests
+        self.battlePass = g_accountRepository.battlePass
         self.customFilesCache = g_accountRepository.customFilesCache
         self.syncData.setAccount(self)
         self.inventory.setAccount(self)
@@ -225,6 +228,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.festivities.onAccountBecomePlayer()
         self.sessionStats.onAccountBecomePlayer()
         self.anonymizer.onAccountBecomePlayer()
+        self.battlePass.onAccountBecomePlayer()
         chatManager.switchPlayerProxy(self)
         events.onAccountBecomePlayer()
         BigWorld.target.source = BigWorld.MouseTargetingMatrix()
@@ -259,6 +263,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.festivities.onAccountBecomeNonPlayer()
         self.sessionStats.onAccountBecomeNonPlayer()
         self.anonymizer.onAccountBecomeNonPlayer()
+        self.battlePass.onAccountBecomeNonPlayer()
         self.__cancelCommands()
         self.syncData.setAccount(None)
         self.inventory.setAccount(None)
@@ -1133,6 +1138,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.festivities.synchronize(isFullSync, diff)
             self.sessionStats.synchronize(isFullSync, diff)
             self.anonymizer.synchronize(isFullSync, diff)
+            self.battlePass.synchronize(isFullSync, diff)
             self.__synchronizeServerSettings(diff)
             self.__synchronizeDisabledPersonalMissions(diff)
             self.__synchronizeEventNotifications(diff)
@@ -1343,7 +1349,7 @@ class _AccountRepository(object):
         self.commandProxy = _ClientCommandProxy()
         self.serverSettings = copy.copy(initialServerSettings)
         self.syncData = AccountSyncData.AccountSyncData()
-        self.inventory = Inventory.Inventory(self.syncData)
+        self.inventory = Inventory.Inventory(self.syncData, self.commandProxy)
         self.stats = Stats.Stats(self.syncData)
         self.questProgress = QuestProgress.QuestProgress(self.syncData)
         self.shop = Shop.Shop()
@@ -1370,6 +1376,7 @@ class _AccountRepository(object):
         self.sessionStats = SessionStatistics(self.syncData)
         self.anonymizer = client_anonymizer.ClientAnonymizer(self.syncData)
         self.dailyQuests = {}
+        self.battlePass = BattlePassManager(self.syncData, self.commandProxy)
         self.gMap = ClientGlobalMap()
         self.onTokenReceived = Event.Event()
         self.requestID = AccountCommands.REQUEST_ID_UNRESERVED_MIN

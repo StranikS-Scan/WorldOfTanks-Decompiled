@@ -21,7 +21,9 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.shared.utils import IHangarSpace
 
 def _getViewSoundEnv(view):
-    if hasattr(view, '__sound_env__'):
+    if hasattr(view, 'getDynamicSoundEnv'):
+        return getattr(view, 'getDynamicSoundEnv')()
+    elif hasattr(view, '__sound_env__'):
         return getattr(view, '__sound_env__')
     else:
         return ModalWindowEnv if isinstance(view, WindowViewMeta) and view.isViewModal() else None
@@ -355,6 +357,12 @@ class BattleResultsEnv(SoundEnv):
         self._onChanged()
 
 
+class BattlePassSoundEnv(SoundEnv):
+
+    def __init__(self, soundsCtrl):
+        super(BattlePassSoundEnv, self).__init__(soundsCtrl, 'battlePass', filters=(SoundFilters.BATTLE_PASS_FILTER,))
+
+
 class GuiAmbientsCtrl(object):
     _spaces = {GuiGlobalSpaceID.LOGIN: LoginSpaceEnv,
      GuiGlobalSpaceID.LOBBY: LobbySpaceEnv,
@@ -388,6 +396,7 @@ class GuiAmbientsCtrl(object):
     def start(self):
         if self.app and self.app.loaderManager:
             self.app.loaderManager.onViewLoaded += self.__onViewLoaded
+        g_eventBus.addListener(events.LobbySimpleEvent.CHANGE_SOUND_ENVIRONMENT, self.__onEnvChangeRequested)
 
     def stop(self, isDisconnected=False):
         if self.app and self.app.loaderManager:
@@ -396,6 +405,7 @@ class GuiAmbientsCtrl(object):
             if self.appLoader.getSpaceID() == GuiGlobalSpaceID.LOGIN:
                 SOUND_DEBUG('Restart login space sound environment after banks reloading')
                 self._restartSounds()
+        g_eventBus.removeListener(events.LobbySimpleEvent.CHANGE_SOUND_ENVIRONMENT, self.__onEnvChangeRequested)
 
     def stopAllSounds(self):
         SOUND_DEBUG('Stop all music and sounds')
@@ -495,25 +505,40 @@ class GuiAmbientsCtrl(object):
 
     def __onViewLoaded(self, view, *args, **kwargs):
         if view is not None and view.settings is not None:
-            soundEnvClass = _getViewSoundEnv(view)
-            if soundEnvClass is not None:
-                alias = view.alias
-                SOUND_DEBUG('Custom sound environ has been detected', alias, soundEnvClass)
-                self._customEnvs[view.viewType][view.getUniqueName()] = self._buildSoundEnv(soundEnvClass)
-                view.onDispose += self.__onViewDisposed
-                self._restartSounds()
-            else:
-                SOUND_DEBUG('Custom sound environ has not been detected', view)
+            self.__registerSoundEnv(view)
+            self._restartSounds()
         return
 
     def __onViewDisposed(self, view):
         uniqueName = view.getUniqueName()
         if uniqueName in self._customEnvs[view.viewType]:
-            env = self._clearSoundEnv(self._customEnvs[view.viewType][uniqueName], view)
-            SOUND_DEBUG('Custom sound environ has been stopped', view.alias, env)
-            del self._customEnvs[view.viewType][uniqueName]
+            self.__removeSoundEnv(view, uniqueName)
             view.onDispose -= self.__onViewDisposed
             self._restartSounds()
+
+    def __onEnvChangeRequested(self, event):
+        view = event.ctx
+        uniqueName = view.getUniqueName()
+        if uniqueName in self._customEnvs[view.viewType]:
+            self.__removeSoundEnv(view, uniqueName)
+        self.__registerSoundEnv(view)
+        self._restartSounds()
+
+    def __registerSoundEnv(self, view):
+        soundEnvClass = _getViewSoundEnv(view)
+        if soundEnvClass is not None:
+            alias = view.alias
+            SOUND_DEBUG('Custom sound environ has been detected', alias, soundEnvClass)
+            self._customEnvs[view.viewType][view.getUniqueName()] = self._buildSoundEnv(soundEnvClass)
+            view.onDispose += self.__onViewDisposed
+        else:
+            SOUND_DEBUG('Custom sound environ has not been detected', view)
+        return
+
+    def __removeSoundEnv(self, view, uniqueName):
+        env = self._clearSoundEnv(self._customEnvs[view.viewType][uniqueName], view)
+        SOUND_DEBUG('Custom sound environ has been stopped', view.alias, env)
+        del self._customEnvs[view.viewType][uniqueName]
 
     def __onAmbientChanged(self, ambient):
         SOUND_DEBUG('Ambient has been changed', ambient)

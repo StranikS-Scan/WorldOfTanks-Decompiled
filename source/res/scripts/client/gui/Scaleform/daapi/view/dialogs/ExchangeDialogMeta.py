@@ -653,3 +653,25 @@ class ExchangeXpMeta(_ExchangeDialogMeta):
         if item is not None and item.isUnlocked:
             self.onCloseDialog()
         return
+
+
+class _UpgradeExchangeCreditsSubmitter(_ExchangeCreditsSubmitter):
+
+    def _getResourceToExchange(self):
+
+        def _getRestorePrice(itemCD):
+            item = self.itemsCache.items.getItemByCD(itemCD)
+            upgradePrice = item.getUpgradePrice(self.itemsCache.items)
+            return upgradePrice.price.credits
+
+        credit = self._exchangeItem.doAction(_getRestorePrice, int)
+        return credit - self.itemsCache.items.stats.credits
+
+
+class UpgradeExchangeCreditsMeta(ExchangeCreditsSingleItemMeta):
+
+    def __init__(self, itemCD, key='confirmExchangeDialog/upgradeExchangeCredits'):
+        super(UpgradeExchangeCreditsMeta, self).__init__(itemCD, key=key)
+
+    def _getSubmitterType(self):
+        return _UpgradeExchangeCreditsSubmitter

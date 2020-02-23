@@ -9,7 +9,7 @@ class CycleStatus(object):
     FUTURE = 'future'
 
 
-class GameSeasonCycle(namedtuple('GameSeasonCycle', 'ID, status, startDate, endDate, ordinalNumber')):
+class GameSeasonCycle(namedtuple('GameSeasonCycle', 'ID, status, startDate, endDate, ordinalNumber, announceOnly')):
 
     def __cmp__(self, other):
         return cmp(self.ID, other.ID)
@@ -125,12 +125,12 @@ class GameSeason(object):
                 status = CycleStatus.CURRENT
             else:
                 status = CycleStatus.FUTURE
-            self.__cycles[idx] = self._buildCycle(idx, status, cycleRawData['start'], cycleRawData['end'], number)
+            self.__cycles[idx] = self._buildCycle(idx, status, cycleRawData['start'], cycleRawData['end'], number, bool(cycleRawData.get('announce', False)))
 
         return
 
-    def _buildCycle(self, idx, status, start, end, number):
-        return GameSeasonCycle(idx, status, start, end, number)
+    def _buildCycle(self, idx, status, start, end, number, announceOnly):
+        return GameSeasonCycle(idx, status, start, end, number, announceOnly)
 
 
 def getSeason(config, now):

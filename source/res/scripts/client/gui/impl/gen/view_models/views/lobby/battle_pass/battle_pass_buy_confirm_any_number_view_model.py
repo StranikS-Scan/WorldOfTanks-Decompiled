@@ -1,0 +1,57 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
+# Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/battle_pass/battle_pass_buy_confirm_any_number_view_model.py
+from frameworks.wulf import ViewModel
+from gui.impl.wrappers.user_list_model import UserListModel
+
+class BattlePassBuyConfirmAnyNumberViewModel(ViewModel):
+    __slots__ = ('onCloseClick', 'onBuyClick', 'onShowRewardsClick', 'onChangeSelectedLevels')
+
+    def __init__(self, properties=6, commands=4):
+        super(BattlePassBuyConfirmAnyNumberViewModel, self).__init__(properties=properties, commands=commands)
+
+    @property
+    def rewards(self):
+        return self._getViewModel(0)
+
+    def getPrice(self):
+        return self._getNumber(1)
+
+    def setPrice(self, value):
+        self._setNumber(1, value)
+
+    def getLevelsPassed(self):
+        return self._getNumber(2)
+
+    def setLevelsPassed(self, value):
+        self._setNumber(2, value)
+
+    def getLevelsTotal(self):
+        return self._getNumber(3)
+
+    def setLevelsTotal(self, value):
+        self._setNumber(3, value)
+
+    def getLevelsSelected(self):
+        return self._getNumber(4)
+
+    def setLevelsSelected(self, value):
+        self._setNumber(4, value)
+
+    def getAllowSlide(self):
+        return self._getBool(5)
+
+    def setAllowSlide(self, value):
+        self._setBool(5, value)
+
+    def _initialize(self):
+        super(BattlePassBuyConfirmAnyNumberViewModel, self)._initialize()
+        self._addViewModelProperty('rewards', UserListModel())
+        self._addNumberProperty('price', 0)
+        self._addNumberProperty('levelsPassed', 0)
+        self._addNumberProperty('levelsTotal', 0)
+        self._addNumberProperty('levelsSelected', 0)
+        self._addBoolProperty('allowSlide', True)
+        self.onCloseClick = self._addCommand('onCloseClick')
+        self.onBuyClick = self._addCommand('onBuyClick')
+        self.onShowRewardsClick = self._addCommand('onShowRewardsClick')
+        self.onChangeSelectedLevels = self._addCommand('onChangeSelectedLevels')

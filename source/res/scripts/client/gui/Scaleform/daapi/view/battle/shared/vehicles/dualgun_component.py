@@ -216,14 +216,19 @@ class DualGunComponent(DualGunPanelMeta):
             self.__onDualGunStateUpdated(value)
         elif stateID == VEHICLE_VIEW_STATE.DUAL_GUN_CHARGER:
             self.__onDualGunChargeStateUpdated(value)
+        elif stateID == VEHICLE_VIEW_STATE.DESTROYED:
+            self.__isEnabled = False
+            self.as_setVisibleS(False)
         elif stateID in self.__deviceStateHandlers:
             self.__deviceStateHandlers[stateID](value)
             self.as_setReloadingTimeIncreasedS(self.__reloadingState.hasNegativeEffect())
 
     def __onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
+        self.__isEnabled = False
         self.as_setVisibleS(False)
 
     def __onSpectatorModeChanged(self, mode):
+        self.__isEnabled = False
         self.as_setVisibleS(False)
 
     def __onCrosshairViewChanged(self, viewID):
@@ -383,10 +388,10 @@ class DualGunComponent(DualGunPanelMeta):
             return
 
     def __updateChargeTimerState(self, *args):
-        if self.__sessionProvider.shared.ammo.getShellsQuantityLeft() <= 1:
-            self.as_setTimerVisibleS(False)
-        else:
+        if self.__sessionProvider.shared.ammo.getShellsQuantityLeft() > 1 or not self.__isPlayerVehicle():
             self.as_setTimerVisibleS(True)
+        else:
+            self.as_setTimerVisibleS(False)
 
     def __onReplayTimeWarpStart(self):
         self.as_resetS()
@@ -399,3 +404,7 @@ class DualGunComponent(DualGunPanelMeta):
         if increaseByDebuff:
             timeValue += self.__debuffBaseTime * DualGunConstants.TIME_MULTIPLIER
         self.as_updateTotalTimeS(timeValue)
+
+    def __isPlayerVehicle(self):
+        player = BigWorld.player()
+        return player.vehicle.isPlayerVehicle if player is not None and player.vehicle is not None else False

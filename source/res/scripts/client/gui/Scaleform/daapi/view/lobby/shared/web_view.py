@@ -34,6 +34,10 @@ class WebView(BrowserScreenMeta):
         if not self._browserParams.get('isHidden'):
             self.destroy()
 
+    def onCloseBtnClick(self):
+        if not self._browserParams.get('isHidden'):
+            self.destroy()
+
     def onFocusChange(self, hasFocus):
         self.__hasFocus = hasFocus
         self.__updateSkipEscape(not hasFocus)

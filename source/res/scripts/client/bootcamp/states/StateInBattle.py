@@ -20,7 +20,7 @@ from gui.battle_control import event_dispatcher as gui_event_dispatcher
 from debug_utils import LOG_DEBUG
 
 class StateInBattle(AbstractState):
-    soundController = dependency.instance(ISoundsController)
+    soundController = dependency.descriptor(ISoundsController)
 
     def __init__(self, lessonId, avatar, entities, bootcampGui):
         super(StateInBattle, self).__init__(STATE.IN_BATTLE)
@@ -104,6 +104,8 @@ class StateInBattle(AbstractState):
                 camera = BigWorld.player().inputHandler.ctrl.camera
                 camera.setMaxZoom()
                 g_bootcamp.setSniperModeUsed(True)
+        elif cameraName == 'postmortem':
+            g_bootcampEvents.onPostMortemSwitch()
 
     def __onRoundFinished(self, winnerTeam, reason):
         if BattleReplay.g_replayCtrl.isPlaying:

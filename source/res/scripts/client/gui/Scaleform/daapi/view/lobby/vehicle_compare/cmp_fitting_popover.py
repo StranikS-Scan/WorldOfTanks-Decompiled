@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/cmp_fitting_popover.py
 from debug_utils import LOG_ERROR
-from gui.Scaleform.daapi.view.lobby.shared.fitting_select_popover import PopoverLogicProvider, CommonFittingSelectPopover, BattleBoosterSelectPopover
+from gui.Scaleform.daapi.view.lobby.shared.fitting_select_popover import PopoverLogicProvider, CommonFittingSelectPopover, BattleBoosterSelectPopover, OptionalDeviceSelectPopover
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -22,16 +22,6 @@ class VehCmpBattleBoosterSelectPopover(BattleBoosterSelectPopover):
         self.cmpVeh = cmp_helpers.getCmpConfiguratorMainView().getCurrentVehicle()
         super(VehCmpBattleBoosterSelectPopover, self).__init__(ctx, lambda slotType, slotIndex: _CmpVehBattleBoosterLogicProvider(slotType, slotIndex, self.cmpVeh))
 
-    def _getInitialTabIndex(self):
-        if self.__initialLoad:
-            self.__initialLoad = False
-            battleBooster = self.cmpVeh.equipment.battleBoosterConsumables[0] if self.cmpVeh is not None else None
-            if battleBooster:
-                if battleBooster.isCrewBooster():
-                    return _POPOVER_SECOND_TAB_IDX
-                return _POPOVER_FIRST_TAB_IDX
-        return self.__class__._TAB_IDX
-
     def _prepareInitialData(self):
         result = super(VehCmpBattleBoosterSelectPopover, self)._prepareInitialData()
         result['rearmCheckboxVisible'] = False
@@ -45,6 +35,20 @@ class VehCmpBattleBoosterSelectPopover(BattleBoosterSelectPopover):
 
     def _getTabCounters(self):
         return [0, 0]
+
+    def _getVehicle(self):
+        return self.cmpVeh
+
+
+class VehCmpOptionalDeviceSelectPopover(OptionalDeviceSelectPopover):
+
+    def __init__(self, ctx=None):
+        self.__initialLoad = True
+        self.cmpVeh = cmp_helpers.getCmpConfiguratorMainView().getCurrentVehicle()
+        super(VehCmpOptionalDeviceSelectPopover, self).__init__(ctx, lambda slotType, slotIndex: _CmpVehOptDevicesLogicProvider(slotType, slotIndex, self.cmpVeh))
+
+    def _getVehicle(self):
+        return self.cmpVeh
 
 
 class _CmpVehBattleBoosterLogicProvider(PopoverLogicProvider):
@@ -98,20 +102,11 @@ class VehCmpConfigSelectPopover(CommonFittingSelectPopover):
         cmpVeh = cmp_helpers.getCmpConfiguratorMainView().getCurrentVehicle()
         if self.__isEquipment(slotType):
             logicProvider = _CmpVehEquipmentLogicProvider(slotType, slotIndex, cmpVeh)
-        elif self.__isOptionalDevice(slotType):
-            logicProvider = _CmpVehOptDevicesLogicProvider(slotType, slotIndex, cmpVeh)
-            self._TABS = [{'label': MENU.OPTIONALDEVICESELECTPOPOVER_TABS_SIMPLE,
-              'id': 'simpleOptDevices'}, {'label': MENU.OPTIONALDEVICESELECTPOPOVER_TABS_DELUXE,
-              'id': 'deluxeOptDevices'}]
         else:
             logicProvider = None
             LOG_ERROR('Unsupported slotType: {}'.format(slotType))
         super(VehCmpConfigSelectPopover, self).__init__(cmpVeh, logicProvider, ctx)
         return
-
-    def setCurrentTab(self, tabIndex):
-        if self.__isOptionalDevice(self._slotType):
-            super(VehCmpConfigSelectPopover, self).setCurrentTab(tabIndex)
 
     def _getCommonData(self):
         return (FITTING_TYPES.OPTIONAL_DEVICE_FITTING_ITEM_RENDERER,
@@ -122,10 +117,6 @@ class VehCmpConfigSelectPopover(CommonFittingSelectPopover):
     @staticmethod
     def __isEquipment(slotType):
         return slotType == cmp_helpers.EQUIPMENT_TYPE_NAME
-
-    @staticmethod
-    def __isOptionalDevice(slotType):
-        return slotType == cmp_helpers.OPTIONAL_DEVICE_TYPE_NAME
 
 
 class _CmpVehArtefactLogicProvider(PopoverLogicProvider):
@@ -184,6 +175,7 @@ class _CmpVehArtefactLogicProvider(PopoverLogicProvider):
         moduleList = super(_CmpVehArtefactLogicProvider, self)._buildList()
         for item in moduleList:
             item['removable'] = True
+            item['isUpgradable'] = False
 
         return moduleList
 
@@ -197,11 +189,30 @@ class _CmpVehOptDevicesLogicProvider(_CmpVehArtefactLogicProvider):
         super(_CmpVehOptDevicesLogicProvider, self).__init__(slotType, slotIndex, vehicle, cmp_helpers.NOT_AFFECTED_DEVICES)
         self._tooltipType = TOOLTIPS_CONSTANTS.COMPARE_MODULE
 
+    def _getSpecificCriteria(self, typeID):
+        criteria = super(_CmpVehOptDevicesLogicProvider, self)._getSpecificCriteria(typeID)
+        if self._tabIndex == _POPOVER_FIRST_TAB_IDX:
+            invVehicles = self._itemsCache.items.getVehicles(_RC.INVENTORY).values()
+            upgradedOptDevCDs = self.__getUpgradedOptDevCDs(typeID, invVehicles)
+            criteria = _RC.CUSTOM(lambda item: item.intCD in upgradedOptDevCDs or not item.isDeluxe)
+        return criteria
+
     def _removeArtifact(self, cmp_config_view, slotIndex):
         cmp_config_view.removeOptionalDevice(slotIndex)
 
     def _installArtifact(self, cmp_config_view, newId, slotIndex):
         cmp_config_view.installOptionalDevice(newId, slotIndex)
+
+    def __getUpgradedOptDevCDs(self, typeID, invVehicles):
+        criteria = _RC.VEHICLE.SUITABLE([self._vehicle], [typeID])
+        criteria |= _RC.CUSTOM(lambda item: (item.inventoryCount > 0 or item.getInstalledVehicles(invVehicles)) and item.isUpgradable)
+        upgradableOptDevs = self._itemsCache.items.getItems(typeID, criteria).values()
+        upgradedOptDevCDs = []
+        for optDev in upgradableOptDevs:
+            upgradedCompDescr = optDev.descriptor.upgradeInfo.upgradedCompDescr
+            upgradedOptDevCDs.append(upgradedCompDescr)
+
+        return upgradedOptDevCDs
 
 
 class _CmpVehEquipmentLogicProvider(_CmpVehArtefactLogicProvider):

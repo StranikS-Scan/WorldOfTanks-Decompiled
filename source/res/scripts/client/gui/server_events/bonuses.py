@@ -4,6 +4,7 @@ import copy
 import logging
 from collections import namedtuple
 from functools import partial
+from operator import itemgetter
 import BigWorld
 from adisp import process
 from blueprints.BlueprintTypes import BlueprintTypes
@@ -51,6 +52,7 @@ from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from nations import NAMES
 from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME
+from optional_bonuses import BONUS_MERGERS
 from shared_utils import makeTupleByDict, CONST_CONTAINER
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IEventProgressionController
@@ -58,6 +60,7 @@ from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from gui.server_events.awards_formatters import BATTLE_BONUS_X5_TOKEN
+from battle_pass_common import BATTLE_PASS_TOKEN_PREFIX
 DEFAULT_CREW_LVL = 50
 _CUSTOMIZATIONS_SCALE = 44.0 / 128
 _EPIC_AWARD_STATIC_VO_ENTRIES = {'compensationTooltip': QUESTS.BONUSES_COMPENSATION,
@@ -441,6 +444,16 @@ class BattleTokensBonus(TokensBonus):
         return i18n.makeString(webCache.getTokenInfo(styleID))
 
 
+class BattlePassTokensBonus(TokensBonus):
+
+    def __init__(self, name, value, isCompensation=False, ctx=None):
+        super(TokensBonus, self).__init__(name, value, isCompensation, ctx)
+        self._name = 'battlePassToken'
+
+    def isShowInGUI(self):
+        return False
+
+
 class LootBoxTokensBonus(TokensBonus):
     itemsCache = dependency.descriptor(IItemsCache)
 
@@ -523,6 +536,8 @@ def tokensFactory(name, value, isCompensation=False, ctx=None):
             result.append(TmanTemplateTokensBonus({tID: tValue}, isCompensation, ctx))
         if tID.startswith(BATTLE_BONUS_X5_TOKEN):
             result.append(X5BattleTokensBonus({tID: tValue}, isCompensation, ctx))
+        if tID.startswith(BATTLE_PASS_TOKEN_PREFIX):
+            result.append(BattlePassTokensBonus(name, {tID: tValue}, isCompensation, ctx))
         result.append(BattleTokensBonus(name, {tID: tValue}, isCompensation, ctx))
 
     return result
@@ -1362,7 +1377,7 @@ def randomBlueprintBonusFactory(name, value, isCompensation=False, ctx=None):
 
 def blueprintBonusFactory(name, value, isCompensation=False, ctx=None):
     blueprintBonuses = []
-    for fragmentCD, fragmentCount in value.iteritems():
+    for fragmentCD, fragmentCount in sorted(value.iteritems(), key=itemgetter(0)):
         fragmentType = getFragmentType(fragmentCD)
         if fragmentType == BlueprintTypes.VEHICLE:
             blueprintBonuses.append(VehicleBlueprintBonus(name, (fragmentCD, fragmentCount), isCompensation, ctx))
@@ -1473,14 +1488,14 @@ class VehicleBlueprintBonus(SimpleBonus):
          'value': self.getCount(),
          'icon': {AWARDS_SIZES.SMALL: self.getImage(),
                   AWARDS_SIZES.BIG: self.getImage()},
-         'name': self._getBlueprintTooltipName(),
+         'name': self.getBlueprintTooltipName(),
          'description': self._getDescription()})
         return result
 
     def canPacked(self):
         return False
 
-    def _getBlueprintTooltipName(self):
+    def getBlueprintTooltipName(self):
         return backport.text(R.strings.tooltips.blueprint.VehicleBlueprintTooltip.header())
 
     def _getDescription(self):
@@ -1528,7 +1543,7 @@ class IntelligenceBlueprintBonus(VehicleBlueprintBonus):
     def canPacked(self):
         return self._ctx.get('isPacked', False) and self.getCount() > 1
 
-    def _getBlueprintTooltipName(self):
+    def getBlueprintTooltipName(self):
         return backport.text(R.strings.tooltips.blueprint.BlueprintFragmentTooltip.intelFragment())
 
     def _getDescription(self):
@@ -1563,7 +1578,7 @@ class NationalBlueprintBonus(VehicleBlueprintBonus):
     def canPacked(self):
         return self._ctx.get('isPacked', False) and self.getCount() > 1
 
-    def _getBlueprintTooltipName(self):
+    def getBlueprintTooltipName(self):
         return i18n.makeString(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_NATIONALFRAGMENT)
 
     def _getDescription(self):
@@ -1691,7 +1706,8 @@ class CrewBooksBonus(SimpleBonus):
         for item, count in self.getItems():
             result.append(makeHtmlString('html_templates:lobby/quests/bonuses', 'crewBook', {'type': item.getBookType(),
              'nation': item.getNation(),
-             'value': count}))
+             'value': count,
+             'name': item.userName}))
 
         return result
 
@@ -1850,8 +1866,11 @@ def mergeBonuses(bonuses):
             while j < len(merged):
                 mergFunc = getMergeBonusFunction(merged[i], merged[j])
                 if mergFunc and merged[i].getName() == merged[j].getName():
-                    merged[i] = mergFunc(merged[i], merged[j])
-                    merged.pop(j)
+                    merged[i], needPop = mergFunc(merged[i], merged[j])
+                    if needPop:
+                        merged.pop(j)
+                    else:
+                        j += 1
                 j += 1
 
             i += 1
@@ -1864,10 +1883,17 @@ def getMergeBonusFunction(lhv, rhv):
     def hasOneBaseClass(l, r, cls):
         return isinstance(l, cls) and isinstance(r, cls)
 
-    if hasOneBaseClass(lhv, lhv, ItemsBonus):
+    def ofSameClassWithBase(l, r, cls):
+        return hasOneBaseClass(l, r, cls) and type(l) is type(r)
+
+    if ofSameClassWithBase(lhv, rhv, CrewSkinsBonus):
+        return None
+    elif hasOneBaseClass(lhv, rhv, ItemsBonus):
         return mergeItemsBonuses
+    elif hasOneBaseClass(lhv, rhv, IntegralBonus) or hasOneBaseClass(lhv, rhv, GoldBonus):
+        return mergeIntegralBonuses
     else:
-        return mergeIntegralBonuses if hasOneBaseClass(lhv, rhv, IntegralBonus) or hasOneBaseClass(lhv, rhv, GoldBonus) else None
+        return mergeSimpleBonuses if ofSameClassWithBase(lhv, lhv, SimpleBonus) else None
 
 
 def mergeItemsBonuses(lhv, rhv):
@@ -1880,10 +1906,120 @@ def mergeItemsBonuses(lhv, rhv):
         if key not in merged.getValue():
             merged.getValue()[key] = value
 
-    return merged
+    return (merged, True)
 
 
 def mergeIntegralBonuses(lhv, rhv):
     merged = copy.deepcopy(lhv)
     merged.setValue(merged.getValue() + rhv.getValue())
+    return (merged, True)
+
+
+def mergeSimpleBonuses(lhv, rhv):
+    merged = copy.deepcopy(lhv)
+    value = merged.getValue()
+    needPop = False
+    if isinstance(value, tuple):
+        lKey, lValue = value
+        rKey, rValue = rhv.getValue()
+        if lKey == rKey:
+            merged.setValue((lKey, lValue + rValue))
+            needPop = True
+    elif isinstance(value, dict):
+        merged.setValue(__mergeDicts(value, rhv.getValue()))
+        needPop = True
+    return (merged, needPop)
+
+
+def __mergeDicts(lhv, rhv):
+    merged = copy.deepcopy(lhv)
+    for key in merged.keys():
+        if key in rhv:
+            if isinstance(merged[key], dict):
+                merged[key] = __mergeDicts(merged[key], rhv[key])
+            else:
+                merged[key] = merged[key] + rhv[key]
+
+    for key in rhv.keys():
+        if key not in merged:
+            merged[key] = rhv[key]
+
     return merged
+
+
+def getMergedBonusesFromDicts(bonusesList):
+    result = {}
+    for bonuses in bonusesList:
+        for bonusName, bonusValue in bonuses.iteritems():
+            if bonusName in BONUS_MERGERS:
+                BONUS_MERGERS[bonusName](result, bonusName, bonusValue, False, 1, None)
+            _logger.warning('BONUS_MERGERS has not bonus %s', bonusName)
+
+    return result
+
+
+def splitBonuses(bonuses):
+    split = []
+    for bonus in bonuses:
+        splitFunc = getSplitBonusFunction(bonus)
+        if splitFunc:
+            split.extend(splitFunc(bonus))
+        split.append(bonus)
+
+    return split
+
+
+def getSplitBonusFunction(bonus):
+    if isinstance(bonus, CrewSkinsBonus):
+        return None
+    elif isinstance(bonus, CustomizationsBonus):
+        return splitCustomizationsBonus
+    elif isinstance(bonus, (IntegralBonus, GoldBonus)):
+        return splitIntegralBonuses
+    else:
+        return splitSimpleBonuses if isinstance(bonus, SimpleBonus) else None
+
+
+def splitIntegralBonuses(bonus):
+    return [bonus]
+
+
+def splitSimpleBonuses(bonus):
+    split = []
+    value = bonus.getValue()
+    if isinstance(value, dict):
+        for key, sub in value.iteritems():
+            item = copy.deepcopy(bonus)
+            item.setValue({key: sub})
+            split.append(item)
+
+    elif isinstance(value, list):
+        for sub in value:
+            item = copy.deepcopy(bonus)
+            item.setValue([sub])
+            split.append(item)
+
+    else:
+        split.append(bonus)
+    return split
+
+
+def splitCustomizationsBonus(bonus):
+    split = []
+    value = bonus.getValue()
+    camoItem = None
+    for sub in value:
+        if sub.get('custType', '') == 'camouflage':
+            if camoItem is None:
+                camoItem = copy.deepcopy(bonus)
+                camoItem.setValue([])
+            oldValue = camoItem.getValue()
+            oldValue.append(sub)
+            camoItem.setValue(oldValue)
+        item = copy.deepcopy(bonus)
+        item.setValue([sub])
+        split.append(item)
+
+    if camoItem is not None:
+        split.append(camoItem)
+    return split

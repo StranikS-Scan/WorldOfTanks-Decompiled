@@ -414,9 +414,7 @@ class DebugViewItem(object):
         self._guiValue.verticalAnchor = 'TOP'
 
     def __destroyGUI(self):
-        GUI.delRoot(self._guiName)
         self._guiName = None
-        GUI.delRoot(self._guiValue)
         self._guiValue = None
         return
 

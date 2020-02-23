@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/prebattle_shared.py
 import nations
 from items import vehicles, ITEM_TYPES
+from items.badges_common import BadgesCommon
 from account_shared import AmmoIterator
 from constants import PREBATTLE_ACCOUNT_STATE, VEHICLE_CLASSES, ARENA_GUI_TYPE, PREBATTLE_ROLE, IGR_TYPE, IS_DEVELOPMENT
 from debug_utils import LOG_DEBUG
@@ -183,7 +184,7 @@ SETTING_DEFAULTS = {'ver': 1,
  'accountsToInvite': [],
  'clansToInvite': [],
  'creator': '',
- 'creatorBadges': [],
+ 'creatorBadges': BadgesCommon.selectedBadgesEmpty(),
  'creatorClanDBID': 0,
  'creatorClanAbbrev': '',
  'creatorIGRType': IGR_TYPE.NONE,

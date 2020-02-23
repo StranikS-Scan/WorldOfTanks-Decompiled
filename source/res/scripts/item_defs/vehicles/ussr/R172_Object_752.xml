@@ -8,7 +8,7 @@
   </crew>
   <speedLimits>
     <forward>	40	</forward>
-    <backward>	15	</backward>
+    <backward>	12	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.065	</moving>
@@ -156,7 +156,7 @@
       <terrainResistance>	1.3 1.6 2.9	</terrainResistance>
       <brakeForce>	39500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	32	</rotationSpeed>
+      <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.26	</vehicleMovement>
         <vehicleRotation>	0.24	</vehicleRotation>
@@ -1034,7 +1034,7 @@
             <gun>	50	</gun>
           </armor>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	30	</reloadTime>
+          <reloadTime>	34	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.11	</turretRotation>
             <afterShot>	3	</afterShot>

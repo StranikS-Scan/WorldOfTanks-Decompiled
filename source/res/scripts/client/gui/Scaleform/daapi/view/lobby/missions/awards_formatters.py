@@ -4,7 +4,7 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events import finders
-from gui.server_events.awards_formatters import QuestsBonusComposer, AWARDS_SIZES, PreformattedBonus, getPersonalMissionAwardPacker, getOperationPacker, formatCountLabel, LABEL_ALIGN, getLinkedSetAwardPacker, PACK_RENT_VEHICLES_BONUS, PostProcessTags
+from gui.server_events.awards_formatters import QuestsBonusComposer, AWARDS_SIZES, PreformattedBonus, getPersonalMissionAwardPacker, getOperationPacker, getBattlePassAwardsPacker, formatCountLabel, LABEL_ALIGN, getLinkedSetAwardPacker, PACK_RENT_VEHICLES_BONUS, PostProcessTags
 from gui.server_events.bonuses import FreeTokensBonus
 from gui.shared.formatters import text_styles
 from helpers import i18n, dependency
@@ -23,9 +23,8 @@ class CurtailingAwardsComposer(QuestsBonusComposer):
     def _packBonuses(self, preformattedBonuses, size):
         bonusCount = len(preformattedBonuses)
         mergedBonuses = []
-        awardsCount = self._displayedRewardsCount
-        if bonusCount > awardsCount:
-            sliceIdx = awardsCount - 1
+        if bonusCount > self._displayedRewardsCount:
+            sliceIdx = self._displayedRewardsCount - 1
             displayBonuses = preformattedBonuses[:sliceIdx]
             mergedBonuses = preformattedBonuses[sliceIdx:]
         else:
@@ -76,6 +75,37 @@ class CurtailingAwardsComposer(QuestsBonusComposer):
             bonuses.append(shortData)
 
         return bonuses
+
+
+class BattlePassAwardsComposer(CurtailingAwardsComposer):
+
+    def __init__(self, displayedAwardsCount=1, awardsFormatter=None):
+        formatter = awardsFormatter or getBattlePassAwardsPacker()
+        super(BattlePassAwardsComposer, self).__init__(displayedAwardsCount, formatter)
+
+    def setDisplayedCount(self, count):
+        self._displayedRewardsCount = count
+
+    def _packMergedBonuses(self, mergedBonuses, size=AWARDS_SIZES.SMALL):
+        blueprints = True
+        for bonus in mergedBonuses:
+            if bonus.postProcessTags != 'blueprints':
+                blueprints = False
+
+        if blueprints:
+            return {'label': '',
+             'imgSource': RES_ICONS.getBonusIcon(size, 'blueprint_tube'),
+             'isSpecial': True,
+             'specialAlias': TOOLTIPS_CONSTANTS.ADDITIONAL_AWARDS,
+             'specialArgs': self._getShortBonusesData(mergedBonuses, size)}
+        label = ''
+        if self._displayedRewardsCount > 1:
+            label = text_styles.stats(i18n.makeString(QUESTS.MISSIONS_AWARDS_MERGED, count=len(mergedBonuses)))
+        return {'label': label,
+         'imgSource': RES_ICONS.getBonusIcon(size, 'default'),
+         'isSpecial': True,
+         'specialAlias': TOOLTIPS_CONSTANTS.ADDITIONAL_AWARDS,
+         'specialArgs': self._getShortBonusesData(mergedBonuses, size)}
 
 
 class RawLabelBonusComposer(QuestsBonusComposer):
@@ -177,7 +207,7 @@ class LootBoxBonusComposer(BonusNameQuestsBonusComposer):
         alwaysVisibleCount = len(alwaysPreformatedBonuses)
         if alwaysVisibleCount:
             totalCount = alwaysVisibleCount + len(preformattedBonuses)
-            if alwaysVisibleCount and totalCount > self._displayedRewardsCount:
+            if totalCount > self._displayedRewardsCount:
                 insertPos = self._displayedRewardsCount - alwaysVisibleCount - 1
                 if insertPos < 0:
                     insertPos = 0

@@ -2,9 +2,12 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/shared/fitting_select_popover.py
 import BigWorld
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
+from async import await, async
 from gui import g_htmlTemplates
 from constants import MAX_VEHICLE_LEVEL
 from gui.game_control.epic_meta_game_ctrl import FRONTLINE_SCREENS
+from gui.impl import backport
+from gui.impl.dialogs import dialogs
 from gui.Scaleform.daapi.view.meta.FittingSelectPopoverMeta import FittingSelectPopoverMeta
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -12,6 +15,7 @@ from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.impl.gen.resources import R
 from gui.shared.formatters.text_styles import builder as str_builder
 from gui.shared.gui_items import GUI_ITEM_TYPE_INDICES, GUI_ITEM_TYPE, GUI_ITEM_ECONOMY_CODE
 from gui.shared.gui_items.processors.vehicle import VehicleAutoBattleBoosterEquipProcessor
@@ -28,9 +32,10 @@ from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared import event_dispatcher as shared_events
 from items import getTypeInfoByName
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
-from account_helpers.AccountSettings import AccountSettings, SHOW_OPT_DEVICE_HINT, BOOSTERS_FOR_CREDITS_SLOT_COUNTER
+from account_helpers.AccountSettings import AccountSettings, SHOW_OPT_DEVICE_HINT, BOOSTERS_FOR_CREDITS_SLOT_COUNTER, SHOW_OPT_DEVICE_HINT_TROPHY
 from skeletons.gui.game_control import IBootcampController, IEpicBattleMetaGameController, IEventProgressionController
 from bootcamp.Bootcamp import g_bootcamp
 _PARAMS_LISTS = {GUI_ITEM_TYPE.RADIO: ('radioDistance',),
@@ -83,16 +88,20 @@ def _extendByArtefactData(targetData, module, slotIndex):
 
 
 def _extendByOptionalDeviceData(targetData, module):
-    highlight = SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS if module.isDeluxe() else SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+    serverSettings = dependency.instance(ILobbyContext).getServerSettings()
+    if serverSettings.isTrophyDevicesEnabled():
+        targetData['isUpgradable'] = module.isUpgradable
+        targetData['upgradeButtonLabel'] = MENU.MODULEFITS_UPGRADEBTN_LABEL
+    highlight = module.getHighlightType()
+    overlayType = module.getOverlayType()
     _extendHighlightData(targetData, highlight, highlight)
-    _extendOverlayData(targetData, highlight)
+    _extendOverlayData(targetData, overlayType)
 
 
 def _extendByEquipmentData(targetData, module):
-    if module.isBuiltIn:
-        highlight = SLOT_HIGHLIGHT_TYPES.BUILT_IN_EQUIPMENT_BIG
-        _extendHighlightData(targetData, highlight, highlight)
-        _extendOverlayData(targetData, highlight)
+    highlight = module.getHighlightType()
+    _extendHighlightData(targetData, highlight, highlight)
+    _extendOverlayData(targetData, highlight)
 
 
 def _extendByBattleBoosterData(targetData, module, vehicle):
@@ -181,7 +190,7 @@ class CommonFittingSelectPopover(FittingSelectPopoverMeta):
         data = ctx.get('data')
         self._slotType = data.slotType
         self.__vehicle = vehicle
-        self.__logicProvider = logicProvider
+        self._logicProvider = logicProvider
         self.setCurrentTab(self._getInitialTabIndex())
 
     def showModuleInfo(self, itemCD):
@@ -190,13 +199,17 @@ class CommonFittingSelectPopover(FittingSelectPopoverMeta):
         return
 
     def setVehicleModule(self, newId, oldId, isRemove):
-        self.__logicProvider.setModule(newId, oldId, isRemove)
+        self._logicProvider.setModule(newId, oldId, isRemove)
+        self.destroy()
+
+    def upgradeVehicleModule(self, moduleId):
+        self._logicProvider.upgradeModule(moduleId)
         self.destroy()
 
     def setCurrentTab(self, tabIndex):
         if tabIndex not in _TAB_IDS:
             return
-        self.__logicProvider.setTab(tabIndex)
+        self._logicProvider.setTab(tabIndex)
         if tabIndex != self._getInitialTabIndex():
             self._saveTabIndex(tabIndex)
             self.as_updateS(self._prepareInitialData())
@@ -213,12 +226,12 @@ class CommonFittingSelectPopover(FittingSelectPopoverMeta):
     def _populate(self):
         super(CommonFittingSelectPopover, self)._populate()
         self.as_updateS(self._prepareInitialData())
-        self.__logicProvider.resetCounters()
+        self._logicProvider.resetCounters()
 
     def _dispose(self):
         self.__vehicle = None
-        self.__logicProvider.dispose()
-        self.__logicProvider = None
+        self._logicProvider.dispose()
+        self._logicProvider = None
         super(CommonFittingSelectPopover, self)._dispose()
         return
 
@@ -227,8 +240,9 @@ class CommonFittingSelectPopover(FittingSelectPopoverMeta):
         result = {'title': text_styles.highTitle(title),
          'rendererName': rendererName,
          'rendererDataClass': rendererDataClass,
-         'selectedIndex': self.__logicProvider.getSelectedIdx(),
-         'availableDevices': self.__logicProvider.getDevices(),
+         'scrollToIndex': self._logicProvider.getSelectedIdx(),
+         'selectedIndex': self._logicProvider.getSelectedIdx(),
+         'availableDevices': self._logicProvider.getDevices(),
          'width': width}
         result.update(self._getTabsData())
         return result
@@ -277,6 +291,7 @@ class CommonFittingSelectPopover(FittingSelectPopoverMeta):
 
 
 class HangarFittingSelectPopover(CommonFittingSelectPopover):
+    _itemsCache = dependency.descriptor(IItemsCache)
     bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self, ctx=None, customProviderClass=None):
@@ -306,7 +321,6 @@ class HangarFittingSelectPopover(CommonFittingSelectPopover):
 
 
 class BattleAbilitySelectPopover(HangarFittingSelectPopover):
-    __itemsCache = dependency.descriptor(IItemsCache)
     __progressionController = dependency.descriptor(IEventProgressionController)
 
     def __init__(self, ctx, *_):
@@ -329,7 +343,8 @@ class BattleAbilitySelectPopover(HangarFittingSelectPopover):
 
     def __getAbilityOverlayData(self):
         icon = RES_ICONS.MAPS_ICONS_MODULES_BATTLEABILITYLISTOVERLAY
-        data = {'icon': icon,
+        data = {'iconBig': icon,
+         'iconSmall': icon,
          'titleText': text_styles.highTitle(EPIC_BATTLE.FITTINGSELECTPOPOVERBATTKEABILITY_TITLETEXT),
          'descText': self._getDescText(),
          'okBtnLabel': '',
@@ -338,56 +353,84 @@ class BattleAbilitySelectPopover(HangarFittingSelectPopover):
         return data
 
     def __isHintVisible(self):
-        return not self.__itemsCache.items.getItems(GUI_ITEM_TYPE.BATTLE_ABILITY, REQ_CRITERIA.UNLOCKED)
+        return not self._itemsCache.items.getItems(GUI_ITEM_TYPE.BATTLE_ABILITY, REQ_CRITERIA.UNLOCKED)
 
 
 class OptionalDeviceSelectPopover(HangarFittingSelectPopover):
-    itemsCache = dependency.descriptor(IItemsCache)
     _TABS = [{'label': MENU.OPTIONALDEVICESELECTPOPOVER_TABS_SIMPLE,
       'id': 'simpleOptDevices'}, {'label': MENU.OPTIONALDEVICESELECTPOPOVER_TABS_DELUXE,
       'id': 'deluxeOptDevices'}]
 
-    def __init__(self, ctx=None):
+    def __init__(self, ctx=None, logicProvider=None):
         self.__initialLoad = True
-        super(OptionalDeviceSelectPopover, self).__init__(ctx, None)
+        self.__currentHint = None
+        self.__blockHint = None
+        super(OptionalDeviceSelectPopover, self).__init__(ctx, logicProvider)
         return
 
     def listOverlayClosed(self):
-        self.__setHintVisited()
+        self.__blockHint = True
+        if self.__isHintDeluxeVisible():
+            self.setCurrentTab(_POPOVER_SECOND_TAB_IDX)
+        elif self.__isHintTrophyVisible():
+            self.setCurrentTab(_POPOVER_FIRST_TAB_IDX)
+        if self.__currentHint:
+            self.__setHintVisited()
 
     def setCurrentTab(self, tabIndex):
-        if tabIndex == _POPOVER_FIRST_TAB_IDX and self.__isHintVisible():
-            self.__setHintVisited()
-        super(OptionalDeviceSelectPopover, self).setCurrentTab(tabIndex)
+        if tabIndex not in _TAB_IDS:
+            return
+        self._logicProvider.setTab(tabIndex)
+        if tabIndex != self._getInitialTabIndex():
+            self._saveTabIndex(tabIndex)
+            if self.__currentHint:
+                self.__setHintVisited()
+        self.as_updateS(self._prepareInitialData())
+        if self.__blockHint:
+            self.__blockHint = False
 
     def _dispose(self):
-        if self.__isHintVisible():
+        if self.__currentHint:
             self.__setHintVisited()
         super(OptionalDeviceSelectPopover, self)._dispose()
 
     def _getInitialTabIndex(self):
-        if self.__isHintVisible():
-            self._saveTabIndex(_POPOVER_SECOND_TAB_IDX)
-        if self.__initialLoad:
+        if not self.__currentHint and self.__initialLoad and not self.__blockHint:
+            if self.__isHintDeluxeVisible():
+                self._saveTabIndex(_POPOVER_SECOND_TAB_IDX)
+            elif self.__isHintTrophyVisible():
+                self._saveTabIndex(_POPOVER_FIRST_TAB_IDX)
+        idx = self._TAB_IDX
+        if not self.__initialLoad:
+            return idx
+        else:
             self.__initialLoad = False
             vehicle = self._getVehicle()
-            if vehicle is not None:
-                installedDevice = self._getVehicle().optDevices[self._getSlotIndex()]
-                if installedDevice:
-                    if installedDevice.isDeluxe():
-                        return _POPOVER_SECOND_TAB_IDX
-                    return _POPOVER_FIRST_TAB_IDX
-        return self.__class__._TAB_IDX
+            if vehicle is None:
+                return idx
+            installedDevice = vehicle.optDevices[self._getSlotIndex()]
+            if installedDevice is not None:
+                idx = _POPOVER_FIRST_TAB_IDX
+                if installedDevice.isDeluxe:
+                    idx = _POPOVER_SECOND_TAB_IDX
+            return idx
 
     def _prepareInitialData(self):
         result = super(OptionalDeviceSelectPopover, self)._prepareInitialData()
-        if 'availableDevices' in result and self.__isHintVisible():
-            result['listOverlay'] = self.__getListOverlayData(len(result['availableDevices']))
+        if 'availableDevices' in result and not self.__blockHint:
+            if self.__isHintDeluxeVisible():
+                result['listOverlay'] = self.__getListOverlayData()
+                self.__currentHint = SHOW_OPT_DEVICE_HINT
+            elif self.__isHintTrophyVisible():
+                result['listOverlay'] = self.__getTrophyOverlayData()
+                self.__currentHint = SHOW_OPT_DEVICE_HINT_TROPHY
+        if self.__blockHint:
+            result['scrollToIndex'] = 0
         return result
 
-    def __getListOverlayData(self, count):
-        icon = RES_ICONS.MAPS_ICONS_MODULES_LISTOVERLAY if count > 5 else RES_ICONS.MAPS_ICONS_MODULES_LISTOVERLAYSMALL
-        data = {'icon': icon,
+    def __getListOverlayData(self):
+        data = {'iconSmall': RES_ICONS.MAPS_ICONS_MODULES_LISTOVERLAYSMALL,
+         'iconBig': RES_ICONS.MAPS_ICONS_MODULES_LISTOVERLAY,
          'titleText': text_styles.highTitle(MENU.FITTINGSELECTPOPOVER_TITLETEXT),
          'descText': self._getDescText(),
          'okBtnLabel': i18n.makeString(MENU.FITTINGSELECTPOPOVER_OKBTNLABEL),
@@ -395,13 +438,28 @@ class OptionalDeviceSelectPopover(HangarFittingSelectPopover):
          'isClickEnabled': True}
         return data
 
-    def __isHintVisible(self):
-        prefSetting = AccountSettings.getSettings(SHOW_OPT_DEVICE_HINT)
-        return prefSetting and self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY_OR_UNLOCKED | REQ_CRITERIA.VEHICLE.LEVELS(_POPOVER_OVERLAY_VEH_LVL_RANGE))
+    def __getTrophyOverlayData(self):
+        data = {'iconSmall': backport.image(R.images.gui.maps.icons.modules.trophyOverlaySmall()),
+         'iconBig': backport.image(R.images.gui.maps.icons.modules.trophyOverlay()),
+         'titleText': text_styles.highTitle(backport.text(R.strings.menu.fittingSelectPopover.trophyOverlay.titleText())),
+         'descText': text_styles.main(backport.text(R.strings.menu.fittingSelectPopover.trophyOverlay.descText())),
+         'okBtnLabel': backport.text(R.strings.menu.fittingSelectPopover.trophyOverlay.okBtnLabel()),
+         'displayOkBtn': True,
+         'isClickEnabled': True}
+        return data
 
-    @staticmethod
-    def __setHintVisited():
-        return AccountSettings.setSettings(SHOW_OPT_DEVICE_HINT, False)
+    def __isHintDeluxeVisible(self):
+        prefSetting = AccountSettings.getSettings(SHOW_OPT_DEVICE_HINT)
+        return prefSetting and self._itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY_OR_UNLOCKED | REQ_CRITERIA.VEHICLE.LEVELS(_POPOVER_OVERLAY_VEH_LVL_RANGE))
+
+    def __isHintTrophyVisible(self):
+        prefSetting = AccountSettings.getSettings(SHOW_OPT_DEVICE_HINT_TROPHY)
+        return prefSetting and self._itemsCache.items.getItems(GUI_ITEM_TYPE.OPTIONALDEVICE, REQ_CRITERIA.OPTIONAL_DEVICE.TROPHY | REQ_CRITERIA.INVENTORY_OR_UNLOCKED)
+
+    def __setHintVisited(self):
+        AccountSettings.setSettings(self.__currentHint, False)
+        self.__currentHint = None
+        return
 
 
 class BattleBoosterSelectPopover(HangarFittingSelectPopover):
@@ -450,19 +508,24 @@ class BattleBoosterSelectPopover(HangarFittingSelectPopover):
          MENU.BOOSTERSELECTPOPOVER_TITLE)
 
     def _getInitialTabIndex(self):
-        if self.__initialLoad:
+        idx = self._TAB_IDX
+        if not self.__initialLoad:
+            return idx
+        else:
             self.__initialLoad = False
-            vehicle = g_currentVehicle.item
-            battleBooster = vehicle.equipment.battleBoosterConsumables[self._getSlotIndex()] if vehicle is not None else None
-            if battleBooster:
+            vehicle = self._getVehicle()
+            if vehicle is None:
+                return idx
+            battleBooster = vehicle.equipment.battleBoosterConsumables[self._getSlotIndex()]
+            if battleBooster is not None:
+                idx = _POPOVER_FIRST_TAB_IDX
                 if battleBooster.isCrewBooster():
-                    return _POPOVER_SECOND_TAB_IDX
-                return _POPOVER_FIRST_TAB_IDX
-        return self.__class__._TAB_IDX
+                    idx = _POPOVER_SECOND_TAB_IDX
+            return idx
 
 
 class PopoverLogicProvider(object):
-    itemsCache = dependency.descriptor(IItemsCache)
+    _itemsCache = dependency.descriptor(IItemsCache)
     _settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, slotType, slotIndex, vehicle):
@@ -531,11 +594,11 @@ class PopoverLogicProvider(object):
         if self._vehicle is not None:
             typeId = GUI_ITEM_TYPE_INDICES[self._slotType]
             data = self._getSuitableItems(typeId)
-            currXp = self.itemsCache.items.stats.vehiclesXPs.get(self._vehicle.intCD, 0)
-            stats = {'money': self.itemsCache.items.stats.money,
-             'exchangeRate': self.itemsCache.items.shop.exchangeRate,
+            currXp = self._itemsCache.items.stats.vehiclesXPs.get(self._vehicle.intCD, 0)
+            stats = {'money': self._itemsCache.items.stats.money,
+             'exchangeRate': self._itemsCache.items.shop.exchangeRate,
              'currXP': currXp,
-             'totalXP': currXp + self.itemsCache.items.stats.freeXP}
+             'totalXP': currXp + self._itemsCache.items.stats.freeXP}
             hasAutoLoaderHighlights = False
             for idx, vehicleModule in enumerate(data):
                 isInstalled = vehicleModule.isInstalled(self._vehicle, self._slotIndex)
@@ -556,18 +619,21 @@ class PopoverLogicProvider(object):
             return []
         else:
             criteria = REQ_CRITERIA.VEHICLE.SUITABLE([self._vehicle], [typeId]) | self._getSpecificCriteria(typeId)
-            data = self.itemsCache.items.getItems(typeId, criteria).values()
-            data.sort(reverse=True, key=self._getItemsSortingKey())
+            data = self._itemsCache.items.getItems(typeId, criteria).values()
+            data.sort(reverse=True, key=self._getItemsSortingKey(typeId))
             return data
 
-    def _getItemsSortingKey(self):
-        return None
+    def _getItemsSortingKey(self, typeId=None):
+        return (lambda item: item.isTrophy) if typeId == GUI_ITEM_TYPE.OPTIONALDEVICE else None
 
     def _getSpecificCriteria(self, typeID):
         if typeID == GUI_ITEM_TYPE.BATTLE_BOOSTER:
             criteria = REQ_CRITERIA.BATTLE_BOOSTER.OPTIONAL_DEVICE_EFFECT if self._tabIndex == _POPOVER_FIRST_TAB_IDX else REQ_CRITERIA.BATTLE_BOOSTER.CREW_EFFECT
         elif typeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
-            criteria = REQ_CRITERIA.OPTIONAL_DEVICE.SIMPLE if self._tabIndex == _POPOVER_FIRST_TAB_IDX else REQ_CRITERIA.OPTIONAL_DEVICE.DELUXE
+            if self._tabIndex == _POPOVER_SECOND_TAB_IDX:
+                criteria = REQ_CRITERIA.OPTIONAL_DEVICE.DELUXE
+            else:
+                criteria = REQ_CRITERIA.CUSTOM(lambda item: not item.isDeluxe and not (item.isTrophy and item.inventoryCount == 0 and not item.isInstalled(self._vehicle)))
         else:
             criteria = REQ_CRITERIA.EMPTY
         return criteria
@@ -600,7 +666,7 @@ class _HangarLogicProvider(PopoverLogicProvider):
             self._tooltipType = TOOLTIPS_CONSTANTS.HANGAR_MODULE
 
     def setModule(self, newId, oldId, isRemove):
-        module = self.itemsCache.items.getItemByCD(int(newId))
+        module = self._itemsCache.items.getItemByCD(int(newId))
         if module.isUnlocked or self._slotType == FITTING_TYPES.OPTIONAL_DEVICE:
             if oldId < 0:
                 if not isRemove and self._slotType == FITTING_TYPES.OPTIONAL_DEVICE and g_currentVehicle.isPresent():
@@ -616,6 +682,14 @@ class _HangarLogicProvider(PopoverLogicProvider):
             else:
                 ItemsActionsFactory.doAction(ItemsActionsFactory.SET_VEHICLE_LAYOUT, self._vehicle, None, None, battleBooster)
         return
+
+    @async
+    def upgradeModule(self, moduleId):
+        if self._slotType == FITTING_TYPES.OPTIONAL_DEVICE:
+            module = self._itemsCache.items.getItemByCD(int(moduleId))
+            result, _ = yield await(dialogs.trophyDeviceUpgradeConfirm(module))
+            if result:
+                ItemsActionsFactory.doAction(ItemsActionsFactory.UPGRADE_MODULE, module, g_currentVehicle.item, self._slotIndex)
 
     def _buildModuleData(self, vehicleModule, isInstalledInSlot, stats):
         itemPrice = vehicleModule.buyPrices.itemPrice
@@ -663,7 +737,7 @@ class _BattleAbilityLogicProvider(_HangarLogicProvider):
 
         return REQ_CRITERIA.CUSTOM(lambda item: item.innationID in skillItemIDs)
 
-    def _getItemsSortingKey(self):
+    def _getItemsSortingKey(self, typeId=None):
         return lambda item: self.__ABILITIES_ORDER.index(item.getSubTypeName())
 
     def _buildModuleData(self, vehicleModule, isInstalledInSlot, stats):

@@ -13,6 +13,7 @@ class LootCongratsTypes(ViewModel):
     INIT_CONGRAT_TYPE_PROGRESSIVE_REWARDS = 'ProgressiveRewardCongrats'
     INIT_CONGRAT_TYPE_CREW_BOOKS = 'CrewBookCongrats'
     INIT_CONGRAT_TYPE_EPIC_REWARDS = 'EpicRewardCongrats'
+    INIT_CONGRAT_TYPE_BATTLE_PASS = 'BattlePassCongrats'
 
     def __init__(self, properties=0, commands=0):
         super(LootCongratsTypes, self).__init__(properties=properties, commands=commands)

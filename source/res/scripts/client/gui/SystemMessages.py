@@ -47,7 +47,10 @@ SM_TYPE = Enumeration('System message type', ['Error',
  'FrontlineVehicleRewards',
  'FeatureSwitcherOn',
  'FeatureSwitcherOff',
- 'DismantlingForDemountKit'])
+ 'DismantlingForDemountKit',
+ 'UpgradeForCredits',
+ 'BattlePassInfo',
+ 'BattlePassReward'])
 CURRENCY_TO_SM_TYPE = {Currency.CREDITS: SM_TYPE.PurchaseForCredits,
  Currency.GOLD: SM_TYPE.PurchaseForGold,
  Currency.CRYSTAL: SM_TYPE.PurchaseForCrystal}

@@ -5,6 +5,7 @@ import ArenaType
 from adisp import process
 from gui import SystemMessages, GUI_SETTINGS
 from gui.Scaleform.genConsts.BATTLE_TYPES import BATTLE_TYPES
+from gui.Scaleform.settings import ICONS_SIZES
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.Scaleform.daapi import LobbySubView
@@ -139,14 +140,14 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
             vContourIcon = vehicle.iconContour
             vShortName = vehicle.shortUserName
             vLevel = int2roman(vehicle.level)
-        badgeID = accountInfo.getBadgeID()
-        badgeIcon = accountInfo.getBadgeImgStr()
+        badge = accountInfo.getBadge()
+        badgeVO = badge.getBadgeVO(ICONS_SIZES.X24, {'isAtlasSource': False}) if badge else {}
         if roster == PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1:
-            self.as_setPlayerStateInTeam1S(accountInfo.dbID, stateString, vContourIcon, vShortName, vLevel, accountInfo.igrType, badgeID, badgeIcon)
+            self.as_setPlayerStateInTeam1S(accountInfo.dbID, stateString, vContourIcon, vShortName, vLevel, accountInfo.igrType, badgeVO)
         elif roster == PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2:
-            self.as_setPlayerStateInTeam2S(accountInfo.dbID, stateString, vContourIcon, vShortName, vLevel, accountInfo.igrType, badgeID, badgeIcon)
+            self.as_setPlayerStateInTeam2S(accountInfo.dbID, stateString, vContourIcon, vShortName, vLevel, accountInfo.igrType, badgeVO)
         else:
-            self.as_setPlayerStateInOtherS(accountInfo.dbID, stateString, vContourIcon, vShortName, vLevel, accountInfo.igrType, badgeID, badgeIcon)
+            self.as_setPlayerStateInOtherS(accountInfo.dbID, stateString, vContourIcon, vShortName, vLevel, accountInfo.igrType, badgeVO)
         creator = self.__getCreatorFromRosters()
         if accountInfo.dbID == creator.dbID:
             self.__showSettings(entity)
@@ -289,6 +290,8 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
                 vContourIcon = vehicle.iconContour
                 vShortName = vehicle.shortUserName
                 vLevel = int2roman(vehicle.level)
+            badge = account.getBadge()
+            badgeVO = badge.getBadgeVO(ICONS_SIZES.X24, {'isAtlasSource': False}) if badge else {}
             listData.append({'accID': account.accID,
              'dbID': account.dbID,
              'userName': account.name,
@@ -302,8 +305,7 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
              'clanAbbrev': account.clanAbbrev,
              'region': self.lobbyContext.getRegionCode(account.dbID),
              'igrType': account.igrType,
-             'badge': account.getBadgeID(),
-             'badgeImgStr': account.getBadgeImgStr()})
+             'badgeVisualVO': badgeVO})
 
         label = ''
         if rLabel is not None:
@@ -359,15 +361,14 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
                 comment = passCensor(settings['comment'])
             creatorFullName, creatorClan, creatorRegion, creatorIgrType = (None, None, None, 0)
             creator = self.__getCreatorFromRosters()
-            badgeID = 0
-            badgeIcon = ''
+            badgeVO = {}
             if creator:
                 creatorFullName = creator.getFullName()
                 creatorClan = creator.clanAbbrev
                 creatorRegion = self.lobbyContext.getRegionCode(creator.dbID)
                 creatorIgrType = creator.igrType
-                badgeID = creator.getBadgeID()
-                badgeIcon = creator.getBadgeImgStr()
+                badge = creator.getBadge()
+                badgeVO = badge.getBadgeVO(ICONS_SIZES.X24, {'isAtlasSource': False}) if badge else {}
             self.as_setInfoS({'isCreator': isCreator,
              'creator': settings[PREBATTLE_SETTING_NAME.CREATOR],
              'creatorFullName': creatorFullName,
@@ -386,8 +387,7 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
              'arenaVoipChannels': settings[PREBATTLE_SETTING_NAME.ARENA_VOIP_CHANNELS],
              'canChangeArenaVOIP': permissions.canChangeArenaVOIP(),
              'isObserverModeEnabled': self._isObserverModeEnabled(),
-             'badge': badgeID,
-             'badgeImgStr': badgeIcon})
+             'badgeVisualVO': badgeVO})
             return
 
     def __getCreatorFromRosters(self):

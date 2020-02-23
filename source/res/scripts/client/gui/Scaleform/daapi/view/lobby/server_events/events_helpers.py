@@ -6,7 +6,7 @@ import constants
 from constants import EVENT_TYPE
 from gui import makeHtmlString, GUI_NATIONS
 from gui.Scaleform import getNationsFilterAssetPath
-from gui.Scaleform.daapi.view.lobby.server_events.awards_formatters import OldStyleBonusesFormatter
+from gui.Scaleform.daapi.view.lobby.server_events.awards_formatters import OldStyleBonusesFormatter, BattlePassTextBonusesPacker
 from gui.Scaleform.daapi.view.lobby.event_boards.formaters import getNationText
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
@@ -15,6 +15,8 @@ from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
+from gui.impl.gen import R
+from gui.server_events.awards_formatters import QuestsBonusComposer
 from gui.server_events import formatters, conditions, settings as quest_settings
 from gui.server_events.events_helpers import EventInfoModel, MISSIONS_STATES, QuestInfoModel, isLinkedSet, isDailyQuest
 from gui.server_events.events_helpers import getLocalizedMissionNameForLinkedSetQuest, getLocalizedQuestNameForLinkedSetQuest, getLocalizedQuestDescForLinkedSetQuest
@@ -27,6 +29,7 @@ from personal_missions import PM_BRANCH
 from quest_xml_source import MAX_BONUS_LIMIT
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from battle_pass_common import BattlePassConsts, BattlePassState
 _AWARDS_PER_PAGE = 3
 FINISH_TIME_LEFT_TO_SHOW = time_utils.ONE_DAY
 START_TIME_LIMIT = 5 * time_utils.ONE_DAY
@@ -62,7 +65,8 @@ class _EventInfo(EventInfoModel):
          'tooltip': TOOLTIPS.QUESTS_RENDERER_LABEL,
          'isSelectable': True,
          'isNew': quest_settings.isNewCommonEvent(self.event),
-         'isAvailable': isAvailable}
+         'isAvailable': isAvailable,
+         'linkTooltip': TOOLTIPS.QUESTS_LINKBTN_TASK}
 
     def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData):
         index = 0
@@ -84,7 +88,8 @@ class _EventInfo(EventInfoModel):
                          'maxProgrVal': totalProg,
                          'currentProgrVal': curProg,
                          'description': '%d. %s' % (index, label),
-                         'progressDiff': '+ %s' % backport.getIntegralFormat(diff)})
+                         'progressDiff': '+ %s' % backport.getIntegralFormat(diff),
+                         'progressDiffTooltip': TOOLTIPS.QUESTS_PROGRESS_EARNEDINBATTLE})
 
             if not progresses:
                 return
@@ -170,7 +175,9 @@ class _QuestInfo(_EventInfo, QuestInfoModel):
     def _getBonuses(self, svrEvents, bonuses=None):
         bonuses = bonuses or self.event.getBonuses()
         result = OldStyleBonusesFormatter(self.event).getFormattedBonuses(bonuses)
-        return formatters.todict(result) if result else formatters.todict([formatters.packTextBlock(text_styles.alert('#quests:bonuses/notAvailable'))])
+        if result:
+            return [ award.getDict() for award in result ]
+        return [formatters.packTextBlock(text_styles.alert(backport.text(R.strings.quests.bonuses.notAvailable()))).getDict()]
 
     def _getBonusCount(self, pCur=None):
         if not self.event.isCompleted(progress=pCur):
@@ -359,3 +366,44 @@ def getChainVehTypeAndLevelRestrictions(operation, chainID):
 
 
 _questBranchToTabMap = {PM_BRANCH.REGULAR: QUESTS_ALIASES.SEASON_VIEW_TAB_RANDOM}
+
+def getBattlePassQuestInfo(progress):
+    postBattleR = R.strings.battle_pass_2020.reward.postBattle
+    if progress.state == BattlePassState.BASE:
+        questName = backport.text(postBattleR.title.base(), level=progress.level)
+    else:
+        questName = backport.text(postBattleR.title.post(), level=progress.level)
+    progressDesc = backport.text(postBattleR.progress())
+    progressDiffTooltip = backport.text(postBattleR.progress.tooltip(), points=progress.pointsBattleDiff)
+    questInfo = {'status': 'done' if progress.isDone else '',
+     'questID': BattlePassConsts.FAKE_QUEST_ID,
+     'rendererType': QUESTS_ALIASES.RENDERER_TYPE_QUEST,
+     'eventType': EVENT_TYPE.BATTLE_QUEST,
+     'maxProgrVal': progress.pointsTotal,
+     'tooltip': TOOLTIPS.QUESTS_RENDERER_LABEL,
+     'description': questName,
+     'currentProgrVal': progress.pointsNew,
+     'tasksCount': -1,
+     'progrBarType': 'current' if not progress.isDone else '',
+     'linkTooltip': TOOLTIPS.QUESTS_LINKBTN_BATTLEPASS}
+    progressList = []
+    if not progress.isDone:
+        progressList = [{'description': progressDesc,
+          'maxProgrVal': progress.pointsTotal,
+          'progressDiff': '+ {}'.format(progress.pointsDiff),
+          'progressDiffTooltip': progressDiffTooltip,
+          'currentProgrVal': progress.pointsNew,
+          'progrBarType': 'current'}]
+    awards = []
+    if progress.isDone:
+        awardsList = QuestsBonusComposer(BattlePassTextBonusesPacker()).getPreformattedBonuses(progress.awards)
+        if awardsList:
+            awards = [ award.getDict() for award in awardsList ]
+        else:
+            awards = [formatters.packTextBlock(text_styles.alert(backport.text(R.strings.quests.bonuses.notAvailable()))).getDict()]
+    info = {'awards': awards,
+     'questInfo': questInfo,
+     'questType': EVENT_TYPE.BATTLE_QUEST,
+     'progressList': progressList,
+     'questState': {'statusState': 'done' if progress.isDone else 'inProgress'}}
+    return info

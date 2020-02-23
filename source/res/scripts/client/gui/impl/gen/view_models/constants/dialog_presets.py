@@ -10,6 +10,8 @@ class DialogPresets(ViewModel):
     INFO = 'info'
     BLUEPRINTS_CONVERSION = 'blueprintsConversion'
     MAPS_BLACKLIST = 'mapsBlacklist'
+    TROPHY_DEVICE_UPGRADE = 'trophyDeviceUpgrade'
+    BUY_BATTLE_PASS = 'buyBattlePass'
     DEFAULT = 'default'
 
     def __init__(self, properties=0, commands=0):

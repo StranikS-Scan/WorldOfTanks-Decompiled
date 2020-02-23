@@ -581,5 +581,19 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/client_promo_log/'
         return self._request_data(callback, url, data, method='GET')
 
+    def get_video_data(self, callback, season_id, level, has_bp, vote_id):
+        url = '/battle_pass/extras_video/{season_id}/condition'.format(season_id=season_id)
+        get_data = {'level': level,
+         'has_bp': has_bp}
+        if vote_id is not None:
+            get_data['vote_id'] = vote_id
+        return self._request_data(callback, url, get_data=get_data, method='GET')
+
+    def get_voting_data(self, callback, feature_id, seasons):
+        url = '/datap/vote_results/'
+        get_data = {'feature_id': feature_id,
+         'seasons': seasons}
+        return self._request_data(callback, url, get_data=get_data, method='GET')
+
     def _get_formatted_language_code(self):
         return self.client_lang.replace('_', '-')

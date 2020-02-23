@@ -1,0 +1,68 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
+# Embedded file name: scripts/client/gui/impl/lobby/battle_pass/tooltips/battle_pass_in_progress_tooltip_view.py
+from battle_pass_common import BattlePassState, BattlePassConsts
+from frameworks.wulf import ViewSettings
+from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view_model import BattlePassInProgressTooltipViewModel
+from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.reward_points_model import RewardPointsModel
+from gui.impl.pub import ViewImpl
+from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData
+from gui.battle_pass.battle_pass_helpers import isSeasonEndingSoon, getFormattedTimeLeft
+from helpers import dependency
+from skeletons.gui.game_control import IBattlePassController
+
+class BattlePassInProgressTooltipView(ViewImpl):
+    __battlePassController = dependency.descriptor(IBattlePassController)
+    __slots__ = ()
+
+    def __init__(self):
+        settings = ViewSettings(R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView())
+        settings.model = BattlePassInProgressTooltipViewModel()
+        super(BattlePassInProgressTooltipView, self).__init__(settings)
+
+    @property
+    def viewModel(self):
+        return super(BattlePassInProgressTooltipView, self).getViewModel()
+
+    def _onLoading(self, *args, **kwargs):
+        super(BattlePassInProgressTooltipView, self)._onLoading(*args, **kwargs)
+        with self.getViewModel().transaction() as model:
+            perBattlePoints = self.__battlePassController.getPerBattlePoints()
+            items = model.rewardPoints.getItems()
+            for _, (label, winPoint, losePoint) in enumerate(perBattlePoints):
+                item = RewardPointsModel()
+                item.setTopCount(label)
+                item.setPointsWin(winPoint)
+                item.setPointsLose(losePoint)
+                items.addViewModel(item)
+
+            curLevel = self.__battlePassController.getCurrentLevel()
+            curPoints, limitPoints = self.__battlePassController.getLevelProgression()
+            isPostProgression = self.__battlePassController.getState() == BattlePassState.POST
+            isBought = self.__battlePassController.isBought()
+            model.setLevel(curLevel)
+            model.setCurrentPoints(curPoints)
+            model.setMaxPoints(limitPoints)
+            model.setIsBattlePassPurchased(self.__battlePassController.isBought())
+            model.setIsPostProgression(isPostProgression)
+            timeTillEnd = ''
+            if isSeasonEndingSoon() and not self.__battlePassController.isBought():
+                timeTillEnd = getFormattedTimeLeft(self.__battlePassController.getSeasonTimeLeft())
+            model.setTimeTillEnd(timeTillEnd)
+            if isPostProgression:
+                self.__getAwards(model.rewards, curLevel, BattlePassConsts.REWARD_POST, False)
+            else:
+                self.__getAwards(model.rewards, curLevel, BattlePassConsts.REWARD_FREE, False)
+                self.__getAwards(model.rewards, curLevel, BattlePassConsts.REWARD_PAID, not isBought)
+
+    def __getAwards(self, rewardsList, level, bonusType, isLocked):
+        finalLevel = self.__battlePassController.getMaxLevel()
+        if level == finalLevel - 1 and bonusType != BattlePassConsts.REWARD_POST:
+            freeReward, paidReward = self.__battlePassController.getSplitFinalAwards()
+            if bonusType == BattlePassConsts.REWARD_FREE:
+                bonuses = freeReward
+            else:
+                bonuses = paidReward
+        else:
+            bonuses = self.__battlePassController.getSingleAward(level + 1, bonusType)
+        packBonusModelAndTooltipData(bonuses, rewardsList, isLocked=isLocked)

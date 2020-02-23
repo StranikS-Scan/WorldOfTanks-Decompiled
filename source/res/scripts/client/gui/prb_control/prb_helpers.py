@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/prb_helpers.py
-from gui.Scaleform.settings import getBadgeIconPathByDimension
-from gui.shared.formatters.icons import makeImageTag
+from gui.shared.badges import buildBadge
 from gui.shared.gui_items.badge import BadgeLayouts
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
@@ -18,15 +17,27 @@ def _findFirstPrefixBadge(selectedBadges, itemsCache=None):
 class BadgesHelper(object):
 
     def __init__(self, badges=None):
-        self.__badges = badges or []
+        self.__badgesRawData = badges or ()
+        self.__badges = {}
         self.__prefixBadgeID = None
         return
 
-    def getBadgeID(self):
+    def getBadge(self):
+        badgeID = self.__getBadgeID()
+        if badgeID <= 0:
+            return None
+        else:
+            if badgeID not in self.__badges:
+                self.__badges[badgeID] = buildBadge(badgeID, self.__getBadgeExtraInfo())
+            return self.__badges[badgeID]
+
+    def __getBadgeID(self):
         if self.__prefixBadgeID is None:
-            self.__prefixBadgeID = _findFirstPrefixBadge(self.__badges)
+            self.__prefixBadgeID = _findFirstPrefixBadge(self.__getSelectedBadges())
         return self.__prefixBadgeID
 
-    def getBadgeImgStr(self, size, vspace):
-        badgeID = self.getBadgeID()
-        return makeImageTag(getBadgeIconPathByDimension(size, badgeID), size, size, vspace) if badgeID else ''
+    def __getSelectedBadges(self):
+        return self.__badgesRawData[0]
+
+    def __getBadgeExtraInfo(self):
+        return self.__badgesRawData[1]

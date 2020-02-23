@@ -56,6 +56,10 @@ class IItemsRequester(requesters.IRequester):
     def anonymizer(self):
         raise NotImplementedError
 
+    @property
+    def battlePass(self):
+        raise NotImplementedError
+
     def requestUserDossier(self, databaseID, callback):
         raise NotImplementedError
 

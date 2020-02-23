@@ -394,9 +394,6 @@ class EventsCache(IEventsCache):
          'start': start,
          'finish': finish}
 
-    def getWebStatisticsEnabled(self):
-        return True
-
     def getTradeInActions(self):
 
         def containsTradeIn(a):

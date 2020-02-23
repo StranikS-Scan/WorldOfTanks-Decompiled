@@ -5,10 +5,8 @@ from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.battle_results.components import style
 from gui.impl import backport
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items.dossier import dumpDossier
 from gui.shared.gui_items.dossier.stats import _MaxVehicleStatsBlock, _FalloutStatsBlock
 from gui.shared.gui_items.dossier.stats import _VehiclesStatsBlock
-from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
 from helpers import dependency
 from helpers import i18n
 from skeletons.gui.lobby_context import ILobbyContext
@@ -382,25 +380,24 @@ class ProfileUtils(object):
     itemsCache = dependency.descriptor(IItemsCache)
 
     @classmethod
-    def packProfileDossierInfo(cls, targetData, accountDossier, userID=None):
+    def packProfileDossierInfo(cls, targetData, accountDossier):
+        outcome = ProfileUtils.packProfileCommonInfo(targetData)
         epicRandomVehicles = set(accountDossier.getEpicRandomStats().getVehicles().keys())
         totalVehiclesCount = len(epicRandomVehicles.union(set(accountDossier.getRandomStats().getVehicles().keys())))
         vehicle = cls.itemsCache.items.getItemByCD(targetData.getMaxXpVehicle())
-        outcome = dict()
+        outcome['maxXPByVehicle'] = vehicle.shortUserName if vehicle is not None else ''
+        outcome['marksOfMasteryText'] = style.makeMarksOfMasteryText(backport.getIntegralFormat(targetData.getMarksOfMastery()[3]), totalVehiclesCount)
+        return outcome
+
+    @staticmethod
+    def packProfileCommonInfo(targetData):
+        outcome = {}
         outcome['battlesCount'] = targetData.getBattlesCount()
         outcome['lossesCount'] = targetData.getLossesCount()
         outcome['winsCount'] = targetData.getWinsCount()
         outcome['hitsEfficiency'] = ProfileUtils.getValueOrUnavailable(targetData.getHitsEfficiency())
         outcome['maxXP'] = targetData.getMaxXp()
         outcome['avgXP'] = ProfileUtils.getValueOrUnavailable(targetData.getAvgXP())
-        outcome['maxXPByVehicle'] = vehicle.shortUserName if vehicle is not None else ''
-        outcome['avgDamage'] = ProfileUtils.getValueOrUnavailable(targetData.getAvgDamage())
-        outcome['maxDestroyed'] = targetData.getMaxFrags()
-        outcome['maxDestroyedByVehicle'] = vehicle.shortUserName if vehicle is not None else ''
-        outcome['marksOfMasteryText'] = style.makeMarksOfMasteryText(backport.getIntegralFormat(targetData.getMarksOfMastery()[3]), totalVehiclesCount)
-        outcome['significantAchievements'] = AchievementsUtils.packAchievementList(accountDossier.getTotalStats().getSignificantAchievements(), accountDossier.getDossierType(), dumpDossier(accountDossier), userID is None, False)
-        outcome['nearestAchievements'] = AchievementsUtils.packAchievementList(accountDossier.getTotalStats().getNearestAchievements(), accountDossier.getDossierType(), dumpDossier(accountDossier), userID is None, True)
-        outcome['globalRating'] = cls.itemsCache.items.stats.globalRating
         return outcome
 
     @staticmethod
@@ -540,8 +537,3 @@ def getProfileCommonInfo(userName, dossier):
     return {'name': userName,
      'registrationDate': '%s' % backport.getLongDateFormat(dossier['total']['creationTime']),
      'lastBattleDate': lastBattleTimeUserString}
-
-
-class StatisticTypes(object):
-    ALL_TIME = 'all'
-    SEASON = 'season'

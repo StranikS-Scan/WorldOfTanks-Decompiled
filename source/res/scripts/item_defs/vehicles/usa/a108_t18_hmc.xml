@@ -1,8 +1,7 @@
 <A108_T18_HMC.xml>
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <crew>
-    <commander>	radioman
-			loader	</commander>
+    <commander>	radioman loader	</commander>
     <gunner></gunner>
     <driver></driver>
   </crew>
@@ -17,7 +16,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.447	</firePenalty>
   </invisibility>
-  <repairCost>	3.865	</repairCost>
+  <repairCost>	6.5	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
@@ -47,7 +46,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	9784	</weight>
-    <maxHealth>	148	</maxHealth>
+    <maxHealth>	88	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	70	</maxHealth>
       <maxRegenHealth>	35	</maxRegenHealth>
@@ -181,8 +180,8 @@
         <vehicleRotation>	0.36	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	53	</maxRegenHealth>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A108_T18_HMC/normal/lod0/Chassis.model	</undamaged>
@@ -1054,8 +1053,8 @@
         <vehicleRotation>	0.36	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	53	</maxRegenHealth>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A108_T18_HMC/normal/lod0/Chassis.model	</undamaged>
@@ -1921,7 +1920,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
       <weight>	100	</weight>
-      <maxHealth>	37	</maxHealth>
+      <maxHealth>	22	</maxHealth>
       <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1935,7 +1934,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_Howitzer_M1A1_SPG>	shared	  <maxAmmo>	75	</maxAmmo>
+        <_75mm_Howitzer_M1A1_SPG>	shared	  <maxAmmo>	42	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -40 1 -40	</minPitch>
             <maxPitch>	0 8.33 1 8.33	</maxPitch>
@@ -2052,7 +2051,11 @@
         </engine>
       </unlocks>
     </Guiberson_T-1020-4>
-    <Continental_W-670>	shared	</Continental_W-670>
+    <Continental_W-670>	shared	  <unlocks>
+        <vehicle>	A27_T82	  <cost>	4620	</cost>
+        </vehicle>
+      </unlocks>
+    </Continental_W-670>
   </engines>
   <fuelTanks>
     <Medium>	shared	</Medium>

@@ -118,9 +118,6 @@ class IEventsCache(object):
     def getHeroTankAdventCalendarRedirectAction(self):
         raise NotImplementedError
 
-    def getWebStatisticsEnabled(self):
-        raise NotImplementedError
-
     def getTradeInActions(self):
         raise NotImplementedError
 

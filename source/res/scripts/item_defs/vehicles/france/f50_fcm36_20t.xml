@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.363	</firePenalty>
   </invisibility>
-  <repairCost>	1.273	</repairCost>
+  <repairCost>	3.0	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
@@ -47,7 +47,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	7662	</weight>
-    <maxHealth>	264	</maxHealth>
+    <maxHealth>	112	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	80	</maxHealth>
       <maxRegenHealth>	55	</maxRegenHealth>
@@ -157,8 +157,8 @@
         <vehicleRotation>	0.32	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	53	</maxRegenHealth>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F50_FCM36_20t/normal/lod0/Chassis.model	</undamaged>
@@ -1001,8 +1001,8 @@
         <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	85	</maxHealth>
-      <maxRegenHealth>	64	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F50_FCM36_20t/normal/lod0/Chassis.model	</undamaged>
@@ -1848,7 +1848,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1187	</weight>
-      <maxHealth>	66	</maxHealth>
+      <maxHealth>	28	</maxHealth>
       <rotationSpeed>	24	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -1862,7 +1862,7 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_APX_SA18>	shared	  <maxAmmo>	235	</maxAmmo>
+        <_37mm_APX_SA18>	shared	  <maxAmmo>	102	</maxAmmo>
           <unlocks>
             <gun>	_37mm_SA38	  <cost>	75	</cost>
             </gun>
@@ -1932,7 +1932,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_37mm_APX_SA18>
-        <_25mm_Canon_Raccourci_Mle.1934>	shared	  <maxAmmo>	300	</maxAmmo>
+        <_25mm_Canon_Raccourci_Mle.1934>	shared	  <maxAmmo>	150	</maxAmmo>
           <armor>
             <armor_1>	8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1994,7 +1994,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_25mm_Canon_Raccourci_Mle.1934>
-        <_37mm_SA38>	shared	  <maxAmmo>	205	</maxAmmo>
+        <_37mm_SA38>	shared	  <maxAmmo>	102	</maxAmmo>
           <unlocks>
             <vehicle>	F13_AMX38	  <cost>	1270	</cost>
             </vehicle>
@@ -2129,11 +2129,7 @@
         </engine>
       </unlocks>
     </Berliet_MDPA>
-    <Berliet_Ricardo>	shared	  <unlocks>
-        <vehicle>	F44_Somua_S35	  <cost>	1360	</cost>
-        </vehicle>
-      </unlocks>
-    </Berliet_Ricardo>
+    <Berliet_Ricardo>	shared	</Berliet_Ricardo>
   </engines>
   <fuelTanks>
     <Small>	shared	</Small>

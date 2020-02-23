@@ -17,10 +17,10 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.47	</firePenalty>
   </invisibility>
-  <repairCost>	2	</repairCost>
+  <repairCost>	4.17	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
-    <priceFactor>	0.6	</priceFactor>
+    <priceFactor>	0.8	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
     <exclusionMask></exclusionMask>
   </camouflage>
@@ -41,10 +41,10 @@
     </armor>
     <primaryArmor>	armor_1 armor_5 armor_4	</primaryArmor>
     <weight>	9087	</weight>
-    <maxHealth>	400	</maxHealth>
+    <maxHealth>	248	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	110	</maxHealth>
-      <maxRegenHealth>	70	</maxRegenHealth>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
     </ammoBayHealth>
     <models>
@@ -113,10 +113,10 @@
     <Chassis_GB04_Valentine>
       <userString>	#gb_vehicles:Chassis_GB04_Valentine	</userString>
       <tags></tags>
-      <level>	2	</level>
-      <price>	710	</price>
+      <level>	3	</level>
+      <price>	1420	</price>
       <unlocks>
-        <chassis>	Chassis_GB04_Valentine_2	  <cost>	320	</cost>
+        <chassis>	Chassis_GB04_Valentine_2	  <cost>	1200	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -128,14 +128,14 @@
       <terrainResistance>	1 1.3 2	</terrainResistance>
       <brakeForce>	14500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	38	</rotationSpeed>
+      <rotationSpeed>	40	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.26	</vehicleMovement>
-        <vehicleRotation>	0.26	</vehicleRotation>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	53	</maxRegenHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB04_Valentine/normal/lod0/Chassis.model	</undamaged>
@@ -1026,12 +1026,8 @@
     <Chassis_GB04_Valentine_2>
       <userString>	#gb_vehicles:Chassis_GB04_Valentine_2	</userString>
       <tags></tags>
-      <level>	3	</level>
-      <price>	2350	</price>
-      <unlocks>
-        <vehicle>	GB42_Valentine_AT	  <cost>	3700	</cost>
-        </vehicle>
-      </unlocks>
+      <level>	4	</level>
+      <price>	4700	</price>
       <armor>
         <leftTrack>	10	</leftTrack>
         <rightTrack>	10	</rightTrack>
@@ -1041,14 +1037,14 @@
       <terrainResistance>	0.9 1.1 1.8	</terrainResistance>
       <brakeForce>	17000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	40	</rotationSpeed>
+      <rotationSpeed>	42	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.24	</vehicleMovement>
-        <vehicleRotation>	0.24	</vehicleRotation>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	85	</maxHealth>
-      <maxRegenHealth>	64	</maxRegenHealth>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB04_Valentine/normal/lod0/Chassis.model	</undamaged>
@@ -1941,10 +1937,10 @@
     <Turret_1_GB04_Valentine>
       <userString>	#gb_vehicles:Turret_1_GB04_Valentine	</userString>
       <tags></tags>
-      <level>	2	</level>
-      <price>	940	</price>
+      <level>	3	</level>
+      <price>	1880	</price>
       <unlocks>
-        <turret>	Turret_2_GB04_Valentine	  <cost>	400	</cost>
+        <turret>	Turret_2_GB04_Valentine	  <cost>	1200	</cost>
         </turret>
       </unlocks>
       <armor>
@@ -1959,21 +1955,21 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2750	</weight>
-      <maxHealth>	75	</maxHealth>
-      <rotationSpeed>	36	</rotationSpeed>
+      <maxHealth>	62	</maxHealth>
+      <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	70	</maxHealth>
-        <maxRegenHealth>	35	</maxRegenHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	310	</circularVisionRadius>
+      <circularVisionRadius>	330	</circularVisionRadius>
       <surveyingDeviceHealth>
-        <maxHealth>	50	</maxHealth>
-        <maxRegenHealth>	25	</maxRegenHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_2pdr_Gun_Mk_X>	shared	  <maxAmmo>	200	</maxAmmo>
+        <_2pdr_Gun_Mk_X>	shared	  <maxAmmo>	60	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 15 0.339116 15 0.402778 4 0.597222 4 0.660884 15 1 15	</maxPitch>
@@ -1987,12 +1983,12 @@
             </armor_4>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	3.2	</reloadTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	2.1	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.17	</turretRotation>
+            <turretRotation>	0.08	</turretRotation>
             <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2104,15 +2100,13 @@
     <Turret_2_GB04_Valentine>
       <userString>	#gb_vehicles:Turret_2_GB04_Valentine	</userString>
       <tags></tags>
-      <level>	3	</level>
-      <price>	2250	</price>
+      <level>	4	</level>
+      <price>	4500	</price>
       <unlocks>
         <gun>	QF_6_pounder_Mk_III	  <cost>	1500	</cost>
         </gun>
         <gun>	QF_6_pounder_Mk_V	  <cost>	3700	</cost>
         </gun>
-        <vehicle>	GB07_Matilda	  <cost>	3900	</cost>
-        </vehicle>
       </unlocks>
       <armor>
         <armor_1>	65	</armor_1>
@@ -2126,21 +2120,21 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4530	</weight>
-      <maxHealth>	100	</maxHealth>
-      <rotationSpeed>	38	</rotationSpeed>
+      <maxHealth>	92	</maxHealth>
+      <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	70	</maxHealth>
-        <maxRegenHealth>	35	</maxRegenHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	320	</circularVisionRadius>
+      <circularVisionRadius>	340	</circularVisionRadius>
       <surveyingDeviceHealth>
-        <maxHealth>	50	</maxHealth>
-        <maxRegenHealth>	25	</maxRegenHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_2pdr_Gun_Mk_X>	shared	  <maxAmmo>	200	</maxAmmo>
+        <_2pdr_Gun_Mk_X>	shared	  <maxAmmo>	60	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -17 1 -17	</minPitch>
             <maxPitch>	0 8 0.339116 8 0.402778 3 0.597222 3 0.660884 8 1 8	</maxPitch>
@@ -2154,12 +2148,12 @@
             </armor_4>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	3.1	</reloadTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	2.1	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.17	</turretRotation>
+            <turretRotation>	0.08	</turretRotation>
             <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2207,7 +2201,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_2pdr_Gun_Mk_X>
-        <QF_6_pounder_Mk_III>	shared	  <maxAmmo>	130	</maxAmmo>
+        <QF_6_pounder_Mk_III>	shared	  <maxAmmo>	44	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -17 1 -17	</minPitch>
             <maxPitch>	0 8 0.339116 8 0.402778 3 0.597222 3 0.660884 8 1 8	</maxPitch>
@@ -2221,7 +2215,7 @@
             </armor_4>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.45	</shotDispersionRadius>
+          <shotDispersionRadius>	0.43	</shotDispersionRadius>
           <reloadTime>	4.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.16	</turretRotation>
@@ -2274,11 +2268,15 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </QF_6_pounder_Mk_III>
-        <QF_6_pounder_Mk_V>	shared	  <maxAmmo>	130	</maxAmmo>
+        <QF_6_pounder_Mk_V>	shared	  <maxAmmo>	44	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -17 1 -17	</minPitch>
             <maxPitch>	0 8 0.339116 8 0.402778 3 0.597222 3 0.660884 8 1 8	</maxPitch>
           </pitchLimits>
+          <unlocks>
+            <gun>	_75mm_Gun_Mk_V	  <cost>	4000	</cost>
+            </gun>
+          </unlocks>
           <armor>
             <armor_1>	65	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2288,7 +2286,7 @@
             </armor_4>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.43	</shotDispersionRadius>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
           <reloadTime>	4.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.16	</turretRotation>
@@ -2342,6 +2340,69 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </QF_6_pounder_Mk_V>
+        <_75mm_Gun_Mk_V>	shared	  <maxAmmo>	44	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -17 1 -17	</minPitch>
+            <maxPitch>	0 8 0.339116 8 0.402778 3 0.597222 3 0.660884 8 1 8	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	65	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_3>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	30	</gun>
+          </armor>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <reloadTime>	6.6	</reloadTime>
+          <aimingTime>	2.5	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/british/GB04_Valentine/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/british/GB04_Valentine/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/british/GB04_Valentine/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Gun_05.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <customizationSlots>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	0.000047 -0.0172964 1.11115	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	0.000047 -0.0172985 1.11115	</anchorPosition>
+              <anchorDirection>	-0.000000 0.000000 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	0.000037 0.311095 0.197828	</anchorPosition>
+              <anchorDirection>	0.000000 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+          </customizationSlots>
+          <camouflage>
+            <tiling>	1 0.3 0.000000 0.000000	</tiling>
+            <density>	122 132.339	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
+          </camouflage>
+        </_75mm_Gun_Mk_V>
       </guns>
       <models>
         <undamaged>	vehicles/british/GB04_Valentine/normal/lod0/Turret_02.model	</undamaged>
@@ -2419,7 +2480,11 @@
         </engine>
       </unlocks>
     </GMC_6-71_Mk10>
-    <GMC_6-71_Mk11>	shared	</GMC_6-71_Mk11>
+    <GMC_6-71_Mk11>	shared	  <unlocks>
+        <vehicle>	GB44_Archer	  <cost>	19340	</cost>
+        </vehicle>
+      </unlocks>
+    </GMC_6-71_Mk11>
   </engines>
   <fuelTanks>
     <Medium>	shared	</Medium>
@@ -2435,7 +2500,14 @@
         </radio>
       </unlocks>
     </N9>
-    <N19Mk1>	shared	</N19Mk1>
+    <N19Mk1>	shared	  <unlocks>
+        <vehicle>	GB28_Bishop	  <cost>	19600	</cost>
+        </vehicle>
+        <radio>	N19Mk2	  <cost>	3600	</cost>
+        </radio>
+      </unlocks>
+    </N19Mk1>
+    <N19Mk2>	shared	</N19Mk2>
   </radios>
   <physics>
     <detailed>

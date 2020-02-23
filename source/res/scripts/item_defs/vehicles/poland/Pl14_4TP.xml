@@ -40,7 +40,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	2750	</weight>
-    <maxHealth>	244	</maxHealth>
+    <maxHealth>	88	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	65	</maxHealth>
       <maxRegenHealth>	45	</maxRegenHealth>
@@ -147,8 +147,8 @@
         <vehicleRotation>	0.28	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/poland/Pl14_4TP/normal/lod0/Chassis.model	</undamaged>
@@ -763,7 +763,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	240	</weight>
-      <maxHealth>	61	</maxHealth>
+      <maxHealth>	22	</maxHealth>
       <rotationSpeed>	35	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	50	</maxHealth>
@@ -777,7 +777,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_20mm_wz_38_FKA>	shared	  <maxAmmo>	972	</maxAmmo>
+        <_20mm_wz_38_FKA>	shared	  <maxAmmo>	420	</maxAmmo>
           <unlocks>
             <gun>	_47mm_QFSA	  <cost>	75	</cost>
             </gun>
@@ -848,7 +848,7 @@
             <aoTextureSize>	256 128	</aoTextureSize>
           </camouflage>
         </_20mm_wz_38_FKA>
-        <_47mm_QFSA>	shared	  <maxAmmo>	105	</maxAmmo>
+        <_47mm_QFSA>	shared	  <maxAmmo>	45	</maxAmmo>
           <unlocks>
             <vehicle>	Pl09_7TP	  <cost>	235	</cost>
             </vehicle>

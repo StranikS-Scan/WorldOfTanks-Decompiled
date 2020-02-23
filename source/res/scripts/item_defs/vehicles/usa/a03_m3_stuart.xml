@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.401	</firePenalty>
   </invisibility>
-  <repairCost>	2.264	</repairCost>
+  <repairCost>	5.0	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
@@ -45,7 +45,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	7100	</weight>
-    <maxHealth>	424	</maxHealth>
+    <maxHealth>	176	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	110	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -158,8 +158,8 @@
         <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	53	</maxRegenHealth>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A03_M3_Stuart/normal/lod0/Chassis.model	</undamaged>
@@ -1025,8 +1025,8 @@
         <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	85	</maxHealth>
-      <maxRegenHealth>	64	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A03_M3_Stuart/normal/lod0/Chassis.model	</undamaged>
@@ -1896,7 +1896,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1250	</weight>
-      <maxHealth>	76	</maxHealth>
+      <maxHealth>	44	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -1910,7 +1910,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_20mm_Hispano_Suiza_Birgikt_gun>	shared	  <maxAmmo>	1500	</maxAmmo>
+        <_20mm_Hispano_Suiza_Birgikt_gun>	shared	  <maxAmmo>	750	</maxAmmo>
           <reloadTime>	7.7	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
@@ -1981,7 +1981,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_20mm_Hispano_Suiza_Birgikt_gun>
-        <_37mm_M-5>	shared	  <maxAmmo>	205	</maxAmmo>
+        <_37mm_M-5>	shared	  <maxAmmo>	103	</maxAmmo>
           <unlocks>
             <turret>	D39273	  <cost>	375	</cost>
             </turret>
@@ -2131,7 +2131,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1700	</weight>
-      <maxHealth>	106	</maxHealth>
+      <maxHealth>	64	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -2146,7 +2146,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.006	</invisibilityFactor>
       <guns>
-        <_20mm_Hispano_Suiza_Birgikt_gun>	shared	  <maxAmmo>	1500	</maxAmmo>
+        <_20mm_Hispano_Suiza_Birgikt_gun>	shared	  <maxAmmo>	750	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.325227 10 0.388889 5 0.611111 5 0.674773 10 1 10	</maxPitch>
@@ -2213,7 +2213,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_20mm_Hispano_Suiza_Birgikt_gun>
-        <_37mm_M-5>	shared	  <maxAmmo>	205	</maxAmmo>
+        <_37mm_M-5>	shared	  <maxAmmo>	103	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.325227 10 0.388889 5 0.611111 5 0.674773 10 1 10	</maxPitch>
@@ -2280,7 +2280,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_37mm_M-5>
-        <_37mm_M-6_L53>	shared	  <maxAmmo>	180	</maxAmmo>
+        <_37mm_M-6_L53>	shared	  <maxAmmo>	103	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.325227 10 0.388889 5 0.611111 5 0.674773 10 1 10	</maxPitch>
@@ -2418,7 +2418,7 @@
     <Continental_W-670>	shared	  <unlocks>
         <engine>	Continental_R-975-C1	  <cost>	550	</cost>
         </engine>
-        <vehicle>	A129_T6_medium	  <cost>	6950	</cost>
+        <vehicle>	A27_T82	  <cost>	6950	</cost>
         </vehicle>
       </unlocks>
     </Continental_W-670>

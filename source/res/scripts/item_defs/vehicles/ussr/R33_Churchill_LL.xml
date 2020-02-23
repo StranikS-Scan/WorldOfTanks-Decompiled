@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.212	</firePenalty>
   </invisibility>
-  <repairCost>	2.149	</repairCost>
+  <repairCost>	3.5	</repairCost>
   <premiumVehicleXPFactor>	0.4	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
@@ -50,7 +50,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	20869	</weight>
-    <maxHealth>	912	</maxHealth>
+    <maxHealth>	560	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	100	</maxRegenHealth>
@@ -137,8 +137,8 @@
         <vehicleRotation>	0.19	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	170	</maxHealth>
-      <maxRegenHealth>	128	</maxRegenHealth>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R33_Churchill_LL/normal/lod0/Chassis.model	</undamaged>
@@ -849,7 +849,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7500	</weight>
-      <maxHealth>	228	</maxHealth>
+      <maxHealth>	140	</maxHealth>
       <rotationSpeed>	34.13	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -863,8 +863,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <QF_6_pounder_Mk_III>	shared	  <maxAmmo>	170	</maxAmmo>
-          <armor>
+        <QF_6_pounder_Mk_III>	shared	  <armor>
             <armor_1>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	108.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>

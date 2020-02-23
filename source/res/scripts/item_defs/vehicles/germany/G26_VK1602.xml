@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.437	</firePenalty>
   </invisibility>
-  <repairCost>	3.04	</repairCost>
+  <repairCost>	6	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
@@ -42,7 +42,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	12320	</weight>
-    <maxHealth>	600	</maxHealth>
+    <maxHealth>	304	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	150	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -132,8 +132,8 @@
         <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	110	</maxHealth>
-      <maxRegenHealth>	83	</maxRegenHealth>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G26_VK1602/normal/lod0/Chassis.model	</undamaged>
@@ -750,8 +750,8 @@
         <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	90	</maxRegenHealth>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G26_VK1602/normal/lod0/Chassis.model	</undamaged>
@@ -1370,7 +1370,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2000	</weight>
-      <maxHealth>	150	</maxHealth>
+      <maxHealth>	76	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1384,7 +1384,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_30mm_MK103A>	shared	  <maxAmmo>	432	</maxAmmo>
+        <_30mm_MK103A>	shared	  <maxAmmo>	360	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 3.2 0.055556 3.2 0.0626234 6 0.119218 10 0.366894 10 0.430556 2 0.569444 2 0.633106 9.985 0.880782 10 0.931078 6 0.944444 3.2 1 3.2	</maxPitch>
@@ -1470,7 +1470,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_30mm_MK103A>
-        <_50mm_KwK_39_L60L>	shared	  <maxAmmo>	75	</maxAmmo>
+        <_50mm_KwK_39_L60L>	shared	  <maxAmmo>	64	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 3.2 0.055556 3.2 0.0626234 6 0.119218 10 0.366894 10 0.430556 2 0.569444 2 0.633106 9.985 0.880782 10 0.931078 6 0.944444 3.2 1 3.2	</maxPitch>

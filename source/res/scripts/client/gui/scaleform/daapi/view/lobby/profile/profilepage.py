@@ -12,6 +12,7 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.sounds.ambients import LobbySubViewEnv
 from gui.ClientUpdateManager import g_clientUpdateManager
 from helpers import dependency
+from helpers.i18n import makeString
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.Scaleform.daapi.view.lobby.profile.sound_constants import ACHIEVEMENTS_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.hof.web_handlers import createHofWebHandlers
@@ -21,11 +22,6 @@ class ProfilePage(LobbySubView, ProfileMeta):
     __sound_env__ = LobbySubViewEnv
     lobbyContext = dependency.descriptor(ILobbyContext)
     _COMMON_SOUND_SPACE = ACHIEVEMENTS_SOUND_SPACE
-    SECTION_IDX_BY_VIEW_ALIAS = {VIEW_ALIAS.PROFILE_SUMMARY_PAGE: PROFILE_CONSTANTS.PROFILE_SUMMARY_PAGE_INDEX,
-     VIEW_ALIAS.PROFILE_AWARDS_PAGE: PROFILE_CONSTANTS.PROFILE_AWARDS_INDEX,
-     VIEW_ALIAS.PROFILE_STATISTICS_PAGE: PROFILE_CONSTANTS.PROFILE_STATISTICS_INDEX,
-     VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE: PROFILE_CONSTANTS.PROFILE_TECHNIQUE_PAGE_INDEX,
-     VIEW_ALIAS.PROFILE_HOF: PROFILE_CONSTANTS.PROFILE_HOF_INDEX}
 
     def __init__(self, ctx=None):
         self.__ctx = ctx
@@ -81,16 +77,32 @@ class ProfilePage(LobbySubView, ProfileMeta):
         if selectedAlias is None or selectedAlias == VIEW_ALIAS.PROFILE_HOF and not isHofEnabled:
             itemCD = self.__ctx.get('itemCD')
             selectedAlias = VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE if itemCD else VIEW_ALIAS.PROFILE_SUMMARY_PAGE
-        sectionsData = [(VIEW_ALIAS.PROFILE_SUMMARY_PAGE, PROFILE_CONSTANTS.PROFILE_SUMMARY_PAGE, PROFILE.PROFILE_TABS_TOOLTIP_SUMMARY),
-         (VIEW_ALIAS.PROFILE_AWARDS_PAGE, PROFILE_CONSTANTS.PROFILE_AWARDS_PAGE, PROFILE.PROFILE_TABS_TOOLTIP_AWARDS),
-         (VIEW_ALIAS.PROFILE_STATISTICS_PAGE, PROFILE_CONSTANTS.PROFILE_STATISTICS_PAGE, PROFILE.PROFILE_TABS_TOOLTIP_STATISTICS),
-         (VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE, PROFILE_CONSTANTS.PROFILE_TECHNIQUE_PAGE, PROFILE.PROFILE_TABS_TOOLTIP_TECHNIQUE)]
+        sectionsData = [(PROFILE.SECTION_SUMMARY_TITLE,
+          PROFILE.PROFILE_TABS_TOOLTIP_SUMMARY,
+          VIEW_ALIAS.PROFILE_SUMMARY_PAGE,
+          True),
+         (PROFILE.SECTION_AWARDS_TITLE,
+          PROFILE.PROFILE_TABS_TOOLTIP_AWARDS,
+          VIEW_ALIAS.PROFILE_AWARDS,
+          True),
+         (PROFILE.SECTION_STATISTICS_TITLE,
+          PROFILE.PROFILE_TABS_TOOLTIP_STATISTICS,
+          VIEW_ALIAS.PROFILE_STATISTICS,
+          True),
+         (PROFILE.SECTION_TECHNIQUE_TITLE,
+          PROFILE.PROFILE_TABS_TOOLTIP_TECHNIQUE,
+          VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE,
+          True)]
         if isHofEnabled:
-            sectionsData.append((VIEW_ALIAS.PROFILE_HOF, PROFILE_CONSTANTS.PROFILE_HOF, PROFILE.PROFILE_TABS_TOOLTIP_HOF))
-        return {'sections': [ {'id': alias,
-                      'linkage': linkage,
-                      'tooltip': tooltip} for alias, linkage, tooltip in sectionsData ],
-         'sectionIdx': self.SECTION_IDX_BY_VIEW_ALIAS[selectedAlias]}
+            sectionsData.append((PROFILE.SECTION_HOF_TITLE,
+             PROFILE.PROFILE_TABS_TOOLTIP_HOF,
+             VIEW_ALIAS.PROFILE_HOF,
+             True))
+        return {'sectionsData': [ {'label': makeString(label),
+                          'tooltip': tooltip,
+                          'alias': alias,
+                          'enabled': isEnabled} for label, tooltip, alias, isEnabled in sectionsData ],
+         'selectedAlias': selectedAlias}
 
     @property
     def __isHofEnabled(self):
@@ -112,12 +124,10 @@ class ProfilePage(LobbySubView, ProfileMeta):
             hofCounter = getHofTabCounter()
             if hofCounter:
                 counters.append({'componentId': VIEW_ALIAS.PROFILE_HOF,
-                 'count': str(hofCounter),
-                 'selectedIdx': self.SECTION_IDX_BY_VIEW_ALIAS[VIEW_ALIAS.PROFILE_HOF]})
+                 'count': str(hofCounter)})
             if isHofButtonNew(PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON):
                 counters.append({'componentId': VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE,
-                 'count': '1',
-                 'selectedIdx': self.SECTION_IDX_BY_VIEW_ALIAS[VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE]})
+                 'count': '1'})
             self.__tabNavigator.as_setBtnTabCountersS(counters)
         else:
             self.__tabNavigator.as_setBtnTabCountersS([])

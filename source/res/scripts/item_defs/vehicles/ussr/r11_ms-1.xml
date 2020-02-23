@@ -24,7 +24,7 @@
     </armor>
     <primaryArmor>	armor_5 armor_3 armor_4	</primaryArmor>
     <weight>	2750	</weight>
-    <maxHealth>	220	</maxHealth>
+    <maxHealth>	80	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	60	</maxHealth>
       <maxRegenHealth>	40	</maxRegenHealth>
@@ -121,8 +121,8 @@
         <vehicleRotation>	0.38	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R11_MS-1/normal/lod0/Chassis.model	</undamaged>
@@ -651,7 +651,7 @@
   <turrets0>
     <T-18_mod>
       <guns>
-        <_37mm_Gochkins>	shared	  <maxAmmo>	240	</maxAmmo>
+        <_37mm_Gochkins>	shared	  <maxAmmo>	104	</maxAmmo>
           <reloadTime>	2.5	</reloadTime>
           <aimingTime>	2.5	</aimingTime>
           <shotDispersionFactors>
@@ -722,11 +722,17 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_37mm_Gochkins>
-        <_45mm_mod_1932>	shared	  <maxAmmo>	125	</maxAmmo>
+        <_45mm_mod_1932>	shared	  <maxAmmo>	54	</maxAmmo>
           <unlocks>
+            <vehicle>	R10_AT-1	  <cost>	270	</cost>
+            </vehicle>
             <vehicle>	R42_T-60	  <cost>	270	</cost>
             </vehicle>
             <vehicle>	R08_BT-2	  <cost>	270	</cost>
+            </vehicle>
+            <vehicle>	R09_T-26	  <cost>	270	</cost>
+            </vehicle>
+            <vehicle>	R16_SU-18	  <cost>	270	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -811,7 +817,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	240	</weight>
-      <maxHealth>	55	</maxHealth>
+      <maxHealth>	20	</maxHealth>
       <rotationSpeed>	35	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	50	</maxHealth>

@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.375	</firePenalty>
   </invisibility>
-  <repairCost>	1.253	</repairCost>
+  <repairCost>	3.0	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
@@ -43,7 +43,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	6938	</weight>
-    <maxHealth>	316	</maxHealth>
+    <maxHealth>	112	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	85	</maxHealth>
       <maxRegenHealth>	55	</maxRegenHealth>
@@ -146,8 +146,8 @@
         <vehicleRotation>	0.28	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB14_M2/normal/lod0/Chassis.model	</undamaged>
@@ -1060,8 +1060,8 @@
         <vehicleRotation>	0.25	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	53	</maxRegenHealth>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB14_M2/normal/lod0/Chassis.model	</undamaged>
@@ -1977,7 +1977,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	700	</weight>
-      <maxHealth>	59	</maxHealth>
+      <maxHealth>	28	</maxHealth>
       <rotationSpeed>	32	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -1991,7 +1991,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_12.7mm_MG_HB_M2>	shared	  <maxAmmo>	3600	</maxAmmo>
+        <_12.7mm_MG_HB_M2>	shared	  <maxAmmo>	1800	</maxAmmo>
           <armor>
             <armor_2>	15.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
@@ -2132,7 +2132,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_3	</primaryArmor>
       <weight>	800	</weight>
-      <maxHealth>	79	</maxHealth>
+      <maxHealth>	53	</maxHealth>
       <rotationSpeed>	35	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -2147,7 +2147,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.918	</invisibilityFactor>
       <guns>
-        <_12.7mm_MG_HB_M2>	shared	  <maxAmmo>	3600	</maxAmmo>
+        <_12.7mm_MG_HB_M2>	shared	  <maxAmmo>	1800	</maxAmmo>
           <armor>
             <armor_1>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2209,7 +2209,11 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_12.7mm_MG_HB_M2>
-        <_37mm_M-5>	shared	  <maxAmmo>	205	</maxAmmo>
+        <_37mm_M-5>	shared	  <maxAmmo>	103	</maxAmmo>
+          <unlocks>
+            <vehicle>	GB15_Stuart_I	  <cost>	1215	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <armor_1>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

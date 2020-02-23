@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.609	</firePenalty>
   </invisibility>
-  <repairCost>	3.011	</repairCost>
+  <repairCost>	5.50	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
@@ -51,7 +51,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	14960	</weight>
-    <maxHealth>	380	</maxHealth>
+    <maxHealth>	208	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	125	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
@@ -181,8 +181,8 @@
         <vehicleRotation>	0.25	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	110	</maxHealth>
-      <maxRegenHealth>	83	</maxRegenHealth>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
       <models>
         <undamaged>	vehicles/german/G101_StuG_III/normal/lod0/Chassis.model	</undamaged>
@@ -1149,8 +1149,8 @@
         <vehicleRotation>	0.23	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	90	</maxRegenHealth>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
       <models>
         <undamaged>	vehicles/german/G101_StuG_III/normal/lod0/Chassis.model	</undamaged>
@@ -2101,7 +2101,7 @@
         <armor_1>	0	</armor_1>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	95	</maxHealth>
+      <maxHealth>	52	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2130,7 +2130,7 @@
             </armor_4>
             <gun>	20	</gun>
           </armor>
-          <maxAmmo>	65	</maxAmmo>
+          <maxAmmo>	44	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -2204,7 +2204,7 @@
             </armor_4>
             <gun>	20	</gun>
           </armor>
-          <maxAmmo>	65	</maxAmmo>
+          <maxAmmo>	44	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
@@ -2268,7 +2268,7 @@
             </armor_4>
             <gun>	20	</gun>
           </armor>
-          <maxAmmo>	65	</maxAmmo>
+          <maxAmmo>	44	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
@@ -2321,11 +2321,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_PaK_39_L48>
-        <_105mm_StuH42_L28>	shared	  <unlocks>
-            <vehicle>	G23_Grille	  <cost>	16330	</cost>
-            </vehicle>
-          </unlocks>
-          <armor>
+        <_105mm_StuH42_L28>	shared	  <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -2336,7 +2332,7 @@
             </armor_4>
             <gun>	20	</gun>
           </armor>
-          <maxAmmo>	42	</maxAmmo>
+          <maxAmmo>	28	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>

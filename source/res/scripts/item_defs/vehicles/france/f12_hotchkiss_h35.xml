@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.414	</firePenalty>
   </invisibility>
-  <repairCost>	2.008	</repairCost>
+  <repairCost>	4.58	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
@@ -41,7 +41,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	4900	</weight>
-    <maxHealth>	292	</maxHealth>
+    <maxHealth>	128	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	80	</maxHealth>
       <maxRegenHealth>	55	</maxRegenHealth>
@@ -141,8 +141,8 @@
         <vehicleRotation>	0.32	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F12_Hotchkiss_H35/normal/lod0/Chassis.model	</undamaged>
@@ -1007,8 +1007,8 @@
         <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	53	</maxRegenHealth>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F12_Hotchkiss_H35/normal/lod0/Chassis.model	</undamaged>
@@ -1881,7 +1881,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	900	</weight>
-      <maxHealth>	73	</maxHealth>
+      <maxHealth>	32	</maxHealth>
       <rotationSpeed>	24	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -1895,7 +1895,7 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_APX_SA18>	shared	  <maxAmmo>	230	</maxAmmo>
+        <_37mm_APX_SA18>	shared	  <maxAmmo>	100	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 16 0.458333 16 0.472222 11 0.527778 11 0.541667 16 1 16	</maxPitch>
@@ -1959,7 +1959,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_37mm_APX_SA18>
-        <_25mm_Canon_Raccourci_Mle.1934>	shared	  <maxAmmo>	320	</maxAmmo>
+        <_25mm_Canon_Raccourci_Mle.1934>	shared	  <maxAmmo>	160	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -16 1 -16	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -2017,11 +2017,15 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_25mm_Canon_Raccourci_Mle.1934>
-        <_37mm_SA38>	shared	  <maxAmmo>	200	</maxAmmo>
+        <_37mm_SA38>	shared	  <maxAmmo>	100	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -13 1 -13	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
+          <unlocks>
+            <vehicle>	F44_Somua_S35	  <cost>	1360	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <armor_1>	30	</armor_1>
             <armor_2>	40	</armor_2>

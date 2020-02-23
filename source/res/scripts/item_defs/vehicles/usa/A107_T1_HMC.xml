@@ -27,7 +27,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	3370	</weight>
-    <maxHealth>	132	</maxHealth>
+    <maxHealth>	64	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	60	</maxHealth>
       <maxRegenHealth>	30	</maxRegenHealth>
@@ -158,8 +158,8 @@
         <vehicleRotation>	0.55	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	50	</maxHealth>
-      <maxRegenHealth>	38	</maxRegenHealth>
+      <maxHealth>	40	</maxHealth>
+      <maxRegenHealth>	30	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A107_T1_HMC/normal/lod0/Chassis.model	</undamaged>
@@ -828,8 +828,8 @@
         <vehicleRotation>	0.5	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A107_T1_HMC/normal/lod0/Chassis.model	</undamaged>
@@ -1482,7 +1482,7 @@
   <turrets0>
     <Turret_1_A107_T1_HMC>
       <guns>
-        <_75mm_Pack_Howitzer_M1>	shared	  <maxAmmo>	120	</maxAmmo>
+        <_75mm_Pack_Howitzer_M1>	shared	  <maxAmmo>	60	</maxAmmo>
           <armor>
             <armor_1>	9.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1572,7 +1572,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
       <weight>	100	</weight>
-      <maxHealth>	33	</maxHealth>
+      <maxHealth>	16	</maxHealth>
       <rotationSpeed>	15	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1643,7 +1643,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.386	</firePenalty>
   </invisibility>
-  <repairCost>	2.424	</repairCost>
+  <repairCost>	5.0	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <engines>
     <LaSalle_V8_75>	shared	  <unlocks>
@@ -1662,7 +1662,13 @@
         </radio>
       </unlocks>
     </SCR_200>
-    <SCR_210>	shared	</SCR_210>
+    <SCR_210>	shared	  <unlocks>
+        <vehicle>	A16_M7_Priest	  <cost>	1130	</cost>
+        </vehicle>
+        <vehicle>	A108_T18_HMC	  <cost>	1110	</cost>
+        </vehicle>
+      </unlocks>
+    </SCR_210>
   </radios>
   <physics>
     <detailed>

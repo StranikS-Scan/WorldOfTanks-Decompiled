@@ -19,7 +19,7 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.326	</firePenalty>
   </invisibility>
-  <repairCost>	4.298	</repairCost>
+  <repairCost>	7.00	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
@@ -44,7 +44,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	13155	</weight>
-    <maxHealth>	456	</maxHealth>
+    <maxHealth>	280	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	150	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -175,8 +175,8 @@
         <vehicleRotation>	0.26	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	110	</maxHealth>
-      <maxRegenHealth>	83	</maxRegenHealth>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
       <models>
         <undamaged>	vehicles/german/G76_Pz_Sfl_IVc/normal/lod0/Chassis.model	</undamaged>
@@ -1093,8 +1093,8 @@
         <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	90	</maxRegenHealth>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
       <models>
         <undamaged>	vehicles/german/G76_Pz_Sfl_IVc/normal/lod0/Chassis.model	</undamaged>
@@ -2006,7 +2006,7 @@
         <armor_8>	0	</armor_8>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	114	</maxHealth>
+      <maxHealth>	70	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2020,7 +2020,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_Flak_L60>	shared	  <maxAmmo>	85	</maxAmmo>
+        <_75mm_Flak_L60>	shared	  <maxAmmo>	72	</maxAmmo>
           <unlocks>
             <gun>	_88mm_Flak_37_L56	  <cost>	9500	</cost>
             </gun>
@@ -2100,10 +2100,12 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_Flak_L60>
-        <_88mm_Flak_37_L56>	shared	  <maxAmmo>	70	</maxAmmo>
+        <_88mm_Flak_37_L56>	shared	  <maxAmmo>	60	</maxAmmo>
           <unlocks>
             <gun>	_88mm_Flak_41_L74	  <cost>	16500	</cost>
             </gun>
+            <vehicle>	G40_Nashorn	  <cost>	26500	</cost>
+            </vehicle>
           </unlocks>
           <armor>
             <gun>	35	</gun>
@@ -2233,7 +2235,7 @@
         <armor_8>	0	</armor_8>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	114	</maxHealth>
+      <maxHealth>	70	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2248,7 +2250,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.034	</invisibilityFactor>
       <guns>
-        <_88mm_Flak_41_L74>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_88mm_Flak_41_L74>	shared	  <maxAmmo>	48	</maxAmmo>
           <armor>
             <armor_1>	12	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
             </armor_1>

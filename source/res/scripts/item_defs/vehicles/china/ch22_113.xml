@@ -17,9 +17,8 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.171	</firePenalty>
   </invisibility>
-  <repairCost>	9.016	</repairCost>
-  <premiumVehicleXPFactor>	0.05	</premiumVehicleXPFactor>
-  <crewXpFactor>	1.5	</crewXpFactor>
+  <repairCost>	11.172	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	2.0	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
@@ -44,7 +43,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_11 armor_4	</primaryArmor>
     <weight>	18858	</weight>
-    <maxHealth>	2280	</maxHealth>
+    <maxHealth>	1840	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	160	</maxRegenHealth>
@@ -937,8 +936,8 @@
         <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	300	</maxHealth>
-      <maxRegenHealth>	225	</maxRegenHealth>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/chinese/Ch22_113/normal/lod0/Chassis.model	</undamaged>
@@ -1756,7 +1755,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	12000	</weight>
-      <maxHealth>	570	</maxHealth>
+      <maxHealth>	460	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
@@ -1770,7 +1769,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_122-mm_60-122TP>	shared	  <maxAmmo>	34	</maxAmmo>
+        <_122-mm_60-122T>	shared	  <maxAmmo>	34	</maxAmmo>
           <armor>
             <armor_1>	240	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1863,7 +1862,7 @@
             <density>	101.268 101.796	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_122-mm_60-122TP>
+        </_122-mm_60-122T>
       </guns>
       <models>
         <undamaged>	vehicles/chinese/Ch22_113/normal/lod0/Turret_01.model	</undamaged>
@@ -2349,21 +2348,21 @@
     </Turret_1_Ch22_113>
   </turrets0>
   <engines>
-    <_V-2-54SCP>	shared	</_V-2-54SCP>
+    <_V-2-54SC>	shared	</_V-2-54SC>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <A-220B_1P>	shared	</A-220B_1P>
+    <A-220B_1>	shared	</A-220B_1>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <_V-2-54SCP>
+        <_V-2-54SC>
           <smplEnginePower>	792.9609	</smplEnginePower>
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
-        </_V-2-54SCP>
+        </_V-2-54SC>
       </engines>
       <chassis>
         <Chassis_Ch22_113>

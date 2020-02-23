@@ -2,10 +2,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileTechniquePage.py
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PROFILE_TECHNIQUE
-from gui.impl import backport
-from gui.impl.gen import R
-from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import StatisticTypes
 from gui.Scaleform.daapi.view.meta.ProfileTechniquePageMeta import ProfileTechniquePageMeta
+from gui.Scaleform.locale.PROFILE import PROFILE
+from helpers.i18n import makeString
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 
 class ProfileTechniquePage(ProfileTechniquePageMeta):
@@ -33,22 +32,11 @@ class ProfileTechniquePage(ProfileTechniquePageMeta):
         elif vehCD in accountDossier.getEpicRandomStats().getVehicles():
             self._battlesType = PROFILE_DROPDOWN_KEYS.EPIC_RANDOM
         self.as_setSelectedVehicleIntCDS(vehCD)
-        self.as_setTabsDataS([{'id': 'all',
-          'label': backport.text(R.strings.profile.profile.tabs.title.allTime()),
-          'linkage': 'RegularItemsTabViewUI',
-          'selected': True,
-          'enabled': True,
-          'tooltip': backport.text(R.strings.profile.profile.tabs.tooltip.forAllTime())}, {'id': 'season',
-          'label': backport.text(R.strings.profile.profile.tabs.title.season()),
-          'linkage': 'RegularItemsTabViewUI',
-          'selected': False,
-          'enabled': True,
-          'tooltip': backport.text(R.strings.profile.profile.tabs.tooltip.forTime(), time='--')}])
         return
 
     def _getInitData(self, accountDossier=None, isFallout=False):
         initDataResult = super(ProfileTechniquePage, self)._getInitData(accountDossier, isFallout)
-        initDataResult['hangarVehiclesLabel'] = backport.text(R.strings.profile.section.technique.window.hangarVehiclesLabel())
+        initDataResult['hangarVehiclesLabel'] = makeString(PROFILE.SECTION_TECHNIQUE_WINDOW_HANGARVEHICLESLABEL)
         storedData = self._getStorageData()
         initDataResult['isInHangarSelected'] = storedData['isInHangarSelected']
         return initDataResult
@@ -71,10 +59,8 @@ class ProfileTechniquePage(ProfileTechniquePageMeta):
         storedData = AccountSettings.getFilter(storageId)
         storedData['isInHangarSelected'] = value
         AccountSettings.setFilter(storageId, storedData)
-        vo = {'vehiclesList': self._getTechniqueListVehicles(self._data),
-         'available': True}
         if self._data is not None:
-            self.as_responseDossierS(self._battlesType, vo, '', self.getEmptyScreenLabel())
+            self.as_responseDossierS(self._battlesType, self._getTechniqueListVehicles(self._data), '', self.getEmptyScreenLabel())
         return
 
     def requestData(self, vehicleId):
@@ -86,9 +72,3 @@ class ProfileTechniquePage(ProfileTechniquePageMeta):
         if self._selectedVehicleIntCD is not None:
             self._receiveVehicleDossier(self._selectedVehicleIntCD, None)
         return
-
-    def setSeasonStatisticsFilter(self, value):
-        self._statisticType = StatisticTypes.ALL_TIME
-        if value == StatisticTypes.SEASON:
-            self._statisticType = StatisticTypes.SEASON
-        self.invokeUpdate()

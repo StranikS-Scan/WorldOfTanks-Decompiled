@@ -24,7 +24,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	4300	</weight>
-    <maxHealth>	276	</maxHealth>
+    <maxHealth>	104	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	65	</maxHealth>
       <maxRegenHealth>	45	</maxRegenHealth>
@@ -131,8 +131,8 @@
         <vehicleRotation>	0.36	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G12_Ltraktor/normal/lod0/Chassis.model	</undamaged>
@@ -859,7 +859,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	700	</weight>
-      <maxHealth>	69	</maxHealth>
+      <maxHealth>	26	</maxHealth>
       <rotationSpeed>	39	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	50	</maxHealth>
@@ -873,7 +873,7 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_KwK_L46>	shared	  <maxAmmo>	345	</maxAmmo>
+        <_37mm_KwK_L46>	shared	  <maxAmmo>	150	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 7 1 7	</maxPitch>
@@ -946,7 +946,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_37mm_KwK_L46>
-        <_20mm_Breda>	shared	  <maxAmmo>	972	</maxAmmo>
+        <_20mm_Breda>	shared	  <maxAmmo>	420	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -30 1 -30	</minPitch>
             <maxPitch>	0 7 0.083333 7 0.146995 10 0.853005 10 0.916667 7 1 7	</maxPitch>
@@ -959,7 +959,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <unlocks>
+            <vehicle>	G93_GW_Mk_VIe	  <cost>	275	</cost>
+            </vehicle>
+            <vehicle>	G21_PanzerJager_I	  <cost>	275	</cost>
+            </vehicle>
+            <vehicle>	G07_Pz35t	  <cost>	275	</cost>
+            </vehicle>
             <vehicle>	G06_PzII	  <cost>	275	</cost>
+            </vehicle>
+            <vehicle>	G53_PzI	  <cost>	275	</cost>
             </vehicle>
           </unlocks>
           <armor>

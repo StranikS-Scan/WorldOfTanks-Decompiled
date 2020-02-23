@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.395	</firePenalty>
   </invisibility>
-  <repairCost>	5.572	</repairCost>
+  <repairCost>	8.88	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
@@ -46,7 +46,7 @@
     </armor>
     <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
     <weight>	7086	</weight>
-    <maxHealth>	204	</maxHealth>
+    <maxHealth>	128	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	60	</maxHealth>
       <maxRegenHealth>	30	</maxRegenHealth>
@@ -166,8 +166,8 @@
         <vehicleRotation>	0.26	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	53	</maxRegenHealth>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
       <repairCost>	2.5	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R14_SU-5/normal/lod0/Chassis.model	</undamaged>
@@ -1142,8 +1142,8 @@
         <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	85	</maxHealth>
-      <maxRegenHealth>	64	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
       <repairCost>	2.5	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R14_SU-5/normal/lod0/Chassis.model	</undamaged>
@@ -2119,7 +2119,7 @@
         <armor_9>	15	</armor_9>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	51	</maxHealth>
+      <maxHealth>	32	</maxHealth>
       <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2133,7 +2133,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_cannon_mod_1905_30>	shared	  <maxAmmo>	85	</maxAmmo>
+        <_76mm_cannon_mod_1905_30>	shared	  <maxAmmo>	48	</maxAmmo>
           <reloadTime>	6	</reloadTime>
           <unlocks>
             <gun>	_76mm_cannon_mod_1905_40	  <cost>	1200	</cost>
@@ -2202,7 +2202,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_76mm_cannon_mod_1905_30>
-        <_76mm_cannon_mod_1905_40>	shared	  <maxAmmo>	85	</maxAmmo>
+        <_76mm_cannon_mod_1905_40>	shared	  <maxAmmo>	48	</maxAmmo>
           <reloadTime>	6	</reloadTime>
           <unlocks>
             <gun>	_122mm_cannon_mod_1930	  <cost>	2600	</cost>
@@ -2271,11 +2271,13 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_76mm_cannon_mod_1905_40>
-        <_122mm_cannon_mod_1930>	shared	  <maxAmmo>	27	</maxAmmo>
+        <_122mm_cannon_mod_1930>	shared	  <maxAmmo>	18	</maxAmmo>
           <reloadTime>	15.5	</reloadTime>
           <unlocks>
             <gun>	_152mm_mortar_NM_mod1931	  <cost>	4080	</cost>
             </gun>
+            <vehicle>	R100_SU122A	  <cost>	12570	</cost>
+            </vehicle>
           </unlocks>
           <shotDispersionFactors>
             <turretRotation>	0.42	</turretRotation>
@@ -2341,7 +2343,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_122mm_cannon_mod_1930>
-        <_152mm_mortar_NM_mod1931>	shared	  <maxAmmo>	18	</maxAmmo>
+        <_152mm_mortar_NM_mod1931>	shared	  <maxAmmo>	12	</maxAmmo>
           <armor>
             <armor_1>	15	</armor_1>
             <armor_2>	0	</armor_2>

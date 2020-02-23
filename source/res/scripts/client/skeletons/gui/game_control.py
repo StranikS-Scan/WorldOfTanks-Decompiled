@@ -1195,12 +1195,3 @@ class IBobSoundController(IGameController):
 
     def playSound(self, eventName):
         raise NotImplementedError
-
-
-class IWebStatisticsController(IGameController):
-
-    def getStatisticData(self, playerID, battleType):
-        raise NotImplementedError
-
-    def getVehicleData(self, playerID, vehicleCD, battleType):
-        raise NotImplementedError

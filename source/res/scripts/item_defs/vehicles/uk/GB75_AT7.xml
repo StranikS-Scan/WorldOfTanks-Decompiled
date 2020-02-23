@@ -19,7 +19,7 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.453	</firePenalty>
   </invisibility>
-  <repairCost>	5.757	</repairCost>
+  <repairCost>	7	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.4	</priceFactor>
@@ -54,7 +54,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	31182	</weight>
-    <maxHealth>	1216	</maxHealth>
+    <maxHealth>	1000	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -185,8 +185,8 @@
         <vehicleRotation>	0.32	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	205	</maxHealth>
-      <maxRegenHealth>	154	</maxRegenHealth>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB75_AT7/normal/lod0/Chassis.model	</undamaged>
@@ -865,8 +865,8 @@
         <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	230	</maxHealth>
-      <maxRegenHealth>	173	</maxRegenHealth>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	145	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB75_AT7/normal/lod0/Chassis.model	</undamaged>
@@ -1537,7 +1537,7 @@
         <armor_1>	0	</armor_1>
       </armor>
       <weight>	170	</weight>
-      <maxHealth>	304	</maxHealth>
+      <maxHealth>	250	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1551,7 +1551,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <QF_6_pounder_Mk_V_AT>	shared	  <maxAmmo>	150	</maxAmmo>
+        <QF_6_pounder_Mk_V_AT>	shared	  <maxAmmo>	120	</maxAmmo>
           <unlocks>
             <gun>	OQF_77mm_AT_Gun_MkII	  <cost>	14500	</cost>
             </gun>
@@ -1730,7 +1730,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </OQF_77mm_AT_Gun_MkII>
-        <_17pdr_OQF_AT_1>	shared	  <maxAmmo>	70	</maxAmmo>
+        <_17pdr_OQF_AT_1>	shared	  <maxAmmo>	60	</maxAmmo>
           <unlocks>
             <gun>	_20pdr_AT_Gun_Type_A	  <cost>	16400	</cost>
             </gun>

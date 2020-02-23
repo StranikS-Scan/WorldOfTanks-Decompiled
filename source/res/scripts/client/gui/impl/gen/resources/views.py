@@ -416,23 +416,12 @@ class Views(DynAccessor):
 
         shop = _shop()
 
-        class _tech_tree(DynAccessor):
-            __slots__ = ()
-
-            class _tech_tree_overlay_view(DynAccessor):
-                __slots__ = ()
-                TechTreeOverlayView = DynAccessor(60)
-
-            tech_tree_overlay_view = _tech_tree_overlay_view()
-
-        tech_tree = _tech_tree()
-
         class _tooltips(DynAccessor):
             __slots__ = ()
 
             class _clans(DynAccessor):
                 __slots__ = ()
-                ClanShortInfoTooltipContent = DynAccessor(61)
+                ClanShortInfoTooltipContent = DynAccessor(60)
 
             clans = _clans()
 
@@ -440,21 +429,21 @@ class Views(DynAccessor):
 
         class _customization(DynAccessor):
             __slots__ = ()
-            CustomizationCart = DynAccessor(83)
+            CustomizationCart = DynAccessor(82)
 
         customization = _customization()
 
         class _demountkit(DynAccessor):
             __slots__ = ()
-            CommonWindow = DynAccessor(84)
-            DemountWindow = DynAccessor(85)
+            CommonWindow = DynAccessor(83)
+            DemountWindow = DynAccessor(84)
 
         demountkit = _demountkit()
 
         class _instructions(DynAccessor):
             __slots__ = ()
-            BuyWindow = DynAccessor(86)
-            SellWindow = DynAccessor(87)
+            BuyWindow = DynAccessor(85)
+            SellWindow = DynAccessor(86)
 
         instructions = _instructions()
 
@@ -462,19 +451,19 @@ class Views(DynAccessor):
 
     class _test_check_box_view(DynAccessor):
         __slots__ = ()
-        TestCheckBoxView = DynAccessor(62)
+        TestCheckBoxView = DynAccessor(61)
 
     test_check_box_view = _test_check_box_view()
 
     class _test_text_button_view(DynAccessor):
         __slots__ = ()
-        TestTextButtonView = DynAccessor(63)
+        TestTextButtonView = DynAccessor(62)
 
     test_text_button_view = _test_text_button_view()
 
     class _windows_layout_view(DynAccessor):
         __slots__ = ()
-        WindowsLayountView = DynAccessor(64)
+        WindowsLayountView = DynAccessor(63)
 
     windows_layout_view = _windows_layout_view()
 
@@ -486,26 +475,26 @@ class Views(DynAccessor):
 
             class _demo_window_content(DynAccessor):
                 __slots__ = ()
-                DemoWindowContent = DynAccessor(65)
-                ImageProps = DynAccessor(66)
+                DemoWindowContent = DynAccessor(64)
+                ImageProps = DynAccessor(65)
 
             demo_window_content = _demo_window_content()
 
             class _demo_window_details_panel(DynAccessor):
                 __slots__ = ()
-                DemoWindowDetailsPanel = DynAccessor(67)
+                DemoWindowDetailsPanel = DynAccessor(66)
 
             demo_window_details_panel = _demo_window_details_panel()
 
             class _demo_window_image_panel(DynAccessor):
                 __slots__ = ()
-                DemoWindowImagePanel = DynAccessor(68)
+                DemoWindowImagePanel = DynAccessor(67)
 
             demo_window_image_panel = _demo_window_image_panel()
 
             class _image_preview_window_content(DynAccessor):
                 __slots__ = ()
-                ImagePreviewWindowContent = DynAccessor(69)
+                ImagePreviewWindowContent = DynAccessor(68)
 
             image_preview_window_content = _image_preview_window_content()
 
@@ -521,31 +510,31 @@ class Views(DynAccessor):
 
             class _test_dialogs_view(DynAccessor):
                 __slots__ = ()
-                TestDialogsView = DynAccessor(70)
+                TestDialogsView = DynAccessor(69)
 
             test_dialogs_view = _test_dialogs_view()
 
             class _test_expr_functions_view(DynAccessor):
                 __slots__ = ()
-                TestExprFunctionsView = DynAccessor(71)
+                TestExprFunctionsView = DynAccessor(70)
 
             test_expr_functions_view = _test_expr_functions_view()
 
             class _test_sub_view(DynAccessor):
                 __slots__ = ()
-                TestSubView = DynAccessor(72)
+                TestSubView = DynAccessor(71)
 
             test_sub_view = _test_sub_view()
 
             class _test_view(DynAccessor):
                 __slots__ = ()
-                TestView = DynAccessor(73)
+                TestView = DynAccessor(72)
 
             test_view = _test_view()
 
             class _unbound_example(DynAccessor):
                 __slots__ = ()
-                UnboundExample = DynAccessor(74)
+                UnboundExample = DynAccessor(73)
 
             unbound_example = _unbound_example()
 
@@ -561,13 +550,13 @@ class Views(DynAccessor):
 
             class _list_examples_empty_render_window_content(DynAccessor):
                 __slots__ = ()
-                ListExamplesEmptyRenderWindowContent = DynAccessor(75)
+                ListExamplesEmptyRenderWindowContent = DynAccessor(74)
 
             list_examples_empty_render_window_content = _list_examples_empty_render_window_content()
 
             class _list_examples_window_content(DynAccessor):
                 __slots__ = ()
-                ListExamplesWindowContent = DynAccessor(76)
+                ListExamplesWindowContent = DynAccessor(75)
 
             list_examples_window_content = _list_examples_window_content()
 
@@ -583,7 +572,7 @@ class Views(DynAccessor):
 
             class _rotation_pivot_view(DynAccessor):
                 __slots__ = ()
-                RotationAndPivotTestView = DynAccessor(77)
+                RotationAndPivotTestView = DynAccessor(76)
 
             rotation_pivot_view = _rotation_pivot_view()
 
@@ -599,7 +588,7 @@ class Views(DynAccessor):
 
             class _rotation_view(DynAccessor):
                 __slots__ = ()
-                RotationTestView = DynAccessor(78)
+                RotationTestView = DynAccessor(77)
 
             rotation_view = _rotation_view()
 
@@ -615,7 +604,7 @@ class Views(DynAccessor):
 
             class _scale_view(DynAccessor):
                 __slots__ = ()
-                ScaleTestView = DynAccessor(79)
+                ScaleTestView = DynAccessor(78)
 
             scale_view = _scale_view()
 
@@ -631,7 +620,7 @@ class Views(DynAccessor):
 
             class _test_uikit_buttons_view(DynAccessor):
                 __slots__ = ()
-                TestUikitButtonsView = DynAccessor(80)
+                TestUikitButtonsView = DynAccessor(79)
 
             test_uikit_buttons_view = _test_uikit_buttons_view()
 
@@ -647,7 +636,7 @@ class Views(DynAccessor):
 
             class _test_uikit_view(DynAccessor):
                 __slots__ = ()
-                TestUikitView = DynAccessor(81)
+                TestUikitView = DynAccessor(80)
 
             test_uikit_view = _test_uikit_view()
 
@@ -663,24 +652,24 @@ class Views(DynAccessor):
 
             class _wtypes_demo_window_content(DynAccessor):
                 __slots__ = ()
-                WtypesDemoWindowContent = DynAccessor(82)
+                WtypesDemoWindowContent = DynAccessor(81)
 
             wtypes_demo_window_content = _wtypes_demo_window_content()
 
         views = _views()
 
     wtypes_view = _wtypes_view()
-    Anchor = DynAccessor(88)
-    ComplexListView = DynAccessor(89)
-    ComponentsDemo = DynAccessor(90)
-    DataTrackerDemo = DynAccessor(91)
-    DemoContextMenu = DynAccessor(92)
-    GFDemoPopover = DynAccessor(93)
-    GFDemoRichTooltipWindow = DynAccessor(94)
-    GFDemoWindow = DynAccessor(95)
-    GFSimpleTooltipWindow = DynAccessor(96)
-    LocaleDemo = DynAccessor(97)
-    PropsSupportDemo = DynAccessor(98)
-    StructuralDataBindDemo = DynAccessor(99)
-    TextFormat = DynAccessor(100)
-    VideoSupportView = DynAccessor(101)
+    Anchor = DynAccessor(87)
+    ComplexListView = DynAccessor(88)
+    ComponentsDemo = DynAccessor(89)
+    DataTrackerDemo = DynAccessor(90)
+    DemoContextMenu = DynAccessor(91)
+    GFDemoPopover = DynAccessor(92)
+    GFDemoRichTooltipWindow = DynAccessor(93)
+    GFDemoWindow = DynAccessor(94)
+    GFSimpleTooltipWindow = DynAccessor(95)
+    LocaleDemo = DynAccessor(96)
+    PropsSupportDemo = DynAccessor(97)
+    StructuralDataBindDemo = DynAccessor(98)
+    TextFormat = DynAccessor(99)
+    VideoSupportView = DynAccessor(100)

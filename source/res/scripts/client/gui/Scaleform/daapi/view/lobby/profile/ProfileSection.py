@@ -2,32 +2,28 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileSection.py
 from helpers import dependency
 from helpers import i18n
-from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import StatisticTypes
 from gui.Scaleform.daapi.view.meta.ProfileSectionMeta import ProfileSectionMeta
 from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.game_control import IWebStatisticsController
 from soft_exception import SoftException
 
 class ProfileSection(ProfileSectionMeta):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
-    statisticsController = dependency.descriptor(IWebStatisticsController)
 
     def __init__(self, *args):
         super(ProfileSection, self).__init__()
         self.__isActive = False
-        self.__needUpdate = False
+        self._battlesType = PROFILE_DROPDOWN_KEYS.ALL
         self._userName = args[0]
         self._userID = args[1]
         self._databaseID = args[2]
         self._selectedData = args[3]
         self._data = None
         self._dossier = None
-        self._battlesType = PROFILE_DROPDOWN_KEYS.ALL
-        self._statisticType = StatisticTypes.ALL_TIME
+        self.__needUpdate = False
         return
 
     def _populate(self):
@@ -40,8 +36,30 @@ class ProfileSection(ProfileSectionMeta):
         super(ProfileSection, self)._dispose()
         return
 
+    def requestDossier(self, bType):
+        self._battlesType = bType
+        self.invokeUpdate()
+
+    def onSectionActivated(self):
+        pass
+
     def _dataProviderEntryAutoTranslate(self, key):
         return self._dataProviderEntry(key, i18n.makeString(PROFILE.profile_dropdown_labels(key)))
+
+    @classmethod
+    def _dataProviderEntry(cls, key, label):
+        return {'key': key,
+         'label': label}
+
+    @classmethod
+    def _getTotalStatsBlock(cls, dossier):
+        return dossier.getRandomStats()
+
+    def __receiveDossier(self):
+        if self.__isActive and self.__needUpdate:
+            self.__needUpdate = False
+            accountDossier = self.itemsCache.items.getAccountDossier(self._userID)
+            self._sendAccountData(self._getNecessaryStats(accountDossier), accountDossier)
 
     def _getNecessaryStats(self, accountDossier=None):
         if accountDossier is None:
@@ -81,37 +99,6 @@ class ProfileSection(ProfileSectionMeta):
         self._data = targetData
         self._dossier = accountDossier
 
-    @staticmethod
-    def _formIconLabelInitObject(i18key, icon):
-        return {'description': i18n.makeString(i18key),
-         'icon': icon}
-
-    @staticmethod
-    def _dataProviderEntry(key, label):
-        return {'key': key,
-         'label': label}
-
-    @staticmethod
-    def _getTotalStatsBlock(dossier):
-        return dossier.getRandomStats()
-
-    def __receiveDossier(self):
-        if self.__isActive and self.__needUpdate:
-            self.__needUpdate = False
-            accountDossier = self.itemsCache.items.getAccountDossier(self._userID)
-            self._sendAccountData(self._getNecessaryStats(accountDossier), accountDossier)
-
-    @property
-    def isActive(self):
-        return self.__isActive
-
-    def requestDossier(self, bType):
-        self._battlesType = bType
-        self.invokeUpdate()
-
-    def onSectionActivated(self):
-        pass
-
     def setActive(self, value):
         self.__isActive = value
         self.__receiveDossier()
@@ -122,3 +109,11 @@ class ProfileSection(ProfileSectionMeta):
         self.__needUpdate = True
         self.__receiveDossier()
         return
+
+    @property
+    def isActive(self):
+        return self.__isActive
+
+    def _formIconLabelInitObject(self, i18key, icon):
+        return {'description': i18n.makeString(i18key),
+         'icon': icon}

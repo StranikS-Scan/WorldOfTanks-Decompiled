@@ -329,21 +329,11 @@ class PromoScreensAccessor(BaseAccessor):
         return self._data_source.client_promo_log(callback, data)
 
 
-class DataProfileAccessor(BaseAccessor):
-
-    def get_player_statistic(self, callback, player_id, battle_type, fields=None):
-        return self._data_source.get_player_statistic(callback, player_id, battle_type, fields=fields)
-
-    def get_player_vehicle_statistic(self, callback, player_id, battle_type, vehicle_CD, fields=None):
-        return self._data_source.get_player_vehicle_statistic(callback, player_id, battle_type, vehicle_CD, fields=fields)
-
-
 class Requester(object):
     available_data_sources = {'stagings': StagingDataAccessor,
      'fake': FakeDataAccessor,
      'gateway': GatewayDataAccessor}
     advent_calendar = RequestDescriptor(AdventCalendarAccessor)
-    data_profile = RequestDescriptor(DataProfileAccessor)
     global_map = RequestDescriptor(GmAccessor)
     ratings = RequestDescriptor(RatingAccessor)
     strongholds = RequestDescriptor(StrongholdsAccessor)

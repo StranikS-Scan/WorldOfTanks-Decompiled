@@ -222,7 +222,6 @@ class _TrainingItem(_SelectorItem):
     def _update(self, state):
         self._isSelected = state.isInLegacy(PREBATTLE_TYPE.TRAINING)
         self._isDisabled = state.hasLockedState
-        self._isVisible = False
 
 
 class _EpicTrainingItem(_SelectorItem):

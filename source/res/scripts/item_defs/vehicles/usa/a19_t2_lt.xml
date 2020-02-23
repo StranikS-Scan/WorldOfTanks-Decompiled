@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.395	</firePenalty>
   </invisibility>
-  <repairCost>	0.829	</repairCost>
+  <repairCost>	2.1	</repairCost>
   <premiumVehicleXPFactor>	0.7	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
@@ -39,7 +39,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	4500	</weight>
-    <maxHealth>	304	</maxHealth>
+    <maxHealth>	120	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	130	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -136,8 +136,8 @@
         <vehicleRotation>	0.25	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	53	</maxRegenHealth>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A19_T2_lt/normal/lod0/Chassis.model	</undamaged>
@@ -775,7 +775,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	700	</weight>
-      <maxHealth>	76	</maxHealth>
+      <maxHealth>	30	</maxHealth>
       <rotationSpeed>	39	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -794,7 +794,7 @@
             <afterShot>	1.3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <maxAmmo>	2400	</maxAmmo>
+          <maxAmmo>	1200	</maxAmmo>
           <armor>
             <armor_1>	16	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

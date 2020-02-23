@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.167	</firePenalty>
   </invisibility>
-  <repairCost>	1.404	</repairCost>
+  <repairCost>	3.20	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
@@ -36,7 +36,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_2 armor_2	</primaryArmor>
     <weight>	12595	</weight>
-    <maxHealth>	456	</maxHealth>
+    <maxHealth>	200	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	100	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -146,8 +146,8 @@
         <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	53	</maxRegenHealth>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/japan/J21_Type_91/normal/lod0/Chassis.model	</undamaged>
@@ -1078,8 +1078,8 @@
         <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	85	</maxHealth>
-      <maxRegenHealth>	64	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/japan/J21_Type_91/normal/lod0/Chassis.model	</undamaged>
@@ -2010,7 +2010,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
       <weight>	1500	</weight>
-      <maxHealth>	114	</maxHealth>
+      <maxHealth>	50	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -2024,7 +2024,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_70mm_Gun_Type_94>	shared	  <maxAmmo>	175	</maxAmmo>
+        <_70mm_Gun_Type_94>	shared	  <maxAmmo>	100	</maxAmmo>
           <unlocks>
             <gun>	_47mm_Gun_Type1	  <cost>	1200	</cost>
             </gun>
@@ -2097,7 +2097,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_70mm_Gun_Type_94>
-        <_47mm_Gun_Type1>	shared	  <maxAmmo>	265	</maxAmmo>
+        <_47mm_Gun_Type1>	shared	  <maxAmmo>	150	</maxAmmo>
           <armor>
             <armor_1>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2234,7 +2234,11 @@
         </engine>
       </unlocks>
     </BMW_IV>
-    <BMW_IV_Kai>	shared	</BMW_IV_Kai>
+    <BMW_IV_Kai>	shared	  <unlocks>
+        <vehicle>	J22_Type_95	  <cost>	3850	</cost>
+        </vehicle>
+      </unlocks>
+    </BMW_IV_Kai>
   </engines>
   <fuelTanks>
     <Medium>	shared	</Medium>

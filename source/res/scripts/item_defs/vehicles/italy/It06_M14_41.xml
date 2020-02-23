@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.362	</firePenalty>
   </invisibility>
-  <repairCost>	1.57	</repairCost>
+  <repairCost>	3.8	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
@@ -38,7 +38,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	9766	</weight>
-    <maxHealth>	368	</maxHealth>
+    <maxHealth>	136	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	85	</maxHealth>
       <maxRegenHealth>	55	</maxRegenHealth>
@@ -128,8 +128,8 @@
         <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/italy/It06_M14_41/normal/lod0/Chassis.model	</undamaged>
@@ -832,8 +832,8 @@
         <vehicleRotation>	0.31	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	53	</maxRegenHealth>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/italy/It06_M14_41/normal/lod0/Chassis.model	</undamaged>
@@ -1535,7 +1535,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1400	</weight>
-      <maxHealth>	92	</maxHealth>
+      <maxHealth>	54	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -1549,7 +1549,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <Cannone_da_37_40>	shared	  <maxAmmo>	240	</maxAmmo>
+        <Cannone_da_37_40>	shared	  <maxAmmo>	104	</maxAmmo>
           <unlocks>
             <gun>	Cannone_da_47_32	  <cost>	140	</cost>
             </gun>
@@ -1614,7 +1614,7 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </Cannone_da_37_40>
-        <Cannone_da_47_32>	shared	  <maxAmmo>	175	</maxAmmo>
+        <Cannone_da_47_32>	shared	  <maxAmmo>	87	</maxAmmo>
           <armor>
             <gun>	10	</gun>
           </armor>

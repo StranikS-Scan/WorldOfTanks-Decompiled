@@ -16,7 +16,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.536	</firePenalty>
   </invisibility>
-  <repairCost>	2.193	</repairCost>
+  <repairCost>	5.0	</repairCost>
   <premiumVehicleXPFactor>	0.6	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
@@ -38,7 +38,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_5 armor_4	</primaryArmor>
     <weight>	4050	</weight>
-    <maxHealth>	456	</maxHealth>
+    <maxHealth>	200	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	130	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -125,8 +125,8 @@
         <vehicleRotation>	0.21	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	85	</maxHealth>
-      <maxRegenHealth>	64	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A43_M22_Locust/normal/lod0/Chassis.model	</undamaged>
@@ -961,7 +961,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1000	</weight>
-      <maxHealth>	114	</maxHealth>
+      <maxHealth>	50	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -975,7 +975,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_M-6_L53M2>	shared	  <maxAmmo>	90	</maxAmmo>
+        <_37mm_M-6_L53M2>	shared	  <maxAmmo>	50	</maxAmmo>
           <reloadTime>	2.29	</reloadTime>
           <shotDispersionRadius>	0.41	</shotDispersionRadius>
           <aimingTime>	1.71	</aimingTime>

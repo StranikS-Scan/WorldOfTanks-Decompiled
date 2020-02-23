@@ -91,8 +91,6 @@
     <Continental_AV-1790-5B_E2>	113	</Continental_AV-1790-5B_E2>
     <Continental_AOI-1195-5_L>	114	</Continental_AOI-1195-5_L>
     <Wright_Continental_R_975_C4_858>	115	</Wright_Continental_R_975_C4_858>
-    <Continental_AOI-628-2A>	116	</Continental_AOI-628-2A>
-    <Ford_GAA2>	117	</Ford_GAA2>
     <Ford_GAN_T23>	1000	</Ford_GAN_T23>
     <Development_Engine>	65535	</Development_Engine>
     <Continental_AOI-628-2_IGR>	60001	</Continental_AOI-628-2_IGR>
@@ -570,29 +568,11 @@
       <rpm_min>	299	</rpm_min>
       <rpm_max>	2841	</rpm_max>
     </Ford_GAA>
-    <Ford_GAA2>
-      <userString>	#usa_vehicles:Ford_GAA	</userString>
-      <tags>	gasoline	</tags>
-      <level>	7	</level>
-      <price>	36000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	520	</power>
-      <weight>	569	</weight>
-      <maxHealth>	234	</maxHealth>
-      <maxRegenHealth>	123	</maxRegenHealth>
-      <repairCost>	5	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	299	</rpm_min>
-      <rpm_max>	2841	</rpm_max>
-    </Ford_GAA2>
     <Ford_GAA_A>
       <userString>	#usa_vehicles:Ford_GAA_A	</userString>
       <tags>	gasoline	</tags>
       <level>	6	</level>
       <price>	36000	</price>
-      <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	550	</power>
@@ -625,7 +605,6 @@
       <tags>	gasoline	</tags>
       <level>	7	</level>
       <price>	39400	</price>
-      <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	600	</power>
@@ -1560,24 +1539,6 @@
       <rpm_min>	362	</rpm_min>
       <rpm_max>	2641	</rpm_max>
     </Continental_AOI-628-2>
-    <Continental_AOI-628-2A>
-      <userString>	#usa_vehicles:Continental_AOI-628-2	</userString>
-      <shortUserString>	#usa_vehicles:Continental_AOI-628-2_short	</shortUserString>
-      <tags>	gasoline	</tags>
-      <level>	7	</level>
-      <price>	34000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	420	</power>
-      <weight>	498	</weight>
-      <maxHealth>	234	</maxHealth>
-      <maxRegenHealth>	123	</maxRegenHealth>
-      <repairCost>	5	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	362	</rpm_min>
-      <rpm_max>	2641	</rpm_max>
-    </Continental_AOI-628-2A>
     <Continental_AOI-402-5>
       <userString>	#usa_vehicles:Continental_AOI-402-5	</userString>
       <shortUserString>	#usa_vehicles:Continental_AOI-402-5_short	</shortUserString>

@@ -20,7 +20,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	4000	</weight>
-    <maxHealth>	256	</maxHealth>
+    <maxHealth>	92	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	70	</maxHealth>
       <maxRegenHealth>	48	</maxRegenHealth>
@@ -127,8 +127,8 @@
         <vehicleRotation>	0.38	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A01_T1_Cunningham/normal/lod0/Chassis.model	</undamaged>
@@ -734,7 +734,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 7 1 7	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	240	</maxAmmo>
+          <maxAmmo>	104	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -799,7 +799,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_37mm_Gun_M1916>
-        <_37mm_semiautomatic_gun_M1924>	shared	  <maxAmmo>	230	</maxAmmo>
+        <_37mm_semiautomatic_gun_M1924>	shared	  <maxAmmo>	100	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 7 1 7	</maxPitch>
@@ -810,7 +810,13 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <unlocks>
+            <vehicle>	A107_T1_HMC	  <cost>	280	</cost>
+            </vehicle>
             <vehicle>	A02_M2_lt	  <cost>	280	</cost>
+            </vehicle>
+            <vehicle>	A46_T3	  <cost>	280	</cost>
+            </vehicle>
+            <vehicle>	A24_T2_med	  <cost>	280	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -884,7 +890,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	950	</weight>
-      <maxHealth>	64	</maxHealth>
+      <maxHealth>	23	</maxHealth>
       <rotationSpeed>	35	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	50	</maxHealth>

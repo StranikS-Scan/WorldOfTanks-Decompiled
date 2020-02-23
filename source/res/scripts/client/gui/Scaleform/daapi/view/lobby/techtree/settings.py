@@ -10,7 +10,6 @@ from items.vehicles import VEHICLE_CLASS_TAGS
 __all__ = ('NODE_STATE', 'RequestState', 'SelectedNation', 'UnlockProps', 'DEFAULT_UNLOCK_PROPS', 'BpfProps', '_DEFAULT_BPF_PROPS', 'VehicleClassInfo', 'MAX_PATH_LIMIT', 'RESEARCH_ITEMS', 'TREE_SHARED_REL_FILE_PATH', 'NATION_TREE_REL_FILE_PATH')
 TREE_SHARED_REL_FILE_PATH = 'gui/flash/techtree/tree-shared.xml'
 NATION_TREE_REL_FILE_PATH = 'gui/flash/techtree/{}-tree.xml'
-NATION_TREE_REL_PREMIUM_FILE_PATH = 'gui/flash/techtree/{}-premium.xml'
 _VEHICLE_TYPE_NAME = GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.VEHICLE]
 RESEARCH_ITEMS = (GUI_ITEM_TYPE.GUN,
  GUI_ITEM_TYPE.TURRET,
@@ -116,14 +115,6 @@ class NODE_STATE(object):
             if state & NODE_STATE_FLAGS.ENOUGH_XP > 0:
                 state ^= NODE_STATE_FLAGS.ENOUGH_XP
         state |= NODE_STATE_FLAGS.UNLOCKED
-        return state
-
-    @classmethod
-    def changeLast2Buy(cls, state, isLast2Buy):
-        if isLast2Buy:
-            state = cls.addIfNot(state, NODE_STATE_FLAGS.LAST_2_BUY)
-        else:
-            state = cls.removeIfHas(state, NODE_STATE_FLAGS.LAST_2_BUY)
         return state
 
     @classmethod

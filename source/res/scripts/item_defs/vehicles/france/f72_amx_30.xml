@@ -17,9 +17,8 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.402	</firePenalty>
   </invisibility>
-  <repairCost>	9.849	</repairCost>
-  <premiumVehicleXPFactor>	0.05	</premiumVehicleXPFactor>
-  <crewXpFactor>	1.5	</crewXpFactor>
+  <repairCost>	12.7	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	2.0	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
@@ -45,7 +44,7 @@
     </armor>
     <primaryArmor>	armor_7 armor_3 armor_4	</primaryArmor>
     <weight>	15194	</weight>
-    <maxHealth>	1960	</maxHealth>
+    <maxHealth>	1520	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	180	</maxRegenHealth>
@@ -739,8 +738,8 @@
         <vehicleRotation>	0.12	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	300	</maxHealth>
-      <maxRegenHealth>	225	</maxRegenHealth>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F72_AMX_30/normal/lod0/Chassis.model	</undamaged>
@@ -1425,7 +1424,7 @@
       </armor>
       <primaryArmor>	armor_7 armor_3 armor_4	</primaryArmor>
       <weight>	7000	</weight>
-      <maxHealth>	490	</maxHealth>
+      <maxHealth>	380	</maxHealth>
       <rotationSpeed>	38	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
@@ -2029,7 +2028,7 @@
     </Turret_1_AMX_30>
   </turrets0>
   <engines>
-    <Hispano-Suiza_HS110_A>	shared	</Hispano-Suiza_HS110_A>
+    <Hispano-Suiza_HS110>	shared	</Hispano-Suiza_HS110>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
@@ -2040,10 +2039,10 @@
   <physics>
     <detailed>
       <engines>
-        <Hispano-Suiza_HS110_A>
+        <Hispano-Suiza_HS110>
           <smplEnginePower>	761.2424	</smplEnginePower>
           <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
-        </Hispano-Suiza_HS110_A>
+        </Hispano-Suiza_HS110>
       </engines>
       <chassis>
         <Chassis_AMX_30>

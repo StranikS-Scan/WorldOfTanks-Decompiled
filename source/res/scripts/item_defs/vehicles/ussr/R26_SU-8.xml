@@ -19,7 +19,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.216	</firePenalty>
   </invisibility>
-  <repairCost>	5.529	</repairCost>
+  <repairCost>	7.27	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.2	</priceFactor>
@@ -45,7 +45,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	13417	</weight>
-    <maxHealth>	284	</maxHealth>
+    <maxHealth>	216	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	80	</maxHealth>
       <maxRegenHealth>	40	</maxRegenHealth>
@@ -166,8 +166,8 @@
         <vehicleRotation>	0.28	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	110	</maxHealth>
-      <maxRegenHealth>	83	</maxRegenHealth>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R26_SU-8/normal/lod0/Chassis.model	</undamaged>
@@ -1078,8 +1078,8 @@
         <vehicleRotation>	0.26	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	90	</maxRegenHealth>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R26_SU-8/normal/lod0/Chassis.model	</undamaged>
@@ -1985,7 +1985,7 @@
         <armor_3>	0	</armor_3>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	71	</maxHealth>
+      <maxHealth>	54	</maxHealth>
       <rotationSpeed>	18	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2130,7 +2130,7 @@
             <maxPitch>	0 4 1 4	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <vehicle>	R15_S-51	  <cost>	62200	</cost>
+            <vehicle>	R91_SU14_1	  <cost>	62200	</cost>
             </vehicle>
           </unlocks>
           <armor>

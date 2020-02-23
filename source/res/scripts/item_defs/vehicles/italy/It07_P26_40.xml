@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.386	</firePenalty>
   </invisibility>
-  <repairCost>	2.162	</repairCost>
+  <repairCost>	4.2	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
@@ -37,7 +37,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	13653	</weight>
-    <maxHealth>	544	</maxHealth>
+    <maxHealth>	256	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	125	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
@@ -150,8 +150,8 @@
         <vehicleRotation>	0.26	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	85	</maxHealth>
-      <maxRegenHealth>	64	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/italy/It07_P26_40/normal/lod0/Chassis.model	</undamaged>
@@ -972,8 +972,8 @@
         <vehicleRotation>	0.23	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	95	</maxHealth>
-      <maxRegenHealth>	71	</maxRegenHealth>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/italy/It07_P26_40/normal/lod0/Chassis.model	</undamaged>
@@ -1792,7 +1792,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2800	</weight>
-      <maxHealth>	106	</maxHealth>
+      <maxHealth>	64	</maxHealth>
       <rotationSpeed>	36	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -1806,7 +1806,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <Cannone_da_47_40>	shared	  <maxAmmo>	210	</maxAmmo>
+        <Cannone_da_47_40>	shared	  <maxAmmo>	120	</maxAmmo>
           <unlocks>
             <gun>	Cannone_da_75_32	  <cost>	1800	</cost>
             </gun>
@@ -1878,7 +1878,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </Cannone_da_47_40>
-        <Cannone_da_75_32>	shared	  <maxAmmo>	100	</maxAmmo>
+        <Cannone_da_75_32>	shared	  <maxAmmo>	68	</maxAmmo>
           <unlocks>
             <turret>	Turret_2_It07_P26_40	  <cost>	1150	</cost>
             </turret>
@@ -2026,7 +2026,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3000	</weight>
-      <maxHealth>	136	</maxHealth>
+      <maxHealth>	94	</maxHealth>
       <rotationSpeed>	38	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -2040,7 +2040,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <Cannone_da_47_40>	shared	  <maxAmmo>	210	</maxAmmo>
+        <Cannone_da_47_40>	shared	  <maxAmmo>	120	</maxAmmo>
           <armor>
             <gun>	20	</gun>
           </armor>
@@ -2102,7 +2102,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </Cannone_da_47_40>
-        <Cannone_da_75_32>	shared	  <maxAmmo>	100	</maxAmmo>
+        <Cannone_da_75_32>	shared	  <maxAmmo>	68	</maxAmmo>
           <armor>
             <gun>	20	</gun>
           </armor>
@@ -2165,7 +2165,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </Cannone_da_75_32>
-        <Cannone_da_75_34>	shared	  <maxAmmo>	100	</maxAmmo>
+        <Cannone_da_75_34>	shared	  <maxAmmo>	68	</maxAmmo>
           <unlocks>
             <vehicle>	It11_P43	  <cost>	11850	</cost>
             </vehicle>

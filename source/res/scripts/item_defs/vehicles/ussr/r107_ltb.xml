@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.405	</firePenalty>
   </invisibility>
-  <repairCost>	7.052	</repairCost>
+  <repairCost>	9.0	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.6	</priceFactor>
@@ -41,7 +41,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	8525	</weight>
-    <maxHealth>	1072	</maxHealth>
+    <maxHealth>	840	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -247,8 +247,8 @@
         <vehicleRotation>	0.14	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	215	</maxHealth>
-      <maxRegenHealth>	161	</maxRegenHealth>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
       <repairCost>	7.5	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R107_LTB/normal/lod0/Chassis.model	</undamaged>
@@ -1046,8 +1046,8 @@
         <vehicleRotation>	0.12	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	240	</maxHealth>
-      <maxRegenHealth>	180	</maxRegenHealth>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	7.5	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R107_LTB/normal/lod0/Chassis.model	</undamaged>
@@ -1850,7 +1850,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5450	</weight>
-      <maxHealth>	268	</maxHealth>
+      <maxHealth>	210	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -1966,6 +1966,10 @@
           </camouflage>
         </_85mm_D5T-85BMU>
         <_85mm_D10_85>	shared	  <maxAmmo>	42	</maxAmmo>
+          <unlocks>
+            <vehicle>	R40_T-54	  <cost>	225300	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <armor_1>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

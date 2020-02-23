@@ -17,7 +17,7 @@
     <isTracer>	true	</isTracer>
     <effects>	autoArmorPiercing	</effects>
     <damage>
-      <armor>	9	</armor>
+      <armor>	8	</armor>
       <devices>	18	</devices>
     </damage>
   </_13.2mm_Balle_P.>
@@ -46,7 +46,7 @@
     <isTracer>	true	</isTracer>
     <effects>	smallArmorPiercing	</effects>
     <damage>
-      <armor>	32	</armor>
+      <armor>	27	</armor>
       <devices>	34	</devices>
     </damage>
   </_25mm_Balle_T.P._mle._1928>
@@ -75,7 +75,7 @@
     <isTracer>	true	</isTracer>
     <effects>	smallArmorPiercing	</effects>
     <damage>
-      <armor>	23	</armor>
+      <armor>	20	</armor>
       <devices>	34	</devices>
     </damage>
   </_25mm_Balle_T.P._mle._1934>
@@ -104,7 +104,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mediumArmorPiercing	</effects>
     <damage>
-      <armor>	47	</armor>
+      <armor>	40	</armor>
       <devices>	50	</devices>
     </damage>
   </_37mm_Odr_mle._1932>
@@ -118,7 +118,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mediumArmorPiercing	</effects>
     <damage>
-      <armor>	35	</armor>
+      <armor>	30	</armor>
       <devices>	50	</devices>
     </damage>
   </_37mm_Odr_mle._1935>
@@ -158,37 +158,14 @@
     <icon>	he	</icon>
     <price>	6	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	37	</caliber>
     <explosionRadius>	0.31	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mediumHighExplosive	</effects>
     <damage>
-      <armor>	20	</armor>
-      <devices>	0	</devices>
+      <armor>	36	</armor>
+      <devices>	50	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	0.31	</impactRadius>
-      <damage>
-        <armor>	20	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	0.31	</impactRadius>
-      <damage>
-        <armor>	15	</armor>
-        <devices>	75	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	0.31	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	20	</devices>
-      </damage>
-    </armorSpalls>
   </_37mm_OE_mle._1916>
   <_37mm_Odr_mle._1939>
     <id>	20	</id>
@@ -211,37 +188,14 @@
     <icon>	he	</icon>
     <price>	10	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	37	</caliber>
     <explosionRadius>	0.31	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mediumHighExplosive	</effects>
     <damage>
-      <armor>	25	</armor>
-      <devices>	0	</devices>
+      <armor>	45	</armor>
+      <devices>	50	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	0.31	</impactRadius>
-      <damage>
-        <armor>	25	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	0.31	</impactRadius>
-      <damage>
-        <armor>	20	</armor>
-        <devices>	75	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	0.31	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	20	</devices>
-      </damage>
-    </armorSpalls>
   </_37mm_Oe_mle._1932>
   <_47mm_Odr_mle._1892>
     <id>	6	</id>
@@ -253,7 +207,7 @@
     <isTracer>	true	</isTracer>
     <effects>	smallArmorPiercing	</effects>
     <damage>
-      <armor>	60	</armor>
+      <armor>	50	</armor>
       <devices>	64	</devices>
     </damage>
   </_47mm_Odr_mle._1892>
@@ -293,37 +247,14 @@
     <icon>	he	</icon>
     <price>	13	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	47	</caliber>
     <explosionRadius>	0.47	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	smallHighExplosive	</effects>
     <damage>
-      <armor>	35	</armor>
-      <devices>	0	</devices>
+      <armor>	70	</armor>
+      <devices>	64	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	0.47	</impactRadius>
-      <damage>
-        <armor>	35	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	0.47	</impactRadius>
-      <damage>
-        <armor>	30	</armor>
-        <devices>	95	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	0.47	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	25	</devices>
-      </damage>
-    </armorSpalls>
   </_47mm_Oe_mle._1932>
   <_47mm_Oe_mle._1936>
     <id>	145	</id>
@@ -331,37 +262,14 @@
     <icon>	he	</icon>
     <price>	40	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	47	</caliber>
     <explosionRadius>	0.47	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	smallHighExplosive	</effects>
     <damage>
-      <armor>	45	</armor>
-      <devices>	0	</devices>
+      <armor>	70	</armor>
+      <devices>	64	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	0.47	</impactRadius>
-      <damage>
-        <armor>	45	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	0.47	</impactRadius>
-      <damage>
-        <armor>	40	</armor>
-        <devices>	95	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	0.47	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	25	</devices>
-      </damage>
-    </armorSpalls>
   </_47mm_Oe_mle._1936>
   <_47mm_Odr_mle._1932>
     <id>	9	</id>
@@ -373,7 +281,7 @@
     <isTracer>	true	</isTracer>
     <effects>	smallArmorPiercing	</effects>
     <damage>
-      <armor>	65	</armor>
+      <armor>	55	</armor>
       <devices>	64	</devices>
     </damage>
   </_47mm_Odr_mle._1932>
@@ -387,7 +295,7 @@
     <isTracer>	true	</isTracer>
     <effects>	smallArmorPiercing	</effects>
     <damage>
-      <armor>	65	</armor>
+      <armor>	55	</armor>
       <devices>	64	</devices>
     </damage>
   </_47mm_Odr_mle._1936>
@@ -428,37 +336,14 @@
     <icon>	he	</icon>
     <price>	13	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	47	</caliber>
     <explosionRadius>	0.47	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	smallHighExplosive	</effects>
     <damage>
-      <armor>	30	</armor>
-      <devices>	0	</devices>
+      <armor>	62	</armor>
+      <devices>	64	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	0.47	</impactRadius>
-      <damage>
-        <armor>	30	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	0.47	</impactRadius>
-      <damage>
-        <armor>	25	</armor>
-        <devices>	95	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	0.47	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	25	</devices>
-      </damage>
-    </armorSpalls>
   </_47mm_Oe_type_D>
   <_47mm_Oe_type_D_bootcamp>
     <id>	120	</id>
@@ -486,7 +371,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mediumArmorPiercing	</effects>
     <damage>
-      <armor>	90	</armor>
+      <armor>	75	</armor>
       <devices>	76	</devices>
     </damage>
   </_6pdr_AP_MK_8T>
@@ -515,7 +400,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mediumArmorPiercing	</effects>
     <damage>
-      <armor>	105	</armor>
+      <armor>	90	</armor>
       <devices>	76	</devices>
     </damage>
   </_57mm_L100_AP>
@@ -544,7 +429,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mediumArmorPiercing	</effects>
     <damage>
-      <armor>	130	</armor>
+      <armor>	110	</armor>
       <devices>	100	</devices>
     </damage>
   </_75mm_Pzgr39>
@@ -573,7 +458,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mediumArmorPiercing	</effects>
     <damage>
-      <armor>	130	</armor>
+      <armor>	110	</armor>
       <devices>	100	</devices>
     </damage>
   </_75mm_Prf1926>
@@ -598,37 +483,14 @@
     <icon>	he	</icon>
     <price>	38	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	75	</caliber>
     <explosionRadius>	1.06	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mediumHighExplosive	</effects>
     <damage>
-      <armor>	90	</armor>
-      <devices>	0	</devices>
+      <armor>	175	</armor>
+      <devices>	100	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	1.06	</impactRadius>
-      <damage>
-        <armor>	90	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	1.06	</impactRadius>
-      <damage>
-        <armor>	75	</armor>
-        <devices>	150	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	1.06	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	40	</devices>
-      </damage>
-    </armorSpalls>
   </_75mm_OE_mle_1915>
   <_75mm_OE_mle_1939>
     <id>	146	</id>
@@ -636,37 +498,14 @@
     <icon>	he	</icon>
     <price>	170	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	75	</caliber>
     <explosionRadius>	1.06	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mediumHighExplosive	</effects>
     <damage>
-      <armor>	90	</armor>
-      <devices>	0	</devices>
+      <armor>	175	</armor>
+      <devices>	100	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	1.06	</impactRadius>
-      <damage>
-        <armor>	90	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	1.06	</impactRadius>
-      <damage>
-        <armor>	75	</armor>
-        <devices>	150	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	1.06	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	40	</devices>
-      </damage>
-    </armorSpalls>
   </_75mm_OE_mle_1939>
   <_75mm_Prf1930>
     <id>	3	</id>
@@ -678,7 +517,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mediumArmorPiercing	</effects>
     <damage>
-      <armor>	160	</armor>
+      <armor>	135	</armor>
       <devices>	100	</devices>
     </damage>
   </_75mm_Prf1930>
@@ -703,37 +542,14 @@
     <icon>	he	</icon>
     <price>	98	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	75	</caliber>
     <explosionRadius>	1.06	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mediumHighExplosive	</effects>
     <damage>
-      <armor>	90	</armor>
-      <devices>	0	</devices>
+      <armor>	175	</armor>
+      <devices>	100	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	1.06	</impactRadius>
-      <damage>
-        <armor>	90	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	1.06	</impactRadius>
-      <damage>
-        <armor>	75	</armor>
-        <devices>	150	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	1.06	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	40	</devices>
-      </damage>
-    </armorSpalls>
   </_75mm_OE_mle_1924>
   <_75mm_Prf1930A>
     <id>	114	</id>
@@ -745,7 +561,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mediumArmorPiercing	</effects>
     <damage>
-      <armor>	205	</armor>
+      <armor>	170	</armor>
       <devices>	100	</devices>
     </damage>
   </_75mm_Prf1930A>
@@ -770,37 +586,14 @@
     <icon>	he	</icon>
     <price>	145	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	75	</caliber>
     <explosionRadius>	1.06	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mediumHighExplosive	</effects>
     <damage>
-      <armor>	130	</armor>
-      <devices>	0	</devices>
+      <armor>	260	</armor>
+      <devices>	100	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	1.06	</impactRadius>
-      <damage>
-        <armor>	130	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	1.06	</impactRadius>
-      <damage>
-        <armor>	110	</armor>
-        <devices>	150	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	1.06	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	40	</devices>
-      </damage>
-    </armorSpalls>
   </_75mm_OE_mle_1924A>
   <_75mm_OE_mle_1944A>
     <id>	147	</id>
@@ -808,37 +601,14 @@
     <icon>	he	</icon>
     <price>	265	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	75	</caliber>
     <explosionRadius>	1.06	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mediumHighExplosive	</effects>
     <damage>
-      <armor>	140	</armor>
-      <devices>	0	</devices>
+      <armor>	260	</armor>
+      <devices>	100	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	1.06	</impactRadius>
-      <damage>
-        <armor>	140	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	1.06	</impactRadius>
-      <damage>
-        <armor>	120	</armor>
-        <devices>	150	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	1.06	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	40	</devices>
-      </damage>
-    </armorSpalls>
   </_75mm_OE_mle_1944A>
   <_75mm_Sprg.18>
     <id>	30	</id>
@@ -846,37 +616,14 @@
     <icon>	he	</icon>
     <price>	38	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	75	</caliber>
     <explosionRadius>	1.06	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mediumHighExplosive	</effects>
     <damage>
-      <armor>	90	</armor>
-      <devices>	0	</devices>
+      <armor>	175	</armor>
+      <devices>	100	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	1.06	</impactRadius>
-      <damage>
-        <armor>	90	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	1.06	</impactRadius>
-      <damage>
-        <armor>	75	</armor>
-        <devices>	150	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	1.06	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	40	</devices>
-      </damage>
-    </armorSpalls>
   </_75mm_Sprg.18>
   <_75mm_Odr_mle.1910>
     <id>	40	</id>
@@ -888,7 +635,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mediumArmorPiercing	</effects>
     <damage>
-      <armor>	130	</armor>
+      <armor>	110	</armor>
       <devices>	100	</devices>
     </damage>
   </_75mm_Odr_mle.1910>
@@ -918,7 +665,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainAPCR	</effects>
     <damage>
-      <armor>	210	</armor>
+      <armor>	175	</armor>
       <devices>	100	</devices>
     </damage>
   </_75mm_OFL_mle_54>
@@ -944,37 +691,14 @@
     <icon>	he	</icon>
     <price>	280	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	75	</caliber>
     <explosionRadius>	1.06	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mainHighExplosive	</effects>
     <damage>
-      <armor>	145	</armor>
-      <devices>	0	</devices>
+      <armor>	260	</armor>
+      <devices>	100	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	1.06	</impactRadius>
-      <damage>
-        <armor>	145	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	1.06	</impactRadius>
-      <damage>
-        <armor>	125	</armor>
-        <devices>	150	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	1.06	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	40	</devices>
-      </damage>
-    </armorSpalls>
   </_75mm_OE_mle_54>
   <_75mm_POT_mle_51>
     <id>	148	</id>
@@ -986,7 +710,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mediumArmorPiercing	</effects>
     <damage>
-      <armor>	160	</armor>
+      <armor>	135	</armor>
       <devices>	100	</devices>
     </damage>
   </_75mm_POT_mle_51>
@@ -1011,37 +735,14 @@
     <icon>	he	</icon>
     <price>	80	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	75	</caliber>
     <explosionRadius>	1.06	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mediumHighExplosive	</effects>
     <damage>
-      <armor>	90	</armor>
-      <devices>	0	</devices>
+      <armor>	175	</armor>
+      <devices>	100	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	1.06	</impactRadius>
-      <damage>
-        <armor>	90	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	1.06	</impactRadius>
-      <damage>
-        <armor>	75	</armor>
-        <devices>	150	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	1.06	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	40	</devices>
-      </damage>
-    </armorSpalls>
   </_75mm_OE_mle_51>
   <_75mm_M61>
     <id>	142	</id>
@@ -1053,7 +754,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mediumArmorPiercing	</effects>
     <damage>
-      <armor>	130	</armor>
+      <armor>	110	</armor>
       <devices>	100	</devices>
     </damage>
   </_75mm_M61>
@@ -1078,37 +779,14 @@
     <icon>	he	</icon>
     <price>	160	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	75	</caliber>
     <explosionRadius>	1.06	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mediumHighExplosive	</effects>
     <damage>
-      <armor>	90	</armor>
-      <devices>	0	</devices>
+      <armor>	175	</armor>
+      <devices>	100	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	1.06	</impactRadius>
-      <damage>
-        <armor>	90	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	1.06	</impactRadius>
-      <damage>
-        <armor>	75	</armor>
-        <devices>	150	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	1.06	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	40	</devices>
-      </damage>
-    </armorSpalls>
   </_75mm_M48>
   <_76mm_OEO_mle._1917>
     <id>	17	</id>
@@ -1152,7 +830,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mediumArmorPiercing	</effects>
     <damage>
-      <armor>	140	</armor>
+      <armor>	115	</armor>
       <devices>	105	</devices>
     </damage>
   </_76mm_AP_M79>
@@ -1177,37 +855,14 @@
     <icon>	he	</icon>
     <price>	68	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	76	</caliber>
     <explosionRadius>	1.09	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mediumHighExplosive	</effects>
     <damage>
-      <armor>	95	</armor>
-      <devices>	0	</devices>
+      <armor>	185	</armor>
+      <devices>	105	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	1.09	</impactRadius>
-      <damage>
-        <armor>	95	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	1.09	</impactRadius>
-      <damage>
-        <armor>	80	</armor>
-        <devices>	160	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	1.09	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	40	</devices>
-      </damage>
-    </armorSpalls>
   </_76mm_HE_M42A1>
   <_76.2_mm_AP_Mk.3T>
     <id>	62	</id>
@@ -1219,7 +874,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mediumArmorPiercing	</effects>
     <damage>
-      <armor>	180	</armor>
+      <armor>	150	</armor>
       <devices>	105	</devices>
     </damage>
   </_76.2_mm_AP_Mk.3T>
@@ -1244,37 +899,14 @@
     <icon>	he	</icon>
     <price>	98	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	76.2	</caliber>
     <explosionRadius>	1.09	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mediumHighExplosive	</effects>
     <damage>
-      <armor>	95	</armor>
-      <devices>	0	</devices>
+      <armor>	190	</armor>
+      <devices>	105	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	1.09	</impactRadius>
-      <damage>
-        <armor>	95	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	1.09	</impactRadius>
-      <damage>
-        <armor>	80	</armor>
-        <devices>	160	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	1.09	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	40	</devices>
-      </damage>
-    </armorSpalls>
   </_76.2_mm_HE_Mk._1T>
   <_75mm_Pzgr_39_42>
     <id>	151	</id>
@@ -1286,7 +918,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mediumArmorPiercing	</effects>
     <damage>
-      <armor>	160	</armor>
+      <armor>	135	</armor>
       <devices>	100	</devices>
     </damage>
   </_75mm_Pzgr_39_42>
@@ -1311,37 +943,14 @@
     <icon>	he	</icon>
     <price>	98	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	75	</caliber>
     <explosionRadius>	1.06	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mediumHighExplosive	</effects>
     <damage>
-      <armor>	90	</armor>
-      <devices>	0	</devices>
+      <armor>	175	</armor>
+      <devices>	100	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	1.06	</impactRadius>
-      <damage>
-        <armor>	90	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	1.06	</impactRadius>
-      <damage>
-        <armor>	75	</armor>
-        <devices>	150	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	1.06	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	40	</devices>
-      </damage>
-    </armorSpalls>
   </_75mm_Sprgr_34>
   <_90mm_Prf1941>
     <id>	34	</id>
@@ -1353,7 +962,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainArmorPiercing	</effects>
     <damage>
-      <armor>	290	</armor>
+      <armor>	240	</armor>
       <devices>	122	</devices>
     </damage>
   </_90mm_Prf1941>
@@ -1367,7 +976,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainAPCR	</effects>
     <damage>
-      <armor>	290	</armor>
+      <armor>	240	</armor>
       <devices>	122	</devices>
     </damage>
   </_90mm_OFL>
@@ -1392,37 +1001,14 @@
     <icon>	he	</icon>
     <price>	255	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	90	</caliber>
     <explosionRadius>	1.46	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mainHighExplosive	</effects>
     <damage>
-      <armor>	160	</armor>
-      <devices>	0	</devices>
+      <armor>	320	</armor>
+      <devices>	122	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	1.46	</impactRadius>
-      <damage>
-        <armor>	160	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	1.46	</impactRadius>
-      <damage>
-        <armor>	135	</armor>
-        <devices>	185	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	1.46	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	45	</devices>
-      </damage>
-    </armorSpalls>
   </_90mm_OE_mle_1924>
   <_90mm_AP_americaine>
     <id>	106	</id>
@@ -1434,7 +1020,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainArmorPiercing	</effects>
     <damage>
-      <armor>	290	</armor>
+      <armor>	240	</armor>
       <devices>	122	</devices>
     </damage>
   </_90mm_AP_americaine>
@@ -1460,37 +1046,14 @@
     <icon>	he	</icon>
     <price>	210	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	90	</caliber>
     <explosionRadius>	1.46	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mainHighExplosive	</effects>
     <damage>
-      <armor>	160	</armor>
-      <devices>	0	</devices>
+      <armor>	320	</armor>
+      <devices>	122	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	1.46	</impactRadius>
-      <damage>
-        <armor>	160	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	1.46	</impactRadius>
-      <damage>
-        <armor>	135	</armor>
-        <devices>	185	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	1.46	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	45	</devices>
-      </damage>
-    </armorSpalls>
   </_90mm_HE_americaine>
   <_90mm_POT_90_D_919>
     <id>	121	</id>
@@ -1502,7 +1065,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainArmorPiercing	</effects>
     <damage>
-      <armor>	265	</armor>
+      <armor>	220	</armor>
       <devices>	122	</devices>
     </damage>
   </_90mm_POT_90_D_919>
@@ -1527,37 +1090,14 @@
     <icon>	he	</icon>
     <price>	175	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	90	</caliber>
     <explosionRadius>	1.46	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mainHighExplosive	</effects>
     <damage>
-      <armor>	135	</armor>
-      <devices>	0	</devices>
+      <armor>	270	</armor>
+      <devices>	122	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	1.46	</impactRadius>
-      <damage>
-        <armor>	135	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	1.46	</impactRadius>
-      <damage>
-        <armor>	115	</armor>
-        <devices>	185	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	1.46	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	45	</devices>
-      </damage>
-    </armorSpalls>
   </_90mm_OE_90_D_919>
   <_90mm_OFL_90>
     <id>	136	</id>
@@ -1569,7 +1109,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainArmorPiercing	</effects>
     <damage>
-      <armor>	290	</armor>
+      <armor>	240	</armor>
       <devices>	122	</devices>
     </damage>
   </_90mm_OFL_90>
@@ -1595,37 +1135,14 @@
     <icon>	he	</icon>
     <price>	440	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	90	</caliber>
     <explosionRadius>	1.46	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mainHighExplosive	</effects>
     <damage>
-      <armor>	200	</armor>
-      <devices>	0	</devices>
+      <armor>	320	</armor>
+      <devices>	122	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	1.46	</impactRadius>
-      <damage>
-        <armor>	200	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	1.46	</impactRadius>
-      <damage>
-        <armor>	170	</armor>
-        <devices>	185	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	1.46	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	45	</devices>
-      </damage>
-    </armorSpalls>
   </_90mm_OE_90>
   <_100mm_FrtPrf1945>
     <id>	43	</id>
@@ -1648,37 +1165,14 @@
     <icon>	he	</icon>
     <price>	650	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	100	</caliber>
     <explosionRadius>	1.76	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mainHighExplosive	</effects>
     <damage>
-      <armor>	200	</armor>
-      <devices>	0	</devices>
+      <armor>	400	</armor>
+      <devices>	135	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	1.76	</impactRadius>
-      <damage>
-        <armor>	200	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	1.76	</impactRadius>
-      <damage>
-        <armor>	170	</armor>
-        <devices>	205	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	1.76	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	50	</devices>
-      </damage>
-    </armorSpalls>
   </_100mm_OE_mle_1930>
   <_100mm_Prf1940>
     <id>	42	</id>
@@ -1690,7 +1184,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainArmorPiercing	</effects>
     <damage>
-      <armor>	365	</armor>
+      <armor>	300	</armor>
       <devices>	135	</devices>
     </damage>
   </_100mm_Prf1940>
@@ -1719,7 +1213,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainArmorPiercing	</effects>
     <damage>
-      <armor>	365	</armor>
+      <armor>	300	</armor>
       <devices>	150	</devices>
     </damage>
   </_105mm_Prf1940>
@@ -1744,37 +1238,14 @@
     <icon>	he	</icon>
     <price>	280	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	105	</caliber>
     <explosionRadius>	1.91	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mainHighExplosive	</effects>
     <damage>
-      <armor>	180	</armor>
-      <devices>	0	</devices>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	1.91	</impactRadius>
-      <damage>
-        <armor>	180	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	1.91	</impactRadius>
-      <damage>
-        <armor>	155	</armor>
-        <devices>	225	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	1.91	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	55	</devices>
-      </damage>
-    </armorSpalls>
   </_105mm_OE_mle_1924>
   <_105mm_Sprg_K>
     <id>	25	</id>
@@ -1817,12 +1288,12 @@
     <isTracer>	true	</isTracer>
     <effects>	mainArmorPiercing	</effects>
     <damage>
-      <armor>	400	</armor>
+      <armor>	350	</armor>
       <devices>	150	</devices>
     </damage>
   </_105mm_PzGr39K>
-  <_105mm_OE_mle_1920_spg>
-    <id>	160	</id>
+  <_105mm_OE_mle_1920>
+    <id>	45	</id>
     <userString>	#france_vehicles:_105mm_OE_mle_1920	</userString>
     <icon>	he	</icon>
     <price>	128	</price>
@@ -1835,44 +1306,6 @@
       <armor>	410	</armor>
       <devices>	150	</devices>
     </damage>
-  </_105mm_OE_mle_1920_spg>
-  <_105mm_OE_mle_1920>
-    <id>	45	</id>
-    <userString>	#france_vehicles:_105mm_OE_mle_1920	</userString>
-    <icon>	he	</icon>
-    <price>	128	</price>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
-    <caliber>	105	</caliber>
-    <explosionRadius>	1.91	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	mainHighExplosive	</effects>
-    <damage>
-      <armor>	205	</armor>
-      <devices>	0	</devices>
-    </damage>
-    <blastWave>
-      <impactRadius>	1.91	</impactRadius>
-      <damage>
-        <armor>	205	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	1.91	</impactRadius>
-      <damage>
-        <armor>	175	</armor>
-        <devices>	225	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	1.91	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	55	</devices>
-      </damage>
-    </armorSpalls>
   </_105mm_OE_mle_1920>
   <_105mm_OCO_mle._1936>
     <id>	46	</id>
@@ -1900,7 +1333,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainAPCR	</effects>
     <damage>
-      <armor>	475	</armor>
+      <armor>	390	</armor>
       <devices>	150	</devices>
     </damage>
   </_105mm_APCR_OFL_E1>
@@ -1926,37 +1359,14 @@
     <icon>	he	</icon>
     <price>	680	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	105	</caliber>
     <explosionRadius>	1.91	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mainHighExplosive	</effects>
     <damage>
-      <armor>	240	</armor>
-      <devices>	0	</devices>
+      <armor>	480	</armor>
+      <devices>	150	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	1.91	</impactRadius>
-      <damage>
-        <armor>	240	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	1.91	</impactRadius>
-      <damage>
-        <armor>	205	</armor>
-        <devices>	225	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	1.91	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	55	</devices>
-      </damage>
-    </armorSpalls>
   </_105mm_HE_OE_F1>
   <_105mm_APCR_OFL_105E3>
     <id>	154	</id>
@@ -1968,7 +1378,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainAPCR	</effects>
     <damage>
-      <armor>	475	</armor>
+      <armor>	390	</armor>
       <devices>	150	</devices>
     </damage>
   </_105mm_APCR_OFL_105E3>
@@ -1994,37 +1404,14 @@
     <icon>	he	</icon>
     <price>	820	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	105	</caliber>
     <explosionRadius>	1.91	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mainHighExplosive	</effects>
     <damage>
-      <armor>	240	</armor>
-      <devices>	0	</devices>
+      <armor>	480	</armor>
+      <devices>	150	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	1.91	</impactRadius>
-      <damage>
-        <armor>	240	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	1.91	</impactRadius>
-      <damage>
-        <armor>	205	</armor>
-        <devices>	225	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	1.91	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	55	</devices>
-      </damage>
-    </armorSpalls>
   </_105mm_HE_OE_105E3>
   <_105mm_OFL_105_F1>
     <id>	88	</id>
@@ -2036,7 +1423,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainAPCR	</effects>
     <damage>
-      <armor>	475	</armor>
+      <armor>	390	</armor>
       <devices>	150	</devices>
     </damage>
   </_105mm_OFL_105_F1>
@@ -2062,37 +1449,14 @@
     <icon>	he	</icon>
     <price>	680	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	105	</caliber>
     <explosionRadius>	1.91	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mainHighExplosive	</effects>
     <damage>
-      <armor>	240	</armor>
-      <devices>	0	</devices>
+      <armor>	480	</armor>
+      <devices>	150	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	1.91	</impactRadius>
-      <damage>
-        <armor>	240	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	1.91	</impactRadius>
-      <damage>
-        <armor>	205	</armor>
-        <devices>	225	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	1.91	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	55	</devices>
-      </damage>
-    </armorSpalls>
   </_105mm_OE_105_Mle_60>
   <_105mm_OFL_105_D1504_L51>
     <id>	95	</id>
@@ -2104,7 +1468,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainAPCR	</effects>
     <damage>
-      <armor>	475	</armor>
+      <armor>	390	</armor>
       <devices>	150	</devices>
     </damage>
   </_105mm_OFL_105_D1504_L51>
@@ -2130,37 +1494,14 @@
     <icon>	he	</icon>
     <price>	410	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	105	</caliber>
     <explosionRadius>	1.91	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mainHighExplosive	</effects>
     <damage>
-      <armor>	240	</armor>
-      <devices>	0	</devices>
+      <armor>	480	</armor>
+      <devices>	150	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	1.91	</impactRadius>
-      <damage>
-        <armor>	240	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	1.91	</impactRadius>
-      <damage>
-        <armor>	205	</armor>
-        <devices>	225	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	1.91	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	55	</devices>
-      </damage>
-    </armorSpalls>
   </_105mm_OE_105_Mle_60_D1504_L51>
   <_105mm_OFL_105_D1504>
     <id>	111	</id>
@@ -2172,7 +1513,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainAPCR	</effects>
     <damage>
-      <armor>	475	</armor>
+      <armor>	390	</armor>
       <devices>	150	</devices>
     </damage>
   </_105mm_OFL_105_D1504>
@@ -2198,37 +1539,14 @@
     <icon>	he	</icon>
     <price>	505	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	105	</caliber>
     <explosionRadius>	1.91	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mainHighExplosive	</effects>
     <damage>
-      <armor>	240	</armor>
-      <devices>	0	</devices>
+      <armor>	480	</armor>
+      <devices>	150	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	1.91	</impactRadius>
-      <damage>
-        <armor>	240	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	1.91	</impactRadius>
-      <damage>
-        <armor>	205	</armor>
-        <devices>	225	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	1.91	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	55	</devices>
-      </damage>
-    </armorSpalls>
   </_105mm_OE_105_Mle_60_D1504>
   <_105mm_OFL_105_D_1504_EBR>
     <id>	139	</id>
@@ -2240,7 +1558,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainAPCR	</effects>
     <damage>
-      <armor>	475	</armor>
+      <armor>	390	</armor>
       <devices>	150	</devices>
     </damage>
   </_105mm_OFL_105_D_1504_EBR>
@@ -2266,37 +1584,14 @@
     <icon>	he	</icon>
     <price>	840	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	105	</caliber>
     <explosionRadius>	1.91	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mainHighExplosive	</effects>
     <damage>
-      <armor>	330	</armor>
-      <devices>	0	</devices>
+      <armor>	500	</armor>
+      <devices>	150	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	1.91	</impactRadius>
-      <damage>
-        <armor>	330	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	1.91	</impactRadius>
-      <damage>
-        <armor>	285	</armor>
-        <devices>	225	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	1.91	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	55	</devices>
-      </damage>
-    </armorSpalls>
   </_105mm_OE_105_Mle_60_D_1504_EBR>
   <_105mm_OFL_105_D_1504_EBR_2>
     <id>	157	</id>
@@ -2352,7 +1647,7 @@
     <isTracer>	true	</isTracer>
     <effects>	largeArmorPiercing	</effects>
     <damage>
-      <armor>	490	</armor>
+      <armor>	400	</armor>
       <devices>	165	</devices>
     </damage>
   </_120mm_Prf1943>
@@ -2406,37 +1701,14 @@
     <icon>	he	</icon>
     <price>	900	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	120	</caliber>
     <explosionRadius>	2.42	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	largeHighExplosive	</effects>
     <damage>
-      <armor>	260	</armor>
-      <devices>	0	</devices>
+      <armor>	515	</armor>
+      <devices>	165	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	2.42	</impactRadius>
-      <damage>
-        <armor>	260	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	2.42	</impactRadius>
-      <damage>
-        <armor>	220	</armor>
-        <devices>	250	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	2.42	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	60	</devices>
-      </damage>
-    </armorSpalls>
   </_120mm_OE_mle_1930>
   <_120mm_OE_mle_1930_fallout2>
     <id>	105	</id>
@@ -2463,7 +1735,7 @@
     <isTracer>	true	</isTracer>
     <effects>	largeArmorPiercing	</effects>
     <damage>
-      <armor>	490	</armor>
+      <armor>	400	</armor>
       <devices>	165	</devices>
     </damage>
   </_120mm_Prf1951>
@@ -2488,37 +1760,14 @@
     <icon>	he	</icon>
     <price>	810	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	120	</caliber>
     <explosionRadius>	2.42	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	largeHighExplosive	</effects>
     <damage>
-      <armor>	260	</armor>
-      <devices>	0	</devices>
+      <armor>	515	</armor>
+      <devices>	165	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	2.42	</impactRadius>
-      <damage>
-        <armor>	260	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	2.42	</impactRadius>
-      <damage>
-        <armor>	220	</armor>
-        <devices>	250	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	2.42	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	60	</devices>
-      </damage>
-    </armorSpalls>
   </_120mm_OE_mle_1951>
   <_127mm_Capped_Common_Semi_AP>
     <id>	124	</id>
@@ -2530,7 +1779,7 @@
     <isTracer>	true	</isTracer>
     <effects>	largeArmorPiercing	</effects>
     <damage>
-      <armor>	580	</armor>
+      <armor>	470	</armor>
       <devices>	178	</devices>
     </damage>
   </_127mm_Capped_Common_Semi_AP>
@@ -2555,37 +1804,14 @@
     <icon>	he	</icon>
     <price>	890	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	127	</caliber>
     <explosionRadius>	2.67	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	largeHighExplosive	</effects>
     <damage>
-      <armor>	305	</armor>
-      <devices>	0	</devices>
+      <armor>	610	</armor>
+      <devices>	178	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	2.67	</impactRadius>
-      <damage>
-        <armor>	305	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	2.67	</impactRadius>
-      <damage>
-        <armor>	260	</armor>
-        <devices>	265	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	2.67	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	65	</devices>
-      </damage>
-    </armorSpalls>
   </_127mm_Common_HE>
   <_130mm_Capped_Common_Semi_AP>
     <id>	127	</id>
@@ -2597,7 +1823,7 @@
     <isTracer>	true	</isTracer>
     <effects>	largeArmorPiercing	</effects>
     <damage>
-      <armor>	690	</armor>
+      <armor>	560	</armor>
       <devices>	180	</devices>
     </damage>
   </_130mm_Capped_Common_Semi_AP>
@@ -2622,37 +1848,14 @@
     <icon>	he	</icon>
     <price>	1035	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	130	</caliber>
     <explosionRadius>	2.78	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	largeHighExplosive	</effects>
     <damage>
-      <armor>	320	</armor>
-      <devices>	0	</devices>
+      <armor>	640	</armor>
+      <devices>	180	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	2.78	</impactRadius>
-      <damage>
-        <armor>	320	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	2.78	</impactRadius>
-      <damage>
-        <armor>	275	</armor>
-        <devices>	270	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	2.78	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	70	</devices>
-      </damage>
-    </armorSpalls>
   </_130mm_Common_HE>
   <_155mm_OE_mle_1917>
     <id>	53	</id>
@@ -2677,15 +1880,16 @@
     <id>	54	</id>
     <userString>	#france_vehicles:_155mm_OCO_mle_1944	</userString>
     <icon>	hc	</icon>
-    <price>	1680	</price>
+    <price>	4800	</price>
     <improved>	true	</improved>
+    <notInShop>	true	</notInShop>
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	155	</caliber>
     <isTracer>	true	</isTracer>
     <effects>	hugeHollowCharge	</effects>
     <damage>
-      <armor>	415	</armor>
-      <devices>	100	</devices>
+      <armor>	720	</armor>
+      <devices>	210	</devices>
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_155mm_OCO_mle_1944>
@@ -2717,10 +1921,14 @@
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	155	</caliber>
     <explosionRadius>	9	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	27	</stunDuration>
+    <guaranteedStunDuration>	0.45	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.55	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
-      <armor>	860	</armor>
+      <armor>	750	</armor>
       <devices>	105	</devices>
     </damage>
   </_155mm_OE_M101M6>
@@ -2753,7 +1961,7 @@
     <isTracer>	true	</isTracer>
     <effects>	hugeArmorPiercing	</effects>
     <damage>
-      <armor>	930	</armor>
+      <armor>	750	</armor>
       <devices>	210	</devices>
     </damage>
   </_155mm_AP-T_T368>
@@ -2779,37 +1987,14 @@
     <icon>	he	</icon>
     <price>	1090	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
     <caliber>	155	</caliber>
     <explosionRadius>	3.78	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
-      <armor>	480	</armor>
-      <devices>	0	</devices>
+      <armor>	1100	</armor>
+      <devices>	210	</devices>
     </damage>
-    <blastWave>
-      <impactRadius>	3.78	</impactRadius>
-      <damage>
-        <armor>	480	</armor>
-        <devices>	0	</devices>
-      </damage>
-    </blastWave>
-    <shellFragments>
-      <impactRadius>	3.78	</impactRadius>
-      <damage>
-        <armor>	410	</armor>
-        <devices>	315	</devices>
-      </damage>
-    </shellFragments>
-    <armorSpalls>
-      <impactRadius>	3.78	</impactRadius>
-      <coneAngleCos>	0.866	</coneAngleCos>
-      <damage>
-        <armor>	0	</armor>
-        <devices>	80	</devices>
-      </damage>
-    </armorSpalls>
   </_155mm_HE_T58>
   <_M_107>
     <id>	77	</id>
@@ -2820,43 +2005,15 @@
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	155	</caliber>
     <explosionRadius>	9	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	22	</stunDuration>
+    <guaranteedStunDuration>	0.50	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.50	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
-      <armor>	805	</armor>
+      <armor>	700	</armor>
       <devices>	105	</devices>
     </damage>
   </_M_107>
-  <_155mm_OE_mle_56_69>
-    <id>	161	</id>
-    <userString>	#france_vehicles:_155mm_OE_mle_56_69	</userString>
-    <icon>	he_premium	</icon>
-    <price>	3000	</price>
-    <improved>	true	</improved>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <caliber>	155	</caliber>
-    <explosionRadius>	9	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	hugeHighExplosive	</effects>
-    <damage>
-      <armor>	805	</armor>
-      <devices>	105	</devices>
-    </damage>
-  </_155mm_OE_mle_56_69>
-  <_155mm_HE_Mk1A1>
-    <id>	162	</id>
-    <userString>	#france_vehicles:_155mm_HE_Mk1A1	</userString>
-    <icon>	he_premium	</icon>
-    <price>	1520	</price>
-    <improved>	true	</improved>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <caliber>	155	</caliber>
-    <explosionRadius>	7.9	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	hugeHighExplosive	</effects>
-    <damage>
-      <armor>	635	</armor>
-      <devices>	105	</devices>
-    </damage>
-  </_155mm_HE_Mk1A1>
 </shells.xml>

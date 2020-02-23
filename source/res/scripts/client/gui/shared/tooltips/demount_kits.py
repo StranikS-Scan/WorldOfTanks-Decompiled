@@ -11,6 +11,7 @@ from gui.shared.money import Currency
 from gui.shared.tooltips import TOOLTIP_TYPE, ToolTipBaseData
 from gui.shared.tooltips import formatters
 from gui.shared.tooltips.common import BlocksTooltipData
+from gui.shared.tooltips.wgm_currency import WGMCurrencyTooltip
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 
@@ -41,6 +42,13 @@ class GoldToolTipData(BlocksTooltipData):
             valueBlock = formatters.packMoneyAndXpValueBlock(value=text_styles.gold(backport.getIntegralFormat(self._itemsCache.items.stats.money.gold)), icon=self._btnType, iconYoffset=self._ICON_Y_OFFSET)
             return formatters.packMoneyAndXpBlocks(tooltipBlocks, btnType=self._btnType, valueBlocks=[valueBlock], alternativeData={'btnClickDesc': 'goldAlternative',
              'btnClickDescAlign': BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT})
+
+
+class GoldStatsToolTipData(WGMCurrencyTooltip):
+
+    def _getAlternativeData(self):
+        return {'btnClickDesc': 'goldAlternative',
+         'btnClickDescAlign': BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT}
 
 
 class DemountKitToolTipData(BlocksTooltipData):

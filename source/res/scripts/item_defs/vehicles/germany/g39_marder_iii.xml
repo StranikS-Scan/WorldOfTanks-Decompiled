@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.507	</firePenalty>
   </invisibility>
-  <repairCost>	2.912	</repairCost>
+  <repairCost>	5.50	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
@@ -46,7 +46,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	5840	</weight>
-    <maxHealth>	408	</maxHealth>
+    <maxHealth>	216	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	125	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
@@ -177,8 +177,8 @@
         <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	85	</maxHealth>
-      <maxRegenHealth>	64	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
       <models>
         <undamaged>	vehicles/german/G39_Marder_III/normal/lod0/Chassis.model	</undamaged>
@@ -1097,8 +1097,8 @@
         <vehicleRotation>	0.28	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	95	</maxHealth>
-      <maxRegenHealth>	71	</maxRegenHealth>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
       <models>
         <undamaged>	vehicles/german/G39_Marder_III/normal/lod0/Chassis.model	</undamaged>
@@ -2017,7 +2017,7 @@
         <armor_8>	0	</armor_8>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	102	</maxHealth>
+      <maxHealth>	54	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2031,7 +2031,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_PaK_36r>	shared	  <maxAmmo>	65	</maxAmmo>
+        <_76mm_PaK_36r>	shared	  <maxAmmo>	37	</maxAmmo>
           <unlocks>
             <gun>	_75mm_PaK_40_2	  <cost>	2600	</cost>
             </gun>
@@ -2098,7 +2098,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_76mm_PaK_36r>
-        <_75mm_PaK_40_2>	shared	  <maxAmmo>	65	</maxAmmo>
+        <_75mm_PaK_40_2>	shared	  <maxAmmo>	38	</maxAmmo>
           <unlocks>
             <gun>	_75mm_PaK_40_3	  <cost>	3600	</cost>
             </gun>
@@ -2165,7 +2165,11 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_PaK_40_2>
-        <_75mm_PaK_40_3>	shared	  <maxAmmo>	55	</maxAmmo>
+        <_75mm_PaK_40_3>	shared	  <maxAmmo>	38	</maxAmmo>
+          <unlocks>
+            <vehicle>	G76_Pz_Sfl_IVc	  <cost>	12150	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <gun>	20	</gun>
             <gunBreech>	0	</gunBreech>
@@ -2289,6 +2293,8 @@
     <FuG5>	shared	  <unlocks>
         <radio>	FuG8	  <cost>	4040	</cost>
         </radio>
+        <vehicle>	G101_StuG_III	  <cost>	3250	</cost>
+        </vehicle>
       </unlocks>
     </FuG5>
     <FuG8>	shared	</FuG8>

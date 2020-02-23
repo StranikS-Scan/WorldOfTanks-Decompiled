@@ -22,7 +22,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	2750	</weight>
-    <maxHealth>	256	</maxHealth>
+    <maxHealth>	92	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	65	</maxHealth>
       <maxRegenHealth>	45	</maxRegenHealth>
@@ -119,8 +119,8 @@
         <vehicleRotation>	0.38	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F01_RenaultFT/normal/lod0/Chassis.model	</undamaged>
@@ -792,7 +792,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	200	</weight>
-      <maxHealth>	64	</maxHealth>
+      <maxHealth>	23	</maxHealth>
       <rotationSpeed>	34	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	50	</maxHealth>
@@ -820,7 +820,6 @@
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <maxAmmo>	545	</maxAmmo>
           <armor>
             <armor_1>	16	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -869,14 +868,23 @@
           </camouflage>
         </_37mm_APX_SA18>
         <_13.2mm_Hotchkiss_mle._1930>	shared	  <unlocks>
+            <vehicle>	F30_RenaultFT_AC	  <cost>	280	</cost>
+            </vehicle>
+            <vehicle>	F02_D1	  <cost>	280	</cost>
+            </vehicle>
+            <vehicle>	F12_Hotchkiss_H35	  <cost>	280	</cost>
+            </vehicle>
             <vehicle>	F50_FCM36_20t	  <cost>	280	</cost>
+            </vehicle>
+            <vehicle>	F49_RenaultR35	  <cost>	280	</cost>
+            </vehicle>
+            <vehicle>	F20_RenaultBS	  <cost>	280	</cost>
             </vehicle>
           </unlocks>
           <pitchLimits>
             <minPitch>	0 -35 1 -35	</minPitch>
             <maxPitch>	0 10 0.40856 10 0.472222 0 0.527778 0 0.59144 10 1 10	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	1665	</maxAmmo>
           <armor>
             <armor_1>	16	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

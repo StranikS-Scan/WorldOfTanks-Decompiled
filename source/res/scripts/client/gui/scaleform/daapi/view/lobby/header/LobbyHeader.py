@@ -136,7 +136,13 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         FREE_XP = 'freeXP'
         BATTLE_SELECTOR = 'battleSelector'
 
-    PRB_NAVIGATION_DISABLE_BUTTONS = (BUTTONS.CREDITS, BUTTONS.CRYSTAL, BUTTONS.FREE_XP)
+    PRB_NAVIGATION_DISABLE_BUTTONS = (BUTTONS.PREM,
+     BUTTONS.CREDITS,
+     BUTTONS.GOLD,
+     BUTTONS.CRYSTAL,
+     BUTTONS.FREE_XP,
+     BUTTONS.ACCOUNT,
+     BUTTONS.PREMSHOP)
 
     class TABS(CONST_CONTAINER):
         HANGAR = VIEW_ALIAS.LOBBY_HANGAR
@@ -263,7 +269,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.PREMIUM_WINDOW), EVENT_BUS_SCOPE.LOBBY)
 
     def onPremShopClick(self):
-        pass
+        self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.PREM_SHOP))
 
     @process
     def showDashboard(self):
@@ -323,10 +329,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         if self.bootcampController.isInBootcamp():
             self.as_disableFightButtonS(self.__isFightBtnDisabled)
         self._onPopulateEnd()
-        self.as_doDisableHeaderButtonS(self.BUTTONS.PREMSHOP, False)
-        self.as_doDisableHeaderButtonS(self.BUTTONS.ACCOUNT, False)
-        self.as_doDisableHeaderButtonS(self.BUTTONS.PREM, False)
-        self.as_doDisableHeaderButtonS(self.BUTTONS.GOLD, False)
         return
 
     def _invalidate(self, *args, **kwargs):
@@ -1040,6 +1042,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             tabDataProvider.append({'label': MENU.HEADERBUTTONS_BROWSER,
              'value': self.TABS.BROWSER,
              'tooltip': TOOLTIPS.HEADER_BUTTONS_BROWSER})
+        tabDataProvider.append(self._updateStrongholdsSelector())
         override = self.app.tutorialManager.lastHangarMenuButtonsOverride
         if override is not None:
             tabDataProvider[:] = ifilter(lambda item: item['value'] in override, tabDataProvider)

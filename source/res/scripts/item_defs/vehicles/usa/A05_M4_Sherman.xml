@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.339	</firePenalty>
   </invisibility>
-  <repairCost>	3.19	</repairCost>
+  <repairCost>	5.34	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
@@ -45,7 +45,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	14600	</weight>
-    <maxHealth>	616	</maxHealth>
+    <maxHealth>	320	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	170	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -155,8 +155,8 @@
         <vehicleRotation>	0.26	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	110	</maxHealth>
-      <maxRegenHealth>	83	</maxRegenHealth>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A05_M4_Sherman/normal/lod0/Chassis.model	</undamaged>
@@ -1183,8 +1183,8 @@
         <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	90	</maxRegenHealth>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A05_M4_Sherman/normal/lod0/Chassis.model	</undamaged>
@@ -2211,7 +2211,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4800	</weight>
-      <maxHealth>	114	</maxHealth>
+      <maxHealth>	80	</maxHealth>
       <rotationSpeed>	39	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2225,7 +2225,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_Gun_M3_L37>	shared	  <maxAmmo>	135	</maxAmmo>
+        <_75mm_Gun_M3_L37>	shared	  <maxAmmo>	90	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 12 1 12	</maxPitch>
@@ -2308,7 +2308,6 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 12 1 12	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	70	</maxAmmo>
           <armor>
             <armor_1>	91.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2448,6 +2447,8 @@
       <unlocks>
         <gun>	_76mm_Gun_M1A1	  <cost>	4600	</cost>
         </gun>
+        <vehicle>	A36_Sherman_Jumbo	  <cost>	32750	</cost>
+        </vehicle>
       </unlocks>
       <armor>
         <armor_1>	63.5	</armor_1>
@@ -2463,7 +2464,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5000	</weight>
-      <maxHealth>	154	</maxHealth>
+      <maxHealth>	140	</maxHealth>
       <rotationSpeed>	37	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2478,7 +2479,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.976	</invisibilityFactor>
       <guns>
-        <_75mm_Gun_M3_L37>	shared	  <maxAmmo>	135	</maxAmmo>
+        <_75mm_Gun_M3_L37>	shared	  <maxAmmo>	90	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 12 1 12	</maxPitch>
@@ -2557,7 +2558,6 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 12 1 12	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	70	</maxAmmo>
           <armor>
             <armor_3>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
@@ -2628,7 +2628,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_105mm_SPH_M4_L23>
-        <_76mm_Gun_M1A1>	shared	  <maxAmmo>	110	</maxAmmo>
+        <_76mm_Gun_M1A1>	shared	  <maxAmmo>	90	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 12 1 12	</maxPitch>

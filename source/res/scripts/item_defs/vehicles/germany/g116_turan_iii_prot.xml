@@ -18,7 +18,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	7309	</weight>
-    <maxHealth>	768	</maxHealth>
+    <maxHealth>	456	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	150	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -105,8 +105,8 @@
         <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	110	</maxHealth>
-      <maxRegenHealth>	83	</maxRegenHealth>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G116_Turan_III_prot/normal/lod0/Chassis.model	</undamaged>
@@ -834,7 +834,7 @@
   <turrets0>
     <Turret_1_G116_Turan_III_prot>
       <guns>
-        <_75mm_43_M_L43>	shared	  <maxAmmo>	39	</maxAmmo>
+        <_75mm_43_M_L43>	shared	  <maxAmmo>	32	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 0.397222 10 0.4 9.8 0.402778 9.6 0.405556 9.4 0.408333 9.2 0.411111 9 0.413889 8.7 0.416667 8.4 0.419444 8.2 0.422222 8 0.425 7.8 0.427778 7.6 0.430556 7.4 0.433333 7.2 0.436111 7 0.438889 6.8 0.45 6.8 0.452778 6 0.455556 5.5 0.461111 5.5 0.463889 6 0.466667 7.3 0.486111 7.3 0.488889 7.5 0.491667 8 0.533333 8 0.536111 6 0.538889 5.5 0.541667 5.5 0.544444 6 0.547222 7 0.558333 7 0.563889 7.2 0.572222 7.8 0.575 8.2 0.577778 9.6 0.580556 10 1 10	</maxPitch>
@@ -938,7 +938,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4000	</weight>
-      <maxHealth>	192	</maxHealth>
+      <maxHealth>	114	</maxHealth>
       <rotationSpeed>	28	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1049,7 +1049,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.363	</firePenalty>
   </invisibility>
-  <repairCost>	2.078	</repairCost>
+  <repairCost>	3.50	</repairCost>
   <premiumVehicleXPFactor>	0.4	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <engines>

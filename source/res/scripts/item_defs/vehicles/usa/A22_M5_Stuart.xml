@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.408	</firePenalty>
   </invisibility>
-  <repairCost>	2.943	</repairCost>
+  <repairCost>	5.80	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
@@ -43,7 +43,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_13 armor_4	</primaryArmor>
     <weight>	10033	</weight>
-    <maxHealth>	536	</maxHealth>
+    <maxHealth>	256	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	140	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -153,8 +153,8 @@
         <vehicleRotation>	0.25	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	85	</maxHealth>
-      <maxRegenHealth>	64	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A22_M5_Stuart/normal/lod0/Chassis.model	</undamaged>
@@ -746,8 +746,8 @@
         <vehicleRotation>	0.21	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	95	</maxHealth>
-      <maxRegenHealth>	71	</maxRegenHealth>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A22_M5_Stuart/normal/lod0/Chassis.model	</undamaged>
@@ -1341,7 +1341,7 @@
       </armor>
       <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
       <weight>	1020	</weight>
-      <maxHealth>	104	</maxHealth>
+      <maxHealth>	64	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -1355,7 +1355,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_M-6_L53>	shared	  <maxAmmo>	215	</maxAmmo>
+        <_37mm_M-6_L53>	shared	  <maxAmmo>	123	</maxAmmo>
           <unlocks>
             <gun>	_37mm_T16	  <cost>	1100	</cost>
             </gun>
@@ -1424,7 +1424,7 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_37mm_M-6_L53>
-        <_37mm_T16>	shared	  <maxAmmo>	180	</maxAmmo>
+        <_37mm_T16>	shared	  <maxAmmo>	120	</maxAmmo>
           <unlocks>
             <turret>	M7	  <cost>	1220	</cost>
             </turret>
@@ -1567,6 +1567,10 @@
       <tags></tags>
       <level>	4	</level>
       <price>	5180	</price>
+      <unlocks>
+        <vehicle>	A23_M7_med	  <cost>	13060	</cost>
+        </vehicle>
+      </unlocks>
       <armor>
         <armor_1>	44.5	</armor_1>
         <armor_2>	44.5	</armor_2>
@@ -1582,7 +1586,7 @@
       </armor>
       <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
       <weight>	1200	</weight>
-      <maxHealth>	134	</maxHealth>
+      <maxHealth>	84	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -1597,7 +1601,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.044	</invisibilityFactor>
       <guns>
-        <_37mm_M-6_L53>	shared	  <maxAmmo>	255	</maxAmmo>
+        <_37mm_M-6_L53>	shared	  <maxAmmo>	147	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.353005 10 0.416667 3 0.583333 3 0.646995 10 1 10	</maxPitch>
@@ -1662,7 +1666,7 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_37mm_M-6_L53>
-        <_37mm_T16>	shared	  <maxAmmo>	220	</maxAmmo>
+        <_37mm_T16>	shared	  <maxAmmo>	145	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.353005 10 0.416667 3 0.583333 3 0.646995 10 1 10	</maxPitch>

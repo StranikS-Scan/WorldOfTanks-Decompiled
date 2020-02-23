@@ -332,13 +332,12 @@ class Grousers(OptionalDevice):
 
 
 class AntifragmentationLining(OptionalDevice):
-    __slots__ = ('antifragmentationLiningFactor', 'increaseCrewChanceToEvadeHit', 'armorSpallsDamageDevicesFactor')
+    __slots__ = ('antifragmentationLiningFactor', 'increaseCrewChanceToEvadeHit')
 
     def __init__(self):
         super(AntifragmentationLining, self).__init__()
         self.antifragmentationLiningFactor = component_constants.ZERO_FLOAT
         self.increaseCrewChanceToEvadeHit = component_constants.ZERO_FLOAT
-        self.armorSpallsDamageDevicesFactor = component_constants.ZERO_FLOAT
 
     def updateVehicleDescrAttrs(self, vehicleDescr):
         miscAttrs = vehicleDescr.miscAttrs
@@ -347,13 +346,11 @@ class AntifragmentationLining(OptionalDevice):
         miscAttrs['stunResistanceEffect'] += self.stunResistanceEffect
         miscAttrs['stunResistanceDuration'] += self.stunResistanceDuration
         miscAttrs['repeatedStunDurationFactor'] *= self.repeatedStunDurationFactor
-        miscAttrs['armorSpallsDamageDevicesFactor'] *= self.armorSpallsDamageDevicesFactor
 
     def _readConfig(self, xmlCtx, section):
         reader = partial(_xml.readPositiveFloat, xmlCtx, section)
         self.antifragmentationLiningFactor = reader('antifragmentationLiningFactor')
         self.increaseCrewChanceToEvadeHit = reader('increaseCrewChanceToEvadeHit')
-        self.armorSpallsDamageDevicesFactor = _xml.readPositiveFloat(xmlCtx, section, 'armorSpallsDamageDevicesFactor', 1.0)
 
 
 class Extinguisher(Equipment):

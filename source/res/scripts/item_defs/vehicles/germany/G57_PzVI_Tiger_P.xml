@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.176	</firePenalty>
   </invisibility>
-  <repairCost>	5.214	</repairCost>
+  <repairCost>	6.545	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.4	</priceFactor>
@@ -44,7 +44,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	30100	</weight>
-    <maxHealth>	1456	</maxHealth>
+    <maxHealth>	1080	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -134,8 +134,8 @@
         <vehicleRotation>	0.23	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	205	</maxHealth>
-      <maxRegenHealth>	154	</maxRegenHealth>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G57_PzVI_Tiger_P/normal/lod0/Chassis.model	</undamaged>
@@ -881,6 +881,10 @@
       <tags></tags>
       <level>	7	</level>
       <price>	17750	</price>
+      <unlocks>
+        <vehicle>	G37_Ferdinand	  <cost>	150000	</cost>
+        </vehicle>
+      </unlocks>
       <armor>
         <leftTrack>	25	</leftTrack>
         <rightTrack>	25	</rightTrack>
@@ -896,8 +900,8 @@
         <vehicleRotation>	0.21	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	230	</maxHealth>
-      <maxRegenHealth>	173	</maxRegenHealth>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	145	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G57_PzVI_Tiger_P/normal/lod0/Chassis.model	</undamaged>
@@ -1665,7 +1669,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8900	</weight>
-      <maxHealth>	264	</maxHealth>
+      <maxHealth>	270	</maxHealth>
       <rotationSpeed>	23	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -1679,7 +1683,7 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_KwK_L70>	shared	  <maxAmmo>	125	</maxAmmo>
+        <_75mm_KwK_L70>	shared	  <maxAmmo>	106	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -1690,6 +1694,8 @@
             </gun>
             <gun>	_105mm_StuH42_L28Pz	  <cost>	3800	</cost>
             </gun>
+            <vehicle>	G04_PzVI_Tiger_I	  <cost>	25120	</cost>
+            </vehicle>
           </unlocks>
           <armor>
             <armor_1>	135	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -1774,7 +1780,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_KwK_L70>
-        <_105mm_StuH42_L28Pz>	shared	  <maxAmmo>	70	</maxAmmo>
+        <_105mm_StuH42_L28Pz>	shared	  <maxAmmo>	58	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -2150,7 +2156,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	9500	</weight>
-      <maxHealth>	364	</maxHealth>
+      <maxHealth>	370	</maxHealth>
       <rotationSpeed>	23	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -2164,7 +2170,7 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_KwK_L70>	shared	  <maxAmmo>	125	</maxAmmo>
+        <_75mm_KwK_L70>	shared	  <maxAmmo>	106	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -2253,7 +2259,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_KwK_L70>
-        <_105mm_StuH42_L28Pz>	shared	  <maxAmmo>	70	</maxAmmo>
+        <_105mm_StuH42_L28Pz>	shared	  <maxAmmo>	58	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>

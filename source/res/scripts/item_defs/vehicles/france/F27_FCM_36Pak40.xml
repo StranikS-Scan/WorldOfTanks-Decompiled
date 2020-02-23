@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.482	</firePenalty>
   </invisibility>
-  <repairCost>	1.846	</repairCost>
+  <repairCost>	4	</repairCost>
   <premiumVehicleXPFactor>	0.6	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
@@ -50,7 +50,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	9700	</weight>
-    <maxHealth>	312	</maxHealth>
+    <maxHealth>	144	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	100	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -178,8 +178,8 @@
         <vehicleRotation>	0.25	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	85	</maxHealth>
-      <maxRegenHealth>	64	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
       <models>
         <undamaged>	vehicles/french/F27_FCM_36Pak40/normal/lod0/Chassis.model	</undamaged>
@@ -932,7 +932,7 @@
         <armor_2>	15	</armor_2>
       </armor>
       <weight>	170	</weight>
-      <maxHealth>	78	</maxHealth>
+      <maxHealth>	36	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -946,7 +946,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_PaK_40_2>	shared	  <maxAmmo>	70	</maxAmmo>
+        <_75mm_PaK_40_2>	shared	  <maxAmmo>	40	</maxAmmo>
           <armor>
             <armor_1>	20	</armor_1>
             <gun>	20	</gun>

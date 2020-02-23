@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.278	</firePenalty>
   </invisibility>
-  <repairCost>	2.741	</repairCost>
+  <repairCost>	4.48	</repairCost>
   <premiumVehicleXPFactor>	0.4	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
@@ -44,7 +44,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	18960	</weight>
-    <maxHealth>	680	</maxHealth>
+    <maxHealth>	416	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -140,8 +140,8 @@
         <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	205	</maxHealth>
-      <maxRegenHealth>	154	</maxRegenHealth>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	125	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G32_PzV_PzIV/normal/lod0/Chassis.model	</undamaged>
@@ -875,7 +875,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4620	</weight>
-      <maxHealth>	170	</maxHealth>
+      <maxHealth>	104	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -893,7 +893,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.063889 8 0.0995403 8 0.127551 10 0.366894 10 0.430556 5 0.569444 5 0.633106 10 0.872449 10 0.903526 8 0.936111 8 1 8	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	150	</maxAmmo>
+          <maxAmmo>	124	</maxAmmo>
           <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

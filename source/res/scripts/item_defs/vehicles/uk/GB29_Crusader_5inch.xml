@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.428	</firePenalty>
   </invisibility>
-  <repairCost>	8.537	</repairCost>
+  <repairCost>	10.00	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.4	</priceFactor>
@@ -43,7 +43,7 @@
     </armor>
     <primaryArmor>	armor_3 armor_3 armor_12	</primaryArmor>
     <weight>	7358	</weight>
-    <maxHealth>	328	</maxHealth>
+    <maxHealth>	280	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	110	</maxHealth>
       <maxRegenHealth>	55	</maxRegenHealth>
@@ -163,8 +163,8 @@
         <vehicleRotation>	0.4	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	90	</maxRegenHealth>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB29_Crusader_5inch/normal/lod0/Chassis.model	</undamaged>
@@ -990,8 +990,8 @@
         <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	130	</maxHealth>
-      <maxRegenHealth>	98	</maxRegenHealth>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB29_Crusader_5inch/normal/lod0/Chassis.model	</undamaged>
@@ -1807,7 +1807,7 @@
         <armor_8>	0	</armor_8>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	82	</maxHealth>
+      <maxHealth>	70	</maxHealth>
       <rotationSpeed>	14	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1821,7 +1821,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_4.5inch_SPG_Howitzer>	shared	  <maxAmmo>	75	</maxAmmo>
+        <_4.5inch_SPG_Howitzer>	shared	  <maxAmmo>	64	</maxAmmo>
           <unlocks>
             <gun>	_5.5inch_SPG_Gun	  <cost>	14000	</cost>
             </gun>
@@ -1953,7 +1953,7 @@
         <armor_8>	0	</armor_8>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	82	</maxHealth>
+      <maxHealth>	70	</maxHealth>
       <rotationSpeed>	14	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>

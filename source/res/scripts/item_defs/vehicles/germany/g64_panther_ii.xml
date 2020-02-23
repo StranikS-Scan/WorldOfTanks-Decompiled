@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.219	</firePenalty>
   </invisibility>
-  <repairCost>	6.977	</repairCost>
+  <repairCost>	8.93	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.6	</priceFactor>
@@ -43,7 +43,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	25490	</weight>
-    <maxHealth>	1536	</maxHealth>
+    <maxHealth>	1120	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -314,8 +314,8 @@
         <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	230	</maxHealth>
-      <maxRegenHealth>	173	</maxRegenHealth>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	145	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G64_Panther_II/normal/lod0/Chassis.model	</undamaged>
@@ -1165,8 +1165,8 @@
         <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	188	</maxRegenHealth>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G64_Panther_II/normal/lod0/Chassis.model	</undamaged>
@@ -2019,7 +2019,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7500	</weight>
-      <maxHealth>	284	</maxHealth>
+      <maxHealth>	280	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -2033,7 +2033,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_KwK_L70>	shared	  <maxAmmo>	95	</maxAmmo>
+        <_75mm_KwK_L70>	shared	  <maxAmmo>	80	</maxAmmo>
           <reloadTime>	4	</reloadTime>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <shotDispersionFactors>
@@ -2245,7 +2245,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_KwK45_L100>
-        <_105mm_StuH42_L28Pz>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_105mm_StuH42_L28Pz>	shared	  <maxAmmo>	42	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -2538,7 +2538,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_3	</primaryArmor>
       <weight>	7745	</weight>
-      <maxHealth>	384	</maxHealth>
+      <maxHealth>	380	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -2553,7 +2553,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.122	</invisibilityFactor>
       <guns>
-        <_75mm_KwK_L70>	shared	  <maxAmmo>	95	</maxAmmo>
+        <_75mm_KwK_L70>	shared	  <maxAmmo>	80	</maxAmmo>
           <reloadTime>	3.8	</reloadTime>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <shotDispersionFactors>
@@ -2735,7 +2735,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_KwK45_L100>
-        <_105mm_StuH42_L28Pz>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_105mm_StuH42_L28Pz>	shared	  <maxAmmo>	42	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	3.5	</afterShot>

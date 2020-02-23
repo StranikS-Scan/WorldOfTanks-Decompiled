@@ -17,9 +17,8 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.402	</firePenalty>
   </invisibility>
-  <repairCost>	9.797	</repairCost>
-  <premiumVehicleXPFactor>	0.05	</premiumVehicleXPFactor>
-  <crewXpFactor>	1.5	</crewXpFactor>
+  <repairCost>	12.309	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	2.0	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
@@ -46,7 +45,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	17320	</weight>
-    <maxHealth>	1960	</maxHealth>
+    <maxHealth>	1560	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	210	</maxHealth>
       <maxRegenHealth>	140	</maxRegenHealth>
@@ -705,8 +704,8 @@
         <vehicleRotation>	0.1	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	300	</maxHealth>
-      <maxRegenHealth>	225	</maxRegenHealth>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R87_T62A/normal/lod0/Chassis.model	</undamaged>
@@ -1462,7 +1461,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8000	</weight>
-      <maxHealth>	490	</maxHealth>
+      <maxHealth>	390	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
@@ -1476,7 +1475,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_100mm_D54_TS2>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_100mm_D54_TS>	shared	  <maxAmmo>	50	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -17 1 -17	</minPitch>
             <maxPitch>	0 5 0.472222 5 0.486111 4 0.513889 4 0.527778 5 1 5	</maxPitch>
@@ -1567,7 +1566,7 @@
             <density>	147.798 146.919	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_100mm_D54_TS2>
+        </_100mm_D54_TS>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R87_T62A/normal/lod0/Turret_01.model	</undamaged>
@@ -2242,7 +2241,7 @@
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <R123A>	shared	</R123A>
+    <R123>	shared	</R123>
   </radios>
   <physics>
     <detailed>

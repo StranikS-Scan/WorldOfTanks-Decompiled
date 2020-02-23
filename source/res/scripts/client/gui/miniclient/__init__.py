@@ -35,6 +35,8 @@ def _get_config(is_miniclient, is_tutorial, is_sandbox):
             max_vehicle_level = 1
         else:
             extraCondition = True
+        if is_sandbox:
+            extraCondition = not vehicle_item.isHidden
         return min_vehicle_level <= vehicle_item.level <= max_vehicle_level and extraCondition
 
     config = {'vehicle_is_available': vehicle_filter}

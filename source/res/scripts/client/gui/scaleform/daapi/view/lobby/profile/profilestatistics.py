@@ -2,10 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileStatistics.py
 from collections import namedtuple
 from debug_utils import LOG_ERROR
-from gui import makeHtmlString
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import StatisticTypes
 from gui.Scaleform.daapi.view.lobby.profile.profile_statistics_vos import getStatisticsVO
 from gui.Scaleform.daapi.view.meta.ProfileStatisticsMeta import ProfileStatisticsMeta
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
@@ -58,29 +56,12 @@ class ProfileStatistics(ProfileStatisticsMeta):
             self.__rankedSeasonKey = seasonId
             self.invokeUpdate()
 
-    def setSeasonStatisticsFilter(self, value):
-        self._statisticType = StatisticTypes.ALL_TIME
-        if value == StatisticTypes.SEASON:
-            self._statisticType = StatisticTypes.SEASON
-        self.invokeUpdate()
-
     def onCompletedSeasonsInfoChanged(self):
         self._setInitData()
 
     def _populate(self):
         super(ProfileStatistics, self)._populate()
         self._setInitData()
-        self.as_setTabsDataS([{'id': 'all',
-          'label': backport.text(R.strings.profile.profile.tabs.title.allTime()),
-          'linkage': 'RegularItemsTabViewUI',
-          'selected': True,
-          'enabled': True,
-          'tooltip': backport.text(R.strings.profile.profile.tabs.tooltip.forAllTime())}, {'id': 'season',
-          'label': backport.text(R.strings.profile.profile.tabs.title.season()),
-          'linkage': 'RegularItemsTabViewUI',
-          'selected': False,
-          'enabled': True,
-          'tooltip': backport.text(R.strings.profile.profile.tabs.tooltip.forTime(), time='--')}])
 
     def _setInitData(self, accountDossier=None):
         dropDownProvider = [self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.ALL),
@@ -114,11 +95,6 @@ class ProfileStatistics(ProfileStatisticsMeta):
             vo['playersStatsLbl'] = backport.text(R.strings.ranked_battles.statistic.playersRaiting())
             vo['playersStats'] = self.rankedController.isEnabled()
             self.__updateRankedDropdownData(vo, self.__rankedSeasonKey)
-        vo['seasonTime'] = ''
-        vo['available'] = False if self._statisticType == StatisticTypes.SEASON else True
-        vo['unavailableMsg'] = makeHtmlString('html_templates:lobby/season_stats', 'unavailable', {'header': backport.text(R.strings.profile.profile.seasonRating.title()),
-         'textFirst': backport.text(R.strings.profile.profile.seasonRating.desc.firstBlock(), seasonStatText=text_styles.highlightText(backport.text(R.strings.profile.profile.seasonRating.desc.seasonStatText()))),
-         'textSecond': backport.text(R.strings.profile.profile.seasonRating.desc.secondBlock(), commonStatText=text_styles.highlightText(backport.text(R.strings.profile.profile.seasonRating.desc.commonStatText())))})
         self.as_responseDossierS(self._battlesType, vo, _FRAME_LABELS[self._battlesType], '')
         return
 

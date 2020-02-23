@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.239	</firePenalty>
   </invisibility>
-  <repairCost>	1.776	</repairCost>
+  <repairCost>	4.58	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
@@ -43,7 +43,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	7600	</weight>
-    <maxHealth>	392	</maxHealth>
+    <maxHealth>	136	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	85	</maxHealth>
       <maxRegenHealth>	55	</maxRegenHealth>
@@ -143,8 +143,8 @@
         <vehicleRotation>	0.34	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB05_Vickers_Medium_Mk_II/normal/lod0/Chassis.model	</undamaged>
@@ -1007,8 +1007,8 @@
         <vehicleRotation>	0.31	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	53	</maxRegenHealth>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB05_Vickers_Medium_Mk_II/normal/lod0/Chassis.model	</undamaged>
@@ -1871,7 +1871,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1750	</weight>
-      <maxHealth>	73	</maxHealth>
+      <maxHealth>	34	</maxHealth>
       <rotationSpeed>	32	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -1885,7 +1885,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <QF_6_pounder_8cwt_Mk_II>	shared	  <maxAmmo>	185	</maxAmmo>
+        <QF_6_pounder_8cwt_Mk_II>	shared	  <maxAmmo>	80	</maxAmmo>
           <unlocks>
             <turret>	Turret_2_GB05_Vickers_Medium_Mk_II	  <cost>	50	</cost>
             </turret>
@@ -2045,7 +2045,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2000	</weight>
-      <maxHealth>	98	</maxHealth>
+      <maxHealth>	54	</maxHealth>
       <rotationSpeed>	32	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -2060,7 +2060,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.02	</invisibilityFactor>
       <guns>
-        <QF_6_pounder_8cwt_Mk_II>	shared	  <maxAmmo>	185	</maxAmmo>
+        <QF_6_pounder_8cwt_Mk_II>	shared	  <maxAmmo>	80	</maxAmmo>
           <armor>
             <armor_1>	8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2123,10 +2123,12 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </QF_6_pounder_8cwt_Mk_II>
-        <OQF_3pdr_Gun>	shared	  <maxAmmo>	220	</maxAmmo>
+        <OQF_3pdr_Gun>	shared	  <maxAmmo>	111	</maxAmmo>
           <unlocks>
             <gun>	QF_6_pounder_8cwt_Mk_I	  <cost>	1200	</cost>
             </gun>
+            <vehicle>	GB06_Vickers_Medium_Mk_III	  <cost>	1000	</cost>
+            </vehicle>
           </unlocks>
           <armor>
             <armor_1>	8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -2190,7 +2192,7 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </OQF_3pdr_Gun>
-        <QF_6_pounder_8cwt_Mk_I>	shared	  <maxAmmo>	160	</maxAmmo>
+        <QF_6_pounder_8cwt_Mk_I>	shared	  <maxAmmo>	80	</maxAmmo>
           <armor>
             <armor_1>	8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

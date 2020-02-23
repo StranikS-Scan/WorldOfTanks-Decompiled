@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.438	</firePenalty>
   </invisibility>
-  <repairCost>	6.972	</repairCost>
+  <repairCost>	9.0	</repairCost>
   <camouflage>
     <priceFactor>	1.6	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
@@ -36,7 +36,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	6022	</weight>
-    <maxHealth>	1136	</maxHealth>
+    <maxHealth>	800	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -455,8 +455,8 @@
         <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	215	</maxHealth>
-      <maxRegenHealth>	161	</maxRegenHealth>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G126_HWK_12/normal/lod0/Chassis.model	</undamaged>
@@ -1347,8 +1347,8 @@
         <vehicleRotation>	0.14	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	240	</maxHealth>
-      <maxRegenHealth>	180	</maxRegenHealth>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G126_HWK_12/normal/lod0/Chassis.model	</undamaged>
@@ -2253,7 +2253,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1800	</weight>
-      <maxHealth>	204	</maxHealth>
+      <maxHealth>	200	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -2598,6 +2598,8 @@
       <unlocks>
         <vehicle>	G103_RU_251	  <cost>	197600	</cost>
         </vehicle>
+        <vehicle>	G91_Pro_Ag_A	  <cost>	227100	</cost>
+        </vehicle>
       </unlocks>
       <armor>
         <armor_1>	15	</armor_1>
@@ -2614,7 +2616,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2000	</weight>
-      <maxHealth>	284	</maxHealth>
+      <maxHealth>	300	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>

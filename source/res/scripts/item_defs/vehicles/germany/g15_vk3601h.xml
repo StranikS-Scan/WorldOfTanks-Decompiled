@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.197	</firePenalty>
   </invisibility>
-  <repairCost>	3.423	</repairCost>
+  <repairCost>	4.9	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.2	</priceFactor>
@@ -44,7 +44,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	17450	</weight>
-    <maxHealth>	1088	</maxHealth>
+    <maxHealth>	680	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -145,8 +145,8 @@
         <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	143	</maxRegenHealth>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	120	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G15_VK3601H/normal/lod0/Chassis.model	</undamaged>
@@ -916,8 +916,8 @@
         <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	205	</maxHealth>
-      <maxRegenHealth>	154	</maxRegenHealth>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	125	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G15_VK3601H/normal/lod0/Chassis.model	</undamaged>
@@ -1688,7 +1688,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7680	</weight>
-      <maxHealth>	212	</maxHealth>
+      <maxHealth>	170	</maxHealth>
       <rotationSpeed>	24	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -1710,7 +1710,6 @@
             <gun>	_75mm_KwK41_L58_conic	  <cost>	9200	</cost>
             </gun>
           </unlocks>
-          <maxAmmo>	50	</maxAmmo>
           <armor>
             <armor_1>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1785,7 +1784,6 @@
           </camouflage>
         </_105mm_StuH42_L28Pz>
         <_75mm_KwK_L70>	shared	  <reloadTime>	4.8	</reloadTime>
-          <maxAmmo>	65	</maxAmmo>
           <armor>
             <armor_1>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1888,7 +1886,7 @@
             <maxPitch>	0 8 0.458333 8 0.472222 4 0.527778 4 0.541667 8 1 8	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <maxAmmo>	85	</maxAmmo>
+          <maxAmmo>	72	</maxAmmo>
           <models>
             <undamaged>	vehicles/german/G15_VK3601H/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/german/G15_VK3601H/crash/lod0/Gun_03.model	</destroyed>
@@ -2043,7 +2041,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8250	</weight>
-      <maxHealth>	272	</maxHealth>
+      <maxHealth>	270	</maxHealth>
       <rotationSpeed>	24	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -2063,7 +2061,6 @@
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <maxAmmo>	50	</maxAmmo>
           <armor>
             <armor_1>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2135,8 +2132,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_105mm_StuH42_L28Pz>
-        <_75mm_KwK_L70>	shared	  <maxAmmo>	65	</maxAmmo>
-          <armor>
+        <_75mm_KwK_L70>	shared	  <armor>
             <armor_1>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -2226,7 +2222,7 @@
           <reloadTime>	4.2	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <maxAmmo>	85	</maxAmmo>
+          <maxAmmo>	72	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	4	</afterShot>

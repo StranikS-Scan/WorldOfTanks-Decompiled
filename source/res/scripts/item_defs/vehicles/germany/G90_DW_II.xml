@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.197	</firePenalty>
   </invisibility>
-  <repairCost>	2.227	</repairCost>
+  <repairCost>	4.20	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
@@ -44,7 +44,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	15250	</weight>
-    <maxHealth>	664	</maxHealth>
+    <maxHealth>	312	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	140	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -144,8 +144,8 @@
         <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	110	</maxHealth>
-      <maxRegenHealth>	83	</maxRegenHealth>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G90_DW_II/normal/lod0/Chassis.model	</undamaged>
@@ -897,8 +897,8 @@
         <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	90	</maxRegenHealth>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G90_DW_II/normal/lod0/Chassis.model	</undamaged>
@@ -1656,7 +1656,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2750	</weight>
-      <maxHealth>	126	</maxHealth>
+      <maxHealth>	78	</maxHealth>
       <rotationSpeed>	42	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1683,7 +1683,7 @@
             </armor_3>
             <gun>	20	</gun>
           </armor>
-          <maxAmmo>	160	</maxAmmo>
+          <maxAmmo>	90	</maxAmmo>
           <shotDispersionRadius>	0.55	</shotDispersionRadius>
           <reloadTime>	4.3	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
@@ -1746,7 +1746,7 @@
             </armor_3>
             <gun>	10	</gun>
           </armor>
-          <maxAmmo>	180	</maxAmmo>
+          <maxAmmo>	120	</maxAmmo>
           <reloadTime>	2.5	</reloadTime>
           <aimingTime>	2.2	</aimingTime>
           <pitchLimits>
@@ -1864,6 +1864,10 @@
       <tags></tags>
       <level>	4	</level>
       <price>	5200	</price>
+      <unlocks>
+        <vehicle>	G13_VK3001H	  <cost>	13600	</cost>
+        </vehicle>
+      </unlocks>
       <armor>
         <armor_1>	50	</armor_1>
         <armor_2>	50	</armor_2>
@@ -1877,7 +1881,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3000	</weight>
-      <maxHealth>	166	</maxHealth>
+      <maxHealth>	128	</maxHealth>
       <rotationSpeed>	42	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1905,7 +1909,7 @@
             </armor_5>
             <gun>	20	</gun>
           </armor>
-          <maxAmmo>	160	</maxAmmo>
+          <maxAmmo>	90	</maxAmmo>
           <shotDispersionRadius>	0.55	</shotDispersionRadius>
           <reloadTime>	4.1	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
@@ -1977,7 +1981,7 @@
             </armor_5>
             <gun>	10	</gun>
           </armor>
-          <maxAmmo>	180	</maxAmmo>
+          <maxAmmo>	120	</maxAmmo>
           <reloadTime>	2.4	</reloadTime>
           <aimingTime>	2.2	</aimingTime>
           <pitchLimits>

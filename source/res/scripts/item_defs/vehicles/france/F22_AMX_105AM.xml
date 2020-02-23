@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.38	</firePenalty>
   </invisibility>
-  <repairCost>	4.508	</repairCost>
+  <repairCost>	6.25	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
@@ -44,7 +44,7 @@
     </armor>
     <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
     <weight>	10830	</weight>
-    <maxHealth>	244	</maxHealth>
+    <maxHealth>	176	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	80	</maxHealth>
       <maxRegenHealth>	40	</maxRegenHealth>
@@ -178,8 +178,8 @@
         <vehicleRotation>	0.38	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	85	</maxHealth>
-      <maxRegenHealth>	64	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F22_AMX_105AM/normal/lod0/Chassis.model	</undamaged>
@@ -1064,8 +1064,8 @@
         <vehicleRotation>	0.34	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	95	</maxHealth>
-      <maxRegenHealth>	71	</maxRegenHealth>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F22_AMX_105AM/normal/lod0/Chassis.model	</undamaged>
@@ -1944,7 +1944,7 @@
         <armor_2>	10	</armor_2>
       </armor>
       <weight>	170	</weight>
-      <maxHealth>	61	</maxHealth>
+      <maxHealth>	44	</maxHealth>
       <rotationSpeed>	22	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1958,7 +1958,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <Canon_de_105_court_mle_1934S>	shared	  <maxAmmo>	60	</maxAmmo>
+        <Canon_de_105_court_mle_1934S>	shared	  <maxAmmo>	34	</maxAmmo>
           <unlocks>
             <gun>	Canon_de_105_mle_1930_Schneider_AM	  <cost>	4200	</cost>
             </gun>
@@ -2038,7 +2038,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </Canon_de_105_court_mle_1934S>
-        <Canon_de_105_mle_1930_Schneider_AM>	shared	  <maxAmmo>	50	</maxAmmo>
+        <Canon_de_105_mle_1930_Schneider_AM>	shared	  <maxAmmo>	34	</maxAmmo>
           <unlocks>
             <vehicle>	F23_AMX_13F3AM	  <cost>	31900	</cost>
             </vehicle>

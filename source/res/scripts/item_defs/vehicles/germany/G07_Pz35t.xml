@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.399	</firePenalty>
   </invisibility>
-  <repairCost>	1.4	</repairCost>
+  <repairCost>	3.54	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
@@ -38,7 +38,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	5200.0	</weight>
-    <maxHealth>	364	</maxHealth>
+    <maxHealth>	120	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	80	</maxHealth>
       <maxRegenHealth>	55	</maxRegenHealth>
@@ -129,8 +129,8 @@
         <vehicleRotation>	0.38	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G07_Pz35t/normal/lod0/Chassis.model	</undamaged>
@@ -1226,8 +1226,8 @@
         <vehicleRotation>	0.34	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	53	</maxRegenHealth>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G07_Pz35t/normal/lod0/Chassis.model	</undamaged>
@@ -2335,7 +2335,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1000.0	</weight>
-      <maxHealth>	66	</maxHealth>
+      <maxHealth>	30	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -2349,7 +2349,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_KwK_34t_L40>	shared	  <maxAmmo>	145	</maxAmmo>
+        <_37mm_KwK_34t_L40>	shared	  <maxAmmo>	72	</maxAmmo>
           <unlocks>
             <gun>	_37mm_KwK_38t_L47	  <cost>	120	</cost>
             </gun>
@@ -2420,7 +2420,11 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_37mm_KwK_34t_L40>
-        <_37mm_KwK_38t_L47>	shared	  <maxAmmo>	145	</maxAmmo>
+        <_37mm_KwK_38t_L47>	shared	  <maxAmmo>	72	</maxAmmo>
+          <unlocks>
+            <vehicle>	G08_Pz38t	  <cost>	1250	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <armor_1>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2486,7 +2490,7 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_37mm_KwK_38t_L47>
-        <_20mm_Flak_38_L112>	shared	  <maxAmmo>	600	</maxAmmo>
+        <_20mm_Flak_38_L112>	shared	  <maxAmmo>	300	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	1.3	</afterShot>
@@ -2664,7 +2668,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1350.0	</weight>
-      <maxHealth>	91	</maxHealth>
+      <maxHealth>	60	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -2678,7 +2682,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_KwK_34t_L40>	shared	  <maxAmmo>	145	</maxAmmo>
+        <_37mm_KwK_34t_L40>	shared	  <maxAmmo>	72	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -2748,7 +2752,7 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_37mm_KwK_34t_L40>
-        <_37mm_KwK_38t_L47>	shared	  <maxAmmo>	145	</maxAmmo>
+        <_37mm_KwK_38t_L47>	shared	  <maxAmmo>	72	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -2819,7 +2823,7 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_37mm_KwK_38t_L47>
-        <_20mm_Flak_38_L112>	shared	  <maxAmmo>	600	</maxAmmo>
+        <_20mm_Flak_38_L112>	shared	  <maxAmmo>	300	</maxAmmo>
           <armor>
             <armor_1>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

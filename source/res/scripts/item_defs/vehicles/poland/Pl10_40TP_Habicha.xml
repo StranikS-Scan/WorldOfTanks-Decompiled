@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.362	</firePenalty>
   </invisibility>
-  <repairCost>	4.861	</repairCost>
+  <repairCost>	7.0	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.2	</priceFactor>
@@ -39,7 +39,7 @@
     </armor>
     <primaryArmor>	armor_6 armor_3 armor_4	</primaryArmor>
     <weight>	22300	</weight>
-    <maxHealth>	864	</maxHealth>
+    <maxHealth>	504	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	140	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -129,8 +129,8 @@
         <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	130	</maxHealth>
-      <maxRegenHealth>	98	</maxRegenHealth>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/poland/Pl10_40TP_Habicha/normal/lod0/Chassis.model	</undamaged>
@@ -871,8 +871,8 @@
         <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	145	</maxHealth>
-      <maxRegenHealth>	109	</maxRegenHealth>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/poland/Pl10_40TP_Habicha/normal/lod0/Chassis.model	</undamaged>
@@ -1617,7 +1617,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	6250	</weight>
-      <maxHealth>	156	</maxHealth>
+      <maxHealth>	126	</maxHealth>
       <rotationSpeed>	33	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -1713,7 +1713,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_wz_22_24>
-        <_75mm_wz_36_37>	shared	  <maxAmmo>	90	</maxAmmo>
+        <_75mm_wz_36_37>	shared	  <maxAmmo>	74	</maxAmmo>
           <unlocks>
             <turret>	Turret_2_Pl10_40TP_Habicha	  <cost>	5150	</cost>
             </turret>
@@ -1905,7 +1905,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7100	</weight>
-      <maxHealth>	216	</maxHealth>
+      <maxHealth>	246	</maxHealth>
       <rotationSpeed>	37	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -1994,7 +1994,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_wz_22_24>
-        <_75mm_wz_36_37>	shared	  <maxAmmo>	90	</maxAmmo>
+        <_75mm_wz_36_37>	shared	  <maxAmmo>	74	</maxAmmo>
           <armor>
             <gun>	20	</gun>
           </armor>

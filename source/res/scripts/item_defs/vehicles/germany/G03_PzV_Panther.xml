@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.243	</firePenalty>
   </invisibility>
-  <repairCost>	4.769	</repairCost>
+  <repairCost>	6.09	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.4	</priceFactor>
@@ -44,7 +44,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	18775	</weight>
-    <maxHealth>	1328	</maxHealth>
+    <maxHealth>	960	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	190	</maxHealth>
       <maxRegenHealth>	130	</maxRegenHealth>
@@ -135,8 +135,8 @@
         <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	135	</maxRegenHealth>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	115	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G03_PzV_Panther/normal/lod0/Chassis.model	</undamaged>
@@ -837,8 +837,8 @@
         <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	143	</maxRegenHealth>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	120	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G03_PzV_Panther/normal/lod0/Chassis.model	</undamaged>
@@ -1539,7 +1539,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7760	</weight>
-      <maxHealth>	252	</maxHealth>
+      <maxHealth>	240	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -1557,7 +1557,7 @@
             <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 8 0.353005 8 0.416667 5 0.583333 5 0.646995 8 1 8	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	95	</maxAmmo>
+          <maxAmmo>	81	</maxAmmo>
           <reloadTime>	4.2	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
@@ -1642,7 +1642,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_KwK_L70>
-        <_105mm_StuH42_L28Pz>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_105mm_StuH42_L28Pz>	shared	  <maxAmmo>	42	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.16	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -1909,7 +1909,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7745	</weight>
-      <maxHealth>	332	</maxHealth>
+      <maxHealth>	340	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -1924,7 +1924,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.991	</invisibilityFactor>
       <guns>
-        <_75mm_KwK_L70>	shared	  <maxAmmo>	95	</maxAmmo>
+        <_75mm_KwK_L70>	shared	  <maxAmmo>	80	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.353005 8 0.416667 3 0.583333 3 0.646995 8 1 8	</maxPitch>
@@ -2008,7 +2008,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_KwK_L70>
-        <_105mm_StuH42_L28Pz>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_105mm_StuH42_L28Pz>	shared	  <maxAmmo>	42	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.16	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -2262,7 +2262,11 @@
         </engine>
       </unlocks>
     </Maybach_HL_210_TRM_P30>
-    <Maybach_HL_230_TRM_P30>	shared	</Maybach_HL_230_TRM_P30>
+    <Maybach_HL_230_TRM_P30>	shared	  <unlocks>
+        <vehicle>	G16_PzVIB_Tiger_II	  <cost>	108000	</cost>
+        </vehicle>
+      </unlocks>
+    </Maybach_HL_230_TRM_P30>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>

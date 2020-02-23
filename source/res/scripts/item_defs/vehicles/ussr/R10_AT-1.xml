@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.558	</firePenalty>
   </invisibility>
-  <repairCost>	2.225	</repairCost>
+  <repairCost>	5.43	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
@@ -39,7 +39,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	7050	</weight>
-    <maxHealth>	244	</maxHealth>
+    <maxHealth>	100	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	75	</maxHealth>
       <maxRegenHealth>	50	</maxRegenHealth>
@@ -160,8 +160,8 @@
         <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	45	</maxRegenHealth>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
       <repairCost>	2.5	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R10_AT-1/normal/lod0/Chassis.model	</undamaged>
@@ -1130,8 +1130,8 @@
         <vehicleRotation>	0.28	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	53	</maxRegenHealth>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
       <repairCost>	2.5	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R10_AT-1/normal/lod0/Chassis.model	</undamaged>
@@ -2092,7 +2092,7 @@
         <armor_1>	0	</armor_1>
       </armor>
       <weight>	10	</weight>
-      <maxHealth>	61	</maxHealth>
+      <maxHealth>	25	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2110,7 +2110,7 @@
             <minPitch>	0 -45 1 -45	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	160	</maxAmmo>
+          <maxAmmo>	80	</maxAmmo>
           <unlocks>
             <gun>	_76mm_L-10_S	  <cost>	400	</cost>
             </gun>
@@ -2185,7 +2185,7 @@
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
           <aimingTime>	2.9	</aimingTime>
-          <maxAmmo>	80	</maxAmmo>
+          <maxAmmo>	40	</maxAmmo>
           <armor>
             <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2251,8 +2251,12 @@
             <minPitch>	0 -45 1 -45	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	120	</maxAmmo>
+          <maxAmmo>	60	</maxAmmo>
           <aimingTime>	2.3	</aimingTime>
+          <unlocks>
+            <vehicle>	R24_SU-76	  <cost>	1100	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

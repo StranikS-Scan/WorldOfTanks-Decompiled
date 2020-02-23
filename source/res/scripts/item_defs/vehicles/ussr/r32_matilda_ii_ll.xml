@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.398	</firePenalty>
   </invisibility>
-  <repairCost>	1.83	</repairCost>
+  <repairCost>	3.0	</repairCost>
   <premiumVehicleXPFactor>	0.4	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
@@ -48,7 +48,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	15000	</weight>
-    <maxHealth>	800	</maxHealth>
+    <maxHealth>	488	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	150	</maxHealth>
       <maxRegenHealth>	100	</maxRegenHealth>
@@ -145,8 +145,8 @@
         <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	130	</maxHealth>
-      <maxRegenHealth>	98	</maxRegenHealth>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R32_Matilda_II_LL/normal/lod0/Chassis.model	</undamaged>
@@ -916,7 +916,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3500	</weight>
-      <maxHealth>	200	</maxHealth>
+      <maxHealth>	122	</maxHealth>
       <rotationSpeed>	34.13	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -930,8 +930,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_ZiS-96>	shared	  <maxAmmo>	70	</maxAmmo>
-          <armor>
+        <_76mm_ZiS-96>	shared	  <armor>
             <armor_1>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_3>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>

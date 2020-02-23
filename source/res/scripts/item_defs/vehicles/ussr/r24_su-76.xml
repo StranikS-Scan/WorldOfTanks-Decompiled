@@ -17,10 +17,10 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.593	</firePenalty>
   </invisibility>
-  <repairCost>	3	</repairCost>
+  <repairCost>	6.9	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
-    <priceFactor>	0.8	</priceFactor>
+    <priceFactor>	0.6	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
     <exclusionMask></exclusionMask>
   </camouflage>
@@ -48,7 +48,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	5565	</weight>
-    <maxHealth>	400	</maxHealth>
+    <maxHealth>	124	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	90	</maxHealth>
       <maxRegenHealth>	60	</maxRegenHealth>
@@ -158,10 +158,10 @@
     <SU-76>
       <userString>	#ussr_vehicles:SU-76_1	</userString>
       <tags></tags>
-      <level>	3	</level>
-      <price>	1160	</price>
+      <level>	2	</level>
+      <price>	580	</price>
       <unlocks>
-        <chassis>	SU-76bis	  <cost>	920	</cost>
+        <chassis>	SU-76bis	  <cost>	320	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -179,8 +179,8 @@
         <vehicleRotation>	0.26	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	85	</maxHealth>
-      <maxRegenHealth>	64	</maxRegenHealth>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R24_SU-76/normal/lod0/Chassis.model	</undamaged>
@@ -1056,8 +1056,8 @@
     <SU-76bis>
       <userString>	#ussr_vehicles:SU-76bis	</userString>
       <tags></tags>
-      <level>	4	</level>
-      <price>	3460	</price>
+      <level>	3	</level>
+      <price>	1730	</price>
       <armor>
         <leftTrack>	15	</leftTrack>
         <rightTrack>	15	</rightTrack>
@@ -1073,8 +1073,8 @@
         <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	95	</maxHealth>
-      <maxRegenHealth>	71	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R24_SU-76/normal/lod0/Chassis.model	</undamaged>
@@ -1951,7 +1951,7 @@
       <ceilless>	true	</ceilless>
       <userString>	#ussr_vehicles:SU-76	</userString>
       <tags>	cannotDetach	</tags>
-      <level>	4	</level>
+      <level>	3	</level>
       <price>	100	</price>
       <notInShop>	true	</notInShop>
       <armor>
@@ -1959,7 +1959,7 @@
         <armor_8>	0	</armor_8>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	100	</maxHealth>
+      <maxHealth>	31	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1968,8 +1968,8 @@
       </turretRotatorHealth>
       <circularVisionRadius>	290	</circularVisionRadius>
       <surveyingDeviceHealth>
-        <maxHealth>	60	</maxHealth>
-        <maxRegenHealth>	30	</maxRegenHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
@@ -1977,7 +1977,7 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	120	</maxAmmo>
+          <maxAmmo>	80	</maxAmmo>
           <unlocks>
             <gun>	_57mm_ZiS-2	  <cost>	4000	</cost>
             </gun>
@@ -2052,9 +2052,9 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	95	</maxAmmo>
+          <maxAmmo>	60	</maxAmmo>
           <unlocks>
-            <vehicle>	R02_SU-85	  <cost>	12500	</cost>
+            <vehicle>	R25_GAZ-74b	  <cost>	3100	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -2125,7 +2125,7 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	110	</maxAmmo>
+          <maxAmmo>	72	</maxAmmo>
           <reloadTime>	3.2	</reloadTime>
           <armor>
             <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -2248,11 +2248,7 @@
         </radio>
       </unlocks>
     </_9R>
-    <_9RM>	shared	  <unlocks>
-        <vehicle>	R100_SU122A	  <cost>	12570	</cost>
-        </vehicle>
-      </unlocks>
-    </_9RM>
+    <_9RM>	shared	</_9RM>
   </radios>
   <physics>
     <detailed>

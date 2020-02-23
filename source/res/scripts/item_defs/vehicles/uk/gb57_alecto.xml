@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.704	</firePenalty>
   </invisibility>
-  <repairCost>	3.176	</repairCost>
+  <repairCost>	6	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
@@ -50,7 +50,7 @@
     </armor>
     <primaryArmor>	armor_2 armor_3 armor_8	</primaryArmor>
     <weight>	5055	</weight>
-    <maxHealth>	408	</maxHealth>
+    <maxHealth>	216	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	140	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -181,8 +181,8 @@
         <vehicleRotation>	0.26	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	85	</maxHealth>
-      <maxRegenHealth>	64	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB57_Alecto/normal/lod0/Chassis.model	</undamaged>
@@ -424,6 +424,10 @@
       <tags></tags>
       <level>	4	</level>
       <price>	4700	</price>
+      <unlocks>
+        <vehicle>	GB73_AT2	  <cost>	13500	</cost>
+        </vehicle>
+      </unlocks>
       <armor>
         <leftTrack>	5	</leftTrack>
         <rightTrack>	5	</rightTrack>
@@ -439,8 +443,8 @@
         <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	95	</maxHealth>
-      <maxRegenHealth>	71	</maxRegenHealth>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB57_Alecto/normal/lod0/Chassis.model	</undamaged>
@@ -697,7 +701,7 @@
         <armor_8>	0	</armor_8>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	102	</maxHealth>
+      <maxHealth>	54	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -711,7 +715,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <QF_6_pounder_Mk_II_AT>	shared	  <maxAmmo>	180	</maxAmmo>
+        <QF_6_pounder_Mk_II_AT>	shared	  <maxAmmo>	120	</maxAmmo>
           <unlocks>
             <gun>	_3.7inch_AT_Howitzer	  <cost>	2300	</cost>
             </gun>
@@ -779,7 +783,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </QF_6_pounder_Mk_II_AT>
-        <_3.7inch_AT_Howitzer>	shared	  <maxAmmo>	70	</maxAmmo>
+        <_3.7inch_AT_Howitzer>	shared	  <maxAmmo>	48	</maxAmmo>
           <unlocks>
             <gun>	_25pdr_AT_Field_Gun	  <cost>	3700	</cost>
             </gun>
@@ -846,7 +850,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_3.7inch_AT_Howitzer>
-        <QF_6_pounder_Mk_IV_AT>	shared	  <maxAmmo>	180	</maxAmmo>
+        <QF_6_pounder_Mk_IV_AT>	shared	  <maxAmmo>	120	</maxAmmo>
           <armor>
             <gun>	15	</gun>
             <gunBreech>	0	</gunBreech>
@@ -910,7 +914,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </QF_6_pounder_Mk_IV_AT>
-        <_25pdr_AT_Field_Gun>	shared	  <maxAmmo>	90	</maxAmmo>
+        <_25pdr_AT_Field_Gun>	shared	  <maxAmmo>	60	</maxAmmo>
           <armor>
             <gun>	30	</gun>
             <gunBreech>	0	</gunBreech>

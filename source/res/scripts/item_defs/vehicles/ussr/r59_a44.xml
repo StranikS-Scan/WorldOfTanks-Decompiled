@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.33	</firePenalty>
   </invisibility>
-  <repairCost>	5.736	</repairCost>
+  <repairCost>	7.30	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.4	</priceFactor>
@@ -46,7 +46,7 @@
     </armor>
     <primaryArmor>	armor_13 armor_3 armor_4	</primaryArmor>
     <weight>	17930	</weight>
-    <maxHealth>	1120	</maxHealth>
+    <maxHealth>	800	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	110	</maxRegenHealth>
@@ -136,8 +136,8 @@
         <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	155	</maxHealth>
-      <maxRegenHealth>	116	</maxRegenHealth>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R59_A44/normal/lod0/Chassis.model	</undamaged>
@@ -850,8 +850,8 @@
         <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	170	</maxHealth>
-      <maxRegenHealth>	128	</maxRegenHealth>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R59_A44/normal/lod0/Chassis.model	</undamaged>
@@ -1573,7 +1573,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4250	</weight>
-      <maxHealth>	220	</maxHealth>
+      <maxHealth>	200	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -1587,7 +1587,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_F-34>	shared	  <maxAmmo>	190	</maxAmmo>
+        <_76mm_F-34>	shared	  <maxAmmo>	160	</maxAmmo>
           <unlocks>
             <gun>	_57mm_ZiS-4	  <cost>	2200	</cost>
             </gun>
@@ -1673,7 +1673,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_76mm_F-34>
-        <_57mm_ZiS-4>	shared	  <maxAmmo>	240	</maxAmmo>
+        <_57mm_ZiS-4>	shared	  <maxAmmo>	160	</maxAmmo>
           <armor>
             <armor_1>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1752,7 +1752,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_57mm_ZiS-4>
-        <_76mm_S-54>	shared	  <maxAmmo>	190	</maxAmmo>
+        <_76mm_S-54>	shared	  <maxAmmo>	160	</maxAmmo>
           <unlocks>
             <gun>	_107mm_ZiS-6	  <cost>	14400	</cost>
             </gun>
@@ -2018,7 +2018,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5170	</weight>
-      <maxHealth>	280	</maxHealth>
+      <maxHealth>	300	</maxHealth>
       <rotationSpeed>	38	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -2032,7 +2032,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_F-34>	shared	  <maxAmmo>	190	</maxAmmo>
+        <_76mm_F-34>	shared	  <maxAmmo>	160	</maxAmmo>
           <armor>
             <armor_1>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2111,7 +2111,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_76mm_F-34>
-        <_57mm_ZiS-4>	shared	  <maxAmmo>	240	</maxAmmo>
+        <_57mm_ZiS-4>	shared	  <maxAmmo>	160	</maxAmmo>
           <armor>
             <armor_1>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2190,7 +2190,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_57mm_ZiS-4>
-        <_76mm_S-54>	shared	  <maxAmmo>	190	</maxAmmo>
+        <_76mm_S-54>	shared	  <maxAmmo>	160	</maxAmmo>
           <armor>
             <armor_1>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

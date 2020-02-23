@@ -15,7 +15,6 @@ import nations
 import items
 from items import _xml, makeIntCompactDescrByID, parseIntCompactDescr, ITEM_TYPES
 from items.components import component_constants, shell_components, chassis_components, skills_constants
-from items.components.shell_components import HighExplosiveImpactParams
 from items.components import shared_components
 from items.components.c11n_constants import ApplyArea, ProjectionDecalPositionTags, CamouflageTilingType, CamouflageTilingTypeNameToType
 from items.readers import chassis_readers
@@ -1109,8 +1108,7 @@ class VehicleDescriptor(object):
          'repeatedStunDurationFactor': 1.0,
          'healthFactor': 1.0,
          'damageFactor': 1.0,
-         'enginePowerFactor': 1.0,
-         'armorSpallsDamageDevicesFactor': 1.0}
+         'enginePowerFactor': 1.0}
         if IS_CLIENT or IS_EDITOR or IS_CELLAPP or IS_WEB or IS_BOT:
             trackCenterOffset = chassis.topRightCarryingPoint[0]
             self.physics = {'weight': weight,
@@ -3632,7 +3630,6 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
             drivenJoints = []
         else:
             drivenJoints = None
-    slotsAnchors = tuple([])
     if IS_CLIENT or IS_EDITOR or IS_BOT or IS_BASEAPP:
         if not section.has_key('emblemSlots') and not section.has_key('customizationSlots'):
             if not IS_BOT and not IS_BASEAPP:
@@ -3911,6 +3908,7 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
     shell.isTracer = section.readBool('isTracer', False)
     if shell.isTracer:
         shell.isForceTracer = section.readBool('isForceTracer', False)
+    shell.damage = (_xml.readPositiveFloat(xmlCtx, section, 'damage/armor'), _xml.readPositiveFloat(xmlCtx, section, 'damage/devices'))
     if IS_CLIENT or IS_WEB:
         shell.i18n = shared_components.I18nComponent(section.readString('userString'), section.readString('description'))
         v = _xml.readNonEmptyString(xmlCtx, section, 'icon')
@@ -3926,9 +3924,6 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
     if shellType is None:
         _xml.raiseWrongXml(xmlCtx, 'kind', "unknown shell kind '%s'" % kind)
     shell.type = shellType
-    mechanics = intern(_xml.readStringOrEmpty(xmlCtx, section, 'mechanics'))
-    isModernHighExplosive = mechanics == 'MODERN'
-    shell.damage = (_readDamageValue(xmlCtx, section, 'armor', isModernHighExplosive), _readDamageValue(xmlCtx, section, 'devices', isModernHighExplosive))
     if not IS_CLIENT and not IS_BOT:
         if kind.startswith('ARMOR_PIERCING'):
             shellType.normalizationAngle = radians(_xml.readNonNegativeFloat(xmlCtx, section, 'normalizationAngle'))
@@ -3937,15 +3932,10 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
             shellType.piercingPowerLossFactorByDistance = 10.0 * _xml.readNonNegativeFloat(xmlCtx, section, 'piercingPowerLossFactorByDistance')
             shellType.ricochetAngleCos = cos(radians(_xml.readNonNegativeFloat(xmlCtx, section, 'ricochetAngle')))
     if kind == 'HIGH_EXPLOSIVE':
-        if isModernHighExplosive:
-            shellType.isModernMechanics = True
-            shellType.blastWave = _readImpactParams(xmlCtx, section, 'blastWave')
-            shellType.shellFragments = _readImpactParams(xmlCtx, section, 'shellFragments')
-            shellType.armorSpalls = _readImpactParams(xmlCtx, section, 'armorSpalls')
         shellType.explosionRadius = cachedFloat(section.readFloat('explosionRadius'))
         if shellType.explosionRadius <= 0.0:
             shellType.explosionRadius = cachedFloat(shell.caliber * shell.caliber / 5555.0)
-        explosionSettings = ('explosionDamageFactor', 'explosionDamageAbsorptionFactor', 'explosionEdgeDamageFactor', 'shellFragmentsDamageAbsorptionFactor')
+        explosionSettings = ('explosionDamageFactor', 'explosionDamageAbsorptionFactor', 'explosionEdgeDamageFactor')
         for f in explosionSettings:
             factor = section.readFloat(f)
             if factor <= 0:
@@ -3996,11 +3986,6 @@ def _defaultLocalReader(xmlCtx, section, sharedItem, unlocksDescrs, parentItem=N
     descr = sharedItem.copy()
     descr.unlocks = _readUnlocks(xmlCtx, section, 'unlocks', unlocksDescrs, sharedItem.compactDescr)
     return descr
-
-
-def _readDamageValue(xmlCtx, section, damageTypeName, isModernHighExplosive):
-    subsectionName = 'damage/{}'.format(damageTypeName)
-    return _xml.readNonNegativeFloat(xmlCtx, section, subsectionName) if isModernHighExplosive else _xml.readPositiveFloat(xmlCtx, section, subsectionName)
 
 
 def _readGunShotDispersionFactors(xmlCtx, section, subsectionName):
@@ -4666,7 +4651,6 @@ def _readCommonConfig(xmlCtx, section):
      'explosionDamageFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionDamageFactor'),
      'explosionDamageAbsorptionFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionDamageAbsorptionFactor'),
      'explosionEdgeDamageFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionEdgeDamageFactor'),
-     'shellFragmentsDamageAbsorptionFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/shellFragmentsDamageAbsorptionFactor'),
      'allowMortarShooting': _xml.readBool(xmlCtx, section, 'miscParams/allowMortarShooting')}
     if IS_CLIENT or IS_EDITOR:
         v = {}
@@ -5379,16 +5363,6 @@ def _readRepaintParams(xmlCtx, section):
     res['refColorMult'] = _xml.readFloat(xmlCtx, section, 'refColorMult')
     res['refGlossMult'] = _xml.readFloat(xmlCtx, section, 'refGlossMult')
     return res
-
-
-def _readImpactParams(xmlCtx, section, paramName):
-    subXmlCtx, subsection = _xml.getSubSectionWithContext(xmlCtx, section, paramName)
-    params = HighExplosiveImpactParams()
-    params.radius = _xml.readNonNegativeFloat(subXmlCtx, subsection, 'impactRadius', 0.0)
-    if paramName == 'armorSpalls':
-        params.angleCos = _xml.readNonNegativeFloat(subXmlCtx, subsection, 'coneAngleCos')
-    params.damages = (_xml.readNonNegativeFloat(subXmlCtx, subsection, 'damage/armor', 0.0), _xml.readNonNegativeFloat(subXmlCtx, subsection, 'damage/devices', 0.0))
-    return params
 
 
 def _descrByID(descrList, id):

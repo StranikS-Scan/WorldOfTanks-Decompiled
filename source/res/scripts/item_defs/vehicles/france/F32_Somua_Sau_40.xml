@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.423	</firePenalty>
   </invisibility>
-  <repairCost>	3.231	</repairCost>
+  <repairCost>	6	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
@@ -48,7 +48,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	16800	</weight>
-    <maxHealth>	416	</maxHealth>
+    <maxHealth>	224	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	125	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
@@ -169,8 +169,8 @@
         <vehicleRotation>	0.26	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	85	</maxHealth>
-      <maxRegenHealth>	64	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
       <models>
         <undamaged>	vehicles/french/F32_Somua_Sau_40/normal/lod0/Chassis.model	</undamaged>
@@ -1095,8 +1095,8 @@
         <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	95	</maxHealth>
-      <maxRegenHealth>	71	</maxRegenHealth>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
       <models>
         <undamaged>	vehicles/french/F32_Somua_Sau_40/normal/lod0/Chassis.model	</undamaged>
@@ -2016,7 +2016,7 @@
         <armor_8>	0	</armor_8>
       </armor>
       <weight>	170	</weight>
-      <maxHealth>	104	</maxHealth>
+      <maxHealth>	56	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2030,7 +2030,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_APX>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_75mm_APX>	shared	  <maxAmmo>	40	</maxAmmo>
           <unlocks>
             <gun>	_75mm_Long_44_AC	  <cost>	2700	</cost>
             </gun>
@@ -2102,7 +2102,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_75mm_APX>
-        <_75mm_Long_44_AC>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_75mm_Long_44_AC>	shared	  <maxAmmo>	40	</maxAmmo>
           <unlocks>
             <gun>	Canon_de_105_court_mle_1934S_AC	  <cost>	3900	</cost>
             </gun>
@@ -2174,11 +2174,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_75mm_Long_44_AC>
-        <Canon_de_105_court_mle_1934S_AC>	shared	  <unlocks>
-            <vehicle>	F22_AMX_105AM	  <cost>	15220	</cost>
-            </vehicle>
-          </unlocks>
-          <maxAmmo>	45	</maxAmmo>
+        <Canon_de_105_court_mle_1934S_AC>	shared	  <maxAmmo>	30	</maxAmmo>
           <armor>
             <armor_1>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

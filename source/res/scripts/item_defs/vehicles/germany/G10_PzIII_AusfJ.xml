@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.428	</firePenalty>
   </invisibility>
-  <repairCost>	2.146	</repairCost>
+  <repairCost>	4.17	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
@@ -46,7 +46,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	8000	</weight>
-    <maxHealth>	544	</maxHealth>
+    <maxHealth>	248	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	125	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
@@ -147,8 +147,8 @@
         <vehicleRotation>	0.25	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	85	</maxHealth>
-      <maxRegenHealth>	64	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G10_PzIII_AusfJ/normal/lod0/Chassis.model	</undamaged>
@@ -1006,8 +1006,8 @@
         <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	95	</maxHealth>
-      <maxRegenHealth>	71	</maxRegenHealth>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G10_PzIII_AusfJ/normal/lod0/Chassis.model	</undamaged>
@@ -1868,7 +1868,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2200	</weight>
-      <maxHealth>	106	</maxHealth>
+      <maxHealth>	62	</maxHealth>
       <rotationSpeed>	46	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -1882,7 +1882,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_KwK_L46>	shared	  <maxAmmo>	300	</maxAmmo>
+        <_37mm_KwK_L46>	shared	  <maxAmmo>	131	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -1950,7 +1950,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_37mm_KwK_L46>
-        <_50mm_KwK_38_L42>	shared	  <maxAmmo>	135	</maxAmmo>
+        <_50mm_KwK_38_L42>	shared	  <maxAmmo>	76	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -2012,7 +2012,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_50mm_KwK_38_L42>
-        <_20mm_Flak_38_L112>	shared	  <maxAmmo>	800	</maxAmmo>
+        <_20mm_Flak_38_L112>	shared	  <maxAmmo>	400	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.55763 10 0.5625 7 0.596471 7 0.602964 10 1 10	</maxPitch>
@@ -2067,7 +2067,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_20mm_Flak_38_L112>
-        <_50mm_KwK_39_L60>	shared	  <maxAmmo>	140	</maxAmmo>
+        <_50mm_KwK_39_L60>	shared	  <maxAmmo>	93	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 9 0.0983565 9 0.112988 10 0.416282 10 0.43901 8.5 0.555813 8.5 0.560679 7 0.59962 7 0.606089 10 0.903751 10 0.91187 9 1 9	</maxPitch>
@@ -2214,7 +2214,7 @@
       </armor>
       <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
       <weight>	3200	</weight>
-      <maxHealth>	136	</maxHealth>
+      <maxHealth>	102	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -2229,7 +2229,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.006	</invisibilityFactor>
       <guns>
-        <_37mm_KwK_L46>	shared	  <maxAmmo>	360	</maxAmmo>
+        <_37mm_KwK_L46>	shared	  <maxAmmo>	156	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -2295,7 +2295,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_37mm_KwK_L46>
-        <_50mm_KwK_38_L42>	shared	  <maxAmmo>	165	</maxAmmo>
+        <_50mm_KwK_38_L42>	shared	  <maxAmmo>	93	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -2361,7 +2361,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_50mm_KwK_38_L42>
-        <_20mm_Flak_38_L112>	shared	  <maxAmmo>	1200	</maxAmmo>
+        <_20mm_Flak_38_L112>	shared	  <maxAmmo>	600	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.55763 10 0.5625 7 0.596471 7 0.602964 10 1 10	</maxPitch>
@@ -2420,11 +2420,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_20mm_Flak_38_L112>
-        <_50mm_KwK_39_L60>	shared	  <maxAmmo>	140	</maxAmmo>
-          <unlocks>
-            <vehicle>	G81_Pz_IV_AusfH	  <cost>	12800	</cost>
-            </vehicle>
-          </unlocks>
+        <_50mm_KwK_39_L60>	shared	  <maxAmmo>	93	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 9 0.0983565 9 0.112988 10 0.416282 10 0.43901 8.5 0.555813 8.5 0.560679 7 0.59962 7 0.606089 10 0.903751 10 0.91187 9 1 9	</maxPitch>
@@ -2490,13 +2486,13 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_50mm_KwK_39_L60>
-        <_75mm_KwK_37_L24>	shared	  <maxAmmo>	125	</maxAmmo>
+        <_75mm_KwK_37_L24>	shared	  <maxAmmo>	70	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.415308 10 0.431565 8.5 0.596901 8.5 0.608275 10 1 10	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <vehicle>	G13_VK3001H	  <cost>	13600	</cost>
+            <vehicle>	G28_PzIII_IV	  <cost>	13480	</cost>
             </vehicle>
           </unlocks>
           <armor>

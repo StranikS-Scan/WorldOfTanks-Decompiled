@@ -19,7 +19,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.383	</firePenalty>
   </invisibility>
-  <repairCost>	1.647	</repairCost>
+  <repairCost>	3.00	</repairCost>
   <premiumVehicleXPFactor>	0.6	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
@@ -53,7 +53,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	13489	</weight>
-    <maxHealth>	204	</maxHealth>
+    <maxHealth>	112	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	70	</maxHealth>
       <maxRegenHealth>	35	</maxRegenHealth>
@@ -181,8 +181,8 @@
         <vehicleRotation>	0.44	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	85	</maxHealth>
-      <maxRegenHealth>	64	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB78_Sexton_I/normal/lod0/Chassis.model	</undamaged>
@@ -1045,7 +1045,7 @@
         <armor_3>	12.7	</armor_3>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	51	</maxHealth>
+      <maxHealth>	28	</maxHealth>
       <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1059,7 +1059,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_25pdr_Field_Gun>	shared	  <maxAmmo>	195	</maxAmmo>
+        <_25pdr_Field_Gun>	shared	  <maxAmmo>	112	</maxAmmo>
           <reloadTime>	12	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -40 1 -40	</minPitch>

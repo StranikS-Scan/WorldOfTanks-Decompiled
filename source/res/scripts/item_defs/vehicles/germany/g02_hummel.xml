@@ -19,7 +19,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.321	</firePenalty>
   </invisibility>
-  <repairCost>	4.99	</repairCost>
+  <repairCost>	6.57	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.2	</priceFactor>
@@ -45,7 +45,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	9700	</weight>
-    <maxHealth>	316	</maxHealth>
+    <maxHealth>	240	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	90	</maxHealth>
       <maxRegenHealth>	45	</maxRegenHealth>
@@ -175,8 +175,8 @@
         <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	110	</maxHealth>
-      <maxRegenHealth>	83	</maxRegenHealth>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
       <models>
         <undamaged>	vehicles/german/G02_Hummel/normal/lod0/Chassis.model	</undamaged>
@@ -859,8 +859,8 @@
         <vehicleRotation>	0.28	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	90	</maxRegenHealth>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
       <models>
         <undamaged>	vehicles/german/G02_Hummel/normal/lod0/Chassis.model	</undamaged>
@@ -1537,7 +1537,7 @@
         <armor_2>	6	</armor_2>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	79	</maxHealth>
+      <maxHealth>	60	</maxHealth>
       <rotationSpeed>	10	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1556,7 +1556,6 @@
             </gun>
           </unlocks>
           <reloadTime>	26.4	</reloadTime>
-          <maxAmmo>	27	</maxAmmo>
           <armor>
             <gun>	25	</gun>
             <gunBreech>	0	</gunBreech>
@@ -1680,7 +1679,7 @@
         <armor_2>	6	</armor_2>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	79	</maxHealth>
+      <maxHealth>	60	</maxHealth>
       <rotationSpeed>	10	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>

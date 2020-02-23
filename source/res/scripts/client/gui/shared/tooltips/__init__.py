@@ -68,7 +68,6 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     DEMOUNT_KIT = 'demountKit'
     BOB_SELECTOR_INFO = 'bobSelectorInfo'
     BOB_CALENDAR_DAY = 'bobCalendarDay'
-    VEHICLE_COLLECTOR = 'vehicleCollector'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):

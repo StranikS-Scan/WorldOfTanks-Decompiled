@@ -71,10 +71,6 @@
     <Cummins_BTA_5_9>	92	</Cummins_BTA_5_9>
     <Jaguar_4_2_XK6>	93	</Jaguar_4_2_XK6>
     <Rolls_Royce_Meteor_P>	94	</Rolls_Royce_Meteor_P>
-    <Nuffield_liberty_MKIII>	95	</Nuffield_liberty_MKIII>
-    <Nuffield_liberty_MKIVA>	96	</Nuffield_liberty_MKIVA>
-    <Vauxhall_Bedford_Twin_Six_A>	97	</Vauxhall_Bedford_Twin_Six_A>
-    <Wright_Continental_R-975C4A>	98	</Wright_Continental_R-975C4A>
     <Rolls_Royse_Meteor_MkIVC_IGR>	60001	</Rolls_Royse_Meteor_MkIVC_IGR>
     <Rolls_Royse_Meteor_M120_IGR>	60002	</Rolls_Royse_Meteor_M120_IGR>
     <Rolls_Royse_Meteor_MkIV_IGR>	60003	</Rolls_Royse_Meteor_MkIV_IGR>
@@ -476,22 +472,6 @@
       <rpm_min>	377	</rpm_min>
       <rpm_max>	2590	</rpm_max>
     </Nuffield_liberty_MKIV>
-    <Nuffield_liberty_MKIVA>
-      <userString>	#gb_vehicles:Nuffield_liberty_MKIVA	</userString>
-      <tags>	gasoline	</tags>
-      <level>	5	</level>
-      <price>	11500	</price>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	410	</power>
-      <weight>	483	</weight>
-      <maxHealth>	104	</maxHealth>
-      <maxRegenHealth>	52	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	368	</rpm_min>
-      <rpm_max>	2621	</rpm_max>
-    </Nuffield_liberty_MKIVA>
     <Nuffield_liberty_MKV>
       <userString>	#gb_vehicles:Nuffield_liberty_MKV	</userString>
       <tags>	gasoline	</tags>
@@ -588,23 +568,6 @@
       <rpm_min>	406	</rpm_min>
       <rpm_max>	2500	</rpm_max>
     </Vauxhall_Bedford_Twin_Six>
-    <Vauxhall_Bedford_Twin_Six_A>
-      <userString>	#gb_vehicles:Vauxhall_Bedford_Twin_Six	</userString>
-      <tags>	gasoline	</tags>
-      <level>	4	</level>
-      <price>	11000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	350	</power>
-      <weight>	1531	</weight>
-      <maxHealth>	104	</maxHealth>
-      <maxRegenHealth>	52	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	406	</rpm_min>
-      <rpm_max>	2500	</rpm_max>
-    </Vauxhall_Bedford_Twin_Six_A>
     <Wright_Continental_R-975C4>
       <userString>	#gb_vehicles:Wright_Continental_R-975C4	</userString>
       <tags>	gasoline	</tags>
@@ -621,23 +584,6 @@
       <rpm_min>	337	</rpm_min>
       <rpm_max>	2721	</rpm_max>
     </Wright_Continental_R-975C4>
-    <Wright_Continental_R-975C4A>
-      <userString>	#gb_vehicles:Wright_Continental_R-975C4	</userString>
-      <tags>	gasoline	</tags>
-      <level>	5	</level>
-      <price>	13900	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	460	</power>
-      <weight>	550	</weight>
-      <maxHealth>	136	</maxHealth>
-      <maxRegenHealth>	67	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	337	</rpm_min>
-      <rpm_max>	2721	</rpm_max>
-    </Wright_Continental_R-975C4A>
     <Chrysler_A57_multibank>
       <userString>	#gb_vehicles:Chrysler_A57_multibank	</userString>
       <tags>	gasoline	</tags>
@@ -739,7 +685,7 @@
       <userString>	#gb_vehicles:Rolls_Royse_Phantom	</userString>
       <tags>	gasoline	</tags>
       <level>	1	</level>
-      <price>	0	</price>
+      <price>	300	</price>
       <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
       <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	120	</power>
@@ -865,22 +811,6 @@
       <rpm_min>	412	</rpm_min>
       <rpm_max>	2480	</rpm_max>
     </Nuffield_liberty_MKII>
-    <Nuffield_liberty_MKIII>
-      <userString>	#gb_vehicles:Nuffield_liberty_MKIII	</userString>
-      <tags>	gasoline	</tags>
-      <level>	4	</level>
-      <price>	500	</price>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	390	</power>
-      <weight>	383	</weight>
-      <maxHealth>	86	</maxHealth>
-      <maxRegenHealth>	42	</maxRegenHealth>
-      <repairCost>	4	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	380	</rpm_min>
-      <rpm_max>	2580	</rpm_max>
-    </Nuffield_liberty_MKIII>
     <Ford_V8-221>
       <userString>	#gb_vehicles:Ford_V8-221	</userString>
       <tags>	gasoline	</tags>

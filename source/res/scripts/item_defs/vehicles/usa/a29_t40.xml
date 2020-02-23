@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.552	</firePenalty>
   </invisibility>
-  <repairCost>	2.157	</repairCost>
+  <repairCost>	4	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
@@ -42,7 +42,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	13000	</weight>
-    <maxHealth>	408	</maxHealth>
+    <maxHealth>	220	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	140	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -172,8 +172,8 @@
         <vehicleRotation>	0.25	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	85	</maxHealth>
-      <maxRegenHealth>	64	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A29_T40/normal/lod0/Chassis.model	</undamaged>
@@ -907,8 +907,8 @@
         <vehicleRotation>	0.23	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	95	</maxHealth>
-      <maxRegenHealth>	71	</maxRegenHealth>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A29_T40/normal/lod0/Chassis.model	</undamaged>
@@ -1642,7 +1642,7 @@
         <armor_8>	0	</armor_8>
       </armor>
       <weight>	170	</weight>
-      <maxHealth>	102	</maxHealth>
+      <maxHealth>	55	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1656,7 +1656,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_Howitzer_M1A1>	shared	  <maxAmmo>	195	</maxAmmo>
+        <_75mm_Howitzer_M1A1>	shared	  <maxAmmo>	98	</maxAmmo>
           <reloadTime>	3.7	</reloadTime>
           <unlocks>
             <gun>	_76mm_AT_Gun_M1918	  <cost>	1500	</cost>
@@ -1724,13 +1724,15 @@
             <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
         </_75mm_Howitzer_M1A1>
-        <_76mm_AT_Gun_M1918>	shared	  <maxAmmo>	145	</maxAmmo>
+        <_76mm_AT_Gun_M1918>	shared	  <maxAmmo>	98	</maxAmmo>
           <reloadTime>	3.7	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 1 1 1	</maxPitch>
           </pitchLimits>
           <unlocks>
+            <vehicle>	A30_M10_Wolverine	  <cost>	14430	</cost>
+            </vehicle>
             <gun>	_76mm_AT_Gun_M1A1	  <cost>	4600	</cost>
             </gun>
           </unlocks>
@@ -1789,7 +1791,7 @@
             <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
         </_76mm_AT_Gun_M1918>
-        <_105mm_AT_Howitzer_M3>	shared	  <maxAmmo>	75	</maxAmmo>
+        <_105mm_AT_Howitzer_M3>	shared	  <maxAmmo>	50	</maxAmmo>
           <reloadTime>	8	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
@@ -1854,7 +1856,7 @@
             <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
         </_105mm_AT_Howitzer_M3>
-        <_57mm_Gun_M1_L50>	shared	  <maxAmmo>	220	</maxAmmo>
+        <_57mm_Gun_M1_L50>	shared	  <maxAmmo>	126	</maxAmmo>
           <reloadTime>	2.3	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
@@ -1917,7 +1919,7 @@
             <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
         </_57mm_Gun_M1_L50>
-        <_76mm_AT_Gun_M1A1>	shared	  <maxAmmo>	100	</maxAmmo>
+        <_76mm_AT_Gun_M1A1>	shared	  <maxAmmo>	68	</maxAmmo>
           <reloadTime>	3.7	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
           <shotDispersionRadius>	0.41	</shotDispersionRadius>

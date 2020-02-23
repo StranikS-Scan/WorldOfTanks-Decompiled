@@ -30,7 +30,7 @@ from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 _logger = logging.getLogger(__name__)
-MarathonEventTooltipData = namedtuple('MarathonEventTooltipData', ('header', 'body', 'bodyExtra', 'errorBattleType', 'errorVehType', 'extraStateSteps', 'extraStateDiscount', 'extraStateCompleted', 'stateStart', 'stateEnd', 'stateProgress', 'stateComplete', 'daysShort', 'hoursShort', 'previewAnnounce', 'previewInProgress'))
+MarathonEventTooltipData = namedtuple('MarathonEventTooltipData', ('header', 'body', 'bodyExtra', 'bodyExtraSmart', 'errorBattleType', 'errorVehType', 'extraStateSteps', 'extraStateDiscount', 'extraStateCompleted', 'stateStart', 'stateEnd', 'stateProgress', 'stateComplete', 'daysShort', 'hoursShort', 'minutesShort', 'previewAnnounce', 'previewInProgress'))
 MarathonEventIconsData = namedtuple('MarathonEventIconsData', ('tooltipHeader', 'libraryOkIcon', 'okIcon', 'timeIcon', 'timeIconGlow', 'alertIcon', 'iconFlag', 'libraryInProgress', 'saleIcon', 'mapFlagHeaderIcon'))
 TIME_FORMAT_DAYS = 'days'
 TIME_FORMAT_HOURS = 'hours'
@@ -39,6 +39,7 @@ TIME_FORMAT_TO_TIME_UNIT = {TIME_FORMAT_DAYS: ONE_DAY,
 _R_BUYING_PANEL = R.strings.marathon.vehiclePreview.buyingPanel
 _R_TITLE_TOOLTIP = R.strings.marathon.vehiclePreview.title.tooltip
 _BUYING_BUTTON_ICON_ALIGN = 'right'
+_TOKEN_COUNT_INDEX = 1
 
 class IMarathonEvent(object):
     onDataChanged = None
@@ -98,7 +99,7 @@ class MarathonEventDataProvider(object):
 
     @property
     def awardTokens(self):
-        pass
+        return tuple()
 
     @property
     def questsInChain(self):
@@ -126,7 +127,7 @@ class MarathonEventDataProvider(object):
 
     @property
     def tooltips(self):
-        return MarathonEventTooltipData(header=R.strings.tooltips.marathon.header(), body=R.strings.tooltips.marathon.body(), bodyExtra=R.strings.tooltips.marathon.body.extra(), errorBattleType=R.strings.tooltips.marathon.error.battle_type(), errorVehType=R.strings.tooltips.marathon.error.veh_type(), extraStateSteps=R.strings.tooltips.marathon.extra_state.steps(), extraStateDiscount=R.strings.tooltips.marathon.extra_state.discount(), extraStateCompleted=R.strings.tooltips.marathon.extra_state.discount(), stateStart=R.strings.tooltips.marathon.state.start(), stateEnd=R.strings.tooltips.marathon.state.end(), stateProgress=R.strings.tooltips.marathon.extra_state(), stateComplete=R.strings.tooltips.marathon.state.complete(), daysShort=R.strings.tooltips.template.days.short(), hoursShort=R.strings.tooltips.template.hours.short(), previewAnnounce=R.strings.marathon.vehiclePreview.title.tooltip.body.announce(), previewInProgress=R.strings.marathon.vehiclePreview.title.tooltip.body.inprogress())
+        return MarathonEventTooltipData(header=R.strings.tooltips.marathon.header(), body=R.strings.tooltips.marathon.body(), bodyExtra=R.strings.tooltips.marathon.body.extra(), bodyExtraSmart=R.strings.tooltips.marathon.body.extra_smart(), errorBattleType=R.strings.tooltips.marathon.error.battle_type(), errorVehType=R.strings.tooltips.marathon.error.veh_type(), extraStateSteps=R.strings.tooltips.marathon.extra_state.steps(), extraStateDiscount=R.strings.tooltips.marathon.extra_state.discount(), extraStateCompleted=R.strings.tooltips.marathon.extra_state.completed(), stateStart=R.strings.tooltips.marathon.state.start(), stateEnd=R.strings.tooltips.marathon.state.end(), stateProgress=R.strings.tooltips.marathon.extra_state(), stateComplete=R.strings.tooltips.marathon.state.complete(), daysShort=R.strings.tooltips.template.days.short(), hoursShort=R.strings.tooltips.template.hours.short(), minutesShort=R.strings.tooltips.template.minutes.short(), previewAnnounce=R.strings.marathon.vehiclePreview.title.tooltip.body.announce(), previewInProgress=R.strings.marathon.vehiclePreview.title.tooltip.body.inprogress())
 
     @property
     def icons(self):
@@ -168,6 +169,15 @@ class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
     def getUrl(self, callback):
         url = yield self.__urlMacros.parse(self._getUrl())
         callback(url)
+
+    @async
+    @process
+    def getMarathonVehicleUrl(self, callback):
+        url = yield self.__urlMacros.parse(self._getUrl(urlType=MarathonConfig.REWARD_VEHICLE_URL))
+        callback(url)
+
+    def getFinishSaleTime(self):
+        return self._lobbyContext.getServerSettings().getMarathonConfig()[MarathonConfig.FINISH_SALE_TIME]
 
     def doesShowMissionsTab(self):
         return self.isEnabled()
@@ -333,8 +343,8 @@ class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
             self.__group = None
         tokens = self.getTokensData(prefix=self.tokenPrefix)
         rewardObtained = False
-        for key, (_, count) in tokens.iteritems():
-            if count > 0 and key in self.awardTokens:
+        for key in self.awardTokens:
+            if key in tokens and tokens[key][_TOKEN_COUNT_INDEX] > 0:
                 rewardObtained = True
                 break
 
@@ -370,8 +380,7 @@ class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
         return createDefaultMarathonWebHandlers()
 
     def getVehiclePreviewTitleTooltip(self):
-        _, finishGroupDate = self.__getGroupStartFinishTime()
-        groupFinishTimeText = self.__getDateTimeText(finishGroupDate)
+        finishSaleTime = self.__getDateTimeText(self.getFinishSaleTime())
         questStartTime, _ = self.__getQuestStartFinishTime()
         questStartTimeText = self.__getDateTimeText(questStartTime)
         if self.__state == MARATHON_STATE.NOT_STARTED:
@@ -382,7 +391,7 @@ class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
             tooltipBody = _R_TITLE_TOOLTIP.info.body.progress()
             if self.getMarathonDiscount():
                 tooltipBody = _R_TITLE_TOOLTIP.info.body.progress.withDiscount()
-            endVehicleSellDate = text_styles.neutral(groupFinishTimeText)
+            endVehicleSellDate = text_styles.neutral(finishSaleTime)
             addInfo = backport.text(_R_TITLE_TOOLTIP.body.addInfo.progress(), endVehicleSellDate=endVehicleSellDate, addInfo=backport.text(self.tooltips.previewInProgress))
             return self.__getPreviewInfoTooltip(tooltipBody, addInfo)
         return makeTooltip()
@@ -410,9 +419,6 @@ class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
          'btnIconAlign': _BUYING_BUTTON_ICON_ALIGN,
          'btnTooltip': tooltip,
          'customOffer': customOffer}
-
-    def getMarathonVehicleUrl(self):
-        return self._getUrl(urlType=MarathonConfig.REWARD_VEHICLE_URL)
 
     def _getUrl(self, urlType=MarathonConfig.URL):
         baseUrl = self._lobbyContext.getServerSettings().getMarathonConfig().get(urlType, MarathonConfig.EMPTY_PATH)
@@ -493,20 +499,15 @@ class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
         text = text_styles.stats(backport.text(self.tooltips.daysShort, value=str(time.struct_time(gmtime).tm_yday)))
         return text_styles.main(backport.text(keyNamespace, value=text))
 
-    def __getFormattedTillTimeString(self, timeValue, keyNamespace, isRoundUp=True, extraFmt=False):
+    def __getFormattedTillTimeString(self, timeValue, keyNamespace, extraFmt=False):
         gmtime = time.gmtime(timeValue)
-        if isRoundUp and gmtime.tm_sec > 0:
-            timeValue += ONE_HOUR
-            gmtime = time.gmtime(timeValue)
         if timeValue >= ONE_DAY:
-            gmtime = time.gmtime(timeValue - ONE_DAY)
-            text = text_styles.stats(backport.text(self.tooltips.daysShort, value=str(time.struct_time(gmtime).tm_yday)))
-            return text_styles.main(backport.text(keyNamespace, value=text))
-        if extraFmt:
-            text = text_styles.stats(backport.text(self.tooltips.hoursShort, value=str(time.struct_time(gmtime).tm_hour)))
-            return text_styles.main(backport.text(keyNamespace, value=text))
-        text = backport.text(self.tooltips.hoursShort, value=str(time.struct_time(gmtime).tm_hour))
-        return text_styles.tutorial(backport.text(keyNamespace, value=text))
+            text = backport.text(self.tooltips.daysShort, value=str(gmtime.tm_yday))
+        elif timeValue >= ONE_HOUR:
+            text = backport.text(self.tooltips.hoursShort, value=str(gmtime.tm_hour + 1))
+        else:
+            text = backport.text(self.tooltips.minutesShort, value=str(gmtime.tm_min + 1))
+        return text_styles.main(backport.text(keyNamespace, value=text_styles.stats(text))) if extraFmt or timeValue >= ONE_DAY else text_styles.tutorial(backport.text(keyNamespace, value=text))
 
     def __getTooltip(self):
         return self.flagTooltip if self.isAvailable() else self.disabledFlagTooltip

@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.395	</firePenalty>
   </invisibility>
-  <repairCost>	5.728	</repairCost>
+  <repairCost>	7.29	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.4	</priceFactor>
@@ -39,7 +39,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	17100	</weight>
-    <maxHealth>	1120	</maxHealth>
+    <maxHealth>	800	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	110	</maxRegenHealth>
@@ -129,8 +129,8 @@
         <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	155	</maxHealth>
-      <maxRegenHealth>	116	</maxRegenHealth>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R23_T-43/normal/lod0/Chassis.model	</undamaged>
@@ -816,8 +816,8 @@
         <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	170	</maxHealth>
-      <maxRegenHealth>	128	</maxRegenHealth>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R23_T-43/normal/lod0/Chassis.model	</undamaged>
@@ -1507,7 +1507,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7000	</weight>
-      <maxHealth>	220	</maxHealth>
+      <maxHealth>	200	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -1604,7 +1604,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_85mm_ZiS_S-53>
-        <_122mm_cannon_U-11>	shared	  <maxAmmo>	44	</maxAmmo>
+        <_122mm_cannon_U-11>	shared	  <maxAmmo>	36	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -26 1 -26	</minPitch>
             <maxPitch>	0 8 0.394671 8 0.458333 3 0.541667 3 0.605329 8 1 8	</maxPitch>
@@ -1787,7 +1787,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8400	</weight>
-      <maxHealth>	280	</maxHealth>
+      <maxHealth>	300	</maxHealth>
       <rotationSpeed>	46	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -1881,7 +1881,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_85mm_ZiS_S-53>
-        <_122mm_cannon_U-11>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_122mm_cannon_U-11>	shared	  <maxAmmo>	42	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -26 1 -26	</minPitch>
             <maxPitch>	0 8 0.394671 8 0.458333 5 0.541667 5 0.605329 8 1 8	</maxPitch>

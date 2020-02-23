@@ -581,21 +581,5 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/client_promo_log/'
         return self._request_data(callback, url, data, method='GET')
 
-    def get_player_statistic(self, callback, player_id, battle_type):
-        url = '//'
-        post_data = {'player_id': player_id,
-         'battle_type': battle_type}
-        return self._request_data(callback, url, get_data={}, converters={'player_id': int,
-         'battle_type': int}, method='POST', post_data=post_data)
-
-    def get_player_vehicle_statistic(self, callback, player_id, battle_type, vehicle_CD):
-        url = '//'
-        post_data = {'player_id': player_id,
-         'battle_type': battle_type,
-         'vehicle_CD': vehicle_CD}
-        return self._request_data(callback, url, get_data={}, converters={'player_id': int,
-         'battle_type': int,
-         'vehicle_CD': int}, method='POST', post_data=post_data)
-
     def _get_formatted_language_code(self):
         return self.client_lang.replace('_', '-')

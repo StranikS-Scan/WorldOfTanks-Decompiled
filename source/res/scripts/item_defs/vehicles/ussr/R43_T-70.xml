@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.495	</firePenalty>
   </invisibility>
-  <repairCost>	1.84	</repairCost>
+  <repairCost>	4	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
@@ -46,7 +46,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	4420	</weight>
-    <maxHealth>	400	</maxHealth>
+    <maxHealth>	168	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	90	</maxHealth>
       <maxRegenHealth>	60	</maxRegenHealth>
@@ -150,8 +150,8 @@
         <vehicleRotation>	0.28	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	53	</maxRegenHealth>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
       <repairCost>	2.5	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R43_T70/normal/lod0/Chassis.model	</undamaged>
@@ -790,10 +790,6 @@
       <tags></tags>
       <level>	3	</level>
       <price>	1730	</price>
-      <unlocks>
-        <vehicle>	R24_SU-76	  <cost>	3900	</cost>
-        </vehicle>
-      </unlocks>
       <armor>
         <leftTrack>	10	</leftTrack>
         <rightTrack>	10	</rightTrack>
@@ -809,8 +805,8 @@
         <vehicleRotation>	0.26	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	85	</maxHealth>
-      <maxRegenHealth>	64	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
       <repairCost>	2.5	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R43_T70/normal/lod0/Chassis.model	</undamaged>
@@ -1470,7 +1466,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1250	</weight>
-      <maxHealth>	75	</maxHealth>
+      <maxHealth>	42	</maxHealth>
       <rotationSpeed>	36	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -1488,7 +1484,7 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	180	</maxAmmo>
+          <maxAmmo>	90	</maxAmmo>
           <unlocks>
             <gun>	_37mm_ZiS-19	  <cost>	160	</cost>
             </gun>
@@ -1554,7 +1550,7 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	300	</maxAmmo>
+          <maxAmmo>	150	</maxAmmo>
           <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1716,7 +1712,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2000	</weight>
-      <maxHealth>	100	</maxHealth>
+      <maxHealth>	62	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -1735,7 +1731,7 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	180	</maxAmmo>
+          <maxAmmo>	90	</maxAmmo>
           <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1802,7 +1798,7 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	300	</maxAmmo>
+          <maxAmmo>	150	</maxAmmo>
           <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1869,7 +1865,7 @@
             <minPitch>	0 -19 1 -19	</minPitch>
             <maxPitch>	0 4 1 4	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	160	</maxAmmo>
+          <maxAmmo>	90	</maxAmmo>
           <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2020,7 +2016,11 @@
         </engine>
       </unlocks>
     </GAZ-203>
-    <M-80>	shared	</M-80>
+    <M-80>	shared	  <unlocks>
+        <vehicle>	R44_T80	  <cost>	3900	</cost>
+        </vehicle>
+      </unlocks>
+    </M-80>
   </engines>
   <fuelTanks>
     <Medium>	shared	</Medium>

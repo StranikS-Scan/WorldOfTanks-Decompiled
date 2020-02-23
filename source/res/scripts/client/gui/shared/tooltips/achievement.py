@@ -8,7 +8,6 @@ from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
-from gui.impl.gen import R
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.icons import makeImageTag
 from gui.shared.money import Money
@@ -220,17 +219,6 @@ class GlobalRatingTooltipData(ToolTipBaseData):
     def getDisplayableData(self, *args):
         return {'name': makeString('#achievements:globalRating'),
          'descr': makeString('#achievements:globalRating_descr'),
-         'isInDossier': True}
-
-
-class WtrTooltipData(ToolTipBaseData):
-
-    def __init__(self, context):
-        super(WtrTooltipData, self).__init__(context, TOOLTIP_TYPE.ACHIEVEMENT)
-
-    def getDisplayableData(self, *args):
-        return {'name': backport.text(R.strings.achievements.wotRating()),
-         'descr': backport.text(R.strings.achievements.wotRating_descr()),
          'isInDossier': True}
 
 

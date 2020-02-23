@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.462	</firePenalty>
   </invisibility>
-  <repairCost>	6.175	</repairCost>
+  <repairCost>	8.0	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.4	</priceFactor>
@@ -40,7 +40,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	3739	</weight>
-    <maxHealth>	912	</maxHealth>
+    <maxHealth>	648	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	190	</maxHealth>
       <maxRegenHealth>	130	</maxRegenHealth>
@@ -129,8 +129,8 @@
         <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	135	</maxRegenHealth>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	115	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G113_SP_I_C/normal/lod0/Chassis.model	</undamaged>
@@ -833,8 +833,8 @@
         <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	143	</maxRegenHealth>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	120	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G113_SP_I_C/normal/lod0/Chassis.model	</undamaged>
@@ -1528,7 +1528,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1500	</weight>
-      <maxHealth>	168	</maxHealth>
+      <maxHealth>	162	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -1720,7 +1720,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2000	</weight>
-      <maxHealth>	228	</maxHealth>
+      <maxHealth>	232	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -1833,6 +1833,8 @@
         </_90mm_D921_F1>
         <_90mm_Mecar>	shared	  <maxAmmo>	40	</maxAmmo>
           <unlocks>
+            <vehicle>	G88_Indien_Panzer	  <cost>	106000	</cost>
+            </vehicle>
             <vehicle>	G126_HWK_12	  <cost>	102000	</cost>
             </vehicle>
           </unlocks>

@@ -122,8 +122,6 @@ class NationObjDumper(_BaseDumper):
         if cache is None:
             cache = {'nodes': [],
              'displaySettings': {},
-             'gridSettings': {},
-             'premiumSettings': {},
              'scrollIndex': -1}
         super(NationObjDumper, self).__init__(cache)
         return
@@ -136,16 +134,12 @@ class NationObjDumper(_BaseDumper):
         if full:
             self._vClassInfo.clear()
             self._cache['displaySettings'].clear()
-            self._cache['gridSettings'].clear()
-            self._cache['premiumSettings'].clear()
 
     def dump(self, data):
         self.clear()
         self._cache['nodes'] = map(self._getVehicleData, data.getNodes())
         self._cache['scrollIndex'] = data._scrollIndex
         self._cache['displaySettings'].update(g_techTreeDP.getDisplaySettings(SelectedNation.getIndex()))
-        self._cache['gridSettings'].update(g_techTreeDP.getGridSettings(SelectedNation.getIndex()))
-        self._cache['premiumSettings'].update(g_techTreeDP.getPremiumGridSettings(SelectedNation.getIndex()))
         return self._cache
 
     def _getVehicleData(self, node):

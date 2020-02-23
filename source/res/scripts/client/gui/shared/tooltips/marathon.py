@@ -41,7 +41,10 @@ class MarathonEventTooltipData(BlocksTooltipData):
 
     def _getBody(self, state):
         if state == MARATHON_STATE.FINISHED:
-            text = text_styles.main(backport.text(self.__tooltipData.bodyExtra, hours=self._marathonEvent.getExtraTimeToBuy(timeFormat=TIME_FORMAT_HOURS), daysForBuying=self._marathonEvent.getAdditionalBuyingTime()))
+            if self._marathonEvent.isRewardObtained():
+                text = text_styles.main(backport.text(self.__tooltipData.bodyExtraSmart))
+            else:
+                text = text_styles.main(backport.text(self.__tooltipData.bodyExtra, hours=self._marathonEvent.getExtraTimeToBuy(timeFormat=TIME_FORMAT_HOURS)))
         else:
             text = text_styles.main(backport.text(self.__tooltipData.body))
         return formatters.packTextBlockData(text=text, padding=formatters.packPadding(left=20, top=10, bottom=20, right=10))

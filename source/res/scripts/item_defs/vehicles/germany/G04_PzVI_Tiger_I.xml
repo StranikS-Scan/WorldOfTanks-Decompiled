@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.164	</firePenalty>
   </invisibility>
-  <repairCost>	5.336	</repairCost>
+  <repairCost>	6.545	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.4	</priceFactor>
@@ -48,7 +48,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	25350	</weight>
-    <maxHealth>	1472	</maxHealth>
+    <maxHealth>	1120	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -161,8 +161,8 @@
         <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	230	</maxHealth>
-      <maxRegenHealth>	173	</maxRegenHealth>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	145	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G04_PzVI_Tiger_I/normal/lod0/Chassis.model	</undamaged>
@@ -1041,8 +1041,8 @@
         <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	188	</maxRegenHealth>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G04_PzVI_Tiger_I/normal/lod0/Chassis.model	</undamaged>
@@ -1927,7 +1927,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8250	</weight>
-      <maxHealth>	268	</maxHealth>
+      <maxHealth>	280	</maxHealth>
       <rotationSpeed>	24	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -1941,7 +1941,7 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_KwK_L70>	shared	  <maxAmmo>	130	</maxAmmo>
+        <_75mm_KwK_L70>	shared	  <maxAmmo>	110	</maxAmmo>
           <unlocks>
             <gun>	_88mm_KwK_36_L56	  <cost>	9500	</cost>
             </gun>
@@ -2107,7 +2107,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_88mm_KwK_36_L56>
-        <_105mm_StuH42_L28Pz>	shared	  <maxAmmo>	70	</maxAmmo>
+        <_105mm_StuH42_L28Pz>	shared	  <maxAmmo>	60	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -2281,7 +2281,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8950	</weight>
-      <maxHealth>	368	</maxHealth>
+      <maxHealth>	380	</maxHealth>
       <rotationSpeed>	18	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -2296,7 +2296,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.064	</invisibilityFactor>
       <guns>
-        <_75mm_KwK_L70>	shared	  <maxAmmo>	130	</maxAmmo>
+        <_75mm_KwK_L70>	shared	  <maxAmmo>	110	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -2387,7 +2387,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_KwK_L70>
-        <_105mm_StuH42_L28Pz>	shared	  <maxAmmo>	70	</maxAmmo>
+        <_105mm_StuH42_L28Pz>	shared	  <maxAmmo>	60	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>

@@ -505,7 +505,7 @@ class IBattleContext(object):
 
 
 class IBattleSessionProvider(object):
-    __slots__ = ()
+    __slots__ = ('onBattleSessionStart', 'onBattleSessionStop')
 
     @property
     def shared(self):

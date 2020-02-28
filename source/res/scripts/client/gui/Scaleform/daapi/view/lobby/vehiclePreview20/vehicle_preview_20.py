@@ -15,6 +15,7 @@ from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIn
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.sound_constants import RESEARCH_PREVIEW_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveStateTooltip
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.info.vehicle_preview_crew_tab import getUniqueMembers
+from gui.Scaleform.daapi.view.lobby.vehiclePreview20.items_kit_helper import OFFER_CHANGED_EVENT
 from gui.Scaleform.daapi.view.meta.VehiclePreview20Meta import VehiclePreview20Meta
 from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
@@ -85,6 +86,7 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
         elif self._backAlias in (VIEW_ALIAS.LOBBY_TECHTREE, VIEW_ALIAS.LOBBY_RESEARCH):
             self._COMMON_SOUND_SPACE = RESEARCH_PREVIEW_SOUND_SPACE
         super(VehiclePreview20, self).__init__(ctx)
+        self.__currentOffer = None
         self._vehicleCD = ctx['itemCD']
         self.__vehicleStrCD = ctx.get('vehicleStrCD')
         self._previousBackAlias = ctx.get('previousBackAlias')
@@ -138,6 +140,7 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
         specialData = getHeroTankPreviewParams() if self.__isHeroTank else None
         if specialData is not None and specialData.enterEvent:
             SoundGroups.g_instance.playSound2D(specialData.enterEvent)
+        g_eventBus.addListener(OFFER_CHANGED_EVENT, self.__onOfferChanged)
         return
 
     def _dispose(self):
@@ -167,6 +170,7 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
             self.__heroTanksControl.setInteractive(True)
         if self.__vehAppearanceChanged:
             g_currentPreviewVehicle.resetAppearance()
+        g_eventBus.removeListener(OFFER_CHANGED_EVENT, self.__onOfferChanged)
         return
 
     def closeView(self):
@@ -231,6 +235,10 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
                 viewPy.setVehicleCrews((ItemPackEntry(id=g_currentPreviewVehicle.item.intCD, groupID=1),), ())
         elif alias == VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE:
             viewPy.setHeroTank(self.__isHeroTank)
+            if self.__offers:
+                offer = self.__currentOffer if self.__currentOffer is not None else getActiveOffer(self.__offers)
+                viewPy.setActiveOffer(offer)
+        return
 
     def __onVehicleLoading(self, ctxEvent):
         if self.__customizationCD is not None and not ctxEvent.ctx.get('started'):
@@ -357,3 +365,6 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
     def __onInventoryChanged(self, *_):
         g_currentPreviewVehicle.selectNoVehicle()
         event_dispatcher.selectVehicleInHangar(self._vehicleCD)
+
+    def __onOfferChanged(self, event):
+        self.__currentOffer = event.ctx.get('offer')

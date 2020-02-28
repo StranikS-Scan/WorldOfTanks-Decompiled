@@ -913,9 +913,9 @@ class BattlePassListener(_NotificationListener):
     def __checkAndNotify(self, oldMode=None, newMode=None):
         isStarted = self.__battlePassController.isSeasonStarted()
         isFinished = self.__battlePassController.isSeasonFinished()
-        if self.__isStarted != isStarted:
+        if self.__isStarted != isStarted and isStarted:
             self.__pushStarted()
-        elif self.__isFinished != isFinished:
+        elif self.__isFinished != isFinished and isFinished:
             self.__pushFinished()
         if oldMode is not None and newMode is not None and oldMode != newMode:
             if newMode == 'paused':

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_control/battle_session.py
 import weakref
 from collections import namedtuple
+import Event
 import BattleReplay
 from PlayerEvents import g_playerEvents
 from adisp import async
@@ -39,6 +40,8 @@ class BattleSessionProvider(IBattleSessionProvider):
         self.__invitations = None
         self.__isReplayPlaying = False
         self.__battleCache = BattleClientCache()
+        self.onBattleSessionStart = Event.Event()
+        self.onBattleSessionStop = Event.Event()
         return
 
     @property
@@ -195,8 +198,10 @@ class BattleSessionProvider(IBattleSessionProvider):
         self.__invitations = invitations.createInvitationsHandler(setup)
         setup.clear()
         g_playerEvents.onBattleResultsReceived += self.__pe_onBattleResultsReceived
+        self.onBattleSessionStart()
 
     def stop(self):
+        self.onBattleSessionStop()
         g_playerEvents.onBattleResultsReceived -= self.__pe_onBattleResultsReceived
         if self.__viewComponentsBridge is not None:
             self.__viewComponentsBridge.clear()

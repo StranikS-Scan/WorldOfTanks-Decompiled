@@ -620,11 +620,11 @@ class PopoverLogicProvider(object):
         else:
             criteria = REQ_CRITERIA.VEHICLE.SUITABLE([self._vehicle], [typeId]) | self._getSpecificCriteria(typeId)
             data = self._itemsCache.items.getItems(typeId, criteria).values()
-            data.sort(reverse=True, key=self._getItemsSortingKey(typeId))
+            data.sort(reverse=True, key=self._getItemsSortingKey())
             return data
 
-    def _getItemsSortingKey(self, typeId=None):
-        return (lambda item: item.isTrophy) if typeId == GUI_ITEM_TYPE.OPTIONALDEVICE else None
+    def _getItemsSortingKey(self):
+        return None
 
     def _getSpecificCriteria(self, typeID):
         if typeID == GUI_ITEM_TYPE.BATTLE_BOOSTER:
@@ -737,7 +737,7 @@ class _BattleAbilityLogicProvider(_HangarLogicProvider):
 
         return REQ_CRITERIA.CUSTOM(lambda item: item.innationID in skillItemIDs)
 
-    def _getItemsSortingKey(self, typeId=None):
+    def _getItemsSortingKey(self):
         return lambda item: self.__ABILITIES_ORDER.index(item.getSubTypeName())
 
     def _buildModuleData(self, vehicleModule, isInstalledInSlot, stats):

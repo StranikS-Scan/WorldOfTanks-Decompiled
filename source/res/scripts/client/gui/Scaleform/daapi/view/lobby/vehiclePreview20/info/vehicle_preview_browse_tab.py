@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehiclePreview20/info/vehicle_preview_browse_tab.py
 from CurrentVehicle import g_currentPreviewVehicle
+from gui.Scaleform.daapi.view.lobby.vehiclePreview20.items_kit_helper import OFFER_CHANGED_EVENT
 from gui.Scaleform.daapi.view.meta.VehiclePreviewBrowseTabMeta import VehiclePreviewBrowseTabMeta
+from gui.shared import g_eventBus
 from gui.shared.formatters import text_styles
 from gui.shared.money import Currency
 from gui.impl import backport
@@ -17,16 +19,20 @@ class VehiclePreviewBrowseTab(VehiclePreviewBrowseTabMeta):
     def __init__(self):
         super(VehiclePreviewBrowseTab, self).__init__()
         self.__isHeroTank = False
+        self.__offer = None
+        return
 
     def _populate(self):
         super(VehiclePreviewBrowseTab, self)._populate()
         g_currentPreviewVehicle.onComponentInstalled += self.update
         g_currentPreviewVehicle.onChanged += self.update
+        g_eventBus.addListener(OFFER_CHANGED_EVENT, self.__onOfferChanged)
         self.update()
 
     def _dispose(self):
         g_currentPreviewVehicle.onComponentInstalled -= self.update
         g_currentPreviewVehicle.onChanged -= self.update
+        g_eventBus.removeListener(OFFER_CHANGED_EVENT, self.__onOfferChanged)
         super(VehiclePreviewBrowseTab, self)._dispose()
 
     def setActiveState(self, isActive):
@@ -36,7 +42,11 @@ class VehiclePreviewBrowseTab(VehiclePreviewBrowseTabMeta):
         self.__isHeroTank = isHeroTank
         self.update()
 
-    def update(self, *args):
+    def setActiveOffer(self, offer):
+        self.__offer = offer
+        self.update()
+
+    def update(self, *_):
         self._update()
 
     def _update(self):
@@ -44,9 +54,11 @@ class VehiclePreviewBrowseTab(VehiclePreviewBrowseTabMeta):
             item = g_currentPreviewVehicle.item
             if item.buyPrices.itemPrice.defPrice.get(Currency.GOLD):
                 maxDescriptionLength = _MAX_LENGTH_FULL_DESCRIPTION_WITH_KPI
-                bonuses = [{'icon': backport.image(R.images.gui.maps.shop.kpi.star_icon_benefits()),
-                  'title': text_styles.concatStylesToMultiLine(text_styles.highTitle(backport.text(R.strings.vehicle_preview.infoPanel.premium.freeExpMultiplier())), text_styles.main(backport.text(R.strings.vehicle_preview.infoPanel.premium.freeExpText())))}]
-                if not item.isSpecial:
+                bonuses = []
+                if not self.__isFrontlineCreditsOffer():
+                    bonuses.append({'icon': backport.image(R.images.gui.maps.shop.kpi.star_icon_benefits()),
+                     'title': text_styles.concatStylesToMultiLine(text_styles.highTitle(backport.text(R.strings.vehicle_preview.infoPanel.premium.freeExpMultiplier())), text_styles.main(backport.text(R.strings.vehicle_preview.infoPanel.premium.freeExpText())))})
+                if not (item.isSpecial or self.__isFrontlineCreditsOffer()):
                     bonuses.append({'icon': backport.image(R.images.gui.maps.shop.kpi.money_benefits()),
                      'title': text_styles.concatStylesToMultiLine(text_styles.highTitle(backport.text(R.strings.vehicle_preview.infoPanel.premium.creditsMultiplier())), text_styles.main(backport.text(R.strings.vehicle_preview.infoPanel.premium.creditsText())))})
                 if not item.isCrewLocked:
@@ -71,3 +83,10 @@ class VehiclePreviewBrowseTab(VehiclePreviewBrowseTabMeta):
                 description = description[:maxDescriptionLength - 3] + '...'
             self.as_setDataS(text_styles.main(description), hasTooltip, bonuses)
         return
+
+    def __onOfferChanged(self, event):
+        ctx = event.ctx
+        self.setActiveOffer(ctx.get('offer'))
+
+    def __isFrontlineCreditsOffer(self):
+        return self.__offer is not None and self.__offer.eventType == 'frontline' and self.__offer.buyPrice.credits

@@ -120,6 +120,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         return self.__filterData
 
     def onClose(self):
+        if self.getCurrentTabAlias() == QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS and not self.currentTab.isCloseEnabled():
+            return
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def resetFilters(self):

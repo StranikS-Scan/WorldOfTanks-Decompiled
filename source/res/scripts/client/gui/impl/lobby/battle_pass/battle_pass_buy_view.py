@@ -19,7 +19,6 @@ from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showHangar
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from gui.sounds.filters import switchHangarOverlaySoundFilter
-from gui.Scaleform.Waiting import Waiting
 from helpers import dependency
 from skeletons.gui.game_control import IWalletController, IBattlePassController
 from skeletons.gui.shared import IItemsCache
@@ -27,7 +26,7 @@ from battle_pass_common import BattlePassState
 _logger = logging.getLogger(__name__)
 
 class BattlePassBuyView(ViewImpl):
-    __slots__ = ('__packages', '__selectedPackage', '__tooltipItems', '__backCallback', '__notifications', '__currentWaiting', '__tooltipWindow')
+    __slots__ = ('__packages', '__selectedPackage', '__tooltipItems', '__backCallback', '__backBtnDescrLabel', '__notifications', '__tooltipWindow')
     __battlePassController = dependency.descriptor(IBattlePassController)
     __wallet = dependency.descriptor(IWalletController)
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -40,7 +39,6 @@ class BattlePassBuyView(ViewImpl):
         self.__packages = []
         self.__selectedPackage = None
         self.__tooltipItems = {}
-        self.__currentWaiting = None
         self.__notifications = Notifiable()
         self.__tooltipWindow = None
         super(BattlePassBuyView, self).__init__(settings)
@@ -76,13 +74,14 @@ class BattlePassBuyView(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         super(BattlePassBuyView, self)._onLoading(*args, **kwargs)
         self.__addListeners()
+        self.__notifications.addNotificator(PeriodicNotifier(self.__timeTillUnlock, self.__updateUnlockTimes))
         with self.viewModel.transaction() as tx:
             tx.setIsBattlePassBought(self.__battlePassController.isBought())
             tx.setIsWalletAvailable(self.__wallet.isAvailable)
         self.__packages = generatePackages()
         self.__setPackages()
         switchHangarOverlaySoundFilter(on=True)
-        self.__notifications.addNotificator(PeriodicNotifier(self.__timeTillUnlock, self.__updateUnlockTimes))
+        self.__notifications.startNotification()
 
     def _finalize(self):
         super(BattlePassBuyView, self)._finalize()
@@ -91,9 +90,6 @@ class BattlePassBuyView(ViewImpl):
         self.__tooltipItems = None
         self.__packages = None
         self.__tooltipWindow = None
-        if self.__currentWaiting is not None:
-            Waiting.hide(self.__currentWaiting)
-            self.__currentWaiting = None
         switchHangarOverlaySoundFilter(on=False)
         self.__notifications.clearNotification()
         return
@@ -129,6 +125,7 @@ class BattlePassBuyView(ViewImpl):
         self.__selectedPackage = None
         self.__clearTooltips()
         self.viewModel.setState(self.viewModel.BUY_STATE)
+        SoundGroups.g_instance.playSound2D(BattlePassSounds.getOverlay(self.viewModel.packages.getItemsLength()))
         return
 
     def __addListeners(self):
@@ -172,9 +169,6 @@ class BattlePassBuyView(ViewImpl):
 
     def __onBuying(self, _):
         self.__battlePassController.onLevelUp += self.__onLevelUp
-        if self.__currentWaiting is not None:
-            Waiting.hide(self.__currentWaiting)
-        return
 
     def __onAwardViewClose(self, _):
         self.__onBackClick()
@@ -206,6 +200,7 @@ class BattlePassBuyView(ViewImpl):
             self.__updateDetailRewards()
         else:
             self.__setPackages()
+            self.viewModel.packages.invalidate()
 
     def __choosePackage(self, args):
         packageID = int(args.get('packageID'))
@@ -259,7 +254,7 @@ class BattlePassBuyView(ViewImpl):
         else:
             curLevel = self.__battlePassController.getCurrentLevel()
         if self.__selectedPackage.hasBattlePass():
-            fromLevel = 1
+            fromLevel = 0
             toLevel = curLevel
         else:
             fromLevel = curLevel
@@ -276,22 +271,24 @@ class BattlePassBuyView(ViewImpl):
     def __onBuyBattlePassClick(self):
         if self.__selectedPackage is not None:
             self.__battlePassController.onLevelUp -= self.__onLevelUp
-            if self.__selectedPackage.getLevelsCount() > 0:
-                self.__currentWaiting = 'buyBattlePassLevels'
+            if self.__selectedPackage.hasBattlePass():
+                BattlePassBuyer.buyBP(self.__selectedPackage.getSeasonID(), onBuyCallback=self.__onBuyBPCallback)
             else:
-                self.__currentWaiting = 'buyBattlePass'
-            Waiting.show(self.__currentWaiting)
-            BattlePassBuyer.buy(self.__selectedPackage.getSeasonID(), self.__selectedPackage.getLevelsCount(), onBuyCallback=self.__onBuyCallback)
+                BattlePassBuyer.buyLevels(self.__selectedPackage.getSeasonID(), self.__selectedPackage.getLevelsCount(), onBuyCallback=self.__onBuyLevelsCallback)
         return
 
-    def __onBuyCallback(self, result):
+    def __onBuyBPCallback(self, result):
         if not result:
-            if self.__currentWaiting is not None:
-                Waiting.hide(self.__currentWaiting)
             self.__battlePassController.onLevelUp += self.__onLevelUp
         else:
             g_eventBus.addListener(events.BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY)
-        return
+
+    def __onBuyLevelsCallback(self, result):
+        if not result:
+            self.__battlePassController.onLevelUp += self.__onLevelUp
+        else:
+            g_eventBus.addListener(events.BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY)
+            g_eventBus.handleEvent(events.BattlePassEvent(events.BattlePassEvent.ON_PURCHASE_LEVELS), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __isStartedProgression(self):
         return self.__battlePassController.getCurrentLevel() > 0

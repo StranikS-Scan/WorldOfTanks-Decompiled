@@ -71,10 +71,11 @@ class HangarCarouselDataProvider(CarouselDataProvider):
     def _buildSupplyItems(self):
         self._supplyItems = []
         items = self._itemsCache.items
+        inventory = self._itemsCache.items.inventory
         slots = items.stats.vehicleSlots
         slotPrice = items.shop.getVehicleSlotsPrice(slots)
         defaultSlotPrice = items.shop.defaults.getVehicleSlotsPrice(slots)
-        self._emptySlotsCount = self._itemsCache.items.inventory.getFreeSlots(self._itemsCache.items.stats.vehicleSlots)
+        self._emptySlotsCount = inventory.getFreeSlots(slots)
         criteria = REQ_CRITERIA.IN_CD_LIST(items.recycleBin.getVehiclesIntCDs()) | REQ_CRITERIA.VEHICLE.IS_RESTORE_POSSIBLE
         self._restorableVehiclesCount = len(items.getVehicles(criteria))
         if slotPrice != defaultSlotPrice:

@@ -33,7 +33,11 @@ class BattlePassWebApi(W2CSchema):
 
     @w2c(W2CSchema, name='get_shop_banners_params')
     def handleGetShopBannerParams(self, _):
-        isVisible = (isCurrentBattlePassStateBase() or not self.__battlePassCtrl.isBought()) and not self.__battlePassCtrl.isPaused() and self.__battlePassCtrl.isVisible()
+        isBase = isCurrentBattlePassStateBase()
+        isActive = not self.__battlePassCtrl.isPaused() and self.__battlePassCtrl.isVisible()
+        canBuyBP = not self.__battlePassCtrl.isBought()
+        canBuyLevels = self.__battlePassCtrl.getBoughtLevels() == 0 or self.__battlePassCtrl.isSellAnyLevelsUnlocked()
+        isVisible = isActive and (canBuyBP or isBase and canBuyLevels)
         data = {'isVisible': isVisible,
          'isSeasonLeftSoon': isSeasonEndingSoon()}
         return data

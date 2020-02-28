@@ -65,6 +65,7 @@ class DailyQuestsView(ViewImpl, ClientMainWindowStateWatcher):
         super(DailyQuestsView, self).__init__(viewSettings)
         self.__tooltipData = {}
         self.__proxyMissionsPage = None
+        self.isCloseEnabled = True
         return
 
     @property
@@ -350,7 +351,9 @@ class DailyQuestsView(ViewImpl, ClientMainWindowStateWatcher):
             _logger.error('Attempted to reroll quest which does not exist, reroll cancelled.')
             return
         quest = quests[questId]
+        self.isCloseEnabled = False
         result = yield daily_quests.DailyQuestReroll(quest).request()
+        self.isCloseEnabled = True
         if result.success:
             with self.viewModel.transaction() as tx:
                 self._markVisited(tx.getCurrentTabIdx(), tx)

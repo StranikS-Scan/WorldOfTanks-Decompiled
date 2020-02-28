@@ -26,6 +26,23 @@ class EpicSpectatorView(EpicSpectatorViewMeta):
 
     def _populate(self):
         super(EpicSpectatorView, self)._populate()
+        self.sessionProvider.onBattleSessionStart += self.__onBattleSessionStart
+        self.sessionProvider.onBattleSessionStop += self.__onBattleSessionStop
+        self.as_setFollowInfoTextS(makeString(EPIC_BATTLE.SPECTATOR_MODE_FOLLOW_TEXT))
+        self.as_focusOnVehicleS(False)
+        self.isTankFocused = False
+
+    def _dispose(self):
+        self.sessionProvider.onBattleSessionStart -= self.__onBattleSessionStart
+        self.sessionProvider.onBattleSessionStop -= self.__onBattleSessionStop
+        if self.__timeCB:
+            BigWorld.cancelCallback(self.__timeCB)
+            self.__timeCB = None
+        super(EpicSpectatorView, self)._dispose()
+        return
+
+    def _addGameListeners(self):
+        super(EpicSpectatorView, self)._addGameListeners()
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onPostMortemSwitched += self.__onPostMortemSwitched
@@ -34,19 +51,18 @@ class EpicSpectatorView(EpicSpectatorViewMeta):
         if specCtrl is not None:
             specCtrl.onSpectatorViewModeChanged += self.__onSpectatorModeChanged
             specCtrl.onSpectatedVehicleChanged += self.__onSpectatedVehicleChanged
+        ctrl = self.sessionProvider.dynamic.respawn
+        if ctrl is not None:
+            ctrl.onRespawnVisibilityChanged += self.__onRespawnVisibility
         playerComp = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'playerDataComponent', None)
         if playerComp is not None:
             playerComp.onReinforcementTimerUpdated += self.__onReinforcementTimerUpdated
             self.__onReinforcementTimerUpdated(playerComp.reinforcementTimer)
         else:
             LOG_ERROR('Expected PayerDataComponent not present!')
-        self.as_setFollowInfoTextS(makeString(EPIC_BATTLE.SPECTATOR_MODE_FOLLOW_TEXT))
-        self.as_focusOnVehicleS(False)
-        self.isTankFocused = False
         return
 
-    def _dispose(self):
-        super(EpicSpectatorView, self)._dispose()
+    def _removeGameListeners(self):
         playerComp = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'playerDataComponent', None)
         if playerComp is not None:
             playerComp.onReinforcementTimerUpdated -= self.__onReinforcementTimerUpdated
@@ -58,9 +74,10 @@ class EpicSpectatorView(EpicSpectatorViewMeta):
         if ctrl is not None:
             ctrl.onSpectatorViewModeChanged -= self.__onSpectatorModeChanged
             ctrl.onSpectatedVehicleChanged -= self.__onSpectatedVehicleChanged
-        if self.__timeCB:
-            BigWorld.cancelCallback(self.__timeCB)
-            self.__timeCB = None
+        ctrl = self.sessionProvider.dynamic.respawn
+        if ctrl is not None:
+            ctrl.onRespawnVisibilityChanged -= self.__onRespawnVisibility
+        super(EpicSpectatorView, self)._removeGameListeners()
         return
 
     def _updateVehicleInfo(self):
@@ -72,19 +89,11 @@ class EpicSpectatorView(EpicSpectatorViewMeta):
         else:
             self._showPlayerInfo()
 
-    def _addGameListeners(self):
-        super(EpicSpectatorView, self)._addGameListeners()
-        ctrl = self.sessionProvider.dynamic.respawn
-        if ctrl is not None:
-            ctrl.onRespawnVisibilityChanged += self.__onRespawnVisibility
-        return
+    def __onBattleSessionStart(self):
+        self._addGameListeners()
 
-    def _removeGameListeners(self):
-        ctrl = self.sessionProvider.dynamic.respawn
-        if ctrl is not None:
-            ctrl.onRespawnVisibilityChanged -= self.__onRespawnVisibility
-        super(EpicSpectatorView, self)._removeGameListeners()
-        return
+    def __onBattleSessionStop(self):
+        self._removeGameListeners()
 
     def __onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
         self.isInPostmortem = True

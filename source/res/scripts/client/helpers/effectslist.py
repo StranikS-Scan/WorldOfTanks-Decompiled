@@ -20,7 +20,6 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
 from vehicle_systems.tankStructure import TankSoundObjectsIndexes
 from constants import IS_EDITOR
-from debug_utils import LOG_WARNING
 if not IS_EDITOR:
     from gui.Scaleform.genConsts.EPIC_CONSTS import EPIC_CONSTS
 _logger = logging.getLogger(__name__)
@@ -134,7 +133,6 @@ class EffectsListPlayer(object):
         if not replayCtrl.isPlaying:
             EffectsListPlayer.clearInProgress = True
             for effect in EffectsListPlayer.activeEffects:
-                LOG_WARNING('[EFFECT LIST] There is an active effect during the space destroying process.Effects must be stopped before {0}'.format(effect))
                 effect.stop()
 
             return

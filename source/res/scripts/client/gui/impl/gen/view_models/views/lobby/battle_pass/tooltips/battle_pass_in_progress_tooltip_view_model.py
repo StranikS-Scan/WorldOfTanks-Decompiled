@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.reward_points_mod
 class BattlePassInProgressTooltipViewModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=10, commands=0):
+    def __init__(self, properties=11, commands=0):
         super(BattlePassInProgressTooltipViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -16,61 +16,66 @@ class BattlePassInProgressTooltipViewModel(ViewModel):
         return self._getViewModel(0)
 
     @property
-    def rewards(self):
+    def rewardsCommon(self):
         return self._getViewModel(1)
 
+    @property
+    def rewardsElite(self):
+        return self._getViewModel(2)
+
     def getLevel(self):
-        return self._getNumber(2)
-
-    def setLevel(self, value):
-        self._setNumber(2, value)
-
-    def getCurrentPoints(self):
         return self._getNumber(3)
 
-    def setCurrentPoints(self, value):
+    def setLevel(self, value):
         self._setNumber(3, value)
 
-    def getMaxPoints(self):
+    def getCurrentPoints(self):
         return self._getNumber(4)
 
-    def setMaxPoints(self, value):
+    def setCurrentPoints(self, value):
         self._setNumber(4, value)
 
+    def getMaxPoints(self):
+        return self._getNumber(5)
+
+    def setMaxPoints(self, value):
+        self._setNumber(5, value)
+
     def getIsBattlePassPurchased(self):
-        return self._getBool(5)
-
-    def setIsBattlePassPurchased(self, value):
-        self._setBool(5, value)
-
-    def getIsSpecialVehicle(self):
         return self._getBool(6)
 
-    def setIsSpecialVehicle(self, value):
+    def setIsBattlePassPurchased(self, value):
         self._setBool(6, value)
 
+    def getIsSpecialVehicle(self):
+        return self._getBool(7)
+
+    def setIsSpecialVehicle(self, value):
+        self._setBool(7, value)
+
     def getVideoName(self):
-        return self._getString(7)
+        return self._getString(8)
 
     def setVideoName(self, value):
-        self._setString(7, value)
+        self._setString(8, value)
 
     def getIsPostProgression(self):
-        return self._getBool(8)
+        return self._getBool(9)
 
     def setIsPostProgression(self, value):
-        self._setBool(8, value)
+        self._setBool(9, value)
 
     def getTimeTillEnd(self):
-        return self._getString(9)
+        return self._getString(10)
 
     def setTimeTillEnd(self, value):
-        self._setString(9, value)
+        self._setString(10, value)
 
     def _initialize(self):
         super(BattlePassInProgressTooltipViewModel, self)._initialize()
         self._addViewModelProperty('rewardPoints', UserListModel())
-        self._addViewModelProperty('rewards', UserListModel())
+        self._addViewModelProperty('rewardsCommon', UserListModel())
+        self._addViewModelProperty('rewardsElite', UserListModel())
         self._addNumberProperty('level', 0)
         self._addNumberProperty('currentPoints', 0)
         self._addNumberProperty('maxPoints', 0)

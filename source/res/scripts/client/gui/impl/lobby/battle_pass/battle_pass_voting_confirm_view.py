@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/battle_pass_voting_confirm_view.py
-import adisp
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui import SystemMessages
@@ -60,7 +59,6 @@ class BattlePassVotingConfirmView(FullScreenDialogView):
     def _blurBackGround(self):
         pass
 
-    @adisp.process
     def __onVoteClick(self, args):
         vehicleCD = int(args.get('vehicleCD'))
         self.__chooseFinalReward(vehicleCD, self.__battlePassController.getSeasonID())

@@ -1118,6 +1118,7 @@ class IBattlePassController(IGameController):
     onSeasonStateChange = None
     onUnlimitedPurchaseUnlocked = None
     onBattlePassSettingsChange = None
+    onFinalRewardStateChange = None
 
     def isEnabled(self):
         raise NotImplementedError
@@ -1237,6 +1238,9 @@ class IBattlePassController(IGameController):
         raise NotImplementedError
 
     def getSellAnyLevelsUnlockTimeLeft(self):
+        raise NotImplementedError
+
+    def getFinalOfferTimeLeft(self):
         raise NotImplementedError
 
     def getSeasonStartTime(self):

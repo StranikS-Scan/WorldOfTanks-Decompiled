@@ -679,6 +679,7 @@ class HangarCameraManagerEvent(HasCtxEvent):
 class BattlePassEvent(HasCtxEvent):
     BUYING_THINGS = 'buyingThings'
     AWARD_VIEW_CLOSE = 'onAwardViewClose'
+    ON_PURCHASE_LEVELS = 'onPurchaseLevels'
 
 
 class ItemRemovalByDemountKitEvent(HasCtxEvent):

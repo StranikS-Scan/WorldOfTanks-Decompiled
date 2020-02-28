@@ -19,8 +19,10 @@ UndefinedStyleTooltipData = namedtuple('UndefinedStyleTooltipData', ['styleA',
  'tankB'])
 UndefinedTmanTooltipData = namedtuple('UndefinedTmanTooltipData', ['imageA',
  'tankmanA',
+ 'skillsA',
  'imageB',
- 'tankmanB'])
+ 'tankmanB',
+ 'skillsB'])
 _CUSTOMIZATION_BONUS_NAME = 'customizations'
 _TANKMAN_BONUS_NAME = 'tmanToken'
 
@@ -126,6 +128,14 @@ class UndefinedTmanBonus(UndefinedBonus):
         if tankmanA is None or tankmanB is None:
             return {}
         else:
-            nationA = getRecruitNation(tankmanA)
-            nationB = getRecruitNation(tankmanB)
-            return UndefinedTmanTooltipData(tankmanA.getIconByNation(nationA), tankmanA.getFullUserNameByNation(nationA), tankmanB.getIconByNation(nationB), tankmanB.getFullUserNameByNation(nationB))
+            iconNameA, tankmanNameA, skillsA = self.__getDataByTankman(tankmanA)
+            iconNameB, tankmanNameB, skillsB = self.__getDataByTankman(tankmanB)
+            return UndefinedTmanTooltipData(iconNameA, tankmanNameA, skillsA, iconNameB, tankmanNameB, skillsB)
+
+    @staticmethod
+    def __getDataByTankman(tankman):
+        nation = getRecruitNation(tankman)
+        iconName = tankman.getIconByNation(nation)
+        tankmanName = tankman.getFullUserNameByNation(nation)
+        skills = tankman.getLearntSkills()
+        return (iconName, tankmanName, skills)

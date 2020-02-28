@@ -26,7 +26,7 @@ class BattlePassManager(object):
             self.__cache.clear()
         dataResetKey = (self.__DATA_KEY, '_r')
         if dataResetKey in diff:
-            self.__cache = diff[dataResetKey]
+            self.__cache[self.__DATA_KEY] = diff[dataResetKey]
         if self.__DATA_KEY in diff:
             synchronizeDicts(diff[self.__DATA_KEY], self.__cache.setdefault(self.__DATA_KEY, {}))
 

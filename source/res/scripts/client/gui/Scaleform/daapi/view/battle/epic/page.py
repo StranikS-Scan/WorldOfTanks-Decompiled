@@ -147,10 +147,10 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
         self.__pageState = PageStates.COUNTDOWN
         self.__topState = PageStates.NONE
         self.__activeState = PageStates.NONE
+        self.__ctrlListener = False
         return
 
     def _invalidateState(self):
-        targetState = PageStates.NONE
         if self.__topState != PageStates.NONE:
             targetState = self.__topState
         else:
@@ -195,14 +195,9 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
 
     def _populate(self):
         super(EpicBattlePage, self)._populate()
-        ctrl = self.sessionProvider.dynamic.respawn
-        if ctrl is not None:
-            ctrl.onRespawnVisibilityChanged += self.__onRespawnVisibility
-            self.__onRespawnVisibility(ctrl.isRespawnVisible())
-        self.addListener(events.GameEvent.MINIMAP_CMD, self._handleToggleOverviewMap, scope=EVENT_BUS_SCOPE.BATTLE)
-        specCtrl = self.sessionProvider.dynamic.spectator
-        if specCtrl is not None:
-            specCtrl.onSpectatorViewModeChanged += self.__onSpectatorModeChanged
+        self.sessionProvider.onBattleSessionStart += self.__onBattleSessionStart
+        self.sessionProvider.onBattleSessionStop += self.__onBattleSessionStop
+        self.__startCtrlListeners()
         g_playerEvents.onRoundFinished += self.__onRoundFinished
         self.app.registerGuiKeyHandler(self)
         arena = self.sessionProvider.arenaVisitor.getArenaSubscription()
@@ -212,13 +207,9 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
         return
 
     def _dispose(self):
-        ctrl = self.sessionProvider.dynamic.respawn
-        if ctrl is not None:
-            ctrl.onRespawnVisibilityChanged -= self.__onRespawnVisibility
-        self.removeListener(events.GameEvent.MINIMAP_CMD, self._handleToggleOverviewMap, scope=EVENT_BUS_SCOPE.BATTLE)
-        specCtrl = self.sessionProvider.dynamic.spectator
-        if specCtrl is not None:
-            specCtrl.onSpectatorViewModeChanged -= self.__onSpectatorModeChanged
+        self.sessionProvider.onBattleSessionStart -= self.__onBattleSessionStart
+        self.sessionProvider.onBattleSessionStop -= self.__onBattleSessionStop
+        self.__stopCtrlListeners()
         g_playerEvents.onRoundFinished -= self.__onRoundFinished
         arena = self.sessionProvider.arenaVisitor.getArenaSubscription()
         if arena is not None:
@@ -394,3 +385,34 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
     def __checkRadialMenu(self):
         if self.__topState == PageStates.RADIAL:
             self._toggleRadialMenu(False)
+
+    def __onBattleSessionStart(self):
+        self.__startCtrlListeners()
+
+    def __onBattleSessionStop(self):
+        self.__stopCtrlListeners()
+
+    def __startCtrlListeners(self):
+        if not self.__ctrlListener:
+            ctrl = self.sessionProvider.dynamic.respawn
+            if ctrl is not None:
+                ctrl.onRespawnVisibilityChanged += self.__onRespawnVisibility
+                self.__onRespawnVisibility(ctrl.isRespawnVisible())
+            self.addListener(events.GameEvent.MINIMAP_CMD, self._handleToggleOverviewMap, scope=EVENT_BUS_SCOPE.BATTLE)
+            specCtrl = self.sessionProvider.dynamic.spectator
+            if specCtrl is not None:
+                specCtrl.onSpectatorViewModeChanged += self.__onSpectatorModeChanged
+            self.__ctrlListener = True
+        return
+
+    def __stopCtrlListeners(self):
+        if self.__ctrlListener:
+            ctrl = self.sessionProvider.dynamic.respawn
+            if ctrl is not None:
+                ctrl.onRespawnVisibilityChanged -= self.__onRespawnVisibility
+            self.removeListener(events.GameEvent.MINIMAP_CMD, self._handleToggleOverviewMap, scope=EVENT_BUS_SCOPE.BATTLE)
+            specCtrl = self.sessionProvider.dynamic.spectator
+            if specCtrl is not None:
+                specCtrl.onSpectatorViewModeChanged -= self.__onSpectatorModeChanged
+            self.__ctrlListener = False
+        return

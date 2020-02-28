@@ -27,7 +27,7 @@ def getBattlePassBonusPacker():
     return BonusUIPacker(mapping)
 
 
-def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, isLocked=False):
+def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None):
     bonusIndexTotal = 0
     if tooltipData is not None:
         bonusIndexTotal = len(tooltipData)
@@ -40,7 +40,6 @@ def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, isL
                 bonusTooltipList = packer.getToolTip(bonus)
             for bonusIndex, item in enumerate(bonusList):
                 item.setIndex(bonusIndex)
-                item.setIsLocked(isLocked)
                 bonusModelsList.addViewModel(item)
                 if tooltipData is not None and bonusTooltipList:
                     tooltipIdx = str(bonusIndexTotal)
@@ -148,9 +147,13 @@ class BattlePassCustomizationsBonusPacker(_BattlePassFinalBonusPacker):
     def _packSingleBonus(cls, bonus, item, data):
         model = ExtendedIconBonusModel()
         cls._packCommon(bonus, model)
+        customizationItem = bonus.getC11nItem(item)
+        iconName = customizationItem.itemTypeName
+        if iconName == 'style' and customizationItem.modelsSet:
+            iconName = 'style_3d'
         model.setValue(str(data.get('value', '')))
-        model.setIcon(str(bonus.getC11nItem(item).itemTypeName))
-        model.setUserName(bonus.getC11nItem(item).userName)
+        model.setIcon(iconName)
+        model.setUserName(customizationItem.userName)
         cls._injectAwardID(model)
         return model
 

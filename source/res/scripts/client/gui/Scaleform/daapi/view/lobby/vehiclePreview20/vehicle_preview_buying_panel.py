@@ -235,7 +235,8 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
             vehicle = g_currentPreviewVehicle.item
             crew = self.__currentOffer.crew
             g_eventBus.handleEvent(HasCtxEvent(ctx={'vehicleItems': [ItemPackEntry(id=vehicle.intCD, groupID=crew.groupID)],
-             'crewItems': [crew]}, eventType=OFFER_CHANGED_EVENT))
+             'crewItems': [crew],
+             'offer': self.__currentOffer}, eventType=OFFER_CHANGED_EVENT))
             self.__buyParams = self.__currentOffer.buyParams
             self.__price = self.__currentOffer.buyPrice
             self.as_setBuyDataS(self.__previewDP.getOffersBuyingPanelData(self.__getBtnData()))
@@ -443,7 +444,6 @@ class VehiclePreviewBuyingPanel(VehiclePreviewBuyingPanelMeta):
         itemPrice = chooseItemPriceVO(priceType, price)
         currency = price.getCurrency(byWeight=True)
         walletAvailable = self.__walletAvailableForCurrency(currency)
-        buttonLabel = None
         buttonIcon = None
         buttonIconAlign = None
         specialData = getHeroTankPreviewParams() if self.__isHeroTank else None

@@ -120,6 +120,7 @@ class CardBattleConditionsFormatters(MissionBonusAndPostBattleCondFormatter):
     MAX_CONDITIONS_IN_CARD = 3
     MAX_DESC_LINES = 3
     ALT_DESCR_LINES = 2
+    ICON_SIZE = CONDITION_SIZE.MINIMIZED
 
     def __init__(self):
         self._formatters = CARD_FIELDS_FORMATTERS
@@ -161,7 +162,7 @@ class CardBattleConditionsFormatters(MissionBonusAndPostBattleCondFormatter):
         tooltipData = None
         if preFormattedCondition.conditionData is not None:
             tooltipData = _getTooltipData(preFormattedCondition.conditionData)
-        return {'icon': getCondIconBySize(CONDITION_SIZE.MINIMIZED, preFormattedCondition.iconKey),
+        return {'icon': getCondIconBySize(self.ICON_SIZE, preFormattedCondition.iconKey),
          'title': self._getFormattedField(preFormattedCondition.titleData),
          'description': self._getFormattedField(preFormattedCondition.descrData),
          'progress': _packProgress(preFormattedCondition),

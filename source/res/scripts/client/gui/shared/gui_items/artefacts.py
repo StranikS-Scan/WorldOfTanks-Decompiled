@@ -392,27 +392,6 @@ class OptionalDevice(RemovableDevice):
         label = labelWithExtension.split('.')[0]
         self._GUIEmblemID = label
 
-    def __cmp__(self, other):
-        if other is None:
-            return 1
-        else:
-            if isinstance(other, OptionalDevice):
-                if self.isTrophy != other.isTrophy:
-                    if self.isTrophy:
-                        return 1
-                    return -1
-                if self.isTrophy:
-                    if self.isUpgraded != other.isUpgraded:
-                        if self.isSimilarDevice(other):
-                            if self.isUpgraded:
-                                return 1
-                            return -1
-                if self.isDeluxe != other.isDeluxe:
-                    if self.isDeluxe:
-                        return 1
-                    return -1
-            return super(OptionalDevice, self).__cmp__(other)
-
     @property
     def shortDescription(self):
         description = super(OptionalDevice, self).shortDescription

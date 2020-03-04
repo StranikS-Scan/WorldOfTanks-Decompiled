@@ -116,15 +116,12 @@ class FullScreenDialogView(ViewImpl):
 class FullScreenDialogWindowWrapper(Window):
     __slots__ = ('__wrappedView',)
 
-    def __init__(self, wrappedView, parent=None):
+    def __init__(self, wrappedView):
         self.__wrappedView = wrappedView
         settings = WindowSettings()
         settings.flags = DialogLayer.TOP_WINDOW
         settings.content = wrappedView
-        if parent is not None:
-            settings.parent = parent
         super(FullScreenDialogWindowWrapper, self).__init__(settings)
-        return
 
     def wait(self):
         return self.__wrappedView.wait()

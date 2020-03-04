@@ -490,11 +490,11 @@ class Views(DynAccessor):
         class _video(DynAccessor):
             __slots__ = ()
 
-            class _video_view(DynAccessor):
+            class _video_view_model(DynAccessor):
                 __slots__ = ()
                 VideoView = DynAccessor(62)
 
-            video_view = _video_view()
+            video_view_model = _video_view_model()
 
         video = _video()
 

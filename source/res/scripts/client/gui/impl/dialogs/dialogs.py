@@ -14,7 +14,7 @@ from gui.impl.lobby.battle_pass.battle_pass_voting_confirm_view import BattlePas
 from gui.impl.pub.dialog_window import DialogButtons, DialogWindow
 if typing.TYPE_CHECKING:
     from typing import Any, Optional, Iterable, Union
-    from frameworks.wulf import View, Window
+    from frameworks.wulf import View
 
 @async
 def show(dialog):
@@ -82,7 +82,7 @@ def buyCrewBook(parent, crewBookCD):
 
 
 @async
-def chooseFinalRewardBattlePass(parent, data):
-    dialog = FullScreenDialogWindowWrapper(BattlePassVotingConfirmView(data), parent)
+def chooseFinalRewardBattlePass(data):
+    dialog = FullScreenDialogWindowWrapper(BattlePassVotingConfirmView(data))
     result = yield await(showSimple(dialog))
     raise AsyncReturn(result)

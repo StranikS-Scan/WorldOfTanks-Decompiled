@@ -66,7 +66,7 @@ def _defaultInGroupComparator(a, b):
 
 
 def _optionalDevicesComparator(a, b):
-    return -cmp(a, b) or _defaultInGroupComparator(a, b)
+    return (1 if a.isDeluxe else 0) - (1 if b.isDeluxe else 0) or _defaultInGroupComparator(a, b)
 
 
 def _shellsComparator(a, b):

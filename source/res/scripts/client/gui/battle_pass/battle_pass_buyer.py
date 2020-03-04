@@ -17,29 +17,22 @@ class BattlePassBuyer(object):
     __battlePassController = dependency.descriptor(IBattlePassController)
 
     @classmethod
-    @decorators.process('buyBattlePass')
-    def buyBP(cls, seasonID, onBuyCallback=None):
+    @decorators.process()
+    def buy(cls, seasonID, levels=0, onBuyCallback=None):
         spendMoneyGold = 0
         if not cls.__battlePassController.isBought():
             spendMoneyGold += cls.__itemsCache.items.shop.getBattlePassCost().get(Currency.GOLD, 0)
-        result = False
-        if isIngameShopEnabled() and cls.__itemsCache.items.stats.actualGold < spendMoneyGold:
-            showBuyGoldForBattlePass(spendMoneyGold)
-        else:
-            result = yield cls.__buyBattlePass(seasonID)
-        if onBuyCallback:
-            onBuyCallback(result)
-
-    @classmethod
-    @decorators.process('buyBattlePassLevels')
-    def buyLevels(cls, seasonID, levels=0, onBuyCallback=None):
-        spendMoneyGold = 0
-        if levels > 0:
+        elif levels > 0:
             spendMoneyGold += cls.__itemsCache.items.shop.getBattlePassLevelCost().get(Currency.GOLD, 0) * levels
         result = False
         if isIngameShopEnabled() and cls.__itemsCache.items.stats.actualGold < spendMoneyGold:
-            showBuyGoldForBattlePassLevels(spendMoneyGold)
-        else:
+            if not cls.__battlePassController.isBought():
+                showBuyGoldForBattlePass(spendMoneyGold)
+            else:
+                showBuyGoldForBattlePassLevels(spendMoneyGold)
+        elif not cls.__battlePassController.isBought():
+            result = yield cls.__buyBattlePass(seasonID)
+        elif levels > 0:
             result = yield cls.__buyBattlePassLevels(seasonID, levels)
         if onBuyCallback:
             onBuyCallback(result)

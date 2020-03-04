@@ -536,7 +536,7 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
         battlePass = extBattleResults.get('battlePass', {})
         if battlePass.get('basePointsDiff', 0) > 0:
             battlePassString = backport.text(R.strings.messenger.serviceChannelMessages.battleResults.battlePass(), pointsDiff=text_styles.neutral(battlePass['basePointsDiff']))
-        return '' if not battlePassString else g_settings.htmlTemplates.format('battlePass', ctx={'battlePassProgression': battlePassString})
+        return g_settings.htmlTemplates.format('battlePass', ctx={'battlePassProgression': battlePassString})
 
     def __makePiggyBankString(self, credits_):
         return '' if not credits_ else g_settings.htmlTemplates.format('piggyBank', ctx={'credits': self.__makeCurrencyString(Currency.CREDITS, credits_)})
@@ -3115,8 +3115,6 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
                 formattedBonuses = BattlePassQuestAchievesFormatter.formatQuestAchieves(rewards, False)
                 if formattedBonuses is None:
                     formattedBonuses = ''
-                if formattedBonuses and additionalText:
-                    additionalText = '<br/>' + additionalText
                 formatted = g_settings.msgTemplates.format(template, ctx={'header': header,
                  'description': description,
                  'text': formattedBonuses,

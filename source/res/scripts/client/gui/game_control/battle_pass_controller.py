@@ -45,7 +45,6 @@ class BattlePassController(IBattlePassController):
         self.onSeasonStateChange = Event(self.__eventsManager)
         self.onUnlimitedPurchaseUnlocked = Event(self.__eventsManager)
         self.onBattlePassSettingsChange = Event(self.__eventsManager)
-        self.onFinalRewardStateChange = Event(self.__eventsManager)
         self.__finalRewardStateMachine = FinalRewardStateMachine(self)
         return
 
@@ -349,9 +348,6 @@ class BattlePassController(IBattlePassController):
 
     def getSellAnyLevelsUnlockTimeLeft(self):
         return max(0, self.getSellAnyLevelsUnlockTime() - time_utils.getServerUTCTime())
-
-    def getFinalOfferTimeLeft(self):
-        return max(0, self.getFinalOfferTime() - time_utils.getServerUTCTime())
 
     def getSeasonStartTime(self):
         return self.__getConfig().seasonStart

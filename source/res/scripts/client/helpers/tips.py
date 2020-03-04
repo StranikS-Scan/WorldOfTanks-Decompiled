@@ -11,7 +11,6 @@ from account_helpers.AccountSettings import WATCHED_PRE_BATTLE_TIPS_SECTION
 from constants import ARENA_GUI_TYPE
 from gui.doc_loaders.prebattle_tips_loader import getPreBattleTipsConfig
 from gui.impl.gen import R
-from gui.battle_pass.battle_pass_helpers import isBattlePassActiveSeason
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 _TipData = namedtuple('_BattleLoadingTipData', 'status, body, icon')
@@ -175,7 +174,7 @@ def _getTipIconRes(tipID, group):
 
 
 class _BattleLoadingTip(object):
-    __slots__ = ('_arenaTypes', '_battlesLimit', '_requiredTags', '_nation', '_level', '_vehicleClass', 'priority', '_tipId', '_statusResId', '_iconResId', '_descriptionResId', '_battlePassCheck')
+    __slots__ = ('_arenaTypes', '_battlesLimit', '_requiredTags', '_nation', '_level', '_vehicleClass', 'priority', '_tipId', '_statusResId', '_iconResId', '_descriptionResId')
 
     def __init__(self):
         super(_BattleLoadingTip, self).__init__()
@@ -189,7 +188,6 @@ class _BattleLoadingTip(object):
         self._level = _ValueValidator()
         self._nation = _ValueValidator()
         self._vehicleClass = _ValueValidator()
-        self._battlePassCheck = _BattlePassValidator()
         return
 
     def build(self, tipID, descriptionResID, config):
@@ -204,7 +202,6 @@ class _BattleLoadingTip(object):
                 self._level.update(tipFilter['levels'])
                 self._nation.update(tipFilter['nations'])
                 self._vehicleClass.update(tipFilter['vehicleClass'])
-                self._battlePassCheck.update(tipFilter['battlePassActiveCheck'])
         self._tipId = tipID
         self._descriptionResId = descriptionResID
         return
@@ -220,7 +217,7 @@ class _BattleLoadingTip(object):
 
     def test(self, arenaGuiType, battlesCount, vehicleType):
         minBattles, maxBattles = self._battlesLimit
-        return minBattles <= battlesCount <= maxBattles and self._requiredTags.validate(vehicleType.tags) and self._arenaTypes.validate(arenaGuiType) and self._level.validate(vehicleType.level) and self._nation.validate(nations.NAMES[vehicleType.nationID]) and self._vehicleClass.validate(vehicleType.classTag) and self._battlePassCheck.validate()
+        return minBattles <= battlesCount <= maxBattles and self._requiredTags.validate(vehicleType.tags) and self._arenaTypes.validate(arenaGuiType) and self._level.validate(vehicleType.level) and self._nation.validate(nations.NAMES[vehicleType.nationID]) and self._vehicleClass.validate(vehicleType.classTag)
 
 
 class _PrecedingBattleLoadingTip(_BattleLoadingTip):
@@ -253,20 +250,6 @@ class _ValueValidator(object):
 
     def validate(self, value):
         return True if not self._possibleValues else str(value) in self._possibleValues
-
-
-class _BattlePassValidator(object):
-    __slots__ = ('_checkBattlePass',)
-
-    def __init__(self):
-        super(_BattlePassValidator, self).__init__()
-        self._checkBattlePass = False
-
-    def update(self, value):
-        self._checkBattlePass = bool(value)
-
-    def validate(self):
-        return isBattlePassActiveSeason() if self._checkBattlePass else True
 
 
 class _SubsetValidator(_ValueValidator):

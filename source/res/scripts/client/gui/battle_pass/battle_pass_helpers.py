@@ -9,11 +9,6 @@ from helpers import dependency, time_utils
 from helpers.http.url_formatters import addParamsToUrlQuery
 from skeletons.gui.game_control import IBattlePassController
 
-def isBattlePassActiveSeason():
-    battlePassController = dependency.instance(IBattlePassController)
-    return battlePassController.isVisible()
-
-
 def getPointsInfoStringID(hasTop):
     path = R.strings.battle_pass_2020.points
     return path.top() if hasTop else path.any()

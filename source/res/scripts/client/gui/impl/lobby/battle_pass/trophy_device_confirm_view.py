@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/trophy_device_confirm_view.py
 import logging
-from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.trophy_device_confirm_dialog_model import TrophyDeviceConfirmDialogModel
 from gui.impl.gen.view_models.constants.dialog_presets import DialogPresets
@@ -42,7 +41,6 @@ class TrophyDeviceUpgradeConfirmView(DialogWindow):
     def _initialize(self):
         super(TrophyDeviceUpgradeConfirmView, self)._initialize()
         self.__wallet.onWalletStatusChanged += self.__onWalletStatusChanged
-        g_clientUpdateManager.addMoneyCallback(self.__onMoneyUpdated)
         self._setPreset(DialogPresets.TROPHY_DEVICE_UPGRADE)
         self.__setUpgradeCost()
         self._addButton(DialogButtons.SUBMIT, R.strings.battle_pass_2020.trophyDeviceUpgradeConfim.submit(), isFocused=True, isEnabled=self.__canPurchaseUpgrade())
@@ -50,7 +48,6 @@ class TrophyDeviceUpgradeConfirmView(DialogWindow):
 
     def _finalize(self):
         self.__wallet.onWalletStatusChanged -= self.__onWalletStatusChanged
-        g_clientUpdateManager.removeObjectCallbacks(self)
         super(TrophyDeviceUpgradeConfirmView, self)._finalize()
 
     def __setUpgradeCost(self):
@@ -63,16 +60,8 @@ class TrophyDeviceUpgradeConfirmView(DialogWindow):
     def __canPurchaseUpgrade(self):
         return (self.__trophyBasicModule.mayPurchaseUpgrage(self.__itemsCache.items) or self.__trophyBasicModule.mayPurchaseUpgrageWithExchange(self.__itemsCache.items)) and self.__isGoldAutoPurhaseEnabled
 
-    def __onMoneyUpdated(self, _):
-        self.__setUpgradeCost()
-        button = self._getButton(DialogButtons.SUBMIT)
-        if button is not None:
-            button.setIsEnabled(self.__canPurchaseUpgrade())
-        return
-
     def __onWalletStatusChanged(self, *_):
         self.__isGoldAutoPurhaseEnabled &= self.__wallet.isAvailable
-        self.__setUpgradeCost()
 
 
 class TrophyDeviceUpgradeConfirmDialogContent(DialogContent):

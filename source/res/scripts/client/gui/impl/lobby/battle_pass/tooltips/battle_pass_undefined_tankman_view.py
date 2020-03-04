@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/tooltips/battle_pass_undefined_tankman_view.py
 import typing
-from frameworks.wulf import WindowFlags, ViewSettings, Array
+from frameworks.wulf import WindowFlags, ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.battle_pass_undefined_tankman_view_model import BattlePassUndefinedTankmanViewModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.tankman_option_model import TankmanOptionModel
@@ -30,22 +30,14 @@ class BattlePassUndefinedTankmanView(ViewImpl):
             self.__setStylesInfo(model)
 
     def __setStylesInfo(self, model):
-        optionA = self.__packModel(self.__tooltipData.imageA, self.__tooltipData.tankmanA, self.__tooltipData.skillsA)
-        optionB = self.__packModel(self.__tooltipData.imageB, self.__tooltipData.tankmanB, self.__tooltipData.skillsB)
+        optionA = TankmanOptionModel()
+        optionB = TankmanOptionModel()
+        optionA.setIcon(self.__tooltipData.imageA)
+        optionA.setTankman(self.__tooltipData.tankmanA)
+        optionB.setIcon(self.__tooltipData.imageB)
+        optionB.setTankman(self.__tooltipData.tankmanB)
         model.options.addViewModel(optionA)
         model.options.addViewModel(optionB)
-
-    @staticmethod
-    def __packModel(image, tankman, skills):
-        model = TankmanOptionModel()
-        skillsArray = Array()
-        for skill in skills:
-            skillsArray.addString(skill)
-
-        model.setIcon(image)
-        model.setTankman(tankman)
-        model.setSkills(skillsArray)
-        return model
 
 
 class BattlePassUndefinedTankmanTooltip(WindowImpl):

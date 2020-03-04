@@ -6,6 +6,7 @@ from operator import itemgetter
 from adisp import process
 from async import async, await
 from frameworks.wulf import ViewFlags, ViewSettings
+from gui.Scaleform.managers.UtilsManager import ONE_SECOND
 from gui.battle_pass.battle_pass_award import awardsFactory
 from gui.battle_pass.battle_pass_helpers import isNeededToVote
 from gui.battle_pass.undefined_bonuses import getStyleInfo, getTankmanInfo, getRecruitNation
@@ -22,6 +23,7 @@ from gui.shared.utils.scheduled_notifications import SimpleNotifier
 from gui.sounds.filters import switchHangarOverlaySoundFilter
 from gui.wgcg.battle_pass.contexts import BattlePassGetVotingDataCtx
 from helpers import dependency
+from helpers.func_utils import oncePerPeriod
 from shared_utils import findFirst
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IBattlePassController
@@ -128,6 +130,7 @@ class BattlePassVotingResultView(ViewImpl):
         item.setSelected(self.__battlePassController.getVoteOption() == vehCD)
         return item
 
+    @oncePerPeriod(ONE_SECOND)
     @async
     def __onVoteClick(self, args):
         vehicleCD = int(args.get('vehicleCD'))
@@ -136,7 +139,7 @@ class BattlePassVotingResultView(ViewImpl):
             if reward.getVehicleCD() == vehicleCD:
                 data['finalReward'] = reward
 
-        result = yield await(dialogs.chooseFinalRewardBattlePass(parent=self.getParentWindow(), data=data))
+        result = yield await(dialogs.chooseFinalRewardBattlePass(data=data))
         if result:
             self.__isVoted = True
             self.__battlePassController.getFinalFlowSM().continueFlow(voteOption=vehicleCD)
@@ -154,8 +157,6 @@ class BattlePassVotingResultView(ViewImpl):
         for model in self.viewModel.finalRewards.getItems():
             vehCD = model.getVehicleCD()
             model.setVoicesNumber(votingResult.get(vehCD, 0) + (1 if selfVote == vehCD else 0))
-
-        self.viewModel.finalRewards.invalidate()
 
     def __addListeners(self):
         model = self.viewModel
@@ -207,17 +208,13 @@ class BattlePassVotingResultView(ViewImpl):
     def __requestVotingData(self):
         ctx = BattlePassGetVotingDataCtx(self.__battlePassController.getSeasonID())
         response = yield self.__webController.sendRequest(ctx=ctx)
-        if self.viewModel is None:
-            return
+        success = response.isSuccess()
+        if success:
+            result = ctx.getDataObj(response.getData())
+            self.__updateVotingResult(result)
         else:
-            success = response.isSuccess()
-            if success:
-                result = ctx.getDataObj(response.getData())
-                self.__updateVotingResult(result)
-            else:
-                self.__requestNotifier.startNotification()
-            self.viewModel.setFailService(not success)
-            return
+            self.__requestNotifier.startNotification()
+        self.viewModel.setFailService(not success)
 
     def __getTimeToNotifyFailedRequest(self):
         return self.CALLBACK_REPEAT_TIME

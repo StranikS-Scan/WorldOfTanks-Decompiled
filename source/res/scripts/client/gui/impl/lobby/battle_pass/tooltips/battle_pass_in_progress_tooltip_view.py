@@ -39,6 +39,7 @@ class BattlePassInProgressTooltipView(ViewImpl):
             curLevel = self.__battlePassController.getCurrentLevel()
             curPoints, limitPoints = self.__battlePassController.getLevelProgression()
             isPostProgression = self.__battlePassController.getState() == BattlePassState.POST
+            isBought = self.__battlePassController.isBought()
             model.setLevel(curLevel)
             model.setCurrentPoints(curPoints)
             model.setMaxPoints(limitPoints)
@@ -49,12 +50,12 @@ class BattlePassInProgressTooltipView(ViewImpl):
                 timeTillEnd = getFormattedTimeLeft(self.__battlePassController.getSeasonTimeLeft())
             model.setTimeTillEnd(timeTillEnd)
             if isPostProgression:
-                self.__getAwards(model.rewardsCommon, curLevel, BattlePassConsts.REWARD_POST)
+                self.__getAwards(model.rewards, curLevel, BattlePassConsts.REWARD_POST, False)
             else:
-                self.__getAwards(model.rewardsCommon, curLevel, BattlePassConsts.REWARD_FREE)
-                self.__getAwards(model.rewardsElite, curLevel, BattlePassConsts.REWARD_PAID)
+                self.__getAwards(model.rewards, curLevel, BattlePassConsts.REWARD_FREE, False)
+                self.__getAwards(model.rewards, curLevel, BattlePassConsts.REWARD_PAID, not isBought)
 
-    def __getAwards(self, rewardsList, level, bonusType):
+    def __getAwards(self, rewardsList, level, bonusType, isLocked):
         finalLevel = self.__battlePassController.getMaxLevel()
         if level == finalLevel - 1 and bonusType != BattlePassConsts.REWARD_POST:
             freeReward, paidReward = self.__battlePassController.getSplitFinalAwards()
@@ -64,4 +65,4 @@ class BattlePassInProgressTooltipView(ViewImpl):
                 bonuses = paidReward
         else:
             bonuses = self.__battlePassController.getSingleAward(level + 1, bonusType)
-        packBonusModelAndTooltipData(bonuses, rewardsList)
+        packBonusModelAndTooltipData(bonuses, rewardsList, isLocked=isLocked)

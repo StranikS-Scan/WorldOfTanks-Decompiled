@@ -9,7 +9,6 @@ class StatesGroup(CONST_CONTAINER):
     BOOTCAMP_ARENA_FILTERED = 'STATE_bootcamp_arena_filtered'
     HANGAR_PLACE_BATTLE_PASS = 'STATE_hanger_place_battle_pass'
     OVERLAY_HANGAR_GENERAL = 'STATE_overlay_hangar_general'
-    VIDEO_OVERLAY = 'STATE_video_overlay'
 
 
 _ON_PATTERN = '{}_on'
@@ -20,8 +19,6 @@ class States(CONST_CONTAINER):
     OVERLAY_HANGAR_GENERAL_OFF = _OFF_PATTERN.format(StatesGroup.OVERLAY_HANGAR_GENERAL)
     HANGAR_FILTERED_ON = _ON_PATTERN.format(StatesGroup.HANGAR_FILTERED)
     HANGAR_FILTERED_OFF = _OFF_PATTERN.format(StatesGroup.HANGAR_FILTERED)
-    VIDEO_OVERLAY_ON = _ON_PATTERN.format(StatesGroup.VIDEO_OVERLAY)
-    VIDEO_OVERLAY_OFF = _OFF_PATTERN.format(StatesGroup.VIDEO_OVERLAY)
 
 
 def switchHangarFilteredFilter(on=True):
@@ -29,11 +26,14 @@ def switchHangarFilteredFilter(on=True):
 
 
 def switchHangarOverlaySoundFilter(on=True):
-    _switchOverlaySoundFilter(StatesGroup.OVERLAY_HANGAR_GENERAL, States.OVERLAY_HANGAR_GENERAL_ON, States.OVERLAY_HANGAR_GENERAL_OFF, on)
-
-
-def switchVideoOverlaySoundFilter(on=True):
-    _switchOverlaySoundFilter(StatesGroup.VIDEO_OVERLAY, States.VIDEO_OVERLAY_ON, States.VIDEO_OVERLAY_OFF, on)
+    if on:
+        prevHolders = _StateKeeper.checkinHolder(StatesGroup.OVERLAY_HANGAR_GENERAL)
+        if not prevHolders:
+            _setState(StatesGroup.OVERLAY_HANGAR_GENERAL, States.OVERLAY_HANGAR_GENERAL_ON)
+    else:
+        currHolders = _StateKeeper.checkoutHolder(StatesGroup.OVERLAY_HANGAR_GENERAL)
+        if not currHolders:
+            _setState(StatesGroup.OVERLAY_HANGAR_GENERAL, States.OVERLAY_HANGAR_GENERAL_OFF)
 
 
 class _StateKeeper(object):
@@ -163,14 +163,3 @@ _filters = {SoundFilters.FORT_FILTER: _selectFilter(WWISEFortAmbientFilter()),
 
 def _setState(stateGroup, stateName):
     WWISE.WW_setState(stateGroup, stateName)
-
-
-def _switchOverlaySoundFilter(group, stateOn, stateOff, on=True):
-    if on:
-        prevHolders = _StateKeeper.checkinHolder(group)
-        if not prevHolders:
-            _setState(group, stateOn)
-    else:
-        currHolders = _StateKeeper.checkoutHolder(group)
-        if not currHolders:
-            _setState(group, stateOff)

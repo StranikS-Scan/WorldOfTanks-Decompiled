@@ -8,13 +8,13 @@ from gui.impl.gen import R
 from gui.battle_pass.battle_pass_helpers import showVideo
 from gui.shared.event_dispatcher import showBattleVotingResultWindow, showBattlePassAwardsWindow
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
-from gui.shared.events import LobbySimpleEvent, BattlePassEvent
+from gui.shared.events import LobbySimpleEvent
 if typing.TYPE_CHECKING:
     from skeletons.gui.game_control import IBattlePassController
 _logger = logging.getLogger(__name__)
 _LOCK_SOURCE_NAME = 'finalRewardStateMachine'
 
-class FinalStates(object):
+class _FinalStates(object):
     STOP = 0
     STARTED = 1
     IN_MIDDLE = 2
@@ -32,83 +32,74 @@ class FinalRewardStateMachine(object):
         self.__battlePassController = weakref.proxy(battlePassController)
         self.__rewards = None
         self.__data = None
-        self.__state = FinalStates.STOP
+        self.__state = _FinalStates.STOP
         return
 
     def init(self):
         if self.__battlePassController.isPlayerVoted():
-            self.__state = FinalStates.FINAL
-        elif self.__state in (FinalStates.FINAL, FinalStates.INTERRUPTED):
-            self.__state = FinalStates.STOP
+            self.__state = _FinalStates.FINAL
+        elif self.__state in (_FinalStates.FINAL, _FinalStates.INTERRUPTED):
+            self.__state = _FinalStates.STOP
 
     def startFlow(self, rewards, data):
+        if self.__state == _FinalStates.FINAL:
+            return
         self.__rewards = rewards
         self.__data = data
-        self.__state = FinalStates.STARTED
+        self.__state = _FinalStates.STARTED
         self.__lockOverlays()
         videoSource = self.__getVideoBeforeVoting()
         showVideo(videoSource, onVideoClosed=self.continueFlow, isAutoClose=True)
 
     def continueFlow(self, **kwargs):
-        if self.__state == FinalStates.STARTED:
-            self.__setState(FinalStates.IN_MIDDLE)
+        if self.__state == _FinalStates.STARTED:
+            self.__state = _FinalStates.IN_MIDDLE
             showBattleVotingResultWindow(isOverlay=True)
-        elif self.__state in (FinalStates.IN_MIDDLE, FinalStates.STOP):
+        elif self.__state in (_FinalStates.IN_MIDDLE, _FinalStates.STOP):
             vote = kwargs.get('voteOption', 0)
             if vote == 0:
+                self.__state = _FinalStates.STOP
                 if self.__rewards is not None and self.__data is not None:
                     rewards, data = self.__rewards, self.__data
                     self.__rewards, self.__data = (None, None)
                     if data.get('reason') == BattlePassRewardReason.PURCHASE_BATTLE_PASS_LEVELS and self.__isEnoughDataForAwardsScreen(rewards):
                         data['callback'] = self.__unlockOverlays
                         showBattlePassAwardsWindow(rewards, data)
-                        g_eventBus.addListener(BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY)
                     else:
                         self.__unlockOverlays()
-                        self.__setState(FinalStates.STOP)
                 else:
                     self.__unlockOverlays()
-                    self.__setState(FinalStates.STOP)
             else:
-                self.__setState(FinalStates.PRE_FINAL)
+                self.__state = _FinalStates.PRE_FINAL
                 hasBattlePass = self.__battlePassController.isBought()
                 video = self.__getVideoId(vote, hasBattlePass)
                 showVideo(video, onVideoClosed=self.continueFlow, isAutoClose=True)
-        elif self.__state == FinalStates.PRE_FINAL:
+        elif self.__state == _FinalStates.PRE_FINAL:
             self.__addFinalRewardsData()
             rewards, data = self.__rewards, self.__data
             self.__rewards, self.__data = (None, None)
             data['callback'] = self.__unlockOverlays
             data['isFinalReward'] = True
             showBattlePassAwardsWindow(rewards, data)
-            g_eventBus.addListener(BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY)
+            self.__state = _FinalStates.FINAL
         return
 
     def pauseFlow(self):
-        if self.__state == FinalStates.IN_MIDDLE:
-            self.__state = FinalStates.PREVIEW
+        if self.__state == _FinalStates.IN_MIDDLE:
+            self.__state = _FinalStates.PREVIEW
             g_eventBus.addListener(LobbySimpleEvent.VEHICLE_PREVIEW_HIDDEN, self.__onHidePreview, EVENT_BUS_SCOPE.LOBBY)
 
     def unpauseFlow(self):
-        if self.__state == FinalStates.PREVIEW:
-            self.__state = FinalStates.IN_MIDDLE
+        if self.__state == _FinalStates.PREVIEW:
+            self.__state = _FinalStates.IN_MIDDLE
             g_eventBus.removeListener(LobbySimpleEvent.VEHICLE_PREVIEW_HIDDEN, self.__onHidePreview, EVENT_BUS_SCOPE.LOBBY)
 
     def interruptFlow(self):
         self.__unlockOverlays()
-        self.__state = FinalStates.INTERRUPTED
+        self.__state = _FinalStates.INTERRUPTED
         self.__rewards = None
         self.__data = None
-        g_eventBus.removeListener(BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY)
         return
-
-    def __setState(self, state):
-        self.__state = state
-        self.__battlePassController.onFinalRewardStateChange(state)
-
-    def __onAwardViewClose(self, _):
-        self.__setState(FinalStates.STOP)
-        g_eventBus.removeListener(BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY)
 
     @staticmethod
     def __getVideoId(choise, hasBattlePass):
@@ -170,5 +161,5 @@ class FinalRewardStateMachine(object):
 
     def __onHidePreview(self, _):
         g_eventBus.removeListener(LobbySimpleEvent.VEHICLE_PREVIEW_HIDDEN, self.__onHidePreview, EVENT_BUS_SCOPE.LOBBY)
-        self.__state = FinalStates.STOP
+        self.__state = _FinalStates.STOP
         self.continueFlow()

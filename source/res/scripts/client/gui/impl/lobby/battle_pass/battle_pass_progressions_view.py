@@ -31,7 +31,7 @@ from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showBattlePassBuyWindow, showBattleVotingResultWindow, showBrowserOverlayView, showHangar
 from gui.shared.formatters import text_styles
-from gui.shared.utils.scheduled_notifications import PeriodicNotifier, Notifiable, SimpleNotifier
+from gui.shared.utils.scheduled_notifications import PeriodicNotifier, Notifiable
 from helpers import dependency, time_utils
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.impl import IGuiLoader
@@ -75,8 +75,6 @@ class BattlePassProgressionsView(ViewImpl):
     __settingsCore = dependency.descriptor(ISettingsCore)
     __battlePassController = dependency.descriptor(IBattlePassController)
     __gui = dependency.descriptor(IGuiLoader)
-    ANIMATION_PURCHASE_LEVELS = 'animPurchaseLevels'
-    ANIMATIONS = {ANIMATION_PURCHASE_LEVELS: False}
 
     def __init__(self, showDummyCallback, showViewCallback, flags=ViewFlags.VIEW):
         settings = ViewSettings(R.views.lobby.battle_pass.BattlePassProgressionsView())
@@ -128,7 +126,6 @@ class BattlePassProgressionsView(ViewImpl):
         self.__notifier = Notifiable()
         self.__notifier.addNotificator(PeriodicNotifier(self.__battlePassController.getSeasonTimeLeft, self.__updateTimer))
         self.__notifier.addNotificator(PeriodicNotifier(self.__battlePassController.getSellAnyLevelsUnlockTimeLeft, self.__updateTimer))
-        self.__notifier.addNotificator(SimpleNotifier(self.__battlePassController.getFinalOfferTimeLeft, self.__updateTimer))
         self.__notifier.startNotification()
         self.__updateProgressData()
         self.__updateBuyButtonState()
@@ -160,9 +157,6 @@ class BattlePassProgressionsView(ViewImpl):
         if self.__battlePassController.isSellAnyLevelsUnlocked():
             self.__setBuyButtonHintShown()
             self.__updateBuyButtonState()
-        with self.viewModel.transaction() as model:
-            model.setShowBuyAnimations(False)
-            model.setShowLevelsAnimations(self.ANIMATIONS[self.ANIMATION_PURCHASE_LEVELS])
         showBattlePassBuyWindow()
 
     @staticmethod
@@ -383,7 +377,6 @@ class BattlePassProgressionsView(ViewImpl):
         self.__battlePassController.onBattlePassSettingsChange += self.__onBattlePassSettingsChange
         g_eventBus.addListener(events.MissionsEvent.ON_TAB_CHANGED, self.__onMissionsTabChanged, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(events.FocusEvent.COMPONENT_FOCUSED, self.__onFocus)
-        g_eventBus.addListener(events.BattlePassEvent.ON_PURCHASE_LEVELS, self.__onPurchaseLevels, EVENT_BUS_SCOPE.LOBBY)
 
     def __removeListeners(self):
         model = self.viewModel
@@ -402,7 +395,6 @@ class BattlePassProgressionsView(ViewImpl):
         self.__battlePassController.onBattlePassSettingsChange -= self.__onBattlePassSettingsChange
         g_eventBus.removeListener(events.MissionsEvent.ON_TAB_CHANGED, self.__onMissionsTabChanged, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(events.FocusEvent.COMPONENT_FOCUSED, self.__onFocus)
-        g_eventBus.removeListener(events.BattlePassEvent.ON_PURCHASE_LEVELS, self.__onPurchaseLevels, EVENT_BUS_SCOPE.LOBBY)
 
     @staticmethod
     def __getDayMonth(timeStamp):
@@ -458,9 +450,6 @@ class BattlePassProgressionsView(ViewImpl):
                     maxLevel = self.__battlePassController.getMaxLevel(False) - 1
                     self.__resetRewardsInterval(BattlePassConsts.REWARD_POST, model.postRewards, oldLevel, maxLevel)
             self.__setCurrentLevelState(model=model)
-        isDrawPoints = newLevel < oldLevel or newPoints < oldPoints
-        if isDrawPoints:
-            model.setShowLevelsAnimations(self.ANIMATIONS[self.ANIMATION_PURCHASE_LEVELS])
         self.__updateBuyButtonState()
         self.__updateExtrasAndVotingButtons()
 
@@ -486,9 +475,6 @@ class BattlePassProgressionsView(ViewImpl):
             self.__setCurrentLevelState(model=model)
         self.__updateBuyButtonState()
 
-    def __onPurchaseLevels(self, _):
-        self.ANIMATIONS[self.ANIMATION_PURCHASE_LEVELS] = True
-
     def __getTooltipContentCreator(self):
         return {R.views.lobby.battle_pass.tooltips.BattlePassPointsView(): self.__getBattlePassPointsTooltipContent,
          R.views.lobby.battle_pass.tooltips.BattlePassLockIconTooltipView(): self.__getBattlePassLockIconTooltipContent}
@@ -505,8 +491,6 @@ class BattlePassProgressionsView(ViewImpl):
                 showAnimations = True
                 settings.saveInBPStorage({BattlePassStorageKeys.BUY_ANIMATION_WAS_SHOWN: True})
         model.setShowBuyAnimations(showAnimations)
-        model.setShowLevelsAnimations(self.ANIMATIONS[self.ANIMATION_PURCHASE_LEVELS])
-        self.ANIMATIONS[self.ANIMATION_PURCHASE_LEVELS] = False
 
     @staticmethod
     def __getBattlePassPointsTooltipContent(_=None):

@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.reward_level_model import 
 class BattlePassProgressionsViewModel(CommonViewModel):
     __slots__ = ('onClose', 'onAboutClick', 'onInfoBtnClick', 'onBuyClick', 'onBuyBtnClick', 'onExtrasClick', 'onVotingResultClick', 'onViewLoaded')
 
-    def __init__(self, properties=31, commands=9):
+    def __init__(self, properties=32, commands=9):
         super(BattlePassProgressionsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -141,11 +141,17 @@ class BattlePassProgressionsViewModel(CommonViewModel):
     def setShowBuyAnimations(self, value):
         self._setBool(29, value)
 
-    def getIsPlayerVoted(self):
+    def getShowLevelsAnimations(self):
         return self._getBool(30)
 
-    def setIsPlayerVoted(self, value):
+    def setShowLevelsAnimations(self, value):
         self._setBool(30, value)
+
+    def getIsPlayerVoted(self):
+        return self._getBool(31)
+
+    def setIsPlayerVoted(self, value):
+        self._setBool(31, value)
 
     def _initialize(self):
         super(BattlePassProgressionsViewModel, self)._initialize()
@@ -172,6 +178,7 @@ class BattlePassProgressionsViewModel(CommonViewModel):
         self._addBoolProperty('showBuyButtonBubble', False)
         self._addBoolProperty('isVisibleBuyButton', False)
         self._addBoolProperty('showBuyAnimations', False)
+        self._addBoolProperty('showLevelsAnimations', False)
         self._addBoolProperty('isPlayerVoted', False)
         self.onClose = self._addCommand('onClose')
         self.onAboutClick = self._addCommand('onAboutClick')

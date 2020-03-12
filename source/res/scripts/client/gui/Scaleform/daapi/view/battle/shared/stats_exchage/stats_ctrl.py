@@ -178,7 +178,8 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         if self._battleCtx.isPlayerObserver():
             currentArenaTeam = arenaDP.getNumberOfTeam()
             if currentArenaTeam != self.__avatarTeam:
-                arenaDP.switchCurrentTeam(self.__avatarTeam)
+                if self.__avatarTeam is not None:
+                    arenaDP.switchCurrentTeam(self.__avatarTeam)
                 arenaTeamSwitched = True
         isEnemy = self.__isEnemyTeam(arenaDP, vo.team)
         exchange = self._exchangeBroker.getVehicleStatusExchange(isEnemy)
@@ -193,6 +194,7 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
             self.as_updateVehicleStatusS(data)
         if arenaTeamSwitched:
             arenaDP.switchCurrentTeam(currentArenaTeam)
+        return
 
     def updateVehiclesStats(self, updated, arenaDP):
         exchange = self._exchangeBroker.getVehiclesStatsExchange()

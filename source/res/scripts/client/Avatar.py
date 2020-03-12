@@ -827,7 +827,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         return
 
     def set_isGunLocked(self, prev):
-        if not self.isObserver():
+        if not self.isObserver() and self.gunRotator is not None:
             if self.isGunLocked:
                 self.gunRotator.lock(True)
                 if not isinstance(self.inputHandler.ctrl, (VideoCameraControlMode,
@@ -839,6 +839,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     self.inputHandler.onControlModeChanged('arcade', preferredPos=self.inputHandler.getDesiredShotPoint())
             else:
                 self.gunRotator.lock(False)
+        return
 
     def set_ownVehicleGear(self, prev):
         pass

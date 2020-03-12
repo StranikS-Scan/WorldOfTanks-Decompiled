@@ -17,6 +17,7 @@ from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CROSSHAIR_VIEW_ID
 from gui.battle_control import event_dispatcher as gui_event_dispatcher
 from gui.shared.items_parameters import isAutoReloadGun
+from gui.shared.utils.MethodsRules import MethodsRules
 from helpers import dependency, i18n
 from items import vehicles
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -353,7 +354,7 @@ def _createTimersCollection(panel):
     return TimersCollection(weakref.proxy(panel))
 
 
-class DestroyTimersPanel(DestroyTimersPanelMeta):
+class DestroyTimersPanel(DestroyTimersPanelMeta, MethodsRules):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
@@ -514,6 +515,7 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
             self._hideTimer(_TIMER_STATES.INSPIRE_CD)
         return
 
+    @MethodsRules.delayable()
     def __onVehicleControlling(self, vehicle):
         ctrl = self.sessionProvider.shared.vehicleState
         checkStatesIDs = (VEHICLE_VIEW_STATE.FIRE,
@@ -532,6 +534,7 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
         self.__vehicleID = vehicle.id
         self.__updatePanelPosition()
 
+    @MethodsRules.delayable('__onVehicleControlling')
     def __onCrosshairViewChanged(self, viewID):
         self.__viewID = viewID
         self.__updatePanelPosition()

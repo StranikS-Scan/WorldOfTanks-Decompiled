@@ -20,7 +20,8 @@ def _readPreBattleTips():
          'levels': filterSection.readString('levels'),
          'vehicleClass': filterSection.readString('vehicleClass'),
          'tags': filterSection.readString('tags'),
-         'preceding': _readPrecedingData(filterSection)}
+         'preceding': _readPrecedingData(filterSection),
+         'battlePassActiveCheck': filterSection.readBool('battlePassActiveCheck', False)}
 
     for _, tipsSection in resource_helper.getIterator(ctx, root['tips']):
         filterId = tipsSection.readString('filter')

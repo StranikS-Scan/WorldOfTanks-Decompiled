@@ -721,7 +721,9 @@ def showSeniorityRewardAwardWindow(qID, data):
 
 def showBattlePassAwardsWindow(bonuses, data):
     from gui.impl.lobby.battle_pass.battle_pass_awards_view import BattlePassAwardsView
-    g_eventBus.handleEvent(events.LoadUnboundViewEvent(layoutID=R.views.lobby.battle_pass.BattlePassAwardsView(), viewClass=BattlePassAwardsView, scope=ScopeTemplates.DEFAULT_SCOPE, wsFlags=ViewFlags.OVERLAY_VIEW, bonuses=bonuses, data=data), scope=EVENT_BUS_SCOPE.LOBBY)
+    layoutID = R.views.lobby.battle_pass.BattlePassAwardsView()
+    _killOldView(layoutID)
+    g_eventBus.handleEvent(events.LoadUnboundViewEvent(layoutID=layoutID, viewClass=BattlePassAwardsView, scope=ScopeTemplates.DEFAULT_SCOPE, wsFlags=ViewFlags.OVERLAY_VIEW, bonuses=bonuses, data=data), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showBattlePassVehicleAwardWindow(data):

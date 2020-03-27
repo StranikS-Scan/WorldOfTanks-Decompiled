@@ -1,14 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/techtree_page.py
+from logging import getLogger
+import datetime
 import Keys
 import GUI
 import nations
+from account_helpers.settings_core.settings_constants import GuiSettingsBehavior
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import GUI_START_BEHAVIOR, TECHTREE_INTRO_BLUEPRINTS
+from helpers import time_utils
 from constants import IS_DEVELOPMENT
-from debug_utils import LOG_DEBUG, LOG_ERROR
 from blueprints.BlueprintTypes import BlueprintTypes
-from gui import g_guiResetters
+from gui import g_guiResetters, GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.go_back_helper import BackButtonContextKeys
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled, getPremiumVehiclesUrl
 from gui.Scaleform.daapi.view.lobby.techtree import dumpers
 from gui.Scaleform.daapi.view.lobby.techtree.data import NationTreeData
 from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation
@@ -16,6 +22,8 @@ from gui.Scaleform.daapi.view.lobby.techtree.sound_constants import Sounds
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.meta.TechTreeMeta import TechTreeMeta
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
+from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
 from gui.impl import backport
 from gui.impl.gen.resources import R
 from gui.ingame_shop import canBuyGoldForVehicleThroughWeb
@@ -23,14 +31,20 @@ from gui.shared import event_dispatcher as shared_events
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
+from gui.shared.utils.vehicle_collector_helper import hasCollectibleVehicles
 from gui.shared.utils.requesters.blueprints_requester import getNationalFragmentCD
 from helpers import dependency
-from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.account_helpers.settings_core import ISettingsCore
+from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
+from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
+from gui.Scaleform.genConsts.SESSION_STATS_CONSTANTS import SESSION_STATS_CONSTANTS
+_logger = getLogger(__name__)
 _HEIGHT_LESS_THAN_SPECIFIED_TO_OVERRIDE = 850
 _HEIGHT_LESS_THAN_SPECIFIED_OVERRIDE_TAG = 'height_less_850'
+_VEHICLE_URL_FILTER_PARAM = 1
 
 class TechTree(TechTreeMeta):
-    __lobbyContext = dependency.descriptor(ILobbyContext)
+    __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, ctx=None):
         super(TechTree, self).__init__(NationTreeData(dumpers.NationObjDumper()))
@@ -40,7 +54,7 @@ class TechTree(TechTreeMeta):
         self.__nationalFragmentsData = {}
 
     def __del__(self):
-        LOG_DEBUG('TechTree deleted')
+        _logger.debug('TechTree deleted')
 
     def redraw(self):
         self.as_refreshNationTreeDataS(SelectedNation.getName())
@@ -52,14 +66,21 @@ class TechTree(TechTreeMeta):
 
     def getNationTreeData(self, nationName):
         if nationName not in nations.INDICES:
-            LOG_ERROR('Nation not found', nationName)
+            _logger.error('Nation with name %s not found', nationName)
             return {}
         nationIdx = nations.INDICES[nationName]
         SelectedNation.select(nationIdx)
         self.__updateBlueprintBalance()
+        self.__setVehicleCollectorState()
         self._data.load(nationIdx, override=self._getOverride())
         self.__playBlueprintPlusSound()
         return self._data.dump()
+
+    def getPremiumPanelLabels(self):
+        vehicleLabel = backport.text(R.strings.menu.techtree.premiumPanel.btnLabel(), count=text_styles.gold(backport.text(R.strings.menu.techtree.premiumPanel.btnLabel.count())))
+        labels = {'panelTitle': backport.text(R.strings.menu.techtree.premiumPanel.title()),
+         'vehicleLabel': vehicleLabel.split(backport.text(R.strings.menu.techtree.premiumPanel.btnLabel.count()))}
+        return labels
 
     def request4Unlock(self, itemCD):
         itemCD = int(itemCD)
@@ -102,6 +123,16 @@ class TechTree(TechTreeMeta):
         else:
             self.soundManager.playInstantSound(Sounds.BLUEPRINT_VIEW_OFF_SOUND_ID)
 
+    def onGoToPremiumShop(self, nationName, level):
+        if isIngameShopEnabled():
+            params = {'nation': nationName,
+             'level': level,
+             'vehicleFilterByUrl': _VEHICLE_URL_FILTER_PARAM}
+            shared_events.showWebShop(url=getPremiumVehiclesUrl(), params=params)
+        else:
+            shared_events.showOldShop(ctx={'tabId': STORE_TYPES.SHOP,
+             'component': STORE_CONSTANTS.VEHICLE})
+
     def invalidateBlueprintMode(self, isEnabled):
         if isEnabled:
             self.as_setBlueprintsSwitchButtonStateS(enabled=True, selected=self.__blueprintMode, tooltip=TOOLTIPS.TECHTREEPAGE_BLUEPRINTSSWITCHTOOLTIP, visible=True)
@@ -132,6 +163,9 @@ class TechTree(TechTreeMeta):
         if self._data.invalidateRestore(vehicles):
             self.redraw()
 
+    def invalidateVehicleCollectorState(self):
+        self.__setVehicleCollectorState()
+
     def _resolveLoadCtx(self, ctx=None):
         nation = ctx[BackButtonContextKeys.NATION] if ctx is not None and BackButtonContextKeys.NATION in ctx else None
         if nation is not None and nation in nations.INDICES:
@@ -156,18 +190,27 @@ class TechTree(TechTreeMeta):
             InputHandler.g_instance.onKeyUp += self.__handleReloadData
         if self.__blueprintMode:
             self.as_setBlueprintModeS(True)
-        isBlueprintsEnabled = self.__lobbyContext.getServerSettings().blueprintsConfig.isBlueprintsAvailable()
+        isBlueprintsEnabled = self._lobbyContext.getServerSettings().blueprintsConfig.isBlueprintsAvailable()
         self.__disableBlueprintsSwitchButton(isBlueprintsEnabled)
+        self.__setVehicleCollectorState()
+        self.__addListeners()
         self._populateAfter()
 
     def _populateAfter(self):
-        pass
+        blueprints = {}
+        defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
+        settings = self.__settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
+        if self.__needShowTechTreeIntro(settings):
+            if settings[GuiSettingsBehavior.TECHTREE_INTRO_BLUEPRINTS_RECEIVED]:
+                blueprints = AccountSettings.getSettings(TECHTREE_INTRO_BLUEPRINTS)
+            shared_events.showTechTreeIntro(parent=self.getParentWindow(), blueprints=blueprints)
 
     def _dispose(self):
         g_guiResetters.discard(self.__onUpdateStage)
         if IS_DEVELOPMENT:
             from gui import InputHandler
             InputHandler.g_instance.onKeyUp -= self.__handleReloadData
+        self.__removeListeners()
         super(TechTree, self)._dispose()
         self._disposeAfter()
 
@@ -177,6 +220,22 @@ class TechTree(TechTreeMeta):
     def _blueprintExitEvent(self, vehicleCD):
         return self.__exitEvent()
 
+    def __addListeners(self):
+        self.addListener(MESSENGER_VIEW_ALIAS.CHANNEL_MANAGEMENT_WINDOW, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(CONTACTS_ALIASES.CONTACTS_POPOVER, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(SESSION_STATS_CONSTANTS.SESSION_STATS_POPOVER, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(VIEW_ALIAS.NOTIFICATIONS_LIST, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.ReferralProgramEvent.SHOW_REFERRAL_PROGRAM_WINDOW, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.ChannelCarouselEvent.OPEN_BUTTON_CLICK, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def __removeListeners(self):
+        self.removeListener(MESSENGER_VIEW_ALIAS.CHANNEL_MANAGEMENT_WINDOW, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(CONTACTS_ALIASES.CONTACTS_POPOVER, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(SESSION_STATS_CONSTANTS.SESSION_STATS_POPOVER, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(VIEW_ALIAS.NOTIFICATIONS_LIST, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.ReferralProgramEvent.SHOW_REFERRAL_PROGRAM_WINDOW, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.ChannelCarouselEvent.OPEN_BUTTON_CLICK, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
+
     def __exitEvent(self):
         return events.LoadViewEvent(VIEW_ALIAS.LOBBY_TECHTREE, ctx={BackButtonContextKeys.NATION: SelectedNation.getName(),
          BackButtonContextKeys.BLUEPRINT_MODE: self.__blueprintMode})
@@ -185,6 +244,9 @@ class TechTree(TechTreeMeta):
         g_techTreeDP.setOverride(self._getOverride())
         if g_techTreeDP.load():
             self.redraw()
+
+    def __onClosePremiumPanel(self, _=None):
+        self.as_closePremiumPanelS()
 
     def __handleReloadData(self, event):
         if event.key is Keys.KEY_R:
@@ -227,3 +289,16 @@ class TechTree(TechTreeMeta):
 
     def __updateBlueprintBalance(self):
         self.as_setBlueprintBalanceS(self.__formatBlueprintBalance())
+
+    def __needShowTechTreeIntro(self, settings):
+        isShowed = settings[GuiSettingsBehavior.TECHTREE_INTRO_SHOWED]
+        startTime = datetime.date(GUI_SETTINGS.techTreeIntroStartDate.get('year'), GUI_SETTINGS.techTreeIntroStartDate.get('month'), GUI_SETTINGS.techTreeIntroStartDate.get('day'))
+        endTime = startTime + datetime.timedelta(seconds=time_utils.ONE_YEAR)
+        registrationTime = self._itemsCache.items.getAccountDossier().getGlobalStats().getCreationTime()
+        isOverdue = time_utils.getCurrentLocalServerTimestamp() >= time_utils.getTimestampFromLocal(endTime.timetuple())
+        isNewPlayer = registrationTime >= time_utils.getTimestampFromLocal(startTime.timetuple())
+        return not (isShowed or isOverdue or isNewPlayer)
+
+    def __setVehicleCollectorState(self):
+        isVehicleCollectorEnabled = self._lobbyContext.getServerSettings().isCollectorVehicleEnabled()
+        self.as_setVehicleCollectorStateS(isVehicleCollectorEnabled and hasCollectibleVehicles(SelectedNation.getIndex()))

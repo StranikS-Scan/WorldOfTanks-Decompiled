@@ -11,6 +11,7 @@ from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import getChain
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_BUTTONS import PERSONAL_MISSIONS_BUTTONS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.QUESTS import QUESTS
@@ -23,10 +24,11 @@ from gui.server_events.bonuses import SimpleBonus
 from gui.server_events.cond_formatters.prebattle import MissionsPreBattleConditionsFormatter
 from gui.server_events.cond_formatters.requirements import AccountRequirementsFormatter, TQAccountRequirementsFormatter
 from gui.server_events.conditions import GROUP_TYPE
+from gui.server_events.events_constants import FRONTLINE_GROUP_ID
 from gui.server_events.events_helpers import MISSIONS_STATES, QuestInfoModel, AWARDS_PER_SINGLE_PAGE, isMarathon, AwardSheetPresenter, isPremium
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.server_events.personal_progress import formatters
-from gui.shared.formatters import text_styles, icons
+from gui.shared.formatters import text_styles, icons, time_formatters
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency, int2roman, time_utils, i18n
@@ -207,6 +209,18 @@ def getPostponedOperationState(operationID):
     return PostponedOperationState(state, postponeTime)
 
 
+@dependency.replace_none_kwargs(epicMetaGameCtrl=IEpicBattleMetaGameController)
+def isEpicDailyQuestsRefreshAvailable(epicMetaGameCtrl=None):
+    dayTimeLeft = time_utils.getDayTimeLeft()
+    cycleTimeLeft = epicMetaGameCtrl.getCurrentCycleTimeLeft()
+    currentPrimeTimeEnd = epicMetaGameCtrl.getCurrentPrimeTimeEnd()
+    if currentPrimeTimeEnd is None:
+        return False
+    else:
+        primeTimeTimeLeft = currentPrimeTimeEnd - time_utils.getCurrentLocalServerTimestamp()
+        return (epicMetaGameCtrl.hasPrimeTimesLeft() or primeTimeTimeLeft > dayTimeLeft) and cycleTimeLeft > dayTimeLeft
+
+
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def _isPremiumEnabled(itemsCache=None):
     return itemsCache.items.stats.isActivePremium(constants.PREMIUM_TYPE.PLUS)
@@ -275,7 +289,7 @@ class _MissionInfo(QuestInfoModel):
             clockIcon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_TIMERICON, 16, 16, -2, 8)
             statusText = _ms(QUESTS.MISSIONDETAILS_STATUS_NOTAVAILABLE)
             statusLabel = text_styles.concatStylesWithSpace(clockIcon, text_styles.error(statusText))
-            statusTooltipData = {'tooltip': makeTooltip(_ms(TOOLTIPS.QUESTS_UNAVAILABLE_TIME_STATUSTOOLTIP), self._getCompleteDailyStatus(QUESTS.MISSIONDETAILS_STATUS_COMPLETED_DAILY)),
+            statusTooltipData = {'tooltip': makeTooltip(_ms(self._getCompleteStatusTooltipHeader()), self._getCompleteDailyStatus(self._getCompleteKey())),
              'isSpecial': False,
              'specialArgs': None}
         else:
@@ -291,6 +305,12 @@ class _MissionInfo(QuestInfoModel):
         return {'statusLabel': statusLabel,
          'status': status,
          'statusTooltipData': statusTooltipData}
+
+    def _getCompleteKey(self):
+        return backport.text(R.strings.quests.missionDetails.status.completed.daily())
+
+    def _getCompleteStatusTooltipHeader(self):
+        return backport.text(R.strings.tooltips.quests.unavailable.time.statusTooltip())
 
     def _getUnavailableStatusFields(self, errorMsg):
         if errorMsg == 'requirements':
@@ -406,6 +426,31 @@ class _MissionInfo(QuestInfoModel):
                 return resultBonus
             return bonuses
             return
+
+
+class _EpicDailyMissionInfo(_MissionInfo):
+    _epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
+
+    def _getCompleteDailyStatus(self, completeKey):
+        season = self._epicMetaGameCtrl.getCurrentSeason() or self._epicMetaGameCtrl.getNextSeason()
+        cycle = season.getCycleInfo()
+        dayTimeLeft = time_utils.getDayTimeLeft()
+        cycleTimeLeft = self._epicMetaGameCtrl.getCurrentCycleTimeLeft()
+        if isEpicDailyQuestsRefreshAvailable():
+            timeLeftString = i18n.makeString(completeKey, time=self._getTillTimeString(dayTimeLeft))
+        else:
+            if cycleTimeLeft < time_utils.ONE_DAY:
+                timeLeft = backport.text(R.strings.epic_battle.questsTooltip.epicBattle.lessThanDay())
+            else:
+                timeLeft = time_formatters.getTillTimeByResource(cycleTimeLeft, R.strings.menu.headerButtons.battle.types.ranked.availability, removeLeadingZeros=True)
+            timeLeftString = i18n.makeString(completeKey, cycle=int2roman(cycle.ordinalNumber), time=timeLeft)
+        return timeLeftString
+
+    def _getCompleteStatusTooltipHeader(self):
+        return QUESTS.MISSIONDETAILS_STATUS_NOTAVAILABLE if not isEpicDailyQuestsRefreshAvailable() else super(_EpicDailyMissionInfo, self)._getCompleteStatusTooltipHeader()
+
+    def _getCompleteKey(self):
+        return EPIC_BATTLE.QUESTSTOOLTIP_EPICBATTLE_TIMELEFT if not isEpicDailyQuestsRefreshAvailable() else super(_EpicDailyMissionInfo, self)._getCompleteKey()
 
 
 class _TokenMissionInfo(_MissionInfo):
@@ -565,7 +610,7 @@ class _DetailedMissionInfo(_MissionInfo):
             statusLabel = text_styles.concatStylesToSingleLine(icon, progressDesc)
         if self.event.bonusCond.isDaily():
             status = MISSIONS_STATES.NOT_AVAILABLE
-            dateLabel = text_styles.concatStylesWithSpace(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_TIMERICON, 16, 16, -2, 8), text_styles.error(QUESTS.MISSIONDETAILS_STATUS_NOTAVAILABLE), self._getCompleteDailyStatus(QUESTS.MISSIONDETAILS_STATUS_COMPLETED_DAILY))
+            dateLabel = self._getCompletedDateLabel()
             resetDateLabel = self._getDailyResetStatusLabel()
         return {'statusLabel': statusLabel,
          'dateLabel': dateLabel,
@@ -573,6 +618,10 @@ class _DetailedMissionInfo(_MissionInfo):
          'bottomStatusText': text_styles.concatStylesWithSpace(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_DONE, 32, 32, -8), text_styles.missionStatusAvailable(QUESTS.MISSIONDETAILS_BOTTOMSTATUSCOMPLETE)),
          'statusTooltipData': statusTooltipData,
          'resetDateLabel': resetDateLabel}
+
+    def _getCompletedDateLabel(self):
+        dateLabel = text_styles.concatStylesWithSpace(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_TIMERICON, 16, 16, -2, 8), text_styles.error(QUESTS.MISSIONDETAILS_STATUS_NOTAVAILABLE), self._getCompleteDailyStatus(QUESTS.MISSIONDETAILS_STATUS_COMPLETED_DAILY))
+        return dateLabel
 
     def _getUnavailableStatusFields(self, errorMsg):
         result = {'status': MISSIONS_STATES.NOT_AVAILABLE}
@@ -640,6 +689,23 @@ class _DetailedMissionInfo(_MissionInfo):
     def __getDescription(self):
         description = self.event.getDescription()
         return None if not description else makeTooltip(QUESTS.MISSIONDETAILS_DESCRIPTION, description)
+
+
+class _EpicDetailedMissionInfo(_DetailedMissionInfo, _EpicDailyMissionInfo):
+
+    def _getCompletedDateLabel(self):
+        dateLabel = text_styles.concatStylesWithSpace(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_TIMERICON, 16, 16, -2, 8), text_styles.error(QUESTS.MISSIONDETAILS_STATUS_NOTAVAILABLE), self._getCompleteDailyStatus(self._getCompleteKey()))
+        return dateLabel
+
+    def _getDailyResetStatusLabel(self):
+        if not isEpicDailyQuestsRefreshAvailable():
+            dailyStr = self._getCompleteDailyStatus(self._getCompleteKey())
+            if dailyStr:
+                clockIcon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_RENT_ICO_BIG, 19, 19, -4, 8)
+                return text_styles.concatStylesToSingleLine(clockIcon, dailyStr)
+        else:
+            dailyStr = super(_EpicDetailedMissionInfo, self)._getDailyResetStatusLabel()
+        return dailyStr
 
 
 class _PremiumDetailedMissionInfo(_DetailedMissionInfo):
@@ -1074,6 +1140,8 @@ def getMissionInfoData(event):
         return _PrivateMissionInfo(event)
     elif isPremium(event.getID()):
         return _PremiumMissionInfo(event)
+    elif event.getGroupID() == FRONTLINE_GROUP_ID:
+        return _EpicDailyMissionInfo(event)
     else:
         return _MissionInfo(event) if event.getType() in constants.EVENT_TYPE.LIKE_BATTLE_QUESTS else None
 
@@ -1087,6 +1155,8 @@ def getDetailedMissionData(event):
         return _DetailedPersonalMissionInfo(event)
     elif isPremium(event.getID()):
         return _PremiumDetailedMissionInfo(event)
+    elif event.getGroupID() == FRONTLINE_GROUP_ID:
+        return _EpicDetailedMissionInfo(event)
     else:
         return _DetailedMissionInfo(event) if event.getType() in constants.EVENT_TYPE.LIKE_BATTLE_QUESTS else None
 

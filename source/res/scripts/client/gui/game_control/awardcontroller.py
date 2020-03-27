@@ -1,37 +1,42 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/AwardController.py
+import logging
 import types
 import weakref
-import logging
-from itertools import ifilter
 from abc import ABCMeta, abstractmethod
 from copy import deepcopy
+from itertools import ifilter
 import BigWorld
 import ArenaType
 import gui.awards.event_dispatcher as shared_events
 import personal_missions
 from PlayerEvents import g_playerEvents
-from account_helpers.AccountSettings import AccountSettings, AWARDS, SPEAKERS_DEVICE
-from account_helpers.settings_core.settings_constants import SOUND
+from account_helpers.AccountSettings import AccountSettings, AWARDS, SPEAKERS_DEVICE, GUI_START_BEHAVIOR, TECHTREE_INTRO_BLUEPRINTS
+from account_helpers.settings_core.settings_constants import SOUND, GuiSettingsBehavior
 from account_shared import getFairPlayViolationName
 from battle_pass_common import BattlePassRewardReason
+from battle_pass_common import BattlePassState
 from chat_shared import SYS_MESSAGE_TYPE
-from constants import EVENT_TYPE, INVOICE_ASSET, PREMIUM_TYPE, IS_DEVELOPMENT
+from collector_vehicle import CollectorVehicleConsts
+from constants import EVENT_TYPE, INVOICE_ASSET, PREMIUM_TYPE
+from constants import IS_DEVELOPMENT
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.layouts import PERSONAL_MISSIONS_GROUP
-from helpers import time_utils
 from gui import DialogsInterface
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.DialogsInterface import showDialog
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18PunishmentDialogMeta
+from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityAwardsBox
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.awards.event_dispatcher import showCrewSkinAward
 from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
+from gui.impl.auxiliary.rewards_helper import getProgressiveRewardBonuses
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.loot_box_view.loot_congrats_types import LootCongratsTypes
 from gui.prb_control.entities.listener import IGlobalListener
@@ -39,11 +44,11 @@ from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from gui.ranked_battles import ranked_helpers
 from gui.server_events import events_dispatcher as quests_events, recruit_helper, awards
 from gui.server_events.events_dispatcher import showLootboxesAward, showPiggyBankRewardWindow
+from gui.server_events.events_helpers import isDailyQuest
 from gui.server_events.finders import PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
 from gui.shared.event_dispatcher import showProgressiveRewardAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showSeniorityRewardAwardWindow, showRankedYeardAwardWindow
 from gui.shared.events import PersonalMissionsEvent, LobbySimpleEvent
-from gui.server_events.events_helpers import isDailyQuest
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.functions import getViewName
@@ -51,11 +56,13 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.sounds.sound_constants import SPEAKERS_CONFIG
 from helpers import dependency
 from helpers import i18n
+from helpers import time_utils
 from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr, vehicles as vehicles_core
 from items.components.crew_books_constants import CREW_BOOK_DISPLAYED_AWARDS_COUNT
 from messenger.formatters import TimeFormatter
 from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
 from messenger.proto.events import g_messengerEvents
+from nations import NAMES
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IAwardController, IRankedBattlesController, IBootcampController, IBattlePassController
@@ -64,10 +71,6 @@ from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.sounds import ISoundsController
-from gui.awards.event_dispatcher import showCrewSkinAward
-from gui.impl.auxiliary.rewards_helper import getProgressiveRewardBonuses
-from battle_pass_common import BattlePassState
-from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityAwardsBox
 _logger = logging.getLogger(__name__)
 
 class QUEST_AWARD_POSTFIX(object):
@@ -76,6 +79,24 @@ class QUEST_AWARD_POSTFIX(object):
 
 
 SENIORITY_AWARDS_TOKEN_QUEST = 'SeniorityAwardsQuest'
+_POPUP_RECORDS = 'popUpRecords'
+
+def _showDailyQuestEpicRewardScreen(quest, context):
+    bonusesFromMissionAward = awards.EpicAward(quest, context, None).getAwards()
+    if bonusesFromMissionAward:
+        showProgressiveRewardAwardWindow(bonusesFromMissionAward, LootCongratsTypes.INIT_CONGRAT_TYPE_EPIC_REWARDS, 0)
+    return
+
+
+def _getBlueprintActualBonus(data, quest):
+    questData = data.get('detailedRewards', {}).get(quest.getID(), {})
+    if 'blueprints' in questData:
+        blueprintActualBonus = questData.get('blueprints', {})
+        actualQuest = deepcopy(quest)
+        actualQuest.getData()['bonus'].update({'blueprints': blueprintActualBonus})
+        return actualQuest
+    return quest
+
 
 class AwardController(IAwardController, IGlobalListener):
     bootcampController = dependency.descriptor(IBootcampController)
@@ -114,7 +135,9 @@ class AwardController(IAwardController, IGlobalListener):
          RankedQuestsHandler(self),
          BattlePassRewardHandler(self),
          BattlePassBuyEmptyHandler(self),
-         BattlePassCapHandler(self)]
+         BattlePassCapHandler(self),
+         TechTreeIntroHandler(self),
+         VehicleCollectorAchievementHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -328,7 +351,7 @@ class PersonalMissionBonusHandler(ServiceChannelHandler):
         _logger.debug('Show personal mission bonus award! %s', ctx)
         data = ctx[1].data
         achievements = []
-        for recordIdx, value in data.get('popUpRecords', []):
+        for recordIdx, value in data.get(_POPUP_RECORDS, []):
             factory = getAchievementFactory(DB_ID_TO_RECORD[recordIdx])
             if factory is not None:
                 a = factory.create(value=int(value))
@@ -347,7 +370,7 @@ class PersonalMissionWindowAfterBattleHandler(ServiceChannelHandler):
 
     def _showAward(self, ctx):
         achievements = []
-        popUpRecords = ctx[1].data.get('popUpRecords', [])
+        popUpRecords = ctx[1].data.get(_POPUP_RECORDS, [])
         for recordIdx, value in popUpRecords:
             recordName = DB_ID_TO_RECORD[recordIdx]
             if recordName in PERSONAL_MISSIONS_GROUP:
@@ -1006,7 +1029,7 @@ class VehiclesResearchHandler(SpecialAchievement):
         g_clientUpdateManager.removeObjectCallbacks(self)
 
     def getAchievementCount(self):
-        return len(self.itemsCache.items.getVehicles(criteria=REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.VEHICLE.LEVELS([1]) | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR))
+        return len(self.itemsCache.items.getVehicles(criteria=REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.VEHICLE.LEVELS([1]) | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR | ~REQ_CRITERIA.COLLECTIBLE))
 
     def onUnlocksChanged(self, unlocks):
         isChanged = False
@@ -1248,11 +1271,98 @@ class ProgressiveRewardHandler(ServiceChannelHandler):
             _logger.error("Can't show empty or invalid reward!")
 
 
-def _showDailyQuestEpicRewardScreen(quest, context):
-    bonusesFromMissionAward = awards.EpicAward(quest, context, None).getAwards()
-    if bonusesFromMissionAward:
-        showProgressiveRewardAwardWindow(bonusesFromMissionAward, LootCongratsTypes.INIT_CONGRAT_TYPE_EPIC_REWARDS, 0)
-    return
+class TechTreeIntroHandler(ServiceChannelHandler):
+    __settingsCore = dependency.descriptor(ISettingsCore)
+
+    def __init__(self, awardCtrl):
+        super(TechTreeIntroHandler, self).__init__(SYS_MESSAGE_TYPE.converter.index(), awardCtrl)
+
+    def _needToShowAward(self, ctx):
+        if not super(TechTreeIntroHandler, self)._needToShowAward(ctx):
+            return False
+        settings = self.__getSettings()
+        if not settings[GuiSettingsBehavior.TECHTREE_INTRO_BLUEPRINTS_RECEIVED]:
+            _, message = ctx
+            data = message.data or {}
+            blueprints = data.get('blueprints', {})
+            if blueprints:
+                AccountSettings.setSettings(TECHTREE_INTRO_BLUEPRINTS, blueprints)
+                settings[GuiSettingsBehavior.TECHTREE_INTRO_BLUEPRINTS_RECEIVED] = True
+                self.__settingsCore.serverSettings.setSectionSettings(GUI_START_BEHAVIOR, settings)
+        return False
+
+    def _showAward(self, ctx):
+        pass
+
+    def __getSettings(self):
+        defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
+        return self.__settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
+
+
+class VehicleCollectorAchievementHandler(ServiceChannelHandler):
+    _PATTERN = CollectorVehicleConsts.COLLECTOR_MEDAL_PREFIX
+
+    def __init__(self, awardCtrl):
+        super(VehicleCollectorAchievementHandler, self).__init__(SYS_MESSAGE_TYPE.achievementReceived.index(), awardCtrl)
+        self.__nationAwards = []
+        self.__isCollectionAssembled = False
+
+    def fini(self):
+        self.__clear()
+        super(VehicleCollectorAchievementHandler, self).fini()
+
+    def _needToShowAward(self, ctx):
+        isNeedToShow = super(VehicleCollectorAchievementHandler, self)._needToShowAward(ctx)
+        if isNeedToShow:
+            self.__setAwards(ctx)
+            return self.__isAwardsReceived()
+        return False
+
+    def __setAwards(self, ctx):
+        _, message = ctx
+        medals = message.data.get(_POPUP_RECORDS, {})
+        if not medals:
+            return
+        for _, medalName in medals:
+            if not medalName.startswith(self._PATTERN):
+                continue
+            if len(medalName) == len(self._PATTERN):
+                self.__isCollectionAssembled = True
+            nation = int(medalName[len(self._PATTERN):])
+            if self.__isNationCorrect(nation):
+                self.__nationAwards.append(nation)
+
+    def __isAwardsReceived(self):
+        return len(self.__nationAwards) > 0 or self.__isCollectionAssembled
+
+    def _showAward(self, ctx):
+        self.__showNationalCollectorAward()
+        self.__showVehicleCollectorOfEverythingAward()
+        self.__clear()
+
+    def __showNationalCollectorAward(self):
+        if self.__nationAwards is None:
+            return
+        else:
+            for nationID in self.__nationAwards:
+                shared_events.showVehicleCollectorAward(nationID)
+
+            return
+
+    def __showVehicleCollectorOfEverythingAward(self):
+        if self.__isCollectionAssembled:
+            shared_events.showVehicleCollectorOfEverythingAward()
+
+    def __clear(self):
+        self.__nationAwards = []
+        self.__isCollectionAssembled = False
+
+    def __isNationCorrect(self, nationID):
+        if nationID is None or nationID >= len(NAMES) or nationID < 0:
+            _logger.error('Incorrect nationID=%s for the award window of the vehicle collector', nationID)
+            return False
+        else:
+            return True
 
 
 class BattlePassRewardHandler(ServiceChannelHandler):
@@ -1323,13 +1433,3 @@ class BattlePassCapHandler(ServiceChannelHandler):
                 return
 
         showBattlePassVehicleAwardWindow(message.data)
-
-
-def _getBlueprintActualBonus(data, quest):
-    questData = data.get('detailedRewards', {}).get(quest.getID(), {})
-    if 'blueprints' in questData:
-        blueprintActualBonus = questData.get('blueprints', {})
-        actualQuest = deepcopy(quest)
-        actualQuest.getData()['bonus'].update({'blueprints': blueprintActualBonus})
-        return actualQuest
-    return quest

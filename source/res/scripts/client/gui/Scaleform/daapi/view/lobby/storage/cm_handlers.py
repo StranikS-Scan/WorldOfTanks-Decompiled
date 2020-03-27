@@ -30,6 +30,7 @@ class CMLabel(object):
     SHOW_BLUEPRINT = 'showBlueprint'
     NATION_CHANGE = 'nationChange'
     UPGRADE = 'upgrade'
+    GO_TO_COLLECTION = 'goToCollection'
 
 
 def option(order, label):

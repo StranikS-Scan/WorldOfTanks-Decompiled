@@ -195,6 +195,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 if self.intUserSettings is not None:
                     self.intUserSettings.setProxy(self, self.syncData)
                 self.prebattleInvitations = repository.prebattleInvitations
+                self.spaFlags = repository.spaFlags
             else:
                 self.intUserSettings = None
                 self.prebattleInvitations = None
@@ -2112,6 +2113,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.base.setClientReady()
         if self.arena.period == ARENA_PERIOD.BATTLE:
             self.__setIsOnArena(True)
+            battleTime = BigWorld.serverTime() - (self.arena.periodEndTime - self.arena.periodLength)
+            BigWorld.notifyBattleTime(self.spaceID, battleTime)
         self.arena.onPeriodChange += self.__onArenaPeriodChange
         self.cell.autoAim(0, False)
         g_playerEvents.onAvatarReady()
@@ -2407,6 +2410,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             LightManager.GameLights.roundStarted()
             if AuxiliaryFx.g_instance is not None:
                 AuxiliaryFx.g_instance.execEffect('roundStartedEffect')
+            BigWorld.notifyBattleTime(self.spaceID, 0)
         self.__prevArenaPeriod = period
         return
 
@@ -2774,7 +2778,7 @@ Avatar = PlayerAvatar
 
 def getVehicleShootingPositions(vehicle):
     vd = vehicle.typeDescriptor
-    gunOffs = vd.turret.gunPosition
+    gunOffs = vd.turret.gunShotPosition
     turretOffs = vd.hull.turretPositions[0] + vd.chassis.hullPosition
     turretYaw, gunPitch = decodeGunAngles(vehicle.gunAnglesPacked, vd.gun.pitchLimits['absolute'])
     turretWorldMatrix = Math.Matrix()

@@ -12,6 +12,18 @@
             <checkpoint-not-reached>	ModuleBoughtCheckpoint	</checkpoint-not-reached>
           </condition>
         </request-exclusive-hint>
+        <effects-group>
+          <condition>
+            <checkpoint-reached>	ModuleBoughtCheckpoint	</checkpoint-reached>
+          </condition>
+          <effects>
+            <play-sound>	bc_new_ui_element	  <event>	ANIMATION_STARTED	</event>
+            </play-sound>
+            <play-animation>	HangarModuleEngine	  <type>	clip	</type>
+              <wait_for_finish>	True	</wait_for_finish>
+            </play-animation>
+          </effects>
+        </effects-group>
       </runtime-effects>
       <gui-items></gui-items>
     </scene>
@@ -31,7 +43,7 @@
         </effects-group>
       </post-effects>
       <runtime-effects>
-        <request-exclusive-hint>	ResearchItemNode	  <condition>
+        <request-exclusive-hint>	ResearchItemNodeButton	  <condition>
             <checkpoint-not-reached>	ModuleBoughtCheckpoint	</checkpoint-not-reached>
           </condition>
         </request-exclusive-hint>
@@ -48,6 +60,7 @@
       </request-exclusive-hint>
       <request-exclusive-hint>	FightButton	  <condition>
           <checkpoint-reached>	EndCheckpoint	</checkpoint-reached>
+          <on-scene>	Hangar	</on-scene>
         </condition>
       </request-exclusive-hint>
     </pre-scene>
@@ -65,15 +78,34 @@
             </arg>
           </args>
         </invoke-gui-cmd>
-        <set-visible>	CreditsButton	  <val>	False	</val>
-        </set-visible>
         <set-visible>	MainMenuGradient	  <val>	False	</val>
         </set-visible>
         <set-visible>	HeaderCenterBg	  <val>	False	</val>
         </set-visible>
         <set-visible>	HeaderCenterMenuBg	  <val>	False	</val>
         </set-visible>
-        <show-dialog>	IntroDialog	</show-dialog>
+        <show-dialog>	IntroDialogCredits	</show-dialog>
+        <set-visible>	VehicleResearchPanel	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	VehicleResearchPanelBG	  <val>	True	</val>
+        </set-visible>
+        <set-visible>	VehicleResearchButton	  <val>	True	</val>
+        </set-visible>
+        <play-animation>	VehicleResearchPanel	  <type>	tween	</type>
+          <wait_for_finish>	False	</wait_for_finish>
+        </play-animation>
+        <play-animation>	VehicleResearchPanelBG	  <type>	tween	</type>
+          <wait_for_finish>	True	</wait_for_finish>
+        </play-animation>
+        <set-visible>	HangarParams	  <val>	True	</val>
+        </set-visible>
+        <play-animation>	HangarParams	  <type>	tween	</type>
+          <wait_for_finish>	True	</wait_for_finish>
+          <condition>
+            <not-on-scene>	Research	</not-on-scene>
+          </condition>
+        </play-animation>
+        <show-dialog>	IntroDialogExp	</show-dialog>
         <play-animation>	CreditsButton	  <type>	tween	</type>
           <wait_for_finish>	True	</wait_for_finish>
         </play-animation>
@@ -105,26 +137,6 @@
         <play-animation>	MenuHangar	  <type>	tween	</type>
           <wait_for_finish>	True	</wait_for_finish>
         </play-animation>
-        <set-visible>	VehicleResearchPanel	  <val>	True	</val>
-        </set-visible>
-        <set-visible>	VehicleResearchPanelBG	  <val>	True	</val>
-        </set-visible>
-        <set-visible>	VehicleResearchButton	  <val>	True	</val>
-        </set-visible>
-        <play-animation>	VehicleResearchPanel	  <type>	tween	</type>
-          <wait_for_finish>	False	</wait_for_finish>
-        </play-animation>
-        <play-animation>	VehicleResearchPanelBG	  <type>	tween	</type>
-          <wait_for_finish>	True	</wait_for_finish>
-        </play-animation>
-        <set-visible>	HangarParams	  <val>	True	</val>
-        </set-visible>
-        <play-animation>	HangarParams	  <type>	tween	</type>
-          <wait_for_finish>	True	</wait_for_finish>
-          <condition>
-            <not-on-scene>	Research	</not-on-scene>
-          </condition>
-        </play-animation>
       </effects>
     </checkpoint>
     <checkpoint>	ModuleUnlockedCheckpoint	  <condition>
@@ -132,7 +144,10 @@
         </game-item>
       </condition>
       <effects>
-        <show-dialog>	ModuleUnlockedDialog	</show-dialog>
+        <show-window>	SubtitleModuleInvestigated	  <condition>
+            <checkpoint-not-reached>	ModuleBoughtCheckpoint	</checkpoint-not-reached>
+          </condition>
+        </show-window>
       </effects>
     </checkpoint>
     <checkpoint>	ModuleBoughtCheckpoint	  <condition>
@@ -140,7 +155,10 @@
         </game-item>
       </condition>
       <effects>
-        <show-dialog>	ModuleBoughtDialog	</show-dialog>
+        <show-window>	SubtitleModulePurchased	  <condition>
+            <checkpoint-not-reached>	EndCheckpoint	</checkpoint-not-reached>
+          </condition>
+        </show-window>
         <set-visible>	HangarModuleGun	  <val>	True	</val>
         </set-visible>
         <set-visible>	HangarModuleTurret	  <val>	True	</val>
@@ -158,11 +176,6 @@
         <on-scene>	Hangar	</on-scene>
       </condition>
       <effects>
-        <play-sound>	bc_new_ui_element	  <event>	ANIMATION_STARTED	</event>
-        </play-sound>
-        <play-animation>	HangarModuleEngine	  <type>	clip	</type>
-          <wait_for_finish>	True	</wait_for_finish>
-        </play-animation>
         <set-allowed-to-fight>
           <value>	True	</value>
         </set-allowed-to-fight>
@@ -179,22 +192,88 @@
     <gui-item-criteria>	ResearchItemNodeCriteria	  <item-id>	ResearchItemNodeID	</item-id>
       <value>	id=$ModuleCD$	</value>
     </gui-item-criteria>
-    <dialog>	IntroDialog	  <type>	bootcampMessage	</type>
+    <window>	SubtitleTankImprovement	  <type>	bootcampSubtitle	</type>
       <sequence>
         <message>
           <data>
-            <icon>	../maps/icons/bootcamp/lines/logo.png	</icon>
-            <preset>	INTRO	</preset>
-            <label>	#bootcamp:message/intro/lesson/ii/label	</label>
+            <subtitle>	#bootcamp:subtitles/vo_bc_hangar_tank_improvement	</subtitle>
             <voiceover>	vo_bc_hangar_tank_improvement	</voiceover>
           </data>
         </message>
         <message>
           <data>
+            <subtitle>	#bootcamp:subtitles/vo_bc_hangar_silver	</subtitle>
+            <voiceover>	vo_bc_hangar_silver	</voiceover>
+          </data>
+        </message>
+      </sequence>
+      <buttons>
+        <close>	NoResultsWindowCloseButton	</close>
+      </buttons>
+      <actions>
+        <click>	NoResultsWindowCloseButton	  <effects>
+            <activate>	NoResultsWindowClosed	</activate>
+          </effects>
+        </click>
+      </actions>
+    </window>
+    <window>	SubtitleExperience	  <type>	bootcampSubtitle	</type>
+      <sequence>
+        <message>
+          <data>
+            <subtitle>	#bootcamp:subtitles/vo_bc_hangar_experience	</subtitle>
+            <voiceover>	vo_bc_hangar_experience	</voiceover>
+          </data>
+        </message>
+      </sequence>
+      <buttons>
+        <close>	NoResultsWindowCloseButton	</close>
+      </buttons>
+      <actions>
+        <click>	NoResultsWindowCloseButton	  <effects>
+            <activate>	NoResultsWindowClosed	</activate>
+          </effects>
+        </click>
+      </actions>
+    </window>
+    <dialog>	IntroDialogCredits	  <type>	bootcampMessage	</type>
+      <sequence>
+        <message>
+          <data>
+            <preset>	ORANGE	</preset>
+            <icon>	../maps/icons/bootcamp/lines/bcCredits.png	</icon>
+            <label>	#bootcamp:message/credits/label	</label>
+            <text>	#bootcamp:message/credits/text	</text>
+            <subtitle>	SubtitleTankImprovement	</subtitle>
+            <voiceover>	vo_bc_hangar_tank_improvement	</voiceover>
+            <bottom_renderer>	rewards	</bottom_renderer>
+            <bottom>
+              <data>
+                <icon>	../maps/icons/bootcamp/rewards/bcCredits.png	</icon>
+                <label>	{0}	</label>
+                <label_format>	getCredits	</label_format>
+                <labelTooltip>	#tooltips:credits/header	</labelTooltip>
+                <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcCredits.png	</iconTooltip>
+                <description>	#bootcamp:message/credits/text	</description>
+                <animationTarget>	lobby:header.headerButtonBar.container.id=credits.container.0.moneyIconText.iconClip	</animationTarget>
+                <animationType>	credits	</animationType>
+              </data>
+            </bottom>
+          </data>
+        </message>
+      </sequence>
+      <buttons></buttons>
+      <actions></actions>
+    </dialog>
+    <dialog>	IntroDialogExp	  <type>	bootcampMessage	</type>
+      <sequence>
+        <message>
+          <data>
+            <preset>	ORANGE	</preset>
             <icon>	../maps/icons/bootcamp/lines/bcExp.png	</icon>
-            <preset>	BLUE	</preset>
             <label>	#bootcamp:message/experience/label	</label>
             <text>	#bootcamp:message/experience/text	</text>
+            <subtitle>	SubtitleExperience	</subtitle>
             <voiceover>	vo_bc_hangar_experience	</voiceover>
             <bottom_renderer>	rewards	</bottom_renderer>
             <bottom>
@@ -202,29 +281,11 @@
                 <icon>	../maps/icons/bootcamp/rewards/bcExp.png	</icon>
                 <label>	{0}	</label>
                 <label_format>	getExperience	</label_format>
-                <labelTooltip>	#bootcamp:message/experience/label	</labelTooltip>
+                <labelTooltip>	#tooltips:XP/header	</labelTooltip>
                 <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcExp.png	</iconTooltip>
                 <description>	#bootcamp:message/experience/text	</description>
-              </data>
-            </bottom>
-          </data>
-        </message>
-        <message>
-          <data>
-            <icon>	../maps/icons/bootcamp/lines/bcCredits.png	</icon>
-            <preset>	BLUE	</preset>
-            <label>	#bootcamp:message/credits/label	</label>
-            <text>	#bootcamp:message/credits/text	</text>
-            <voiceover>	vo_bc_hangar_silver	</voiceover>
-            <bottom_renderer>	rewards	</bottom_renderer>
-            <bottom>
-              <data>
-                <icon>	../maps/icons/bootcamp/rewards/bcCredits.png	</icon>
-                <label>	{0}	</label>
-                <label_format>	getCredits	</label_format>
-                <labelTooltip>	#bootcamp:message/credits/label	</labelTooltip>
-                <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcCredits.png	</iconTooltip>
-                <description>	#bootcamp:message/credits/text	</description>
+                <animationTarget>	hangar:vehResearchPanel.xpText.iconClip.1	</animationTarget>
+                <animationType>	experience	</animationType>
               </data>
             </bottom>
           </data>
@@ -233,57 +294,52 @@
       <buttons></buttons>
       <actions></actions>
     </dialog>
-    <dialog>	ModuleUnlockedDialog	  <type>	bootcampMessage	</type>
-      <sequence>
-        <message>
-          <nations>
-            <data>
-              <nation_id>	usa	</nation_id>
-              <icon>	../maps/icons/bootcamp/lines/bcUnlock.png	</icon>
-              <preset>	BLUE	</preset>
-              <label>	#bootcamp:message/unlock/module/label	</label>
-              <text>	#bootcamp:message/unlock/module/text	</text>
-              <voiceover>	vo_bc_hangar_module_investigated	</voiceover>
-            </data>
-            <data>
-              <nation_id>	germany	</nation_id>
-              <icon>	../maps/icons/bootcamp/lines/bcUnlock.png	</icon>
-              <preset>	BLUE	</preset>
-              <label>	#bootcamp:message/unlock/module/label	</label>
-              <text>	#bootcamp:message/unlock/module/text	</text>
-              <voiceover>	vo_bc_hangar_module_investigated	</voiceover>
-            </data>
-            <data>
-              <nation_id>	ussr	</nation_id>
-              <icon>	../maps/icons/bootcamp/lines/bcUnlock.png	</icon>
-              <preset>	BLUE	</preset>
-              <label>	#bootcamp:message/unlock/module/label	</label>
-              <text>	#bootcamp:message/unlock/module/text	</text>
-              <voiceover>	vo_bc_hangar_module_investigated	</voiceover>
-            </data>
-          </nations>
-        </message>
-      </sequence>
-      <buttons></buttons>
-      <actions></actions>
-    </dialog>
-    <dialog>	ModuleBoughtDialog	  <type>	bootcampMessage	</type>
+    <window>	SubtitleModuleInvestigated	  <type>	bootcampSubtitle	</type>
       <sequence>
         <message>
           <data>
-            <icon>	../maps/icons/bootcamp/lines/bcEngine.png	</icon>
-            <preset>	GOLD	</preset>
-            <label>	#bootcamp:message/new/module/label	</label>
-            <text>	#bootcamp:message/new/module/text	</text>
+            <subtitle>	#bootcamp:subtitles/vo_bc_hangar_module_investigated	</subtitle>
+            <voiceover>	vo_bc_hangar_module_investigated	</voiceover>
+          </data>
+        </message>
+      </sequence>
+      <buttons>
+        <close>	NoResultsWindowCloseButton	</close>
+      </buttons>
+      <actions>
+        <click>	NoResultsWindowCloseButton	  <effects>
+            <activate>	NoResultsWindowClosed	</activate>
+          </effects>
+        </click>
+      </actions>
+    </window>
+    <window>	SubtitleModulePurchased	  <type>	bootcampSubtitle	</type>
+      <sequence>
+        <message>
+          <data>
+            <subtitle>	#bootcamp:subtitles/vo_bc_hangar_module_purchased	</subtitle>
             <voiceover>	vo_bc_hangar_module_purchased	</voiceover>
           </data>
         </message>
       </sequence>
-      <buttons></buttons>
-      <actions></actions>
-    </dialog>
+      <buttons>
+        <close>	NoResultsWindowCloseButton	</close>
+      </buttons>
+      <actions>
+        <click>	NoResultsWindowCloseButton	  <effects>
+            <activate>	NoResultsWindowClosed	</activate>
+          </effects>
+        </click>
+      </actions>
+    </window>
   </has-id>
   <vars>
+    <var-set>	EnabledHeaderMenuButtons	  <asList>
+        <asString>	settings	</asString>
+        <asString>	account	</asString>
+        <asString>	credits	</asString>
+      </asList>
+    </var-set>
     <var-set>	EnabledHangarMenuButtons_Initial	  <asList></asList>
     </var-set>
     <var-set>	EnabledHangarMenuButtons_AfterIntro	  <asList>

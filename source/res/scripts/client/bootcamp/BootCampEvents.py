@@ -11,7 +11,6 @@ class _BootCampEvents(object):
         self.onBootcampStarted = self._createEvent()
         self.onBootcampFinished = self._createEvent()
         self.onIntroVideoStop = self._createEvent()
-        self.onOutroVideoStop = self._createEvent()
         self.onBootcampSpaceLoaded = self._createEvent()
         self.onBootcampGoNext = self._createEvent()
         self.onUIStateChanged = self._createEvent()
@@ -26,9 +25,10 @@ class _BootCampEvents(object):
         self.onBCGUIComponentLifetime = self._createEvent()
         self.onBattleComponentVisibility = self._createEvent()
         self.onRequestBootcampMessageWindowClose = self._createEvent()
-        self.onBattleFinishAnimationComplete = self._createEvent()
+        self.hideGUIForWinMessage = self._createEvent()
         self.onGameplayChoice = self._createEvent()
-        self.onPostMortemSwitch = self._createEvent()
+        self.onHideSubtitle = self._createEvent()
+        self.onHighlightAdded = self._createEvent()
 
     def destroy(self):
         self.__manager.clear()

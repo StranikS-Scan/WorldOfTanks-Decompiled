@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/external_strings_utils.py
 import re
+import string
 import unicodedata
 from debug_utils import LOG_CURRENT_EXCEPTION
 from constants import CREDENTIALS_RESTRICTION, CREDENTIALS_RESTRICTION_SET
+from soft_exception import SoftException
 _MAX_NORMALIZED_NAME_BYTES = 96
 
 class TextRestrictionsBasic(object):
@@ -282,3 +284,16 @@ def _decode_utf8_len_byte(byte):
     if v >= 192:
         return 2
     return 1 if v < 127 else 0
+
+
+def strtobool(val):
+    val = string.lower(val)
+    if val in ('y', 'yes', 't', 'true', 'on', '1'):
+        return True
+    if val in ('n', 'no', 'f', 'false', 'off', '0'):
+        return False
+    raise InvalidStringValueException('invalid truth value %r' % (val,))
+
+
+class InvalidStringValueException(SoftException):
+    pass

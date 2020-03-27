@@ -224,7 +224,7 @@ class _StrongholdsItem(_SelectorItem):
         return False
 
     def _update(self, state):
-        self._isSelected = state.isInUnit(PREBATTLE_TYPE.EXTERNAL)
+        self._isSelected = state.isInUnit(PREBATTLE_TYPE.STRONGHOLD)
         if isStrongholdsEnabled() or self._isSelected:
             self._isDisabled = state.hasLockedState
         else:

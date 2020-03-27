@@ -253,6 +253,8 @@ class DamagePanel(DamagePanelMeta):
 
     def _switching(self, _):
         self.as_resetS()
+        if self.__isWheeledTech:
+            self.__isWheeledTech = False
         self.hideStatusImmediate()
 
     def _updateStun(self, stunInfo):

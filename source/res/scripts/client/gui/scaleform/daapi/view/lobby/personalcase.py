@@ -482,6 +482,7 @@ class PersonalCaseDataProvider(object):
         nativeVehicleCD = tankman.vehicleNativeDescr.type.compactDescr
         criteria = REQ_CRITERIA.NATIONS([tankman.nationID]) | REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.VEHICLE.OBSERVER
         criteria |= ~REQ_CRITERIA.VEHICLE.IS_CREW_LOCKED
+        criteria |= ~(REQ_CRITERIA.SECRET | ~REQ_CRITERIA.INVENTORY_OR_UNLOCKED)
         if not constants.IS_IGR_ENABLED:
             criteria |= ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
         if constants.IS_DEVELOPMENT:

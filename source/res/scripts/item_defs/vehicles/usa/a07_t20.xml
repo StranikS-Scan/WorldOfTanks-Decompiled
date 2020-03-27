@@ -2008,7 +2008,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_Gun_M1A1>	shared	  <maxAmmo>	70	</maxAmmo>
+        <_76mm_Gun_M1A1>	shared	  <maxAmmo>	85	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 0.394671 10 0.458333 6 0.541667 6 0.605329 10 1 10	</maxPitch>
@@ -2240,6 +2240,8 @@
         </gun>
         <gun>	_105mm_SPH_M4_L23	  <cost>	1500	</cost>
         </gun>
+        <vehicle>	A90_T69	  <cost>	118000	</cost>
+        </vehicle>
       </unlocks>
       <armor>
         <armor_1>	88.9	</armor_1>
@@ -2268,7 +2270,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.062	</invisibilityFactor>
       <guns>
-        <_76mm_Gun_M1A1>	shared	  <maxAmmo>	68	</maxAmmo>
+        <_76mm_Gun_M1A1>	shared	  <maxAmmo>	80	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 0.366894 10 0.430556 5 0.569444 5 0.633106 10 1 10	</maxPitch>
@@ -2417,7 +2419,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_76mm_Gun_M1A2>
-        <_105mm_SPH_M4_L23>	shared	  <maxAmmo>	36	</maxAmmo>
+        <_105mm_SPH_M4_L23>	shared	  <maxAmmo>	55	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 0.366894 10 0.430556 5 0.569444 5 0.633106 10 1 10	</maxPitch>

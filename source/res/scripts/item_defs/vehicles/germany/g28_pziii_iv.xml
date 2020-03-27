@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.368	</firePenalty>
   </invisibility>
-  <repairCost>	6.62	</repairCost>
+  <repairCost>	5.044	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
@@ -41,7 +41,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	13570	</weight>
-    <maxHealth>	336	</maxHealth>
+    <maxHealth>	504	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	150	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -1530,7 +1530,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3000	</weight>
-      <maxHealth>	84	</maxHealth>
+      <maxHealth>	96	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1548,6 +1548,7 @@
             <gun>	_75mm_KwK_40_L48	  <cost>	3400	</cost>
             </gun>
           </unlocks>
+          <maxAmmo>	130	</maxAmmo>
           <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1619,10 +1620,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_75mm_KwK_40_L43>
-        <_75mm_KwK_40_L48>	shared	  <unlocks>
-            <vehicle>	G87_VK3002DB_V1	  <cost>	26800	</cost>
-            </vehicle>
-          </unlocks>
+        <_75mm_KwK_40_L48>	shared	  <maxAmmo>	105	</maxAmmo>
           <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1778,7 +1776,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4000	</weight>
-      <maxHealth>	144	</maxHealth>
+      <maxHealth>	126	</maxHealth>
       <rotationSpeed>	53	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1797,6 +1795,7 @@
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <maxAmmo>	130	</maxAmmo>
           <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1873,6 +1872,7 @@
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <maxAmmo>	105	</maxAmmo>
           <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

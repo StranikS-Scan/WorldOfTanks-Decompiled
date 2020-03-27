@@ -23,7 +23,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.game_control.links import URLMacros
 from gui.impl import backport
 from gui.impl.dialogs import dialogs
-from gui.impl.dialogs.builders import ResSimpleDialogBuilder
+from gui.impl.dialogs.builders import ResSimpleDialogBuilder, ResPureDialogBuilder
 from gui.impl.gen import R
 from gui.impl.pub.dialog_window import DialogButtons
 from gui.prb_control import prbDispatcherProperty
@@ -108,9 +108,13 @@ class SessionStatsOverview(SessionStatsOverviewMeta):
         container = self.app.containerManager.getContainer(ViewTypes.VIEW)
         lobby = container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOBBY})
         timeToClear = time.gmtime(time_utils.ONE_DAY - time_utils.getServerRegionalTimeCurrentDay())
-        builder = ResSimpleDialogBuilder()
+        manualResetEnabled = self.__settingsController.getSettings()[SESSION_STATS.IS_NOT_NEEDED_RESET_STATS_EVERY_DAY]
+        if manualResetEnabled:
+            builder = ResPureDialogBuilder()
+        else:
+            builder = ResSimpleDialogBuilder()
+            builder.setMessageArgs([self.__timeToClearText(timeToClear)])
         builder.setMessagesAndButtons(R.strings.dialogs.sessionStats.confirmReset, btnDownSounds={DialogButtons.SUBMIT: R.sounds.session_stats_clear()})
-        builder.setMessageArgs([self.__timeToClearText(timeToClear)])
         result = yield await(dialogs.showSimple(builder.build(lobby)))
         if result:
             self.__resetStats()

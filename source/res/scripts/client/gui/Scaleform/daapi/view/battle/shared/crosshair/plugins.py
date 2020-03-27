@@ -896,6 +896,9 @@ class SiegeModePlugin(CrosshairPlugin):
             siegeState, _ = value
             self.__siegeState = siegeState
             self.__updateView()
+        elif stateID == VEHICLE_VIEW_STATE.SWITCHING:
+            self.__siegeState = _SIEGE_STATE.DISABLED
+            self.__updateView()
 
     def __updateView(self):
         vStateCtrl = self.sessionProvider.shared.vehicleState

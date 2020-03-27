@@ -183,6 +183,7 @@ def makeVehicleFormatter(includeInventoryFields=False):
     ownershipField = Field('ownership', _formatVehicleOwnership)
     nationChangeField = Field('nationChange', _formatVehicleNationChange)
     clanLockField = Field('clanLock', lambda i: i.clanLock)
+    isCollectibleField = Field('isCollectible', lambda i: i.isCollectible)
     fields = [idField,
      nameField,
      shortName,
@@ -207,7 +208,8 @@ def makeVehicleFormatter(includeInventoryFields=False):
      inHangarField,
      ownershipField,
      nationChangeField,
-     clanLockField]
+     clanLockField,
+     isCollectibleField]
     if includeInventoryFields:
         shellFormatter = makeShellFormatter(includeCount=True)
         shellsField = Field('shells', lambda i: [ shellFormatter.format(s) for s in i.shells ])

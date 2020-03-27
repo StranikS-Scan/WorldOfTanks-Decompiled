@@ -1,7 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/missions/daily_quests_view.py
-from math import floor
-import time
 import typing
 import logging
 from constants import PREMIUM_TYPE, PremiumConfigs, DAILY_QUESTS_CONFIG
@@ -34,7 +32,7 @@ if typing.TYPE_CHECKING:
     from typing import Optional, List
     from gui.impl.gen.view_models.common.missions.daily_quest_model import DailyQuestModel
     from gui.impl.gen.view_models.views.lobby.missions.epic_quest_model import EpicQuestModel
-    from gui.server_events.event_items import TokenQuest, Quest
+    from gui.server_events.event_items import Quest
     from frameworks.wulf.view.view_event import ViewEvent
     from frameworks.wulf.windows_system.window import Window
 _logger = logging.getLogger(__name__)
@@ -45,8 +43,6 @@ class DailyTabs(object):
 
 
 DEFAULT_DAILY_TAB = DailyTabs.QUESTS
-TEN_SECONDS = 10
-NUM_OF_COMMON_DAILY_QUESTS = 3
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def _isPremiumPlusAccount(itemsCache=None):
@@ -147,21 +143,21 @@ class DailyQuestsView(ViewImpl, ClientMainWindowStateWatcher):
         _logger.debug('DailyQuestsView::_updateDailyQuestModel')
         isEnabled = isDailyQuestsEnable()
         quests = sorted(self.eventsCache.getDailyQuests().values(), cmp=dailyQuestsSortFunc)
-        bonusQuests = settings.getNewCommonEvents([ q for q in quests if q.isBonus() ])
+        newBonusQuests = settings.getNewCommonEvents([ q for q in quests if q.isBonus() ])
         self._updateRerollEnabledFlag(model)
         with model.dailyQuests.transaction() as tx:
             tx.setIsEnabled(isEnabled)
             if not isEnabled:
                 return
-            if not fullUpdate and not needToUpdateQuestsInModel(quests + bonusQuests, tx.getQuests()):
+            if not fullUpdate and not needToUpdateQuestsInModel(quests + newBonusQuests, tx.getQuests()):
                 return
             self.__updateQuestsInModel(tx.getQuests(), quests)
             self.__updateMissionVisitedArray(tx.getMissionsCompletedVisited(), quests)
-            tx.setBonusMissionVisited(not bonusQuests)
+            tx.setBonusMissionVisited(not newBonusQuests)
 
     def _updateEpicQuestModel(self, model, fullUpdate=False):
         _logger.debug('DailyQuestsView::_updateEpicQuestModel')
-        epicQuest = first(self.eventsCache.getDailyEpicQuest().values())
+        epicQuest = self.eventsCache.getDailyEpicQuest()
         isEnabled = isEpicQuestEnabled() and epicQuest is not None
         with model.epicQuest.transaction() as tx:
             tx.setIsEnabled(isEnabled)
@@ -294,12 +290,13 @@ class DailyQuestsView(ViewImpl, ClientMainWindowStateWatcher):
         for seenQuest in seenQuests:
             self.eventsCache.questsProgress.markQuestProgressAsViewed(seenQuest.getID())
 
-        epicQuest = first(self.eventsCache.getDailyEpicQuest().values())
-        if epicQuest:
-            dqToken = first((token for token in epicQuest.accountReqs.getTokens() if token.isDailyQuest()))
-            if dqToken:
-                self.itemsCache.items.tokens.markTokenProgressAsViewed(dqToken.getID())
-        seenQuests.append(epicQuest)
+        if isEpicQuestEnabled():
+            epicQuest = self.eventsCache.getDailyEpicQuest()
+            if epicQuest:
+                seenQuests.append(epicQuest)
+                dqToken = first((token for token in epicQuest.accountReqs.getTokens() if token.isDailyQuest()))
+                if dqToken:
+                    self.itemsCache.items.tokens.markTokenProgressAsViewed(dqToken.getID())
         settings.visitEventsGUI(seenQuests)
         self.__updateMissionsNotification()
 
@@ -413,7 +410,3 @@ class DailyQuestsView(ViewImpl, ClientMainWindowStateWatcher):
             missionVisitedArray.addBool(missionCompletedVisited)
 
         missionVisitedArray.invalidate()
-
-    @staticmethod
-    def __getCurrentTimeStampInMilli():
-        return floor(time.time() * 1000)

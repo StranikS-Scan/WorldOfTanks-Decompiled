@@ -217,6 +217,7 @@ class REQ_CRITERIA(object):
     CUSTOM = staticmethod(lambda predicate: RequestCriteria(PredicateCondition(predicate)))
     HIDDEN = RequestCriteria(PredicateCondition(operator.attrgetter('isHidden')))
     SECRET = RequestCriteria(PredicateCondition(operator.attrgetter('isSecret')))
+    COLLECTIBLE = RequestCriteria(PredicateCondition(operator.attrgetter('isCollectible')))
     DISCLOSABLE = RequestCriteria(PredicateCondition(lambda item: item.inventoryCount > 0 or not item.isSecret))
     UNLOCKED = RequestCriteria(PredicateCondition(operator.attrgetter('isUnlocked')))
     REMOVABLE = RequestCriteria(PredicateCondition(operator.attrgetter('isRemovable')))
@@ -373,11 +374,6 @@ class ItemsRequester(IItemsRequester):
         self.__battlePass = BattlePassRequester()
         self.__itemsCache = defaultdict(dict)
         self.__brokenSyncAlreadyLoggedTypes = set()
-        self.__fittingItemRequesters = {self.__inventory,
-         self.__stats,
-         self.__shop,
-         self.__vehicleRotation,
-         self.__recycleBin}
         self.__vehCustomStateCache = defaultdict(dict)
 
     @property
@@ -549,9 +545,6 @@ class ItemsRequester(IItemsRequester):
 
     def onDisconnected(self):
         self.__tokens.onDisconnected()
-
-    def fini(self):
-        self.__fittingItemRequesters = {}
 
     def invalidateCache(self, diff=None):
         invalidate = defaultdict(set)
@@ -954,7 +947,8 @@ class ItemsRequester(IItemsRequester):
         if uid in container:
             return container[uid]
         else:
-            self.__checkFittingItemsSync(itemTypeIdx)
+            if not self.isSynced():
+                self.__logBrokenSync(itemTypeIdx)
             item = self.itemsFactory.createGuiItem(itemTypeIdx, *args, **kwargs)
             if item is not None:
                 container[uid] = item
@@ -1006,9 +1000,17 @@ class ItemsRequester(IItemsRequester):
         vehData = self.__inventory.getVehicleData(tmanData.vehicle)
         return {vehData.descriptor.type.compactDescr} if vehData is not None else set()
 
-    def __checkFittingItemsSync(self, itemTypeID):
-        unsyncedList = [ r.__class__.__name__ for r in self.__fittingItemRequesters if not r.isSynced() ]
-        if not unsyncedList or itemTypeID in self.__brokenSyncAlreadyLoggedTypes:
+    def __logBrokenSync(self, itemTypeID):
+        if itemTypeID in self.__brokenSyncAlreadyLoggedTypes:
             return
         self.__brokenSyncAlreadyLoggedTypes.add(itemTypeID)
+        requesters = (self.__stats,
+         self.__inventory,
+         self.__recycleBin,
+         self.__shop,
+         self.__dossiers,
+         self.__goodies,
+         self.__vehicleRotation,
+         self.ranked)
+        unsyncedList = [ r.__class__.__name__ for r in [ r for r in requesters if not r.isSynced() ] ]
         LOG_ERROR('Trying to create fitting item when requesters are not fully synced:', unsyncedList, stack=True)

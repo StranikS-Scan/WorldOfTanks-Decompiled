@@ -42,7 +42,8 @@ class BaseRewardWindowContent(ViewImpl):
      'dossier',
      'customizations',
      'tokens',
-     'goodies')
+     'goodies',
+     Currency.EVENT_COIN)
 
     def __init__(self, settings, ctx=None):
         super(BaseRewardWindowContent, self).__init__(settings)

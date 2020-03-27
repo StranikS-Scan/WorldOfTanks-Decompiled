@@ -6,6 +6,7 @@ from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 
 class HasVehiclesList(object):
+    _LIST_NAME = 'vehicles'
     VehicleData = namedtuple('VehicleData', 'name nation level type icon')
     itemsCache = dependency.descriptor(IItemsCache)
 
@@ -17,8 +18,9 @@ class HasVehiclesList(object):
 
         return map(lambda i: i._asdict(), sorted(result, cmp=self.__sortFunc))
 
-    def getVehiclesListTitle(self):
-        pass
+    @classmethod
+    def getVehiclesListTitle(cls):
+        return cls._LIST_NAME
 
     def _getVehiclesDescrsList(self):
         raise NotImplemented

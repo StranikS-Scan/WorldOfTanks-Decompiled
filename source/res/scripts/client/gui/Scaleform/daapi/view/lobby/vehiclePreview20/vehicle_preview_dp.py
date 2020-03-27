@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehiclePreview20/vehicle_preview_dp.py
 import logging
 import nations
-from gui.Scaleform import MENU
 from gui import GUI_NATIONS_ORDER_INDEX_REVERSED
+from gui.Scaleform import MENU
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -15,7 +15,8 @@ from gui.shared.gui_items import Vehicle
 from gui.shared.gui_items.items_actions import factory
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from gui.shared.utils.functions import makeTooltip
-from helpers import dependency, func_utils
+from gui.shared.utils import vehicle_collector_helper
+from helpers import dependency, func_utils, int2roman
 from helpers.i18n import makeString as _ms
 from helpers.time_utils import getTillTimeString
 from items_kit_helper import collapseItemsPack
@@ -93,7 +94,7 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
     __itemsCache = dependency.descriptor(IItemsCache)
 
     def getBuyType(self, vehicle):
-        return factory.BUY_VEHICLE if vehicle.isUnlocked else factory.UNLOCK_ITEM
+        return factory.BUY_VEHICLE if vehicle.isUnlocked or vehicle.isCollectible else factory.UNLOCK_ITEM
 
     def getBuyingPanelData(self, item, data=None, isHeroTank=False, itemsPack=None):
         isBuyingAvailable = not isHeroTank and (not item.isHidden or item.isRentable or item.isRestorePossible())
@@ -111,13 +112,14 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
          'buyButtonIcon': data.icon,
          'buyButtonIconAlign': data.iconAlign,
          'buyButtonTooltip': data.tooltip,
+         'isShowSpecialTooltip': data.isShowSpecial,
          'itemPrice': data.itemPrice,
          'isUnlock': data.isUnlock,
          'couponDiscount': 0,
          'showAction': data.isAction,
          'hasCompensation': compensationData is not None,
          'compensation': compensationData if compensationData is not None else {},
-         'showCannotResearchWarning': data.isUnlock and not data.isPrevItemsUnlock}
+         'warning': self.__getWarningInfo(data, item)}
         customOffer = self.__getCustomOfferData(data)
         if customOffer is not None:
             resultVO.update({'customOffer': customOffer})
@@ -136,12 +138,13 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
          'buyButtonIcon': data.icon,
          'buyButtonIconAlign': data.iconAlign,
          'buyButtonTooltip': data.tooltip,
+         'isShowSpecialTooltip': data.isShowSpecial,
          'itemPrice': data.itemPrice,
          'isUnlock': False,
          'showAction': data.isAction,
          'hasCompensation': compensationData is not None,
          'compensation': compensationData if compensationData is not None else {},
-         'showCannotResearchWarning': False}
+         'warning': ''}
         if data.customOffer is not None:
             resultVO.update({'customOffer': data.customOffer})
         return resultVO
@@ -158,12 +161,13 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
          'buyButtonIcon': data.icon,
          'buyButtonIconAlign': data.iconAlign,
          'buyButtonTooltip': data.tooltip,
+         'isShowSpecialTooltip': data.isShowSpecial,
          'itemPrice': data.itemPrice,
          'showAction': data.isAction,
          'actionTooltip': data.actionTooltip,
          'hasCompensation': False,
          'compensation': {},
-         'showCannotResearchWarning': False}
+         'warning': ''}
 
     def getOffersData(self, offers, activeID):
         return [ _createOfferVO(offer, offer.id == activeID) for offer in offers ]
@@ -248,3 +252,9 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
                     return text_styles.promoSubTitle(''.join((label, value)))
 
         return None
+
+    @staticmethod
+    def __getWarningInfo(data, item):
+        if data.isUnlock and not data.isPrevItemsUnlock:
+            return backport.text(R.strings.vehicle_preview.buyingPanel.notResearchedVehicleWarning())
+        return backport.text(R.strings.vehicle_preview.buyingPanel.collectible.notResearchedVehiclesWarning(), level=int2roman(item.level), nation=backport.text(R.strings.nations.dyn(item.nationName).genetiveCase())) if item.isCollectible and not vehicle_collector_helper.isAvailableForPurchase(item) else ''

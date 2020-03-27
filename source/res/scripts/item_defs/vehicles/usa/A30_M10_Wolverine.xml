@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.468	</firePenalty>
   </invisibility>
-  <repairCost>	6.43	</repairCost>
+  <repairCost>	4.925	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
@@ -45,7 +45,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_3	</primaryArmor>
     <weight>	14800	</weight>
-    <maxHealth>	272	</maxHealth>
+    <maxHealth>	376	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	170	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -2029,7 +2029,7 @@
       </armor>
       <primaryArmor>	armor_7 armor_3 armor_4	</primaryArmor>
       <weight>	3700	</weight>
-      <maxHealth>	68	</maxHealth>
+      <maxHealth>	69	</maxHealth>
       <rotationSpeed>	17	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2043,7 +2043,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_AT_Gun_M7_L50>	shared	  <maxAmmo>	54	</maxAmmo>
+        <_75mm_AT_Gun_M7_L50>	shared	  <maxAmmo>	95	</maxAmmo>
           <unlocks>
             <gun>	_76mm_AT_Gun_M1A1	  <cost>	4600	</cost>
             </gun>
@@ -2132,7 +2132,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_AT_Gun_M7_L50>
-        <_76mm_AT_Gun_M1A1>	shared	  <maxAmmo>	54	</maxAmmo>
+        <_76mm_AT_Gun_M1A1>	shared	  <maxAmmo>	80	</maxAmmo>
           <reloadTime>	3.7	</reloadTime>
           <unlocks>
             <gun>	_76mm_AT_Gun_M1A2	  <cost>	5800	</cost>
@@ -2212,7 +2212,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_76mm_AT_Gun_M1A1>
-        <_76mm_AT_Gun_M1A2>	shared	  <maxAmmo>	54	</maxAmmo>
+        <_76mm_AT_Gun_M1A2>	shared	  <maxAmmo>	65	</maxAmmo>
           <reloadTime>	3.3	</reloadTime>
           <unlocks>
             <turret>	Turret_2_M10_Wolverine	  <cost>	2100	</cost>
@@ -2297,7 +2297,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_76mm_AT_Gun_M1A2>
-        <_105mm_AT_SPH_M4_L23>	shared	  <maxAmmo>	30	</maxAmmo>
+        <_105mm_AT_SPH_M4_L23>	shared	  <maxAmmo>	36	</maxAmmo>
           <reloadTime>	7.9	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.16	</turretRotation>
@@ -2469,7 +2469,7 @@
       </armor>
       <primaryArmor>	armor_11 armor_3 armor_4	</primaryArmor>
       <weight>	4400	</weight>
-      <maxHealth>	88	</maxHealth>
+      <maxHealth>	94	</maxHealth>
       <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2483,7 +2483,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_AT_Gun_M7_L50>	shared	  <maxAmmo>	54	</maxAmmo>
+        <_75mm_AT_Gun_M7_L50>	shared	  <maxAmmo>	95	</maxAmmo>
           <reloadTime>	4.1	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
@@ -2564,7 +2564,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_AT_Gun_M7_L50>
-        <_76mm_AT_Gun_M1A1>	shared	  <maxAmmo>	54	</maxAmmo>
+        <_76mm_AT_Gun_M1A1>	shared	  <maxAmmo>	80	</maxAmmo>
           <reloadTime>	3.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
@@ -2645,7 +2645,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_76mm_AT_Gun_M1A1>
-        <_76mm_AT_Gun_M1A2>	shared	  <maxAmmo>	54	</maxAmmo>
+        <_76mm_AT_Gun_M1A2>	shared	  <maxAmmo>	65	</maxAmmo>
           <reloadTime>	3.2	</reloadTime>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <armor>
@@ -2721,7 +2721,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_76mm_AT_Gun_M1A2>
-        <_105mm_AT_SPH_M4_L23>	shared	  <maxAmmo>	30	</maxAmmo>
+        <_105mm_AT_SPH_M4_L23>	shared	  <maxAmmo>	36	</maxAmmo>
           <reloadTime>	7.8	</reloadTime>
           <armor>
             <armor_1>	57.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>

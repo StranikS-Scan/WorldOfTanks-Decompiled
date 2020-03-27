@@ -18,7 +18,7 @@ from constants import PREBATTLE_TYPE_NAMES
 from bootcamp.aop import common
 from soft_exception import SoftException
 _MS_IN_SEC = 1000
-_BC_MESSAGE_VIEW_TYPE = ViewTypes.OVERLAY
+_BC_MESSAGE_VIEW_TYPE = ViewTypes.TOP_WINDOW
 
 def weave(weaver, stateInGarage):
     weaver.weave(pointcut=_PointcutBrowserControllerDisable)

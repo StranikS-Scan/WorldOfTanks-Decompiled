@@ -3,6 +3,7 @@
 import itertools
 import logging
 from collections import namedtuple, defaultdict
+import typing
 import constants
 import nations
 from dossiers2.ui import layouts
@@ -443,7 +444,7 @@ class _AchievementsBlock(_StatsBlockAbstract):
         for record in layouts.NEAREST_ACHIEVEMENTS:
             if self.__isAchieveValid(*record):
                 a = self.getAchievement(record)
-                if a is not None and a.isValid() and not a.isDone() and a.isInNear():
+                if a is not None and a.isValid() and not a.isDone() and a.isInNear() and not a.isHidden():
                     uncompletedAchievements.append(a)
 
         return tuple(sorted(uncompletedAchievements, cmp=_nearestComparator, reverse=True)[:_NEAREST_ACHIEVEMENTS_COUNT])

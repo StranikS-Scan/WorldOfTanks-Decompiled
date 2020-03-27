@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.378	</firePenalty>
   </invisibility>
-  <repairCost>	5.00	</repairCost>
+  <repairCost>	3.81	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
@@ -45,7 +45,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_7 armor_4	</primaryArmor>
     <weight>	5130	</weight>
-    <maxHealth>	352	</maxHealth>
+    <maxHealth>	504	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	150	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -1482,7 +1482,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4700	</weight>
-      <maxHealth>	88	</maxHealth>
+      <maxHealth>	96	</maxHealth>
       <rotationSpeed>	36	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1496,7 +1496,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_57mm_Gun_Shin>	shared	  <maxAmmo>	80	</maxAmmo>
+        <_57mm_Gun_Shin>	shared	  <maxAmmo>	120	</maxAmmo>
           <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1573,7 +1573,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_57mm_Gun_Shin>
-        <_75mm_Gun_Type_99>	shared	  <maxAmmo>	63	</maxAmmo>
+        <_75mm_Gun_Type_99>	shared	  <maxAmmo>	95	</maxAmmo>
           <unlocks>
             <turret>	Turret_2_Chi_Nu	  <cost>	2500	</cost>
             </turret>
@@ -1763,7 +1763,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5000	</weight>
-      <maxHealth>	128	</maxHealth>
+      <maxHealth>	126	</maxHealth>
       <rotationSpeed>	36	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1778,7 +1778,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.973	</invisibilityFactor>
       <guns>
-        <_57mm_Gun_Shin>	shared	  <maxAmmo>	90	</maxAmmo>
+        <_57mm_Gun_Shin>	shared	  <maxAmmo>	135	</maxAmmo>
           <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1855,7 +1855,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_57mm_Gun_Shin>
-        <_75mm_Gun_Type_99>	shared	  <maxAmmo>	70	</maxAmmo>
+        <_75mm_Gun_Type_99>	shared	  <maxAmmo>	105	</maxAmmo>
           <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1932,7 +1932,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_Gun_Type_99>
-        <_75mm_Gun_Type3>	shared	  <maxAmmo>	70	</maxAmmo>
+        <_75mm_Gun_Type3>	shared	  <maxAmmo>	85	</maxAmmo>
           <unlocks>
             <gun>	_75mm_Gun_Type5	  <cost>	3800	</cost>
             </gun>
@@ -2014,8 +2014,10 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_Gun_Type3>
-        <_75mm_Gun_Type5>	shared	  <maxAmmo>	52	</maxAmmo>
+        <_75mm_Gun_Type5>	shared	  <maxAmmo>	60	</maxAmmo>
           <unlocks>
+            <vehicle>	J24_Mi_To_130_tons	  <cost>	26950	</cost>
+            </vehicle>
             <vehicle>	J10_Chi_To	  <cost>	31150	</cost>
             </vehicle>
           </unlocks>

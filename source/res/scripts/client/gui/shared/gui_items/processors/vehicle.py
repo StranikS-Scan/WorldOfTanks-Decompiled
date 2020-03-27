@@ -79,7 +79,10 @@ class VehicleBuyer(VehicleReceiveProcessor):
         super(VehicleBuyer, self).__init__(vehicle, buyShell=buyShell, crewType=crewType)
 
     def _getPluginsList(self):
-        return (proc_plugs.MoneyValidator(self.price), proc_plugs.VehicleSlotsConfirmator(self.showNotEnoughSlotMsg and not self.buySlot), proc_plugs.VehicleFreeLimitConfirmator(self.item, self.crewType))
+        return (proc_plugs.MoneyValidator(self.price),
+         proc_plugs.VehicleSlotsConfirmator(self.showNotEnoughSlotMsg and not self.buySlot),
+         proc_plugs.VehicleFreeLimitConfirmator(self.item, self.crewType),
+         proc_plugs.CollectibleVehiclesValidator(self.item.intCD))
 
     def _getPrice(self):
         return getCrewAndShellsSumPrice(self.item.buyPrices.itemPrice.price, self.item, self.crewType, self.buyShell)

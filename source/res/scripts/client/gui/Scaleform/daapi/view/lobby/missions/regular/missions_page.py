@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/missions_page.py
 import weakref
 from collections import namedtuple
+import typing
 from adisp import process, async as adispasync
 from async import async, await
 from items import getTypeOfCompactDescr
@@ -44,6 +45,9 @@ from skeletons.gui.game_control import IMarathonEventsController, IGameSessionCo
 from skeletons.gui.linkedset import ILinkedSetController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+if typing.TYPE_CHECKING:
+    from typing import List, Union
+    from gui.server_events.event_items import DailyEpicTokenQuest, DailyQuest, PremiumQuest
 TabData = namedtuple('TabData', ('alias',
  'linkage',
  'tooltip',
@@ -346,9 +350,11 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
              QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS):
                 newEvents = []
                 if alias == QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS:
-                    quests = self.eventsCache.getAllAvailableDailyQuests()
-                    if quests:
-                        newEvents = settings.getNewCommonEvents(quests)
+                    availableDailyQuests = []
+                    availableDailyQuests.extend(self.eventsCache.getDailyQuests(includeEpic=True).values())
+                    availableDailyQuests.extend(self.eventsCache.getPremiumQuests(lambda q: q.isAvailable().isValid).values())
+                    if availableDailyQuests:
+                        newEvents = settings.getNewCommonEvents(availableDailyQuests)
                 elif self.currentTab is not None and self.__currentTabAlias == alias:
                     suitableEvents = [ quest for quest in self.currentTab.getSuitableEvents() if not isLinkedSet(quest.getGroupID()) or quest.isAvailable().isValid ]
                     newEvents = settings.getNewCommonEvents(suitableEvents)

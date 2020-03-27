@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.474	</firePenalty>
   </invisibility>
-  <repairCost>	3.15	</repairCost>
+  <repairCost>	1.779	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
@@ -41,7 +41,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	6000	</weight>
-    <maxHealth>	160	</maxHealth>
+    <maxHealth>	340	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	100	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -1547,7 +1547,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	800	</weight>
-      <maxHealth>	40	</maxHealth>
+      <maxHealth>	65	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -1561,7 +1561,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_KwK_L46>	shared	  <maxAmmo>	156	</maxAmmo>
+        <_37mm_KwK_L46>	shared	  <maxAmmo>	360	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -1627,7 +1627,7 @@
             <turret>	PzIII_Ausf_C	  <cost>	400	</cost>
             </turret>
           </unlocks>
-          <maxAmmo>	400	</maxAmmo>
+          <maxAmmo>	800	</maxAmmo>
           <reloadTime>	3.9	</reloadTime>
           <aimingTime>	1.6	</aimingTime>
           <shotDispersionRadius>	0.57	</shotDispersionRadius>
@@ -1787,7 +1787,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2200	</weight>
-      <maxHealth>	80	</maxHealth>
+      <maxHealth>	85	</maxHealth>
       <rotationSpeed>	35	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -1801,7 +1801,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_KwK_L46>	shared	  <maxAmmo>	156	</maxAmmo>
+        <_37mm_KwK_L46>	shared	  <maxAmmo>	360	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -1864,7 +1864,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_37mm_KwK_L46>
-        <_20mm_KwK_38_L55>	shared	  <maxAmmo>	400	</maxAmmo>
+        <_20mm_KwK_38_L55>	shared	  <maxAmmo>	800	</maxAmmo>
           <reloadTime>	3.4	</reloadTime>
           <aimingTime>	1.4	</aimingTime>
           <shotDispersionRadius>	0.57	</shotDispersionRadius>
@@ -1925,11 +1925,9 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_20mm_KwK_38_L55>
-        <_50mm_KwK_38_L42>	shared	  <maxAmmo>	76	</maxAmmo>
+        <_50mm_KwK_38_L42>	shared	  <maxAmmo>	135	</maxAmmo>
           <unlocks>
-            <vehicle>	G90_DW_II	  <cost>	5020	</cost>
-            </vehicle>
-            <vehicle>	G83_Pz_IV_AusfA	  <cost>	1250	</cost>
+            <vehicle>	G101_StuG_III	  <cost>	3800	</cost>
             </vehicle>
           </unlocks>
           <pitchLimits>
@@ -1993,7 +1991,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_50mm_KwK_38_L42>
-        <_20mm_Flak_38_L112>	shared	  <maxAmmo>	400	</maxAmmo>
+        <_20mm_Flak_38_L112>	shared	  <maxAmmo>	800	</maxAmmo>
           <aimingTime>	1.4	</aimingTime>
           <reloadTime>	3.4	</reloadTime>
           <pitchLimits>

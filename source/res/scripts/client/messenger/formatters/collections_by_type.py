@@ -4,7 +4,8 @@ from chat_shared import SYS_MESSAGE_TYPE as _SM_TYPE
 from messenger.formatters import service_channel as _sc
 from messenger.formatters import token_quest_subformatters
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
-_TOKEN_QUEST_SUB_FORMATTERS = (token_quest_subformatters.RecruitQuestsFormatter(),
+_TOKEN_QUEST_SUB_FORMATTERS = (token_quest_subformatters.LootBoxTokenQuestFormatter(),
+ token_quest_subformatters.RecruitQuestsFormatter(),
  token_quest_subformatters.FrontlineExchangeQuestFormatter(),
  token_quest_subformatters.FrontlineRewardQuestFormatter(),
  token_quest_subformatters.RankedSeasonTokenQuestFormatter(),
@@ -66,7 +67,8 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.enhancementsWiped.index(): _sc.EnhancementsWipedFormatter(),
  _SM_TYPE.battlePassReward.index(): _sc.BattlePassRewardFormatter(),
  _SM_TYPE.battlePassReachedCap.index(): _sc.BattlePassReachedCapFormatter(),
- _SM_TYPE.badges.index(): _sc.BadgesFormatter()}
+ _SM_TYPE.badges.index(): _sc.BadgesFormatter(),
+ _SM_TYPE.collectibleVehiclesUnlocked.index(): _sc.CollectibleVehiclesUnlockedFormatter()}
 CLIENT_FORMATTERS = {SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE: _sc.ClientSysMessageFormatter(),
  SCH_CLIENT_MSG_TYPE.PREMIUM_ACCOUNT_EXPIRY_MSG: _sc.PremiumAccountExpiryFormatter(),
  SCH_CLIENT_MSG_TYPE.AOGAS_NOTIFY_TYPE: _sc.AOGASNotifyFormatter(),

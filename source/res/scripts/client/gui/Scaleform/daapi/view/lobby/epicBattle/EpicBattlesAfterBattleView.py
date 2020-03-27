@@ -3,7 +3,7 @@
 import SoundGroups
 from constants import EPIC_ABILITY_PTS_NAME
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_meta_level_icon import getEpicMetaIconVODict
-from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import FRONTLINE_LEVEL_TOKEN_BASE
+from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import FRONTLINE_LEVEL_TOKEN_BASE, FRONTLINE_PROGRESSION_FINISH_TOKEN
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import EpicCurtailingAwardsComposer
 from gui.Scaleform.daapi.view.meta.EpicBattlesAfterBattleViewMeta import EpicBattlesAfterBattleViewMeta
 from gui.impl import backport
@@ -164,19 +164,15 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         allQuests = self.__eventsCache.getAllQuests()
         currentLevelQuest = allQuests.get(_LEVELUP_TOKEN_TEMPLATE % level, None)
         if currentLevelQuest and questsProgressData:
-            bonuses = sum([ allQuests.get(q).getBonuses() for q in questsProgressData if FRONTLINE_LEVEL_TOKEN_BASE in q ], [ self.__getAbilityPointsRewardBonus(q.split(FRONTLINE_LEVEL_TOKEN_BASE)[1]) for q in questsProgressData if FRONTLINE_LEVEL_TOKEN_BASE in q ])
+            bonuses = sum([ allQuests.get(q).getBonuses() for q in questsProgressData if FRONTLINE_LEVEL_TOKEN_BASE in q or FRONTLINE_PROGRESSION_FINISH_TOKEN in q ], self.__getAbilityPointsRewardBonus(level))
             bonuses = _AccumulateBonuses(bonuses)
         else:
             bonuses = []
         return bonuses
 
     def __getAbilityPointsRewardBonus(self, level):
-        level = int(level)
-        ptsCount = 1
         abilityPts = self.__lobbyCtx.getServerSettings().epicMetaGame.metaLevel['abilityPointsForLevel'] or []
-        if level <= len(abilityPts):
-            ptsCount = abilityPts[level - 1]
-        return EpicAbilityPtsBonus(name=EPIC_ABILITY_PTS_NAME, value=ptsCount)
+        return [EpicAbilityPtsBonus(name=EPIC_ABILITY_PTS_NAME, value=abilityPts[level - 1])] if level and level <= len(abilityPts) else []
 
     def __getProgress(self, curLevel, curFamePoints, prevLevel, prevFamePoints, maxLevel, boostedXP):
         getPointsProgressForLevel = self.__epicMetaGameCtrl.getPointsProgressForLevel

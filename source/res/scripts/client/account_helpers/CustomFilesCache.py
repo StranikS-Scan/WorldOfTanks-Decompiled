@@ -12,9 +12,10 @@ from functools import partial
 from Queue import Queue
 from pickle import HIGHEST_PROTOCOL as HIGHEST_PICKLE_PROTOCOL, UnpicklingError
 import BigWorld
-from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
+from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_DEBUG_DEV
 from helpers import getFullClientVersion
 from soft_exception import SoftException
+from helpers import isPlayerAccount
 INFINITE_QUEUE_SIZE = 0
 _MIN_LIFE_TIME = 900
 _MAX_LIFE_TIME = 86400
@@ -531,8 +532,10 @@ class CustomFilesCache(object):
 
     def __onWriteCache(self, name, packet):
         try:
+            if not isPlayerAccount():
+                LOG_DEBUG_DEV('Trying to write cache record to db while in battle')
             startTime = time.time()
-            if self.__db is not None:
+            if self.__db is not None and isPlayerAccount():
                 self.__db[name] = packet
                 self.__db.sync()
             _LOG_EXECUTING_TIME(startTime, '__onWriteCache', 5.0)

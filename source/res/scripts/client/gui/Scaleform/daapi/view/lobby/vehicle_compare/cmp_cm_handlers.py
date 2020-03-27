@@ -8,16 +8,19 @@ from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.ingame_shop import canBuyGoldForVehicleThroughWeb
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
+from gui.shared.utils.vehicle_collector_helper import isAvailableForPurchase
 from helpers import dependency
 from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.lobby_context import ILobbyContext
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
 
-class _OPT_IDS(object):
+class _OptIds(object):
     COPY = 'copy'
 
 
 class CommonContextMenuHandler(SimpleVehicleCMHandler):
+    _lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, cmProxy, ctx=None, handlers=None):
         self.__itemIndexInBasket = -1
@@ -68,7 +71,7 @@ class CommonContextMenuHandler(SimpleVehicleCMHandler):
              'isNew': isNew}))
         if vehicle.isPurchased:
             options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.SELL), {'enabled': vehicle.canSell}))
-        elif vehicle.isUnlocked:
+        elif self.__isPurchaseEnabled(vehicle):
             items = self.itemsCache.items
             if vehicle.isRestoreAvailable():
                 label = MENU.CONTEXTMENU_RESTORE
@@ -76,12 +79,14 @@ class CommonContextMenuHandler(SimpleVehicleCMHandler):
                 label = MENU.CONTEXTMENU_BUYORTRADEIN
             else:
                 label = MENU.CONTEXTMENU_BUY
-            if canBuyGoldForVehicleThroughWeb(vehicle):
+            if vehicle.isCollectible and not self.__isCollectibleVehicleEnabled(vehicle):
+                btnEnabled = False
+            elif canBuyGoldForVehicleThroughWeb(vehicle):
                 btnEnabled = True
             else:
                 btnEnabled = vehicle.mayObtainWithMoneyExchange(items.stats.money, items.shop.exchangeRate)
             options.append(self._makeItem(VEHICLE.BUY, label, {'enabled': btnEnabled}))
-        else:
+        elif self.__isResearchEnabled(vehicle):
             isNextToUnlock, isXpEnough = g_techTreeDP.isVehicleAvailableToUnlock(self.vehCD)
             isAvailableToUnlock = isNextToUnlock and isXpEnough
             options.append(self._makeItem(VEHICLE.RESEARCH, MENU.contextmenu(VEHICLE.RESEARCH), {'enabled': isAvailableToUnlock}))
@@ -99,9 +104,20 @@ class CommonContextMenuHandler(SimpleVehicleCMHandler):
     def _initFlashValues(self, ctx):
         self.vehCD = int(ctx.id)
 
+    def __isCollectibleVehicleEnabled(self, vehicle):
+        return self._lobbyContext.getServerSettings().isCollectorVehicleEnabled() and isAvailableForPurchase(vehicle)
+
     @classmethod
     def __getVehicle(cls, intCD):
         return cls.itemsCache.items.getItemByCD(intCD)
+
+    @staticmethod
+    def __isResearchEnabled(vehicle):
+        return not vehicle.isCollectible
+
+    @staticmethod
+    def __isPurchaseEnabled(vehicle):
+        return vehicle.isUnlocked or vehicle.isCollectible
 
 
 class VehicleCompareContextMenuHandler(CommonContextMenuHandler):
@@ -109,14 +125,14 @@ class VehicleCompareContextMenuHandler(CommonContextMenuHandler):
 
     def __init__(self, cmProxy, ctx=None):
         handlers = {VEHICLE.STATS: 'showVehicleStats',
-         _OPT_IDS.COPY: 'copyComparedVehicle'}
+         _OptIds.COPY: 'copyComparedVehicle'}
         super(VehicleCompareContextMenuHandler, self).__init__(cmProxy, ctx, handlers)
 
     def copyComparedVehicle(self):
         self.comparisonBasket.cloneVehicle(self.__itemIndexInBasket)
 
     def _manageStartOptions(self, options, vehicle):
-        options.append(self._makeItem(_OPT_IDS.COPY, VEH_COMPARE.MENU_CLONEFORCOMPARE, {'enabled': not self.comparisonBasket.isFull()}))
+        options.append(self._makeItem(_OptIds.COPY, VEH_COMPARE.MENU_CLONEFORCOMPARE, {'enabled': not self.comparisonBasket.isFull()}))
         if vehicle.isInInventory:
             options.append(self._makeItem(VEHICLE.SELECT, VEH_COMPARE.VEHICLECOMPAREVIEW_TOHANGAR))
         elif vehicle.isPreviewAllowed():

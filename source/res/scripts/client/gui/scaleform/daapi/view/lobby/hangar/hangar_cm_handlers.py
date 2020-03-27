@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/hangar_cm_handlers.py
+from logging import getLogger
 from CurrentVehicle import g_currentVehicle
 from adisp import process
 from constants import GameSeasonType, RentType
-from debug_utils import LOG_ERROR
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getTradeInUrl
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
@@ -20,9 +20,11 @@ from gui.shared.gui_items.processors.vehicle import VehicleFavoriteProcessor
 from gui.shared.utils import decorators
 from helpers import dependency
 from skeletons.gui.game_control import IVehicleComparisonBasket, IEpicBattleMetaGameController, ITradeInController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
+_logger = getLogger(__name__)
 
 class CREW(object):
     PERSONAL_CASE = 'personalCase'
@@ -56,6 +58,7 @@ class VEHICLE(object):
     COMPARE = 'compare'
     BLUEPRINT = 'blueprint'
     NATION_CHANGE = 'nationChange'
+    GO_TO_COLLECTION = 'goToCollection'
 
 
 class CrewContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
@@ -155,6 +158,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
     _comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
     _epicController = dependency.descriptor(IEpicBattleMetaGameController)
     _tradeInController = dependency.descriptor(ITradeInController)
+    _lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, cmProxy, ctx=None):
         super(VehicleContextMenuHandler, self).__init__(cmProxy, ctx, {VEHICLE.EXCHANGE: 'showVehicleExchange',
@@ -167,7 +171,8 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
          VEHICLE.BUY: 'buyVehicle',
          VEHICLE.COMPARE: 'compareVehicle',
          VEHICLE.RENEW: 'renewRentVehicle',
-         VEHICLE.NATION_CHANGE: 'changeVehicleNation'})
+         VEHICLE.NATION_CHANGE: 'changeVehicleNation',
+         VEHICLE.GO_TO_COLLECTION: 'goToCollection'})
 
     @prbDispatcherProperty
     def prbDispatcher(self):
@@ -184,7 +189,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
         if vehicle is not None:
             shared_events.showResearchView(vehicle.intCD)
         else:
-            LOG_ERROR("Can't go to Research because id for current vehicle is None")
+            _logger.error('Can not go to Research because id for current vehicle is None')
         return
 
     def showVehicleExchange(self):
@@ -207,6 +212,10 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
 
     def changeVehicleNation(self):
         ItemsActionsFactory.doAction(ItemsActionsFactory.CHANGE_NATION, self.vehCD)
+
+    def goToCollection(self):
+        vehicle = self.itemsCache.items.getVehicle(self.vehInvID)
+        shared_events.showCollectibleVehicles(vehicle.nationID)
 
     def _initFlashValues(self, ctx):
         self.vehInvID = int(ctx.inventoryId)
@@ -247,6 +256,8 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                     isNavigationEnabled = True
                 if not vehicle.isOnlyForEpicBattles:
                     options.append(self._makeItem(VEHICLE.RESEARCH, MENU.contextmenu(VEHICLE.RESEARCH), {'enabled': isNavigationEnabled}))
+                if vehicle.isCollectible:
+                    options.append(self._makeItem(VEHICLE.GO_TO_COLLECTION, MENU.contextmenu(VEHICLE.GO_TO_COLLECTION), {'enabled': self._lobbyContext.getServerSettings().isCollectorVehicleEnabled()}))
                 if vehicle.hasNationGroup:
                     isNew = not AccountSettings.getSettings(NATION_CHANGE_VIEWED)
                     options.append(self._makeItem(VEHICLE.NATION_CHANGE, MENU.CONTEXTMENU_NATIONCHANGE, {'enabled': vehicle.isNationChangeAvailable,
@@ -277,5 +288,5 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
         if vehicle is not None:
             result = yield VehicleFavoriteProcessor(vehicle, bool(isFavorite)).request()
             if not result.success:
-                LOG_ERROR('Cannot set selected vehicle as favorite due to following error: ', result.userMsg)
+                _logger.error('Cannot set selected vehicle as favorite due to following error: %s', result.userMsg)
         return

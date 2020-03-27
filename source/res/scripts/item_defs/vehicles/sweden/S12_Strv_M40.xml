@@ -16,7 +16,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.491	</firePenalty>
   </invisibility>
-  <repairCost>	3.5	</repairCost>
+  <repairCost>	1.963	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
@@ -37,7 +37,7 @@
     </armor>
     <primaryArmor>	armor_2 armor_3 armor_3	</primaryArmor>
     <weight>	4976	</weight>
-    <maxHealth>	160	</maxHealth>
+    <maxHealth>	328	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	100	</maxHealth>
       <maxRegenHealth>	80	</maxRegenHealth>
@@ -775,6 +775,10 @@
       <tags></tags>
       <level>	3	</level>
       <price>	1940	</price>
+      <unlocks>
+        <vehicle>	S19_Sav_M43	  <cost>	4170	</cost>
+        </vehicle>
+      </unlocks>
       <armor>
         <leftTrack>	10	</leftTrack>
         <rightTrack>	10	</rightTrack>
@@ -1457,7 +1461,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1633	</weight>
-      <maxHealth>	40	</maxHealth>
+      <maxHealth>	62	</maxHealth>
       <rotationSpeed>	35	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -1471,7 +1475,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_kan_m_38_strv>	shared	  <maxAmmo>	100	</maxAmmo>
+        <_37mm_kan_m_38_strv>	shared	  <maxAmmo>	200	</maxAmmo>
           <unlocks>
             <gun>	_37mm_kan_m_38_49_strv	  <cost>	1050	</cost>
             </gun>
@@ -1537,7 +1541,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_37mm_kan_m_38_strv>
-        <_37mm_kan_m_38_49_strv>	shared	  <maxAmmo>	100	</maxAmmo>
+        <_37mm_kan_m_38_49_strv>	shared	  <maxAmmo>	175	</maxAmmo>
           <unlocks>
             <turret>	Turret_2_S12_Strv_M40	  <cost>	380	</cost>
             </turret>
@@ -1709,7 +1713,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2000	</weight>
-      <maxHealth>	70	</maxHealth>
+      <maxHealth>	82	</maxHealth>
       <rotationSpeed>	37	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -1723,7 +1727,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_kan_m_38_strv>	shared	  <maxAmmo>	100	</maxAmmo>
+        <_37mm_kan_m_38_strv>	shared	  <maxAmmo>	200	</maxAmmo>
           <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1786,7 +1790,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_37mm_kan_m_38_strv>
-        <_37mm_kan_m_38_49_strv>	shared	  <maxAmmo>	100	</maxAmmo>
+        <_37mm_kan_m_38_49_strv>	shared	  <maxAmmo>	175	</maxAmmo>
           <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

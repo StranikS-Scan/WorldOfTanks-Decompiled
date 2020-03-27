@@ -16,10 +16,6 @@ class IGuiLoader(object):
     def systemLocale(self):
         raise NotImplementedError
 
-    @property
-    def implTypeMask(self):
-        raise NotImplementedError
-
     def init(self):
         raise NotImplementedError
 

@@ -2,14 +2,21 @@
 # Embedded file name: scripts/client/bootcamp/hints/HintsShoot.py
 import time
 import math
+import weakref
 import TriggersManager
 import Math
 import BigWorld
+import aih_constants
+from AvatarInputHandler import gun_marker_ctrl
 from bootcamp.BootcampConstants import HINT_TYPE
 from bootcamp_shared import BOOTCAMP_BATTLE_ACTION
 from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP
 from HintsBase import HINT_COMMAND, HintBase
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework import ViewTypes
+from gui.Scaleform.framework.entities.View import ViewKey
 from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 
 class HintSniper(HintBase, TriggersManager.ITriggerListener):
@@ -111,6 +118,12 @@ class HintAdvancedSniper(HintBase, TriggersManager.ITriggerListener):
     STATE_VEHICLE_KILLED = 4
     STATE_EXIT_SNIPER_MODE = 5
     STATE_INACTIVE = 6
+    _PIERCING_CHANCE_HINT_HIDE_VALUE = ''
+    _SHOT_RESULT_TO_PIERCING_CHANCE_HINT = {aih_constants.SHOT_RESULT.UNDEFINED: _PIERCING_CHANCE_HINT_HIDE_VALUE,
+     aih_constants.SHOT_RESULT.NOT_PIERCED: 'low',
+     aih_constants.SHOT_RESULT.LITTLE_PIERCED: _PIERCING_CHANCE_HINT_HIDE_VALUE,
+     aih_constants.SHOT_RESULT.GREAT_PIERCED: 'high'}
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     @property
     def message(self):
@@ -147,6 +160,9 @@ class HintAdvancedSniper(HintBase, TriggersManager.ITriggerListener):
         self.__voiceoverEnterSniper = params['enter_voiceover']
         self.__voiceoverExitSniper = params['exit_voiceover']
         self.__voiceoverWeakPoints = params['weak_points_voiceover']
+        self.__isShotResultHintActive = False
+        self.__currentShotResultHint = self._PIERCING_CHANCE_HINT_HIDE_VALUE
+        self.__topHintRef = lambda : None
         return
 
     def start(self):
@@ -156,12 +172,49 @@ class HintAdvancedSniper(HintBase, TriggersManager.ITriggerListener):
         self.cooldownAfter = self.__timeBetween
         self.__sniperTriggerId = TriggersManager.g_manager.addTrigger(TriggersManager.TRIGGER_TYPE.SNIPER_MODE)
         TriggersManager.g_manager.addListener(self)
+        self._avatar.guiSessionProvider.shared.crosshair.onGunMarkerStateChanged += self.__onGunMarkerStateChanged
+        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
 
     def stop(self):
         self._state = HintAdvancedSniper.STATE_INACTIVE
         if TriggersManager.g_manager is not None:
             TriggersManager.g_manager.delTrigger(self.__sniperTriggerId)
             TriggersManager.g_manager.delListener(self)
+        if self._avatar.guiSessionProvider.shared.crosshair is not None:
+            self._avatar.guiSessionProvider.shared.crosshair.onGunMarkerStateChanged -= self.__onGunMarkerStateChanged
+        if self.settingsCore:
+            self.settingsCore.onSettingsChanged += self.__onSettingsChanged
+        return
+
+    def __onSettingsChanged(self, diff):
+        if 'isColorBlind' in diff:
+            self.__changePiercingHint(self.__currentShotResultHint, True)
+
+    def __onGunMarkerStateChanged(self, markerType, position, direction, collision):
+        if self.__isShotResultHintActive and self.__inSniperMode:
+            shotResultResolver = gun_marker_ctrl.createShotResultResolver()
+            result = shotResultResolver.getShotResult(position, collision, direction, excludeTeam=self._avatar.team)
+            piercing_chance_hint = self._SHOT_RESULT_TO_PIERCING_CHANCE_HINT.get(result)
+            self.__changePiercingHint(piercing_chance_hint)
+        else:
+            self.__changePiercingHint(self._PIERCING_CHANCE_HINT_HIDE_VALUE)
+
+    def __getBattleTopHint(self):
+        topHint = self.__topHintRef()
+        if topHint is None and self._avatar is not None:
+            app = self._avatar.appLoader.getApp()
+            bcPageContainer = app.containerManager.getContainer(ViewTypes.DEFAULT)
+            bcPage = bcPageContainer.findView(ViewKey(VIEW_ALIAS.BOOTCAMP_BATTLE_PAGE))
+            topHint = bcPage.topHint
+            self.__topHintRef = weakref.ref(topHint)
+        return topHint
+
+    def __changePiercingHint(self, hintValue, forceChange=False):
+        if hintValue != self.__currentShotResultHint or forceChange:
+            topHint = self.__getBattleTopHint()
+            if topHint is not None:
+                topHint.as_setPenetrationS(hintValue, self.settingsCore.getSetting('isColorBlind'))
+                self.__currentShotResultHint = hintValue
         return
 
     def update(self):
@@ -201,16 +254,19 @@ class HintAdvancedSniper(HintBase, TriggersManager.ITriggerListener):
                     self.cooldownAfter = self.__cooldownAfterAll
                     self.typeId = HINT_TYPE.HINT_WEAK_POINTS
                     resultCommand = HINT_COMMAND.SHOW
+                    self.__isShotResultHintActive = True
             elif self._state == HintAdvancedSniper.STATE_HINT_WEAK_POINTS:
                 if self.__vehicleWasKilled:
                     self._state = HintAdvancedSniper.STATE_VEHICLE_KILLED
                     self.cooldownAfter = self.__timeBetween
                     resultCommand = HINT_COMMAND.HIDE
+                    self.__isShotResultHintActive = False
                 elif targetVehicle is None or not self.__inSniperMode:
                     self._state = HintAdvancedSniper.STATE_DEFAULT_SNIPER
                     self.cooldownAfter = self.__timeBetween
                     self.typeId = HINT_TYPE.HINT_SNIPER
                     resultCommand = HINT_COMMAND.HIDE
+                    self.__isShotResultHintActive = False
             elif self._state == HintAdvancedSniper.STATE_VEHICLE_KILLED:
                 if self.__inSniperMode:
                     self._state = HintAdvancedSniper.STATE_EXIT_SNIPER_MODE

@@ -8,17 +8,17 @@
     <loader></loader>
   </crew>
   <speedLimits>
-    <forward>	35	</forward>
-    <backward>	12	</backward>
+    <forward>	40	</forward>
+    <backward>	15	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.069	</moving>
-    <still>	0.138	</still>
-    <camouflageBonus>	0.02	</camouflageBonus>
-    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <moving>	0.189	</moving>
+    <still>	0.252	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.207	</firePenalty>
   </invisibility>
-  <repairCost>	5.00	</repairCost>
+  <repairCost>	4.0	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
@@ -44,7 +44,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	16170	</weight>
-    <maxHealth>	480	</maxHealth>
+    <maxHealth>	560	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	110	</maxRegenHealth>
@@ -137,14 +137,14 @@
       <terrainResistance>	1.1 1.3 2.7	</terrainResistance>
       <brakeForce>	29000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	20	</rotationSpeed>
+      <rotationSpeed>	28	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.24	</vehicleMovement>
         <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	140	</maxHealth>
-      <maxRegenHealth>	105	</maxRegenHealth>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G13_VK3001H/normal/lod0/Chassis.model	</undamaged>
@@ -812,14 +812,14 @@
       <terrainResistance>	1 1.2 2.5	</terrainResistance>
       <brakeForce>	32000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	22	</rotationSpeed>
+      <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.22	</vehicleMovement>
         <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	150	</maxHealth>
-      <maxRegenHealth>	110	</maxRegenHealth>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G13_VK3001H/normal/lod0/Chassis.model	</undamaged>
@@ -1497,14 +1497,14 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3000	</weight>
-      <maxHealth>	120	</maxHealth>
+      <maxHealth>	110	</maxHealth>
       <rotationSpeed>	42	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	330	</circularVisionRadius>
+      <circularVisionRadius>	350	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	70	</maxHealth>
         <maxRegenHealth>	35	</maxRegenHealth>
@@ -1852,8 +1852,8 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7680	</weight>
-      <maxHealth>	180	</maxHealth>
-      <rotationSpeed>	24	</rotationSpeed>
+      <maxHealth>	140	</maxHealth>
+      <rotationSpeed>	28	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
@@ -1871,7 +1871,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	100	</maxAmmo>
+          <maxAmmo>	145	</maxAmmo>
           <armor>
             <armor_1>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1952,7 +1952,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	130	</maxAmmo>
+          <maxAmmo>	189	</maxAmmo>
           <armor>
             <armor_1>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2031,7 +2031,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	50	</maxAmmo>
+          <maxAmmo>	73	</maxAmmo>
           <armor>
             <armor_1>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2111,7 +2111,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	50	</maxAmmo>
+          <maxAmmo>	73	</maxAmmo>
           <unlocks>
             <vehicle>	G96_VK3002M	  <cost>	27350	</cost>
             </vehicle>
@@ -2199,7 +2199,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	40	</maxAmmo>
+          <maxAmmo>	58	</maxAmmo>
           <armor>
             <armor_1>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2279,7 +2279,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	45	</maxAmmo>
+          <maxAmmo>	66	</maxAmmo>
           <reloadTime>	5	</reloadTime>
           <armor>
             <armor_1>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -2360,7 +2360,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	40	</maxAmmo>
+          <maxAmmo>	58	</maxAmmo>
           <unlocks>
             <vehicle>	G15_VK3601H	  <cost>	27000	</cost>
             </vehicle>
@@ -2540,16 +2540,16 @@
     <detailed>
       <engines>
         <Maybach_HL_116>
-          <smplEnginePower>	317.1843	</smplEnginePower>
-          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
+          <smplEnginePower>	350	</smplEnginePower>
+          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </Maybach_HL_116>
         <Maybach_HL_190>
-          <smplEnginePower>	396.4804	</smplEnginePower>
-          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
+          <smplEnginePower>	440	</smplEnginePower>
+          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </Maybach_HL_190>
         <Maybach_HL_150>
-          <smplEnginePower>	422.9124	</smplEnginePower>
-          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
+          <smplEnginePower>	470	</smplEnginePower>
+          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </Maybach_HL_150>
       </engines>
       <chassis>

@@ -87,8 +87,7 @@ class EventProgressionTooltipHelpers(object):
             return isInPrime and isEnable and not isAvailable and season.getCycleInfo()
 
     def getHeaderTooltipPack(self):
-        items = []
-        items.append(self.getTopBackgroundTooltipWithTextData())
+        items = [self.getTopBackgroundTooltipWithTextData()]
         bottom = -30
         if not self.isCurrentSeasonInPrimeTime() and not self.__epicController.isAvailable():
             items.append(self.getRewardVehiclesData())

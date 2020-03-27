@@ -11,7 +11,6 @@ from messenger.m_constants import PROTO_TYPE, CLIENT_ACTION_ID, USER_TAG
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.errors import ServerActionError
-from messenger.proto.xmpp.gloox_constants import ERROR_TYPE
 from messenger.proto.xmpp.jid import makeContactJID
 from messenger.proto.xmpp.messages.formatters import XmppLobbyMessageBuilder, XmppLobbyUsersChatBuilder
 from messenger.proto.xmpp.xmpp_constants import MESSAGE_LIMIT
@@ -260,7 +259,8 @@ class ClanUserRoomController(UserRoomController):
         super(ClanUserRoomController, self).clear()
 
     def join(self):
-        self.proto.messages.joinToMUC(self._channel.getID())
+        if not self._channel.isJoined():
+            self.proto.messages.joinToMUC(self._channel.getID())
 
     def exit(self):
         if self._channel.isJoined():
@@ -272,9 +272,8 @@ class ClanUserRoomController(UserRoomController):
             self.__cancelRejoinCallback()
 
     def __doNextRejoin(self):
-        self.__reJoinCallbackID = None
+        self.__cancelRejoinCallback()
         self.join()
-        return
 
     def __cancelRejoinCallback(self):
         if self.__reJoinCallbackID is not None:
@@ -287,7 +286,7 @@ class ClanUserRoomController(UserRoomController):
         self.__reJoinCallbackID = BigWorld.callback(delay, self.__doNextRejoin)
 
     def __me_onErrorReceived(self, error):
-        if isinstance(error, ServerActionError) and error.getActionID() == CLIENT_ACTION_ID.JOIN_CLAN_ROOM and error.getErrorType() == ERROR_TYPE.AUTH and error.getCondition() == 'registration-required':
+        if isinstance(error, ServerActionError) and error.getActionID() == CLIENT_ACTION_ID.JOIN_CLAN_ROOM:
             if self.__reJoinCallbackID is None:
                 self.__setRejoinCallback()
         return

@@ -15,11 +15,11 @@ class GunMatCalc(object):
     __slots__ = ('__currentGun',)
 
     @staticmethod
-    def gunOffset(vehicleDescr, currentGun):
+    def gunShotOffset(vehicleDescr, currentGun):
         if vehicleDescr.turret.multiGun is not None:
             if 0 <= currentGun < len(vehicleDescr.turret.multiGun):
-                return vehicleDescr.turret.multiGun[currentGun].position
-        return vehicleDescr.turret.gunPosition
+                return vehicleDescr.turret.multiGun[currentGun].shotPosition
+        return vehicleDescr.turret.gunShotPosition
 
     @staticmethod
     def turretOffset(vehicleDescr):
@@ -46,8 +46,8 @@ class GunMatCalc(object):
         return turretMat
 
     def __gunJointMat(self, turretMat, gunPitch, vehicleDescr):
-        gunOffset = self.gunOffset(vehicleDescr, self.__currentGun)
-        gunMat = math_utils.createRTMatrix(Vector3(0.0, gunPitch, 0.0), gunOffset)
+        gunShotOffset = self.gunShotOffset(vehicleDescr, self.__currentGun)
+        gunMat = math_utils.createRTMatrix(Vector3(0.0, gunPitch, 0.0), gunShotOffset)
         gunMat.postMultiply(turretMat)
         return gunMat
 
@@ -175,10 +175,10 @@ class SingleGunAimingSystem(SniperAimingSystem):
     def _getTurretYawGunPitch(self, targetPos, compensateGravity=False):
         vehicleMatrix = Matrix(self._vehicleMProv)
         turretOffset = GunMatCalc.turretOffset(self._vehicleTypeDescriptor)
-        gunOffset = GunMatCalc.gunOffset(self._vehicleTypeDescriptor, self.__gunIndex)
+        gunShotOffset = GunMatCalc.gunShotOffset(self._vehicleTypeDescriptor, self.__gunIndex)
         speed = self._vehicleTypeDescriptor.shot.speed
         gravity = self._vehicleTypeDescriptor.shot.gravity if not compensateGravity else 0.0
-        turretYaw, gunPitch = BigWorld.wg_getShotAngles(turretOffset, gunOffset, vehicleMatrix, speed, gravity, 0.0, 0.0, targetPos, False)
+        turretYaw, gunPitch = BigWorld.wg_getShotAngles(turretOffset, gunShotOffset, vehicleMatrix, speed, gravity, 0.0, 0.0, targetPos, False)
         rotation = math_utils.createRotationMatrix((turretYaw, gunPitch, 0.0))
         rotation.postMultiply(vehicleMatrix)
         invertSteady = Matrix(self._vehicleMProv)

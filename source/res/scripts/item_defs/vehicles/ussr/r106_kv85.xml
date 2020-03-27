@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.182	</firePenalty>
   </invisibility>
-  <repairCost>	4.9	</repairCost>
+  <repairCost>	4.395	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.2	</priceFactor>
@@ -44,7 +44,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	23000	</weight>
-    <maxHealth>	656	</maxHealth>
+    <maxHealth>	776	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	100	</maxRegenHealth>
@@ -1631,7 +1631,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8000	</weight>
-      <maxHealth>	164	</maxHealth>
+      <maxHealth>	144	</maxHealth>
       <rotationSpeed>	28	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -1836,7 +1836,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7400	</weight>
-      <maxHealth>	214	</maxHealth>
+      <maxHealth>	194	</maxHealth>
       <rotationSpeed>	28	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -2174,11 +2174,7 @@
         </engine>
       </unlocks>
     </V-2K>
-    <V-2IS>	shared	  <unlocks>
-        <vehicle>	R01_IS	  <cost>	49480	</cost>
-        </vehicle>
-      </unlocks>
-    </V-2IS>
+    <V-2IS>	shared	</V-2IS>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
@@ -2194,11 +2190,7 @@
         </radio>
       </unlocks>
     </_10R>
-    <_10RK>	shared	  <unlocks>
-        <vehicle>	R46_KV-13	  <cost>	53300	</cost>
-        </vehicle>
-      </unlocks>
-    </_10RK>
+    <_10RK>	shared	</_10RK>
   </radios>
   <physics>
     <detailed>

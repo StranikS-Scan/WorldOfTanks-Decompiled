@@ -241,6 +241,9 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
             tooltipStr = INGAME_GUI.SHELLS_KINDS_PARAMS
             paramsDict = {'damage': str(int(descriptor.damage[0])),
              'piercingPower': str(piercingPower)}
+            if piercingPower == 0:
+                del paramsDict['piercingPower']
+                tooltipStr = INGAME_GUI.SHELLS_KINDS_PARAMSNOPIERCING
             if descriptor.hasStun and self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
                 stun = descriptor.stun
                 tooltipStr = INGAME_GUI.SHELLS_KINDS_STUNPARAMS

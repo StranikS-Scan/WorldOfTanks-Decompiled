@@ -183,8 +183,6 @@ class ShowDialogEvent(SharedEvent):
     SHOW_ICON_DIALOG = 'showIconDialog'
     SHOW_ICON_PRICE_DIALOG = 'showIconPriceDialog'
     SHOW_CREW_SKINS_COMPENSATION_DIALOG = 'showCrewSkinsCompensationDialog'
-    SHOW_DEMOUNT_DEVICE_DIALOG = 'showDemountDeviceDialog'
-    SHOW_DESTROY_DEVICE_DIALOG = 'showDestroyDeviceDialog'
     SHOW_PM_CONFIRMATION_DIALOG = 'showPMConfirmationDialog'
     SHOW_CONFIRM_MODULE = 'showConfirmModule'
     SHOW_CONFIRM_BOOSTER = 'showConfirmBooster'
@@ -558,6 +556,7 @@ class OpenLinkEvent(SharedEvent):
     PREM_SHOP = 'premShopURL'
     TOKEN_SHOP = 'tokenShopUrl'
     FRONTLINE_CHANGES = 'frontlineChangesURL'
+    TECHTREE_UPDATE_NEWS = 'techTreeUpdateNewsURL'
 
     def __init__(self, eventType, url='', title='', params=None):
         super(OpenLinkEvent, self).__init__(eventType)

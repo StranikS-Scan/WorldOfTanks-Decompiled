@@ -15,7 +15,7 @@ from gui.Scaleform.genConsts.DAMAGEINDICATOR import DAMAGEINDICATOR
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control.battle_constants import DEVICE_STATES_RANGE
 from gui.battle_control.battle_constants import HIT_INDICATOR_MAX_ON_SCREEN
-from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
+from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CROSSHAIR_VIEW_ID
 from gui.battle_control.controllers.hit_direction_ctrl import IHitIndicator
 from gui.shared.crits_mask_parser import critsParserGenerator
 from helpers import dependency
@@ -522,6 +522,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         if crosshairCtrl is not None:
             crosshairCtrl.onCrosshairPositionChanged += self.__onCrosshairPositionChanged
             crosshairCtrl.onCrosshairScaleChanged += self.__onCrosshairPositionChanged
+            crosshairCtrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
         if vStateCtrl is not None:
             vStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
             vStateCtrl.onVehicleControlling += self.__onVehicleControlling
@@ -537,6 +538,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         if crosshairCtrl is not None:
             crosshairCtrl.onCrosshairPositionChanged -= self.__onCrosshairPositionChanged
             crosshairCtrl.onCrosshairScaleChanged -= self.__onCrosshairPositionChanged
+            crosshairCtrl.onCrosshairViewChanged -= self.__onCrosshairViewChanged
         if vStateCtrl is not None:
             vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
             vStateCtrl.onVehicleControlling -= self.__onVehicleControlling
@@ -629,6 +631,12 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         crosshairCtrl = self.sessionProvider.shared.crosshair
         scaledPosition = crosshairCtrl.getScaledPosition()
         self.as_updateLayoutS(*scaledPosition)
+
+    def __onCrosshairViewChanged(self, viewID):
+        if viewID in (CROSSHAIR_VIEW_ID.UNDEFINED, CROSSHAIR_VIEW_ID.POSTMORTEM):
+            self.as_setVisibleS(False)
+        else:
+            self.as_setVisibleS(self._isEnabled)
 
     def __updateSiegeState(self, siegeState, switchTime):
         if self._siegeState in _SIEGE_STATE.SWITCHING:

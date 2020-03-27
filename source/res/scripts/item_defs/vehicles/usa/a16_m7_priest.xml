@@ -19,7 +19,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.33	</firePenalty>
   </invisibility>
-  <repairCost>	6.86	</repairCost>
+  <repairCost>	3.842	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
@@ -44,7 +44,7 @@
     </armor>
     <primaryArmor>	armor_2 armor_5 armor_4	</primaryArmor>
     <weight>	10646	</weight>
-    <maxHealth>	112	</maxHealth>
+    <maxHealth>	200	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	70	</maxHealth>
       <maxRegenHealth>	35	</maxRegenHealth>
@@ -1925,7 +1925,7 @@
         <armor_8>	0	</armor_8>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	28	</maxHealth>
+      <maxHealth>	50	</maxHealth>
       <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1943,7 +1943,7 @@
             <minPitch>	0 -45 1 -45	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	69	</maxAmmo>
+          <maxAmmo>	120	</maxAmmo>
           <reloadTime>	20	</reloadTime>
           <unlocks>
             <gun>	_105mm_Howitzer_M2A1	  <cost>	2550	</cost>
@@ -2010,12 +2010,8 @@
             <minPitch>	0 -45 1 -45	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	69	</maxAmmo>
+          <maxAmmo>	120	</maxAmmo>
           <reloadTime>	20	</reloadTime>
-          <unlocks>
-            <vehicle>	A17_M37	  <cost>	3150	</cost>
-            </vehicle>
-          </unlocks>
           <armor>
             <gun>	20	</gun>
             <gunBreech>	0	</gunBreech>

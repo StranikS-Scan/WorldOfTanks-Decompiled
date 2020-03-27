@@ -25,6 +25,8 @@ SUSP_COMPRESSION_MIN_MASS = 60.0
 SUSP_COMPRESSION_MAX = 0.88
 SUSP_COMPRESSION_MAX_MASS = 30.0
 BODY_HEIGHT = 1.4
+ROLLER_CONTACT_IGNORE_ANGLE = 25
+ROLLER_HORIZONTAL_SURFACE_ANGLE = 35
 SIDE_MOVEMENT_THRESHOLD = SERVER_TICK_LENGTH * 0.05
 _SIMULATION_Y_BOUND = 1000.0
 FREEZE_ANG_ACCEL_EPSILON = 0.35
@@ -124,21 +126,21 @@ g_defaultChassisXPhysicsCfg = {'wheelRadius': 0.4,
                          1.0,
                          _cosDeg(29.0),
                          0.1),
- 'slopeGripLngStaticObject': (_cosDeg(20),
+ 'slopeGripLngStaticObject': (_cosDeg(20.0),
                               1.0,
-                              _cosDeg(25),
+                              _cosDeg(25.0),
                               0.1),
- 'slopeGripSdwStaticObject': (_cosDeg(20),
+ 'slopeGripSdwStaticObject': (_cosDeg(20.0),
                               1.0,
-                              _cosDeg(25),
+                              _cosDeg(25.0),
                               0.1),
- 'slopeGripLngDynamicObject': (_cosDeg(20),
+ 'slopeGripLngDynamicObject': (_cosDeg(20.0),
                                1.0,
-                               _cosDeg(25),
+                               _cosDeg(25.0),
                                0.1),
- 'slopeGripSdwDynamicObject': (_cosDeg(20),
+ 'slopeGripSdwDynamicObject': (_cosDeg(20.0),
                                1.0,
-                               _cosDeg(25),
+                               _cosDeg(25.0),
                                0.1),
  'stiffnessFactors': (1.0, 1.0, 1.0, 1.0, 1.0),
  'angVelocityFactor': 1.0,
@@ -762,7 +764,7 @@ def computeBarrelLocalPoint(vehDescr, turretYaw, gunPitch):
     maxGunZ = vehDescr.gun.hitTester.bbox[1][2]
     m = Math.Matrix()
     m.setRotateX(gunPitch)
-    pt = m.applyVector((0.0, 0.0, maxGunZ)) + vehDescr.turret.gunPosition
+    pt = m.applyVector((0.0, 0.0, maxGunZ)) + vehDescr.turret.gunShotPosition
     m.setRotateY(turretYaw)
     pt = m.applyVector(pt)
     pt += vehDescr.hull.turretPositions[vehDescr.activeTurretPosition]

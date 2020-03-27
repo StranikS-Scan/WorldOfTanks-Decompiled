@@ -172,13 +172,10 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             self.respawnOutfitCompactDescr = None
         else:
             outfitDescr = self.publicInfo.outfit
-        if respawnCompactDescr is None and self.typeDescriptor is not None:
-            return
-        else:
-            self.typeDescriptor = self.getDescr(respawnCompactDescr)
-            forceReloading = respawnCompactDescr is not None
-            self.appearance, prereqs = appearance_cache.createAppearance(self.id, self.typeDescriptor, self.health, self.isCrewActive, self.isTurretDetached, outfitDescr, forceReloading)
-            return (loadingPriority(self.id), prereqs)
+        self.typeDescriptor = self.getDescr(respawnCompactDescr)
+        forceReloading = respawnCompactDescr is not None
+        self.appearance, prereqs = appearance_cache.createAppearance(self.id, self.typeDescriptor, self.health, self.isCrewActive, self.isTurretDetached, outfitDescr, forceReloading)
+        return (loadingPriority(self.id), prereqs)
 
     def getDescr(self, respawnCompactDescr):
         if respawnCompactDescr is not None:

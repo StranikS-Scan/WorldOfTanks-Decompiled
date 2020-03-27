@@ -223,7 +223,7 @@ class _HeaderPresenter(object):
     @staticmethod
     def _makeBonus(value, bonusType):
         return {'icon': backport.image(R.images.gui.maps.icons.squad.bonuses.dyn(bonusType)()),
-         'bonusValue': text_styles.creditsTextBig(str(int(value)) + backport.text(R.strings.common.common.percent())),
+         'bonusValue': text_styles.creditsTextBig(str(int(round(value))) + backport.text(R.strings.common.common.percent())),
          'label': text_styles.playerOnline(backport.text(R.strings.messenger.dialogs.squadChannel.bonuses.dyn(bonusType)())),
          'tooltipType': None,
          'tooltip': None}

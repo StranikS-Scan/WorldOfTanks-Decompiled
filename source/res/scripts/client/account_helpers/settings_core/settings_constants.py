@@ -143,6 +143,7 @@ class SOUND(CONST_CONTAINER):
     MASTER_TOGGLE = 'masterVolumeToggle'
     SOUND_QUALITY = 'soundQuality'
     SOUND_QUALITY_VISIBLE = 'soundQualityVisible'
+    SUBTITLES = 'subtitles'
     MASTER = 'masterVolume'
     MUSIC = 'musicVolume'
     MUSIC_HANGAR = 'musicHangar'
@@ -286,6 +287,8 @@ class GuiSettingsBehavior(CONST_CONTAINER):
     EPIC_RANDOM_CHECKBOX_CLICKED = 'isEpicRandomCheckboxClicked'
     EPIC_WELCOME_VIEW_SHOWED = 'isEpicWelcomeViewShowed'
     LAST_SHOWN_EPIC_WELCOME_SCREEN = 'lastShownEpicWelcomeScreen'
+    TECHTREE_INTRO_BLUEPRINTS_RECEIVED = 'techTreeIntroBlueprintsReceived'
+    TECHTREE_INTRO_SHOWED = 'techTreeIntroShowed'
 
 
 class OnceOnlyHints(CONST_CONTAINER):
@@ -312,6 +315,7 @@ class OnceOnlyHints(CONST_CONTAINER):
     BATTLE_SESSION_UP_BUTTON_TOURNAMENT_HINT = 'BattleSessionUpButtonTournamentHint'
     CREW_OPERATION_BTN_HINT = 'CrewOperationBtnHint'
     SOUND_BUTTONEX_HINT = 'SoundButtonExHint'
+    VEHICLE_PREVIEW_MODULES_BUTTON_HINT = 'VehiclePreviewModulesButtonHint'
 
 
 class SESSION_STATS(CONST_CONTAINER):

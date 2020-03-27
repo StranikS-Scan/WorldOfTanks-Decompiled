@@ -879,7 +879,7 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
         if config.node is not None:
             parentCD = int(config.node.unlockProps.parentID) or None
         _, _, need2Unlock, _, _ = getUnlockPrice(vehicle.intCD, parentCD, vehicle.level)
-        if not nodeState & NODE_STATE_FLAGS.UNLOCKED:
+        if not nodeState & NODE_STATE_FLAGS.UNLOCKED and not nodeState & NODE_STATE_FLAGS.COLLECTIBLE:
             level = Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
             if not nodeState & NODE_STATE_FLAGS.NEXT_2_UNLOCK:
                 tooltip = TOOLTIPS.RESEARCHPAGE_VEHICLE_STATUS_PARENTMODULEISLOCKED

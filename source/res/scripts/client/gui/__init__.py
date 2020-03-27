@@ -15,7 +15,6 @@ g_mouseEventHandlers = set()
 g_tankActiveCamouflage = {'historical': {}}
 GUI_SETTINGS = _GuiSettings()
 DEPTH_OF_BotsMenu = 0.05
-DEPTH_OF_PhysicChart = 0.7
 DEPTH_OF_Battle = 0.1
 DEPTH_OF_Statistic = 0.1
 DEPTH_OF_PlayerBonusesPanel = 0.2

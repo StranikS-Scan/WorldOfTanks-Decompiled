@@ -37,10 +37,13 @@ class _EmptyWaitingWorker(IWaitingWorker):
     def hide(self, messageID):
         _logger.error('Waiting is not found. Method "hide" is ignored: %r', messageID)
 
-    def suspend(self):
+    def suspend(self, lockerID=None):
         _logger.error('Waiting is not found. Method "suspend" is ignored')
 
-    def resume(self):
+    def isResumeLocked(self):
+        return False
+
+    def resume(self, lockerID=None, hard=False):
         _logger.error('Waiting is not found. Method "resumed" is ignored')
 
     def isSuspended(self):

@@ -6,6 +6,7 @@ from CurrentVehicle import g_currentPreviewVehicle, g_currentVehicle
 from HeroTank import HeroTank
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PREVIEW_INFO_PANEL_IDX
+from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.items_kit_helper import getActiveOffer, addBuiltInEquipment
@@ -34,8 +35,10 @@ from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import getTypeSmallIconPath
 from gui.shared.money import MONEY_UNDEFINED
+from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from helpers import dependency
 from helpers.i18n import makeString as _ms
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IHeroTankController
 from skeletons.gui.game_control import IRestoreController
 from skeletons.gui.game_control import ITradeInController
@@ -44,9 +47,10 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from gui.Scaleform.daapi.view.lobby.store.browser.sound_constants import INGAMESHOP_PREVIEW_SOUND_SPACE
+from gui.Scaleform.daapi.view.lobby.vehiclePreview20.hero_tank_preview_constants import getHeroTankPreviewParams
 from web.web_client_api.common import ItemPackTypeGroup, ItemPackEntry, ItemPackType
 import SoundGroups
-from gui.Scaleform.daapi.view.lobby.vehiclePreview20.hero_tank_preview_constants import getHeroTankPreviewParams
+from tutorial.control.context import GLOBAL_FLAG
 _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_STORE: 'shop',
  VIEW_ALIAS.LOBBY_STORAGE: 'storage',
@@ -64,8 +68,28 @@ _TABS_DATA = ({'id': VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE,
   'linkage': VEHPREVIEW_CONSTANTS.MODULES_LINKAGE}, {'id': VEHPREVIEW_CONSTANTS.CREW_LINKAGE,
   'label': VEHICLE_PREVIEW.INFOPANEL_TAB_CREWINFO_NAME,
   'linkage': VEHPREVIEW_CONSTANTS.CREW_LINKAGE})
-_SHOW_CLOSE_BTN = True
 _SHOW_BACK_BTN = True
+_SHOW_CLOSE_BTN = True
+
+def _updateHintParameters():
+    tutorialStorage = getTutorialGlobalStorage()
+    if tutorialStorage is None:
+        return
+    else:
+        isActiveModulesTab = AccountSettings.getSettings(PREVIEW_INFO_PANEL_IDX) == _getModulesTabIdx()
+        hintValue = False if isActiveModulesTab else g_currentPreviewVehicle.isCollectible()
+        tutorialStorage.setValue(GLOBAL_FLAG.COLLECTIBLE_VEHICLE_PREVIEW_ENABLED, hintValue)
+        return
+
+
+@dependency.replace_none_kwargs(settingsCore=ISettingsCore)
+def _isModuleBulletVisible(settingsCore=None):
+    return g_currentPreviewVehicle.isCollectible() and settingsCore.serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.VEHICLE_PREVIEW_MODULES_BUTTON_HINT)
+
+
+def _getModulesTabIdx():
+    return [ tab['id'] for tab in _TABS_DATA ].index(VEHPREVIEW_CONSTANTS.MODULES_LINKAGE)
+
 
 class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
     __background_alpha__ = 0.0
@@ -141,6 +165,7 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
         if specialData is not None and specialData.enterEvent:
             SoundGroups.g_instance.playSound2D(specialData.enterEvent)
         g_eventBus.addListener(OFFER_CHANGED_EVENT, self.__onOfferChanged)
+        _updateHintParameters()
         return
 
     def _dispose(self):
@@ -221,6 +246,9 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
             if self._itemsPack:
                 crewItems = tuple((item for item in self._itemsPack if item.type in ItemPackTypeGroup.CREW))
                 vehicleItems = tuple((item for item in self._itemsPack if item.type in ItemPackTypeGroup.VEHICLE))
+                if not vehicleItems and crewItems:
+                    groupID = crewItems[0].groupID
+                    vehicleItems = (ItemPackEntry(id=g_currentPreviewVehicle.item.intCD, groupID=groupID),)
                 viewPy.setVehicleCrews(vehicleItems, crewItems)
             elif self.__offers:
                 offer = getActiveOffer(self.__offers)
@@ -240,6 +268,33 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
                 viewPy.setActiveOffer(offer)
         return
 
+    def _getData(self):
+        vehicle = g_currentPreviewVehicle.item
+        if vehicle.isPremium:
+            vehicleTitle = '{} {},'.format(_ms(MENU.header_vehicletype_elite(vehicle.type)), _ms(VEHICLE_PREVIEW.INFOPANEL_LEVEL, level=_ms(MENU.header_level(vehicle.level))))
+            vehicleName = makeHtmlString('html_templates:lobby/vehicle_preview', 'vehicleNamePremium', {'name': vehicle.descriptor.type.shortUserString.upper()})
+        else:
+            vehicleTitle = '{} {},'.format(_ms(MENU.header_vehicletype(vehicle.type)), _ms(VEHICLE_PREVIEW.INFOPANEL_LEVEL, level=_ms(MENU.header_level(vehicle.level))))
+            vehicleName = makeHtmlString('html_templates:lobby/vehicle_preview', 'vehicleNameRegular', {'name': vehicle.descriptor.type.shortUserString.upper()})
+        if vehicle.isPremiumIGR:
+            vehicleTitle = makeHtmlString('html_templates:igr/premium-vehicle', 'name', {'vehicle': vehicleTitle})
+        compareBtnEnabled, compareBtnTooltip = resolveStateTooltip(self.comparisonBasket, vehicle, VEH_COMPARE.STORE_COMPAREVEHICLEBTN_TOOLTIPS_ADDTOCOMPARE, VEH_COMPARE.STORE_COMPAREVEHICLEBTN_TOOLTIPS_DISABLED)
+        result = {'closeBtnLabel': VEHICLE_PREVIEW.HEADER_CLOSEBTN_LABEL,
+         'backBtnLabel': VEHICLE_PREVIEW.HEADER_BACKBTN_LABEL,
+         'backBtnDescrLabel': self._getBackBtnLabel(),
+         'showCloseBtn': _SHOW_CLOSE_BTN,
+         'showBackButton': _SHOW_BACK_BTN,
+         'vehicleTitle': vehicleTitle,
+         'vehicleTypeIcon': getTypeSmallIconPath(vehicle.type, vehicle.isElite),
+         'nationFlagIcon': RES_ICONS.getFilterNation(vehicle.nationName),
+         'vehicleName': vehicleName,
+         'nationName': MENU.nations(vehicle.nationName),
+         'compareBtnTooltip': compareBtnTooltip,
+         'showCompareBtn': compareBtnEnabled,
+         'listDesc': self.__getInfoPanelListDescription(vehicle),
+         'isMultinational': vehicle.hasNationGroup}
+        return result
+
     def __onVehicleLoading(self, ctxEvent):
         if self.__customizationCD is not None and not ctxEvent.ctx.get('started'):
             customizationItem = self.itemsCache.items.getItemByCD(self.__customizationCD)
@@ -258,6 +313,7 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
     def __fullUpdate(self):
         self.__updateHeaderData()
         self.__updateTabsData()
+        self.__updateModuleBullet()
 
     def __updateTabsData(self):
         selectedTabInd = AccountSettings.getSettings(PREVIEW_INFO_PANEL_IDX)
@@ -288,34 +344,7 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
             self.__updateHeaderData()
 
     def __updateHeaderData(self):
-        self.as_setDataS(self.__getData())
-
-    def __getData(self):
-        vehicle = g_currentPreviewVehicle.item
-        if vehicle.isPremium:
-            vehicleTitle = '{} {},'.format(_ms(MENU.header_vehicletype_elite(vehicle.type)), _ms(VEHICLE_PREVIEW.INFOPANEL_LEVEL, level=_ms(MENU.header_level(vehicle.level))))
-            vehicleName = makeHtmlString('html_templates:lobby/vehicle_preview', 'vehicleNamePremium', {'name': vehicle.descriptor.type.shortUserString.upper()})
-        else:
-            vehicleTitle = '{} {},'.format(_ms(MENU.header_vehicletype(vehicle.type)), _ms(VEHICLE_PREVIEW.INFOPANEL_LEVEL, level=_ms(MENU.header_level(vehicle.level))))
-            vehicleName = makeHtmlString('html_templates:lobby/vehicle_preview', 'vehicleNameRegular', {'name': vehicle.descriptor.type.shortUserString.upper()})
-        if vehicle.isPremiumIGR:
-            vehicleTitle = makeHtmlString('html_templates:igr/premium-vehicle', 'name', {'vehicle': vehicleTitle})
-        compareBtnEnabled, compareBtnTooltip = resolveStateTooltip(self.comparisonBasket, vehicle, VEH_COMPARE.STORE_COMPAREVEHICLEBTN_TOOLTIPS_ADDTOCOMPARE, VEH_COMPARE.STORE_COMPAREVEHICLEBTN_TOOLTIPS_DISABLED)
-        result = {'closeBtnLabel': VEHICLE_PREVIEW.HEADER_CLOSEBTN_LABEL,
-         'backBtnLabel': VEHICLE_PREVIEW.HEADER_BACKBTN_LABEL,
-         'backBtnDescrLabel': self._getBackBtnLabel(),
-         'showCloseBtn': _SHOW_CLOSE_BTN,
-         'showBackButton': _SHOW_BACK_BTN,
-         'vehicleTitle': vehicleTitle,
-         'vehicleTypeIcon': getTypeSmallIconPath(vehicle.type, vehicle.isElite),
-         'nationFlagIcon': RES_ICONS.getFilterNation(vehicle.nationName),
-         'vehicleName': vehicleName,
-         'nationName': MENU.nations(vehicle.nationName),
-         'compareBtnTooltip': compareBtnTooltip,
-         'showCompareBtn': compareBtnEnabled,
-         'listDesc': self.__getInfoPanelListDescription(vehicle),
-         'isMultinational': vehicle.hasNationGroup}
-        return result
+        self.as_setDataS(self._getData())
 
     @staticmethod
     def __getInfoPanelListDescription(vehicle):
@@ -368,3 +397,6 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
 
     def __onOfferChanged(self, event):
         self.__currentOffer = event.ctx.get('offer')
+
+    def __updateModuleBullet(self):
+        self.as_setBulletVisibilityS(_getModulesTabIdx(), _isModuleBulletVisible())

@@ -104,6 +104,7 @@ class LoginSpace(IGlobalSpace):
 
     def init(self):
         self._clearEntitiesAndSpaces()
+        BigWorld.notifySpaceChange('spaces/login_space')
 
     def setup(self, action=None):
         self._action = action

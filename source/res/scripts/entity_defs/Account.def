@@ -30,11 +30,11 @@
     <Interface>	AvatarCreator	</Interface>
   </Implements>
   <Properties>
-    <requiredVersion_18000>
+    <requiredVersion_19000>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	ru_1.8.0_3	</Default>
-    </requiredVersion_18000>
+      <Default>	ct_1.9.0	</Default>
+    </requiredVersion_19000>
     <name>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
@@ -453,6 +453,9 @@
     <extraWriteToDB>
       <Arg>	UINT8	</Arg>
     </extraWriteToDB>
+    <writeToDBForTransfer>
+      <Arg>	INT64	</Arg>
+    </writeToDBForTransfer>
     <receiveClanMemberInfo>
       <Arg>	DB_ID	</Arg>
       <Arg>	DB_ID	</Arg>

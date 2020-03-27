@@ -3,12 +3,19 @@
 from gui.Scaleform.daapi.view.lobby.hangar.ResearchPanel import ResearchPanel
 from CurrentVehicle import g_currentVehicle
 from gui.shared import event_dispatcher as shared_events
-from debug_utils import LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_ERROR
+from bootcamp.statistic.decorators import loggerTarget, loggerEntry, simpleLog
+from bootcamp.statistic.logging_constants import BC_LOG_ACTIONS, BC_LOG_KEYS
 
+@loggerTarget(logKey=BC_LOG_KEYS.BC_RESEARCH_VEHICLES)
 class BCResearchPanel(ResearchPanel):
 
+    @loggerEntry
+    def _populate(self):
+        super(BCResearchPanel, self)._populate()
+
+    @simpleLog(action=BC_LOG_ACTIONS.RESEARCH_BUTTON_PRESSED, logOnce=True)
     def goToResearch(self):
-        LOG_DEBUG('BCResearchPanel::goToResearch')
         if g_currentVehicle.isPresent():
             shared_events.showResearchView(g_currentVehicle.item.intCD)
         else:

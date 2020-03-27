@@ -64,6 +64,10 @@ def getUniqueBlueprints(blueprints, isFullNationCD=False):
     return (vehicleFragments, nationalFragments, intelligenceData)
 
 
+def _isUnsuitableForBlueprints(vehicle):
+    return vehicle.isPremium or vehicle.isSecret or vehicle.isEvent or vehicle.isOnlyForEpicBattles or vehicle.isCollectible
+
+
 class BlueprintsRequester(AbstractSyncDataRequester, IBlueprintsRequester):
     __itemsCache = dependency.descriptor(IItemsCache)
     __lobbyContext = dependency.descriptor(ILobbyContext)
@@ -93,7 +97,7 @@ class BlueprintsRequester(AbstractSyncDataRequester, IBlueprintsRequester):
             return None
         else:
             vehicle = self.__itemsCache.items.getItemByCD(vehicleCD)
-            if vehicle.isPremium or vehicle.isSecret or vehicle.isEvent or vehicle.isOnlyForEpicBattles:
+            if _isUnsuitableForBlueprints(vehicle):
                 return None
             filledCount, totalCount = self.getBlueprintCount(vehicleCD, vLevel)
             canConvert = False

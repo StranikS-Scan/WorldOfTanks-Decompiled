@@ -17,7 +17,6 @@ def getContextMenuHandlers():
 
 def getViewSettings():
     from gui.Scaleform.daapi.view.battle.classic import team_bases_panel
-    from gui.Scaleform.daapi.view.battle.classic import frag_correlation_bar
     from gui.Scaleform.daapi.view.battle.classic import full_stats
     from gui.Scaleform.daapi.view.battle.classic import players_panel
     from gui.Scaleform.daapi.view.battle.classic import stats_exchange
@@ -25,9 +24,9 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.shared import battle_loading
     from gui.Scaleform.daapi.view.battle.classic import battle_end_warning_panel
     from gui.Scaleform.daapi.view.bootcamp.battle import bootcamp_battle_timer
+    from gui.Scaleform.daapi.view.bootcamp.battle.frag_correlation_bar import BootcampFragCorrelationBar
     from gui.Scaleform.daapi.view.bootcamp.BCIntroFadeOut import BCIntroFadeOut
     from gui.Scaleform.daapi.view.bootcamp.BCBattleTopHint import BCBattleTopHint
-    from gui.Scaleform.daapi.view.bootcamp.BCOverlayFinalWindow import BCOverlayFinalWindow
     from gui.Scaleform.daapi.view.bootcamp.BCBattlePage import BCBattlePage
     from gui.Scaleform.daapi.view.bootcamp.BCHighlights import BCHighlights
     from gui.Scaleform.daapi.view.bootcamp.BCConsumablesPanel import BCConsumablesPanel
@@ -41,13 +40,12 @@ def getViewSettings():
      ViewSettings(VIEW_ALIAS.BOOTCAMP_BATTLE_PAGE, BCBattlePage, 'BCbattlePage.swf', ViewTypes.DEFAULT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BOOTCAMP_INTRO_FADEOUT, BCIntroFadeOut, 'BCIntroFadeOut.swf', ViewTypes.WINDOW, None, ScopeTemplates.TOP_WINDOW_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.BOOTCAMP_BATTLE_TOP_HINT, BCBattleTopHint, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.BOOTCAMP_BATTLE_FINISHED_WINDOW, BCOverlayFinalWindow, 'BCOverlayFinalWindow.swf', ViewTypes.TOP_WINDOW, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BOOTCAMP_BATTLE_HIGHLIGHTS, BCHighlights, 'BCHighlights.swf', ViewTypes.WINDOW, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, BCConsumablesPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.RIBBONS_PANEL, BCRibbonsPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.BOOTCAMP_SECONDARY_HINT, BCSecondaryHint, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BOOTCAMP_PREBATTLE_HITNS, BCPrebattleHints, 'BCPrebattleHints.swf', ViewTypes.WINDOW, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.FRAG_CORRELATION_BAR, frag_correlation_bar.FragCorrelationBar, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(BATTLE_VIEW_ALIASES.FRAG_CORRELATION_BAR, BootcampFragCorrelationBar, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.BATTLE_TIMER, bootcamp_battle_timer.BootcampBattleTimer, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, team_bases_panel.TeamBasesPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.FULL_STATS, full_stats.FullStatsComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
@@ -75,7 +73,6 @@ class BootcampPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.BOOTCAMP_INTRO_FADEOUT, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BOOTCAMP_BATTLE_PAGE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BOOTCAMP_BATTLE_TOP_HINT, self.onShowHint),
-         (VIEW_ALIAS.BOOTCAMP_BATTLE_FINISHED_WINDOW, self.onShowBattleFinished),
          (VIEW_ALIAS.BOOTCAMP_PREBATTLE_HITNS, self.loadViewByCtxEvent),
          (BootcampEvent.ADD_HIGHLIGHT, self.onHighlightHint),
          (BootcampEvent.REMOVE_HIGHLIGHT, self.onRemoveHighlight),

@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.432	</firePenalty>
   </invisibility>
-  <repairCost>	7.0	</repairCost>
+  <repairCost>	6.234	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.2	</priceFactor>
@@ -38,7 +38,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	4650	</weight>
-    <maxHealth>	416	</maxHealth>
+    <maxHealth>	512	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -196,7 +196,7 @@
           <armor>
             <wheel>	5	</wheel>
           </armor>
-          <wheelPos>	-0.870308 0.579624 1.56435	</wheelPos>
+          <wheelPos>	-0.634 0.58 1.564	</wheelPos>
         </wheel>
         <wheel>
           <index>	0	</index>
@@ -223,13 +223,13 @@
             <explodedRadius>	0.47	</explodedRadius>
           </deflation>
           <hitTester>
-            <collisionModelServer>	vehicles/french/F109_AMD_Panhard_178B/collision/Wheel_L_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F109_AMD_Panhard_178B/collision_client/Wheel_L_01.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/french/F109_AMD_Panhard_178B/collision/Wheel_L_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F109_AMD_Panhard_178B/collision_client/Wheel_L_02.model	</collisionModelClient>
           </hitTester>
           <armor>
             <wheel>	5	</wheel>
           </armor>
-          <wheelPos>	-0.870475 0.579624 -1.56273	</wheelPos>
+          <wheelPos>	-0.794 0.58 -1.563	</wheelPos>
         </wheel>
         <wheel>
           <index>	3	</index>
@@ -263,7 +263,7 @@
           <armor>
             <wheel>	5	</wheel>
           </armor>
-          <wheelPos>	0.875504 0.579624 1.56435	</wheelPos>
+          <wheelPos>	0.64 0.58 1.564	</wheelPos>
         </wheel>
         <wheel>
           <index>	1	</index>
@@ -290,13 +290,13 @@
             <explodedRadius>	0.47	</explodedRadius>
           </deflation>
           <hitTester>
-            <collisionModelServer>	vehicles/french/F109_AMD_Panhard_178B/collision/Wheel_R_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F109_AMD_Panhard_178B/collision_client/Wheel_R_01.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/french/F109_AMD_Panhard_178B/collision/Wheel_R_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F109_AMD_Panhard_178B/collision_client/Wheel_R_02.model	</collisionModelClient>
           </hitTester>
           <armor>
             <wheel>	5	</wheel>
           </armor>
-          <wheelPos>	0.875504 0.579624 -1.56273	</wheelPos>
+          <wheelPos>	0.8 0.58 -1.563	</wheelPos>
         </wheel>
         <generalWheels>	true	</generalWheels>
         <globalDeflationShaderParams>
@@ -474,7 +474,7 @@
           <armor>
             <wheel>	5	</wheel>
           </armor>
-          <wheelPos>	-0.870308 0.579624 1.56435	</wheelPos>
+          <wheelPos>	-0.634 0.58 1.564	</wheelPos>
         </wheel>
         <wheel>
           <index>	0	</index>
@@ -501,13 +501,13 @@
             <explodedRadius>	0.47	</explodedRadius>
           </deflation>
           <hitTester>
-            <collisionModelServer>	vehicles/french/F109_AMD_Panhard_178B/collision/Wheel_L_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F109_AMD_Panhard_178B/collision_client/Wheel_L_01.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/french/F109_AMD_Panhard_178B/collision/Wheel_L_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F109_AMD_Panhard_178B/collision_client/Wheel_L_02.model	</collisionModelClient>
           </hitTester>
           <armor>
             <wheel>	5	</wheel>
           </armor>
-          <wheelPos>	-0.870475 0.579624 -1.56273	</wheelPos>
+          <wheelPos>	-0.794 0.58 -1.563	</wheelPos>
         </wheel>
         <wheel>
           <index>	3	</index>
@@ -541,7 +541,7 @@
           <armor>
             <wheel>	5	</wheel>
           </armor>
-          <wheelPos>	0.875504 0.579624 1.56435	</wheelPos>
+          <wheelPos>	0.64 0.58 1.564	</wheelPos>
         </wheel>
         <wheel>
           <index>	1	</index>
@@ -568,13 +568,13 @@
             <explodedRadius>	0.47	</explodedRadius>
           </deflation>
           <hitTester>
-            <collisionModelServer>	vehicles/french/F109_AMD_Panhard_178B/collision/Wheel_R_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F109_AMD_Panhard_178B/collision_client/Wheel_R_01.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/french/F109_AMD_Panhard_178B/collision/Wheel_R_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F109_AMD_Panhard_178B/collision_client/Wheel_R_02.model	</collisionModelClient>
           </hitTester>
           <armor>
             <wheel>	5	</wheel>
           </armor>
-          <wheelPos>	0.875504 0.579624 -1.56273	</wheelPos>
+          <wheelPos>	0.8 0.58 -1.563	</wheelPos>
         </wheel>
         <generalWheels>	true	</generalWheels>
         <globalDeflationShaderParams>
@@ -692,7 +692,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1700	</weight>
-      <maxHealth>	104	</maxHealth>
+      <maxHealth>	98	</maxHealth>
       <rotationSpeed>	47	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -885,7 +885,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1900	</weight>
-      <maxHealth>	154	</maxHealth>
+      <maxHealth>	128	</maxHealth>
       <rotationSpeed>	50	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>

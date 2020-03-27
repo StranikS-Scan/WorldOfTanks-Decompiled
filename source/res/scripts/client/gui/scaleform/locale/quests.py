@@ -63,6 +63,7 @@ class QUESTS(object):
     BONUSES_CREDITS_DESCRIPTION = '#quests:bonuses/credits/description'
     BONUSES_GOLD_DESCRIPTION = '#quests:bonuses/gold/description'
     BONUSES_CRYSTAL_DESCRIPTION = '#quests:bonuses/crystal/description'
+    BONUSES_EVENTCOIN_DESCRIPTION = '#quests:bonuses/eventCoin/description'
     BONUSES_TANKMEN_DESCRIPTION = '#quests:bonuses/tankmen/description'
     BONUSES_ITEM_TANKWOMAN = '#quests:bonuses/item/tankwoman'
     BONUSES_ITEM_TANKMAN = '#quests:bonuses/item/tankman'
@@ -964,6 +965,7 @@ class QUESTS(object):
     DETAILS_MODIFIERS_EQUIPMENT_GOLD = '#quests:details/modifiers/equipment/gold'
     DETAILS_MODIFIERS_EQUIPMENT_CREDITS = '#quests:details/modifiers/equipment/credits'
     DETAILS_MODIFIERS_EQUIPMENT_CRYSTAL = '#quests:details/modifiers/equipment/crystal'
+    DETAILS_MODIFIERS_EQUIPMENT_EVENTCOIN = '#quests:details/modifiers/equipment/eventCoin'
     DETAILS_MODIFIERS_EQUIPMENT_GOLDPRICEMULTIPLIER = '#quests:details/modifiers/equipment/goldPriceMultiplier'
     DETAILS_MODIFIERS_EQUIPMENT_CREDITSPRICEMULTIPLIER = '#quests:details/modifiers/equipment/creditsPriceMultiplier'
     DETAILS_MODIFIERS_EQUIPMENT_CRYSTALPRICEMULTIPLIER = '#quests:details/modifiers/equipment/crystalPriceMultiplier'
@@ -1162,6 +1164,7 @@ class QUESTS(object):
     BONUSNAME_CREDITS = '#quests:bonusName/credits'
     BONUSNAME_GOLD = '#quests:bonusName/gold'
     BONUSNAME_CRYSTAL = '#quests:bonusName/crystal'
+    BONUSNAME_EVENTCOIN = '#quests:bonusName/eventCoin'
     BONUSNAME_XP = '#quests:bonusName/xp'
     BONUSNAME_FREEXP = '#quests:bonusName/freeXP'
     BONUSNAME_TANKMENXP = '#quests:bonusName/tankmenXP'
@@ -1688,6 +1691,7 @@ class QUESTS(object):
      BONUSNAME_CREDITS,
      BONUSNAME_GOLD,
      BONUSNAME_CRYSTAL,
+     BONUSNAME_EVENTCOIN,
      BONUSNAME_XP,
      BONUSNAME_FREEXP,
      BONUSNAME_TANKMENXP,

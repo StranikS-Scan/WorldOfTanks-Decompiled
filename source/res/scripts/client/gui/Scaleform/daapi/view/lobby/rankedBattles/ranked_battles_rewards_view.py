@@ -20,7 +20,7 @@ from gui.ranked_battles.ranked_helpers.sound_manager import AmbientType
 from gui.shared.event_dispatcher import showStylePreview
 from gui.shared.utils.scheduled_notifications import AcyclicNotifier
 from helpers import dependency, time_utils
-from items.vehicles import VehicleDescriptor
+from items.vehicles import VehicleDescriptor, getVehicleType
 from shared_utils import first
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.game_control import IRankedBattlesController
@@ -223,7 +223,12 @@ class RankedBattlesRewardsLeaguesView(RankedBattlesRewardsLeaguesMeta, IResetabl
                 vehicles = accDossier.getRandomStats().getVehicles()
             if vehicles:
                 sortedVehicles = sorted(vehicles.items(), key=lambda vStat: vStat[1].battlesCount, reverse=True)
-                styledVehicleCD = sortedVehicles[0][0]
+                for vehicleCD, _ in sortedVehicles:
+                    vehicleType = getVehicleType(vehicleCD)
+                    if vehicleType.level >= minLvl:
+                        styledVehicleCD = vehicleCD
+                        break
+
             if not styledVehicleCD:
                 vehiclesPool = AccountSettings.getSettings(RANKED_STYLED_VEHICLES_POOL)
                 if not vehiclesPool:

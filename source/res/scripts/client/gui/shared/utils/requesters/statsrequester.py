@@ -7,7 +7,7 @@ from adisp import async
 from gui.shared.money import Money, Currency
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from helpers import time_utils, dependency
-from constants import SPA_ATTRS
+from constants import SPA_ATTRS, MIN_VEHICLE_LEVEL
 from skeletons.gui.game_control import IWalletController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.utils.requesters import IStatsRequester
@@ -40,8 +40,12 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
         return max(self.actualCrystal, 0)
 
     @property
+    def eventCoin(self):
+        return max(self.actualEventCoin, 0)
+
+    @property
     def money(self):
-        return Money(credits=self.credits, gold=self.gold, crystal=self.crystal)
+        return Money(credits=self.credits, gold=self.gold, crystal=self.crystal, eventCoin=self.eventCoin)
 
     @property
     def actualCredits(self):
@@ -56,8 +60,12 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
         return self.getCacheValue(Currency.CRYSTAL, 0)
 
     @property
+    def actualEventCoin(self):
+        return self.getCacheValue(Currency.EVENT_COIN, 0)
+
+    @property
     def actualMoney(self):
-        return Money(credits=self.actualCredits, gold=self.actualGold, crystal=self.actualCrystal)
+        return Money(credits=self.actualCredits, gold=self.actualGold, crystal=self.actualCrystal, eventCoin=self.actualEventCoin)
 
     @property
     def freeXP(self):
@@ -256,6 +264,12 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
     def getMapsBlackList(self):
         blackList = self.getCacheValue('preferredMaps', {}).get('blackList', ())
         return blackList
+
+    def getMaxResearchedLevelByNations(self):
+        return self.getCacheValue('maxResearchedLevelByNation', {})
+
+    def getMaxResearchedLevel(self, nationID):
+        return self.getMaxResearchedLevelByNations().get(nationID, MIN_VEHICLE_LEVEL)
 
     @async
     def _requestCache(self, callback):

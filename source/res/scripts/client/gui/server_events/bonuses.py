@@ -159,8 +159,8 @@ class SimpleBonus(object):
           'value': self.getValue(),
           'icon': {AWARDS_SIZES.SMALL: self.getIconBySize(AWARDS_SIZES.SMALL),
                    AWARDS_SIZES.BIG: self.getIconBySize(AWARDS_SIZES.BIG)},
-          'name': backport.text(awardItem.header() if awardItem else ''),
-          'description': backport.text(awardItem.body() if awardItem else '')}]
+          'name': backport.text(awardItem.header()) if awardItem else '',
+          'description': backport.text(awardItem.body()) if awardItem else ''}]
 
     def __getCommonAwardsVOs(self, iconSize='small', align=TEXT_ALIGN.CENTER, withCounts=False):
         itemInfo = {'imgSource': self.getIconBySize(iconSize),
@@ -277,6 +277,23 @@ class CrystalBonus(IntegralBonus):
 
     def getIconLabel(self):
         return text_styles.crystal(self.getValue())
+
+
+class EventCoinBonus(IntegralBonus):
+
+    def getIcon(self):
+        return backport.image(R.images.gui.maps.icons.library.EventCoinIconBig())
+
+    def getList(self):
+        return [{'value': self.formatValue(),
+          'itemSource': backport.image(R.images.gui.maps.icons.library.EventCoinIconBig()),
+          'tooltip': TOOLTIPS.AWARDITEM_EVENTCOIN}]
+
+    def hasIconFormat(self):
+        return True
+
+    def getIconLabel(self):
+        return text_styles.eventCoin(self.getValue())
 
 
 class FreeXpBonus(IntegralBonus):
@@ -435,7 +452,7 @@ class BattleTokensBonus(TokensBonus):
                  'value': value.get('count', 1),
                  'icon': {AWARDS_SIZES.SMALL: backport.image(R.images.gui.maps.icons.epicBattles.rewardPoints.c_48x48()),
                           AWARDS_SIZES.BIG: backport.image(R.images.gui.maps.icons.epicBattles.rewardPoints.c_80x80())},
-                 'type': 'custom/reward_point'.format(tokenID)})
+                 'type': 'custom/{}'.format(tokenID)})
 
         return result
 
@@ -1744,6 +1761,7 @@ class EpicAbilityPtsBonus(SimpleBonus):
 _BONUSES = {Currency.CREDITS: CreditsBonus,
  Currency.GOLD: GoldBonus,
  Currency.CRYSTAL: CrystalBonus,
+ Currency.EVENT_COIN: EventCoinBonus,
  'strBonus': SimpleBonus,
  'groups': SimpleBonus,
  'xp': IntegralBonus,

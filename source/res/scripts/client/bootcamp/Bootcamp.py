@@ -19,6 +19,7 @@ from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP
 from PlayerEvents import g_playerEvents
 from bootcamp_shared import BOOTCAMP_BATTLE_ACTION
 from gui import makeHtmlString
+from gui.ClientHangarSpace import g_clientHangarSpaceOverride
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import isReferralProgramEnabled, isCurrentUserRecruit
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.Scaleform.Waiting import Waiting
@@ -43,7 +44,6 @@ from .ReloadLobbyHelper import ReloadLobbyHelper
 from .states import STATE
 from .states.StateInGarage import StateInGarage
 from .states.StateInitial import StateInitial
-from .states.StateOutroVideo import StateOutroVideo
 from .states.StateResultScreen import StateResultScreen
 from .aop.common import weave
 from . import GAME_SETTINGS_NEWBIE, GAME_SETTINGS_COMMON
@@ -96,7 +96,6 @@ class Bootcamp(EventSystemEntity):
         self.__bonuses = None
         self.__isIntroVideoPlayed = False
         self.__requestBootcampFinishFromBattle = False
-        self.__transitionFlash = None
         self.__isSniperModeUsed = False
         self.__showingWaitingActionWindow = False
         self.__nation = 0
@@ -105,7 +104,6 @@ class Bootcamp(EventSystemEntity):
         self.__replayController = None
         self.__minimapSize = 0.0
         self.__garageLessons = GarageLessons()
-        self.__finalVideoCallback = None
         self.__p = {'manualStart': False,
          'finished': False}
         self.__weaver = aop.Weaver()
@@ -223,7 +221,6 @@ class Bootcamp(EventSystemEntity):
         g_bootcampEvents.onBattleLoaded += self.onBattleLoaded
         g_bootcampEvents.onResultScreenFinished += self.onResultScreenFinished
         g_bootcampEvents.onRequestBootcampFinish += self.onRequestBootcampFinish
-        g_bootcampEvents.onOutroVideoStop += self.onOutroVideoStop
         g_bootcampEvents.onBootcampBecomeNonPlayer += self.onBootcampBecomeNonPlayer
         g_playerEvents.onAvatarBecomeNonPlayer += self.__onAvatarBecomeNonPlayer
         g_playerEvents.onArenaCreated += self.__onArenaCreated
@@ -238,7 +235,7 @@ class Bootcamp(EventSystemEntity):
             yield self.settingsCore.serverSettings.settingsCache.update()
             self.settingsCore.serverSettings.applySettings()
             isNewbie = False
-            if ctx['isNewbieSettings'] and not ctx['completed'] and ctx['runCount'] == 1:
+            if ctx['isNewbieSettings'] and not ctx['completed']:
                 isNewbie = True
             self.__setupPreferences(isNewbie)
             self.hideActionWaitWindow()
@@ -310,7 +307,6 @@ class Bootcamp(EventSystemEntity):
         g_bootcampEvents.onBattleLoaded -= self.onBattleLoaded
         g_bootcampEvents.onResultScreenFinished -= self.onResultScreenFinished
         g_bootcampEvents.onRequestBootcampFinish -= self.onRequestBootcampFinish
-        g_bootcampEvents.onOutroVideoStop -= self.onOutroVideoStop
         g_playerEvents.onAvatarBecomeNonPlayer -= self.__onAvatarBecomeNonPlayer
         g_playerEvents.onArenaCreated -= self.__onArenaCreated
         self.connectionMgr.onDisconnected -= self.__cm_onDisconnected
@@ -430,14 +426,6 @@ class Bootcamp(EventSystemEntity):
             self.prbEntity.doAction()
         return
 
-    def showFinalVideo(self, callback):
-        LOG_DEBUG_DEV_BOOTCAMP('showFinalVideo')
-        MC.g_musicController.stopAmbient(True)
-        self.__finalVideoCallback = callback
-        self.__currentState.deactivate()
-        self.__currentState = StateOutroVideo()
-        self.__currentState.activate()
-
     def onGarageLessonFinished(self, lessonId):
         LOG_DEBUG_DEV_BOOTCAMP('onGarageLessonFinished', lessonId)
         self.__account.base.completeBootcampLesson(0)
@@ -463,12 +451,6 @@ class Bootcamp(EventSystemEntity):
         self.setDefaultHangarSpace()
         self.stop(0)
         self.__lobbyReloader.reload()
-
-    def onOutroVideoStop(self):
-        if self.__finalVideoCallback is not None:
-            self.__finalVideoCallback()
-            self.__finalVideoCallback = None
-        return
 
     def getBattleSettings(self):
         settings = getBattleSettings(self.__lessonId)
@@ -504,7 +486,6 @@ class Bootcamp(EventSystemEntity):
         return self.__gui
 
     def setHangarSpace(self, hangarSpace, hangarSpacePremium):
-        from gui.ClientHangarSpace import g_clientHangarSpaceOverride
         g_clientHangarSpaceOverride.setPath(hangarSpacePremium, -1, True, False)
         g_clientHangarSpaceOverride.setPath(hangarSpace, -1, False, False)
 
@@ -515,6 +496,12 @@ class Bootcamp(EventSystemEntity):
     def setDefaultHangarSpace(self):
         self.setHangarSpace(None, None)
         return
+
+    def previewNation(self, nationIndex):
+        nationData = self.__nationsData[nationIndex]
+        vehicleFirstID = nationData['vehicle_first']
+        vehicle = self.itemsCache.items.getVehicles()[vehicleFirstID]
+        g_clientHangarSpaceOverride.hangarSpace.startToUpdateVehicle(vehicle)
 
     def changeNation(self, nationIndex):
         self.__nation = nationIndex
@@ -574,8 +561,11 @@ class Bootcamp(EventSystemEntity):
     def checkBigConsumablesIconsLesson(self):
         return self.__lessonId == self.getContextIntParameter('researchSecondVehicleLesson')
 
-    def getBattleStatsLesson(self):
-        return self.__context.get('battleStats', [])
+    def getBattleStatsLessonWin(self):
+        return self.__context.get('battleStatsWin', [])
+
+    def getBattleStatsLessonDefeat(self):
+        return self.__context.get('battleStatsDefeat', [])
 
     def setBootcampParams(self, params):
         self.__p.update(params)
@@ -589,21 +579,6 @@ class Bootcamp(EventSystemEntity):
     def removePointcut(self, pointcutIndex):
         if pointcutIndex is not None:
             self.__weaver.clear(pointcutIndex)
-        return
-
-    def showBattleResultTransition(self):
-        from .BattleResultTransition import BattleResultTransition
-        if self.__transitionFlash is not None:
-            self.__transitionFlash.close()
-        self.__transitionFlash = BattleResultTransition()
-        self.__transitionFlash.active(True)
-        return
-
-    def hideBattleResultTransition(self):
-        if self.__transitionFlash is not None:
-            self.__transitionFlash.active(False)
-            self.__transitionFlash.close()
-            self.__transitionFlash = None
         return
 
     def __setupPreferences(self, isNewbie):
@@ -622,6 +597,10 @@ class Bootcamp(EventSystemEntity):
         self.settingsCore.applySettings(settings)
         self.settingsCore.confirmChanges(self.settingsCore.applyStorages(restartApproved=False))
         self.settingsCore.clearStorages()
+
+
+def important_function():
+    pass
 
 
 g_bootcamp = Bootcamp()

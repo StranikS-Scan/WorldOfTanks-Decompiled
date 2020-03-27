@@ -29,10 +29,6 @@ class GuiApplication(object):
     def systemLocale(self):
         return self.__systemLocale
 
-    @property
-    def implTypeMask(self):
-        return self.__impl.implTypeMask
-
     def init(self):
         self.__impl.initialize()
         self.__resourceManager = ResourceManager.create(self.__impl.resourceManager)

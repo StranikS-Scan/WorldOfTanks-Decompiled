@@ -38,8 +38,21 @@ class HollowChargeType(ShellType):
         return 'HollowChargeType(piercingPowerLossFactorByDistance={}, ricochetAngleCos={})'.format(self.piercingPowerLossFactorByDistance, self.ricochetAngleCos)
 
 
+class HighExplosiveImpactParams(object):
+    __slots__ = ('angleCos', 'radius', 'damages')
+
+    def __init__(self):
+        self.angleCos = None
+        self.radius = component_constants.ZERO_FLOAT
+        self.damages = component_constants.EMPTY_TUPLE
+        return
+
+    def __repr__(self):
+        return 'HighExplosiveImpactParams(angleCos={}, radius={}, damages={})'.format(self.angleCos, self.radius, self.damages)
+
+
 class HighExplosiveType(ShellType):
-    __slots__ = ('explosionRadius', 'explosionDamageFactor', 'explosionDamageAbsorptionFactor', 'explosionEdgeDamageFactor')
+    __slots__ = ('explosionRadius', 'explosionDamageFactor', 'explosionDamageAbsorptionFactor', 'explosionEdgeDamageFactor', 'isModernMechanics', 'blastWave', 'shellFragments', 'armorSpalls', 'shellFragmentsDamageAbsorptionFactor')
 
     def __init__(self, name):
         super(HighExplosiveType, self).__init__(name)
@@ -47,9 +60,15 @@ class HighExplosiveType(ShellType):
         self.explosionDamageFactor = component_constants.ZERO_FLOAT
         self.explosionDamageAbsorptionFactor = component_constants.ZERO_FLOAT
         self.explosionEdgeDamageFactor = component_constants.ZERO_FLOAT
+        self.shellFragmentsDamageAbsorptionFactor = component_constants.ZERO_FLOAT
+        self.isModernMechanics = False
+        self.blastWave = None
+        self.shellFragments = None
+        self.armorSpalls = None
+        return
 
     def __repr__(self):
-        return 'HighExplosiveType(explosionRadius={}, explosionDamageFactor={}, explosionDamageAbsorptionFactor={}, explosionEdgeDamageFactor={})'.format(self.explosionRadius, self.explosionDamageFactor, self.explosionDamageAbsorptionFactor, self.explosionEdgeDamageFactor)
+        return 'HighExplosiveType(explosionRadius={}, explosionDamageFactor={}, explosionDamageAbsorptionFactor={}, explosionEdgeDamageFactor={}, blastWave={}, shellFragments={}, armorSpalls={}, shellFragmentsDamageAbsorptionFactor={})'.format(self.explosionRadius, self.explosionDamageFactor, self.explosionDamageAbsorptionFactor, self.explosionEdgeDamageFactor, self.blastWave, self.shellFragments, self.armorSpalls, self.shellFragmentsDamageAbsorptionFactor)
 
 
 class SmokeType(ShellType):

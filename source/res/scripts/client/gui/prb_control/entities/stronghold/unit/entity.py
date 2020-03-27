@@ -17,7 +17,7 @@ from gui.prb_control.entities.stronghold.unit.actions_handler import StrongholdA
 from gui.prb_control.entities.stronghold.unit.actions_validator import StrongholdActionsValidator
 from gui.prb_control.entities.stronghold.unit.permissions import StrongholdPermissions
 from gui.prb_control.entities.stronghold.unit.requester import StrongholdUnitRequestProcessor
-from gui.prb_control.entities.stronghold.unit.waiting import WaitingManager
+from gui.prb_control.entities.base.external_battle_unit.base_external_battle_waiting_manager import BaseExternalUnitWaitingManager
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.formatters import messages
 from gui.prb_control.items import SelectResult
@@ -85,7 +85,7 @@ class StrongholdDynamicRosterSettings(DynamicRosterSettings):
 class StrongholdBrowserEntryPoint(UnitBrowserEntryPoint):
 
     def __init__(self):
-        super(StrongholdBrowserEntryPoint, self).__init__(FUNCTIONAL_FLAG.STRONGHOLD, PREBATTLE_TYPE.EXTERNAL)
+        super(StrongholdBrowserEntryPoint, self).__init__(FUNCTIONAL_FLAG.STRONGHOLD, PREBATTLE_TYPE.STRONGHOLD)
 
 
 class StrongholdEntryPoint(UnitEntryPoint):
@@ -145,7 +145,7 @@ class StrongholdEntryPoint(UnitEntryPoint):
 class StrongholdBrowserEntity(UnitBrowserEntity):
 
     def __init__(self):
-        super(StrongholdBrowserEntity, self).__init__(FUNCTIONAL_FLAG.STRONGHOLD, PREBATTLE_TYPE.EXTERNAL)
+        super(StrongholdBrowserEntity, self).__init__(FUNCTIONAL_FLAG.STRONGHOLD, PREBATTLE_TYPE.STRONGHOLD)
 
     def canKeepMode(self):
         return False
@@ -175,11 +175,11 @@ class StrongholdEntity(UnitEntity):
 
     def __init__(self):
         self.__strongholdSettings = StrongholdSettings()
-        super(StrongholdEntity, self).__init__(FUNCTIONAL_FLAG.STRONGHOLD, PREBATTLE_TYPE.EXTERNAL)
+        super(StrongholdEntity, self).__init__(FUNCTIONAL_FLAG.STRONGHOLD, PREBATTLE_TYPE.STRONGHOLD)
         self.__g_clanCache = _ClanCache()
         self.__revisionId = 0
         self.__battleModeData = {}
-        self.__waitingManager = WaitingManager()
+        self.__waitingManager = BaseExternalUnitWaitingManager()
         self.__errorCount = 0
         self.__timerID = None
         self.__leaveInitiator = False
@@ -238,7 +238,7 @@ class StrongholdEntity(UnitEntity):
         if self.inPlayersMatchingMode():
             self._invokeListeners('onPlayersMatching', True)
 
-    @prequeue_storage_getter(QUEUE_TYPE.EXTERNAL_UNITS)
+    @prequeue_storage_getter(QUEUE_TYPE.STRONGHOLD_UNITS)
     def storage(self):
         return None
 
@@ -281,7 +281,7 @@ class StrongholdEntity(UnitEntity):
         return meta
 
     def getQueueType(self):
-        return QUEUE_TYPE.EXTERNAL_UNITS
+        return QUEUE_TYPE.STRONGHOLD_UNITS
 
     def rejoin(self):
         super(StrongholdEntity, self).rejoin()

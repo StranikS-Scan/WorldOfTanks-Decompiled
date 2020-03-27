@@ -81,7 +81,7 @@ class VehiclePreviewBrowseTab(VehiclePreviewBrowseTabMeta):
             hasTooltip = len(description) > maxDescriptionLength
             if hasTooltip:
                 description = description[:maxDescriptionLength - 3] + '...'
-            self.as_setDataS(text_styles.main(description), hasTooltip, bonuses)
+            self.as_setDataS(text_styles.main(description), hasTooltip, g_currentPreviewVehicle.getVehiclePreviewType(), bonuses)
         return
 
     def __onOfferChanged(self, event):

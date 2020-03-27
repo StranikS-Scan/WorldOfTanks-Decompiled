@@ -598,6 +598,7 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
         isEqOrDev = module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS
         isFit = True
         reason = ''
+        showAllInstalled = True
         titleFormatter = text_styles.middleTitle
         cachedEqs = RegularEquipmentConsumables()
         currentVehicleEqs = RegularEquipmentConsumables()
@@ -632,11 +633,14 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
             elif reason == 'already_installed' and isEqOrDev and installedVehicles:
                 tooltipHeader, _ = getComplexStatus('#tooltips:deviceFits/already_installed' if module.itemTypeName == GUI_ITEM_TYPE.OPTIONALDEVICE else '#tooltips:moduleFits/already_installed')
                 tooltipText = ', '.join(installedVehicles)
+            elif reason == 'too_heavy':
+                titleFormatter = text_styles.error
+                showAllInstalled = False
         elif installedVehicles:
             tooltipHeader, _ = getComplexStatus('#tooltips:deviceFits/already_installed' if module.itemTypeName == GUI_ITEM_TYPE.OPTIONALDEVICE else '#tooltips:moduleFits/already_installed')
             tooltipText = ', '.join(installedVehicles)
         if tooltipHeader is not None or tooltipText is not None:
-            if len(totalInstalledVehicles) > self.MAX_INSTALLED_LIST_LEN:
+            if showAllInstalled and len(totalInstalledVehicles) > self.MAX_INSTALLED_LIST_LEN:
                 hiddenVehicleCount = len(totalInstalledVehicles) - self.MAX_INSTALLED_LIST_LEN
                 hiddenTxt = '%s %s' % (text_styles.main(backport.text(R.strings.tooltips.suitableVehicle.hiddenVehicleCount())), text_styles.stats(hiddenVehicleCount))
                 tooltipText = '%s\n%s' % (tooltipText, hiddenTxt)

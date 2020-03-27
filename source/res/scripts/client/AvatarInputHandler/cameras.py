@@ -216,7 +216,7 @@ def get2DAngleFromCamera(vector):
 class FovExtended(object):
     __instance = None
     __HOR_TO_VERT_RATIO = 60.0 / 95.0
-    __TO_HORIZONTAL_THRESHOLD = 32.0 / 9.0 + 0.001
+    __TO_HORIZONTAL_THRESHOLD = 3.0 / 2.0 + 0.001
     __HOR_TO_BIG_HOR_RATIO = 2.0
     __BIG_ASPECT_THRESHOLD = 11.0 / 3.0
 

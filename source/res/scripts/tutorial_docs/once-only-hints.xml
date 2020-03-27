@@ -313,5 +313,17 @@
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	True	</ignore-outside-click>
     </hint>
+    <hint>	VehiclePreviewModulesButtonHint	  <item-id>	VehiclePreviewModulesButton	</item-id>
+      <text>	_(#tutorial:collectibleVehicles/showModules)	</text>
+      <arrow>
+        <direction>	R	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <update-runtime>	True	</update-runtime>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <condition>
+        <global-active>	_CollectibleVehiclePreviewEnabled	</global-active>
+      </condition>
+    </hint>
   </hints>
 </once-only-hints.xml>

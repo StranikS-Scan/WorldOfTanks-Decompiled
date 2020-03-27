@@ -67,6 +67,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     TRADE_IN_INFO_NOT_AVAILABLE = 'tradeInInfoNotAvailable'
     TRADE_IN_STATE_NOT_AVAILABLE = 'tradeInStateNotAvailable'
     DEMOUNT_KIT = 'demountKit'
+    VEHICLE_COLLECTOR = 'vehicleCollector'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):

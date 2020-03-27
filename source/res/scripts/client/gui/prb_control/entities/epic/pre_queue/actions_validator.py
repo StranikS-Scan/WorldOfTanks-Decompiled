@@ -7,6 +7,7 @@ from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import PRE_QUEUE_RESTRICTION, PREBATTLE_RESTRICTION
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.game_control import IEpicBattleMetaGameController
 
 class EpicVehicleValidator(BaseActionsValidator):
 
@@ -29,6 +30,9 @@ class EpicActionsValidator(PreQueueActionsValidator):
 
     def _validate(self):
         result = super(EpicActionsValidator, self)._validate()
+        epicCtrl = dependency.instance(IEpicBattleMetaGameController)
+        if not epicCtrl.isActive():
+            result = ValidationResult(False, PREBATTLE_RESTRICTION.UNDEFINED)
         if result and result.restriction == PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED:
             epicValidationResult = self.__epicVehicleValidator.canPlayerDoAction()
             if epicValidationResult and not epicValidationResult.isValid:

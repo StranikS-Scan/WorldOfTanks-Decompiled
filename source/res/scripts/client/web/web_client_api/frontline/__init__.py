@@ -59,7 +59,8 @@ class FrontLineWebApi(W2CSchema):
          'award_points': self.__eventProgCtrl.actualRewardPoints,
          'season_award_points': self.__eventProgCtrl.seasonRewardPoints,
          'max_award_points': self.__eventProgCtrl.maxRewardPoints,
-         'seasons_achievements': seasonsAchievements}
+         'seasons_achievements': seasonsAchievements,
+         'is_reserves_available_in_fl_menu': self.__frontlineCtrl.isReservesAvailableInFLMenu()}
         return data
 
     @w2c(W2CSchema, name='get_calendar_info')

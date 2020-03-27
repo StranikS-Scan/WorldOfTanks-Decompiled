@@ -64,11 +64,6 @@ class Processor(object):
         for plugin in plugins:
             self.addPlugin(plugin)
 
-    @property
-    def gamefaceEnabled(self):
-        from gui.shared.event_dispatcher import gamefaceEnabled
-        return self.IS_GAMEFACE_SUPPORTED and gamefaceEnabled()
-
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeError(errStr, auxData=ctx)
 

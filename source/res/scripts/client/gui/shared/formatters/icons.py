@@ -115,6 +115,14 @@ def crystalBig():
     return _getIcon('crystalBig')
 
 
+def eventCoin():
+    return _getIcon(Currency.EVENT_COIN)
+
+
+def eventCoinBig():
+    return _getIcon('eventCoinBig')
+
+
 def demountKit():
     return _getIcon('demountKit')
 

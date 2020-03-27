@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/event_progression_controller.py
+from enum import Enum, unique
 import Event
 from adisp import process
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.game_control.epic_meta_game_ctrl import FRONTLINE_SCREENS
 from gui.game_control.links import URLMacros
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from helpers import dependency
@@ -11,6 +11,17 @@ from skeletons.gui.game_control import IEventProgressionController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 EVENT_PROGRESSION_SETTINGS_KEY = 'event_progression_config'
+
+@unique
+class EventProgressionScreens(Enum):
+    MAIN = '?preview=1'
+    FRONTLINE_RESERVES = 'reserves/'
+    FRONTLINE_REWARDS = 'rewards/'
+
+    @classmethod
+    def hasValue(cls, value):
+        return value in cls.__members__.values()
+
 
 def _showBrowserView(url):
     from gui.Scaleform.daapi.view.lobby.event_progression.web_handlers import createEventProgressionWebHandlers
@@ -89,8 +100,8 @@ class EventProgressionController(IEventProgressionController):
                 _showBrowserView(parsedUrl)
 
     def showCustomScreen(self, screen):
-        if self.__url and screen in FRONTLINE_SCREENS.ALL():
-            self.openURL('/'.join((self.__url.strip('/'), screen.strip('/'))))
+        if self.__url and EventProgressionScreens.hasValue(screen):
+            self.openURL('/'.join((self.__url.strip('/'), screen.value.strip('/'))))
 
     def onLobbyInited(self, ctx):
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange

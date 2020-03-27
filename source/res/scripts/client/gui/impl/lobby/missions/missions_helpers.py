@@ -6,11 +6,19 @@ from skeletons.gui.server_events import IEventsCache
 if typing.TYPE_CHECKING:
     from typing import Iterable
     from gui.impl.gen.view_models.common.missions.event_model import EventModel
-    from gui.server_events.event_items import Quest
+    from gui.server_events.event_items import DailyQuest
+    from frameworks.wulf.view.array import Array
 __all__ = ('needToUpdateQuestsInModel',)
+NUM_OF_COMMON_DAILY_QUESTS = 3
+
+def areCommonQuestsCompleted(quests):
+    numCompletedQuests = len([ q for q in quests if q.isCompleted() ])
+    return numCompletedQuests >= NUM_OF_COMMON_DAILY_QUESTS
+
 
 def needToUpdateQuestsInModel(quests, questsInModel):
-    return __hasProgressChanged(__questsIdGen(quests)) or __hasStatusChanged(__questsIdGen(quests)) or __hasNewQuest(__questsIdGen(quests), __questModelsIdGen(questsInModel))
+    questIds = [ q.getID() for q in quests ]
+    return __hasProgressChanged(questIds) or __hasStatusChanged(questIds) or __hasDifferentQuests(questIds, __questModelsIdGen(questsInModel))
 
 
 @dependency.replace_none_kwargs(eventsCache=IEventsCache)
@@ -28,17 +36,8 @@ def __hasStatusChanged(ids, eventsCache=None):
     return False
 
 
-def __hasNewQuest(questIds, viewModelIds):
-    for index in questIds:
-        if index not in viewModelIds:
-            return True
-
-    return False
-
-
-def __questsIdGen(dailyQuests):
-    for dailyQuest in dailyQuests:
-        yield dailyQuest.getID()
+def __hasDifferentQuests(questIds, viewModelIds):
+    return sorted(questIds) != sorted(viewModelIds)
 
 
 def __questModelsIdGen(dailyQuests):

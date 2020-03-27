@@ -4,12 +4,15 @@ import operator
 import time
 import types
 from Queue import Queue
+from collections import defaultdict
 import logging
 import ArenaType
 import BigWorld
 import constants
 import personal_missions
+import nations
 from adisp import async, process
+from blueprints.FragmentTypes import getFragmentType
 from chat_shared import decompressSysMessage, SYS_MESSAGE_TYPE, MapRemovedFromBLReason
 from constants import INVOICE_ASSET, AUTO_MAINTENANCE_TYPE, AUTO_MAINTENANCE_RESULT, PREBATTLE_TYPE, FINISH_REASON, KICK_REASON_NAMES, KICK_REASON, NC_MESSAGE_TYPE, NC_MESSAGE_PRIORITY, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, ARENA_GUI_TYPE, SYS_MESSAGE_FORT_EVENT_NAMES, PREMIUM_ENTITLEMENTS, PREMIUM_TYPE
 from battle_pass_common import BATTLE_PASS_BADGE_ID
@@ -22,7 +25,7 @@ from nations import NAMES
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
 from dossiers2.ui.layouts import IGNORED_BY_BATTLE_RESULTS
-from gui import GUI_SETTINGS
+from gui import GUI_SETTINGS, GUI_NATIONS
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.SystemMessages import SM_TYPE
@@ -44,10 +47,10 @@ from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency, ZERO_MONEY
 from gui.shared.notifications import NotificationPriorityLevel, NotificationGuiSettings, NotificationGroup
 from gui.shared.utils.transport import z_loads
-from gui.shared.utils.requesters.blueprints_requester import getUniqueBlueprints
+from gui.shared.utils.requesters.blueprints_requester import getUniqueBlueprints, getFragmentNationID
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from helpers import dependency
-from helpers import i18n, html, getLocalizedData
+from helpers import i18n, html, getLocalizedData, int2roman
 from helpers import time_utils
 from items import getTypeInfoByIndex, getTypeInfoByName, vehicles as vehicles_core, tankmen, ITEM_TYPES as I_T
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
@@ -366,6 +369,11 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                 if accCrystal:
                     ctx[Currency.CRYSTAL] = self.__makeCurrencyString(Currency.CRYSTAL, accCrystal)
                     ctx['crystalStr'] = g_settings.htmlTemplates.format('battleResultCrystal', {Currency.CRYSTAL: ctx[Currency.CRYSTAL]})
+                accEventCoin = battleResults.get(Currency.EVENT_COIN)
+                ctx['eventCoinStr'] = ''
+                if accEventCoin:
+                    ctx[Currency.EVENT_COIN] = self.__makeCurrencyString(Currency.EVENT_COIN, accEventCoin)
+                    ctx['eventCoinStr'] = g_settings.htmlTemplates.format('battleResultEventCoin', {Currency.EVENT_COIN: ctx[Currency.EVENT_COIN]})
                 ctx['creditsEx'] = self.__makeCreditsExString(accCredits, battleResults.get('creditsPenalty', 0), battleResults.get('creditsContributionIn', 0), battleResults.get('creditsContributionOut', 0))
                 guiType = battleResults.get('guiType', 0)
                 ctx['achieves'], ctx['badges'] = self.__makeAchievementsAndBadgesStrings(battleResults)
@@ -574,7 +582,8 @@ class AutoMaintenanceFormatter(WaitItemsSyncFormatter):
      AUTO_MAINTENANCE_RESULT.RENT_IS_ALMOST_OVER: {AUTO_MAINTENANCE_TYPE.CUSTOMIZATION: R.strings.messenger.serviceChannelMessages.autoRentStyleRentIsAlmostOverAutoprolongationOFF.text()}}
     __currencyTemplates = {Currency.CREDITS: 'PurchaseForCreditsSysMessage',
      Currency.GOLD: 'PurchaseForGoldSysMessage',
-     Currency.CRYSTAL: 'PurchaseForCrystalSysMessage'}
+     Currency.CRYSTAL: 'PurchaseForCrystalSysMessage',
+     Currency.EVENT_COIN: 'PurchaseForEventCoinSysMessage'}
 
     def isNotify(self):
         return True
@@ -695,15 +704,19 @@ class AchievementFormatter(ServiceChannelFormatter):
 
 
 class CurrencyUpdateFormatter(ServiceChannelFormatter):
+    _EMITTER_ID_TO_TITLE = {2525: R.strings.messenger.serviceChannelMessages.currencyUpdate.auction()}
+    _DEFAULT_TITLE = R.strings.messenger.serviceChannelMessages.currencyUpdate.financial_transaction()
 
     def format(self, message, *args):
         data = message.data
-        currencyCode = data['currency_code']
+        currencyCode = data['currency_name']
         amountDelta = data['amount_delta']
         transactionTime = data['date']
+        emitterID = data.get('emitterID')
         if currencyCode and amountDelta and transactionTime:
             xmlKey = 'currencyUpdate'
-            formatted = g_settings.msgTemplates.format(xmlKey, ctx={'date': TimeFormatter.getLongDatetimeFormat(transactionTime),
+            formatted = g_settings.msgTemplates.format(xmlKey, ctx={'title': backport.text(self._EMITTER_ID_TO_TITLE.get(emitterID, self._DEFAULT_TITLE)),
+             'date': TimeFormatter.getLongDatetimeFormat(transactionTime),
              'currency': backport.text(R.strings.messenger.serviceChannelMessages.currencyUpdate.dyn('debited' if amountDelta < 0 else 'received').dyn(currencyCode)()),
              'amount': getStyle(currencyCode)(getBWFormatter(currencyCode)(abs(amountDelta)))}, data={'icon': currencyCode.title() + 'Icon'})
             return [MessageData(formatted, self._getGuiSettings(message, xmlKey))]
@@ -714,7 +727,8 @@ class CurrencyUpdateFormatter(ServiceChannelFormatter):
 class GiftReceivedFormatter(ServiceChannelFormatter):
     __handlers = {'money': ('_GiftReceivedFormatter__formatMoneyGiftMsg', {1: 'creditsReceivedAsGift',
                 2: 'goldReceivedAsGift',
-                3: 'creditsAndGoldReceivedAsGift'}),
+                3: 'creditsAndGoldReceivedAsGift',
+                8: 'eventCoinReceivedAsGift'}),
      'xp': ('_GiftReceivedFormatter__formatXPGiftMsg', 'xpReceivedAsGift'),
      'premium': ('_GiftReceivedFormatter__formatPremiumGiftMsg', 'premiumReceivedAsGift'),
      'premium_plus': ('_GiftReceivedFormatter__formatPremiumGiftMsg', 'tankPremiumReceivedAsGift'),
@@ -784,20 +798,24 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
     __assetHandlers = {INVOICE_ASSET.GOLD: '_formatAmount',
      INVOICE_ASSET.CREDITS: '_formatAmount',
      INVOICE_ASSET.CRYSTAL: '_formatAmount',
+     INVOICE_ASSET.EVENT_COIN: '_formatAmount',
      INVOICE_ASSET.PREMIUM: '_formatAmount',
      INVOICE_ASSET.FREE_XP: '_formatAmount',
      INVOICE_ASSET.DATA: '_formatData'}
     __currencyToInvoiceAsset = {Currency.GOLD: INVOICE_ASSET.GOLD,
      Currency.CREDITS: INVOICE_ASSET.CREDITS,
-     Currency.CRYSTAL: INVOICE_ASSET.CRYSTAL}
+     Currency.CRYSTAL: INVOICE_ASSET.CRYSTAL,
+     Currency.EVENT_COIN: INVOICE_ASSET.EVENT_COIN}
     __operationTemplateKeys = {INVOICE_ASSET.GOLD: 'goldAccruedInvoiceReceived',
      INVOICE_ASSET.CREDITS: 'creditsAccruedInvoiceReceived',
      INVOICE_ASSET.CRYSTAL: 'crystalAccruedInvoiceReceived',
+     INVOICE_ASSET.EVENT_COIN: 'eventCoinAccruedInvoiceReceived',
      INVOICE_ASSET.PREMIUM: 'premiumAccruedInvoiceReceived',
      INVOICE_ASSET.FREE_XP: 'freeXpAccruedInvoiceReceived',
      INVOICE_ASSET.GOLD | 16: 'goldDebitedInvoiceReceived',
      INVOICE_ASSET.CREDITS | 16: 'creditsDebitedInvoiceReceived',
      INVOICE_ASSET.CRYSTAL | 16: 'crystalDebitedInvoiceReceived',
+     INVOICE_ASSET.EVENT_COIN | 16: 'eventCoinDebitedInvoiceReceived',
      INVOICE_ASSET.PREMIUM | 16: 'premiumDebitedInvoiceReceived',
      INVOICE_ASSET.FREE_XP | 16: 'freeXpDebitedInvoiceReceived'}
     __blueprintsTemplateKeys = {BlueprintTypes.VEHICLE: ('vehicleBlueprintsAccruedInvoiceReceived', 'vehicleBlueprintsDebitedInvoiceReceived'),
@@ -806,6 +824,7 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
     __messageTemplateKeys = {INVOICE_ASSET.GOLD: 'goldInvoiceReceived',
      INVOICE_ASSET.CREDITS: 'creditsInvoiceReceived',
      INVOICE_ASSET.CRYSTAL: 'crystalInvoiceReceived',
+     INVOICE_ASSET.EVENT_COIN: 'eventCoinInvoiceReceived',
      INVOICE_ASSET.PREMIUM: 'premiumInvoiceReceived',
      INVOICE_ASSET.FREE_XP: 'freeXpInvoiceReceived',
      INVOICE_ASSET.DATA: 'dataInvoiceReceived'}
@@ -1708,6 +1727,7 @@ class VehInscriptionTimedOutFormatter(ServiceChannelFormatter):
 
 class ConverterFormatter(ServiceChannelFormatter):
     __itemsCache = dependency.descriptor(IItemsCache)
+    __CONVERTER_BLUEPRINTS_TEMPLATE = 'ConverterBlueprintsNotify'
 
     def __i18nValue(self, key, isReceived, **kwargs):
         key = ('%sReceived' if isReceived else '%sWithdrawn') % key
@@ -1759,7 +1779,34 @@ class ConverterFormatter(ServiceChannelFormatter):
             templateName = 'ProjectionDecalsDemountedSysMessage'
             formatted = g_settings.msgTemplates.format(templateName, {'text': messageText})
             messagesListData.append(MessageData(formatted, self._getGuiSettings(message, 'ProjectionDecalsDemountedSysMessage')))
+        blueprints = data.get('blueprints')
+        if blueprints:
+            blueprintsText = self.__getBlueprintsMessageText(blueprints)
+            if blueprintsText is not None:
+                messagesListData.append(MessageData(blueprintsText, self._getGuiSettings(message, self.__CONVERTER_BLUEPRINTS_TEMPLATE)))
         return messagesListData
+
+    def __getBlueprintsMessageText(self, blueprints):
+        universal = 0
+        national = defaultdict(int)
+        text = []
+        for blueprintCD in blueprints:
+            fragmentType = getFragmentType(blueprintCD)
+            if fragmentType == BlueprintTypes.INTELLIGENCE_DATA:
+                universal += blueprints[blueprintCD]
+            if fragmentType == BlueprintTypes.NATIONAL:
+                nationID = getFragmentNationID(blueprintCD)
+                nationName = nations.MAP.get(nationID, nations.NONE_INDEX)
+                national[nationName] += blueprints[blueprintCD]
+
+        if universal > 0:
+            text.append(g_settings.htmlTemplates.format('intelligenceBlueprintReceived', {'count': backport.getIntegralFormat(universal)}))
+        for nation in GUI_NATIONS:
+            if national[nation] > 0:
+                text.append(g_settings.htmlTemplates.format('nationalBlueprintReceived', {'count': backport.getIntegralFormat(national[nation]),
+                 'nationName': backport.text(R.strings.nations.dyn(nation).genetiveCase())}))
+
+        return g_settings.msgTemplates.format(self.__CONVERTER_BLUEPRINTS_TEMPLATE, {'text': '<br/>'.join(text)}) if text else None
 
 
 class ClientSysMessageFormatter(ServiceChannelFormatter):
@@ -2027,6 +2074,10 @@ class QuestAchievesFormatter(object):
             if crystal:
                 fomatter = getBWFormatter(Currency.CRYSTAL)
                 result.append(cls.__makeQuestsAchieve('battleQuestsCrystal', crystal=fomatter(crystal)))
+            eventCoin = data.get(Currency.EVENT_COIN, 0)
+            if eventCoin:
+                fomatter = getBWFormatter(Currency.EVENT_COIN)
+                result.append(cls.__makeQuestsAchieve('battleQuestsEventCoin', eventCoin=fomatter(eventCoin)))
             gold = data.get(Currency.GOLD, 0)
             if gold:
                 fomatter = getBWFormatter(Currency.GOLD)
@@ -2190,15 +2241,15 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
                 self.__processMetaActions(qID)
 
             for subFormatter in self.__subFormatters:
-                subTokkenQuestIDs = subFormatter.getQuestOfThisGroup(completedQuestIDs)
-                if subTokkenQuestIDs:
+                subTokenQuestIDs = subFormatter.getQuestOfThisGroup(completedQuestIDs)
+                if subTokenQuestIDs:
                     if subFormatter.isAsync():
                         result = yield subFormatter.format(message)
                     else:
                         result = subFormatter.format(message)
                     if result:
                         messageDataList.extend(result)
-                    completedQuestIDs.difference_update(subTokkenQuestIDs)
+                    completedQuestIDs.difference_update(subTokenQuestIDs)
                     popUps.difference_update(subFormatter.getPopUps(message))
 
             if completedQuestIDs or popUps:
@@ -2751,7 +2802,12 @@ class RankedQuestAchievesFormatter(QuestAchievesFormatter):
     __rankAwardsFormatters = tuple(((currency, getBWFormatter(currency)) for currency in Currency.ALL))
     __awardsStyles = {Currency.CREDITS: text_styles.credits,
      Currency.GOLD: text_styles.gold,
-     Currency.CRYSTAL: text_styles.crystal}
+     Currency.CRYSTAL: text_styles.crystal,
+     Currency.EVENT_COIN: text_styles.eventCoin}
+    __rankAwardsFormatters = ((Currency.CRYSTAL, getBWFormatter(Currency.CRYSTAL)),
+     (Currency.GOLD, getBWFormatter(Currency.GOLD)),
+     (Currency.CREDITS, getBWFormatter(Currency.CREDITS)),
+     (Currency.EVENT_COIN, getBWFormatter(Currency.EVENT_COIN)))
 
     def packRankAwards(self, awardsDict):
         result = self._processTokens(awardsDict)
@@ -3184,3 +3240,18 @@ class BadgesFormatter(ServiceChannelFormatter):
                         formatted = g_settings.msgTemplates.format(self.__template, {'text': text,
                          'header': header})
                         return [MessageData(formatted, self._getGuiSettings(message, self.__template))]
+
+
+class CollectibleVehiclesUnlockedFormatter(ServiceChannelFormatter):
+    __TEMPLATE = 'UnlockedCollectibleVehiclesMessage'
+
+    def format(self, message, *args):
+        data = message.data
+        if data:
+            nationID = data.get('nationID')
+            level = data.get('level')
+            if nationID is not None and nationID < len(NAMES):
+                formatted = g_settings.msgTemplates.format(self.__TEMPLATE, {'header': backport.text(R.strings.messenger.serviceChannelMessages.vehicleCollector.unlockLevel.header()),
+                 'text': backport.text(R.strings.messenger.serviceChannelMessages.vehicleCollector.unlockLevel.text(), level=int2roman(level), nation=backport.text(R.strings.nations.dyn(NAMES[nationID]).genetiveCase()))})
+                return [MessageData(formatted, self._getGuiSettings(message, self.__TEMPLATE))]
+        return [MessageData(None, None)]

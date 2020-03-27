@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.491	</firePenalty>
   </invisibility>
-  <repairCost>	5.00	</repairCost>
+  <repairCost>	2.5	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
@@ -37,7 +37,7 @@
     </armor>
     <primaryArmor>	armor_2 armor_3 armor_8	</primaryArmor>
     <weight>	1617	</weight>
-    <maxHealth>	64	</maxHealth>
+    <maxHealth>	128	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	60	</maxHealth>
       <maxRegenHealth>	30	</maxRegenHealth>
@@ -1793,7 +1793,7 @@
         <armor_5>	0	</armor_5>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	16	</maxHealth>
+      <maxHealth>	32	</maxHealth>
       <rotationSpeed>	10	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1807,7 +1807,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_13pdr_Gun>	shared	  <maxAmmo>	24	</maxAmmo>
+        <_13pdr_Gun>	shared	  <maxAmmo>	48	</maxAmmo>
           <armor>
             <armor_4>	3.2	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
             </armor_4>
@@ -1930,11 +1930,7 @@
         </radio>
       </unlocks>
     </N11>
-    <N9>	shared	  <unlocks>
-        <vehicle>	GB27_Sexton	  <cost>	1350	</cost>
-        </vehicle>
-      </unlocks>
-    </N9>
+    <N9>	shared	</N9>
   </radios>
   <physics>
     <detailed>

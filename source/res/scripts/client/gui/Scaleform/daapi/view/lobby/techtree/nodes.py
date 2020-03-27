@@ -184,7 +184,7 @@ class RealNode(ExposedNode):
         unlockProps = self.getUnlockProps()
         if item.canTradeIn:
             return getItemPricesVO(self.__tradeIn.getTradeInPrice(item))
-        elif not item.isUnlocked and unlockProps is not None:
+        elif not item.isUnlocked and unlockProps is not None and not item.isCollectible:
             return getItemUnlockPricesVO(unlockProps)
         else:
             return getItemRestorePricesVO(item.restorePrice) if item.isRestoreAvailable() else getItemPricesVO(item.getBuyPrice())

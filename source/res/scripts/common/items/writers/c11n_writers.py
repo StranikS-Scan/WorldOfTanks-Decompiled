@@ -2,12 +2,13 @@
 # Embedded file name: scripts/common/items/writers/c11n_writers.py
 import Math
 import math
-from items import _xml
+from items import _xml, parseIntCompactDescr
 import os
 from realm_utils import ResMgr
 from soft_exception import SoftException
 import items.vehicles as iv
 from items.components.c11n_constants import SeasonType, DecalType
+from nations import NAMES, INDICES
 
 def findOrCreate(section, subsectionName):
     if not section.has_key(subsectionName):
@@ -124,6 +125,106 @@ def parseReference(reference, itemName, refsections, gsections, isections):
         return
 
 
+class VehicleFilterTagsConvertor(object):
+
+    def convertToString(self, valuesList):
+        result = ' '.join(valuesList)
+        return result
+
+
+class VehicleFilterLevelConvertor(object):
+
+    def convertToString(self, valuesList):
+        result = ' '.join(map(str, valuesList))
+        return result
+
+
+class VehicleFilterNationConvertor(object):
+
+    def convertToString(self, valuesList):
+        result = ' '.join(map(lambda item: NAMES[item], valuesList))
+        return result
+
+
+class VehicleFilterVehicleConvertor(object):
+
+    def convertToString(self, valuesList):
+        from items.vehicles import g_cache, g_list
+
+        def getTankName(vehCompactDesc):
+            itemTypeID, nationId, vehId = parseIntCompactDescr(vehCompactDesc)
+            tank = g_cache.vehicle(nationId, vehId)
+            return tank.name
+
+        result = ' '.join(map(lambda item: getTankName(item), valuesList))
+        return result
+
+
+def saveVehicleFilter(item, gsection, isection):
+    changed = False
+    section = selectSection(gsection, isection, 'vehicleFilter')
+    vehicleFilterSection = findOrCreate(section, 'vehicleFilter')
+
+    def countFilters(filterSection):
+        includeCount = 0
+        excludeCount = 0
+        for iname, isection in filterSection.items():
+            if iname == 'include':
+                includeCount += 1
+            if iname == 'exclude':
+                excludeCount += 1
+
+        return (includeCount, excludeCount)
+
+    includeSectCnt, excludeSectCnt = countFilters(vehicleFilterSection)
+    if includeSectCnt != len(item.filter.include) or excludeSectCnt != len(item.filter.exclude):
+        changed = True
+        while len(vehicleFilterSection) > 0:
+            lastSection = section.child(len(vehicleFilterSection) - 1)
+            section.deleteSection(lastSection)
+
+        def createSections(parentSection, sectionName, count):
+            while count > 0:
+                parentSection.createSection(sectionName)
+                count -= 1
+
+        createSections(vehicleFilterSection, 'include', len(item.filter.include))
+        createSections(vehicleFilterSection, 'exclude', len(item.filter.exclude))
+
+    def saveFilter(filterSection, filterName, filters):
+        if len(filters) == 0:
+            return False
+        changed = False
+        index = 0
+
+        def saveFilterValue(subFilterSection, valueSectionName, listOfValues, convertor):
+            if len(listOfValues) == 0:
+                if subFilterSection.has_key(valueSectionName):
+                    subFilterSection.deleteSection(valueSectionName)
+                    return True
+            else:
+                strValue = convertor.convertToString(listOfValues)
+                if strValue is None:
+                    return False
+                return _xml.rewriteString(subFilterSection, valueSectionName, strValue)
+            return False
+
+        for iname, isection in filterSection.items():
+            if iname == filterName:
+                filterValue = filters[index]
+                changed |= saveFilterValue(isection, 'nations', filterValue.nations, VehicleFilterNationConvertor())
+                changed |= saveFilterValue(isection, 'levels', filterValue.levels, VehicleFilterLevelConvertor())
+                changed |= saveFilterValue(isection, 'tags', filterValue.tags, VehicleFilterTagsConvertor())
+                changed |= saveFilterValue(isection, 'vehicles', filterValue.vehicles, VehicleFilterVehicleConvertor())
+                index += 1
+
+        return changed
+
+    changed |= saveFilter(vehicleFilterSection, 'include', item.filter.include)
+    changed |= saveFilter(vehicleFilterSection, 'exclude', item.filter.exclude)
+    return changed
+
+
 class BaseCustomizationItemXmlWriter(object):
 
     def write(self, item, gsection, isection):
@@ -137,6 +238,7 @@ class BaseCustomizationItemXmlWriter(object):
         changed |= rewriteString(gsection, isection, 'season', encodeEnum(SeasonType, item.season), 'UNDEFINED')
         changed |= rewriteString(gsection, isection, 'userString', item.i18n.userKey)
         changed |= rewriteString(gsection, isection, 'description', item.i18n.descriptionKey)
+        changed |= saveVehicleFilter(item, gsection, isection)
         return changed
 
 

@@ -1,16 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/__init__.py
 import BigWorld
-import Event
 from gui import makeHtmlString
-from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.impl import backport
 from gui.shared import events
-from helpers import dependency
 from helpers import i18n, time_utils
-from skeletons.gui.shared import IItemsCache
 I18N_PRICE_KEY = '{0:>s}/messagePrice'
 I18N_TITLE_KEY = '{0:>s}/title'
 I18N_MESSAGE_KEY = '{0:>s}/message'
@@ -203,6 +199,39 @@ class I18nConfirmDialogMeta(I18nDialogMeta):
         super(I18nConfirmDialogMeta, self).__init__(key, buttons, titleCtx, messageCtx, meta, scope)
 
 
+class BCConfirmDialogMeta(IDialogMeta):
+
+    def __init__(self, meta=None):
+        self.__meta = meta
+
+    def getEventType(self):
+        return events.ShowDialogEvent.SHOW_SIMPLE_DLG
+
+    def getViewScopeType(self):
+        return ScopeTemplates.DEFAULT_SCOPE
+
+    def getLabelExecute(self):
+        return self.__meta.get('labelExecute', '')
+
+    def getIcon(self):
+        return self.__meta.get('icon', '')
+
+    def getCostValue(self):
+        return self.__meta.get('costValue', 0)
+
+    def getLabel(self):
+        return self.__meta.get('label', '')
+
+    def getIsBuy(self):
+        return self.__meta.get('isBuy', False)
+
+    def getIsTraining(self):
+        return self.__meta.get('isTraining', False)
+
+    def getMessage(self):
+        return self.__meta.get('message', '')
+
+
 class TankmanOperationDialogMeta(I18nConfirmDialogMeta):
 
     def __init__(self, key, tankman=None, focusedID=None, showPeriodEndWarning=False):
@@ -302,58 +331,10 @@ class IconPriceDialogMeta(IconDialogMeta):
         return self._action
 
 
-class DestroyDeviceDialogMeta(IconDialogMeta):
-
-    def getEventType(self):
-        return events.ShowDialogEvent.SHOW_DESTROY_DEVICE_DIALOG
-
-
 class PMConfirmationDialogMeta(IconDialogMeta):
 
     def getEventType(self):
         return events.ShowDialogEvent.SHOW_PM_CONFIRMATION_DIALOG
-
-
-class DemountDeviceDialogMeta(IconPriceDialogMeta):
-    DISMANTLE_DEVICE_PATH = '../maps/icons/modules/dismantleDevice.png'
-
-    def __init__(self, key, titleCtx=None, messageCtx=None, meta=None, focusedID=None):
-        super(DemountDeviceDialogMeta, self).__init__(key, titleCtx, messageCtx, meta, focusedID)
-        self.onConfirmationStatusChanged = Event.Event()
-        self.__isOperationAllowed = False
-        self.__checkIsOperationAllowed()
-        g_clientUpdateManager.addMoneyCallback(self.__moneyChangeHandler)
-        g_clientUpdateManager.addCallbacks({'shop.paidRemovalCost': self.__paidRemovalCostChangeHandler,
-         'shop.paidDeluxeRemovalCost': self.__paidRemovalCostChangeHandler})
-
-    @property
-    def isOperationAllowed(self):
-        return self.__isOperationAllowed
-
-    def getIcon(self):
-        return self.DISMANTLE_DEVICE_PATH
-
-    def __moneyChangeHandler(self, *args):
-        self.__checkIsOperationAllowed()
-
-    def __paidRemovalCostChangeHandler(self, *args):
-        self.__checkIsOperationAllowed()
-
-    @dependency.replace_none_kwargs(itemsCache=IItemsCache)
-    def __checkIsOperationAllowed(self, itemsCache=None):
-        userMoney = itemsCache.items.stats.money
-        itemRemovalPrice = self._item.getRemovalPrice(itemsCache.items)
-        operationAllowed = userMoney >= itemRemovalPrice.price
-        if self.__isOperationAllowed != operationAllowed:
-            self.__isOperationAllowed = operationAllowed
-            self.onConfirmationStatusChanged(operationAllowed)
-
-    def getEventType(self):
-        return events.ShowDialogEvent.SHOW_DEMOUNT_DEVICE_DIALOG
-
-    def dispose(self):
-        self.onConfirmationStatusChanged.clear()
-        g_clientUpdateManager.removeObjectCallbacks(self)
 
 
 class HtmlMessageDialogMeta(SimpleDialogMeta):

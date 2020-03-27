@@ -10,7 +10,7 @@ from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.app_loader import sf_lobby
 from gui.battle_control.arena_info.interfaces import IArenaPeriodController
 from gui.battle_control.battle_constants import WinStatus
-from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared import g_eventBus, events
 from gui.shared.utils.scheduled_notifications import PeriodicNotifier, Notifiable
 from gui.sounds import filters as snd_filters
 from gui.sounds.sound_constants import SoundFilters, PLAYING_SOUND_CHECK_PERIOD
@@ -309,21 +309,7 @@ class ModalWindowEnv(SoundEnv):
 class StrongholdEnv(SoundEnv):
 
     def __init__(self, soundsCtrl):
-        super(StrongholdEnv, self).__init__(soundsCtrl, 'stronghold', ambient=SoundEvent(_MC.AMBIENT_EVENT_LOBBY_FORT), filters=(SoundFilters.FORT_FILTER,))
-
-    def start(self):
-        super(StrongholdEnv, self).start()
-        g_eventBus.addListener(events.StrongholdEvent.STRONGHOLD_DATA_UNAVAILABLE, self.__onError, scope=EVENT_BUS_SCOPE.STRONGHOLD)
-
-    def stop(self):
-        g_eventBus.removeListener(events.StrongholdEvent.STRONGHOLD_DATA_UNAVAILABLE, self.__onError, scope=EVENT_BUS_SCOPE.STRONGHOLD)
-        if self._soundsCtrl is not None:
-            self._soundsCtrl.system.sendGlobalEvent('fa_music_global_unmute')
-        super(StrongholdEnv, self).stop()
-        return
-
-    def __onError(self, event):
-        self.getAmbientEvent().stop()
+        super(StrongholdEnv, self).__init__(soundsCtrl, 'stronghold', filters=(SoundFilters.FILTERED_HANGAR,))
 
 
 class BattleResultsEnv(SoundEnv):

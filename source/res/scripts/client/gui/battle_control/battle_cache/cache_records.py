@@ -70,7 +70,7 @@ class RelationsCacheRecord(AbstractCacheRecord):
                     keys = struct.unpack_from(_RELATIONS_KEYS_LIST_FORMAT.format(count), record, offset=_RELATIONS_SIZE_LEN)
                     values = struct.unpack_from(_RELATIONS_VALUES_LIST_FORMAT.format(count), record, offset=_RELATIONS_SIZE_LEN + struct.calcsize(_RELATIONS_KEYS_LIST_FORMAT.format(count)))
                     self.__relations.clear()
-                    self.__relations = {key:val for key, val in zip(keys, values)}
+                    self.__relations.update({key:val for key, val in zip(keys, values)})
             except struct.error as e:
                 LOG_ERROR('Could not unpack the following record: ', record, e)
 

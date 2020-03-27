@@ -25,6 +25,7 @@ from account_helpers.battle_pass import BattlePassManager
 from account_helpers.festivity_manager import FestivityManager
 from account_helpers.settings_core import IntUserSettings
 from account_helpers.session_statistics import SessionStatistics
+from account_helpers.spa_flags import SPAFlags
 from account_shared import NotificationItem, readClientServerVersion
 from adisp import process
 from bootcamp.Bootcamp import g_bootcamp
@@ -152,6 +153,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.blueprints = g_accountRepository.blueprints
         self.festivities = g_accountRepository.festivities
         self.sessionStats = g_accountRepository.sessionStats
+        self.spaFlags = g_accountRepository.spaFlags
         self.anonymizer = g_accountRepository.anonymizer
         self.dailyQuests = g_accountRepository.dailyQuests
         self.battlePass = g_accountRepository.battlePass
@@ -175,6 +177,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.epicMetaGame.setAccount(self)
         self.blueprints.setAccount(self)
         self.sessionStats.setAccount(self)
+        self.spaFlags.setAccount(self)
         self.anonymizer.setAccount(self)
         g_accountRepository.commandProxy.setGateway(self.__doCmd)
         self.isLongDisconnectedFromCenter = False
@@ -187,6 +190,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.eventNotifications = g_accountRepository.eventNotifications
         self.clanMembers = g_accountRepository.clanMembers
         self.eventsData = g_accountRepository.eventsData
+        self.__eventsDataUnpacked = {}
         self.personalMissionsLock = g_accountRepository.personalMissionsLock
         self.isInRandomQueue = False
         self.isInTutorialQueue = False
@@ -227,6 +231,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.blueprints.onAccountBecomePlayer()
         self.festivities.onAccountBecomePlayer()
         self.sessionStats.onAccountBecomePlayer()
+        self.spaFlags.onAccountBecomePlayer()
         self.anonymizer.onAccountBecomePlayer()
         self.battlePass.onAccountBecomePlayer()
         chatManager.switchPlayerProxy(self)
@@ -262,6 +267,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.blueprints.onAccountBecomeNonPlayer()
         self.festivities.onAccountBecomeNonPlayer()
         self.sessionStats.onAccountBecomeNonPlayer()
+        self.spaFlags.onAccountBecomeNonPlayer()
         self.anonymizer.onAccountBecomeNonPlayer()
         self.battlePass.onAccountBecomeNonPlayer()
         self.__cancelCommands()
@@ -283,6 +289,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.epicMetaGame.setAccount(None)
         self.blueprints.setAccount(None)
         self.sessionStats.setAccount(None)
+        self.spaFlags.setAccount(None)
         self.anonymizer.setAccount(None)
         g_accountRepository.commandProxy.setGateway(None)
         self.unitMgr.clear()
@@ -331,6 +338,26 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def onKickedFromServer(self, reason, isBan, expiryTime):
         LOG_DEBUG('onKickedFromServer', reason, isBan, expiryTime)
         self.connectionMgr.setKickedFromServer(reason, isBan, expiryTime)
+
+    def getUnpackedEventsData(self, typeID):
+        eventsData = {}
+        if typeID not in self.eventsData:
+            return eventsData
+        currentRevID = EVENT_CLIENT_DATA.REVISION(typeID)
+        currentRev = self.eventsData[currentRevID]
+        if typeID in self.__eventsDataUnpacked:
+            unpackedRev, eventsData = self.__eventsDataUnpacked[typeID]
+            if unpackedRev != currentRev:
+                del self.__eventsDataUnpacked[typeID]
+            else:
+                return eventsData
+        try:
+            eventsData = cPickle.loads(zlib.decompress(self.eventsData[typeID]))
+            self.__eventsDataUnpacked[typeID] = (currentRev, eventsData)
+        except (zlib.error, cPickle.UnpicklingError):
+            LOG_CURRENT_EXCEPTION()
+
+        return eventsData
 
     def onStreamComplete(self, streamID, desc, data):
         isCorrupted, origPacketLen, packetLen, origCrc32, crc32 = desc
@@ -1137,6 +1164,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.blueprints.synchronize(isFullSync, diff)
             self.festivities.synchronize(isFullSync, diff)
             self.sessionStats.synchronize(isFullSync, diff)
+            self.spaFlags.synchronize(diff)
             self.anonymizer.synchronize(isFullSync, diff)
             self.battlePass.synchronize(isFullSync, diff)
             self.__synchronizeServerSettings(diff)
@@ -1374,6 +1402,7 @@ class _AccountRepository(object):
         self.blueprints = client_blueprints.ClientBlueprints(self.syncData)
         self.festivities = FestivityManager(self.syncData, self.commandProxy)
         self.sessionStats = SessionStatistics(self.syncData)
+        self.spaFlags = SPAFlags(self.syncData)
         self.anonymizer = client_anonymizer.ClientAnonymizer(self.syncData)
         self.dailyQuests = {}
         self.battlePass = BattlePassManager(self.syncData, self.commandProxy)

@@ -54,7 +54,7 @@ class StrongholdBattleRoomWindow(FortBattleRoomWindowMeta, IStrongholdListener):
         return FORTIFICATION_ALIASES.PYTHON_ALIASES
 
     def getPrbType(self):
-        return PREBATTLE_TYPE.EXTERNAL
+        return PREBATTLE_TYPE.STRONGHOLD
 
     def autoSearchCancel(self, value):
         self.currentState = value

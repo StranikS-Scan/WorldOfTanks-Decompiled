@@ -5,7 +5,6 @@ from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
 from async import await, async
 from gui import g_htmlTemplates
 from constants import MAX_VEHICLE_LEVEL
-from gui.game_control.epic_meta_game_ctrl import FRONTLINE_SCREENS
 from gui.impl import backport
 from gui.impl.dialogs import dialogs
 from gui.Scaleform.daapi.view.meta.FittingSelectPopoverMeta import FittingSelectPopoverMeta
@@ -15,6 +14,7 @@ from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.game_control.event_progression_controller import EventProgressionScreens
 from gui.impl.gen.resources import R
 from gui.shared.formatters.text_styles import builder as str_builder
 from gui.shared.gui_items import GUI_ITEM_TYPE_INDICES, GUI_ITEM_TYPE, GUI_ITEM_ECONOMY_CODE
@@ -327,7 +327,7 @@ class BattleAbilitySelectPopover(HangarFittingSelectPopover):
         super(BattleAbilitySelectPopover, self).__init__(ctx, _BattleAbilityLogicProvider)
 
     def onManageBattleAbilitiesClicked(self):
-        self.__progressionController.showCustomScreen(FRONTLINE_SCREENS.RESERVES_SCREEN)
+        self.__progressionController.showCustomScreen(EventProgressionScreens.FRONTLINE_RESERVES)
         self.destroy()
 
     def _prepareInitialData(self):

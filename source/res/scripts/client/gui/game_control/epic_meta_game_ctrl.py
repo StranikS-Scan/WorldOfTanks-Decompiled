@@ -6,7 +6,7 @@ from collections import defaultdict
 import BigWorld
 import WWISE
 import Event
-from shared_utils import collapseIntervals, CONST_CONTAINER
+from shared_utils import collapseIntervals
 from gui.periodic_battles.models import PrimeTime
 from constants import ARENA_BONUS_TYPE, PREBATTLE_TYPE, QUEUE_TYPE
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -41,11 +41,6 @@ from gui.Scaleform.daapi.view.lobby.epicBattle.epic_cycle_helpers import getCurr
 from player_ranks import getSettings as getRankSettings
 _logger = logging.getLogger(__name__)
 _VALID_PREBATTLE_TYPES = [PREBATTLE_TYPE.EPIC, PREBATTLE_TYPE.EPIC_TRAINING]
-
-class FRONTLINE_SCREENS(CONST_CONTAINER):
-    RESERVES_SCREEN = 'reserves/'
-    REWARDS_SCREEN = 'rewards/'
-
 
 class EPIC_PERF_GROUP(object):
     HIGH_RISK = 1
@@ -188,6 +183,9 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
 
     def isEnabled(self):
         return self.__getSettingsEpicBattles().isEnabled
+
+    def isReservesAvailableInFLMenu(self):
+        return self.__getSettingsEpicBattles().reservesAvailableInFLMenu
 
     def getPerformanceGroup(self):
         if not self.__performanceGroup:
@@ -415,6 +413,11 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
         currentVersion = getCurrentWelcomeScreenVersion()
         return lastSeen >= currentVersion
 
+    def getCurrentCycleTimeLeft(self):
+        currentCycleEndTime, isCycleActive = self.getCurrentCycleInfo()
+        cycleTimeLeft = currentCycleEndTime - time_utils.getCurrentLocalServerTimestamp() if isCycleActive else None
+        return cycleTimeLeft
+
     def getTimer(self):
         primeTimeStatus, timeLeft, _ = self.getPrimeTimeStatus()
         if primeTimeStatus != PrimeTimeStatus.AVAILABLE and not self.connectionMgr.isStandalone():
@@ -433,6 +436,24 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
     def getEventTimeLeft(self):
         timeLeft = self.getSeasonTimeRange()[1] - time_utils.getCurrentLocalServerTimestamp()
         return timeLeft + 1 if timeLeft > 0 else time_utils.ONE_MINUTE
+
+    def getCurrentPrimeTimeEnd(self):
+        primeTimes = self.getPrimeTimes()
+        currentPrimeTimeEnd = None
+        for primeTime in primeTimes.values():
+            periods = primeTime.getPeriodsActiveForTime(time_utils.getCurrentLocalServerTimestamp(), preferPeriodBounds=True)
+            for period in periods:
+                _, endTime = period
+                currentPrimeTimeEnd = max(endTime, currentPrimeTimeEnd)
+
+        return currentPrimeTimeEnd
+
+    def hasPrimeTimesLeft(self):
+        currentCycleEndTime, isCycleActive = self.getCurrentCycleInfo()
+        if not isCycleActive:
+            return False
+        primeTimes = self.getPrimeTimes()
+        return any([ primeTime.getNextPeriodStart(time_utils.getCurrentLocalServerTimestamp(), currentCycleEndTime) for primeTime in primeTimes.values() ])
 
     def __invalidateBattleAbilities(self, *_):
         if not self.itemsCache.isSynced():

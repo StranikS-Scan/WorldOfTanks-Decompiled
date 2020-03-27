@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.596	</firePenalty>
   </invisibility>
-  <repairCost>	3.8	</repairCost>
+  <repairCost>	2.47	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
@@ -43,7 +43,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	6870	</weight>
-    <maxHealth>	208	</maxHealth>
+    <maxHealth>	320	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	110	</maxHealth>
       <maxRegenHealth>	75	</maxRegenHealth>
@@ -1868,7 +1868,7 @@
         <armor_8>	0	</armor_8>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	52	</maxHealth>
+      <maxHealth>	80	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1886,7 +1886,7 @@
             <minPitch>	0 -7 1 -7	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	64	</maxAmmo>
+          <maxAmmo>	95	</maxAmmo>
           <reloadTime>	3.4	</reloadTime>
           <unlocks>
             <gun>	_57mm_ZiS-2	  <cost>	4000	</cost>
@@ -1959,7 +1959,7 @@
             <minPitch>	0 -7 1 -7	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	72	</maxAmmo>
+          <maxAmmo>	110	</maxAmmo>
           <reloadTime>	2.3	</reloadTime>
           <armor>
             <armor_1>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -2025,12 +2025,10 @@
             <minPitch>	0 -7 1 -7	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	43	</maxAmmo>
+          <maxAmmo>	65	</maxAmmo>
           <unlocks>
             <gun>	_85mm_LB-2S	  <cost>	5100	</cost>
             </gun>
-            <vehicle>	R02_SU-85	  <cost>	12500	</cost>
-            </vehicle>
           </unlocks>
           <armor>
             <armor_1>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -2097,7 +2095,7 @@
             <minPitch>	0 -7 1 -7	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	43	</maxAmmo>
+          <maxAmmo>	65	</maxAmmo>
           <armor>
             <armor_1>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

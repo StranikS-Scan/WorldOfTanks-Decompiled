@@ -34,12 +34,15 @@ def _epicBattle(achieveName):
 
 _TANK_EXPERT_PREFIX = 'tankExpert'
 _MECH_ENGINEER_PREFIX = 'mechanicEngineer'
+_VEHICLE_COLLECTOR_PREFIX = 'collectorVehicle'
 _HIST_BATTLEFIELD_POSTFIX = 'battlefield'
 TANK_EXPERT_GROUP = [_total(_TANK_EXPERT_PREFIX)]
 MECH_ENGINEER_GROUP = [_total(_MECH_ENGINEER_PREFIX)]
+VEHICLE_COLLECTOR_GROUP = [_total(_VEHICLE_COLLECTOR_PREFIX)]
 for _nID, name in enumerate(nations.AVAILABLE_NAMES):
     TANK_EXPERT_GROUP.append(_total('%s%d' % (_TANK_EXPERT_PREFIX, _nID)))
     MECH_ENGINEER_GROUP.append(_total('%s%d' % (_MECH_ENGINEER_PREFIX, _nID)))
+    VEHICLE_COLLECTOR_GROUP.append(_total('%s%d' % (_VEHICLE_COLLECTOR_PREFIX, _nID)))
 
 HISTORY_BATTLEFIELD_GROUP = []
 PERSONAL_MISSIONS_GROUP = [_single('firstMerit'),
@@ -69,7 +72,9 @@ _CUSTOM_ACHIEVES = defaultdict(tuple, {DOSSIER_TYPE.ACCOUNT: (achievements.WHITE
 def _getComLayoutRecordID(record):
     if record in TANK_EXPERT_GROUP:
         return (record[0], 'tankExpertStrg')
-    return (record[0], 'mechanicEngineerStrg') if record in MECH_ENGINEER_GROUP else record
+    if record in MECH_ENGINEER_GROUP:
+        return (record[0], 'mechanicEngineerStrg')
+    return (record[0], 'collectorVehicleStrg') if record in VEHICLE_COLLECTOR_GROUP else record
 
 
 def _buildComLayoutSet(dossierType, comLayout):
@@ -115,7 +120,7 @@ def getAchievementsByMode(mode):
     return result
 
 
-NEAREST_ACHIEVEMENTS = TANK_EXPERT_GROUP + MECH_ENGINEER_GROUP + [_total('mousebane'),
+NEAREST_ACHIEVEMENTS = TANK_EXPERT_GROUP + MECH_ENGINEER_GROUP + VEHICLE_COLLECTOR_GROUP + [_total('mousebane'),
  _total('beasthunter'),
  _total('pattonValley'),
  _total('sinai'),
@@ -165,7 +170,7 @@ def init():
                             _7x7('bruteForceMedal')) + tuple(map(_fallout, FALLOUT_ACHIEVEMENTS_BLOCK_LAYOUT))})
     for _r in achievements.ACHIEVEMENTS.iterkeys():
         name = str(_r[1])
-        if name.startswith(_TANK_EXPERT_PREFIX) and _r not in TANK_EXPERT_GROUP or name.startswith(_MECH_ENGINEER_PREFIX) and _r not in MECH_ENGINEER_GROUP:
+        if name.startswith(_TANK_EXPERT_PREFIX) and _r not in TANK_EXPERT_GROUP or name.startswith(_MECH_ENGINEER_PREFIX) and _r not in MECH_ENGINEER_GROUP or name.startswith(_VEHICLE_COLLECTOR_PREFIX) and _r not in VEHICLE_COLLECTOR_GROUP:
             _EXCLUDED_ACHIEVES[_COMMON_DOSSIERS_TYPE] += (_r,)
 
     _layoutsMap = {DOSSIER_TYPE.ACCOUNT: (ACCOUNT_ACHIEVEMENT_LAYOUT, _buildComLayoutSet(DOSSIER_TYPE.ACCOUNT, com_layouts.accountDossierLayout)),

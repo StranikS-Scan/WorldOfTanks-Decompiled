@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/prb_control/formatters/invites.py
 import logging
 from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_TYPE
-from constants import QUEUE_TYPE_NAMES
+from constants import QUEUE_TYPE_NAMES, QUEUE_TYPE
 from gui import makeHtmlString
 from gui.impl import backport
 from gui.impl.gen import R
@@ -94,9 +94,9 @@ def getLeaveOrChangeText(funcState, invitePrbType, peripheryID, lobbyContext=Non
     text = ''
     if funcState.doLeaveToAcceptInvite(invitePrbType):
         if funcState.isInLegacy() or funcState.isInUnit():
-            entityName = getPrbName(funcState.entityTypeID)
+            entityName = getPrbName(invitePrbType)
         elif funcState.isInPreQueue():
-            entityName = getPreQueueName(funcState.entityTypeID)
+            entityName = getPreQueueName(invitePrbType)
         else:
             _logger.error('Can not resolve name of entity. %s', funcState)
             return text
@@ -140,6 +140,13 @@ class PrbInviteHtmlTextFormatter(InviteFormatter):
         creatorName = _formatInvite(_PrbInvitePart.TITLE_CREATOR_NAME, name)
         return _formatInvite(_PrbInvitePart.TITLE, creatorName, True, sourceKey=getPrbName(invite.type))
 
+    def getLeaveFrontLineWarning(self, invite):
+        stateCurrent = self.prbDispatcher.getFunctionalState().entityTypeID
+        warning = ''
+        if stateCurrent == QUEUE_TYPE.EPIC and invite.type == QUEUE_TYPE.RANDOMS:
+            warning = backport.text(_R_INVITES.warning.leave.FrontLine())
+        return _formatInvite(_PrbInvitePart.WARNING, warning)
+
     def getWarning(self, invite):
         warning = backport.text(_R_INVITES.warning.dyn(invite.warning)())
         return _formatInvite(_PrbInvitePart.WARNING, warning)
@@ -168,6 +175,9 @@ class PrbInviteHtmlTextFormatter(InviteFormatter):
         text = self.getWarning(invite)
         if text:
             result.append(text)
+        text = self.getLeaveFrontLineWarning(invite)
+        if text:
+            result.append(text)
         text = self.getComment(invite)
         if text:
             result.append(text)
@@ -188,7 +198,7 @@ class PrbExternalBattleInviteHtmlTextFormatter(PrbInviteHtmlTextFormatter):
 
 
 def getPrbInviteHtmlFormatter(invite):
-    return PrbExternalBattleInviteHtmlTextFormatter() if invite.type == PREBATTLE_TYPE.EXTERNAL else PrbInviteHtmlTextFormatter()
+    return PrbExternalBattleInviteHtmlTextFormatter() if invite.type in PREBATTLE_TYPE.EXTERNAL_PREBATTLES else PrbInviteHtmlTextFormatter()
 
 
 class PrbInviteTitleFormatter(InviteFormatter):

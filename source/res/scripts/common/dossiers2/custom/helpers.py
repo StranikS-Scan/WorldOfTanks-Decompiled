@@ -1,13 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/custom/helpers.py
+import typing
 from dossiers2.custom.records import RECORDS, RECORD_INDICES
 from dossiers2.custom.cache import getCache
+from nations import ALL_NATIONS_INDEX
 
-def getTankExpertRequirements(vehTypeFrags, nationID=-1):
+def getTankExpertRequirements(vehTypeFrags, nationID=ALL_NATIONS_INDEX):
     cache = getCache()
     killedVehTypes = set(vehTypeFrags.iterkeys())
     res = {'tankExpert': cache['vehiclesInTrees'] - killedVehTypes}
-    if nationID == -1:
+    if nationID == ALL_NATIONS_INDEX:
         nationIDs = cache['nationsWithVehiclesInTree']
     else:
         nationIDs = [nationID]
@@ -18,11 +20,11 @@ def getTankExpertRequirements(vehTypeFrags, nationID=-1):
     return res
 
 
-def getMechanicEngineerRequirements(defaultUnlocks, unlocks, nationID=-1):
+def getMechanicEngineerRequirements(defaultUnlocks, unlocks, nationID=ALL_NATIONS_INDEX):
     cache = getCache()
     vehiclesInTreesByNation = cache['vehiclesInTreesByNation']
     res = {'mechanicEngineer': cache['vehiclesInTrees'] - defaultUnlocks - unlocks}
-    if nationID == -1:
+    if nationID == ALL_NATIONS_INDEX:
         nationIDs = cache['nationsWithVehiclesInTree']
     else:
         nationIDs = [nationID]
@@ -30,6 +32,29 @@ def getMechanicEngineerRequirements(defaultUnlocks, unlocks, nationID=-1):
         res[''.join(['mechanicEngineer', str(nationIdx)])] = vehiclesInTreesByNation[nationIdx] - defaultUnlocks - unlocks
 
     return res
+
+
+def getVehicleCollectorRequirements(inventoryVehicles, nationID=ALL_NATIONS_INDEX):
+    cache = getCache()
+    collectorVehicles = getAllCollectorVehicles()
+    res = {'collectorVehicle': collectorVehicles - inventoryVehicles}
+    collectorVehiclesByNations = cache['collectorVehiclesByNations']
+    nationIDs = collectorVehiclesByNations.keys() if nationID == ALL_NATIONS_INDEX else [nationID]
+    for nationIdx in nationIDs:
+        achievementName = ''.join(['collectorVehicle', str(nationIdx)])
+        res[achievementName] = collectorVehiclesByNations.get(nationIdx, set()) - inventoryVehicles
+
+    return res
+
+
+def getAllCollectorVehicles():
+    cache = getCache()
+    collectorVehicles = set()
+    collectorVehiclesByNations = cache['collectorVehiclesByNations']
+    for collectorVehiclesInNation in collectorVehiclesByNations.itervalues():
+        collectorVehicles.update(collectorVehiclesInNation)
+
+    return collectorVehicles
 
 
 def getRecordMaxValue(block, record):
@@ -51,6 +76,15 @@ def updateMechanicEngineer(dossierDescr, defaultUnlocks, unlocks, nationID):
         if len(value) == 0:
             dossierDescr['achievements'][record] = True
             dossierDescr.addPopUp('achievements', record, True)
+
+
+def updateVehicleCollector(dossierDescr, inventoryVehicles, nationID):
+    res = getVehicleCollectorRequirements(inventoryVehicles, nationID)
+    for record, value in res.iteritems():
+        if len(value) == 0:
+            if not dossierDescr['achievements'][record]:
+                dossierDescr['achievements'][record] = True
+                dossierDescr.addPopUp('achievements', record, True)
 
 
 def updateRareAchievements(dossierDescr, achievements):

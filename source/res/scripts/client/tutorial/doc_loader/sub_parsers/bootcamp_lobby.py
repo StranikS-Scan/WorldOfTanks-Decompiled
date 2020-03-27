@@ -40,13 +40,37 @@ def _readMessageDialogSequenceItem(xmlCtx, section):
     return messageContent
 
 
+def _readSequenceItem(ctx, sec, fields):
+    messageContent = {'data': {}}
+    if fields:
+        subSec = _xml.getSubsection(ctx, sec, 'data')
+        for field in fields:
+            _fillValue(messageContent['data'], ctx, subSec, field, _xml.readStringOrNone, default='')
+
+    return messageContent
+
+
+def _readSubtitleWindowSection(xmlCtx, section, _, windowID, windowType, content):
+    fields = ('subtitle', 'voiceover')
+    content['sequence'] = [ _readSequenceItem(xmlCtx, messageSec, fields) for _, messageSec in _xml.getChildren(xmlCtx, section, 'sequence') ]
+    return chapter.PopUp(windowID, windowType, content, varRef=None, forcedQuery=True)
+
+
+def _readVideoWindowSection(xmlCtx, section, _, windowID, windowType, content):
+    fields = ('subtitle', 'video-path', 'event-start', 'event-stop', 'event-pause', 'event-resume', 'event-loop')
+    content['sequence'] = [ _readSequenceItem(xmlCtx, messageSec, fields) for _, messageSec in _xml.getChildren(xmlCtx, section, 'sequence') ]
+    return chapter.PopUp(windowID, windowType, content, varRef=None, forcedQuery=True)
+
+
 def _readMessageDialogData(xmlCtx, section, isNation):
     nationID = _xml.readString(xmlCtx, section, 'nation_id') if isNation else None
     data = {}
     _fillValue(data, xmlCtx, section, 'preset', _xml.readString)
     _fillValue(data, xmlCtx, section, 'icon', _xml.readStringOrNone, default='')
     _fillValue(data, xmlCtx, section, 'label', _xml.readStringOrNone, default='')
+    _fillValue(data, xmlCtx, section, 'label_first_bootcamp', partial(_xml.readStringOrNone))
     _fillValue(data, xmlCtx, section, 'text', _xml.readStringOrNone, default='')
+    _fillValue(data, xmlCtx, section, 'subtitle', _xml.readStringOrNone, default='')
     _fillValue(data, xmlCtx, section, 'voiceover', _xml.readStringOrNone, default='')
     _fillValue(data, xmlCtx, section, 'description', _xml.readStringOrNone, default='')
     _fillValue(data, xmlCtx, section, 'background', _xml.readStringOrNone, default='')
@@ -63,6 +87,8 @@ def _readMessageDialogData(xmlCtx, section, isNation):
                 _fillValue(bottomData, xmlCtx, dataSection, 'description', _xml.readStringOrNone, default='')
                 _fillValue(bottomData, xmlCtx, dataSection, 'iconTooltip', _xml.readStringOrNone, default='')
                 _fillValue(bottomData, xmlCtx, dataSection, 'labelTooltip', _xml.readStringOrNone, default='')
+                _fillValue(bottomData, xmlCtx, dataSection, 'animationTarget', _xml.readStringOrNone, default='')
+                _fillValue(bottomData, xmlCtx, dataSection, 'animationType', _xml.readStringOrNone, default='')
                 bottomDataList.append(bottomData)
 
     return (nationID, data)
@@ -70,7 +96,7 @@ def _readMessageDialogData(xmlCtx, section, isNation):
 
 def _readBootcampSelectNationDialogSection(xmlCtx, section, _, dialogID, dialogType, content):
     content['resultVarID'] = _xml.readString(xmlCtx, section, 'result-var')
-    return chapter.PopUp(dialogID, dialogType, content)
+    return _readBootcampMessageDialogSection(xmlCtx, section, _, dialogID, dialogType, content)
 
 
 def _readCheckpointSection(xmlCtx, section, flags):
@@ -129,6 +155,8 @@ def init():
      'current-vehicle-changed': _makeSimpleValidateVarTriggerReader(triggers.CurrentVehicleChangedTrigger),
      'items-cache-sync': _makeSimpleValidateVarTriggerReader(triggers.ItemsCacheSyncTrigger)})
     sub_parsers.setDialogsParsers({'bootcampMessage': _readBootcampMessageDialogSection,
-     'bootcampSelectNation': _readBootcampSelectNationDialogSection})
+     'bootcampSelectNation': _readBootcampSelectNationDialogSection,
+     'bootcampVideo': _readVideoWindowSection})
     sub_parsers.setConditionsParsers({'checkpoint-reached': lambda xmlCtx, section, flags: _readCheckpointReachedCondition(xmlCtx, section, _COND_STATE.ACTIVE),
      'checkpoint-not-reached': lambda xmlCtx, section, flags: _readCheckpointReachedCondition(xmlCtx, section, ~_COND_STATE.ACTIVE)})
+    sub_parsers.setWindowsParsers({'bootcampSubtitle': _readSubtitleWindowSection})

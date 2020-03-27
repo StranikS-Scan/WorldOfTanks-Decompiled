@@ -17,7 +17,7 @@ IS_CELLAPP = BigWorld.component == 'cell'
 IS_BASEAPP = BigWorld.component in ('base', 'service')
 IS_WEB = BigWorld.component == 'web'
 IS_DYNAPDATER = False
-CURRENT_REALM = 'RU'
+CURRENT_REALM = 'CT'
 DEFAULT_LANGUAGE = 'ru'
 AUTH_REALM = 'RU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
@@ -417,7 +417,7 @@ class PREBATTLE_TYPE:
     CLUBS = 9
     FALLOUT = 10
     EVENT = 11
-    EXTERNAL = 12
+    STRONGHOLD = 12
     E_SPORT_COMMON = 14
     EPIC = 15
     EPIC_TRAINING = 16
@@ -430,7 +430,7 @@ class PREBATTLE_TYPE:
      CLUBS,
      FALLOUT,
      EVENT,
-     EXTERNAL,
+     STRONGHOLD,
      E_SPORT_COMMON,
      EPIC,
      EPIC_TRAINING)
@@ -447,7 +447,7 @@ class PREBATTLE_TYPE:
      CLAN,
      FALLOUT,
      EVENT,
-     EXTERNAL,
+     STRONGHOLD,
      E_SPORT_COMMON,
      EPIC)
     CREATE_FROM_CLIENT = (UNIT,
@@ -455,8 +455,9 @@ class PREBATTLE_TYPE:
      EPIC,
      FALLOUT,
      EVENT)
-    CREATE_FROM_WEB = (UNIT, SQUAD, EXTERNAL)
+    CREATE_FROM_WEB = (UNIT, SQUAD, STRONGHOLD)
     TRAININGS = (TRAINING, EPIC_TRAINING)
+    EXTERNAL_PREBATTLES = (STRONGHOLD, TOURNAMENT)
     CREATE_EX_FROM_SERVER = (SQUAD,
      CLAN,
      EPIC,
@@ -755,6 +756,12 @@ RESTR_TYPE_TO_SPA_NAME = dict(((x[1], x[0]) for x in SPA_RESTR_NAME_TO_RESTR_TYP
 class SPA_ATTRS:
     ANONYM_RESTRICTED = '/wot/game/anonym_restricted/'
     GOLFISH_BONUS_APPLIED = '/common/goldfish_bonus_applied/'
+    BOOTCAMP_DISABLED = '/wot/game/bootcamp_disabled/'
+    LOGGING_ENABLED = '/wot/game/logging_enabled/'
+
+    @staticmethod
+    def toClientAttrs():
+        return [SPA_ATTRS.LOGGING_ENABLED, SPA_ATTRS.BOOTCAMP_DISABLED]
 
 
 class CLAN_MEMBER_FLAGS(object):
@@ -1151,10 +1158,11 @@ class QUEUE_TYPE:
     SPEC_BATTLE = 13
     FALLOUT_CLASSIC = 14
     FALLOUT_MULTITEAM = 15
-    EXTERNAL_UNITS = 16
+    STRONGHOLD_UNITS = 16
     RANKED = 17
     BOOTCAMP = 18
     EPIC = 19
+    TOURNAMENT_UNITS = 20
     FALLOUT = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
     ALL = (RANDOMS,
      COMPANIES,
@@ -1168,10 +1176,11 @@ class QUEUE_TYPE:
      FALLOUT,
      FALLOUT_CLASSIC,
      FALLOUT_MULTITEAM,
-     EXTERNAL_UNITS,
+     STRONGHOLD_UNITS,
      RANKED,
      BOOTCAMP,
-     EPIC)
+     EPIC,
+     TOURNAMENT_UNITS)
     REMOVED = (COMPANIES,)
 
 
@@ -1238,6 +1247,7 @@ class INVOICE_ASSET:
     FREE_XP = 5
     FORT_RESOURCE = 6
     CRYSTAL = 7
+    EVENT_COIN = 8
 
 
 class RentType(object):
@@ -1349,6 +1359,7 @@ class REQUEST_COOLDOWN:
     PREFERRED_MAPS = 1.0
     APPLY_ADDITIONAL_XP = 2.0
     SINGLE_TOKEN = 5.0
+    CMD_BUY_VEHICLE = 5.0
     LOG_CLIENT_SESSION_STATS = 5.0
     LOG_CLIENT_SYSTEM = 5.0
     LOG_CLIENT_PB_20_UX_STATS = 5.0
@@ -2308,6 +2319,7 @@ class MarathonConfig(object):
     EMPTY_PATH = ''
     URL = 'marathonUrl'
     REWARD_VEHICLE_URL = 'rewardVehicleUrl'
+    FINISH_SALE_TIME = 'finishSaleTime'
 
 
 SECONDS_IN_DAY = 86400

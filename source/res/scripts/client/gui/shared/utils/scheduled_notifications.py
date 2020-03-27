@@ -74,7 +74,8 @@ class _Notifier(object):
             nextNotification = self._getNextNotificationDelta(delta)
             if not nextNotification:
                 return
-            self._notificationCallbackID = self._registerCallback(nextNotification, self._onNotification)
+            if self._notificationCallbackID is None:
+                self._notificationCallbackID = self._registerCallback(nextNotification, self._onNotification)
             return
 
     def __cancelNotification(self):

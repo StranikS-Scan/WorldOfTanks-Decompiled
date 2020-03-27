@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.315	</firePenalty>
   </invisibility>
-  <repairCost>	7.0	</repairCost>
+  <repairCost>	6.25	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.2	</priceFactor>
@@ -43,7 +43,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	18110	</weight>
-    <maxHealth>	576	</maxHealth>
+    <maxHealth>	672	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -2173,7 +2173,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5400	</weight>
-      <maxHealth>	144	</maxHealth>
+      <maxHealth>	128	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -2187,7 +2187,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_Gun_M3_L37>	shared	  <maxAmmo>	120	</maxAmmo>
+        <_75mm_Gun_M3_L37>	shared	  <maxAmmo>	180	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -2271,7 +2271,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_Gun_M3_L37>
-        <_105mm_SPH_M4_L23>	shared	  <maxAmmo>	72	</maxAmmo>
+        <_105mm_SPH_M4_L23>	shared	  <maxAmmo>	85	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -2344,7 +2344,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_105mm_SPH_M4_L23>
-        <_76mm_Gun_M1A1>	shared	  <maxAmmo>	77	</maxAmmo>
+        <_76mm_Gun_M1A1>	shared	  <maxAmmo>	90	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -2521,7 +2521,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5300	</weight>
-      <maxHealth>	174	</maxHealth>
+      <maxHealth>	168	</maxHealth>
       <rotationSpeed>	42	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -2535,7 +2535,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_Gun_M3_L37>	shared	  <maxAmmo>	120	</maxAmmo>
+        <_75mm_Gun_M3_L37>	shared	  <maxAmmo>	180	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -2613,7 +2613,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_Gun_M3_L37>
-        <_105mm_SPH_M4_L23>	shared	  <maxAmmo>	72	</maxAmmo>
+        <_105mm_SPH_M4_L23>	shared	  <maxAmmo>	85	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -2686,7 +2686,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_105mm_SPH_M4_L23>
-        <_76mm_Gun_M1A1>	shared	  <maxAmmo>	77	</maxAmmo>
+        <_76mm_Gun_M1A1>	shared	  <maxAmmo>	90	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -2772,8 +2772,6 @@
           <unlocks>
             <gun>	OQF_17pdr_Gun_Mk_VII	  <cost>	15000	</cost>
             </gun>
-            <vehicle>	GB41_Challenger	  <cost>	63250	</cost>
-            </vehicle>
           </unlocks>
           <armor>
             <armor_3>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>

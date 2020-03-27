@@ -26,6 +26,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.clans import formatters as clans_fmts
 from gui.clans.items import formatField
 from gui.impl import backport
+from gui.impl.backport.backport_tooltip import DecoratedTooltipWindow
 from gui.impl.gen import R
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_chose_winner_tooltip_view import BattlePassChoseWinnerTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_completed_tooltip_view import BattlePassCompletedTooltipView
@@ -953,6 +954,7 @@ class CURRENCY_SETTINGS(object):
     RESTORE_PRICE = 'restorePrice'
     BUY_GOLD_PRICE = 'buyGoldPrice'
     BUY_CRYSTAL_PRICE = 'buyCrystalPrice'
+    BUY_EVENT_COIN_PRICE = 'buyEventCoinPrice'
     RENT_CREDITS_PRICE = 'rentCreditsPrice'
     RENT_GOLD_PRICE = 'rentGoldPrice'
     SELL_PRICE = 'sellPrice'
@@ -963,7 +965,8 @@ class CURRENCY_SETTINGS(object):
     UPGRADABLE_CREDITS_PRICE = 'upgradableCreditsPrice'
     __BUY_SETTINGS = {Currency.CREDITS: BUY_CREDITS_PRICE,
      Currency.GOLD: BUY_GOLD_PRICE,
-     Currency.CRYSTAL: BUY_CRYSTAL_PRICE}
+     Currency.CRYSTAL: BUY_CRYSTAL_PRICE,
+     Currency.EVENT_COIN: BUY_EVENT_COIN_PRICE}
     __RENT_SETTINGS = {Currency.CREDITS: RENT_CREDITS_PRICE,
      Currency.GOLD: RENT_GOLD_PRICE}
     __REMOVAL_SETTINGS = {Currency.CREDITS: REMOVAL_CREDITS_PRICE,
@@ -992,6 +995,7 @@ _OPERATIONS_SETTINGS = {CURRENCY_SETTINGS.BUY_CREDITS_PRICE: _CurrencySetting(TO
  CURRENCY_SETTINGS.RESTORE_PRICE: _CurrencySetting('#tooltips:vehicle/restore_price', icons.credits(), text_styles.credits, ICON_TEXT_FRAMES.CREDITS),
  CURRENCY_SETTINGS.BUY_GOLD_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_BUY_PRICE, icons.gold(), text_styles.gold, ICON_TEXT_FRAMES.GOLD),
  CURRENCY_SETTINGS.BUY_CRYSTAL_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_BUY_PRICE, icons.crystal(), text_styles.crystal, ICON_TEXT_FRAMES.CRYSTAL),
+ CURRENCY_SETTINGS.BUY_EVENT_COIN_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_BUY_PRICE, icons.eventCoin(), text_styles.eventCoin, ICON_TEXT_FRAMES.EVENT_COIN),
  CURRENCY_SETTINGS.RENT_CREDITS_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_MINRENTALSPRICE, icons.credits(), text_styles.credits, ICON_TEXT_FRAMES.CREDITS),
  CURRENCY_SETTINGS.RENT_GOLD_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_MINRENTALSPRICE, icons.gold(), text_styles.gold, ICON_TEXT_FRAMES.GOLD),
  CURRENCY_SETTINGS.SELL_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_SELL_PRICE, icons.credits(), text_styles.credits, ICON_TEXT_FRAMES.CREDITS),
@@ -1215,6 +1219,8 @@ class HeaderMoneyAndXpTooltipData(BlocksTooltipData):
             valueStr = text_styles.credits(backport.getIntegralFormat(self.itemsCache.items.stats.money.credits))
         elif self._btnType == CURRENCIES_CONSTANTS.CRYSTAL:
             valueStr = text_styles.crystal(backport.getIntegralFormat(self.itemsCache.items.stats.money.crystal))
+        elif self._btnType == CURRENCIES_CONSTANTS.EVENT_COIN:
+            valueStr = text_styles.eventCoin(backport.getIntegralFormat(self.itemsCache.items.stats.money.eventCoin))
         elif self._btnType == CURRENCIES_CONSTANTS.FREE_XP:
             valueStr = text_styles.expText(backport.getIntegralFormat(self.itemsCache.items.stats.actualFreeXP))
         return valueStr
@@ -1372,7 +1378,7 @@ class SquadBonusTooltipWindowData(ToolTipBaseData):
         super(SquadBonusTooltipWindowData, self).__init__(context, TOOLTIP_TYPE.SQUAD_BONUS)
 
     def getDisplayableData(self, *args, **kwargs):
-        return SquadBonusTooltipContent()
+        return DecoratedTooltipWindow(SquadBonusTooltipContent())
 
 
 class VehiclePointsTooltipContentWindowData(ToolTipBaseData):
@@ -1381,7 +1387,7 @@ class VehiclePointsTooltipContentWindowData(ToolTipBaseData):
         super(VehiclePointsTooltipContentWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.BATTLE_PASS_VEHICLE_POINTS)
 
     def getDisplayableData(self, intCD, *args, **kwargs):
-        return VehiclePointsTooltipView(intCD)
+        return DecoratedTooltipWindow(VehiclePointsTooltipView(intCD), useDecorator=False)
 
 
 class BattlePassInProgressTooltipContentWindowData(ToolTipBaseData):

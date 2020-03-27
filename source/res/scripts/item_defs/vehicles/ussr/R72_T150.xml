@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.188	</firePenalty>
   </invisibility>
-  <repairCost>	4.9	</repairCost>
+  <repairCost>	4.356	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.2	</priceFactor>
@@ -43,7 +43,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	30200	</weight>
-    <maxHealth>	664	</maxHealth>
+    <maxHealth>	792	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	100	</maxRegenHealth>
@@ -1745,7 +1745,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7150	</weight>
-      <maxHealth>	166	</maxHealth>
+      <maxHealth>	148	</maxHealth>
       <rotationSpeed>	24	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -1759,7 +1759,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_ZiS-5>	shared	  <maxAmmo>	111	</maxAmmo>
+        <_76mm_ZiS-5>	shared	  <maxAmmo>	135	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 7 1 7	</maxPitch>
@@ -1846,7 +1846,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_76mm_ZiS-5>
-        <_57mm_413>	shared	  <maxAmmo>	166	</maxAmmo>
+        <_57mm_413>	shared	  <maxAmmo>	200	</maxAmmo>
           <armor>
             <armor_1>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1925,7 +1925,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_57mm_413>
-        <_122mm_cannon_U-11>	shared	  <maxAmmo>	48	</maxAmmo>
+        <_122mm_cannon_U-11>	shared	  <maxAmmo>	60	</maxAmmo>
           <armor>
             <armor_1>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2182,7 +2182,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	10000	</weight>
-      <maxHealth>	216	</maxHealth>
+      <maxHealth>	198	</maxHealth>
       <rotationSpeed>	24	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -2197,7 +2197,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.914	</invisibilityFactor>
       <guns>
-        <_76mm_ZiS-5>	shared	  <maxAmmo>	121	</maxAmmo>
+        <_76mm_ZiS-5>	shared	  <maxAmmo>	145	</maxAmmo>
           <armor>
             <armor_1>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2276,7 +2276,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_76mm_ZiS-5>
-        <_57mm_413>	shared	  <maxAmmo>	184	</maxAmmo>
+        <_57mm_413>	shared	  <maxAmmo>	220	</maxAmmo>
           <armor>
             <armor_1>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2355,7 +2355,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_57mm_413>
-        <_122mm_cannon_U-11>	shared	  <maxAmmo>	70	</maxAmmo>
+        <_122mm_cannon_U-11>	shared	  <maxAmmo>	85	</maxAmmo>
           <armor>
             <armor_1>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

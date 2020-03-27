@@ -12,3 +12,9 @@ class BCOutroVideoPageMeta(View):
 
     def as_playVideoS(self, data):
         return self.flashObject.as_playVideo(data) if self._isDAAPIInited() else None
+
+    def as_pausePlaybackS(self):
+        return self.flashObject.as_pausePlayback() if self._isDAAPIInited() else None
+
+    def as_resumePlaybackS(self):
+        return self.flashObject.as_resumePlayback() if self._isDAAPIInited() else None

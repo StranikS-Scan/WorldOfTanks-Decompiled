@@ -18,7 +18,7 @@ from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX, PREMIUM_GROUP_PREFIX, DAILY_QUEST_ID_PREFIX
+from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX, PREMIUM_GROUP_PREFIX, DAILY_QUEST_ID_PREFIX, FRONTLINE_GROUP_ID
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.locale.LINKEDSET import LINKEDSET
 from gui.server_events.conditions import getProgressFromQuestWithSingleAccumulative
@@ -240,12 +240,16 @@ def isPremium(eventID):
     return eventID.startswith(PREMIUM_GROUP_PREFIX) if eventID else False
 
 
+def isDailyEpic(eventID):
+    return eventID == FRONTLINE_GROUP_ID if eventID else False
+
+
 def isDailyQuest(eventID):
     return eventID.startswith(DAILY_QUEST_ID_PREFIX) if eventID else False
 
 
 def isRegularQuest(eventID):
-    return not (isMarathon(eventID) or isLinkedSet(eventID) or isPremium(eventID))
+    return not (isMarathon(eventID) or isLinkedSet(eventID) or isPremium(eventID) or isDailyEpic(eventID))
 
 
 def getLocalizedMissionNameForLinkedSet(missionID):
@@ -376,6 +380,12 @@ def _formatNumberInLinkedSetQuest(number):
 def getPremiumGroup(eventsCache=None):
     groups = eventsCache.getGroups()
     return findFirst(lambda g: isPremium(g.getID()), groups.values())
+
+
+@dependency.replace_none_kwargs(eventsCache=IEventsCache)
+def getDailyEpicGroup(eventsCache=None):
+    groups = eventsCache.getGroups()
+    return findFirst(lambda g: isDailyEpic(g.getID()), groups.values())
 
 
 @dependency.replace_none_kwargs(eventsCache=IEventsCache, lobbyContext=ILobbyContext)

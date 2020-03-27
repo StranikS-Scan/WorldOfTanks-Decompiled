@@ -10,6 +10,7 @@
         <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcMaingun.png	</iconTooltip>
       </data>
     </medals>
+    <ribbons></ribbons>
     <unlocks>
       <data>
         <id>	0	</id>
@@ -31,6 +32,7 @@
         <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcSniper.png	</iconTooltip>
       </data>
     </medals>
+    <ribbons></ribbons>
     <unlocks></unlocks>
   </lesson>
   <lesson>
@@ -44,6 +46,7 @@
         <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcInvader.png	</iconTooltip>
       </data>
     </medals>
+    <ribbons></ribbons>
     <unlocks>
       <data>
         <id>	0	</id>
@@ -64,6 +67,8 @@
         <icon>	../maps/icons/bootcamp/rewards/bcMaingun.png	</icon>
         <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcMaingun.png	</iconTooltip>
       </data>
+    </medals>
+    <ribbons>
       <data>
         <id>	3	</id>
         <label>	#bootcamp:result/award/duel/label	</label>
@@ -78,7 +83,7 @@
         <icon>	../maps/icons/bootcamp/rewards/bcShoottokill.png	</icon>
         <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcShoottokill.png	</iconTooltip>
       </data>
-    </medals>
+    </ribbons>
     <unlocks>
       <data>
         <id>	0	</id>
@@ -89,7 +94,7 @@
       </data>
       <data>
         <id>	1	</id>
-        <label>	#bootcamp:message/consumables/label	</label>
+        <label>	#item_types:equipment/name	</label>
         <description>	#bootcamp:message/consumables/text	</description>
         <icon>	../maps/icons/bootcamp/rewards/bcConsumables.png	</icon>
         <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcConsumables.png	</iconTooltip>
@@ -114,14 +119,7 @@
         <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcSniper.png	</iconTooltip>
       </data>
     </medals>
-    <unlocks>
-      <data>
-        <id>	0	</id>
-        <label>	#bootcamp:result/award/mission/label	</label>
-        <description>	#bootcamp:result/award/mission/text	</description>
-        <icon>	../maps/icons/bootcamp/rewards/bcMission.png	</icon>
-        <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcMission.png	</iconTooltip>
-      </data>
-    </unlocks>
+    <ribbons></ribbons>
+    <unlocks></unlocks>
   </lesson>
 </battle_results.xml>

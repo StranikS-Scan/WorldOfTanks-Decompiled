@@ -133,8 +133,13 @@ class MarathonEventsController(IMarathonEventsController, Notifiable):
         self.onFlagUpdateNotify()
 
     def __getClosestStatusUpdateTime(self):
-        if self.__marathons:
-            return min([ marathon.getClosestStatusUpdateTime() for marathon in self.__marathons ])
+        timeList = []
+        for marathon in self.__marathons:
+            time = marathon.getClosestStatusUpdateTime()
+            if time != 0:
+                timeList.append(time)
+
+        return min(timeList) if timeList else 0
 
     def __reloadNotification(self):
         self.clearNotification()

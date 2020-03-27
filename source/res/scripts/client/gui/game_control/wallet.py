@@ -77,7 +77,8 @@ class WalletController(IWalletController):
         return {'gold': self.__currentStatus if self.__useGold else self.STATUS.AVAILABLE,
          'freeXP': self.__currentStatus if self.__useFreeXP else self.STATUS.AVAILABLE,
          'credits': self.__currentStatus if not constants.IS_CHINA else self.STATUS.AVAILABLE,
-         'crystal': self.__currentStatus if not constants.IS_CHINA else self.STATUS.AVAILABLE}
+         'crystal': self.__currentStatus if not constants.IS_CHINA else self.STATUS.AVAILABLE,
+         'eventCoin': self.__currentStatus if not constants.IS_CHINA else self.STATUS.AVAILABLE}
 
     @property
     def isSyncing(self):

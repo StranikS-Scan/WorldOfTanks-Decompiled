@@ -13,7 +13,7 @@ class BlueprintFragment(object):
     FTYPE = BlueprintTypes.NONE
     nationID = property(lambda self: self.vehTypeCD >> 4 & 15)
 
-    def __init__(self, vehTypeCD=0, total=0):
+    def __init__(self, vehTypeCD=0, total=0, enableException=True):
         self.vehTypeCD = vehTypeCD
         self.total = int(total)
 
@@ -33,11 +33,11 @@ class BlueprintFragment(object):
         return {}
 
     @staticmethod
-    def fromIntFragmentCD(fragmentCD):
+    def fromIntFragmentCD(fragmentCD, enableException=True):
         myFragmentType = getFragmentType(fragmentCD)
         for cls in BlueprintFragment.__subclasses__():
             if myFragmentType == cls.FTYPE:
-                return cls(ITEM_TYPES.vehicle + (fragmentCD & 65520))
+                return cls(ITEM_TYPES.vehicle + (fragmentCD & 65520), enableException)
 
         raise BlueprintsException('Invalid fragment compact descriptor', fragmentCD)
 
@@ -66,17 +66,17 @@ class VehicleBlueprintFragment(BlueprintFragment):
     FTYPE = BlueprintTypes.VEHICLE
 
     @staticmethod
-    def fromVehicleType(vehNameOrTypeDescr):
+    def fromVehicleType(vehNameOrTypeDescr, enableException=True):
         vehTypeCD = vehicles.makeVehicleTypeCompDescrByName(vehNameOrTypeDescr) if type(vehNameOrTypeDescr) is str else vehNameOrTypeDescr
-        if vehTypeCD not in getAllResearchedVehicles():
+        if enableException and vehTypeCD not in getAllResearchedVehicles():
             raise BlueprintsException('Cannot create blueprint for non-researched vehicle {}'.format(vehTypeCD))
-        return VehicleBlueprintFragment(vehTypeCD)
+        return VehicleBlueprintFragment(vehTypeCD, enableException)
 
-    def __init__(self, vehTypeCD):
+    def __init__(self, vehTypeCD, enableException=True):
         super(VehicleBlueprintFragment, self).__init__(vehTypeCD)
         vehicleLevel = vehicles.getVehicleType(vehTypeCD).level
         availableLevels = g_cache.levels
-        if vehicleLevel not in availableLevels:
+        if enableException and vehicleLevel not in availableLevels:
             raise BlueprintsException('Invalid vehicle level for having blueprints')
         self.total, self.progressPerFragment, self.require, self.decays = availableLevels.get(vehicleLevel, (0,
          0,
@@ -131,8 +131,8 @@ def getFragmentType(ifragmentCD):
     raise BlueprintsException('Wrong fragment compact descriptor', ifragmentCD)
 
 
-def fromIntFragmentCD(ifragmentCD):
-    return BlueprintFragment.fromIntFragmentCD(ifragmentCD)
+def fromIntFragmentCD(ifragmentCD, enableException=True):
+    return BlueprintFragment.fromIntFragmentCD(ifragmentCD, enableException)
 
 
 def toIntFragmentCD(fragment):
@@ -142,7 +142,9 @@ def toIntFragmentCD(fragment):
 def isValidFragment(maybeFragment, defaultUnlocks=()):
     if type(maybeFragment) in (int, long):
         if maybeFragment & 15 == 1 and defaultUnlocks:
-            return maybeFragment not in defaultUnlocks
+            vehType = vehicles.getVehicleType(maybeFragment)
+            if not vehType.isCollectorVehicle:
+                return maybeFragment not in defaultUnlocks
         else:
             return maybeFragment & 15 in BlueprintTypes.ALL
     return False

@@ -89,7 +89,6 @@ class _DirectionIndicatorCtrl(_IMarker):
             self.__updateVisibility()
         elif self.__isMarkerVisible and not isVisible:
             self.__isMarkerVisible = False
-            self.settingsCore.onSettingsChanged -= self.__as_onSettingsChanged
             if self.__indicator is not None:
                 self.__indicator.setVisibility(False)
         return

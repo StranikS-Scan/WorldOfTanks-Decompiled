@@ -1,6 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/skeletons/gui/server_events.py
+import typing
 from Event import Event
+if typing.TYPE_CHECKING:
+    from typing import Optional, Dict, Callable, Union
+    from gui.server_events.event_items import DailyEpicTokenQuest, Quest, DailyQuest, PremiumQuest
 
 class IEventsCache(object):
     onSyncStarted = None
@@ -62,16 +66,10 @@ class IEventsCache(object):
     def getPremiumQuests(self, filterFunc=None):
         raise NotImplementedError
 
-    def getDailyQuests(self, filterFunc=None):
+    def getDailyQuests(self, filterFunc=None, includeEpic=False):
         raise NotImplementedError
 
-    def getAllDailyQuests(self):
-        raise NotImplementedError
-
-    def getAllAvailableDailyQuests(self, filterFunc=None):
-        raise NotImplementedError
-
-    def getDailyEpicQuest(self, filterFunc=None):
+    def getDailyEpicQuest(self):
         raise NotImplementedError
 
     def getBattleQuests(self, filterFunc=None):

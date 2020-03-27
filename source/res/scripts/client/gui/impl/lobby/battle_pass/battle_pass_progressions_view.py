@@ -331,9 +331,7 @@ class BattlePassProgressionsView(ViewImpl):
         else:
             timeStart = self.__battlePassController.getSeasonStartTime()
             timeEnd = self.__battlePassController.getSeasonFinishTime()
-            sday, smonth = self.__getDayMonth(timeStart)
-            eday, emonth = self.__getDayMonth(timeEnd)
-            timePeriod = '{} {} {} - {} {} {}'.format(str(sday), backport.text(R.strings.menu.dateTime.months.num(smonth)()), backport.getShortTimeFormat(timeStart), str(eday), backport.text(R.strings.menu.dateTime.months.num(emonth)()), backport.getShortTimeFormat(timeEnd))
+            timePeriod = '{} - {}'.format(self.__makeSeasonTimeText(timeStart), self.__makeSeasonTimeText(timeEnd))
             model.setSeasonTime(timePeriod)
 
     def __updateBuyButtonState(self):
@@ -523,3 +521,7 @@ class BattlePassProgressionsView(ViewImpl):
                 return
             settings.saveInBPStorage({BattlePassStorageKeys.INTRO_VIDEO_SHOWN: True})
         showBrowserOverlayView(getIntroVideoURL(), VIEW_ALIAS.BROWSER_OVERLAY)
+
+    def __makeSeasonTimeText(self, timeStamp):
+        day, month = self.__getDayMonth(timeStamp)
+        return backport.text(R.strings.battle_pass_2020.progression.seasonTime(), day=str(day), month=backport.text(R.strings.menu.dateTime.months.num(month)()))

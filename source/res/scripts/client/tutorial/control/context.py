@@ -147,6 +147,7 @@ class GLOBAL_FLAG(object):
     HAVE_NEW_SUFFIX_BADGE = '_HaveNewSuffixBadge'
     BADGE_PAGE_HAS_NEW_SUFFIX_BADGE = '_BadgePageHasNewSuffixBadge'
     CREW_BOOKS_ENABLED = '_CrewBooksEnabled'
+    COLLECTIBLE_VEHICLE_PREVIEW_ENABLED = '_CollectibleVehiclePreviewEnabled'
     ALL = (IS_FLAGS_RESET,
      SHOW_HISTORY,
      HISTORY_NOT_AVAILABLE,
@@ -156,7 +157,8 @@ class GLOBAL_FLAG(object):
      HAVE_NEW_BADGE,
      HAVE_NEW_SUFFIX_BADGE,
      BADGE_PAGE_HAS_NEW_SUFFIX_BADGE,
-     CREW_BOOKS_ENABLED)
+     CREW_BOOKS_ENABLED,
+     COLLECTIBLE_VEHICLE_PREVIEW_ENABLED)
 
 
 class GlobalStorage(object):

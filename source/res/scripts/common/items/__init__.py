@@ -65,8 +65,10 @@ class ItemsPrices(object):
                 info['credits'] = prices[0]
             if prices[1] != 0:
                 info['gold'] = prices[1]
-            if len(prices) > 2:
+            if len(prices) > 2 and prices[2] != 0:
                 info['crystal'] = prices[2]
+                if len(prices) > 3:
+                    info['eventCoin'] = prices[3]
             self._itemsPriceInfo[descriptor] = info
         elif isinstance(prices, dict):
             self._itemsPriceInfo[descriptor] = prices

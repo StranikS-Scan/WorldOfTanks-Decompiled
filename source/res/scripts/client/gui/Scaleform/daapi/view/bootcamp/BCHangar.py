@@ -10,8 +10,9 @@ from gui.shared import events
 class BCHangar(Hangar):
 
     def onEscape(self):
-        dialogsContainer = self.app.containerManager.getContainer(ViewTypes.TOP_WINDOW)
-        if not self.__isViewOpenOrLoading(dialogsContainer, VIEW_ALIAS.LOBBY_MENU) and not self.__isViewOpenOrLoading(dialogsContainer, VIEW_ALIAS.BOOTCAMP_OUTRO_VIDEO) and not self.__isViewOpenOrLoading(dialogsContainer, VIEW_ALIAS.BOOTCAMP_QUEUE_DIALOG):
+        topWindowContainer = self.app.containerManager.getContainer(ViewTypes.TOP_WINDOW)
+        windowContainer = self.app.containerManager.getContainer(ViewTypes.WINDOW)
+        if not self.__isViewOpenOrLoading(topWindowContainer, VIEW_ALIAS.LOBBY_MENU) and not self.__isViewOpenOrLoading(windowContainer, VIEW_ALIAS.BOOTCAMP_NATIONS_WINDOW) and not self.__isViewOpenOrLoading(topWindowContainer, VIEW_ALIAS.BOOTCAMP_MESSAGE_WINDOW) and not self.__isViewOpenOrLoading(topWindowContainer, VIEW_ALIAS.BOOTCAMP_OUTRO_VIDEO) and not self.__isViewOpenOrLoading(topWindowContainer, VIEW_ALIAS.BOOTCAMP_QUEUE_DIALOG):
             self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MENU), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def showHelpLayout(self):

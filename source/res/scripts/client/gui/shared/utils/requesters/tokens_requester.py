@@ -1,11 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/tokens_requester.py
+import functools
 import logging
 import BigWorld
+from account_helpers.AccountSettings import QUEST_DELTAS_TOKENS_PROGRESS
 from adisp import async, process
 from constants import LOOTBOX_TOKEN_PREFIX
+from gui.shared.utils.requesters.quest_deltas_settings import QuestDeltasSettings
 from gui.shared.utils.requesters.common import BaseDelta
-from gui.shared.utils.requesters.QuestsProgressRequester import _Token
+from gui.shared.utils.requesters.token import Token
 from helpers import dependency
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from skeletons.gui.shared.utils.requesters import ITokensRequester
@@ -22,7 +25,7 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
         self.__lastShopRev = None
         self.__lootBoxCache = {}
         self.__lootBoxTotalCount = 0
-        self.__tokensProgressDelta = TokensProgressDelta()
+        self.__tokensProgressDelta = TokensProgressDelta(functools.partial(QuestDeltasSettings, QUEST_DELTAS_TOKENS_PROGRESS))
         super(TokensRequester, self).__init__()
         return
 
@@ -137,12 +140,9 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
 
 class TokensProgressDelta(BaseDelta):
 
-    def _hasEntryChanged(self, entryId):
-        return self._currValues[entryId] != self._prevValues[entryId]
-
     def _getDataIterator(self, data):
         for tokenId, value in data.get('tokens', {}).iteritems():
-            yield (tokenId, _Token(*value).count)
+            yield (tokenId, Token(*value).count)
 
     def _getDefaultValue(self):
         pass

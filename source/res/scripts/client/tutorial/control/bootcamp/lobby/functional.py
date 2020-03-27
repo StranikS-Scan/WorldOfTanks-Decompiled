@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/bootcamp/lobby/functional.py
+from functools import partial
+import BigWorld
 from tutorial.control.functional import FunctionalCondition, FunctionalEffect, FunctionalChapterContext
 from tutorial.gui import GUI_EFFECT_NAME
 from tutorial.logger import LOG_DEBUG, LOG_ERROR
@@ -127,6 +129,7 @@ class FunctionalFinishBootcampEffect(FunctionalEffect):
 
 
 class FunctionalBootcampLobbyChapterContext(FunctionalChapterContext):
+    _HINT_SOUND_DELAY = 5
 
     def __init__(self):
         super(FunctionalBootcampLobbyChapterContext, self).__init__()
@@ -136,6 +139,7 @@ class FunctionalBootcampLobbyChapterContext(FunctionalChapterContext):
         self.__activeExclusiveHint = None
         self.__requestedExclusiveHint = None
         self.__requestedExclusiveHintSoundID = None
+        self.__exclusiveHintSoundCallback = None
         self.__assistant = None
         return
 
@@ -146,6 +150,7 @@ class FunctionalBootcampLobbyChapterContext(FunctionalChapterContext):
     def onItemLost(self, itemID):
         if itemID == self.__activeExclusiveHint:
             self.__forceRefreshActiveHint = True
+            self.__cancelHintSoundCallback()
             self.invalidate()
 
     def onStartLongEffect(self):
@@ -177,11 +182,12 @@ class FunctionalBootcampLobbyChapterContext(FunctionalChapterContext):
             LOG_DEBUG('updateExclusiveHints: changed', self.__activeExclusiveHint, self.__requestedExclusiveHint)
             if self.__activeExclusiveHint is not None:
                 self._gui.stopEffect(GUI_EFFECT_NAME.SHOW_HINT, self.__activeExclusiveHint)
+                self.__cancelHintSoundCallback()
             self.__activeExclusiveHint = self.__requestedExclusiveHint
             if self.__activeExclusiveHint is not None:
                 self._gui.playEffect(GUI_EFFECT_NAME.SHOW_HINT, self.__activeExclusiveHint)
                 if self.__requestedExclusiveHintSoundID:
-                    self._sound.play(SOUND_EVENT.HINT_SHOWN, self.__requestedExclusiveHintSoundID)
+                    self.__exclusiveHintSoundCallback = BigWorld.callback(self._HINT_SOUND_DELAY, partial(self.__playHintSound, SOUND_EVENT.HINT_SHOWN, self.__requestedExclusiveHintSoundID))
         elif self.__activeExclusiveHint is not None and self.__forceRefreshActiveHint:
             LOG_DEBUG('updateExclusiveHints: forced refresh of active hint', self.__activeExclusiveHint)
             self._gui.playEffect(GUI_EFFECT_NAME.SHOW_HINT, self.__activeExclusiveHint)
@@ -196,6 +202,7 @@ class FunctionalBootcampLobbyChapterContext(FunctionalChapterContext):
         if self.__activeExclusiveHint is not None:
             LOG_DEBUG('forceHideExclusiveHint: removing', self.__activeExclusiveHint)
             self._gui.stopEffect(GUI_EFFECT_NAME.SHOW_HINT, self.__activeExclusiveHint)
+            self.__cancelHintSoundCallback()
             self.__activeExclusiveHint = None
         else:
             LOG_DEBUG('forceHideExclusiveHint: nothing to remove')
@@ -209,4 +216,16 @@ class FunctionalBootcampLobbyChapterContext(FunctionalChapterContext):
         if self.__assistant is not None:
             self.__assistant.stop()
             self.__assistant = None
+        return
+
+    def __playHintSound(self, soundEvent, soundId):
+        self.__cancelHintSoundCallback()
+        if self._tutorial is not None:
+            self._sound.play(soundEvent, soundId)
+        return
+
+    def __cancelHintSoundCallback(self):
+        if self.__exclusiveHintSoundCallback is not None:
+            BigWorld.cancelCallback(self.__exclusiveHintSoundCallback)
+            self.__exclusiveHintSoundCallback = None
         return

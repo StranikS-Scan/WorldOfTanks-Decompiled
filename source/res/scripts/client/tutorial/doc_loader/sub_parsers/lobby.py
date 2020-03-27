@@ -69,6 +69,10 @@ def readIsIngameShopEnabledSection(xmlCtx, section, chapter, triggerID):
     return triggers.IsIngameShopEnabledTrigger(triggerID)
 
 
+def readIsCollectibleVehicleTrigger(xmlCtx, section, chapter, triggerID):
+    return triggers.IsCollectibleVehicleTrigger(triggerID)
+
+
 def readSwitchToRandomSection(xmlCtx, section, flags, conditions):
     return effects.SimpleEffect(effects.EFFECT_TYPE.ENTER_QUEUE, conditions=conditions)
 

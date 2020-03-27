@@ -197,6 +197,7 @@ class INGAME_GUI(object):
     SHELLS_KINDS_ARMOR_PIERCING_HE = '#ingame_gui:shells_kinds/ARMOR_PIERCING_HE'
     SHELLS_KINDS_ARMOR_PIERCING_CR = '#ingame_gui:shells_kinds/ARMOR_PIERCING_CR'
     SHELLS_KINDS_PARAMS = '#ingame_gui:shells_kinds/params'
+    SHELLS_KINDS_PARAMSNOPIERCING = '#ingame_gui:shells_kinds/paramsNoPiercing'
     SHELLS_KINDS_STUNPARAMS = '#ingame_gui:shells_kinds/stunParams'
     DAMAGE_PANEL_DEVICES_TURRETROTATOR_NORMAL = '#ingame_gui:damage_panel/devices/turretRotator/normal'
     DAMAGE_PANEL_DEVICES_TURRETROTATOR_CRITICAL = '#ingame_gui:damage_panel/devices/turretRotator/critical'

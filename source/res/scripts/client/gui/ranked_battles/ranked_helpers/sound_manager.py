@@ -21,6 +21,8 @@ class Sounds(CONST_CONTAINER):
     OVERLAY_HANGAR_FILTERED = 'STATE_hangar_filtered'
     OVERLAY_HANGAR_FILTERED_ON = 'STATE_hangar_filtered_on'
     OVERLAY_HANGAR_FILTERED_OFF = 'STATE_hangar_filtered_off'
+    HANGAR_PLACE_STATE = 'STATE_hangar_place'
+    HANGAR_PLACE_GARAGE = 'STATE_hangar_place_garage'
     MAIN_PAGE_SPACE_NAME = 'ranked_main_page'
     MAIN_PAGE_STATE = 'STATE_gamemode_progress_page'
     MAIN_PAGE_STATE_ON = 'STATE_gamemode_progress_page_on'
@@ -39,7 +41,8 @@ class Sounds(CONST_CONTAINER):
     PROGRESSION_STATE_LEAGUES = 'STATE_rank_level_05'
 
 
-RANKED_MAIN_PAGE_SOUND_SPACE = CommonSoundSpaceSettings(name=Sounds.MAIN_PAGE_SPACE_NAME, entranceStates={Sounds.MAIN_PAGE_STATE: Sounds.MAIN_PAGE_STATE_ON}, exitStates={Sounds.MAIN_PAGE_STATE: Sounds.MAIN_PAGE_STATE_OFF,
+RANKED_MAIN_PAGE_SOUND_SPACE = CommonSoundSpaceSettings(name=Sounds.MAIN_PAGE_SPACE_NAME, entranceStates={Sounds.HANGAR_PLACE_STATE: Sounds.HANGAR_PLACE_GARAGE,
+ Sounds.MAIN_PAGE_STATE: Sounds.MAIN_PAGE_STATE_ON}, exitStates={Sounds.MAIN_PAGE_STATE: Sounds.MAIN_PAGE_STATE_OFF,
  Sounds.OVERLAY_HANGAR_GENERAL: Sounds.OVERLAY_HANGAR_GENERAL_OFF}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent=Sounds.MAIN_PAGE_AMBIENT_ON_EVENT, exitEvent=Sounds.MAIN_PAGE_AMBIENT_OFF_EVENT)
 RANKED_OVERLAY_SOUND_SPACE = CommonSoundSpaceSettings(name=Sounds.OVERLAY_SPACE_NAME, entranceStates={Sounds.OVERLAY_HANGAR_GENERAL: Sounds.OVERLAY_HANGAR_GENERAL_ON,
  Sounds.OVERLAY_HANGAR_FILTERED: Sounds.OVERLAY_HANGAR_FILTERED_ON}, exitStates={Sounds.OVERLAY_HANGAR_GENERAL: Sounds.OVERLAY_HANGAR_GENERAL_OFF,

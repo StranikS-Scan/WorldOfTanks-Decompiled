@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.449	</firePenalty>
   </invisibility>
-  <repairCost>	7	</repairCost>
+  <repairCost>	5.339	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
@@ -47,7 +47,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	28777	</weight>
-    <maxHealth>	360	</maxHealth>
+    <maxHealth>	472	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	185	</maxHealth>
       <maxRegenHealth>	125	</maxRegenHealth>
@@ -1538,7 +1538,7 @@
         <armor_1>	0	</armor_1>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	90	</maxHealth>
+      <maxHealth>	118	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1552,7 +1552,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <QF_6_pounder_Mk_III_AT>	shared	  <maxAmmo>	96	</maxAmmo>
+        <QF_6_pounder_Mk_III_AT>	shared	  <maxAmmo>	115	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -13 1 -13	</minPitch>
             <maxPitch>	0 7 1 7	</maxPitch>
@@ -1643,7 +1643,11 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </QF_6_pounder_Mk_III_AT>
-        <_3.7inch_AT_Howitzer>	shared	  <maxAmmo>	42	</maxAmmo>
+        <_3.7inch_AT_Howitzer>	shared	  <maxAmmo>	65	</maxAmmo>
+          <unlocks>
+            <vehicle>	GB45_Achilles_IIC	  <cost>	29700	</cost>
+            </vehicle>
+          </unlocks>
           <pitchLimits>
             <minPitch>	0 -13 1 -13	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -1734,7 +1738,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_3.7inch_AT_Howitzer>
-        <QF_6_pounder_Mk_V_AT>	shared	  <maxAmmo>	96	</maxAmmo>
+        <QF_6_pounder_Mk_V_AT>	shared	  <maxAmmo>	115	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -13 1 -13	</minPitch>
             <maxPitch>	0 7 1 7	</maxPitch>

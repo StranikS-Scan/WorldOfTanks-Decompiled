@@ -6,6 +6,7 @@ from CurrentVehicle import g_currentVehicle
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_meta_level_icon import getEpicMetaIconVODict
 from gui.Scaleform.daapi.view.lobby.hangar.hangar_header import LABEL_STATE
 from gui.Scaleform.daapi.view.lobby.missions.regular import missions_page
+from gui.Scaleform.daapi.view.lobby.missions.missions_helper import isEpicDailyQuestsRefreshAvailable
 from gui.Scaleform.daapi.view.meta.EpicBattlesWidgetMeta import EpicBattlesWidgetMeta
 from gui.Scaleform.genConsts.HANGAR_HEADER_QUESTS import HANGAR_HEADER_QUESTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -57,7 +58,7 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
 
     def __init__(self):
         super(EpicBattlesWidget, self).__init__()
-        self.__periodicNotifier = PeriodicNotifier(self.__epicMetaGameCtrl.getTimer, self.update)
+        self.__periodicNotifier = None
         self._currentVehicle = None
         return
 
@@ -76,16 +77,24 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
         event_dispatcher.showEpicBattlesPrimeTimeWindow()
 
     def update(self):
-        self.__periodicNotifier.startNotification()
+        if self.__periodicNotifier is not None:
+            self.__periodicNotifier.startNotification()
         self.as_setDataS(self._buildVO()._asdict())
+        return
 
     def _populate(self):
         super(EpicBattlesWidget, self)._populate()
+        if self.__periodicNotifier is None:
+            self.__periodicNotifier = PeriodicNotifier(self.__epicMetaGameCtrl.getTimer, self.update)
         self.__periodicNotifier.startNotification()
         self._currentVehicle = g_currentVehicle
+        return
 
     def _dispose(self):
-        self.__periodicNotifier.stopNotification()
+        if self.__periodicNotifier is not None:
+            self.__periodicNotifier.stopNotification()
+            self.__periodicNotifier.clear()
+            self.__periodicNotifier = None
         super(EpicBattlesWidget, self)._dispose()
         self.__periodicNotifier = None
         self._currentVehicle = None
@@ -121,7 +130,7 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
         else:
             currentCycleEndTime, _ = self.__epicMetaGameCtrl.getCurrentCycleInfo()
             cycleTimeLeft = currentCycleEndTime - time_utils.getCurrentLocalServerTimestamp()
-            if cycleTimeLeft < ONE_DAY:
+            if cycleTimeLeft < ONE_DAY or not isEpicDailyQuestsRefreshAvailable():
                 label = icons.makeImageTag(backport.image(libraryIcons.ConfirmIcon_1()))
             else:
                 label = icons.makeImageTag(backport.image(libraryIcons.time_icon()))
@@ -160,7 +169,7 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
             currSeason = self.__epicMetaGameCtrl.getCurrentSeason()
             currTime = time_utils.getCurrentLocalServerTimestamp()
             primeTime = self.__epicMetaGameCtrl.getPrimeTimes().get(self.__connectionMgr.peripheryID)
-            isCycleNow = currSeason and currSeason.hasActiveCycle(currTime) and primeTime.getPeriodsBetween(currTime, currSeason.getCycleEndDate())
+            isCycleNow = currSeason and currSeason.hasActiveCycle(currTime) and primeTime and primeTime.getPeriodsBetween(currTime, currSeason.getCycleEndDate())
             if isCycleNow:
                 if self.__connectionMgr.isStandalone():
                     key = rAlertMsgBlock.singleModeHalt

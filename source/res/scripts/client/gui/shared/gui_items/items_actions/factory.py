@@ -7,8 +7,10 @@ SELL_MULTIPLE = 'sellMultipleItems'
 BUY_VEHICLE = 'vehBuyAction'
 BUY_MODULE = 'moduleBuyAction'
 UNLOCK_ITEM = 'unlockAction'
+BC_UNLOCK_ITEM = 'bcUnlockAction'
 INSTALL_ITEM = 'installItemAction'
 BUY_AND_INSTALL_ITEM = 'buyAndInstallItemAction'
+BC_BUY_AND_INSTALL_ITEM = 'bcBuyAndInstallItemAction'
 SET_VEHICLE_MODULE = 'setVehicleModuleAction'
 SET_VEHICLE_LAYOUT = 'setVehicleLayoutAction'
 BUY_AND_INSTALL_ITEM_VEHICLE_LAYOUT = 'buyAndInstallItemVehicleLayout'
@@ -22,10 +24,12 @@ UPGRADE_MODULE = 'upgradeModule'
 _ACTION_MAP = {SELL_ITEM: actions.SellItemAction,
  SELL_MULTIPLE: actions.SellMultipleItems,
  UNLOCK_ITEM: actions.UnlockItemAction,
+ BC_UNLOCK_ITEM: actions.BCUnlockItemAction,
  BUY_MODULE: actions.ModuleBuyAction,
  BUY_VEHICLE: actions.VehicleBuyAction,
  INSTALL_ITEM: actions.InstallItemAction,
  BUY_AND_INSTALL_ITEM: actions.BuyAndInstallItemAction,
+ BC_BUY_AND_INSTALL_ITEM: actions.BCBuyAndInstallItemAction,
  SET_VEHICLE_MODULE: actions.SetVehicleModuleAction,
  SET_VEHICLE_LAYOUT: actions.SetVehicleLayoutAction,
  BUY_AND_INSTALL_ITEM_VEHICLE_LAYOUT: actions.BuyAndInstallItemVehicleLayout,

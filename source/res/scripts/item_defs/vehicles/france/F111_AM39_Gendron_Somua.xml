@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.401	</firePenalty>
   </invisibility>
-  <repairCost>	2.0	</repairCost>
+  <repairCost>	1	</repairCost>
   <premiumVehicleXPFactor>	0.7	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
@@ -37,7 +37,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	3529	</weight>
-    <maxHealth>	112	</maxHealth>
+    <maxHealth>	224	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	80	</maxHealth>
       <maxRegenHealth>	55	</maxRegenHealth>
@@ -227,13 +227,13 @@
             <explodedRadius>	0.36	</explodedRadius>
           </deflation>
           <hitTester>
-            <collisionModelServer>	vehicles/french/F111_AM39_Gendron_Somua/collision/Wheel_L_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F111_AM39_Gendron_Somua/collision_client/Wheel_L_02.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/french/F111_AM39_Gendron_Somua/collision/Wheel_L_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F111_AM39_Gendron_Somua/collision_client/Wheel_L_01.model	</collisionModelClient>
           </hitTester>
           <armor>
             <wheel>	5	</wheel>
           </armor>
-          <wheelPos>	-0.786 0.455 -1.161	</wheelPos>
+          <wheelPos>	-0.786 0.454 -1.161	</wheelPos>
         </wheel>
         <wheel>
           <index>	2	</index>
@@ -252,8 +252,8 @@
           </geometry>
           <proceduralCollisionBody>	true	</proceduralCollisionBody>
           <hitTester>
-            <collisionModelServer>	vehicles/french/F111_AM39_Gendron_Somua/collision/Wheel_L_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F111_AM39_Gendron_Somua/collision_client/Wheel_L_01.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/french/F111_AM39_Gendron_Somua/collision/Wheel_L_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F111_AM39_Gendron_Somua/collision_client/Wheel_L_02.model	</collisionModelClient>
           </hitTester>
           <armor>
             <wheel>	5	</wheel>
@@ -318,13 +318,13 @@
             <explodedRadius>	0.36	</explodedRadius>
           </deflation>
           <hitTester>
-            <collisionModelServer>	vehicles/french/F111_AM39_Gendron_Somua/collision/Wheel_R_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F111_AM39_Gendron_Somua/collision_client/Wheel_R_02.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/french/F111_AM39_Gendron_Somua/collision/Wheel_R_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F111_AM39_Gendron_Somua/collision_client/Wheel_R_01.model	</collisionModelClient>
           </hitTester>
           <armor>
             <wheel>	5	</wheel>
           </armor>
-          <wheelPos>	0.779 0.455 -1.161	</wheelPos>
+          <wheelPos>	0.779 0.454 -1.161	</wheelPos>
         </wheel>
         <wheel>
           <index>	3	</index>
@@ -343,13 +343,13 @@
           </geometry>
           <proceduralCollisionBody>	true	</proceduralCollisionBody>
           <hitTester>
-            <collisionModelServer>	vehicles/french/F111_AM39_Gendron_Somua/collision/Wheel_R_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F111_AM39_Gendron_Somua/collision_client/Wheel_R_01.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/french/F111_AM39_Gendron_Somua/collision/Wheel_R_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F111_AM39_Gendron_Somua/collision_client/Wheel_R_02.model	</collisionModelClient>
           </hitTester>
           <armor>
             <wheel>	5	</wheel>
           </armor>
-          <wheelPos>	0.77925 0.603125 0.12474	</wheelPos>
+          <wheelPos>	0.779 0.603 0.125	</wheelPos>
           <isLeading>	false	</isLeading>
         </wheel>
         <generalWheels>	true	</generalWheels>
@@ -485,7 +485,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	800	</weight>
-      <maxHealth>	28	</maxHealth>
+      <maxHealth>	56	</maxHealth>
       <rotationSpeed>	42	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -499,7 +499,7 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_25mm_SA35>	shared	  <maxAmmo>	150	</maxAmmo>
+        <_25mm_SA35>	shared	  <maxAmmo>	300	</maxAmmo>
           <armor>
             <gun>	10	</gun>
           </armor>

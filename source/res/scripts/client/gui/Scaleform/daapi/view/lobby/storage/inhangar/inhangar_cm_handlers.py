@@ -13,6 +13,7 @@ from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from helpers import dependency
 from ids_generators import SequenceIDGenerator
 from skeletons.gui.game_control import IVehicleComparisonBasket, IEpicBattleMetaGameController, ITradeInController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
@@ -22,6 +23,7 @@ class VehiclesRegularCMHandler(ContextMenu):
     __itemsCache = dependency.descriptor(IItemsCache)
     __comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
     __tradeInController = dependency.descriptor(ITradeInController)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     @option(__sqGen.next(), CMLabel.EXCHANGE)
     def exchange(self):
@@ -35,6 +37,11 @@ class VehiclesRegularCMHandler(ContextMenu):
     @option(__sqGen.next(), CMLabel.STATS)
     def goToStats(self):
         shared_events.showVehicleStats(self._id)
+
+    @option(__sqGen.next(), CMLabel.GO_TO_COLLECTION)
+    def goToCollection(self):
+        vehicle = self.__itemsCache.items.getItemByCD(self._id)
+        shared_events.showCollectibleVehicles(vehicle.nationID)
 
     @option(__sqGen.next(), CMLabel.SELL)
     def sell(self):
@@ -60,6 +67,9 @@ class VehiclesRegularCMHandler(ContextMenu):
             optionData.textColor = CM_BUY_COLOR
         elif label == CMLabel.STATS:
             optionData.enabled = _canGoToStats(self._id)
+        elif label == CMLabel.GO_TO_COLLECTION:
+            optionData.visible = self.__isVehicleCollectorAvailable()
+            optionData.enabled = self.__lobbyContext.getServerSettings().isCollectorVehicleEnabled()
         elif label == CMLabel.ADD_TO_COMPARE:
             optionData.enabled = _canAddToComparisonBasket(self._id)
         elif label == CMLabel.SELL:
@@ -89,6 +99,10 @@ class VehiclesRegularCMHandler(ContextMenu):
     def __isNationChangeAvailable(self):
         vehicle = self.__itemsCache.items.getItemByCD(self._id)
         return vehicle is not None and vehicle.isNationChangeAvailable
+
+    def __isVehicleCollectorAvailable(self):
+        vehicle = self.__itemsCache.items.getItemByCD(self._id)
+        return vehicle is not None and vehicle.isCollectible
 
 
 class VehiclesRestoreCMHandler(ContextMenu):

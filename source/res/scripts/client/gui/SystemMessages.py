@@ -50,13 +50,17 @@ SM_TYPE = Enumeration('System message type', ['Error',
  'DismantlingForDemountKit',
  'UpgradeForCredits',
  'BattlePassInfo',
- 'BattlePassReward'])
+ 'BattlePassReward',
+ 'PurchaseForEventCoin',
+ 'DismantlingForEventCoin'])
 CURRENCY_TO_SM_TYPE = {Currency.CREDITS: SM_TYPE.PurchaseForCredits,
  Currency.GOLD: SM_TYPE.PurchaseForGold,
- Currency.CRYSTAL: SM_TYPE.PurchaseForCrystal}
+ Currency.CRYSTAL: SM_TYPE.PurchaseForCrystal,
+ Currency.EVENT_COIN: SM_TYPE.PurchaseForEventCoin}
 CURRENCY_TO_SM_TYPE_DISMANTLING = {Currency.CREDITS: SM_TYPE.DismantlingForCredits,
  Currency.GOLD: SM_TYPE.DismantlingForGold,
- Currency.CRYSTAL: SM_TYPE.DismantlingForCrystal}
+ Currency.CRYSTAL: SM_TYPE.DismantlingForCrystal,
+ Currency.EVENT_COIN: SM_TYPE.DismantlingForEventCoin}
 
 def _getSystemMessages():
     return dependency.instance(ISystemMessages)

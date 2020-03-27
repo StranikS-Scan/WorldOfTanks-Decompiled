@@ -5,6 +5,7 @@ INDICES = dict(((n, i) for i, n in enumerate(NAMES)))
 MAP = {i:n for i, n in enumerate(NAMES)}
 AVAILABLE_NAMES = ('ussr', 'germany', 'usa', 'china', 'france', 'uk', 'japan', 'czech', 'sweden', 'poland', 'italy')
 NONE_INDEX = 15
+ALL_NATIONS_INDEX = -1
 
 class Alliances(object):
     USSR = 'Alliance-USSR'

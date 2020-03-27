@@ -8,6 +8,7 @@ from operator import itemgetter
 from collections import namedtuple
 import BigWorld
 import constants
+from collector_vehicle import CollectorVehicleConsts
 from AccountCommands import LOCK_REASON, VEHICLE_SETTINGS_FLAG, VEHICLE_EXTRA_SETTING_FLAG
 from account_shared import LayoutIterator
 from constants import WIN_XP_FACTOR_MODE, RentType
@@ -1015,6 +1016,10 @@ class Vehicle(FittingItem):
     @property
     def isSpecial(self):
         return checkForTags(self.tags, VEHICLE_TAGS.SPECIAL)
+
+    @property
+    def isCollectible(self):
+        return checkForTags(self.tags, CollectorVehicleConsts.COLLECTOR_VEHICLES_TAG)
 
     @property
     def isExcludedFromSandbox(self):

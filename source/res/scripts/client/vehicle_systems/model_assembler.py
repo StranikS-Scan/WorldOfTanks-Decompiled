@@ -313,7 +313,9 @@ def assembleMultiGunRecoil(appearance, lodLink):
 
 
 def assembleGunLinkedNodesAnimator(appearance):
-    drivingJoints = appearance.typeDescriptor.gun.drivenJoints
+    skin = appearance.modelsSetParams.skin
+    drivingJoints = appearance.typeDescriptor.gun.drivenJoints or {}
+    drivingJoints = drivingJoints.get(skin, drivingJoints.get('default', None))
     if drivingJoints is not None:
         appearance.gunLinkedNodesAnimator = appearance.createComponent(Vehicular.LinkedNodesPitchAnimator, appearance.compoundModel, drivingJoints)
     return

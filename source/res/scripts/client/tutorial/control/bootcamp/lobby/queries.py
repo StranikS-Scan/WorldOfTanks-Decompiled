@@ -17,15 +17,15 @@ _PRESET_RENDERERS = {'FINISH': BOOTCAMP_MESSAGE_ALIASES.RENDERER_FIN_UI,
  'INTRO': BOOTCAMP_MESSAGE_ALIASES.RENDERER_INTRO}
 _BOTTOM_RENDERERS = {'rewards': BOOTCAMP_MESSAGE_ALIASES.BOTTOM_REWARDS_VIEW_UI,
  'buttons': BOOTCAMP_MESSAGE_ALIASES.BOTTOM_BUTTONS_VIEW_UI}
-_BOTTOM_DATA_FIELDS = ('label', 'icon', 'description', 'iconTooltip', 'labelTooltip')
+_BOTTOM_DATA_FIELDS = ('label', 'icon', 'description', 'iconTooltip', 'labelTooltip', 'animationTarget', 'animationType')
 
 class MessageDialogContentQuery(ContentQuery):
     bootcampController = dependency.descriptor(IBootcampController)
 
     def invoke(self, content, varID):
-        content['messages'], content['voiceovers'] = map(list, zip(*(self.__makeMessageData(msgContent) for msgContent in content['sequence'])))
+        content['messages'], content['voiceovers'] = map(list, zip(*(self._makeMessageData(msgContent) for msgContent in content['sequence'])))
 
-    def __makeMessageData(self, msgContent):
+    def _makeMessageData(self, msgContent):
         nationsDataDict = msgContent.get('nations_data', None)
         if nationsDataDict is not None:
             nation = self.bootcampController.nation
@@ -34,13 +34,17 @@ class MessageDialogContentQuery(ContentQuery):
             data = msgContent['data']
         showBottomData = not data['only_first_bootcamp_bottom'] or self.bootcampController.needAwarding()
         showReferralData = self.bootcampController.isReferralEnabled()
+        if self.bootcampController.needAwarding() and data.get('label_first_bootcamp'):
+            msgLabel = data['label_first_bootcamp']
+        else:
+            msgLabel = data['label']
         msgData = {'messagePreset': _PRESET_RENDERERS[data['preset']],
-         'label': i18n.makeString(data['label']),
+         'label': i18n.makeString(msgLabel),
          'iconPath': data['icon'],
          'message': i18n.makeString(data['text']) if showBottomData else '',
          'referralDescription': i18n.makeString(data['description']) if showReferralData else '',
          'background': data['background']}
-        voiceover = data['voiceover']
+        voiceover = (data['voiceover'], data['subtitle'])
         if showBottomData:
             bottomRendererID = data['bottom_renderer']
             if bottomRendererID:
@@ -58,9 +62,9 @@ class MessageDialogContentQuery(ContentQuery):
         return (msgData, voiceover)
 
     def __preprocessBottomData(self, data):
-        self.__formatLabel(data)
         data['label'] = i18n.makeString(data['label'])
         data['description'] = i18n.makeString(data['description'])
+        self.__formatLabel(data)
         keysToRemove = [ key for key in data if key not in _BOTTOM_DATA_FIELDS ]
         for key in keysToRemove:
             del data[key]
@@ -105,4 +109,22 @@ class MessageDialogContentQuery(ContentQuery):
                 data['label'] = data['label'].format(lessonBonuses['equipment']['largeMedkit']['count'])
             elif labelFormat == 'getFireExtinguisher':
                 data['label'] = data['label'].format(lessonBonuses['equipment']['handExtinguishers']['count'])
+            elif labelFormat == 'getToolbox':
+                data['label'] = data['label'].format(lessonBonuses['optional']['toolbox']['count'])
             return
+
+
+class SubtitleDialogContentQuery(MessageDialogContentQuery):
+
+    def _makeMessageData(self, msgContent):
+        data = msgContent['data']
+        voiceover = (data['voiceover'], i18n.makeString(data['subtitle']))
+        return (data, voiceover)
+
+
+class VideoDialogContentQuery(MessageDialogContentQuery):
+
+    def _makeMessageData(self, msgContent):
+        data = msgContent['data']
+        voiceover = ('', data['subtitle'])
+        return (data, voiceover)

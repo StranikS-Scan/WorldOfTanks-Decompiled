@@ -47,7 +47,6 @@ class ItemsCache(IItemsCache):
         g_playerEvents.onCenterIsLongDisconnected += self._onCenterIsLongDisconnected
 
     def fini(self):
-        self.__items.fini()
         self.onSyncStarted.clear()
         self.onSyncCompleted.clear()
         self.onSyncFailed.clear()

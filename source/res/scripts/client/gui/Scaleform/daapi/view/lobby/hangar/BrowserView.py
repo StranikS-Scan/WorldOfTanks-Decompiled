@@ -1,10 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/BrowserView.py
 import BigWorld
-import Keys
 from adisp import process
 from debug_utils import LOG_ERROR
-from gui.InputHandler import g_instance as g_inputHandler
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.BrowserScreenMeta import BrowserScreenMeta
@@ -56,6 +54,10 @@ class BrowserView(LobbySubView, BrowserScreenMeta):
         returnAlias = self.__getFromCtx('returnAlias', VIEW_ALIAS.LOBBY_HANGAR)
         self.fireEvent(events.LoadViewEvent(returnAlias, ctx=self.__ctx), EVENT_BUS_SCOPE.LOBBY)
 
+    def onEscapePress(self):
+        if self.__browser and not self.__browser.skipEscape:
+            self.onCloseView()
+
     def viewSize(self, width, height):
         self.__viewSize = (width, height)
         self.__loadBrowser()
@@ -75,7 +77,6 @@ class BrowserView(LobbySubView, BrowserScreenMeta):
         super(BrowserView, self)._populate()
         self.as_setBrowserParamsS(self.__browserParams)
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
-        g_inputHandler.onKeyDown += self.__onKeyDown
 
     def _invalidate(self, *args, **kwargs):
         super(BrowserView, self)._invalidate(*args, **kwargs)
@@ -99,7 +100,6 @@ class BrowserView(LobbySubView, BrowserScreenMeta):
             if self.__browser:
                 callbackArgs['url'] = self.__browser.url
             returnCallback(**callbackArgs)
-        g_inputHandler.onKeyDown -= self.__onKeyDown
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         super(BrowserView, self)._dispose()
         return
@@ -107,11 +107,6 @@ class BrowserView(LobbySubView, BrowserScreenMeta):
     def __onError(self):
         self.__errorOccurred = True
         self.__updateSkipEscape()
-
-    def __onKeyDown(self, event):
-        if event.key == Keys.KEY_ESCAPE:
-            if not self.__browser.skipEscape:
-                self.onCloseView()
 
     def __getFromCtx(self, name, default=None):
         ctx = self.__ctx

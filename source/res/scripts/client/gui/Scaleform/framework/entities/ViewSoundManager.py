@@ -46,6 +46,9 @@ class _ViewSoundsManager(object):
                 sound.play()
         return
 
+    def isSoundPlaying(self, eventName):
+        return self.__sounds.get(eventName, False).isPlaying
+
     def stopSound(self, eventName):
         sound = self.__sounds.get(eventName)
         if sound and sound.isPlaying:

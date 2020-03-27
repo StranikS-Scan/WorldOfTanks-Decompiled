@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.422	</firePenalty>
   </invisibility>
-  <repairCost>	4.2	</repairCost>
+  <repairCost>	2.749	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
@@ -40,7 +40,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	7800	</weight>
-    <maxHealth>	280	</maxHealth>
+    <maxHealth>	440	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	110	</maxHealth>
       <maxRegenHealth>	75	</maxRegenHealth>
@@ -1525,7 +1525,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1000	</weight>
-      <maxHealth>	70	</maxHealth>
+      <maxHealth>	80	</maxHealth>
       <rotationSpeed>	35	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -1539,7 +1539,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_Bofors_wz_37>	shared	  <maxAmmo>	80	</maxAmmo>
+        <_37mm_Bofors_wz_37>	shared	  <maxAmmo>	160	</maxAmmo>
           <armor>
             <armor_1>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1705,7 +1705,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1300	</weight>
-      <maxHealth>	80	</maxHealth>
+      <maxHealth>	110	</maxHealth>
       <rotationSpeed>	38	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -1720,7 +1720,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.037	</invisibilityFactor>
       <guns>
-        <_37mm_Bofors_wz_37>	shared	  <maxAmmo>	80	</maxAmmo>
+        <_37mm_Bofors_wz_37>	shared	  <maxAmmo>	160	</maxAmmo>
           <armor>
             <armor_1>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1801,7 +1801,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_37mm_Bofors_wz_37>
-        <_40mm_auto_Boforsa>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_40mm_auto_Boforsa>	shared	  <maxAmmo>	92	</maxAmmo>
           <unlocks>
             <gun>	_47mm_armata_wz_39	  <cost>	1400	</cost>
             </gun>
@@ -1893,7 +1893,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_40mm_auto_Boforsa>
-        <_47mm_armata_wz_39>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_47mm_armata_wz_39>	shared	  <maxAmmo>	75	</maxAmmo>
           <unlocks>
             <vehicle>	Pl12_25TP_KSUST_II	  <cost>	11930	</cost>
             </vehicle>

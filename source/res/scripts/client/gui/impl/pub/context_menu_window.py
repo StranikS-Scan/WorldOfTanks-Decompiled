@@ -118,5 +118,5 @@ class ContextMenuWindow(WindowImpl):
             decorator = WindowView(layoutID=event.decoratorID)
         else:
             decorator = None
-        super(ContextMenuWindow, self).__init__(wndFlags=WindowFlags.CONTEXT_MENU, decorator=decorator, content=content, parent=parent, areaID=R.areas.specific())
+        super(ContextMenuWindow, self).__init__(wndFlags=WindowFlags.CONTEXT_MENU, decorator=decorator, content=content, parent=parent, areaID=R.areas.context_menu())
         return

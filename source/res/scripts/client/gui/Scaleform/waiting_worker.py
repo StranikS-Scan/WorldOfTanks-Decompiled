@@ -57,7 +57,7 @@ class _WaitingTask(object):
 
 
 class WaitingWorker(IWaitingWorker):
-    __slots__ = ('__appFactory', '__blocking', '__nonBlocking', '__waitingStack', '__suspendStack', '__isShown', '__transition', '__transitionMessageID')
+    __slots__ = ('__appFactory', '__blocking', '__nonBlocking', '__waitingStack', '__suspendStack', '__isShown', '__transition', '__transitionMessageID', '__resumeLockers')
 
     def __init__(self):
         super(WaitingWorker, self).__init__()
@@ -69,6 +69,7 @@ class WaitingWorker(IWaitingWorker):
         self.__isShown = False
         self.__transition = None
         self.__transitionMessageID = R.invalid()
+        self.__resumeLockers = set()
         return
 
     def start(self, appFactory):
@@ -103,6 +104,7 @@ class WaitingWorker(IWaitingWorker):
             self.__blocking = None
         del self.__waitingStack[:]
         del self.__suspendStack[:]
+        self.__resumeLockers.clear()
         self.__isShown = False
         return
 
@@ -154,19 +156,35 @@ class WaitingWorker(IWaitingWorker):
             self.close()
         return
 
-    def suspend(self):
+    def suspend(self, lockerID=None):
+        if lockerID is not None:
+            self.__resumeLockers.add(lockerID)
         if self.isSuspended():
             return
-        self.__suspendStack = self.__waitingStack[:]
-        self.close()
+        else:
+            self.__suspendStack = self.__waitingStack[:]
+            self.close()
+            return
 
-    def resume(self):
+    def isResumeLocked(self):
+        return bool(self.__resumeLockers)
+
+    def resume(self, lockerID=None, hard=False):
+        if lockerID is not None:
+            self.__resumeLockers.discard(lockerID)
         if not self.isSuspended():
             return
-        if self.__suspendStack:
-            self._showWaiting(self.__suspendStack[-1])
-            self.__waitingStack += self.__suspendStack[:]
-        del self.__suspendStack[:]
+        elif self.isResumeLocked() and not hard:
+            _logger.debug('waiting resume locked')
+            return
+        else:
+            if hard:
+                self.__resumeLockers.clear()
+            if self.__suspendStack:
+                self._showWaiting(self.__suspendStack[-1])
+                self.__waitingStack += self.__suspendStack[:]
+            del self.__suspendStack[:]
+            return
 
     def isSuspended(self):
         return len(self.__suspendStack) > 0
@@ -187,6 +205,7 @@ class WaitingWorker(IWaitingWorker):
             task.clear()
 
         del self.__suspendStack[:]
+        self.__resumeLockers.clear()
         self.close()
 
     def cancelCallback(self):

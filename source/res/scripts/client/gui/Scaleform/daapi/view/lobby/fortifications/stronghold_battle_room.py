@@ -25,7 +25,8 @@ from gui.impl import backport
 from gui.prb_control import settings
 from gui.prb_control.entities.base.unit.listener import IStrongholdListener
 from gui.prb_control.entities.base.unit.listener import IUnitListener
-from gui.prb_control.entities.stronghold.unit.ctx import SetReserveUnitCtx, UnsetReserveUnitCtx, ChangeVehTypesInSlotFilterCtx, ChangeVehiclesInSlotFilterCtx
+from gui.prb_control.entities.stronghold.unit.ctx import SetReserveUnitCtx, UnsetReserveUnitCtx
+from gui.prb_control.entities.base.external_battle_unit.base_external_battle_ctx import ChangeVehTypesInSlotFilterCtx, ChangeVehiclesInSlotFilterCtx
 from gui.prb_control.items.stronghold_items import REQUISITION_TYPE
 from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_FLAG
 from gui.shared import events
@@ -149,7 +150,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         self._candidatesDP.init(self.app, self.as_getCandidatesDPS(), self.prbEntity.getCandidates())
 
     def inviteFriendRequest(self):
-        self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.STRONGHOLD_SEND_INVITES_WINDOW_PY, ctx={'prbName': PREBATTLE_TYPE_NAMES[PREBATTLE_TYPE.EXTERNAL],
+        self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.STRONGHOLD_SEND_INVITES_WINDOW_PY, ctx={'prbName': PREBATTLE_TYPE_NAMES[PREBATTLE_TYPE.STRONGHOLD],
          'ctrlType': CTRL_ENTITY_TYPE.UNIT,
          'showClanOnly': False}), scope=EVENT_BUS_SCOPE.LOBBY)
 
@@ -553,14 +554,14 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
     def __onUserDataChanged(self, _, user, shadowMode):
         if self._candidatesDP:
             candidates = self.prbEntity.getCandidates()
-            if user._databaseID in candidates:
+            if user.getID() in candidates:
                 self._rebuildCandidatesDP()
                 self._updateRallyData()
 
     def __onUserStatusUpdated(self, user):
         if self._candidatesDP:
             candidates = self.prbEntity.getCandidates()
-            if user._databaseID in candidates:
+            if user.getID() in candidates:
                 self._rebuildCandidatesDP()
                 self._updateRallyData()
 
@@ -582,7 +583,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         return unitActive
 
     def __getClientID(self):
-        return channel_num_gen.getClientID4Prebattle(PREBATTLE_TYPE.EXTERNAL)
+        return channel_num_gen.getClientID4Prebattle(PREBATTLE_TYPE.STRONGHOLD)
 
     def __setVehicles(self, slotIndex, vehicles=None):
         self.__vehiclesInSlotFilters[slotIndex] = vehicles

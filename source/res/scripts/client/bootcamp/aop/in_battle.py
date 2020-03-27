@@ -1,11 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bootcamp/aop/in_battle.py
 from helpers import aop
-from bootcamp.aop import common
 
-def weave(weaver, stateInBattle):
+def weave(weaver):
     weaver.weave(pointcut=_PointcutToggleFullStats, avoid=True)
-    weaver.weave(pointcut=_PointcutAvatarReceiveBattleResults(stateInBattle))
     weaver.weave(pointcut=_PointcutComputePiercingPowerAtDist)
     weaver.weave(pointcut=_PointcutComputePiercingPowerRandomization)
     weaver.weave(pointcut=_PointcutKeepArenaSoundsPlayingOnResultScreen)
@@ -15,12 +13,6 @@ class _PointcutToggleFullStats(aop.Pointcut):
 
     def __init__(self):
         super(_PointcutToggleFullStats, self).__init__('gui.battle_control', 'event_dispatcher', 'toggleFullStats')
-
-
-class _PointcutAvatarReceiveBattleResults(aop.Pointcut):
-
-    def __init__(self, stateInBattle):
-        super(_PointcutAvatarReceiveBattleResults, self).__init__('Avatar', 'PlayerAvatar', 'receiveBattleResults', aspects=(common.AspectRedirectMethod(stateInBattle.onAvatarReceiveBattleResults),))
 
 
 class _PointcutComputePiercingPowerAtDist(aop.Pointcut):

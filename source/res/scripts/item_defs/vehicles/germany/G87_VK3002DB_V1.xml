@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.386	</firePenalty>
   </invisibility>
-  <repairCost>	7	</repairCost>
+  <repairCost>	6.267	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.2	</priceFactor>
@@ -46,7 +46,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	14760	</weight>
-    <maxHealth>	560	</maxHealth>
+    <maxHealth>	688	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	110	</maxRegenHealth>
@@ -1575,7 +1575,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5500	</weight>
-      <maxHealth>	140	</maxHealth>
+      <maxHealth>	132	</maxHealth>
       <rotationSpeed>	35	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -1589,7 +1589,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_KwK_40_L48>	shared	  <maxAmmo>	120	</maxAmmo>
+        <_75mm_KwK_40_L48>	shared	  <maxAmmo>	145	</maxAmmo>
           <reloadTime>	4.3	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
@@ -1755,8 +1755,6 @@
       <level>	7	</level>
       <price>	19260	</price>
       <unlocks>
-        <vehicle>	G24_VK3002DB	  <cost>	46800	</cost>
-        </vehicle>
         <gun>	_75mm_KwK_L70	  <cost>	4600	</cost>
         </gun>
       </unlocks>
@@ -1774,7 +1772,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	6000	</weight>
-      <maxHealth>	210	</maxHealth>
+      <maxHealth>	172	</maxHealth>
       <rotationSpeed>	45	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -1789,7 +1787,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.94	</invisibilityFactor>
       <guns>
-        <_75mm_KwK_40_L48>	shared	  <maxAmmo>	120	</maxAmmo>
+        <_75mm_KwK_40_L48>	shared	  <maxAmmo>	145	</maxAmmo>
           <reloadTime>	4	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
@@ -1866,7 +1864,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_KwK_40_L48>
-        <_75mm_KwK_L70>	shared	  <maxAmmo>	79	</maxAmmo>
+        <_75mm_KwK_L70>	shared	  <maxAmmo>	95	</maxAmmo>
           <reloadTime>	4.2	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>

@@ -33,6 +33,7 @@ class ClassicMinimapComponent(component.MinimapComponent):
 
 class GlobalSettingsPlugin(common.SimplePlugin):
     __slots__ = ('__currentSizeSettings', '__isVisible', '__sizeIndex')
+    _AccountSettingsClass = AccountSettings
 
     def __init__(self, parentObj):
         super(GlobalSettingsPlugin, self).__init__(parentObj)
@@ -53,7 +54,7 @@ class GlobalSettingsPlugin(common.SimplePlugin):
         super(GlobalSettingsPlugin, self).stop()
 
     def setSettings(self):
-        newSize = settings.clampMinimapSizeIndex(AccountSettings.getSettings(self.__currentSizeSettings))
+        newSize = settings.clampMinimapSizeIndex(self._AccountSettingsClass.getSettings(self.__currentSizeSettings))
         if self.__sizeIndex != newSize:
             self.__sizeIndex = newSize
             self._parentObj.as_setSizeS(self.__sizeIndex)
@@ -81,7 +82,7 @@ class GlobalSettingsPlugin(common.SimplePlugin):
         self._parentObj.as_setVisibleS(self.__isVisible)
 
     def __saveSettings(self):
-        AccountSettings.setSettings(self.__currentSizeSettings, self.__sizeIndex)
+        self._AccountSettingsClass.setSettings(self.__currentSizeSettings, self.__sizeIndex)
 
     def __setSizeByStep(self, step):
         newIndex = settings.clampMinimapSizeIndex(self.__sizeIndex + step)

@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/tabs/shop.py
 import BigWorld
+from gui.impl.gen import R
+from gui.impl import backport
 from gui.Scaleform.daapi.view.lobby.store.tabs import StoreItemsTab, StoreModuleTab, StoreVehicleTab, StoreShellTab, StoreArtefactTab, StoreOptionalDeviceTab, StoreEquipmentTab, StoreBattleBoosterTab
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
@@ -11,9 +13,11 @@ from gui.shared.gui_items.gui_item_economics import ItemPrices, ItemPrice
 from gui.shared.money import Currency
 from gui.shared.tooltips.formatters import getActionPriceData
 from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared.utils.vehicle_collector_helper import isAvailableForPurchase
 from helpers import dependency, i18n
 from nation_change.nation_change_helpers import isMainInNationGroupSafe
 from skeletons.gui.game_control import ITradeInController
+from skeletons.gui.lobby_context import ILobbyContext
 
 class ShopItemsTab(StoreItemsTab):
     tradeIn = dependency.descriptor(ITradeInController)
@@ -97,6 +101,7 @@ class ShopModuleTab(ShopItemsTab, StoreModuleTab):
 
 
 class ShopVehicleTab(ShopItemsTab, StoreVehicleTab):
+    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     @classmethod
     def getFilterInitData(cls):
@@ -112,9 +117,11 @@ class ShopVehicleTab(ShopItemsTab, StoreVehicleTab):
 
     def _getRequestCriteria(self, invVehicles):
         requestCriteria = REQ_CRITERIA.EMPTY | ~REQ_CRITERIA.CUSTOM(lambda item: item.isHidden and not item.isRestorePossible()) | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
-        requestCriteria |= self._getVehicleRiterias(self._filterData['selectedTypes'], self._filterData['selectedLevels'])
         requestCriteria |= REQ_CRITERIA.CUSTOM(lambda item: isMainInNationGroupSafe(item.intCD))
-        return self._getExtraCriteria(self._filterData['extra'], requestCriteria, invVehicles)
+        requestCriteria |= self._getExtraCriteria(self._filterData['extra'], requestCriteria, invVehicles)
+        requestCriteria = self.__updateCollectibleCriteria(requestCriteria)
+        requestCriteria |= self._getVehicleRiterias(self._filterData['selectedTypes'], self._filterData['selectedLevels'])
+        return requestCriteria
 
     def _getExtraCriteria(self, extra, requestCriteria, invVehicles):
         if 'locked' not in extra:
@@ -125,6 +132,14 @@ class ShopVehicleTab(ShopItemsTab, StoreVehicleTab):
             requestCriteria |= ~REQ_CRITERIA.VEHICLE.RENT
         return requestCriteria
 
+    def __updateCollectibleCriteria(self, requestCriteria):
+        isCollectibleVehiclesEnabled = self.__lobbyContext.getServerSettings().isCollectorVehicleEnabled()
+        if not isCollectibleVehiclesEnabled:
+            requestCriteria |= ~REQ_CRITERIA.COLLECTIBLE ^ REQ_CRITERIA.INVENTORY
+        else:
+            requestCriteria ^= REQ_CRITERIA.COLLECTIBLE | ~REQ_CRITERIA.INVENTORY
+        return requestCriteria
+
     def _getStatusParams(self, item):
         statusMessage = ''
         money = self._items.stats.money
@@ -132,15 +147,19 @@ class ShopVehicleTab(ShopItemsTab, StoreVehicleTab):
             statusMessage = '#menu:store/vehicleStates/%s' % item.getState()[0]
             disabled = not self._isPurchaseEnabled(item, money)
         elif BigWorld.player().isLongDisconnectedFromCenter:
-            statusMessage = MENU.SHOP_ERRORS_CENTERISDOWN
+            statusMessage = backport.text(R.strings.menu.shop.errors.centerIsDown())
             disabled = True
         elif item.inventoryCount > 0:
-            statusMessage = MENU.SHOP_ERRORS_INHANGAR
+            statusMessage = backport.text(R.strings.menu.shop.errors.inHangar())
             disabled = True
             if not item.isPurchased:
                 disabled = not self._isPurchaseEnabled(item, money)
+        elif item.isCollectible:
+            isEnabled = isAvailableForPurchase(item)
+            disabled = not isEnabled
+            statusMessage = backport.text(R.strings.menu.shop.errors.lockedNation()) if not isEnabled else ''
         elif not item.isUnlocked:
-            statusMessage = MENU.SHOP_ERRORS_UNLOCKNEEDED
+            statusMessage = backport.text(R.strings.menu.shop.errors.unlockNeeded())
             disabled = True
         else:
             disabled = not self._isPurchaseEnabled(item, money)

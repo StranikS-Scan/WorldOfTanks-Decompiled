@@ -15,3 +15,6 @@ class BCBattleTopHintMeta(BaseDAAPIComponent):
 
     def as_closeHintS(self):
         return self.flashObject.as_closeHint() if self._isDAAPIInited() else None
+
+    def as_setPenetrationS(self, penetrationType, isPurple):
+        return self.flashObject.as_setPenetration(penetrationType, isPurple) if self._isDAAPIInited() else None

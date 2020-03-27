@@ -1405,6 +1405,51 @@
       <devices>	150	</devices>
     </damage>
   </_105mm_HE_M11A2E>
+  <_110mm_XL1E>
+    <id>	160	</id>
+    <userString>	#usa_vehicles:_110mm_XL1E	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1030	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	110	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_110mm_XL1E>
+  <_110mm_SAY2E>
+    <id>	161	</id>
+    <userString>	#usa_vehicles:_110mm_SAY2E	</userString>
+    <icon>	hc	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	110	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_110mm_SAY2E>
+  <_110mm_SDRN1>
+    <id>	162	</id>
+    <userString>	#usa_vehicles:_110mm_SDRN1	</userString>
+    <icon>	he	</icon>
+    <price>	825	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	110	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	515	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_110mm_SDRN1>
   <_120mm_AP_T42>
     <id>	30	</id>
     <userString>	#usa_vehicles:_120mm_AP_T42	</userString>

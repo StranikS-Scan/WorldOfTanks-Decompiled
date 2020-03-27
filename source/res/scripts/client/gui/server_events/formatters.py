@@ -40,6 +40,7 @@ class DISCOUNT_TYPE(CONST_CONTAINER):
     GOLD = Currency.GOLD
     CREDITS = Currency.CREDITS
     CRYSTAL = Currency.CRYSTAL
+    EVENT_COIN = Currency.EVENT_COIN
     XP = 'xp'
     FREE_XP = 'freeXp'
     MULTIPLIER = 'multiplier'

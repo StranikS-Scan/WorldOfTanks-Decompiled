@@ -69,7 +69,7 @@ class UnitUserCMHandler(BaseUserCMHandler, IGlobalListener):
         return super(UnitUserCMHandler, self)._addSquadInfo(options, isIgnored) if self.prbEntity.getEntityType() not in PREBATTLE_TYPE.SQUAD_PREBATTLES else options
 
     def _addStrongholdsInfo(self, userCMInfo):
-        if self.prbEntity.getEntityType() != PREBATTLE_TYPE.EXTERNAL:
+        if self.prbEntity.getEntityType() != PREBATTLE_TYPE.STRONGHOLD:
             return []
         options = []
         if self._canTakeEquipmentCommander():
@@ -85,7 +85,7 @@ class UnitUserCMHandler(BaseUserCMHandler, IGlobalListener):
             options.append(self._makeItem(GIVE_LEADERSHIP, MENU.contextmenu(GIVE_LEADERSHIP)))
         if self._canTakeLeadership():
             options.append(self._makeItem(TAKE_LEADERSHIP, MENU.contextmenu(TAKE_LEADERSHIP)))
-        if self.prbEntity.getEntityType() == PREBATTLE_TYPE.EXTERNAL:
+        if self.prbEntity.getEntityType() == PREBATTLE_TYPE.STRONGHOLD:
             options.extend(self._addStrongholdsInfo(userCMInfo))
         return options
 

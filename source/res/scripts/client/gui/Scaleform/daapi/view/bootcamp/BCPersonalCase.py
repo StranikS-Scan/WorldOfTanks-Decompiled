@@ -4,9 +4,10 @@ from gui.Scaleform.daapi.view.lobby.PersonalCase import PersonalCaseDataProvider
 from adisp import async
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
-from debug_utils import LOG_DEBUG
 from gui.Scaleform.locale.MENU import MENU
 from bootcamp.Bootcamp import g_bootcamp
+from bootcamp.statistic.decorators import loggerTarget, loggerEntry, simpleLog
+from bootcamp.statistic.logging_constants import BC_LOG_ACTIONS, BC_LOG_KEYS
 SKILLS_TAB_INDEX = 2
 PERSONAL_CASE_SKILLS = 'PersonalCaseSkills'
 
@@ -53,11 +54,19 @@ class BCPersonalCaseDataProvider(PersonalCaseDataProvider):
           'linkage': PERSONAL_CASE_SKILLS}]
 
 
+@loggerTarget(logKey=BC_LOG_KEYS.BC_PERSONAL_CASE)
 class BCPersonalCase(PersonalCase):
 
     def __init__(self, ctx=None):
-        LOG_DEBUG('BCPersonalCase.__init__')
         super(BCPersonalCase, self).__init__(ctx)
         self.tabIndex = 0
         self.isBootcamp = True
         self.dataProvider = BCPersonalCaseDataProvider(self.tmanInvID)
+
+    @loggerEntry
+    def _populate(self):
+        super(BCPersonalCase, self)._populate()
+
+    @simpleLog(action=BC_LOG_ACTIONS.CLOSE)
+    def _dispose(self):
+        super(BCPersonalCase, self)._dispose()

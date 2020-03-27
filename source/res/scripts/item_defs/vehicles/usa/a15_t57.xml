@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.417	</firePenalty>
   </invisibility>
-  <repairCost>	4.74	</repairCost>
+  <repairCost>	2.37	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
@@ -42,7 +42,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	9670	</weight>
-    <maxHealth>	64	</maxHealth>
+    <maxHealth>	128	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	60	</maxHealth>
       <maxRegenHealth>	30	</maxRegenHealth>
@@ -270,7 +270,7 @@
         <armor_8>	0	</armor_8>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	16	</maxHealth>
+      <maxHealth>	32	</maxHealth>
       <rotationSpeed>	14	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -288,6 +288,7 @@
             <minPitch>	0 -35 1 -35	</minPitch>
             <maxPitch>	0 2 1 2	</maxPitch>
           </pitchLimits>
+          <maxAmmo>	3600	</maxAmmo>
           <armor>
             <gun>	15	</gun>
             <gunBreech>	0	</gunBreech>

@@ -118,6 +118,9 @@ class EventDispatcher(object):
         self.__addStrongholdsToCarousel()
         self.showStrongholdsWindow()
 
+    def loadTournaments(self):
+        pass
+
     def loadSquad(self, prbType, ctx=None, isTeamReady=False):
         self.__addSquadToCarousel(prbType, isTeamReady)
         self.__showSquadWindow(prbType, ctx and ctx.get('showInvitesWindow', False))
@@ -244,9 +247,15 @@ class EventDispatcher(object):
         from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
         self.__fireShowEvent(FORTIFICATION_ALIASES.STRONGHOLD_BATTLE_ROOM_WINDOW_ALIAS)
 
+    def showTournamentWindow(self):
+        pass
+
     def showStrongholdsBattleQueue(self):
-        self.removeUnitFromCarousel(PREBATTLE_TYPE.EXTERNAL)
+        self.removeUnitFromCarousel(PREBATTLE_TYPE.STRONGHOLD)
         self.__fireShowEvent(VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE)
+
+    def showTournamentQueue(self):
+        pass
 
     def strongholdsOnTimer(self, data):
         self.__fireEvent(events.StrongholdEvent(events.StrongholdEvent.STRONGHOLD_ON_TIMER, ctx=data), scope=EVENT_BUS_SCOPE.STRONGHOLD)
@@ -439,7 +448,10 @@ class EventDispatcher(object):
     def __addStrongholdsToCarousel(self):
         from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
         from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
-        self.__addUnitToCarouselCommon(PREBATTLE_TYPE.EXTERNAL, FORTIFICATIONS.SORTIE_INTROVIEW_TITLE, FORTIFICATION_ALIASES.STRONGHOLD_BATTLE_ROOM_WINDOW_ALIAS, self.showStrongholdsWindow)
+        self.__addUnitToCarouselCommon(PREBATTLE_TYPE.STRONGHOLD, FORTIFICATIONS.SORTIE_INTROVIEW_TITLE, FORTIFICATION_ALIASES.STRONGHOLD_BATTLE_ROOM_WINDOW_ALIAS, self.showStrongholdsWindow)
+
+    def __addTournamentToCarousel(self):
+        pass
 
     def __addUnitToCarouselCommon(self, prbType, label, viewAlias, openHandler):
         clientID = channel_num_gen.getClientID4Prebattle(prbType)

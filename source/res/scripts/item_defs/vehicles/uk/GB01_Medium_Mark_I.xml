@@ -20,7 +20,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	6750	</weight>
-    <maxHealth>	112	</maxHealth>
+    <maxHealth>	240	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	70	</maxHealth>
       <maxRegenHealth>	48	</maxRegenHealth>
@@ -869,7 +869,7 @@
     <Turret_1_GB01_Medium_Mark_I>
       <userString>	#gb_vehicles:Turret_1_GB01_Medium_Mark_I	</userString>
       <guns>
-        <_3pdr_gun_Hotchkiss>	shared	  <maxAmmo>	90	</maxAmmo>
+        <_3pdr_gun_Hotchkiss>	shared	  <maxAmmo>	205	</maxAmmo>
           <unlocks>
             <gun>	QF_6_pounder_8cwt_Mk_II	  <cost>	90	</cost>
             </gun>
@@ -936,21 +936,7 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_3pdr_gun_Hotchkiss>
-        <QF_6_pounder_8cwt_Mk_II>	shared	  <maxAmmo>	60	</maxAmmo>
-          <unlocks>
-            <vehicle>	GB58_Cruiser_Mk_III	  <cost>	220	</cost>
-            </vehicle>
-            <vehicle>	GB39_Universal_CarrierQF2	  <cost>	220	</cost>
-            </vehicle>
-            <vehicle>	GB05_Vickers_Medium_Mk_II	  <cost>	220	</cost>
-            </vehicle>
-            <vehicle>	GB14_M2	  <cost>	220	</cost>
-            </vehicle>
-            <vehicle>	GB03_Cruiser_Mk_I	  <cost>	220	</cost>
-            </vehicle>
-            <vehicle>	GB25_Loyd_Gun_Carriage	  <cost>	220	</cost>
-            </vehicle>
-          </unlocks>
+        <QF_6_pounder_8cwt_Mk_II>	shared	  <maxAmmo>	140	</maxAmmo>
           <armor>
             <armor_1>	6.35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1033,7 +1019,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1360	</weight>
-      <maxHealth>	28	</maxHealth>
+      <maxHealth>	60	</maxHealth>
       <rotationSpeed>	32	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	50	</maxHealth>

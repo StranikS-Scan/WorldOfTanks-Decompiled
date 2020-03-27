@@ -65,10 +65,12 @@ class ItemPackType(CONST_CONTAINER):
     CUSTOM_CRYSTAL = 'custom/crystal'
     CUSTOM_GOLD = 'custom/gold'
     CUSTOM_CREDITS = 'custom/credits'
+    CUSTOM_EVENT_COIN = 'custom/event_coin'
     CUSTOM_SLOT = 'custom/slot'
     CUSTOM_REFERRAL_CREW = 'custom/crew'
-    CUSTOM_REWARD_POINT = 'custom/reward_point'
+    CUSTOM_REWARD_POINT = 'custom/prestige_point'
     CUSTOM_SUPPLY_POINT = 'custom/supply_point'
+    CUSTOM_EVENT_PROGRESSION_REWARD_POINT = 'custom/ep20:points'
     TOKEN = 'token'
     PAINT_ALL = 'paint/all'
     PAINT_SUMMER = 'paint/summer'
@@ -124,6 +126,7 @@ class ItemPackTypeGroup(CONST_CONTAINER):
      ItemPackType.CUSTOM_CRYSTAL,
      ItemPackType.CUSTOM_GOLD,
      ItemPackType.CUSTOM_CREDITS,
+     ItemPackType.CUSTOM_EVENT_COIN,
      ItemPackType.CUSTOM_REFERRAL_CREW,
      ItemPackType.CUSTOM_SLOT,
      ItemPackType.CUSTOM_REWARD_POINT,

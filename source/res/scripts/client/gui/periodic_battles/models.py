@@ -37,7 +37,10 @@ class PrimeTime(object):
                 return nextPeriodStart
         return
 
-    def getPeriodsBetween(self, startTime, endTime, includeBeginning=True, includeEnd=True):
+    def getPeriodsActiveForTime(self, periodTime, preferPeriodBounds=False):
+        return self.getPeriodsBetween(periodTime, periodTime, preferPeriodBounds=preferPeriodBounds)
+
+    def getPeriodsBetween(self, startTime, endTime, includeBeginning=True, includeEnd=True, preferPeriodBounds=False):
         periods = []
         startDateTime = time_utils.getDateTimeInUTC(startTime)
         startTimeDayStart, _ = time_utils.getDayTimeBoundsForUTC(startTime)
@@ -52,7 +55,10 @@ class PrimeTime(object):
                             continue
                         if not includeEnd and endTime < periodEndTime:
                             continue
-                        periods.append((max(startTime, periodStartTime), min(endTime, periodEndTime)))
+                        if preferPeriodBounds:
+                            periods.append((periodStartTime, periodEndTime))
+                        else:
+                            periods.append((max(startTime, periodStartTime), min(endTime, periodEndTime)))
 
             if weekDay == time_utils.WEEK_END:
                 weekDay = time_utils.WEEK_START

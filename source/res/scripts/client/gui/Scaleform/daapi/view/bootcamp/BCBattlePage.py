@@ -1,6 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/bootcamp/BCBattlePage.py
+import base64
+import cPickle as pickle
+import BigWorld
 import SoundGroups
+from account_helpers.AccountSettings import AccountSettings, KEY_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.battle.classic.minimap import ClassicMinimapComponent, GlobalSettingsPlugin
 from gui.Scaleform.daapi.view.battle.classic.page import DynamicAliases
@@ -13,7 +17,7 @@ from gui.Scaleform.daapi.view.battle.shared.start_countdown_sound_player import 
 from gui.Scaleform.daapi.view.bootcamp.battle.bc_finish_sound_player import BCFinishSoundPlayer
 from gui.Scaleform.daapi.view.meta.BCBattlePageMeta import BCBattlePageMeta
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
-from gui.battle_control import minimap_utils
+from gui.battle_control import avatar_getter, minimap_utils
 from constants import ARENA_PERIOD
 from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP, LOG_ERROR_BOOTCAMP
 from bootcamp.BootcampGUI import BootcampMarkersComponent
@@ -25,6 +29,7 @@ from PlayerEvents import g_playerEvents
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 _BOOTCAMP_EXTERNAL_COMPONENTS = (CrosshairPanelContainer, BootcampMarkersComponent)
+_BOOTCAMP_MINIMAP_SIZE_SETTINGS_KEY = 'bootcampMinimapSize'
 
 class _BCComponentsConfig(ComponentsConfig):
     BC_FINISH_SOUND_PLAYER = 'bcFinishSoundPlayer'
@@ -45,6 +50,30 @@ class _BCComponentsConfig(ComponentsConfig):
 
 _BC_COMPONENTS_CONFIG = _BCComponentsConfig()
 
+class BootcampAccountSettings(AccountSettings):
+    __SCREEN_WIDTH = 1920
+    __SCREEN_HEIGHT = 1080
+
+    @staticmethod
+    def _getValue(name, setting, force=False):
+        if name == _BOOTCAMP_MINIMAP_SIZE_SETTINGS_KEY and setting == KEY_SETTINGS:
+            fds = AccountSettings._readSection(AccountSettings._readUserSection(), setting)
+            if not fds.has_key(name):
+                value = 2 if BigWorld.screenWidth() < BootcampAccountSettings.__SCREEN_WIDTH and BigWorld.screenHeight() < BootcampAccountSettings.__SCREEN_HEIGHT else 3
+                fds.write(name, base64.b64encode(pickle.dumps(value)))
+                return value
+        return AccountSettings._getValue(name, setting, force)
+
+    @staticmethod
+    def _setValue(name, value, setting, force=False):
+        if name == _BOOTCAMP_MINIMAP_SIZE_SETTINGS_KEY and setting == KEY_SETTINGS:
+            fds = AccountSettings._readSection(AccountSettings._readUserSection(), setting)
+            fds.write(name, base64.b64encode(pickle.dumps(value)))
+            AccountSettings.onSettingsChanging(name, value)
+        else:
+            AccountSettings._setValue(name, value, setting, force)
+
+
 class BootcampTargetPlugin(common.EntriesPlugin):
 
     def addTarget(self, markerID, position):
@@ -54,6 +83,14 @@ class BootcampTargetPlugin(common.EntriesPlugin):
 
     def delTarget(self, markerID):
         return self._delEntryEx(markerID)
+
+
+class BootcampMinimapSettingsPlugin(GlobalSettingsPlugin):
+    _AccountSettingsClass = BootcampAccountSettings
+
+    def __init__(self, *args, **kwargs):
+        super(BootcampMinimapSettingsPlugin, self).__init__(*args, **kwargs)
+        self._changeSizeSettings(_BOOTCAMP_MINIMAP_SIZE_SETTINGS_KEY)
 
 
 class BootcampMinimapDisablePlugin(GlobalSettingsPlugin):
@@ -70,6 +107,7 @@ class BootcampMinimapComponent(ClassicMinimapComponent):
     def _setupPlugins(self, arenaVisitor):
         setup = super(BootcampMinimapComponent, self)._setupPlugins(arenaVisitor)
         setup['bootcamp'] = BootcampTargetPlugin
+        setup['settings'] = BootcampMinimapSettingsPlugin
         try:
             lessonId = arenaVisitor.getArenaExtraData()['lessonId']
             if BATTLE_VIEW_ALIASES.MINIMAP in getBattleSettings(lessonId).hiddenPanels:
@@ -97,6 +135,11 @@ class BCBattlePage(BCBattlePageMeta):
     def topHint(self):
         return self.getComponent(BATTLE_VIEW_ALIASES.BOOTCAMP_BATTLE_TOP_HINT)
 
+    def getExternalByAlias(self, alias):
+        for external in self._external:
+            if external.alias == alias:
+                return external
+
     def showNewElements(self, newElements):
         self._onAnimationsCompleteCallback = newElements['callback']
         self.as_showAnimatedS(newElements)
@@ -112,12 +155,14 @@ class BCBattlePage(BCBattlePageMeta):
         g_bootcampEvents.onUIStateChanged(UI_STATE.INIT)
         super(BCBattlePageMeta, self)._populate()
         g_bootcampEvents.onBattleComponentVisibility += self.__onComponentVisibilityEvent
+        g_bootcampEvents.hideGUIForWinMessage += self.__hideGUIForWinMessage
         g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
 
     def _dispose(self):
         self._onAnimationsCompleteCallback = None
         self.__hideOnCountdownPanels.clear()
         g_playerEvents.onArenaPeriodChange -= self.__onArenaPeriodChange
+        g_bootcampEvents.hideGUIForWinMessage -= self.__hideGUIForWinMessage
         g_bootcampEvents.onBattleComponentVisibility -= self.__onComponentVisibilityEvent
         super(BCBattlePageMeta, self)._dispose()
         return
@@ -167,3 +212,10 @@ class BCBattlePage(BCBattlePageMeta):
     def __onArenaPeriodChange(self, period, *args):
         if period == ARENA_PERIOD.BATTLE and self.__hideOnCountdownPanels:
             self._setComponentsVisibility(visible=self.__hideOnCountdownPanels, hidden=set())
+
+    def __hideGUIForWinMessage(self):
+        hideSet = set(self.as_getComponentsVisibilityS())
+        hideSet.difference_update([BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL])
+        self._setComponentsVisibility(visible={BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL}, hidden=hideSet)
+        self.fireEvent(events.GameEvent(events.GameEvent.GUI_VISIBILITY, {'visible': False}), scope=EVENT_BUS_SCOPE.BATTLE)
+        avatar_getter.setComponentsVisibility(False)

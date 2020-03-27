@@ -12,10 +12,12 @@ from gui.app_loader import settings as app_settings
 from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_results import IBattleResultsService
-from bootcamp.Bootcamp import g_bootcamp
+from bootcamp.statistic.decorators import loggerTarget, loggerEntry, simpleLog
+from bootcamp.statistic.logging_constants import BC_LOG_ACTIONS, BC_LOG_KEYS, BC_AWARDS_MAP
 _SNDID_ACHIEVEMENT = 'result_screen_achievements'
 _SNDID_BONUS = 'result_screen_bonus'
 
+@loggerTarget(logKey=BC_LOG_KEYS.BC_RESULT_SCREEN)
 class BCBattleResult(BCBattleResultMeta):
     battleResults = dependency.descriptor(IBattleResultsService)
     appLoader = dependency.descriptor(IAppLoader)
@@ -47,6 +49,10 @@ class BCBattleResult(BCBattleResultMeta):
         g_currentVehicle.selectVehicle(inventoryId)
         return g_currentVehicle.invID == inventoryId
 
+    @simpleLog(argKey='rendererId', resetTime=False, logOnce=True, argMap=BC_AWARDS_MAP)
+    def onToolTipShow(self, rendererId):
+        pass
+
     def onAnimationAwardStart(self, id):
         if not self.battleResults.areResultsPosted(self.__arenaUniqueID):
             return
@@ -62,6 +68,7 @@ class BCBattleResult(BCBattleResultMeta):
                 sound.play()
             return
 
+    @loggerEntry
     def _populate(self):
         g_bootcampEvents.onResultScreenFinished += self.__onResultScreenFinished
         self.__music = SoundGroups.g_instance.getSound2D('bc_result_screen_ambient')
@@ -70,11 +77,11 @@ class BCBattleResult(BCBattleResultMeta):
         super(BCBattleResult, self)._populate()
         if self.battleResults.areResultsPosted(self.__arenaUniqueID):
             self.__setBattleResults()
-        g_bootcamp.hideBattleResultTransition()
         self.app.as_loadLibrariesS(['guiControlsLobbyBattleDynamic.swf', 'guiControlsLobbyDynamic.swf'])
         self.appLoader.attachCursor(app_settings.APP_NAME_SPACE.SF_LOBBY, _CTRL_FLAG.GUI_ENABLED)
         return
 
+    @simpleLog(action=BC_LOG_ACTIONS.CONTINUE_BUTTON_PRESSED)
     def _dispose(self):
         g_bootcampEvents.onResultScreenFinished -= self.__onResultScreenFinished
         for sound in self.__awardSounds:

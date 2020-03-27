@@ -55,6 +55,7 @@
     <userString>	#ussr_vehicles:_23mm_BC-23	</userString>
     <icon>	ap	</icon>
     <price>	3	</price>
+    <notInShop>	true	</notInShop>
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	23	</caliber>
     <isTracer>	true	</isTracer>
@@ -70,6 +71,7 @@
     <icon>	ap_cr	</icon>
     <price>	400	</price>
     <improved>	true	</improved>
+    <notInShop>	true	</notInShop>
     <kind>	ARMOR_PIERCING_CR	</kind>
     <caliber>	23	</caliber>
     <isTracer>	true	</isTracer>
@@ -421,6 +423,50 @@
       <devices>	61	</devices>
     </damage>
   </_45mm_UOF-240A>
+  <_45mm_UBR-243>
+    <id>	259	</id>
+    <userString>	#ussr_vehicles:_45mm_UBR-243	</userString>
+    <icon>	ap	</icon>
+    <price>	14	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	45	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallArmorPiercing	</effects>
+    <damage>
+      <armor>	55	</armor>
+      <devices>	61	</devices>
+    </damage>
+  </_45mm_UBR-243>
+  <_45mm_UBR-243P>
+    <id>	260	</id>
+    <userString>	#ussr_vehicles:_45mm_UBR-243P	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	45	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallAPCR	</effects>
+    <damage>
+      <armor>	47	</armor>
+      <devices>	61	</devices>
+    </damage>
+  </_45mm_UBR-243P>
+  <_45mm_UO-243>
+    <id>	261	</id>
+    <userString>	#ussr_vehicles:_45mm_UO-243	</userString>
+    <icon>	he	</icon>
+    <price>	14	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	45	</caliber>
+    <explosionRadius>	0.43	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	smallHighExplosive	</effects>
+    <damage>
+      <armor>	62	</armor>
+      <devices>	61	</devices>
+    </damage>
+  </_45mm_UO-243>
   <_45mm_UBR-243SP>
     <id>	16	</id>
     <userString>	#ussr_vehicles:_45mm_UBR-243SP	</userString>
@@ -1642,6 +1688,51 @@
       <devices>	135	</devices>
     </damage>
   </_100mm_3UOF_LM>
+  <_100mm_UBR_LMK>
+    <id>	256	</id>
+    <userString>	#ussr_vehicles:_100mm_UBR_LMK	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	945	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	135	</devices>
+    </damage>
+  </_100mm_UBR_LMK>
+  <_100mm_3UBK_LMK>
+    <id>	257	</id>
+    <userString>	#ussr_vehicles:_100mm_3UBK_LMK	</userString>
+    <icon>	hc	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_100mm_3UBK_LMK>
+  <_100mm_3UOF_LMK>
+    <id>	258	</id>
+    <userString>	#ussr_vehicles:_100mm_3UOF_LMK	</userString>
+    <icon>	he	</icon>
+    <price>	465	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	100	</caliber>
+    <explosionRadius>	1.76	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	135	</devices>
+    </damage>
+  </_100mm_3UOF_LMK>
   <_100mm_UBR-412-DG>
     <id>	238	</id>
     <userString>	#ussr_vehicles:_100mm_UBR-412-DG	</userString>
@@ -2823,6 +2914,21 @@
       <devices>	203	</devices>
     </damage>
   </_152mm_53-OF-530>
+  <_152mm_53-OF-530_U>
+    <id>	224	</id>
+    <userString>	#ussr_vehicles:_152mm_53-OF-530	</userString>
+    <icon>	he	</icon>
+    <price>	810	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	152	</caliber>
+    <explosionRadius>	3.66	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	910	</armor>
+      <devices>	203	</devices>
+    </damage>
+  </_152mm_53-OF-530_U>
   <_152mm_53-OF-531>
     <id>	180	</id>
     <userString>	#ussr_vehicles:_152mm_53-OF-531	</userString>

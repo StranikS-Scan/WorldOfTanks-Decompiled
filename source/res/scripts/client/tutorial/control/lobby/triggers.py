@@ -14,7 +14,7 @@ from tutorial.control import game_vars, g_tutorialWeaver
 from tutorial.control.lobby import aspects
 from tutorial.control.triggers import Trigger, TriggerWithValidateVar, TriggerWithSubscription
 from tutorial.logger import LOG_ERROR
-__all__ = ('BonusTrigger', 'BattleCountRequester', 'ItemUnlockedTrigger', 'ItemInInventoryTrigger', 'ItemInstalledTrigger', 'EquipmentInstalledTrigger', 'CurrentVehicleChangedTrigger', 'FreeVehicleSlotChangedTrigger', 'PremiumPeriodChangedTrigger', 'PremiumDiscountUseTrigger', 'IsIngameShopEnabledTrigger')
+__all__ = ('BonusTrigger', 'BattleCountRequester', 'ItemUnlockedTrigger', 'ItemInInventoryTrigger', 'ItemInstalledTrigger', 'EquipmentInstalledTrigger', 'CurrentVehicleChangedTrigger', 'FreeVehicleSlotChangedTrigger', 'PremiumPeriodChangedTrigger', 'PremiumDiscountUseTrigger', 'IsIngameShopEnabledTrigger', 'IsCollectibleVehicleTrigger')
 
 class BonusTrigger(Trigger):
 
@@ -346,3 +346,13 @@ class IsIngameShopEnabledTrigger(Trigger):
     def __onServerSettingChanged(self, diff):
         if 'ingameShop' in diff and isIngameShopEnabled():
             self.toggle(isOn=self.isOn())
+
+
+class IsCollectibleVehicleTrigger(CurrentVehicleChangedTrigger):
+
+    def run(self):
+        super(IsCollectibleVehicleTrigger, self).run()
+        self.toggle(isOn=self.isOn())
+
+    def isOn(self, *args):
+        return g_currentVehicle.isCollectible()

@@ -8,6 +8,9 @@ from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.Scaleform.genConsts.RESEARCH_ALIASES import RESEARCH_ALIASES
 from gui.shared import event_dispatcher as shared_events
+from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
+from bootcamp.statistic.decorators import loggerTarget, loggerEntry, simpleLog
+from bootcamp.statistic.logging_constants import BC_LOG_ACTIONS, BC_LOG_KEYS
 
 class BCResearchItemsData(ResearchItemsData):
 
@@ -25,7 +28,7 @@ class BCResearchItemsData(ResearchItemsData):
         state = node.getState()
         if not NODE_STATE.isAnnouncement(state):
             if self.__overrideResearch:
-                if not NODE_STATE.inInventory(state):
+                if not NODE_STATE.inInventory(state) and not (NODE_STATE.isAvailable2Unlock(state) or NODE_STATE.isAvailable2Buy(state)):
                     state = NODE_STATE.addIfNot(state, NODE_STATE_FLAGS.NOT_CLICKABLE)
                 if self.getRootCD() == self.__firstVehicleNode:
                     if self.__secondVehicleResearch:
@@ -64,26 +67,31 @@ class BCResearchItemsData(ResearchItemsData):
         return (oldCost, 0)
 
 
+@loggerTarget(logKey=BC_LOG_KEYS.BC_RESEARCH_VEHICLES)
 class BCResearch(Research):
 
     def __init__(self, ctx=None):
-        super(BCResearch, self).__init__(ctx, skipConfirm=True)
+        super(BCResearch, self).__init__(ctx, skipConfirm=False)
         self._data = BCResearchItemsData(dumpers.ResearchItemsObjDumper())
         self._resolveLoadCtx(ctx=ctx)
 
-    def request4Unlock(self, unlockCD, topLevel):
-        nationData = g_bootcamp.getNationData()
-        if nationData['vehicle_second'] == unlockCD:
-            shared_events.showOldVehiclePreview(int(unlockCD), self.alias)
-        else:
-            super(BCResearch, self).request4Unlock(unlockCD, topLevel)
+    @loggerEntry
+    def _populate(self):
+        super(BCResearch, self)._populate()
 
+    @simpleLog(action=BC_LOG_ACTIONS.UNLOCK_ITEM)
+    def request4Unlock(self, unlockCD, topLevel):
+        super(BCResearch, self).request4Unlock(unlockCD, topLevel)
+
+    def _doUnlockItemAction(self, itemCD, unlockProps):
+        ItemsActionsFactory.doAction(ItemsActionsFactory.BC_UNLOCK_ITEM, itemCD, unlockProps, skipConfirm=self._skipConfirm)
+
+    @simpleLog(action=BC_LOG_ACTIONS.BUY_ITEM)
     def request4Buy(self, itemCD):
-        nationData = g_bootcamp.getNationData()
-        if nationData['vehicle_second'] == itemCD:
-            shared_events.showOldVehiclePreview(int(itemCD), self.alias)
-        else:
-            super(BCResearch, self).request4Buy(itemCD)
+        super(BCResearch, self).request4Buy(itemCD)
+
+    def _doBuyAndInstallItemAction(self, itemCD):
+        ItemsActionsFactory.doAction(ItemsActionsFactory.BC_BUY_AND_INSTALL_ITEM, itemCD, self._data.getRootCD(), skipConfirm=self._skipConfirm)
 
     def invalidateVehCompare(self):
         pass
@@ -93,10 +101,14 @@ class BCResearch(Research):
 
     def goToVehicleView(self, itemCD):
         vehicle = self._itemsCache.items.getItemByCD(int(itemCD))
-        if vehicle.isPreviewAllowed():
-            shared_events.showOldVehiclePreview(int(itemCD), self.alias)
-        elif vehicle.isInInventory:
+        if vehicle.isInInventory:
             shared_events.selectVehicleInHangar(itemCD)
+
+    def goToNextVehicle(self, vehCD):
+        nationData = g_bootcamp.getNationData()
+        super(BCResearch, self).goToNextVehicle(vehCD)
+        if nationData['vehicle_second'] != vehCD:
+            self.exitFromResearch()
 
     def setupContextHints(self, hintID):
         pass

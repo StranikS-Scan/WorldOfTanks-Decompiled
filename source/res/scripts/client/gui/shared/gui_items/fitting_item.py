@@ -101,7 +101,7 @@ class RentalInfoProvider(_RentalInfoProvider):
                         if currentSeason.getCycleID() == rentID:
                             return SeasonRentInfo(seasonType, rentID, duration, currentSeason.getCycleEndDate())
                         now = time_utils.getCurrentLocalServerTimestamp()
-                        nextCycle = currentSeason.getNextCycleInfo(now)
+                        nextCycle = currentSeason.getNextCycleInfo(now) or currentSeason.getNextByTimeCycle(now)
                         if nextCycle and nextCycle.ID == rentID:
                             return SeasonRentInfo(seasonType, rentID, duration, nextCycle.endDate)
 
@@ -135,13 +135,13 @@ class RentalInfoProvider(_RentalInfoProvider):
                         return (curCycle, lastCycle)
                 elif duration == SeasonRentDuration.SEASON_CYCLE:
                     now = time_utils.getCurrentLocalServerTimestamp()
-                    lastFutureCycleInfo = self._getLastFutureCycleRentInfo()
-                    curCycle = currentSeason.getCycleInfo() or currentSeason.getNextCycleInfo(now)
-                    if lastFutureCycleInfo:
-                        lastCycle = currentSeason.getCycleInfo(lastFutureCycleInfo.seasonID)
-                        if curCycle != lastCycle:
+                    curCycle = currentSeason.getCycleInfo() or currentSeason.getNextByTimeCycle(now)
+                    if curCycle:
+                        lastFutureCycleInfo = self._getLastFutureCycleRentInfo()
+                        if lastFutureCycleInfo and lastFutureCycleInfo.seasonID != curCycle.ID:
+                            lastCycle = currentSeason.getCycleInfo(lastFutureCycleInfo.seasonID)
                             return (curCycle, lastCycle)
-                    return (curCycle,)
+                        return (curCycle,)
             return
 
     def _getLastFutureCycleRentInfo(self):
@@ -267,6 +267,10 @@ class FittingItem(GUIItem):
 
     @property
     def isSecret(self):
+        return False
+
+    @property
+    def isCollectible(self):
         return False
 
     @property
@@ -487,7 +491,7 @@ class FittingItem(GUIItem):
          GUI_ITEM_TYPE.OPTIONALDEVICE,
          GUI_ITEM_TYPE.SHELL,
          GUI_ITEM_TYPE.BATTLE_BOOSTER,
-         GUI_ITEM_TYPE.CREW_BOOKS) and not self.isUnlocked:
+         GUI_ITEM_TYPE.CREW_BOOKS) and not self.isUnlocked and not self.isCollectible:
             return (False, GUI_ITEM_ECONOMY_CODE.UNLOCK_ERROR)
         return (False, GUI_ITEM_ECONOMY_CODE.ITEM_IS_HIDDEN) if self.isHidden else self._isEnoughMoney(price, money)
 

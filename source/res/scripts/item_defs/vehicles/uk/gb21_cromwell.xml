@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.38	</firePenalty>
   </invisibility>
-  <repairCost>	6.5	</repairCost>
+  <repairCost>	5.804	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.2	</priceFactor>
@@ -46,7 +46,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_7 armor_4	</primaryArmor>
     <weight>	14900	</weight>
-    <maxHealth>	560	</maxHealth>
+    <maxHealth>	672	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -1730,7 +1730,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5000	</weight>
-      <maxHealth>	140	</maxHealth>
+      <maxHealth>	128	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -1744,7 +1744,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <QF_6_pounder_Mk_III>	shared	  <maxAmmo>	75	</maxAmmo>
+        <QF_6_pounder_Mk_III>	shared	  <maxAmmo>	130	</maxAmmo>
           <unlocks>
             <gun>	QF_6_pounder_Mk_V	  <cost>	3700	</cost>
             </gun>
@@ -1820,7 +1820,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </QF_6_pounder_Mk_III>
-        <QF_6_pounder_Mk_V>	shared	  <maxAmmo>	75	</maxAmmo>
+        <QF_6_pounder_Mk_V>	shared	  <maxAmmo>	130	</maxAmmo>
           <unlocks>
             <turret>	Turret_2_GB21_Cromwell	  <cost>	4200	</cost>
             </turret>
@@ -1898,7 +1898,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </QF_6_pounder_Mk_V>
-        <_3.7inch_Howitzer>	shared	  <maxAmmo>	40	</maxAmmo>
+        <_3.7inch_Howitzer>	shared	  <maxAmmo>	48	</maxAmmo>
           <armor>
             <gun>	40	</gun>
           </armor>
@@ -2055,7 +2055,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5000	</weight>
-      <maxHealth>	190	</maxHealth>
+      <maxHealth>	168	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -2069,7 +2069,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <QF_6_pounder_Mk_III>	shared	  <maxAmmo>	75	</maxAmmo>
+        <QF_6_pounder_Mk_III>	shared	  <maxAmmo>	130	</maxAmmo>
           <armor>
             <gun>	10	</gun>
           </armor>
@@ -2136,7 +2136,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </QF_6_pounder_Mk_III>
-        <QF_6_pounder_Mk_V>	shared	  <maxAmmo>	75	</maxAmmo>
+        <QF_6_pounder_Mk_V>	shared	  <maxAmmo>	130	</maxAmmo>
           <armor>
             <gun>	10	</gun>
           </armor>
@@ -2203,7 +2203,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </QF_6_pounder_Mk_V>
-        <_3.7inch_Howitzer>	shared	  <maxAmmo>	40	</maxAmmo>
+        <_3.7inch_Howitzer>	shared	  <maxAmmo>	48	</maxAmmo>
           <armor>
             <gun>	40	</gun>
           </armor>
@@ -2270,12 +2270,10 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_3.7inch_Howitzer>
-        <_75mm_Gun_Mk_V>	shared	  <maxAmmo>	64	</maxAmmo>
+        <_75mm_Gun_Mk_V>	shared	  <maxAmmo>	75	</maxAmmo>
           <unlocks>
             <gun>	_75mm_Gun_Vickers_HV	  <cost>	5000	</cost>
             </gun>
-            <vehicle>	GB104_GSR_3301_Setter	  <cost>	63000	</cost>
-            </vehicle>
           </unlocks>
           <armor>
             <gun>	20	</gun>
@@ -2348,7 +2346,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_Gun_Mk_V>
-        <_75mm_Gun_Vickers_HV>	shared	  <maxAmmo>	64	</maxAmmo>
+        <_75mm_Gun_Vickers_HV>	shared	  <maxAmmo>	75	</maxAmmo>
           <unlocks>
             <vehicle>	GB22_Comet	  <cost>	58000	</cost>
             </vehicle>

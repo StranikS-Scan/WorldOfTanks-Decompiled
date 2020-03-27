@@ -68,7 +68,7 @@ class VehicleGunRotator(object):
 
     def start(self):
 
-        def multiGunCurrentPosition():
+        def multiGunCurrentShotPosition():
             player = BigWorld.player()
             if player is None:
                 return
@@ -80,7 +80,7 @@ class VehicleGunRotator(object):
                     return
                 gunIdx = vehicle.activeGunIndex
                 multiGun = vehicle.typeDescriptor.turret.multiGun
-                return None if multiGun is None or gunIdx >= len(multiGun) or gunIdx < 0 else multiGun[gunIdx].position
+                return None if multiGun is None or gunIdx >= len(multiGun) or gunIdx < 0 else multiGun[gunIdx].shotPosition
 
         if self.__isStarted or not self.__speedsInitialized:
             return
@@ -92,7 +92,7 @@ class VehicleGunRotator(object):
             ctrl = self.__sessionProvider.shared.feedback
             if ctrl is not None:
                 ctrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
-            self.__gunPosition = multiGunCurrentPosition()
+            self.__gunPosition = multiGunCurrentShotPosition()
             self.__isStarted = True
             self.__updateGunMarker()
             self.__timerID = BigWorld.callback(self.__ROTATION_TICK_LENGTH, self.__onTick)
@@ -547,7 +547,7 @@ class VehicleGunRotator(object):
         descr = self._avatar.getVehicleDescriptor()
         turretOffs = descr.hull.turretPositions[0] + descr.chassis.hullPosition
         if gunOffset is None:
-            gunOffset = descr.turret.gunPosition if self.__gunPosition is None else self.__gunPosition
+            gunOffset = descr.turret.gunShotPosition if self.__gunPosition is None else self.__gunPosition
         shotSpeed = descr.shot.speed
         turretWorldMatrix = Math.Matrix()
         turretWorldMatrix.setRotateY(turretYaw)
@@ -590,12 +590,12 @@ class VehicleGunRotator(object):
             return
         else:
             playerTeam = BigWorld.player().vehicle.publicInfo.team
-            gunsData = [ self.__getTargetedEnemyForGun(gun.position, playerTeam) for gun in multiGun ]
+            gunsData = [ self.__getTargetedEnemyForGun(gun.shotPosition, playerTeam) for gun in multiGun ]
             self._avatar.inputHandler.ctrl.updateTargetedEnemiesForGuns(gunsData)
             return
 
-    def __getTargetedEnemyForGun(self, gunPosition, excludeTeam):
-        shotPos, shotVec = self.__getShotPosition(self.__turretYaw, self.__gunPitch, gunPosition)
+    def __getTargetedEnemyForGun(self, gunShotPosition, excludeTeam):
+        shotPos, shotVec = self.__getShotPosition(self.__turretYaw, self.__gunPitch, gunShotPosition)
         shotDescr = self._avatar.getVehicleDescriptor().shot
         gravity = Math.Vector3(0.0, -shotDescr.gravity, 0.0)
         testVehicleID = self.getAttachedVehicleID()
@@ -656,7 +656,10 @@ class VehicleGunRotator(object):
             return
         else:
             turret = playerVehicle.typeDescriptor.turret
-            self.__gunPosition = turret.multiGun[activeGun].position if turret.multiGun is not None else turret.gunPosition
+            if turret.multiGun is not None:
+                self.__gunPosition = turret.multiGun[activeGun].shotPosition
+            else:
+                self.__gunPosition = turret.gunShotPosition
             return
 
     def __getGunPitchLimits(self):

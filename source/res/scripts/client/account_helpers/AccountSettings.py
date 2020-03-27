@@ -133,6 +133,16 @@ RANKED_WEB_LEAGUE_UPDATE = 'rankedWebLeagueUpdate'
 RANKED_AWARDS_BUBBLE_YEAR_REACHED = 'rankedAwardsBubbleYearReached'
 MARATHON_REWARD_WAS_SHOWN_PREFIX = 'marathonRewardScreenWasShown'
 MARATHON_VIDEO_WAS_SHOWN_PREFIX = 'marathonRewardVideoWasShown'
+SUBTITLES = 'subtitles'
+TECHTREE_INTRO_BLUEPRINTS = 'techTreeIntroBlueprints'
+MODULES_ANIMATION_SHOWN = 'collectibleVehiclesAnimWasShown'
+NEW_SHOP_TABS = 'newShopTabs'
+IS_COLLECTIBLE_VEHICLES_VISITED = 'isCollectibleVehiclesVisited'
+QUESTS = 'quests'
+QUEST_DELTAS = 'questDeltas'
+QUEST_DELTAS_COMPLETION = 'questCompletion'
+QUEST_DELTAS_PROGRESS = 'questProgress'
+QUEST_DELTAS_TOKENS_PROGRESS = 'tokensProgress'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
@@ -317,7 +327,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                     'isRankedWelcomeViewStarted': False,
                                     'isEpicRandomCheckboxClicked': False,
                                     'isEpicWelcomeViewShowed': False,
-                                    'lastShownEpicWelcomeScreen': 0},
+                                    'lastShownEpicWelcomeScreen': 0,
+                                    'techTreeIntroBlueprintsReceived': False,
+                                    'techTreeIntroShowed': False},
                EULA_VERSION: {'version': 0},
                LINKEDSET_QUESTS: {'shown': 0},
                FORT_MEMBER_TUTORIAL: {'wasShown': False},
@@ -488,16 +500,19 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'statsSortingSortie': {'iconType': 'tank',
                                        'sortDirection': 'descending'},
                 'backDraftInvert': False,
-                'quests': {'lastVisitTime': -1,
-                           'visited': [],
-                           'naVisited': [],
-                           'personalMissions': {'introShown': False,
-                                                'operationsVisited': set(),
-                                                'headerAlert': False},
-                           'dailyQuests': {'lastVisitedDQTabIdx': None,
-                                           'seenCompleted': False,
-                                           'visitedBonus': False,
-                                           'premMissionsTabDiscovered': False}},
+                QUESTS: {'lastVisitTime': -1,
+                         'visited': [],
+                         'naVisited': [],
+                         'personalMissions': {'introShown': False,
+                                              'operationsVisited': set(),
+                                              'headerAlert': False},
+                         'dailyQuests': {'lastVisitedDQTabIdx': None,
+                                         'seenCompleted': False,
+                                         'visitedBonus': False,
+                                         'premMissionsTabDiscovered': False},
+                         QUEST_DELTAS: {QUEST_DELTAS_COMPLETION: dict(),
+                                        QUEST_DELTAS_PROGRESS: dict(),
+                                        QUEST_DELTAS_TOKENS_PROGRESS: dict()}},
                 'checkBoxConfirmator': {'questsConfirmDialogShow': True,
                                         'questsConfirmDialogShowPM2': True},
                 CUSTOMIZATION_SECTION: {},
@@ -589,7 +604,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 RANKED_AWARDS_BUBBLE_YEAR_REACHED: False,
                 NATION_CHANGE_VIEWED: False,
                 LAST_BATTLE_PASS_POINTS_SEEN: 0,
-                BATTLE_PASS_VIDEOS_CONFIG: {}},
+                BATTLE_PASS_VIDEOS_CONFIG: {},
+                TECHTREE_INTRO_BLUEPRINTS: {},
+                MODULES_ANIMATION_SHOWN: False,
+                SUBTITLES: True},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
@@ -599,7 +617,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 RANKED_INFO_COUNTER: 1,
                 BOOSTERS_FOR_CREDITS_SLOT_COUNTER: 1,
                 SENIORITY_AWARDS_COUNTER: 1,
-                DEMOUNT_KIT_SEEN: False},
+                DEMOUNT_KIT_SEEN: False,
+                NEW_SHOP_TABS: {IS_COLLECTIBLE_VEHICLES_VISITED: False}},
  KEY_NOTIFICATIONS: {ELEN_NOTIFICATIONS: {MISSIONS_CONSTANTS.ELEN_EVENT_STARTED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_FINISHED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_TAB_VISITED: set()},
@@ -703,20 +722,20 @@ class AccountSettings(object):
         return
 
     @staticmethod
-    def __readSection(ds, name):
+    def _readSection(ds, name):
         if not ds.has_key(name):
             ds.write(name, '')
         return ds[name]
 
     @staticmethod
-    def __readUserSection():
+    def _readUserSection():
         if AccountSettings.__isFirstRun:
             AccountSettings.convert()
             AccountSettings.invalidateNewSettingsCounter()
             AccountSettings.__isFirstRun = False
         userLogin = getattr(BigWorld.player(), 'name', '')
         if AccountSettings.__cache['login'] != userLogin:
-            ads = AccountSettings.__readSection(Settings.g_instance.userPrefs, Settings.KEY_ACCOUNT_SETTINGS)
+            ads = AccountSettings._readSection(Settings.g_instance.userPrefs, Settings.KEY_ACCOUNT_SETTINGS)
             for key, section in ads.items():
                 if key == 'account' and section.readString('login') == userLogin:
                     AccountSettings.__cache['login'] = userLogin
@@ -736,7 +755,7 @@ class AccountSettings(object):
 
     @staticmethod
     def convert():
-        ads = AccountSettings.__readSection(Settings.g_instance.userPrefs, Settings.KEY_ACCOUNT_SETTINGS)
+        ads = AccountSettings._readSection(Settings.g_instance.userPrefs, Settings.KEY_ACCOUNT_SETTINGS)
         currVersion = ads.readInt('version', 0)
         if currVersion != AccountSettings.version:
             if currVersion < 1:
@@ -755,7 +774,7 @@ class AccountSettings(object):
                  'showExInf4Destroyed': 'markerBaseDead'}
                 for key, section in ads.items()[:]:
                     if key == 'account':
-                        accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
+                        accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
                         defaultMarker = DEFAULT_VALUES[KEY_SETTINGS]['markers'].copy()
                         needUpdate = False
                         for key1, section1 in accSettings.items()[:]:
@@ -770,7 +789,7 @@ class AccountSettings(object):
             if currVersion < 3:
                 for key, section in ads.items()[:]:
                     if key == 'account':
-                        accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
+                        accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
                         defaultCursor = DEFAULT_VALUES[KEY_SETTINGS]['arcade'].copy()
                         cassetteDefValues = DEFAULT_VALUES[KEY_SETTINGS]['arcade'].copy()['cassette']
                         for key1, section1 in accSettings.items()[:]:
@@ -785,7 +804,7 @@ class AccountSettings(object):
             if currVersion < 4:
                 for key, section in ads.items()[:]:
                     if key == 'account':
-                        accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
+                        accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
                         defaultCursor = DEFAULT_VALUES[KEY_SETTINGS]['arcade'].copy()
                         for key1, section1 in accSettings.items()[:]:
                             if key1 == 'cursors':
@@ -798,7 +817,7 @@ class AccountSettings(object):
             if currVersion < 5:
                 for key, section in ads.items()[:]:
                     if key == 'account':
-                        accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
+                        accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
                         for key1, section1 in accSettings.items()[:]:
                             if key1 == 'markers':
                                 accSettings.deleteSection(key1)
@@ -806,14 +825,14 @@ class AccountSettings(object):
             if currVersion < 6:
                 for key, section in ads.items()[:]:
                     if key == 'account':
-                        accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
+                        accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
                         defaultSorting = DEFAULT_VALUES[KEY_SETTINGS]['statsSorting'].copy()
                         accSettings.write('statsSorting', base64.b64encode(pickle.dumps(defaultSorting)))
 
             if currVersion < 7:
                 for key, section in ads.items()[:]:
                     if key == 'account':
-                        accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
+                        accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
                         result = DEFAULT_VALUES[KEY_SETTINGS]['sniper'].copy()
                         for settingName, settingPickle in accSettings.items()[:]:
                             if settingName == 'sniper':
@@ -834,7 +853,7 @@ class AccountSettings(object):
             if currVersion < 8:
                 for key, section in ads.items()[:]:
                     if key == 'account':
-                        accFilters = AccountSettings.__readSection(section, KEY_FILTERS)
+                        accFilters = AccountSettings._readSection(section, KEY_FILTERS)
                         for filterName, filterPickle in accFilters.items()[:]:
                             if filterName in ('cs_intro_view_vehicle', 'cs_list_view_vehicle', 'cs_unit_view_vehicle', 'cs_unit_view_settings'):
                                 result = DEFAULT_VALUES[KEY_FILTERS][filterName].copy()
@@ -845,7 +864,7 @@ class AccountSettings(object):
             if currVersion < 9:
                 for key, section in ads.items()[:]:
                     if key == 'account':
-                        accFilters = AccountSettings.__readSection(section, KEY_FILTERS)
+                        accFilters = AccountSettings._readSection(section, KEY_FILTERS)
                         for filterName, filterPickle in accFilters.items()[:]:
                             if filterName in ('cs_intro_view_vehicle', 'cs_list_view_vehicle', 'cs_unit_view_vehicle', 'cs_unit_view_settings'):
                                 defaults = DEFAULT_VALUES[KEY_FILTERS][filterName].copy()
@@ -856,7 +875,7 @@ class AccountSettings(object):
             if currVersion < 10:
                 for key, section in ads.items()[:]:
                     if key == 'account':
-                        accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
+                        accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
                         result = set(DEFAULT_VALUES[KEY_SETTINGS][KNOWN_SELECTOR_BATTLES]).copy()
                         for key1, section1 in accSettings.items()[:]:
                             if key1 == 'unitWindow':
@@ -871,13 +890,13 @@ class AccountSettings(object):
             if currVersion < 11:
                 for key, section in ads.items()[:]:
                     if key == 'account':
-                        accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
+                        accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
                         defaultSorting = DEFAULT_VALUES[KEY_SETTINGS]['statsSortingSortie'].copy()
                         accSettings.write('statsSortingSortie', base64.b64encode(pickle.dumps(defaultSorting)))
 
             if currVersion < 12:
                 for key, section in _filterAccountSection(ads):
-                    accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
+                    accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
                     if KNOWN_SELECTOR_BATTLES in accSettings.keys():
                         known = _unpack(accSettings[KNOWN_SELECTOR_BATTLES].asString)
                         if SELECTOR_BATTLE_TYPES.UNIT in known:
@@ -891,28 +910,28 @@ class AccountSettings(object):
                 if Settings.g_instance.userPrefs.has_key('enableVoIP'):
                     enableVoIPVal = Settings.g_instance.userPrefs.readBool('enableVoIP')
                 for key, section in _filterAccountSection(ads):
-                    AccountSettings.__readSection(section, KEY_SETTINGS).write('enableVoIP', _pack(enableVoIPVal))
+                    AccountSettings._readSection(section, KEY_SETTINGS).write('enableVoIP', _pack(enableVoIPVal))
 
                 Settings.g_instance.userPrefs.deleteSection('enableVoIP')
             if currVersion < 17:
                 for key, section in ads.items()[:]:
                     if key == 'account':
-                        accSettings = AccountSettings.__readSection(section, KEY_FAVORITES)
+                        accSettings = AccountSettings._readSection(section, KEY_FAVORITES)
                         for key1, section1 in accSettings.items()[:]:
                             if key1 == FALLOUT_VEHICLES:
                                 accSettings.deleteSection(key1)
 
             if currVersion < 18:
-                cmSection = AccountSettings.__readSection(Settings.g_instance.userPrefs, Settings.KEY_COMMAND_MAPPING)
+                cmSection = AccountSettings._readSection(Settings.g_instance.userPrefs, Settings.KEY_COMMAND_MAPPING)
                 for command, section in cmSection.items()[:]:
                     newSection = None
                     satelliteKeys = ''
-                    fireKey = AccountSettings.__readSection(section, 'fireKey').asString
+                    fireKey = AccountSettings._readSection(section, 'fireKey').asString
                     if fireKey == 'KEY_SPACE':
                         if command == 'CMD_BLOCK_TRACKS':
                             pass
                         elif command == 'CMD_STOP_UNTIL_FIRE':
-                            satelliteKeys = AccountSettings.__readSection(section, 'satelliteKeys').asString
+                            satelliteKeys = AccountSettings._readSection(section, 'satelliteKeys').asString
                             cmSection.deleteSection('CMD_STOP_UNTIL_FIRE')
                             newSection = cmSection.createSection('CMD_STOP_UNTIL_FIRE')
                         else:
@@ -926,9 +945,9 @@ class AccountSettings(object):
                 pass
             if currVersion < 20:
                 for key, section in _filterAccountSection(ads):
-                    accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
+                    accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
                     accSettings.write('battleLoadingInfo', base64.b64encode(pickle.dumps(0)))
-                    AccountSettings.__readSection(section, KEY_FILTERS).deleteSection('joinCommandPressed')
+                    AccountSettings._readSection(section, KEY_FILTERS).deleteSection('joinCommandPressed')
 
             if currVersion < 21:
                 import SoundGroups
@@ -943,12 +962,12 @@ class AccountSettings(object):
                 pass
             if currVersion < 23:
                 for key, section in _filterAccountSection(ads):
-                    AccountSettings.__readSection(section, KEY_SETTINGS).deleteSection('FootballVehSelectedOnce')
+                    AccountSettings._readSection(section, KEY_SETTINGS).deleteSection('FootballVehSelectedOnce')
 
             if currVersion < 24:
                 for key, section in _filterAccountSection(ads):
-                    AccountSettings.__readSection(section, KEY_SETTINGS).deleteSection('FootballCustTriggerShown')
-                    AccountSettings.__readSection(section, KEY_SETTINGS).deleteSection('FootballVehSelectedOnce')
+                    AccountSettings._readSection(section, KEY_SETTINGS).deleteSection('FootballCustTriggerShown')
+                    AccountSettings._readSection(section, KEY_SETTINGS).deleteSection('FootballVehSelectedOnce')
 
             if currVersion < 24:
                 import SoundGroups
@@ -963,7 +982,7 @@ class AccountSettings(object):
                 SoundGroups.g_instance.savePreferences()
             if currVersion < 25:
                 for key, section in _filterAccountSection(ads):
-                    accFilters = AccountSettings.__readSection(section, KEY_FILTERS)
+                    accFilters = AccountSettings._readSection(section, KEY_FILTERS)
                     for filterName, filterPickle in accFilters.items():
                         if filterName in ('shop_vehicle', 'shop_module', 'shop_shell', 'shop_optionalDevice', 'shop_equipment', 'inventory_vehicle', 'inventory_module', 'inventory_shell', 'inventory_optionalDevice', 'inventory_equipment'):
                             defaults = DEFAULT_VALUES[KEY_FILTERS][filterName].copy()
@@ -971,8 +990,8 @@ class AccountSettings(object):
 
             if currVersion < 26:
                 for key, section in _filterAccountSection(ads):
-                    AccountSettings.__readSection(section, KEY_SETTINGS).deleteSection('new_customization_items')
-                    AccountSettings.__readSection(section, KEY_SETTINGS).deleteSection('statsSortingEvent')
+                    AccountSettings._readSection(section, KEY_SETTINGS).deleteSection('new_customization_items')
+                    AccountSettings._readSection(section, KEY_SETTINGS).deleteSection('statsSortingEvent')
 
             if currVersion < 27:
                 legacyToNewMode = {'hidden': 0,
@@ -981,7 +1000,7 @@ class AccountSettings(object):
                  'medium2': 3,
                  'large': 4}
                 for key, section in _filterAccountSection(ads):
-                    settingsSection = AccountSettings.__readSection(section, KEY_SETTINGS)
+                    settingsSection = AccountSettings._readSection(section, KEY_SETTINGS)
                     if 'players_panel' in settingsSection.keys():
                         panelSettings = _unpack(settingsSection['players_panel'].asString)
                         if 'state' in panelSettings:
@@ -992,12 +1011,12 @@ class AccountSettings(object):
 
             if currVersion < 28:
                 for key, section in _filterAccountSection(ads):
-                    filters = AccountSettings.__readSection(section, KEY_FILTERS)
+                    filters = AccountSettings._readSection(section, KEY_FILTERS)
                     filters.deleteSection('lastClubOpenedForApps')
                     filters.deleteSection('showInviteCommandBtnAnimation')
 
             if currVersion < 29:
-                getSection = AccountSettings.__readSection
+                getSection = AccountSettings._readSection
                 cmSection = getSection(Settings.g_instance.userPrefs, Settings.KEY_COMMAND_MAPPING)
                 cmdItems = cmSection.items()[:]
                 if cmdItems:
@@ -1016,7 +1035,7 @@ class AccountSettings(object):
                     CommandMapping.g_instance.restoreUserConfig()
             if currVersion < 29:
                 for key, section in _filterAccountSection(ads):
-                    filtersSection = AccountSettings.__readSection(section, KEY_FILTERS)
+                    filtersSection = AccountSettings._readSection(section, KEY_FILTERS)
                     if 'searchNameVehicle' in filtersSection.keys():
                         searchName = _unpack(filtersSection['searchNameVehicle'].asString)
                         filtersSection.write(CAROUSEL_FILTER_CLIENT_1, _pack({'searchNameVehicle': searchName}))
@@ -1024,7 +1043,7 @@ class AccountSettings(object):
 
             if currVersion < 30:
                 for key, section in _filterAccountSection(ads):
-                    accFilters = AccountSettings.__readSection(section, KEY_FILTERS)
+                    accFilters = AccountSettings._readSection(section, KEY_FILTERS)
                     for filterName, filterPickle in accFilters.items():
                         if filterName in ('shop_vehicle', 'inventory_vehicle', 'shop_current', 'inventory_current', 'shop_tradeInVehicle', 'shop_restoreVehicle'):
                             defaults = DEFAULT_VALUES[KEY_FILTERS][filterName]
@@ -1032,23 +1051,23 @@ class AccountSettings(object):
 
             if currVersion < 32:
                 for _, section in _filterAccountSection(ads):
-                    accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
+                    accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
                     accSettings.deleteSection(NEW_SETTINGS_COUNTER)
 
             if currVersion < 32:
                 for _, section in _filterAccountSection(ads):
-                    accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
+                    accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
                     accSettings.deleteSection(SHOW_CRYSTAL_HEADER_BAND)
 
             if currVersion < 33:
                 for _, section in _filterAccountSection(ads):
-                    accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
-                    if 'quests' in accSettings.keys():
-                        quests = _unpack(accSettings['quests'].asString)
+                    accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
+                    if QUESTS in accSettings.keys():
+                        quests = _unpack(accSettings[QUESTS].asString)
                         if 'potapov' in quests:
                             newVersion = quests.pop('potapov')
                             newVersion['operationsVisited'] = newVersion.pop('tilesVisited')
-                            accSettings.write('quests', _pack(quests))
+                            accSettings.write(QUESTS, _pack(quests))
 
             if currVersion < 34:
                 import SoundGroups
@@ -1061,7 +1080,7 @@ class AccountSettings(object):
             if currVersion < 36:
                 from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import LobbyHeader
                 for key, section in _filterAccountSection(ads):
-                    accSettings = AccountSettings.__readSection(section, KEY_COUNTERS)
+                    accSettings = AccountSettings._readSection(section, KEY_COUNTERS)
                     if NEW_LOBBY_TAB_COUNTER in accSettings.keys():
                         counters = _unpack(accSettings[NEW_LOBBY_TAB_COUNTER].asString)
                         if LobbyHeader.TABS.PERSONAL_MISSIONS in counters:
@@ -1069,10 +1088,10 @@ class AccountSettings(object):
                             accSettings.write(NEW_LOBBY_TAB_COUNTER, _pack(counters))
 
             if currVersion < 37:
-                cmSection = AccountSettings.__readSection(Settings.g_instance.userPrefs, Settings.KEY_COMMAND_MAPPING)
+                cmSection = AccountSettings._readSection(Settings.g_instance.userPrefs, Settings.KEY_COMMAND_MAPPING)
                 for command, section in cmSection.items()[:]:
                     newSection = None
-                    fireKey = AccountSettings.__readSection(section, 'fireKey').asString
+                    fireKey = AccountSettings._readSection(section, 'fireKey').asString
                     if fireKey == 'KEY_N':
                         if command == 'CMD_QUEST_PROGRESS_SHOW':
                             pass
@@ -1084,7 +1103,7 @@ class AccountSettings(object):
                 CommandMapping.g_instance.restoreUserConfig()
             if currVersion < 38:
                 for key, section in _filterAccountSection(ads):
-                    accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
+                    accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
                     if CUSTOMIZATION_SECTION in accSettings.keys():
                         accSettings.write(CUSTOMIZATION_SECTION, _pack({}))
                     obsoleteKeys = ('questProgressShowsCount', 'trajectoryViewHintCounter', 'siegeModeHintCounter')
@@ -1094,7 +1113,7 @@ class AccountSettings(object):
 
             if currVersion < 39:
                 for key, section in _filterAccountSection(ads):
-                    accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
+                    accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
                     if CUSTOMIZATION_SECTION in accSettings.keys():
                         custSett = _unpack(accSettings[CUSTOMIZATION_SECTION].asString)
                         if CAROUSEL_ARROWS_HINT_SHOWN_FIELD in custSett:
@@ -1103,7 +1122,7 @@ class AccountSettings(object):
 
             if currVersion < 40:
                 for key, section in _filterAccountSection(ads):
-                    accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
+                    accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
                     obsoleteKeys = ('questProgressHint', 'helpScreenHint')
                     for sectionName in obsoleteKeys:
                         if sectionName in accSettings.keys():
@@ -1118,11 +1137,11 @@ class AccountSettings(object):
 
     @staticmethod
     def invalidateNewSettingsCounter():
-        ads = AccountSettings.__readSection(Settings.g_instance.userPrefs, Settings.KEY_ACCOUNT_SETTINGS)
+        ads = AccountSettings._readSection(Settings.g_instance.userPrefs, Settings.KEY_ACCOUNT_SETTINGS)
         currentDefaults = AccountSettings.getSettingsDefault(NEW_SETTINGS_COUNTER)
         filtered = _filterAccountSection(ads)
         for _, section in filtered:
-            accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
+            accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
             if NEW_SETTINGS_COUNTER in accSettings.keys():
                 savedNewSettingsCounters = _unpack(accSettings[NEW_SETTINGS_COUNTER].asString)
                 newSettingsCounters = AccountSettings.updateNewSettingsCounter(currentDefaults, savedNewSettingsCounters)
@@ -1138,47 +1157,47 @@ class AccountSettings(object):
 
     @staticmethod
     def getFilter(name):
-        return AccountSettings.__getValue(name, KEY_FILTERS)
+        return AccountSettings._getValue(name, KEY_FILTERS)
 
     @staticmethod
     def setFilter(name, value):
-        AccountSettings.__setValue(name, value, KEY_FILTERS)
+        AccountSettings._setValue(name, value, KEY_FILTERS)
 
     @staticmethod
     def getSettingsDefault(name):
         return DEFAULT_VALUES[KEY_SETTINGS].get(name, None)
 
-    @staticmethod
-    def getSettings(name):
-        return AccountSettings.__getValue(name, KEY_SETTINGS)
+    @classmethod
+    def getSettings(cls, name):
+        return cls._getValue(name, KEY_SETTINGS)
 
-    @staticmethod
-    def setSettings(name, value):
-        AccountSettings.__setValue(name, value, KEY_SETTINGS)
+    @classmethod
+    def setSettings(cls, name, value):
+        cls._setValue(name, value, KEY_SETTINGS)
 
     @staticmethod
     def getFavorites(name):
-        return AccountSettings.__getValue(name, KEY_FAVORITES)
+        return AccountSettings._getValue(name, KEY_FAVORITES)
 
     @staticmethod
     def setFavorites(name, value):
-        AccountSettings.__setValue(name, value, KEY_FAVORITES)
+        AccountSettings._setValue(name, value, KEY_FAVORITES)
 
     @staticmethod
     def getCounters(name):
-        return AccountSettings.__getValue(name, KEY_COUNTERS)
+        return AccountSettings._getValue(name, KEY_COUNTERS)
 
     @staticmethod
     def setCounters(name, value):
-        AccountSettings.__setValue(name, value, KEY_COUNTERS)
+        AccountSettings._setValue(name, value, KEY_COUNTERS)
 
     @staticmethod
     def getNotifications(name):
-        return AccountSettings.__getValue(name, KEY_NOTIFICATIONS)
+        return AccountSettings._getValue(name, KEY_NOTIFICATIONS)
 
     @staticmethod
     def setNotifications(name, value):
-        AccountSettings.__setValue(name, value, KEY_NOTIFICATIONS)
+        AccountSettings._setValue(name, value, KEY_NOTIFICATIONS)
 
     @staticmethod
     def getSessionSettings(name):
@@ -1200,15 +1219,15 @@ class AccountSettings(object):
 
     @classmethod
     def getUIFlag(cls, name):
-        return cls.__getValue(name, KEY_UI_FLAGS, force=True)
+        return cls._getValue(name, KEY_UI_FLAGS, force=True)
 
     @classmethod
     def setUIFlag(cls, name, value):
-        return cls.__setValue(name, value, KEY_UI_FLAGS, force=True)
+        return cls._setValue(name, value, KEY_UI_FLAGS, force=True)
 
     @staticmethod
-    def __getValue(name, setting, force=False):
-        fds = AccountSettings.__readSection(AccountSettings.__readUserSection(), setting)
+    def _getValue(name, setting, force=False):
+        fds = AccountSettings._readSection(AccountSettings._readUserSection(), setting)
         try:
             if fds.has_key(name):
                 return pickle.loads(base64.b64decode(fds.readString(name)))
@@ -1219,11 +1238,11 @@ class AccountSettings(object):
         return copy.deepcopy(DEFAULT_VALUES[setting][name]) if name in DEFAULT_VALUES[setting] else None
 
     @staticmethod
-    def __setValue(name, value, setting, force=False):
+    def _setValue(name, value, setting, force=False):
         if name not in DEFAULT_VALUES[setting] and not force:
             raise SoftException('Default value "{}" is not found in "{}"'.format(name, type))
-        if AccountSettings.__getValue(name, setting, force) != value:
-            fds = AccountSettings.__readSection(AccountSettings.__readUserSection(), setting)
+        if AccountSettings._getValue(name, setting, force) != value:
+            fds = AccountSettings._readSection(AccountSettings._readUserSection(), setting)
             if name in DEFAULT_VALUES[setting] and DEFAULT_VALUES[setting][name] == value:
                 fds.deleteSection(name)
             else:
@@ -1265,11 +1284,11 @@ class AccountSettings(object):
     @staticmethod
     def __checkUserKeyBinding(key=None, command=None, commandSectionItems=None):
         if commandSectionItems is None:
-            commandSection = AccountSettings.__readSection(Settings.g_instance.userPrefs, Settings.KEY_COMMAND_MAPPING)
+            commandSection = AccountSettings._readSection(Settings.g_instance.userPrefs, Settings.KEY_COMMAND_MAPPING)
             commandSectionItems = commandSection.items()[:]
         hasKey, hasCommand, binded = False, False, False
         for cmd, section in commandSectionItems:
-            fireKey = AccountSettings.__readSection(section, 'fireKey').asString
+            fireKey = AccountSettings._readSection(section, 'fireKey').asString
             if key is not None and fireKey == key:
                 if cmd == command:
                     return (True, True, True)

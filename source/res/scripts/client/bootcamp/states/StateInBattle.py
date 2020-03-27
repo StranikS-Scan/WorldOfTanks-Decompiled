@@ -16,8 +16,6 @@ from skeletons.gui.sounds import ISoundsController
 from helpers import dependency, aop
 from PlayerEvents import g_playerEvents
 from bootcamp.Bootcamp import g_bootcamp
-from gui.battle_control import event_dispatcher as gui_event_dispatcher
-from debug_utils import LOG_DEBUG
 
 class StateInBattle(AbstractState):
     soundController = dependency.descriptor(ISoundsController)
@@ -38,6 +36,7 @@ class StateInBattle(AbstractState):
     def onKickedFromArena(self, reasonCode):
         arenaID = BigWorld.player().arenaUniqueID
         g_bootcamp.setBattleResults(arenaID, BOOTCAMP_BATTLE_RESULT_MESSAGE.FAILURE, reasonCode)
+        g_bootcampEvents.onUIStateChanged(UI_STATE.STOP)
 
     def onBattleAction(self, actionId, actionParams):
         self.__assistant.onAction(actionId, actionParams)
@@ -49,21 +48,9 @@ class StateInBattle(AbstractState):
             self.__scenery = None
         return
 
-    def onAvatarReceiveBattleResults(self, isSuccess, data):
-        if self.__finishAnimationCompleted:
-            return False
-        self.__battleResultsData['isSuccess'] = isSuccess
-        self.__battleResultsData['data'] = data
-
-    def _onBattleFinishAnimationComplete(self):
-        self.__finishAnimationCompleted = True
-        if self.__battleResultsData:
-            BigWorld.player().receiveBattleResults(isSuccess=self.__battleResultsData['isSuccess'], data=self.__battleResultsData['data'])
-
     def _doActivate(self):
-        weave(self.__weaver, self)
+        weave(self.__weaver)
         g_bootcampEvents.onUIStateChanged += self._onUIStateChanged
-        g_bootcampEvents.onBattleFinishAnimationComplete += self._onBattleFinishAnimationComplete
         g_playerEvents.onKickedFromArena += self.onKickedFromArena
         g_playerEvents.onRoundFinished += self.__onRoundFinished
         g_playerEvents.onAvatarBecomeNonPlayer += self.__onAvatarBecomeNonPlayer
@@ -71,7 +58,6 @@ class StateInBattle(AbstractState):
         self.__scenery.start()
         self.__assistant.getMarkers().afterScenery()
         self.__oldSpaceEnv = self.soundController.setEnvForSpace(GuiGlobalSpaceID.BATTLE, BCBattleSpaceEnv)
-        self.__battleResultsData = {}
         self.__finishAnimationCompleted = True
         player = BigWorld.player()
         if player is not None and player.inputHandler is not None:
@@ -86,7 +72,6 @@ class StateInBattle(AbstractState):
         if self.__oldSpaceEnv is not None:
             self.soundController.setEnvForSpace(GuiGlobalSpaceID.BATTLE, self.__oldSpaceEnv)
         g_bootcampEvents.onUIStateChanged -= self._onUIStateChanged
-        g_bootcampEvents.onBattleFinishAnimationComplete -= self._onBattleFinishAnimationComplete
         g_playerEvents.onKickedFromArena -= self.onKickedFromArena
         g_playerEvents.onRoundFinished -= self.__onRoundFinished
         g_playerEvents.onAvatarBecomeNonPlayer -= self.__onAvatarBecomeNonPlayer
@@ -94,7 +79,6 @@ class StateInBattle(AbstractState):
         self.onAvatarBecomeNonPlayer()
         if self.__assistant is not None:
             self.__assistant = None
-        self.__battleResultsData.clear()
         self.__weaver.clear()
         return
 
@@ -105,38 +89,31 @@ class StateInBattle(AbstractState):
                 camera.setMaxZoom()
                 g_bootcamp.setSniperModeUsed(True)
         elif cameraName == 'postmortem':
-            g_bootcampEvents.onPostMortemSwitch()
+            g_bootcampEvents.onUIStateChanged(UI_STATE.STOP)
 
     def __onRoundFinished(self, winnerTeam, reason):
         if BattleReplay.g_replayCtrl.isPlaying:
             return
-        else:
-            g_bootcampEvents.onUIStateChanged(UI_STATE.STOP)
-            gui_event_dispatcher.toggleGUIVisibility()
-            from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-            from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
-            asBattleResultType = BOOTCAMP_BATTLE_RESULT_MESSAGE.DEFEAT
-            if winnerTeam == BigWorld.player().team:
-                asBattleResultType = BOOTCAMP_BATTLE_RESULT_MESSAGE.VICTORY
-            elif winnerTeam == 0:
-                asBattleResultType = BOOTCAMP_BATTLE_RESULT_MESSAGE.DRAW
-            g_bootcamp.setBattleResults(BigWorld.player().arenaUniqueID, asBattleResultType, reason)
-            LOG_DEBUG('Show battle result final message.')
-            g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOTCAMP_BATTLE_FINISHED_WINDOW, None), EVENT_BUS_SCOPE.BATTLE)
-            if asBattleResultType == BOOTCAMP_BATTLE_RESULT_MESSAGE.VICTORY:
-                SoundGroups.g_instance.playSound2D('vo_bc_victory')
-            elif asBattleResultType == BOOTCAMP_BATTLE_RESULT_MESSAGE.DEFEAT:
-                SoundGroups.g_instance.playSound2D('vo_bc_defeat')
-            elif asBattleResultType == BOOTCAMP_BATTLE_RESULT_MESSAGE.DRAW:
-                SoundGroups.g_instance.playSound2D('vo_bc_draw')
-            return
+        g_bootcampEvents.onUIStateChanged(UI_STATE.STOP)
+        g_bootcampEvents.hideGUIForWinMessage()
+        asBattleResultType = BOOTCAMP_BATTLE_RESULT_MESSAGE.DEFEAT
+        if winnerTeam == BigWorld.player().team:
+            asBattleResultType = BOOTCAMP_BATTLE_RESULT_MESSAGE.VICTORY
+        elif winnerTeam == 0:
+            asBattleResultType = BOOTCAMP_BATTLE_RESULT_MESSAGE.DRAW
+        g_bootcamp.setBattleResults(BigWorld.player().arenaUniqueID, asBattleResultType, reason)
+        if asBattleResultType == BOOTCAMP_BATTLE_RESULT_MESSAGE.VICTORY:
+            SoundGroups.g_instance.playSound2D('vo_bc_victory')
+        elif asBattleResultType == BOOTCAMP_BATTLE_RESULT_MESSAGE.DEFEAT:
+            SoundGroups.g_instance.playSound2D('vo_bc_defeat')
+        elif asBattleResultType == BOOTCAMP_BATTLE_RESULT_MESSAGE.DRAW:
+            SoundGroups.g_instance.playSound2D('vo_bc_draw')
 
     def __onAvatarBecomeNonPlayer(self):
         player = BigWorld.player()
         if player is not None and player.inputHandler is not None:
             player.inputHandler.onCameraChanged -= self.__onCameraChanged
-        if self.__assistant is not None:
-            self.__assistant.stop()
+        g_bootcampEvents.onUIStateChanged(UI_STATE.STOP)
         self.__avatar = None
         self.stopScenery()
         return

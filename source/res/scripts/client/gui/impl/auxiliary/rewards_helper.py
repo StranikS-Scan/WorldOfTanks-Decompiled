@@ -89,7 +89,8 @@ _BONUSES_ORDER = (Currency.CREDITS,
  'blueprints',
  CrewBonusTypes.CREW_SKIN_BONUSES,
  CrewBonusTypes.CREW_BOOK_BONUSES,
- 'finalBlueprints')
+ 'finalBlueprints',
+ Currency.EVENT_COIN)
 _SENIORITY_BONUSES = ('customizations', 'crewBooks', 'dossier', 'battleToken', 'goodies', 'tokens')
 BLUEPRINTS_CONGRAT_TYPES = (LootCongratsTypes.CONGRAT_TYPE_BLUEPRINT, LootCongratsTypes.CONGRAT_TYPE_BLUEPRINT_PART)
 _COMPENSATION_TOOLTIP_CONTENT_RES_IDS = (R.views.common.tooltip_window.loot_box_compensation_tooltip.LootBoxCompensationTooltipContent(), R.views.common.tooltip_window.loot_box_compensation_tooltip.CrewSkinsCompensationTooltipContent(), R.views.common.tooltip_window.loot_box_compensation_tooltip.LootBoxVehicleCompensationTooltipContent())

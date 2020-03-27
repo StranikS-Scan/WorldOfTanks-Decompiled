@@ -5,7 +5,7 @@
     <description>	#gb_vehicles:GB01_Medium_Mark_I_descr	</description>
     <shortUserString>	#gb_vehicles:GB01_Medium_Mark_I_short	</shortUserString>
     <price>	0	</price>
-    <tags>	mediumTank improvedVentilation_class1_user lightTankArtefacts_User enhancedVertical_elastic_elements_user HD	</tags>
+    <tags>	mediumTank improvedVentilation_class1_user lightTankArtefacts_User enhancedVertical_elastic_elements_user HD collectorVehicle	</tags>
     <level>	1	</level>
   </GB01_Medium_Mark_I>
   <GB05_Vickers_Medium_Mk_II>
@@ -14,7 +14,7 @@
     <description>	#gb_vehicles:GB05_Vickers_Medium_Mk_II_descr	</description>
     <shortUserString>	#gb_vehicles:GB05_Vickers_Medium_Mk_II_short	</shortUserString>
     <price>	3500	</price>
-    <tags>	mediumTank improvedVentilation_class2_user enhancedVertical_elastic_elements_user HD	</tags>
+    <tags>	mediumTank improvedVentilation_class2_user enhancedVertical_elastic_elements_user HD collectorVehicle	</tags>
     <level>	2	</level>
   </GB05_Vickers_Medium_Mk_II>
   <GB14_M2>
@@ -23,7 +23,7 @@
     <description>	#gb_vehicles:GB14_M2_descr	</description>
     <shortUserString>	#gb_vehicles:GB14_M2_short	</shortUserString>
     <price>	3800	</price>
-    <tags>	lightTank improvedVentilation_class1_user enhancedVertical_springs_user HD	</tags>
+    <tags>	lightTank improvedVentilation_class1_user enhancedVertical_springs_user HD collectorVehicle	</tags>
     <level>	2	</level>
   </GB14_M2>
   <GB07_Matilda>
@@ -49,7 +49,7 @@
     <userString>	#gb_vehicles:GB15_Stuart_I	</userString>
     <description>	#gb_vehicles:GB15_Stuart_I_descr	</description>
     <price>	43500	</price>
-    <tags>	lightTank improvedVentilation_class1_user wetCombatPack_class1_user enhancedVertical_springs_user HD	</tags>
+    <tags>	lightTank improvedVentilation_class1_user wetCombatPack_class1_user enhancedVertical_springs_user HD collectorVehicle	</tags>
     <level>	3	</level>
   </GB15_Stuart_I>
   <GB17_Grant_I>
@@ -57,7 +57,7 @@
     <userString>	#gb_vehicles:GB17_Grant_I	</userString>
     <description>	#gb_vehicles:GB17_Grant_I_descr	</description>
     <price>	138500	</price>
-    <tags>	mediumTank improvedVentilation_class2_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class2_user HD	</tags>
+    <tags>	mediumTank improvedVentilation_class2_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class2_user HD collectorVehicle	</tags>
     <level>	4	</level>
   </GB17_Grant_I>
   <GB20_Crusader>
@@ -65,9 +65,9 @@
     <userString>	#gb_vehicles:GB20_Crusader	</userString>
     <description>	#gb_vehicles:GB20_Crusader_descr	</description>
     <shortUserString>	#gb_vehicles:GB20_Crusader_short	</shortUserString>
-    <price>	380000	</price>
-    <tags>	mediumTank mediumTank1 improvedVentilation_class2_user wetCombatPack_class1_user mediumCaliberTankRammer_user enhancedSuspension_Christie_user HD	</tags>
-    <level>	5	</level>
+    <price>	880000	</price>
+    <tags>	lightTank improvedVentilation_class1_user scout wetCombatPack_class1_user mediumCaliberTankRammer_user enhancedSuspension_Christie_user HD	</tags>
+    <level>	6	</level>
   </GB20_Crusader>
   <GB06_Vickers_Medium_Mk_III>
     <id>	9	</id>
@@ -75,7 +75,7 @@
     <description>	#gb_vehicles:GB06_Vickers_Medium_Mk_III_descr	</description>
     <shortUserString>	#gb_vehicles:GB06_Vickers_Medium_Mk_III_short	</shortUserString>
     <price>	40000	</price>
-    <tags>	mediumTank improvedVentilation_class2_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedHorizontal_elastic_elements_user HD	</tags>
+    <tags>	mediumTank improvedVentilation_class2_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedHorizontal_elastic_elements_user HD collectorVehicle	</tags>
     <level>	3	</level>
   </GB06_Vickers_Medium_Mk_III>
   <GB08_Churchill_I>
@@ -102,7 +102,7 @@
     <shortUserString>	#gb_vehicles:GB27_Sexton_short	</shortUserString>
     <description>	#gb_vehicles:GB27_Sexton_descr	</description>
     <price>	49000	</price>
-    <tags>	SPG mediumSPG mediumCaliberHowitzerRammer_user wetCombatPack_class1_user enhancedVertical_springs_class2_user HD	</tags>
+    <tags>	SPG mediumSPG mediumCaliberHowitzerRammer_user wetCombatPack_class1_user enhancedVertical_springs_class2_user HD collectorVehicle	</tags>
     <level>	3	</level>
   </GB27_Sexton>
   <GB19_Sherman_Firefly>
@@ -111,7 +111,7 @@
     <description>	#gb_vehicles:GB19_Sherman_Firefly_descr	</description>
     <shortUserString>	#gb_vehicles:GB19_Sherman_Firefly_short	</shortUserString>
     <price>	945000	</price>
-    <tags>	mediumTank improvedVentilation_class2_user aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class2_user HD	</tags>
+    <tags>	mediumTank improvedVentilation_class2_user aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class2_user HD collectorVehicle	</tags>
     <level>	6	</level>
   </GB19_Sherman_Firefly>
   <GB11_Caernarvon>
@@ -146,18 +146,18 @@
     <userString>	#gb_vehicles:GB04_Valentine	</userString>
     <description>	#gb_vehicles:GB04_Valentine_descr	</description>
     <shortUserString>	#gb_vehicles:GB04_Valentine_short	</shortUserString>
-    <price>	120000	</price>
+    <price>	40000	</price>
     <tags>	lightTank improvedVentilation_class1_user wetCombatPack_class1_user enhancedVertical_springs_user HD	</tags>
-    <level>	4	</level>
+    <level>	3	</level>
   </GB04_Valentine>
   <GB03_Cruiser_Mk_I>
     <id>	20	</id>
     <userString>	#gb_vehicles:GB03_Cruiser_Mk_I	</userString>
     <description>	#gb_vehicles:GB03_Cruiser_Mk_I_descr	</description>
     <shortUserString>	#gb_vehicles:GB03_Cruiser_Mk_I_short	</shortUserString>
-    <price>	3000	</price>
+    <price>	0	</price>
     <tags>	lightTank improvedVentilation_class1_user enhancedVertical_springs_user HD	</tags>
-    <level>	2	</level>
+    <level>	1	</level>
   </GB03_Cruiser_Mk_I>
   <GB22_Comet>
     <id>	21	</id>
@@ -203,18 +203,18 @@
     <userString>	#gb_vehicles:GB60_Covenanter	</userString>
     <description>	#gb_vehicles:GB60_Covenanter_descr	</description>
     <shortUserString>	#gb_vehicles:GB60_Covenanter_short	</shortUserString>
-    <price>	110000	</price>
-    <tags>	lightTank improvedVentilation_class1_user wetCombatPack_class1_user enhancedSuspension_Christie_user HD	</tags>
-    <level>	4	</level>
+    <price>	410000	</price>
+    <tags>	lightTank scout improvedVentilation_class1_user wetCombatPack_class1_user enhancedSuspension_Christie_user HD	</tags>
+    <level>	5	</level>
   </GB60_Covenanter>
   <GB69_Cruiser_Mk_II>
     <id>	27	</id>
     <userString>	#gb_vehicles:GB69_Cruiser_Mk_II	</userString>
     <description>	#gb_vehicles:GB69_Cruiser_Mk_III_descr	</description>
     <shortUserString>	#gb_vehicles:GB69_Cruiser_Mk_II_short	</shortUserString>
-    <price>	31000	</price>
+    <price>	3100	</price>
     <tags>	lightTank improvedVentilation_class1_user wetCombatPack_class1_user enhancedVertical_springs_user HD	</tags>
-    <level>	3	</level>
+    <level>	2	</level>
   </GB69_Cruiser_Mk_II>
   <GB70_FV4202_105>
     <id>	58	</id>
@@ -231,26 +231,26 @@
     <userString>	#gb_vehicles:GB59_Cruiser_Mk_IV	</userString>
     <description>	#gb_vehicles:GB59_Cruiser_Mk_IV_descr	</description>
     <shortUserString>	#gb_vehicles:GB59_Cruiser_Mk_IV_short	</shortUserString>
-    <price>	41000	</price>
+    <price>	141000	</price>
     <tags>	lightTank improvedVentilation_class1_user wetCombatPack_class1_user enhancedSuspension_Christie_user HD	</tags>
-    <level>	3	</level>
+    <level>	4	</level>
   </GB59_Cruiser_Mk_IV>
   <GB58_Cruiser_Mk_III>
     <id>	30	</id>
     <userString>	#gb_vehicles:GB58_Cruiser_Mk_III	</userString>
     <description>	#gb_vehicles:GB58_Cruiser_Mk_III_descr	</description>
     <shortUserString>	#gb_vehicles:GB58_Cruiser_Mk_III_short	</shortUserString>
-    <price>	3800	</price>
+    <price>	38000	</price>
     <tags>	lightTank improvedVentilation_class1_user enhancedSuspension_Christie_user HD	</tags>
-    <level>	2	</level>
+    <level>	3	</level>
   </GB58_Cruiser_Mk_III>
   <GB42_Valentine_AT>
     <id>	31	</id>
     <userString>	#gb_vehicles:GB42_Valentine_AT	</userString>
     <description>	#gb_vehicles:GB42_Valentine_AT_descr	</description>
-    <price>	34000	</price>
+    <price>	134000	</price>
     <tags>	AT-SPG lightAT-SPG wetCombatPack_class1_user enhancedVertical_springs_user HD	</tags>
-    <level>	3	</level>
+    <level>	4	</level>
   </GB42_Valentine_AT>
   <GB39_Universal_CarrierQF2>
     <id>	32	</id>
@@ -258,7 +258,7 @@
     <description>	#gb_vehicles:GB39_Universal_CarrierQF2_descr	</description>
     <shortUserString>	#gb_vehicles:GB39_Universal_CarrierQF2_short	</shortUserString>
     <price>	3900	</price>
-    <tags>	AT-SPG lightAT-SPG wetCombatPack_class1_user HD	</tags>
+    <tags>	AT-SPG lightAT-SPG wetCombatPack_class1_user HD collectorVehicle	</tags>
     <level>	2	</level>
   </GB39_Universal_CarrierQF2>
   <GB72_AT15>
@@ -282,7 +282,7 @@
     <userString>	#gb_vehicles:GB57_Alecto	</userString>
     <description>	#gb_vehicles:GB57_Alecto_descr	</description>
     <price>	130000	</price>
-    <tags>	AT-SPG lightAT-SPG mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
+    <tags>	AT-SPG lightAT-SPG mediumCaliberTankRammer_user wetCombatPack_class1_user HD collectorVehicle	</tags>
     <level>	4	</level>
   </GB57_Alecto>
   <GB48_FV215b_183>
@@ -310,7 +310,7 @@
     <description>	#gb_vehicles:GB40_Gun_Carrier_Churchill_descr	</description>
     <shortUserString>	#gb_vehicles:GB40_Gun_Carrier_Churchill_short	</shortUserString>
     <price>	965000	</price>
-    <tags>	AT-SPG heavyAT-SPG AT-SPG2 improvedVentilation_class3_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
+    <tags>	AT-SPG heavyAT-SPG AT-SPG2 improvedVentilation_class3_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD collectorVehicle	</tags>
     <level>	6	</level>
   </GB40_Gun_Carrier_Churchill>
   <GB75_AT7>
@@ -327,7 +327,7 @@
     <description>	#gb_vehicles:GB25_Loyd_Carrier_descr	</description>
     <shortUserString>	#gb_vehicles:GB25_Loyd_Carrier_short	</shortUserString>
     <price>	3900	</price>
-    <tags>	SPG lightSPG mediumCaliberHowitzerRammer_user wetCombatPack_class1_user enhancedVertical_springs_user HD	</tags>
+    <tags>	SPG lightSPG mediumCaliberHowitzerRammer_user wetCombatPack_class1_user enhancedVertical_springs_user HD collectorVehicle	</tags>
     <level>	2	</level>
   </GB25_Loyd_Gun_Carriage>
   <GB26_Birch_Gun>
@@ -336,7 +336,7 @@
     <description>	#gb_vehicles:GB26_Birch_Gun_descr	</description>
     <shortUserString>	#gb_vehicles:GB26_Birch_Gun_short	</shortUserString>
     <price>	152000	</price>
-    <tags>	SPG mediumSPG mediumCaliberHowitzerRammer_user wetCombatPack_class1_user enhancedVertical_elastic_elements_user HD	</tags>
+    <tags>	SPG mediumSPG mediumCaliberHowitzerRammer_user wetCombatPack_class1_user enhancedVertical_elastic_elements_user HD collectorVehicle	</tags>
     <level>	4	</level>
   </GB26_Birch_Gun>
   <GB28_Bishop>
@@ -399,7 +399,7 @@
     <description>	#gb_vehicles:GB50_Sherman_III_descr	</description>
     <shortUserString>	#gb_vehicles:GB50_Sherman_III_short	</shortUserString>
     <price>	360000	</price>
-    <tags>	mediumTank improvedVentilation_class2_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class2_user HD	</tags>
+    <tags>	mediumTank improvedVentilation_class2_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class2_user HD collectorVehicle	</tags>
     <level>	5	</level>
   </GB50_Sherman_III>
   <GB81_FV4004>
@@ -417,7 +417,7 @@
     <description>	#gb_vehicles:GB44_Archer_descr	</description>
     <shortUserString>	#gb_vehicles:GB44_Archer_short	</shortUserString>
     <price>	395000	</price>
-    <tags>	AT-SPG lightAT-SPG mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_user HD	</tags>
+    <tags>	AT-SPG lightAT-SPG mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_user HD collectorVehicle	</tags>
     <level>	5	</level>
   </GB44_Archer>
   <GB83_FV4005>
@@ -491,6 +491,15 @@
     <tags>	AT-SPG heavyAT-SPG improvedVentilation_class3_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedHorizontal_springs_class3_user HD	</tags>
     <level>	10	</level>
   </GB92_FV217>
+  <GB107_Cavalier>
+    <id>	63	</id>
+    <userString>	#gb_vehicles:GB107_Cavalier	</userString>
+    <description>	#gb_vehicles:GB107_Cavalier_descr	</description>
+    <shortUserString>	#gb_vehicles:GB107_Cavalier_short	</shortUserString>
+    <price>	380000	</price>
+    <tags>	mediumTank mediumTank1 improvedVentilation_class2_user wetCombatPack_class1_user mediumCaliberTankRammer_user enhancedSuspension_Christie_user HD	</tags>
+    <level>	5	</level>
+  </GB107_Cavalier>
   <GB102_LHMTV>
     <id>	232	</id>
     <userString>	#gb_vehicles:GB102_LHMTV	</userString>
@@ -641,6 +650,19 @@
     <tags>	heavyTank improvedVentilation_class3_user aimingStabilizer_Mk2_user mediumCaliberTankRammer_user wetCombatPack_class2_user enhancedHorizontal_springs_class3_user HD	</tags>
     <level>	7	</level>
   </GB52_A45>
+  <GB108_A46>
+    <id>	216	</id>
+    <userString>	#gb_vehicles:GB108_A46	</userString>
+    <description>	#gb_vehicles:GB108_A46_descr	</description>
+    <shortUserString>	#gb_vehicles:GB108_A46_short	</shortUserString>
+    <shortDescriptionSpecial>	#gb_vehicles:GB108_A46_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#gb_vehicles:GB108_A46_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank improvedVentilation_class1_user scout wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedVertical_springs_user mediumCaliberTankRammer_user HD secret testTank	</tags>
+    <level>	6	</level>
+  </GB108_A46>
   <GB70_N_FV4202_105>
     <id>	217	</id>
     <userString>	#gb_vehicles:GB70_N_FV4202_105	</userString>

@@ -19,7 +19,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.312	</firePenalty>
   </invisibility>
-  <repairCost>	3.15	</repairCost>
+  <repairCost>	1.764	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
@@ -46,7 +46,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	11310	</weight>
-    <maxHealth>	200	</maxHealth>
+    <maxHealth>	400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	110	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -1845,7 +1845,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1250	</weight>
-      <maxHealth>	50	</maxHealth>
+      <maxHealth>	75	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -1859,7 +1859,7 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <OQF_3pdr_Gun>	shared	  <maxAmmo>	111	</maxAmmo>
+        <OQF_3pdr_Gun>	shared	  <maxAmmo>	220	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -16 1 -16	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
@@ -1923,7 +1923,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </OQF_3pdr_Gun>
-        <QF_6_pounder_8cwt_Mk_I>	shared	  <maxAmmo>	80	</maxAmmo>
+        <QF_6_pounder_8cwt_Mk_I>	shared	  <maxAmmo>	160	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -16 1 -16	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
@@ -2066,7 +2066,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1750	</weight>
-      <maxHealth>	80	</maxHealth>
+      <maxHealth>	100	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -2080,7 +2080,7 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <OQF_3pdr_Gun>	shared	  <maxAmmo>	111	</maxAmmo>
+        <OQF_3pdr_Gun>	shared	  <maxAmmo>	220	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -16 1 -16	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
@@ -2140,7 +2140,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </OQF_3pdr_Gun>
-        <QF_6_pounder_8cwt_Mk_I>	shared	  <maxAmmo>	80	</maxAmmo>
+        <QF_6_pounder_8cwt_Mk_I>	shared	  <maxAmmo>	160	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -16 1 -16	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
@@ -2200,15 +2200,11 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </QF_6_pounder_8cwt_Mk_I>
-        <_2pdr_Gun_Mk_IX>	shared	  <maxAmmo>	130	</maxAmmo>
+        <_2pdr_Gun_Mk_IX>	shared	  <maxAmmo>	230	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -16 1 -16	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
-          <unlocks>
-            <vehicle>	GB07_Matilda	  <cost>	3900	</cost>
-            </vehicle>
-          </unlocks>
           <armor>
             <armor_1>	14	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

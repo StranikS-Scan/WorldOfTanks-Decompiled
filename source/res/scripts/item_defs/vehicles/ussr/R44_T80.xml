@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.482	</firePenalty>
   </invisibility>
-  <repairCost>	5	</repairCost>
+  <repairCost>	3.241	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
@@ -44,7 +44,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	5670	</weight>
-    <maxHealth>	280	</maxHealth>
+    <maxHealth>	432	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	110	</maxHealth>
       <maxRegenHealth>	75	</maxRegenHealth>
@@ -1440,7 +1440,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2000	</weight>
-      <maxHealth>	70	</maxHealth>
+      <maxHealth>	108	</maxHealth>
       <rotationSpeed>	45	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -1458,7 +1458,7 @@
             <minPitch>	0 -65 1 -65	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	100	</maxAmmo>
+          <maxAmmo>	200	</maxAmmo>
           <unlocks>
             <gun>	_45mm_VT-42	  <cost>	850	</cost>
             </gun>
@@ -1523,7 +1523,7 @@
             <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
         </_45mm_20K>
-        <_45mm_VT-42>	shared	  <maxAmmo>	100	</maxAmmo>
+        <_45mm_VT-42>	shared	  <maxAmmo>	175	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -65 1 -65	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
@@ -1594,7 +1594,7 @@
             <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
         </_45mm_VT-42>
-        <_45mm_VT-43>	shared	  <maxAmmo>	100	</maxAmmo>
+        <_45mm_VT-43>	shared	  <maxAmmo>	150	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -65 1 -65	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
@@ -1659,7 +1659,7 @@
             <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
         </_45mm_VT-43>
-        <_37mm_automatic_SH-37>	shared	  <maxAmmo>	120	</maxAmmo>
+        <_37mm_automatic_SH-37>	shared	  <maxAmmo>	210	</maxAmmo>
           <armor>
             <armor_1>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1823,11 +1823,7 @@
         </radio>
       </unlocks>
     </_9R>
-    <_9RM>	shared	  <unlocks>
-        <vehicle>	R04_T-34	  <cost>	16200	</cost>
-        </vehicle>
-      </unlocks>
-    </_9RM>
+    <_9RM>	shared	</_9RM>
   </radios>
   <physics>
     <detailed>

@@ -262,6 +262,10 @@ def textEpic(text):
     return _formatText('textEpic', text)
 
 
+def eventCoin(text):
+    return _formatText('eventCoinText', text)
+
+
 def defRes(text):
     return _formatText('defresText', text)
 

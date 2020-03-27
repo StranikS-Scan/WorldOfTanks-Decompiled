@@ -19,7 +19,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.293	</firePenalty>
   </invisibility>
-  <repairCost>	4.80	</repairCost>
+  <repairCost>	2.688	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
@@ -53,7 +53,7 @@
     </armor>
     <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
     <weight>	13800	</weight>
-    <maxHealth>	144	</maxHealth>
+    <maxHealth>	300	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	110	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -1732,7 +1732,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	950	</weight>
-      <maxHealth>	36	</maxHealth>
+      <maxHealth>	55	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -1746,7 +1746,7 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_M-5>	shared	  <maxAmmo>	120	</maxAmmo>
+        <_37mm_M-5>	shared	  <maxAmmo>	240	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -1814,7 +1814,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_37mm_M-5>
-        <_37mm_M-6_L53>	shared	  <maxAmmo>	120	</maxAmmo>
+        <_37mm_M-6_L53>	shared	  <maxAmmo>	210	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -1957,7 +1957,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1350	</weight>
-      <maxHealth>	66	</maxHealth>
+      <maxHealth>	75	</maxHealth>
       <rotationSpeed>	39	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -1972,7 +1972,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.099	</invisibilityFactor>
       <guns>
-        <_37mm_M-5>	shared	  <maxAmmo>	120	</maxAmmo>
+        <_37mm_M-5>	shared	  <maxAmmo>	240	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -40 1 -40	</minPitch>
             <maxPitch>	0 13 0.277778 13 0.34144 20 0.65856 20 0.722222 13 1 13	</maxPitch>
@@ -2036,7 +2036,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_37mm_M-5>
-        <_37mm_M-6_L53>	shared	  <maxAmmo>	120	</maxAmmo>
+        <_37mm_M-6_L53>	shared	  <maxAmmo>	210	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -40 1 -40	</minPitch>
             <maxPitch>	0 13 0.277778 13 0.34144 20 0.65856 20 0.722222 13 1 13	</maxPitch>
@@ -2105,6 +2105,7 @@
             <maxPitch>	0 14 0.277778 14 0.34144 20 0.65856 20 0.722222 14 1 14	</maxPitch>
           </pitchLimits>
           <reloadTime>	4.6	</reloadTime>
+          <maxAmmo>	80	</maxAmmo>
           <armor>
             <armor_1>	38	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2231,11 +2232,7 @@
         </engine>
       </unlocks>
     </Wright_Continental_R-975C2>
-    <Wright_R-975EC2>	shared	  <unlocks>
-        <vehicle>	A04_M3_Grant	  <cost>	3500	</cost>
-        </vehicle>
-      </unlocks>
-    </Wright_R-975EC2>
+    <Wright_R-975EC2>	shared	</Wright_R-975EC2>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>

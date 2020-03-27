@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/awards/special_achievement_awards.py
+from collector_vehicle import CollectorVehicleConsts
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -12,11 +13,16 @@ from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import sortCrew
 from gui.impl.gen import R
 from gui.impl import backport
-from helpers import dependency
-from helpers import i18n
+from helpers import dependency, i18n
+from nations import NAMES
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from CurrentVehicle import g_currentVehicle
+_CENTER_ALIGN = 'center'
+
+def _getNationName(nationID):
+    return backport.text(R.strings.nations.dyn(NAMES[nationID]).genetiveCase())
+
 
 class ResearchAward(ExplosionBackAward):
 
@@ -56,6 +62,59 @@ class VictoryAward(ExplosionBackAward):
 
     def getDescription(self):
         return text_styles.main(i18n.makeString('#menu:awardWindow/specialAchievement/victory/description%d' % self.messageNumber, victoriesCount=backport.getIntegralFormat(self.victoriesCount)))
+
+
+class VehicleCollectorAward(ExplosionBackAward):
+
+    def __init__(self, nationID):
+        super(VehicleCollectorAward, self).__init__()
+        self.__nationID = nationID
+
+    def getBackgroundImage(self):
+        return backport.image(R.images.gui.maps.icons.vehicle_collector.collectorNation())
+
+    def useBackgroundAnimation(self):
+        return False
+
+    def getAwardImage(self):
+        medalName = ''.join((CollectorVehicleConsts.COLLECTOR_MEDAL_PREFIX, str(self.__nationID)))
+        return backport.image(R.images.gui.maps.icons.achievement.big.dyn(medalName)())
+
+    def getWindowTitle(self):
+        return backport.text(R.strings.menu.awardWindow.vehicleCollector.title(), nation=_getNationName(self.__nationID))
+
+    def getHeader(self):
+        return text_styles.promoTitle(text_styles.alignText(backport.text(R.strings.menu.awardWindow.vehicleCollector.header()), _CENTER_ALIGN))
+
+    def getDescription(self):
+        return text_styles.alignText(text_styles.main(backport.text(R.strings.menu.awardWindow.vehicleCollector.description(), nation=_getNationName(self.__nationID))), _CENTER_ALIGN)
+
+    def getOkButtonText(self):
+        return backport.text(R.strings.menu.awardWindow.vehicleCollector.okButton())
+
+
+class VehicleCollectorOfEverythingAward(ExplosionBackAward):
+
+    def useBackgroundAnimation(self):
+        return False
+
+    def getBackgroundImage(self):
+        return backport.image(R.images.gui.maps.icons.vehicle_collector.collectorEverything())
+
+    def getAwardImage(self):
+        return backport.image(R.images.gui.maps.icons.achievement.big.collectorVehicle())
+
+    def getWindowTitle(self):
+        return backport.text(R.strings.menu.awardWindow.vehicleCollectorOfEverything.title())
+
+    def getHeader(self):
+        return text_styles.promoTitle(text_styles.alignText(backport.text(R.strings.menu.awardWindow.vehicleCollectorOfEverything.header()), _CENTER_ALIGN))
+
+    def getDescription(self):
+        return text_styles.alignText(text_styles.main(backport.text(R.strings.menu.awardWindow.vehicleCollectorOfEverything.description())), _CENTER_ALIGN)
+
+    def getOkButtonText(self):
+        return backport.text(R.strings.menu.awardWindow.vehicleCollectorOfEverything.okButton())
 
 
 class BattleAward(ExplosionBackAward):
@@ -291,13 +350,13 @@ class RecruiterAward(ExplosionBackAward):
         return RES_ICONS.MAPS_ICONS_AWARDS_BECOMERECRUITER
 
     def getHeader(self):
-        return text_styles.promoTitle(text_styles.alignText(i18n.makeString(MENU.AWARDWINDOW_RECRUITERAWARD_HEADER), 'center'))
+        return text_styles.promoTitle(text_styles.alignText(i18n.makeString(MENU.AWARDWINDOW_RECRUITERAWARD_HEADER), _CENTER_ALIGN))
 
     def getOkButtonText(self):
         return i18n.makeString(MENU.AWARDWINDOW_RECRUITERAWARD_OKBUTTON)
 
     def getDescription(self):
-        return text_styles.main(text_styles.alignText(i18n.makeString(MENU.AWARDWINDOW_RECRUITERAWARD_DESCRIPTION), 'center'))
+        return text_styles.main(text_styles.alignText(i18n.makeString(MENU.AWARDWINDOW_RECRUITERAWARD_DESCRIPTION), _CENTER_ALIGN))
 
     def handleOkButton(self):
         showReferralProgramWindow()

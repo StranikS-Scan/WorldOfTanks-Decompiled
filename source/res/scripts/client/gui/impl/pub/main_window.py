@@ -15,9 +15,11 @@ class MainWindow(WindowImpl):
         self.gui.windowsManager.addWindowsArea(R.areas.default())
         self.gui.windowsManager.addWindowsArea(R.areas.specific())
         self.gui.windowsManager.addWindowsArea(R.areas.pop_over())
+        self.gui.windowsManager.addWindowsArea(R.areas.context_menu())
 
     def _finalize(self):
         self.gui.windowsManager.removeWindowsArea(R.areas.default())
         self.gui.windowsManager.removeWindowsArea(R.areas.specific())
         self.gui.windowsManager.removeWindowsArea(R.areas.pop_over())
+        self.gui.windowsManager.removeWindowsArea(R.areas.context_menu())
         super(MainWindow, self)._finalize()

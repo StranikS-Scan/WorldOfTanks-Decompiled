@@ -19,12 +19,14 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.bootcamp.BCVehicleBuyView import BCVehicleBuyView
     from gui.Scaleform.daapi.view.bootcamp.BCQuestsView import BCQuestsView
     from gui.Scaleform.daapi.view.bootcamp.BCQueueDialog import BCQueueDialog
-    return (ViewSettings(VIEW_ALIAS.BOOTCAMP_OUTRO_VIDEO, BCOutroVideoPage, 'BCOutroVideo.swf', ViewTypes.TOP_WINDOW, None, ScopeTemplates.TOP_WINDOW_SCOPE),
+    from gui.Scaleform.daapi.view.bootcamp.BCSubtitlesWindow import SubtitlesWindow
+    return (ViewSettings(VIEW_ALIAS.BOOTCAMP_OUTRO_VIDEO, BCOutroVideoPage, 'BCOutroVideo.swf', ViewTypes.TOP_WINDOW, VIEW_ALIAS.BOOTCAMP_OUTRO_VIDEO, ScopeTemplates.TOP_WINDOW_SCOPE, canClose=False, canDrag=True),
      ViewSettings(VIEW_ALIAS.BOOTCAMP_TOOLTIPS_WINDOW, BCTooltipsWindow, 'BCTooltipsWindow.swf', ViewTypes.WINDOW, None, ScopeTemplates.TOP_WINDOW_SCOPE),
      ViewSettings(VIEW_ALIAS.BOOTCAMP_LOBBY_HIGHLIGHTS, BCHighlights, 'BCHighlights.swf', ViewTypes.LOBBY_TOP_SUB, VIEW_ALIAS.BOOTCAMP_LOBBY_HIGHLIGHTS, ScopeTemplates.DEFAULT_SCOPE, True),
      ViewSettings(VIEW_ALIAS.BOOTCAMP_VEHICLE_BUY_VIEW, BCVehicleBuyView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.BOOTCAMP_QUEUE_DIALOG, BCQueueDialog, 'BCQueueWindow.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.BOOTCAMP_QUESTS_VIEW, BCQuestsView, 'BCQuestsView.swf', ViewTypes.LOBBY_TOP_SUB, None, ScopeTemplates.DEFAULT_SCOPE))
+     ViewSettings(VIEW_ALIAS.BOOTCAMP_QUESTS_VIEW, BCQuestsView, 'missionsDetails.swf', ViewTypes.LOBBY_TOP_SUB, VIEW_ALIAS.BOOTCAMP_QUESTS_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ViewSettings(VIEW_ALIAS.SUBTITLES_WINDOW, SubtitlesWindow, 'SubtitlesWindow.swf', ViewTypes.OVERLAY, VIEW_ALIAS.SUBTITLES_WINDOW, ScopeTemplates.OVERLAY_SCOPE))
 
 
 def getBusinessHandlers():
@@ -43,6 +45,7 @@ class BootcampPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.BOOTCAMP_LOBBY_HIGHLIGHTS, self.loadViewByCtxEvent),
          (VIEW_ALIAS.LOBBY_RESEARCH, self.__loadResearch),
          (VIEW_ALIAS.LOBBY_TECHTREE, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.BOOTCAMP_MESSAGE_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.PERSONAL_CASE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_PREVIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_PREVIEW_20, self.loadViewByCtxEvent),
@@ -51,6 +54,7 @@ class BootcampPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.FITTING_SELECT_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.PACK_ITEM_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BOOTCAMP_QUESTS_VIEW, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.SUBTITLES_WINDOW, self.loadViewByCtxEvent),
          (LoadEvent.EXIT_FROM_RESEARCH, self.__exitFromResearch),
          (BootcampEvent.ADD_HIGHLIGHT, self.onShowHint),
          (BootcampEvent.REMOVE_HIGHLIGHT, self.onHideHint),

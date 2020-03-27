@@ -85,9 +85,6 @@ class SettingsWindowMeta(AbstractWindowView):
     def as_disableControlS(self, tabId, controlID, subTabId):
         return self.flashObject.as_disableControl(tabId, controlID, subTabId) if self._isDAAPIInited() else None
 
-    def as_setInitDataS(self, isWinXP):
-        return self.flashObject.as_setInitData(isWinXP) if self._isDAAPIInited() else None
-
     def as_setColorGradingTechniqueS(self, icon, label):
         return self.flashObject.as_setColorGradingTechnique(icon, label) if self._isDAAPIInited() else None
 

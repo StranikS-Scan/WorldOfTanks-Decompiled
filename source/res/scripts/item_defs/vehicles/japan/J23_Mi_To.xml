@@ -19,7 +19,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.057	</firePenalty>
   </invisibility>
-  <repairCost>	4.70	</repairCost>
+  <repairCost>	3.576	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
@@ -48,7 +48,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	69108	</weight>
-    <maxHealth>	560	</maxHealth>
+    <maxHealth>	736	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -1822,7 +1822,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8000	</weight>
-      <maxHealth>	140	</maxHealth>
+      <maxHealth>	184	</maxHealth>
       <rotationSpeed>	20	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -1836,7 +1836,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_120mm_Short_Barrel_Gun>	shared	  <maxAmmo>	100	</maxAmmo>
+        <_120mm_Short_Barrel_Gun>	shared	  <maxAmmo>	120	</maxAmmo>
           <unlocks>
             <gun>	_75mm_Gun_Type3	  <cost>	2350	</cost>
             </gun>
@@ -1923,7 +1923,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_120mm_Short_Barrel_Gun>
-        <_75mm_Gun_Type3>	shared	  <maxAmmo>	200	</maxAmmo>
+        <_75mm_Gun_Type3>	shared	  <maxAmmo>	240	</maxAmmo>
           <unlocks>
             <gun>	_75mm_Gun_Type5	  <cost>	3800	</cost>
             </gun>
@@ -2011,7 +2011,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_Gun_Type3>
-        <_75mm_Gun_Type5>	shared	  <maxAmmo>	200	</maxAmmo>
+        <_75mm_Gun_Type5>	shared	  <maxAmmo>	240	</maxAmmo>
           <armor>
             <armor_1>	125	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2038,10 +2038,6 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
-          <unlocks>
-            <vehicle>	J24_Mi_To_130_tons	  <cost>	26950	</cost>
-            </vehicle>
-          </unlocks>
           <models>
             <undamaged>	vehicles/japan/J23_Mi_To/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/japan/J23_Mi_To/crash/lod0/Gun_03.model	</destroyed>

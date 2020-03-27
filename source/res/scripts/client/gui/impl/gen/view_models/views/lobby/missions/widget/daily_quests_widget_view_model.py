@@ -37,7 +37,7 @@ class DailyQuestsWidgetViewModel(ViewModel):
         super(DailyQuestsWidgetViewModel, self)._initialize()
         self._addArrayProperty('missions', Array())
         self._addNumberProperty('countDown', 0)
-        self._addBoolProperty('isVisible', True)
+        self._addBoolProperty('isVisible', False)
         self._addArrayProperty('missionsCompletedVisited', Array())
         self.onMissionClick = self._addCommand('onMissionClick')
         self.onNothingToDisplay = self._addCommand('onNothingToDisplay')

@@ -16,6 +16,7 @@ import nations
 import items
 from items import _xml, makeIntCompactDescrByID, parseIntCompactDescr, ITEM_TYPES
 from items.components import component_constants, shell_components, chassis_components, skills_constants
+from items.components.shell_components import HighExplosiveImpactParams
 from items.components import shared_components
 from items.components.c11n_constants import ApplyArea, ProjectionDecalPositionTags, CamouflageTilingType, CamouflageTilingTypeNameToType
 from items.readers import chassis_readers
@@ -38,6 +39,7 @@ from items import common_extras, decodeEnum
 from string import upper
 from constants import IS_EDITOR
 from wrapped_reflection_framework import ReflectionMetaclass
+from collector_vehicle import CollectorVehicleConsts
 if IS_EDITOR:
     import meta_objects.items.vehicles_meta as meta
     from TankXmlSplitter import TankXmlSplitter
@@ -1111,7 +1113,8 @@ class VehicleDescriptor(object):
          'repeatedStunDurationFactor': 1.0,
          'healthFactor': 1.0,
          'damageFactor': 1.0,
-         'enginePowerFactor': 1.0}
+         'enginePowerFactor': 1.0,
+         'armorSpallsDamageDevicesFactor': 1.0}
         if IS_CLIENT or IS_EDITOR or IS_CELLAPP or IS_WEB or IS_BOT:
             trackCenterOffset = chassis.topRightCarryingPoint[0]
             self.physics = {'weight': weight,
@@ -1176,7 +1179,7 @@ class VehicleDescriptor(object):
         for attribute in self.enhancements:
             self.miscAttrs[attribute.name] = attribute.applyFactor(self.miscAttrs[attribute.name])
 
-        self.maxHealth = int(round(round(self.maxHealth * self.miscAttrs['healthFactor']) / 10) * 10)
+        self.maxHealth = int(round(self.maxHealth * self.miscAttrs['healthFactor']))
         return
 
 
@@ -1315,7 +1318,8 @@ class VehicleType(object):
      'actionsGroup',
      'actions',
      'builtins',
-     'nationChangeGroupId')
+     'nationChangeGroupId',
+     'isCollectorVehicle')
 
     def __init__(self, nationID, basicInfo, xmlPath, vehMode=VEHICLE_MODE.DEFAULT):
         self.name = basicInfo.name
@@ -1336,6 +1340,7 @@ class VehicleType(object):
         self.hasCharge = 'charger' in self.tags
         self.builtins = {t.split('_user')[0] for t in self.tags if t.startswith('builtin')}
         self.hasBurnout = 'burnout' in self.tags
+        self.isCollectorVehicle = CollectorVehicleConsts.COLLECTOR_VEHICLES_TAG in self.tags
         self.role = self.__getRoleFromTags()
         self.actionsGroup = self.__getActionsGroupFromRole(self.role)
         self.actions = self.__getActionsFromActionsGroup(self.actionsGroup)
@@ -2152,7 +2157,8 @@ def isItemWithCompactDescrExist(compactDescr):
     return None
 
 
-_itemGetters = {ITEM_TYPES.shell: lambda nationID, compTypeID: g_cache.shells(nationID)[compTypeID],
+_itemGetters = {ITEM_TYPES.vehicle: lambda nationID, compTypeID: g_cache.vehicle(nationID, compTypeID),
+ ITEM_TYPES.shell: lambda nationID, compTypeID: g_cache.shells(nationID)[compTypeID],
  ITEM_TYPES.equipment: lambda nationID, compTypeID: g_cache.equipments()[compTypeID],
  ITEM_TYPES.optionalDevice: lambda nationID, compTypeID: g_cache.optionalDevices()[compTypeID],
  ITEM_TYPES.vehicleGun: lambda nationID, compTypeID: g_cache.guns(nationID)[compTypeID],
@@ -2359,9 +2365,10 @@ def isRestorable(vehTypeCD, gameParams):
     if vehTypeCD in gameParams['items']['vehiclesToSellForGold']:
         return False
     vehicleTags = getVehicleType(vehTypeCD).tags
-    isUnrecoverable = bool('unrecoverable' in vehicleTags)
-    if isUnrecoverable:
-        return False
+    for tag in ('unrecoverable', CollectorVehicleConsts.COLLECTOR_VEHICLES_TAG):
+        if bool(tag in vehicleTags):
+            return False
+
     isPremium = bool('premium' in vehicleTags)
     notInShop = bool(vehTypeCD in gameParams['items']['notInShopItems'])
     return isPremium or notInShop
@@ -3097,7 +3104,7 @@ def _xphysicsParseChassis(ctx, sec):
 
 def _xphysicsParseWheeledChassis(ctx, sec):
     res = _xphysicsParseChassis(ctx, sec)
-    axleCount = res['axleCount']
+    axleCount = sec.readInt('axleCount', 5)
     floatArrParams = (('axleSteeringLockAngles', axleCount),
      ('axleSteeringAngles', axleCount),
      ('axleSteeringSpeed', axleCount),
@@ -3223,6 +3230,8 @@ def _readTurret(xmlCtx, section, item, unlocksDescrs=None, _=None):
     item.level = _readLevel(xmlCtx, section)
     item.hitTester = _readHitTester(xmlCtx, section, 'hitTester')
     item.gunPosition = _xml.readVector3(xmlCtx, section, 'gunPosition')
+    item.gunShotOffset = _xml.readVector3(xmlCtx, section, 'gunShotOffset', defaultValue=(0.0, 0.0, 0.0))
+    item.gunShotPosition = item.gunPosition + item.gunShotOffset
     item.customizableVehicleAreas = _readCustomizableAreas(xmlCtx, section, 'customization')
     if section.has_key('multiGun'):
         item.multiGun = _readMultiGun(xmlCtx, section, 'multiGun')
@@ -3317,7 +3326,14 @@ def _readTurretLocals(xmlCtx, section, sharedItem, unlocksDescrs, _=None):
         return descr
 
 
-MultiGunInstance = namedtuple('MultiGun', ('node', 'gunFire', 'position'))
+if IS_CLIENT or IS_EDITOR:
+    MultiGunInstance = namedtuple('MultiGun', ('node',
+     'gunFire',
+     'position',
+     'shotOffset',
+     'shotPosition'))
+else:
+    MultiGunInstance = namedtuple('MultiGun', ('position', 'shotPosition'))
 
 def _readMultiGun(xmlCtx, section, subsection):
     multiGun = []
@@ -3330,9 +3346,13 @@ def _readMultiGun(xmlCtx, section, subsection):
             gunNode = _xml.readString(ctx, subsection, 'gunNode')
             gunFire = _xml.readString(ctx, subsection, 'gunFire')
             gunPosition = _xml.readVector3(ctx, subsection, 'position')
-            multiGun.append(MultiGunInstance(gunNode, gunFire, gunPosition))
+            gunShotOffset = _xml.readVector3(ctx, subsection, 'gunShotOffset', defaultValue=(0.0, 0.0, 0.0))
+            gunShotPosition = gunPosition + gunShotOffset
+            multiGun.append(MultiGunInstance(gunNode, gunFire, gunPosition, gunShotOffset, gunShotPosition))
         gunPosition = _xml.readVector3(ctx, subsection, 'position')
-        multiGun.append(gunPosition)
+        gunShotOffset = _xml.readVector3(ctx, subsection, 'gunShotOffset', defaultValue=(0.0, 0.0, 0.0))
+        gunShotPosition = gunPosition + gunShotOffset
+        multiGun.append(MultiGunInstance(gunPosition, gunShotPosition))
 
     return multiGun
 
@@ -3629,10 +3649,9 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
             animateEmblemSlots = section.readBool('animateEmblemSlots', True)
         if section.has_key('drivenJoints'):
             drivenJoints = _readDrivenJoints(xmlCtx, section, 'drivenJoints')
-        elif IS_EDITOR:
-            drivenJoints = []
         else:
-            drivenJoints = None
+            drivenJoints = {}
+    slotsAnchors = tuple([])
     if IS_CLIENT or IS_EDITOR or IS_BOT or IS_BASEAPP:
         if not section.has_key('emblemSlots') and not section.has_key('customizationSlots'):
             if not IS_BOT and not IS_BASEAPP:
@@ -3911,7 +3930,6 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
     shell.isTracer = section.readBool('isTracer', False)
     if shell.isTracer:
         shell.isForceTracer = section.readBool('isForceTracer', False)
-    shell.damage = (_xml.readPositiveFloat(xmlCtx, section, 'damage/armor'), _xml.readPositiveFloat(xmlCtx, section, 'damage/devices'))
     if IS_CLIENT or IS_WEB:
         shell.i18n = shared_components.I18nComponent(section.readString('userString'), section.readString('description'))
         v = _xml.readNonEmptyString(xmlCtx, section, 'icon')
@@ -3927,6 +3945,9 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
     if shellType is None:
         _xml.raiseWrongXml(xmlCtx, 'kind', "unknown shell kind '%s'" % kind)
     shell.type = shellType
+    mechanics = intern(_xml.readStringOrEmpty(xmlCtx, section, 'mechanics'))
+    isModernHighExplosive = mechanics == 'MODERN'
+    shell.damage = (_readDamageValue(xmlCtx, section, 'armor', isModernHighExplosive), _readDamageValue(xmlCtx, section, 'devices', isModernHighExplosive))
     if not IS_CLIENT and not IS_BOT:
         if kind.startswith('ARMOR_PIERCING'):
             shellType.normalizationAngle = radians(_xml.readNonNegativeFloat(xmlCtx, section, 'normalizationAngle'))
@@ -3935,10 +3956,15 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
             shellType.piercingPowerLossFactorByDistance = 10.0 * _xml.readNonNegativeFloat(xmlCtx, section, 'piercingPowerLossFactorByDistance')
             shellType.ricochetAngleCos = cos(radians(_xml.readNonNegativeFloat(xmlCtx, section, 'ricochetAngle')))
     if kind == 'HIGH_EXPLOSIVE':
+        if isModernHighExplosive:
+            shellType.isModernMechanics = True
+            shellType.blastWave = _readImpactParams(xmlCtx, section, 'blastWave')
+            shellType.shellFragments = _readImpactParams(xmlCtx, section, 'shellFragments')
+            shellType.armorSpalls = _readImpactParams(xmlCtx, section, 'armorSpalls')
         shellType.explosionRadius = cachedFloat(section.readFloat('explosionRadius'))
         if shellType.explosionRadius <= 0.0:
             shellType.explosionRadius = cachedFloat(shell.caliber * shell.caliber / 5555.0)
-        explosionSettings = ('explosionDamageFactor', 'explosionDamageAbsorptionFactor', 'explosionEdgeDamageFactor')
+        explosionSettings = ('explosionDamageFactor', 'explosionDamageAbsorptionFactor', 'explosionEdgeDamageFactor', 'shellFragmentsDamageAbsorptionFactor')
         for f in explosionSettings:
             factor = section.readFloat(f)
             if factor <= 0:
@@ -3989,6 +4015,11 @@ def _defaultLocalReader(xmlCtx, section, sharedItem, unlocksDescrs, parentItem=N
     descr = sharedItem.copy()
     descr.unlocks = _readUnlocks(xmlCtx, section, 'unlocks', unlocksDescrs, sharedItem.compactDescr)
     return descr
+
+
+def _readDamageValue(xmlCtx, section, damageTypeName, isModernHighExplosive):
+    subsectionName = 'damage/{}'.format(damageTypeName)
+    return _xml.readNonNegativeFloat(xmlCtx, section, subsectionName) if isModernHighExplosive else _xml.readPositiveFloat(xmlCtx, section, subsectionName)
 
 
 def _readGunShotDispersionFactors(xmlCtx, section, subsectionName):
@@ -4276,32 +4307,72 @@ def _readEffectGroups(xmlPath, withSubgroups=False):
 
 
 def _readDrivenJoints(xmlCtx, section, subsectionName):
-    drivenJoints = []
-    for sname, subsection in _xml.getChildren(xmlCtx, section, subsectionName):
-        ctx = (xmlCtx, sname)
-        masterNode = _xml.readNonEmptyString(ctx, subsection, 'node')
-        fulltable = []
-        masterTable = []
-        masterTable.append(masterNode)
-        for rowName, rowValue in subsection['table'].items():
-            masterTable.append(radians(rowValue.asFloat))
 
-        fulltable.append(masterTable)
-        for sname, subsection in subsection['slaves'].items():
-            slaveNode = _xml.readString(ctx, subsection, 'node')
-            table = []
-            table.append(slaveNode)
+    def readOneSection(xmlCtx, section, subsectionName):
+        result = []
+        for sname, subsection in _xml.getChildren(xmlCtx, section, subsectionName):
+            if sname == 'sets':
+                continue
+            ctx = (xmlCtx, sname)
+            masterNode = _xml.readNonEmptyString(ctx, subsection, 'node')
+            fulltable = []
+            masterTable = [masterNode]
             for rowName, rowValue in subsection['table'].items():
-                table.append(radians(rowValue.asFloat))
+                masterTable.append(radians(rowValue.asFloat))
 
-            fulltable.append(table)
+            fulltable.append(masterTable)
+            for subsection in subsection['slaves'].values():
+                slaveNode = _xml.readString(ctx, subsection, 'node')
+                table = [slaveNode]
+                for rowValue in subsection['table'].values():
+                    table.append(radians(rowValue.asFloat))
 
-        drivenJoints.append(fulltable)
+                fulltable.append(table)
+
+            result.append(fulltable)
+
+        return result
+
+    drivenJoints = {}
+    drivenJointsSection = _xml.getSubsection(xmlCtx, section, subsectionName)
+    defaultSection = readOneSection(xmlCtx, section, subsectionName)
+    if defaultSection:
+        drivenJoints['default'] = defaultSection
+    if drivenJointsSection.has_key('sets'):
+        drivenJointsSetsSection = _xml.getSubsection(xmlCtx, drivenJointsSection, 'sets')
+        for sname in drivenJointsSetsSection.keys():
+            drivenJoints[sname] = readOneSection(xmlCtx, drivenJointsSetsSection, sname)
 
     return drivenJoints
 
 
 def _writeDrivenJoints(items, section, subsectionName):
+
+    def getSubsection(section, subsectionName):
+        if not section.has_key(subsectionName):
+            subsection = section.createSection(subsectionName)
+        else:
+            subsection = section[subsectionName]
+        return subsection
+
+    def createSingleSection(section, subsection):
+        for i in xrange(len(section)):
+            record = section[i]
+            recordSection = createOrTake(subsection, i, 'master')
+            for j in xrange(len(record)):
+                table = record[j]
+                if j == 0:
+                    tableSection = recordSection
+                else:
+                    slavesSection = createOrTake(recordSection, 0, 'slaves')
+                    tableSection = createOrTake(slavesSection, j - 1, 'slave')
+                _xml.rewriteString(tableSection, 'node', table[0])
+                rowsSection = createOrTake(tableSection, 0, 'table')
+                for k in xrange(1, len(table)):
+                    row = degrees(table[k])
+                    rowSection = createOrTake(rowsSection, k - 1, 'row')
+                    if abs(row - rowSection.asFloat) > 1e-05:
+                        rowSection.asFloat = row
 
     def createOrTake(section, id, subsectionName):
         if not section.has_key(subsectionName):
@@ -4320,27 +4391,14 @@ def _writeDrivenJoints(items, section, subsectionName):
         if section.has_key(subsectionName):
             section.deleteSection(subsectionName)
     elif len(items) > 0:
-        if not section.has_key(subsectionName):
-            subsection = section.createSection(subsectionName)
-        else:
-            subsection = section[subsectionName]
-        for i in xrange(len(items)):
-            record = items[i]
-            recordSection = createOrTake(subsection, i, 'master')
-            for j in xrange(len(record)):
-                table = record[j]
-                if j == 0:
-                    tableSection = recordSection
-                else:
-                    slavesSection = createOrTake(recordSection, 0, 'slaves')
-                    tableSection = createOrTake(slavesSection, j - 1, 'slave')
-                _xml.rewriteString(tableSection, 'node', table[0])
-                rowsSection = createOrTake(tableSection, 0, 'table')
-                for k in xrange(1, len(table)):
-                    row = degrees(table[k])
-                    rowSection = createOrTake(rowsSection, k - 1, 'row')
-                    if abs(row - rowSection.asFloat) > 1e-05:
-                        rowSection.asFloat = row
+        subsection = getSubsection(section, subsectionName)
+        for key, value in items.items():
+            if key == 'default':
+                createSingleSection(value, subsection)
+                continue
+            setSubsection = getSubsection(subsection, 'sets')
+            skinSubsection = getSubsection(setSubsection, key)
+            createSingleSection(value, skinSubsection)
 
     return
 
@@ -4661,6 +4719,7 @@ def _readCommonConfig(xmlCtx, section):
      'explosionDamageFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionDamageFactor'),
      'explosionDamageAbsorptionFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionDamageAbsorptionFactor'),
      'explosionEdgeDamageFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionEdgeDamageFactor'),
+     'shellFragmentsDamageAbsorptionFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/shellFragmentsDamageAbsorptionFactor'),
      'allowMortarShooting': _xml.readBool(xmlCtx, section, 'miscParams/allowMortarShooting')}
     if IS_CLIENT or IS_EDITOR:
         v = {}
@@ -5379,6 +5438,16 @@ def _readRepaintParams(xmlCtx, section):
     res['refColorMult'] = _xml.readFloat(xmlCtx, section, 'refColorMult')
     res['refGlossMult'] = _xml.readFloat(xmlCtx, section, 'refGlossMult')
     return res
+
+
+def _readImpactParams(xmlCtx, section, paramName):
+    subXmlCtx, subsection = _xml.getSubSectionWithContext(xmlCtx, section, paramName)
+    params = HighExplosiveImpactParams()
+    params.radius = _xml.readNonNegativeFloat(subXmlCtx, subsection, 'impactRadius', 0.0)
+    if paramName == 'armorSpalls':
+        params.angleCos = _xml.readNonNegativeFloat(subXmlCtx, subsection, 'coneAngleCos')
+    params.damages = (_xml.readNonNegativeFloat(subXmlCtx, subsection, 'damage/armor', 0.0), _xml.readNonNegativeFloat(subXmlCtx, subsection, 'damage/devices', 0.0))
+    return params
 
 
 def _descrByID(descrList, id):

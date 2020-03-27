@@ -19,6 +19,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.Waiting import Waiting
+from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IIGRController, IRentalsController
@@ -59,6 +60,9 @@ class _CachedVehicle(object):
 
     def isPresent(self):
         return self.item is not None
+
+    def isCollectible(self):
+        return self.isPresent() and self.item.isCollectible
 
     def onInventoryUpdate(self, invDiff):
         raise NotImplementedError
@@ -184,7 +188,7 @@ class _CurrentVehicle(_CachedVehicle):
 
     @property
     def item(self):
-        return self.itemsCache.items.getVehicle(self.__vehInvID) if self.__vehInvID > 0 else None
+        return self.itemsCache.items.getVehicle(self.__vehInvID) if self.__vehInvID > 0 and self.itemsCache.isSynced() else None
 
     def isBroken(self):
         return self.isPresent() and self.item.isBroken
@@ -445,6 +449,9 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         if self.isPresent():
             vehicle = self.itemsCache.items.getItemByCD(self.item.intCD)
             return vehicle.invID
+
+    def getVehiclePreviewType(self):
+        return VEHPREVIEW_CONSTANTS.COLLECTIBLE if self.isPresent() and self.item.isCollectible else VEHPREVIEW_CONSTANTS.REGULAR
 
     def onInventoryUpdate(self, invDiff):
         if self.isPresent():

@@ -366,7 +366,7 @@
           <geometry>
             <radius>	0.507	</radius>
             <width>	0.29	</width>
-            <pivotXOffset>	-0.073	</pivotXOffset>
+            <pivotXOffset>	-0.072	</pivotXOffset>
           </geometry>
           <proceduralCollisionBody>	true	</proceduralCollisionBody>
           <deflation>
@@ -380,7 +380,7 @@
           <armor>
             <wheel>	5	</wheel>
           </armor>
-          <wheelPos>	-1.157 0.508 1.477	</wheelPos>
+          <wheelPos>	-1.011 0.508 1.477	</wheelPos>
         </wheel>
         <wheel>
           <index>	0	</index>
@@ -390,36 +390,6 @@
           <isLeading>	true	</isLeading>
           <deflatable>	true	</deflatable>
           <steeringProcessor>	true	</steeringProcessor>
-          <scrollProcessor>
-            <connectedToEngine>	true	</connectedToEngine>
-          </scrollProcessor>
-          <rollProcessor>
-            <maxDamageAngle>	0.3	</maxDamageAngle>
-          </rollProcessor>
-          <geometry>
-            <radius>	0.507	</radius>
-            <width>	0.29	</width>
-            <pivotXOffset>	-0.073	</pivotXOffset>
-          </geometry>
-          <proceduralCollisionBody>	true	</proceduralCollisionBody>
-          <deflation>
-            <maxYShift>	0.15	</maxYShift>
-            <explodedRadius>	0.365	</explodedRadius>
-          </deflation>
-          <hitTester>
-            <collisionModelServer>	vehicles/french/F110_Lynx_6x6/collision/Wheel_L_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F110_Lynx_6x6/collision_client/Wheel_L_01.model	</collisionModelClient>
-          </hitTester>
-          <armor>
-            <wheel>	5	</wheel>
-          </armor>
-          <wheelPos>	-1.157 0.508 -1.445	</wheelPos>
-        </wheel>
-        <wheel>
-          <index>	2	</index>
-          <isLeft>	true	</isLeft>
-          <name>	W_L0	</name>
-          <nonTrack>	true	</nonTrack>
           <scrollProcessor>
             <connectedToEngine>	true	</connectedToEngine>
           </scrollProcessor>
@@ -443,7 +413,37 @@
           <armor>
             <wheel>	5	</wheel>
           </armor>
-          <wheelPos>	-1.157 0.547 0.005	</wheelPos>
+          <wheelPos>	-1.011 0.508 -1.445	</wheelPos>
+        </wheel>
+        <wheel>
+          <index>	2	</index>
+          <isLeft>	true	</isLeft>
+          <name>	W_L0	</name>
+          <nonTrack>	true	</nonTrack>
+          <scrollProcessor>
+            <connectedToEngine>	true	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.507	</radius>
+            <width>	0.29	</width>
+            <pivotXOffset>	-0.072	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.15	</maxYShift>
+            <explodedRadius>	0.365	</explodedRadius>
+          </deflation>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F110_Lynx_6x6/collision/Wheel_L_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F110_Lynx_6x6/collision_client/Wheel_L_02.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+          <wheelPos>	-1.011 0.547 0.005	</wheelPos>
         </wheel>
         <wheel>
           <index>	5	</index>
@@ -453,69 +453,6 @@
           <isLeading>	true	</isLeading>
           <deflatable>	true	</deflatable>
           <steeringProcessor>	true	</steeringProcessor>
-          <scrollProcessor>
-            <connectedToEngine>	true	</connectedToEngine>
-          </scrollProcessor>
-          <rollProcessor>
-            <maxDamageAngle>	0.3	</maxDamageAngle>
-          </rollProcessor>
-          <geometry>
-            <radius>	0.507	</radius>
-            <width>	0.29	</width>
-            <pivotXOffset>	0.073	</pivotXOffset>
-          </geometry>
-          <proceduralCollisionBody>	true	</proceduralCollisionBody>
-          <deflation>
-            <maxYShift>	0.15	</maxYShift>
-            <explodedRadius>	0.365	</explodedRadius>
-          </deflation>
-          <hitTester>
-            <collisionModelServer>	vehicles/french/F110_Lynx_6x6/collision/Wheel_R_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F110_Lynx_6x6/collision_client/Wheel_R_01.model	</collisionModelClient>
-          </hitTester>
-          <armor>
-            <wheel>	5	</wheel>
-          </armor>
-          <wheelPos>	1.154 0.508 1.477	</wheelPos>
-        </wheel>
-        <wheel>
-          <index>	1	</index>
-          <isLeft>	false	</isLeft>
-          <name>	WD_R1	</name>
-          <nonTrack>	true	</nonTrack>
-          <isLeading>	true	</isLeading>
-          <deflatable>	true	</deflatable>
-          <steeringProcessor>	true	</steeringProcessor>
-          <scrollProcessor>
-            <connectedToEngine>	true	</connectedToEngine>
-          </scrollProcessor>
-          <rollProcessor>
-            <maxDamageAngle>	0.3	</maxDamageAngle>
-          </rollProcessor>
-          <geometry>
-            <radius>	0.507	</radius>
-            <width>	0.29	</width>
-            <pivotXOffset>	0.073	</pivotXOffset>
-          </geometry>
-          <proceduralCollisionBody>	true	</proceduralCollisionBody>
-          <deflation>
-            <maxYShift>	0.15	</maxYShift>
-            <explodedRadius>	0.365	</explodedRadius>
-          </deflation>
-          <hitTester>
-            <collisionModelServer>	vehicles/french/F110_Lynx_6x6/collision/Wheel_R_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F110_Lynx_6x6/collision_client/Wheel_R_01.model	</collisionModelClient>
-          </hitTester>
-          <armor>
-            <wheel>	5	</wheel>
-          </armor>
-          <wheelPos>	1.154 0.508 -1.445	</wheelPos>
-        </wheel>
-        <wheel>
-          <index>	3	</index>
-          <isLeft>	false	</isLeft>
-          <name>	W_R0	</name>
-          <nonTrack>	true	</nonTrack>
           <scrollProcessor>
             <connectedToEngine>	true	</connectedToEngine>
           </scrollProcessor>
@@ -539,7 +476,70 @@
           <armor>
             <wheel>	5	</wheel>
           </armor>
-          <wheelPos>	1.154 0.547 0.005	</wheelPos>
+          <wheelPos>	1.011 0.508 1.477	</wheelPos>
+        </wheel>
+        <wheel>
+          <index>	1	</index>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R1	</name>
+          <nonTrack>	true	</nonTrack>
+          <isLeading>	true	</isLeading>
+          <deflatable>	true	</deflatable>
+          <steeringProcessor>	true	</steeringProcessor>
+          <scrollProcessor>
+            <connectedToEngine>	true	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.507	</radius>
+            <width>	0.29	</width>
+            <pivotXOffset>	0.072	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.15	</maxYShift>
+            <explodedRadius>	0.365	</explodedRadius>
+          </deflation>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F110_Lynx_6x6/collision/Wheel_R_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F110_Lynx_6x6/collision_client/Wheel_R_01.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+          <wheelPos>	1.011 0.508 -1.445	</wheelPos>
+        </wheel>
+        <wheel>
+          <index>	3	</index>
+          <isLeft>	false	</isLeft>
+          <name>	W_R0	</name>
+          <nonTrack>	true	</nonTrack>
+          <scrollProcessor>
+            <connectedToEngine>	true	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.507	</radius>
+            <width>	0.29	</width>
+            <pivotXOffset>	0.072	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.15	</maxYShift>
+            <explodedRadius>	0.365	</explodedRadius>
+          </deflation>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F110_Lynx_6x6/collision/Wheel_R_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F110_Lynx_6x6/collision_client/Wheel_R_02.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+          <wheelPos>	1.011 0.547 0.005	</wheelPos>
         </wheel>
         <generalWheels>	true	</generalWheels>
         <globalDeflationShaderParams>
@@ -727,7 +727,7 @@
           <geometry>
             <radius>	0.507	</radius>
             <width>	0.29	</width>
-            <pivotXOffset>	-0.073	</pivotXOffset>
+            <pivotXOffset>	-0.072	</pivotXOffset>
           </geometry>
           <proceduralCollisionBody>	true	</proceduralCollisionBody>
           <deflation>
@@ -741,7 +741,7 @@
           <armor>
             <wheel>	5	</wheel>
           </armor>
-          <wheelPos>	-1.157 0.508 1.477	</wheelPos>
+          <wheelPos>	-1.011 0.508 1.477	</wheelPos>
         </wheel>
         <wheel>
           <index>	0	</index>
@@ -751,36 +751,6 @@
           <isLeading>	true	</isLeading>
           <deflatable>	true	</deflatable>
           <steeringProcessor>	true	</steeringProcessor>
-          <scrollProcessor>
-            <connectedToEngine>	true	</connectedToEngine>
-          </scrollProcessor>
-          <rollProcessor>
-            <maxDamageAngle>	0.3	</maxDamageAngle>
-          </rollProcessor>
-          <geometry>
-            <radius>	0.507	</radius>
-            <width>	0.29	</width>
-            <pivotXOffset>	-0.073	</pivotXOffset>
-          </geometry>
-          <proceduralCollisionBody>	true	</proceduralCollisionBody>
-          <deflation>
-            <maxYShift>	0.15	</maxYShift>
-            <explodedRadius>	0.365	</explodedRadius>
-          </deflation>
-          <hitTester>
-            <collisionModelServer>	vehicles/french/F110_Lynx_6x6/collision/Wheel_L_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F110_Lynx_6x6/collision_client/Wheel_L_01.model	</collisionModelClient>
-          </hitTester>
-          <armor>
-            <wheel>	5	</wheel>
-          </armor>
-          <wheelPos>	-1.157 0.508 -1.445	</wheelPos>
-        </wheel>
-        <wheel>
-          <index>	2	</index>
-          <isLeft>	true	</isLeft>
-          <name>	W_L0	</name>
-          <nonTrack>	true	</nonTrack>
           <scrollProcessor>
             <connectedToEngine>	true	</connectedToEngine>
           </scrollProcessor>
@@ -804,7 +774,37 @@
           <armor>
             <wheel>	5	</wheel>
           </armor>
-          <wheelPos>	-1.157 0.547 0.005	</wheelPos>
+          <wheelPos>	-1.011 0.508 -1.445	</wheelPos>
+        </wheel>
+        <wheel>
+          <index>	2	</index>
+          <isLeft>	true	</isLeft>
+          <name>	W_L0	</name>
+          <nonTrack>	true	</nonTrack>
+          <scrollProcessor>
+            <connectedToEngine>	true	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.507	</radius>
+            <width>	0.29	</width>
+            <pivotXOffset>	-0.072	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.15	</maxYShift>
+            <explodedRadius>	0.365	</explodedRadius>
+          </deflation>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F110_Lynx_6x6/collision/Wheel_L_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F110_Lynx_6x6/collision_client/Wheel_L_02.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+          <wheelPos>	-1.011 0.547 0.005	</wheelPos>
         </wheel>
         <wheel>
           <index>	5	</index>
@@ -814,69 +814,6 @@
           <isLeading>	true	</isLeading>
           <deflatable>	true	</deflatable>
           <steeringProcessor>	true	</steeringProcessor>
-          <scrollProcessor>
-            <connectedToEngine>	true	</connectedToEngine>
-          </scrollProcessor>
-          <rollProcessor>
-            <maxDamageAngle>	0.3	</maxDamageAngle>
-          </rollProcessor>
-          <geometry>
-            <radius>	0.507	</radius>
-            <width>	0.29	</width>
-            <pivotXOffset>	0.073	</pivotXOffset>
-          </geometry>
-          <proceduralCollisionBody>	true	</proceduralCollisionBody>
-          <deflation>
-            <maxYShift>	0.15	</maxYShift>
-            <explodedRadius>	0.365	</explodedRadius>
-          </deflation>
-          <hitTester>
-            <collisionModelServer>	vehicles/french/F110_Lynx_6x6/collision/Wheel_R_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F110_Lynx_6x6/collision_client/Wheel_R_01.model	</collisionModelClient>
-          </hitTester>
-          <armor>
-            <wheel>	5	</wheel>
-          </armor>
-          <wheelPos>	1.154 0.508 1.477	</wheelPos>
-        </wheel>
-        <wheel>
-          <index>	1	</index>
-          <isLeft>	false	</isLeft>
-          <name>	WD_R1	</name>
-          <nonTrack>	true	</nonTrack>
-          <isLeading>	true	</isLeading>
-          <deflatable>	true	</deflatable>
-          <steeringProcessor>	true	</steeringProcessor>
-          <scrollProcessor>
-            <connectedToEngine>	true	</connectedToEngine>
-          </scrollProcessor>
-          <rollProcessor>
-            <maxDamageAngle>	0.3	</maxDamageAngle>
-          </rollProcessor>
-          <geometry>
-            <radius>	0.507	</radius>
-            <width>	0.29	</width>
-            <pivotXOffset>	0.073	</pivotXOffset>
-          </geometry>
-          <proceduralCollisionBody>	true	</proceduralCollisionBody>
-          <deflation>
-            <maxYShift>	0.15	</maxYShift>
-            <explodedRadius>	0.365	</explodedRadius>
-          </deflation>
-          <hitTester>
-            <collisionModelServer>	vehicles/french/F110_Lynx_6x6/collision/Wheel_R_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F110_Lynx_6x6/collision_client/Wheel_R_01.model	</collisionModelClient>
-          </hitTester>
-          <armor>
-            <wheel>	5	</wheel>
-          </armor>
-          <wheelPos>	1.154 0.508 -1.445	</wheelPos>
-        </wheel>
-        <wheel>
-          <index>	3	</index>
-          <isLeft>	false	</isLeft>
-          <name>	W_R0	</name>
-          <nonTrack>	true	</nonTrack>
           <scrollProcessor>
             <connectedToEngine>	true	</connectedToEngine>
           </scrollProcessor>
@@ -900,7 +837,70 @@
           <armor>
             <wheel>	5	</wheel>
           </armor>
-          <wheelPos>	1.154 0.547 0.005	</wheelPos>
+          <wheelPos>	1.011 0.508 1.477	</wheelPos>
+        </wheel>
+        <wheel>
+          <index>	1	</index>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R1	</name>
+          <nonTrack>	true	</nonTrack>
+          <isLeading>	true	</isLeading>
+          <deflatable>	true	</deflatable>
+          <steeringProcessor>	true	</steeringProcessor>
+          <scrollProcessor>
+            <connectedToEngine>	true	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.507	</radius>
+            <width>	0.29	</width>
+            <pivotXOffset>	0.072	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.15	</maxYShift>
+            <explodedRadius>	0.365	</explodedRadius>
+          </deflation>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F110_Lynx_6x6/collision/Wheel_R_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F110_Lynx_6x6/collision_client/Wheel_R_01.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+          <wheelPos>	1.011 0.508 -1.445	</wheelPos>
+        </wheel>
+        <wheel>
+          <index>	3	</index>
+          <isLeft>	false	</isLeft>
+          <name>	W_R0	</name>
+          <nonTrack>	true	</nonTrack>
+          <scrollProcessor>
+            <connectedToEngine>	true	</connectedToEngine>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.507	</radius>
+            <width>	0.29	</width>
+            <pivotXOffset>	0.072	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.15	</maxYShift>
+            <explodedRadius>	0.365	</explodedRadius>
+          </deflation>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F110_Lynx_6x6/collision/Wheel_R_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F110_Lynx_6x6/collision_client/Wheel_R_02.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+          <wheelPos>	1.011 0.547 0.005	</wheelPos>
         </wheel>
         <generalWheels>	true	</generalWheels>
         <globalDeflationShaderParams>

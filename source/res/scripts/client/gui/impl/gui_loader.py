@@ -22,10 +22,6 @@ class GuiLoader(IGuiLoader):
     def systemLocale(self):
         return self.__gui.systemLocale
 
-    @property
-    def implTypeMask(self):
-        return self.__gui.implTypeMask
-
     def init(self):
         self.__gui.init()
 

@@ -95,7 +95,7 @@
     <shortUserString>	#sweden_vehicles:S09_L_120_TD_short	</shortUserString>
     <description>	#sweden_vehicles:S09_L_120_TD_descr	</description>
     <price>	3800	</price>
-    <tags>	AT-SPG lightAT-SPG enhancedTorsions1t_user HD	</tags>
+    <tags>	AT-SPG lightAT-SPG enhancedTorsions1t_user HD collectorVehicle	</tags>
     <level>	2	</level>
   </S09_L_120_TD>
   <S20_Ikv_72>
@@ -104,7 +104,7 @@
     <shortUserString>	#sweden_vehicles:S20_Ikv_72_short	</shortUserString>
     <description>	#sweden_vehicles:S20_Ikv_72_descr	</description>
     <price>	40800	</price>
-    <tags>	AT-SPG lightAT-SPG enhancedTorsions1t_user HD	</tags>
+    <tags>	AT-SPG lightAT-SPG enhancedTorsions1t_user HD collectorVehicle	</tags>
     <level>	3	</level>
   </S20_Ikv_72>
   <S19_Sav_M43>
@@ -322,4 +322,17 @@
     <tags>	AT-SPG mediumAT-SPG AT-SPG1 improvedVentilation_class2_user mediumCaliberTankRammer_user enhancedTorsions3t_user wetCombatPack_class1_user siegeMode HD epic_battles	</tags>
     <level>	8	</level>
   </S22_Strv_S1_FL>
+  <S31_Strv_K>
+    <id>	211	</id>
+    <userString>	#sweden_vehicles:S31_Strv_K	</userString>
+    <shortUserString>	#sweden_vehicles:S31_Strv_K_short	</shortUserString>
+    <description>	#sweden_vehicles:S31_Strv_K_descr	</description>
+    <shortDescriptionSpecial>	#sweden_vehicles:S31_Strv_K_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#sweden_vehicles:S31_Strv_K_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank heavyTank1 improvedVentilation_class3_user aimingStabilizer_Mk2_user largeCaliberTankRammer_user enhancedTorsions5t_user wetCombatPack_class2_user special testTank HD	</tags>
+    <level>	9	</level>
+  </S31_Strv_K>
 </list.xml>

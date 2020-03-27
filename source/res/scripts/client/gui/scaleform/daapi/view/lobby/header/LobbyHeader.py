@@ -7,9 +7,9 @@ import BigWorld
 import WWISE
 import constants
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
-from account_helpers.AccountSettings import AccountSettings
+from account_helpers.AccountSettings import AccountSettings, QUESTS, QUEST_DELTAS, QUEST_DELTAS_COMPLETION
 from account_helpers.AccountSettings import KNOWN_SELECTOR_BATTLES
-from account_helpers.AccountSettings import NEW_LOBBY_TAB_COUNTER, RECRUIT_NOTIFICATIONS
+from account_helpers.AccountSettings import NEW_LOBBY_TAB_COUNTER, RECRUIT_NOTIFICATIONS, NEW_SHOP_TABS
 from adisp import process
 from debug_utils import LOG_ERROR
 from frameworks.wulf import ViewFlags
@@ -45,6 +45,7 @@ from gui.prb_control.settings import PREBATTLE_ACTION_NAME, REQUEST_TYPE, UNIT_R
 from gui.prb_control.settings import PRE_QUEUE_RESTRICTION, PREBATTLE_RESTRICTION
 from gui.server_events import settings as quest_settings
 from gui.server_events import recruit_helper
+from gui.server_events.events_helpers import isDailyQuest
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events
 from gui.shared.ClanCache import g_clanCache
@@ -88,6 +89,16 @@ _DASHBOARD_SUPPRESSED_VIEWS = [VIEW_ALIAS.BADGES_PAGE]
 
 def _predicateLobbyTopSubViews(view):
     return view.layoutID != R.views.lobby.premacc.prem_dashboard_view.PremDashboardView() and view.viewFlags & ViewFlags.LOBBY_TOP_SUB_VIEW
+
+
+def _isActiveShopNewCounters():
+    newTabCounters = AccountSettings.getCounters(NEW_SHOP_TABS)
+    return not any(newTabCounters.values())
+
+
+def _updateShopNewCounters():
+    newTabCounters = AccountSettings.getCounters(NEW_SHOP_TABS)
+    AccountSettings.setCounters(NEW_SHOP_TABS, dict.fromkeys(newTabCounters, True))
 
 
 class TOOLTIP_TYPES(object):
@@ -310,6 +321,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         pass
 
     def _populate(self):
+        self._cleanupVisitedSettings()
         self._updateHangarMenuData()
         battle_selector_items.create()
         super(LobbyHeader, self)._populate()
@@ -895,6 +907,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         return not canDo or isLocked
 
     def _updateTabCounters(self):
+        self._updatePremiumQuestsVisitedStatus(self.eventsCache.getPremiumQuests())
         self.__onEventsVisited()
         self.__onProfileVisited()
         self.__updateMissionsTabCounter()
@@ -947,6 +960,20 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             counter = len(getNewActiveActions(self.eventsCache))
             self.__onActionVisited(counter)
         return
+
+    @staticmethod
+    def _updatePremiumQuestsVisitedStatus(quests):
+        if not quests:
+            return
+        firstPremiumId = sorted(quests.keys())[0]
+        currFirstPremMissionCompleted = quests[firstPremiumId].isCompleted()
+        if currFirstPremMissionCompleted:
+            return
+        questSettings = AccountSettings.getSettings(QUESTS)
+        prevFirstPremMissionCompleted = questSettings.get(QUEST_DELTAS, {}).get(QUEST_DELTAS_COMPLETION, {}).get(firstPremiumId, False)
+        if prevFirstPremMissionCompleted and firstPremiumId in questSettings['visited']:
+            questSettings['visited'] = tuple((t for t in questSettings['visited'] if t != firstPremiumId))
+            AccountSettings.setSettings(QUESTS, questSettings)
 
     def __onMissionVisited(self, counter):
         if counter:
@@ -1155,8 +1182,9 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         else:
             if alias in self.ACCOUNT_SETTINGS_COUNTERS:
                 counters = AccountSettings.getCounters(NEW_LOBBY_TAB_COUNTER)
-                if alias not in counters:
+                if alias not in counters or _isActiveShopNewCounters():
                     counters[alias] = backport.text(R.strings.menu.headerButtons.defaultCounter())
+                    _updateShopNewCounters()
                 elif counter is not None:
                     counters[alias] = counter
                 AccountSettings.setCounters(NEW_LOBBY_TAB_COUNTER, counters)
@@ -1261,6 +1289,14 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             self.removeTextureFromMemory(self.__clanIconID)
             self.__clanIconID = None
         return
+
+    def _cleanupVisitedSettings(self):
+        currentDynamicQuests = self.eventsCache.getDailyQuests(includeEpic=True).keys()
+        questSettings = AccountSettings.getSettings(QUESTS)
+        for visitedKey in ['visited', 'naVisited']:
+            visitedQuestIds = questSettings[visitedKey]
+            questSettings[visitedKey] = tuple((q for q in visitedQuestIds if not isDailyQuest(q) or q in currentDynamicQuests))
+            AccountSettings.setSettings(QUESTS, questSettings)
 
 
 class _BoosterInfoPresenter(object):

@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.197	</firePenalty>
   </invisibility>
-  <repairCost>	6.5	</repairCost>
+  <repairCost>	5.778	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.2	</priceFactor>
@@ -48,7 +48,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	22050	</weight>
-    <maxHealth>	688	</maxHealth>
+    <maxHealth>	864	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -1715,7 +1715,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7500	</weight>
-      <maxHealth>	172	</maxHealth>
+      <maxHealth>	156	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -1729,7 +1729,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <QF_6_pounder_Mk_V>	shared	  <maxAmmo>	84	</maxAmmo>
+        <QF_6_pounder_Mk_V>	shared	  <maxAmmo>	145	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 7 0.325226 7 0.388888 4 0.611112 4 0.674774 7 1 7	</maxPitch>
@@ -1809,7 +1809,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </QF_6_pounder_Mk_V>
-        <_3.7inch_Howitzer>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_3.7inch_Howitzer>	shared	  <maxAmmo>	60	</maxAmmo>
           <pitchLimits>
             <maxPitch>	0 3 1 3	</maxPitch>
             <minPitch>	0 -20 1 -20	</minPitch>
@@ -1881,7 +1881,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_3.7inch_Howitzer>
-        <_75mm_Gun_Mk_V>	shared	  <maxAmmo>	84	</maxAmmo>
+        <_75mm_Gun_Mk_V>	shared	  <maxAmmo>	100	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 4 0.325226 4 0.388888 3 0.611112 3 0.674774 4 1 4	</maxPitch>
@@ -1957,7 +1957,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_Gun_Mk_V>
-        <_75mm_Gun_Vickers_HV>	shared	  <maxAmmo>	84	</maxAmmo>
+        <_75mm_Gun_Vickers_HV>	shared	  <maxAmmo>	100	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -12 1 -12	</minPitch>
             <maxPitch>	0 4 0.325226 4 0.388888 3 0.611112 3 0.674774 4 1 4	</maxPitch>
@@ -2117,7 +2117,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8000	</weight>
-      <maxHealth>	272	</maxHealth>
+      <maxHealth>	216	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -2131,7 +2131,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <QF_6_pounder_Mk_V>	shared	  <maxAmmo>	84	</maxAmmo>
+        <QF_6_pounder_Mk_V>	shared	  <maxAmmo>	145	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 5 0.077778 5 0.14144 12.5 0.325226 12.5 0.388888 3 0.611112 3 0.674774 12.5 0.85856 12.5 0.922222 5 1 5	</maxPitch>
@@ -2203,7 +2203,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </QF_6_pounder_Mk_V>
-        <_3.7inch_Howitzer>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_3.7inch_Howitzer>	shared	  <maxAmmo>	60	</maxAmmo>
           <pitchLimits>
             <maxPitch>	0 3 1 3	</maxPitch>
             <minPitch>	0 -20 1 -20	</minPitch>
@@ -2275,7 +2275,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_3.7inch_Howitzer>
-        <_75mm_Gun_Mk_V>	shared	  <maxAmmo>	84	</maxAmmo>
+        <_75mm_Gun_Mk_V>	shared	  <maxAmmo>	100	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 4 0.083333 4 0.146996 12.5 0.325226 12.5 0.388888 2 0.611112 2 0.674774 12.5 0.853004 12.5 0.916666 4 1 4	</maxPitch>
@@ -2347,7 +2347,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_Gun_Mk_V>
-        <_75mm_Gun_Vickers_HV>	shared	  <maxAmmo>	84	</maxAmmo>
+        <_75mm_Gun_Vickers_HV>	shared	  <maxAmmo>	100	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -12 1 -12	</minPitch>
             <maxPitch>	0 4 0.325226 4 0.388888 2 0.611112 2 0.674774 4 1 4	</maxPitch>

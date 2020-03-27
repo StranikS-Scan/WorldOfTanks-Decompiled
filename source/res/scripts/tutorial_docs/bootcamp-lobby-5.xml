@@ -13,67 +13,31 @@
   </scenes>
   <global-runtime-effects></global-runtime-effects>
   <has-id>
-    <dialog>	IntroDialog	  <type>	bootcampMessage	</type>
+    <window>	SubtitleMissionAccomplished	  <type>	bootcampSubtitle	</type>
       <sequence>
         <message>
           <data>
-            <preset>	INTRO	</preset>
-            <icon>	../maps/icons/bootcamp/lines/logo.png	</icon>
-            <label>	#bootcamp:message/intro/lesson/v/label	</label>
+            <subtitle>	#bootcamp:subtitles/vo_bc_hangar_gold_premium	</subtitle>
             <voiceover>	vo_bc_hangar_gold_premium	</voiceover>
           </data>
         </message>
         <message>
           <data>
-            <preset>	BLUE	</preset>
-            <icon>	../maps/icons/bootcamp/lines/bcGold.png	</icon>
-            <label>	#bootcamp:message/gold/label	</label>
-            <text>	#bootcamp:message/gold/premiumPlus/text	</text>
-            <voiceover>	vo_bc_hangar_gold	</voiceover>
-          </data>
-        </message>
-        <message>
-          <data>
-            <preset>	BLUE	</preset>
-            <icon>	../maps/icons/bootcamp/lines/bcPremiumPlus.png	</icon>
-            <label>	#bootcamp:message/premiumPlus/label	</label>
-            <text>	#bootcamp:message/premiumPlus/text	</text>
-            <voiceover>	vo_bc_hangar_premium	</voiceover>
-          </data>
-        </message>
-        <message>
-          <data>
-            <preset>	ORANGE	</preset>
-            <icon>	../maps/icons/bootcamp/lines/bcMission.png	</icon>
-            <label>	#bootcamp:message/mission/accomplished/label	</label>
-            <text>	#bootcamp:message/mission/accomplished/text	</text>
+            <subtitle>	#bootcamp:subtitles/vo_bc_hangar_mission_accomplished	</subtitle>
             <voiceover>	vo_bc_hangar_mission_accomplished	</voiceover>
-            <bottom_renderer>	rewards	</bottom_renderer>
-            <only_first_bootcamp_bottom>	True	</only_first_bootcamp_bottom>
-            <bottom>
-              <data>
-                <icon>	../maps/icons/bootcamp/rewards/bcGold.png	</icon>
-                <labelTooltip>	#bootcamp:message/gold/label	</labelTooltip>
-                <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcGold.png	</iconTooltip>
-                <description>	#bootcamp:message/gold/premiumPlus/text	</description>
-                <label>	{}	</label>
-                <label_format>	getGold	</label_format>
-              </data>
-              <data>
-                <icon>	../maps/icons/bootcamp/rewards/bcPremiumPlus3d.png	</icon>
-                <labelTooltip>	#bootcamp:message/premiumPlus/label	</labelTooltip>
-                <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcPremiumPlus3d.png	</iconTooltip>
-                <description>	#bootcamp:message/premiumPlus/text	</description>
-                <label>	{0}	</label>
-                <label_format>	getPremiumHours	</label_format>
-              </data>
-            </bottom>
           </data>
         </message>
       </sequence>
-      <buttons></buttons>
-      <actions></actions>
-    </dialog>
+      <buttons>
+        <close>	NoResultsWindowCloseButton	</close>
+      </buttons>
+      <actions>
+        <click>	NoResultsWindowCloseButton	  <effects>
+            <activate>	NoResultsWindowClosed	</activate>
+          </effects>
+        </click>
+      </actions>
+    </window>
     <dialog>	MissionAccomplishedDialog	  <type>	bootcampMessage	</type>
       <sequence>
         <message>
@@ -82,27 +46,173 @@
             <icon>	../maps/icons/bootcamp/lines/bcMission.png	</icon>
             <label>	#bootcamp:message/mission/accomplished/label	</label>
             <text>	#bootcamp:message/mission/accomplished/text	</text>
+            <subtitle>	SubtitleMissionAccomplished	</subtitle>
+          </data>
+        </message>
+      </sequence>
+      <buttons></buttons>
+      <actions></actions>
+    </dialog>
+    <window>	SubtitleMissionAccomplishedRepeat	  <type>	bootcampSubtitle	</type>
+      <sequence>
+        <message>
+          <data>
+            <subtitle>	#bootcamp:subtitles/vo_bc_hangar_mission_accomplished	</subtitle>
             <voiceover>	vo_bc_hangar_mission_accomplished	</voiceover>
+          </data>
+        </message>
+      </sequence>
+      <buttons>
+        <close>	NoResultsWindowCloseButton	</close>
+      </buttons>
+      <actions>
+        <click>	NoResultsWindowCloseButton	  <effects>
+            <activate>	NoResultsWindowClosed	</activate>
+          </effects>
+        </click>
+      </actions>
+    </window>
+    <dialog>	MissionAccomplishedDialogRepeat	  <type>	bootcampMessage	</type>
+      <sequence>
+        <message>
+          <data>
+            <preset>	ORANGE	</preset>
+            <icon>	../maps/icons/bootcamp/lines/bcMission.png	</icon>
+            <label>	#bootcamp:message/mission/accomplished/label	</label>
+            <text>	#bootcamp:message/mission/accomplished/text	</text>
+            <subtitle>	SubtitleMissionAccomplishedRepeat	</subtitle>
+          </data>
+        </message>
+      </sequence>
+      <buttons></buttons>
+      <actions></actions>
+    </dialog>
+    <dialog>	GoldReceivedDialog	  <type>	bootcampMessage	</type>
+      <sequence>
+        <message>
+          <data>
+            <preset>	ORANGE	</preset>
+            <icon>	../maps/icons/bootcamp/lines/bcGold.png	</icon>
+            <label_first_bootcamp>	#bootcamp:message/goldReceived/label	</label_first_bootcamp>
+            <label>	#bootcamp:message/gold/label	</label>
+            <text>	#bootcamp:message/gold/premiumPlus/text	</text>
+            <subtitle>	SubtitleGold	</subtitle>
             <bottom_renderer>	rewards	</bottom_renderer>
             <only_first_bootcamp_bottom>	True	</only_first_bootcamp_bottom>
             <bottom>
               <data>
                 <icon>	../maps/icons/bootcamp/rewards/bcGold.png	</icon>
-                <labelTooltip>	#bootcamp:message/gold/label	</labelTooltip>
+                <labelTooltip>	#tooltips:gold/header	</labelTooltip>
                 <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcGold.png	</iconTooltip>
-                <description>	#bootcamp:message/gold/text	</description>
-                <label>	{}	</label>
+                <description>	#bootcamp:message/goldReceived/label	</description>
+                <label>	{0}	</label>
                 <label_format>	getGold	</label_format>
+                <animationTarget>	lobby:header.headerButtonBar.container.id=gold.container.0.moneyIconText.iconClip	</animationTarget>
+                <animationType>	gold	</animationType>
               </data>
+            </bottom>
+          </data>
+        </message>
+      </sequence>
+      <buttons></buttons>
+      <actions></actions>
+    </dialog>
+    <dialog>	PremiumAccountReceivedDialog	  <type>	bootcampMessage	</type>
+      <sequence>
+        <message>
+          <data>
+            <preset>	ORANGE	</preset>
+            <icon>	../maps/icons/bootcamp/lines/bcPremiumPlus.png	</icon>
+            <label>	#bootcamp:message/premiumPlus/label	</label>
+            <label_first_bootcamp>	#bootcamp:message/premiumPlusReceived/label	</label_first_bootcamp>
+            <text>	#bootcamp:message/premiumPlus/text	</text>
+            <subtitle>	SubtitlePremium	</subtitle>
+            <bottom_renderer>	rewards	</bottom_renderer>
+            <only_first_bootcamp_bottom>	True	</only_first_bootcamp_bottom>
+            <bottom>
               <data>
                 <icon>	../maps/icons/bootcamp/rewards/bcPremiumPlus3d.png	</icon>
-                <labelTooltip>	#bootcamp:message/premiumPlus/label	</labelTooltip>
+                <labelTooltip>	#tooltips:awardItem/premium/header	</labelTooltip>
                 <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcPremiumPlus3d.png	</iconTooltip>
                 <description>	#bootcamp:message/premiumPlus/text	</description>
                 <label>	{0}	</label>
                 <label_format>	getPremiumHours	</label_format>
+                <animationTarget>	lobby:header.headerButtonBar.container.id=prem.container.0.premIcon	</animationTarget>
+                <animationType>	prem	</animationType>
               </data>
             </bottom>
+          </data>
+        </message>
+      </sequence>
+      <buttons></buttons>
+      <actions></actions>
+    </dialog>
+    <window>	SubtitleGold	  <type>	bootcampSubtitle	</type>
+      <sequence>
+        <message>
+          <data>
+            <subtitle>	#bootcamp:subtitles/vo_bc_hangar_gold	</subtitle>
+            <voiceover>	vo_bc_hangar_gold	</voiceover>
+          </data>
+        </message>
+      </sequence>
+      <buttons>
+        <close>	NoResultsWindowCloseButton	</close>
+      </buttons>
+      <actions>
+        <click>	NoResultsWindowCloseButton	  <effects>
+            <activate>	NoResultsWindowClosed	</activate>
+          </effects>
+        </click>
+      </actions>
+    </window>
+    <window>	SubtitlePremium	  <type>	bootcampSubtitle	</type>
+      <sequence>
+        <message>
+          <data>
+            <subtitle>	#bootcamp:subtitles/vo_bc_hangar_premium	</subtitle>
+            <voiceover>	vo_bc_hangar_premium	</voiceover>
+          </data>
+        </message>
+      </sequence>
+      <buttons>
+        <close>	NoResultsWindowCloseButton	</close>
+      </buttons>
+      <actions>
+        <click>	NoResultsWindowCloseButton	  <effects>
+            <activate>	NoResultsWindowClosed	</activate>
+          </effects>
+        </click>
+      </actions>
+    </window>
+    <window>	SubtitleCongratulations	  <type>	bootcampSubtitle	</type>
+      <sequence>
+        <message>
+          <data>
+            <subtitle>	#bootcamp:subtitles/vo_bc_hangar_congratulations	</subtitle>
+            <voiceover>	vo_bc_hangar_congratulations	</voiceover>
+          </data>
+        </message>
+      </sequence>
+      <buttons>
+        <close>	NoResultsWindowCloseButton	</close>
+      </buttons>
+      <actions>
+        <click>	NoResultsWindowCloseButton	  <effects>
+            <activate>	NoResultsWindowClosed	</activate>
+          </effects>
+        </click>
+      </actions>
+    </window>
+    <dialog>	OutroVideo	  <type>	bootcampVideo	</type>
+      <sequence>
+        <message>
+          <data>
+            <video-path>	videos/_bootcampOutro.usm	</video-path>
+            <event-start>	bc_music_video_outro_start	</event-start>
+            <event-stop>	bc_music_video_outro_stop	</event-stop>
+            <event-pause>	bc_music_video_outro_pause	</event-pause>
+            <event-resume>	bc_music_video_outro_resume	</event-resume>
           </data>
         </message>
       </sequence>
@@ -113,13 +223,23 @@
       <sequence>
         <message>
           <data>
-            <preset>	FINISH	</preset>
+            <preset>	ORANGE	</preset>
             <icon>	../maps/icons/bootcamp/lines/bcFinishBC.png	</icon>
             <label>	#bootcamp:message/bootcamp/graduate/label	</label>
             <text>	#bootcamp:message/bootcamp/graduate/text	</text>
-            <voiceover>	vo_bc_hangar_congratulations	</voiceover>
             <description>	#bootcamp:message/bootcamp/graduate/referral/text	</description>
             <background>	../maps/bootcamp/message/bgFinishBC.png	</background>
+            <subtitle>	SubtitleCongratulations	</subtitle>
+            <bottom_renderer>	rewards	</bottom_renderer>
+            <only_first_bootcamp_bottom>	True	</only_first_bootcamp_bottom>
+            <bottom>
+              <data>
+                <icon>	../maps/icons/bootcamp/rewards/bcAchievement.png	</icon>
+                <labelTooltip>	#bootcamp:tooltip/bootcamp/achievement/label	</labelTooltip>
+                <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcAchievement.png	</iconTooltip>
+                <description>	#bootcamp:tooltip/bootcamp/achievement/text	</description>
+              </data>
+            </bottom>
           </data>
         </message>
       </sequence>
@@ -172,16 +292,18 @@
         </set-visible>
         <set-var>	SecondVehicleSetter	</set-var>
         <select-in-hangar>	SecondVehicleCD	</select-in-hangar>
-        <show-dialog>	IntroDialog	</show-dialog>
+        <show-dialog>	MissionAccomplishedDialog	</show-dialog>
+        <show-dialog>	GoldReceivedDialog	</show-dialog>
+        <show-dialog>	PremiumAccountReceivedDialog	</show-dialog>
       </effects>
     </checkpoint>
     <checkpoint>	VideoCheckpoint	  <condition></condition>
       <effects>
-        <show-dialog>	MissionAccomplishedDialog	  <condition>
-            <effect-not-triggered>	IntroDialog	</effect-not-triggered>
+        <show-dialog>	MissionAccomplishedDialogRepeat	  <condition>
+            <effect-not-triggered>	MissionAccomplishedDialog	</effect-not-triggered>
           </condition>
         </show-dialog>
-        <play-final-video></play-final-video>
+        <show-dialog>	OutroVideo	</show-dialog>
       </effects>
     </checkpoint>
     <checkpoint>	AfterVideoCheckpoint	  <condition></condition>
@@ -200,6 +322,9 @@
     <var-set>	EnabledHeaderMenuButtons	  <asList>
         <asString>	settings	</asString>
         <asString>	account	</asString>
+        <asString>	prem	</asString>
+        <asString>	gold	</asString>
+        <asString>	credits	</asString>
       </asList>
     </var-set>
   </vars>

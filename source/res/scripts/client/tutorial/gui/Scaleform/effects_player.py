@@ -179,6 +179,8 @@ class ShowWindowEffect(ApplicationEffect):
         else:
             effectIDs = self._windowIDs.copy()
         container = self._getContainer(ViewTypes.WINDOW)
+        if container is None:
+            container = self._getContainer(ViewTypes.OVERLAY)
         if container is not None:
             getView = container.getView
             for eID in effectIDs:

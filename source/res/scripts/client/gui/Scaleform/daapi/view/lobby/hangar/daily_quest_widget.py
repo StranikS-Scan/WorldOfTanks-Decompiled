@@ -3,8 +3,9 @@
 import typing
 from constants import QUEUE_TYPE
 from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
+from gui.impl.lobby.missions import missions_helpers
 from gui.prb_control.entities.listener import IGlobalListener
-from gui.server_events.events_helpers import isDailyQuestsEnable
+from gui.server_events.events_helpers import isDailyQuestsEnable, EventInfoModel
 from gui.impl.lobby.missions.daily_quests_widget_view import DailyQuestsWidgetView
 from gui.Scaleform.daapi.view.meta.DailyQuestMeta import DailyQuestMeta
 from gui.Scaleform.managers import UtilsManager
@@ -41,6 +42,7 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
         self.__addListeners()
         self.__timer = CallbackDelayer()
         self.__showOrHide()
+        self.__updateHideCallback(EventInfoModel.getDailyProgressResetTimeDelta())
 
     def _dispose(self):
         self.__timer.clearCallbacks()
@@ -72,7 +74,7 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
         if self.__shouldHide():
             self.__hide()
             return
-        if self.__hasUncompletedQuests():
+        if self.__hasUncompletedQuests() or self.__hasQuestStatusChanged():
             self.__show()
 
     def __shouldHide(self):
@@ -85,7 +87,14 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
 
         return False
 
-    def __onServerSettingsChanged(self, diff):
+    def __hasQuestStatusChanged(self):
+        for quest in self.eventsCache.getDailyQuests().values():
+            if self.eventsCache.questsProgress.getQuestCompletionChanged(quest.getID()):
+                return True
+
+        return False
+
+    def __onServerSettingsChanged(self, _):
         self.__showOrHide()
 
     def __onTeaserClosed(self):
@@ -121,3 +130,10 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
         if self._injectView is not None:
             self._injectView.viewModel.onNothingToDisplay -= self.__onNothingToDisplay
         return
+
+    def __updateHideCallback(self, countdownValue):
+        self.__timer.delayCallback(countdownValue, self.__hideWidgetOnTimeout)
+
+    def __hideWidgetOnTimeout(self):
+        if missions_helpers.areCommonQuestsCompleted(self.eventsCache.getDailyQuests().values()):
+            self._injectView.setIsVisible(False)

@@ -27,6 +27,7 @@ class LOG_LEVEL:
 
 class LOG_TAGS:
     BOOTCAMP = '[BOOTCAMP]'
+    STATISTIC = '[STATISTIC]'
 
 
 if CURRENT_REALM == 'DEV':
@@ -396,14 +397,21 @@ def verify(expression):
 def traceCalls(func):
     if not IS_DEVELOPMENT:
         return func
+    argnames = func.func_code.co_varnames[:func.func_code.co_argcount]
+    fname = func.func_name
+    frame = sys._getframe(1)
 
     @wraps(func)
-    def wrapper(*args, **kwargs):
-        LOG_DEBUG_DEV('%s.%s' % (func.im_class.__name__, func.im_func.__name__), args, kwargs)
-        returned = func(*args, **kwargs)
-        if returned is not None:
-            LOG_DEBUG_DEV('%s.%s returned:' % (func.im_class.__name__, func.im_func.__name__), returned)
-        return returned
+    def wrapper(*args, **kwds):
+        entID = ' [id=%s]' % str(args[0].id) if len(args) > 0 and hasattr(args[0], 'id') else ''
+        BigWorld.logDebug('traceCalls', '(%s, %d)%s call %s(%s)' % (frame.f_code.co_filename,
+         frame.f_lineno,
+         entID,
+         fname,
+         ', '.join(('%s=%r' % entry for entry in zip(argnames, args) + kwds.items()))), None)
+        ret = func(*args, **kwds)
+        BigWorld.logDebug('traceCalls', '%s returned %s' % (fname, repr(ret)), None)
+        return ret
 
     return wrapper
 

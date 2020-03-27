@@ -78,14 +78,14 @@ class NotifyController(INotifyController):
             isOk = yield self.__showI18nDialog('resetGraphics', ctx={'alert': self.__wrapHtmlMessage(backport.text(R.strings.dialogs.graphics.message.alert()))})
             self.__graphicsResetShown = True
             if isOk:
-                event_dispatcher.showSettingsWindow(redefinedKeyMode=False, tabIndex=event_dispatcher.SETTINGS_TAB_INDEX.GRAPHICS)
+                event_dispatcher.showSettingsWindow(redefinedKeyMode=False, tabIndex=event_dispatcher.SettingsTabIndex.GRAPHICS)
         elif graphicsStatus.isShowWarning():
-            event_dispatcher.showSettingsWindow(redefinedKeyMode=False, tabIndex=event_dispatcher.SETTINGS_TAB_INDEX.GRAPHICS)
+            event_dispatcher.showSettingsWindow(redefinedKeyMode=False, tabIndex=event_dispatcher.SettingsTabIndex.GRAPHICS)
             isOk = yield self.__showI18nDialog('changeGraphics', ctx={'alert': self.__wrapHtmlMessage(backport.text(R.strings.dialogs.graphics.message.alert()))})
             if isOk:
                 self.__updatePresetSetting()
         elif self.__isNeedToShowPresetChangingDialog():
-            event_dispatcher.showSettingsWindow(redefinedKeyMode=False, tabIndex=event_dispatcher.SETTINGS_TAB_INDEX.GRAPHICS)
+            event_dispatcher.showSettingsWindow(redefinedKeyMode=False, tabIndex=event_dispatcher.SettingsTabIndex.GRAPHICS)
             isOk = yield self.__showI18nDialog('lowFpsWarning')
             if isOk:
                 BigWorld.callback(0.001, self.__downgradePresetIndex)

@@ -15,6 +15,14 @@ class TutorialPopUp(AbstractWindowView, TutorialProxyHolder):
         super(TutorialPopUp, self).__init__()
         self._content = content
 
+    @property
+    def content(self):
+        return self._content
+
+    @property
+    def tutorial(self):
+        return self._tutorial
+
     def _onMouseClicked(self, targetKey):
         if targetKey in self._content:
             targetID = self._content[targetKey]

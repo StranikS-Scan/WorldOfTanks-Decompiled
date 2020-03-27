@@ -111,6 +111,10 @@ class IStatsRequester(IRequester):
         raise NotImplementedError
 
     @property
+    def eventCoin(self):
+        raise NotImplementedError
+
+    @property
     def money(self):
         raise NotImplementedError
 
@@ -124,6 +128,10 @@ class IStatsRequester(IRequester):
 
     @property
     def actualCrystal(self):
+        raise NotImplementedError
+
+    @property
+    def actualEventCoin(self):
         raise NotImplementedError
 
     @property
@@ -307,6 +315,12 @@ class IStatsRequester(IRequester):
         raise NotImplementedError
 
     def getMapsBlackList(self):
+        raise NotImplementedError
+
+    def getMaxResearchedLevelByNations(self):
+        raise NotImplementedError
+
+    def getMaxResearchedLevel(self, nationID):
         raise NotImplementedError
 
 

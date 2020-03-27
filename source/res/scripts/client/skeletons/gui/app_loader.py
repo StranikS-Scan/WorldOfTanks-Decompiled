@@ -87,10 +87,13 @@ class IWaitingWorker(object):
     def hide(self, messageID):
         raise NotImplementedError
 
-    def suspend(self):
+    def suspend(self, lockerID=None):
         raise NotImplementedError
 
-    def resume(self):
+    def isResumeLocked(self):
+        raise NotImplementedError
+
+    def resume(self, lockerID=None, hard=False):
         raise NotImplementedError
 
     def isSuspended(self):

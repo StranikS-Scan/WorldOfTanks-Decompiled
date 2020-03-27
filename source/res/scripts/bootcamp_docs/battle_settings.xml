@@ -9,7 +9,7 @@
       <hintMove></hintMove>
       <hintMoveTurret></hintMoveTurret>
       <hintSniperLevel0>
-        <voiceover>	vo_bc_entering_sniper_mode	</voiceover>
+        <voiceover>	vo_bc_exiting_sniper_mode	</voiceover>
         <time_completed>	5.0	</time_completed>
       </hintSniperLevel0>
       <hintShoot>
@@ -64,7 +64,7 @@
     <ribbons>	damage kill ram spotted capture	</ribbons>
     <lesson_pages>	penetration sniper modules movement	</lesson_pages>
     <prebattle>
-      <hints>	crosshairHint modulesHint hitpointsHint scoreHint crosshairHint	</hints>
+      <hints>	modulesHint crosshairHint	</hints>
       <timeout>	7.0	</timeout>
     </prebattle>
     <primary_hints></primary_hints>
@@ -83,7 +83,7 @@
     <ribbons>	damage kill ram spotted capture crits	</ribbons>
     <lesson_pages>	visibility victory crosshair penetration sniper modules movement	</lesson_pages>
     <prebattle>
-      <hints>	crewHint modulesHint hitpointsHint scoreHint minimapHint crosshairHint	</hints>
+      <hints>	crewHint crosshairHint	</hints>
       <timeout>	10.0	</timeout>
     </prebattle>
     <primary_hints>
@@ -107,7 +107,7 @@
     <ribbons>	damage kill ram spotted capture crits	</ribbons>
     <lesson_pages>	equipment visibility victory crosshair penetration sniper modules movement	</lesson_pages>
     <prebattle>
-      <hints>	crewHint modulesHint hitpointsHint scoreHint minimapHint crosshairHint consumablesHint	</hints>
+      <hints>	crosshairHint	</hints>
       <timeout>	10.0	</timeout>
     </prebattle>
     <primary_hints></primary_hints>

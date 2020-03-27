@@ -423,6 +423,32 @@ class Inventory(object):
             self.__account._doCmdStrArr(AccountCommands.CMD_VEHICLE_CHANGE_NATION, arr, proxy)
             return
 
+    def obtainAll(self, callback=None):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            else:
+                proxy = None
+            self.__account._doCmdInt2(AccountCommands.CMD_OBTAIN_ALL, 0, 0, proxy)
+            return
+
+    def obtainVehicle(self, name, callback=None):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            else:
+                proxy = None
+            self.__account._doCmdStr(AccountCommands.CMD_OBTAIN_VEHICLE, name, proxy)
+            return
+
     def __onGetItemsResponse(self, itemTypeIdx, callback, resultID):
         if resultID < 0:
             if callback is not None:

@@ -371,6 +371,7 @@ def onGeometryMapped(spaceID, path):
     SoundGroups.g_instance.unloadAll()
     LOG_NOTE('[SPACE] Loading space: ' + path)
     arenaName = path.split('/')[-1]
+    BigWorld.notifySpaceChange(path)
     SoundGroups.g_instance.preloadSoundGroups(arenaName)
 
 
@@ -499,7 +500,9 @@ _PYTHON_MACROS = {'p': 'BigWorld.player()',
  'leave': 'BigWorld.player().leaveArena',
  'cv': 'import vehicles_check;vehicles_check.check',
  'cls': "print '\\n' * 100",
- 'unlockAll': 'BigWorld.player().stats.unlockAll(lambda *args:None)',
+ 'unlockAll': 'BigWorld.player().stats.unlockAll()',
+ 'obtainAll': 'BigWorld.player().inventory.obtainAll()',
+ 'obtainVehicle': 'BigWorld.player().inventory.obtainVehicle',
  'hangar': 'from gui.ClientHangarSpace import g_clientHangarSpaceOverride; g_clientHangarSpaceOverride',
  'cvi': 'from CurrentVehicle import g_currentVehicle; cvi = g_currentVehicle.item; cvi',
  'wc': 'from gui.Scaleform.Waiting import Waiting; Waiting.close()',
@@ -507,9 +510,6 @@ _PYTHON_MACROS = {'p': 'BigWorld.player()',
  'camera': 'BigWorld.player().inputHandler.ctrl',
  'resetEpic': 'BigWorld.player().epicMetaGame.resetEpicMetaGame',
  'setHero': 'from HeroTank import debugReloadHero; debugReloadHero',
- 'rankedCtrl': 'from helpers import dependency; from skeletons.gui.game_control import IRankedBattlesController;rc = dependency.instance(IRankedBattlesController)',
- 'eventsCache': 'from helpers import dependency; from skeletons.gui.server_events import IEventsCache;ec = dependency.instance(IEventsCache)',
- 'items': 'from helpers import dependency; from skeletons.gui.shared import IItemsCache;items = dependency.instance(IItemsCache).items',
  'switchNation': 'import Account; Account.g_accountRepository.inventory.switchNation()'}
 
 def expandMacros(line):

@@ -169,6 +169,7 @@ class SharedPage(BattlePageMeta):
         if ctrl is not None:
             if ctrl.isInPostmortem:
                 self._onPostMortemSwitched(noRespawnPossible=False, respawnAvailable=False)
+            self._isInPostmortem = ctrl.isInPostmortem
             ctrl.onPostMortemSwitched += self._onPostMortemSwitched
             ctrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
         aih_global_binding.subscribe(aih_global_binding.BINDING_ID.CTRL_MODE_NAME, self._onAvatarCtrlModeChanged)

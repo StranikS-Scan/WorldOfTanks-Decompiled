@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/research_view.py
-from debug_utils import LOG_DEBUG
+from logging import getLogger
+import typing
 from gui import SystemMessages
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.view.lobby.techtree.listeners import TTListenerDecorator
@@ -11,8 +12,11 @@ from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.shared import event_dispatcher as shared_events
 from gui.sounds.ambients import LobbySubViewEnv
 from helpers import dependency
+import nations
 from skeletons.gui.game_control import IWalletController, IVehicleComparisonBasket
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+_logger = getLogger(__name__)
 
 class ResearchView(LobbySubView, ResearchViewMeta):
     __sound_env__ = LobbySubViewEnv
@@ -20,6 +24,7 @@ class ResearchView(LobbySubView, ResearchViewMeta):
     _itemsCache = dependency.descriptor(IItemsCache)
     _wallet = dependency.descriptor(IWalletController)
     _cmpBasket = dependency.descriptor(IVehicleComparisonBasket)
+    _lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, data):
         super(ResearchView, self).__init__()
@@ -32,6 +37,10 @@ class ResearchView(LobbySubView, ResearchViewMeta):
 
     def goToNationChangeView(self, vehicleCD):
         shared_events.showChangeVehicleNationDialog(vehicleCD)
+
+    def goToVehicleCollection(self, nationName):
+        nationID = nations.INDICES.get(nationName, nations.NONE_INDEX)
+        shared_events.showCollectibleVehicles(nationID)
 
     def redraw(self):
         raise NotImplementedError('Must be overridden in subclass')
@@ -72,13 +81,16 @@ class ResearchView(LobbySubView, ResearchViewMeta):
             self.as_setNodesStatesS(NODE_STATE_FLAGS.ENOUGH_XP, result)
 
     def invalidateUnlocks(self, unlocks):
-        next2Unlock, unlocked = self._data.invalidateUnlocks(unlocks)
+        next2Unlock, unlocked, prevUnlocked = self._data.invalidateUnlocks(unlocks)
         if unlocked:
-            LOG_DEBUG('unlocked', unlocked)
+            _logger.debug('unlocked: %s', ' '.join((str(intCD) for intCD in unlocked)))
             self.as_setNodesStatesS(NODE_STATE_FLAGS.UNLOCKED, unlocked)
         if next2Unlock:
-            LOG_DEBUG('next2Unlock', next2Unlock)
+            _logger.debug('next2Unlock: %s', ' '.join((str(intCD) for intCD in next2Unlock)))
             self.as_setNext2UnlockS(next2Unlock)
+        if prevUnlocked:
+            _logger.info('previouslyUnlocked %s', prevUnlocked)
+            self.as_setNodesStatesS(NODE_STATE_FLAGS.LAST_2_BUY, prevUnlocked)
 
     def invalidateInventory(self, data):
         result = self._data.invalidateInventory(data)
@@ -124,6 +136,11 @@ class ResearchView(LobbySubView, ResearchViewMeta):
             return getTreeNodeCompareData(getVehicle(vehCD))
 
         self.as_setNodeVehCompareDataS([ (v, getNodeData(v)) for v in self._data.getVehicleCDs() ])
+
+    def invalidateVehicleCollectorState(self):
+        result = self._data.invalidateVehicleCollectorState()
+        if result:
+            self.as_setNodesStatesS(NODE_STATE_FLAGS.PURCHASE_DISABLED, result)
 
     def _blueprintExitEvent(self, vehicleCD):
         return None

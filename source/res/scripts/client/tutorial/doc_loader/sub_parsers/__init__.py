@@ -743,8 +743,11 @@ def setWindowsParsers(parsers):
 def _parseWindow(xmlCtx, section, flags):
     windowID = parseID(xmlCtx, section, 'Specify a window ID')
     windowType = _xml.readString(xmlCtx, section, 'type')
+    content = {}
     bSec = _xml.getSubsection(xmlCtx, section, 'buttons')
-    content = {'closeID': _xml.readString(xmlCtx, bSec, 'close')}
+    content['closeID'] = _xml.readString(xmlCtx, bSec, 'close')
+    content['type'] = windowType
+    content['windowID'] = windowID
     parser = _WINDOW_SUB_PARERS.get(windowType)
     if parser is not None:
         window = parser(xmlCtx, section, flags, windowID, windowType, content)

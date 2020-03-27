@@ -3,6 +3,7 @@
 import logging
 from operator import attrgetter
 import typing
+from BWUtil import AsyncReturn
 from CurrentVehicle import HeroTankPreviewAppearance
 import adisp
 from async import async, await
@@ -11,13 +12,14 @@ from debug_utils import LOG_WARNING
 from frameworks.wulf import ViewFlags
 from gui import SystemMessages, DialogsInterface, GUI_SETTINGS
 from gui.Scaleform import MENU
+from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
+from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta, I18nConfirmDialogMeta, DIALOG_BUTTON_ID
-from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import SellModuleMeta
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsWebProductMeta
 from gui.Scaleform.daapi.view.dialogs.rent_confirm_dialog import RentConfirmDialogMeta
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getWebShopURL, isIngameShopEnabled, getBuyPremiumUrl
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getWebShopURL, isIngameShopEnabled, getBuyPremiumUrl, getBuyCollectibleVehiclesUrl
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
@@ -34,7 +36,7 @@ from gui.impl.gen import R
 from gui.impl.lobby.demount_kit.optional_device_dialogs import BuyAndInstallOpDevDialog, BuyAndStorageOpDevDialog, DemountOpDevSinglePriceDialog, DestroyOpDevDialog, InstallOpDevDialog
 from gui.impl.lobby.demount_kit.selector_dialog import DemountOpDevDialog
 from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
-from gui.impl.pub import UIImplType
+from gui.impl.lobby.techtree.techtree_intro_view import TechTreeIntroWindow
 from gui.ingame_shop import generateShopRentRenewProductID, showBuyGoldForRentWebOverlay
 from gui.ingame_shop import getShopProductInfo
 from gui.ingame_shop import makeBuyParamsByProductInfo
@@ -54,6 +56,7 @@ from helpers import dependency
 from helpers.aop import pointcutable
 from helpers.i18n import makeString as _ms
 from items import vehicles as vehicles_core
+from nations import NAMES
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IHeroTankController, IReferralProgramController, IEpicBattleMetaGameController
 from skeletons.gui.goodies import IGoodiesCache
@@ -63,7 +66,7 @@ from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 
-class SETTINGS_TAB_INDEX(object):
+class SettingsTabIndex(object):
     GAME = 0
     GRAPHICS = 1
     SOUND = 2
@@ -250,40 +253,20 @@ def showDashboardView():
     g_eventBus.handleEvent(events.LoadUnboundViewEvent(R.views.lobby.premacc.prem_dashboard_view.PremDashboardView(), PremDashboardView, ScopeTemplates.LOBBY_SUB_SCOPE), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def gamefaceEnabled():
-    lobbyContext = dependency.instance(ILobbyContext)
-    guiLoader = dependency.instance(IGuiLoader)
-    isGamefaceInitilized = guiLoader.implTypeMask & UIImplType.GAMEFACE_UI_IMPL > 0
-    isGamefaceEnabled = lobbyContext.getServerSettings().isGamefaceEnabled()
-    return isGamefaceInitilized and isGamefaceEnabled
-
-
 @async
 def showBattleBoosterBuyDialog(battleBoosterIntCD, install=False):
     from gui.impl.dialogs import dialogs
     from gui.impl.lobby.instructions.booster_buy_dialog import BoosterBuyWindowView
-    if gamefaceEnabled():
-        wrapper = FullScreenDialogWindowWrapper(BoosterBuyWindowView(battleBoosterIntCD, install))
-        yield dialogs.showSimple(wrapper)
-    else:
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOSTER_BUY_WINDOW, ctx={'typeCompDescr': battleBoosterIntCD,
-         'install': install}), EVENT_BUS_SCOPE.LOBBY)
+    wrapper = FullScreenDialogWindowWrapper(BoosterBuyWindowView(battleBoosterIntCD, install))
+    yield dialogs.showSimple(wrapper)
 
 
 @async
-def _showBattleBoosterGFSellDialog(battleBoosterIntCD):
+def showBattleBoosterSellDialog(battleBoosterIntCD):
     from gui.impl.lobby.instructions.booster_sell_dialog import BoosterSellWindowView
     from gui.impl.dialogs import dialogs
     wrapper = FullScreenDialogWindowWrapper(BoosterSellWindowView(battleBoosterIntCD))
     yield dialogs.showSimple(wrapper)
-
-
-@adisp.process
-def showBattleBoosterSellDialog(battleBoosterIntCD):
-    if gamefaceEnabled():
-        _showBattleBoosterGFSellDialog(battleBoosterIntCD)
-    else:
-        yield DialogsInterface.showDialog(SellModuleMeta(battleBoosterIntCD))
 
 
 def showResearchView(vehTypeCompDescr, exitEvent=None):
@@ -375,6 +358,14 @@ def showMarathonVehiclePreview(vehTypeCompDescr, itemsPack=None, title='', marat
      'itemsPack': itemsPack,
      'title': title,
      'marathonPrefix': marathonPrefix}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showConfigurableVehiclePreview(vehTypeCompDescr, previewAlias, previewBackCb, hiddenBlocks, itemPack):
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW_20, ctx={'itemCD': vehTypeCompDescr,
+     'previewAlias': previewAlias,
+     'previewBackCb': previewBackCb,
+     'hiddenBlocks': hiddenBlocks,
+     'itemsPack': itemPack}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showEventProgressionVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previewBackCb=None):
@@ -546,6 +537,15 @@ def showPremiumDialog():
         showWebShop(url)
     else:
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.PREMIUM_WINDOW), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showCollectibleVehicles(nationID):
+    if isIngameShopEnabled():
+        nationName = NAMES[nationID]
+        showWebShop(getBuyCollectibleVehiclesUrl(), nationName)
+    else:
+        showOldShop(ctx={'tabId': STORE_TYPES.SHOP,
+         'component': STORE_CONSTANTS.VEHICLE})
 
 
 def showBoostersWindow(tabID=None):
@@ -750,6 +750,34 @@ def showStylePreview(vehCD, style, styleDescr, backCallback, backBtnDescrLabel='
      'styleDescr': styleDescr,
      'backCallback': backCallback,
      'backBtnDescrLabel': backBtnDescrLabel}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showTechTreeIntro(parent=None, blueprints=None):
+    window = TechTreeIntroWindow(parent=parent, convertedBlueprints=blueprints if blueprints is not None else {})
+    window.load()
+    return
+
+
+@async
+def showPreformattedDialog(preset, title, message, buttons, focusedButton, btnDownSounds):
+    from gui.impl.dialogs import dialogs
+    from gui.impl.dialogs.builders import FormattedSimpleDialogBuilder
+    builder = FormattedSimpleDialogBuilder()
+    builder.setMessagesAndButtons(preset, title, message, buttons, focusedButton, btnDownSounds)
+    result = yield await(dialogs.show(builder.build()))
+    raise AsyncReturn(result)
+
+
+@async
+def showResSimpleDialog(resources, icon, formattedMessage):
+    from gui.impl.dialogs import dialogs
+    from gui.impl.dialogs.builders import ResSimpleDialogBuilder
+    builder = ResSimpleDialogBuilder()
+    builder.setMessagesAndButtons(resources)
+    builder.setIcon(icon)
+    builder.setFormattedMessage(formattedMessage)
+    result = yield await(dialogs.showSimple(builder.build()))
+    raise AsyncReturn(result)
 
 
 @async

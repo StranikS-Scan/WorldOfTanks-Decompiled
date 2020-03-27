@@ -153,7 +153,6 @@ class SettingsWindow(SettingsWindowMeta):
         if self.__redefinedKeyModeEnabled:
             BigWorld.wg_setRedefineKeysMode(True)
         self.__currentSettings = self.params.getMonitorSettings()
-        self.as_setInitDataS(BigWorld.wg_isRunningOnWinXP())
         self._update()
         VibroManager.g_instance.onConnect += self.onVibroManagerConnect
         VibroManager.g_instance.onDisconnect += self.onVibroManagerDisconnect

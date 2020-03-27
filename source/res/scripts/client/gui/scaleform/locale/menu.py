@@ -369,6 +369,7 @@ class MENU(object):
     PRICE_CREDITS = '#menu:price/credits'
     PRICE_GOLD = '#menu:price/gold'
     PRICE_CRYSTAL = '#menu:price/crystal'
+    PRICE_EVENTCOIN = '#menu:price/eventCoin'
     PRICE_SPENT = '#menu:price/spent'
     PRICE_RECEIVED = '#menu:price/received'
     AMMORELOAD_TITLE = '#menu:ammoReload/title'
@@ -485,6 +486,7 @@ class MENU(object):
     ACCOUNTINFO_CREDITS = '#menu:accountInfo/credits'
     ACCOUNTINFO_GOLD = '#menu:accountInfo/gold'
     ACCOUNTINFO_CRYSTAL = '#menu:accountInfo/crystal'
+    ACCOUNTINFO_EVENTCOIN = '#menu:accountInfo/eventCoin'
     VEHPARAMS_FIREPOWER = '#menu:vehParams/firepower'
     VEHPARAMS_ARMOR = '#menu:vehParams/armor'
     VEHPARAMS_MOBILITY = '#menu:vehParams/mobility'
@@ -861,6 +863,7 @@ class MENU(object):
     PROFILE_CREDITS = '#menu:profile/credits'
     PROFILE_GOLD = '#menu:profile/gold'
     PROFILE_CRYSTAL = '#menu:profile/crystal'
+    PROFILE_EVENTCOIN = '#menu:profile/eventCoin'
     PROFILE_CREATIONTIME = '#menu:profile/creationTime'
     PROFILE_LIST_TOTALNAME = '#menu:profile/list/totalName'
     PROFILE_LIST_DESCR = '#menu:profile/list/descr'
@@ -1091,6 +1094,7 @@ class MENU(object):
     RESEARCH_LABELS_BUTTON_RESTORE = '#menu:research/labels/button/restore'
     RESEARCH_LABELS_BUTTON_TRADE_IN = '#menu:research/labels/button/trade-in'
     RESEARCH_LABELS_BUTTON_RENT = '#menu:research/labels/button/rent'
+    RESEARCH_LABELS_BUTTON_TOCOLLECTION = '#menu:research/labels/button/toCollection'
     TRADE_IN = '#menu:trade/in'
     BARRACKS_MENU_ROLEFILTER_TEXTFIELD = '#menu:barracks/menu/roleFilter/textfield'
     BARRACKS_BTNBUYTANKMAN = '#menu:barracks/btnBuyTankman'
@@ -1246,6 +1250,7 @@ class MENU(object):
     SHOP_MENU_EQUIPMENT_FITS_MYVEHICLES_NAME = '#menu:shop/menu/equipment/fits/myVehicles/name'
     SHOP_MENU_EQUIPMENT_FITS_OTHERVEHICLES_NAME = '#menu:shop/menu/equipment/fits/otherVehicles/name'
     SHOP_ERRORS_UNLOCKNEEDED = '#menu:shop/errors/unlockNeeded'
+    SHOP_ERRORS_LOCKEDNATION = '#menu:shop/errors/lockedNation'
     SHOP_ERRORS_INHANGAR = '#menu:shop/errors/inHangar'
     SHOP_ERRORS_CENTERISDOWN = '#menu:shop/errors/centerIsDown'
     SHOP_TABLE_FIND = '#menu:shop/table/find'
@@ -1386,6 +1391,7 @@ class MENU(object):
     CONTEXTMENU_GOTONEXTVEHICLE = '#menu:contextMenu/goToNextVehicle'
     CONTEXTMENU_VEHICLESELL = '#menu:contextMenu/vehicleSell'
     CONTEXTMENU_NATIONCHANGE = '#menu:contextMenu/nationChange'
+    CONTEXTMENU_GOTOCOLLECTION = '#menu:contextMenu/goToCollection'
     CONTEXTMENU_VEHICLERESEARCH = '#menu:contextMenu/vehicleResearch'
     CONTEXTMENU_VEHICLECHECK = '#menu:contextMenu/vehicleCheck'
     CONTEXTMENU_VEHICLEUNCHECK = '#menu:contextMenu/vehicleUncheck'
@@ -1713,6 +1719,14 @@ class MENU(object):
     AWARDWINDOW_RECRUITERAWARD_HEADER = '#menu:awardWindow/recruiterAward/header'
     AWARDWINDOW_RECRUITERAWARD_DESCRIPTION = '#menu:awardWindow/recruiterAward/description'
     AWARDWINDOW_RECRUITERAWARD_OKBUTTON = '#menu:awardWindow/recruiterAward/okButton'
+    AWARDWINDOW_VEHICLECOLLECTOR_TITLE = '#menu:awardWindow/vehicleCollector/title'
+    AWARDWINDOW_VEHICLECOLLECTOR_HEADER = '#menu:awardWindow/vehicleCollector/header'
+    AWARDWINDOW_VEHICLECOLLECTOR_DESCRIPTION = '#menu:awardWindow/vehicleCollector/description'
+    AWARDWINDOW_VEHICLECOLLECTOR_OKBUTTON = '#menu:awardWindow/vehicleCollector/okButton'
+    AWARDWINDOW_VEHICLECOLLECTOROFEVERYTHING_TITLE = '#menu:awardWindow/vehicleCollectorOfEverything/title'
+    AWARDWINDOW_VEHICLECOLLECTOROFEVERYTHING_HEADER = '#menu:awardWindow/vehicleCollectorOfEverything/header'
+    AWARDWINDOW_VEHICLECOLLECTOROFEVERYTHING_DESCRIPTION = '#menu:awardWindow/vehicleCollectorOfEverything/description'
+    AWARDWINDOW_VEHICLECOLLECTOROFEVERYTHING_OKBUTTON = '#menu:awardWindow/vehicleCollectorOfEverything/okButton'
     VEHICLE_IGRRENTLEFT_DAYS = '#menu:vehicle/igrRentLeft/days'
     VEHICLE_IGRRENTLEFT_HOURS = '#menu:vehicle/igrRentLeft/hours'
     VEHICLEPREVIEW_ENDTIME = '#menu:vehiclePreview/endTime'
@@ -1857,13 +1871,8 @@ class MENU(object):
     CRYSTALS_PROMOWINDOW_SUBDESCR2 = '#menu:crystals/promoWindow/subDescr2'
     CRYSTALS_PROMOWINDOW_CLOSEBTN = '#menu:crystals/promoWindow/closebtn'
     CRYSTALS_PROMOWINDOW_OPENSHOPBTNLABEL = '#menu:crystals/promoWindow/openShopBtnLabel'
-    BOOSTERBUYWINDOW_WINDOWTITLE = '#menu:boosterBuyWindow/windowTitle'
     BOOSTERBUYWINDOW_BUYBUTTONLABEL = '#menu:boosterBuyWindow/buyButtonLabel'
     BOOSTERBUYWINDOW_CANCELBUTTONLABEL = '#menu:boosterBuyWindow/cancelButtonLabel'
-    BOOSTERBUYWINDOW_TOTALLABEL = '#menu:boosterBuyWindow/totalLabel'
-    BOOSTERBUYWINDOW_BUYCOUNT = '#menu:boosterBuyWindow/buyCount'
-    BOOSTERBUYWINDOW_INHANGARCOUNT = '#menu:boosterBuyWindow/inHangarCount'
-    BOOSTERBUYWINDOW_TOTALPRICE = '#menu:boosterBuyWindow/totalPrice'
     BOOSTERBUYWINDOW_REARMCHECKBOXLABEL = '#menu:boosterBuyWindow/rearmCheckboxLabel'
     BOOSTERBUYWINDOW_TITLE = '#menu:boosterBuyWindow/title'
     BOOSTERBUYWINDOW_PRICEPERITEM = '#menu:boosterBuyWindow/pricePerItem'
@@ -1880,6 +1889,19 @@ class MENU(object):
     FITTINGSELECTPOPOVER_TROPHYOVERLAY_OKBTNLABEL = '#menu:fittingSelectPopover/trophyOverlay/okBtnLabel'
     QUOTE = '#menu:quote'
     TECHTREE_ANNOUNCEMENT = '#menu:techtree/Announcement'
+    TECHTREE_PREMIUMPANEL_TITLE = '#menu:techtree/premiumPanel/title'
+    TECHTREE_PREMIUMPANEL_BTNLABEL = '#menu:techtree/premiumPanel/btnLabel'
+    TECHTREE_PREMIUMPANEL_BTNLABEL_COUNT = '#menu:techtree/premiumPanel/btnLabel/count'
+    TECHTREE_INTRO_TITLE = '#menu:techtree/intro/title'
+    TECHTREE_INTRO_BLOCK0_TITLE = '#menu:techtree/intro/block0/title'
+    TECHTREE_INTRO_BLOCK0_DESC = '#menu:techtree/intro/block0/desc'
+    TECHTREE_INTRO_BLOCK1_TITLE = '#menu:techtree/intro/block1/title'
+    TECHTREE_INTRO_BLOCK1_DESC = '#menu:techtree/intro/block1/desc'
+    TECHTREE_INTRO_BLOCK2_TITLE = '#menu:techtree/intro/block2/title'
+    TECHTREE_INTRO_BLOCK2_DESC = '#menu:techtree/intro/block2/desc'
+    TECHTREE_INTRO_COMPENSATION_TITLE = '#menu:techtree/intro/compensation/title'
+    TECHTREE_INTRO_FOOTER = '#menu:techtree/intro/footer'
+    TECHTREE_INTRO_BTNYES = '#menu:techtree/intro/btnYes'
     CST_ITEM_CTX_MENU_BUY = '#menu:cst_item_ctx_menu/buy'
     CST_ITEM_CTX_MENU_EXCHANGE = '#menu:cst_item_ctx_menu/exchange'
     CST_ITEM_CTX_MENU_BUYMORE = '#menu:cst_item_ctx_menu/buyMore'
@@ -1909,6 +1931,7 @@ class MENU(object):
     CST_ITEM_CTX_MENU_SHOWBLUEPRINT = '#menu:cst_item_ctx_menu/showBlueprint'
     CST_ITEM_CTX_MENU_STYLEINFO = '#menu:cst_item_ctx_menu/styleInfo'
     CST_ITEM_CTX_MENU_UPGRADE = '#menu:cst_item_ctx_menu/upgrade'
+    CST_ITEM_CTX_MENU_GOTOCOLLECTION = '#menu:cst_item_ctx_menu/goToCollection'
     VIEWHEADER_BACKBTN_LABEL = '#menu:viewHeader/backBtn/label'
     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE = '#menu:viewHeader/backBtn/descrLabel/techtree'
     VIEWHEADER_BACKBTN_DESCRLABEL_HANGAR = '#menu:viewHeader/backBtn/descrLabel/hangar'
@@ -1945,6 +1968,8 @@ class MENU(object):
     INTERNET_PROVIDER_KYIVSTAR_TARIFF = '#menu:internet_provider/Kyivstar/tariff'
     INTERNET_PROVIDER_KAZAKHTELECOM_NAME = '#menu:internet_provider/Kazakhtelecom/name'
     INTERNET_PROVIDER_KAZAKHTELECOM_TARIFF = '#menu:internet_provider/Kazakhtelecom/tariff'
+    INTERNET_PROVIDER_BEELINEKZ_NAME = '#menu:internet_provider/BeelineKZ/name'
+    INTERNET_PROVIDER_BEELINEKZ_TARIFF = '#menu:internet_provider/BeelineKZ/tariff'
     PROGRESSIVEREWARD_WIDGET_TITLE = '#menu:progressiveReward/widget/title'
     PROGRESSIVEREWARD_WIDGET_DESC = '#menu:progressiveReward/widget/desc'
     TIMELEFT_SHORT_DAY = '#menu:timeLeft/short/day'
@@ -1972,6 +1997,7 @@ class MENU(object):
      CONTEXTMENU_GOTONEXTVEHICLE,
      CONTEXTMENU_VEHICLESELL,
      CONTEXTMENU_NATIONCHANGE,
+     CONTEXTMENU_GOTOCOLLECTION,
      CONTEXTMENU_VEHICLERESEARCH,
      CONTEXTMENU_VEHICLECHECK,
      CONTEXTMENU_VEHICLEUNCHECK,
@@ -2497,15 +2523,18 @@ class MENU(object):
      CST_ITEM_CTX_MENU_CONVERTBLUEPRINTMAXCOUNT,
      CST_ITEM_CTX_MENU_SHOWBLUEPRINT,
      CST_ITEM_CTX_MENU_STYLEINFO,
-     CST_ITEM_CTX_MENU_UPGRADE)
+     CST_ITEM_CTX_MENU_UPGRADE,
+     CST_ITEM_CTX_MENU_GOTOCOLLECTION)
     INTERNET_PROVIDER_ALL_NAME_ENUM = (INTERNET_PROVIDER_ROSTELECOM_NAME,
      INTERNET_PROVIDER_BELTELECOM_NAME,
      INTERNET_PROVIDER_KYIVSTAR_NAME,
-     INTERNET_PROVIDER_KAZAKHTELECOM_NAME)
+     INTERNET_PROVIDER_KAZAKHTELECOM_NAME,
+     INTERNET_PROVIDER_BEELINEKZ_NAME)
     INTERNET_PROVIDER_ALL_TARIFF_ENUM = (INTERNET_PROVIDER_ROSTELECOM_TARIFF,
      INTERNET_PROVIDER_BELTELECOM_TARIFF,
      INTERNET_PROVIDER_KYIVSTAR_TARIFF,
-     INTERNET_PROVIDER_KAZAKHTELECOM_TARIFF)
+     INTERNET_PROVIDER_KAZAKHTELECOM_TARIFF,
+     INTERNET_PROVIDER_BEELINEKZ_TARIFF)
     BOOSTER_USERNAME_ENUM = (BOOSTER_USERNAME_BOOSTER_XP,
      BOOSTER_USERNAME_BOOSTER_FREE_XP,
      BOOSTER_USERNAME_BOOSTER_CREW_XP,

@@ -31,7 +31,6 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.dialogs.CheckBoxDialog import CheckBoxDialog
     from gui.Scaleform.daapi.view.dialogs.ConfirmModuleDialog import ConfirmModuleDialog
     from gui.Scaleform.daapi.view.dialogs.ConfirmBoosterDialog import ConfirmBoosterDialog
-    from gui.Scaleform.daapi.view.dialogs.DemountDeviceDialog import DemountDeviceDialog
     from gui.Scaleform.daapi.view.dialogs.TankmanOperationDialog import DismissTankmanDialog
     from gui.Scaleform.daapi.view.dialogs.FreeXPInfoWindow import FreeXPInfoWindow
     from gui.Scaleform.daapi.view.dialogs.IconDialog import IconDialog
@@ -78,6 +77,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.event_progression.event_progression_vehicle_preview_20 import EventProgressionVehiclePreview20
     from gui.Scaleform.daapi.view.lobby.trade_in.trade_in_vehicle_preview_20 import TradeInVehiclePreview20
     from gui.Scaleform.daapi.view.lobby.vehiclePreview20.marathon_vehicle_preview_20 import MarathonVehiclePreview20
+    from gui.Scaleform.daapi.view.lobby.vehiclePreview20.configurable_vehicle_preview import ConfigurableVehiclePreview20
     from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_view import VehicleCompareView
     from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_view import VehicleCompareConfiguratorMain
     from gui.Scaleform.daapi.view.meta.MiniClientComponentMeta import MiniClientComponentMeta
@@ -98,6 +98,7 @@ def getViewSettings():
      ViewSettings(VIEW_ALIAS.VEHICLE_PREVIEW_20, VehiclePreview20, 'vehiclePreview20.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.VEHICLE_PREVIEW_20, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.HERO_VEHICLE_PREVIEW_20, VehiclePreview20, 'vehiclePreview20.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.HERO_VEHICLE_PREVIEW_20, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.EVENT_PROGRESSION_VEHICLE_PREVIEW_20, EventProgressionVehiclePreview20, 'vehiclePreview20.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.EVENT_PROGRESSION_VEHICLE_PREVIEW_20, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ViewSettings(VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW_20, ConfigurableVehiclePreview20, 'vehiclePreview20.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW_20, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.STYLE_PREVIEW, VehicleStylePreview, 'vehicleBasePreview.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.STYLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.TRADE_IN_VEHICLE_PREVIEW_20, TradeInVehiclePreview20, 'vehiclePreview20.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.TRADE_IN_VEHICLE_PREVIEW_20, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.MARATHON_VEHICLE_PREVIEW_20, MarathonVehiclePreview20, 'vehiclePreview20.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.MARATHON_VEHICLE_PREVIEW_20, ScopeTemplates.LOBBY_SUB_SCOPE),
@@ -111,9 +112,7 @@ def getViewSettings():
      GroupedViewSettings(VIEW_ALIAS.CONFIRM_MODULE_DIALOG, ConfirmModuleDialog, 'confirmModuleWindow.swf', ViewTypes.TOP_WINDOW, 'confirmModuleDialog', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.USE_FREEW_AWARD_SHEET_DIALOG, UseAwardSheetWindow, 'useAwardSheetWindow.swf', ViewTypes.TOP_WINDOW, 'useAwardSheetWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.CONFIRM_BOOSTER_DIALOG, ConfirmBoosterDialog, 'confirmBoostersWindow.swf', ViewTypes.TOP_WINDOW, 'confirmBoosterDialog', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
-     GroupedViewSettings(VIEW_ALIAS.DEMOUNT_DEVICE_DIALOG, DemountDeviceDialog, 'demountDeviceDialog.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.PM_CONFIRMATION_DIALOG, IconDialog, 'pmConfirmationDialog.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True, canDrag=False),
-     GroupedViewSettings(VIEW_ALIAS.DESTROY_DEVICE_DIALOG, IconDialog, 'destroyDeviceDialog.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.DISMISS_TANKMAN_DIALOG, DismissTankmanDialog, 'tankmanOperationDialog.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.RESTORE_TANKMAN_DIALOG, RestoreTankmanDialog, 'tankmanOperationDialog.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.ICON_DIALOG, IconDialog, 'iconDialog.swf', ViewTypes.WINDOW, '', None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True, canDrag=False),
@@ -194,6 +193,7 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.HERO_VEHICLE_PREVIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.HERO_VEHICLE_PREVIEW_20, self.loadViewByCtxEvent),
          (VIEW_ALIAS.EVENT_PROGRESSION_VEHICLE_PREVIEW_20, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW_20, self.loadViewByCtxEvent),
          (VIEW_ALIAS.TRADE_IN_VEHICLE_PREVIEW_20, self.loadViewByCtxEvent),
          (VIEW_ALIAS.MARATHON_VEHICLE_PREVIEW_20, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_COMPARE, self.loadViewByCtxEvent),
@@ -230,8 +230,6 @@ class LobbyDialogsHandler(PackageBusinessHandler):
         listeners = ((ShowDialogEvent.SHOW_CHECK_BOX_DIALOG, self.__checkBoxDialogHandler),
          (ShowDialogEvent.SHOW_CONFIRM_MODULE, self.__confirmModuleHandler),
          (ShowDialogEvent.SHOW_CONFIRM_BOOSTER, self.__confirmBoosterHandler),
-         (ShowDialogEvent.SHOW_DEMOUNT_DEVICE_DIALOG, self.__demountDeviceDialogHandler),
-         (ShowDialogEvent.SHOW_DESTROY_DEVICE_DIALOG, self.__destroyDeviceDialogHandler),
          (ShowDialogEvent.SHOW_PM_CONFIRMATION_DIALOG, self.__pmConfirmationDialogHandler),
          (ShowDialogEvent.SHOW_DISMISS_TANKMAN_DIALOG, self.__dismissTankmanHandler),
          (ShowDialogEvent.SHOW_RESTORE_TANKMAN_DIALOG, self.__restoreTankmanHandler),
@@ -253,12 +251,6 @@ class LobbyDialogsHandler(PackageBusinessHandler):
 
     def __confirmBoosterHandler(self, event):
         self.loadViewWithGenName(VIEW_ALIAS.CONFIRM_BOOSTER_DIALOG, event.meta, event.handler)
-
-    def __demountDeviceDialogHandler(self, event):
-        self.loadViewWithGenName(VIEW_ALIAS.DEMOUNT_DEVICE_DIALOG, event.meta, event.handler)
-
-    def __destroyDeviceDialogHandler(self, event):
-        self.loadViewWithGenName(VIEW_ALIAS.DESTROY_DEVICE_DIALOG, event.meta, event.handler)
 
     def __pmConfirmationDialogHandler(self, event):
         self.loadViewWithGenName(VIEW_ALIAS.PM_CONFIRMATION_DIALOG, event.meta, event.handler)

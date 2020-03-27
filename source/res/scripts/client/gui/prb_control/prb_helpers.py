@@ -23,7 +23,7 @@ def _findFirstPrefixBadge(selectedBadges, itemsCache=None):
 class BadgesHelper(object):
 
     def __init__(self, badges=None):
-        if isinstance(badges, (list, tuple)) and len(badges) > 0 and not isinstance(badges[0], (list, tuple)):
+        if isinstance(badges, (list, tuple)) and badges and not isinstance(badges[0], (list, tuple)):
             _logger.error('Converting badges data %s', badges)
             self.__badgesRawData = (badges, [])
         else:

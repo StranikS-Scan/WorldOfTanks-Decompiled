@@ -143,6 +143,8 @@
     <V-12-5M1>	220	</V-12-5M1>
     <V-12-6M1>	221	</V-12-6M1>
     <V-12-6B>	222	</V-12-6B>
+    <V_64R>	223	</V_64R>
+    <V_3BT>	224	</V_3BT>
     <V-5_IGR>	60001	</V-5_IGR>
     <V-2IS_IGR>	60002	</V-2IS_IGR>
     <V-54-6_IGR>	60003	</V-54-6_IGR>
@@ -602,6 +604,22 @@
       <rpm_min>	266	</rpm_min>
       <rpm_max>	2167	</rpm_max>
     </V-3>
+    <V_3BT>
+      <userString>	#ussr_vehicles:V_3BT	</userString>
+      <tags>	diesel	</tags>
+      <level>	4	</level>
+      <price>	11000	</price>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	420	</power>
+      <weight>	540	</weight>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	212	</rpm_min>
+      <rpm_max>	2274	</rpm_max>
+    </V_3BT>
     <M-5-400>
       <userString>	#ussr_vehicles:M-5-400	</userString>
       <tags>	gasoline	</tags>
@@ -1329,14 +1347,14 @@
     <M-80>
       <userString>	#ussr_vehicles:M-80	</userString>
       <tags>	gasoline	</tags>
-      <level>	3	</level>
+      <level>	4	</level>
       <price>	4130	</price>
       <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
       <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	170	</power>
       <weight>	550	</weight>
-      <maxHealth>	60	</maxHealth>
-      <maxRegenHealth>	30	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	35	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
       <rpm_min>	286	</rpm_min>
@@ -2527,6 +2545,23 @@
       <rpm_min>	290	</rpm_min>
       <rpm_max>	2328	</rpm_max>
     </V_64>
+    <V_64R>
+      <userString>	#ussr_vehicles:V_64R	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	90000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	800	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	306	</rpm_min>
+      <rpm_max>	2280	</rpm_max>
+    </V_64R>
     <M_850>
       <userString>	#ussr_vehicles:M_850	</userString>
       <tags>	diesel	</tags>

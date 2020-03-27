@@ -99,6 +99,14 @@ def getTradeOffOverlayUrl():
     return _getUrl('tradeOffOverlay')
 
 
+def getPremiumVehiclesUrl():
+    return _getUrl('premiumVehicles')
+
+
+def getBuyCollectibleVehiclesUrl():
+    return _getUrl('buyCollectibleVehicle')
+
+
 def showDisabledDialog():
     DialogsInterface.showI18nInfoDialog('ingameShopDisabled', None)
     return

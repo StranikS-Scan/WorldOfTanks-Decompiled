@@ -98,7 +98,11 @@ class GUI_ITEM_ECONOMY_CODE(CONST_CONTAINER):
     NOT_ENOUGH_GOLD = _formatMoneyError(Currency.GOLD)
     NOT_ENOUGH_CREDITS = _formatMoneyError(Currency.CREDITS)
     NOT_ENOUGH_CRYSTAL = _formatMoneyError(Currency.CRYSTAL)
-    _NOT_ENOUGH_MONEY = (NOT_ENOUGH_GOLD, NOT_ENOUGH_CRYSTAL, NOT_ENOUGH_CREDITS)
+    NOT_ENOUGH_EVENT_COIN = _formatMoneyError(Currency.EVENT_COIN)
+    _NOT_ENOUGH_MONEY = (NOT_ENOUGH_GOLD,
+     NOT_ENOUGH_CRYSTAL,
+     NOT_ENOUGH_CREDITS,
+     NOT_ENOUGH_EVENT_COIN)
 
     @classmethod
     def getMoneyError(cls, currency):

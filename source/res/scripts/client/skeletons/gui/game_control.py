@@ -922,6 +922,9 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
     def isEnabled(self):
         raise NotImplementedError
 
+    def isReservesAvailableInFLMenu(self):
+        raise NotImplementedError
+
     def isAvailable(self):
         raise NotImplementedError
 
@@ -994,6 +997,9 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
     def getAllUnlockedSkillLevelsBySkillId(self):
         raise NotImplementedError
 
+    def getCurrentCycleTimeLeft(self):
+        raise NotImplementedError
+
     def getCurrentCycleInfo(self):
         raise NotImplementedError
 
@@ -1025,6 +1031,12 @@ class IEpicBattleMetaGameController(IGameController, ISeasonProvider):
         raise NotImplementedError
 
     def getStoredEpicDiscount(self):
+        return NotImplementedError
+
+    def hasPrimeTimesLeft(self):
+        return NotImplementedError
+
+    def getCurrentPrimeTimeEnd(self):
         return NotImplementedError
 
 

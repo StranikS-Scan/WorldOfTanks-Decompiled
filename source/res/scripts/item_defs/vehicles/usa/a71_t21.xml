@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.402	</firePenalty>
   </invisibility>
-  <repairCost>	7.04	</repairCost>
+  <repairCost>	6.304	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.2	</priceFactor>
@@ -40,7 +40,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	10847	</weight>
-    <maxHealth>	480	</maxHealth>
+    <maxHealth>	536	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -2076,7 +2076,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4500	</weight>
-      <maxHealth>	120	</maxHealth>
+      <maxHealth>	134	</maxHealth>
       <rotationSpeed>	42	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
@@ -2182,10 +2182,6 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 0.394671 10 0.458333 6 0.541667 6 0.605329 10 1 10	</maxPitch>
           </pitchLimits>
-          <unlocks>
-            <vehicle>	A103_T71E1	  <cost>	68950	</cost>
-            </vehicle>
-          </unlocks>
           <armor>
             <armor_1>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>

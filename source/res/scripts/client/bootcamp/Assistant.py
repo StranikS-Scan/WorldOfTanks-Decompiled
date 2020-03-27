@@ -60,7 +60,6 @@ class BattleAssistant(BaseAssistant):
     HIGHLIGHTED_GUI_DICT = {'Minimap': BATTLE_VIEW_ALIASES.MINIMAP,
      'MinimapAppear': BATTLE_VIEW_ALIASES.MINIMAP,
      'FragCorrelationBar': BATTLE_VIEW_ALIASES.FRAG_CORRELATION_BAR,
-     'FragCorrelationBarAppear': BATTLE_VIEW_ALIASES.FRAG_CORRELATION_BAR,
      'ConsumableSlot4': BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL,
      'ConsumableSlot5': BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL,
      'ConsumableSlot6': BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL,
@@ -109,6 +108,7 @@ class BattleAssistant(BaseAssistant):
     def __doHighlight(self):
         for name in self.__highlightedElements:
             g_eventBus.handleEvent(events.LoadViewEvent(BootcampEvent.ADD_HIGHLIGHT, None, name), EVENT_BUS_SCOPE.BATTLE)
+            g_bootcampEvents.onHighlightAdded(self.HIGHLIGHTED_GUI_DICT[name])
 
         self.__idHighlight = None
         self.__highlightedElements.clear()

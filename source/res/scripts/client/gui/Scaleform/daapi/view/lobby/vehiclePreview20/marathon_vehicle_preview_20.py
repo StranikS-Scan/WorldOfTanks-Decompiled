@@ -30,7 +30,7 @@ class MarathonVehiclePreview20(VehiclePreview20):
                 viewPy.setVehicleCrews(vehicleItems, crewItems)
 
     def _processBackClick(self, ctx=None):
-        showMissionsMarathon()
+        showMissionsMarathon(self.__marathonPrefix)
 
     def _getBackBtnLabel(self):
         return backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.winterMarathon())

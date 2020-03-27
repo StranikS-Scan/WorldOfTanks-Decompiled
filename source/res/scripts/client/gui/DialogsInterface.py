@@ -1,37 +1,56 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/DialogsInterface.py
 from gui.Scaleform.Waiting import Waiting
-from gui.shared import events, g_eventBus
-from gui.shared.utils.decorators import dialog
+from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
+from gui.shared.utils import decorators
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta, I18nConfirmDialogMeta, DisconnectMeta, CheckBoxDialogMeta
 
-@dialog
+class _DialogCallbackWrapper(object):
+
+    def __init__(self, cb):
+        Waiting.suspend(lockerID=id(self))
+        self.__cb = cb
+
+    def __call__(self, result):
+        Waiting.resume(lockerID=id(self))
+        if self.__cb is not None:
+            self.__cb(result)
+        return
+
+
+@decorators.async
 def showDialog(meta, callback):
-
-    def cbwrapper(cb):
-
-        def callback(result):
-            Waiting.resume()
-            if cb is not None:
-                cb(result)
-            return
-
-        return callback
-
-    g_eventBus.handleEvent(events.ShowDialogEvent(meta, cbwrapper(callback)))
+    g_eventBus.handleEvent(events.ShowDialogEvent(meta, _DialogCallbackWrapper(callback)))
 
 
-@dialog
+@decorators.async
+def showBCConfirmationDialog(meta, callback):
+    effectData = {'messages': [{'messagePreset': 'BCMessageGreenUI',
+                   'label': meta.getLabel(),
+                   'iconPath': meta.getIcon(),
+                   'labelExecute': meta.getLabelExecute(),
+                   'costValue': meta.getCostValue(),
+                   'isBuy': meta.getIsBuy(),
+                   'isTraining': meta.getIsTraining(),
+                   'message': meta.getMessage()}],
+     'voiceovers': [],
+     'callback': _DialogCallbackWrapper(callback)}
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOTCAMP_MESSAGE_WINDOW, None, effectData), EVENT_BUS_SCOPE.LOBBY)
+    return
+
+
+@decorators.async
 def showI18nInfoDialog(i18nKey, callback, meta=None):
     showDialog(I18nInfoDialogMeta(i18nKey, meta=meta), callback)
 
 
-@dialog
+@decorators.async
 def showI18nConfirmDialog(i18nKey, callback, ctx=None, meta=None, focusedID=None):
     showDialog(I18nConfirmDialogMeta(i18nKey, messageCtx=ctx, meta=meta, focusedID=focusedID), callback)
 
 
-@dialog
+@decorators.async
 def showI18nCheckBoxDialog(i18nKey, callback, meta=None, focusedID=None):
     showDialog(CheckBoxDialogMeta(i18nKey, meta=meta, focusedID=focusedID), callback)
 

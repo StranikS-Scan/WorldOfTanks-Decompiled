@@ -9,9 +9,10 @@ class Sounds(CONST_CONTAINER):
     STATE_PLACE_TECHTREE = 'STATE_hangar_place_research'
     AMBIENT = 'researches_ambience'
     MUSIC = 'researches_music'
+    RESET = 'researches_music_reset'
     BLUEPRINT_VIEW_ON_SOUND_ID = 'gui_blueprint_view_switch_on'
     BLUEPRINT_VIEW_OFF_SOUND_ID = 'gui_blueprint_view_switch_off'
     BLUEPRINT_VIEW_PLUS_SOUND_ID = 'gui_blueprint_view_switch_on_plus'
 
 
-TECHTREE_SOUND_SPACE = CommonSoundSpaceSettings(name=Sounds.COMMON_SOUND_SPACE, entranceStates={Sounds.STATE_PLACE: Sounds.STATE_PLACE_TECHTREE}, exitStates={}, persistentSounds=(Sounds.MUSIC, Sounds.AMBIENT), stoppableSounds=(), priorities=(), autoStart=True)
+TECHTREE_SOUND_SPACE = CommonSoundSpaceSettings(name=Sounds.COMMON_SOUND_SPACE, entranceStates={Sounds.STATE_PLACE: Sounds.STATE_PLACE_TECHTREE}, exitStates={}, persistentSounds=(Sounds.MUSIC, Sounds.AMBIENT), stoppableSounds=(), priorities=(), autoStart=True, exitEvent=Sounds.RESET)

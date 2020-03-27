@@ -118,6 +118,9 @@ class LobbyMenu(LobbyMenuMeta):
             self.as_setBootcampButtonLabelS(bootcampLabel, bootcampIconSource)
         else:
             self.as_showBootcampButtonS(False)
+        isBootCampDisabled = BigWorld.player().spaFlags.getFlag(constants.SPA_ATTRS.BOOTCAMP_DISABLED)
+        if isBootCampDisabled:
+            self.as_showBootcampButtonS(False)
         if events.isPlayerEntityChanging:
             self.as_showBootcampButtonS(False)
         if not self.manualController.isActivated() or self.bootcamp.isInBootcamp() or self.__isInQueue():

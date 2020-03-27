@@ -1,11 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/EventsCache.py
-import cPickle as pickle
 import math
 import sys
-import zlib
 from collections import defaultdict, namedtuple
-from typing import Union, Any, Callable
+import typing
 import BigWorld
 import motivation_quests
 import nations
@@ -13,11 +11,11 @@ from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
 from adisp import async, process
 from constants import EVENT_TYPE, EVENT_CLIENT_DATA, LOOTBOX_TOKEN_PREFIX, TWITCH_TOKEN_PREFIX
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
+from debug_utils import LOG_DEBUG
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.server_events import caches as quests_caches
 from gui.server_events.event_items import EventBattles, createQuest, createAction, MotiveQuest, ServerEventAbstract, Quest
-from gui.server_events.events_helpers import isMarathon, isLinkedSet, isPremium, isDailyQuest
+from gui.server_events.events_helpers import isMarathon, isLinkedSet, isPremium
 from gui.server_events.events_helpers import getRerollTimeout
 from gui.server_events.formatters import getLinkedActionID
 from gui.server_events.modifiers import ACTION_SECTION_TYPE, ACTION_MODIFIER_TYPE, clearModifiersCache
@@ -36,6 +34,9 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IRaresCache
 from skeletons.gui.linkedset import ILinkedSetController
+if typing.TYPE_CHECKING:
+    from typing import Optional, Dict, Callable, Union
+    from gui.server_events.event_items import DailyEpicTokenQuest, DailyQuest, PremiumQuest
 _ProgressiveReward = namedtuple('_ProgressiveReward', ('currentStep', 'probability', 'maxSteps'))
 
 class _DailyQuestsData(object):
@@ -267,33 +268,19 @@ class EventsCache(IEventsCache):
 
         return self.getQuests(userFilterFunc)
 
-    def getDailyQuests(self, filterFunc=None):
+    def getDailyQuests(self, filterFunc=None, includeEpic=False):
         filterFunc = filterFunc or (lambda a: True)
 
         def userFilterFunc(q):
-            return False if q.getType() == EVENT_TYPE.TOKEN_QUEST else isDailyQuest(q.getID()) and filterFunc(q)
+            return False if not includeEpic and q.getType() == EVENT_TYPE.TOKEN_QUEST else filterFunc(q)
 
-        return self.getQuests(userFilterFunc)
+        return self._getDailyQuests(userFilterFunc)
 
-    def getDailyEpicQuest(self, filterFunc=None):
-        filterFunc = filterFunc or (lambda a: True)
-
-        def userFilterFunc(q):
-            return isDailyQuest(q.getID()) and not q.isCompleted() and filterFunc(q) if q.getType() == EVENT_TYPE.TOKEN_QUEST else False
-
-        return self.getQuests(userFilterFunc)
-
-    def getAllDailyQuests(self):
-        result = self.getPremiumQuests().values()
-        result.extend(self.getDailyQuests().values())
-        result.extend(self.getDailyEpicQuest().values())
-        return result
-
-    def getAllAvailableDailyQuests(self):
-        result = self.getPremiumQuests(lambda q: q.isAvailable().isValid).values()
-        result.extend(self.getDailyQuests().values())
-        result.extend(self.getDailyEpicQuest().values())
-        return result
+    def getDailyEpicQuest(self):
+        dailyQuests = self._getDailyQuests()
+        for q in dailyQuests.values():
+            if q.getType() == EVENT_TYPE.TOKEN_QUEST and not q.isCompleted():
+                return q
 
     def getBattleQuests(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
@@ -517,6 +504,15 @@ class EventsCache(IEventsCache):
             currentStep = self.questsProgress.getTokenCount(progressiveConfig.levelTokenID)
             probability = self.questsProgress.getTokenCount(progressiveConfig.probabilityTokenID) / 100
             return _ProgressiveReward(currentStep, probability, maxSteps)
+
+    def _getDailyQuests(self, filterFunc=None):
+        result = {}
+        filterFunc = filterFunc or (lambda a: True)
+        for qID, q in self.__getDailyQuestsIterator():
+            if filterFunc(q):
+                result[qID] = q
+
+        return result
 
     def _getQuests(self, filterFunc=None, includePersonalMissions=False):
         result = {}
@@ -743,16 +739,7 @@ class EventsCache(IEventsCache):
 
     @classmethod
     def __getEventsData(cls, eventsTypeName):
-        try:
-            if isPlayerAccount():
-                if eventsTypeName in BigWorld.player().eventsData:
-                    return pickle.loads(zlib.decompress(BigWorld.player().eventsData[eventsTypeName]))
-                return {}
-            LOG_DEBUG('Trying to get quests data from not account player', eventsTypeName, BigWorld.player())
-        except Exception:
-            LOG_CURRENT_EXCEPTION()
-
-        return {}
+        return BigWorld.player().getUnpackedEventsData(eventsTypeName) if isPlayerAccount() else {}
 
     def __getQuestsData(self):
         return self.__getEventsData(EVENT_CLIENT_DATA.QUEST)
@@ -786,6 +773,10 @@ class EventsCache(IEventsCache):
 
     def __getUnitData(self):
         return self.__getEventsData(EVENT_CLIENT_DATA.SQUAD_BONUSES)
+
+    def __getDailyQuestsIterator(self):
+        for qID, qData in self.__getDailyQuestsData().iteritems():
+            yield (qID, self._makeQuest(qID, qData))
 
     def __getCommonQuestsIterator(self):
         questsData = self.__getQuestsData()

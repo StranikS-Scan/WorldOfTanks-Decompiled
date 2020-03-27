@@ -34,6 +34,8 @@ class TOOLTIPS_CONSTANTS(object):
     CREW_SKIN_SOUND = 'crewSkinSound'
     CREW_BOOK = 'crewBook'
     CREW_BOOK_RESTRICTED = 'crewBookRestricted'
+    VEHICLE_COLLECTOR_INFO = 'vehicleCollectorInfo'
+    VEHICLE_COLLECTOR_DISABLED = 'vehicleCollectorDisabled'
     NATION_CHANGE_HANGAR_MODULE = 'nationChangeHangarModule'
     COMPARE_MODULE = 'compareModule'
     DIRECT_MODULE = 'directModule'
@@ -175,6 +177,7 @@ class TOOLTIPS_CONSTANTS(object):
     BATTLE_TRAINING = 'battleTraining'
     OPERATION_POSTPONED = 'operationPostponed'
     SQUAD_BONUS = 'squadBonus'
+    GF_TEST_TOOLTIP = 'gfTestTooltip'
     BATTLE_PASS_VEHICLE_POINTS = 'battlePassVehiclePoints'
     BATTLE_PASS_POINTS = 'battlePassPoints'
     BATTLE_PASS_NOT_STARTED = 'battlePassNotStarted'
@@ -189,6 +192,7 @@ class TOOLTIPS_CONSTANTS(object):
     GOLD_INFO = 'goldInfo'
     GOLD_ALTERNATIVE_INFO = 'goldAlternativeInfo'
     GOLD_ALTERNATIVE_STATS = 'goldAlternativeStats'
+    EVENT_COIN_INFO = 'eventCoinInfo'
     FREEXP_INFO = 'freeXPInfo'
     HEADER_BUTTON_INFO = 'Info'
     RANKED_BATTLES_RANK = 'rankedBattlesRank'
@@ -340,6 +344,7 @@ class TOOLTIPS_CONSTANTS(object):
      MISSIONS_TOKEN,
      RESERVE_MODULE,
      CRYSTAL_INFO,
+     EVENT_COIN_INFO,
      CREDITS_INFO,
      GOLD_INFO,
      FREEXP_INFO,
@@ -489,3 +494,5 @@ class TOOLTIPS_CONSTANTS(object):
      GOLD_ALTERNATIVE_INFO,
      GOLD_ALTERNATIVE_STATS,
      NOT_ENOUGH_MONEY]
+    DEVELOPMENT_SET = [GF_TEST_TOOLTIP]
+    VEHICLE_COLLECTOR_SET = [VEHICLE_COLLECTOR_INFO, VEHICLE_COLLECTOR_DISABLED]

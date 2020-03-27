@@ -29,8 +29,8 @@ class _DQSettings(utils.SettingRecord):
 
 class _QuestSettings(utils.SettingRootRecord):
 
-    def __init__(self, lastVisitTime=-1, visited=None, naVisited=None, minimized=None, personalMissions=None, dailyQuests=None):
-        super(_QuestSettings, self).__init__(lastVisitTime=lastVisitTime, visited=visited or set(), naVisited=naVisited or set(), minimized=minimized or set(), personalMissions=_PMSettings(**(personalMissions or {})), dailyQuests=_DQSettings(**(dailyQuests or {})))
+    def __init__(self, lastVisitTime=-1, visited=None, naVisited=None, minimized=None, personalMissions=None, dailyQuests=None, questDeltas=None):
+        super(_QuestSettings, self).__init__(lastVisitTime=lastVisitTime, visited=visited or set(), naVisited=naVisited or set(), minimized=minimized or set(), personalMissions=_PMSettings(**(personalMissions or {})), dailyQuests=_DQSettings(**(dailyQuests or {})), questDeltas=questDeltas or dict())
 
     def updateVisited(self, visitSettingName, eventID):
         settingsValue = set(self[visitSettingName])
@@ -75,7 +75,7 @@ def isNewCommonEvent(svrEvent, settings=None):
         setting = 'visited'
     else:
         setting = 'naVisited'
-    return svrEvent.getID() not in settings[setting] and not svrEvent.isCompleted() and not svrEvent.isOutOfDate()
+    return settings is not None and svrEvent.getID() not in settings[setting] and not svrEvent.isCompleted() and not svrEvent.isOutOfDate()
 
 
 def isGroupMinimized(groupID, settings=None):

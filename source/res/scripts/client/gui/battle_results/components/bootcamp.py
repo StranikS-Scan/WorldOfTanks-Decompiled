@@ -12,7 +12,6 @@ from gui.impl.gen import R
 from gui.battle_results.components import base
 from gui.battle_results.components.common import makeRegularFinishResultLabel
 from gui.battle_results.settings import PLAYER_TEAM_RESULT
-from gui.shared.gui_items.Vehicle import getTypeBigIconPath
 from gui.Scaleform.locale.BOOTCAMP import BOOTCAMP
 from helpers.i18n import makeString
 from helpers import dependency
@@ -43,34 +42,37 @@ class BackgroundItem(base.StatsItem):
         return value
 
 
-class UnlocksAndMedalsBlock(base.StatsBlock):
+class RewardsBlock(base.StatsBlock):
     __slots__ = ()
 
     def setRecord(self, result, reusable):
         teamResult = reusable.getPersonalTeamResult()
         if teamResult != PLAYER_TEAM_RESULT.WIN:
             return
-        lessonNum = g_bootcamp.getLessonNum()
-        lessonSpecificExtras = g_bootcamp.getBattleResultsExtra(lessonNum - 1)
-        for val in lessonSpecificExtras['unlocks']:
-            self.addNextComponent(base.DirectStatsItem('', val))
-
-        for val in lessonSpecificExtras['medals']:
-            self.addNextComponent(base.DirectStatsItem('', val))
-
         bootcampController = dependency.instance(IBootcampController)
+        lessonNum = g_bootcamp.getLessonNum()
         lastLessonNum = g_bootcamp.getContextIntParameter('lastLessonNum')
+        lessonSpecificExtras = g_bootcamp.getBattleResultsExtra(lessonNum - 1)
+        goldPremuimExtras = []
         showPremium = lessonNum == lastLessonNum and bootcampController.needAwarding()
         if showPremium:
             premiumType = g_bootcamp.getPremiumType(lessonNum)
             if premiumType not in _PREMIUM_RESOURCES:
                 _logger.error('Premium type %s is not supported or it is not in the bonuses')
-                return
-            self.addNextComponent(base.DirectStatsItem('', {'id': premiumType,
-             'label': _PREMIUM_RESOURCES[premiumType]['label'],
-             'description': _PREMIUM_RESOURCES[premiumType]['description'],
-             'icon': _PREMIUM_RESOURCES[premiumType]['icon'],
-             'iconTooltip': _PREMIUM_RESOURCES[premiumType]['iconTooltip']}))
+            else:
+                goldPremuimExtras.append({'id': premiumType,
+                 'label': _PREMIUM_RESOURCES[premiumType]['label'],
+                 'description': _PREMIUM_RESOURCES[premiumType]['description'],
+                 'icon': _PREMIUM_RESOURCES[premiumType]['icon'],
+                 'iconTooltip': _PREMIUM_RESOURCES[premiumType]['iconTooltip']})
+                goldPremuimExtras.append({'id': 'gold',
+                 'label': backport.text(R.strings.bootcamp.message.gold.label()),
+                 'description': backport.text(R.strings.bootcamp.message.gold.premiumPlus.text()),
+                 'icon': backport.image(R.images.gui.maps.icons.bootcamp.rewards.bcGold()),
+                 'iconTooltip': backport.image(R.images.gui.maps.icons.bootcamp.rewards.tooltips.bcGold())})
+        self.addNextComponent(base.DirectStatsItem('medals', lessonSpecificExtras['medals']))
+        self.addNextComponent(base.DirectStatsItem('ribbons', lessonSpecificExtras['ribbons']))
+        self.addNextComponent(base.DirectStatsItem('unlocks', lessonSpecificExtras['unlocks'] + goldPremuimExtras))
 
 
 class HasUnlocksFlag(base.StatsItem):
@@ -80,9 +82,12 @@ class HasUnlocksFlag(base.StatsItem):
         teamResult = reusable.getPersonalTeamResult()
         if teamResult != PLAYER_TEAM_RESULT.WIN:
             return False
+        bootcampController = dependency.instance(IBootcampController)
         lessonNum = g_bootcamp.getLessonNum()
+        lastLessonNum = g_bootcamp.getContextIntParameter('lastLessonNum')
         lessonSpecificExtras = g_bootcamp.getBattleResultsExtra(lessonNum - 1)
-        val = bool(lessonSpecificExtras['unlocks'])
+        showPremium = lessonNum == lastLessonNum and bootcampController.needAwarding()
+        val = bool(lessonSpecificExtras['unlocks']) or showPremium
         return val
 
 
@@ -91,7 +96,11 @@ class StatsBlock(base.StatsBlock):
 
     def setRecord(self, result, reusable):
         info = reusable.getPersonalVehiclesInfo(result['personal'])
-        battleStats = g_bootcamp.getBattleStatsLesson()
+        teamResult = reusable.getPersonalTeamResult()
+        if teamResult == PLAYER_TEAM_RESULT.WIN:
+            battleStats = g_bootcamp.getBattleStatsLessonWin()
+        else:
+            battleStats = g_bootcamp.getBattleStatsLessonDefeat()
         for statType in battleStats:
             statFieldName = BATTLE_STATS_RESULT_FIELDS[statType]
             statVal = info.__getattribute__(statFieldName)
@@ -109,7 +118,15 @@ class ResultTypeStrItem(base.StatsItem):
 
     def _convert(self, record, reusable):
         teamResult = reusable.getPersonalTeamResult()
-        val = makeHtmlString('html_templates:bootcamp/battle_results', teamResult)
+        return backport.text(R.strings.bootcamp.resultlabel.dyn(teamResult)())
+
+
+class FinishReasonStrItem(base.StatsItem):
+    __slots__ = ()
+
+    def _convert(self, record, reusable):
+        teamResult = reusable.getPersonalTeamResult()
+        val = makeRegularFinishResultLabel(reusable.common.finishReason, teamResult)
         return val
 
 
@@ -117,9 +134,7 @@ class FinishReasonItem(base.StatsItem):
     __slots__ = ()
 
     def _convert(self, record, reusable):
-        teamResult = reusable.getPersonalTeamResult()
-        val = makeRegularFinishResultLabel(reusable.common.finishReason, teamResult)
-        return val
+        return reusable.getPersonalTeamResult()
 
 
 class ShowRewardsFlag(base.StatsItem):
@@ -131,13 +146,23 @@ class ShowRewardsFlag(base.StatsItem):
         return credit != 0 or xp != 0
 
 
-class PlayerVehicleBlock(base.StatsBlock):
+class PlayerResultItem(base.StatsItem):
     __slots__ = ()
 
-    def setRecord(self, result, reusable):
-        _, item = first(reusable.personal.getVehicleItemsIterator())
-        self.addNextComponent(base.DirectStatsItem('name', item.userName))
-        self.addNextComponent(base.DirectStatsItem('typeIcon', getTypeBigIconPath(item.type)))
+    def _convert(self, record, reusable):
+        playerName = record['players'].values()[0]['name']
+        itemId, item = first(reusable.personal.getVehicleItemsIterator())
+        killerID = record['personal'][itemId]['killerID']
+        ctx = {'player': playerName,
+         'vehicle': item.userName}
+        if killerID == 0:
+            return makeHtmlString('html_templates:bootcamp/player_status', 'alive', ctx=ctx)
+        if killerID not in record['common']['bots']:
+            return makeHtmlString('html_templates:bootcamp/player_status', 'dead', ctx=ctx)
+        killerName = record['common']['bots'][killerID][1]
+        killerName = makeString('#bootcamp:' + killerName)
+        ctx['killer'] = killerName
+        return makeHtmlString('html_templates:bootcamp/player_status', 'killed', ctx=ctx)
 
 
 class CreditsBlock(base.StatsBlock):

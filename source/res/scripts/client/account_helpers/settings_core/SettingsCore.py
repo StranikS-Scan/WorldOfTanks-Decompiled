@@ -177,6 +177,7 @@ class SettingsCore(ISettingsCore):
          (SOUND.MASTER_TOGGLE, options.SoundEnableSetting()),
          (SOUND.SOUND_QUALITY, options.SoundQualitySetting()),
          (SOUND.SOUND_QUALITY_VISIBLE, options.ReadOnlySetting(options.SoundQualitySetting.isAvailable)),
+         (SOUND.SUBTITLES, options.AccountSetting(SOUND.SUBTITLES)),
          (SOUND.MASTER, options.SoundSetting('master')),
          (SOUND.MUSIC, options.SoundSetting('music')),
          (SOUND.MUSIC_HANGAR, options.SoundSetting('music_hangar')),

@@ -1,17 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehiclePreview20/info/vehicle_preview_modules_tab.py
 from CurrentVehicle import g_currentPreviewVehicle
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.Scaleform.daapi.view.meta.VehiclePreviewModulesTabMeta import VehiclePreviewModulesTabMeta
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.shared.formatters import text_styles, icons
-from helpers import dependency
-from helpers.i18n import makeString as _ms
-from skeletons.gui.shared import IItemsCache
+from gui.shared.utils.vehicle_collector_helper import wasModulesAnimationShown
 
 class VehiclePreviewModulesTab(VehiclePreviewModulesTabMeta):
-    itemsCache = dependency.descriptor(IItemsCache)
 
     def _populate(self):
         super(VehiclePreviewModulesTab, self)._populate()
@@ -33,14 +30,19 @@ class VehiclePreviewModulesTab(VehiclePreviewModulesTabMeta):
     def updateStatus(self):
         if g_currentPreviewVehicle.hasModulesToSelect():
             if g_currentPreviewVehicle.isModified():
-                icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_INFO_YELLOW, 24, 24, -7, -4)
-                text = text_styles.neutral('%s%s' % (_ms(VEHICLE_PREVIEW.MODULESPANEL_STATUS_TEXT), icon))
+                icon = icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.info_yellow()), 24, 24, -7, -4)
+                text = text_styles.neutral('%s%s' % (backport.text(R.strings.vehicle_preview.modulesPanel.status.text()), icon))
             else:
-                icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_INFO, 24, 24, -7, -4)
-                text = text_styles.stats('%s%s' % (_ms(VEHICLE_PREVIEW.MODULESPANEL_LABEL), icon))
+                icon = icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.info()), 24, 24, -7, -4)
+                text = text_styles.stats('%s%s' % (backport.text(R.strings.vehicle_preview.modulesPanel.Label()), icon))
             tooltip = TOOLTIPS.VEHICLEPREVIEW_MODULS
         else:
-            icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_INFO, 24, 24, -7, -4)
-            text = text_styles.stats('%s%s' % (_ms(VEHICLE_PREVIEW.MODULESPANEL_NOMODULESOPTIONS), icon))
+            icon = icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.info()), 24, 24, -7, -4)
+            text = text_styles.stats('%s%s' % (backport.text(R.strings.vehicle_preview.modulesPanel.noModulesOptions()), icon))
             tooltip = TOOLTIPS.VEHICLEPREVIEW_MODULSNOMODULES
-        self.as_setStatusInfoS(text, tooltip)
+        self.as_setStatusInfoS(text, tooltip, g_currentPreviewVehicle.getVehiclePreviewType(), needToShowAnim=self.__showAnimation())
+
+    @staticmethod
+    def __showAnimation():
+        vehicle = g_currentPreviewVehicle.item
+        return not wasModulesAnimationShown() if vehicle is not None and vehicle.isCollectible else False

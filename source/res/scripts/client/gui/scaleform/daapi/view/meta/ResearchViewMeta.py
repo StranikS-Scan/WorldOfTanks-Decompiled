@@ -22,6 +22,9 @@ class ResearchViewMeta(View):
     def goToNationChangeView(self, itemCD):
         self._printOverrideError('goToNationChangeView')
 
+    def goToVehicleCollection(self, nation):
+        self._printOverrideError('goToVehicleCollection')
+
     def as_setNodesStatesS(self, primary, data):
         return self.flashObject.as_setNodesStates(primary, data) if self._isDAAPIInited() else None
 

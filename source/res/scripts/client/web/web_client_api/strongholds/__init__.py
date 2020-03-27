@@ -9,7 +9,7 @@ from gui import DialogsInterface
 from gui.SystemMessages import pushMessage, SM_TYPE
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.base.ctx import PrbAction, LeavePrbAction
-from gui.prb_control.entities.stronghold.unit.ctx import CreateUnitCtx, JoinUnitCtx
+from gui.prb_control.entities.base.external_battle_unit.base_external_battle_ctx import CreateBaseExternalUnitCtx, JoinBaseExternalUnitCtx
 from gui.prb_control.formatters import messages
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared import actions
@@ -46,7 +46,7 @@ class StrongholdsWebApi(object):
             pushMessage(messages.getJoinFailureMessage(JOIN_FAILURE.TIME_OUT), type=SM_TYPE.Error)
             dispatcher.restorePrevious()
 
-        yield dispatcher.create(CreateUnitCtx(PREBATTLE_TYPE.EXTERNAL, waitingID='prebattle/create', onTimeoutCallback=onTimeout))
+        yield dispatcher.create(CreateBaseExternalUnitCtx(PREBATTLE_TYPE.STRONGHOLD, waitingID='prebattle/create', onTimeoutCallback=onTimeout))
 
     @w2c(_StrongholdsJoinBattleSchema, 'join_battle')
     @process
@@ -54,7 +54,7 @@ class StrongholdsWebApi(object):
 
         @process
         def joinBattle(dispatcher, unitMgrId, onErrorCallback):
-            yield dispatcher.join(JoinUnitCtx(unitMgrId, PREBATTLE_TYPE.EXTERNAL, onErrorCallback=onErrorCallback, waitingID='prebattle/join'))
+            yield dispatcher.join(JoinBaseExternalUnitCtx(unitMgrId, PREBATTLE_TYPE.STRONGHOLD, onErrorCallback=onErrorCallback, waitingID='prebattle/join'))
 
         def doJoin(restoreOnError):
             dispatcher = g_prbLoader.getDispatcher()

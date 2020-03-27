@@ -416,6 +416,7 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_BUY_NOT_ENOUGH_CREDITS = '#system_messages:vehicle_buy/not_enough_credits'
     VEHICLE_BUY_NOT_ENOUGH_GOLD = '#system_messages:vehicle_buy/not_enough_gold'
     VEHICLE_BUY_WALLET_NOT_AVAILABLE = '#system_messages:vehicle_buy/wallet_not_available'
+    VEHICLE_BUY_NOT_UNLOCKED_NATION = '#system_messages:vehicle_buy/not_unlocked_nation'
     VEHICLE_RENT_SUCCESS = '#system_messages:vehicle_rent/success'
     VEHICLE_RENT_BUYOPTION = '#system_messages:vehicle_rent/buyOption'
     VEHICLE_RENT_TIMERENT = '#system_messages:vehicle_rent/timeRent'
@@ -544,6 +545,7 @@ class SYSTEM_MESSAGES(object):
     ARTEFACT_BUY_NOT_ENOUGH_CREDITS = '#system_messages:artefact_buy/not_enough_credits'
     ARTEFACT_BUY_NOT_ENOUGH_GOLD = '#system_messages:artefact_buy/not_enough_gold'
     ARTEFACT_BUY_NOT_ENOUGH_CRYSTAL = '#system_messages:artefact_buy/not_enough_crystal'
+    ARTEFACT_BUY_NOT_ENOUGH_EVENTCOIN = '#system_messages:artefact_buy/not_enough_eventCoin'
     ARTEFACT_BUY_WALLET_NOT_AVAILABLE = '#system_messages:artefact_buy/wallet_not_available'
     ARTEFACT_BUY_SERVER_ERROR = '#system_messages:artefact_buy/server_error'
     ARTEFACT_BUY_SERVER_ERROR_CENTERDOWN = '#system_messages:artefact_buy/server_error_centerDown'
@@ -558,9 +560,11 @@ class SYSTEM_MESSAGES(object):
     BATTLEBOOSTER_BUY_NOT_ENOUGH_CREDITS = '#system_messages:battleBooster_buy/not_enough_credits'
     BATTLEBOOSTER_BUY_NOT_ENOUGH_GOLD = '#system_messages:battleBooster_buy/not_enough_gold'
     BATTLEBOOSTER_BUY_NOT_ENOUGH_CRYSTAL = '#system_messages:battleBooster_buy/not_enough_crystal'
+    BATTLEBOOSTER_BUY_NOT_ENOUGH_EVENTCOIN = '#system_messages:battleBooster_buy/not_enough_eventCoin'
     BATTLEBOOSTER_BUY_CREDITS_ERROR = '#system_messages:battleBooster_buy/credits_error'
     BATTLEBOOSTER_BUY_GOLD_ERROR = '#system_messages:battleBooster_buy/gold_error'
     BATTLEBOOSTER_BUY_CRYSTAL_ERROR = '#system_messages:battleBooster_buy/crystal_error'
+    BATTLEBOOSTER_BUY_EVENTCOIN_ERROR = '#system_messages:battleBooster_buy/eventCoin_error'
     BATTLEBOOSTER_BUY_WALLET_NOT_AVAILABLE = '#system_messages:battleBooster_buy/wallet_not_available'
     BATTLEBOOSTER_BUY_SERVER_ERROR = '#system_messages:battleBooster_buy/server_error'
     BATTLEBOOSTER_BUY_SERVER_ERROR_CENTERDOWN = '#system_messages:battleBooster_buy/server_error_centerDown'
@@ -1034,6 +1038,7 @@ class SYSTEM_MESSAGES(object):
     RANKED_NOTIFICATIONS_SINGLERANK_TEXT = '#system_messages:ranked/notifications/singleRank/text'
     RANKED_NOTIFICATIONS_BONUSNAME_YEARPOINTS = '#system_messages:ranked/notifications/bonusName/yearPoints'
     RANKED_NOTIFICATIONS_BONUSNAME_CRYSTAL = '#system_messages:ranked/notifications/bonusName/crystal'
+    RANKED_NOTIFICATIONS_BONUSNAME_EVENTCOIN = '#system_messages:ranked/notifications/bonusName/eventCoin'
     RANKED_NOTIFICATIONS_BONUSNAME_CREDITS = '#system_messages:ranked/notifications/bonusName/credits'
     RANKED_NOTIFICATIONS_BONUSNAME_GOLD = '#system_messages:ranked/notifications/bonusName/gold'
     RANKED_NOTIFICATIONS_BONUSVALUE_PREMIUMDAY = '#system_messages:ranked/notifications/bonusValue/premiumDay'
@@ -1140,6 +1145,10 @@ class SYSTEM_MESSAGES(object):
     UPGRADETROPHYDEVICE_SWITCH_ON_BODY = '#system_messages:upgradeTrophyDevice/switch_on/body'
     UPGRADETROPHYDEVICE_SWITCH_OFF_BODY = '#system_messages:upgradeTrophyDevice/switch_off/body'
     BATTLEPASS_BADGEREMOVED_TEXT = '#system_messages:battlePass/badgeRemoved/text'
+    COLLECTORVEHICLE_SWITCH_OFF_TITLE = '#system_messages:collectorVehicle/switch_off/title'
+    COLLECTORVEHICLE_SWITCH_OFF_BODY = '#system_messages:collectorVehicle/switch_off/body'
+    COLLECTORVEHICLE_SWITCH_ON_TITLE = '#system_messages:collectorVehicle/switch_on/title'
+    COLLECTORVEHICLE_SWITCH_ON_BODY = '#system_messages:collectorVehicle/switch_on/body'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -1238,6 +1247,7 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_REQUEST_NAME_CHANGE_FALLOUT_QUEUE_TYPE)
     RANKED_NOTIFICATIONSALL_BONUSNAME_ENUM = (RANKED_NOTIFICATIONS_BONUSNAME_YEARPOINTS,
      RANKED_NOTIFICATIONS_BONUSNAME_CRYSTAL,
+     RANKED_NOTIFICATIONS_BONUSNAME_EVENTCOIN,
      RANKED_NOTIFICATIONS_BONUSNAME_CREDITS,
      RANKED_NOTIFICATIONS_BONUSNAME_GOLD,
      RANKED_NOTIFICATIONS_BONUSNAME_BADGE,
@@ -1663,6 +1673,7 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_BUY_NOT_ENOUGH_CREDITS,
      VEHICLE_BUY_NOT_ENOUGH_GOLD,
      VEHICLE_BUY_WALLET_NOT_AVAILABLE,
+     VEHICLE_BUY_NOT_UNLOCKED_NATION,
      VEHICLE_RENT_SUCCESS,
      VEHICLE_RENT_BUYOPTION,
      VEHICLE_RENT_TIMERENT,
@@ -1791,6 +1802,7 @@ class SYSTEM_MESSAGES(object):
      ARTEFACT_BUY_NOT_ENOUGH_CREDITS,
      ARTEFACT_BUY_NOT_ENOUGH_GOLD,
      ARTEFACT_BUY_NOT_ENOUGH_CRYSTAL,
+     ARTEFACT_BUY_NOT_ENOUGH_EVENTCOIN,
      ARTEFACT_BUY_WALLET_NOT_AVAILABLE,
      ARTEFACT_BUY_SERVER_ERROR,
      ARTEFACT_BUY_SERVER_ERROR_CENTERDOWN,
@@ -1805,9 +1817,11 @@ class SYSTEM_MESSAGES(object):
      BATTLEBOOSTER_BUY_NOT_ENOUGH_CREDITS,
      BATTLEBOOSTER_BUY_NOT_ENOUGH_GOLD,
      BATTLEBOOSTER_BUY_NOT_ENOUGH_CRYSTAL,
+     BATTLEBOOSTER_BUY_NOT_ENOUGH_EVENTCOIN,
      BATTLEBOOSTER_BUY_CREDITS_ERROR,
      BATTLEBOOSTER_BUY_GOLD_ERROR,
      BATTLEBOOSTER_BUY_CRYSTAL_ERROR,
+     BATTLEBOOSTER_BUY_EVENTCOIN_ERROR,
      BATTLEBOOSTER_BUY_WALLET_NOT_AVAILABLE,
      BATTLEBOOSTER_BUY_SERVER_ERROR,
      BATTLEBOOSTER_BUY_SERVER_ERROR_CENTERDOWN,
@@ -2281,6 +2295,7 @@ class SYSTEM_MESSAGES(object):
      RANKED_NOTIFICATIONS_SINGLERANK_TEXT,
      RANKED_NOTIFICATIONS_BONUSNAME_YEARPOINTS,
      RANKED_NOTIFICATIONS_BONUSNAME_CRYSTAL,
+     RANKED_NOTIFICATIONS_BONUSNAME_EVENTCOIN,
      RANKED_NOTIFICATIONS_BONUSNAME_CREDITS,
      RANKED_NOTIFICATIONS_BONUSNAME_GOLD,
      RANKED_NOTIFICATIONS_BONUSVALUE_PREMIUMDAY,
@@ -2386,7 +2401,11 @@ class SYSTEM_MESSAGES(object):
      BATTLEPASS_SWITCH_ENABLED_BODY,
      UPGRADETROPHYDEVICE_SWITCH_ON_BODY,
      UPGRADETROPHYDEVICE_SWITCH_OFF_BODY,
-     BATTLEPASS_BADGEREMOVED_TEXT)
+     BATTLEPASS_BADGEREMOVED_TEXT,
+     COLLECTORVEHICLE_SWITCH_OFF_TITLE,
+     COLLECTORVEHICLE_SWITCH_OFF_BODY,
+     COLLECTORVEHICLE_SWITCH_ON_TITLE,
+     COLLECTORVEHICLE_SWITCH_ON_BODY)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

@@ -63,12 +63,16 @@ class Waiting(object):
         cls.__getWaiting().hide(resourceID())
 
     @classmethod
-    def suspend(cls):
-        cls.__getWaiting().suspend()
+    def suspend(cls, lockerID=None):
+        cls.__getWaiting().suspend(lockerID)
 
     @classmethod
-    def resume(cls):
-        cls.__getWaiting().resume()
+    def isResumeLocked(cls):
+        return cls.__getWaiting().isResumeLocked()
+
+    @classmethod
+    def resume(cls, lockerID=None, hard=False):
+        cls.__getWaiting().resume(lockerID, hard)
 
     @classmethod
     def isSuspended(cls):

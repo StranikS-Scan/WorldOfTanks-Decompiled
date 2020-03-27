@@ -6,6 +6,7 @@ from collections import namedtuple
 import logging
 from Event import Event
 from constants import IS_TUTORIAL_ENABLED, PremiumConfigs, DAILY_QUESTS_CONFIG
+from collector_vehicle import CollectorVehicleConsts
 from debug_utils import LOG_WARNING, LOG_DEBUG
 from battle_pass_common import BattlePassConfig, BATTLE_PASS_CONFIG_NAME
 from gui import GUI_SETTINGS, SystemMessages
@@ -191,6 +192,14 @@ class _StrongholdSettings(namedtuple('_StrongholdSettings', ('wgshHostUrl',))):
         return cls('')
 
 
+class _TournamentSettings(namedtuple('_TournamentSettings', ('tmsHostUrl',))):
+    __slots__ = ()
+
+    @classmethod
+    def defaults(cls):
+        return cls('')
+
+
 class _FrontlineSettings(namedtuple('_FrontlineSettings', ('flHostUrl', 'isEpicTrainingEnabled'))):
     __slots__ = ()
 
@@ -325,11 +334,11 @@ _EpicMetaGameConfig.__new__.__defaults__ = (0,
  {},
  {})
 
-class _EpicGameConfig(namedtuple('_EpicGameConfig', ('isEnabled', 'validVehicleLevels', 'seasons', 'cycleTimes', 'peripheryIDs', 'primeTimes'))):
+class _EpicGameConfig(namedtuple('_EpicGameConfig', ('isEnabled', 'validVehicleLevels', 'seasons', 'cycleTimes', 'peripheryIDs', 'primeTimes', 'reservesAvailableInFLMenu'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, validVehicleLevels=[], seasons={}, cycleTimes=(), peripheryIDs={}, primeTimes={})
+        defaults = dict(isEnabled=False, validVehicleLevels=[], seasons={}, cycleTimes=(), peripheryIDs={}, primeTimes={}, reservesAvailableInFLMenu=False)
         defaults.update(kwargs)
         return super(_EpicGameConfig, cls).__new__(cls, **defaults)
 
@@ -478,6 +487,7 @@ class ServerSettings(object):
         self.__clanProfile = _ClanProfile.defaults()
         self.__spgRedesignFeatures = _SpgRedesignFeatures.defaults()
         self.__strongholdSettings = _StrongholdSettings.defaults()
+        self.__tournamentSettings = _TournamentSettings.defaults()
         self.__frontlineSettings = _FrontlineSettings.defaults()
         self.__bwRankedBattles = _BwRankedBattles.defaults()
         self.__bwHallOfFame = _BwHallOfFame.defaults()
@@ -514,6 +524,9 @@ class ServerSettings(object):
         if 'strongholdSettings' in self.__serverSettings:
             settings = self.__serverSettings['strongholdSettings']
             self.__strongholdSettings = _StrongholdSettings(settings.get('wgshHostUrl', ''))
+        if 'tournamentSettings' in self.__serverSettings:
+            settings = self.__serverSettings['tournamentSettings']
+            self.__tournamentSettings = _TournamentSettings(settings.get('tmsHostUrl', ''))
         if 'frontlineSettings' in self.__serverSettings:
             settings = self.__serverSettings['frontlineSettings']
             self.__frontlineSettings = _FrontlineSettings(settings.get('flHostUrl', ''), settings.get('isEpicTrainingEnabled', False))
@@ -600,6 +613,8 @@ class ServerSettings(object):
         if BATTLE_PASS_CONFIG_NAME in serverSettingsDiff:
             self.__serverSettings[BATTLE_PASS_CONFIG_NAME] = serverSettingsDiff[BATTLE_PASS_CONFIG_NAME]
             self.__battlePassConfig = BattlePassConfig(self.__serverSettings.get(BATTLE_PASS_CONFIG_NAME, {}))
+        if CollectorVehicleConsts.CONFIG_NAME in serverSettingsDiff:
+            self.__serverSettings[CollectorVehicleConsts.CONFIG_NAME] = serverSettingsDiff[CollectorVehicleConsts.CONFIG_NAME]
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -639,6 +654,10 @@ class ServerSettings(object):
     @property
     def stronghold(self):
         return self.__strongholdSettings
+
+    @property
+    def tournament(self):
+        return self.__tournamentSettings
 
     @property
     def frontline(self):
@@ -699,6 +718,9 @@ class ServerSettings(object):
 
     def isStrongholdsEnabled(self):
         return self.__getGlobalSetting('strongholdSettings', {}).get('isStrongholdsEnabled', False)
+
+    def isTournamentEnabled(self):
+        return self.__getGlobalSetting('tournamentSettings', {}).get('isTournamentEnabled', False)
 
     def isLeaguesEnabled(self):
         return self.__getGlobalSetting('strongholdSettings', {}).get('isLeaguesEnabled', False)
@@ -848,9 +870,6 @@ class ServerSettings(object):
     def isPreferredMapsEnabled(self):
         return self.__getGlobalSetting('isPreferredMapsEnabled', False)
 
-    def isGamefaceEnabled(self):
-        return self.__getGlobalSetting('isGamefaceEnabled', False)
-
     def isBattleBoostersEnabled(self):
         return self.__getGlobalSetting('isBattleBoostersEnabled', False)
 
@@ -865,6 +884,9 @@ class ServerSettings(object):
 
     def isTrophyDevicesEnabled(self):
         return self.__getGlobalSetting('isTrophyDevicesEnabled', False)
+
+    def isCollectorVehicleEnabled(self):
+        return self.__getGlobalSetting(CollectorVehicleConsts.CONFIG_NAME, {}).get(CollectorVehicleConsts.IS_ENABLED, False)
 
     def getFriendlyFireBonusTypes(self):
         return self.__getGlobalSetting('isNoAllyDamage', set())

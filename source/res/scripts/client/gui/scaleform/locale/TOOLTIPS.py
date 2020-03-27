@@ -105,6 +105,7 @@ class TOOLTIPS(object):
     AWARDITEM_CREDITS = '#tooltips:awardItem/credits'
     AWARDITEM_GOLD = '#tooltips:awardItem/gold'
     AWARDITEM_CRYSTAL = '#tooltips:awardItem/crystal'
+    AWARDITEM_EVENTCOIN = '#tooltips:awardItem/eventCoin'
     AWARDITEM_FREEXP = '#tooltips:awardItem/freeXP'
     AWARDITEM_PREMIUM = '#tooltips:awardItem/premium'
     FALLOUTBATTLESELECTORWINDOW_BTNINSQUADDISABLED = '#tooltips:falloutBattleSelectorWindow/btnInSquadDisabled'
@@ -344,6 +345,8 @@ class TOOLTIPS(object):
     SETTINGS_FEEDBACK_INDICATORS_SHOWALLIES_BODY = '#tooltips:settings/feedback/indicators/showAllies/body'
     SETTINGS_SOUND_DEVICEALERT_HEADER = '#tooltips:settings/sound/deviceAlert/header'
     SETTINGS_SOUND_DEVICEALERT_BODY = '#tooltips:settings/sound/deviceAlert/body'
+    SETTINGS_SOUND_SUBTITLES_HEADER = '#tooltips:settings/sound/subtitles/header'
+    SETTINGS_SOUND_SUBTITLES_BODY = '#tooltips:settings/sound/subtitles/body'
     LOBBYMENU_VERSIONINFOBUTTON_BODY = '#tooltips:lobbyMenu/versionInfoButton/body'
     WINDOWHELP_HEADER = '#tooltips:windowHelp/header'
     WINDOWHELP_BODY = '#tooltips:windowHelp/body'
@@ -645,6 +648,7 @@ class TOOLTIPS(object):
     ACHIEVEMENT_PARAMS_VEHICLESTAKEPART = '#tooltips:achievement/params/vehiclesTakePart'
     ACHIEVEMENT_PARAMS_VEHICLESTOKILL = '#tooltips:achievement/params/vehiclesToKill'
     ACHIEVEMENT_PARAMS_VEHICLESTORESEARCH = '#tooltips:achievement/params/vehiclesToResearch'
+    ACHIEVEMENT_PARAMS_VEHICLESTOBUY = '#tooltips:achievement/params/vehiclesToBuy'
     ACHIEVEMENT_PARAMS_VEHICLES = '#tooltips:achievement/params/vehicles'
     ACHIEVEMENT_ACTION_UNAVAILABLE_DESCR = '#tooltips:achievement/action/unavailable/descr'
     ACHIEVEMENT_ACTION_UNAVAILABLE_TITLE = '#tooltips:achievement/action/unavailable/title'
@@ -1273,6 +1277,8 @@ class TOOLTIPS(object):
     RESEARCHPAGE_VEHICLE_STATUS_PARENTMODULEISLOCKED_HEADER = '#tooltips:researchPage/vehicle/status/parentModuleIsLocked/header'
     RESEARCHPAGE_VEHICLE_STATUS_PARENTMODULEISLOCKED_TEXT = '#tooltips:researchPage/vehicle/status/parentModuleIsLocked/text'
     RESEARCHPAGE_VEHICLE_STATUS_PARENTMODULEISLOCKED_BODY = '#tooltips:researchPage/vehicle/status/parentModuleIsLocked/body'
+    RESEARCHPAGE_COLLECTIBLEVEHICLE_VEHICLEENABLED_HEADER = '#tooltips:researchPage/collectibleVehicle/vehicleEnabled/header'
+    RESEARCHPAGE_COLLECTIBLEVEHICLE_VEHICLEENABLED_BODY = '#tooltips:researchPage/collectibleVehicle/vehicleEnabled/body'
     TECHTREEPAGE_NATIONS_USSR = '#tooltips:techTreePage/nations/ussr'
     TECHTREEPAGE_NATIONS_GERMANY = '#tooltips:techTreePage/nations/germany'
     TECHTREEPAGE_NATIONS_USA = '#tooltips:techTreePage/nations/usa'
@@ -1290,6 +1296,17 @@ class TOOLTIPS(object):
     TECHTREEPAGE_BLUEPRINTCONVERTTOOLTIP_BODY = '#tooltips:techTreePage/blueprintConvertTooltip/body'
     TECHTREEPAGE_BLUEPRINTSSWITCHTOOLTIPDISABLED_HEADER = '#tooltips:techTreePage/blueprintsSwitchTooltipDisabled/header'
     TECHTREEPAGE_BLUEPRINTSSWITCHTOOLTIPDISABLED_BODY = '#tooltips:techTreePage/blueprintsSwitchTooltipDisabled/body'
+    COLLECTIBLEVEHICLETOOLTIP_HEADER = '#tooltips:collectibleVehicleTooltip/header'
+    COLLECTIBLEVEHICLETOOLTIP_STATISTICS = '#tooltips:collectibleVehicleTooltip/statistics'
+    COLLECTIBLEVEHICLETOOLTIP_DESCRIPTION = '#tooltips:collectibleVehicleTooltip/description'
+    COLLECTIBLEVEHICLETOOLTIP_ELITE = '#tooltips:collectibleVehicleTooltip/elite'
+    COLLECTIBLEVEHICLETOOLTIP_STATUS_PURCHASEUNAVAILABLE = '#tooltips:collectibleVehicleTooltip/status/purchaseUnavailable'
+    COLLECTIBLEVEHICLETOOLTIP_STATUS_PURCHASEAVAILABLE = '#tooltips:collectibleVehicleTooltip/status/purchaseAvailable'
+    COLLECTIBLEVEHICLETOOLTIP_STATUS_CONDITION = '#tooltips:collectibleVehicleTooltip/status/condition'
+    COLLECTIBLEVEHICLETOOLTIP_STATUS_PURCHASED = '#tooltips:collectibleVehicleTooltip/status/purchased'
+    COLLECTIBLEVEHICLETOOLTIP_STATUS_LEVEL = '#tooltips:collectibleVehicleTooltip/status/level'
+    COLLECTIBLEVEHICLETOOLTIP_SWITCHOFF_HEADER = '#tooltips:collectibleVehicleTooltip/switchOff/header'
+    COLLECTIBLEVEHICLETOOLTIP_SWITCHOFF_TEXT = '#tooltips:collectibleVehicleTooltip/switchOff/text'
     BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_HEADER = '#tooltips:blueprint/VehicleBlueprintTooltip/header'
     BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_DESCRIPTIONFIRST = '#tooltips:blueprint/VehicleBlueprintTooltip/descriptionFirst'
     BLUEPRINT_VEHICLEBLUEPRINTTOOLTIP_DESCRIPTIONSECOND = '#tooltips:blueprint/VehicleBlueprintTooltip/descriptionSecond'
@@ -1730,6 +1747,8 @@ class TOOLTIPS(object):
     AWARDITEM_CRYSTAL_BODY = '#tooltips:awardItem/crystal/body'
     AWARDITEM_GOLD_HEADER = '#tooltips:awardItem/gold/header'
     AWARDITEM_GOLD_BODY = '#tooltips:awardItem/gold/body'
+    AWARDITEM_EVENTCOIN_HEADER = '#tooltips:awardItem/eventCoin/header'
+    AWARDITEM_EVENTCOIN_BODY = '#tooltips:awardItem/eventCoin/body'
     AWARDITEM_FREEXP_HEADER = '#tooltips:awardItem/freeXP/header'
     AWARDITEM_FREEXP_BODY = '#tooltips:awardItem/freeXP/body'
     AWARDITEM_PREMIUM_HEADER = '#tooltips:awardItem/premium/header'
@@ -2017,6 +2036,8 @@ class TOOLTIPS(object):
     VEHICLEPREVIEW_BUYBUTTON_NOTENOUGHPRESTIGEPOINTS_HEADER = '#tooltips:vehiclePreview/buyButton/notEnoughPrestigePoints/header'
     VEHICLEPREVIEW_BUYBUTTON_ENDTIME_HEADER = '#tooltips:vehiclePreview/buyButton/endTime/header'
     VEHICLEPREVIEW_BUYBUTTON_ENDTIME_BODY = '#tooltips:vehiclePreview/buyButton/endTime/body'
+    VEHICLEPREVIEW_BUYBUTTON_NOTUNLOCKEDNATION_HEADER = '#tooltips:vehiclePreview/buyButton/notUnlockedNation/header'
+    VEHICLEPREVIEW_BUYBUTTON_NOTUNLOCKEDNATION_BODY = '#tooltips:vehiclePreview/buyButton/notUnlockedNation/body'
     VEHICLEPREVIEW_MODULS_HEADER = '#tooltips:vehiclePreview/moduls/header'
     VEHICLEPREVIEW_MODULS_BODY = '#tooltips:vehiclePreview/moduls/body'
     VEHICLEPREVIEW_MODULSNOMODULES_HEADER = '#tooltips:vehiclePreview/modulsnoModules/header'
@@ -2696,6 +2717,7 @@ class TOOLTIPS(object):
     MARATHON_HEADER = '#tooltips:marathon/header'
     MARATHON_BODY = '#tooltips:marathon/body'
     MARATHON_BODY_EXTRA = '#tooltips:marathon/body/extra'
+    MARATHON_BODY_EXTRA_SMART = '#tooltips:marathon/body/extra_smart'
     MARATHON_STATE_START = '#tooltips:marathon/state/start'
     MARATHON_STATE_END = '#tooltips:marathon/state/end'
     MARATHON_STATE_COMPLETE = '#tooltips:marathon/state/complete'
@@ -3052,6 +3074,7 @@ class TOOLTIPS(object):
      AWARDITEM_CRYSTAL_HEADER,
      AWARDITEM_RANDOMBOOKLET_HEADER,
      AWARDITEM_GOLD_HEADER,
+     AWARDITEM_EVENTCOIN_HEADER,
      AWARDITEM_FREEXP_HEADER,
      AWARDITEM_PREMIUM_HEADER,
      AWARDITEM_PREMIUM_PLUS_HEADER,
@@ -3110,6 +3133,7 @@ class TOOLTIPS(object):
      AWARDITEM_RANDOMBOOKLET_BODY,
      AWARDITEM_CRYSTAL_BODY,
      AWARDITEM_GOLD_BODY,
+     AWARDITEM_EVENTCOIN_BODY,
      AWARDITEM_FREEXP_BODY,
      AWARDITEM_PREMIUM_BODY,
      AWARDITEM_PREMIUM_PLUS_BODY,
@@ -3183,7 +3207,9 @@ class TOOLTIPS(object):
      VEHICLEPREVIEW_BUYBUTTON_NOTENOUGHGOLD_BODY,
      VEHICLEPREVIEW_BUYBUTTON_NOTENOUGHPRESTIGEPOINTS_HEADER,
      VEHICLEPREVIEW_BUYBUTTON_ENDTIME_HEADER,
-     VEHICLEPREVIEW_BUYBUTTON_ENDTIME_BODY)
+     VEHICLEPREVIEW_BUYBUTTON_ENDTIME_BODY,
+     VEHICLEPREVIEW_BUYBUTTON_NOTUNLOCKEDNATION_HEADER,
+     VEHICLEPREVIEW_BUYBUTTON_NOTUNLOCKEDNATION_BODY)
     TANK_PARAMS_AVGPARAMCOMMENT_ENUM = (TANK_PARAMS_AVGPARAMCOMMENT_DAMAGE, TANK_PARAMS_AVGPARAMCOMMENT_PIERCINGPOWER)
     SKILLS_ALL_HEADER_ENUM = (SKILLS_CAMOUFLAGE_HEADER,
      SKILLS_BROTHERHOOD_HEADER,

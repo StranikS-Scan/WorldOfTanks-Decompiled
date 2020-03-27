@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/data.py
+import logging
+from itertools import chain
+import typing
 from CurrentVehicle import g_currentVehicle
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR
 from gui.Scaleform.daapi.view.lobby.techtree import nodes
 from gui.Scaleform.daapi.view.lobby.techtree.dumpers import _BaseDumper
 from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE, MAX_PATH_LIMIT, SelectedNation
@@ -18,8 +20,19 @@ from helpers import dependency
 from items import ITEM_TYPE_NAMES, getTypeOfCompactDescr as getTypeOfCD, vehicles as vehicles_core
 from skeletons.gui.game_control import ITradeInController, IBootcampController
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
+_logger = logging.getLogger(__name__)
 __all__ = ('ResearchItemsData', 'NationTreeData')
+
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def _checkCollectibleEnabled(state, lobbyContext=None):
+    if lobbyContext.getServerSettings().isCollectorVehicleEnabled():
+        state = NODE_STATE.removeIfHas(state, NODE_STATE_FLAGS.PURCHASE_DISABLED)
+    else:
+        state = NODE_STATE.addIfNot(state, NODE_STATE_FLAGS.PURCHASE_DISABLED)
+    return state
+
 
 class _ItemsData(object):
     tradeIn = dependency.descriptor(ITradeInController)
@@ -40,7 +53,7 @@ class _ItemsData(object):
         return
 
     def __del__(self):
-        LOG_DEBUG('Data deleted:', self)
+        _logger.debug('Data deleted: %s', self)
 
     @prbDispatcherProperty
     def prbDispatcher(self):
@@ -76,7 +89,7 @@ class _ItemsData(object):
 
     def getInventoryVehicles(self):
         nodeCDs = [ node.getNodeCD() for node in self._getNodesToInvalidate() ]
-        LOG_DEBUG('getInventoryVehicles', nodeCDs)
+        _logger.debug('getInventoryVehicles: %d', nodeCDs)
         inventoryVehicles = self._items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.IN_CD_LIST(nodeCDs))
         return {item.invID:item for item in inventoryVehicles.itervalues()}
 
@@ -115,6 +128,7 @@ class _ItemsData(object):
                 state = NODE_STATE.removeIfHas(state, NODE_STATE_FLAGS.ENOUGH_MONEY)
                 state = NODE_STATE.addIfNot(state, NODE_STATE_FLAGS.IN_INVENTORY)
                 state = NODE_STATE.removeIfHas(state, NODE_STATE_FLAGS.VEHICLE_IN_RENT)
+                state = NODE_STATE.removeIfHas(state, NODE_STATE_FLAGS.LAST_2_BUY)
                 if item.isRented and not item.isPremiumIGR:
                     state = self._checkExpiredRent(state, item)
                     state = self._checkMoney(state, nodeCD)
@@ -127,6 +141,7 @@ class _ItemsData(object):
                 state = NODE_STATE.removeIfHas(state, NODE_STATE_FLAGS.VEHICLE_IN_RENT)
                 state = NODE_STATE.removeIfHas(state, NODE_STATE_FLAGS.CAN_SELL)
                 state = NODE_STATE.removeIfHas(state, NODE_STATE_FLAGS.SELECTED)
+                state = NODE_STATE.changeLast2Buy(state, self._needLast2BuyFlag(nodeCD))
                 state = self._checkMoney(state, nodeCD)
             state = self._checkBuyingActionState(state, item)
             state = self._checkRestoreState(state, item)
@@ -237,11 +252,15 @@ class _ItemsData(object):
         return state
 
     def _checkBuyingActionState(self, state, item):
+        state = NODE_STATE.removeIfHas(state, NODE_STATE_FLAGS.ACTION)
+        if item.buyPrices.itemPrice.isActionPrice() and not item.isRestorePossible():
+            state = NODE_STATE.addIfNot(state, NODE_STATE_FLAGS.ACTION)
+        return state
+
+    def _checkCollectibleActionState(self, state, item):
+        state = NODE_STATE.removeIfHas(state, NODE_STATE_FLAGS.COLLECTIBLE_ACTION)
         if item.buyPrices.itemPrice.isActionPrice():
-            if item.isRestorePossible():
-                state = NODE_STATE.removeIfHas(state, NODE_STATE_FLAGS.ACTION)
-            else:
-                state = NODE_STATE.addIfNot(state, NODE_STATE_FLAGS.ACTION)
+            state = NODE_STATE.addIfNot(state, NODE_STATE_FLAGS.COLLECTIBLE_ACTION)
         return state
 
     def _addNode(self, nodeCD, node):
@@ -298,6 +317,9 @@ class _ItemsData(object):
         return item.mayObtainWithMoneyExchange(money, self._items.shop.exchangeRate)
 
     def _canSell(self, nodeCD):
+        raise NotImplementedError
+
+    def _needLast2BuyFlag(self, nodeCD):
         raise NotImplementedError
 
     def _invalidateMoney(self, nodes_):
@@ -418,7 +440,7 @@ class ResearchItemsData(_ItemsData):
                 mapping.pop(nodeCD)
 
         next2Unlock = self._findNext2UnlockItems(mapping.values())
-        return (next2Unlock, unlocked)
+        return (next2Unlock, unlocked, [])
 
     def invalidateInstalled(self):
         nodes_ = self._getNodesToInvalidate()
@@ -439,6 +461,11 @@ class ResearchItemsData(_ItemsData):
                 result.append((nodeCD, state))
 
         return result
+
+    def invalidateVehicleCollectorState(self):
+        node = self.getRootNode()
+        state = _checkCollectibleEnabled(node.getState())
+        return [(self.getRootCD(), state)]
 
     def _addTopNode(self, nodeCD, node):
         index = len(self._topLevel)
@@ -495,6 +522,9 @@ class ResearchItemsData(_ItemsData):
             canSell = item.isInInventory
         return canSell
 
+    def _needLast2BuyFlag(self, nodeCD):
+        return False
+
     def _getRootUnlocksDescrs(self, rootItem):
         return rootItem.getUnlocksDescrs()
 
@@ -537,6 +567,11 @@ class ResearchItemsData(_ItemsData):
                 state |= NODE_STATE_FLAGS.ELITE
             if guiItem.isPremium:
                 state |= NODE_STATE_FLAGS.PREMIUM
+            if guiItem.isCollectible:
+                state |= NODE_STATE_FLAGS.COLLECTIBLE
+                state = _checkCollectibleEnabled(state)
+                if not guiItem.isInInventory:
+                    state = self._checkCollectibleActionState(state, guiItem)
             if guiItem.isRented and not guiItem.isPremiumIGR:
                 state = self._checkExpiredRent(state, guiItem)
                 if not guiItem.isTelecom:
@@ -699,6 +734,7 @@ class NationTreeData(_ItemsData):
     def invalidateUnlocks(self, unlocks):
         next2Unlock = []
         unlocked = []
+        prevUnlocked = []
         unlockStats = self.getUnlockStats()
         items = g_techTreeDP.getNext2UnlockByItems(unlocks, **unlockStats._asdict())
         if items:
@@ -706,7 +742,9 @@ class NationTreeData(_ItemsData):
         filtered = [ unlock for unlock in unlocks if getTypeOfCD(unlock) == GUI_ITEM_TYPE.VEHICLE ]
         if filtered:
             unlocked = [ (item, self._change2UnlockedByCD(item)) for item in filtered ]
-        return (next2Unlock, unlocked)
+            parents = map(g_techTreeDP.getTopLevel, filtered)
+            prevUnlocked = [ (item, self._changePreviouslyUnlockedByCD(item)) for item in chain(*parents) ]
+        return (next2Unlock, unlocked, prevUnlocked)
 
     def invalidateXpCosts(self):
         result = []
@@ -725,8 +763,8 @@ class NationTreeData(_ItemsData):
     def _changeNext2Unlock(self, nodeCD, unlockProps, unlockStats):
         try:
             node = self._nodes[self._nodesIdx[nodeCD]]
-        except KeyError:
-            LOG_CURRENT_EXCEPTION()
+        except KeyError as e:
+            _logger.exception(e)
             return 0
 
         state = NODE_STATE.setNext2Unlock(node.getState())
@@ -742,14 +780,31 @@ class NationTreeData(_ItemsData):
         node.setUnlockProps(unlockProps)
         return state
 
+    def _change2Unlocked(self, node):
+        state = super(NationTreeData, self)._change2Unlocked(node)
+        return NODE_STATE.changeLast2Buy(state, self._isLastUnlocked(node.getNodeCD()))
+
+    def _changePreviouslyUnlocked(self, node):
+        state = node.getState()
+        return NODE_STATE.changeLast2Buy(state, self._isLastUnlocked(node.getNodeCD()))
+
     def _change2UnlockedByCD(self, nodeCD):
         try:
             node = self._nodes[self._nodesIdx[nodeCD]]
-        except KeyError:
-            LOG_CURRENT_EXCEPTION()
+        except KeyError as e:
+            _logger.exception(e)
             return 0
 
         return self._change2Unlocked(node)
+
+    def _changePreviouslyUnlockedByCD(self, nodeCD):
+        try:
+            node = self._nodes[self._nodesIdx[nodeCD]]
+        except KeyError as e:
+            _logger.exception(e)
+            return 0
+
+        return self._changePreviouslyUnlocked(node)
 
     def _makeRealExposedNode(self, node, guiItem, unlockStats, displayInfo):
         nodeCD = node.nodeCD
@@ -762,8 +817,11 @@ class NationTreeData(_ItemsData):
                 state |= NODE_STATE_FLAGS.IN_INVENTORY
                 if self._canSell(nodeCD):
                     state |= NODE_STATE_FLAGS.CAN_SELL
-            elif canBuyGoldForItemThroughWeb(nodeCD) or self._mayObtainForMoney(nodeCD):
-                state |= NODE_STATE_FLAGS.ENOUGH_MONEY
+            else:
+                if canBuyGoldForItemThroughWeb(nodeCD) or self._mayObtainForMoney(nodeCD):
+                    state |= NODE_STATE_FLAGS.ENOUGH_MONEY
+                if self._isLastUnlocked(nodeCD):
+                    state |= NODE_STATE_FLAGS.LAST_2_BUY
             if nodeCD in self._wereInBattle:
                 state |= NODE_STATE_FLAGS.WAS_IN_BATTLE
             if guiItem.buyPrices.itemPrice.isActionPrice() and not guiItem.isRestorePossible():
@@ -807,6 +865,17 @@ class NationTreeData(_ItemsData):
     def _canSell(self, nodeCD):
         return self.getItem(nodeCD).canSell
 
+    def _needLast2BuyFlag(self, nodeCD):
+        return self._isLastUnlocked(nodeCD)
+
+    def _isLastUnlocked(self, nodeCD):
+        if self.getItem(nodeCD).isPremium:
+            return False
+        nextLevels = g_techTreeDP.getNextLevel(nodeCD)
+        isAvailable = lambda self, nextCD: self.getItem(nextCD).isUnlocked or g_techTreeDP.isVehicleAvailableToUnlock(nextCD)[0]
+        isNextUnavailable = any((not isAvailable(self, nextCD) for nextCD in nextLevels))
+        return isNextUnavailable or not nextLevels
+
     def _findSelectedNode(self, nationID):
         if not g_currentVehicle.isPresent():
             return
@@ -822,8 +891,10 @@ class NationTreeData(_ItemsData):
             if vehicle.isInInventory:
                 node.addStateFlag(NODE_STATE_FLAGS.SELECTED)
             else:
-                LOG_ERROR('Current vehicle not found in inventory', nodeCD)
+                _logger.error('Current vehicle not found in inventory: %d', nodeCD)
+        elif vehicle.isCollectible:
+            _logger.info('Current vehicle with id=%d is collectible. It is not in nation tree', nodeCD)
         elif vehicle.isHidden:
-            LOG_DEBUG('Current vehicle is hidden. Is it define in nation tree:', nodeCD)
+            _logger.debug('Current vehicle is hidden. Is it define in nation tree: %d', nodeCD)
         else:
-            LOG_ERROR('Current vehicle not found in nation tree', nodeCD)
+            _logger.error('Current vehicle not found in nation tree: %d', nodeCD)

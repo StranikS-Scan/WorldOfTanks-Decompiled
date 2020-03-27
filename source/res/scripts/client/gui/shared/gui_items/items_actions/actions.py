@@ -5,6 +5,7 @@ from adisp import process, async
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import SystemMessages, DialogsInterface
 from gui.Scaleform.Waiting import Waiting
+from gui.Scaleform.daapi.view.bootcamp.lobby.unlock import BCUnlockItemConfirmator
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import BuyModuleMeta
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import LocalSellModuleMeta
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import MAX_ITEMS_FOR_OPERATION
@@ -25,7 +26,7 @@ from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
 from gui.shared.gui_items.processors.common import ConvertBlueprintFragmentProcessor
 from gui.shared.gui_items.processors.common import UseCrewBookProcessor
 from gui.shared.gui_items.processors.goodies import BoosterBuyer
-from gui.shared.gui_items.processors.module import BuyAndInstallItemProcessor
+from gui.shared.gui_items.processors.module import BuyAndInstallItemProcessor, BCBuyAndInstallItemProcessor
 from gui.shared.gui_items.processors.module import ModuleSeller
 from gui.shared.gui_items.processors.module import MultipleModulesSeller
 from gui.shared.gui_items.processors.module import getInstallerProcessor
@@ -258,6 +259,8 @@ class VehicleBuyAction(BuyAction):
 
 
 class _UnlockItem(CachedItemAction):
+    _itemConfirmatorCls = unlock.UnlockItemConfirmator
+    _itemValidatorCls = unlock.UnlockItemValidator
 
     def __init__(self, itemCD, unlockProps):
         super(_UnlockItem, self).__init__()
@@ -276,7 +279,7 @@ class _UnlockItem(CachedItemAction):
     def _createPlugins(self):
         self.__costCtx = self.__getCostCtx()
         unlockCtx = unlock.UnlockItemCtx(self._item.intCD, self._item.itemTypeID, self._unlockProps.parentID, self._unlockProps.unlockIdx)
-        plugins = [unlock.UnlockItemConfirmator(unlockCtx, self.__costCtx, isEnabled=not self.skipConfirm), unlock.UnlockItemValidator(unlockCtx, self.__costCtx)]
+        plugins = [self._itemConfirmatorCls(unlockCtx, self.__costCtx, isEnabled=not self.skipConfirm), self._itemValidatorCls(unlockCtx, self.__costCtx)]
         return plugins
 
     def _showResult(self, result):
@@ -324,6 +327,11 @@ class UnlockItemAction(_UnlockItem):
     def __doUnlockItem(self, plugins):
         result = yield unlock.UnlockItemProcessor(self._unlockProps.parentID, self._unlockProps.unlockIdx, plugins=plugins).request()
         self._showResult(result)
+
+
+class BCUnlockItemAction(UnlockItemAction):
+    _itemConfirmatorCls = BCUnlockItemConfirmator
+    _itemValidatorCls = unlock.UnlockItemValidator
 
 
 class UnlockItemActionWithResult(_UnlockItem):
@@ -375,14 +383,14 @@ class InstallItemAction(BuyAction):
         RequestState.sent(state)
         if item.isInInventory:
             proc = getInstallerProcessor(vehicle, item, conflictedEqs=conflictedEqs, skipConfirm=self.skipConfirm)
-            if not proc.gamefaceEnabled:
+            if not proc.IS_GAMEFACE_SUPPORTED:
                 Waiting.show('applyModule')
             result = yield proc.request()
             processMsg(result)
             if result.success and item.itemTypeID in (GUI_ITEM_TYPE.TURRET, GUI_ITEM_TYPE.GUN):
                 vehicle = self._itemsCache.items.getItemByCD(vehicle.intCD)
                 yield tryToLoadDefaultShellsLayout(vehicle)
-            if not proc.gamefaceEnabled:
+            if not proc.IS_GAMEFACE_SUPPORTED:
                 Waiting.hide('applyModule')
         RequestState.received(state)
         yield lambda callback=None: callback
@@ -390,6 +398,7 @@ class InstallItemAction(BuyAction):
 
 
 class BuyAndInstallItemAction(InstallItemAction):
+    _buyAndInstallItemProcessorCls = BuyAndInstallItemProcessor
 
     def doAction(self):
         if RequestState.inProcess('buyAndInstall'):
@@ -413,9 +422,7 @@ class BuyAndInstallItemAction(InstallItemAction):
         if self._mayObtainForMoney(item):
             vehicle = self._itemsCache.items.getItemByCD(rootCD)
             gunCD = getGunCD(item, vehicle)
-            proc = BuyAndInstallItemProcessor(vehicle, item, 0, gunCD, conflictedEqs=conflictedEqs, skipConfirm=self.skipConfirm)
-            if not proc.gamefaceEnabled:
-                Waiting.show('buyAndInstall')
+            proc = self._buyAndInstallItemProcessorCls(vehicle, item, 0, gunCD, conflictedEqs=conflictedEqs, skipConfirm=self.skipConfirm)
             result = yield proc.request()
             processMsg(result)
             if result.success and item.itemTypeID in (GUI_ITEM_TYPE.TURRET, GUI_ITEM_TYPE.GUN):
@@ -423,11 +430,13 @@ class BuyAndInstallItemAction(InstallItemAction):
                 vehicle = self._itemsCache.items.getItemByCD(rootCD)
                 if item.isInstalled(vehicle):
                     yield tryToLoadDefaultShellsLayout(vehicle)
-            if not proc.gamefaceEnabled:
-                Waiting.hide('buyAndInstall')
         RequestState.received(state)
         yield lambda callback=None: callback
         return
+
+
+class BCBuyAndInstallItemAction(BuyAndInstallItemAction):
+    _buyAndInstallItemProcessorCls = BCBuyAndInstallItemProcessor
 
 
 class SetVehicleModuleAction(BuyAction):
@@ -458,11 +467,11 @@ class SetVehicleModuleAction(BuyAction):
                 if oldComponentItem:
                     if oldComponentItem.itemTypeID in (GUI_ITEM_TYPE.OPTIONALDEVICE, GUI_ITEM_TYPE.BATTLE_BOOSTER):
                         proc = getInstallerProcessor(vehicle, oldComponentItem, self.__slotIdx, False, True, skipConfirm=self.skipConfirm)
-                        if not proc.gamefaceEnabled:
+                        if not proc.IS_GAMEFACE_SUPPORTED:
                             Waiting.show('installEquipment')
                         result = yield proc.request()
                         processMsg(result)
-                        if not proc.gamefaceEnabled:
+                        if not proc.IS_GAMEFACE_SUPPORTED:
                             Waiting.hide('installEquipment')
                         if not result.success:
                             return
@@ -476,22 +485,18 @@ class SetVehicleModuleAction(BuyAction):
                         vehicle = self._itemsCache.items.getVehicle(self.__vehInvID)
                         gunCD = getGunCD(newComponentItem, vehicle)
                         proc = BuyAndInstallItemProcessor(vehicle, newComponentItem, self.__slotIdx, gunCD, conflictedEqs=conflictedEqs, skipConfirm=self.skipConfirm)
-                        if not proc.gamefaceEnabled:
-                            Waiting.show('buyAndInstall')
                         result = yield proc.request()
                         processMsg(result)
                         if result.success and newComponentItem.itemTypeID in (GUI_ITEM_TYPE.TURRET, GUI_ITEM_TYPE.GUN):
                             newComponentItem = self._itemsCache.items.getItemByCD(int(self.__newItemCD))
                             vehicle = self._itemsCache.items.getItemByCD(vehicle.intCD)
-                            if newComponentItem.isInstalled(vehicle):
-                                yield tryToLoadDefaultShellsLayout(vehicle)
-                        proc.gamefaceEnabled or Waiting.hide('buyAndInstall')
+                            newComponentItem.isInstalled(vehicle) and (yield tryToLoadDefaultShellsLayout(vehicle))
                 else:
                     yield lambda callback=None: callback
             else:
                 conflictedEqs = newComponentItem.getConflictedEquipments(vehicle)
                 proc = getInstallerProcessor(vehicle, newComponentItem, self.__slotIdx, not self.__isRemove, isUseMoney, conflictedEqs, self.skipConfirm)
-                if not proc.gamefaceEnabled:
+                if not proc.IS_GAMEFACE_SUPPORTED:
                     Waiting.show('applyModule')
                 result = yield proc.request()
                 processMsg(result)
@@ -500,7 +505,7 @@ class SetVehicleModuleAction(BuyAction):
                     vehicle = self._itemsCache.items.getItemByCD(vehicle.intCD)
                     if newComponentItem.isInstalled(vehicle):
                         yield tryToLoadDefaultShellsLayout(vehicle)
-                if not proc.gamefaceEnabled:
+                if not proc.IS_GAMEFACE_SUPPORTED:
                     Waiting.hide('applyModule')
             return
 

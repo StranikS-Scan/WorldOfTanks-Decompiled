@@ -11,7 +11,6 @@ from gui.Scaleform.daapi.view.battle.epic import markers2d
 from gui.Scaleform.daapi.view.battle.shared import crosshair
 from gui.Scaleform.daapi.view.battle.shared import period_music_listener
 from gui.Scaleform.daapi.view.battle.epic import finish_sound_player, drone_music_player
-from PlayerEvents import g_playerEvents
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
 import CommandMapping
 from constants import ARENA_PERIOD
@@ -147,7 +146,6 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
         self.__pageState = PageStates.COUNTDOWN
         self.__topState = PageStates.NONE
         self.__activeState = PageStates.NONE
-        self.__ctrlListener = False
         return
 
     def _invalidateState(self):
@@ -195,11 +193,6 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
 
     def _populate(self):
         super(EpicBattlePage, self)._populate()
-        self.sessionProvider.onBattleSessionStart += self.__onBattleSessionStart
-        self.sessionProvider.onBattleSessionStop += self.__onBattleSessionStop
-        self.__startCtrlListeners()
-        g_playerEvents.onRoundFinished += self.__onRoundFinished
-        self.app.registerGuiKeyHandler(self)
         arena = self.sessionProvider.arenaVisitor.getArenaSubscription()
         if arena is not None:
             arena.onPeriodChange += self.__arena_onPeriodChange
@@ -207,10 +200,6 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
         return
 
     def _dispose(self):
-        self.sessionProvider.onBattleSessionStart -= self.__onBattleSessionStart
-        self.sessionProvider.onBattleSessionStop -= self.__onBattleSessionStop
-        self.__stopCtrlListeners()
-        g_playerEvents.onRoundFinished -= self.__onRoundFinished
         arena = self.sessionProvider.arenaVisitor.getArenaSubscription()
         if arena is not None:
             arena.onPeriodChange -= self.__arena_onPeriodChange
@@ -220,7 +209,7 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
     def __arena_onPeriodChange(self, period, *args):
         if self.__battleStarted:
             return
-        if period <= ARENA_PERIOD.PREBATTLE:
+        if period in (ARENA_PERIOD.WAITING, ARENA_PERIOD.IDLE):
             if self.__pageState != PageStates.COUNTDOWN:
                 self.__pageState = PageStates.COUNTDOWN
                 self._invalidateState()
@@ -281,7 +270,7 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
         if not isShown and self.__topState == PageStates.TABSCREEN:
             self.__topState = PageStates.NONE
         elif isShown and self.__topState != PageStates.RADIAL:
-            self.__checkOverviewmap()
+            self.__checkOverviewMap()
             if self.__pageState == PageStates.RESPAWN:
                 BigWorld.worldDrawEnabled(True)
             self.__topState = PageStates.TABSCREEN
@@ -309,7 +298,7 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
         if specCtrl is None:
             return
         else:
-            self.__checkOverviewmap()
+            self.__checkOverviewMap()
             self.__checkRadialMenu()
             if specCtrl.spectatorViewMode == EPIC_CONSTS.SPECTATOR_MODE_FREECAM:
                 self.__pageState = PageStates.SPECTATOR_FREE
@@ -341,11 +330,11 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
         if not self._isVisible and isVisible:
             self._toggleGuiVisible()
         if isVisible and self.__topState == PageStates.TABSCREEN:
-            self.__checkOverviewmap()
+            self.__checkOverviewMap()
             self.__checkRadialMenu()
             self.__pageState = PageStates.RESPAWN
         elif isVisible and self.__pageState != PageStates.RESPAWN:
-            self.__checkOverviewmap()
+            self.__checkOverviewMap()
             self.__checkRadialMenu()
             self.__pageState = PageStates.RESPAWN
             BigWorld.worldDrawEnabled(False)
@@ -359,6 +348,8 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
                 component.active(True)
 
         else:
+            if not isVisible and self.__pageState in (PageStates.SPECTATOR_FREE, PageStates.SPECTATOR_FOLLOW, PageStates.SPECTATOR_DEATHCAM):
+                BigWorld.worldDrawEnabled(True)
             return
         self._invalidateState()
 
@@ -376,7 +367,7 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
         self.__pageState = PageStates.GAME_OVER
         self._invalidateState()
 
-    def __checkOverviewmap(self):
+    def __checkOverviewMap(self):
         if self.__topState == PageStates.OVERVIEWMAP:
             ctrl = self.sessionProvider.dynamic.maps
             if ctrl:
@@ -386,33 +377,25 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
         if self.__topState == PageStates.RADIAL:
             self._toggleRadialMenu(False)
 
-    def __onBattleSessionStart(self):
-        self.__startCtrlListeners()
-
-    def __onBattleSessionStop(self):
-        self.__stopCtrlListeners()
-
-    def __startCtrlListeners(self):
-        if not self.__ctrlListener:
-            ctrl = self.sessionProvider.dynamic.respawn
-            if ctrl is not None:
-                ctrl.onRespawnVisibilityChanged += self.__onRespawnVisibility
-                self.__onRespawnVisibility(ctrl.isRespawnVisible())
-            self.addListener(events.GameEvent.MINIMAP_CMD, self._handleToggleOverviewMap, scope=EVENT_BUS_SCOPE.BATTLE)
-            specCtrl = self.sessionProvider.dynamic.spectator
-            if specCtrl is not None:
-                specCtrl.onSpectatorViewModeChanged += self.__onSpectatorModeChanged
-            self.__ctrlListener = True
+    def _startBattleSession(self):
+        super(EpicBattlePage, self)._startBattleSession()
+        ctrl = self.sessionProvider.dynamic.respawn
+        if ctrl is not None:
+            ctrl.onRespawnVisibilityChanged += self.__onRespawnVisibility
+            self.__onRespawnVisibility(ctrl.isRespawnVisible())
+        self.addListener(events.GameEvent.MINIMAP_CMD, self._handleToggleOverviewMap, scope=EVENT_BUS_SCOPE.BATTLE)
+        specCtrl = self.sessionProvider.dynamic.spectator
+        if specCtrl is not None:
+            specCtrl.onSpectatorViewModeChanged += self.__onSpectatorModeChanged
         return
 
-    def __stopCtrlListeners(self):
-        if self.__ctrlListener:
-            ctrl = self.sessionProvider.dynamic.respawn
-            if ctrl is not None:
-                ctrl.onRespawnVisibilityChanged -= self.__onRespawnVisibility
-            self.removeListener(events.GameEvent.MINIMAP_CMD, self._handleToggleOverviewMap, scope=EVENT_BUS_SCOPE.BATTLE)
-            specCtrl = self.sessionProvider.dynamic.spectator
-            if specCtrl is not None:
-                specCtrl.onSpectatorViewModeChanged -= self.__onSpectatorModeChanged
-            self.__ctrlListener = False
+    def _stopBattleSession(self):
+        ctrl = self.sessionProvider.dynamic.respawn
+        if ctrl is not None:
+            ctrl.onRespawnVisibilityChanged -= self.__onRespawnVisibility
+        self.removeListener(events.GameEvent.MINIMAP_CMD, self._handleToggleOverviewMap, scope=EVENT_BUS_SCOPE.BATTLE)
+        specCtrl = self.sessionProvider.dynamic.spectator
+        if specCtrl is not None:
+            specCtrl.onSpectatorViewModeChanged -= self.__onSpectatorModeChanged
+        super(EpicBattlePage, self)._stopBattleSession()
         return

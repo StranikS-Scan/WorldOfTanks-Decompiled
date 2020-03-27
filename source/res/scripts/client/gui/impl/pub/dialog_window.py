@@ -143,10 +143,13 @@ class DialogWindow(Window):
     def _removeAllButtons(self):
         self.viewModel.buttons.getItems().clear()
 
-    def _addButton(self, name, label, isFocused=False, invalidateAll=False, isEnabled=True, soundDown=None):
+    def _addButton(self, name, label=R.invalid(), isFocused=False, invalidateAll=False, isEnabled=True, soundDown=None, rawLabel=''):
         button = DialogButtonModel()
         button.setName(name)
-        button.setLabel(label)
+        if rawLabel:
+            button.setRawLabel(rawLabel)
+        else:
+            button.setLabel(label)
         button.setDoSetFocus(isFocused)
         button.setIsEnabled(isEnabled)
         if soundDown is not None:

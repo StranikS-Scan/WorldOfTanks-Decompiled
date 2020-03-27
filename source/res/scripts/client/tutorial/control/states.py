@@ -160,7 +160,7 @@ class TutorialStateRunEffects(_TutorialState):
     def setInput(self, event):
         if self._current is not None and self._current.isStillRunning():
             target = self._current.getTarget()
-            if self._processEvent(event, target, benefit=True, isGlobal=False):
+            if target and self._processEvent(event, target, benefit=True, isGlobal=False):
                 self.__clearCurrent()
         else:
             super(TutorialStateRunEffects, self).setInput(event)

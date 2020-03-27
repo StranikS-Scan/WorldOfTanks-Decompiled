@@ -12,7 +12,7 @@ VEH_LEN_CHR = '<H'
 VEH_LEN_SIZE = struct.calcsize(VEH_LEN_CHR)
 _ExternalPrebattleExtra = namedtuple('ExternalPrebattleExtra', ('rev',))
 _ExternalPrebattleExtra.__new__.__defaults__ = (0,)
-_EXTRA_BY_PRB_TYPE = {PREBATTLE_TYPE.EXTERNAL: _ExternalPrebattleExtra}
+_EXTRA_BY_PRB_TYPE = {PREBATTLE_TYPE.STRONGHOLD: _ExternalPrebattleExtra}
 
 class ClientUnit(UnitBase):
 

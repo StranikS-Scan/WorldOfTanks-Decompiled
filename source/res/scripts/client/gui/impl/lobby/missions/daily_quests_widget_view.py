@@ -73,7 +73,8 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
 
     def setLayout(self, value):
         self.__layout = value
-        self._markVisited()
+        if self.getViewModel().getIsVisible():
+            self._markVisited()
 
     def setIsVisible(self, value):
         if value == self.getViewModel().getIsVisible():
@@ -81,7 +82,7 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
         with self.getViewModel().transaction() as tx:
             if value:
                 quests = sorted(self.eventsCache.getDailyQuests().values(), cmp=dailyQuestsSortFunc)
-                self.__updateModelMissionCompletedVisitedArray(tx, quests)
+                self.__updateModelMissionCompletedVisitedArray(tx, quests, True)
             tx.setIsVisible(value)
 
     def _onLoading(self, *args, **kwargs):
@@ -130,7 +131,7 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
                     fullQuestModel.unbind()
 
                 modelMissionsArray.invalidate()
-                self.__updateModelMissionCompletedVisitedArray(tx, quests)
+                self.__updateModelMissionCompletedVisitedArray(tx, quests, self.viewModel.getIsVisible())
             return
 
     def _markVisited(self):
@@ -161,15 +162,15 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
         self._updateViewModel()
         self._markVisited()
 
-    def __updateModelMissionCompletedVisitedArray(self, viewModelTransaction, sortedQuests):
+    def __updateModelMissionCompletedVisitedArray(self, viewModelTransaction, sortedQuests, markViewed):
         modelMissionsCompletedVisitedArray = viewModelTransaction.getMissionsCompletedVisited()
         modelMissionsCompletedVisitedArray.clear()
         modelMissionsCompletedVisitedArray.reserve(len(sortedQuests))
         for quest in sortedQuests:
-            missionCompletedVisitedStatus = not self.eventsCache.questsProgress.getQuestCompletionChanged(quest.getID())
-            if not missionCompletedVisitedStatus:
+            questCompletionChanged = self.eventsCache.questsProgress.getQuestCompletionChanged(quest.getID())
+            if questCompletionChanged and markViewed:
                 self.eventsCache.questsProgress.markQuestProgressAsViewed(quest.getID())
-            modelMissionsCompletedVisitedArray.addBool(missionCompletedVisitedStatus)
+            modelMissionsCompletedVisitedArray.addBool(not questCompletionChanged)
 
         modelMissionsCompletedVisitedArray.invalidate()
 

@@ -262,7 +262,7 @@ def _getSlotsData(unitMgrID, fullData, levelsRange=None, checkForVehicles=True, 
         roster = unit.getRoster()
         rosterSlots = roster.slots
         isDefaultSlot = roster.isDefaultSlot
-        if unit.getPrebattleType() == PREBATTLE_TYPE.EXTERNAL:
+        if unit.getPrebattleType() in PREBATTLE_TYPE.EXTERNAL_PREBATTLES:
             canTakeSlot = canTakeSlot and not isPlayerInSlot
     unitState = fullData.flags
     playerCount = 0

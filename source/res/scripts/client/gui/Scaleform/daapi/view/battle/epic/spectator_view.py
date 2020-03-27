@@ -35,11 +35,7 @@ class EpicSpectatorView(EpicSpectatorViewMeta):
     def _dispose(self):
         self.sessionProvider.onBattleSessionStart -= self.__onBattleSessionStart
         self.sessionProvider.onBattleSessionStop -= self.__onBattleSessionStop
-        if self.__timeCB:
-            BigWorld.cancelCallback(self.__timeCB)
-            self.__timeCB = None
         super(EpicSpectatorView, self)._dispose()
-        return
 
     def _addGameListeners(self):
         super(EpicSpectatorView, self)._addGameListeners()
@@ -47,13 +43,17 @@ class EpicSpectatorView(EpicSpectatorViewMeta):
         if ctrl is not None:
             ctrl.onPostMortemSwitched += self.__onPostMortemSwitched
             ctrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
+            self.isInPostmortem = ctrl.isInPostmortem
         specCtrl = self.sessionProvider.dynamic.spectator
         if specCtrl is not None:
             specCtrl.onSpectatorViewModeChanged += self.__onSpectatorModeChanged
             specCtrl.onSpectatedVehicleChanged += self.__onSpectatedVehicleChanged
+            self.__onSpectatorModeChanged(specCtrl.spectatorViewMode)
+            self.__onSpectatedVehicleChanged(specCtrl.spectatedVehicle)
         ctrl = self.sessionProvider.dynamic.respawn
         if ctrl is not None:
             ctrl.onRespawnVisibilityChanged += self.__onRespawnVisibility
+            self.__onRespawnVisibility(ctrl.isRespawnVisible())
         playerComp = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'playerDataComponent', None)
         if playerComp is not None:
             playerComp.onReinforcementTimerUpdated += self.__onReinforcementTimerUpdated
@@ -94,6 +94,10 @@ class EpicSpectatorView(EpicSpectatorViewMeta):
 
     def __onBattleSessionStop(self):
         self._removeGameListeners()
+        if self.__timeCB:
+            BigWorld.cancelCallback(self.__timeCB)
+            self.__timeCB = None
+        return
 
     def __onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
         self.isInPostmortem = True

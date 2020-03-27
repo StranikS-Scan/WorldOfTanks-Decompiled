@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.483	</firePenalty>
   </invisibility>
-  <repairCost>	4.10	</repairCost>
+  <repairCost>	2.681	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
@@ -43,7 +43,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	5600	</weight>
-    <maxHealth>	240	</maxHealth>
+    <maxHealth>	416	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	125	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
@@ -780,10 +780,6 @@
       <tags></tags>
       <level>	4	</level>
       <price>	3900	</price>
-      <unlocks>
-        <vehicle>	G09_Hetzer	  <cost>	5000	</cost>
-        </vehicle>
-      </unlocks>
       <armor>
         <leftTrack>	10	</leftTrack>
         <rightTrack>	10	</rightTrack>
@@ -1458,7 +1454,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1200	</weight>
-      <maxHealth>	60	</maxHealth>
+      <maxHealth>	79	</maxHealth>
       <rotationSpeed>	32	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -1476,7 +1472,7 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	72	</maxAmmo>
+          <maxAmmo>	145	</maxAmmo>
           <unlocks>
             <gun>	_20mm_Flak_38_L112	  <cost>	160	</cost>
             </gun>
@@ -1538,7 +1534,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_37mm_KwK_38t_L47>
-        <_20mm_Flak_38_L112>	shared	  <maxAmmo>	340	</maxAmmo>
+        <_20mm_Flak_38_L112>	shared	  <maxAmmo>	680	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 0.490221 10 0.498386 9.5 0.514726 10 0.548065 10 1 10	</maxPitch>
@@ -1595,7 +1591,7 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 0.521119 10 1 10	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	56	</maxAmmo>
+          <maxAmmo>	100	</maxAmmo>
           <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1735,7 +1731,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2200	</weight>
-      <maxHealth>	100	</maxHealth>
+      <maxHealth>	104	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -1754,7 +1750,7 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 0.419937 10 0.434644 9 0.465666 6 0.4755 4 0.519488 4 0.55219 9 0.573343 9 0.58476 10 1 10	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	80	</maxAmmo>
+          <maxAmmo>	160	</maxAmmo>
           <armor>
             <armor_1>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1812,7 +1808,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_37mm_KwK_38t_L47>
-        <_20mm_Flak_38_L112>	shared	  <maxAmmo>	400	</maxAmmo>
+        <_20mm_Flak_38_L112>	shared	  <maxAmmo>	800	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 0.0859067 10 0.105522 9 0.131653 10 0.419937 10 0.434644 9 0.465666 6.5 0.4755 4.8 0.519488 4.8 0.55219 9 0.573343 9 0.58476 10 0.871396 10 0.892609 9 0.915433 8 0.923393 7 0.934925 8 0.941476 10 1 10	</maxPitch>
@@ -1871,7 +1867,7 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 0.0556083 10 0.0752282 8 0.11442 8 0.137313 10 0.406839 10 0.419937 8 0.42647 8.00001 0.434644 8 0.465666 6 0.4755 5 0.519488 5 0.55219 8 0.573343 8 0.58476 10 0.837041 10 0.869691 8 0.910467 8 0.938256 10 1 10	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	64	</maxAmmo>
+          <maxAmmo>	110	</maxAmmo>
           <armor>
             <armor_1>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1933,12 +1929,8 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 0.0556083 10 0.0752282 8 0.11442 8 0.137313 10 0.406839 10 0.419937 8 0.42647 8.00001 0.434644 8 0.465666 6 0.4755 5 0.519488 5 0.55219 8 0.573343 8 0.58476 10 0.837041 10 0.869691 8 0.910467 8 0.923508 7 0.938256 10 1 10	</maxPitch>
           </pitchLimits>
-          <maxAmmo>	60	</maxAmmo>
+          <maxAmmo>	90	</maxAmmo>
           <reloadTime>	2.5	</reloadTime>
-          <unlocks>
-            <vehicle>	G81_Pz_IV_AusfH	  <cost>	15000	</cost>
-            </vehicle>
-          </unlocks>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>

@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.425	</firePenalty>
   </invisibility>
-  <repairCost>	5.00	</repairCost>
+  <repairCost>	2.5	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
@@ -50,7 +50,7 @@
     </armor>
     <primaryArmor>	armor_8 armor_10 armor_9	</primaryArmor>
     <weight>	3410	</weight>
-    <maxHealth>	72	</maxHealth>
+    <maxHealth>	144	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	50	</maxHealth>
       <maxRegenHealth>	25	</maxRegenHealth>
@@ -1883,7 +1883,7 @@
         <armor_8>	0	</armor_8>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	18	</maxHealth>
+      <maxHealth>	36	</maxHealth>
       <rotationSpeed>	12	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1897,7 +1897,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_105mm_leFH16_L22>	shared	  <maxAmmo>	15	</maxAmmo>
+        <_105mm_leFH16_L22>	shared	  <maxAmmo>	30	</maxAmmo>
           <armor>
             <gun>	20	</gun>
             <gunBreech>	0	</gunBreech>
@@ -2004,13 +2004,7 @@
         </radio>
       </unlocks>
     </FuG2>
-    <FuG5>	shared	  <unlocks>
-        <vehicle>	G11_Bison_I	  <cost>	1480	</cost>
-        </vehicle>
-        <vehicle>	G19_Wespe	  <cost>	1430	</cost>
-        </vehicle>
-      </unlocks>
-    </FuG5>
+    <FuG5>	shared	</FuG5>
   </radios>
   <physics>
     <detailed>

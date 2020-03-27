@@ -32,6 +32,7 @@ _INTRO_VIDEO_MUSIC_PAUSE_EVENT = 'bc_music_video_intro_pause'
 _INTRO_VIDEO_MUSIC_RESUME_EVENT = 'bc_music_video_intro_resume'
 _INTRO_VIDEO_MUSIC_TO_LOOP_EVENT = 'bc_music_transition_to_loop'
 _DEFAULT_VIDEO_BUFFERING_TIME = 0.5
+_BUTTON_HINT_SOUND_DELAY = 5
 
 class StateBattlePreparing(AbstractState):
     soundController = dependency.descriptor(ISoundsController)
@@ -49,6 +50,7 @@ class StateBattlePreparing(AbstractState):
         self._soundFilter = BCFilter()
         self.__oldSpaceEnv = None
         self.__skipBootcamp = False
+        self.__btnHintSoundCallbackId = None
         return
 
     @property
@@ -79,6 +81,7 @@ class StateBattlePreparing(AbstractState):
             self.soundController.setEnvForSpace(GuiGlobalSpaceID.BATTLE_LOADING, self.__oldSpaceEnv)
         self.onAvatarBecomeNonPlayer()
         self.__weaver.clear()
+        self.__cancelHintSoundCallback()
         self._soundFilter.stop()
         return
 
@@ -166,6 +169,7 @@ class StateBattlePreparing(AbstractState):
 
     def __onBootcampGoNext(self):
         LOG_DEBUG_DEV_BOOTCAMP('__onBootcampGoNext')
+        self.__cancelHintSoundCallback()
         BigWorld.player().onSpaceLoaded()
         app = self.appLoader.getDefBattleApp()
         app.cursorMgr.resetMousePosition()
@@ -173,10 +177,9 @@ class StateBattlePreparing(AbstractState):
     def __onBCIntroVideoStop(self):
         from bootcamp.Bootcamp import g_bootcamp
         noSounds = BattleReplay.g_replayCtrl.isTimeWarpInProgress
-        if not noSounds:
-            SoundGroups.g_instance.playSound2D('bc_loading_tips')
-            if self.isVideoPlayingLesson:
-                SoundGroups.g_instance.playSound2D('vo_bc_welcome')
+        if not noSounds and self.isVideoPlayingLesson:
+            self.__btnHintSoundCallbackId = BigWorld.callback(_BUTTON_HINT_SOUND_DELAY, self.__playHintSound)
+            SoundGroups.g_instance.playSound2D('vo_bc_welcome')
         LOG_DEBUG_DEV_BOOTCAMP('__onBCIntroVideoStop called')
         self.__isIntroVideoFinished = True
         g_bootcamp.setIntroVideoPlayed()
@@ -188,4 +191,14 @@ class StateBattlePreparing(AbstractState):
             BigWorld.player().onEnterWorld(self.__prereqs)
             self.__prereqs = None
         self.appLoader.attachCursor(app_settings.APP_NAME_SPACE.SF_BATTLE, _CTRL_FLAG.GUI_ENABLED)
+        return
+
+    def __playHintSound(self):
+        self.__cancelHintSoundCallback()
+        SoundGroups.g_instance.playSound2D('bc_loading_tips')
+
+    def __cancelHintSoundCallback(self):
+        if self.__btnHintSoundCallbackId is not None:
+            BigWorld.cancelCallback(self.__btnHintSoundCallbackId)
+            self.__btnHintSoundCallbackId = None
         return

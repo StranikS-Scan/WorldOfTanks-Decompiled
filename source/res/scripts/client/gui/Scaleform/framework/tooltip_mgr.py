@@ -5,8 +5,6 @@ import Keys
 from gui import InputHandler
 from gui.Scaleform.framework.entities.abstract.ToolTipMgrMeta import ToolTipMgrMeta
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.impl.backport.backport_tooltip import DecoratedTooltipWindow
-from gui.impl.pub import ToolTipWindow
 from gui.shared import events
 from gui.shared.tooltips import builders
 from helpers import dependency
@@ -79,7 +77,7 @@ class ToolTip(ToolTipMgrMeta):
                     self._dynamic[tooltipType] = data
             return
 
-    def onCreateWulfTooltip(self, tooltipType, args, x, y, isUnbound=False):
+    def onCreateWulfTooltip(self, tooltipType, args, x, y):
         if not self._isAllowedTypedTooltip:
             return
         else:
@@ -89,11 +87,7 @@ class ToolTip(ToolTipMgrMeta):
             else:
                 _logger.warning('Tooltip can not be displayed: type "%s" is not found', tooltipType)
                 return
-            content = data.getDisplayableData(*args)
-            if isUnbound:
-                window = DecoratedTooltipWindow(content, None)
-            else:
-                window = ToolTipWindow(None, content, None)
+            window = data.getDisplayableData(*args)
             window.load()
             window.move(x, y)
             self.__tooltipWindowId = window.uniqueID

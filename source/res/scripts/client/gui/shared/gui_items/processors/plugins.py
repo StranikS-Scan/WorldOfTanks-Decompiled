@@ -7,6 +7,7 @@ import async as future_async
 from adisp import process, async
 from account_helpers import isLongDisconnectedFromCenter
 from account_helpers.AccountSettings import AccountSettings
+from gui.Scaleform.daapi.view import dialogs
 from gui.shared.gui_items.artefacts import OptionalDevice
 from items import tankmen
 from gui.Scaleform.Waiting import Waiting
@@ -16,10 +17,11 @@ from gui import DialogsInterface
 from gui.game_control import restore_contoller
 from gui.shared.formatters.tankmen import formatDeletedTankmanStr
 from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared.utils.vehicle_collector_helper import isAvailableForPurchase
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_ECONOMY_CODE
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
 from gui.shared.money import Currency
-from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta, DIALOG_BUTTON_ID, IconPriceDialogMeta, IconDialogMeta, PMConfirmationDialogMeta, DemountDeviceDialogMeta, DestroyDeviceDialogMeta, TankmanOperationDialogMeta, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta, CheckBoxDialogMeta, CrewSkinsRemovalCompensationDialogMeta, CrewSkinsRemovalDialogMeta
+from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta, DIALOG_BUTTON_ID, IconPriceDialogMeta, IconDialogMeta, PMConfirmationDialogMeta, TankmanOperationDialogMeta, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta, CheckBoxDialogMeta, CrewSkinsRemovalCompensationDialogMeta, CrewSkinsRemovalDialogMeta
 from helpers import dependency
 from items.components import skills_constants
 from skeletons.gui.goodies import IGoodiesCache
@@ -117,9 +119,9 @@ class AwaitConfirmator(ProcessorPlugin):
     @async
     @future_async.async
     def confirm(self, callback):
-        Waiting.suspend()
+        Waiting.suspend(lockerID=id(self))
         yield future_async.await(self._confirm(callback))
-        Waiting.resume()
+        Waiting.resume(lockerID=id(self))
 
     @future_async.async
     def _confirm(self, callback):
@@ -253,6 +255,20 @@ class EliteVehiclesValidator(SyncValidator):
                 return makeError('vehicle_not_elite')
 
         return makeSuccess()
+
+
+class CollectibleVehiclesValidator(SyncValidator):
+
+    def __init__(self, vehicleCD):
+        super(CollectibleVehiclesValidator, self).__init__()
+        self.__vehicleCD = vehicleCD
+
+    def _validate(self):
+        vehicle = self.itemsCache.items.getItemByCD(int(self.__vehicleCD))
+        if vehicle is None:
+            return makeError('invalid_vehicle')
+        else:
+            return makeError('not_unlocked_nation') if vehicle.isCollectible and not isAvailableForPurchase(vehicle) else makeSuccess()
 
 
 class CompatibilityValidator(SyncValidator):
@@ -407,6 +423,7 @@ class GroupOperationsValidator(SyncValidator):
 
 
 class DialogAbstractConfirmator(AsyncConfirmator):
+    _dialogsInterfaceMethod = staticmethod(DialogsInterface.showDialog)
 
     def __init__(self, activeHandler=None, isEnabled=True):
         super(DialogAbstractConfirmator, self).__init__(isEnabled=isEnabled)
@@ -433,16 +450,15 @@ class DialogAbstractConfirmator(AsyncConfirmator):
     @async
     @process
     def _confirm(self, callback):
-        from gui.shared import event_dispatcher
         yield lambda callback: callback(None)
         if self._activeHandler():
             gfMetaData = self._gfMakeMeta()
-            if gfMetaData and event_dispatcher.gamefaceEnabled():
+            if gfMetaData:
                 isOk, data = yield gfMetaData
                 result = makeSuccess(**data) if isOk else makeError()
                 callback(result)
                 return
-            isOk = yield DialogsInterface.showDialog(meta=self._makeMeta())
+            isOk = yield self._dialogsInterfaceMethod(meta=self._makeMeta())
             if not isOk:
                 callback(makeError())
                 return
@@ -478,6 +494,32 @@ class BuyAndInstallConfirmator(ModuleBuyerConfirmator):
     def _gfMakeMeta(self):
         from gui.shared.event_dispatcher import showOptionalDeviceBuyAndInstall
         return partial(showOptionalDeviceBuyAndInstall, self.item.intCD) if self.item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE else None
+
+
+class BCBuyAndInstallConfirmator(BuyAndInstallConfirmator):
+    _dialogsInterfaceMethod = staticmethod(DialogsInterface.showBCConfirmationDialog)
+    _BOOTCAM_LABELS_PATH = '../maps/icons/bootcamp/lines'
+    _VEHICLE_COMPONENTS_LABLES = {'vehicleChassis': 'bcChassis.png',
+     'vehicleTurret': 'bcTurret.png',
+     'vehicleGun': 'bcGun.png',
+     'vehicleRadio': 'bcRadio.png',
+     'vehicleWheels': 'bcWheels.png',
+     'vehicleEngine': 'bcEngine.png'}
+
+    @staticmethod
+    def getPath(itemTypeName):
+        dataStr = ''
+        if itemTypeName in BCBuyAndInstallConfirmator._VEHICLE_COMPONENTS_LABLES:
+            dataStr = '/'.join((BCBuyAndInstallConfirmator._BOOTCAM_LABELS_PATH, BCBuyAndInstallConfirmator._VEHICLE_COMPONENTS_LABLES[itemTypeName]))
+        return dataStr
+
+    def _makeMeta(self):
+        dialogData = {'label': backport.text(R.strings.bootcamp.message.confirmBuyAndInstall.module.title()).format(self.item.longUserName),
+         'labelExecute': backport.text(R.strings.bootcamp.message.confirmBuyAndInstall.module.buttonLabel()),
+         'icon': BCBuyAndInstallConfirmator.getPath(self.item.itemTypeName),
+         'costValue': self.ctx['price'],
+         'isBuy': True}
+        return dialogs.BCConfirmDialogMeta(dialogData)
 
 
 class BuyAndStorageConfirmator(ModuleBuyerConfirmator):
@@ -573,12 +615,10 @@ class IconPriceMessageConfirmator(I18nMessageAbstractConfirmator):
 class DemountDeviceConfirmator(IconPriceMessageConfirmator):
     _goodiesCache = dependency.descriptor(IGoodiesCache)
 
-    def __init__(self, localeKey, ctx=None, activeHandler=None, isEnabled=True, item=None):
-        super(DemountDeviceConfirmator, self).__init__(localeKey, ctx, activeHandler, isEnabled)
+    def __init__(self, isEnabled=True, item=None):
+        super(DemountDeviceConfirmator, self).__init__(None, isEnabled=isEnabled)
         self.item = item
-
-    def _makeMeta(self):
-        return DemountDeviceDialogMeta(self.localeKey, self.ctx, self.ctx, focusedID=DIALOG_BUTTON_ID.SUBMIT)
+        return
 
     def _gfMakeMeta(self):
         from gui.shared import event_dispatcher
@@ -599,9 +639,10 @@ class IconMessageConfirmator(I18nMessageAbstractConfirmator):
 
 class InstallDeviceConfirmator(MessageConfirmator):
 
-    def __init__(self, localeKey, ctx=None, activeHandler=None, isEnabled=True, item=None):
-        super(InstallDeviceConfirmator, self).__init__(localeKey, ctx, activeHandler, isEnabled)
+    def __init__(self, isEnabled=True, item=None):
+        super(InstallDeviceConfirmator, self).__init__(None, isEnabled=isEnabled)
         self.item = item
+        return
 
     def _gfMakeMeta(self):
         from gui.shared import event_dispatcher
@@ -609,16 +650,11 @@ class InstallDeviceConfirmator(MessageConfirmator):
 
 
 class DestroyDeviceConfirmator(IconMessageConfirmator):
-    __DESTROY_DEVICE_PATH = '../maps/icons/modules/destroyDevice.png'
 
-    def __init__(self, localeKey, itemName=None, destroyText='', activeHandler=None, isEnabled=True, item=None):
-        super(DestroyDeviceConfirmator, self).__init__(localeKey, {'name': itemName,
-         'icon': self.__DESTROY_DEVICE_PATH,
-         'destroy': destroyText}, activeHandler, isEnabled)
+    def __init__(self, isEnabled=True, item=None):
+        super(DestroyDeviceConfirmator, self).__init__(None, isEnabled=isEnabled)
         self.item = item
-
-    def _makeMeta(self):
-        return DestroyDeviceDialogMeta(self.localeKey, self.ctx, self.ctx, focusedID=DIALOG_BUTTON_ID.SUBMIT)
+        return
 
     def _gfMakeMeta(self):
         from gui.shared import event_dispatcher

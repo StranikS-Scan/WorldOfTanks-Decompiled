@@ -41,3 +41,11 @@ def showRecruiterAward():
 def showCrewSkinAward(lobbyContext=None):
     if lobbyContext.getServerSettings().isCrewSkinsEnabled():
         showModalAwardWindow(specialAwards.CrewSkinAward())
+
+
+def showVehicleCollectorAward(nationID):
+    showAwardWindow(specialAwards.VehicleCollectorAward(nationID))
+
+
+def showVehicleCollectorOfEverythingAward(*args):
+    showAwardWindow(specialAwards.VehicleCollectorOfEverythingAward())

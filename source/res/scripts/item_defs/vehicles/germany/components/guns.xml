@@ -120,6 +120,7 @@
     <_105mm_Rheinmetall_V1>	137	</_105mm_Rheinmetall_V1>
     <_105mm_Kw_K_L_73>	138	</_105mm_Kw_K_L_73>
     <_90mm_Kanone_M41>	139	</_90mm_Kanone_M41>
+    <_20mm_Solothurn_S_18_1000>	140	</_20mm_Solothurn_S_18_1000>
     <_20mm_KwK_30_bot>	244	</_20mm_KwK_30_bot>
     <_37mm_KwK_L46_bot>	245	</_37mm_KwK_L46_bot>
     <Gun_Env_Artillery>	248	</Gun_Env_Artillery>
@@ -656,6 +657,56 @@
         </_20cm_Pzgr40>
       </shots>
     </_20mm_KwK_30A>
+    <_20mm_Solothurn_S_18_1000>
+      <userString>	#germany_vehicles:_20mm_Solothurn_S_18_1000	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	1910	</price>
+      <impulse>	0.22	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.03	</amplitude>
+        <recoilEffect>	small	</recoilEffect>
+      </recoil>
+      <effects>	shot_small_mb	</effects>
+      <reloadEffect>	reload20_45	</reloadEffect>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <pitchLimits>
+        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <rotationSpeed>	43.75	</rotationSpeed>
+      <reloadTime>	2.28571428571429	</reloadTime>
+      <maxAmmo>	100	</maxAmmo>
+      <aimingTime>	1.6	</aimingTime>
+      <weight>	70	</weight>
+      <maxHealth>	54	</maxHealth>
+      <maxRegenHealth>	27	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_20mm_Pzgr39_S>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	400	</maxDistance>
+          <piercingPower>	40 25	</piercingPower>
+        </_20mm_Pzgr39_S>
+        <_20cm_Pzgr40_S>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1125	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	400	</maxDistance>
+          <piercingPower>	51 30	</piercingPower>
+        </_20cm_Pzgr40_S>
+      </shots>
+    </_20mm_Solothurn_S_18_1000>
     <_30mm_MK103>
       <userString>	#germany_vehicles:_30mm_MK103	</userString>
       <tags></tags>
@@ -3721,7 +3772,7 @@
           <piercingPower>	157 137	</piercingPower>
         </APCNR.erz>
         <APCNR>
-          <defaultPortion>	1.0	</defaultPortion>
+          <defaultPortion>	0	</defaultPortion>
           <speed>	1260	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>

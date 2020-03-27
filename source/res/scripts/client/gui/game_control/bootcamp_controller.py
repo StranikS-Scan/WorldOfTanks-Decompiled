@@ -3,16 +3,19 @@
 from collections import namedtuple
 import AccountCommands
 import BigWorld
+from async import async, await
 from adisp import process
 from account_helpers.AccountSettings import CURRENT_VEHICLE, AccountSettings
 from account_helpers import isLongDisconnectedFromCenter
+from gui.impl import backport
+from gui.impl.gen import R
 from helpers import dependency
 from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.bootcamp.disabled_settings import BCDisabledSettings
 from gui.Scaleform.daapi.view.dialogs.bootcamp_dialogs_meta import ExecutionChooserDialogMeta
-from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
+from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID, BCConfirmDialogMeta
 from bootcamp.BootCampEvents import g_bootcampEvents
 from bootcamp.Bootcamp import g_bootcamp, LESSON_COUNT
 from PlayerEvents import g_playerEvents
@@ -21,9 +24,13 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.prb_control import prbDispatcherProperty
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
-from gui import DialogsInterface
+from gui import DialogsInterface, makeHtmlString
 from debug_utils import LOG_ERROR
+from gui.shared.event_dispatcher import showResSimpleDialog
 BootcampDialogConstants = namedtuple('BootcampDialogConstants', 'dialogType dialogKey focusedID needAwarding premiumType')
+_YELLOW = 'yellow'
+_GRAY = 'gray'
+_REWARD = '\n{}'
 
 class BootcampController(IBootcampController):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -146,7 +153,7 @@ class BootcampController(IBootcampController):
         return self.__disabledSettings.disabledSetting
 
     def showFinalVideo(self, callback):
-        g_bootcamp.showFinalVideo(callback)
+        pass
 
     def finishBootcamp(self):
         Waiting.show('login')
@@ -181,10 +188,7 @@ class BootcampController(IBootcampController):
 
     def runBootcamp(self):
         if self.isInBootcamp():
-            if not self.needAwarding():
-                self.stopBootcamp(inBattle=not self.isInBootcampAccount())
-            else:
-                self.__doBootcamp(isSkip=True)
+            self.__doBootcamp(isSkip=True)
         elif isLongDisconnectedFromCenter():
             DialogsInterface.showI18nInfoDialog('bootcampCenterUnavailable', lambda result: None)
         else:
@@ -209,14 +213,61 @@ class BootcampController(IBootcampController):
             dialogKey = bootcampLiteral + ExecutionChooserDialogMeta.START
         return BootcampDialogConstants(dialogType=dialogType, dialogKey=dialogKey, focusedID=focusedID, needAwarding=needAwarding, premiumType=g_bootcamp.getPremiumType(LESSON_COUNT))
 
-    @process
+    @async
     def __doBootcamp(self, isSkip):
-        dialogConstants = self.getSkipDialogConstants(isSkip)
-        result = yield DialogsInterface.showDialog(ExecutionChooserDialogMeta(dialogConstants.dialogType, dialogConstants.dialogKey, dialogConstants.focusedID, not dialogConstants.needAwarding and not isSkip, dialogConstants.premiumType))
+        g_eventBus.handleEvent(events.DestroyViewEvent(VIEW_ALIAS.LOBBY_MENU))
+        if isSkip:
+            self.__skipBootcamp()
+        else:
+            needAwarding = self.needAwarding()
+            startAcc = R.strings.bootcamp.message.start if needAwarding else R.strings.bootcamp.message.restart
+            iconAcc = R.images.gui.maps.icons.bootcamp.dialog
+            icon = iconAcc.bc_enter_small() if needAwarding else iconAcc.bc_enter_1_small()
+            if needAwarding:
+                messageSkipAcc = R.strings.bootcamp.message.skip.message
+                premiumStr = self.__format(messageSkipAcc.premium(), _YELLOW)
+                goldStr = self.__format(messageSkipAcc.gold(), _YELLOW)
+                crewStr = self.__format(messageSkipAcc.crew(), _YELLOW)
+                message = self.__format(startAcc.message(), _GRAY, premium=premiumStr, gold=goldStr, crew=crewStr)
+            else:
+                rewardStr = _REWARD.format(self.__format(startAcc.reward(), _YELLOW))
+                message = self.__format(startAcc.message(), _GRAY, reward=rewardStr)
+            result = yield await(showResSimpleDialog(startAcc, icon, message))
+            if result:
+                self.__goBootcamp()
+
+    @process
+    def __skipBootcamp(self):
+        skipAcc = R.strings.bootcamp.message.skip
+        iconAcc = R.images.gui.maps.icons.bootcamp.dialog
+        if self.needAwarding():
+            icon = backport.image(iconAcc.bc_leave())
+            messageAcc = skipAcc.message
+            premiumStr = self.__format(messageAcc.premium(), _YELLOW)
+            goldStr = self.__format(messageAcc.gold(), _YELLOW)
+            crewStr = self.__format(messageAcc.crew(), _YELLOW)
+            if self.isReferralEnabled():
+                message = self.__format(skipAcc.referral.message(), _GRAY, premium=premiumStr, gold=goldStr, crew=crewStr)
+            else:
+                message = self.__format(messageAcc(), _GRAY, premium=premiumStr, gold=goldStr, crew=crewStr)
+        else:
+            icon = backport.image(iconAcc.bc_leave_noreward())
+            message = self.__format(skipAcc.completed.message(), _GRAY)
+        result = yield DialogsInterface.showBCConfirmationDialog(BCConfirmDialogMeta({'label': backport.text(skipAcc.label()),
+         'labelExecute': backport.text(skipAcc.labelExecute()),
+         'icon': icon,
+         'message': message,
+         'isTraining': True}))
         if result:
-            if isSkip:
-                self.stopBootcamp(inBattle=not self.isInBootcampAccount())
-            elif self.prbDispatcher is not None:
-                action = PrbAction(PREBATTLE_ACTION_NAME.BOOTCAMP)
-                yield self.prbDispatcher.doSelectAction(action)
+            self.stopBootcamp(inBattle=not self.isInBootcampAccount())
+
+    @process
+    def __goBootcamp(self):
+        if self.prbDispatcher is not None:
+            action = PrbAction(PREBATTLE_ACTION_NAME.BOOTCAMP)
+            yield self.prbDispatcher.doSelectAction(action)
         return
+
+    @staticmethod
+    def __format(text, style, **kwargs):
+        return makeHtmlString('html_templates:bootcamp/message', style, ctx={'text': backport.text(text, **kwargs)})

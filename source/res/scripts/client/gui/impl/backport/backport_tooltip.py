@@ -57,5 +57,7 @@ class BackportTooltipWindow(Window):
 class DecoratedTooltipWindow(WindowImpl):
     __slots__ = ()
 
-    def __init__(self, content, parent):
-        super(DecoratedTooltipWindow, self).__init__(wndFlags=WindowFlags.TOOLTIP, decorator=WindowView(layoutID=R.views.common.tooltip_window.tooltip_window.TooltipWindow()), content=content, parent=parent, areaID=R.areas.specific())
+    def __init__(self, content, parent=None, useDecorator=True):
+        decorator = WindowView(layoutID=R.views.common.tooltip_window.tooltip_window.TooltipWindow()) if useDecorator else None
+        super(DecoratedTooltipWindow, self).__init__(wndFlags=WindowFlags.TOOLTIP, decorator=decorator, content=content, parent=parent, areaID=R.areas.specific())
+        return

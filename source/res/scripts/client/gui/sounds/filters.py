@@ -93,37 +93,6 @@ class _WWISEStateAmbient(_SoundFilterAbstract):
         return 'WWISE(%s)' % self._stateID
 
 
-class _FortAmbientFilter(object):
-
-    def getBuildNumberField(self):
-        raise NotImplementedError
-
-    def getTransportModeField(self):
-        raise NotImplementedError
-
-    def getDefencePeriodField(self):
-        raise NotImplementedError
-
-
-class WWISEFortAmbientFilter(_FortAmbientFilter, _WWISEStateAmbient):
-
-    def __init__(self):
-        _FortAmbientFilter.__init__(self)
-        _WWISEStateAmbient.__init__(self, 'STATE_fortified_area')
-
-    def getBuildNumberField(self):
-        pass
-
-    def getTransportModeField(self):
-        pass
-
-    def getDefencePeriodField(self):
-        pass
-
-    def __repr__(self):
-        pass
-
-
 class WWISEFilteredHangarFilter(_WWISEStateAmbient):
 
     def __init__(self):
@@ -157,8 +126,7 @@ def _selectFilter(wwise):
     return wwise if WWISE.enabled else EmptySoundFilter()
 
 
-_filters = {SoundFilters.FORT_FILTER: _selectFilter(WWISEFortAmbientFilter()),
- SoundFilters.FILTERED_HANGAR: _selectFilter(WWISEFilteredHangarFilter()),
+_filters = {SoundFilters.FILTERED_HANGAR: _selectFilter(WWISEFilteredHangarFilter()),
  SoundFilters.BATTLE_PASS_FILTER: _selectFilter(WWISEBattlePassFilter())}
 
 def _setState(stateGroup, stateName):

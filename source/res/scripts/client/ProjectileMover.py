@@ -6,23 +6,16 @@ import constants
 import TriggersManager
 from TriggersManager import TRIGGER_TYPE
 import FlockManager
-from vehicle_systems.tankStructure import TankPartNames, TankNodeNames, ColliderTypes
+from vehicle_systems.tankStructure import TankPartNames, ColliderTypes
 from helpers import gEffectsDisabled
 from helpers.trajectory_drawer import TrajectoryDrawer
 
-def ownVehicleGunPositionGetter():
+def ownVehicleGunShotPositionGetter():
     ownVehicle = BigWorld.entities.get(BigWorld.player().playerVehicleID, None)
-    if ownVehicle and ownVehicle.appearance:
-        compoundModel = ownVehicle.appearance.compoundModel
-        if compoundModel is None:
-            return Math.Vector3(0.0, 0.0, 0.0)
-        gunMat = ownVehicle.appearance.compoundModel.node(TankPartNames.GUN)
-        if gunMat is None:
-            gunMat = ownVehicle.appearance.compoundModel.node(TankNodeNames.TURRET_JOINT)
-        return Math.Matrix(gunMat).translation
-    else:
+    if not ownVehicle:
         return Math.Vector3(0.0, 0.0, 0.0)
-        return
+    else:
+        return Math.Vector3(0.0, 0.0, 0.0) if not ownVehicle.typeDescriptor else ownVehicle.typeDescriptor.turret.gunShotPosition
 
 
 class ProjectileMover(object):
@@ -68,7 +61,7 @@ class ProjectileMover(object):
                 self.salvo.addProjectile(artID, gravity, refStartPoint, refVelocity)
                 return
             isOwnShoot = attackerID == BigWorld.player().playerVehicleID
-            projectileMotor = self.__ballistics.addProjectile(shotID, gravity, refStartPoint, refVelocity, startPoint, maxDistance, isOwnShoot, attackerID, ownVehicleGunPositionGetter(), tracerCameraPos)
+            projectileMotor = self.__ballistics.addProjectile(shotID, gravity, refStartPoint, refVelocity, startPoint, maxDistance, isOwnShoot, attackerID, ownVehicleGunShotPositionGetter(), tracerCameraPos)
             if self.__debugDrawer is not None:
                 self.__debugDrawer.addProjectile(shotID, attackerID, refStartPoint, refVelocity, Math.Vector3(0.0, -gravity, 0.0), maxDistance, isOwnShoot)
             if projectileMotor is None:

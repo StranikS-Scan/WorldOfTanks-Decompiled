@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/listeners.py
+import typing
 import collections
 import weakref
 from collections import defaultdict
@@ -8,6 +9,7 @@ from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED, SENIORIT
 from adisp import process
 from chat_shared import SYS_MESSAGE_TYPE
 from constants import AUTO_MAINTENANCE_RESULT, PremiumConfigs, DAILY_QUESTS_CONFIG
+from collector_vehicle import CollectorVehicleConsts
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -76,6 +78,10 @@ class _StateExtractor(object):
     def getDailyQuestsState(cls):
         return cls.__lobbyContext.getServerSettings().getDailyQuestConfig().get('enabled', False)
 
+    @classmethod
+    def getCollectorVehicleState(cls):
+        return cls.__lobbyContext.getServerSettings().isCollectorVehicleEnabled()
+
 
 _FEATURES_DATA = {PremiumConfigs.DAILY_BONUS: {_FeatureState.ON: (R.strings.system_messages.daily_xp_bonus.switch_on.title(), R.strings.system_messages.daily_xp_bonus.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
                               _FeatureState.OFF: (R.strings.system_messages.daily_xp_bonus.switch_off.title(), R.strings.system_messages.daily_xp_bonus.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
@@ -94,7 +100,10 @@ _FEATURES_DATA = {PremiumConfigs.DAILY_BONUS: {_FeatureState.ON: (R.strings.syst
                               _FUNCTION: _StateExtractor.getPremQuestsState},
  DAILY_QUESTS_CONFIG: {_FeatureState.ON: (R.strings.system_messages.daily_quests.switch_on.title(), R.strings.system_messages.daily_quests.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
                        _FeatureState.OFF: (R.strings.system_messages.daily_quests.switch_off.title(), R.strings.system_messages.daily_quests.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
-                       _FUNCTION: _StateExtractor.getDailyQuestsState}}
+                       _FUNCTION: _StateExtractor.getDailyQuestsState},
+ CollectorVehicleConsts.CONFIG_NAME: {_FeatureState.ON: (R.strings.system_messages.collectorVehicle.switch_on.title(), R.strings.system_messages.collectorVehicle.switch_on.body(), SystemMessages.SM_TYPE.FeatureSwitcherOn),
+                                      _FeatureState.OFF: (R.strings.system_messages.collectorVehicle.switch_off.title(), R.strings.system_messages.collectorVehicle.switch_off.body(), SystemMessages.SM_TYPE.FeatureSwitcherOff),
+                                      _FUNCTION: _StateExtractor.getCollectorVehicleState}}
 
 class _NotificationListener(object):
 

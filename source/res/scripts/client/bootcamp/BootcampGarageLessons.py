@@ -69,8 +69,10 @@ class GarageLessons:
                 lesson_id = section['id'].asInt
                 currentBattle = self.__battleResults[lesson_id] = {}
                 medals = currentBattle['medals'] = []
+                ribbons = currentBattle['ribbons'] = []
                 unlocks = currentBattle['unlocks'] = []
                 self.readBattleResultsData(medals, section['medals'])
+                self.readBattleResultsData(ribbons, section['ribbons'])
                 self.readBattleResultsData(unlocks, section['unlocks'])
 
         return

@@ -54,21 +54,13 @@ def async(func, cbname='callback', cbwrapper=lambda x: x):
     return wrapper
 
 
-def dialog(func):
-
-    def wrapper(*kargs, **kwargs):
-        Waiting.suspend()
-        return async(func, 'callback')(*kargs, **kwargs)
-
-    return wrapper
-
-
 def debugTime(func):
 
     def wrapper(*args, **kwargs):
         startTime = time.time()
-        func(*args, **kwargs)
+        result = func(*args, **kwargs)
         LOG_DEBUG("Method '%s' measuring time: %.10f" % (func.__name__, time.time() - startTime))
+        return result
 
     return wrapper
 

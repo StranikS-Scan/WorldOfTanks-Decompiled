@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.507	</firePenalty>
   </invisibility>
-  <repairCost>	5.50	</repairCost>
+  <repairCost>	3.578	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
@@ -46,7 +46,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	5840	</weight>
-    <maxHealth>	216	</maxHealth>
+    <maxHealth>	332	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	125	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
@@ -2017,7 +2017,7 @@
         <armor_8>	0	</armor_8>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	54	</maxHealth>
+      <maxHealth>	83	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2031,7 +2031,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_PaK_36r>	shared	  <maxAmmo>	37	</maxAmmo>
+        <_76mm_PaK_36r>	shared	  <maxAmmo>	65	</maxAmmo>
           <unlocks>
             <gun>	_75mm_PaK_40_2	  <cost>	2600	</cost>
             </gun>
@@ -2045,7 +2045,7 @@
             <gunBreech>	0	</gunBreech>
           </armor>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	3.6	</reloadTime>
+          <reloadTime>	4.3	</reloadTime>
           <aimingTime>	1.9	</aimingTime>
           <turretYawLimits>	-28 28	</turretYawLimits>
           <shotDispersionFactors>
@@ -2098,7 +2098,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_76mm_PaK_36r>
-        <_75mm_PaK_40_2>	shared	  <maxAmmo>	38	</maxAmmo>
+        <_75mm_PaK_40_2>	shared	  <maxAmmo>	65	</maxAmmo>
           <unlocks>
             <gun>	_75mm_PaK_40_3	  <cost>	3600	</cost>
             </gun>
@@ -2108,7 +2108,7 @@
             <gunBreech>	0	</gunBreech>
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	3.4	</reloadTime>
+          <reloadTime>	4	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
           <turretYawLimits>	-28 28	</turretYawLimits>
           <shotDispersionFactors>
@@ -2165,18 +2165,14 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_PaK_40_2>
-        <_75mm_PaK_40_3>	shared	  <maxAmmo>	38	</maxAmmo>
-          <unlocks>
-            <vehicle>	G76_Pz_Sfl_IVc	  <cost>	12150	</cost>
-            </vehicle>
-          </unlocks>
+        <_75mm_PaK_40_3>	shared	  <maxAmmo>	55	</maxAmmo>
           <armor>
             <gun>	20	</gun>
             <gunBreech>	0	</gunBreech>
           </armor>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <reloadTime>	3.2	</reloadTime>
-          <aimingTime>	1.5	</aimingTime>
+          <reloadTime>	3.8	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
           <turretYawLimits>	-28 28	</turretYawLimits>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <pitchLimits>
@@ -2293,8 +2289,6 @@
     <FuG5>	shared	  <unlocks>
         <radio>	FuG8	  <cost>	4040	</cost>
         </radio>
-        <vehicle>	G101_StuG_III	  <cost>	3250	</cost>
-        </vehicle>
       </unlocks>
     </FuG5>
     <FuG8>	shared	</FuG8>

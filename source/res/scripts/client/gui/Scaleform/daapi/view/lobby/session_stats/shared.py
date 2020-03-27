@@ -319,7 +319,7 @@ def getSessionStatsPropImage(propId, width=54, height=54):
 
 
 def processRatioValue(value):
-    if value.ratio:
+    if value.ratio is not None:
         return backport.getNiceNumberFormat(float(value.ratio))
     elif value.dealt is not None and value.received is not None:
         ctx = {'numerator': backport.getIntegralFormat(value.dealt),

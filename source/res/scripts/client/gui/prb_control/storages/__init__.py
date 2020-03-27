@@ -12,6 +12,7 @@ from gui.prb_control.storages.ranked_storage import RankedStorage
 from gui.prb_control.storages.epic_storage import EpicStorage
 from gui.prb_control.storages.sandbox_storage import SandboxStorage
 from gui.prb_control.storages.stronghold_storage import StrongholdStorage
+from gui.prb_control.storages.tournament_storage import TournamentStorage
 from helpers.ro_property import ROPropertyMeta
 from soft_exception import SoftException
 __all__ = ('legacy_storage_getter', 'prequeue_storage_getter', 'PrbStorageDecorator')
@@ -36,7 +37,8 @@ _PRB_STORAGE = {_makeLegacyName(_P_TYPE.TRAINING): TrainingStorage(),
  _makeQueueName(_Q_TYPE.SANDBOX): SandboxStorage(),
  _makeQueueName(_Q_TYPE.RANKED): RankedStorage(),
  _makeQueueName(_Q_TYPE.EPIC): EpicStorage(),
- _makeQueueName(_Q_TYPE.EXTERNAL_UNITS): StrongholdStorage(),
+ _makeQueueName(_Q_TYPE.STRONGHOLD_UNITS): StrongholdStorage(),
+ _makeQueueName(_Q_TYPE.TOURNAMENT_UNITS): TournamentStorage(),
  _makeLegacyName(_P_TYPE.EPIC_TRAINING): TrainingStorage()}
 
 class _storage_getter(object):

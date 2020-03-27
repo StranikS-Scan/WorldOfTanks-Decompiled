@@ -116,6 +116,7 @@ class Manager(ILoginManager):
         if self.wgcAvailable and self.__wgcManager.onLoggedOn(responseData):
             self._preferences.clear()
             self._preferences.writeLoginInfo()
+            NonRecruitNotifierSingleton().getInstance().resetFirstShowState()
             return
         loginCount = self._preferences.get('loginCount', 0)
         self._preferences['loginCount'] = 1 if loginCount >= _LIMIT_LOGIN_COUNT else loginCount + 1

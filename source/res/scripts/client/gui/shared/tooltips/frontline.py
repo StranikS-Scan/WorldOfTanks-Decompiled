@@ -5,6 +5,7 @@ from gui import makeHtmlString
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.daapi.view.lobby.missions.missions_helper import isEpicDailyQuestsRefreshAvailable
 from gui.impl import backport
 from gui.impl.backport import getTillTimeStringByRClass as getTimeStr
 from gui.impl.gen import R
@@ -176,7 +177,7 @@ class FrontlineQuestsTooltipData(BlocksTooltipData):
                 textStyle = text_styles.main
                 description = textStyle(backport.text(messageID(), cycle=int2roman(cycle.ordinalNumber), time=timeStr))
                 return text_styles.concatStylesWithSpace(icon, description)
-            if all((q.isCompleted() for q in quests)):
+            if all((q.isCompleted() for q in quests)) and isEpicDailyQuestsRefreshAvailable():
                 data = time_utils.ONE_DAY - time_utils.getServerRegionalTimeCurrentDay()
                 valueStyle = text_styles.tutorial
                 timeToStr = valueStyle(getTimeStr(data, R.strings.menu.Time.timeLeftShort))

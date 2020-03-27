@@ -7,9 +7,12 @@ from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from bootcamp.BootCampEvents import g_bootcampEvents
 from bootcamp.Bootcamp import g_bootcamp
+from bootcamp.statistic.decorators import loggerTarget, loggerEntry, simpleLog
+from bootcamp.statistic.logging_constants import BC_LOG_KEYS, BC_LOG_ACTIONS, HANGAR_MENU_ITEMS
 from bootcamp.aop.in_garage import PointcutBattleSelectorHintText
 _ALLOWED_ENABLED_BUTTONS = [LobbyHeader.BUTTONS.SETTINGS, LobbyHeader.BUTTONS.BATTLE_SELECTOR]
 
+@loggerTarget(logKey=BC_LOG_KEYS.BC_HANGAR_MENU)
 class BCLobbyHeader(LobbyHeader):
 
     def __init__(self):
@@ -17,6 +20,7 @@ class BCLobbyHeader(LobbyHeader):
         self.__battleSelectorHintPointcutIndex = None
         return
 
+    @simpleLog(action=BC_LOG_ACTIONS.BATTLE_BUTTON_PRESSED)
     def fightClick(self, _, __):
         g_bootcampEvents.onGarageLessonFinished(0)
 
@@ -25,6 +29,7 @@ class BCLobbyHeader(LobbyHeader):
             isEnabled = False
         super(BCLobbyHeader, self).as_doDisableHeaderButtonS(btnId, isEnabled)
 
+    @loggerEntry
     def _populate(self):
         super(BCLobbyHeader, self)._populate()
         if self.app.tutorialManager.lastBattleSelectorHintOverride is not None:
@@ -71,3 +76,7 @@ class BCLobbyHeader(LobbyHeader):
                 self.__battleSelectorHintPointcutIndex = None
             g_eventDispatcher.updateUI()
         return
+
+    @simpleLog(argKey='alias', argMap=HANGAR_MENU_ITEMS)
+    def menuItemClick(self, alias):
+        super(BCLobbyHeader, self).menuItemClick(alias)

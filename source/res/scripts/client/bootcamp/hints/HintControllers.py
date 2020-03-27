@@ -13,7 +13,6 @@ from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import BootcampEvent
 from helpers import dependency
 from skeletons.gui.game_control import IBootcampController
-from bootcamp.BootCampEvents import g_bootcampEvents
 
 class PrimaryHintController(object):
     HINT_HIGHLIGHTS = {HINT_TYPE.HINT_REPAIR_TRACK: 'InBattleRepairKit',
@@ -46,7 +45,6 @@ class PrimaryHintController(object):
         else:
             self._viewAlias = VIEW_ALIAS.BOOTCAMP_TOOLTIPS_WINDOW
             self._scope = EVENT_BUS_SCOPE.LOBBY
-        g_bootcampEvents.onPostMortemSwitch += self.close
         return
 
     def show(self):
@@ -113,7 +111,6 @@ class PrimaryHintController(object):
         self._isOnScreen = False
 
     def close(self):
-        g_bootcampEvents.onPostMortemSwitch -= self.close
         g_eventBus.handleEvent(events.BootcampEvent(BootcampEvent.HINT_CLOSE), self._scope)
         if self.typeId in PrimaryHintController.HINT_HIGHLIGHTS:
             g_eventBus.handleEvent(events.LoadViewEvent(BootcampEvent.REMOVE_HIGHLIGHT, None, PrimaryHintController.HINT_HIGHLIGHTS[self.typeId]), EVENT_BUS_SCOPE.BATTLE)

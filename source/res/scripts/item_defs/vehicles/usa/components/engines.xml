@@ -91,7 +91,9 @@
     <Continental_AV-1790-5B_E2>	113	</Continental_AV-1790-5B_E2>
     <Continental_AOI-1195-5_L>	114	</Continental_AOI-1195-5_L>
     <Wright_Continental_R_975_C4_858>	115	</Wright_Continental_R_975_C4_858>
+    <PLT_27>	116	</PLT_27>
     <Continental_AV-1790-3_FL>	117	</Continental_AV-1790-3_FL>
+    <Wright_Continental_R-975C4_early>	118	</Wright_Continental_R-975C4_early>
     <Ford_GAN_T23>	1000	</Ford_GAN_T23>
     <Development_Engine>	65535	</Development_Engine>
     <Continental_AOI-628-2_IGR>	60001	</Continental_AOI-628-2_IGR>
@@ -519,6 +521,23 @@
       <rpm_min>	337	</rpm_min>
       <rpm_max>	2721	</rpm_max>
     </Wright_Continental_R-975C4>
+    <Wright_Continental_R-975C4_early>
+      <userString>	#usa_vehicles:Wright_Continental_R-975C4_early	</userString>
+      <shortUserString>	#usa_vehicles:Wright_Continental_R-975C4_early_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	13900	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	380	</power>
+      <weight>	550	</weight>
+      <maxHealth>	136	</maxHealth>
+      <maxRegenHealth>	67	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	337	</rpm_min>
+      <rpm_max>	2721	</rpm_max>
+    </Wright_Continental_R-975C4_early>
     <Wright_Continental_R-975C4_ID>
       <userString>	#usa_vehicles:Wright_Continental_R-975C4_ID	</userString>
       <tags>	gasoline	</tags>
@@ -1748,6 +1767,23 @@
       <rpm_min>	488	</rpm_min>
       <rpm_max>	2035	</rpm_max>
     </Continental_AOSI_1195_5>
+    <PLT_27>
+      <userString>	#usa_vehicles:PLT_27	</userString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	90000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	900	</power>
+      <weight>	1145	</weight>
+      <maxHealth>	285	</maxHealth>
+      <maxRegenHealth>	142	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	320	</rpm_min>
+      <rpm_max>	2575	</rpm_max>
+    </PLT_27>
     <Wright_Continental_R_975_C4_858>
       <userString>	#usa_vehicles:Wright_Continental_R_975_C4_858	</userString>
       <shortUserString>	#usa_vehicles:Wright_Continental_R_975_C4_858_short	</shortUserString>

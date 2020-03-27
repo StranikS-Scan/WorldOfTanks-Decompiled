@@ -22,7 +22,8 @@
             <request-exclusive-hint>	PersonalCaseOption	</request-exclusive-hint>
           </effects>
         </effects-group>
-        <request-exclusive-hint>	SecondTank	  <condition>
+        <request-exclusive-hint>	SecondTank	  <sound></sound>
+          <condition>
             <active>	WrongVehicle	</active>
           </condition>
         </request-exclusive-hint>
@@ -78,27 +79,20 @@
     </scene>
     <scene>	Research	  <post-effects>
         <set-gui-item-criteria>	ResearchItemNodeCriteria	</set-gui-item-criteria>
+        <set-gui-item-criteria>	ResearchRootNodeCriteria	</set-gui-item-criteria>
         <close-view>
           <type>	topWindow	</type>
           <alias>	vehicleBuyWindow	</alias>
         </close-view>
       </post-effects>
       <runtime-effects>
-        <request-exclusive-hint>	ResearchItemNode	  <condition>
-            <checkpoint-not-reached>	VehicleBoughtCheckpoint	</checkpoint-not-reached>
-          </condition>
-        </request-exclusive-hint>
-      </runtime-effects>
-      <gui-items></gui-items>
-    </scene>
-    <scene>	VehiclePreview	  <post-effects></post-effects>
-      <runtime-effects>
         <effects-group>
           <condition>
             <checkpoint-not-reached>	VehicleBoughtCheckpoint	</checkpoint-not-reached>
           </condition>
           <effects>
-            <request-exclusive-hint>	VehiclePreviewUnlockOrBuyButton	</request-exclusive-hint>
+            <request-exclusive-hint>	ResearchItemNodeButton	</request-exclusive-hint>
+            <request-exclusive-hint>	ResearchRootNodeButton	</request-exclusive-hint>
             <set-visible>	VehicleBuyCheckbox	  <val>	False	</val>
             </set-visible>
             <request-exclusive-hint>	VehicleBuyAcademy	</request-exclusive-hint>
@@ -110,6 +104,13 @@
         </effects-group>
       </runtime-effects>
       <gui-items>
+        <gui-item>	ResearchItemNode	  <on-scene-effects>
+            <set-action>	ResearchItemNodeClick	</set-action>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <remove-action>	ResearchItemNodeClick	</remove-action>
+          </not-on-scene-effects>
+        </gui-item>
         <gui-item>	VehicleBuyAcademy	  <on-scene-effects>
             <set-button-enabled>	VehicleBuyAmmo	  <val>	False	</val>
             </set-button-enabled>
@@ -221,7 +222,10 @@
         <set-visible>	HangarModuleRadio	  <val>	True	</val>
         </set-visible>
         <update-layout>	AmmunitionPanel	</update-layout>
-        <show-dialog>	NewVehicleIntroDialog	</show-dialog>
+        <show-window>	NewVehicleIntroDialog	  <condition>
+            <checkpoint-not-reached>	VehicleUnlockedCheckpoint	</checkpoint-not-reached>
+          </condition>
+        </show-window>
         <invoke-gui-cmd>	OverrideHangarMenuButtons	  <args>
             <arg>	EnabledHangarMenuButtons_AfterIntro	  <name>	buttonsListVarID	</name>
             </arg>
@@ -237,7 +241,10 @@
         </game-item>
       </condition>
       <effects>
-        <show-dialog>	VehicleUnlockedDialog	</show-dialog>
+        <show-window>	SubtitleTankInvestigated	  <condition>
+            <checkpoint-not-reached>	VehicleBoughtCheckpoint	</checkpoint-not-reached>
+          </condition>
+        </show-window>
       </effects>
     </checkpoint>
     <checkpoint>	VehicleBoughtCheckpoint	  <condition>
@@ -249,7 +256,6 @@
         <select-in-hangar>	SecondVehicleCD	</select-in-hangar>
         <set-var>	SecondVehicleCommanderSetter	</set-var>
         <set-gui-item-view-criteria>	SecondVehicleCommander_PersonalCase	</set-gui-item-view-criteria>
-        <show-dialog>	VehicleBoughtAndCrewIntroDialog	</show-dialog>
         <set-visible>	TankCarouselContainer	  <val>	True	</val>
         </set-visible>
         <set-visible>	TankCarouselContainerBG	  <val>	True	</val>
@@ -262,11 +268,16 @@
         <play-animation>	CrewPanel	  <type>	tween	</type>
           <wait_for_finish>	True	</wait_for_finish>
         </play-animation>
+        <show-window>	HangarTeamDialog	  <condition>
+            <checkpoint-not-reached>	SkillLearnedCheckpoint	</checkpoint-not-reached>
+          </condition>
+        </show-window>
       </effects>
     </checkpoint>
     <checkpoint>	SkillLearnedCheckpoint	  <condition>
         <game-item>	SecondVehicleCD	  <crew-has-skill>	commander TankmanSkillName	</crew-has-skill>
         </game-item>
+        <checkpoint-not-reached>	EndCheckpoint	</checkpoint-not-reached>
       </condition>
       <effects>
         <show-dialog>	CrewSkillsDialog	</show-dialog>
@@ -311,6 +322,9 @@
     <gui-item-criteria>	ResearchItemNodeCriteria	  <item-id>	ResearchItemNodeID	</item-id>
       <value>	id=$SecondVehicleCD$	</value>
     </gui-item-criteria>
+    <gui-item-criteria>	ResearchRootNodeCriteria	  <item-id>	ResearchRootNodeID	</item-id>
+      <value>	id=$SecondVehicleCD$	</value>
+    </gui-item-criteria>
     <gui-item-criteria>	TankmanSkillCriteria	  <item-id>	PersonalCaseSkillID	</item-id>
       <value>	title=$TankmanSkillName$	</value>
     </gui-item-criteria>
@@ -324,13 +338,17 @@
     </gui-item-view-criteria>
     <click-action>	VehicleBuyAcademyClick	  <item-id>	VehicleBuyAcademy	</item-id>
       <effects>
+        <update-exclusive-hints></update-exclusive-hints>
         <set-button-enabled>	VehicleBuyAccept	  <val>	True	</val>
         </set-button-enabled>
         <activate>	VehicleBuyAcademyClicked	</activate>
+        <show-dialog>	TeamTeachingDialog	</show-dialog>
+        <remove-action>	VehicleBuyAcademyClick	</remove-action>
       </effects>
     </click-action>
     <click-action>	VehicleBuyAcceptClick	  <item-id>	VehicleBuyAccept	</item-id>
       <effects>
+        <update-exclusive-hints></update-exclusive-hints>
         <activate>	VehicleBuyAcceptClicked	  <condition>
             <active>	VehicleBuyAcademyClicked	</active>
           </condition>
@@ -342,85 +360,157 @@
         <activate>	PersonalCaseSkillClicked	</activate>
       </effects>
     </click-action>
-    <dialog>	NewVehicleIntroDialog	  <type>	bootcampMessage	</type>
+    <window>	NewVehicleIntroDialog	  <type>	bootcampSubtitle	</type>
       <sequence>
         <message>
           <data>
-            <preset>	INTRO	</preset>
-            <icon>	../maps/icons/bootcamp/lines/logo.png	</icon>
-            <label>	#bootcamp:message/intro/lesson/iii/label	</label>
+            <subtitle>	#bootcamp:subtitles/vo_bc_hangar_new_tank_received	</subtitle>
             <voiceover>	vo_bc_hangar_new_tank_received	</voiceover>
           </data>
         </message>
       </sequence>
-      <buttons></buttons>
-      <actions></actions>
-    </dialog>
-    <dialog>	VehicleUnlockedDialog	  <type>	bootcampMessage	</type>
+      <buttons>
+        <close>	NoResultsWindowCloseButton	</close>
+      </buttons>
+      <actions>
+        <click>	NoResultsWindowCloseButton	  <effects>
+            <activate>	NoResultsWindowClosed	</activate>
+          </effects>
+        </click>
+      </actions>
+    </window>
+    <window>	SubtitleTankInvestigated	  <type>	bootcampSubtitle	</type>
       <sequence>
         <message>
           <data>
-            <preset>	BLUE	</preset>
-            <icon>	../maps/icons/bootcamp/lines/bcUnlock.png	</icon>
-            <label>	#bootcamp:message/unlock/vehicle/label	</label>
-            <text>	#bootcamp:message/unlock/vehicle/text	</text>
+            <subtitle>	#bootcamp:subtitles/vo_bc_hangar_tank_investigated	</subtitle>
             <voiceover>	vo_bc_hangar_tank_investigated	</voiceover>
           </data>
         </message>
       </sequence>
-      <buttons></buttons>
-      <actions></actions>
-    </dialog>
-    <dialog>	VehicleBoughtAndCrewIntroDialog	  <type>	bootcampMessage	</type>
+      <buttons>
+        <close>	NoResultsWindowCloseButton	</close>
+      </buttons>
+      <actions>
+        <click>	NoResultsWindowCloseButton	  <effects>
+            <activate>	NoResultsWindowClosed	</activate>
+          </effects>
+        </click>
+      </actions>
+    </window>
+    <window>	SubtitleTeam	  <type>	bootcampSubtitle	</type>
       <sequence>
         <message>
-          <nations>
-            <data>
-              <nation_id>	usa	</nation_id>
-              <icon>	../maps/icons/bootcamp/lines/bcM2.png	</icon>
-              <preset>	GOLD	</preset>
-              <label>	M2 Medium Tank	</label>
-              <text>	#bootcamp:message/second/vehicle/text/nation/0	</text>
-              <voiceover>	vo_bc_hangar_tank_in_garage	</voiceover>
-            </data>
-            <data>
-              <nation_id>	germany	</nation_id>
-              <icon>	../maps/icons/bootcamp/lines/bcPz38t.png	</icon>
-              <preset>	GOLD	</preset>
-              <label>	Pz.Kpfw. 38 (t)	</label>
-              <text>	#bootcamp:message/second/vehicle/text/nation/1	</text>
-              <voiceover>	vo_bc_hangar_tank_in_garage	</voiceover>
-            </data>
-            <data>
-              <nation_id>	ussr	</nation_id>
-              <icon>	../maps/icons/bootcamp/lines/bcT46.png	</icon>
-              <preset>	GOLD	</preset>
-              <label>	T-46	</label>
-              <text>	#bootcamp:message/second/vehicle/text/nation/2	</text>
-              <voiceover>	vo_bc_hangar_tank_in_garage	</voiceover>
-            </data>
-          </nations>
+          <data>
+            <subtitle>	#bootcamp:subtitles/vo_bc_team_teaching	</subtitle>
+            <voiceover>	vo_bc_hangar_team	</voiceover>
+          </data>
         </message>
+      </sequence>
+      <buttons>
+        <close>	NoResultsWindowCloseButton	</close>
+      </buttons>
+      <actions>
+        <click>	NoResultsWindowCloseButton	  <effects>
+            <activate>	NoResultsWindowClosed	</activate>
+          </effects>
+        </click>
+      </actions>
+    </window>
+    <dialog>	TeamTeachingDialog	  <type>	bootcampMessage	</type>
+      <sequence>
         <message>
           <data>
-            <preset>	INTRO	</preset>
-            <icon>	../maps/icons/bootcamp/lines/logo.png	</icon>
-            <label>	#bootcamp:message/intro/lesson/iii/crew/label	</label>
-            <voiceover>	vo_bc_hangar_team	</voiceover>
+            <preset>	ORANGE	</preset>
+            <label>	#bootcamp:message/teaching/team/label	</label>
+            <text>	#bootcamp:message/teaching/team/text	</text>
+            <icon>	../maps/icons/bootcamp/lines/bcCrewEducation.png	</icon>
           </data>
         </message>
       </sequence>
       <buttons></buttons>
       <actions></actions>
     </dialog>
+    <dialog>	AfterBuyCongrats	  <type>	bootcampMessage	</type>
+      <sequence>
+        <message>
+          <data>
+            <preset>	ORANGE	</preset>
+            <label>	#bootcamp:message/vehicle/bought/label	</label>
+            <text>	#bootcamp:message/teaching/team/text	</text>
+            <icon>	../maps/icons/bootcamp/lines/bcT46.png	</icon>
+          </data>
+        </message>
+      </sequence>
+      <buttons></buttons>
+      <actions></actions>
+    </dialog>
+    <window>	SubtitleTankInGarage	  <type>	bootcampSubtitle	</type>
+      <sequence>
+        <message>
+          <data>
+            <subtitle>	#bootcamp:subtitles/vo_bc_hangar_tank_in_garage	</subtitle>
+            <voiceover>	vo_bc_hangar_tank_in_garage	</voiceover>
+          </data>
+        </message>
+      </sequence>
+      <buttons>
+        <close>	NoResultsWindowCloseButton	</close>
+      </buttons>
+      <actions>
+        <click>	NoResultsWindowCloseButton	  <effects>
+            <activate>	NoResultsWindowClosed	</activate>
+          </effects>
+        </click>
+      </actions>
+    </window>
+    <window>	HangarTeamDialog	  <type>	bootcampSubtitle	</type>
+      <sequence>
+        <message>
+          <data>
+            <subtitle>	#bootcamp:subtitles/vo_bc_hangar_team	</subtitle>
+            <voiceover>	vo_bc_hangar_team	</voiceover>
+          </data>
+        </message>
+      </sequence>
+      <buttons>
+        <close>	NoResultsWindowCloseButton	</close>
+      </buttons>
+      <actions>
+        <click>	NoResultsWindowCloseButton	  <effects>
+            <activate>	NoResultsWindowClosed	</activate>
+          </effects>
+        </click>
+      </actions>
+    </window>
+    <window>	SubtitleSkillsAbilities	  <type>	bootcampSubtitle	</type>
+      <sequence>
+        <message>
+          <data>
+            <subtitle>	#bootcamp:subtitles/vo_bc_hangar_skills_abilities	</subtitle>
+            <voiceover>	vo_bc_hangar_skills_abilities	</voiceover>
+          </data>
+        </message>
+      </sequence>
+      <buttons>
+        <close>	NoResultsWindowCloseButton	</close>
+      </buttons>
+      <actions>
+        <click>	NoResultsWindowCloseButton	  <effects>
+            <activate>	NoResultsWindowClosed	</activate>
+          </effects>
+        </click>
+      </actions>
+    </window>
     <dialog>	CrewSkillsDialog	  <type>	bootcampMessage	</type>
       <sequence>
         <message>
           <data>
-            <preset>	BLUE	</preset>
+            <preset>	ORANGE	</preset>
             <icon>	../maps/icons/bootcamp/lines/bcSkills.png	</icon>
             <label>	#bootcamp:message/skills/and/perks/label	</label>
             <text>	#bootcamp:message/skills/and/perks/text	</text>
+            <subtitle>	SubtitleSkillsAbilities	</subtitle>
             <voiceover>	vo_bc_hangar_skills_abilities	</voiceover>
           </data>
         </message>

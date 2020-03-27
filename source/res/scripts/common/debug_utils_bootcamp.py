@@ -41,3 +41,9 @@ def LOG_CODEPOINT_WARNING_BOOTCAMP(*kargs, **kwargs):
 
 def LOG_CURRENT_EXCEPTION_BOOTCAMP():
     LOG_CURRENT_EXCEPTION(tags=[LOG_TAGS.BOOTCAMP], frame=2)
+
+
+@_LogWrapper(LOG_LEVEL.RELEASE)
+def LOG_STATISTIC(msg, *kargs, **kwargs):
+    kwargs.setdefault('tags', []).append(LOG_TAGS.STATISTIC)
+    _doLog('WARNING', msg, kargs, kwargs)

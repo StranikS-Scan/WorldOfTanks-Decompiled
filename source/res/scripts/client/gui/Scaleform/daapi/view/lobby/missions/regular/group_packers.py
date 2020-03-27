@@ -27,13 +27,15 @@ from gui.server_events import settings
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.cond_formatters.tokens import TokensMarathonFormatter
 from gui.server_events.event_items import DEFAULTS_GROUPS
-from gui.server_events.events_helpers import hasAtLeastOneAvailableQuest, isAllQuestsCompleted, isLinkedSet, getLocalizedQuestNameForLinkedSetQuest, getLocalizedQuestDescForLinkedSetQuest, getLinkedSetMissionIDFromQuest, isPremium, premMissionsSortFunc, isPremiumQuestsEnable, getPremiumGroup
+from gui.server_events.events_constants import FRONTLINE_GROUP_ID
+from gui.server_events.events_helpers import hasAtLeastOneAvailableQuest, isAllQuestsCompleted, isLinkedSet, getLocalizedQuestNameForLinkedSetQuest, getLocalizedQuestDescForLinkedSetQuest, getLinkedSetMissionIDFromQuest, isPremium, premMissionsSortFunc, isPremiumQuestsEnable, getPremiumGroup, getDailyEpicGroup
 from gui.server_events.events_helpers import missionsSortFunc
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.icons import makeImageTag
 from helpers import dependency, time_utils, getLanguageCode
 from helpers.i18n import makeString as _ms
+from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.linkedset import ILinkedSetController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -245,6 +247,7 @@ class MarathonsDumbBuilder(GroupedEventsBlocksBuilder):
 class QuestsGroupsBuilder(GroupedEventsBlocksBuilder):
     linkedSet = dependency.descriptor(ILinkedSetController)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
 
     def __init__(self):
         super(QuestsGroupsBuilder, self).__init__()
@@ -255,6 +258,11 @@ class QuestsGroupsBuilder(GroupedEventsBlocksBuilder):
         if self.linkedSet.isLinkedSetEnabled() and (self.__wasLinkedSetShowed or not self.linkedSet.isLinkedSetFinished()):
             self._cache['groupedEvents']['linkedset'] = _LinkedSetQuestsBlockInfo()
             self.__wasLinkedSetShowed = True
+        group = getDailyEpicGroup()
+        _, isCycleActive = self.epicMetaGameCtrl.getCurrentCycleInfo()
+        frontlineQuestsAvailable = isCycleActive and (self.epicMetaGameCtrl.isInPrimeTime() or self.epicMetaGameCtrl.hasPrimeTimesLeft())
+        if group and frontlineQuestsAvailable and FRONTLINE_GROUP_ID not in self._cache['groupedEvents']:
+            self._cache['groupedEvents'][FRONTLINE_GROUP_ID] = self._createGroupedEventsBlock(group)
         group = getPremiumGroup()
         if isPremiumQuestsEnable() and 'premium' not in self._cache['groupedEvents'].iterkeys() and group:
             self._cache['groupedEvents']['premium'] = _PremiumGroupedQuestsBlockInfo()

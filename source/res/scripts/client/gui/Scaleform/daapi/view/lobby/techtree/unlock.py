@@ -30,8 +30,8 @@ class UnlockItemConfirmator(proc_plugs.DialogAbstractConfirmator):
 
     def __init__(self, unlockCtx, costCtx, activeHandler=None, isEnabled=True):
         super(UnlockItemConfirmator, self).__init__(activeHandler, isEnabled)
-        self.__unlockCtx = unlockCtx
-        self.__costCtx = costCtx
+        self._unlockCtx = unlockCtx
+        self._costCtx = costCtx
         self.__itemType = None
         g_clientUpdateManager.addCallbacks({'serverSettings.blueprints_config.isEnabled': self.__onBlueprintsModeChanged,
          'serverSettings.blueprints_config.useBlueprintsForUnlock': self.__onBlueprintsModeChanged})
@@ -42,9 +42,9 @@ class UnlockItemConfirmator(proc_plugs.DialogAbstractConfirmator):
         super(UnlockItemConfirmator, self).__del__()
 
     def _makeMeta(self):
-        item = self.itemsCache.items.getItemByCD(self.__unlockCtx.itemCD)
-        xpCost = backport.getIntegralFormat(self.__costCtx['xpCost'])
-        freeXp = backport.getIntegralFormat(self.__costCtx['freeXP'])
+        item = self.itemsCache.items.getItemByCD(self._unlockCtx.itemCD)
+        xpCost = backport.getIntegralFormat(self._costCtx['xpCost'])
+        freeXp = backport.getIntegralFormat(self._costCtx['freeXP'])
         ctx = {'xpCost': text_styles.expText(xpCost),
          'freeXP': text_styles.expText(freeXp),
          'typeString': item.userType,
@@ -57,8 +57,8 @@ class UnlockItemConfirmator(proc_plugs.DialogAbstractConfirmator):
         return dialogs.I18nConfirmDialogMeta('confirmUnlock', meta=dialogs.HtmlMessageLocalDialogMeta('html_templates:lobby/dialogs', key, ctx=ctx))
 
     def __destroy(self):
-        self.__unlockCtx = None
-        self.__costCtx = None
+        self._unlockCtx = None
+        self._costCtx = None
         self.__itemType = None
         g_clientUpdateManager.removeObjectCallbacks(self)
         return

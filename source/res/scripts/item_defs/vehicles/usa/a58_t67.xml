@@ -9,7 +9,7 @@
   </crew>
   <speedLimits>
     <forward>	61	</forward>
-    <backward>	20	</backward>
+    <backward>	17	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.245	</moving>
@@ -18,7 +18,7 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.614	</firePenalty>
   </invisibility>
-  <repairCost>	6.43	</repairCost>
+  <repairCost>	4.925	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
@@ -36,7 +36,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	7000	</weight>
-    <maxHealth>	272	</maxHealth>
+    <maxHealth>	376	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	170	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -122,8 +122,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.23	</vehicleMovement>
-        <vehicleRotation>	0.23	</vehicleRotation>
+        <vehicleMovement>	0.27	</vehicleMovement>
+        <vehicleRotation>	0.27	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	90	</maxHealth>
@@ -906,8 +906,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	32	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.21	</vehicleMovement>
-        <vehicleRotation>	0.21	</vehicleRotation>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	100	</maxHealth>
@@ -1677,7 +1677,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2640	</weight>
-      <maxHealth>	68	</maxHealth>
+      <maxHealth>	69	</maxHealth>
       <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1691,7 +1691,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_57mm_Gun_M1_L50>	shared	  <maxAmmo>	70	</maxAmmo>
+        <_57mm_Gun_M1_L50>	shared	  <maxAmmo>	125	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -1719,7 +1719,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <aimingTime>	1.7	</aimingTime>
+          <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
@@ -1881,7 +1881,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3300	</weight>
-      <maxHealth>	88	</maxHealth>
+      <maxHealth>	94	</maxHealth>
       <rotationSpeed>	18	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1896,7 +1896,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.885	</invisibilityFactor>
       <guns>
-        <_57mm_Gun_M1_L50>	shared	  <maxAmmo>	70	</maxAmmo>
+        <_57mm_Gun_M1_L50>	shared	  <maxAmmo>	125	</maxAmmo>
           <armor>
             <armor_1>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1920,7 +1920,7 @@
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <aimingTime>	1.7	</aimingTime>
+          <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
@@ -1979,12 +1979,10 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_57mm_Gun_M1_L50>
-        <_75mm_AT_Gun_M7_L50>	shared	  <maxAmmo>	45	</maxAmmo>
+        <_75mm_AT_Gun_M7_L50>	shared	  <maxAmmo>	80	</maxAmmo>
           <unlocks>
             <gun>	_76mm_AT_Gun_M1A1	  <cost>	4600	</cost>
             </gun>
-            <vehicle>	A41_M18_Hellcat	  <cost>	27350	</cost>
-            </vehicle>
           </unlocks>
           <armor>
             <armor_1>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -2009,7 +2007,7 @@
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.43	</shotDispersionRadius>
-          <aimingTime>	1.7	</aimingTime>
+          <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
@@ -2068,7 +2066,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_75mm_AT_Gun_M7_L50>
-        <_76mm_AT_Gun_M1A1>	shared	  <maxAmmo>	45	</maxAmmo>
+        <_76mm_AT_Gun_M1A1>	shared	  <maxAmmo>	70	</maxAmmo>
           <armor>
             <armor_1>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -2092,7 +2090,7 @@
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.41	</shotDispersionRadius>
-          <aimingTime>	1.7	</aimingTime>
+          <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
@@ -2235,11 +2233,11 @@
   </turrets0>
   <engines>
     <Buick_series_60>	shared	  <unlocks>
-        <engine>	Wright_Continental_R-975C4	  <cost>	1500	</cost>
+        <engine>	Wright_Continental_R-975C4_early	  <cost>	1500	</cost>
         </engine>
       </unlocks>
     </Buick_series_60>
-    <Wright_Continental_R-975C4>	shared	</Wright_Continental_R-975C4>
+    <Wright_Continental_R-975C4_early>	shared	</Wright_Continental_R-975C4_early>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>
@@ -2264,10 +2262,10 @@
           <smplEnginePower>	348.9028	</smplEnginePower>
           <smplFwMaxSpeed>	61	</smplFwMaxSpeed>
         </Buick_series_60>
-        <Wright_Continental_R-975C4>
-          <smplEnginePower>	486.3493	</smplEnginePower>
+        <Wright_Continental_R-975C4_early>
+          <smplEnginePower>	380	</smplEnginePower>
           <smplFwMaxSpeed>	61	</smplFwMaxSpeed>
-        </Wright_Continental_R-975C4>
+        </Wright_Continental_R-975C4_early>
       </engines>
       <chassis>
         <Chassis_T49>

@@ -7,5 +7,5 @@ class VehiclePreviewModulesTabMeta(BaseDAAPIComponent):
     def setActiveState(self, isActive):
         self._printOverrideError('setActiveState')
 
-    def as_setStatusInfoS(self, message, tooltipId):
-        return self.flashObject.as_setStatusInfo(message, tooltipId) if self._isDAAPIInited() else None
+    def as_setStatusInfoS(self, message, tooltipId, vehicleType, needToShowAnim):
+        return self.flashObject.as_setStatusInfo(message, tooltipId, vehicleType, needToShowAnim) if self._isDAAPIInited() else None

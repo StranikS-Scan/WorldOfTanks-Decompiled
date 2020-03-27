@@ -830,7 +830,7 @@ class BattleReplay(object):
             personals = modifiedResults.get('personal', None)
             if personals is not None:
                 for personal in personals.itervalues():
-                    for field in ('damageEventList', 'xpReplay', 'creditsReplay', 'tmenXPReplay', 'goldReplay', 'crystalReplay', 'freeXPReplay', 'avatarDamageEventList'):
+                    for field in ('damageEventList', 'xpReplay', 'creditsReplay', 'tmenXPReplay', 'goldReplay', 'crystalReplay', 'eventCoinReplay', 'freeXPReplay', 'avatarDamageEventList'):
                         personal[field] = None
 
                     extMeta = personal.get('ext', {}).get('epicMetaGame')

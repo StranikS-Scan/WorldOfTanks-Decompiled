@@ -46,6 +46,7 @@ class STORE(object):
     RENTALTERMSELECTIONPOPOVER_TERMSLOTSEASON_RANKEDCYCLE = '#store:rentalTermSelectionPopover/termSlotSeason/rankedCycle'
     RENTALTERMSELECTIONPOPOVER_TERMSLOTUNLIM = '#store:rentalTermSelectionPopover/termSlotUnlim'
     CONGRATULATIONANIM_BUYINGLABEL = '#store:congratulationAnim/buyingLabel'
+    CONGRATULATIONANIM_COLLECTIBLELABEL = '#store:congratulationAnim/collectibleLabel'
     CONGRATULATIONANIM_RESTORELABEL = '#store:congratulationAnim/restoreLabel'
     CONGRATULATIONANIM_SHOWPREVIEWBTNLABEL = '#store:congratulationAnim/showPreviewBtnLabel'
     CONGRATULATIONANIM_SHOWEPICBTNLABEL = '#store:congratulationAnim/showEpicBtnLabel'

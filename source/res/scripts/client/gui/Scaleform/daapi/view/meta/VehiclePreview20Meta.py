@@ -30,3 +30,6 @@ class VehiclePreview20Meta(View):
 
     def as_setBottomPanelS(self, linkage):
         return self.flashObject.as_setBottomPanel(linkage) if self._isDAAPIInited() else None
+
+    def as_setBulletVisibilityS(self, bulletTabIdx, isBulletVisible):
+        return self.flashObject.as_setBulletVisibility(bulletTabIdx, isBulletVisible) if self._isDAAPIInited() else None

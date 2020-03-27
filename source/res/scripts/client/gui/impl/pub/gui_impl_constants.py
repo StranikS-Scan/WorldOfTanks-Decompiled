@@ -4,9 +4,3 @@ from shared_utils import CONST_CONTAINER
 
 class ContextMenuID(CONST_CONTAINER):
     EXAMPLE_ID = 1
-
-
-class UIImplType(CONST_CONTAINER):
-    UNDEFINED_UI_IMPL = 0
-    UNBOUND_UI_IMPL = 1
-    GAMEFACE_UI_IMPL = 2

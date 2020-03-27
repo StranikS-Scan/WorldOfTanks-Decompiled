@@ -30,7 +30,6 @@ from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
 from gui.customization.shared import chooseMode, getAppliedRegionsForCurrentHangarVehicle, appliedToFromSlotsIds, C11nId, SEASON_IDX_TO_TYPE, SEASON_TYPE_TO_NAME, SEASON_TYPE_TO_IDX, SEASONS_ORDER, getTotalPurchaseInfo, containsVehicleBound
-from gui.impl.pub import UIImplType
 from gui.hangar_cameras.c11n_hangar_camera_manager import C11nCameraModes
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.shared import events
@@ -150,10 +149,8 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
     def showBuyWindow(self, ctx=None):
         if self.__propertiesSheet.handleBuyWindow():
             return
-        isGamefaceEnabled = self.__isGamefaceEnabled()
         isGamefaceBuyViewOpened = self.__isGamefaceBuyViewOpened()
-        isGamefaceCanOpened = isGamefaceEnabled and not isGamefaceBuyViewOpened
-        if not isGamefaceCanOpened:
+        if isGamefaceBuyViewOpened:
             self.changeVisible(False)
         purchaseItems = self.__ctx.getPurchaseItems()
         cart = getTotalPurchaseInfo(purchaseItems)
@@ -164,7 +161,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
                 self.__ctx.applyItems(purchaseItems)
                 if self.__styleInfo.visible:
                     self.__styleInfo.disableBlur()
-        elif isGamefaceEnabled:
+        else:
             if isGamefaceBuyViewOpened:
                 _logger.debug('Gameface customization cart is already opened, ignore event')
                 return
@@ -172,9 +169,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             ctx = ctx or {}
             ctx.update(c11nView=self)
             self.fireEvent(events.LoadUnboundViewEvent(R.views.lobby.customization.CustomizationCart(), CustomizationCartView, ScopeTemplates.LOBBY_SUB_SCOPE, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
-        else:
-            _logger.info('Scalefrom customization cart is opened')
-            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.CUSTOMIZATION_PURCHASE_WINDOW, ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
 
     def __onVehicleChangeStarted(self):
         entity = self.hangarSpace.getVehicleEntity()
@@ -1012,11 +1006,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             selectedAnchor = self.__ctx.selectedAnchor
             self.__locateCameraOnAnchor(selectedAnchor.areaId, selectedAnchor.slotType, selectedAnchor.regionIdx)
         self.__ctx.refreshOutfit()
-
-    def __isGamefaceEnabled(self):
-        isGamefaceInitilized = self.guiLoader.implTypeMask & UIImplType.GAMEFACE_UI_IMPL > 0
-        isGamefaceEnabled = self.lobbyContext.getServerSettings().isGamefaceEnabled()
-        return isGamefaceInitilized and isGamefaceEnabled
 
     def __isGamefaceBuyViewOpened(self):
         return self.guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.customization.CustomizationCart())

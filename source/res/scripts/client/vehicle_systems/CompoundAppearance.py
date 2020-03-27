@@ -251,6 +251,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         self.trackNodesAnimator = None
         if self.wheelsAnimator is not None and not self.wheelsAnimator.activePostmortem:
             self.wheelsAnimator = None
+        self.gearbox = None
         self.gunRotatorAudition = None
         fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(), None, None, None)
         self._setFashions(fashions, isTurretDetached)
@@ -284,7 +285,6 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         if self.__terrainCircle is not None:
             self.__terrainCircle.destroy()
             self.__terrainCircle = None
-        self.onModelChanged = None
         CallbackDelayer.destroy(self)
         return
 
@@ -595,7 +595,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
             distanceFromPlayer = self.lodCalculator.lodDistance
             self.__updateCurrTerrainMatKinds()
             self.__updateEffectsLOD(distanceFromPlayer)
-            self.__updateTransmissionScroll()
+            self.__updateTransmissionScroll(_PERIODIC_TIME)
             if self.customEffectManager:
                 self.customEffectManager.update()
             return
@@ -781,24 +781,24 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
             self.engineAudition.onEngineGearUp()
         return
 
-    def __updateTransmissionScroll(self):
+    def __updateTransmissionScroll(self, dt):
         self._commonSlip = 0.0
         self._commonScroll = 0.0
         worldMatrix = Math.Matrix(self.compoundModel.matrix)
         zAxis = worldMatrix.applyToAxis(2)
         vehicleSpeed = zAxis.dot(self.filter.velocity)
-        wheelsScroll = self.wheelsScroll
-        if wheelsScroll is not None:
-            wheelCount = len(wheelsScroll)
+        if self.wheelsScroll is not None:
+            wheelsScrollDelta = self.wheelsAnimator.getWheelsScrollDelta()
+            wheelCount = len(wheelsScrollDelta)
             skippedWheelsCount = 0
             for wheelIndex in xrange(0, wheelCount):
                 flying = self.wheelsAnimator.wheelIsFlying(wheelIndex)
                 if not flying:
-                    self._commonScroll += wheelsScroll[wheelIndex]
-                    self._commonSlip += wheelsScroll[wheelIndex] - vehicleSpeed
+                    self._commonScroll += wheelsScrollDelta[wheelIndex]
+                    self._commonSlip += wheelsScrollDelta[wheelIndex] - vehicleSpeed * dt
                 skippedWheelsCount += 1
 
-            activeWheelCount = max(len(wheelsScroll) - skippedWheelsCount, 1)
+            activeWheelCount = max(wheelCount - skippedWheelsCount, 1)
             self._commonSlip /= activeWheelCount
             self._commonScroll /= activeWheelCount
         elif self.trackScrollController is not None:

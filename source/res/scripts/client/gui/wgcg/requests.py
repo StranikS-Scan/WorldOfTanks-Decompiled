@@ -19,7 +19,7 @@ from gui.wgcg.hof.handlers import HofRequestHandlers
 from gui.wgcg.promo_screens.handlers import PromoScreensRequestHandlers
 from gui.wgcg.rank.handlers import RankRequestHandlers
 from gui.wgcg.settings import WebRequestDataType
-from gui.wgcg.strongholds.handlers import StrongholdsRequestHandlers
+from gui.wgcg.external_battle_handlers import BaseExternalBattleUnitRequestHandlers
 
 class WgcgRequestResponse(Response):
 
@@ -94,7 +94,7 @@ class WgcgRequestsController(RequestsController):
         self.__handlers.update(BaseRequestHandlers(requester).get())
         self.__handlers.update(BattlePassRequestHandlers(requester).get())
         self.__handlers.update(ClanRequestHandlers(requester, self.__webCtrl).get())
-        self.__handlers.update(StrongholdsRequestHandlers(requester).get())
+        self.__handlers.update(BaseExternalBattleUnitRequestHandlers(requester).get())
         self.__handlers.update(ElenRequestHandlers(requester).get())
         self.__handlers.update(HofRequestHandlers(requester).get())
         self.__handlers.update(RankRequestHandlers(requester).get())

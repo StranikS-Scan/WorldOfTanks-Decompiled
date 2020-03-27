@@ -35,12 +35,10 @@ class StateResultScreen(AbstractState):
     @process
     def _doActivate(self):
         from bootcamp.Bootcamp import g_bootcamp
-        g_bootcamp.showBattleResultTransition()
         yield self.itemsCache.update(CACHE_SYNC_REASON.SHOW_GUI)
         resultType = g_bootcamp.getBattleResults().type
         if resultType == BOOTCAMP_BATTLE_RESULT_MESSAGE.FAILURE:
             g_bootcampEvents.onResultScreenFinished()
-            g_bootcamp.hideBattleResultTransition()
             return
         else:
             battleCtx = self.sessionProvider.getCtx()
@@ -57,8 +55,6 @@ class StateResultScreen(AbstractState):
 
     def _doDeactivate(self):
         g_eventBus.removeListener(events.AppLifeCycleEvent.INITIALIZED, self.__onAppInitialized, EVENT_BUS_SCOPE.GLOBAL)
-        from bootcamp.Bootcamp import g_bootcamp
-        g_bootcamp.hideBattleResultTransition()
 
     def __onAppInitialized(self, event):
         if event.ns == settings.APP_NAME_SPACE.SF_LOBBY and self.__storedArenaUniqueID:

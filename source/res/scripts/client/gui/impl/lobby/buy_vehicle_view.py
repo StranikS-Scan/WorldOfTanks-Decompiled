@@ -5,6 +5,7 @@ from collections import namedtuple
 import nations
 import GUI
 import constants
+from gui.game_control.event_progression_controller import EventProgressionScreens
 from items import UNDEFINED_ITEM_CD
 from rent_common import parseRentID
 from gui import GUI_SETTINGS
@@ -43,6 +44,7 @@ from gui.shared.formatters.text_styles import neutral
 from gui.shared.money import Currency, Money
 from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.utils import decorators
+from gui.shared.utils.vehicle_collector_helper import getCollectibleVehiclesInInventory
 from gui.shared.events import VehicleBuyEvent
 from gui.shared.gui_items.processors.vehicle import VehicleBuyer, VehicleSlotBuyer, VehicleRenter, VehicleTradeInProcessor, VehicleRestoreProcessor
 from helpers import i18n, dependency, int2roman, func_utils
@@ -63,6 +65,7 @@ _TooltipExtraData = namedtuple('_TooltipExtraData', 'key, itemType')
 _TANKMAN_KEYS = ('', 'creditsTankman', 'goldTankman')
 _ACADEMY_SLOT = 2
 _VP_SHOW_HANGAR_ON_SUCCESS_ALIASES = (VIEW_ALIAS.VEHICLE_PREVIEW, VIEW_ALIAS.VEHICLE_PREVIEW_20, VIEW_ALIAS.TRADE_IN_VEHICLE_PREVIEW_20)
+_COLLECTIBLE_VEHICLE_TUTORIAL = 'collectibleVehicle'
 
 class BuyVehicleView(ViewImpl, EventSystemEntity):
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -108,8 +111,8 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         else:
             self.__selectedRentID = self.__RENT_UNLIM_IDX
             self.__selectedRentIdx = self.__RENT_UNLIM_IDX
-        self.__isGoldAutoPurhaseEnabled = isIngameShopEnabled()
-        self.__isGoldAutoPurhaseEnabled &= self.__wallet.isAvailable
+        self.__isGoldAutoPurchaseEnabled = isIngameShopEnabled()
+        self.__isGoldAutoPurchaseEnabled &= self.__wallet.isAvailable
         self.__isRentVisible = self.__vehicle.hasRentPackages and not self.__isTradeIn()
         self.__popoverIsAvailable = True
         self.__tradeInInProgress = False
@@ -135,7 +138,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
 
     def showCongratulations(self):
         self.__showHangar()
-        if self.__isRenting() or self.__bootcamp.isInBootcamp():
+        if self.__isRenting():
             self.__onWindowClose()
         else:
             self.__showCongratulationsView()
@@ -319,7 +322,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         showTradeOffOverlay(self.__vehicle.level)
 
     def __onWalletStatusChanged(self, *_):
-        self.__isGoldAutoPurhaseEnabled &= self.__wallet.isAvailable
+        self.__isGoldAutoPurchaseEnabled &= self.__wallet.isAvailable
         self.__updateTotalPrice()
 
     def __onTradeOffVehicleSelected(self, _=None):
@@ -379,7 +382,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
             if self.__previousAlias in _VP_SHOW_HANGAR_ON_SUCCESS_ALIASES:
                 event_dispatcher.selectVehicleInHangar(self.__vehicle.intCD)
             elif self.__previousAlias == VIEW_ALIAS.EVENT_PROGRESSION_VEHICLE_PREVIEW_20:
-                self.__progressionCtrl.openURL()
+                self.__progressionCtrl.showCustomScreen(EventProgressionScreens.MAIN)
 
     def __playSlotAnimation(self):
         if self.viewStatus != ViewStatus.LOADED:
@@ -405,6 +408,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
                 if settings and 'backBtnLabel' in settings:
                     vm.setBackBtnLbl(settings['backBtnLabel'])
                 vm.setIsElite(self.__vehicle.isElite)
+                vm.setIsCollectible(self.__vehicle.isCollectible)
                 vm.setVehicleType(vehicleType)
                 vm.setLvl(int2roman(self.__vehicle.level))
                 vm.setVName(self.__vehicle.userName)
@@ -480,6 +484,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
                 SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
             self.__purchaseInProgress = False
         if result and result.success and not self.isDisposed():
+            self.__startTutorial()
             self.showCongratulations()
         return
 
@@ -529,7 +534,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
                 slotVm.setIsSelected(False)
             isInit = len(listArray) == 0
             if isInit:
-                self.__addVMsInActionPriceList(listArray, slotItemPrice, not self.__isGoldAutoPurhaseEnabled, tooltipData=_TooltipExtraData('slotsPrices', ACTION_TOOLTIPS_TYPE.ECONOMICS))
+                self.__addVMsInActionPriceList(listArray, slotItemPrice, not self.__isGoldAutoPurchaseEnabled, tooltipData=_TooltipExtraData('slotsPrices', ACTION_TOOLTIPS_TYPE.ECONOMICS))
             else:
                 self.__updateActionPriceArray(listArray, slotItemPrice)
 
@@ -824,7 +829,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         return self.__stats.money >= money or isPurchaseCurrencyAvailable
 
     def __isPurchaseCurrencyAvailable(self, currencyType):
-        return currencyType == Currency.GOLD and self.__isGoldAutoPurhaseEnabled
+        return currencyType == Currency.GOLD and self.__isGoldAutoPurchaseEnabled
 
     def __isTradeIn(self):
         isBuyingAllowed = not self.__vehicle.isDisabledForBuy and not self.__vehicle.isHidden
@@ -842,6 +847,13 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
 
     def __isBuying(self):
         return self.__selectedRentIdx in (self.__RENT_UNLIM_IDX, self.__RENT_NOT_SELECTED_IDX) or not self.__isRentVisible
+
+    def __startTutorial(self):
+        if not self.__vehicle.isCollectible:
+            return
+        collectibleVehicles = set(getCollectibleVehiclesInInventory().keys())
+        if len(collectibleVehicles) == 1 and self.__vehicle.intCD in collectibleVehicles:
+            event_dispatcher.runSalesChain(_COLLECTIBLE_VEHICLE_TUTORIAL)
 
 
 class BuyVehicleWindow(Window):

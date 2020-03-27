@@ -6,7 +6,7 @@ from frameworks.wulf import ViewModel
 class VehicleCongratulationModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=11, commands=0):
+    def __init__(self, properties=12, commands=0):
         super(VehicleCongratulationModel, self).__init__(properties=properties, commands=commands)
 
     def getIsElite(self):
@@ -15,69 +15,76 @@ class VehicleCongratulationModel(ViewModel):
     def setIsElite(self, value):
         self._setBool(0, value)
 
+    def getIsCollectible(self):
+        return self._getBool(1)
+
+    def setIsCollectible(self, value):
+        self._setBool(1, value)
+
     def getVehicleType(self):
-        return self._getString(1)
-
-    def setVehicleType(self, value):
-        self._setString(1, value)
-
-    def getLvl(self):
         return self._getString(2)
 
-    def setLvl(self, value):
+    def setVehicleType(self, value):
         self._setString(2, value)
 
-    def getVName(self):
+    def getLvl(self):
         return self._getString(3)
 
-    def setVName(self, value):
+    def setLvl(self, value):
         self._setString(3, value)
 
-    def getImage(self):
+    def getVName(self):
         return self._getString(4)
 
-    def setImage(self, value):
+    def setVName(self, value):
         self._setString(4, value)
 
-    def getImageAlt(self):
+    def getImage(self):
         return self._getString(5)
 
-    def setImageAlt(self, value):
+    def setImage(self, value):
         self._setString(5, value)
 
+    def getImageAlt(self):
+        return self._getString(6)
+
+    def setImageAlt(self, value):
+        self._setString(6, value)
+
     def getBtnLbl(self):
-        return self._getResource(6)
-
-    def setBtnLbl(self, value):
-        self._setResource(6, value)
-
-    def getBackBtnLbl(self):
         return self._getResource(7)
 
-    def setBackBtnLbl(self, value):
+    def setBtnLbl(self, value):
         self._setResource(7, value)
 
-    def getTitle(self):
+    def getBackBtnLbl(self):
         return self._getResource(8)
 
-    def setTitle(self, value):
+    def setBackBtnLbl(self, value):
         self._setResource(8, value)
 
+    def getTitle(self):
+        return self._getResource(9)
+
+    def setTitle(self, value):
+        self._setResource(9, value)
+
     def getResetAnimTrgigger(self):
-        return self._getBool(9)
-
-    def setResetAnimTrgigger(self, value):
-        self._setBool(9, value)
-
-    def getNeedBackBtn(self):
         return self._getBool(10)
 
-    def setNeedBackBtn(self, value):
+    def setResetAnimTrgigger(self, value):
         self._setBool(10, value)
+
+    def getNeedBackBtn(self):
+        return self._getBool(11)
+
+    def setNeedBackBtn(self, value):
+        self._setBool(11, value)
 
     def _initialize(self):
         super(VehicleCongratulationModel, self)._initialize()
         self._addBoolProperty('isElite', False)
+        self._addBoolProperty('isCollectible', False)
         self._addStringProperty('vehicleType', '')
         self._addStringProperty('lvl', '')
         self._addStringProperty('vName', '')

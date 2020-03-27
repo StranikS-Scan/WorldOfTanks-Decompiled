@@ -20,8 +20,9 @@ from gui.shared.formatters import text_styles
 from gui.shared.money import Currency
 from messenger import g_settings
 from messenger.formatters import TimeFormatter
-from messenger.formatters.service_channel import WaitItemsSyncFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, ServiceChannelFormatter, PersonalMissionsQuestAchievesFormatter, BattlePassQuestAchievesFormatter
+from messenger.formatters.service_channel import WaitItemsSyncFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, ServiceChannelFormatter, PersonalMissionsQuestAchievesFormatter, BattlePassQuestAchievesFormatter, InvoiceReceivedFormatter
 from messenger.formatters.service_channel_helpers import getRewardsForQuests, EOL, MessageData, getCustomizationItemData, getDefaultMessage, DEFAULT_MESSAGE
+from messenger.proto.bw.wrappers import ServiceChannelMessage
 from shared_utils import findFirst, first
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.game_control import IRankedBattlesController
@@ -592,6 +593,37 @@ class SeniorityAwardsFormatter(AsyncTokenQuestsSubFormatter):
             return MessageData(formatted, settings)
         else:
             return
+
+
+class LootBoxTokenQuestFormatter(AsyncTokenQuestsSubFormatter):
+    __TEMPLATE_NAME = 'tokenQuestLootbox'
+
+    @async
+    @process
+    def format(self, message, callback):
+        result = yield InvoiceReceivedFormatter().format(self.__getInvoiceFormatMessage(message))
+        callback(result)
+
+    @classmethod
+    def _isQuestOfThisGroup(cls, questID):
+        return cls.__TEMPLATE_NAME in questID
+
+    def __getInvoiceFormatMessage(self, message):
+        data = {'active': message.active,
+         'createdAt': message.createdAt,
+         'finishedAt': message.finishedAt,
+         'importance': message.importance,
+         'isHighImportance': message.isHighImportance,
+         'messageId': message.messageId,
+         'personal': message.personal,
+         'sentTime': message.sentTime,
+         'startedAt': message.startedAt,
+         'type': message.type,
+         'userId': message.userId,
+         'data': {'data': {'assetType': constants.INVOICE_ASSET.DATA,
+                           'at': message.sentTime,
+                           'data': message.data}}}
+        return ServiceChannelMessage.fromChatAction(data, message.personal)
 
 
 class BattlePassDefaultAwardsFormatter(WaitItemsSyncFormatter, TokenQuestsSubFormatter):

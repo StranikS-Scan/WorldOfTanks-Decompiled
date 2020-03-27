@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/dossiers2/custom/cache.py
 import nations
 from items import vehicles
+from collector_vehicle import CollectorVehicleConsts
 
 def getCache():
     global _g_cache
@@ -16,6 +17,8 @@ def buildCache():
     vehiclesInTreeByNation = {}
     vehiclesInTree = set()
     nationsWithVehiclesInTree = []
+    collectorVehiclesByNations = {}
+    collectorVehiclesLevelsByNations = {}
     unlocksSources = vehicles.getUnlocksSources()
     for nationIdx in xrange(len(nations.NAMES)):
         nationList = vehicles.g_list.getList(nationIdx)
@@ -28,6 +31,10 @@ def buildCache():
                 if tag in vehDescr.tags:
                     vehiclesByTag[tag].add(vehDescr.compactDescr)
 
+            if CollectorVehicleConsts.COLLECTOR_VEHICLES_TAG in vehDescr.tags:
+                collectorVehiclesByNations.setdefault(nationIdx, set()).add(vehDescr.compactDescr)
+                collectorVehiclesLevelsByNations.setdefault(nationIdx, set()).add(vehDescr.level)
+                continue
             if len(unlocksSources.get(vehDescr.compactDescr, set())) > 0 or len(vehicles.g_cache.vehicle(nationIdx, vehDescr.id).unlocksDescrs) > 0:
                 vehiclesInNationTree.add(vehDescr.compactDescr)
 
@@ -43,7 +50,9 @@ def buildCache():
      'mausTypeCompDescr': vehicles.makeVehicleTypeCompDescrByName('germany:G42_Maus'),
      'vehiclesInTreesByNation': vehiclesInTreeByNation,
      'vehiclesInTrees': vehiclesInTree,
-     'nationsWithVehiclesInTree': nationsWithVehiclesInTree})
+     'nationsWithVehiclesInTree': nationsWithVehiclesInTree,
+     'collectorVehiclesByNations': collectorVehiclesByNations,
+     'collectorVehiclesLevelsByNations': collectorVehiclesLevelsByNations})
 
 
 _g_cache = {}

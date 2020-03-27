@@ -20,6 +20,7 @@ from web.web_client_api.common import ItemPackType
 _logger = logging.getLogger(__name__)
 FRONTLINE_PRESTIGE_TOKEN_BASE = 'epicmetagame:prestige:'
 FRONTLINE_LEVEL_TOKEN_BASE = 'epicmetagame:levelup:'
+FRONTLINE_PROGRESSION_FINISH_TOKEN = 'epicmetagame:progression_finish'
 FRONTLINE_TOKEN_PRESTIGE_POINTS = 'prestige_point'
 FRONTLINE_HIDDEN_TAG = 'fr_hidden'
 FRONTLINE_VEH_BOUGHT_TOKEN_TEMPLATE = 'fr_reward_%s'

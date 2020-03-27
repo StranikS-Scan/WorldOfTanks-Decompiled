@@ -26,6 +26,6 @@ class BoosterInfoWindow(BoosterInfoMeta):
         self.as_setBoosterInfoS({'windowTitle': _ms(MENU.BOOSTERS_COMMON_NAME),
          'name': booster.userName,
          'icon': booster.icon,
-         'parameters': [{'value': booster.getFormattedValue(),
+         'parameters': [{'value': '{}\n'.format(booster.getFormattedValue()),
                          'type': '{}\n'.format(_ms(MENU.BOOSTERS_COMMON_EFFECT_VALUE))}, {'value': booster.getEffectTimeStr(hoursOnly=True),
                          'type': _ms(MENU.BOOSTERS_COMMON_EFFECT_TIME)}]})

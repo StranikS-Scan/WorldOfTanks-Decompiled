@@ -4,10 +4,12 @@ import logging
 from constants import PREM_TYPE_TO_ENTITLEMENT
 from gui.game_control.wallet import WalletController
 from gui.shared.money import Currency
+from gui.shared.utils.vehicle_collector_helper import hasCollectibleVehicles
 from helpers import dependency
 from helpers import time_utils
-from web.web_client_api import W2CSchema, w2c
+import nations
 from skeletons.gui.shared import IItemsCache
+from web.web_client_api import W2CSchema, w2c
 _logger = logging.getLogger(__name__)
 
 class BalanceWebApiMixin(object):
@@ -22,8 +24,8 @@ class BalanceWebApiMixin(object):
             premiumExpireISOTime = time_utils.timestampToISO(premiumExpireLocalTime)
         else:
             premiumExpireISOTime = None
-        balanceData = {currency:money.get(currency, 0) for currency in Currency.ALL}
-        balanceData.update({'walletStatus': {key:WalletController.STATUS.getKeyByValue(code).lower() for key, code in stats.currencyStatuses.items() if key in Currency.ALL},
+        balanceData = {Currency.currencyExternalName(currency):money.get(currency, 0) for currency in Currency.ALL}
+        balanceData.update({'walletStatus': {Currency.currencyExternalName(key):WalletController.STATUS.getKeyByValue(code).lower() for key, code in stats.currencyStatuses.items() if key in Currency.ALL},
          'premiumExpireDate': premiumExpireISOTime})
         return balanceData
 
@@ -63,3 +65,7 @@ class BalanceWebApiMixin(object):
     @w2c(W2CSchema, 'get_premium_info')
     def getPremiumInfo(self, cmd):
         return {PREM_TYPE_TO_ENTITLEMENT[k]:v for k, v in self.itemsCache.items.stats.premiumInfo.items()}
+
+    @w2c(W2CSchema, 'get_collection_nations')
+    def getCollectionNations(self, cmd):
+        return {nations.MAP[nationID]:self.itemsCache.items.stats.getMaxResearchedLevel(nationID) for nationID in nations.MAP if hasCollectibleVehicles(nationID)}

@@ -74,6 +74,7 @@ class BCIntroPage(BCIntroVideoPageMeta):
             self.bootcampCtrl.runBootcamp()
 
     def handleError(self, data):
+        LOG_ERROR_BOOTCAMP('Video error - {0}'.format(data))
         self._onFinish()
 
     @staticmethod

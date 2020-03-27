@@ -15,7 +15,7 @@
       </header2>
       <header3>
         <text>	#bootcamp:loading/tip/equipment/header/3	</text>
-        <autoSize>	left	</autoSize>
+        <autoSize>	right	</autoSize>
       </header3>
       <description1>
         <text>	#bootcamp:loading/tip/equipment/description/1	</text>
@@ -27,7 +27,7 @@
       </description2>
       <description3>
         <text>	#bootcamp:loading/tip/equipment/description/3	</text>
-        <autoSize>	left	</autoSize>
+        <autoSize>	right	</autoSize>
       </description3>
     </equipment>
     <sniper>
@@ -39,19 +39,19 @@
     <penetration>
       <header1>
         <text>	#bootcamp:loading/tip/penetration/header/1	</text>
-        <autoSize>	right	</autoSize>
+        <autoSize>	left	</autoSize>
       </header1>
       <header2>
         <text>	#bootcamp:loading/tip/penetration/header/2	</text>
-        <autoSize>	left	</autoSize>
+        <autoSize>	right	</autoSize>
       </header2>
       <description1>
         <text>	#bootcamp:loading/tip/penetration/description/1	</text>
-        <autoSize>	right	</autoSize>
+        <autoSize>	left	</autoSize>
       </description1>
       <description2>
         <text>	#bootcamp:loading/tip/penetration/description/2	</text>
-        <autoSize>	left	</autoSize>
+        <autoSize>	right	</autoSize>
       </description2>
     </penetration>
     <visibility>
@@ -117,11 +117,11 @@
       </header1>
       <header2>
         <text>	#bootcamp:loading/tip/wasd/header/2	</text>
-        <autoSize>	center	</autoSize>
+        <autoSize>	left	</autoSize>
       </header2>
       <header3>
         <text>	#bootcamp:loading/tip/wasd/header/3	</text>
-        <autoSize>	center	</autoSize>
+        <autoSize>	left	</autoSize>
       </header3>
     </movement>
     <crosshair>
@@ -157,7 +157,7 @@
       </description3>
     </modules>
   </lesson_pages>
-  <prebattle>	crewHint modulesHint hitpointsHint teamsHint scoreHint minimapHint crosshairHint consumablesHint	</prebattle>
+  <prebattle>	crewHint modulesHint hitpointsHint crosshairHint	</prebattle>
   <primary_hints>
     <hintMoveTurret>
       <message>	#bootcamp:hint/move/turret	</message>
@@ -188,7 +188,7 @@
       <cooldown_after>	3.0	</cooldown_after>
     </hintSniper>
     <hintSniperLevel0>
-      <message>	#bootcamp:hint/sniper	</message>
+      <message>	#bootcamp:hint/sniper/on/distance/exit	</message>
       <time_completed>	2.0	</time_completed>
       <cooldown_after>	3.0	</cooldown_after>
     </hintSniperLevel0>

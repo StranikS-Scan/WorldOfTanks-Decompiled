@@ -35,4 +35,5 @@ def init():
      'view-data': readLoadViewDataSection})
     sub_parsers.setEffectsParsers({'load-view': _reaLoadViewSection})
     sub_parsers.setTriggersParsers({'timer': lobby.readTimerTriggerSection,
-     'isIngameShopEnabled': lobby.readIsIngameShopEnabledSection})
+     'isIngameShopEnabled': lobby.readIsIngameShopEnabledSection,
+     'isCollectibleVehicle': lobby.readIsCollectibleVehicleTrigger})

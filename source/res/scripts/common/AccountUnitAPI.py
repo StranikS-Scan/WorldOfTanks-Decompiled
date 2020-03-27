@@ -10,6 +10,14 @@ class UNIT_API:
     NONE = 0
     CLIENT = 1
     WGSH = 2
+    TMS = 3
+    EXTERNAL_API = (WGSH, TMS)
+
+
+UNIT_API_NAMES = dict([ (v, k) for k, v in UNIT_API.__dict__.iteritems() if not k.startswith('_') ])
+
+def makeExternalRequestID(unitApiID, webRequestID):
+    return unitApiID << 32 | webRequestID & 4294967295L
 
 
 def getUnitApiID(serverRequestID):

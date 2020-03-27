@@ -20,6 +20,7 @@ class BootcampLobbyControlsFactory(ControlsFactory):
          EFFECT_TYPE.REMOVE_ACTION: core_func.FunctionalRemoveAction,
          EFFECT_TYPE.RUN_TRIGGER: core_func.FunctionalRunTriggerEffect,
          EFFECT_TYPE.SHOW_DIALOG: core_func.FunctionalShowDialogEffect,
+         EFFECT_TYPE.SHOW_WINDOW: core_func.FunctionalShowWindowEffect,
          EFFECT_TYPE.SET_ITEM_PROPS: core_func.FunctionalSetGuiItemPropertiesEffect,
          EFFECT_TYPE.PLAY_ANIMATION: core_func.FunctionalPlayAnimationEffect,
          EFFECT_TYPE.INVOKE_GUI_CMD: core_func.FunctionalGuiCommandEffect,
@@ -35,7 +36,10 @@ class BootcampLobbyControlsFactory(ControlsFactory):
          EFFECT_TYPE.PLAY_SOUND: core_func.FunctionalPlaySoundEffect,
          EFFECT_TYPE.FINISH_TRAINING: functional.FunctionalFinishBootcampEffect,
          EFFECT_TYPE.CLOSE_VIEW: core_func.FunctionalCloseViewEffect}
-        queries_ = {'bootcampMessage': queries.MessageDialogContentQuery}
+        queries_ = {'bootcampVideo': queries.VideoDialogContentQuery,
+         'bootcampSubtitle': queries.SubtitleDialogContentQuery,
+         'bootcampMessage': queries.MessageDialogContentQuery,
+         'bootcampSelectNation': queries.SubtitleDialogContentQuery}
         customConditions = {BOOTCAMP_CONDITION_TYPE.CHECKPOINT_REACHED: functional.FunctionalCheckpointReachedCondition}
         ControlsFactory.__init__(self, effects, queries_, customConditions)
 

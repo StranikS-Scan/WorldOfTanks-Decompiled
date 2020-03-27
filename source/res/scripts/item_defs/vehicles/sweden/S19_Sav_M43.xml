@@ -17,7 +17,7 @@
     <camouflageNetBonus>	0.15	</camouflageNetBonus>
     <firePenalty>	0.591	</firePenalty>
   </invisibility>
-  <repairCost>	5.5	</repairCost>
+  <repairCost>	3.578	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
@@ -39,7 +39,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	7831	</weight>
-    <maxHealth>	216	</maxHealth>
+    <maxHealth>	332	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	140	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -1461,7 +1461,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
       <weight>	100	</weight>
-      <maxHealth>	54	</maxHealth>
+      <maxHealth>	83	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1475,7 +1475,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_kan_m_02>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_75mm_kan_m_02>	shared	  <maxAmmo>	90	</maxAmmo>
           <unlocks>
             <gun>	_75mm_kan_m_41_ikv_L_50_neglkrut	  <cost>	2250	</cost>
             </gun>
@@ -1535,7 +1535,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_kan_m_02>
-        <_75mm_kan_m_41_ikv_L_50_neglkrut>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_75mm_kan_m_41_ikv_L_50_neglkrut>	shared	  <maxAmmo>	90	</maxAmmo>
           <unlocks>
             <gun>	_105mm_kan_m_44_sav	  <cost>	3800	</cost>
             </gun>
@@ -1597,7 +1597,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_kan_m_41_ikv_L_50_neglkrut>
-        <_105mm_kan_m_44_sav>	shared	  <maxAmmo>	41	</maxAmmo>
+        <_105mm_kan_m_44_sav>	shared	  <maxAmmo>	60	</maxAmmo>
           <unlocks>
             <vehicle>	S14_Ikv_103	  <cost>	10830	</cost>
             </vehicle>

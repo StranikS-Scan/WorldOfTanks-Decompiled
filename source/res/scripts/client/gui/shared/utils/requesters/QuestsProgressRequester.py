@@ -1,18 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/QuestsProgressRequester.py
+import functools
 from collections import namedtuple
 import copy
-from typing import Any
 import logging
+import typing
 import BigWorld
 import personal_missions
+from account_helpers.AccountSettings import QUEST_DELTAS_PROGRESS, QUEST_DELTAS_COMPLETION
 from adisp import async
+from gui.server_events import events_helpers
+from gui.shared.utils.requesters.quest_deltas_settings import QuestDeltasSettings
+from gui.shared.utils.requesters.token import Token
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from gui.shared.utils.requesters.common import BaseDelta
 from helpers import dependency
-from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-_Token = namedtuple('_Token', ('expireTime', 'count'))
+if typing.TYPE_CHECKING:
+    from gui.server_events.event_items import Quest
 _logger = logging.getLogger(__name__)
 
 class _QuestsProgressRequester(AbstractSyncDataRequester):
@@ -36,15 +41,15 @@ class _QuestsProgressRequester(AbstractSyncDataRequester):
         BigWorld.player().questProgress.getCache(lambda resID, value: self._response(resID, value, callback))
 
     def __getToken(self, tokenID):
-        return _Token(*self.getTokensData().get(tokenID, (0, 0)))
+        return Token(*self.getTokensData().get(tokenID, (0, 0)))
 
 
 class QuestsProgressRequester(_QuestsProgressRequester):
 
     def __init__(self):
         super(QuestsProgressRequester, self).__init__()
-        self.__questProgressDelta = _QuestProgressDelta()
-        self.__questCompletion = _QuestCompletion()
+        self.__questProgressDelta = _QuestProgressDelta(functools.partial(QuestDeltasSettings, QUEST_DELTAS_PROGRESS))
+        self.__questCompletion = _QuestCompletionDelta(functools.partial(QuestDeltasSettings, QUEST_DELTAS_COMPLETION))
 
     def getQuestCompletionChanged(self, questId):
         return self.__questCompletion.getQuestCompletionChanged(questId)
@@ -75,6 +80,7 @@ class QuestsProgressRequester(_QuestsProgressRequester):
 
     def _preprocessValidData(self, data):
         self.__questProgressDelta.update(data)
+        self.__questCompletion.update(data)
         return data
 
     def __getQuestsRewards(self):
@@ -138,9 +144,6 @@ class PersonalMissionsProgressRequester(_QuestsProgressRequester):
 
 class _QuestProgressDelta(BaseDelta):
 
-    def _hasEntryChanged(self, entryId):
-        return cmp(self._currValues[entryId], self._prevValues[entryId]) != 0
-
     def _getDataIterator(self, data):
         for questId, quest in data.get('quests', {}).iteritems():
             yield (questId, copy.deepcopy(quest.get('progress', {})))
@@ -149,23 +152,24 @@ class _QuestProgressDelta(BaseDelta):
         return {}
 
 
-class _QuestCompletion(object):
-    eventsCache = dependency.descriptor(IEventsCache)
+class _QuestCompletionDelta(BaseDelta):
 
-    def __init__(self):
-        self.__visitedQuests = set()
+    @staticmethod
+    def questFilter(quest):
+        return events_helpers.isDailyQuest(quest.getID()) or events_helpers.isPremium(quest.getID())
+
+    def _getDataIterator(self, data):
+        events = self.eventsCache.getEvents(self.questFilter)
+        for questId in data.get('quests', {}).keys():
+            quest = events.get(questId)
+            if quest:
+                yield (questId, quest.isCompleted(data['quests'][questId]['progress']))
+
+    def _getDefaultValue(self):
+        return False
 
     def getQuestCompletionChanged(self, questId):
-        isCompleted = self.eventsCache.getEvents()[questId].isCompleted()
-        if not isCompleted:
-            if questId in self.__visitedQuests:
-                self.__visitedQuests.remove(questId)
-            return False
-        return False if questId in self.__visitedQuests else True
+        return self.hasDiff(questId)
 
     def markVisited(self, questId):
-        if self.getQuestCompletionChanged(questId):
-            self.__visitedQuests.add(questId)
-
-    def clear(self):
-        self.__visitedQuests.clear()
+        self.updatePrevValueToCurrentValue(questId)

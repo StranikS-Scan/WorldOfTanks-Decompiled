@@ -1,9 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/common.py
-from typing import Iterable, Any
+import abc
+import typing
 import BigWorld
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
+if typing.TYPE_CHECKING:
+    from typing import Iterable, Any
 
 class RequestProcessor(object):
 
@@ -30,17 +33,19 @@ class RequestProcessor(object):
 
 
 class BaseDelta(object):
+    __metaclass__ = abc.ABCMeta
     eventsCache = dependency.descriptor(IEventsCache)
 
-    def __init__(self):
-        self._prevValues = {}
-        self._currValues = {}
-        self.__isInitialized = False
+    def __init__(self, prevFactory=None):
+        self._currValues = dict()
+        self._prevValues = dict()
+        self._prevFactory = prevFactory
+        self._prevIsInitialized = False
 
     def update(self, data):
         self._currValues.clear()
         self._currValues.update(self._getDataIterator(data))
-        self.__initialize()
+        self._initializePrevValues()
         self._removeOutdatedValues()
 
     def updatePrevValueToCurrentValue(self, entryId):
@@ -51,9 +56,9 @@ class BaseDelta(object):
         return self._prevValues[entryId] if entryId in self._prevValues else self._getDefaultValue()
 
     def clear(self):
-        self._currValues.clear()
         self._prevValues.clear()
-        self.__isInitialized = False
+        self._currValues.clear()
+        self._prevIsInitialized = False
 
     def hasDiff(self, entryId):
         if entryId in self._currValues:
@@ -63,22 +68,27 @@ class BaseDelta(object):
         return False
 
     def _hasEntryChanged(self, entryId):
-        raise NotImplementedError
+        return self._currValues.get(entryId) != self._prevValues.get(entryId)
 
     def _removeOutdatedValues(self):
         for entryId in self._prevValues.keys():
             if entryId not in self._currValues:
                 del self._prevValues[entryId]
 
+    @abc.abstractmethod
     def _getDataIterator(self, data):
         raise NotImplementedError
 
+    @abc.abstractmethod
     def _getDefaultValue(self):
         raise NotImplementedError
 
-    def __initialize(self):
-        if not self.__isInitialized:
-            for entryId in self._currValues.iterkeys():
-                self._prevValues[entryId] = self._currValues[entryId]
-
-            self.__isInitialized = True
+    def _initializePrevValues(self):
+        if self._prevIsInitialized:
+            return
+        if self._prevFactory:
+            self._prevValues = self._prevFactory()
+        else:
+            self._prevValues = dict()
+            self._prevValues = {k:v for k, v in self._currValues.iteritems()}
+        self._prevIsInitialized = True

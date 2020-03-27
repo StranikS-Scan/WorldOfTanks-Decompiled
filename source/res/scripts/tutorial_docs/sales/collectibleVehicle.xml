@@ -1,0 +1,74 @@
+<collectibleVehicle.xml>
+  <default-scene>	DefaultScene	</default-scene>
+  <initial-scene>	Hangar	</initial-scene>
+  <scenes>
+    <scene>	Hangar	  <post-effects>
+        <run-trigger>	CollectibleVehicleTrigger	</run-trigger>
+      </post-effects>
+      <runtime-effects>
+        <show-hint>	ResearchVehicleHint	  <condition>
+            <active>	VehicleResearchOnScene	</active>
+            <active>	currentVehicleIsCollectible	</active>
+          </condition>
+        </show-hint>
+        <refuse-training>
+          <condition>
+            <active>	isCompleted	</active>
+          </condition>
+        </refuse-training>
+      </runtime-effects>
+      <gui-items>
+        <gui-item>	VehicleResearchButton	  <on-scene-effects>
+            <activate>	VehicleResearchOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	VehicleResearchOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+      </gui-items>
+    </scene>
+    <scene>	DefaultScene	  <post-effects>
+        <refuse-training></refuse-training>
+      </post-effects>
+      <runtime-effects></runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+  </scenes>
+  <has-id>
+    <hint>	ResearchVehicleHint	  <item-id>	VehicleResearchButton	</item-id>
+      <text>	#tutorial:collectibleVehicles/researchModules	</text>
+      <arrow>
+        <direction>	L	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <update-runtime>	True	</update-runtime>
+      <actions>
+        <click>	VehicleResearchButton	  <effects>
+            <activate>	isCompleted	</activate>
+            <refuse-training></refuse-training>
+          </effects>
+        </click>
+        <click-outside>	VehicleResearchButton	  <effects>
+            <run-trigger>	CollectibleVehicleTrigger	</run-trigger>
+          </effects>
+        </click-outside>
+        <esc>	VehicleResearchButton	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+  </has-id>
+  <triggers>
+    <trigger>	CollectibleVehicleTrigger	  <type>	isCollectibleVehicle	</type>
+      <on-effects>
+        <activate>	currentVehicleIsCollectible	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	currentVehicleIsCollectible	</inactivate>
+        <close-hint>	ResearchVehicleHint	</close-hint>
+      </off-effects>
+    </trigger>
+  </triggers>
+  <vars></vars>
+</collectibleVehicle.xml>

@@ -8,14 +8,29 @@ class Currency(CONST_CONTAINER):
     CREDITS = 'credits'
     GOLD = 'gold'
     CRYSTAL = 'crystal'
-    ALL = (CREDITS, GOLD, CRYSTAL)
-    BY_WEIGHT = (GOLD, CRYSTAL, CREDITS)
+    EVENT_COIN = 'eventCoin'
+    ALL = (CREDITS,
+     GOLD,
+     CRYSTAL,
+     EVENT_COIN)
+    BY_WEIGHT = (GOLD,
+     CRYSTAL,
+     CREDITS,
+     EVENT_COIN)
     GUI_ALL = (CRYSTAL, GOLD, CREDITS)
     __INDEXES = {c:i for i, c in enumerate(ALL)}
+    _CURRENCY_EXTERNAL_MAP = {CREDITS: 'credits',
+     GOLD: 'gold',
+     CRYSTAL: 'crystal',
+     EVENT_COIN: 'event_coin'}
 
     @classmethod
     def getCurrencyIndex(cls, currency):
         return cls.__INDEXES.get(currency, None)
+
+    @classmethod
+    def currencyExternalName(cls, currencyName):
+        return Currency._CURRENCY_EXTERNAL_MAP[currencyName]
 
 
 __Money = namedtuple('_Money', Currency.ALL)
@@ -30,12 +45,13 @@ class _Money(__Money):
 class Money(object):
     __slots__ = ('__values',)
 
-    def __init__(self, credits=None, gold=None, crystal=None, *args, **kwargs):
+    def __init__(self, credits=None, gold=None, crystal=None, eventCoin=None, *args, **kwargs):
         super(Money, self).__init__()
         self.__values = {}
         self.__initValue(self.__values, Currency.CREDITS, credits)
         self.__initValue(self.__values, Currency.GOLD, gold)
         self.__initValue(self.__values, Currency.CRYSTAL, crystal)
+        self.__initValue(self.__values, Currency.EVENT_COIN, eventCoin)
 
     @property
     def credits(self):
@@ -48,6 +64,10 @@ class Money(object):
     @property
     def crystal(self):
         return self.__values.get(Currency.CRYSTAL)
+
+    @property
+    def eventCoin(self):
+        return self.__values.get(Currency.EVENT_COIN)
 
     @classmethod
     def makeFrom(cls, currency, value):
@@ -320,6 +340,7 @@ MONEY_UNDEFINED = Money()
 MONEY_ZERO_CREDITS = Money(credits=0)
 MONEY_ZERO_GOLD = Money(gold=0)
 MONEY_ZERO_CRYSTAL = Money(crystal=0)
+MONEY_ZERO_EVENT_COIN = Money(eventCoin=0)
 ZERO_MONEY = Money(**{c:0 for c in Currency.ALL})
 
 class MoneySet(tuple):

@@ -50,6 +50,35 @@
       <devices>	27	</devices>
     </damage>
   </_20mm_Pzgr39>
+  <_20mm_Pzgr39_S>
+    <id>	208	</id>
+    <userString>	#germany_vehicles:_20mm_Pzgr39_S	</userString>
+    <icon>	ap	</icon>
+    <price>	3	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	20	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	autoArmorPiercing	</effects>
+    <damage>
+      <armor>	13	</armor>
+      <devices>	27	</devices>
+    </damage>
+  </_20mm_Pzgr39_S>
+  <_20cm_Pzgr40_S>
+    <id>	209	</id>
+    <userString>	#germany_vehicles:_20cm_Pzgr40_S	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	400	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	20	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallAPCR	</effects>
+    <damage>
+      <armor>	13	</armor>
+      <devices>	27	</devices>
+    </damage>
+  </_20cm_Pzgr40_S>
   <_20mm_Pzgr39_bot>
     <id>	147	</id>
     <userString>	#germany_vehicles:_20mm_Pzgr39_bot	</userString>
@@ -955,6 +984,7 @@
     <price>	160	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	75	</caliber>
+    <explosionRadius>	1.06	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mediumHighExplosive	</effects>
     <damage>

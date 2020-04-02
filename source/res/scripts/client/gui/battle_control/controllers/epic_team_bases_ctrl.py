@@ -89,6 +89,7 @@ class EpicBattleTeamsBasesController(BattleTeamsBasesController):
 
     def __onPlayerPhysicalLaneUpdated(self, laneID):
         if not self.__currentBaseID:
+            self.clearViewComponents()
             return
         else:
             componentSystem = self.sessionProvider.arenaVisitor.getComponentSystem()

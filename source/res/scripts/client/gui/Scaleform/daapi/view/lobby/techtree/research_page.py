@@ -302,8 +302,10 @@ class Research(ResearchMeta):
         if root.isPremium:
             benefitIconPattern = 'benefit%dIconSrc'
             benefitLabelPattern = 'benefit%dLabelStr'
-            benefitData = [(backport.image(R.images.gui.maps.shop.kpi.star_icon_benefits()), backport.text(R.strings.vehicle_preview.infoPanel.premium.freeExpMultiplier()), backport.text(R.strings.vehicle_preview.infoPanel.premium.freeExpText()))]
-            if not root.isSpecial:
+            benefitData = []
+            if not root.isEpicActionVehicle:
+                benefitData.append((backport.image(R.images.gui.maps.shop.kpi.star_icon_benefits()), backport.text(R.strings.vehicle_preview.infoPanel.premium.freeExpMultiplier()), backport.text(R.strings.vehicle_preview.infoPanel.premium.freeExpText())))
+            if not (root.isSpecial or root.isEpicActionVehicle):
                 benefitData.append((backport.image(R.images.gui.maps.shop.kpi.money_benefits()), backport.text(R.strings.vehicle_preview.infoPanel.premium.creditsMultiplier()), backport.text(R.strings.vehicle_preview.infoPanel.premium.creditsText())))
             if not root.isCrewLocked:
                 benefitData.append((backport.image(R.images.gui.maps.shop.kpi.crow_benefits()), backport.text(R.strings.vehicle_preview.infoPanel.premium.crewTransferTitle()), backport.text(R.strings.vehicle_preview.infoPanel.premium.crewTransferText())))

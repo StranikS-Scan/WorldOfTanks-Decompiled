@@ -73,7 +73,7 @@ class BATTLE_PASS_2020(object):
     PROGRESSION_SEASONENDINGTOOLTIP = '#battle_pass_2020:progression/seasonEndingTooltip'
     PROGRESSION_TITLE = '#battle_pass_2020:progression/title'
     PROGRESSION_ABOUT = '#battle_pass_2020:progression/about'
-    PROGRESSION_DURATION = '#battle_pass_2020:progression/duration'
+    PROGRESSION_SEASONTIME = '#battle_pass_2020:progression/seasonTime'
     PROGRESSION_BTNVOTE = '#battle_pass_2020:progression/btnVote'
     PROGRESSION_BTNVOTETOOLTIP = '#battle_pass_2020:progression/btnVoteTooltip'
     PROGRESSION_BTNEXTRAS = '#battle_pass_2020:progression/btnExtras'

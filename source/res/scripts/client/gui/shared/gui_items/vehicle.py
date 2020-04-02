@@ -103,6 +103,7 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     RENT_PROMOTION = 'rent_promotion'
 
 
+EPIC_ACTION_VEHICLE_CDS = (44033, 63265)
 _NOT_FULL_AMMO_MULTIPLIER = 0.2
 _MAX_RENT_MULTIPLIER = 2
 RentPackagesInfo = namedtuple('RentPackagesInfo', ('hasAvailableRentPackages', 'mainRentType', 'seasonType'))
@@ -1161,6 +1162,10 @@ class Vehicle(FittingItem):
     @property
     def isOnlyForEpicBattles(self):
         return checkForTags(self.tags, VEHICLE_TAGS.EPIC_BATTLES)
+
+    @property
+    def isEpicActionVehicle(self):
+        return self.isOnlyForEpicBattles and self.intCD in EPIC_ACTION_VEHICLE_CDS
 
     @property
     def isTelecom(self):

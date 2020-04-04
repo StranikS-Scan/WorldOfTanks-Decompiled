@@ -596,6 +596,18 @@ class Attachment(Customization):
     def modelName(self):
         return self.descriptor.modelName
 
+    @property
+    def sequenceId(self):
+        return self.descriptor.sequenceId
+
+    @property
+    def attachmentLogic(self):
+        return self.descriptor.attachmentLogic
+
+    @property
+    def initialVisibility(self):
+        return self.descriptor.initialVisibility
+
 
 class Style(Customization):
     __slots__ = ('_outfits',)

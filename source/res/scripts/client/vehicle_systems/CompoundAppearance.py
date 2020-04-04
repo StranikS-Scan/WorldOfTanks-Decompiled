@@ -488,6 +488,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         return self.collisions.getBoundingBox(DamageFromShotDecoder.convertComponentIndex(partIdx)) if self.collisions is not None else (Math.Vector3(0.0, 0.0, 0.0), Math.Vector3(0.0, 0.0, 0.0), 0)
 
     def __requestModelsRefresh(self):
+        self._onRequestModelsRefresh()
         modelsSetParams = self.modelsSetParams
         assembler = model_assembler.prepareCompoundAssembler(self.typeDescriptor, modelsSetParams, self.__vehicle.spaceID, self.__vehicle.isTurretDetached)
         BigWorld.loadResourceListBG((assembler,), makeCallbackWeak(self.__onModelsRefresh, modelsSetParams.state), loadingPriority(self.__vehicle.id))

@@ -3,7 +3,6 @@
 from logging import getLogger
 import datetime
 import Keys
-import GUI
 import nations
 from account_helpers.settings_core.settings_constants import GuiSettingsBehavior
 from account_helpers import AccountSettings
@@ -11,7 +10,7 @@ from account_helpers.AccountSettings import GUI_START_BEHAVIOR, TECHTREE_INTRO_B
 from helpers import time_utils
 from constants import IS_DEVELOPMENT
 from blueprints.BlueprintTypes import BlueprintTypes
-from gui import g_guiResetters, GUI_SETTINGS
+from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.go_back_helper import BackButtonContextKeys
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled, getPremiumVehiclesUrl
@@ -39,8 +38,6 @@ from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
 from gui.Scaleform.genConsts.SESSION_STATS_CONSTANTS import SESSION_STATS_CONSTANTS
 _logger = getLogger(__name__)
-_HEIGHT_LESS_THAN_SPECIFIED_TO_OVERRIDE = 850
-_HEIGHT_LESS_THAN_SPECIFIED_OVERRIDE_TAG = 'height_less_850'
 _VEHICLE_URL_FILTER_PARAM = 1
 
 class TechTree(TechTreeMeta):
@@ -60,7 +57,7 @@ class TechTree(TechTreeMeta):
         self.as_refreshNationTreeDataS(SelectedNation.getName())
 
     def requestNationTreeData(self):
-        self.as_setAvailableNationsS(g_techTreeDP.getAvailableNations())
+        self.as_setAvailableNationsS(g_techTreeDP.getNationsMenuDataProvider())
         self.as_setSelectedNationS(SelectedNation.getName())
         return True
 
@@ -68,11 +65,12 @@ class TechTree(TechTreeMeta):
         if nationName not in nations.INDICES:
             _logger.error('Nation with name %s not found', nationName)
             return {}
+        self.__stopTopOfTheTreeSounds()
         nationIdx = nations.INDICES[nationName]
         SelectedNation.select(nationIdx)
         self.__updateBlueprintBalance()
         self.__setVehicleCollectorState()
-        self._data.load(nationIdx, override=self._getOverride())
+        self._data.load(nationIdx)
         self.__playBlueprintPlusSound()
         return self._data.dump()
 
@@ -133,6 +131,13 @@ class TechTree(TechTreeMeta):
             shared_events.showOldShop(ctx={'tabId': STORE_TYPES.SHOP,
              'component': STORE_CONSTANTS.VEHICLE})
 
+    def onPlayHintAnimation(self, isEnabled=True):
+        if isEnabled:
+            g_techTreeDP.techTreeEventsListener.setNationViewed(SelectedNation.getIndex())
+            self.soundManager.playInstantSound(Sounds.TOP_OF_THE_TREE_ANIMATION_ON_SOUND_ID)
+        else:
+            self.soundManager.playInstantSound(Sounds.TOP_OF_THE_TREE_ANIMATION_OFF_SOUND_ID)
+
     def invalidateBlueprintMode(self, isEnabled):
         if isEnabled:
             self.as_setBlueprintsSwitchButtonStateS(enabled=True, selected=self.__blueprintMode, tooltip=TOOLTIPS.TECHTREEPAGE_BLUEPRINTSSWITCHTOOLTIP, visible=True)
@@ -175,19 +180,14 @@ class TechTree(TechTreeMeta):
             SelectedNation.byDefault()
         return
 
-    def _getOverride(self):
-        _, height = GUI.screenResolution()
-        override = ''
-        if height < _HEIGHT_LESS_THAN_SPECIFIED_TO_OVERRIDE or self.app.varsManager.isShowTicker() and height == _HEIGHT_LESS_THAN_SPECIFIED_TO_OVERRIDE:
-            override = _HEIGHT_LESS_THAN_SPECIFIED_OVERRIDE_TAG
-        return override
-
     def _populate(self):
         super(TechTree, self)._populate()
-        g_guiResetters.add(self.__onUpdateStage)
         if IS_DEVELOPMENT:
             from gui import InputHandler
             InputHandler.g_instance.onKeyUp += self.__handleReloadData
+        eventsListener = g_techTreeDP.techTreeEventsListener
+        if eventsListener is not None:
+            eventsListener.onSettingsChanged += self.__onSettingsChanged
         if self.__blueprintMode:
             self.as_setBlueprintModeS(True)
         isBlueprintsEnabled = self._lobbyContext.getServerSettings().blueprintsConfig.isBlueprintsAvailable()
@@ -195,6 +195,7 @@ class TechTree(TechTreeMeta):
         self.__setVehicleCollectorState()
         self.__addListeners()
         self._populateAfter()
+        return
 
     def _populateAfter(self):
         blueprints = {}
@@ -206,16 +207,12 @@ class TechTree(TechTreeMeta):
             shared_events.showTechTreeIntro(parent=self.getParentWindow(), blueprints=blueprints)
 
     def _dispose(self):
-        g_guiResetters.discard(self.__onUpdateStage)
         if IS_DEVELOPMENT:
             from gui import InputHandler
             InputHandler.g_instance.onKeyUp -= self.__handleReloadData
         self.__removeListeners()
+        self.__stopTopOfTheTreeSounds()
         super(TechTree, self)._dispose()
-        self._disposeAfter()
-
-    def _disposeAfter(self):
-        pass
 
     def _blueprintExitEvent(self, vehicleCD):
         return self.__exitEvent()
@@ -235,15 +232,14 @@ class TechTree(TechTreeMeta):
         self.removeListener(VIEW_ALIAS.NOTIFICATIONS_LIST, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.ReferralProgramEvent.SHOW_REFERRAL_PROGRAM_WINDOW, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.ChannelCarouselEvent.OPEN_BUTTON_CLICK, self.__onClosePremiumPanel, scope=EVENT_BUS_SCOPE.LOBBY)
+        eventsListener = g_techTreeDP.techTreeEventsListener
+        if eventsListener is not None:
+            eventsListener.onSettingsChanged -= self.__onSettingsChanged
+        return
 
     def __exitEvent(self):
         return events.LoadViewEvent(VIEW_ALIAS.LOBBY_TECHTREE, ctx={BackButtonContextKeys.NATION: SelectedNation.getName(),
          BackButtonContextKeys.BLUEPRINT_MODE: self.__blueprintMode})
-
-    def __onUpdateStage(self):
-        g_techTreeDP.setOverride(self._getOverride())
-        if g_techTreeDP.load():
-            self.redraw()
 
     def __onClosePremiumPanel(self, _=None):
         self.as_closePremiumPanelS()
@@ -302,3 +298,9 @@ class TechTree(TechTreeMeta):
     def __setVehicleCollectorState(self):
         isVehicleCollectorEnabled = self._lobbyContext.getServerSettings().isCollectorVehicleEnabled()
         self.as_setVehicleCollectorStateS(isVehicleCollectorEnabled and hasCollectibleVehicles(SelectedNation.getIndex()))
+
+    def __onSettingsChanged(self):
+        self.as_setAvailableNationsS(g_techTreeDP.getNationsMenuDataProvider())
+
+    def __stopTopOfTheTreeSounds(self):
+        self.soundManager.playInstantSound(Sounds.TOP_OF_THE_TREE_ANIMATION_STOP_ANIMATION)

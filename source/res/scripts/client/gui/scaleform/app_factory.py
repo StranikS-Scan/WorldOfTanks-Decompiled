@@ -23,22 +23,22 @@ _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 _SPACE = app_settings.APP_NAME_SPACE
 
-class NoAppFactory(AlwaysValidObject, IAppFactory):
+class EmptyAppFactory(AlwaysValidObject, IAppFactory):
 
     def createLobby(self):
-        _logger.debug('NoAppFactory.createLobby')
+        _logger.debug('EmptyAppFactory.createLobby')
 
     def destroyLobby(self):
-        _logger.debug('NoAppFactory.destroyLobby')
+        _logger.debug('EmptyAppFactory.destroyLobby')
 
     def reloadLobbyPackages(self):
-        _logger.debug('NoAppFactory.reloadLobbyPackages')
+        _logger.debug('EmptyAppFactory.reloadLobbyPackages')
 
     def createBattle(self, _):
-        _logger.debug('NoAppFactory.createBattle')
+        _logger.debug('EmptyAppFactory.createBattle')
 
     def destroyBattle(self):
-        _logger.debug('NoAppFactory.destroyBattle')
+        _logger.debug('EmptyAppFactory.destroyBattle')
 
 
 class AS3_AppFactory(IAppFactory):
@@ -295,9 +295,9 @@ class AS3_AppFactory(IAppFactory):
         g_eventBus.handleEvent(event, EVENT_BUS_SCOPE.BATTLE)
 
 
-def createAppFactory():
-    if GUI_SETTINGS.isGuiEnabled():
+def createAppFactory(forceEmptyFactory=False):
+    if GUI_SETTINGS.isGuiEnabled() and not forceEmptyFactory:
         factory = AS3_AppFactory()
     else:
-        factory = NoAppFactory()
+        factory = EmptyAppFactory()
     return factory

@@ -41,7 +41,9 @@ def getTooltipBuilders():
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BATTLE_PASS_VEHICLE_POINTS, None, common.VehiclePointsTooltipContentWindowData(contexts.ToolTipContext(None))),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BATTLE_PASS_IN_PROGRESS, None, common.BattlePassInProgressTooltipContentWindowData(contexts.ToolTipContext(None))),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BATTLE_PASS_COMPLETED, None, common.BattlePassCompletedTooltipContentWindowData(contexts.ToolTipContext(None))),
-     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BATTLE_PASS_CHOSE_WINNER, None, common.BattlePassChoseWinnerTooltipContentWindowData(contexts.ToolTipContext(None))))
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BATTLE_PASS_CHOSE_WINNER, None, common.BattlePassChoseWinnerTooltipContentWindowData(contexts.ToolTipContext(None))),
+     DataBuilder(TOOLTIPS_CONSTANTS.TECHTREE_DISCOUNT_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, common.TechTreeDiscountInfoTooltip(contexts.QuestContext())),
+     DataBuilder(TOOLTIPS_CONSTANTS.TECHTREE_NATION_DISCOUNT, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, common.TechTreeNationDiscountTooltip(contexts.TechTreeContext())))
 
 
 class HeaderMoneyAndXpBuilder(DataBuilder):

@@ -1118,6 +1118,32 @@
     </usages>
   </itemGroup>
   <itemGroup>
+    <name>	Cosmonautics Day 2020 paints	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	32	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_22.png	</texture>
+      <color>	16 16 33 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.222	</metallic>
+      <userString>	#vehicle_customization:repaint/cosmonautics_day_2020	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
     <name>	Japan Golden Week paints	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>

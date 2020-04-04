@@ -86,6 +86,9 @@ class ExposedNode(object):
     def getLevel(self):
         raise NotImplementedError
 
+    def getNationID(self):
+        raise NotImplementedError
+
     def getTypeName(self):
         raise NotImplementedError
 
@@ -160,6 +163,9 @@ class RealNode(ExposedNode):
 
     def getLevel(self):
         return self.__item.level
+
+    def getNationID(self):
+        return self.__item.nationID
 
     def getTypeName(self):
         return self.__item.getGUIEmblemID()
@@ -261,6 +267,9 @@ class AnnouncementNode(ExposedNode):
 
     def getLevel(self):
         return self.__announcementInfo.level
+
+    def getNationID(self):
+        pass
 
     def getTypeName(self):
         return GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.VEHICLE]

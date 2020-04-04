@@ -47,12 +47,13 @@ class _VehicleState(object):
     CAN_RESTORE = 3
 
 
-def _getPremiumBaseBenefit(benefits, _, __=None):
-    benefits.append((backport.image(R.images.gui.maps.shop.kpi.star_icon_benefits()), backport.text(R.strings.vehicle_preview.infoPanel.premium.freeExpMultiplier()), backport.text(R.strings.vehicle_preview.infoPanel.premium.freeExpText())))
+def _getPremiumBaseBenefit(benefits, root, _=None):
+    if not root.isEpicActionVehicle:
+        benefits.append((backport.image(R.images.gui.maps.shop.kpi.star_icon_benefits()), backport.text(R.strings.vehicle_preview.infoPanel.premium.freeExpMultiplier()), backport.text(R.strings.vehicle_preview.infoPanel.premium.freeExpText())))
 
 
 def _getMoneyBenefits(benefits, root, _=None):
-    if not root.isSpecial:
+    if not (root.isSpecial or root.isEpicActionVehicle):
         benefits.append((backport.image(R.images.gui.maps.shop.kpi.money_benefits()), backport.text(R.strings.vehicle_preview.infoPanel.premium.creditsMultiplier()), backport.text(R.strings.vehicle_preview.infoPanel.premium.creditsText())))
 
 

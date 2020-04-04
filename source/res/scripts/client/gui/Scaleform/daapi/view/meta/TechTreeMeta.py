@@ -31,6 +31,9 @@ class TechTreeMeta(ResearchView):
     def onGoToPremiumShop(self, nationName, level):
         self._printOverrideError('onGoToPremiumShop')
 
+    def onPlayHintAnimation(self, isEnabled):
+        self._printOverrideError('onPlayHintAnimation')
+
     def as_setAvailableNationsS(self, nations):
         return self.flashObject.as_setAvailableNations(nations) if self._isDAAPIInited() else None
 

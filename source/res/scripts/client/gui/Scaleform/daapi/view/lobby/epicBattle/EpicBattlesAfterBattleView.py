@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/epicBattle/EpicBattlesAfterBattleView.py
 import SoundGroups
 from constants import EPIC_ABILITY_PTS_NAME
+from data_structures import OrderedSet
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_meta_level_icon import getEpicMetaIconVODict
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import FRONTLINE_LEVEL_TOKEN_BASE, FRONTLINE_PROGRESSION_FINISH_TOKEN
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import EpicCurtailingAwardsComposer
@@ -66,7 +67,7 @@ def _AccumulateBonuses(bonuses):
      PlusPremiumDaysBonus: accumulatePlusPremiumDays,
      EpicAbilityPtsBonus: accumulateEpicAbilityPtsBonus}
     accumulatedBonuses = []
-    for bonusType in set((type(b) for b in bonuses)):
+    for bonusType in OrderedSet((type(b) for b in bonuses)):
         bonusesOfType = [ b for b in bonuses if isinstance(b, bonusType) ]
         if bonusType not in typeToAccumulator.iterkeys():
             accumulatedBonuses.extend(bonusesOfType)
@@ -164,7 +165,10 @@ class EpicBattlesAfterBattleView(EpicBattlesAfterBattleViewMeta):
         allQuests = self.__eventsCache.getAllQuests()
         currentLevelQuest = allQuests.get(_LEVELUP_TOKEN_TEMPLATE % level, None)
         if currentLevelQuest and questsProgressData:
-            bonuses = sum([ allQuests.get(q).getBonuses() for q in questsProgressData if FRONTLINE_LEVEL_TOKEN_BASE in q or FRONTLINE_PROGRESSION_FINISH_TOKEN in q ], self.__getAbilityPointsRewardBonus(level))
+            progressionFinishBonuses = [ allQuests.get(q).getBonuses() for q in questsProgressData if FRONTLINE_PROGRESSION_FINISH_TOKEN in q ]
+            levelupBonuses = [ allQuests.get(q).getBonuses() for q in questsProgressData if FRONTLINE_LEVEL_TOKEN_BASE in q ]
+            bonuses = progressionFinishBonuses + levelupBonuses + [self.__getAbilityPointsRewardBonus(level)]
+            bonuses = [ bonus for singleQuestBonuses in bonuses for bonus in singleQuestBonuses ]
             bonuses = _AccumulateBonuses(bonuses)
         else:
             bonuses = []

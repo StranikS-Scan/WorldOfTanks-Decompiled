@@ -248,7 +248,7 @@ class VehicleArenaInfoVO(object):
         return
 
     def __repr__(self):
-        return 'VehicleArenaInfoVO(vehicleID = {0!r:s}, team = {1!r:n}, player = {2!r:s}, playerStatus = {3:n}, vehicleType = {4!r:s}, vehicleStatus = {5:n}, prebattleID = {6!r:s})'.format(self.vehicleID, self.team, self.player, self.playerStatus, self.vehicleType, self.vehicleStatus, self.prebattleID)
+        return 'VehicleArenaInfoVO(vehicleID = {0!r:s}, team = {1!r:s}, player = {2!r:s}, playerStatus = {3:n}, vehicleType = {4!r:s}, vehicleStatus = {5:n}, prebattleID = {6!r:s})'.format(self.vehicleID, self.team, self.player, self.playerStatus, self.vehicleType, self.vehicleStatus, self.prebattleID)
 
     def __eq__(self, other):
         return self.vehicleID == other.vehicleID

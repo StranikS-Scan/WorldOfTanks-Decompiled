@@ -70,6 +70,8 @@ def _readGroupTags(xmlCtx, section, subsectionName):
 
 def _readSkinItem(pricesCache, cache, xmlCtx, section, storage):
     skinID = _xml.readInt(xmlCtx, section, 'id', 1)
+    if skinID in storage:
+        _xml.raiseWrongXml(xmlCtx, 'id', "duplicate id '%s'" % skinID)
     priceGroup = section.readString('priceGroup')
     tags = _readGroupTags((xmlCtx, 'tags'), section, 'tags')
     firstNameID = _xml.readStringOrEmpty(xmlCtx, section, 'firstName')

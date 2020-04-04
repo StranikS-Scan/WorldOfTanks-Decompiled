@@ -2099,6 +2099,46 @@
               <applyTo>	16384	</applyTo>
             </slot>
           </customizationSlots>
+          <drivenJoints>
+            <master>
+              <node>	Gun	</node>
+              <table>
+                <row>	-45.0	</row>
+                <row>	-39.25	</row>
+                <row>	-33.75	</row>
+                <row>	-22.5	</row>
+                <row>	-11.25	</row>
+                <row>	-6.0	</row>
+                <row>	0.0	</row>
+              </table>
+              <slaves>
+                <slave>
+                  <node>	Joint_01	</node>
+                  <table>
+                    <row>	2.174	</row>
+                    <row>	3.125	</row>
+                    <row>	3.252	</row>
+                    <row>	4.463	</row>
+                    <row>	2.962	</row>
+                    <row>	2.321	</row>
+                    <row>	0.0	</row>
+                  </table>
+                </slave>
+                <slave>
+                  <node>	Joint_02	</node>
+                  <table>
+                    <row>	46.352	</row>
+                    <row>	41.748	</row>
+                    <row>	37.563	</row>
+                    <row>	26.363	</row>
+                    <row>	14.755	</row>
+                    <row>	7.757	</row>
+                    <row>	0.0	</row>
+                  </table>
+                </slave>
+              </slaves>
+            </master>
+          </drivenJoints>
           <camouflage>
             <tiling>	1.2 0.6 0.000000 0.000000	</tiling>
             <density>	174.844 171.483	</density>

@@ -20,18 +20,18 @@ _logger = logging.getLogger(__name__)
 REG_EXP_QUEST_SUBTYPE = ':([Y, y]\\d*)|:([A,a,B,b][T,t])'
 _UNVISIBLE_BONUSES = set(['slots'])
 _BONUSES_STEP = 9
-_SENIORITY_BONUSES_ORDER = (('customizations', 'style'),
- ('crewBooks', 'personalBook'),
- ('crewBooks', 'universalBook'),
- ('dossier', 'badge'),
- ('customizations', 'projectionDecal'),
- ('battleToken', ''),
- ('dossier', 'medal'),
+_SENIORITY_BONUSES_ORDER = (('dossier', 'medal'),
  ('dossier', 'achievement'),
  ('customizations', 'emblem'),
+ ('tokens', 'bonus_battle'),
+ ('crewBooks', 'universalBook'),
+ ('crewBooks', 'personalBook'),
+ ('battleToken', ''),
  ('goodies', 'xp'),
  ('goodies', 'credits'),
- ('tokens', 'bonus_battle'))
+ ('customizations', 'style'),
+ ('dossier', 'badge'),
+ ('customizations', 'projectionDecal'))
 
 def _getBonusOrder():
     bonusOrder = defaultdict(dict)
@@ -91,6 +91,7 @@ class SeniorityRewardAwardView(ViewImpl):
             questYearsType = seniorityLvlSearch.groups()[0] if seniorityLvlSearch.groups()[0] is not None else seniorityLvlSearch.groups()[1]
         bonuses, vehicles, _ = getSeniorityAwardsRewardsAndBonuses(data, maxAwardCount=1000)
         self.__bonusOrder = _getBonusOrder()
+        bonuses = [ bonus for bonus in bonuses if bonus.get('bonusName', '') not in _UNVISIBLE_BONUSES ]
         self.__bonuses = sorted(bonuses, key=lambda b: _keySortOrder(b, self.__bonusOrder)) if bonuses is not None else []
         self.__vehicles = vehicles if vehicles is not None else []
         self.__tooltipData = {}
@@ -134,13 +135,14 @@ class SeniorityRewardAwardView(ViewImpl):
                 rendererModel = modelPresenter.getModel(bonus, index)
                 bonusesList.addViewModel(rendererModel)
                 self.__tooltipData[index] = TooltipData(tooltip=bonus.get('tooltip', None), isSpecial=bonus.get('isSpecial', False), specialAlias=bonus.get('specialAlias', ''), specialArgs=bonus.get('specialArgs', None))
-                self.__bonusesPosition = currentBonusPosition
-                countBonuses = len(self.__bonuses) - currentBonusPosition
-                if countBonuses > 0:
-                    countBonuses = countBonuses if countBonuses < _BONUSES_STEP else _BONUSES_STEP
-                    vm.setBtnLabel(backport.text(R.strings.seniority_awards.rewardsView.nextBtn(), count=countBonuses))
-                vm.setBtnLabel(backport.text(R.strings.seniority_awards.multiOpenView.applyLabel()))
 
+            self.__bonusesPosition = currentBonusPosition
+            countBonuses = len(self.__bonuses) - currentBonusPosition
+            if countBonuses > 0:
+                countBonuses = countBonuses if countBonuses < _BONUSES_STEP else _BONUSES_STEP
+                vm.setBtnLabel(backport.text(R.strings.seniority_awards.rewardsView.nextBtn(), count=countBonuses))
+            else:
+                vm.setBtnLabel(backport.text(R.strings.seniority_awards.multiOpenView.applyLabel()))
             bonusesList.invalidate()
         return
 

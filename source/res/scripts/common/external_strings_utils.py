@@ -78,6 +78,15 @@ class TextRestrictionsSandbox(TextRestrictionsBasic):
         self.ACCOUNT_NAME_MAX_LENGTH += self.SANDBOX_POSTFIX_LENGTH
 
 
+class TextRestrictionsCT(TextRestrictionsBasic):
+    __slots__ = TextRestrictionsBasic.__slots__
+    CT_POSTFIX_LENGTH = 5
+
+    def __init__(self):
+        super(TextRestrictionsCT, self).__init__()
+        self.ACCOUNT_NAME_MAX_LENGTH += self.CT_POSTFIX_LENGTH
+
+
 if CREDENTIALS_RESTRICTION_SET == CREDENTIALS_RESTRICTION.BASIC:
     textRestrictions = TextRestrictionsBasic()
 elif CREDENTIALS_RESTRICTION_SET == CREDENTIALS_RESTRICTION.CHINESE:
@@ -86,6 +95,8 @@ elif CREDENTIALS_RESTRICTION_SET == CREDENTIALS_RESTRICTION.KOREA:
     textRestrictions = TextRestrictionsKorea()
 elif CREDENTIALS_RESTRICTION_SET == CREDENTIALS_RESTRICTION.SANDBOX:
     textRestrictions = TextRestrictionsSandbox()
+elif CREDENTIALS_RESTRICTION_SET == CREDENTIALS_RESTRICTION.CT:
+    textRestrictions = TextRestrictionsCT()
 _ACCOUNT_NAME_RE = textRestrictions.ACCOUNT_NAME_RE
 _ACCOUNT_NAME_MIN_LENGTH = textRestrictions.ACCOUNT_NAME_MIN_LENGTH
 _ACCOUNT_NAME_MAX_LENGTH = textRestrictions.ACCOUNT_NAME_MAX_LENGTH

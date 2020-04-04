@@ -17,6 +17,7 @@ from items import vehicles
 import BattleReplay
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
+from smoke_screen import SmokeScreen
 _ENABLE_DEBUG_DRAW = False
 _ENABLE_DEBUG_LOG = False
 
@@ -110,7 +111,10 @@ class CombatEquipmentManager(object):
         if wing is None or wing.withdrawn:
             if wing is not None:
                 wing.destroy()
-            self.__wings[wingID] = BombersWing.BombersWing(equipmentID, points)
+            wing = BombersWing.BombersWing(equipmentID, points)
+            self.__wings[wingID] = wing
+            if isEndOfFlight:
+                wing.addControlPoint(points, isEndOfFlight)
             if _ENABLE_DEBUG_DRAW:
                 self.debugPoints.append(curPos)
                 self.debugDirs.append(curDir)
@@ -284,6 +288,7 @@ class CombatEquipmentManager(object):
         self.__lastSmokeInfos = smokeInfos
         if ctrl is not None:
             ctrl.notifyStateChanged(VEHICLE_VIEW_STATE.SMOKE, smokeInfos)
+            SmokeScreen.enableSmokePostEffect(bool(smokeInfos))
         return
 
     @property

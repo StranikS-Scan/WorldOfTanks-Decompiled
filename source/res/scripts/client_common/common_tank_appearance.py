@@ -106,6 +106,7 @@ class CommonTankAppearance(ScriptGameObject):
     waterSensor = ComponentDescriptor()
     wheeledLodCalculator = ComponentDescriptor()
     wheelsAnimator = ComponentDescriptor()
+    flagComponent = ComponentDescriptor()
 
     def __init__(self, spaceID):
         ScriptGameObject.__init__(self, spaceID)
@@ -153,6 +154,7 @@ class CommonTankAppearance(ScriptGameObject):
         prereqs = self.typeDescriptor.prerequisites(True)
         prereqs.extend(camouflages.getCamoPrereqs(self.outfit, self.typeDescriptor))
         prereqs.extend(camouflages.getModelAnimatorsPrereqs(self.outfit, self.worldID))
+        prereqs.extend(camouflages.getAttachmentsAnimatorsPrereqs(self.__attachments, self.worldID))
         splineDesc = self.typeDescriptor.chassis.splineDesc
         if splineDesc is not None:
             modelsSet = self.outfit.modelsSet
@@ -208,6 +210,7 @@ class CommonTankAppearance(ScriptGameObject):
             self.__trackScrollCtl = None
         self.__chassisDecal.create()
         self.__modelAnimators = camouflages.getModelAnimators(self.outfit, self.typeDescriptor, self.worldID, resourceRefs, self.compoundModel)
+        self.__modelAnimators.extend(camouflages.getAttachmentsAnimators(self.__attachments, self.worldID, resourceRefs, self.compoundModel))
         self.transform = self.createComponent(GenericComponents.TransformComponent, Math.Vector3(0, 0, 0))
         self.areaTriggerTarget = self.createComponent(Triggers.AreaTriggerTarget)
         self.__filter = model_assembler.createVehicleFilter(self.typeDescriptor)
@@ -263,9 +266,11 @@ class CommonTankAppearance(ScriptGameObject):
         self.__postSetupFilter()
         compoundModel.setPartBoundingBoxAttachNode(TankPartIndexes.GUN, TankNodeNames.GUN_INCLINATION)
         camouflages.updateFashions(self)
+        model_assembler.assembleCustomLogicComponents(self, self.__attachments, self.__modelAnimators)
         return
 
     def destroy(self):
+        self.flagComponent = None
         self.__modelAnimators = []
         self._destroySystems()
         fashions = VehiclePartsTuple(None, None, None, None)
@@ -297,8 +302,8 @@ class CommonTankAppearance(ScriptGameObject):
         for lodCalculator in self.allLodCalculators:
             lodCalculator.setupPosition(DataLinks.linkMatrixTranslation(self.compoundModel.matrix))
 
-        for animator in self.__modelAnimators:
-            animator.start()
+        for modelAnimator in self.__modelAnimators:
+            modelAnimator.animator.start()
 
         if hasattr(self.filter, 'placingCompensationMatrix') and self.swingingAnimator is not None:
             self.swingingAnimator.placingCompensationMatrix = self.filter.placingCompensationMatrix
@@ -315,8 +320,8 @@ class CommonTankAppearance(ScriptGameObject):
         return
 
     def deactivate(self):
-        for animator in self.__modelAnimators:
-            animator.stop()
+        for modelAnimator in self.__modelAnimators:
+            modelAnimator.animator.stop()
 
         if self.damageState and self.damageState.isCurrentModelDamaged:
             self.__modelAnimators = []
@@ -423,6 +428,10 @@ class CommonTankAppearance(ScriptGameObject):
         if self.crashedTracksController is not None:
             self.crashedTracksController.destroy()
             self.crashedTracksController = None
+        return
+
+    def _onRequestModelsRefresh(self):
+        self.flagComponent = None
         return
 
     def __assembleNonDamagedOnly(self, resourceRefs, isPlayer, lodLink, lodStateLink):

@@ -88,7 +88,6 @@ class INVITES(object):
     INVITES_NOTE_LEAVE_RANKED = '#invites:invites/note/leave/RANKED'
     INVITES_NOTE_CHANGE_AND_LEAVE_RANKED = '#invites:invites/note/change_and_leave/RANKED'
     INVITES_WARNING_ANONYMIZED = '#invites:invites/warning/anonymized'
-    INVITES_WARNING_LEAVE_FRONTLINE = '#invites:invites/warning/leave/FrontLine'
     GUI_TITLES_RECEIVEDINVITES = '#invites:gui/titles/receivedInvites'
     GUI_TITLES_INVITE = '#invites:gui/titles/invite'
     GUI_TITLES_BARTER = '#invites:gui/titles/barter'

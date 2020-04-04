@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/VehicleStickers.py
+import imghdr
 from collections import namedtuple
 import math
 import BigWorld
@@ -431,6 +432,8 @@ class ClanStickerPack(StickerPack):
     def __onClanEmblemLoaded(self, _, data, componentIdx, stickerModel, isDamaged):
         if not IS_EDITOR:
             if data is None:
+                return
+            if imghdr.what(None, data) is None:
                 return
             stickerModel.setTextureData(data)
         super(ClanStickerPack, self).attach(componentIdx, stickerModel, isDamaged)

@@ -63,6 +63,9 @@ class BaseMapActivity(object):
     def isOver(self):
         return False
 
+    def isPaused(self):
+        return False
+
     def setStartTime(self, startTime):
         self._startTime = startTime
 
@@ -264,9 +267,11 @@ class WarplaneActivity(BaseMapActivity):
     def create(self, settings):
         BaseMapActivity.create(self, settings)
         self.__isStopped = False
+        self.__isPaused = False
         self.__curve = None
         self.__model = None
         self.__motor = None
+        self.__sound = None
         self.__particle = (None, None)
         self.__cbID = None
         self.__fadedIn = False
@@ -276,11 +281,7 @@ class WarplaneActivity(BaseMapActivity):
         self.__curve = BigWorld.WGActionCurve(self._settings)
         self.__modelName = self.__curve.getChannelProperty(0, 'modelName').asString
         ds = self.__curve.getChannelProperty(0, 'wwsoundName')
-        soundName = ds.asString if ds is not None else ''
-        if soundName != '':
-            self.__sound = SoundGroups.g_instance.getSound3D(None, soundName)
-        else:
-            self.__sound = None
+        self.__soundName = ds.asString if ds is not None else ''
         BigWorld.loadResourceListBG((self.__modelName,), self.__onModelLoaded)
         return True
 
@@ -292,6 +293,9 @@ class WarplaneActivity(BaseMapActivity):
 
     def isOver(self):
         return Timer.getTime() > self.__endTime
+
+    def isPaused(self):
+        return self.__isPaused
 
     def clampStartTime(self):
         if self.isRepeating() and Timer.getTime() > self._startTime:
@@ -308,6 +312,7 @@ class WarplaneActivity(BaseMapActivity):
         self._interval = period
 
     def start(self):
+        self.__isPaused = False
         self.__isStopped = False
         if self.isRepeating() and self.__possibility < random.uniform(0.0, 1.0):
             self._startTime += self._interval
@@ -340,6 +345,7 @@ class WarplaneActivity(BaseMapActivity):
             return
 
     def stop(self):
+        self.__isPaused = True
         self.__isStopped = True
         if self.__cbID is not None:
             BigWorld.cancelCallback(self.__cbID)
@@ -355,6 +361,7 @@ class WarplaneActivity(BaseMapActivity):
         if self.__sound is not None:
             self.__sound.stop(self.FADE_TIME)
             self.__sound.releaseMatrix()
+            self.__sound = None
         if self.__particle[1] is not None and self.__particle[1].pixie is not None:
             self.__particle[0].detach(self.__particle[1].pixie)
             self.__particle[1].destroy()
@@ -363,9 +370,11 @@ class WarplaneActivity(BaseMapActivity):
         return
 
     def pause(self):
+        self.__isPaused = True
         if self.__sound is not None:
             self.__sound.stop(self.FADE_TIME)
             self.__sound.releaseMatrix()
+            self.__sound = None
         if self.__particle[1] is not None and self.__particle[1].pixie is not None:
             self.__particle[0].detach(self.__particle[1].pixie)
         self.__particle = (None, None)
@@ -392,7 +401,8 @@ class WarplaneActivity(BaseMapActivity):
         if visibility > 0.1:
             if not self.__fadedIn:
                 self.__fadedIn = True
-                if self.__sound is not None:
+                if self.__soundName != '':
+                    self.__sound = SoundGroups.g_instance.getSound3D(None, self.__soundName)
                     self.__sound.play()
                     self.__sound.volume = visibility
                     if self.__model is not None:
@@ -658,11 +668,13 @@ class ScenarioActivity(BaseMapActivity):
 
     def __onPeriodicTimer(self):
         self.__cbID = None
-        if not self.isRepeating():
-            for activity in self.__currentActivities:
-                if activity.isOver():
+        for activity in self.__currentActivities:
+            if activity.isOver():
+                if not self.isRepeating():
                     activity.stop()
                     self.__currentActivities.remove(activity)
+                elif not activity.isPaused():
+                    activity.pause()
 
         for activity in self.__pendingActivities:
             if activity.canStart():

@@ -550,7 +550,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
     def updateControlMode(self, mode, vehicleID):
         prevCtrlID = self._ctrlVehicleID
         super(ArenaVehiclesPlugin, self).updateControlMode(mode, vehicleID)
-        if self._isInPostmortemMode() or self._isInVideoMode():
+        if self._isInPostmortemMode() or self._isInVideoMode() or self._isInRespawnDeath():
             self.__switchToVehicle(prevCtrlID)
 
     def setSettings(self):

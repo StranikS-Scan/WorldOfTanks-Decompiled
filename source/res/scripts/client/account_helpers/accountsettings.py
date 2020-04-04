@@ -143,6 +143,7 @@ QUEST_DELTAS = 'questDeltas'
 QUEST_DELTAS_COMPLETION = 'questCompletion'
 QUEST_DELTAS_PROGRESS = 'questProgress'
 QUEST_DELTAS_TOKENS_PROGRESS = 'tokensProgress'
+TOP_OF_TREE_CONFIG = 'topOfTree'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
@@ -607,7 +608,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 BATTLE_PASS_VIDEOS_CONFIG: {},
                 TECHTREE_INTRO_BLUEPRINTS: {},
                 MODULES_ANIMATION_SHOWN: False,
-                SUBTITLES: True},
+                SUBTITLES: True,
+                NATION_CHANGE_VIEWED: False,
+                TOP_OF_TREE_CONFIG: {}},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},

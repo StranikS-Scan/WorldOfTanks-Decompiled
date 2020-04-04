@@ -176,13 +176,13 @@ class QuestRewardWindowContent(BaseRewardWindowContent):
 
 class TwitchRewardWindowContent(QuestRewardWindowContent):
     __slots__ = ()
-    _BONUSES_ORDER = ('customizations',
+    _BONUSES_ORDER = ('dossier',
+     'customizations',
+     'premium_plus',
      Currency.GOLD,
      'vehicles',
-     'premium_plus',
-     'dossier',
-     'crewBooks',
-     'items')
+     'items',
+     'crewBooks')
 
     def handleNextButton(self):
         bonuses = self._quest.getBonuses('tokens')

@@ -182,14 +182,14 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
                 if nextSeason is not None:
                     nextCycle = nextSeason.getNextByTimeCycle(currTime)
                     if nextCycle is not None:
-                        cycleId = nextCycle.getEpicCycleNumber()
+                        cycleNumber = nextCycle.getEpicCycleNumber()
                         timeLeftStr = time_utils.getTillTimeString(nextCycle.startDate - currTime, EPIC_BATTLE.STATUS_TIMELEFT, removeLeadingZeros=True)
-                        alertStr = backport.text(rAlertMsgBlock.startIn(), cycle=cycleId, time=timeLeftStr)
+                        alertStr = backport.text(rAlertMsgBlock.startIn(), cycle=int2roman(cycleNumber), time=timeLeftStr)
                 if not alertStr:
                     prevSeason = currSeason or self.__epicMetaGameCtrl.getPreviousSeason()
                     if prevSeason is not None:
                         prevCycle = prevSeason.getLastActiveCycleInfo(currTime)
                         if prevCycle is not None:
-                            cycleId = prevCycle.getEpicCycleNumber()
-                            alertStr = backport.text(rAlertMsgBlock.noCycleMessage(), cycle=cycleId)
+                            cycleNumber = prevCycle.getEpicCycleNumber()
+                            alertStr = backport.text(rAlertMsgBlock.noCycleMessage(), cycle=int2roman(cycleNumber))
         return text_styles.vehicleStatusCriticalText(alertStr)

@@ -9,6 +9,7 @@ import BigWorld
 import Math
 import Vehicular
 import AnimationSequence
+from helpers import dependency
 import items.vehicles
 from constants import IS_EDITOR
 from items.vehicles import makeIntCompactDescrByID, getItemByCompactDescr
@@ -21,6 +22,7 @@ from items.components.c11n_constants import ModificationType, C11N_MASK_REGION, 
 import math_utils
 from helpers import newFakeModel
 from soft_exception import SoftException
+from skeletons.gui.shared.gui_items import IGuiItemsFactory
 _logger = logging.getLogger(__name__)
 RepaintParams = namedtuple('PaintParams', ('enabled', 'baseColor', 'color', 'metallic', 'gloss', 'fading', 'strength'))
 RepaintParams.__new__.__defaults__ = (False,
@@ -53,10 +55,14 @@ ProjectionDecalGenericParams.__new__.__defaults__ = (Math.Vector4(0.0),
  True)
 ModelAnimatorParams = namedtuple('ModelAnimatorParams', ('transform', 'attachNode', 'animatorName'))
 ModelAnimatorParams.__new__.__defaults__ = (math_utils.createIdentityMatrix(), '', '')
-AttachmentParams = namedtuple('AttachmentParams', ('transform', 'attachNode', 'modelName'))
+LoadedModelAnimator = namedtuple('LoadedModelAnimator', ('animator', 'node', 'attachmentPartNode'))
+AttachmentParams = namedtuple('AttachmentParams', ('transform', 'attachNode', 'modelName', 'sequenceId', 'attachmentLogic', 'initialVisibility', 'partNodeAlias'))
 AttachmentParams.__new__.__defaults__ = (math_utils.createIdentityMatrix(),
- Math.Vector3(0.0),
  '',
+ '',
+ None,
+ '',
+ True,
  '')
 _isDeferredRenderer = isRendererPipelineDeferred()
 _DEFAULT_GLOSS = 0.509
@@ -317,6 +323,40 @@ def getRepaint(outfit, containerId, vDesc):
     return RepaintParams(enabled, defaultColor, colors, metallics, glosses, fading, quality) if enabled else RepaintParams(enabled, defaultColor)
 
 
+def getAttachmentsAnimatorsPrereqs(attachments, spaceId):
+    prereqs = []
+    for attachment in attachments:
+        if attachment.sequenceId is None:
+            continue
+        sequenceItem = __createSequenceItem(attachment.sequenceId)
+        if sequenceItem is None:
+            continue
+        prereqs.append(AnimationSequence.Loader(sequenceItem.sequenceName, spaceId))
+
+    return prereqs
+
+
+def getAttachmentsAnimators(attachments, spaceId, loadedAnimators, compoundModel):
+    animators = []
+    for attachment in attachments:
+        if attachment.sequenceId is None:
+            continue
+        sequenceItem = __createSequenceItem(attachment.sequenceId)
+        if sequenceItem is None:
+            continue
+        if sequenceItem.sequenceName in loadedAnimators.failedIDs:
+            _logger.error('Failed to load attachment sequence: "%s"', sequenceItem.sequenceName)
+            continue
+        animWrapper = AnimationSequence.PartWrapperContainer(compoundModel, spaceId, attachment.partNodeAlias)
+        node = compoundModel.node(attachment.attachNode)
+        animator = __prepareAnimator(loadedAnimators, sequenceItem.sequenceName, animWrapper, node, attachment.partNodeAlias)
+        if animator is None:
+            continue
+        animators.append(animator)
+
+    return animators
+
+
 def getModelAnimatorsPrereqs(outfit, spaceId):
     multiSlot = outfit.misc.slotFor(GUI_ITEM_TYPE.SEQUENCE)
     prereqs = []
@@ -327,23 +367,33 @@ def getModelAnimatorsPrereqs(outfit, spaceId):
 
 
 def getModelAnimators(outfit, vehicleDescr, spaceId, loadedAnimators, compoundModel):
-    failedIds = loadedAnimators.failedIDs
     params = __getModelAnimators(outfit, vehicleDescr)
     animators = []
     for param in params:
-        if param.animatorName in failedIds:
+        if param.animatorName in loadedAnimators.failedIDs:
+            _logger.error('Failed to load sequence: "%s"', param.animatorName)
             continue
-        animator = loadedAnimators.pop(param.animatorName)
         fakeModel = newFakeModel()
         node = compoundModel.node(param.attachNode)
         node.attach(fakeModel, param.transform)
-        wrapper = AnimationSequence.ModelWrapperContainer(fakeModel, spaceId)
-        animator.bindTo(wrapper)
-        if hasattr(animator, 'setBoolParam'):
-            animator.setBoolParam('isDeferred', _isDeferredRenderer)
+        animWrapper = AnimationSequence.ModelWrapperContainer(fakeModel, spaceId)
+        animator = __prepareAnimator(loadedAnimators, param.animatorName, animWrapper, node)
+        if animator is None:
+            continue
         animators.append(animator)
 
     return animators
+
+
+def __prepareAnimator(loadedAnimators, animatorName, wrapperToBind, node, attachmentPartNode=None):
+    if animatorName in loadedAnimators.failedIDs:
+        return None
+    else:
+        animator = loadedAnimators.pop(animatorName)
+        animator.bindTo(wrapperToBind)
+        if hasattr(animator, 'setBoolParam'):
+            animator.setBoolParam('isDeferred', _isDeferredRenderer)
+        return LoadedModelAnimator(animator, node, attachmentPartNode)
 
 
 def __getParams(outfit, vehicleDescr, slotTypeName, slotType, paramsConverter):
@@ -356,7 +406,7 @@ def __getParams(outfit, vehicleDescr, slotTypeName, slotType, paramsConverter):
         if not slotData.isEmpty():
             if slotData.component.slotId in slotsByIdMap:
                 slotParams = slotsByIdMap[slotData.component.slotId]
-                result.append(paramsConverter(slotParams, slotData))
+                result.append(paramsConverter(slotParams, slotData, idx))
             else:
                 _logger.warning('SlotId mismatch (slotId=%(slotId)d component=%(component)s)', {'slotId': slotData.component.slotId,
                  'component': slotData.component})
@@ -374,16 +424,29 @@ def __createTransform(slotParams, slotData):
 
 def __getModelAnimators(outfit, vehicleDescr):
 
-    def getModelAnimatorParams(slotParams, slotData):
+    def getModelAnimatorParams(slotParams, slotData, _):
         return ModelAnimatorParams(transform=__createTransform(slotParams, slotData), attachNode=slotParams.attachNode, animatorName=slotData.item.sequenceName)
 
     return __getParams(outfit, vehicleDescr, 'sequence', GUI_ITEM_TYPE.SEQUENCE, getModelAnimatorParams)
 
 
+@dependency.replace_none_kwargs(guiItemsFactory=IGuiItemsFactory)
+def __createSequenceItem(sequenceId, guiItemsFactory=None):
+    try:
+        from gui.customization.shared import C11N_ITEM_TYPE_MAP
+        intCD = makeIntCompactDescrByID('customizationItem', C11N_ITEM_TYPE_MAP.get(GUI_ITEM_TYPE.SEQUENCE), sequenceId)
+        sequenceItem = guiItemsFactory.createCustomization(intCD)
+    except KeyError:
+        _logger.error('Could not find sequence item with id=%d', sequenceId)
+        return None
+
+    return sequenceItem
+
+
 def getAttachments(outfit, vehicleDescr):
 
-    def getAttachmentParams(slotParams, slotData):
-        return AttachmentParams(transform=__createTransform(slotParams, slotData), attachNode=slotParams.attachNode, modelName=slotData.item.modelName)
+    def getAttachmentParams(slotParams, slotData, idx):
+        return AttachmentParams(transform=__createTransform(slotParams, slotData), attachNode=slotParams.attachNode, modelName=slotData.item.modelName, sequenceId=slotData.item.sequenceId, attachmentLogic=slotData.item.attachmentLogic, initialVisibility=slotData.item.initialVisibility, partNodeAlias='attachment' + str(idx))
 
     return __getParams(outfit, vehicleDescr, 'attachment', GUI_ITEM_TYPE.ATTACHMENT, getAttachmentParams)
 

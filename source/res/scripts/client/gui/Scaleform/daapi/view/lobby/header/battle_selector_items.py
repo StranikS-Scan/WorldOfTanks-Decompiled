@@ -14,7 +14,7 @@ from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from gui.shared.formatters import text_styles, icons
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
-from helpers import time_utils, dependency
+from helpers import time_utils, dependency, int2roman
 from shared_utils import findFirst
 from skeletons.gui.game_control import IRankedBattlesController, IEventProgressionController, IEpicBattleMetaGameController, IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -381,8 +381,8 @@ class _EventProgressionEpicDataProvider(_SelectorExtraItem):
                 seasonResID = R.strings.epic_battle.season.num(currentSeason.getSeasonID())
                 seasonName = backport.text(seasonResID.name()) if seasonResID else None
                 if currentSeason.hasActiveCycle(time_utils.getCurrentLocalServerTimestamp()):
-                    cycleName = currentSeason.getCycleInfo().getEpicCycleNumber()
-                    scheduleStr = backport.text(_R_BATTLE_TYPES.epic.extra.currentCycle(), cycle=cycleName, season=seasonName)
+                    cycleNumber = currentSeason.getCycleInfo().getEpicCycleNumber()
+                    scheduleStr = backport.text(_R_BATTLE_TYPES.epic.extra.currentCycle(), cycle=int2roman(cycleNumber), season=seasonName)
                 else:
                     nextCycle = currentSeason.getNextCycleInfo(time_utils.getCurrentLocalServerTimestamp())
                     if nextCycle is None:

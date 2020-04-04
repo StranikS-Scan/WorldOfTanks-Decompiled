@@ -7,3 +7,4 @@ PREMIUM_GROUP_PREFIX = 'prem_acc'
 FRONTLINE_GROUP_ID = 'frontline_group'
 DAILY_QUEST_ID_PREFIX = DailyQuestsTokensPrefixes.QUEST_TOKEN
 DAILY_QUEST_TOKEN_PREFIX = DailyQuestsTokensPrefixes.QUEST_TICKET
+TECH_TREE_ACTION_POSTFIX = '_techtree'

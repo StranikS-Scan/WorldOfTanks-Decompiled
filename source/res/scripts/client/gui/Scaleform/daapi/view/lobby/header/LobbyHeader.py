@@ -70,6 +70,7 @@ from skeletons.gui.game_control import IAnonymizerController, IBadgesController,
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.techtree_events import ITechTreeEventsListener
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from SoundGroups import g_instance as SoundGroupsInstance
@@ -181,6 +182,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     epicController = dependency.descriptor(IEpicBattleMetaGameController)
     eventProgressionController = dependency.descriptor(IEventProgressionController)
     eventsCache = dependency.descriptor(IEventsCache)
+    techTreeEventsListener = dependency.descriptor(ITechTreeEventsListener)
     gameSession = dependency.descriptor(IGameSessionController)
     goodiesCache = dependency.descriptor(IGoodiesCache)
     gui = dependency.descriptor(IGuiLoader)
@@ -390,6 +392,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.epicController.onPrimeTimeStatusUpdated += self.__updateEpic
         self.badgesController.onUpdated += self.__updateBadge
         self.anonymizerController.onStateChanged += self.__updateAnonymizedState
+        self.techTreeEventsListener.onSettingsChanged += self._updateHangarMenuData
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.BubbleTooltipEvent.SHOW, self.__showBubbleTooltip, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -465,6 +468,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.boosters.onReserveTimerTick -= self.__onUpdateGoodies
         g_preDefinedHosts.onPingPerformed -= self.__onPingPerformed
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        self.techTreeEventsListener.onSettingsChanged -= self._updateHangarMenuData
         self.removeListener(events.TutorialEvent.OVERRIDE_HANGAR_MENU_BUTTONS, self.__onOverrideHangarMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.TutorialEvent.OVERRIDE_HEADER_MENU_BUTTONS, self.__onOverrideHeaderMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, self.__onToggleVisibilityMenu, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -1065,10 +1069,19 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         tabDataProvider.append(self._updatePersonalMissionSelector())
         tabDataProvider.extend([{'label': MENU.HEADERBUTTONS_PROFILE,
           'value': self.TABS.PROFILE,
-          'tooltip': TOOLTIPS.HEADER_BUTTONS_PROFILE}, {'label': MENU.HEADERBUTTONS_TECHTREE,
-          'value': self.TABS.TECHTREE,
-          'tooltip': TOOLTIPS.HEADER_BUTTONS_TECHTREE,
-          'subValues': [self.TABS.RESEARCH]}, {'label': MENU.HEADERBUTTONS_BARRACKS,
+          'tooltip': TOOLTIPS.HEADER_BUTTONS_PROFILE}])
+        techTreeData = {'label': MENU.HEADERBUTTONS_TECHTREE,
+         'value': self.TABS.TECHTREE,
+         'tooltip': TOOLTIPS.HEADER_BUTTONS_TECHTREE,
+         'isTooltipSpecial': False,
+         'subValues': [self.TABS.RESEARCH]}
+        if self.techTreeEventsListener.actions:
+            techTreeData['tooltip'] = TOOLTIPS_CONSTANTS.TECHTREE_DISCOUNT_INFO
+            techTreeData['isTooltipSpecial'] = True
+            if self.techTreeEventsListener.getNations(unviewed=True):
+                techTreeData['actionIcon'] = backport.image(R.images.gui.maps.icons.library.discountIndicator())
+        tabDataProvider.extend([techTreeData])
+        tabDataProvider.extend([{'label': MENU.HEADERBUTTONS_BARRACKS,
           'value': self.TABS.BARRACKS,
           'tooltip': TOOLTIPS.HEADER_BUTTONS_BARRACKS}])
         if constants.IS_CHINA:

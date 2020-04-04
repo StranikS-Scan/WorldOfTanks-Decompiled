@@ -176,6 +176,10 @@ class BoosterGUIItemProxy(object):
     def mayInstall(self):
         return False
 
+    @staticmethod
+    def getHighlightType():
+        return SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+
 
 def getCompensateItemsCount(rawItem, itemsCache):
     if rawItem.compensation is not None:

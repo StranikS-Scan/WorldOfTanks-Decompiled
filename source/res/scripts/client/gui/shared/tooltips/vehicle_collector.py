@@ -65,7 +65,7 @@ class VehicleCollectorTooltipData(BlocksTooltipData):
 
     @staticmethod
     def __getDescription():
-        return [formatters.packImageBlockData(img=backport.image(R.images.gui.maps.icons.vehicle_collector.collectibles_pic()), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(bottom=10)), formatters.packTextBlockData(text=text_styles.main(backport.text(R.strings.tooltips.collectibleVehicleTooltip.description())), padding=formatters.packPadding(bottom=10)), formatters.packTextBlockData(text=text_styles.main(backport.text(R.strings.tooltips.collectibleVehicleTooltip.elite())))]
+        return [formatters.packImageBlockData(img=backport.image(R.images.gui.maps.icons.vehicleCollector.collectibles_pic()), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(bottom=10)), formatters.packTextBlockData(text=text_styles.main(backport.text(R.strings.tooltips.collectibleVehicleTooltip.description())), padding=formatters.packPadding(bottom=10)), formatters.packTextBlockData(text=text_styles.main(backport.text(R.strings.tooltips.collectibleVehicleTooltip.elite())))]
 
 
 class VehicleCollectorDisabledTooltipData(BlocksTooltipData):

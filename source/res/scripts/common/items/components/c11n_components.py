@@ -191,11 +191,14 @@ class SequenceItem(BaseCustomizationItem):
 
 class AttachmentItem(BaseCustomizationItem):
     itemType = CustomizationType.ATTACHMENT
-    __slots__ = ('modelName',)
+    __slots__ = ('modelName', 'sequenceId', 'attachmentLogic', 'initialVisibility')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
 
     def __init__(self, parentGroup=None):
         self.modelName = None
+        self.sequenceId = None
+        self.attachmentLogic = None
+        self.initialVisibility = True
         super(AttachmentItem, self).__init__(parentGroup)
         return
 

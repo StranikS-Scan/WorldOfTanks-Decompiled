@@ -13,11 +13,13 @@ from gui.Scaleform.daapi.view.lobby.techtree.settings import NATION_TREE_REL_PRE
 from gui.Scaleform.daapi.view.lobby.techtree.settings import TREE_SHARED_REL_FILE_PATH, UnlockStats
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UNKNOWN_VEHICLE_LEVEL
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockProps, DEFAULT_UNLOCK_PROPS
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from items import _xml, vehicles, getTypeOfCompactDescr
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.techtree_events import ITechTreeEventsListener
 from soft_exception import SoftException
 
 class _ConfigError(SoftException):
@@ -52,6 +54,7 @@ _AnnouncementInfo = namedtuple('_AnnouncementInfo', ('userString',
 class _TechTreeDataProvider(object):
     __slots__ = ('__loaded', '__availableNations', '__override', '__displayInfo', '__displaySettings', '__gridSettings', '__premiumGridSettings', '__topLevels', '__topItems', '__nextLevels', '__unlockPrices', '__announcements', '__announcementCDToName', '__nextAnnouncements', '__nodes', '__nextTypeIDs')
     itemsCache = dependency.descriptor(IItemsCache)
+    techTreeEventsListener = dependency.descriptor(ITechTreeEventsListener)
 
     def __init__(self):
         super(_TechTreeDataProvider, self).__init__()
@@ -186,6 +189,18 @@ class _TechTreeDataProvider(object):
             self.__availableNations = self.__readAvailableNations(xmlCtx, section)
         return self.__availableNations[:]
 
+    def getNationsMenuDataProvider(self):
+        return [ self._getNationsMenuItem(nation) for nation in self.getAvailableNations() ]
+
+    def _getNationsMenuItem(self, nation):
+        nationIdx = nations.INDICES[nation]
+        hasDiscount = nationIdx in self.techTreeEventsListener.getNations(unviewed=True)
+        isTooltipSpecial = nationIdx in self.techTreeEventsListener.getNations()
+        return {'tooltip': TOOLTIPS_CONSTANTS.TECHTREE_NATION_DISCOUNT if isTooltipSpecial else nation,
+         'isTooltipSpecial': isTooltipSpecial,
+         'hasDiscount': hasDiscount,
+         'label': nation}
+
     def getAvailableNationsIndices(self):
         return [ nations.INDICES[nation] for nation in self.getAvailableNations() ]
 
@@ -255,6 +270,14 @@ class _TechTreeDataProvider(object):
             return
         for nodeCD in self.__nextAnnouncements[intCD]:
             yield nodeCD
+
+    def isActionEndNode(self, node):
+        hasAction = self.techTreeEventsListener.hasActiveAction
+        return not any((hasAction(nextCD) for nextCD in self.getNextLevel(node.getNodeCD()))) if hasAction(node.getNodeCD(), node.getNationID()) else False
+
+    def isActionStartNode(self, node):
+        hasAction = self.techTreeEventsListener.hasActiveAction
+        return not any((hasAction(nextCD) for nextCD in self.getTopLevel(node.getNodeCD()))) if hasAction(node.getNodeCD(), node.getNationID()) else False
 
     def _clear(self):
         self.__displayInfo = [None] * len(nations.NAMES)

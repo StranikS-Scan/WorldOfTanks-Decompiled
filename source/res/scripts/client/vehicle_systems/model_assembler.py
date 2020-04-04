@@ -85,8 +85,8 @@ def attachModels(assembler, vehicleDesc, modelsSetParams, isTurretDetached, rend
             assembler.addNode(TankNodeNames.GUN_JOINT, TankPartNames.TURRET, math_utils.createTranslationMatrix(vehicleDesc.turret.gunPosition))
         assembler.addPart(gun, TankNodeNames.GUN_JOINT, partNames.GUN)
         if modelsSetParams.state == 'undamaged':
-            for idx, attachment in enumerate(modelsSetParams.attachments):
-                assembler.addPart(attachment.modelName, attachment.attachNode, 'attachment' + str(idx), attachment.transform)
+            for attachment in modelsSetParams.attachments:
+                assembler.addPart(attachment.modelName, attachment.attachNode, attachment.partNodeAlias, attachment.transform)
 
 
 def createGunAnimator(gameObject, vehicleDesc, basisMatrix=None, lodLink=None):
@@ -723,3 +723,29 @@ def assembleBurnoutProcessor(appearance):
         burnoutProcessor = appearance.createComponent(Vehicular.BurnoutProcessor, appearance.compoundModel, appearance.swingingAnimator, lambda : appearance.burnoutLevel, burnoutAnimation.accumImpulseMag, burnoutAnimation.dischargeImpulseMag, burnoutAnimation.timeToAccumImpulse)
         appearance.burnoutProcessor = burnoutProcessor
         return
+
+
+def assembleCustomLogicComponents(appearance, attachments, modelAnimators):
+    assemblers = [('flagAnimation', __assembleAnimationFlagComponent)]
+    for assemblerName, assembler in assemblers:
+        for attachment in attachments:
+            if attachment.attachmentLogic == assemblerName:
+                assembler(appearance, attachment, attachments, modelAnimators)
+
+
+def __assembleAnimationFlagComponent(appearance, attachment, attachments, modelAnimators):
+    mainAnimator = None
+    for i, modelAnimator in enumerate(modelAnimators):
+        if modelAnimator.attachmentPartNode == attachment.partNodeAlias:
+            mainAnimator = modelAnimators.pop(i)
+            break
+
+    if mainAnimator is None:
+        return False
+    else:
+        flagParts = tuple((a.partNodeAlias for a in attachments if a.attachmentLogic == 'flagPart'))
+        appearance.flagComponent = appearance.createComponent(Vehicular.FlagComponent, mainAnimator.animator, mainAnimator.node, TankPartNames.TURRET, (attachment.partNodeAlias,) + flagParts)
+        if appearance.filter is not None:
+            appearance.flagComponent.vehicleSpeedLink = DataLinks.createFloatLink(appearance.filter, 'averageSpeed')
+            appearance.flagComponent.allowTransparency(True)
+        return True

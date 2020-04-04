@@ -452,7 +452,7 @@ class BattleTokensBonus(TokensBonus):
                  'value': value.get('count', 1),
                  'icon': {AWARDS_SIZES.SMALL: backport.image(R.images.gui.maps.icons.epicBattles.rewardPoints.c_48x48()),
                           AWARDS_SIZES.BIG: backport.image(R.images.gui.maps.icons.epicBattles.rewardPoints.c_80x80())},
-                 'type': 'custom/{}'.format(tokenID)})
+                 'type': 'custom/reward_point'})
 
         return result
 

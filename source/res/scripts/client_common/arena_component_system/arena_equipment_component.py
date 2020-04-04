@@ -204,7 +204,7 @@ class ArenaEquipmentComponent(ClientArenaComponent):
         args = None
         if period == InspireData.INSPIRE_PERIOD.INSPIRED:
             if not isSourceVehicle:
-                args = InspireArgs(False, False, data.endTime, data.endTime - data.startTime)
+                args = InspireArgs(False, False, data.endTime, data.endTime - BigWorld.serverTime())
                 data.setNextCallback(self.__evaluateInspiredData)
         elif period == InspireData.INSPIRE_PERIOD.INACTIVATION:
             args = InspireArgs(False, True, data.inactivationEndTime, data.inactivationEndTime - data.inactivationStartTime)

@@ -110,7 +110,7 @@ class ModuleInfoWindow(ModuleInfoMeta):
                     for paramName, paramValue in formattedModuleParameters:
                         if paramName in excludedParametersNames:
                             otherParamsInfoList.append({'type': formatters.formatModuleParamName(paramName) + '\n',
-                             'value': text_styles.stats(paramValue)})
+                             'value': text_styles.stats(paramValue) + '\n'})
 
                     moduleData['otherParameters'] = {'headerText': _ms(MENU.MODULEINFO_PARAMETERSCLIPGUNLABEL, getAbsoluteUrl(RES_ICONS.MAPS_ICONS_MODULES_MAGAZINEGUNICON)),
                      'params': otherParamsInfoList}

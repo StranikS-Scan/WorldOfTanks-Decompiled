@@ -71,7 +71,7 @@ class VehicleCollectorAward(ExplosionBackAward):
         self.__nationID = nationID
 
     def getBackgroundImage(self):
-        return backport.image(R.images.gui.maps.icons.vehicle_collector.collectorNation())
+        return backport.image(R.images.gui.maps.icons.vehicleCollector.collectorNation())
 
     def useBackgroundAnimation(self):
         return False
@@ -99,7 +99,7 @@ class VehicleCollectorOfEverythingAward(ExplosionBackAward):
         return False
 
     def getBackgroundImage(self):
-        return backport.image(R.images.gui.maps.icons.vehicle_collector.collectorEverything())
+        return backport.image(R.images.gui.maps.icons.vehicleCollector.collectorEverything())
 
     def getAwardImage(self):
         return backport.image(R.images.gui.maps.icons.achievement.big.collectorVehicle())

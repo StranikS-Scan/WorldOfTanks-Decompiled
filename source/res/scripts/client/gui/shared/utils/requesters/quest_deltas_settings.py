@@ -32,5 +32,5 @@ class QuestDeltasSettings(IterableUserDict):
     def _saveToSettings(self):
         savedDict = {k:v for k, v in self.data.iteritems()}
         questSettings = AccountSettings.getSettings(QUESTS)
-        questSettings.get(QUEST_DELTAS)[self._subKey] = savedDict
+        questSettings.get(QUEST_DELTAS, dict())[self._subKey] = savedDict
         AccountSettings.setSettings(QUESTS, questSettings)

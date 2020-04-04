@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/data.py
 import logging
 from itertools import chain
+from random import choice
 import typing
 from CurrentVehicle import g_currentVehicle
 from gui.Scaleform.daapi.view.lobby.techtree import nodes
@@ -261,6 +262,15 @@ class _ItemsData(object):
         state = NODE_STATE.removeIfHas(state, NODE_STATE_FLAGS.COLLECTIBLE_ACTION)
         if item.buyPrices.itemPrice.isActionPrice():
             state = NODE_STATE.addIfNot(state, NODE_STATE_FLAGS.COLLECTIBLE_ACTION)
+        return state
+
+    def _checkTechTreeEvents(self, state, guiItem, unlockProps):
+        if g_techTreeDP.techTreeEventsListener.hasActiveAction(guiItem.intCD) and guiItem.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
+            state |= NODE_STATE_FLAGS.HAS_TECH_TREE_EVENT
+            NODE_STATE.removeIfHas(state, NODE_STATE_FLAGS.ACTION)
+            noUnlockDiscount = not unlockProps or not unlockProps.discount
+            if noUnlockDiscount and guiItem.buyPrices.itemPrice.isActionPrice() and not guiItem.isRestorePossible():
+                NODE_STATE.add(state, NODE_STATE_FLAGS.ACTION)
         return state
 
     def _addNode(self, nodeCD, node):
@@ -585,6 +595,7 @@ class ResearchItemsData(_ItemsData):
             state = self._checkRestoreState(state, guiItem)
             state = self._checkRentableState(state, guiItem)
             state = self._checkTradeInState(state, guiItem)
+            state = self._checkTechTreeEvents(state, guiItem, unlockProps)
             bpfProps = self._getBlueprintsProps(nodeCD, rootItem.level)
             if bpfProps is not None and bpfProps.totalCount > 0:
                 state |= NODE_STATE_FLAGS.BLUEPRINT
@@ -726,7 +737,7 @@ class NationTreeData(_ItemsData):
         ResearchItemsData.clearRootCD()
         self._findSelectedNode(nationID)
         if self._scrollIndex < 0:
-            self._scrollIndex = 0
+            self._findActionNode(nationID)
 
     def getRootItem(self):
         return self._nodes[0] if self._nodes else None
@@ -850,6 +861,7 @@ class NationTreeData(_ItemsData):
         state = self._checkRestoreState(state, guiItem)
         state = self._checkRentableState(state, guiItem)
         state = self._checkTradeInState(state, guiItem)
+        state = self._checkTechTreeEvents(state, guiItem, unlockProps)
         price = getGUIPrice(guiItem, self._stats.money, self._items.shop.exchangeRate)
         return nodes.RealNode(node.nodeCD, guiItem, earnedXP, state, displayInfo, unlockProps=unlockProps, bpfProps=bpfProps, price=price)
 
@@ -898,3 +910,20 @@ class NationTreeData(_ItemsData):
             _logger.debug('Current vehicle is hidden. Is it define in nation tree: %d', nodeCD)
         else:
             _logger.error('Current vehicle not found in nation tree: %d', nodeCD)
+
+    def _findActionNode(self, nationID):
+
+        def _filterFunc(nodeCD):
+            if nodeCD in self._nodesIdx.keys():
+                index = self._nodesIdx[nodeCD]
+                node = self._nodes[index]
+                return g_techTreeDP.isActionStartNode(node)
+            return False
+
+        vehicleCDs = g_techTreeDP.techTreeEventsListener.getVehicles(nationID)
+        startNodes = filter(_filterFunc, vehicleCDs)
+        if startNodes:
+            self._scrollIndex = self._nodesIdx[choice(startNodes)]
+            self._nodes[self._scrollIndex].addStateFlag(NODE_STATE_FLAGS.SELECTED)
+        elif self._scrollIndex < 0:
+            self._scrollIndex = 0

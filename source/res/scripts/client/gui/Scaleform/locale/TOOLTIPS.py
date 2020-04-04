@@ -975,6 +975,7 @@ class TOOLTIPS(object):
     HEADER_BUTTONS_PROFILE_BODY = '#tooltips:header/buttons/profile/body'
     HEADER_BUTTONS_TECHTREE_HEADER = '#tooltips:header/buttons/techtree/header'
     HEADER_BUTTONS_TECHTREE_BODY = '#tooltips:header/buttons/techtree/body'
+    HEADER_BUTTONS_TECHTREE_EXTENDED_DESCRIPTION = '#tooltips:header/buttons/techtree/extended/description'
     HEADER_BUTTONS_BARRACKS_HEADER = '#tooltips:header/buttons/barracks/header'
     HEADER_BUTTONS_BARRACKS_BODY = '#tooltips:header/buttons/barracks/body'
     HEADER_BUTTONS_FORTS_HEADER = '#tooltips:header/buttons/forts/header'
@@ -1290,6 +1291,13 @@ class TOOLTIPS(object):
     TECHTREEPAGE_NATIONS_SWEDEN = '#tooltips:techTreePage/nations/sweden'
     TECHTREEPAGE_NATIONS_POLAND = '#tooltips:techTreePage/nations/poland'
     TECHTREEPAGE_NATIONS_ITALY = '#tooltips:techTreePage/nations/italy'
+    TECHTREEPAGE_EVENT_NAME = '#tooltips:techTreePage/event/name'
+    TECHTREEPAGE_EVENT_TIME = '#tooltips:techTreePage/event/time'
+    TECHTREEPAGE_EVENT_TIMELEFT_DAYS = '#tooltips:techTreePage/event/timeLeft/days'
+    TECHTREEPAGE_EVENT_TIMELEFT_HOURS = '#tooltips:techTreePage/event/timeLeft/hours'
+    TECHTREEPAGE_EVENT_TIMELEFT_MIN = '#tooltips:techTreePage/event/timeLeft/min'
+    TECHTREEPAGE_EVENT_TIMELEFT_LESSMIN = '#tooltips:techTreePage/event/timeLeft/lessMin'
+    TECHTREEPAGE_EVENT_DESCRIPTION = '#tooltips:techTreePage/event/description'
     TECHTREEPAGE_BLUEPRINTSSWITCHTOOLTIP_HEADER = '#tooltips:techTreePage/blueprintsSwitchTooltip/header'
     TECHTREEPAGE_BLUEPRINTSSWITCHTOOLTIP_BODY = '#tooltips:techTreePage/blueprintsSwitchTooltip/body'
     TECHTREEPAGE_BLUEPRINTCONVERTTOOLTIP_HEADER = '#tooltips:techTreePage/blueprintConvertTooltip/header'
@@ -2292,7 +2300,7 @@ class TOOLTIPS(object):
     ADVANCED_REPAIR = '#tooltips:advanced/repair'
     ADVANCED_FIREFIGHTING = '#tooltips:advanced/fireFighting'
     ADVANCED_CAMOUFLAGE = '#tooltips:advanced/camouflage'
-    ADVANCED_CAMOUFLAGEBATTLEBOOSTER = '#tooltips:advanced/camouflageBattleBooster'
+    ADVANCED_NATURALCOVER = '#tooltips:advanced/naturalCover'
     ADVANCED_BROTHERHOOD = '#tooltips:advanced/brotherhood'
     ADVANCED_COMMANDER_TUTOR = '#tooltips:advanced/commander_tutor'
     ADVANCED_COMMANDER_EAGLEEYE = '#tooltips:advanced/commander_eagleEye'
@@ -3371,7 +3379,7 @@ class TOOLTIPS(object):
      ADVANCED_REPAIR,
      ADVANCED_FIREFIGHTING,
      ADVANCED_CAMOUFLAGE,
-     ADVANCED_CAMOUFLAGEBATTLEBOOSTER,
+     ADVANCED_NATURALCOVER,
      ADVANCED_BROTHERHOOD,
      ADVANCED_COMMANDER_TUTOR,
      ADVANCED_COMMANDER_EAGLEEYE,

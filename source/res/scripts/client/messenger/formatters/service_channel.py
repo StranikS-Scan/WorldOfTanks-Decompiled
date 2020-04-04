@@ -40,6 +40,7 @@ from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared import formatters as shared_fmts
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.currency import getBWFormatter, getStyle, applyAll
+from gui.shared.formatters.time_formatters import getTillTimeByResource
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import getUserName, getShortUserName
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
@@ -3255,3 +3256,18 @@ class CollectibleVehiclesUnlockedFormatter(ServiceChannelFormatter):
                  'text': backport.text(R.strings.messenger.serviceChannelMessages.vehicleCollector.unlockLevel.text(), level=int2roman(level), nation=backport.text(R.strings.nations.dyn(NAMES[nationID]).genetiveCase()))})
                 return [MessageData(formatted, self._getGuiSettings(message, self.__TEMPLATE))]
         return [MessageData(None, None)]
+
+
+class TechTreeActionDiscountFormatter(ServiceChannelFormatter):
+    __template = 'TechTreeActionDiscountMessage'
+
+    def format(self, message, *args):
+        actionName = message.get('actionName', None)
+        timeLeft = message.get('timeLeft', None)
+        if actionName is not None and timeLeft is not None:
+            formatted = g_settings.msgTemplates.format(self.__template, {'header': backport.text(R.strings.system_messages.techtree.action.header(), actionName=actionName),
+             'text': backport.text(R.strings.system_messages.techtree.action.text()),
+             'timeLeft': getTillTimeByResource(timeLeft, R.strings.menu.Time.timeLeftShort, useRoundUp=True)})
+            return [MessageData(formatted, self._getGuiSettings(message, self.__template))]
+        else:
+            return [MessageData(None, None)]

@@ -4,6 +4,8 @@ import gui
 from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation
 from gui.Scaleform.daapi.view.lobby.techtree.settings import VehicleClassInfo
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
+from gui.Scaleform.daapi.view.lobby.techtree.event_helpers import TechTreeFormatters
+from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from helpers import i18n
 __all__ = ('ResearchItemsObjDumper', 'NationObjDumper')
 
@@ -117,6 +119,7 @@ class ResearchItemsObjDumper(ResearchBaseDumper):
 
 
 class NationObjDumper(_BaseDumper):
+    DEBUG_ITEMS = (18689, 5393, 6417, 7217)
 
     def __init__(self, cache=None):
         if cache is None:
@@ -167,4 +170,14 @@ class NationObjDumper(_BaseDumper):
          'blueprintProgress': node.getBlueprintProgress(),
          'blueprintCanConvert': blueprints.canConvert if blueprints is not None else False,
          'buyPrice': node.getBuyPrices(),
-         'isNationChangeAvailable': node.hasItemNationGroup()}
+         'isNationChangeAvailable': node.hasItemNationGroup(),
+         'isTopActionNode': g_techTreeDP.isActionEndNode(node),
+         'actionMessage': self.__getTooltipString(node)}
+
+    def __getTooltipString(self, node):
+        isActionNode = node.getState() & NODE_STATE_FLAGS.HAS_TECH_TREE_EVENT > 0
+        if not isActionNode:
+            return ''
+        if g_techTreeDP.isActionStartNode(node):
+            eventsListener = g_techTreeDP.techTreeEventsListener
+            return TechTreeFormatters.getActionInfoStr(eventsListener.getUserName(), eventsListener.getFinishTime())

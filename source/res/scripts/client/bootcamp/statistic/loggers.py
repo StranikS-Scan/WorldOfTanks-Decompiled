@@ -3,6 +3,7 @@
 from collections import defaultdict
 import json
 import BigWorld
+import BattleReplay
 from async import async, await, AsyncReturn
 from debug_utils_bootcamp import LOG_STATISTIC
 from gui.shared.utils import getPlayerDatabaseID
@@ -14,7 +15,9 @@ from . import STATISTIC_SETTINGS
 __all__ = ('BootcampUILogger',)
 
 def isSPAAttributeExists():
-    if STATISTIC_SETTINGS.TEST_MODE:
+    if BattleReplay.isPlaying():
+        return False
+    elif STATISTIC_SETTINGS.TEST_MODE:
         return True
     else:
         bootcampSPAFlag = BigWorld.player().spaFlags.getFlag(constants.SPA_ATTRS.LOGGING_ENABLED)

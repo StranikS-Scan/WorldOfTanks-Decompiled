@@ -74,7 +74,7 @@ class HintsManager(object):
     def __showHint(self, hint):
         text = hint['text']
         uniqueID = hintID = hint['hintID']
-        props = HintProps(uniqueID, hintID, hint['itemID'], text, hasBox=True, arrow=hint['arrow'], padding=None, updateRuntime=hint['updateRuntime'], checkViewArea=hint['checkViewArea'])
+        props = HintProps(uniqueID, hintID, hint['itemID'], text, hasBox=hint['hasBox'], arrow=hint['arrow'], padding=None, updateRuntime=hint['updateRuntime'], checkViewArea=hint['checkViewArea'])
         actionType = hint.get('ignoreOutsideClick')
         self._gui.showHint(props, actionType)
         self.__activeHints[hint['itemID']] = hint

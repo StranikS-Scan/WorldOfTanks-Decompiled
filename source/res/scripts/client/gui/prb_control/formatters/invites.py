@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/prb_control/formatters/invites.py
 import logging
 from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_TYPE
-from constants import QUEUE_TYPE_NAMES, QUEUE_TYPE
+from constants import QUEUE_TYPE_NAMES
 from gui import makeHtmlString
 from gui.impl import backport
 from gui.impl.gen import R
@@ -94,9 +94,9 @@ def getLeaveOrChangeText(funcState, invitePrbType, peripheryID, lobbyContext=Non
     text = ''
     if funcState.doLeaveToAcceptInvite(invitePrbType):
         if funcState.isInLegacy() or funcState.isInUnit():
-            entityName = getPrbName(invitePrbType)
+            entityName = getPrbName(funcState.entityTypeID)
         elif funcState.isInPreQueue():
-            entityName = getPreQueueName(invitePrbType)
+            entityName = getPreQueueName(funcState.entityTypeID)
         else:
             _logger.error('Can not resolve name of entity. %s', funcState)
             return text
@@ -140,13 +140,6 @@ class PrbInviteHtmlTextFormatter(InviteFormatter):
         creatorName = _formatInvite(_PrbInvitePart.TITLE_CREATOR_NAME, name)
         return _formatInvite(_PrbInvitePart.TITLE, creatorName, True, sourceKey=getPrbName(invite.type))
 
-    def getLeaveFrontLineWarning(self, invite):
-        stateCurrent = self.prbDispatcher.getFunctionalState().entityTypeID
-        warning = ''
-        if stateCurrent == QUEUE_TYPE.EPIC and invite.type == QUEUE_TYPE.RANDOMS:
-            warning = backport.text(_R_INVITES.warning.leave.FrontLine())
-        return _formatInvite(_PrbInvitePart.WARNING, warning)
-
     def getWarning(self, invite):
         warning = backport.text(_R_INVITES.warning.dyn(invite.warning)())
         return _formatInvite(_PrbInvitePart.WARNING, warning)
@@ -173,9 +166,6 @@ class PrbInviteHtmlTextFormatter(InviteFormatter):
         if text:
             result.append(text)
         text = self.getWarning(invite)
-        if text:
-            result.append(text)
-        text = self.getLeaveFrontLineWarning(invite)
         if text:
             result.append(text)
         text = self.getComment(invite)

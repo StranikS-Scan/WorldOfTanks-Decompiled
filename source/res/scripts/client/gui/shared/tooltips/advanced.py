@@ -223,7 +223,7 @@ class DemountKitTooltipAdvanced(BaseAdvancedTooltip):
 
 _SKILL_MOVIES = {'repair': 'skillRepairs',
  'camouflage': 'skillConcealment',
- 'camouflageBattleBooster': 'skillConcealment',
+ 'naturalCover': 'skillConcealment',
  'fireFighting': 'skillFirefighting',
  'brotherhood': 'skillBrothersInArms',
  'commander_tutor': 'skillMentor',

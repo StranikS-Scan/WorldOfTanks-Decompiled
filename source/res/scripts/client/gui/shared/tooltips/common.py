@@ -8,7 +8,9 @@ import ArenaType
 import constants
 from soft_exception import SoftException
 import ResMgr
-from gui import g_htmlTemplates, makeHtmlString
+import nations
+from gui import g_htmlTemplates, makeHtmlString, GUI_NATIONS
+from gui.Scaleform import getNationsFilterAssetPath
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import getReserveNameVO, getDirection
 from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
@@ -42,7 +44,7 @@ from gui.shared.formatters import formatActionPrices
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.servers import formatPingStatus, wrapServerName
 from gui.shared.formatters.text_styles import concatStylesToMultiLine
-from gui.shared.formatters.time_formatters import getTimeLeftStr
+from gui.shared.formatters.time_formatters import getTimeLeftStr, getTillTimeByResource
 from gui.shared.gui_items import GUI_ITEM_TYPE, ACTION_ENTITY_ITEM
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from gui.shared.tooltips import ToolTipBaseData, TOOLTIP_TYPE, ACTION_TOOLTIPS_TYPE, ToolTipParameterField
@@ -62,6 +64,7 @@ from skeletons.gui.game_control import IIGRController, IServerStatsController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.techtree_events import ITechTreeEventsListener
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
 _logger = logging.getLogger(__name__)
@@ -1424,3 +1427,56 @@ class BattlePassNotStartedTooltipWindowData(ToolTipBaseData):
 
     def getDisplayableData(self, *args, **kwargs):
         return BattlePassNotStartedTooltipView()
+
+
+class TechTreeEventTooltipBase(BlocksTooltipData):
+    _eventsListener = dependency.descriptor(ITechTreeEventsListener)
+
+    def __init__(self, context):
+        super(TechTreeEventTooltipBase, self).__init__(context, None)
+        self._setWidth(365)
+        return
+
+    def _actionNameBlock(self, title, description, icon):
+        return formatters.packImageTextBlockData(title=text_styles.neutral(title), desc=text_styles.standard(description), img=icon, imgPadding=formatters.packPadding(top=-1), padding=formatters.packPadding(bottom=10))
+
+    def _actionExpireBlock(self):
+        timeLeftStr = getTillTimeByResource(self._eventsListener.getTimeTillEnd(), R.strings.tooltips.techTreePage.event.timeLeft)
+        return formatters.packTextBlockData(text=text_styles.standard(backport.text(R.strings.tooltips.techTreePage.event.time(), time=text_styles.main(timeLeftStr))), padding=formatters.packPadding(top=10, left=23))
+
+
+class TechTreeDiscountInfoTooltip(TechTreeEventTooltipBase):
+
+    def _packBlocks(self, *args, **kwargs):
+        items = super(TechTreeDiscountInfoTooltip, self)._packBlocks(*args, **kwargs)
+        items.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(TOOLTIPS.HEADER_BUTTONS_TECHTREE_HEADER), desc=text_styles.main(TOOLTIPS.HEADER_BUTTONS_TECHTREE_BODY)))
+        if not self._eventsListener.actions:
+            return items
+        blocks = list()
+        blocks.append(self._actionNameBlock(backport.text(R.strings.tooltips.techTreePage.event.name(), eventName=self._eventsListener.getUserName()), backport.text(R.strings.tooltips.header.buttons.techtree.extended.description()), backport.image(R.images.gui.maps.icons.library.discount())))
+        nationIDs = self._eventsListener.getNations()
+        separator = '   '
+        for nation in GUI_NATIONS:
+            if nations.INDICES[nation] in nationIDs:
+                icon = icons.makeImageTag(getNationsFilterAssetPath(nation), 26, 16, -4)
+                nationName = text_styles.main(backport.text(R.strings.nations.dyn(nation)()))
+                blocks.append(formatters.packTextBlockData(text_styles.concatStylesToSingleLine(icon, separator, nationName), padding=formatters.packPadding(left=43)))
+
+        blocks.append(self._actionExpireBlock())
+        items.append(formatters.packBuildUpBlockData(blocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
+        return items
+
+
+class TechTreeNationDiscountTooltip(TechTreeEventTooltipBase):
+
+    def _packBlocks(self, nation):
+        items = super(TechTreeNationDiscountTooltip, self)._packBlocks()
+        items.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.techTreePage.nations.dyn(nation)()))))
+        nationID = nations.INDICES[nation]
+        if nationID not in self._eventsListener.getNations():
+            return items
+        blocks = list()
+        blocks.append(self._actionNameBlock(backport.text(R.strings.tooltips.techTreePage.event.name(), eventName=self._eventsListener.getUserName()), backport.text(R.strings.tooltips.techTreePage.event.description(), nation=backport.text(R.strings.nations.dyn(nation).genetiveCase())), backport.image(R.images.gui.maps.icons.library.discount())))
+        blocks.append(self._actionExpireBlock())
+        items.append(formatters.packBuildUpBlockData(blocks))
+        return items

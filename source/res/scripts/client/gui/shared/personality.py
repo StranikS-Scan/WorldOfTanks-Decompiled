@@ -327,6 +327,12 @@ def onScreenShotMade(path):
     g_eventBus.handleEvent(events.GameEvent(events.GameEvent.SCREEN_SHOT_MADE, {'path': path}), scope=EVENT_BUS_SCOPE.GLOBAL)
 
 
+def disableLobbyGUI():
+    ServicesLocator.appLoader.fini()
+    from gui.Scaleform.app_factory import createAppFactory
+    ServicesLocator.appLoader.init(createAppFactory(True))
+
+
 def onRecreateDevice():
     for c in g_guiResetters:
         try:

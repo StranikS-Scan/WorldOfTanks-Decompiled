@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/hangar_vehicle_appearance.py
+import logging
 import weakref
 import math
 from collections import namedtuple
@@ -9,7 +10,6 @@ import Math
 import VehicleStickers
 import Vehicular
 import math_utils
-from debug_utils import LOG_ERROR
 from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
 from gui import g_tankActiveCamouflage
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -44,6 +44,7 @@ AnchorHelper = namedtuple('AnchorHelper', ['location',
  'partIdx',
  'attachedPartIdx'])
 AnchorParams = namedtuple('AnchorParams', ['location', 'descriptor', 'id'])
+_logger = logging.getLogger(__name__)
 
 class _LoadStateNotifier(object):
     __em = Event.EventManager()
@@ -92,6 +93,7 @@ class HangarVehicleAppearance(ScriptGameObject):
     tracks = ComponentDescriptor()
     collisionObstaclesCollector = ComponentDescriptor()
     tessellationCollisionSensor = ComponentDescriptor()
+    flagComponent = ComponentDescriptor()
 
     @property
     def compoundModel(self):
@@ -130,6 +132,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__staticGunPitch = 0.0
         self.__anchorsHelpers = None
         self.__anchorsParams = None
+        self.__attachments = []
         self.__modelAnimators = []
         self.shadowManager = None
         cfg = hangarCFG()
@@ -171,9 +174,9 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.fashion.removePhysicalTracks()
         if self.shadowManager is not None:
             self.shadowManager.updatePlayerTarget(None)
+        self.__clearModelAnimators()
         ScriptGameObject.deactivate(self)
         ScriptGameObject.destroy(self)
-        self.__clearModelAnimators()
         self.__vDesc = None
         self.__vState = None
         self.__loadState.unload()
@@ -238,6 +241,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         return self.turretAndGunAngles.getGunPitch()
 
     def __reload(self, vDesc, vState, outfit):
+        self.__clearModelAnimators()
         self.__loadState.unload()
         if self.fashion is not None:
             self.fashion.removePhysicalTracks()
@@ -265,7 +269,7 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.__isVehicleDestroyed = True
         self.__vDesc = vDesc
         resources = camouflages.getCamoPrereqs(self.__outfit, vDesc)
-        attachments = camouflages.getAttachments(self.__outfit, vDesc)
+        self.__attachments = camouflages.getAttachments(self.__outfit, vDesc)
         modelsSet = self.__outfit.modelsSet
         splineDesc = vDesc.chassis.splineDesc
         if splineDesc is not None:
@@ -282,7 +286,7 @@ class HangarVehicleAppearance(ScriptGameObject):
             if segment2ModelRight is not None:
                 resources.append(segment2ModelRight)
         from vehicle_systems import model_assembler
-        resources.append(model_assembler.prepareCompoundAssembler(self.__vDesc, ModelsSetParams(modelsSet, self.__vState, attachments), self.__spaceId))
+        resources.append(model_assembler.prepareCompoundAssembler(self.__vDesc, ModelsSetParams(modelsSet, self.__vState, self.__attachments), self.__spaceId))
         g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.VEHICLE_LOADING, ctx={'started': True,
          'vEntityId': self.__vEntity.id}), scope=EVENT_BUS_SCOPE.DEFAULT)
         cfg = hangarCFG()
@@ -322,7 +326,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         for resID, resource in resourceRefs.items():
             if resID not in failedIDs:
                 resources[resID] = resource
-            LOG_ERROR('Could not load %s' % resID)
+            _logger.error('Could not load %s', resID)
             succesLoaded = False
 
         if self.collisions:
@@ -330,6 +334,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.collisions = resourceRefs['collisionAssembler']
         if succesLoaded:
             self.__setupModel(buildInd)
+        self.__applyAttachmentsVisibility()
         g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.VEHICLE_LOADING, ctx={'started': False,
          'vEntityId': self.__vEntity.id}), scope=EVENT_BUS_SCOPE.DEFAULT)
         super(HangarVehicleAppearance, self).activate()
@@ -341,8 +346,11 @@ class HangarVehicleAppearance(ScriptGameObject):
             return
         self.__clearModelAnimators()
         self.__modelAnimators = camouflages.getModelAnimators(outfit, self.__vDesc, self.__spaceId, resourceRefs, self.compoundModel)
-        for animator in self.__modelAnimators:
-            animator.start()
+        self.__modelAnimators.extend(camouflages.getAttachmentsAnimators(self.__attachments, self.__spaceId, resourceRefs, self.compoundModel))
+        from vehicle_systems import model_assembler
+        model_assembler.assembleCustomLogicComponents(self, self.__attachments, self.__modelAnimators)
+        for modelAnimator in self.__modelAnimators:
+            modelAnimator.animator.start()
 
     def __onSettingsChanged(self, diff):
         if 'showMarksOnGun' in diff:
@@ -409,6 +417,7 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.wheelsAnimator = None
             self.trackNodesAnimator = None
             self.dirtComponent = None
+            self.flagComponent = None
         self.__staticTurretYaw = self.__vDesc.gun.staticTurretYaw
         self.__staticGunPitch = self.__vDesc.gun.staticPitch
         if not ('AT-SPG' in self.__vDesc.type.tags or 'SPG' in self.__vDesc.type.tags):
@@ -518,6 +527,25 @@ class HangarVehicleAppearance(ScriptGameObject):
             if self.__vDesc is not None and 'observer' in self.__vDesc.type.tags:
                 self.__vEntity.model.visible = False
             return
+
+    def __applyAttachmentsVisibility(self):
+        if self.compoundModel is None:
+            return False
+        else:
+            partHandleNotFoundErrorCode = 4294967295L
+            for attachment in self.__attachments:
+                partNode = self.compoundModel.node(attachment.partNodeAlias)
+                if partNode is None:
+                    _logger.error('Attachment node "%s" is not found.', attachment.partNodeAlias)
+                    continue
+                partId = self.compoundModel.findPartHandleByNode(partNode)
+                if partId == partHandleNotFoundErrorCode:
+                    _logger.error('Part handle is not found, see node "%s"', attachment.partNodeAlias)
+                    continue
+                if not attachment.initialVisibility:
+                    self.compoundModel.setPartVisible(partId, False)
+
+            return True
 
     def getAnchorParams(self, slotId, areaId, regionIdx):
         if self.__anchorsParams is None:
@@ -650,16 +678,19 @@ class HangarVehicleAppearance(ScriptGameObject):
 
     def __updateSequences(self, outfit):
         resources = camouflages.getModelAnimatorsPrereqs(outfit, self.__spaceId)
+        resources.extend(camouflages.getAttachmentsAnimatorsPrereqs(self.__attachments, self.__spaceId))
         if not resources:
             self.__clearModelAnimators()
             return
         BigWorld.loadResourceListBG(tuple(resources), makeCallbackWeak(self.__onAnimatorsLoaded, self.__curBuildInd, outfit))
 
     def __clearModelAnimators(self):
-        for animator in self.__modelAnimators:
-            animator.halt()
+        self.flagComponent = None
+        for modelAnimator in self.__modelAnimators:
+            modelAnimator.animator.stop()
 
         self.__modelAnimators = []
+        return
 
     def __onVehicleChanged(self):
         self.__anchorsParams = None

@@ -70,7 +70,7 @@ class ItemPackType(CONST_CONTAINER):
     CUSTOM_REFERRAL_CREW = 'custom/crew'
     CUSTOM_REWARD_POINT = 'custom/prestige_point'
     CUSTOM_SUPPLY_POINT = 'custom/supply_point'
-    CUSTOM_EVENT_PROGRESSION_REWARD_POINT = 'custom/ep20:points'
+    CUSTOM_EVENT_PROGRESSION_REWARD_POINT = 'custom/reward_point'
     TOKEN = 'token'
     PAINT_ALL = 'paint/all'
     PAINT_SUMMER = 'paint/summer'

@@ -31,7 +31,9 @@ C11N_ITEM_TYPE_MAP = {GUI_ITEM_TYPE.PAINT: CustomizationType.PAINT,
  GUI_ITEM_TYPE.INSCRIPTION: CustomizationType.DECAL,
  GUI_ITEM_TYPE.PERSONAL_NUMBER: CustomizationType.PERSONAL_NUMBER,
  GUI_ITEM_TYPE.STYLE: CustomizationType.STYLE,
- GUI_ITEM_TYPE.PROJECTION_DECAL: CustomizationType.PROJECTION_DECAL}
+ GUI_ITEM_TYPE.PROJECTION_DECAL: CustomizationType.PROJECTION_DECAL,
+ GUI_ITEM_TYPE.ATTACHMENT: CustomizationType.ATTACHMENT,
+ GUI_ITEM_TYPE.SEQUENCE: CustomizationType.SEQUENCE}
 
 class PurchaseItem(object):
     __slots__ = ('item', 'price', 'areaID', 'slot', 'regionID', 'selected', 'group', 'isFromInventory', 'isDismantling', 'component')

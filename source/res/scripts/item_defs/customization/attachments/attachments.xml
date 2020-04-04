@@ -16,5 +16,20 @@
     <historical>	true	</historical>
     <priceGroup>	attachments 50g notInShop	</priceGroup>
     <tags>	hiddenInUI	</tags>
+    <attachment>
+      <id>	1	</id>
+      <name>	attachment_01	</name>
+      <modelName>	content/Hangars/CharacterAnimations/Flag/normal/lod0/shaft_hd.model	</modelName>
+      <attachmentLogic>	flagPart	</attachmentLogic>
+      <initialVisibility>	false	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	2	</id>
+      <name>	attachment_02	</name>
+      <modelName>	content/Hangars/CharacterAnimations/Flag/normal/lod0/flag_hd_anim.model	</modelName>
+      <sequenceId>	3	</sequenceId>
+      <attachmentLogic>	flagAnimation	</attachmentLogic>
+      <initialVisibility>	false	</initialVisibility>
+    </attachment>
   </itemGroup>
 </attachments.xml>

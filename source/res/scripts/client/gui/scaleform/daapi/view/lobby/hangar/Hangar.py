@@ -39,7 +39,7 @@ from helpers.i18n import makeString as _ms
 from helpers.statistics import HANGAR_LOADING_STATE
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IIGRController
+from skeletons.gui.game_control import IIGRController, IPreLaunchController
 from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController, IBattlePassController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
@@ -75,6 +75,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     hangarSpace = dependency.descriptor(IHangarSpace)
     _promoController = dependency.descriptor(IPromoController)
     _connectionMgr = dependency.descriptor(IConnectionManager)
+    _preLaunchController = dependency.descriptor(IPreLaunchController)
     _COMMON_SOUND_SPACE = __SOUND_SETTINGS
 
     def __init__(self, _=None):
@@ -136,6 +137,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.epicController.onPrimeTimeStatusUpdated += self.__onEpicSkillsUpdate
         self._promoController.onNewTeaserReceived += self.__onTeaserReceived
         self.hangarSpace.setVehicleSelectable(True)
+        self._preLaunchController.onPreEventStateChanged += self.__updatePrelaunch
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         self._settingsCore.onSettingsChanged += self.__onSettingsChanged
@@ -152,6 +154,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         getTutorialGlobalStorage().setValue(GLOBAL_FLAG.CREW_BOOKS_ENABLED, isCrewBooksEnabled)
         self.as_setNotificationEnabledS(crewBooksViewedCache().haveNewCrewBooks())
         self.__updateSenorityEntryPoint()
+        self.__updatePrelaunch()
 
     def _dispose(self):
         self.removeListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
@@ -176,11 +179,15 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         g_prbCtrlEvents.onVehicleClientStateChanged -= self.__onVehicleClientStateChanged
         self._settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
+        self._preLaunchController.onPreEventStateChanged -= self.__updatePrelaunch
         self.battlePassController.onSeasonStateChange -= self.__switchCarousels
         self.closeHelpLayout()
         self.stopGlobalListening()
         LobbySelectableView._dispose(self)
         return
+
+    def __updatePrelaunch(self):
+        self.as_updatePreLaunchS(self._preLaunchController.isPreEventActive())
 
     def __updateSenorityEntryPoint(self):
         curStatus = self.__seniorityAwardsIsActive

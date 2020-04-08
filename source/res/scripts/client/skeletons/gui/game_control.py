@@ -1278,3 +1278,21 @@ class IBattlePassController(IGameController):
 
     def getAlternativeVoteOption(self):
         raise NotImplementedError
+
+
+class IPreLaunchController(IGameController):
+    onPrelaunchCountChanged = None
+    onPrelaunchTextChanged = None
+    onPreEventStateChanged = None
+
+    def getCount(self):
+        raise NotImplementedError
+
+    def getTextID(self):
+        raise NotImplementedError
+
+    def isPreEventActive(self):
+        raise NotImplementedError
+
+    def needToShowTeaser(self):
+        return NotImplementedError

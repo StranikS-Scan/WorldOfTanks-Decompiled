@@ -27,3 +27,4 @@ class HANGAR_ALIASES(object):
     PROGRESSIVE_REWARD_WIDGET = 'progressiveRewardWdgt'
     DAILY_QUEST_WIDGET = 'dqWidget'
     BATTLE_PASSS_ENTRY_POINT = 'battlePassEntryPoint'
+    PRE_LAUNCH = 'preLaunch'

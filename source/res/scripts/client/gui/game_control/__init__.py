@@ -40,6 +40,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.trade_in import TradeInController as _TradeIn
     from gui.game_control.quests_controller import QuestsController as _Quests
     from gui.game_control.ranked_battles_controller import RankedBattlesController as _Ranked
+    from gui.game_control.pre_launch_controller import PreLaunchController as _PreLaunch
     from gui.game_control.epic_mode_controller import EpicModeController as _Epic
     from gui.game_control.bootcamp_controller import BootcampController as _Bootcamp
     from gui.game_control.hero_tank_controller import HeroTankController as _HeroTankController
@@ -97,6 +98,7 @@ def getGameControllersConfig(manager):
     _config(_interface.IReferralProgramController, _ReferralController())
     _config(_interface.ISpecialSoundCtrl, _SpecialSoundCtrl())
     _config(_interface.IBattlePassController, BattlePassController())
+    _config(_interface.IPreLaunchController, _PreLaunch())
     if constants.IS_CHINA:
         _config(_interface.IChinaController, _China())
     else:

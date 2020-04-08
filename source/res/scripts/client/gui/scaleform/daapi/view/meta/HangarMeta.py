@@ -81,3 +81,6 @@ class HangarMeta(View):
 
     def as_destroyDQWidgetS(self):
         return self.flashObject.as_destroyDQWidget() if self._isDAAPIInited() else None
+
+    def as_updatePreLaunchS(self, isVisible):
+        return self.flashObject.as_updatePreLaunch(isVisible) if self._isDAAPIInited() else None

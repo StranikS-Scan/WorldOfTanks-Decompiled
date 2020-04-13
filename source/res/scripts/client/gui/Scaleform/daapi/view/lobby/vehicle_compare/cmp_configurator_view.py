@@ -779,12 +779,14 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
     @process
     def __launchOptDeviceRemoving(self, slotIndex):
         installedDevice = self.__vehicle.optDevices[slotIndex]
-        result = yield _CmpOptDeviceRemover(self.__vehicle, installedDevice, slotIndex).request()
-        if result.success:
-            self.__notifyViews('onOptDeviceUpdated')
-            self.__notifyViews('onBattleBoosterUpdated')
-        else:
-            processMsg(result)
+        if installedDevice is not None:
+            result = yield _CmpOptDeviceRemover(self.__vehicle, installedDevice, slotIndex).request()
+            if result.success:
+                self.__notifyViews('onOptDeviceUpdated')
+                self.__notifyViews('onBattleBoosterUpdated')
+            else:
+                processMsg(result)
+        return
 
     def __getTopModules(self):
         if self.__topModules is None:

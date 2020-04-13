@@ -71,20 +71,24 @@ _TABS_DATA = ({'id': VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE,
 _SHOW_BACK_BTN = True
 _SHOW_CLOSE_BTN = True
 
+def _isCollectibleVehicleWithModules():
+    return g_currentPreviewVehicle.isCollectible() and g_currentPreviewVehicle.hasModulesToSelect()
+
+
 def _updateHintParameters():
     tutorialStorage = getTutorialGlobalStorage()
     if tutorialStorage is None:
         return
     else:
         isActiveModulesTab = AccountSettings.getSettings(PREVIEW_INFO_PANEL_IDX) == _getModulesTabIdx()
-        hintValue = False if isActiveModulesTab else g_currentPreviewVehicle.isCollectible()
+        hintValue = False if isActiveModulesTab else _isCollectibleVehicleWithModules()
         tutorialStorage.setValue(GLOBAL_FLAG.COLLECTIBLE_VEHICLE_PREVIEW_ENABLED, hintValue)
         return
 
 
 @dependency.replace_none_kwargs(settingsCore=ISettingsCore)
 def _isModuleBulletVisible(settingsCore=None):
-    return g_currentPreviewVehicle.isCollectible() and settingsCore.serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.VEHICLE_PREVIEW_MODULES_BUTTON_HINT)
+    return _isCollectibleVehicleWithModules() and settingsCore.serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.VEHICLE_PREVIEW_MODULES_BUTTON_HINT)
 
 
 def _getModulesTabIdx():

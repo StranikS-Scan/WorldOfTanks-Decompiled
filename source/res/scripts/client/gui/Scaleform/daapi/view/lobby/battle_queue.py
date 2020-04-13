@@ -48,7 +48,7 @@ _HTMLTEMP_PLAYERSLABEL = 'html_templates:lobby/queue/playersLabel'
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def _needShowLongWaitingWarning(lobbyContext=None):
     vehicle = g_currentVehicle.item
-    return lobbyContext is not None and vehicle.type == VEHICLE_CLASS_NAME.SPG and vehicle.level in _LONG_WAITING_LEVELS
+    return lobbyContext is not None and vehicle is not None and vehicle.type == VEHICLE_CLASS_NAME.SPG and vehicle.level in _LONG_WAITING_LEVELS
 
 
 class _QueueProvider(object):

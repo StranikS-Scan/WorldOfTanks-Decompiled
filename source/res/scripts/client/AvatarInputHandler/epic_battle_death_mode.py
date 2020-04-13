@@ -21,7 +21,8 @@ class EpicVideoCamera(VideoCamera):
 
     def __init__(self, configDataSec):
         super(EpicVideoCamera, self).__init__(configDataSec)
-        self.__selectedTargetID = False
+        self.__selectedTargetID = None
+        return
 
     def enable(self, **args):
         super(EpicVideoCamera, self).enable(**args)

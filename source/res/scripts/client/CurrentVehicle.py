@@ -188,7 +188,7 @@ class _CurrentVehicle(_CachedVehicle):
 
     @property
     def item(self):
-        return self.itemsCache.items.getVehicle(self.__vehInvID) if self.__vehInvID > 0 and self.itemsCache.isSynced() else None
+        return self.itemsCache.items.getVehicle(self.__vehInvID) if self.__vehInvID > 0 else None
 
     def isBroken(self):
         return self.isPresent() and self.item.isBroken
@@ -451,7 +451,11 @@ class _CurrentPreviewVehicle(_CachedVehicle):
             return vehicle.invID
 
     def getVehiclePreviewType(self):
-        return VEHPREVIEW_CONSTANTS.COLLECTIBLE if self.isPresent() and self.item.isCollectible else VEHPREVIEW_CONSTANTS.REGULAR
+        if self.isPresent() and self.item.isCollectible:
+            if self.hasModulesToSelect():
+                return VEHPREVIEW_CONSTANTS.COLLECTIBLE
+            return VEHPREVIEW_CONSTANTS.COLLECTIBLE_WITHOUT_MODULES
+        return VEHPREVIEW_CONSTANTS.REGULAR
 
     def onInventoryUpdate(self, invDiff):
         if self.isPresent():

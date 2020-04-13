@@ -1783,7 +1783,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	1.25	</textureScale>
+        <textureScale>	-1.25	</textureScale>
       </tracks>
       <AODecals>
         <decal>
@@ -1888,20 +1888,8 @@
           <backwardElastK>	1.5	</backwardElastK>
         </node>
         <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R0	</name>
-          <forwardElastK>	0.5	</forwardElastK>
-          <backwardElastK>	1.5	</backwardElastK>
-        </node>
-        <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
-          <forwardElastK>	2	</forwardElastK>
-          <backwardElastK>	0.5	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R1	</name>
           <forwardElastK>	2	</forwardElastK>
           <backwardElastK>	0.5	</backwardElastK>
         </node>
@@ -1938,6 +1926,18 @@
           <backwardElastK>	3	</backwardElastK>
           <offset>	-0.0857143	</offset>
           <leftSibling>	Track_VT_L2	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.5	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
@@ -1996,7 +1996,7 @@
         <left>	vehicles/russian/R177_ISU_152K_BL10/track/left.track	</left>
         <right>	vehicles/russian/R177_ISU_152K_BL10/track/right.track	</right>
         <segmentLength>	0.307	</segmentLength>
-        <segmentOffset>	0.103	</segmentOffset>
+        <segmentOffset>	0.0816327	</segmentOffset>
         <segment2Offset>	0.154	</segment2Offset>
         <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
@@ -2017,39 +2017,55 @@
       <trackThickness>	0.012	</trackThickness>
       <physicalTracks>
         <left>
-          <segmentsCount>	94	</segmentsCount>
-          <segmentsOuterThickness>	0.0693054	</segmentsOuterThickness>
-          <segmentsInnerThickness>	-0.00400522	</segmentsInnerThickness>
-          <segmentsPlaneOffset>	-1.20273	</segmentsPlaneOffset>
+          <segmentsCount>	92	</segmentsCount>
+          <segmentsOuterThickness>	0.0653247	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.000025	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	-1.203	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <back>	0.152666	</back>
-              <top>	0.135526	</top>
-              <front>	0.139776	</front>
-              <bottom>	0.109755	</bottom>
+              <back>	0.152897	</back>
+              <top>	0.142454	</top>
+              <front>	0.146614	</front>
+              <bottom>	0.136155	</bottom>
             </backwardMovement>
             <forwardMovement>
-              <back>	0.140984	</back>
-              <top>	0.146353	</top>
-              <front>	0.151341	</front>
-              <bottom>	0.133776	</bottom>
+              <back>	0.148209	</back>
+              <top>	0.148956	</top>
+              <front>	0.151692	</front>
+              <bottom>	0.136155	</bottom>
             </forwardMovement>
           </springsLength>
           <mainSegment>
             <model>	vehicles/russian/R177_ISU_152K_BL10/track/segment_01.model	</model>
-            <length>	0.154006	</length>
+            <length>	0.155894	</length>
           </mainSegment>
           <secSegment>
             <model>	vehicles/russian/R177_ISU_152K_BL10/track/segment_02.model	</model>
-            <length>	0.154234	</length>
+            <length>	0.155415	</length>
           </secSegment>
           <collisionHull>
-            <bottom></bottom>
+            <bottom>
+              <part>
+                <xStart>	-2.67931	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.406337 0.413591 0.421404 0.429827 0.43892 0.448756 0.459431	</ySamples>
+              </part>
+              <part>
+                <xStart>	-2.61931	</xStart>
+                <xStep>	0.0779467	</xStep>
+                <ySamples>	0.459431 0.603315	</ySamples>
+              </part>
+              <part>
+                <xStart>	-2.54136	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.603315 0.657553 0.963164 0.953164 0.943164 0.933164 0.923164	</ySamples>
+              </part>
+            </bottom>
             <top>
               <part>
-                <xStart>	-3.36615	</xStart>
-                <xStep>	0.0770028	</xStep>
-                <ySamples>	0.946169 1.01988 1.09646 1.14864 1.14907 1.14949 1.14994 1.15053 1.15112 1.15173 1.15234 1.15291 1.15347 1.15404 1.15463 1.1536 1.1505 1.14741 1.14431 1.14332 1.14614 1.15044 1.15481 1.15918 1.16026 1.16018 1.16009 1.16001 1.15992 1.15988 1.15985 1.15986 1.16045 1.1617 1.16356 1.16556 1.16755 1.16859 1.16921 1.16982 1.17041 1.171 1.17159 1.17218 1.17277 1.17336 1.17395 1.17454 1.17513 1.17572 1.17634 1.17695 1.17756 1.17817 1.17878 1.17939 1.18 1.18061 1.18122 1.18183 1.18244 1.18303 1.18362 1.18378 1.18365 1.18416 1.18537 1.18611 1.18204 1.17823 1.18008 1.18535 1.18965 1.19024 1.19083 1.19144 1.1885 1.18266 1.17702 1.17473 1.17378 1.17145 1.16702 1.15021 1.11215 1.04576	</ySamples>
+                <xStart>	-3.24289	</xStart>
+                <xStep>	0.0779468	</xStep>
+                <ySamples>	1.09234 1.1279 1.14808 1.12827 1.12887 1.12947 1.13006 1.13066 1.13126 1.13185 1.13245 1.13305 1.13364 1.13424 1.13484 1.13543 1.13603 1.13662 1.13722 1.13782 1.13841 1.13901 1.13961 1.1402 1.1408 1.1414 1.14199 1.14259 1.14319 1.14378 1.14438 1.14498 1.14557 1.14617 1.14677 1.14728 1.14789 1.1485 1.14912 1.14977 1.15039 1.151 1.15161 1.15227 1.15288 1.1535 1.15415 1.15477 1.15538 1.15604 1.1567 1.15735 1.15801 1.15867 1.15933 1.15998 1.16065 1.16131 1.16198 1.16264 1.16331 1.164 1.16478 1.16488 1.16488 1.16488 1.16488 1.16488 1.16488 1.16333 1.16335 1.16336 1.16338 1.1634 1.16341 1.16332 1.16313 1.16295 1.15763 1.14292 1.12084 1.09521 1.05548 0.993629	</ySamples>
               </part>
             </top>
           </collisionHull>
@@ -2066,37 +2082,37 @@
           <snapWheels>
             <topFront>
               <wheelName>	WD_L0	</wheelName>
-              <basePos>	2.87228 0.771656	</basePos>
-              <shiftVec>	0.258448 0.107191	</shiftVec>
+              <basePos>	2.95874 0.734258	</basePos>
+              <shiftVec>	0.240247 0.147008	</shiftVec>
               <jointIdx>	10	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_L4	</wheelName>
-              <basePos>	-2.96667 0.73123	</basePos>
-              <shiftVec>	-0.334359 0.0830325	</shiftVec>
-              <jointIdx>	55	</jointIdx>
+              <basePos>	-2.88022 0.693831	</basePos>
+              <shiftVec>	-0.271577 0.198225	</shiftVec>
+              <jointIdx>	53	</jointIdx>
             </topBack>
             <bottomBack>
               <wheelName>	W_L5	</wheelName>
-              <basePos>	-2.3352 0.315692	</basePos>
-              <shiftVec>	-0.00472069 -0.271054	</shiftVec>
-              <jointIdx>	64	</jointIdx>
+              <basePos>	-2.24875 0.318026	</basePos>
+              <shiftVec>	0.0672812 -0.275075	</shiftVec>
+              <jointIdx>	63	</jointIdx>
             </bottomBack>
             <bottomFront>
               <wheelName>	W_L0	</wheelName>
-              <basePos>	1.97655 0.315692	</basePos>
-              <shiftVec>	0.0732236 -0.261019	</shiftVec>
+              <basePos>	2.063 0.318026	</basePos>
+              <shiftVec>	0.0744622 -0.264805	</shiftVec>
               <jointIdx>	0	</jointIdx>
             </bottomFront>
           </snapWheels>
           <radiusOverrides>
             <wheel>
               <name>	WD_L4	</name>
-              <radius>	0.338954	</radius>
+              <radius>	0.33041	</radius>
             </wheel>
             <wheel>
               <name>	WD_L0	</name>
-              <radius>	0.29	</radius>
+              <radius>	0.274688	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -2104,12 +2120,12 @@
             <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L4	</name>
-              <startAngle>	-510.337	</startAngle>
+              <startAngle>	3.11379	</startAngle>
               <teethCount>	7	</teethCount>
             </sync>
             <sync>
               <name>	WD_L0	</name>
-              <startAngle>	-513.321	</startAngle>
+              <startAngle>	-0.320205	</startAngle>
               <teethCount>	7	</teethCount>
             </sync>
           </teethSyncs>
@@ -2206,45 +2222,62 @@
             </top>
             <bottom>
               <range>
-                <point>	-1.19866 0.886245 -2.75013	</point>
+                <point>	-1.1687 0.856429 -2.6193	</point>
+                <point>	-1.0887 0.881492 -2.54135	</point>
               </range>
             </bottom>
           </sourceCollisionHullPoints>
         </left>
         <right>
-          <segmentsCount>	94	</segmentsCount>
-          <segmentsOuterThickness>	0.0693053	</segmentsOuterThickness>
-          <segmentsInnerThickness>	-0.0040051	</segmentsInnerThickness>
-          <segmentsPlaneOffset>	1.20273	</segmentsPlaneOffset>
+          <segmentsCount>	92	</segmentsCount>
+          <segmentsOuterThickness>	0.0653248	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.000025	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	1.203	</segmentsPlaneOffset>
           <springsLength>
             <backwardMovement>
-              <back>	0.152666	</back>
-              <top>	0.135526	</top>
-              <front>	0.139776	</front>
-              <bottom>	0.109755	</bottom>
+              <back>	0.152897	</back>
+              <top>	0.142454	</top>
+              <front>	0.146614	</front>
+              <bottom>	0.136155	</bottom>
             </backwardMovement>
             <forwardMovement>
-              <back>	0.140984	</back>
-              <top>	0.146353	</top>
-              <front>	0.151341	</front>
-              <bottom>	0.133776	</bottom>
+              <back>	0.148209	</back>
+              <top>	0.148956	</top>
+              <front>	0.151692	</front>
+              <bottom>	0.136155	</bottom>
             </forwardMovement>
           </springsLength>
           <mainSegment>
             <model>	vehicles/russian/R177_ISU_152K_BL10/track/segment_01.model	</model>
-            <length>	0.154002	</length>
+            <length>	0.156437	</length>
           </mainSegment>
           <secSegment>
             <model>	vehicles/russian/R177_ISU_152K_BL10/track/segment_02.model	</model>
-            <length>	0.153793	</length>
+            <length>	0.156058	</length>
           </secSegment>
           <collisionHull>
-            <bottom></bottom>
+            <bottom>
+              <part>
+                <xStart>	-2.66654	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.415887 0.423869 0.432478 0.441775 0.451842 0.462779 0.474716	</ySamples>
+              </part>
+              <part>
+                <xStart>	-2.60654	</xStart>
+                <xStep>	0.078218	</xStep>
+                <ySamples>	0.474716 0.981544	</ySamples>
+              </part>
+              <part>
+                <xStart>	-2.52833	</xStart>
+                <xStep>	0.00999999	</xStep>
+                <ySamples>	0.981544 0.971544 0.961544 0.951544 0.941544 0.931544 0.921544	</ySamples>
+              </part>
+            </bottom>
             <top>
               <part>
-                <xStart>	-3.36623	</xStart>
-                <xStep>	0.0770009	</xStep>
-                <ySamples>	0.954487 1.02806 1.10321 1.14864 1.14906 1.14949 1.1496 1.14766 1.14572 1.14379 1.14263 1.14389 1.147 1.15015 1.15331 1.15445 1.15298 1.15152 1.1501 1.14985 1.1491 1.14836 1.14762 1.14718 1.14859 1.15249 1.15647 1.16049 1.16317 1.16376 1.16435 1.16494 1.16554 1.16615 1.16676 1.16737 1.16798 1.16504 1.1605 1.15597 1.15156 1.14889 1.15071 1.1563 1.16199 1.16775 1.17351 1.17461 1.17522 1.17583 1.17644 1.17705 1.17766 1.17827 1.17888 1.17949 1.18011 1.1807 1.18129 1.18188 1.18247 1.18306 1.18365 1.18424 1.18483 1.18475 1.18412 1.18349 1.18292 1.18248 1.18219 1.18278 1.1845 1.18643 1.18858 1.19074 1.19158 1.19133 1.19103 1.19051 1.18999 1.18655 1.17541 1.1524 1.11231 1.05402	</ySamples>
+                <xStart>	-3.23229	</xStart>
+                <xStep>	0.0782184	</xStep>
+                <ySamples>	1.098 1.13123 1.14956 1.12838 1.12901 1.12963 1.13026 1.13088 1.13151 1.13213 1.13275 1.13338 1.134 1.13463 1.13525 1.13588 1.1365 1.13713 1.13775 1.13838 1.139 1.13963 1.14025 1.14088 1.1415 1.14213 1.14275 1.14338 1.144 1.14463 1.14525 1.14588 1.1465 1.14713 1.14775 1.14828 1.14887 1.14944 1.15 1.15057 1.15116 1.15173 1.15229 1.15288 1.15345 1.15401 1.15458 1.15517 1.15573 1.15632 1.15691 1.1575 1.1581 1.15869 1.15928 1.15987 1.16052 1.16119 1.16186 1.16252 1.1632 1.16395 1.1648 1.16488 1.16488 1.16488 1.16488 1.16488 1.16488 1.16434 1.16411 1.16388 1.16365 1.16342 1.16341 1.16325 1.16306 1.16291 1.15336 1.1339 1.11395 1.07783 1.02541 0.967588	</ySamples>
               </part>
             </top>
           </collisionHull>
@@ -2261,37 +2294,37 @@
           <snapWheels>
             <topFront>
               <wheelName>	WD_R0	</wheelName>
-              <basePos>	2.87228 0.771656	</basePos>
-              <shiftVec>	0.255269 0.107697	</shiftVec>
+              <basePos>	2.95874 0.734258	</basePos>
+              <shiftVec>	0.242821 0.150015	</shiftVec>
               <jointIdx>	9	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_R4	</wheelName>
-              <basePos>	-2.96667 0.73123	</basePos>
-              <shiftVec>	-0.270516 0.214555	</shiftVec>
-              <jointIdx>	53	</jointIdx>
+              <basePos>	-2.88022 0.693831	</basePos>
+              <shiftVec>	-0.273993 0.194669	</shiftVec>
+              <jointIdx>	52	</jointIdx>
             </topBack>
             <bottomBack>
               <wheelName>	W_R5	</wheelName>
-              <basePos>	-2.14686 0.315637	</basePos>
-              <shiftVec>	-0.022095 -0.270193	</shiftVec>
-              <jointIdx>	64	</jointIdx>
+              <basePos>	-2.06041 0.317977	</basePos>
+              <shiftVec>	0.0541983 -0.275075	</shiftVec>
+              <jointIdx>	63	</jointIdx>
             </bottomBack>
             <bottomFront>
               <wheelName>	W_R0	</wheelName>
-              <basePos>	2.16314 0.315637	</basePos>
-              <shiftVec>	0.0577157 -0.26488	</shiftVec>
+              <basePos>	2.24959 0.317977	</basePos>
+              <shiftVec>	0.0670478 -0.266779	</shiftVec>
               <jointIdx>	0	</jointIdx>
             </bottomFront>
           </snapWheels>
           <radiusOverrides>
             <wheel>
               <name>	WD_R4	</name>
-              <radius>	0.33974	</radius>
+              <radius>	0.330246	</radius>
             </wheel>
             <wheel>
               <name>	WD_R0	</name>
-              <radius>	0.29	</radius>
+              <radius>	0.278497	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -2299,12 +2332,12 @@
             <segmentSyncPivotOffset>	0.000000	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R4	</name>
-              <startAngle>	-515.719	</startAngle>
+              <startAngle>	-3.12132	</startAngle>
               <teethCount>	7	</teethCount>
             </sync>
             <sync>
               <name>	WD_R0	</name>
-              <startAngle>	-513.381	</startAngle>
+              <startAngle>	-0.270563	</startAngle>
               <teethCount>	7	</teethCount>
             </sync>
           </teethSyncs>
@@ -2401,7 +2434,7 @@
             </top>
             <bottom>
               <range>
-                <point>	1.19876 0.886289 -2.7502	</point>
+                <point>	1.1687 0.856429 -2.6193	</point>
               </range>
             </bottom>
           </sourceCollisionHullPoints>

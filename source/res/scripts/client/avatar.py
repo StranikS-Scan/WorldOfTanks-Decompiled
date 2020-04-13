@@ -318,7 +318,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.__isWaitingForShot = False
             self.__gunReloadCommandWaitEndTime = 0.0
             self.__prevGunReloadTimeLeft = -1.0
-            self.__frags = set()
             self.__vehicleToVehicleCollisions = {}
             self.__deviceStates = {}
             self.__maySeeOtherVehicleDamagedDevices = False
@@ -1011,7 +1010,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__autoAimVehID = 0
         self.inputHandler.setAimingMode(False, AIMING_MODE.TARGET_LOCK)
         self.gunRotator.clientMode = True
-        if autoAimVehID and autoAimVehID not in self.__frags:
+        if autoAimVehID:
             self.onLockTarget(AimSound.TARGET_LOST, not lossReasonFlags & TARGET_LOST_FLAGS.KILLED_BY_ME)
         TriggersManager.g_manager.deactivateTrigger(TRIGGER_TYPE.AUTO_AIM_AT_VEHICLE)
         if BigWorld.player().vehicle.isWheeledTech:
@@ -2363,8 +2362,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
      'TANKMAN_HIT_AT_DROWNING')
 
     def __onArenaVehicleKilled(self, targetID, attackerID, equipmentID, reason):
-        if self.__autoAimVehID != 0 and self.__autoAimVehID == targetID and self.__isVehicleAlive:
-            self.onLockTarget(AimSound.TARGET_LOST, False)
         isMyVehicle = targetID == self.playerVehicleID
         isObservedVehicle = not self.__isVehicleAlive and targetID == getattr(self.inputHandler.ctrl, 'curVehicleID', None)
         if isMyVehicle or isObservedVehicle:
@@ -2386,12 +2383,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.inputHandler.setKillerVehicleID(attackerID)
             return
         else:
-            if attackerID == self.playerVehicleID:
-                targetInfo = self.arena.vehicles.get(targetID)
-                if targetInfo is None:
-                    LOG_CODEPOINT_WARNING()
-                    return
-                self.__frags.add(targetID)
             self.guiSessionProvider.shared.messages.showVehicleKilledMessage(self, targetID, attackerID, equipmentID, reason)
             return
 

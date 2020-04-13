@@ -283,15 +283,20 @@ class BonusConditions(ConditionsParser):
         if name == 'vehicleStun':
             return conditions.VehicleStunCumulative(uniqueName, data, self)
         if name == 'cumulative':
+
+            def isDescription(el):
+                return el[0] == 'description'
+
             result = []
             description = tuple()
-            for idx, element in enumerate(data):
-                if element[0] == 'description':
+            for _, element in enumerate(data):
+                if isDescription(element):
                     description = (element,)
-                    del data[idx]
                     break
 
             for idx, element in enumerate(data):
+                if isDescription(element):
+                    continue
                 result.append(conditions.CumulativeResult('%s%d' % (uniqueName, idx), (element,) + description, self))
 
             return result

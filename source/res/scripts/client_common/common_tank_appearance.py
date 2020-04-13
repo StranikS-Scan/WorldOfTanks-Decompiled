@@ -210,7 +210,8 @@ class CommonTankAppearance(ScriptGameObject):
             self.__trackScrollCtl = None
         self.__chassisDecal.create()
         self.__modelAnimators = camouflages.getModelAnimators(self.outfit, self.typeDescriptor, self.worldID, resourceRefs, self.compoundModel)
-        self.__modelAnimators.extend(camouflages.getAttachmentsAnimators(self.__attachments, self.worldID, resourceRefs, self.compoundModel))
+        if self.isAlive:
+            self.__modelAnimators.extend(camouflages.getAttachmentsAnimators(self.__attachments, self.worldID, resourceRefs, self.compoundModel))
         self.transform = self.createComponent(GenericComponents.TransformComponent, Math.Vector3(0, 0, 0))
         self.areaTriggerTarget = self.createComponent(Triggers.AreaTriggerTarget)
         self.__filter = model_assembler.createVehicleFilter(self.typeDescriptor)

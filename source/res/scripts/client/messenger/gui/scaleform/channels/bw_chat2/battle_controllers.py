@@ -148,6 +148,8 @@ class EpicTeamChannelController(TeamChannelController):
         elif cmd.isOnEpicBattleMinimap():
             markingPos = cmd.getMarkedPosition()
             targetInRange = validatePosition(markingPos)
+        if cmd.isEpicGlobalMessage():
+            senderInRange = True
         return senderInRange or targetInRange
 
     def __getNameSuffix(self, avatarSessionID):

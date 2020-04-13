@@ -1,10 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/SectorBase.py
 import BigWorld
-from Math import Vector4, Vector3, Vector2, Matrix
 import ResMgr
 import SoundGroups
+from helpers import dependency
 from FlagModel import FlagSettings, FlagModel
+from Math import Vector4, Vector3, Vector2, Matrix
+from skeletons.account_helpers.settings_core import ISettingsCore
+from account_helpers.settings_core.settings_constants import GRAPHICS
 
 class _SectorBaseSettingsCache(object):
 
@@ -30,6 +33,7 @@ _g_sectorBaseSettings = None
 class SectorBase(BigWorld.Entity):
     _OVER_TERRAIN_HEIGHT = 0.5
     _PLAYER_TEAM_PARAMS = {}
+    __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         global _g_sectorBaseSettings
@@ -43,8 +47,7 @@ class SectorBase(BigWorld.Entity):
         if _g_sectorBaseSettings is None:
             settingsData = ResMgr.openSection(ENVIRONMENT_EFFECTS_CONFIG_FILE + '/sectorBase')
             _g_sectorBaseSettings = _SectorBaseSettingsCache(settingsData)
-            SectorBase._PLAYER_TEAM_PARAMS = {True: (4278255360L, True),
-             False: (4294901760L, False)}
+            SectorBase._PLAYER_TEAM_PARAMS = ((4294901760L, 4286806526L, False), (4278255360L, 4278255360L, True))
         return
 
     def prerequisites(self):
@@ -135,4 +138,5 @@ class SectorBase(BigWorld.Entity):
         return
 
     def __getTeamParams(self):
-        return self._PLAYER_TEAM_PARAMS[self.isPlayerTeam()]
+        params = self._PLAYER_TEAM_PARAMS[self.isPlayerTeam()]
+        return (params[self.__settingsCore.getSetting(GRAPHICS.COLOR_BLIND)], params[2])

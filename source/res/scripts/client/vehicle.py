@@ -150,11 +150,17 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         self.__wheelsSteeringFilter = None
         self.__activeGunIndex = None
         self.refreshNationalVoice()
+        self.prereqsCompDescr = None
         return
 
     def __del__(self):
         if _g_waitingVehicle.has_key(self.id):
             del _g_waitingVehicle[self.id]
+
+    def set_publicInfo(self, prev):
+        if self.prereqsCompDescr is not None and self.prereqsCompDescr != self.publicInfo.compDescr:
+            Vehicle.respawnVehicle(self.id, self.publicInfo.compDescr)
+        return
 
     def reload(self):
         if self.isStarted:
@@ -175,6 +181,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         self.typeDescriptor = self.getDescr(respawnCompactDescr)
         forceReloading = respawnCompactDescr is not None
         self.appearance, prereqs = appearance_cache.createAppearance(self.id, self.typeDescriptor, self.health, self.isCrewActive, self.isTurretDetached, outfitDescr, forceReloading)
+        self.prereqsCompDescr = self.respawnCompactDescr if self.respawnCompactDescr else self.publicInfo.compDescr
         return (loadingPriority(self.id), prereqs)
 
     def getDescr(self, respawnCompactDescr):
@@ -199,6 +206,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
                     _logger.error('respawn vehicle: Vehicle ref is not None but entity does not exist anymore. Skip wg_respawn')
                 else:
                     try:
+                        vehicle.prereqsCompDescr = None
                         vehicle.wg_respawn()
                     except Exception:
                         _logger.error('respawn vehicle: Vehicle ref is not None but failed to call respawn: %s', vID)
@@ -239,6 +247,9 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         if self.respawnCompactDescr:
             _logger.debug('respawn compact descr is still valid, request reloading of tank resources')
             BigWorld.callback(0.0, lambda : Vehicle.respawnVehicle(self.id, self.respawnCompactDescr))
+        elif self.prereqsCompDescr is not None and self.prereqsCompDescr != self.publicInfo.compDescr:
+            BigWorld.callback(0.0, lambda : Vehicle.respawnVehicle(self.id, self.publicInfo.compDescr))
+        return
 
     def onLeaveWorld(self):
         self.__stopExtras()

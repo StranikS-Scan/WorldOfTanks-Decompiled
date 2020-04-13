@@ -45,4 +45,4 @@ class VehiclePreviewModulesTab(VehiclePreviewModulesTabMeta):
     @staticmethod
     def __showAnimation():
         vehicle = g_currentPreviewVehicle.item
-        return not wasModulesAnimationShown() if vehicle is not None and vehicle.isCollectible else False
+        return not wasModulesAnimationShown() if vehicle is not None and vehicle.isCollectible and vehicle.hasModulesToSelect else False

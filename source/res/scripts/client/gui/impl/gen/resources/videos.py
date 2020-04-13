@@ -19,14 +19,21 @@ class Videos(DynAccessor):
 
     battle_pass = _battle_pass()
 
+    class _development(DynAccessor):
+        __slots__ = ()
+        example = DynAccessor(38051)
+        example_2 = DynAccessor(38052)
+
+    development = _development()
+
     class _startup(DynAccessor):
         __slots__ = ()
-        Logo_All = DynAccessor(38051)
+        Logo_All = DynAccessor(38053)
 
     startup = _startup()
 
     class _vehicle(DynAccessor):
         __slots__ = ()
-        A122_TS_5 = DynAccessor(38052)
+        A122_TS_5 = DynAccessor(38054)
 
     vehicle = _vehicle()

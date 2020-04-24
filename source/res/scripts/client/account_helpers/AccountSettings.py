@@ -43,6 +43,9 @@ RANKED_CAROUSEL_FILTER_CLIENT_1 = 'RANKED_CAROUSEL_FILTER_CLIENT_1'
 EPICBATTLE_CAROUSEL_FILTER_1 = 'EPICBATTLE_CAROUSEL_FILTER_1'
 EPICBATTLE_CAROUSEL_FILTER_2 = 'EPICBATTLE_CAROUSEL_FILTER_2'
 EPICBATTLE_CAROUSEL_FILTER_CLIENT_1 = 'EPICBATTLE_CAROUSEL_FILTER_CLIENT_1'
+BOB_CAROUSEL_FILTER_1 = 'BOB_CAROUSEL_FILTER_1'
+BOB_CAROUSEL_FILTER_2 = 'BOB_CAROUSEL_FILTER_2'
+BOB_CAROUSEL_FILTER_CLIENT_1 = 'BOB_CAROUSEL_FILTER_CLIENT_1'
 STORAGE_VEHICLES_CAROUSEL_FILTER_1 = 'STORAGE_CAROUSEL_FILTER_1'
 BATTLEPASS_CAROUSEL_FILTER_1 = 'BATTLEPASS_CAROUSEL_FILTER_1'
 BATTLEPASS_CAROUSEL_FILTER_CLIENT_1 = 'BATTLEPASS_CAROUSEL_FILTER_CLIENT_1'
@@ -144,6 +147,7 @@ QUEST_DELTAS_COMPLETION = 'questCompletion'
 QUEST_DELTAS_PROGRESS = 'questProgress'
 QUEST_DELTAS_TOKENS_PROGRESS = 'tokensProgress'
 TOP_OF_TREE_CONFIG = 'topOfTree'
+TEN_YEARS_COUNTDOWN_ON_BOARDING_LAST_VISITED_BLOCK = 'tenYearsCountdownOnBoardingLastVisitedBlock'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
@@ -313,6 +317,41 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'bonus': False},
                EPICBATTLE_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                BATTLEPASS_CAROUSEL_FILTER_1: {'isCommonProgression': False},
+               BOB_CAROUSEL_FILTER_1: {'ussr': False,
+                                       'germany': False,
+                                       'usa': False,
+                                       'china': False,
+                                       'france': False,
+                                       'uk': False,
+                                       'japan': False,
+                                       'czech': False,
+                                       'sweden': False,
+                                       'poland': False,
+                                       'italy': False,
+                                       'lightTank': False,
+                                       'mediumTank': False,
+                                       'heavyTank': False,
+                                       'SPG': False,
+                                       'AT-SPG': False,
+                                       'level_1': False,
+                                       'level_2': False,
+                                       'level_3': False,
+                                       'level_4': False,
+                                       'level_5': False,
+                                       'level_6': False,
+                                       'level_7': False,
+                                       'level_8': False,
+                                       'level_9': False,
+                                       'level_10': True},
+               BOB_CAROUSEL_FILTER_2: {'premium': False,
+                                       'elite': False,
+                                       'igr': False,
+                                       'rented': True,
+                                       'event': True,
+                                       'gameMode': False,
+                                       'favorite': False,
+                                       'bonus': False},
+               BOB_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                MISSION_SELECTOR_FILTER: {'inventory': False},
                PM_SELECTOR_FILTER: {'inventory': False},
                BLUEPRINTS_STORAGE_FILTER: {'unlock_available': False,
@@ -552,7 +591,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                         'hangarCamParallaxEnabled': True,
                                                         'hangarCamPeriod': True,
                                                         'showDamageIcon': True,
-                                                        ANONYMIZER: True},
+                                                        ANONYMIZER: True,
+                                                        GAME.DISABLE_EVENT_COMMON_CHAT: True},
                                        'GraphicSettings': {'ScreenSettings': {'gammaSetting': True,
                                                                               'colorFilter': True},
                                                            'AdvancedGraphicSettings': {'HAVOK_ENABLED': True,
@@ -610,7 +650,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 MODULES_ANIMATION_SHOWN: False,
                 SUBTITLES: True,
                 NATION_CHANGE_VIEWED: False,
-                TOP_OF_TREE_CONFIG: {}},
+                TOP_OF_TREE_CONFIG: {},
+                TEN_YEARS_COUNTDOWN_ON_BOARDING_LAST_VISITED_BLOCK: 0},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},

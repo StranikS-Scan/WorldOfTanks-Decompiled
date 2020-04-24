@@ -71,6 +71,12 @@ from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.sounds import ISoundsController
+from ten_year_countdown_config import EVENT_BADGE_MISSION_ID
+from ten_year_countdown_config import EVENT_STYLE_MISSION_ID
+from ten_year_countdown_config import TEN_YEAR_COUNTDOWN_QUEST_TOKEN_PREFIX
+from ten_year_countdown_config import TEN_YEAR_COUNTDOWN_QUEST_TOKEN_POSTFIX
+from gui.shared.event_dispatcher import show10YCAwardWindow
+from gui.impl.auxiliary.rewards_helper import getTokenAward
 _logger = logging.getLogger(__name__)
 
 class QUEST_AWARD_POSTFIX(object):
@@ -137,7 +143,8 @@ class AwardController(IAwardController, IGlobalListener):
          BattlePassBuyEmptyHandler(self),
          BattlePassCapHandler(self),
          TechTreeIntroHandler(self),
-         VehicleCollectorAchievementHandler(self)]
+         VehicleCollectorAchievementHandler(self),
+         TenYearsCountdownHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -1433,3 +1440,53 @@ class BattlePassCapHandler(ServiceChannelHandler):
                 return
 
         showBattlePassVehicleAwardWindow(message.data)
+
+
+class TenYearsCountdownHandler(MultiTypeServiceChannelHandler):
+
+    def __init__(self, awardCtrl):
+        super(TenYearsCountdownHandler, self).__init__((SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index()), awardCtrl)
+        self.__pending = []
+        self.__locked = False
+
+    def __processOrHold(self, method, args):
+        if self.__locked:
+            self.__pending.append((method, args))
+        else:
+            self.__locked = True
+            method(*args)
+
+    def __unlock(self):
+        self.__locked = False
+        if self.__pending:
+            self.__processOrHold(*self.__pending.pop(0))
+
+    def __show10YCAward(self, questID, data):
+        if data is not None:
+            bonuses, _ = getProgressiveRewardBonuses(data['detailedRewards'][questID])
+            if questID.startswith(TEN_YEAR_COUNTDOWN_QUEST_TOKEN_PREFIX) and questID.endswith(TEN_YEAR_COUNTDOWN_QUEST_TOKEN_POSTFIX):
+                bonuses.append(getTokenAward())
+            show10YCAwardWindow(bonuses, questID, closeCallback=self.__unlock)
+        else:
+            self.__unlock()
+        return
+
+    def __sortAwardIDs(self, nameQuests):
+        quests = []
+        for questID in nameQuests:
+            if questID.startswith(TEN_YEAR_COUNTDOWN_QUEST_TOKEN_PREFIX) and questID.endswith(TEN_YEAR_COUNTDOWN_QUEST_TOKEN_POSTFIX):
+                quests.append(questID)
+
+        if EVENT_STYLE_MISSION_ID in nameQuests:
+            quests.append(EVENT_STYLE_MISSION_ID)
+        if EVENT_BADGE_MISSION_ID in nameQuests:
+            quests.append(EVENT_BADGE_MISSION_ID)
+        return quests
+
+    def _showAward(self, ctx):
+        _, message = ctx
+        data = message.data.copy()
+        nameQuests = data.get('completedQuestIDs', set())
+        quests10YC = self.__sortAwardIDs(nameQuests)
+        for questID in quests10YC:
+            self.__processOrHold(self.__show10YCAward, (questID, data))

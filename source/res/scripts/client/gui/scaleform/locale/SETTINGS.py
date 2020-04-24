@@ -341,6 +341,7 @@ class SETTINGS(object):
     CHAT_RECEIVECLANINVITESNOTIFICATIONS = '#settings:chat/receiveClanInvitesNotifications'
     CHAT_CHATCONTACTSLISTONLY = '#settings:chat/chatContactsListOnly'
     CHAT_DISABLEBATTLECHAT = '#settings:chat/disableBattleChat'
+    CHAT_DISABLEDCOMMONCHAT = '#settings:chat/disabledCommonChat'
     GAME_SHOWLANGUAGEBAR = '#settings:game/showLanguageBar'
     GAME_ENABLEVOIP = '#settings:game/enableVoIP'
     GAME_ENABLEOPTICALSNPEFFECT = '#settings:game/enableOpticalSnpEffect'

@@ -1029,7 +1029,7 @@
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
-    <priceGroup>	styles 2500g	</priceGroup>
+    <priceGroup>	styles 2500g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <vehicles>	ussr:R19_IS-3	</vehicles>
@@ -1349,6 +1349,101 @@
               <slotId>	38001	</slotId>
             </item>
           </attachments>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 1750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R38_KV-220 ussr:R38_KV-220_beta	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	285	</id>
+      <texture>	gui/maps/vehicles/styles/10years_transformator.png	</texture>
+      <description>	#vehicle_customization:special_style/10years_transformator_desc	</description>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/10years_transformator	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	103	</id>
+              <appliedTo>	16	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	104	</id>
+              <appliedTo>	4352	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	34	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	120	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 1750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R54_KV-5	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	287	</id>
+      <texture>	gui/maps/vehicles/styles/10years_fortress.png	</texture>
+      <description>	#vehicle_customization:special_style/10years_fortress_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/10years_fortress_desc/long	</longDescriptionSpecial>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/10years_fortress	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	106	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	122	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
         </outfit>
       </outfits>
     </style>

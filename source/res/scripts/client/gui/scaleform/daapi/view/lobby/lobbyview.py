@@ -23,9 +23,10 @@ from helpers import i18n, dependency, uniprof
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from skeletons.gui.app_loader import IWaitingWidget
-from skeletons.gui.game_control import IIGRController
+from skeletons.gui.game_control import IIGRController, ITenYearsCountdownController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from gui.Scaleform.daapi.view.lobby.ten_years_event.ten_years_event_sound_controller import TenYearsEventSounds
 
 class _LobbySubViewsLifecycleHandler(IViewLifecycleHandler):
     __WAITING_LBL = 'loadPage'
@@ -95,6 +96,7 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
     itemsCache = dependency.descriptor(IItemsCache)
     igrCtrl = dependency.descriptor(IIGRController)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    tenYearsEventController = dependency.descriptor(ITenYearsCountdownController)
 
     def __init__(self, ctx=None):
         super(LobbyView, self).__init__(ctx)
@@ -145,6 +147,8 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
         self.lobbyContext.updateBattlesCount(battlesCount, epicBattlesCount)
         self.fireEvent(events.GUICommonEvent(events.GUICommonEvent.LOBBY_VIEW_LOADED))
         self.bwProto.voipController.invalidateMicrophoneMute()
+        if self.tenYearsEventController.isEnabled():
+            self.soundManager.playInstantSound(TenYearsEventSounds.EV_10Y_COUNTDOWN_ENTRY_POINT)
 
     def _invalidate(self, *args, **kwargs):
         g_prbLoader.setEnabled(True)

@@ -32,9 +32,10 @@ from web.web_client_api.ui.vehicle import VehicleCompareWebApiMixin
 from web.web_client_api.ui.vehicle import VehiclePreviewWebApiMixin
 from web.web_client_api.ui.vehicle import VehicleComparisonBasketWebApiMixin
 from web.web_client_api.ui.waiting import WaitingWebApiMixin
+from web.web_client_api.ui.ten_years_event import OpenTenYearsEventHubWebApiMixin
 
 @w2capi(name='open_window', key='window_id')
-class OpenWindowWebApi(OpenBrowserWindowWebApiMixin, ClanWindowWebApiMixin, ProfileWindowWebApiMixin, OpenExternalBrowserWebApiMixin, VehicleSellWebApiMixin, hangar.HangarWindowsWebApiMixin, BoostersWindowWebApiMixin, PremiumWindowWebApiMixin, ManualPageWebApiMixin, ChatWebApiMixin, SquadWebApiMixin, OpenBrowserOverlayWebApiMixin, PremiumViewsWebApiMixin, OpenCalendarWindowWebApiMixin, OpenBuyGoldWebApiMixin, OpenTankmanWebApiMixin, DialogsWebApiMixin):
+class OpenWindowWebApi(OpenBrowserWindowWebApiMixin, ClanWindowWebApiMixin, ProfileWindowWebApiMixin, OpenExternalBrowserWebApiMixin, VehicleSellWebApiMixin, hangar.HangarWindowsWebApiMixin, BoostersWindowWebApiMixin, PremiumWindowWebApiMixin, ManualPageWebApiMixin, ChatWebApiMixin, SquadWebApiMixin, OpenBrowserOverlayWebApiMixin, PremiumViewsWebApiMixin, OpenCalendarWindowWebApiMixin, OpenBuyGoldWebApiMixin, OpenTankmanWebApiMixin, DialogsWebApiMixin, OpenTenYearsEventHubWebApiMixin):
     pass
 
 

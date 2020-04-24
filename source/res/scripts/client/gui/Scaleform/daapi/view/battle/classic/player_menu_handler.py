@@ -13,6 +13,7 @@ from messenger.m_constants import PROTO_TYPE, UserEntityScope
 from messenger.proto import proto_getter
 from messenger.storage import storage_getter
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.lobby_context import ILobbyContext
 
 class DYN_SQUAD_OPTION_ID(object):
     SENT_INVITATION = 'sendInvitationToSquad'
@@ -84,12 +85,14 @@ class PlayerContextMenuInfo(object):
 
 class PlayerMenuHandler(AbstractContextMenuHandler):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    lobbyContext = dependency.instance(ILobbyContext)
 
     def __init__(self, cmProxy, ctx=None):
         self.__denunciator = BattleDenunciator()
         self.__arenaUniqueID = BattleDenunciator.getArenaUniqueID()
         g_eventBus.addListener(events.GameEvent.HIDE_CURSOR, self.__handleHideCursor, EVENT_BUS_SCOPE.GLOBAL)
         super(PlayerMenuHandler, self).__init__(cmProxy, ctx=ctx, handlers=_OPTIONS_HANDLERS)
+        self.isRandomCommonChatEnabled = self.lobbyContext.getServerSettings().isRandomCommonChatEnabled()
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
     def bwProto(self):
@@ -262,6 +265,8 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
         make = self._makeItem
         if self.__userInfo.isAlly or self.arenaGuiType.isTrainingBattle():
             order = DENUNCIATIONS.ORDER
+        elif self.isRandomCommonChatEnabled:
+            order = DENUNCIATIONS.ENEMY_ORDER_COMMON_CHAT
         else:
             order = DENUNCIATIONS.ENEMY_ORDER
         sub = [ make(denunciation, MENU.contextmenu(denunciation), optInitData={'enabled': self.__isAppealsForTopicEnabled(denunciation)}) for denunciation in order ]

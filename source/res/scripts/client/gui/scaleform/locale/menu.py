@@ -155,6 +155,8 @@ class MENU(object):
     LOADING_BATTLETYPES_DESC_21 = '#menu:loading/battleTypes/desc/21'
     LOADING_BATTLETYPES_22 = '#menu:loading/battleTypes/22'
     LOADING_BATTLETYPES_DESC_22 = '#menu:loading/battleTypes/desc/22'
+    LOADING_BATTLETYPES_23 = '#menu:loading/battleTypes/23'
+    LOADING_BATTLETYPES_DESC_23 = '#menu:loading/battleTypes/desc/23'
     LOADING_TEAM1 = '#menu:loading/team1'
     LOADING_TEAM2 = '#menu:loading/team2'
     LOADING_TEAMS_ALLIES = '#menu:loading/teams/allies'
@@ -611,6 +613,7 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_SQUAD_RANDOMBATTLE = '#menu:headerButtons/battle/types/squad/randomBattle'
     HEADERBUTTONS_BATTLE_TYPES_SQUAD_EVENT = '#menu:headerButtons/battle/types/squad/event'
     HEADERBUTTONS_BATTLE_TYPES_SQUAD_EPIC = '#menu:headerButtons/battle/types/squad/epic'
+    HEADERBUTTONS_BATTLE_TYPES_SQUAD_BOB = '#menu:headerButtons/battle/types/squad/bob'
     HEADERBUTTONS_BATTLE_TYPES_SQUADLEAVEOWNER = '#menu:headerButtons/battle/types/squadLeaveOwner'
     HEADERBUTTONS_BATTLE_TYPES_SQUADLEAVE = '#menu:headerButtons/battle/types/squadLeave'
     HEADERBUTTONS_BATTLE_TYPES_SQUAD_DESCR = '#menu:headerButtons/battle/types/squad/descr'
@@ -640,6 +643,8 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_HISTORICALBATTLESLEAVE = '#menu:headerButtons/battle/types/historicalBattlesLeave'
     HEADERBUTTONS_BATTLE_TYPES_BATTLETUTORIAL = '#menu:headerButtons/battle/types/battleTutorial'
     HEADERBUTTONS_BATTLE_TYPES_FALLOUT = '#menu:headerButtons/battle/types/fallout'
+    HEADERBUTTONS_BATTLE_TYPES_BOB = '#menu:headerButtons/battle/types/bob'
+    HEADERBUTTONS_BATTLE_TYPES_BOB_DESCR = '#menu:headerButtons/battle/types/bob/descr'
     HEADERBUTTONS_BATTLE_AVAILABLESINCE = '#menu:headerButtons/battle/availableSince'
     HEADERBUTTONS_BATTLE_AVAILABLESINCESOON = '#menu:headerButtons/battle/availableSinceSoon'
     HEADERBUTTONS_BATTLE_AVAILABLEUNTIL = '#menu:headerButtons/battle/availableUntil'
@@ -684,6 +689,8 @@ class MENU(object):
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICLEVELREQUIRED_BODYEND = '#menu:headerButtons/fightBtn/tooltip/epicLevelRequired/bodyEnd'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICBATTLEONLY_HEADER = '#menu:headerButtons/fightBtn/tooltip/epicBattleOnly/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICBATTLEONLY_BODY = '#menu:headerButtons/fightBtn/tooltip/epicBattleOnly/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_BOBONLY_HEADER = '#menu:headerButtons/fightBtn/tooltip/bobOnly/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_BOBONLY_BODY = '#menu:headerButtons/fightBtn/tooltip/bobOnly/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDDISABLED_HEADER = '#menu:headerButtons/fightBtn/tooltip/rankedDisabled/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDDISABLED_BODY = '#menu:headerButtons/fightBtn/tooltip/rankedDisabled/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDNOTSET_HEADER = '#menu:headerButtons/fightBtn/tooltip/rankedNotSet/header'
@@ -1439,6 +1446,7 @@ class MENU(object):
     CONTEXTMENU_TAKELEADERSHIP = '#menu:contextMenu/takeLeadership'
     CONTEXTMENU_CREATESQUAD = '#menu:contextMenu/createSquad'
     CONTEXTMENU_CREATEEVENTSQUAD = '#menu:contextMenu/createEventSquad'
+    CONTEXTMENU_CREATEBOBSQUAD = '#menu:contextMenu/createBobSquad'
     CONTEXTMENU_INVITE = '#menu:contextMenu/invite'
     CONTEXTMENU_APPEAL = '#menu:contextMenu/appeal'
     CONTEXTMENU_INCORRECTBEHAVIOR = '#menu:contextMenu/incorrectBehavior'
@@ -1555,6 +1563,7 @@ class MENU(object):
     BONUSTYPE_22 = '#menu:bonusType/22'
     BONUSTYPE_24 = '#menu:bonusType/24'
     BONUSTYPE_27 = '#menu:bonusType/27'
+    BONUSTYPE_32 = '#menu:bonusType/32'
     FORTIFICATIONCTX_ASSIGNEDPLAYERS = '#menu:fortificationCtx/assignedPlayers'
     FORTIFICATIONCTX_PREPAREORDER = '#menu:fortificationCtx/prepareOrder'
     FORTIFICATIONCTX_CLANDESCRIPTION_OPENCLANCARD = '#menu:fortificationCtx/clanDescription/openClanCard'
@@ -2045,6 +2054,7 @@ class MENU(object):
      CONTEXTMENU_TAKELEADERSHIP,
      CONTEXTMENU_CREATESQUAD,
      CONTEXTMENU_CREATEEVENTSQUAD,
+     CONTEXTMENU_CREATEBOBSQUAD,
      CONTEXTMENU_INVITE,
      CONTEXTMENU_APPEAL,
      CONTEXTMENU_INCORRECTBEHAVIOR,
@@ -2452,7 +2462,8 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_19,
      LOADING_BATTLETYPES_DESC_20,
      LOADING_BATTLETYPES_DESC_21,
-     LOADING_BATTLETYPES_DESC_22)
+     LOADING_BATTLETYPES_DESC_22,
+     LOADING_BATTLETYPES_DESC_23)
     LOADING_BATTLETYPES_ENUM = (LOADING_BATTLETYPES_0,
      LOADING_BATTLETYPES_DESC_0,
      LOADING_BATTLETYPES_1,
@@ -2494,7 +2505,9 @@ class MENU(object):
      LOADING_BATTLETYPES_21,
      LOADING_BATTLETYPES_DESC_21,
      LOADING_BATTLETYPES_22,
-     LOADING_BATTLETYPES_DESC_22)
+     LOADING_BATTLETYPES_DESC_22,
+     LOADING_BATTLETYPES_23,
+     LOADING_BATTLETYPES_DESC_23)
     CST_ITEM_CTX_MENU_ENUM = (CST_ITEM_CTX_MENU_BUY,
      CST_ITEM_CTX_MENU_EXCHANGE,
      CST_ITEM_CTX_MENU_BUYMORE,

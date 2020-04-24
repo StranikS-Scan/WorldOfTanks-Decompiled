@@ -4,7 +4,7 @@ from skeletons.gui.game_control import IWalletController
 from web.client_web_api.api import C2WHandler, c2w
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.game_control.wallet import WalletController
-from gui.shared.money import Currency, Money
+from gui.shared.money import Currency
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 
@@ -25,9 +25,11 @@ class BalanceEventHandler(C2WHandler):
     @c2w(name='balance_update')
     def __onBalanceUpdate(self, *_):
         stats = self.__itemsCache.items.stats
-        return Money.extractMoneyDict(stats.actualMoney.toDict())
+        actualMoney = stats.actualMoney.toDict()
+        balanceData = {Currency.currencyExternalName(currency):actualMoney[currency] for currency in Currency.ALL if currency in actualMoney}
+        return balanceData
 
     @c2w(name='wallet_update')
     def __onWalletUpdate(self, *_):
         stats = self.__itemsCache.items.stats
-        return {key:WalletController.STATUS.getKeyByValue(code).lower() for key, code in stats.currencyStatuses.items() if key in Currency.ALL}
+        return {Currency.currencyExternalName(key):WalletController.STATUS.getKeyByValue(code).lower() for key, code in stats.currencyStatuses.items() if key in Currency.ALL}

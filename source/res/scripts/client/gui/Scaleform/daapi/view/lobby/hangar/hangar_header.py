@@ -268,7 +268,13 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         return
 
     def _makeHeaderVO(self):
-        if self.app.tutorialManager.hangarHeaderEnabled and self._currentVehicle.isPresent():
+        if self.prbDispatcher:
+            state = self.prbDispatcher.getFunctionalState()
+            isBob = state.isInPreQueue(constants.QUEUE_TYPE.BOB) or state.isInUnit(constants.PREBATTLE_TYPE.BOB)
+        else:
+            isBob = False
+        needShowHeader = self.app.tutorialManager.hangarHeaderEnabled and self._currentVehicle.isPresent() and not isBob
+        if needShowHeader:
             vehicle = self._currentVehicle.item
             quests = self._getQuestsToHeaderVO(vehicle)
             headerVO = {'isVisible': True,

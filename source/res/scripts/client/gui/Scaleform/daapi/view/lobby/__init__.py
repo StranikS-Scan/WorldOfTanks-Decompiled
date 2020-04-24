@@ -88,6 +88,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.bootcamp.BCBattleResult import BCBattleResult
     from gui.Scaleform.daapi.view.bootcamp.BCVehiclePreview import BCVehiclePreview
     from gui.Scaleform.daapi.view.lobby.vehiclePreview20.style_preview import VehicleStylePreview
+    from gui.Scaleform.daapi.view.lobby.ten_years_event.ten_years_event_hub_browser import TenYearsEventHubPageOverlay
     return (ViewSettings(VIEW_ALIAS.LOBBY, LobbyView, 'lobbyPage.swf', ViewTypes.DEFAULT, None, ScopeTemplates.DEFAULT_SCOPE, False, (ContainerSettings(ViewTypes.LOBBY_SUB, containers.DefaultContainer), ContainerSettings(ViewTypes.LOBBY_TOP_SUB, containers.PopUpContainer))),
      ViewSettings(VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW, LobbyVehicleMarkerView, 'lobbyVehicleMarkerView.swf', ViewTypes.MARKER, VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BATTLE_QUEUE, BattleQueue, 'battleQueue.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.BATTLE_QUEUE, ScopeTemplates.DEFAULT_SCOPE),
@@ -159,7 +160,8 @@ def getViewSettings():
      ViewSettings(VIEW_ALIAS.MINI_CLIENT_LINKED, MiniClientComponentMeta, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.RECRUIT_PARAMS, RecruitParamsComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.SERVERS_STATS, ServerStats, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.BROWSER, Browser, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
+     ViewSettings(VIEW_ALIAS.BROWSER, Browser, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(VIEW_ALIAS.OVERLAY_TEN_YEARS_COUNTDOWN, TenYearsEventHubPageOverlay, 'browserScreen.swf', ViewTypes.LOBBY_TOP_SUB, VIEW_ALIAS.BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE))
 
 
 def getBusinessHandlers():
@@ -220,7 +222,8 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.CRYSTALS_PROMO_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BADGES_PAGE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.UNBOUND_INJECT_WINDOW, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.BATTLE_PASS_BADGES_DEMO, self.loadViewByCtxEvent))
+         (VIEW_ALIAS.BATTLE_PASS_BADGES_DEMO, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.OVERLAY_TEN_YEARS_COUNTDOWN, self.loadViewByCtxEvent))
         super(LobbyPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
 
 

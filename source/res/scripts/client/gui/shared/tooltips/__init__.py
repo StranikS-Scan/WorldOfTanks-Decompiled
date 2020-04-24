@@ -68,6 +68,8 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     TRADE_IN_STATE_NOT_AVAILABLE = 'tradeInStateNotAvailable'
     DEMOUNT_KIT = 'demountKit'
     VEHICLE_COLLECTOR = 'vehicleCollector'
+    BOB_SELECTOR_INFO = 'bobSelectorInfo'
+    BOB_CALENDAR_DAY = 'bobCalendarDay'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):
@@ -157,7 +159,10 @@ class ToolTipData(ToolTipBaseData):
         return
 
     def getDisplayableData(self, *args, **kwargs):
-        self.item = self.context.buildItem(*args, **kwargs)
+        if 'item' in kwargs:
+            self.item = kwargs['item']
+        else:
+            self.item = self.context.buildItem(*args, **kwargs)
         result = dict()
         for field in self.fields:
             key, value = field.buildData()

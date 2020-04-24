@@ -16,6 +16,7 @@ if typing.TYPE_CHECKING:
     from skeletons.account_helpers.settings_core import ISettingsCache
     from gui.ranked_battles.ranked_models import BattleRankInfo
     from gui.server_events.bonuses import SimpleBonus
+    from gui.shared.gui_items import ItemsCollection
 
 class IGameController(object):
 
@@ -1289,4 +1290,111 @@ class IBattlePassController(IGameController):
         raise NotImplementedError
 
     def getAlternativeVoteOption(self):
+        raise NotImplementedError
+
+
+class IBobController(IGameController, ISeasonProvider):
+    onPrimeTimeStatusUpdated = None
+    onUpdated = None
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def isModeActive(self):
+        raise NotImplementedError
+
+    def isAvailable(self):
+        raise NotImplementedError
+
+    def getConfig(self):
+        raise NotImplementedError
+
+    def getPrimeTimes(self):
+        raise NotImplementedError
+
+    def hasAvailablePrimeTimeServers(self):
+        raise NotImplementedError
+
+    def hasAnyPeripheryWithPrimeTime(self):
+        raise NotImplementedError
+
+    def getPrimeTimesForDay(self, selectedTime, groupIdentical=False):
+        raise NotImplementedError
+
+    def getPrimeTimeStatus(self, peripheryID=None):
+        raise NotImplementedError
+
+    def getSuitableVehicles(self):
+        raise NotImplementedError
+
+    def hasSuitableVehicles(self):
+        raise NotImplementedError
+
+    def isSuitableVehicle(self):
+        raise NotImplementedError
+
+    def isFrozen(self):
+        raise NotImplementedError
+
+    def getCurrentRealm(self):
+        raise NotImplementedError
+
+
+class IBobSoundController(IGameController):
+    pass
+
+
+class IHangarLoadingController(IGameController):
+    onHangarLoadedAfterLogin = None
+
+
+class ITenYearsCountdownController(IGameController):
+    onEventStateChanged = None
+    onEventBlockChanged = None
+    onEventMonthsChanged = None
+    onActivePhasesDatesChanged = None
+    onEventFinishChanged = None
+    onEventDataUpdated = None
+    onBlocksDataValidityChanged = None
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def getCurrentBlock(self):
+        raise NotImplementedError
+
+    def isCurrentBlockActive(self):
+        raise NotImplementedError
+
+    def getCurrentBlockNumber(self):
+        raise NotImplementedError
+
+    def getCurrentBlockState(self):
+        raise NotImplementedError
+
+    def getMonths(self):
+        raise NotImplementedError
+
+    def getMonth(self, blockNumber):
+        raise NotImplementedError
+
+    def getActivePhaseDates(self, blockNumber):
+        raise NotImplementedError
+
+    def getEventFinish(self):
+        raise NotImplementedError
+
+    def getBlocksCount(self):
+        raise NotImplementedError
+
+    def getEventBaseURL(self):
+        raise NotImplementedError
+
+    def isBlocksDataValid(self):
+        raise NotImplementedError
+
+    def isEventInProgress(self):
+        raise NotImplementedError
+
+    def isRandomCommonChatEnabled(self):
         raise NotImplementedError

@@ -65,7 +65,8 @@ class ItemPackType(CONST_CONTAINER):
     CUSTOM_CRYSTAL = 'custom/crystal'
     CUSTOM_GOLD = 'custom/gold'
     CUSTOM_CREDITS = 'custom/credits'
-    CUSTOM_EVENT_COIN = 'custom/event_coin'
+    CUSTOM_EVENT_COIN = 'custom/eventCoin'
+    CUSTOM_EVENT_COIN_EXTERNAL = 'custom/event_coin'
     CUSTOM_SLOT = 'custom/slot'
     CUSTOM_REFERRAL_CREW = 'custom/crew'
     CUSTOM_REWARD_POINT = 'custom/prestige_point'
@@ -127,6 +128,7 @@ class ItemPackTypeGroup(CONST_CONTAINER):
      ItemPackType.CUSTOM_GOLD,
      ItemPackType.CUSTOM_CREDITS,
      ItemPackType.CUSTOM_EVENT_COIN,
+     ItemPackType.CUSTOM_EVENT_COIN_EXTERNAL,
      ItemPackType.CUSTOM_REFERRAL_CREW,
      ItemPackType.CUSTOM_SLOT,
      ItemPackType.CUSTOM_REWARD_POINT,

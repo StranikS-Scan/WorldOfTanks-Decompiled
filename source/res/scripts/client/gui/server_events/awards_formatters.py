@@ -46,6 +46,12 @@ class AWARDS_SIZES(CONST_CONTAINER):
     BIG = 'big'
 
 
+class AWARDS_SIZES_EXT(CONST_CONTAINER):
+    SMALL = 'small'
+    BIG = 'big'
+    HUGE = 'huge'
+
+
 class COMPLETION_TOKENS_SIZES(CONST_CONTAINER):
     SMALL = 'small'
     BIG = 'big'

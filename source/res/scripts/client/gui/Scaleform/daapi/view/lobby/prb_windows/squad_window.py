@@ -9,7 +9,8 @@ from gui.Scaleform.managers.windows_stored_data import stored_window
 from gui.prb_control import settings
 from gui.prb_control.formatters import messages
 from gui.shared import events, EVENT_BUS_SCOPE
-from helpers import i18n
+from helpers import i18n, dependency
+from skeletons.gui.game_control import IBobController
 
 @stored_window(DATA_TYPE.UNIQUE_WINDOW, TARGET_ID.CHANNEL_CAROUSEL)
 class SquadWindow(SquadWindowMeta):
@@ -106,3 +107,28 @@ class EpicSquadWindow(SquadWindow):
 
     def _getSquadViewAlias(self):
         return PREBATTLE_ALIASES.EPIC_SQUAD_VIEW_PY
+
+
+class BobSquadWindow(SquadWindow):
+    __bobEventController = dependency.descriptor(IBobController)
+
+    def _populate(self):
+        super(BobSquadWindow, self)._populate()
+        self.__bobEventController.onUpdated += self.__bobConfigChanged
+
+    def _dispose(self):
+        self.__bobEventController.onUpdated -= self.__bobConfigChanged
+        super(BobSquadWindow, self)._dispose()
+
+    def _getTitle(self):
+        return ''.join((i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_SQUAD), i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_SQUAD_BOB)))
+
+    def getPrbType(self):
+        return PREBATTLE_TYPE.BOB
+
+    def _getSquadViewAlias(self):
+        return PREBATTLE_ALIASES.BOB_SQUAD_VIEW_PY
+
+    def __bobConfigChanged(self):
+        if not self.__bobEventController.isModeActive():
+            self._doLeave()

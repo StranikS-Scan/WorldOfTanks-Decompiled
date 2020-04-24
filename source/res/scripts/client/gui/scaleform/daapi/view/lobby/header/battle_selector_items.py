@@ -16,10 +16,11 @@ from gui.shared.formatters import text_styles, icons
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from helpers import time_utils, dependency, int2roman
 from shared_utils import findFirst
-from skeletons.gui.game_control import IRankedBattlesController, IEventProgressionController, IEpicBattleMetaGameController, IBootcampController
+from skeletons.gui.game_control import IRankedBattlesController, IEventProgressionController, IEpicBattleMetaGameController, IBootcampController, IBobController
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.clans.clan_helpers import isStrongholdsEnabled
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
+from gui.Scaleform.locale.MENU import MENU
 from gui.game_control.epic_meta_game_ctrl import EPIC_PERF_GROUP
 from gui.impl import backport
 from gui.impl.gen import R
@@ -95,7 +96,7 @@ class _SelectorItem(object):
         return False
 
     def isInSquad(self, state):
-        return state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInUnit(PREBATTLE_TYPE.EVENT) or state.isInUnit(PREBATTLE_TYPE.EPIC)
+        return state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInUnit(PREBATTLE_TYPE.EVENT) or state.isInUnit(PREBATTLE_TYPE.EPIC) or state.isInUnit(PREBATTLE_TYPE.BOB)
 
     def setLocked(self, value):
         self._isLocked = value
@@ -471,6 +472,25 @@ class _EventProgressionItem(_SelectorExtraItem):
         self.__dataProvider = findFirst(lambda dp: dp.isVisible(), self.__dataProviders, _EventProgressionDefaultDataProvider())
 
 
+class _BobItem(_SelectorItem):
+    bobController = dependency.descriptor(IBobController)
+
+    def isRandomBattle(self):
+        return True
+
+    def getSpecialBGIcon(self):
+        return backport.image(_R_ICONS.buttons.selectorRendererBGEvent()) if self.bobController.isModeActive() else ''
+
+    def select(self):
+        super(_BobItem, self).select()
+        selectorUtils.setBattleTypeAsKnown(self._selectorType)
+
+    def _update(self, state):
+        self._isSelected = state.isQueueSelected(QUEUE_TYPE.BOB)
+        self._isDisabled = state.hasLockedState
+        self._isVisible = self.bobController.isModeActive()
+
+
 class _BattleSelectorItems(object):
 
     def __init__(self, items, extraItems=None):
@@ -651,6 +671,7 @@ def _createItems(lobbyContext=None):
     isInRoaming = settings.roaming.isInRoaming()
     items = []
     _addRandomBattleType(items)
+    _addBobBattleType(items)
     _addRankedBattleType(items, settings)
     _addCommandBattleType(items, settings)
     _addStrongholdsBattleType(items, isInRoaming)
@@ -716,6 +737,10 @@ def _addSandboxType(items):
 
 def _addEventProgressionExtraType(items):
     items.append(_EventProgressionItem(_EventProgressionEpicDataProvider()))
+
+
+def _addBobBattleType(items):
+    items.append(_BobItem(MENU.HEADERBUTTONS_BATTLE_TYPES_BOB, PREBATTLE_ACTION_NAME.BOB, 1, SELECTOR_BATTLE_TYPES.BOB))
 
 
 def _addSimpleSquadType(items):

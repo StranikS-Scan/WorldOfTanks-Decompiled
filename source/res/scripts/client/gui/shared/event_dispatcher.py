@@ -29,6 +29,7 @@ from gui.Scaleform.genConsts.EVENTPROGRESSION_ALIASES import EVENTPROGRESSION_AL
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
+from gui.Scaleform.genConsts.BATTLE_OF_BLOGGERS_ALIASES import BATTLE_OF_BLOGGERS_ALIASES
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.game_control.links import URLMacros
 from gui.impl import backport
@@ -58,7 +59,7 @@ from helpers.i18n import makeString as _ms
 from items import vehicles as vehicles_core
 from nations import NAMES
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IHeroTankController, IReferralProgramController, IEpicBattleMetaGameController
+from skeletons.gui.game_control import IHeroTankController, IReferralProgramController, IEpicBattleMetaGameController, ITenYearsCountdownController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
@@ -105,6 +106,10 @@ def showEpicBattlesPrimeTimeWindow():
 
 def showEventProgressionBuyConfirmView(ctx):
     g_eventBus.handleEvent(events.LoadViewEvent(alias=EVENTPROGRESSION_ALIASES.EVENT_PROGRESION_BUY_CONFIRM_VIEW_ALIAS, ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showBobPrimeTimeWindow():
+    g_eventBus.handleEvent(events.LoadViewEvent(alias=BATTLE_OF_BLOGGERS_ALIASES.BOB_PRIME_TIME_ALIAS, ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showEpicBattlesWelcomeBackWindow():
@@ -676,6 +681,29 @@ def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=N
          'callbackOnLoad': callbackOnLoad}), EVENT_BUS_SCOPE.LOBBY)
 
 
+@adisp.process
+def showTenYearsCountdownOverlay(url=None, path=None):
+    eventController = dependency.instance(ITenYearsCountdownController)
+    if not eventController.isEnabled():
+        _logger.warning('Ten years countdown event is not enabled. Nothing will be shown.')
+        return
+    else:
+        if url:
+            url = yield URLMacros().parse(url)
+        else:
+            url = eventController.getEventBaseURL()
+        if path:
+            path = yield URLMacros().parse(path)
+        else:
+            path = ''
+        if url is None:
+            _logger.error('tenYears events baseURL is missed')
+        url = '/'.join((node.strip('/') for node in (url, path)))
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.OVERLAY_TEN_YEARS_COUNTDOWN, ctx={'url': url,
+         'allowRightClick': False}), EVENT_BUS_SCOPE.LOBBY)
+        return
+
+
 def showSeniorityRewardWindow():
     from gui.impl.lobby.seniority_awards.seniority_reward_view import SeniorityRewardWindow
     uiLoader = dependency.instance(IGuiLoader)
@@ -704,6 +732,12 @@ def showProgressiveRewardWindow():
 def showProgressiveRewardAwardWindow(bonuses, specialRewardType, currentStep):
     from gui.impl.lobby.progressive_reward.progressive_reward_award_view import ProgressiveRewardAwardWindow
     window = ProgressiveRewardAwardWindow(bonuses, specialRewardType, currentStep)
+    window.load()
+
+
+def show10YCAwardWindow(bonuses, specialRewardType, closeCallback=None):
+    from gui.impl.lobby.ten_years_countdown.ten_years_countdown_award_view import TenYearsCountdownAwardWindow
+    window = TenYearsCountdownAwardWindow(bonuses, specialRewardType, closeCallback)
     window.load()
 
 
@@ -868,3 +902,9 @@ def _killOldView(layoutID):
         view.destroyWindow()
         return True
     return False
+
+
+def showTenYearsCountdownOnBoarding(stageNumber, isStageActive, months, blocksCount):
+    from gui.impl.lobby.ten_years_countdown.ten_years_onboarding_view import TenYearsOnboardingWindow
+    window = TenYearsOnboardingWindow(stageNumber, isStageActive, months, blocksCount)
+    window.load()

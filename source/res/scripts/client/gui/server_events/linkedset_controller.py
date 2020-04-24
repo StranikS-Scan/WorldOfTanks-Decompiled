@@ -234,7 +234,7 @@ class LinkedSetController(ILinkedSetController):
         BigWorld.player().chooseQuestReward(EVENT_TYPE.TOKEN_QUEST, questID, str(vehicleCD), _callback)
 
     def _onMissionsTabEventsSelected(self, event):
-        if event.ctx == QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS:
+        if event.ctx.get('alias') == QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS:
             self._showNewCompletedQuests()
 
     def _showNewCompletedQuests(self):

@@ -57,7 +57,8 @@ class RankedBattlesPrimeTimeView(RankedPrimeTimeMeta):
          'serversText': text_styles.expText(self._getServerText(serverList, serverInfo, True)),
          'serversDDEnabled': not isSingleServer,
          'serverDDVisible': not isSingleServer,
-         'timeText': text_styles.expText(self.__getTimeText(serverInfo))}
+         'timeText': text_styles.expText(self.__getTimeText(serverInfo)),
+         'background': backport.image(R.images.gui.maps.icons.rankedBattles.bg.main())}
 
     def _getPrbActionName(self):
         return self._getPrbForcedActionName()

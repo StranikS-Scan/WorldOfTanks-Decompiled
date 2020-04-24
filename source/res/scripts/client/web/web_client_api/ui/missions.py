@@ -10,6 +10,16 @@ from web.web_client_api import w2c, W2CSchema, Field
 from gui.server_events import events_dispatcher as server_events
 from gui.shared.event_dispatcher import showBattlePassBuyWindow, showWebShop
 
+class _MissionsSchema(W2CSchema):
+    tab = Field(required=False, type=basestring, default=None)
+    missionID = Field(required=False, type=basestring, default=None)
+    groupID = Field(required=False, type=basestring, default=None)
+    marathonPrefix = Field(required=False, type=basestring, default=None)
+    anchor = Field(required=False, type=basestring, default=None)
+    showDetails = Field(required=False, type=bool, default=True)
+    subTab = Field(required=False, type=int, default=0)
+
+
 class _PersonalMissionsSchema(W2CSchema):
     branch = Field(required=True, type=basestring, validator=lambda v, _: v in PM_BRANCH.NAME_TO_TYPE)
     operation_id = Field(required=False, type=int)
@@ -21,9 +31,9 @@ class _MarathonMissionsSchema(W2CSchema):
 
 class MissionsWebApiMixin(object):
 
-    @w2c(W2CSchema, 'missions')
+    @w2c(_MissionsSchema, 'missions')
     def openMissionsTab(self, cmd):
-        server_events.showMissions()
+        server_events.showMissions(tab=cmd.tab, missionID=cmd.missionID, groupID=cmd.groupID, marathonPrefix=cmd.marathonPrefix, anchor=cmd.anchor, showDetails=cmd.showDetails, subTab=cmd.subTab)
 
     @w2c(W2CSchema, 'missions_events')
     def openMissionsEvents(self, cmd):

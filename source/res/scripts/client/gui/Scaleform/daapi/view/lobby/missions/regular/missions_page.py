@@ -231,7 +231,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         return
 
     def __fireTabChangedEvent(self):
-        self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_TAB_CHANGED, ctx=self.__currentTabAlias), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_TAB_CHANGED, ctx={'alias': self.__currentTabAlias,
+         'marathonPrefix': self.__marathonPrefix}), EVENT_BUS_SCOPE.LOBBY)
 
     @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_MISSIONS_PAGE_VIEW, EVENT_BUS_SCOPE.DEFAULT)
     def __handleMissionsPageClose(self, _):

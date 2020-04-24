@@ -510,7 +510,7 @@ class VehiclePreviewWebApiMixin(object):
         style = self.c11n.getItemByID(GUI_ITEM_TYPE.STYLE, cmd.style_id)
         vehicle = self.itemsCache.items.getItemByCD(vehicleCD)
         if vehicle is not None and style.mayInstall(vehicle):
-            showStylePreview(vehicleCD, style, style.getDescription(), self._getVehicleStylePreviewCallback(cmd), backBtnDescrLabel=backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.dyn(cmd.back_btn_descr)()))
+            showStylePreview(vehicleCD, style, style.getDescription(), self._getVehicleStylePreviewCallback(cmd), backBtnDescrLabel=backport.text(R.strings.vehicle_preview.header.backBtn.descrLabel.dyn(cmd.back_btn_descr, '')()))
             return True
         else:
             return False

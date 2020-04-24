@@ -149,7 +149,8 @@ class CommonTankAppearance(ScriptGameObject):
         self.__vID = vID
         self._isTurretDetached = isTurretDetached
         self.__outfit = self._prepareOutfit(outfitCD)
-        self.__attachments = camouflages.getAttachments(self.outfit, self.typeDescriptor)
+        if self.damageState.isCurrentModelUndamaged:
+            self.__attachments = camouflages.getAttachments(self.outfit, self.typeDescriptor)
         self.__renderState = renderState
         prereqs = self.typeDescriptor.prerequisites(True)
         prereqs.extend(camouflages.getCamoPrereqs(self.outfit, self.typeDescriptor))
@@ -210,7 +211,7 @@ class CommonTankAppearance(ScriptGameObject):
             self.__trackScrollCtl = None
         self.__chassisDecal.create()
         self.__modelAnimators = camouflages.getModelAnimators(self.outfit, self.typeDescriptor, self.worldID, resourceRefs, self.compoundModel)
-        if self.isAlive:
+        if self.damageState.isCurrentModelUndamaged:
             self.__modelAnimators.extend(camouflages.getAttachmentsAnimators(self.__attachments, self.worldID, resourceRefs, self.compoundModel))
         self.transform = self.createComponent(GenericComponents.TransformComponent, Math.Vector3(0, 0, 0))
         self.areaTriggerTarget = self.createComponent(Triggers.AreaTriggerTarget)

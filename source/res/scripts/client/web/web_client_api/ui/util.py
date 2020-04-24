@@ -153,7 +153,7 @@ class UtilWebApiMixin(object):
              achievement.getBlock(),
              cmd.itemId,
              isRareAchievement(achievement)]
-        self.__getTooltipMgr().onCreateTypedTooltip(tooltipType, args, 'INFO')
+        self.__getTooltipMgr().createTypedTooltipExt(tooltipType, args, 'INFO')
 
     @w2c(_ShowItemTooltipSchema, 'show_item_tooltip')
     def showItemTooltip(self, cmd):

@@ -36,12 +36,17 @@ class VehicleDamageState(object):
     state = property(lambda self: self.__state)
     modelState = property(lambda self: self.__model)
     isCurrentModelDamaged = property(lambda self: VehicleDamageState.isDamagedModel(self.modelState))
+    isCurrentModelUndamaged = property(lambda self: VehicleDamageState.isUndamagedModel(self.modelState))
     isCurrentModelExploded = property(lambda self: VehicleDamageState.isExplodedModel(self.modelState))
     effect = property(lambda self: self.__effect)
 
     @staticmethod
     def isDamagedModel(model):
         return model != 'undamaged'
+
+    @staticmethod
+    def isUndamagedModel(model):
+        return model == 'undamaged'
 
     @staticmethod
     def isExplodedModel(model):

@@ -32,6 +32,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.hangar.carousels import RankedTankCarousel
     from gui.Scaleform.daapi.view.lobby.hangar.carousels import EpicBattleTankCarousel
     from gui.Scaleform.daapi.view.lobby.hangar.carousels import BattlePassTankCarousel
+    from gui.Scaleform.daapi.view.lobby.hangar.carousels import BobTankCarousel
     from gui.Scaleform.daapi.view.lobby.hangar.StrongholdView import StrongholdView
     from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import BrowserView
     from gui.Scaleform.daapi.view.lobby.hangar.hangar_header import HangarHeader
@@ -57,6 +58,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.hangar.daily_quest_widget import DailyQuestWidget
     from gui.Scaleform.daapi.view.lobby.hangar.progressive_reward_widget import ProgressiveRewardWidget
     from gui.impl.lobby.battle_pass.battle_pass_entry_point_view import BattlePassEntryPointComponent
+    from gui.Scaleform.daapi.view.lobby.hangar.ten_years_countdown_entry_point_inject import TenYearsCountdownEntryPointInject
     return (ConditionalViewSettings(VIEW_ALIAS.LOBBY_HANGAR, BootcampComponentOverride(Hangar, BCHangar), 'hangar.swf', ViewTypes.LOBBY_SUB, None, VIEW_ALIAS.LOBBY_HANGAR, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.LOBBY_STRONGHOLD, StrongholdView, 'StrongholdView.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_STRONGHOLD, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.BROWSER_VIEW, BrowserView, 'browserScreen.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE, True),
@@ -80,6 +82,7 @@ def getViewSettings():
      ConditionalViewSettings(HANGAR_ALIASES.TANK_CAROUSEL, BootcampComponentOverride(TankCarousel, BCTankCarousel), None, ViewTypes.COMPONENT, None, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(HANGAR_ALIASES.RANKED_TANK_CAROUSEL, RankedTankCarousel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(HANGAR_ALIASES.EPICBATTLE_TANK_CAROUSEL, EpicBattleTankCarousel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(HANGAR_ALIASES.BOB_TANK_CAROUSEL, BobTankCarousel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(HANGAR_ALIASES.TMEN_XP_PANEL, TmenXpPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(HANGAR_ALIASES.VEHICLE_PARAMETERS, VehicleParameters, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ConditionalViewSettings(HANGAR_ALIASES.CREW, BootcampComponentOverride(Crew, BCCrew), None, ViewTypes.COMPONENT, None, None, ScopeTemplates.DEFAULT_SCOPE),
@@ -90,7 +93,8 @@ def getViewSettings():
      ViewSettings(HANGAR_ALIASES.SENIORITY_AWARDS_ENTRY_POINT, SeniorityAwardsHangarEntryPoint, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(HANGAR_ALIASES.DAILY_QUEST_WIDGET, DailyQuestWidget, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(HANGAR_ALIASES.BATTLEPASS_TANK_CAROUSEL, BattlePassTankCarousel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(HANGAR_ALIASES.BATTLE_PASSS_ENTRY_POINT, BattlePassEntryPointComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
+     ViewSettings(HANGAR_ALIASES.BATTLE_PASSS_ENTRY_POINT, BattlePassEntryPointComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(HANGAR_ALIASES.TEN_YEARS_COUNTDOWN_ENTRY_POINT_INJECT, TenYearsCountdownEntryPointInject, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

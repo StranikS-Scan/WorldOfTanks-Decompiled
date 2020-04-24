@@ -59,6 +59,9 @@ class ToolTip(ToolTipMgrMeta):
         return self.__tooltipID is not None and altPressed
 
     def onCreateTypedTooltip(self, tooltipType, args, stateType):
+        self.createTypedTooltipExt(tooltipType, args, stateType)
+
+    def createTypedTooltipExt(self, tooltipType, args, stateType, item=None):
         if self._areTooltipsDisabled:
             return
         elif not self._isAllowedTypedTooltip:
@@ -66,7 +69,10 @@ class ToolTip(ToolTipMgrMeta):
         else:
             builder = self._builders.getBuilder(tooltipType)
             if builder is not None:
-                data = builder.build(self, stateType, self.__isAdvancedKeyPressed, *args)
+                kwargs = {}
+                if item:
+                    kwargs['item'] = item
+                data = builder.build(self, stateType, self.__isAdvancedKeyPressed, *args, **kwargs)
             else:
                 _logger.warning('Tooltip can not be displayed: type "%s" is not found', tooltipType)
                 return

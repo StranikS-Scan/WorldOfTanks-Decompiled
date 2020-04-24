@@ -18,4 +18,5 @@ class EpicVehiclesWatcher(BaseVehiclesWatcher):
         vehLevels = list(set(range(MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL + 1)) - set(config.validVehicleLevels))
         vehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(vehLevels)).itervalues()
         eventVehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.EVENT_BATTLE).itervalues()
-        return chain(vehs, eventVehs)
+        bobVehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.BOB_BATTLE).itervalues()
+        return chain(vehs, eventVehs, bobVehs)

@@ -323,6 +323,8 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.SINGLE, 'bootcampMedal'): _AchieveFactory.get(_abstract_achievements.RegularAchievement),
  (_AB.SINGLE, 'BattlePassCommonPr_1'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.TOTAL, 'collectorVehicle'): _NationAchieveFactory.get(_as.nation_specific.VehicleCollectorAchievement),
+ (_AB.SINGLE, 'TenYearsCountdownParticipation'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.TOTAL, 'TenYearsCountdownStageMedal'): _AchieveFactory.get(_abstract_achievements.StageAchievement),
  WHITE_TIGER_RECORD: _CustomAchieveFactory.get(_as.regular.WhiteTigerAchievement),
  HONORED_RANK_RECORD: _CustomAchieveFactory.get(_as.regular.HonoredRankAchievement),
  RARE_STORAGE_RECORD: _RareAchievesFactory.get()}

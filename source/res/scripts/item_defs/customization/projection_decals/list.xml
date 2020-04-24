@@ -2576,7 +2576,11 @@
     <priceGroup>	projection_decals 170g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	8 10	</levels>
+        <tags>	premium	</tags>
+        <levels>	8	</levels>
+      </include>
+      <include>
+        <levels>	10	</levels>
       </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -2598,7 +2602,11 @@
     <priceGroup>	projection_decals 330g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	8 10	</levels>
+        <tags>	premium	</tags>
+        <levels>	8	</levels>
+      </include>
+      <include>
+        <levels>	10	</levels>
       </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -2955,5 +2963,142 @@
       <mirror>	false	</mirror>
     </projection_decal>
     <name>	Offspring 2020	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	projection_decals 150g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	242	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_80.dds	</texture>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_80/description	</description>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_80	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	243	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_81.dds	</texture>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_81/description	</description>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_81	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <name>	Twitch April 2020	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	projection_decals 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	246	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_84.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_84	</userString>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_84/description	</description>
+      <tags>	formfactor_square	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	247	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_85.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_85	</userString>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_85/description	</description>
+      <tags>	formfactor_square	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	248	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_86.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_86	</userString>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_86/description	</description>
+      <tags>	formfactor_square	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	249	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_87.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_87	</userString>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_87/description	</description>
+      <tags>	formfactor_square	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	250	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_88.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_88	</userString>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_88/description	</description>
+      <tags>	formfactor_square	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	251	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_89.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_89	</userString>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_89/description	</description>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <name>	10 Years Countdown	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	projection_decals 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <tags>	premium	</tags>
+        <levels>	8	</levels>
+      </include>
+      <include>
+        <levels>	10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	245	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_83.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_83	</userString>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_83/description	</description>
+      <tags>	direction_left_to_right formfactor_rect1x6	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	252	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_90.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_90	</userString>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_90/description	</description>
+      <tags>	direction_left_to_right formfactor_rect1x2	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	253	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_91.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_91	</userString>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_91/description	</description>
+      <tags>	direction_left_to_right formfactor_rect1x2	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <name>	10 Years Countdown	</name>
   </itemGroup>
 </list.xml>

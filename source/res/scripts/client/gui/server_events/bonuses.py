@@ -28,7 +28,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.Scaleform.settings import getBadgeIconPath, BADGES_ICONS, ICONS_SIZES
-from gui.server_events.awards_formatters import AWARDS_SIZES
+from gui.server_events.awards_formatters import AWARDS_SIZES, AWARDS_SIZES_EXT
 from gui.server_events.formatters import parseComplexToken
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
@@ -1029,12 +1029,12 @@ class DossierBonus(SimpleBonus):
     def getWrappedEpicBonusList(self):
         result = []
         for block, record in self.getRecords().iterkeys():
-            if block == 'singleAchievements':
+            if block in ('singleAchievements', 'achievements'):
                 blockID = RECORD_DB_IDS[block, record]
             else:
                 blockID = record
             icons = self.__getEpicBonusImages(block, record)
-            if not icons['small'] and not icons['big']:
+            if not icons or not icons['small'] and not icons['big']:
                 icons = self.__getAchievementImages(record)
             result.append({'id': blockID,
              'name': record,
@@ -1046,14 +1046,17 @@ class DossierBonus(SimpleBonus):
 
     def __getEpicBonusImages(self, block, record):
         if block == 'playerBadges':
-            return {AWARDS_SIZES.SMALL: getBadgeIconPath(BADGES_ICONS.X48, record),
-             AWARDS_SIZES.BIG: getBadgeIconPath(BADGES_ICONS.X80, record)}
+            return {AWARDS_SIZES_EXT.SMALL: getBadgeIconPath(BADGES_ICONS.X48, record),
+             AWARDS_SIZES_EXT.BIG: getBadgeIconPath(BADGES_ICONS.X80, record),
+             AWARDS_SIZES_EXT.HUGE: getBadgeIconPath(BADGES_ICONS.X110, record)}
         return {AWARDS_SIZES.SMALL: RES_ICONS.getEpicAchievementIcon(ICONS_SIZES.X48, record),
          AWARDS_SIZES.BIG: RES_ICONS.getEpicAchievementIcon(ICONS_SIZES.X80, record)} if block == 'singleAchievements' else {}
 
     def __getAchievementImages(self, record):
-        return {AWARDS_SIZES.SMALL: backport.image(R.images.gui.maps.icons.achievement.num(ICONS_SIZES.X48).dyn(record)()),
-         AWARDS_SIZES.BIG: backport.image(R.images.gui.maps.icons.achievement.num(ICONS_SIZES.X80).dyn(record)())}
+        smallId = R.images.gui.maps.icons.achievement.num(ICONS_SIZES.X48).dyn(record)()
+        bigId = R.images.gui.maps.icons.achievement.num(ICONS_SIZES.X80).dyn(record)()
+        return {AWARDS_SIZES.SMALL: backport.image(smallId) if smallId > 0 else '',
+         AWARDS_SIZES.BIG: backport.image(bigId) if smallId > 0 else ''}
 
     def __getCommonAwardsVOs(self, block, record, iconSize='small', withCounts=False):
         badgesIconSizes = {'big': BADGES_ICONS.X80,
@@ -1255,7 +1258,8 @@ class CustomizationsBonus(SimpleBonus):
              'icon': {AWARDS_SIZES.SMALL: smallIcon,
                       AWARDS_SIZES.BIG: bigIcon},
              'name': item.longUserName,
-             'description': item.longDescriptionSpecial})
+             'description': item.longDescriptionSpecial,
+             'intCD': item.intCD})
 
         return result
 

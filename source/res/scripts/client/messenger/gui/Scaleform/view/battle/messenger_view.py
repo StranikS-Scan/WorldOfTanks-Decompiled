@@ -422,7 +422,7 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
         settings = controller.getSettings()
         isChatEnabled = controller.isEnabled()
         if isChatEnabled:
-            if not isBattleChatEnabled() and settings.name == BATTLE_CHANNEL.SQUAD.name:
+            if not isBattleChatEnabled(common=False) and not isBattleChatEnabled(common=True) and settings.name == BATTLE_CHANNEL.SQUAD.name:
                 self.__receivers = []
                 self.__receiverIndex = 0
                 isReset = True

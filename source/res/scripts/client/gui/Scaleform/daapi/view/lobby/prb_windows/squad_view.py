@@ -18,6 +18,7 @@ from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.game_control import IBobController
 
 def _unitWithPremium(unitData):
     return any((slot.player.hasPremium for slot in unitData.slotsIterator if slot.player))
@@ -182,6 +183,22 @@ class EpicSquadView(SquadView):
 
     def _getHeaderPresenter(self):
         return _BonusHeaderPresenter(self.prbEntity) if self._isPremiumBonusEnabled() else _EpicHeaderPresenter(self.prbEntity)
+
+
+class BobSquadView(SquadView):
+    bobController = dependency.descriptor(IBobController)
+
+    def _populate(self):
+        super(BobSquadView, self)._populate()
+        self.bobController.onUpdated += self.__onUpdated
+
+    def _dispose(self):
+        self.bobController.onUpdated -= self.__onUpdated
+        super(BobSquadView, self)._dispose()
+
+    def __onUpdated(self):
+        if not self.bobController.isModeActive():
+            self._doLeave()
 
 
 class _HeaderPresenter(object):

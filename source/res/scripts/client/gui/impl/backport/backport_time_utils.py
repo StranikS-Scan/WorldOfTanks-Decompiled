@@ -4,7 +4,7 @@ import time
 from gui.impl.backport import text
 from helpers import time_utils
 
-def getTillTimeStringByRClass(timeValue, stringRClass, isRoundUp=False):
+def getTillTimeStringByRClass(timeValue, stringRClass, isRoundUp=False, removeLeadingZeros=False):
     gmtime = time.gmtime(timeValue)
     if isRoundUp and gmtime.tm_sec > 0:
         timeValue += time_utils.ONE_MINUTE
@@ -18,8 +18,9 @@ def getTillTimeStringByRClass(timeValue, stringRClass, isRoundUp=False):
         fmtKey = 'min'
     else:
         fmtKey = 'lessMin'
-    fmtValues = {'day': str(time.struct_time(gmtime).tm_yday),
-     'hour': time.strftime('%H', gmtime),
-     'min': time.strftime('%M', gmtime),
+    tm = time.struct_time(gmtime)
+    fmtValues = {'day': str(tm.tm_yday),
+     'hour': time.strftime('%H', gmtime) if not removeLeadingZeros else str(tm.tm_hour),
+     'min': time.strftime('%M', gmtime) if not removeLeadingZeros else str(tm.tm_min),
      'sec': time.strftime('%S', gmtime)}
     return text(stringRClass.dyn(fmtKey)(), **fmtValues)

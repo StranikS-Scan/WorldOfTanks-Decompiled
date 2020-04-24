@@ -5,6 +5,8 @@ from gui.impl import backport
 from gui.shared.gui_items.gui_item import GUIItem
 from dossiers2.custom.records import RECORD_MAX_VALUES
 from dossiers2.ui import achievements
+from gui.Scaleform.settings import ICONS_SIZES
+from gui.impl.gen import R
 
 class RegularAchievement(GUIItem):
     __slots__ = ('_name', '_block', '_value', '_lvlUpValue', '_lvlUpTotalValue', '_isDone', '_isInDossier', '_isValid')
@@ -116,6 +118,21 @@ class RegularAchievement(GUIItem):
 
     def getIcon32x32(self):
         return self.getIcons()[self.ICON_TYPE.IT_32X32]
+
+    def getIcon48x48(self):
+        iconName = self._getIconName()
+        iconId = R.images.gui.maps.icons.achievement.num(ICONS_SIZES.X48).dyn(iconName)()
+        return backport.image(iconId) if iconId > 0 else ''
+
+    def getIcon80x80(self):
+        iconName = self._getIconName()
+        iconId = R.images.gui.maps.icons.achievement.num(ICONS_SIZES.X80).dyn(iconName)()
+        return backport.image(iconId) if iconId > 0 else ''
+
+    def getIcon110x110(self):
+        iconName = self._getIconName()
+        iconId = R.images.gui.maps.icons.achievement.num(ICONS_SIZES.X110).dyn(iconName)()
+        return backport.image(iconId) if iconId > 0 else ''
 
     def getUserName(self):
         return i18n.makeString('#achievements:%s' % self._getActualName())

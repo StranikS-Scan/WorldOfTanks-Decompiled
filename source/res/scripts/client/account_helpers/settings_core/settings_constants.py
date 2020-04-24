@@ -75,6 +75,7 @@ class GAME(CONST_CONTAINER):
     RECEIVE_FRIENDSHIP_REQUEST = 'receiveFriendshipRequest'
     STORE_RECEIVER_IN_BATTLE = 'storeReceiverInBattle'
     DISABLE_BATTLE_CHAT = 'disableBattleChat'
+    DISABLE_EVENT_COMMON_CHAT = 'disableEventCommonChat'
     CHAT_CONTACTS_LIST_ONLY = 'chatContactsListOnly'
     LENS_EFFECT = 'enableOpticalSnpEffect'
     MINIMAP_ALPHA = 'minimapAlpha'

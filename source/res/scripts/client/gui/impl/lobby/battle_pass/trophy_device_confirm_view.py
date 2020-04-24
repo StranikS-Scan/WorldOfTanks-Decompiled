@@ -96,7 +96,7 @@ class TrophyDeviceUpgradeConfirmDialogContent(DialogContent):
     def __getValueKPI(module):
         listStrValue = []
         for kpi in module.kpi:
-            percentKpi = int((kpi.value - 1) * 100)
+            percentKpi = int(round((kpi.value - 1) * 100))
             resValue = '{}{}%'.format('+' if percentKpi > 0 else '', percentKpi)
             listStrValue.append(resValue)
 

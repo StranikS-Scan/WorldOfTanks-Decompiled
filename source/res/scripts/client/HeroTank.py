@@ -5,6 +5,7 @@ import random
 import BigWorld
 from ClientSelectableCameraVehicle import ClientSelectableCameraVehicle
 from CurrentVehicle import g_currentPreviewVehicle
+from gui.Scaleform.daapi.view.lobby.lobby_vehicle_marker_view import LOBBY_TYPE
 from gui.hangar_vehicle_appearance import HangarVehicleAppearance
 from gui.shared import events, EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -46,7 +47,7 @@ class HeroTank(ClientSelectableCameraVehicle):
     _hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self):
-        self.__heroTankCD = None
+        self._heroTankCD = None
         ClientSelectableCameraVehicle.__init__(self)
         return
 
@@ -72,8 +73,8 @@ class HeroTank(ClientSelectableCameraVehicle):
     def recreateVehicle(self, typeDescriptor=None, state=ModelStates.UNDAMAGED, callback=None):
         if self.__isInPreview():
             return
-        if self.__heroTankCD and not self.__isInPreview():
-            self.typeDescriptor = HeroTank.__getVehicleDescriptorByIntCD(self.__heroTankCD)
+        if self._heroTankCD and not self.__isInPreview():
+            self.typeDescriptor = HeroTank.__getVehicleDescriptorByIntCD(self._heroTankCD)
         super(HeroTank, self).recreateVehicle(typeDescriptor, state, callback)
 
     def _createAppearance(self):
@@ -83,10 +84,10 @@ class HeroTank(ClientSelectableCameraVehicle):
 
     def _updateHeroTank(self):
         if g_currentPreviewVehicle.item is not None:
-            if g_currentPreviewVehicle.item.intCD == self.__heroTankCD:
+            if g_currentPreviewVehicle.item.intCD == self._heroTankCD:
                 return
-        self.__heroTankCD = self._heroTankCtrl.getRandomTankCD()
-        if self.__heroTankCD:
+        self._heroTankCD = self._heroTankCtrl.getRandomTankCD()
+        if self._heroTankCD:
             self.recreateVehicle()
         else:
             self.removeModelFromScene()
@@ -101,10 +102,12 @@ class HeroTank(ClientSelectableCameraVehicle):
     def _onVehicleLoaded(self):
         super(HeroTank, self)._onVehicleLoaded()
         if self.enabled:
-            g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.ON_HERO_TANK_LOADED, ctx={'entity': self}), scope=EVENT_BUS_SCOPE.LOBBY)
+            g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.ON_HERO_TANK_LOADED, ctx={'entity': self,
+             'lobbyType': LOBBY_TYPE.REGULAR}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _onVehicleDestroy(self):
-        g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.ON_HERO_TANK_DESTROY, ctx={'entity': self}), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.ON_HERO_TANK_DESTROY, ctx={'entity': self,
+         'lobbyType': LOBBY_TYPE.REGULAR}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     @staticmethod
     def __getVehicleDescriptorByIntCD(vehicleIntCD):

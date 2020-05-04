@@ -9,6 +9,8 @@ from gui.Scaleform.genConsts.GAME_MESSAGES_CONSTS import GAME_MESSAGES_CONSTS
 from gui.battle_control import avatar_getter
 from gui.battle_results.components.common import makeRegularFinishResultLabel
 from gui.shared.utils import toUpper
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
 
 class PlayerMessageData(namedtuple('playerMessageData', ('messageType', 'length', 'priority', 'msgData'))):
 
@@ -17,6 +19,7 @@ class PlayerMessageData(namedtuple('playerMessageData', ('messageType', 'length'
 
 
 class GameMessagesPanel(GameMessagesPanelMeta):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def _addMessage(self, msg):
         self.as_addMessageS(msg)
@@ -40,6 +43,9 @@ class GameMessagesPanel(GameMessagesPanelMeta):
                 messageType = GAME_MESSAGES_CONSTS.DEFEAT
         endGameMsgData = {'title': toUpper(backport.text(R.strings.menu.finalStatistic.commonStats.resultlabel.dyn(messageType)())),
          'subTitle': makeRegularFinishResultLabel(reason, messageType)}
+        if self.sessionProvider.arenaVisitor.gui.isEventBattle():
+            endGameMsgData = {'title': toUpper(backport.text(R.strings.event.endbattle.title.dyn(messageType)())),
+             'subTitle': backport.text(R.strings.event.endbattle.subtitle.dyn('{}_reason_{}'.format(messageType, reason))())}
         msg = PlayerMessageData(messageType, GAME_MESSAGES_CONSTS.DEFAULT_MESSAGE_LENGTH, GAME_MESSAGES_CONSTS.GAME_MESSAGE_PRIORITY_END_GAME, endGameMsgData)
         self._addMessage(msg.getDict())
 

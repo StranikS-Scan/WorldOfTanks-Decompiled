@@ -484,8 +484,8 @@ class Views(DynAccessor):
                 TenYearsCountdownAward = DynAccessor(62)
 
             ten_years_countdown_award = _ten_years_countdown_award()
-            TenYearsCountdownEntryPoint = DynAccessor(123)
-            TenYearsOnboardingView = DynAccessor(124)
+            TenYearsCountdownEntryPoint = DynAccessor(137)
+            TenYearsOnboardingView = DynAccessor(138)
 
         ten_years_countdown = _ten_years_countdown()
 
@@ -543,9 +543,28 @@ class Views(DynAccessor):
 
         instructions = _instructions()
 
+        class _secretEvent(DynAccessor):
+            __slots__ = ()
+            ActionAboutWindow = DynAccessor(122)
+            ActionBerlinWindow = DynAccessor(123)
+            ActionHangarWindow = DynAccessor(124)
+            ActionMissionsWindow = DynAccessor(125)
+            ActionOrderWindow = DynAccessor(126)
+            ComponentsTestWindow = DynAccessor(127)
+            FuelBuyWindow = DynAccessor(128)
+            FuelWindow = DynAccessor(129)
+            GeneralTooltip = DynAccessor(130)
+            HangarObjectTooltip = DynAccessor(131)
+            MenuWidget = DynAccessor(132)
+            OrderConfirmWindow = DynAccessor(133)
+            OrderSelectWindow = DynAccessor(134)
+            UnitsWindow = DynAccessor(135)
+
+        secretEvent = _secretEvent()
+
         class _techtree(DynAccessor):
             __slots__ = ()
-            TechTreeIntro = DynAccessor(122)
+            TechTreeIntro = DynAccessor(136)
 
         techtree = _techtree()
 
@@ -761,20 +780,20 @@ class Views(DynAccessor):
         views = _views()
 
     wtypes_view = _wtypes_view()
-    Anchor = DynAccessor(125)
-    ComplexListView = DynAccessor(126)
-    ComponentsDemo = DynAccessor(127)
-    DataTrackerDemo = DynAccessor(128)
-    DemoContextMenu = DynAccessor(129)
-    Easings = DynAccessor(130)
-    GFDemoPopover = DynAccessor(131)
-    GFDemoRichTooltipWindow = DynAccessor(132)
-    GFDemoWindow = DynAccessor(133)
-    GFInjectView = DynAccessor(134)
-    GFSimpleTooltipWindow = DynAccessor(135)
-    LocaleDemo = DynAccessor(136)
-    MixBlendModeAnimation = DynAccessor(137)
-    PropsSupportDemo = DynAccessor(138)
-    StructuralDataBindDemo = DynAccessor(139)
-    TextFormat = DynAccessor(140)
-    VideoSupportView = DynAccessor(141)
+    Anchor = DynAccessor(139)
+    ComplexListView = DynAccessor(140)
+    ComponentsDemo = DynAccessor(141)
+    DataTrackerDemo = DynAccessor(142)
+    DemoContextMenu = DynAccessor(143)
+    Easings = DynAccessor(144)
+    GFDemoPopover = DynAccessor(145)
+    GFDemoRichTooltipWindow = DynAccessor(146)
+    GFDemoWindow = DynAccessor(147)
+    GFInjectView = DynAccessor(148)
+    GFSimpleTooltipWindow = DynAccessor(149)
+    LocaleDemo = DynAccessor(150)
+    MixBlendModeAnimation = DynAccessor(151)
+    PropsSupportDemo = DynAccessor(152)
+    StructuralDataBindDemo = DynAccessor(153)
+    TextFormat = DynAccessor(154)
+    VideoSupportView = DynAccessor(155)

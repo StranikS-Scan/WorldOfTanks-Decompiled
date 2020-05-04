@@ -1,0 +1,373 @@
+<buffs.xml>
+  <invulnerabilityPlayer>
+    <server>
+      <assignFactor>
+        <data>	vehicle/canBeDamaged	</data>
+        <factor>	false	</factor>
+      </assignFactor>
+    </server>
+    <client>
+      <effect>
+        <timeline>
+          <effectEnd>	3600	</effectEnd>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <file>	particles/Environment/se20/explosion_bomb_05.eff	</file>
+            <position>	hull	</position>
+          </pixie>
+        </effects>
+      </effect>
+      <invulnerability></invulnerability>
+    </client>
+  </invulnerabilityPlayer>
+  <multiplyMaxSpeed_SU_1>
+    <server>
+      <multiplyFactor>
+        <data>	vehicle/maxSpeed	</data>
+        <factor>	1.02	</factor>
+      </multiplyFactor>
+      <multiplyFactor>
+        <data>	engine/power	</data>
+        <factor>	3	</factor>
+      </multiplyFactor>
+      <assignFactor>
+        <data>	chassis/terrainResistance	</data>
+        <factor>	[3.0, 3.0, 3.0]	</factor>
+      </assignFactor>
+    </server>
+  </multiplyMaxSpeed_SU_1>
+  <multiplyMaxSpeed_SU_2>
+    <server>
+      <multiplyFactor>
+        <data>	vehicle/maxSpeed	</data>
+        <factor>	1.02	</factor>
+      </multiplyFactor>
+      <multiplyFactor>
+        <data>	engine/power	</data>
+        <factor>	3	</factor>
+      </multiplyFactor>
+      <assignFactor>
+        <data>	chassis/terrainResistance	</data>
+        <factor>	[3.0, 3.0, 3.0]	</factor>
+      </assignFactor>
+    </server>
+  </multiplyMaxSpeed_SU_2>
+  <multiplyMaxSpeed_SU_3>
+    <server>
+      <multiplyFactor>
+        <data>	vehicle/maxSpeed	</data>
+        <factor>	1.02	</factor>
+      </multiplyFactor>
+      <multiplyFactor>
+        <data>	engine/power	</data>
+        <factor>	3	</factor>
+      </multiplyFactor>
+      <assignFactor>
+        <data>	chassis/terrainResistance	</data>
+        <factor>	[3.0, 3.0, 3.0]	</factor>
+      </assignFactor>
+    </server>
+  </multiplyMaxSpeed_SU_3>
+  <multiplyMaxSpeed_IS_1>
+    <server>
+      <multiplyFactor>
+        <data>	vehicle/maxSpeed	</data>
+        <factor>	1.2	</factor>
+      </multiplyFactor>
+      <multiplyFactor>
+        <data>	engine/power	</data>
+        <factor>	5	</factor>
+      </multiplyFactor>
+      <assignFactor>
+        <data>	chassis/terrainResistance	</data>
+        <factor>	[5.0, 5.0, 5.0]	</factor>
+      </assignFactor>
+    </server>
+  </multiplyMaxSpeed_IS_1>
+  <multiplyMaxSpeed_IS_2>
+    <server>
+      <multiplyFactor>
+        <data>	vehicle/maxSpeed	</data>
+        <factor>	1.2	</factor>
+      </multiplyFactor>
+      <multiplyFactor>
+        <data>	engine/power	</data>
+        <factor>	5	</factor>
+      </multiplyFactor>
+      <assignFactor>
+        <data>	chassis/terrainResistance	</data>
+        <factor>	[5.0, 5.0, 5.0]	</factor>
+      </assignFactor>
+    </server>
+  </multiplyMaxSpeed_IS_2>
+  <multiplyMaxSpeed_IS_3>
+    <server>
+      <multiplyFactor>
+        <data>	vehicle/maxSpeed	</data>
+        <factor>	1.2	</factor>
+      </multiplyFactor>
+      <multiplyFactor>
+        <data>	engine/power	</data>
+        <factor>	5	</factor>
+      </multiplyFactor>
+      <assignFactor>
+        <data>	chassis/terrainResistance	</data>
+        <factor>	[5.0, 5.0, 5.0]	</factor>
+      </assignFactor>
+    </server>
+  </multiplyMaxSpeed_IS_3>
+  <multiplyMaxSpeed_T34_1>
+    <server>
+      <multiplyFactor>
+        <data>	vehicle/maxSpeed	</data>
+        <factor>	1.02	</factor>
+      </multiplyFactor>
+      <multiplyFactor>
+        <data>	engine/power	</data>
+        <factor>	3	</factor>
+      </multiplyFactor>
+      <assignFactor>
+        <data>	chassis/terrainResistance	</data>
+        <factor>	[3.0, 3.0, 3.0]	</factor>
+      </assignFactor>
+    </server>
+  </multiplyMaxSpeed_T34_1>
+  <multiplyMaxSpeed_T34_2>
+    <server>
+      <multiplyFactor>
+        <data>	vehicle/maxSpeed	</data>
+        <factor>	1.02	</factor>
+      </multiplyFactor>
+      <multiplyFactor>
+        <data>	engine/power	</data>
+        <factor>	3	</factor>
+      </multiplyFactor>
+      <assignFactor>
+        <data>	chassis/terrainResistance	</data>
+        <factor>	[3.0, 3.0, 3.0]	</factor>
+      </assignFactor>
+    </server>
+  </multiplyMaxSpeed_T34_2>
+  <multiplyMaxSpeed_T34_3>
+    <server>
+      <multiplyFactor>
+        <data>	vehicle/maxSpeed	</data>
+        <factor>	1.02	</factor>
+      </multiplyFactor>
+      <multiplyFactor>
+        <data>	engine/power	</data>
+        <factor>	3	</factor>
+      </multiplyFactor>
+      <assignFactor>
+        <data>	chassis/terrainResistance	</data>
+        <factor>	[3.0, 3.0, 3.0]	</factor>
+      </assignFactor>
+    </server>
+  </multiplyMaxSpeed_T34_3>
+  <multiplyMaxSpeed_M4_1>
+    <server>
+      <multiplyFactor>
+        <data>	vehicle/maxSpeed	</data>
+        <factor>	1.02	</factor>
+      </multiplyFactor>
+      <multiplyFactor>
+        <data>	engine/power	</data>
+        <factor>	3	</factor>
+      </multiplyFactor>
+      <assignFactor>
+        <data>	chassis/terrainResistance	</data>
+        <factor>	[3.0, 3.0, 3.0]	</factor>
+      </assignFactor>
+    </server>
+  </multiplyMaxSpeed_M4_1>
+  <multiplyMaxSpeed_M4_2>
+    <server>
+      <multiplyFactor>
+        <data>	vehicle/maxSpeed	</data>
+        <factor>	1.02	</factor>
+      </multiplyFactor>
+      <multiplyFactor>
+        <data>	engine/power	</data>
+        <factor>	3	</factor>
+      </multiplyFactor>
+      <assignFactor>
+        <data>	chassis/terrainResistance	</data>
+        <factor>	[3.0, 3.0, 3.0]	</factor>
+      </assignFactor>
+    </server>
+  </multiplyMaxSpeed_M4_2>
+  <multiplyMaxSpeed_M4_3>
+    <server>
+      <multiplyFactor>
+        <data>	vehicle/maxSpeed	</data>
+        <factor>	1.02	</factor>
+      </multiplyFactor>
+      <multiplyFactor>
+        <data>	engine/power	</data>
+        <factor>	3	</factor>
+      </multiplyFactor>
+      <assignFactor>
+        <data>	chassis/terrainResistance	</data>
+        <factor>	[3.0, 3.0, 3.0]	</factor>
+      </assignFactor>
+    </server>
+  </multiplyMaxSpeed_M4_3>
+  <multiplyMaxSpeed_Churchill_1>
+    <server>
+      <multiplyFactor>
+        <data>	vehicle/maxSpeed	</data>
+        <factor>	1.75	</factor>
+      </multiplyFactor>
+      <multiplyFactor>
+        <data>	engine/power	</data>
+        <factor>	7.5	</factor>
+      </multiplyFactor>
+      <assignFactor>
+        <data>	chassis/terrainResistance	</data>
+        <factor>	[5.0, 3.0, 3.0]	</factor>
+      </assignFactor>
+    </server>
+    <client>
+      <sound>
+        <visibleTo>	self	</visibleTo>
+        <wwsoundOnStart>	ev_2020_secret_event_gameplay_ability_nitro_activation_engine	</wwsoundOnStart>
+        <wwsoundOnStop>	ev_2020_secret_event_gameplay_ability_nitro_deactivation_engine	</wwsoundOnStop>
+      </sound>
+    </client>
+  </multiplyMaxSpeed_Churchill_1>
+  <multiplyMaxSpeed_Churchill_2>
+    <server>
+      <multiplyFactor>
+        <data>	vehicle/maxSpeed	</data>
+        <factor>	1.75	</factor>
+      </multiplyFactor>
+      <multiplyFactor>
+        <data>	engine/power	</data>
+        <factor>	7.5	</factor>
+      </multiplyFactor>
+      <assignFactor>
+        <data>	chassis/terrainResistance	</data>
+        <factor>	[5.0, 3.0, 3.0]	</factor>
+      </assignFactor>
+    </server>
+    <client>
+      <sound>
+        <visibleTo>	self	</visibleTo>
+        <wwsoundOnStart>	ev_2020_secret_event_gameplay_ability_nitro_activation_engine	</wwsoundOnStart>
+        <wwsoundOnStop>	ev_2020_secret_event_gameplay_ability_nitro_deactivation_engine	</wwsoundOnStop>
+      </sound>
+    </client>
+  </multiplyMaxSpeed_Churchill_2>
+  <multiplyMaxSpeed_Churchill_3>
+    <server>
+      <multiplyFactor>
+        <data>	vehicle/maxSpeed	</data>
+        <factor>	1.75	</factor>
+      </multiplyFactor>
+      <multiplyFactor>
+        <data>	engine/power	</data>
+        <factor>	7.5	</factor>
+      </multiplyFactor>
+      <assignFactor>
+        <data>	chassis/terrainResistance	</data>
+        <factor>	[5.0, 3.0, 3.0]	</factor>
+      </assignFactor>
+    </server>
+    <client>
+      <sound>
+        <visibleTo>	self	</visibleTo>
+        <wwsoundOnStart>	ev_2020_secret_event_gameplay_ability_nitro_activation_engine	</wwsoundOnStart>
+        <wwsoundOnStop>	ev_2020_secret_event_gameplay_ability_nitro_deactivation_engine	</wwsoundOnStop>
+      </sound>
+    </client>
+  </multiplyMaxSpeed_Churchill_3>
+  <bigBoom>
+    <client>
+      <effect>
+        <timeline>
+          <effectEnd>	3600	</effectEnd>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <file>	particles/Shells_Eff/armorHit_AP_2.eff	</file>
+            <position>	hull	</position>
+          </pixie>
+        </effects>
+      </effect>
+    </client>
+  </bigBoom>
+  <stunned>
+    <server>
+      <stunVehicle>
+        <duration>	20.0	</duration>
+      </stunVehicle>
+    </server>
+  </stunned>
+  <fireball>
+    <client>
+      <effect>
+        <timeline>
+          <effectEnd>	3600	</effectEnd>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <file>	particles/Environment/se20/se20_burn_bullet_skill.eff	</file>
+            <position>	hull	</position>
+          </pixie>
+        </effects>
+      </effect>
+    </client>
+    <server>
+      <fireVehicle></fireVehicle>
+    </server>
+  </fireball>
+  <oneShot>
+    <server>
+      <explodeVehicle></explodeVehicle>
+    </server>
+  </oneShot>
+  <flatTyres>
+    <client>
+      <effect>
+        <timeline>
+          <effectEnd>	3600	</effectEnd>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <file>	particles/Environment/se20/se20_stun_bullet_skill.eff	</file>
+            <position>	hull	</position>
+          </pixie>
+        </effects>
+      </effect>
+    </client>
+    <server>
+      <damageTrack></damageTrack>
+    </server>
+  </flatTyres>
+  <slowdown>
+    <server>
+      <multiplyFactor>
+        <data>	vehicle/maxSpeed	</data>
+        <factor>	0.5	</factor>
+      </multiplyFactor>
+      <multiplyFactor>
+        <data>	engine/power	</data>
+        <factor>	0.5	</factor>
+      </multiplyFactor>
+      <assignFactor>
+        <data>	chassis/terrainResistance	</data>
+        <factor>	[10.0, 10.0, 10.0]	</factor>
+      </assignFactor>
+    </server>
+  </slowdown>
+  <invisibleMan>
+    <server>
+      <lowPriorityEnemy></lowPriorityEnemy>
+    </server>
+  </invisibleMan>
+</buffs.xml>

@@ -150,6 +150,7 @@ def getGuiServicesConfig(manager):
     manager.addConfig(promo.getPromoConfig)
     manager.addInstance(ILobbyContext, lobby_context.LobbyContext(), finalizer='clear')
     manager.addConfig(server_events.getLinkedSetController)
+    manager.addConfig(server_events.getGameEventController)
     if HAS_DEV_RESOURCES:
         try:
             from gui.development import getDevelopmentServicesConfig

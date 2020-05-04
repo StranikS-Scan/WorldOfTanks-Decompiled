@@ -21,7 +21,7 @@ from gui import GUI_CTRL_MODE_FLAG
 from helpers import EffectsList, isPlayerAvatar, isPlayerAccount, getFullClientVersion
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
-from constants import ARENA_PERIOD
+from constants import ARENA_PERIOD, IS_DEVELOPMENT
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
@@ -70,6 +70,7 @@ class CallbackDataNames(object):
     GUN_DAMAGE_SOUND = 'gunDamagedSound'
     SHOW_AUTO_AIM_MARKER = 'showAutoAimMarker'
     HIDE_AUTO_AIM_MARKER = 'hideAutoAimMarker'
+    SWITCH_ENVIRONMENT = 'switchEnvironment'
 
 
 class BattleReplay(object):
@@ -175,6 +176,7 @@ class BattleReplay(object):
     def subscribe(self):
         g_playerEvents.onBattleResultsReceived += self.__onBattleResultsReceived
         g_playerEvents.onAccountBecomePlayer += self.__onAccountBecomePlayer
+        g_playerEvents.onAvatarBecomePlayer += self.__onAvatarBecomePlayer
         g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
         g_playerEvents.onBootcampAccountMigrationComplete += self.__onBootcampAccountMigrationComplete
         self.settingsCore.onSettingsChanged += self.__onSettingsChanging
@@ -182,6 +184,7 @@ class BattleReplay(object):
     def unsubscribe(self):
         g_playerEvents.onBattleResultsReceived -= self.__onBattleResultsReceived
         g_playerEvents.onAccountBecomePlayer -= self.__onAccountBecomePlayer
+        g_playerEvents.onAvatarBecomePlayer -= self.__onAvatarBecomePlayer
         g_playerEvents.onArenaPeriodChange -= self.__onArenaPeriodChange
         g_playerEvents.onBootcampAccountMigrationComplete -= self.__onBootcampAccountMigrationComplete
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanging
@@ -772,7 +775,7 @@ class BattleReplay(object):
     def registerWotReplayFileExtension(self):
         self.__replayCtrl.registerWotReplayFileExtension()
 
-    def enableAutoRecordingBattles(self, enable):
+    def enableAutoRecordingBattles(self, enable, delete=False):
         if self.__isAutoRecordingEnabled == enable:
             return
         else:
@@ -787,7 +790,7 @@ class BattleReplay(object):
             else:
                 g_playerEvents.onAccountBecomePlayer -= self.__startAutoRecord
                 if self.isRecording:
-                    self.stop()
+                    self.stop(delete=delete)
             return
 
     def setResultingFileName(self, fileName, overwriteExisting=False):
@@ -867,6 +870,10 @@ class BattleReplay(object):
                 self.__playerDatabaseID = player.databaseID
             return
 
+    def __onAvatarBecomePlayer(self):
+        if self.sessionProvider.arenaVisitor.gui.isEventBattle() and not IS_DEVELOPMENT:
+            self.enableAutoRecordingBattles(enable=False, delete=True)
+
     def __onSettingsChanging(self, diff):
         newSpeed = self.__playbackSpeedModifiers[self.__playbackSpeedIdx]
         newQuiet = newSpeed == 0 or newSpeed > 4.0
@@ -935,12 +942,11 @@ class BattleReplay(object):
         if equipmentId != -1:
             self.__equipmentId = equipmentId
             BigWorld.player().inputHandler.showGunMarker(False)
-            mapCaseMode = BigWorld.player().inputHandler.ctrls.get('mapcase', None)
-            if mapCaseMode is not None:
-                mapCaseMode.activateEquipment(equipmentId)
+            ctrl = BigWorld.player().inputHandler.ctrl
+            if hasattr(ctrl, 'activateEquipment'):
+                ctrl.activateEquipment(equipmentId)
         else:
             BigWorld.player().inputHandler.showGunMarker(True)
-        return
 
     def __onVehicleEnterWorld(self, vehicle):
         if vehicle.id == self.playerVehicleID:

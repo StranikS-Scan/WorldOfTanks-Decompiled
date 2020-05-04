@@ -32,7 +32,10 @@ _ATTACK_REASON_CODE = {_AR_INDICES['shot']: 'DEATH_FROM_SHOT',
  _AR_INDICES['bombers']: 'DEATH_FROM_SECTOR_BOMBERS',
  _AR_INDICES['recovery']: 'DEATH_FROM_RECOVERY',
  _AR_INDICES['artillery_eq']: 'DEATH_FROM_SHOT',
- _AR_INDICES['bomber_eq']: 'DEATH_FROM_SHOT'}
+ _AR_INDICES['bomber_eq']: 'DEATH_FROM_SHOT',
+ _AR_INDICES['minefield_eq']: 'DEATH_FROM_SHOT',
+ _AR_INDICES['event_death_on_phase_change']: 'EVENT_DEATH_ON_PHASE_CHANGE',
+ _AR_INDICES['event_death_on_phase_change_full_sc']: 'EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC'}
 _PLAYER_KILL_ENEMY_SOUND = 'enemy_killed_by_player'
 _PLAYER_KILL_ALLY_SOUND = 'ally_killed_by_player'
 _ALLY_KILLED_SOUND = 'ally_killed_by_enemy'
@@ -121,6 +124,9 @@ class BattleMessagesController(IBattleController):
 
     def showAllyHitMessage(self, vehicleID=None):
         self.onShowPlayerMessageByKey('ALLY_HIT', {'entity': self._battleCtx.getPlayerFullName(vID=vehicleID)}, (('entity', vehicleID),))
+
+    def showPlayerMessageByKey(self, key, args=None):
+        self.onShowPlayerMessageByKey(key, args)
 
     def __getEntityString(self, avatar, entityID):
         if entityID == avatar.playerVehicleID:

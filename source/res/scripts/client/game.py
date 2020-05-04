@@ -122,6 +122,8 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         player_ranks.init()
         import destructible_entities
         destructible_entities.init()
+        from helpers.buffs import ClientBuffsRepository
+        ClientBuffsRepository.init()
         try:
             from LightFx import LightManager
             LightManager.g_instance = LightManager.LightManager()
@@ -319,6 +321,8 @@ def fini():
         if g_scenario is not None:
             g_scenario.destroy()
         g_onBeforeSendEvent = None
+        from helpers.buffs import ClientBuffsRepository
+        ClientBuffsRepository.fini()
         WebBrowser.destroyExternalCache()
         if constants.HAS_DEV_RESOURCES:
             import development
@@ -510,7 +514,11 @@ _PYTHON_MACROS = {'p': 'BigWorld.player()',
  'camera': 'BigWorld.player().inputHandler.ctrl',
  'resetEpic': 'BigWorld.player().epicMetaGame.resetEpicMetaGame',
  'setHero': 'from HeroTank import debugReloadHero; debugReloadHero',
- 'switchNation': 'import Account; Account.g_accountRepository.inventory.switchNation()'}
+ 'switchNation': 'import Account; Account.g_accountRepository.inventory.switchNation()',
+ 'rankedCtrl': 'from helpers import dependency; from skeletons.gui.game_control import IRankedBattlesController;rc = dependency.instance(IRankedBattlesController)',
+ 'eventsCache': 'from helpers import dependency; from skeletons.gui.server_events import IEventsCache;ec = dependency.instance(IEventsCache)',
+ 'items': 'from helpers import dependency; from skeletons.gui.shared import IItemsCache;items = dependency.instance(IItemsCache).items',
+ 'eventController': 'from helpers import dependency;from skeletons.gui.game_event_controller import IGameEventController;eventController = dependency.instance(IGameEventController)'}
 
 def expandMacros(line):
     import re

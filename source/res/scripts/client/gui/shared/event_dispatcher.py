@@ -4,20 +4,20 @@ import logging
 from operator import attrgetter
 import typing
 from BWUtil import AsyncReturn
-from CurrentVehicle import HeroTankPreviewAppearance
+import BigWorld
 import adisp
+from CurrentVehicle import HeroTankPreviewAppearance, EventHeroTankPreviewAppearance
 from async import async, await
-from constants import RentType, GameSeasonType
+from constants import RentType, GameSeasonType, QUEUE_TYPE, PREBATTLE_TYPE
 from debug_utils import LOG_WARNING
 from frameworks.wulf import ViewFlags
 from gui import SystemMessages, DialogsInterface, GUI_SETTINGS
 from gui.Scaleform import MENU
-from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
-from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta, I18nConfirmDialogMeta, DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsWebProductMeta
 from gui.Scaleform.daapi.view.dialogs.rent_confirm_dialog import RentConfirmDialogMeta
+from gui.Scaleform.daapi.view.lobby.lobby_vehicle_marker_view import LOBBY_TYPE
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getReferralProgramURL
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getWebShopURL, isIngameShopEnabled, getBuyPremiumUrl, getBuyCollectibleVehiclesUrl
 from gui.Scaleform.framework import ScopeTemplates
@@ -30,6 +30,8 @@ from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.genConsts.BATTLE_OF_BLOGGERS_ALIASES import BATTLE_OF_BLOGGERS_ALIASES
+from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
+from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.game_control.links import URLMacros
 from gui.impl import backport
@@ -37,12 +39,15 @@ from gui.impl.gen import R
 from gui.impl.lobby.demount_kit.optional_device_dialogs import BuyAndInstallOpDevDialog, BuyAndStorageOpDevDialog, DemountOpDevSinglePriceDialog, DestroyOpDevDialog, InstallOpDevDialog
 from gui.impl.lobby.demount_kit.selector_dialog import DemountOpDevDialog
 from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
+from gui.impl.lobby.secret_event import getTabs
 from gui.impl.lobby.techtree.techtree_intro_view import TechTreeIntroWindow
 from gui.ingame_shop import generateShopRentRenewProductID, showBuyGoldForRentWebOverlay
 from gui.ingame_shop import getShopProductInfo
 from gui.ingame_shop import makeBuyParamsByProductInfo
 from gui.ingame_shop import showBuyVehicleOverlay
-from gui.prb_control.settings import CTRL_ENTITY_TYPE
+from gui.prb_control.dispatcher import g_prbLoader
+from gui.prb_control.entities.base.ctx import PrbAction
+from gui.prb_control.settings import CTRL_ENTITY_TYPE, PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
 from gui.shared import events, g_eventBus, money
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
@@ -60,11 +65,18 @@ from items import vehicles as vehicles_core
 from nations import NAMES
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IHeroTankController, IReferralProgramController, IEpicBattleMetaGameController, ITenYearsCountdownController
+from skeletons.gui.game_event_controller import IGameEventController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from skeletons.se20 import ICustomizableObjectsManager
 from soft_exception import SoftException
+from gui.shared.events import checkLoadedView
+if typing.TYPE_CHECKING:
+    from typing import Optional
+    from gui.shared.money import Money
 _logger = logging.getLogger(__name__)
 
 class SettingsTabIndex(object):
@@ -89,6 +101,10 @@ def showRankedBattleResultsWindow(rankedResultsVO, rankInfo, questsProgress):
     g_eventBus.handleEvent(events.LoadViewEvent(alias=RANKEDBATTLES_ALIASES.RANKED_BATTLES_BATTLE_RESULTS, ctx={'rankedResultsVO': rankedResultsVO,
      'rankInfo': rankInfo,
      'questsProgress': questsProgress}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showEventBattleResultsWindow(arenaUniqueID):
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.EVENT_BATTLE_RESULTS, getViewName(VIEW_ALIAS.EVENT_BATTLE_RESULTS, str(arenaUniqueID)), ctx={'arenaUniqueID': arenaUniqueID}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showRankedAwardWindow(awardsSequence, rankedInfo):
@@ -178,6 +194,11 @@ def mayObtainWithMoneyExchange(itemPrice, itemsCache=None):
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def getShortageForObtainingForMoney(itemPrice, itemsCache=None):
+    return itemsCache.items.stats.money.getShortage(itemPrice)
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def mayObtainForMoney(itemPrice, itemsCache=None):
     return itemPrice <= itemsCache.items.stats.money
 
@@ -218,6 +239,21 @@ def showVehicleBuyDialog(vehicle, actionType=None, isTradeIn=False, previousAlia
      'previousAlias': previousAlias,
      'showOnlyCongrats': showOnlyCongrats})
     window = BuyVehicleWindow(ctx=ctx)
+    window.load()
+    if showOnlyCongrats:
+        window.showCongratulations()
+
+
+def showVehicleBuyDialogFromEvent(vehicle, actionType=None, isTradeIn=False, previousAlias=None, showOnlyCongrats=False, ctx=None):
+    from gui.impl.lobby.secret_event.buy_vehicle_view import SecretEventBuyVehicleWindow
+    ctx = ctx or {}
+    ctx.update({'nationID': vehicle.nationID,
+     'itemID': vehicle.innationID,
+     'actionType': actionType,
+     'isTradeIn': isTradeIn,
+     'previousAlias': previousAlias,
+     'showOnlyCongrats': showOnlyCongrats})
+    window = SecretEventBuyVehicleWindow(ctx=ctx)
     window.load()
     if showOnlyCongrats:
         window.showCongratulations()
@@ -267,6 +303,28 @@ def showBattleBoosterBuyDialog(battleBoosterIntCD, install=False):
 
 
 @async
+def showBuyFuelDialog():
+    from gui.impl.dialogs import dialogs
+    from gui.impl.lobby.secret_event.buy_fuel_view import BuyFuelView
+    wrapper = FullScreenDialogWindowWrapper(BuyFuelView())
+    yield dialogs.showSimple(wrapper)
+
+
+@async
+def showOrderBuyDialog(generalID=None, orderID=None, parentID=None):
+    from gui.impl.dialogs import dialogs
+    from gui.impl.lobby.secret_event.order_buy_view import OrderBuyView
+    guiLoader = dependency.instance(IGuiLoader)
+    layoutID = R.views.lobby.secretEvent.OrderConfirmWindow()
+    if guiLoader.windowsManager.getViewByLayoutID(layoutID) is not None:
+        return
+    else:
+        wrapper = FullScreenDialogWindowWrapper(OrderBuyView(generalID=generalID, orderID=orderID, parentID=parentID))
+        yield dialogs.showSimple(wrapper)
+        return
+
+
+@async
 def showBattleBoosterSellDialog(battleBoosterIntCD):
     from gui.impl.lobby.instructions.booster_sell_dialog import BoosterSellWindowView
     from gui.impl.dialogs import dialogs
@@ -293,7 +351,19 @@ def showVehicleStats(vehTypeCompDescr):
 
 
 def showHangar():
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+    dispatcher = g_prbLoader.getDispatcher()
+    if dispatcher:
+        state = dispatcher.getFunctionalState()
+        if state.isInUnit(PREBATTLE_TYPE.EVENT) or state.isInPreQueue(QUEUE_TYPE.EVENT_BATTLES):
+            showEventHangar()
+        else:
+            g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+@checkLoadedView(R.views.lobby.secretEvent.ActionHangarWindow())
+def showEventHangar():
+    from gui.impl.lobby.secret_event.action_hangar_view import ActionHangarView
+    g_eventBus.handleEvent(events.LoadUnboundViewEvent(R.views.lobby.secretEvent.ActionHangarWindow(), ActionHangarView, ScopeTemplates.DEFAULT_SCOPE), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showBarracks():
@@ -414,7 +484,6 @@ def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, v
 
 
 def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR):
-    import BigWorld
     from HeroTank import HeroTank
     from ClientSelectableCameraObject import ClientSelectableCameraObject
     for entity in BigWorld.entities.values():
@@ -426,15 +495,51 @@ def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR):
     return
 
 
+def goToHeroTankFromEvent(previewAlias=VIEW_ALIAS.LOBBY_HANGAR):
+    from se20.customizable_objects_manager import AnchorNames
+    gameEventController = dependency.instance(IGameEventController)
+    vehTypeCompDescr = gameEventController.getHeroTank().getVehicleCD()
+    customizableObjectsMgr = dependency.instance(ICustomizableObjectsManager)
+    customizableObjectsMgr.switchByAnchorName(AnchorNames.HERO_TANK)
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.SECRET_EVENT_SHOP_VEHICLE_PREVIEW_20, ctx={'itemCD': vehTypeCompDescr,
+     'previewAlias': previewAlias,
+     'previousBackAlias': None}), scope=EVENT_BUS_SCOPE.LOBBY)
+    return
+
+
+def loadSecretEventTabMenu(menuItem, isFromPanel=False):
+    customizableObjectsMgr = dependency.instance(ICustomizableObjectsManager)
+    customizableObjectsMgr.switchByAnchorName()
+    tabs = getTabs()
+    if menuItem not in tabs:
+        raise SoftException("Invalid menu item id: '{}'".format(menuItem))
+    tabSettings = tabs[menuItem]
+    guiLoader = dependency.instance(IGuiLoader)
+    if guiLoader.windowsManager.getViewByLayoutID(tabSettings.layoutID) is not None:
+        return
+    else:
+        ctx = None
+        if isFromPanel:
+            ctx = {'isFromPanel': isFromPanel}
+        g_eventBus.handleEvent(events.LoadUnboundViewEvent(tabSettings.layoutID, tabSettings.viewClass, ScopeTemplates.DEFAULT_SCOPE, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+        return
+
+
 def showHeroTankPreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previousBackAlias=None):
     lobbyContext = dependency.instance(ILobbyContext)
-    if lobbyContext.getServerSettings().isIngamePreviewEnabled():
+    eventsCache = dependency.instance(IEventsCache)
+    gameEventController = dependency.instance(IGameEventController)
+    previewAppearance = HeroTankPreviewAppearance
+    if eventsCache.isEventEnabled() and gameEventController.getHeroTank().isEventHeroTank(vehTypeCompDescr):
+        alias = VIEW_ALIAS.SECRET_EVENT_VEHICLE_PREVIEW_20
+        previewAppearance = EventHeroTankPreviewAppearance
+    elif lobbyContext.getServerSettings().isIngamePreviewEnabled():
         alias = VIEW_ALIAS.HERO_VEHICLE_PREVIEW_20
     else:
         alias = VIEW_ALIAS.HERO_VEHICLE_PREVIEW
     g_eventBus.handleEvent(events.LoadViewEvent(alias, ctx={'itemCD': vehTypeCompDescr,
      'previewAlias': previewAlias,
-     'previewAppearance': HeroTankPreviewAppearance(),
+     'previewAppearance': previewAppearance(),
      'isHeroTank': True,
      'previousBackAlias': previousBackAlias}), scope=EVENT_BUS_SCOPE.LOBBY)
 
@@ -516,6 +621,7 @@ def showClanSendInviteWindow(clanDbID):
      'ctrlType': CTRL_ENTITY_TYPE.UNIT}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
+@adisp.process
 def selectVehicleInHangar(itemCD):
     from CurrentVehicle import g_currentVehicle
     itemsCache = dependency.instance(IItemsCache)
@@ -523,7 +629,14 @@ def selectVehicleInHangar(itemCD):
     if not veh.isInInventory:
         raise SoftException('Vehicle (itemCD={}) must be in inventory.'.format(itemCD))
     g_currentVehicle.selectVehicle(veh.invID)
+    dispatcher = g_prbLoader.getDispatcher()
+    if dispatcher:
+        entity = dispatcher.getEntity()
+        if entity is not None and entity.getQueueType() == QUEUE_TYPE.EVENT_BATTLES:
+            yield switchOutEventMode()
+            return
     showHangar()
+    return
 
 
 def showPersonalCase(tankmanInvID, tabIndex, scope=EVENT_BUS_SCOPE.DEFAULT):
@@ -908,3 +1021,39 @@ def showTenYearsCountdownOnBoarding(stageNumber, isStageActive, months, blocksCo
     from gui.impl.lobby.ten_years_countdown.ten_years_onboarding_view import TenYearsOnboardingWindow
     window = TenYearsOnboardingWindow(stageNumber, isStageActive, months, blocksCount)
     window.load()
+
+
+@adisp.async
+@adisp.process
+def switchOutEventMode(callback=None):
+    dispatcher = g_prbLoader.getDispatcher()
+    if dispatcher:
+        entity = dispatcher.getEntity()
+        if entity is not None and entity.getQueueType() == QUEUE_TYPE.EVENT_BATTLES:
+            yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.RANDOM))
+    if callable(callback):
+        callback(False)
+    return
+
+
+def leaveEventMode(func):
+
+    @adisp.process
+    def wrapper(*args, **kwargs):
+        from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
+        dispatcher = g_prbLoader.getDispatcher()
+        entity = None
+        if dispatcher:
+            entity = dispatcher.getEntity()
+        isOK = True
+        if entity and entity.getQueueType() == QUEUE_TYPE.EVENT_BATTLES:
+            ctx = dispatcher.getControlFactories().get(entity.getCtrlType()).createLeaveCtx(flags=FUNCTIONAL_FLAG.EXIT | FUNCTIONAL_FLAG.SWITCH_FROM_EVENT, entityType=entity.getEntityType())
+            isOK = yield dispatcher.leave(ctx)
+            if isOK:
+                g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.ALL}), scope=EVENT_BUS_SCOPE.LOBBY)
+                g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.LOBBY_TYPE_CHANGED, ctx={'lobbyType': LOBBY_TYPE.REGULAR}), scope=EVENT_BUS_SCOPE.LOBBY)
+        if isOK:
+            func(*args, **kwargs)
+        return
+
+    return wrapper

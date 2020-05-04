@@ -725,6 +725,7 @@ class QUESTS(object):
     DETAILS_CONDITIONS_CUMULATIVE_ISENEMYBASECAPTURED = '#quests:details/conditions/cumulative/isEnemyBaseCaptured'
     DETAILS_CONDITIONS_CUMULATIVE_AGGREGATED = '#quests:details/conditions/cumulative/aggregated'
     DETAILS_CONDITIONS_CUMULATIVE_RANKCHANGE = '#quests:details/conditions/cumulative/rankChange'
+    DETAILS_CONDITIONS_CUMULATIVE_ENVIRONMENTID = '#quests:details/conditions/cumulative/environmentID'
     DETAILS_DOSSIER_SNIPERSERIES = '#quests:details/dossier/sniperSeries'
     DETAILS_DOSSIER_MAXSNIPERSERIES = '#quests:details/dossier/maxSniperSeries'
     DETAILS_DOSSIER_INVINCIBLESERIES = '#quests:details/dossier/invincibleSeries'
@@ -1091,6 +1092,9 @@ class QUESTS(object):
     MISSIONDETAILS_VEHICLE_CONDITIONS_LEVEL = '#quests:missionDetails/vehicle/conditions/level'
     MISSIONDETAILS_VEHICLE_CONDITIONS_LEVEL_ALL = '#quests:missionDetails/vehicle/conditions/level/all'
     MISSIONDETAILS_STATUS_COMPLETED_DAILY = '#quests:missionDetails/status/completed/daily'
+    MISSIONDETAILS_STATUS_COMPLETED_SECRETEVENT = '#quests:missionDetails/status/completed/secretEvent'
+    MISSIONDETAILS_STATUS_COMPLETE = '#quests:missionDetails/status/complete'
+    MISSIONDETAILS_STATUS_INPROGRESS = '#quests:missionDetails/status/inProgress'
     MISSIONDETAILS_STATUS_NOTAVAILABLE = '#quests:missionDetails/status/notAvailable'
     MISSIONDETAILS_STATUS_WRONGVEHICLE = '#quests:missionDetails/status/wrongVehicle'
     MISSIONDETAILS_STATUS_DISABLED = '#quests:missionDetails/status/disabled'
@@ -1132,6 +1136,7 @@ class QUESTS(object):
     MISSIONDETAILS_REQUIREMENTS_HEADER_AVAILABLE = '#quests:missionDetails/requirements/header/available'
     MISSIONDETAILS_REQUIREMENTS_CONCLUSION_AVAILABLE = '#quests:missionDetails/requirements/conclusion/available'
     MISSIONDETAILS_REQUIREMENTS_CONCLUSION_UNAVAILABLE = '#quests:missionDetails/requirements/conclusion/unavailable'
+    MISSIONDETAILS_REQUIREMENTS_CONCLUSION_PREVIOUSINCOMPLETE = '#quests:missionDetails/requirements/conclusion/previousIncomplete'
     MISSIONDETAILS_VEHICLESSELECT = '#quests:missionDetails/vehiclesSelect'
     MISSIONDETAILS_VEHICLESAVAILABLE = '#quests:missionDetails/vehiclesAvailable'
     MISSIONDETAILS_BOTTOMSTATUSCOMPLETE = '#quests:missionDetails/bottomStatusComplete'
@@ -1139,6 +1144,10 @@ class QUESTS(object):
     MISSIONDETAILS_BOTTOMSTATUSNEXTTRY = '#quests:missionDetails/bottomStatusNextTry'
     MISSIONDETAILS_NEXTPAGEBTN_LABEL = '#quests:missionDetails/nextPageBtn/label'
     MISSIONDETAILS_PREVPAGEBTN_LABEL = '#quests:missionDetails/prevPageBtn/label'
+    MISSIONS_TOKENPOPOVER_SECRETEVENT_HEADER = '#quests:missions/tokenPopover/secretEvent/header'
+    MISSIONS_TOKENPOPOVER_SECRETEVENT_DESCR = '#quests:missions/tokenPopover/secretEvent/descr'
+    MISSIONS_TOKENPOPOVER_SECRETEVENT_DESCR_SHOP = '#quests:missions/tokenPopover/secretEvent/descr/shop'
+    MISSIONS_TOKENPOPOVER_SECRETEVENT_BUYBTN_LABEL = '#quests:missions/tokenPopover/secretEvent/buyBtn/label'
     MISSIONS_TOKENPOPOVER_HEADER = '#quests:missions/tokenPopover/header'
     MISSIONS_TOKENPOPOVER_DESCR = '#quests:missions/tokenPopover/descr'
     MISSIONS_TOKENPOPOVER_DESCR_SHOP = '#quests:missions/tokenPopover/descr/shop'
@@ -1183,6 +1192,33 @@ class QUESTS(object):
     TOKEN_DEFAULT_WHEEL = '#quests:token/default/wheel'
     TOKEN_DEFAULT_BOX = '#quests:token/default/box'
     TOKEN_DEFAULT_TANKREWARDS = '#quests:token/default/tankrewards'
+    TOKEN_DEFAULT_SE_ENERGY = '#quests:token/default/se_energy'
+    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_X15_DISCOUNT = '#quests:token/default/se20_energy_general_x15_discount'
+    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_0_X5 = '#quests:token/default/se20_energy_general_0_x5'
+    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_0_X10 = '#quests:token/default/se20_energy_general_0_x10'
+    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_0_X10_PREMIUM = '#quests:token/default/se20_energy_general_0_x10_premium'
+    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_0_X15 = '#quests:token/default/se20_energy_general_0_x15'
+    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_1_X5 = '#quests:token/default/se20_energy_general_1_x5'
+    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_1_X10 = '#quests:token/default/se20_energy_general_1_x10'
+    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_1_X10_PREMIUM = '#quests:token/default/se20_energy_general_1_x10_premium'
+    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_1_X15 = '#quests:token/default/se20_energy_general_1_x15'
+    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_2_X5 = '#quests:token/default/se20_energy_general_2_x5'
+    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_2_X10 = '#quests:token/default/se20_energy_general_2_x10'
+    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_2_X10_PREMIUM = '#quests:token/default/se20_energy_general_2_x10_premium'
+    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_2_X15 = '#quests:token/default/se20_energy_general_2_x15'
+    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_3_X5 = '#quests:token/default/se20_energy_general_3_x5'
+    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_3_X10 = '#quests:token/default/se20_energy_general_3_x10'
+    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_3_X10_PREMIUM = '#quests:token/default/se20_energy_general_3_x10_premium'
+    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_3_X15 = '#quests:token/default/se20_energy_general_3_x15'
+    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_4_X5 = '#quests:token/default/se20_energy_general_4_x5'
+    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_4_X10 = '#quests:token/default/se20_energy_general_4_x10'
+    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_4_X10_PREMIUM = '#quests:token/default/se20_energy_general_4_x10_premium'
+    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_4_X15 = '#quests:token/default/se20_energy_general_4_x15'
+    TOKEN_TOKEN_FOR = '#quests:token/token_for'
+    TOKEN_DEFAULT_SE20_GENERAL_MARK = '#quests:token/default/se20_general_mark'
+    TOKEN_DEFAULT_SE20_TANK_DISCOUNT25 = '#quests:token/default/se20_tank_discount25'
+    TOKEN_DEFAULT_SE20_TANK_DISCOUNT50 = '#quests:token/default/se20_tank_discount50'
+    TOKEN_DEFAULT_SE20_TANK_DISCOUNT75 = '#quests:token/default/se20_tank_discount75'
     BONUSNAME_CREDITS = '#quests:bonusName/credits'
     BONUSNAME_GOLD = '#quests:bonusName/gold'
     BONUSNAME_CRYSTAL = '#quests:bonusName/crystal'
@@ -1675,6 +1711,8 @@ class QUESTS(object):
     DAILYQUESTS_CONDITION_DODAMAGEVEH_ACCUM = '#quests:dailyQuests/condition/doDamageVeh_accum'
     DAILYQUESTS_CONDITION_DESTROYVEH_FEW_ACCUM = '#quests:dailyQuests/condition/destroyVeh_few_accum'
     DAILYQUESTS_CONDITION_DESTROYVEH_PLURAL_ACCUM = '#quests:dailyQuests/condition/destroyVeh_plural_accum'
+    BACKBUTTON_LABEL = '#quests:backButton/label'
+    BACKBUTTON_DESCRIPTION = '#quests:backButton/description'
     TOKEN_DEFAULT_ENUM = (TOKEN_DEFAULT_USSR,
      TOKEN_DEFAULT_GERMANY,
      TOKEN_DEFAULT_USA,
@@ -1703,7 +1741,33 @@ class QUESTS(object):
      TOKEN_DEFAULT_LEAFLET,
      TOKEN_DEFAULT_WHEEL,
      TOKEN_DEFAULT_BOX,
-     TOKEN_DEFAULT_TANKREWARDS)
+     TOKEN_DEFAULT_TANKREWARDS,
+     TOKEN_DEFAULT_SE_ENERGY,
+     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_X15_DISCOUNT,
+     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_0_X5,
+     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_0_X10,
+     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_0_X10_PREMIUM,
+     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_0_X15,
+     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_1_X5,
+     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_1_X10,
+     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_1_X10_PREMIUM,
+     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_1_X15,
+     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_2_X5,
+     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_2_X10,
+     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_2_X10_PREMIUM,
+     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_2_X15,
+     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_3_X5,
+     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_3_X10,
+     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_3_X10_PREMIUM,
+     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_3_X15,
+     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_4_X5,
+     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_4_X10,
+     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_4_X10_PREMIUM,
+     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_4_X15,
+     TOKEN_DEFAULT_SE20_GENERAL_MARK,
+     TOKEN_DEFAULT_SE20_TANK_DISCOUNT25,
+     TOKEN_DEFAULT_SE20_TANK_DISCOUNT50,
+     TOKEN_DEFAULT_SE20_TANK_DISCOUNT75)
     BONUSNAME_ENUM = (BONUSNAME_BLUEPRINTS_ANY,
      BONUSNAME_BLUEPRINTS_VEHICLE,
      BONUSNAME_BLUEPRINTS_VEHICLE_ANY,

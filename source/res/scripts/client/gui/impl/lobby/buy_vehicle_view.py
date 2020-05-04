@@ -64,7 +64,11 @@ class VehicleBuyActionTypes(CONST_CONTAINER):
 _TooltipExtraData = namedtuple('_TooltipExtraData', 'key, itemType')
 _TANKMAN_KEYS = ('', 'creditsTankman', 'goldTankman')
 _ACADEMY_SLOT = 2
-_VP_SHOW_HANGAR_ON_SUCCESS_ALIASES = (VIEW_ALIAS.VEHICLE_PREVIEW, VIEW_ALIAS.VEHICLE_PREVIEW_20, VIEW_ALIAS.TRADE_IN_VEHICLE_PREVIEW_20)
+_VP_SHOW_HANGAR_ON_SUCCESS_ALIASES = (VIEW_ALIAS.VEHICLE_PREVIEW,
+ VIEW_ALIAS.VEHICLE_PREVIEW_20,
+ VIEW_ALIAS.TRADE_IN_VEHICLE_PREVIEW_20,
+ VIEW_ALIAS.SECRET_EVENT_VEHICLE_PREVIEW_20,
+ VIEW_ALIAS.SECRET_EVENT_SHOP_VEHICLE_PREVIEW_20)
 _COLLECTIBLE_VEHICLE_TUTORIAL = 'collectibleVehicle'
 
 class BuyVehicleView(ViewImpl, EventSystemEntity):
@@ -861,6 +865,13 @@ class BuyVehicleWindow(Window):
     __slots__ = ()
 
     def __init__(self, *args, **kwargs):
+        settings = self._getSettings(**kwargs)
+        super(BuyVehicleWindow, self).__init__(settings)
+
+    def showCongratulations(self):
+        self.content.showCongratulations()
+
+    def _getSettings(self, **kwargs):
         app = self.appLoader.getApp()
         view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY))
         if view is not None:
@@ -869,10 +880,6 @@ class BuyVehicleWindow(Window):
             parent = None
         settings = WindowSettings()
         settings.flags = WindowFlags.DIALOG
-        settings.content = BuyVehicleView(*args, **kwargs)
+        settings.content = BuyVehicleView(**kwargs)
         settings.parent = parent
-        super(BuyVehicleWindow, self).__init__(settings)
-        return
-
-    def showCongratulations(self):
-        self.content.showCongratulations()
+        return settings

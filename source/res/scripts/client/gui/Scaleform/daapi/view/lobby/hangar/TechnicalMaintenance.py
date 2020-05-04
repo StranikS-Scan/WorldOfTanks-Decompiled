@@ -19,16 +19,24 @@ from gui.shared.money import Currency
 from gui.shared.utils import decorators
 from gui.shared.utils.requesters import REQ_CRITERIA as _RC
 from gui.shared import events, event_dispatcher as shared_events
+from constants import EVENT_BATTLES_TAG
 from helpers import dependency
 from helpers import i18n
 from helpers.i18n import makeString
 from account_helpers.settings_core.settings_constants import TUTORIAL
 from skeletons.gui.game_control import IBootcampController
+from skeletons.gui.game_event_controller import IGameEventController
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.server_events import IEventsCache
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.Scaleform.daapi.view.lobby import halloween_event
 
 class TechnicalMaintenance(TechnicalMaintenanceMeta):
     itemsCache = dependency.descriptor(IItemsCache)
     bootcamp = dependency.descriptor(IBootcampController)
+    eventsCache = dependency.descriptor(IEventsCache)
+    gameEventController = dependency.descriptor(IGameEventController)
 
     def __init__(self, _=None, skipConfirm=False):
         super(TechnicalMaintenance, self).__init__()
@@ -116,9 +124,11 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         money = self.itemsCache.items.stats.money
         data = {Currency.CREDITS: money.getSignValue(Currency.CREDITS),
          Currency.GOLD: money.getSignValue(Currency.GOLD)}
+        isEventTank = False
         if g_currentVehicle.isPresent():
             vehicle = g_currentVehicle.item
             gun = vehicle.descriptor.gun
+            isEventTank = EVENT_BATTLES_TAG in vehicle.descriptor.type.tags
             cassetteText = ''
             if not isAutoReloadGun(gun):
                 cassetteCount = vehicle.descriptor.gun.clip[0]
@@ -167,6 +177,10 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
                  'actionPriceData': action,
                  'desc': MENU.SHELLLISTITEMRENDERER_REPLACE})
 
+        eventTooltip = ''
+        if isEventTank:
+            eventTooltip = backport.text(R.strings.menu.shop.errors.centerIsDown(), date=backport.getLongDateFormat(self.gameEventController.getEventFinishTime()))
+        self.as_showEventInfoS(isEventTank, eventTooltip)
         self.as_setDataS(data)
         return
 
@@ -198,6 +212,8 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
             currencies = [currency1, currency2, currency3]
         inventoryVehicles = items.getVehicles(_RC.INVENTORY).values()
         itemsCriteria = ~_RC.HIDDEN | _RC.VEHICLE.SUITABLE([vehicle], [GUI_ITEM_TYPE.EQUIPMENT])
+        if halloween_event.isInEvent():
+            itemsCriteria |= _RC.EQUIPMENT.HAS_TAGS([EVENT_BATTLES_TAG])
         data = sorted(self.itemsCache.items.getItems(GUI_ITEM_TYPE.EQUIPMENT, itemsCriteria).values(), reverse=True)
         vehicle.equipment.setRegularConsumables(RegularEquipmentConsumables(*selectedItems))
         modules = []

@@ -12,6 +12,7 @@ from gui.prb_control.settings import VEHICLE_LEVELS
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES
 from gui.shared.utils import makeSearchableString
 from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
 
 class _ShortNameVehiclesCriteriesGroup(CriteriesGroup):
 
@@ -84,7 +85,7 @@ class StorageCarouselDataProvider(CarouselDataProvider):
 
     def __init__(self, carouselFilter, itemsCache, currentVehicle):
         super(StorageCarouselDataProvider, self).__init__(carouselFilter, itemsCache, currentVehicle)
-        self._baseCriteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.RENT
+        self._baseCriteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.RENT | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
 
     def _buildVehicle(self, item):
         return getStorageVehicleVo(item)

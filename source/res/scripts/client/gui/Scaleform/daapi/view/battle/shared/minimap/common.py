@@ -129,6 +129,12 @@ class EntriesPlugin(SimplePlugin):
         model.clear()
         return True
 
+    def _setMatrixEx(self, uniqueID, matrix):
+        if uniqueID not in self._entries:
+            return
+        model = self._entries[uniqueID]
+        self._setMatrix(model.getID(), matrix)
+
 
 class IntervalPlugin(EntriesPlugin):
     __slots__ = ('__callbackIDs',)

@@ -25,10 +25,13 @@ class HangarCarouselDataProvider(CarouselDataProvider):
 
     def __init__(self, carouselFilter, itemsCache, currentVehicle):
         super(HangarCarouselDataProvider, self).__init__(carouselFilter, itemsCache, currentVehicle)
-        self._baseCriteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.BOB_BATTLE
+        self._baseCriteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.BOB_BATTLE | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
         self._supplyItems = []
         self._emptySlotsCount = 0
         self._restorableVehiclesCount = 0
+
+    def hasEventVehicles(self):
+        return False
 
     @property
     def collection(self):
@@ -40,7 +43,7 @@ class HangarCarouselDataProvider(CarouselDataProvider):
     def updateSupplies(self):
         self._supplyItems = []
         self._buildSupplyItems()
-        self.flashObject.invalidateItems(self.__getSupplyIndices(), self._supplyItems)
+        self.flashObject.invalidateItems(self._getSupplyIndices(), self._supplyItems)
         self.applyFilter()
 
     def clear(self):
@@ -57,7 +60,7 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         self._buildSupplyItems()
 
     def _getAdditionalItemsIndexes(self):
-        supplyIndices = self.__getSupplyIndices()
+        supplyIndices = self._getSupplyIndices()
         serverSettings = dependency.instance(ILobbyContext).getServerSettings()
         restoreEnabled = serverSettings.isVehicleRestoreEnabled()
         storageEnabled = serverSettings.isIngameStorageEnabled()
@@ -73,9 +76,10 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         items = self._itemsCache.items
         inventory = self._itemsCache.items.inventory
         slots = items.stats.vehicleSlots
+        eventVehiclesCount = self.getEventVehiclesCount()
         slotPrice = items.shop.getVehicleSlotsPrice(slots)
         defaultSlotPrice = items.shop.defaults.getVehicleSlotsPrice(slots)
-        self._emptySlotsCount = inventory.getFreeSlots(slots)
+        self._emptySlotsCount = inventory.getFreeSlots(slots) - eventVehiclesCount
         criteria = REQ_CRITERIA.IN_CD_LIST(items.recycleBin.getVehiclesIntCDs()) | REQ_CRITERIA.VEHICLE.IS_RESTORE_POSSIBLE
         self._restorableVehiclesCount = len(items.getVehicles(criteria))
         if slotPrice != defaultSlotPrice:
@@ -113,7 +117,7 @@ class HangarCarouselDataProvider(CarouselDataProvider):
     def _isSuitableForQueue(vehicle):
         return vehicle.getCustomState() != Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE
 
-    def __getSupplyIndices(self):
+    def _getSupplyIndices(self):
         return [ len(self._vehicles) + idx for idx in _SUPPLY_ITEMS.ALL ]
 
 

@@ -5,7 +5,7 @@ from PlayerEvents import g_playerEvents
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled, getWebShopURL
-from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared import events, EVENT_BUS_SCOPE, event_dispatcher
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -52,10 +52,10 @@ class IngameShopView(LobbySubView, IngameShopBase):
         g_playerEvents.onShopResync += self.__onShopResync
 
     def onCloseBtnClick(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        event_dispatcher.showHangar()
 
     def onEscapePress(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        event_dispatcher.showHangar()
 
     def _dispose(self):
         g_playerEvents.onShopResync -= self.__onShopResync

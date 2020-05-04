@@ -53,6 +53,7 @@ class LoginObserver(AppLoaderObserver):
     __slots__ = ()
 
     def onEnterState(self, event=None):
+        self._proxy.destroyBattle()
         action = None
         if event is not None:
             disconnectReason = event.getArgument('disconnectReason', DisconnectReason.REQUEST)

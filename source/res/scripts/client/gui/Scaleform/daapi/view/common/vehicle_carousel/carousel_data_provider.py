@@ -137,6 +137,9 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
     def getRentPromotionVehiclesCount(self):
         return len(self._getFilteredVehicles(REQ_CRITERIA.VEHICLE.RENT_PROMOTION))
 
+    def getEventVehiclesCount(self):
+        return len(self._itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.EVENT_BATTLE))
+
     def getCurrentVehiclesCount(self):
         return len(self._filteredIndices)
 

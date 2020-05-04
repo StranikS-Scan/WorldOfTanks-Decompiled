@@ -26,6 +26,9 @@
     <N19Mk3_IGR>	60002	</N19Mk3_IGR>
     <N22_IGR>	60003	</N22_IGR>
     <C45_IGR>	60004	</C45_IGR>
+    <N19Mk3_SE20_Gen_5_Lvl_1>	3	</N19Mk3_SE20_Gen_5_Lvl_1>
+    <N19Mk3_SE20_Gen_5_Lvl_2>	5	</N19Mk3_SE20_Gen_5_Lvl_2>
+    <N22_SE20_Gen_5_Lvl_3>	6	</N22_SE20_Gen_5_Lvl_3>
   </ids>
   <shared>
     <Alarm_flags_bot>
@@ -328,5 +331,41 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </Radio_FV4202>
+    <N19Mk3_SE20_Gen_5_Lvl_1>
+      <userString>	#gb_vehicles:N19Mk3_SE20_Gen_5_Lvl_1	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	22000	</price>
+      <weight>	40	</weight>
+      <distance>	300	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	84	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+      <notInShop>	True	</notInShop>
+    </N19Mk3_SE20_Gen_5_Lvl_1>
+    <N19Mk3_SE20_Gen_5_Lvl_2>
+      <userString>	#gb_vehicles:N19Mk3_SE20_Gen_5_Lvl_2	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	22000	</price>
+      <weight>	40	</weight>
+      <distance>	300	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	84	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+      <notInShop>	True	</notInShop>
+    </N19Mk3_SE20_Gen_5_Lvl_2>
+    <N22_SE20_Gen_5_Lvl_3>
+      <userString>	#gb_vehicles:N22_SE20_Gen_5_Lvl_3	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	25000	</price>
+      <weight>	40	</weight>
+      <distance>	300	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	84	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <notInShop>	True	</notInShop>
+    </N22_SE20_Gen_5_Lvl_3>
   </shared>
 </radios.xml>

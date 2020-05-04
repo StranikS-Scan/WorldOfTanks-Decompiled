@@ -8,7 +8,7 @@ from gui.impl.gen.resources import R
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.recruitWindow.RecruitParamsComponent import packPredefinedTmanParams
 from gui.Scaleform.daapi.view.meta.QuestRecruitWindowMeta import QuestRecruitWindowMeta
-from gui.Scaleform.framework.entities.View import CommonSoundSpaceSettings
+from gui.Scaleform.framework.entities.view_sound import CommonSoundSpaceSettings
 from gui.Scaleform.genConsts.AWARDWINDOW_CONSTANTS import AWARDWINDOW_CONSTANTS
 from gui.server_events.pm_constants import SOUNDS
 from gui.shared.gui_items import Tankman

@@ -22,6 +22,10 @@ class ClientSelectableEasterEgg(ClientSelectableObject):
             self.setEnable(False)
         return
 
+    @property
+    def animator(self):
+        return self.__animator
+
     def prerequisites(self):
         prereqs = super(ClientSelectableEasterEgg, self).prerequisites()
         if not prereqs:
@@ -74,6 +78,10 @@ class ClientSelectableEasterEgg(ClientSelectableObject):
         self.__animator = resourceList[resourceName]
         self.__animator.bindTo(AnimationSequence.ModelWrapperContainer(self.model, self.spaceID))
         self.__animator.start()
+        self._onAnimatorReady()
+
+    def _onAnimatorReady(self):
+        pass
 
     def _addEdgeDetect(self):
         if self.outlineModelName and self.models:

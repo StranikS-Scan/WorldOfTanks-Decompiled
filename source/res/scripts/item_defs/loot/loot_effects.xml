@@ -1,0 +1,127 @@
+<loot_effects.xml>
+  <defaultPickup>
+    <timeline>
+      <effectEnd>	3	</effectEnd>
+    </timeline>
+    <effects>
+      <sound>
+        <dynamic>	true	</dynamic>
+        <startKey>	start	</startKey>
+        <wwsound>	eb_ability_smoke_expl_02	</wwsound>
+        <sound>	/NONE	</sound>
+      </sound>
+    </effects>
+  </defaultPickup>
+  <bombStartEffect>
+    <timeline>
+      <effectEnd>	10	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/se20/minefield_mine_appears.eff	</file>
+        <force>	1	</force>
+      </pixie>
+    </effects>
+  </bombStartEffect>
+  <bombIdleEffect>
+    <timeline>
+      <end>	100	</end>
+    </timeline>
+    <effects>
+      <decal>
+        <startKey>	start	</startKey>
+        <groupName>	fast	</groupName>
+        <texName>	Mine_1_AM Mine_2_AM	</texName>
+        <bumpTexName>	Mine_1_NM Mine_2_NM	</bumpTexName>
+        <smTexName>	Mine_1_GMM Mine_2_GMM	</smTexName>
+        <size>	1.5 1.5	</size>
+        <variation>	0.2	</variation>
+        <randomYaw>	True	</randomYaw>
+      </decal>
+    </effects>
+  </bombIdleEffect>
+  <bombEffect>
+    <timeline>
+      <lightingEnd>	0.22	</lightingEnd>
+      <soundplaystop>	7	</soundplaystop>
+      <endpixie>	1	</endpixie>
+      <end>	1.2	</end>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+        <file>	particles/Shells_Eff/groundHit_HC_4.xml	</file>
+        <force>	1	</force>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lightingEnd	</endKey>
+        <innerRadius>	0.2	</innerRadius>
+        <outerRadius>	6	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	Scene Root	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 85 0	</color>
+          <multiplier>	3	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.25	</time>
+          <color>	255 150 100	</color>
+          <multiplier>	5	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.75	</time>
+          <color>	125 45 0	</color>
+          <multiplier>	3	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	1	</multiplier>
+        </animation>
+      </light>
+      <decal>
+        <startKey>	start	</startKey>
+        <groupName>	slow	</groupName>
+        <texName>	explosion_sand_AM	</texName>
+        <bumpTexName>	explosion_sand_NM	</bumpTexName>
+        <smTexName>	explosion_sand_GMM	</smTexName>
+        <size>	1.2 1.2	</size>
+        <variation>	0.2	</variation>
+        <randomYaw>	True	</randomYaw>
+      </decal>
+      <sound>
+        <dynamic>	true	</dynamic>
+        <startKey>	start	</startKey>
+        <wwsound>	ev_2020_secret_event_gameplay_ability_minefield_explosion	</wwsound>
+        <sound>	/NONE	</sound>
+      </sound>
+    </effects>
+  </bombEffect>
+  <bombDestroyEffect>
+    <timeline>
+      <effectEnd>	10	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/se20/minefield_mine_disappears.eff	</file>
+        <force>	1	</force>
+      </pixie>
+      <decal>
+        <startKey>	start	</startKey>
+        <groupName>	slow	</groupName>
+        <texName>	explosion_sand_AM	</texName>
+        <bumpTexName>	explosion_sand_NM	</bumpTexName>
+        <smTexName>	explosion_sand_GMM	</smTexName>
+        <size>	4.0 4.0	</size>
+        <variation>	0.2	</variation>
+        <randomYaw>	True	</randomYaw>
+      </decal>
+    </effects>
+  </bombDestroyEffect>
+</loot_effects.xml>

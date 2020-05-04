@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/shell_components.py
+from collections import namedtuple
 from constants import SHELL_TYPES
 from items.components import component_constants
 
@@ -97,6 +98,8 @@ class Stun(object):
     def __repr__(self):
         return 'Stun(radius={}, duration={}, guaranteedDuration={}, damageDurationCoeff={} guaranteedSEffect={}, damageEffectCoeff={})'.format(self.stunRadius, self.stunDuration, self.guaranteedStunDuration, self.damageDurationCoeff, self.guaranteedStunEffect, self.damageEffectCoeff)
 
+
+Buff = namedtuple('Buff', ('buffName', 'buffDuration'))
 
 def createShellType(typeName):
     shellType = None

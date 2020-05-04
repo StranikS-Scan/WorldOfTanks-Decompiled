@@ -11,6 +11,7 @@ from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from skeletons.gui.game_control import IHeroTankController, IBootcampController, ICalendarController
+from skeletons.gui.game_event_controller import IGameEventController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.server_events import IEventsCache
@@ -28,6 +29,7 @@ class HeroTankController(IHeroTankController):
     lobbyContext = dependency.descriptor(ILobbyContext)
     bootcampController = dependency.descriptor(IBootcampController)
     calendarController = dependency.descriptor(ICalendarController)
+    gameEventController = dependency.descriptor(IGameEventController)
     _eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self):
@@ -38,6 +40,8 @@ class HeroTankController(IHeroTankController):
         self.__actionInfo = None
         self.onUpdated = Event.Event()
         self.onInteractive = Event.Event()
+        self.onEnterPreviewFromEvent = Event.Event()
+        self.onExitPreviewFromEvent = Event.Event()
         return
 
     def init(self):
@@ -99,9 +103,12 @@ class HeroTankController(IHeroTankController):
     def setInteractive(self, interactive):
         self.onInteractive(interactive)
 
+    def __isItemAvailable(self, item):
+        return item.inventoryCount > 0 or item.isRestorePossible() and not self.gameEventController.getHeroTank().isEventHeroTank(item.intCD)
+
     def __fullUpdate(self):
         self.__invVehiclesIntCD = []
-        invVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.CUSTOM(lambda item: item.inventoryCount > 0 or item.isRestorePossible())).values()
+        invVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.CUSTOM(self.__isItemAvailable)).values()
         for invVeh in invVehicles:
             self.__invVehiclesIntCD.append(invVeh.intCD)
 

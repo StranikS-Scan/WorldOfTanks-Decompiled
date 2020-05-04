@@ -2,26 +2,30 @@
 # Embedded file name: scripts/client/gui/server_events/events_helpers.py
 import operator
 import time
+import typing
 import BigWorld
 from constants import EVENT_TYPE
 from gui import makeHtmlString
 from gui.Scaleform.genConsts.MISSIONS_STATES import MISSIONS_STATES
+from gui.Scaleform.locale.LINKEDSET import LINKEDSET
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
 from gui.server_events import formatters
+from gui.server_events.conditions import getProgressFromQuestWithSingleAccumulative
+from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX, PREMIUM_GROUP_PREFIX, DAILY_QUEST_ID_PREFIX, FRONTLINE_GROUP_ID, SECRET_EVENT_GROUP_PREFIX
 from gui.server_events.personal_missions_navigation import PersonalMissionsNavigation
 from helpers import time_utils, i18n, dependency
+from helpers.i18n import makeString as _ms
 from shared_utils import CONST_CONTAINER, findFirst
 from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX, PREMIUM_GROUP_PREFIX, DAILY_QUEST_ID_PREFIX, FRONTLINE_GROUP_ID
-from helpers.i18n import makeString as _ms
-from gui.Scaleform.locale.LINKEDSET import LINKEDSET
-from gui.server_events.conditions import getProgressFromQuestWithSingleAccumulative
+if typing.TYPE_CHECKING:
+    from typing import Optional
+    from gui.server_events.event_items import Quest, Group
 FINISH_TIME_LEFT_TO_SHOW = time_utils.ONE_DAY
 START_TIME_LIMIT = 5 * time_utils.ONE_DAY
 AWARDS_PER_PAGE = 3
@@ -154,6 +158,8 @@ def getMinutesRoundByTime(timeLeft):
 
 
 def missionsSortFunc(a, b):
+    if isSecretEvent(a.getGroupID()) and isSecretEvent(b.getGroupID()):
+        return cmp(a.getPriority(), b.getPriority())
     res = cmp(a.isAvailable()[0] and not a.isCompleted(), b.isAvailable()[0] and not b.isCompleted())
     if res:
         return res
@@ -246,6 +252,10 @@ def isDailyEpic(eventID):
 
 def isDailyQuest(eventID):
     return eventID.startswith(DAILY_QUEST_ID_PREFIX) if eventID else False
+
+
+def isSecretEvent(eventID):
+    return eventID.startswith(SECRET_EVENT_GROUP_PREFIX) if eventID else False
 
 
 def isRegularQuest(eventID):
@@ -411,3 +421,23 @@ def isRerollEnabled(lobbyContext=None):
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def isEpicQuestEnabled(lobbyContext=None):
     return lobbyContext.getServerSettings().getDailyQuestConfig().get('epicRewardEnabled', False)
+
+
+def getPreviousBattleQuest(quest):
+    eventsCache = dependency.instance(IEventsCache)
+    group = eventsCache.getGroups().get(quest.getGroupID())
+    if group is not None:
+        questID = quest.getID()
+        quests = eventsCache.getQuests()
+        groupContent = group.getGroupContent(quests)
+        sortedQuests = sorted(groupContent, key=operator.methodcaller('getPriority'), reverse=True)
+        for idx, _quest in enumerate(sortedQuests):
+            if _quest.getID() == questID:
+                if idx != 0:
+                    return sortedQuests[idx - 1]
+
+    return
+
+
+def secretEventMissionsSortFunc(a, b):
+    return cmp(a.getPriority(), b.getPriority())

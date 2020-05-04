@@ -47,8 +47,8 @@ def xp():
     return _getIcon('xp')
 
 
-def credits():
-    return _getIcon(Currency.CREDITS)
+def credits(hspace=None, vspace=None):
+    return _getIcon(Currency.CREDITS, hspace=hspace, vspace=vspace)
 
 
 def creditsBig():

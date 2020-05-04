@@ -42,6 +42,7 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.sounds import ISoundsController
 from skeletons.gui.event_boards_controllers import IEventBoardController
+from skeletons.gui.game_event_controller import IGameEventController
 from skeletons.helpers.statistics import IStatisticsCollector
 try:
     from gui import mods
@@ -71,11 +72,13 @@ class ServicesLocator(object):
     hangarSpace = dependency.descriptor(IHangarSpace)
     rareAchievesCache = dependency.descriptor(IRaresCache)
     appLoader = dependency.descriptor(IAppLoader)
+    gameEventController = dependency.descriptor(IGameEventController)
 
     @classmethod
     def clear(cls):
         cls.itemsCache.clear()
         cls.goodiesCache.clear()
+        cls.gameEventController.clear()
         cls.eventsCache.clear()
         cls.lobbyContext.clear()
 
@@ -95,6 +98,7 @@ def onAccountShowGUI(ctx):
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.QUESTS_SYNC)
     ServicesLocator.eventsCache.start()
     yield ServicesLocator.eventsCache.update()
+    ServicesLocator.gameEventController.start()
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.USER_SERVER_SETTINGS_SYNC)
     yield ServicesLocator.settingsCache.update()
     if not ServicesLocator.itemsCache.isSynced():
@@ -146,6 +150,7 @@ def onAccountBecomeNonPlayer():
     ServicesLocator.hangarSpace.destroy()
     g_prbLoader.onAccountBecomeNonPlayer()
     ServicesLocator.gameState.onAccountBecomeNonPlayer()
+    ServicesLocator.gameEventController.stop()
     guiModsSendEvent('onAccountBecomeNonPlayer')
     UsersInfoHelper.clear()
     g_blueprintGenerator.fini()
@@ -158,6 +163,7 @@ def onAvatarBecomePlayer():
     ServicesLocator.settingsCore.serverSettings.applySettings()
     ServicesLocator.soundCtrl.stop()
     ServicesLocator.webCtrl.stop(logout=False)
+    ServicesLocator.gameEventController.stop()
     ServicesLocator.eventsCache.stop()
     g_prbLoader.onAvatarBecomePlayer()
     ServicesLocator.gameState.onAvatarBecomePlayer()

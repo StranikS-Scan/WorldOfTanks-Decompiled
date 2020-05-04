@@ -167,8 +167,10 @@ def getStylePurchaseItems(styleInfo, buyMore=False):
     return purchaseItems
 
 
-def getItemInventoryCount(item, outfitsInfo=None):
-    inventoryCount = item.fullInventoryCount(g_currentVehicle.item)
+def getItemInventoryCount(item, outfitsInfo=None, vehicle=None):
+    if vehicle is None:
+        vehicle = g_currentVehicle.item
+    inventoryCount = item.fullInventoryCount(vehicle)
     if outfitsInfo is not None:
         intCD = item.intCD
         for outfitCompare in outfitsInfo.itervalues():

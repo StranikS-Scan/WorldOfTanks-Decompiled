@@ -1,0 +1,22 @@
+<AttackBomber.def>
+  <Parent>	AnimatedScene	</Parent>
+  <Properties>
+    <avatarID>
+      <Type>	INT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </avatarID>
+    <equipmentID>
+      <Type>	INT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </equipmentID>
+    <delay>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </delay>
+  </Properties>
+  <ClientMethods>
+    <playEffect>
+      <Arg>	VECTOR3	</Arg>
+    </playEffect>
+  </ClientMethods>
+</AttackBomber.def>

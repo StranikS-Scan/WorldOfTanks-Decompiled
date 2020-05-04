@@ -68,5 +68,9 @@ class PlayerBootcampAccount(PlayerAccount):
         self.isInBootcampQueue = True
         events.onBootcampEnqueued(number, queueLen, avgWaitingTime)
 
+    def _initTimeCorrection(self, ctx):
+        if 'serverUTC' in ctx:
+            super(PlayerBootcampAccount, self)._initTimeCorrection(ctx['serverUTC'])
+
 
 BootcampAccount = PlayerBootcampAccount

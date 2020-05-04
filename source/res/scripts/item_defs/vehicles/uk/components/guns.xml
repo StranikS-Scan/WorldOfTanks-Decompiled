@@ -104,6 +104,9 @@
     <_4.5inch_SPG_Howitzer_IGR>	60004	</_4.5inch_SPG_Howitzer_IGR>
     <_20pdr_AT_Gun_Type_B_IGR>	60005	</_20pdr_AT_Gun_Type_B_IGR>
     <_120mm_Gun_L1A1_IGR>	60006	</_120mm_Gun_L1A1_IGR>
+    <_75mm_Gun_Vickers_HV_SE20_Gen_5_Lvl_1>	8	</_75mm_Gun_Vickers_HV_SE20_Gen_5_Lvl_1>
+    <_75mm_Gun_Vickers_HV_SE20_Gen_5_Lvl_2>	23	</_75mm_Gun_Vickers_HV_SE20_Gen_5_Lvl_2>
+    <OQF_77mm_Gun_MkII_SE20_Gen_5_Lvl_3>	24	</OQF_77mm_Gun_MkII_SE20_Gen_5_Lvl_3>
   </ids>
   <shared>
     <_12.7mm_MG_HB_M2>
@@ -5905,5 +5908,137 @@
         </_75mm_L40_HE>
       </shots>
     </_75mm_HV_L40>
+    <_75mm_Gun_Vickers_HV_SE20_Gen_5_Lvl_1>
+      <userString>	#gb_vehicles:_75mm_Gun_Vickers_HV_SE20_Gen_5_Lvl_1	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	50000	</price>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.36	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium_mb	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	40.25	</rotationSpeed>
+      <reloadTime>	4	</reloadTime>
+      <maxAmmo>	70	</maxAmmo>
+      <aimingTime>	2.3	</aimingTime>
+      <weight>	591	</weight>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	65	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.36	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_75mm_AP_HV_Mk1_SE20_Gen_5_Lvl_1>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	785	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	115 115	</piercingPower>
+        </_75mm_AP_HV_Mk1_SE20_Gen_5_Lvl_1>
+      </shots>
+      <notInShop>	True	</notInShop>
+    </_75mm_Gun_Vickers_HV_SE20_Gen_5_Lvl_1>
+    <_75mm_Gun_Vickers_HV_SE20_Gen_5_Lvl_2>
+      <userString>	#gb_vehicles:_75mm_Gun_Vickers_HV_SE20_Gen_5_Lvl_2	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	50000	</price>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.36	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium_mb	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	40.25	</rotationSpeed>
+      <reloadTime>	4	</reloadTime>
+      <maxAmmo>	70	</maxAmmo>
+      <aimingTime>	2.3	</aimingTime>
+      <weight>	591	</weight>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	65	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.36	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_75mm_AP_HV_Mk1_SE20_Gen_5_Lvl_2>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	785	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	125 125	</piercingPower>
+        </_75mm_AP_HV_Mk1_SE20_Gen_5_Lvl_2>
+      </shots>
+      <notInShop>	True	</notInShop>
+    </_75mm_Gun_Vickers_HV_SE20_Gen_5_Lvl_2>
+    <OQF_77mm_Gun_MkII_SE20_Gen_5_Lvl_3>
+      <userString>	#gb_vehicles:OQF_77mm_Gun_MkII_SE20_Gen_5_Lvl_3	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	63000	</price>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.36	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium_mb	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	40.25	</rotationSpeed>
+      <reloadTime>	4.22857142857143	</reloadTime>
+      <maxAmmo>	70	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	681	</weight>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	65	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.434285714285714	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_77mm_APCBC_Mk8T_SE20_Gen_5_Lvl_3>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	785	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	150 150	</piercingPower>
+        </_77mm_APCBC_Mk8T_SE20_Gen_5_Lvl_3>
+      </shots>
+      <notInShop>	True	</notInShop>
+    </OQF_77mm_Gun_MkII_SE20_Gen_5_Lvl_3>
   </shared>
 </guns.xml>

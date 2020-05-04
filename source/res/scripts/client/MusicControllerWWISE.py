@@ -1,14 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/MusicControllerWWISE.py
+from typing import Set, Any
 import WWISE
 import BigWorld
 import ResMgr
 from PlayerEvents import g_playerEvents
 from constants import ARENA_PERIOD
 from helpers import isPlayerAvatar
+from ids_generators import SequenceIDGenerator
 from items import _xml
 from helpers import dependency
 from skeletons.gui.game_control import ISpecialSoundCtrl
+from skeletons.gui.app_loader import GuiGlobalSpaceID
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.battle_session import IBattleSessionProvider
 MUSIC_EVENT_NONE = 0
 MUSIC_EVENT_LOBBY = 2
 MUSIC_EVENT_COMBAT = 3
@@ -99,67 +104,181 @@ def play(eventId=None):
     return
 
 
+class _LoadingVoiceoverHelper(object):
+    BEFORE = 'before'
+    AFTER = 'after'
+    VOICEOVERS_BEFORE_COUNT = 3
+    VOICEOVERS_AFTER_COUNT = 3
+    settingsCore = dependency.descriptor(ISettingsCore)
+
+    def __init__(self):
+        self.__isBerlinStarted = None
+        return
+
+    def _getVoiceoverToken(self, template):
+        from account_helpers.settings_core.ServerSettingsManager import EventLoadingVoiceoversKeys
+        return EventLoadingVoiceoversKeys(template.format('', ''))
+
+    def _isBerlinStarted(self):
+        if self.__isBerlinStarted is None and isPlayerAvatar():
+            self.__isBerlinStarted = bool(BigWorld.player().arena.extraData['isBerlinStarted'])
+        return self.__isBerlinStarted
+
+    def _getCurrentIndexesRange(self):
+        coef = int(self._isBerlinStarted())
+        return (self.VOICEOVERS_BEFORE_COUNT * coef, self.VOICEOVERS_BEFORE_COUNT + self.VOICEOVERS_AFTER_COUNT * coef)
+
+    def _getPrefix(self):
+        return self.AFTER if self._isBerlinStarted() else self.BEFORE
+
+    def _getNextVoiceover(self, template):
+        minIndex, maxIndex = self._getCurrentIndexesRange()
+        token = self._getVoiceoverToken(template)
+        storedValue = self.settingsCore.serverSettings.getGameEventStorage().get(token)
+        storedValue = storedValue if storedValue is not None else 0
+        nextValue = max(storedValue, minIndex) + 1
+        if nextValue <= maxIndex:
+            self.settingsCore.serverSettings.saveInGameEventStorage({token: nextValue})
+            return template.format(self._getPrefix(), nextValue - minIndex)
+        else:
+            return
+
+    def __call__(self, template):
+        return None if template is None else self._getNextVoiceover(template)
+
+
+class _MusicEvent(object):
+    _idGen = SequenceIDGenerator()
+
+    def __init__(self, event=None, eventId=None):
+        self.__muted = False
+        self.__event = event
+        self.__eventID = eventId
+        self.__id = self._idGen.next()
+
+    def replace(self, event, eventId, unlink=True):
+        if self.__event is not None:
+            if self.__event.name != event.name:
+                if unlink:
+                    self.__event.unlink()
+            else:
+                self.__eventID = eventId
+                if not self.__event.isPlaying:
+                    self.__event.play()
+                return
+        self.__eventID = eventId
+        self.__event = event
+        self.__event.play()
+        return
+
+    def mute(self, isMute):
+        if self.__event is not None:
+            if isMute != self.__muted:
+                self.__muted = isMute
+                if self.__muted:
+                    self.__event.stop()
+                else:
+                    self.__event.play()
+        return
+
+    def param(self, paramName):
+        return self.__event.param(paramName) if self.__event is not None else None
+
+    @property
+    def ownId(self):
+        return self.__id
+
+    @property
+    def eventId(self):
+        return self.__eventID
+
+    @property
+    def wwSoundName(self):
+        return self.__event.name if self.__event is not None else None
+
+    def isPlaying(self):
+        return self.__event.isPlaying if self.__event is not None else False
+
+    def play(self):
+        if not self.isPlaying():
+            self.__event.play()
+
+    def destroy(self, force=False):
+        if self.__event is not None:
+            if force:
+                self.__event.stop(5.0)
+            else:
+                self.__event.unlink()
+            self.__event = None
+            self.__eventID = None
+        return
+
+
+class _MusicEventsContainer(object):
+
+    def __init__(self, wwSounds=None):
+        self.__wwSounds = wwSounds or []
+        musicEvents = [ _MusicEvent(wwSound) for wwSound in self.__wwSounds ]
+        self._musicEvents = {event.ownId:event for event in musicEvents}
+        self.__eventID = None
+        return
+
+    @property
+    def _musicEventsByWWSoundName(self):
+        return {event.wwSoundName:event for event in self._musicEvents.values()}
+
+    def replace(self, sounds, eventId, unlink=True):
+        musicEventsNames = set(self._musicEventsByWWSoundName)
+        soundsByNames = {wwSound.name:wwSound for wwSound in sounds}
+        soundsNames = set(soundsByNames)
+        toReplace = musicEventsNames & soundsNames
+        toRemove = musicEventsNames & (musicEventsNames ^ soundsNames)
+        toAdd = soundsNames & (musicEventsNames ^ soundsNames)
+        for soundName in toReplace:
+            self._musicEventsByWWSoundName[soundName].replace(soundsByNames[soundName], eventId, unlink)
+
+        for toAddName, toRemoveName in zip(toAdd, toRemove):
+            toRemove.discard(toRemoveName)
+            toAdd.discard(toAddName)
+            self._musicEventsByWWSoundName[toRemoveName].replace(soundsByNames[toAddName], eventId, unlink)
+
+        for soundName in toRemove:
+            _id = self._musicEventsByWWSoundName[soundName].ownId
+            event = self._musicEvents.pop(_id)
+            event.destroy()
+
+        for soundName in toAdd:
+            newMusicEvent = _MusicEvent(soundsByNames[soundName], eventId)
+            newMusicEvent.play()
+            self._musicEvents[newMusicEvent.ownId] = newMusicEvent
+
+    def mute(self, isMute):
+        _ = [ event.mute(isMute) for event in self._musicEvents.values() ]
+
+    @property
+    def eventId(self):
+        return self.__eventID
+
+    def isPlaying(self):
+        return any((event.isPlaying() for event in self._musicEvents.values()))
+
+    def stop(self):
+        _ = [ event.stop() for event in self._musicEvents.values() ]
+
+    def destroy(self, force=False):
+        _ = [ event.destroy(force) for event in self._musicEvents.values() ]
+
+
 class MusicController(object):
     __specialSounds = dependency.descriptor(ISpecialSoundCtrl)
-
-    class MusicEvent(object):
-
-        def __init__(self, event=None):
-            self.__muted = False
-            self.__event = event
-            self.__eventID = None
-            return
-
-        def replace(self, event, eventId, unlink=True):
-            if self.__event is not None:
-                if self.__event.name != event.name:
-                    if unlink:
-                        self.__event.unlink()
-                else:
-                    self.__eventID = eventId
-                    if not self.__event.isPlaying:
-                        self.__event.play()
-                    return
-            self.__eventID = eventId
-            self.__event = event
-            self.__event.play()
-            return
-
-        def mute(self, isMute):
-            if self.__event is not None:
-                if isMute != self.__muted:
-                    self.__muted = isMute
-                    if self.__muted:
-                        self.__event.stop()
-                    else:
-                        self.__event.play()
-            return
-
-        def param(self, paramName):
-            return self.__event.param(paramName) if self.__event is not None else None
-
-        def getEventId(self):
-            return self.__eventID
-
-        def isPlaying(self):
-            return self.__event.isPlaying if self.__event is not None else False
-
-        def destroy(self, force=False):
-            if self.__event is not None:
-                if force:
-                    self.__event.stop(5.0)
-                else:
-                    self.__event.unlink()
-                self.__event = None
-                self.__eventID = None
-            return
-
     __lastBattleResultEventName = ''
+    __lastBattleResultVOEventName = ''
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         self.__overriddenEvents = {}
-        self.__music = MusicController.MusicEvent()
-        self.__ambient = MusicController.MusicEvent()
+        self.__music = _MusicEventsContainer()
+        self.__ambient = _MusicEventsContainer()
         self.__sndEventMusic = None
         self.__soundEvents = {MUSIC_EVENT_NONE: None,
          AMBIENT_EVENT_NONE: None}
@@ -185,22 +304,19 @@ class MusicController(object):
         self.stop()
         self.__soundEvents.clear()
 
-    def play(self, eventId, params=None, checkIsPlaying=False):
+    def play(self, eventId, params=None, checkIsPlaying=False, extraData=None):
         if eventId is None:
             return
         else:
-            newSoundEvent = self.__getEvent(eventId)
-            if newSoundEvent is None:
+            spaceID = extraData.get('spaceID', None) if extraData else None
+            newSoundEvents = self.__getEvent(eventId, spaceID)
+            if not newSoundEvents:
                 return
-            if eventId < AMBIENT_EVENT_NONE:
-                eventSnd = self.__music
-                unlink = True
-            else:
-                eventSnd = self.__ambient
-                unlink = False
+            eventSnd = self._getSoundEventById(eventId)
+            unlink = bool(eventId < AMBIENT_EVENT_NONE)
             if checkIsPlaying and eventSnd.isPlaying():
                 return
-            eventSnd.replace(newSoundEvent, eventId, unlink)
+            eventSnd.replace(newSoundEvents, eventId, unlink)
             if params is not None:
                 for paramName, paramValue in params.iteritems():
                     self.setEventParam(paramName, paramValue)
@@ -218,10 +334,9 @@ class MusicController(object):
         self.stopMusic()
 
     def stopEvent(self, eventId):
-        e = self.__getEvent(eventId)
-        if e is not None:
+        events = self.__getEvent(eventId)
+        for e in events:
             e.stop()
-        return
 
     def muteMusic(self, isMute):
         self.__music.mute(isMute)
@@ -244,23 +359,23 @@ class MusicController(object):
     def setAccountPremiumState(self, isPremium, restart=False):
         wasPremiumAccount = self.__isPremiumAccount
         self.__isPremiumAccount = isPremium
-        musicEventId = self.__music.getEventId()
+        musicEventId = self.__music.eventId
         if restart and self.__isPremiumAccount != wasPremiumAccount and musicEventId == MUSIC_EVENT_LOBBY:
             self.play(musicEventId)
-            self.play(self.__ambient.getEventId())
+            self.play(self.__ambient.eventId)
 
-    def __getEvent(self, eventId):
-        soundEvent = None
+    def __getEvent(self, eventId, spaceID=None):
+        soundEvents = []
         if eventId in _ARENA_EVENTS or eventId in _BATTLE_RESULT_MUSIC_EVENTS:
-            soundEvent = self.__getArenaSoundEvent(eventId)
-        if soundEvent is None:
+            soundEvents = self.__getArenaSoundEvents(eventId, spaceID)
+        if not soundEvents:
             soundEvent = self.__soundEvents.get(eventId)
             if soundEvent is not None:
                 if isinstance(soundEvent, list):
                     isPremium = self.__isPremiumAccount
                     idx = 1 if isPremium and len(soundEvent) > 1 else 0
-                    soundEvent = soundEvent[idx]
-        return soundEvent
+                    soundEvents = [soundEvent[idx]]
+        return soundEvents
 
     def __onArenaStateChanged(self, *args):
         if self._skipArenaChanges:
@@ -279,6 +394,7 @@ class MusicController(object):
                 wwSetup = self.__specialSounds.arenaMusicSetup
                 self.stopAmbient()
                 MusicController.__lastBattleResultEventName = ''
+                MusicController.__lastBattleResultVOEventName = ''
                 if wwSetup is not None:
                     import SoundGroups
                     SoundGroups.g_instance.playSound2D(wwSetup.get('wwmusicEndbattleStop', ''))
@@ -286,13 +402,18 @@ class MusicController(object):
                 if winnerTeam == BigWorld.player().team:
                     if wwSetup is not None:
                         MusicController.__lastBattleResultEventName = wwSetup.get('wwmusicResultWin', '')
+                        MusicController.__lastBattleResultVOEventName = wwSetup.get('wwmusicVoResultWin', '')
                 elif winnerTeam == 0:
                     if wwSetup is not None:
                         MusicController.__lastBattleResultEventName = wwSetup.get('wwmusicResultDrawn', '')
+                        MusicController.__lastBattleResultVOEventName = wwSetup.get('wwmusicVoiceoverResultDrawn', '')
                 elif wwSetup is not None:
                     MusicController.__lastBattleResultEventName = wwSetup.get('wwmusicResultDefeat', '')
+                    MusicController.__lastBattleResultVOEventName = wwSetup.get('wwmusicVoResultDefeat', '')
+                elif hasattr(arena.arenaType, 'battleLoseMusic'):
+                    MusicController.__lastBattleResultEventName = arena.arenaType.battleLoseMusic
                 else:
-                    MusicController.__lastBattleResultEventName = arena.arenaType.battleLoseMusic if hasattr(arena.arenaType, 'battleLoseMusic') else ''
+                    MusicController.__lastBattleResultEventName = ''
             return
 
     def __onArenaVehicleKilled(self, *args):
@@ -300,28 +421,38 @@ class MusicController(object):
             WWISE.WW_eventGlobal(_ON_VEHICLE_KILLED_EVENT)
             self.__vehicleKilled = True
 
-    def __getArenaSoundEvent(self, eventId):
+    def __getArenaSoundEvents(self, eventId, spaceID=None):
         soundEventName = None
+        voiceoverEventName = None
         if eventId in _BATTLE_RESULT_MUSIC_EVENTS:
             soundEventName = MusicController.__lastBattleResultEventName
+            voiceoverEventName = MusicController.__lastBattleResultVOEventName
         else:
             player = BigWorld.player()
             if not isPlayerAvatar():
-                return
+                return []
             if player.arena is None:
-                return
+                return []
             arenaType = player.arena.arenaType
             if eventId == MUSIC_EVENT_COMBAT_LOADING:
                 wwmusicSetup = self.__specialSounds.arenaMusicSetup
                 if wwmusicSetup is not None:
                     soundEventName = wwmusicSetup.get('wwmusicLoading')
+                    voiceoverEventName = None
+                    if spaceID == GuiGlobalSpaceID.BATTLE_LOADING:
+                        voiceoverEventName = _LoadingVoiceoverHelper()(arenaType.wwmusicSetup.get('wwmusicLoadingVoiceover', None))
             elif eventId == AMBIENT_EVENT_COMBAT:
                 soundEventName = arenaType.ambientSound
+        soundNames = []
         if soundEventName:
+            soundNames.append(soundEventName)
+        if voiceoverEventName:
+            soundNames.append(voiceoverEventName)
+        if soundNames:
             import SoundGroups
-            return SoundGroups.g_instance.getSound2D(soundEventName)
+            return [ SoundGroups.g_instance.getSound2D(soundName) for soundName in soundNames ]
         else:
-            return
+            return []
 
     def __loadConfig(self):
         eventNames = {}
@@ -394,16 +525,16 @@ class MusicController(object):
 
     def isPlaying(self, soundEventID):
         soundEvent = self._getSoundEventById(soundEventID)
-        return soundEvent.getEventId() == soundEventID and soundEvent.isPlaying()
+        return soundEvent.eventId == soundEventID and soundEvent.isPlaying()
 
     def isCompleted(self, soundEventID):
         soundEvent = self._getSoundEventById(soundEventID)
-        return soundEvent.getEventId() == soundEventID and not soundEvent.isPlaying()
+        return soundEvent.eventId == soundEventID and not soundEvent.isPlaying()
 
     def __reloadSounds(self):
         self.__loadConfig()
-        self.play(self.__music.getEventId())
-        self.play(self.__ambient.getEventId())
+        self.play(self.__music.eventId)
+        self.play(self.__ambient.eventId)
 
     def __onEventNotificationsChanged(self, notificationsDiff):
         hasChanges = False
@@ -472,11 +603,11 @@ class MusicController(object):
 
     def unloadServerSounds(self, isDisconnect=False):
         if isDisconnect:
-            self.__ambient = MusicController.MusicEvent()
+            self.__ambient = _MusicEventsContainer()
         self.__eraseOverridden(_SERVER_OVERRIDDEN)
         self.__loadConfig()
-        self.play(self.__music.getEventId())
-        self.play(self.__ambient.getEventId())
+        self.play(self.__music.eventId)
+        self.play(self.__ambient.eventId)
 
     def __eraseOverridden(self, index):
         for eventId, _ in self.__overriddenEvents.iteritems():

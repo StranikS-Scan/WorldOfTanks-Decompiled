@@ -3,6 +3,7 @@
 import ArenaType
 from adisp import process
 from constants import PREBATTLE_MAX_OBSERVERS_IN_TEAM, OBSERVERS_BONUS_TYPES
+from gui.Scaleform.daapi.view.lobby.lobby_vehicle_marker_view import LOBBY_TYPE
 from gui.Scaleform.settings import ICONS_SIZES
 from helpers import dependency
 from gui.Scaleform.framework import ViewTypes
@@ -88,6 +89,7 @@ class TrainingsListBase(LobbySubView, TrainingFormMeta, ILegacyListener):
         self.startPrbListening()
         self.__setViewData()
         self.sendData([], 0)
+        self._onPopulateEnd()
 
     def _dispose(self):
         if Waiting.isOpened('Flash'):
@@ -97,6 +99,9 @@ class TrainingsListBase(LobbySubView, TrainingFormMeta, ILegacyListener):
 
     def _getViewData(self):
         raise NotImplementedError('Data should be implemented. Must be overridden in subclass')
+
+    def _onPopulateEnd(self):
+        self.fireEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.LOBBY_TYPE_CHANGED, ctx={'lobbyType': LOBBY_TYPE.TRAINING_ROOM}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     @process
     def _createTrainingRoom(self, event):

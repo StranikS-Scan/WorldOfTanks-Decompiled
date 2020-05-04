@@ -10,15 +10,16 @@ from gui.battle_results.reusable import shared
 from helpers.bots import preprocessBotName
 
 class CommonInfo(shared.UnpackedInfo):
-    __slots__ = ('__arenaTypeID', '__winnerTeam', '__finishReason', '__arenaVisitor', '__bots', '__extCommon')
+    __slots__ = ('__arenaTypeID', '__winnerTeam', '__finishReason', '__arenaVisitor', '__bots', '__extCommon', '__arenaCreateTime')
 
-    def __init__(self, arenaTypeID=0, guiType=ARENA_GUI_TYPE.UNKNOWN, bonusType=ARENA_BONUS_TYPE.UNKNOWN, winnerTeam=0, finishReason=FINISH_REASON.UNKNOWN, bots=None, **kwargs):
+    def __init__(self, arenaTypeID=0, guiType=ARENA_GUI_TYPE.UNKNOWN, bonusType=ARENA_BONUS_TYPE.UNKNOWN, winnerTeam=0, finishReason=FINISH_REASON.UNKNOWN, bots=None, arenaCreateTime=0, **kwargs):
         super(CommonInfo, self).__init__()
         self.__arenaTypeID = arenaTypeID
         self.__winnerTeam = winnerTeam
         self.__finishReason = finishReason
         self.__bots = defaultdict()
         self.__extCommon = kwargs.get('extCommon', {})
+        self.__arenaCreateTime = arenaCreateTime
         if bots is not None:
             for info in bots.iteritems():
                 if len(info) > 1:
@@ -73,6 +74,10 @@ class CommonInfo(shared.UnpackedInfo):
     @property
     def extCommon(self):
         return self.__extCommon
+
+    @property
+    def arenaCreateTime(self):
+        return self.__arenaCreateTime
 
     def isSquadSupported(self):
         return self.__arenaVisitor.bonus.isSquadSupported()

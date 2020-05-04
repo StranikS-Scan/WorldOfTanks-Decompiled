@@ -12,9 +12,10 @@ from gui.battle_control.battle_constants import makeExtraName, VEHICLE_COMPLEX_I
 from gui.battle_control.controllers.interfaces import IBattleController
 from gui.shared.utils.MethodsRules import MethodsRules
 from gui.shared.utils.decorators import ReprInjector
-from helpers import i18n
+from helpers import i18n, dependency
 from items import vehicles, EQUIPMENT_TYPES
 from shared_utils import findFirst, forEach
+from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
 _ActivationError = namedtuple('_ActivationError', 'key ctx')
 
@@ -49,20 +50,51 @@ class EquipmentSound(object):
 
     @staticmethod
     def playSound(ID):
-        soundName = EquipmentSound._soundMap.get(ID, None)
+        soundName = None
+        if ID in EquipmentSound._soundMap:
+            soundName = EquipmentSound._soundMap[ID]
         if soundName is not None:
             SoundGroups.g_instance.playSound2D(soundName)
         return
 
     @staticmethod
     def playReady(item):
-        if item.requiresSoundNotification:
-            equipment = vehicles.g_cache.equipments()[item.getEquipmentID()]
-            if equipment is not None:
-                if equipment.soundNotification is not None:
-                    avatar_getter.getSoundNotifications().play(equipment.soundNotification)
-                    return
+        if item.requiresSoundNotification and not getattr(item.getDescriptor(), 'soundConfiguration', False):
             avatar_getter.getSoundNotifications().play('combat_reserve')
+
+    @classmethod
+    def onUIEvent(cls, soundConfiguration, event, result):
+        soundConfig = soundConfiguration['uiEvents'].get((event, result))
+        if soundConfig is not None:
+            cls.__playSoundFeedback(soundConfig)
+        return
+
+    @classmethod
+    def onEquipmentStageChange(cls, soundConfiguration, prevStage, newStage):
+        if prevStage == newStage:
+            return
+        else:
+            for (pState, nState), soundConfig in soundConfiguration['stageChanges'].iteritems():
+                if (pState is None or pState == prevStage) and (nState is None or nState == newStage):
+                    cls.__playSoundFeedback(soundConfig)
+
+            return
+
+    @classmethod
+    def __playSoundFeedback(cls, soundFeedbackInfo):
+        notifications = soundFeedbackInfo.get('notification')
+        if notifications is not None:
+            soundNotifications = avatar_getter.getSoundNotifications()
+            if soundNotifications is not None:
+                playerVehicleId = BigWorld.player().playerVehicleID
+                for notificationId in notifications:
+                    soundNotifications.play(notificationId, vehicleIdToBind=playerVehicleId)
+
+        wwSounds = soundFeedbackInfo.get('wwsound')
+        if wwSounds is not None:
+            for wwSoundEventId in wwSounds:
+                SoundGroups.g_instance.playSound2D(wwSoundEventId)
+
         return
 
 
@@ -147,13 +179,13 @@ class _EquipmentItem(object):
         self._soundUpdate(self._prevQuantity, quantity)
 
     def activate(self, entityName=None, avatar=None):
-        if 'avatar' in self._descriptor.tags:
+        if self.isAvatar():
             avatar_getter.activateAvatarEquipment(self.getEquipmentID(), avatar)
         else:
             avatar_getter.changeVehicleSetting(VEHICLE_SETTING.ACTIVATE_EQUIPMENT, self.getActivationCode(entityName, avatar), avatar=avatar)
 
     def deactivate(self):
-        if 'avatar' in self._descriptor.tags:
+        if self.isAvatar():
             avatar_getter.activateAvatarEquipment(self.getEquipmentID())
         else:
             avatar_getter.changeVehicleSetting(VEHICLE_SETTING.ACTIVATE_EQUIPMENT, self.getEquipmentID())
@@ -198,7 +230,8 @@ class _EquipmentItem(object):
         return self._totalTime
 
     def getMarker(self):
-        return self._descriptor.name.split('_')[0]
+        eqName = self._descriptor.name.lower().replace('arcade_', '')
+        return eqName.split('_')[0]
 
     def getEquipmentID(self):
         _, innationID = self._descriptor.id
@@ -355,10 +388,13 @@ class _OrderItem(_TriggerItem):
     def update(self, quantity, stage, timeRemaining, totalTime):
         from AvatarInputHandler import MapCaseMode
         if stage == EQUIPMENT_STAGES.PREPARING and self._stage != stage:
-            MapCaseMode.activateMapCase(self.getEquipmentID(), partial(self.deactivate))
+            MapCaseMode.activateMapCase(self.getEquipmentID(), partial(self.deactivate), self.isArcadeCamera())
         elif self._stage == EQUIPMENT_STAGES.PREPARING and self._stage != stage:
-            MapCaseMode.turnOffMapCase(self.getEquipmentID())
+            MapCaseMode.turnOffMapCase(self.getEquipmentID(), self.isArcadeCamera())
         super(_OrderItem, self).update(quantity, stage, timeRemaining, totalTime)
+
+    def isArcadeCamera(self):
+        return False
 
 
 class _ArtilleryItem(_OrderItem):
@@ -367,10 +403,28 @@ class _ArtilleryItem(_OrderItem):
         pass
 
 
+class _ArcadeArtilleryItem(_ArtilleryItem):
+
+    def isArcadeCamera(self):
+        return True
+
+
 class _BomberItem(_OrderItem):
 
     def getMarker(self):
         pass
+
+
+class _ArcadeBomberItem(_BomberItem):
+
+    def isArcadeCamera(self):
+        return True
+
+
+class _ArcadeMineFieldItem(_OrderItem):
+
+    def isArcadeCamera(self):
+        return True
 
 
 class _ReconItem(_OrderItem):
@@ -385,7 +439,113 @@ class _SmokeItem(_OrderItem):
         pass
 
 
+class EventItem(_TriggerItem):
+
+    def update(self, quantity, stage, timeRemaining, totalTime):
+        super(EventItem, self).update(quantity, stage, timeRemaining, totalTime)
+        if stage in (EQUIPMENT_STAGES.COOLDOWN, EQUIPMENT_STAGES.READY):
+            self._totalTime = self._descriptor.cooldownSeconds
+        elif stage == EQUIPMENT_STAGES.ACTIVE:
+            self._totalTime = timeRemaining
+        elif stage == EQUIPMENT_STAGES.PREPARING:
+            self._totalTime = 0
+
+
+class _EventBuffItem(EventItem):
+    pass
+
+
+class _SuperShellItem(EventItem):
+
+    def update(self, quantity, stage, timeRemaining, totalTime):
+        super(_SuperShellItem, self).update(quantity, stage, timeRemaining, totalTime)
+        if stage == EQUIPMENT_STAGES.READY:
+            self._timeRemaining = 0
+            self._totalTime = totalTime
+        if stage == EQUIPMENT_STAGES.ACTIVE:
+            self._timeRemaining = -1
+            self._totalTime = totalTime
+
+
+class _HpRepairAndCrewHeal(EventItem):
+
+    def canActivate(self, entityName=None, avatar=None):
+        avatar = avatar or BigWorld.player()
+        result, error = super(_HpRepairAndCrewHeal, self).canActivate(entityName, avatar)
+        if not result:
+            return (result, error)
+        elif avatar_getter.isVehicleInFire(avatar):
+            return (True, None)
+        else:
+            vehTypeDescr = avatar_getter.getVehicleTypeDescriptor(avatar)
+            vehicle = avatar.vehicle
+            if vehTypeDescr.maxHealth > vehicle.health:
+                return (True, None)
+            deviceStates = avatar_getter.getVehicleDeviceStates(avatar)
+            for item in self._getDevicesIterator():
+                if item[0] in deviceStates:
+                    isEntityNotRequired = not self.isEntityRequired()
+                    return (isEntityNotRequired, None if isEntityNotRequired else NeedEntitySelection('', None))
+
+            result, error = self._checkCrew(avatar)
+            return (result, error) if result else (False, _ActivationError('hpRepairAndCrewHeal', {'name': self._descriptor.userString}))
+
+    def _checkCrew(self, avatar):
+        result = False
+        error = None
+        deviceStates = avatar_getter.getVehicleDeviceStates(avatar)
+        for item in self._getCrewIterator():
+            if item[0] in deviceStates:
+                isEntityNotRequired = not self.isEntityRequired()
+                result = isEntityNotRequired
+                error = None if isEntityNotRequired else NeedEntitySelection('', None)
+                break
+
+        return (True, IgnoreEntitySelection('', None)) if not result and type(error) not in (NeedEntitySelection, NotApplyingError) and avatar_getter.isVehicleStunned() and self.isReusable else (False, None)
+
+    @staticmethod
+    def _getCrewIterator(avatar=None):
+        return vehicle_getter.TankmenStatesIterator(avatar_getter.getVehicleDeviceStates(avatar), avatar_getter.getVehicleTypeDescriptor(avatar))
+
+    @staticmethod
+    def _getDevicesIterator(avatar=None):
+        return vehicle_getter.VehicleDeviceStatesIterator(avatar_getter.getVehicleDeviceStates(avatar), avatar_getter.getVehicleTypeDescriptor(avatar))
+
+
+class _InstantReload(EventItem):
+    guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
+
+    def canActivate(self, entityName=None, avatar=None):
+        avatar = avatar or BigWorld.player()
+        result, error = super(_InstantReload, self).canActivate(entityName, avatar)
+        if not result:
+            return (result, error)
+        else:
+            ammoCtrl = self.guiSessionProvider.shared.ammo
+            quantity, quantityInClip = ammoCtrl.getCurrentShells()
+            if not quantity:
+                return (False, None)
+            isGunReload = ammoCtrl.isGunReloading()
+            if isGunReload:
+                return (True, None)
+            if ammoCtrl.getGunSettings().isCassetteClip():
+                clipCapacity = ammoCtrl.getClipCapacity()
+                if clipCapacity > quantity:
+                    return (False, None)
+                if clipCapacity > quantityInClip:
+                    return (True, None)
+            return (False, _ActivationError('instantReload', {'name': self._descriptor.userString}))
+
+
 def _triggerItemFactory(descriptor, quantity, stage, timeRemaining, totalTime, tag=None):
+    if descriptor.name.startswith('arcade_artillery'):
+        return _ArcadeArtilleryItem(descriptor, quantity, stage, timeRemaining, totalTime, tag)
+    if descriptor.name.startswith('arcade_bomber'):
+        return _ArcadeBomberItem(descriptor, quantity, stage, timeRemaining, totalTime, tag)
+    if descriptor.name.startswith('arcade_action'):
+        return _ArcadeArtilleryItem(descriptor, quantity, stage, timeRemaining, totalTime, tag)
+    if descriptor.name.startswith('arcade_minefield'):
+        return _ArcadeMineFieldItem(descriptor, quantity, stage, timeRemaining, totalTime, tag)
     if descriptor.name.startswith('artillery'):
         return _ArtilleryItem(descriptor, quantity, stage, timeRemaining, totalTime, tag)
     if descriptor.name.startswith('bomber'):
@@ -400,7 +560,13 @@ _EQUIPMENT_TAG_TO_ITEM = {'fuel': _AutoItem,
  'trigger': _triggerItemFactory,
  'extinguisher': _ExtinguisherItem,
  'medkit': _MedKitItem,
- 'repairkit': _RepairKitItem}
+ 'repairkit': _RepairKitItem,
+ 'resurrect': _AutoItem,
+ 'eventItem': EventItem,
+ 'eventBuff': _EventBuffItem,
+ 'hpRepairAndCrewHeal': _HpRepairAndCrewHeal,
+ 'instantReload': _InstantReload,
+ 'superShell': _SuperShellItem}
 
 def _getSupportedTag(descriptor):
     keys = set(_EQUIPMENT_TAG_TO_ITEM.keys()) & descriptor.tags
@@ -500,6 +666,9 @@ class EquipmentsController(MethodsRules, IBattleController):
             item = self._equipments[intCD]
             item.update(quantity, stage, timeRemaining, totalTime)
             self.onEquipmentUpdated(intCD, item)
+            descriptor = item.getDescriptor()
+            if hasattr(descriptor, 'soundConfiguration'):
+                EquipmentSound.onEquipmentStageChange(descriptor.soundConfiguration, item.getPrevStage(), item.getStage())
         else:
             descriptor = vehicles.getItemByCompactDescr(intCD)
             if descriptor.equipmentType in (EQUIPMENT_TYPES.regular, EQUIPMENT_TYPES.battleAbilities):
@@ -559,6 +728,9 @@ class EquipmentsController(MethodsRules, IBattleController):
 
     def __doChangeSetting(self, item, entityName=None, avatar=None):
         result, error = item.canActivate(entityName, avatar)
+        descriptor = item.getDescriptor()
+        if hasattr(descriptor, 'soundConfiguration'):
+            EquipmentSound.onUIEvent(descriptor.soundConfiguration, 'activation', 'success' if result else 'failure')
         if result and avatar_getter.isPlayerOnArena(avatar):
             if item.getStage() == EQUIPMENT_STAGES.PREPARING:
                 item.deactivate()
@@ -655,6 +827,12 @@ class _ReplaySmokeItem(_ReplayOrderItem):
 
 
 def _replayTriggerItemFactory(descriptor, quantity, stage, timeRemaining, totalTime, tag=None):
+    if descriptor.name.startswith('arcade_artillery'):
+        return _ReplayArtilleryItem(descriptor, quantity, stage, timeRemaining, totalTime, tag)
+    if descriptor.name.startswith('arcade_bomber'):
+        return _ReplayBomberItem(descriptor, quantity, stage, timeRemaining, totalTime, tag)
+    if descriptor.name.startswith('arcade_minefield'):
+        return _ReplayOrderItem(descriptor, quantity, stage, timeRemaining, totalTime, tag)
     if descriptor.name.startswith('artillery'):
         return _ReplayArtilleryItem(descriptor, quantity, stage, timeRemaining, totalTime, tag)
     if descriptor.name.startswith('bomber'):
@@ -669,7 +847,13 @@ _REPLAY_EQUIPMENT_TAG_TO_ITEM = {'fuel': _ReplayItem,
  'trigger': _replayTriggerItemFactory,
  'extinguisher': _ReplayItem,
  'medkit': _ReplayMedKitItem,
- 'repairkit': _ReplayRepairKitItem}
+ 'repairkit': _ReplayRepairKitItem,
+ 'resurrect': _ReplayItem,
+ 'eventItem': _ReplayItem,
+ 'eventBuff': _ReplayItem,
+ 'hpRepairAndCrewHeal': _ReplayItem,
+ 'instantReload': _ReplayItem,
+ 'superShell': _ReplayItem}
 
 class EquipmentsReplayPlayer(EquipmentsController):
     __slots__ = ('__callbackID', '__callbackTimeID', '__percentGetters', '__percents', '__timeGetters', '__times')

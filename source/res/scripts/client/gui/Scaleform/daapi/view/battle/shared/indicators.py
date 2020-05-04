@@ -3,6 +3,7 @@
 import BigWorld
 import GUI
 import SoundGroups
+import math_utils
 from account_helpers.settings_core.settings_constants import SOUND, DAMAGE_INDICATOR, GRAPHICS
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE
 from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV
@@ -178,11 +179,15 @@ class _ExtendedMarkerVOBuilder(_MarkerVOBuilder):
 
     def buildVO(self, markerData):
         vo = super(_ExtendedMarkerVOBuilder, self).buildVO(markerData)
+        vehicleID = markerData.hitData.getAttackerID()
+        player = BigWorld.player()
+        botMarkerType = player.getBotMarkerType(vehicleID)
         vo.update({'circleStr': self._getCircleBackground(markerData),
          'tankTypeStr': self._getTankType(markerData),
          'tankName': markerData.hitData.getAttackerVehicleName(),
          'damageValue': self._getDamageLabel(markerData),
-         'isFriendlyFire': markerData.hitData.isFriendlyFire()})
+         'isFriendlyFire': markerData.hitData.isFriendlyFire(),
+         'botMarkerType': botMarkerType})
         return vo
 
     def _getBackground(self, markerData):
@@ -303,8 +308,8 @@ class DamageIndicatorMeta(Flash):
     def as_showStandardS(self, itemIdx, bgStr, frame):
         return self._as_showStandard(itemIdx, bgStr, frame)
 
-    def as_showExtendedS(self, itemIdx, bgStr, circleStr, frame, tankName, tankTypeStr, damageValue, isFriendlyFire):
-        return self._as_showExtended(itemIdx, bgStr, circleStr, frame, tankName, tankTypeStr, damageValue, isFriendlyFire)
+    def as_showExtendedS(self, itemIdx, bgStr, circleStr, frame, tankName, tankTypeStr, damageValue, isFriendlyFire, botMarkerType):
+        return self._as_showExtended(itemIdx, bgStr, circleStr, frame, tankName, tankTypeStr, damageValue, isFriendlyFire, botMarkerType)
 
     def as_hideS(self, itemIdx):
         return self._as_hide(itemIdx)
@@ -675,8 +680,12 @@ class IDirectionIndicator(object):
     def remove(self):
         pass
 
+    def setBlinking(self, speed, isShow):
+        pass
+
 
 class _DirectionIndicator(Flash, IDirectionIndicator):
+    _settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, swf):
         super(_DirectionIndicator, self).__init__(swf, _DIRECT_INDICATOR_COMPONENT, (_DIRECT_INDICATOR_MC_NAME,))
@@ -692,6 +701,8 @@ class _DirectionIndicator(Flash, IDirectionIndicator):
         self.__isVisible = True
         self.component.relativeRadius = 0.5
         self._dObject = getattr(self.movie, _DIRECT_INDICATOR_MC_NAME, None)
+        self.__setIndicatorScale()
+        self._settingsCore.interfaceScale.onScaleChanged += self.__setIndicatorScale
         return
 
     def __del__(self):
@@ -715,6 +726,7 @@ class _DirectionIndicator(Flash, IDirectionIndicator):
         self.component.position3D = position
 
     def remove(self):
+        self._settingsCore.interfaceScale.onScaleChanged -= self.__setIndicatorScale
         self._dObject = None
         self.close()
         return
@@ -723,6 +735,16 @@ class _DirectionIndicator(Flash, IDirectionIndicator):
         if not self.__isVisible == isVisible:
             self.__isVisible = isVisible
             self.component.visible = isVisible
+
+    def setBlinking(self, speed, isShow):
+        if self._dObject:
+            self._dObject.setBlinking(isShow, speed)
+
+    def __setIndicatorScale(self, scale=None):
+        if scale is None:
+            scale = self._settingsCore.interfaceScale.get()
+        self.component.indicatorScale = math_utils.clamp(1.0, 2.0, round(scale, 1))
+        return
 
 
 class _DirectionIndicatorMessage(_DirectionIndicator):

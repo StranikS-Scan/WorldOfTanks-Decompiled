@@ -88,6 +88,7 @@ class _PlayerEvents(object):
         self.onGuiCacheSyncCompleted = Event.Event()
         self.onPMLocksChanged = Event.Event()
         self.onDailyQuestsInfoChange = Event.Event()
+        self.onGeneralLockChanged = Event.Event()
         self.onBootcampEnqueued = Event.Event()
         self.onBootcampDequeued = Event.Event()
         self.onBootcampStartChoice = Event.Event()
@@ -100,6 +101,9 @@ class _PlayerEvents(object):
         self.onShowDevelopmentInfo = Event.Event()
         self.onEntityCheckOutEnqueued = Event.Event()
         self.onRoundFinished = Event.Event()
+        self.onDeathZoneActivated = Event.Event()
+        self.onDeathZoneDeactivated = Event.Event()
+        self.onVehicleChanged = Event.Event()
 
 
 g_playerEvents = _PlayerEvents()

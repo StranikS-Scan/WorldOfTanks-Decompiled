@@ -30,7 +30,7 @@ def getViewSettings():
     return (GroupedViewSettings(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY, SendInvitesWindow, 'sendInvitesWindow.swf', ViewTypes.WINDOW, '', PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY, ScopeTemplates.DEFAULT_SCOPE, True, isCentered=False),
      GroupedViewSettings(PREBATTLE_ALIASES.AUTO_INVITE_WINDOW_PY, invite_windows.AutoInviteWindow, 'receivedInviteWindow.swf', ViewTypes.WINDOW, 'receivedInviteWindow', None, ScopeTemplates.DEFAULT_SCOPE, True, isCentered=False),
      GroupedViewSettings(PREBATTLE_ALIASES.SQUAD_WINDOW_PY, SquadWindow, 'squadWindow.swf', ViewTypes.WINDOW, '', PREBATTLE_ALIASES.SQUAD_WINDOW_PY, ScopeTemplates.DEFAULT_SCOPE, True),
-     GroupedViewSettings(PREBATTLE_ALIASES.EVENT_SQUAD_WINDOW_PY, EventSquadWindow, 'squadWindow.swf', ViewTypes.WINDOW, '', PREBATTLE_ALIASES.EVENT_SQUAD_WINDOW_PY, ScopeTemplates.DEFAULT_SCOPE, True),
+     GroupedViewSettings(PREBATTLE_ALIASES.EVENT_SQUAD_WINDOW_PY, EventSquadWindow, 'EventSquadWindow.swf', ViewTypes.WINDOW, '', PREBATTLE_ALIASES.EVENT_SQUAD_WINDOW_PY, ScopeTemplates.DEFAULT_SCOPE, True),
      GroupedViewSettings(PREBATTLE_ALIASES.EPIC_SQUAD_WINDOW_PY, EpicSquadWindow, 'squadWindow.swf', ViewTypes.WINDOW, '', PREBATTLE_ALIASES.EPIC_SQUAD_WINDOW_PY, ScopeTemplates.DEFAULT_SCOPE, True),
      GroupedViewSettings(PREBATTLE_ALIASES.BOB_SQUAD_WINDOW_PY, BobSquadWindow, 'squadWindow.swf', ViewTypes.WINDOW, '', PREBATTLE_ALIASES.BOB_SQUAD_WINDOW_PY, ScopeTemplates.DEFAULT_SCOPE, True),
      GroupedViewSettings(PREBATTLE_ALIASES.BATTLE_SESSION_ROOM_WINDOW_PY, BattleSessionWindow, 'battleSessionWindow.swf', ViewTypes.WINDOW, '', PREBATTLE_ALIASES.BATTLE_SESSION_ROOM_WINDOW_PY, ScopeTemplates.DEFAULT_SCOPE, True, isCentered=False),

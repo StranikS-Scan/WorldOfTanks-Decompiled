@@ -188,6 +188,9 @@ class CommonTankAppearance(ScriptGameObject):
 
         return prereqs
 
+    def setID(self, vID):
+        self.__vID = vID
+
     def construct(self, isPlayer, resourceRefs):
         self.collisions = resourceRefs['collisionAssembler']
         self.typeDescriptor.chassis.hitTester.bbox = self.collisions.getBoundingBox(TankPartNames.getIdx(TankPartNames.CHASSIS))

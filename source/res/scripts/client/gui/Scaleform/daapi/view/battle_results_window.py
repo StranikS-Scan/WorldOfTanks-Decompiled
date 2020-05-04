@@ -13,7 +13,6 @@ from gui.server_events import events_dispatcher as quests_events
 from gui.Scaleform.daapi.view.meta.BattleResultsMeta import BattleResultsMeta
 from gui.shared import event_bus_handlers, events, EVENT_BUS_SCOPE, g_eventBus
 from gui.shared import event_dispatcher
-from gui.shared.event_dispatcher import showProgressiveRewardWindow, showTankPremiumAboutPage
 from gui.sounds.ambients import BattleResultsEnv
 from helpers import dependency
 from skeletons.gui.battle_results import IBattleResultsService
@@ -47,6 +46,7 @@ class BattleResultsWindow(BattleResultsMeta):
     def onWindowClose(self):
         self.destroy()
 
+    @event_dispatcher.leaveEventMode
     def showEventsWindow(self, eID, eventType):
         if self.__canNavigate():
             quests_events.showMission(eID, eventType)
@@ -74,13 +74,14 @@ class BattleResultsWindow(BattleResultsMeta):
             event_dispatcher.showPersonalCase(itemID, 2, EVENT_BUS_SCOPE.LOBBY)
 
     def showProgressiveRewardView(self):
-        showProgressiveRewardWindow()
+        event_dispatcher.showProgressiveRewardWindow()
 
     def onAppliedPremiumBonus(self):
         self.__battleResults.applyAdditionalBonus(self.__arenaUniqueID)
 
+    @event_dispatcher.leaveEventMode
     def onShowDetailsPremium(self):
-        BigWorld.callback(0.0, showTankPremiumAboutPage)
+        BigWorld.callback(0.0, event_dispatcher.showTankPremiumAboutPage)
         self.destroy()
 
     def _populate(self):

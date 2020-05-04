@@ -198,6 +198,7 @@ class WaitingWorker(IWaitingWorker):
             if view:
                 view.hideWaiting()
 
+        g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.WAITING_HIDDEN), scope=EVENT_BUS_SCOPE.LOBBY)
         del self.__waitingStack[:]
 
     def rollback(self):

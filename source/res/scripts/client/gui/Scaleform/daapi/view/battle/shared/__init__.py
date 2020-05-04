@@ -25,7 +25,9 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.shared import ingame_help
     from gui.Scaleform.daapi.view.battle.shared import ingame_menu
     from gui.Scaleform.daapi.view.battle.shared import messages
-    from gui.Scaleform.daapi.view.battle.shared import radial_menu
+    from gui.Scaleform.daapi.view.battle.event.component_override import EventComponentOverride
+    from gui.Scaleform.daapi.view.battle.shared.radial_menu import RadialMenu
+    from gui.Scaleform.daapi.view.battle.event.radial_menu import EventRadialMenu
     from gui.Scaleform.daapi.view.battle.shared import battle_ticker
     from gui.Scaleform.daapi.view.dialogs import deserter_dialog
     from gui.Scaleform.daapi.view.battle.shared import postmortem_panel
@@ -43,7 +45,7 @@ def getViewSettings():
      ConditionalViewSettings(BATTLE_VIEW_ALIASES.VEHICLE_MESSAGES, BootcampComponentOverride(messages.VehicleMessages, BCVehicleMessages), None, ViewTypes.COMPONENT, None, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.VEHICLE_ERROR_MESSAGES, messages.VehicleErrorMessages, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.PLAYER_MESSAGES, messages.PlayerMessages, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.RADIAL_MENU, radial_menu.RadialMenu, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ConditionalViewSettings(BATTLE_VIEW_ALIASES.RADIAL_MENU, EventComponentOverride(RadialMenu, EventRadialMenu), None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.DAMAGE_INFO_PANEL, damage_info_panel.DamageInfoPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.SIXTH_SENSE, indicators.SixthSenseIndicator, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.TICKER, battle_ticker.BattleTicker, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),

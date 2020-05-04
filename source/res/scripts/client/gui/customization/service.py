@@ -14,7 +14,7 @@ from gui.customization.shared import C11N_ITEM_TYPE_MAP, HighlightingMode, MODE_
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.gui_items import GUI_ITEM_TYPE, ItemsCollection
 from gui.shared.gui_items.customization.c11n_items import Customization, Style
-from gui.shared.gui_items.customization.outfit import Outfit, Area
+from gui.shared.gui_items.customization.outfit import Outfit
 from gui.shared.gui_items.processors.common import OutfitApplier, StyleApplier, CustomizationsBuyer, CustomizationsSeller
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.decorators import process
@@ -124,6 +124,8 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         self.onRegionHighlighted = Event.Event(self._eventsManager)
         self.onOutfitChanged = Event.Event(self._eventsManager)
         self.onCustomizationHelperRecreated = Event.Event(self._eventsManager)
+        self.onCustomizationOpened = Event.Event(self._eventsManager)
+        self.onCustomizationClosed = Event.Event(self._eventsManager)
         self.__customizationCtx = None
         self._suspendHighlighterCallbackID = None
         self._isDraggingInProcess = False
@@ -169,12 +171,14 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
             if self.__showCustomizationCallbackId is None:
                 self.__moveHangarVehicleToCustomizationRoom()
                 self.__showCustomizationCallbackId = BigWorld.callback(0.0, lambda : self.__showCustomization(loadCallback))
+            self.onCustomizationOpened()
             return
 
     def closeCustomization(self):
         if self.hangarSpace.space is not None:
             self.hangarSpace.space.turretAndGunAngles.reset()
         self.__destroyCtx()
+        self.onCustomizationClosed()
         return
 
     def getCtx(self):

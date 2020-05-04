@@ -323,7 +323,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
 
     def __updateTanksList(self):
         data = list()
-        modulesAll = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).values()
+        modulesAll = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE).values()
         modulesAll.sort()
         for module in modulesAll:
             if self.filter['nation'] != -1 and self.filter['nation'] != module.descriptor.type.id[0] or self.filter['tankType'] != 'None' and self.filter['tankType'] != -1 and self.filter['tankType'] != module.type:
@@ -359,6 +359,8 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         tankmenInBarracks = 0
         tankmenList = [_packBuyBerthsSlot()]
         for tankman in self.__sortedCachedTankmen:
+            if tankman.vehicleInvID > 0 and self.itemsCache.items.getVehicle(tankman.vehicleInvID) is not None and self.itemsCache.items.getVehicle(tankman.vehicleInvID).isOnlyForEventBattles:
+                continue
             if not tankman.isInTank:
                 tankmenInBarracks += 1
             if not criteria(tankman):

@@ -285,6 +285,8 @@ class AS3_AppFactory(IAppFactory):
             event = events.LoadViewEvent(VIEW_ALIAS.BOOTCAMP_BATTLE_PAGE)
         elif arenaGuiType in ARENA_GUI_TYPE.EPIC_RANGE:
             event = events.LoadViewEvent(VIEW_ALIAS.EPIC_BATTLE_PAGE)
+        elif arenaGuiType == ARENA_GUI_TYPE.EVENT_BATTLES:
+            event = events.LoadViewEvent(VIEW_ALIAS.EVENT_BATTLE_PAGE)
         else:
             event = events.LoadViewEvent(VIEW_ALIAS.CLASSIC_BATTLE_PAGE)
         g_eventBus.handleEvent(event, EVENT_BUS_SCOPE.BATTLE)

@@ -8,7 +8,7 @@ import WWISE
 import Event
 from shared_utils import collapseIntervals
 from gui.periodic_battles.models import PrimeTime
-from constants import ARENA_BONUS_TYPE, PREBATTLE_TYPE, QUEUE_TYPE
+from constants import ARENA_BONUS_TYPE, PREBATTLE_TYPE, QUEUE_TYPE, EPIC_PERF_GROUP
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared import event_dispatcher
 from helpers import dependency, i18n, time_utils
@@ -41,12 +41,6 @@ from gui.Scaleform.daapi.view.lobby.epicBattle.epic_cycle_helpers import getCurr
 from player_ranks import getSettings as getRankSettings
 _logger = logging.getLogger(__name__)
 _VALID_PREBATTLE_TYPES = [PREBATTLE_TYPE.EPIC, PREBATTLE_TYPE.EPIC_TRAINING]
-
-class EPIC_PERF_GROUP(object):
-    HIGH_RISK = 1
-    MEDIUM_RISK = 2
-    LOW_RISK = 3
-
 
 class EPIC_META_GAME_LIMIT_TYPE(object):
     SYSTEM_DATA = 0

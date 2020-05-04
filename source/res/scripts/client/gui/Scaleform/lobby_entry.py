@@ -33,6 +33,7 @@ from gui.shared import EVENT_BUS_SCOPE
 from helpers import dependency, uniprof
 from skeletons.gui.app_loader import GuiGlobalSpaceID
 from skeletons.gui.game_control import IBootcampController
+from gui.Scaleform.managers.fade_manager import FadeManager
 LOBBY_OPTIMIZATION_CONFIG = {VIEW_ALIAS.LOBBY_HEADER: OptimizationSetting(),
  VIEW_ALIAS.LOBBY_TECHTREE: OptimizationSetting(),
  VIEW_ALIAS.LOBBY_RESEARCH: OptimizationSetting(),
@@ -119,6 +120,9 @@ class LobbyEntry(AppEntry):
 
     def _createGraphicsOptimizationManager(self):
         return GraphicsOptimizationManager(config=LOBBY_OPTIMIZATION_CONFIG)
+
+    def _createFadeManager(self):
+        return FadeManager()
 
     def _setup(self):
         self.movie.backgroundAlpha = 0.0

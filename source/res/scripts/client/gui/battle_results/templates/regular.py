@@ -316,7 +316,7 @@ _BADGE_VO_META = base.PropertyMeta((('icon', '', 'icon'),
  ('isDynamic', False, 'isDynamic'),
  ('isAtlasSource', False, 'isAtlasSource')))
 _BADGE_VO_META.bind(vehicles.BadgeBlock)
-TEAM_ITEM_VO_META = base.PropertyMeta((('achievements', shared.AchievementsBlock(base.ListMeta(), 'achievements'), 'achievements'),
+TEAM_ITEM_VO_META_TUPLE = (('achievements', shared.AchievementsBlock(base.ListMeta(), 'achievements'), 'achievements'),
  ('medalsCount', 0, 'achievementsCount'),
  ('vehicleStateStr', '', 'vehicleState'),
  ('vehicleStatePrefixStr', '', 'vehicleStatePrefix'),
@@ -351,7 +351,8 @@ TEAM_ITEM_VO_META = base.PropertyMeta((('achievements', shared.AchievementsBlock
  ('badgeVO', vehicles.BadgeBlock(field='badgeVO'), 'badge'),
  ('playerRank', 0, 'playerRank'),
  ('respawns', 0, 'respawns'),
- ('suffixBadgeIcon', '', 'suffixBadgeIcon')))
+ ('suffixBadgeIcon', '', 'suffixBadgeIcon'))
+TEAM_ITEM_VO_META = base.PropertyMeta(TEAM_ITEM_VO_META_TUPLE)
 TEAM_ITEM_VO_META.bind(vehicles.RegularVehicleStatsBlock)
 TEAMS_VO_META = base.DictMeta({'team1': [],
  'team2': []})

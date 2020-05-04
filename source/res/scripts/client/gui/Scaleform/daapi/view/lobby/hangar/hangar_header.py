@@ -14,12 +14,14 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.event_boards.listener import IEventBoardsListener
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.marathon.marathon_event_controller import DEFAULT_MARATHON_PREFIX
 from gui.prb_control import prb_getters
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.server_events import finders
-from gui.server_events.events_dispatcher import showPersonalMission, showMissionsElen, showMissionsMarathon, showPersonalMissionOperationsPage, showPersonalMissionsOperationsMap, showMissionsCategories, showMissionsBattlePassCommonProgression
-from gui.server_events.events_helpers import isPremium, isDailyQuest
+from gui.server_events.events_dispatcher import showPersonalMission, showMissionsElen, showMissionsMarathon, showPersonalMissionOperationsPage, showPersonalMissionsOperationsMap, showMissionsCategories, showMissionsBattlePassCommonProgression, showMissionsSecretEvent
+from gui.server_events.events_helpers import isPremium, isDailyQuest, isSecretEvent
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import icons
@@ -73,7 +75,8 @@ HANGAR_HEADER_QUESTS_TO_PM_BRANCH = {value:key for key, value in QUEST_TYPE_BY_P
 FLAG_BY_QUEST_TYPE = {HANGAR_HEADER_QUESTS.QUEST_TYPE_PERSONAL_REGULAR: RES_ICONS.MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_VINOUS,
  HANGAR_HEADER_QUESTS.QUEST_TYPE_PERSONAL_PM2: RES_ICONS.MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_RED,
  HANGAR_HEADER_QUESTS.QUEST_TYPE_COMMON: RES_ICONS.MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_BLUE,
- HANGAR_HEADER_QUESTS.QUEST_TYPE_EVENT: RES_ICONS.MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_KHACKI}
+ HANGAR_HEADER_QUESTS.QUEST_TYPE_EVENT: RES_ICONS.MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_KHACKI,
+ HANGAR_HEADER_QUESTS.QUEST_TYPE_SECRET_EVENT: RES_ICONS.MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_45}
 TOOLTIPS_HANGAR_HEADER_PM = {WIDGET_PM_STATE.BRANCH_DISABLED: TOOLTIPS.HANGAR_HEADER_PERSONALMISSIONS_BRANCH_DISABLED,
  WIDGET_PM_STATE.LOW_LEVEL: TOOLTIPS.HANGAR_HEADER_PERSONALMISSIONS_LOWLEVEL,
  WIDGET_PM_STATE.MISSION_DISABLED: TOOLTIPS.HANGAR_HEADER_PERSONALMISSIONS_MISSION_DISABLED,
@@ -221,6 +224,8 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         elif HANGAR_HEADER_QUESTS.QUEST_TYPE_MARATHON in questType:
             marathonPrefix = questID or DEFAULT_MARATHON_PREFIX
             showMissionsMarathon(marathonPrefix)
+        elif questType == HANGAR_HEADER_QUESTS.QUEST_TYPE_SECRET_EVENT:
+            showMissionsSecretEvent()
 
     def onUpdateHangarFlag(self):
         self.update()
@@ -277,7 +282,9 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         if needShowHeader:
             vehicle = self._currentVehicle.item
             quests = self._getQuestsToHeaderVO(vehicle)
-            headerVO = {'isVisible': True,
+            entity = self.prbDispatcher.getEntity() if self.prbDispatcher else None
+            inEvent = entity is not None and entity.getQueueType() == constants.QUEUE_TYPE.EVENT_BATTLES
+            headerVO = {'isVisible': not inEvent,
              'quests': quests}
         else:
             headerVO = {'isVisible': False,
@@ -292,6 +299,9 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         battleQuests = self.__getBattleQuestsVO(vehicle)
         if battleQuests:
             quests.append(battleQuests)
+        eventQuests = self.__getSecretEventQuestsVO(vehicle)
+        if eventQuests:
+            quests.append(eventQuests)
         isMarathonQuestsGroupped = self.__screenWidth <= _SCREEN_WIDTH_FOR_MARATHON_GROUP
         marathonQuests = self.__getMarathonQuestsVO(vehicle, isMarathonQuestsGroupped)
         if marathonQuests:
@@ -400,21 +410,45 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             self.update()
 
     def __getBattleQuestsVO(self, vehicle):
-        quests = [ q for q in self._questController.getQuestForVehicle(vehicle) if q.getID() not in self._eventProgressionController.questIDs and not isDailyQuest(q.getID()) and not isPremium(q.getID()) ]
-        totalCount = len(quests)
-        completedQuests = len([ q for q in quests if q.isCompleted() ])
-        festivityFlagData = self._festivityController.getHangarQuestsFlagData()
-        if totalCount > 0:
-            if completedQuests != totalCount:
-                label = _ms(MENU.hangarHeaderBattleQuestsLabel(LABEL_STATE.ACTIVE), total=totalCount - completedQuests)
-            else:
-                label = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_ALL_DONE)
-            commonQuestsIcon = festivityFlagData.icon or RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_AVAILABLE
+        return self.__getQuestsVO(vehicle, showIfEmpty=True, showAlert=False, enabledIcon=RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_AVAILABLE, disabledIcon=RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_DISABLED, questType=HANGAR_HEADER_QUESTS.QUEST_TYPE_COMMON, questGroup=HANGAR_HEADER_QUESTS.QUEST_GROUP_COMMON, tooltip=TOOLTIPS_CONSTANTS.QUESTS_PREVIEW)
+
+    def __getSecretEventQuestsVO(self, vehicle):
+        return None if not self._eventsCache.isEventEnabled() else self.__getQuestsVO(vehicle, showIfEmpty=False, showAlert=True, enabledIcon=backport.image(R.images.gui.maps.icons.secretEvent.flagIcon()), disabledIcon=backport.image(R.images.gui.maps.icons.secretEvent.flagIconDisable()), questType=HANGAR_HEADER_QUESTS.QUEST_TYPE_SECRET_EVENT, questGroup=HANGAR_HEADER_QUESTS.QUEST_GROUP_SECRET_EVENT, tooltip=TOOLTIPS_CONSTANTS.SECRET_EVENT_QUESTS_PREVIEW, questFilter=lambda x: isSecretEvent(x.getGroupID()))
+
+    def __getQuestsVO(self, vehicle, showIfEmpty, showAlert, enabledIcon, disabledIcon, questType, questGroup, tooltip, questFilter=lambda x: True):
+
+        def includeOnlyQuests(qx):
+            isIncluded = qx.isAvailable()[0] or qx.isCompleted() or qx.isWrongVehicle(vehicle)
+            return isIncluded and not isDailyQuest(qx.getID()) and not isPremium(qx.getID()) and qx.getID() not in self._eventProgressionController.questIDs and questFilter(qx)
+
+        allQuests = self._eventsCache.getAllQuests(includeOnlyQuests)
+        if not allQuests and not showIfEmpty:
+            return None
         else:
-            commonQuestsIcon = festivityFlagData.iconDisabled or RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_DISABLED
-            label = ''
-        quests = [self._headerQuestFormaterVo(totalCount > 0, commonQuestsIcon, label, HANGAR_HEADER_QUESTS.QUEST_TYPE_COMMON, flag=festivityFlagData.flagBackground, tooltip=TOOLTIPS_CONSTANTS.QUESTS_PREVIEW, isTooltipSpecial=True)]
-        return self._wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_COMMON, '', quests)
+            hasIncompleted = any((not allQuests[q].isCompleted() for q in allQuests))
+            questsForVehicle = filter(includeOnlyQuests, self._questController.getQuestForVehicle(vehicle))
+            totalCount = len(questsForVehicle)
+            completedCount = sum((1 for q in questsForVehicle if q.isCompleted()))
+            enable = totalCount > 0
+            festivityFlagData = self._festivityController.getHangarQuestsFlagData()
+            if totalCount > 0:
+                if completedCount != totalCount:
+                    label = _ms(MENU.hangarHeaderBattleQuestsLabel(LABEL_STATE.ACTIVE), total=totalCount - completedCount)
+                else:
+                    label = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_ALL_DONE)
+                commonQuestsIcon = festivityFlagData.icon or enabledIcon
+            elif showAlert and allQuests:
+                if hasIncompleted:
+                    label = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON)
+                else:
+                    label = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_ALL_DONE)
+                commonQuestsIcon = festivityFlagData.icon or enabledIcon
+                enable = True
+            else:
+                commonQuestsIcon = festivityFlagData.iconDisabled or disabledIcon
+                label = ''
+            quests = [self._headerQuestFormaterVo(enable=enable, icon=commonQuestsIcon, label=label, questType=questType, tooltip=tooltip, isTooltipSpecial=True, flag=festivityFlagData.flagBackground)]
+            return self._wrapQuestGroup(questGroup, '', quests)
 
     def __getMarathonQuestsVO(self, vehicle, isGroupped=False):
         marathons = self._marathonsCtrl.getMarathons()

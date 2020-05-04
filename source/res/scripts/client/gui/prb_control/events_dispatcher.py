@@ -5,7 +5,7 @@ from collections import namedtuple
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import ViewTypes
+from gui.Scaleform.framework import ViewTypes, ScopeTemplates
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
@@ -17,7 +17,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.app_loader import sf_lobby
 from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_FLAG
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from gui.shared.events import ChannelManagementEvent, PreBattleChannelEvent
+from gui.shared.events import ChannelManagementEvent, PreBattleChannelEvent, checkLoadedView
 from helpers import dependency
 from gui.impl import backport
 from gui.impl.gen import R
@@ -63,6 +63,7 @@ class EventDispatcher(object):
         app = self.app
         if app and app.containerManager:
             app.containerManager.onViewAddedToContainer += self.__onViewAddedToContainer
+            app.containerManager.onViewLoadCanceled += self.__onViewLoadCanceled
 
     def fini(self):
         self.__setPrebattleDispatcher(None)
@@ -70,6 +71,7 @@ class EventDispatcher(object):
         app = self.app
         if app and app.containerManager:
             app.containerManager.onViewAddedToContainer -= self.__onViewAddedToContainer
+            app.containerManager.onViewLoadCanceled -= self.__onViewLoadCanceled
         return
 
     def isTrainingLoaded(self):
@@ -85,8 +87,16 @@ class EventDispatcher(object):
     def loadHangar(self):
         self.__fireLoadEvent(VIEW_ALIAS.LOBBY_HANGAR)
 
+    @checkLoadedView(R.views.lobby.secretEvent.ActionHangarWindow())
+    def loadEventHangar(self):
+        from gui.impl.lobby.secret_event.action_hangar_view import ActionHangarView
+        g_eventBus.handleEvent(events.LoadUnboundViewEvent(R.views.lobby.secretEvent.ActionHangarWindow(), ActionHangarView, ScopeTemplates.DEFAULT_SCOPE), scope=EVENT_BUS_SCOPE.LOBBY)
+
     def loadBattleQueue(self):
         self.__fireLoadEvent(VIEW_ALIAS.BATTLE_QUEUE)
+
+    def loadEventBattleQueue(self):
+        self.__fireLoadEvent(VIEW_ALIAS.EVENT_BATTLE_QUEUE)
 
     def loadTrainingList(self):
         self.addTrainingToCarousel()
@@ -334,6 +344,12 @@ class EventDispatcher(object):
                 res = True
         return res
 
+    def showEpicBattlesPrimeTimeWindow(self):
+        g_eventBus.handleEvent(events.LoadViewEvent(alias=EPICBATTLES_ALIASES.EPIC_BATTLES_PRIME_TIME_ALIAS, ctx={}), EVENT_BUS_SCOPE.LOBBY)
+
+    def showRankedPrimeTimeWindow(self):
+        g_eventBus.handleEvent(events.LoadViewEvent(alias=RANKEDBATTLES_ALIASES.RANKED_BATTLE_PRIME_TIME, ctx={}), EVENT_BUS_SCOPE.LOBBY)
+
     def _showUnitProgress(self, prbType, show):
         clientID = channel_num_gen.getClientID4Prebattle(prbType)
         if not clientID:
@@ -430,6 +446,12 @@ class EventDispatcher(object):
             self.__loadingEvent = None
         if pyEntity.viewType == ViewTypes.LOBBY_SUB:
             self.updateUI(pyEntity.alias)
+        return
+
+    def __onViewLoadCanceled(self, _, pyEntity):
+        settings = pyEntity.settings
+        if settings is None or settings.event == self.__loadingEvent:
+            self.__loadingEvent = None
         return
 
     def __getLoadedEvent(self):

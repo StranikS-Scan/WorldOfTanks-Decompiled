@@ -40,6 +40,7 @@ from items import vehicles, tankmen, customizations, getTypeInfoByName, getTypeO
 from items.components.c11n_constants import SeasonType, CustomizationType, StyleFlags, HIDDEN_CAMOUFLAGE_ID
 from shared_utils import findFirst, CONST_CONTAINER
 from skeletons.gui.game_control import IIGRController, IRentalsController
+from skeletons.gui.game_event_controller import IGameEventController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from nation_change.nation_change_helpers import hasNationGroup, iterVehTypeCDsInNationGroup
@@ -95,6 +96,8 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     OBSERVER = 'observer'
     DISABLED_IN_ROAMING = 'disabledInRoaming'
     EVENT = 'event_battles'
+    EVENT_PREMIUM_VEHICLE = 'event_premium_vehicle'
+    EVENT_NOT_ELITE_VEHICLE = 'event_not_elite_vehicle'
     EXCLUDED_FROM_SANDBOX = 'excluded_from_sandbox'
     TELECOM = 'telecom'
     UNRECOVERABLE = 'unrecoverable'
@@ -168,6 +171,7 @@ class Vehicle(FittingItem):
     lobbyContext = dependency.descriptor(ILobbyContext)
     eventsCache = dependency.descriptor(IEventsCache)
     igrCtrl = dependency.descriptor(IIGRController)
+    gameEventController = dependency.descriptor(IGameEventController)
 
     def __init__(self, strCompactDescr=None, inventoryID=-1, typeCompDescr=None, proxy=None):
         if strCompactDescr is not None:
@@ -216,6 +220,7 @@ class Vehicle(FittingItem):
             if proxy.shop.winXPFactorMode == WIN_XP_FACTOR_MODE.ALWAYS or self.intCD not in proxy.stats.multipliedVehicles and not self.isOnlyForEventBattles:
                 self._dailyXPFactor = proxy.shop.dailyXPFactor
             self._isElite = not vehDescr.type.unlocksDescrs or self.intCD in proxy.stats.eliteVehicles
+            self._isElite = self._isElite and VEHICLE_TAGS.EVENT_NOT_ELITE_VEHICLE not in vehDescr.type.tags
             self._isFullyElite = self.isElite and not any((data[1] not in proxy.stats.unlocks for data in vehDescr.type.unlocksDescrs))
             clanDamageLock = proxy.stats.vehicleTypeLocks.get(self.intCD, {}).get(CLAN_LOCK, 0)
             clanNewbieLock = proxy.stats.globalVehicleLocks.get(CLAN_LOCK, 0)
@@ -355,17 +360,31 @@ class Vehicle(FittingItem):
         return self._slotsAnchorsById.get(anchorId, None)
 
     @property
+    def eventHeroTankBuyPrice(self):
+        eventHeroTank = self.gameEventController.getHeroTank()
+        defCurrency, defAmount = eventHeroTank.getDefPrice()
+        currency, amount = eventHeroTank.getCurrentPrice()
+        return ItemPrices(itemPrice=ItemPrice(price=Money(**{currency: amount}), defPrice=Money(**{defCurrency: defAmount})))
+
+    @property
+    def isEventHeroTank(self):
+        return self.eventsCache.isEventEnabled() and self.gameEventController.getHeroTank().isEventHeroTank(self.intCD)
+
+    @property
     def buyPrices(self):
-        currency = self._buyPrices.itemPrice.price.getCurrency()
-        if self._personalDiscountPrice is not None and self._personalDiscountPrice.get(currency) <= self._buyPrices.itemPrice.price.get(currency):
-            currentPrice = self._personalDiscountPrice
+        if self.isEventHeroTank:
+            return self.eventHeroTankBuyPrice
         else:
-            currentPrice = self._buyPrices.itemPrice.price
-        if self.isRented and not self.rentalIsOver:
-            buyPrice = currentPrice - self.rentCompensation
-        else:
-            buyPrice = currentPrice
-        return ItemPrices(itemPrice=ItemPrice(price=buyPrice, defPrice=self._buyPrices.itemPrice.defPrice), itemAltPrice=self._buyPrices.itemAltPrice)
+            currency = self._buyPrices.itemPrice.price.getCurrency()
+            if self._personalDiscountPrice is not None and self._personalDiscountPrice.get(currency) <= self._buyPrices.itemPrice.price.get(currency):
+                currentPrice = self._personalDiscountPrice
+            else:
+                currentPrice = self._buyPrices.itemPrice.price
+            if self.isRented and not self.rentalIsOver:
+                buyPrice = currentPrice - self.rentCompensation
+            else:
+                buyPrice = currentPrice
+            return ItemPrices(itemPrice=ItemPrice(price=buyPrice, defPrice=self._buyPrices.itemPrice.defPrice), itemAltPrice=self._buyPrices.itemAltPrice)
 
     @property
     def searchableUserName(self):
@@ -1574,6 +1593,10 @@ def getTypeSmallIconPath(vehicleType, isElite=False):
 
 def getTypeBigIconPath(vehicleType, isElite=False):
     return RES_ICONS.getVehicleTypeBigIcon(vehicleType, '_elite' if isElite else '')
+
+
+def getEventTypeBigIconPath(vehicleType):
+    return RES_ICONS.getEventVehicleTypeBigIcon(vehicleType)
 
 
 def getUserName(vehicleType, textPrefix=False):

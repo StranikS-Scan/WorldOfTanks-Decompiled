@@ -5,6 +5,7 @@ from collections import namedtuple
 import typing
 from adisp import process, async as adispasync
 from async import async, await
+from gui.impl.gen.view_models.views.lobby.secret_event.action_menu_model import ActionMenuModel
 from items import getTypeOfCompactDescr
 import BigWorld
 import Windowing
@@ -27,11 +28,15 @@ from gui.Scaleform.locale.BATTLE_PASS_2020 import BATTLE_PASS_2020
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
+from gui.impl.gen import R
 from gui.marathon.marathon_event_controller import MARATHON_EVENTS
+from gui.prb_control.dispatcher import g_prbLoader
+from gui.prb_control.entities.base.ctx import PrbAction
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.server_events import caches, settings
 from gui.server_events.events_dispatcher import showMissionDetails, hideMissionDetails
 from gui.server_events.events_helpers import isLinkedSet
-from gui.shared import events, g_eventBus, event_bus_handlers
+from gui.shared import events, g_eventBus, event_bus_handlers, event_dispatcher
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import MissionsEvent
 from gui.shared.formatters import text_styles
@@ -89,6 +94,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         self.__marathonPrefix = None
         self.__needToScroll = False
         self._showMissionDetails = True
+        self._secretEventTabMenuItem = None
         self.__builders = {QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS: group_packers.MarathonsDumbBuilder(),
          QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS: group_packers.MissionsGroupsBuilder(),
          QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS: group_packers.QuestsGroupsBuilder(),
@@ -99,7 +105,13 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         self._initialize(ctx)
         return
 
+    def onToEventClick(self):
+        if self._secretEventTabMenuItem:
+            self.__doSelectAction(PREBATTLE_ACTION_NAME.EVENT_BATTLE)
+
     def onTabSelected(self, alias, prefix):
+        self._secretEventTabMenuItem = None
+        self._drawBackButton()
         self.__currentTabAlias = alias
         self.__marathonPrefix = prefix
         caches.getNavInfo().setMissionsTab(alias)
@@ -116,6 +128,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         if self.currentTab:
             self.fireEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.CHANGE_SOUND_ENVIRONMENT, ctx=self))
             self.currentTab.setActive(True)
+        return
 
     def getCurrentTabAlias(self):
         return self.__currentTabAlias
@@ -147,6 +160,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
 
     def _populate(self):
         super(MissionsPage, self)._populate()
+        self._drawBackButton()
         for builder in self.__builders.itervalues():
             builder.init()
 
@@ -164,6 +178,14 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         self.__updateHeader()
         self.__tryOpenMissionDetails()
         self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_ACTIVATE), EVENT_BUS_SCOPE.LOBBY)
+        return
+
+    def _drawBackButton(self):
+        backButton = R.strings.quests.backButton
+        if self._secretEventTabMenuItem is not None:
+            self.as_showBackButtonS(backport.text(backButton.label()), backport.text(backButton.description()))
+        else:
+            self.as_hideBackButtonS()
         return
 
     def _invalidate(self, ctx=None):
@@ -222,6 +244,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
                         self.__marathonPrefix = enabledMarathon.prefix
         self._eventID = ctx.get('eventID')
         self._groupID = ctx.get('groupID')
+        self._secretEventTabMenuItem = ctx.get('secretEventTabMenuItem')
         self._showMissionDetails = ctx.get('showMissionDetails', True)
         self.__needToScroll = self._groupID is not None
         self.__scrollToGroup()
@@ -237,6 +260,12 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
     @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_MISSIONS_PAGE_VIEW, EVENT_BUS_SCOPE.DEFAULT)
     def __handleMissionsPageClose(self, _):
         self.destroy()
+
+    @process
+    def __doSelectAction(self, actionName):
+        result = yield g_prbLoader.getDispatcher().doSelectAction(PrbAction(actionName))
+        if self._secretEventTabMenuItem != ActionMenuModel.BASE and result:
+            event_dispatcher.loadSecretEventTabMenu(self._secretEventTabMenuItem)
 
     def __showMarathonReward(self, isAccessible, prefix):
         isMarathonTab = self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS
@@ -382,7 +411,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
 
     def __tryOpenMissionDetails(self):
         if self._eventID and self._groupID and self._showMissionDetails:
-            showMissionDetails(self._eventID, self._groupID)
+            showMissionDetails(self._eventID, self._groupID, self._secretEventTabMenuItem)
         else:
             hideMissionDetails()
 

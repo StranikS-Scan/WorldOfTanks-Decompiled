@@ -9,7 +9,7 @@ from tutorial.gui.Scaleform.pop_ups import TutorialDialog
 from bootcamp.statistic.decorators import loggerTarget, loggerEntry, simpleLog
 from bootcamp.statistic.logging_constants import BC_LOG_ACTIONS, BC_LOG_KEYS
 from gui.Scaleform.daapi.view.bootcamp.BCSubtitlesWindow import subtitleDecorator
-from gui.Scaleform.framework.entities.View import CommonSoundSpaceSettings
+from gui.Scaleform.framework.entities.view_sound import CommonSoundSpaceSettings
 
 @loggerTarget(logKey=BC_LOG_KEYS.BC_OUTRO_VIDEO)
 class BCOutroVideoPage(TutorialDialog, BCOutroVideoPageMeta):

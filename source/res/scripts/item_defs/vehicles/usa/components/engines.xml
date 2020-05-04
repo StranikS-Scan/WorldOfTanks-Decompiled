@@ -108,6 +108,8 @@
     <Twin_Cadillac_42series_bootcamp>	64002	</Twin_Cadillac_42series_bootcamp>
     <Wright_Continental_R-975C2_bootcamp>	64003	</Wright_Continental_R-975C2_bootcamp>
     <Wright_Continental_R-975C1_bootcamp>	64004	</Wright_Continental_R-975C1_bootcamp>
+    <Ford_GAA_SE20_Gen_4_Lvl_2>	4	</Ford_GAA_SE20_Gen_4_Lvl_2>
+    <Ford_GAF_500_SE20_Gen_4_Lvl_3>	5	</Ford_GAF_500_SE20_Gen_4_Lvl_3>
   </ids>
   <shared>
     <Ford_GAC>
@@ -1962,5 +1964,39 @@
       <rpm_min>	416	</rpm_min>
       <rpm_max>	2848	</rpm_max>
     </Continental_AV-1790-7B_IGR>
+    <Ford_GAA_SE20_Gen_4_Lvl_2>
+      <userString>	#usa_vehicles:Ford_GAA_SE20_Gen_4_Lvl_2	</userString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	36000	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	620	</power>
+      <weight>	569	</weight>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	299	</rpm_min>
+      <rpm_max>	2841	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Ford_GAA_SE20_Gen_4_Lvl_2>
+    <Ford_GAF_500_SE20_Gen_4_Lvl_3>
+      <userString>	#usa_vehicles:Ford_GAF_500_SE20_Gen_4_Lvl_3	</userString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	36000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	540	</power>
+      <weight>	641	</weight>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	312	</rpm_min>
+      <rpm_max>	2801	</rpm_max>
+    </Ford_GAF_500_SE20_Gen_4_Lvl_3>
   </shared>
 </engines.xml>

@@ -192,6 +192,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.eventsData = g_accountRepository.eventsData
         self.__eventsDataUnpacked = {}
         self.personalMissionsLock = g_accountRepository.personalMissionsLock
+        self.generalsLock = g_accountRepository.generalsLock
         self.isInRandomQueue = False
         self.isInTutorialQueue = False
         self.isInBootcampQueue = False
@@ -635,7 +636,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInRandomQueue = ctx.get('isInRandomQueue', False)
         self.isInTutorialQueue = ctx.get('isInTutorialQueue', False)
         self.isInTutorialQueue = ctx.get('isInUnitAssembler', False)
-        self._initTimeCorrection(ctx)
         if 'isLongDisconnectedFromCenter' in ctx:
             isLongDisconnectedFromCenter = ctx['isLongDisconnectedFromCenter']
             if self.isLongDisconnectedFromCenter != isLongDisconnectedFromCenter:
@@ -649,6 +649,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             AccountSettings.setFavorites(CURRENT_VEHICLE, currentVehInvID)
         events.isPlayerEntityChanging = False
         events.onAccountShowGUI(ctx)
+
+    def onLoadEntity(self, serverUTC):
+        self._initTimeCorrection(serverUTC)
 
     def receiveQueueInfo(self, queueInfo):
         events.onQueueInfoReceived(queueInfo)
@@ -827,10 +830,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_UNIT_ASSEMBLER, 0, 0, 0)
 
-    def enqueueEventBattles(self, vehInvIDs):
+    def enqueueEventBattles(self, generalID):
         if not events.isPlayerEntityChanging:
-            arr = [len(vehInvIDs)] + vehInvIDs
-            self.base.doCmdIntArr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_EVENT_BATTLES, arr)
+            self.base.doCmdIntArr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_EVENT_BATTLES, [generalID])
 
     def dequeueEventBattles(self):
         if not events.isPlayerEntityChanging:
@@ -1069,6 +1071,23 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self._doCmdIntStrArr(AccountCommands.CMD_CHOOSE_QUEST_REWARD, eventType, strArr, proxy)
         return
 
+    def buyEventPack(self, packId, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
+        else:
+            proxy = None
+        self._doCmdStr(AccountCommands.CMD_BUY_EVENT_PACK, packId, proxy)
+        return
+
+    def changeSelectedGeneral(self, generalId, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
+        else:
+            proxy = None
+        parameters = [generalId]
+        self._doCmdIntArr(AccountCommands.CMD_CHANGE_SELECTED_GENERAL, parameters, proxy)
+        return
+
     def logClientSystem(self, stats):
         self.base.logClientSystem(stats)
 
@@ -1197,6 +1216,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.__synchronizeCacheDict(self.eventsData, diff, 'eventsData', 'replace', events.onEventsDataChanged)
             self.__synchronizeCacheDict(self.personalMissionsLock, diff.get('cache', None), 'potapovQuestIDs', 'replace', events.onPMLocksChanged)
             self.__synchronizeCacheDict(self.dailyQuests, diff, 'dailyQuests', 'replace', events.onDailyQuestsInfoChange)
+            self.__synchronizeCacheDict(self.generalsLock, diff.get('cache', None), 'generalIDsLock', 'replace', events.onGeneralLockChanged)
             self.__synchronizeCacheSimpleValue('globalRating', diff.get('account', None), 'globalRating', events.onAccountGlobalRatingChanged)
             events.onClientUpdated(diff, not triggerEvents)
             if triggerEvents and not isFullSync:
@@ -1215,10 +1235,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def _subscribeForStream(self, requestID, callback):
         self.__onStreamComplete[requestID] = callback
 
-    def _initTimeCorrection(self, ctx):
-        if 'serverUTC' in ctx:
-            import helpers.time_utils as tm
-            tm.setTimeCorrection(ctx['serverUTC'])
+    def _initTimeCorrection(self, serverUTC):
+        import helpers.time_utils as tm
+        tm.setTimeCorrection(serverUTC)
 
     def __getRequestID(self):
         if g_accountRepository is None:
@@ -1409,6 +1428,7 @@ class _AccountRepository(object):
         self.clanMembers = {}
         self.eventsData = {}
         self.personalMissionsLock = {}
+        self.generalsLock = {}
         self.customFilesCache = CustomFilesCache.CustomFilesCache('custom_data')
         self.eventNotifications = []
         self.intUserSettings = IntUserSettings.IntUserSettings()

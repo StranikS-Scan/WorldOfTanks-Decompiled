@@ -4,7 +4,6 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import LAST_STORAGE_VISITED_TIMESTAMP
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi import LobbySubView
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.storage import getSectionsList
 from gui.Scaleform.daapi.view.lobby.storage.sound_constants import STORAGE_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageShellsData
@@ -13,7 +12,6 @@ from gui.Scaleform.daapi.view.meta.StorageViewMeta import StorageViewMeta
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showHangar
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
@@ -42,7 +40,7 @@ class StorageView(LobbySubView, StorageViewMeta):
         return
 
     def onClose(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        showHangar()
 
     def navigateToHangar(self):
         showHangar()

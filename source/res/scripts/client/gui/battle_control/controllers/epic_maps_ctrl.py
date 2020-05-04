@@ -23,9 +23,12 @@ class MapsController(IViewComponentsController):
         return
 
     def setViewComponents(self, *components):
-        self.__overviewMapUi = components[0]
-        self.__miniMapUi = components[1]
-        self.__overviewMapUi.start()
+        if len(components) >= 2:
+            self.__overviewMapUi = components[0]
+            self.__miniMapUi = components[1]
+            self.__overviewMapUi.start()
+        else:
+            self.__miniMapUi = components[0]
 
     def getControllerID(self):
         return BATTLE_CTRL_ID.MAPS

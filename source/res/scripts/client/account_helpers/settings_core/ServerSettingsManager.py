@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/ServerSettingsManager.py
 import weakref
 from collections import namedtuple
+from enum import Enum
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.migrations import migrateToVersion
 from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION, GuiSettingsBehavior, OnceOnlyHints, BattlePassStorageKeys
@@ -51,6 +52,8 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     LINKEDSET_QUESTS = 'LINKEDSET_QUESTS'
     SESSION_STATS = 'SESSION_STATS'
     BATTLE_PASS_STORAGE = 'BATTLE_PASS_STORAGE'
+    GAME_EVENT = 'GAME_EVENT'
+    GAME_EVENT_HANGAR_VO = 'GAME_EVENT_HANGAR_VO'
 
 
 class UI_STORAGE_KEYS(CONST_CONTAINER):
@@ -61,6 +64,18 @@ class UI_STORAGE_KEYS(CONST_CONTAINER):
     REFERRAL_BUTTON_CIRCLES_SHOWN = 'referral_button_circles_shown'
     DUAL_GUN_HIGHLIGHTS_COUNTER = 'dual_gun_highlights_count'
     DUAL_GUN_MARK_IS_SHOWN = 'dual_gun_mark_shown'
+
+
+class UIGameEventKeys(Enum):
+    FRONT_AWARD_SHOWN = 1
+    COMMANDER_LEVEL_AWARD_SHOWN = 2
+
+
+class EventLoadingVoiceoversKeys(Enum):
+    RUINBERG = 'vo_se20_loading_ruinberg__0'
+    SIEGFRIED = 'vo_se20_loading_siegfried_line__0'
+    NORMANDY = 'vo_se20_loading_normandy__0'
+    BERLIN = 'vo_se20_loading_berlin__0'
 
 
 class ServerSettingsManager(object):
@@ -78,6 +93,7 @@ class ServerSettingsManager(object):
     BATTLE_BORDER_MAP = settings_constants.BATTLE_BORDER_MAP
     QUESTS_PROGRESS = settings_constants.QUESTS_PROGRESS
     SESSION_STATS = settings_constants.SESSION_STATS
+    EVENT_HANGAR_VO_PHASES = settings_constants.EventHangarVoPhases
     SECTIONS = {SETTINGS_SECTIONS.GAME: Section(masks={GAME.ENABLE_OL_FILTER: 0,
                               GAME.ENABLE_SPAM_FILTER: 1,
                               GAME.INVITES_FROM_FRIENDS: 2,
@@ -404,7 +420,20 @@ class ServerSettingsManager(object):
                                              BattlePassStorageKeys.BUY_BUTTON_HINT_IS_SHOWN: 17,
                                              BattlePassStorageKeys.VOTED_WITH_BOUGHT_BP: 18,
                                              BattlePassStorageKeys.BUY_ANIMATION_WAS_SHOWN: 19,
-                                             BattlePassStorageKeys.INTRO_VIDEO_SHOWN: 20}, offsets={BattlePassStorageKeys.SHOWN_VIDEOS_FLAGS: Offset(0, 65535)})}
+                                             BattlePassStorageKeys.INTRO_VIDEO_SHOWN: 20}, offsets={BattlePassStorageKeys.SHOWN_VIDEOS_FLAGS: Offset(0, 65535)}),
+     SETTINGS_SECTIONS.GAME_EVENT: Section(masks={}, offsets={UIGameEventKeys.FRONT_AWARD_SHOWN: Offset(0, 31),
+                                    UIGameEventKeys.COMMANDER_LEVEL_AWARD_SHOWN: Offset(5, 65504),
+                                    EventLoadingVoiceoversKeys.RUINBERG: Offset(16, 983040),
+                                    EventLoadingVoiceoversKeys.SIEGFRIED: Offset(20, 15728640),
+                                    EventLoadingVoiceoversKeys.NORMANDY: Offset(24, 251658240),
+                                    EventLoadingVoiceoversKeys.BERLIN: Offset(28, 4026531840L)}),
+     SETTINGS_SECTIONS.GAME_EVENT_HANGAR_VO: Section(masks={EVENT_HANGAR_VO_PHASES.PHASE1: 0,
+                                              EVENT_HANGAR_VO_PHASES.PHASE2: 1,
+                                              EVENT_HANGAR_VO_PHASES.PHASE3: 2,
+                                              EVENT_HANGAR_VO_PHASES.PHASE4: 3,
+                                              EVENT_HANGAR_VO_PHASES.PHASE5: 4,
+                                              EVENT_HANGAR_VO_PHASES.PHASE6: 5,
+                                              EVENT_HANGAR_VO_PHASES.PHASE7: 6}, offsets={})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -505,8 +534,20 @@ class ServerSettingsManager(object):
         newValue = self.getSectionSettings(SETTINGS_SECTIONS.LINKEDSET_QUESTS, 'shown', 0) | mask
         return self.setSectionSettings(SETTINGS_SECTIONS.LINKEDSET_QUESTS, {'shown': newValue})
 
+    def getGameEventStorage(self, defaults=None):
+        return self.getSection(SETTINGS_SECTIONS.GAME_EVENT, defaults)
+
+    def saveInGameEventStorage(self, fields):
+        return self.setSections([SETTINGS_SECTIONS.GAME_EVENT], fields)
+
     def setQuestProgressSettings(self, settings):
         self.setSectionSettings(SETTINGS_SECTIONS.QUESTS_PROGRESS, settings)
+
+    def getGameEventHangarVoSettings(self, key):
+        return self.getSectionSettings(SETTINGS_SECTIONS.GAME_EVENT_HANGAR_VO, key)
+
+    def setGameEventHangarVoSettings(self, fields):
+        self.setSectionSettings(SETTINGS_SECTIONS.GAME_EVENT_HANGAR_VO, fields)
 
     def _getMaskForLinkedSetQuest(self, questID, missionID):
         return 1 << questID - 1 + (missionID - 1) * 10

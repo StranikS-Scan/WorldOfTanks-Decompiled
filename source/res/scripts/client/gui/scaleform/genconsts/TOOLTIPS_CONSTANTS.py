@@ -103,6 +103,7 @@ class TOOLTIPS_CONSTANTS(object):
     QUESTS_PREVIEW = 'questsPreview'
     EPIC_QUESTS_PREVIEW = 'epicQuestsPreview'
     EVENT_QUESTS_PREVIEW = 'EventQuestsPreview'
+    SECRET_EVENT_QUESTS_PREVIEW = 'secretEventQuestsPreview'
     PERSONAL_QUESTS_PREVIEW = 'presonalQuestsPreview'
     SHEDULE_QUEST = 'scheduleQuest'
     MISSION_VEHICLE = 'missionVehicle'
@@ -173,6 +174,20 @@ class TOOLTIPS_CONSTANTS(object):
     BADGE_LOYAL_SERVICE = 'badgeLoyalService'
     EVENT_BOARDS_BADGE = 'eventBoardsBadge'
     EVENT_BOARDS_BADGES_GROUP = 'eventBoardsBadgesGroup'
+    EVENT_BONUSES_BASIC_INFO = 'eventBonusesBasicInfo'
+    EVENT_ENERGY_DISCOUNT = 'eventEnergyDiscount'
+    EVENT_BONUSES_INFO = 'eventBonusesInfo'
+    EVENT_BONUSES_POST_BATTLE_INFO = 'eventBonusesPostBattleInfo'
+    EVENT_BANNER_INFO = 'eventBannerInfo'
+    EVENT_SELECTOR_INFO = 'eventSelectorInfo'
+    EVENT_SQUAD_INFO = 'eventSquadInfo'
+    EVENT_SUBDIVISION_PUMPING_INFO = 'eventSubdivisionPumpingInfo'
+    COMMANDER_ABILITY_INFO = 'commanderAbilityInfo'
+    COMMANDER_RESPAWN_INFO = 'commaderRespawnInfo'
+    EVENT_PROGRESSION_POINTS_INFO = 'eventProgressionPointsInfo'
+    EVENT_SQUAD_GENERAL_INFO = 'eventSquadGeneralInfo'
+    SECRET_EVENT_PROGRESSION_INFO = 'secretEventProgressInfo'
+    EVENT_RESULT_GENERAL = 'eventResultGeneral'
     OPERATION = 'operation'
     OPERATIONS_CHAIN_DETAILS = 'operationsChainDetails'
     PERSONAL_MISSIONS_MAP_REGION = 'personalMissionsMapRegion'
@@ -180,12 +195,24 @@ class TOOLTIPS_CONSTANTS(object):
     OPERATION_POSTPONED = 'operationPostponed'
     SQUAD_BONUS = 'squadBonus'
     GF_TEST_TOOLTIP = 'gfTestTooltip'
+    COMMANDER_CHARACTERISTICS = 'eventCommanderCharacteristics'
     BATTLE_PASS_VEHICLE_POINTS = 'battlePassVehiclePoints'
     BATTLE_PASS_POINTS = 'battlePassPoints'
     BATTLE_PASS_NOT_STARTED = 'battlePassNotStarted'
     BATTLE_PASS_IN_PROGRESS = 'battlePassInProgress'
     BATTLE_PASS_COMPLETED = 'battlePassCompleted'
     BATTLE_PASS_CHOSE_WINNER = 'battlePassChoseWinner'
+    EVENT_VEHICLE_PREVIEW_MESSAGE = 'eventVehiclePreviewMessage'
+    EVENT_RESULT_KILL = 'eventResultKill'
+    EVENT_RESULT_DAMAGE = 'eventResultDamage'
+    EVENT_RESULT_ASSIST = 'eventResultAssist'
+    EVENT_RESULT_ARMOR = 'eventResultArmor'
+    EVENT_RESULT_MISSION = 'eventResultMission'
+    EVENT_VEHICLE = 'eventVehicle'
+    EVENT_GOLD_INFO = 'eventGoldInfo'
+    EVENT_CREDIT_INFO = 'eventCreditInfo'
+    EVENT_CRYSTAL_INFO = 'eventCrystalInfo'
+    EVENT_FREE_XP_INFO = 'eventFreeXPInfo'
     SINGAPORE_WALLET_STATS = 'Stats'
     GOLD_STATS = 'goldStats'
     CREDITS_STATS = 'creditsStats'
@@ -307,6 +334,7 @@ class TOOLTIPS_CONSTANTS(object):
     SESSION_STATS_TANK_INFO_UI = 'ToolTipInblocksDefaultUI'
     SESSION_STATS_EFFICIENCY_PARAM = 'sessionStatsEfficientParam'
     SESSION_STATS_EFFICIENCY_PARAM_UI = 'ToolTipInblocksDefaultUI'
+    SECRET_EVENT_HANGAR_OBJECT = 'secretEventHangarObject'
     ACHIEVEMENTS_SET = [BATTLE_STATS_ACHIEVS,
      BATTLE_STATS_MARKS_ON_GUN_ACHIEVEMENT,
      ACHIEVEMENT,
@@ -503,3 +531,31 @@ class TOOLTIPS_CONSTANTS(object):
     DEVELOPMENT_SET = [GF_TEST_TOOLTIP]
     VEHICLE_COLLECTOR_SET = [VEHICLE_COLLECTOR_INFO, VEHICLE_COLLECTOR_DISABLED]
     BOB_SET = [BOB_SELECTOR_INFO, BOB_SERVER_PRIMETIME]
+    EVENT_SET = [EVENT_FREE_XP_INFO,
+     EVENT_CRYSTAL_INFO,
+     EVENT_CREDIT_INFO,
+     EVENT_GOLD_INFO,
+     EVENT_SELECTOR_INFO,
+     EVENT_VEHICLE_PREVIEW_MESSAGE,
+     EVENT_SQUAD_INFO,
+     EVENT_SUBDIVISION_PUMPING_INFO,
+     SECRET_EVENT_QUESTS_PREVIEW,
+     SECRET_EVENT_HANGAR_OBJECT,
+     EVENT_BANNER_INFO,
+     EVENT_ENERGY_DISCOUNT,
+     EVENT_BONUSES_BASIC_INFO,
+     EVENT_BONUSES_INFO,
+     EVENT_BONUSES_POST_BATTLE_INFO,
+     COMMANDER_ABILITY_INFO,
+     COMMANDER_RESPAWN_INFO,
+     EVENT_PROGRESSION_POINTS_INFO,
+     EVENT_SQUAD_GENERAL_INFO,
+     EVENT_RESULT_KILL,
+     EVENT_RESULT_DAMAGE,
+     EVENT_RESULT_ARMOR,
+     EVENT_RESULT_ASSIST,
+     EVENT_RESULT_MISSION,
+     SECRET_EVENT_PROGRESSION_INFO,
+     EVENT_VEHICLE,
+     COMMANDER_CHARACTERISTICS,
+     EVENT_RESULT_GENERAL]

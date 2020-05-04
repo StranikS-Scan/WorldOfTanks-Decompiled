@@ -154,6 +154,25 @@
     <Maybach_HL_120_TR_bootcamp>	64005	</Maybach_HL_120_TR_bootcamp>
     <Maybach_HL_108TR_bootcamp>	64006	</Maybach_HL_108TR_bootcamp>
     <Ganz_VIII_VGT_107_bootcamp>	64007	</Ganz_VIII_VGT_107_bootcamp>
+    <Maybach_HL_120_TRM_SE20_Mt1_Regular>	45	</Maybach_HL_120_TRM_SE20_Mt1_Regular>
+    <Maybach_HL_120_TRM_SE20_Mt1_Elite>	46	</Maybach_HL_120_TRM_SE20_Mt1_Elite>
+    <Maybach_HL_230_TRM_P30_SE20_Mt2_Regular>	51	</Maybach_HL_230_TRM_P30_SE20_Mt2_Regular>
+    <Maybach_HL_230_TRM_P30_SE20_Mt2_Elite>	53	</Maybach_HL_230_TRM_P30_SE20_Mt2_Elite>
+    <Maybach_HL_45P_SE20_Art1_Regular>	54	</Maybach_HL_45P_SE20_Art1_Regular>
+    <Maybach_HL_120_TRM_R_SE20_Art2_Regular>	55	</Maybach_HL_120_TRM_R_SE20_Art2_Regular>
+    <Maybach_HL_230_TRM_P45_SE20_Ht1_Regular>	56	</Maybach_HL_230_TRM_P45_SE20_Ht1_Regular>
+    <Maybach_HL_230_TRM_P45_SE20_Ht1_Elite>	57	</Maybach_HL_230_TRM_P45_SE20_Ht1_Elite>
+    <Maybach_HL_230_TRM_P45_SE20_Ht2_Regular>	58	</Maybach_HL_230_TRM_P45_SE20_Ht2_Regular>
+    <Maybach_HL_230_TRM_P45_SE20_Ht2_Elite>	72	</Maybach_HL_230_TRM_P45_SE20_Ht2_Elite>
+    <Maybach_HL_120_TRM_SE20_At1_Regular>	73	</Maybach_HL_120_TRM_SE20_At1_Regular>
+    <Maybach_HL_230_TRM_P30_SE20_At3_Regular>	104	</Maybach_HL_230_TRM_P30_SE20_At3_Regular>
+    <Porsche_Deutz_Typ180_2_SE20_At4_Elite>	154	</Porsche_Deutz_Typ180_2_SE20_At4_Elite>
+    <Maybach_HL_230_TRM_P30_SE20_At5_Elite>	155	</Maybach_HL_230_TRM_P30_SE20_At5_Elite>
+    <Tatra_V-103_SE20_At0_Regular>	105	</Tatra_V-103_SE20_At0_Regular>
+    <Maybach_HL_120_TRM_R_SE20_At2_Regular>	15	</Maybach_HL_120_TRM_R_SE20_At2_Regular>
+    <Maybach_HL_120_TRM_SE20_Mt0_Elite>	113	</Maybach_HL_120_TRM_SE20_Mt0_Elite>
+    <Maybach_HL_120_TRM_SE20_Mt0_Regular>	122	</Maybach_HL_120_TRM_SE20_Mt0_Regular>
+    <MB507_SE20_Ht3_Boss>	138	</MB507_SE20_Ht3_Boss>
   </ids>
   <shared>
     <Maybach_HL_120_TR>
@@ -2734,5 +2753,337 @@
       <rpm_min>	250	</rpm_min>
       <rpm_max>	2800	</rpm_max>
     </MB507_IGR>
+    <Maybach_HL_120_TRM_SE20_Mt1_Regular>
+      <userString>	#germany_vehicles:Maybach_HL_120_TRM	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	19900	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	510	</weight>
+      <maxHealth>	86	</maxHealth>
+      <maxRegenHealth>	42	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	349	</rpm_min>
+      <rpm_max>	2681	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Maybach_HL_120_TRM_SE20_Mt1_Regular>
+    <Maybach_HL_120_TRM_SE20_Mt1_Elite>
+      <userString>	#germany_vehicles:Maybach_HL_120_TRM	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	19900	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	440	</power>
+      <weight>	510	</weight>
+      <maxHealth>	86	</maxHealth>
+      <maxRegenHealth>	42	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	349	</rpm_min>
+      <rpm_max>	2681	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Maybach_HL_120_TRM_SE20_Mt1_Elite>
+    <Maybach_HL_230_TRM_P30_SE20_Mt2_Regular>
+      <userString>	#germany_vehicles:Maybach_HL_230_TRM_P30	</userString>
+      <shortUserString>	#germany_vehicles:Maybach_HL_230_TRM_P30_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	54000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	1200	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	564	</rpm_min>
+      <rpm_max>	2508	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Maybach_HL_230_TRM_P30_SE20_Mt2_Regular>
+    <Maybach_HL_230_TRM_P30_SE20_Mt2_Elite>
+      <userString>	#germany_vehicles:Maybach_HL_230_TRM_P30	</userString>
+      <shortUserString>	#germany_vehicles:Maybach_HL_230_TRM_P30_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	54000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	1200	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	564	</rpm_min>
+      <rpm_max>	2508	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Maybach_HL_230_TRM_P30_SE20_Mt2_Elite>
+    <Maybach_HL_45P_SE20_Art1_Regular>
+      <userString>	#germany_vehicles:Maybach_HL_45P	</userString>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	5600	</price>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	150	</power>
+      <weight>	500	</weight>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	311	</rpm_min>
+      <rpm_max>	2603	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Maybach_HL_45P_SE20_Art1_Regular>
+    <Maybach_HL_120_TRM_R_SE20_Art2_Regular>
+      <userString>	#germany_vehicles:Maybach_HL_120_TRM_R	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	15000	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	300	</power>
+      <weight>	920	</weight>
+      <maxHealth>	86	</maxHealth>
+      <maxRegenHealth>	42	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	437	</rpm_min>
+      <rpm_max>	2400	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Maybach_HL_120_TRM_R_SE20_Art2_Regular>
+    <Maybach_HL_230_TRM_P45_SE20_Ht1_Regular>
+      <userString>	#germany_vehicles:Maybach_HL_230_TRM_P45	</userString>
+      <shortUserString>	#germany_vehicles:Maybach_HL_230_TRM_P45_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	54000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	600	</power>
+      <weight>	1300	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	564	</rpm_min>
+      <rpm_max>	2508	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Maybach_HL_230_TRM_P45_SE20_Ht1_Regular>
+    <Maybach_HL_230_TRM_P45_SE20_Ht1_Elite>
+      <userString>	#germany_vehicles:Maybach_HL_230_TRM_P45	</userString>
+      <shortUserString>	#germany_vehicles:Maybach_HL_230_TRM_P45_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	54000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	1300	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	564	</rpm_min>
+      <rpm_max>	2508	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Maybach_HL_230_TRM_P45_SE20_Ht1_Elite>
+    <Maybach_HL_230_TRM_P45_SE20_Ht2_Regular>
+      <userString>	#germany_vehicles:Maybach_HL_230_TRM_P45	</userString>
+      <shortUserString>	#germany_vehicles:Maybach_HL_230_TRM_P45_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	54000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	1300	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	564	</rpm_min>
+      <rpm_max>	2508	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Maybach_HL_230_TRM_P45_SE20_Ht2_Regular>
+    <Maybach_HL_230_TRM_P45_SE20_Ht2_Elite>
+      <userString>	#germany_vehicles:Maybach_HL_230_TRM_P45	</userString>
+      <shortUserString>	#germany_vehicles:Maybach_HL_230_TRM_P45_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	54000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	1300	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	564	</rpm_min>
+      <rpm_max>	2508	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Maybach_HL_230_TRM_P45_SE20_Ht2_Elite>
+    <Maybach_HL_120_TRM_SE20_At1_Regular>
+      <userString>	#germany_vehicles:Maybach_HL_120_TRM	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	19900	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	440	</power>
+      <weight>	510	</weight>
+      <maxHealth>	86	</maxHealth>
+      <maxRegenHealth>	42	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	349	</rpm_min>
+      <rpm_max>	2681	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Maybach_HL_120_TRM_SE20_At1_Regular>
+    <Maybach_HL_230_TRM_P30_SE20_At3_Regular>
+      <userString>	#germany_vehicles:Maybach_HL_230_TRM_P30	</userString>
+      <shortUserString>	#germany_vehicles:Maybach_HL_230_TRM_P30_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	54000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	1200	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	564	</rpm_min>
+      <rpm_max>	2508	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Maybach_HL_230_TRM_P30_SE20_At3_Regular>
+    <Porsche_Deutz_Typ180_2_SE20_At4_Elite>
+      <userString>	#germany_vehicles:Porsche_Deutz_Typ180_2	</userString>
+      <shortUserString>	#germany_vehicles:Porsche_Deutz_Typ180_2_short	</shortUserString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	45300	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	840	</power>
+      <weight>	720	</weight>
+      <maxHealth>	255	</maxHealth>
+      <maxRegenHealth>	127	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	296	</rpm_min>
+      <rpm_max>	2312	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Porsche_Deutz_Typ180_2_SE20_At4_Elite>
+    <Maybach_HL_230_TRM_P30_SE20_At5_Elite>
+      <userString>	#germany_vehicles:Maybach_HL_230_TRM_P30	</userString>
+      <shortUserString>	#germany_vehicles:Maybach_HL_230_TRM_P30_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	54000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	1200	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	564	</rpm_min>
+      <rpm_max>	2508	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Maybach_HL_230_TRM_P30_SE20_At5_Elite>
+    <Tatra_V-103_SE20_At0_Regular>
+      <userString>	#germany_vehicles:Tatra_V-103	</userString>
+      <tags>	diesel	</tags>
+      <level>	4	</level>
+      <price>	9120	</price>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	220	</power>
+      <weight>	500	</weight>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	302	</rpm_min>
+      <rpm_max>	2095	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Tatra_V-103_SE20_At0_Regular>
+    <Maybach_HL_120_TRM_R_SE20_At2_Regular>
+      <userString>	#germany_vehicles:Maybach_HL_120_TRM_R	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	15000	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	300	</power>
+      <weight>	920	</weight>
+      <maxHealth>	86	</maxHealth>
+      <maxRegenHealth>	42	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	437	</rpm_min>
+      <rpm_max>	2400	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Maybach_HL_120_TRM_R_SE20_At2_Regular>
+    <Maybach_HL_120_TRM_SE20_Mt0_Elite>
+      <userString>	#germany_vehicles:Maybach_HL_120_TRM	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	19900	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	440	</power>
+      <weight>	510	</weight>
+      <maxHealth>	86	</maxHealth>
+      <maxRegenHealth>	42	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	349	</rpm_min>
+      <rpm_max>	2681	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Maybach_HL_120_TRM_SE20_Mt0_Elite>
+    <Maybach_HL_120_TRM_SE20_Mt0_Regular>
+      <userString>	#germany_vehicles:Maybach_HL_120_TRM	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	19900	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	440	</power>
+      <weight>	510	</weight>
+      <maxHealth>	86	</maxHealth>
+      <maxRegenHealth>	42	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	349	</rpm_min>
+      <rpm_max>	2681	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Maybach_HL_120_TRM_SE20_Mt0_Regular>
+    <MB507_SE20_Ht3_Boss>
+      <userString>	#germany_vehicles:MB507	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	132000	</price>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1750	</power>
+      <weight>	750	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	250	</rpm_min>
+      <rpm_max>	2800	</rpm_max>
+    </MB507_SE20_Ht3_Boss>
   </shared>
 </engines.xml>

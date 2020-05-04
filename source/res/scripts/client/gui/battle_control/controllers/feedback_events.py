@@ -120,8 +120,17 @@ class _DamageExtra(object):
     def isBomberEq(self, primary=True):
         return self.isAttackReason(ATTACK_REASON.BOMBER_EQ) if primary else self.isSecondaryAttackReason(ATTACK_REASON.BOMBER_EQ)
 
+    def isEventPhaseChange(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE) or self.isAttackReason(ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC) if primary else self.isSecondaryAttackReason(ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE) or self.isSecondaryAttackReason(ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC)
+
     def isBombers(self, primary=True):
         return self.isAttackReason(ATTACK_REASON.BOMBERS) if primary else self.isSecondaryAttackReason(ATTACK_REASON.BOMBERS)
+
+    def isDeathZone(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.PERSONAL_DEATH_ZONE) or self.isAttackReason(ATTACK_REASON.DEATH_ZONE) if primary else self.isSecondaryAttackReason(ATTACK_REASON.PERSONAL_DEATH_ZONE) or self.isSecondaryAttackReason(ATTACK_REASON.DEATH_ZONE)
+
+    def isMinefield(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.MINEFIELD_EQ) if primary else self.isSecondaryAttackReason(ATTACK_REASON.MINEFIELD_EQ)
 
     def isAttackReason(self, attackReason):
         return ATTACK_REASONS[self.__attackReasonID] == attackReason
@@ -212,6 +221,15 @@ class _CritsExtra(object):
 
     def isBombers(self, primary=True):
         return self.isAttackReason(ATTACK_REASON.BOMBERS) if primary else self.isSecondaryAttackReason(ATTACK_REASON.BOMBERS)
+
+    def isEventPhaseChange(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE) or self.isAttackReason(ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC) if primary else self.isSecondaryAttackReason(ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE) or self.isSecondaryAttackReason(ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC)
+
+    def isDeathZone(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.PERSONAL_DEATH_ZONE) or self.isAttackReason(ATTACK_REASON.DEATH_ZONE) if primary else self.isSecondaryAttackReason(ATTACK_REASON.PERSONAL_DEATH_ZONE) or self.isSecondaryAttackReason(ATTACK_REASON.DEATH_ZONE)
+
+    def isMinefield(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.MINEFIELD_EQ) if primary else self.isSecondaryAttackReason(ATTACK_REASON.MINEFIELD_EQ)
 
     def isSecondaryAttackReason(self, attackReason):
         return ATTACK_REASONS[self.__secondaryAttackReasonID] == attackReason

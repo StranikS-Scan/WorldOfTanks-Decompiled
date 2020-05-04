@@ -5,6 +5,8 @@
     <Average>	203	</Average>
     <Heavy>	204	</Heavy>
     <Large>	205	</Large>
+    <Average_SE20_Gen_4_Lvl_2>	0	</Average_SE20_Gen_4_Lvl_2>
+    <Heavy_SE20_Gen_4_Lvl_3>	1	</Heavy_SE20_Gen_4_Lvl_3>
   </ids>
   <shared>
     <Small>
@@ -47,5 +49,23 @@
       <maxRegenHealth>	70	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
     </Large>
+    <Average_SE20_Gen_4_Lvl_2>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	250	</weight>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Average_SE20_Gen_4_Lvl_2>
+    <Heavy_SE20_Gen_4_Lvl_3>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	275	</weight>
+      <maxHealth>	175	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Heavy_SE20_Gen_4_Lvl_3>
   </shared>
 </fuelTanks.xml>

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/damage_log_panel.py
 from collections import defaultdict
+import BigWorld
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE as _BET
 from account_helpers.settings_core.options import DamageLogDetailsSetting as _VIEW_MODE, DamageLogEventPositionsSetting as _EVENT_POSITIONS, DamageLogEventTypesSetting as _DISPLAYED_EVENT_TYPES
 from account_helpers.settings_core.settings_constants import DAMAGE_LOG, GRAPHICS
@@ -47,7 +48,18 @@ _VEHICLE_CLASS_TAGS_ICONS = {'lightTank': _IMAGES.WHITE_ICON_LIGHTTANK_16X16,
  'mediumTank': _IMAGES.WHITE_ICON_MEDIUM_TANK_16X16,
  'heavyTank': _IMAGES.WHITE_ICON_HEAVYTANK_16X16,
  'SPG': _IMAGES.WHITE_ICON_SPG_16X16,
- 'AT-SPG': _IMAGES.WHITE_ICON_AT_SPG_16X16}
+ 'AT-SPG': _IMAGES.WHITE_ICON_AT_SPG_16X16,
+ 'AT-SPGNormal': _IMAGES.DAMAGELOG_AT_SPG_NORMAL,
+ 'SPGNormal': _IMAGES.DAMAGELOG_SPG_NORMAL,
+ 'heavyTankNormal': _IMAGES.DAMAGELOG_HEAVY_TANK_NORMAL,
+ 'lightTankNormal': _IMAGES.DAMAGELOG_LIGHT_TANK_NORMAL,
+ 'mediumTankNormal': _IMAGES.DAMAGELOG_MEDIUM_TANK_NORMAL,
+ 'AT-SPGElite': _IMAGES.DAMAGELOG_AT_SPG_ELITE,
+ 'SPGElite': _IMAGES.DAMAGELOG_SPG_ELITE,
+ 'heavyTankElite': _IMAGES.DAMAGELOG_HEAVY_TANK_ELITE,
+ 'lightTankElite': _IMAGES.DAMAGELOG_LIGHT_TANK_ELITE,
+ 'mediumTankElite': _IMAGES.DAMAGELOG_MEDIUM_TANK_ELITE,
+ 'bossKill': _IMAGES.DAMAGELOG_BOSS_KILL}
 _SHELL_TYPES_TO_STR = {SHELL_TYPES.ARMOR_PIERCING: INGAME_GUI.DAMAGELOG_SHELLTYPE_ARMOR_PIERCING,
  SHELL_TYPES.HIGH_EXPLOSIVE: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE,
  SHELL_TYPES.ARMOR_PIERCING_HE: INGAME_GUI.DAMAGELOG_SHELLTYPE_ARMOR_PIERCING_HE,
@@ -114,8 +126,12 @@ class _VehicleVOBuilder(_IVOBuilder):
         return vo
 
     def _populateVO(self, vehicleVO, info, arenaDP):
-        vTypeInfoVO = arenaDP.getVehicleInfo(info.getArenaVehicleID()).vehicleType
-        vehicleVO.vehicleTypeImg = _VEHICLE_CLASS_TAGS_ICONS.get(vTypeInfoVO.classTag, '')
+        player = BigWorld.player()
+        vehicleId = info.getArenaVehicleID()
+        botMarkerType = player.getBotMarkerType(vehicleId)
+        vTypeInfoVO = arenaDP.getVehicleInfo(vehicleId).vehicleType
+        classImg = _VEHICLE_CLASS_TAGS_ICONS.get(vTypeInfoVO.classTag, '')
+        vehicleVO.vehicleTypeImg = _VEHICLE_CLASS_TAGS_ICONS.get(botMarkerType or vTypeInfoVO.classTag, classImg)
         vehicleVO.vehicleName = vTypeInfoVO.shortNameWithPrefix
 
 
@@ -123,7 +139,7 @@ class _ReceivedHitVehicleVOBuilder(_VehicleVOBuilder):
 
     def _populateVO(self, vehicleVO, info, arenaDP):
         super(_ReceivedHitVehicleVOBuilder, self)._populateVO(vehicleVO, info, arenaDP)
-        if info.getArenaVehicleID() == arenaDP.getPlayerVehicleID() and info.isRam():
+        if info.getArenaVehicleID() == arenaDP.getPlayerVehicleID() and (info.isRam() or info.isDeathZoneDamage()):
             vehicleVO.vehicleName = ''
             vehicleVO.vehicleTypeImg = ''
         if info.isProtectionZoneDamage() or info.isProtectionZoneDamage(primary=False) or info.isArtilleryEqDamage() or info.isArtilleryEqDamage(primary=False):
@@ -249,7 +265,7 @@ class _DamageActionImgVOBuilder(_ActionImgVOBuilder):
         self._wcIcon = wcIcon
 
     def _getImage(self, info):
-        if info.isShot() or info.isProtectionZoneDamage() or info.isBombersDamage() or info.isArtilleryEqDamage() or info.isBomberEqDamage():
+        if info.isShot() or info.isProtectionZoneDamage() or info.isBombersDamage() or info.isArtilleryEqDamage() or info.isBomberEqDamage() or info.isDeathZoneDamage() or info.isMinefieldDamage():
             return self._shotIcon
         if info.isFire():
             return self._fireIcon

@@ -4,9 +4,9 @@ from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.views.lobby.nation_change.nation_change_tank_slot_model import NationChangeTankSlotModel
 
 class NationChangeScreenModel(ViewModel):
-    __slots__ = ('onCloseBtnClick', 'onSwitchBtnClick', 'onCancelBtnClick', 'onHangarBtnClick', 'onDogClick')
+    __slots__ = ('onCloseBtnClick', 'onSwitchBtnClick', 'onCancelBtnClick', 'onHangarBtnClick', 'onDogClick', 'onInitialized')
 
-    def __init__(self, properties=13, commands=5):
+    def __init__(self, properties=13, commands=6):
         super(NationChangeScreenModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -103,3 +103,4 @@ class NationChangeScreenModel(ViewModel):
         self.onCancelBtnClick = self._addCommand('onCancelBtnClick')
         self.onHangarBtnClick = self._addCommand('onHangarBtnClick')
         self.onDogClick = self._addCommand('onDogClick')
+        self.onInitialized = self._addCommand('onInitialized')

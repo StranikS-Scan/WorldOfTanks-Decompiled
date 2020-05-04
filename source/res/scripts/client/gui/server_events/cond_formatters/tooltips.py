@@ -2,10 +2,13 @@
 # Embedded file name: scripts/client/gui/server_events/cond_formatters/tooltips.py
 from constants import EVENT_TYPE
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.server_events.cond_formatters import packText, getSeparator, requirements
 from gui.server_events.cond_formatters.formatters import ConditionFormatter, ConditionsFormatter
 from gui.server_events.cond_formatters.requirements import prepareAccountConditionsGroup
 from gui.server_events.conditions import GROUP_TYPE
+from gui.server_events.events_helpers import isSecretEvent, getPreviousBattleQuest
 from gui.shared.formatters import text_styles
 from helpers import dependency
 from helpers.i18n import makeString as _ms
@@ -104,5 +107,10 @@ class _TokenRequirementFormatter(ConditionFormatter):
         result = []
         if event.getType() not in EVENT_TYPE.LIKE_BATTLE_QUESTS + EVENT_TYPE.LIKE_TOKEN_QUESTS:
             return result
-        tokensNeedCount = condition.getNeededCount()
-        return [packText(style(_ms(TOOLTIPS.QUESTS_UNAVAILABLE_TOKEN, tokenName=text_styles.neutral(condition.getUserName()), count=tokensNeedCount)))]
+        else:
+            if isSecretEvent(event.getGroupID()):
+                prevEvent = getPreviousBattleQuest(event)
+                if prevEvent is not None and not prevEvent.isCompleted():
+                    return [packText(style(backport.text(R.strings.quests.missionDetails.requirements.conclusion.previousIncomplete(), quest_name=prevEvent.getUserName())))]
+            tokensNeedCount = condition.getNeededCount()
+            return [packText(style(_ms(TOOLTIPS.QUESTS_UNAVAILABLE_TOKEN, tokenName=text_styles.neutral(condition.getUserName()), count=tokensNeedCount)))]

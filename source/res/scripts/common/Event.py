@@ -2,17 +2,17 @@
 # Embedded file name: scripts/common/Event.py
 from debug_utils import LOG_CURRENT_EXCEPTION
 
-class Event(object):
+class Event(list):
     __slots__ = ('_delegates', '__weakref__')
 
     def __init__(self, manager=None):
-        self._delegates = []
+        list.__init__(self)
         if manager is not None:
             manager.register(self)
         return
 
     def __call__(self, *args, **kwargs):
-        for delegate in self._delegates[:]:
+        for delegate in self[:]:
             try:
                 delegate(*args, **kwargs)
             except:
@@ -22,20 +22,20 @@ class Event(object):
     def __iadd__(self, delegate):
         if not callable(delegate):
             raise TypeError('Event listener is not callable.')
-        if delegate not in self._delegates:
-            self._delegates.append(delegate)
+        if delegate not in self:
+            self.append(delegate)
         return self
 
     def __isub__(self, delegate):
-        if delegate in self._delegates:
-            self._delegates.remove(delegate)
+        if delegate in self:
+            self.remove(delegate)
         return self
 
     def clear(self):
-        del self._delegates[:]
+        del self[:]
 
     def __repr__(self):
-        return 'Event(%s):%s' % (len(self._delegates), repr(self._delegates))
+        return 'Event(%s):%s' % (len(self), repr(self[:]))
 
 
 class SafeEvent(Event):
@@ -45,7 +45,7 @@ class SafeEvent(Event):
         super(SafeEvent, self).__init__(manager)
 
     def __call__(self, *args, **kwargs):
-        for delegate in self._delegates[:]:
+        for delegate in self[:]:
             try:
                 delegate(*args, **kwargs)
             except:

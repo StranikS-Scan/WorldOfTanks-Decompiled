@@ -173,6 +173,13 @@ def showBuyGoldForBundle(fullPrice, params=None):
     showBuyGoldWebOverlay(params)
 
 
+def showBuyGoldForSecretEventItem(fullPrice):
+    params = _getParams('', fullPrice)
+    params.pop('reason', None)
+    showBuyGoldWebOverlay(params)
+    return
+
+
 @process
 def _showBlurredWebOverlay(url, params=None):
     url = yield URLMacros().parse(url, params)

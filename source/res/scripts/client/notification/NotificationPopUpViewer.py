@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/NotificationPopUpViewer.py
 from gui.Scaleform.daapi.view.meta.NotificationPopUpViewerMeta import NotificationPopUpViewerMeta
+from gui.shared import g_eventBus, EVENT_BUS_SCOPE
+from gui.shared.events import LobbyNotificationEvent
 from gui.shared.notifications import NotificationPriorityLevel, NotificationGroup
 from helpers import dependency
 from messenger import g_settings
@@ -52,6 +54,7 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
         self._model.onDisplayStateChanged += self.__displayStateChangeHandler
         mvcInstance = NotificationMVC.g_instance
         mvcInstance.getAlertController().onAllAlertsClosed += self.__allAlertsMessageCloseHandler
+        g_eventBus.addListener(LobbyNotificationEvent.SET_BOTTOM_PADDING, handler=self.__setBottomPaddingHandler, scope=EVENT_BUS_SCOPE.LOBBY)
         self.as_initInfoS(self.__maxAvailableItemsCount, self.__messagesPadding)
         self._model.setup()
 
@@ -61,6 +64,7 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
         self._model.onNotificationUpdated -= self.__onNotificationUpdated
         self._model.onNotificationRemoved -= self.__onNotificationRemoved
         self._model.onDisplayStateChanged -= self.__displayStateChangeHandler
+        g_eventBus.removeListener(LobbyNotificationEvent.SET_BOTTOM_PADDING, handler=self.__setBottomPaddingHandler, scope=EVENT_BUS_SCOPE.LOBBY)
         mvcInstance = NotificationMVC.g_instance
         mvcInstance.getAlertController().onAllAlertsClosed -= self.__allAlertsMessageCloseHandler
         self.cleanUp()
@@ -69,6 +73,9 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
 
     def _getSettings(self):
         return g_settings.lobby.serviceChannel
+
+    def __setBottomPaddingHandler(self, event):
+        self.as_setBottomPaddingS(event.bottomPadding)
 
     def __onNotificationReceived(self, notification):
         if self._model.getDisplayState() == NOTIFICATION_STATE.POPUPS:

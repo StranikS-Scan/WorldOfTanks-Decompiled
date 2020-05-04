@@ -296,6 +296,8 @@ class ISoundEventChecker(IGameController):
 class IHeroTankController(IGameController):
     onUpdated = None
     onInteractive = None
+    onEnterPreviewFromEvent = None
+    onExitPreviewFromEvent = None
 
     def hasAdventHero(self):
         raise NotImplementedError

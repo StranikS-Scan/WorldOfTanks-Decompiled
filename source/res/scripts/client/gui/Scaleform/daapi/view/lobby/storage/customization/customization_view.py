@@ -88,7 +88,7 @@ class StorageCategoryCustomizationView(StorageCategoryCustomizationViewMeta):
         return criteria
 
     def _getInvVehicleCriteria(self):
-        return REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT
+        return REQ_CRITERIA.INVENTORY ^ REQ_CRITERIA.VEHICLE.EVENT_BATTLE | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT
 
     def _getVO(self, item):
         priceVO = getItemPricesVO(item.getSellPrice())[0]

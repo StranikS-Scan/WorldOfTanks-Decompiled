@@ -11,7 +11,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_awards_view_model import BattlePassAwardsViewModel
 from gui.impl.pub import ViewImpl
 from gui.server_events.events_dispatcher import showMissionsBattlePassCommonProgression
-from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE, event_dispatcher
 from gui.shared.event_dispatcher import showBattlePassBuyWindow
 from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
@@ -105,9 +105,13 @@ class BattlePassAwardsView(ViewImpl):
         return
 
     def _onBuyClick(self):
+        self.destroyWindow()
+        self.__showBuyWindow()
+
+    @event_dispatcher.leaveEventMode
+    def __showBuyWindow(self):
         showMissionsBattlePassCommonProgression()
         showBattlePassBuyWindow()
-        self.destroyWindow()
 
     def __setAwards(self, bonuses, isPremiumPurchase, isFinalReward, isPostProgression):
         rewards = BattlePassAwardsManager.composeBonuses(bonuses)

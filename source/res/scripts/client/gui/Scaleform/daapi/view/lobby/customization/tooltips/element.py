@@ -114,6 +114,7 @@ class ElementTooltip(BlocksTooltipData):
         self._specialArgs = None
         self._isUnsupportedForm = None
         self._appliedCount = 0
+        self._customVehicleCD = -1
         self.__ctx = None
         return
 
@@ -128,6 +129,7 @@ class ElementTooltip(BlocksTooltipData):
             statsConfig.inventoryCount = showInventoryBlock
         self._isUnsupportedForm = args[2] if len(args) > 2 else False
         self._specialArgs = args[3] if len(args) > 3 else []
+        self._customVehicleCD = args[4] if len(args) > 4 else -1
         return self._packItemBlocks(statsConfig)
 
     def _packItemBlocks(self, statsConfig):
@@ -135,7 +137,11 @@ class ElementTooltip(BlocksTooltipData):
         topBlocks = [self._packTitleBlock(), self._packIconBlock(self._item.isHistorical(), self._item.isDim())]
         items = [formatters.packBuildUpBlockData(blocks=topBlocks, gap=10)]
         self.currentVehicle = g_currentVehicle.item
+        if self._customVehicleCD > 0:
+            self.currentVehicle = self.itemsCache.items.getItemByCD(self._customVehicleCD)
         self.boundVehs = [ vehicleCD for vehicleCD in self._item.boundInventoryCount if vehicleCD != -1 ]
+        if self._customVehicleCD > 0 and self._customVehicleCD not in self.boundVehs:
+            self.boundVehs.append(self._customVehicleCD)
         self.installedToVehs = self._item.getInstalledVehicles()
         if self.currentVehicle is not None:
             self.installedCount = self._item.getInstalledOnVehicleCount(self.currentVehicle.intCD)
@@ -205,7 +211,8 @@ class ElementTooltip(BlocksTooltipData):
         if not self._item.descriptor.filter.include:
             return None
         elif self._item.isVehicleBound and not self._item.mayApply:
-            return formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TITLE), desc=text_styles.main(makeVehiclesShortNamesString(set(self.boundVehs + self.installedToVehs), self.currentVehicle)), padding=formatters.packPadding(top=-2))
+            isCustom = self._customVehicleCD > 0
+            return formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TITLE), desc=text_styles.main(makeVehiclesShortNamesString(set(self.boundVehs + self.installedToVehs), self.currentVehicle, flat=isCustom)), padding=formatters.packPadding(top=-2))
         else:
             icn = getSuitableText(self._item, self.currentVehicle)
             blocks.append(formatters.packTextBlockData(text=icn, padding=formatters.packPadding(top=-2)))
@@ -317,7 +324,7 @@ class ElementTooltip(BlocksTooltipData):
         if self.__ctx is not None:
             inventoryCount = self.__ctx.getItemInventoryCount(self._item)
         else:
-            inventoryCount = getItemInventoryCount(self._item)
+            inventoryCount = getItemInventoryCount(self._item, vehicle=self.currentVehicle)
         info = text_styles.concatStylesWithSpace(text_styles.stats(inventoryCount))
         padding = formatters.packPadding(left=83, bottom=0)
         titlePadding = formatters.packPadding(left=-1)
@@ -329,7 +336,7 @@ class ElementTooltip(BlocksTooltipData):
                 if self._item.isRented and autoRentEnabled:
                     textKey = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_INVENTORY_RENT_BATTLESLEFT_AUTOPROLONGATIONON
                     icon = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_ICON_RENT
-                title = text_styles.main(_ms(textKey, tankname=g_currentVehicle.item.shortUserName))
+                title = text_styles.main(_ms(textKey, tankname=self.currentVehicle.shortUserName))
                 padding = formatters.packPadding(left=83, bottom=-14)
                 titlePadding = formatters.packPadding(left=-8)
                 iconPadding = formatters.packPadding(top=-7, left=-3)
@@ -343,7 +350,7 @@ class ElementTooltip(BlocksTooltipData):
         boundCount = self._item.boundInventoryCount.get(self.currentVehicle.intCD, 0)
         commonCount = boundCount + self.installedCount
         if showInventoryCount and commonCount > 0 and self._item.isVehicleBound and not self._item.isRentable:
-            subBlocks.append(formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_BOUND_ON_VEHICLE, tankname=g_currentVehicle.item.shortUserName)), value=text_styles.concatStylesWithSpace(text_styles.stats(commonCount)), icon=RES_ICONS.MAPS_ICONS_CUSTOMIZATION_TANK, padding=padding, titlePadding=titlePadding, iconPadding=formatters.packPadding(top=2)))
+            subBlocks.append(formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_BOUND_ON_VEHICLE, tankname=self.currentVehicle.shortUserName)), value=text_styles.concatStylesWithSpace(text_styles.stats(commonCount)), icon=RES_ICONS.MAPS_ICONS_CUSTOMIZATION_TANK, padding=padding, titlePadding=titlePadding, iconPadding=formatters.packPadding(top=2)))
         return formatters.packBuildUpBlockData(blocks=subBlocks, gap=-1)
 
     def _countImageWidth(self):
@@ -370,11 +377,10 @@ class ElementTooltip(BlocksTooltipData):
 
     def _packBonusBlock(self, bonus, camo, isApplied):
         blocks = []
-        vehicle = g_currentVehicle.item
-        bonusPercent = bonus.getFormattedValue(vehicle)
+        bonusPercent = bonus.getFormattedValue(self.currentVehicle)
         blocks.append(formatters.packImageTextBlockData(title=text_styles.bonusLocalInfoTipText(text_styles.concatStylesToSingleLine('+', bonusPercent)), img=RES_ICONS.MAPS_ICONS_VEHPARAMS_BIG_INVISIBILITYSTILLFACTOR, imgPadding=formatters.packPadding(top=-8, left=12), txtPadding=formatters.packPadding(top=-4), txtOffset=69))
         blocks.append(formatters.packTextBlockData(text=text_styles.main(self.bonusDescription), padding=formatters.packPadding(top=-46, left=110)))
-        stockVehicle = self.itemsCache.items.getStockVehicle(vehicle.intCD)
+        stockVehicle = self.itemsCache.items.getStockVehicle(self.currentVehicle.intCD)
         comparator = params_helper.camouflageComparator(stockVehicle, camo)
         stockParams = params_helper.getParameters(stockVehicle)
         padding = formatters.packPadding(left=105, top=2, bottom=-6)

@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/pm_constants.py
-from gui.Scaleform.framework.entities.View import CommonSoundSpaceSettings
+from gui.Scaleform.framework.entities.view_sound import CommonSoundSpaceSettings
 from shared_utils import CONST_CONTAINER
 from personal_missions import PM_BRANCH
 

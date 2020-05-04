@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/messages/vehicle_messages.py
+import logging
 from MemoryCriticalController import g_critMemHandler
-from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.battle.shared.messages import fading_messages
 from gui.shared.events import GameEvent
 from helpers import i18n
 from items import vehicles
+_logger = logging.getLogger(__name__)
 _VEHICLE_STYLE_FORMATTER = '<font size="%(fontSize)s" face="%(fontFace)s" color="%(fontColor)s">{0}</font>'
 
 class VehicleMessages(fading_messages.FadingMessages):
@@ -16,7 +17,7 @@ class VehicleMessages(fading_messages.FadingMessages):
         return
 
     def __del__(self):
-        LOG_DEBUG('VehicleMessages panel is deleted')
+        _logger.debug('VehicleMessages panel is deleted')
 
     def _populate(self):
         super(VehicleMessages, self)._populate()
@@ -62,7 +63,11 @@ class VehicleMessages(fading_messages.FadingMessages):
         self.showMessage('SCREENSHOT_CREATED', {'path': i18n.encodeUtf8(event.ctx['path'])})
 
     def __onShowVehicleMessageByCode(self, code, postfix, entityID, extra, equipmentID):
-        LOG_DEBUG('onShowVehicleMessage', code, postfix, entityID, extra, equipmentID)
+        _logger.debug('onShowVehicleMessage %s', (code,
+         postfix,
+         entityID,
+         extra,
+         equipmentID))
         names = {'device': '',
          'entity': '',
          'target': ''}
@@ -73,7 +78,7 @@ class VehicleMessages(fading_messages.FadingMessages):
         if equipmentID:
             equipment = vehicles.g_cache.equipments().get(equipmentID)
             if equipment is not None:
-                postfix = '_'.join((postfix, equipment.name.split('_')[0].upper()))
+                postfix = '_'.join((postfix, equipment.equipmentName))
         self.showMessage(code, names, postfix=postfix)
         return
 

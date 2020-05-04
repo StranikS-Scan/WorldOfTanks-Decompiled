@@ -17,6 +17,7 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.final_reward_item_model im
 from gui.impl.pub import ViewImpl
 from gui.server_events.events_dispatcher import showMissionsBattlePassCommonProgression
 from gui.shared.event_dispatcher import showStylePreview, showBattleVotingResultWindow, hideVehiclePreview, showHangar
+from gui.shared import event_dispatcher
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.scheduled_notifications import SimpleNotifier
 from gui.sounds.filters import switchHangarOverlaySoundFilter
@@ -90,7 +91,8 @@ class BattlePassVotingResultView(ViewImpl):
         vehicleCD = int(args.get('vehicleCD'))
         styleID = int(args.get('styleID'))
         style = self.__c11n.getItemByID(GUI_ITEM_TYPE.STYLE, styleID)
-        showStylePreview(vehicleCD, style, style.getDescription(), partial(self.__previewCallback, self.__isOverlay), backBtnDescrLabel=backport.text(R.strings.battle_pass_2020.battlePassVoting.backBtnTextPreview()))
+        self.destroyWindow()
+        event_dispatcher.leaveEventMode(showStylePreview)(vehicleCD, style, style.getDescription(), partial(self.__previewCallback, self.__isOverlay), backBtnDescrLabel=backport.text(R.strings.battle_pass_2020.battlePassVoting.backBtnTextPreview()))
 
     def __updateViewState(self):
         if isNeededToVote():
@@ -146,8 +148,12 @@ class BattlePassVotingResultView(ViewImpl):
         if self.__isOverlay:
             showHangar()
         else:
-            showMissionsBattlePassCommonProgression()
+            self.__showMissions()
         self.destroyWindow()
+
+    @event_dispatcher.leaveEventMode
+    def __showMissions(self):
+        showMissionsBattlePassCommonProgression()
 
     def __updateVotingResult(self, votingResult):
         selfVote = self.__battlePassController.getVoteOption()

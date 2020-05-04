@@ -222,6 +222,9 @@ class _EconomicsRecordsChains(object):
     def getBaseXPRecords(self):
         return self._baseXP
 
+    def getBaseFreeXPRecords(self):
+        return self._baseFreeXP
+
     def getPremiumXPRecords(self):
         return self._premiumXP
 
@@ -519,6 +522,9 @@ class PersonalInfo(shared.UnpackedInfo):
 
     def getPremiumXPRecords(self):
         return self._economicsRecords.getPremiumXPRecords()
+
+    def getBaseFreeXPRecords(self):
+        return self._economicsRecords.getBaseFreeXPRecords()
 
     def getPremiumXPAddRecords(self):
         return self._economicsRecords.getPremiumXPAddRecords()

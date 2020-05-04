@@ -1,0 +1,23 @@
+<PersonalDeathZonesHelper.def>
+  <Implements>
+    <Interface>	EntityTrap	</Interface>
+  </Implements>
+  <Properties>
+    <warningTimeShouldEndAt>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </warningTimeShouldEndAt>
+    <warningDuration>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </warningDuration>
+  </Properties>
+  <ClientMethods>
+    <onEnterDZ>
+      <Arg>	OBJECT_ID	</Arg>
+    </onEnterDZ>
+    <onLeaveDZ>
+      <Arg>	OBJECT_ID	</Arg>
+    </onLeaveDZ>
+  </ClientMethods>
+</PersonalDeathZonesHelper.def>

@@ -4,7 +4,7 @@ import logging
 import BigWorld
 import Event
 from adisp import async, process
-from constants import PREMIUM_TYPE
+from constants import PREMIUM_TYPE, ARENA_BONUS_TYPE
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING
 from gui import SystemMessages
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
@@ -28,7 +28,6 @@ from skeletons.gui.server_events import IEventsCache
 import personal_missions
 from gui.battle_results.components.progress import VehicleProgressHelper
 from Account import PlayerAccount
-from constants import ARENA_BONUS_TYPE
 from soft_exception import SoftException
 from shared_utils import first
 from shared_utils.account_helpers.battle_results_helpers import getEmptyClientPB20UXStats
@@ -271,22 +270,24 @@ class BattleResultsService(IBattleResultsService):
     def __showResults(self, ctx):
         yield self.requestResults(ctx)
 
-    @staticmethod
-    def __notifyBattleResultsPosted(arenaUniqueID, needToShowUI=False):
+    def __notifyBattleResultsPosted(self, arenaUniqueID, needToShowUI=False):
+        composerObj = self.__composers[arenaUniqueID]
         if needToShowUI:
-            event_dispatcher.showBattleResultsWindow(arenaUniqueID)
-        event_dispatcher.notifyBattleResultsPosted(arenaUniqueID)
+            composerObj.onShowResults(arenaUniqueID)
+        composerObj.onResultsPosted(arenaUniqueID)
 
     def __handleLobbyViewLoaded(self, _):
         battleCtx = self.sessionProvider.getCtx()
         arenaUniqueID = battleCtx.lastArenaUniqueID
+        arenaBonusType = battleCtx.lastArenaBonusType or ARENA_BONUS_TYPE.UNKNOWN
         if arenaUniqueID:
             try:
-                self.__showResults(context.RequestResultsContext(arenaUniqueID))
+                self.__showResults(context.RequestResultsContext(arenaUniqueID, arenaBonusType))
             except Exception:
                 LOG_CURRENT_EXCEPTION()
 
             battleCtx.lastArenaUniqueID = None
+            battleCtx.lastArenaBonusType = None
         return
 
     @async

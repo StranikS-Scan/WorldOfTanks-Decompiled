@@ -1,0 +1,22 @@
+<ActionEffects.def>
+  <Properties>
+    <arenaID>
+      <Type>	INT32	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </arenaID>
+    <equipmentID>
+      <Type>	INT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </equipmentID>
+    <attackerInfo>
+      <Type>	ATTACKER_INFO	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </attackerInfo>
+  </Properties>
+  <ClientMethods>
+    <playEffect>
+      <Arg>	STRING	</Arg>
+      <Arg>	VECTOR3	</Arg>
+    </playEffect>
+  </ClientMethods>
+</ActionEffects.def>

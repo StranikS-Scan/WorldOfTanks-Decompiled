@@ -24,7 +24,9 @@ class CombatSelectedArea(object):
         self.__rotateModelNode = None
         self.__color = None
         self.__size = None
+        self.__visualPath = None
         self.__enableConstrainToArenaBounds = enableConstrainToArenaBounds
+        self.__enableConstrainAreaCenterToArenaBounds = False
         return
 
     def setup(self, position, direction, size, visualPath, color, marker):
@@ -35,20 +37,19 @@ class CombatSelectedArea(object):
         area.enableAccurateCollision(True)
         area.setYCutOffDistance(MARKER_HEIGHT)
         rootNode.attach(area)
-        self.__terrainAndObjectsSelectedArea = area = BigWorld.PyTerrainSelectedArea()
-        area.setup(visualPath, size, self.__overTerrainHeight, color)
-        area.enableAccurateCollision(False)
-        area.setYCutOffDistance(MARKER_HEIGHT)
-        rootNode.attach(area)
         self.__size = size
         self.__color = color
-        BigWorld.addModel(model)
+        self.__visualPath = visualPath
+        player = BigWorld.player()
+        if player is not None:
+            player.addModel(model)
         self.__matrix = Math.Matrix()
         model.addMotor(BigWorld.Servo(self.__matrix))
         self.relocate(position, direction)
         self.__nextPosition = position
         self.__speed = Math.Vector3(0.0, 0.0, 0.0)
         self.__time = 0.0
+        return
 
     def addLine(self, position, color, width, height):
         if self.__fakeModel is None:
@@ -73,8 +74,24 @@ class CombatSelectedArea(object):
             self.__terrainRotatedArea = None
         return
 
+    def setTerrainAndObjectsSelectedAreaVisible(self, value=False):
+        rootNode = self.__fakeModel.node('')
+        if value and self.__terrainAndObjectsSelectedArea is None:
+            self.__terrainAndObjectsSelectedArea = area = BigWorld.PyTerrainSelectedArea()
+            area.setup(self.__visualPath, self.__size, self.__overTerrainHeight, self.__color)
+            area.enableAccurateCollision(False)
+            area.setYCutOffDistance(MARKER_HEIGHT)
+            rootNode.attach(area)
+        elif not value and self.__terrainAndObjectsSelectedArea is not None:
+            rootNode.detach(self.__terrainAndObjectsSelectedArea)
+            self.__terrainAndObjectsSelectedArea = None
+        return
+
     def setConstrainToArenaBounds(self, enable):
         self.__enableConstrainToArenaBounds = enable
+
+    def setConstrainCenterToArenaBounds(self, enable):
+        self.__enableConstrainAreaCenterToArenaBounds = enable
 
     def setOverTerrainOffset(self, offset):
         if self.__terrainSelectedArea is not None:
@@ -108,8 +125,11 @@ class CombatSelectedArea(object):
                         correction.z = max(correction.z, correctedPoint.z - transformedCorner.z, key=abs)
 
                 self.__matrix.translation = position + correction
+            elif self.__enableConstrainAreaCenterToArenaBounds:
+                self.__matrix.translation = self._clampToArenaBB(position)
             self.__terrainSelectedArea.updateHeights()
-            self.__terrainAndObjectsSelectedArea.updateHeights()
+            if self.__terrainAndObjectsSelectedArea is not None:
+                self.__terrainAndObjectsSelectedArea.updateHeights()
             if self.__terrainRotatedArea:
                 self.__terrainRotatedArea.updateHeights()
             return
@@ -134,7 +154,9 @@ class CombatSelectedArea(object):
         self.setup(position, direction, size, DEFAULT_RADIUS_MODEL, COLOR_WHITE, marker)
 
     def destroy(self):
-        BigWorld.delModel(self.__fakeModel)
+        player = BigWorld.player()
+        if player is not None:
+            player.delModel(self.__fakeModel)
         self.__terrainSelectedArea = None
         self.__terrainAndObjectsSelectedArea = None
         self.__terrainRotatedArea = None
@@ -151,3 +173,7 @@ class CombatSelectedArea(object):
         x_side = self.__size.x / 2
         y_side = self.__size.y / 2
         return -x_side < point.x < x_side and -y_side < point.z < y_side
+
+    def _clampToArenaBB(self, position):
+        arena = BigWorld.player().arena
+        return arena.getClosestPointOnArenaBB(position) if not arena.isPointInsideArenaBB(position) else position

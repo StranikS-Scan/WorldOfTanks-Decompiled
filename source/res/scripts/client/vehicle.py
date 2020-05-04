@@ -6,6 +6,7 @@ import random
 import weakref
 from collections import namedtuple
 import BigWorld
+import Event
 import Math
 import NetworkFilters
 import WoT
@@ -26,6 +27,7 @@ from gun_rotation_shared import decodeGunAngles
 from helpers import dependency
 from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
 from helpers.EffectsList import SoundStartParam
+from helpers.buffs import BuffContainer
 from items import vehicles
 from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES, EFFECT_MATERIALS
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -77,9 +79,9 @@ StunInfo = namedtuple('StunInfo', ('startTime',
  'endTime',
  'duration',
  'totalTime'))
-VEHICLE_COMPONENTS = {BattleAbilitiesComponent}
+VEHICLE_COMPONENTS = {BattleAbilitiesComponent, BuffContainer}
 
-class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
+class Vehicle(BigWorld.Entity, BattleAbilitiesComponent, BuffContainer):
     isEnteringWorld = property(lambda self: self.__isEnteringWorld)
     isTurretDetached = property(lambda self: constants.SPECIAL_VEHICLE_HEALTH.IS_TURRET_DETACHED(self.health) and self.__turretDetachmentConfirmed)
     isTurretMarkedForDetachment = property(lambda self: constants.SPECIAL_VEHICLE_HEALTH.IS_TURRET_DETACHED(self.health))
@@ -89,6 +91,25 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
     lobbyContext = dependency.descriptor(ILobbyContext)
     __specialSounds = dependency.descriptor(ISpecialSoundCtrl)
     activeGunIndex = property(lambda self: self.__activeGunIndex)
+
+    @property
+    def canBeDamaged(self):
+        return self.__canBeDamaged
+
+    @canBeDamaged.setter
+    def canBeDamaged(self, value):
+        if value is self.__canBeDamaged:
+            return
+        else:
+            self.__canBeDamaged = value
+            self.onCanBeDamagedChanged(value)
+            attachedVehicle = BigWorld.player().getVehicleAttached()
+            if attachedVehicle is None:
+                return
+            isAttachedVehicle = self.id == attachedVehicle.id
+            if isAttachedVehicle:
+                self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.CAN_BE_DAMAGED, self.__canBeDamaged)
+            return
 
     @property
     def speedInfo(self):
@@ -126,8 +147,9 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
     def getSpeed(self):
         return self.__speedInfo.value[0]
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         global _g_waitingVehicle
+        super(Vehicle, self).__init__(*args, **kwargs)
         for comp in VEHICLE_COMPONENTS:
             comp.__init__(self)
 
@@ -137,6 +159,8 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         self.appearance = None
         self.isPlayerVehicle = False
         self.isStarted = False
+        self.isCrewActive = True
+        self.__canBeDamaged = True
         self.__isEnteringWorld = False
         self.__turretDetachmentConfirmed = False
         self.__speedInfo = _VehicleSpeedProvider()
@@ -150,6 +174,8 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
         self.__wheelsSteeringFilter = None
         self.__activeGunIndex = None
         self.refreshNationalVoice()
+        self.onCanBeDamagedChanged = Event.Event()
+        self.compoundInvalidated = False
         self.prereqsCompDescr = None
         return
 
@@ -312,7 +338,9 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
                 return
             if attackerID == BigWorld.player().playerVehicleID:
                 if maxHitEffectCode is not None and not self.isPlayerVehicle:
-                    if maxHitEffectCode in VEHICLE_HIT_EFFECT.RICOCHETS:
+                    if not self.canBeDamaged:
+                        eventID = _GUI_EVENT_ID.VEHICLE_INVULNERABLE
+                    elif maxHitEffectCode in VEHICLE_HIT_EFFECT.RICOCHETS:
                         eventID = _GUI_EVENT_ID.VEHICLE_RICOCHET
                     elif maxHitEffectCode == VEHICLE_HIT_EFFECT.CRITICAL_HIT:
                         if maxDamagedComponent == TankPartNames.CHASSIS:
@@ -715,6 +743,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             self.updateStunInfo()
         self.set_inspiringEffect()
         self.set_inspired()
+        self.set_buffs()
         if self.isSpeedCapturing:
             self.set_isSpeedCapturing()
         if self.isBlockingCapture:
@@ -742,6 +771,8 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
     def stopVisual(self, showStipple=False):
         if not self.isStarted:
             raise SoftException('Vehicle is already stopped')
+        self.compoundInvalidated = True
+        self.clearBuffs()
         stippleModel = None
         showStipple = False
         if showStipple:

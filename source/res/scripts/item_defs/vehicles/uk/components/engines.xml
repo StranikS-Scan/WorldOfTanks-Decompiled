@@ -81,6 +81,9 @@
     <Rolls_Royse_Meteor_MkV_IGR>	60005	</Rolls_Royse_Meteor_MkV_IGR>
     <Vauxhall_Bedford_Twin_Six_IGR>	60006	</Vauxhall_Bedford_Twin_Six_IGR>
     <Rolls_Royce_Griffon_IGR>	60007	</Rolls_Royce_Griffon_IGR>
+    <Vauxhall_Bedford_Twin_Six_SE20_Gen_5_Lvl_1>	3	</Vauxhall_Bedford_Twin_Six_SE20_Gen_5_Lvl_1>
+    <Vauxhall_Bedford_Twin_Six_SE20_Gen_5_Lvl_2>	6	</Vauxhall_Bedford_Twin_Six_SE20_Gen_5_Lvl_2>
+    <Rolls_Royse_Meteor_SE20_Gen_5_Lvl_3>	11	</Rolls_Royse_Meteor_SE20_Gen_5_Lvl_3>
   </ids>
   <shared>
     <Vickers-Armstrong>
@@ -1416,5 +1419,56 @@
       <rpm_min>	416	</rpm_min>
       <rpm_max>	2848	</rpm_max>
     </Engine_FV4202>
+    <Vauxhall_Bedford_Twin_Six_SE20_Gen_5_Lvl_1>
+      <userString>	#gb_vehicles:Vauxhall_Bedford_Twin_Six_SE20_Gen_5_Lvl_1	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	11000	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	450	</power>
+      <weight>	1531	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	406	</rpm_min>
+      <rpm_max>	2500	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Vauxhall_Bedford_Twin_Six_SE20_Gen_5_Lvl_1>
+    <Vauxhall_Bedford_Twin_Six_SE20_Gen_5_Lvl_2>
+      <userString>	#gb_vehicles:Vauxhall_Bedford_Twin_Six_SE20_Gen_5_Lvl_2	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	11000	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	500	</power>
+      <weight>	1531	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	406	</rpm_min>
+      <rpm_max>	2500	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Vauxhall_Bedford_Twin_Six_SE20_Gen_5_Lvl_2>
+    <Rolls_Royse_Meteor_SE20_Gen_5_Lvl_3>
+      <userString>	#gb_vehicles:Rolls_Royse_Meteor_SE20_Gen_5_Lvl_3	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	14000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	634	</power>
+      <weight>	744	</weight>
+      <maxHealth>	247	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	700	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Rolls_Royse_Meteor_SE20_Gen_5_Lvl_3>
   </shared>
 </engines.xml>

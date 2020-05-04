@@ -75,6 +75,7 @@ class InventoryVehicleTab(InventoryItemsTab, StoreVehicleTab):
         requestCriteria = super(InventoryVehicleTab, self)._getRequestCriteria(invVehicles)
         requestCriteria |= REQ_CRITERIA.INVENTORY
         requestCriteria |= REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP
+        requestCriteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
         requestCriteria |= self._getVehicleRiterias(self._filterData['selectedTypes'], self._filterData['selectedLevels'])
         extra = self._filterData['extra']
         return self._getExtraCriteria(extra, requestCriteria, invVehicles)

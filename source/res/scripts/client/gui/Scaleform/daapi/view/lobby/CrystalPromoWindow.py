@@ -6,6 +6,7 @@ from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.event_dispatcher import showWebShop, showOldShop
+from gui.shared import event_dispatcher as shared_events
 
 class CrystalsPromoWindow(CrystalsPromoWindowMeta):
 
@@ -33,6 +34,7 @@ class CrystalsPromoWindow(CrystalsPromoWindowMeta):
          'bg': RES_ICONS.MAPS_ICONS_WINDOWS_CRYSTALSPROMOBG,
          'showOpenShopBtn': isIngameShopEnabled()})
 
+    @shared_events.leaveEventMode
     def onOpenShop(self):
         if isIngameShopEnabled():
             showWebShop(getBonsUrl())

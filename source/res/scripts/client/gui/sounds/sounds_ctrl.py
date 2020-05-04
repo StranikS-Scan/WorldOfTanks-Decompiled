@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/sounds/sounds_ctrl.py
 import weakref
+from constants import CURRENT_REALM
 import MusicControllerWWISE as _MC
 import SoundGroups
 from gui.sounds.ambients import GuiAmbientsCtrl
-from gui.sounds.sound_constants import EnabledStatus
+from gui.sounds.sound_constants import EnabledStatus, SoundLanguage
 from gui.sounds.sound_systems import getCurrentSoundSystem
 from gui.sounds.sound_utils import SOUND_DEBUG
 from helpers import dependency
@@ -34,6 +35,7 @@ class SoundsController(ISoundsController):
         self.__guiAmbients.start()
         self.gameSession.onPremiumNotify += self.__onPremiumChanged
         self.__setAccountAttrs()
+        self.__setEventVoiceoverLanguage()
 
     def stop(self, isDisconnected=False):
         self.gameSession.onPremiumNotify -= self.__onPremiumChanged
@@ -66,3 +68,9 @@ class SoundsController(ISoundsController):
     def __setAccountAttrs(self, restartSounds=False):
         SOUND_DEBUG('Set current account premium state', self.itemsCache.items.stats.isPremium, restartSounds)
         _MC.g_musicController.setAccountPremiumState(self.itemsCache.items.stats.isPremium, restart=restartSounds)
+
+    def __setEventVoiceoverLanguage(self):
+        if CURRENT_REALM in SoundLanguage.RU_VOICEOVER_REALM_CODES:
+            SoundGroups.g_instance.setSwitch(SoundLanguage.VOICEOVER_LOCALIZATION_SWITCH, SoundLanguage.VOICEOVER_RU)
+        else:
+            SoundGroups.g_instance.setSwitch(SoundLanguage.VOICEOVER_LOCALIZATION_SWITCH, SoundLanguage.VOICEOVER_EN)

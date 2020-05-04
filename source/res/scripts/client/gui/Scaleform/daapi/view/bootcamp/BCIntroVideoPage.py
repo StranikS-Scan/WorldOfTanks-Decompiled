@@ -10,7 +10,7 @@ from bootcamp.BootCampEvents import g_bootcampEvents
 from bootcamp.statistic.decorators import loggerTarget, loggerEntry, logOnCondition, simpleLog
 from bootcamp.statistic.logging_constants import BC_LOG_ACTIONS, BC_LOG_KEYS
 from gui.Scaleform import SCALEFORM_SWF_PATH_V3
-from gui.Scaleform.framework.entities.View import CommonSoundSpaceSettings
+from gui.Scaleform.framework.entities.view_sound import CommonSoundSpaceSettings
 _DEFAULT_VIDEO_BUFFERING_TIME = 0.0
 
 @loggerTarget(logKey=BC_LOG_KEYS.BC_INTRO_VIDEO)

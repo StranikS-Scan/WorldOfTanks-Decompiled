@@ -53,7 +53,9 @@ class IntSettingsRequester(object):
      'BOB_CAROUSEL_FILTER_2': 93,
      'SESSION_STATS': constants.USER_SERVER_SETTINGS.SESSION_STATS,
      'BATTLEPASS_CAROUSEL_FILTER_1': 97,
-     'BATTLE_PASS_STORAGE': 98}
+     'BATTLE_PASS_STORAGE': 98,
+     'GAME_EVENT': constants.USER_SERVER_SETTINGS.GAME_EVENT,
+     'GAME_EVENT_HANGAR_VO': constants.USER_SERVER_SETTINGS.GAME_EVENT_HANGAR_VO}
 
     def __init__(self):
         self.__cache = dict()

@@ -40,7 +40,7 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
         super(StoreComponent, self).__init__()
         self.__nations = []
         self.__filterHash = {}
-        self.__invVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).values()
+        self.__invVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE).values()
         self._table = None
         self._currentTab = None
         self.__subFilter = {'current': None,

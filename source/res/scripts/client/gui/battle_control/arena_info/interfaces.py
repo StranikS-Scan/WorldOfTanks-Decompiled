@@ -203,3 +203,13 @@ class IAnonymizerFakesController(IArenaVehiclesController):
 
     def removeTmpIgnored(self, avatarSessionID):
         raise NotImplementedError
+
+
+class IRadarController(object):
+    __slots__ = ()
+
+    def addRuntimeView(self, view):
+        raise NotImplementedError
+
+    def removeRuntimeView(self, view):
+        raise NotImplementedError

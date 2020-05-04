@@ -6,6 +6,8 @@ from gui.battle_control.battle_constants import BATTLE_CTRL_ID, REUSABLE_BATTLE_
 from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, bootcamp_ctrl, chat_cmd_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, respawn_ctrl, team_bases_ctrl, team_health_bar_ctrl, vehicle_state_ctrl, view_points_ctrl, epic_respawn_ctrl, progress_circle_ctrl, epic_maps_ctrl, epic_spectator_ctrl, epic_missions_ctrl, game_notification_ctrl, epic_team_bases_ctrl, anonymizer_fakes_ctrl, korea_msgs_ctrl
 from gui.battle_control.controllers.quest_progress import quest_progress_ctrl
 from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicControllersLocator
+from gui.battle_control.controllers import battle_hints_ctrl
+from gui.battle_control.controllers import radar_ctrl
 
 class BattleSessionSetup(object):
     __slots__ = ('avatar', 'replayCtrl', 'gasAttackMgr', 'sessionProvider')
@@ -141,6 +143,10 @@ class SharedControllersLocator(_ControllersLocator, ISharedControllersLocator):
     def questProgress(self):
         return self._repository.getController(BATTLE_CTRL_ID.QUEST_PROGRESS)
 
+    @property
+    def arenaBorder(self):
+        return self._repository.getController(BATTLE_CTRL_ID.ARENA_BORDER)
+
 
 class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator):
     __slots__ = ()
@@ -196,6 +202,30 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
     @property
     def gameNotifications(self):
         return self._repository.getController(BATTLE_CTRL_ID.GAME_NOTIFICATIONS)
+
+    @property
+    def battleHints(self):
+        return self._repository.getController(BATTLE_CTRL_ID.BATTLE_HINTS)
+
+    @property
+    def radar(self):
+        return self._repository.getController(BATTLE_CTRL_ID.RADAR_CTRL)
+
+    @property
+    def areaPointMarker(self):
+        return self._repository.getController(BATTLE_CTRL_ID.AREA_POINT)
+
+    @property
+    def areaVehicleMarker(self):
+        return self._repository.getController(BATTLE_CTRL_ID.AREA_VEHICLE_MARKER)
+
+    @property
+    def behaviorMarker(self):
+        return self._repository.getController(BATTLE_CTRL_ID.BEHAVIOR_MARKER)
+
+    @property
+    def highlightMarker(self):
+        return self._repository.getController(BATTLE_CTRL_ID.HIGHLIGHT_MARKER)
 
 
 class _EmptyRepository(interfaces.IBattleControllersRepository):
@@ -338,4 +368,21 @@ class EpicControllersRepository(_ControllersRepository):
         repository.addViewController(game_notification_ctrl.EpicGameNotificationsController(setup), setup)
         repository.addViewController(epic_missions_ctrl.EpicMissionsController(setup), setup)
         repository.addArenaViewController(epic_team_bases_ctrl.createEpicTeamsBasesCtrl(setup), setup)
+        return repository
+
+
+class EventControllersRepository(ClassicControllersRepository):
+    __slots__ = ()
+
+    @classmethod
+    def create(cls, setup):
+        from gui.battle_control.controllers import event_area_point_marker_ctrl, event_area_vehicle_marker_ctrl, event_behavior_marker_ctrl, event_highlight_marker_ctrl, event_deathzones_markers_ctrl
+        repository = super(EventControllersRepository, cls).create(setup)
+        repository.addViewController(battle_hints_ctrl.createBattleHintsController(), setup)
+        repository.addViewController(radar_ctrl.RadarController(), setup)
+        repository.addArenaController(event_area_point_marker_ctrl.EventAreaPointMarkersController(), setup)
+        repository.addArenaController(event_area_vehicle_marker_ctrl.EventAreaVehicleMarkersController(), setup)
+        repository.addArenaController(event_behavior_marker_ctrl.EventBehaviorMarkersController(), setup)
+        repository.addArenaController(event_highlight_marker_ctrl.EventHighlightMarkersController(), setup)
+        repository.addArenaController(event_deathzones_markers_ctrl.EventDeathZonesMarkersController(), setup)
         return repository

@@ -436,7 +436,7 @@ def packMoneyAndXpValueBlock(value, icon, iconYoffset, paddingBottom=15, valueWi
     return valueBlock
 
 
-def packMoneyAndXpBlocks(tooltipBlocks, btnType, valueBlocks, alternativeData=None):
+def packMoneyAndXpBlocks(tooltipBlocks, btnType, valueBlocks, alternativeData=None, hideActionBlocks=False):
     titleBlocks = list()
     alternativeData = alternativeData or {}
     titleBlocks.append(packTitleDescBlock(text_styles.highTitle(TOOLTIPS.getHeaderBtnTitle(alternativeData.get('title') or btnType)), None, padding=packPadding(bottom=15)))
@@ -447,10 +447,15 @@ def packMoneyAndXpBlocks(tooltipBlocks, btnType, valueBlocks, alternativeData=No
         decsBlocks = list()
         decsBlocks.append(packTextBlockData(text_styles.main(TOOLTIPS.getHeaderBtnDesc(alternativeData.get('btnDesc') or btnType)), padding=packPadding(bottom=15)))
         tooltipBlocks.append(packBuildUpBlockData(decsBlocks))
-    actionBlocks = list()
-    actionBlocks.append(packAlignedTextBlockData(text=text_styles.standard(TOOLTIPS.getHeaderBtnClickDesc(alternativeData.get('btnClickDesc') or btnType)), align=alternativeData.get('btnClickDescAlign') or BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
-    tooltipBlocks.append(packBuildUpBlockData(actionBlocks))
+    if not hideActionBlocks:
+        actionBlocks = list()
+        actionBlocks.append(packAlignedTextBlockData(text=text_styles.standard(TOOLTIPS.getHeaderBtnClickDesc(alternativeData.get('btnClickDesc') or btnType)), align=alternativeData.get('btnClickDescAlign') or BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
+        tooltipBlocks.append(packBuildUpBlockData(actionBlocks))
     return tooltipBlocks
+
+
+def packMoneyAndXpBlocksEvent(tooltipBlocks, btnType, valueBlocks, alternativeData=None):
+    return packMoneyAndXpBlocks(tooltipBlocks=tooltipBlocks, btnType=btnType, valueBlocks=valueBlocks, alternativeData=alternativeData, hideActionBlocks=True)
 
 
 def packSeparatorBlockData(paddings=None, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT):

@@ -2,13 +2,18 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehiclePreview20/__init__.py
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.trade_in.trade_off_widget import TradeOffWidget
+from gui.Scaleform.daapi.view.lobby.vehiclePreview20.info.vehicle_preview_browse_tab import VehiclePreviewBrowseTab
+from gui.Scaleform.daapi.view.lobby.vehiclePreview20.info.vehicle_preview_crew_tab import VehiclePreviewCrewTab
+from gui.Scaleform.daapi.view.lobby.vehiclePreview20.info.vehicle_preview_event_progression_buying_panel import VehiclePreviewEventProgressionBuyingPanel
+from gui.Scaleform.daapi.view.lobby.vehiclePreview20.info.vehicle_preview_modules_tab import VehiclePreviewModulesTab
+from gui.Scaleform.daapi.view.lobby.vehiclePreview20.info.vehicle_preview_secret_event_bought_panel import VehiclePreviewSecretEventBoughtPanel
+from gui.Scaleform.daapi.view.lobby.vehiclePreview20.info.vehicle_preview_secret_event_buying_action_panel import VehiclePreviewSecretEventBuyingActionPanel
+from gui.Scaleform.daapi.view.lobby.vehiclePreview20.info.vehicle_preview_secret_event_buying_panel import VehiclePreviewSecretEventBuyingPanel
+from gui.Scaleform.daapi.view.lobby.vehiclePreview20.info.vehicle_preview_secret_event_header import VehiclePreviewSecretEventHeader
+from gui.Scaleform.daapi.view.lobby.vehiclePreview20.info.vehicle_preview_secret_event_sold_panel import VehiclePreviewSecretEventSoldPanel
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.info.vehicle_preview_trade_in_buying_panel import VehiclePreviewTradeInBuyingPanel
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.pack_items_popover import PackItemsPopover
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.vehicle_preview_buying_panel import VehiclePreviewBuyingPanel
-from gui.Scaleform.daapi.view.lobby.vehiclePreview20.info.vehicle_preview_event_progression_buying_panel import VehiclePreviewEventProgressionBuyingPanel
-from gui.Scaleform.daapi.view.lobby.vehiclePreview20.info.vehicle_preview_browse_tab import VehiclePreviewBrowseTab
-from gui.Scaleform.daapi.view.lobby.vehiclePreview20.info.vehicle_preview_crew_tab import VehiclePreviewCrewTab
-from gui.Scaleform.daapi.view.lobby.vehiclePreview20.info.vehicle_preview_modules_tab import VehiclePreviewModulesTab
 from gui.Scaleform.framework import ViewSettings, ViewTypes, ScopeTemplates, GroupedViewSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
@@ -25,6 +30,11 @@ def getViewSettings():
      ViewSettings(VEHPREVIEW_CONSTANTS.BUYING_PANEL_PY_ALIAS, VehiclePreviewBuyingPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VEHPREVIEW_CONSTANTS.EVENT_PROGRESSION_BUYING_PANEL_PY_ALIAS, VehiclePreviewEventProgressionBuyingPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VEHPREVIEW_CONSTANTS.TRADE_IN_BUYING_PANEL_PY_ALIAS, VehiclePreviewTradeInBuyingPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(VEHPREVIEW_CONSTANTS.SECRET_EVENT_BUYING_ACTION_PANEL_PY_ALIAS, VehiclePreviewSecretEventBuyingActionPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(VEHPREVIEW_CONSTANTS.SECRET_EVENT_BUYING_PANEL_PY_ALIAS, VehiclePreviewSecretEventBuyingPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(VEHPREVIEW_CONSTANTS.SECRET_EVENT_BOUGHT_PANEL_PY_ALIAS, VehiclePreviewSecretEventBoughtPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(VEHPREVIEW_CONSTANTS.SECRET_EVENT_SOLD_PANEL_PY_ALIAS, VehiclePreviewSecretEventSoldPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(VEHPREVIEW_CONSTANTS.SECRET_EVENT_HEADER_WIDGET_PY_ALIAS, VehiclePreviewSecretEventHeader, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE, VehiclePreviewBrowseTab, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VEHPREVIEW_CONSTANTS.MODULES_LINKAGE, VehiclePreviewModulesTab, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VEHPREVIEW_CONSTANTS.CREW_LINKAGE, VehiclePreviewCrewTab, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),

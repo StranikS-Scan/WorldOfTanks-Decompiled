@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/CurrentVehicle.py
 import BigWorld
-from constants import CustomizationInvData
+from constants import CustomizationInvData, QUEUE_TYPE
 from Event import Event, EventManager
 from adisp import process
+from skeletons.gui.game_event_controller import IGameEventController
 from gui.shared.formatters.time_formatters import getTimeLeftStr
 from gui.shared.gui_items.customization.outfit import Area
 from gui.shared.gui_items.processors.module import getPreviewInstallerProcessor
@@ -11,7 +12,7 @@ from gui.vehicle_view_states import createState4CurrentVehicle
 from helpers import dependency
 from items.vehicles import VehicleDescr
 from helpers import isPlayerAccount, i18n
-from account_helpers.AccountSettings import AccountSettings, CURRENT_VEHICLE
+from account_helpers.AccountSettings import AccountSettings, CURRENT_VEHICLE, EVENT_CURRENT_VEHICLE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.formatters import icons
@@ -26,6 +27,7 @@ from skeletons.gui.game_control import IIGRController, IRentalsController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.gui.shared.utils import IHangarSpace
+from gui.prb_control import prbEntityProperty
 _MODULES_NAMES = ('turret',
  'chassis',
  'engine',
@@ -281,6 +283,7 @@ class _CurrentVehicle(_CachedVehicle):
         vehicle = self.itemsCache.items.getVehicle(vehInvID)
         if vehicle is None:
             vehiclesCriteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP
+            vehiclesCriteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
             invVehs = self.itemsCache.items.getVehicles(criteria=vehiclesCriteria)
 
             def notEvent(x, y):
@@ -297,6 +300,31 @@ class _CurrentVehicle(_CachedVehicle):
 
     def selectNoVehicle(self):
         self._selectVehicle(0)
+
+    def selectStoredVehicle(self):
+        g_currentPreviewVehicle.selectNoVehicle()
+        self.selectVehicle(AccountSettings.getFavorites(CURRENT_VEHICLE))
+
+    def selectEventVehicle(self, vehInvID=0):
+        if vehInvID == 0:
+            vehInvID = AccountSettings.getFavorites(EVENT_CURRENT_VEHICLE)
+        if vehInvID < 0:
+            AccountSettings.setFavorites(EVENT_CURRENT_VEHICLE, vehInvID)
+            g_currentPreviewVehicle.selectVehicle(-vehInvID)
+            return
+        else:
+            vehicle = self.itemsCache.items.getVehicle(vehInvID)
+            if vehicle is None:
+                vehiclesCriteria = REQ_CRITERIA.VEHICLE.EVENT
+                invVehs = self.itemsCache.items.getVehicles(criteria=vehiclesCriteria)
+                if invVehs:
+                    vehInvID = sorted(invVehs.itervalues(), key=lambda veh: veh.intCD, reverse=True)[0].invID
+                else:
+                    vehInvID = 0
+            AccountSettings.setFavorites(EVENT_CURRENT_VEHICLE, vehInvID)
+            g_currentPreviewVehicle.selectNoVehicle()
+            self._selectVehicle(vehInvID)
+            return
 
     def getDossier(self):
         return self.itemsCache.items.getVehicleDossier(self.item.intCD)
@@ -337,7 +365,8 @@ class _CurrentVehicle(_CachedVehicle):
         Waiting.show('updateCurrentVehicle', isSingle=True, overlapsUI=waitingOverlapsUI)
         self.onChangeStarted()
         self.__vehInvID = vehInvID
-        AccountSettings.setFavorites(CURRENT_VEHICLE, vehInvID)
+        if not self.isOnlyForEventBattles():
+            AccountSettings.setFavorites(CURRENT_VEHICLE, vehInvID)
         self.refreshModel()
         self._setChangeCallback(callback)
 
@@ -382,16 +411,29 @@ class _RegularPreviewAppearance(PreviewAppearance):
 
 class HeroTankPreviewAppearance(PreviewAppearance):
 
-    def refreshVehicle(self, item):
+    def refreshVehicle(self, item, immediate=False):
         if item is None:
             from ClientSelectableCameraObject import ClientSelectableCameraObject
-            ClientSelectableCameraObject.switchCamera()
+            ClientSelectableCameraObject.switchCamera(immediate=immediate)
+        return
+
+
+class EventHeroTankPreviewAppearance(HeroTankPreviewAppearance):
+
+    @prbEntityProperty
+    def prbEntity(self):
+        return None
+
+    def refreshVehicle(self, item, immediate=False):
+        if self.prbEntity is None or self.prbEntity.getQueueType() != QUEUE_TYPE.EVENT_BATTLES:
+            super(EventHeroTankPreviewAppearance, self).refreshVehicle(item)
         return
 
 
 class _CurrentPreviewVehicle(_CachedVehicle):
     _itemsFactory = dependency.descriptor(IGuiItemsFactory)
     _c11nService = dependency.descriptor(ICustomizationService)
+    _gameEventController = dependency.descriptor(IGameEventController)
 
     def __init__(self):
         super(_CurrentPreviewVehicle, self).__init__()
@@ -420,9 +462,20 @@ class _CurrentPreviewVehicle(_CachedVehicle):
     def refreshModel(self):
         pass
 
-    def selectVehicle(self, vehicleCD=None, vehicleStrCD=None):
+    def selectVehicle(self, vehicleCD=None, vehicleStrCD=None, waitingOverlapsUI=False):
         self._selectVehicle(vehicleCD, vehicleStrCD)
         self.onSelected()
+
+    def selectStyledVehicle(self, vDescr, outfit):
+        vehicleEntity = self.hangarSpace.getVehicleEntity()
+        if vehicleEntity is None or vehicleEntity.appearance is None:
+            return
+        else:
+            self.__item = self.__getPreviewVehicle(vDescr.type.compactDescr)
+            self.onChangeStarted()
+            Waiting.show('updateCurrentVehicle', isSingle=True, overlapsUI=False)
+            vehicleEntity.appearance.recreate(vDescr, vState='undamaged', callback=self._changeDone, outfit=outfit.getOutfit(first(outfit.seasons)))
+            return
 
     def selectNoVehicle(self):
         self._selectVehicle(None)

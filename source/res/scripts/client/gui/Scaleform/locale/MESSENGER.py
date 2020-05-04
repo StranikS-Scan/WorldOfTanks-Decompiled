@@ -935,6 +935,15 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLEPASS_BADGES_HEADER_REMOVE = '#messenger:serviceChannelMessages/battlePass/badges/header/remove'
     SERVICECHANNELMESSAGES_BATTLEPASS_BADGES_TEXT_REMOVE = '#messenger:serviceChannelMessages/battlePass/badges/text/remove'
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_UPGRADE = '#messenger:serviceChannelMessages/sysMsg/titles/upgrade'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_SE20_GAMEMODE = '#messenger:serviceChannelMessages/battleResults/se20/gameMode'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_SE20_GAMEMODENAME = '#messenger:serviceChannelMessages/battleResults/se20/gameModeName'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_SE20_DIVISION = '#messenger:serviceChannelMessages/battleResults/se20/division'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_SE20_BATTLEGOALSDONE = '#messenger:serviceChannelMessages/battleResults/se20/battleGoalsDone'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_SE20_REPUTATIONPOINTSGAIN = '#messenger:serviceChannelMessages/battleResults/se20/reputationPointsGain'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_SE20_DIVISIONPOINTSGAIN = '#messenger:serviceChannelMessages/battleResults/se20/divisionPointsGain'
+    SERVICECHANNELMESSAGES_SE20_BUYBUNDLEREWARD = '#messenger:serviceChannelMessages/se20/buyBundleReward'
+    SERVICECHANNELMESSAGES_SE20_EXHANGEORDER_HEADER = '#messenger:serviceChannelMessages/se20/exhangeOrder/header'
+    SERVICECHANNELMESSAGES_SE20_EXHANGEORDER_DESC = '#messenger:serviceChannelMessages/se20/exhangeOrder/desc'
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_TRY_LATER,
      CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,

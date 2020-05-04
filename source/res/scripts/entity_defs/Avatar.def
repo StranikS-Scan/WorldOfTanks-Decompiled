@@ -12,6 +12,11 @@
     <Interface>	RecoveryMechanic_Avatar	</Interface>
     <Interface>	DestructibleEntity_Avatar	</Interface>
     <Interface>	RespawnController_Avatar	</Interface>
+    <Interface>	WaveBotsSpawnController_Avatar	</Interface>
+    <Interface>	TriggerController_Avatar	</Interface>
+    <Interface>	SequenceController_Avatar	</Interface>
+    <Interface>	BattleHintsController_Avatar	</Interface>
+    <Interface>	VehicleRemovalController_Avatar	</Interface>
     <Interface>	AvatarEpic	</Interface>
   </Implements>
   <Volatile>
@@ -320,7 +325,7 @@
       <Arg>	UINT8	</Arg>
       <Arg>	EXTRA_ID	</Arg>
       <Arg>	OBJECT_ID	</Arg>
-      <Arg>	UINT8	</Arg>
+      <Arg>	UINT16	</Arg>
     </showVehicleDamageInfo>
     <showOtherVehicleDamagedDevices>
       <Arg>	OBJECT_ID	</Arg>
@@ -405,7 +410,7 @@
       </VariableLengthHeaderSize>
     </updateArena>
     <updatePositions>
-      <Arg>	ARRAY	  <of>	UINT8	</of>
+      <Arg>	ARRAY	  <of>	UINT16	</of>
       </Arg>
       <Arg>	ARRAY	  <of>	INT16	</of>
       </Arg>
@@ -468,6 +473,20 @@
       <Arg>	PYTHON	</Arg>
       <AllowUnsafeData>	true	</AllowUnsafeData>
     </updateQuestProgress>
+    <updateScenarioTimer>
+      <Arg>	PYTHON	</Arg>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </updateScenarioTimer>
+    <sendPlayerBattleLogNotification>
+      <Arg>	STRING	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </sendPlayerBattleLogNotification>
+    <sendEquipmentBattleLogNotification>
+      <Arg>	INT32	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	BOOL	</Arg>
+    </sendEquipmentBattleLogNotification>
   </ClientMethods>
   <CellMethods>
     <autoAim>
@@ -669,7 +688,7 @@
       <Arg>	UINT8	</Arg>
       <Arg>	EXTRA_ID	</Arg>
       <Arg>	OBJECT_ID	</Arg>
-      <Arg>	UINT8	</Arg>
+      <Arg>	UINT16	</Arg>
     </showVehicleDamageInfo>
     <vehicle_moveWith>
       <Exposed></Exposed>
@@ -710,6 +729,10 @@
     <onRemovedFromArena>
       <Arg>	UINT64	</Arg>
     </onRemovedFromArena>
+    <onRemovedFromEventArena>
+      <Arg>	UINT64	</Arg>
+      <Arg>	STRING	</Arg>
+    </onRemovedFromEventArena>
     <onKickedFromArena>
       <Arg>	UINT64	</Arg>
       <Arg>	UINT16	</Arg>

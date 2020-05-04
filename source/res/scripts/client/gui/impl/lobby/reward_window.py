@@ -135,6 +135,7 @@ class PiggyBankRewardWindowContent(BaseRewardWindowContent):
     def handleNextButton(self):
         self.getParentWindow().destroy()
 
+    @event_dispatcher.leaveEventMode
     def onHyperLinkClicked(self):
         event_dispatcher.showPremiumDialog()
 

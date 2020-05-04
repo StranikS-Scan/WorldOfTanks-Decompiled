@@ -237,7 +237,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
     def __onCurrentVehicleChanged(self):
         self.updateAviability()
         if self._carouselDP is not None:
-            filteredIndex = self._carouselDP.findVehicleFilteredIndex(g_currentVehicle.item)
+            filteredIndex = self._carouselDP.findVehicleFilteredIndex(self._currentVehicle.item)
             if self._carouselDP.pyGetSelectedIdx() != filteredIndex:
                 self._carouselDP.selectVehicle(filteredIndex)
                 self._carouselDP.refresh()

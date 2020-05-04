@@ -414,6 +414,9 @@ class AmmoController(MethodsRules, IBattleController):
         else:
             return quantity
 
+    def getClipCapacity(self):
+        return self.__gunSettings.clip.size
+
     @MethodsRules.delayable('setGunSettings')
     def setShells(self, intCD, quantity, quantityInClip):
         result = SHELL_SET_RESULT.UNDEFINED

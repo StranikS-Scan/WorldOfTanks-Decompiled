@@ -53,7 +53,8 @@ LOBBY_TOOLTIPS_BUILDERS_PATHS = (('gui.Scaleform.daapi.view.tooltips.achievement
  ('gui.Scaleform.daapi.view.tooltips.crew_bundle_builders', _TOOLTIPS.CREW_BUNDLE_SET),
  ('gui.Scaleform.daapi.view.tooltips.demount_kit_builders', _TOOLTIPS.DEMOUNT_KIT_SET),
  ('gui.Scaleform.daapi.view.tooltips.vehicle_collector_builders', _TOOLTIPS.VEHICLE_COLLECTOR_SET),
- ('gui.Scaleform.daapi.view.tooltips.bob_builders', _TOOLTIPS.BOB_SET))
+ ('gui.Scaleform.daapi.view.tooltips.bob_builders', _TOOLTIPS.BOB_SET),
+ ('gui.Scaleform.daapi.view.tooltips.event_builders', _TOOLTIPS.EVENT_SET))
 ADVANCED_COMPLEX_TOOLTIPS = {'#tooltips:hangar/ammo_panel/device/empty': 'equipment',
  '#tooltips:hangar/ammo_panel/equipment/empty': 'service',
  '#tooltips:equipment/empty': 'service',

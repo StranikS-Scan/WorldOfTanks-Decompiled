@@ -379,7 +379,7 @@ class StoreEquipmentTab(StoreArtefactTab):
 
     def _getRequestCriteria(self, invVehicles):
         requestCriteria = super(StoreEquipmentTab, self)._getRequestCriteria(invVehicles)
-        requestCriteria |= ~REQ_CRITERIA.EQUIPMENT.BUILTIN
+        requestCriteria |= ~REQ_CRITERIA.EQUIPMENT.BUILTIN | ~REQ_CRITERIA.EQUIPMENT.HAS_TAGS(['event_battles'])
         return requestCriteria
 
 

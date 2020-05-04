@@ -9,12 +9,20 @@ from arena_component_system.step_repair_point_component import StepRepairPointCo
 from arena_component_system.epic_random_battle_component_assembler import EpicRandomBattleComponentAssembler
 from arena_component_system.epic_battle_component_assembler import EpicBattleComponentAssembler
 from arena_component_system.protection_zone_component import ProtectionZoneComponent
+from arena_component_system.arena_game_event_component import GameEventComponent
+from arena_component_system.event_battle_component_assembler import EventBattleComponentAssembler
+from arena_components.loot import LootComponent
+from arena_components.event_control_point import EventControlPointComponent
 COMPONENT_ASSEMBLER = {ARENA_BONUS_TYPE.EPIC_RANDOM: EpicRandomBattleComponentAssembler,
  ARENA_BONUS_TYPE.EPIC_RANDOM_TRAINING: EpicRandomBattleComponentAssembler,
  ARENA_BONUS_TYPE.EPIC_BATTLE: EpicBattleComponentAssembler,
- ARENA_BONUS_TYPE.EPIC_BATTLE_TRAINING: EpicBattleComponentAssembler}
+ ARENA_BONUS_TYPE.EPIC_BATTLE_TRAINING: EpicBattleComponentAssembler,
+ ARENA_BONUS_TYPE.EVENT_BATTLES: EventBattleComponentAssembler}
 ARENA_BONUS_TYPE_CAP_COMPONENTS = {'sectorBaseComponent': (ARENA_BONUS_TYPE_CAPS.SECTOR_MECHANICS, SectorBaseArenaComponent),
  'sectorComponent': (ARENA_BONUS_TYPE_CAPS.SECTOR_MECHANICS, SectorsArenaComponent),
  'destructibleEntityComponent': (ARENA_BONUS_TYPE_CAPS.DESTRUCTIBLE_ENTITIES, DestructibleEntitiesComponent),
  'stepRepairPointComponent': (ARENA_BONUS_TYPE_CAPS.STEP_REPAIR_MECHANIC, StepRepairPointComponent),
- 'protectionZoneComponent': (ARENA_BONUS_TYPE_CAPS.PROTECTION_ZONE, ProtectionZoneComponent)}
+ 'protectionZoneComponent': (ARENA_BONUS_TYPE_CAPS.PROTECTION_ZONE, ProtectionZoneComponent),
+ 'gameEventComponent': (ARENA_BONUS_TYPE_CAPS.EVENT_BATTLES, GameEventComponent),
+ 'loot': (ARENA_BONUS_TYPE_CAPS.EVENT_BATTLES, LootComponent),
+ 'ecp': (ARENA_BONUS_TYPE_CAPS.EVENT_BATTLES, EventControlPointComponent)}

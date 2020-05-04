@@ -24,6 +24,10 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.game_control.epic_meta_game_ctrl import EPIC_PERF_GROUP
 from gui.impl import backport
 from gui.impl.gen import R
+from skeletons.gui.server_events import IEventsCache
+from gui.shared import g_eventBus, events
+import gui.Scaleform.daapi.view.lobby.header as header
+from gui.shared.event_bus import EVENT_BUS_SCOPE
 _logger = logging.getLogger(__name__)
 _R_HEADER_BUTTONS = R.strings.menu.headerButtons
 _R_BATTLE_TYPES = R.strings.menu.headerButtons.battle.types
@@ -150,6 +154,7 @@ class _SelectorItem(object):
 
 
 class _SelectorExtraItem(_SelectorItem):
+    epicQueueController = dependency.descriptor(IEpicBattleMetaGameController)
 
     def __init__(self, label, data, order, selectorType=None, isVisible=True):
         super(_SelectorExtraItem, self).__init__(label, data, order, selectorType, isVisible, isExtra=True)
@@ -168,6 +173,25 @@ class _SelectorExtraItem(_SelectorItem):
 
     def _update(self, state):
         raise NotImplementedError
+
+
+class _EventBattleItem(_SelectorItem):
+    eventsCache = dependency.descriptor(IEventsCache)
+    epicQueueController = dependency.descriptor(IEpicBattleMetaGameController)
+
+    def getSpecialBGIcon(self):
+        return backport.image(_R_ICONS.buttons.selectorRendererBGEvent())
+
+    def _update(self, state):
+        self._isDisabled = state.hasLockedState
+        self._isSelected = state.isQueueSelected(QUEUE_TYPE.EVENT_BATTLES)
+        self._isVisible = self.eventsCache.isEventEnabled()
+
+    def getFormattedLabel(self):
+        battleTypeName = super(_EventBattleItem, self).getFormattedLabel()
+        performanceGroup = self.epicQueueController.getPerformanceGroup()
+        availabilityStr = getPerformanceAlarmStr(performanceGroup)
+        return battleTypeName if availabilityStr is None else '%s\n%s' % (battleTypeName, availabilityStr)
 
 
 class _DisabledSelectorItem(_SelectorItem):
@@ -251,6 +275,10 @@ class _TrainingItem(_SelectorItem):
     def _update(self, state):
         self._isSelected = state.isInLegacy(PREBATTLE_TYPE.TRAINING)
         self._isDisabled = state.hasLockedState
+
+    def select(self):
+        g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': header.LobbyHeader.HeaderMenuVisibilityState.ALL}), scope=EVENT_BUS_SCOPE.LOBBY)
+        return super(_TrainingItem, self).select()
 
 
 class _EpicTrainingItem(_SelectorItem):
@@ -345,7 +373,8 @@ class _EventProgressionEpicDataProvider(_SelectorExtraItem):
 
     def getFormattedLabel(self):
         battleTypeName = super(_EventProgressionEpicDataProvider, self).getFormattedLabel()
-        availabilityStr = self.__getPerformanceAlarmStr() or self.__getScheduleStr()
+        performanceGroup = self.epicQueueController.getPerformanceGroup()
+        availabilityStr = getPerformanceAlarmStr(performanceGroup) or self.__getScheduleStr()
         return battleTypeName if availabilityStr is None else '{}\n{}'.format(battleTypeName, availabilityStr)
 
     def getSpecialBGIcon(self):
@@ -679,6 +708,7 @@ def _createItems(lobbyContext=None):
     _addEpicTrainingBattleType(items, settings)
     if GUI_SETTINGS.specPrebatlesVisible:
         _addSpecialBattleType(items)
+    _addEventBattleType(items)
     if settings is not None and settings.isSandboxEnabled() and not isInRoaming:
         _addSandboxType(items)
     extraItems = []
@@ -743,12 +773,16 @@ def _addBobBattleType(items):
     items.append(_BobItem(MENU.HEADERBUTTONS_BATTLE_TYPES_BOB, PREBATTLE_ACTION_NAME.BOB, 1, SELECTOR_BATTLE_TYPES.BOB))
 
 
+def _addEventBattleType(items):
+    items.append(_EventBattleItem(text_styles.middleTitle(backport.text(_R_BATTLE_TYPES.eventBattle())), PREBATTLE_ACTION_NAME.EVENT_BATTLE, 10))
+
+
 def _addSimpleSquadType(items):
-    items.append(_SimpleSquadItem(text_styles.middleTitle(backport.text(_R_BATTLE_TYPES.simpleSquad())), PREBATTLE_ACTION_NAME.SQUAD, 0))
+    items.append(_SimpleSquadItem(text_styles.concatStylesToMultiLine(text_styles.middleTitle(backport.text(R.strings.menu.headerButtons.battle.types.simpleSquad.label())), text_styles.main(backport.text(R.strings.menu.headerButtons.battle.types.simpleSquad.description()))), PREBATTLE_ACTION_NAME.SQUAD, 0))
 
 
 def _addEventSquadType(items):
-    items.append(_EventSquadItem(text_styles.middleTitle(backport.text(_R_BATTLE_TYPES.eventSquad())), PREBATTLE_ACTION_NAME.EVENT_SQUAD, 1))
+    items.append(_EventSquadItem(text_styles.concatStylesToMultiLine(text_styles.middleTitle(backport.text(R.strings.menu.headerButtons.battle.types.eventSquad.label())), text_styles.main(backport.text(R.strings.menu.headerButtons.battle.types.eventSquad.description()))), PREBATTLE_ACTION_NAME.EVENT_SQUAD, 1))
 
 
 def create():
@@ -783,3 +817,14 @@ def getItems():
 
 def getSquadItems():
     return _g_squadItems
+
+
+def getPerformanceAlarmStr(performanceGroup):
+    attentionText, iconPath = (None, None)
+    if performanceGroup == EPIC_PERF_GROUP.HIGH_RISK:
+        attentionText = text_styles.error(backport.text(R.strings.menu.headerButtons.battle.menu.attention.lowPerformance()))
+        iconPath = backport.image(R.images.gui.maps.icons.library.marker_blocked())
+    elif performanceGroup == EPIC_PERF_GROUP.MEDIUM_RISK:
+        attentionText = text_styles.alert(backport.text(R.strings.menu.headerButtons.battle.menu.attention.reducedPerformance()))
+        iconPath = backport.image(R.images.gui.maps.icons.library.alertIcon())
+    return icons.makeImageTag(iconPath, vSpace=-3) + ' ' + attentionText if attentionText and iconPath else None

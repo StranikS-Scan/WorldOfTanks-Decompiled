@@ -487,6 +487,7 @@ class PersonalCaseDataProvider(object):
             criteria |= ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
         if constants.IS_DEVELOPMENT:
             criteria |= ~REQ_CRITERIA.VEHICLE.IS_BOT
+        criteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
         vData = items.getVehicles(criteria)
         tDescr = tankman.descriptor
         vehiclesData = vData.values()

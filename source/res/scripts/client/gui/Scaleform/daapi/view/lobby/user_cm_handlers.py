@@ -343,6 +343,7 @@ class AppealCMHandler(BaseUserCMHandler):
         vehicleCD = getValidVehicleCDForNationChange(self._vehicleCD)
         shared_events.showVehicleInfo(vehicleCD)
 
+    @shared_events.leaveEventMode
     def showVehiclePreview(self):
         vehicleCD = getValidVehicleCDForNationChange(self._vehicleCD)
         shared_events.showVehiclePreview(vehicleCD)

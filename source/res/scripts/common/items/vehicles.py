@@ -177,36 +177,42 @@ class EnhancementItem(object):
         return func(factor, self.value)
 
 
-VEHICLE_ATTRIBUTE_FACTORS = {'engine/power': 1.0,
- 'turret/rotationSpeed': 1.0,
- 'circularVisionRadius': 1.0,
- 'invisibility': [0.0, 1.0],
- 'radio/distance': 1.0,
- 'gun/rotationSpeed': 1.0,
- 'chassis/shotDispersionFactors/movement': 1.0,
- 'chassis/shotDispersionFactors/rotation': 1.0,
- 'gun/shotDispersionFactors/turretRotation': 1.0,
- 'gun/reloadTime': 1.0,
- 'gun/aimingTime': 1.0,
- 'gun/canShoot': True,
- 'engine/fireStartingChance': 1.0,
- 'healthBurnPerSecLossFraction': 1.0,
- 'repairSpeed': 1.0,
- 'additiveShotDispersionFactor': 1.0,
- 'brokenTrack': 0,
- 'vehicle/rotationSpeed': 1.0,
- 'vehicle/maxSpeed': 1.0,
- 'chassis/terrainResistance': [1.0, 1.0, 1.0],
- 'ramming': 1.0,
- 'crewLevelIncrease': 0.0,
- 'crewChanceToHitFactor': 1.0,
- 'crewRolesFactor': 1.0,
- 'stunResistanceEffect': 0.0,
- 'stunResistanceDuration': 0.0,
- 'repeatedStunDurationFactor': 1.0,
- 'healthFactor': 1.0,
- 'damageFactor': 1.0,
- 'enginePowerFactor': 1.0}
+def vehicleAttributeFactors():
+    return {'engine/power': 1.0,
+     'turret/rotationSpeed': 1.0,
+     'circularVisionRadius': 1.0,
+     'invisibility': [0.0, 1.0],
+     'radio/distance': 1.0,
+     'gun/rotationSpeed': 1.0,
+     'chassis/shotDispersionFactors/movement': 1.0,
+     'chassis/shotDispersionFactors/rotation': 1.0,
+     'gun/shotDispersionFactors/turretRotation': 1.0,
+     'gun/reloadTime': 1.0,
+     'gun/aimingTime': 1.0,
+     'gun/canShoot': True,
+     'engine/fireStartingChance': 1.0,
+     'healthBurnPerSecLossFraction': 1.0,
+     'repairSpeed': 1.0,
+     'additiveShotDispersionFactor': 1.0,
+     'brokenTrack': 0,
+     'vehicle/rotationSpeed': 1.0,
+     'vehicle/maxSpeed': 1.0,
+     'chassis/terrainResistance': [1.0, 1.0, 1.0],
+     'ramming': 1.0,
+     'crewLevelIncrease': 0.0,
+     'crewChanceToHitFactor': 1.0,
+     'crewRolesFactor': 1.0,
+     'stunResistanceEffect': 0.0,
+     'stunResistanceDuration': 0.0,
+     'repeatedStunDurationFactor': 1.0,
+     'vehicle/canBeDamaged': True,
+     'vehicle/antifragmentationLiningFactor': 1.0,
+     'healthFactor': 1.0,
+     'damageFactor': 1.0,
+     'enginePowerFactor': 1.0}
+
+
+VEHICLE_ATTRIBUTE_FACTORS = vehicleAttributeFactors()
 _g_prices = None
 
 class CamouflageBonus():
@@ -1849,6 +1855,10 @@ class Cache(object):
         if descr is None:
             from items import artefacts
             self.__equipments, self.__equipmentIDs = _readArtefacts(_VEHICLE_TYPE_XML_PATH + 'common/equipments.xml')
+            for eq in self.__equipments.itervalues():
+                eqName = eq.name.upper().replace('ARCADE_', '')
+                eq.equipmentName = eqName.split('_')[0]
+
             descr = self.__equipments
         return descr
 
@@ -1929,6 +1939,9 @@ class Cache(object):
 
     def getGunRecoilEffects(self, effectName):
         return self._gunRecoilEffects.get(effectName, None)
+
+    def getVehicleEffect(self, effectID):
+        return self._vehicleEffects.get(effectID)
 
     @property
     def _vehicleEffects(self):
@@ -3999,6 +4012,8 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
     if v is None:
         _xml.raiseWrongXml(xmlCtx, 'effects', "unknown effect '%s'" % effName)
     shell.effectsIndex = v
+    if section.has_key('buffs'):
+        shell.buffs = tuple([ shell_components.Buff(buffName=buff.readString('buffName'), buffDuration=buff.readFloat('buffDuration')) for buff in section['buffs'].values() ])
     return shell
 
 
@@ -5310,7 +5325,7 @@ if IS_CLIENT or IS_EDITOR:
      'collisionVehicleHeavy2',
      'collisionVehicleHeavy3',
      'rammingCollisionLight',
-     'rammingCollisionHeavy'] + [ '%sCollisionLight' % name for name in EFFECT_MATERIALS ] + [ '%sCollisionHeavy' % name for name in EFFECT_MATERIALS ] + [ 'explosionCandle%d' % i for i in xrange(1, 5) ] + ['fullDestruction'] + ['dynamicCollision'])
+     'rammingCollisionHeavy'] + [ '%sCollisionLight' % name for name in EFFECT_MATERIALS ] + [ '%sCollisionHeavy' % name for name in EFFECT_MATERIALS ] + [ 'explosionCandle%d' % i for i in xrange(1, 5) ] + ['fullDestruction', 'hw19fullDestruction'] + ['dynamicCollision'])
     _damagedStateGroupEffectKindNames = ('ammoBayExplosion',
      'ammoBayBurnOff',
      'fuelExplosion',

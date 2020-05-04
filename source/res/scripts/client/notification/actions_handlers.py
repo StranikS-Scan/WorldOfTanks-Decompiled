@@ -479,7 +479,7 @@ class AcceptPrbInviteHandler(_ActionHandler):
         invite = self.prbInvites.getInvite(entityID)
         state = self.prbDispatcher.getFunctionalState()
         if state.doLeaveToAcceptInvite(invite.type):
-            postActions.append(actions.LeavePrbModalEntity())
+            postActions.append(actions.LeavePrbModalEntity(inviteType=invite.type))
         if invite and invite.anotherPeriphery:
             success = True
             if g_preDefinedHosts.isRoamingPeriphery(invite.peripheryID):
@@ -489,7 +489,7 @@ class AcceptPrbInviteHandler(_ActionHandler):
             postActions.append(actions.DisconnectFromPeriphery())
             postActions.append(actions.ConnectToPeriphery(invite.peripheryID))
             postActions.append(actions.PrbInvitesInit())
-            postActions.append(actions.LeavePrbEntity())
+            postActions.append(actions.LeavePrbEntity(inviteType=invite.type))
         self.prbInvites.acceptInvite(entityID, postActions=postActions)
 
 
@@ -720,6 +720,7 @@ class _OpenBattlePassProgressionView(_NavigationDisabledActionHandler):
     def getActions(cls):
         pass
 
+    @shared_events.leaveEventMode
     def doAction(self, model, entityID, action):
         showMissionsBattlePassCommonProgression()
 

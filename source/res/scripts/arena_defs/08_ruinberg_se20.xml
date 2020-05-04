@@ -1,0 +1,265 @@
+<08_ruinberg_se20.xml>
+  <name>	#arenas:08_ruinberg_se20/name	</name>
+  <description>	#arenas:08_ruinberg_se20/description	</description>
+  <geometry>	spaces/08_ruinberg_se20	</geometry>
+  <runDelay>	15	</runDelay>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+  <estimatedLoad>	0.34	</estimatedLoad>
+  <roundLength>	1380	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-400.0 -400.0	</bottomLeft>
+    <upperRight>	400.0 400.0	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/08_ruinberg_se20/event/se20_s0_phase6.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <defaultGroundEffect>	None	</defaultGroundEffect>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_ruinberg_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_ruinberg_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_ruinberg_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_ruinberg_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_ruinberg_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_ruinberg_result_defeat	</wwmusicResultDefeat>
+    <wwmusicLoadingVoiceover>	vo_se20_loading_ruinberg_{}_0{}	</wwmusicLoadingVoiceover>
+    <wwmusicVoResultWin>	vo_se20_victory	</wwmusicVoResultWin>
+    <wwmusicVoResultDefeat>	vo_se20_defeat	</wwmusicVoResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <wwmusicDroneSetup>
+    <timeRemained>
+      <value>	120	</value>
+    </timeRemained>
+    <teamLivesLeft>
+      <value>	5	</value>
+    </teamLivesLeft>
+    <playerObserver>
+      <value>	1	</value>
+    </playerObserver>
+    <bossBattle>
+      <value>	1	</value>
+    </bossBattle>
+  </wwmusicDroneSetup>
+  <soundRemapping>
+    <loadBanks>
+      <bank>	ev_2020_secret_event_gameplay.bnk	</bank>
+      <bank>	ev_2020_secret_event_gameplay.pck	</bank>
+      <bank>	ev_2020_secret_event_voiceover.bnk	</bank>
+      <bank>	ev_2020_secret_event_voiceover.pck	</bank>
+    </loadBanks>
+    <events>
+      <event>
+        <name>	ambient_wind_autumn_01	</name>
+        <mod>	ambient_wind_autumn_01	</mod>
+        <modAUX>	ev_2020_secret_event_2_gameplay_intro_combat	</modAUX>
+      </event>
+      <event>
+        <name>	minimap_attention	</name>
+        <mod>	ev_2020_secret_event_gameplay_ui_minimap_attention	</mod>
+      </event>
+    </events>
+  </soundRemapping>
+  <notificationsRemapping>
+    <notification>
+      <name>	start_battle	</name>
+      <mod>	se20_start_battle	</mod>
+    </notification>
+    <notification>
+      <name>	respawn	</name>
+    </notification>
+    <notification>
+      <name>	vehicle_destroyed	</name>
+    </notification>
+    <notification>
+      <name>	enemy_hp_damaged_by_projectile_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_hp_damaged_by_projectile_and_gun_damaged_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_hp_damaged_by_explosion_at_direct_hit_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_no_piercing_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_no_hp_damage_at_attempt_and_chassis_damaged_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_no_hp_damage_at_attempt_and_gun_damaged_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_no_hp_damage_at_no_attempt_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_no_hp_damage_at_attempt_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_no_hp_damage_at_no_attempt_and_chassis_damaged_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_no_hp_damage_at_no_attempt_and_gun_damaged_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_ricochet_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_no_hp_damage_by_near_explosion_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_hp_damaged_by_near_explosion_by_player	</name>
+    </notification>
+    <notification>
+      <name>	enemy_fire_started_by_player	</name>
+    </notification>
+    <notification>
+      <name>	damage_by_near_explosion_by_enemy	</name>
+    </notification>
+    <notification>
+      <name>	target_captured	</name>
+    </notification>
+    <notification>
+      <name>	target_lost	</name>
+    </notification>
+    <notification>
+      <name>	target_unlocked	</name>
+    </notification>
+    <notification>
+      <name>	crew_deactivated	</name>
+    </notification>
+    <notification>
+      <name>	engine_damaged	</name>
+    </notification>
+    <notification>
+      <name>	engine_destroyed	</name>
+    </notification>
+    <notification>
+      <name>	engine_functional	</name>
+    </notification>
+    <notification>
+      <name>	ammo_bay_damaged	</name>
+    </notification>
+    <notification>
+      <name>	fuel_tank_damaged	</name>
+    </notification>
+    <notification>
+      <name>	radio_damaged	</name>
+    </notification>
+    <notification>
+      <name>	track_damaged	</name>
+    </notification>
+    <notification>
+      <name>	track_destroyed	</name>
+    </notification>
+    <notification>
+      <name>	track_functional	</name>
+    </notification>
+    <notification>
+      <name>	track_functional_can_move	</name>
+    </notification>
+    <notification>
+      <name>	gun_damaged	</name>
+    </notification>
+    <notification>
+      <name>	gun_destroyed	</name>
+    </notification>
+    <notification>
+      <name>	gun_functional	</name>
+    </notification>
+    <notification>
+      <name>	turret_rotator_damaged	</name>
+    </notification>
+    <notification>
+      <name>	turret_rotator_destroyed	</name>
+    </notification>
+    <notification>
+      <name>	turret_rotator_functional	</name>
+    </notification>
+    <notification>
+      <name>	surveying_devices_damaged	</name>
+    </notification>
+    <notification>
+      <name>	surveying_devices_destroyed	</name>
+    </notification>
+    <notification>
+      <name>	surveying_devices_functional	</name>
+    </notification>
+    <notification>
+      <name>	commander_killed	</name>
+    </notification>
+    <notification>
+      <name>	driver_killed	</name>
+    </notification>
+    <notification>
+      <name>	radioman_killed	</name>
+    </notification>
+    <notification>
+      <name>	gunner_killed	</name>
+    </notification>
+    <notification>
+      <name>	loader_killed	</name>
+    </notification>
+    <notification>
+      <name>	fire_started	</name>
+    </notification>
+    <notification>
+      <name>	fire_stopped	</name>
+    </notification>
+    <notification>
+      <name>	enemy_killed_by_player	</name>
+    </notification>
+  </notificationsRemapping>
+  <gameplayTypes>
+    <ctf>
+      <battleEndWarningAppearTime>	0	</battleEndWarningAppearTime>
+      <respawnType>	event_limited	</respawnType>
+      <numPlayerGroups>	10	</numPlayerGroups>
+      <playerGroupLimit>	150	</playerGroupLimit>
+      <enabledChatCommandFlags>	EPIC_BATTLE_COMMANDS	</enabledChatCommandFlags>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	-1 0 -1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	1 0 0	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <initialMinimapIDs>
+        <scenario>
+          <name>	ruinberg_se20	</name>
+          <minimapID>	se20_s0_phase1	</minimapID>
+        </scenario>
+        <scenario>
+          <name>	s2_ruinberg_se20	</name>
+          <minimapID>	se20_s1_phase1	</minimapID>
+        </scenario>
+        <scenario>
+          <name>	ruinberg_se20_2	</name>
+          <minimapID>	se20_s0_phase1	</minimapID>
+        </scenario>
+        <scenario>
+          <name>	s2_ruinberg_se20_2	</name>
+          <minimapID>	se20_s1_phase1	</minimapID>
+        </scenario>
+        <scenario>
+          <name>	ruinberg_se20_3	</name>
+          <minimapID>	se20_s0_phase1	</minimapID>
+        </scenario>
+        <scenario>
+          <name>	s2_ruinberg_se20_3	</name>
+          <minimapID>	se20_s1_phase1	</minimapID>
+        </scenario>
+      </initialMinimapIDs>
+    </ctf>
+  </gameplayTypes>
+</08_ruinberg_se20.xml>

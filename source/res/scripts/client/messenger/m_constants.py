@@ -43,8 +43,12 @@ class MESSENGER_COMMAND_TYPE(object):
 class LAZY_CHANNEL(object):
     COMMON = '#chat:channels/common'
     SPECIAL_BATTLES = '#chat:channels/special_battles'
+    SECRET_EVENT = '#chat:channels/secret_event'
     XMPP_COMMON = '#chat:channels/xmpp_common'
-    ALL = (COMMON, SPECIAL_BATTLES, XMPP_COMMON)
+    ALL = (SECRET_EVENT,
+     COMMON,
+     SPECIAL_BATTLES,
+     XMPP_COMMON)
 
 
 class BATTLE_CHANNEL(object):

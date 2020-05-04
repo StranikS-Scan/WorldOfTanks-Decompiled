@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/ClientSelectableObject.py
 import BigWorld
 import SoundGroups
+import Math
 from vehicle_systems.tankStructure import ColliderTypes
 from svarog_script.script_game_object import ScriptGameObject, ComponentDescriptor
 from hangar_selectable_objects import ISelectableObject
@@ -39,7 +40,7 @@ class ClientSelectableObject(BigWorld.Entity, ScriptGameObject, ISelectableObjec
             self.filter = BigWorld.DumbFilter()
             self.model.addMotor(BigWorld.Servo(self.matrix))
             self.collisions = prereqs['collisionAssembler']
-            collisionData = ((0, self.model.matrix),)
+            collisionData = ((0, self._getCollisionDataMatrix()),)
             self.collisions.connect(self.id, ColliderTypes.DYNAMIC_COLLIDER, collisionData)
         ScriptGameObject.activate(self)
 
@@ -91,6 +92,9 @@ class ClientSelectableObject(BigWorld.Entity, ScriptGameObject, ISelectableObjec
     def _getCollisionModelsPrereqs(self):
         collisionModels = ((0, self.modelName),)
         return collisionModels
+
+    def _getCollisionDataMatrix(self):
+        return Math.Matrix() if self.model is None else self.model.matrix
 
     def _addEdgeDetect(self):
         BigWorld.wgAddEdgeDetectEntity(self, 0, self.edgeMode, False)

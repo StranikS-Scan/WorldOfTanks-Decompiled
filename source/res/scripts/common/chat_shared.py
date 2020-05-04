@@ -1385,7 +1385,16 @@ SYS_MESSAGE_TYPE = Enumeration('systemMessageType', ['serverReboot',
  'battlePassBought',
  'battlePassReachedCap',
  'badges',
- 'collectibleVehiclesUnlocked'])
+ 'collectibleVehiclesUnlocked',
+ 'eventGeneralLevelReached',
+ 'eventGeneralReward',
+ 'eventGeneralBuyReward',
+ 'eventFrontReward',
+ 'eventFrontLevelReached',
+ 'eventGeneralBundleBuyReward',
+ 'eventBuyBundleReward',
+ 'eventSE20EnergyDraw',
+ 'eventExchangerOrder'])
 SYS_MESSAGE_IMPORTANCE = Enumeration('systemMessageImportance', ['normal', 'high'])
 SM_REQUEST_PERSONAL_MESSAGES_FLAG = 1
 SM_REQUEST_SYSTEM_MESSAGES_FLAG = 2

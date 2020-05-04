@@ -89,9 +89,11 @@ class _ArenaTypeSkeleton(object):
     repairPoints = {}
     soloTeamNumbers = []
     squadTeamNumbers = []
+    vsePlans = []
     boundingBox = ((0, 0), (0, 0))
     minimap = ''
     overviewmap = ''
+    minimap_overlays = []
     winPointsSettings = None
     battleCountdownTimerSound = ''
     roundLength = 0
@@ -99,6 +101,7 @@ class _ArenaTypeSkeleton(object):
     battleEndWarningAppearTime = 0
     battleEndWarningDuration = 0
     vehicleCamouflageKind = 0
+    initialMinimapIDs = {}
 
 
 class IArenaVisitor(object):
@@ -188,6 +191,10 @@ class _ArenaTypeVisitor(IArenaVisitor):
     def getTeamBasePositions(self):
         return self._arenaType.teamBasePositions
 
+    @catch_attribute_exception(default=_ArenaTypeSkeleton.vsePlans)
+    def getVsePlans(self):
+        return self._arenaType.vsePlans
+
     @catch_attribute_exception(default=_ArenaTypeSkeleton.teamLowLevelSpawnPoints)
     def getTeamLowLevelSpawnPoints(self):
         return self._arenaType.teamLowLevelSpawnPoints
@@ -254,6 +261,10 @@ class _ArenaTypeVisitor(IArenaVisitor):
     @catch_attribute_exception(default=_ArenaTypeSkeleton.vehicleCamouflageKind)
     def getVehicleCamouflageKind(self):
         return self._arenaType.vehicleCamouflageKind
+
+    @catch_attribute_exception(default=_ArenaTypeSkeleton.initialMinimapIDs)
+    def getInitialMinimapIDs(self):
+        return self._arenaType.initialMinimapIDs
 
 
 class _ArenaGuiTypeVisitor(IArenaVisitor):

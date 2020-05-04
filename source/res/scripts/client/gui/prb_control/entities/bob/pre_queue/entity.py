@@ -20,7 +20,6 @@ from gui.prb_control.entities.base import vehicleAmmoCheck
 from gui.ranked_battles.constants import PrimeTimeStatus
 from helpers import dependency
 from skeletons.gui.game_control import IBobController
-from gui.shared.event_dispatcher import showBobPrimeTimeWindow
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui import SystemMessages
 from gui.impl.gen import R
@@ -61,6 +60,7 @@ class BobEntryPoint(PreQueueEntryPoint):
             g_prbCtrlEvents.onPreQueueJoinFailure(PRE_QUEUE_JOIN_ERRORS.DISABLED)
             return
         elif status in self._getFilterStates():
+            from gui.shared.event_dispatcher import showBobPrimeTimeWindow
             showBobPrimeTimeWindow()
             if callback is not None:
                 callback(False)

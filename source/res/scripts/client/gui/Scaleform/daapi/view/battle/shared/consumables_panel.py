@@ -16,7 +16,7 @@ from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
 from gui.battle_control.battle_constants import VEHICLE_DEVICE_IN_COMPLEX_ITEM
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, DEVICE_STATE_DESTROYED
-from gui.battle_control.controllers.consumables.equipment_ctrl import IgnoreEntitySelection
+from gui.battle_control.controllers.consumables.equipment_ctrl import IgnoreEntitySelection, EventItem
 from gui.battle_control.controllers.consumables.equipment_ctrl import NeedEntitySelection, InCooldownError
 from gui.impl import backport
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
@@ -315,7 +315,8 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         if ctrl is None:
             return
         else:
-            result, error = ctrl.changeSetting(intCD, entityName=entityName, avatar=BigWorld.player())
+            player = BigWorld.player()
+            result, error = ctrl.changeSetting(intCD, entityName=entityName, avatar=player)
             if not result and error:
                 ctrl = self.sessionProvider.shared.messages
                 if ctrl is not None:
@@ -452,7 +453,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
             quantity = item.getQuantity()
             currentTime = item.getTimeRemaining()
             maxTime = item.getTotalTime()
-            self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime)
+            self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime, item.getStage())
             if item.isReusable or item.isAvatar() and item.getStage() != EQUIPMENT_STAGES.PREPARING:
                 glowType = CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN_SPECIAL if item.isAvatar() else CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN
                 if self.__canApplyingGlowEquipment(item):
@@ -617,7 +618,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         if equipment.getTag() == 'extinguisher':
             correction = True
             entityName = None
-        elif equipment.isAvatar():
+        elif equipment.isAvatar() or isinstance(equipment, EventItem):
             correction = False
             entityName = None
         else:

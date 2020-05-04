@@ -70,6 +70,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     VEHICLE_COLLECTOR = 'vehicleCollector'
     BOB_SELECTOR_INFO = 'bobSelectorInfo'
     BOB_CALENDAR_DAY = 'bobCalendarDay'
+    EVENT = 'event'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):

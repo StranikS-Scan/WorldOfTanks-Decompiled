@@ -1,7 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/constants.py
+import re
+from enum import Enum
+from enum import IntEnum
 from math import cos, radians
 from time import time as timestamp
+from enumerations import Enumeration, AttributeEnumItem
 try:
     import BigWorld
 except ImportError:
@@ -335,6 +339,7 @@ class ARENA_UPDATE:
     VIEW_POINTS = 26
     FOG_OF_WAR = 27
     VEHICLE_RECOVERED = 28
+    RADAR_INFO_RECEIVED = 29
 
 
 class ARENA_SYNC_OBJECTS:
@@ -345,6 +350,7 @@ class ARENA_SYNC_OBJECTS:
     SECTOR = 5
     OVERTIME = 6
     SMOKE = 7
+    GAME_EVENT = 8
 
 
 ARENA_SYNC_OBJECT_NAMES = dict([ (v, k) for k, v in ARENA_SYNC_OBJECTS.__dict__.iteritems() if not k.startswith('_') ])
@@ -366,6 +372,8 @@ class JOIN_FAILURE:
     WRONG_PERIPHERY_ID = 15
     WRONG_VEHICLE_LVL = 16
     QUEUE_FULL = 17
+    NOT_ENOUGH_ENERGY = 18
+    GENERAL_NOT_SUPPORTED = 19
 
 
 JOIN_FAILURE_NAMES = dict([ (v, k) for k, v in JOIN_FAILURE.__dict__.iteritems() if not k.startswith('_') ])
@@ -946,6 +954,11 @@ class ATTACK_REASON(object):
     RECOVERY = 'recovery'
     ARTILLERY_EQ = 'artillery_eq'
     BOMBER_EQ = 'bomber_eq'
+    MINEFIELD_EQ = 'minefield_eq'
+    EVENT_BOMBER_EXPLOSION = 'event_bomber_explosion'
+    EVENT_DEATH_ON_PHASE_CHANGE = 'event_death_on_phase_change'
+    EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC = 'event_death_on_phase_change_full_sc'
+    PERSONAL_DEATH_ZONE = 'personal_death_zone'
     NONE = 'none'
 
     @classmethod
@@ -968,7 +981,12 @@ ATTACK_REASONS = (ATTACK_REASON.SHOT,
  ATTACK_REASON.RECOVERY,
  ATTACK_REASON.ARTILLERY_EQ,
  ATTACK_REASON.BOMBER_EQ,
- ATTACK_REASON.NONE)
+ ATTACK_REASON.MINEFIELD_EQ,
+ ATTACK_REASON.EVENT_BOMBER_EXPLOSION,
+ ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE,
+ ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC,
+ ATTACK_REASON.NONE,
+ ATTACK_REASON.PERSONAL_DEATH_ZONE)
 ATTACK_REASON_INDICES = dict(((value, index) for index, value in enumerate(ATTACK_REASONS)))
 DEATH_REASON_ALIVE = -1
 
@@ -1017,7 +1035,7 @@ class VEHICLE_HIT_FLAGS:
     IS_ANY_PIERCING_MASK = IS_ANY_DAMAGE_MASK | ARMOR_WITH_ZERO_DF_PIERCED_BY_PROJECTILE | ARMOR_WITH_ZERO_DF_PIERCED_BY_EXPLOSION
 
 
-DAMAGE_INFO_CODES = ('DEVICE_CRITICAL', 'DEVICE_DESTROYED', 'TANKMAN_HIT', 'FIRE', 'DEVICE_CRITICAL_AT_SHOT', 'DEVICE_DESTROYED_AT_SHOT', 'DEVICE_CRITICAL_AT_RAMMING', 'DEVICE_DESTROYED_AT_RAMMING', 'DEVICE_STARTED_FIRE_AT_SHOT', 'DEVICE_STARTED_FIRE_AT_RAMMING', 'TANKMAN_HIT_AT_SHOT', 'DEATH_FROM_DEVICE_EXPLOSION_AT_SHOT', 'DEVICE_CRITICAL_AT_FIRE', 'DEVICE_DESTROYED_AT_FIRE', 'DEVICE_CRITICAL_AT_WORLD_COLLISION', 'DEVICE_DESTROYED_AT_WORLD_COLLISION', 'DEVICE_CRITICAL_AT_DROWNING', 'DEVICE_DESTROYED_AT_DROWNING', 'DEVICE_REPAIRED_TO_CRITICAL', 'DEVICE_REPAIRED', 'TANKMAN_HIT_AT_WORLD_COLLISION', 'TANKMAN_HIT_AT_DROWNING', 'TANKMAN_RESTORED', 'DEATH_FROM_DEVICE_EXPLOSION_AT_FIRE', 'ENGINE_CRITICAL_AT_UNLIMITED_RPM', 'ENGINE_DESTROYED_AT_UNLIMITED_RPM', 'ENGINE_CRITICAL_AT_BURNOUT', 'ENGINE_DESTROYED_AT_BURNOUT', 'DEATH_FROM_SHOT', 'DEATH_FROM_INACTIVE_CREW_AT_SHOT', 'DEATH_FROM_RAMMING', 'DEATH_FROM_FIRE', 'DEATH_FROM_INACTIVE_CREW', 'DEATH_FROM_DROWNING', 'DEATH_FROM_WORLD_COLLISION', 'DEATH_FROM_INACTIVE_CREW_AT_WORLD_COLLISION', 'DEATH_FROM_DEATH_ZONE', 'DEATH_FROM_GAS_ATTACK', 'DEATH_FROM_OVERTURN', 'DEATH_FROM_ARTILLERY_PROTECTION', 'DEATH_FROM_ARTILLERY_SECTOR', 'DEATH_FROM_BOMBER', 'FIRE_STOPPED', 'DEATH_FROM_RECOVERY')
+DAMAGE_INFO_CODES = ('DEVICE_CRITICAL', 'DEVICE_DESTROYED', 'TANKMAN_HIT', 'FIRE', 'DEVICE_CRITICAL_AT_SHOT', 'DEVICE_DESTROYED_AT_SHOT', 'DEVICE_CRITICAL_AT_RAMMING', 'DEVICE_DESTROYED_AT_RAMMING', 'DEVICE_STARTED_FIRE_AT_SHOT', 'DEVICE_STARTED_FIRE_AT_RAMMING', 'TANKMAN_HIT_AT_SHOT', 'DEATH_FROM_DEVICE_EXPLOSION_AT_SHOT', 'DEVICE_CRITICAL_AT_SHOT_IN_PERSONAL_DEATH_ZONE', 'DEVICE_DESTROYED_AT_SHOT_IN_PERSONAL_DEATH_ZONE', 'DEVICE_CRITICAL_AT_FIRE', 'DEVICE_DESTROYED_AT_FIRE', 'DEVICE_CRITICAL_AT_WORLD_COLLISION', 'DEVICE_DESTROYED_AT_WORLD_COLLISION', 'DEVICE_CRITICAL_AT_DROWNING', 'DEVICE_DESTROYED_AT_DROWNING', 'DEVICE_REPAIRED_TO_CRITICAL', 'DEVICE_REPAIRED', 'TANKMAN_HIT_AT_WORLD_COLLISION', 'TANKMAN_HIT_AT_DROWNING', 'TANKMAN_RESTORED', 'DEATH_FROM_DEVICE_EXPLOSION_AT_FIRE', 'ENGINE_CRITICAL_AT_UNLIMITED_RPM', 'ENGINE_DESTROYED_AT_UNLIMITED_RPM', 'ENGINE_CRITICAL_AT_BURNOUT', 'ENGINE_DESTROYED_AT_BURNOUT', 'DEATH_FROM_SHOT', 'DEATH_FROM_INACTIVE_CREW_AT_SHOT', 'DEATH_FROM_RAMMING', 'DEATH_FROM_FIRE', 'DEATH_FROM_INACTIVE_CREW', 'DEATH_FROM_DROWNING', 'DEATH_FROM_WORLD_COLLISION', 'DEATH_FROM_INACTIVE_CREW_AT_WORLD_COLLISION', 'DEATH_FROM_DEATH_ZONE', 'DEATH_FROM_GAS_ATTACK', 'DEATH_FROM_OVERTURN', 'DEATH_FROM_ARTILLERY_PROTECTION', 'DEATH_FROM_ARTILLERY_SECTOR', 'DEATH_FROM_BOMBER', 'FIRE_STOPPED', 'DEATH_FROM_RECOVERY', 'EVENT_DEATH_ON_PHASE_CHANGE', 'EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC')
 
 class IGR_TYPE:
     NONE = 0
@@ -1393,6 +1411,9 @@ class REQUEST_COOLDOWN:
     BUY_BATTLE_PASS_LEVELS = 1.0
     BATTLE_PASS_VOTE = 2.0
     CUSTOMIZATION_NOVELTY = 0.5
+    CREW_BOOKS = 0.5
+    CHANGE_SELECTED_GENERAL = 1.0
+    BUY_EVENT_PACK = 1.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -1598,6 +1619,8 @@ class USER_SERVER_SETTINGS:
     LINKEDSET_QUESTS = 89
     QUESTS_PROGRESS = 90
     SESSION_STATS = 96
+    GAME_EVENT = 97
+    GAME_EVENT_HANGAR_VO = 99
     _ALL = (HIDE_MARKS_ON_GUN,
      EULA_VERSION,
      GAME_EXTENDED,
@@ -1703,7 +1726,9 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  93: 'Battle of Bloggers carousel filter',
  USER_SERVER_SETTINGS.SESSION_STATS: 'sessiong statistics settings',
  97: 'BattlePass carouse filter 1',
- 98: 'Battle Pass Storage'}
+ 98: 'Battle Pass Storage',
+ USER_SERVER_SETTINGS.GAME_EVENT: 'game event',
+ USER_SERVER_SETTINGS.GAME_EVENT_HANGAR_VO: 'game event hangar vo'}
 
 class WG_GAMES:
     TANKS = 'wot'
@@ -1788,7 +1813,7 @@ class PREBATTLE_INVITE_STATUS:
 
 
 PREBATTLE_INVITE_STATUS_NAMES = dict([ (v, k) for k, v in PREBATTLE_INVITE_STATUS.__dict__.iteritems() if not k.startswith('_') ])
-FAIRPLAY_VIOLATIONS_NAMES = ('deserter', 'suicide', 'afk')
+FAIRPLAY_VIOLATIONS_NAMES = ('deserter', 'suicide', 'afk', 'event_deserter', 'event_afk')
 FAIRPLAY_VIOLATIONS_MASKS = dict([ (name, 1 << index) for index, name in enumerate(FAIRPLAY_VIOLATIONS_NAMES) ])
 
 class INVALID_CLIENT_STATS:
@@ -2018,6 +2043,7 @@ class RESPAWN_TYPES:
     SHARED = 2
     LIMITED = 3
     EPIC = 4
+    EVENT_LIMITED = 5
 
 
 class VISIBILITY:
@@ -2416,3 +2442,245 @@ class OVERRIDEN_BADGE(object):
 
 
 DEFAULT_VECTOR_3 = (0.0, 0.0, 0.0)
+
+class EVENT:
+    PLAYERS_TEAM = 1
+    ENEMY_TEAM = 2
+    PLAYERS_COUNT = 5
+    DEFAULT_RESURRECT_HEAL_FACTOR = 0.7
+    INVALID_GENERAL_ID = -1
+    DISABLE_AI_BATTLE_RESULTS_SEND = True
+
+    class TRIGGER_TYPES(object):
+        TIME_INTERVAL = 'TimeInterval'
+        TIMER = 'Timer'
+        CIRCULAR_AREA_TRIGGER = 'CircularAreaAlly'
+        CIRCULAR_AREA_COUNTER = 'CircularAreaAllyCounter'
+        RECTANGULAR_AREA_TRIGGER = 'RectangularAreaAlly'
+        RECTANGULAR_AREA_COUNTER = 'RectangularAreaAllyCounter'
+        CONTROL_POINT_PROGRESS = 'EventControlPoint'
+        CIRCULAR_ENTITY_AREA_TRIGGER = 'CircularEntityAreaTrigger'
+
+    class LOG_TYPE:
+        VEHICLE_SPAWN = 'vehicleSpawn'
+        ENVIRONMENT_CHANGED = 'environmentChanged'
+        PICK_UP_SOULS = 'pickUpSouls'
+        VEHICLE_KILLED = 'vehicleKilled'
+        WAVE_STARTED = 'waveStarted'
+        EQUIPMENT_ACTIVATED = 'equipmentActivated'
+        DAMAGE_ENEMY = 'damageEnemy'
+        DEATHZONE_DAMAGE = 'deathzoneDamage'
+        TEAMMATE_LIVES_LEFT = 'teammateLivesLeft'
+
+
+class EVENT_SOULS_CHANGE_REASON:
+    NONE = 0
+    ADD = 1
+    DRAW_BY_COLLECTOR = 2
+    DRAW_BY_BOSS = 3
+    DEATH = 4
+
+
+class EVENT_BOT_ROLE:
+    BOSS = 'eventBigBossBot'
+    HUNTER = 'eventHunterBot'
+    BOMBER = 'eventBomberBot'
+    TURRET = 'eventTurretBot'
+    RUNNER = 'eventRunnerBot'
+    SENTRY = 'eventSentryBot'
+    ORDER = (BOSS,
+     HUNTER,
+     BOMBER,
+     TURRET,
+     RUNNER,
+     SENTRY)
+
+
+ECP_INDEXES = Enumeration('eventControlPointConfigs', ['light',
+ 'capturing',
+ 'circle',
+ 'minimap',
+ 'marker',
+ 'soulCollector'])
+ECP_SWITCHES = Enumeration('eventControlPointSwitches', ['none', 'on', 'off'])
+ECP_EVENTS = Enumeration('eventControlPointEvents', ['none',
+ 'onCall',
+ 'onEnter',
+ 'onCapture',
+ 'onFullOfSouls'])
+ECP_CONFIG_INDEXES = Enumeration('eventControlPointConfigIndexes', ['switches', 'events', 'value'])
+ECP_HUD_INDEXES = Enumeration('ecpHUDIndexes', ['minimap', 'marker'])
+ECP_HUD_TOGGLES = Enumeration('ecpHUDToggles', ['off', 'on'])
+HE19_NO_ENERGY_TOKEN = 'he19_no_energy_{}'
+HE19_NO_ENERGY_TOKEN_PREFIX = 'he19_no_energy_'
+HE19_USE_ENERGY_TOKEN = 'he19_use_energy_{}'
+HE19_USE_ENERGY_TOKEN_PREFIX = 'he19_use_energy_'
+SE_ENERGY_TOKEN_ID = 'img:se_energy:webId'
+HE19_A100_T49_TOKEN_ID = 'img:he19_A100_T49_Halloween:webId'
+HE19_R40_T_54_TOKEN_ID = 'img:he19_R40_T_54_Halloween:webId'
+HE19_A100_T49_TOKEN_ID_COMPENSATION = 'he19_A100_T49_Halloween_compensation'
+HE19_R40_T_54_TOKEN_ID_COMPENSATION = 'he19_R40_T_54_Halloween_compensation'
+HE19_MISSION_ITEM_2_2_UNLOCK_TOKEN_ID = 'he19_mission_item_2_2_unlock'
+HE19_MISSION_ITEM_2_3_UNLOCK_TOKEN_ID = 'he19_mission_item_2_3_unlock'
+HE19_MISSION_ITEM_2_4_UNLOCK_TOKEN_ID = 'he19_mission_item_2_4_unlock'
+HE19_MISSION_ITEM_2_5_UNLOCK_TOKEN_ID = 'he19_mission_item_2_5_unlock'
+HE19_MISSION_ITEM_3_2_UNLOCK_TOKEN_ID = 'he19_mission_item_3_2_unlock'
+HE19_MISSION_ITEM_3_3_UNLOCK_TOKEN_ID = 'he19_mission_item_3_3_unlock'
+HE19_MISSION_ITEM_3_4_UNLOCK_TOKEN_ID = 'he19_mission_item_3_4_unlock'
+HE19_MISSION_ITEM_3_5_UNLOCK_TOKEN_ID = 'he19_mission_item_3_5_unlock'
+HE19_COMMANDER_TANKMAN_TOKEN_ID_PATTERN = re.compile('^img:he19_tankman_(?P<commanderID>[1-9][0-9]*):webId$')
+SE20_HERO_TANK_DISCOUNT_PREFIX = 'img:se20_tank_discount'
+SE20_HERO_TANK_DISCOUNT_PERCENT_PATTERN = re.compile('^img:se20_tank_discount(?P<percent>[1-9][0-9]*):webId$')
+SE20_USE_DEATH_ZONE_ON_MINI_MAP = 0
+EVENT_BATTLES_TAG = 'event_battles'
+SE20_DEFAULT_PATTERN = 'default'
+EVENT_GAME_PLAY_NAME = 'ctf'
+EVENT_DEF_WEIGHT_FOR_SPECIAL_MAP = 1000
+EVENT_DEFAULT_FRONT_ID = 1
+
+class EVENT_SYS_MESSEGES(object):
+    RECEIVE_HE19_MONEY = 'receiveHE19Money'
+
+
+class EVENT_MISSION_ICON_SIZES:
+    BIG = 'Big'
+    SMALL = 'Small'
+
+
+class EPIC_PERF_GROUP(object):
+    HIGH_RISK = 1
+    MEDIUM_RISK = 2
+    LOW_RISK = 3
+
+
+class EventPackTypes(Enum):
+    ENERGY_OF_GENERAL = 'se20_energy_general'
+    PROGRESSION_OF_GENERAL = 'se20_bought_general'
+    PROGRESSION_FOR_ALL_GENERALS = 'se20_general_bundle'
+    ENERGY = 'se20_energy_bundle'
+    REGULAR = 'se20'
+
+    @classmethod
+    def values(cls):
+        return cls.__members__.values()
+
+
+class EventPackGuiTypes(Enum):
+    BEGINNER = 'beginner'
+    SPECIALIST = 'specialist'
+    MASTER = 'master'
+    MEGA_PACK = 'megaPack'
+    EXCHANGE = 'exchange'
+
+
+GENERAL_ENERGY_MULTIPLIER_PATTERN = re.compile('_x(?P<multiplier>[0-9]*)')
+MULTIPLIER_GROUP = 'multiplier'
+GENERAL_ID_PATTERN = re.compile('general_(?P<generalID>[0-9]*)')
+GENERAL_ID_GROUP = 'generalID'
+ENERGY_EXCHANGE_PATTERN = re.compile('se20_energy_general_([0-9]*)_x15')
+ENERGY_TOKEN_PREFIX = 'img:se20_energy_general'
+TANK_DISCOUNT_TOKEN_PREFIX = 'img:se20_tank_discount'
+LONG_WAIT_QUEUE_TIME = 180
+
+class ConditionState(IntEnum):
+    NOT_STARTED = 0
+    STARTED = 1
+    STOPPED = 2
+
+
+class BaseScenarioFinishState(IntEnum):
+    FAILED = 0
+    SUCCESS = 1
+
+
+class ScenarioGoalState(IntEnum):
+    NOT_STARTED = 0
+    ACTIVE = 1
+    FINISHED = 2
+
+
+class ScenarioGoalGroupType(IntEnum):
+    MAIN = 0
+    SECONDARY = 1
+
+
+class ScenarioGoalFinishedState(IntEnum):
+    NONE = 0
+    FAILED = 1
+    SUCCESS = 2
+
+
+class ScenarioGoalType(IntEnum):
+    NONE = 0
+    SIMPLE_GOAL = 1
+    REMOTE_SCENARIO = 2
+    KILL_BOTS = 3
+    KILL_BOTS_FOR_TIME = 4
+    KILL_BOTS_FROM_WAVES = 5
+    KILL_BOTS_FROM_WAVES_FOR_TIME = 6
+
+
+class LobbyType(Enum):
+    REGULAR = 'regular'
+    EVENT = 'event'
+    TRAINING_ROOM = 'training_room'
+
+
+class EventHangarEnvironmentName(Enum):
+    RANDOM_PHASE_1 = 'main_war'
+    EVENT_PHASE_1 = 'diarama_war'
+    RANDOM_PHASE_2 = 'main_peace'
+    EVENT_PHASE_2 = 'diarama_peace'
+
+
+class EventBehaviorConst(Enum):
+    STUN_EFFECT_DURATION = 999999
+    DESTROYED_PREFIX = 'Destroyed'
+    SHOW_ENEMY_ROLE_MARKER = 'showEnemyRoleMarker'
+    RAGE = 'Rage'
+    PANIC = 'Panic'
+    DEFAULT = 'Default'
+
+
+class EventMarkerBlinkingParams(Enum):
+    BLINKING_DURATION_CUSTOM_MARKER = 10
+    BLINKING_DURATION_ARROW_MARKER = 5
+    BLINKING_SPEED_CUSTOM_MARKER_MS = 600
+    BLINKING_SPEED_ARROW_MARKER_MS = 1000
+
+
+class MarkerTypes(object):
+    DEFAULT = 'default'
+    AREA_BOSS = 'controlPointBoss'
+    POINT_A = 'CapturePointA'
+    POINT_B = 'CapturePointB'
+    POINT_C = 'CapturePointC'
+    POINT_A_GREEN = 'CapturePointAGreen'
+    POINT_B_GREEN = 'CapturePointBGreen'
+    POINT_C_GREEN = 'CapturePointCGreen'
+    COUNTER_ATTACK = 'CounterAttack'
+    COUNTER_ATTACK_RED = 'CounterAttackRed'
+    COUNTER_ATTACK_RECTANGLE = 'CounterAttackRectangle'
+    CAPTURE_BASE = 'CaptureBase'
+    OUR_BASE = 'OurBase'
+    EVENT_DEATHZONE = 'EventDeathZone'
+    ARROW = 'Arrow'
+    ARROW_BT = 'ArrowBT'
+    ARROW_TB = 'ArrowTB'
+    ONLY_MINI_MAP_MARKER_LIST = (POINT_A_GREEN,
+     POINT_B_GREEN,
+     POINT_C_GREEN,
+     ARROW,
+     ARROW_BT,
+     ARROW_TB)
+    NO_BLINKING_MARKER_LIST = (POINT_A_GREEN, POINT_B_GREEN, POINT_C_GREEN)
+    ARROW_MINI_MAP_MARKER_LIST = (ARROW, ARROW_BT, ARROW_TB)
+
+
+class QUEST_NOT_AVAILABLE_REASON(object):
+    IN_FUTURE = 'in_future'
+    OUT_OF_DATE = 'out_of_date'
+    INVALID_WEEKDAY = 'invalid_weekday'
+    INVALID_TIME_INTERVAL = 'invalid_time_interval'
+    REQUIREMENTS = 'requirements'
+    DAILY_COMPLETE = 'dailyComplete'

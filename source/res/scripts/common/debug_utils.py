@@ -416,6 +416,24 @@ def traceCalls(func):
     return wrapper
 
 
+class CatchNativeCallstack(object):
+
+    def __init__(self):
+        self._stack = None
+        return
+
+    def __enter__(self):
+        self._stack = traceback.extract_stack()
+        return self
+
+    def __exit__(self, exctype, value, tb):
+        if exctype:
+            LOG_ERROR('Original callstack:')
+            traceback.print_list(self._stack[:-1])
+            traceback.print_exception(exctype, value, tb)
+        return True
+
+
 def traceMethodCalls(obj, *names):
     if not IS_DEVELOPMENT:
         return

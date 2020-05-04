@@ -103,6 +103,10 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
     def isVehicleLoaded(self):
         return self.__isVehicleLoaded
 
+    @property
+    def isVehicleAppearanceLoaded(self):
+        return False if self.__vAppearance is None else self.__vAppearance.isLoaded()
+
     def setSelectable(self, flag):
         if flag:
             self.targetCaps = []

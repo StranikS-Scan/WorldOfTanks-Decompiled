@@ -333,7 +333,7 @@ class EventsCache(IEventsCache):
         return EventBattles(battles.get('vehicleTags', set()), battles.get('vehicles', []), bool(battles.get('enabled', 0)), battles.get('arenaTypeID')) if battles else EventBattles(set(), [], 0, None)
 
     def isEventEnabled(self):
-        return len(self.__getEventBattles()) > 0 and len(self.getEventVehicles()) > 0
+        return self.getEventBattles().enabled
 
     @dependency.replace_none_kwargs(itemsCache=IItemsCache)
     def getEventVehicles(self, itemsCache=None):
@@ -347,6 +347,15 @@ class EventsCache(IEventsCache):
                     result.append(item)
 
             return sorted(result)
+
+    def getCommanders(self):
+        return self.getGameEventData().get('generals', {})
+
+    def getCommander(self, commanderId):
+        return self.getCommanders().get(commanderId)
+
+    def getFronts(self):
+        return self.getGameEventData().get('fronts', [])
 
     def getEvents(self, filterFunc=None):
         svrEvents = self.getQuests(filterFunc)
@@ -513,6 +522,9 @@ class EventsCache(IEventsCache):
                 result[qID] = q
 
         return result
+
+    def getGameEventData(self):
+        return self.__getIngameEventsData().get('se2', {})
 
     def _getQuests(self, filterFunc=None, includePersonalMissions=False):
         result = {}

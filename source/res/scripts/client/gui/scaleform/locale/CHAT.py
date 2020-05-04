@@ -9,6 +9,7 @@ class CHAT(object):
     CHANNELS_SYSTEM = '#chat:channels/system'
     CHANNELS_TRADING = '#chat:channels/trading'
     CHANNELS_COMMON = '#chat:channels/common'
+    CHANNELS_SECRET_EVENT = '#chat:channels/secret_event'
     CHANNELS_SPECIAL_BATTLES = '#chat:channels/special_battles'
     CHANNELS_TOURNAMENT = '#chat:channels/tournament'
     CHANNELS_CLAN = '#chat:channels/clan'

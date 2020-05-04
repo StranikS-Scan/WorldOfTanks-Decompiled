@@ -13,6 +13,16 @@
   </projectilePiercingPowerReduction>
   <trees>
     <entry>
+      <filename>	vegetation/Broadleaves/Birch_Dry/Birch_Dry_Curve_01.srt	</filename>
+      <health>	20	</health>
+      <density>	0.25	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Pollardind_Willow_11m_fall	</fractureEffect>
+      <touchdownEffect>	tree_Pollardind_Willow_11m_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
       <filename>	vegetation/Broadleaves/Birch/Birch_16m.srt	</filename>
       <health>	60	</health>
       <density>	0.5	</density>
@@ -603,6 +613,16 @@
       <touchdownEffect>	tree_Linden_Town_Dry_23m_touchdown	</touchdownEffect>
     </entry>
     <entry>
+      <filename>	vegetation/Broadleaves/Linden_High_Bald/Linden_High_Bald_17m.srt	</filename>
+      <health>	3	</health>
+      <density>	0.25	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Linden_Town_Dry_23m_fall	</fractureEffect>
+      <touchdownEffect>	tree_Linden_Town_Dry_23m_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
       <filename>	vegetation/Broadleaves/Linden_High_Bald_Snow/Linden_High_Bald_Snow_16m.srt	</filename>
       <health>	3	</health>
       <density>	0.25	</density>
@@ -1061,6 +1081,16 @@
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
       <fractureEffect>	tree_Oak_Regular_Colored_5m_fall	</fractureEffect>
       <touchdownEffect>	tree_Oak_Regular_Colored_5m_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
+      <filename>	vegetation/Broadleaves/Pin_Oak/Pin_Oak_24m.srt	</filename>
+      <health>	10	</health>
+      <density>	0.5	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
+      <fractureEffect>	tree_Maple_Autumn_12m_fall	</fractureEffect>
+      <touchdownEffect>	tree_Maple_Autumn_12m_touchdown	</touchdownEffect>
     </entry>
     <entry>
       <filename>	vegetation/Broadleaves/Ivy_Tree/Ivy_Tree_01.srt	</filename>
@@ -4168,6 +4198,116 @@
       <fractureEffect>	hd_env_UNI_092_CityLantern_fall	</fractureEffect>
       <touchdownEffect>	hd_env_UNI_092_CityLantern_touchdown	</touchdownEffect>
       <touchdownBreakEffect>	none	</touchdownBreakEffect>
+      <effectScale>	1.000000	</effectScale>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_EU_488_BerlinSigns/normal/lod0/hd_env_EU_488_BerlinSigns_01.model	</filename>
+      <health>	10	</health>
+      <physicParams>	200 3.2 0.03 150000 10000 0 0.05	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <fractureEffect>	hd_env_EU_488_BerlinSigns_01_fracture	</fractureEffect>
+      <touchdownEffect>	hd_env_EU_488_BerlinSigns_01_touchdown	</touchdownEffect>
+      <touchdownBreakEffect>	none	</touchdownBreakEffect>
+      <effectScale>	1.000000	</effectScale>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_EU_488_BerlinSigns/normal/lod0/hd_env_EU_488_BerlinSigns_02.model	</filename>
+      <health>	10	</health>
+      <physicParams>	200 3.2 0.03 150000 10000 0 0.05	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <fractureEffect>	hd_env_EU_488_BerlinSigns_01_fracture	</fractureEffect>
+      <touchdownEffect>	hd_env_EU_488_BerlinSigns_01_touchdown	</touchdownEffect>
+      <touchdownBreakEffect>	none	</touchdownBreakEffect>
+      <effectScale>	1.000000	</effectScale>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_EU_488_BerlinSigns/normal/lod0/hd_env_EU_488_BerlinSigns_04.model	</filename>
+      <health>	10	</health>
+      <physicParams>	200 3.2 0.03 150000 10000 0 0.05	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <fractureEffect>	hd_env_EU_488_BerlinSigns_01_fracture	</fractureEffect>
+      <touchdownEffect>	hd_env_EU_488_BerlinSigns_01_touchdown	</touchdownEffect>
+      <touchdownBreakEffect>	none	</touchdownBreakEffect>
+      <effectScale>	1.000000	</effectScale>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_EU_488_BerlinSigns/normal/lod0/hd_env_EU_488_BerlinSigns_06.model	</filename>
+      <health>	10	</health>
+      <physicParams>	200 3.2 0.03 150000 10000 0 0.05	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <fractureEffect>	hd_env_EU_488_BerlinSigns_01_fracture	</fractureEffect>
+      <touchdownEffect>	hd_env_EU_488_BerlinSigns_01_touchdown	</touchdownEffect>
+      <touchdownBreakEffect>	none	</touchdownBreakEffect>
+      <effectScale>	1.000000	</effectScale>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_EU_488_BerlinSigns/normal/lod0/hd_env_EU_488_BerlinSigns_07.model	</filename>
+      <health>	10	</health>
+      <physicParams>	200 3.2 0.03 150000 10000 0 0.05	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <fractureEffect>	hd_env_EU_488_BerlinSigns_01_fracture	</fractureEffect>
+      <touchdownEffect>	hd_env_EU_488_BerlinSigns_01_touchdown	</touchdownEffect>
+      <touchdownBreakEffect>	none	</touchdownBreakEffect>
+      <effectScale>	1.000000	</effectScale>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_EU_488_BerlinSigns/normal/lod0/hd_env_EU_488_BerlinSigns_08.model	</filename>
+      <health>	10	</health>
+      <physicParams>	200 3.2 0.03 150000 10000 0 0.05	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <fractureEffect>	hd_env_EU_488_BerlinSigns_01_fracture	</fractureEffect>
+      <touchdownEffect>	hd_env_EU_488_BerlinSigns_01_touchdown	</touchdownEffect>
+      <touchdownBreakEffect>	none	</touchdownBreakEffect>
+      <effectScale>	1.000000	</effectScale>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_EU_488_BerlinSigns/normal/lod0/hd_env_EU_488_BerlinSigns_09.model	</filename>
+      <health>	10	</health>
+      <physicParams>	200 3.2 0.03 150000 10000 0 0.05	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <fractureEffect>	hd_env_EU_488_BerlinSigns_01_fracture	</fractureEffect>
+      <touchdownEffect>	hd_env_EU_488_BerlinSigns_01_touchdown	</touchdownEffect>
+      <touchdownBreakEffect>	none	</touchdownBreakEffect>
+      <effectScale>	1.000000	</effectScale>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_EU_488_BerlinSigns/normal/lod0/hd_env_EU_488_BerlinSigns_10.model	</filename>
+      <health>	10	</health>
+      <physicParams>	200 3.2 0.03 150000 10000 0 0.05	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <fractureEffect>	hd_env_EU_488_BerlinSigns_01_fracture	</fractureEffect>
+      <touchdownEffect>	hd_env_EU_488_BerlinSigns_01_touchdown	</touchdownEffect>
+      <touchdownBreakEffect>	none	</touchdownBreakEffect>
+      <effectScale>	1.000000	</effectScale>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_EU_488_BerlinSigns/normal/lod0/hd_env_EU_488_BerlinSigns_12.model	</filename>
+      <health>	10	</health>
+      <physicParams>	200 3.2 0.03 150000 10000 0 0.05	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <fractureEffect>	hd_env_EU_488_BerlinSigns_01_fracture	</fractureEffect>
+      <touchdownEffect>	hd_env_EU_488_BerlinSigns_01_touchdown	</touchdownEffect>
+      <touchdownBreakEffect>	none	</touchdownBreakEffect>
+      <effectScale>	1.000000	</effectScale>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_EU_488_BerlinSigns/normal/lod0/hd_env_EU_488_BerlinSigns_Destr_01.model	</filename>
+      <health>	10	</health>
+      <physicParams>	200 3.2 0.03 150000 10000 0 0.05	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <fractureEffect>	hd_env_EU_488_BerlinSigns_01_fracture	</fractureEffect>
+      <touchdownEffect>	hd_env_EU_488_BerlinSigns_01_touchdown	</touchdownEffect>
+      <touchdownBreakEffect>	none	</touchdownBreakEffect>
+      <effectScale>	1.000000	</effectScale>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_EU_488_BerlinSigns/normal/lod0/hd_env_EU_488_BerlinSigns_Destr_02.model	</filename>
+      <health>	10	</health>
+      <physicParams>	200 3.2 0.03 150000 10000 0 0.05	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <fractureEffect>	hd_env_EU_488_BerlinSigns_01_fracture	</fractureEffect>
+      <touchdownEffect>	hd_env_EU_488_BerlinSigns_01_touchdown	</touchdownEffect>
+      <touchdownBreakEffect></touchdownBreakEffect>
       <effectScale>	1.000000	</effectScale>
     </entry>
   </fallingAtoms>
@@ -8144,6 +8284,7 @@
       <effectScale>	1	</effectScale>
       <matName>	n_metal0	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
+      <achievementTag>	monument	</achievementTag>
     </entry>
     <entry>
       <filename>	content/GatesAndFences/hd_gaf_EUGB_002_FieldFence/normal/lod0/hd_gaf_EUGB_002_FieldFence_01.model	</filename>
@@ -12712,6 +12853,17 @@
       <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
     <entry>
+      <filename>	content/Environment/hd_env_UNI_658_LatheMachine_Big_02/normal/lod0/hd_env_UNI_658_LatheMachine_Big_02.model	</filename>
+      <health>	10	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_UNI_658_LatheMachine_Big_02	</effect>
+      <hitEffect>	hd_env_UNI_658_LatheMachine_Big_02_hit	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1	</effectScale>
+      <matName>	n_metal0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
       <filename>	content/Buildings/hd_bld_UNI_008_WorkshopNew/normal/lod0/hd_bld_UNI_008_WorkshopNew_Doors_Big_02_Left.model	</filename>
       <health>	20	</health>
       <decayEffect>	none	</decayEffect>
@@ -13644,6 +13796,17 @@
       <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
     <entry>
+      <filename>	content/Environment/hd_env_UNI_007_SnagHeap/normal/lod0/hd_env_UNI_007_SnagHeap_Burning_03.model	</filename>
+      <health>	10	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	inf_env_UNI_007_SnagHeap_02	</effect>
+      <hitEffect>	inf_env_UNI_007_SnagHeap_02_hit	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1	</effectScale>
+      <matName>	n_wood0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
       <filename>	content/GatesAndFences/hd_gaf_SU_011_StarFence/normal/lod0/hd_gaf_SU_011_StarFence_Tile.model	</filename>
       <health>	1	</health>
       <decayEffect>	none	</decayEffect>
@@ -14242,6 +14405,17 @@
       <hitEffect>	hd_env_SU_028_GasBottle	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1.000000	</effectScale>
+      <matName>	n_metal0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_EU_057_CallBox/normal/lod0/hd_env_EU_057_CallBox_Red_01.model	</filename>
+      <health>	10	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_EU_057_CallBox	</effect>
+      <hitEffect>	hd_env_EU_057_CallBox	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1	</effectScale>
       <matName>	n_metal0	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
@@ -15402,6 +15576,52 @@
       <decayEffect>	none	</decayEffect>
       <effect>	hd_bld_AM_035_SmallShed	</effect>
       <hitEffect>	hd_bld_AM_035_SmallShed	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_wood0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_EU_483_MoabitBridge/normal/lod0/hd_env_EU_483_MoabitBridge_03.model	</filename>
+      <health>	10	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_EU_483_MoabitBridge_03	</effect>
+      <hitEffect>	hd_env_EU_483_MoabitBridge_03	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_stone0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <hitEffect>	inf_gafSU_92_02_BrickFence_tile_01	</hitEffect>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_EU_483_MoabitBridge/normal/lod0/hd_env_EU_483_MoabitBridge_04.model	</filename>
+      <health>	10	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_EU_483_MoabitBridge_04	</effect>
+      <hitEffect>	hd_env_EU_483_MoabitBridge_04	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_stone0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <hitEffect>	inf_gafSU_92_02_BrickFence_tile	</hitEffect>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_EU_481_RailwayOverpass/normal/lod0/hd_env_EU_481_RailwayOverpass_03.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	envAM_005_sign	</effect>
+      <hitEffect>	envAM_005_sign	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_metal0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_UNI_414_Pole/normal/lod0/hd_env_UNI_414_Pole_12.model	</filename>
+      <health>	1	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_env_UNI_414_Pole_12	</effect>
+      <hitEffect>	hd_env_UNI_414_Pole_12	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1.000000	</effectScale>
       <matName>	n_wood0	</matName>
@@ -16901,7 +17121,7 @@
       <filename>	content/Buildings/hd_bld_AF_002_VHouse/normal/lod0/hd_bld_AF_002_VHouse_01.model	</filename>
       <modules>
         <module>
-          <matName>	n_stone1_1_7	</matName>
+          <matName>	n_stone1_1_2	</matName>
           <health>	35	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	inf_bldAF_module_01_12_ram	</ramEffect>
@@ -16910,7 +17130,7 @@
           <effectScale>	1	</effectScale>
         </module>
         <module>
-          <matName>	n_stone1_7	</matName>
+          <matName>	n_stone1_2	</matName>
           <health>	35	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	inf_bldAF_module_01_13_ram	</ramEffect>
@@ -18010,6 +18230,65 @@
           <ramEffect>	inf_env_EU_447_Stairs_2	</ramEffect>
           <hitEffect>	inf_env_EU_447_Stairs_2_hit	</hitEffect>
           <effectHP>	HP_module1	</effectHP>
+          <effectScale>	1	</effectScale>
+        </module>
+      </modules>
+    </entry>
+    <entry>
+      <filename>	content/Environment/hd_env_EU_456_BurnedTrees/normal/lod0/hd_env_EU_456_BurnedTrees_20x20.model	</filename>
+      <modules>
+        <module>
+          <matName>	n_wood0_1	</matName>
+          <health>	10	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	inf_env_EU_456_BurnedTrees_01	</ramEffect>
+          <hitEffect>	inf_env_EU_456_BurnedTrees_01_hit	</hitEffect>
+          <effectHP>	HP_module0	</effectHP>
+          <effectScale>	1	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood0_2	</matName>
+          <health>	10	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	inf_env_EU_456_BurnedTrees_01_01_ram	</ramEffect>
+          <hitEffect>	inf_env_EU_456_BurnedTrees_01_01_hit	</hitEffect>
+          <effectHP>	HP_module1	</effectHP>
+          <effectScale>	1	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood0_3	</matName>
+          <health>	10	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	inf_env_EU_456_BurnedTrees_01_02_ram	</ramEffect>
+          <hitEffect>	inf_env_EU_456_BurnedTrees_01_02_hit	</hitEffect>
+          <effectHP>	HP_module2	</effectHP>
+          <effectScale>	1	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood0_4	</matName>
+          <health>	10	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	inf_env_EU_456_BurnedTrees_01_03_ram	</ramEffect>
+          <hitEffect>	inf_env_EU_456_BurnedTrees_01_03_hit	</hitEffect>
+          <effectHP>	HP_module3	</effectHP>
+          <effectScale>	1	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood0_5	</matName>
+          <health>	10	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	inf_env_EU_456_BurnedTrees_01_04_ram	</ramEffect>
+          <hitEffect>	inf_env_EU_456_BurnedTrees_01_04_hit	</hitEffect>
+          <effectHP>	HP_module4	</effectHP>
+          <effectScale>	1	</effectScale>
+        </module>
+        <module>
+          <matName>	n_wood0_6	</matName>
+          <health>	10	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	inf_env_EU_456_BurnedTrees_01_05_ram	</ramEffect>
+          <hitEffect>	inf_env_EU_456_BurnedTrees_01_05_hit	</hitEffect>
+          <effectHP>	HP_module5	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
       </modules>
@@ -20843,6 +21122,47 @@
           <ramEffect>	hd_bld_UNI_015_Watchtower_Circle_02	</ramEffect>
           <hitEffect>	hd_bld_UNI_015_Watchtower_Circle_02	</hitEffect>
           <effectHP>	HP_module1	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+      </modules>
+    </entry>
+    <entry>
+      <filename>	content/Environment/env_105_01_BerlinFountain/normal/lod0/env_105_01_BerlinFountain01.model	</filename>
+      <modules>
+        <module>
+          <matName>	n_stone0_1	</matName>
+          <health>	10	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	env_105_01_BerlinFountain01_0	</ramEffect>
+          <hitEffect>	env_105_01_BerlinFountain01_0	</hitEffect>
+          <effectHP>	HP_module_0	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_stone0_2	</matName>
+          <health>	10	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	env_105_01_BerlinFountain01_1	</ramEffect>
+          <hitEffect>	env_105_01_BerlinFountain01_1	</hitEffect>
+          <effectHP>	HP_module_1	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_stone0_3	</matName>
+          <health>	10	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	env_105_01_BerlinFountain01_2	</ramEffect>
+          <hitEffect>	env_105_01_BerlinFountain01_2	</hitEffect>
+          <effectHP>	HP_module_2	</effectHP>
+          <effectScale>	1.000000	</effectScale>
+        </module>
+        <module>
+          <matName>	n_stone0_4	</matName>
+          <health>	10	</health>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	env_105_01_BerlinFountain01_3	</ramEffect>
+          <hitEffect>	env_105_01_BerlinFountain01_3	</hitEffect>
+          <effectHP>	HP_module_3	</effectHP>
           <effectScale>	1.000000	</effectScale>
         </module>
       </modules>

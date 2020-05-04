@@ -1,0 +1,13 @@
+<WaveBotsSpawnController_Avatar.def>
+  <BaseMethods>
+    <waveBotsSpawnController_notifyClients>
+      <Arg>	STRING	</Arg>
+    </waveBotsSpawnController_notifyClients>
+  </BaseMethods>
+  <ClientMethods>
+    <notifyClients>
+      <Arg>	STRING	</Arg>
+      <VariableLengthHeaderSize>	2	</VariableLengthHeaderSize>
+    </notifyClients>
+  </ClientMethods>
+</WaveBotsSpawnController_Avatar.def>

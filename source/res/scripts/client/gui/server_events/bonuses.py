@@ -440,7 +440,10 @@ class BattleTokensBonus(TokensBonus):
             complexToken = parseComplexToken(tokenID)
             if complexToken.isDisplayable:
                 userName = self._getUserName(complexToken.styleID)
-                result.append(i18n.makeString(TOOLTIPS.MISSIONS_TOKEN_HEADER, name=userName))
+                header = i18n.makeString(TOOLTIPS.MISSIONS_TOKEN_HEADER, name=userName)
+                if TOOLTIPS.hasBonusesTokenHeader(complexToken.styleID):
+                    header = i18n.makeString(TOOLTIPS.getBonusesTokenHeader(complexToken.styleID))
+                result.append(header)
 
         return ', '.join(result) if result else None
 
@@ -1914,6 +1917,8 @@ def getMergeBonusFunction(lhv, rhv):
         return mergeItemsBonuses
     elif hasOneBaseClass(lhv, rhv, IntegralBonus) or hasOneBaseClass(lhv, rhv, GoldBonus):
         return mergeIntegralBonuses
+    elif ofSameClassWithBase(lhv, rhv, BattleTokensBonus):
+        return mergeTokensBonuses
     else:
         return mergeSimpleBonuses if ofSameClassWithBase(lhv, lhv, SimpleBonus) else None
 
@@ -2045,3 +2050,18 @@ def splitCustomizationsBonus(bonus):
     if camoItem is not None:
         split.append(camoItem)
     return split
+
+
+def mergeTokensBonuses(lhv, rhv):
+    merged = copy.deepcopy(lhv)
+    needPop = False
+    for key in merged.getValue():
+        if key in rhv.getValue():
+            merged.getValue()[key]['count'] += rhv.getValue()[key]['count']
+
+    for key, value in rhv.getValue().iteritems():
+        if key not in merged.getValue():
+            merged.getValue()[key] = value
+            needPop = True
+
+    return (merged, needPop)

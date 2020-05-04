@@ -2,12 +2,13 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/missions_token_popover.py
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.view.meta.MissionsTokenPopoverMeta import MissionsTokenPopoverMeta
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.QUESTS import QUESTS
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
+from gui.impl.gen import R
 from gui.server_events.events_dispatcher import showMissionDetails
-from gui.server_events.events_helpers import missionsSortFunc
+from gui.server_events.events_helpers import missionsSortFunc, isSecretEvent
 from gui.server_events.formatters import TOKEN_SIZES
 from gui.shared import events
 from gui.shared.formatters import text_styles
@@ -18,6 +19,7 @@ from skeletons.gui.server_events import IEventsCache
 
 class MissionsTokenPopover(MissionsTokenPopoverMeta):
     eventsCache = dependency.descriptor(IEventsCache)
+    _SECRET_EVENT_DESCRIPTION_PADDING = 20
 
     def __init__(self, ctx=None):
         super(MissionsTokenPopover, self).__init__()
@@ -40,6 +42,10 @@ class MissionsTokenPopover(MissionsTokenPopoverMeta):
         super(MissionsTokenPopover, self)._populate()
         mainQuest = self.eventsCache.getQuests()[self._questId]
         children = mainQuest.getChildren()[self._tokenId]
+        locR = R.strings.quests.missions.tokenPopover
+        isSecretEventPopover = isSecretEvent(mainQuest.getGroupID())
+        if isSecretEventPopover:
+            locR = locR.secretEvent
 
         def filterfunc(quest):
             return quest.getGroupID() == mainQuest.getGroupID() and quest.getID() in children
@@ -72,13 +78,14 @@ class MissionsTokenPopover(MissionsTokenPopoverMeta):
         self.as_setListDataProviderS(result)
         buyBtnVisible = self._token.isOnSale() or mainQuest.isTokensOnSale()
         if buyBtnVisible:
-            descrText = ms(QUESTS.MISSIONS_TOKENPOPOVER_DESCR_SHOP, name=text_styles.neutral(ms(self._token.getUserName())))
+            descrText = backport.text(locR.descr.shop(), name=text_styles.neutral(ms(self._token.getUserName())))
         else:
-            descrText = ms(QUESTS.MISSIONS_TOKENPOPOVER_DESCR, name=text_styles.neutral(ms(self._token.getUserName())))
+            descrText = backport.text(locR.descr(), name=text_styles.neutral(ms(self._token.getUserName())))
         if not GUI_SETTINGS.tokenShopURL:
             buyBtnVisible = False
-        self.as_setStaticDataS({'headerText': text_styles.highTitle(ms(QUESTS.MISSIONS_TOKENPOPOVER_HEADER, name=ms(self._token.getUserName()))),
+        self.as_setStaticDataS({'headerText': text_styles.highTitle(backport.text(locR.header(), name=ms(self._token.getUserName()))),
          'descrText': text_styles.main(descrText),
+         'descrLeftPadding': self._SECRET_EVENT_DESCRIPTION_PADDING if isSecretEventPopover else 0,
          'imageSrc': self._token.getImage(TOKEN_SIZES.MEDIUM),
-         'buyBtnLabel': QUESTS.MISSIONS_TOKENPOPOVER_BUYBTN_LABEL,
+         'buyBtnLabel': backport.text(locR.buyBtn.label()),
          'buyBtnVisible': buyBtnVisible})

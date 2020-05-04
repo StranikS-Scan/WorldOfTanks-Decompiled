@@ -65,25 +65,25 @@ class SpecialEvents(object):
     FOOTBALL18 = 'football2018'
     WINTER_HUNT = 'winter_hunt'
     KURSK_BATTLE = 'Kursk_battle'
-    HALLOWEEN = 'Halloween'
+    SE20 = 'Halloween'
     ALL = (NY18,
      NY19,
      FOOTBALL18,
      WINTER_HUNT,
      KURSK_BATTLE,
-     HALLOWEEN)
+     SE20)
     ICONS = {NY18: backport.image(R.images.gui.maps.icons.customization.style_info.newYear()),
      NY19: backport.image(R.images.gui.maps.icons.customization.style_info.newYear()),
      FOOTBALL18: backport.image(R.images.gui.maps.icons.customization.style_info.football()),
      WINTER_HUNT: backport.image(R.images.gui.maps.icons.customization.style_info.marathon()),
      KURSK_BATTLE: backport.image(R.images.gui.maps.icons.customization.style_info.marathon()),
-     HALLOWEEN: backport.image(R.images.gui.maps.icons.customization.style_info.halloween())}
+     SE20: backport.image(R.images.gui.maps.icons.customization.style_info.marathon())}
     NAMES = {NY18: backport.text(R.strings.vehicle_customization.styleInfo.event.ny18()),
      NY19: backport.text(R.strings.vehicle_customization.styleInfo.event.ny19()),
      FOOTBALL18: backport.text(R.strings.vehicle_customization.styleInfo.event.football18()),
      WINTER_HUNT: backport.text(R.strings.vehicle_customization.styleInfo.event.winter_hunt()),
      KURSK_BATTLE: backport.text(R.strings.vehicle_customization.styleInfo.event.kursk_battle()),
-     HALLOWEEN: backport.text(R.strings.vehicle_customization.styleInfo.event.halloween())}
+     SE20: backport.text(R.strings.vehicle_customization.styleInfo.event.se20())}
 
 
 def camoIconTemplate(texture, width, height, colors, background=_CAMO_SWATCH_BACKGROUND):

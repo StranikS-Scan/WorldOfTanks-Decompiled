@@ -36,7 +36,7 @@ class IRespawnView(object):
         pass
 
 
-_RESPAWN_SOUND_ID = 'start_battle'
+_RESPAWN_SOUND_ID = 'respawn'
 
 class RespawnsController(ViewComponentsController):
     __slots__ = ('__weakref__', '__isUIInited', '__vehicles', '__cooldowns', '__respawnInfo', '__timerCallback', '__eManager', 'onRespawnVisibilityChanged', 'onVehicleDeployed', 'onRespawnInfoUpdated', 'onPlayerRespawnLivesUpdated', 'onTeamRespawnLivesRestored', 'onRespawnVehiclesUpdated', '__isUiShown', '__isShowUiAllowed', '__limits', '__playerRespawnLives', '__respawnSoundNotificationRequest', '__battleCtx')

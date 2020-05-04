@@ -10,6 +10,7 @@ from gui.impl.gen import R
 from gui.server_events.cond_formatters import packText, packTokenProgress, getSeparatorBlock
 from gui.server_events.cond_formatters.formatters import ConditionsFormatter, ConditionFormatter
 from gui.server_events.conditions import GROUP_TYPE, AndGroup
+from gui.server_events.events_helpers import isSecretEvent, getPreviousBattleQuest
 from gui.server_events.formatters import TOKEN_SIZES
 from gui.shared.formatters import text_styles, icons
 from helpers import int2roman, dependency
@@ -135,12 +136,14 @@ class AccountRequirementsFormatter(ConditionsFormatter):
     def format(self, conditions, event):
         if event.isGuiDisabled():
             return {}
-        group = prepareAccountConditionsGroup(conditions, event)
-        formatter = self._getGroupFormatter(group)
-        requirements, passed, total = formatter.format(group, event)
-        conclusion = formatter.conclusion(group, event, requirements, passed, total)
-        return {} if not requirements and not conclusion else {'header': conclusion,
-         'requirements': self._processRequirements(requirements)}
+        else:
+            group = prepareAccountConditionsGroup(conditions, event)
+            formatter = self._getGroupFormatter(group)
+            requirements, passed, total = formatter.format(group, event)
+            conclusion = formatter.conclusion(group, event, requirements, passed, total)
+            return {} if conclusion is None or not requirements and not conclusion else {'header': conclusion,
+             'requirements': self._processRequirements(requirements),
+             'showDetailedRequirements': self._showDetailedRequirementsButton()}
 
     @staticmethod
     def _processRequirements(requirements):
@@ -150,6 +153,9 @@ class AccountRequirementsFormatter(ConditionsFormatter):
                     del item[key]
 
         return requirements
+
+    def _showDetailedRequirementsButton(self):
+        return True
 
     def _getGroupFormatter(self, group):
         return self.getConditionFormatter('single') if len(group.items) == 1 and first(group.items).getName() not in ('token', 'and', 'or') else self.getConditionFormatter(group.getName())
@@ -173,6 +179,17 @@ class TQAccountRequirementsFormatter(AccountRequirementsFormatter):
 
     def _getGroupFormatter(self, group):
         return self.getConditionFormatter(group.getName())
+
+
+class SecretEventAccountRequirementsFormatter(AccountRequirementsFormatter):
+
+    def __init__(self):
+        super(SecretEventAccountRequirementsFormatter, self).__init__({'and': SecretEventRecursiveGroupFormatter(),
+         'or': SecretEventRecursiveGroupFormatter(),
+         'single': SingleGroupFormatter()})
+
+    def _showDetailedRequirementsButton(self):
+        return False
 
 
 class SingleGroupFormatter(ConditionsFormatter):
@@ -354,6 +371,19 @@ class TQRecursiveGroupFormatter(RecursiveGroupFormatter):
          'hasReceivedMultipliedXP': HasReceivedMultipliedXPFormatter()})
 
 
+class SecretEventRecursiveGroupFormatter(TQRecursiveGroupFormatter):
+
+    def conclusion(self, group, event, requirements, passed, total):
+        prevEvent = getPreviousBattleQuest(event)
+        if prevEvent is not None and not prevEvent.isCompleted():
+            rRequirements = R.strings.quests.missionDetails.requirements
+            icon = (icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.marker_blocked()), width=14, height=14, vSpace=-1, hSpace=-2),)
+            reason = backport.text(rRequirements.conclusion.previousIncomplete(), quest_name=prevEvent.getUserName())
+            return text_styles.concatStylesWithSpace(icon, text_styles.error(backport.text(rRequirements.header.unavailable())), text_styles.main(reason))
+        else:
+            return
+
+
 class PremiumAccountFormatter(ConditionFormatter):
 
     @classmethod
@@ -532,12 +562,17 @@ class TokenGatheringRequirementFormatter(ConditionFormatter):
     def __init__(self):
         self._tokens = []
         self._isAvailable = True
+        self._isSecretEvent = False
 
     def format(self, styler):
         style = styler(self._isAvailable)
         result = []
+        text = style('#quests:details/requirements/token') if not self._isSecretEvent else ''
+        packedText = packText(text)
+        if self._isSecretEvent:
+            packedText['isNeedShowIcon'] = False
         if self._tokens:
-            result = [packText(style('#quests:details/requirements/token')), packTokens(self._tokens)]
+            result = [packedText, packTokens(self._tokens)]
         return result
 
     def gather(self, condition, event):
@@ -550,6 +585,7 @@ class TokenGatheringRequirementFormatter(ConditionFormatter):
         image = condition.getImage(TOKEN_SIZES.BIG)
         self._tokens.append(packTokenProgress(condition.getID(), event.getID(), '', image, gotCount, needCount, isBigSize=True))
         self._isAvailable = self._isAvailable and condition.isAvailable()
+        self._isSecretEvent = self._isSecretEvent or isSecretEvent(event.getGroupID())
 
     def isAvailable(self):
         return self._isAvailable

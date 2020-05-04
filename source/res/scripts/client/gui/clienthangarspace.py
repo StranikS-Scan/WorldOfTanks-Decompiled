@@ -12,9 +12,11 @@ import constants
 from PlayerEvents import g_playerEvents
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.framework.managers.optimization_manager import GraphicsOptimizationManager
+from constants import EPIC_PERF_GROUP as EPG
 from helpers import dependency
+from sequence import SequenceManager
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IIGRController
+from skeletons.gui.game_control import IIGRController, IEpicBattleMetaGameController
 from gui.hangar_cameras.hangar_camera_manager import HangarCameraManager
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.gui.turret_gun_angles import ITurretAndGunAngles
@@ -83,6 +85,7 @@ def _readHangarSettings():
         loadConfigValue('shadow_empty_texture_name', hangarsXml, hangarsXml.readString, cfg)
         loadConfigValue(_IGR_HANGAR_PATH_KEY, hangarsXml, hangarsXml.readString, cfg)
         loadConfig(cfg, settingsXml)
+        _loadVsPlanConfig(cfg, settingsXml)
         if settingsXml.has_key(_CUSTOMIZATION_HANGAR_SETTINGS_SEC):
             customizationXmlSection = settingsXml[_CUSTOMIZATION_HANGAR_SETTINGS_SEC]
             customizationCfg = {}
@@ -171,6 +174,15 @@ def _loadCustomizationConfig(cfg, xml):
     loadConfigValue('cam_fluency', xml, xml.readFloat, cfg, cfg)
 
 
+def _loadVsPlanConfig(cfg, section):
+    section = section['vsPlans']
+    if section is None:
+        return
+    else:
+        cfg['vsPlans'] = dict(((getattr(EPG, name.upper(), EPG.LOW_RISK), subsection.readStrings('vsName')) for name, subsection in section.items()))
+        return
+
+
 def loadConfigValue(name, xml, fn, cfg, defaultCfg=None):
     if xml.has_key(name):
         cfg[name] = fn(name)
@@ -185,6 +197,7 @@ class ClientHangarSpace(object):
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
     mapActivities = dependency.descriptor(IMapActivities)
     turretAndGunAngles = dependency.descriptor(ITurretAndGunAngles)
+    epicController = dependency.descriptor(IEpicBattleMetaGameController)
 
     def __init__(self, onVehicleLoadedCallback):
         global _HANGAR_CFGS
@@ -201,8 +214,14 @@ class ClientHangarSpace(object):
         self.__onVehicleLoadedCallback = onVehicleLoadedCallback
         self.__gfxOptimizerMgr = None
         self.__optimizerID = None
+        self.__vsPlans = None
+        self.__sequenceManager = None
         _HANGAR_CFGS = _readHangarSettings()
         return
+
+    @property
+    def spaceId(self):
+        return self.__spaceId
 
     def create(self, isPremium, onSpaceLoadedCallback=None):
         global _CFG
@@ -245,6 +264,14 @@ class ClientHangarSpace(object):
         self.__optimizerID = self.__gfxOptimizerMgr.registerOptimizationArea(0, 0, size[0], size[1])
         self.mapActivities.generateOfflineActivities(spacePath)
         BigWorld.pauseDRRAutoscaling(True)
+        self.__sequenceManager = SequenceManager()
+        self.__sequenceManager.init(self.__spaceId)
+        vsNamesConfiguration = _CFG.get('vsPlans', None)
+        if vsNamesConfiguration is not None:
+            from visual_script_helpers import loadAndStartPlayerVSPlans
+            performanceGroup = self.epicController.getPerformanceGroup()
+            vsNames = vsNamesConfiguration[performanceGroup]
+            self.__vsPlans = loadAndStartPlayerVSPlans(vsNames)
         return
 
     def recreateVehicle(self, vDesc, vState, onVehicleLoadedCallback=None):
@@ -323,6 +350,8 @@ class ClientHangarSpace(object):
 
     def __destroy(self):
         LOG_DEBUG('Hangar successfully destroyed.')
+        self.__sequenceManager.destroy()
+        self.__vsPlans = None
         MusicControllerWWISE.unloadCustomSounds()
         if self.__cameraManager:
             self.__cameraManager.destroy()
@@ -380,6 +409,10 @@ class ClientHangarSpace(object):
     def camera(self):
         return self.__cameraManager.camera
 
+    @property
+    def sequenceManager(self):
+        return self.__sequenceManager
+
 
 class _ClientHangarSpacePathOverride(object):
     hangarSpace = dependency.descriptor(IHangarSpace)
@@ -408,6 +441,16 @@ class _ClientHangarSpacePathOverride(object):
             self.hangarSpace.refreshSpace(self.hangarSpace.isPremium, True)
             self.hangarSpace.onSpaceChanged()
         return
+
+    def setEnvironmentAndVisibilityMask(self, environmentName, visibilityMask):
+        if not constants.IS_DEVELOPMENT:
+            return
+        import WWISE
+        from se20.customizable_objects_manager import _WWISE_STATES_CONFIGS
+        BigWorld.CustomizationEnvironment().enable(True, environmentName)
+        BigWorld.wg_setSpaceItemsVisibilityMask(self.hangarSpace.space.spaceId, visibilityMask)
+        for group, state in _WWISE_STATES_CONFIGS[environmentName].items():
+            WWISE.WW_setState(group, state)
 
     def __onDisconnected(self):
         global _EVENT_HANGAR_PATHS

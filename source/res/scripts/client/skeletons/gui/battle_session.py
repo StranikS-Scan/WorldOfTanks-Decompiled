@@ -73,6 +73,10 @@ class ISharedControllersLocator(object):
     def questProgress(self):
         raise NotImplementedError
 
+    @property
+    def arenaBorder(self):
+        raise NotImplementedError
+
 
 class IDynamicControllersLocator(object):
     __slots__ = ()
@@ -115,6 +119,26 @@ class IDynamicControllersLocator(object):
 
     @property
     def battleField(self):
+        raise NotImplementedError
+
+    @property
+    def battleHints(self):
+        raise NotImplementedError
+
+    @property
+    def areaPointMarker(self):
+        raise NotImplementedError
+
+    @property
+    def areaVehicleMarker(self):
+        raise NotImplementedError
+
+    @property
+    def behaviorMarker(self):
+        raise NotImplementedError
+
+    @property
+    def highlightMarker(self):
         raise NotImplementedError
 
 
@@ -239,6 +263,9 @@ class IClientArenaVisitor(object):
         raise NotImplementedError
 
     def hasGameEndMessage(self):
+        raise NotImplementedError
+
+    def getComponentSystem(self):
         raise NotImplementedError
 
 
@@ -611,4 +638,10 @@ class IBattleSessionProvider(object):
         raise NotImplementedError
 
     def handleShortcutChatCommand(self, key):
+        raise NotImplementedError
+
+    def updateScenarioTimer(self, waitTime, alarmTime, visible):
+        raise NotImplementedError
+
+    def sendPlayerBattleLogNotification(self, messageKey, messageParams):
         raise NotImplementedError

@@ -38,7 +38,7 @@ from gui.impl.lobby.battle_pass.tooltips.vehicle_points_tooltip_view import Vehi
 from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltipContent
 from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
-from gui.server_events.events_helpers import missionsSortFunc
+from gui.server_events.events_helpers import missionsSortFunc, isSecretEvent
 from gui.server_events.formatters import TOKEN_SIZES, DISCOUNT_TYPE
 from gui.shared.formatters import formatActionPrices
 from gui.shared.formatters import icons, text_styles
@@ -1241,6 +1241,14 @@ class HeaderMoneyAndXpTooltipData(BlocksTooltipData):
         return icon
 
 
+class EventHeaderMoneyAndXpTooltipData(HeaderMoneyAndXpTooltipData):
+
+    def _packBlocks(self, btnType=None, *args, **kwargs):
+        self._btnType = btnType
+        valueBlock = formatters.packMoneyAndXpValueBlock(value=self._getValue(), icon=self._getIcon(), iconYoffset=self._getIconYOffset())
+        return formatters.packMoneyAndXpBlocks(tooltipBlocks=[], btnType=self._btnType, valueBlocks=[valueBlock], hideActionBlocks=True)
+
+
 class MissionsToken(BlocksTooltipData):
     eventsCache = dependency.descriptor(IEventsCache)
 
@@ -1253,6 +1261,7 @@ class MissionsToken(BlocksTooltipData):
     def _packBlocks(self, tokenId, questId, *args):
         items = super(MissionsToken, self)._packBlocks(*args)
         mainQuest = self.eventsCache.getQuests()[questId]
+        isSecretEventQuest = isSecretEvent(mainQuest.getGroupID())
         children = mainQuest.getChildren()[tokenId]
 
         def filterfunc(quest):
@@ -1266,13 +1275,17 @@ class MissionsToken(BlocksTooltipData):
                 curToken = token
                 break
 
-        items.append(self.__packTitleBlock(curToken))
+        items.append(self.__packTitleBlock(curToken, isSecretEventQuest))
         items.append(self.__packQuestsBlock(quests))
-        items.append(self.__packBottomBlock(curToken))
+        if not isSecretEventQuest:
+            items.append(self.__packBottomBlock(curToken))
         return items
 
-    def __packTitleBlock(self, token):
-        return formatters.packImageTextBlockData(title=text_styles.highTitle(makeString(TOOLTIPS.MISSIONS_TOKEN_HEADER, name=makeString(token.getUserName()))), img=token.getImage(TOKEN_SIZES.MEDIUM), txtPadding={'top': 14,
+    def __packTitleBlock(self, token, isSecretEventQuest):
+        rTitle = R.strings.tooltips.missions.token
+        if isSecretEventQuest:
+            rTitle = rTitle.secretEvent
+        return formatters.packImageTextBlockData(title=text_styles.highTitle(backport.text(rTitle.header(), name=makeString(token.getUserName()))), img=token.getImage(TOKEN_SIZES.MEDIUM), txtPadding={'top': 14,
          'left': 11,
          'right': 5})
 

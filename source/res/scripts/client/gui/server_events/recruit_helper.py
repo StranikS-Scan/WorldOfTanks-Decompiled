@@ -22,7 +22,7 @@ from gui.impl.gen.resources import R
 from gui import SystemMessages
 from gui.shared.notifications import NotificationPriorityLevel
 from shared_utils import first
-from .events_helpers import getTankmanRewardQuests
+from gui.server_events.events_helpers import getTankmanRewardQuests
 
 class RecruitSourceID(object):
     TANKWOMAN = 'tankwoman'
@@ -38,6 +38,7 @@ class RecruitSourceID(object):
     TWITCH_9 = 'twitch9'
     TWITCH_10 = 'twitch10'
     TWITCH_11 = 'twitch11'
+    TWITCH_12 = 'twitch12'
     BUFFON = 'buffon'
     LOOTBOX = 'lootbox'
     COMMANDER_MARINA = 'commander_marina'
@@ -55,7 +56,8 @@ class RecruitSourceID(object):
      COMMANDER_MARINA,
      COMMANDER_PATRICK,
      TWITCH_10,
-     TWITCH_11)
+     TWITCH_11,
+     TWITCH_12)
 
 
 _NEW_SKILL = 'new_skill'

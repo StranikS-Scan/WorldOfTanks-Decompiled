@@ -44,6 +44,8 @@ AnchorHelper = namedtuple('AnchorHelper', ['location',
  'partIdx',
  'attachedPartIdx'])
 AnchorParams = namedtuple('AnchorParams', ['location', 'descriptor', 'id'])
+_DEFAULT_TURRET_YAW_ANGLE = 0.0
+_DEFAULT_GUN_PITCH_ANGLE = 0.0
 _logger = logging.getLogger(__name__)
 
 class _LoadStateNotifier(object):
@@ -239,6 +241,12 @@ class HangarVehicleAppearance(ScriptGameObject):
 
     def _getGunPitch(self):
         return self.turretAndGunAngles.getGunPitch()
+
+    def _getGunPitchLimits(self):
+        return self.__vDesc.gun.pitchLimits['absolute']
+
+    def _getTurretYawLimits(self):
+        return self.__vDesc.gun.turretYawLimits
 
     def __reload(self, vDesc, vState, outfit):
         self.__clearModelAnimators()
@@ -601,10 +609,10 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__updateProjectionDecals(outfit)
         self.__updateSequences(outfit)
 
-    def rotateTurretForAnchor(self, anchorId):
+    def rotateTurretForAnchor(self, anchorId, useStaticTurretYaw=False):
         if self.compoundModel is None:
             return False
-        defaultYaw = self._getTurretYaw()
+        defaultYaw = self.__staticTurretYaw if useStaticTurretYaw else self._getTurretYaw()
         turretYaw = self.__getTurretYawForAnchor(anchorId, defaultYaw)
         currentTurretYaw = Math.Matrix(self.compoundModel.node(TankPartNames.TURRET)).yaw
         if abs(currentTurretYaw - turretYaw) > 0.0001:
@@ -614,13 +622,13 @@ class HangarVehicleAppearance(ScriptGameObject):
         else:
             return False
 
-    def rotateGunToDefault(self):
+    def rotateGunToDefault(self, useStaticGunPitch=False):
         if self.compoundModel is None:
             return False
         else:
             localGunMatrix = self.__getGunNode().local
             currentGunPitch = localGunMatrix.pitch
-            gunPitchAngle = self._getGunPitch()
+            gunPitchAngle = self.__staticGunPitch if useStaticGunPitch else self._getGunPitch()
             if abs(currentGunPitch - gunPitchAngle) < 0.0001:
                 return False
             gunPitchMatrix = math_utils.createRotationMatrix((0.0, gunPitchAngle, 0.0))

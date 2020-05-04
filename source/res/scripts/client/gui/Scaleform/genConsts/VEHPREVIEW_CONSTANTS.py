@@ -7,6 +7,11 @@ class VEHPREVIEW_CONSTANTS(object):
     BUYING_PANEL_LINKAGE = 'VehiclePreview20BuyingPanelUI'
     EVENT_PROGRESSION_BUYING_PANEL_LINKAGE = 'VehiclePreview20EventProgressionBuyingPanelUI'
     TRADE_IN_BUYING_PANEL_LINKAGE = 'VehiclePreview20TradeInBuyingPanelUI'
+    SECRET_EVENT_BUYING_PANEL_LINKAGE = 'VehiclePreview20SecretEventBuyingPanelUI'
+    SECRET_EVENT_BUYING_ACTION_PANEL_LINKAGE = 'VehiclePreview20SecretEventBuyingActionPanelUI'
+    SECRET_EVENT_BOUGHT_PANEL_LINKAGE = 'VehiclePreview20SecretEventBoughtPanelUI'
+    SECRET_EVENT_SOLD_PANEL_LINKAGE = 'VehiclePreview20SecretEventSoldPanelUI'
+    SECRET_EVENT_HEADER_LINKAGE = 'VehiclePreview20SecretEventHeaderUI'
     FACT_SHEET_LINKAGE = 'VehPreviewFactSheetUI'
     ELITE_FACT_SHEET_LINKAGE = 'VehPreviewEliteFactSheetUI'
     BROWSE_LINKAGE = 'VPBrowseUI'
@@ -20,7 +25,12 @@ class VEHPREVIEW_CONSTANTS(object):
     BUYING_PANEL_PY_ALIAS = 'vehPreviewBuyingPanel'
     EVENT_PROGRESSION_BUYING_PANEL_PY_ALIAS = 'vehPreviewEventProgressionBuyingPanel'
     TRADE_IN_BUYING_PANEL_PY_ALIAS = 'vehPreviewTradeInBuyingPanel'
+    SECRET_EVENT_BUYING_PANEL_PY_ALIAS = 'vehPreviewSecretEventBuyingPanel'
+    SECRET_EVENT_BUYING_ACTION_PANEL_PY_ALIAS = 'vehPreviewSecretEventBuyingActionPanel'
+    SECRET_EVENT_BOUGHT_PANEL_PY_ALIAS = 'vehPreviewSecretEventBoughtPanel'
+    SECRET_EVENT_SOLD_PANEL_PY_ALIAS = 'vehPreviewSecretEventSoldPanel'
     TRADE_OFF_WIDGET_ALIAS = 'vehPreviewTradeOffWidget'
+    SECRET_EVENT_HEADER_WIDGET_PY_ALIAS = 'vehPreviewSecretEventHeaderWidget'
     CREW_BONUS = 0
     BATTLE_BONUS = 1
     REPLACE_BONUS = 2
@@ -28,3 +38,8 @@ class VEHPREVIEW_CONSTANTS(object):
     REGULAR = 0
     COLLECTIBLE = 1
     COLLECTIBLE_WITHOUT_MODULES = 2
+    SECRET_EVENT_LINKAGES = [SECRET_EVENT_BUYING_PANEL_LINKAGE,
+     SECRET_EVENT_BUYING_ACTION_PANEL_LINKAGE,
+     SECRET_EVENT_BOUGHT_PANEL_LINKAGE,
+     SECRET_EVENT_SOLD_PANEL_LINKAGE,
+     SECRET_EVENT_HEADER_LINKAGE]

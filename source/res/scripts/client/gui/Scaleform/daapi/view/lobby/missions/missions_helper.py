@@ -22,10 +22,10 @@ from gui.impl.gen import R
 from gui.server_events.awards_formatters import AWARDS_SIZES, getEpicAwardFormatter, EPIC_AWARD_SIZE
 from gui.server_events.bonuses import SimpleBonus
 from gui.server_events.cond_formatters.prebattle import MissionsPreBattleConditionsFormatter
-from gui.server_events.cond_formatters.requirements import AccountRequirementsFormatter, TQAccountRequirementsFormatter
+from gui.server_events.cond_formatters.requirements import AccountRequirementsFormatter, TQAccountRequirementsFormatter, SecretEventAccountRequirementsFormatter
 from gui.server_events.conditions import GROUP_TYPE
 from gui.server_events.events_constants import FRONTLINE_GROUP_ID
-from gui.server_events.events_helpers import MISSIONS_STATES, QuestInfoModel, AWARDS_PER_SINGLE_PAGE, isMarathon, AwardSheetPresenter, isPremium
+from gui.server_events.events_helpers import MISSIONS_STATES, QuestInfoModel, AWARDS_PER_SINGLE_PAGE, isMarathon, AwardSheetPresenter, isPremium, isSecretEvent
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.server_events.personal_progress import formatters
 from gui.shared.formatters import text_styles, icons, time_formatters
@@ -37,9 +37,9 @@ from personal_missions import PM_BRANCH
 from potapov_quests import PM_BRANCH_TO_FREE_TOKEN_NAME
 from quest_xml_source import MAX_BONUS_LIMIT
 from shared_utils import first
+from skeletons.gui.game_control import IEventProgressionController, IEpicBattleMetaGameController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.game_control import IEventProgressionController, IEpicBattleMetaGameController
 CARD_AWARDS_COUNT = 6
 CARD_AWARDS_BIG_COUNT = 5
 CARD_AWARDS_EPIC_COUNT = 2
@@ -48,6 +48,7 @@ DETAILED_CARD_AWARDS_COUNT = 10
 _preBattleConditionFormatter = MissionsPreBattleConditionsFormatter()
 _accountReqsFormatter = AccountRequirementsFormatter()
 _tqAccountReqsFormatter = TQAccountRequirementsFormatter()
+_secretEventReqsFormatter = SecretEventAccountRequirementsFormatter()
 _cardCondFormatter = cards_formatters.CardBattleConditionsFormatters()
 _detailedCardCondFormatter = cards_formatters.DetailedCardBattleConditionsFormatters()
 _cardTokenConditionFormatter = cards_formatters.CardTokenConditionFormatter()
@@ -1133,6 +1134,50 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
         return self.eventsCache.getPersonalMissions().getFreeTokensCount(quest.getPMType().branch) >= quest.getPawnCost()
 
 
+class _SecretEventMissionInfo(_MissionInfo):
+
+    def _getUIDecoration(self):
+        return backport.image(R.images.gui.maps.icons.secretEvent.quest.missionBG482x222())
+
+    def _getRegularStatusFields(self, isLimited, bonusCount, bonusLimit):
+        flagIcon = icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.inProgressIcon()), 16, 16, -2, 8)
+        statusText = backport.text(R.strings.quests.missionDetails.status.inProgress())
+        statusLabel = text_styles.concatStylesWithSpace(flagIcon, text_styles.neutral(statusText))
+        statusTooltipData = getBonusLimitTooltip(bonusCount, bonusLimit, False)
+        return {'statusLabel': statusLabel,
+         'status': MISSIONS_STATES.NONE,
+         'statusTooltipData': statusTooltipData}
+
+    def _getCompleteStatusFields(self, isLimited, bonusCount, bonusLimit):
+        rLibrary = R.images.gui.maps.icons.library
+        rMissionDetails = R.strings.quests.missionDetails
+        clockIcon = icons.makeImageTag(backport.image(rLibrary.timerIcon()), 16, 16, -2, 0)
+        tickIcon = icons.makeImageTag(backport.image(rLibrary.ConfirmIcon_1()), 16, 16, -2, 0)
+        statusText = backport.text(rMissionDetails.status.complete())
+        statusLabel = text_styles.concatStylesToSingleLine(clockIcon, tickIcon, text_styles.bonusAppliedText(statusText))
+        header = backport.text(R.strings.tooltips.quests.unavailable.time.statusTooltip())
+        body = self._getCompleteDailyStatus(backport.text(rMissionDetails.status.completed.secretEvent()))
+        return {'statusLabel': statusLabel,
+         'status': MISSIONS_STATES.COMPLETED,
+         'statusTooltipData': {'tooltip': makeTooltip(header=header, body=body),
+                               'isSpecial': False,
+                               'specialArgs': []}}
+
+
+class _DetailedSecretEventMissionInfo(_DetailedMissionInfo):
+
+    def _getUIDecoration(self):
+        return backport.image(R.images.gui.maps.icons.secretEvent.quest.missionBG752x264())
+
+    def _getAccountRequirements(self):
+        return _secretEventReqsFormatter.format(self.event.accountReqs, self.event)
+
+    def _getCompleteStatusFields(self, isLimited, bonusCount, bonusLimit):
+        statusFields = super(_DetailedSecretEventMissionInfo, self)._getCompleteStatusFields(isLimited, bonusCount, bonusLimit)
+        statusFields['status'] = MISSIONS_STATES.COMPLETED
+        return statusFields
+
+
 def getMissionInfoData(event):
     if event.getType() == constants.EVENT_TYPE.TOKEN_QUEST:
         return _TokenMissionInfo(event)
@@ -1142,8 +1187,12 @@ def getMissionInfoData(event):
         return _PremiumMissionInfo(event)
     elif event.getGroupID() == FRONTLINE_GROUP_ID:
         return _EpicDailyMissionInfo(event)
+    elif event.getType() in constants.EVENT_TYPE.LIKE_BATTLE_QUESTS:
+        if isSecretEvent(event.getGroupID()):
+            return _SecretEventMissionInfo(event)
+        return _MissionInfo(event)
     else:
-        return _MissionInfo(event) if event.getType() in constants.EVENT_TYPE.LIKE_BATTLE_QUESTS else None
+        return None
 
 
 def getDetailedMissionData(event):
@@ -1157,8 +1206,12 @@ def getDetailedMissionData(event):
         return _PremiumDetailedMissionInfo(event)
     elif event.getGroupID() == FRONTLINE_GROUP_ID:
         return _EpicDetailedMissionInfo(event)
+    elif event.getType() in constants.EVENT_TYPE.LIKE_BATTLE_QUESTS:
+        if isSecretEvent(event.getGroupID()):
+            return _DetailedSecretEventMissionInfo(event)
+        return _DetailedMissionInfo(event)
     else:
-        return _DetailedMissionInfo(event) if event.getType() in constants.EVENT_TYPE.LIKE_BATTLE_QUESTS else None
+        return None
 
 
 def getAwardsWindowBonuses(bonuses):

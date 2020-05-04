@@ -410,3 +410,20 @@ class BattlePassStorageKeys(CONST_CONTAINER):
     VOTED_WITH_BOUGHT_BP = 'votedWithBoughtBP'
     SHOWN_VIDEOS_FLAGS = 'shownVideosFlags'
     BUY_ANIMATION_WAS_SHOWN = 'buyAnimationWasShown'
+
+
+class EventHangarVoPhases(CONST_CONTAINER):
+    PHASE1 = 'Phase1'
+    PHASE2 = 'Phase2'
+    PHASE3 = 'Phase3'
+    PHASE4 = 'Phase4'
+    PHASE5 = 'Phase5'
+    PHASE6 = 'Phase6'
+    PHASE7 = 'Phase7'
+    ALL_PHASES = (PHASE1,
+     PHASE2,
+     PHASE3,
+     PHASE4,
+     PHASE5,
+     PHASE6,
+     PHASE7)

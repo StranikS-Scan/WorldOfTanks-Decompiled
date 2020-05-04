@@ -36,3 +36,6 @@ class TechnicalMaintenanceMeta(AbstractWindowView):
 
     def as_resetEquipmentS(self, equipmentCD):
         return self.flashObject.as_resetEquipment(equipmentCD) if self._isDAAPIInited() else None
+
+    def as_showEventInfoS(self, showInfo, info):
+        return self.flashObject.as_showEventInfo(showInfo, info) if self._isDAAPIInited() else None

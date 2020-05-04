@@ -155,6 +155,7 @@ class TeamsOrControlsPointsPlugin(common.SimplePlugin):
         if entryID:
             self._invoke(entryID, 'setPointNumber', number)
             self.__entries.append(entryID)
+            return entryID
 
     def __addTeamSpawnPoints(self):
         points = self._arenaVisitor.getTeamSpawnPointsIterator(self.__personalTeam)

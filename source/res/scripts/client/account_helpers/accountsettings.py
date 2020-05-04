@@ -52,6 +52,7 @@ BATTLEPASS_CAROUSEL_FILTER_CLIENT_1 = 'BATTLEPASS_CAROUSEL_FILTER_CLIENT_1'
 BARRACKS_FILTER = 'barracks_filter'
 ORDERS_FILTER = 'ORDERS_FILTER'
 CURRENT_VEHICLE = 'current'
+EVENT_CURRENT_VEHICLE = 'event_current'
 GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
 EULA_VERSION = 'EULA_VERSION'
 LINKEDSET_QUESTS = 'LINKEDSET_QUEST'
@@ -85,6 +86,11 @@ ELEN_NOTIFICATIONS = 'elenNotifications'
 RECRUIT_NOTIFICATIONS = 'recruitNotifications'
 SPEAKERS_DEVICE = 'speakersDevice'
 SESSION_STATS_PREV_BATTLE_COUNT = 'sessionStatsPrevBattleCnt'
+SECRET_EVENT_2020_SEEN = 'secretEvent2020Seen'
+SECRET_EVENT_BERLIN_2020_SEEN = 'secretEventBerlin2020Seen'
+SECRET_EVENT_BERLIN_TAB_2020_SEEN = 'secretEventBerlinTab2020Seen'
+SECRET_EVENT_INTRO_ANIMATION_SEEN = 'secretEventIntroAnimationSeen'
+SECRET_EVENT_CHAT_FIRST_SEEN = 'secretEventChatFirstSeen'
 DEFAULT_QUEUE = 'defaultQueue'
 STORE_TAB = 'store_tab'
 STATS_REGULAR_SORTING = 'statsSorting'
@@ -417,6 +423,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'selectedColumnSorting': 'descending'},
                SPEAKERS_DEVICE: 0},
  KEY_FAVORITES: {CURRENT_VEHICLE: 0,
+                 EVENT_CURRENT_VEHICLE: 0,
                  FALLOUT_VEHICLES: {}},
  KEY_SETTINGS: {'unitWindow': {SELECTED_INTRO_VEHICLES_FIELD: []},
                 'vehicleSellDialog': {'isOpened': False},
@@ -662,7 +669,12 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 BOOSTERS_FOR_CREDITS_SLOT_COUNTER: 1,
                 SENIORITY_AWARDS_COUNTER: 1,
                 DEMOUNT_KIT_SEEN: False,
-                NEW_SHOP_TABS: {IS_COLLECTIBLE_VEHICLES_VISITED: False}},
+                NEW_SHOP_TABS: {IS_COLLECTIBLE_VEHICLES_VISITED: False},
+                SECRET_EVENT_2020_SEEN: False,
+                SECRET_EVENT_BERLIN_2020_SEEN: False,
+                SECRET_EVENT_BERLIN_TAB_2020_SEEN: False,
+                SECRET_EVENT_INTRO_ANIMATION_SEEN: False,
+                SECRET_EVENT_CHAT_FIRST_SEEN: False},
  KEY_NOTIFICATIONS: {ELEN_NOTIFICATIONS: {MISSIONS_CONSTANTS.ELEN_EVENT_STARTED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_FINISHED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_TAB_VISITED: set()},

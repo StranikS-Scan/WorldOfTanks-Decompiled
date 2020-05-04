@@ -136,6 +136,14 @@ class ARENAS(object):
     C_83_KHARKIV_DESCRIPTION = '#arenas:83_kharkiv/description'
     C_209_WG_EPIC_SUBURBIA_NAME = '#arenas:209_wg_epic_suburbia/name'
     C_209_WG_EPIC_SUBURBIA_DESCRIPTION = '#arenas:209_wg_epic_suburbia/description'
+    C_105_GERMANY_SE20_NAME = '#arenas:105_germany_se20/name'
+    C_105_GERMANY_SE20_DESCRIPTION = '#arenas:105_germany_se20/description'
+    C_08_RUINBERG_SE20_NAME = '#arenas:08_ruinberg_se20/name'
+    C_08_RUINBERG_SE20_DESCRIPTION = '#arenas:08_ruinberg_se20/description'
+    C_108_NORMANDY_SE20_NAME = '#arenas:108_normandy_se20/name'
+    C_108_NORMANDY_SE20_DESCRIPTION = '#arenas:108_normandy_se20/description'
+    C_14_SIEGFRIED_LINE_SE20_NAME = '#arenas:14_siegfried_line_se20/name'
+    C_14_SIEGFRIED_LINE_SE20_DESCRIPTION = '#arenas:14_siegfried_line_se20/description'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -268,7 +276,15 @@ class ARENAS(object):
      C_83_KHARKIV_NAME,
      C_83_KHARKIV_DESCRIPTION,
      C_209_WG_EPIC_SUBURBIA_NAME,
-     C_209_WG_EPIC_SUBURBIA_DESCRIPTION)
+     C_209_WG_EPIC_SUBURBIA_DESCRIPTION,
+     C_105_GERMANY_SE20_NAME,
+     C_105_GERMANY_SE20_DESCRIPTION,
+     C_08_RUINBERG_SE20_NAME,
+     C_08_RUINBERG_SE20_DESCRIPTION,
+     C_108_NORMANDY_SE20_NAME,
+     C_108_NORMANDY_SE20_DESCRIPTION,
+     C_14_SIEGFRIED_LINE_SE20_NAME,
+     C_14_SIEGFRIED_LINE_SE20_DESCRIPTION)
 
     @classmethod
     def all(cls, key0):

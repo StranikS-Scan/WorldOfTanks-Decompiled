@@ -33,3 +33,6 @@ class VehiclePreview20Meta(View):
 
     def as_setBulletVisibilityS(self, bulletTabIdx, isBulletVisible):
         return self.flashObject.as_setBulletVisibility(bulletTabIdx, isBulletVisible) if self._isDAAPIInited() else None
+
+    def as_setHeaderS(self, linkage):
+        return self.flashObject.as_setHeader(linkage) if self._isDAAPIInited() else None

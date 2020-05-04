@@ -11,6 +11,7 @@ from soft_exception import SoftException
 DAYS_IN_YEAR = 365
 HOURS_IN_DAY = 24
 MINUTES_IN_HOUR = 60
+ONE_SECOND = 1
 ONE_MINUTE = 60
 MS_IN_SECOND = 1000
 QUARTER = 15

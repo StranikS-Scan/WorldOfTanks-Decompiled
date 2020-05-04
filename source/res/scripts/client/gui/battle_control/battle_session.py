@@ -165,9 +165,18 @@ class BattleSessionProvider(IBattleSessionProvider):
         return
 
     def getExitResult(self):
-        if not self.__isReplayPlaying and not self.__arenaVisitor.gui.isTrainingBattle() and not self.__arenaVisitor.gui.isEventBattle():
+        if not self.__isReplayPlaying and not self.__arenaVisitor.gui.isTrainingBattle():
             vInfo = self.__arenaDP.getVehicleInfo()
             vStats = self.__arenaDP.getVehicleStats()
+            if self.__arenaVisitor.gui.isEventBattle():
+                markersCtrl = controllers.event_behavior_marker_ctrl.EventBehaviorMarkersController()
+                lifecycle = markersCtrl.teammateLifecycle.getParams()
+                deaths = lifecycle[vInfo.vehicleID]['death']
+                maxLives = lifecycle['maxLivesLimit']
+                isDeserter = avatar_getter.isVehicleAlive() and not avatar_getter.isVehicleOverturned()
+                if not isDeserter and deaths < maxLives:
+                    isDeserter = True
+                return BattleExitResult(isDeserter, vInfo.player)
             if self.__arenaVisitor.hasRespawns():
                 isDeserter = not vStats.stopRespawn
             else:
@@ -336,10 +345,22 @@ class BattleSessionProvider(IBattleSessionProvider):
             ctrl.handleShortcutChatCommand(key)
             return
 
+    def updateScenarioTimer(self, waitTime, alarmTime, visible):
+        ctrl = self.__sharedRepo.vehicleState
+        if ctrl is not None:
+            ctrl.updateScenarioTimer(waitTime, alarmTime, visible)
+        return
+
+    def sendPlayerBattleLogNotification(self, messageKey, messageParams):
+        self.shared.messages.showPlayerMessageByKey(messageKey, messageParams)
+
     def __pe_onBattleResultsReceived(self, isActiveVehicle, _):
         if isActiveVehicle and not BattleReplay.g_replayCtrl.isPlaying:
             arenaUniqueID = self.__arenaVisitor.getArenaUniqueID()
-            LOG_DEBUG('Try to exit from arena', arenaUniqueID)
+            arenaBonusType = self.__arenaVisitor.getArenaBonusType()
+            LOG_DEBUG('Try to exit from arena', arenaUniqueID, arenaBonusType)
             if arenaUniqueID:
                 self.__ctx.lastArenaUniqueID = arenaUniqueID
+            if arenaBonusType:
+                self.__ctx.lastArenaBonusType = arenaBonusType
             BattleSessionProvider.exit()

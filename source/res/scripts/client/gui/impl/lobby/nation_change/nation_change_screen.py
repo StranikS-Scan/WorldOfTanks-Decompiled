@@ -30,6 +30,7 @@ from items.tankmen import getSkillsConfig
 from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from gui.Scaleform.Waiting import Waiting
 
 class NationChangeScreen(ViewImpl):
     __itemsCache = descriptor(IItemsCache)
@@ -53,6 +54,7 @@ class NationChangeScreen(ViewImpl):
             self.__currentVehicle = self.__itemsCache.items.getItemByCD(iterVehTypeCDsInNationGroup(vehicle.intCD).next())
             self.__targetVehicle = vehicle
         self.__icons = R.images.gui.maps.icons
+        Waiting.show('loadPage')
         return
 
     @property
@@ -92,6 +94,9 @@ class NationChangeScreen(ViewImpl):
         self.__addListeners()
         self.__setViewed()
         WWISE.WW_setState(self._HANGAR_SOUND_FILTERED_STATE_NAME, self._HANGAR_SOUND_FILTERED_STATE_ON)
+
+    def __onInitialized(self):
+        Waiting.hide('loadPage')
 
     def _finalize(self):
         WWISE.WW_setState(self._HANGAR_SOUND_FILTERED_STATE_NAME, self._HANGAR_SOUND_FILTERED_STATE_OFF)
@@ -229,6 +234,7 @@ class NationChangeScreen(ViewImpl):
         self.viewModel.onCancelBtnClick += self.__onCancelBtnClick
         self.viewModel.onHangarBtnClick += self.__onHangarBtnClick
         self.viewModel.onDogClick += self.__onDogClick
+        self.viewModel.onInitialized += self.__onInitialized
 
     def __removeListeners(self):
         self.viewModel.onCloseBtnClick -= self.__onWindowClose
@@ -236,6 +242,7 @@ class NationChangeScreen(ViewImpl):
         self.viewModel.onCancelBtnClick -= self.__onCancelBtnClick
         self.viewModel.onHangarBtnClick -= self.__onHangarBtnClick
         self.viewModel.onDogClick -= self.__onDogClick
+        self.viewModel.onInitialized -= self.__onInitialized
 
     def __onWindowClose(self):
         if g_currentVehicle.item == self.__currentVehicle and not self.__itemsCache.items.getItemByCD(self.__currentVehicle.intCD).activeInNationGroup:

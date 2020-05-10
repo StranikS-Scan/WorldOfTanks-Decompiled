@@ -72,7 +72,7 @@ class EventBattleSquadEntity(SquadEntity):
             if not inBattleQueue:
                 g_eventDispatcher.loadEventHangar()
             ctx.addFlags(FUNCTIONAL_FLAG.LOAD_PAGE)
-        return super(EventBattleSquadEntity, self).init(ctx)
+        return super(EventBattleSquadEntity, self).init(ctx) | FUNCTIONAL_FLAG.LOAD_PAGE
 
     def fini(self, ctx=None, woEvents=False):
         if ctx is not None:

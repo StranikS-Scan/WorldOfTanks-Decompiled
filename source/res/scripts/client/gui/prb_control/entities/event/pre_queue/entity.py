@@ -58,7 +58,7 @@ class EventBattleEntity(PreQueueEntity):
         g_eventDispatcher.loadEventHangar()
         if ctx is not None:
             ctx.addFlags(FUNCTIONAL_FLAG.LOAD_PAGE)
-        return super(EventBattleEntity, self).init(ctx=ctx)
+        return super(EventBattleEntity, self).init(ctx=ctx) | FUNCTIONAL_FLAG.LOAD_PAGE
 
     def fini(self, ctx=None, woEvents=False):
         if ctx is not None:

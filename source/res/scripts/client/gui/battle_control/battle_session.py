@@ -171,8 +171,8 @@ class BattleSessionProvider(IBattleSessionProvider):
             if self.__arenaVisitor.gui.isEventBattle():
                 markersCtrl = controllers.event_behavior_marker_ctrl.EventBehaviorMarkersController()
                 lifecycle = markersCtrl.teammateLifecycle.getParams()
-                deaths = lifecycle[vInfo.vehicleID]['death']
-                maxLives = lifecycle['maxLivesLimit']
+                deaths = lifecycle.get(vInfo.vehicleID, {}).get('death', 0)
+                maxLives = lifecycle.get('maxLivesLimit', 5)
                 isDeserter = avatar_getter.isVehicleAlive() and not avatar_getter.isVehicleOverturned()
                 if not isDeserter and deaths < maxLives:
                     isDeserter = True

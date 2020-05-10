@@ -21,7 +21,7 @@ from gui import GUI_CTRL_MODE_FLAG
 from helpers import EffectsList, isPlayerAvatar, isPlayerAccount, getFullClientVersion
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
-from constants import ARENA_PERIOD, IS_DEVELOPMENT
+from constants import ARENA_PERIOD
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
@@ -176,7 +176,6 @@ class BattleReplay(object):
     def subscribe(self):
         g_playerEvents.onBattleResultsReceived += self.__onBattleResultsReceived
         g_playerEvents.onAccountBecomePlayer += self.__onAccountBecomePlayer
-        g_playerEvents.onAvatarBecomePlayer += self.__onAvatarBecomePlayer
         g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
         g_playerEvents.onBootcampAccountMigrationComplete += self.__onBootcampAccountMigrationComplete
         self.settingsCore.onSettingsChanged += self.__onSettingsChanging
@@ -184,7 +183,6 @@ class BattleReplay(object):
     def unsubscribe(self):
         g_playerEvents.onBattleResultsReceived -= self.__onBattleResultsReceived
         g_playerEvents.onAccountBecomePlayer -= self.__onAccountBecomePlayer
-        g_playerEvents.onAvatarBecomePlayer -= self.__onAvatarBecomePlayer
         g_playerEvents.onArenaPeriodChange -= self.__onArenaPeriodChange
         g_playerEvents.onBootcampAccountMigrationComplete -= self.__onBootcampAccountMigrationComplete
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanging
@@ -869,10 +867,6 @@ class BattleReplay(object):
             else:
                 self.__playerDatabaseID = player.databaseID
             return
-
-    def __onAvatarBecomePlayer(self):
-        if self.sessionProvider.arenaVisitor.gui.isEventBattle() and not IS_DEVELOPMENT:
-            self.enableAutoRecordingBattles(enable=False, delete=True)
 
     def __onSettingsChanging(self, diff):
         newSpeed = self.__playbackSpeedModifiers[self.__playbackSpeedIdx]

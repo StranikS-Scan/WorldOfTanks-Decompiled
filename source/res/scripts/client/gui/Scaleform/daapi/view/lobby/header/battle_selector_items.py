@@ -12,6 +12,7 @@ from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.prb_getters import areSpecBattlesHidden
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
+from gui.shared.event_dispatcher import leaveEventMode
 from gui.shared.formatters import text_styles, icons
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from helpers import time_utils, dependency, int2roman
@@ -649,6 +650,7 @@ class _RankedItem(_SelectorItem):
     def getSpecialBGIcon(self):
         return backport.image(_R_ICONS.buttons.selectorRendererBGEvent()) if self.rankedController.isAvailable() else ''
 
+    @leaveEventMode
     def select(self):
         if not self.rankedController.hasSuitableVehicles():
             g_eventDispatcher.loadRankedUnreachable()

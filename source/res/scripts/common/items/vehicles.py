@@ -1325,7 +1325,9 @@ class VehicleType(object):
      'actions',
      'builtins',
      'nationChangeGroupId',
-     'isCollectorVehicle')
+     'isCollectorVehicle',
+     'hornDistanceFactor',
+     'hornVolumeFactor')
 
     def __init__(self, nationID, basicInfo, xmlPath, vehMode=VEHICLE_MODE.DEFAULT):
         self.name = basicInfo.name
@@ -1421,6 +1423,7 @@ class VehicleType(object):
          self._defEmblem,
          self._defEmblem,
          self._defEmblem)
+        self.hornDistanceFactor, self.hornVolumeFactor = (1, 1)
         pricesDest = _g_prices
         if pricesDest is not None:
             pricesDest['vehicleCamouflagePriceFactors'][self.compactDescr] = _xml.readNonNegativeFloat(xmlCtx, section, 'camouflage/priceFactor')

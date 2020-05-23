@@ -75,7 +75,6 @@ class GAME(CONST_CONTAINER):
     RECEIVE_FRIENDSHIP_REQUEST = 'receiveFriendshipRequest'
     STORE_RECEIVER_IN_BATTLE = 'storeReceiverInBattle'
     DISABLE_BATTLE_CHAT = 'disableBattleChat'
-    DISABLE_EVENT_COMMON_CHAT = 'disableEventCommonChat'
     CHAT_CONTACTS_LIST_ONLY = 'chatContactsListOnly'
     LENS_EFFECT = 'enableOpticalSnpEffect'
     MINIMAP_ALPHA = 'minimapAlpha'
@@ -117,6 +116,7 @@ class GAME(CONST_CONTAINER):
     MINIMAP_ALPHA_ENABLED = 'minimapAlphaEnabled'
     C11N_HISTORICALLY_ACCURATE = 'c11nHistoricallyAccurate'
     LOGIN_SERVER_SELECTION = 'loginServerSelection'
+    DISABLE_EVENT_HORN = 'disableEventHorn'
 
 
 class TUTORIAL(CONST_CONTAINER):

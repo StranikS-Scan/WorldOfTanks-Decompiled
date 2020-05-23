@@ -1530,7 +1530,7 @@ class TenYearsCountdownHandler(MultiTypeServiceChannelHandler):
 
     def __show10YCAward(self, questID, data):
         if data is not None:
-            bonuses, _ = getProgressiveRewardBonuses(data['detailedRewards'][questID])
+            bonuses, _ = getProgressiveRewardBonuses(data['detailedRewards'][questID], ctx={'popUpRecords': data['popUpRecords']})
             if questID.startswith(TEN_YEAR_COUNTDOWN_QUEST_TOKEN_PREFIX) and questID.endswith(TEN_YEAR_COUNTDOWN_QUEST_TOKEN_POSTFIX):
                 bonuses.append(getTokenAward())
             show10YCAwardWindow(bonuses, questID, closeCallback=self.__unlock)

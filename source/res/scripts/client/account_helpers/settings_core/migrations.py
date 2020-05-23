@@ -473,6 +473,10 @@ def _migrateTo52(core, data, initialized):
     data['onceOnlyHints']['SoundButtonExHint'] = True
 
 
+def _migrateTo53(core, data, initialized):
+    data['gameExtData'][GAME.DISABLE_EVENT_HORN] = False
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -675,6 +679,10 @@ _versions = ((1,
   False),
  (52,
   _migrateTo52,
+  False,
+  False),
+ (53,
+  _migrateTo53,
   False,
   False))
 

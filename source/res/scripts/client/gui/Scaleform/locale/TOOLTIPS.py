@@ -397,8 +397,6 @@ class TOOLTIPS(object):
     CHATCONTACTSLISTONLY_BODY = '#tooltips:chatContactsListOnly/body'
     TURNOFFCOMBATCHAT_HEADER = '#tooltips:turnOffCombatChat/header'
     TURNOFFCOMBATCHAT_BODY = '#tooltips:turnOffCombatChat/body'
-    DISABLECOMMONCHAT_HEADER = '#tooltips:disableCommonChat/header'
-    DISABLECOMMONCHAT_BODY = '#tooltips:disableCommonChat/body'
     HANGARCAMDROPDOWN_HEADER = '#tooltips:hangarCamDropdown/header'
     HANGARCAMDROPDOWN_BODY = '#tooltips:hangarCamDropdown/body'
     HANGARCAMCHECKBOX_HEADER = '#tooltips:hangarCamCheckbox/header'

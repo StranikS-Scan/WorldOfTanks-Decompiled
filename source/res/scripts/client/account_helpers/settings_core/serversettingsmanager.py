@@ -127,7 +127,7 @@ class ServerSettingsManager(object):
                                        GAME.HANGAR_CAM_PARALLAX_ENABLED: 16,
                                        GAME.C11N_HISTORICALLY_ACCURATE: 17,
                                        GAME.ENABLE_SPEEDOMETER: 23,
-                                       GAME.DISABLE_EVENT_COMMON_CHAT: 24}, offsets={GAME.BATTLE_LOADING_INFO: Offset(4, 48),
+                                       GAME.DISABLE_EVENT_HORN: 25}, offsets={GAME.BATTLE_LOADING_INFO: Offset(4, 48),
                                        GAME.BATTLE_LOADING_RANKED_INFO: Offset(21, 6291456),
                                        GAME.HANGAR_CAM_PERIOD: Offset(18, 1835008)}),
      SETTINGS_SECTIONS.GAMEPLAY: Section(masks={}, offsets={GAME.GAMEPLAY_MASK: Offset(0, 65535)}),

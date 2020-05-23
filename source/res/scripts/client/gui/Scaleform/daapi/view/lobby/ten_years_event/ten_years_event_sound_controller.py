@@ -9,3 +9,5 @@ class TenYearsEventSounds(object):
     EV_10Y_COUNTDOWN_WELCOME_SCREEN_CLOSE = 'ev_10y_countdown_welcome_screen_close'
     EV_10Y_COUNTDOWN_ENTRY_POINT = 'ev_10y_countdown_entry_point'
     EV_10Y_COUNTDOWN_AWARD_SCREEN = 'gui_hangar_simple_execution_screen'
+    STATE_EV_10Y_COUNTDOWN_EPISODE = 'STATE_ev_10y_countdown_episode'
+    STATE_EV_10Y_COUNTDOWN_EPISODE_OUT = 'STATE_ev_10y_countdown_episode_out'

@@ -40,7 +40,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
 
     def _populate(self):
         super(VehicleStylePreview, self)._populate()
-        g_currentPreviewVehicle.selectVehicle(self.__vehicleCD)
+        g_currentPreviewVehicle.selectVehicleWithoutHeroTankUpdate(self.__vehicleCD)
         if not g_currentPreviewVehicle.isPresent() or self.__style is None:
             event_dispatcher.showHangar()
         self.__hangarSpace.onSpaceCreate += self.__onHangarCreateOrRefresh
@@ -66,6 +66,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         super(VehicleStylePreview, self)._dispose()
 
     def __onVehicleLoading(self, ctxEvent):
+        self.removeListener(CameraRelatedEvents.VEHICLE_LOADING, self.__onVehicleLoading, EVENT_BUS_SCOPE.DEFAULT)
         g_currentPreviewVehicle.previewStyle(self.__style)
 
     def __onHangarCreateOrRefresh(self):

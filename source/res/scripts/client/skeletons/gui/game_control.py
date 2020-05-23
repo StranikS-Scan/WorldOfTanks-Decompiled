@@ -1398,5 +1398,5 @@ class ITenYearsCountdownController(IGameController):
     def isEventInProgress(self):
         raise NotImplementedError
 
-    def isRandomCommonChatEnabled(self):
+    def isHornSettingsEnabled(self):
         raise NotImplementedError

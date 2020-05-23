@@ -83,6 +83,7 @@ from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IEpicBattleMetaGameController
+from skeletons.gui.game_control import ITenYearsCountdownController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.helpers.statistics import IStatisticsCollector
 from soft_exception import SoftException
@@ -190,6 +191,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     statsCollector = dependency.descriptor(IStatisticsCollector)
     appLoader = dependency.descriptor(IAppLoader)
     epicController = dependency.descriptor(IEpicBattleMetaGameController)
+    tenYearsCountdownController = dependency.descriptor(ITenYearsCountdownController)
     canMakeDualShot = property(lambda self: self.__canMakeDualShot)
 
     def __init__(self):
@@ -627,6 +629,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 for comp in AVATAR_COMPONENTS:
                     comp.handleKey(self, isDown, key, mods)
 
+                if cmdMap.isFired(CommandMapping.CMD_EVENT_HORN, key) and mods != 2 and isDown:
+                    self.useHorn()
                 if BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and isDown and constants.HAS_DEV_RESOURCES:
                     if key == Keys.KEY_ESCAPE:
                         gui_event_dispatcher.toggleGUIVisibility()
@@ -1586,6 +1590,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
     def updateResourceAmount(self, resourcePointID, newAmount):
         pass
+
+    def useHorn(self):
+        if self.tenYearsCountdownController.isHornEnabled():
+            self.base.vehicle_useHorn()
 
     def onFrictionWithVehicle(self, otherID, frictionPoint, state):
         vehicle = self.getVehicleAttached()

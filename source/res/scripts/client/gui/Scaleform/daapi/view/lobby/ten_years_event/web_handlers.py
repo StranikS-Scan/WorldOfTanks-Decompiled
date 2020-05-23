@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/ten_years_event/web_handlers.py
+import WWISE
 from gui.shared.event_dispatcher import showTenYearsCountdownOverlay, showHangar
 from web.web_client_api import webApiCollection
 from web.web_client_api.ten_years_event import TenYCEventWebApi
@@ -32,5 +33,14 @@ class _SoundWebApi(SoundWebApi):
      TenYearsEventSounds.EV_10Y_COUNTDOWN_ENTER: TenYearsEventSounds.EV_10Y_COUNTDOWN_EXIT}
 
 
+class _SoundStateWebApi(SoundStateWebApi):
+    __ON_EXIT_STATES_EXT = {TenYearsEventSounds.STATE_EV_10Y_COUNTDOWN_EPISODE: TenYearsEventSounds.STATE_EV_10Y_COUNTDOWN_EPISODE_OUT}
+
+    def _statesFini(self):
+        super(_SoundStateWebApi, self)._statesFini()
+        for stateName, stateValue in self.__ON_EXIT_STATES_EXT.iteritems():
+            WWISE.WW_setState(stateName, stateValue)
+
+
 def createTenYearsEventWebHandlers():
-    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, _OpenTabWebApi, RequestWebApi, ShopWebApi, _SoundWebApi, SoundStateWebApi, HangarSoundWebApi, UtilWebApi, QuestsWebApi, VehiclesWebApi, RewardsWebApi, SocialWebApi, TenYCEventWebApi)
+    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, _OpenTabWebApi, RequestWebApi, ShopWebApi, _SoundWebApi, _SoundStateWebApi, HangarSoundWebApi, UtilWebApi, QuestsWebApi, VehiclesWebApi, RewardsWebApi, SocialWebApi, TenYCEventWebApi)

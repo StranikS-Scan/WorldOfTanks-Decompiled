@@ -108,7 +108,10 @@ class EpicRespawnsController(RespawnsController):
             if self.respawnInfo:
                 selectedVehicleID = self.respawnInfo.vehicleID
             for lane in range(EB_MIN_RESPAWN_LANE_IDX, EB_MAX_RESPAWN_LANE_IDX):
-                isEnoughPlace = playerDataComp.getPlayersForTeamAndGroup(avatar_getter.getPlayerTeam(), lane) < limit
+                if playerDataComp.respawnLane == lane:
+                    isEnoughPlace = True
+                else:
+                    isEnoughPlace = playerDataComp.getPlayersForTeamAndGroup(avatar_getter.getPlayerTeam(), lane) < limit
                 isVehicleBlocked = lane in vehicleLimits and selectedVehicleID in vehicleLimits[lane]
                 isAvailableForPlayer = (isEnoughPlace or playerDataComp.respawnLane == lane and not availableLanes) and not isVehicleBlocked
                 reasonText = ''

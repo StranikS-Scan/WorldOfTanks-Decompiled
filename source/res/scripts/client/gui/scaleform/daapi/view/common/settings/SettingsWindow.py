@@ -86,9 +86,12 @@ class SettingsWindow(SettingsWindowMeta):
          SETTINGS_GROUP.MARKERS_SETTINGS: self.params.getMarkersSettings(),
          SETTINGS_GROUP.OTHER_SETTINGS: self.params.getOtherSettings(),
          SETTINGS_GROUP.FEEDBACK_SETTINGS: self.params.getFeedbackSettings()}
-        if not self.lobbyContext.getServerSettings().isRandomCommonChatEnabled() and GAME.DISABLE_EVENT_COMMON_CHAT in settings[SETTINGS_GROUP.GAME_SETTINGS]:
-            del settings[SETTINGS_GROUP.GAME_SETTINGS][GAME.DISABLE_EVENT_COMMON_CHAT]
+        self.validate_horn(settings)
         return settings
+
+    def validate_horn(self, settings):
+        if not self.lobbyContext.getServerSettings().isHornEnabled() and GAME.DISABLE_EVENT_HORN in settings[SETTINGS_GROUP.GAME_SETTINGS]:
+            del settings[SETTINGS_GROUP.GAME_SETTINGS][GAME.DISABLE_EVENT_HORN]
 
     def __getSettings(self):
         settings = self.__getSettingsParam()

@@ -56,6 +56,9 @@ class SoundStateWebApi(object):
         WWISE.WW_setState(str(cmd.state_name), str(cmd.state_value))
 
     def _soundStateFini(self):
+        self._statesFini()
+
+    def _statesFini(self):
         for stateName, stateValue in self.__ON_EXIT_STATES.iteritems():
             WWISE.WW_setState(stateName, stateValue)
 

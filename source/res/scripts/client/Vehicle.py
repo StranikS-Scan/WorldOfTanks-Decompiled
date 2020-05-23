@@ -30,9 +30,13 @@ from helpers.EffectsList import SoundStartParam
 from helpers.buffs import BuffContainer
 from items import vehicles
 from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES, EFFECT_MATERIALS
+from messenger import MessengerEntry, g_settings
+from gui.impl import backport
+from gui.impl.gen.resources import R
+import ten_year_countdown_config
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.game_control import ISpecialSoundCtrl
+from skeletons.gui.game_control import ISpecialSoundCtrl, ITenYearsCountdownController
 from soft_exception import SoftException
 from vehicle_systems import appearance_cache
 from vehicle_systems.entity_components.battle_abilities_component import BattleAbilitiesComponent
@@ -90,6 +94,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent, BuffContainer):
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
     lobbyContext = dependency.descriptor(ILobbyContext)
     __specialSounds = dependency.descriptor(ISpecialSoundCtrl)
+    tenYearsCountdownController = dependency.descriptor(ITenYearsCountdownController)
     activeGunIndex = property(lambda self: self.__activeGunIndex)
 
     @property
@@ -159,7 +164,6 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent, BuffContainer):
         self.appearance = None
         self.isPlayerVehicle = False
         self.isStarted = False
-        self.isCrewActive = True
         self.__canBeDamaged = True
         self.__isEnteringWorld = False
         self.__turretDetachmentConfirmed = False
@@ -551,6 +555,32 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent, BuffContainer):
                 scrollFilter.input(BigWorld.time(), unpackedValue)
 
         return
+
+    def receiveHorn(self, powerHorn, timeRecovery):
+        if not self.tenYearsCountdownController.isHornSettingsEnabled():
+            return
+        isNotHorn = powerHorn >= 0 and powerHorn < ten_year_countdown_config.HornParams.MAX_POWER
+        powerHorn = int(math.fabs(powerHorn))
+        if self.isPlayerVehicle:
+            self._useOwnHorn(powerHorn, timeRecovery, isNotHorn)
+        else:
+            soundObject = self._getSoundObject(powerHorn)
+            soundObject.play(ten_year_countdown_config.HornParams.SOUND_NPC)
+
+    def _showHornCooldownTime(self, seconds):
+        text = backport.text(R.strings.ten_year_countdown.horn.cooldown(), seconds)
+        MessengerEntry.g_instance.gui.addClientMessage(g_settings.htmlTemplates.format('battleErrorMessage', ctx={'error': text}))
+
+    def _useOwnHorn(self, powerHorn, timeRecovery, isNotHorn):
+        if not isNotHorn:
+            self._showHornCooldownTime(timeRecovery)
+        soundObject = self._getSoundObject(powerHorn)
+        soundObject.play(ten_year_countdown_config.HornParams.SOUND_PC)
+
+    def _getSoundObject(self, powerHorn):
+        soundObject = self.appearance.engineAudition.getSoundObject(TankSoundObjectsIndexes.ENGINE)
+        soundObject.setRTPC(ten_year_countdown_config.HornParams.SOUND_RTPC, powerHorn)
+        return soundObject
 
     def onHealthChanged(self, newHealth, attackerID, attackReasonID):
         if newHealth > 0 and self.health <= 0:

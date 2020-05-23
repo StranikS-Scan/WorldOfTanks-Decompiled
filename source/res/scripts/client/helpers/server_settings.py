@@ -908,8 +908,8 @@ class ServerSettings(object):
     def isCrewBooksEnabled(self):
         return self.__getGlobalSetting('isCrewBooksEnabled', False)
 
-    def isRandomCommonChatEnabled(self):
-        return self.__getGlobalSetting('isRandomCommonChatEnabled', False)
+    def isHornEnabled(self):
+        return self.__getGlobalSetting('isHornEnabled', False)
 
     def isCrewBooksPurchaseEnabled(self):
         return self.__getGlobalSetting('isCrewBooksPurchaseEnabled', False)

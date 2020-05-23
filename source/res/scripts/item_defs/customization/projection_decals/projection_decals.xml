@@ -3012,7 +3012,7 @@
       <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_84.dds	</texture>
       <userString>	#vehicle_customization:projection_decals/special/projection_decal_84	</userString>
       <description>	#vehicle_customization:projection_decals/special/projection_decal_84/description	</description>
-      <tags>	formfactor_square	</tags>
+      <tags>	formfactor_square direction_right_to_left	</tags>
       <mirror>	true	</mirror>
     </projection_decal>
     <projection_decal>
@@ -3020,7 +3020,7 @@
       <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_85.dds	</texture>
       <userString>	#vehicle_customization:projection_decals/special/projection_decal_85	</userString>
       <description>	#vehicle_customization:projection_decals/special/projection_decal_85/description	</description>
-      <tags>	formfactor_square	</tags>
+      <tags>	formfactor_square direction_left_to_right	</tags>
       <mirror>	true	</mirror>
     </projection_decal>
     <projection_decal>
@@ -3028,7 +3028,7 @@
       <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_86.dds	</texture>
       <userString>	#vehicle_customization:projection_decals/special/projection_decal_86	</userString>
       <description>	#vehicle_customization:projection_decals/special/projection_decal_86/description	</description>
-      <tags>	formfactor_square	</tags>
+      <tags>	formfactor_square direction_left_to_right	</tags>
       <mirror>	true	</mirror>
     </projection_decal>
     <projection_decal>
@@ -3036,7 +3036,7 @@
       <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_87.dds	</texture>
       <userString>	#vehicle_customization:projection_decals/special/projection_decal_87	</userString>
       <description>	#vehicle_customization:projection_decals/special/projection_decal_87/description	</description>
-      <tags>	formfactor_square	</tags>
+      <tags>	formfactor_square direction_left_to_right	</tags>
       <mirror>	true	</mirror>
     </projection_decal>
     <projection_decal>
@@ -3044,7 +3044,7 @@
       <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_88.dds	</texture>
       <userString>	#vehicle_customization:projection_decals/special/projection_decal_88	</userString>
       <description>	#vehicle_customization:projection_decals/special/projection_decal_88/description	</description>
-      <tags>	formfactor_square	</tags>
+      <tags>	formfactor_square direction_left_to_right	</tags>
       <mirror>	true	</mirror>
     </projection_decal>
     <projection_decal>
@@ -3052,8 +3052,40 @@
       <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_89.dds	</texture>
       <userString>	#vehicle_customization:projection_decals/special/projection_decal_89	</userString>
       <description>	#vehicle_customization:projection_decals/special/projection_decal_89/description	</description>
-      <tags>	formfactor_square	</tags>
-      <mirror>	false	</mirror>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	255	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_93.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_93	</userString>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_93/description	</description>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	256	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_94.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_94	</userString>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_94/description	</description>
+      <tags>	formfactor_square direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	257	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_95.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_95	</userString>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_95/description	</description>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	262	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_100.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_100	</userString>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_100/description	</description>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+      <mirror>	true	</mirror>
     </projection_decal>
     <name>	10 Years Countdown	</name>
   </itemGroup>
@@ -3096,6 +3128,46 @@
       <userString>	#vehicle_customization:projection_decals/special/projection_decal_91	</userString>
       <description>	#vehicle_customization:projection_decals/special/projection_decal_91/description	</description>
       <tags>	direction_left_to_right formfactor_rect1x2	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	254	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_92.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_92	</userString>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_92/description	</description>
+      <tags>	formfactor_rect1x6 direction_left_to_right	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	258	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_96.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_96	</userString>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_96/description	</description>
+      <tags>	formfactor_rect1x2 direction_left_to_right	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	259	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_97.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_97	</userString>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_97/description	</description>
+      <tags>	formfactor_rect1x2 direction_left_to_right	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	260	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_98.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_98	</userString>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_98/description	</description>
+      <tags>	formfactor_rect1x2 direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	261	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_99.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_99	</userString>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_99/description	</description>
+      <tags>	formfactor_rect1x2 direction_right_to_left	</tags>
       <mirror>	true	</mirror>
     </projection_decal>
     <name>	10 Years Countdown	</name>

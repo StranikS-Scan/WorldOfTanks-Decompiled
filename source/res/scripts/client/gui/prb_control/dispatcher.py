@@ -5,12 +5,13 @@ import types
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
 from adisp import async, process
-from constants import IGR_TYPE
+from constants import IGR_TYPE, QUEUE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import SystemMessages, DialogsInterface, GUI_SETTINGS
 from gui.prb_control import prb_getters
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities import initDevFunctional, finiDevFunctional
+from gui.prb_control.entities.base.pre_queue.ctx import LeavePreQueueCtx
 from gui.prb_control.entities.base.unit.ctx import JoinUnitCtx
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.factories import ControlFactoryComposite
@@ -597,7 +598,11 @@ class _PreBattleDispatcher(ListenersCollection):
                 created.addMutualListeners(self)
             self.__entity = created
             self.__prevEntity = NotSupportedEntity()
-            flag = self.__entity.init(ctx=ctx)
+            if self.__entity.getQueueType() == QUEUE_TYPE.EVENT_BATTLES and not self.eventsCache.isEventEnabled():
+                self.__entity.leave(LeavePreQueueCtx())
+                flag = FUNCTIONAL_FLAG.UNDEFINED
+            else:
+                flag = self.__entity.init(ctx=ctx)
             self._invokeListeners('onPrbEntitySwitched')
             ctx.clearFlags()
             ctx.addFlags(flag | created.getFunctionalFlags())

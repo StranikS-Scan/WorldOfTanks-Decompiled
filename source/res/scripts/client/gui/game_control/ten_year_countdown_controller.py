@@ -112,9 +112,13 @@ class TenYearsCountdownController(ITenYearsCountdownController):
     def isEventInProgress(self):
         return self.__isEventActive and self.__currentBlock.state != EventBlockStates.NOT_STARTED and self.__currentBlock.state != EventBlockStates.FINISHED
 
-    def isRandomCommonChatEnabled(self):
+    def isHornSettingsEnabled(self):
+        gSettingsCore = dependency.instance(ISettingsCore)
+        return not bool(gSettingsCore.getSetting(GAME.DISABLE_EVENT_HORN))
+
+    def isHornEnabled(self):
         lobbyContext = dependency.instance(ILobbyContext)
-        return lobbyContext.getServerSettings().isRandomCommonChatEnabled() and not self._isBattleChatDisabled()
+        return self.isHornSettingsEnabled() and lobbyContext.getServerSettings().isHornEnabled()
 
     def __clear(self):
         self.__isEventActive = False
@@ -344,7 +348,3 @@ class TenYearsCountdownController(ITenYearsCountdownController):
             _logger.error('Invalid format: %s, date should be in format DD.MM.YYYY-HH:MM:SS', eventFinish)
 
         return eventFinish
-
-    def _isBattleChatDisabled(self):
-        gSettingsCore = dependency.instance(ISettingsCore)
-        return bool(gSettingsCore.getSetting(GAME.DISABLE_EVENT_COMMON_CHAT))

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/messenger/ext/__init__.py
 import types
 import BigWorld
-from helpers import i18n, dependency
+from helpers import i18n
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from external_strings_utils import isAccountNameValid
 from external_strings_utils import _ACCOUNT_NAME_MIN_LENGTH, _ACCOUNT_NAME_MAX_LENGTH
@@ -11,7 +11,6 @@ from debug_utils import LOG_ERROR, LOG_DEBUG
 from messenger import g_settings
 from messenger.ext import dictionaries
 from messenger.m_constants import CLIENT_ERROR_ID
-from skeletons.gui.game_control import ITenYearsCountdownController
 MESSENGER_OLDICT_FILE_PATH = 'text/messenger_oldictionary.xml'
 MESSENGER_DOMAIN_FILE_PATH = 'text/messenger_dndictionary.xml'
 g_dnDictionary = dictionaries.DomainNameDictionary.load(MESSENGER_DOMAIN_FILE_PATH)
@@ -44,14 +43,8 @@ def isBattleChatEnabled(common=False):
          constants.ARENA_GUI_TYPE.EPIC_RANDOM,
          constants.ARENA_GUI_TYPE.EPIC_BATTLE):
             result = not g_settings.userPrefs.disableBattleChat
-        if common:
-            typesBattleForCommonChat = []
-            if result:
-                typesBattleForCommonChat += [constants.ARENA_BONUS_TYPE.TRAINING, constants.ARENA_BONUS_TYPE.EPIC_RANDOM_TRAINING]
-            controller = dependency.instance(ITenYearsCountdownController)
-            if controller.isRandomCommonChatEnabled():
-                typesBattleForCommonChat.append(constants.ARENA_GUI_TYPE.RANDOM)
-            result = arena.bonusType in typesBattleForCommonChat
+        if result and common:
+            result = arena.bonusType in (constants.ARENA_BONUS_TYPE.TRAINING, constants.ARENA_BONUS_TYPE.EPIC_RANDOM_TRAINING)
         return result
 
 

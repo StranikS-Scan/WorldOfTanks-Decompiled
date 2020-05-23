@@ -1002,8 +1002,19 @@ class DossierBonus(SimpleBonus):
         if self._value is not None:
             for dossierType in self._value:
                 if dossierType != DOSSIER_TYPE.CLAN:
+                    popUpRecords = {}
+                    if self._ctx and 'popUpRecords' in self._ctx:
+                        popUpRecords = dict(self._ctx['popUpRecords'])
                     for name, data in self._value[dossierType].iteritems():
-                        records[name] = data.get('value', 0)
+                        block = name[0]
+                        if block == BADGES_BLOCK:
+                            blid = int(name[1])
+                        else:
+                            blid = RECORD_DB_IDS.get(name, 0)
+                        val = popUpRecords.get(blid)
+                        if val is None:
+                            val = data.get('value', 0)
+                        records[name] = val
 
         return records
 

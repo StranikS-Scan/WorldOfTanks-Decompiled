@@ -701,7 +701,7 @@ def getSeniorityAwardsRewardsAndBonuses(rewards, size='big', maxAwardCount=_DEFA
     return (formattedBonuses, orderedVehicles, countBoxes)
 
 
-def getProgressiveRewardBonuses(rewards, size='big', maxAwardCount=_DEFAULT_DISPLAYED_AWARDS_COUNT, packBlueprints=False):
+def getProgressiveRewardBonuses(rewards, size='big', maxAwardCount=_DEFAULT_DISPLAYED_AWARDS_COUNT, packBlueprints=False, ctx=None):
     preparationRewardsCurrency(rewards)
     if packBlueprints:
         _packBlueprints(rewards)
@@ -727,7 +727,7 @@ def getProgressiveRewardBonuses(rewards, size='big', maxAwardCount=_DEFAULT_DISP
             if bonusType == 'items':
                 bonus = getNonQuestBonuses(bonusType, bonusValue)
                 _checkAndFillItems(bonus, alwaysVisibleBonuses, bonuses)
-            bonus = getNonQuestBonuses(bonusType, bonusValue)
+            bonus = getNonQuestBonuses(bonusType, bonusValue, ctx)
             bonuses.extend(bonus)
 
         bonuses.sort(key=_keySortOrder)

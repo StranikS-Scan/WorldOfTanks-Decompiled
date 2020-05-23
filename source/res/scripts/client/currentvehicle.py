@@ -482,6 +482,9 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         self.onSelected()
         return
 
+    def selectVehicleWithoutHeroTankUpdate(self, vehicleCD):
+        self._selectVehicle(vehicleCD)
+
     def resetAppearance(self, appearance=None):
         self.__vehAppearance = appearance or _RegularPreviewAppearance()
 

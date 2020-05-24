@@ -1,18 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/CurrentVehicle.py
 import BigWorld
-from constants import CustomizationInvData, QUEUE_TYPE
+from constants import CustomizationInvData
 from Event import Event, EventManager
 from adisp import process
-from skeletons.gui.game_event_controller import IGameEventController
+from gui import g_tankActiveCamouflage
 from gui.shared.formatters.time_formatters import getTimeLeftStr
-from gui.shared.gui_items.customization.outfit import Area
+from vehicle_outfit.outfit import Area
 from gui.shared.gui_items.processors.module import getPreviewInstallerProcessor
 from gui.vehicle_view_states import createState4CurrentVehicle
 from helpers import dependency
 from items.vehicles import VehicleDescr
 from helpers import isPlayerAccount, i18n
-from account_helpers.AccountSettings import AccountSettings, CURRENT_VEHICLE, EVENT_CURRENT_VEHICLE
+from account_helpers.AccountSettings import AccountSettings, CURRENT_VEHICLE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.formatters import icons
@@ -27,7 +27,6 @@ from skeletons.gui.game_control import IIGRController, IRentalsController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.gui.shared.utils import IHangarSpace
-from gui.prb_control import prbEntityProperty
 _MODULES_NAMES = ('turret',
  'chassis',
  'engine',
@@ -89,8 +88,15 @@ class _CachedVehicle(object):
     def _changeDone(self):
         self._clearChangeCallback()
         if isPlayerAccount():
-            self.onChanged()
+            self._updateVehicle()
         Waiting.hide('updateCurrentVehicle')
+
+    def _updateVehicle(self):
+        abilities = BigWorld.player().inventory.abilities.abilitiesManager
+        scopedPerks = abilities.getPerksByVehicle(self.invID)
+        if self.item:
+            self.item.initPerksController(scopedPerks)
+        self.onChanged()
 
     def _setChangeCallback(self, callback=None):
         self.__onVehicleChangedCallback = callback
@@ -126,6 +132,8 @@ class _CurrentVehicle(_CachedVehicle):
 
     def destroy(self):
         super(_CurrentVehicle, self).destroy()
+        if self.item:
+            self.item.stopPerksController()
         self.__vehInvID = 0
         self.hangarSpace.removeVehicle()
         self.selectNoVehicle()
@@ -151,13 +159,19 @@ class _CurrentVehicle(_CachedVehicle):
             self.selectVehicle()
         else:
             isRepaired = 'repair' in vehsDiff and self.__vehInvID in vehsDiff['repair']
-            isCustomizationChanged = CustomizationInvData.OUTFITS in invDiff.get(GUI_ITEM_TYPE.CUSTOMIZATION, {})
+            customizationDiff = invDiff.get(GUI_ITEM_TYPE.CUSTOMIZATION, {})
+            isCustomizationChanged = CustomizationInvData.OUTFITS in customizationDiff
+            if isCustomizationChanged and self.item is not None:
+                season = g_tankActiveCamouflage.get(self.item.intCD, self.item.getAnyOutfitSeason())
+                vehicleOutfitDiff = customizationDiff[CustomizationInvData.OUTFITS].get(self.item.intCD, {})
+                if vehicleOutfitDiff is not None:
+                    isCustomizationChanged = season in vehicleOutfitDiff
             isComponentsChanged = GUI_ITEM_TYPE.TURRET in invDiff or GUI_ITEM_TYPE.GUN in invDiff
             isVehicleChanged = any((self.__vehInvID in hive or (self.__vehInvID, '_r') in hive for hive in vehsDiff.itervalues()))
             if isComponentsChanged or isRepaired or isVehicleDescrChanged or isCustomizationChanged:
                 self.refreshModel()
-            if isVehicleChanged or isRepaired:
-                self.onChanged()
+            if isVehicleChanged or isRepaired or isCustomizationChanged:
+                self._updateVehicle()
         return
 
     def onRotationUpdate(self, diff):
@@ -167,12 +181,12 @@ class _CurrentVehicle(_CachedVehicle):
         elif 'isGroupLocked' in diff:
             isVehicleChanged = self.item.rotationGroupIdx in diff['isGroupLocked']
         if isVehicleChanged:
-            self.onChanged()
+            self._updateVehicle()
 
     def onLocksUpdate(self, locksDiff):
         if self.__vehInvID in locksDiff:
             self.refreshModel()
-            self.onChanged()
+            self._updateVehicle()
 
     def refreshModel(self):
         if g_currentPreviewVehicle.item is not None and not g_currentPreviewVehicle.isHeroTank:
@@ -243,9 +257,6 @@ class _CurrentVehicle(_CachedVehicle):
     def isOnlyForEpicBattles(self):
         return self.isPresent() and self.item.isOnlyForEpicBattles
 
-    def isOnlyForBob(self):
-        return self.isPresent() and self.item.isOnlyForBob
-
     def isOutfitLocked(self):
         return self.isPresent() and self.item.isOutfitLocked
 
@@ -283,7 +294,6 @@ class _CurrentVehicle(_CachedVehicle):
         vehicle = self.itemsCache.items.getVehicle(vehInvID)
         if vehicle is None:
             vehiclesCriteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP
-            vehiclesCriteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
             invVehs = self.itemsCache.items.getVehicles(criteria=vehiclesCriteria)
 
             def notEvent(x, y):
@@ -300,31 +310,6 @@ class _CurrentVehicle(_CachedVehicle):
 
     def selectNoVehicle(self):
         self._selectVehicle(0)
-
-    def selectStoredVehicle(self):
-        g_currentPreviewVehicle.selectNoVehicle()
-        self.selectVehicle(AccountSettings.getFavorites(CURRENT_VEHICLE))
-
-    def selectEventVehicle(self, vehInvID=0):
-        if vehInvID == 0:
-            vehInvID = AccountSettings.getFavorites(EVENT_CURRENT_VEHICLE)
-        if vehInvID < 0:
-            AccountSettings.setFavorites(EVENT_CURRENT_VEHICLE, vehInvID)
-            g_currentPreviewVehicle.selectVehicle(-vehInvID)
-            return
-        else:
-            vehicle = self.itemsCache.items.getVehicle(vehInvID)
-            if vehicle is None:
-                vehiclesCriteria = REQ_CRITERIA.VEHICLE.EVENT
-                invVehs = self.itemsCache.items.getVehicles(criteria=vehiclesCriteria)
-                if invVehs:
-                    vehInvID = sorted(invVehs.itervalues(), key=lambda veh: veh.intCD, reverse=True)[0].invID
-                else:
-                    vehInvID = 0
-            AccountSettings.setFavorites(EVENT_CURRENT_VEHICLE, vehInvID)
-            g_currentPreviewVehicle.selectNoVehicle()
-            self._selectVehicle(vehInvID)
-            return
 
     def getDossier(self):
         return self.itemsCache.items.getVehicleDossier(self.item.intCD)
@@ -362,11 +347,12 @@ class _CurrentVehicle(_CachedVehicle):
     def _selectVehicle(self, vehInvID, callback=None, waitingOverlapsUI=False):
         if vehInvID == self.__vehInvID:
             return
+        if self.item:
+            self.item.stopPerksController()
         Waiting.show('updateCurrentVehicle', isSingle=True, overlapsUI=waitingOverlapsUI)
         self.onChangeStarted()
         self.__vehInvID = vehInvID
-        if not self.isOnlyForEventBattles():
-            AccountSettings.setFavorites(CURRENT_VEHICLE, vehInvID)
+        AccountSettings.setFavorites(CURRENT_VEHICLE, vehInvID)
         self.refreshModel()
         self._setChangeCallback(callback)
 
@@ -411,29 +397,16 @@ class _RegularPreviewAppearance(PreviewAppearance):
 
 class HeroTankPreviewAppearance(PreviewAppearance):
 
-    def refreshVehicle(self, item, immediate=False):
+    def refreshVehicle(self, item):
         if item is None:
             from ClientSelectableCameraObject import ClientSelectableCameraObject
-            ClientSelectableCameraObject.switchCamera(immediate=immediate)
-        return
-
-
-class EventHeroTankPreviewAppearance(HeroTankPreviewAppearance):
-
-    @prbEntityProperty
-    def prbEntity(self):
-        return None
-
-    def refreshVehicle(self, item, immediate=False):
-        if self.prbEntity is None or self.prbEntity.getQueueType() != QUEUE_TYPE.EVENT_BATTLES:
-            super(EventHeroTankPreviewAppearance, self).refreshVehicle(item)
+            ClientSelectableCameraObject.switchCamera()
         return
 
 
 class _CurrentPreviewVehicle(_CachedVehicle):
     _itemsFactory = dependency.descriptor(IGuiItemsFactory)
     _c11nService = dependency.descriptor(ICustomizationService)
-    _gameEventController = dependency.descriptor(IGameEventController)
 
     def __init__(self):
         super(_CurrentPreviewVehicle, self).__init__()
@@ -462,20 +435,9 @@ class _CurrentPreviewVehicle(_CachedVehicle):
     def refreshModel(self):
         pass
 
-    def selectVehicle(self, vehicleCD=None, vehicleStrCD=None, waitingOverlapsUI=False):
+    def selectVehicle(self, vehicleCD=None, vehicleStrCD=None):
         self._selectVehicle(vehicleCD, vehicleStrCD)
         self.onSelected()
-
-    def selectStyledVehicle(self, vDescr, outfit):
-        vehicleEntity = self.hangarSpace.getVehicleEntity()
-        if vehicleEntity is None or vehicleEntity.appearance is None:
-            return
-        else:
-            self.__item = self.__getPreviewVehicle(vDescr.type.compactDescr)
-            self.onChangeStarted()
-            Waiting.show('updateCurrentVehicle', isSingle=True, overlapsUI=False)
-            vehicleEntity.appearance.recreate(vDescr, vState='undamaged', callback=self._changeDone, outfit=outfit.getOutfit(first(outfit.seasons)))
-            return
 
     def selectNoVehicle(self):
         self._selectVehicle(None)
@@ -553,16 +515,16 @@ class _CurrentPreviewVehicle(_CachedVehicle):
     def previewStyle(self, style):
         if self.isPresent() and not self.item.isOutfitLocked and style.mayInstall(self.item):
             self._applyCamouflageTTC()
-            self.hangarSpace.updateVehicleOutfit(style.getOutfit(first(style.seasons)))
+            self.hangarSpace.updateVehicleOutfit(style.getOutfit(first(style.seasons), vehicleCD=self.item.descriptor.makeCompactDescr()))
             self.onChanged()
 
     def previewCamouflage(self, camouflage):
         if self.isPresent() and not self.item.isOutfitLocked and camouflage.mayInstall(self.item):
-            outfit = self._itemsFactory.createOutfit()
+            outfit = self._itemsFactory.createOutfit(vehicleCD=self.item.descriptor.makeCompactDescr())
             for tankPart in Area.ALL:
                 slot = outfit.getContainer(tankPart).slotFor(GUI_ITEM_TYPE.CAMOUFLAGE)
                 if slot:
-                    slot.set(camouflage)
+                    slot.set(camouflage.intCD)
 
             self.hangarSpace.updateVehicleOutfit(outfit)
             self._applyCamouflageTTC()
@@ -572,8 +534,8 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         if self.isPresent():
             camo = first(self._c11nService.getCamouflages(vehicle=self.item).itervalues())
             if camo:
-                outfit = self._itemsFactory.createOutfit(isEnabled=True, isInstalled=True)
-                outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).set(camo)
+                outfit = self._itemsFactory.createOutfit(vehicleCD=self.item.descriptor.makeCompactDescr())
+                outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).set(camo.intCD)
                 self.item.setCustomOutfit(first(camo.seasons), outfit)
 
     def _addListeners(self):

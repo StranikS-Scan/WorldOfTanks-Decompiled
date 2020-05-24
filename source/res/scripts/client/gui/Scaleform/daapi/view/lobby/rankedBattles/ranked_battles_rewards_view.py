@@ -273,7 +273,7 @@ class RankedBattlesRewardsYearView(RankedBattlesRewardsYearMeta, IResetablePage)
         points = awardPoints if isAwarded else currentPoints
         awardType = self.__rankedController.getAwardTypeByPoints(points)
         exchange = self.__rankedController.getCurrentPointToCrystalRate()
-        compensation = self.__rankedController.calculateCompensation(points)
+        compensation = self.__rankedController.getCompensation(points)
         awards = self.__getAwardsData(points, isAwarded)
         self.as_setDataS(rewards_vos.getYearRewardDataVO(points, awards, isAwarded, awardType, compensation, exchange))
 

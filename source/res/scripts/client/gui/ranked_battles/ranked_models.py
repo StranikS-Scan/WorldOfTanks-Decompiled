@@ -281,7 +281,7 @@ class Rank(object):
         return self.__division.getRankUserName(self.__rankID)
 
 
-class PostBattleRankInfo(namedtuple('PostBattleRankInfo', ('accRank', 'accStep', 'stepChanges', 'updatedStepChanges', 'prevAccRank', 'prevAccStep', 'prevMaxRank', 'prevMaxStep', 'shields', 'prevShields', 'isBonusBattle', 'qualificationBonusBattles', 'additionalBonusBattles'))):
+class PostBattleRankInfo(namedtuple('PostBattleRankInfo', ('accRank', 'accStep', 'stepChanges', 'updatedStepChanges', 'prevAccRank', 'prevAccStep', 'prevMaxRank', 'prevMaxStep', 'shields', 'prevShields', 'isBonusBattle', 'stepsBonusBattles', 'efficiencyBonusBattles'))):
     __slots__ = ()
 
     @classmethod
@@ -294,9 +294,9 @@ class PostBattleRankInfo(namedtuple('PostBattleRankInfo', ('accRank', 'accStep',
         shields = dictWithInfo.get('shields', {})
         prevShields = dictWithInfo.get('prevShields', {})
         isBonusBattle = dictWithInfo.get('bonusBattleUsed', False)
-        additionalBonusBattles = dictWithInfo.get('additionalBonusBattles', 0)
-        qualificationBonusBattles = dictWithInfo.get('qualificationBonusBattles', 0)
-        return cls(accRank, accStep, stepChanges, updatedStepChanges, prevAccRank, prevAccStep, prevMaxRank, prevMaxStep, shields, prevShields, isBonusBattle, qualificationBonusBattles, additionalBonusBattles)
+        efficiencyBonusBattles = dictWithInfo.get('efficiencyBonusBattles', 0)
+        stepsBonusBattles = dictWithInfo.get('stepsBonusBattles', 0)
+        return cls(accRank, accStep, stepChanges, updatedStepChanges, prevAccRank, prevAccStep, prevMaxRank, prevMaxStep, shields, prevShields, isBonusBattle, stepsBonusBattles, efficiencyBonusBattles)
 
     @property
     def shieldHP(self):

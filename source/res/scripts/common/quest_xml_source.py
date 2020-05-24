@@ -9,7 +9,7 @@ import ResMgr
 import battle_results_shared
 import nations
 from bonus_readers import readBonusSection, readUTC
-from constants import VEHICLE_CLASS_INDICES, ARENA_BONUS_TYPE, EVENT_TYPE, IGR_TYPE, ATTACK_REASONS, QUEST_RUN_FLAGS, DEFAULT_QUEST_START_TIME, DEFAULT_QUEST_FINISH_TIME
+from constants import VEHICLE_CLASS_INDICES, ARENA_BONUS_TYPE, EVENT_TYPE, IGR_TYPE, ATTACK_REASONS, QUEST_RUN_FLAGS, DEFAULT_QUEST_START_TIME, DEFAULT_QUEST_FINISH_TIME, ACTIONS_GROUP_LABEL_TO_TYPE
 from debug_utils import LOG_WARNING
 from dossiers2.custom.layouts import accountDossierLayout, vehicleDossierLayout, StaticSizeBlockBuilder, BinarySetDossierBlockBuilder
 from dossiers2.custom.records import RECORD_DB_IDS
@@ -205,6 +205,14 @@ class Source(object):
         return
 
     def __readHeader(self, eventType, questSection, curTime, gStartTime, gFinishTime):
+
+        def timeFormatTest(testTime):
+            testHour, testMinute = testTime
+            if testHour < 0 or testHour > 24 or testMinute < 0 or testMinute > 59 or testHour == 24 and testMinute != 0:
+                raise SoftException('Bad time format. (%02d:%02d) must be HH:MM, 00:00 to 24:00' % (testHour, testMinute))
+            testTime = str(testHour).zfill(2) + ':' + str(testMinute).zfill(2)
+            return testTime
+
         id = questSection.readString('id', '')
         if not id:
             raise SoftException('Quest id must be specified.')
@@ -227,6 +235,12 @@ class Source(object):
         makeHM = lambda hm: tuple((int(v) for v in hm.split(':')))
         makeIntervals = lambda intervals: tuple((makeHM(v) for v in intervals.split('_')))
         activeTimeIntervals = [ makeIntervals(i) for i in intervalsInString ]
+        for intervalStartTime, intervalFinishTime in activeTimeIntervals:
+            intervalStart = timeFormatTest(intervalStartTime)
+            intervalFinish = timeFormatTest(intervalFinishTime)
+            if intervalFinishTime <= intervalStartTime:
+                raise SoftException('Interval finish time (%s) must be later than interval start time (%s)' % (intervalFinish, intervalStart))
+
         if announceTime < gStartTime:
             raise SoftException('Invalid announce time. announceTime:%s < gStartTime:%s' % (announceTime, gStartTime))
         if startTime < announceTime:
@@ -321,6 +335,7 @@ class Source(object):
          'levels': self.__readVehicleFilter_levels,
          'nations': self.__readVehicleFilter_nations,
          'types': self.__readVehicleFilter_types,
+         'actionsGroups': self.__readVehicleFilter_actionsGroups,
          'dossier': self.__readBattleResultsConditionList,
          'record': self.__readCondition_dossierRecord,
          'average': self.__readCondition_int,
@@ -465,7 +480,10 @@ class Source(object):
          'blueprint',
          'blueprintAny',
          'enhancement',
-         'eventCoin'}
+         'eventCoin',
+         'entitlement',
+         'rankedDailyBattles',
+         'rankedBonusBattles'}
         if eventType in (EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST, EVENT_TYPE.NT_QUEST):
             bonusTypes.update(('xp', 'tankmenXP', 'xpFactor', 'creditsFactor', 'freeXPFactor', 'tankmenXPFactor'))
         if eventType in (EVENT_TYPE.NT_QUEST,):
@@ -696,6 +714,10 @@ class Source(object):
     def __readVehicleTypeList(self, section):
         typeNames = section.asString.split()
         return [ vehicles.makeVehicleTypeCompDescrByName(typeName) for typeName in typeNames ]
+
+    def __readVehicleFilter_actionsGroups(self, _, section, node):
+        actionsGroups = set([ ACTIONS_GROUP_LABEL_TO_TYPE[actionsGroup] for actionsGroup in section.asString.split() ])
+        node.addChild(actionsGroups)
 
     def __readMetaSection(self, section):
         if section is None:

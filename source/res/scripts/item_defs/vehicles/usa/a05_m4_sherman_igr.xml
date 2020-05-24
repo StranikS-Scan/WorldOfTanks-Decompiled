@@ -343,30 +343,6 @@
           <backwardElastK>	0.75	</backwardElastK>
         </node>
       </trackNodes>
-      <effects>
-        <lodDist>	MEDIUM	</lodDist>
-        <mud>	mediumTankMud	</mud>
-      </effects>
-      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.96204 0.000000	</hullPosition>
-      <hitTester>
-        <collisionModelServer>	vehicles/american/A05_M4_Sherman/collision/Chassis.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/american/A05_M4_Sherman/collision_client/Chassis.model	</collisionModelClient>
-      </hitTester>
-      <topRightCarryingPoint>	1.05187 1.88355	</topRightCarryingPoint>
-      <maxClimbAngle>	25	</maxClimbAngle>
-      <navmeshGirth>	6.0	</navmeshGirth>
-      <AODecals>
-        <decal>
-          <transform>
-            <row0>	3.585780 0.000000 0.000000	</row0>
-            <row1>	0.000000 1.384620 0.000000	</row1>
-            <row2>	0.000000 0.000000 7.347410	</row2>
-            <row3>	0.000000 0.000000 0.000000	</row3>
-          </transform>
-        </decal>
-      </AODecals>
-      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <physicalTracks>
         <left>
           <segmentsCount>	186	</segmentsCount>
@@ -1127,6 +1103,30 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.96204 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A05_M4_Sherman/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A05_M4_Sherman/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.05187 1.88355	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.585780 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.384620 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.347410	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <customization>
         <customizableVehicleAreas>
           <paint></paint>
@@ -1300,36 +1300,15 @@
       <chassis>
         <T42_IGR>
           <grounds>
-            <ground>
-              <medium>
-                <rollingFriction>	0.08855	</rollingFriction>
-              </medium>
-            </ground>
-            <sand>
-              <medium>
-                <rollingFriction>	0.08855	</rollingFriction>
-              </medium>
-            </sand>
-            <wood>
-              <medium>
-                <rollingFriction>	0.08855	</rollingFriction>
-              </medium>
-            </wood>
-            <snow>
-              <medium>
-                <rollingFriction>	0.08855	</rollingFriction>
-              </medium>
-            </snow>
-            <stone>
-              <medium>
-                <rollingFriction>	0.08855	</rollingFriction>
-              </medium>
-            </stone>
-            <metal>
-              <medium>
-                <rollingFriction>	0.08855	</rollingFriction>
-              </medium>
-            </metal>
+            <soft>
+              <rollingFriction>	0.13685	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.08855	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0805	</rollingFriction>
+            </firm>
           </grounds>
         </T42_IGR>
       </chassis>

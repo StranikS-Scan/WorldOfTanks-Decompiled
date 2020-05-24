@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/__init__.py
 import math
-from collections import namedtuple
 import BigWorld
 import Math
 from Math import Vector3, Matrix
 import math_utils
-from AvatarInputHandler.cameras import readVec3, readFloat, ImpulseReason
-from helpers.CallbackDelayer import TimeDeltaMeter
+from AvatarInputHandler.cameras import readVec3, readFloat, ImpulseReason, ICamera
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
 
 def createCrosshairMatrix(offsetFromNearPlane):
     nearPlane = BigWorld.projection().nearPlane
@@ -33,6 +33,10 @@ def createOscillatorFromSection(oscillatorSection, constraintsAsAngle=True):
         constructorParams.append(constraints)
         oscillator = Math.PyOscillator(*constructorParams)
     return oscillator
+
+
+def calcYawPitchDelta(cfg, curSense, dx, dy):
+    return (dx * curSense * (-1 if cfg['horzInvert'] else 1), dy * curSense * (-1 if cfg['vertInvert'] else 1))
 
 
 def __getOscillatorParams(oscillatorSection):
@@ -148,3 +152,49 @@ class AccelerationSmoother(object):
             return acceleration
         except Exception:
             return Math.Vector3(0.0, 0.0, 0.0)
+
+
+class CameraWithSettings(ICamera):
+    settingsCore = dependency.descriptor(ISettingsCore)
+
+    def __init__(self):
+        super(CameraWithSettings, self).__init__()
+        self._userCfg = {}
+        self._cfg = {}
+        self._baseCfg = {}
+
+    def create(self, **args):
+        self._updateSettingsFromServer()
+        self.settingsCore.onSettingsChanged += self._handleSettingsChange
+        self.settingsCore.onSettingsReady += self._updateSettingsFromServer
+
+    def destroy(self):
+        self.settingsCore.onSettingsChanged -= self._handleSettingsChange
+        self.settingsCore.onSettingsReady -= self._updateSettingsFromServer
+
+    def getConfigValue(self, name):
+        return self._cfg.get(name)
+
+    def getUserConfigValue(self, name):
+        return self._userCfg.get(name)
+
+    def setUserConfigValue(self, name, value):
+        if name not in self._userCfg:
+            return
+        self._userCfg[name] = value
+        if name not in ('keySensitivity', 'sensitivity', 'scrollSensitivity'):
+            self._cfg[name] = self._userCfg[name]
+        else:
+            self._cfg[name] = self._baseCfg[name] * self._userCfg[name]
+
+    def _handleSettingsChange(self, diff):
+        pass
+
+    def _updateSettingsFromServer(self):
+        if self.settingsCore.isReady:
+            ucfg = self._userCfg
+            ucfg['horzInvert'] = self.settingsCore.getSetting('mouseHorzInvert')
+            ucfg['vertInvert'] = self.settingsCore.getSetting('mouseVertInvert')
+            cfg = self._cfg
+            cfg['horzInvert'] = ucfg['horzInvert']
+            cfg['vertInvert'] = ucfg['vertInvert']

@@ -10,7 +10,7 @@ class BattlePassVotingResultViewModel(ViewModel):
     NEED_VOTING_STATE = 'needVotingState'
     RESULT_STATE = 'resultState'
 
-    def __init__(self, properties=6, commands=6):
+    def __init__(self, properties=7, commands=6):
         super(BattlePassVotingResultViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -47,6 +47,12 @@ class BattlePassVotingResultViewModel(ViewModel):
     def setMaxEpisode(self, value):
         self._setNumber(5, value)
 
+    def getIsBattlePassPurchased(self):
+        return self._getBool(6)
+
+    def setIsBattlePassPurchased(self, value):
+        self._setBool(6, value)
+
     def _initialize(self):
         super(BattlePassVotingResultViewModel, self)._initialize()
         self._addViewModelProperty('finalRewards', UserListModel())
@@ -55,6 +61,7 @@ class BattlePassVotingResultViewModel(ViewModel):
         self._addStringProperty('backBtnDescr', '')
         self._addBoolProperty('failService', False)
         self._addNumberProperty('maxEpisode', 0)
+        self._addBoolProperty('isBattlePassPurchased', False)
         self.onPreviewClick = self._addCommand('onPreviewClick')
         self.onVoteClick = self._addCommand('onVoteClick')
         self.onBackClick = self._addCommand('onBackClick')

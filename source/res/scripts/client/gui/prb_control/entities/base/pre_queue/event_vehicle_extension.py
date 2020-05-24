@@ -4,7 +4,7 @@ import weakref
 from functools import partial
 import BigWorld
 from CurrentVehicle import g_currentVehicle
-from constants import QUEUE_TYPE, EVENT
+from constants import QUEUE_TYPE
 from debug_utils import LOG_DEBUG
 from gui.prb_control.prb_getters import isInEventBattlesQueue
 from helpers import dependency
@@ -86,7 +86,7 @@ class _EventVehicleEntityExtension(object):
 
     def _makeQueueCtxByAction(self, action=None):
         from gui.prb_control.entities.event.pre_queue.ctx import EventBattleQueueCtx
-        return EventBattleQueueCtx(EVENT.INVALID_GENERAL_ID, waitingID='prebattle/join')
+        return EventBattleQueueCtx(vehInvIDs=[g_currentVehicle.item.invID], waitingID='prebattle/join')
 
     def _onEventsCacheResync(self):
         if self.__isEventsEnabled != self.eventsCache.isEventEnabled():

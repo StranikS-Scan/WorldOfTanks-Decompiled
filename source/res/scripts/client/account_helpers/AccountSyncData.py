@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/AccountSyncData.py
+from functools import partial
 import AccountCommands
 from SyncController import SyncController
 from debug_utils import LOG_ERROR, LOG_DEBUG
@@ -161,3 +162,72 @@ class AccountSyncData(object):
             self.__persistentCache.data = accountDataExtractPersistent(self.__persistentCache.data)
             self.__persistentCache.save(accountDataPersistentHash(self.__persistentCache.data), self.__persistentCache.data)
             self.__persistentCache.isDirty = False
+
+
+class BaseSyncDataCache(object):
+
+    def __init__(self, syncData):
+        self._account = None
+        self._syncData = syncData
+        self._cache = {}
+        self._ignore = True
+        return
+
+    def onAccountBecomePlayer(self):
+        self._ignore = False
+
+    def onAccountBecomeNonPlayer(self):
+        self._ignore = True
+
+    def setAccount(self, account):
+        self._account = account
+
+    def synchronize(self, isFullSync, diff):
+        if isFullSync:
+            self._cache.clear()
+        self._synchronize(diff)
+
+    def _synchronize(self, diff):
+        raise NotImplementedError
+
+    def getCache(self, callback=None):
+        if self._ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER, None)
+            return
+        else:
+            self._syncData.waitForSync(partial(self._onGetCacheResponse, callback))
+            return
+
+    def getItems(self, itemsType, callback):
+        if self._ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER, None)
+            return
+        else:
+            self._syncData.waitForSync(partial(self._onGetItemsResponse, itemsType, callback))
+            return
+
+    def _onGetCacheResponse(self, callback, resultID):
+        if resultID < 0:
+            if callback is not None:
+                callback(resultID, None)
+            return
+        else:
+            if callback is not None:
+                callback(resultID, self._cache)
+            return
+
+    @property
+    def _itemsStorage(self):
+        return self._cache
+
+    def _onGetItemsResponse(self, itemsType, callback, resultID):
+        if resultID < 0:
+            if callback is not None:
+                callback(resultID, None)
+            return
+        else:
+            if callback is not None:
+                callback(resultID, self._itemsStorage.get(itemsType, None))
+            return

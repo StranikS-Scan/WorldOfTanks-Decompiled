@@ -11,9 +11,9 @@ from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDL
 SETTINGS_WINDOW_SCOPE = ScopeTemplates.SimpleScope(VIEW_ALIAS.SETTINGS_WINDOW, ScopeTemplates.DEFAULT_SCOPE)
 
 def getContextMenuHandlers():
-    from gui.Scaleform.daapi.view.battle.shared import ingameshop_cm_handlers
+    from gui.Scaleform.daapi.view.battle.shared import shop_cm_handlers
     from gui.Scaleform.daapi.view.battle.classic import player_menu_handler
-    return ((CONTEXT_MENU_HANDLER_TYPE.INGAME_SHOP, ingameshop_cm_handlers.IngameShopCMHandler), (BATTLE_CONTEXT_MENU_HANDLER_TYPE.EPIC_FULL_STATS, player_menu_handler.PlayerMenuHandler), (BATTLE_CONTEXT_MENU_HANDLER_TYPE.PLAYERS_PANEL, player_menu_handler.PlayerMenuHandler))
+    return ((CONTEXT_MENU_HANDLER_TYPE.SHOP, shop_cm_handlers.ShopCMHandler), (BATTLE_CONTEXT_MENU_HANDLER_TYPE.EPIC_FULL_STATS, player_menu_handler.PlayerMenuHandler), (BATTLE_CONTEXT_MENU_HANDLER_TYPE.PLAYERS_PANEL, player_menu_handler.PlayerMenuHandler))
 
 
 def getViewSettings():

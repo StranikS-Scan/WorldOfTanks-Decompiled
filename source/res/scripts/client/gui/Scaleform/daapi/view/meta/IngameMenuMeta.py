@@ -42,6 +42,3 @@ class IngameMenuMeta(AbstractWindowView):
 
     def as_showBootcampButtonS(self, value):
         return self.flashObject.as_showBootcampButton(value) if self._isDAAPIInited() else None
-
-    def as_showHelpButtonS(self, value):
-        return self.flashObject.as_showHelpButton(value) if self._isDAAPIInited() else None

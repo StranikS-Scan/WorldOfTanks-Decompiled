@@ -189,6 +189,8 @@ class BarrelReload(SimpleReload):
     def __init__(self, effectDesc):
         SimpleReload.__init__(self, effectDesc)
         self.__reloadSequence = LoopSequence(self._desc)
+        self._startLongSound = None
+        return
 
     def __del__(self):
         self.stop()
@@ -197,26 +199,31 @@ class BarrelReload(SimpleReload):
     def start(self, shellReloadTime, alert, shellCount, reloadShellCount, shellID, reloadStart):
         if gEffectsDisabled():
             return
-        SoundGroups.g_instance.setSwitch('SWITCH_ext_rld_automat_caliber', self._desc.caliber)
-        currentTime = BigWorld.time()
-        if shellCount == 0:
-            self.stopCallback(self._startOneShoot)
-            self.__reloadSequence.schedule(shellReloadTime, reloadShellCount)
-            if reloadStart:
-                playByName(self._desc.startLong)
-                if BARREL_DEBUG_ENABLED:
-                    LOG_DEBUG('!!! Play Long  = {0} {1}'.format(currentTime, self._desc.startLong))
-            if alert:
-                playByName(self._desc.ammoLow)
-                if BARREL_DEBUG_ENABLED:
-                    LOG_DEBUG('!!! Play Ammo Low  = {0} {1}'.format(currentTime, self._desc.ammoLow))
         else:
-            if shellCount == 1 and reloadShellCount > 2:
-                if BARREL_DEBUG_ENABLED:
-                    LOG_DEBUG('!!! Play Alert  = {0} {1}'.format(currentTime, self._desc.lastShellAlert))
-                playByName(self._desc.lastShellAlert)
-            time = shellReloadTime - self._desc.shellDuration
-            self.delayCallback(time, self._startOneShoot, currentTime + time)
+            SoundGroups.g_instance.setSwitch('SWITCH_ext_rld_automat_caliber', self._desc.caliber)
+            currentTime = BigWorld.time()
+            if shellCount == 0:
+                self.stopCallback(self._startOneShoot)
+                self.__reloadSequence.schedule(shellReloadTime, reloadShellCount)
+                if reloadStart:
+                    if self._startLongSound is not None:
+                        self._startLongSound.stop()
+                    self._startLongSound = SoundGroups.g_instance.getSound2D(self._desc.startLong)
+                    self.__playStartLongSound()
+                    if BARREL_DEBUG_ENABLED:
+                        LOG_DEBUG('!!! Play Long  = {0} {1}'.format(currentTime, self._desc.startLong))
+                if alert:
+                    playByName(self._desc.ammoLow)
+                    if BARREL_DEBUG_ENABLED:
+                        LOG_DEBUG('!!! Play Ammo Low  = {0} {1}'.format(currentTime, self._desc.ammoLow))
+            else:
+                if shellCount == 1 and reloadShellCount > 2:
+                    if BARREL_DEBUG_ENABLED:
+                        LOG_DEBUG('!!! Play Alert  = {0} {1}'.format(currentTime, self._desc.lastShellAlert))
+                    playByName(self._desc.lastShellAlert)
+                time = shellReloadTime - self._desc.shellDuration
+                self.delayCallback(time, self._startOneShoot, currentTime + time)
+            return
 
     def stop(self):
         if BARREL_DEBUG_ENABLED:
@@ -239,6 +246,16 @@ class BarrelReload(SimpleReload):
                 LOG_DEBUG('!!!{0} Play One Shoot = {1}'.format(BigWorld.time(), self._desc.soundEvent))
             playByName(self._desc.soundEvent)
 
+    def __playStartLongSound(self):
+        if self._startLongSound is not None:
+            self._startLongSound.stop()
+            import BattleReplay
+            replayCtrl = BattleReplay.g_replayCtrl
+            if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
+                return
+            self._startLongSound.play()
+        return
+
 
 class LoopSequence(CallbackDelayer):
 
@@ -252,6 +269,7 @@ class LoopSequence(CallbackDelayer):
         self.__shellT = desc.shellDt
         self.__shellTLast = desc.shellDtLast
         self.__sequence = []
+        self.__inProgress = False
 
     def __del__(self):
         self.stop()
@@ -266,11 +284,11 @@ class LoopSequence(CallbackDelayer):
         if reloadD < self.__duration:
             loopDuration = reloadD
             startLoopD = 0.0
-            inProgress = True
+            self.__inProgress = True
         else:
             startLoopD = reloadD - self.__duration
-            inProgress = False
-        self.__sequence = self.__generateTimeLine(startLoopD, loopDuration, inProgress, shellCount)
+            self.__inProgress = False
+        self.__sequence = self.__generateTimeLine(startLoopD, loopDuration, shellCount)
         if BARREL_DEBUG_ENABLED:
             for item in self.__sequence:
                 LOG_DEBUG('LoopSequence::schedule dt = {0} name = {1}'.format(item[0], item[1]))
@@ -279,9 +297,9 @@ class LoopSequence(CallbackDelayer):
 
     def stop(self):
         self.stopCallback(self.__startCallback)
-        if self.__sequence:
+        if self.__inProgress:
             playByName(self.__stopLoop)
-            self.__sequence = []
+        self.__sequence = []
 
     def __start(self):
         if self.__sequence:
@@ -292,17 +310,15 @@ class LoopSequence(CallbackDelayer):
             self.delayCallback(dt, self.__startCallback)
 
     def __startCallback(self):
+        self.__inProgress = True
         if not self.__sequence:
             return None
         else:
             invokeTime, name = self.__sequence.pop(0)
-            if fabs(invokeTime - BigWorld.time()) > 0.1:
-                self.__sequence = []
-                playByName(self.__stopLoop)
-                return None
-            if BARREL_DEBUG_ENABLED:
-                LOG_DEBUG('LoopSequence::__startCallback time = {0} {1}'.format(BigWorld.time(), name))
-            playByName(name)
+            if fabs(invokeTime - BigWorld.time()) < 0.1 or not self.__sequence:
+                if BARREL_DEBUG_ENABLED:
+                    LOG_DEBUG('LoopSequence::__startCallback time = {0} {1}'.format(BigWorld.time(), name))
+                playByName(name)
             if self.__sequence:
                 callTime, _ = self.__sequence[0]
                 dt = callTime - BigWorld.time()
@@ -312,10 +328,10 @@ class LoopSequence(CallbackDelayer):
             return None
             return None
 
-    def __generateTimeLine(self, loopStartDT, loopDuration, inProgress, count):
+    def __generateTimeLine(self, loopStartDT, loopDuration, count):
         time = BigWorld.time()
         timeLine = []
-        if not inProgress:
+        if not self.__inProgress:
             time += loopStartDT
             timeLine += [(time, self.__startLoop)]
         lastDt = loopDuration - self.__shellTLast

@@ -5,7 +5,7 @@ from gui.Scaleform.daapi.view.lobby.hangar.hangar_cm_handlers import SimpleVehic
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
-from gui.ingame_shop import canBuyGoldForVehicleThroughWeb
+from gui.shop import canBuyGoldForVehicleThroughWeb
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.utils.vehicle_collector_helper import isAvailableForPurchase

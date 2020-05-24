@@ -8,7 +8,7 @@ import WWISE
 import Event
 from shared_utils import collapseIntervals
 from gui.periodic_battles.models import PrimeTime
-from constants import ARENA_BONUS_TYPE, PREBATTLE_TYPE, QUEUE_TYPE, EPIC_PERF_GROUP
+from constants import ARENA_BONUS_TYPE, PREBATTLE_TYPE, QUEUE_TYPE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared import event_dispatcher
 from helpers import dependency, i18n, time_utils
@@ -42,6 +42,12 @@ from player_ranks import getSettings as getRankSettings
 _logger = logging.getLogger(__name__)
 _VALID_PREBATTLE_TYPES = [PREBATTLE_TYPE.EPIC, PREBATTLE_TYPE.EPIC_TRAINING]
 
+class EPIC_PERF_GROUP(object):
+    HIGH_RISK = 1
+    MEDIUM_RISK = 2
+    LOW_RISK = 3
+
+
 class EPIC_META_GAME_LIMIT_TYPE(object):
     SYSTEM_DATA = 0
     HARDWARE_PARAMS = 1
@@ -53,12 +59,11 @@ PERFORMANCE_GROUP_LIMITS = {EPIC_PERF_GROUP.HIGH_RISK: [{EPIC_META_GAME_LIMIT_TY
  EPIC_PERF_GROUP.MEDIUM_RISK: [{EPIC_META_GAME_LIMIT_TYPE.HARDWARE_PARAMS: {HARDWARE_SCORE_PARAMS.PARAM_GPU_SCORE: 150}}, {EPIC_META_GAME_LIMIT_TYPE.HARDWARE_PARAMS: {HARDWARE_SCORE_PARAMS.PARAM_CPU_SCORE: 50000}}]}
 
 class EpicMetaGameSkillLevel(object):
-    __slots__ = ('level', 'name', 'descr', 'shortDescr', 'longDescr', 'shortFilterAlert', 'longFilterAlert', 'icon', 'eqID')
+    __slots__ = ('level', 'name', 'shortDescr', 'longDescr', 'shortFilterAlert', 'longFilterAlert', 'icon', 'eqID')
 
-    def __init__(self, lvl, eqID, name, descr, shortDescr, longDescr, shortFilterAlert, longFilterAlert, icon):
+    def __init__(self, lvl, eqID, name, shortDescr, longDescr, shortFilterAlert, longFilterAlert, icon):
         self.level = lvl
         self.name = name
-        self.descr = descr
         self.shortDescr = shortDescr
         self.longDescr = longDescr
         self.shortFilterAlert = shortFilterAlert
@@ -469,7 +474,7 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, Se
                 for eq in eqs.values():
                     if eq.name in lvls:
                         lvl = lvls.index(eq.name) + 1
-                        self.__skillData[key].levels[lvl] = EpicMetaGameSkillLevel(lvl, eq.id[1], i18n.makeString(eq.userString), i18n.makeString(eq.description), i18n.makeString(eq.shortDescription), i18n.makeString(eq.longDescription), i18n.makeString(eq.shortFilterAlert), i18n.makeString(eq.longFilterAlert), eq.icon[0])
+                        self.__skillData[key].levels[lvl] = EpicMetaGameSkillLevel(lvl, eq.id[1], i18n.makeString(eq.userString), i18n.makeString(eq.shortDescription), i18n.makeString(eq.longDescription), i18n.makeString(eq.shortFilterAlert), i18n.makeString(eq.longFilterAlert), eq.icon[0])
                         found += 1
                         if found == lvlAmount:
                             break

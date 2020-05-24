@@ -64,5 +64,5 @@ class IGuiItemsFactory(object):
     def createCustomization(self, intCompactDescr, proxy=None):
         raise NotImplementedError
 
-    def createOutfit(self, strCompactDescr=None, component=None, isEnabled=False, isInstalled=False, proxy=None):
+    def createOutfit(self, strCompactDescr=None, component=None, vehicleCD=''):
         raise NotImplementedError

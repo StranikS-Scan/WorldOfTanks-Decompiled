@@ -10,23 +10,26 @@ class CustomizationBottomPanelMeta(BaseDAAPIComponent):
     def showBuyWindow(self):
         self._printOverrideError('showBuyWindow')
 
-    def switchToStyle(self):
-        self._printOverrideError('switchToStyle')
-
-    def switchToCustom(self):
-        self._printOverrideError('switchToCustom')
-
     def refreshFilterData(self):
         self._printOverrideError('refreshFilterData')
 
-    def onSelectItem(self, index, intCD):
+    def onSelectItem(self, index, intCD, progressionLevel):
         self._printOverrideError('onSelectItem')
+
+    def onEditItem(self, intCD):
+        self._printOverrideError('onEditItem')
 
     def showGroupFromTab(self, groupId):
         self._printOverrideError('showGroupFromTab')
 
     def onSelectHotFilter(self, index, value):
         self._printOverrideError('onSelectHotFilter')
+
+    def switchMode(self, index):
+        self._printOverrideError('switchMode')
+
+    def returnToStyledMode(self):
+        self._printOverrideError('returnToStyledMode')
 
     def as_showBillS(self):
         return self.flashObject.as_showBill() if self._isDAAPIInited() else None
@@ -49,6 +52,9 @@ class CustomizationBottomPanelMeta(BaseDAAPIComponent):
     def as_setCarouselDataS(self, data):
         return self.flashObject.as_setCarouselData(data) if self._isDAAPIInited() else None
 
+    def as_setCarouselInfoLabelDataS(self, text, tooltip):
+        return self.flashObject.as_setCarouselInfoLabelData(text, tooltip) if self._isDAAPIInited() else None
+
     def as_setFilterDataS(self, data):
         return self.flashObject.as_setFilterData(data) if self._isDAAPIInited() else None
 
@@ -57,6 +63,15 @@ class CustomizationBottomPanelMeta(BaseDAAPIComponent):
 
     def as_setCarouselFiltersDataS(self, data):
         return self.flashObject.as_setCarouselFiltersData(data) if self._isDAAPIInited() else None
+
+    def as_setProjectionDecalHintVisibilityS(self, value):
+        return self.flashObject.as_setProjectionDecalHintVisibility(value) if self._isDAAPIInited() else None
+
+    def as_setEditableStyleHintVisibilityS(self, value):
+        return self.flashObject.as_setEditableStyleHintVisibility(value) if self._isDAAPIInited() else None
+
+    def as_setEditableProgressionRequiredStyleHintVisibilityS(self, value):
+        return self.flashObject.as_setEditableProgressionRequiredStyleHintVisibility(value) if self._isDAAPIInited() else None
 
     def as_showPopoverBtnIconS(self, src, tooltip):
         return self.flashObject.as_showPopoverBtnIcon(src, tooltip) if self._isDAAPIInited() else None
@@ -75,12 +90,6 @@ class CustomizationBottomPanelMeta(BaseDAAPIComponent):
 
     def as_playFilterBlinkS(self):
         return self.flashObject.as_playFilterBlink() if self._isDAAPIInited() else None
-
-    def as_onProjectionDecalOnlyOnceHintShownS(self):
-        return self.flashObject.as_onProjectionDecalOnlyOnceHintShown() if self._isDAAPIInited() else None
-
-    def as_onProjectionDecalOnlyOnceHintHiddenS(self):
-        return self.flashObject.as_onProjectionDecalOnlyOnceHintHidden() if self._isDAAPIInited() else None
 
     def as_carouselFilterMessageS(self, value):
         return self.flashObject.as_carouselFilterMessage(value) if self._isDAAPIInited() else None

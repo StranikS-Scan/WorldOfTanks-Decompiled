@@ -6,18 +6,11 @@ from gui.Scaleform.daapi.view.lobby.missions import missions_helper
 from gui.Scaleform.daapi.view.lobby.missions.regular.group_packers import getGroupPackerByContextID
 from gui.Scaleform.daapi.view.meta.MissionDetailsContainerViewMeta import MissionDetailsContainerViewMeta
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
-from gui.impl import backport
-from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.secret_event.action_menu_model import ActionMenuModel
 from gui.server_events.events_helpers import isDailyQuest, isPremium
 from gui.server_events.formatters import parseComplexToken
-from gui.shared import events, event_bus_handlers, EVENT_BUS_SCOPE, event_dispatcher
+from gui.shared import events, event_bus_handlers, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME
-from adisp import process
-from gui.prb_control.dispatcher import g_prbLoader
-from gui.prb_control.entities.base.ctx import PrbAction
 
 class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta):
     eventsCache = dependency.descriptor(IEventsCache)
@@ -41,10 +34,6 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
 
     def onTokenBuyClick(self, tokenId, questId):
         self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.TOKEN_SHOP, params={'name': parseComplexToken(tokenId).webID}))
-
-    def onToEventClick(self):
-        if self._secretEventTabMenuItem:
-            self.__doSelectAction(PREBATTLE_ACTION_NAME.EVENT_BATTLE)
 
     def onChangePage(self, eventID):
         vehicleSelector = self.getComponent(QUESTS_ALIASES.MISSIONS_VEHICLE_SELECTOR_ALIAS)
@@ -94,7 +83,6 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
         self.__quests = self.eventsCache.getQuests(missionsFilter)
         eventID = self.__ctx.get('eventID')
         groupID = self.__ctx.get('groupID')
-        self._secretEventTabMenuItem = self.__ctx.get('secretEventTabMenuItem')
         if self.__groupPacker is not None:
             self.__groupPacker.clear()
         self.__groupPacker = getGroupPackerByContextID(groupID, self.eventsCache)
@@ -118,19 +106,8 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
              'status': mission.get('status'),
              'selected': eventID == mission.get('eventID')} for i, mission in enumerate(self.__datailedList) ]
             self.as_setInitDataS({'pages': pages})
-            backButton = R.strings.quests.backButton
-            if self._secretEventTabMenuItem is not None:
-                self.as_showBackButtonS(backport.text(backButton.label()), backport.text(backButton.description()))
-            else:
-                self.as_hideBackButtonS()
         return
 
     @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_MISSION_DETAILS_VIEW, EVENT_BUS_SCOPE.LOBBY)
     def __handleDetailsClose(self, _):
         self.destroy()
-
-    @process
-    def __doSelectAction(self, actionName):
-        result = yield g_prbLoader.getDispatcher().doSelectAction(PrbAction(actionName))
-        if self._secretEventTabMenuItem != ActionMenuModel.BASE and result:
-            event_dispatcher.loadSecretEventTabMenu(self._secretEventTabMenuItem)

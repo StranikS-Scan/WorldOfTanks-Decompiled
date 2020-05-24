@@ -18,7 +18,7 @@ from skeletons.gui.game_control import ISpecialSoundCtrl
 from items.vehicles import VehicleDescr
 from gui.battle_control import avatar_getter
 from PlayerEvents import g_playerEvents
-from gui.shared.gui_items.customization.outfit import Outfit
+from vehicle_outfit.outfit import Outfit
 from skeletons.gui.battle_session import IBattleSessionProvider
 _logger = logging.getLogger(__name__)
 _XML_PATH = ITEM_DEFS_PATH + 'special_voices.xml'
@@ -98,7 +98,7 @@ class SpecialSoundCtrl(ISpecialSoundCtrl):
                 _logger.debug('Skip special arena sound according to game mode')
                 return
             if isPlayerVehicle and vehiclePublicInfo.outfit:
-                outfit = Outfit(vehiclePublicInfo.outfit)
+                outfit = Outfit(vehiclePublicInfo.outfit, vehicleCD=vehiclePublicInfo.compDescr)
                 if outfit.style and outfit.style.tags:
                     for tag, arenaMusic in self.__arenaMusicByStyle.iteritems():
                         if tag in outfit.style.tags:

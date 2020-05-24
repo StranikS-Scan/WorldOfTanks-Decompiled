@@ -16,7 +16,6 @@ from gui.clans.users import UserCache
 from gui.shared.utils.decorators import ReprInjector
 from gui.wgcg.clan.contexts import ClanInfoCtx, ClanGlobalMapStatsCtx, GetClanInvitesCount, GetClanAppsCount, ClanMembersCtx, GetProvincesCtx, ClanFavouriteAttributesCtx, ClanRatingsCtx
 from gui.wgcg.hof.contexts import HofUserInfoCtx, HofUserExcludeCtx, HofUserRestoreCtx
-from gui.wgcg.rank.contexts import RankedPositionCtx
 from gui.wgcg.settings import WebRequestDataType
 from gui.wgcg.states import UndefinedState
 from gui.wgcg.strongholds.contexts import StrongholdInfoCtx, StrongholdStatisticsCtx
@@ -231,10 +230,6 @@ class _ClanDossier(object):
     @async
     def requestFavouriteAttributes(self, callback):
         self.__doRequest(ClanFavouriteAttributesCtx(self.__clanDbID), callback)
-
-    @async
-    def requestRankedPosition(self, callback):
-        self.__doRequest(RankedPositionCtx(), callback)
 
     @async
     def requestHofUserInfo(self, callback):
@@ -592,6 +587,13 @@ class WebController(WebListeners, IWebController):
 
     def getClanDbID(self):
         return self.__profile.getClanDbID() if self.__profile else None
+
+    def getClanInfo(self):
+        return {'id': self.__profile.getClanDbID(),
+         'tag': self.__profile.getClanAbbrev(),
+         'joined_at': self.__profile.getJoinedAt(),
+         'name': self.__profile.getClanName(),
+         'full_name': self.__profile.getClanFullName()}
 
     def changeState(self, state):
         self.__state = state

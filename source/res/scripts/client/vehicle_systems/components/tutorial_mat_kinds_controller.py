@@ -1,15 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/components/tutorial_mat_kinds_controller.py
 import BigWorld
-import material_kinds
 import TriggersManager
 from svarog_script.py_component import Component
 from svarog_script.auto_properties import LinkDescriptor
 from helpers.CallbackDelayer import CallbackDelayer
+from constants import GROUND_TYPE_NAME_BY_INDEX
 _PERIODIC_TIME = 0.25
 
 class TutorialMatKindsController(Component, CallbackDelayer):
-    terrainMatKindsLink = LinkDescriptor()
+    terrainGroundTypesLink = LinkDescriptor()
 
     def __init__(self):
         CallbackDelayer.__init__(self)
@@ -27,11 +27,9 @@ class TutorialMatKindsController(Component, CallbackDelayer):
 
     def __onPeriodicTimer(self):
         isOnSoftTerrain = False
-        matKinds = self.terrainMatKindsLink()
-        for matKind in matKinds:
-            if not isOnSoftTerrain:
-                groundStr = material_kinds.GROUND_STRENGTHS_BY_IDS.get(matKind)
-                isOnSoftTerrain = groundStr == 'soft'
+        groundTypes = self.terrainGroundTypesLink()
+        for groundType in groundTypes:
+            isOnSoftTerrain = isOnSoftTerrain or GROUND_TYPE_NAME_BY_INDEX[groundType] == 'soft'
 
         if self.__wasOnSoftTerrain != isOnSoftTerrain:
             self.__wasOnSoftTerrain = isOnSoftTerrain

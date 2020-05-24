@@ -39,6 +39,39 @@ class _FillValue(_FillStruct):
         return
 
 
+def _getSubSections(section, subsectionName):
+    subsection = section[subsectionName]
+    return [] if subsection is None else subsection.items()
+
+
+def _readSequenceItem(section, fields):
+    messageContent = {}
+    if fields:
+        subSection = section['data']
+        for field in fields:
+            _FillValue(field, 'asString', default='')(subSection, messageContent)
+
+    return messageContent
+
+
+def _readSubItemSectionSequence(section, key, fields):
+    subSection = section['data']
+    keySection = subSection[key]
+    content = []
+    if keySection:
+        content = [ _readSequenceItem(messageSec, fields) for _, messageSec in _getSubSections(keySection, 'sequence') ]
+    return content
+
+
+def _readVideoSection(section):
+    messagesFields = ('video-path', 'event-start', 'event-stop', 'event-pause', 'event-resume', 'event-loop')
+    subtitlesFields = ('subtitle', 'voiceover', 'keypoint')
+    messageSec = section['message']
+    content = {'messages': _readSequenceItem(messageSec, messagesFields),
+     'voiceovers': _readSubItemSectionSequence(messageSec, 'subtitles', subtitlesFields)}
+    return content
+
+
 class GarageLessons:
 
     def __init__(self):
@@ -74,5 +107,9 @@ class GarageLessons:
                 self.readBattleResultsData(medals, section['medals'])
                 self.readBattleResultsData(ribbons, section['ribbons'])
                 self.readBattleResultsData(unlocks, section['unlocks'])
+                currentBattle['video'] = {}
+                videoSection = section['video']
+                if videoSection is not None:
+                    currentBattle['video'] = _readVideoSection(videoSection)
 
         return

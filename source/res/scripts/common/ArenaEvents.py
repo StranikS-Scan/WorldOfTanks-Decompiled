@@ -9,7 +9,6 @@ class ArenaEvents(object):
         self.onArenaStarted = Event.SafeEvent(em)
         self.onArenaStoped = Event.SafeEvent(em)
         self.onVehicleCreated = Event.SafeEvent(em)
-        self.onVehicleKilled = Event.SafeEvent(em)
 
     def destroy(self):
         self.__eventManager.clear()

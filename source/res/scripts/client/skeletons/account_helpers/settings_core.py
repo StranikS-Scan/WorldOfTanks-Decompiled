@@ -12,6 +12,9 @@ class ISettingsCache(object):
     def fini(self):
         raise NotImplementedError
 
+    def clear(self):
+        raise NotImplementedError
+
     @property
     def waitForSync(self):
         raise NotImplementedError
@@ -48,11 +51,20 @@ class ISettingsCache(object):
 class ISettingsCore(object):
     onSettingsChanged = None
     onSettingsApplied = None
+    onSettingsReady = None
+    isReady = property()
 
     def init(self):
         raise NotImplementedError
 
     def fini(self):
+        raise NotImplementedError
+
+    def clear(self):
+        raise NotImplementedError
+
+    @isReady.getter
+    def isReady(self):
         raise NotImplementedError
 
     @property

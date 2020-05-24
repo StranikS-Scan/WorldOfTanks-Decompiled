@@ -27,6 +27,7 @@ from gui.Scaleform.daapi.view.lobby.storage.inventory.regular_items_tab import R
 from gui.Scaleform.daapi.view.lobby.storage.inventory.select_vehicle_popover import VehicleSelectPopover
 from gui.Scaleform.daapi.view.lobby.storage.inventory.shells_tab import ShellsTabView
 from gui.Scaleform.daapi.view.lobby.storage.inventory.crew_books_tab import CrewBooksTabView
+from gui.Scaleform.daapi.view.lobby.storage.offers.offers_view import StorageCategoryOffersView
 from gui.Scaleform.daapi.view.lobby.storage.personalreserves.boosters_cm_handlers import PersonalReservesCMHandler
 from gui.Scaleform.daapi.view.lobby.storage.personalreserves.boosters_view import StorageCategoryPersonalReservesView
 from gui.Scaleform.framework import ViewSettings, ViewTypes, ScopeTemplates, GroupedViewSettings
@@ -72,7 +73,8 @@ def getViewSettings():
      ViewSettings(STORAGE_CONSTANTS.BLUEPRINTS_VIEW, StorageCategoryBlueprintsView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.STORAGE_BLUEPRINTS_FILTER_POPOVER, StorageBlueprintsFilterPopover, 'vehiclesFiltersPopoverView.swf', ViewTypes.WINDOW, VIEW_ALIAS.STORAGE_VEHICLES_FILTER_POPOVER, VIEW_ALIAS.STORAGE_BLUEPRINTS_FILTER_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.STORAGE_VEHICLE_SELECTOR_POPOVER, VehicleSelectPopover, 'storageVehicleSelectorPopover.swf', ViewTypes.WINDOW, VIEW_ALIAS.STORAGE_VEHICLE_SELECTOR_POPOVER, VIEW_ALIAS.STORAGE_VEHICLE_SELECTOR_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(STORAGE_CONSTANTS.CUSTOMIZATION_VIEW, StorageCategoryCustomizationView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
+     ViewSettings(STORAGE_CONSTANTS.CUSTOMIZATION_VIEW, StorageCategoryCustomizationView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(STORAGE_CONSTANTS.OFFERS_VIEW, StorageCategoryOffersView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getSectionsList():
@@ -93,7 +95,10 @@ def getSectionsList():
       'tooltip': TOOLTIPS.STORAGE_MAINMENU_PERSONAL_RESERVES},
      {'id': STORAGE_CONSTANTS.CUSTOMIZATION,
       'linkage': STORAGE_CONSTANTS.CUSTOMIZATION_VIEW,
-      'tooltip': TOOLTIPS.STORAGE_MAINMENU_CUSTOMIZATION})
+      'tooltip': TOOLTIPS.STORAGE_MAINMENU_CUSTOMIZATION},
+     {'id': STORAGE_CONSTANTS.OFFERS,
+      'linkage': STORAGE_CONSTANTS.OFFERS_VIEW,
+      'tooltip': TOOLTIPS.STORAGE_MAINMENU_OFFERS})
 
 
 def getBusinessHandlers():

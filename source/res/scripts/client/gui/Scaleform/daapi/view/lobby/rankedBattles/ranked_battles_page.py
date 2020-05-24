@@ -16,6 +16,7 @@ from helpers import time_utils, dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.server_events import IEventsCache
 _RANKED_BATTLES_VIEW_TO_ITEM_ID = {RANKEDBATTLES_ALIASES.RANKED_BATTLES_LEAGUES_VIEW_UI: RANKEDBATTLES_CONSTS.RANKED_BATTLES_RANKS_ID,
  RANKEDBATTLES_ALIASES.RANKED_BATTLES_DIVISIONS_VIEW_UI: RANKEDBATTLES_CONSTS.RANKED_BATTLES_RANKS_ID,
  RANKEDBATTLES_ALIASES.RANKED_BATTLES_SEASON_GAP_VIEW_UI: RANKEDBATTLES_CONSTS.RANKED_BATTLES_RANKS_ID,
@@ -23,6 +24,7 @@ _RANKED_BATTLES_VIEW_TO_ITEM_ID = {RANKEDBATTLES_ALIASES.RANKED_BATTLES_LEAGUES_
  RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_SEASON_OFF_ALIAS: RANKEDBATTLES_CONSTS.RANKED_BATTLES_REWARDS_ID,
  RANKEDBATTLES_ALIASES.RANKED_BATTLES_RAITING_ALIAS: RANKEDBATTLES_CONSTS.RANKED_BATTLES_RATING_ID,
  RANKEDBATTLES_ALIASES.RANKED_BATTLES_INFO_ALIAS: RANKEDBATTLES_CONSTS.RANKED_BATTLES_INFO_ID}
+_RANKED_WEB_PAGES = (RANKEDBATTLES_ALIASES.RANKED_BATTLES_RAITING_ALIAS, RANKEDBATTLES_ALIASES.RANKED_BATTLES_INFO_ALIAS)
 
 class IResetablePage(object):
 
@@ -31,8 +33,8 @@ class IResetablePage(object):
 
 
 class RankedMainPage(LobbySubView, RankedBattlesPageMeta):
-    _rankedController = dependency.descriptor(IRankedBattlesController)
-    _settingsCore = dependency.descriptor(ISettingsCore)
+    __rankedController = dependency.descriptor(IRankedBattlesController)
+    __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, ctx):
         super(RankedMainPage, self).__init__(ctx)
@@ -44,19 +46,20 @@ class RankedMainPage(LobbySubView, RankedBattlesPageMeta):
 
     def onPageChanged(self, viewId):
         newSelectedID = _RANKED_BATTLES_VIEW_TO_ITEM_ID.get(viewId, self._selectedItemID)
-        if self._selectedItemID != newSelectedID:
+        isOtherSelected = self._selectedItemID != newSelectedID
+        if isOtherSelected or viewId in _RANKED_WEB_PAGES:
             self._selectedItemID = newSelectedID
             self._updateSounds()
-            viewComponent = self.getComponent(viewId)
-            if viewComponent is not None:
-                viewComponent.reset()
+            self.__resetComponent(viewId)
+        if isOtherSelected:
             self._update()
             self.__resetCounters(newSelectedID)
-        return
+        self.__rankedController.clearWebOpenPageCtx()
 
     def _dispose(self):
-        self._rankedController.onUpdated -= self._update
-        self._rankedController.onYearPointsChanges -= self.__onYearAwardPointsUpdate
+        self.__rankedController.clearWebOpenPageCtx()
+        self.__rankedController.onUpdated -= self._update
+        self.__rankedController.onYearPointsChanges -= self.__onYearAwardPointsUpdate
         super(RankedMainPage, self)._dispose()
 
     def _getSelectedIdx(self, menuItems):
@@ -73,8 +76,8 @@ class RankedMainPage(LobbySubView, RankedBattlesPageMeta):
 
     def _populate(self):
         super(RankedMainPage, self)._populate()
-        self._rankedController.onYearPointsChanges += self.__onYearAwardPointsUpdate
-        self._rankedController.onUpdated += self._update
+        self.__rankedController.onYearPointsChanges += self.__onYearAwardPointsUpdate
+        self.__rankedController.onUpdated += self._update
         self.__onYearAwardPointsUpdate()
         self.__resetCounters(self._selectedItemID)
         self._updateSounds()
@@ -97,16 +100,16 @@ class RankedMainPage(LobbySubView, RankedBattlesPageMeta):
         raise NotImplementedError
 
     def _updateSounds(self):
-        self._rankedController.getSoundManager().setAmbient()
+        self.__rankedController.getSoundManager().setAmbient()
 
     def __getShowStateFlags(self):
         defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
-        return self._settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
+        return self.__settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
 
     def __onYearAwardPointsUpdate(self):
         if not AccountSettings.getSettings(RANKED_AWARDS_BUBBLE_YEAR_REACHED):
-            points = self._rankedController.getYearRewardPoints()
-            for minPoints, maxPoints in self._rankedController.getYearAwardsPointsMap().itervalues():
+            points = self.__rankedController.getYearRewardPoints()
+            for minPoints, maxPoints in self.__rankedController.getYearAwardsPointsMap().itervalues():
                 if maxPoints >= points >= minPoints:
                     AccountSettings.setCounters(RANKED_AWARDS_COUNTER, 1)
                     AccountSettings.setSettings(RANKED_AWARDS_BUBBLE_YEAR_REACHED, True)
@@ -121,8 +124,14 @@ class RankedMainPage(LobbySubView, RankedBattlesPageMeta):
             AccountSettings.setCounters(RANKED_INFO_COUNTER, 0)
         self.__updateCounters()
 
+    def __resetComponent(self, viewId):
+        viewComponent = self.getComponent(viewId)
+        if viewComponent is not None:
+            viewComponent.reset()
+        return
+
     def __setShowStateFlags(self, filters):
-        self._settingsCore.serverSettings.setSectionSettings(GUI_START_BEHAVIOR, filters)
+        self.__settingsCore.serverSettings.setSectionSettings(GUI_START_BEHAVIOR, filters)
 
     def __updateCounters(self):
         awardsCounter = main_page_vos.getBubbleLabel(AccountSettings.getCounters(RANKED_AWARDS_COUNTER))
@@ -132,7 +141,9 @@ class RankedMainPage(LobbySubView, RankedBattlesPageMeta):
 
 class RankedMainSeasonOffPage(RankedMainPage):
     _COMMON_SOUND_SPACE = RANKED_MAIN_PAGE_SOUND_SPACE
+    __rankedController = dependency.descriptor(IRankedBattlesController)
     __itemsCache = dependency.descriptor(IItemsCache)
+    __eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, ctx):
         super(RankedMainSeasonOffPage, self).__init__(ctx)
@@ -140,12 +151,12 @@ class RankedMainSeasonOffPage(RankedMainPage):
         return
 
     def _dispose(self):
-        self._rankedController.getSoundManager().onSoundModeChanged(False)
+        self.__rankedController.getSoundManager().onSoundModeChanged(False)
         super(RankedMainSeasonOffPage, self)._dispose()
 
     def _populate(self):
         super(RankedMainSeasonOffPage, self)._populate()
-        self._rankedController.getSoundManager().onSoundModeChanged(True)
+        self.__rankedController.getSoundManager().onSoundModeChanged(True)
 
     def _processContext(self, ctx):
         super(RankedMainSeasonOffPage, self)._processContext(ctx)
@@ -154,7 +165,7 @@ class RankedMainSeasonOffPage(RankedMainPage):
 
     def _update(self):
         self.__checkDestroy()
-        self.__nextSeason = self._rankedController.getNextSeason()
+        self.__nextSeason = self.__rankedController.getNextSeason()
         super(RankedMainSeasonOffPage, self)._update()
 
     def _updateHeader(self):
@@ -167,22 +178,23 @@ class RankedMainSeasonOffPage(RankedMainPage):
 
     def _updateSounds(self):
         super(RankedMainSeasonOffPage, self)._updateSounds()
-        soundManager = self._rankedController.getSoundManager()
-        if self._rankedController.getMaxPossibleRank() == self.__achievedRankID:
+        soundManager = self.__rankedController.getSoundManager()
+        if self.__rankedController.getMaxPossibleRank() == self.__achievedRankID:
             soundManager.setProgressSound()
         else:
-            soundManager.setProgressSound(self._rankedController.getDivision(self.__achievedRankID).getUserID())
+            soundManager.setProgressSound(self.__rankedController.getDivision(self.__achievedRankID).getUserID())
 
     def __checkDestroy(self):
-        ctrlPrevSeason = self._rankedController.getPreviousSeason()
+        ctrlPrevSeason = self.__rankedController.getPreviousSeason()
         isPrevValid = ctrlPrevSeason is not None and ctrlPrevSeason.getSeasonID() == self.__prevSeason.getSeasonID()
-        if self._rankedController.getCurrentSeason() is not None or not isPrevValid:
+        if self.__rankedController.getCurrentSeason() is not None or not isPrevValid:
             self.onClose()
         return
 
 
 class RankedMainSeasonOnPage(RankedMainPage):
     _COMMON_SOUND_SPACE = RANKED_MAIN_PAGE_SOUND_SPACE
+    __rankedController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self, ctx):
         super(RankedMainSeasonOnPage, self).__init__(ctx)
@@ -207,7 +219,7 @@ class RankedMainSeasonOnPage(RankedMainPage):
         return
 
     def _update(self):
-        self.__currentSeason = self._rankedController.getCurrentSeason()
+        self.__currentSeason = self.__rankedController.getCurrentSeason()
         self.__periodicNotifier.startNotification()
         super(RankedMainSeasonOnPage, self)._update()
 
@@ -215,19 +227,19 @@ class RankedMainSeasonOnPage(RankedMainPage):
         self.as_setHeaderDataS(main_page_vos.getRankedMainSeasonOnHeader(self.__currentSeason, self._selectedItemID))
 
     def _updateMenuItems(self):
-        menuItems = main_page_vos.getRankedMainSeasonOnItems(self._rankedController.isAccountMastered())
+        menuItems = main_page_vos.getRankedMainSeasonOnItems(self.__rankedController.isAccountMastered())
         self.as_setDataS({'menuItems': menuItems,
          'selectedIndex': self._getSelectedIdx(menuItems)})
 
     def _updateSounds(self, onClose=False):
         super(RankedMainSeasonOnPage, self)._updateSounds()
-        soundManager = self._rankedController.getSoundManager()
-        if self._rankedController.isAccountMastered():
+        soundManager = self.__rankedController.getSoundManager()
+        if self.__rankedController.isAccountMastered():
             soundManager.setProgressSound()
         elif onClose:
             soundManager.setDefaultProgressSound()
         else:
-            soundManager.setProgressSound(self._rankedController.getCurrentDivision().getUserID())
+            soundManager.setProgressSound(self.__rankedController.getCurrentDivision().getUserID())
 
     def _processContext(self, ctx):
         super(RankedMainSeasonOnPage, self)._processContext(ctx)

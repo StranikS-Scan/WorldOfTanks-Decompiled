@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/ui/missions.py
 from helpers import dependency
+from gui.battle_pass.battle_pass_helpers import BattlePassProgressionSubTabs
 from gui.marathon.marathon_event_controller import MARATHON_EVENTS
 from personal_missions import PM_BRANCH
 from skeletons.gui.event_boards_controllers import IEventBoardController
@@ -8,7 +9,6 @@ from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.lobby_context import ILobbyContext
 from web.web_client_api import w2c, W2CSchema, Field
 from gui.server_events import events_dispatcher as server_events
-from gui.shared.event_dispatcher import showBattlePassBuyWindow, showWebShop
 
 class _MissionsSchema(W2CSchema):
     tab = Field(required=False, type=basestring, default=None)
@@ -67,8 +67,7 @@ class MissionsWebApiMixin(object):
 
     @w2c(W2CSchema, 'battle_pass_buy:')
     def openBattlePassMainWithBuy(self, _):
-        server_events.showMissionsBattlePassCommonProgression()
-        showBattlePassBuyWindow(backCallback=showWebShop)
+        server_events.showMissionsBattlePassCommonProgression(subTab=BattlePassProgressionSubTabs.BUY_TAB_FOR_SHOP)
 
 
 class PersonalMissionsWebApiMixin(object):

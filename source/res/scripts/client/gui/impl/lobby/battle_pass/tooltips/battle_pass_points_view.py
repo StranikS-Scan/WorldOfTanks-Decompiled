@@ -35,14 +35,13 @@ class BattlePassPointsTooltip(ViewImpl):
     def __setPointsInfo(self, model):
         model.rewardPoints.clearItems()
         model.vehiclesList.clearItems()
-        perBattlePoints = self.__battlePassController.getPerBattlePoints()
         specialVehicles = self.__battlePassController.getSpecialVehicles()
         rewardPoints = model.rewardPoints.getItems()
-        for _, (label, winPoint, losePoint) in enumerate(perBattlePoints):
+        for points in self.__battlePassController.getPerBattlePoints():
             item = RewardPointsModel()
-            item.setTopCount(label)
-            item.setPointsWin(winPoint)
-            item.setPointsLose(losePoint)
+            item.setTopCount(points.label)
+            item.setPointsWin(points.winPoint)
+            item.setPointsLose(points.losePoint)
             rewardPoints.addViewModel(item)
 
         vehiclesList = model.vehiclesList.getItems()

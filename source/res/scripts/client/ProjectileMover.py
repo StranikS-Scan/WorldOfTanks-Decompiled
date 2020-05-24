@@ -27,7 +27,7 @@ class ProjectileMover(object):
     def __init__(self):
         self.__projectiles = dict()
         self.salvo = BigWorld.PySalvo(1000, 0, -100)
-        self.__ballistics = BigWorld.PyBallisticsSimulator(self.__checkArenaBounds, self.__killProjectile, self.__deleteProjectile)
+        self.__ballistics = BigWorld.PyBallisticsSimulator(lambda start, end: BigWorld.player().arena.collideWithSpaceBB(start, end)[1], self.__killProjectile, self.__deleteProjectile)
         if self.__ballistics is not None:
             self.__ballistics.setFixedBallisticsParams(self.__PROJECTILE_HIDING_TIME, self.__PROJECTILE_TIME_AFTER_DEATH, self.__AUTO_SCALE_DISTANCE, constants.SERVER_TICK_LENGTH)
         player = BigWorld.player()
@@ -182,10 +182,6 @@ class ProjectileMover(object):
             if proj['fireMissedTrigger']:
                 TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_SHOT_MISSED)
             return
-
-    def __checkArenaBounds(self, start, end):
-        arena = BigWorld.player().arena
-        return None if not arena.isPointInsideArenaBB(start) else arena.collideWithSpaceBB(start, end)[1]
 
     def __addWaterRipples(self, position, rippleDiameter, ripplesLeft):
         BigWorld.wg_addWaterRipples(position, rippleDiameter)

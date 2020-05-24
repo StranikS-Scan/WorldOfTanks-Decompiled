@@ -5,7 +5,9 @@
 class CREW_OPERATIONS(object):
     RETURN_WARNING_MEMBERSINBATTLE_TOOLTIP = '#crew_operations:return/warning/membersInBattle/tooltip'
     RETURN_WARNING_MEMBERDEMOBILIZED_TOOLTIP = '#crew_operations:return/warning/memberDemobilized/tooltip'
+    RETURN_WARNING_NOSPACE_TOOLTIP = '#crew_operations:return/warning/noSpace/tooltip'
     DROPINBARRACK_WARNING_NOSPACE_TOOLTIP = '#crew_operations:dropInBarrack/warning/noSpace/tooltip'
+    DROPINBARRACK_WARNING_INBATTLE_TOOLTIP = '#crew_operations:dropInBarrack/warning/inBattle/tooltip'
     CREWBOOKS_WARNING_MEMBERSINBATTLE_TOOLTIP = '#crew_operations:crewBooks/warning/membersInBattle/tooltip'
     WINDOW_TITLE = '#crew_operations:window/title'
     CREWOPERATIONS_BTN_TOOLTIP_HEADER = '#crew_operations:crewOperations/btn/tooltip/header'
@@ -34,6 +36,8 @@ class CREW_OPERATIONS(object):
     DROPINBARRACK_ERROR_NOCREW = '#crew_operations:dropInBarrack/error/noCrew'
     DROPINBARRACK_WARNING_NOSPACE_TOOLTIP_HEADER = '#crew_operations:dropInBarrack/warning/noSpace/tooltip/header'
     DROPINBARRACK_WARNING_NOSPACE_TOOLTIP_BODY = '#crew_operations:dropInBarrack/warning/noSpace/tooltip/body'
+    DROPINBARRACK_WARNING_INBATTLE_TOOLTIP_HEADER = '#crew_operations:dropInBarrack/warning/inBattle/tooltip/header'
+    DROPINBARRACK_WARNING_INBATTLE_TOOLTIP_BODY = '#crew_operations:dropInBarrack/warning/inBattle/tooltip/body'
     ROLECHANGE_WINDOWTITLE = '#crew_operations:roleChange/windowTitle'
     ROLECHANGE_ACCEPTBUTTON = '#crew_operations:roleChange/acceptButton'
     ROLECHANGE_VEHICLESELECTLABEL = '#crew_operations:roleChange/vehicleSelectlabel'

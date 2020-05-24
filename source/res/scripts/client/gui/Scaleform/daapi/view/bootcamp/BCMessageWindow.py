@@ -12,7 +12,7 @@ from gui.impl.wrappers.background_blur import WGUIBackgroundBlurSupportImpl
 from gui.shared import EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
-from gui.Scaleform.daapi.view.bootcamp.BCSubtitlesWindow import subtitleDecorator
+from bootcamp.subtitles.decorators import subtitleDecorator
 
 class BCMessageWindow(BCMessageWindowMeta):
     _hangarSpace = dependency.descriptor(IHangarSpace)

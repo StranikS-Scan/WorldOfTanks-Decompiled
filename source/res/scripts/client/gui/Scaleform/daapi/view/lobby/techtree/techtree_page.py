@@ -13,7 +13,7 @@ from blueprints.BlueprintTypes import BlueprintTypes
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.go_back_helper import BackButtonContextKeys
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled, getPremiumVehiclesUrl
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getPremiumVehiclesUrl
 from gui.Scaleform.daapi.view.lobby.techtree import dumpers
 from gui.Scaleform.daapi.view.lobby.techtree.data import NationTreeData
 from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation
@@ -21,11 +21,9 @@ from gui.Scaleform.daapi.view.lobby.techtree.sound_constants import Sounds
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.meta.TechTreeMeta import TechTreeMeta
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
-from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
 from gui.impl import backport
 from gui.impl.gen.resources import R
-from gui.ingame_shop import canBuyGoldForVehicleThroughWeb
+from gui.shop import canBuyGoldForVehicleThroughWeb
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
@@ -122,14 +120,10 @@ class TechTree(TechTreeMeta):
             self.soundManager.playInstantSound(Sounds.BLUEPRINT_VIEW_OFF_SOUND_ID)
 
     def onGoToPremiumShop(self, nationName, level):
-        if isIngameShopEnabled():
-            params = {'nation': nationName,
-             'level': level,
-             'vehicleFilterByUrl': _VEHICLE_URL_FILTER_PARAM}
-            shared_events.showWebShop(url=getPremiumVehiclesUrl(), params=params)
-        else:
-            shared_events.showOldShop(ctx={'tabId': STORE_TYPES.SHOP,
-             'component': STORE_CONSTANTS.VEHICLE})
+        params = {'nation': nationName,
+         'level': level,
+         'vehicleFilterByUrl': _VEHICLE_URL_FILTER_PARAM}
+        shared_events.showShop(url=getPremiumVehiclesUrl(), params=params)
 
     def onPlayHintAnimation(self, isEnabled=True):
         if isEnabled:

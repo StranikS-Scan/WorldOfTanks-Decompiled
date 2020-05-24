@@ -5,6 +5,7 @@ from gui.Scaleform.daapi.view.lobby.techtree import dumpers
 from gui.Scaleform.daapi.view.lobby.techtree.data import ResearchItemsData
 from gui.Scaleform.daapi.view.lobby.techtree.research_page import Research
 from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE
+from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.Scaleform.genConsts.RESEARCH_ALIASES import RESEARCH_ALIASES
 from gui.shared import event_dispatcher as shared_events
@@ -39,10 +40,20 @@ class BCResearchItemsData(ResearchItemsData):
             item = self._items.getItemByCD(nodeCD)
             if item.level in DISABLED_TANK_LEVELS and NODE_STATE.isAvailable2Buy(state):
                 state = NODE_STATE.add(state, NODE_STATE_FLAGS.PURCHASE_DISABLED)
+            if self._isLastUnlocked(nodeCD):
+                state |= NODE_STATE_FLAGS.LAST_2_BUY
         if NODE_STATE.hasBlueprints(state):
             state = NODE_STATE.remove(state, NODE_STATE_FLAGS.BLUEPRINT)
         node.setState(state)
         return super(BCResearchItemsData, self)._addNode(nodeCD, node)
+
+    def _isLastUnlocked(self, nodeCD):
+        if self.getItem(nodeCD).isPremium:
+            return False
+        nextLevels = g_techTreeDP.getNextLevel(nodeCD)
+        isAvailable = lambda self, nextCD: self.getItem(nextCD).isUnlocked or g_techTreeDP.isVehicleAvailableToUnlock(nextCD)[0]
+        isNextUnavailable = any((not isAvailable(self, nextCD) for nextCD in nextLevels))
+        return isNextUnavailable or not nextLevels
 
     def _addTopNode(self, nodeCD, node):
         state = node.getState()

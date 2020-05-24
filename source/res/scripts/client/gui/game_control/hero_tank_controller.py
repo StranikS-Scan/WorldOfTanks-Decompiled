@@ -11,7 +11,6 @@ from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from skeletons.gui.game_control import IHeroTankController, IBootcampController, ICalendarController
-from skeletons.gui.game_event_controller import IGameEventController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.server_events import IEventsCache
@@ -21,7 +20,7 @@ _logger = logging.getLogger(__name__)
 _HERO_VEHICLES = 'hero_vehicles'
 _ADD_HERO_STEP_NAME = 'add_HeroVehicle'
 _CALENDAR_ACTION_CHANGED = events.AdventCalendarEvent.HERO_ADVENT_ACTION_STATE_CHANGED
-_HeroTankInfo = namedtuple('_HeroTankInfo', ('url', 'styleID', 'crew', 'name', 'ingameshopUrl'))
+_HeroTankInfo = namedtuple('_HeroTankInfo', ('url', 'styleID', 'crew', 'name', 'shopUrl'))
 _HeroTankInfo.__new__.__defaults__ = ('', None, None, '', '')
 
 class HeroTankController(IHeroTankController):
@@ -29,7 +28,6 @@ class HeroTankController(IHeroTankController):
     lobbyContext = dependency.descriptor(ILobbyContext)
     bootcampController = dependency.descriptor(IBootcampController)
     calendarController = dependency.descriptor(ICalendarController)
-    gameEventController = dependency.descriptor(IGameEventController)
     _eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self):
@@ -40,8 +38,6 @@ class HeroTankController(IHeroTankController):
         self.__actionInfo = None
         self.onUpdated = Event.Event()
         self.onInteractive = Event.Event()
-        self.onEnterPreviewFromEvent = Event.Event()
-        self.onExitPreviewFromEvent = Event.Event()
         return
 
     def init(self):
@@ -91,8 +87,8 @@ class HeroTankController(IHeroTankController):
     def getCurrentRelatedURL(self):
         return self.__data[self.__currentTankCD].url if self.isEnabled() and self.__currentTankCD in self.__data else ''
 
-    def getCurrentIngameshopUrl(self):
-        return self.__data[self.__currentTankCD].ingameshopUrl if self.isEnabled() and self.__currentTankCD in self.__data else ''
+    def getCurrentShopUrl(self):
+        return self.__data[self.__currentTankCD].shopUrl if self.isEnabled() and self.__currentTankCD in self.__data else ''
 
     def getCurrentTankCrew(self):
         return self.__data[self.__currentTankCD].crew if self.isEnabled() and self.__currentTankCD in self.__data else None
@@ -103,12 +99,9 @@ class HeroTankController(IHeroTankController):
     def setInteractive(self, interactive):
         self.onInteractive(interactive)
 
-    def __isItemAvailable(self, item):
-        return item.inventoryCount > 0 or item.isRestorePossible() and not self.gameEventController.getHeroTank().isEventHeroTank(item.intCD)
-
     def __fullUpdate(self):
         self.__invVehiclesIntCD = []
-        invVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.CUSTOM(self.__isItemAvailable)).values()
+        invVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.CUSTOM(lambda item: item.inventoryCount > 0 or item.isRestorePossible())).values()
         for invVeh in invVehicles:
             self.__invVehiclesIntCD.append(invVeh.intCD)
 
@@ -144,7 +137,7 @@ class HeroTankController(IHeroTankController):
             for vCompDescr, vData in heroVehicles.iteritems():
                 if vCompDescr in self.__invVehiclesIntCD:
                     continue
-                self.__data[vCompDescr] = _HeroTankInfo(name=vData.get('name'), url=vData.get('url'), ingameshopUrl=vData.get('ingameshopUrl'), styleID=vData.get('styleID'), crew=self.__createCrew(vData.get('crew'), vCompDescr))
+                self.__data[vCompDescr] = _HeroTankInfo(name=vData.get('name'), url=vData.get('url'), shopUrl=vData.get('shopUrl'), styleID=vData.get('styleID'), crew=self.__createCrew(vData.get('crew'), vCompDescr))
 
         self.__applyActions()
         self.__isEnabled = bool(self.__data)
@@ -172,7 +165,7 @@ class HeroTankController(IHeroTankController):
         else:
             styleStr = params.get('styleID')
             styleId = int(styleStr) if styleStr else None
-            self.__data[vCompDescr] = _HeroTankInfo(name=vName, url=params.get('url'), ingameshopUrl=params.get('ingameshopUrl'), styleID=styleId, crew=self.__createCrew(params.get('crew'), vCompDescr))
+            self.__data[vCompDescr] = _HeroTankInfo(name=vName, url=params.get('url'), shopUrl=params.get('shopUrl'), styleID=styleId, crew=self.__createCrew(params.get('crew'), vCompDescr))
             return
 
     def __createCrew(self, crewXml, vCompDescr):

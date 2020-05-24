@@ -84,7 +84,6 @@ class SYSTEM_MESSAGES(object):
     PREBATTLE_VEHICLEINVALID_NO_READYVEHICLE = '#system_messages:prebattle/vehicleInvalid/no_readyVehicle'
     PREBATTLE_VEHICLEINVALID_VEHICLENOTSUPPORTED = '#system_messages:prebattle/vehicleInvalid/vehicleNotSupported'
     PREBATTLE_VEHICLEINVALID_EPICONLY = '#system_messages:prebattle/vehicleInvalid/epicOnly'
-    PREBATTLE_VEHICLEINVALID_BOBONLY = '#system_messages:prebattle/vehicleInvalid/bobOnly'
     PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS = '#system_messages:prebattle/vehicleInvalid/notSetReadyStatus'
     PREBATTLE_VEHICLEINVALID_FALLOUTONLY = '#system_messages:prebattle/vehicleInvalid/falloutOnly'
     PREBATTLE_VEHICLEINVALID_LIMITS_NATIONS = '#system_messages:prebattle/vehicleInvalid/limits/nations'
@@ -1152,41 +1151,11 @@ class SYSTEM_MESSAGES(object):
     COLLECTORVEHICLE_SWITCH_ON_BODY = '#system_messages:collectorVehicle/switch_on/body'
     TECHTREE_ACTION_HEADER = '#system_messages:techtree/action/header'
     TECHTREE_ACTION_TEXT = '#system_messages:techtree/action/text'
+    TECHTREE_ACTION_TEXT_CLOSEST = '#system_messages:techtree/action/text/closest'
     TECHTREE_ACTION_EXPIRETIME = '#system_messages:techtree/action/expireTime'
-    SE20_BUY_ENERGY_SERVER_ERROR = '#system_messages:se20_buy_energy/server_error'
-    SE20_BUY_ENERGY_HAS_ENERGY = '#system_messages:se20_buy_energy/has_energy'
-    SE20_BUY_ENERGY_SUCCESS = '#system_messages:se20_buy_energy/success'
-    SE20_SERVER_ERROR = '#system_messages:se20/server_error'
-    SE20_BUY_PACK_SUCCESS = '#system_messages:se20_buy_pack/success'
-    SE20_SHOP_PACK_SE20_ENERGY_GENERAL_0_X10 = '#system_messages:se20_shop_pack/se20_energy_general_0_x10'
-    SE20_SHOP_PACK_SE20_ENERGY_GENERAL_1_X10 = '#system_messages:se20_shop_pack/se20_energy_general_1_x10'
-    SE20_SHOP_PACK_SE20_ENERGY_GENERAL_2_X10 = '#system_messages:se20_shop_pack/se20_energy_general_2_x10'
-    SE20_SHOP_PACK_SE20_ENERGY_GENERAL_3_X10 = '#system_messages:se20_shop_pack/se20_energy_general_3_x10'
-    SE20_SHOP_PACK_SE20_ENERGY_GENERAL_4_X10 = '#system_messages:se20_shop_pack/se20_energy_general_4_x10'
-    SE20_SHOP_PACK_SE20_ENERGY_GENERAL_0_BUNDLE_X10 = '#system_messages:se20_shop_pack/se20_energy_general_0_bundle_x10'
-    SE20_SHOP_PACK_SE20_ENERGY_GENERAL_1_BUNDLE_X10 = '#system_messages:se20_shop_pack/se20_energy_general_1_bundle_x10'
-    SE20_SHOP_PACK_SE20_ENERGY_GENERAL_2_BUNDLE_X10 = '#system_messages:se20_shop_pack/se20_energy_general_2_bundle_x10'
-    SE20_SHOP_PACK_SE20_ENERGY_GENERAL_3_BUNDLE_X10 = '#system_messages:se20_shop_pack/se20_energy_general_3_bundle_x10'
-    SE20_SHOP_PACK_SE20_ENERGY_GENERAL_4_BUNDLE_X10 = '#system_messages:se20_shop_pack/se20_energy_general_4_bundle_x10'
-    SE20_SHOP_PACK_SE20_ENERGY_GENERAL_0_BUNDLE2_X10 = '#system_messages:se20_shop_pack/se20_energy_general_0_bundle2_x10'
-    SE20_SHOP_PACK_SE20_ENERGY_GENERAL_1_BUNDLE2_X10 = '#system_messages:se20_shop_pack/se20_energy_general_1_bundle2_x10'
-    SE20_SHOP_PACK_SE20_ENERGY_GENERAL_2_BUNDLE2_X10 = '#system_messages:se20_shop_pack/se20_energy_general_2_bundle2_x10'
-    SE20_SHOP_PACK_SE20_ENERGY_GENERAL_3_BUNDLE2_X10 = '#system_messages:se20_shop_pack/se20_energy_general_3_bundle2_x10'
-    SE20_SHOP_PACK_SE20_ENERGY_GENERAL_4_BUNDLE2_X10 = '#system_messages:se20_shop_pack/se20_energy_general_4_bundle2_x10'
-    SE20_SHOP_PACK_SE20_GENERAL_BUNDLE_LEVEL_2 = '#system_messages:se20_shop_pack/se20_general_bundle_level_2'
-    SE20_MAX_GENERAL_LEVEL_ALREADY_REACHED = '#system_messages:se20/max_general_level_already_reached'
-    SE20_BUY_GENERAL_LEVEL_SUCCESS = '#system_messages:se20/buy_general_level_success'
-    SE20_GENERAL_ORDERS_RECEIVE = '#system_messages:se20/general_orders_receive'
-    SE20_GENERAL_ORDERS_DRAW = '#system_messages:se20/general_orders_draw'
-    SE20_FRONT_LEVEL_COMPLETE_TITLE = '#system_messages:se20/front_level_complete/title'
-    SE20_FRONT_LEVEL_COMPLETE_BODY = '#system_messages:se20/front_level_complete/body'
-    SE20_FRONT_LEVEL_COMPLETE_AWARDS = '#system_messages:se20/front_level_complete/awards'
-    SE20_FRONT_LEVEL_COMPLETE_SLOTS = '#system_messages:se20/front_level_complete/slots'
-    SE20_FRONT_LEVEL_COMPLETE_PIECES = '#system_messages:se20/front_level_complete/pieces'
-    SE20_COMMANDER_LEVEL_COMPLETE_BODY = '#system_messages:se20/commander_level_complete/body'
-    SE20_COMMANDER_LEVEL_COMPLETE_CURRENTVEHICLE = '#system_messages:se20/commander_level_complete/currentVehicle'
-    SE20_COMMANDER_LEVEL_COMPLETE_ABILITIES = '#system_messages:se20/commander_level_complete/abilities'
-    ARENA_START_ERRORS_JOIN_NOT_ENOUGH_ENERGY = '#system_messages:arena_start_errors/join/NOT_ENOUGH_ENERGY'
+    OFFERS_SWITCH_OFF_BODY = '#system_messages:offers/switch_off/body'
+    OFFERS_UNAVAILABLE_ONE = '#system_messages:offers/unavailable_one'
+    OFFERS_UNAVAILABLE_MANY = '#system_messages:offers/unavailable_many'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -1379,7 +1348,6 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_VEHICLEINVALID_NO_READYVEHICLE,
      PREBATTLE_VEHICLEINVALID_VEHICLENOTSUPPORTED,
      PREBATTLE_VEHICLEINVALID_EPICONLY,
-     PREBATTLE_VEHICLEINVALID_BOBONLY,
      PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS,
      PREBATTLE_VEHICLEINVALID_FALLOUTONLY,
      PREBATTLE_VEHICLEINVALID_LIMITS_NATIONS,
@@ -2447,41 +2415,11 @@ class SYSTEM_MESSAGES(object):
      COLLECTORVEHICLE_SWITCH_ON_BODY,
      TECHTREE_ACTION_HEADER,
      TECHTREE_ACTION_TEXT,
+     TECHTREE_ACTION_TEXT_CLOSEST,
      TECHTREE_ACTION_EXPIRETIME,
-     SE20_BUY_ENERGY_SERVER_ERROR,
-     SE20_BUY_ENERGY_HAS_ENERGY,
-     SE20_BUY_ENERGY_SUCCESS,
-     SE20_SERVER_ERROR,
-     SE20_BUY_PACK_SUCCESS,
-     SE20_SHOP_PACK_SE20_ENERGY_GENERAL_0_X10,
-     SE20_SHOP_PACK_SE20_ENERGY_GENERAL_1_X10,
-     SE20_SHOP_PACK_SE20_ENERGY_GENERAL_2_X10,
-     SE20_SHOP_PACK_SE20_ENERGY_GENERAL_3_X10,
-     SE20_SHOP_PACK_SE20_ENERGY_GENERAL_4_X10,
-     SE20_SHOP_PACK_SE20_ENERGY_GENERAL_0_BUNDLE_X10,
-     SE20_SHOP_PACK_SE20_ENERGY_GENERAL_1_BUNDLE_X10,
-     SE20_SHOP_PACK_SE20_ENERGY_GENERAL_2_BUNDLE_X10,
-     SE20_SHOP_PACK_SE20_ENERGY_GENERAL_3_BUNDLE_X10,
-     SE20_SHOP_PACK_SE20_ENERGY_GENERAL_4_BUNDLE_X10,
-     SE20_SHOP_PACK_SE20_ENERGY_GENERAL_0_BUNDLE2_X10,
-     SE20_SHOP_PACK_SE20_ENERGY_GENERAL_1_BUNDLE2_X10,
-     SE20_SHOP_PACK_SE20_ENERGY_GENERAL_2_BUNDLE2_X10,
-     SE20_SHOP_PACK_SE20_ENERGY_GENERAL_3_BUNDLE2_X10,
-     SE20_SHOP_PACK_SE20_ENERGY_GENERAL_4_BUNDLE2_X10,
-     SE20_SHOP_PACK_SE20_GENERAL_BUNDLE_LEVEL_2,
-     SE20_MAX_GENERAL_LEVEL_ALREADY_REACHED,
-     SE20_BUY_GENERAL_LEVEL_SUCCESS,
-     SE20_GENERAL_ORDERS_RECEIVE,
-     SE20_GENERAL_ORDERS_DRAW,
-     SE20_FRONT_LEVEL_COMPLETE_TITLE,
-     SE20_FRONT_LEVEL_COMPLETE_BODY,
-     SE20_FRONT_LEVEL_COMPLETE_AWARDS,
-     SE20_FRONT_LEVEL_COMPLETE_SLOTS,
-     SE20_FRONT_LEVEL_COMPLETE_PIECES,
-     SE20_COMMANDER_LEVEL_COMPLETE_BODY,
-     SE20_COMMANDER_LEVEL_COMPLETE_CURRENTVEHICLE,
-     SE20_COMMANDER_LEVEL_COMPLETE_ABILITIES,
-     ARENA_START_ERRORS_JOIN_NOT_ENOUGH_ENERGY)
+     OFFERS_SWITCH_OFF_BODY,
+     OFFERS_UNAVAILABLE_ONE,
+     OFFERS_UNAVAILABLE_MANY)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

@@ -2,24 +2,24 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/customization_inscription_controller.py
 import SoundGroups
 from account_helpers.AccountSettings import AccountSettings, CUSTOMIZATION_SECTION
-from gui import makeHtmlString
 from gui import SystemMessages
-from gui.customization.shared import C11nId
-from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
-from gui.Scaleform.daapi.view.lobby.customization.shared import SEASON_TYPE_TO_INFOTYPE_MAP, formatPersonalNumber, fitPersonalNumber
+from gui import makeHtmlString
+from gui.Scaleform.daapi.view.lobby.customization.shared import SEASON_TYPE_TO_INFOTYPE_MAP, formatPersonalNumber, fitPersonalNumber, EMPTY_PERSONAL_NUMBER
 from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS
 from gui.Scaleform.daapi.view.meta.CustomizationInscriptionControllerMeta import CustomizationInscriptionControllerMeta
-from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.Scaleform.locale.READABLE_KEY_NAMES import READABLE_KEY_NAMES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
+from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.shared import g_eventBus
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
-from items.components.c11n_components import isPersonalNumberAllowed
 from helpers.i18n import makeString as _ms
+from items.components.c11n_components import isPersonalNumberAllowed
+from items.customizations import PersonalNumberComponent
 from skeletons.gui.customization import ICustomizationService
 _ERROR_ICON_DESC = {'image': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_INSCRIPTION_CONTROLLER_ICON_ERROR}
 _ENTER_ICON_DESC = {'image': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_INSCRIPTION_CONTROLLER_ENTER_BTN}
@@ -29,7 +29,6 @@ _PRESS_ENTER_HINT_SHOWN_FIELD = 'isPressEnterHintShown'
 _ENTER_NUMBER_HINT_SHOWN_FIELD = 'isEnterNumberHintShown'
 _DEFAULT_HINT_DURATION = 3000
 _DEFAULT_HINT_DELAY = 3000
-_EMPTY_NUMBER = ''
 
 class CustomizationInscriptionController(CustomizationInscriptionControllerMeta, CallbackDelayer):
     service = dependency.descriptor(ICustomizationService)
@@ -37,22 +36,23 @@ class CustomizationInscriptionController(CustomizationInscriptionControllerMeta,
     def __init__(self):
         CustomizationInscriptionControllerMeta.__init__(self)
         CallbackDelayer.__init__(self)
-        self.__shownNumber = _EMPTY_NUMBER
+        self.__currentNumber = None
         self.__ctx = None
         self.__isProhibitedHintShown = False
         self.__visible = False
         self.__digitsCount = 3
-        self.__attachedAnchor = C11nId()
+        self.__slotId = None
+        self.__storedNumber = None
         self.__clearedNumber = None
         return
 
     def _populate(self):
         self.__ctx = self.service.getCtx()
-        self.__ctx.onPersonalNumberCleared += self.__onPersonalNumberCleared
+        self.__ctx.events.onPersonalNumberCleared += self.__onPersonalNumberCleared
         g_eventBus.addListener(CameraRelatedEvents.LOBBY_VIEW_MOUSE_MOVE, self.__handleLobbyViewMouseEvent)
 
     def _dispose(self):
-        self.__ctx.onPersonalNumberCleared -= self.__onPersonalNumberCleared
+        self.__ctx.events.onPersonalNumberCleared -= self.__onPersonalNumberCleared
         g_eventBus.removeListener(CameraRelatedEvents.LOBBY_VIEW_MOUSE_MOVE, self.__handleLobbyViewMouseEvent)
         self.__ctx = None
         return
@@ -62,6 +62,16 @@ class CustomizationInscriptionController(CustomizationInscriptionControllerMeta,
         return self.__visible
 
     @property
+    def _component(self):
+        if self.__slotId is None:
+            return
+        else:
+            component = self.__ctx.mode.getComponentFromSlot(self.__slotId)
+            if component is None:
+                return
+            return None if component.customType != PersonalNumberComponent.customType else component
+
+    @property
     def _digitsCount(self):
         return self.__digitsCount
 
@@ -69,9 +79,32 @@ class CustomizationInscriptionController(CustomizationInscriptionControllerMeta,
     def _digitsCount(self, digitsCount):
         if self.__digitsCount == digitsCount:
             return
-        self.__digitsCount = digitsCount
-        if self.visible:
-            self.as_showS(self._digitsCount)
+        else:
+            self.__digitsCount = digitsCount
+            if self.visible and self._digitsCount is not None:
+                self.as_showS(self._digitsCount)
+            self.__manageCamera()
+            return
+
+    @property
+    def _currentNumber(self):
+        return self.__currentNumber
+
+    @_currentNumber.setter
+    def _currentNumber(self, number):
+        if not self.visible:
+            return
+        elif self.__currentNumber == number:
+            return
+        elif self._component is None:
+            return
+        else:
+            self.__currentNumber = number
+            self._component.number = self.__currentNumber
+            self.__ctx.refreshOutfit()
+            self.__manageCamera()
+            self.__ctx.events.onComponentChanged(self.__slotId, False)
+            return
 
     def handleLobbyClick(self):
         if self.visible:
@@ -88,161 +121,151 @@ class CustomizationInscriptionController(CustomizationInscriptionControllerMeta,
     def handleDelBtn(self):
         return True if self.visible else False
 
-    def show(self, anchor):
-        self.__attachedAnchor = anchor
+    def start(self, slotId):
+        item = self.__ctx.mode.getItemFromSlot(slotId)
+        if item is None or item.itemTypeID != GUI_ITEM_TYPE.PERSONAL_NUMBER:
+            return
+        else:
+            self.__slotId = slotId
+            self._digitsCount = item.digitsCount
+            self._currentNumber = EMPTY_PERSONAL_NUMBER
+            component = self.__ctx.mode.getComponentFromSlot(slotId)
+            if component is not None and component.isFilled():
+                self.__storedNumber = component.number
+            self.show()
+            return
+
+    def finish(self, cancelIfEmpty=False):
+        if not self.visible:
+            return
+        if self._currentNumber == EMPTY_PERSONAL_NUMBER:
+            if cancelIfEmpty:
+                self.cancel()
+            else:
+                self.__showPromptHint(showImmediately=True)
+            return
+        newNumber = formatPersonalNumber(self._currentNumber, self._digitsCount)
+        if isPersonalNumberAllowed(newNumber):
+            SoundGroups.g_instance.playSound2D(SOUNDS.CUST_CHOICE_ENTER)
+            self._currentNumber = newNumber
+            self.hide()
+        elif not self.__isProhibitedHintShown:
+            self.__prohibitedHintShown(True)
+            self.__showProhibitedHint(newNumber)
+            self.delayCallback(_DEFAULT_HINT_DURATION * 0.001, lambda : self.__prohibitedHintShown(False))
+
+    def cancel(self):
+        if not self.visible:
+            return
+        else:
+            if self.__storedNumber is None:
+                self.hide()
+                self.__ctx.mode.removeItem(self.__slotId)
+            else:
+                newNumber = fitPersonalNumber(self.__storedNumber, self._digitsCount)
+                newNumber = formatPersonalNumber(newNumber, self._digitsCount)
+                if isPersonalNumberAllowed(newNumber):
+                    self._currentNumber = newNumber
+                    self.hide()
+                else:
+                    self.__showProhibitedHint(newNumber)
+                    self.__storedNumber = None
+            return
+
+    def stop(self):
+        if not self.visible:
+            return
+        else:
+            newNumber = formatPersonalNumber(self._currentNumber, self._digitsCount)
+            if isPersonalNumberAllowed(newNumber):
+                self._currentNumber = newNumber
+                self.hide()
+                return
+            if self.__storedNumber is not None:
+                newNumber = formatPersonalNumber(self.__storedNumber, self._digitsCount)
+                if isPersonalNumberAllowed(newNumber):
+                    self._currentNumber = newNumber
+                    self.hide()
+                    return
+            item = self.__ctx.mode.getItemFromSlot(self.__slotId)
+            if item is not None:
+                self.__showProhibitedNumberSystemMsg(item, newNumber)
+            self.hide()
+            self.__ctx.mode.removeItem(self.__slotId)
+            return
+
+    def show(self):
+        if self.visible:
+            return
         self.__prohibitedHintShown(False)
         self.stopCallback(self.__prohibitedHintShown)
         self.as_showS(self._digitsCount)
         self.__visible = True
         self.__ctx.vehicleAnchorsUpdater.displayLine(True)
-        self.__shownNumber = _EMPTY_NUMBER
-        if self.__clearedNumber is not None:
-            self.__showProhibitedHint(self.__clearedNumber)
-        else:
-            self.__showPromptHint()
-        self.__ctx.changePersonalNumberValue(self.__shownNumber)
-        self.__ctx.onEditModeStarted()
-        return
+        self._currentNumber = EMPTY_PERSONAL_NUMBER
+        self.__showPromptHint()
+        self.__ctx.mode.enableEditMode(enabled=True)
 
     def hide(self):
         if not self.visible:
             return
-        self.__visible = False
-        self.as_hideS()
-        self.__shownNumber = _EMPTY_NUMBER
-        self.__ctx.vehicleAnchorsUpdater.displayLine(False)
-        self.__ctx.c11CameraManager.enableMovementByMouse()
-        self.__ctx.onEditModeFinished()
-
-    def update(self, anchor):
-        slotId = self.__ctx.getSlotIdByAnchorId(anchor)
-        if slotId is not None:
-            item = self.__ctx.getItemFromRegion(slotId)
-            component = self.__ctx.getComponentFromRegion(slotId)
         else:
-            self.hide()
+            self.__visible = False
+            self.as_hideS()
+            self.__currentNumber = None
+            self.__storedNumber = None
+            self.__ctx.vehicleAnchorsUpdater.displayLine(False)
+            self.__ctx.c11nCameraManager.enableMovementByMouse()
+            self.__ctx.mode.enableEditMode(enabled=False)
             return
+
+    def update(self, slotId):
+        item = self.__ctx.mode.getItemFromSlot(slotId)
         if item is not None and item.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER:
             self._digitsCount = item.digitsCount
         else:
             self.hide()
             return
         if self.visible:
-            if item.digitsCount <= len(self.__shownNumber):
-                number = fitPersonalNumber(self.__shownNumber, item.digitsCount)
-                if isPersonalNumberAllowed(number):
-                    self.__shownNumber = number
+            if item.digitsCount <= len(self.__currentNumber):
+                newNumber = fitPersonalNumber(self._currentNumber, item.digitsCount)
+                newNumber = formatPersonalNumber(newNumber, item.digitsCount)
+                if isPersonalNumberAllowed(newNumber):
+                    self._currentNumber = newNumber
                 else:
-                    self.__shownNumber = _EMPTY_NUMBER
-                    self.__showProhibitedHint(number)
-            if self.__ctx.storedPersonalNumber is not None:
-                storedNumber = fitPersonalNumber(self.__ctx.storedPersonalNumber, item.digitsCount)
-                self.__ctx.storePersonalNumber(storedNumber)
-            self.__ctx.changePersonalNumberValue(self.__shownNumber, slotId)
-            return
-        elif not component.isFilled():
-            self.show(anchor)
+                    self._currentNumber = EMPTY_PERSONAL_NUMBER
+                    self.__showProhibitedHint(newNumber)
             return
         else:
-            if len(component.number) != item.digitsCount:
-                number = fitPersonalNumber(component.number, item.digitsCount)
-                number = formatPersonalNumber(number, item.digitsCount)
-                if isPersonalNumberAllowed(number):
-                    self.__ctx.changePersonalNumberValue(number, slotId)
-                    component.number = number
-                    self.__ctx.storePersonalNumber(number, item.digitsCount)
-                else:
-                    self.__ctx.clearStoredPersonalNumber()
-                    self.show(anchor)
-                    self.__showProhibitedHint(number)
+            component = self.__ctx.mode.getComponentFromSlot(slotId)
+            if component is not None and not component.isFilled():
+                self.start(slotId)
             return
 
     def sendChar(self, char):
-        if len(self.__shownNumber) == self._digitsCount:
+        if len(self._currentNumber) == self._digitsCount:
             SoundGroups.g_instance.playSound2D(SOUNDS.CUST_CHOICE_NUMBER_OVER)
             self.__showEditHint()
             return
-        newNumber = self.__shownNumber + char
+        newNumber = self._currentNumber + char
         if len(newNumber) == self._digitsCount and not isPersonalNumberAllowed(newNumber):
             self.__showProhibitedHint(newNumber)
+            return
+        self._currentNumber = newNumber
+        SoundGroups.g_instance.playSound2D(SOUNDS.CUST_CHOICE_NUMBER)
+        if len(self._currentNumber) == self._digitsCount:
+            self.__showConfirmitionHint()
         else:
-            self.__shownNumber = newNumber
-            self.__ctx.changePersonalNumberValue(self.__shownNumber)
-            SoundGroups.g_instance.playSound2D(SOUNDS.CUST_CHOICE_NUMBER)
-            if len(self.__shownNumber) == self._digitsCount:
-                self.__showConfirmitionHint()
-            else:
-                self.__showPromptHint()
-        self.__manageCamera()
+            self.__showPromptHint()
 
     def removeChar(self):
         SoundGroups.g_instance.playSound2D(SOUNDS.CUST_CHOICE_BACKSPACE)
-        self.__shownNumber = self.__shownNumber[:-1]
-        self.__ctx.changePersonalNumberValue(self.__shownNumber)
+        self._currentNumber = self._currentNumber[:-1]
         self.__showPromptHint()
-        self.__manageCamera()
 
     def deleteAll(self):
         SoundGroups.g_instance.playSound2D(SOUNDS.CUST_CHOICE_DELETE)
-        self.__shownNumber = _EMPTY_NUMBER
-        self.__ctx.changePersonalNumberValue(self.__shownNumber)
-
-    def finish(self, cancelIfEmpty=False, removeProhibited=False):
-        if not self.visible:
-            return
-        if self.__shownNumber == _EMPTY_NUMBER:
-            if cancelIfEmpty:
-                self.cancel(removeProhibited)
-            else:
-                self.__showPromptHint(showImmediately=True)
-            return
-        newNumber = formatPersonalNumber(self.__shownNumber, self._digitsCount)
-        if not isPersonalNumberAllowed(newNumber):
-            if removeProhibited:
-                slotId = self.__ctx.getSlotIdByAnchorId(self.__attachedAnchor)
-                item = self.__ctx.getItemFromRegion(slotId)
-                self.__showProhibitedNumberSystemMsg(item, newNumber)
-                self.__ctx.removeItemFromSlot(self.__ctx.currentSeason, slotId)
-            else:
-                if self.__isProhibitedHintShown:
-                    return
-                self.__prohibitedHintShown(True)
-                self.__showProhibitedHint(newNumber)
-                self.delayCallback(_DEFAULT_HINT_DURATION * 0.001, self.__prohibitedHintShown, value=False)
-        else:
-            SoundGroups.g_instance.playSound2D(SOUNDS.CUST_CHOICE_ENTER)
-            slotId = self.__ctx.getSlotIdByAnchorId(self.__attachedAnchor)
-            self.__ctx.changePersonalNumberValue(newNumber, slotId)
-            self.__ctx.clearStoredPersonalNumber()
-            self.hide()
-
-    def cancel(self, removeProhibited=False):
-        if not self.visible:
-            return
-        else:
-            slotId = self.__ctx.getSlotIdByAnchorId(self.__attachedAnchor)
-            item = self.__ctx.getItemFromRegion(slotId)
-            SoundGroups.g_instance.playSound2D(SOUNDS.CUST_CHOICE_ESC)
-            if item is not None and item.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER:
-                if self.__ctx.storedPersonalNumber is not None:
-                    storedNumber = fitPersonalNumber(self.__ctx.storedPersonalNumber, item.digitsCount)
-                    storedNumber = formatPersonalNumber(storedNumber, item.digitsCount)
-                    if isPersonalNumberAllowed(storedNumber):
-                        self.__ctx.changePersonalNumberValue(storedNumber, slotId)
-                        self.__ctx.clearStoredPersonalNumber()
-                    elif removeProhibited:
-                        self.__showProhibitedNumberSystemMsg(item, storedNumber)
-                        self.__ctx.removeItemFromSlot(self.__ctx.currentSeason, slotId)
-                    else:
-                        self.__shownNumber = _EMPTY_NUMBER
-                        self.__ctx.changePersonalNumberValue(self.__shownNumber, slotId)
-                        self.__showProhibitedHint(storedNumber)
-                        self.__ctx.clearStoredPersonalNumber()
-                        return
-                else:
-                    self.__ctx.removeItemFromSlot(self.__ctx.currentSeason, slotId)
-            self.hide()
-            return
+        self._currentNumber = EMPTY_PERSONAL_NUMBER
 
     def __handleLobbyViewMouseEvent(self, event):
         if self.visible:
@@ -253,27 +276,24 @@ class CustomizationInscriptionController(CustomizationInscriptionControllerMeta,
     def __manageCamera(self):
         isCameraRotationEnabled = True
         if self.visible:
-            formattedNumber = formatPersonalNumber(self.__shownNumber, self._digitsCount)
+            formattedNumber = formatPersonalNumber(self._currentNumber, self._digitsCount)
             isCameraRotationEnabled = isPersonalNumberAllowed(formattedNumber)
-        self.__ctx.c11CameraManager.enableMovementByMouse(enableRotation=isCameraRotationEnabled)
+        self.__ctx.c11nCameraManager.enableMovementByMouse(enableRotation=isCameraRotationEnabled)
 
     def __prohibitedHintShown(self, value):
         self.__isProhibitedHintShown = value
 
     def __showProhibitedNumberSystemMsg(self, item, number):
-        seasonName = _ms(SEASON_TYPE_TO_INFOTYPE_MAP[self.__ctx.currentSeason])
+        seasonName = _ms(SEASON_TYPE_TO_INFOTYPE_MAP[self.__ctx.season])
         msg = _ms(SYSTEM_MESSAGES.CUSTOMIZATION_PERSONAL_NUMBER_PROHIBITED, value=text_styles.critical(number), itemType=item.userType, itemName=item.userName, seasonName=seasonName)
         msgType = SystemMessages.SM_TYPE.Error
         SystemMessages.pushMessage(msg, msgType)
 
     def __showProhibitedHint(self, number):
-        if self.__clearedNumber == number:
-            self.__clearedNumber = None
         message = makeHtmlString('html_templates:lobby/customization', 'inscription_hint', {'value': number})
         icons = [_ERROR_ICON_DESC]
         hintVO = self.__getHintVO(message, icons=icons, duration=_DEFAULT_HINT_DURATION)
         self.as_invalidInscriptionS(hintVO)
-        return
 
     def __showEditHint(self):
         message = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_INSCRIPTIONCONTROLLER_EDIT_BUTTONS
@@ -304,7 +324,7 @@ class CustomizationInscriptionController(CustomizationInscriptionControllerMeta,
          'delay': delay}
 
     def __onPersonalNumberCleared(self, number):
-        self.__clearedNumber = number
+        self.__showProhibitedHint(number)
 
     @staticmethod
     def __calcHintTimings(accountSettingName):

@@ -4,7 +4,9 @@ import typing
 import logging
 from constants import PREMIUM_TYPE, PremiumConfigs, DAILY_QUESTS_CONFIG
 from frameworks.wulf import Array, ViewFlags, ViewSettings
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyPremiumUrl
 from gui.impl.lobby.missions.missions_helpers import needToUpdateQuestsInModel
+from gui.shared.event_dispatcher import showShop
 from shared_utils import first
 from gui import SystemMessages
 from gui.impl.backport.backport_tooltip import BackportTooltipWindow
@@ -17,7 +19,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.server_events import settings, daily_quests
 from gui.server_events.events_helpers import premMissionsSortFunc, dailyQuestsSortFunc, isPremiumQuestsEnable, isDailyQuestsEnable, isRerollEnabled, isEpicQuestEnabled, EventInfoModel, getRerollTimeout
-from gui.shared import events, event_dispatcher
+from gui.shared import events
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.main_wnd_state_watcher import ClientMainWindowStateWatcher
 from gui.shared.missions.packers.bonus import getDefaultBonusPacker
@@ -142,7 +144,7 @@ class DailyQuestsView(ViewImpl, ClientMainWindowStateWatcher):
     def _updateDailyQuestModel(self, model, fullUpdate=False):
         _logger.debug('DailyQuestsView::_updateDailyQuestModel')
         isEnabled = isDailyQuestsEnable()
-        quests = sorted(self.eventsCache.getDailyQuests().values(), cmp=dailyQuestsSortFunc)
+        quests = sorted(self.eventsCache.getDailyQuests().values(), key=dailyQuestsSortFunc)
         newBonusQuests = settings.getNewCommonEvents([ q for q in quests if q.isBonus() ])
         self._updateRerollEnabledFlag(model)
         with model.dailyQuests.transaction() as tx:
@@ -301,7 +303,7 @@ class DailyQuestsView(ViewImpl, ClientMainWindowStateWatcher):
         self.__updateMissionsNotification()
 
     def __onBuyPremiumBtn(self):
-        event_dispatcher.showPremiumDialog()
+        showShop(getBuyPremiumUrl())
 
     @args2params(int)
     def __onTabClick(self, tabIdx):

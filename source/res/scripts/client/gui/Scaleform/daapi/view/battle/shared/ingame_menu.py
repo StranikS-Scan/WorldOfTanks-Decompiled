@@ -9,7 +9,6 @@ from account_helpers.counter_settings import getCountNewSettings
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 from gui.Scaleform.daapi.view.dialogs.deserter_meta import IngameDeserterDialogMeta
-from gui.Scaleform.daapi.view.dialogs.event_deserter_meta import EventIngameDeserterDialogMeta
 from gui.Scaleform.daapi.view.meta.IngameMenuMeta import IngameMenuMeta
 from gui.Scaleform.genConsts.GLOBAL_VARS_MGR_CONSTS import GLOBAL_VARS_MGR_CONSTS
 from gui.Scaleform.genConsts.INTERFACE_STATES import INTERFACE_STATES
@@ -80,7 +79,6 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
         self.__setMenuButtonsLabels()
         self.as_showQuitButtonS(BattleReplay.g_replayCtrl.isPlaying or not self.bootcampController.isInBootcamp())
         self.as_showBootcampButtonS(self.bootcampController.isInBootcamp())
-        self.as_showHelpButtonS(not self.sessionProvider.arenaVisitor.gui.isEventBattle())
         return
 
     def __updateNewSettingsCount(self):
@@ -152,10 +150,7 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
         else:
             i18nKey = 'quitBattle'
         if exitResult.isDeserter:
-            if self.sessionProvider.arenaVisitor.gui.isEventBattle():
-                result = yield DialogsInterface.showDialog(EventIngameDeserterDialogMeta('se20quitBattle/deserter', focusedID=DIALOG_BUTTON_ID.CLOSE))
-            else:
-                result = yield DialogsInterface.showDialog(IngameDeserterDialogMeta(i18nKey + '/deserter', focusedID=DIALOG_BUTTON_ID.CLOSE))
+            result = yield DialogsInterface.showDialog(IngameDeserterDialogMeta(i18nKey + '/deserter', focusedID=DIALOG_BUTTON_ID.CLOSE))
         elif BattleReplay.isPlaying():
             result = yield DialogsInterface.showDialog(I18nConfirmDialogMeta('quitReplay', focusedID=DIALOG_BUTTON_ID.CLOSE))
         else:

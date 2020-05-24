@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/visual_script/example.py
-from block import Block, Meta, InitParam, SLOT_TYPE
+from block import Block, Meta, InitParam, SLOT_TYPE, EDITOR_TYPE, buildStrKeysValue
 
 class Example(Meta):
 
@@ -14,10 +14,17 @@ class HelloFromPython(Block, Example):
     def __init__(self, *args, **kwargs):
         super(HelloFromPython, self).__init__(*args, **kwargs)
         self._inSlot = self._makeDataInputSlot('project_name', SLOT_TYPE.STR)
-        self._outSlot = self._makeDataOutputSlot('result', SLOT_TYPE.STR, HelloFromPython._execute)
+        self._outSlot = self._makeDataOutputSlot('result', SLOT_TYPE.STR, self._execute)
 
     def _execute(self):
         res = ' '.join(('Hello', self._inSlot.getValue(), 'from python vse...'))
+        self._outSlot.setValue(res)
+
+
+class HelloFromPythonOverride(HelloFromPython):
+
+    def _execute(self):
+        res = ' '.join(('(Override) Hello', self._inSlot.getValue(), 'from python vse...'))
         self._outSlot.setValue(res)
 
 
@@ -88,3 +95,23 @@ class WeightSequence(Block, Example):
     @classmethod
     def initParams(cls):
         return [InitParam('outCount', SLOT_TYPE.INT, 1)]
+
+
+class SelectProjectID(Block, Example):
+    convert = {'WoT': 0,
+     'WoP': 1,
+     'WoS': 2}
+
+    def __init__(self, *args, **kwargs):
+        super(SelectProjectID, self).__init__(*args, **kwargs)
+        self.outSlot = self._makeDataOutputSlot('get', SLOT_TYPE.INT, None)
+        self._name = self._getInitParams()
+        self.outSlot.setValue(SelectProjectID.convert[self._name])
+        return
+
+    @classmethod
+    def initParams(cls):
+        return [InitParam('Names', SLOT_TYPE.STR, buildStrKeysValue(*cls.convert.keys()), EDITOR_TYPE.STR_KEY_SELECTOR)]
+
+    def captionText(self):
+        return ' : '.join((self.__class__.__name__, self._name))

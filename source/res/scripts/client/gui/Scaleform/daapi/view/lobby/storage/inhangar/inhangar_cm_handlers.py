@@ -4,11 +4,11 @@ from constants import GameSeasonType, RentType
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.storage.cm_handlers import ContextMenu, option, CMLabel
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import enoughCreditsForRestore, getVehicleRestoreInfo
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getTradeInUrl
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getTradeInVehiclesUrl
 from gui.Scaleform.framework.managers.context_menu import CM_BUY_COLOR
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.shared import event_dispatcher as shared_events
-from gui.shared.event_dispatcher import showVehicleRentRenewDialog, showWebShop
+from gui.shared.event_dispatcher import showVehicleRentRenewDialog, showShop
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from helpers import dependency
 from ids_generators import SequenceIDGenerator
@@ -28,7 +28,7 @@ class VehiclesRegularCMHandler(ContextMenu):
     @option(__sqGen.next(), CMLabel.EXCHANGE)
     def exchange(self):
         self.__tradeInController.setActiveTradeOffVehicleCD(self._id)
-        showWebShop(getTradeInUrl())
+        showShop(getTradeInVehiclesUrl())
 
     @option(__sqGen.next(), CMLabel.INFORMATION)
     def showInfo(self):
@@ -208,15 +208,7 @@ class VehiclesRentedCMHandler(ContextMenu):
 
     def __canRenewRent(self):
         vehicle = self.__itemsCache.items.getItemByCD(self._id)
-        canRenew = False
-        if vehicle is None:
-            return canRenew
-        else:
-            if vehicle.isOnlyForEpicBattles:
-                canRenew = vehicle.rentInfo.canCycleRentRenewForSeason(GameSeasonType.EPIC)
-            elif vehicle.isOnlyForBob:
-                canRenew = vehicle.rentInfo.canCycleRentRenewForSeason(GameSeasonType.BOB)
-            return canRenew
+        return vehicle is not None and vehicle.isOnlyForEpicBattles and vehicle.rentInfo.canCycleRentRenewForSeason(GameSeasonType.EPIC)
 
     def __canRemove(self):
         vehicle = self.__itemsCache.items.getItemByCD(self._id)

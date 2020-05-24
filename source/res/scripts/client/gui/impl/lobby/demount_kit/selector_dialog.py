@@ -11,7 +11,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.demount_kit.selector_dialog_item_model import SelectorDialogItemModel
 from gui.impl.gen.view_models.views.lobby.demount_kit.selector_dialog_model import SelectorDialogModel
 from gui.impl.lobby.demount_kit.item_base_dialog import BaseItemDialog
-from gui.ingame_shop import showBuyGoldForEquipment
+from gui.shop import showBuyGoldForEquipment
 from helpers import dependency
 from skeletons.gui.game_control import IWalletController
 from skeletons.gui.goodies import IGoodiesCache

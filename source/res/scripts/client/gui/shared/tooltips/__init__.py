@@ -50,6 +50,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     RANKED_SELECTOR_INFO = 'rankedSelectorInfo'
     RANKED_DIVISION_INFO = 'rankedDivisionInfo'
     RANKED_YEAR_REWARD = 'rankedYearReward'
+    RANKED_QUESTS_PREVIEW = 'rankedQuestsPreview'
     FAKE = 'fake'
     VEHICLE_ELITE_BONUS = 'vehicleEliteBonus'
     VEHICLE_HISTORICAL_REFERENCE = 'vehicleHistoricalReference'
@@ -68,9 +69,6 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     TRADE_IN_STATE_NOT_AVAILABLE = 'tradeInStateNotAvailable'
     DEMOUNT_KIT = 'demountKit'
     VEHICLE_COLLECTOR = 'vehicleCollector'
-    BOB_SELECTOR_INFO = 'bobSelectorInfo'
-    BOB_CALENDAR_DAY = 'bobCalendarDay'
-    EVENT = 'event'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):

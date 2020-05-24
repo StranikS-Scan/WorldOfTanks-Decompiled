@@ -57,13 +57,18 @@ class DossierCache(object):
             self.__syncController.request(self.__getNextSyncID(), None)
             return
 
-    def resynchronize(self):
+    def resynchronize(self, isFullResync=False):
+        if isFullResync:
+            saveMaxChangeTime = self.__maxChangeTime
+            self.__maxChangeTime = 0
         LOG_DEBUG('resynchronize', self.__maxChangeTime)
         if self.__ignore:
             return
         else:
             self.__isSynchronizing = True
             self.__syncController.request(self.__getNextSyncID(), None)
+            if isFullResync:
+                self.__maxChangeTime = saveMaxChangeTime
             return
 
     def waitForSync(self, callback):

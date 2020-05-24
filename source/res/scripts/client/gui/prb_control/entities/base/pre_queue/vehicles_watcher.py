@@ -8,15 +8,18 @@ class BaseVehiclesWatcher(object):
 
     def start(self):
         self.__setUnsuitableState()
-        g_clientUpdateManager.addCallbacks({'inventory': self.__update,
-         'eventsData': self.__update})
+        g_clientUpdateManager.addCallbacks({'inventory': self._update,
+         'eventsData': self._update})
 
     def stop(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.__clearUnsuitableState()
 
-    def _getUnsuitableVehicles(self):
+    def _getUnsuitableVehicles(self, onClear=False):
         raise NotImplementedError
+
+    def _update(self, *_):
+        self.__setUnsuitableState()
 
     def __setUnsuitableState(self):
         vehicles = self._getUnsuitableVehicles()
@@ -29,7 +32,7 @@ class BaseVehiclesWatcher(object):
             g_prbCtrlEvents.onVehicleClientStateChanged(intCDs)
 
     def __clearUnsuitableState(self):
-        vehicles = self._getUnsuitableVehicles()
+        vehicles = self._getUnsuitableVehicles(True)
         intCDs = set()
         for vehicle in vehicles:
             vehicle.clearCustomState()
@@ -37,6 +40,3 @@ class BaseVehiclesWatcher(object):
 
         if intCDs:
             g_prbCtrlEvents.onVehicleClientStateChanged(intCDs)
-
-    def __update(self, diff):
-        self.__setUnsuitableState()

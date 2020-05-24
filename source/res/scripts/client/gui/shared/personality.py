@@ -32,6 +32,7 @@ from skeletons.connection_mgr import IConnectionManager
 from skeletons.gameplay import IGameplayLogic, PlayerEventID
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_results import IBattleResultsService
+from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.shared.utils import IHangarSpace, IRaresCache
 from skeletons.gui.web import IWebController
 from skeletons.gui.game_control import IGameStateTracker
@@ -42,7 +43,6 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.sounds import ISoundsController
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_event_controller import IGameEventController
 from skeletons.helpers.statistics import IStatisticsCollector
 try:
     from gui import mods
@@ -72,15 +72,16 @@ class ServicesLocator(object):
     hangarSpace = dependency.descriptor(IHangarSpace)
     rareAchievesCache = dependency.descriptor(IRaresCache)
     appLoader = dependency.descriptor(IAppLoader)
-    gameEventController = dependency.descriptor(IGameEventController)
+    offersProvider = dependency.descriptor(IOffersDataProvider)
 
     @classmethod
     def clear(cls):
         cls.itemsCache.clear()
         cls.goodiesCache.clear()
-        cls.gameEventController.clear()
         cls.eventsCache.clear()
         cls.lobbyContext.clear()
+        cls.settingsCore.clear()
+        cls.settingsCache.clear()
 
     @classmethod
     def onDisconnected(cls):
@@ -98,7 +99,6 @@ def onAccountShowGUI(ctx):
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.QUESTS_SYNC)
     ServicesLocator.eventsCache.start()
     yield ServicesLocator.eventsCache.update()
-    ServicesLocator.gameEventController.start()
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.USER_SERVER_SETTINGS_SYNC)
     yield ServicesLocator.settingsCache.update()
     if not ServicesLocator.itemsCache.isSynced():
@@ -133,6 +133,7 @@ def onAccountShowGUI(ctx):
     g_blueprintGenerator.init()
     SoundGroups.g_instance.enableLobbySounds(True)
     onCenterIsLongDisconnected(True)
+    ServicesLocator.offersProvider.start()
     guiModsSendEvent('onAccountShowGUI', ctx)
     if serverSettings.wgcg.getLoginOnStart():
         yield ServicesLocator.webCtrl.login()
@@ -143,14 +144,13 @@ def onAccountShowGUI(ctx):
 
 def onAccountBecomeNonPlayer():
     g_clanCache.clear()
+    g_currentVehicle.destroy()
     ServicesLocator.itemsCache.clear()
     ServicesLocator.goodiesCache.clear()
-    g_currentVehicle.destroy()
     g_currentPreviewVehicle.destroy()
     ServicesLocator.hangarSpace.destroy()
     g_prbLoader.onAccountBecomeNonPlayer()
     ServicesLocator.gameState.onAccountBecomeNonPlayer()
-    ServicesLocator.gameEventController.stop()
     guiModsSendEvent('onAccountBecomeNonPlayer')
     UsersInfoHelper.clear()
     g_blueprintGenerator.fini()
@@ -163,7 +163,6 @@ def onAvatarBecomePlayer():
     ServicesLocator.settingsCore.serverSettings.applySettings()
     ServicesLocator.soundCtrl.stop()
     ServicesLocator.webCtrl.stop(logout=False)
-    ServicesLocator.gameEventController.stop()
     ServicesLocator.eventsCache.stop()
     g_prbLoader.onAvatarBecomePlayer()
     ServicesLocator.gameState.onAvatarBecomePlayer()
@@ -192,6 +191,7 @@ def onClientUpdate(diff, updateOnlyLobbyCtx):
             yield g_clanCache.update(diff)
         ServicesLocator.lobbyContext.update(diff)
         g_clientUpdateManager.update(diff)
+    ServicesLocator.offersProvider.update(diff)
 
 
 def onShopResyncStarted():

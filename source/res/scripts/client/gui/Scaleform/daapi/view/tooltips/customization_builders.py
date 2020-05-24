@@ -7,13 +7,14 @@ from gui.Scaleform.daapi.view.lobby.customization.tooltips import ElementAwardTo
 from gui.Scaleform.daapi.view.lobby.customization.tooltips import ElementPurchaseTooltip
 from gui.shared.tooltips import contexts
 from gui.shared.tooltips.builders import DataBuilder
-from gui.Scaleform.daapi.view.lobby.customization.tooltips.element import NonHistoricTooltip
+from gui.Scaleform.daapi.view.lobby.customization.tooltips.element import NonHistoricTooltip, PopoverTooltip
 __all__ = ('getTooltipBuilders',)
 
 def getTooltipBuilders():
     return (DataBuilder(TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_UI, ElementTooltip(contexts.TechCustomizationContext())),
-     DataBuilder(TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_HISTORIC_ITEM, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_UI, NonHistoricTooltip(contexts.TechCustomizationContext())),
+     DataBuilder(TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_NONHISTORIC_ITEM, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_UI, NonHistoricTooltip(contexts.TechCustomizationContext())),
+     DataBuilder(TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_POPOVER_ITEM, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_UI, PopoverTooltip(contexts.TechCustomizationContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_ICON, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_UI, ElementIconTooltip(contexts.TechCustomizationContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_AWARD, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_UI, ElementAwardTooltip(contexts.TechCustomizationContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_PURCHASE, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_UI, ElementPurchaseTooltip(contexts.TechCustomizationContext())),
-     DataBuilder(TOOLTIPS_CONSTANTS.SHOP_20_CUSTOMIZATION_ITEM, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_UI, ElementTooltip(contexts.Shop20CustomizationContext())))
+     DataBuilder(TOOLTIPS_CONSTANTS.SHOP_CUSTOMIZATION_ITEM, TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_UI, ElementTooltip(contexts.ShopCustomizationContext())))

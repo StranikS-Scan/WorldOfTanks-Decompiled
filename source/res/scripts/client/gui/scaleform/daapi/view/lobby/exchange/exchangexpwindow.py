@@ -3,14 +3,13 @@
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform import getVehicleTypeAssetPath, getNationsAssetPath, NATION_ICON_PREFIX_131x31
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.ExchangeXpWindowMeta import ExchangeXpWindowMeta
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
-from gui.ingame_shop import showBuyGoldForXpWebOverlay
+from gui.shop import showBuyGoldForXpWebOverlay
 from gui.shared.formatters import icons
 from gui.shared.formatters.text_styles import builder
 from gui.shared.gui_items.gui_item_economics import ItemPrice
@@ -25,19 +24,14 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
     itemsCache = dependency.descriptor(IItemsCache)
     wallet = dependency.descriptor(IWalletController)
 
-    def __init__(self, ctx=None):
-        super(ExchangeXPWindow, self).__init__(ctx)
-        self.__isIngameShopEnabled = False
-
     def _populate(self):
         super(ExchangeXPWindow, self)._populate()
         self.__xpForFree = self.itemsCache.items.shop.freeXPConversionLimit
         self.as_setPrimaryCurrencyS(self.itemsCache.items.stats.actualGold)
         self.__setRates()
         self.as_totalExperienceChangedS(self.itemsCache.items.stats.actualFreeXP)
-        self.__isIngameShopEnabled = isIngameShopEnabled()
         self.__prepareAndPassVehiclesData()
-        self.as_setWalletStatusS(self.wallet.status, self.__isIngameShopEnabled)
+        self.as_setWalletStatusS(self.wallet.status, True)
 
     def _subscribe(self):
         g_clientUpdateManager.addCurrencyCallback(Currency.GOLD, self._setGoldCallBack)
@@ -62,7 +56,7 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
     def __setWalletCallback(self, status):
         self.as_setPrimaryCurrencyS(self.itemsCache.items.stats.actualGold)
         self.as_totalExperienceChangedS(self.itemsCache.items.stats.actualFreeXP)
-        self.as_setWalletStatusS(status, self.__isIngameShopEnabled)
+        self.as_setWalletStatusS(status, True)
 
     def __prepareAndPassVehiclesData(self):
         values = []
@@ -91,8 +85,7 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
          'rateToIcon': ICON_TEXT_FRAMES.ELITE_XP,
          'rateFromTextColor': self.app.colorManager.getColorScheme('textColorGold').get('rgb'),
          'rateToTextColor': self.app.colorManager.getColorScheme('textColorCredits').get('rgb')}
-        vehicleData = {'buyGoldAvailable': self.__isIngameShopEnabled,
-         'isHaveElite': bool(values),
+        vehicleData = {'isHaveElite': bool(values),
          'vehicleList': values,
          'tableHeader': self._getTableHeader(),
          'xpForFree': self.__xpForFree,
@@ -129,7 +122,7 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
         xpToExchange = min(commonXp, exchangeXP)
         money = self.itemsCache.items.stats.money
         price = self.__getConversionPrice(xpToExchange).price
-        if money.gold < price.gold and self.__isIngameShopEnabled:
+        if money.gold < price.gold:
             showBuyGoldForXpWebOverlay(price.gold)
         else:
             result = yield FreeXPExchanger(xpToExchange, vehTypeCompDescrs, freeConversion=self.__xpForFree).request()
@@ -142,11 +135,7 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
         self.destroy()
 
     def getSubmitButtonEnableState(self, selectedXPCount):
-        if selectedXPCount == 0:
-            return False
-        money = self.itemsCache.items.stats.money
-        price = self.__getConversionPrice(selectedXPCount).price
-        return True if price.gold <= money.gold else self.__isIngameShopEnabled
+        return selectedXPCount > 0
 
     def _dispose(self):
         self.itemsCache.onSyncCompleted -= self.__setXPConversationCallBack

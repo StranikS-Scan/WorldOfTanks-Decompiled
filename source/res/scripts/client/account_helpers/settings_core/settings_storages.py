@@ -4,6 +4,7 @@ import functools
 import weakref
 import math
 import BigWorld
+import BattleReplay
 from AvatarInputHandler.cameras import FovExtended
 from adisp import async
 from debug_utils import LOG_DEBUG, LOG_ERROR
@@ -41,12 +42,13 @@ class ServerSettingsStorage(ISettingsStorage):
         self._section = section
 
     def apply(self, restartApproved):
-        if self._settings:
+        if self._settings and not BattleReplay.isPlaying():
             self._manager.setSectionSettings(self._section, self._settings)
         return super(ServerSettingsStorage, self).apply(restartApproved)
 
     def extract(self, settingOption, default=None):
-        default = self._manager.getSectionSettings(self._section, settingOption, default)
+        if not BattleReplay.isPlaying():
+            default = self._manager.getSectionSettings(self._section, settingOption, default)
         return super(ServerSettingsStorage, self).extract(settingOption, default)
 
 

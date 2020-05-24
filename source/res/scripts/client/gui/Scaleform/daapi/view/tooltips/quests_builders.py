@@ -7,7 +7,7 @@ from gui.shared.tooltips.builders import DataBuilder
 __all__ = ('getTooltipBuilders',)
 
 def getTooltipBuilders():
-    return (DataBuilder(TOOLTIPS_CONSTANTS.QUESTS_PREVIEW, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, quests.BattleQuestsPreviewTooltipData(contexts.QuestsBoosterContext())),
+    return (DataBuilder(TOOLTIPS_CONSTANTS.QUESTS_PREVIEW, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, quests.QuestsPreviewTooltipData(contexts.QuestsBoosterContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.SHEDULE_QUEST, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, quests.ScheduleQuestTooltipData(contexts.QuestContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.MISSION_VEHICLE, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, quests.MissionVehiclesConditionTooltipData(contexts.QuestContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.MISSION_VEHICLE_TYPE, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, quests.MissionVehiclesTypeTooltipData(contexts.QuestContext())),

@@ -162,9 +162,6 @@ class RankedTokenQuestFormatter(AsyncTokenQuestsSubFormatter):
         super(RankedTokenQuestFormatter, self).__init__()
         self._achievesFormatter = RankedQuestAchievesFormatter()
 
-    def getPopUps(self, message):
-        return set()
-
     @classmethod
     def _isQuestOfThisGroup(cls, questID):
         return ranked_helpers.isRankedQuestID(questID)
@@ -191,6 +188,9 @@ class RankedSeasonTokenQuestFormatter(RankedTokenQuestFormatter):
         else:
             callback([MessageData(None, self._getGuiSettings(message))])
         return
+
+    def getPopUps(self, message):
+        return set()
 
     @classmethod
     def _isQuestOfThisGroup(cls, questID):
@@ -219,9 +219,10 @@ class RankedSeasonTokenQuestFormatter(RankedTokenQuestFormatter):
     def __processBadges(self, data):
         result = list()
         for block in data.get('dossier', {}).values():
-            for record in block.keys():
-                if record[0] == BADGES_BLOCK:
-                    result.append(backport.text(R.strings.badge.dyn('badge_{}'.format(record[1]))()))
+            if isinstance(block, dict):
+                for record in block.keys():
+                    if record[0] == BADGES_BLOCK:
+                        result.append(backport.text(R.strings.badge.dyn('badge_{}'.format(record[1]))()))
 
         return result
 
@@ -353,12 +354,15 @@ class RankedFinalTokenQuestFormatter(RankedTokenQuestFormatter):
         callback([messageData])
         return
 
+    def getPopUps(self, message):
+        return set()
+
     @classmethod
     def _isQuestOfThisGroup(cls, questID):
         return ranked_helpers.isFinalTokenQuest(questID) if super(RankedFinalTokenQuestFormatter, cls)._isQuestOfThisGroup(questID) else False
 
     def __generatePointsTemplate(self, points, questData):
-        surplusPoints = self.__rankedController.calculateCompensation(points)
+        surplusPoints = self.__rankedController.getCompensation(points)
         rate = self.__rankedController.getCurrentPointToCrystalRate()
         result = [g_settings.htmlTemplates.format(self.__HTML_POINTS_TEMPLATE, ctx={'points': points})]
         count = 0
@@ -535,7 +539,8 @@ class PersonalMissionsFormatter(PersonalMissionsTokenQuestsFormatter):
         for achievesID, achievesCount in popUPs:
             achievesRecord = DB_ID_TO_RECORD[achievesID]
             for questID, questData in data.get('detailedRewards', {}).iteritems():
-                for dossierRecord in chain.from_iterable(questData.get('dossier', {}).values()):
+                records = [ (r.keys() if isinstance(r, dict) else [ rec[0] for rec in r ]) for r in questData.get('dossier', {}).values() ]
+                for dossierRecord in chain.from_iterable(records):
                     if achievesRecord == dossierRecord and not self._isQuestOfThisGroup(questID):
                         otherQuestsPopUP.add((achievesID, achievesCount))
 

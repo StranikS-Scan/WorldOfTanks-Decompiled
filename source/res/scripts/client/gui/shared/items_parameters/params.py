@@ -7,6 +7,7 @@ import math
 import operator
 from collections import namedtuple, defaultdict
 from math import ceil
+import BigWorld
 from constants import SHELL_TYPES, PIERCING_POWER
 from gui import GUI_SETTINGS
 from gui.shared.formatters import text_styles
@@ -319,7 +320,7 @@ class VehicleParams(_ParameterBase):
 
     @property
     def hullArmor(self):
-        return self._itemDescr.hull.primaryArmor
+        return tuple((round(armor) for armor in self._itemDescr.hull.primaryArmor))
 
     @property
     def damage(self):
@@ -367,7 +368,7 @@ class VehicleParams(_ParameterBase):
 
     @property
     def turretArmor(self):
-        return self._itemDescr.turret.primaryArmor if self.__hasTurret() else None
+        return tuple((round(armor) for armor in self._itemDescr.turret.primaryArmor)) if self.__hasTurret() else None
 
     @property
     def explosionRadius(self):
@@ -582,6 +583,12 @@ class VehicleParams(_ParameterBase):
                 if skill.isEnable and skill.isActive:
                     result.append((skill.name, 'skill'))
 
+        perksSet = set()
+        for perksScope in BigWorld.player().inventory.abilities.abilitiesManager.getPerksByVehicle(vehicle.invID):
+            for perkID, _ in perksScope:
+                perksSet.add((str(perkID), 'perk'))
+
+        result.extend(list(perksSet))
         result.extend(_processExtraBonuses(vehicle))
         return set(result)
 
@@ -643,7 +650,7 @@ class VehicleParams(_ParameterBase):
 
     def __getRealSpeedLimit(self):
         enginePower = self.__getEnginePhysics()['smplEnginePower']
-        rollingFriction = self.__getChassisPhysics()['grounds']['ground']['rollingFriction']
+        rollingFriction = self.__getChassisPhysics()['grounds']['medium']['rollingFriction']
         return enginePower / self.vehicleWeight.current * METERS_PER_SECOND_TO_KILOMETERS_PER_HOUR * self.__factors['engine/power'] / 12.25 / rollingFriction
 
     def __getInvisibilityValues(self):

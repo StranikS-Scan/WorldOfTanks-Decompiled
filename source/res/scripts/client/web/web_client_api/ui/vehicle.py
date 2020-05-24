@@ -12,17 +12,16 @@ from constants import NC_MESSAGE_PRIORITY
 from debug_utils import LOG_ERROR
 from gui import SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.vehiclePreview20.configurable_vehicle_preview import OptionalBlocks
-from gui.Scaleform.daapi.view.lobby.vehiclePreview20.items_kit_helper import getCDFromId, canInstallStyle
+from gui.Scaleform.daapi.view.lobby.vehicle_preview.configurable_vehicle_preview import OptionalBlocks
+from gui.Scaleform.daapi.view.lobby.vehicle_preview.items_kit_helper import getCDFromId, canInstallStyle
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import checkIfVehicleIsHidden
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
-from gui.customization.shared import C11nId, SEASON_TYPE_TO_IDX
+from gui.customization.constants import CustomizationModes
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared import event_dispatcher
 from gui.shared.event_dispatcher import showStylePreview, showHangar
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.customization.outfit import Area
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
@@ -460,10 +459,10 @@ class VehiclePreviewWebApiMixin(object):
 
         def styleCallback():
             if result.style is not None:
-                self.c11n.getCtx().switchToStyle()
-                season = SEASON_TYPE_TO_IDX[self.c11n.getCtx().currentSeason]
-                styleSlot = C11nId(areaId=Area.MISC, slotType=GUI_ITEM_TYPE.STYLE, regionIdx=0)
-                self.c11n.getCtx().installItem(result.style.intCD, styleSlot, season)
+                ctx = self.c11n.getCtx()
+                ctx.changeMode(CustomizationModes.STYLED)
+                slotId = ctx.mode.STYLE_SLOT
+                ctx.installItem(result.style.intCD, slotId)
             return
 
         self.c11n.showCustomization(result.vehicle.invID, callback=styleCallback)

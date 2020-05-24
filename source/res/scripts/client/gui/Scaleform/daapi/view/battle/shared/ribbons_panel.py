@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/ribbons_panel.py
 import logging
-import BigWorld
 from account_helpers.settings_core.settings_constants import BATTLE_EVENTS, GRAPHICS
 from gui.battle_control.battle_constants import BonusRibbonLabel as _BRL
 from gui.impl import backport
@@ -28,7 +27,7 @@ _ADDITIONAL_USER_SETTINGS = (BATTLE_EVENTS.VEHICLE_INFO,
  BATTLE_EVENTS.SHOW_IN_BATTLE,
  GRAPHICS.RENDER_PIPELINE,
  GRAPHICS.COLOR_BLIND)
-_BATTLE_EVENTS_SETTINGS_TO_BATTLE_EFFICIENCY_TYPES = {BATTLE_EVENTS.ENEMY_HP_DAMAGE: (_BET.DAMAGE, _BET.EVENT_ABILITY_DAMAGE),
+_BATTLE_EVENTS_SETTINGS_TO_BATTLE_EFFICIENCY_TYPES = {BATTLE_EVENTS.ENEMY_HP_DAMAGE: (_BET.DAMAGE,),
  BATTLE_EVENTS.BLOCKED_DAMAGE: (_BET.ARMOR,),
  BATTLE_EVENTS.ENEMY_RAM_ATTACK: (_BET.RAM,),
  BATTLE_EVENTS.ENEMY_BURNING: (_BET.BURN,),
@@ -43,17 +42,14 @@ _BATTLE_EVENTS_SETTINGS_TO_BATTLE_EFFICIENCY_TYPES = {BATTLE_EVENTS.ENEMY_HP_DAM
  BATTLE_EVENTS.RECEIVED_DAMAGE: (_BET.RECEIVED_DAMAGE,
                                  _BET.RECEIVED_BURN,
                                  _BET.RECEIVED_RAM,
-                                 _BET.RECEIVED_WORLD_COLLISION,
-                                 _BET.EVENT_DEATHZONE_DAMAGE),
+                                 _BET.RECEIVED_WORLD_COLLISION),
  BATTLE_EVENTS.RECEIVED_CRITS: (_BET.RECEIVED_CRITS,),
  BATTLE_EVENTS.ENEMIES_STUN: (_BET.STUN,),
  BATTLE_EVENTS.ENEMY_ASSIST_STUN: (_BET.ASSIST_STUN,)}
 
 def _getVehicleData(arenaDP, vehArenaID):
-    player = BigWorld.player()
-    markerType = player.getBotMarkerType(vehArenaID)
     vTypeInfoVO = arenaDP.getVehicleInfo(vehArenaID).vehicleType
-    vehicleClassTag = markerType or vTypeInfoVO.classTag or ''
+    vehicleClassTag = vTypeInfoVO.classTag or ''
     vehicleName = vTypeInfoVO.shortNameWithPrefix
     return (vehicleName, vehicleClassTag)
 
@@ -141,8 +137,6 @@ _RIBBONS_FMTS = {_BET.CAPTURE: _baseRibbonFormatter,
  _BET.STUN: _enemiesStunRibbonFormatter,
  _BET.ARMOR: _singleVehRibbonFormatter,
  _BET.DAMAGE: _singleVehRibbonFormatter,
- _BET.EVENT_ABILITY_DAMAGE: _singleVehRibbonFormatter,
- _BET.EVENT_DEATHZONE_DAMAGE: _singleVehRibbonFormatter,
  _BET.CRITS: _criticalHitRibbonFormatter,
  _BET.RAM: _singleVehRibbonFormatter,
  _BET.BURN: _singleVehRibbonFormatter,
@@ -299,8 +293,6 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
         self.as_setupS([[_BET.ARMOR, backport.text(R.strings.ingame_gui.efficiencyRibbons.armor())],
          [_BET.DEFENCE, backport.text(R.strings.ingame_gui.efficiencyRibbons.defence())],
          [_BET.DAMAGE, backport.text(R.strings.ingame_gui.efficiencyRibbons.damage())],
-         [_BET.EVENT_ABILITY_DAMAGE, backport.text(R.strings.ingame_gui.efficiencyRibbons.damageByAbility())],
-         [_BET.EVENT_DEATHZONE_DAMAGE, backport.text(R.strings.ingame_gui.efficiencyRibbons.damageByDeathZone())],
          [_BET.ASSIST_SPOT, backport.text(R.strings.ingame_gui.efficiencyRibbons.assistSpot())],
          [_BET.ASSIST_TRACK, backport.text(R.strings.ingame_gui.efficiencyRibbons.assistTrack())],
          [_BET.BURN, backport.text(R.strings.ingame_gui.efficiencyRibbons.burn())],

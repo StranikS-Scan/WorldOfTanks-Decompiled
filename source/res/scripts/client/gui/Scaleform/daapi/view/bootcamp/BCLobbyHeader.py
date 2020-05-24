@@ -39,10 +39,10 @@ class BCLobbyHeader(LobbyHeader):
     def _getWalletBtnDoText(self, _):
         return None
 
-    def _getPremiumLabelText(self, _, __):
+    def _getPremiumLabelText(self, _):
         pass
 
-    def _getPremiumTooltipText(self, _, __):
+    def _getPremiumTooltipText(self, _):
         pass
 
     def _onPopulateEnd(self):

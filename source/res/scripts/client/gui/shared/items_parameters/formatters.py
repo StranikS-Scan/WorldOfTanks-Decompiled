@@ -411,7 +411,7 @@ def getFormattedParamsList(descriptor, parameters, excludeRelative=False):
     return params
 
 
-def getBonusIcon(bonusId):
+def getBonusIcon(bonusId, bonusType):
     if bonusId.find('Rammer') >= 0 and bonusId != 'deluxRammer' and bonusId.find('trophy') == -1:
         iconName = 'rammer'
     elif bonusId.find('enhanced') >= 0 and bonusId not in ('enhancedAimDrives', 'enhancedAimDrivesBattleBooster'):

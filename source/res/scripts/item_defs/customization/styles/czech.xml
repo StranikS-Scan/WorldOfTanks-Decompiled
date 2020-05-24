@@ -15,7 +15,7 @@
       <isRent>	true	</isRent>
       <rentCount>	100	</rentCount>
       <userString>	#vehicle_customization:rented_style/czech	</userString>
-      <tags>	vehicleBound	</tags>
+      <tags>	vehicleBound addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -71,6 +71,14 @@
       <texture>	gui/maps/vehicles/styles/style_01.png	</texture>
       <userString>	#vehicle_customization:gold_style/gold_style_01	</userString>
       <longDescriptionSpecial>	#vehicle_customization:gold_style/gold_style_01_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -206,6 +214,14 @@
       <id>	148	</id>
       <texture>	gui/maps/vehicles/styles/global_map_01.png	</texture>
       <userString>	#vehicle_customization:special_style/global_map	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -362,6 +378,14 @@
       <description>	#vehicle_customization:main_style/generic_custom_look_czech_desc	</description>
       <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_czech_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:main_style/generic_custom_look_czech	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	summer	</season>
@@ -435,6 +459,14 @@
       <texture>	gui/maps/vehicles/styles/generic_custom_look_2_czech.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_2_czech_desc	</description>
       <userString>	#vehicle_customization:main_style/generic_custom_look_2_czech	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -509,6 +541,14 @@
       <longDescriptionSpecial>	#vehicle_customization:special_style/czech_veteran_desc/long	</longDescriptionSpecial>
       <modelsSet>	T_27_3Dst	</modelsSet>
       <userString>	#vehicle_customization:special_style/czech_veteran	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -526,68 +566,6 @@
               <appliedTo>	65520	</appliedTo>
             </item>
           </decals>
-          <projection_decals>
-            <item>
-              <id>	108	</id>
-              <showOn>	HULL	</showOn>
-              <doubleSided>	0	</doubleSided>
-              <position>
-                <p0>	-1.80827	</p0>
-                <p1>	1.45492	</p1>
-                <p2>	1.28653	</p2>
-              </position>
-              <rotation>
-                <r0>	1.25068	</r0>
-                <r1>	-1.57079	</r1>
-                <r2>	3.14159	</r2>
-              </rotation>
-              <scale>
-                <s0>	1.5	</s0>
-                <s1>	1	</s1>
-                <s2>	1.5	</s2>
-              </scale>
-            </item>
-            <item>
-              <id>	109	</id>
-              <showOn>	TURRET	</showOn>
-              <doubleSided>	0	</doubleSided>
-              <position>
-                <p0>	-0.794566	</p0>
-                <p1>	1.87532	</p1>
-                <p2>	1.13687	</p2>
-              </position>
-              <rotation>
-                <r0>	1.20254	</r0>
-                <r1>	-0.97355	</r1>
-                <r2>	3.13294	</r2>
-              </rotation>
-              <scale>
-                <s0>	0.6	</s0>
-                <s1>	1	</s1>
-                <s2>	0.6	</s2>
-              </scale>
-            </item>
-            <item>
-              <id>	110	</id>
-              <showOn>	TURRET	</showOn>
-              <doubleSided>	0	</doubleSided>
-              <position>
-                <p0>	0.679154	</p0>
-                <p1>	1.78283	</p1>
-                <p2>	1.40573	</p2>
-              </position>
-              <rotation>
-                <r0>	1.19272	</r0>
-                <r1>	0.689563	</r1>
-                <r2>	3.03856	</r2>
-              </rotation>
-              <scale>
-                <s0>	0.3	</s0>
-                <s1>	1	</s1>
-                <s2>	0.3	</s2>
-              </scale>
-            </item>
-          </projection_decals>
         </outfit>
       </outfits>
     </style>
@@ -607,6 +585,14 @@
       <texture>	gui/maps/vehicles/styles/generic_custom_look_3_czech.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_3_czech_desc	</description>
       <userString>	#vehicle_customization:main_style/generic_custom_look_3_czech	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	winter	</season>

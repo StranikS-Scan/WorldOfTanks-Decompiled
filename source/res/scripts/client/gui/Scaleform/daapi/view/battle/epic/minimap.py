@@ -54,7 +54,6 @@ class MINIMAP_SCALE_TYPES(object):
     NO_SCALE = 0
     REAL_SCALE = 1
     ADAPTED_SCALE = 2
-    FULLMAP_SCALE = 3
 
 
 class EpicMinimapComponent(EpicMinimapMeta):
@@ -70,11 +69,17 @@ class EpicMinimapComponent(EpicMinimapMeta):
         self.updateZoomMode(AccountSettings.getSettings('epicMinimapZoom'))
 
     def setMinimapCenterEntry(self, entryID):
-        self.getComponent().setMinimapCenterEntry(entryID)
+        component = self.getComponent()
+        if component is not None:
+            component.setMinimapCenterEntry(entryID)
+        return
 
     def changeMinimapZoom(self, mode):
-        self.getComponent().changeMinimapZoom(mode)
+        component = self.getComponent()
+        if component is not None:
+            self.getComponent().changeMinimapZoom(mode)
         AccountSettings.setSettings('epicMinimapZoom', mode)
+        return
 
     def setEntryParameters(self, entryId, doClip=True, scaleType=MINIMAP_SCALE_TYPES.ADAPTED_SCALE):
         self.getComponent().setEntryParameters(entryId, doClip, scaleType)

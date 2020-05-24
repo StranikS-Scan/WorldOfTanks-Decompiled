@@ -372,15 +372,6 @@ def updatePhysicsCfg(baseCfg, typeDesc, cfg):
     chsCfg = baseCfg['chassis'].get(chsName)
     if chsCfg:
         cfg.setdefault('chassis', {}).update(chsCfg)
-        groundsSrc = cfg['chassis']['grounds'].copy()
-        softCfg = groundsSrc['soft']
-        del groundsSrc['soft']
-        idMap = EFFECT_MATERIAL_INDEXES_BY_NAMES
-        cfg['chassis']['grounds'] = {}
-        for nm, sub in groundsSrc.iteritems():
-            if nm in idMap:
-                cfg['chassis']['grounds'][idMap[nm]] = dict(sub.items() + [('soft', softCfg)])
-
     fakeGearBox = baseCfg.get('fakegearbox')
     if fakeGearBox is not None:
         cfg['fakegearbox'] = fakeGearBox

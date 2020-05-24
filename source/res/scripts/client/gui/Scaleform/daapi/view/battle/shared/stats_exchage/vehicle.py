@@ -149,6 +149,7 @@ class VehicleInfoComponent(broker.ExchangeComponent):
                 data['badge'] = badge.getBadgeVO(ICONS_SIZES.X24, {'isAtlasSource': True}, shortIconName=True)
         if vInfoVO.selectedSuffixBadge:
             data['suffixBadgeType'] = 'badge_{}'.format(vInfoVO.selectedSuffixBadge)
+            data['suffixBadgeStripType'] = 'strip_{}'.format(vInfoVO.selectedSuffixBadge)
         return self._data.update(data)
 
 

@@ -362,16 +362,6 @@
           <offset>	-0.054	</offset>
         </node>
       </trackNodes>
-      <AODecals>
-        <decal>
-          <transform>
-            <row0>	3.847070 0.000000 0.000000	</row0>
-            <row1>	0.000000 1.350000 0.000000	</row1>
-            <row2>	0.000000 0.000000 5.927010	</row2>
-            <row3>	0.000000 0.000000 0.000000	</row3>
-          </transform>
-        </decal>
-      </AODecals>
       <physicalTracks>
         <left>
           <segmentsCount>	70	</segmentsCount>
@@ -950,6 +940,16 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.847070 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.927010	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
       <customization>
         <customizableVehicleAreas>
           <paint></paint>
@@ -1111,36 +1111,15 @@
       <chassis>
         <Chassis_GB05_Vickers_Medium_Mk_II_bot>
           <grounds>
-            <ground>
-              <medium>
-                <rollingFriction>	0.10465	</rollingFriction>
-              </medium>
-            </ground>
-            <sand>
-              <medium>
-                <rollingFriction>	0.10465	</rollingFriction>
-              </medium>
-            </sand>
-            <wood>
-              <medium>
-                <rollingFriction>	0.10465	</rollingFriction>
-              </medium>
-            </wood>
-            <snow>
-              <medium>
-                <rollingFriction>	0.10465	</rollingFriction>
-              </medium>
-            </snow>
-            <stone>
-              <medium>
-                <rollingFriction>	0.10465	</rollingFriction>
-              </medium>
-            </stone>
-            <metal>
-              <medium>
-                <rollingFriction>	0.10465	</rollingFriction>
-              </medium>
-            </metal>
+            <soft>
+              <rollingFriction>	0.1932	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.10465	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0966	</rollingFriction>
+            </firm>
           </grounds>
         </Chassis_GB05_Vickers_Medium_Mk_II_bot>
       </chassis>

@@ -1057,7 +1057,7 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	0.00422264 0.0036233 1.85853	</rayStart>
+              <rayStart>	0.00422243 0.00438597 1.85853	</rayStart>
               <rayEnd>	-0.000779636 0.000475718 1.8583	</rayEnd>
               <rayUp>	0.074 0.000000 0.000000	</rayUp>
               <applyToFabric>	true	</applyToFabric>
@@ -1123,36 +1123,15 @@
       <chassis>
         <Chassis_M46_Patton_KR>
           <grounds>
-            <ground>
-              <medium>
-                <rollingFriction>	0.12075	</rollingFriction>
-              </medium>
-            </ground>
-            <sand>
-              <medium>
-                <rollingFriction>	0.12075	</rollingFriction>
-              </medium>
-            </sand>
-            <wood>
-              <medium>
-                <rollingFriction>	0.12075	</rollingFriction>
-              </medium>
-            </wood>
-            <snow>
-              <medium>
-                <rollingFriction>	0.12075	</rollingFriction>
-              </medium>
-            </snow>
-            <stone>
-              <medium>
-                <rollingFriction>	0.12075	</rollingFriction>
-              </medium>
-            </stone>
-            <metal>
-              <medium>
-                <rollingFriction>	0.12075	</rollingFriction>
-              </medium>
-            </metal>
+            <soft>
+              <rollingFriction>	0.20125	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.12075	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.10465	</rollingFriction>
+            </firm>
           </grounds>
         </Chassis_M46_Patton_KR>
       </chassis>

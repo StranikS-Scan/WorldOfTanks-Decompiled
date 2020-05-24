@@ -26,6 +26,7 @@ def _getEpicRandomSwitch(lobbyContext=None):
 class SettingsCore(ISettingsCore):
     onSettingsChanged = Event.Event()
     onSettingsApplied = Event.Event()
+    onSettingsReady = Event.Event()
 
     def __init__(self):
         super(SettingsCore, self).__init__()
@@ -33,6 +34,7 @@ class SettingsCore(ISettingsCore):
         self.__interfaceScale = None
         self.__storages = None
         self.__options = None
+        self.__isReady = False
         return
 
     def init(self):
@@ -146,7 +148,6 @@ class SettingsCore(ISettingsCore):
          (GAME.C11N_HISTORICALLY_ACCURATE, options.C11nHistoricallyAccurateSetting(GAME.C11N_HISTORICALLY_ACCURATE, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.LOGIN_SERVER_SELECTION, options.LoginServerSelectionSetting(GAME.LOGIN_SERVER_SELECTION)),
          (GAME.MINIMAP_ALPHA_ENABLED, options.StorageAccountSetting(GAME.MINIMAP_ALPHA_ENABLED, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
-         (GAME.DISABLE_EVENT_HORN, options.StorageAccountSetting(GAME.DISABLE_EVENT_HORN, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GRAPHICS.MONITOR, options.MonitorSetting(storage=VIDEO_SETTINGS_STORAGE)),
          (GRAPHICS.WINDOW_SIZE, options.WindowSizeSetting(storage=VIDEO_SETTINGS_STORAGE)),
          (GRAPHICS.RESOLUTION, options.ResolutionSetting(storage=VIDEO_SETTINGS_STORAGE)),
@@ -279,21 +280,28 @@ class SettingsCore(ISettingsCore):
         self.__options.init()
         AccountSettings.onSettingsChanging += self.__onAccountSettingsChanging
         self.interfaceScale.init()
+        self.__isReady = True
+        self.onSettingsReady()
         LOG_DEBUG('SettingsCore is created')
 
     def fini(self):
         if self.__options is not None:
-            self.__options.dump()
             self.__options.fini()
             self.__options = None
         self.__storages = None
         self.__serverSettings = None
+        self.__isReady = False
         if self.__interfaceScale is not None:
             self.__interfaceScale.fini()
             self.__interfaceScale = None
         AccountSettings.onSettingsChanging -= self.__onAccountSettingsChanging
         AccountSettings.clearCache()
         LOG_DEBUG('SettingsCore is destroyed')
+        return
+
+    def clear(self):
+        if self.__options is not None and self.serverSettings.settingsCache.settings.isSynced():
+            self.__options.dump()
         return
 
     @property
@@ -374,6 +382,9 @@ class SettingsCore(ISettingsCore):
     def clearStorages(self):
         for storage in self.__storages.values():
             storage.clear()
+
+    def isReady(self):
+        return self.__isReady
 
     def __onAccountSettingsChanging(self, key, value):
         self.onSettingsChanged({key: value})

@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/storage_helpers.py
+import logging
 import random
 from functools import partial
+from typing import Optional
 import nations
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import LAST_STORAGE_VISITED_TIMESTAMP
@@ -21,6 +23,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.event_dispatcher import showVehiclePreview, showStorage
 from gui.shared.formatters import text_styles, getItemPricesVO, icons, getMoneyVO
+from gui.shared.gui_items.customization.c11n_items import Customization
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.utils.functions import makeTooltip
 from helpers.i18n import makeString as _ms
@@ -32,7 +35,11 @@ from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import i18n, dependency, int2roman, time_utils, func_utils
 from helpers.time_utils import getCurrentTimestamp
 from skeletons.gui.lobby_context import ILobbyContext
+from items import vehicles
+from items.vehicles import makeVehicleTypeCompDescrByName
 from skeletons.gui.shared import IItemsCache
+from soft_exception import SoftException
+_logger = logging.getLogger(__name__)
 _MAX_COMPATIBLE_VEHS_COUNT = 5
 _MAX_COMPATIBLE_GUNS_COUNT = 2
 _HANDLERS_MAP = {GUI_ITEM_TYPE.OPTIONALDEVICE: (CONTEXT_MENU_HANDLER_TYPE.STORAGE_OPTIONAL_DEVICE_ITEM,),
@@ -46,6 +53,12 @@ _HANDLERS_MAP = {GUI_ITEM_TYPE.OPTIONALDEVICE: (CONTEXT_MENU_HANDLER_TYPE.STORAG
  GUI_ITEM_TYPE.SHELL: (CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM,),
  GUI_ITEM_TYPE.CREW_BOOKS: (CONTEXT_MENU_HANDLER_TYPE.STORAGE_CREW_BOOKS_NO_SALE_ITEM, CONTEXT_MENU_HANDLER_TYPE.STORAGE_MODULES_SHELLS_ITEM),
  GUI_ITEM_TYPE.DEMOUNT_KIT: (CONTEXT_MENU_HANDLER_TYPE.STORAGE_DEMOUNT_KIT_ITEM,)}
+
+def getTopVehicleByNation(nationName):
+    customizationCache = vehicles.g_cache.customization20()
+    topVehicles = customizationCache.topVehiclesByNation
+    return topVehicles.get(nationName, '')
+
 
 def _getContextMenuHandlerID(item):
     itemTypeID = item.itemTypeID
@@ -263,23 +276,59 @@ def isStorageSessionTimeout():
     return getCurrentTimestamp() - lastVisitTime > STORAGE_CONSTANTS.SESSION_TIMEOUT
 
 
-def customizationAvailableForSell(item):
-    return item.inventoryCount > 0 and item.getSellPrice() != ITEM_PRICE_EMPTY and not item.isRentable and not item.isHidden
+def isCustomizationAvailableForSell(item, vehicleCD=None):
+    return False if item.getSellPrice() == ITEM_PRICE_EMPTY or item.isRentable or item.isHidden else getAvailableForSellCustomizationCount(item, vehicleCD) > 0
+
+
+def getAvailableForSellCustomizationCount(item, vehicleCD=None):
+    if not item.isVehicleBound or vehicleCD is None:
+        inventoryCount = item.inventoryCount
+    else:
+        inventoryCount = item.fullInventoryCount(vehicleCD)
+        if item.isProgressive:
+            availableForSell = inventoryCount - item.descriptor.progression.autoGrantCount
+            inventoryCount = min(inventoryCount, availableForSell)
+    return inventoryCount
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def customizationPreview(itemCD, itemsCache=None):
-    item = itemsCache.items.getItemByCD(itemCD)
-    vehicles = []
-    req = _CUSTOMIZATION_VEHICLE_CRITERIA | ~REQ_CRITERIA.SECRET
-    for vehCD, vehicle in itemsCache.items.getVehicles(req).iteritems():
-        if not vehicle.isOutfitLocked and item.mayInstall(vehicle):
-            vehicles.append(vehCD)
+def customizationPreview(itemCD, itemsCache=None, vehicleCD=None):
+    if vehicleCD is None:
+        suitableVehicles = []
+        item = itemsCache.items.getItemByCD(itemCD)
+        itemFilter = item.descriptor.filter
+        nationsFilter = []
+        if itemFilter is not None and itemFilter.include:
+            for node in itemFilter.include:
+                if node.nations:
+                    nationsFilter += node.nations
+                if node.vehicles:
+                    suitableVehicles += node.vehicles
 
-    if not vehicles:
-        secretReq = _CUSTOMIZATION_VEHICLE_CRITERIA | REQ_CRITERIA.SECRET
-        for vehCD, vehicle in itemsCache.items.getVehicles(secretReq).iteritems():
-            if not vehicle.isOutfitLocked and item.mayInstall(vehicle):
-                vehicles.append(vehCD)
+            if not suitableVehicles and nationsFilter:
+                nationName = nations.NAMES[nationsFilter[0]]
+                topVehicle = getTopVehicleByNation(nationName)
+                if topVehicle:
+                    try:
+                        vehicleCD = makeVehicleTypeCompDescrByName(topVehicle)
+                        vehicle = itemsCache.items.getItemByCD(vehicleCD)
+                        if item.mayInstall(vehicle):
+                            suitableVehicles.append(vehicleCD)
+                    except SoftException as e:
+                        _logger.warning(e)
 
-    showVehiclePreview(random.choice(vehicles), previewBackCb=partial(showStorage, defaultSection=STORAGE_CONSTANTS.CUSTOMIZATION), previewAlias=VIEW_ALIAS.LOBBY_STORAGE, vehParams={'styleCD': itemCD})
+        if not suitableVehicles:
+            req = _CUSTOMIZATION_VEHICLE_CRITERIA | ~REQ_CRITERIA.SECRET
+            for vehCD, vehicle in itemsCache.items.getVehicles(req).iteritems():
+                if not vehicle.isOutfitLocked and item.mayInstall(vehicle):
+                    suitableVehicles.append(vehCD)
+
+        if not suitableVehicles:
+            secretReq = _CUSTOMIZATION_VEHICLE_CRITERIA | REQ_CRITERIA.SECRET
+            for vehCD, vehicle in itemsCache.items.getVehicles(secretReq).iteritems():
+                if not vehicle.isOutfitLocked and item.mayInstall(vehicle):
+                    suitableVehicles.append(vehCD)
+
+        vehicleCD = random.choice(suitableVehicles)
+    showVehiclePreview(vehTypeCompDescr=vehicleCD, previewBackCb=partial(showStorage, defaultSection=STORAGE_CONSTANTS.CUSTOMIZATION), previewAlias=VIEW_ALIAS.LOBBY_STORAGE, vehParams={'styleCD': itemCD})
+    return

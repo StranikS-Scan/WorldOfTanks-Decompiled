@@ -507,30 +507,6 @@
           <leftSibling>	Track_VT_R9	</leftSibling>
         </node>
       </trackNodes>
-      <effects>
-        <lodDist>	MEDIUM	</lodDist>
-        <mud>	largeTankMud	</mud>
-      </effects>
-      <wwsoundPC>	treads_type_pc	</wwsoundPC>
-      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 1.10799 0.000000	</hullPosition>
-      <hitTester>
-        <collisionModelServer>	vehicles/french/F36_AMX_AC_Mle1948/collision/Chassis.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/french/F36_AMX_AC_Mle1948/collision_client/Chassis.model	</collisionModelClient>
-      </hitTester>
-      <topRightCarryingPoint>	1.32889 2.14016	</topRightCarryingPoint>
-      <maxClimbAngle>	25	</maxClimbAngle>
-      <navmeshGirth>	6.0	</navmeshGirth>
-      <AODecals>
-        <decal>
-          <transform>
-            <row0>	4.759050 0.000000 0.000000	</row0>
-            <row1>	0.000000 1.629390 0.000000	</row1>
-            <row2>	0.000000 0.000000 8.363610	</row2>
-            <row3>	0.000000 0.000000 0.000001	</row3>
-          </transform>
-        </decal>
-      </AODecals>
       <physicalTracks>
         <left>
           <segmentsCount>	102	</segmentsCount>
@@ -969,6 +945,30 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.10799 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F36_AMX_AC_Mle1948/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F36_AMX_AC_Mle1948/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.32889 2.14016	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.759050 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.629390 0.000000	</row1>
+            <row2>	0.000000 0.000000 8.363610	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
       <customization>
         <customizableVehicleAreas>
           <paint>	CHASSIS	</paint>
@@ -1109,36 +1109,15 @@
       <chassis>
         <Chassis_AMX_AC_Mle1948_2_IGR>
           <grounds>
-            <ground>
-              <medium>
-                <rollingFriction>	0.1127	</rollingFriction>
-              </medium>
-            </ground>
-            <sand>
-              <medium>
-                <rollingFriction>	0.1127	</rollingFriction>
-              </medium>
-            </sand>
-            <wood>
-              <medium>
-                <rollingFriction>	0.1127	</rollingFriction>
-              </medium>
-            </wood>
-            <snow>
-              <medium>
-                <rollingFriction>	0.1127	</rollingFriction>
-              </medium>
-            </snow>
-            <stone>
-              <medium>
-                <rollingFriction>	0.1127	</rollingFriction>
-              </medium>
-            </stone>
-            <metal>
-              <medium>
-                <rollingFriction>	0.1127	</rollingFriction>
-              </medium>
-            </metal>
+            <soft>
+              <rollingFriction>	0.1932	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.1127	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.10465	</rollingFriction>
+            </firm>
           </grounds>
         </Chassis_AMX_AC_Mle1948_2_IGR>
       </chassis>

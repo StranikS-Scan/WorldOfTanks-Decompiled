@@ -4,7 +4,7 @@ import weakref
 from typing import Union
 from gui.server_events import formatters, conditions
 from gui.server_events.conditions import _Cumulativable, CumulativeResult, _ConditionsGroup
-from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 
@@ -141,15 +141,16 @@ class VehicleRequirements(ConditionsParser):
 
     def __init__(self, section):
         super(VehicleRequirements, self).__init__(section, rootName='vehicle')
-        self._suitableVehicles = []
+        self._suitableVehicles = None
+        return
 
     def clearItemsCache(self):
-        self._suitableVehicles = []
+        self._suitableVehicles = None
         self.forEachNodeInTree(lambda node: node.clearItemsCache())
+        return
 
     def isAvailable(self, vehicle):
-        conds = self.getConditions()
-        return conds.isAvailable(vehicle) if not conds.isEmpty() else True
+        return self.getConditions().isAvailable(vehicle)
 
     def isAnyVehicleAcceptable(self):
         results = set()
@@ -164,17 +165,10 @@ class VehicleRequirements(ConditionsParser):
         return False not in results
 
     def getSuitableVehicles(self):
-        if self._suitableVehicles:
-            return self._suitableVehicles
-        invVehs = self.itemsCache.items.inventory.getItems(GUI_ITEM_TYPE.VEHICLE) or {}
-        vehGetter = self.itemsCache.items.getVehicle
-        suitableVehiclesAppend = self._suitableVehicles.append
-        isAvailable = self.isAvailable
-        for invID in invVehs.iterkeys():
-            vehicleItem = vehGetter(invID)
-            if isAvailable(vehicleItem):
-                suitableVehiclesAppend(vehicleItem)
-
+        if self._suitableVehicles is None:
+            invVehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY)
+            isAvailable = self.isAvailable
+            self._suitableVehicles = (vehicleItem for vehicleItem in invVehs.itervalues() if isAvailable(vehicleItem))
         return self._suitableVehicles
 
     def _handleCondition(self, name, data, uniqueName, group):

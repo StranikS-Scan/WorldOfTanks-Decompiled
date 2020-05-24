@@ -27,13 +27,12 @@ class BattlePassInProgressTooltipView(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         super(BattlePassInProgressTooltipView, self)._onLoading(*args, **kwargs)
         with self.getViewModel().transaction() as model:
-            perBattlePoints = self.__battlePassController.getPerBattlePoints()
             items = model.rewardPoints.getItems()
-            for _, (label, winPoint, losePoint) in enumerate(perBattlePoints):
+            for points in self.__battlePassController.getPerBattlePoints():
                 item = RewardPointsModel()
-                item.setTopCount(label)
-                item.setPointsWin(winPoint)
-                item.setPointsLose(losePoint)
+                item.setTopCount(points.label)
+                item.setPointsWin(points.winPoint)
+                item.setPointsLose(points.losePoint)
                 items.addViewModel(item)
 
             curLevel = self.__battlePassController.getCurrentLevel()
@@ -44,6 +43,7 @@ class BattlePassInProgressTooltipView(ViewImpl):
             model.setMaxPoints(limitPoints)
             model.setIsBattlePassPurchased(self.__battlePassController.isBought())
             model.setIsPostProgression(isPostProgression)
+            model.setCanPlay(self.__battlePassController.canPlayerParticipate())
             timeTillEnd = ''
             if isSeasonEndingSoon() and not self.__battlePassController.isBought():
                 timeTillEnd = getFormattedTimeLeft(self.__battlePassController.getSeasonTimeLeft())

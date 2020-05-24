@@ -62,7 +62,7 @@ def _extendByModuleData(targetData, vehicleModule, vehDescr):
         if vehicleModule.isDualGun(vehDescr):
             paramsList = paramsList[:-1] + ('reloadTimeSecs',)
             serverSettings = dependency.instance(ISettingsCore).serverSettings
-            if serverSettings.checkDualGunHighlights(increase=True):
+            if serverSettings.checkDualGunHighlights():
                 targetData['highlightedParameterIdx'] = 2
     for paramName in paramsList:
         value = paramsData.get(paramName)
@@ -600,6 +600,7 @@ class PopoverLogicProvider(object):
              'currXP': currXp,
              'totalXP': currXp + self._itemsCache.items.stats.freeXP}
             hasAutoLoaderHighlights = False
+            hasDualGunHighlights = False
             for idx, vehicleModule in enumerate(data):
                 isInstalled = vehicleModule.isInstalled(self._vehicle, self._slotIndex)
                 if isInstalled:
@@ -608,10 +609,14 @@ class PopoverLogicProvider(object):
                 self.__extendByTypeSpecificData(moduleData, vehicleModule)
                 modulesList.append(moduleData)
                 if 'highlightedParameterIdx' in moduleData:
-                    hasAutoLoaderHighlights = True
+                    isDualGun = vehicleModule.isDualGun(self._vehicle.descriptor)
+                    hasDualGunHighlights = isDualGun or hasDualGunHighlights
+                    hasAutoLoaderHighlights = not isDualGun or hasAutoLoaderHighlights
 
             if hasAutoLoaderHighlights:
                 self._settingsCore.serverSettings.updateUIStorageCounter(UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER)
+            if hasDualGunHighlights:
+                self._settingsCore.serverSettings.updateUIStorageCounter(UI_STORAGE_KEYS.DUAL_GUN_HIGHLIGHTS_COUNTER)
         return modulesList
 
     def _getSuitableItems(self, typeId):
@@ -659,7 +664,7 @@ class _HangarLogicProvider(PopoverLogicProvider):
     def __init__(self, slotType, slotIndex):
         super(_HangarLogicProvider, self).__init__(slotType, slotIndex, g_currentVehicle.item)
         if slotType == FITTING_TYPES.BOOSTER:
-            self._tooltipType = TOOLTIPS_CONSTANTS.BATTLE_BOOSTER
+            self._tooltipType = TOOLTIPS_CONSTANTS.BATTLE_BOOSTER_BLOCK
         elif slotType == FITTING_TYPES.BATTLE_ABILITY:
             self._tooltipType = TOOLTIPS_CONSTANTS.EPIC_SKILL_SLOT_INFO
         else:

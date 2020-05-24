@@ -6,7 +6,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import CriteriesGroup
 from gui.Scaleform.daapi.view.lobby.storage.inhangar import StorageCarouselDataProvider, StorageCarouselFilter
 from gui.Scaleform.daapi.view.lobby.storage.storage_carousel_environment import StorageCarouselEnvironment
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getVehicleUrl
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getVehicleUrl
 from gui.Scaleform.daapi.view.meta.AllVehiclesTabViewMeta import AllVehiclesTabViewMeta
 from gui.Scaleform.locale.STORAGE import STORAGE
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -17,7 +17,7 @@ from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from skeletons.gui.game_control import IIGRController
-from gui.shared.event_dispatcher import showWebShop
+from gui.shared.event_dispatcher import showShop
 
 class _AllVehiclesTabCriteriesGroup(CriteriesGroup):
 
@@ -37,7 +37,7 @@ class AllVehiclesTabView(AllVehiclesTabViewMeta, StorageCarouselEnvironment):
         shared_events.showVehicleSellDialog(self._itemsCache.items.getItemByCD(int(itemId)).invID)
 
     def navigateToStore(self):
-        showWebShop(getVehicleUrl())
+        showShop(getVehicleUrl())
 
     def applyFilter(self):
         super(AllVehiclesTabView, self).applyFilter()

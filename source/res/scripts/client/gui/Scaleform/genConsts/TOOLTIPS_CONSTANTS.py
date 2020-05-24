@@ -44,29 +44,29 @@ class TOOLTIPS_CONSTANTS(object):
     RESERVE_MODULE = 'reserveModule'
     PREVIEW_MODULE = 'previewModule'
     PERSONAL_MISSION_INFO = 'personalMissionInfo'
-    BATTLE_BOOSTER = 'battleBooster'
+    BATTLE_BOOSTER_BLOCK = 'battleBoosterBlock'
     NATION_CHANGE_BATTLE_BOOSTER = 'nationChangeBattleBooster'
     BATTLE_BOOSTER_COMPARE = 'battleBoosterCompare'
     SHOP_VEHICLE = 'shopVehicle'
     AWARD_VEHICLE = 'awardVehicle'
-    SHOP_SHELL = 'shopShell'
+    DEFAULT_SHELL = 'defaultShell'
     HANGAR_SHELL = 'hangarShell'
     NATION_CHANGE_HANGAR_SHELL = 'nationChangeHangarShell'
     COMPARE_SHELL = 'compareShell'
     AWARD_SHELL = 'awardShell'
-    SHOP_MODULE = 'shopModule'
-    SHOP_BATTLE_BOOSTER = 'shopBattleBooster'
+    DEFAULT_MODULE = 'defaultModule'
+    DEFAULT_BATTLE_BOOSTER = 'defaultBattleBooster'
     AWARD_MODULE = 'awardModule'
     AWARD_BATTLE_BOOSTER = 'awardBattleBooster'
     EPIC_AWARD_BATTLE_BOOSTER = 'epicAwardBattleBooster'
-    SHOP_20_MODULE = 'shop20Module'
-    SHOP_20_SHELL = 'shop20Shell'
-    SHOP_20_BOOSTER = 'shop20Booster'
-    SHOP_20_BATTLE_BOOSTER = 'shop20BattleBooster'
-    SHOP_20_CUSTOMIZATION_ITEM = 'shop20CustomizationItem'
-    SHOP_20_ACHIEVEMENT = 'shop20Achievement'
-    SHOP_20_BADGE = 'shop20Badge'
-    SHOP_20_CREW_BUNDLE = 'shop20CrewBundle'
+    SHOP_MODULE = 'shopModule'
+    SHOP_SHELL = 'shopShell'
+    SHOP_BOOSTER = 'shopBooster'
+    SHOP_BATTLE_BOOSTER = 'shopBattleBooster'
+    SHOP_CUSTOMIZATION_ITEM = 'shopCustomizationItem'
+    SHOP_ACHIEVEMENT = 'shopAchievement'
+    SHOP_BADGE = 'shopBadge'
+    SHOP_CREW_BUNDLE = 'shopCrewBundle'
     AWARD_DEMOUNT_KIT = 'awardDemountKit'
     NOT_ENOUGH_MONEY = 'notEnoughMoney'
     TANKMAN_SKILL = 'tankmanSkill'
@@ -81,7 +81,8 @@ class TOOLTIPS_CONSTANTS(object):
     TECH_CUSTOMIZATION_ITEM_ICON = 'techCustomizationItemIcon'
     TECH_CUSTOMIZATION_ITEM_AWARD = 'techCustomizationItemAward'
     TECH_CUSTOMIZATION_ITEM_PURCHASE = 'techCustomizationItemPurchase'
-    TECH_CUSTOMIZATION_HISTORIC_ITEM = 'techCustomizationHistoricItem'
+    TECH_CUSTOMIZATION_NONHISTORIC_ITEM = 'techCustomizationNonhistoricItem'
+    TECH_CUSTOMIZATION_POPOVER_ITEM = 'techCustomizationPopoverItem'
     VEHICLE_FILTER = 'vehicleFilter'
     LADDER = 'ladder'
     CLAN_INFO = 'clanInfo'
@@ -103,7 +104,6 @@ class TOOLTIPS_CONSTANTS(object):
     QUESTS_PREVIEW = 'questsPreview'
     EPIC_QUESTS_PREVIEW = 'epicQuestsPreview'
     EVENT_QUESTS_PREVIEW = 'EventQuestsPreview'
-    SECRET_EVENT_QUESTS_PREVIEW = 'secretEventQuestsPreview'
     PERSONAL_QUESTS_PREVIEW = 'presonalQuestsPreview'
     SHEDULE_QUEST = 'scheduleQuest'
     MISSION_VEHICLE = 'missionVehicle'
@@ -148,7 +148,7 @@ class TOOLTIPS_CONSTANTS(object):
     BOOSTERS_BOOSTER_INFO = 'boostersBoosterInfo'
     CLAN_RESERVE_INFO = 'clanReserveInfo'
     BOOSTERS_QUESTS = 'boostersQuests'
-    BOOSTERS_SHOP = 'boostersShop'
+    BOOSTER = 'booster'
     VEHICLE_SIMPLE_PARAMETERS = 'vehicleSimpleParameters'
     VEHICLE_ADVANCED_PARAMETERS = 'vehicleAdvancedParameters'
     VEHICLE_AVG_PARAMETERS = 'vehicleAvgParameters'
@@ -157,8 +157,8 @@ class TOOLTIPS_CONSTANTS(object):
     VEHICLE_PREVIEW_AVG_PARAMETERS = 'vehiclePreviewAvgParameters'
     VEHICLE_CMP_PARAMETERS = 'vehicleCmpParameters'
     BASE_VEHICLE_PARAMETERS = 'baseVehicleParameters'
+    DEFAULT_CREW_MEMBER = 'defaultCrewMember'
     VEHICLE_PREVIEW_CREW_MEMBER = 'vehiclePreviewCrewMember'
-    VEHICLE_PREVIEW_20_CREW_MEMBER = 'vehiclePreview20CrewMember'
     TRADE_IN = 'tradeIn'
     TRADE_IN_INFO = 'tradeInInfo'
     TRADE_IN_INFO_NOT_AVAILABLE = 'tradeInInfoNotAvailable'
@@ -174,20 +174,6 @@ class TOOLTIPS_CONSTANTS(object):
     BADGE_LOYAL_SERVICE = 'badgeLoyalService'
     EVENT_BOARDS_BADGE = 'eventBoardsBadge'
     EVENT_BOARDS_BADGES_GROUP = 'eventBoardsBadgesGroup'
-    EVENT_BONUSES_BASIC_INFO = 'eventBonusesBasicInfo'
-    EVENT_ENERGY_DISCOUNT = 'eventEnergyDiscount'
-    EVENT_BONUSES_INFO = 'eventBonusesInfo'
-    EVENT_BONUSES_POST_BATTLE_INFO = 'eventBonusesPostBattleInfo'
-    EVENT_BANNER_INFO = 'eventBannerInfo'
-    EVENT_SELECTOR_INFO = 'eventSelectorInfo'
-    EVENT_SQUAD_INFO = 'eventSquadInfo'
-    EVENT_SUBDIVISION_PUMPING_INFO = 'eventSubdivisionPumpingInfo'
-    COMMANDER_ABILITY_INFO = 'commanderAbilityInfo'
-    COMMANDER_RESPAWN_INFO = 'commaderRespawnInfo'
-    EVENT_PROGRESSION_POINTS_INFO = 'eventProgressionPointsInfo'
-    EVENT_SQUAD_GENERAL_INFO = 'eventSquadGeneralInfo'
-    SECRET_EVENT_PROGRESSION_INFO = 'secretEventProgressInfo'
-    EVENT_RESULT_GENERAL = 'eventResultGeneral'
     OPERATION = 'operation'
     OPERATIONS_CHAIN_DETAILS = 'operationsChainDetails'
     PERSONAL_MISSIONS_MAP_REGION = 'personalMissionsMapRegion'
@@ -195,24 +181,12 @@ class TOOLTIPS_CONSTANTS(object):
     OPERATION_POSTPONED = 'operationPostponed'
     SQUAD_BONUS = 'squadBonus'
     GF_TEST_TOOLTIP = 'gfTestTooltip'
-    COMMANDER_CHARACTERISTICS = 'eventCommanderCharacteristics'
     BATTLE_PASS_VEHICLE_POINTS = 'battlePassVehiclePoints'
     BATTLE_PASS_POINTS = 'battlePassPoints'
     BATTLE_PASS_NOT_STARTED = 'battlePassNotStarted'
     BATTLE_PASS_IN_PROGRESS = 'battlePassInProgress'
     BATTLE_PASS_COMPLETED = 'battlePassCompleted'
     BATTLE_PASS_CHOSE_WINNER = 'battlePassChoseWinner'
-    EVENT_VEHICLE_PREVIEW_MESSAGE = 'eventVehiclePreviewMessage'
-    EVENT_RESULT_KILL = 'eventResultKill'
-    EVENT_RESULT_DAMAGE = 'eventResultDamage'
-    EVENT_RESULT_ASSIST = 'eventResultAssist'
-    EVENT_RESULT_ARMOR = 'eventResultArmor'
-    EVENT_RESULT_MISSION = 'eventResultMission'
-    EVENT_VEHICLE = 'eventVehicle'
-    EVENT_GOLD_INFO = 'eventGoldInfo'
-    EVENT_CREDIT_INFO = 'eventCreditInfo'
-    EVENT_CRYSTAL_INFO = 'eventCrystalInfo'
-    EVENT_FREE_XP_INFO = 'eventFreeXPInfo'
     SINGAPORE_WALLET_STATS = 'Stats'
     GOLD_STATS = 'goldStats'
     CREDITS_STATS = 'creditsStats'
@@ -237,6 +211,8 @@ class TOOLTIPS_CONSTANTS(object):
     RANKED_DIVISION_INFO = 'rankedDivisionInfo'
     RANKED_BATTLES_YEAR_REWARD = 'rankedBattlesYearReward'
     RANKED_SERVER_PRIMETIME = 'rankedServerPrimeTime'
+    RANKED_BATTLES_ROLES = 'rankedBattlesRoles'
+    RANKED_QUESTS_PREVIEW = 'rankedQuestsPreview'
     EPIC_SKILL_INFO = 'epicSkillInfo'
     EPIC_SKILL_SLOT_INFO = 'epicSkillSlotInfo'
     EVENT_PROGRESSION_PROGRESS_INFO = 'eventProgressionProgressInfo'
@@ -247,8 +223,6 @@ class TOOLTIPS_CONSTANTS(object):
     BLUEPRINT_FRAGMENT_INFO = 'blueprintFragmentInfo'
     BLUEPRINT_EMPTY_SLOT_INFO = 'blueprintEmptySlotInfo'
     BLUEPRINT_RANDOM_INFO = 'blueprintRandomInfo'
-    BOB_SELECTOR_INFO = 'bobSelectorInfo'
-    BOB_SERVER_PRIMETIME = 'bobServerPrimeTime'
     BLOCKS_DEFAULT_UI = 'ToolTipInblocksDefaultUI'
     TANKMEN_UI = 'ToolTipTankmenUI'
     TANKMEN_SKILL_UI = 'ToolTipSkillUI'
@@ -334,7 +308,8 @@ class TOOLTIPS_CONSTANTS(object):
     SESSION_STATS_TANK_INFO_UI = 'ToolTipInblocksDefaultUI'
     SESSION_STATS_EFFICIENCY_PARAM = 'sessionStatsEfficientParam'
     SESSION_STATS_EFFICIENCY_PARAM_UI = 'ToolTipInblocksDefaultUI'
-    SECRET_EVENT_HANGAR_OBJECT = 'secretEventHangarObject'
+    BADGES_SUFFIX_ITEM = 'badgesSuffixItem'
+    BADGES_SUFFIX_ITEM_UI = 'ToolTipInblocksDefaultUI'
     ACHIEVEMENTS_SET = [BATTLE_STATS_ACHIEVS,
      BATTLE_STATS_MARKS_ON_GUN_ACHIEVEMENT,
      ACHIEVEMENT,
@@ -342,20 +317,20 @@ class TOOLTIPS_CONSTANTS(object):
      GLOBAL_RATING,
      MARK_OF_MASTERY,
      ACHIEVEMENT_ATTR,
-     SHOP_20_ACHIEVEMENT,
-     SHOP_20_BADGE,
+     SHOP_ACHIEVEMENT,
+     SHOP_BADGE,
      REFERRAL_BADGE]
     BOOSTERS_SET = [INVENTORY_BATTLE_BOOSTER,
      AWARD_BATTLE_BOOSTER,
      EPIC_AWARD_BATTLE_BOOSTER,
-     BATTLE_BOOSTER,
+     BATTLE_BOOSTER_BLOCK,
+     DEFAULT_BATTLE_BOOSTER,
      SHOP_BATTLE_BOOSTER,
-     SHOP_20_BATTLE_BOOSTER,
      BATTLE_BOOSTER_COMPARE,
      BOOSTERS_BOOSTER_INFO,
      CLAN_RESERVE_INFO,
-     BOOSTERS_SHOP,
-     SHOP_20_BOOSTER,
+     BOOSTER,
+     SHOP_BOOSTER,
      BOOSTERS_QUESTS,
      NATION_CHANGE_BATTLE_BOOSTER]
     COMMON_SET = [EFFICIENCY_PARAM,
@@ -393,11 +368,12 @@ class TOOLTIPS_CONSTANTS(object):
      TECHTREE_DISCOUNT_INFO,
      TECHTREE_NATION_DISCOUNT]
     CUSTOMIZATION_SET = [TECH_CUSTOMIZATION_ITEM,
-     TECH_CUSTOMIZATION_HISTORIC_ITEM,
+     TECH_CUSTOMIZATION_NONHISTORIC_ITEM,
+     TECH_CUSTOMIZATION_POPOVER_ITEM,
      TECH_CUSTOMIZATION_ITEM_ICON,
      TECH_CUSTOMIZATION_ITEM_AWARD,
      TECH_CUSTOMIZATION_ITEM_PURCHASE,
-     SHOP_20_CUSTOMIZATION_ITEM]
+     SHOP_CUSTOMIZATION_ITEM]
     CYBER_SPORT_SET = [CYBER_SPORT_SLOT,
      CYBER_SPORT_SLOT_SELECTED,
      CYBER_SPORT_SELECTED_VEHICLE,
@@ -453,7 +429,9 @@ class TOOLTIPS_CONSTANTS(object):
      RANKED_UNAVAILABLE_INFO,
      RANKED_DIVISION_INFO,
      RANKED_BATTLES_YEAR_REWARD,
-     RANKED_SERVER_PRIMETIME]
+     RANKED_SERVER_PRIMETIME,
+     RANKED_BATTLES_ROLES,
+     RANKED_QUESTS_PREVIEW]
     SETTINGS_SET = [SETTINGS_CONTROL,
      SETTINGS_BUTTON,
      SETTINGS_MINIMAP_CIRCLES,
@@ -486,8 +464,8 @@ class TOOLTIPS_CONSTANTS(object):
      VEHICLE_PREVIEW_SIMPLE_PARAMETERS,
      VEHICLE_PREVIEW_AVG_PARAMETERS,
      VEHICLE_PREVIEW_ADVANCED_PARAMETERS,
+     DEFAULT_CREW_MEMBER,
      VEHICLE_PREVIEW_CREW_MEMBER,
-     VEHICLE_PREVIEW_20_CREW_MEMBER,
      TECHTREE_VEHICLE_ANNOUNCEMENT,
      TECHTREE_VEHICLE_STATUS]
     BLUEPRINTS_SET = [BLUEPRINT_INFO,
@@ -496,8 +474,8 @@ class TOOLTIPS_CONSTANTS(object):
      BLUEPRINT_CONVERT_INFO,
      BLUEPRINT_RANDOM_INFO]
     VEHICLES_ITEMS_SET = [INVENTORY_MODULE,
+     DEFAULT_MODULE,
      SHOP_MODULE,
-     SHOP_20_MODULE,
      TECHTREE_MODULE,
      TECH_MAIN_MODULE,
      HANGAR_MODULE,
@@ -505,8 +483,8 @@ class TOOLTIPS_CONSTANTS(object):
      VEH_COMPARE_TECHTREE_MODULE,
      PREVIEW_MODULE,
      AWARD_MODULE,
+     DEFAULT_SHELL,
      SHOP_SHELL,
-     SHOP_20_SHELL,
      AWARD_SHELL,
      HANGAR_SHELL,
      COMPARE_SHELL,
@@ -520,7 +498,7 @@ class TOOLTIPS_CONSTANTS(object):
      CREW_SKIN_NO_AVAILABLE_SKINS,
      CREW_SKIN_SOUND]
     CREW_BOOK_SET = [CREW_BOOK, CREW_BOOK_RESTRICTED]
-    CREW_BUNDLE_SET = [SHOP_20_CREW_BUNDLE]
+    CREW_BUNDLE_SET = [SHOP_CREW_BUNDLE]
     FRONTLINE_SET = [FRONTLINE_COUPON, FRONTLINE_RANK]
     SESSION_STATS_SET = [SESSION_STATS_TANK_INFO, SESSION_STATS_EFFICIENCY_PARAM]
     TRADE_IN_SET = [TRADE_IN_INFO, TRADE_IN_INFO_NOT_AVAILABLE, TRADE_IN_STATE_NOT_AVAILABLE]
@@ -530,32 +508,4 @@ class TOOLTIPS_CONSTANTS(object):
      NOT_ENOUGH_MONEY]
     DEVELOPMENT_SET = [GF_TEST_TOOLTIP]
     VEHICLE_COLLECTOR_SET = [VEHICLE_COLLECTOR_INFO, VEHICLE_COLLECTOR_DISABLED]
-    BOB_SET = [BOB_SELECTOR_INFO, BOB_SERVER_PRIMETIME]
-    EVENT_SET = [EVENT_FREE_XP_INFO,
-     EVENT_CRYSTAL_INFO,
-     EVENT_CREDIT_INFO,
-     EVENT_GOLD_INFO,
-     EVENT_SELECTOR_INFO,
-     EVENT_VEHICLE_PREVIEW_MESSAGE,
-     EVENT_SQUAD_INFO,
-     EVENT_SUBDIVISION_PUMPING_INFO,
-     SECRET_EVENT_QUESTS_PREVIEW,
-     SECRET_EVENT_HANGAR_OBJECT,
-     EVENT_BANNER_INFO,
-     EVENT_ENERGY_DISCOUNT,
-     EVENT_BONUSES_BASIC_INFO,
-     EVENT_BONUSES_INFO,
-     EVENT_BONUSES_POST_BATTLE_INFO,
-     COMMANDER_ABILITY_INFO,
-     COMMANDER_RESPAWN_INFO,
-     EVENT_PROGRESSION_POINTS_INFO,
-     EVENT_SQUAD_GENERAL_INFO,
-     EVENT_RESULT_KILL,
-     EVENT_RESULT_DAMAGE,
-     EVENT_RESULT_ARMOR,
-     EVENT_RESULT_ASSIST,
-     EVENT_RESULT_MISSION,
-     SECRET_EVENT_PROGRESSION_INFO,
-     EVENT_VEHICLE,
-     COMMANDER_CHARACTERISTICS,
-     EVENT_RESULT_GENERAL]
+    BADGES_SET = [BADGES_SUFFIX_ITEM]

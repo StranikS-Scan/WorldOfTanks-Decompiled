@@ -5,7 +5,7 @@ from CurrentVehicle import g_currentVehicle
 from adisp import process
 from constants import GameSeasonType, RentType
 from gui import SystemMessages
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getTradeInUrl
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getTradeInVehiclesUrl
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler, CM_BUY_COLOR
 from gui.Scaleform.locale.MENU import MENU
@@ -13,7 +13,7 @@ from gui.impl.lobby.buy_vehicle_view import VehicleBuyActionTypes
 from gui.prb_control import prbDispatcherProperty
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showVehicleRentRenewDialog, showWebShop
+from gui.shared.event_dispatcher import showVehicleRentRenewDialog, showShop
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.gui_items.processors.tankman import TankmanUnload
 from gui.shared.gui_items.processors.vehicle import VehicleFavoriteProcessor
@@ -24,7 +24,6 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
-from gui.Scaleform.daapi.view.lobby import halloween_event
 _logger = getLogger(__name__)
 
 class CREW(object):
@@ -80,7 +79,7 @@ class CrewContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def _generateOptions(self, ctx=None):
-        return [self._makeItem(CREW.PERSONAL_CASE, MENU.contextmenu('personalCase')), self._makeSeparator(), self._makeItem(CREW.UNLOAD, MENU.contextmenu('tankmanUnload'), {'enabled': True})]
+        return [self._makeItem(CREW.PERSONAL_CASE, MENU.contextmenu('personalCase')), self._makeSeparator(), self._makeItem(CREW.UNLOAD, MENU.contextmenu('tankmanUnload'), {'enabled': not g_currentVehicle.isInBattle()})]
 
     def _initFlashValues(self, ctx):
         self._tankmanID = int(ctx.tankmanID)
@@ -124,10 +123,7 @@ class TechnicalMaintenanceCMHandler(AbstractContextMenuHandler, EventSystemEntit
             if self._isCanceled:
                 options.append(self._makeItem(MODULE.CANCEL_BUY, MENU.contextmenu(MODULE.CANCEL_BUY)))
             else:
-                item = self._makeItem(MODULE.UNLOAD, MENU.contextmenu(MODULE.UNLOAD))
-                options.append(item)
-                if halloween_event.isInEvent():
-                    item.setdefault('initData', {}).update({'enabled': False})
+                options.append(self._makeItem(MODULE.UNLOAD, MENU.contextmenu(MODULE.UNLOAD)))
             return options
 
 
@@ -198,7 +194,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
 
     def showVehicleExchange(self):
         self._tradeInController.setActiveTradeOffVehicleCD(self.vehCD)
-        showWebShop(getTradeInUrl())
+        showShop(getTradeInVehiclesUrl())
 
     def checkFavoriteVehicle(self):
         self.__favoriteVehicle(True)
@@ -235,13 +231,12 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
     def _generateOptions(self, ctx=None):
         options = []
         vehicle = self.itemsCache.items.getVehicle(self.getVehInvID())
-        if vehicle.isOnlyForEventBattles:
+        vehicleWasInBattle = False
+        accDossier = self.itemsCache.items.getAccountDossier(None)
+        if vehicle is None:
             return options
         else:
-            vehicleWasInBattle = False
-            accDossier = self.itemsCache.items.getAccountDossier(None)
-            if vehicle is None:
-                return options
+            isEventVehicle = vehicle.isOnlyForEventBattles
             if accDossier:
                 wasInBattleSet = set(accDossier.getTotalStats().getVehicles().keys())
                 wasInBattleSet.update(accDossier.getGlobalMapStats().getVehicles().keys())
@@ -259,7 +254,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                     isNavigationEnabled = not self.prbDispatcher.getFunctionalState().isNavigationDisabled()
                 else:
                     isNavigationEnabled = True
-                if not vehicle.isOnlyForEpicBattles and not vehicle.isOnlyForBob:
+                if not vehicle.isOnlyForEpicBattles:
                     options.append(self._makeItem(VEHICLE.RESEARCH, MENU.contextmenu(VEHICLE.RESEARCH), {'enabled': isNavigationEnabled}))
                 if vehicle.isCollectible:
                     options.append(self._makeItem(VEHICLE.GO_TO_COLLECTION, MENU.contextmenu(VEHICLE.GO_TO_COLLECTION), {'enabled': self._lobbyContext.getServerSettings().isCollectorVehicleEnabled()}))
@@ -274,14 +269,13 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                         label = MENU.CONTEXTMENU_RESTORE if vehicle.isRestoreAvailable() else MENU.CONTEXTMENU_BUY
                         options.append(self._makeItem(VEHICLE.BUY, label, {'enabled': enabled}))
                     options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.REMOVE), {'enabled': vehicle.canSell and vehicle.rentalIsOver}))
-                    rentRenewEnabled = vehicle.isOnlyForEpicBattles and vehicle.rentInfo.canCycleRentRenewForSeason(GameSeasonType.EPIC) or vehicle.isOnlyForBob and vehicle.rentInfo.canCycleRentRenewForSeason(GameSeasonType.BOB)
-                    options.append(self._makeItem(VEHICLE.RENEW, MENU.contextmenu(VEHICLE.RENEW), {'enabled': rentRenewEnabled}))
+                    options.append(self._makeItem(VEHICLE.RENEW, MENU.contextmenu(VEHICLE.RENEW), {'enabled': vehicle.isOnlyForEpicBattles and vehicle.rentInfo.canCycleRentRenewForSeason(GameSeasonType.EPIC)}))
                 else:
-                    options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.SELL), {'enabled': vehicle.canSell}))
+                    options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.SELL), {'enabled': vehicle.canSell and not isEventVehicle}))
                 if vehicle.isFavorite:
                     options.append(self._makeItem(VEHICLE.UNCHECK, MENU.contextmenu(VEHICLE.UNCHECK)))
                 else:
-                    options.append(self._makeItem(VEHICLE.CHECK, MENU.contextmenu(VEHICLE.CHECK), {'enabled': True}))
+                    options.append(self._makeItem(VEHICLE.CHECK, MENU.contextmenu(VEHICLE.CHECK), {'enabled': not isEventVehicle}))
             return options
 
     def _manageVehCompareOptions(self, options, vehicle):

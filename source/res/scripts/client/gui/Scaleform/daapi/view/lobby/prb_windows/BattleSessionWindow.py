@@ -72,7 +72,9 @@ class BattleSessionWindow(BattleSessionWindowMeta):
         self.__updateCommonRequirements(entity.getTeamLimits(), rosters)
 
     def onSettingUpdated(self, entity, settingName, settingValue):
-        pass
+        if settingName == 'arenaTypeID':
+            self.__arenaName = functions.getArenaShortName(settingValue)
+            self.as_setInfoS(self.__isTurnamentBattle, self.__battlesWinsString, self.__arenaName, self.__firstTeam, self.__secondTeam, self.prbEntity.getProps().getBattlesScore(), self.__eventName, self.__sessionName)
 
     def canMoveToAssigned(self):
         return self.prbEntity.getPermissions().canAssignToTeam(self._getPlayerTeam())

@@ -16,9 +16,6 @@ class CustomizationMainViewMeta(View):
     def changeSeason(self, season, keepSelect):
         self._printOverrideError('changeSeason')
 
-    def itemContextMenuDisplayed(self):
-        self._printOverrideError('itemContextMenuDisplayed')
-
     def onLobbyClick(self):
         self._printOverrideError('onLobbyClick')
 
@@ -58,6 +55,9 @@ class CustomizationMainViewMeta(View):
     def resetC11nItemsNovelty(self, itemsList):
         self._printOverrideError('resetC11nItemsNovelty')
 
+    def onProgressionEntryPointClick(self):
+        self._printOverrideError('onProgressionEntryPointClick')
+
     def as_hideS(self, value):
         return self.flashObject.as_hide(value) if self._isDAAPIInited() else None
 
@@ -94,8 +94,8 @@ class CustomizationMainViewMeta(View):
     def as_showCarouselsArrowsNotificationS(self, text):
         return self.flashObject.as_showCarouselsArrowsNotification(text) if self._isDAAPIInited() else None
 
-    def as_reselectS(self, intCd):
-        return self.flashObject.as_reselect(intCd) if self._isDAAPIInited() else None
+    def as_reselectS(self, data):
+        return self.flashObject.as_reselect(data) if self._isDAAPIInited() else None
 
     def as_setNotificationCountersS(self, counters):
         return self.flashObject.as_setNotificationCounters(counters) if self._isDAAPIInited() else None
@@ -103,5 +103,8 @@ class CustomizationMainViewMeta(View):
     def as_setAnchorsStateS(self, data):
         return self.flashObject.as_setAnchorsState(data) if self._isDAAPIInited() else None
 
-    def as_attachToCursorS(self, index):
-        return self.flashObject.as_attachToCursor(index) if self._isDAAPIInited() else None
+    def as_attachToCursorS(self, data):
+        return self.flashObject.as_attachToCursor(data) if self._isDAAPIInited() else None
+
+    def as_progressionEntryPointVisibleS(self, value):
+        return self.flashObject.as_progressionEntryPointVisible(value) if self._isDAAPIInited() else None

@@ -6,11 +6,14 @@ from items import utils, tankmen
 def getVehicleFactors(vehicle):
     factors = utils.makeDefaultVehicleAttributeFactors()
     vehicleDescr = vehicle.descriptor
+    perksController = vehicle.getPerksController()
+    if perksController and not perksController.isInitialized():
+        perksController.recalc()
     eqs = [ eq.descriptor for eq in vehicle.equipment.regularConsumables if eq is not None ]
     if vehicle.equipment.battleBoosterConsumables[0] is not None:
         eqs.append(vehicle.equipment.battleBoosterConsumables[0].descriptor)
     crewCompactDescrs = extractCrewDescrs(vehicle)
-    utils.updateAttrFactorsWithSplit(vehicleDescr, crewCompactDescrs, eqs, factors)
+    utils.updateAttrFactorsWithSplit(vehicleDescr, crewCompactDescrs, eqs, factors, perksController)
     return factors
 
 

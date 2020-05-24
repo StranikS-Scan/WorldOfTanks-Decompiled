@@ -3,7 +3,7 @@
 import random
 from math import ceil
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
-from constants import DEATH_REASON_ALIVE, PREMIUM_TYPE, ARENA_BONUS_TYPE
+from constants import DEATH_REASON_ALIVE, PREMIUM_TYPE, ARENA_BONUS_TYPE, ARENA_GUI_TYPE
 from gui.Scaleform.genConsts.BATTLE_RESULTS_PREMIUM_STATES import BATTLE_RESULTS_PREMIUM_STATES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
@@ -100,9 +100,13 @@ class DynamicPremiumState(base.StatsItem):
 
 
 class PremiumInfoBlock(base.StatsBlock):
-    __slots__ = ('creditsPremiumBonusStr', 'xpPremiumBonusStr', 'premiumBonusStr', 'isGetPremium', 'isUpgradeToPremiumPlus', 'backgroundIcon', '__xpDiff', '__creditsDiff', '__canUpgradeToBasic', '__canUpgradeToPlus')
+    __slots__ = ('creditsPremiumBonusStr', 'xpPremiumBonusStr', 'premiumBonusStr', 'isGetPremium', 'isUpgradeToPremiumPlus', 'backgroundIcon', '__xpDiff', '__creditsDiff', '__canUpgradeToBasic', '__canUpgradeToPlus', '__adsCase')
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __itemsCache = dependency.descriptor(IItemsCache)
+    __allPremiumPlusCases = ('credits', 'premium', 'squad', 'bonus', 'quests')
+    __epicPremiumPlusCases = ('premium', 'squad', 'credits')
+    availableEpicCases = [ case for case in __epicPremiumPlusCases ]
+    availableCases = [ case for case in __allPremiumPlusCases ]
 
     def __init__(self, meta=None, field='', *path):
         super(PremiumInfoBlock, self).__init__(meta, field, *path)
@@ -116,17 +120,27 @@ class PremiumInfoBlock(base.StatsBlock):
         self.__creditsDiff = 0
         self.__canUpgradeToBasic = False
         self.__canUpgradeToPlus = False
+        self.__adsCase = 'premium'
 
     def setRecord(self, result, reusable):
         self.__xpDiff = reusable.personal.getXPDiff()
         self.__creditsDiff = reusable.personal.getCreditsDiff()
         self.__canUpgradeToBasic = reusable.canUpgradeToPremium
         self.__canUpgradeToPlus = reusable.canUpgradeToPremiumPlus
+        isEpic = reusable.common.arenaGuiType in ARENA_GUI_TYPE.EPIC_RANGE
+        cases = PremiumInfoBlock.availableEpicCases if isEpic else PremiumInfoBlock.availableCases
+        self.__adsCase = random.choice(cases)
+        cases.remove(self.__adsCase)
+        if not cases:
+            if isEpic:
+                PremiumInfoBlock.availableEpicCases = [ case for case in self.__epicPremiumPlusCases ]
+            else:
+                PremiumInfoBlock.availableCases = [ case for case in self.__allPremiumPlusCases ]
 
     def getVO(self):
         stats = self.__itemsCache.items.stats
         self.isGetPremium = self.__canUpgradeToBasic and self.__xpDiff > 0 and self.__creditsDiff > 0 and not stats.isPremium
-        self.isUpgradeToPremiumPlus = self.__canUpgradeToPlus and stats.isActivePremium(PREMIUM_TYPE.BASIC) and not stats.isActivePremium(PREMIUM_TYPE.PLUS)
+        self.isUpgradeToPremiumPlus = self.__canUpgradeToPlus and not stats.isActivePremium(PREMIUM_TYPE.PLUS)
         self.__setPremiumBonusData()
         if self.__xpDiff < 0 or self.__creditsDiff < 0:
             self.creditsPremiumBonusStr = ''
@@ -147,12 +161,9 @@ class PremiumInfoBlock(base.StatsBlock):
         multiplier = premacc_helpers.validateAdditionalBonusMultiplier(bonusConfig.get('bonusFactor', 1))
         if not self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS):
             if self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.BASIC):
-                cases = ('credits', 'premium', 'squad', 'bonus', 'quests')
-                randCase = random.choice(cases)
-                value = backport.text(R.strings.battle_results.common.details.premiumPlus.dyn(randCase)(), bonusCredits=text_styles.concatStylesToSingleLine(text_styles.credits(backport.getGoldFormat(piggyBankMaxAmount)), icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.CreditsIcon_2()), vSpace=-5)), durationInDays=periodInDays, multiplier=multiplier)
-                if randCase == 'bonus':
-                    randCase = 'bonus_x{}'.format(multiplier)
-                icon = backport.image(R.images.gui.maps.icons.premacc.battleResult.dyn(randCase)())
+                value = backport.text(R.strings.battle_results.common.details.premiumPlus.dyn(self.__adsCase)(), bonusCredits=text_styles.concatStylesToSingleLine(text_styles.credits(backport.getGoldFormat(piggyBankMaxAmount)), icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.CreditsIcon_2()), vSpace=-5)), durationInDays=periodInDays, multiplier=multiplier)
+                iconName = 'bonus_x{}'.format(multiplier) if self.__adsCase == 'bonus' else self.__adsCase
+                icon = backport.image(R.images.gui.maps.icons.premacc.battleResult.dyn(iconName)())
             elif self.__creditsDiff < 0 or self.__xpDiff < 0:
                 value = backport.text(R.strings.battle_results.common.details.premiumPlus.premium())
             else:

@@ -10,20 +10,20 @@ import nations
 from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
 from adisp import async, process
-from constants import EVENT_TYPE, EVENT_CLIENT_DATA, LOOTBOX_TOKEN_PREFIX, TWITCH_TOKEN_PREFIX
+from constants import EVENT_TYPE, EVENT_CLIENT_DATA, LOOTBOX_TOKEN_PREFIX, TWITCH_TOKEN_PREFIX, OFFER_TOKEN_PREFIX
 from debug_utils import LOG_DEBUG
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.server_events import caches as quests_caches
 from gui.server_events.event_items import EventBattles, createQuest, createAction, MotiveQuest, ServerEventAbstract, Quest
 from gui.server_events.events_helpers import isMarathon, isLinkedSet, isPremium
-from gui.server_events.events_helpers import getRerollTimeout
+from gui.server_events.events_helpers import getRerollTimeout, getEventsData
 from gui.server_events.formatters import getLinkedActionID
 from gui.server_events.modifiers import ACTION_SECTION_TYPE, ACTION_MODIFIER_TYPE, clearModifiersCache
 from gui.server_events.personal_missions_cache import PersonalMissionsCache
 from gui.server_events.prefetcher import Prefetcher
 from gui.shared.gui_items import GUI_ITEM_TYPE, ACTION_ENTITY_ITEM as aei
 from gui.shared.utils.requesters.QuestsProgressRequester import QuestsProgressRequester
-from helpers import dependency, time_utils, isPlayerAccount
+from helpers import dependency, time_utils
 from items import getTypeOfCompactDescr
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from personal_missions import PERSONAL_MISSIONS_XML_PATH
@@ -37,6 +37,10 @@ from skeletons.gui.linkedset import ILinkedSetController
 if typing.TYPE_CHECKING:
     from typing import Optional, Dict, Callable, Union
     from gui.server_events.event_items import DailyEpicTokenQuest, DailyQuest, PremiumQuest
+NOT_FOR_PERSONAL_MISSIONS_TOKENS = (LOOTBOX_TOKEN_PREFIX,
+ RECRUIT_TMAN_TOKEN_PREFIX,
+ TWITCH_TOKEN_PREFIX,
+ OFFER_TOKEN_PREFIX)
 _ProgressiveReward = namedtuple('_ProgressiveReward', ('currentStep', 'probability', 'maxSteps'))
 
 class _DailyQuestsData(object):
@@ -187,7 +191,7 @@ class EventsCache(IEventsCache):
                 isQPUpdated = 'quests' in diff or 'potapovQuests' in diff
                 if not isQPUpdated and 'tokens' in diff:
                     for tokenID in diff['tokens'].iterkeys():
-                        if not tokenID.startswith(LOOTBOX_TOKEN_PREFIX) and not tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX) and not tokenID.startswith(TWITCH_TOKEN_PREFIX):
+                        if all((not tokenID.startswith(t) for t in NOT_FOR_PERSONAL_MISSIONS_TOKENS)):
                             isQPUpdated = True
                             break
 
@@ -202,13 +206,13 @@ class EventsCache(IEventsCache):
                 isNeedToClearItemsCaches = hasVehicleUnlocks or 'inventory' in diff and GUI_ITEM_TYPE.VEHICLE in diff['inventory']
             if isNeedToInvalidate:
                 self.__invalidateData(_cbWrapper)
-                return
-            if isNeedToClearItemsCaches:
-                self.__clearQuestsItemsCache()
-            if isQPUpdated:
-                _cbWrapper(True)
             else:
-                callback(True)
+                if isNeedToClearItemsCaches:
+                    self.__clearQuestsItemsCache()
+                if isQPUpdated:
+                    _cbWrapper(True)
+                else:
+                    callback(True)
             return
 
     def getQuests(self, filterFunc=None):
@@ -333,7 +337,7 @@ class EventsCache(IEventsCache):
         return EventBattles(battles.get('vehicleTags', set()), battles.get('vehicles', []), bool(battles.get('enabled', 0)), battles.get('arenaTypeID')) if battles else EventBattles(set(), [], 0, None)
 
     def isEventEnabled(self):
-        return self.getEventBattles().enabled
+        return len(self.__getEventBattles()) > 0 and len(self.getEventVehicles()) > 0
 
     @dependency.replace_none_kwargs(itemsCache=IItemsCache)
     def getEventVehicles(self, itemsCache=None):
@@ -347,15 +351,6 @@ class EventsCache(IEventsCache):
                     result.append(item)
 
             return sorted(result)
-
-    def getCommanders(self):
-        return self.getGameEventData().get('generals', {})
-
-    def getCommander(self, commanderId):
-        return self.getCommanders().get(commanderId)
-
-    def getFronts(self):
-        return self.getGameEventData().get('fronts', [])
 
     def getEvents(self, filterFunc=None):
         svrEvents = self.getQuests(filterFunc)
@@ -522,9 +517,6 @@ class EventsCache(IEventsCache):
                 result[qID] = q
 
         return result
-
-    def getGameEventData(self):
-        return self.__getIngameEventsData().get('se2', {})
 
     def _getQuests(self, filterFunc=None, includePersonalMissions=False):
         result = {}
@@ -751,7 +743,7 @@ class EventsCache(IEventsCache):
 
     @classmethod
     def __getEventsData(cls, eventsTypeName):
-        return BigWorld.player().getUnpackedEventsData(eventsTypeName) if isPlayerAccount() else {}
+        return getEventsData(eventsTypeName)
 
     def __getQuestsData(self):
         return self.__getEventsData(EVENT_CLIENT_DATA.QUEST)

@@ -38,6 +38,82 @@
       </effects>
     </variant1>
   </groundCollisionHeavy>
+  <oilCollisionLight>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_light_oil.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_static_object_hull_ground ; collision_static_object_suspension_ground	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </oilCollisionLight>
+  <oilCollisionHeavy>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_oil.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_static_object_hull_ground ; collision_static_object_suspension_ground	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </oilCollisionHeavy>
+  <dirtCollisionLight>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_light_dirt.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_static_object_hull_ground ; collision_static_object_suspension_ground	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </dirtCollisionLight>
+  <dirtCollisionHeavy>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_dirt.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_static_object_hull_ground ; collision_static_object_suspension_ground	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </dirtCollisionHeavy>
   <sandCollisionLight>
     <variant1>
       <timeline>
@@ -285,6 +361,44 @@
       </effects>
     </variant1>
   </groundCollisionWheeledLight>
+  <oilCollisionWheeledLight>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_light_oil.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_static_object_wheel_tech_hull_ground ; collision_static_object_wheel_tech_suspension_ground	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </oilCollisionWheeledLight>
+  <dirtCollisionWheeledLight>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_light_dirt.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_static_object_wheel_tech_hull_ground ; collision_static_object_wheel_tech_suspension_ground	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </dirtCollisionWheeledLight>
   <groundCollisionWheeledHeavy>
     <variant1>
       <timeline>
@@ -304,6 +418,44 @@
       </effects>
     </variant1>
   </groundCollisionWheeledHeavy>
+  <oilCollisionWheeledHeavy>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_oil.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_static_object_wheel_tech_hull_ground ; collision_static_object_wheel_tech_suspension_ground	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </oilCollisionWheeledHeavy>
+  <dirtCollisionWheeledHeavy>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_dirt.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_static_object_wheel_tech_hull_ground ; collision_static_object_wheel_tech_suspension_ground	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </dirtCollisionWheeledHeavy>
   <sandCollisionWheeledLight>
     <variant1>
       <timeline>
@@ -2960,110 +3112,4 @@
       </effects>
     </variant1>
   </dynamicCollision>
-  <deathzone_default>
-    <variant1>
-      <timeline>
-        <flaming>	0.015	</flaming>
-        <static>	0.02	</static>
-        <impactEnd>	5.0	</impactEnd>
-        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
-        <stopExplosion>	36000	</stopExplosion>
-        <lightingEnd>	8.0	</lightingEnd>
-      </timeline>
-      <effects>
-        <flashBang>
-          <startKey>	start	</startKey>
-          <stages>
-            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
-            </stage>
-            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
-            </stage>
-            <stage>	0.0	  <color>	0 0 0 0	</color>
-            </stage>
-          </stages>
-        </flashBang>
-        <pixie>
-          <startKey>	start	</startKey>
-          <file>	particles/Tank/destruction/explosion_turret_01.eff	</file>
-          <position>	HP_turretJoint	</position>
-          <force>	1	</force>
-        </pixie>
-        <light>
-          <startKey>	start	</startKey>
-          <endKey>	lightingEnd	</endKey>
-          <innerRadius>	1.0	</innerRadius>
-          <outerRadius>	15.0	</outerRadius>
-          <castShadows>	false	</castShadows>
-          <offset>	0.0 3.0 0.0	</offset>
-          <position>	HP_turretJoint	</position>
-          <animation>
-            <time>	0.0	</time>
-            <color>	255 137 40	</color>
-            <multiplier>	900	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.1	</time>
-            <color>	255 137 40	</color>
-            <multiplier>	100	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.2	</time>
-            <color>	255 137 40	</color>
-            <multiplier>	700	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.4	</time>
-            <color>	255 137 40	</color>
-            <multiplier>	150	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.5	</time>
-            <color>	255 137 40	</color>
-            <multiplier>	500	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.75	</time>
-            <color>	255 137 40	</color>
-            <multiplier>	600	</multiplier>
-          </animation>
-          <animation>
-            <time>	1.0	</time>
-            <color>	0 0 0 0	</color>
-            <multiplier>	0	</multiplier>
-          </animation>
-        </light>
-        <decal>
-          <startKey>	static	</startKey>
-          <groupName>	slow	</groupName>
-          <texName>	explosion_ground_AM	</texName>
-          <bumpTexName>	explosion_ground_NM	</bumpTexName>
-          <smTexName>	explosion_stone_NO_GMM	</smTexName>
-          <size>	12 12	</size>
-          <randomYaw>	true	</randomYaw>
-        </decal>
-        <pixie>
-          <startKey>	static	</startKey>
-          <endKey>	stopExplosion	</endKey>
-          <file>	particles/Tank/destruction/smoke_dead_small_02.eff	</file>
-          <position>	HP_Fire_1	</position>
-        </pixie>
-        <pixie>
-          <startKey>	flaming	</startKey>
-          <endKey>	waitChangeBurnSound	</endKey>
-          <file>	particles/Tank/destruction/fire_dead_small_02.eff	</file>
-          <position>	HP_Fire_1	</position>
-        </pixie>
-        <sound>
-          <startKey>	flaming	</startKey>
-          <wwsound>	burning_tank_small	</wwsound>
-        </sound>
-        <sound>
-          <startKey>	start	</startKey>
-          <wwsound>	expl_ammo	</wwsound>
-          <wwsoundPC>	expl_ammo_PC	</wwsoundPC>
-          <wwsoundNPC>	expl_ammo_NPC	</wwsoundNPC>
-        </sound>
-      </effects>
-    </variant1>
-  </deathzone_default>
 </vehicle_effects.xml>

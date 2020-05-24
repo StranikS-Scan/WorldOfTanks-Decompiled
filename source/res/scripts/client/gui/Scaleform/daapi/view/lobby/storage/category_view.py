@@ -51,6 +51,9 @@ class BaseCategoryView(BaseStorageCategoryViewMeta):
     def playInfoSound(self):
         self.__playSound('shop_info')
 
+    def scrolledToBottom(self):
+        pass
+
     def _populate(self):
         super(BaseCategoryView, self)._populate()
         self._dataProvider.setFlashObject(self.as_getCardsDPS())
@@ -149,7 +152,7 @@ class InventoryCategoryView(BaseCategoryView):
         raise NotImplementedError
 
     def _inventoryUpdatesCallback(self, *args):
-        self._invVehicles = self._itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY ^ REQ_CRITERIA.VEHICLE.EVENT_BATTLE).values()
+        self._invVehicles = self._itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).values()
         self._buildItems()
 
     def _update(self, *args):

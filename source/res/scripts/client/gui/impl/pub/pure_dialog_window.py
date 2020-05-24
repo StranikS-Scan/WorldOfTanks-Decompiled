@@ -35,6 +35,9 @@ class PureDialogWindow(DialogWindow):
     def setBackground(self, backImg):
         self.viewModel.setBackgroundImage(backImg)
 
+    def _getResultData(self):
+        return self.bottomContentViewModel.getIsSelected() if self.bottomContentViewModel is not None else super(PureDialogWindow, self)._getResultData()
+
     @staticmethod
     def _addArgsOfModel(arrModel, args):
         for arg in args:

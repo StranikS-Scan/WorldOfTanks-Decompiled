@@ -542,7 +542,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
         return (typeDescriptor.isWheeledVehicle or typeDescriptor.isDualgunVehicle) and self.__isInDisplayPeriod and self._haveHintsLeft(self.__helpHintSettings[self.__vehicleId])
 
     def __canDisplayQuestHint(self):
-        return self.__isInDisplayPeriod and self._haveHintsLeft(self.__questHintSettings) and self.__haveReqLevel and self.sessionProvider.getCtx().areQuestsEnabledForArena()
+        return self.__isInDisplayPeriod and self._haveHintsLeft(self.__questHintSettings) and self.__haveReqLevel and self.sessionProvider.arenaVisitor.getArenaGuiType() in ARENA_GUI_TYPE.RANDOM_RANGE
 
     def __onHintTimeCooldown(self):
         if self.__canDisplayQuestHint():

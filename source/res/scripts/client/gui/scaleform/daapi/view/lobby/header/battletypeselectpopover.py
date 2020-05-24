@@ -63,12 +63,6 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
             elif itemData == PREBATTLE_ACTION_NAME.SANDBOX:
                 isSpecial = True
                 tooltip = TOOLTIPS_CONSTANTS.BATTLE_TRAINING
-            elif itemData == PREBATTLE_ACTION_NAME.EVENT_BATTLE:
-                isSpecial = True
-                tooltip = TOOLTIPS_CONSTANTS.EVENT_SELECTOR_INFO
-            elif itemData == PREBATTLE_ACTION_NAME.BOB or itemData == PREBATTLE_ACTION_NAME.BOB_SQUAD:
-                isSpecial = True
-                tooltip = TOOLTIPS_CONSTANTS.BOB_SELECTOR_INFO
             result = {'isSpecial': isSpecial,
              'tooltip': tooltip}
             return result
@@ -90,8 +84,7 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
         self.update()
 
     def __getRankedAvailabilityData(self):
-        hasSuitableVehicles = self.__rankedController.hasSuitableVehicles()
-        return (TOOLTIPS_CONSTANTS.RANKED_SELECTOR_INFO, True) if self.__rankedController.isAvailable() and hasSuitableVehicles else (TOOLTIPS_CONSTANTS.RANKED_UNAVAILABLE_INFO, True)
+        return (TOOLTIPS_CONSTANTS.RANKED_SELECTOR_INFO, True) if self.__rankedController.isAvailable() else (TOOLTIPS_CONSTANTS.RANKED_UNAVAILABLE_INFO, True)
 
     def __getEpicAvailabilityData(self):
         return (TOOLTIPS_CONSTANTS.EVENT_PROGRESSION_SELECTOR_INFO, True)

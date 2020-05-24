@@ -5,7 +5,6 @@ import constants
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
 from items import vehicles, tankmen, ITEM_TYPE_NAMES
-from items.components.c11n_constants import StyleFlags
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from soft_exception import SoftException
@@ -54,8 +53,8 @@ class AccountValidator(object):
          lambda : self.__validateInvItem(GUI_ITEM_TYPE.OPTIONALDEVICE, ValidationCodes.OPT_DEV_MISMATCH),
          lambda : self.__validateInvItem(GUI_ITEM_TYPE.SHELL, ValidationCodes.SHELL_MISMATCH),
          lambda : self.__validateInvItem(GUI_ITEM_TYPE.EQUIPMENT, ValidationCodes.EQ_MISMATCH),
-         self.__validateInventoryOutfit,
          self.__validateInventoryVehicles,
+         self.__validateInventoryOutfit,
          self.__validateInventoryTankmen,
          self.__validateEliteVehicleCDs)
         for handler in handlers:
@@ -98,13 +97,21 @@ class AccountValidator(object):
 
     def __validateInventoryOutfit(self):
         c11nData = self.itemsCache.items.inventory.getCacheValue(GUI_ITEM_TYPE.CUSTOMIZATION, {})
-        for vehCD, outfitsData in c11nData.get(constants.CustomizationInvData.OUTFITS, {}).iteritems():
-            for outfitData in outfitsData.itervalues():
+        for vehIntCD, outfitsData in c11nData.get(constants.CustomizationInvData.OUTFITS, {}).iteritems():
+            vehicleData = self.itemsCache.items.inventory.getItemData(vehIntCD)
+            if vehicleData is not None:
+                vehicleCD = vehicleData.compDescr
+            else:
+                _, nationID, vehicleTypeID = vehicles.parseIntCompactDescr(vehIntCD)
+                vehicleDesc = vehicles.VehicleDescr(typeID=(nationID, vehicleTypeID))
+                vehicleCD = vehicleDesc.makeCompactDescr()
+            for outfitCD in outfitsData.itervalues():
                 try:
-                    outfitCD, flags = outfitData
-                    self.itemsFactory.createOutfit(strCompactDescr=outfitCD, isEnabled=bool(flags & StyleFlags.ENABLED), isInstalled=bool(flags & StyleFlags.INSTALLED))
+                    self.itemsFactory.createOutfit(strCompactDescr=outfitCD, vehicleCD=vehicleCD)
                 except Exception as e:
-                    raise ValidateException(e.message, ValidationCodes.OUTFIT_MISMATCH, _packItemData(GUI_ITEM_TYPE.CUSTOMIZATION, (vehCD, outfitData)))
+                    raise ValidateException(e.message, ValidationCodes.OUTFIT_MISMATCH, _packItemData(GUI_ITEM_TYPE.CUSTOMIZATION, (vehIntCD, outfitCD)))
+
+        return
 
     def __validateInvItem(self, itemTypeID, errorCode):
         for intCompactDescr, itemData in self.itemsCache.items.inventory.getCacheValue(itemTypeID, {}).iteritems():

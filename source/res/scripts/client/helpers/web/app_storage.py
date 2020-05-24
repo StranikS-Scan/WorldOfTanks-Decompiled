@@ -85,7 +85,8 @@ class ApplicationStorage(object):
 
     def __init__(self, name, workersLimit, queueLimit=threads.INFINITE_QUEUE_SIZE):
         prefsPath = unicode(BigWorld.wg_getPreferencesFilePath(), 'utf-8', errors='ignore')
-        self.__cacheDir = os.path.normpath(os.path.join(os.path.dirname(prefsPath), name))
+        self._prefsDirPath = os.path.normpath(os.path.dirname(prefsPath))
+        self.__cacheDir = os.path.normpath(os.path.join(self._prefsDirPath, name))
         _expectDir(self.__cacheDir)
         self.__worker = threads.ThreadPool(workersLimit, queueLimit)
         self.__worker.start()
@@ -104,6 +105,10 @@ class ApplicationStorage(object):
             self.__worker.stop()
             self.__worker = None
         return
+
+    @property
+    def rootDirPath(self):
+        return self._prefsDirPath
 
     def load(self):
         cache = {}
@@ -170,7 +175,7 @@ class ApplicationStorage(object):
         return set(files)
 
     def isAppFileExist(self, appName, filename):
-        return self.__db[appName].isStored(filename)
+        return self.__db[appName].isStored(filename) if appName in self.__db else False
 
     def isFileExist(self, filename):
         return os.path.isfile(filename)

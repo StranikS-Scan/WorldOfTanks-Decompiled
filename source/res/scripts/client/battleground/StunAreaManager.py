@@ -67,7 +67,6 @@ class StunAreaManager(object):
                 if area is not None:
                     area.setGUIVisible(self.__isGUIVisible)
                     areas.append(area)
-                    area.setTerrainAndObjectsSelectedAreaVisible(True)
 
             self.__stunAreas[areaID] = areas
             if areas:

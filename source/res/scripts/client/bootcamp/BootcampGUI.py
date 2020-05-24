@@ -51,13 +51,6 @@ class BootcampStaticObjectsPlugin(plugins.MarkerPlugin):
         self.__objects[objectID] = markerID
         return True
 
-    def addDynObject(self, objectID, matrix):
-        if objectID in self.__objects:
-            return False
-        markerID = self._createMarkerWithMatrix(_markers2d_settings.MARKER_SYMBOL_NAME.STATIC_OBJECT_MARKER, matrix, active=True)
-        self.__objects[objectID] = markerID
-        return True
-
     def delStaticObject(self, objectID):
         markerID = self.__objects.pop(objectID, None)
         if markerID is not None:
@@ -73,10 +66,6 @@ class BootcampStaticObjectsPlugin(plugins.MarkerPlugin):
     def setDistanceToObject(self, objectID, distance):
         if objectID in self.__objects:
             self._invokeMarker(self.__objects[objectID], 'setDistance', distance)
-
-    def setBlinking(self, objectID, speed, isShow):
-        if objectID in self.__objects:
-            self._invokeMarker(self.__objects[objectID], 'setBlinking', isShow, speed)
 
 
 class BootcampGUI(object):

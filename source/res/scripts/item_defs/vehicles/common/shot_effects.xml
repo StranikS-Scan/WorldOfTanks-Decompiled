@@ -90,6 +90,134 @@
         </sound>
       </effects>
     </groundHit>
+    <oilHit>
+      <timeline>
+        <lightingEnd>	0.15	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	0.8	</endpixie>
+        <end>	1	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/oilHit_AP_1.eff	</file>
+          <file>	particles/Shells_Eff/oilHit_AP_1_2.eff	</file>
+          <file>	particles/Shells_Eff/oilHit_AP_1_3.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.125	</innerRadius>
+          <outerRadius>	1	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	0	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	fast	</groupName>
+          <texName>	explosion_oil_AM	</texName>
+          <bumpTexName>	explosion_oil_NM	</bumpTexName>
+          <smTexName>	explosion_oil_GMM	</smTexName>
+          <size>	1.1 1.1	</size>
+          <variation>	0.15	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_automatic_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_automatic_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_oil	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </oilHit>
+    <dirtHit>
+      <timeline>
+        <lightingEnd>	0.15	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	0.8	</endpixie>
+        <end>	1	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/dirtHit_AP_1.eff	</file>
+          <file>	particles/Shells_Eff/dirtHit_AP_1_2.eff	</file>
+          <file>	particles/Shells_Eff/dirtHit_AP_1_3.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.125	</innerRadius>
+          <outerRadius>	1	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	0	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	fast	</groupName>
+          <texName>	explosion_dirt_AM	</texName>
+          <bumpTexName>	explosion_dirt_NM	</bumpTexName>
+          <smTexName>	explosion_dirt_GMM	</smTexName>
+          <size>	1.1 1.1	</size>
+          <variation>	0.15	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_automatic_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_automatic_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_dirt	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </dirtHit>
     <sandHit>
       <timeline>
         <lightingEnd>	0.15	</lightingEnd>
@@ -941,6 +1069,134 @@
         </sound>
       </effects>
     </groundHit>
+    <oilHit>
+      <timeline>
+        <lightingEnd>	0.15	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	1.2	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/oilHit_AP_CR_1.eff	</file>
+          <file>	particles/Shells_Eff/oilHit_AP_CR_1_2.eff	</file>
+          <file>	particles/Shells_Eff/oilHit_AP_CR_1_3.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.125	</innerRadius>
+          <outerRadius>	1.0	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	3	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	fast	</groupName>
+          <texName>	explosion_oil_AM	</texName>
+          <bumpTexName>	explosion_oil_NM	</bumpTexName>
+          <smTexName>	explosion_oil_GMM	</smTexName>
+          <size>	1.1 1.1	</size>
+          <variation>	0.16	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_automatic_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_automatic_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_oil	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </oilHit>
+    <dirtHit>
+      <timeline>
+        <lightingEnd>	0.15	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	1.2	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/dirtHit_AP_CR_1.eff	</file>
+          <file>	particles/Shells_Eff/dirtHit_AP_CR_1_2.eff	</file>
+          <file>	particles/Shells_Eff/dirtHit_AP_CR_1_3.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.125	</innerRadius>
+          <outerRadius>	1.0	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	3	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	fast	</groupName>
+          <texName>	explosion_dirt_AM	</texName>
+          <bumpTexName>	explosion_dirt_NM	</bumpTexName>
+          <smTexName>	explosion_dirt_GMM	</smTexName>
+          <size>	1.1 1.1	</size>
+          <variation>	0.16	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_automatic_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_automatic_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_dirt	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </dirtHit>
     <sandHit>
       <timeline>
         <lightingEnd>	0.15	</lightingEnd>
@@ -1791,6 +2047,132 @@
         </sound>
       </effects>
     </groundHit>
+    <oilHit>
+      <timeline>
+        <lightingEnd>	0.15	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	0.8	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/oilHit_AP_1.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.125	</innerRadius>
+          <outerRadius>	2.5	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	5	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	3	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_oil_AM	</texName>
+          <bumpTexName>	explosion_oil_NM	</bumpTexName>
+          <smTexName>	explosion_oil_GMM	</smTexName>
+          <size>	5.0 5.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_small_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_small_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_oil	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </oilHit>
+    <dirtHit>
+      <timeline>
+        <lightingEnd>	0.15	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	0.8	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/dirtHit_AP_1.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.125	</innerRadius>
+          <outerRadius>	2.5	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	5	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	3	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_dirt_AM	</texName>
+          <bumpTexName>	explosion_dirt_NM	</bumpTexName>
+          <smTexName>	explosion_dirt_GMM	</smTexName>
+          <size>	5.0 5.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_small_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_small_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_dirt	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </dirtHit>
     <sandHit>
       <timeline>
         <lightingEnd>	0.15	</lightingEnd>
@@ -2643,6 +3025,132 @@
         </sound>
       </effects>
     </groundHit>
+    <oilHit>
+      <timeline>
+        <lightingEnd>	0.15	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	1.2	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/oilHit_HE_2.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	1	</innerRadius>
+          <outerRadius>	5	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	15	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	20	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	15	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	5	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_oil_AM	</texName>
+          <bumpTexName>	explosion_oil_NM	</bumpTexName>
+          <smTexName>	explosion_oil_GMM	</smTexName>
+          <size>	5.0 5.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_small_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_small_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_oil	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </oilHit>
+    <dirtHit>
+      <timeline>
+        <lightingEnd>	0.15	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	1.2	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/dirtHit_HE_2.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	1	</innerRadius>
+          <outerRadius>	5	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	15	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	20	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	15	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	5	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_dirt_AM	</texName>
+          <bumpTexName>	explosion_dirt_NM	</bumpTexName>
+          <smTexName>	explosion_dirt_GMM	</smTexName>
+          <size>	5.0 5.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_small_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_small_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_dirt	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </dirtHit>
     <sandHit>
       <timeline>
         <lightingEnd>	0.15	</lightingEnd>
@@ -3380,6 +3888,130 @@
         </sound>
       </effects>
     </groundHit>
+    <oilHit>
+      <timeline>
+        <lightingEnd>	0.15	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	1.2	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/oilHit_HC_2.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.125	</innerRadius>
+          <outerRadius>	3.5	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	5	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	3	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_oil_AM	</texName>
+          <bumpTexName>	explosion_oil_NM	</bumpTexName>
+          <smTexName>	explosion_oil_GMM	</smTexName>
+          <size>	4.0 4.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_small_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_small_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_oil	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HC	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </oilHit>
+    <dirtHit>
+      <timeline>
+        <lightingEnd>	0.15	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	1.2	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/dirtHit_HC_2.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.125	</innerRadius>
+          <outerRadius>	3.5	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	5	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	3	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_dirt_AM	</texName>
+          <bumpTexName>	explosion_dirt_NM	</bumpTexName>
+          <smTexName>	explosion_dirt_GMM	</smTexName>
+          <size>	4.0 4.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_small_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_small_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_dirt	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HC	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </dirtHit>
     <sandHit>
       <timeline>
         <lightingEnd>	0.15	</lightingEnd>
@@ -4219,6 +4851,130 @@
         </sound>
       </effects>
     </groundHit>
+    <oilHit>
+      <timeline>
+        <lightingEnd>	0.15	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	1.2	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/oilHit_AP_CR_1.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.125	</innerRadius>
+          <outerRadius>	1.0	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	0	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_oil_AM	</texName>
+          <bumpTexName>	explosion_oil_NM	</bumpTexName>
+          <smTexName>	explosion_oil_GMM	</smTexName>
+          <size>	4.0 4.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_small_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_small_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_oil	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </oilHit>
+    <dirtHit>
+      <timeline>
+        <lightingEnd>	0.15	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	1.2	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/dirtHit_AP_CR_1.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.125	</innerRadius>
+          <outerRadius>	1.0	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	0	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_dirt_AM	</texName>
+          <bumpTexName>	explosion_dirt_NM	</bumpTexName>
+          <smTexName>	explosion_dirt_GMM	</smTexName>
+          <size>	4.0 4.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_small_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_small_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_dirt	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </dirtHit>
     <sandHit>
       <timeline>
         <lightingEnd>	0.15	</lightingEnd>
@@ -5069,6 +5825,132 @@
         </sound>
       </effects>
     </groundHit>
+    <oilHit>
+      <timeline>
+        <lightingEnd>	0.17	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	0.8	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/oilHit_AP_2.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.15	</innerRadius>
+          <outerRadius>	3	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	5	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_oil_AM	</texName>
+          <bumpTexName>	explosion_oil_NM	</bumpTexName>
+          <smTexName>	explosion_oil_GMM	</smTexName>
+          <size>	5.0 5.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_medium_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_medium_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_oil	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </oilHit>
+    <dirtHit>
+      <timeline>
+        <lightingEnd>	0.17	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	0.8	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/dirtHit_AP_2.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.15	</innerRadius>
+          <outerRadius>	3	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	5	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_dirt_AM	</texName>
+          <bumpTexName>	explosion_dirt_NM	</bumpTexName>
+          <smTexName>	explosion_dirt_GMM	</smTexName>
+          <size>	5.0 5.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_medium_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_medium_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_dirt	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </dirtHit>
     <sandHit>
       <timeline>
         <lightingEnd>	0.17	</lightingEnd>
@@ -5926,6 +6808,132 @@
         </sound>
       </effects>
     </groundHit>
+    <oilHit>
+      <timeline>
+        <lightingEnd>	0.17	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	5	</endpixie>
+        <end>	6	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/oilHit_HE_2.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	1.5	</innerRadius>
+          <outerRadius>	6	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	11	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	16	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	11	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	3	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_oil_AM	</texName>
+          <bumpTexName>	explosion_oil_NM	</bumpTexName>
+          <smTexName>	explosion_oil_GMM	</smTexName>
+          <size>	5.0 5.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_medium_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_medium_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_oil	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </oilHit>
+    <dirtHit>
+      <timeline>
+        <lightingEnd>	0.17	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	5	</endpixie>
+        <end>	6	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/dirtHit_HE_2.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	1.5	</innerRadius>
+          <outerRadius>	6	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	11	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	16	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	11	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	3	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_dirt_AM	</texName>
+          <bumpTexName>	explosion_dirt_NM	</bumpTexName>
+          <smTexName>	explosion_dirt_GMM	</smTexName>
+          <size>	5.0 5.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_medium_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_medium_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_dirt	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </dirtHit>
     <sandHit>
       <timeline>
         <lightingEnd>	0.17	</lightingEnd>
@@ -6666,6 +7674,130 @@
         </sound>
       </effects>
     </groundHit>
+    <oilHit>
+      <timeline>
+        <lightingEnd>	0.17	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	1.2	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/oilHit_HC_2.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.15	</innerRadius>
+          <outerRadius>	4	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	5	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	3	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_oil_AM	</texName>
+          <bumpTexName>	explosion_oil_NM	</bumpTexName>
+          <smTexName>	explosion_oil_GMM	</smTexName>
+          <size>	4.0 4.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_medium_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_medium_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_oil	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HC	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </oilHit>
+    <dirtHit>
+      <timeline>
+        <lightingEnd>	0.17	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	1.2	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/dirtHit_HC_2.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.15	</innerRadius>
+          <outerRadius>	4	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	5	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	3	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_dirt_AM	</texName>
+          <bumpTexName>	explosion_dirt_NM	</bumpTexName>
+          <smTexName>	explosion_dirt_GMM	</smTexName>
+          <size>	4.0 4.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_medium_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_medium_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_dirt	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HC	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </dirtHit>
     <sandHit>
       <timeline>
         <lightingEnd>	0.17	</lightingEnd>
@@ -7510,6 +8642,130 @@
         </sound>
       </effects>
     </groundHit>
+    <oilHit>
+      <timeline>
+        <lightingEnd>	0.17	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	1.2	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/oilHit_AP_CR_2.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.125	</innerRadius>
+          <outerRadius>	1.3	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	0.5	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_oil_AM	</texName>
+          <bumpTexName>	explosion_oil_NM	</bumpTexName>
+          <smTexName>	explosion_oil_GMM	</smTexName>
+          <size>	4.0 4.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_medium_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_medium_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_oil	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </oilHit>
+    <dirtHit>
+      <timeline>
+        <lightingEnd>	0.17	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	1.2	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/dirtHit_AP_CR_2.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.125	</innerRadius>
+          <outerRadius>	1.3	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	0.5	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_dirt_AM	</texName>
+          <bumpTexName>	explosion_dirt_NM	</bumpTexName>
+          <smTexName>	explosion_dirt_GMM	</smTexName>
+          <size>	4.0 4.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_medium_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_medium_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_dirt	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </dirtHit>
     <sandHit>
       <timeline>
         <lightingEnd>	0.17	</lightingEnd>
@@ -8365,6 +9621,132 @@
         </sound>
       </effects>
     </groundHit>
+    <oilHit>
+      <timeline>
+        <lightingEnd>	0.2	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	0.8	</endpixie>
+        <end>	1	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/oilHit_AP_3.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.15	</innerRadius>
+          <outerRadius>	4	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	4	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.50	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_oil_AM	</texName>
+          <bumpTexName>	explosion_oil_NM	</bumpTexName>
+          <smTexName>	explosion_oil_GMM	</smTexName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_main_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_main_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_oil	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </oilHit>
+    <dirtHit>
+      <timeline>
+        <lightingEnd>	0.2	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	0.8	</endpixie>
+        <end>	1	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/dirtHit_AP_3.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.15	</innerRadius>
+          <outerRadius>	4	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	4	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.50	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_dirt_AM	</texName>
+          <bumpTexName>	explosion_dirt_NM	</bumpTexName>
+          <smTexName>	explosion_dirt_GMM	</smTexName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_main_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_main_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_dirt	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </dirtHit>
     <sandHit>
       <timeline>
         <lightingEnd>	0.2	</lightingEnd>
@@ -9222,6 +10604,132 @@
         </sound>
       </effects>
     </groundHit>
+    <oilHit>
+      <timeline>
+        <lightingEnd>	0.2	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	5	</endpixie>
+        <end>	6	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/oilHit_HE_3.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	2.0	</innerRadius>
+          <outerRadius>	8	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	13	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	18	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.50	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	13	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	6	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_oil_AM	</texName>
+          <bumpTexName>	explosion_oil_NM	</bumpTexName>
+          <smTexName>	explosion_oil_GMM	</smTexName>
+          <size>	7.0 7.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_main_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_main_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_oil	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </oilHit>
+    <dirtHit>
+      <timeline>
+        <lightingEnd>	0.2	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	5	</endpixie>
+        <end>	6	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/dirtHit_HE_3.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	2.0	</innerRadius>
+          <outerRadius>	8	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	13	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	18	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.50	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	13	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	6	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_dirt_AM	</texName>
+          <bumpTexName>	explosion_dirt_NM	</bumpTexName>
+          <smTexName>	explosion_dirt_GMM	</smTexName>
+          <size>	7.0 7.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_main_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_main_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_dirt	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </dirtHit>
     <sandHit>
       <timeline>
         <lightingEnd>	0.2	</lightingEnd>
@@ -9962,6 +11470,130 @@
         </sound>
       </effects>
     </groundHit>
+    <oilHit>
+      <timeline>
+        <lightingEnd>	0.2	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	1.2	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/oilHit_HC_3.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.15	</innerRadius>
+          <outerRadius>	4	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	4	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_oil_AM	</texName>
+          <bumpTexName>	explosion_oil_NM	</bumpTexName>
+          <smTexName>	explosion_oil_GMM	</smTexName>
+          <size>	4.0 4.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_main_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_main_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_oil	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HC	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </oilHit>
+    <dirtHit>
+      <timeline>
+        <lightingEnd>	0.2	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	1.2	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/dirtHit_HC_3.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.15	</innerRadius>
+          <outerRadius>	4	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	4	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_dirt_AM	</texName>
+          <bumpTexName>	explosion_dirt_NM	</bumpTexName>
+          <smTexName>	explosion_dirt_GMM	</smTexName>
+          <size>	4.0 4.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_main_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_main_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_dirt	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HC	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </dirtHit>
     <sandHit>
       <timeline>
         <lightingEnd>	0.2	</lightingEnd>
@@ -10807,6 +12439,132 @@
         </sound>
       </effects>
     </groundHit>
+    <oilHit>
+      <timeline>
+        <lightingEnd>	0.2	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	1.4	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/oilHit_AP_CR_3.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.15	</innerRadius>
+          <outerRadius>	1.0	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	4	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_oil_AM	</texName>
+          <bumpTexName>	explosion_oil_NM	</bumpTexName>
+          <smTexName>	explosion_oil_GMM	</smTexName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_main_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_main_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_oil	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </oilHit>
+    <dirtHit>
+      <timeline>
+        <lightingEnd>	0.2	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	1.4	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/dirtHit_AP_CR_3.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.15	</innerRadius>
+          <outerRadius>	1.0	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	4	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_dirt_AM	</texName>
+          <bumpTexName>	explosion_dirt_NM	</bumpTexName>
+          <smTexName>	explosion_dirt_GMM	</smTexName>
+          <size>	6.0 6.0	</size>
+          <variation>	0.25	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_main_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_main_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_dirt	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </dirtHit>
     <sandHit>
       <timeline>
         <lightingEnd>	0.2	</lightingEnd>
@@ -11664,6 +13422,132 @@
         </sound>
       </effects>
     </groundHit>
+    <oilHit>
+      <timeline>
+        <lightingEnd>	0.22	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	0.6	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/oilHit_AP_4.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.2	</innerRadius>
+          <outerRadius>	6	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	3	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	5	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	3	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_oil_AM	</texName>
+          <bumpTexName>	explosion_oil_NM	</bumpTexName>
+          <smTexName>	explosion_oil_GMM	</smTexName>
+          <size>	7.0 7.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_large_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_large_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_oil	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </oilHit>
+    <dirtHit>
+      <timeline>
+        <lightingEnd>	0.22	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	0.6	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/dirtHit_AP_4.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.2	</innerRadius>
+          <outerRadius>	6	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	3	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	5	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	3	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_dirt_AM	</texName>
+          <bumpTexName>	explosion_dirt_NM	</bumpTexName>
+          <smTexName>	explosion_dirt_GMM	</smTexName>
+          <size>	7.0 7.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_large_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_large_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_dirt	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </dirtHit>
     <sandHit>
       <timeline>
         <lightingEnd>	0.22	</lightingEnd>
@@ -12471,7 +14355,7 @@
           <endKey>	endpixie	</endKey>
           <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
           <alwaysUpdateModel>	true	</alwaysUpdateModel>
-          <file>	particles/Shells_Eff/groundHit_HC_3.eff	</file>
+          <file>	particles/Shells_Eff/groundHit_HE_4.eff	</file>
           <force>	1	</force>
         </pixie>
         <light>
@@ -12521,6 +14405,132 @@
         </sound>
       </effects>
     </groundHit>
+    <oilHit>
+      <timeline>
+        <lightingEnd>	0.22	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	5.5	</endpixie>
+        <end>	6	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/oilHit_HE_4.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	2.0	</innerRadius>
+          <outerRadius>	10.0	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	15	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.2	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	20	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.50	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	15	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0	</color>
+            <multiplier>	8	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_oil_AM	</texName>
+          <bumpTexName>	explosion_oil_NM	</bumpTexName>
+          <smTexName>	explosion_oil_GMM	</smTexName>
+          <size>	10.0 10.0	</size>
+          <variation>	0.15	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_large_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_large_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_oil	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </oilHit>
+    <dirtHit>
+      <timeline>
+        <lightingEnd>	0.22	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	5.5	</endpixie>
+        <end>	6	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/dirtHit_HE_4.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	2.0	</innerRadius>
+          <outerRadius>	10.0	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	15	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.2	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	20	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.50	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	15	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0	</color>
+            <multiplier>	8	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_dirt_AM	</texName>
+          <bumpTexName>	explosion_dirt_NM	</bumpTexName>
+          <smTexName>	explosion_dirt_GMM	</smTexName>
+          <size>	10.0 10.0	</size>
+          <variation>	0.15	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_large_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_large_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_dirt	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </dirtHit>
     <sandHit>
       <timeline>
         <lightingEnd>	0.22	</lightingEnd>
@@ -13261,6 +15271,130 @@
         </sound>
       </effects>
     </groundHit>
+    <oilHit>
+      <timeline>
+        <lightingEnd>	0.22	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	1.2	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/oilHit_HC_4.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.2	</innerRadius>
+          <outerRadius>	6	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	3	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	5	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	3	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_oil_AM	</texName>
+          <bumpTexName>	explosion_oil_NM	</bumpTexName>
+          <smTexName>	explosion_oil_GMM	</smTexName>
+          <size>	4.0 4.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_large_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_large_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_oil	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HC	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </oilHit>
+    <dirtHit>
+      <timeline>
+        <lightingEnd>	0.22	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	1.2	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/dirtHit_HC_4.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.2	</innerRadius>
+          <outerRadius>	6	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	3	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	5	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	3	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_dirt_AM	</texName>
+          <bumpTexName>	explosion_dirt_NM	</bumpTexName>
+          <smTexName>	explosion_dirt_GMM	</smTexName>
+          <size>	4.0 4.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_large_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_large_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_dirt	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HC	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </dirtHit>
     <sandHit>
       <timeline>
         <lightingEnd>	0.22	</lightingEnd>
@@ -14106,6 +16240,132 @@
         </sound>
       </effects>
     </groundHit>
+    <oilHit>
+      <timeline>
+        <lightingEnd>	0.22	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	2	</endpixie>
+        <end>	1.4	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/oilHit_AP_CR_4.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.2	</innerRadius>
+          <outerRadius>	2.0	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	3	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	5	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_oil_AM	</texName>
+          <bumpTexName>	explosion_oil_NM	</bumpTexName>
+          <smTexName>	explosion_oil_GMM	</smTexName>
+          <size>	7.0 7.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_large_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_large_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_oil	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </oilHit>
+    <dirtHit>
+      <timeline>
+        <lightingEnd>	0.22	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	2	</endpixie>
+        <end>	1.4	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/dirtHit_AP_CR_4.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.2	</innerRadius>
+          <outerRadius>	2.0	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	3	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	5	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	2	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_dirt_AM	</texName>
+          <bumpTexName>	explosion_dirt_NM	</bumpTexName>
+          <smTexName>	explosion_dirt_GMM	</smTexName>
+          <size>	7.0 7.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_large_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_large_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_dirt	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </dirtHit>
     <sandHit>
       <timeline>
         <lightingEnd>	0.22	</lightingEnd>
@@ -14963,6 +17223,132 @@
         </sound>
       </effects>
     </groundHit>
+    <oilHit>
+      <timeline>
+        <lightingEnd>	0.24	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	2	</endpixie>
+        <end>	0.6	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/oilHit_AP_4.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.3	</innerRadius>
+          <outerRadius>	10	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	5	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	10	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	8	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_oil_AM	</texName>
+          <bumpTexName>	explosion_oil_NM	</bumpTexName>
+          <smTexName>	explosion_oil_GMM	</smTexName>
+          <size>	7.0 7.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_huge_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_huge_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_oil	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </oilHit>
+    <dirtHit>
+      <timeline>
+        <lightingEnd>	0.24	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	2	</endpixie>
+        <end>	0.6	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/dirtHit_AP_4.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.3	</innerRadius>
+          <outerRadius>	10	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	5	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	10	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	8	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_dirt_AM	</texName>
+          <bumpTexName>	explosion_dirt_NM	</bumpTexName>
+          <smTexName>	explosion_dirt_GMM	</smTexName>
+          <size>	7.0 7.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_huge_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_huge_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_dirt	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </dirtHit>
     <sandHit>
       <timeline>
         <lightingEnd>	0.24	</lightingEnd>
@@ -15820,6 +18206,132 @@
         </sound>
       </effects>
     </groundHit>
+    <oilHit>
+      <timeline>
+        <lightingEnd>	0.24	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	5	</endpixie>
+        <end>	6	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/oilHit_HE_4.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	5	</innerRadius>
+          <outerRadius>	15	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	45	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	55	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	45	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	25	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_oil_AM	</texName>
+          <bumpTexName>	explosion_oil_NM	</bumpTexName>
+          <smTexName>	explosion_oil_GMM	</smTexName>
+          <size>	10.0 10.0	</size>
+          <variation>	0.15	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_huge_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_huge_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_oil	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </oilHit>
+    <dirtHit>
+      <timeline>
+        <lightingEnd>	0.24	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	5	</endpixie>
+        <end>	6	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/dirtHit_HE_4.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	5	</innerRadius>
+          <outerRadius>	15	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	45	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	55	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	45	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	25	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_dirt_AM	</texName>
+          <bumpTexName>	explosion_dirt_NM	</bumpTexName>
+          <smTexName>	explosion_dirt_GMM	</smTexName>
+          <size>	10.0 10.0	</size>
+          <variation>	0.15	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_huge_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_huge_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_dirt	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </dirtHit>
     <sandHit>
       <timeline>
         <lightingEnd>	0.24	</lightingEnd>
@@ -16560,6 +19072,130 @@
         </sound>
       </effects>
     </groundHit>
+    <oilHit>
+      <timeline>
+        <lightingEnd>	0.24	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	1.2	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/oilHit_HC_4.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.3	</innerRadius>
+          <outerRadius>	10	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	5	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	10	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	8	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_oil_AM	</texName>
+          <bumpTexName>	explosion_oil_NM	</bumpTexName>
+          <smTexName>	explosion_oil_GMM	</smTexName>
+          <size>	4.0 4.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_huge_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_huge_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_oil	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HC	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </oilHit>
+    <dirtHit>
+      <timeline>
+        <lightingEnd>	0.24	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	1	</endpixie>
+        <end>	1.2	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Shells_Eff/dirtHit_HC_4.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.3	</innerRadius>
+          <outerRadius>	10	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	5	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	10	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	8	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_dirt_AM	</texName>
+          <bumpTexName>	explosion_dirt_NM	</bumpTexName>
+          <smTexName>	explosion_dirt_GMM	</smTexName>
+          <size>	4.0 4.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_huge_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_huge_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_dirt	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HC	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </dirtHit>
     <sandHit>
       <timeline>
         <lightingEnd>	0.24	</lightingEnd>
@@ -17405,6 +20041,132 @@
         </sound>
       </effects>
     </groundHit>
+    <oilHit>
+      <timeline>
+        <lightingEnd>	0.24	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	6	</endpixie>
+        <end>	1.4	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/oilHit_AP_CR_4.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.23	</innerRadius>
+          <outerRadius>	3	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	5	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	9	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	8	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_oil_AM	</texName>
+          <bumpTexName>	explosion_oil_NM	</bumpTexName>
+          <smTexName>	explosion_oil_GMM	</smTexName>
+          <size>	7.0 7.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_huge_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_huge_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_oil	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </oilHit>
+    <dirtHit>
+      <timeline>
+        <lightingEnd>	0.24	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	6	</endpixie>
+        <end>	1.4	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/dirtHit_AP_CR_4.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	0.23	</innerRadius>
+          <outerRadius>	3	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	5	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	9	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	8	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	1	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_dirt_AM	</texName>
+          <bumpTexName>	explosion_dirt_NM	</bumpTexName>
+          <smTexName>	explosion_dirt_GMM	</smTexName>
+          <size>	7.0 7.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <impactNPC_NPC>	imp_surface_huge_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_surface_huge_PC	</impactPC_NPC>
+          <SWITCH_ext_impact_surface>	SWITCH_ext_impact_surface_dirt	</SWITCH_ext_impact_surface>
+          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
+        </sound>
+      </effects>
+    </dirtHit>
     <sandHit>
       <timeline>
         <lightingEnd>	0.24	</lightingEnd>
@@ -18258,6 +21020,126 @@
         </sound>
       </effects>
     </groundHit>
+    <oilHit>
+      <timeline>
+        <lightingEnd>	0.2	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	5	</endpixie>
+        <end>	6	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/oilHit_HE_3.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	2.0	</innerRadius>
+          <outerRadius>	8	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	13	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	18	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.50	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	13	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	6	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_oil_AM	</texName>
+          <bumpTexName>	explosion_oil_NM	</bumpTexName>
+          <smTexName>	explosion_oil_GMM	</smTexName>
+          <size>	7.0 7.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <wwsound>	imp_surf_ground_fougasse_main	</wwsound>
+        </sound>
+      </effects>
+    </oilHit>
+    <dirtHit>
+      <timeline>
+        <lightingEnd>	0.2	</lightingEnd>
+        <soundplaystop>	7	</soundplaystop>
+        <endpixie>	5	</endpixie>
+        <end>	6	</end>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <endKey>	endpixie	</endKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Shells_Eff/dirtHit_HE_3.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <light>
+          <startKey>	start	</startKey>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	2.0	</innerRadius>
+          <outerRadius>	8	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <position>	Scene Root	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 85 0	</color>
+            <multiplier>	13	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.25	</time>
+            <color>	255 150 100	</color>
+            <multiplier>	18	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.50	</time>
+            <color>	125 45 0	</color>
+            <multiplier>	13	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	6	</multiplier>
+          </animation>
+        </light>
+        <decal>
+          <startKey>	start	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_dirt_AM	</texName>
+          <bumpTexName>	explosion_dirt_NM	</bumpTexName>
+          <smTexName>	explosion_dirt_GMM	</smTexName>
+          <size>	7.0 7.0	</size>
+          <variation>	0.2	</variation>
+          <randomYaw>	True	</randomYaw>
+        </decal>
+        <sound>
+          <startKey>	start	</startKey>
+          <wwsound>	imp_surf_ground_fougasse_main	</wwsound>
+        </sound>
+      </effects>
+    </dirtHit>
     <sandHit>
       <timeline>
         <lightingEnd>	0.2	</lightingEnd>
@@ -19037,6 +21919,20 @@
         <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
         <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_snp>
       </ground>
+      <dirt>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_add>
+        <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_snp>
+      </dirt>
+      <oil>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_add>
+        <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_snp>
+      </oil>
       <stone>
         <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_fwd>
         <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion>
@@ -19294,6 +22190,20 @@
         <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
         <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_groundHit_snp.vfx	</effect_explosion_snp>
       </ground>
+      <dirt>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryStrike_dirtHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_dirtHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_dirtHit_add.vfx	</effect_explosion_add>
+        <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_dirtHit_snp.vfx	</effect_explosion_snp>
+      </dirt>
+      <oil>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryStrike_oilHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_oilHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_oilHit_add.vfx	</effect_explosion_add>
+        <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_oilHit_snp.vfx	</effect_explosion_snp>
+      </oil>
       <stone>
         <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryStrike_stoneHit.vfx	</effect_explosion_fwd>
         <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_stoneHit.vfx	</effect_explosion>
@@ -19548,6 +22458,20 @@
         <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/airstrike_groundHit_snp.vfx	</effect_explosion_snp>
         <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
       </ground>
+      <dirt>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/airstrike_dirtHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/airstrike_dirtHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Strike_Eff/airstrike_dirtHit_add.vfx	</effect_explosion_add>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/airstrike_dirtHit_snp.vfx	</effect_explosion_snp>
+        <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
+      </dirt>
+      <oil>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/airstrike_oilHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/airstrike_oilHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Strike_Eff/airstrike_oilHit_add.vfx	</effect_explosion_add>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/airstrike_oilHit_snp.vfx	</effect_explosion_snp>
+        <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
+      </oil>
       <stone>
         <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/airstrike_stoneHit.vfx	</effect_explosion_fwd>
         <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/airstrike_stoneHit.vfx	</effect_explosion>
@@ -19810,6 +22734,20 @@
         <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
         <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_groundHit_snp.vfx	</effect_explosion_snp>
       </ground>
+      <dirt>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryStrike_dirtHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_dirtHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_dirtHit_add.vfx	</effect_explosion_add>
+        <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_dirtHit_snp.vfx	</effect_explosion_snp>
+      </dirt>
+      <oil>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryStrike_oilHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_oilHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_oilHit_add.vfx	</effect_explosion_add>
+        <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_oilHit_snp.vfx	</effect_explosion_snp>
+      </oil>
       <stone>
         <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryStrike_stoneHit.vfx	</effect_explosion_fwd>
         <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryStrike_stoneHit.vfx	</effect_explosion>
@@ -20064,6 +23002,20 @@
         <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/airstrike_groundHit_snp.vfx	</effect_explosion_snp>
         <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
       </ground>
+      <dirt>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/airstrike_dirtHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/airstrike_dirtHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Strike_Eff/airstrike_dirtHit_add.vfx	</effect_explosion_add>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/airstrike_dirtHit_snp.vfx	</effect_explosion_snp>
+        <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
+      </dirt>
+      <oil>
+        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/airstrike_oilHit.vfx	</effect_explosion_fwd>
+        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/airstrike_oilHit.vfx	</effect_explosion>
+        <effect_explosion_add>	particles/content_deferred/PFX/Strike_Eff/airstrike_oilHit_add.vfx	</effect_explosion_add>
+        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/airstrike_oilHit_snp.vfx	</effect_explosion_snp>
+        <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
+      </oil>
       <stone>
         <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/airstrike_stoneHit.vfx	</effect_explosion_fwd>
         <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/airstrike_stoneHit.vfx	</effect_explosion>
@@ -20125,1275 +23077,4 @@
       </wwexplosion_far>
     </airstrike>
   </epicAirbombStrike>
-  <eventAirStrike>
-    <armorHit>
-      <timeline>
-        <lightingEnd>	0.2	</lightingEnd>
-        <soundplaystop>	7	</soundplaystop>
-        <endpixie>	1	</endpixie>
-        <end>	0.8	</end>
-      </timeline>
-      <effects>
-        <flashBang>
-          <startKey>	start	</startKey>
-          <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
-            </stage>
-            <stage>	1.1	  <color>	1.0 0.0 0.0 0.5	</color>
-            </stage>
-            <stage>	0.0	  <color>	0 0 0 0	</color>
-            </stage>
-          </stages>
-        </flashBang>
-        <pixie>
-          <startKey>	start	</startKey>
-          <endKey>	endpixie	</endKey>
-          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
-          <file>	particles/Shells_Eff/armorHit_AP_4.xml	</file>
-          <force>	1	</force>
-        </pixie>
-        <light>
-          <startKey>	start	</startKey>
-          <endKey>	lightingEnd	</endKey>
-          <innerRadius>	2.0	</innerRadius>
-          <outerRadius>	8	</outerRadius>
-          <castShadows>	false	</castShadows>
-          <position>	Scene Root	</position>
-          <animation>
-            <time>	0.0	</time>
-            <color>	255 85 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.25	</time>
-            <color>	255 150 100	</color>
-            <multiplier>	18	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.50	</time>
-            <color>	125 45 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	1.0	</time>
-            <color>	0 0 0 0	</color>
-            <multiplier>	6	</multiplier>
-          </animation>
-        </light>
-        <sound>
-          <startKey>	start	</startKey>
-          <impactNPC_PC>	imp_main_pierce_HE_NPC_PC	</impactNPC_PC>
-          <impactPC_NPC>	imp_main_pierce_HE_PC_NPC	</impactPC_NPC>
-          <impactNPC_NPC>	imp_main_pierce_HE_NPC_NPC	</impactNPC_NPC>
-          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
-        </sound>
-      </effects>
-    </armorHit>
-    <armorCriticalHit>
-      <timeline>
-        <lightingEnd>	0.2	</lightingEnd>
-        <soundplaystop>	7	</soundplaystop>
-        <endpixie>	1	</endpixie>
-        <end>	0.8	</end>
-      </timeline>
-      <effects>
-        <flashBang>
-          <startKey>	start	</startKey>
-          <stages>
-            <stage>	0.1	  <color>	0.9 0 0 0.8	</color>
-            </stage>
-            <stage>	1.4	  <color>	1.0 0.0 0.0 0.7	</color>
-            </stage>
-            <stage>	0.0	  <color>	0 0 0 0	</color>
-            </stage>
-          </stages>
-        </flashBang>
-        <pixie>
-          <startKey>	start	</startKey>
-          <endKey>	endpixie	</endKey>
-          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
-          <file>	particles/Shells_Eff/armorHit_AP_4.xml	</file>
-          <force>	1	</force>
-        </pixie>
-        <light>
-          <startKey>	start	</startKey>
-          <endKey>	lightingEnd	</endKey>
-          <innerRadius>	2.0	</innerRadius>
-          <outerRadius>	8	</outerRadius>
-          <castShadows>	false	</castShadows>
-          <position>	Scene Root	</position>
-          <animation>
-            <time>	0.0	</time>
-            <color>	255 85 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.25	</time>
-            <color>	255 150 100	</color>
-            <multiplier>	18	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.50	</time>
-            <color>	125 45 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	1.0	</time>
-            <color>	0 0 0 0	</color>
-            <multiplier>	6	</multiplier>
-          </animation>
-        </light>
-        <sound>
-          <startKey>	start	</startKey>
-          <impactNPC_PC>	imp_main_critical_HE_NPC_PC	</impactNPC_PC>
-          <impactPC_NPC>	imp_main_critical_HE_PC_NPC	</impactPC_NPC>
-          <impactNPC_NPC>	imp_main_critical_HE_NPC_NPC	</impactNPC_NPC>
-          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
-        </sound>
-      </effects>
-    </armorCriticalHit>
-    <armorResisted>
-      <timeline>
-        <lightingEnd>	0.2	</lightingEnd>
-        <soundplaystop>	7	</soundplaystop>
-        <endpixie>	0.8	</endpixie>
-        <end>	1	</end>
-      </timeline>
-      <effects>
-        <pixie>
-          <startKey>	start	</startKey>
-          <endKey>	endpixie	</endKey>
-          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
-          <file>	particles/Shells_Eff/shellFall_AP_4.xml	</file>
-          <force>	1	</force>
-        </pixie>
-        <light>
-          <startKey>	start	</startKey>
-          <endKey>	lightingEnd	</endKey>
-          <innerRadius>	2.0	</innerRadius>
-          <outerRadius>	8	</outerRadius>
-          <castShadows>	false	</castShadows>
-          <position>	Scene Root	</position>
-          <animation>
-            <time>	0.0	</time>
-            <color>	255 85 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.25	</time>
-            <color>	255 150 100	</color>
-            <multiplier>	18	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.50	</time>
-            <color>	125 45 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	1.0	</time>
-            <color>	0 0 0 0	</color>
-            <multiplier>	6	</multiplier>
-          </animation>
-        </light>
-        <sound>
-          <startKey>	start	</startKey>
-          <impactNPC_PC>	imp_main_not_pierce_HE_NPC_PC	</impactNPC_PC>
-          <impactPC_NPC>	imp_main_not_pierce_HE_PC_NPC	</impactPC_NPC>
-          <impactNPC_NPC>	imp_main_not_pierce_HE_NPC_NPC	</impactNPC_NPC>
-          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
-        </sound>
-      </effects>
-    </armorResisted>
-    <caliber>	125	</caliber>
-    <targetImpulse>	0.88	</targetImpulse>
-    <physicsParams>
-      <shellVelocity>	600	</shellVelocity>
-      <shellMass>	2500	</shellMass>
-      <splashRadius>	8	</splashRadius>
-      <splashStrength>	25	</splashStrength>
-    </physicsParams>
-    <airstrike>
-      <optimization>	2	</optimization>
-      <step_offset>	1.2	</step_offset>
-      <add_variation>	0.25	</add_variation>
-      <ground>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/groundHit_AP_4.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/groundHit_AP_4.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Null.vfx	</effect_smoke>
-      </ground>
-      <stone>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/stoneHit_AP_4.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/stoneHit_AP_4.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Null.vfx	</effect_smoke>
-      </stone>
-      <wood>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/woodHit_AP_4.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/woodHit_AP_4.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Null.vfx	</effect_smoke>
-      </wood>
-      <metal>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/groundHit_AP_4.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/groundHit_AP_4.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Null.vfx	</effect_smoke>
-      </metal>
-      <snow>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/snowHit_AP_4.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/snowHit_AP_4.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Null.vfx	</effect_smoke>
-      </snow>
-      <sand>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/sandHit_AP_4.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/sandHit_AP_4.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Null.vfx	</effect_smoke>
-      </sand>
-      <water>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/waterHit_AP_4.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/waterHit_AP_4.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Null.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Null.vfx	</effect_smoke>
-      </water>
-      <decal>
-        <groupName>	fast	</groupName>
-        <size>	2 2	</size>
-        <randomYaw>	True	</randomYaw>
-        <variation>	0.25	</variation>
-        <diffuseName>	maps/fx/decal_sand_1_AM.dds	</diffuseName>
-        <bumpName>	maps/fx/decal_sand_1_NM.dds	</bumpName>
-        <smTexName>	maps/fx/decal_sand_1_GMM.dds	</smTexName>
-      </decal>
-      <wwexplosion_close>
-        <main>	ev_2020_secret_event_gameplay_ability_ground_assault_plane_bullet	</main>
-        <keyoff></keyoff>
-      </wwexplosion_close>
-      <wwexplosion_far>
-        <main></main>
-        <keyoff></keyoff>
-      </wwexplosion_far>
-    </airstrike>
-  </eventAirStrike>
-  <eventArtilleryStrike>
-    <armorHit>
-      <timeline>
-        <lightingEnd>	0.2	</lightingEnd>
-        <soundplaystop>	7	</soundplaystop>
-        <endpixie>	1	</endpixie>
-        <end>	0.8	</end>
-      </timeline>
-      <effects>
-        <flashBang>
-          <startKey>	start	</startKey>
-          <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
-            </stage>
-            <stage>	1.1	  <color>	1.0 0.0 0.0 0.5	</color>
-            </stage>
-            <stage>	0.0	  <color>	0 0 0 0	</color>
-            </stage>
-          </stages>
-        </flashBang>
-        <pixie>
-          <startKey>	start	</startKey>
-          <endKey>	endpixie	</endKey>
-          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
-          <file>	particles/Shells_Eff/armorHit_HE_3.xml	</file>
-          <force>	1	</force>
-        </pixie>
-        <light>
-          <startKey>	start	</startKey>
-          <endKey>	lightingEnd	</endKey>
-          <innerRadius>	2.0	</innerRadius>
-          <outerRadius>	8	</outerRadius>
-          <castShadows>	false	</castShadows>
-          <position>	Scene Root	</position>
-          <animation>
-            <time>	0.0	</time>
-            <color>	255 85 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.25	</time>
-            <color>	255 150 100	</color>
-            <multiplier>	18	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.50	</time>
-            <color>	125 45 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	1.0	</time>
-            <color>	0 0 0 0	</color>
-            <multiplier>	6	</multiplier>
-          </animation>
-        </light>
-        <sound>
-          <startKey>	start	</startKey>
-          <impactNPC_PC>	imp_main_pierce_HE_NPC_PC	</impactNPC_PC>
-          <impactPC_NPC>	imp_main_pierce_HE_PC_NPC	</impactPC_NPC>
-          <impactNPC_NPC>	imp_main_pierce_HE_NPC_NPC	</impactNPC_NPC>
-          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
-        </sound>
-      </effects>
-    </armorHit>
-    <armorCriticalHit>
-      <timeline>
-        <lightingEnd>	0.2	</lightingEnd>
-        <soundplaystop>	7	</soundplaystop>
-        <endpixie>	1	</endpixie>
-        <end>	0.8	</end>
-      </timeline>
-      <effects>
-        <flashBang>
-          <startKey>	start	</startKey>
-          <stages>
-            <stage>	0.1	  <color>	0.9 0 0 0.8	</color>
-            </stage>
-            <stage>	1.4	  <color>	1.0 0.0 0.0 0.7	</color>
-            </stage>
-            <stage>	0.0	  <color>	0 0 0 0	</color>
-            </stage>
-          </stages>
-        </flashBang>
-        <pixie>
-          <startKey>	start	</startKey>
-          <endKey>	endpixie	</endKey>
-          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
-          <file>	particles/Shells_Eff/armorHit_HE_3.xml	</file>
-          <force>	1	</force>
-        </pixie>
-        <light>
-          <startKey>	start	</startKey>
-          <endKey>	lightingEnd	</endKey>
-          <innerRadius>	2.0	</innerRadius>
-          <outerRadius>	8	</outerRadius>
-          <castShadows>	false	</castShadows>
-          <position>	Scene Root	</position>
-          <animation>
-            <time>	0.0	</time>
-            <color>	255 85 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.25	</time>
-            <color>	255 150 100	</color>
-            <multiplier>	18	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.50	</time>
-            <color>	125 45 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	1.0	</time>
-            <color>	0 0 0 0	</color>
-            <multiplier>	6	</multiplier>
-          </animation>
-        </light>
-        <sound>
-          <startKey>	start	</startKey>
-          <impactNPC_PC>	imp_main_critical_HE_NPC_PC	</impactNPC_PC>
-          <impactPC_NPC>	imp_main_critical_HE_PC_NPC	</impactPC_NPC>
-          <impactNPC_NPC>	imp_main_critical_HE_NPC_NPC	</impactNPC_NPC>
-          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
-        </sound>
-      </effects>
-    </armorCriticalHit>
-    <armorResisted>
-      <timeline>
-        <lightingEnd>	0.2	</lightingEnd>
-        <soundplaystop>	7	</soundplaystop>
-        <endpixie>	0.8	</endpixie>
-        <end>	1	</end>
-      </timeline>
-      <effects>
-        <pixie>
-          <startKey>	start	</startKey>
-          <endKey>	endpixie	</endKey>
-          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
-          <file>	particles/Shells_Eff/shellFall_HE_3.xml	</file>
-          <force>	1	</force>
-        </pixie>
-        <light>
-          <startKey>	start	</startKey>
-          <endKey>	lightingEnd	</endKey>
-          <innerRadius>	2.0	</innerRadius>
-          <outerRadius>	8	</outerRadius>
-          <castShadows>	false	</castShadows>
-          <position>	Scene Root	</position>
-          <animation>
-            <time>	0.0	</time>
-            <color>	255 85 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.25	</time>
-            <color>	255 150 100	</color>
-            <multiplier>	18	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.50	</time>
-            <color>	125 45 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	1.0	</time>
-            <color>	0 0 0 0	</color>
-            <multiplier>	6	</multiplier>
-          </animation>
-        </light>
-        <sound>
-          <startKey>	start	</startKey>
-          <impactNPC_PC>	imp_main_not_pierce_HE_NPC_PC	</impactNPC_PC>
-          <impactPC_NPC>	imp_main_not_pierce_HE_PC_NPC	</impactPC_NPC>
-          <impactNPC_NPC>	imp_main_not_pierce_HE_NPC_NPC	</impactNPC_NPC>
-          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
-        </sound>
-      </effects>
-    </armorResisted>
-    <caliber>	125	</caliber>
-    <targetImpulse>	0.88	</targetImpulse>
-    <physicsParams>
-      <shellVelocity>	600	</shellVelocity>
-      <shellMass>	2500	</shellMass>
-      <splashRadius>	8	</splashRadius>
-      <splashStrength>	25	</splashStrength>
-    </physicsParams>
-    <artillery>
-      <smoke_variation>	0.0	</smoke_variation>
-      <add_variation>	0.5	</add_variation>
-      <ground>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/groundHit_HE_2.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/groundHit_HE_3.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Shells_Eff/groundHit_HE_2.vfx	</effect_explosion_add>
-        <effect_smoke>	particles/content_deferred/PFX/Shells_Eff/groundHit_HE_2.vfx	</effect_smoke>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/groundHit_HE_2.vfx	</effect_explosion_snp>
-      </ground>
-      <stone>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/stoneHit_HE_2.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/stoneHit_HE_3.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Shells_Eff/stoneHit_HE_2.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/stoneHit_HE_2.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Shells_Eff/stoneHit_HE_2.vfx	</effect_smoke>
-      </stone>
-      <wood>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/woodHit_HE_2.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/woodHit_HE_3.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Shells_Eff/woodHit_HE_2.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/woodHit_HE_2.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Shells_Eff/woodHit_HE_2.vfx	</effect_smoke>
-      </wood>
-      <metal>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/groundHit_HE_2.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/groundHit_HE_3.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Shells_Eff/groundHit_HE_2.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/groundHit_HE_2.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Shells_Eff/groundHit_HE_2.vfx	</effect_smoke>
-      </metal>
-      <snow>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/snowHit_HE_2.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/snowHit_HE_3.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Shells_Eff/snowHit_HE_2.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/snowHit_HE_2.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Shells_Eff/snowHit_HE_2.vfx	</effect_smoke>
-      </snow>
-      <sand>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/sandHit_HE_2.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/sandHit_HE_3.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Shells_Eff/sandHit_HE_2.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/sandHit_HE_2.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Shells_Eff/sandHit_HE_2.vfx	</effect_smoke>
-      </sand>
-      <water>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/waterHit_HE_2.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/waterHit_HE_3.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Shells_Eff/waterHit_HE_2.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/waterHit_HE_2.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Shells_Eff/waterHit_HE_2.vfx	</effect_smoke>
-      </water>
-      <decal>
-        <groupName>	fast	</groupName>
-        <size>	4.0 4.0	</size>
-        <randomYaw>	True	</randomYaw>
-        <variation>	0.15	</variation>
-        <diffuseName>	maps/fx/decal_ground_1_AM.dds	</diffuseName>
-        <bumpName>	maps/fx/decal_ground_1_NM.dds	</bumpName>
-        <smTexName>	maps/fx/decal_ground_1_GMM.dds	</smTexName>
-      </decal>
-      <wwexplosion_far>	hit_barrage_expl_far	</wwexplosion_far>
-      <wwexplosion_close>	hit_barrage_expl_close_ground	</wwexplosion_close>
-      <wwtracer>	tracer_comb	</wwtracer>
-    </artillery>
-  </eventArtilleryStrike>
-  <eventMortarStrike>
-    <armorHit>
-      <timeline>
-        <lightingEnd>	0.2	</lightingEnd>
-        <soundplaystop>	7	</soundplaystop>
-        <endpixie>	1	</endpixie>
-        <end>	0.8	</end>
-      </timeline>
-      <effects>
-        <flashBang>
-          <startKey>	start	</startKey>
-          <stages>
-            <stage>	0.1	  <color>	1.0 0.15 0.0 0.4	</color>
-            </stage>
-            <stage>	0.7	  <color>	0.9 0.1 0.0 0.1	</color>
-            </stage>
-            <stage>	0.0	  <color>	0 0 0 0	</color>
-            </stage>
-          </stages>
-        </flashBang>
-        <pixie>
-          <startKey>	start	</startKey>
-          <endKey>	endpixie	</endKey>
-          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
-          <file>	particles/Shells_Eff/armorHit_AP_2.eff	</file>
-          <force>	1	</force>
-        </pixie>
-        <light>
-          <startKey>	start	</startKey>
-          <endKey>	lightingEnd	</endKey>
-          <innerRadius>	2.0	</innerRadius>
-          <outerRadius>	8	</outerRadius>
-          <castShadows>	false	</castShadows>
-          <position>	Scene Root	</position>
-          <animation>
-            <time>	0.0	</time>
-            <color>	255 85 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.25	</time>
-            <color>	255 150 100	</color>
-            <multiplier>	18	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.50	</time>
-            <color>	125 45 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	1.0	</time>
-            <color>	0 0 0 0	</color>
-            <multiplier>	6	</multiplier>
-          </animation>
-        </light>
-        <sound>
-          <startKey>	start	</startKey>
-          <impactNPC_PC>	imp_main_pierce_HE_NPC_PC	</impactNPC_PC>
-          <impactPC_NPC>	imp_main_pierce_HE_PC_NPC	</impactPC_NPC>
-          <impactNPC_NPC>	imp_main_pierce_HE_NPC_NPC	</impactNPC_NPC>
-          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
-        </sound>
-      </effects>
-    </armorHit>
-    <armorCriticalHit>
-      <timeline>
-        <lightingEnd>	0.2	</lightingEnd>
-        <soundplaystop>	7	</soundplaystop>
-        <endpixie>	1	</endpixie>
-        <end>	0.8	</end>
-      </timeline>
-      <effects>
-        <flashBang>
-          <startKey>	start	</startKey>
-          <stages>
-            <stage>	0.1	  <color>	1.0 0.15 0.0 0.4	</color>
-            </stage>
-            <stage>	0.7	  <color>	0.9 0.1 0.0 0.1	</color>
-            </stage>
-            <stage>	0.0	  <color>	0 0 0 0	</color>
-            </stage>
-          </stages>
-        </flashBang>
-        <pixie>
-          <startKey>	start	</startKey>
-          <endKey>	endpixie	</endKey>
-          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
-          <file>	particles/Shells_Eff/armorHit_AP_2.eff	</file>
-          <force>	1	</force>
-        </pixie>
-        <light>
-          <startKey>	start	</startKey>
-          <endKey>	lightingEnd	</endKey>
-          <innerRadius>	2.0	</innerRadius>
-          <outerRadius>	8	</outerRadius>
-          <castShadows>	false	</castShadows>
-          <position>	Scene Root	</position>
-          <animation>
-            <time>	0.0	</time>
-            <color>	255 85 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.25	</time>
-            <color>	255 150 100	</color>
-            <multiplier>	18	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.50	</time>
-            <color>	125 45 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	1.0	</time>
-            <color>	0 0 0 0	</color>
-            <multiplier>	6	</multiplier>
-          </animation>
-        </light>
-        <sound>
-          <startKey>	start	</startKey>
-          <impactNPC_PC>	imp_main_critical_HE_NPC_PC	</impactNPC_PC>
-          <impactPC_NPC>	imp_main_critical_HE_PC_NPC	</impactPC_NPC>
-          <impactNPC_NPC>	imp_main_critical_HE_NPC_NPC	</impactNPC_NPC>
-          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
-        </sound>
-      </effects>
-    </armorCriticalHit>
-    <armorResisted>
-      <timeline>
-        <lightingEnd>	0.2	</lightingEnd>
-        <soundplaystop>	7	</soundplaystop>
-        <endpixie>	0.8	</endpixie>
-        <end>	1	</end>
-      </timeline>
-      <effects>
-        <pixie>
-          <startKey>	start	</startKey>
-          <endKey>	endpixie	</endKey>
-          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
-          <file>	particles/Shells_Eff/shellFall_AP_2.eff	</file>
-          <force>	1	</force>
-        </pixie>
-        <light>
-          <startKey>	start	</startKey>
-          <endKey>	lightingEnd	</endKey>
-          <innerRadius>	2.0	</innerRadius>
-          <outerRadius>	8	</outerRadius>
-          <castShadows>	false	</castShadows>
-          <position>	Scene Root	</position>
-          <animation>
-            <time>	0.0	</time>
-            <color>	255 85 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.25	</time>
-            <color>	255 150 100	</color>
-            <multiplier>	18	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.50	</time>
-            <color>	125 45 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	1.0	</time>
-            <color>	0 0 0 0	</color>
-            <multiplier>	6	</multiplier>
-          </animation>
-        </light>
-        <sound>
-          <startKey>	start	</startKey>
-          <impactNPC_PC>	imp_main_not_pierce_HE_NPC_PC	</impactNPC_PC>
-          <impactPC_NPC>	imp_main_not_pierce_HE_PC_NPC	</impactPC_NPC>
-          <impactNPC_NPC>	imp_main_not_pierce_HE_NPC_NPC	</impactNPC_NPC>
-          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
-        </sound>
-      </effects>
-    </armorResisted>
-    <caliber>	125	</caliber>
-    <targetImpulse>	0.88	</targetImpulse>
-    <physicsParams>
-      <shellVelocity>	1000	</shellVelocity>
-      <shellMass>	2500	</shellMass>
-      <splashRadius>	10	</splashRadius>
-      <splashStrength>	25	</splashStrength>
-    </physicsParams>
-    <artillery>
-      <smoke_variation>	0.0	</smoke_variation>
-      <add_variation>	0.5	</add_variation>
-      <ground>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_add>
-        <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_snp>
-      </ground>
-      <stone>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
-      </stone>
-      <wood>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
-      </wood>
-      <metal>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
-      </metal>
-      <snow>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
-      </snow>
-      <sand>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
-      </sand>
-      <water>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Strike_Eff/artilleryPrep_groundHit.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Strike_Eff/airstrike_smoke.vfx	</effect_smoke>
-      </water>
-      <decal>
-        <groupName>	fast	</groupName>
-        <size>	5.0 5.0	</size>
-        <randomYaw>	True	</randomYaw>
-        <variation>	0.15	</variation>
-        <diffuseName>	maps/fx/decal_ground_1_AM.dds	</diffuseName>
-        <bumpName>	maps/fx/decal_ground_1_NM.dds	</bumpName>
-        <smTexName>	maps/fx/decal_ground_1_GMM.dds	</smTexName>
-      </decal>
-      <wwexplosion_far>	hit_barrage_expl_far	</wwexplosion_far>
-      <wwexplosion_close>	hit_barrage_expl_close_ground	</wwexplosion_close>
-      <wwtracer>	tracer_comb	</wwtracer>
-    </artillery>
-  </eventMortarStrike>
-  <eventAirbombStrike>
-    <armorHit>
-      <timeline>
-        <lightingEnd>	0.2	</lightingEnd>
-        <soundplaystop>	7	</soundplaystop>
-        <endpixie>	1	</endpixie>
-        <end>	0.8	</end>
-      </timeline>
-      <effects>
-        <flashBang>
-          <startKey>	start	</startKey>
-          <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
-            </stage>
-            <stage>	1.1	  <color>	1.0 0.0 0.0 0.5	</color>
-            </stage>
-            <stage>	0.0	  <color>	0 0 0 0	</color>
-            </stage>
-          </stages>
-        </flashBang>
-        <pixie>
-          <startKey>	start	</startKey>
-          <endKey>	endpixie	</endKey>
-          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
-          <file>	particles/Shells_Eff/armorHit_HE_4.eff	</file>
-          <force>	1	</force>
-        </pixie>
-        <light>
-          <startKey>	start	</startKey>
-          <endKey>	lightingEnd	</endKey>
-          <innerRadius>	2.0	</innerRadius>
-          <outerRadius>	8	</outerRadius>
-          <castShadows>	false	</castShadows>
-          <position>	Scene Root	</position>
-          <animation>
-            <time>	0.0	</time>
-            <color>	255 85 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.25	</time>
-            <color>	255 150 100	</color>
-            <multiplier>	18	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.50	</time>
-            <color>	125 45 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	1.0	</time>
-            <color>	0 0 0 0	</color>
-            <multiplier>	6	</multiplier>
-          </animation>
-        </light>
-        <sound>
-          <startKey>	start	</startKey>
-          <impactNPC_PC>	imp_main_pierce_HE_NPC_PC	</impactNPC_PC>
-          <impactPC_NPC>	imp_main_pierce_HE_PC_NPC	</impactPC_NPC>
-          <impactNPC_NPC>	imp_main_pierce_HE_NPC_NPC	</impactNPC_NPC>
-          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
-        </sound>
-      </effects>
-    </armorHit>
-    <armorCriticalHit>
-      <timeline>
-        <lightingEnd>	0.2	</lightingEnd>
-        <soundplaystop>	7	</soundplaystop>
-        <endpixie>	1	</endpixie>
-        <end>	0.8	</end>
-      </timeline>
-      <effects>
-        <flashBang>
-          <startKey>	start	</startKey>
-          <stages>
-            <stage>	0.1	  <color>	0.9 0 0 0.8	</color>
-            </stage>
-            <stage>	1.4	  <color>	1.0 0.0 0.0 0.7	</color>
-            </stage>
-            <stage>	0.0	  <color>	0 0 0 0	</color>
-            </stage>
-          </stages>
-        </flashBang>
-        <pixie>
-          <startKey>	start	</startKey>
-          <endKey>	endpixie	</endKey>
-          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
-          <file>	particles/Shells_Eff/armorHit_HE_4.eff	</file>
-          <force>	1	</force>
-        </pixie>
-        <light>
-          <startKey>	start	</startKey>
-          <endKey>	lightingEnd	</endKey>
-          <innerRadius>	2.0	</innerRadius>
-          <outerRadius>	8	</outerRadius>
-          <castShadows>	false	</castShadows>
-          <position>	Scene Root	</position>
-          <animation>
-            <time>	0.0	</time>
-            <color>	255 85 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.25	</time>
-            <color>	255 150 100	</color>
-            <multiplier>	18	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.50	</time>
-            <color>	125 45 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	1.0	</time>
-            <color>	0 0 0 0	</color>
-            <multiplier>	6	</multiplier>
-          </animation>
-        </light>
-        <sound>
-          <startKey>	start	</startKey>
-          <impactNPC_PC>	imp_main_critical_HE_NPC_PC	</impactNPC_PC>
-          <impactPC_NPC>	imp_main_critical_HE_PC_NPC	</impactPC_NPC>
-          <impactNPC_NPC>	imp_main_critical_HE_NPC_NPC	</impactNPC_NPC>
-          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
-        </sound>
-      </effects>
-    </armorCriticalHit>
-    <armorResisted>
-      <timeline>
-        <lightingEnd>	0.2	</lightingEnd>
-        <soundplaystop>	7	</soundplaystop>
-        <endpixie>	0.8	</endpixie>
-        <end>	1	</end>
-      </timeline>
-      <effects>
-        <pixie>
-          <startKey>	start	</startKey>
-          <endKey>	endpixie	</endKey>
-          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
-          <file>	particles/Shells_Eff/shellFall_HE_4.eff	</file>
-          <force>	1	</force>
-        </pixie>
-        <light>
-          <startKey>	start	</startKey>
-          <endKey>	lightingEnd	</endKey>
-          <innerRadius>	2.0	</innerRadius>
-          <outerRadius>	8	</outerRadius>
-          <castShadows>	false	</castShadows>
-          <position>	Scene Root	</position>
-          <animation>
-            <time>	0.0	</time>
-            <color>	255 85 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.25	</time>
-            <color>	255 150 100	</color>
-            <multiplier>	18	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.50	</time>
-            <color>	125 45 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	1.0	</time>
-            <color>	0 0 0 0	</color>
-            <multiplier>	6	</multiplier>
-          </animation>
-        </light>
-        <sound>
-          <startKey>	start	</startKey>
-          <impactNPC_PC>	imp_main_not_pierce_HE_NPC_PC	</impactNPC_PC>
-          <impactPC_NPC>	imp_main_not_pierce_HE_PC_NPC	</impactPC_NPC>
-          <impactNPC_NPC>	imp_main_not_pierce_HE_NPC_NPC	</impactNPC_NPC>
-          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
-        </sound>
-      </effects>
-    </armorResisted>
-    <caliber>	125	</caliber>
-    <targetImpulse>	0.88	</targetImpulse>
-    <physicsParams>
-      <shellVelocity>	600	</shellVelocity>
-      <shellMass>	2500	</shellMass>
-      <splashRadius>	8	</splashRadius>
-      <splashStrength>	25	</splashStrength>
-    </physicsParams>
-    <artillery>
-      <smoke_variation>	0.0	</smoke_variation>
-      <add_variation>	0.5	</add_variation>
-      <ground>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/groundHit_HE_4.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/groundHit_HE_4.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Shells_Eff/groundHit_HE_4.vfx	</effect_explosion_add>
-        <effect_smoke>	particles/content_deferred/PFX/Shells_Eff/groundHit_HE_4.vfx	</effect_smoke>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/groundHit_HE_4.vfx	</effect_explosion_snp>
-      </ground>
-      <stone>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/stoneHit_HE_4.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/stoneHit_HE_4.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Shells_Eff/stoneHit_HE_4.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/stoneHit_HE_4.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Shells_Eff/stoneHit_HE_4.vfx	</effect_smoke>
-      </stone>
-      <wood>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/woodHit_HE_4.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/woodHit_HE_4.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Shells_Eff/woodHit_HE_4.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/woodHit_HE_4.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Shells_Eff/woodHit_HE_4.vfx	</effect_smoke>
-      </wood>
-      <metal>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/groundHit_HE_4.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/groundHit_HE_4.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Shells_Eff/groundHit_HE_4.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/groundHit_HE_4.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Shells_Eff/groundHit_HE_4.vfx	</effect_smoke>
-      </metal>
-      <snow>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/snowHit_HE_4.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/snowHit_HE_4.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Shells_Eff/snowHit_HE_4.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/snowHit_HE_4.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Shells_Eff/snowHit_HE_4.vfx	</effect_smoke>
-      </snow>
-      <sand>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/sandHit_HE_4.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/sandHit_HE_4.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Shells_Eff/sandHit_HE_4.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/sandHit_HE_4.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Shells_Eff/sandHit_HE_4.vfx	</effect_smoke>
-      </sand>
-      <water>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/waterHit_HE_4.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/waterHit_HE_4.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Shells_Eff/waterHit_HE_4.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/waterHit_HE_4.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Shells_Eff/waterHit_HE_4.vfx	</effect_smoke>
-      </water>
-      <decal>
-        <groupName>	fast	</groupName>
-        <size>	8.0 8.0	</size>
-        <randomYaw>	True	</randomYaw>
-        <variation>	0.15	</variation>
-        <diffuseName>	maps/fx/decal_ground_1_AM.dds	</diffuseName>
-        <bumpName>	maps/fx/decal_ground_1_NM.dds	</bumpName>
-        <smTexName>	maps/fx/decal_ground_1_GMM.dds	</smTexName>
-      </decal>
-      <wwexplosion_far>	hit_barrage_expl_far	</wwexplosion_far>
-      <wwexplosion_close>	hit_barrage_expl_close_ground	</wwexplosion_close>
-      <wwtracer>	tracer_comb	</wwtracer>
-    </artillery>
-  </eventAirbombStrike>
-  <eventRocketStrike>
-    <armorHit>
-      <timeline>
-        <lightingEnd>	0.2	</lightingEnd>
-        <soundplaystop>	7	</soundplaystop>
-        <endpixie>	1	</endpixie>
-        <end>	0.8	</end>
-      </timeline>
-      <effects>
-        <flashBang>
-          <startKey>	start	</startKey>
-          <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
-            </stage>
-            <stage>	1.1	  <color>	1.0 0.0 0.0 0.5	</color>
-            </stage>
-            <stage>	0.0	  <color>	0 0 0 0	</color>
-            </stage>
-          </stages>
-        </flashBang>
-        <pixie>
-          <startKey>	start	</startKey>
-          <endKey>	endpixie	</endKey>
-          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
-          <file>	particles/Shells_Eff/armorHit_HC_3.eff	</file>
-          <force>	1	</force>
-        </pixie>
-        <light>
-          <startKey>	start	</startKey>
-          <endKey>	lightingEnd	</endKey>
-          <innerRadius>	2.0	</innerRadius>
-          <outerRadius>	8	</outerRadius>
-          <castShadows>	false	</castShadows>
-          <position>	Scene Root	</position>
-          <animation>
-            <time>	0.0	</time>
-            <color>	255 85 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.25	</time>
-            <color>	255 150 100	</color>
-            <multiplier>	18	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.50	</time>
-            <color>	125 45 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	1.0	</time>
-            <color>	0 0 0 0	</color>
-            <multiplier>	6	</multiplier>
-          </animation>
-        </light>
-        <sound>
-          <startKey>	start	</startKey>
-          <impactNPC_PC>	imp_main_pierce_HE_NPC_PC	</impactNPC_PC>
-          <impactPC_NPC>	imp_main_pierce_HE_PC_NPC	</impactPC_NPC>
-          <impactNPC_NPC>	imp_main_pierce_HE_NPC_NPC	</impactNPC_NPC>
-          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
-        </sound>
-      </effects>
-    </armorHit>
-    <armorCriticalHit>
-      <timeline>
-        <lightingEnd>	0.2	</lightingEnd>
-        <soundplaystop>	7	</soundplaystop>
-        <endpixie>	1	</endpixie>
-        <end>	0.8	</end>
-      </timeline>
-      <effects>
-        <flashBang>
-          <startKey>	start	</startKey>
-          <stages>
-            <stage>	0.1	  <color>	0.9 0 0 0.8	</color>
-            </stage>
-            <stage>	1.4	  <color>	1.0 0.0 0.0 0.7	</color>
-            </stage>
-            <stage>	0.0	  <color>	0 0 0 0	</color>
-            </stage>
-          </stages>
-        </flashBang>
-        <pixie>
-          <startKey>	start	</startKey>
-          <endKey>	endpixie	</endKey>
-          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
-          <file>	particles/Shells_Eff/armorHit_HC_3.eff	</file>
-          <force>	1	</force>
-        </pixie>
-        <light>
-          <startKey>	start	</startKey>
-          <endKey>	lightingEnd	</endKey>
-          <innerRadius>	2.0	</innerRadius>
-          <outerRadius>	8	</outerRadius>
-          <castShadows>	false	</castShadows>
-          <position>	Scene Root	</position>
-          <animation>
-            <time>	0.0	</time>
-            <color>	255 85 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.25	</time>
-            <color>	255 150 100	</color>
-            <multiplier>	18	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.50	</time>
-            <color>	125 45 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	1.0	</time>
-            <color>	0 0 0 0	</color>
-            <multiplier>	6	</multiplier>
-          </animation>
-        </light>
-        <sound>
-          <startKey>	start	</startKey>
-          <impactNPC_PC>	imp_main_critical_HE_NPC_PC	</impactNPC_PC>
-          <impactPC_NPC>	imp_main_critical_HE_PC_NPC	</impactPC_NPC>
-          <impactNPC_NPC>	imp_main_critical_HE_NPC_NPC	</impactNPC_NPC>
-          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
-        </sound>
-      </effects>
-    </armorCriticalHit>
-    <armorResisted>
-      <timeline>
-        <lightingEnd>	0.2	</lightingEnd>
-        <soundplaystop>	7	</soundplaystop>
-        <endpixie>	0.8	</endpixie>
-        <end>	1	</end>
-      </timeline>
-      <effects>
-        <pixie>
-          <startKey>	start	</startKey>
-          <endKey>	endpixie	</endKey>
-          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
-          <file>	particles/Shells_Eff/shellFall_HC_3.eff	</file>
-          <force>	1	</force>
-        </pixie>
-        <light>
-          <startKey>	start	</startKey>
-          <endKey>	lightingEnd	</endKey>
-          <innerRadius>	2.0	</innerRadius>
-          <outerRadius>	8	</outerRadius>
-          <castShadows>	false	</castShadows>
-          <position>	Scene Root	</position>
-          <animation>
-            <time>	0.0	</time>
-            <color>	255 85 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.25	</time>
-            <color>	255 150 100	</color>
-            <multiplier>	18	</multiplier>
-          </animation>
-          <animation>
-            <time>	0.50	</time>
-            <color>	125 45 0	</color>
-            <multiplier>	13	</multiplier>
-          </animation>
-          <animation>
-            <time>	1.0	</time>
-            <color>	0 0 0 0	</color>
-            <multiplier>	6	</multiplier>
-          </animation>
-        </light>
-        <sound>
-          <startKey>	start	</startKey>
-          <impactNPC_PC>	imp_main_not_pierce_HE_NPC_PC	</impactNPC_PC>
-          <impactPC_NPC>	imp_main_not_pierce_HE_PC_NPC	</impactPC_NPC>
-          <impactNPC_NPC>	imp_main_not_pierce_HE_NPC_NPC	</impactNPC_NPC>
-          <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_HE	</SWITCH_ext_shell_type>
-        </sound>
-      </effects>
-    </armorResisted>
-    <caliber>	125	</caliber>
-    <targetImpulse>	0.88	</targetImpulse>
-    <physicsParams>
-      <shellVelocity>	600	</shellVelocity>
-      <shellMass>	2500	</shellMass>
-      <splashRadius>	8	</splashRadius>
-      <splashStrength>	25	</splashStrength>
-    </physicsParams>
-    <artillery>
-      <smoke_variation>	0.0	</smoke_variation>
-      <add_variation>	0.5	</add_variation>
-      <ground>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/groundHit_HC_3.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/groundHit_HC_3.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Shells_Eff/groundHit_HC_3.vfx	</effect_explosion_add>
-        <effect_smoke>	particles/content_deferred/PFX/Shells_Eff/groundHit_HC_3.vfx	</effect_smoke>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/groundHit_HC_3.vfx	</effect_explosion_snp>
-      </ground>
-      <stone>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/stoneHit_HC_3.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/stoneHit_HC_3.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Shells_Eff/stoneHit_HC_3.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/stoneHit_HC_3.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Shells_Eff/stoneHit_HC_3.vfx	</effect_smoke>
-      </stone>
-      <wood>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/woodHit_HC_3.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/woodHit_HC_3.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Shells_Eff/woodHit_HC_3.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/woodHit_HC_3.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Shells_Eff/woodHit_HC_3.vfx	</effect_smoke>
-      </wood>
-      <metal>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/groundHit_HC_3.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/groundHit_HC_3.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Shells_Eff/groundHit_HC_3.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/groundHit_HC_3.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Shells_Eff/groundHit_HC_3.vfx	</effect_smoke>
-      </metal>
-      <snow>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/snowHit_HC_3.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/snowHit_HC_3.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Shells_Eff/snowHit_HC_3.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/snowHit_HC_3.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Shells_Eff/snowHit_HC_3.vfx	</effect_smoke>
-      </snow>
-      <sand>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/sandHit_HC_3.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/sandHit_HC_3.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Shells_Eff/sandHit_HC_3.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/sandHit_HC_3.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Shells_Eff/sandHit_HC_3.vfx	</effect_smoke>
-      </sand>
-      <water>
-        <effect_explosion_fwd>	particles/content_forward/PFX/Shells_Eff/waterHit_HC_3.vfx	</effect_explosion_fwd>
-        <effect_explosion>	particles/content_deferred/PFX/Shells_Eff/waterHit_HC_3.vfx	</effect_explosion>
-        <effect_explosion_add>	particles/content_deferred/PFX/Shells_Eff/waterHit_HC_3.vfx	</effect_explosion_add>
-        <effect_explosion_snp>	particles/content_deferred/PFX/Shells_Eff/waterHit_HC_3.vfx	</effect_explosion_snp>
-        <effect_smoke>	particles/content_deferred/PFX/Shells_Eff/waterHit_HC_3.vfx	</effect_smoke>
-      </water>
-      <decal>
-        <groupName>	fast	</groupName>
-        <size>	5.0 5.0	</size>
-        <randomYaw>	True	</randomYaw>
-        <variation>	0.15	</variation>
-        <diffuseName>	maps/fx/decal_ground_1_AM.dds	</diffuseName>
-        <bumpName>	maps/fx/decal_ground_1_NM.dds	</bumpName>
-        <smTexName>	maps/fx/decal_ground_1_GMM.dds	</smTexName>
-      </decal>
-      <wwexplosion_far>	hit_barrage_expl_far	</wwexplosion_far>
-      <wwexplosion_close>	hit_barrage_expl_close_ground	</wwexplosion_close>
-      <wwtracer>	tracer_comb	</wwtracer>
-    </artillery>
-  </eventRocketStrike>
 </shot_effects.xml>

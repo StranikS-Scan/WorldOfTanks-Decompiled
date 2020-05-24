@@ -90,8 +90,9 @@ class TechTreeEventsListener(ITechTreeEventsListener):
         g_playerEvents.onAccountShowGUI -= self.__onAccountShowGUI
         g_clientUpdateManager.removeObjectCallbacks(self)
 
-    def getUserName(self):
-        return self.__getUserName(self.__getActualEventID())
+    def getUserName(self, actionID):
+        action = self.__actions.get(actionID, None)
+        return str() if action is None else action.getUserName()
 
     def getVehicles(self, nationID=None):
         vehicles = set()
@@ -101,27 +102,35 @@ class TechTreeEventsListener(ITechTreeEventsListener):
         return vehicles
 
     def setNationViewed(self, nationID):
-        for actionID in self.__getEvents(nationID):
+        for actionID in self.__getActions(nationID=nationID):
             self.__settings.selectNation(actionID, nationID)
 
         self.onSettingsChanged()
 
-    def getNations(self, unviewed=False):
+    def getNations(self, unviewed=False, actionID=None):
         if not self.actions:
             return set()
-        nationIDs = set.union(*[ self.__getNations(actionID) for actionID in self.__actions ])
-        return nationIDs.difference(self.__settings.viewedNations()) if unviewed else nationIDs
+        else:
+            if actionID is not None:
+                nationIDs = self.__getNations(actionID)
+            else:
+                nationIDs = set.union(*[ self.__getNations(actionID) for actionID in self.__actions ])
+            return nationIDs.difference(self.__settings.viewedNations()) if unviewed else nationIDs
 
-    def getTimeTillEnd(self):
-        actionID = self.__getActualEventID()
-        return 0 if actionID is None else self.__actions[actionID].getFinishTimeLeft()
+    def getTimeTillEnd(self, actionID):
+        action = self.__actions.get(actionID, None)
+        return 0 if action is None else action.getFinishTimeLeft()
 
-    def getFinishTime(self):
-        actionID = self.__getActualEventID()
-        return 0 if actionID is None else self.__actions[actionID].getFinishTime()
+    def getFinishTime(self, actionID):
+        action = self.__actions.get(actionID, None)
+        return 0 if action is None else action.getFinishTime()
 
     def hasActiveAction(self, vehicleCD, nationID=None):
-        return vehicleCD in self.getVehicles(nationID) if nationID not in self.__settings.viewedNations() else False
+        return bool(self.__getActions(vehicleCD, nationID))
+
+    def getActiveAction(self, vehicleCD=None, nationID=None):
+        actionIDs = self.__getActions(vehicleCD, nationID)
+        return self.__getActualEventID(actionIDs)
 
     def __update(self):
         actions = self.__eventsCache.getActions(self.__eventFilter())
@@ -149,24 +158,24 @@ class TechTreeEventsListener(ITechTreeEventsListener):
         action = self.__actions.get(actionID, None)
         return str() if action is None else action.getUserName()
 
-    def __getEvents(self, nationID):
-        return (actionID for actionID in self.__actions if nationID in self.__getNations(actionID))
-
-    def __getActualEventID(self):
-        return None if not self.__actions else max(((k, v.getFinishTime()) for k, v in self.__actions.items()), key=operator.itemgetter(1))[0]
+    def __getActualEventID(self, actionIDs):
+        actionItems = [ pair for pair in self.__actions.items() if pair[0] in actionIDs ]
+        return None if not actionItems else min(((k, v.getFinishTime()) for k, v in actionItems), key=operator.itemgetter(1))[0]
 
     def __onAccountShowGUI(self, ctx):
         self.__notifyAboutExpiration()
 
     def __notifyAboutExpiration(self):
-        for aID, action in self.__actions.items():
-            timeLeft = action.getFinishTimeLeft()
-            if ONE_DAY <= timeLeft <= _NOTIFY_THRESHOLD and not self.__settings.isNotified(aID):
-                if not self.__actionNotifierCondition(aID):
-                    continue
-                self.__systemMessages.proto.serviceChannel.pushClientMessage({'actionName': self.__getUserName(aID),
-                 'timeLeft': timeLeft}, SCH_CLIENT_MSG_TYPE.TECH_TREE_ACTION_DISCOUNT)
-                self.__settings.setNotified(aID)
+        if not self.actions:
+            return
+        expireTime = min([ action.getFinishTimeLeft() for action in self.__actions.values() ])
+        if ONE_DAY <= expireTime <= _NOTIFY_THRESHOLD:
+            actionIDs = [ aID for aID, action in self.__actions.items() if action.getFinishTimeLeft() == expireTime ]
+            if actionIDs and any((self.__actionNotifierCondition(aID) for aID in actionIDs)):
+                self.__systemMessages.proto.serviceChannel.pushClientMessage({'actionName': self.getUserName(actionIDs[0]),
+                 'timeLeft': expireTime,
+                 'single': len(self.actions) == 1}, SCH_CLIENT_MSG_TYPE.TECH_TREE_ACTION_DISCOUNT)
+                map(self.__settings.setNotified, actionIDs)
 
     def __actionNotifierCondition(self, actionID):
         vehicleDossier = self.__getVehicleCDsWereInBattle()
@@ -175,11 +184,23 @@ class TechTreeEventsListener(ITechTreeEventsListener):
             return vehicle.level == 10 and not vehicle.isInInventory and vehicle.intCD not in dossier
 
         vehicles = self.__items[actionID].keys()
-        return any((invalidateVehicle(vehicle, vehicleDossier) for vehicle in vehicles))
+        isNotified = self.__settings.isNotified(actionID)
+        return any((invalidateVehicle(vehicle, vehicleDossier) for vehicle in vehicles)) and not isNotified
 
     def __getVehicleCDsWereInBattle(self):
         accDossier = self.__itemsCache.items.getAccountDossier(None)
         return set(accDossier.getTotalStats().getVehicles().keys()) if accDossier else set()
+
+    def __getActions(self, vehicleCD=None, nationID=None):
+
+        def _filterFunc(actionID):
+            vehicles = self.__getVehicles(actionID, nationID)
+            if vehicleCD is not None:
+                return any((vehicleCD == v.intCD for v in vehicles))
+            else:
+                return bool(vehicles) if nationID is not None else False
+
+        return filter(_filterFunc, self.actions)
 
     def __onInventoryUpdated(self, _):
         self.__update()

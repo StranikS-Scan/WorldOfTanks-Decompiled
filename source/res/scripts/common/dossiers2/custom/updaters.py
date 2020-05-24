@@ -16,7 +16,7 @@ from wotdecorators import singleton
 from debug_utils import LOG_DEBUG_DEV
 ACCOUNT_DOSSIER_VERSION = 128
 ACCOUNT_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromAccountDossier%d'
-VEHICLE_DOSSIER_VERSION = 102
+VEHICLE_DOSSIER_VERSION = 103
 VEHICLE_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromVehicleDossier%d'
 TANKMAN_DOSSIER_VERSION = 66
 TANKMAN_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromTankmanDossier%d'
@@ -5907,6 +5907,66 @@ def __updateFromVehicleDossier101(compDescr):
     addBlock(updateCtx, 'maxRankedSeason3')
     setVersion(updateCtx, 102)
     return (102, updateCtx['dossierCompDescr'])
+
+
+def __updateFromVehicleDossier102(compDescr):
+    blocksLayout = ['a15x15',
+     'a15x15_2',
+     'clan',
+     'clan2',
+     'company',
+     'company2',
+     'a7x7',
+     'achievements',
+     'vehTypeFrags',
+     'total',
+     'max15x15',
+     'max7x7',
+     'inscriptions',
+     'emblems',
+     'camouflages',
+     'compensation',
+     'achievements7x7',
+     'historical',
+     'maxHistorical',
+     'uniqueAchievements',
+     'fortBattles',
+     'maxFortBattles',
+     'fortSorties',
+     'maxFortSorties',
+     'fortAchievements',
+     'singleAchievements',
+     'clanAchievements',
+     'rated7x7',
+     'maxRated7x7',
+     'globalMapCommon',
+     'maxGlobalMapCommon',
+     'fallout',
+     'maxFallout',
+     'falloutAchievements',
+     'ranked',
+     'maxRanked',
+     'rankedSeasons',
+     'a30x30',
+     'max30x30',
+     'epicBattle',
+     'maxEpicBattle',
+     'epicBattleAchievements',
+     'maxRankedSeason1',
+     'maxRankedSeason2',
+     'maxRankedSeason3']
+    updateCtx = {'dossierCompDescr': compDescr,
+     'blockSizeFormat': 'H',
+     'versionFormat': 'H',
+     'blocksLayout': blocksLayout}
+    getHeader(updateCtx)
+    recordsFormat = [('marksOfMasteryCount1', 'H'),
+     ('marksOfMasteryCount2', 'H'),
+     ('marksOfMasteryCount3', 'H'),
+     ('marksOfMasteryCount4', 'H')]
+    addRecords(updateCtx, 'achievements', recordsFormat, {})
+    setVersion(updateCtx, 103)
+    return (103, updateCtx['dossierCompDescr'])
 
 
 def __bootstrapTankmanDossierFrom(ver, compDescr):

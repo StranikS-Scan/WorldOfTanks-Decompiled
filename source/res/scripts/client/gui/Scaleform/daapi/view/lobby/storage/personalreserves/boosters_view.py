@@ -8,7 +8,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import createStorageDefVO, isStorageSessionTimeout
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getBuyBoostersUrl
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyPersonalReservesUrl
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -17,7 +17,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.goodies.goodie_items import BOOSTERS_ORDERS, MAX_ACTIVE_BOOSTERS_COUNT
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared.event_dispatcher import showWebShop
+from gui.shared.event_dispatcher import showShop
 from gui.shared.formatters import text_styles, getItemPricesVO
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency, func_utils
@@ -112,7 +112,7 @@ class StorageCategoryPersonalReservesView(StorageCategoryPersonalReservesViewMet
         self._loadFilters()
 
     def navigateToStore(self):
-        showWebShop(getBuyBoostersUrl())
+        showShop(getBuyPersonalReservesUrl())
 
     def resetFilter(self):
         self.__filterMask = 0

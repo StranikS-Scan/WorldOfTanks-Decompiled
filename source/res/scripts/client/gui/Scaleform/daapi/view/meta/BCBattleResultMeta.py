@@ -13,5 +13,8 @@ class BCBattleResultMeta(View):
     def onToolTipShow(self, rendererId):
         self._printOverrideError('onToolTipShow')
 
+    def onVideoButtonClick(self):
+        self._printOverrideError('onVideoButtonClick')
+
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None

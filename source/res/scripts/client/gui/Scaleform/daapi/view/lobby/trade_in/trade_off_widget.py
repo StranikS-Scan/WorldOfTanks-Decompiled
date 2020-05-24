@@ -4,7 +4,7 @@ from gui.Scaleform.daapi.view.meta.TradeOffWidgetMeta import TradeOffWidgetMeta
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.ingame_shop import showTradeOffOverlay
+from gui.shop import showTradeOffOverlay
 from gui.shared import events
 from gui.shared.gui_items import Vehicle
 from gui.shared.gui_items.Vehicle import getSmallIconPath

@@ -72,7 +72,7 @@
     <hangarShadowTexture>	vehicles/russian/R00_Placeholder/Placeholder_HangarShadowMap.dds	</hangarShadowTexture>
     <customization>
       <customizableVehicleAreas>
-        <paint></paint>
+        <paint>	HULL	</paint>
         <camouflage>	HULL	</camouflage>
       </customizableVehicleAreas>
     </customization>
@@ -203,7 +203,7 @@
       </AODecals>
       <customization>
         <customizableVehicleAreas>
-          <paint></paint>
+          <paint>	CHASSIS	</paint>
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
@@ -270,7 +270,7 @@
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <customization>
             <customizableVehicleAreas>
-              <paint></paint>
+              <paint>	GUN GUN_2	</paint>
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
@@ -307,7 +307,7 @@
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <customization>
         <customizableVehicleAreas>
-          <paint></paint>
+          <paint>	TURRET	</paint>
           <camouflage>	TURRET	</camouflage>
         </customizableVehicleAreas>
       </customization>
@@ -380,36 +380,15 @@
       <chassis>
         <Chassis_T_50_2_1>
           <grounds>
-            <ground>
-              <medium>
-                <rollingFriction>	0.10465	</rollingFriction>
-              </medium>
-            </ground>
-            <sand>
-              <medium>
-                <rollingFriction>	0.10465	</rollingFriction>
-              </medium>
-            </sand>
-            <wood>
-              <medium>
-                <rollingFriction>	0.10465	</rollingFriction>
-              </medium>
-            </wood>
-            <snow>
-              <medium>
-                <rollingFriction>	0.10465	</rollingFriction>
-              </medium>
-            </snow>
-            <stone>
-              <medium>
-                <rollingFriction>	0.10465	</rollingFriction>
-              </medium>
-            </stone>
-            <metal>
-              <medium>
-                <rollingFriction>	0.10465	</rollingFriction>
-              </medium>
-            </metal>
+            <soft>
+              <rollingFriction>	0.1771	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.10465	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0805	</rollingFriction>
+            </firm>
           </grounds>
         </Chassis_T_50_2_1>
       </chassis>

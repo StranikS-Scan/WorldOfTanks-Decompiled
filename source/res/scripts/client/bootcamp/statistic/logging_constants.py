@@ -56,6 +56,7 @@ class BC_LOG_KEYS:
     BC_BATTLE_HINTS = 'bc_battle_hints'
     BC_INTRO_VIDEO = 'bc_intro_video'
     BC_OUTRO_VIDEO = 'bc_outro_video'
+    BC_INTERLUDE_VIDEO = 'bc_interlude_video'
     BC_RESULT_SCREEN = 'bc_result_screen'
     BC_HANGAR_HINTS = 'bc_hangar_hints'
     BC_RESEARCH_VEHICLES = 'bc_research_vehicles'

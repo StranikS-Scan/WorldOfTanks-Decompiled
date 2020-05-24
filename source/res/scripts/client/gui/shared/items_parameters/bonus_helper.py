@@ -5,10 +5,16 @@ from gui.shared.items_parameters.comparator import CONDITIONAL_BONUSES, getParam
 from gui.shared.items_parameters.params import VehicleParams
 from gui.shared.items_parameters.params import EXTRAS_CAMOUFLAGE
 from helpers import dependency
+from items import perks
+from constants import BonusTypes
 from items.components.c11n_components import SeasonType
 from skeletons.gui.shared import IItemsCache
 
-def isSituationalBonus(bonusName):
+def isSituationalBonus(bonusName, bonusType=''):
+    if bonusType == BonusTypes.PERK:
+        cache = perks.g_cache.perks()
+        perkItem = cache.perks[int(bonusName)]
+        return perkItem.situational
     return bonusName in _SITUATIONAL_BONUSES
 
 
@@ -21,6 +27,14 @@ def _removeCamouflageModifier(vehicle, bonusID):
             if outfit:
                 outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).clear()
 
+    return vehicle
+
+
+def _removePlatoonPerkModifier(vehicle, perkName):
+    perksController = vehicle.getPerksController()
+    if not perksController:
+        return vehicle
+    perksController.customizedRecalc(int(perkName))
     return vehicle
 
 
@@ -52,11 +66,12 @@ def _removeEquipmentModifier(vehicle, eqName):
     return vehicle
 
 
-_VEHICLE_MODIFIERS = {'skill': _removeSkillModifier,
- 'extra': _removeCamouflageModifier,
- 'equipment': _removeEquipmentModifier,
- 'optionalDevice': _removeOptionalDeviceModifier,
- 'battleBooster': _removeBattleBoosterModifier}
+_VEHICLE_MODIFIERS = {BonusTypes.SKILL: _removeSkillModifier,
+ BonusTypes.EXTRA: _removeCamouflageModifier,
+ BonusTypes.EQUIPMENT: _removeEquipmentModifier,
+ BonusTypes.OPTIONAL_DEVICE: _removeOptionalDeviceModifier,
+ BonusTypes.BATTLE_BOOSTER: _removeBattleBoosterModifier,
+ BonusTypes.PERK: _removePlatoonPerkModifier}
 
 class _BonusSorter(object):
 
@@ -78,7 +93,7 @@ class _BonusSorter(object):
 
     def __opticsSorter(self, bonuses):
         if self.__paramName == 'circularVisionRadius':
-            stereoscope = ('stereoscope', 'optionalDevice')
+            stereoscope = ('stereoscope', BonusTypes.OPTIONAL_DEVICE)
             if stereoscope in bonuses:
                 bonuses.remove(stereoscope)
                 bonuses.insert(0, stereoscope)
@@ -93,6 +108,9 @@ class BonusExtractor(object):
         self.__paramName = paramName
         self.__bonuses = _BonusSorter(self.__paramName).sort(bonuses)
         self.__removeCamouflage = False
+        perksController = vehicle.getPerksController()
+        if perksController:
+            self.__vehicle.setPerksController(perksController)
         self.__updateCurrValue()
 
     def getBonusInfo(self):
@@ -102,19 +120,13 @@ class BonusExtractor(object):
     def extractBonus(self, bonusGroup, bonusID):
         oldValue = self.__currValue
         self.__vehicle = _VEHICLE_MODIFIERS[bonusGroup](self.__vehicle, bonusID)
-        if bonusGroup == 'extra' and bonusID == EXTRAS_CAMOUFLAGE:
+        if bonusGroup == BonusTypes.EXTRA and bonusID == EXTRAS_CAMOUFLAGE:
             self.__removeCamouflage = True
         self.__updateCurrValue()
         return getParamExtendedData(self.__paramName, oldValue, self.__currValue)
 
     def __updateCurrValue(self):
         self.__currValue = getattr(_CustomizedVehicleParams(self.__vehicle, self.__removeCamouflage), self.__paramName)
-
-    def getVehicle(self):
-        return self.__vehicle
-
-    def reUpdateCurrValue(self):
-        self.__updateCurrValue()
 
 
 class _CustomizedVehicleParams(VehicleParams):

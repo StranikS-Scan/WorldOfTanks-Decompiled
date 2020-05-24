@@ -6,8 +6,6 @@ class ICustomizationService(object):
     onRegionHighlighted = None
     onOutfitChanged = None
     onCustomizationHelperRecreated = None
-    onCustomizationOpened = None
-    onCustomizationClosed = None
 
     def init(self):
         raise NotImplementedError
@@ -72,16 +70,22 @@ class ICustomizationService(object):
     def tryOnOutfit(self, outfit):
         raise NotImplementedError
 
-    def getOutfit(self, season):
+    def getCurrentOutfit(self, season):
+        raise NotImplementedError
+
+    def getStyledOutfit(self, season):
         raise NotImplementedError
 
     def getCustomOutfit(self, season):
         raise NotImplementedError
 
-    def getCurrentStyle(self):
+    def isStyleInstalled(self):
         raise NotImplementedError
 
-    def isCurrentStyleInstalled(self):
+    def getStyleComponentDiffs(self, style):
+        raise NotImplementedError
+
+    def getStoredStyleDiffs(self):
         raise NotImplementedError
 
     def isRegionSelected(self):
@@ -94,9 +98,6 @@ class ICustomizationService(object):
         raise NotImplementedError
 
     def buyAndEquipOutfit(self, outfit, season, vehicle=None):
-        raise NotImplementedError
-
-    def buyAndEquipStyle(self, style, vehicle=None):
         raise NotImplementedError
 
     def setSelectHighlighting(self, value):

@@ -46,9 +46,6 @@ class HangarMeta(View):
     def as_show3DSceneTooltipS(self, id, args):
         return self.flashObject.as_show3DSceneTooltip(id, args) if self._isDAAPIInited() else None
 
-    def as_show3DSceneWulfTooltipS(self, id, args):
-        return self.flashObject.as_show3DSceneWulfTooltip(id, args) if self._isDAAPIInited() else None
-
     def as_hide3DSceneTooltipS(self):
         return self.flashObject.as_hide3DSceneTooltip() if self._isDAAPIInited() else None
 

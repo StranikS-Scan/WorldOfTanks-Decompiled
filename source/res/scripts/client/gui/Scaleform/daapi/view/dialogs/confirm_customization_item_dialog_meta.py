@@ -29,18 +29,19 @@ class ItemsCountStepSize(object):
 class ConfirmC11nBuyMeta(IDialogMeta):
     itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, itemCD, title=DIALOGS.BUYCONFIRMATION_TITLE, submitBtn=DIALOGS.BUYCONFIRMATION_SUBMIT, cancelBtn=DIALOGS.BUYCONFIRMATION_CANCEL):
+    def __init__(self, itemCD, title=DIALOGS.BUYCONFIRMATION_TITLE, submitBtn=DIALOGS.BUYCONFIRMATION_SUBMIT, cancelBtn=DIALOGS.BUYCONFIRMATION_CANCEL, vehicle=None):
         self.__item = self.itemsCache.items.getItemByCD(itemCD)
         self.__title = title
         self.__submitLabel = submitBtn
         self.__cancelLabel = cancelBtn
+        self.vehicle = vehicle
         self.type = Types.BUY
 
     def destroy(self):
         pass
 
     @process('buyItem')
-    def submit(self, item, count, _):
+    def submit(self, item, count, _, vehicle):
         result = yield CustomizationsBuyer(g_currentVehicle.item, item, count).request()
         if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
@@ -91,6 +92,9 @@ class ConfirmC11nBuyMeta(IDialogMeta):
             result = math.floor(balance.get(currency, 0) / modulePrice.get(currency))
         if item.isLimited:
             result = min(result, item.buyCount)
+        if item.isProgressionAutoBound and self.vehicle is not None:
+            availableToBuyProgression = item.availableForPurchaseProgressive(self.vehicle)
+            result = min(result, availableToBuyProgression)
         return min(result, MAX_ITEMS_FOR_BUY_OPERATION)
 
     def getStepFactor(self, item):
@@ -102,8 +106,8 @@ class ConfirmC11nBuyMeta(IDialogMeta):
 
 class ConfirmC11nSellMeta(ConfirmC11nBuyMeta):
 
-    def __init__(self, itemCD, count, handler, title=DIALOGS.SELLMODULECONFIRMATION_TITLE, submitBtn=DIALOGS.SELLMODULECONFIRMATION_SUBMIT, cancelBtn=DIALOGS.SELLMODULECONFIRMATION_CANCEL):
-        super(ConfirmC11nSellMeta, self).__init__(itemCD, title, submitBtn, cancelBtn)
+    def __init__(self, itemCD, count, handler, title=DIALOGS.SELLMODULECONFIRMATION_TITLE, submitBtn=DIALOGS.SELLMODULECONFIRMATION_SUBMIT, cancelBtn=DIALOGS.SELLMODULECONFIRMATION_CANCEL, vehicle=None):
+        super(ConfirmC11nSellMeta, self).__init__(itemCD, title, submitBtn, cancelBtn, vehicle)
         self.__count = count
         self.__handler = handler
         self.type = Types.SELL
@@ -123,8 +127,8 @@ class ConfirmC11nSellMeta(ConfirmC11nBuyMeta):
     def getDefaultPrices(self, item):
         return item.sellPrices.getSum().defPrice
 
-    def submit(self, item, count, _):
-        self.__handler(item.intCD, count)
+    def submit(self, item, count, _, vehicle):
+        self.__handler(item.intCD, count, vehicle)
 
     def getActionVO(self, item):
         prices = self.getActualPrices(item)

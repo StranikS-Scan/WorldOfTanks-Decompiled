@@ -9,8 +9,6 @@ from gui import makeHtmlString
 from gui.battle_control import avatar_getter, vehicle_getter
 from gui.battle_control.arena_info import settings
 from gui.doc_loaders.badges_loader import getSelectedByLayout
-from gui.impl import backport
-from gui.impl.gen import R
 from gui.shared.gui_items import Vehicle
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS, VEHICLE_CLASS_NAME
 from gui.shared.utils.decorators import ReprInjector
@@ -232,12 +230,6 @@ class VehicleArenaInfoVO(object):
         super(VehicleArenaInfoVO, self).__init__()
         self.vehicleID = vehicleID
         self.team = team
-        arena = avatar_getter.getArena()
-        guiType = None if not arena else arena.guiType
-        if guiType and guiType == ARENA_GUI_TYPE.EVENT_BATTLES and kwargs:
-            if kwargs['accountDBID'] == 0:
-                name = kwargs['name']
-                kwargs['name'] = backport.text(R.strings.event.bot_name.dyn(name)())
         self.player = PlayerInfoVO(forbidInBattleInvitations=forbidInBattleInvitations, **kwargs)
         self.vehicleType = VehicleTypeInfoVO(**kwargs)
         self.prebattleID = prebattleID
@@ -247,6 +239,8 @@ class VehicleArenaInfoVO(object):
         self.events = events or {}
         self.squadIndex = 0
         self.ranked = PlayerRankedInfoVO(ranked) if ranked is not None else PlayerRankedInfoVO()
+        arena = avatar_getter.getArena()
+        guiType = None if not arena else arena.guiType
         self.gameModeSpecific = GameModeDataVO(guiType, True)
         self.overriddenBadge = overriddenBadge
         self.badges = badges or ((), ())
@@ -268,12 +262,6 @@ class VehicleArenaInfoVO(object):
             return result
         result = cmp(self.vehicleType, other.vehicleType)
         return result if result else cmp(self.player, other.player)
-
-    @property
-    def isEventBot(self):
-        arena = avatar_getter.getArena()
-        guiType = None if not arena else arena.guiType
-        return True if guiType and guiType == ARENA_GUI_TYPE.EVENT_BATTLES and self.player.accountDBID == 0 else False
 
     @property
     def selectedBadge(self):
@@ -393,11 +381,10 @@ class VehicleArenaInfoVO(object):
         return not self.player.avatarSessionID
 
     def isChatCommandsDisabled(self, isAlly):
-        arena = avatar_getter.getArena()
-        isEvent = arena.guiType == ARENA_GUI_TYPE.EVENT_BATTLES if arena else False
-        if not self.player.avatarSessionID and not isEvent:
+        if not self.player.avatarSessionID:
             if isAlly:
                 return True
+            arena = avatar_getter.getArena()
             if arena is None or arena.guiType not in (ARENA_GUI_TYPE.RANDOM, ARENA_GUI_TYPE.TRAINING):
                 return True
         return False

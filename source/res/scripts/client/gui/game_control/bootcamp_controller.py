@@ -261,12 +261,10 @@ class BootcampController(IBootcampController):
         if result:
             self.stopBootcamp(inBattle=not self.isInBootcampAccount())
 
-    @process
     def __goBootcamp(self):
-        if self.prbDispatcher is not None:
-            action = PrbAction(PREBATTLE_ACTION_NAME.BOOTCAMP)
-            yield self.prbDispatcher.doSelectAction(action)
-        return
+        action = PrbAction(PREBATTLE_ACTION_NAME.BOOTCAMP)
+        event = events.PrbActionEvent(action, events.PrbActionEvent.SELECT)
+        g_eventBus.handleEvent(event, EVENT_BUS_SCOPE.LOBBY)
 
     @staticmethod
     def __format(text, style, **kwargs):

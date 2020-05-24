@@ -38,6 +38,9 @@ class VehicleParameters(VehicleParametersMeta):
         self._vehParamsDP.setGroupsToShow(self._expandedGroups)
         self._setDPUseAnimAndRebuild(True)
 
+    def rebuildParams(self):
+        self._vehParamsDP.rebuildList(self._getVehicleCache())
+
     def _createDataProvider(self):
         return _VehParamsDataProvider(_VehParamsGenerator())
 
@@ -51,6 +54,11 @@ class VehicleParameters(VehicleParametersMeta):
         self._vehParamsDP.fini()
         self._vehParamsDP = None
         self._paramsProviderCls = None
+        cache = self._getVehicleCache()
+        if cache and cache.item:
+            perksController = cache.item.getPerksController()
+            if perksController:
+                perksController.setVehParams(None)
         super(VehicleParameters, self)._dispose()
         return
 
@@ -58,10 +66,18 @@ class VehicleParameters(VehicleParametersMeta):
         if self._vehParamsDP.useAnim != useAnim:
             self.as_setIsParamsAnimatedS(useAnim)
         self._vehParamsDP.setUseAnim(useAnim)
-        self._vehParamsDP.rebuildList(self._getVehicleCache())
+        cache = self._getVehicleCache()
+        if not cache.item:
+            return
+        perksController = cache.item.getPerksController()
+        if not perksController:
+            self._vehParamsDP.rebuildList(self._getVehicleCache())
+        elif not perksController.isEnabled():
+            perksController.recalc(self)
+            self.rebuildParams()
 
     def _getVehicleCache(self):
-        return g_currentPreviewVehicle if g_currentPreviewVehicle.isPresent() and g_currentPreviewVehicle.item.isOnlyForEventBattles else g_currentVehicle
+        return g_currentVehicle
 
 
 class VehiclePreviewParameters(VehicleParameters):

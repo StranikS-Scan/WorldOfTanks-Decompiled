@@ -34,6 +34,45 @@
     </medals>
     <ribbons></ribbons>
     <unlocks></unlocks>
+    <video>
+      <message>
+        <data>
+          <video-path>	videos/_bootcampLesson2.usm	</video-path>
+          <event-start>	bc_music_video_interlude_02_start	</event-start>
+          <event-stop>	bc_music_video_interlude_02_stop	</event-stop>
+          <event-pause>	bc_music_video_interlude_02_pause	</event-pause>
+          <event-resume>	bc_music_video_interlude_02_resume	</event-resume>
+          <subtitles>
+            <sequence>
+              <message>
+                <data>
+                  <voiceover>	vo_enemy_hp_damaged_by_projectile_by_player	</voiceover>
+                  <keypoint>	14.59	</keypoint>
+                </data>
+              </message>
+              <message>
+                <data>
+                  <voiceover>	vo_enemy_hp_damaged_by_projectile_by_player	</voiceover>
+                  <keypoint>	5.86	</keypoint>
+                </data>
+              </message>
+              <message>
+                <data>
+                  <voiceover>	vo_enemy_hp_damaged_by_projectile_by_player	</voiceover>
+                  <keypoint>	9.95	</keypoint>
+                </data>
+              </message>
+              <message>
+                <data>
+                  <voiceover>	vo_enemy_killed	</voiceover>
+                  <keypoint>	3.60	</keypoint>
+                </data>
+              </message>
+            </sequence>
+          </subtitles>
+        </data>
+      </message>
+    </video>
   </lesson>
   <lesson>
     <id>	2	</id>

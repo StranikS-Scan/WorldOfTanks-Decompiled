@@ -15,8 +15,8 @@ from gui.shared.utils.key_mapping import getScaleformKey
 from helpers import dependency
 from helpers import isPlayerAvatar
 from skeletons.gui.battle_session import IBattleSessionProvider
-CMD_LOCALE_PFX = '#ingame_help:chatShortcuts/'
-SHORTCUTS_IN_GROUP = 6
+_CMD_LOCALE_PFX = '#ingame_help:chatShortcuts/'
+_SHORTCUTS_IN_GROUP = 6
 
 class SHORTCUT_STATES(object):
     DEFAULT = 'default'
@@ -30,19 +30,19 @@ class SHORTCUT_STATES(object):
 
 
 Shortcut = namedtuple('Shortcut', ('title', 'action', 'icon', 'groups', 'indexInGroup'))
-SHORTCUTS = (Shortcut(title=CMD_LOCALE_PFX + 'attack', action=CHAT_COMMANDS.ATTACK, icon=BATTLE_ICONS_CONSTS.ATTACK, groups=[SHORTCUT_STATES.DEFAULT], indexInGroup=4),
- Shortcut(title=CMD_LOCALE_PFX + 'backToBase', action=CHAT_COMMANDS.BACKTOBASE, icon=BATTLE_ICONS_CONSTS.BACK_TO_BASE, groups=[SHORTCUT_STATES.DEFAULT, SHORTCUT_STATES.ENEMY, SHORTCUT_STATES.ENEMY_SPG], indexInGroup=1),
- Shortcut(title=CMD_LOCALE_PFX + 'positive', action=CHAT_COMMANDS.POSITIVE, icon=BATTLE_ICONS_CONSTS.YES, groups=list(SHORTCUT_STATES.ALL), indexInGroup=0),
- Shortcut(title=CMD_LOCALE_PFX + 'negative', action=CHAT_COMMANDS.NEGATIVE, icon=BATTLE_ICONS_CONSTS.NO, groups=list(SHORTCUT_STATES.ALL), indexInGroup=5),
- Shortcut(title=CMD_LOCALE_PFX + 'helpMe', action=CHAT_COMMANDS.SOS, icon=BATTLE_ICONS_CONSTS.HELP_ME, groups=[SHORTCUT_STATES.DEFAULT, SHORTCUT_STATES.ENEMY, SHORTCUT_STATES.ENEMY_SPG], indexInGroup=3),
- Shortcut(title=CMD_LOCALE_PFX + 'reloadingGun', action=CHAT_COMMANDS.RELOADINGGUN, icon=BATTLE_ICONS_CONSTS.RELOAD, groups=[SHORTCUT_STATES.DEFAULT, SHORTCUT_STATES.ENEMY, SHORTCUT_STATES.ENEMY_SPG], indexInGroup=2),
- Shortcut(title=CMD_LOCALE_PFX + 'followMe', action=CHAT_COMMANDS.FOLLOWME, icon=BATTLE_ICONS_CONSTS.FOLLOW_ME, groups=[SHORTCUT_STATES.ALLY], indexInGroup=4),
- Shortcut(title=CMD_LOCALE_PFX + 'toBack', action=CHAT_COMMANDS.TURNBACK, icon=BATTLE_ICONS_CONSTS.TURN_BACK, groups=[SHORTCUT_STATES.ALLY], indexInGroup=1),
- Shortcut(title=CMD_LOCALE_PFX + 'helpMeEx', action=CHAT_COMMANDS.HELPME, icon=BATTLE_ICONS_CONSTS.HELP_ME_EX, groups=[SHORTCUT_STATES.ALLY], indexInGroup=3),
- Shortcut(title=CMD_LOCALE_PFX + 'stop', action=CHAT_COMMANDS.STOP, icon=BATTLE_ICONS_CONSTS.STOP, groups=[SHORTCUT_STATES.ALLY], indexInGroup=2),
- Shortcut(title=CMD_LOCALE_PFX + 'supportMeWithFire', action=CHAT_COMMANDS.SUPPORTMEWITHFIRE, icon=BATTLE_ICONS_CONSTS.SUPPORT, groups=[SHORTCUT_STATES.ENEMY], indexInGroup=4),
- Shortcut(title=CMD_LOCALE_PFX + 'attackEnemy', action=CHAT_COMMANDS.ATTACKENEMY, icon=BATTLE_ICONS_CONSTS.ATTACK_SPG, groups=[SHORTCUT_STATES.ENEMY_SPG], indexInGroup=4))
-SHORTCUT_SETS = {state:[None] * SHORTCUTS_IN_GROUP for state in SHORTCUT_STATES.ALL}
+SHORTCUTS = (Shortcut(title=_CMD_LOCALE_PFX + 'attack', action=CHAT_COMMANDS.ATTACK, icon=BATTLE_ICONS_CONSTS.ATTACK, groups=[SHORTCUT_STATES.DEFAULT], indexInGroup=4),
+ Shortcut(title=_CMD_LOCALE_PFX + 'backToBase', action=CHAT_COMMANDS.BACKTOBASE, icon=BATTLE_ICONS_CONSTS.BACK_TO_BASE, groups=[SHORTCUT_STATES.DEFAULT, SHORTCUT_STATES.ENEMY, SHORTCUT_STATES.ENEMY_SPG], indexInGroup=1),
+ Shortcut(title=_CMD_LOCALE_PFX + 'positive', action=CHAT_COMMANDS.POSITIVE, icon=BATTLE_ICONS_CONSTS.YES, groups=list(SHORTCUT_STATES.ALL), indexInGroup=0),
+ Shortcut(title=_CMD_LOCALE_PFX + 'negative', action=CHAT_COMMANDS.NEGATIVE, icon=BATTLE_ICONS_CONSTS.NO, groups=list(SHORTCUT_STATES.ALL), indexInGroup=5),
+ Shortcut(title=_CMD_LOCALE_PFX + 'helpMe', action=CHAT_COMMANDS.SOS, icon=BATTLE_ICONS_CONSTS.HELP_ME, groups=[SHORTCUT_STATES.DEFAULT, SHORTCUT_STATES.ENEMY, SHORTCUT_STATES.ENEMY_SPG], indexInGroup=3),
+ Shortcut(title=_CMD_LOCALE_PFX + 'reloadingGun', action=CHAT_COMMANDS.RELOADINGGUN, icon=BATTLE_ICONS_CONSTS.RELOAD, groups=[SHORTCUT_STATES.DEFAULT, SHORTCUT_STATES.ENEMY, SHORTCUT_STATES.ENEMY_SPG], indexInGroup=2),
+ Shortcut(title=_CMD_LOCALE_PFX + 'followMe', action=CHAT_COMMANDS.FOLLOWME, icon=BATTLE_ICONS_CONSTS.FOLLOW_ME, groups=[SHORTCUT_STATES.ALLY], indexInGroup=4),
+ Shortcut(title=_CMD_LOCALE_PFX + 'toBack', action=CHAT_COMMANDS.TURNBACK, icon=BATTLE_ICONS_CONSTS.TURN_BACK, groups=[SHORTCUT_STATES.ALLY], indexInGroup=1),
+ Shortcut(title=_CMD_LOCALE_PFX + 'helpMeEx', action=CHAT_COMMANDS.HELPME, icon=BATTLE_ICONS_CONSTS.HELP_ME_EX, groups=[SHORTCUT_STATES.ALLY], indexInGroup=3),
+ Shortcut(title=_CMD_LOCALE_PFX + 'stop', action=CHAT_COMMANDS.STOP, icon=BATTLE_ICONS_CONSTS.STOP, groups=[SHORTCUT_STATES.ALLY], indexInGroup=2),
+ Shortcut(title=_CMD_LOCALE_PFX + 'supportMeWithFire', action=CHAT_COMMANDS.SUPPORTMEWITHFIRE, icon=BATTLE_ICONS_CONSTS.SUPPORT, groups=[SHORTCUT_STATES.ENEMY], indexInGroup=4),
+ Shortcut(title=_CMD_LOCALE_PFX + 'attackEnemy', action=CHAT_COMMANDS.ATTACKENEMY, icon=BATTLE_ICONS_CONSTS.ATTACK_SPG, groups=[SHORTCUT_STATES.ENEMY_SPG], indexInGroup=4))
+SHORTCUT_SETS = {state:[None] * _SHORTCUTS_IN_GROUP for state in SHORTCUT_STATES.ALL}
 for s in SHORTCUTS:
     for group in s.groups:
         SHORTCUT_SETS[group][s.indexInGroup] = s
@@ -101,11 +101,8 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler):
             position = (guiScreenWidth * 0.5, guiScreenHeight * 0.5)
         if self.app is not None:
             self.app.registerGuiKeyHandler(self)
-        self._showInternal(crosshairType, position, ratio)
+        self.as_showS(crosshairType, position, ratio)
         return
-
-    def _showInternal(self, radialState, offset, ratio):
-        self.as_showS(radialState, offset, ratio)
 
     def hide(self):
         if self.app is not None:
@@ -131,19 +128,15 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler):
 
     def __updateMenu(self):
         data = []
-        shortcutSets = self._getShortcutSets()
         for state in SHORTCUT_STATES.ALL:
             stateData = map(lambda x, s=state: {'title': x.title,
              'action': x.action,
              'icon': x.icon,
-             'key': getKeyFromAction(x.action, s)} if x is not None else None, shortcutSets[state])
+             'key': getKeyFromAction(x.action, s)}, SHORTCUT_SETS[state])
             data.append({'state': state,
              'data': stateData})
 
         self.as_buildDataS(data)
-
-    def _getShortcutSets(self):
-        return SHORTCUT_SETS
 
     def __getCrosshairType(self, player, target):
         if not self.__isTargetCorrect(player, target):

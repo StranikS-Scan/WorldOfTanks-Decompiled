@@ -952,36 +952,15 @@
       <chassis>
         <Chassis_G120_M41_90_GrandFinal>
           <grounds>
-            <ground>
-              <medium>
-                <rollingFriction>	0.05635	</rollingFriction>
-              </medium>
-            </ground>
-            <sand>
-              <medium>
-                <rollingFriction>	0.05635	</rollingFriction>
-              </medium>
-            </sand>
-            <wood>
-              <medium>
-                <rollingFriction>	0.05635	</rollingFriction>
-              </medium>
-            </wood>
-            <snow>
-              <medium>
-                <rollingFriction>	0.05635	</rollingFriction>
-              </medium>
-            </snow>
-            <stone>
-              <medium>
-                <rollingFriction>	0.05635	</rollingFriction>
-              </medium>
-            </stone>
-            <metal>
-              <medium>
-                <rollingFriction>	0.05635	</rollingFriction>
-              </medium>
-            </metal>
+            <soft>
+              <rollingFriction>	0.0966	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.05635	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0483	</rollingFriction>
+            </firm>
           </grounds>
         </Chassis_G120_M41_90_GrandFinal>
       </chassis>

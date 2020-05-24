@@ -29,9 +29,9 @@ class SquadActionsHandler(AbstractActionsHandler):
             vInfos = unit.getMemberVehicles(pInfo.dbID)
             if vInfos is not None:
                 g_currentVehicle.selectVehicle(vInfos[0].vehInvID)
-            self._showBattleQueueGUI()
+            g_eventDispatcher.loadBattleQueue()
         elif loadHangar:
-            self._loadPage()
+            g_eventDispatcher.loadHangar()
         return
 
     def setPlayerInfoChanged(self):
@@ -43,7 +43,7 @@ class SquadActionsHandler(AbstractActionsHandler):
     def executeInit(self, ctx):
         initResult = FUNCTIONAL_FLAG.UNDEFINED
         if self._entity.getPlayerInfo().isReady and self._entity.getFlags().isInQueue():
-            self._showBattleQueueGUI()
+            g_eventDispatcher.loadBattleQueue()
             initResult = FUNCTIONAL_FLAG.LOAD_PAGE
         squadCtx = None
         if ctx is not None:
@@ -61,7 +61,7 @@ class SquadActionsHandler(AbstractActionsHandler):
     def executeFini(self):
         prbType = self._entity.getEntityType()
         g_eventDispatcher.removeUnitFromCarousel(prbType)
-        self._loadPage()
+        g_eventDispatcher.loadHangar()
 
     @vehicleAmmoCheck
     def execute(self):
@@ -106,15 +106,9 @@ class SquadActionsHandler(AbstractActionsHandler):
             self._entity.request(SendInvitesCtx(accountsToInvite, ''))
             self._showInviteSentMessage(accountsToInvite)
 
-    def _loadPage(self):
-        g_eventDispatcher.loadHangar()
-
     def _loadWindow(self, ctx):
         prbType = self._entity.getEntityType()
         g_eventDispatcher.loadSquad(prbType, ctx, self._getTeamReady())
-
-    def _showBattleQueueGUI(self):
-        g_eventDispatcher.loadBattleQueue()
 
     def _confirmCallback(self, result):
         if result:

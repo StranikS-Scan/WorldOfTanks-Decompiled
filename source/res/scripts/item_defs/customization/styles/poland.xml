@@ -15,7 +15,7 @@
       <isRent>	true	</isRent>
       <rentCount>	100	</rentCount>
       <userString>	#vehicle_customization:rented_style/poland	</userString>
-      <tags>	vehicleBound	</tags>
+      <tags>	vehicleBound addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -71,6 +71,14 @@
       <texture>	gui/maps/vehicles/styles/style_01.png	</texture>
       <userString>	#vehicle_customization:gold_style/gold_style_01	</userString>
       <longDescriptionSpecial>	#vehicle_customization:gold_style/gold_style_01_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -206,6 +214,14 @@
       <id>	186	</id>
       <texture>	gui/maps/vehicles/styles/global_map_01.png	</texture>
       <userString>	#vehicle_customization:special_style/global_map	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -258,6 +274,14 @@
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/50TP_prototyp_WingedHussar	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/50TP_prototyp_WingedHussar_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -299,6 +323,14 @@
       <description>	#vehicle_customization:main_style/generic_custom_look_poland_desc	</description>
       <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_poland_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:main_style/generic_custom_look_poland	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	summer	</season>
@@ -372,6 +404,14 @@
       <texture>	gui/maps/vehicles/styles/generic_custom_look_2_poland.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_2_poland_desc	</description>
       <userString>	#vehicle_customization:main_style/generic_custom_look_2_poland	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -445,6 +485,14 @@
       <texture>	gui/maps/vehicles/styles/generic_custom_look_3_poland.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_3_poland_desc	</description>
       <userString>	#vehicle_customization:main_style/generic_custom_look_3_poland	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	winter	</season>

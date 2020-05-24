@@ -387,11 +387,11 @@ class VehicleSeller(ItemProcessor):
         for module in vehEqs + optDevicesToSell + boosters:
             moneyGain += module.sellPrices.itemPrice.price
 
-        for module in inventory + customizationItems:
+        for module in inventory:
             moneyGain += module.sellPrices.itemPrice.price * module.inventoryCount
 
         for module in customizationItems:
-            getCount = module.getInstalledOnVehicleCount
+            getCount = module.installedCount
             moneyGain += module.sellPrices.itemPrice.price * reduce(lambda acc, veh: acc + getCount(veh.intCD), vehicles, 0)
 
         dismantlingToInventoryDevices = getDismantlingForMoneyToInventoryDevices(optDevicesToSell, itemsForDemountKit, *vehicles)
@@ -446,7 +446,7 @@ class VehicleSeller(ItemProcessor):
                     self.optDevs.remove(od)
 
             for ci in list(self.customizationItems):
-                installedCount = ci.getInstalledOnVehicleCount(vehicle.intCD)
+                installedCount = ci.installedCount(vehicle.intCD)
                 if installedCount > 0 and ci.intCD not in seenCustItems:
                     customizationItems.append(ci.intCD)
                     customizationItems.append(installedCount)

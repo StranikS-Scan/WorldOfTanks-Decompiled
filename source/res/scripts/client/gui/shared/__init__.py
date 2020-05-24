@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/__init__.py
-from gui.shared.event_bus import EventBus, EVENT_BUS_SCOPE
-__all__ = ('g_eventBus', 'getSharedServices', 'EVENT_BUS_SCOPE')
+from gui.shared.event_bus import EventBus, EVENT_BUS_SCOPE, EventPriority
+__all__ = ('g_eventBus', 'getSharedServices', 'EVENT_BUS_SCOPE', 'EventPriority')
 g_eventBus = EventBus()
 
 def getSharedServices(manager):

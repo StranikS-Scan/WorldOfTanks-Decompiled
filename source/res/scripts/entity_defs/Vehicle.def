@@ -17,7 +17,6 @@
     <Interface>	SmokeController_Vehicle	</Interface>
     <Interface>	InspireController_Vehicle	</Interface>
     <Interface>	Wheels	</Interface>
-    <Interface>	EventControlPoint_Vehicle	</Interface>
   </Implements>
   <LoDLevels>
     <level>	20	  <hyst>	4	</hyst>
@@ -130,6 +129,10 @@
       <Type>	PYTHON	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
     </enhancements>
+    <vehPerks>
+      <Type>	PYTHON	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </vehPerks>
     <isClientConnected>
       <Type>	INT8	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
@@ -207,11 +210,6 @@
       <Type>	BOOL	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </isBlockingCapture>
-    <buffs>
-      <Type>	ARRAY	  <of>	UINT16	</of>
-      </Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-    </buffs>
   </Properties>
   <TempProperties>
     <events></events>
@@ -232,14 +230,8 @@
     <_ProximityManager__data></_ProximityManager__data>
     <_TimerManager__unpersistedTimers></_TimerManager__unpersistedTimers>
     <gameObject></gameObject>
-    <buffContainer></buffContainer>
   </TempProperties>
   <ClientMethods>
-    <receiveHorn>
-      <DetailDistance>	200	</DetailDistance>
-      <Arg>	INT8	</Arg>
-      <Arg>	UINT8	</Arg>
-    </receiveHorn>
     <onHealthChanged>
       <Arg>	INT16	</Arg>
       <Arg>	OBJECT_ID	</Arg>
@@ -325,7 +317,6 @@
     <shoot>
       <Arg>	FLOAT32	</Arg>
     </shoot>
-    <useHorn></useHorn>
     <teleportTo>
       <Arg>	VECTOR3	</Arg>
       <Arg>	FLOAT32	</Arg>
@@ -466,7 +457,6 @@
     <requestVisibilityLists>
       <Arg>	MAILBOX	</Arg>
     </requestVisibilityLists>
-    <redrawVehicleOnRespawnAfterReconnect></redrawVehicleOnRespawnAfterReconnect>
   </CellMethods>
   <BaseMethods>
     <createCellNearHere>
@@ -476,9 +466,6 @@
     <receiveFinalStats>
       <Arg>	STRING	</Arg>
     </receiveFinalStats>
-    <receiveBotFinalStats>
-      <Arg>	STRING	</Arg>
-    </receiveBotFinalStats>
     <setAvatar>
       <Arg>	MAILBOX	</Arg>
     </setAvatar>

@@ -116,7 +116,6 @@ class GAME(CONST_CONTAINER):
     MINIMAP_ALPHA_ENABLED = 'minimapAlphaEnabled'
     C11N_HISTORICALLY_ACCURATE = 'c11nHistoricallyAccurate'
     LOGIN_SERVER_SELECTION = 'loginServerSelection'
-    DISABLE_EVENT_HORN = 'disableEventHorn'
 
 
 class TUTORIAL(CONST_CONTAINER):
@@ -304,7 +303,12 @@ class OnceOnlyHints(CONST_CONTAINER):
     PAUSE_HINT = 'PauseHint'
     HAVE_NEW_SUFFIX_BADGE_HINT = 'HaveNewSuffixBadgeHint'
     BADGE_PAGE_NEW_SUFFIX_BADGE_HINT = 'BadgePageNewSuffixBadgeHint'
-    CUSTOMIZATION_AUTOPROLONGATION_HINT = 'CustomizationAutoprolongationHint'
+    C11N_AUTOPROLONGATION_HINT = 'CustomizationAutoprolongationHint'
+    C11N_PROGRESSION_VIEW_HINT = 'CustomizationProgressionViewHint'
+    C11N_EDITABLE_STYLES_HINT = 'CustomizationEditableStylesHint'
+    C11N_EDITABLE_STYLE_IN_SLOT_HINT = 'CustomizationEditableStyleInSlotHint'
+    C11N_EDITABLE_STYLE_IN_SLOT_BUTTON_HINT = 'CustomizationEditableStyleInSlotButtonHint'
+    C11N_EDITABLE_PROGRESSION_REQUIRED_STYLES_HINT = 'CustomizationEditableProgressionRequiredStylesHint'
     BLUEPRINTS_SWITCHBUTTON_HINT = 'BlueprintsSwitchButtonHint'
     BLUEPRINTS_RESEARCH_BUTTON_HINT = 'BlueprintsResearchButtonHint'
     BLUEPRINTS_TECHTREE_CONVERT_BUTTON_HINT = 'BlueprintsTechtreeConvertButtonHint'
@@ -410,20 +414,3 @@ class BattlePassStorageKeys(CONST_CONTAINER):
     VOTED_WITH_BOUGHT_BP = 'votedWithBoughtBP'
     SHOWN_VIDEOS_FLAGS = 'shownVideosFlags'
     BUY_ANIMATION_WAS_SHOWN = 'buyAnimationWasShown'
-
-
-class EventHangarVoPhases(CONST_CONTAINER):
-    PHASE1 = 'Phase1'
-    PHASE2 = 'Phase2'
-    PHASE3 = 'Phase3'
-    PHASE4 = 'Phase4'
-    PHASE5 = 'Phase5'
-    PHASE6 = 'Phase6'
-    PHASE7 = 'Phase7'
-    ALL_PHASES = (PHASE1,
-     PHASE2,
-     PHASE3,
-     PHASE4,
-     PHASE5,
-     PHASE6,
-     PHASE7)

@@ -7,15 +7,12 @@ from gui.Scaleform import getButtonsAssetPath
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.common.filter_contexts import getFilterSetupContexts, FilterSetupContext
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.basic.carousel_data_provider import HangarCarouselDataProvider
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled, shouldOpenNewStorage
 from gui.Scaleform.daapi.view.meta.TankCarouselMeta import TankCarouselMeta
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
-from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
-from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
 from gui.Scaleform.locale.TANK_CAROUSEL_FILTER import TANK_CAROUSEL_FILTER
-from gui.ingame_shop import showBuyGoldForSlot
+from gui.shop import showBuyGoldForSlot
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showStorage, showOldShop
+from gui.shared.event_dispatcher import showStorage
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
@@ -37,20 +34,10 @@ class TankCarousel(TankCarouselMeta):
         self.as_rowCountS(value)
 
     def buyTank(self):
-        if isIngameShopEnabled():
-            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_TECHTREE), EVENT_BUS_SCOPE.LOBBY)
-        else:
-            ctx = {'tabId': STORE_TYPES.SHOP,
-             'component': STORE_CONSTANTS.VEHICLE}
-            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_STORE_OLD, ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_TECHTREE), EVENT_BUS_SCOPE.LOBBY)
 
     def restoreTank(self):
-        if shouldOpenNewStorage():
-            showStorage(STORAGE_CONSTANTS.IN_HANGAR, STORAGE_CONSTANTS.VEHICLES_TAB_RESTORE)
-        else:
-            ctx = {'tabId': STORE_TYPES.SHOP,
-             'component': STORE_CONSTANTS.RESTORE_VEHICLE}
-            showOldShop(ctx=ctx)
+        showStorage(STORAGE_CONSTANTS.IN_HANGAR, STORAGE_CONSTANTS.VEHICLES_TAB_RESTORE)
 
     def buySlot(self):
         self.__buySlot()
@@ -144,7 +131,7 @@ class TankCarousel(TankCarouselMeta):
     def __buySlot(self):
         price = self.itemsCache.items.shop.getVehicleSlotsPrice(self.itemsCache.items.stats.vehicleSlots)
         availableMoney = self.itemsCache.items.stats.money
-        if price and availableMoney.gold < price and isIngameShopEnabled():
+        if price and availableMoney.gold < price:
             showBuyGoldForSlot(price)
         else:
             ActionsFactory.doAction(ActionsFactory.BUY_VEHICLE_SLOT)

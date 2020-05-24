@@ -104,6 +104,15 @@ def __mergeGoodies(total, key, value, isLeaf=False, count=1, *args):
             total['limit'] = goodieData['limit'] if total['limit'] == 0 else max(total['limit'], goodieData['limit'])
 
 
+def __mergeEntitlements(total, key, value, isLeaf=False, count=1, *args):
+    totalEntitlements = total.setdefault(key, {})
+    for entitlementCode, entitlementData in value.iteritems():
+        total = totalEntitlements.setdefault(entitlementCode, {'count': 0})
+        total['count'] += count * entitlementData.get('count', 1)
+        if 'expires' not in total and 'expires' in entitlementData:
+            total['expires'] = entitlementData['expires']
+
+
 def __mergeDossier(total, key, value, isLeaf=False, count=1, *args):
     totalDossiers = total.setdefault(key, {})
     for _dossierType, changes in value.iteritems():
@@ -164,6 +173,9 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'blueprintsAny': __mergeItems,
  'blueprints': __mergeBlueprints,
  'enhancements': __mergeItems,
+ 'entitlements': __mergeEntitlements,
+ 'rankedDailyBattles': __mergeValue,
+ 'rankedBonusBattles': __mergeValue,
  'meta': lambda *args, **kwargs: None}
 ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._inventory.getVehicleInvID(key) != 0,
  'customizations': lambda account, key: account._customizations20.getItems((key,), 0)[key] > 0,

@@ -568,7 +568,7 @@ _DEF_CONGRATS_VALIDATORS = {BlueprintsBonusSubtypes.FINAL_FRAGMENT: BlueprintFin
 _DEF_MODEL_PRESENTER = LootRewardDefModelPresenter()
 DEF_COMPENSATION_PRESENTERS = {'vehicles': VehicleCompensationModelPresenter(),
  CrewBonusTypes.CREW_SKIN_BONUSES: CrewSkinsCompensationModelPresenter()}
-_DEF_MODEL_PRESENTERS = {CrewBonusTypes.CREW_BOOK_BONUSES: CrewBookModelPresenter(),
+DEF_MODEL_PRESENTERS = {CrewBonusTypes.CREW_BOOK_BONUSES: CrewBookModelPresenter(),
  BlueprintsBonusSubtypes.FINAL_FRAGMENT: BlueprintFinalFragmentModelPresenter(),
  BlueprintsBonusSubtypes.UNIVERSAL_FRAGMENT: LootRewardConversionModelPresenter(R.images.gui.maps.icons.blueprints.fragment.big.vehicle(), R.sounds.gui_blueprint_fragment_convert()),
  BlueprintsBonusSubtypes.NATION_FRAGMENT: LootRewardConversionModelPresenter(R.images.gui.maps.icons.blueprints.fragment.big.vehicle(), R.sounds.gui_blueprint_fragment_convert()),
@@ -596,7 +596,7 @@ def getRewardsBonuses(rewards, size='big', awardsCount=_DEFAULT_DISPLAYED_AWARDS
 
 def getRewardRendererModelPresenter(reward, presenters=None, compensationPresenters=None, defPresenter=_DEF_MODEL_PRESENTER):
     if presenters is None:
-        presenters = _DEF_MODEL_PRESENTERS
+        presenters = DEF_MODEL_PRESENTERS
     if compensationPresenters is None:
         compensationPresenters = DEF_COMPENSATION_PRESENTERS
     bonusName = reward.get('bonusName', '')

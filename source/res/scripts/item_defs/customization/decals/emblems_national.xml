@@ -12,7 +12,8 @@
   <itemGroup>
     <userString>	#vehicle_customization:emblem/auto	</userString>
     <season>	ALL	</season>
-    <historical>	false	</historical>
+    <historical>	true	</historical>
+    <tags>	vehicleBound nationalEmblem	</tags>
     <priceGroup>	emblems 50g notInShop	</priceGroup>
     <decal>
       <id>	15501	</id>
@@ -114,31 +115,6 @@
       <id>	15500	</id>
       <texture>	gui/maps/vehicles/decals/italian_flag.dds	</texture>
       <userString>	#vehicle_customization:emblem/auto/italian_flag	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	20001	</id>
-      <texture>	gui/maps/vehicles/decals/g1.dds	</texture>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	20002	</id>
-      <texture>	gui/maps/vehicles/decals/g2.dds	</texture>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	20003	</id>
-      <texture>	gui/maps/vehicles/decals/g3.dds	</texture>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	20004	</id>
-      <texture>	gui/maps/vehicles/decals/g4.dds	</texture>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	20005	</id>
-      <texture>	gui/maps/vehicles/decals/g5.dds	</texture>
       <mirror>	false	</mirror>
     </decal>
     <name>	National Emblems	</name>

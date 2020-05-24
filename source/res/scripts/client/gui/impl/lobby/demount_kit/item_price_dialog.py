@@ -8,7 +8,7 @@ from gui.shared.economics import getActionPrc
 from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.money import Currency
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
-from gui.ingame_shop import showBuyGoldForEquipment
+from gui.shop import showBuyGoldForEquipment
 
 class ItemPriceDialog(BaseItemDialog):
 

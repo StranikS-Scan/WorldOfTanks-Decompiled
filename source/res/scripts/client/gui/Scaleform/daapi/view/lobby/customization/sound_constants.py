@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/sound_constants.py
-from gui.Scaleform.framework.entities.view_sound import CommonSoundSpaceSettings
+from gui.Scaleform.framework.entities.View import CommonSoundSpaceSettings
 from shared_utils import CONST_CONTAINER
 
 class SOUNDS(CONST_CONTAINER):
@@ -18,6 +18,11 @@ class SOUNDS(CONST_CONTAINER):
     SEASON_SELECT_DESERT = 'cust_camtype_desert'
     SEASON_SELECT_WINTER = 'cust_camtype_winter'
     TAB_SWITCH = 'cust_tab_switch'
+    EDIT_MODE_SWITCH_ON = 'cust_style_edit_on'
+    EDIT_MODE_SWITCH_OFF = 'cust_style_edit_off'
+    NEW_PROGRESSIVE_DECAL = 'cust_progress_reward'
+    PROGRESSIVE_DECAL_COULD_BE_INSTALLED = 'cust_progress_reward_edit'
+    PROGRESSIVE_DECAL_UPGRADE = 'cust_progress_upgrade'
     SELECT = 'cust_select'
     REMOVE = 'cust_select_remove'
     CHOOSE = 'cust_tankmodule_choose'

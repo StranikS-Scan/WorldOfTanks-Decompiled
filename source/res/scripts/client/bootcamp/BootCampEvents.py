@@ -29,6 +29,8 @@ class _BootCampEvents(object):
         self.onGameplayChoice = self._createEvent()
         self.onHideSubtitle = self._createEvent()
         self.onHighlightAdded = self._createEvent()
+        self.onInterludeVideoStarted = self._createEvent()
+        self.onInterludeVideoFinished = self._createEvent()
 
     def destroy(self):
         self.__manager.clear()

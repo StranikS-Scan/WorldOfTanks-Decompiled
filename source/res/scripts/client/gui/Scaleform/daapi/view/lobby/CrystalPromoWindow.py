@@ -1,12 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/CrystalPromoWindow.py
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getBonsUrl, isIngameShopEnabled
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBonsUrl
 from gui.Scaleform.daapi.view.meta.CrystalsPromoWindowMeta import CrystalsPromoWindowMeta
-from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.shared.event_dispatcher import showWebShop, showOldShop
-from gui.shared import event_dispatcher as shared_events
+from gui.shared.event_dispatcher import showShop
 
 class CrystalsPromoWindow(CrystalsPromoWindowMeta):
 
@@ -31,14 +29,8 @@ class CrystalsPromoWindow(CrystalsPromoWindowMeta):
          'image0': RES_ICONS.MAPS_ICONS_BATTLETYPES_64X64_RANKED_EPICRANDOM,
          'image1': RES_ICONS.MAPS_ICONS_LIBRARY_CRYSTAL_80X80,
          'image2': RES_ICONS.MAPS_ICONS_MODULES_LISTOVERLAYSMALL,
-         'bg': RES_ICONS.MAPS_ICONS_WINDOWS_CRYSTALSPROMOBG,
-         'showOpenShopBtn': isIngameShopEnabled()})
+         'bg': RES_ICONS.MAPS_ICONS_WINDOWS_CRYSTALSPROMOBG})
 
-    @shared_events.leaveEventMode
     def onOpenShop(self):
-        if isIngameShopEnabled():
-            showWebShop(getBonsUrl())
-        else:
-            showOldShop(ctx={'tabId': STORE_CONSTANTS.SHOP,
-             'component': STORE_CONSTANTS.BATTLE_BOOSTER})
+        showShop(getBonsUrl())
         self.destroy()

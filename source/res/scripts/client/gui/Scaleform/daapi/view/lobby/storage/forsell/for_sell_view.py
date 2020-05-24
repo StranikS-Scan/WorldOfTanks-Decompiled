@@ -11,14 +11,14 @@ from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageIte
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageItemIcon
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageModuleName
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getStorageShellsData
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getWebShopURL
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopURL
 from gui.Scaleform.daapi.view.meta.StorageCategoryForSellViewMeta import StorageCategoryForSellViewMeta
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showWebShop
+from gui.shared.event_dispatcher import showShop
 from gui.shared.formatters import getItemPricesVO
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
@@ -238,7 +238,7 @@ class StorageCategoryForSellView(StorageCategoryForSellViewMeta):
         self.__updateUI()
 
     def navigateToStore(self):
-        showWebShop(getWebShopURL())
+        showShop(getShopURL())
 
     def _populate(self):
         super(StorageCategoryForSellView, self)._populate()

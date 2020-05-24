@@ -7,7 +7,7 @@ from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
 from gui.Scaleform.locale.MENU import MENU
-from gui.ingame_shop import canBuyGoldForVehicleThroughWeb
+from gui.shop import canBuyGoldForVehicleThroughWeb
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from helpers import dependency

@@ -690,15 +690,15 @@
       <enhancements>
         <Type>	PYTHON	</Type>
       </enhancements>
+      <vehPerks>
+        <Type>	PYTHON	</Type>
+      </vehPerks>
     </Properties>
   </ARENA_VEH_INFO>
   <USER_EXTRA_SETTINGS>	FIXED_DICT	  <Properties>
       <hideNonHistoric>
         <Type>	BOOL	</Type>
       </hideNonHistoric>
-      <disableEventHorn>
-        <Type>	BOOL	</Type>
-      </disableEventHorn>
     </Properties>
   </USER_EXTRA_SETTINGS>
   <ARENA_ADDPLAYER_INFO>	FIXED_DICT	  <Properties>
@@ -797,21 +797,6 @@
       <userExtraSettings>
         <Type>	USER_EXTRA_SETTINGS	</Type>
       </userExtraSettings>
-      <availableLorePoints>
-        <Type>	UINT8	</Type>
-      </availableLorePoints>
-      <eventSkillLevel>
-        <Type>	UINT8	</Type>
-      </eventSkillLevel>
-      <generalID>
-        <Type>	INT32	</Type>
-      </generalID>
-      <generalLevel>
-        <Type>	INT32	</Type>
-      </generalLevel>
-      <energyToken>
-        <Type>	STRING	</Type>
-      </energyToken>
     </Properties>
   </ARENA_ADDPLAYER_INFO>
   <AVATAR_VEHICLE_ROSTER>	FIXED_DICT	  <Properties>
@@ -1151,39 +1136,11 @@
       <outfit>
         <Type>	STRING	</Type>
       </outfit>
+      <vehPerks>
+        <Type>	PYTHON	</Type>
+      </vehPerks>
     </Properties>
   </RESPAWN_INFO_VEHICLE>
-  <EVENT_RESPAWN_INFO_VEHICLE>	FIXED_DICT	  <Properties>
-      <compDescr>
-        <Type>	STRING	</Type>
-      </compDescr>
-      <crewCompactDescrs>
-        <Type>	ARRAY	  <of>	STRING	</of>
-        </Type>
-      </crewCompactDescrs>
-      <commanderSkinID>
-        <Type>	UINT16	</Type>
-      </commanderSkinID>
-      <marksOnGun>
-        <Type>	UINT8	</Type>
-      </marksOnGun>
-      <index>
-        <Type>	UINT16	</Type>
-      </index>
-      <onRespawnSettings>
-        <Type>	PYTHON	</Type>
-      </onRespawnSettings>
-      <ammo>
-        <Type>	ARRAY	  <of>	INT32	</of>
-        </Type>
-      </ammo>
-      <positionList>	&gt;	  <Type>	PYTHON	</Type>
-      </positionList>
-      <outfit>
-        <Type>	STRING	</Type>
-      </outfit>
-    </Properties>
-  </EVENT_RESPAWN_INFO_VEHICLE>
   <INSPIRING_EFFECT>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <radius>
@@ -1344,13 +1301,4 @@
       </dailyPlayLimit>
     </Properties>
   </PLAY_LIMITS>
-  <VEHICLE_IN_DEATHZONE>	FIXED_DICT	  <Properties>
-      <vehicleId>
-        <Type>	OBJECT_ID	</Type>
-      </vehicleId>
-      <nextStrikeTime>
-        <Type>	UINT32	</Type>
-      </nextStrikeTime>
-    </Properties>
-  </VEHICLE_IN_DEATHZONE>
 </alias.xml>

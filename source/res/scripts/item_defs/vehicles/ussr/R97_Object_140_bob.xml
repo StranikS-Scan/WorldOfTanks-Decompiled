@@ -297,6 +297,7 @@
         <clipAngle>	0.297691	</clipAngle>
         <anchorPosition>	-1.26163 0.558173 1.1153	</anchorPosition>
         <anchorDirection>	0.0206876 0.997349 0.0697602	</anchorDirection>
+        <verticalMirror>	true	</verticalMirror>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -336,6 +337,7 @@
         <clipAngle>	0.697474	</clipAngle>
         <anchorPosition>	-1.2863 0.307784 2.62277	</anchorPosition>
         <anchorDirection>	-0.0156177 0.942219 0.334633	</anchorDirection>
+        <verticalMirror>	true	</verticalMirror>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -349,6 +351,7 @@
         <clipAngle>	0.697474	</clipAngle>
         <anchorPosition>	1.2764 0.349965 2.62198	</anchorPosition>
         <anchorDirection>	-0.0381905 0.942216 0.332822	</anchorDirection>
+        <verticalMirror>	true	</verticalMirror>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -375,6 +378,7 @@
         <clipAngle>	0.747639	</clipAngle>
         <anchorPosition>	-1.27725 0.301407 2.25078	</anchorPosition>
         <anchorDirection>	-0.026086 0.946098 0.322829	</anchorDirection>
+        <verticalMirror>	true	</verticalMirror>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -388,6 +392,7 @@
         <clipAngle>	0.747639	</clipAngle>
         <anchorPosition>	1.28274 0.269669 2.21541	</anchorPosition>
         <anchorDirection>	-0.0202852 0.946068 0.323332	</anchorDirection>
+        <verticalMirror>	true	</verticalMirror>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -401,6 +406,7 @@
         <clipAngle>	0.604152	</clipAngle>
         <anchorPosition>	-1.28625 0.446124 1.92869	</anchorPosition>
         <anchorDirection>	-0.0292339 0.971963 0.233308	</anchorDirection>
+        <verticalMirror>	true	</verticalMirror>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -414,6 +420,7 @@
         <clipAngle>	0.604152	</clipAngle>
         <anchorPosition>	1.27368 0.522928 1.928	</anchorPosition>
         <anchorDirection>	-0.0292447 0.972238 0.232159	</anchorDirection>
+        <verticalMirror>	true	</verticalMirror>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -453,6 +460,7 @@
         <clipAngle>	0.335694	</clipAngle>
         <anchorPosition>	1.2624 0.55955 1.1279	</anchorPosition>
         <anchorDirection>	0.0260492 0.997223 0.069761	</anchorDirection>
+        <verticalMirror>	true	</verticalMirror>
       </slot>
       <slot>
         <slotType>	projectionDecal	</slotType>
@@ -1900,6 +1908,7 @@
           <clipAngle>	0.587042	</clipAngle>
           <anchorPosition>	-0.0025298 0.683751 -0.00309061	</anchorPosition>
           <anchorDirection>	-0.00841436 0.99979 0.018703	</anchorDirection>
+          <verticalMirror>	true	</verticalMirror>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -1952,6 +1961,7 @@
           <clipAngle>	0.681441	</clipAngle>
           <anchorPosition>	-0.0025298 0.68268 0.0541754	</anchorPosition>
           <anchorDirection>	-0.00841436 0.99979 0.018703	</anchorDirection>
+          <verticalMirror>	true	</verticalMirror>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -1965,6 +1975,7 @@
           <clipAngle>	0.681441	</clipAngle>
           <anchorPosition>	-0.00252979 0.682679 0.0541753	</anchorPosition>
           <anchorDirection>	-0.00841436 0.99979 0.0187031	</anchorDirection>
+          <verticalMirror>	true	</verticalMirror>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>
@@ -2015,36 +2026,15 @@
       <chassis>
         <Chassis_Object_140_bob>
           <grounds>
-            <ground>
-              <medium>
-                <rollingFriction>	0.052325	</rollingFriction>
-              </medium>
-            </ground>
-            <sand>
-              <medium>
-                <rollingFriction>	0.052325	</rollingFriction>
-              </medium>
-            </sand>
-            <wood>
-              <medium>
-                <rollingFriction>	0.052325	</rollingFriction>
-              </medium>
-            </wood>
-            <snow>
-              <medium>
-                <rollingFriction>	0.052325	</rollingFriction>
-              </medium>
-            </snow>
-            <stone>
-              <medium>
-                <rollingFriction>	0.052325	</rollingFriction>
-              </medium>
-            </stone>
-            <metal>
-              <medium>
-                <rollingFriction>	0.052325	</rollingFriction>
-              </medium>
-            </metal>
+            <soft>
+              <rollingFriction>	0.12075	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.052325	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.044275	</rollingFriction>
+            </firm>
           </grounds>
         </Chassis_Object_140_bob>
       </chassis>

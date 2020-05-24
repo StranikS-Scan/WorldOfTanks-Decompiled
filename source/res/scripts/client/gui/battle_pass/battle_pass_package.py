@@ -1,14 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_pass/battle_pass_package.py
-from helpers import dependency
 from battle_pass_common import BattlePassConsts
 from gui.battle_pass.battle_pass_award import BattlePassAwardsManager
 from gui.battle_pass.battle_pass_helpers import isCurrentBattlePassStateBase
+from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
+from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 
 class BattlePassPackage(object):
     __slots__ = ('__seasonID',)
+    _eventsCache = dependency.descriptor(IEventsCache)
     _itemsCache = dependency.descriptor(IItemsCache)
     _battlePassController = dependency.descriptor(IBattlePassController)
 
@@ -17,12 +19,7 @@ class BattlePassPackage(object):
 
     def getPrice(self):
         bpCost = self._itemsCache.items.shop.getBattlePassCost()
-        currency = bpCost.getCurrency()
-        if self.hasBattlePass():
-            value = bpCost.get(currency)
-        else:
-            value = 0
-        return value
+        return self.__getPriceBP(bpCost)
 
     def getLevelsCount(self):
         pass
@@ -74,6 +71,14 @@ class BattlePassPackage(object):
     def _getBPCurrentLevel(self):
         return self._battlePassController.getMaxLevel() if not isCurrentBattlePassStateBase() else self._battlePassController.getCurrentLevel()
 
+    def __getPriceBP(self, battlePassCost):
+        currency = battlePassCost.getCurrency()
+        if self.hasBattlePass():
+            value = battlePassCost.get(currency)
+        else:
+            value = 0
+        return value
+
 
 class PackageLevels(BattlePassPackage):
 
@@ -91,13 +96,7 @@ class PackageLevels(BattlePassPackage):
 
     def getPrice(self):
         levelCost = self._itemsCache.items.shop.getBattlePassLevelCost()
-        currency = levelCost.getCurrency()
-        levelsCount = self.getLevelsCount()
-        if levelsCount:
-            value = levelCost.get(currency) * levelsCount
-        else:
-            value = 0
-        return value
+        return self.__getLevelsPrice(levelCost)
 
     def getNowAwards(self):
         curLevel = self._getBPCurrentLevel()
@@ -121,6 +120,15 @@ class PackageLevels(BattlePassPackage):
     def isVisible(self):
         isAvaibleToBuy = not self._battlePassController.isSellAnyLevelsUnlocked()
         return (isAvaibleToBuy or self.isBought()) and isCurrentBattlePassStateBase()
+
+    def __getLevelsPrice(self, levelCost):
+        currency = levelCost.getCurrency()
+        levelsCount = self.getLevelsCount()
+        if levelsCount:
+            value = levelCost.get(currency) * levelsCount
+        else:
+            value = 0
+        return value
 
 
 class PackageAnyLevels(PackageLevels):

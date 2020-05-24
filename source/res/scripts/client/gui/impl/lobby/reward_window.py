@@ -6,6 +6,7 @@ from frameworks.wulf.gui_constants import WindowFlags
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import PackRentVehiclesAwardComposer, AnniversaryAwardComposer, CurtailingAwardsComposer, RawLabelBonusComposer
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyPremiumUrl
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.impl.backport import TooltipData, BackportTooltipWindow
@@ -15,9 +16,10 @@ from gui.impl.gen.view_models.ui_kit.reward_renderer_model import RewardRenderer
 from gui.impl.gen.view_models.windows.piggy_bank_reward_window_content_model import PiggyBankRewardWindowContentModel
 from gui.impl.gen.view_models.windows.reward_window_content_model import RewardWindowContentModel
 from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker, getAnniversaryPacker, getDefaultAwardFormatter
-from gui.server_events.bonuses import getTutorialBonuses, CreditsBonus
+from gui.server_events.bonuses import getTutorialBonuses, CreditsBonus, getNonQuestBonuses
 from gui.server_events.recruit_helper import getRecruitInfo
-from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE, event_dispatcher
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showShop
 from gui.shared.money import Currency
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
@@ -135,9 +137,8 @@ class PiggyBankRewardWindowContent(BaseRewardWindowContent):
     def handleNextButton(self):
         self.getParentWindow().destroy()
 
-    @event_dispatcher.leaveEventMode
     def onHyperLinkClicked(self):
-        event_dispatcher.showPremiumDialog()
+        showShop(getBuyPremiumUrl())
 
     def _getAwardComposer(self):
         return RawLabelBonusComposer(getDefaultAwardFormatter())
@@ -244,6 +245,59 @@ class TwitchRewardWindow(RewardWindowBase):
         contentSettings = ViewSettings(R.views.lobby.reward_window.twitch_reward_window_content.TwitchRewardWindowContent())
         contentSettings.model = RewardWindowContentModel()
         super(TwitchRewardWindow, self).__init__(parent=parent, content=TwitchRewardWindowContent(contentSettings, ctx=ctx))
+
+
+class DynamicRewardWindowContent(BaseRewardWindowContent):
+    __slots__ = ('__bonuses', '_eventName')
+    _BONUSES_ORDER = ('customizations',
+     Currency.GOLD,
+     'vehicles',
+     'premium_plus',
+     'dossier',
+     'crewBooks',
+     'items',
+     'tokens')
+
+    def __init__(self, settings, ctx=None):
+        super(DynamicRewardWindowContent, self).__init__(settings, ctx)
+        self.__bonuses = None
+        if ctx is not None:
+            self.__bonuses = ctx.get('bonuses', None)
+        return
+
+    def handleNextButton(self):
+        self.destroyWindow()
+
+    def _getBonuses(self):
+        bonuses = []
+        if self.__bonuses is None:
+            return bonuses
+        else:
+            for key, value in self.__bonuses.items():
+                bonus = getNonQuestBonuses(key, value)
+                if bonus:
+                    bonuses.extend(bonus)
+
+            return bonuses
+
+    def _finalize(self):
+        super(DynamicRewardWindowContent, self)._finalize()
+        self.__bonuses = None
+        return
+
+
+class DynamicRewardWindow(RewardWindowBase):
+    __slots__ = ('_eventName',)
+
+    def __init__(self, ctx=None, parent=None):
+        self._eventName = ctx['eventName']
+        contentSettings = ViewSettings(R.views.lobby.reward_window.clan_reward_window_content.ClanRewardWindowContent())
+        contentSettings.model = RewardWindowContentModel()
+        super(DynamicRewardWindow, self).__init__(parent=parent, content=DynamicRewardWindowContent(contentSettings, ctx=ctx))
+
+    def _initialize(self):
+        super(DynamicRewardWindow, self)._initialize()
+        self.windowModel.setTitle(getattr(R.strings.ingame_gui.rewardWindow, self._eventName).winHeaderText())
 
 
 class GiveAwayRewardWindowContent(QuestRewardWindowContent):

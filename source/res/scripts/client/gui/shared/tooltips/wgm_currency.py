@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/wgm_currency.py
-import constants
 from debug_utils import LOG_ERROR
 from gui.impl import backport
 from gui.shared.money import Currency
@@ -61,7 +60,7 @@ class WGMCurrencyTooltip(DynamicBlocksTooltipData):
             LOG_ERROR('WGMGoldCurrencyTooltip empty btnType!')
             return tooltipBlocks
         else:
-            return formatters.packMoneyAndXpBlocks(tooltipBlocks, btnType=self._btnType, valueBlocks=self._getValueBlocks(), alternativeData=self._getAlternativeData())
+            return formatters.packMoneyAndXpBlocks(tooltipBlocks, btnType=self._btnType, valueBlocks=self.__getValueBlocks(), alternativeData=self._getAlternativeData())
 
     def _getAlternativeData(self):
         return None
@@ -78,17 +77,15 @@ class WGMCurrencyTooltip(DynamicBlocksTooltipData):
         s2 = frozenset(d2.itervalues())
         return s1 ^ s2
 
-    def _getValueBlocks(self):
+    def __getValueBlocks(self):
         valueBlocks = list()
         if self._btnType == Currency.GOLD:
-            if constants.IS_SINGAPORE:
-                valueBlocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.HANGAR_HEADER_WGMONEYTOOLTIP_PURCHASEDVALUE), value=self.__getGoldString(wgm_balance_info_requester.GOLD_PURCHASED), icon=Currency.GOLD, valueWidth=84, iconYOffset=2))
-                valueBlocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.HANGAR_HEADER_WGMONEYTOOLTIP_EARNEDVALUE), value=self.__getGoldString(wgm_balance_info_requester.GOLD_EARNED), icon=Currency.GOLD, padding=formatters.packPadding(bottom=10), valueWidth=84, iconYOffset=2))
+            valueBlocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.HANGAR_HEADER_WGMONEYTOOLTIP_PURCHASEDVALUE), value=self.__getGoldString(wgm_balance_info_requester.GOLD_PURCHASED), icon=Currency.GOLD, valueWidth=84, iconYOffset=2))
+            valueBlocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.HANGAR_HEADER_WGMONEYTOOLTIP_EARNEDVALUE), value=self.__getGoldString(wgm_balance_info_requester.GOLD_EARNED), icon=Currency.GOLD, padding=formatters.packPadding(bottom=10), valueWidth=84, iconYOffset=2))
             valueBlocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.HANGAR_HEADER_WGMONEYTOOLTIP_TOTALVALUE), value=text_styles.gold(self.__getGoldTotal()), icon=Currency.GOLD, padding=formatters.packPadding(bottom=15), valueWidth=84, iconYOffset=2))
         else:
-            if constants.IS_SINGAPORE:
-                valueBlocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.HANGAR_HEADER_WGMONEYTOOLTIP_PURCHASEDVALUE), value=self.__getCreditsString(wgm_balance_info_requester.CREDITS_PURCHASED), icon=Currency.CREDITS, valueWidth=84, iconYOffset=2))
-                valueBlocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.HANGAR_HEADER_WGMONEYTOOLTIP_EARNEDVALUE), value=self.__getCreditsString(wgm_balance_info_requester.CREDITS_EARNED), icon=Currency.CREDITS, padding=formatters.packPadding(bottom=10), valueWidth=84, iconYOffset=2))
+            valueBlocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.HANGAR_HEADER_WGMONEYTOOLTIP_PURCHASEDVALUE), value=self.__getCreditsString(wgm_balance_info_requester.CREDITS_PURCHASED), icon=Currency.CREDITS, valueWidth=84, iconYOffset=2))
+            valueBlocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.HANGAR_HEADER_WGMONEYTOOLTIP_EARNEDVALUE), value=self.__getCreditsString(wgm_balance_info_requester.CREDITS_EARNED), icon=Currency.CREDITS, padding=formatters.packPadding(bottom=10), valueWidth=84, iconYOffset=2))
             valueBlocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.HANGAR_HEADER_WGMONEYTOOLTIP_TOTALVALUE), value=text_styles.credits(self.__getCreditsTotal()), icon=Currency.CREDITS, padding=formatters.packPadding(bottom=15), valueWidth=84, iconYOffset=2))
         return valueBlocks
 

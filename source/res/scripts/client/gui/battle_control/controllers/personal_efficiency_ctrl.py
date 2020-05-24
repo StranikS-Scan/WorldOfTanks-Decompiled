@@ -35,9 +35,6 @@ class _FeedbackEventEfficiencyInfo(_EfficiencyInfo):
     def getArenaVehicleID(self):
         return self.__arenaVehID
 
-    def isEventPhaseChangeDamage(self):
-        return False
-
 
 class _DamageEfficiencyInfo(_FeedbackEventEfficiencyInfo):
     __slots__ = ('__damage',)
@@ -75,15 +72,6 @@ class _DamageEfficiencyInfo(_FeedbackEventEfficiencyInfo):
 
     def isBombersDamage(self, primary=True):
         return self.__damage.isBombers(primary=primary)
-
-    def isEventPhaseChangeDamage(self, primary=True):
-        return self.__damage.isEventPhaseChange(primary=primary)
-
-    def isDeathZoneDamage(self, primary=True):
-        return self.__damage.isDeathZone(primary=primary)
-
-    def isMinefieldDamage(self, primary=True):
-        return self.__damage.isMinefield(primary=primary)
 
     def getShellType(self):
         return self.__damage.getShellType()
@@ -125,15 +113,6 @@ class _CriticalHitsEfficiencyInfo(_FeedbackEventEfficiencyInfo):
 
     def isBombersDamage(self, primary=True):
         return self.__critsExtra.isBombers(primary=primary)
-
-    def isEventPhaseChangeDamage(self, primary=True):
-        return self.__critsExtra.isEventPhaseChange(primary=primary)
-
-    def isDeathZoneDamage(self, primary=True):
-        return self.__critsExtra.isDeathZone(primary=primary)
-
-    def isMinefieldDamage(self, primary=True):
-        return self.__critsExtra.isMinefield(primary=primary)
 
     def getShellType(self):
         return self.__critsExtra.getShellType()
@@ -227,8 +206,6 @@ class PersonalEfficiencyController(IBattleController):
         for event in events:
             info = _createEfficiencyInfoFromFeedbackEvent(event)
             if info is not None:
-                if info.isEventPhaseChangeDamage():
-                    continue
                 eventsCount += 1
                 if info.getType() in _AGGREGATED_DAMAGE_EFFICIENCY_TYPES:
                     totals[info.getType()] = totals[info.getType()] + info.getDamage()

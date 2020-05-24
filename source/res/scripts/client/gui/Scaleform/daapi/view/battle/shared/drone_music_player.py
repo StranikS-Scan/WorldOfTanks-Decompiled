@@ -336,7 +336,7 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
 
     def __init__(self):
         super(DroneMusicPlayer, self).__init__()
-        self._arenaPeriod = None
+        self.__arenaPeriod = None
         self.__isArenaLoadingCompleted = False
         arenaType = self.sessionProvider.arenaVisitor.getArenaType()
         self.__guiTypeName = ARENA_GUI_TYPE_LABEL.LABELS[self.sessionProvider.arenaVisitor.getArenaGuiType()]
@@ -375,8 +375,8 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
 
     @_delegate
     def setPeriod(self, period):
-        if self._arenaPeriod != period:
-            self._arenaPeriod = period
+        if self.__arenaPeriod != period:
+            self.__arenaPeriod = period
             self.__checkInitialization()
 
     @_delegate
@@ -443,7 +443,7 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
             notifier = getattr(condition, event)
             if callable(notifier):
                 satisfiedChanged = notifier(*args, **kwargs)
-                if self._isProperBattlePeroid():
+                if self.__isProperBattlePeroid():
                     if self._initialized:
                         if satisfiedChanged:
                             self._validateConditions()
@@ -459,7 +459,7 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
         return
 
     def __onConditionChangedItself(self):
-        if self._isProperBattlePeroid():
+        if self.__isProperBattlePeroid():
             self._validateConditions()
 
     def __checkFullInitialization(self):
@@ -498,14 +498,14 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
         return
 
     def __checkInitialization(self):
-        if self._isProperBattlePeroid():
+        if self.__isProperBattlePeroid():
             if self._initialized:
                 self._validateConditions()
             else:
                 self.__checkFullInitialization()
 
-    def _isProperBattlePeroid(self):
-        return self._arenaPeriod == ARENA_PERIOD.BATTLE and self.__isArenaLoadingCompleted
+    def __isProperBattlePeroid(self):
+        return self.__arenaPeriod == ARENA_PERIOD.BATTLE and self.__isArenaLoadingCompleted
 
     def __stopMusic(self):
         LOG_DEBUG('[Drone] Playing music "{}" has been stopped'.format(self.__playingMusicID))

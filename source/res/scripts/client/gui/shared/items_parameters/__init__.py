@@ -47,7 +47,7 @@ def getShotsPerMinute(descriptor, reloadTime, autoReloadGun=False):
         clipCount = 1
         reloadTime = max(reloadTime, clip[1])
     else:
-        clipCount = clip[0] / (burst[0] if clip[0] > 1 else 1)
+        clipCount = float(clip[0]) / (burst[0] if clip[0] > 1 else 1)
     value = burst[0] * clipCount * time_utils.ONE_MINUTE / (reloadTime + (burst[0] - 1) * burst[1] * clipCount + (clipCount - 1) * clip[1])
     return value
 

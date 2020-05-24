@@ -336,6 +336,9 @@ class BATTLE_RESULTS(object):
     PERSONALQUEST_FAILED_ATTENTION = '#battle_results:personalQuest/failed/attention'
     PERSONALQUEST_FAILED_DESCR = '#battle_results:personalQuest/failed/descr'
     PROGRESSIVEREWARD_DESCR = '#battle_results:progressiveReward/descr'
+    CUSTOMIZATIONPROGRESS_DESCR = '#battle_results:customizationProgress/descr'
+    CUSTOMIZATIONPROGRESS_AWARD_RECEIVED = '#battle_results:customizationProgress/award/received'
+    CUSTOMIZATIONPROGRESS_AWARD_NEWLEVEL = '#battle_results:customizationProgress/award/newLevel'
     DETAILS_TIME_LBL_ENUM = (DETAILS_TIME_LBL_OBJECTIVESREACHED,
      DETAILS_TIME_LBL_OBJECTIVESDESTROYED,
      DETAILS_TIME_LBL_BASESCAPTURED,

@@ -5,7 +5,7 @@ from account_helpers.AccountSettings import NEW_LOBBY_TAB_COUNTER
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HEADER_BUTTONS_COUNTERS_CHANGED_EVENT
-from gui.Scaleform.daapi.view.lobby.vehiclePreview20.items_kit_helper import lookupItem, showItemTooltip, getCDFromId, canInstallStyle
+from gui.Scaleform.daapi.view.lobby.vehicle_preview.items_kit_helper import lookupItem, showItemTooltip, getCDFromId, canInstallStyle
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS as TC
 from gui.shared import g_eventBus
 from gui.shared.events import HasCtxEvent
@@ -132,16 +132,14 @@ class UtilWebApiMixin(object):
         itemId = cmd.itemId
         args = []
         withLongIntArgs = (TC.AWARD_SHELL,)
-        withLongBoolArgs = (TC.TECH_CUSTOMIZATION_ITEM, TC.TECH_CUSTOMIZATION_HISTORIC_ITEM)
         withLongOnlyArgs = (TC.AWARD_VEHICLE,
          TC.AWARD_MODULE,
          TC.INVENTORY_BATTLE_BOOSTER,
          TC.BOOSTERS_BOOSTER_INFO,
-         TC.BADGE)
+         TC.BADGE,
+         TC.TECH_CUSTOMIZATION_ITEM)
         if tooltipType in withLongIntArgs:
             args = [itemId, 0]
-        elif tooltipType in withLongBoolArgs:
-            args = [itemId, False]
         elif tooltipType in withLongOnlyArgs:
             args = [itemId]
         elif tooltipType == TC.ACHIEVEMENT:

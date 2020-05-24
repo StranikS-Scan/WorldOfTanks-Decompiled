@@ -23,7 +23,7 @@ from vehicle_systems.components.siegeEffectsController import SiegeEffectsContro
 from vehicle_systems.components.vehicle_shadow_manager import VehicleShadowManager
 import items.vehicles
 from helpers import bound_effects, gEffectsDisabled
-from gui.shared.gui_items.customization.outfit import Outfit
+from vehicle_outfit.outfit import Outfit
 _DEFAULT_STICKERS_ALPHA = 1.0
 MATKIND_COUNT = 3
 MAX_DISTANCE = 500
@@ -51,6 +51,7 @@ class CommonTankAppearance(ScriptGameObject):
             self.compoundModel.setupFashions(fashions)
 
     terrainMatKind = property(lambda self: self.__currTerrainMatKind)
+    terrainGroundType = property(lambda self: self.__currTerrainGroundType)
     terrainEffectMaterialNames = property(lambda self: self.__terrainEffectMaterialNames)
     isInWater = property(lambda self: self.waterSensor.isInWater)
     isUnderwater = property(lambda self: self.waterSensor.isUnderWater)
@@ -115,6 +116,7 @@ class CommonTankAppearance(ScriptGameObject):
         self.crashedTracksController = None
         self.__currentDamageState = VehicleDamageState()
         self.__currTerrainMatKind = [-1] * MATKIND_COUNT
+        self.__currTerrainGroundType = [-1] * MATKIND_COUNT
         self.__terrainEffectMaterialNames = [''] * MATKIND_COUNT
         self.__chassisDecal = VehicleDecal(self)
         self.__splodge = None
@@ -187,9 +189,6 @@ class CommonTankAppearance(ScriptGameObject):
                 prereqs.append(builder.createLoader(self.worldID, '{0}{1}PhysicalTrack'.format(name, index), modelsSetParams.skin))
 
         return prereqs
-
-    def setID(self, vID):
-        self.__vID = vID
 
     def construct(self, isPlayer, resourceRefs):
         self.collisions = resourceRefs['collisionAssembler']
@@ -378,7 +377,7 @@ class CommonTankAppearance(ScriptGameObject):
 
     def _prepareOutfit(self, outfitCD):
         outfitComponent = camouflages.getOutfitComponent(outfitCD)
-        return Outfit(component=outfitComponent)
+        return Outfit(component=outfitComponent, vehicleCD=self.typeDescriptor.makeCompactDescr())
 
     def _setupModels(self):
         self.__isAlive = not self.damageState.isCurrentModelDamaged

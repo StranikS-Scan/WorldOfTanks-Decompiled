@@ -31,16 +31,17 @@ class VehiclePointsTooltipView(ViewImpl):
             isSpecial = self.__battlePassController.isSpecialVehicle(self.__intCD)
             currentPoints, limitPoints = self.__battlePassController.getVehicleProgression(self.__intCD)
             pointsReward = self.__battlePassController.getVehicleCapBonus(self.__intCD)
-            commonPerBattlePoints = self.__battlePassController.getPerBattlePoints()
-            perBattlePoints = self.__battlePassController.getPerBattlePoints(self.__intCD)
+            commonPerBattlePoints = {points.label:(points.winPoint, points.losePoint) for points in self.__battlePassController.getPerBattlePoints()}
             items = model.rewardPoints.getItems()
-            for itemIndex, (label, winPoint, losePoint) in enumerate(perBattlePoints):
-                _, commonWinPoint, commonLosePoint = commonPerBattlePoints[itemIndex]
-                isHighlighted = commonWinPoint != winPoint or commonLosePoint != losePoint
+            for points in self.__battlePassController.getPerBattlePoints(self.__intCD):
+                isHighlighted = True
+                if points.label in commonPerBattlePoints:
+                    commonWinPoint, commonLosePoint = commonPerBattlePoints[points.label]
+                    isHighlighted = commonWinPoint != points.winPoint or commonLosePoint != points.losePoint
                 item = RewardPointsModel()
-                item.setTopCount(label)
-                item.setPointsWin(winPoint)
-                item.setPointsLose(losePoint)
+                item.setTopCount(points.label)
+                item.setPointsWin(points.winPoint)
+                item.setPointsLose(points.losePoint)
                 item.setIsSpecial(isHighlighted)
                 items.addViewModel(item)
 

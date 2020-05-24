@@ -44,7 +44,8 @@ class MessageDialogContentQuery(ContentQuery):
          'message': i18n.makeString(data['text']) if showBottomData else '',
          'referralDescription': i18n.makeString(data['description']) if showReferralData else '',
          'background': data['background']}
-        voiceover = (data['voiceover'], data['subtitle'])
+        voiceover = {'voiceover': data['voiceover'],
+         'subtitle': data['subtitle']}
         if showBottomData:
             bottomRendererID = data['bottom_renderer']
             if bottomRendererID:
@@ -118,7 +119,9 @@ class SubtitleDialogContentQuery(MessageDialogContentQuery):
 
     def _makeMessageData(self, msgContent):
         data = msgContent['data']
-        voiceover = (data['voiceover'], i18n.makeString(data['subtitle']))
+        voiceover = {'voiceover': data['voiceover'],
+         'subtitle': i18n.makeString(data['subtitle']),
+         'keypoint': ''}
         return (data, voiceover)
 
 
@@ -126,5 +129,6 @@ class VideoDialogContentQuery(MessageDialogContentQuery):
 
     def _makeMessageData(self, msgContent):
         data = msgContent['data']
-        voiceover = ('', data['subtitle'])
+        voiceover = {'voiceover': '',
+         'subtitle': data['subtitle']}
         return (data, voiceover)

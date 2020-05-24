@@ -23,7 +23,6 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from shared_utils import first
 from skeletons.gui.server_events import IEventsCache
-from gui.shared.event_dispatcher import leaveEventMode
 _OPERATION_ID_TO_UI_BACKGROUND = {1: RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_QUESTAWARD_BG_STUG4,
  2: RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_QUESTAWARD_BG_HTC,
  3: RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_QUESTAWARD_BG_T55A,
@@ -87,11 +86,11 @@ class PersonalMissionsQuestAwardScreen(PersonalMissionsQuestAwardScreenMeta):
 
     def onNextQuestLinkClick(self):
         if self._addReward and self._nextQuest:
-            self._runProxyEvent(self._proxyEvent, self._nextQuest.getID())
+            self._proxyEvent(missionID=self._nextQuest.getID())
         elif self._addReward and not self._nextQuest:
             self.__tryGetAward()
         else:
-            self._runProxyEvent(self._proxyEvent, self._quest.getID())
+            self._proxyEvent(missionID=self._quest.getID())
         self.__fireOnClose()
         self.destroy()
 
@@ -108,10 +107,6 @@ class PersonalMissionsQuestAwardScreen(PersonalMissionsQuestAwardScreenMeta):
         self._processMission(self._nextQuest)
         self.__fireOnClose()
         self.destroy()
-
-    @leaveEventMode
-    def _runProxyEvent(self, proxyEvent, missionID):
-        proxyEvent(missionID=missionID)
 
     def _populate(self):
         super(PersonalMissionsQuestAwardScreen, self)._populate()

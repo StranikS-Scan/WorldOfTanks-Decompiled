@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/battle_pass/battle_pass_awards_view_model.py
 from gui.impl.wrappers.user_list_model import UserListModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.common_view_model import CommonViewModel
+from gui.impl.gen.view_models.views.lobby.battle_pass.reward_item_model import RewardItemModel
 
 class BattlePassAwardsViewModel(CommonViewModel):
     __slots__ = ('onBuyClick',)

@@ -3,6 +3,7 @@
 from collections import namedtuple
 import logging
 from typing import Iterable, Any, Optional
+from gui.impl.lobby.dialogs.contents.checkbox_content import CheckBoxDialogContent
 from gui.impl.pub.simple_dialog_window import SimpleDialogWindow
 from gui.impl.pub.pure_dialog_window import PureDialogWindow
 from gui.impl.gen import R
@@ -31,7 +32,7 @@ def _setupButtonsBasedOnRes(obj, message, buttons=R.strings.dialogs.common, focu
 
 
 class PureDialogBuilder(object):
-    __slots__ = ('_windowClass', '__title', '__formattedTitle', '__titleArgs', '__icon', '__backImg', '__preset', '__layer', '__buttons', '__showBalance')
+    __slots__ = ('_windowClass', '__title', '__formattedTitle', '__titleArgs', '__icon', '__backImg', '__preset', '__layer', '__buttons', '__showBalance', '__checkboxLabel', '__checkboxCheckedByDefault')
 
     def __init__(self):
         super(PureDialogBuilder, self).__init__()
@@ -45,13 +46,18 @@ class PureDialogBuilder(object):
         self.__preset = DialogPresets.DEFAULT
         self.__layer = DialogLayer.TOP_WINDOW
         self.__showBalance = False
+        self.__checkboxLabel = R.invalid
+        self.__checkboxCheckedByDefault = False
 
     def build(self, parent=None):
         if not self.__buttons:
             _logger.error("Dialog buttons can't be empty")
             return
         else:
-            dialog = self._windowClass(parent=parent.getParentWindow() if parent else None, preset=self.__preset, balanceContent=CommonBalanceContent() if self.__showBalance else None, layer=self.__layer)
+            checkboxContent = None
+            if self.__checkboxLabel.exists():
+                checkboxContent = CheckBoxDialogContent(self.__checkboxLabel(), self.__checkboxCheckedByDefault)
+            dialog = self._windowClass(parent=parent.getParentWindow() if parent else None, preset=self.__preset, bottomContent=checkboxContent, balanceContent=CommonBalanceContent() if self.__showBalance else None, layer=self.__layer)
             for btn in self.__buttons:
                 dialog.addButton(btn.name, btn.label, btn.isFocused, soundDown=btn.soundDown, rawLabel=btn.rawLabel)
 
@@ -70,6 +76,14 @@ class PureDialogBuilder(object):
 
     def setTitle(self, title):
         self.__title = title
+        return self
+
+    def setCheckboxLabel(self, checkboxLabel):
+        self.__checkboxLabel = checkboxLabel
+        return self
+
+    def setCheckboxDefaultValue(self, value):
+        self.__checkboxCheckedByDefault = value
         return self
 
     def setTitleArgs(self, args=None, fmtArgs=None, namedFmtArgs=True):
@@ -164,6 +178,7 @@ class ResSimpleDialogBuilder(SimpleDialogBuilder):
     def setMessagesAndButtons(self, message, buttons=R.strings.dialogs.common, focused=DialogButtons.SUBMIT, btnDownSounds=None):
         self.setMessage(message.dyn('message')())
         self.setTitle(message.dyn('title')())
+        self.setCheckboxLabel(message.dyn('checkboxLabel'))
         _setupButtonsBasedOnRes(self, message, buttons, focused, btnDownSounds)
 
 
@@ -171,6 +186,7 @@ class ResPureDialogBuilder(PureDialogBuilder):
 
     def setMessagesAndButtons(self, message, buttons=R.strings.dialogs.common, focused=DialogButtons.SUBMIT, btnDownSounds=None):
         self.setTitle(message.dyn('title')())
+        self.setCheckboxLabel(message.dyn('checkboxLabel'))
         _setupButtonsBasedOnRes(self, message, buttons, focused, btnDownSounds)
 
 

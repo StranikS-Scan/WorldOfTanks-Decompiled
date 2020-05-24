@@ -132,12 +132,6 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
         return self.getCacheValue('premiumInfo', PremiumInfo()).data
 
     @property
-    def isIngameShopEnabled(self):
-        shopMode = self.lobbyContext.getServerSettings().ingameShop.shopMode
-        shopFeatureKey = '/wot/game/apply_feature/shop2_0'
-        return shopMode == 'enabled' or shopMode == 'restricted' and shopFeatureKey in self.SPA
-
-    @property
     def isSubscriptionEnabled(self):
         subscriptionKey = '/wot/game/premium_subscription'
         return subscriptionKey in self.SPA

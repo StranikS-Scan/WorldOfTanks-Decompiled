@@ -55,10 +55,11 @@ class EpicScorePanel(EpicScorePanelMeta):
         else:
             LOG_ERROR('Expected SectorBaseComponent not present!')
         ctrl = self.sessionProvider.dynamic.missions
-        ctrl.onPlayerMissionUpdated += self.__onPlayerMissionUpdated
-        ctrl.onPlayerMissionReset += self.__onPlayerMissionReset
-        ctrl.onNearestObjectiveChanged += self.__onNearestObjectiveChanged
-        ctrl.onObjectiveBattleStarted += self.__onHQBattleStarted
+        if ctrl is not None:
+            ctrl.onPlayerMissionUpdated += self.__onPlayerMissionUpdated
+            ctrl.onPlayerMissionReset += self.__onPlayerMissionReset
+            ctrl.onNearestObjectiveChanged += self.__onNearestObjectiveChanged
+            ctrl.onObjectiveBattleStarted += self.__onHQBattleStarted
         self.__currentMission = ctrl.getCurrentMission()
         ctrl = self.sessionProvider.dynamic.spectator
         if ctrl is not None:

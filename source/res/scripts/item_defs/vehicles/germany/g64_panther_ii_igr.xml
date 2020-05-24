@@ -522,30 +522,6 @@
           <leftSibling>	Track_VT_R13	</leftSibling>
         </node>
       </trackNodes>
-      <effects>
-        <lodDist>	MEDIUM	</lodDist>
-        <mud>	largeTankMud	</mud>
-      </effects>
-      <wwsoundPC>	treads_type_pc	</wwsoundPC>
-      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 1.20177 0.000000	</hullPosition>
-      <hitTester>
-        <collisionModelServer>	vehicles/german/G64_Panther_II/collision/Chassis.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/german/G64_Panther_II/collision_client/Chassis.model	</collisionModelClient>
-      </hitTester>
-      <topRightCarryingPoint>	1.3287 1.9437	</topRightCarryingPoint>
-      <maxClimbAngle>	25	</maxClimbAngle>
-      <navmeshGirth>	6.0	</navmeshGirth>
-      <AODecals>
-        <decal>
-          <transform>
-            <row0>	4.672880 0.000000 0.000000	</row0>
-            <row1>	0.000000 1.478530 0.000000	</row1>
-            <row2>	0.000000 0.000000 7.255260	</row2>
-            <row3>	0.000000 0.000000 -0.000001	</row3>
-          </transform>
-        </decal>
-      </AODecals>
       <physicalTracks>
         <left>
           <segmentsCount>	90	</segmentsCount>
@@ -924,6 +900,30 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.20177 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G64_Panther_II/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G64_Panther_II/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.3287 1.9437	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.672880 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.478530 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.255260	</row2>
+            <row3>	0.000000 0.000000 -0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
       <customization>
         <customizableVehicleAreas>
           <paint>	CHASSIS	</paint>
@@ -1122,36 +1122,15 @@
       <chassis>
         <Chassis_Panther_II_2_IGR>
           <grounds>
-            <ground>
-              <medium>
-                <rollingFriction>	0.0805	</rollingFriction>
-              </medium>
-            </ground>
-            <sand>
-              <medium>
-                <rollingFriction>	0.0805	</rollingFriction>
-              </medium>
-            </sand>
-            <wood>
-              <medium>
-                <rollingFriction>	0.0805	</rollingFriction>
-              </medium>
-            </wood>
-            <snow>
-              <medium>
-                <rollingFriction>	0.0805	</rollingFriction>
-              </medium>
-            </snow>
-            <stone>
-              <medium>
-                <rollingFriction>	0.0805	</rollingFriction>
-              </medium>
-            </stone>
-            <metal>
-              <medium>
-                <rollingFriction>	0.0805	</rollingFriction>
-              </medium>
-            </metal>
+            <soft>
+              <rollingFriction>	0.16905	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.0805	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0644	</rollingFriction>
+            </firm>
           </grounds>
         </Chassis_Panther_II_2_IGR>
       </chassis>

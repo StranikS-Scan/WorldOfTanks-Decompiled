@@ -304,11 +304,14 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.3	</maxAmplitude>
+        <maxAmplitude>	0.05	</maxAmplitude>
         <maxOffset>	0.3	</maxOffset>
         <gravity>	-9.8	</gravity>
         <elasticity>	1049	</elasticity>
         <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -390,30 +393,6 @@
           <backwardElastK>	0.8	</backwardElastK>
         </node>
       </trackNodes>
-      <effects>
-        <lodDist>	MEDIUM	</lodDist>
-        <mud>	mediumTankMud	</mud>
-      </effects>
-      <wwsoundPC>	treads_type_pc	</wwsoundPC>
-      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 1.04799 0.000000	</hullPosition>
-      <hitTester>
-        <collisionModelServer>	vehicles/german/G05_StuG_40_AusfG/collision/Chassis.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/german/G05_StuG_40_AusfG/collision_client/Chassis.model	</collisionModelClient>
-      </hitTester>
-      <topRightCarryingPoint>	1.25511 1.47088	</topRightCarryingPoint>
-      <maxClimbAngle>	25	</maxClimbAngle>
-      <navmeshGirth>	6.0	</navmeshGirth>
-      <AODecals>
-        <decal>
-          <transform>
-            <row0>	4.037700 0.000000 0.000000	</row0>
-            <row1>	0.000000 1.732570 0.000000	</row1>
-            <row2>	0.000000 0.000000 5.589340	</row2>
-            <row3>	0.000000 0.000000 0.000000	</row3>
-          </transform>
-        </decal>
-      </AODecals>
       <physicalTracks>
         <left>
           <segmentsCount>	100	</segmentsCount>
@@ -1028,6 +1007,30 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.04799 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G05_StuG_40_AusfG/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G05_StuG_40_AusfG/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.25511 1.47088	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.033530 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.732570 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.589340	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
       <customization>
         <customizableVehicleAreas>
           <paint></paint>
@@ -1159,36 +1162,15 @@
       <chassis>
         <StuGIII_Ausf_1943_IGR>
           <grounds>
-            <ground>
-              <medium>
-                <rollingFriction>	0.1127	</rollingFriction>
-              </medium>
-            </ground>
-            <sand>
-              <medium>
-                <rollingFriction>	0.1127	</rollingFriction>
-              </medium>
-            </sand>
-            <wood>
-              <medium>
-                <rollingFriction>	0.1127	</rollingFriction>
-              </medium>
-            </wood>
-            <snow>
-              <medium>
-                <rollingFriction>	0.1127	</rollingFriction>
-              </medium>
-            </snow>
-            <stone>
-              <medium>
-                <rollingFriction>	0.1127	</rollingFriction>
-              </medium>
-            </stone>
-            <metal>
-              <medium>
-                <rollingFriction>	0.1127	</rollingFriction>
-              </medium>
-            </metal>
+            <soft>
+              <rollingFriction>	0.18515	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.1127	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.08855	</rollingFriction>
+            </firm>
           </grounds>
         </StuGIII_Ausf_1943_IGR>
       </chassis>

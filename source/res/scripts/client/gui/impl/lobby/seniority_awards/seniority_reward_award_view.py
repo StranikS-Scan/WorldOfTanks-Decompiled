@@ -16,6 +16,9 @@ from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.shared.gui_items.Vehicle import getNationLessName, getIconResourceName
 from gui.impl.auxiliary.rewards_helper import getSeniorityAwardsRewardsAndBonuses
+from gui.impl.auxiliary.rewards_helper import DEF_MODEL_PRESENTERS
+from gui.server_events.bonuses import BlueprintsBonusSubtypes
+from gui.impl.auxiliary.rewards_helper import LootRewardDefModelPresenter
 _logger = logging.getLogger(__name__)
 REG_EXP_QUEST_SUBTYPE = ':([Y, y]\\d*)|:([A,a,B,b][T,t])'
 _UNVISIBLE_BONUSES = set(['slots'])
@@ -86,7 +89,7 @@ class SeniorityRewardAwardView(ViewImpl):
         self.viewModel.onCloseAction += self.__onWindowClose
         self.viewModel.onOpenBtnClick += self.__onOpenBtnClick
         questYearsType = None
-        seniorityLvlSearch = re.search(REG_EXP_QUEST_SUBTYPE, questID)
+        seniorityLvlSearch = re.search(REG_EXP_QUEST_SUBTYPE, questID) if questID else None
         if seniorityLvlSearch is not None and len(seniorityLvlSearch.groups()) >= 2:
             questYearsType = seniorityLvlSearch.groups()[0] if seniorityLvlSearch.groups()[0] is not None else seniorityLvlSearch.groups()[1]
         bonuses, vehicles, _ = getSeniorityAwardsRewardsAndBonuses(data, maxAwardCount=1000)
@@ -131,7 +134,9 @@ class SeniorityRewardAwardView(ViewImpl):
             for index, bonus in enumerate(currentBonuses):
                 if bonus.get('bonusName') in _UNVISIBLE_BONUSES:
                     continue
-                modelPresenter = getRewardRendererModelPresenter(bonus)
+                presenters = DEF_MODEL_PRESENTERS.copy()
+                presenters[BlueprintsBonusSubtypes.UNIVERSAL_FRAGMENT] = LootRewardDefModelPresenter()
+                modelPresenter = getRewardRendererModelPresenter(bonus, presenters=presenters)
                 rendererModel = modelPresenter.getModel(bonus, index)
                 bonusesList.addViewModel(rendererModel)
                 self.__tooltipData[index] = TooltipData(tooltip=bonus.get('tooltip', None), isSpecial=bonus.get('isSpecial', False), specialAlias=bonus.get('specialAlias', ''), specialArgs=bonus.get('specialArgs', None))

@@ -493,3 +493,7 @@ def getAchievementsConditionKey(condition):
 
 def actionTitleFormat(title):
     return text_styles.titleFont(title)
+
+
+def tagText(text, tag):
+    return '{%sOpen}%s{%sClose}' % (tag, text, tag)

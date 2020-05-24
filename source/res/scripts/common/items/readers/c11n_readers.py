@@ -1,18 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/readers/c11n_readers.py
-import nations
 import os
-from items.components import shared_components
-from items.components.c11n_constants import CustomizationType, ProjectionDecalFormTags
-from realm_utils import ResMgr
-import items.vehicles as iv
+from string import upper
 import items._xml as ix
 import items.components.c11n_components as cc
 import items.customizations as c11n
+import items.vehicles as iv
+import nations
 from constants import IS_CLIENT, IS_EDITOR, IS_WEB
+from items.components import shared_components
+from items.components.c11n_constants import CustomizationType, ProjectionDecalFormTags, CustomizationNamesToTypes, EMPTY_ITEM_ID
 from items.components.c11n_constants import SeasonType, ApplyArea, DecalType, ModificationType, RENT_DEFAULT_BATTLES, ItemTags
+from realm_utils import ResMgr
 from typing import Dict, Type, Tuple, Any, TypeVar
 from contextlib import contextmanager
+from soft_exception import SoftException
 if IS_EDITOR:
     from reflection_framework import EditorSharedPropertiesInfo, EditorSharedPropertiesConnector
     from meta_objects.items.components.c11n_components_meta import I18nExposedComponentMeta
@@ -101,7 +103,7 @@ class BaseCustomizationItemXmlReader(object):
             for nation in strNations.split():
                 nationId = nations.INDICES.get(nation)
                 if nationId is None:
-                    ix.raiseWrongXml(xmlCtx, 'nations', "unknown nation '%s'" % nation)
+                    ix.raiseWrongXml(xmlCtx, 'nations', 'unknown nation "%s"' % nation)
                 r.append(nationId)
 
             fn.nations = r
@@ -166,13 +168,15 @@ class ProjectionDecalXmlReader(BaseCustomizationItemXmlReader):
 
     def _readFromXml(self, target, xmlCtx, section, cache=None):
         super(ProjectionDecalXmlReader, self)._readFromXml(target, xmlCtx, section)
-        if section.has_key('mirror'):
-            target.canBeMirrored = ix.readBool(xmlCtx, section, 'mirror')
+        if 'mirror' in section.keys():
+            target.canBeMirroredHorizontally = ix.readBool(xmlCtx, section, 'mirror')
 
     def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):
         super(ProjectionDecalXmlReader, self)._readClientOnlyFromXml(target, xmlCtx, section)
         if section.has_key('texture'):
             target.texture = section.readString('texture')
+        if section.has_key('glossTexture'):
+            target.glossTexture = section.readString('glossTexture')
 
 
 class PersonalNumberXmlReader(BaseCustomizationItemXmlReader):
@@ -294,6 +298,23 @@ class StyleXmlReader(BaseCustomizationItemXmlReader):
     def _readFromXml(self, target, xmlCtx, section, cache=None):
         super(StyleXmlReader, self)._readFromXml(target, xmlCtx, section)
         prototype = True
+        if section.has_key('modelsSet'):
+            target.modelsSet = section.readString('modelsSet')
+        if section.has_key('itemFilters'):
+            target.isEditable = True
+            target.itemsFilters = {}
+            for sectionName, oSection in section['itemFilters'].items():
+                c11nType = CustomizationNamesToTypes[upper(sectionName)]
+                target.itemsFilters[c11nType] = self._readItemsFilterFromXml(c11nType, xmlCtx, oSection)
+
+        if section.has_key('alternateItems'):
+            target.isEditable = True
+            target.alternateItems = {}
+            for sectionName, oSection in section['alternateItems'].items():
+                c11nType = CustomizationNamesToTypes[upper(sectionName)]
+                if oSection.has_key('id'):
+                    target.alternateItems[c11nType] = ix.readTupleOfPositiveInts(xmlCtx, oSection, 'id')
+
         if section.has_key('outfits'):
             prototype = False
             outfits = {}
@@ -317,12 +338,42 @@ class StyleXmlReader(BaseCustomizationItemXmlReader):
         if totalSeason != target.season and not prototype:
             ix.raiseWrongXml(xmlCtx, 'outfits', 'style season must correspond to declared outfits')
 
+    @staticmethod
+    def _readItemsFilterFromXml(itemType, xmlCtx, section):
+        f = cc.ItemsFilter()
+        readNode = StyleXmlReader.__readItemFilterNodeFromXml
+        for subsection in section.values():
+            if subsection.name == 'include':
+                f.include.append(readNode(itemType, (xmlCtx, 'include'), subsection))
+            if subsection.name == 'exclude':
+                f.exclude.append(readNode(itemType, (xmlCtx, 'exclude'), subsection))
+
+        return f
+
+    @staticmethod
+    def __readItemFilterNodeFromXml(itemType, xmlCtx, section):
+        fn = cc.ItemsFilter.FilterNode()
+        if section.has_key('id'):
+            fn.ids = ix.readTupleOfPositiveInts(xmlCtx, section, 'id')
+        if section.has_key('itemGroupName'):
+            fn.itemGroupNames = ix.readTupleOfStrings(xmlCtx, section, 'itemGroupName', separator=';')
+        if section.has_key('tags'):
+            fn.tags = iv._readTags(xmlCtx, section, 'tags', 'customizationItem')
+        if section.has_key('type'):
+            if itemType is not CustomizationType.DECAL:
+                ix.raiseWrongXml(xmlCtx, 'type', 'type can be used only with decals')
+            types = set((getattr(DecalType, typeName) for typeName in ix.readTupleOfStrings(xmlCtx, section, 'type')))
+            if not types.issubset(DecalType.ALL):
+                ix.raiseWrongXml(xmlCtx, 'type', 'unsupported type is used')
+            fn.types = types
+        if section.has_key('historical'):
+            fn.historical = section.readBool('historical', None)
+        return fn
+
     def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):
         super(StyleXmlReader, self)._readClientOnlyFromXml(target, xmlCtx, section)
         if section.has_key('texture'):
             target.texture = section.readString('texture')
-        if section.has_key('modelsSet'):
-            target.modelsSet = section.readString('modelsSet')
 
 
 class InsigniaXmlReader(BaseCustomizationItemXmlReader):
@@ -345,10 +396,19 @@ class InsigniaXmlReader(BaseCustomizationItemXmlReader):
 def readCustomizationCacheFromXml(cache, folder):
 
     def __readItemFolder(itemCls, folder, itemName, storage):
+        progressionFileName = os.path.join(folder, itemName + 's', 'progression.xml')
+        dataSection = ResMgr.openSection(progressionFileName)
+        progression = {}
+        if dataSection:
+            try:
+                _readProgression((None, itemName + 's/progression.xml'), dataSection, progression)
+            finally:
+                ResMgr.purge(progressionFileName)
+
         itemsFileName = os.path.join(folder, itemName + 's', 'list.xml')
         dataSection = ResMgr.openSection(itemsFileName)
         try:
-            _readItems(cache, itemCls, (None, itemName + 's/list.xml'), dataSection, itemName, storage)
+            _readItems(cache, itemCls, (None, itemName + 's/list.xml'), dataSection, itemName, storage, progression)
         finally:
             ResMgr.purge(itemsFileName)
 
@@ -376,7 +436,20 @@ def readCustomizationCacheFromXml(cache, folder):
     __readItemFolder(cc.PersonalNumberItem, folder, 'personal_number', cache.personal_numbers)
     __readItemFolder(cc.SequenceItem, folder, 'sequence', cache.sequences)
     __readItemFolder(cc.AttachmentItem, folder, 'attachment', cache.attachments)
+    _validateStyles(cache)
     return None
+
+
+def _validateStyles(cache):
+    styleOnlyItemsFromStyles = set()
+    for style in cache.styles.itervalues():
+        if style.isEditable and style.alternateItems:
+            for itemType, ids in style.alternateItems.iteritems():
+                items = map(cache.itemTypes[itemType].get, ids)
+                styleOnlyItemsFromStyles.update(items)
+
+    if any((item is None or not item.isStyleOnly for item in styleOnlyItemsFromStyles)):
+        raise SoftException('Items shall contain styleOnly tag in tags to be used in alternateItems')
 
 
 def _readProhibitedNumbers(xmlCtx, section):
@@ -388,7 +461,63 @@ def _readProhibitedNumbers(xmlCtx, section):
     cc.PersonalNumberItem.setProhibitedNumbers(prohibitedNumbers)
 
 
-def _readItems(cache, itemCls, xmlCtx, section, itemSectionName, storage):
+def __readProgressLevel(xmlCtx, section):
+    conditions = list()
+    for subSections in section.values():
+        condition = {}
+        for subSection in subSections.values():
+            sectionName = subSection.name
+            if sectionName == 'description':
+                condition.update({'description': ix.readNonEmptyString(xmlCtx, subSection, '')})
+            condition.update(__readCondition((xmlCtx, subSection.name), subSection, [sectionName]))
+
+        conditions.append(condition)
+
+    if not conditions:
+        ix.raiseWrongXml(xmlCtx, 'progression', "Customization don't have conditions")
+    return conditions
+
+
+def __readCondition(xmlCtx, section, path):
+    subSections = section.values()
+    if subSections:
+        path.append(subSections[0].name)
+        return __readCondition((xmlCtx, subSections[0].name), subSections[0], path)
+    else:
+        return {'path': tuple(path),
+         'value': ix.readNonEmptyString(xmlCtx, section, '')}
+
+
+def __readProgress(xmlCtx, section):
+    progress = cc.ProgressForCustomization()
+    itemId = ix.readInt(xmlCtx, section, 'id')
+    if section.has_key('autobound'):
+        progress.autobound = True
+    for sectionName, subSection in section.items():
+        if sectionName == 'level':
+            level = ix.readPositiveInt(xmlCtx, subSection, '')
+            progress.levels[level] = __readProgressLevel((xmlCtx, 'level'), subSection)
+        if sectionName == 'autoGrantCount':
+            progress.autoGrantCount = ix.readPositiveInt(xmlCtx, subSection, '')
+
+    if len(progress.levels) < 2:
+        ix.raiseWrongXml(xmlCtx, 'tags', 'wrong progression. Minimum count progression = 2. Current count progression %i' % len(progress.levels))
+    for i in range(1, len(progress.levels) + 1):
+        if i not in progress.levels:
+            ix.raiseWrongXml(xmlCtx, 'tags', 'wrong progression. Skipped level %i' % i)
+
+    return (itemId, progress)
+
+
+def _readProgression(xmlCtx, section, progression):
+    for gname, gsection in section.items():
+        if gname != 'progress':
+            ix.raiseWrongSection(xmlCtx, gname)
+        itemId, progress = __readProgress((xmlCtx, 'progress'), gsection)
+        progression[itemId] = progress
+
+
+def _readItems(cache, itemCls, xmlCtx, section, itemSectionName, storage, progression):
     reader = __xmlReaders[itemCls]
     groupsDict = cache.priceGroups
     itemToGroup = cache.itemToPriceGroup
@@ -405,6 +534,8 @@ def _readItems(cache, itemCls, xmlCtx, section, itemSectionName, storage):
             reader._readFromXml(itemPrototype, gCtx, gsection, cache)
         group.itemPrototype = itemPrototype
         groupItems = []
+        if gsection.has_key('name'):
+            group.name = gsection.readString('name')
         j = 0
         for iname, isection in gsection.items():
             if iname != itemSectionName:
@@ -422,6 +553,9 @@ def _readItems(cache, itemCls, xmlCtx, section, itemSectionName, storage):
             if item.compactDescr in itemToGroup:
                 ix.raiseWrongXml(iCtx, 'id', 'duplicate item. id: %s found in group %s' % (item.id, itemToGroup[item.compactDescr]))
             storage[item.id] = item
+            item.progression = progression.get(item.id, None)
+            if item.progression is not None:
+                cache.customizationWithProgression[item.compactDescr] = item
             if isection.has_key('price'):
                 iv._readPriceForItem(iCtx, isection, item.compactDescr)
             if item.priceGroup:
@@ -442,6 +576,15 @@ def _readItems(cache, itemCls, xmlCtx, section, itemSectionName, storage):
                             item.editorData.sharedPropertiesInfo.markAsShared(p)
 
                 EditorSharedPropertiesConnector(groupItems).connect()
+
+    _addEmptyItem(itemCls, storage)
+    return
+
+
+def _addEmptyItem(itemCls, storage):
+    item = itemCls()
+    item.id = EMPTY_ITEM_ID
+    storage[EMPTY_ITEM_ID] = item
 
 
 def _readPriceGroups(cache, xmlCtx, section, sectionName):
@@ -501,6 +644,9 @@ def _readDefault(cache, xmlCtx, section, sectionName):
         cache.defaultColors[nations.INDICES[nation]] = tuple(colors)
         itemId = ix.readInt(xmlCtx, iSection, 'insignia_id')
         cache.defaultInsignias[nations.INDICES[nation]] = itemId
+        if iSection.has_key('top_vehicle'):
+            topVehicle = ix.readString(xmlCtx, iSection, 'top_vehicle')
+            cache.topVehiclesByNation[nation] = topVehicle
 
 
 def readFlagEnum(xmlCtx, section, subsectionName, enumClass, defaultValue=None):

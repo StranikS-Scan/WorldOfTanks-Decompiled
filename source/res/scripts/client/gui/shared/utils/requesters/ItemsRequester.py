@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/ItemsRequester.py
 from abc import ABCMeta, abstractmethod
-from collections import defaultdict, Counter
+from collections import defaultdict
 from typing import TYPE_CHECKING
 import operator
 import constants
@@ -14,12 +14,11 @@ from debug_utils import LOG_WARNING, LOG_DEBUG, LOG_ERROR
 from goodies.goodie_constants import GOODIE_STATE
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES, ItemsCollection, getVehicleSuitablesByType
 from gui.shared.utils.requesters import vehicle_items_getter
-from gui.shared.gui_items.customization.outfit import Outfit
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.utils.requesters.battle_pass_requester import BattlePassRequester
 from helpers import dependency
 from items import vehicles, tankmen, getTypeOfCompactDescr, makeIntCompactDescrByID
-from items.components.c11n_constants import SeasonType, StyleFlags
+from items.components.c11n_constants import SeasonType
 from items.components.crew_skins_constants import CrewSkinType
 from skeletons.gui.shared import IItemsRequester, IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
@@ -214,6 +213,7 @@ class VehsMultiNationSuitableCriteria(VehsSuitableCriteria):
 
 class REQ_CRITERIA(object):
     EMPTY = RequestCriteria()
+    NONE = RequestCriteria(lambda i: False)
     CUSTOM = staticmethod(lambda predicate: RequestCriteria(PredicateCondition(predicate)))
     HIDDEN = RequestCriteria(PredicateCondition(operator.attrgetter('isHidden')))
     SECRET = RequestCriteria(PredicateCondition(operator.attrgetter('isSecret')))
@@ -243,6 +243,7 @@ class REQ_CRITERIA(object):
         LOCKED = RequestCriteria(PredicateCondition(lambda item: item.isLocked))
         CLASSES = staticmethod(lambda types=constants.VEHICLE_CLASS_INDICES.keys(): RequestCriteria(PredicateCondition(lambda item: item.type in types)))
         LEVELS = staticmethod(lambda levels=range(1, constants.MAX_VEHICLE_LEVEL + 1): RequestCriteria(PredicateCondition(lambda item: item.level in levels)))
+        ACTION_GROUPS = staticmethod(lambda actionsGroups=constants.ACTION_LABEL_TO_TYPE.keys(): RequestCriteria(PredicateCondition(lambda item: item.actionsGroupLabel in actionsGroups)))
         LEVEL = staticmethod(lambda level=1: RequestCriteria(PredicateCondition(lambda item: item.level == level)))
         SPECIFIC_BY_CD = staticmethod(lambda typeCompDescrs: RequestCriteria(PredicateCondition(lambda item: item.intCD in typeCompDescrs)))
         SPECIFIC_BY_NAME = staticmethod(lambda typeNames: RequestCriteria(PredicateCondition(lambda item: item.name in typeNames)))
@@ -253,6 +254,7 @@ class REQ_CRITERIA(object):
         TELECOM = RequestCriteria(PredicateCondition(lambda item: item.isTelecom))
         ACTIVE_RENT = RequestCriteria(InventoryPredicateCondition(lambda item: item.isRented and not item.rentalIsOver))
         EXPIRED_RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented and item.rentalIsOver))
+        IS_OUTFIT_LOCKED = RequestCriteria(PredicateCondition(lambda item: item.isOutfitLocked))
         EXPIRED_IGR_RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented and item.rentalIsOver and item.isPremiumIGR))
         RENT_PROMOTION = RequestCriteria(PredicateCondition(lambda item: item.isRentPromotion))
         SEASON_RENT = RequestCriteria(PredicateCondition(lambda item: item.isSeasonRent))
@@ -265,7 +267,6 @@ class REQ_CRITERIA(object):
         EVENT = RequestCriteria(PredicateCondition(lambda item: item.isEvent))
         EVENT_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEventBattles))
         EPIC_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEpicBattles))
-        BOB_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForBob))
         HAS_XP_FACTOR = RequestCriteria(PredicateCondition(lambda item: item.dailyXPFactor != -1))
         IS_RESTORE_POSSIBLE = RequestCriteria(PredicateCondition(lambda item: item.isRestorePossible()))
         CAN_TRADE_IN = RequestCriteria(PredicateCondition(lambda item: item.canTradeIn))
@@ -308,7 +309,6 @@ class REQ_CRITERIA(object):
 
     class EQUIPMENT(object):
         BUILTIN = staticmethod(RequestCriteria(PredicateCondition(lambda item: item.isBuiltIn)))
-        HAS_TAGS = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: item.tags.issuperset(tags))))
 
     class BATTLE_BOOSTER(object):
         ALL = RequestCriteria(PredicateCondition(lambda item: item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER))
@@ -345,10 +345,10 @@ class REQ_CRITERIA(object):
         PRICE_GROUP_TAG = staticmethod(lambda tag: RequestCriteria(PredicateCondition(lambda item: tag in item.priceGroupTags)))
         FREE_OR_IN_INVENTORY = RequestCriteria(PredicateCondition(lambda item: item.isInInventory or item.getBuyPrice() == ITEM_PRICE_EMPTY))
         ONLY_IN_GROUP = staticmethod(lambda group: RequestCriteria(PredicateCondition(lambda item: item.groupUserName == group)))
-        DISCLOSABLE = staticmethod(lambda vehicle: RequestCriteria(PredicateCondition(lambda item: item.fullInventoryCount(vehicle) or not item.isHidden)))
-        IS_INSTALLED_ON_VEHICLE = staticmethod(lambda vehicle: RequestCriteria(PredicateCondition(lambda item: item.getInstalledOnVehicleCount(vehicle.intCD) > 0)))
-        IS_INSTALLED_ON_ANY_VEHICLE = RequestCriteria(PredicateCondition(lambda item: len(item.getInstalledVehicles()) > 0))
+        DISCLOSABLE = staticmethod(lambda vehicle: RequestCriteria(PredicateCondition(lambda item: item.fullInventoryCount(vehicle.intCD) or not item.isHidden)))
+        IS_INSTALLED_ON_VEHICLE = staticmethod(lambda vehicle: RequestCriteria(PredicateCondition(lambda item: item.installedCount(vehicle.intCD) > 0)))
         HAS_TAGS = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: item.tags.issuperset(tags))))
+        FULL_INVENTORY = RequestCriteria(PredicateCondition(lambda item: item.fullInventoryCount() > 0))
 
 
 class RESEARCH_CRITERIA(object):
@@ -565,7 +565,6 @@ class ItemsRequester(IItemsRequester):
                 if itemTypeID not in (GUI_ITEM_TYPE.ACCOUNT_DOSSIER, GUI_ITEM_TYPE.VEHICLE_DOSSIER, GUI_ITEM_TYPE.BATTLE_ABILITY):
                     cache.clear()
 
-            self.inventory.initC11nItemsAppliedCounts()
             self.inventory.initC11nItemsNoveltyData()
         else:
             for statName, data in diff.get('stats', {}).iteritems():
@@ -658,17 +657,22 @@ class ItemsRequester(IItemsRequester):
 
             if itemTypeID == GUI_ITEM_TYPE.CUSTOMIZATION:
                 for vehicleIntCD, outfitsData in itemsDiff.get(CustomizationInvData.OUTFITS, {}).iteritems():
-                    self._invalidateVehicleOutfits(vehicleIntCD, outfitsData, invalidate)
+                    invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehicleIntCD)
+                    for season in outfitsData or SeasonType.REGULAR:
+                        invalidate[GUI_ITEM_TYPE.OUTFIT].add((vehicleIntCD, season))
 
-                for cType, items in itemsDiff.get(CustomizationInvData.ITEMS, {}).iteritems():
-                    for idx in items.iterkeys():
-                        intCD = vehicles.makeIntCompactDescrByID('customizationItem', cType, _getDiffID(idx))
-                        invalidate[GUI_ITEM_TYPE.CUSTOMIZATION].add(intCD)
+                storageKeys = (CustomizationInvData.ITEMS,
+                 CustomizationInvData.NOVELTY_DATA,
+                 CustomizationInvData.DRESSED,
+                 CustomizationInvData.PROGRESSION)
+                for storageKey in storageKeys:
+                    for cType, items in itemsDiff.get(storageKey, {}).iteritems():
+                        for idx in items.iterkeys():
+                            intCD = vehicles.makeIntCompactDescrByID('customizationItem', cType, _getDiffID(idx))
+                            invalidate[GUI_ITEM_TYPE.CUSTOMIZATION].add(intCD)
 
-                for cType, items in itemsDiff.get(CustomizationInvData.NOVELTY_DATA, {}).iteritems():
-                    for idx in items.iterkeys():
-                        intCD = vehicles.makeIntCompactDescrByID('customizationItem', cType, _getDiffID(idx))
-                        invalidate[GUI_ITEM_TYPE.CUSTOMIZATION].add(intCD)
+                for vehicleIntCD, outfitsData in itemsDiff.get(CustomizationInvData.OUTFITS_POOL, {}).iteritems():
+                    invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehicleIntCD)
 
             invalidate[itemTypeID].update(itemsDiff.keys())
 
@@ -870,70 +874,6 @@ class ItemsRequester(IItemsRequester):
             if itemTypeID != GUI_ITEM_TYPE.FUEL_TANK:
                 LOG_WARNING('Item is not vehicle or module', itemTypeID)
 
-    def _invalidateVehicleOutfits(self, vehicleIntCD, outfitsData, invalidate):
-        invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehicleIntCD)
-        vehicle = self.getItemByCD(vehicleIntCD)
-        if outfitsData is None:
-            invalidate[GUI_ITEM_TYPE.CUSTOMIZATION] |= self.__removeVehicleOutfits(vehicle)
-            invalidate[GUI_ITEM_TYPE.OUTFIT] |= {(vehicleIntCD, season) for season in SeasonType.RANGE}
-            return
-        else:
-            if SeasonType.ALL in outfitsData:
-                invalidate[GUI_ITEM_TYPE.CUSTOMIZATION] |= self.__invalidateStyledOutfits(outfitsData, vehicle)
-                invalidate[GUI_ITEM_TYPE.OUTFIT].add((vehicleIntCD, SeasonType.ALL))
-            for season in outfitsData:
-                if season == SeasonType.ALL:
-                    continue
-                invalidate[GUI_ITEM_TYPE.CUSTOMIZATION] |= self.__invalidateCustomOutfit(outfitsData, vehicle, season)
-                invalidate[GUI_ITEM_TYPE.OUTFIT].add((vehicleIntCD, season))
-
-            return
-
-    def __removeVehicleOutfits(self, vehicle):
-        invalidItems = set()
-        for season in SeasonType.RANGE:
-            outfit = vehicle.getOutfit(season)
-            if outfit is None:
-                continue
-            if outfit.style is not None:
-                styleIntCD = outfit.style.compactDescr
-                self.__inventory.updateC11nItemAppliedCount(styleIntCD, vehicle.intCD, -1)
-                invalidItems.add(styleIntCD)
-                break
-            for itemCD, count in outfit.itemsCounter.iteritems():
-                self.__inventory.updateC11nItemAppliedCount(itemCD, vehicle.intCD, -count)
-                invalidItems.add(itemCD)
-
-        return invalidItems
-
-    def __invalidateStyledOutfits(self, outfitsData, vehicle):
-        invalidItems = set()
-        outfit = vehicle.getStyledOutfit(SeasonType.SUMMER) or Outfit()
-        if outfit.style is not None and outfit.isActive():
-            self.__inventory.updateC11nItemAppliedCount(outfit.style.compactDescr, vehicle.intCD, -1)
-            invalidItems.add(outfit.style.compactDescr)
-        if SeasonType.ALL in outfitsData:
-            styleCD, flags = outfitsData[SeasonType.ALL] or (None, StyleFlags.ACTIVE)
-            outfit = Outfit(strCompactDescr=styleCD, isEnabled=flags & StyleFlags.ENABLED, isInstalled=flags & StyleFlags.INSTALLED)
-            if outfit.style is not None and outfit.isActive():
-                self.__inventory.updateC11nItemAppliedCount(outfit.style.compactDescr, vehicle.intCD, 1)
-                invalidItems.add(outfit.style.compactDescr)
-        return invalidItems
-
-    def __invalidateCustomOutfit(self, outfitsData, vehicle, season):
-        invalidItems = set()
-        outfitCD, flags = outfitsData[season] or (None, StyleFlags.ACTIVE)
-        newOutfit = Outfit(strCompactDescr=outfitCD, isEnabled=flags & StyleFlags.ENABLED, isInstalled=flags & StyleFlags.INSTALLED)
-        itemsDiff = newOutfit.itemsCounter if newOutfit.isActive() else Counter()
-        prevOutfit = vehicle.getCustomOutfit(season) or Outfit()
-        if prevOutfit.isActive():
-            itemsDiff.subtract(prevOutfit.itemsCounter)
-        for itemCD, count in itemsDiff.iteritems():
-            self.__inventory.updateC11nItemAppliedCount(itemCD, vehicle.intCD, count)
-            invalidItems.add(itemCD)
-
-        return invalidItems
-
     def __deleteItemFromCache(self, cache, uid, itemTypeID):
         if itemTypeID == GUI_ITEM_TYPE.VEHICLE:
             item = cache[uid]
@@ -941,6 +881,7 @@ class ItemsRequester(IItemsRequester):
                 self.__vehCustomStateCache[uid] = item.getCustomState()
             elif uid in self.__vehCustomStateCache:
                 del self.__vehCustomStateCache[uid]
+            item.stopPerksController()
         del cache[uid]
 
     def __getAccountDossierDescr(self):

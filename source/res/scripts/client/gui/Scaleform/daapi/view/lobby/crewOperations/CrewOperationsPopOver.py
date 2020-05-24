@@ -96,10 +96,11 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
                                 tankmenToBarracksCount -= 1
                     else:
                         isCrewAlreadyInCurrentVehicle = False
+                        freeBerths += 1
                 demobilizedMembersCounter += 1
 
-            if tankmenToBarracksCount > freeBerths:
-                return self.__getInitCrewOperationObject(OPERATION_RETURN, None, CREW_OPERATIONS.DROPINBARRACK_WARNING_NOSPACE_TOOLTIP)
+            if tankmenToBarracksCount > 0 and tankmenToBarracksCount > freeBerths:
+                return self.__getInitCrewOperationObject(OPERATION_RETURN, None, CREW_OPERATIONS.RETURN_WARNING_NOSPACE_TOOLTIP)
         else:
             return self.__getInitCrewOperationObject(OPERATION_RETURN, 'noPrevious')
         if demobilizedMembersCounter > 0 and demobilizedMembersCounter == len(lastCrewIDs):
@@ -113,6 +114,8 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
         crew = vehicle.crew
         if self.__isNoCrew(crew):
             return self.__getInitCrewOperationObject(OPERATION_DROP_IN_BARRACK, 'noCrew')
+        elif vehicle.isInBattle:
+            return self.__getInitCrewOperationObject(OPERATION_DROP_IN_BARRACK, None, CREW_OPERATIONS.DROPINBARRACK_WARNING_INBATTLE_TOOLTIP)
         else:
             return self.__getInitCrewOperationObject(OPERATION_DROP_IN_BARRACK, None, CREW_OPERATIONS.DROPINBARRACK_WARNING_NOSPACE_TOOLTIP) if self.__isNotEnoughSpaceInBarrack(crew) else self.__getInitCrewOperationObject(OPERATION_DROP_IN_BARRACK)
 

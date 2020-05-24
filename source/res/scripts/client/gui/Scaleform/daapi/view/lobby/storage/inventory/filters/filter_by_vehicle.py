@@ -50,7 +50,7 @@ class FiltrableInventoryCategoryByVehicleTabView(ItemsWithVehicleFilterTabViewMe
         return super(FiltrableInventoryCategoryByVehicleTabView, self)._shouldShowCounter() or bool(self._selectedVehicle)
 
     def __onVehicleSelected(self, event):
-        if event.ctx and event.ctx.get('vehicleId') and self._isActive:
+        if event.ctx and event.ctx.get('vehicleId') and self.getActive():
             self._selectedVehicle = vehicle = self._itemsCache.items.getItemByCD(event.ctx['vehicleId'])
             self.as_updateVehicleFilterButtonS(self.__makeVehicleVO(vehicle))
             self._buildItems()

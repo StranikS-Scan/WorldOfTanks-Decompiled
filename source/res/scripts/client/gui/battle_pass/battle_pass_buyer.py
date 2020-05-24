@@ -2,8 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_pass/battle_pass_buyer.py
 from gui import SystemMessages
 from adisp import async, process
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
-from gui.ingame_shop import showBuyGoldForBattlePass, showBuyGoldForBattlePassLevels
+from gui.shop import showBuyGoldForBattlePass, showBuyGoldForBattlePassLevels
 from gui.shared.gui_items.processors.common import BuyBattlePass, BuyBattlePassLevels
 from gui.shared.utils import decorators
 from gui.shared.money import Currency
@@ -23,7 +22,7 @@ class BattlePassBuyer(object):
         if not cls.__battlePassController.isBought():
             spendMoneyGold += cls.__itemsCache.items.shop.getBattlePassCost().get(Currency.GOLD, 0)
         result = False
-        if isIngameShopEnabled() and cls.__itemsCache.items.stats.actualGold < spendMoneyGold:
+        if cls.__itemsCache.items.stats.actualGold < spendMoneyGold:
             showBuyGoldForBattlePass(spendMoneyGold)
         else:
             result = yield cls.__buyBattlePass(seasonID)
@@ -37,7 +36,7 @@ class BattlePassBuyer(object):
         if levels > 0:
             spendMoneyGold += cls.__itemsCache.items.shop.getBattlePassLevelCost().get(Currency.GOLD, 0) * levels
         result = False
-        if isIngameShopEnabled() and cls.__itemsCache.items.stats.actualGold < spendMoneyGold:
+        if cls.__itemsCache.items.stats.actualGold < spendMoneyGold:
             showBuyGoldForBattlePassLevels(spendMoneyGold)
         else:
             result = yield cls.__buyBattlePassLevels(seasonID, levels)

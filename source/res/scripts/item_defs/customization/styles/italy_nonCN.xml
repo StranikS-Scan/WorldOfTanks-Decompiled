@@ -13,6 +13,14 @@
       <id>	138	</id>
       <texture>	gui/maps/vehicles/styles/italian_marathion_01.png	</texture>
       <userString>	#vehicle_customization:special_style/italian_marathion_01	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>

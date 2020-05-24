@@ -3,11 +3,12 @@
 from constants import PREMIUM_TYPE
 from frameworks.wulf import ViewSettings
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyPremiumUrl
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.premacc.dashboard.card_prem_info_model import CardPremInfoModel
 from gui.impl.gen.view_models.views.lobby.premacc.dashboard.dashboard_premium_card_model import DashboardPremiumCardModel
 from gui.impl.pub import ViewImpl
-from gui.shared.event_dispatcher import showPremiumDialog
+from gui.shared.event_dispatcher import showShop
 from helpers import dependency, time_utils
 from skeletons.gui.game_control import IGameSessionController
 from skeletons.gui.impl import IGuiLoader
@@ -88,7 +89,7 @@ class DashboardPremiumCard(ViewImpl):
 
     @staticmethod
     def __onClick():
-        showPremiumDialog()
+        showShop(getBuyPremiumUrl())
 
 
 class _StatsGroupBuilder(object):

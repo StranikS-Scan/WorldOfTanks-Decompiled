@@ -1327,36 +1327,15 @@
         <Chassis_S23_Strv_81_sabaton>
           <axleCount>	5	</axleCount>
           <grounds>
-            <ground>
-              <medium>
-                <rollingFriction>	0.110688	</rollingFriction>
-              </medium>
-            </ground>
-            <sand>
-              <medium>
-                <rollingFriction>	0.110688	</rollingFriction>
-              </medium>
-            </sand>
-            <wood>
-              <medium>
-                <rollingFriction>	0.110688	</rollingFriction>
-              </medium>
-            </wood>
-            <snow>
-              <medium>
-                <rollingFriction>	0.110688	</rollingFriction>
-              </medium>
-            </snow>
-            <stone>
-              <medium>
-                <rollingFriction>	0.110688	</rollingFriction>
-              </medium>
-            </stone>
-            <metal>
-              <medium>
-                <rollingFriction>	0.110688	</rollingFriction>
-              </medium>
-            </metal>
+            <soft>
+              <rollingFriction>	0.191188	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.110688	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.100625	</rollingFriction>
+            </firm>
           </grounds>
         </Chassis_S23_Strv_81_sabaton>
       </chassis>

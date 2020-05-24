@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/ranked_battles/ranked_helpers/sound_manager.py
 import WWISE
-from gui.Scaleform.framework.entities.view_sound import CommonSoundSpaceSettings
+from gui.Scaleform.framework.entities.View import CommonSoundSpaceSettings
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from shared_utils import CONST_CONTAINER
 
@@ -60,12 +60,26 @@ class RankedSoundManager(object):
     def __init__(self):
         self.__isFirstEntrance = True
 
-    @staticmethod
-    def setDefaultProgressSound():
+    def clear(self):
+        self.__isFirstEntrance = True
+
+    def onSoundModeChanged(self, isRankedSoundMode, initialProgressionState=None):
+        if isRankedSoundMode:
+            if self.__isFirstEntrance:
+                self.__isFirstEntrance = False
+                WWISE.WW_eventGlobal(Sounds.FIRST_SELECT_EVENT)
+            else:
+                WWISE.WW_eventGlobal(Sounds.SELECT_EVENT)
+            if initialProgressionState is not None:
+                WWISE.WW_setState(Sounds.PROGRESSION_STATE, initialProgressionState)
+        else:
+            WWISE.WW_eventGlobal(Sounds.DESELECT_EVENT)
+        return
+
+    def setDefaultProgressSound(self):
         WWISE.WW_setState(Sounds.PROGRESSION_STATE, Sounds.PROGRESSION_STATE_DEFAULT)
 
-    @staticmethod
-    def setProgressSound(divisionUserID=None, isLoud=True):
+    def setProgressSound(self, divisionUserID=None, isLoud=True):
         if isLoud:
             WWISE.WW_setState(Sounds.OVERLAY_HANGAR_GENERAL, Sounds.OVERLAY_HANGAR_GENERAL_OFF)
         else:
@@ -88,19 +102,3 @@ class RankedSoundManager(object):
     def setOverlayStateOff(self):
         WWISE.WW_setState(Sounds.OVERLAY_HANGAR_FILTERED, Sounds.OVERLAY_HANGAR_FILTERED_OFF)
         WWISE.WW_setState(Sounds.OVERLAY_HANGAR_GENERAL, Sounds.OVERLAY_HANGAR_GENERAL_OFF)
-
-    def clear(self):
-        self.__isFirstEntrance = True
-
-    def onSoundModeChanged(self, isRankedSoundMode, initialProgressionState=None):
-        if isRankedSoundMode:
-            if self.__isFirstEntrance:
-                self.__isFirstEntrance = False
-                WWISE.WW_eventGlobal(Sounds.FIRST_SELECT_EVENT)
-            else:
-                WWISE.WW_eventGlobal(Sounds.SELECT_EVENT)
-            if initialProgressionState is not None:
-                WWISE.WW_setState(Sounds.PROGRESSION_STATE, initialProgressionState)
-        else:
-            WWISE.WW_eventGlobal(Sounds.DESELECT_EVENT)
-        return

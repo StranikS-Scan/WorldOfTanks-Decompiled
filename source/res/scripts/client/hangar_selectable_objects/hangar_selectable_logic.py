@@ -33,7 +33,7 @@ class HangarSelectableLogic(BaseSelectableLogic):
             targetEntity = BigWorld.target()
             if targetEntity is not None:
                 if isCursorOver3dScene and self._filterEntity(targetEntity):
-                    self._onMouseEnter(targetEntity)
+                    self.__onMouseEnter(targetEntity)
         return
 
     def _filterEntity(self, entity):
@@ -47,14 +47,11 @@ class HangarSelectableLogic(BaseSelectableLogic):
             return False if not entity.enabled else True
 
     def _onMouseEnter(self, entity):
-        if Waiting.isVisible():
-            return
-        if not self._filterEntity(entity):
-            return
-        self.__selected3DEntity = entity
-        self.__highlight3DEntity(entity)
-        if entity.mouseOverSoundName:
-            SoundGroups.g_instance.playSound3D(entity.model.root, entity.mouseOverSoundName)
+        if self.__onMouseEnter(entity) and entity.mouseOverSoundName:
+            if entity.isOver3DSound:
+                SoundGroups.g_instance.playSound3D(entity.model.root, entity.mouseOverSoundName)
+            else:
+                SoundGroups.g_instance.playSound2D(entity.mouseOverSoundName)
 
     def _onMouseExit(self, entity):
         self.__selected3DEntity = None
@@ -77,9 +74,18 @@ class HangarSelectableLogic(BaseSelectableLogic):
                 self.__selected3DEntityUnderMouseDown.onMouseUp()
                 if self.__selected3DEntityUnderMouseDown == self.__selected3DEntity:
                     self.__selected3DEntityUnderMouseDown.onMouseClick()
-        self._onMouseEnter(self.__selected3DEntity)
+        self.__onMouseEnter(self.__selected3DEntity)
         self.__selected3DEntityUnderMouseDown = None
         return
+
+    def __onMouseEnter(self, entity):
+        if Waiting.isVisible():
+            return False
+        if not self._filterEntity(entity):
+            return False
+        self.__selected3DEntity = entity
+        self.__highlight3DEntity(entity)
+        return True
 
     def __highlight3DEntity(self, entity):
         entity.setHighlight(True)

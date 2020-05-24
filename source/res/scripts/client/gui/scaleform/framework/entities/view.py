@@ -9,7 +9,6 @@ from gui.Scaleform.framework.settings import UIFrameworkImpl
 from gui.Scaleform.framework.entities.DisposableEntity import EntityState
 from gui.Scaleform.framework.entities.abstract.AbstractViewMeta import AbstractViewMeta
 from gui.Scaleform.framework.entities.view_interface import ViewInterface
-from gui.Scaleform.framework.entities.view_sound import ViewSoundMixin
 from gui.doc_loaders import hints_layout
 from gui.shared.events import FocusEvent
 from soft_exception import SoftException
@@ -37,14 +36,19 @@ class ViewKeyDynamic(ViewKey):
         return self.alias == other.alias if isinstance(other, ViewKey) else False
 
 
-class View(AbstractViewMeta, ViewSoundMixin, ViewInterface):
+CommonSoundSpaceSettings = namedtuple('CommonSoundSpaceSettings', ('name', 'entranceStates', 'exitStates', 'persistentSounds', 'stoppableSounds', 'priorities', 'autoStart', 'enterEvent', 'exitEvent', 'parentSpace'))
+CommonSoundSpaceSettings.__new__.func_defaults = (None,) * len(CommonSoundSpaceSettings._fields)
+
+class View(AbstractViewMeta, ViewInterface):
+    _COMMON_SOUND_SPACE = None
+    __commonSoundManagers = {}
 
     def __init__(self, *args, **kwargs):
         super(View, self).__init__()
         from gui.Scaleform.framework import ViewSettings
         self.__settings = ViewSettings()
         self.__key = ViewKey(None, None)
-        self._initSoundManager()
+        self.__initSoundManager()
         from gui.Scaleform.framework import ScopeTemplates
         self.__scope = ScopeTemplates.DEFAULT_SCOPE
         self.__windowImplTracker = None
@@ -83,6 +87,10 @@ class View(AbstractViewMeta, ViewSoundMixin, ViewInterface):
     @property
     def uniqueName(self):
         return self.__key.name
+
+    @property
+    def soundManager(self):
+        return self.__commonSoundManagers.get(self._COMMON_SOUND_SPACE.name) if self._COMMON_SOUND_SPACE else self.__soundsManager
 
     def isViewModal(self):
         return self.__settings.isModal
@@ -154,12 +162,40 @@ class View(AbstractViewMeta, ViewSoundMixin, ViewInterface):
 
     def _populate(self):
         super(View, self)._populate()
-        self._startSoundManager()
+        self.soundManager.startSpace(self._COMMON_SOUND_SPACE)
 
     def _destroy(self):
         if self.__windowImplTracker is not None:
             self.__windowImplTracker.destroy()
             self.__windowImplTracker = None
-        self._deinitSoundManager()
+        self.soundManager.unregister(id(self))
+        self.soundManager.clear(requester=id(self))
+        if not self.soundManager.isUsed:
+            if self._COMMON_SOUND_SPACE and not self._COMMON_SOUND_SPACE.persistentSounds:
+                self.__commonSoundManagers.pop(self._COMMON_SOUND_SPACE.name)
+        self.__soundsManager = None
+        if self.__parentManager is not None:
+            self.__parentManager.unregister(id(self))
+            self.__parentManager.clear(requester=id(self))
+            if not self.__parentManager.isUsed:
+                self.__commonSoundManagers.pop(self._COMMON_SOUND_SPACE.parentSpace)
+            self.__parentManager = None
         super(View, self)._destroy()
+        return
+
+    def __initSoundManager(self):
+        from ViewSoundManager import _ViewSoundsManager
+        if self._COMMON_SOUND_SPACE:
+            soundSpaceName = self._COMMON_SOUND_SPACE.name
+            if soundSpaceName not in self.__commonSoundManagers:
+                self.__commonSoundManagers[soundSpaceName] = _ViewSoundsManager()
+        else:
+            self.__soundsManager = _ViewSoundsManager()
+        self.soundManager.register(id(self), self._COMMON_SOUND_SPACE)
+        if self._COMMON_SOUND_SPACE and self._COMMON_SOUND_SPACE.parentSpace:
+            self.__parentManager = self.__commonSoundManagers.get(self._COMMON_SOUND_SPACE.parentSpace)
+            if self.__parentManager is not None:
+                self.__parentManager.register(id(self), CommonSoundSpaceSettings(autoStart=True))
+        else:
+            self.__parentManager = None
         return

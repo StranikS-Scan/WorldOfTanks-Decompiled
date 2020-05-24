@@ -30,10 +30,6 @@ def setMinimapCmd(key):
     g_eventBus.handleEvent(GameEvent(GameEvent.MINIMAP_CMD, _makeKeyCtx(key=key)), scope=_SCOPE)
 
 
-def setFullMapCmd(key, isDown):
-    g_eventBus.handleEvent(GameEvent(GameEvent.FULL_MAP_CMD, _makeKeyCtx(key=key, isDown=isDown)), scope=_SCOPE)
-
-
 def setRadialMenuCmd(key, isDown):
     g_eventBus.handleEvent(GameEvent(GameEvent.RADIAL_MENU_CMD, _makeKeyCtx(key=key, isDown=isDown)), scope=_SCOPE)
 
@@ -56,10 +52,6 @@ def showIngameMenu():
 
 def toggleFullStats(isDown):
     g_eventBus.handleEvent(GameEvent(GameEvent.FULL_STATS, _makeKeyCtx(isDown=isDown)), scope=_SCOPE)
-
-
-def toggleEventStats(isDown):
-    g_eventBus.handleEvent(GameEvent(GameEvent.EVENT_STATS, _makeKeyCtx(isDown=isDown)), scope=_SCOPE)
 
 
 def toggleFullStatsQuestProgress(isDown):
@@ -113,7 +105,3 @@ def controlModeChange(mode):
 def sniperCameraTransition(transitionTime, currentGunIndex):
     g_eventBus.handleEvent(GameEvent(GameEvent.SNIPER_CAMERA_TRANSITION, {'transitionTime': transitionTime,
      'currentGunIndex': currentGunIndex}), scope=_SCOPE)
-
-
-def toggleFadeOut(settings):
-    g_eventBus.handleEvent(GameEvent(GameEvent.FADE_OUT_AND_IN, {'settings': settings}), scope=_SCOPE)

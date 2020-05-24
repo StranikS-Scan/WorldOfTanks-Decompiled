@@ -1135,15 +1135,6 @@ class StagingDataAccessor(base.BaseDataAccessor):
 
         return self._request_data(inner_callback, 'wgsh', url, method='POST')
 
-    def user_season_statistics(self, callback, fields=None):
-        url = '/user-season-statistics/{account_id}/'.format(account_id=self._account)
-
-        @preprocess_callback(callback, 'rblb')
-        def inner_callback(data):
-            return data or {}
-
-        return self._request_data(inner_callback, 'rblb', url, method='GET')
-
     def user_ranked_position(self, callback, fields=None):
         url = '/user-position/{account_id}/'.format(account_id=self._account)
 

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/components/ranked.py
+import typing
 from collections import namedtuple
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import ENABLE_RANKED_ANIMATIONS
@@ -9,6 +10,7 @@ from gui.battle_results.reusable import sort_keys
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.ranked_battles.ranked_models import RankChangeStates
+from gui.ranked_battles.ranked_helpers import getBonusBattlesIncome
 from gui.shared.formatters import text_styles
 from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController
@@ -253,8 +255,8 @@ class RankedChangesInfoHelper(RankedInfoHelper):
          RankChangeStates.QUAL_UNBURN_EARNED):
             if rankState == RankChangeStates.LEAGUE_EARNED:
                 description = backport.text(R.strings.ranked_battles.battleresult.leagueUnavailable())
-            if rankInfo.additionalBonusBattles > 0 or rankInfo.qualificationBonusBattles > 0:
-                description = text_styles.concatStylesToMultiLine(description, backport.text(R.strings.ranked_battles.battleresult.bonusBattlesEarned()), backport.text(R.strings.ranked_battles.battleresult.bonusBattlesEarned.text(), divisionAmount=text_styles.neutral(rankInfo.additionalBonusBattles), qualificationAmount=text_styles.neutral(rankInfo.qualificationBonusBattles)))
+            bonusBattlesIncome = getBonusBattlesIncome(R.strings.ranked_battles.battleresult.bonusBattlesEarned, rankInfo.stepsBonusBattles, rankInfo.efficiencyBonusBattles, rankState == RankChangeStates.LEAGUE_EARNED)
+            description = text_styles.concatStylesToSingleLine(description, backport.text(R.strings.ranked_battles.battleresult.bonusBattlesEarned()), bonusBattlesIncome)
         return TitleAndDescription(title, description, descriptionIcon)
 
     def makeIcons(self):

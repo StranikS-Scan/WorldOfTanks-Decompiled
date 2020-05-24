@@ -5,24 +5,31 @@ from collections import namedtuple, defaultdict
 from copy import deepcopy
 from itertools import product
 from string import lower
+import typing
 import BigWorld
 import Math
 import Vehicular
 import AnimationSequence
 from helpers import dependency
+from skeletons.gui.shared import IItemsCache
 import items.vehicles
 from constants import IS_EDITOR
 from items.vehicles import makeIntCompactDescrByID, getItemByCompactDescr
-from items.customizations import parseOutfitDescr, CustomizationOutfit
+from items.customizations import parseOutfitDescr, CustomizationOutfit, createNationalEmblemComponents
+from vehicle_outfit.packers import ProjectionDecalPacker
 from vehicle_systems.tankStructure import VehiclePartsTuple
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.graphics import isRendererPipelineDeferred
-from items.components.c11n_constants import ModificationType, C11N_MASK_REGION, DEFAULT_DECAL_SCALE_FACTORS, SeasonType, CustomizationType, DEFAULT_DECAL_CLIP_ANGLE, ApplyArea, ProjectionDecalPositionTags, MAX_PROJECTION_DECALS_PER_AREA, CamouflageTilingType, CustomizationTypeNames
+from items.components.c11n_constants import ModificationType, C11N_MASK_REGION, DEFAULT_DECAL_SCALE_FACTORS, SeasonType, CustomizationType, DEFAULT_DECAL_CLIP_ANGLE, ApplyArea, MATCHING_TAGS_SUFFIX, MAX_PROJECTION_DECALS_PER_AREA, CamouflageTilingType, CustomizationTypeNames, SLOT_TYPE_NAMES, DEFAULT_DECAL_TINT_COLOR, Options, SLOT_DEFAULT_ALLOWED_MODEL, ItemTags
+from gui.shared.gui_items.customization.c11n_items import Customization
 import math_utils
 from helpers import newFakeModel
 from soft_exception import SoftException
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
+if typing.TYPE_CHECKING:
+    from items.components.shared_components import CustomizationSlotDescription
+    from vehicle_outfit.containers import MultiSlot
 _logger = logging.getLogger(__name__)
 RepaintParams = namedtuple('PaintParams', ('enabled', 'baseColor', 'color', 'metallic', 'gloss', 'fading', 'strength'))
 RepaintParams.__new__.__defaults__ = (False,
@@ -42,14 +49,16 @@ CamoParams.__new__.__defaults__ = ('',
  0,
  0,
  0)
-ProjectionDecalGenericParams = namedtuple('ProjectionDecalGenericParams', ('tintColor', 'position', 'rotation', 'scale', 'decalMap', 'applyAreas', 'clipAngle', 'mirrored', 'doubleSided', 'scaleBySlotSize'))
+ProjectionDecalGenericParams = namedtuple('ProjectionDecalGenericParams', ('tintColor', 'position', 'rotation', 'scale', 'decalMap', 'glossDecalMap', 'applyAreas', 'clipAngle', 'mirroredHorizontally', 'mirroredVertically', 'doubleSided', 'scaleBySlotSize'))
 ProjectionDecalGenericParams.__new__.__defaults__ = (Math.Vector4(0.0),
  Math.Vector3(0.0),
  Math.Vector3(0.0, 1.0, 0.0),
  1.0,
  '',
+ '',
  0.0,
  0.0,
+ False,
  False,
  False,
  True)
@@ -112,17 +121,21 @@ def _currentMapSeason():
         return
 
 
-def getOutfitComponent(outfitCD):
+def getOutfitComponent(outfitCD, vehicleDescriptor=None):
     if outfitCD:
         outfitComponent = parseOutfitDescr(outfitCD)
         season = _currentMapSeason()
         if outfitComponent.styleId != 0 and season is not None:
             intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, outfitComponent.styleId)
             styleDescr = getItemByCompactDescr(intCD)
-            outfitComponent = styleDescr.outfits[season]
+            baseOutfitComponent = deepcopy(styleDescr.outfits[season])
+            if vehicleDescriptor and ItemTags.ADD_NATIONAL_EMBLEM in styleDescr.tags:
+                emblems = createNationalEmblemComponents(vehicleDescriptor)
+                baseOutfitComponent.decals.extend(emblems)
+            outfitComponent = baseOutfitComponent.applyDiff(outfitComponent)
+        return outfitComponent
     else:
-        outfitComponent = CustomizationOutfit()
-    return outfitComponent
+        return CustomizationOutfit()
 
 
 def createSlotMap(vehDescr, slotTypeName):
@@ -148,8 +161,9 @@ def getCamoPrereqs(outfit, vDesc):
             slot = container.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE)
             if not slot:
                 continue
-            camouflage = slot.getItem()
-            if camouflage:
+            intCD = slot.getItemCD()
+            if intCD:
+                camouflage = getItemByCompactDescr(intCD)
                 result.append(camouflage.texture)
                 exclusionMap = vDesc.type.camouflage.exclusionMask
                 compDesc = getattr(vDesc, descId, None)
@@ -170,9 +184,10 @@ def getCamo(appearance, outfit, containerId, vDesc, descId, isDamaged, default=N
         slot = container.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE)
         if not slot:
             return result
-        camouflage = slot.getItem()
-        component = slot.getComponent()
-        if camouflage:
+        intCD = slot.getItemCD()
+        if intCD:
+            camouflage = getItemByCompactDescr(intCD)
+            component = slot.getComponent()
             try:
                 palette = camouflage.palettes[component.palette]
             except IndexError:
@@ -288,26 +303,28 @@ def getRepaint(outfit, containerId, vDesc):
     colorId = vDesc.type.baseColorID
     defaultColors = items.vehicles.g_cache.customization20().defaultColors
     defaultColor = defaultColors[nationID][colorId]
-    mod = outfit.misc.slotFor(GUI_ITEM_TYPE.MODIFICATION).getItem()
-    if mod:
+    intCD = outfit.misc.slotFor(GUI_ITEM_TYPE.MODIFICATION).getItemCD()
+    if intCD:
+        mod = getItemByCompactDescr(intCD)
         enabled = True
-        quality = mod.modValue(ModificationType.PAINT_AGE, quality)
-        fading = mod.modValue(ModificationType.PAINT_FADING, fading)
-        overlapMetallic = mod.modValue(ModificationType.METALLIC, overlapMetallic)
-        overlapGloss = mod.modValue(ModificationType.GLOSS, overlapGloss)
+        quality = mod.getEffectValue(ModificationType.PAINT_AGE, quality)
+        fading = mod.getEffectValue(ModificationType.PAINT_FADING, fading)
+        overlapMetallic = mod.getEffectValue(ModificationType.METALLIC, overlapMetallic)
+        overlapGloss = mod.getEffectValue(ModificationType.GLOSS, overlapGloss)
     container = outfit.getContainer(containerId)
     paintSlot = container.slotFor(GUI_ITEM_TYPE.PAINT)
     capacity = paintSlot.capacity()
     camoSlot = container.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE)
     if camoSlot is not None:
-        if camoSlot.getItem() is not None:
+        if camoSlot.getItemCD():
             enabled = True
     colors = [defaultColor] * capacity
     metallics = [overlapMetallic or _DEFAULT_METALLIC] * (capacity + 1)
     glosses = [overlapGloss or _DEFAULT_GLOSS] * (capacity + 1)
     for idx in range(capacity):
-        paint = paintSlot.getItem(idx)
-        if paint:
+        intCD = paintSlot.getItemCD(idx)
+        if intCD:
+            paint = getItemByCompactDescr(intCD)
             enabled = True
             colors[idx] = paint.color
             metallics[idx] = overlapMetallic or paint.metallic
@@ -360,7 +377,8 @@ def getAttachmentsAnimators(attachments, spaceId, loadedAnimators, compoundModel
 def getModelAnimatorsPrereqs(outfit, spaceId):
     multiSlot = outfit.misc.slotFor(GUI_ITEM_TYPE.SEQUENCE)
     prereqs = []
-    for _, item, _ in multiSlot.items():
+    for _, intCD, _ in multiSlot.items():
+        item = getItemByCompactDescr(intCD)
         prereqs.append(AnimationSequence.Loader(item.sequenceName, spaceId))
 
     return prereqs
@@ -375,8 +393,6 @@ def getModelAnimators(outfit, vehicleDescr, spaceId, loadedAnimators, compoundMo
             continue
         fakeModel = newFakeModel()
         node = compoundModel.node(param.attachNode)
-        if node is None:
-            continue
         node.attach(fakeModel, param.transform)
         animWrapper = AnimationSequence.ModelWrapperContainer(fakeModel, spaceId)
         animator = __prepareAnimator(loadedAnimators, param.animatorName, animWrapper, node)
@@ -427,7 +443,8 @@ def __createTransform(slotParams, slotData):
 def __getModelAnimators(outfit, vehicleDescr):
 
     def getModelAnimatorParams(slotParams, slotData, _):
-        return ModelAnimatorParams(transform=__createTransform(slotParams, slotData), attachNode=slotParams.attachNode, animatorName=slotData.item.sequenceName)
+        item = getItemByCompactDescr(slotData.intCD)
+        return ModelAnimatorParams(transform=__createTransform(slotParams, slotData), attachNode=slotParams.attachNode, animatorName=item.sequenceName)
 
     return __getParams(outfit, vehicleDescr, 'sequence', GUI_ITEM_TYPE.SEQUENCE, getModelAnimatorParams)
 
@@ -448,42 +465,42 @@ def __createSequenceItem(sequenceId, guiItemsFactory=None):
 def getAttachments(outfit, vehicleDescr):
 
     def getAttachmentParams(slotParams, slotData, idx):
-        return AttachmentParams(transform=__createTransform(slotParams, slotData), attachNode=slotParams.attachNode, modelName=slotData.item.modelName, sequenceId=slotData.item.sequenceId, attachmentLogic=slotData.item.attachmentLogic, initialVisibility=slotData.item.initialVisibility, partNodeAlias='attachment' + str(idx))
+        item = getItemByCompactDescr(slotData.intCD)
+        return AttachmentParams(transform=__createTransform(slotParams, slotData), attachNode=slotParams.attachNode, modelName=item.modelName, sequenceId=item.sequenceId, attachmentLogic=item.attachmentLogic, initialVisibility=item.initialVisibility, partNodeAlias='attachment' + str(idx))
 
     return __getParams(outfit, vehicleDescr, 'attachment', GUI_ITEM_TYPE.ATTACHMENT, getAttachmentParams)
 
 
-def _getPositionTag(slot):
+def _getMatchingTag(slot):
     for tag in slot.tags:
-        if tag.startswith(ProjectionDecalPositionTags.PREFIX):
+        if tag.endswith(MATCHING_TAGS_SUFFIX):
             return tag
 
     return None
 
 
-def _matchProjectionDecalsToSlots(projectionDecalsSlot, slotsByTagMap):
+def _matchTaggedProjectionDecalsToSlots(projectionDecalsMultiSlot, slotsByTagMap):
     taggedDecals = []
     appliedDecals = []
-    for idx, _, component in projectionDecalsSlot.items():
-        slotData = projectionDecalsSlot.getSlotData(idx)
-        if component.slotId == 0 and component.tags:
-            taggedDecals.append(slotData)
-        appliedDecals.append(slotData)
+    for _, _, component in projectionDecalsMultiSlot.items():
+        if component.slotId == ProjectionDecalPacker.STYLED_SLOT_ID and component.tags:
+            taggedDecals.append(component)
+        appliedDecals.append(component)
 
-    if taggedDecals:
-        slots = _findProjectionDecalsSlotsByTags(taggedDecals, appliedDecals, slotsByTagMap)
-        if slots:
-            for decal, slotParams in zip(taggedDecals, slots):
-                decal.component.slotId = slotParams.slotId
+    if not taggedDecals:
+        return True
+    slots = _findProjectionDecalsSlotsByTags(taggedDecals, appliedDecals, slotsByTagMap)
+    if not slots:
+        return False
+    for component, slotParams in zip(taggedDecals, slots):
+        component.slotId = slotParams.slotId
 
-        else:
-            return False
     return True
 
 
 def _findProjectionDecalsSlotsByTags(decals, appliedDecals, slotsByTagMap):
     resultSlots = []
-    for tagsOrder in product(*[ decal.component.tags for decal in decals ]):
+    for tagsOrder in product(*[ decal.tags for decal in decals ]):
         slotsByTags = deepcopy(slotsByTagMap)
         slots = []
         for tag in tagsOrder:
@@ -510,7 +527,7 @@ def _getAppliedAreas(mask):
 def _checkSlotsOrder(slots, appliedDecals):
     areas = defaultdict(int)
     for decal in appliedDecals:
-        for area in _getAppliedAreas(decal.component.showOn):
+        for area in _getAppliedAreas(decal.showOn):
             areas[area] += 1
 
     for slot in slots:
@@ -527,84 +544,161 @@ def _checkSlotsOrder(slots, appliedDecals):
 def _compareSlotsOrders(slotsA, slotsB, decals):
     if not slotsA or not slotsB:
         return slotsA or slotsB
-    slotsAIds = [ decal.component.tags.index(_getPositionTag(slot)) for slot, decal in zip(slotsA, decals) ]
+    slotsAIds = [ decal.tags.index(_getMatchingTag(slot)) for slot, decal in zip(slotsA, decals) ]
     slotsAIds.sort()
-    slotsBIds = [ decal.component.tags.index(_getPositionTag(slot)) for slot, decal in zip(slotsB, decals) ]
+    slotsBIds = [ decal.tags.index(_getMatchingTag(slot)) for slot, decal in zip(slotsB, decals) ]
     slotsBIds.sort()
     return slotsA if slotsBIds >= slotsAIds else slotsB
 
 
-def getGenericProjectionDecals(outfit, vehicleDescr):
-
-    def createVehSlotsMaps(vehDescr):
-        slotsByIdMap = {}
-        slotsByTagMap = {}
-        slotTypeName = 'projectionDecal'
-        for vehiclePartSlots in (vehDescr.hull.slotsAnchors,
-         vehDescr.chassis.slotsAnchors,
-         vehDescr.turret.slotsAnchors,
-         vehDescr.gun.slotsAnchors):
-            for vehicleSlot in vehiclePartSlots:
-                if vehicleSlot.type == slotTypeName:
-                    slotsByIdMap[vehicleSlot.slotId] = vehicleSlot
-                    positionTag = _getPositionTag(vehicleSlot)
-                    if positionTag is not None:
-                        slotsByTagMap[positionTag] = vehicleSlot
-
-        return (slotsByIdMap, slotsByTagMap)
-
+def getGenericProjectionDecals(outfit, vehDesc):
     decalsParams = []
-    projectionDecalsSlot = outfit.misc.slotFor(GUI_ITEM_TYPE.PROJECTION_DECAL)
-    if projectionDecalsSlot is None:
+    style = outfit.style
+    model = style.modelsSet if style is not None and style.modelsSet else SLOT_DEFAULT_ALLOWED_MODEL
+    for slotParams in __vehicleSlotsByType(vehDesc, SLOT_TYPE_NAMES.FIXED_PROJECTION_DECAL):
+        if model in slotParams.compatibleModels:
+            fixedDecalParams = __getFixedProjectionDecalParams(slotParams)
+            decalsParams.append(fixedDecalParams)
+
+    if decalsParams:
         return decalsParams
     else:
-        slotsByIdMap, slotsByTagMap = createVehSlotsMaps(vehicleDescr)
-        if outfit.id != 0:
-            if not _matchProjectionDecalsToSlots(projectionDecalsSlot, slotsByTagMap):
-                _logger.warning('No available slots for tagged decals. vehicle: %(vehicle)s styleId: %(id)s', {'vehicle': vehicleDescr.type.name,
-                 'id': outfit.id})
-        capacity = projectionDecalsSlot.capacity()
-        for idx in range(capacity):
-            decal = projectionDecalsSlot.getSlotData(idx)
-            if not decal.isEmpty():
-                mirrored = bool(decal.component.isMirrored())
-                if decal.component.slotId != 0:
-                    if decal.component.slotId in slotsByIdMap:
-                        slotParams = slotsByIdMap[decal.component.slotId]
-                        position = slotParams.position
-                        scale = slotParams.scale
-                        rotation = slotParams.rotation
-                        showOn = slotParams.showOn
-                        factors = slotParams.scaleFactors or DEFAULT_DECAL_SCALE_FACTORS
-                        doubleSided = slotParams.doubleSided
-                        if slotParams.clipAngle is not None:
-                            clipAngle = slotParams.clipAngle
-                        else:
-                            clipAngle = DEFAULT_DECAL_CLIP_ANGLE
-                    else:
-                        _logger.warning('Wrong slotId in ProjectDecalComponent (slotId=%(slotId)d component=%(component)s)', {'slotId': decal.component.slotId,
-                         'component': decal.component})
-                        continue
-                else:
-                    if decal.component.tags:
-                        continue
-                    position = decal.component.position
-                    scale = decal.component.scale
-                    rotation = decal.component.rotation
-                    showOn = decal.component.showOn
-                    factors = DEFAULT_DECAL_SCALE_FACTORS
-                    clipAngle = DEFAULT_DECAL_CLIP_ANGLE
-                    doubleSided = decal.component.doubleSided
-                if decal.component.scaleFactorId != 0:
-                    factor = factors[decal.component.scaleFactorId - 1]
-                    scale = Math.Vector3(scale[0] * factor, scale[1], scale[2] * factor)
-                tintColor = Math.Vector4(decal.component.tintColor) / 255
-                if decal.component.preview:
-                    tintColor.w = tintColor.w * _PROJECTION_DECAL_PREVIEW_ALPHA
-                params = ProjectionDecalGenericParams(tintColor=tintColor, position=Math.Vector3(position), rotation=Math.Vector3(rotation), scale=Math.Vector3(scale), decalMap=decal.item.texture, applyAreas=showOn, clipAngle=clipAngle, mirrored=mirrored, doubleSided=doubleSided, scaleBySlotSize=True)
-                decalsParams.append(params)
+        slotsByIdMap, slotsByTagMap = __createVehSlotsMaps(vehDesc)
+        projectionDecalsMultiSlot = outfit.misc.slotFor(GUI_ITEM_TYPE.PROJECTION_DECAL)
+        if style is not None:
+            succeeded = _matchTaggedProjectionDecalsToSlots(projectionDecalsMultiSlot, slotsByTagMap)
+            if not succeeded:
+                _logger.error('Failed to match tagged projection decals of style: %(styleId)s to vehicle: %(vehName)s slots.', {'styleId': outfit.id,
+                 'vehName': vehDesc.type.name})
+                return decalsParams
+        for idx in projectionDecalsMultiSlot.order():
+            slotData = projectionDecalsMultiSlot.getSlotData(idx)
+            if slotData.isEmpty():
+                continue
+            item = getItemByCompactDescr(slotData.intCD)
+            component = slotData.component
+            slotId = component.slotId
+            if slotId != ProjectionDecalPacker.STYLED_SLOT_ID:
+                if slotId not in slotsByIdMap:
+                    _logger.error('Projection Decal slot mismatch. SlotId: %(slotId)s; Vehicle: %(vehName)s', {'slotId': slotId,
+                     'vehName': vehDesc.type.name})
+                    continue
+                slotParams = slotsByIdMap[slotId]
+            elif component.tags:
+                continue
+            else:
+                slotParams = None
+            decalParams = __getProjectionDecalParams(vehDesc, item, component, slotParams)
+            if decalParams is not None:
+                decalsParams.append(decalParams)
 
         return decalsParams
+
+
+def __vehicleSlotsByType(vehDesc, slotType):
+    for partName in TankPartNames.ALL:
+        partDesc = getattr(vehDesc, partName, None)
+        if partDesc is None:
+            continue
+        for slot in partDesc.slotsAnchors:
+            if slot.type == slotType:
+                yield slot
+
+    return
+
+
+def __createVehSlotsMaps(vehDesc):
+    slotsByIdMap = {}
+    slotsByTagMap = {}
+    for slotParams in __vehicleSlotsByType(vehDesc, SLOT_TYPE_NAMES.PROJECTION_DECAL):
+        slotsByIdMap[slotParams.slotId] = slotParams
+        matchingTag = _getMatchingTag(slotParams)
+        if matchingTag is not None:
+            slotsByTagMap[matchingTag] = slotParams
+
+    return (slotsByIdMap, slotsByTagMap)
+
+
+def __getFixedProjectionDecalParams(slotParams):
+    intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.PROJECTION_DECAL, slotParams.itemId)
+    item = getItemByCompactDescr(intCD)
+    tintColor = __getProjectionDecalTintColor()
+    mirroredHorizontally = slotParams.options & Options.MIRRORED_HORIZONTALLY
+    mirroredVertically = slotParams.options & Options.MIRRORED_VERTICALLY
+    params = ProjectionDecalGenericParams(tintColor=tintColor, position=Math.Vector3(slotParams.position), rotation=Math.Vector3(slotParams.rotation), scale=Math.Vector3(slotParams.scale), decalMap=item.texture, glossDecalMap=item.glossTexture, applyAreas=slotParams.showOn, clipAngle=slotParams.clipAngle, mirroredHorizontally=mirroredHorizontally, mirroredVertically=mirroredVertically, doubleSided=slotParams.doubleSided, scaleBySlotSize=True)
+    return params
+
+
+def __getProjectionDecalParams(vehDesc, item, component, slotParams=None):
+    texture, glossTexture = __getProjectionDecalTextures(item, component, vehDesc)
+    if texture is None or glossTexture is None:
+        _logger.error('Failed to get textures for Projection Decal: %(itemId)s; Vehicle: %(vehName)s; Component: %(component)s', {'itemId': item.id,
+         'vehName': vehDesc.type.name,
+         'component': component})
+        return
+    else:
+        tintColor = __getProjectionDecalTintColor(component)
+        scale = __getProjectionDecalScale(component, slotParams)
+        mirroredHorizontally = bool(component.isMirroredHorizontally())
+        mirroredVertically = bool(component.isMirroredVertically())
+        if slotParams is None:
+            position = Math.Vector3(component.position)
+            rotation = Math.Vector3(component.rotation)
+            applyAreas = component.showOn
+            clipAngle = DEFAULT_DECAL_CLIP_ANGLE
+            doubleSided = component.doubleSided
+        else:
+            position = Math.Vector3(slotParams.position)
+            rotation = Math.Vector3(slotParams.rotation)
+            applyAreas = slotParams.showOn
+            clipAngle = slotParams.clipAngle
+            doubleSided = slotParams.doubleSided
+        params = ProjectionDecalGenericParams(tintColor=tintColor, position=position, rotation=rotation, scale=scale, decalMap=texture, glossDecalMap=glossTexture, applyAreas=applyAreas, clipAngle=clipAngle, mirroredHorizontally=mirroredHorizontally, mirroredVertically=mirroredVertically, doubleSided=doubleSided, scaleBySlotSize=True)
+        return params
+
+
+def __getProjectionDecalTintColor(component=None):
+    tintColor = component.tintColor if component is not None else DEFAULT_DECAL_TINT_COLOR
+    tintColor = Math.Vector4(tintColor)
+    tintColor /= 255
+    if component is not None and component.preview:
+        tintColor.w *= _PROJECTION_DECAL_PREVIEW_ALPHA
+    return tintColor
+
+
+def __getProjectionDecalScale(component, slotParams=None):
+    if slotParams is not None:
+        scale = slotParams.scale or component.scale
+    else:
+        scale = component.scale
+    scale = Math.Vector3(scale)
+    if component.scaleFactorId:
+        scaleFactors = slotParams.scaleFactors if slotParams is not None else DEFAULT_DECAL_SCALE_FACTORS
+        scaleFactor = scaleFactors[component.scaleFactorId - 1]
+        scale.x *= scaleFactor
+        scale.z *= scaleFactor
+    return scale
+
+
+def __getProjectionDecalTextures(item, component, vehDesc):
+    texture = item.texture
+    glossTexture = item.glossTexture
+    if item.isProgressive():
+        progressionLevel = component.progressionLevel
+        if progressionLevel == 0:
+            itemsCache = dependency.instance(IItemsCache)
+            inventory = itemsCache.items.inventory
+            intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.PROJECTION_DECAL, item.id)
+            progressData = inventory.getC11nProgressionData(intCD, vehDesc.type.compactDescr)
+            if progressData is not None:
+                progressionLevel = progressData.currentLevel
+        if progressionLevel:
+            texture = Customization.getTextureByProgressionLevel(texture, progressionLevel)
+            if glossTexture:
+                glossTexture = Customization.getTextureByProgressionLevel(glossTexture, progressionLevel)
+        else:
+            return (None, None)
+    return (texture, glossTexture)
 
 
 def getOutfitData(appearance, outfit, vehicleDescr, isDamaged):

@@ -308,8 +308,8 @@
           <forwardElastK>	1.6	</forwardElastK>
           <backwardElastK>	0.89	</backwardElastK>
           <offset>	-0.232	</offset>
-          <leftSibling>	Track_VT_L4	</leftSibling>
           <rightSibling>	Track_VT_L6	</rightSibling>
+          <leftSibling>	Track_VT_L4	</leftSibling>
         </node>
         <node>
           <isLeft>	true	</isLeft>
@@ -326,8 +326,8 @@
           <forwardElastK>	1.41	</forwardElastK>
           <backwardElastK>	0.89	</backwardElastK>
           <offset>	-0.175	</offset>
-          <leftSibling>	Track_VT_L6	</leftSibling>
           <rightSibling>	Track_VT_L8	</rightSibling>
+          <leftSibling>	Track_VT_L6	</leftSibling>
         </node>
         <node>
           <isLeft>	true	</isLeft>
@@ -418,30 +418,6 @@
         </node>
       </trackNodes>
       <trackThickness>	-0.0288	</trackThickness>
-      <effects>
-        <lodDist>	MEDIUM	</lodDist>
-        <mud>	largeTankMud	</mud>
-      </effects>
-      <wwsoundPC>	treads_type_pc	</wwsoundPC>
-      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 1.18716 0.000000	</hullPosition>
-      <hitTester>
-        <collisionModelServer>	vehicles/german/G16_PzVIB_Tiger_II_training/collision/Chassis.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/german/G16_PzVIB_Tiger_II_training/collision_client/Chassis.model	</collisionModelClient>
-      </hitTester>
-      <topRightCarryingPoint>	1.39764 2.05133	</topRightCarryingPoint>
-      <maxClimbAngle>	25	</maxClimbAngle>
-      <navmeshGirth>	6.0	</navmeshGirth>
-      <AODecals>
-        <decal>
-          <transform>
-            <row0>	5.155860 0.000000 0.000000	</row0>
-            <row1>	0.000000 1.815900 0.000000	</row1>
-            <row2>	0.000000 0.000000 7.970920	</row2>
-            <row3>	0.000000 0.000000 0.000001	</row3>
-          </transform>
-        </decal>
-      </AODecals>
       <physicalTracks>
         <left>
           <segmentsCount>	98	</segmentsCount>
@@ -836,6 +812,30 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.18716 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G16_PzVIB_Tiger_II_training/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G16_PzVIB_Tiger_II_training/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.39764 2.05133	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	5.155860 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.815900 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.970920	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
       <customization>
         <customizableVehicleAreas>
           <paint></paint>
@@ -944,9 +944,9 @@
         </_88mm_KwK_43_L71_T>
       </guns>
       <models>
-        <undamaged>	vehicles/german/G16_PzVIB_Tiger_II_training/normal/lod0/Turret_01.model	</undamaged>
-        <destroyed>	vehicles/german/G16_PzVIB_Tiger_II_training/crash/lod0/Turret_01.model	</destroyed>
-        <exploded>	vehicles/german/G16_PzVIB_Tiger_II_training/crash/lod0/Turret_01.model	</exploded>
+        <undamaged>	vehicles/german/G16_PzVIB_Tiger_II/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/german/G16_PzVIB_Tiger_II_training/collision/Turret_01.model	</collisionModelServer>
@@ -1022,36 +1022,15 @@
       <chassis>
         <PzVIB_Vetstaerktketten_T>
           <grounds>
-            <ground>
-              <medium>
-                <rollingFriction>	0.1127	</rollingFriction>
-              </medium>
-            </ground>
-            <sand>
-              <medium>
-                <rollingFriction>	0.1127	</rollingFriction>
-              </medium>
-            </sand>
-            <wood>
-              <medium>
-                <rollingFriction>	0.1127	</rollingFriction>
-              </medium>
-            </wood>
-            <snow>
-              <medium>
-                <rollingFriction>	0.1127	</rollingFriction>
-              </medium>
-            </snow>
-            <stone>
-              <medium>
-                <rollingFriction>	0.1127	</rollingFriction>
-              </medium>
-            </stone>
-            <metal>
-              <medium>
-                <rollingFriction>	0.1127	</rollingFriction>
-              </medium>
-            </metal>
+            <soft>
+              <rollingFriction>	0.18515	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.1127	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.08855	</rollingFriction>
+            </firm>
           </grounds>
         </PzVIB_Vetstaerktketten_T>
       </chassis>

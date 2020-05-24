@@ -61,7 +61,6 @@ class HangarCameraIdleController(HangarCameraSettingsListener):
 class HangarCameraIdle(HangarCameraIdleController, CallbackDelayer, TimeDeltaMeter):
     TIME_OUT = 0.8
     MAX_DT = 0.05
-    MIN_DT = 0.001
 
     class IdleParams(object):
 
@@ -121,13 +120,11 @@ class HangarCameraIdle(HangarCameraIdleController, CallbackDelayer, TimeDeltaMet
         self.__setStartParams(self.__distParams)
         self.__currentIdleTime = 0.0
         self.__yawSpeed = 0.0
-        self.delayCallback(self.MIN_DT, self.__updateIdleMovement)
+        self.delayCallback(0.0, self.__updateIdleMovement)
 
     def __updateIdleMovement(self):
         dt = min(self.measureDeltaTime(), self.MAX_DT)
         self.__currentIdleTime += dt
-        if dt < self.MIN_DT:
-            return
         cameraMatrix = Math.Matrix(self.__camera.source)
         if self.__yawPeriod > 0:
             yawDelta = 2.0 * math.pi * dt / self.__yawPeriod
@@ -170,7 +167,7 @@ class HangarCameraIdle(HangarCameraIdleController, CallbackDelayer, TimeDeltaMet
         dist = self.__easeOutValue(self.__distParams.speed, self.__camera.pivotMaxDist, dt)
         self.__setCameraParams(yaw, pitch, dist)
         if self.__currentIdleTime < self.TIME_OUT:
-            return
+            return 0.0
         g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.IDLE_CAMERA, ctx={'started': False}), scope=EVENT_BUS_SCOPE.DEFAULT)
         g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.IDLE_CAMERA, ctx={'started': False}), scope=EVENT_BUS_SCOPE.DEFAULT)
 
@@ -190,4 +187,4 @@ class HangarCameraIdle(HangarCameraIdleController, CallbackDelayer, TimeDeltaMet
     def __stopCameraIdle(self):
         self.stopCallback(self.__updateIdleMovement)
         self.__currentIdleTime = 0.0
-        self.delayCallback(self.MIN_DT, self.__updateEasingOut)
+        self.delayCallback(0.0, self.__updateEasingOut)

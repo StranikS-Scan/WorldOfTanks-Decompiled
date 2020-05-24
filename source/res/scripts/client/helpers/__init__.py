@@ -190,3 +190,15 @@ class ReferralButtonHandler(object):
         url = getReferralProgramURL() + url
         showReferralProgramWindow(url)
         return
+
+
+class ClanQuestButtonHandler(object):
+
+    @classmethod
+    def invoke(cls, **kwargs):
+        from gui.shared.event_dispatcher import showClanQuestWindow
+        from gui.Scaleform.daapi.view.lobby.clans.clan_helpers import getClanQuestURL
+        value = kwargs.get('value', None)
+        url = value.get('action_url', '') if isinstance(value, dict) else ''
+        showClanQuestWindow(getClanQuestURL() + url)
+        return

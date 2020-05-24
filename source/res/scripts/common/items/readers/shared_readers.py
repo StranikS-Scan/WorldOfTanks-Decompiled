@@ -27,6 +27,11 @@ def _readMiscSlot(ctx, subsection, slotType):
     return descr
 
 
+def _customizationSlotTagsValidator(tag):
+    availableTags = c11n_constants.ProjectionDecalDirectionTags.ALL + c11n_constants.ProjectionDecalFormTags.ALL + c11n_constants.ProjectionDecalPreferredTags.ALL + (c11n_constants.HIDDEN_FOR_USER_TAG,)
+    return True if tag in availableTags else tag.endswith(c11n_constants.MATCHING_TAGS_SUFFIX)
+
+
 def _readCustomizationSlot(ctx, subsection, slotType):
     applyTo = _xml.readIntOrNone(ctx, subsection, 'applyTo')
     if applyTo is not None:
@@ -37,8 +42,7 @@ def _readCustomizationSlot(ctx, subsection, slotType):
         availableShowOnRegions = c11n_constants.ApplyArea.HULL | c11n_constants.ApplyArea.TURRET | c11n_constants.ApplyArea.GUN
         if showOn | availableShowOnRegions != availableShowOnRegions:
             _xml.raiseWrongSection(ctx, 'showOn')
-    availableTags = c11n_constants.ProjectionDecalDirectionTags.ALL + c11n_constants.ProjectionDecalFormTags.ALL + c11n_constants.ProjectionDecalPositionTags.ALL + c11n_constants.ProjectionDecalPreferredTags.ALL
-    tags = readOrderedTagsOrEmpty(ctx, subsection, availableTags)
+    tags = readOrderedTagsOrEmpty(ctx, subsection, _customizationSlotTagsValidator)
     slotId = _xml.readInt(ctx, subsection, 'slotId')
     _verifySlotId(ctx, slotType, slotId)
     attachedPartsData = _xml.readStringOrNone(ctx, subsection, 'attachedPart')
@@ -51,7 +55,15 @@ def _readCustomizationSlot(ctx, subsection, slotType):
 
     else:
         attachedParts = None
-    descr = shared_components.CustomizationSlotDescription(type=slotType, anchorPosition=_xml.readVector3(ctx, subsection, 'anchorPosition'), anchorDirection=_xml.readVector3(ctx, subsection, 'anchorDirection'), applyTo=applyTo, slotId=slotId, position=_xml.readVector3OrNone(ctx, subsection, 'position'), rotation=_xml.readVector3OrNone(ctx, subsection, 'rotation'), scale=_xml.readVector3OrNone(ctx, subsection, 'scale'), scaleFactors=_xml.readVector3OrNone(ctx, subsection, 'scaleFactors'), doubleSided=_xml.readBool(ctx, subsection, 'doubleSided', False), showOn=showOn, tags=tags, clipAngle=_xml.readFloat(ctx, subsection, 'clipAngle', 0.0), attachedParts=attachedParts)
+    if subsection.has_key('compatibleModels'):
+        compatibleModels = _xml.readTupleOfStrings(ctx, subsection, 'compatibleModels')
+    else:
+        compatibleModels = (c11n_constants.SLOT_DEFAULT_ALLOWED_MODEL,)
+    if subsection.has_key('options'):
+        options = _xml.readNonNegativeInt(ctx, subsection, 'options')
+    else:
+        options = c11n_constants.Options.NONE
+    descr = shared_components.CustomizationSlotDescription(type=slotType, anchorPosition=_xml.readVector3OrNone(ctx, subsection, 'anchorPosition'), anchorDirection=_xml.readVector3OrNone(ctx, subsection, 'anchorDirection'), applyTo=applyTo, slotId=slotId, position=_xml.readVector3OrNone(ctx, subsection, 'position'), rotation=_xml.readVector3OrNone(ctx, subsection, 'rotation'), scale=_xml.readVector3OrNone(ctx, subsection, 'scale'), scaleFactors=_xml.readVector3(ctx, subsection, 'scaleFactors', c11n_constants.DEFAULT_DECAL_SCALE_FACTORS), doubleSided=_xml.readBool(ctx, subsection, 'doubleSided', False), canBeMirroredVertically=_xml.readBool(ctx, subsection, 'verticalMirror', False), showOn=showOn, tags=tags, clipAngle=_xml.readFloat(ctx, subsection, 'clipAngle', c11n_constants.DEFAULT_DECAL_CLIP_ANGLE), attachedParts=attachedParts, compatibleModels=compatibleModels, itemId=_xml.readIntOrNone(ctx, subsection, 'itemId'), options=options)
     return descr
 
 
@@ -129,13 +141,13 @@ def readTagsOrEmpty(xmlCtx, section, allowedTagNames, subsectionName='tags'):
     return frozenset(res)
 
 
-def readOrderedTagsOrEmpty(xmlCtx, section, allowedTagNames, subsectionName='tags'):
+def readOrderedTagsOrEmpty(xmlCtx, section, allowedTagValidator, subsectionName='tags'):
     tags = _xml.readStringOrNone(xmlCtx, section, subsectionName)
     res = []
     if tags is not None:
         tagNames = tags.split()
         for tagName in tagNames:
-            if tagName not in allowedTagNames:
+            if not allowedTagValidator(tagName):
                 _xml.raiseWrongXml(xmlCtx, subsectionName, "unknown tag '%s'" % tagName)
             res.append(intern(tagName))
 

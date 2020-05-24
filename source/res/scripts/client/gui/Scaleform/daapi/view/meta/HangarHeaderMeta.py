@@ -15,3 +15,9 @@ class HangarHeaderMeta(BaseDAAPIComponent):
 
     def as_removeBattlePassS(self):
         return self.flashObject.as_removeBattlePass() if self._isDAAPIInited() else None
+
+    def as_createRankedBattlesS(self):
+        return self.flashObject.as_createRankedBattles() if self._isDAAPIInited() else None
+
+    def as_removeRankedBattlesS(self):
+        return self.flashObject.as_removeRankedBattles() if self._isDAAPIInited() else None

@@ -43,7 +43,7 @@ class TeamPlayerNameBlock(shared.PlayerNameBlock):
 
 
 class RegularVehicleStatsBlock(base.StatsBlock):
-    __slots__ = ('_isObserver', 'achievements', 'achievementsCount', 'vehicleState', 'vehicleStatePrefix', 'vehicleStateSuffix', 'killerID', 'deathReason', 'isPrematureLeave', 'vehicleName', 'vehicleShortName', 'vehicleIcon', 'vehicleSort', 'isPersonal', 'isTeamKiller', 'kills', 'tkills', 'realKills', 'xp', 'damageDealt', 'vehicles', 'playerID', 'player', 'statValues', 'fortResource', 'squadIndex', 'isPersonalSquad', 'xpSort', 'intCD', 'rank', 'rankIcon', 'suffixBadgeIcon', 'isKilledByTeamKiller', 'playerRank', 'respawns', 'badge', 'hasSelectedBadge')
+    __slots__ = ('_isObserver', 'achievements', 'achievementsCount', 'vehicleState', 'vehicleStatePrefix', 'vehicleStateSuffix', 'killerID', 'deathReason', 'isPrematureLeave', 'vehicleName', 'vehicleShortName', 'vehicleIcon', 'vehicleSort', 'isPersonal', 'isTeamKiller', 'kills', 'tkills', 'realKills', 'xp', 'damageDealt', 'vehicles', 'playerID', 'player', 'statValues', 'fortResource', 'squadIndex', 'isPersonalSquad', 'xpSort', 'intCD', 'rank', 'rankIcon', 'suffixBadgeIcon', 'isKilledByTeamKiller', 'playerRank', 'respawns', 'badge', 'hasSelectedBadge', 'suffixBadgeStripIcon')
 
     def __init__(self, meta=None, field='', *path):
         super(RegularVehicleStatsBlock, self).__init__(meta, field, *path)
@@ -54,6 +54,7 @@ class RegularVehicleStatsBlock(base.StatsBlock):
         self.isKilledByTeamKiller = False
         self.vehicleSort = None
         self.suffixBadgeIcon = None
+        self.suffixBadgeStripIcon = None
         self.hasSelectedBadge = False
         return
 
@@ -62,12 +63,15 @@ class RegularVehicleStatsBlock(base.StatsBlock):
         avatar = reusable.avatars.getAvatarInfo(player.dbID)
         noPenalties = not avatar.hasPenalties()
         self.suffixBadgeIcon = None
+        self.suffixBadgeStripIcon = None
         if avatar is not None:
             self.hasSelectedBadge = avatar.badge > 0
             if self.hasSelectedBadge:
                 self._setBadge(result, reusable)
             if avatar.suffixBadge:
                 self.suffixBadgeIcon = style.makeBadgeIcon(avatar.suffixBadge)
+                stripImg = R.images.gui.maps.icons.library.badges.strips.c_64x24.dyn('strip_{}'.format(avatar.suffixBadge))
+                self.suffixBadgeStripIcon = backport.image(stripImg()) if stripImg else ''
         self._processVehicles(result)
         self._setPlayerInfo(player)
         self._setTotalStats(result, noPenalties)

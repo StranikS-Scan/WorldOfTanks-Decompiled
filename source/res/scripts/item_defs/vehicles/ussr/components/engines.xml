@@ -146,6 +146,7 @@
     <V_64R>	223	</V_64R>
     <V_3BT>	224	</V_3BT>
     <V-54K_1>	225	</V-54K_1>
+    <GTD_700P>	226	</GTD_700P>
     <V-5_IGR>	60001	</V-5_IGR>
     <V-2IS_IGR>	60002	</V-2IS_IGR>
     <V-54-6_IGR>	60003	</V-54-6_IGR>
@@ -160,16 +161,6 @@
     <V-2-34_bootcamp>	64005	</V-2-34_bootcamp>
     <V-4_bootcamp>	64006	</V-4_bootcamp>
     <GAZ-203_bootcamp>	64007	</GAZ-203_bootcamp>
-    <V-2-54IS_SE20_Gen_1_Lvl_1>	38	</V-2-54IS_SE20_Gen_1_Lvl_1>
-    <V-2-54IS_SE20_Gen_1_Lvl_2>	46	</V-2-54IS_SE20_Gen_1_Lvl_2>
-    <V-2IS_B_SE20_Gen_1_Lvl_3>	56	</V-2IS_B_SE20_Gen_1_Lvl_3>
-    <V-54K_SE20_Gen_2_Lvl_1>	64	</V-54K_SE20_Gen_2_Lvl_1>
-    <V-2-34A_SE20_Gen_2_Lvl_2>	65	</V-2-34A_SE20_Gen_2_Lvl_2>
-    <V-2IS_R1_SE20_Gen_2_Lvl_3>	66	</V-2IS_R1_SE20_Gen_2_Lvl_3>
-    <V-2-34M_SE20_Gen_0_Lvl_1>	67	</V-2-34M_SE20_Gen_0_Lvl_1>
-    <V-2-34M_SE20_Gen_0_Lvl_2>	68	</V-2-34M_SE20_Gen_0_Lvl_2>
-    <V-2IS_B_SE20_Gen_0_Lvl_3>	69	</V-2IS_B_SE20_Gen_0_Lvl_3>
-    <GMC_6046_SE20_Gen_4_Lvl_1>	70	</GMC_6046_SE20_Gen_4_Lvl_1>
   </ids>
   <shared>
     <V-2>
@@ -1972,6 +1963,23 @@
       <rpm_min>	381	</rpm_min>
       <rpm_max>	2056	</rpm_max>
     </_5TDF>
+    <GTD_700P>
+      <userString>	#ussr_vehicles:GTD_700P	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	110000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	870	</power>
+      <weight>	750	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	333	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+    </GTD_700P>
     <_4TPD>
       <userString>	#ussr_vehicles:_4TPD	</userString>
       <tags>	diesel	</tags>
@@ -2581,14 +2589,14 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	800	</power>
+      <power>	1000	</power>
       <weight>	1000	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	306	</rpm_min>
-      <rpm_max>	2280	</rpm_max>
+      <rpm_min>	253	</rpm_min>
+      <rpm_max>	2440	</rpm_max>
     </V_64R>
     <M_850>
       <userString>	#ussr_vehicles:M_850	</userString>
@@ -2828,175 +2836,5 @@
       <rpm_min>	240	</rpm_min>
       <rpm_max>	2480	</rpm_max>
     </M-50T_IGR>
-    <V-2-54IS_SE20_Gen_1_Lvl_1>
-      <userString>	#ussr_vehicles:V-2-54IS_SE20_Gen_1_Lvl_1	</userString>
-      <tags>	diesel	</tags>
-      <level>	9	</level>
-      <price>	79290	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	500	</power>
-      <weight>	700	</weight>
-      <maxHealth>	370	</maxHealth>
-      <maxRegenHealth>	185	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	333	</rpm_min>
-      <rpm_max>	2200	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </V-2-54IS_SE20_Gen_1_Lvl_1>
-    <V-2-54IS_SE20_Gen_1_Lvl_2>
-      <userString>	#ussr_vehicles:V-2-54IS_SE20_Gen_1_Lvl_2	</userString>
-      <tags>	diesel	</tags>
-      <level>	9	</level>
-      <price>	79290	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	600	</power>
-      <weight>	700	</weight>
-      <maxHealth>	370	</maxHealth>
-      <maxRegenHealth>	185	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	333	</rpm_min>
-      <rpm_max>	2200	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </V-2-54IS_SE20_Gen_1_Lvl_2>
-    <V-2IS_B_SE20_Gen_1_Lvl_3>
-      <userString>	#ussr_vehicles:V-2IS_B_SE20_Gen_1_Lvl_3	</userString>
-      <tags>	diesel	</tags>
-      <level>	7	</level>
-      <price>	36000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	634	</power>
-      <weight>	750	</weight>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	95	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	360	</rpm_min>
-      <rpm_max>	2120	</rpm_max>
-    </V-2IS_B_SE20_Gen_1_Lvl_3>
-    <V-54K_SE20_Gen_2_Lvl_1>
-      <userString>	#ussr_vehicles:V-54K_SE20_Gen_2_Lvl_1	</userString>
-      <tags>	diesel	</tags>
-      <level>	8	</level>
-      <price>	58000	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	634	</power>
-      <weight>	750	</weight>
-      <maxHealth>	260	</maxHealth>
-      <maxRegenHealth>	130	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	360	</rpm_min>
-      <rpm_max>	2120	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </V-54K_SE20_Gen_2_Lvl_1>
-    <V-2-34A_SE20_Gen_2_Lvl_2>
-      <userString>	#ussr_vehicles:V-2-34_SE20_Gen_2_Lvl_2	</userString>
-      <tags>	diesel	</tags>
-      <level>	6	</level>
-      <price>	27860	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	650	</power>
-      <weight>	750	</weight>
-      <maxHealth>	145	</maxHealth>
-      <maxRegenHealth>	72	</maxRegenHealth>
-      <repairCost>	6	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	386	</rpm_min>
-      <rpm_max>	2040	</rpm_max>
-    </V-2-34A_SE20_Gen_2_Lvl_2>
-    <V-2IS_R1_SE20_Gen_2_Lvl_3>
-      <userString>	#ussr_vehicles:V-2IS_R_SE20_Gen_2_Lvl_3	</userString>
-      <tags>	diesel	</tags>
-      <level>	6	</level>
-      <price>	29000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	520	</power>
-      <weight>	750	</weight>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	95	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	381	</rpm_min>
-      <rpm_max>	2056	</rpm_max>
-    </V-2IS_R1_SE20_Gen_2_Lvl_3>
-    <V-2-34M_SE20_Gen_0_Lvl_1>
-      <userString>	#ussr_vehicles:V-2-34M_SE20_Gen_0_Lvl_1	</userString>
-      <tags>	diesel	</tags>
-      <level>	6	</level>
-      <price>	29500	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	480	</power>
-      <weight>	750	</weight>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	95	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	381	</rpm_min>
-      <rpm_max>	2056	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </V-2-34M_SE20_Gen_0_Lvl_1>
-    <V-2-34M_SE20_Gen_0_Lvl_2>
-      <userString>	#ussr_vehicles:V-2-34M_SE20_Gen_0_Lvl_2	</userString>
-      <tags>	diesel	</tags>
-      <level>	6	</level>
-      <price>	29500	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	500	</power>
-      <weight>	750	</weight>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	95	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	381	</rpm_min>
-      <rpm_max>	2056	</rpm_max>
-      <notInShop>	True	</notInShop>
-    </V-2-34M_SE20_Gen_0_Lvl_2>
-    <V-2IS_B_SE20_Gen_0_Lvl_3>
-      <userString>	#ussr_vehicles:V-2IS_B_SE20_Gen_0_Lvl_3__0	</userString>
-      <tags>	diesel	</tags>
-      <level>	7	</level>
-      <price>	36000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	600	</power>
-      <weight>	750	</weight>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	95	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	360	</rpm_min>
-      <rpm_max>	2120	</rpm_max>
-    </V-2IS_B_SE20_Gen_0_Lvl_3>
-    <GMC_6046_SE20_Gen_4_Lvl_1>
-      <userString>	#ussr_vehicles:GMC_6046_SE20_Gen_4_Lvl_1	</userString>
-      <tags>	diesel	</tags>
-      <level>	5	</level>
-      <price>	13500	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
-      <power>	650	</power>
-      <weight>	2318	</weight>
-      <maxHealth>	176	</maxHealth>
-      <maxRegenHealth>	100	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	217	</rpm_min>
-      <rpm_max>	2265	</rpm_max>
-    </GMC_6046_SE20_Gen_4_Lvl_1>
   </shared>
 </engines.xml>

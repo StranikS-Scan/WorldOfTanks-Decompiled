@@ -5,12 +5,15 @@ from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.meta.AbstractRallyWindowMeta import AbstractRallyWindowMeta
 from gui.prb_control.entities.base.ctx import LeavePrbAction, PrbAction
 from gui.prb_control.entities.base.listener import IPrbListener
+from gui.shared.events import RallyWindowEvent
+from gui.shared.event_bus import EVENT_BUS_SCOPE
 
 class AbstractRallyWindow(AbstractRallyWindowMeta, IPrbListener):
 
     def __init__(self):
         super(AbstractRallyWindow, self).__init__()
         self._viewToLoad = None
+        self.addListener(RallyWindowEvent.ON_CLOSE, self.__onClose, scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
     def getFlashAliases(self):
@@ -24,7 +27,7 @@ class AbstractRallyWindow(AbstractRallyWindowMeta, IPrbListener):
             component.isMinimising = True
 
     def onWindowClose(self):
-        self._doLeave()
+        self.fireEvent(RallyWindowEvent(RallyWindowEvent.ON_CLOSE), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _getPythonAlias(self, flashAlias):
         flashAliases = self.getFlashAliases()
@@ -54,6 +57,7 @@ class AbstractRallyWindow(AbstractRallyWindowMeta, IPrbListener):
         return
 
     def _dispose(self):
+        self.removeListener(RallyWindowEvent.ON_CLOSE, self.__onClose, scope=EVENT_BUS_SCOPE.LOBBY)
         self._viewToUnload = None
         self._viewToLoad = None
         super(AbstractRallyWindow, self)._dispose()
@@ -66,3 +70,6 @@ class AbstractRallyWindow(AbstractRallyWindowMeta, IPrbListener):
     @process
     def _doSelect(self, prebattleActionName, accountsToInvite=None):
         yield self.prbDispatcher.doSelectAction(PrbAction(prebattleActionName, accountsToInvite=accountsToInvite))
+
+    def __onClose(self, event):
+        self._doLeave()

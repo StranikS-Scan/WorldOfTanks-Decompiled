@@ -2,11 +2,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/crewOperations/RetrainCrewWindow.py
 from CurrentVehicle import g_currentVehicle
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.RetrainCrewWindowMeta import RetrainCrewWindowMeta
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.ingame_shop import showBuyGoldForCrew
+from gui.shop import showBuyGoldForCrew
 from gui.shared.gui_items.processors.tankman import TankmanCrewRetraining
 from gui.shared.gui_items.serializers import packTraining
 from gui.shared.utils import decorators
@@ -84,7 +83,7 @@ class RetrainCrewWindow(RetrainCrewWindowMeta):
         if operationId in self.AVAILABLE_OPERATIONS:
             _, cost = self.getCrewTrainInfo(int(operationId))
             currentGold = self.itemsCache.items.stats.gold
-            if currentGold < cost.get(Currency.GOLD, 0) and isIngameShopEnabled():
+            if currentGold < cost.get(Currency.GOLD, 0):
                 showBuyGoldForCrew(cost.get(Currency.GOLD))
                 return
             self.__processCrewRetrianing(operationId)
@@ -115,7 +114,7 @@ class RetrainCrewWindow(RetrainCrewWindowMeta):
     def changeRetrainType(self, operationId):
         crew, cost = self.getCrewTrainInfo(int(operationId))
         currentMoney = self.itemsCache.items.stats.money
-        enableSubmitButton = crew and (cost <= currentMoney or cost.get(Currency.GOLD) and isIngameShopEnabled())
+        enableSubmitButton = bool(crew and (cost <= currentMoney or cost.get(Currency.GOLD)))
         self.as_setCrewDataS({'price': cost.toMoneyTuple(),
          'crew': crew,
          'crewMembersText': text_styles.concatStylesWithSpace(backport.text(R.strings.retrain_crew.label.crewMembers()), text_styles.middleTitle(len(crew))),

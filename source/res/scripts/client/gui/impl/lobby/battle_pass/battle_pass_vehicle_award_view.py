@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/battle_pass_vehicle_award_view.py
 import SoundGroups
-from frameworks.wulf import ViewFlags, ViewSettings
+from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
 from gui.battle_pass.battle_pass_helpers import isCurrentBattlePassStateBase
 from gui.battle_pass.sounds import BattlePassSounds
+from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_vehicle_award_view_model import BattlePassVehicleAwardViewModel
 from gui.impl.pub import ViewImpl
+from gui.impl.pub.lobby_window import LobbyWindow
 from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
@@ -46,3 +48,11 @@ class BattlePassVehicleAwardView(ViewImpl):
     def _finalize(self):
         super(BattlePassVehicleAwardView, self)._finalize()
         switchHangarOverlaySoundFilter(on=False)
+
+
+class BattlePassVehicleAwardWindow(LobbyWindow):
+    __slots__ = ()
+
+    def __init__(self, data):
+        super(BattlePassVehicleAwardWindow, self).__init__(content=BattlePassVehicleAwardView(R.views.lobby.battle_pass.BattlePassVehicleAwardView(), wsFlags=ViewFlags.OVERLAY_VIEW, data=data), wndFlags=WindowFlags.OVERLAY, decorator=None)
+        return

@@ -10,3 +10,11 @@ class RankedTankCarousel(TankCarousel):
         super(RankedTankCarousel, self).__init__()
         self._carouselDPCls = RankedCarouselDataProvider
         self._carouselFilterCls = RankedCarouselFilter
+
+    def hasRoles(self):
+        return True
+
+    def _getInitialFilterVO(self, contexts):
+        filtersVO = super(RankedTankCarousel, self)._getInitialFilterVO(contexts)
+        filtersVO['isRanked'] = True
+        return filtersVO

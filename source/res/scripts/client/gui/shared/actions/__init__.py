@@ -2,11 +2,10 @@
 # Embedded file name: scripts/client/gui/shared/actions/__init__.py
 import BigWorld
 from adisp import process
-from constants import QUEUE_TYPE, PREBATTLE_TYPE
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.framework import ViewTypes
-from gui.prb_control.settings import FUNCTIONAL_FLAG, CTRL_ENTITY_TYPE
+from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.actions.chains import ActionsChain
 from gui.shared.events import LoginEventEx, GUICommonEvent
@@ -17,6 +16,7 @@ from skeletons.gameplay import IGameplayLogic
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.login_manager import ILoginManager
+from constants import WGC_STATE
 __all__ = ('LeavePrbModalEntity', 'DisconnectFromPeriphery', 'ConnectToPeriphery', 'PrbInvitesInit', 'ActionsChain')
 
 class Action(object):
@@ -41,21 +41,11 @@ class Action(object):
 
 CONNECT_TO_PERIPHERY_DELAY = 2.0
 
-def _addEventSwitchCtx(inviteType, currentType, ctx):
-    if inviteType is not None:
-        inviteToEvent = inviteType == PREBATTLE_TYPE.EVENT
-        inEvent = currentType in (PREBATTLE_TYPE.EVENT, QUEUE_TYPE.EVENT_BATTLES)
-        if inviteToEvent and inEvent:
-            ctx.addFlags(FUNCTIONAL_FLAG.LOAD_PAGE)
-    return
-
-
 class LeavePrbModalEntity(Action):
 
-    def __init__(self, inviteType=None):
+    def __init__(self):
         super(LeavePrbModalEntity, self).__init__()
         self._running = False
-        self._inviteType = inviteType
 
     def invoke(self):
         from gui.prb_control.dispatcher import g_prbLoader
@@ -66,7 +56,6 @@ class LeavePrbModalEntity(Action):
                 factory = dispatcher.getControlFactories().get(state.ctrlTypeID)
                 if factory:
                     ctx = factory.createLeaveCtx(flags=FUNCTIONAL_FLAG.SWITCH)
-                    _addEventSwitchCtx(self._inviteType, state.entityTypeID, ctx)
                     if ctx:
                         self._running = True
                         self.__doLeave(dispatcher, ctx)
@@ -93,10 +82,9 @@ class LeavePrbModalEntity(Action):
 
 class LeavePrbEntity(Action):
 
-    def __init__(self, inviteType=None):
+    def __init__(self):
         super(LeavePrbEntity, self).__init__()
         self._running = False
-        self._inviteType = inviteType
 
     def invoke(self):
         from gui.prb_control.dispatcher import g_prbLoader
@@ -106,7 +94,6 @@ class LeavePrbEntity(Action):
             factory = dispatcher.getControlFactories().get(state.ctrlTypeID)
             if factory:
                 ctx = factory.createLeaveCtx(flags=FUNCTIONAL_FLAG.SWITCH)
-                _addEventSwitchCtx(self._inviteType, state.entityTypeID, ctx)
                 if ctx:
                     self._running = True
                     self.__doLeave(dispatcher, ctx)

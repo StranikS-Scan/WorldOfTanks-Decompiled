@@ -20,7 +20,7 @@ from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
 class VehicleGunRotator(object):
     __INSUFFICIENT_TIME_DIFF = 0.02
     __MAX_TIME_DIFF = 0.2
-    __ANGLE_EPS = 1e-06
+    ANGLE_EPS = 1e-06
     __ROTATION_TICK_LENGTH = SERVER_TICK_LENGTH
     __AIMING_PERFECTION_DELAY = 1.0
     __AIMING_PERFECTION_RANGE = math.radians(5.0)
@@ -49,8 +49,8 @@ class VehicleGunRotator(object):
         self.__showServerMarker = False
         self.__time = None
         self.__timerID = None
-        self.__turretMatrixAnimator = _MatrixAnimator(self._avatar)
-        self.__gunMatrixAnimator = _MatrixAnimator(self._avatar)
+        self.__turretMatrixAnimator = MatrixAnimator()
+        self.__gunMatrixAnimator = MatrixAnimator()
         self.__isLocked = False
         self.estimatedTurretRotationTime = 0
         self.__aimingPerfectionStartTime = None
@@ -60,8 +60,8 @@ class VehicleGunRotator(object):
 
     def destroy(self):
         self.stop()
-        self.__turretMatrixAnimator.destroy(self._avatar)
-        self.__gunMatrixAnimator.destroy(self._avatar)
+        self.__turretMatrixAnimator.destroy()
+        self.__gunMatrixAnimator.destroy()
         self._avatar = None
         self.__shotPointSourceFunctor = None
         return
@@ -441,7 +441,7 @@ class VehicleGunRotator(object):
             turretYaw = replayCtrl.getTurretYaw()
             if turretYaw > -100000:
                 return turretYaw
-        if math.fabs(curAngle - shotAngle) < VehicleGunRotator.__ANGLE_EPS:
+        if math.fabs(curAngle - shotAngle) < VehicleGunRotator.ANGLE_EPS:
             return curAngle
         else:
             shortWayDiff, longWayDiff = self.__getRotationWays(curAngle, shotAngle)
@@ -524,7 +524,7 @@ class VehicleGunRotator(object):
             descr = self._avatar.getVehicleDescriptor()
             speedLimit = descr.gun.rotationSpeed * timeDiff
         else:
-            if math.fabs(curAngle - shotAngle) < VehicleGunRotator.__ANGLE_EPS:
+            if math.fabs(curAngle - shotAngle) < VehicleGunRotator.ANGLE_EPS:
                 if angleLimits is not None:
                     return math_utils.clamp(angleLimits[0], angleLimits[1], shotAngle)
                 return shotAngle
@@ -708,15 +708,15 @@ class VehicleGunRotator(object):
         return self._avatar.vehicleTypeDescriptor.gun.staticTurretYaw
 
 
-class _MatrixAnimator(object):
+class MatrixAnimator(object):
 
-    def __init__(self, avatar):
+    def __init__(self):
         m = Math.Matrix()
         m.setIdentity()
         self.__animMat = Math.MatrixAnimation()
         self.__animMat.keyframes = ((0.0, m),)
 
-    def destroy(self, avatar):
+    def destroy(self):
         self.__animMat = None
         return
 

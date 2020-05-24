@@ -21,24 +21,25 @@ def _generateKey(url):
 
 class WebExternalCache(IWebExternalCache):
 
-    def __init__(self, cacheName):
+    def __init__(self, cacheName, workersLimit=_WORKERS_LIMIT):
         self.__cache = {}
-        self.__prefetchCnt = 0
-        self.__downloadedCnt = 0
-        self.__notDownloadedCnt = 0
-        self.__downloadedSize = 0
-        self.__storedCnt = 0
-        self.__notStoredCnt = 0
-        self.__startTime = 0
-        self.__downloader = WebDownloader(_WORKERS_LIMIT)
-        _logger.info('WebDownloader created. Workers: %r', _WORKERS_LIMIT)
-        self.__storage = ApplicationStorage(cacheName, _WORKERS_LIMIT)
-        _logger.info('WebStorage created. Name: %s Workers: %r', cacheName, _WORKERS_LIMIT)
+        self._prefetchCnt = 0
+        self._downloadedCnt = 0
+        self._notDownloadedCnt = 0
+        self._downloadedSize = 0
+        self._storedCnt = 0
+        self._notStoredCnt = 0
+        self._startTime = 0
+        self.__downloader = WebDownloader(workersLimit)
+        _logger.info('WebDownloader created. Workers: %r', workersLimit)
+        self.__storage = ApplicationStorage(cacheName, workersLimit)
+        _logger.info('WebStorage created. Name: %s Workers: %r', cacheName, workersLimit)
 
     def close(self):
         self.__cache = {}
         self.__closeDownloader()
-        self.__storage.close()
+        if self.__storage:
+            self.__storage.close()
         self.__storage = None
         _logger.info('WebStorage destroyed')
         return
@@ -49,6 +50,10 @@ class WebExternalCache(IWebExternalCache):
             self.__downloader = None
             _logger.info('WebDownloader destroyed')
         return
+
+    @property
+    def rootDirPath(self):
+        return self.__storage.rootDirPath
 
     def load(self):
         loaded = self.__storage.load()
@@ -66,7 +71,7 @@ class WebExternalCache(IWebExternalCache):
         return None
 
     def prefetchStart(self, url):
-        self.__startTime = BigWorld.timeExact()
+        self._startTime = BigWorld.timeExact()
         _logger.info('Web prefetch started...')
         if url is not None:
             _logger.info('Download manifest file: %s', url)
@@ -78,10 +83,11 @@ class WebExternalCache(IWebExternalCache):
 
     def prefetchEnd(self):
         self.__closeDownloader()
-        self.__storage.stopWorker()
+        if self.__storage:
+            self.__storage.stopWorker()
         _logger.info('Web prefetch finished')
-        _logger.info('Summary: Downloaded: %r / %r. Stored: %r / %r. Size: %r', self.__downloadedCnt, self.__prefetchCnt, self.__storedCnt, self.__prefetchCnt, self.__downloadedSize)
-        delta = BigWorld.timeExact() - self.__startTime
+        _logger.info('Summary: Downloaded: %r / %r. Stored: %r / %r. Size: %r', self._downloadedCnt, self._prefetchCnt, self._storedCnt, self._prefetchCnt, self._downloadedSize)
+        delta = BigWorld.timeExact() - self._startTime
         _logger.info('Total prefetch time: %r', delta)
 
     def __onManifestLoaded(self, url, data):
@@ -129,41 +135,41 @@ class WebExternalCache(IWebExternalCache):
         except KeyError:
             LOG_CURRENT_EXCEPTION()
 
-        self.__prefetchCnt = len(filesToDownload)
-        if self.__prefetchCnt > 0:
-            _logger.info('There are %r new files in manifest', self.__prefetchCnt)
+        self._prefetchCnt = len(filesToDownload)
+        if self._prefetchCnt > 0:
+            _logger.info('There are %r new files in manifest', self._prefetchCnt)
             _logger.info('Start downloading...')
             for url, name in filesToDownload.iteritems():
-                self.__downloader.download(url, partial(self.__onResourceLoaded, name))
+                self.__downloader.download(url, partial(self._onResourceLoaded, name))
 
         else:
             _logger.info('There are no new files in manifest')
             self.prefetchEnd()
 
-    def __onResourceLoaded(self, appName, url, data):
+    def _onResourceLoaded(self, appName, url, data):
         if data is not None:
             key = _generateKey(url)
             _logger.debug('Resource downloaded: %s size: %r', url, len(data))
-            self.__storage.addAppFile(appName, key, data, partial(self.__onResourceStored, url, key))
-            self.__downloadedCnt += 1
-            self.__downloadedSize += len(data)
+            self.__storage.addAppFile(appName, key, data, partial(self._onResourceStored, url, key))
+            self._downloadedCnt += 1
+            self._downloadedSize += len(data)
         else:
-            _logger.error('Resource download error: %s', url)
-            self.__notDownloadedCnt += 1
+            _logger.warning('Resource download error: %s', url)
+            self._notDownloadedCnt += 1
         self.__checkPrefetchEnd()
         return
 
-    def __onResourceStored(self, url, key, filename, stored):
+    def _onResourceStored(self, url, key, filename, stored):
         if stored:
             self.__cache[key] = filename
             _logger.debug('Resource: %s saved on disk as: %s', url, filename)
-            self.__storedCnt += 1
+            self._storedCnt += 1
         else:
             _logger.error('Resource: %s writing error as: %s', url, filename)
-            self.__notStoredCnt += 1
+            self._notStoredCnt += 1
         self.__checkPrefetchEnd()
 
     def __checkPrefetchEnd(self):
-        if self.__downloadedCnt + self.__notDownloadedCnt == self.__prefetchCnt:
-            if self.__storedCnt + self.__notStoredCnt + self.__notDownloadedCnt == self.__prefetchCnt:
+        if self._downloadedCnt + self._notDownloadedCnt == self._prefetchCnt:
+            if self._storedCnt + self._notStoredCnt + self._notDownloadedCnt == self._prefetchCnt:
                 self.prefetchEnd()

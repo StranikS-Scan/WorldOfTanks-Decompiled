@@ -2,21 +2,26 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/ammunition_panel.py
 import logging
 import typing
-import SoundGroups
+from account_helpers.AccountSettings import AccountSettings, BOOSTERS_FOR_CREDITS_SLOT_COUNTER
+from account_helpers.settings_core.settings_constants import OnceOnlyHints
+from constants import QUEUE_TYPE, PREBATTLE_TYPE, ROLE_TYPE
 from CurrentVehicle import g_currentVehicle
-from account_helpers.AccountSettings import AccountSettings
-from account_helpers.AccountSettings import BOOSTERS_FOR_CREDITS_SLOT_COUNTER
-from constants import QUEUE_TYPE, PREBATTLE_TYPE
 from gui import makeHtmlString
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.customization.shared import getEditableStylesExtraNotificationCounter, getItemTypesAvailableForVehicle
 from gui.Scaleform.daapi.view.lobby.shared.fitting_slot_vo import HangarFittingSlotVO
 from gui.Scaleform.daapi.view.meta.AmmunitionPanelMeta import AmmunitionPanelMeta
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.prb_control.entities.listener import IGlobalListener
+from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.shared import event_dispatcher as shared_events, g_eventBus
+from gui.shared.formatters.icons import roleActionsGroup
+from gui.shared.formatters import text_styles
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import LoadViewEvent, ItemRemovalByDemountKitEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
@@ -26,8 +31,12 @@ from gui.shared.gui_items.vehicle_equipment import BATTLE_BOOSTER_LAYOUT_SIZE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import i18n, dependency, int2roman
 from items.vehicles import NUM_OPTIONAL_DEVICE_SLOTS
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
+from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.shared import IItemsCache
+from gui.customization.shared import isVehicleCanBeCustomized
+import SoundGroups
 if typing.TYPE_CHECKING:
     from typing import List, Tuple, Optional
     from gui.Scaleform.daapi.view.lobby.shared.fitting_slot_vo import FittingSlotVO
@@ -57,7 +66,7 @@ def getFittingSlotsData(vehicle, slotsRange, voClass=None):
 
         if slotType in _BOOSTERS_SLOTS:
             for slotId in xrange(BATTLE_BOOSTER_LAYOUT_SIZE):
-                devices.append(voClass(modulesData[slotType], vehicle, slotType, slotId, tooltipType=TOOLTIPS_CONSTANTS.BATTLE_BOOSTER))
+                devices.append(voClass(modulesData[slotType], vehicle, slotType, slotId, tooltipType=TOOLTIPS_CONSTANTS.BATTLE_BOOSTER_BLOCK))
 
         if slotType in _ABILITY_SLOTS:
             for slotId, _ in enumerate(vehicle.equipment.battleAbilityConsumables.getIntCDs()):
@@ -102,8 +111,10 @@ def getAmmo(shells):
 
 class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     __slots__ = ('__hangarMessage', '__declaredItemRemovalByDKSlotIndex')
+    bootcampCtrl = dependency.descriptor(IBootcampController)
     itemsCache = dependency.descriptor(IItemsCache)
     service = dependency.descriptor(ICustomizationService)
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(AmmunitionPanel, self).__init__()
@@ -135,6 +146,9 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
         if itemCD is not None and int(itemCD) > 0:
             shared_events.showModuleInfo(itemCD, g_currentVehicle.item.descriptor)
         return
+
+    def onPrbEntitySwitched(self):
+        self._update()
 
     def _populate(self):
         super(AmmunitionPanel, self)._populate()
@@ -171,24 +185,37 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
                 rentAvailable = vehicle.isRentable and canBuyOrRent
             if msgLvl == Vehicle.VEHICLE_STATE_LEVEL.RENTABLE:
                 msgLvl = Vehicle.VEHICLE_STATE_LEVEL.INFO
+            msg, msgLvl = self.__applyGamemodeOverrides(statusId, i18n.makeString(msg), msgLvl)
+            msgString = ''
+            if statusId != Vehicle.VEHICLE_STATE.UNDAMAGED or msgLvl == Vehicle.VEHICLE_STATE_LEVEL.ACTIONS_GROUP:
+                msgString = makeHtmlString('html_templates:vehicleStatus', msgLvl, {'message': msg})
+            roleID = ROLE_TYPE.NOT_DEFINED
+            if msgLvl == Vehicle.VEHICLE_STATE_LEVEL.ACTIONS_GROUP:
+                roleID = vehicle.role
             self.__applyCustomizationNewCounter(vehicle)
             self.__applyBoosterNewCounter()
-            msgString = ''
-            if statusId != Vehicle.VEHICLE_STATE.UNDAMAGED:
-                msgString = makeHtmlString('html_templates:vehicleStatus', msgLvl, {'message': i18n.makeString(msg)})
             self.__updateDevices(vehicle)
             self.as_updateVehicleStatusS({'message': msgString,
              'rentAvailable': rentAvailable,
              'isElite': vehicle.isElite,
              'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
              'vehicleLevel': '{}'.format(int2roman(vehicle.level)),
-             'vehicleName': '{}'.format(vehicle.shortUserName)})
+             'vehicleName': '{}'.format(vehicle.shortUserName),
+             'actionGroupId': roleID})
 
     def __inventoryUpdateCallBack(self, *args):
         self.update()
 
     def __applyCustomizationNewCounter(self, vehicle):
-        counter = vehicle.getC11nItemsNoveltyCounter(self.itemsCache.items) if vehicle.isCustomizationEnabled() else 0
+        if vehicle.isCustomizationEnabled() and not self.bootcampCtrl.isInBootcamp():
+            availableItemTypes = getItemTypesAvailableForVehicle()
+            counter = vehicle.getC11nItemsNoveltyCounter(self.itemsCache.items, itemTypes=availableItemTypes)
+            progressiveItemsViewVisited = self.settingsCore.serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_PROGRESSION_VIEW_HINT)
+            if not progressiveItemsViewVisited and isVehicleCanBeCustomized(vehicle, GUI_ITEM_TYPE.PROJECTION_DECAL):
+                counter += 1
+            counter += getEditableStylesExtraNotificationCounter()
+        else:
+            counter = 0
         self.as_setCustomizationBtnCounterS(counter)
 
     def __applyBoosterNewCounter(self):
@@ -254,3 +281,20 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
         soundID = animData[1]
         self.as_showAnimationS(slotType, slotIndex, swfPath)
         SoundGroups.g_instance.playSound2D(soundID)
+
+    def __isRankedPrbActive(self):
+        return False if self.prbEntity is None else bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.RANKED)
+
+    def __applyGamemodeOverrides(self, statusId, msg, msgLvl):
+        return self.__applyRankedOverrides(statusId, msg, msgLvl) if self.__isRankedPrbActive() else (msg, msgLvl)
+
+    def __applyRankedOverrides(self, statusId, msg, msgLvl):
+        statusOverrideRes = R.strings.ranked_battles.currentVehicleStatus.dyn(statusId)
+        if statusOverrideRes:
+            msg = backport.text(statusOverrideRes())
+        isRole = statusId in (Vehicle.VEHICLE_STATE.UNDAMAGED, Vehicle.VEHICLE_STATE.ROTATION_GROUP_UNLOCKED)
+        if isRole and g_currentVehicle.item.actionsGroup:
+            actionsGroupLabel = g_currentVehicle.item.actionsGroupLabel
+            msg = text_styles.concatStylesToSingleLine(backport.text(R.strings.menu.roleExp.currentVehicleStatus()), ' ', roleActionsGroup(actionsGroupLabel), backport.text(R.strings.menu.roleExp.actionsGroup.dyn(actionsGroupLabel)()))
+            msgLvl = Vehicle.VEHICLE_STATE_LEVEL.ACTIONS_GROUP
+        return (msg, msgLvl)

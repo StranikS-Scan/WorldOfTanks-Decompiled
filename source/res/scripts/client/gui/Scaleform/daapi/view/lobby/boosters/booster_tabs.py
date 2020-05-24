@@ -206,7 +206,7 @@ class ShopBoostersTab(BoosterTab):
          'descriptionText': text_styles.main(booster.description),
          'addDescriptionText': booster.getExpiryDateStr(),
          'actionBtnLabel': _ms(MENU.BOOSTERSWINDOW_BOOSTERSTABLERENDERER_BUYBTNLABEL),
-         'tooltip': TOOLTIPS_CONSTANTS.BOOSTERS_SHOP,
+         'tooltip': TOOLTIPS_CONSTANTS.BOOSTER,
          'boosterSlotVO': _makeBoosterSlotVO(booster, DEFAULT_SHOP_COUNT),
          'priceText': text_styles.standard(MENU.SHOP_TABLE_BUYACTIONOR),
          'creditsPriceState': priceState,

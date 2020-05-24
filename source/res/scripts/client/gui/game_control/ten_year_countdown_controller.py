@@ -11,12 +11,9 @@ from gui.shared.utils.scheduled_notifications import PeriodicNotifier
 from helpers import dependency, time_utils
 from shared_utils import first
 from skeletons.gui.game_control import ITenYearsCountdownController
-from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from ten_year_countdown_config import EventBlockStates, FIRST_BLOCK_NUMBER, EVENT_BLOCKS_COUNT
 from gui.game_control.links import URLMacros
-from account_helpers.settings_core.settings_constants import GAME
-from skeletons.account_helpers.settings_core import ISettingsCore
 _logger = logging.getLogger(__name__)
 _EVENT_STATE_NAME = 'EventState'
 _EVENT_BLOCK_NAME = 'EventBlock'
@@ -111,14 +108,6 @@ class TenYearsCountdownController(ITenYearsCountdownController):
 
     def isEventInProgress(self):
         return self.__isEventActive and self.__currentBlock.state != EventBlockStates.NOT_STARTED and self.__currentBlock.state != EventBlockStates.FINISHED
-
-    def isHornSettingsEnabled(self):
-        gSettingsCore = dependency.instance(ISettingsCore)
-        return not bool(gSettingsCore.getSetting(GAME.DISABLE_EVENT_HORN))
-
-    def isHornEnabled(self):
-        lobbyContext = dependency.instance(ILobbyContext)
-        return self.isHornSettingsEnabled() and lobbyContext.getServerSettings().isHornEnabled()
 
     def __clear(self):
         self.__isEventActive = False

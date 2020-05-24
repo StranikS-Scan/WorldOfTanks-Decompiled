@@ -70,6 +70,7 @@ def getRankedMainSeasonOffItems():
 
 
 def getRankedMainSeasonOnHeader(season, itemID):
+    title = backport.text(R.strings.ranked_battles.rankedBattle.title())
     leftSideText = ''
     rightSideText = ''
     tooltip = TOOLTIPS_CONSTANTS.RANKED_CALENDAR_DAY_INFO
@@ -85,7 +86,7 @@ def getRankedMainSeasonOnHeader(season, itemID):
         else:
             leftSideText = backport.getTillTimeStringByRClass(timeDelta, R.strings.ranked_battles.rankedBattleMainView.date)
         rightSideText = backport.text(R.strings.ranked_battles.rankedBattleMainView.season(), season=season.getUserName())
-    return {'title': backport.text(R.strings.ranked_battles.rankedBattle.title()),
+    return {'title': title,
      'leftSideText': leftSideText,
      'rightSideText': rightSideText,
      'tooltip': tooltip}
@@ -97,7 +98,8 @@ def getRankedMainSeasonOffHeader(prevSeason, nextSeason, itemID):
     else:
         rightSideText = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonComplete(), season=prevSeason.getUserName())
         if nextSeason is not None:
-            rightSideText = text_styles.concatStylesToSingleLine(rightSideText, backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap(), newSeason=nextSeason.getUserName(), date=backport.getLongDateFormat(nextSeason.getStartDate())))
+            nextSeasonInfo = backport.text(R.strings.ranked_battles.rankedBattleMainView.seasonGap(), newSeason=nextSeason.getUserName(), date=backport.getLongDateFormat(nextSeason.getStartDate()))
+            rightSideText = text_styles.concatStylesToSingleLine(rightSideText, nextSeasonInfo)
     return {'title': backport.text(R.strings.ranked_battles.rankedBattle.title()),
      'leftSideText': '',
      'rightSideText': rightSideText,

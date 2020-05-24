@@ -15,7 +15,9 @@ from . import STATISTIC_SETTINGS
 __all__ = ('BootcampUILogger',)
 
 def isSPAAttributeExists():
-    if BattleReplay.isPlaying():
+    if not BigWorld.player():
+        return False
+    elif BattleReplay.isPlaying():
         return False
     elif STATISTIC_SETTINGS.TEST_MODE:
         return True

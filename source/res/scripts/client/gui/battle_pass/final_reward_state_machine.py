@@ -4,10 +4,10 @@ import logging
 import weakref
 import typing
 from battle_pass_common import BattlePassRewardReason
-from gui.impl.gen import R
 from gui.battle_pass.battle_pass_helpers import showVideo
-from gui.shared.event_dispatcher import showBattleVotingResultWindow, showBattlePassAwardsWindow
+from gui.impl.gen import R
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
+from gui.shared.event_dispatcher import showBattleVotingResultWindow, showBattlePassAwardsWindow
 from gui.shared.events import LobbySimpleEvent, BattlePassEvent
 if typing.TYPE_CHECKING:
     from skeletons.gui.game_control import IBattlePassController

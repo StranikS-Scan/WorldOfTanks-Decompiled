@@ -376,30 +376,6 @@
           <maxOffset>	0.07	</maxOffset>
         </group>
       </groundNodes>
-      <effects>
-        <lodDist>	MEDIUM	</lodDist>
-        <mud>	largeTankMud	</mud>
-      </effects>
-      <wwsoundPC>	treads_type_pc	</wwsoundPC>
-      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 1.07665 0.000000	</hullPosition>
-      <hitTester>
-        <collisionModelServer>	vehicles/russian/R18_SU-152/collision/Chassis.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/russian/R18_SU-152/collision_client/Chassis.model	</collisionModelClient>
-      </hitTester>
-      <topRightCarryingPoint>	1.29478 2.14571	</topRightCarryingPoint>
-      <maxClimbAngle>	25	</maxClimbAngle>
-      <navmeshGirth>	6.0	</navmeshGirth>
-      <AODecals>
-        <decal>
-          <transform>
-            <row0>	4.538050 0.000000 0.000000	</row0>
-            <row1>	0.000000 1.487750 0.000000	</row1>
-            <row2>	0.000000 0.000000 8.245700	</row2>
-            <row3>	0.000000 0.000000 0.000001	</row3>
-          </transform>
-        </decal>
-      </AODecals>
       <physicalTracks>
         <left>
           <segmentsCount>	97	</segmentsCount>
@@ -814,6 +790,30 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.07665 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R18_SU-152/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R18_SU-152/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.29478 2.14571	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.538050 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.487750 0.000000	</row1>
+            <row2>	0.000000 0.000000 8.245700	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
       <customization>
         <customizableVehicleAreas>
           <paint></paint>
@@ -942,36 +942,15 @@
       <chassis>
         <SU-152_mod_1944_IGR>
           <grounds>
-            <ground>
-              <medium>
-                <rollingFriction>	0.1127	</rollingFriction>
-              </medium>
-            </ground>
-            <sand>
-              <medium>
-                <rollingFriction>	0.1127	</rollingFriction>
-              </medium>
-            </sand>
-            <wood>
-              <medium>
-                <rollingFriction>	0.1127	</rollingFriction>
-              </medium>
-            </wood>
-            <snow>
-              <medium>
-                <rollingFriction>	0.1127	</rollingFriction>
-              </medium>
-            </snow>
-            <stone>
-              <medium>
-                <rollingFriction>	0.1127	</rollingFriction>
-              </medium>
-            </stone>
-            <metal>
-              <medium>
-                <rollingFriction>	0.1127	</rollingFriction>
-              </medium>
-            </metal>
+            <soft>
+              <rollingFriction>	0.18515	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.1127	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.08855	</rollingFriction>
+            </firm>
           </grounds>
         </SU-152_mod_1944_IGR>
       </chassis>

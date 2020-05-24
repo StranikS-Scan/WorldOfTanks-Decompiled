@@ -105,7 +105,7 @@ class _StatsListener(_Listener):
         self._page.invalidateUnlocks(unlocks)
 
     def __onServerSettingsChanged(self, diff):
-        if self.__lobbyContext.getServerSettings().isIngameDataChangedInDiff(diff, 'isEnabled'):
+        if self.__lobbyContext.getServerSettings().isShopDataChangedInDiff(diff, 'isEnabled'):
             self._onGoldUpdate(None)
         if CollectorVehicleConsts.CONFIG_NAME in diff:
             self._page.invalidateVehicleCollectorState()

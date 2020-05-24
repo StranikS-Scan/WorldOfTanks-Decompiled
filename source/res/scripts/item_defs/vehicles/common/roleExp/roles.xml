@@ -1,11 +1,11 @@
 <roles.xml>
   <Tank1>
-    <actionsGroup>	tank	</actionsGroup>
+    <actionsGroup>	tank1	</actionsGroup>
     <includeTags>	heavyTank	</includeTags>
     <excludeTags>	heavyTank1 heavyTank2	</excludeTags>
   </Tank1>
   <Tank2>
-    <actionsGroup>	tank	</actionsGroup>
+    <actionsGroup>	tank2	</actionsGroup>
     <includeTags>	heavyTank1	</includeTags>
   </Tank2>
   <FirstLineSupport1>
@@ -31,7 +31,7 @@
     <includeTags>	mediumTank1	</includeTags>
   </FireSupport1>
   <FireSupport2>
-    <actionsGroup>	fireSupport2	</actionsGroup>
+    <actionsGroup>	fireSupport1	</actionsGroup>
     <includeTags>	mediumTank2	</includeTags>
   </FireSupport2>
   <FirstLineSupport5>
@@ -40,7 +40,7 @@
     <excludeTags>	AT-SPG1 AT-SPG2	</excludeTags>
   </FirstLineSupport5>
   <Sniper>
-    <actionsGroup>	sniper	</actionsGroup>
+    <actionsGroup>	sniper1	</actionsGroup>
     <includeTags>	AT-SPG1	</includeTags>
   </Sniper>
   <Scout1>
@@ -53,7 +53,7 @@
     <includeTags>	wheeledVehicle	</includeTags>
   </Scout2>
   <SPG>
-    <actionsGroup>	SPG	</actionsGroup>
+    <actionsGroup>	SPG1	</actionsGroup>
     <includeTags>	SPG	</includeTags>
   </SPG>
   <HashSupport1>

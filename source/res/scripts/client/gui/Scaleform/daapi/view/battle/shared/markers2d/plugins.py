@@ -345,9 +345,6 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
             self._destroyMarker(marker.getMarkerID())
             marker.destroy()
 
-    def _getMarkerName(self):
-        return settings.MARKER_SYMBOL_NAME.VEHICLE_MARKER
-
     def __addMarkerToPool(self, vehicleID, vProxy=None):
         if vProxy is not None:
             matrixProvider = self._clazz.fetchMatrixProvider(vProxy)
@@ -355,7 +352,7 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
         else:
             matrixProvider = None
             active = False
-        markerID = self._createMarkerWithMatrix(self._getMarkerName(), matrixProvider=matrixProvider, active=active)
+        markerID = self._createMarkerWithMatrix(settings.MARKER_SYMBOL_NAME.VEHICLE_MARKER, matrixProvider=matrixProvider, active=active)
         marker = self._clazz(markerID, vehicleID, vProxy=vProxy, active=active)
         marker.onVehicleModelChanged += self.__onVehicleModelChanged
         self._markers[vehicleID] = marker
@@ -382,8 +379,7 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
         else:
             squadIndex = 0
         hunting = VehicleActions.isHunting(vInfo.events)
-        vehicleName = nameParts.vehicleName if not vInfo.isEventBot else ''
-        self._invokeMarker(markerID, 'setVehicleInfo', vType.classTag, vType.iconPath, vehicleName, vType.level, nameParts.playerFullName, nameParts.playerName, nameParts.clanAbbrev, nameParts.regionCode, vType.maxHealth, guiProps.name(), hunting, squadIndex, i18n.makeString(INGAME_GUI.STUN_SECONDS))
+        self._invokeMarker(markerID, 'setVehicleInfo', vType.classTag, vType.iconPath, nameParts.vehicleName, vType.level, nameParts.playerFullName, nameParts.playerName, nameParts.clanAbbrev, nameParts.regionCode, vType.maxHealth, guiProps.name(), hunting, squadIndex, i18n.makeString(INGAME_GUI.STUN_SECONDS))
         self._invokeMarker(markerID, 'update')
 
     def __setupDynamic(self, marker, accountDBID=0):

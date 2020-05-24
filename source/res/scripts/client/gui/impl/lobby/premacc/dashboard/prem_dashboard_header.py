@@ -4,8 +4,6 @@ import typing
 import BigWorld
 from frameworks.wulf import ViewSettings
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import shouldOpenNewStorage
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.clans.clan_helpers import getStrongholdClanCardUrl
@@ -19,7 +17,7 @@ from gui.impl.gen.view_models.views.lobby.premacc.dashboard.prem_dashboard_heade
 from gui.impl.lobby.tooltips.clans import ClanShortInfoTooltipContent
 from gui.impl.pub import ViewImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
-from gui.shared import event_dispatcher, g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared import event_dispatcher
 from gui.shared.event_dispatcher import showStrongholds
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
@@ -189,10 +187,7 @@ class PremDashboardHeader(ViewImpl):
 
     @staticmethod
     def __onPersonalReserveClick(_):
-        if shouldOpenNewStorage():
-            event_dispatcher.showStorage(defaultSection=STORAGE_CONSTANTS.PERSONAL_RESERVES)
-        else:
-            g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOSTERS_WINDOW), EVENT_BUS_SCOPE.LOBBY)
+        event_dispatcher.showStorage(defaultSection=STORAGE_CONSTANTS.PERSONAL_RESERVES)
 
     @staticmethod
     def __onClanReserveClick(_):

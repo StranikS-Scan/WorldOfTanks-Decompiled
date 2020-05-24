@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/browser/web_handlers.py
-from gui.shared.event_dispatcher import showWebShop
+from gui.shared.event_dispatcher import showShop
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from web.web_client_api import webApiCollection
+from web.web_client_api.clans import ClansWebApi
 from web.web_client_api.request import RequestWebApi
 from web.web_client_api.sound import SoundWebApi, HangarSoundWebApi
 from web.web_client_api.shop import ShopWebApi
@@ -23,8 +24,8 @@ class _OpenTabWebApi(OpenTabWebApi):
         return self.__getReturnCallback(cmd.back_url)
 
     def __getReturnCallback(self, backUrl):
-        return (lambda : showWebShop(backUrl)) if backUrl is not None else None
+        return (lambda : showShop(backUrl)) if backUrl is not None else None
 
 
 def createShopWebHandlers():
-    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, _OpenTabWebApi, RequestWebApi, ShopWebApi, SoundWebApi, HangarSoundWebApi, UtilWebApi, FrontLineWebApi, HeroTankWebApi, BattlePassWebApi)
+    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, _OpenTabWebApi, RequestWebApi, ShopWebApi, SoundWebApi, HangarSoundWebApi, UtilWebApi, FrontLineWebApi, HeroTankWebApi, BattlePassWebApi, ClansWebApi)

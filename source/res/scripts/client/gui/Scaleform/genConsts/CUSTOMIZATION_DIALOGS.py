@@ -5,4 +5,3 @@
 class CUSTOMIZATION_DIALOGS(object):
     CUSTOMIZATION_INSTALL_BOUND_CHECK_NOTIFICATION = 'customization/install_bound/check'
     CUSTOMIZATION_INSTALL_BOUND_BASKET_NOTIFICATION = 'customization/install_bound/basket'
-    CUSTOMIZATION_INSTALL_BOUND_RIGHTCLICK_NOTIFICATION = 'customization/install_bound/right_click'

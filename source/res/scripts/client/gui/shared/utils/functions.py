@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/utils/functions.py
 import random
 import re
+import typing
 import ArenaType
 from adisp import async, process
 from debug_utils import LOG_DEBUG
@@ -13,6 +14,8 @@ from gui.shared.money import Currency, MONEY_UNDEFINED
 from helpers.i18n import makeString
 from ids_generators import SequenceIDGenerator
 from items import ITEM_TYPE_INDICES, vehicles as vehs_core
+if typing.TYPE_CHECKING:
+    from gui.impl.gen_utils import DynAccessor
 
 def rnd_choice(*args):
     args = list(args)
@@ -62,6 +65,10 @@ def stripExpAmountTags(descr):
 
 def stripShortDescr(descr):
     return re.sub('<shortDesc>(.*?)</shortDesc>', '', descr)
+
+
+def stripAllTags(descr):
+    return re.sub('{\\w+Open}|{\\w+Close}', '', descr)
 
 
 def makeTooltip(header=None, body=None, note=None, attention=None):
@@ -270,3 +277,13 @@ def replaceHyphenToUnderscore(text):
 def getVehTypeIconName(vType, isElite=False):
     vType = replaceHyphenToUnderscore(vType)
     return '{}_elite'.format(vType) if isElite else vType
+
+
+def getImageResourceFromPath(path):
+    path = path.replace('../', 'gui/')
+    path = path.rsplit('.', 1)[0]
+    resource = R.images
+    for pathItem in path.split('/'):
+        resource = resource.dyn(pathItem)
+
+    return resource

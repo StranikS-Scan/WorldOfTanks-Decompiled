@@ -16,6 +16,7 @@ from bootcamp.statistic.decorators import loggerTarget, loggerEntry, simpleLog
 from bootcamp.statistic.logging_constants import BC_LOG_ACTIONS, BC_LOG_KEYS, BC_AWARDS_MAP
 _SNDID_ACHIEVEMENT = 'result_screen_achievements'
 _SNDID_BONUS = 'result_screen_bonus'
+_AMBIENT_SOUND = 'bc_result_screen_ambient'
 
 @loggerTarget(logKey=BC_LOG_KEYS.BC_RESULT_SCREEN)
 class BCBattleResult(BCBattleResultMeta):
@@ -41,8 +42,23 @@ class BCBattleResult(BCBattleResultMeta):
     def onWindowClose(self):
         self.destroy()
 
+    def onFocusIn(self, alias):
+        if self.__music is None:
+            if self.alias == alias:
+                self.__music = SoundGroups.g_instance.getSound2D(_AMBIENT_SOUND)
+                self.__music.play()
+        elif self.alias != alias:
+            self.__music.stop()
+            self.__music = None
+        return
+
     def click(self):
         g_bootcampEvents.onResultScreenFinished()
+
+    def onVideoButtonClick(self):
+        g_bootcampEvents.onInterludeVideoStarted()
+        for sound in self.__awardSounds:
+            sound.stop()
 
     @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_BATTLE_RESULT_WINDOW, EVENT_BUS_SCOPE.LOBBY)
     def selectVehicle(self, inventoryId):
@@ -71,7 +87,9 @@ class BCBattleResult(BCBattleResultMeta):
     @loggerEntry
     def _populate(self):
         g_bootcampEvents.onResultScreenFinished += self.__onResultScreenFinished
-        self.__music = SoundGroups.g_instance.getSound2D('bc_result_screen_ambient')
+        g_bootcampEvents.onInterludeVideoStarted += self.__onInterludeVideoStarted
+        g_bootcampEvents.onInterludeVideoFinished += self.__onInterludeVideoFinished
+        self.__music = SoundGroups.g_instance.getSound2D(_AMBIENT_SOUND)
         if self.__music is not None:
             self.__music.play()
         super(BCBattleResult, self)._populate()
@@ -84,6 +102,8 @@ class BCBattleResult(BCBattleResultMeta):
     @simpleLog(action=BC_LOG_ACTIONS.CONTINUE_BUTTON_PRESSED)
     def _dispose(self):
         g_bootcampEvents.onResultScreenFinished -= self.__onResultScreenFinished
+        g_bootcampEvents.onInterludeVideoStarted -= self.__onInterludeVideoStarted
+        g_bootcampEvents.onInterludeVideoFinished -= self.__onInterludeVideoFinished
         for sound in self.__awardSounds:
             sound.stop()
 
@@ -103,3 +123,9 @@ class BCBattleResult(BCBattleResultMeta):
 
     def __onResultScreenFinished(self):
         self.destroy()
+
+    def __onInterludeVideoStarted(self):
+        self.onFocusIn(alias='')
+
+    def __onInterludeVideoFinished(self):
+        self.onFocusIn(alias=self.alias)

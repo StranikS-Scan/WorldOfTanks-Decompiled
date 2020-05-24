@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/items_parameters/comparator.py
 import collections
 import sys
+from constants import BonusTypes
 from gui.shared.items_parameters import params_cache
 from gui.shared.utils import WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, DUAL_GUN_CHARGE_TIME
 _BACKWARD_QUALITY_PARAMS = ['aimingTime',
@@ -79,6 +80,9 @@ class VehiclesComparator(ItemsComparator):
         self.__bonuses = bonuses or set()
         self.__penalties = penalties or dict()
 
+    def hasBonusOfType(self, bnsType):
+        return any((i == bnsType for _, i in self.__bonuses))
+
     def _getPenaltiesAndBonuses(self, paramName):
         penalties = self.__penalties.get(paramName, [])
         allPossibleParamBonuses = self.__getPossibleParamBonuses(paramName)
@@ -93,7 +97,7 @@ class VehiclesComparator(ItemsComparator):
         paramBonuses = set(params_cache.g_paramsCache.getBonuses().get(paramName, []))
         allPossibleParamBonuses = set()
         for bonusName, bonusGroup in paramBonuses:
-            if (bonusName, bonusGroup) in self.__suitableArtefacts or bonusGroup in ('skill', 'role', 'extra'):
+            if (bonusName, bonusGroup) in self.__suitableArtefacts or bonusGroup in BonusTypes.POSSIBLE:
                 allPossibleParamBonuses.add((bonusName, bonusGroup))
 
         return allPossibleParamBonuses
@@ -129,36 +133,36 @@ class _ParameterInfo(collections.namedtuple('_ParamInfo', ('name', 'value', 'sta
         return
 
 
-CONDITIONAL_BONUSES = {'invisibilityMovingFactor': (('camouflage', 'skill'), [('brotherhood', 'skill'),
-                               ('chocolate', 'equipment'),
-                               ('cocacola', 'equipment'),
-                               ('ration', 'equipment'),
-                               ('hotCoffee', 'equipment'),
-                               ('ration_china', 'equipment'),
-                               ('ration_uk', 'equipment'),
-                               ('ration_japan', 'equipment'),
-                               ('ration_czech', 'equipment'),
-                               ('ration_poland', 'equipment'),
-                               ('ration_italy', 'equipment'),
-                               ('improvedVentilation_class1', 'optionalDevice'),
-                               ('improvedVentilation_class2', 'optionalDevice'),
-                               ('improvedVentilation_class3', 'optionalDevice'),
-                               ('deluxImprovedVentilation', 'optionalDevice')]),
- 'invisibilityStillFactor': (('camouflage', 'skill'), [('brotherhood', 'skill'),
-                              ('chocolate', 'equipment'),
-                              ('cocacola', 'equipment'),
-                              ('ration', 'equipment'),
-                              ('hotCoffee', 'equipment'),
-                              ('ration_china', 'equipment'),
-                              ('ration_uk', 'equipment'),
-                              ('ration_japan', 'equipment'),
-                              ('ration_czech', 'equipment'),
-                              ('ration_poland', 'equipment'),
-                              ('ration_italy', 'equipment'),
-                              ('improvedVentilation_class1', 'optionalDevice'),
-                              ('improvedVentilation_class2', 'optionalDevice'),
-                              ('improvedVentilation_class3', 'optionalDevice'),
-                              ('deluxImprovedVentilation', 'optionalDevice')])}
+CONDITIONAL_BONUSES = {'invisibilityMovingFactor': (('camouflage', BonusTypes.SKILL), [('brotherhood', BonusTypes.SKILL),
+                               ('chocolate', BonusTypes.EQUIPMENT),
+                               ('cocacola', BonusTypes.EQUIPMENT),
+                               ('ration', BonusTypes.EQUIPMENT),
+                               ('hotCoffee', BonusTypes.EQUIPMENT),
+                               ('ration_china', BonusTypes.EQUIPMENT),
+                               ('ration_uk', BonusTypes.EQUIPMENT),
+                               ('ration_japan', BonusTypes.EQUIPMENT),
+                               ('ration_czech', BonusTypes.EQUIPMENT),
+                               ('ration_poland', BonusTypes.EQUIPMENT),
+                               ('ration_italy', BonusTypes.EQUIPMENT),
+                               ('improvedVentilation_class1', BonusTypes.OPTIONAL_DEVICE),
+                               ('improvedVentilation_class2', BonusTypes.OPTIONAL_DEVICE),
+                               ('improvedVentilation_class3', BonusTypes.OPTIONAL_DEVICE),
+                               ('deluxImprovedVentilation', BonusTypes.OPTIONAL_DEVICE)]),
+ 'invisibilityStillFactor': (('camouflage', BonusTypes.SKILL), [('brotherhood', BonusTypes.SKILL),
+                              ('chocolate', BonusTypes.EQUIPMENT),
+                              ('cocacola', BonusTypes.EQUIPMENT),
+                              ('ration', BonusTypes.EQUIPMENT),
+                              ('hotCoffee', BonusTypes.EQUIPMENT),
+                              ('ration_china', BonusTypes.EQUIPMENT),
+                              ('ration_uk', BonusTypes.EQUIPMENT),
+                              ('ration_japan', BonusTypes.EQUIPMENT),
+                              ('ration_czech', BonusTypes.EQUIPMENT),
+                              ('ration_poland', BonusTypes.EQUIPMENT),
+                              ('ration_italy', BonusTypes.EQUIPMENT),
+                              ('improvedVentilation_class1', BonusTypes.OPTIONAL_DEVICE),
+                              ('improvedVentilation_class2', BonusTypes.OPTIONAL_DEVICE),
+                              ('improvedVentilation_class3', BonusTypes.OPTIONAL_DEVICE),
+                              ('deluxImprovedVentilation', BonusTypes.OPTIONAL_DEVICE)])}
 
 def _getComparableValue(currentValue, comparableList, idx):
     return comparableList[idx] if len(comparableList) > idx else currentValue

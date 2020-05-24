@@ -191,10 +191,6 @@ class HangarSpace(IHangarSpace):
     def isModelLoaded(self):
         return self.__isModelLoaded
 
-    @property
-    def sequenceManager(self):
-        return self.__space.sequenceManager
-
     def spaceLoading(self):
         return self.__space.spaceLoading() if self.__space is not None else False
 

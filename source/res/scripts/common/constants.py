@@ -1,11 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/constants.py
-import re
-from enum import Enum
-from enum import IntEnum
 from math import cos, radians
 from time import time as timestamp
-from enumerations import Enumeration, AttributeEnumItem
 try:
     import BigWorld
 except ImportError:
@@ -21,7 +17,7 @@ IS_CELLAPP = BigWorld.component == 'cell'
 IS_BASEAPP = BigWorld.component in ('base', 'service')
 IS_WEB = BigWorld.component == 'web'
 IS_DYNAPDATER = False
-CURRENT_REALM = 'RU'
+CURRENT_REALM = 'CT'
 DEFAULT_LANGUAGE = 'ru'
 AUTH_REALM = 'RU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
@@ -175,7 +171,6 @@ class ARENA_GUI_TYPE:
     EPIC_RANDOM_TRAINING = 20
     EPIC_BATTLE = 21
     EPIC_TRAINING = 22
-    BOB = 23
     RANGE = (UNKNOWN,
      RANDOM,
      TRAINING,
@@ -194,8 +189,8 @@ class ARENA_GUI_TYPE:
      EPIC_RANDOM,
      EPIC_RANDOM_TRAINING,
      EPIC_BATTLE,
-     EPIC_TRAINING,
-     BOB)
+     EPIC_TRAINING)
+    RANDOM_RANGE = (RANDOM, EPIC_RANDOM)
     SANDBOX_RANGE = (SANDBOX, RATED_SANDBOX)
     FALLOUT_RANGE = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
     EPIC_RANGE = (EPIC_BATTLE, EPIC_TRAINING)
@@ -219,8 +214,7 @@ class ARENA_GUI_TYPE_LABEL:
      ARENA_GUI_TYPE.EPIC_RANDOM: 'epic_random',
      ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING: 'epic_random_training',
      ARENA_GUI_TYPE.EPIC_BATTLE: 'epicbattle',
-     ARENA_GUI_TYPE.EPIC_TRAINING: 'epicbattle',
-     ARENA_GUI_TYPE.BOB: 'bob'}
+     ARENA_GUI_TYPE.EPIC_TRAINING: 'epicbattle'}
 
 
 class ARENA_BONUS_TYPE:
@@ -249,7 +243,7 @@ class ARENA_BONUS_TYPE:
     EPIC_BATTLE = 27
     EPIC_BATTLE_TRAINING = 28
     TOURNAMENT_EVENT = 31
-    BOB = 32
+    EVENT_RANDOM = 33
     RANGE = (UNKNOWN,
      REGULAR,
      TRAINING,
@@ -275,7 +269,7 @@ class ARENA_BONUS_TYPE:
      EPIC_BATTLE,
      EPIC_BATTLE_TRAINING,
      TOURNAMENT_EVENT,
-     BOB)
+     EVENT_RANDOM)
     RANDOM_RANGE = (REGULAR, EPIC_RANDOM)
     SANDBOX_RANGE = (RATED_SANDBOX, SANDBOX)
     FALLOUT_RANGE = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
@@ -339,7 +333,6 @@ class ARENA_UPDATE:
     VIEW_POINTS = 26
     FOG_OF_WAR = 27
     VEHICLE_RECOVERED = 28
-    RADAR_INFO_RECEIVED = 29
 
 
 class ARENA_SYNC_OBJECTS:
@@ -350,7 +343,6 @@ class ARENA_SYNC_OBJECTS:
     SECTOR = 5
     OVERTIME = 6
     SMOKE = 7
-    GAME_EVENT = 8
 
 
 ARENA_SYNC_OBJECT_NAMES = dict([ (v, k) for k, v in ARENA_SYNC_OBJECTS.__dict__.iteritems() if not k.startswith('_') ])
@@ -372,8 +364,6 @@ class JOIN_FAILURE:
     WRONG_PERIPHERY_ID = 15
     WRONG_VEHICLE_LVL = 16
     QUEUE_FULL = 17
-    NOT_ENOUGH_ENERGY = 18
-    GENERAL_NOT_SUPPORTED = 19
 
 
 JOIN_FAILURE_NAMES = dict([ (v, k) for k, v in JOIN_FAILURE.__dict__.iteritems() if not k.startswith('_') ])
@@ -435,7 +425,6 @@ class PREBATTLE_TYPE:
     E_SPORT_COMMON = 14
     EPIC = 15
     EPIC_TRAINING = 16
-    BOB = 17
     RANGE = (SQUAD,
      TRAINING,
      COMPANY,
@@ -448,8 +437,7 @@ class PREBATTLE_TYPE:
      STRONGHOLD,
      E_SPORT_COMMON,
      EPIC,
-     EPIC_TRAINING,
-     BOB)
+     EPIC_TRAINING)
     LEGACY_PREBATTLES = (TRAINING,
      TOURNAMENT,
      CLAN,
@@ -457,8 +445,7 @@ class PREBATTLE_TYPE:
     SQUAD_PREBATTLES = (SQUAD,
      FALLOUT,
      EVENT,
-     EPIC,
-     BOB)
+     EPIC)
     UNIT_MGR_PREBATTLES = (UNIT,
      SQUAD,
      CLAN,
@@ -466,27 +453,21 @@ class PREBATTLE_TYPE:
      EVENT,
      STRONGHOLD,
      E_SPORT_COMMON,
-     EPIC,
-     BOB)
+     EPIC)
     CREATE_FROM_CLIENT = (UNIT,
      SQUAD,
      EPIC,
      FALLOUT,
-     EVENT,
-     BOB)
+     EVENT)
     CREATE_FROM_WEB = (UNIT, SQUAD, STRONGHOLD)
     TRAININGS = (TRAINING, EPIC_TRAINING)
     EXTERNAL_PREBATTLES = (STRONGHOLD, TOURNAMENT)
     CREATE_EX_FROM_SERVER = (SQUAD,
      CLAN,
      EPIC,
-     EVENT,
-     BOB)
+     EVENT)
     CREATE_EX_FROM_WEB = (SQUAD, CLAN)
-    JOIN_EX = (SQUAD,
-     EPIC,
-     EVENT,
-     BOB)
+    JOIN_EX = (SQUAD, EPIC, EVENT)
     EPIC_PREBATTLES = (EPIC, EPIC_TRAINING)
     REMOVED = (COMPANY, CLUBS)
 
@@ -686,6 +667,7 @@ class ACCOUNT_ATTR:
     PAYMENTS = 4096
     OUT_OF_SESSION_WALLET = 8192
     EXCLUDED_FROM_FAIRPLAY = 16384
+    BATTLE_TYPE_CHANGE = 32768
     DAILY_BONUS_1 = 2097152
     DAILY_BONUS_2 = 4194304
     ALPHA = 536870912
@@ -781,10 +763,11 @@ class SPA_ATTRS:
     GOLFISH_BONUS_APPLIED = '/common/goldfish_bonus_applied/'
     BOOTCAMP_DISABLED = '/wot/game/bootcamp_disabled/'
     LOGGING_ENABLED = '/wot/game/logging_enabled/'
+    BOOTCAMP_VIDEO_DISABLED = '/wot/game/bc_video_disabled/'
 
     @staticmethod
     def toClientAttrs():
-        return [SPA_ATTRS.LOGGING_ENABLED, SPA_ATTRS.BOOTCAMP_DISABLED]
+        return [SPA_ATTRS.LOGGING_ENABLED, SPA_ATTRS.BOOTCAMP_DISABLED, SPA_ATTRS.BOOTCAMP_VIDEO_DISABLED]
 
 
 class CLAN_MEMBER_FLAGS(object):
@@ -954,11 +937,6 @@ class ATTACK_REASON(object):
     RECOVERY = 'recovery'
     ARTILLERY_EQ = 'artillery_eq'
     BOMBER_EQ = 'bomber_eq'
-    MINEFIELD_EQ = 'minefield_eq'
-    EVENT_BOMBER_EXPLOSION = 'event_bomber_explosion'
-    EVENT_DEATH_ON_PHASE_CHANGE = 'event_death_on_phase_change'
-    EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC = 'event_death_on_phase_change_full_sc'
-    PERSONAL_DEATH_ZONE = 'personal_death_zone'
     NONE = 'none'
 
     @classmethod
@@ -981,12 +959,7 @@ ATTACK_REASONS = (ATTACK_REASON.SHOT,
  ATTACK_REASON.RECOVERY,
  ATTACK_REASON.ARTILLERY_EQ,
  ATTACK_REASON.BOMBER_EQ,
- ATTACK_REASON.MINEFIELD_EQ,
- ATTACK_REASON.EVENT_BOMBER_EXPLOSION,
- ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE,
- ATTACK_REASON.EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC,
- ATTACK_REASON.NONE,
- ATTACK_REASON.PERSONAL_DEATH_ZONE)
+ ATTACK_REASON.NONE)
 ATTACK_REASON_INDICES = dict(((value, index) for index, value in enumerate(ATTACK_REASONS)))
 DEATH_REASON_ALIVE = -1
 
@@ -1002,7 +975,8 @@ class VEHICLE_HIT_EFFECT:
     ARMOR_PIERCED_NO_DAMAGE = 3
     ARMOR_PIERCED = 4
     CRITICAL_HIT = 5
-    MAX_CODE = CRITICAL_HIT
+    ARMOR_PIERCED_DEVICE_DAMAGED = 6
+    MAX_CODE = ARMOR_PIERCED_DEVICE_DAMAGED
     RICOCHETS = (INTERMEDIATE_RICOCHET, FINAL_RICOCHET)
 
 
@@ -1035,7 +1009,7 @@ class VEHICLE_HIT_FLAGS:
     IS_ANY_PIERCING_MASK = IS_ANY_DAMAGE_MASK | ARMOR_WITH_ZERO_DF_PIERCED_BY_PROJECTILE | ARMOR_WITH_ZERO_DF_PIERCED_BY_EXPLOSION
 
 
-DAMAGE_INFO_CODES = ('DEVICE_CRITICAL', 'DEVICE_DESTROYED', 'TANKMAN_HIT', 'FIRE', 'DEVICE_CRITICAL_AT_SHOT', 'DEVICE_DESTROYED_AT_SHOT', 'DEVICE_CRITICAL_AT_RAMMING', 'DEVICE_DESTROYED_AT_RAMMING', 'DEVICE_STARTED_FIRE_AT_SHOT', 'DEVICE_STARTED_FIRE_AT_RAMMING', 'TANKMAN_HIT_AT_SHOT', 'DEATH_FROM_DEVICE_EXPLOSION_AT_SHOT', 'DEVICE_CRITICAL_AT_SHOT_IN_PERSONAL_DEATH_ZONE', 'DEVICE_DESTROYED_AT_SHOT_IN_PERSONAL_DEATH_ZONE', 'DEVICE_CRITICAL_AT_FIRE', 'DEVICE_DESTROYED_AT_FIRE', 'DEVICE_CRITICAL_AT_WORLD_COLLISION', 'DEVICE_DESTROYED_AT_WORLD_COLLISION', 'DEVICE_CRITICAL_AT_DROWNING', 'DEVICE_DESTROYED_AT_DROWNING', 'DEVICE_REPAIRED_TO_CRITICAL', 'DEVICE_REPAIRED', 'TANKMAN_HIT_AT_WORLD_COLLISION', 'TANKMAN_HIT_AT_DROWNING', 'TANKMAN_RESTORED', 'DEATH_FROM_DEVICE_EXPLOSION_AT_FIRE', 'ENGINE_CRITICAL_AT_UNLIMITED_RPM', 'ENGINE_DESTROYED_AT_UNLIMITED_RPM', 'ENGINE_CRITICAL_AT_BURNOUT', 'ENGINE_DESTROYED_AT_BURNOUT', 'DEATH_FROM_SHOT', 'DEATH_FROM_INACTIVE_CREW_AT_SHOT', 'DEATH_FROM_RAMMING', 'DEATH_FROM_FIRE', 'DEATH_FROM_INACTIVE_CREW', 'DEATH_FROM_DROWNING', 'DEATH_FROM_WORLD_COLLISION', 'DEATH_FROM_INACTIVE_CREW_AT_WORLD_COLLISION', 'DEATH_FROM_DEATH_ZONE', 'DEATH_FROM_GAS_ATTACK', 'DEATH_FROM_OVERTURN', 'DEATH_FROM_ARTILLERY_PROTECTION', 'DEATH_FROM_ARTILLERY_SECTOR', 'DEATH_FROM_BOMBER', 'FIRE_STOPPED', 'DEATH_FROM_RECOVERY', 'EVENT_DEATH_ON_PHASE_CHANGE', 'EVENT_DEATH_ON_PHASE_CHANGE_FULL_SC')
+DAMAGE_INFO_CODES = ('DEVICE_CRITICAL', 'DEVICE_DESTROYED', 'TANKMAN_HIT', 'FIRE', 'DEVICE_CRITICAL_AT_SHOT', 'DEVICE_DESTROYED_AT_SHOT', 'DEVICE_CRITICAL_AT_RAMMING', 'DEVICE_DESTROYED_AT_RAMMING', 'DEVICE_STARTED_FIRE_AT_SHOT', 'DEVICE_STARTED_FIRE_AT_RAMMING', 'TANKMAN_HIT_AT_SHOT', 'DEATH_FROM_DEVICE_EXPLOSION_AT_SHOT', 'DEVICE_CRITICAL_AT_FIRE', 'DEVICE_DESTROYED_AT_FIRE', 'DEVICE_CRITICAL_AT_WORLD_COLLISION', 'DEVICE_DESTROYED_AT_WORLD_COLLISION', 'DEVICE_CRITICAL_AT_DROWNING', 'DEVICE_DESTROYED_AT_DROWNING', 'DEVICE_REPAIRED_TO_CRITICAL', 'DEVICE_REPAIRED', 'TANKMAN_HIT_AT_WORLD_COLLISION', 'TANKMAN_HIT_AT_DROWNING', 'TANKMAN_RESTORED', 'DEATH_FROM_DEVICE_EXPLOSION_AT_FIRE', 'ENGINE_CRITICAL_AT_UNLIMITED_RPM', 'ENGINE_DESTROYED_AT_UNLIMITED_RPM', 'ENGINE_CRITICAL_AT_BURNOUT', 'ENGINE_DESTROYED_AT_BURNOUT', 'DEATH_FROM_SHOT', 'DEATH_FROM_INACTIVE_CREW_AT_SHOT', 'DEATH_FROM_RAMMING', 'DEATH_FROM_FIRE', 'DEATH_FROM_INACTIVE_CREW', 'DEATH_FROM_DROWNING', 'DEATH_FROM_WORLD_COLLISION', 'DEATH_FROM_INACTIVE_CREW_AT_WORLD_COLLISION', 'DEATH_FROM_DEATH_ZONE', 'DEATH_FROM_GAS_ATTACK', 'DEATH_FROM_OVERTURN', 'DEATH_FROM_ARTILLERY_PROTECTION', 'DEATH_FROM_ARTILLERY_SECTOR', 'DEATH_FROM_BOMBER', 'FIRE_STOPPED', 'DEATH_FROM_RECOVERY')
 
 class IGR_TYPE:
     NONE = 0
@@ -1059,7 +1033,8 @@ class EVENT_TYPE:
     ELEN_QUEST = 14
     HANGAR_QUEST = 15
     NT_QUEST = 16
-    LAST = 16
+    C11N_PROGRESSION = 17
+    LAST = 17
     NAME_TO_TYPE = {'battleQuest': BATTLE_QUEST,
      'tokenQuest': TOKEN_QUEST,
      'personalQuest': PERSONAL_QUEST,
@@ -1070,7 +1045,8 @@ class EVENT_TYPE:
      'rankedQuest': RANKED_QUEST,
      'elenQuest': ELEN_QUEST,
      'hangarQuest': HANGAR_QUEST,
-     'NTQuest': NT_QUEST}
+     'NTQuest': NT_QUEST,
+     'c11nProgression': C11N_PROGRESSION}
     TYPE_TO_NAME = dict(zip(NAME_TO_TYPE.values(), NAME_TO_TYPE.keys()))
     QUEST_RANGE = (BATTLE_QUEST,
      TOKEN_QUEST,
@@ -1137,8 +1113,11 @@ PERSONAL_MISSION_FREE_TOKENS_LIMIT = 21
 ENDLESS_TOKEN_TIME = 4104777660L
 LOOTBOX_TOKEN_PREFIX = 'lootBox:'
 TWITCH_TOKEN_PREFIX = 'token:twitch'
+RESOURCE_TOKEN_PREFIX = 'resource:'
+CURRENCY_TOKEN_PREFIX = 'currency:'
 PREMIUM_TOKEN_PREFIX = 'prem_acc'
 EPIC_ABILITY_PTS_NAME = 'abilityPts'
+OFFER_TOKEN_PREFIX = 'offer:'
 
 def personalMissionFreeTokenName(branch):
     return PERSONAL_MISSION_FREE_TOKEN_NAME if branch <= 1 else '_'.join([PERSONAL_MISSION_FREE_TOKEN_NAME, str(branch)])
@@ -1196,7 +1175,6 @@ class QUEUE_TYPE:
     BOOTCAMP = 18
     EPIC = 19
     TOURNAMENT_UNITS = 20
-    BOB = 21
     FALLOUT = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
     ALL = (RANDOMS,
      COMPANIES,
@@ -1214,8 +1192,7 @@ class QUEUE_TYPE:
      RANKED,
      BOOTCAMP,
      EPIC,
-     TOURNAMENT_UNITS,
-     BOB)
+     TOURNAMENT_UNITS)
     REMOVED = (COMPANIES,)
 
 
@@ -1298,12 +1275,10 @@ class GameSeasonType(object):
     NONE = 0
     RANKED = 1
     EPIC = 2
-    BOB = 3
 
 
 SEASON_TYPE_BY_NAME = {'ranked': GameSeasonType.RANKED,
- 'epic': GameSeasonType.EPIC,
- 'bob': GameSeasonType.BOB}
+ 'epic': GameSeasonType.EPIC}
 SEASON_NAME_BY_TYPE = {val:key for key, val in SEASON_TYPE_BY_NAME.iteritems()}
 CHANNEL_SEARCH_RESULTS_LIMIT = 50
 USER_SEARCH_RESULTS_LIMIT = 50
@@ -1410,10 +1385,12 @@ class REQUEST_COOLDOWN:
     BUY_BATTLE_PASS = 1.0
     BUY_BATTLE_PASS_LEVELS = 1.0
     BATTLE_PASS_VOTE = 2.0
-    CUSTOMIZATION_NOVELTY = 0.5
+    ABILITIES = 1.0
     CREW_BOOKS = 0.5
-    CHANGE_SELECTED_GENERAL = 1.0
-    BUY_EVENT_PACK = 1.0
+    CUSTOMIZATION_NOVELTY = 0.5
+    REPAIR_VEHICLE = 0.5
+    RECEIVE_OFFER_GIFT = 1.0
+    SET_OFFER_BANNER_SEEN = 0.3
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -1619,8 +1596,6 @@ class USER_SERVER_SETTINGS:
     LINKEDSET_QUESTS = 89
     QUESTS_PROGRESS = 90
     SESSION_STATS = 96
-    GAME_EVENT = 97
-    GAME_EVENT_HANGAR_VO = 99
     _ALL = (HIDE_MARKS_ON_GUN,
      EULA_VERSION,
      GAME_EXTENDED,
@@ -1722,13 +1697,9 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  USER_SERVER_SETTINGS.LINKEDSET_QUESTS: 'linkedset quests show reward info',
  USER_SERVER_SETTINGS.QUESTS_PROGRESS: 'feedback quests progress',
  91: 'Loot box last viewed count',
- 92: 'Battle of Bloggers carousel filter',
- 93: 'Battle of Bloggers carousel filter',
  USER_SERVER_SETTINGS.SESSION_STATS: 'sessiong statistics settings',
  97: 'BattlePass carouse filter 1',
- 98: 'Battle Pass Storage',
- USER_SERVER_SETTINGS.GAME_EVENT: 'game event',
- USER_SERVER_SETTINGS.GAME_EVENT_HANGAR_VO: 'game event hangar vo'}
+ 98: 'Battle Pass Storage'}
 
 class WG_GAMES:
     TANKS = 'wot'
@@ -1813,7 +1784,7 @@ class PREBATTLE_INVITE_STATUS:
 
 
 PREBATTLE_INVITE_STATUS_NAMES = dict([ (v, k) for k, v in PREBATTLE_INVITE_STATUS.__dict__.iteritems() if not k.startswith('_') ])
-FAIRPLAY_VIOLATIONS_NAMES = ('deserter', 'suicide', 'afk', 'event_deserter', 'event_afk')
+FAIRPLAY_VIOLATIONS_NAMES = ('deserter', 'suicide', 'afk')
 FAIRPLAY_VIOLATIONS_MASKS = dict([ (name, 1 << index) for index, name in enumerate(FAIRPLAY_VIOLATIONS_NAMES) ])
 
 class INVALID_CLIENT_STATS:
@@ -1839,6 +1810,9 @@ class CustomizationInvData(object):
     ITEMS = 1
     OUTFITS = 2
     NOVELTY_DATA = 3
+    DRESSED = 4
+    PROGRESSION = 5
+    OUTFITS_POOL = 6
 
 
 class SkinInvData(object):
@@ -1869,6 +1843,8 @@ class EVENT_CLIENT_DATA:
     ANNOUNCED_ACTION_DATA_REV = 24
     DAILY_QUESTS = 25
     DAILY_QUESTS_REV = 26
+    OFFER = 27
+    OFFER_REV = 28
     NUMBER_OF_ANNOUNCED_ACTIONS_STEPS = 1
 
     @staticmethod
@@ -1925,11 +1901,7 @@ class INVITATION_TYPE:
     SQUAD = PREBATTLE_TYPE.SQUAD
     EPIC = PREBATTLE_TYPE.EPIC
     EVENT = PREBATTLE_TYPE.EVENT
-    BOB = PREBATTLE_TYPE.BOB
-    RANGE = (SQUAD,
-     EVENT,
-     EPIC,
-     BOB)
+    RANGE = (SQUAD, EVENT, EPIC)
 
 
 class REPAIR_FLAGS:
@@ -2043,7 +2015,6 @@ class RESPAWN_TYPES:
     SHARED = 2
     LIMITED = 3
     EPIC = 4
-    EVENT_LIMITED = 5
 
 
 class VISIBILITY:
@@ -2255,6 +2226,7 @@ class CLIENT_COMMAND_SOURCES:
 EMPTY_GEOMETRY_ID = 0
 
 class ROLE_TYPE:
+    NOT_DEFINED = 0
     TANK_ONE = 1
     TANK_TWO = 2
     FIRST_LINE_SUPPORT_ONE = 3
@@ -2271,7 +2243,8 @@ class ROLE_TYPE:
     HASH_SUPPORT_ONE = 14
 
 
-ROLE_LABEL_TO_TYPE = {'Tank1': ROLE_TYPE.TANK_ONE,
+ROLE_LABEL_TO_TYPE = {'NotDefined': ROLE_TYPE.NOT_DEFINED,
+ 'Tank1': ROLE_TYPE.TANK_ONE,
  'Tank2': ROLE_TYPE.TANK_TWO,
  'FirstLineSupport1': ROLE_TYPE.FIRST_LINE_SUPPORT_ONE,
  'FirstLineSupport2': ROLE_TYPE.FIRST_LINE_SUPPORT_TWO,
@@ -2288,29 +2261,31 @@ ROLE_LABEL_TO_TYPE = {'Tank1': ROLE_TYPE.TANK_ONE,
 ROLE_TYPE_TO_LABEL = dict(((index, label) for label, index in ROLE_LABEL_TO_TYPE.items()))
 
 class ACTIONS_GROUP_TYPE:
-    TANK = 1
-    FIRST_LINE_SUPPORT_ONE = 2
-    FIRST_LINE_SUPPORT_TWO = 3
-    FIRE_SUPPORT_ONE = 4
-    FIRE_SUPPORT_TWO = 5
-    SNIPER = 6
-    SCOUT_ONE = 7
-    SPG = 8
-    HASH_SUPPORT_ONE = 9
-    SCOUT_TWO = 10
-    FIRST_LINE_SUPPORT_THREE = 11
+    NOT_DEFINED = 0
+    TANK_ONE = 1
+    TANK_TWO = 2
+    FIRST_LINE_SUPPORT_ONE = 3
+    FIRST_LINE_SUPPORT_TWO = 4
+    FIRST_LINE_SUPPORT_THREE = 5
+    FIRE_SUPPORT_ONE = 6
+    SNIPER_ONE = 7
+    SCOUT_ONE = 8
+    SCOUT_TWO = 9
+    SPG_ONE = 10
+    HASH_SUPPORT_ONE = 11
 
 
-ACTIONS_GROUP_LABEL_TO_TYPE = {'tank': ACTIONS_GROUP_TYPE.TANK,
+ACTIONS_GROUP_LABEL_TO_TYPE = {'notDefined': ACTIONS_GROUP_TYPE.NOT_DEFINED,
+ 'tank1': ACTIONS_GROUP_TYPE.TANK_ONE,
+ 'tank2': ACTIONS_GROUP_TYPE.TANK_TWO,
  'firstLineSupport1': ACTIONS_GROUP_TYPE.FIRST_LINE_SUPPORT_ONE,
  'firstLineSupport2': ACTIONS_GROUP_TYPE.FIRST_LINE_SUPPORT_TWO,
  'firstLineSupport3': ACTIONS_GROUP_TYPE.FIRST_LINE_SUPPORT_THREE,
  'fireSupport1': ACTIONS_GROUP_TYPE.FIRE_SUPPORT_ONE,
- 'fireSupport2': ACTIONS_GROUP_TYPE.FIRE_SUPPORT_TWO,
- 'sniper': ACTIONS_GROUP_TYPE.SNIPER,
+ 'sniper1': ACTIONS_GROUP_TYPE.SNIPER_ONE,
  'scout1': ACTIONS_GROUP_TYPE.SCOUT_ONE,
  'scout2': ACTIONS_GROUP_TYPE.SCOUT_TWO,
- 'SPG': ACTIONS_GROUP_TYPE.SPG,
+ 'SPG1': ACTIONS_GROUP_TYPE.SPG_ONE,
  'hashSupport1': ACTIONS_GROUP_TYPE.HASH_SUPPORT_ONE}
 ACTIONS_GROUP_TYPE_TO_LABEL = dict(((index, label) for label, index in ACTIONS_GROUP_LABEL_TO_TYPE.items()))
 
@@ -2342,6 +2317,7 @@ ACTION_LABEL_TO_TYPE = {'blockAndTakeDamage': ACTION_TYPE.BLOCK_AND_TAKE_DAMAGE,
  'doGroupStun': ACTION_TYPE.DO_GROUP_STUN,
  'doInvisAssist': ACTION_TYPE.DO_INVIS_ASSIST}
 ACTION_TYPE_TO_LABEL = dict(((index, label) for label, index in ACTION_LABEL_TO_TYPE.items()))
+ROLES_COLLAPSE = 'rolesSectionCollapsed'
 
 class ASSIST_TYPES(object):
     TRACK = 0
@@ -2375,6 +2351,12 @@ class MarathonConfig(object):
     URL = 'marathonUrl'
     REWARD_VEHICLE_URL = 'rewardVehicleUrl'
     FINISH_SALE_TIME = 'finishSaleTime'
+
+
+class ClansConfig(object):
+    SECTION_NAME = 'clans_config'
+    NOTIFICATION_ENABLED = 'isClanNotificationEnabled'
+    QUEST_URL = 'clanQuestUrl'
 
 
 SECONDS_IN_DAY = 86400
@@ -2443,244 +2425,22 @@ class OVERRIDEN_BADGE(object):
 
 DEFAULT_VECTOR_3 = (0.0, 0.0, 0.0)
 
-class EVENT:
-    PLAYERS_TEAM = 1
-    ENEMY_TEAM = 2
-    PLAYERS_COUNT = 5
-    DEFAULT_RESURRECT_HEAL_FACTOR = 0.7
-    INVALID_GENERAL_ID = -1
-    DISABLE_AI_BATTLE_RESULTS_SEND = True
-
-    class TRIGGER_TYPES(object):
-        TIME_INTERVAL = 'TimeInterval'
-        TIMER = 'Timer'
-        CIRCULAR_AREA_TRIGGER = 'CircularAreaAlly'
-        CIRCULAR_AREA_COUNTER = 'CircularAreaAllyCounter'
-        RECTANGULAR_AREA_TRIGGER = 'RectangularAreaAlly'
-        RECTANGULAR_AREA_COUNTER = 'RectangularAreaAllyCounter'
-        CONTROL_POINT_PROGRESS = 'EventControlPoint'
-        CIRCULAR_ENTITY_AREA_TRIGGER = 'CircularEntityAreaTrigger'
-
-    class LOG_TYPE:
-        VEHICLE_SPAWN = 'vehicleSpawn'
-        ENVIRONMENT_CHANGED = 'environmentChanged'
-        PICK_UP_SOULS = 'pickUpSouls'
-        VEHICLE_KILLED = 'vehicleKilled'
-        WAVE_STARTED = 'waveStarted'
-        EQUIPMENT_ACTIVATED = 'equipmentActivated'
-        DAMAGE_ENEMY = 'damageEnemy'
-        DEATHZONE_DAMAGE = 'deathzoneDamage'
-        TEAMMATE_LIVES_LEFT = 'teammateLivesLeft'
+class BonusTypes(object):
+    SKILL = 'skill'
+    ROLE = 'role'
+    EXTRA = 'extra'
+    PERK = 'perk'
+    OPTIONAL_DEVICE = 'optionalDevice'
+    EQUIPMENT = 'equipment'
+    BATTLE_BOOSTER = 'battleBooster'
+    POSSIBLE = (SKILL,
+     ROLE,
+     EXTRA,
+     PERK)
 
 
-class EVENT_SOULS_CHANGE_REASON:
-    NONE = 0
-    ADD = 1
-    DRAW_BY_COLLECTOR = 2
-    DRAW_BY_BOSS = 3
-    DEATH = 4
-
-
-class EVENT_BOT_ROLE:
-    BOSS = 'eventBigBossBot'
-    HUNTER = 'eventHunterBot'
-    BOMBER = 'eventBomberBot'
-    TURRET = 'eventTurretBot'
-    RUNNER = 'eventRunnerBot'
-    SENTRY = 'eventSentryBot'
-    ORDER = (BOSS,
-     HUNTER,
-     BOMBER,
-     TURRET,
-     RUNNER,
-     SENTRY)
-
-
-ECP_INDEXES = Enumeration('eventControlPointConfigs', ['light',
- 'capturing',
- 'circle',
- 'minimap',
- 'marker',
- 'soulCollector'])
-ECP_SWITCHES = Enumeration('eventControlPointSwitches', ['none', 'on', 'off'])
-ECP_EVENTS = Enumeration('eventControlPointEvents', ['none',
- 'onCall',
- 'onEnter',
- 'onCapture',
- 'onFullOfSouls'])
-ECP_CONFIG_INDEXES = Enumeration('eventControlPointConfigIndexes', ['switches', 'events', 'value'])
-ECP_HUD_INDEXES = Enumeration('ecpHUDIndexes', ['minimap', 'marker'])
-ECP_HUD_TOGGLES = Enumeration('ecpHUDToggles', ['off', 'on'])
-HE19_NO_ENERGY_TOKEN = 'he19_no_energy_{}'
-HE19_NO_ENERGY_TOKEN_PREFIX = 'he19_no_energy_'
-HE19_USE_ENERGY_TOKEN = 'he19_use_energy_{}'
-HE19_USE_ENERGY_TOKEN_PREFIX = 'he19_use_energy_'
-SE_ENERGY_TOKEN_ID = 'img:se_energy:webId'
-HE19_A100_T49_TOKEN_ID = 'img:he19_A100_T49_Halloween:webId'
-HE19_R40_T_54_TOKEN_ID = 'img:he19_R40_T_54_Halloween:webId'
-HE19_A100_T49_TOKEN_ID_COMPENSATION = 'he19_A100_T49_Halloween_compensation'
-HE19_R40_T_54_TOKEN_ID_COMPENSATION = 'he19_R40_T_54_Halloween_compensation'
-HE19_MISSION_ITEM_2_2_UNLOCK_TOKEN_ID = 'he19_mission_item_2_2_unlock'
-HE19_MISSION_ITEM_2_3_UNLOCK_TOKEN_ID = 'he19_mission_item_2_3_unlock'
-HE19_MISSION_ITEM_2_4_UNLOCK_TOKEN_ID = 'he19_mission_item_2_4_unlock'
-HE19_MISSION_ITEM_2_5_UNLOCK_TOKEN_ID = 'he19_mission_item_2_5_unlock'
-HE19_MISSION_ITEM_3_2_UNLOCK_TOKEN_ID = 'he19_mission_item_3_2_unlock'
-HE19_MISSION_ITEM_3_3_UNLOCK_TOKEN_ID = 'he19_mission_item_3_3_unlock'
-HE19_MISSION_ITEM_3_4_UNLOCK_TOKEN_ID = 'he19_mission_item_3_4_unlock'
-HE19_MISSION_ITEM_3_5_UNLOCK_TOKEN_ID = 'he19_mission_item_3_5_unlock'
-HE19_COMMANDER_TANKMAN_TOKEN_ID_PATTERN = re.compile('^img:he19_tankman_(?P<commanderID>[1-9][0-9]*):webId$')
-SE20_HERO_TANK_DISCOUNT_PREFIX = 'img:se20_tank_discount'
-SE20_HERO_TANK_DISCOUNT_PERCENT_PATTERN = re.compile('^img:se20_tank_discount(?P<percent>[1-9][0-9]*):webId$')
-SE20_USE_DEATH_ZONE_ON_MINI_MAP = 0
-EVENT_BATTLES_TAG = 'event_battles'
-SE20_DEFAULT_PATTERN = 'default'
-EVENT_GAME_PLAY_NAME = 'ctf'
-EVENT_DEF_WEIGHT_FOR_SPECIAL_MAP = 1000
-EVENT_DEFAULT_FRONT_ID = 1
-
-class EVENT_SYS_MESSEGES(object):
-    RECEIVE_HE19_MONEY = 'receiveHE19Money'
-
-
-class EVENT_MISSION_ICON_SIZES:
-    BIG = 'Big'
-    SMALL = 'Small'
-
-
-class EPIC_PERF_GROUP(object):
-    HIGH_RISK = 1
-    MEDIUM_RISK = 2
-    LOW_RISK = 3
-
-
-class EventPackTypes(Enum):
-    ENERGY_OF_GENERAL = 'se20_energy_general'
-    PROGRESSION_OF_GENERAL = 'se20_bought_general'
-    PROGRESSION_FOR_ALL_GENERALS = 'se20_general_bundle'
-    ENERGY = 'se20_energy_bundle'
-    REGULAR = 'se20'
-
-    @classmethod
-    def values(cls):
-        return cls.__members__.values()
-
-
-class EventPackGuiTypes(Enum):
-    BEGINNER = 'beginner'
-    SPECIALIST = 'specialist'
-    MASTER = 'master'
-    MEGA_PACK = 'megaPack'
-    EXCHANGE = 'exchange'
-
-
-GENERAL_ENERGY_MULTIPLIER_PATTERN = re.compile('_x(?P<multiplier>[0-9]*)')
-MULTIPLIER_GROUP = 'multiplier'
-GENERAL_ID_PATTERN = re.compile('general_(?P<generalID>[0-9]*)')
-GENERAL_ID_GROUP = 'generalID'
-ENERGY_EXCHANGE_PATTERN = re.compile('se20_energy_general_([0-9]*)_x15')
-ENERGY_TOKEN_PREFIX = 'img:se20_energy_general'
-TANK_DISCOUNT_TOKEN_PREFIX = 'img:se20_tank_discount'
-LONG_WAIT_QUEUE_TIME = 180
-
-class ConditionState(IntEnum):
-    NOT_STARTED = 0
-    STARTED = 1
-    STOPPED = 2
-
-
-class BaseScenarioFinishState(IntEnum):
-    FAILED = 0
-    SUCCESS = 1
-
-
-class ScenarioGoalState(IntEnum):
-    NOT_STARTED = 0
-    ACTIVE = 1
-    FINISHED = 2
-
-
-class ScenarioGoalGroupType(IntEnum):
-    MAIN = 0
-    SECONDARY = 1
-
-
-class ScenarioGoalFinishedState(IntEnum):
-    NONE = 0
-    FAILED = 1
-    SUCCESS = 2
-
-
-class ScenarioGoalType(IntEnum):
-    NONE = 0
-    SIMPLE_GOAL = 1
-    REMOTE_SCENARIO = 2
-    KILL_BOTS = 3
-    KILL_BOTS_FOR_TIME = 4
-    KILL_BOTS_FROM_WAVES = 5
-    KILL_BOTS_FROM_WAVES_FOR_TIME = 6
-
-
-class LobbyType(Enum):
-    REGULAR = 'regular'
-    EVENT = 'event'
-    TRAINING_ROOM = 'training_room'
-
-
-class EventHangarEnvironmentName(Enum):
-    RANDOM_PHASE_1 = 'main_war'
-    EVENT_PHASE_1 = 'diarama_war'
-    RANDOM_PHASE_2 = 'main_peace'
-    EVENT_PHASE_2 = 'diarama_peace'
-
-
-class EventBehaviorConst(Enum):
-    STUN_EFFECT_DURATION = 999999
-    DESTROYED_PREFIX = 'Destroyed'
-    SHOW_ENEMY_ROLE_MARKER = 'showEnemyRoleMarker'
-    RAGE = 'Rage'
-    PANIC = 'Panic'
-    DEFAULT = 'Default'
-
-
-class EventMarkerBlinkingParams(Enum):
-    BLINKING_DURATION_CUSTOM_MARKER = 10
-    BLINKING_DURATION_ARROW_MARKER = 5
-    BLINKING_SPEED_CUSTOM_MARKER_MS = 600
-    BLINKING_SPEED_ARROW_MARKER_MS = 1000
-
-
-class MarkerTypes(object):
-    DEFAULT = 'default'
-    AREA_BOSS = 'controlPointBoss'
-    POINT_A = 'CapturePointA'
-    POINT_B = 'CapturePointB'
-    POINT_C = 'CapturePointC'
-    POINT_A_GREEN = 'CapturePointAGreen'
-    POINT_B_GREEN = 'CapturePointBGreen'
-    POINT_C_GREEN = 'CapturePointCGreen'
-    COUNTER_ATTACK = 'CounterAttack'
-    COUNTER_ATTACK_RED = 'CounterAttackRed'
-    COUNTER_ATTACK_RECTANGLE = 'CounterAttackRectangle'
-    CAPTURE_BASE = 'CaptureBase'
-    OUR_BASE = 'OurBase'
-    EVENT_DEATHZONE = 'EventDeathZone'
-    ARROW = 'Arrow'
-    ARROW_BT = 'ArrowBT'
-    ARROW_TB = 'ArrowTB'
-    ONLY_MINI_MAP_MARKER_LIST = (POINT_A_GREEN,
-     POINT_B_GREEN,
-     POINT_C_GREEN,
-     ARROW,
-     ARROW_BT,
-     ARROW_TB)
-    NO_BLINKING_MARKER_LIST = (POINT_A_GREEN, POINT_B_GREEN, POINT_C_GREEN)
-    ARROW_MINI_MAP_MARKER_LIST = (ARROW, ARROW_BT, ARROW_TB)
-
-
-class QUEST_NOT_AVAILABLE_REASON(object):
-    IN_FUTURE = 'in_future'
-    OUT_OF_DATE = 'out_of_date'
-    INVALID_WEEKDAY = 'invalid_weekday'
-    INVALID_TIME_INTERVAL = 'invalid_time_interval'
-    REQUIREMENTS = 'requirements'
-    DAILY_COMPLETE = 'dailyComplete'
+class GF_RES_PROTOCOL(object):
+    IMG = 'img://'
+    CAMO = 'camo://'
+    PNUM = 'pnum://'
+    SWF = 'swf://'

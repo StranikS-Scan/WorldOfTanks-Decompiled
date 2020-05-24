@@ -1053,36 +1053,15 @@
       <chassis>
         <Chassis_A117_T26E5_Patriot>
           <grounds>
-            <ground>
-              <medium>
-                <rollingFriction>	0.140875	</rollingFriction>
-              </medium>
-            </ground>
-            <sand>
-              <medium>
-                <rollingFriction>	0.140875	</rollingFriction>
-              </medium>
-            </sand>
-            <wood>
-              <medium>
-                <rollingFriction>	0.140875	</rollingFriction>
-              </medium>
-            </wood>
-            <snow>
-              <medium>
-                <rollingFriction>	0.140875	</rollingFriction>
-              </medium>
-            </snow>
-            <stone>
-              <medium>
-                <rollingFriction>	0.140875	</rollingFriction>
-              </medium>
-            </stone>
-            <metal>
-              <medium>
-                <rollingFriction>	0.140875	</rollingFriction>
-              </medium>
-            </metal>
+            <soft>
+              <rollingFriction>	0.271688	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.140875	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.12075	</rollingFriction>
+            </firm>
           </grounds>
         </Chassis_A117_T26E5_Patriot>
       </chassis>

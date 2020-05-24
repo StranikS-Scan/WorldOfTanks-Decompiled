@@ -128,8 +128,6 @@
     <_37mm_M-6_L53_bootcamp>	64002	</_37mm_M-6_L53_bootcamp>
     <_37mm_M-5_bootcamp>	64003	</_37mm_M-5_bootcamp>
     <_75mm_Gun_M3_L37_bootcamp>	64004	</_75mm_Gun_M3_L37_bootcamp>
-    <_75mm_Gun_M3_L37_SE20_Gen_4_Lvl_2>	13	</_75mm_Gun_M3_L37_SE20_Gen_4_Lvl_2>
-    <_90mm_Gun_M3E_SE20_Gen_4_Lvl_3>	15	</_90mm_Gun_M3E_SE20_Gen_4_Lvl_3>
   </ids>
   <shared>
     <_12.7mm_MG_HB_M2>
@@ -7285,93 +7283,5 @@
         </_105mm_HE_M68M2>
       </shots>
     </_105mm_Gun_M68_IGR>
-    <_75mm_Gun_M3_L37_SE20_Gen_4_Lvl_2>
-      <userString>	#usa_vehicles:_75mm_Gun_M3_L37_SE20_Gen_4_Lvl_2	</userString>
-      <tags></tags>
-      <level>	4	</level>
-      <price>	30000	</price>
-      <impulse>	0.48	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.36	</amplitude>
-        <recoilEffect>	medium	</recoilEffect>
-      </recoil>
-      <effects>	shot_medium	</effects>
-      <reloadEffect>	reload50_75	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
-        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	40.25	</rotationSpeed>
-      <reloadTime>	3.80571428571429	</reloadTime>
-      <maxAmmo>	46	</maxAmmo>
-      <aimingTime>	2.05714285714286	</aimingTime>
-      <weight>	1437	</weight>
-      <maxHealth>	114	</maxHealth>
-      <maxRegenHealth>	57	</maxRegenHealth>
-      <repairCost>	5	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.457142857142857	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.16	</turretRotation>
-        <afterShot>	4.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_75mm_M61_SE20_Gen_4_Lvl_2>
-          <defaultPortion>	1.0	</defaultPortion>
-          <speed>	619	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	125 125	</piercingPower>
-        </_75mm_M61_SE20_Gen_4_Lvl_2>
-      </shots>
-      <notInShop>	True	</notInShop>
-    </_75mm_Gun_M3_L37_SE20_Gen_4_Lvl_2>
-    <_90mm_Gun_M3E_SE20_Gen_4_Lvl_3>
-      <userString>	#usa_vehicles:_90mm_Gun_M3E_SE20_Gen_4_Lvl_3	</userString>
-      <tags></tags>
-      <level>	7	</level>
-      <price>	81000	</price>
-      <notInShop>	true	</notInShop>
-      <impulse>	0.48	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.38	</amplitude>
-        <recoilEffect>	main	</recoilEffect>
-      </recoil>
-      <effects>	shot_main_mb	</effects>
-      <reloadEffect>	reload85_107	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
-        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	35.0	</rotationSpeed>
-      <reloadTime>	4.04	</reloadTime>
-      <maxAmmo>	50	</maxAmmo>
-      <aimingTime>	4.04	</aimingTime>
-      <weight>	975	</weight>
-      <maxHealth>	150	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.4	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.12	</turretRotation>
-        <afterShot>	3.5	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_90mm_AP_M82_late_SE20_Gen_4_Lvl_3>
-          <defaultPortion>	1.0	</defaultPortion>
-          <speed>	853	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	160 160	</piercingPower>
-        </_90mm_AP_M82_late_SE20_Gen_4_Lvl_3>
-      </shots>
-    </_90mm_Gun_M3E_SE20_Gen_4_Lvl_3>
   </shared>
 </guns.xml>

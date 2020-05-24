@@ -213,7 +213,7 @@
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
-      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.18826 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB13_FV215b/collision/Chassis.model	</collisionModelServer>
@@ -1218,36 +1218,15 @@
       <chassis>
         <Chassis_GB13_FV215b_IGR>
           <grounds>
-            <ground>
-              <medium>
-                <rollingFriction>	0.0966	</rollingFriction>
-              </medium>
-            </ground>
-            <sand>
-              <medium>
-                <rollingFriction>	0.0966	</rollingFriction>
-              </medium>
-            </sand>
-            <wood>
-              <medium>
-                <rollingFriction>	0.0966	</rollingFriction>
-              </medium>
-            </wood>
-            <snow>
-              <medium>
-                <rollingFriction>	0.0966	</rollingFriction>
-              </medium>
-            </snow>
-            <stone>
-              <medium>
-                <rollingFriction>	0.0966	</rollingFriction>
-              </medium>
-            </stone>
-            <metal>
-              <medium>
-                <rollingFriction>	0.0966	</rollingFriction>
-              </medium>
-            </metal>
+            <soft>
+              <rollingFriction>	0.161	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.0966	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0805	</rollingFriction>
+            </firm>
           </grounds>
         </Chassis_GB13_FV215b_IGR>
       </chassis>

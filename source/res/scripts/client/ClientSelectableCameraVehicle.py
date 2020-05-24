@@ -52,6 +52,7 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         return
 
     def recreateVehicle(self, typeDescriptor=None, state=ModelStates.UNDAMAGED, callback=None):
+        self.setHighlight(False)
         if typeDescriptor is not None:
             self.typeDescriptor = typeDescriptor
         self.__onLoadedCallback = callback
@@ -102,10 +103,6 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
     @property
     def isVehicleLoaded(self):
         return self.__isVehicleLoaded
-
-    @property
-    def isVehicleAppearanceLoaded(self):
-        return False if self.__vAppearance is None else self.__vAppearance.isLoaded()
 
     def setSelectable(self, flag):
         if flag:

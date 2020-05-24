@@ -2,30 +2,26 @@
 # Embedded file name: scripts/client/gui/server_events/events_helpers.py
 import operator
 import time
-import typing
 import BigWorld
 from constants import EVENT_TYPE
 from gui import makeHtmlString
 from gui.Scaleform.genConsts.MISSIONS_STATES import MISSIONS_STATES
-from gui.Scaleform.locale.LINKEDSET import LINKEDSET
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
 from gui.server_events import formatters
-from gui.server_events.conditions import getProgressFromQuestWithSingleAccumulative
-from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX, PREMIUM_GROUP_PREFIX, DAILY_QUEST_ID_PREFIX, FRONTLINE_GROUP_ID, SECRET_EVENT_GROUP_PREFIX
 from gui.server_events.personal_missions_navigation import PersonalMissionsNavigation
-from helpers import time_utils, i18n, dependency
-from helpers.i18n import makeString as _ms
+from helpers import time_utils, i18n, dependency, isPlayerAccount
 from shared_utils import CONST_CONTAINER, findFirst
 from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-if typing.TYPE_CHECKING:
-    from typing import Optional
-    from gui.server_events.event_items import Quest, Group
+from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX, PREMIUM_GROUP_PREFIX, DAILY_QUEST_ID_PREFIX, FRONTLINE_GROUP_ID, RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID
+from helpers.i18n import makeString as _ms
+from gui.Scaleform.locale.LINKEDSET import LINKEDSET
+from gui.server_events.conditions import getProgressFromQuestWithSingleAccumulative
 FINISH_TIME_LEFT_TO_SHOW = time_utils.ONE_DAY
 START_TIME_LIMIT = 5 * time_utils.ONE_DAY
 AWARDS_PER_PAGE = 3
@@ -102,7 +98,7 @@ class EventInfoModel(object):
                 i18nKey = '#quests:details/header/tillDate'
                 args = {'finishTime': self._getDateTimeString(self.event.getFinishTime())}
             weekDays = self.event.getWeekDays()
-            intervals = self.event.getCollapsedActiveTimeIntervals()
+            intervals = self.event.getActiveTimeIntervals()
             if weekDays or intervals:
                 if i18nKey is None:
                     i18nKey = '#quests:details/header/schedule'
@@ -157,23 +153,15 @@ def getMinutesRoundByTime(timeLeft):
     return (timeLeft / time_utils.QUARTER_HOUR + cmp(timeLeft % time_utils.QUARTER_HOUR, 0)) * time_utils.QUARTER
 
 
-def missionsSortFunc(a, b):
-    if isSecretEvent(a.getGroupID()) and isSecretEvent(b.getGroupID()):
-        return cmp(a.getPriority(), b.getPriority())
-    res = cmp(a.isAvailable()[0] and not a.isCompleted(), b.isAvailable()[0] and not b.isCompleted())
-    if res:
-        return res
-    res = cmp(a.getPriority(), b.getPriority())
-    if res:
-        return res
-    res = cmp(a.isAvailable()[1] == 'requirement', b.isAvailable()[1] == 'requirement')
-    if res:
-        return res
-    res = cmp(bool(a.isAvailable()[1]), bool(b.isAvailable()[1]))
-    if res:
-        return res
-    res = cmp(a.isCompleted(), b.isCompleted())
-    return res if res else cmp(a.getUserName(), b.getUserName())
+def missionsSortFunc(q):
+    isAvailable, status = q.isAvailable()
+    isCompleted = q.isCompleted()
+    return (isAvailable and not isCompleted,
+     q.getPriority(),
+     status == 'requirement',
+     bool(status),
+     isCompleted,
+     q.getUserName())
 
 
 def premMissionsSortFunc(a, b):
@@ -184,26 +172,23 @@ def premMissionsSortFunc(a, b):
     return isChild(a, b) - isChild(b, a)
 
 
-def dailyQuestsSortFunc(a, b):
-    return cmp(a.getSortKey(), b.getSortKey())
+def dailyQuestsSortFunc(q):
+    return q.getSortKey()
 
 
 def hasAnySavedProgresses(savedProgresses):
     return True if savedProgresses else False
 
 
-def questsSortFunc(a, b):
-    res = cmp(a.isCompleted(), b.isCompleted())
-    if res:
-        return res
+def questsSortFunc(q):
 
     def getPriority(event):
         return -1 if isPremium(event.getGroupID()) else event.getPriority()
 
-    res = cmp(getPriority(a), getPriority(b))
-    if getPriority(a) == -1 or getPriority(b) == -1:
-        res = -res
-    return res if res else cmp(a.getID(), b.getID())
+    return (q.isCompleted(),
+     getPriority(q),
+     getPriority(q) == -1,
+     q.getID())
 
 
 def getBoosterQuests():
@@ -250,16 +235,21 @@ def isDailyEpic(eventID):
     return eventID == FRONTLINE_GROUP_ID if eventID else False
 
 
+def isRankedDaily(eventID):
+    return eventID.startswith(RANKED_DAILY_GROUP_ID) if eventID else False
+
+
+def isRankedPlatform(eventID):
+    return eventID.startswith(RANKED_PLATFORM_GROUP_ID) if eventID else False
+
+
 def isDailyQuest(eventID):
     return eventID.startswith(DAILY_QUEST_ID_PREFIX) if eventID else False
 
 
-def isSecretEvent(eventID):
-    return eventID.startswith(SECRET_EVENT_GROUP_PREFIX) if eventID else False
-
-
 def isRegularQuest(eventID):
-    return not (isMarathon(eventID) or isLinkedSet(eventID) or isPremium(eventID) or isDailyEpic(eventID))
+    idGameModeEvent = isDailyEpic(eventID) or isRankedDaily(eventID) or isRankedPlatform(eventID)
+    return not (isMarathon(eventID) or isLinkedSet(eventID) or isPremium(eventID) or idGameModeEvent)
 
 
 def getLocalizedMissionNameForLinkedSet(missionID):
@@ -398,6 +388,18 @@ def getDailyEpicGroup(eventsCache=None):
     return findFirst(lambda g: isDailyEpic(g.getID()), groups.values())
 
 
+@dependency.replace_none_kwargs(eventsCache=IEventsCache)
+def getRankedDailyGroup(eventsCache=None):
+    groups = eventsCache.getGroups()
+    return findFirst(lambda g: isRankedDaily(g.getID()), groups.values())
+
+
+@dependency.replace_none_kwargs(eventsCache=IEventsCache)
+def getRankedPlatformGroup(eventsCache=None):
+    groups = eventsCache.getGroups()
+    return findFirst(lambda g: isRankedPlatform(g.getID()), groups.values())
+
+
 @dependency.replace_none_kwargs(eventsCache=IEventsCache, lobbyContext=ILobbyContext)
 def isPremiumQuestsEnable(lobbyContext=None, eventsCache=None):
     return lobbyContext.getServerSettings().getPremQuestsConfig().get('enabled', False) and len(eventsCache.getPremiumQuests()) > 0
@@ -423,21 +425,5 @@ def isEpicQuestEnabled(lobbyContext=None):
     return lobbyContext.getServerSettings().getDailyQuestConfig().get('epicRewardEnabled', False)
 
 
-def getPreviousBattleQuest(quest):
-    eventsCache = dependency.instance(IEventsCache)
-    group = eventsCache.getGroups().get(quest.getGroupID())
-    if group is not None:
-        questID = quest.getID()
-        quests = eventsCache.getQuests()
-        groupContent = group.getGroupContent(quests)
-        sortedQuests = sorted(groupContent, key=operator.methodcaller('getPriority'), reverse=True)
-        for idx, _quest in enumerate(sortedQuests):
-            if _quest.getID() == questID:
-                if idx != 0:
-                    return sortedQuests[idx - 1]
-
-    return
-
-
-def secretEventMissionsSortFunc(a, b):
-    return cmp(a.getPriority(), b.getPriority())
+def getEventsData(eventsTypeName):
+    return BigWorld.player().getUnpackedEventsData(eventsTypeName) if isPlayerAccount() else {}

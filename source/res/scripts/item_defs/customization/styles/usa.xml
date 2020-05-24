@@ -18,7 +18,7 @@
       <isRent>	true	</isRent>
       <rentCount>	100	</rentCount>
       <userString>	#vehicle_customization:rented_style/usa	</userString>
-      <tags>	vehicleBound	</tags>
+      <tags>	vehicleBound addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -77,6 +77,14 @@
       <texture>	gui/maps/vehicles/styles/style_01.png	</texture>
       <userString>	#vehicle_customization:gold_style/gold_style_01	</userString>
       <longDescriptionSpecial>	#vehicle_customization:gold_style/gold_style_01_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -215,6 +223,14 @@
       <id>	155	</id>
       <texture>	gui/maps/vehicles/styles/global_map_01.png	</texture>
       <userString>	#vehicle_customization:special_style/global_map	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -263,12 +279,18 @@
     <style>
       <id>	226	</id>
       <texture>	gui/maps/vehicles/styles/T57_NYst.png	</texture>
-      <description>	#vehicle_customization:special_style/T57_NYst_description	</description>
       <longDescriptionSpecial>	#vehicle_customization:special_style/T57_NYst_description/long	</longDescriptionSpecial>
       <modelsSet>	NYst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/T57_NYst	</userString>
-      <tags>	NY2019_style	</tags>
+      <tags>	NY2019_style progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -313,6 +335,14 @@
       <description>	#vehicle_customization:main_style/generic_custom_look_usa_desc	</description>
       <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_usa_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:main_style/generic_custom_look_usa	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	summer	</season>
@@ -389,6 +419,14 @@
       <texture>	gui/maps/vehicles/styles/generic_custom_look_2_usa.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_2_usa_desc	</description>
       <userString>	#vehicle_customization:main_style/generic_custom_look_2_usa	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -466,6 +504,14 @@
       <description>	#vehicle_customization:historical_style/tunisia_dazzle_desc	</description>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:historical_style/tunisia_dazzle	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -508,6 +554,14 @@
       <modelsSet>	T78_ID	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:main_style/usa_veteran	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -542,7 +596,7 @@
     <style>
       <id>	52	</id>
       <texture>	gui/maps/vehicles/styles/kingtiger.png	</texture>
-      <description>	#vehicle_customization:special_style/kingtiger_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/kingtiger_desc/long	</longDescriptionSpecial>
       <modelsSet>	KingTiger	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/kingtiger	</userString>
@@ -585,6 +639,14 @@
       <texture>	gui/maps/vehicles/styles/generic_custom_look_3_usa.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_3_usa_desc	</description>
       <userString>	#vehicle_customization:main_style/generic_custom_look_3_usa	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -661,6 +723,14 @@
       <texture>	gui/maps/vehicles/styles/Vietnam_CLook.png	</texture>
       <description>	#vehicle_customization:main_style/historical_custom_look_vietnam_desc	</description>
       <userString>	#vehicle_customization:main_style/historical_custom_look_vietnam	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -710,6 +780,14 @@
       <texture>	gui/maps/vehicles/styles/Icon_Museum_CLook.png	</texture>
       <description>	#vehicle_customization:main_style/historical_custom_look_museum_desc	</description>
       <userString>	#vehicle_customization:main_style/historical_custom_look_museum	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -753,6 +831,14 @@
       <texture>	gui/maps/vehicles/styles/Korea_CLook.png	</texture>
       <description>	#vehicle_customization:main_style/historical_custom_look_korea_desc	</description>
       <userString>	#vehicle_customization:main_style/historical_custom_look_korea	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -801,7 +887,7 @@
     <style>
       <id>	83	</id>
       <texture>	gui/maps/vehicles/styles/A127_TL_1_LPC_3Dst_Offspring.png	</texture>
-      <description>	#vehicle_customization:main_style/A127_TL_1_LPC_3Dst_Offspring_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/A127_TL_1_LPC_3Dst_Offspring_desc/long	</longDescriptionSpecial>
       <modelsSet>	offspring	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:main_style/A127_TL_1_LPC_3Dst_Offspring	</userString>
@@ -886,10 +972,18 @@
     <style>
       <id>	79	</id>
       <texture>	gui/maps/vehicles/styles/A66_M103_Halloween_3Dst.png	</texture>
-      <description>	#vehicle_customization:main_style/A66_M103_Halloween_3Dst_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/A66_M103_Halloween_3Dst_desc/long	</longDescriptionSpecial>
       <modelsSet>	Helloween_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:main_style/A66_M103_Halloween_3Dst	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -928,10 +1022,18 @@
     <style>
       <id>	84	</id>
       <texture>	gui/maps/vehicles/styles/A100_T49_Halloween_3Dst.png	</texture>
-      <description>	#vehicle_customization:main_style/A100_T49_Halloween_3Dst_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/A100_T49_Halloween_3Dst_desc/long	</longDescriptionSpecial>
       <modelsSet>	halloween	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:main_style/A100_T49_Halloween_3Dst	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -970,12 +1072,18 @@
     <style>
       <id>	101	</id>
       <texture>	gui/maps/vehicles/styles/T110E4_NYst.png	</texture>
-      <description>	#vehicle_customization:unique_style/T110E4_NYst_desc	</description>
       <longDescriptionSpecial>	#vehicle_customization:unique_style/T110E4_NYst_desc/long	</longDescriptionSpecial>
       <modelsSet>	NY_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:unique_style/T110E4_NYst	</userString>
-      <tags>	NY2020_style	</tags>
+      <tags>	NY2020_style progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -1015,6 +1123,14 @@
       <modelsSet>	A124_T54E2_Renegade_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/A124_T54E2_Renegade_3Dst	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -1057,6 +1173,14 @@
       <longDescriptionSpecial>	#vehicle_customization:special_style/10years_geese_desc/long	</longDescriptionSpecial>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/10years_geese	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -1078,47 +1202,6 @@
             <item>
               <id>	121	</id>
               <appliedTo>	13104	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-      </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:styles/special_styles	</userString>
-    <season>	ALL	</season>
-    <historical>	false	</historical>
-    <priceGroup>	styles 1750g notInShop	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <vehicles>	usa:A80_T26_E4_SuperPershing	</vehicles>
-      </include>
-    </vehicleFilter>
-    <style>
-      <id>	307	</id>
-      <texture>	gui/maps/vehicles/styles/10years_general_america.png	</texture>
-      <description>	#vehicle_customization:special_style/10years_general_america_desc	</description>
-      <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:special_style/10years_general_america	</userString>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	117	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	213	</id>
-              <appliedTo>	13104	</appliedTo>
-            </item>
-            <item>
-              <id>	0	</id>
-              <appliedTo>	52416	</appliedTo>
             </item>
           </decals>
         </outfit>

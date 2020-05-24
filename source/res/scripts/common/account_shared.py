@@ -111,14 +111,16 @@ def getCustomizationItem(custType, custID):
 
 def validateCustomizationItem(custData):
     custID = custData.get('id', None)
-    custType = custData.get('custType', None)
+    splitted = custData.get('custType', '').split(':')
+    custType = splitted[0]
+    isProgression = len(splitted) == 2 and splitted[1] == 'progression'
     value = custData.get('value', None)
     vehTypeCompDescr = custData.get('vehTypeCompDescr', None)
     if custID is None:
         return (False, 'Cust id is not specified')
     elif not custType:
         return (False, 'Cust type is not specified')
-    elif value == 0 or not isinstance(value, int):
+    elif not isinstance(value, int) or value == 0 and not isProgression:
         return (False, 'Invalid value')
     else:
         c11nItem, errStr = getCustomizationItem(custType, custID)

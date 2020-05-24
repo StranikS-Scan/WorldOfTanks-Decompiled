@@ -2,24 +2,22 @@
 # Embedded file name: scripts/client/gui/server_events/events_dispatcher.py
 import constants
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.customization.progression_helpers import parseEventID
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData
-from gui.Scaleform.framework import ScopeTemplates
-from gui.Scaleform.genConsts.EVENT_AWARD_SCREEN_CONSTANTS import EVENT_AWARD_SCREEN_CONSTANTS
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
-from gui.impl.gen import R
-from gui.impl.lobby.reward_window import TwitchRewardWindow, GiveAwayRewardWindow, PiggyBankRewardWindow
 from gui.marathon.marathon_event_controller import DEFAULT_MARATHON_PREFIX
 from gui.server_events import awards, events_helpers, recruit_helper, anniversary_helper
 from gui.server_events.events_helpers import getLootboxesFromBonuses
 from gui.shared import g_eventBus, events, event_dispatcher as shared_events, EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showProgressiveItemsView
 from gui.shared.events import PersonalMissionsEvent
 from helpers import dependency
-from shared_utils import first
-from skeletons.gui.impl import IGuiLoader
+from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
-from gui.Scaleform.genConsts.HANGAR_HEADER_QUESTS import HANGAR_HEADER_QUESTS
+from gui.impl.lobby.reward_window import TwitchRewardWindow, GiveAwayRewardWindow, PiggyBankRewardWindow
+from shared_utils import first
 from battle_pass_common import BattlePassConsts
 OPERATIONS = {PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_1_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS_PAGE_ALIAS,
  PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_2_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS2_OPERATIONS_PAGE_ALIAS}
@@ -127,13 +125,6 @@ def showMissionsElen(eventQuestsID=None):
     showMissions(tab=QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS, missionID=eventQuestsID, groupID=eventQuestsID, showDetails=False)
 
 
-def showMissionsSecretEvent(groupID=None, missionID=None, secretEventTabMenuItem=None):
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MISSIONS, ctx={'tab': QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS,
-     'eventID': missionID,
-     'groupID': groupID or HANGAR_HEADER_QUESTS.QUEST_GROUP_SECRET_EVENT + '0',
-     'secretEventTabMenuItem': secretEventTabMenuItem}), scope=EVENT_BUS_SCOPE.LOBBY)
-
-
 def showMissionsLinkedSet():
     showMissions(tab=QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS)
 
@@ -142,14 +133,13 @@ def showDailyQuests(subTab):
     showMissions(tab=QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS, subTab=subTab)
 
 
-def showMissionsBattlePassCommonProgression():
-    showMissions(tab=QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS)
+def showMissionsBattlePassCommonProgression(subTab=None):
+    showMissions(tab=QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS, subTab=subTab)
 
 
-def showMissionDetails(missionID, groupID, secretEventTabMenuItem=None):
+def showMissionDetails(missionID, groupID):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MISSION_DETAILS, ctx={'eventID': missionID,
-     'groupID': groupID,
-     'secretEventTabMenuItem': secretEventTabMenuItem}), scope=EVENT_BUS_SCOPE.LOBBY)
+     'groupID': groupID}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def hideMissionDetails():
@@ -176,15 +166,25 @@ def showPersonalMissionBrowserView(ctx):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.PERSONAL_MISSIONS_BROWSER_VIEW, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
+def showProgressiveItemsBrowserView(ctx):
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.PROGRESSIVE_ITEMS_BROWSER_VIEW, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
 def showMission(eventID, eventType=None):
     from gui.impl.lobby.missions.daily_quests_view import DailyTabs
-    eventsCache = dependency.instance(IEventsCache)
-    quests = eventsCache.getQuests()
-    quest = quests.get(eventID)
-    if eventID == BattlePassConsts.FAKE_QUEST_ID:
-        showMissionsBattlePassCommonProgression()
+    if eventType == constants.EVENT_TYPE.C11N_PROGRESSION:
+        itemIntCD, vehicleIntCD = parseEventID(eventID)
+        service = dependency.instance(ICustomizationService)
+        vehicle = service.getItemByCD(vehicleIntCD)
+        service.showCustomization(vehicle.invID, lambda : showProgressiveItemsView(itemIntCD))
         return
     else:
+        eventsCache = dependency.instance(IEventsCache)
+        quests = eventsCache.getQuests()
+        quest = quests.get(eventID)
+        if eventID == BattlePassConsts.FAKE_QUEST_ID:
+            showMissionsBattlePassCommonProgression()
+            return
         if quest is None:
             prefix = events_helpers.getMarathonPrefix(eventID)
             if prefix is not None:
@@ -259,7 +259,7 @@ def showMissionAward(quest, ctx):
                     showLootboxesAward(lootboxId=lootboxId, lootboxCount=lootboxInfo['count'], isFree=lootboxInfo['isFree'])
 
             else:
-                missionAward = awards.MissionAward(quest, ctx, showMissionsCategories)
+                missionAward = awards.MissionAward(quest, ctx, showMissionsCategories())
                 if missionAward.getAwards():
                     shared_events.showMissionAwardWindow(missionAward)
 
@@ -289,10 +289,6 @@ def showPersonalMissionsOperationAwardsScreen(ctx):
     g_eventBus.handleEvent(events.LoadViewEvent(alias, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showEventAwardScreen(messages):
-    g_eventBus.handleEvent(events.LoadViewEvent(EVENT_AWARD_SCREEN_CONSTANTS.SCREEN_ALIAS, name='award_window_{}'.format(len(messages)), ctx={'messages': messages}), scope=EVENT_BUS_SCOPE.LOBBY)
-
-
 def updatePersonalMissionAward(context):
     g_eventBus.handleEvent(events.PersonalMissionsEvent(PersonalMissionsEvent.UPDATE_AWARD_SCREEN, ctx=context), EVENT_BUS_SCOPE.LOBBY)
 
@@ -305,14 +301,3 @@ def showPersonalMissionFirstEntryAwardView(ctx):
 def showActions(tab=None, anchor=None):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_STORE, ctx={'tab': tab,
      'anchor': anchor}), scope=EVENT_BUS_SCOPE.LOBBY)
-
-
-def showOrderSelectView(generalID=None, isExchange=False):
-    from gui.impl.lobby.secret_event.order_select_view import OrderSelectView
-    layoutID = R.views.lobby.secretEvent.OrderSelectWindow()
-    guiLoader = dependency.instance(IGuiLoader)
-    if guiLoader.windowsManager.getViewByLayoutID(layoutID) is not None:
-        return
-    else:
-        g_eventBus.handleEvent(events.LoadUnboundViewEvent(layoutID, OrderSelectView, ScopeTemplates.DEFAULT_SCOPE, generalID=generalID, isExchange=isExchange), scope=EVENT_BUS_SCOPE.LOBBY)
-        return

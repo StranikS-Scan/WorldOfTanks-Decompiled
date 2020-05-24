@@ -16,7 +16,6 @@ from BattleReplay import CallbackDataNames
 from BootCampEvents import g_bootcampEvents
 from BootcampConstants import UI_STATE
 from BootcampGUI import getDirectionIndicator
-from constants import EventMarkerBlinkingParams
 from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP, LOG_ERROR_BOOTCAMP
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -31,10 +30,6 @@ class _IMarker(object):
     def isSwitchedToSniperMode(self):
         return self.__switchedToSniperMode
 
-    @isSwitchedToSniperMode.setter
-    def isSwitchedToSniperMode(self, value):
-        self.__switchedToSniperMode = value
-
     def update(self, *args, **kwargs):
         pass
 
@@ -44,20 +39,15 @@ class _IMarker(object):
     def setVisible(self, isVisible):
         pass
 
-    def setBlinking(self, speed, isShow):
-        pass
-
-    def setPosition(self, position):
-        pass
-
 
 class _DirectionIndicatorCtrl(_IMarker):
     settingsCore = dependency.descriptor(ISettingsCore)
+    __INFOCUS_ANGLE = 45
 
     def __init__(self, shapes, position, switchedToSniperMode=True):
         super(_DirectionIndicatorCtrl, self).__init__(switchedToSniperMode)
         self.__shapes = shapes
-        self._indicator = None
+        self.__indicator = None
         self.__position = position
         self.__isMarkerVisible = False
         return
@@ -66,32 +56,32 @@ class _DirectionIndicatorCtrl(_IMarker):
         return self.__shapes[1] if self.settingsCore.getSetting('isColorBlind') else self.__shapes[0]
 
     def attachGUI(self, indicator):
-        self._indicator = indicator
-        self._indicator.setShape(self.getShape())
-        self._indicator.track(self.__position)
+        self.__indicator = indicator
+        self.__indicator.setShape(self.getShape())
+        self.__indicator.track(self.__position)
         self.__updateVisibility()
         self.settingsCore.onSettingsChanged += self.__as_onSettingsChanged
 
     def detachGUI(self):
         self.settingsCore.onSettingsChanged -= self.__as_onSettingsChanged
-        if self._indicator is not None:
-            self._indicator.remove()
-            self._indicator = None
+        if self.__indicator is not None:
+            self.__indicator.remove()
+            self.__indicator = None
         return
 
     def update(self, distance, position=None):
-        if self.__isMarkerVisible and self._indicator is not None:
-            self._indicator.setDistance(distance)
+        if self.__isMarkerVisible and self.__indicator is not None:
+            self.__indicator.setDistance(distance)
             if position is not None:
-                self._indicator.setPosition(position)
+                self.__indicator.setPosition(position)
         self.__updateVisibility()
         return
 
     def clear(self):
         LOG_DEBUG_DEV_BOOTCAMP('_DirectionIndicatorCtrl.clear', hex(id(self)))
-        if self._indicator is not None:
-            self._indicator.remove()
-            self._indicator = None
+        if self.__indicator is not None:
+            self.__indicator.remove()
+            self.__indicator = None
         return
 
     def setVisible(self, isVisible):
@@ -99,31 +89,33 @@ class _DirectionIndicatorCtrl(_IMarker):
             self.__updateVisibility()
         elif self.__isMarkerVisible and not isVisible:
             self.__isMarkerVisible = False
-            if self._indicator is not None:
-                self._indicator.setVisibility(False)
+            if self.__indicator is not None:
+                self.__indicator.setVisibility(False)
         return
 
     def __as_onSettingsChanged(self, diff):
         if 'isColorBlind' in diff:
-            if self._indicator is not None:
-                self._indicator.setShape(self.getShape())
+            if self.__indicator is not None:
+                self.__indicator.setShape(self.getShape())
         return
 
     def __updateVisibility(self):
-        if self._indicator is not None:
-            if not hasattr(BigWorld.player().inputHandler.ctrl, 'camera'):
-                return
+        if self.__indicator is not None:
             self.__isMarkerVisible = True
             camera = BigWorld.player().inputHandler.ctrl.camera.camera
             camMat = Math.Matrix(camera.invViewMatrix)
             if camMat is not None:
                 view = camMat.applyV4Point(Math.Vector4(0, 0, 1, 0))
+                view = view.tuple()
                 direction = self.__position - BigWorld.player().getOwnVehiclePosition()
-                dotProduct = direction.dot(view[0:3])
-                cosFov = math.cos(BigWorld.projection().fov / 2)
-                if dotProduct > cosFov * direction.length:
-                    self.__isMarkerVisible = False
-            self._indicator.setVisibility(self.__isMarkerVisible)
+                direction.normalise()
+                direction = direction.tuple()
+                for acosi in (abs(v * p) for v, p in zip(view, direction)):
+                    if acosi > math.cos(self.__INFOCUS_ANGLE * math.pi / 180):
+                        self.__isMarkerVisible = False
+                        break
+
+            self.__indicator.setVisibility(self.__isMarkerVisible)
         return
 
 
@@ -138,8 +130,7 @@ class _AimMarker(_IMarker):
         self.__dIndicator = dIndicator
 
     def attachGUI(self, markers2D, minimap):
-        if self.__marker2D is not None:
-            self.__marker2D.attachGUI(markers2D)
+        self.__marker2D.attachGUI(markers2D)
         indicator = getDirectionIndicator()
         if indicator is not None:
             self.__dIndicator.attachGUI(indicator)
@@ -148,15 +139,11 @@ class _AimMarker(_IMarker):
         return
 
     def detachGUI(self):
-        if self.__marker2D is not None:
-            self.__marker2D.detachGUI()
-        if self.__dIndicator is not None:
-            self.__dIndicator.detachGUI()
-        return
+        self.__marker2D.detachGUI()
+        self.__dIndicator.detachGUI()
 
     def update(self, distance):
-        if self.__marker2D is not None:
-            self.__marker2D.update(distance)
+        self.__marker2D.update(distance)
         if self.__dIndicator is not None:
             self.__dIndicator.update(distance)
         return
@@ -174,17 +161,9 @@ class _AimMarker(_IMarker):
         return
 
     def setVisible(self, isVisible):
-        if self.__marker3D is not None:
-            self.__marker3D.setVisible(isVisible)
-        if self.__marker2D is not None:
-            self.__marker2D.setVisible(isVisible)
-        if self.__dIndicator is not None:
-            self.__dIndicator.setVisible(isVisible)
-        return
-
-    @property
-    def triggerID(self):
-        return self.__triggerID
+        self.__marker3D.setVisible(isVisible)
+        self.__marker2D.setVisible(isVisible)
+        self.__dIndicator.setVisible(isVisible)
 
 
 class _AreaMarker(_AimMarker):
@@ -197,15 +176,11 @@ class _AreaMarker(_AimMarker):
 
     def attachGUI(self, markers2D, minimap):
         super(_AreaMarker, self).attachGUI(markers2D, minimap)
-        if self.__minimapMarker is not None:
-            self.__minimapMarker.attachGUI(minimap)
-        return
+        self.__minimapMarker.attachGUI(minimap)
 
     def detachGUI(self):
         super(_AreaMarker, self).detachGUI()
-        if self.__minimapMarker is not None:
-            self.__minimapMarker.detachGUI()
-        return
+        self.__minimapMarker.detachGUI()
 
     def clear(self):
         if self.__groundMarker is not None:
@@ -223,11 +198,8 @@ class _AreaMarker(_AimMarker):
 
     def setVisible(self, isVisible):
         super(_AreaMarker, self).setVisible(isVisible)
-        if self.__groundMarker is not None:
-            self.__groundMarker.setVisible(isVisible)
-        if self.__minimapMarker is not None:
-            self.__minimapMarker.setVisible(isVisible)
-        return
+        self.__groundMarker.setVisible(isVisible)
+        self.__minimapMarker.setVisible(isVisible)
 
 
 class _StaticWorldMarker2D(_IMarker):
@@ -240,8 +212,6 @@ class _StaticWorldMarker2D(_IMarker):
         self.__distance = distance
         self.__visible = True
         self.__markers2D = lambda : None
-        self.__isBlinking = False
-        self.__speed = EventMarkerBlinkingParams.BLINKING_SPEED_CUSTOM_MARKER_MS
 
     def attachGUI(self, markers2D):
         self.__markers2D = weakref.ref(markers2D)
@@ -262,7 +232,6 @@ class _StaticWorldMarker2D(_IMarker):
         offset = self.__initData.get('offset', Math.Vector3(0, 0, 0))
         if markers2D.addStaticObject(objectID, Math.Vector3(self.__initPosition[:]) + offset):
             markers2D.setupStaticObject(objectID, self.__initData.get('shape', 'arrow'), self.__initData.get('min-distance', 0), self.__initData.get('max-distance', 0), distance, self.__initData.get('color', 'yellow'))
-            markers2D.setBlinking(objectID, self.__speed, self.__isBlinking)
             return True
         return False
 
@@ -290,14 +259,6 @@ class _StaticWorldMarker2D(_IMarker):
             elif self.__visible and not isVisible:
                 markers2D.delStaticObject(self.__objectID)
         self.__visible = isVisible
-        return
-
-    def setBlinking(self, speed, isShow):
-        self.__isBlinking = isShow
-        self.__speed = speed
-        markers2D = self.__markers2D()
-        if markers2D is not None and self.__objectID and self.__visible:
-            markers2D.setBlinking(self.__objectID, speed, isShow)
         return
 
 

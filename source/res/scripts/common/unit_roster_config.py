@@ -72,8 +72,8 @@ class SpecRoster(BaseUnitRoster):
 
 
 class EventRoster(BaseUnitRoster):
-    MAX_SLOTS = 5
-    MAX_EMPTY_SLOTS = 4
+    MAX_SLOTS = 3
+    MAX_EMPTY_SLOTS = 2
     SLOT_TYPE = RosterSlot10
     DEFAULT_SLOT_PACK = RosterSlot10().pack()
     LIMITS_TYPE = BaseUnitRosterLimits
@@ -87,11 +87,3 @@ class EpicRoster(BaseUnitRoster):
     LIMITS_TYPE = BaseUnitRosterLimits
     MIN_VEHICLES = 1
     MAX_VEHICLES = 10000
-
-
-class BobRoster(BaseUnitRoster):
-    MAX_SLOTS = 3
-    MAX_EMPTY_SLOTS = 2
-    SLOT_TYPE = RosterSlot10
-    DEFAULT_SLOT_PACK = RosterSlot10().pack()
-    LIMITS_TYPE = BaseUnitRosterLimits

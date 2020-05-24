@@ -1,30 +1,28 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/SniperCamera.py
-import BattleReplay
 import BigWorld
 import GUI
+from Math import Vector2, Vector3, Matrix
+import BattleReplay
 import Settings
 import constants
 import math_utils
+from AvatarInputHandler import AimingSystems
 from AvatarInputHandler import cameras, aih_global_binding
 from AvatarInputHandler.AimingSystems.SniperAimingSystem import SniperAimingSystem
 from AvatarInputHandler.AimingSystems.SniperAimingSystemRemote import SniperAimingSystemRemote
-from AvatarInputHandler import AimingSystems
-from AvatarInputHandler.DynamicCameras import CameraDynamicConfig
+from AvatarInputHandler.DynamicCameras import CameraDynamicConfig, CameraWithSettings, calcYawPitchDelta
 from AvatarInputHandler.DynamicCameras import createCrosshairMatrix, createOscillatorFromSection, AccelerationSmoother
-from AvatarInputHandler.cameras import ICamera, readFloat, readVec3, ImpulseReason, FovExtended
+from AvatarInputHandler.cameras import readFloat, readVec3, ImpulseReason, FovExtended
 from BattleReplay import CallbackDataNames
-from Math import Vector2, Vector3, Matrix
 from debug_utils import LOG_WARNING, LOG_DEBUG
-from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
-from skeletons.account_helpers.settings_core import ISettingsCore
 
 def getCameraAsSettingsHolder(settingsDataSec):
     return SniperCamera(settingsDataSec)
 
 
-class SniperCamera(ICamera, CallbackDelayer):
+class SniperCamera(CameraWithSettings, CallbackDelayer):
     _DYNAMIC_ENABLED = True
 
     @staticmethod
@@ -40,11 +38,11 @@ class SniperCamera(ICamera, CallbackDelayer):
     _MIN_REL_SPEED_ACC_SMOOTHING = 0.7
     camera = property(lambda self: self.__cam)
     aimingSystem = property(lambda self: self.__aimingSystem)
-    settingsCore = dependency.descriptor(ISettingsCore)
     __aimOffset = aih_global_binding.bindRW(aih_global_binding.BINDING_ID.AIM_OFFSET)
     __zoomFactor = aih_global_binding.bindRW(aih_global_binding.BINDING_ID.ZOOM_FACTOR)
 
     def __init__(self, dataSec, defaultOffset=None, binoculars=None):
+        super(SniperCamera, self).__init__()
         CallbackDelayer.__init__(self)
         self.__impulseOscillator = None
         self.__movementOscillator = None
@@ -56,7 +54,7 @@ class SniperCamera(ICamera, CallbackDelayer):
             return
         else:
             self.__cam = BigWorld.FreeCamera()
-            self.__zoom = self.__cfg['zoom']
+            self.__zoom = self._cfg['zoom']
             self.__curSense = 0
             self.__curScrollSense = 0
             self.__waitVehicleCallbackId = None
@@ -71,26 +69,25 @@ class SniperCamera(ICamera, CallbackDelayer):
                 BattleReplay.g_replayCtrl.setDataCallback(CallbackDataNames.APPLY_ZOOM, self.__applySerializedZoom)
             return
 
-    def __onSettingsChanged(self, diff):
+    def _handleSettingsChange(self, diff):
         if 'increasedZoom' in diff:
-            self.__cfg['increasedZoom'] = diff['increasedZoom']
-            if not self.__cfg['increasedZoom']:
-                self.__cfg['zoom'] = self.__zoom = self.__cfg['zooms'][:3][-1]
+            self._cfg['increasedZoom'] = diff['increasedZoom']
+            if not self._cfg['increasedZoom']:
+                self._cfg['zoom'] = self.__zoom = self._cfg['zooms'][:3][-1]
                 if self.camera is BigWorld.camera():
-                    self.delayCallback(0.0, self.__applyZoom, self.__cfg['zoom'])
+                    self.delayCallback(0.0, self.__applyZoom, self._cfg['zoom'])
         if ('fov' in diff or 'dynamicFov' in diff) and self.camera is BigWorld.camera():
-            self.delayCallback(0.01, self.__applyZoom, self.__cfg['zoom'])
+            self.delayCallback(0.01, self.__applyZoom, self._cfg['zoom'])
 
     def create(self, onChangeControlMode=None):
+        super(SniperCamera, self).create()
         self.__onChangeControlMode = onChangeControlMode
-        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         self.__aimingSystem = self._aimingSystemClass()()
 
     def _aimingSystemClass(self):
         return SniperAimingSystemRemote if BigWorld.player().isObserver() else SniperAimingSystem
 
     def destroy(self):
-        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.disable()
         self.__onChangeControlMode = None
         self.__cam = None
@@ -98,15 +95,16 @@ class SniperCamera(ICamera, CallbackDelayer):
             self.__aimingSystem.destroy()
             self.__aimingSystem = None
         CallbackDelayer.destroy(self)
+        CameraWithSettings.destroy(self)
         return
 
     def enable(self, targetPos, saveZoom):
         self.__prevTime = BigWorld.time()
         player = BigWorld.player()
         if saveZoom:
-            self.__zoom = self.__cfg['zoom']
+            self.__zoom = self._cfg['zoom']
         else:
-            self.__cfg['zoom'] = self.__zoom = self.__cfg['zooms'][0]
+            self._cfg['zoom'] = self.__zoom = self._cfg['zooms'][0]
         self.__applyZoom(self.__zoom)
         self.__setupCamera(targetPos)
         vehicle = player.getVehicleAttached()
@@ -137,24 +135,9 @@ class SniperCamera(ICamera, CallbackDelayer):
         FovExtended.instance().resetFov()
         return
 
-    def getConfigValue(self, name):
-        return self.__cfg.get(name)
-
-    def getUserConfigValue(self, name):
-        return self.__userCfg.get(name)
-
-    def setUserConfigValue(self, name, value):
-        if name not in self.__userCfg:
-            return
-        self.__userCfg[name] = value
-        if name not in ('keySensitivity', 'sensitivity', 'scrollSensitivity'):
-            self.__cfg[name] = self.__userCfg[name]
-        else:
-            self.__cfg[name] = self.__baseCfg[name] * self.__userCfg[name]
-
     def update(self, dx, dy, dz, updatedByKeyboard=False):
-        self.__curSense = self.__cfg['keySensitivity'] if updatedByKeyboard else self.__cfg['sensitivity']
-        self.__curScrollSense = self.__cfg['keySensitivity'] if updatedByKeyboard else self.__cfg['scrollSensitivity']
+        self.__curSense = self._cfg['keySensitivity'] if updatedByKeyboard else self._cfg['sensitivity']
+        self.__curScrollSense = self._cfg['keySensitivity'] if updatedByKeyboard else self._cfg['scrollSensitivity']
         self.__curSense *= 1.0 / self.__zoom
         if updatedByKeyboard:
             self.__autoUpdateDxDyDz.set(dx, dy, dz)
@@ -195,7 +178,7 @@ class SniperCamera(ICamera, CallbackDelayer):
     def setMaxZoom(self):
         zooms = self.__getZooms()
         self.__zoom = zooms[-1]
-        self.__cfg['zoom'] = self.__zoom
+        self._cfg['zoom'] = self.__zoom
         self.__applyZoom(self.__zoom)
 
     def __applyNoiseImpulse(self, noiseMagnitude):
@@ -203,11 +186,8 @@ class SniperCamera(ICamera, CallbackDelayer):
         self.__noiseOscillator.applyImpulse(noiseImpulse)
 
     def __rotateAndZoom(self, dx, dy, dz):
-        self.__aimingSystem.handleMovement(*self.__calcYawPitchDelta(dx, dy))
+        self.__aimingSystem.handleMovement(*calcYawPitchDelta(self._cfg, self.__curSense, dx, dy))
         self.__setupZoom(dz)
-
-    def __calcYawPitchDelta(self, dx, dy):
-        return (dx * self.__curSense * (-1 if self.__cfg['horzInvert'] else 1), dy * self.__curSense * (-1 if self.__cfg['vertInvert'] else 1))
 
     def __showVehicle(self, show):
         player = BigWorld.player()
@@ -248,8 +228,8 @@ class SniperCamera(ICamera, CallbackDelayer):
         FovExtended.instance().setFovByMultiplier(1 / zoomFactor)
 
     def __getZooms(self):
-        zooms = self.__cfg['zooms']
-        if not self.__cfg['increasedZoom']:
+        zooms = self._cfg['zooms']
+        if not self._cfg['increasedZoom']:
             zooms = zooms[:3]
         return zooms
 
@@ -265,14 +245,14 @@ class SniperCamera(ICamera, CallbackDelayer):
                 for elem in zooms:
                     if self.__zoom < elem:
                         self.__zoom = elem
-                        self.__cfg['zoom'] = self.__zoom
+                        self._cfg['zoom'] = self.__zoom
                         break
 
             elif dz < 0:
                 for i in range(len(zooms) - 1, -1, -1):
                     if self.__zoom > zooms[i]:
                         self.__zoom = zooms[i]
-                        self.__cfg['zoom'] = self.__zoom
+                        self._cfg['zoom'] = self.__zoom
                         break
 
             if prevZoom != self.__zoom:
@@ -370,7 +350,7 @@ class SniperCamera(ICamera, CallbackDelayer):
         if abs(deviation.z) < 1e-05 and abs(oscVelocity.z) < 0.0001:
             deviation.z = 0
         curZoomIdx = 0
-        zooms = self.__cfg['zooms']
+        zooms = self._cfg['zooms']
         for idx in xrange(len(zooms)):
             if self.__zoom == zooms[idx]:
                 curZoomIdx = idx
@@ -398,8 +378,8 @@ class SniperCamera(ICamera, CallbackDelayer):
     def _readCfg(self, dataSec):
         if not dataSec:
             LOG_WARNING('Invalid section <sniperMode/camera> in avatar_input_handler.xml')
-        self.__baseCfg = dict()
-        bcfg = self.__baseCfg
+        self._baseCfg = dict()
+        bcfg = self._baseCfg
         bcfg['keySensitivity'] = readFloat(dataSec, 'keySensitivity', 0, 10, 0.005)
         bcfg['sensitivity'] = readFloat(dataSec, 'sensitivity', 0, 10, 0.005)
         bcfg['scrollSensitivity'] = readFloat(dataSec, 'scrollSensitivity', 0, 10, 0.005)
@@ -408,19 +388,19 @@ class SniperCamera(ICamera, CallbackDelayer):
         ds = Settings.g_instance.userPrefs[Settings.KEY_CONTROL_MODE]
         if ds is not None:
             ds = ds['sniperMode/camera']
-        self.__userCfg = dict()
-        ucfg = self.__userCfg
-        ucfg['horzInvert'] = self.settingsCore.getSetting('mouseHorzInvert')
-        ucfg['vertInvert'] = self.settingsCore.getSetting('mouseVertInvert')
-        ucfg['increasedZoom'] = self.settingsCore.getSetting('increasedZoom')
+        self._userCfg = dict()
+        ucfg = self._userCfg
+        ucfg['horzInvert'] = False
+        ucfg['vertInvert'] = False
+        ucfg['increasedZoom'] = False
+        ucfg['sniperModeByShift'] = False
         maxZoom = bcfg['zooms'][-1] if ucfg['increasedZoom'] else bcfg['zooms'][:3][-1]
         ucfg['zoom'] = readFloat(ds, 'zoom', 0.0, maxZoom, bcfg['zooms'][0])
-        ucfg['sniperModeByShift'] = self.settingsCore.getSetting('sniperModeByShift')
         ucfg['keySensitivity'] = readFloat(ds, 'keySensitivity', 0.0, 10.0, 1.0)
         ucfg['sensitivity'] = readFloat(ds, 'sensitivity', 0.0, 10.0, 1.0)
         ucfg['scrollSensitivity'] = readFloat(ds, 'scrollSensitivity', 0.0, 10.0, 1.0)
-        self.__cfg = dict()
-        cfg = self.__cfg
+        self._cfg = dict()
+        cfg = self._cfg
         cfg['keySensitivity'] = bcfg['keySensitivity']
         cfg['sensitivity'] = bcfg['sensitivity']
         cfg['scrollSensitivity'] = bcfg['scrollSensitivity']
@@ -458,11 +438,23 @@ class SniperCamera(ICamera, CallbackDelayer):
         ds = Settings.g_instance.userPrefs
         if not ds.has_key(Settings.KEY_CONTROL_MODE):
             ds.write(Settings.KEY_CONTROL_MODE, '')
-        ucfg = self.__userCfg
+        ucfg = self._userCfg
         ds = ds[Settings.KEY_CONTROL_MODE]
         ds.writeBool('sniperMode/camera/horzInvert', ucfg['horzInvert'])
         ds.writeBool('sniperMode/camera/vertInvert', ucfg['vertInvert'])
         ds.writeFloat('sniperMode/camera/keySensitivity', ucfg['keySensitivity'])
         ds.writeFloat('sniperMode/camera/sensitivity', ucfg['sensitivity'])
         ds.writeFloat('sniperMode/camera/scrollSensitivity', ucfg['scrollSensitivity'])
-        ds.writeFloat('sniperMode/camera/zoom', self.__cfg['zoom'])
+        ds.writeFloat('sniperMode/camera/zoom', self._cfg['zoom'])
+
+    def _updateSettingsFromServer(self):
+        super(SniperCamera, self)._updateSettingsFromServer()
+        if self.settingsCore.isReady:
+            ucfg = self._userCfg
+            ucfg['increasedZoom'] = self.settingsCore.getSetting('increasedZoom')
+            ucfg['sniperModeByShift'] = self.settingsCore.getSetting('sniperModeByShift')
+            cfg = self._cfg
+            cfg['increasedZoom'] = ucfg['increasedZoom']
+            cfg['sniperModeByShift'] = ucfg['sniperModeByShift']
+            if self.camera is BigWorld.camera():
+                self.delayCallback(0.0, self.__applyZoom, self._cfg['zoom'])

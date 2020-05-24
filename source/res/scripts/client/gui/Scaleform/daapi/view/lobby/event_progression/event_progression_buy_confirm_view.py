@@ -47,7 +47,7 @@ class EventProgressionBuyConfirmView(EventProgressionBuyConfirmViewMeta):
         if result and result.success:
             ctx = {'congratulationsViewSettings': {'backBtnLabel': R.strings.store.congratulationAnim.showEpicBtnLabel(),
                                              'backBtnEnabled': True}}
-            shared_event.showVehicleBuyDialog(vehicle=self.__vehicle, previousAlias=VIEW_ALIAS.EVENT_PROGRESSION_VEHICLE_PREVIEW_20, showOnlyCongrats=True, ctx=ctx)
+            shared_event.showVehicleBuyDialog(vehicle=self.__vehicle, previousAlias=VIEW_ALIAS.EVENT_PROGRESSION_VEHICLE_PREVIEW, showOnlyCongrats=True, ctx=ctx)
         if result and result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         self.onClose()

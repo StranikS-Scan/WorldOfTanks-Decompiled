@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/awards/special_achievement_awards.py
 from collector_vehicle import CollectorVehicleConsts
+from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -222,7 +223,7 @@ class BoosterAward(ExplosionBackAward):
         return i18n.makeString(MENU.AWARDWINDOW_BOOSTERAWARD_ACTIVATEBTN_LABEL)
 
     def handleOkButton(self):
-        shared_events.showBoostersWindow()
+        shared_events.showStorage(STORAGE_CONSTANTS.PERSONAL_RESERVES)
 
     def clear(self):
         self._booster = None

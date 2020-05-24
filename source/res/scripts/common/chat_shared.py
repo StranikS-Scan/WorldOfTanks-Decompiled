@@ -11,7 +11,7 @@ from wotdecorators import noexcept
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from constants import CHAT_LOG, RESTRICTION_TYPE
 from enumerations import Enumeration, AttributeEnumItem
-__all__ = ['CHAT_ACTIONS']
+__all__ = ['CHAT_ACTIONS', 'SYS_MESSAGE_TYPE']
 NOTIFICATION_GROUP = Enumeration('Group of members for notification', ['All',
  'NONE',
  'Originator',
@@ -1386,15 +1386,7 @@ SYS_MESSAGE_TYPE = Enumeration('systemMessageType', ['serverReboot',
  'battlePassReachedCap',
  'badges',
  'collectibleVehiclesUnlocked',
- 'eventGeneralLevelReached',
- 'eventGeneralReward',
- 'eventGeneralBuyReward',
- 'eventFrontReward',
- 'eventFrontLevelReached',
- 'eventGeneralBundleBuyReward',
- 'eventBuyBundleReward',
- 'eventSE20EnergyDraw',
- 'eventExchangerOrder'])
+ 'customizationProgress'])
 SYS_MESSAGE_IMPORTANCE = Enumeration('systemMessageImportance', ['normal', 'high'])
 SM_REQUEST_PERSONAL_MESSAGES_FLAG = 1
 SM_REQUEST_SYSTEM_MESSAGES_FLAG = 2

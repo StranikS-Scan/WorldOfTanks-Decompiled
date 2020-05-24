@@ -72,6 +72,9 @@ class ModuleBlockTooltipData(BlocksTooltipData):
             if effectsBlock:
                 effectsItems.append(formatters.packBuildUpBlockData(effectsBlock))
         if statsConfig.vehicle is not None and not module.isInstalled(statsConfig.vehicle):
+            perksController = statsConfig.vehicle.getPerksController()
+            if perksController and not perksController.isInitialized():
+                perksController.recalc()
             if module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS:
                 comparator = params_helper.artifactComparator(statsConfig.vehicle, module, statsConfig.slotIdx, True)
             else:
@@ -498,7 +501,7 @@ class ModuleReplaceBlockConstructor(ModuleTooltipBlockConstructor):
         vehicle = self.configuration.vehicle
         optionalDevice = vehicle.optDevices[self.configuration.slotIdx]
         if optionalDevice is not None:
-            if self.module.isDeluxe != optionalDevice.isDeluxe:
+            if self.module.isDeluxe != optionalDevice.isDeluxe or self.module.isTrophy != optionalDevice.isTrophy:
                 msgKey = R.strings.tooltips.moduleFits.replace()
             else:
                 msgKey = R.strings.tooltips.moduleFits.dismantling()

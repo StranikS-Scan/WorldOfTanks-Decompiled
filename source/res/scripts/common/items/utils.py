@@ -187,13 +187,13 @@ if IS_CLIENT:
         return (moving, still)
 
 
-    def updateAttrFactorsWithSplit(vehicleDescr, crewCompactDescrs, eqs, factors):
+    def updateAttrFactorsWithSplit(vehicleDescr, crewCompactDescrs, eqs, factors, perksController=None):
         extras = {}
         extraAspects = {VEHICLE_TTC_ASPECTS.WHEN_STILL: ('invisibility',)}
-        updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, factors, VEHICLE_TTC_ASPECTS.DEFAULT)
+        updateVehicleAttrFactors(vehicleDescr, perksController, crewCompactDescrs, eqs, factors, VEHICLE_TTC_ASPECTS.DEFAULT)
         for aspect in extraAspects.iterkeys():
             currFactors = copy.deepcopy(factors)
-            updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, currFactors, aspect)
+            updateVehicleAttrFactors(vehicleDescr, perksController, crewCompactDescrs, eqs, currFactors, aspect)
             for coefficient in extraAspects[aspect]:
                 extras.setdefault(coefficient, {})[aspect] = currFactors[coefficient]
 
@@ -224,7 +224,7 @@ if IS_CLIENT:
         return sum(filter(None, [ getattr(eq, 'crewLevelIncrease', None) for eq in eqs ]))
 
 
-    def updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, factors, aspect):
+    def updateVehicleAttrFactors(vehicleDescr, perksController, crewCompactDescrs, eqs, factors, aspect):
         factors['crewLevelIncrease'] = _sumCrewLevelIncrease(eqs)
         for eq in eqs:
             if eq is not None:
@@ -241,6 +241,8 @@ if IS_CLIENT:
 
         vehicleDescrCrew.onCollectFactors(factors)
         factors['camouflage'] = vehicleDescrCrew.camouflageFactor
+        if perksController and aspect == VEHICLE_TTC_ASPECTS.DEFAULT:
+            perksController.onCollectFactors(factors)
         shotDispersionFactors = [1.0, 0.0]
         vehicleDescrCrew.onCollectShotDispersionFactors(shotDispersionFactors)
         factors['shotDispersion'] = shotDispersionFactors

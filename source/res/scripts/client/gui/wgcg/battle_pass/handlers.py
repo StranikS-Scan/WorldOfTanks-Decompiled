@@ -15,5 +15,5 @@ class BattlePassRequestHandlers(RequestHandlers):
         return reqCtx
 
     def __getVotingData(self, ctx, callback):
-        reqCtx = self._requester.doRequestEx(ctx, callback, ('battle_pass', 'get_voting_data'), feature_id=ctx.getFeatureID(), seasons=ctx.getSeason())
+        reqCtx = self._requester.doRequestEx(ctx, callback, ('battle_pass', 'get_voting_data'), feature_id=ctx.getFeatureID(), seasons=ctx.getSeasons())
         return reqCtx

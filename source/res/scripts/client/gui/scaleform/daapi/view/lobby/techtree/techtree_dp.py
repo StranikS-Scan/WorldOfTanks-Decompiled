@@ -193,9 +193,9 @@ class _TechTreeDataProvider(object):
         return [ self._getNationsMenuItem(nation) for nation in self.getAvailableNations() ]
 
     def _getNationsMenuItem(self, nation):
-        nationIdx = nations.INDICES[nation]
-        hasDiscount = nationIdx in self.techTreeEventsListener.getNations(unviewed=True)
-        isTooltipSpecial = nationIdx in self.techTreeEventsListener.getNations()
+        nationID = nations.INDICES[nation]
+        hasDiscount = nationID in self.techTreeEventsListener.getNations(unviewed=True)
+        isTooltipSpecial = hasDiscount or nationID in self.techTreeEventsListener.getNations()
         return {'tooltip': TOOLTIPS_CONSTANTS.TECHTREE_NATION_DISCOUNT if isTooltipSpecial else nation,
          'isTooltipSpecial': isTooltipSpecial,
          'hasDiscount': hasDiscount,
@@ -272,12 +272,10 @@ class _TechTreeDataProvider(object):
             yield nodeCD
 
     def isActionEndNode(self, node):
-        hasAction = self.techTreeEventsListener.hasActiveAction
-        return not any((hasAction(nextCD) for nextCD in self.getNextLevel(node.getNodeCD()))) if hasAction(node.getNodeCD(), node.getNationID()) else False
+        return self.__isBoundActionNode(node, self.getNextLevel(node.getNodeCD()))
 
     def isActionStartNode(self, node):
-        hasAction = self.techTreeEventsListener.hasActiveAction
-        return not any((hasAction(nextCD) for nextCD in self.getTopLevel(node.getNodeCD()))) if hasAction(node.getNodeCD(), node.getNationID()) else False
+        return self.__isBoundActionNode(node, self.getTopLevel(node.getNodeCD()))
 
     def _clear(self):
         self.__displayInfo = [None] * len(nations.NAMES)
@@ -500,6 +498,14 @@ class _TechTreeDataProvider(object):
             node = BaseNode(nodeName, nationID, vehicleTypeID, nodeCD, isFound=isFound, isAnnouncement=isAnnouncement, order=order)
             nodes[nodeName] = node
             return node
+
+    def __isBoundActionNode(self, node, boundNodes):
+        nodeCD = node.getNodeCD()
+        nationID = node.getNationID()
+        if nationID not in self.techTreeEventsListener.getNations(unviewed=True):
+            return False
+        hasAction = self.techTreeEventsListener.hasActiveAction
+        return not any((hasAction(boundCD, nationID) for boundCD in boundNodes)) if hasAction(nodeCD, nationID) else False
 
     def __readNodeLines(self, parentCD, nation, xmlCtx, section, shared):
         linesSec = section['lines']

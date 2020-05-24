@@ -211,9 +211,7 @@ class AlwaysValidObject(object):
         self.__name = name
 
     def __getattr__(self, item):
-        if item not in self.__dict__:
-            self.__dict__[item] = AlwaysValidObject(self._makeName(self.__name, item))
-        return self.__dict__[item]
+        return self.__dict__[item] if item in self.__dict__ else AlwaysValidObject(self._makeName(self.__name, item))
 
     def __call__(self, *args, **kwargs):
         return AlwaysValidObject()

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/battle_pass/battle_pass_buy_confirm_any_number_view_model.py
 from frameworks.wulf import ViewModel
 from gui.impl.wrappers.user_list_model import UserListModel
+from gui.impl.gen.view_models.views.lobby.battle_pass.reward_item_model import RewardItemModel
 
 class BattlePassBuyConfirmAnyNumberViewModel(ViewModel):
     __slots__ = ('onCloseClick', 'onBuyClick', 'onShowRewardsClick', 'onChangeSelectedLevels')

@@ -2183,7 +2183,7 @@
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_creak	</wwsound>
+            <wwsound>	obj_treefall_down	</wwsound>
           </destructionSound>
         </effects>
       </variant1>
@@ -10373,6 +10373,30 @@
         </effects>
       </variant1>
     </inf_envSU_92_08_Pire_1>
+    <hd_env_EU_481_RailwayOverpass_03>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <hasHavokVersion>	true	</hasHavokVersion>
+            <file>	particles/Environment/objects/hd_env_EU_481_RailwayOverpass_03.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <debrisAmount>	20.000000	</debrisAmount>
+              <weight>	4206.000000	</weight>
+              <metal_2>	24.000000	</metal_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_EU_481_RailwayOverpass_03>
     <hd_env_EU_483_MoabitBridge_04>
       <variant1>
         <stages>
@@ -10842,10 +10866,10 @@
             <startKey>	base	</startKey>
             <wwsound>	obj_generative	</wwsound>
             <params>
-              <wood_1>	24	</wood_1>
               <debrisAmount>	50	</debrisAmount>
               <weight>	2800	</weight>
-              <metal_2>	1	</metal_2>
+              <metal_2>	17.000000	</metal_2>
+              <metal_1>	44.000000	</metal_1>
             </params>
           </destructionSound>
         </effects>
@@ -13961,6 +13985,24 @@
         </effects>
       </variant1>
     </inf_envAF_006_BarrelFuel_01>
+    <inf_envAF_006_BarrelFuel_02>
+      <variant1>
+        <stages>
+          <base>	5.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_envAF_006_BarrelFuel_02.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_fuel_tank	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_envAF_006_BarrelFuel_02>
     <inf_envAF_006_BarrelFuel_01_02>
       <variant1>
         <stages>
@@ -28020,7 +28062,9 @@
               <debrisAmount>	45.000000	</debrisAmount>
               <weight>	3716.000000	</weight>
               <metal_2>	44.000000	</metal_2>
-              <metal_1>	60.000000	</metal_1>
+              <metal_1>	47.000000	</metal_1>
+              <wood_1>	29.000000	</wood_1>
+              <wood_2>	32.000000	</wood_2>
             </params>
           </destructionSound>
         </effects>
@@ -28090,8 +28134,8 @@
             <params>
               <debrisAmount>	49.000000	</debrisAmount>
               <weight>	5428.000000	</weight>
-              <wood_1>	16.000000	</wood_1>
-              <metal_2>	44.000000	</metal_2>
+              <wood_1>	21.000000	</wood_1>
+              <wood_2>	18.000000	</wood_2>
             </params>
           </destructionSound>
         </effects>
@@ -28140,6 +28184,8 @@
               <debrisAmount>	34.000000	</debrisAmount>
               <weight>	2905.000000	</weight>
               <metal_2>	44.000000	</metal_2>
+              <wood_1>	15.000000	</wood_1>
+              <wood_2>	30.000000	</wood_2>
             </params>
           </destructionSound>
         </effects>
@@ -28481,6 +28527,7 @@
               <debrisAmount>	78.000000	</debrisAmount>
               <weight>	4662.000000	</weight>
               <wood_2>	53.000000	</wood_2>
+              <metal_1>	43.000000	</metal_1>
             </params>
           </destructionSound>
         </effects>
@@ -28910,6 +28957,54 @@
         </effects>
       </variant1>
     </hd_bld_UNI_745_Pavilion>
+    <hd_env007_SnagHeap_Burning_03>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env007_SnagHeap_Burning_03.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	77.99	</wood_1>
+              <glass>	23.51	</glass>
+              <debrisAmount>	56.6	</debrisAmount>
+              <weight>	6567.18	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env007_SnagHeap_Burning_03>
+    <hd_env007_SnagHeap3>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env007_SnagHeap3.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	77.99	</wood_1>
+              <glass>	23.51	</glass>
+              <debrisAmount>	56.6	</debrisAmount>
+              <weight>	6567.18	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env007_SnagHeap3>
     <hd_bld_AM_035_SmallShed>
       <variant1>
         <stages>
@@ -29391,7 +29486,7 @@
               <metal_1>	24	</metal_1>
               <debrisAmount>	40	</debrisAmount>
               <weight>	3500	</weight>
-              <glass>	15.85	</glass>
+              <metal_2>	24.000000	</metal_2>
             </params>
           </destructionSound>
         </effects>
@@ -32478,6 +32573,54 @@
         </effects>
       </variant1>
     </hd_gaf_SU_007_AvenueFence_02>
+    <hd_mle_UNI_803_Trenches_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_mle_UNI_803_Trenches_01.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <wwsound>	obj_generative	</wwsound>
+            <startKey>	base	</startKey>
+            <params>
+              <stone_1>	50	</stone_1>
+              <debrisAmount>	39.32	</debrisAmount>
+              <weight>	5679.61	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_mle_UNI_803_Trenches_01>
+    <hd_mle_UNI_803_Trenches_05>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_mle_UNI_803_Trenches_05.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <wwsound>	obj_generative	</wwsound>
+            <startKey>	base	</startKey>
+            <params>
+              <debrisAmount>	50.000000	</debrisAmount>
+              <weight>	2500.000000	</weight>
+              <wood_2>	10.000000	</wood_2>
+              <snow>	20.000000	</snow>
+              <cloth>	80.000000	</cloth>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_mle_UNI_803_Trenches_05>
     <hd_gaf_SU_007_AvenueFence_03>
       <variant1>
         <stages>
@@ -39862,6 +40005,8 @@
               <metal_1>	18.000000	</metal_1>
               <wood_1>	45.000000	</wood_1>
               <metal_2>	7.000000	</metal_2>
+              <glass>	26.000000	</glass>
+              <stone_2>	35.000000	</stone_2>
             </params>
           </destructionSound>
         </effects>
@@ -51446,54 +51591,6 @@
         </effects>
       </variant1>
     </hd_env_SU_054_Embankment_02>
-    <hd_mle_UNI_803_Trenches_01>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_mle_UNI_803_Trenches_01.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <wwsound>	obj_generative	</wwsound>
-            <startKey>	base	</startKey>
-            <params>
-              <stone_1>	50	</stone_1>
-              <debrisAmount>	39.32	</debrisAmount>
-              <weight>	5679.61	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_mle_UNI_803_Trenches_01>
-    <hd_mle_UNI_803_Trenches_05>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_mle_UNI_803_Trenches_05.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <wwsound>	obj_generative	</wwsound>
-            <startKey>	base	</startKey>
-            <params>
-              <debrisAmount>	50.000000	</debrisAmount>
-              <weight>	2500.000000	</weight>
-              <wood_2>	10.000000	</wood_2>
-              <cloth>	80.000000	</cloth>
-              <snow>	20.000000	</snow>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_mle_UNI_803_Trenches_05>
     <env_105_01_BerlinFountain01_0>
       <variant1>
         <stages>

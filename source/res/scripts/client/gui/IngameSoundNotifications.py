@@ -7,7 +7,6 @@ import ResMgr
 import BattleReplay
 import SoundGroups
 import WWISE
-from constants import ARENA_GUI_TYPE
 from debug_utils import LOG_WARNING
 
 class IngameSoundNotifications(object):
@@ -20,7 +19,6 @@ class IngameSoundNotifications(object):
         self.__isEnabled = False
         self.__enabledSoundCategories = set()
         self.__lastEnqueuedTime = {}
-        self.__remappedNotifications = {}
         self.__readConfig()
         return
 
@@ -68,9 +66,6 @@ class IngameSoundNotifications(object):
         elif not self.__isEnabled or BigWorld.isWindowVisible() is False:
             return
         else:
-            eventName = self.__remappedNotifications.get(eventName, eventName)
-            if eventName is None:
-                return
             event = self.__events.get(eventName, None)
             if event is None:
                 LOG_WARNING("Couldn't find %s event" % eventName)
@@ -85,10 +80,6 @@ class IngameSoundNotifications(object):
                     if idToBind is None and soundDesc['shouldBindToPlayer']:
                         if BigWorld.player().vehicle is not None:
                             idToBind = BigWorld.player().vehicle.id
-                    arena = BigWorld.player().arena
-                    if arena is not None and arena.guiType == ARENA_GUI_TYPE.EVENT_BATTLES:
-                        if not soundDesc['shouldBindToPlayer']:
-                            idToBind = None
                     soundPath = soundDesc['sound']
                     minTimeBetweenEvents = soundDesc['minTimeBetweenEvents']
                     queueItem = IngameSoundNotifications.QueueItem(soundPath, time + soundDesc['timeout'], minTimeBetweenEvents, idToBind, checkFn, eventPos)
@@ -145,9 +136,6 @@ class IngameSoundNotifications(object):
         else:
             self.__enabledSoundCategories.remove(category)
             self.__clearQueue(category)
-
-    def setRemapping(self, remap):
-        self.__remappedNotifications = remap
 
     def isPlaying(self, eventName):
         for category in ('fx', 'voice'):

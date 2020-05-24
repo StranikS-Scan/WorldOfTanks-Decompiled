@@ -316,8 +316,6 @@
           <name>	Track_VD_L1	</name>
         </node>
       </trackNodes>
-      <wwsoundPC>	treads_type_pc	</wwsoundPC>
-      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <physicalTracks>
         <left>
           <segmentsCount>	97	</segmentsCount>
@@ -753,6 +751,8 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <customization>
         <customizableVehicleAreas>
           <paint></paint>
@@ -991,36 +991,15 @@
       <chassis>
         <Chassis_G119_Panzer58_BF>
           <grounds>
-            <ground>
-              <medium>
-                <rollingFriction>	0.05635	</rollingFriction>
-              </medium>
-            </ground>
-            <sand>
-              <medium>
-                <rollingFriction>	0.05635	</rollingFriction>
-              </medium>
-            </sand>
-            <wood>
-              <medium>
-                <rollingFriction>	0.05635	</rollingFriction>
-              </medium>
-            </wood>
-            <snow>
-              <medium>
-                <rollingFriction>	0.05635	</rollingFriction>
-              </medium>
-            </snow>
-            <stone>
-              <medium>
-                <rollingFriction>	0.05635	</rollingFriction>
-              </medium>
-            </stone>
-            <metal>
-              <medium>
-                <rollingFriction>	0.05635	</rollingFriction>
-              </medium>
-            </metal>
+            <soft>
+              <rollingFriction>	0.1127	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.05635	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.04025	</rollingFriction>
+            </firm>
           </grounds>
         </Chassis_G119_Panzer58_BF>
       </chassis>

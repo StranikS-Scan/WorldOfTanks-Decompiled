@@ -5,6 +5,7 @@ import AccountCommands
 import BattleReplay
 from Account import PlayerAccount
 from PlayerEvents import g_playerEvents as events
+from constants import QUEUE_TYPE
 from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP
 from bootcamp.Bootcamp import g_bootcamp
 from bootcamp.BootCampEvents import g_bootcampEvents
@@ -67,10 +68,7 @@ class PlayerBootcampAccount(PlayerAccount):
         LOG_DEBUG_DEV_BOOTCAMP('onBootcampEnqueued', number, queueLen, avgWaitingTime)
         self.isInBootcampQueue = True
         events.onBootcampEnqueued(number, queueLen, avgWaitingTime)
-
-    def _initTimeCorrection(self, ctx):
-        if 'serverUTC' in ctx:
-            super(PlayerBootcampAccount, self)._initTimeCorrection(ctx['serverUTC'])
+        events.onEnqueued(QUEUE_TYPE.BOOTCAMP)
 
 
 BootcampAccount = PlayerBootcampAccount

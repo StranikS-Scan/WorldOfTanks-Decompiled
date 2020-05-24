@@ -12,12 +12,11 @@ from gui import GUI_SETTINGS
 from gui import SystemMessages
 from gui.DialogsInterface import showI18nConfirmDialog
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.ingame_shop import showBuyGoldForVehicleWebOverlay, showTradeOffOverlay
+from gui.shop import showBuyGoldForVehicleWebOverlay, showTradeOffOverlay
 from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.Scaleform.locale.STORE import STORE
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, DIALOG_BUTTON_ID
 from gui.Scaleform.framework.managers.loaders import ViewKey
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
@@ -64,11 +63,7 @@ class VehicleBuyActionTypes(CONST_CONTAINER):
 _TooltipExtraData = namedtuple('_TooltipExtraData', 'key, itemType')
 _TANKMAN_KEYS = ('', 'creditsTankman', 'goldTankman')
 _ACADEMY_SLOT = 2
-_VP_SHOW_HANGAR_ON_SUCCESS_ALIASES = (VIEW_ALIAS.VEHICLE_PREVIEW,
- VIEW_ALIAS.VEHICLE_PREVIEW_20,
- VIEW_ALIAS.TRADE_IN_VEHICLE_PREVIEW_20,
- VIEW_ALIAS.SECRET_EVENT_VEHICLE_PREVIEW_20,
- VIEW_ALIAS.SECRET_EVENT_SHOP_VEHICLE_PREVIEW_20)
+_VP_SHOW_HANGAR_ON_SUCCESS_ALIASES = (VIEW_ALIAS.VEHICLE_PREVIEW, VIEW_ALIAS.TRADE_IN_VEHICLE_PREVIEW)
 _COLLECTIBLE_VEHICLE_TUTORIAL = 'collectibleVehicle'
 
 class BuyVehicleView(ViewImpl, EventSystemEntity):
@@ -115,8 +110,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         else:
             self.__selectedRentID = self.__RENT_UNLIM_IDX
             self.__selectedRentIdx = self.__RENT_UNLIM_IDX
-        self.__isGoldAutoPurchaseEnabled = isIngameShopEnabled()
-        self.__isGoldAutoPurchaseEnabled &= self.__wallet.isAvailable
+        self.__isGoldAutoPurchaseEnabled = self.__wallet.isAvailable
         self.__isRentVisible = self.__vehicle.hasRentPackages and not self.__isTradeIn()
         self.__popoverIsAvailable = True
         self.__tradeInInProgress = False
@@ -385,7 +379,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity):
         if not self.__bootcamp.isInBootcamp():
             if self.__previousAlias in _VP_SHOW_HANGAR_ON_SUCCESS_ALIASES:
                 event_dispatcher.selectVehicleInHangar(self.__vehicle.intCD)
-            elif self.__previousAlias == VIEW_ALIAS.EVENT_PROGRESSION_VEHICLE_PREVIEW_20:
+            elif self.__previousAlias == VIEW_ALIAS.EVENT_PROGRESSION_VEHICLE_PREVIEW:
                 self.__progressionCtrl.showCustomScreen(EventProgressionScreens.MAIN)
 
     def __playSlotAnimation(self):
@@ -865,13 +859,6 @@ class BuyVehicleWindow(Window):
     __slots__ = ()
 
     def __init__(self, *args, **kwargs):
-        settings = self._getSettings(**kwargs)
-        super(BuyVehicleWindow, self).__init__(settings)
-
-    def showCongratulations(self):
-        self.content.showCongratulations()
-
-    def _getSettings(self, **kwargs):
         app = self.appLoader.getApp()
         view = app.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.LOBBY))
         if view is not None:
@@ -880,6 +867,10 @@ class BuyVehicleWindow(Window):
             parent = None
         settings = WindowSettings()
         settings.flags = WindowFlags.DIALOG
-        settings.content = BuyVehicleView(**kwargs)
+        settings.content = BuyVehicleView(*args, **kwargs)
         settings.parent = parent
-        return settings
+        super(BuyVehicleWindow, self).__init__(settings)
+        return
+
+    def showCongratulations(self):
+        self.content.showCongratulations()

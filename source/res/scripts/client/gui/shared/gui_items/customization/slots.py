@@ -3,15 +3,8 @@
 import logging
 from shared_utils import first
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from items.components.c11n_constants import ProjectionDecalDirectionTags, ProjectionDecalFormTags, ProjectionDecalPositionTags
+from items.components.c11n_constants import ProjectionDecalDirectionTags, ProjectionDecalFormTags, MATCHING_TAGS_SUFFIX, HIDDEN_FOR_USER_TAG, SLOT_DEFAULT_ALLOWED_MODEL
 _logger = logging.getLogger(__name__)
-ANCHOR_TYPE_TO_SLOT_TYPE_MAP = {'inscription': GUI_ITEM_TYPE.INSCRIPTION,
- 'player': GUI_ITEM_TYPE.EMBLEM,
- 'paint': GUI_ITEM_TYPE.PAINT,
- 'camouflage': GUI_ITEM_TYPE.CAMOUFLAGE,
- 'projectionDecal': GUI_ITEM_TYPE.PROJECTION_DECAL,
- 'style': GUI_ITEM_TYPE.STYLE,
- 'effect': GUI_ITEM_TYPE.MODIFICATION}
 SLOT_ASPECT_RATIO = {GUI_ITEM_TYPE.EMBLEM: 1.0,
  GUI_ITEM_TYPE.INSCRIPTION: 0.5}
 FORMFACTOR_ASPECT_RATIO = {ProjectionDecalFormTags.SQUARE: 1.0,
@@ -19,8 +12,6 @@ FORMFACTOR_ASPECT_RATIO = {ProjectionDecalFormTags.SQUARE: 1.0,
  ProjectionDecalFormTags.RECT1X3: 1.0 / 3,
  ProjectionDecalFormTags.RECT1X4: 1.0 / 4,
  ProjectionDecalFormTags.RECT1X6: 1.0 / 6}
-SLOT_TYPE_TO_ANCHOR_TYPE_MAP = {v:k for k, v in ANCHOR_TYPE_TO_SLOT_TYPE_MAP.iteritems()}
-SLOT_TYPES = tuple((slotType for slotType in SLOT_TYPE_TO_ANCHOR_TYPE_MAP))
 
 class BaseSlot(object):
     __slots__ = ('_areaId', '_regionIdx', '_descriptor')
@@ -29,9 +20,6 @@ class BaseSlot(object):
         self._areaId = areaId
         self._regionIdx = regionIdx
         self._descriptor = descriptor
-
-
-class EmblemSlot(BaseSlot):
 
     @property
     def type(self):
@@ -48,6 +36,17 @@ class EmblemSlot(BaseSlot):
     @property
     def descriptor(self):
         return self._descriptor
+
+    @property
+    def hiddenForUser(self):
+        return False
+
+    @property
+    def compatibleModels(self):
+        return (SLOT_DEFAULT_ALLOWED_MODEL,)
+
+
+class EmblemSlot(BaseSlot):
 
     @property
     def rayStart(self):
@@ -93,10 +92,6 @@ class EmblemSlot(BaseSlot):
 class BaseCustomizationSlot(BaseSlot):
 
     @property
-    def type(self):
-        return self.descriptor.type
-
-    @property
     def slotId(self):
         return self.descriptor.slotId
 
@@ -109,6 +104,10 @@ class BaseCustomizationSlot(BaseSlot):
         return self.descriptor.anchorDirection
 
     @property
+    def tags(self):
+        return self.descriptor.tags
+
+    @property
     def areaId(self):
         return self._areaId
 
@@ -119,6 +118,14 @@ class BaseCustomizationSlot(BaseSlot):
     @property
     def descriptor(self):
         return self._descriptor
+
+    @property
+    def hiddenForUser(self):
+        return HIDDEN_FOR_USER_TAG in self.tags
+
+    @property
+    def compatibleModels(self):
+        return self._descriptor.compatibleModels
 
 
 class ProjectionDecalSlot(BaseCustomizationSlot):
@@ -152,22 +159,22 @@ class ProjectionDecalSlot(BaseCustomizationSlot):
         return self.descriptor.showOn
 
     @property
-    def tags(self):
-        return self.descriptor.tags
-
-    @property
     def direction(self):
         directionTags = (tag for tag in self.tags if tag.startswith(ProjectionDecalDirectionTags.PREFIX))
         return first(directionTags, ProjectionDecalDirectionTags.ANY)
+
+    @property
+    def canBeMirroredVertically(self):
+        return self.descriptor.canBeMirroredVertically
 
     @property
     def formfactors(self):
         return tuple((tag for tag in self.tags if tag.startswith(ProjectionDecalFormTags.PREFIX)))
 
     @property
-    def positionTag(self):
-        positionTags = (tag for tag in self.tags if tag.startswith(ProjectionDecalPositionTags.PREFIX))
-        return first(positionTags, None)
+    def matchingTag(self):
+        matchingTags = (tag for tag in self.tags if tag.endswith(MATCHING_TAGS_SUFFIX))
+        return first(matchingTags, None)
 
     def isFitForFormfactor(self, formfactor):
         return formfactor in self.formfactors

@@ -34,7 +34,6 @@ from shared_utils import first, findFirst
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from constants import QUEST_NOT_AVAILABLE_REASON
 EventBattles = namedtuple('EventBattles', ['vehicleTags',
  'vehicles',
  'enabled',
@@ -100,23 +99,6 @@ class ServerEventAbstract(object):
         if 'activeTimeIntervals' in self._data:
             return [ (l[0] * 3600 + l[1] * 60, h[0] * 3600 + h[1] * 60) for l, h in self._data['activeTimeIntervals'] ]
         return []
-
-    def getCollapsedActiveTimeIntervals(self):
-        intervals = self.getActiveTimeIntervals()
-        if not intervals:
-            return []
-        collapsed = []
-        current = first(intervals)
-        for following in intervals[1:]:
-            collapsable = current[1] == following[0] or current[1] == 86400 and following[0] == 0
-            if collapsable:
-                current = (current[0], following[1])
-            collapsed.append(current)
-            current = following
-
-        if not collapsed or current != collapsed[-1]:
-            collapsed.append(current)
-        return collapsed
 
     def getID(self):
         return self._id
@@ -200,12 +182,12 @@ class ServerEventAbstract(object):
 
     def isAvailable(self):
         if self.getStartTimeLeft() > 0:
-            return ValidationResult(False, QUEST_NOT_AVAILABLE_REASON.IN_FUTURE)
+            return ValidationResult(False, 'in_future')
         if self.isOutOfDate():
-            return ValidationResult(False, QUEST_NOT_AVAILABLE_REASON.OUT_OF_DATE)
+            return ValidationResult(False, 'out_of_date')
         weekDays = self.getWeekDays()
         if weekDays and time_utils.getServerRegionalWeekDay() not in weekDays:
-            return ValidationResult(False, QUEST_NOT_AVAILABLE_REASON.INVALID_WEEKDAY)
+            return ValidationResult(False, 'invalid_weekday')
         intervals = self.getActiveTimeIntervals()
         serverTime = time_utils.getServerTimeCurrentDay()
         if intervals:
@@ -213,15 +195,12 @@ class ServerEventAbstract(object):
                 if low <= serverTime <= high:
                     break
             else:
-                return ValidationResult(False, QUEST_NOT_AVAILABLE_REASON.INVALID_TIME_INTERVAL)
+                return ValidationResult(False, 'invalid_time_interval')
 
-        return ValidationResult(False, QUEST_NOT_AVAILABLE_REASON.REQUIREMENTS) if not self._checkConditions() else ValidationResult(True, '')
+        return ValidationResult(False, 'requirements') if not self._checkConditions() else ValidationResult(True, '')
 
     def isValidVehicleCondition(self, vehicle):
         return self._checkVehicleConditions(vehicle)
-
-    def isWrongVehicle(self, vehicle):
-        return self._isWrongVehicle(vehicle)
 
     def getBonuses(self, bonusName=None, isCompensation=False):
         return []
@@ -237,9 +216,6 @@ class ServerEventAbstract(object):
 
     def _checkVehicleConditions(self, vehicle):
         return True
-
-    def _isWrongVehicle(self, vehicle):
-        return False
 
     def _getTokenSaleState(self):
         return self._data.get('shopButton', TOKEN_SHOP.HIDE)
@@ -335,7 +311,7 @@ class Quest(ServerEventAbstract):
         return getGroupTypeByID(self.getGroupID())
 
     def isAvailable(self):
-        return ValidationResult(False, QUEST_NOT_AVAILABLE_REASON.DAILY_COMPLETE) if self.bonusCond.getBonusLimit() is not None and self.bonusCond.isDaily() and self.isCompleted() else super(Quest, self).isAvailable()
+        return ValidationResult(False, 'dailyComplete') if self.bonusCond.getBonusLimit() is not None and self.bonusCond.isDaily() and self.isCompleted() else super(Quest, self).isAvailable()
 
     @property
     def linkedActions(self):
@@ -473,13 +449,10 @@ class Quest(ServerEventAbstract):
         return True
 
     def _checkConditions(self):
-        return False if not self.accountReqs.isAvailable() else self.vehicleReqs.isAnyVehicleAcceptable() or self.vehicleReqs.getSuitableVehicles()
+        return self.accountReqs.isAvailable() and (self.vehicleReqs.isAnyVehicleAcceptable() or self.vehicleReqs.getSuitableVehicles())
 
     def _checkVehicleConditions(self, vehicle):
         return self.vehicleReqs.isAnyVehicleAcceptable() or vehicle in self.vehicleReqs.getSuitableVehicles()
-
-    def _isWrongVehicle(self, vehicle):
-        return self.accountReqs.isAvailable() and not self._checkVehicleConditions(vehicle)
 
 
 class TokenQuest(Quest):
@@ -559,8 +532,6 @@ class PersonalQuest(Quest):
 
 
 class RankedQuest(Quest):
-    boxIconSizes = {'big': '450x400',
-     'small': '100x88'}
     __slots__ = Quest.__slots__ + ('__rankedData',)
 
     def __init__(self, qID, data, progress=None):

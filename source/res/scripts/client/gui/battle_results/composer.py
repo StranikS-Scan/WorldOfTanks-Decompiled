@@ -3,7 +3,6 @@
 from constants import ARENA_BONUS_TYPE
 from gui.battle_results import templates
 from gui.battle_results.components import base
-from gui.shared import event_dispatcher
 
 class IStatsComposer(object):
 
@@ -17,14 +16,6 @@ class IStatsComposer(object):
         raise NotImplementedError
 
     def popAnimation(self):
-        raise NotImplementedError
-
-    @staticmethod
-    def onShowResults(arenaUniqueID):
-        raise NotImplementedError
-
-    @staticmethod
-    def onResultsPosted(arenaUniqueID):
         raise NotImplementedError
 
 
@@ -66,14 +57,6 @@ class StatsComposer(IStatsComposer):
         else:
             animation = None
         return animation
-
-    @staticmethod
-    def onShowResults(arenaUniqueID):
-        event_dispatcher.showBattleResultsWindow(arenaUniqueID)
-
-    @staticmethod
-    def onResultsPosted(arenaUniqueID):
-        event_dispatcher.notifyBattleResultsPosted(arenaUniqueID)
 
     def _registerTabs(self, reusable):
         if reusable.common.isMultiTeamMode:
@@ -168,42 +151,6 @@ class BootcampStatsComposer(IStatsComposer):
     def popAnimation(self):
         return None
 
-    @staticmethod
-    def onShowResults(arenaUniqueID):
-        event_dispatcher.showBattleResultsWindow(arenaUniqueID)
-
-    @staticmethod
-    def onResultsPosted(arenaUniqueID):
-        event_dispatcher.notifyBattleResultsPosted(arenaUniqueID)
-
-
-class EventStatsComposer(IStatsComposer):
-    __slots__ = ('_block',)
-
-    def __init__(self, _):
-        super(EventStatsComposer, self).__init__()
-        self._block = templates.EVENT_TOTAL_RESULTS_BLOCK.clone()
-
-    def clear(self):
-        self._block.clear()
-
-    def setResults(self, results, reusable):
-        self._block.setRecord(results, reusable)
-
-    def getVO(self):
-        return self._block.getVO()
-
-    def popAnimation(self):
-        return None
-
-    @staticmethod
-    def onShowResults(arenaUniqueID):
-        pass
-
-    @staticmethod
-    def onResultsPosted(arenaUniqueID):
-        event_dispatcher.showEventBattleResultsWindow(arenaUniqueID)
-
 
 def createComposer(reusable):
     bonusType = reusable.common.arenaBonusType
@@ -221,8 +168,6 @@ def createComposer(reusable):
         composer = BootcampStatsComposer(reusable)
     elif bonusType == ARENA_BONUS_TYPE.EPIC_BATTLE:
         composer = EpicStatsComposer(reusable)
-    elif bonusType == ARENA_BONUS_TYPE.EVENT_BATTLES:
-        composer = EventStatsComposer(reusable)
     else:
         composer = RegularStatsComposer(reusable)
     return composer

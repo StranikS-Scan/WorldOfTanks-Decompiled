@@ -22,7 +22,7 @@ from gui.impl.gen.resources import R
 from gui import SystemMessages
 from gui.shared.notifications import NotificationPriorityLevel
 from shared_utils import first
-from gui.server_events.events_helpers import getTankmanRewardQuests
+from .events_helpers import getTankmanRewardQuests
 
 class RecruitSourceID(object):
     TANKWOMAN = 'tankwoman'

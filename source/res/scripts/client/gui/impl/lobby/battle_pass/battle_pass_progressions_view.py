@@ -1,43 +1,48 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/battle_pass_progressions_view.py
-import typing
+import logging
 from operator import itemgetter
-from battle_pass_common import BattlePassConsts, BattlePassState
-from gui.Scaleform.daapi import LobbySubView
-from gui.Scaleform.managers.UtilsManager import ONE_SECOND
-from helpers.func_utils import oncePerPeriod
-from soft_exception import SoftException
+import typing
 from account_helpers.AccountSettings import AccountSettings, LAST_BATTLE_PASS_POINTS_SEEN
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
+from battle_pass_common import BattlePassConsts, BattlePassState, getBattlePassVoteToken
 from frameworks.wulf import ViewSettings, ViewFlags
+from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.store.browser import shop_helpers
+from gui.Scaleform.daapi.view.meta.MissionsBattlePassViewMeta import MissionsBattlePassViewMeta
+from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
+from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData, changeBonusTooltipData
+from gui.battle_pass.battle_pass_helpers import getExtrasVideoPageURL, getFormattedTimeLeft, isSeasonEndingSoon, isCurrentBattlePassStateBase, isNeededToVote, getInfoPageURL, getIntroVideoURL, BattlePassProgressionSubTabs, getSeasonHistory, getVehicleBackgroundPosition, BackgroundPositions
 from gui.battle_pass.undefined_bonuses import isUndefinedBonusTooltipData, createUndefinedBonusTooltipWindow
-from gui.battle_pass.battle_pass_helpers import getExtrasVideoPageURL, getFormattedTimeLeft, isSeasonEndingSoon, isCurrentBattlePassStateBase, isNeededToVote, getInfoPageURL, getIntroVideoURL
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_progressions_view_model import BattlePassProgressionsViewModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.reward_level_model import RewardLevelModel
+from gui.impl.lobby.battle_pass.battle_pass_buy_view import BattlePassBuyWindow
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_lock_icon_tooltip_view import BattlePassLockIconTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_points_view import BattlePassPointsTooltip
+from gui.impl.lobby.battle_pass.tooltips.battle_pass_progress_warning_tooltip_view import BattlePassProgressWarningTooltipView
 from gui.impl.pub import ViewImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
-from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
-from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.meta.MissionsBattlePassViewMeta import MissionsBattlePassViewMeta
 from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showBattlePassBuyWindow, showBattleVotingResultWindow, showBrowserOverlayView, showHangar
+from gui.shared.event_dispatcher import showBattleVotingResultWindow, showBrowserOverlayView, showHangar, showShop
 from gui.shared.formatters import text_styles
 from gui.shared.utils.scheduled_notifications import PeriodicNotifier, Notifiable, SimpleNotifier
 from helpers import dependency, time_utils
+from shared_utils import findFirst
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.game_control import IBattlePassController
+from skeletons.gui.impl import IGuiLoader
+from skeletons.gui.shared import IItemsCache
+from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
+_logger = logging.getLogger(__name__)
 
 class BattlePassProgressionsComponent(InjectComponentAdaptor, MissionsBattlePassViewMeta, LobbySubView):
     __slots__ = ()
@@ -53,6 +58,11 @@ class BattlePassProgressionsComponent(InjectComponentAdaptor, MissionsBattlePass
     def _makeInjectView(self):
         self.as_setWaitingVisibleS(True)
         return BattlePassProgressionsView(self.__showDummy, self.as_showViewS, flags=ViewFlags.COMPONENT)
+
+    def setSubTab(self, subTab):
+        if self._injectView is not None:
+            self._injectView.setSubTab(subTab)
+        return
 
     def __showDummy(self, show):
         if show:
@@ -75,6 +85,7 @@ class BattlePassProgressionsView(ViewImpl):
     __settingsCore = dependency.descriptor(ISettingsCore)
     __battlePassController = dependency.descriptor(IBattlePassController)
     __gui = dependency.descriptor(IGuiLoader)
+    __itemsCache = dependency.descriptor(IItemsCache)
     ANIMATION_PURCHASE_LEVELS = 'animPurchaseLevels'
     ANIMATIONS = {ANIMATION_PURCHASE_LEVELS: False}
 
@@ -118,12 +129,17 @@ class BattlePassProgressionsView(ViewImpl):
             raise SoftException('Incorrect tooltip type with contentID {}'.format(contentID))
         return tooltipContentCreator(event)
 
+    def setSubTab(self, subTab):
+        self.__clearSubViews()
+        if subTab == BattlePassProgressionSubTabs.VOTING_TAB:
+            showBattleVotingResultWindow(parent=self.getParentWindow())
+        elif subTab == BattlePassProgressionSubTabs.BUY_TAB:
+            self.__showBattlePassBuyWindow()
+        elif subTab == BattlePassProgressionSubTabs.BUY_TAB_FOR_SHOP:
+            self.__showBattlePassBuyWindow(backCallback=showShop)
+
     def _onLoading(self, *args, **kwargs):
         super(BattlePassProgressionsView, self)._onLoading()
-        with self.viewModel.transaction() as tx:
-            self.__showIntroVideo(onStart=True)
-            tx.setShowIntro(self.__isFirstShowView())
-            self.__setShowBuyAnimations(model=tx)
         self.__addListeners()
         self.__notifier = Notifiable()
         self.__notifier.addNotificator(PeriodicNotifier(self.__battlePassController.getSeasonTimeLeft, self.__updateTimer))
@@ -149,11 +165,15 @@ class BattlePassProgressionsView(ViewImpl):
     def __showDummy(self):
         if self.__showDummyCallback is not None:
             self.__showDummyCallback(True)
+            with self.viewModel.transaction() as model:
+                model.setIsPaused(True)
         return
 
     def __hideDummy(self):
         if self.__showDummyCallback is not None:
             self.__showDummyCallback(False)
+            with self.viewModel.transaction() as model:
+                model.setIsPaused(False)
         return
 
     def __onBuyClick(self):
@@ -163,12 +183,10 @@ class BattlePassProgressionsView(ViewImpl):
         with self.viewModel.transaction() as model:
             model.setShowBuyAnimations(False)
             model.setShowLevelsAnimations(self.ANIMATIONS[self.ANIMATION_PURCHASE_LEVELS])
-        showBattlePassBuyWindow()
+        self.setSubTab(BattlePassProgressionSubTabs.BUY_TAB)
 
-    @staticmethod
-    @oncePerPeriod(ONE_SECOND)
-    def __onVotingResultClick():
-        showBattleVotingResultWindow()
+    def __onVotingResultClick(self):
+        self.setSubTab(BattlePassProgressionSubTabs.VOTING_TAB)
 
     def __onIntroCloseClick(self):
         self.viewModel.setShowIntro(False)
@@ -181,12 +199,22 @@ class BattlePassProgressionsView(ViewImpl):
         self.__loadUrl(getInfoPageURL())
 
     @staticmethod
+    def __onBuyVehicleClick():
+        showShop(shop_helpers.getBuyVehiclesUrl())
+
+    @staticmethod
     def __onClose():
         showHangar()
 
     @staticmethod
     def __loadUrl(url):
         showBrowserOverlayView(url, VIEW_ALIAS.BATTLE_PASS_BROWSER_VIEW)
+
+    def __showIntro(self):
+        with self.viewModel.transaction() as tx:
+            self.__showIntroVideo(onStart=True)
+            tx.setShowIntro(self.__isFirstShowView())
+            self.__setShowBuyAnimations(model=tx)
 
     def __isFirstShowView(self):
         return not self.__settingsCore.serverSettings.getBPStorage().get(BattlePassStorageKeys.INTRO_SHOWN)
@@ -198,10 +226,12 @@ class BattlePassProgressionsView(ViewImpl):
         isPaused = self.__battlePassController.isPaused()
         if isPaused:
             self.__showDummy()
-            with self.viewModel.transaction() as model:
-                self.__setIsPaused(isPaused, model)
+        elif self.__battlePassController.isOffSeasonEnable():
+            self.__hideDummy()
+            self.__updateOffSeason()
         else:
             self.__hideDummy()
+            self.__showIntro()
             with self.viewModel.transaction() as model:
                 self.__setAwards(model)
                 self.__setCurrentLevelState(model=model)
@@ -216,6 +246,23 @@ class BattlePassProgressionsView(ViewImpl):
         self.__setRewardsList(BattlePassConsts.REWARD_PAID, model.paidRewards)
         self.__setRewardsList(BattlePassConsts.REWARD_POST, model.postRewards)
         self.__setFinalReward(model)
+        self.__setMedalReward(model)
+
+    def __setMedalReward(self, model):
+        maxLevel = self.__battlePassController.getMaxLevel()
+        freeRewards = self.__battlePassController.getSingleAward(maxLevel)
+        dossierBonus = findFirst(lambda b: b.getName() == 'dossier', freeRewards)
+        if dossierBonus is None:
+            return
+        else:
+            randomStats = self.__itemsCache.items.getAccountDossier().getRandomStats()
+            achievements = dossierBonus.getAchievementsFromDossier(randomStats)
+            if not achievements:
+                return
+            model.setHaveMedalReward(achievements[-1].isInDossier())
+            model.medalReward.clearItems()
+            packBonusModelAndTooltipData([dossierBonus], model.medalReward, self.__tooltipItems)
+            return
 
     def __setFinalReward(self, model):
         finalLevel = self.__battlePassController.getMaxLevel()
@@ -226,14 +273,15 @@ class BattlePassProgressionsView(ViewImpl):
         packBonusModelAndTooltipData(freeReward, freeModel.rewardItems, self.__tooltipItems)
         packBonusModelAndTooltipData(paidReward, paidModel.rewardItems, self.__tooltipItems)
 
-    def __removeMedals(self, model):
+    @staticmethod
+    def __removeMedals(model):
         freeItems = model.rewardItems.getItems()
-        indexies = []
+        indexes = []
         for index, item in enumerate(freeItems):
             if item.getName() == 'dossier_achievement':
-                indexies.append(index)
+                indexes.append(index)
 
-        model.rewardItems.removeItemByIndexes(indexies)
+        model.rewardItems.removeItemByIndexes(indexes)
 
     def __setRewardsList(self, awardType, model):
         model.clearItems()
@@ -326,6 +374,7 @@ class BattlePassProgressionsView(ViewImpl):
         model.setIsPaused(isPaused)
         model.setCanBuy(canBuy)
         model.setSeasonTimeLeft(getFormattedTimeLeft(self.__battlePassController.getSeasonTimeLeft()))
+        model.setCanPlayerParticipate(self.__battlePassController.canPlayerParticipate())
         if self.__battlePassController.isSeasonFinished():
             model.setSeasonTime(backport.text(R.strings.battle_pass_2020.commonProgression.body.ended()))
         else:
@@ -333,6 +382,89 @@ class BattlePassProgressionsView(ViewImpl):
             timeEnd = self.__battlePassController.getSeasonFinishTime()
             timePeriod = '{} - {}'.format(self.__makeSeasonTimeText(timeStart), self.__makeSeasonTimeText(timeEnd))
             model.setSeasonTime(timePeriod)
+
+    def __updateOffSeason(self):
+        prevSeasonStats = self.__battlePassController.getLastFinishedSeasonStats()
+        if prevSeasonStats is None:
+            self.__showDummy()
+            _logger.warning('There is not previous season stats')
+            return
+        else:
+            prevOtherStats = prevSeasonStats.otherStats
+            prevSeasonHistory = getSeasonHistory(prevSeasonStats.seasonID)
+            if prevSeasonHistory is None:
+                self.__showDummy()
+                _logger.warning('There is not previous season %r history', prevSeasonStats.seasonID)
+                return
+            sumPoints = sum(prevSeasonStats.vehPoints)
+            if prevOtherStats.maxBase == prevSeasonHistory.maxBaseLevel:
+                currentLevel = prevOtherStats.maxPost
+                state = BattlePassState.POST
+            else:
+                currentLevel = prevOtherStats.maxBase
+                state = BattlePassState.BASE
+            if prevOtherStats.maxPost >= prevSeasonHistory.maxPostLevel:
+                state = BattlePassState.COMPLETED
+            with self.viewModel.transaction() as tx:
+                tx.setShowOffSeason(True)
+                offSeason = tx.offSeason
+                offSeason.setLevel(currentLevel + 1)
+                offSeason.setSeasonName(backport.text(R.strings.battle_pass_2020.offSeason.title(), number='I'))
+                offSeason.setHasBattlePass(self.__battlePassController.isBought(prevSeasonStats.seasonID))
+                offSeason.setIsPostProgression(state != BattlePassState.BASE)
+                offSeason.setIsPostProgressionCompleted(state == BattlePassState.COMPLETED)
+                offSeason.setIsEnabled(sumPoints > 0)
+                for vehCD in prevSeasonHistory.rewardVehicles:
+                    vehicle = self.__itemsCache.items.getItemByCD(vehCD)
+                    vehicleBackgroundPosition = getVehicleBackgroundPosition(vehCD)
+                    if vehicleBackgroundPosition == BackgroundPositions.LEFT:
+                        offSeason.setLeftVehicle(vehicle.userName)
+                    if vehicleBackgroundPosition == BackgroundPositions.RIGHT:
+                        offSeason.setRightVehicle(vehicle.userName)
+
+                self.__updateVotingResult(model=tx)
+            return
+
+    @replaceNoneKwargsModel
+    def __updateVotingResult(self, model=None):
+        votingRequester = self.__battlePassController.getVotingRequester()
+        prevSeasonStats = self.__battlePassController.getLastFinishedSeasonStats()
+        if prevSeasonStats is None:
+            return
+        else:
+            availableService, votingResult = votingRequester.getVotingResult(prevSeasonStats.seasonID)
+            isFailedService = not availableService or not votingResult
+            offSeason = model.offSeason
+            offSeason.setIsFailedService(isFailedService)
+            if len(votingResult) != 2:
+                _logger.error('Incorrect voting results - %s', votingResult)
+                if len(votingResult) > 2:
+                    return
+                _logger.error('Trying to build results from history')
+                prevSeasonHistory = getSeasonHistory(prevSeasonStats.seasonID)
+                for vehCD in prevSeasonHistory.rewardVehicles:
+                    if vehCD not in votingResult:
+                        votingResult[vehCD] = 0
+
+            selectedVehCD = self.__getSelectedVoteOptionFromTokens(prevSeasonStats.seasonID, votingResult.keys())
+            winVehCD, _ = max(votingResult.iteritems(), key=itemgetter(1))
+            if not selectedVehCD:
+                offSeason.setVoteStatus(offSeason.NOT_VOTE)
+            elif winVehCD == selectedVehCD:
+                offSeason.setVoteStatus(offSeason.WIN_VOTE)
+            else:
+                offSeason.setVoteStatus(offSeason.LOSE_VOTE)
+            for vehCD, voices in votingResult.iteritems():
+                vehicleArtPosition = getVehicleBackgroundPosition(vehCD)
+                if vehicleArtPosition == BackgroundPositions.LEFT:
+                    offSeason.setLeftPoints(voices)
+                if vehicleArtPosition == BackgroundPositions.RIGHT:
+                    offSeason.setRightPoints(voices)
+
+            return
+
+    def __onVotingResultsUpdated(self):
+        self.__updateVotingResult()
 
     def __updateBuyButtonState(self):
         sellAnyLevelsUnlocked = self.__battlePassController.isSellAnyLevelsUnlocked()
@@ -374,10 +506,12 @@ class BattlePassProgressionsView(ViewImpl):
         model.onClose += self.__onClose
         model.intro.onClose += self.__onIntroCloseClick
         model.intro.onVideo += self.__showIntroVideo
+        model.onBuyVehicleClick += self.__onBuyVehicleClick
         self.__battlePassController.onPointsUpdated += self.__onPointsUpdated
         self.__battlePassController.onVoted += self.__onVoted
         self.__battlePassController.onBattlePassIsBought += self.__onBattlePassBought
         self.__battlePassController.onUnlimitedPurchaseUnlocked += self.__updateBuyButtonState
+        self.__battlePassController.getVotingRequester().onVotingResultsUpdated += self.__onVotingResultsUpdated
         self.__battlePassController.onBattlePassSettingsChange += self.__onBattlePassSettingsChange
         g_eventBus.addListener(events.MissionsEvent.ON_TAB_CHANGED, self.__onMissionsTabChanged, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(events.FocusEvent.COMPONENT_FOCUSED, self.__onFocus)
@@ -393,10 +527,12 @@ class BattlePassProgressionsView(ViewImpl):
         model.onClose -= self.__onClose
         model.intro.onClose -= self.__onIntroCloseClick
         model.intro.onVideo -= self.__showIntroVideo
+        model.onBuyVehicleClick -= self.__onBuyVehicleClick
         self.__battlePassController.onPointsUpdated -= self.__onPointsUpdated
         self.__battlePassController.onVoted -= self.__onVoted
         self.__battlePassController.onBattlePassIsBought -= self.__onBattlePassBought
         self.__battlePassController.onUnlimitedPurchaseUnlocked -= self.__updateBuyButtonState
+        self.__battlePassController.getVotingRequester().onVotingResultsUpdated -= self.__onVotingResultsUpdated
         self.__battlePassController.onBattlePassSettingsChange -= self.__onBattlePassSettingsChange
         g_eventBus.removeListener(events.MissionsEvent.ON_TAB_CHANGED, self.__onMissionsTabChanged, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(events.FocusEvent.COMPONENT_FOCUSED, self.__onFocus)
@@ -408,17 +544,15 @@ class BattlePassProgressionsView(ViewImpl):
         return (timeStruct.tm_mday, timeStruct.tm_mon)
 
     def __onMissionsTabChanged(self, event):
-
-        def _predicateLobbyTopSubViews(view):
-            return view.viewFlags & ViewFlags.VIEW_TYPE_MASK == ViewFlags.LOBBY_TOP_SUB_VIEW
-
         viewActive = event.ctx == QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS
         if self.__viewActive == viewActive and self.__viewActive:
-            views = self.__gui.windowsManager.findViews(_predicateLobbyTopSubViews)
-            for view in views:
-                view.destroyWindow()
-
+            self.__clearSubViews()
         self.__viewActive = viewActive
+
+    def __clearSubViews(self):
+        views = self.__gui.windowsManager.findViews(lambda view: view.viewFlags & ViewFlags.VIEW_TYPE_MASK == ViewFlags.LOBBY_TOP_SUB_VIEW)
+        for view in views:
+            view.destroyWindow()
 
     def __onFocus(self, event):
         context = event.ctx
@@ -489,10 +623,8 @@ class BattlePassProgressionsView(ViewImpl):
 
     def __getTooltipContentCreator(self):
         return {R.views.lobby.battle_pass.tooltips.BattlePassPointsView(): self.__getBattlePassPointsTooltipContent,
-         R.views.lobby.battle_pass.tooltips.BattlePassLockIconTooltipView(): self.__getBattlePassLockIconTooltipContent}
-
-    def __setIsPaused(self, value, model=None):
-        model.setIsPaused(value)
+         R.views.lobby.battle_pass.tooltips.BattlePassLockIconTooltipView(): self.__getBattlePassLockIconTooltipContent,
+         R.views.lobby.battle_pass.tooltips.BattlePassProgressWarningTooltipView(): self.__getBattlePassProgressWarningTooltipContent}
 
     @replaceNoneKwargsModel
     def __setShowBuyAnimations(self, model=None):
@@ -514,6 +646,10 @@ class BattlePassProgressionsView(ViewImpl):
     def __getBattlePassLockIconTooltipContent(_=None):
         return BattlePassLockIconTooltipView()
 
+    @staticmethod
+    def __getBattlePassProgressWarningTooltipContent(_=None):
+        return BattlePassProgressWarningTooltipView()
+
     def __showIntroVideo(self, onStart=False):
         settings = self.__settingsCore.serverSettings
         if onStart:
@@ -525,3 +661,19 @@ class BattlePassProgressionsView(ViewImpl):
     def __makeSeasonTimeText(self, timeStamp):
         day, month = self.__getDayMonth(timeStamp)
         return backport.text(R.strings.battle_pass_2020.progression.seasonTime(), day=str(day), month=backport.text(R.strings.menu.dateTime.months.num(month)()))
+
+    def __getSelectedVoteOptionFromTokens(self, seasonID, vehicleCDs):
+        for vehCD in vehicleCDs:
+            token = self.__itemsCache.items.tokens.getTokens().get(getBattlePassVoteToken(seasonID, vehCD))
+            if token is not None:
+                return vehCD
+
+        return
+
+    def __showBattlePassBuyWindow(self, backCallback=None):
+        ctx = {'backCallback': backCallback}
+        view = self.__gui.windowsManager.getViewByLayoutID(R.views.lobby.battle_pass.BattlePassBuyView())
+        if view is None:
+            window = BattlePassBuyWindow(ctx, self.getParentWindow())
+            window.load()
+        return

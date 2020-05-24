@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/bootcamp/lobby/vehicle_preview/vehicle_preview_dp.py
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
+from gui.Scaleform.daapi.view.lobby.vehicle_preview.vehicle_preview_dp import DefaultVehPreviewDataProvider
 from gui.shared.gui_items.items_actions import factory
-from gui.Scaleform.daapi.view.lobby.vehiclePreview.vehicle_preview_dp import DefaultVehPreviewDataProvider
 
 class BCVehPreviewDataProvider(DefaultVehPreviewDataProvider):
 

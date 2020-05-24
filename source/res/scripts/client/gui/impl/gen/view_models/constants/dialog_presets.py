@@ -12,6 +12,7 @@ class DialogPresets(ViewModel):
     MAPS_BLACKLIST = 'mapsBlacklist'
     TROPHY_DEVICE_UPGRADE = 'trophyDeviceUpgrade'
     BUY_BATTLE_PASS = 'buyBattlePass'
+    CUSTOMIZATION_INSTALL_BOUND = 'customizationInstallBound'
     DEFAULT = 'default'
 
     def __init__(self, properties=0, commands=0):

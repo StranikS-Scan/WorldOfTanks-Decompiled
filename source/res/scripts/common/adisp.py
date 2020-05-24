@@ -87,4 +87,9 @@ def async(func, cbname='callback', cbwrapper=lambda x: x):
 
         return caller
 
+    wrapper.__is_async__ = True
     return wrapper
+
+
+def isAsync(func):
+    return hasattr(func, '__is_async__')

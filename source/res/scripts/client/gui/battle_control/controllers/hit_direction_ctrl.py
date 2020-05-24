@@ -152,9 +152,6 @@ class HitDirectionController(IViewComponentsController):
 
     def startControl(self):
         g_eventBus.addListener(GameEvent.GUI_VISIBILITY, self.__handleGUIVisibility, scope=EVENT_BUS_SCOPE.BATTLE)
-        self.__damageIndicatorExtType = bool(self.settingsCore.getSetting(DAMAGE_INDICATOR.TYPE))
-        self.__damageIndicatorCrits = bool(self.settingsCore.getSetting(DAMAGE_INDICATOR.PRESET_CRITS))
-        self.__damageIndicatorAllies = bool(self.settingsCore.getSetting(DAMAGE_INDICATOR.PRESET_ALLIES))
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
 
     def stopControl(self):
@@ -191,6 +188,9 @@ class HitDirectionController(IViewComponentsController):
             self.__ui.setVisible(flag)
 
     def setViewComponents(self, component):
+        self.__damageIndicatorExtType = bool(self.settingsCore.getSetting(DAMAGE_INDICATOR.TYPE))
+        self.__damageIndicatorCrits = bool(self.settingsCore.getSetting(DAMAGE_INDICATOR.PRESET_CRITS))
+        self.__damageIndicatorAllies = bool(self.settingsCore.getSetting(DAMAGE_INDICATOR.PRESET_ALLIES))
         self.__ui = component
         self.__ui.invalidateSettings()
         self.__ui.setVisible(self.__isVisible)

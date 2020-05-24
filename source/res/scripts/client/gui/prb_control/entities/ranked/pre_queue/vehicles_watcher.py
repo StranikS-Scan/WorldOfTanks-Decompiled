@@ -12,14 +12,16 @@ if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
 
 class RankedVehiclesWatcher(BaseVehiclesWatcher):
-    itemsCache = dependency.descriptor(IItemsCache)
-    lobbyContext = dependency.descriptor(ILobbyContext)
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def _getUnsuitableVehicles(self):
-        config = self.lobbyContext.getServerSettings().rankedBattles
+    def _getUnsuitableVehicles(self, onClear=False):
+        allVehs = self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).itervalues()
+        config = self.__lobbyContext.getServerSettings().rankedBattles
         vehLevels = range(MIN_VEHICLE_LEVEL, config.minLevel) + range(config.maxLevel + 1, MAX_VEHICLE_LEVEL + 1)
-        vehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(vehLevels)).itervalues()
-        eventVehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.EVENT_BATTLE).itervalues()
-        epicVehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.EPIC_BATTLE).itervalues()
-        bobVehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.BOB_BATTLE).itervalues()
-        return chain(vehs, eventVehs, epicVehs, bobVehs)
+        levelVehs = self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(vehLevels)).itervalues()
+        classVehs = self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.CLASSES(config.forbiddenClassTags)).itervalues()
+        typeVehs = self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.SPECIFIC_BY_CD(config.forbiddenVehTypes)).itervalues()
+        eventVehs = self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.EVENT_BATTLE).itervalues()
+        epicVehs = self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.EPIC_BATTLE).itervalues()
+        return chain(levelVehs, classVehs, typeVehs, eventVehs, epicVehs) if not onClear else allVehs

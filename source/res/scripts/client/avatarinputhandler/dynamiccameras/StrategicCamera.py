@@ -2,30 +2,28 @@
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/StrategicCamera.py
 import math
 from collections import namedtuple
-import BattleReplay
 import BigWorld
 import Math
+from Math import Vector2, Vector3
+import BattleReplay
 import Settings
 import constants
 import math_utils
 from AvatarInputHandler import cameras, aih_global_binding
 from AvatarInputHandler.AimingSystems.StrategicAimingSystem import StrategicAimingSystem
 from AvatarInputHandler.AimingSystems.StrategicAimingSystemRemote import StrategicAimingSystemRemote
-from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig
-from AvatarInputHandler.cameras import ICamera, getWorldRayAndPoint, readFloat, readVec2, ImpulseReason, FovExtended
+from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig, CameraWithSettings
+from AvatarInputHandler.cameras import getWorldRayAndPoint, readFloat, readVec2, ImpulseReason, FovExtended
 from ClientArena import Plane
-from Math import Vector2, Vector3
 from debug_utils import LOG_WARNING
-from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
-from skeletons.account_helpers.settings_core import ISettingsCore
 _DistRangeSetting = namedtuple('_DistRangeSetting', ['minArenaSize', 'distRange', 'acceleration'])
 
 def getCameraAsSettingsHolder(settingsDataSec):
     return StrategicCamera(settingsDataSec)
 
 
-class StrategicCamera(ICamera, CallbackDelayer):
+class StrategicCamera(CameraWithSettings, CallbackDelayer):
     _DYNAMIC_ENABLED = True
     ABSOLUTE_VERTICAL_FOV = math.radians(60.0)
     _SMOOTHING_PIVOT_DELTA_FACTOR = 6.0
@@ -40,10 +38,10 @@ class StrategicCamera(ICamera, CallbackDelayer):
 
     camera = property(lambda self: self.__cam)
     aimingSystem = property(lambda self: self.__aimingSystem)
-    settingsCore = dependency.descriptor(ISettingsCore)
     __aimOffset = aih_global_binding.bindRW(aih_global_binding.BINDING_ID.AIM_OFFSET)
 
     def __init__(self, dataSec):
+        super(StrategicCamera, self).__init__()
         CallbackDelayer.__init__(self)
         self.__positionOscillator = None
         self.__positionNoiseOscillator = None
@@ -53,7 +51,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
         self.__readCfg(dataSec)
         self.__cam = BigWorld.CursorCamera()
         self.__cam.isHangar = False
-        self.__curSense = self.__cfg['sensitivity']
+        self.__curSense = self._cfg['sensitivity']
         self.__onChangeControlMode = None
         self.__aimingSystem = None
         self.__prevTime = BigWorld.time()
@@ -64,24 +62,26 @@ class StrategicCamera(ICamera, CallbackDelayer):
         return
 
     def create(self, onChangeControlMode=None):
+        super(StrategicCamera, self).create()
         self.__onChangeControlMode = onChangeControlMode
-        self.__camDist = self.__cfg['camDist']
+        self.__camDist = self._cfg['camDist']
         self.__cam.pivotMaxDist = 0.0
         self.__cam.maxDistHalfLife = 0.01
         self.__cam.movementHalfLife = 0.0
         self.__cam.turningHalfLife = -1
         self.__cam.pivotPosition = Math.Vector3(0.0, self.__camDist, 0.0)
         aimingSystemClass = StrategicAimingSystemRemote if BigWorld.player().isObserver() else StrategicAimingSystem
-        self.__aimingSystem = aimingSystemClass(self.__cfg['distRange'][0], self.__cameraYaw)
+        self.__aimingSystem = aimingSystemClass(self._cfg['distRange'][0], self.__cameraYaw)
 
     def destroy(self):
-        CallbackDelayer.destroy(self)
         self.disable()
         self.__onChangeControlMode = None
         self.__cam = None
         if self.__aimingSystem is not None:
             self.__aimingSystem.destroy()
             self.__aimingSystem = None
+        CallbackDelayer.destroy(self)
+        CameraWithSettings.destroy(self)
         return
 
     def enable(self, targetPos, saveDist):
@@ -94,7 +94,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
         self.__cam.source = srcMat
         if not saveDist:
             self.__updateCamDistCfg()
-            self.__camDist = self.__cfg['camDist']
+            self.__camDist = self._cfg['camDist']
         self.__cam.pivotPosition = Math.Vector3(0.0, self.__camDist, 0.0)
         camTarget = Math.MatrixProduct()
         camTarget.b = self.__aimingSystem.matrix
@@ -130,26 +130,11 @@ class StrategicCamera(ICamera, CallbackDelayer):
         if len(distRange) > 1:
             self.__camDist = distRange[1]
 
-    def getConfigValue(self, name):
-        return self.__cfg.get(name)
-
-    def getUserConfigValue(self, name):
-        return self.__userCfg.get(name)
-
-    def setUserConfigValue(self, name, value):
-        if name not in self.__userCfg:
-            return
-        self.__userCfg[name] = value
-        if name not in ('keySensitivity', 'sensitivity', 'scrollSensitivity'):
-            self.__cfg[name] = self.__userCfg[name]
-        else:
-            self.__cfg[name] = self.__baseCfg[name] * self.__userCfg[name]
-
     def update(self, dx, dy, dz, updatedByKeyboard=False):
-        self.__curSense = self.__cfg['keySensitivity'] if updatedByKeyboard else self.__cfg['sensitivity']
-        standardMaxDist = self.__cfg['distRange'][1]
+        self.__curSense = self._cfg['keySensitivity'] if updatedByKeyboard else self._cfg['sensitivity']
+        standardMaxDist = self._cfg['distRange'][1]
         if self.__camDist > standardMaxDist:
-            self.__curSense *= 1.0 + (self.__camDist - self.__cfg['distRange'][1]) * self.__getCameraAcceleration()
+            self.__curSense *= 1.0 + (self.__camDist - self._cfg['distRange'][1]) * self.__getCameraAcceleration()
         self.__autoUpdatePosition = updatedByKeyboard
         self.__dxdydz = Vector3(dx, dy, dz)
 
@@ -218,12 +203,12 @@ class StrategicCamera(ICamera, CallbackDelayer):
         ds = Settings.g_instance.userPrefs
         if not ds.has_key(Settings.KEY_CONTROL_MODE):
             ds.write(Settings.KEY_CONTROL_MODE, '')
-        ucfg = self.__userCfg
+        ucfg = self._userCfg
         ds = ds[Settings.KEY_CONTROL_MODE]
         ds.writeFloat('strategicMode/camera/keySensitivity', ucfg['keySensitivity'])
         ds.writeFloat('strategicMode/camera/sensitivity', ucfg['sensitivity'])
         ds.writeFloat('strategicMode/camera/scrollSensitivity', ucfg['scrollSensitivity'])
-        ds.writeFloat('strategicMode/camera/camDist', self.__cfg['camDist'])
+        ds.writeFloat('strategicMode/camera/camDist', self._cfg['camDist'])
 
     def __cameraUpdate(self):
         replayCtrl = BattleReplay.g_replayCtrl
@@ -266,7 +251,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
         distRange = self.__getDistRange()
         maxPivotHeight = distRange[1] - distRange[0]
         self.__camDist = math_utils.clamp(0, maxPivotHeight, self.__camDist)
-        self.__cfg['camDist'] = self.__camDist
+        self._cfg['camDist'] = self.__camDist
         camDistWithSmoothing = self.__camDist + self.__smoothingPivotDelta - self.__aimingSystem.heightFromPlane
         self.__cam.pivotPosition = Math.Vector3(0.0, camDistWithSmoothing, 0.0)
         if self.__dxdydz.z != 0 and self.__onChangeControlMode is not None and math_utils.almostZero(self.__camDist - maxPivotHeight):
@@ -307,8 +292,8 @@ class StrategicCamera(ICamera, CallbackDelayer):
     def __readCfg(self, dataSec):
         if not dataSec or dataSec['strategic']:
             LOG_WARNING('Invalid section <strategicMode/camera> in avatar_input_handler.xml')
-        self.__baseCfg = dict()
-        bcfg = self.__baseCfg
+        self._baseCfg = dict()
+        bcfg = self._baseCfg
         bcfg['keySensitivity'] = readFloat(dataSec, 'keySensitivity', 0.005, 10, 0.025)
         bcfg['sensitivity'] = readFloat(dataSec, 'sensitivity', 0.005, 10, 0.025)
         bcfg['scrollSensitivity'] = readFloat(dataSec, 'scrollSensitivity', 0.005, 10, 0.025)
@@ -317,16 +302,16 @@ class StrategicCamera(ICamera, CallbackDelayer):
         ds = Settings.g_instance.userPrefs[Settings.KEY_CONTROL_MODE]
         if ds is not None:
             ds = ds['strategicMode/camera']
-        self.__userCfg = dict()
-        ucfg = self.__userCfg
-        ucfg['horzInvert'] = self.settingsCore.getSetting('mouseHorzInvert')
-        ucfg['vertInvert'] = self.settingsCore.getSetting('mouseVertInvert')
+        self._userCfg = dict()
+        ucfg = self._userCfg
+        ucfg['horzInvert'] = False
+        ucfg['vertInvert'] = False
         ucfg['keySensitivity'] = readFloat(ds, 'keySensitivity', 0.0, 10.0, 1.0)
         ucfg['sensitivity'] = readFloat(ds, 'sensitivity', 0.0, 10.0, 1.0)
         ucfg['scrollSensitivity'] = readFloat(ds, 'scrollSensitivity', 0.0, 10.0, 1.0)
         ucfg['camDist'] = readFloat(ds, 'camDist', 0.0, 60.0, 0)
-        self.__cfg = dict()
-        cfg = self.__cfg
+        self._cfg = dict()
+        cfg = self._cfg
         cfg['keySensitivity'] = bcfg['keySensitivity']
         cfg['sensitivity'] = bcfg['sensitivity']
         cfg['scrollSensitivity'] = bcfg['scrollSensitivity']
@@ -364,7 +349,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
         arenaX = arenaUpperRight[0] - arenaBottomLeft[0]
         arenaZ = arenaUpperRight[1] - arenaBottomLeft[1]
         arenaSize = min(arenaX, arenaZ)
-        availableDistRanges = self.__cfg['distRangeForArenaSize']
+        availableDistRanges = self._cfg['distRangeForArenaSize']
         currentDistRange = None
         choosenArenaMinSize = 0
         for pt in availableDistRanges:
@@ -375,7 +360,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
         return currentDistRange
 
     def __getDistRange(self):
-        return self.__cfg['distRange'] if not self.__activeDistRangeSettings else self.__activeDistRangeSettings.distRange
+        return self._cfg['distRange'] if not self.__activeDistRangeSettings else self.__activeDistRangeSettings.distRange
 
     def __getCameraAcceleration(self):
         return 0 if not self.__activeDistRangeSettings else self.__activeDistRangeSettings.acceleration
@@ -385,5 +370,5 @@ class StrategicCamera(ICamera, CallbackDelayer):
         if ds is not None:
             ds = ds['strategicMode/camera']
         distRange = self.__getDistRange()
-        self.__cfg['camDist'] = self.__userCfg['camDist'] = readFloat(ds, 'camDist', 0, distRange[1] - distRange[0], 0)
+        self._cfg['camDist'] = self._userCfg['camDist'] = readFloat(ds, 'camDist', 0, distRange[1] - distRange[0], 0)
         return

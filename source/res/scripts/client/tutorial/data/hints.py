@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/data/hints.py
 from collections import namedtuple, defaultdict
-HintProps = namedtuple('HintProps', ('uniqueID', 'hintID', 'itemID', 'text', 'hasBox', 'arrow', 'padding', 'updateRuntime', 'checkViewArea'))
+HintProps = namedtuple('HintProps', ('uniqueID', 'hintID', 'itemID', 'text', 'hasBox', 'arrow', 'padding', 'updateRuntime', 'hideImmediately', 'checkViewArea'))
 
 class HintsData(object):
 

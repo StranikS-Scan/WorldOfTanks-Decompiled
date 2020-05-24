@@ -19,7 +19,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.impl.gen.resources import R
 from gui.impl.lobby.buy_vehicle_view import VehicleBuyActionTypes
-from gui.ingame_shop import canBuyGoldForVehicleThroughWeb
+from gui.shop import canBuyGoldForVehicleThroughWeb
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events

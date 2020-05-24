@@ -40,8 +40,12 @@ class RankedRequester(AbstractSyncDataRequester, IRankedRequester):
         return self.getCacheValue('shields', {})
 
     @property
-    def bonusBattlesCount(self):
+    def persistentBonusBattles(self):
         return self.getCacheValue('bonusBattlesCount', 0)
+
+    @property
+    def dailyBonusBattles(self):
+        return self.getCacheValue('dailyBonusBattlesCount', 0)
 
     @async
     def _requestCache(self, callback):

@@ -28,22 +28,11 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
         self.__ids = set()
         return
 
-    @property
-    def canvas(self):
-        return self.__canvas
-
-    @property
-    def ids(self):
-        return self.__ids
-
     def setScaleProps(self, minScale=40, maxScale=100, defScale=100, speed=3.0):
         self.__canvas.scaleProperties = (minScale,
          maxScale,
          defScale,
          speed)
-
-    def getGUIMarkerSettings(self):
-        return GUI_SETTINGS.markerScaleSettings
 
     def setAlphaProps(self, minAlpha=40, maxAlpha=100, defAlpha=100, speed=3.0):
         self.__canvas.alphaProperties = (minAlpha,
@@ -161,7 +150,7 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
     def __addCanvas(self, arenaVisitor):
         self.__canvas = self._createCanvas(arenaVisitor)
         self.__canvas.wg_inputKeyMode = InputKeyMode.NO_HANDLE
-        self.__canvas.scaleProperties = self.getGUIMarkerSettings()
+        self.__canvas.scaleProperties = GUI_SETTINGS.markerScaleSettings
         self.__canvas.alphaProperties = GUI_SETTINGS.markerBgSettings
         self.__canvasProxy = weakref.ref(self.__canvas)
         self.component.addChild(self.__canvas, 'vehicleMarkersCanvas')

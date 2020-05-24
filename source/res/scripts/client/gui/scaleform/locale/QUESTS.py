@@ -64,6 +64,8 @@ class QUESTS(object):
     BONUSES_GOLD_DESCRIPTION = '#quests:bonuses/gold/description'
     BONUSES_CRYSTAL_DESCRIPTION = '#quests:bonuses/crystal/description'
     BONUSES_EVENTCOIN_DESCRIPTION = '#quests:bonuses/eventCoin/description'
+    BONUSES_FREEXP_DESCRIPTION = '#quests:bonuses/freeXP/description'
+    BONUSES_PREMIUM_PLUS_DESCRIPTION = '#quests:bonuses/premium_plus/description'
     BONUSES_TANKMEN_DESCRIPTION = '#quests:bonuses/tankmen/description'
     BONUSES_ITEM_TANKWOMAN = '#quests:bonuses/item/tankwoman'
     BONUSES_ITEM_TANKMAN = '#quests:bonuses/item/tankman'
@@ -725,7 +727,7 @@ class QUESTS(object):
     DETAILS_CONDITIONS_CUMULATIVE_ISENEMYBASECAPTURED = '#quests:details/conditions/cumulative/isEnemyBaseCaptured'
     DETAILS_CONDITIONS_CUMULATIVE_AGGREGATED = '#quests:details/conditions/cumulative/aggregated'
     DETAILS_CONDITIONS_CUMULATIVE_RANKCHANGE = '#quests:details/conditions/cumulative/rankChange'
-    DETAILS_CONDITIONS_CUMULATIVE_ENVIRONMENTID = '#quests:details/conditions/cumulative/environmentID'
+    DETAILS_CONDITIONS_CUMULATIVE_XP_OTHER = '#quests:details/conditions/cumulative/xp/other'
     DETAILS_DOSSIER_SNIPERSERIES = '#quests:details/dossier/sniperSeries'
     DETAILS_DOSSIER_MAXSNIPERSERIES = '#quests:details/dossier/maxSniperSeries'
     DETAILS_DOSSIER_INVINCIBLESERIES = '#quests:details/dossier/invincibleSeries'
@@ -919,27 +921,6 @@ class QUESTS(object):
     DETAILS_DOSSIER_LADDER_ORIGINALXP = '#quests:details/dossier/ladder/originalXP'
     DETAILS_DOSSIER_LADDER_DAMAGEASSISTEDTRACK = '#quests:details/dossier/ladder/damageAssistedTrack'
     DETAILS_DOSSIER_LADDER_DAMAGEASSISTEDRADIO = '#quests:details/dossier/ladder/damageAssistedRadio'
-    DETAILS_DOSSIER_BOB_XP = '#quests:details/dossier/bob/xp'
-    DETAILS_DOSSIER_BOB_BATTLESCOUNT = '#quests:details/dossier/bob/battlesCount'
-    DETAILS_DOSSIER_BOB_WINS = '#quests:details/dossier/bob/wins'
-    DETAILS_DOSSIER_BOB_LOSSES = '#quests:details/dossier/bob/losses'
-    DETAILS_DOSSIER_BOB_SURVIVEDBATTLES = '#quests:details/dossier/bob/survivedBattles'
-    DETAILS_DOSSIER_BOB_FRAGS = '#quests:details/dossier/bob/frags'
-    DETAILS_DOSSIER_BOB_DIRECTHITS = '#quests:details/dossier/bob/directHits'
-    DETAILS_DOSSIER_BOB_SPOTTED = '#quests:details/dossier/bob/spotted'
-    DETAILS_DOSSIER_BOB_DAMAGEDEALT = '#quests:details/dossier/bob/damageDealt'
-    DETAILS_DOSSIER_BOB_MAXDAMAGE = '#quests:details/dossier/bob/maxDamage'
-    DETAILS_DOSSIER_BOB_DAMAGERECEIVED = '#quests:details/dossier/bob/damageReceived'
-    DETAILS_DOSSIER_BOB_CAPTUREPOINTS = '#quests:details/dossier/bob/capturePoints'
-    DETAILS_DOSSIER_BOB_DROPPEDCAPTUREPOINTS = '#quests:details/dossier/bob/droppedCapturePoints'
-    DETAILS_DOSSIER_BOB_PIERCINGS = '#quests:details/dossier/bob/piercings'
-    DETAILS_DOSSIER_BOB_NODAMAGEDIRECTHITSRECEIVED = '#quests:details/dossier/bob/noDamageDirectHitsReceived'
-    DETAILS_DOSSIER_BOB_PIERCINGSRECEIVED = '#quests:details/dossier/bob/piercingsReceived'
-    DETAILS_DOSSIER_BOB_POTENTIALDAMAGERECEIVED = '#quests:details/dossier/bob/potentialDamageReceived'
-    DETAILS_DOSSIER_BOB_DAMAGEBLOCKEDBYARMOR = '#quests:details/dossier/bob/damageBlockedByArmor'
-    DETAILS_DOSSIER_BOB_ORIGINALXP = '#quests:details/dossier/bob/originalXP'
-    DETAILS_DOSSIER_BOB_DAMAGEASSISTEDTRACK = '#quests:details/dossier/bob/damageAssistedTrack'
-    DETAILS_DOSSIER_BOB_DAMAGEASSISTEDRADIO = '#quests:details/dossier/bob/damageAssistedRadio'
     DETAILS_DOSSIER_BATTLESCOUNT = '#quests:details/dossier/battlesCount'
     DETAILS_DOSSIER_0_BATTLESCOUNT = '#quests:details/dossier/0/battlesCount'
     DETAILS_DOSSIER_1_BATTLESCOUNT = '#quests:details/dossier/1/battlesCount'
@@ -958,7 +939,6 @@ class QUESTS(object):
     DETAILS_DOSSIER_22_BATTLESCOUNT = '#quests:details/dossier/22/battlesCount'
     DETAILS_DOSSIER_24_BATTLESCOUNT = '#quests:details/dossier/24/battlesCount'
     DETAILS_DOSSIER_27_BATTLESCOUNT = '#quests:details/dossier/27/battlesCount'
-    DETAILS_DOSSIER_32_BATTLESCOUNT = '#quests:details/dossier/32/battlesCount'
     DETAILS_MODIFIERS_TITLE_DISCOUNT = '#quests:details/modifiers/title/discount'
     DETAILS_MODIFIERS_TITLE_SELLING = '#quests:details/modifiers/title/selling'
     DETAILS_MODIFIERS_TITLE_AVAILABILITY = '#quests:details/modifiers/title/availability'
@@ -1092,9 +1072,6 @@ class QUESTS(object):
     MISSIONDETAILS_VEHICLE_CONDITIONS_LEVEL = '#quests:missionDetails/vehicle/conditions/level'
     MISSIONDETAILS_VEHICLE_CONDITIONS_LEVEL_ALL = '#quests:missionDetails/vehicle/conditions/level/all'
     MISSIONDETAILS_STATUS_COMPLETED_DAILY = '#quests:missionDetails/status/completed/daily'
-    MISSIONDETAILS_STATUS_COMPLETED_SECRETEVENT = '#quests:missionDetails/status/completed/secretEvent'
-    MISSIONDETAILS_STATUS_COMPLETE = '#quests:missionDetails/status/complete'
-    MISSIONDETAILS_STATUS_INPROGRESS = '#quests:missionDetails/status/inProgress'
     MISSIONDETAILS_STATUS_NOTAVAILABLE = '#quests:missionDetails/status/notAvailable'
     MISSIONDETAILS_STATUS_WRONGVEHICLE = '#quests:missionDetails/status/wrongVehicle'
     MISSIONDETAILS_STATUS_DISABLED = '#quests:missionDetails/status/disabled'
@@ -1136,7 +1113,6 @@ class QUESTS(object):
     MISSIONDETAILS_REQUIREMENTS_HEADER_AVAILABLE = '#quests:missionDetails/requirements/header/available'
     MISSIONDETAILS_REQUIREMENTS_CONCLUSION_AVAILABLE = '#quests:missionDetails/requirements/conclusion/available'
     MISSIONDETAILS_REQUIREMENTS_CONCLUSION_UNAVAILABLE = '#quests:missionDetails/requirements/conclusion/unavailable'
-    MISSIONDETAILS_REQUIREMENTS_CONCLUSION_PREVIOUSINCOMPLETE = '#quests:missionDetails/requirements/conclusion/previousIncomplete'
     MISSIONDETAILS_VEHICLESSELECT = '#quests:missionDetails/vehiclesSelect'
     MISSIONDETAILS_VEHICLESAVAILABLE = '#quests:missionDetails/vehiclesAvailable'
     MISSIONDETAILS_BOTTOMSTATUSCOMPLETE = '#quests:missionDetails/bottomStatusComplete'
@@ -1144,10 +1120,6 @@ class QUESTS(object):
     MISSIONDETAILS_BOTTOMSTATUSNEXTTRY = '#quests:missionDetails/bottomStatusNextTry'
     MISSIONDETAILS_NEXTPAGEBTN_LABEL = '#quests:missionDetails/nextPageBtn/label'
     MISSIONDETAILS_PREVPAGEBTN_LABEL = '#quests:missionDetails/prevPageBtn/label'
-    MISSIONS_TOKENPOPOVER_SECRETEVENT_HEADER = '#quests:missions/tokenPopover/secretEvent/header'
-    MISSIONS_TOKENPOPOVER_SECRETEVENT_DESCR = '#quests:missions/tokenPopover/secretEvent/descr'
-    MISSIONS_TOKENPOPOVER_SECRETEVENT_DESCR_SHOP = '#quests:missions/tokenPopover/secretEvent/descr/shop'
-    MISSIONS_TOKENPOPOVER_SECRETEVENT_BUYBTN_LABEL = '#quests:missions/tokenPopover/secretEvent/buyBtn/label'
     MISSIONS_TOKENPOPOVER_HEADER = '#quests:missions/tokenPopover/header'
     MISSIONS_TOKENPOPOVER_DESCR = '#quests:missions/tokenPopover/descr'
     MISSIONS_TOKENPOPOVER_DESCR_SHOP = '#quests:missions/tokenPopover/descr/shop'
@@ -1192,33 +1164,6 @@ class QUESTS(object):
     TOKEN_DEFAULT_WHEEL = '#quests:token/default/wheel'
     TOKEN_DEFAULT_BOX = '#quests:token/default/box'
     TOKEN_DEFAULT_TANKREWARDS = '#quests:token/default/tankrewards'
-    TOKEN_DEFAULT_SE_ENERGY = '#quests:token/default/se_energy'
-    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_X15_DISCOUNT = '#quests:token/default/se20_energy_general_x15_discount'
-    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_0_X5 = '#quests:token/default/se20_energy_general_0_x5'
-    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_0_X10 = '#quests:token/default/se20_energy_general_0_x10'
-    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_0_X10_PREMIUM = '#quests:token/default/se20_energy_general_0_x10_premium'
-    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_0_X15 = '#quests:token/default/se20_energy_general_0_x15'
-    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_1_X5 = '#quests:token/default/se20_energy_general_1_x5'
-    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_1_X10 = '#quests:token/default/se20_energy_general_1_x10'
-    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_1_X10_PREMIUM = '#quests:token/default/se20_energy_general_1_x10_premium'
-    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_1_X15 = '#quests:token/default/se20_energy_general_1_x15'
-    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_2_X5 = '#quests:token/default/se20_energy_general_2_x5'
-    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_2_X10 = '#quests:token/default/se20_energy_general_2_x10'
-    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_2_X10_PREMIUM = '#quests:token/default/se20_energy_general_2_x10_premium'
-    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_2_X15 = '#quests:token/default/se20_energy_general_2_x15'
-    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_3_X5 = '#quests:token/default/se20_energy_general_3_x5'
-    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_3_X10 = '#quests:token/default/se20_energy_general_3_x10'
-    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_3_X10_PREMIUM = '#quests:token/default/se20_energy_general_3_x10_premium'
-    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_3_X15 = '#quests:token/default/se20_energy_general_3_x15'
-    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_4_X5 = '#quests:token/default/se20_energy_general_4_x5'
-    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_4_X10 = '#quests:token/default/se20_energy_general_4_x10'
-    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_4_X10_PREMIUM = '#quests:token/default/se20_energy_general_4_x10_premium'
-    TOKEN_DEFAULT_SE20_ENERGY_GENERAL_4_X15 = '#quests:token/default/se20_energy_general_4_x15'
-    TOKEN_TOKEN_FOR = '#quests:token/token_for'
-    TOKEN_DEFAULT_SE20_GENERAL_MARK = '#quests:token/default/se20_general_mark'
-    TOKEN_DEFAULT_SE20_TANK_DISCOUNT25 = '#quests:token/default/se20_tank_discount25'
-    TOKEN_DEFAULT_SE20_TANK_DISCOUNT50 = '#quests:token/default/se20_tank_discount50'
-    TOKEN_DEFAULT_SE20_TANK_DISCOUNT75 = '#quests:token/default/se20_tank_discount75'
     BONUSNAME_CREDITS = '#quests:bonusName/credits'
     BONUSNAME_GOLD = '#quests:bonusName/gold'
     BONUSNAME_CRYSTAL = '#quests:bonusName/crystal'
@@ -1280,6 +1225,9 @@ class QUESTS(object):
     BONUSNAME_COMPLETIONTOKENS_7_4 = '#quests:bonusName/completionTokens_7_4'
     BONUSNAME_PROJECTIONDECAL = '#quests:bonusName/projectionDecal'
     BONUSNAME_PERSONALNUMBER = '#quests:bonusName/personalNumber'
+    BONUSNAME_RANKEDDAILYBATTLES = '#quests:bonusName/rankedDailyBattles'
+    BONUSNAME_RANKEDBONUSBATTLES = '#quests:bonusName/rankedBonusBattles'
+    BONUSNAME_ENTITLEMENTS_TESTENTITLEMENT = '#quests:bonusName/entitlements/testEntitlement'
     ACTION_AUTO_CALENDAR = '#quests:action/auto/calendar'
     ACTION_FULL_CALENDAR = '#quests:action/full/calendar'
     ACTION_HERO_FULL_CALENDAR = '#quests:action/hero/full/calendar'
@@ -1711,8 +1659,6 @@ class QUESTS(object):
     DAILYQUESTS_CONDITION_DODAMAGEVEH_ACCUM = '#quests:dailyQuests/condition/doDamageVeh_accum'
     DAILYQUESTS_CONDITION_DESTROYVEH_FEW_ACCUM = '#quests:dailyQuests/condition/destroyVeh_few_accum'
     DAILYQUESTS_CONDITION_DESTROYVEH_PLURAL_ACCUM = '#quests:dailyQuests/condition/destroyVeh_plural_accum'
-    BACKBUTTON_LABEL = '#quests:backButton/label'
-    BACKBUTTON_DESCRIPTION = '#quests:backButton/description'
     TOKEN_DEFAULT_ENUM = (TOKEN_DEFAULT_USSR,
      TOKEN_DEFAULT_GERMANY,
      TOKEN_DEFAULT_USA,
@@ -1741,33 +1687,7 @@ class QUESTS(object):
      TOKEN_DEFAULT_LEAFLET,
      TOKEN_DEFAULT_WHEEL,
      TOKEN_DEFAULT_BOX,
-     TOKEN_DEFAULT_TANKREWARDS,
-     TOKEN_DEFAULT_SE_ENERGY,
-     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_X15_DISCOUNT,
-     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_0_X5,
-     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_0_X10,
-     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_0_X10_PREMIUM,
-     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_0_X15,
-     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_1_X5,
-     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_1_X10,
-     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_1_X10_PREMIUM,
-     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_1_X15,
-     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_2_X5,
-     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_2_X10,
-     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_2_X10_PREMIUM,
-     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_2_X15,
-     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_3_X5,
-     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_3_X10,
-     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_3_X10_PREMIUM,
-     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_3_X15,
-     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_4_X5,
-     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_4_X10,
-     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_4_X10_PREMIUM,
-     TOKEN_DEFAULT_SE20_ENERGY_GENERAL_4_X15,
-     TOKEN_DEFAULT_SE20_GENERAL_MARK,
-     TOKEN_DEFAULT_SE20_TANK_DISCOUNT25,
-     TOKEN_DEFAULT_SE20_TANK_DISCOUNT50,
-     TOKEN_DEFAULT_SE20_TANK_DISCOUNT75)
+     TOKEN_DEFAULT_TANKREWARDS)
     BONUSNAME_ENUM = (BONUSNAME_BLUEPRINTS_ANY,
      BONUSNAME_BLUEPRINTS_VEHICLE,
      BONUSNAME_BLUEPRINTS_VEHICLE_ANY,
@@ -1834,7 +1754,10 @@ class QUESTS(object):
      BONUSNAME_COMPLETIONTOKENS_7_3,
      BONUSNAME_COMPLETIONTOKENS_7_4,
      BONUSNAME_PROJECTIONDECAL,
-     BONUSNAME_PERSONALNUMBER)
+     BONUSNAME_PERSONALNUMBER,
+     BONUSNAME_RANKEDDAILYBATTLES,
+     BONUSNAME_RANKEDBONUSBATTLES,
+     BONUSNAME_ENTITLEMENTS_TESTENTITLEMENT)
     ACTION_ENUM = (ACTION_AUTO_CALENDAR,
      ACTION_FULL_CALENDAR,
      ACTION_HERO_FULL_CALENDAR,
@@ -2215,27 +2138,6 @@ class QUESTS(object):
      DETAILS_DOSSIER_LADDER_ORIGINALXP,
      DETAILS_DOSSIER_LADDER_DAMAGEASSISTEDTRACK,
      DETAILS_DOSSIER_LADDER_DAMAGEASSISTEDRADIO,
-     DETAILS_DOSSIER_BOB_XP,
-     DETAILS_DOSSIER_BOB_BATTLESCOUNT,
-     DETAILS_DOSSIER_BOB_WINS,
-     DETAILS_DOSSIER_BOB_LOSSES,
-     DETAILS_DOSSIER_BOB_SURVIVEDBATTLES,
-     DETAILS_DOSSIER_BOB_FRAGS,
-     DETAILS_DOSSIER_BOB_DIRECTHITS,
-     DETAILS_DOSSIER_BOB_SPOTTED,
-     DETAILS_DOSSIER_BOB_DAMAGEDEALT,
-     DETAILS_DOSSIER_BOB_MAXDAMAGE,
-     DETAILS_DOSSIER_BOB_DAMAGERECEIVED,
-     DETAILS_DOSSIER_BOB_CAPTUREPOINTS,
-     DETAILS_DOSSIER_BOB_DROPPEDCAPTUREPOINTS,
-     DETAILS_DOSSIER_BOB_PIERCINGS,
-     DETAILS_DOSSIER_BOB_NODAMAGEDIRECTHITSRECEIVED,
-     DETAILS_DOSSIER_BOB_PIERCINGSRECEIVED,
-     DETAILS_DOSSIER_BOB_POTENTIALDAMAGERECEIVED,
-     DETAILS_DOSSIER_BOB_DAMAGEBLOCKEDBYARMOR,
-     DETAILS_DOSSIER_BOB_ORIGINALXP,
-     DETAILS_DOSSIER_BOB_DAMAGEASSISTEDTRACK,
-     DETAILS_DOSSIER_BOB_DAMAGEASSISTEDRADIO,
      DETAILS_DOSSIER_0_BATTLESCOUNT,
      DETAILS_DOSSIER_1_BATTLESCOUNT,
      DETAILS_DOSSIER_2_BATTLESCOUNT,
@@ -2252,8 +2154,7 @@ class QUESTS(object):
      DETAILS_DOSSIER_21_BATTLESCOUNT,
      DETAILS_DOSSIER_22_BATTLESCOUNT,
      DETAILS_DOSSIER_24_BATTLESCOUNT,
-     DETAILS_DOSSIER_27_BATTLESCOUNT,
-     DETAILS_DOSSIER_32_BATTLESCOUNT)
+     DETAILS_DOSSIER_27_BATTLESCOUNT)
     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ENUM = (PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_USSR,
      PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_GERMANY,
      PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_USA,

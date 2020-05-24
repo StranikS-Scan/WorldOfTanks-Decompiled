@@ -2,13 +2,14 @@
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/battle_pass_buy_view.py
 import logging
 import SoundGroups
-from frameworks.wulf import ViewFlags, ViewSettings
+from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
 from gui.battle_pass.sounds import BattlePassSounds
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_buy_view_model import BattlePassBuyViewModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.package_item import PackageItem
 from gui.impl.pub import ViewImpl
+from gui.impl.pub.lobby_window import LobbyWindow
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.battle_pass.battle_pass_helpers import isCurrentBattlePassStateBase, getFormattedTimeLeft
 from gui.battle_pass.battle_pass_buyer import BattlePassBuyer
@@ -338,3 +339,11 @@ class BattlePassBuyView(ViewImpl):
         if package.hasBattlePass():
             return PackageItem.BATTLE_PASS_TYPE
         return PackageItem.ANY_LEVELS_TYPE if package.isDynamic() else PackageItem.LIMITED_LEVELS_TYPE
+
+
+class BattlePassBuyWindow(LobbyWindow):
+    __slots__ = ()
+
+    def __init__(self, ctx, parent):
+        super(BattlePassBuyWindow, self).__init__(content=BattlePassBuyView(R.views.lobby.battle_pass.BattlePassBuyView(), wsFlags=ViewFlags.LOBBY_TOP_SUB_VIEW, ctx=ctx), wndFlags=WindowFlags.WINDOW, decorator=None, parent=parent)
+        return

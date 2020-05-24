@@ -211,6 +211,7 @@ class BOOTCAMP(object):
     BATTLE_RESULT_DESCRIPTION_BLOCKED = '#bootcamp:battle/result/description/blocked'
     BATTLE_RESULT_DESCRIPTION_DETECTED = '#bootcamp:battle/result/description/detected'
     BATTLE_RESULT_DESCRIPTION_ASSISTED = '#bootcamp:battle/result/description/assisted'
+    BATTLE_RESULT_VIDEOBUTTON = '#bootcamp:battle/result/videoButton'
     RESULT_AWARD_CADET_LABEL = '#bootcamp:result/award/cadet/label'
     RESULT_AWARD_CADET_TEXT = '#bootcamp:result/award/cadet/text'
     RESULT_AWARD_TANK_LABEL = '#bootcamp:result/award/tank/label'
@@ -370,7 +371,8 @@ class BOOTCAMP(object):
      BATTLE_RESULT_DESCRIPTION_DAMAGE,
      BATTLE_RESULT_DESCRIPTION_BLOCKED,
      BATTLE_RESULT_DESCRIPTION_DETECTED,
-     BATTLE_RESULT_DESCRIPTION_ASSISTED)
+     BATTLE_RESULT_DESCRIPTION_ASSISTED,
+     BATTLE_RESULT_VIDEOBUTTON)
     BATTLE_RESULT_DESCRIPTION_ENUM = (BATTLE_RESULT_DESCRIPTION_DESTROYED,
      BATTLE_RESULT_DESCRIPTION_DAMAGE,
      BATTLE_RESULT_DESCRIPTION_BLOCKED,

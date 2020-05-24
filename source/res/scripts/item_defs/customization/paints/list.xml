@@ -329,32 +329,6 @@
     </usages>
   </itemGroup>
   <itemGroup>
-    <name>	the battle of kursk style paint	</name>
-    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
-    <season>	ALL	</season>
-    <historical>	true	</historical>
-    <priceGroup>	paints 20g notInShop	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <vehicles>	ussr:R154_T_34E_1943	</vehicles>
-      </include>
-    </vehicleFilter>
-    <paint>
-      <id>	296	</id>
-      <texture>	gui/maps/vehicles/repaints/custom_color_24.png	</texture>
-      <color>	64 69 48 255	</color>
-      <gloss>	0.52	</gloss>
-      <metallic>	0.235	</metallic>
-      <userString>	#vehicle_customization:repaint/custom_color_24	</userString>
-    </paint>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
-  </itemGroup>
-  <itemGroup>
     <name>	fireworks_2019	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
@@ -1119,32 +1093,6 @@
     </usages>
   </itemGroup>
   <itemGroup>
-    <name>	Cosmonautics Day 2020 paints	</name>
-    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
-    <season>	ALL	</season>
-    <historical>	false	</historical>
-    <priceGroup>	paints 20g notInShop	</priceGroup>
-    <vehicleFilter>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <paint>
-      <id>	32	</id>
-      <texture>	gui/maps/vehicles/repaints/custom_color_22.png	</texture>
-      <color>	16 16 33 255	</color>
-      <gloss>	0.6	</gloss>
-      <metallic>	0.222	</metallic>
-      <userString>	#vehicle_customization:repaint/cosmonautics_day_2020	</userString>
-    </paint>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
-  </itemGroup>
-  <itemGroup>
     <name>	Japan Golden Week paints	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
@@ -1198,7 +1146,7 @@
     </usages>
   </itemGroup>
   <itemGroup>
-    <name>	Countdown TOG2	</name>
+    <name>	Cosmonautics Day 2020 paints	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
@@ -1209,12 +1157,38 @@
       </exclude>
     </vehicleFilter>
     <paint>
-      <id>	37	</id>
-      <texture>	gui/maps/vehicles/repaints/custom_color_37.png	</texture>
-      <color>	217 166 48 255	</color>
-      <gloss>	0.579	</gloss>
+      <id>	32	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_22.png	</texture>
+      <color>	16 16 33 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.222	</metallic>
+      <userString>	#vehicle_customization:repaint/cosmonautics_day_2020	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	Argentina	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	33	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_11.png	</texture>
+      <color>	191 191 191 255	</color>
+      <gloss>	0.509	</gloss>
       <metallic>	0.23	</metallic>
-      <userString>	#vehicle_customization:repaint/contdown_tog2	</userString>
+      <userString>	#vehicle_customization:repaint/argentina	</userString>
     </paint>
     <usages>
       <item>
@@ -1249,14 +1223,6 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/10years_geese	</userString>
-    </paint>
-    <paint>
-      <id>	38	</id>
-      <texture>	gui/maps/vehicles/repaints/custom_color_04.png	</texture>
-      <color>	116 109 56 255	</color>
-      <gloss>	0.509	</gloss>
-      <metallic>	0.23	</metallic>
-      <userString>	#vehicle_customization:repaint/10years_grandfather	</userString>
     </paint>
     <usages>
       <item>

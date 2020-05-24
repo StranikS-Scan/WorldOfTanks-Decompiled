@@ -5,7 +5,6 @@ from soft_exception import SoftException
 _MATERIAL_KINDS_FILE = 'system/data/material_kinds.xml'
 _EFFECT_MATERIALS_FILE = 'system/data/effect_materials.xml'
 IDS_BY_NAMES = None
-GROUND_STRENGTHS_BY_IDS = None
 EFFECT_MATERIALS = None
 EFFECT_MATERIAL_INDEXES_BY_NAMES = None
 EFFECT_MATERIAL_NAMES_BY_INDEXES = None
@@ -19,13 +18,11 @@ def _init():
     global EFFECT_MATERIAL_INDEXES_BY_IDS
     global EFFECT_MATERIALS
     global EFFECT_MATERIAL_NAMES_BY_INDEXES
-    global GROUND_STRENGTHS_BY_IDS
     global EFFECT_MATERIAL_IDS_BY_NAMES
     global NOT_GROUND_MATERIALS
     global EFFECT_MATERIAL_INDEXES_BY_NAMES
     global EFFECT_MATERIAL_PROPERTIES
     IDS_BY_NAMES = {}
-    GROUND_STRENGTHS_BY_IDS = {}
     EFFECT_MATERIALS = []
     EFFECT_MATERIAL_INDEXES_BY_NAMES = {}
     EFFECT_MATERIAL_NAMES_BY_INDEXES = {}
@@ -45,12 +42,6 @@ def _init():
             _raiseWrongXml(xmlPath, "wrong or non-unique 'id' or 'desc' (%d, '%s')" % (id, name))
         ids.add(id)
         IDS_BY_NAMES[name] = id
-        groundStrength = s.readString('ground_strength')
-        if groundStrength:
-            groundStrength = intern(groundStrength)
-            if groundStrength not in ('firm', 'medium', 'soft'):
-                _raiseWrongXml(xmlPath, "wrong value of 'ground_strength' for '%s'" % groundStrength)
-            GROUND_STRENGTHS_BY_IDS[id] = groundStrength
         matName = s.readString('effect_material')
         if matName:
             matName = intern(matName)

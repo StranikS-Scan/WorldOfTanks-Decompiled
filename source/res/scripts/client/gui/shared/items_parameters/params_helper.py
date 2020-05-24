@@ -10,7 +10,7 @@ from gui.shared.items_parameters import params, RELATIVE_PARAMS, MAX_RELATIVE_VA
 from gui.shared.items_parameters.comparator import VehiclesComparator, ItemsComparator
 from gui.shared.items_parameters.functions import getBasicShell
 from gui.shared.items_parameters.params_cache import g_paramsCache
-from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME
+from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME
 from helpers import dependency
 from items import vehicles, ITEM_TYPES
 from shared_utils import findFirst, first
@@ -49,9 +49,7 @@ RELATIVE_MOBILITY_PARAMS = ('vehicleWeight',
  'chassisRotationSpeed',
  MAX_STEERING_LOCK_ANGLE,
  'switchOnTime',
- 'switchOffTime',
- WHEELED_SWITCH_ON_TIME,
- WHEELED_SWITCH_OFF_TIME)
+ 'switchOffTime')
 RELATIVE_CAMOUFLAGE_PARAMS = ('invisibilityStillFactor', 'invisibilityMovingFactor')
 RELATIVE_VISIBILITY_PARAMS = ('circularVisionRadius', 'radioDistance')
 PARAMS_GROUPS = {'relativePower': RELATIVE_POWER_PARAMS,
@@ -189,15 +187,15 @@ def camouflageComparator(vehicle, camo, factory=None):
         season = first(camo.seasons)
         outfit = vehicle.getOutfit(season)
         if not outfit:
-            outfit = factory.createOutfit(isEnabled=True, isInstalled=True)
+            outfit = factory.createOutfit(vehicleCD=vehicle.descriptor.makeCompactDescr())
             vehicle.setCustomOutfit(season, outfit)
         slot = outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE)
-        oldCamo = slot.getItem()
+        oldCamoCD = slot.getItemCD()
         oldComponent = slot.getComponent()
-        slot.set(camo)
+        slot.set(camo.intCD)
         newParams = params.VehicleParams(vehicle).getParamsDict(preload=True)
-        if oldCamo:
-            slot.set(oldCamo, component=oldComponent)
+        if oldCamoCD:
+            slot.set(oldCamoCD, component=oldComponent)
         else:
             slot.clear()
     else:

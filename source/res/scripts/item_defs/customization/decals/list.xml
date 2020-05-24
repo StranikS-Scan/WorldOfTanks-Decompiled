@@ -240,6 +240,75 @@
     <name>	Animals	</name>
     <type>	EMBLEM	</type>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:emblem/animals	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	emblems 50g notInShop	</priceGroup>
+    <tags>	styleOnly	</tags>
+    <decal>
+      <id>	228	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/animals/sticker_38.dds	</texture>
+      <userString>	#vehicle_customization:emblem/group1/animal_38	</userString>
+      <mirror>	true	</mirror>
+    </decal>
+    <decal>
+      <id>	229	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/animals/sticker_39.dds	</texture>
+      <userString>	#vehicle_customization:emblem/group1/animal_39	</userString>
+      <mirror>	true	</mirror>
+    </decal>
+    <decal>
+      <id>	230	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/animals/sticker_40.dds	</texture>
+      <userString>	#vehicle_customization:emblem/group1/animal_40	</userString>
+      <mirror>	true	</mirror>
+    </decal>
+    <decal>
+      <id>	231	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/animals/sticker_41.dds	</texture>
+      <userString>	#vehicle_customization:emblem/group1/animal_41	</userString>
+      <mirror>	true	</mirror>
+    </decal>
+    <decal>
+      <id>	232	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/animals/sticker_42.dds	</texture>
+      <userString>	#vehicle_customization:emblem/group1/animal_42	</userString>
+      <mirror>	true	</mirror>
+    </decal>
+    <decal>
+      <id>	233	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/animals/sticker_43.dds	</texture>
+      <userString>	#vehicle_customization:emblem/group1/animal_43	</userString>
+      <mirror>	true	</mirror>
+    </decal>
+    <decal>
+      <id>	234	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/animals/sticker_44.dds	</texture>
+      <userString>	#vehicle_customization:emblem/group1/animal_44	</userString>
+      <mirror>	true	</mirror>
+    </decal>
+    <decal>
+      <id>	235	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/animals/sticker_45.dds	</texture>
+      <userString>	#vehicle_customization:emblem/group1/animal_45	</userString>
+      <mirror>	true	</mirror>
+    </decal>
+    <decal>
+      <id>	236	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/animals/sticker_46.dds	</texture>
+      <userString>	#vehicle_customization:emblem/group1/animal_46	</userString>
+      <mirror>	true	</mirror>
+    </decal>
+    <decal>
+      <id>	237	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/animals/sticker_47.dds	</texture>
+      <userString>	#vehicle_customization:emblem/group1/animal_47	</userString>
+      <mirror>	true	</mirror>
+    </decal>
+    <name>	Collapsible style animals	</name>
+    <type>	EMBLEM	</type>
+  </itemGroup>
   <xmlns:czech0>	ussr	</xmlns:czech0>
   <xmlns:germany>	germany	</xmlns:germany>
   <xmlns:usa>	usa	</xmlns:usa>
@@ -1129,7 +1198,8 @@
   <itemGroup>
     <userString>	#vehicle_customization:emblem/auto	</userString>
     <season>	ALL	</season>
-    <historical>	false	</historical>
+    <historical>	true	</historical>
+    <tags>	vehicleBound nationalEmblem	</tags>
     <priceGroup>	emblems 50g notInShop	</priceGroup>
     <decal>
       <id>	15501	</id>
@@ -1231,31 +1301,6 @@
       <id>	15500	</id>
       <texture>	gui/maps/vehicles/decals/italian_flag.dds	</texture>
       <userString>	#vehicle_customization:emblem/auto/italian_flag	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	20001	</id>
-      <texture>	gui/maps/vehicles/decals/g1.dds	</texture>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	20002	</id>
-      <texture>	gui/maps/vehicles/decals/g2.dds	</texture>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	20003	</id>
-      <texture>	gui/maps/vehicles/decals/g3.dds	</texture>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	20004	</id>
-      <texture>	gui/maps/vehicles/decals/g4.dds	</texture>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	20005	</id>
-      <texture>	gui/maps/vehicles/decals/g5.dds	</texture>
       <mirror>	false	</mirror>
     </decal>
     <name>	National Emblems	</name>
@@ -4614,6 +4659,44 @@
     <historical>	false	</historical>
     <priceGroup>	emblems 50g notInShop	</priceGroup>
     <decal>
+      <id>	115	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_550.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_550	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	116	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_551.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_551	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	117	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_552.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_552	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	118	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_553.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_553	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	119	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_554.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_554	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Argentina	</name>
+    <type>	EMBLEM	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	emblems 50g notInShop	</priceGroup>
+    <decal>
       <id>	121	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_555.dds	</texture>
       <userString>	#vehicle_customization:emblem/special/sticker_555	</userString>
@@ -4673,61 +4756,21 @@
       <userString>	#vehicle_customization:emblem/special/sticker_564	</userString>
       <mirror>	false	</mirror>
     </decal>
-    <decal>
-      <id>	212	</id>
-      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_565.dds	</texture>
-      <userString>	#vehicle_customization:emblem/special/sticker_565	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	213	</id>
-      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_566.dds	</texture>
-      <userString>	#vehicle_customization:emblem/special/sticker_566	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	214	</id>
-      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_567.dds	</texture>
-      <userString>	#vehicle_customization:emblem/special/sticker_567	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	215	</id>
-      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_568.dds	</texture>
-      <userString>	#vehicle_customization:emblem/special/sticker_568	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	216	</id>
-      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_569.dds	</texture>
-      <userString>	#vehicle_customization:emblem/special/sticker_569	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	217	</id>
-      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_570.dds	</texture>
-      <userString>	#vehicle_customization:emblem/special/sticker_570	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	218	</id>
-      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_571.dds	</texture>
-      <userString>	#vehicle_customization:emblem/special/sticker_571	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	219	</id>
-      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_572.dds	</texture>
-      <userString>	#vehicle_customization:emblem/special/sticker_572	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	220	</id>
-      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_573.dds	</texture>
-      <userString>	#vehicle_customization:emblem/special/sticker_573	</userString>
-      <mirror>	false	</mirror>
-    </decal>
     <name>	10 Years Countdown	</name>
+    <type>	EMBLEM	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	emblems 50g notInShop	</priceGroup>
+    <decal>
+      <id>	245	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_578.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_578	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Stay Home	</name>
     <type>	EMBLEM	</type>
   </itemGroup>
   <xmlns:czech0>	ussr	</xmlns:czech0>
@@ -4978,35 +5021,35 @@
   <xmlns:poland>	poland	</xmlns:poland>
   <xmlns:italy>	italy	</xmlns:italy>
   <itemGroup>
-    <name>	VBR RU	</name>
     <userString>	#vehicle_customization:emblem/special	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
     <priceGroup>	emblems 50g notInShop	</priceGroup>
-    <type>	EMBLEM	</type>
     <decal>
       <id>	653	</id>
-      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_436.dds	</texture>
-      <userString>	#vehicle_customization:emblem/special/sticker_436	</userString>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_437.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_437	</userString>
       <mirror>	false	</mirror>
     </decal>
+    <name>	VBR nonRU	</name>
+    <type>	EMBLEM	</type>
   </itemGroup>
   <itemGroup>
-    <name>	WOT Classic RU	</name>
     <userString>	#vehicle_customization:emblem/special	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
     <priceGroup>	emblems 50g notInShop	</priceGroup>
-    <type>	EMBLEM	</type>
     <decal>
       <id>	701	</id>
-      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_476.dds	</texture>
-      <userString>	#vehicle_customization:emblem/special/sticker_476	</userString>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_475.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_475	</userString>
       <mirror>	false	</mirror>
     </decal>
+    <name>	WOT Classic nonRU	</name>
+    <type>	EMBLEM	</type>
   </itemGroup>
   <itemGroup>
-    <name>	BRW RU	</name>
+    <name>	BRW nonRU	</name>
     <userString>	#vehicle_customization:emblem/special	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
@@ -5014,8 +5057,8 @@
     <type>	EMBLEM	</type>
     <decal>
       <id>	86	</id>
-      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_533.dds	</texture>
-      <userString>	#vehicle_customization:emblem/special/sticker_533	</userString>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_534.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_534	</userString>
       <mirror>	false	</mirror>
     </decal>
   </itemGroup>
@@ -8656,6 +8699,20 @@
     <historical>	false	</historical>
     <priceGroup>	inscriptions 50g notInShop	</priceGroup>
     <decal>
+      <id>	114	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_318.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_318	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Argentina	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <decal>
       <id>	120	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_319.dds	</texture>
       <userString>	#vehicle_customization:inscription/special/special_319	</userString>
@@ -8710,48 +8767,6 @@
       <userString>	#vehicle_customization:inscription/special/special_327	</userString>
       <mirror>	false	</mirror>
     </decal>
-    <decal>
-      <id>	221	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_335.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_335	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	222	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_336.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_336	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	223	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_337.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_337	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	224	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_338.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_338	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	225	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_339.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_339	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	226	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_340.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_340	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	227	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_341.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_341	</userString>
-      <mirror>	false	</mirror>
-    </decal>
     <name>	10 Years Countdown	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
@@ -8761,42 +8776,12 @@
     <historical>	false	</historical>
     <priceGroup>	inscriptions 50g notInShop	</priceGroup>
     <decal>
-      <id>	206	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_329.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_329	</userString>
+      <id>	205	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_328.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_328	</userString>
       <mirror>	false	</mirror>
     </decal>
-    <decal>
-      <id>	207	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_330.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_330	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	208	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_331.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_331	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	209	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_332.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_332	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	210	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_333.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_333	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <decal>
-      <id>	211	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_334.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_334	</userString>
-      <mirror>	false	</mirror>
-    </decal>
-    <name>	Hot TOG	</name>
+    <name>	Ivan Kupala	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
   <xmlns:czech0>	ussr	</xmlns:czech0>
@@ -8889,102 +8874,102 @@
   <xmlns:sweden>	sweden	</xmlns:sweden>
   <xmlns:poland>	poland	</xmlns:poland>
   <itemGroup>
-    <name>	BRW Winners RU	</name>
     <userString>	#vehicle_customization:inscription/special	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
     <priceGroup>	inscriptions 50g notInShop	</priceGroup>
-    <type>	INSCRIPTION	</type>
     <decal>
       <id>	549	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_196.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_196	</userString>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_197.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_197	</userString>
       <mirror>	false	</mirror>
     </decal>
+    <name>	BRW Winners nonRU	</name>
+    <type>	INSCRIPTION	</type>
   </itemGroup>
   <itemGroup>
-    <name>	Halloween 2018 RU	</name>
     <userString>	#vehicle_customization:inscription/special	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
     <priceGroup>	inscriptions 50g notInShop	</priceGroup>
-    <type>	INSCRIPTION	</type>
     <decal>
       <id>	628	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_215.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_215	</userString>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_214.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_214	</userString>
       <mirror>	false	</mirror>
     </decal>
+    <name>	Halloween 2018 nonRU	</name>
+    <type>	INSCRIPTION	</type>
   </itemGroup>
   <itemGroup>
-    <name>	WGFest RU	</name>
     <userString>	#vehicle_customization:inscription/special	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
     <priceGroup>	inscriptions 50g notInShop	</priceGroup>
-    <type>	INSCRIPTION	</type>
     <decal>
       <id>	631	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_131.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_131	</userString>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_130.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_130	</userString>
       <mirror>	false	</mirror>
     </decal>
+    <name>	WGFest nonRU	</name>
+    <type>	INSCRIPTION	</type>
   </itemGroup>
   <itemGroup>
-    <name>	WGFest 2018 RU	</name>
     <userString>	#vehicle_customization:inscription/special	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
     <priceGroup>	inscriptions 50g notInShop	</priceGroup>
-    <type>	INSCRIPTION	</type>
     <decal>
       <id>	640	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_223.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_223	</userString>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_222.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_222	</userString>
       <mirror>	false	</mirror>
     </decal>
+    <name>	WGFest 2018 nonRU	</name>
+    <type>	INSCRIPTION	</type>
   </itemGroup>
   <itemGroup>
-    <name>	Referal Programm RU	</name>
     <userString>	#vehicle_customization:inscription/special	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
     <priceGroup>	inscriptions 50g notInShop	</priceGroup>
-    <type>	INSCRIPTION	</type>
     <decal>
       <id>	676	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_234.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_234	</userString>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_233.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_233	</userString>
       <mirror>	false	</mirror>
     </decal>
+    <name>	Referal Programm nonRU	</name>
+    <type>	INSCRIPTION	</type>
   </itemGroup>
   <itemGroup>
-    <name>	WOT Classic RU	</name>
     <userString>	#vehicle_customization:inscription/special	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
     <priceGroup>	inscriptions 50g notInShop	</priceGroup>
-    <type>	INSCRIPTION	</type>
     <decal>
       <id>	703	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_240.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_240	</userString>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_239.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_239	</userString>
       <mirror>	false	</mirror>
     </decal>
+    <name>	WOT Classic nonRU	</name>
+    <type>	INSCRIPTION	</type>
   </itemGroup>
   <itemGroup>
-    <name>	Cosmonautics Day RU	</name>
     <userString>	#vehicle_customization:inscription/special	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
     <priceGroup>	inscriptions 50g notInShop	</priceGroup>
-    <type>	INSCRIPTION	</type>
     <decal>
       <id>	1	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_241.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_241	</userString>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_242.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_242	</userString>
       <mirror>	false	</mirror>
     </decal>
+    <name>	Cosmonautics Day nonRU	</name>
+    <type>	INSCRIPTION	</type>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:inscription/special	</userString>
@@ -8993,15 +8978,15 @@
     <priceGroup>	inscriptions 50g notInShop	</priceGroup>
     <decal>
       <id>	24	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_272.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/inscription_272	</userString>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_273.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/inscription_273	</userString>
       <mirror>	false	</mirror>
     </decal>
     <name>	BattlePass 2019	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
   <itemGroup>
-    <name>	Master of Orion RU	</name>
+    <name>	Master of Orion nonRU	</name>
     <userString>	#vehicle_customization:inscription/special	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
@@ -9009,10 +8994,24 @@
     <type>	INSCRIPTION	</type>
     <decal>
       <id>	84	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_303.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_303	</userString>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_304.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_304	</userString>
       <mirror>	false	</mirror>
     </decal>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <decal>
+      <id>	246	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_345.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/inscription_345	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Stay Home nonRU	</name>
+    <type>	INSCRIPTION	</type>
   </itemGroup>
   <xmlns:czech0>	ussr	</xmlns:czech0>
   <xmlns:germany>	germany	</xmlns:germany>

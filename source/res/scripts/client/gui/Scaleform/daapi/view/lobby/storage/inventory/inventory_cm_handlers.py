@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/inventory/inventory_cm_handlers.py
 from adisp import process
 from async import async, await
-from gui import DialogsInterface, ingame_shop as shop
+from gui import DialogsInterface, shop
 from gui.impl.dialogs import dialogs
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import SellModuleMeta
 from gui.Scaleform.daapi.view.lobby.storage.cm_handlers import ContextMenu, option, CMLabel
@@ -76,7 +76,7 @@ class EquipmentCMHandler(ContextMenu):
         elif typeID == GUI_ITEM_TYPE.EQUIPMENT:
             shop.showBuyEquipmentOverlay(self._id, _SOURCE, _ORIGIN)
         else:
-            shared_events.showWebShop()
+            shared_events.showShop()
 
     def _generateOptions(self, ctx=None):
         options = super(EquipmentCMHandler, self)._generateOptions(ctx)

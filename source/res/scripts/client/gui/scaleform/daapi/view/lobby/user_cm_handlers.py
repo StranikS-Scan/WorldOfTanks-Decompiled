@@ -14,9 +14,10 @@ from gui.clans.clan_helpers import showClanInviteSystemMsg
 from gui.prb_control import prbDispatcherProperty, prbEntityProperty
 from gui.prb_control.entities.base.ctx import PrbAction, SendInvitesCtx
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
-from gui.shared import event_dispatcher as shared_events, utils
+from gui.shared import event_dispatcher as shared_events, events, g_eventBus, utils
 from gui.shared.ClanCache import ClanInfo
 from gui.shared.denunciator import LobbyDenunciator, DENUNCIATIONS, DENUNCIATIONS_MAP
+from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.utils.functions import showSentInviteMessage
 from gui.wgcg.clan.contexts import CreateInviteCtx
 from helpers import i18n, dependency
@@ -26,7 +27,7 @@ from messenger.m_constants import PROTO_TYPE, USER_TAG
 from messenger.proto import proto_getter
 from messenger.storage import storage_getter
 from nation_change_helpers.client_nation_change_helper import getValidVehicleCDForNationChange
-from skeletons.gui.game_control import IVehicleComparisonBasket, IBobController
+from skeletons.gui.game_control import IVehicleComparisonBasket
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -51,7 +52,6 @@ class USER(object):
     UNSET_MUTED = 'unsetMuted'
     CREATE_SQUAD = 'createSquad'
     CREATE_EVENT_SQUAD = 'createEventSquad'
-    CREATE_BOB_SQUAD = 'createBobSquad'
     INVITE = 'invite'
     REQUEST_FRIENDSHIP = 'requestFriendship'
     VEHICLE_INFO = 'vehicleInfoEx'
@@ -66,7 +66,6 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     eventsCache = dependency.descriptor(IEventsCache)
     clanCtrl = dependency.descriptor(IWebController)
     lobbyContext = dependency.descriptor(ILobbyContext)
-    bobCtrl = dependency.descriptor(IBobController)
 
     def __init__(self, cmProxy, ctx=None):
         super(BaseUserCMHandler, self).__init__(cmProxy, ctx, handlers=self._getHandlers())
@@ -156,9 +155,6 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     def createEventSquad(self):
         self._doSelect(PREBATTLE_ACTION_NAME.EVENT_SQUAD, (self.databaseID,))
 
-    def createBobSquad(self):
-        self._doSelect(PREBATTLE_ACTION_NAME.BOB_SQUAD, (self.databaseID,))
-
     def invite(self):
         user = self.usersStorage.getUser(self.databaseID)
         if self.prbEntity.getPermissions().canSendInvite():
@@ -181,7 +177,6 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
          USER.SET_MUTED: 'setMuted',
          USER.UNSET_MUTED: 'unsetMuted',
          USER.CREATE_SQUAD: 'createSquad',
-         USER.CREATE_BOB_SQUAD: 'createBobSquad',
          USER.CREATE_EVENT_SQUAD: 'createEventSquad',
          USER.INVITE: 'invite',
          USER.REQUEST_FRIENDSHIP: 'requestFriendship'}
@@ -256,9 +251,6 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
             if self.eventsCache.isEventEnabled():
                 options.append(self._makeItem(USER.CREATE_EVENT_SQUAD, MENU.contextmenu(USER.CREATE_EVENT_SQUAD), optInitData={'enabled': canCreate,
                  'textColor': 13347959}))
-            if self.bobCtrl.isModeActive():
-                options.append(self._makeItem(USER.CREATE_BOB_SQUAD, MENU.contextmenu(USER.CREATE_BOB_SQUAD), optInitData={'enabled': canCreate,
-                 'textColor': 13347959}))
         return options
 
     def _addPrebattleInfo(self, options, userCMInfo):
@@ -311,9 +303,10 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     def _makeAIBotOptions(self):
         return [self._makeItem(USER.VEHICLE_INFO, MENU.contextmenu(USER.VEHICLE_INFO)), self._makeItem(USER.VEHICLE_PREVIEW, MENU.contextmenu(USER.VEHICLE_PREVIEW))]
 
-    @process
     def _doSelect(self, prebattleActionName, accountsToInvite=None):
-        yield self.prbDispatcher.doSelectAction(PrbAction(prebattleActionName, accountsToInvite=accountsToInvite))
+        action = PrbAction(prebattleActionName, accountsToInvite=accountsToInvite)
+        event = events.PrbActionEvent(action, events.PrbActionEvent.SELECT)
+        g_eventBus.handleEvent(event, EVENT_BUS_SCOPE.LOBBY)
 
 
 class AppealCMHandler(BaseUserCMHandler):
@@ -343,7 +336,6 @@ class AppealCMHandler(BaseUserCMHandler):
         vehicleCD = getValidVehicleCDForNationChange(self._vehicleCD)
         shared_events.showVehicleInfo(vehicleCD)
 
-    @shared_events.leaveEventMode
     def showVehiclePreview(self):
         vehicleCD = getValidVehicleCDForNationChange(self._vehicleCD)
         shared_events.showVehiclePreview(vehicleCD)

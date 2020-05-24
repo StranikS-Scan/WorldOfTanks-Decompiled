@@ -18,18 +18,34 @@ class BonusTooltipData(BlocksTooltipData):
         super(BonusTooltipData, self).__init__(context, TOOLTIP_TYPE.RANKED_RANK)
         self._setContentMargin(bottom=14)
         self._setMargins(14, 20)
-        self._setWidth(330)
+        self._setWidth(380)
 
     def _packBlocks(self, *args, **kwargs):
         items = super(BonusTooltipData, self)._packBlocks()
         headerBlocks = [formatters.packImageTextBlockData(title=text_styles.highTitle(backport.text(R.strings.tooltips.battleTypes.ranked.bonusBattle.title())), img=backport.image(R.images.gui.maps.icons.rankedBattles.bonusIcons.c_48x48()), txtPadding=formatters.packPadding(left=20), titleAtMiddle=True, padding=formatters.packPadding(left=30, top=14))]
         items.append(formatters.packBuildUpBlockData(headerBlocks, stretchBg=False, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_NORMAL_VEHICLE_BG_LINKAGE, padding=formatters.packPadding(left=-20, top=-12, bottom=-6)))
-        bonusBattlesValue = self.rankedController.getClientBonusBattlesCount()
-        bonusCountName = backport.text(R.strings.tooltips.battleTypes.ranked.bonusBattle.count())
-        items.append(formatters.packTextParameterBlockData(name=text_styles.main(bonusCountName), value=text_styles.stats(bonusBattlesValue), padding=formatters.packPadding(top=-8, left=20, bottom=0)))
-        descriptionBlock = [formatters.packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.battleTypes.ranked.bonusBattle.description())), padding=formatters.packPadding(top=-10))]
-        items.append(formatters.packBuildUpBlockData(descriptionBlock, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
+        statsComposer = self.rankedController.getStatsComposer()
+        persistentCount = statsComposer.persistentBonusBattles
+        items.append(self.__packPersistentCount(persistentCount))
+        dailyCount = statsComposer.dailyBonusBattles
+        if dailyCount > 0:
+            income = statsComposer.dailyBonusBattlesIncome
+            items.append(self.__packDailyCount(dailyCount, income))
+        descriptionBlock = [formatters.packTextBlockData(text_styles.main(backport.text(R.strings.tooltips.battleTypes.ranked.bonusBattle.description())), padding=formatters.packPadding(top=-6))]
+        items.append(formatters.packBuildUpBlockData(descriptionBlock))
         return items
+
+    def __packPersistentCount(self, persistentCount):
+        persistenName = backport.text(R.strings.tooltips.battleTypes.ranked.bonusBattle.persistent.title())
+        return formatters.packBuildUpBlockData([formatters.packTitleDescParameterWithIconBlockData(title=text_styles.middleTitle(persistenName), value=text_styles.promoSubTitle(persistentCount), padding=formatters.packPadding(top=-8, left=48, bottom=-3), titlePadding=formatters.packPadding(top=9, left=34))], linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)
+
+    def __packDailyCount(self, dailyCount, income):
+        dailyTitle = backport.text(R.strings.tooltips.battleTypes.ranked.bonusBattle.daily.title())
+        dailyBody = text_styles.standard(backport.text(R.strings.tooltips.battleTypes.ranked.bonusBattle.daily.bodyOther()))
+        if income > 0:
+            incomeStr = backport.text(R.strings.tooltips.battleTypes.ranked.bonusBattle.daily.bodyIncome(), income=income)
+            dailyBody = text_styles.concatStylesToMultiLine(text_styles.standard(incomeStr), dailyBody)
+        return formatters.packBuildUpBlockData([formatters.packTitleDescParameterWithIconBlockData(title=text_styles.concatStylesToMultiLine(text_styles.middleTitle(dailyTitle), dailyBody), value=text_styles.promoSubTitle(dailyCount), padding=formatters.packPadding(top=-11, left=48, bottom=-5), titlePadding=formatters.packPadding(top=9, left=34))], linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)
 
 
 class LeagueTooltipData(BlocksTooltipData):

@@ -268,9 +268,6 @@ class WgshAccessor(BaseAccessor):
 
 class RblbAccessor(BaseAccessor):
 
-    def user_season_statistics(self, callback, fields=None):
-        return self._data_source.user_season_statistics(callback, fields=fields)
-
     def user_ranked_position(self, callback, fields=None):
         return self._data_source.user_ranked_position(callback, fields=fields)
 

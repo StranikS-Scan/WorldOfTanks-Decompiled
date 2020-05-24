@@ -24,7 +24,7 @@ class CONTEXT_MENU_HANDLER_TYPE(object):
     CUSTOM_USER = 'customUser'
     CUSTOMIZATION_ITEM = 'customizationItem'
     STRONGHOLD_USER = 'strongholdUser'
-    INGAME_SHOP = 'ingameShop'
+    SHOP = 'shop'
     STORAGE_FOR_SELL_ITEM = 'storageForSellItem'
     STORAGE_MODULES_SHELLS_ITEM = 'storageModulesShellsItem'
     STORAGE_EQUIPMENT_ITEM = 'storageEquipmentItem'

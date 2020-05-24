@@ -18,7 +18,7 @@
       <isRent>	true	</isRent>
       <rentCount>	100	</rentCount>
       <userString>	#vehicle_customization:rented_style/germany	</userString>
-      <tags>	vehicleBound	</tags>
+      <tags>	vehicleBound addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -77,6 +77,14 @@
       <texture>	gui/maps/vehicles/styles/style_01.png	</texture>
       <userString>	#vehicle_customization:gold_style/gold_style_01	</userString>
       <longDescriptionSpecial>	#vehicle_customization:gold_style/gold_style_01_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -215,6 +223,14 @@
       <id>	150	</id>
       <texture>	gui/maps/vehicles/styles/global_map_01.png	</texture>
       <userString>	#vehicle_customization:special_style/global_map	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -267,6 +283,14 @@
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/KanonenPanter_105	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/KanonenPanter_105_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -305,12 +329,18 @@
     <style>
       <id>	227	</id>
       <texture>	gui/maps/vehicles/styles/Grille_15_L63_NYst.png	</texture>
-      <description>	#vehicle_customization:special_style/Grille_15_L63_NYst_description	</description>
       <longDescriptionSpecial>	#vehicle_customization:special_style/Grille_15_L63_NYst_description/long	</longDescriptionSpecial>
       <modelsSet>	NYst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/Grille_15_L63_NYst	</userString>
-      <tags>	NY2019_style	</tags>
+      <tags>	NY2019_style progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -355,6 +385,14 @@
       <description>	#vehicle_customization:main_style/generic_custom_look_germany_desc	</description>
       <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_germany_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:main_style/generic_custom_look_germany	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	summer	</season>
@@ -443,6 +481,14 @@
       <texture>	gui/maps/vehicles/styles/generic_custom_look_2_germany.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_2_germany_desc	</description>
       <userString>	#vehicle_customization:main_style/generic_custom_look_2_germany	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -514,10 +560,18 @@
     <style>
       <id>	113	</id>
       <texture>	gui/maps/vehicles/styles/G54_E50_Halloween_3Dst.png	</texture>
-      <description>	#vehicle_customization:main_style/Halloween_2019_3Dst_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/Halloween_2019_3Dst_desc/long	</longDescriptionSpecial>
       <modelsSet>	Halloween_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:main_style/Halloween_2019_3Dst	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -556,10 +610,18 @@
     <style>
       <id>	95	</id>
       <texture>	gui/maps/vehicles/styles/G64_Panther_II_Halloween_3Dst.png	</texture>
-      <description>	#vehicle_customization:main_style/Halloween_2019_3Dst_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/Halloween_2019_3Dst_desc/long	</longDescriptionSpecial>
       <modelsSet>	Halloween_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:main_style/Halloween_2019_3Dst	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -598,10 +660,18 @@
     <style>
       <id>	96	</id>
       <texture>	gui/maps/vehicles/styles/G73_E50_Ausf_M_Hallowen_3Dst.png	</texture>
-      <description>	#vehicle_customization:main_style/Halloween_2019_3Dst_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/Halloween_2019_3Dst_desc/long	</longDescriptionSpecial>
       <modelsSet>	Halloween_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:main_style/Halloween_2019_3Dst	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -640,10 +710,18 @@
     <style>
       <id>	60	</id>
       <texture>	gui/maps/vehicles/styles/G143_E75_TS_3Dst.png	</texture>
-      <description>	#vehicle_customization:main_style/G143_E75_TS_3Dst_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/G143_E75_TS_3Dst_desc/long	</longDescriptionSpecial>
       <modelsSet>	TS_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:main_style/G143_E75_TS_3Dst	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -687,6 +765,14 @@
       <texture>	gui/maps/vehicles/styles/generic_custom_look_3_germany.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_3_germany_desc	</description>
       <userString>	#vehicle_customization:main_style/generic_custom_look_3_germany	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -758,12 +844,18 @@
     <style>
       <id>	100	</id>
       <texture>	gui/maps/vehicles/styles/G56_E-100_3Dst.png	</texture>
-      <description>	#vehicle_customization:unique_style/G56_E-100_3Dst_desc	</description>
       <longDescriptionSpecial>	#vehicle_customization:unique_style/G56_E-100_3Dst_desc/long	</longDescriptionSpecial>
       <modelsSet>	G56_E-100_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:unique_style/G56_E-100_3Dst	</userString>
-      <tags>	NY2020_style	</tags>
+      <tags>	NY2020_style progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -802,12 +894,18 @@
     <style>
       <id>	112	</id>
       <texture>	gui/maps/vehicles/styles/G72_JagdPz_E100_3Dst.png	</texture>
-      <description>	#vehicle_customization:unique_style/G72_JagdPz_E100_3Dst_desc	</description>
       <longDescriptionSpecial>	#vehicle_customization:unique_style/G72_JagdPz_E100_3Dst_desc/long	</longDescriptionSpecial>
       <modelsSet>	G72_JagdPz_E100_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:unique_style/G72_JagdPz_E100_3Dst	</userString>
-      <tags>	NY2020_style	</tags>
+      <tags>	NY2020_style progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -836,10 +934,18 @@
     <style>
       <id>	124	</id>
       <texture>	gui/maps/vehicles/styles/G51_Lowe_Valentine_Day_3Dst.png	</texture>
-      <description>	#vehicle_customization:main_style/G51_Lowe_Valentine_Day_3Dst_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/G51_Lowe_Valentine_Day_3Dst_desc/long	</longDescriptionSpecial>
       <modelsSet>	Valentine_Day	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:main_style/G51_Lowe_Valentine_Day_3Dst	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>

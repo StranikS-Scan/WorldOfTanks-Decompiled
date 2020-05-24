@@ -44,20 +44,6 @@ class CHAT_COMMANDS(object):
     GLOBAL_LANE_WEST = 'EPIC_GLOBAL_WEST'
     GLOBAL_LANE_CENTER = 'EPIC_GLOBAL_CENTER'
     GLOBAL_LANE_EAST = 'EPIC_GLOBAL_EAST'
-    EVENT_CHAT_1 = 'EVENT_CHAT_1'
-    EVENT_CHAT_2 = 'EVENT_CHAT_2'
-    EVENT_CHAT_3 = 'EVENT_CHAT_3'
-    EVENT_CHAT_4 = 'EVENT_CHAT_4'
-    EVENT_CHAT_5 = 'EVENT_CHAT_5'
-    EVENT_CHAT_6 = 'EVENT_CHAT_6'
-    EVENT_CHAT_7 = 'EVENT_CHAT_7'
-    EVENT_CHAT_1_EX = 'EVENT_CHAT_1_EX'
-    EVENT_CHAT_2_EX = 'EVENT_CHAT_2_EX'
-    EVENT_CHAT_3_EX = 'EVENT_CHAT_3_EX'
-    EVENT_CHAT_4_EX = 'EVENT_CHAT_4_EX'
-    EVENT_CHAT_5_EX = 'EVENT_CHAT_5_EX'
-    EVENT_CHAT_6_EX = 'EVENT_CHAT_6_EX'
-    EVENT_CHAT_7_EX = 'EVENT_CHAT_7_EX'
 
 
 KB_MAPPING = {CHAT_COMMANDS.ATTACKENEMY: CommandMapping.CMD_CHAT_SHORTCUT_ATTACK_MY_TARGET,
@@ -72,14 +58,7 @@ TARGET_ACTIONS = [CHAT_COMMANDS.FOLLOWME,
  CHAT_COMMANDS.HELPME,
  CHAT_COMMANDS.SUPPORTMEWITHFIRE,
  CHAT_COMMANDS.ATTACKENEMY,
- CHAT_COMMANDS.STOP,
- CHAT_COMMANDS.EVENT_CHAT_1_EX,
- CHAT_COMMANDS.EVENT_CHAT_2_EX,
- CHAT_COMMANDS.EVENT_CHAT_3_EX,
- CHAT_COMMANDS.EVENT_CHAT_4_EX,
- CHAT_COMMANDS.EVENT_CHAT_5_EX,
- CHAT_COMMANDS.EVENT_CHAT_6_EX,
- CHAT_COMMANDS.EVENT_CHAT_7_EX]
+ CHAT_COMMANDS.STOP]
 EPIC_GLOBAL_ACTIONS = [CHAT_COMMANDS.GLOBAL_SAVE_TANKS_ATK,
  CHAT_COMMANDS.GLOBAL_TIME_ATK,
  CHAT_COMMANDS.GLOBAL_FOCUSHQ_ATK,
@@ -99,14 +78,7 @@ TARGET_TRANSLATION_MAPPING = {CHAT_COMMANDS.ATTACKENEMY: {ALLY_CUT: CHAT_COMMAND
                              ENEMY_SPG_CUT: CHAT_COMMANDS.ATTACKENEMY},
  CHAT_COMMANDS.BACKTOBASE: {ALLY_CUT: CHAT_COMMANDS.TURNBACK},
  CHAT_COMMANDS.SOS: {ALLY_CUT: CHAT_COMMANDS.HELPME},
- CHAT_COMMANDS.RELOADINGGUN: {ALLY_CUT: CHAT_COMMANDS.STOP},
- CHAT_COMMANDS.EVENT_CHAT_1_EX: {ALLY_CUT: CHAT_COMMANDS.EVENT_CHAT_1},
- CHAT_COMMANDS.EVENT_CHAT_2_EX: {ALLY_CUT: CHAT_COMMANDS.EVENT_CHAT_2},
- CHAT_COMMANDS.EVENT_CHAT_3_EX: {ALLY_CUT: CHAT_COMMANDS.EVENT_CHAT_3},
- CHAT_COMMANDS.EVENT_CHAT_4_EX: {ALLY_CUT: CHAT_COMMANDS.EVENT_CHAT_4},
- CHAT_COMMANDS.EVENT_CHAT_5_EX: {ALLY_CUT: CHAT_COMMANDS.EVENT_CHAT_5},
- CHAT_COMMANDS.EVENT_CHAT_6_EX: {ALLY_CUT: CHAT_COMMANDS.EVENT_CHAT_6},
- CHAT_COMMANDS.EVENT_CHAT_7_EX: {ALLY_CUT: CHAT_COMMANDS.EVENT_CHAT_7}}
+ CHAT_COMMANDS.RELOADINGGUN: {ALLY_CUT: CHAT_COMMANDS.STOP}}
 
 class ChatCommandsController(IBattleController):
     __slots__ = ('__arenaDP', '__feedback', '__ammo')
@@ -312,9 +284,6 @@ class ChatCommandsController(IBattleController):
             vMarker = cmd.getVehMarker(vehicle=vehicleInfo)
             if vMarker and vehicleID:
                 self.__feedback.showActionMarker(vehicleID, vMarker, cmd.getVehMarker())
-            if cmd.isMsgOnMarker() and vehicleID:
-                message = cmd.messageOnMarker()
-                self.__feedback.showActionMessage(vehicleID, message, True)
         return
 
     def __handlePublicCommand(self, cmd):
@@ -332,9 +301,6 @@ class ChatCommandsController(IBattleController):
                 self.__feedback.showActionMarker(senderID, senderMarker, senderMarker)
         elif senderID:
             self.__feedback.showActionMarker(senderID, recvMarker, recvMarker)
-        if cmd.isMsgOnMarker() and senderID:
-            message = cmd.messageOnMarker()
-            self.__feedback.showActionMessage(senderID, message, False)
         return
 
     def __me_onCommandReceived(self, cmd):

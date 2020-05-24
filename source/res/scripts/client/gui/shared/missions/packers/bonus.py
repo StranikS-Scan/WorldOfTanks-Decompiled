@@ -11,6 +11,7 @@ from gui.impl.gen.view_models.common.missions.bonuses.item_bonus_model import It
 from gui.impl.gen.view_models.common.missions.bonuses.token_bonus_model import TokenBonusModel
 from gui.server_events.awards_formatters import TOKEN_SIZES, ItemsBonusFormatter
 from gui.server_events.formatters import parseComplexToken, TokenComplex
+from gui.shared.gui_items.customization import CustomizationTooltipContext
 from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -215,7 +216,7 @@ class GoodiesBonusUIPacker(BaseBonusUIPacker):
     def _getToolTip(cls, bonus):
         tooltipData = []
         for booster in sorted(bonus.getBoosters().iterkeys(), key=lambda b: b.boosterID):
-            tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.SHOP_20_BOOSTER, specialArgs=[booster.boosterID]))
+            tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.SHOP_BOOSTER, specialArgs=[booster.boosterID]))
 
         for demountkit in sorted(bonus.getDemountKits().iterkeys()):
             tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.AWARD_DEMOUNT_KIT, specialArgs=[demountkit.intCD]))
@@ -324,7 +325,7 @@ class CustomizationBonusUIPacker(BaseBonusUIPacker):
             if item is None:
                 continue
             itemCustomization = bonus.getC11nItem(item)
-            tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_AWARD, specialArgs=[itemCustomization.intCD, False]))
+            tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_AWARD, specialArgs=CustomizationTooltipContext(itemCD=itemCustomization.intCD)))
 
         return tooltipData
 

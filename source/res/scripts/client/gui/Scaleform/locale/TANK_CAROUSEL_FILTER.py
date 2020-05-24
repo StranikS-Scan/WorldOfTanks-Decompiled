@@ -13,6 +13,7 @@ class TANK_CAROUSEL_FILTER(object):
     POPOVER_LABEL_SPECIALS = '#tank_carousel_filter:popover/label/specials'
     POPOVER_LABEL_HIDDEN = '#tank_carousel_filter:popover/label/hidden'
     POPOVER_LABEL_PROGRESSIONS = '#tank_carousel_filter:popover/label/progressions'
+    POPOVER_LABEL_ROLES = '#tank_carousel_filter:popover/label/roles'
     POPOVER_LABEL_SEARCHNAMEVEHICLE = '#tank_carousel_filter:popover/label/searchNameVehicle'
     POPOVER_CHECKBOX_PREMIUM = '#tank_carousel_filter:popover/checkbox/premium'
     POPOVER_CHECKBOX_ELITE = '#tank_carousel_filter:popover/checkbox/elite'

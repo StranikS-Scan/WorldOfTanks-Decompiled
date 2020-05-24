@@ -78,7 +78,7 @@
     <userString>	#ussr_vehicles:A-20	</userString>
     <description>	#ussr_vehicles:A-20_descr	</description>
     <price>	334000	</price>
-    <tags>	lightTank scout improvedVentilation_class1_user enhancedSuspension_Christie_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
+    <tags>	lightTank scout aimingStabilizer_Mk1_user improvedVentilation_class1_user enhancedSuspension_Christie_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
     <level>	5	</level>
   </R12_A-20>
   <R18_SU-152>
@@ -1540,7 +1540,7 @@
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank improvedVentilation_class2_user special enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD secret testTank	</tags>
+    <tags>	mediumTank improvedVentilation_class2_user enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD special secret testTank	</tags>
     <level>	9	</level>
   </R173_K_91_2>
   <R175_IS_2_screen>
@@ -1568,6 +1568,19 @@
     <tags>	AT-SPG sinai heavyAT-SPG improvedVentilation_class3_user enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user HD	</tags>
     <level>	8	</level>
   </R177_ISU_152K_BL10>
+  <R178_Object_780>
+    <id>	125	</id>
+    <userString>	#ussr_vehicles:R178_Object_780	</userString>
+    <description>	#ussr_vehicles:R178_Object_780_descr	</description>
+    <shortUserString>	#ussr_vehicles:R178_Object_780_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R178_Object_780_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R178_Object_780_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank improvedVentilation_class3_user enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user special secret testTank HD	</tags>
+    <level>	10	</level>
+  </R178_Object_780>
   <R87_T62A_fallout>
     <id>	249	</id>
     <userString>	#ussr_vehicles:T62A_fallout	</userString>
@@ -1777,122 +1790,4 @@
     <tags>	heavyTank improvedVentilation_class3_user enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user HD	</tags>
     <level>	6	</level>
   </R152_KV2_W>
-  <R01_IS_SE20_Gen_1_Lvl_1>
-    <id>	74	</id>
-    <userString>	#ussr_vehicles:IS_SE20_Gen_1_Lvl_1	</userString>
-    <description>	#ussr_vehicles:IS_descr_SE20_Gen_1_Lvl_1	</description>
-    <price>	1424000	</price>
-    <tags>	heavyTank improvedVentilation_class3_user sinai enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user HD  event_battles secret cannot_be_sold lockOutfit lockCrew	</tags>
-    <level>	7	</level>
-    <clone_tags>	cloned cloned_localization	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </R01_IS_SE20_Gen_1_Lvl_1>
-  <R01_IS_SE20_Gen_1_Lvl_2>
-    <id>	99	</id>
-    <userString>	#ussr_vehicles:IS_SE20_Gen_1_Lvl_2	</userString>
-    <description>	#ussr_vehicles:IS_descr_SE20_Gen_1_Lvl_2	</description>
-    <price>	1424000	</price>
-    <tags>	heavyTank improvedVentilation_class3_user sinai enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user HD  event_battles secret cannot_be_sold lockOutfit lockCrew	</tags>
-    <level>	7	</level>
-    <clone_tags>	cloned cloned_localization	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </R01_IS_SE20_Gen_1_Lvl_2>
-  <R71_IS_2B_SE20_Gen_1_Lvl_3>
-    <id>	91	</id>
-    <userString>	#ussr_vehicles:R71_IS_2B_SE20_Gen_1_Lvl_3	</userString>
-    <description>	#ussr_vehicles:R71_IS_2B_descr_SE20_Gen_1_Lvl_3	</description>
-    <shortDescriptionSpecial>	#ussr_vehicles:R71_IS_2B_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R71_IS_2B_long_special	</longDescriptionSpecial>
-    <price>	5250	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank sinai improvedVentilation_class3_user enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user HD  event_battles secret cannot_be_sold lockOutfit lockCrew	</tags>
-    <level>	7	</level>
-    <clone_tags>	cloned cloned_localization	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </R71_IS_2B_SE20_Gen_1_Lvl_3>
-  <R07_T-34-85_SE20_Gen_2_Lvl_1>
-    <id>	92	</id>
-    <userString>	#ussr_vehicles:T-34-85_SE20_Gen_2_Lvl_1	</userString>
-    <description>	#ussr_vehicles:T-34-85_descr_SE20_Gen_2_Lvl_1	</description>
-    <price>	915000	</price>
-    <tags>	mediumTank improvedVentilation_class2_user enhancedSuspension_Christie_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD  event_battles secret cannot_be_sold lockOutfit lockCrew	</tags>
-    <level>	6	</level>
-    <clone_tags>	cloned cloned_localization	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </R07_T-34-85_SE20_Gen_2_Lvl_1>
-  <R108_T34_85M_SE20_Gen_2_Lvl_2>
-    <id>	93	</id>
-    <userString>	#ussr_vehicles:R108_T34_85M_SE20_Gen_2_Lvl_2	</userString>
-    <description>	#ussr_vehicles:R108_T34_85M_descr_SE20_Gen_2_Lvl_2	</description>
-    <shortDescriptionSpecial>	#ussr_vehicles:R108_T34_85M_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R108_T34_85M_long_special	</longDescriptionSpecial>
-    <price>	3750	  <gold></gold>
-    </price>
-    <tags>	mediumTank improvedVentilation_class2_user enhancedSuspension_Christie_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD  event_battles secret cannot_be_sold lockOutfit lockCrew	</tags>
-    <level>	6	</level>
-    <clone_tags>	cloned cloned_localization	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </R108_T34_85M_SE20_Gen_2_Lvl_2>
-  <R98_T44_85_SE20_Gen_2_Lvl_3>
-    <id>	94	</id>
-    <userString>	#ussr_vehicles:T44_85_SE20_Gen_2_Lvl_3	</userString>
-    <description>	#ussr_vehicles:T44_85_descr_SE20_Gen_2_Lvl_3	</description>
-    <price>	7200	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank mediumTank1 improvedVentilation_class2_user enhancedTorsions3t_user mediumCaliberTankRammer_user aimingStabilizer_Mk1_user wetCombatPack_class1_user secret HD  event_battles cannot_be_sold lockOutfit lockCrew	</tags>
-    <level>	7	</level>
-    <clone_tags>	cloned cloned_localization	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </R98_T44_85_SE20_Gen_2_Lvl_3>
-  <R17_SU-100_SE20_Gen_0_Lvl_1>
-    <id>	95	</id>
-    <userString>	#ussr_vehicles:SU-100_SE20_Gen_0_Lvl_1	</userString>
-    <description>	#ussr_vehicles:SU-100_descr_SE20_Gen_0_Lvl_1	</description>
-    <price>	908900	</price>
-    <tags>	AT-SPG mediumAT-SPG AT-SPG2 improvedVentilation_class2_user enhancedSuspension_Christie_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD  event_battles secret cannot_be_sold lockOutfit lockCrew	</tags>
-    <level>	6	</level>
-    <clone_tags>	cloned cloned_localization	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </R17_SU-100_SE20_Gen_0_Lvl_1>
-  <R17_SU-100_SE20_Gen_0_Lvl_2>
-    <id>	96	</id>
-    <userString>	#ussr_vehicles:SU-100_SE20_Gen_0_Lvl_2	</userString>
-    <description>	#ussr_vehicles:SU-100_descr_SE20_Gen_0_Lvl_2	</description>
-    <price>	908900	</price>
-    <tags>	AT-SPG mediumAT-SPG AT-SPG2 improvedVentilation_class2_user enhancedSuspension_Christie_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD  event_battles secret cannot_be_sold lockOutfit lockCrew	</tags>
-    <level>	6	</level>
-    <clone_tags>	cloned cloned_localization	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </R17_SU-100_SE20_Gen_0_Lvl_2>
-  <R116_ISU122C_Berlin_SE20_Gen_0_Lvl_3>
-    <id>	97	</id>
-    <userString>	#ussr_vehicles:R116_ISU122C_Berlin_SE20_Gen_0_Lvl_3__0	</userString>
-    <description>	#ussr_vehicles:R116_ISU122C_Berlin_descr_SE20_Gen_0_Lvl_3__0	</description>
-    <shortDescriptionSpecial>	#ussr_vehicles:R116_ISU122C_Berlin_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R116_ISU122C_Berlin_long_special	</longDescriptionSpecial>
-    <price>	4750	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	AT-SPG sinai heavyAT-SPG improvedVentilation_class3_user enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user HD  event_battles secret cannot_be_sold lockOutfit lockCrew	</tags>
-    <level>	7	</level>
-    <clone_tags>	cloned cloned_localization	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </R116_ISU122C_Berlin_SE20_Gen_0_Lvl_3>
-  <R140_M4_Loza_SE20_Gen_4_Lvl_1>
-    <id>	98	</id>
-    <userString>	#ussr_vehicles:R140_M4_Loza_SE20_Gen_4_Lvl_1	</userString>
-    <description>	#ussr_vehicles:R140_M4_Loza_descr_SE20_Gen_4_Lvl_1	</description>
-    <shortUserString>	#ussr_vehicles:R140_M4_Loza_short_SE20_Gen_4_Lvl_1	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R140_M4_Loza_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:R140_M4_Loza_long_special	</longDescriptionSpecial>
-    <price>	3700	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank improvedVentilation_class2_user lendLeaseVehicle aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedHorizontal_springs_class2_user HD  event_battles secret cannot_be_sold lockOutfit lockCrew	</tags>
-    <level>	6	</level>
-    <clone_tags>	cloned cloned_localization	</clone_tags>
-    <notInShop>	True	</notInShop>
-  </R140_M4_Loza_SE20_Gen_4_Lvl_1>
 </list.xml>

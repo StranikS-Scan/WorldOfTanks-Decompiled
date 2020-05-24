@@ -130,6 +130,7 @@ class COMPONENTS(object):
     TEXT_BTN_STROKE = 'text_btn_stroke'
     TEXTFIELD_BG = 'textfield_bg'
     TOOL_TIP_SEPARATOR = 'tool_tip_separator'
+    TOOLTIP_BACKGROUND = 'tooltip_background'
     TOP_BALANCE_BG = 'top_balance_bg'
     XP_DISCOUNT_BG_SIMPLE = 'xp_discount_bg_simple'
     XP_COST_ICON_BIG = 'XpCostIconBig'

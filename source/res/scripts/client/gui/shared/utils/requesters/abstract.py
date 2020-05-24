@@ -65,6 +65,15 @@ class AbstractSyncDataRequester(AbstractRequester):
     def getCacheValue(self, key, defaultValue=None):
         return self._data[key] if key in self._data else defaultValue
 
+    def getCacheValueByPath(self, path, defaultValue=None):
+        value = self._data
+        for key in path:
+            if not isinstance(value, dict) or key not in value:
+                return defaultValue
+            value = value[key]
+
+        return value
+
     def _getDefaultDataValue(self):
         return {}
 

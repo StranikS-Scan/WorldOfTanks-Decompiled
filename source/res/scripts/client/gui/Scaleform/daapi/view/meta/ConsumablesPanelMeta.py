@@ -4,7 +4,7 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class ConsumablesPanelMeta(BaseDAAPIComponent):
 
-    def onClickedToSlot(self, keyCode):
+    def onClickedToSlot(self, keyCode, idx):
         self._printOverrideError('onClickedToSlot')
 
     def onPopUpClosed(self):
@@ -16,8 +16,8 @@ class ConsumablesPanelMeta(BaseDAAPIComponent):
     def as_setItemQuantityInSlotS(self, idx, quantity):
         return self.flashObject.as_setItemQuantityInSlot(idx, quantity) if self._isDAAPIInited() else None
 
-    def as_setItemTimeQuantityInSlotS(self, idx, quantity, timeRemaining, maxTime, stage):
-        return self.flashObject.as_setItemTimeQuantityInSlot(idx, quantity, timeRemaining, maxTime, stage) if self._isDAAPIInited() else None
+    def as_setItemTimeQuantityInSlotS(self, idx, quantity, timeRemaining, maxTime):
+        return self.flashObject.as_setItemTimeQuantityInSlot(idx, quantity, timeRemaining, maxTime) if self._isDAAPIInited() else None
 
     def as_setCoolDownTimeS(self, idx, duration, baseTime, startTime, isReloading):
         return self.flashObject.as_setCoolDownTime(idx, duration, baseTime, startTime, isReloading) if self._isDAAPIInited() else None

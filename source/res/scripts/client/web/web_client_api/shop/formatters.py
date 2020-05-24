@@ -5,7 +5,7 @@ from collections import namedtuple
 from constants import RentType
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
-from gui.ingame_shop import SHOP_RENT_SEASON_TYPE_MAP, SHOP_RENT_TYPE_MAP
+from gui.shop import SHOP_RENT_SEASON_TYPE_MAP, SHOP_RENT_TYPE_MAP
 from gui.shared.gui_items import KPI, CREW_SKILL_TO_KPI_NAME_MAP
 from helpers import dependency, i18n, time_utils
 from items.components.skills_constants import PERKS

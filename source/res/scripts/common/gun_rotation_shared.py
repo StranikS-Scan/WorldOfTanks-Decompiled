@@ -3,10 +3,7 @@
 import BigWorld
 import Math
 from math import pi
-from constants import IS_CLIENT, IS_CELLAPP
 from debug_utils import *
-if IS_CELLAPP:
-    from server_constants import MAX_VEHICLE_RADIUS
 
 def calcPitchLimitsFromDesc(turretYaw, pitchLimitsDesc):
     minPitch = pitchLimitsDesc['minPitch']
@@ -47,79 +44,6 @@ def _clamp(minBound, value, maxBound):
     if value < minBound:
         return minBound
     return maxBound if value > maxBound else value
-
-
-def isShootPositionInsideOtherVehicle(vehicle, turretPosition, shootPosition):
-    if IS_CLIENT:
-        res = BigWorld.wg_collideDynamic(BigWorld.player().spaceID, turretPosition, shootPosition, BigWorld.player().getVehicleAttached().id, 3)
-        if res is not None:
-            return True
-        else:
-            return False
-    elif IS_CELLAPP:
-
-        def getNearVehicles(vehicle, shootPosition):
-            return vehicle.entitiesInRange(MAX_VEHICLE_RADIUS, 'Vehicle', shootPosition)
-
-    nearVehicles = getNearVehicles(vehicle, shootPosition)
-    for v in nearVehicles:
-        if shootPosition.distTo(v.position) < v.typeDescriptor.boundingRadius and isSegmentCollideWithVehicle(v, turretPosition, shootPosition):
-            return True
-
-    return False
-
-
-def getPenetratedVehicles(vehicle, turretPosition, shootPosition):
-    if IS_CLIENT:
-
-        def getNearVehicles(vehicle, shootPosition):
-            nearVehicles = []
-            arenaVehicles = BigWorld.player().arena.vehicles
-            for id in arenaVehicles.iterkeys():
-                v = BigWorld.entities.get(id)
-                if v and not v.isPlayerVehicle:
-                    nearVehicles.append(v)
-
-            return nearVehicles
-
-    elif IS_CELLAPP:
-
-        def getNearVehicles(vehicle, shootPosition):
-            return vehicle.entitiesInRange(MAX_VEHICLE_RADIUS, 'Vehicle', shootPosition)
-
-    penetratedVehicles = []
-    nearVehicles = getNearVehicles(vehicle, shootPosition)
-    for v in nearVehicles:
-        if shootPosition.distTo(v.position) < v.typeDescriptor.boundingRadius and isSegmentCollideWithVehicle(v, turretPosition, shootPosition):
-            penetratedVehicles.append(v.id)
-
-    return penetratedVehicles
-
-
-def isSegmentCollideWithVehicle(vehicle, startPoint, endPoint):
-    if IS_CELLAPP:
-
-        def getVehicleSpaceMatrix(vehicle):
-            toVehSpace = Math.Matrix(vehicle.mover.matrix)
-            toVehSpace.invert()
-            return toVehSpace
-
-        def getVehicleComponents(vehicle):
-            return vehicle.getComponents(vehicle.gunAngles)
-
-    toVehSpace = getVehicleSpaceMatrix(vehicle)
-    vehStartPoint = toVehSpace.applyPoint(startPoint)
-    vehEndPoint = toVehSpace.applyPoint(endPoint)
-    for compDescr, toCompSpace, isAttached in getVehicleComponents(vehicle):
-        if not isAttached or getattr(compDescr, 'itemTypeName', None) == 'vehicleGun':
-            continue
-        compStartPoint = toCompSpace.applyPoint(vehStartPoint)
-        compEndPoint = toCompSpace.applyPoint(vehEndPoint)
-        collisions = compDescr.hitTester.localAnyHitTest(compStartPoint, compEndPoint)
-        if collisions is not None:
-            return True
-
-    return False
 
 
 def getLocalAimPoint(vehicleDescriptor):

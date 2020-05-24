@@ -20,20 +20,22 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.customization.customization_properties_sheet import CustomizationPropertiesSheet
     from gui.Scaleform.daapi.view.lobby.customization.customization_bottom_panel import CustomizationBottomPanel
     from gui.Scaleform.daapi.view.lobby.customization.filter_popover import FilterPopover
-    from gui.Scaleform.daapi.view.lobby.customization.installed_items_popover import InstalledItemsPopover
-    from gui.Scaleform.daapi.view.lobby.customization.installed_kit_popover import InstalledKitPopover
-    from gui.Scaleform.daapi.view.lobby.customization.purchase_window import PurchaseWindow
+    from gui.Scaleform.daapi.view.lobby.customization.popovers.custom_popover import CustomPopover
+    from gui.Scaleform.daapi.view.lobby.customization.popovers.style_popover import StylePopover
+    from gui.Scaleform.daapi.view.lobby.customization.popovers.editable_style_popover import EditableStylePopover
     from gui.Scaleform.daapi.view.dialogs.confirm_customization_item_dialog import ConfirmCustomizationItemDialog
     from gui.Scaleform.daapi.view.lobby.customization.customization_style_info import CustomizationStyleInfo
+    from gui.Scaleform.daapi.view.lobby.customization.progressive_items_browser_view import ProgressiveItemsBrowserView
     return (GroupedViewSettings(VIEW_ALIAS.CUSTOMIZATION_FILTER_POPOVER, FilterPopover, 'customizationFiltersPopoverView.swf', ViewTypes.WINDOW, VIEW_ALIAS.CUSTOMIZATION_FILTER_POPOVER, VIEW_ALIAS.CUSTOMIZATION_FILTER_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
-     GroupedViewSettings(VIEW_ALIAS.CUSTOMIZATION_ITEMS_POPOVER, InstalledItemsPopover, 'customizationItemsPopover.swf', ViewTypes.WINDOW, VIEW_ALIAS.CUSTOMIZATION_ITEMS_POPOVER, VIEW_ALIAS.CUSTOMIZATION_ITEMS_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
-     GroupedViewSettings(VIEW_ALIAS.CUSTOMIZATION_KIT_POPOVER, InstalledKitPopover, 'customizationKitPopover.swf', ViewTypes.WINDOW, VIEW_ALIAS.CUSTOMIZATION_KIT_POPOVER, VIEW_ALIAS.CUSTOMIZATION_KIT_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
-     GroupedViewSettings(VIEW_ALIAS.CUSTOMIZATION_PURCHASE_WINDOW, PurchaseWindow, 'customizationBuyWindow.swf', ViewTypes.LOBBY_TOP_SUB, 'customizationBuyWindow', None, ScopeTemplates.LOBBY_SUB_SCOPE, isModal=True, canDrag=False),
+     GroupedViewSettings(VIEW_ALIAS.CUSTOMIZATION_ITEMS_POPOVER, CustomPopover, 'customizationItemsPopover.swf', ViewTypes.WINDOW, VIEW_ALIAS.CUSTOMIZATION_ITEMS_POPOVER, VIEW_ALIAS.CUSTOMIZATION_ITEMS_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
+     GroupedViewSettings(VIEW_ALIAS.CUSTOMIZATION_EDITED_KIT_POPOVER, EditableStylePopover, 'customizationEditedKitPopover.swf', ViewTypes.WINDOW, VIEW_ALIAS.CUSTOMIZATION_EDITED_KIT_POPOVER, VIEW_ALIAS.CUSTOMIZATION_EDITED_KIT_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
+     GroupedViewSettings(VIEW_ALIAS.CUSTOMIZATION_KIT_POPOVER, StylePopover, 'customizationKitPopover.swf', ViewTypes.WINDOW, VIEW_ALIAS.CUSTOMIZATION_KIT_POPOVER, VIEW_ALIAS.CUSTOMIZATION_KIT_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(CUSTOMIZATION_ALIASES.CONFIRM_CUSTOMIZATION_ITEM_DIALOG, ConfirmCustomizationItemDialog, 'confirmCustomizationItemDialog.swf', ViewTypes.TOP_WINDOW, 'confirmCustomizationItemDialog', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      ViewSettings(VIEW_ALIAS.CUSTOMIZATION_PROPERTIES_SHEET, CustomizationPropertiesSheet, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.CUSTOMIZATION_BOTTOM_PANEL, CustomizationBottomPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.CUSTOMIZATION_INSCRIPTION_CONTROLLER, CustomizationInscriptionController, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.CUSTOMIZATION_STYLE_INFO, CustomizationStyleInfo, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
+     ViewSettings(VIEW_ALIAS.CUSTOMIZATION_STYLE_INFO, CustomizationStyleInfo, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(CUSTOMIZATION_ALIASES.PROGRESSIVE_ITEMS_BROWSER_VIEW, ProgressiveItemsBrowserView, 'browserScreen.swf', ViewTypes.OVERLAY, CUSTOMIZATION_ALIASES.PROGRESSIVE_ITEMS_BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE, True))
 
 
 CAMOUFLAGES_KIND_TEXTS = [VEHICLE_CUSTOMIZATION.CAMOUFLAGE_WINTER, VEHICLE_CUSTOMIZATION.CAMOUFLAGE_SUMMER, VEHICLE_CUSTOMIZATION.CAMOUFLAGE_DESERT]
@@ -54,9 +56,10 @@ class CustomizationPackageBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):
         listeners = ((VIEW_ALIAS.CUSTOMIZATION_FILTER_POPOVER, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.CUSTOMIZATION_PURCHASE_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.CUSTOMIZATION_ITEMS_POPOVER, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.CUSTOMIZATION_KIT_POPOVER, self.loadViewByCtxEvent))
+         (VIEW_ALIAS.CUSTOMIZATION_EDITED_KIT_POPOVER, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.CUSTOMIZATION_KIT_POPOVER, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.PROGRESSIVE_ITEMS_BROWSER_VIEW, self.loadViewByCtxEvent))
         super(CustomizationPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
 
 

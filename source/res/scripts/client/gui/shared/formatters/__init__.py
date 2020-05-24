@@ -7,6 +7,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.impl import backport
 from gui.shared.gui_items.gui_item_economics import ActualPrice
+from gui.impl.gen import R
 from gui.shared.formatters import icons
 from gui.shared.formatters import text_styles
 from gui.shared.formatters import time_formatters
@@ -21,11 +22,10 @@ __all__ = ('icons', 'text_styles', 'time_formatters')
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def _checkPriceIsAllowed(price, itemsCache=None):
-    isPurchaseAllowed = itemsCache.items.stats.isIngameShopEnabled
-    if isPurchaseAllowed:
-        for currencyType in Currency.ALL:
-            if price.get(currencyType):
-                isPurchaseAllowed &= currencyType == Currency.GOLD
+    isPurchaseAllowed = True
+    for currencyType in Currency.ALL:
+        if price.get(currencyType):
+            isPurchaseAllowed &= currencyType == Currency.GOLD
 
     return itemsCache.items.stats.money >= price or isPurchaseAllowed
 
@@ -100,14 +100,10 @@ def getGlobalRatingFmt(globalRating):
     return backport.getIntegralFormat(globalRating) if globalRating >= 0 else '--'
 
 
-def moneyWithIcon(money, currType=None, statsMoney=None):
-    from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
+def moneyWithIcon(money, currType=None):
     if currType is None:
         currType = money.getCurrency()
-    if statsMoney and not isIngameShopEnabled() and statsMoney.get(currType) < money.get(currType):
-        style = getattr(text_styles, 'error')
-    else:
-        style = getattr(text_styles, currType)
+    style = getattr(text_styles, currType)
     icon = getattr(icons, currType)
     value = money.get(currType)
     formatter = getBWFormatter(currType)
@@ -214,3 +210,17 @@ def chooseItemPriceVO(priceType, price):
     elif priceType == ActualPrice.BUY_PRICE:
         itemPrice = getItemPricesVO(price)
     return itemPrice
+
+
+def formatPurchaseItems(purchaseItems):
+    formattedItems = []
+    items = set((purchaseItem.item for purchaseItem in purchaseItems if not purchaseItem.isFromInventory))
+    for item in items:
+        count = sum((purchaseItem.item.intCD == item.intCD and not purchaseItem.isFromInventory for purchaseItem in purchaseItems))
+        ctx = {'itemType': item.userType,
+         'itemName': item.userName,
+         'count': count}
+        formattedItem = backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.customization.item(), **ctx)
+        formattedItems.append(formattedItem)
+
+    return ', \n'.join(formattedItems) + '.'

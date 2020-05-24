@@ -13,14 +13,13 @@ from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.lobby.PersonalCaseConstants import TABS
 from gui.Scaleform.daapi.view.meta.PersonalCaseMeta import PersonalCaseMeta
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.CREW_SKINS import CREW_SKINS
 from gui.Scaleform.locale.NATIONS import NATIONS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
-from gui.ingame_shop import showBuyGoldForCrew
+from gui.shop import showBuyGoldForCrew
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import EVENT_BUS_SCOPE, events
@@ -99,8 +98,8 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
         self.tabIndex = ctx.get('page', -1)
         self.isBootcamp = False
         self.dataProvider = PersonalCaseDataProvider(self.tmanInvID)
-        tankman = self.itemsCache.items.getTankman(self.tmanInvID)
-        self.vehicle = self.itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
+        self._tankman = self.itemsCache.items.getTankman(self.tmanInvID)
+        self.vehicle = self.itemsCache.items.getItemByCD(self._tankman.vehicleNativeDescr.type.compactDescr)
         self.__previewSound = None
         return
 
@@ -174,7 +173,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
 
     @decorators.process('updating')
     def dismissTankman(self, tmanInvID):
-        tankman = self.itemsCache.items.getTankman(int(tmanInvID))
+        tankman = self.__getTankmanByInvID(int(tmanInvID))
         proc = TankmanDismiss(tankman)
         result = yield proc.request()
         SystemMessages.pushMessages(result)
@@ -183,10 +182,10 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
     def retrainingTankman(self, inventoryID, tankmanCostTypeIdx):
         operationCost = self.itemsCache.items.shop.tankmanCost[tankmanCostTypeIdx].get('gold', 0)
         currentGold = self.itemsCache.items.stats.gold
-        if currentGold < operationCost and isIngameShopEnabled():
+        if currentGold < operationCost:
             showBuyGoldForCrew(operationCost)
             return
-        tankman = self.itemsCache.items.getTankman(int(inventoryID))
+        tankman = self.__getTankmanByInvID(int(inventoryID))
         proc = TankmanRetraining(tankman, self.vehicle, tankmanCostTypeIdx)
         result = yield proc.request()
         if result.userMsg:
@@ -194,7 +193,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
 
     @decorators.process('unloading')
     def unloadTankman(self, tmanInvID, currentVehicleID):
-        tankman = self.itemsCache.items.getTankman(int(tmanInvID))
+        tankman = self.__getTankmanByInvID(int(tmanInvID))
         tmanVehicle = self.itemsCache.items.getVehicle(int(tankman.vehicleInvID))
         if tmanVehicle is None:
             LOG_ERROR("Target tankman's vehicle is not found in inventory", tankman, tankman.vehicleInvID)
@@ -215,14 +214,14 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
         firstNameID = checkFlashInt(firstNameID)
         lastNameID = checkFlashInt(lastNameID)
         iconID = checkFlashInt(iconID)
-        tankman = self.itemsCache.items.getTankman(int(inventoryID))
+        tankman = self.__getTankmanByInvID(int(inventoryID))
         result = yield TankmanChangePassport(tankman, firstNameID, firstNameGroup, lastNameID, lastNameGroup, iconID, iconGroup).request()
         if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     @decorators.process('studying')
     def addTankmanSkill(self, invengoryID, skillName):
-        tankman = self.itemsCache.items.getTankman(int(invengoryID))
+        tankman = self.__getTankmanByInvID(int(invengoryID))
         processor = TankmanAddSkill(tankman, skillName)
         result = yield processor.request()
         if result.userMsg:
@@ -326,14 +325,15 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
                     return self.destroy()
             if self.tmanInvID in inventory[GUI_ITEM_TYPE.TANKMAN].get('vehicle', {}):
                 isTankmanChanged = True
+        if isTankmanChanged:
+            self._tankman = self.itemsCache.items.getTankman(self.tmanInvID)
         isVehsLockExist = 'vehsLock' in cache
         isMoneyChanged = 'credits' in stats or 'gold' in stats or 'mayConsumeWalletResources' in cache
         isVehicleChanged = 'unlocks' in stats or isVehsLockExist or GUI_ITEM_TYPE.VEHICLE in inventory
         isFreeXpChanged = 'freeXP' in stats
         if isVehicleChanged:
-            tankman = self.itemsCache.items.getTankman(self.tmanInvID)
-            if tankman.isInTank:
-                vehicle = self.itemsCache.items.getVehicle(tankman.vehicleInvID)
+            if self._tankman.isInTank:
+                vehicle = self.itemsCache.items.getVehicle(self._tankman.vehicleInvID)
                 if vehicle.isLocked:
                     return self.destroy()
                 vehsDiff = inventory.get(GUI_ITEM_TYPE.VEHICLE, {})
@@ -356,11 +356,15 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
     def __refreshData(self, reason, _):
         if reason != CACHE_SYNC_REASON.SHOP_RESYNC:
             return
+        self._tankman = self.itemsCache.items.getTankman(self.tmanInvID)
         self.__setCommonData()
         self.__setSkillsData()
         self.__setDossierData()
         self.__setRetrainingData()
         self.__setDocumentsData()
+
+    def __getTankmanByInvID(self, inventoryID):
+        return self._tankman if inventoryID == self.tmanInvID else self.itemsCache.items.getTankman(inventoryID)
 
 
 class PersonalCaseDataProvider(object):
@@ -487,7 +491,6 @@ class PersonalCaseDataProvider(object):
             criteria |= ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
         if constants.IS_DEVELOPMENT:
             criteria |= ~REQ_CRITERIA.VEHICLE.IS_BOT
-        criteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
         vData = items.getVehicles(criteria)
         tDescr = tankman.descriptor
         vehiclesData = vData.values()

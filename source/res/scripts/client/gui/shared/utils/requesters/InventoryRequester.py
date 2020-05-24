@@ -2,15 +2,15 @@
 # Embedded file name: scripts/client/gui/shared/utils/requesters/InventoryRequester.py
 from itertools import imap
 from collections import namedtuple, defaultdict
+from copy import deepcopy
 import BigWorld
 from nation_change.nation_change_helpers import activeInNationGroup
 from adisp import async
 from constants import CustomizationInvData, SkinInvData, VEHICLE_NO_INV_ID
 from items import vehicles, tankmen, getTypeOfCompactDescr, parseIntCompactDescr, makeIntCompactDescrByID
-from items.components.c11n_constants import SeasonType, StyleFlags, UNBOUND_VEH_KEY
+from items.components.c11n_constants import UNBOUND_VEH_KEY
 from debug_utils import LOG_DEBUG
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.customization.outfit import Outfit
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from skeletons.gui.shared.utils.requesters import IInventoryRequester
 
@@ -19,6 +19,7 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
     ITEM_DATA = namedtuple('ITEM_DATA', ('compDescr', 'descriptor', 'count'))
     TMAN_DATA = namedtuple('TMAN_DATA', ('compDescr', 'descriptor', 'vehicle', 'invID'))
     OUTFIT_DATA = namedtuple('OUTFIT_DATA', ('compDescr', 'flags'))
+    CUSTOMIZATION_PROGRESS_DATA = namedtuple('CUSTOMIZATION_PROGRESS_DATA', ('currentLevel', 'currentProgressOnLevel', 'maxProgressOnLevel'))
 
     def __init__(self):
         super(InventoryRequester, self).__init__()
@@ -26,16 +27,18 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
         self.__itemsPreviousCache = defaultdict(dict)
         self.__vehsCDsByID = {}
         self.__vehsIDsByCD = {}
-        self.__c11nItemsAppliedCounts = defaultdict(lambda : defaultdict(int))
         self.__newC11nItems = {}
         self.__newC11nItemsByVehicleCache = {}
+        self.__c11nProgressionData = {}
+        self.__c11nProgressionForVehicle = {}
 
     def clear(self):
         self.__itemsCache.clear()
         self.__itemsPreviousCache.clear()
         self.__vehsCDsByID.clear()
         self.__vehsIDsByCD.clear()
-        self.__c11nItemsAppliedCounts.clear()
+        self.__c11nProgressionData.clear()
+        self.__c11nProgressionForVehicle.clear()
         super(InventoryRequester, self).clear()
 
     def invalidateItem(self, itemTypeID, invIdx):
@@ -46,39 +49,27 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
             return True
         if itemTypeID == GUI_ITEM_TYPE.CUSTOMIZATION:
             self.updateC11nItemNoveltyData(invIdx)
+            self.updateC11nProgressionDataForItem(invIdx)
         return False
 
-    def initC11nItemsAppliedCounts(self):
-        self.__c11nItemsAppliedCounts.clear()
-        hangarVehicles = self.getItems(GUI_ITEM_TYPE.VEHICLE)
-        if hangarVehicles is None:
-            return
-        else:
-            for vehInvID in hangarVehicles:
-                vehicleIntCD = self.__vehsCDsByID[vehInvID]
-                for season in SeasonType.RANGE:
-                    outfitData = self.getOutfitData(vehicleIntCD, season)
-                    if outfitData is None:
-                        continue
-                    if outfitData.flags != StyleFlags.ACTIVE:
-                        continue
-                    outfit = Outfit(strCompactDescr=outfitData.compDescr)
-                    if outfit.style is not None:
-                        self.__c11nItemsAppliedCounts[outfit.style.compactDescr][vehicleIntCD] = 1
-                    for itemCD, count in outfit.itemsCounter.iteritems():
-                        self.__c11nItemsAppliedCounts[itemCD][vehicleIntCD] += count
-
-            return
-
-    def updateC11nItemAppliedCount(self, itemCD, vehicleIntCD, diffCount):
-        prevCount = self.__c11nItemsAppliedCounts[itemCD][vehicleIntCD]
-        self.__c11nItemsAppliedCounts[itemCD][vehicleIntCD] = max(0, prevCount + diffCount)
-
     def getC11nItemAppliedVehicles(self, itemCD):
-        return [ vehicleCD for vehicleCD, count in self.__c11nItemsAppliedCounts[itemCD].items() if count > 0 ]
+        _, itemType, itemId = parseIntCompactDescr(itemCD)
+        path = (GUI_ITEM_TYPE.CUSTOMIZATION,
+         CustomizationInvData.DRESSED,
+         itemType,
+         itemId)
+        vehs = self.getCacheValueByPath(path, defaultValue={})
+        return vehs.keys()
 
-    def getC11nItemAppliedOnVehicleCount(self, itemCD, vehicleCD):
-        return self.__c11nItemsAppliedCounts[itemCD][vehicleCD]
+    def getC11nItemAppliedOnVehicleCount(self, itemCD, vehicleIntCD):
+        _, itemType, itemId = parseIntCompactDescr(itemCD)
+        path = (GUI_ITEM_TYPE.CUSTOMIZATION,
+         CustomizationInvData.DRESSED,
+         itemType,
+         itemId,
+         vehicleIntCD)
+        count = self.getCacheValueByPath(path, defaultValue=0)
+        return count
 
     def initC11nItemsNoveltyData(self):
         self.__newC11nItems.clear()
@@ -126,6 +117,63 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
         else:
             self.__newC11nItemsByVehicleCache[vehicleIntCD] = self.__getC11nItemNoveltyDataForVehicle(vehicleType)
             return self.__newC11nItemsByVehicleCache[vehicleIntCD]
+
+    def updateC11nProgressionDataForItem(self, itemIntCD):
+        if not self.__c11nProgressionData:
+            self.updateC11nProgressionData()
+            return
+        if itemIntCD in self.__c11nProgressionData:
+            del self.__c11nProgressionData[itemIntCD]
+        customizationInvData = self.getCacheValue(GUI_ITEM_TYPE.CUSTOMIZATION, {})
+        itemsInvData = customizationInvData.get(CustomizationInvData.PROGRESSION, {})
+        _, cType, idx = parseIntCompactDescr(itemIntCD)
+        if cType in itemsInvData:
+            typeInvData = itemsInvData[cType]
+            if idx in typeInvData:
+                itemData = typeInvData[idx]
+                self.__updateC11nProgressionDataForItem(itemIntCD, itemData)
+
+    def updateC11nProgressionData(self):
+        self.__c11nProgressionData = {}
+        customizationInvData = self.getCacheValue(GUI_ITEM_TYPE.CUSTOMIZATION, {})
+        itemsInvData = customizationInvData.get(CustomizationInvData.PROGRESSION, {})
+        for cType, typeInvData in itemsInvData.iteritems():
+            for idx, itemData in typeInvData.iteritems():
+                itemIntCD = makeIntCompactDescrByID('customizationItem', cType, idx)
+                self.__updateC11nProgressionDataForItem(itemIntCD, itemData)
+
+    def getC11nProgressionDataForItem(self, itemIntCD):
+        if not self.__c11nProgressionData:
+            self.updateC11nProgressionData()
+        return self.__c11nProgressionData.get(itemIntCD)
+
+    def getC11nProgressionDataForVehicle(self, vehicleIntCD):
+        if not self.__c11nProgressionData:
+            self.updateC11nProgressionData()
+        result = {}
+        vehicleType = vehicles.getVehicleType(vehicleIntCD)
+        for itemIntCD, progressionData in self.__c11nProgressionForVehicle.get(UNBOUND_VEH_KEY, {}).iteritems():
+            itemDescriptor = vehicles.getItemByCompactDescr(itemIntCD)
+            if not itemDescriptor.filter or itemDescriptor.filter.matchVehicleType(vehicleType):
+                result[itemIntCD] = progressionData
+
+        result.update(self.__c11nProgressionForVehicle.get(vehicleIntCD, {}))
+        return result
+
+    def getC11nProgressionData(self, itemIntCD, vehicleIntCD):
+        itemData = self.getC11nProgressionDataForItem(itemIntCD)
+        if itemData is not None:
+            vehData = itemData.get(vehicleIntCD)
+            if vehData is not None:
+                return vehData
+            return itemData.get(0)
+        else:
+            return
+
+    def getC11nOutfitsFromPool(self, vehicleIntCD):
+        path = (GUI_ITEM_TYPE.CUSTOMIZATION, CustomizationInvData.OUTFITS_POOL, vehicleIntCD)
+        poolData = self.getCacheValueByPath(path, defaultValue=[])
+        return deepcopy(poolData)
 
     def getItemsData(self, itemTypeID):
         invData = self.getCacheValue(itemTypeID, {})
@@ -264,9 +312,8 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
             vehicleOutfits = outfitsData.get(intCD, {})
             if season not in vehicleOutfits:
                 return None
-            compDescr, flags = vehicleOutfits.get(season)
-            item = cache[intCD, season] = self.OUTFIT_DATA(compDescr, flags)
-            return item
+            outfitCD = cache[intCD, season] = vehicleOutfits[season]
+            return outfitCD
 
     def __getTankmenData(self, inventoryID=None):
         tankmanItemsData = self.__getItemsData(vehicles._TANKMAN)
@@ -344,6 +391,19 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
                 vehCache[itemCD] = counter
 
         return vehCache
+
+    def __updateC11nProgressionDataForItem(self, itemIntCD, itemData):
+        if itemData is not None:
+            c11nProgressionData = {}
+            for vehicleIntCD, vehData in itemData.iteritems():
+                progressionData = self.CUSTOMIZATION_PROGRESS_DATA(currentLevel=vehData['level'], currentProgressOnLevel=vehData['progress'], maxProgressOnLevel=vehData['value'])
+                c11nProgressionData[vehicleIntCD] = progressionData
+                self.__c11nProgressionForVehicle.setdefault(vehicleIntCD, {})[itemIntCD] = progressionData
+
+            self.__c11nProgressionData[itemIntCD] = c11nProgressionData
+        else:
+            self.__c11nProgressionData.pop(itemIntCD, None)
+        return
 
     def __getCrewSkinsData(self, idx):
         crewSkinsInvData = self.getCacheValue(GUI_ITEM_TYPE.CREW_SKINS, {})

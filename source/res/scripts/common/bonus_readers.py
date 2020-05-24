@@ -566,11 +566,6 @@ def __readBonus_customizations(bonus, _name, section, eventType):
          'id': subsection.readInt('id', -1)}
         if subsection.has_key('boundVehicle'):
             custData['vehTypeCompDescr'] = vehicles.makeIntCompactDescrByID('vehicle', *vehicles.g_list.getIDsByName(subsection.readString('boundVehicle', '')))
-        elif subsection.has_key('applyToVehicle'):
-            if custData['custType'] != 'style':
-                raise SoftException('applyToVehicle supports only style customization type')
-            custData['vehTypeCompDescr'] = vehicles.makeIntCompactDescrByID('vehicle', *vehicles.g_list.getIDsByName(subsection.readString('applyToVehicle', '')))
-            custData['applyToVehicle'] = True
         elif subsection.has_key('boundToCurrentVehicle'):
             if eventType in EVENT_TYPE.LIKE_TOKEN_QUESTS:
                 raise SoftException("Unsupported tag 'boundToCurrentVehicle' in 'like token' quests")
@@ -629,6 +624,17 @@ def __readBonus_enhancement(bonus, _name, section, eventType):
     if section.has_key('count'):
         count = section['count'].asInt
     bonus.setdefault('enhancements', {})[enhancementID] = count
+
+
+def __readBonus_entitlement(bonus, _name, section, eventType):
+    id = section['id'].asString
+    entitlement = bonus.setdefault('entitlements', {})[id] = {}
+    if section.has_key('count'):
+        entitlement['count'] = section['count'].asInt
+    else:
+        entitlement['count'] = 1
+    if section.has_key('expires'):
+        entitlement['expires'] = readUTC(section, 'expires')
 
 
 def __readBonus_expires(id, expires, section):
@@ -848,6 +854,9 @@ __BONUS_READERS = {'meta': __readMetaSection,
  'tankmen': __readBonus_tankmen,
  'customizations': __readBonus_customizations,
  'crewSkin': __readBonus_crewSkin,
+ 'entitlement': __readBonus_entitlement,
+ 'rankedDailyBattles': __readBonus_int,
+ 'rankedBonusBattles': __readBonus_int,
  'vehicleChoice': __readBonus_vehicleChoice,
  'blueprint': __readBonus_blueprint,
  'blueprintAny': __readBonus_blueprintAny}

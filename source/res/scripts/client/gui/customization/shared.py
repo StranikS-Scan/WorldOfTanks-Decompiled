@@ -3,20 +3,21 @@
 from collections import namedtuple, Counter
 import logging
 import Math
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import InfoItemBase
 from gui.Scaleform.genConsts.SEASONS_CONSTANTS import SEASONS_CONSTANTS
+from gui.customization.constants import CustomizationModes
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.money import Currency, ZERO_MONEY
-from items.components.c11n_constants import CustomizationType, C11N_MASK_REGION, MAX_USERS_PROJECTION_DECALS, ProjectionDecalFormTags, SeasonType, ApplyArea, C11N_GUN_APPLY_REGIONS
+from items.components.c11n_constants import CustomizationType, C11N_MASK_REGION, MAX_USERS_PROJECTION_DECALS, ProjectionDecalFormTags, SeasonType, ApplyArea, C11N_GUN_APPLY_REGIONS, UNBOUND_VEH_KEY
 from shared_utils import CONST_CONTAINER, isEmpty
+from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.customization import ICustomizationService
 from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames
 from CurrentVehicle import g_currentVehicle
 from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.shared.gui_items.customization.outfit import Area, scaffold
-from gui.shared.gui_items.customization.slots import SLOT_TYPE_TO_ANCHOR_TYPE_MAP
+from vehicle_outfit.outfit import Area, SLOT_TYPE_TO_ANCHOR_TYPE_MAP, scaffold, Outfit
 from gui.impl import backport
 from gui.impl.gen import R
 from helpers import dependency
@@ -34,21 +35,41 @@ C11N_ITEM_TYPE_MAP = {GUI_ITEM_TYPE.PAINT: CustomizationType.PAINT,
  GUI_ITEM_TYPE.PROJECTION_DECAL: CustomizationType.PROJECTION_DECAL,
  GUI_ITEM_TYPE.ATTACHMENT: CustomizationType.ATTACHMENT,
  GUI_ITEM_TYPE.SEQUENCE: CustomizationType.SEQUENCE}
+PURCHASE_ITEMS_ORDER = (GUI_ITEM_TYPE.STYLE,
+ GUI_ITEM_TYPE.ATTACHMENT,
+ GUI_ITEM_TYPE.SEQUENCE,
+ GUI_ITEM_TYPE.PROJECTION_DECAL,
+ GUI_ITEM_TYPE.PERSONAL_NUMBER,
+ GUI_ITEM_TYPE.INSCRIPTION,
+ GUI_ITEM_TYPE.MODIFICATION,
+ GUI_ITEM_TYPE.PAINT,
+ GUI_ITEM_TYPE.CAMOUFLAGE,
+ GUI_ITEM_TYPE.EMBLEM)
+_EDITED_ITEM_ORDER_SHIFT = 8
+PURCHASE_ITEMS_ORDER += tuple((key << _EDITED_ITEM_ORDER_SHIFT for key in PURCHASE_ITEMS_ORDER))
+EDITABLE_STYLE_IRREMOVABLE_TYPES = (GUI_ITEM_TYPE.PAINT, GUI_ITEM_TYPE.CAMOUFLAGE, GUI_ITEM_TYPE.MODIFICATION)
+EDITABLE_STYLE_APPLY_TO_ALL_AREAS_TYPES = {GUI_ITEM_TYPE.PAINT: C11nId(Area.HULL, GUI_ITEM_TYPE.PAINT, 0),
+ GUI_ITEM_TYPE.CAMOUFLAGE: C11nId(Area.HULL, GUI_ITEM_TYPE.CAMOUFLAGE, 0)}
 
 class PurchaseItem(object):
-    __slots__ = ('item', 'price', 'areaID', 'slot', 'regionID', 'selected', 'group', 'isFromInventory', 'isDismantling', 'component')
+    __slots__ = ('item', 'price', 'areaID', 'slotType', 'regionIdx', 'selected', 'group', 'isFromInventory', 'isDismantling', 'component', 'locked', 'isEdited')
 
-    def __init__(self, item, price, areaID, slot, regionID, selected, group, isFromInventory=False, isDismantling=False, component=None):
+    def __init__(self, item, price, areaID, slotType, regionIdx, selected, group, isFromInventory=False, isDismantling=False, component=None, locked=False, isEdited=False):
         self.item = item
         self.price = price
         self.areaID = areaID
-        self.slot = slot
-        self.regionID = regionID
+        self.slotType = slotType
+        self.regionIdx = regionIdx
         self.selected = selected
         self.group = group
         self.isFromInventory = isFromInventory
         self.isDismantling = isDismantling
         self.component = component
+        self.locked = locked
+        self.isEdited = isEdited
+
+    def getOrderKey(self):
+        return self.item.itemTypeID if not self.isEdited else self.item.itemTypeID << _EDITED_ITEM_ORDER_SHIFT
 
 
 class HighlightingMode(CONST_CONTAINER):
@@ -134,7 +155,9 @@ class CustomizationTankPartNames(TankPartNames):
     ALL = TankPartNames.ALL + (MASK,)
 
 
-def chooseMode(itemTypeID, vehicle):
+def chooseMode(itemTypeID, modeId, vehicle):
+    if modeId == CustomizationModes.EDITABLE_STYLE:
+        return HighlightingMode.WHOLE_VEHICLE
     if itemTypeID == GUI_ITEM_TYPE.CAMOUFLAGE:
         if not __isTurretCustomizable(vehicle.descriptor):
             return HighlightingMode.CAMO_REGIONS_SKIP_TURRET
@@ -142,45 +165,31 @@ def chooseMode(itemTypeID, vehicle):
     return HighlightingMode.REPAINT_REGIONS_MERGED if itemTypeID == GUI_ITEM_TYPE.PAINT else HighlightingMode.WHOLE_VEHICLE
 
 
-def getAppliedRegionsForCurrentHangarVehicle(areaId, slotId):
-    if not g_currentVehicle.isPresent():
+def getAvailableRegions(areaId, slotType, vehicleDescr=None):
+    if vehicleDescr is None:
+        if not g_currentVehicle.isPresent():
+            return ()
+        vehicleDescr = g_currentVehicle.item.descriptor
+    outfit = Outfit(vehicleCD=vehicleDescr.makeCompactDescr())
+    container = outfit.getContainer(areaId)
+    if container is None:
         return ()
     else:
-        outfit = g_currentVehicle.item.getCustomOutfit(SeasonType.SUMMER)
-        area = outfit.getContainer(areaId)
-        if area:
-            slot = area.slotFor(slotId)
-            if slot:
-                if slotId in (GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.EMBLEM):
-                    descriptor = g_currentVehicle.item.descriptor
-                    allDecalesSlots = ()
-                    if areaId == TankPartIndexes.HULL:
-                        allDecalesSlots = descriptor.hull.emblemSlots + descriptor.hull.slotsAnchors
-                    elif areaId == TankPartIndexes.TURRET and not descriptor.turret.showEmblemsOnGun or areaId == TankPartIndexes.GUN and descriptor.turret.showEmblemsOnGun:
-                        allDecalesSlots = descriptor.turret.emblemSlots + descriptor.turret.slotsAnchors
-                    slotType = SLOT_TYPE_TO_ANCHOR_TYPE_MAP.get(slotId, None)
-                    if slotType is not None:
-                        decalesSlots = tuple((slt for slt in allDecalesSlots if slt.type == slotType))
-                        return tuple(range(min(len(decalesSlots), len(slot.getRegions()))))
-                    _logger.warning('slotId=%d does not have matched value', slotId)
-                    return ()
-                if slotId in (GUI_ITEM_TYPE.PROJECTION_DECAL,):
-                    return tuple(g_currentVehicle.item.getAnchors(slotId, Area.MISC))
-                if slotId in (GUI_ITEM_TYPE.PAINT, GUI_ITEM_TYPE.CAMOUFLAGE):
-                    customizableAreas = []
-                    vehiclePart = getVehiclePartByIdx(g_currentVehicle.item, areaId)
-                    if vehiclePart is not None:
-                        if areaId == TankPartIndexes.GUN:
-                            return tuple((C11N_GUN_APPLY_REGIONS[area] for area in vehiclePart.customizableVehicleAreas[GUI_ITEM_TYPE_NAMES[slotId]][1]))
-                        customizableAreas = vehiclePart.customizableVehicleAreas[GUI_ITEM_TYPE_NAMES[slotId]][1]
-                    return tuple(range(len(customizableAreas)))
-                if slotId in (GUI_ITEM_TYPE.MODIFICATION,):
-                    return (0,)
+        slot = container.slotFor(slotType)
+        if slot is None:
+            return ()
+        if slotType in (GUI_ITEM_TYPE.MODIFICATION,):
+            if areaId == Area.MISC:
+                return (0,)
+            return ()
+        if slotType in (GUI_ITEM_TYPE.PROJECTION_DECAL, GUI_ITEM_TYPE.ATTACHMENT, GUI_ITEM_TYPE.SEQUENCE):
+            return tuple(range(len(slot.getRegions())))
+        if slotType in (GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.EMBLEM):
+            return __getAvailableDecalRegions(areaId, slotType, vehicleDescr)
+        if slotType in (GUI_ITEM_TYPE.PAINT, GUI_ITEM_TYPE.CAMOUFLAGE):
+            return __getAppliedToRegions(areaId, slotType, vehicleDescr)
+        _logger.error('Wrong customization slotType: %s', slotType)
         return ()
-
-
-def __isTurretCustomizable(vhicleDescriptor):
-    return bool(ApplyArea.TURRET & vhicleDescriptor.turret.customizableVehicleAreas['camouflage'][0])
 
 
 def getCustomizationTankPartName(areaId, regionIdx):
@@ -189,12 +198,13 @@ def getCustomizationTankPartName(areaId, regionIdx):
 
 def createCustomizationBaseRequestCriteria(vehicle, progress, appliedItems, season=None, itemTypeID=None):
     season = season or SeasonType.ALL
-    criteria = REQ_CRITERIA.CUSTOM(lambda item: (not itemTypeID or item.itemTypeID == itemTypeID) and item.season & season and (not item.requiredToken or progress.getTokenCount(item.requiredToken) > 0) and (item.buyCount > 0 or item.fullInventoryCount(vehicle) > 0 or appliedItems and item.intCD in appliedItems or item.getInstalledVehicles() and not item.isVehicleBound) and item.mayInstall(vehicle))
+    criteria = REQ_CRITERIA.CUSTOM(lambda item: (not itemTypeID or item.itemTypeID == itemTypeID) and item.season & season and (not item.requiredToken or progress.getTokenCount(item.requiredToken) > 0) and (item.buyCount > 0 or item.fullInventoryCount(vehicle.intCD) > 0 or appliedItems and item.intCD in appliedItems or item.installedCount() > 0 and not item.isVehicleBound) and item.mayInstall(vehicle) and (not item.isProgressive or item.getLatestOpenedProgressionLevel(vehicle) > 0))
     return criteria
 
 
 def isOutfitVisuallyEmpty(oufit):
-    return isEmpty((item for item in oufit.items() if not item.isHiddenInUI()))
+    customizationService = dependency.instance(ICustomizationService)
+    return isEmpty((intCD for intCD in oufit.items() if not customizationService.getItemByCD(intCD).isHiddenInUI()))
 
 
 def fromWorldCoordsToHangarVehicle(worldCoords):
@@ -239,16 +249,16 @@ def appliedToFromSlotsIds(slotsIds):
     return appliedTo
 
 
-def getVehiclePartByIdx(vehicle, partIdx):
+def getVehiclePartByIdx(vehicleDescriptor, partIdx):
     vehiclePart = None
     if partIdx == TankPartIndexes.CHASSIS:
-        vehiclePart = vehicle.descriptor.chassis
+        vehiclePart = vehicleDescriptor.chassis
     if partIdx == TankPartIndexes.TURRET:
-        vehiclePart = vehicle.descriptor.turret
+        vehiclePart = vehicleDescriptor.turret
     if partIdx == TankPartIndexes.HULL:
-        vehiclePart = vehicle.descriptor.hull
+        vehiclePart = vehicleDescriptor.hull
     if partIdx == TankPartIndexes.GUN:
-        vehiclePart = vehicle.descriptor.gun
+        vehiclePart = vehicleDescriptor.gun
     return vehiclePart
 
 
@@ -287,12 +297,15 @@ def containsVehicleBound(purchaseItems):
     fromInventoryCounter = Counter()
     vehCD = g_currentVehicle.item.intCD
     for purchaseItem in purchaseItems:
-        if purchaseItem.item and purchaseItem.item.isVehicleBound and not purchaseItem.isDismantling and not purchaseItem.item.isRentable:
+        if purchaseItem.item and purchaseItem.item.isVehicleBound and not purchaseItem.item.isProgressionAutoBound and not purchaseItem.isDismantling and not purchaseItem.item.isRentable:
             if not purchaseItem.isFromInventory:
                 return True
             fromInventoryCounter[purchaseItem.item] += 1
 
-    return any((count > item.boundInventoryCount.get(vehCD, 0) for item, count in fromInventoryCounter.items()))
+    for item in fromInventoryCounter:
+        fromInventoryCounter[item] -= item.installedCount(vehCD)
+
+    return any((count > item.boundInventoryCount(vehCD) for item, count in fromInventoryCounter.items()))
 
 
 def getPurchaseMoneyState(price):
@@ -318,6 +331,80 @@ def isTransactionValid(moneyState, price):
     itemsCache = dependency.instance(IItemsCache)
     money = itemsCache.items.stats.money
     shortage = money.getShortage(price)
-    inGameShopOn = Currency.GOLD in shortage.getCurrency() and isIngameShopEnabled()
-    validTransaction = moneyState != MoneyForPurchase.NOT_ENOUGH or inGameShopOn
-    return validTransaction
+    return moneyState != MoneyForPurchase.NOT_ENOUGH or Currency.GOLD in shortage.getCurrency()
+
+
+def isVehicleCanBeCustomized(vehicle, itemTypeID, itemsFilter=None):
+    for areaId in Area.ALL:
+        if any(vehicle.getAnchors(itemTypeID, areaId)):
+            break
+    else:
+        return False
+
+    itemsCache = dependency.instance(IItemsCache)
+    eventsCache = dependency.instance(IEventsCache)
+    requirement = createCustomizationBaseRequestCriteria(vehicle, eventsCache.questsProgress, set(), itemTypeID=itemTypeID)
+    if itemsFilter is not None:
+        requirement |= REQ_CRITERIA.CUSTOM(itemsFilter)
+    allItems = itemsCache.items.getItems(GUI_ITEM_TYPE.CUSTOMIZATIONS, requirement)
+    return bool(allItems)
+
+
+def getBaseStyleItems():
+    items = set()
+    c11nService = dependency.instance(ICustomizationService)
+    ctx = c11nService.getCtx()
+    if ctx is None:
+        return items
+    else:
+        styleDescr = ctx.mode.currentOutfit.style
+        if styleDescr is not None:
+            style = c11nService.getItemByID(GUI_ITEM_TYPE.STYLE, styleDescr.id)
+            for season in SeasonType.COMMON_SEASONS:
+                outfit = style.getOutfit(season, vehicleCD=g_currentVehicle.item.descriptor.makeCompactDescr())
+                items.update(outfit.items())
+
+        return items
+
+
+def checkIsFirstProgressionDecalOnVehicle(vehicleCD, newItemsCDs):
+    itemsCache = dependency.instance(IItemsCache)
+    progressionData = itemsCache.items.inventory.getC11nProgressionDataForVehicle(vehicleCD)
+    if vehicleCD == UNBOUND_VEH_KEY:
+        return False
+    for itemCD, c11nProgressData in progressionData.iteritems():
+        if c11nProgressData.currentLevel > 1:
+            return False
+        if c11nProgressData.currentLevel == 1 and itemCD not in newItemsCDs:
+            return False
+
+    return True
+
+
+def __isTurretCustomizable(vhicleDescriptor):
+    applyAreaMask, _ = vhicleDescriptor.turret.customizableVehicleAreas['camouflage']
+    return bool(ApplyArea.TURRET & applyAreaMask)
+
+
+def __getAvailableDecalRegions(areaId, slotType, vehicleDescr):
+    showTurretEmblemsOnGun = vehicleDescr.turret.showEmblemsOnGun
+    if areaId == TankPartIndexes.HULL:
+        anchors = vehicleDescr.hull.emblemSlots
+    elif areaId == TankPartIndexes.GUN and showTurretEmblemsOnGun:
+        anchors = vehicleDescr.turret.emblemSlots
+    elif areaId == TankPartIndexes.TURRET and not showTurretEmblemsOnGun:
+        anchors = vehicleDescr.turret.emblemSlots
+    else:
+        return ()
+    anchorType = SLOT_TYPE_TO_ANCHOR_TYPE_MAP[slotType]
+    anchors = tuple((anchor for anchor in anchors if anchor.type == anchorType))
+    return tuple(range(len(anchors)))
+
+
+def __getAppliedToRegions(areaId, slotType, vehicleDescr):
+    if areaId not in Area.TANK_PARTS:
+        return ()
+    itemTypeName = GUI_ITEM_TYPE_NAMES[slotType]
+    vehiclePart = getVehiclePartByIdx(vehicleDescr, areaId)
+    _, regionNames = vehiclePart.customizableVehicleAreas[itemTypeName]
+    return tuple((C11N_GUN_APPLY_REGIONS[regionName] for regionName in regionNames)) if areaId == TankPartIndexes.GUN else tuple(range(len(regionNames)))

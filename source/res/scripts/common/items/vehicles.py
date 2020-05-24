@@ -18,7 +18,7 @@ from items import _xml, makeIntCompactDescrByID, parseIntCompactDescr, ITEM_TYPE
 from items.components import component_constants, shell_components, chassis_components, skills_constants
 from items.components.shell_components import HighExplosiveImpactParams
 from items.components import shared_components
-from items.components.c11n_constants import ApplyArea, ProjectionDecalPositionTags, CamouflageTilingType, CamouflageTilingTypeNameToType
+from items.components.c11n_constants import ApplyArea, MATCHING_TAGS_SUFFIX, CamouflageTilingType, CamouflageTilingTypeNameToType
 from items.readers import chassis_readers
 from items.readers import gun_readers
 from items.readers import shared_readers
@@ -32,7 +32,7 @@ from items import vehicle_items
 from items._xml import cachedFloat
 from constants import IS_BOT, IS_WEB, ITEM_DEFS_PATH, SHELL_TYPES, VEHICLE_SIEGE_STATE, VEHICLE_MODE
 from constants import IGR_TYPE, IS_RENTALS_ENABLED, IS_CELLAPP, IS_BASEAPP, IS_CLIENT, IS_EDITOR
-from constants import ACTION_LABEL_TO_TYPE, ACTIONS_GROUP_LABEL_TO_TYPE, ROLE_LABEL_TO_TYPE, ACTIONS_GROUP_TYPE_TO_LABEL, ROLE_TYPE_TO_LABEL
+from constants import ACTION_LABEL_TO_TYPE, ACTIONS_GROUP_LABEL_TO_TYPE, ROLE_LABEL_TO_TYPE, ACTIONS_GROUP_TYPE_TO_LABEL, ROLE_TYPE_TO_LABEL, ROLE_TYPE, ACTIONS_GROUP_TYPE
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG_DEV
 from items.stun import g_cfg as stunConfig
 from items import common_extras, decodeEnum
@@ -110,6 +110,7 @@ CAMOUFLAGE_KINDS = {'winter': 0,
  'summer': 1,
  'desert': 2}
 CAMOUFLAGE_KIND_INDICES = dict(((v, k) for k, v in CAMOUFLAGE_KINDS.iteritems()))
+NATIONAL_EMBLEMS = set()
 VEHICLE_MODE_FILE_SUFFIX = {VEHICLE_MODE.DEFAULT: '',
  VEHICLE_MODE.SIEGE: '_siege_mode'}
 NUM_INSCRIPTION_COLORS = 16
@@ -177,42 +178,36 @@ class EnhancementItem(object):
         return func(factor, self.value)
 
 
-def vehicleAttributeFactors():
-    return {'engine/power': 1.0,
-     'turret/rotationSpeed': 1.0,
-     'circularVisionRadius': 1.0,
-     'invisibility': [0.0, 1.0],
-     'radio/distance': 1.0,
-     'gun/rotationSpeed': 1.0,
-     'chassis/shotDispersionFactors/movement': 1.0,
-     'chassis/shotDispersionFactors/rotation': 1.0,
-     'gun/shotDispersionFactors/turretRotation': 1.0,
-     'gun/reloadTime': 1.0,
-     'gun/aimingTime': 1.0,
-     'gun/canShoot': True,
-     'engine/fireStartingChance': 1.0,
-     'healthBurnPerSecLossFraction': 1.0,
-     'repairSpeed': 1.0,
-     'additiveShotDispersionFactor': 1.0,
-     'brokenTrack': 0,
-     'vehicle/rotationSpeed': 1.0,
-     'vehicle/maxSpeed': 1.0,
-     'chassis/terrainResistance': [1.0, 1.0, 1.0],
-     'ramming': 1.0,
-     'crewLevelIncrease': 0.0,
-     'crewChanceToHitFactor': 1.0,
-     'crewRolesFactor': 1.0,
-     'stunResistanceEffect': 0.0,
-     'stunResistanceDuration': 0.0,
-     'repeatedStunDurationFactor': 1.0,
-     'vehicle/canBeDamaged': True,
-     'vehicle/antifragmentationLiningFactor': 1.0,
-     'healthFactor': 1.0,
-     'damageFactor': 1.0,
-     'enginePowerFactor': 1.0}
-
-
-VEHICLE_ATTRIBUTE_FACTORS = vehicleAttributeFactors()
+VEHICLE_ATTRIBUTE_FACTORS = {'engine/power': 1.0,
+ 'turret/rotationSpeed': 1.0,
+ 'circularVisionRadius': 1.0,
+ 'invisibility': [0.0, 1.0],
+ 'radio/distance': 1.0,
+ 'gun/rotationSpeed': 1.0,
+ 'chassis/shotDispersionFactors/movement': 1.0,
+ 'chassis/shotDispersionFactors/rotation': 1.0,
+ 'gun/shotDispersionFactors/turretRotation': 1.0,
+ 'gun/reloadTime': 1.0,
+ 'gun/aimingTime': 1.0,
+ 'gun/canShoot': True,
+ 'engine/fireStartingChance': 1.0,
+ 'healthBurnPerSecLossFraction': 1.0,
+ 'repairSpeed': 1.0,
+ 'additiveShotDispersionFactor': 1.0,
+ 'brokenTrack': 0,
+ 'vehicle/rotationSpeed': 1.0,
+ 'vehicle/maxSpeed': 1.0,
+ 'chassis/terrainResistance': [1.0, 1.0, 1.0],
+ 'ramming': 1.0,
+ 'crewLevelIncrease': 0.0,
+ 'crewChanceToHitFactor': 1.0,
+ 'crewRolesFactor': 1.0,
+ 'stunResistanceEffect': 0.0,
+ 'stunResistanceDuration': 0.0,
+ 'repeatedStunDurationFactor': 1.0,
+ 'healthFactor': 1.0,
+ 'damageFactor': 1.0,
+ 'enginePowerFactor': 1.0}
 _g_prices = None
 
 class CamouflageBonus():
@@ -1325,9 +1320,7 @@ class VehicleType(object):
      'actions',
      'builtins',
      'nationChangeGroupId',
-     'isCollectorVehicle',
-     'hornDistanceFactor',
-     'hornVolumeFactor')
+     'isCollectorVehicle')
 
     def __init__(self, nationID, basicInfo, xmlPath, vehMode=VEHICLE_MODE.DEFAULT):
         self.name = basicInfo.name
@@ -1349,7 +1342,7 @@ class VehicleType(object):
         self.builtins = {t.split('_user')[0] for t in self.tags if t.startswith('builtin')}
         self.hasBurnout = 'burnout' in self.tags
         self.isCollectorVehicle = CollectorVehicleConsts.COLLECTOR_VEHICLES_TAG in self.tags
-        self.role = self.__getRoleFromTags()
+        self.role = self.__getRoleFromTags() if self.level == 10 else ROLE_TYPE.NOT_DEFINED
         self.actionsGroup = self.__getActionsGroupFromRole(self.role)
         self.actions = self.__getActionsFromActionsGroup(self.actionsGroup)
         VehicleType.currentReadingVeh = self
@@ -1418,12 +1411,12 @@ class VehicleType(object):
              'ramming': collisionVelCfg['ramming']}
         g_cache.playerEmblems()
         self.defaultPlayerEmblemID = _xml.readNonNegativeInt(xmlCtx, section, 'emblems/default')
+        NATIONAL_EMBLEMS.add(self.defaultPlayerEmblemID)
         self._defEmblem = (self.defaultPlayerEmblemID, _CUSTOMIZATION_EPOCH, 0)
         self._defEmblems = (self._defEmblem,
          self._defEmblem,
          self._defEmblem,
          self._defEmblem)
-        self.hornDistanceFactor, self.hornVolumeFactor = (1, 1)
         pricesDest = _g_prices
         if pricesDest is not None:
             pricesDest['vehicleCamouflagePriceFactors'][self.compactDescr] = _xml.readNonNegativeFloat(xmlCtx, section, 'camouflage/priceFactor')
@@ -1493,7 +1486,7 @@ class VehicleType(object):
                                 wheel.materials[matKind] = matInfo._replace(extra=self.extrasDict[matInfo.extra])
 
         if IS_CLIENT or IS_EDITOR:
-            self.__checkPositionTags()
+            self.__checkMatchingTags()
         VehicleType.currentReadingVeh = None
         section = None
         ResMgr.purge(xmlPath, True)
@@ -1588,7 +1581,7 @@ class VehicleType(object):
 
     def __getActionsGroupFromRole(self, role):
         rolesActionsGroup = g_cache.actionGroupsByRoles()
-        return rolesActionsGroup.get(role, None)
+        return rolesActionsGroup.get(role, ACTIONS_GROUP_TYPE.NOT_DEFINED)
 
     def __getActionsFromActionsGroup(self, actionsGroup):
         actionsByGroups = g_cache.actionsByGroups()
@@ -1653,41 +1646,41 @@ class VehicleType(object):
 
         return autounlocks
 
-    def __checkPositionTags(self):
-        hullsPositionTags = set()
+    def __checkMatchingTags(self):
+        hullsMatchingTags = set()
         for hull in self.hulls:
-            hullsPositionTags = self.__checkPartPositionTags(hull, hullsPositionTags)
+            hullsMatchingTags = self.____checkPartMatchingTags(hull, hullsMatchingTags)
 
-        turretsPositionTags = set()
-        gunsPositionTags = set()
+        turretsMatchingTags = set()
+        gunsMatchingTags = set()
         for turrets in self.turrets:
             for turret in turrets:
-                turretsPositionTags = self.__checkPartPositionTags(turret, turretsPositionTags)
-                gunPositionTags = set()
+                turretsMatchingTags = self.____checkPartMatchingTags(turret, turretsMatchingTags)
+                gunMatchingTags = set()
                 for gun in turret.guns:
-                    gunPositionTags = self.__checkPartPositionTags(gun, gunPositionTags)
+                    gunMatchingTags = self.____checkPartMatchingTags(gun, gunMatchingTags)
 
-                gunsPositionTags |= gunPositionTags
+                gunsMatchingTags |= gunMatchingTags
 
-        repeatingTags = hullsPositionTags & gunsPositionTags | hullsPositionTags & turretsPositionTags | gunsPositionTags & turretsPositionTags
+        repeatingTags = hullsMatchingTags & gunsMatchingTags | hullsMatchingTags & turretsMatchingTags | gunsMatchingTags & turretsMatchingTags
         if repeatingTags:
-            LOG_ERROR('repeating position tags: {} for {}'.format(','.join(repeatingTags), self.name))
+            LOG_ERROR('repeating matching tags: {} for {}'.format(','.join(repeatingTags), self.name))
 
-    def __checkPartPositionTags(self, part, partTags):
+    def ____checkPartMatchingTags(self, part, partTags):
         tags = set()
         projectionDecalSlots = [ slot for slot in part.slotsAnchors if slot.type == 'projectionDecal' ]
         for slot in projectionDecalSlots:
-            positionTags = [ tag for tag in slot.tags if tag.startswith(ProjectionDecalPositionTags.PREFIX) ]
-            if len(positionTags) > 1:
-                LOG_ERROR('several position tags for slot ID%i' % slot.slotId)
-            for tag in positionTags:
+            matchingTags = [ tag for tag in slot.tags if tag.endswith(MATCHING_TAGS_SUFFIX) ]
+            if len(matchingTags) > 1:
+                LOG_ERROR('several matching tags for slot ID%i' % slot.slotId)
+            for tag in matchingTags:
                 if tag not in tags:
                     tags.add(tag)
-                LOG_ERROR('repeating position tags: {} for {}'.format(tag, self.name))
+                LOG_ERROR('repeating matching tags: {} for {}'.format(tag, self.name))
 
         repeatingTags = tags & partTags
         if repeatingTags:
-            LOG_ERROR('repeating position tags: {} for {}'.format(','.join(repeatingTags), self.name))
+            LOG_ERROR('repeating matching tags: {} for {}'.format(','.join(repeatingTags), self.name))
         return tags | partTags
 
 
@@ -1858,10 +1851,6 @@ class Cache(object):
         if descr is None:
             from items import artefacts
             self.__equipments, self.__equipmentIDs = _readArtefacts(_VEHICLE_TYPE_XML_PATH + 'common/equipments.xml')
-            for eq in self.__equipments.itervalues():
-                eqName = eq.name.upper().replace('ARCADE_', '')
-                eq.equipmentName = eqName.split('_')[0]
-
             descr = self.__equipments
         return descr
 
@@ -1942,9 +1931,6 @@ class Cache(object):
 
     def getGunRecoilEffects(self, effectName):
         return self._gunRecoilEffects.get(effectName, None)
-
-    def getVehicleEffect(self, effectID):
-        return self._vehicleEffects.get(effectID)
 
     @property
     def _vehicleEffects(self):
@@ -2367,6 +2353,10 @@ def getUnlocksSources():
                 res.setdefault(cd, set()).add(vehicleType)
 
     return res
+
+
+def getRolesActionsGroups():
+    return g_cache.actionGroupsByRoles()
 
 
 def getActionsGroups():
@@ -3065,8 +3055,6 @@ def _xphysicsReadSwingCompensator(ctx, sec):
 
 
 def _xphysicsParseGround(ctx, sec):
-    if 'medium' in sec.keys():
-        return _parseSectionList(ctx, sec, _xphysicsParseGround)
     floatParams = ('dirtCumulationRate', 'dirtReleaseRate', 'dirtSideVelocity', 'maxDirt', 'sideFriction', 'fwdFriction', 'rollingFriction')
     res = _parseFloatList(ctx, sec, floatParams)
     res['dirtSideVelocity'] *= component_constants.KMH_TO_MS
@@ -3174,10 +3162,7 @@ def _readXPhysics(xmlCtx, section, subsectionName):
 
 def _xphysicsParseGroundClient(ctx, sec):
     res = {}
-    if 'medium' in sec.keys():
-        res['rollingFriction'] = sec.readFloat('medium/rollingFriction', float('nan'))
-    else:
-        res['rollingFriction'] = sec.readFloat('rollingFriction', float('nan'))
+    res['rollingFriction'] = sec.readFloat('rollingFriction', float('nan'))
     if isnan(res['rollingFriction']):
         _xml.raiseWrongXml(ctx, '', "'rollingFriction' is missing")
     return res
@@ -4015,8 +4000,6 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
     if v is None:
         _xml.raiseWrongXml(xmlCtx, 'effects', "unknown effect '%s'" % effName)
     shell.effectsIndex = v
-    if section.has_key('buffs'):
-        shell.buffs = tuple([ shell_components.Buff(buffName=buff.readString('buffName'), buffDuration=buff.readFloat('buffDuration')) for buff in section['buffs'].values() ])
     return shell
 
 
@@ -5328,7 +5311,7 @@ if IS_CLIENT or IS_EDITOR:
      'collisionVehicleHeavy2',
      'collisionVehicleHeavy3',
      'rammingCollisionLight',
-     'rammingCollisionHeavy'] + [ '%sCollisionLight' % name for name in EFFECT_MATERIALS ] + [ '%sCollisionHeavy' % name for name in EFFECT_MATERIALS ] + [ 'explosionCandle%d' % i for i in xrange(1, 5) ] + ['fullDestruction', 'hw19fullDestruction'] + ['dynamicCollision'])
+     'rammingCollisionHeavy'] + [ '%sCollisionLight' % name for name in EFFECT_MATERIALS ] + [ '%sCollisionHeavy' % name for name in EFFECT_MATERIALS ] + [ 'explosionCandle%d' % i for i in xrange(1, 5) ] + ['fullDestruction'] + ['dynamicCollision'])
     _damagedStateGroupEffectKindNames = ('ammoBayExplosion',
      'ammoBayBurnOff',
      'fuelExplosion',

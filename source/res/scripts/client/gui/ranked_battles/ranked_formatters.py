@@ -6,8 +6,6 @@ from gui.ranked_battles.constants import AWARDS_ORDER, DEFAULT_REWARDS_COUNT, YE
 from gui.server_events.awards_formatters import AWARDS_SIZES, getRankedAwardsPacker
 from gui.server_events.bonuses import getNonQuestBonuses
 from gui.shared.formatters import text_styles
-_MAX_VISIBLE_AWARDS = 6
-_awardsFormatter = CurtailingAwardsComposer(_MAX_VISIBLE_AWARDS)
 _UNAVAILABLE_VALUE = -1
 _UNAVAILABLE_SYMBOL = '--'
 _PERCENT_SYMBOL = '%'
@@ -34,10 +32,7 @@ class _BonusNameRankedAwardsComposer(_RankedAwardsComposer):
 
 
 def getFloatPercentStrStat(value):
-    if _getValueOrUnavailable(value) == _UNAVAILABLE_VALUE:
-        return _UNAVAILABLE_SYMBOL
-    value = value * 100
-    return text_styles.concatStylesToSingleLine(backport.getNiceNumberFormat(value), _PERCENT_SYMBOL)
+    return _UNAVAILABLE_SYMBOL if _getValueOrUnavailable(value) == _UNAVAILABLE_VALUE else text_styles.concatStylesToSingleLine(backport.getNiceNumberFormat(value * 100), _PERCENT_SYMBOL)
 
 
 def getIntegerStrStat(value):
@@ -54,11 +49,11 @@ def getRankedAwardsFormatter(maxRewardsCount=DEFAULT_REWARDS_COUNT):
 
 def getFormattedBonusesForYearAwardsWindow(rawRewards, maxRewardsCount=DEFAULT_REWARDS_COUNT):
     bonuses = []
-    composser = _BonusNameRankedAwardsComposer(maxRewardsCount)
+    composer = _BonusNameRankedAwardsComposer(maxRewardsCount)
     for name, value in rawRewards.iteritems():
         bonuses.extend(getNonQuestBonuses(name, value))
 
-    return composser.getFormattedBonuses(bonuses, AWARDS_SIZES.BIG, compareMethod=rankedYearAwardsSortFunction)
+    return composer.getFormattedBonuses(bonuses, AWARDS_SIZES.BIG, compareMethod=rankedYearAwardsSortFunction)
 
 
 def rankedYearAwardsSortFunction(b1, b2):

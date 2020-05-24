@@ -23,16 +23,15 @@ class DIALOG_TYPES(object):
 
 
 class FullScreenDialogView(ViewImpl):
-    __slots__ = ('__blur', '__scope', '__event', '__result', '__isShowBlur', '_stats')
+    __slots__ = ('__blur', '__scope', '__event', '__result', '_stats')
     _itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, settings, showBlur=True):
+    def __init__(self, settings):
         super(FullScreenDialogView, self).__init__(settings)
         self.__blur = WGUIBackgroundBlurSupportImpl()
         self.__scope = AsyncScope()
         self.__event = AsyncEvent(scope=self.__scope)
         self.__result = DialogButtons.CANCEL
-        self.__isShowBlur = showBlur
         self._stats = self._itemsCache.items.stats
 
     @abstractproperty
@@ -69,14 +68,13 @@ class FullScreenDialogView(ViewImpl):
 
     def _onLoaded(self, *args, **kwargs):
         super(FullScreenDialogView, self)._onLoaded()
-        if self.__isShowBlur:
-            self._blurBackGround()
+        self._blurBackGround()
 
     def _finalize(self):
         super(FullScreenDialogView, self)._finalize()
         self._removeListeners()
         self.__scope.destroy()
-        if self.__blur and self.__isShowBlur:
+        if self.__blur:
             self.__blur.disable()
 
     def _addListeners(self):

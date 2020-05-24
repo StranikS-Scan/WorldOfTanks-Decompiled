@@ -127,4 +127,29 @@
     </personal_number>
     <name>	personal numbers	</name>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:personal_number/general	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	personal_numbers 50g notInShop	</priceGroup>
+    <personal_number>
+      <id>	14	</id>
+      <digitsCount>	3	</digitsCount>
+      <texture>	gui/maps/vehicles/personal_numbers/font_14.png	</texture>
+      <preview_texture>	gui/maps/vehicles/personal_numbers/font_14_preview.png	</preview_texture>
+      <userString>	#vehicle_customization:personal_number/fonts/font_14	</userString>
+      <fontId>	14	</fontId>
+      <tags>	styleOnly	</tags>
+    </personal_number>
+    <personal_number>
+      <id>	15	</id>
+      <digitsCount>	3	</digitsCount>
+      <texture>	gui/maps/vehicles/personal_numbers/font_15.png	</texture>
+      <preview_texture>	gui/maps/vehicles/personal_numbers/font_15_preview.png	</preview_texture>
+      <userString>	#vehicle_customization:personal_number/fonts/font_15	</userString>
+      <fontId>	15	</fontId>
+      <tags>	styleOnly	</tags>
+    </personal_number>
+    <name>	Collapsible style numbers	</name>
+  </itemGroup>
 </personal_numbers.xml>

@@ -1,12 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/BaseRallyView.py
-from adisp import process
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.meta.BaseRallyViewMeta import BaseRallyViewMeta
 from gui.prb_control.entities.base.cooldown import getPrbRequestCoolDown
 from gui.prb_control.entities.base.ctx import LeavePrbAction
 from gui.prb_control.entities.listener import IGlobalListener
-from gui.shared import events
+from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.utils.MethodsRules import MethodsRules
 
@@ -38,9 +37,10 @@ class BaseRallyView(BaseRallyViewMeta, IGlobalListener, MethodsRules):
             if coolDown > 0:
                 self.as_setCoolDownS(coolDown, requestID)
 
-    @process
     def _doLeave(self, isExit=True):
-        yield self.prbDispatcher.doLeaveAction(LeavePrbAction(isExit=isExit))
+        action = LeavePrbAction(isExit=isExit)
+        event = events.PrbActionEvent(action, events.PrbActionEvent.LEAVE)
+        g_eventBus.handleEvent(event, EVENT_BUS_SCOPE.LOBBY)
 
     @MethodsRules.delayable('_populate')
     def _startListening(self):

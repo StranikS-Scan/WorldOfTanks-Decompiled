@@ -3,17 +3,21 @@
 import math
 import random
 import typing
+import logging
 from itertools import izip
 from operator import itemgetter
 from collections import namedtuple
+from copy import deepcopy
 import BigWorld
 import constants
 from collector_vehicle import CollectorVehicleConsts
 from AccountCommands import LOCK_REASON, VEHICLE_SETTINGS_FLAG, VEHICLE_EXTRA_SETTING_FLAG
+from PerksParametersController import PerksParametersController
 from account_shared import LayoutIterator
 from constants import WIN_XP_FACTOR_MODE, RentType
 from gui.impl import backport
 from gui.impl.gen import R
+from items.customizations import createNationalEmblemComponents
 from rent_common import parseRentID
 from gui import makeHtmlString
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
@@ -26,8 +30,7 @@ from gui.shared.economics import calcRentPackages, getActionPrc, calcVehicleRest
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import CLAN_LOCK, GUI_ITEM_TYPE, getItemIconName, GUI_ITEM_ECONOMY_CODE, checkForTags
 from gui.shared.gui_items.customization.slots import ProjectionDecalSlot, BaseCustomizationSlot, EmblemSlot
-from gui.shared.gui_items.customization.slots import ANCHOR_TYPE_TO_SLOT_TYPE_MAP
-from gui.shared.gui_items.customization.outfit import Area, REGIONS_BY_SLOT_TYPE
+from vehicle_outfit.outfit import Area, REGIONS_BY_SLOT_TYPE, ANCHOR_TYPE_TO_SLOT_TYPE_MAP
 from gui.shared.gui_items.vehicle_equipment import VehicleEquipment
 from gui.shared.gui_items.gui_item import HasStrCD
 from gui.shared.gui_items.fitting_item import FittingItem, RentalInfoProvider
@@ -36,16 +39,18 @@ from gui.shared.money import MONEY_UNDEFINED, Currency, Money
 from gui.shared.gui_items.gui_item_economics import ItemPrice, ItemPrices, ITEM_PRICE_EMPTY
 from gui.shared.utils import makeSearchableString
 from helpers import i18n, time_utils, dependency, func_utils
-from items import vehicles, tankmen, customizations, getTypeInfoByName, getTypeOfCompactDescr, makeIntCompactDescrByID
-from items.components.c11n_constants import SeasonType, CustomizationType, StyleFlags, HIDDEN_CAMOUFLAGE_ID
+from items import vehicles, tankmen, customizations, getTypeInfoByName, getTypeOfCompactDescr
+from items.vehicles import getItemByCompactDescr
+from items.components.c11n_constants import SeasonType, CustomizationType, HIDDEN_CAMOUFLAGE_ID, ApplyArea, CUSTOM_STYLE_POOL_ID, ItemTags
 from shared_utils import findFirst, CONST_CONTAINER
 from skeletons.gui.game_control import IIGRController, IRentalsController
-from skeletons.gui.game_event_controller import IGameEventController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from nation_change.nation_change_helpers import hasNationGroup, iterVehTypeCDsInNationGroup
 if typing.TYPE_CHECKING:
     from skeletons.gui.shared import IItemsRequester
+    from items.components.c11n_components import StyleItem
+_logger = logging.getLogger(__name__)
 
 class VEHICLE_CLASS_NAME(CONST_CONTAINER):
     LIGHT_TANK = 'lightTank'
@@ -86,6 +91,38 @@ VEHICLE_BATTLE_TYPES_ORDER = (VEHICLE_CLASS_NAME.HEAVY_TANK,
  VEHICLE_CLASS_NAME.LIGHT_TANK,
  VEHICLE_CLASS_NAME.SPG)
 VEHICLE_BATTLE_TYPES_ORDER_INDICES = dict(((n, i) for i, n in enumerate(VEHICLE_BATTLE_TYPES_ORDER)))
+_ALL_ACTION_GROUPS_ORDER = [constants.ACTIONS_GROUP_TYPE.NOT_DEFINED,
+ constants.ACTIONS_GROUP_TYPE.FIRST_LINE_SUPPORT_ONE,
+ constants.ACTIONS_GROUP_TYPE.FIRST_LINE_SUPPORT_THREE,
+ constants.ACTIONS_GROUP_TYPE.FIRST_LINE_SUPPORT_TWO,
+ constants.ACTIONS_GROUP_TYPE.TANK_ONE,
+ constants.ACTIONS_GROUP_TYPE.TANK_TWO,
+ constants.ACTIONS_GROUP_TYPE.FIRE_SUPPORT_ONE,
+ constants.ACTIONS_GROUP_TYPE.HASH_SUPPORT_ONE,
+ constants.ACTIONS_GROUP_TYPE.SNIPER_ONE,
+ constants.ACTIONS_GROUP_TYPE.SCOUT_ONE,
+ constants.ACTIONS_GROUP_TYPE.SCOUT_TWO,
+ constants.ACTIONS_GROUP_TYPE.SPG_ONE]
+_LIGHT_GROUPS = {constants.ACTIONS_GROUP_TYPE.NOT_DEFINED, constants.ACTIONS_GROUP_TYPE.SCOUT_ONE, constants.ACTIONS_GROUP_TYPE.SCOUT_TWO}
+_MEDIUM_GROUPS = {constants.ACTIONS_GROUP_TYPE.NOT_DEFINED,
+ constants.ACTIONS_GROUP_TYPE.FIRST_LINE_SUPPORT_THREE,
+ constants.ACTIONS_GROUP_TYPE.FIRST_LINE_SUPPORT_TWO,
+ constants.ACTIONS_GROUP_TYPE.FIRE_SUPPORT_ONE}
+_HEAVY_GROUPS = {constants.ACTIONS_GROUP_TYPE.NOT_DEFINED,
+ constants.ACTIONS_GROUP_TYPE.FIRST_LINE_SUPPORT_ONE,
+ constants.ACTIONS_GROUP_TYPE.TANK_ONE,
+ constants.ACTIONS_GROUP_TYPE.TANK_TWO}
+_AT_SPG_GROUPS = {constants.ACTIONS_GROUP_TYPE.NOT_DEFINED,
+ constants.ACTIONS_GROUP_TYPE.FIRST_LINE_SUPPORT_ONE,
+ constants.ACTIONS_GROUP_TYPE.HASH_SUPPORT_ONE,
+ constants.ACTIONS_GROUP_TYPE.SNIPER_ONE}
+_SPG_GROUPS = {constants.ACTIONS_GROUP_TYPE.SPG_ONE}
+VEHICLE_ACTION_GROUPS_LABELS = [ constants.ACTIONS_GROUP_TYPE_TO_LABEL.get(group) for group in _ALL_ACTION_GROUPS_ORDER ]
+VEHICLE_ACTION_GROUPS_LABELS_BY_CLASS = {VEHICLE_CLASS_NAME.LIGHT_TANK: [ constants.ACTIONS_GROUP_TYPE_TO_LABEL.get(group) for group in _LIGHT_GROUPS ],
+ VEHICLE_CLASS_NAME.MEDIUM_TANK: [ constants.ACTIONS_GROUP_TYPE_TO_LABEL.get(group) for group in _MEDIUM_GROUPS ],
+ VEHICLE_CLASS_NAME.HEAVY_TANK: {constants.ACTIONS_GROUP_TYPE_TO_LABEL.get(group) for group in _HEAVY_GROUPS},
+ VEHICLE_CLASS_NAME.AT_SPG: [ constants.ACTIONS_GROUP_TYPE_TO_LABEL.get(group) for group in _AT_SPG_GROUPS ],
+ VEHICLE_CLASS_NAME.SPG: [ constants.ACTIONS_GROUP_TYPE_TO_LABEL.get(group) for group in _SPG_GROUPS ]}
 
 class VEHICLE_TAGS(CONST_CONTAINER):
     PREMIUM = 'premium'
@@ -96,8 +133,6 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     OBSERVER = 'observer'
     DISABLED_IN_ROAMING = 'disabledInRoaming'
     EVENT = 'event_battles'
-    EVENT_PREMIUM_VEHICLE = 'event_premium_vehicle'
-    EVENT_NOT_ELITE_VEHICLE = 'event_not_elite_vehicle'
     EXCLUDED_FROM_SANDBOX = 'excluded_from_sandbox'
     TELECOM = 'telecom'
     UNRECOVERABLE = 'unrecoverable'
@@ -105,7 +140,6 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     OUTFIT_LOCKED = 'lockOutfit'
     EPIC_BATTLES = 'epic_battles'
     RENT_PROMOTION = 'rent_promotion'
-    BOB = 'bob'
 
 
 EPIC_ACTION_VEHICLE_CDS = (44033, 63265)
@@ -114,7 +148,7 @@ _MAX_RENT_MULTIPLIER = 2
 RentPackagesInfo = namedtuple('RentPackagesInfo', ('hasAvailableRentPackages', 'mainRentType', 'seasonType'))
 
 class Vehicle(FittingItem):
-    __slots__ = ('__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_rentPackagesInfo', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_tradeInAvailable', '_tradeOffAvailable', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_optDevices', '_shells', '_equipment', '_equipmentLayout', '_bonuses', '_crewIndices', '_slotsIds', '_crew', '_lastCrew', '_hasModulesToSelect', '_customOutfits', '_styledOutfits', '_slotsAnchors', '_unlockedBy', '_maxRentDuration', '_minRentDuration', '_slotsAnchorsById', '_hasNationGroup', '_extraSettings')
+    __slots__ = ('__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_rentPackagesInfo', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_tradeInAvailable', '_tradeOffAvailable', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_optDevices', '_shells', '_equipment', '_equipmentLayout', '_bonuses', '_crewIndices', '_slotsIds', '_crew', '_lastCrew', '_hasModulesToSelect', '_outfits', '_isStyleInstalled', '_slotsAnchors', '_unlockedBy', '_maxRentDuration', '_minRentDuration', '_slotsAnchorsById', '_hasNationGroup', '_extraSettings', '_perksController')
 
     class VEHICLE_STATE(object):
         DAMAGED = 'damaged'
@@ -166,12 +200,12 @@ class Vehicle(FittingItem):
         WARNING = 'warning'
         RENTED = 'rented'
         RENTABLE = 'rentableBlub'
+        ACTIONS_GROUP = 'actionsGroup'
 
     rentalsController = dependency.descriptor(IRentalsController)
     lobbyContext = dependency.descriptor(ILobbyContext)
     eventsCache = dependency.descriptor(IEventsCache)
     igrCtrl = dependency.descriptor(IIGRController)
-    gameEventController = dependency.descriptor(IGameEventController)
 
     def __init__(self, strCompactDescr=None, inventoryID=-1, typeCompDescr=None, proxy=None):
         if strCompactDescr is not None:
@@ -202,9 +236,10 @@ class Vehicle(FittingItem):
         self._isRotationGroupLocked = False
         self._isInfiniteRotationGroup = False
         self._unlockedBy = []
+        self._perksController = None
         self._hasNationGroup = hasNationGroup(vehDescr.type.compactDescr)
-        self._customOutfits = {}
-        self._styledOutfits = {}
+        self._outfits = {}
+        self._isStyleInstalled = False
         if self.isPremiumIGR:
             self._searchableUserName = makeSearchableString(self.shortUserName)
         else:
@@ -220,7 +255,6 @@ class Vehicle(FittingItem):
             if proxy.shop.winXPFactorMode == WIN_XP_FACTOR_MODE.ALWAYS or self.intCD not in proxy.stats.multipliedVehicles and not self.isOnlyForEventBattles:
                 self._dailyXPFactor = proxy.shop.dailyXPFactor
             self._isElite = not vehDescr.type.unlocksDescrs or self.intCD in proxy.stats.eliteVehicles
-            self._isElite = self._isElite and VEHICLE_TAGS.EVENT_NOT_ELITE_VEHICLE not in vehDescr.type.tags
             self._isFullyElite = self.isElite and not any((data[1] not in proxy.stats.unlocks for data in vehDescr.type.unlocksDescrs))
             clanDamageLock = proxy.stats.vehicleTypeLocks.get(self.intCD, {}).get(CLAN_LOCK, 0)
             clanNewbieLock = proxy.stats.globalVehicleLocks.get(CLAN_LOCK, 0)
@@ -232,8 +266,7 @@ class Vehicle(FittingItem):
             hasAvailableRentPackages, mainRentType, seasonType = self.rentalsController.getRentPackagesInfo(proxy.shop.getVehicleRentPrices().get(self.intCD, {}), self._rentInfo)
             self._rentPackagesInfo = RentPackagesInfo(hasAvailableRentPackages, mainRentType, seasonType)
             self._isSelected = bool(self.invID in proxy.stats.oldVehInvIDs)
-            self._customOutfits = self._parseCustomOutfits(self.intCD, proxy, self.descriptor.type.hasCustomDefaultCamouflage)
-            self._styledOutfits = self._parseStyledOutfits(self.intCD, proxy)
+            self._outfits = self._parseOutfits(proxy)
             restoreConfig = proxy.shop.vehiclesRestoreConfig
             self._restorePrice = calcVehicleRestorePrice(self.buyPrices.itemPrice.defPrice, proxy.shop)
             self._restoreInfo = proxy.recycleBin.getVehicleRestoreInfo(self.intCD, restoreConfig.restoreDuration, restoreConfig.restoreCooldown)
@@ -304,7 +337,7 @@ class Vehicle(FittingItem):
         for emblemSlotHelper in (hullEmblemSlots, turretEmblemSlots):
             for emblemSlot in emblemSlotHelper.tankAreaSlot:
                 areaId = emblemSlotHelper.tankAreaId
-                slotType = ANCHOR_TYPE_TO_SLOT_TYPE_MAP.get(emblemSlot.type, None)
+                slotType = ANCHOR_TYPE_TO_SLOT_TYPE_MAP.get(emblemSlot.type)
                 if slotType is not None:
                     regionIdx = len(slotsAnchors[slotType][areaId])
                     slot = EmblemSlot(emblemSlot, emblemSlotHelper.tankAreaId, regionIdx)
@@ -319,72 +352,55 @@ class Vehicle(FittingItem):
          hullCustomizationSlots,
          turretCustomizationSlots,
          gunCustomizationSlots):
-            for slotsAnchor in slotHelper.tankAreaSlot:
-                slotType = ANCHOR_TYPE_TO_SLOT_TYPE_MAP.get(slotsAnchor.type, None)
-                if slotType is not None:
-                    if slotType in (GUI_ITEM_TYPE.PROJECTION_DECAL,
-                     GUI_ITEM_TYPE.MODIFICATION,
-                     GUI_ITEM_TYPE.STYLE,
-                     GUI_ITEM_TYPE.SEQUENCE,
-                     GUI_ITEM_TYPE.ATTACHMENT):
-                        areaId = Area.MISC
+            for anchor in slotHelper.tankAreaSlot:
+                if anchor.type not in ANCHOR_TYPE_TO_SLOT_TYPE_MAP:
+                    continue
+                slotType = ANCHOR_TYPE_TO_SLOT_TYPE_MAP[anchor.type]
+                if slotType in (GUI_ITEM_TYPE.PROJECTION_DECAL,
+                 GUI_ITEM_TYPE.MODIFICATION,
+                 GUI_ITEM_TYPE.STYLE,
+                 GUI_ITEM_TYPE.SEQUENCE,
+                 GUI_ITEM_TYPE.ATTACHMENT):
+                    areaId = Area.MISC
+                else:
+                    areaId = slotHelper.tankAreaId
+                if anchor.applyTo is not None:
+                    regions = REGIONS_BY_SLOT_TYPE[areaId][slotType]
+                    if anchor.applyTo in regions:
+                        regionIdx = regions.index(anchor.applyTo)
                     else:
-                        areaId = slotHelper.tankAreaId
-                    if slotsAnchor.applyTo is not None:
-                        regionIdx = -1
-                        if slotType in REGIONS_BY_SLOT_TYPE[areaId]:
-                            regions = REGIONS_BY_SLOT_TYPE[areaId][slotType]
-                            regionIdx = next((i for i, region in enumerate(regions) if slotsAnchor.applyTo == region), -1)
-                    else:
-                        regionIdx = len(slotsAnchors[slotType][areaId])
-                    if regionIdx == -1:
                         continue
-                    if slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
-                        customizationSlot = ProjectionDecalSlot(slotsAnchor, slotHelper.tankAreaId, regionIdx)
-                    else:
-                        customizationSlot = BaseCustomizationSlot(slotsAnchor, slotHelper.tankAreaId, regionIdx)
-                    slotsAnchors[slotType][areaId][regionIdx] = customizationSlot
-                    slotsAnchorsById[customizationSlot.slotId] = customizationSlot
+                else:
+                    regionIdx = len(slotsAnchors[slotType][areaId])
+                if slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
+                    customizationSlot = ProjectionDecalSlot(anchor, slotHelper.tankAreaId, regionIdx)
+                else:
+                    customizationSlot = BaseCustomizationSlot(anchor, slotHelper.tankAreaId, regionIdx)
+                slotsAnchors[slotType][areaId][regionIdx] = customizationSlot
+                slotsAnchorsById[customizationSlot.slotId] = customizationSlot
 
         if not slotsAnchors[GUI_ITEM_TYPE.MODIFICATION][Area.MISC]:
             slotsAnchors[GUI_ITEM_TYPE.MODIFICATION][Area.MISC] = slotsAnchors[GUI_ITEM_TYPE.STYLE][Area.MISC]
         return (slotsAnchorsById, slotsAnchors)
 
     def getAnchors(self, slotType, areaId):
-        return self._slotsAnchors.get(slotType, {}).get(areaId, {}).itervalues()
+        return self._slotsAnchors.get(slotType, {}).get(areaId, {}).iteritems()
 
     def getAnchorBySlotId(self, slotType, areaId, regionIdx):
         return self._slotsAnchors.get(slotType, {}).get(areaId, {}).get(regionIdx)
 
-    def getAnchorById(self, anchorId):
-        return self._slotsAnchorsById.get(anchorId, None)
-
-    @property
-    def eventHeroTankBuyPrice(self):
-        eventHeroTank = self.gameEventController.getHeroTank()
-        defCurrency, defAmount = eventHeroTank.getDefPrice()
-        currency, amount = eventHeroTank.getCurrentPrice()
-        return ItemPrices(itemPrice=ItemPrice(price=Money(**{currency: amount}), defPrice=Money(**{defCurrency: defAmount})))
-
-    @property
-    def isEventHeroTank(self):
-        return self.eventsCache.isEventEnabled() and self.gameEventController.getHeroTank().isEventHeroTank(self.intCD)
-
     @property
     def buyPrices(self):
-        if self.isEventHeroTank:
-            return self.eventHeroTankBuyPrice
+        currency = self._buyPrices.itemPrice.price.getCurrency()
+        if self._personalDiscountPrice is not None and self._personalDiscountPrice.get(currency) <= self._buyPrices.itemPrice.price.get(currency):
+            currentPrice = self._personalDiscountPrice
         else:
-            currency = self._buyPrices.itemPrice.price.getCurrency()
-            if self._personalDiscountPrice is not None and self._personalDiscountPrice.get(currency) <= self._buyPrices.itemPrice.price.get(currency):
-                currentPrice = self._personalDiscountPrice
-            else:
-                currentPrice = self._buyPrices.itemPrice.price
-            if self.isRented and not self.rentalIsOver:
-                buyPrice = currentPrice - self.rentCompensation
-            else:
-                buyPrice = currentPrice
-            return ItemPrices(itemPrice=ItemPrice(price=buyPrice, defPrice=self._buyPrices.itemPrice.defPrice), itemAltPrice=self._buyPrices.itemAltPrice)
+            currentPrice = self._buyPrices.itemPrice.price
+        if self.isRented and not self.rentalIsOver:
+            buyPrice = currentPrice - self.rentCompensation
+        else:
+            buyPrice = currentPrice
+        return ItemPrices(itemPrice=ItemPrice(price=buyPrice, defPrice=self._buyPrices.itemPrice.defPrice), itemAltPrice=self._buyPrices.itemAltPrice)
 
     @property
     def searchableUserName(self):
@@ -400,6 +416,22 @@ class Vehicle(FittingItem):
                 return (unlockIdx, data[0], set(data[2:]))
 
         return (-1, 0, set())
+
+    def initPerksController(self, scopedPerks):
+        if not self._perksController:
+            self._perksController = PerksParametersController(self.descriptor.type.compactDescr, scopedPerks)
+
+    def stopPerksController(self):
+        if self._perksController:
+            self._perksController.destroy()
+            self._perksController = None
+        return
+
+    def getPerksController(self):
+        return self._perksController
+
+    def setPerksController(self, perksController):
+        self._perksController = perksController
 
     def _calcSellPrice(self, proxy):
         if self.isRented:
@@ -500,37 +532,34 @@ class Vehicle(FittingItem):
 
         return result
 
-    @classmethod
-    def _parseCustomOutfits(cls, compactDescr, proxy, hasDefaultCamouflage=False):
+    def _parseOutfits(self, proxy):
         outfits = {}
+        styleOutfitData = proxy.inventory.getOutfitData(self.intCD, SeasonType.ALL)
+        if styleOutfitData is not None:
+            self._isStyleInstalled = True
+            styledOutfitComponent = customizations.parseCompDescr(styleOutfitData)
+            styleIntCD = vehicles.makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, styledOutfitComponent.styleId)
+            style = vehicles.getItemByCompactDescr(styleIntCD)
+        else:
+            style = None
+            outfitsPool = proxy.inventory.getC11nOutfitsFromPool(self.intCD)
+            isCustomOutfitStored = outfitsPool and outfitsPool[0][0] == CUSTOM_STYLE_POOL_ID
+            if not isCustomOutfitStored:
+                self._isStyleInstalled = False
+            else:
+                isCustomOutfitInstalled = any((proxy.inventory.getOutfitData(self.intCD, s) for s in SeasonType.SEASONS))
+                self._isStyleInstalled = not isCustomOutfitInstalled
         for season in SeasonType.SEASONS:
-            outfitData = proxy.inventory.getOutfitData(compactDescr, season)
-            if outfitData:
-                outfits[season] = cls.itemsFactory.createOutfit(strCompactDescr=outfitData.compDescr, isEnabled=bool(outfitData.flags & StyleFlags.ENABLED), isInstalled=bool(outfitData.flags & StyleFlags.INSTALLED), proxy=proxy)
-            if hasDefaultCamouflage:
-                outfit = cls.itemsFactory.createOutfit(isInstalled=True, isEnabled=True)
-                hiddenCamoCD = makeIntCompactDescrByID('customizationItem', CustomizationType.CAMOUFLAGE, HIDDEN_CAMOUFLAGE_ID)
-                camo = cls.itemsFactory.createCustomization(hiddenCamoCD)
-                outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).set(camo)
-                outfits[season] = outfit
-            outfits[season] = cls.itemsFactory.createOutfit()
+            outfitComp = self._getOutfitComponent(proxy, style, season)
+            outfits[season] = self.itemsFactory.createOutfit(component=outfitComp, vehicleCD=self.descriptor.makeCompactDescr())
 
         return outfits
 
-    @classmethod
-    def _parseStyledOutfits(cls, compactDescr, proxy):
-        outfits = {}
-        outfitData = proxy.inventory.getOutfitData(compactDescr, SeasonType.ALL)
-        if not outfitData or not bool(outfitData.flags & StyleFlags.ENABLED):
-            return outfits
-        component = customizations.parseCompDescr(outfitData.compDescr)
-        styleIntCD = vehicles.makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, component.styleId)
-        style = vehicles.getItemByCompactDescr(styleIntCD)
-        for styleSeason in SeasonType.SEASONS:
-            outfitComp = style.outfits.get(styleSeason)
-            outfits[styleSeason] = cls.itemsFactory.createOutfit(component=outfitComp, isEnabled=bool(outfitData.flags & StyleFlags.ENABLED), isInstalled=bool(outfitData.flags & StyleFlags.INSTALLED), proxy=proxy)
-
-        return outfits
+    def _getOutfitComponent(self, proxy, style, season):
+        if style is not None:
+            return self.__getStyledOutfitComponent(proxy, style, season)
+        else:
+            return self.__getEmptyOutfitComponent() if self._isStyleInstalled else self.__getCustomOutfitComponent(proxy, season)
 
     @classmethod
     def _parserOptDevs(cls, layoutList, proxy):
@@ -852,6 +881,10 @@ class Vehicle(FittingItem):
     @property
     def typeUserName(self):
         return getTypeUserName(self.type, self.isElite)
+
+    @property
+    def typeBigIconResource(self):
+        return getTypeBigIconResource(self.type, self.isElite)
 
     @property
     def hasTurrets(self):
@@ -1193,16 +1226,16 @@ class Vehicle(FittingItem):
         return self.isOnlyForEpicBattles and self.intCD in EPIC_ACTION_VEHICLE_CDS
 
     @property
-    def isOnlyForBob(self):
-        return checkForTags(self.tags, VEHICLE_TAGS.BOB)
-
-    @property
     def isTelecom(self):
         return checkForTags(self.tags, VEHICLE_TAGS.TELECOM)
 
     @property
     def isTelecomDealOver(self):
         return self.isTelecom and self.rentExpiryState
+
+    @property
+    def isStyleInstalled(self):
+        return self._isStyleInstalled
 
     def hasLockMode(self):
         isBS = prb_getters.isBattleSession()
@@ -1264,6 +1297,36 @@ class Vehicle(FittingItem):
     def isAutoRentStyle(self):
         return bool(self.settings & VEHICLE_SETTINGS_FLAG.AUTO_RENT_CUSTOMIZATION)
 
+    @property
+    def role(self):
+        return self._descriptor.type.role
+
+    @property
+    def roleLabel(self):
+        return constants.ROLE_TYPE_TO_LABEL.get(self.role)
+
+    @property
+    def actionsGroup(self):
+        return self._descriptor.type.actionsGroup
+
+    @property
+    def actionsGroupLabel(self):
+        return constants.ACTIONS_GROUP_TYPE_TO_LABEL.get(self.actionsGroup)
+
+    @property
+    def roleActions(self):
+        return self._descriptor.type.actions
+
+    @property
+    def roleActionsLabels(self):
+        actions = self.roleActions
+        if actions:
+            return [ constants.ACTION_TYPE_TO_LABEL.get(action) for action in actions ]
+
+    @property
+    def comactDescr(self):
+        return self._descriptor.type.compactDescr
+
     @prbDispatcherProperty
     def __prbDispatcher(self):
         return None
@@ -1274,7 +1337,7 @@ class Vehicle(FittingItem):
             permission = self.__prbDispatcher.getGUIPermissions()
             if permission is not None:
                 locked = not permission.canChangeVehicle()
-        return not self.isOnlyForEventBattles and not self.isInBattle and self.isInInventory and not self.isLocked and not locked and not self.isBroken and not self.rentalIsOver and not self.isOutfitLocked and not self.isDisabled
+        return not self.isOnlyForEventBattles and not self.isInBattle and self.isInInventory and not self.isLocked and not locked and not self.isBroken and not self.isOutfitLocked and not self.isDisabled
 
     def isAutoLoadFull(self):
         if self.isAutoLoad:
@@ -1401,25 +1464,18 @@ class Vehicle(FittingItem):
         return sortCrew(crewItems, crewRoles)
 
     def getOutfit(self, season):
-        for outfit in (self._styledOutfits.get(season), self._customOutfits.get(season)):
-            if outfit and outfit.isActive():
-                return outfit
-
-        return None
+        return self._outfits.get(season, None)
 
     def setCustomOutfit(self, season, outfit):
-        self._customOutfits[season] = outfit
+        for s in SeasonType.REGULAR:
+            if s == season:
+                self._outfits[s] = outfit
+            if s in self._outfits and self._outfits[s].id:
+                self._outfits[s] = self.__getEmptyOutfitComponent()
 
     def setOutfits(self, fromVehicle):
-        for season in SeasonType.SEASONS:
-            self._customOutfits[season] = fromVehicle.getCustomOutfit(season)
-            self._styledOutfits[season] = fromVehicle.getStyledOutfit(season)
-
-    def getCustomOutfit(self, season):
-        return self._customOutfits.get(season)
-
-    def getStyledOutfit(self, season):
-        return self._styledOutfits.get(season)
+        for season in SeasonType.RANGE:
+            self._outfits[season] = fromVehicle.getOutfit(season)
 
     def hasOutfit(self, season):
         outfit = self.getOutfit(season)
@@ -1437,9 +1493,9 @@ class Vehicle(FittingItem):
             outfit = self.getOutfit(season)
             if not outfit:
                 continue
-            camo = outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).getItem()
-            if camo:
-                return camo
+            intCD = outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).getItemCD()
+            if intCD:
+                return getItemByCompactDescr(intCD)
 
         return None
 
@@ -1527,6 +1583,32 @@ class Vehicle(FittingItem):
         else:
             return (0, 0)
 
+    def __getCustomOutfitComponent(self, proxy, season):
+        customOutfitData = proxy.inventory.getOutfitData(self.intCD, season)
+        return customizations.parseCompDescr(customOutfitData) if customOutfitData is not None else self.__getEmptyOutfitComponent()
+
+    def __getStyledOutfitComponent(self, proxy, style, season):
+        component = deepcopy(style.outfits.get(season))
+        if ItemTags.ADD_NATIONAL_EMBLEM in style.tags:
+            emblems = createNationalEmblemComponents(self._descriptor)
+            component.decals.extend(emblems)
+        diff = proxy.inventory.getOutfitData(self.intCD, season)
+        if diff is None:
+            return component.copy()
+        else:
+            diffComponent = customizations.parseCompDescr(diff)
+            if component.styleId != diffComponent.styleId:
+                _logger.error('Merging outfits of different styles is not allowed. ID1: %s ID2: %s', component.styleId, diffComponent.styleId)
+                return component.copy()
+            return component.applyDiff(diffComponent)
+
+    def __getEmptyOutfitComponent(self):
+        if self.descriptor.type.hasCustomDefaultCamouflage:
+            appliedTo = reduce(int.__or__, ApplyArea.HULL_CAMOUFLAGE_REGIONS)
+            camoComp = customizations.CamouflageComponent(id=HIDDEN_CAMOUFLAGE_ID, appliedTo=appliedTo)
+            return customizations.CustomizationOutfit(camouflages=[camoComp])
+        return customizations.CustomizationOutfit()
+
 
 def getTypeUserName(vehType, isElite):
     return i18n.makeString('#menu:header/vehicleType/elite/%s' % vehType) if isElite else i18n.makeString('#menu:header/vehicleType/%s' % vehType)
@@ -1595,8 +1677,8 @@ def getTypeBigIconPath(vehicleType, isElite=False):
     return RES_ICONS.getVehicleTypeBigIcon(vehicleType, '_elite' if isElite else '')
 
 
-def getEventTypeBigIconPath(vehicleType):
-    return RES_ICONS.getEventVehicleTypeBigIcon(vehicleType)
+def getTypeBigIconResource(vehicleType, isElite=False):
+    return R.images.gui.maps.icons.vehicleTypes.big.dyn((vehicleType + '_elite' if isElite else vehicleType).replace('-', '_'))
 
 
 def getUserName(vehicleType, textPrefix=False):

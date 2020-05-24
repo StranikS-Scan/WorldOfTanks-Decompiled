@@ -9,6 +9,7 @@ import AccountCommands
 import items
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
 from items import vehicles, tankmen
+from account_helpers.abilities import AbilitiesHelper
 _logger = logging.getLogger(__name__)
 _VEHICLE = items.ITEM_TYPE_INDICES['vehicle']
 _CHASSIS = items.ITEM_TYPE_INDICES['vehicleChassis']
@@ -38,16 +39,20 @@ class Inventory(object):
         self.__cache = {}
         self.__ignore = True
         self.__commandsProxy = clientCommandsProxy
+        self.abilities = AbilitiesHelper()
         return
 
     def onAccountBecomePlayer(self):
         self.__ignore = False
+        self.abilities.onAccountBecomePlayer()
 
     def onAccountBecomeNonPlayer(self):
         self.__ignore = True
+        self.abilities.onAccountBecomeNonPlayer()
 
     def setAccount(self, account):
         self.__account = account
+        self.abilities.setAccount(account)
 
     def synchronize(self, isFullSync, diff):
         if isFullSync:

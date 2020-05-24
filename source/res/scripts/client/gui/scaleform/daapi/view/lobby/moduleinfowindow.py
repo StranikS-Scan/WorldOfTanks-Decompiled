@@ -16,8 +16,6 @@ from helpers.i18n import makeString as _ms
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from gui.impl.gen import R
-from gui.impl import backport
 _DEF_SHOT_DISTANCE = 720
 
 class ModuleInfoWindow(ModuleInfoMeta):
@@ -150,8 +148,7 @@ class ModuleInfoWindow(ModuleInfoMeta):
             if itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
 
                 def makeEffectsStr(root, node):
-                    strRes = R.strings.artefacts.dyn(root).dyn(node)
-                    return self._filterEmptyText(stripColorTagDescrTags(backport.text(strRes()))) if strRes.exists() else ''
+                    return stripColorTagDescrTags(_ms('#artefacts:{}/{}'.format(root, node)))
 
                 if self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
                     isRemovingStun = module.isRemovingStun
@@ -190,7 +187,3 @@ class ModuleInfoWindow(ModuleInfoMeta):
         buttonData = {'visible': isButtonVisible,
          'label': buttonLabel}
         self.as_setActionButtonS(buttonData)
-
-    @staticmethod
-    def _filterEmptyText(text):
-        return text if text != '?empty?' else ''

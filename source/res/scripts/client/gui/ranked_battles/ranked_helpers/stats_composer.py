@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/ranked_battles/ranked_helpers/stats_composer.py
-import time
 from collections import namedtuple
-from gui.ranked_battles.constants import RankedDossierKeys, ARCHIVE_SEASON_ID
+import time
+import typing
+from gui.ranked_battles.constants import RankedDossierKeys, ARCHIVE_SEASON_ID, ZERO_DIVISION_ID
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 EfficiencyStamp = namedtuple('EfficiencyStamp', 'efficiency, time')
@@ -51,7 +52,22 @@ class RankedBattlesStatsComposer(object):
 
     @property
     def bonusBattlesCount(self):
-        return self.itemsCache.items.ranked.bonusBattlesCount
+        return self.itemsCache.items.ranked.persistentBonusBattles + self.itemsCache.items.ranked.dailyBonusBattles
+
+    @property
+    def persistentBonusBattles(self):
+        return self.itemsCache.items.ranked.persistentBonusBattles
+
+    @property
+    def dailyBonusBattles(self):
+        return self.itemsCache.items.ranked.dailyBonusBattles
+
+    @property
+    def dailyBonusBattlesIncome(self):
+        steps = self.divisionsStats.get(ZERO_DIVISION_ID, {}).get('rankChanges', 0)
+        settings = self.__settings.leaguesBonusBattles
+        bonusBattles = {item['battlesCount']:item['steps'] for item in settings if item['steps'] <= steps}
+        return max(bonusBattles or (0,))
 
     @property
     def cachedSeasonEfficiency(self):

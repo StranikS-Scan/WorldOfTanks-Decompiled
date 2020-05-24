@@ -30,11 +30,11 @@
     <Interface>	AvatarCreator	</Interface>
   </Implements>
   <Properties>
-    <requiredVersion_19000>
+    <requiredVersion_19100>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	ru_1.9.0_7	</Default>
-    </requiredVersion_19000>
+      <Default>	ct_1.9.1_1	</Default>
+    </requiredVersion_19100>
     <name>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
@@ -241,9 +241,6 @@
       <Arg>	STRING	</Arg>
       <VariableLengthHeaderSize>	2	</VariableLengthHeaderSize>
     </showGUI>
-    <onLoadEntity>
-      <Arg>	UINT32	</Arg>
-    </onLoadEntity>
     <receiveActiveArenas>
       <Arg>	ARRAY	  <of>	PUBLIC_ARENA_INFO	</of>
       </Arg>
@@ -266,7 +263,9 @@
       <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
       </VariableLengthHeaderSize>
     </update>
-    <resyncDossiers></resyncDossiers>
+    <resyncDossiers>
+      <Arg>	BOOL	</Arg>
+    </resyncDossiers>
     <reloadShop></reloadShop>
     <onUnitUpdate>
       <Arg>	UINT64	</Arg>
@@ -366,15 +365,6 @@
       <Arg>	INT32	</Arg>
       <Arg>	PYTHON	</Arg>
     </onArenaCreated>
-    <onEventArenaCreated>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	UINT64	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	PYTHON	</Arg>
-    </onEventArenaCreated>
     <onTutorialCreated>
       <Arg>	MAILBOX	</Arg>
       <Arg>	UINT64	</Arg>

@@ -13,7 +13,7 @@ HitEffectMapping = namedtuple('HitEffectMapping', ('componentName', 'hitTester')
 
 class DamageFromShotDecoder(object):
     ShotPoint = namedtuple('ShotPoint', ('componentName', 'matrix', 'hitEffectGroup'))
-    __hitEffectCodeToEffectGroup = ('armorBasicRicochet', 'armorRicochet', 'armorResisted', 'armorResisted', 'armorHit', 'armorCriticalHit')
+    __hitEffectCodeToEffectGroup = ('armorBasicRicochet', 'armorRicochet', 'armorResisted', 'armorResisted', 'armorHit', 'armorCriticalHit', 'armorCriticalHit')
 
     @staticmethod
     def hasDamaged(vehicleHitEffectCode):

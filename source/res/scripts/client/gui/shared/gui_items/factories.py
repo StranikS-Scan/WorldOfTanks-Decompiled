@@ -6,7 +6,7 @@ from items import vehicles, EQUIPMENT_TYPES, getTypeOfCompactDescr
 from items.components.c11n_constants import CustomizationType, DecalType
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization.c11n_items import Customization, Paint, Camouflage, Modification, Insignia, Decal, Emblem, Inscription, Style, ProjectionDecal, PersonalNumber, Sequence, Attachment
-from gui.shared.gui_items.customization.outfit import Outfit
+from vehicle_outfit.outfit import Outfit
 from gui.shared.gui_items.dossier import TankmanDossier, AccountDossier, VehicleDossier
 from gui.shared.gui_items.vehicle_modules import Shell, VehicleGun, VehicleChassis, VehicleEngine, VehicleRadio, VehicleTurret, VehicleFuelTank
 from gui.shared.gui_items.artefacts import Equipment, BattleBooster, BattleAbility, OptionalDevice
@@ -131,12 +131,12 @@ class GuiItemFactory(IGuiItemsFactory):
             cls = Customization
         return cls(intCompactDescr, proxy)
 
-    def createOutfit(self, strCompactDescr=None, component=None, isEnabled=False, isInstalled=False, proxy=None):
+    def createOutfit(self, strCompactDescr=None, component=None, vehicleCD=''):
         if strCompactDescr is not None and component is not None:
             _logger.error("'strCompactDescr' and 'component' arguments are mutually exclusive!")
             return
         else:
-            return Outfit(strCompactDescr=strCompactDescr, component=component, isEnabled=isEnabled, isInstalled=isInstalled, proxy=proxy)
+            return Outfit(strCompactDescr=strCompactDescr, component=component, vehicleCD=vehicleCD)
 
     def createCrewSkin(self, intCompactDescr, proxy=None):
         return CrewSkin(intCompactDescr, proxy)

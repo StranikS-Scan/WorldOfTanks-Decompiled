@@ -155,6 +155,8 @@ def init(preloadEverything, pricesToCollect=None):
     avatars.init()
     from items import tankmen
     tankmen.init(preloadEverything, pricesToCollect)
+    from items import perks
+    perks.init(preloadEverything)
     return
 
 

@@ -41,7 +41,6 @@ class LobbyMenu(LobbyMenuMeta):
     def prbEntity(self):
         pass
 
-    @event_dispatcher.leaveEventMode
     def postClick(self):
         self.destroy()
         self.promo.showFieldPost()
@@ -83,7 +82,6 @@ class LobbyMenu(LobbyMenuMeta):
     def bootcampClick(self):
         self.bootcamp.runBootcamp()
 
-    @event_dispatcher.leaveEventMode
     def manualClick(self):
         if self.manualController.isActivated():
             view = self.manualController.getView()

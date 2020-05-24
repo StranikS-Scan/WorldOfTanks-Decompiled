@@ -70,7 +70,6 @@ class CallbackDataNames(object):
     GUN_DAMAGE_SOUND = 'gunDamagedSound'
     SHOW_AUTO_AIM_MARKER = 'showAutoAimMarker'
     HIDE_AUTO_AIM_MARKER = 'hideAutoAimMarker'
-    SWITCH_ENVIRONMENT = 'switchEnvironment'
 
 
 class BattleReplay(object):
@@ -773,7 +772,7 @@ class BattleReplay(object):
     def registerWotReplayFileExtension(self):
         self.__replayCtrl.registerWotReplayFileExtension()
 
-    def enableAutoRecordingBattles(self, enable, delete=False):
+    def enableAutoRecordingBattles(self, enable):
         if self.__isAutoRecordingEnabled == enable:
             return
         else:
@@ -788,7 +787,7 @@ class BattleReplay(object):
             else:
                 g_playerEvents.onAccountBecomePlayer -= self.__startAutoRecord
                 if self.isRecording:
-                    self.stop(delete=delete)
+                    self.stop()
             return
 
     def setResultingFileName(self, fileName, overwriteExisting=False):
@@ -936,11 +935,12 @@ class BattleReplay(object):
         if equipmentId != -1:
             self.__equipmentId = equipmentId
             BigWorld.player().inputHandler.showGunMarker(False)
-            ctrl = BigWorld.player().inputHandler.ctrl
-            if hasattr(ctrl, 'activateEquipment'):
-                ctrl.activateEquipment(equipmentId)
+            mapCaseMode = BigWorld.player().inputHandler.ctrls.get('mapcase', None)
+            if mapCaseMode is not None:
+                mapCaseMode.activateEquipment(equipmentId)
         else:
             BigWorld.player().inputHandler.showGunMarker(True)
+        return
 
     def __onVehicleEnterWorld(self, vehicle):
         if vehicle.id == self.playerVehicleID:

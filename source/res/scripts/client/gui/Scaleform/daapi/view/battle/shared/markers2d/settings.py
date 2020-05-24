@@ -9,7 +9,6 @@ MARKERS_COLOR_SCHEME_PREFIX = 'vm_'
 
 class MARKER_SYMBOL_NAME(object):
     VEHICLE_MARKER = 'VehicleMarker'
-    EVENT_VEHICLE_MARKER = 'EventVehicleMarker'
     TARGET_MARKER = 'TargetMarker'
     EQUIPMENT_MARKER = 'FortConsumablesMarker'
     SAFE_ZONE_MARKER = 'SafeZoneIndicatorUI'

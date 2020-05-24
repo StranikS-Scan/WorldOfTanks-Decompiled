@@ -212,7 +212,8 @@ SETTING_DEFAULTS = {'ver': 1,
  'vehicleLockTimeFactors': {},
  'observeBothTeams': True,
  'numGroupsPerTeam': 0,
- 'playerGroupLimit': 0}
+ 'playerGroupLimit': 0,
+ 'tournamentArenasTypeIDs': []}
 LIMIT_DEFAULTS = {'maxCountTotal': 256,
  'minCount': 1,
  'maxCount': (0, 65535),

@@ -89,7 +89,7 @@ class RankedYearAwardView(ViewImpl):
             activeLabel = R.strings.ranked_battles.year_award.acceptButton.hangarLabel()
         else:
             activeLabel = R.strings.ranked_battles.year_award.acceptButton.acceptLabel()
-        surplusPoints = self.__rankedController.calculateCompensation(points)
+        surplusPoints = self.__rankedController.getCompensation(points)
         rate = self.__rankedController.getCurrentPointToCrystalRate()
         with self.viewModel.transaction() as tx:
             tx.setAwardType(awardType)

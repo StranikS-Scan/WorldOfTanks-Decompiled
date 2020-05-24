@@ -144,7 +144,7 @@ class MissionsVehicleListFormatter(MissionFormatter):
         if condition.isAnyVehicleAcceptable():
             return None
         elif 'types' not in condition.data:
-            _, fNations, fLevels, fClasses = condition.parseFilters()
+            _, fNations, fLevels, fClasses, _ = condition.parseFilters()
             data['list'].append({'label': text_styles.standard(i18n.makeString(QUESTS.MISSIONDETAILS_VEHICLE_CONDITIONS_NATIONS)),
              'typeIcon': RES_ICONS.MAPS_ICONS_FILTERS_NATIONS_ALL,
              'list': self._getConditionNationsList(fNations or []),

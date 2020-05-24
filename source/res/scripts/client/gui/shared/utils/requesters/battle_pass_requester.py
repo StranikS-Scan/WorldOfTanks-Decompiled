@@ -27,6 +27,9 @@ class BattlePassRequester(AbstractSyncDataRequester):
     def getPointsForVehicle(self, vehicleID, default=0):
         return self.getCacheValue('vehiclePoints', {}).get(vehicleID, default)
 
+    def getPackedStats(self):
+        return self.getCacheValue('packedStats', '')
+
     def _preprocessValidData(self, data):
         return dict(data.get('battlePass', {}))
 

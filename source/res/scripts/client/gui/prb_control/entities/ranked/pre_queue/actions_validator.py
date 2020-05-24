@@ -8,13 +8,12 @@ from gui.prb_control.settings import PRE_QUEUE_RESTRICTION
 from gui.ranked_battles.constants import PrimeTimeStatus
 from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController
-from skeletons.gui.lobby_context import ILobbyContext
 
 class RankedPrimeTimeValidator(BaseActionsValidator):
+    __rankedController = dependency.descriptor(IRankedBattlesController)
 
     def _validate(self):
-        rankedController = dependency.instance(IRankedBattlesController)
-        status, _, _ = rankedController.getPrimeTimeStatus()
+        status, _, _ = self.__rankedController.getPrimeTimeStatus()
         if status == PrimeTimeStatus.NOT_SET:
             return ValidationResult(False, PRE_QUEUE_RESTRICTION.MODE_NOT_SET, None)
         else:
@@ -22,12 +21,14 @@ class RankedPrimeTimeValidator(BaseActionsValidator):
 
 
 class RankedVehicleValidator(BaseActionsValidator):
+    __rankedController = dependency.descriptor(IRankedBattlesController)
 
     def _validate(self):
-        lobbyContext = dependency.instance(ILobbyContext)
-        vehicle = g_currentVehicle.item
-        config = lobbyContext.getServerSettings().rankedBattles
-        return ValidationResult(False, PRE_QUEUE_RESTRICTION.LIMIT_LEVEL, {'levels': range(config.minLevel, config.maxLevel + 1)}) if vehicle.level < config.minLevel or vehicle.level > config.maxLevel else super(RankedVehicleValidator, self)._validate()
+        if g_currentVehicle.isPresent():
+            restriction = self.__rankedController.isSuitableVehicle(g_currentVehicle.item)
+            if restriction is not None:
+                return restriction
+        return super(RankedVehicleValidator, self)._validate()
 
 
 class RankedActionsValidator(PreQueueActionsValidator):
@@ -38,4 +39,4 @@ class RankedActionsValidator(PreQueueActionsValidator):
 
     def _createVehiclesValidator(self, entity):
         baseValidator = super(RankedActionsValidator, self)._createVehiclesValidator(entity)
-        return ActionsValidatorComposite(entity, [baseValidator, RankedVehicleValidator(entity)])
+        return ActionsValidatorComposite(entity, [RankedVehicleValidator(entity), baseValidator])

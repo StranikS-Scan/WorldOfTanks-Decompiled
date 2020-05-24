@@ -20,7 +20,7 @@ def aspectActive(aspect):
         return True
     if aspect is ASPECT.CLIENT:
         return IS_CLIENT
-    return IS_CELLAPP or IS_BASEAPP if aspect is ASPECT.SERVER else False
+    return IS_CELLAPP if aspect is ASPECT.SERVER else False
 
 
 def anyAspectActive(*aspects):

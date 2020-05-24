@@ -128,29 +128,29 @@ class ToolTipContext(object):
         return {}
 
 
-class ShopContext(ToolTipContext):
+class DefaultContext(ToolTipContext):
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, fieldsToExclude=None):
-        super(ShopContext, self).__init__(TOOLTIP_COMPONENT.SHOP, fieldsToExclude)
+        super(DefaultContext, self).__init__(TOOLTIP_COMPONENT.SHOP, fieldsToExclude)
 
     def buildItem(self, intCD):
         return self.itemsCache.items.getItemByCD(int(intCD))
 
     def getStatusConfiguration(self, item):
-        value = super(ShopContext, self).getStatusConfiguration(item)
+        value = super(DefaultContext, self).getStatusConfiguration(item)
         value.checkBuying = True
         value.showCustomStates = True
         return value
 
     def getStatsConfiguration(self, item):
-        value = super(ShopContext, self).getStatsConfiguration(item)
+        value = super(DefaultContext, self).getStatsConfiguration(item)
         value.xp = False
         value.dailyXP = False
         return value
 
     def getParamsConfiguration(self, item):
-        value = super(ShopContext, self).getParamsConfiguration(item)
+        value = super(DefaultContext, self).getParamsConfiguration(item)
         value.params = gui.GUI_SETTINGS.technicalInfo
         value.eqs = False
         value.devices = False
@@ -178,7 +178,7 @@ class ReferralProgramBadgeContext(BadgeContext):
         return value
 
 
-class AwardContext(ShopContext):
+class AwardContext(DefaultContext):
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, fieldsToExclude=None):
@@ -231,10 +231,10 @@ class AwardContext(ShopContext):
          'isSeniority': self._isSeniority}
 
 
-class Shop20Context(AwardContext):
+class ShopContext(AwardContext):
 
     def getStatsConfiguration(self, item):
-        value = super(Shop20Context, self).getStatsConfiguration(item)
+        value = super(ShopContext, self).getStatsConfiguration(item)
         value.inventoryCount = True
         value.vehiclesCount = True
         return value
@@ -352,10 +352,10 @@ class BaseHangarParamContext(ToolTipContext):
         self.showTitleValue = showTitleValue
 
     def getComparator(self):
-        return params_helper.idealCrewComparator(g_currentPreviewVehicle.item) if g_currentPreviewVehicle.isPresent() and g_currentPreviewVehicle.item.isOnlyForEventBattles else params_helper.idealCrewComparator(g_currentVehicle.item)
+        return params_helper.idealCrewComparator(g_currentVehicle.item)
 
     def buildItem(self, *args, **kwargs):
-        return g_currentPreviewVehicle.item if g_currentPreviewVehicle.isPresent() and g_currentPreviewVehicle.item.isOnlyForEventBattles else g_currentVehicle.item
+        return g_currentVehicle.item
 
 
 class HangarParamContext(BaseHangarParamContext):
@@ -399,7 +399,7 @@ class HangarContext(ToolTipContext):
         return
 
     def getVehicle(self):
-        return g_currentPreviewVehicle.item if g_currentPreviewVehicle.isPresent() and g_currentPreviewVehicle.item.isOnlyForEventBattles else g_currentVehicle.item
+        return g_currentVehicle.item
 
     def buildItem(self, intCD, slotIdx=0, historicalBattleID=-1):
         self._slotIdx = int(slotIdx)
@@ -470,7 +470,7 @@ class NotRecruitedTankmanContext(HangarContext):
         return recruit_helper.getRecruitInfo(recruitID)
 
 
-class TechTreeContext(ShopContext):
+class TechTreeContext(DefaultContext):
 
     def __init__(self, fieldsToExclude=None):
         super(TechTreeContext, self).__init__(fieldsToExclude)
@@ -778,11 +778,11 @@ class BattleResultContext(ProfileContext):
         return value
 
 
-class Shop20AchievementContext(BattleResultContext):
+class ShopAchievementContext(BattleResultContext):
 
     def buildItem(self, aID, *args):
         block, achieveName = DB_ID_TO_RECORD[aID]
-        return super(Shop20AchievementContext, self).buildItem(block, achieveName)
+        return super(ShopAchievementContext, self).buildItem(block, achieveName)
 
 
 class BattleResultMarksOnGunContext(BattleResultContext):
@@ -916,10 +916,10 @@ class SessionStatsContext(ToolTipContext):
         return self.itemsCache.items.getItemByCD(int(intCD))
 
 
-class Shop20CustomizationContext(TechCustomizationContext):
+class ShopCustomizationContext(TechCustomizationContext):
 
     def getStatsConfiguration(self, item):
-        value = super(Shop20CustomizationContext, self).getStatsConfiguration(item)
+        value = super(ShopCustomizationContext, self).getStatsConfiguration(item)
         value.sellPrice = False
         value.buyPrice = False
         value.inventoryCount = True
@@ -927,11 +927,11 @@ class Shop20CustomizationContext(TechCustomizationContext):
         return value
 
 
-class BoosterContext(ToolTipContext):
+class BoosterInfoContext(ToolTipContext):
     _goodiesCache = dependency.descriptor(IGoodiesCache)
 
     def __init__(self, fieldsToExclude=None):
-        super(BoosterContext, self).__init__(TOOLTIP_COMPONENT.BOOSTER, fieldsToExclude)
+        super(BoosterInfoContext, self).__init__(TOOLTIP_COMPONENT.BOOSTER, fieldsToExclude)
 
     def getStatsConfiguration(self, booster):
         return BoosterStatsConfiguration()
@@ -950,15 +950,15 @@ class DemountKitContext(ToolTipContext):
         return self._goodiesCache.getDemountKit(demountKitID)
 
 
-class ShopBoosterContext(BoosterContext):
+class BoosterContext(BoosterInfoContext):
 
     def getStatsConfiguration(self, booster):
-        value = super(ShopBoosterContext, self).getStatsConfiguration(booster)
+        value = super(BoosterContext, self).getStatsConfiguration(booster)
         value.buyPrice = True
         return value
 
 
-class QuestsBoosterContext(BoosterContext):
+class QuestsBoosterContext(BoosterInfoContext):
 
     def getStatsConfiguration(self, booster):
         value = super(QuestsBoosterContext, self).getStatsConfiguration(booster)
@@ -966,17 +966,17 @@ class QuestsBoosterContext(BoosterContext):
         return value
 
 
-class Shop20BoosterContext(BoosterContext):
+class ShopBoosterContext(BoosterInfoContext):
 
     def getStatsConfiguration(self, booster):
-        value = super(Shop20BoosterContext, self).getStatsConfiguration(booster)
+        value = super(ShopBoosterContext, self).getStatsConfiguration(booster)
         value.activateInfo = True
         value.activeState = False
         value.inventoryCount = True
         return value
 
 
-class ClanReserveContext(BoosterContext):
+class ClanReserveContext(BoosterInfoContext):
 
     def buildItem(self, boosterID):
         return self._goodiesCache.getClanReserves().get(boosterID)
@@ -1013,20 +1013,20 @@ class HangarServerStatusContext(ToolTipContext):
         super(HangarServerStatusContext, self).__init__(TOOLTIP_COMPONENT.HANGAR, fieldsToExclude)
 
 
-class ShopBattleBoosterContext(HangarContext):
+class BattleBoosterContext(HangarContext):
 
     def getStatsConfiguration(self, item):
-        value = super(ShopBattleBoosterContext, self).getStatsConfiguration(item)
+        value = super(BattleBoosterContext, self).getStatsConfiguration(item)
         value.vehicle = None
         return value
 
     def getStatusConfiguration(self, item):
-        value = super(ShopBattleBoosterContext, self).getStatusConfiguration(item)
+        value = super(BattleBoosterContext, self).getStatusConfiguration(item)
         value.vehicle = None
         return value
 
 
-class InventoryBattleBoosterContext(ShopBattleBoosterContext):
+class InventoryBattleBoosterContext(BattleBoosterContext):
 
     def getStatsConfiguration(self, item):
         value = super(InventoryBattleBoosterContext, self).getStatsConfiguration(item)
@@ -1054,10 +1054,10 @@ class AwardBattleBoosterContext(InventoryBattleBoosterContext):
         return value
 
 
-class Shop20BattleBoosterContext(AwardBattleBoosterContext):
+class ShopBattleBoosterContext(AwardBattleBoosterContext):
 
     def getStatsConfiguration(self, item):
-        value = super(Shop20BattleBoosterContext, self).getStatsConfiguration(item)
+        value = super(ShopBattleBoosterContext, self).getStatsConfiguration(item)
         value.inventoryCount = True
         value.vehiclesCount = True
         return value

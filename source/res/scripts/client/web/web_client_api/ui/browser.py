@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/ui/browser.py
 from adisp import process
-from gui.ingame_shop import showBuyGoldWebOverlay
+from gui.shop import showBuyGoldWebOverlay
 from gui.shared.event_dispatcher import showBrowserOverlayView
 from helpers import dependency
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS

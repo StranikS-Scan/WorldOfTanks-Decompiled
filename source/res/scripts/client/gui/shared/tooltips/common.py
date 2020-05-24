@@ -3,7 +3,7 @@
 import cPickle
 import logging
 import math
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 import ArenaType
 import constants
 from soft_exception import SoftException
@@ -38,7 +38,7 @@ from gui.impl.lobby.battle_pass.tooltips.vehicle_points_tooltip_view import Vehi
 from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltipContent
 from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
-from gui.server_events.events_helpers import missionsSortFunc, isSecretEvent
+from gui.server_events.events_helpers import missionsSortFunc
 from gui.server_events.formatters import TOKEN_SIZES, DISCOUNT_TYPE
 from gui.shared.formatters import formatActionPrices
 from gui.shared.formatters import icons, text_styles
@@ -1241,14 +1241,6 @@ class HeaderMoneyAndXpTooltipData(BlocksTooltipData):
         return icon
 
 
-class EventHeaderMoneyAndXpTooltipData(HeaderMoneyAndXpTooltipData):
-
-    def _packBlocks(self, btnType=None, *args, **kwargs):
-        self._btnType = btnType
-        valueBlock = formatters.packMoneyAndXpValueBlock(value=self._getValue(), icon=self._getIcon(), iconYoffset=self._getIconYOffset())
-        return formatters.packMoneyAndXpBlocks(tooltipBlocks=[], btnType=self._btnType, valueBlocks=[valueBlock], hideActionBlocks=True)
-
-
 class MissionsToken(BlocksTooltipData):
     eventsCache = dependency.descriptor(IEventsCache)
 
@@ -1261,31 +1253,26 @@ class MissionsToken(BlocksTooltipData):
     def _packBlocks(self, tokenId, questId, *args):
         items = super(MissionsToken, self)._packBlocks(*args)
         mainQuest = self.eventsCache.getQuests()[questId]
-        isSecretEventQuest = isSecretEvent(mainQuest.getGroupID())
         children = mainQuest.getChildren()[tokenId]
 
         def filterfunc(quest):
             return quest.getGroupID() == mainQuest.getGroupID() and quest.getID() in children
 
         quests = self.eventsCache.getQuests(filterfunc).values()
-        quests = sorted(quests, missionsSortFunc, reverse=True)
+        quests = sorted(quests, key=missionsSortFunc, reverse=True)
         curToken = None
         for token in mainQuest.accountReqs.getTokens():
             if token.getID() == tokenId:
                 curToken = token
                 break
 
-        items.append(self.__packTitleBlock(curToken, isSecretEventQuest))
+        items.append(self.__packTitleBlock(curToken))
         items.append(self.__packQuestsBlock(quests))
-        if not isSecretEventQuest:
-            items.append(self.__packBottomBlock(curToken))
+        items.append(self.__packBottomBlock(curToken))
         return items
 
-    def __packTitleBlock(self, token, isSecretEventQuest):
-        rTitle = R.strings.tooltips.missions.token
-        if isSecretEventQuest:
-            rTitle = rTitle.secretEvent
-        return formatters.packImageTextBlockData(title=text_styles.highTitle(backport.text(rTitle.header(), name=makeString(token.getUserName()))), img=token.getImage(TOKEN_SIZES.MEDIUM), txtPadding={'top': 14,
+    def __packTitleBlock(self, token):
+        return formatters.packImageTextBlockData(title=text_styles.highTitle(makeString(TOOLTIPS.MISSIONS_TOKEN_HEADER, name=makeString(token.getUserName()))), img=token.getImage(TOKEN_SIZES.MEDIUM), txtPadding={'top': 14,
          'left': 11,
          'right': 5})
 
@@ -1453,8 +1440,8 @@ class TechTreeEventTooltipBase(BlocksTooltipData):
     def _actionNameBlock(self, title, description, icon):
         return formatters.packImageTextBlockData(title=text_styles.neutral(title), desc=text_styles.standard(description), img=icon, imgPadding=formatters.packPadding(top=-1), padding=formatters.packPadding(bottom=10))
 
-    def _actionExpireBlock(self):
-        timeLeftStr = getTillTimeByResource(self._eventsListener.getTimeTillEnd(), R.strings.tooltips.techTreePage.event.timeLeft)
+    def _actionExpireBlock(self, actionID):
+        timeLeftStr = getTillTimeByResource(self._eventsListener.getTimeTillEnd(actionID), R.strings.tooltips.techTreePage.event.timeLeft)
         return formatters.packTextBlockData(text=text_styles.standard(backport.text(R.strings.tooltips.techTreePage.event.time(), time=text_styles.main(timeLeftStr))), padding=formatters.packPadding(top=10, left=23))
 
 
@@ -1465,19 +1452,32 @@ class TechTreeDiscountInfoTooltip(TechTreeEventTooltipBase):
         items.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(TOOLTIPS.HEADER_BUTTONS_TECHTREE_HEADER), desc=text_styles.main(TOOLTIPS.HEADER_BUTTONS_TECHTREE_BODY)))
         if not self._eventsListener.actions:
             return items
-        blocks = list()
-        blocks.append(self._actionNameBlock(backport.text(R.strings.tooltips.techTreePage.event.name(), eventName=self._eventsListener.getUserName()), backport.text(R.strings.tooltips.header.buttons.techtree.extended.description()), backport.image(R.images.gui.maps.icons.library.discount())))
-        nationIDs = self._eventsListener.getNations()
-        separator = '   '
-        for nation in GUI_NATIONS:
-            if nations.INDICES[nation] in nationIDs:
-                icon = icons.makeImageTag(getNationsFilterAssetPath(nation), 26, 16, -4)
-                nationName = text_styles.main(backport.text(R.strings.nations.dyn(nation)()))
-                blocks.append(formatters.packTextBlockData(text_styles.concatStylesToSingleLine(icon, separator, nationName), padding=formatters.packPadding(left=43)))
+        actionGoups = defaultdict(list)
+        for actionID in self._eventsListener.actions:
+            actionGoups[self._eventsListener.getTimeTillEnd(actionID)].append(actionID)
 
-        blocks.append(self._actionExpireBlock())
-        items.append(formatters.packBuildUpBlockData(blocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
+        for idx, actionIDs in enumerate([ actionGoups[key] for key in sorted(actionGoups.keys()) ]):
+            items.append(self.__packActionBlock(actionIDs, not idx))
+
         return items
+
+    def __packActionBlock(self, actionIDs, packHeader=False):
+        blocks = list()
+        if packHeader:
+            blocks.append(self._actionNameBlock(backport.text(R.strings.tooltips.techTreePage.event.name(), eventName=self._eventsListener.getUserName(actionIDs[0])), backport.text(R.strings.tooltips.header.buttons.techtree.extended.description()), backport.image(R.images.gui.maps.icons.library.discount())))
+        else:
+            blocks.append(formatters.packTextBlockData(text=text_styles.standard(backport.text(R.strings.tooltips.header.buttons.techtree.extended.description())), padding=formatters.packPadding(bottom=10, left=23)))
+        for actionID in actionIDs:
+            nationIDs = self._eventsListener.getNations(actionID=actionID)
+            separator = '   '
+            for nation in GUI_NATIONS:
+                if nations.INDICES[nation] in nationIDs:
+                    icon = icons.makeImageTag(getNationsFilterAssetPath(nation), 26, 16, -4)
+                    nationName = text_styles.main(backport.text(R.strings.nations.dyn(nation)()))
+                    blocks.append(formatters.packTextBlockData(text_styles.concatStylesToSingleLine(icon, separator, nationName), padding=formatters.packPadding(left=43)))
+
+        blocks.append(self._actionExpireBlock(actionIDs[0]))
+        return formatters.packBuildUpBlockData(blocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)
 
 
 class TechTreeNationDiscountTooltip(TechTreeEventTooltipBase):
@@ -1486,10 +1486,11 @@ class TechTreeNationDiscountTooltip(TechTreeEventTooltipBase):
         items = super(TechTreeNationDiscountTooltip, self)._packBlocks()
         items.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.techTreePage.nations.dyn(nation)()))))
         nationID = nations.INDICES[nation]
+        closestAction = self._eventsListener.getActiveAction(nationID=nationID)
         if nationID not in self._eventsListener.getNations():
             return items
         blocks = list()
-        blocks.append(self._actionNameBlock(backport.text(R.strings.tooltips.techTreePage.event.name(), eventName=self._eventsListener.getUserName()), backport.text(R.strings.tooltips.techTreePage.event.description(), nation=backport.text(R.strings.nations.dyn(nation).genetiveCase())), backport.image(R.images.gui.maps.icons.library.discount())))
-        blocks.append(self._actionExpireBlock())
+        blocks.append(self._actionNameBlock(backport.text(R.strings.tooltips.techTreePage.event.name(), eventName=self._eventsListener.getUserName(closestAction)), backport.text(R.strings.tooltips.techTreePage.event.description(), nation=backport.text(R.strings.nations.dyn(nation).genetiveCase())), backport.image(R.images.gui.maps.icons.library.discount())))
+        blocks.append(self._actionExpireBlock(closestAction))
         items.append(formatters.packBuildUpBlockData(blocks))
         return items

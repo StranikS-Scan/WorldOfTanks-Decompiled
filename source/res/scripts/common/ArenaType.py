@@ -6,7 +6,6 @@ from constants import IS_BOT, IS_WEB, IS_CLIENT, ARENA_TYPE_XML_PATH, ARENA_GUI_
 from constants import ARENA_GAMEPLAY_IDS, TEAMS_IN_ARENA, ARENA_GAMEPLAY_NAMES, IS_DEVELOPMENT
 from constants import IS_CELLAPP, IS_BASEAPP
 from constants import CHAT_COMMAND_FLAGS
-from constants import EPIC_PERF_GROUP
 from coordinate_system import AXIS_ALIGNED_DIRECTION
 from items.vehicles import CAMOUFLAGE_KINDS
 from debug_utils import LOG_CURRENT_EXCEPTION
@@ -16,7 +15,6 @@ from soft_exception import SoftException
 from collections import defaultdict
 from data_structures import DictObj
 from Math import Vector2
-from Math import Vector3
 if IS_CLIENT:
     from helpers import i18n
     import WWISE
@@ -297,9 +295,6 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
             musicSetup = __readWWmusicSection(section, defaultXml)
         if musicSetup is not None:
             cfg['wwmusicSetup'] = musicSetup
-        notificationsRemapping = __readNotificationsRemappingSection(section, defaultXml)
-        if notificationsRemapping is not None:
-            cfg['notificationsRemapping'] = notificationsRemapping
         wwmusicDroneSetup = 'wwmusicDroneSetup'
         if raiseIfMissing or __hasKey(wwmusicDroneSetup, section, defaultXml):
             cfg[wwmusicDroneSetup] = __readWWmusicDroneSection(wwmusicDroneSetup, section, defaultXml)
@@ -309,8 +304,6 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
             cfg['mapActivitiesSection'] = section['mapActivities']
         if section.has_key('soundRemapping'):
             cfg['soundRemapping'] = section['soundRemapping']
-        if __hasKey('envSwitcherSettings', section, defaultXml):
-            cfg['envSwitcherSettings'] = EnvSwitcherSettings(section['envSwitcherSettings'])
     if IS_CLIENT or IS_BOT:
         cfg['controlPoints'] = __readControlPoints(section)
         cfg['teamLowLevelSpawnPoints'] = __readTeamSpawnPoints(section, maxTeamsInArena, nodeNameTemplate='team%d_low', required=False)
@@ -320,33 +313,7 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
             cfg['battleScenarios'] = __readBattleScenarios(section, defaultXml)
         if raiseIfMissing or __hasKey('waypoints', section, defaultXml):
             cfg['waypoints'] = _readString('waypoints', section, defaultXml)
-        if __hasKey('vsPlans', section, defaultXml):
-            cfg['vsPlans'] = __readVsPlanSection(section, defaultXml)
-    if IS_CLIENT:
-        cfg['initialMinimapIDs'] = __readMinimapSection(section)
     return cfg
-
-
-def __readVsPlanSection(section, defaultXml):
-    section = section['vsPlans']
-    if section is None:
-        section = defaultXml['vsPlans']
-    res = {}
-    for name, subsection in section.items():
-        if subsection.has_key('vsName'):
-            perfGroupId = getattr(EPIC_PERF_GROUP, name.upper(), None)
-            if perfGroupId is not None:
-                res[perfGroupId] = subsection.readStrings('vsName')
-            else:
-                raise SoftException("unknown perfomance group: '%s'" % name)
-        raise SoftException('incomplete vs plan section')
-
-    return res
-
-
-def __readMinimapSection(section):
-    section = section['initialMinimapIDs']
-    return {} if section is None else {scenarioSection['name'].asString:scenarioSection['minimapID'].asString for scenarioSection in section.values()}
 
 
 def __readWWmusicSection(section, defaultXml):
@@ -358,17 +325,6 @@ def __readWWmusicSection(section, defaultXml):
             wwmusic[name] = value.asString
 
     return wwmusic
-
-
-def __readNotificationsRemappingSection(section, defaultXml):
-    notificationsRemapping = None
-    if __hasKey('notificationsRemapping', section, defaultXml):
-        notificationsRemapping = {}
-        dataSection = section if section.has_key('notificationsRemapping') else defaultXml
-        for _, event in _xml.getChildren(defaultXml, dataSection, 'notificationsRemapping'):
-            notificationsRemapping[event['name'].asString] = event['mod'].asString if event.has_key('mod') else None
-
-    return notificationsRemapping
 
 
 def __readWWmusicDroneSection(wwmusicDroneSetup, section, defaultXml):
@@ -892,102 +848,3 @@ def __readGameplayPoints(section, geometryCfg):
 
 def __readWinPoints(section):
     return {'winPointsSettings': section.readString('winPoints', 'DEFAULT')}
-
-
-class EnvSwitcherSettings(object):
-
-    class EnvSwitcher(object):
-
-        def __init__(self, pEnvName, pSettings):
-            self.envName = pEnvName
-            self.settings = pSettings
-
-        @staticmethod
-        def readXml(section):
-            switchers = {}
-            for name, value in section.items():
-                if name == 'switcher':
-                    settings = None
-                    if value.has_key('settings'):
-                        settings = EnvSwitcherSettings.EnvSwitcher.readValues(value['settings'])
-                    switcher = EnvSwitcherSettings.EnvSwitcher(value.readString('envName'), settings)
-                    switchers[value.readInt('id')] = switcher
-
-            return switchers
-
-        @staticmethod
-        def readValues(section):
-            return [ value.asString for value in section.values() ]
-
-        def __str__(self):
-            return str(self.__class__) + ': ' + str(self.__dict__)
-
-    class EnvSetting(object):
-
-        def __init__(self, pFuncName, pSpeed, pTimeout, pDirection, pFader, pFaderPlayer):
-            self.funcName = pFuncName
-            self.speed = pSpeed
-            self.timeout = pTimeout
-            self.direction = pDirection
-            self.fader = pFader
-            self.faderPlayer = pFaderPlayer
-
-        @staticmethod
-        def readXml(section):
-            envSettings = {}
-            for name, value in section.items():
-                if name == 'envSetting':
-                    envSetting = EnvSwitcherSettings.EnvSetting(value.readString('functionName'), value.readFloat('speed'), value.readFloat('timeout'), value.readVector2('direction'), EnvSwitcherSettings.EnvSetting.readFader(value), EnvSwitcherSettings.EnvSetting.readFaderPlayer(value))
-                    envSettings[value.readString('id')] = envSetting
-
-            return envSettings
-
-        @staticmethod
-        def readFader(section):
-            fader = None
-            for name, value in section.items():
-                if name == 'fader':
-                    fader = {'duration': value.readFloat('duration'),
-                     'color': value.readVector3('color')}
-
-            return fader
-
-        @staticmethod
-        def readFaderPlayer(section):
-            faderPlayer = None
-            for name, value in section.items():
-                if name == 'faderPlayer':
-                    faderPlayer = value
-
-            return faderPlayer
-
-        def __str__(self):
-            return str(self.__class__) + ': ' + str(self.__dict__)
-
-    def __init__(self, section):
-        self.switchers, self.envSwitcherSettings = self._readXml(section)
-
-    def __str__(self):
-        return str(self.__class__) + ': ' + str(self.__dict__)
-
-    def _readXml(self, section):
-        envSettings = None
-        switchers = None
-        for name, value in section.items():
-            if name == 'envSettings':
-                envSettings = EnvSwitcherSettings.EnvSetting.readXml(value)
-            if name == 'switchers':
-                switchers = EnvSwitcherSettings.EnvSwitcher.readXml(value)
-
-        return (switchers, envSettings)
-
-    def getSwitcherByName(self, name):
-        for switcher in self.switchers:
-            if switcher.envName == name:
-                return switcher
-
-    def getSwitcherByID(self, id):
-        return self.switchers[id] if id in self.switchers else None
-
-    def getEnvSettingByID(self, name):
-        return self.envSwitcherSettings[name] if name in self.envSwitcherSettings else None

@@ -963,5 +963,6 @@ def parseHint(xmlCtx, section):
     sectionInfo['equalActions'] = section.readBool('equal-actions', False)
     sectionInfo['ignoreOutsideClick'] = section.readBool('ignore-outside-click', False)
     sectionInfo['updateRuntime'] = section.readBool('update-runtime', False)
+    sectionInfo['hideImmediately'] = section.readBool('hide-immediately', False)
     sectionInfo['checkViewArea'] = section.readBool('check-view-area', False)
     return sectionInfo

@@ -7,7 +7,6 @@ from gui import SystemMessages
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.barracks.sound_constants import BARRACKS_SOUND_SPACE
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.BarracksMeta import BarracksMeta
 from gui.Scaleform.flash_wrapper import InputKeyMode
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
@@ -15,7 +14,7 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
 from gui.impl import backport
-from gui.ingame_shop import showBuyGoldForBerth
+from gui.shop import showBuyGoldForBerth
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.server_events import recruit_helper
 from gui.server_events.events_dispatcher import showRecruitWindow
@@ -163,14 +162,11 @@ def _packBuyBerthsSlot(itemsCache=None):
     berths = itemsCache.items.stats.tankmenBerthsCount
     berthPrice, berthCount = itemsCache.items.shop.getTankmanBerthPrice(berths)
     defaultBerthPrice, _ = itemsCache.items.shop.defaults.getTankmanBerthPrice(berths)
-    gold = itemsCache.items.stats.money.gold
     action = None
     if berthPrice != defaultBerthPrice:
         action = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'berthsPrices', True, berthPrice, defaultBerthPrice)
-    enoughGold = berthPrice.gold <= gold
     return {'buy': True,
      'price': backport.getGoldFormat(berthPrice.getSignValue(Currency.GOLD)),
-     'enoughGold': enoughGold or isIngameShopEnabled(),
      'actionPriceData': action,
      'count': berthCount}
 
@@ -227,7 +223,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
     def buyBerths(self):
         price, _ = self.itemsCache.items.shop.getTankmanBerthPrice(self.itemsCache.items.stats.tankmenBerthsCount)
         availableMoney = self.itemsCache.items.stats.money
-        if price and availableMoney.gold < price.gold and isIngameShopEnabled():
+        if price and availableMoney.gold < price.gold:
             showBuyGoldForBerth(price.gold)
         else:
             ActionsFactory.doAction(ActionsFactory.BUY_BERTHS)
@@ -323,7 +319,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
 
     def __updateTanksList(self):
         data = list()
-        modulesAll = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE).values()
+        modulesAll = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).values()
         modulesAll.sort()
         for module in modulesAll:
             if self.filter['nation'] != -1 and self.filter['nation'] != module.descriptor.type.id[0] or self.filter['tankType'] != 'None' and self.filter['tankType'] != -1 and self.filter['tankType'] != module.type:
@@ -359,8 +355,6 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         tankmenInBarracks = 0
         tankmenList = [_packBuyBerthsSlot()]
         for tankman in self.__sortedCachedTankmen:
-            if tankman.vehicleInvID > 0 and self.itemsCache.items.getVehicle(tankman.vehicleInvID) is not None and self.itemsCache.items.getVehicle(tankman.vehicleInvID).isOnlyForEventBattles:
-                continue
             if not tankman.isInTank:
                 tankmenInBarracks += 1
             if not criteria(tankman):
@@ -386,7 +380,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         if tankmenInBarracks < slots:
             tankmenList.insert(1, {'empty': True,
              'freePlaces': slots - tankmenInBarracks})
-        self.as_setTankmenS({'tankmenCount': self.__getTankmenCountStr(tankmenInSlots=tankmenInSlots, totalCount=len(self.__sortedCachedTankmen)),
+        self.as_setTankmenS({'tankmenCount': self.__getTankmenCountStr(tankmenInSlots, totalCount=len(self.__sortedCachedTankmen)),
          'placesCount': self.__getPlaceCountStr(free=max(slots - tankmenInBarracks, 0), totalCount=slots),
          'placesCountTooltip': None,
          'tankmenData': tankmenList,

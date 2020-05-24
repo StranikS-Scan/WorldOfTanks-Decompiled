@@ -10,14 +10,13 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.DialogsInterface import showI18nConfirmDialog
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.VehicleBuyWindowMeta import VehicleBuyWindowMeta
 from gui.Scaleform.genConsts.VEHICLE_BUY_WINDOW_ALIASES import VEHICLE_BUY_WINDOW_ALIASES
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.ingame_shop import showBuyGoldForVehicleWebOverlay
+from gui.shop import showBuyGoldForVehicleWebOverlay
 from gui.shared.events import VehicleBuyEvent
 from gui.shared.formatters import text_styles, moneyWithIcon
 from gui.shared.formatters.text_styles import neutral
@@ -60,7 +59,6 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
         self.vehicle = None
         self.tradeOffVehicle = None
         self.__state = VehicleBuyWindowState(False, False, -1, -1)
-        self.__isGoldAutoPurchaseEnabled = isIngameShopEnabled()
         if ctx.get('isTradeIn', False):
             self.selectedTab = _TABS.TRADE
         else:
@@ -71,12 +69,11 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
         self.destroy()
 
     def submit(self, data):
-        if self.__isGoldAutoPurchaseEnabled:
-            availableGold = self.itemsCache.items.stats.money.gold
-            requiredGold = (self._getVehiclePrice(self.vehicle) + self._getSetupPrice()).price.gold
-            if availableGold < requiredGold:
-                showBuyGoldForVehicleWebOverlay(requiredGold, self.vehicle.intCD)
-                return
+        availableGold = self.itemsCache.items.stats.money.gold
+        requiredGold = (self._getVehiclePrice(self.vehicle) + self._getSetupPrice()).price.gold
+        if availableGold < requiredGold:
+            showBuyGoldForVehicleWebOverlay(requiredGold, self.vehicle.intCD)
+            return
         self.__requestForMoneyObtain(data)
 
     def stateChange(self, data):
@@ -154,7 +151,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
         setupPrice = self._getSetupPrice()
         totalPrice = vehiclePrice + setupPrice
         canBuy = totalPrice.price <= money
-        canBuy |= self.__isGoldAutoPurchaseEnabled and totalPrice.price.gold > money.gold and totalPrice.price.credits <= money.credits
+        canBuy |= totalPrice.price.gold > money.gold and totalPrice.price.credits <= money.credits
         return canBuy
 
     def _initData(self, *args):

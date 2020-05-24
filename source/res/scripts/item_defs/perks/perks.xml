@@ -1,0 +1,96 @@
+<perks.xml>
+  <perk>
+    <id>	102	</id>
+    <name>	#item_types:abilities/perk_name_102	</name>
+    <description>	#item_types:abilities/perk_descr_102	</description>
+    <icon>	perk_102.png	</icon>
+    <branchID>	1	</branchID>
+    <maxCount>	10	</maxCount>
+  </perk>
+  <perk>
+    <id>	202	</id>
+    <name>	#item_types:abilities/perk_name_202	</name>
+    <description>	#item_types:abilities/perk_descr_202	</description>
+    <icon>	perk_202.png	</icon>
+    <branchID>	2	</branchID>
+    <maxCount>	10	</maxCount>
+  </perk>
+  <perk>
+    <id>	203	</id>
+    <name>	#item_types:abilities/perk_name_203	</name>
+    <description>	#item_types:abilities/perk_descr_203	</description>
+    <icon>	perk_203.png	</icon>
+    <branchID>	2	</branchID>
+    <maxCount>	10	</maxCount>
+  </perk>
+  <perk>
+    <id>	211	</id>
+    <name>	#item_types:abilities/perk_name_211	</name>
+    <description>	#item_types:abilities/perk_descr_211	</description>
+    <icon>	perk_211.png	</icon>
+    <branchID>	2	</branchID>
+    <maxCount>	1	</maxCount>
+    <ultimative>	true	</ultimative>
+    <needPoints>	30	</needPoints>
+  </perk>
+  <perk>
+    <id>	301	</id>
+    <name>	#item_types:abilities/perk_name_301	</name>
+    <description>	#item_types:abilities/perk_descr_301	</description>
+    <icon>	perk_301.png	</icon>
+    <branchID>	3	</branchID>
+    <maxCount>	10	</maxCount>
+  </perk>
+  <perk>
+    <id>	312	</id>
+    <name>	#item_types:abilities/perk_name_312	</name>
+    <description>	#item_types:abilities/perk_descr_312	</description>
+    <icon>	perk_312.png	</icon>
+    <branchID>	3	</branchID>
+    <maxCount>	1	</maxCount>
+    <ultimative>	true	</ultimative>
+    <needPoints>	30	</needPoints>
+  </perk>
+  <perk>
+    <id>	403	</id>
+    <name>	#item_types:abilities/perk_name_403	</name>
+    <description>	#item_types:abilities/perk_descr_403	</description>
+    <icon>	perk_403.png	</icon>
+    <branchID>	4	</branchID>
+    <maxCount>	10	</maxCount>
+  </perk>
+  <perk>
+    <id>	405	</id>
+    <name>	#item_types:abilities/perk_name_405	</name>
+    <description>	#item_types:abilities/perk_descr_405	</description>
+    <icon>	perk_405.png	</icon>
+    <branchID>	4	</branchID>
+    <maxCount>	10	</maxCount>
+    <situational>	true	</situational>
+  </perk>
+  <branch>
+    <id>	1	</id>
+    <name>	#item_types:abilities/branch_01	</name>
+    <needPoints>	30	</needPoints>
+  </branch>
+  <branch>
+    <id>	2	</id>
+    <name>	#item_types:abilities/branch_02	</name>
+    <needPoints>	30	</needPoints>
+  </branch>
+  <branch>
+    <id>	3	</id>
+    <name>	#item_types:abilities/branch_03	</name>
+    <needPoints>	30	</needPoints>
+  </branch>
+  <branch>
+    <id>	4	</id>
+    <name>	#item_types:abilities/branch_04	</name>
+    <needPoints>	30	</needPoints>
+  </branch>
+  <branch>
+    <id>	5	</id>
+    <name>	#item_types:abilities/branch_05	</name>
+    <needPoints>	30	</needPoints>
+  </branch>
+</perks.xml>

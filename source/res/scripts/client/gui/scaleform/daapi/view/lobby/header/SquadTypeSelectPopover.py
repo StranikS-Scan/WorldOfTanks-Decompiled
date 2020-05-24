@@ -2,15 +2,11 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/SquadTypeSelectPopover.py
 from adisp import process
 from debug_utils import LOG_ERROR
-from gui import makeHtmlString
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
 from gui.Scaleform.daapi.view.meta.BattleTypeSelectPopoverMeta import BattleTypeSelectPopoverMeta
-from gui.impl import backport
-from gui.impl.gen import R
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.listener import IGlobalListener
-from gui.shared.utils.functions import makeTooltip
-_SQUAD_SELECTOR_TEMPLATE = 'html_templates:lobby/tooltips/squad_selector'
 
 class SquadTypeSelectPopover(BattleTypeSelectPopoverMeta, IGlobalListener):
 
@@ -26,12 +22,10 @@ class SquadTypeSelectPopover(BattleTypeSelectPopoverMeta, IGlobalListener):
     def getTooltipData(self, itemData, itemIsDisabled):
         tooltip = ''
         if itemData == 'eventSquad':
-            tooltip = makeTooltip(backport.text(R.strings.tooltips.header.eventSquad.header()), makeHtmlString(_SQUAD_SELECTOR_TEMPLATE, 'event'))
+            tooltip = TOOLTIPS.HEADER_EVENTSQUAD
         elif itemData == 'squad':
-            tooltip = makeTooltip(backport.text(R.strings.tooltips.header.squad.header()), makeHtmlString(_SQUAD_SELECTOR_TEMPLATE, 'regular'))
-        result = {'isSpecial': False,
-         'tooltip': tooltip}
-        return result
+            tooltip = TOOLTIPS.HEADER_SQUAD
+        return tooltip
 
     def demoClick(self):
         pass

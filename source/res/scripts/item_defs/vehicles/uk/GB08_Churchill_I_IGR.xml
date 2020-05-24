@@ -329,30 +329,6 @@
           <leftSibling>	Track_VT_R0	</leftSibling>
         </node>
       </trackNodes>
-      <effects>
-        <lodDist>	MEDIUM	</lodDist>
-        <mud>	largeTankMud	</mud>
-      </effects>
-      <wwsoundPC>	treads_type_pc	</wwsoundPC>
-      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 1.37518 0.000000	</hullPosition>
-      <hitTester>
-        <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Chassis.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Chassis.model	</collisionModelClient>
-      </hitTester>
-      <topRightCarryingPoint>	1.0882 1.99583	</topRightCarryingPoint>
-      <maxClimbAngle>	25	</maxClimbAngle>
-      <navmeshGirth>	6.0	</navmeshGirth>
-      <AODecals>
-        <decal>
-          <transform>
-            <row0>	3.782410 0.000000 0.000000	</row0>
-            <row1>	0.000000 1.410910 0.000000	</row1>
-            <row2>	0.000000 0.000000 7.210920	</row2>
-            <row3>	0.000000 0.000000 0.000000	</row3>
-          </transform>
-        </decal>
-      </AODecals>
       <physicalTracks>
         <left>
           <segmentsCount>	75	</segmentsCount>
@@ -707,6 +683,30 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.37518 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.0882 1.99583	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.782410 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.410910 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.210920	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
       <customization>
         <customizableVehicleAreas>
           <paint></paint>
@@ -819,7 +819,7 @@
         <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Turret_02.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.023538 0.403355 0.640064	</gunPosition>
+      <gunPosition>	0.023538 0.403442 0.640064	</gunPosition>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.800 0.246 1.000 0.000 0.415 -0.508 0.862 0.388 0.288 0.710 0.002 0.513 0.054 0.604 0.048	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
@@ -889,36 +889,15 @@
       <chassis>
         <Chassis_GB08_Churchill_I_2_IGR>
           <grounds>
-            <ground>
-              <medium>
-                <rollingFriction>	0.0966	</rollingFriction>
-              </medium>
-            </ground>
-            <sand>
-              <medium>
-                <rollingFriction>	0.0966	</rollingFriction>
-              </medium>
-            </sand>
-            <wood>
-              <medium>
-                <rollingFriction>	0.0966	</rollingFriction>
-              </medium>
-            </wood>
-            <snow>
-              <medium>
-                <rollingFriction>	0.0966	</rollingFriction>
-              </medium>
-            </snow>
-            <stone>
-              <medium>
-                <rollingFriction>	0.0966	</rollingFriction>
-              </medium>
-            </stone>
-            <metal>
-              <medium>
-                <rollingFriction>	0.0966	</rollingFriction>
-              </medium>
-            </metal>
+            <soft>
+              <rollingFriction>	0.16905	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.0966	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0805	</rollingFriction>
+            </firm>
           </grounds>
         </Chassis_GB08_Churchill_I_2_IGR>
       </chassis>

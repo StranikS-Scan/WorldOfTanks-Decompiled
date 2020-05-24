@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/battle_ctx.py
+import logging
 import Settings
 from gui.battle_control.arena_info import player_format
 from unit_roster_config import SquadRoster, EpicRoster
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider, IBattleContext
+_logger = logging.getLogger(__name__)
 
 class BattleContext(IBattleContext):
 
@@ -15,7 +17,6 @@ class BattleContext(IBattleContext):
         self.__lastArenaWinStatus = None
         self.__playerFormatter = player_format.PlayerFullNameFormatter()
         self.lastArenaUniqueID = None
-        self.lastArenaBonusType = None
         self.isInBattle = False
         self.wasInBattle = False
         return
@@ -87,10 +88,18 @@ class BattleContext(IBattleContext):
         return vID and self.__arenaDP.isTeamKiller(vID)
 
     def isObserver(self, vID):
-        return self.__arenaDP.isObserver(vID) if self.__arenaDP is not None else False
+        if self.__arenaDP is not None:
+            return self.__arenaDP.isObserver(vID)
+        else:
+            _logger.debug('BattleContext.isObserver: ArenaDP is None, vID = %s', vID)
+            return
 
     def isPlayerObserver(self):
-        return self.__arenaDP.isPlayerObserver() if self.__arenaDP is not None else False
+        if self.__arenaDP is not None:
+            return self.__arenaDP.isPlayerObserver()
+        else:
+            _logger.debug('BattleContext.isPlayerObserver: ArenaDP is None')
+            return
 
     def isInTeam(self, teamIdx, vID=None, avatarSessionID=None):
         return self._isInTeams([teamIdx], vID, avatarSessionID)

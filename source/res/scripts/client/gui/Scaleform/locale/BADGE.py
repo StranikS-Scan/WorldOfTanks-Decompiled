@@ -8,6 +8,7 @@ class BADGE(object):
     BADGESPAGE_HEADER_DESCR = '#badge:badgesPage/header/descr'
     BADGESPAGE_HEADER_BACKBTN_LABEL = '#badge:badgesPage/header/backBtn/label'
     BADGESPAGE_HEADER_BACKBTN_DESCRLABEL = '#badge:badgesPage/header/backBtn/descrLabel'
+    BADGESPAGE_HEADER_SUFFIXSETTING_LABEL = '#badge:badgesPage/header/suffixSetting/label'
     BADGESPAGE_BODY_UNCOLLECTED_TITLE = '#badge:badgesPage/body/uncollected/title'
     BADGESPAGE_DUMMY_TITLE = '#badge:badgesPage/dummy/title'
     BADGESPAGE_DUMMY_DESCR = '#badge:badgesPage/dummy/descr'

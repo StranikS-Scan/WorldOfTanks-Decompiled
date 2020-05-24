@@ -1,24 +1,26 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/battle_pass_controller.py
-import typing
 import logging
 from collections import namedtuple
 from itertools import groupby
 from operator import itemgetter
+import typing
 import constants
 from Event import Event, EventManager
-from battle_pass_common import BattlePassConsts, BattlePassState, getBattlePassPassTokenName, getLevel, BATTLE_PASS_CONFIG_NAME, BattlePassConfig
+from battle_pass_common import BattlePassConsts, BattlePassState, getBattlePassPassTokenName, getLevel, BATTLE_PASS_CONFIG_NAME, BattlePassConfig, BattlePassStatsCommon
+from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.battle_pass.battle_pass_award import awardsFactory, BattlePassAwardsManager
-from gui.battle_pass.undefined_bonuses import makeUndefinedBonus
 from gui.battle_pass.battle_pass_helpers import getLevelProgression, getPointsInfoStringID
 from gui.battle_pass.final_reward_state_machine import FinalRewardStateMachine
-from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.battle_pass.undefined_bonuses import makeUndefinedBonus
+from gui.battle_pass.voting_requester import BattlePassVotingRequester
+from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.utils.scheduled_notifications import SimpleNotifier
 from helpers import dependency, time_utils
+from shared_utils import findFirst, first
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from shared_utils import findFirst
 if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import DossierBonus
 _logger = logging.getLogger(__name__)
@@ -46,6 +48,7 @@ class BattlePassController(IBattlePassController):
         self.onUnlimitedPurchaseUnlocked = Event(self.__eventsManager)
         self.onBattlePassSettingsChange = Event(self.__eventsManager)
         self.onFinalRewardStateChange = Event(self.__eventsManager)
+        self.__votingRequester = BattlePassVotingRequester(self)
         self.__finalRewardStateMachine = FinalRewardStateMachine(self)
         return
 
@@ -65,6 +68,7 @@ class BattlePassController(IBattlePassController):
         else:
             self.onBattlePassSettingsChange(self.__getConfig().mode, self.__currentMode)
             self.__currentMode = self.__getConfig().mode
+        self.__votingRequester.start()
         return
 
     def onAvatarBecomePlayer(self):
@@ -78,11 +82,14 @@ class BattlePassController(IBattlePassController):
     def fini(self):
         self.__stop()
         self.__clearFields()
+        self.__eventsManager.clear()
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(BattlePassController, self).fini()
 
-    def isBought(self):
-        token = self.__itemsCache.items.tokens.getTokens().get(getBattlePassPassTokenName(self.getSeasonID()))
+    def isBought(self, seasonID=None):
+        if seasonID is None:
+            seasonID = self.getSeasonID()
+        token = self.__itemsCache.items.tokens.getTokens().get(getBattlePassPassTokenName(seasonID))
         return True if token else False
 
     def isEnabled(self):
@@ -93,6 +100,9 @@ class BattlePassController(IBattlePassController):
 
     def isVisible(self):
         return self.isSeasonStarted() and not self.isDisabled() and not self.isSeasonFinished()
+
+    def isOffSeasonEnable(self):
+        return (not self.isSeasonStarted() or self.isSeasonFinished()) and not self.isDisabled()
 
     def isDisabled(self):
         return self.__getConfig().isDisabled()
@@ -123,6 +133,9 @@ class BattlePassController(IBattlePassController):
         rewardType = BattlePassConsts.REWARD_PAID if isBase else BattlePassConsts.REWARD_POST
         tags = self.__getConfig().getTags(realLevel, rewardType)
         return BattlePassConsts.RARE_REWARD_TAG in tags
+
+    def getVotingRequester(self):
+        return self.__votingRequester
 
     def getFinalFlowSM(self):
         return self.__finalRewardStateMachine
@@ -192,7 +205,7 @@ class BattlePassController(IBattlePassController):
     def getAwardsInterval(self, fromLevel, toLevel, awardType=BattlePassConsts.REWARD_FREE):
         result = {}
         for level in range(fromLevel, toLevel + 1):
-            result[level] = self.getSingleAward(level, awardType, False)
+            result[level] = self.getSingleAward(level, awardType, True)
 
         return result
 
@@ -237,6 +250,24 @@ class BattlePassController(IBattlePassController):
 
     def getVoteOption(self):
         return self.__itemsCache.items.battlePass.getVoteOption()
+
+    def getPrevSeasonsStats(self):
+        packedStats = self.__itemsCache.items.battlePass.getPackedStats()
+        if not packedStats:
+            return None
+        else:
+            unpackStats, _ = BattlePassStatsCommon.unpackAllSeasonStats(packedStats)
+            return unpackStats
+
+    def getLastFinishedSeasonStats(self):
+        allSeasonStats = self.getPrevSeasonsStats()
+        if not allSeasonStats:
+            seasons = sorted(self.getSeasonsHistory().keys(), reverse=True)
+            return BattlePassStatsCommon.makeSeasonStats(first(seasons), {}, BattlePassStatsCommon.initialSeasonStatsData())
+        return allSeasonStats[-1]
+
+    def getSeasonsHistory(self):
+        return self.__getConfig().seasonsHistory
 
     def getAlternativeVoteOption(self):
         voteOption = self.getVoteOption()
@@ -370,6 +401,14 @@ class BattlePassController(IBattlePassController):
         cap = self.__getConfig().vehicleCapacity(intCD)
         return cap > 0
 
+    def canPlayerParticipate(self):
+        criteria = REQ_CRITERIA.INVENTORY
+        criteria |= ~REQ_CRITERIA.VEHICLE.EPIC_BATTLE
+        criteria |= REQ_CRITERIA.CUSTOM(lambda veh: not self.hasMaxPointsOnVehicle(veh.intCD))
+        criteria |= REQ_CRITERIA.CUSTOM(lambda veh: self.isProgressionOnVehiclePossible(veh.intCD))
+        availableVehiclesToProgression = self.__itemsCache.items.getVehicles(criteria)
+        return len(availableVehiclesToProgression) > 0
+
     def getSeasonID(self):
         return self.__itemsCache.items.battlePass.getSeasonID()
 
@@ -381,6 +420,7 @@ class BattlePassController(IBattlePassController):
         self.__purchaseUnlockNotifier.stopNotification()
         self.__itemsCache.onSyncCompleted -= self.__onSyncCompleted
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
+        self.__votingRequester.stop()
 
     def __getFrontierStep(self):
         return self.__getConfig().postPoints

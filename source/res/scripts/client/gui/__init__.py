@@ -130,6 +130,7 @@ def getGuiServicesConfig(manager):
     from gui import Scaleform as _sf
     from gui import hangar_cameras
     from gui import impl
+    from gui import offers
     from skeletons.gui.lobby_context import ILobbyContext
     manager.addConfig(app_loader.getAppLoaderConfig)
     manager.addConfig(shared.getSharedServices)
@@ -149,8 +150,8 @@ def getGuiServicesConfig(manager):
     manager.addConfig(hangar_cameras.getHangarCamerasConfig)
     manager.addConfig(promo.getPromoConfig)
     manager.addInstance(ILobbyContext, lobby_context.LobbyContext(), finalizer='clear')
+    manager.addConfig(offers.getOffersConfig)
     manager.addConfig(server_events.getLinkedSetController)
-    manager.addConfig(server_events.getGameEventController)
     if HAS_DEV_RESOURCES:
         try:
             from gui.development import getDevelopmentServicesConfig

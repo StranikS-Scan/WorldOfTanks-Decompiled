@@ -29,7 +29,11 @@ class SLOT_TYPE(object):
 
 
 class EDITOR_TYPE(object):
-    SPLINE_NAME_SELECTOR = 1
+    STR_KEY_SELECTOR = 1
+
+
+def buildStrKeysValue(*args):
+    return ';'.join(args)
 
 
 class InitParam(object):
@@ -101,6 +105,7 @@ class Block(Meta):
 
     def __init__(self, agent):
         self.__agent = agent
+        self._onFinishScriptCallRequired = False
 
     def _getInitParams(self):
         return self.__agent.getInitParams()

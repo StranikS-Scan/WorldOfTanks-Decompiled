@@ -81,7 +81,7 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
             return
         with self.getViewModel().transaction() as tx:
             if value:
-                quests = sorted(self.eventsCache.getDailyQuests().values(), cmp=dailyQuestsSortFunc)
+                quests = sorted(self.eventsCache.getDailyQuests().values(), key=dailyQuestsSortFunc)
                 self.__updateModelMissionCompletedVisitedArray(tx, quests, True)
             tx.setIsVisible(value)
 
@@ -105,7 +105,7 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
     def _updateViewModel(self):
         _logger.debug('DailyQuests::UpdatingViewModel')
         newCountdownVal = EventInfoModel.getDailyProgressResetTimeDelta()
-        quests = sorted(self.eventsCache.getDailyQuests().values(), cmp=dailyQuestsSortFunc)
+        quests = sorted(self.eventsCache.getDailyQuests().values(), key=dailyQuestsSortFunc)
         if not needToUpdateQuestsInModel(quests, self.getViewModel().getMissions()):
             return
         else:

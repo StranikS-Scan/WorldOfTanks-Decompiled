@@ -1,13 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/vehicle_anchor_states.py
-from helpers import dependency
+import logging
 from Math import Vector3
-from skeletons.gui.customization import ICustomizationService
-from gui.Scaleform.daapi.view.lobby.customization.shared import REGIONS_SLOTS
-from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.customization.outfit import Area
-from gui.shared.gui_items.customization.slots import SLOT_ASPECT_RATIO
+from gui.Scaleform.daapi.view.lobby.customization.shared import isSlotFilled, isItemsQuantityLimitReached, REGIONS_SLOTS
 from gui.Scaleform.genConsts.CUSTOMIZATION_ALIASES import CUSTOMIZATION_ALIASES
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.customization.slots import SLOT_ASPECT_RATIO
+from helpers import dependency
+from skeletons.gui.customization import ICustomizationService
+from vehicle_outfit.outfit import Area
+_logger = logging.getLogger(__name__)
 _ANCHOR_SHIFT = {GUI_ITEM_TYPE.EMBLEM: 0.5,
  GUI_ITEM_TYPE.INSCRIPTION: 0.3}
 _REGION_ANCHOR_SHIFT = 0.2
@@ -33,16 +35,16 @@ class StateContext(object):
 
 
 class Anchor(StateContext):
-    __slots__ = ('customizationService', '__anchorId', '__uid', '__anchorShift', '__customizationContext', '__position', '__direction')
-    customizationService = dependency.descriptor(ICustomizationService)
+    __slots__ = ('__service', '__slotId', '__uid', '__anchorShift', '__position', '__direction', '__ctx')
+    __service = dependency.descriptor(ICustomizationService)
 
-    def __init__(self, anchorId, uid, position, direction):
+    def __init__(self, slotId, uid, position, direction):
         super(Anchor, self).__init__()
-        self.__anchorId = anchorId
+        self.__slotId = slotId
         self.__uid = uid
         self._state = AnchorState(self)
-        self.__anchorShift = getAnchorShift(self.anchorId)
-        self.__customizationContext = self.customizationService.getCtx()
+        self.__anchorShift = getAnchorShift(self.slotId, direction)
+        self.__ctx = self.__service.getCtx()
         self.__position = position
         self.__direction = direction
 
@@ -59,8 +61,8 @@ class Anchor(StateContext):
         return self._state
 
     @property
-    def anchorId(self):
-        return self.__anchorId
+    def slotId(self):
+        return self.__slotId
 
     @property
     def uid(self):
@@ -76,16 +78,16 @@ class Anchor(StateContext):
 
     @property
     def updater(self):
-        return self.__customizationContext.vehicleAnchorsUpdater
+        return self.__ctx.vehicleAnchorsUpdater
 
     def changeState(self, newState):
         super(Anchor, self).changeState(newState)
-        self.__customizationContext.vehicleAnchorsUpdater.onAnchorStateChanged(self.uid, self.stateID)
+        self.__ctx.vehicleAnchorsUpdater.onAnchorStateChanged(self.uid, self.stateID)
 
     def updateState(self):
-        outfit = self.__customizationContext.getModifiedOutfit(self.__customizationContext.currentSeason)
-        lock = self.__customizationContext.isC11nItemsQuantityLimitReached(outfit, self.anchorId.slotType)
-        if self.__customizationContext.isSlotFilled(self.anchorId):
+        outfit = self.__ctx.mode.getModifiedOutfit(self.__ctx.season)
+        lock = isItemsQuantityLimitReached(outfit, self.slotId.slotType)
+        if isSlotFilled(outfit, self.slotId):
             newState = UnselectedFilledState(self)
         elif lock:
             newState = LockedState(self)
@@ -95,20 +97,19 @@ class Anchor(StateContext):
             self.changeState(newState)
 
     def setup(self):
-        if self.anchorId.slotType in REGIONS_SLOTS or self.anchorId.slotType == GUI_ITEM_TYPE.EMBLEM:
-            if self.shift is not None:
-                self.__customizationContext.vehicleAnchorsUpdater.setAnchorShift(self.anchorId, self.shift)
+        if self.slotId.slotType in REGIONS_SLOTS and self.shift is not None:
+            self.__ctx.vehicleAnchorsUpdater.setAnchorShift(self.slotId, self.shift)
         self.updateState()
         return
 
     def destroy(self):
         super(Anchor, self).destroy()
-        self.__customizationContext = None
+        self.__ctx = None
         return
 
     def setShift(self, shift):
         self.__anchorShift = shift
-        self.__customizationContext.vehicleAnchorsUpdater.setAnchorShift(self.anchorId, self.shift)
+        self.__ctx.vehicleAnchorsUpdater.setAnchorShift(self.slotId, self.shift)
 
 
 class BaseState(object):
@@ -130,13 +131,13 @@ class BaseState(object):
 
 
 class AnchorState(BaseState):
-    __slots__ = ('customizationService', 'stateID', '_customizationContext')
-    customizationService = dependency.descriptor(ICustomizationService)
+    __slots__ = ('_service', 'stateID', '_ctx')
+    _service = dependency.descriptor(ICustomizationService)
     stateID = None
 
     def __init__(self, anchor):
         super(AnchorState, self).__init__(anchor)
-        self._customizationContext = self.customizationService.getCtx()
+        self._ctx = self._service.getCtx()
 
     @property
     def anchor(self):
@@ -209,13 +210,13 @@ class UnselectedFilledState(AnchorState):
         self.changeState(newState)
 
     def onEnterState(self):
-        if self.anchor.anchorId.slotType == GUI_ITEM_TYPE.INSCRIPTION and self.anchor.shift is not None:
-            self.updater.setAnchorShift(self.anchor.anchorId, self.anchor.shift)
+        if self.anchor.slotId.slotType in _ANCHOR_SHIFT and self.anchor.shift is not None:
+            self.updater.setAnchorShift(self.anchor.slotId, self.anchor.shift)
         return
 
     def onExitState(self):
-        if self.anchor.anchorId.slotType == GUI_ITEM_TYPE.INSCRIPTION:
-            self.updater.setAnchorShift(self.anchor.anchorId, Vector3())
+        if self.anchor.slotId.slotType in _ANCHOR_SHIFT:
+            self.updater.setAnchorShift(self.anchor.slotId, Vector3())
 
 
 class SelectedEmptyState(AnchorState):
@@ -238,12 +239,12 @@ class SelectedFilledState(AnchorState):
         self.changeState(newState)
 
     def onEnterState(self):
-        if self.anchor.anchorId.slotType == GUI_ITEM_TYPE.EMBLEM:
-            self.updater.setAnchorShift(self.anchor.anchorId, Vector3())
+        if self.anchor.slotId.slotType == GUI_ITEM_TYPE.EMBLEM:
+            self.updater.setAnchorShift(self.anchor.slotId, Vector3())
 
     def onExitState(self):
-        if self.anchor.anchorId.slotType == GUI_ITEM_TYPE.EMBLEM and self.anchor.shift is not None:
-            self.updater.setAnchorShift(self.anchor.anchorId, self.anchor.shift)
+        if self.anchor.slotId.slotType == GUI_ITEM_TYPE.EMBLEM and self.anchor.shift is not None:
+            self.updater.setAnchorShift(self.anchor.slotId, self.anchor.shift)
         return
 
 
@@ -263,10 +264,16 @@ class PreviewState(AnchorState):
         self.changeState(newState)
 
     def onEnterState(self):
-        self._customizationContext.previewSelectedDecal(self.anchor.anchorId)
+        item = self._ctx.mode.selectedItem
+        if item is None:
+            _logger.warning('no item selected')
+            return
+        else:
+            self._ctx.mode.previewItem(item.intCD, self.anchor.slotId)
+            return
 
     def onExitState(self):
-        self._customizationContext.removeDecalPreview(self.anchor.anchorId)
+        self._ctx.mode.removeItemPreview(self.anchor.slotId)
 
 
 class LockedState(AnchorState):
@@ -294,15 +301,14 @@ class RemoveState(AnchorState):
 
 
 @dependency.replace_none_kwargs(service=ICustomizationService)
-def getAnchorShift(anchorId, service=None):
-    if anchorId.slotType in REGIONS_SLOTS:
-        if anchorId.areaId != Area.GUN:
-            anchorParams = service.getAnchorParams(anchorId.areaId, anchorId.slotType, anchorId.regionIdx)
-            return -anchorParams.location.normal * _REGION_ANCHOR_SHIFT
-    elif anchorId.slotType in (GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.EMBLEM):
-        anchorParams = service.getAnchorParams(anchorId.areaId, anchorId.slotType, anchorId.regionIdx)
+def getAnchorShift(slotId, direction, service=None):
+    if slotId.slotType in REGIONS_SLOTS:
+        if slotId.areaId != Area.GUN:
+            return -direction * _REGION_ANCHOR_SHIFT
+    elif slotId.slotType in (GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.EMBLEM):
+        anchorParams = service.getAnchorParams(slotId.areaId, slotId.slotType, slotId.regionIdx)
         slotWidth = anchorParams.descriptor.size
-        slotHeight = slotWidth * SLOT_ASPECT_RATIO.get(anchorId.slotType, 0)
-        shift = slotHeight * _ANCHOR_SHIFT.get(anchorId.slotType, 0)
+        slotHeight = slotWidth * SLOT_ASPECT_RATIO.get(slotId.slotType, 0)
+        shift = slotHeight * _ANCHOR_SHIFT.get(slotId.slotType, 0)
         return anchorParams.location.up * shift
     return None

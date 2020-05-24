@@ -5,7 +5,7 @@ import types
 from collections import namedtuple
 import logging
 from Event import Event
-from constants import IS_TUTORIAL_ENABLED, PremiumConfigs, DAILY_QUESTS_CONFIG
+from constants import IS_TUTORIAL_ENABLED, PremiumConfigs, DAILY_QUESTS_CONFIG, ClansConfig
 from collector_vehicle import CollectorVehicleConsts
 from debug_utils import LOG_WARNING, LOG_DEBUG
 from battle_pass_common import BattlePassConfig, BATTLE_PASS_CONFIG_NAME
@@ -105,6 +105,9 @@ class _FileServerSettings(object):
 
     def getMissionsDecorationUrl(self, decorationID, size):
         return self.__getUrl('missions_decoration', size, decorationID)
+
+    def getOffersRootUrl(self):
+        return self.__getUrl('offers')
 
     def __getUrl(self, urlKey, *args):
         try:
@@ -222,12 +225,14 @@ class _SpgRedesignFeatures(namedtuple('_SpgRedesignFeatures', ('stunEnabled', 'm
 class _BwRankedBattles(namedtuple('_BwRankedBattles', ('rblbHostUrl', 'infoPageUrl', 'introPageUrl'))):
     __slots__ = ()
 
-    def __new__(cls, rblbHostUrl=None, infoPageUrl=None, introPageUrl=None):
-        return super(_BwRankedBattles, cls).__new__(cls, rblbHostUrl, infoPageUrl, introPageUrl)
+    def __new__(cls, **kwargs):
+        defaults = dict(rblbHostUrl=None, infoPageUrl=None, introPageUrl=None)
+        defaults.update(kwargs)
+        return super(_BwRankedBattles, cls).__new__(cls, **defaults)
 
     @classmethod
     def defaults(cls):
-        return cls(None, None, None)
+        return cls()
 
 
 class _BwHallOfFame(namedtuple('_BwHallOfFame', ('hofHostUrl', 'isHofEnabled', 'isStatusEnabled'))):
@@ -241,7 +246,7 @@ class _BwHallOfFame(namedtuple('_BwHallOfFame', ('hofHostUrl', 'isHofEnabled', '
         return cls()
 
 
-class _BwIngameShop(namedtuple('_BwIngameShop', ('hostUrl', 'backendHostUrl', 'shopMode', 'isStorageEnabled', 'isPreviewEnabled'))):
+class _BwShop(namedtuple('_BwShop', ('hostUrl', 'backendHostUrl', 'isStorageEnabled'))):
 
     def replace(self, data):
         allowedFields = self._fields
@@ -249,17 +254,13 @@ class _BwIngameShop(namedtuple('_BwIngameShop', ('hostUrl', 'backendHostUrl', 's
         return self._replace(**dataToUpdate)
 
 
-_BwIngameShop.__new__.__defaults__ = ('',
- '',
- 'disabled',
- False,
- False)
+_BwShop.__new__.__defaults__ = ('', '', False)
 
-class _RankedBattlesConfig(namedtuple('_RankedBattlesConfig', ('isEnabled', 'peripheryIDs', 'winnerRankChanges', 'loserRankChanges', 'minXP', 'unburnableRanks', 'unburnableStepRanks', 'minLevel', 'maxLevel', 'accRanks', 'accSteps', 'cycleFinishSeconds', 'primeTimes', 'seasons', 'cycleTimes', 'shields', 'divisions', 'bonusBattlesMultiplier', 'expectedSeasons', 'yearAwardsMarks', 'rankGroups', 'qualificationBattles'))):
+class _RankedBattlesConfig(namedtuple('_RankedBattlesConfig', ('isEnabled', 'peripheryIDs', 'winnerRankChanges', 'loserRankChanges', 'minXP', 'unburnableRanks', 'unburnableStepRanks', 'minLevel', 'maxLevel', 'accRanks', 'accSteps', 'cycleFinishSeconds', 'primeTimes', 'seasons', 'cycleTimes', 'shields', 'divisions', 'bonusBattlesMultiplier', 'expectedSeasons', 'yearAwardsMarks', 'rankGroups', 'qualificationBattles', 'leaguesBonusBattles', 'forbiddenClassTags', 'forbiddenVehTypes'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, peripheryIDs={}, winnerRankChanges=(), loserRankChanges=(), minXP=0, unburnableRanks={}, unburnableStepRanks={}, minLevel=0, maxLevel=0, accRanks=0, accSteps=(), cycleFinishSeconds=0, primeTimes={}, seasons={}, cycleTimes=(), shields={}, divisions={}, bonusBattlesMultiplier=0, expectedSeasons=0, yearAwardsMarks=(), rankGroups=(), qualificationBattles=0)
+        defaults = dict(isEnabled=False, peripheryIDs={}, winnerRankChanges=(), loserRankChanges=(), minXP=0, unburnableRanks={}, unburnableStepRanks={}, minLevel=0, maxLevel=0, accRanks=0, accSteps=(), cycleFinishSeconds=0, primeTimes={}, seasons={}, cycleTimes=(), shields={}, divisions={}, bonusBattlesMultiplier=0, expectedSeasons=0, yearAwardsMarks=(), rankGroups=(), qualificationBattles=0, leaguesBonusBattles=(), forbiddenClassTags=(), forbiddenVehTypes=())
         defaults.update(kwargs)
         return super(_RankedBattlesConfig, cls).__new__(cls, **defaults)
 
@@ -474,27 +475,6 @@ class _SeniorityAwardsConfig(namedtuple('_SeniorityAwardsConfig', ('enabled', 'a
         return self.hangarWidgetVisibility
 
 
-class _BobConfig(namedtuple('_BobConfig', ('isEnabled', 'peripheryIDs', 'primeTimes', 'seasons', 'cycleTimes', 'levels', 'forbiddenClassTags', 'forbiddenVehTypes'))):
-    __slots__ = ()
-
-    def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, peripheryIDs={}, primeTimes={}, seasons={}, cycleTimes={}, levels=set(), forbiddenClassTags=set(), forbiddenVehTypes=set())
-        defaults.update(kwargs)
-        return super(_BobConfig, cls).__new__(cls, **defaults)
-
-    def asDict(self):
-        return self._asdict()
-
-    def replace(self, data):
-        allowedFields = self._fields
-        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
-        return self._replace(**dataToUpdate)
-
-    @classmethod
-    def defaults(cls):
-        return cls()
-
-
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
@@ -512,7 +492,7 @@ class ServerSettings(object):
         self.__frontlineSettings = _FrontlineSettings.defaults()
         self.__bwRankedBattles = _BwRankedBattles.defaults()
         self.__bwHallOfFame = _BwHallOfFame.defaults()
-        self.__bwIngameShop = _BwIngameShop()
+        self.__bwShop = _BwShop()
         self.__rankedBattlesSettings = _RankedBattlesConfig.defaults()
         self.__epicMetaGameSettings = _EpicMetaGameConfig()
         self.__eventProgressionSettings = _EventProgressionConfig()
@@ -555,8 +535,8 @@ class ServerSettings(object):
             self.__bwRankedBattles = makeTupleByDict(_BwRankedBattles, self.__serverSettings['rankedBattles'])
         if 'hallOfFame' in self.__serverSettings:
             self.__bwHallOfFame = makeTupleByDict(_BwHallOfFame, self.__serverSettings['hallOfFame'])
-        if 'ingameShop' in self.__serverSettings:
-            self.__bwIngameShop = makeTupleByDict(_BwIngameShop, self.__serverSettings['ingameShop'])
+        if 'shop' in self.__serverSettings:
+            self.__bwShop = makeTupleByDict(_BwShop, self.__serverSettings['shop'])
         if 'ranked_config' in self.__serverSettings:
             self.__rankedBattlesSettings = makeTupleByDict(_RankedBattlesConfig, self.__serverSettings['ranked_config'])
         if 'event_progression_config' in self.__serverSettings:
@@ -585,11 +565,6 @@ class ServerSettings(object):
             self.__battlePassConfig = BattlePassConfig(self.__serverSettings.get(BATTLE_PASS_CONFIG_NAME, {}))
         else:
             self.__battlePassConfig = BattlePassConfig({})
-        if 'bob_config' in self.__serverSettings:
-            LOG_DEBUG('bob_config', self.__serverSettings['bob_config'])
-            self.__bobSettings = makeTupleByDict(_BobConfig, self.__serverSettings['bob_config'])
-        else:
-            self.__bobSettings = _BobConfig.defaults()
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -610,14 +585,12 @@ class ServerSettings(object):
         if 'epic_config' in serverSettingsDiff:
             self.__updateEpic(serverSettingsDiff)
             self.__serverSettings['epic_config'] = serverSettingsDiff['epic_config']
-        if 'bob_config' in serverSettingsDiff:
-            self.__updateBob(serverSettingsDiff)
         if 'telecom_config' in serverSettingsDiff:
             self.__telecomConfig = _TelecomConfig(self.__serverSettings['telecom_config'])
         if 'disabledPMOperations' in serverSettingsDiff:
             self.__serverSettings['disabledPMOperations'] = serverSettingsDiff['disabledPMOperations']
-        if 'ingameShop' in serverSettingsDiff:
-            self.__updateIngameShop(serverSettingsDiff)
+        if 'shop' in serverSettingsDiff:
+            self.__updateShop(serverSettingsDiff)
         if 'disabledPersonalMissions' in serverSettingsDiff:
             self.__serverSettings['disabledPersonalMissions'] = serverSettingsDiff['disabledPersonalMissions']
         if 'blueprints_config' in serverSettingsDiff:
@@ -716,10 +689,6 @@ class ServerSettings(object):
         return self.__epicGameSettings
 
     @property
-    def bobConfig(self):
-        return self.__bobSettings
-
-    @property
     def telecomConfig(self):
         return self.__telecomConfig
 
@@ -766,11 +735,8 @@ class ServerSettings(object):
     def isGoldFishEnabled(self):
         return self.__getGlobalSetting('isGoldFishEnabled', False)
 
-    def isIngameStorageEnabled(self):
-        return self.__bwIngameShop.isStorageEnabled
-
-    def isIngamePreviewEnabled(self):
-        return self.__bwIngameShop.isPreviewEnabled
+    def isStorageEnabled(self):
+        return self.__bwShop.isStorageEnabled
 
     def isLootBoxesEnabled(self):
         return self.__getGlobalSetting('isLootBoxesEnabled')
@@ -788,13 +754,13 @@ class ServerSettings(object):
         return self.__getGlobalSetting('isNationChangeEnabled', True)
 
     @property
-    def ingameShop(self):
-        return self.__bwIngameShop
+    def shop(self):
+        return self.__bwShop
 
-    def isIngameDataChangedInDiff(self, diff, fieldName=None):
-        if 'ingameShop' in diff:
+    def isShopDataChangedInDiff(self, diff, fieldName=None):
+        if 'shop' in diff:
             if fieldName is not None:
-                if fieldName in diff['ingameShop']:
+                if fieldName in diff['shop']:
                     return True
             else:
                 return True
@@ -908,9 +874,6 @@ class ServerSettings(object):
     def isCrewBooksEnabled(self):
         return self.__getGlobalSetting('isCrewBooksEnabled', False)
 
-    def isHornEnabled(self):
-        return self.__getGlobalSetting('isHornEnabled', False)
-
     def isCrewBooksPurchaseEnabled(self):
         return self.__getGlobalSetting('isCrewBooksPurchaseEnabled', False)
 
@@ -923,6 +886,9 @@ class ServerSettings(object):
     def isCollectorVehicleEnabled(self):
         return self.__getGlobalSetting(CollectorVehicleConsts.CONFIG_NAME, {}).get(CollectorVehicleConsts.IS_ENABLED, False)
 
+    def isOffersEnabled(self):
+        return self.__getGlobalSetting('isOffersEnabled', False)
+
     def getFriendlyFireBonusTypes(self):
         return self.__getGlobalSetting('isNoAllyDamage', set())
 
@@ -931,6 +897,9 @@ class ServerSettings(object):
 
     def getMarathonConfig(self):
         return self.__getGlobalSetting('marathon_config', {})
+
+    def getClansConfig(self):
+        return self.__getGlobalSetting(ClansConfig.SECTION_NAME, {})
 
     def getSeniorityAwardsConfig(self):
         return self.__seniorityAwardsConfig
@@ -959,14 +928,11 @@ class ServerSettings(object):
         self.__epicMetaGameSettings = self.__epicMetaGameSettings.replace(targetSettings['epic_config'].get('epicMetaGame', {}))
         self.__epicGameSettings = self.__epicGameSettings.replace(targetSettings['epic_config'])
 
-    def __updateBob(self, targetSettings):
-        self.__bobSettings = self.__bobSettings.replace(targetSettings['bob_config'])
-
     def __updateSquadBonus(self, sourceSettings):
         self.__squadPremiumBonus = self.__squadPremiumBonus.replace(sourceSettings[PremiumConfigs.PREM_SQUAD])
 
-    def __updateIngameShop(self, targetSettings):
-        self.__bwIngameShop = self.__bwIngameShop.replace(targetSettings['ingameShop'])
+    def __updateShop(self, targetSettings):
+        self.__bwShop = self.__bwShop.replace(targetSettings['shop'])
 
     def __updateBlueprints(self, targetSettings):
         self.__blueprintsConfig = self.__blueprintsConfig._replace(**targetSettings)

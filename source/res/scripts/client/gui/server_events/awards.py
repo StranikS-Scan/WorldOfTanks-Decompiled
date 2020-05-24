@@ -12,7 +12,6 @@ from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
-from gui.shared.event_dispatcher import leaveEventMode
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import Currency
@@ -423,7 +422,6 @@ class MissionAward(MissionAwardAbstract):
         bonuses = getMissionInfoData(self._quest).getSubstituteBonuses()
         return getAwardsWindowBonuses(bonuses)
 
-    @leaveEventMode
     def handleNextButton(self):
         self._proxyEvent()
 

@@ -23,6 +23,9 @@ class SettingsCache(ISettingsCache):
         self.onSyncCompleted.clear()
         g_clientUpdateManager.removeObjectCallbacks(self)
 
+    def clear(self):
+        self.__intSettings.clear()
+
     @property
     def waitForSync(self):
         return self.__waitForSync

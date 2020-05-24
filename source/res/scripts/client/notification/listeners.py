@@ -169,8 +169,11 @@ class ServiceChannelListener(_NotificationListener):
         if messageType == SYS_MESSAGE_TYPE.autoMaintenance.index():
             if messageSubtype in (AUTO_MAINTENANCE_RESULT.RENT_IS_OVER, AUTO_MAINTENANCE_RESULT.RENT_IS_ALMOST_OVER):
                 return C11nMessageDecorator
-        elif messageType == SYS_MESSAGE_TYPE.customizationChanged.index():
-            return C11nMessageDecorator
+        else:
+            if messageType == SYS_MESSAGE_TYPE.customizationChanged.index():
+                return C11nMessageDecorator
+            if messageType == SYS_MESSAGE_TYPE.customizationProgress.index():
+                return C11nMessageDecorator
         return MessageDecorator
 
 

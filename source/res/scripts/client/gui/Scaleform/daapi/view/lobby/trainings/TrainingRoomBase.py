@@ -4,7 +4,6 @@ import BigWorld
 import ArenaType
 from adisp import process
 from gui import SystemMessages, GUI_SETTINGS
-from gui.Scaleform.daapi.view.lobby.lobby_vehicle_marker_view import LOBBY_TYPE
 from gui.Scaleform.genConsts.BATTLE_TYPES import BATTLE_TYPES
 from gui.Scaleform.settings import ICONS_SIZES
 from helpers import dependency
@@ -227,11 +226,7 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
         self.startPrbListening()
         self._addListeners()
         self.as_setObserverS(entity.getPlayerInfo().getVehicle().isObserver)
-        self._onPopulateEnd()
         self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.TRAINING_UI_READY, showSummaryNow=True)
-
-    def _onPopulateEnd(self):
-        self.fireEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.LOBBY_TYPE_CHANGED, ctx={'lobbyType': LOBBY_TYPE.TRAINING_ROOM}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _addListeners(self):
         g_messengerEvents.users.onUserActionReceived += self.__me_onUserActionReceived

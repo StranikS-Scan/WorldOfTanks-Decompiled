@@ -45,13 +45,13 @@ class BattlePassGetVideoDataCtx(CommonWebRequestCtx):
 
 class BattlePassGetVotingDataCtx(CommonWebRequestCtx):
 
-    def __init__(self, season, **kwargs):
+    def __init__(self, seasons, **kwargs):
         super(BattlePassGetVotingDataCtx, self).__init__(**kwargs)
         self.__featureID = 'battle_pass'
-        self.__season = season
+        self.__seasons = seasons
 
-    def getSeason(self):
-        return self.__season
+    def getSeasons(self):
+        return self.__seasons
 
     def getFeatureID(self):
         return self.__featureID
@@ -66,13 +66,13 @@ class BattlePassGetVotingDataCtx(CommonWebRequestCtx):
         return False
 
     def getDataObj(self, incomeData):
-        data = incomeData or []
-        result = {}
+        data = incomeData or {}
+        result = {seasonID:{} for seasonID in self.__seasons}
         for option in data.get('data', []):
             if option.get('major_key') != self.__featureID:
                 return {}
-            if option.get('season_id') != self.__season:
-                continue
-            result[option.get('option_id')] = option.get('count')
+            seasonID = option.get('season_id')
+            if seasonID in self.__seasons:
+                result[seasonID][option.get('option_id')] = option.get('count')
 
         return result

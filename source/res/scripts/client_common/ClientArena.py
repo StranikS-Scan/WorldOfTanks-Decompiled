@@ -35,12 +35,10 @@ class ClientArena(object):
      ARENA_UPDATE.OWN_VEHICLE_LOCKED_FOR_RP: '_ClientArena__onOwnVehicleLockedForRP',
      ARENA_UPDATE.VIEW_POINTS: '_ClientArena__onViewPoints',
      ARENA_UPDATE.VEHICLE_RECOVERED: '_ClientArena__onVehicleRecovered',
-     ARENA_UPDATE.FOG_OF_WAR: '_ClientArena__onFogOfWar',
-     ARENA_UPDATE.RADAR_INFO_RECEIVED: '_ClientArena__onRadarInfoReceived'}
+     ARENA_UPDATE.FOG_OF_WAR: '_ClientArena__onFogOfWar'}
 
     def __init__(self, arenaUniqueID, arenaTypeID, arenaBonusType, arenaGuiType, arenaExtraData):
         self.__vehicles = {}
-        self.__precachedVehicles = {}
         self.__vehicleIndexToId = {}
         self.__positions = {}
         self.__statistics = {}
@@ -73,7 +71,6 @@ class ClientArena(object):
         self.onFogOfWarEnabled = Event.Event(em)
         self.onFogOfWarHiddenVehiclesSet = Event.Event(em)
         self.onTeamHealthPercentUpdate = Event.Event(em)
-        self.onRadarInfoReceived = Event.Event(em)
         self.arenaUniqueID = arenaUniqueID
         self.arenaType = ArenaType.g_cache.get(arenaTypeID, None)
         if self.arenaType is None:
@@ -87,7 +84,6 @@ class ClientArena(object):
         return
 
     vehicles = property(lambda self: self.__vehicles)
-    precachedVehicles = property(lambda self: self.__precachedVehicles)
     positions = property(lambda self: self.__positions)
     statistics = property(lambda self: self.__statistics)
     period = property(lambda self: self.__periodInfo[0])
@@ -158,12 +154,9 @@ class ClientArena(object):
         LOG_DEBUG_DEV('__onVehicleListUpdate', vehiclesList)
         vehs = self.__vehicles
         vehs.clear()
-        self.__precachedVehicles.clear()
         for infoAsTuple in vehiclesList:
             vehID, info = self.__vehicleInfoAsDict(infoAsTuple)
-            if vehID >= 0:
-                vehs[vehID] = self.__preprocessVehicleInfo(info)
-            self.__precachedVehicles[vehID] = info
+            vehs[vehID] = self.__preprocessVehicleInfo(info)
 
         self.__rebuildIndexToId()
         self.onNewVehicleListReceived()
@@ -197,10 +190,6 @@ class ClientArena(object):
         self.onFogOfWarEnabled(self.__isFogOfWarEnabled)
         self.__hasFogOfWarHiddenVehicles = bool(status & 2)
         self.onFogOfWarHiddenVehiclesSet(self.__hasFogOfWarHiddenVehicles)
-
-    def __onRadarInfoReceived(self, argStr):
-        duration, positions = cPickle.loads(argStr)
-        self.onRadarInfoReceived(duration, positions)
 
     def __onStatisticsUpdate(self, argStr):
         self.__statistics = {}

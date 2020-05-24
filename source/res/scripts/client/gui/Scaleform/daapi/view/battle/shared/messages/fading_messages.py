@@ -1,10 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/messages/fading_messages.py
-import logging
 import operator
 from soft_exception import SoftException
 from account_helpers.settings_core.settings_constants import GRAPHICS
-from debug_utils import LOG_CURRENT_EXCEPTION
+from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.daapi.view.meta.BattleMessageListMeta import BattleMessageListMeta
 from gui.Scaleform.genConsts.BATTLE_MESSAGES_CONSTS import BATTLE_MESSAGES_CONSTS
 from gui.app_loader import sf_battle
@@ -12,7 +11,6 @@ from gui.doc_loaders import messages_panel_reader
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
-_logger = logging.getLogger(__name__)
 _MESSAGES_SETTINGS_PATH = 'gui/{}'
 _EXTRA_COLOR_FORMAT = '<font color="#{0:02X}{1:02X}{2:02X}">{3:>s}</font>'
 _COLOR_TO_METHOD = {BATTLE_MESSAGES_CONSTS.COLOR_YELLOW: 'as_showYellowMessageS',
@@ -36,7 +34,7 @@ class FadingMessages(BattleMessageListMeta):
         return
 
     def __del__(self):
-        _logger.debug('%s is deleted', self.__name)
+        LOG_DEBUG('{0} is deleted'.format(self.__name))
 
     def setSettingFile(self, mFile):
         self.__settingsFilePath = _MESSAGES_SETTINGS_PATH.format(mFile)
@@ -54,11 +52,8 @@ class FadingMessages(BattleMessageListMeta):
             if extKey in self.__messages:
                 self.__doShowMessage(extKey, args, extra)
                 return
-            _logger.debug('Key for message not found %s_%s (%s)', key, postfix, self.__settingsFilePath)
         if key in self.__messages:
             self.__doShowMessage(key, args, extra)
-        else:
-            _logger.debug('Key for message not found %s (%s)', key, self.__settingsFilePath)
 
     def getStyles(self):
         return self.__styles
@@ -118,7 +113,7 @@ class FadingMessages(BattleMessageListMeta):
             method = _COLOR_TO_METHOD[color]
         else:
             raise SoftException('Can not recognize color for message "{}". List "{}"'.format(key, self.__name))
-        _logger.debug('Show message in a battle %s', (self.__name, key))
+        LOG_DEBUG('Show message in a battle', self.__name, key)
         operator.methodcaller(method, key, msgText)(self)
         return
 

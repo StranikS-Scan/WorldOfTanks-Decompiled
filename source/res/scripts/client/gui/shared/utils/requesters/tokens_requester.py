@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/utils/requesters/tokens_requester.py
 import functools
 import logging
+import time
 import BigWorld
 from account_helpers.AccountSettings import QUEST_DELTAS_TOKENS_PROGRESS
 from adisp import async, process
@@ -39,6 +40,22 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
 
     def getTokens(self):
         return self.getCacheValue('tokens', {})
+
+    def getToken(self, tokenID):
+        return self.getTokens().get(tokenID)
+
+    def getTokenCount(self, tokenID):
+        _, count = self._getTokenInfo(tokenID)
+        return count
+
+    def getTokenExpiryTime(self, tokenID):
+        expireTime, _ = self._getTokenInfo(tokenID)
+        return expireTime
+
+    def isTokenAvailable(self, tokenID):
+        curTime = int(time.time())
+        expireTime, count = self._getTokenInfo(tokenID)
+        return count > 0 and expireTime > curTime
 
     def getLootBoxes(self):
         return self.__lootBoxCache.copy()
@@ -85,6 +102,10 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
 
     def hasTokenCountChanged(self, tokenId):
         return self.__tokensProgressDelta.hasDiff(tokenId)
+
+    def _getTokenInfo(self, tokenID):
+        token = self.getToken(tokenID)
+        return token or (0, 0)
 
     def _preprocessValidData(self, data):
         self.__tokensProgressDelta.update(data)

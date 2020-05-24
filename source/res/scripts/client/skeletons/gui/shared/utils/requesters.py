@@ -30,16 +30,13 @@ class IInventoryRequester(IRequester):
     def invalidateItem(self, itemTypeID, invIdx):
         raise NotImplementedError
 
-    def initC11nItemsAppliedCounts(self):
-        raise NotImplementedError
-
-    def updateC11nItemAppliedCount(self, itemCD, vehicleIntCD, count):
-        raise NotImplementedError
-
     def getC11nItemAppliedVehicles(self, itemCD):
         raise NotImplementedError
 
     def getC11nItemAppliedOnVehicleCount(self, itemCD, vehicleCD):
+        raise NotImplementedError
+
+    def getC11nOutfitsFromPool(self, vehicleIntCD):
         raise NotImplementedError
 
     def initC11nItemsNoveltyData(self):
@@ -52,6 +49,21 @@ class IInventoryRequester(IRequester):
         raise NotImplementedError
 
     def getC11nItemsNoveltyCounters(self, vehicleType):
+        raise NotImplementedError
+
+    def updateC11nProgressionDataForItem(self, itemIntCD):
+        raise NotImplementedError
+
+    def updateC11nProgressionData(self):
+        raise NotImplementedError
+
+    def getC11nProgressionDataForItem(self, itemIntCD):
+        raise NotImplementedError
+
+    def getC11nProgressionDataForVehicle(self, vehicleIntCD):
+        raise NotImplementedError
+
+    def getC11nProgressionData(self, itemIntCD, vehicleIntCD):
         raise NotImplementedError
 
     def getItemsData(self, itemTypeID):
@@ -199,10 +211,6 @@ class IStatsRequester(IRequester):
 
     @property
     def premiumInfo(self):
-        raise NotImplementedError
-
-    @property
-    def isIngameShopEnabled(self):
         raise NotImplementedError
 
     @property
@@ -714,7 +722,11 @@ class IRankedRequester(IRequester):
         raise NotImplementedError
 
     @property
-    def bonusBattlesCount(self):
+    def persistentBonusBattles(self):
+        raise NotImplementedError
+
+    @property
+    def dailyBonusBattles(self):
         raise NotImplementedError
 
     @property
@@ -817,6 +829,18 @@ class IBlueprintsRequester(IRequester):
 class ITokensRequester(IRequester):
 
     def getTokens(self):
+        raise NotImplementedError
+
+    def getToken(self, tokenID):
+        raise NotImplementedError
+
+    def getTokenCount(self, tokenID):
+        raise NotImplementedError
+
+    def getTokenExpiryTime(self, tokenID):
+        raise NotImplementedError
+
+    def isTokenAvailable(self, tokenID):
         raise NotImplementedError
 
     def getLootBoxes(self):
@@ -959,4 +983,13 @@ class ISessionStatsRequester(IRequester):
         raise NotImplementedError
 
     def getAccountWtr(self):
+        raise NotImplementedError
+
+
+class IOffersRequester(IRequester):
+
+    def isBannerSeen(self, offerID):
+        raise NotImplementedError
+
+    def getReceivedGifts(self, offerID):
         raise NotImplementedError

@@ -16,7 +16,7 @@ from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
 from gui.battle_control.battle_constants import VEHICLE_DEVICE_IN_COMPLEX_ITEM
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, DEVICE_STATE_DESTROYED
-from gui.battle_control.controllers.consumables.equipment_ctrl import IgnoreEntitySelection, EventItem
+from gui.battle_control.controllers.consumables.equipment_ctrl import IgnoreEntitySelection
 from gui.battle_control.controllers.consumables.equipment_ctrl import NeedEntitySelection, InCooldownError
 from gui.impl import backport
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
@@ -101,6 +101,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         self.__cds = [None] * PANEL_MAX_LENGTH
         self.__mask = 0
         self.__keys = {}
+        self.__extraKeys = {}
         self.__currentActivatedSlotIdx = -1
         self.__equipmentsGlowCallbacks = {}
         if self.sessionProvider.isReplayPlaying:
@@ -111,17 +112,20 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         self.__delayedNextShellID = None
         return
 
-    def onClickedToSlot(self, bwKey):
-        self.__handleBWKey(int(bwKey))
+    def onClickedToSlot(self, bwKey, idx):
+        self.__handleBWKey(int(bwKey), idx)
 
     def onPopUpClosed(self):
         keys = {}
-        for _, bwKey, _, handler in self.__getKeysGenerator():
+        extraKeys = {}
+        for idx, bwKey, _, handler in self.__getKeysGenerator():
             if handler:
-                keys[bwKey] = handler
+                extraKeys[idx] = keys[bwKey] = handler
 
         self.__keys.clear()
         self.__keys = keys
+        self.__extraKeys.clear()
+        self.__extraKeys = extraKeys
 
     def handleEscKey(self, isDown):
         if isDown:
@@ -140,6 +144,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         self.__clearAllEquipmentGlow()
         self.__removeListeners()
         self.__keys.clear()
+        self.__extraKeys.clear()
         super(ConsumablesPanel, self)._dispose()
 
     def _getPanelSettings(self):
@@ -285,24 +290,31 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
 
     def __onMappingChanged(self, *args):
         keys = {}
+        extraKeys = {}
         slots = []
         for idx, bwKey, sfKey, handler in self.__getKeysGenerator():
             if handler:
                 keys[bwKey] = handler
+                extraKeys[idx] = handler
                 slots.append((idx, bwKey, sfKey))
 
         self.as_setKeysToSlotsS(slots)
         self.__keys.clear()
         self.__keys = keys
+        self.__extraKeys.clear()
+        self.__extraKeys = extraKeys
 
     def __handleConsumableChoice(self, event):
         self.__handleBWKey(event.ctx['key'])
 
-    def __handleBWKey(self, bwKey):
-        if bwKey in self.__keys:
-            handler = self.__keys[bwKey]
-            if handler and callable(handler):
-                handler()
+    def __handleBWKey(self, bwKey, idx=None):
+        if bwKey == 0 and idx is not None:
+            handler = self.__extraKeys.get(idx)
+        else:
+            handler = self.__keys.get(bwKey)
+        if handler and callable(handler):
+            handler()
+        return
 
     def __handleAmmoPressed(self, intCD):
         ctrl = self.sessionProvider.shared.ammo
@@ -315,8 +327,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         if ctrl is None:
             return
         else:
-            player = BigWorld.player()
-            result, error = ctrl.changeSetting(intCD, entityName=entityName, avatar=player)
+            result, error = ctrl.changeSetting(intCD, entityName=entityName, avatar=BigWorld.player())
             if not result and error:
                 ctrl = self.sessionProvider.shared.messages
                 if ctrl is not None:
@@ -350,17 +361,21 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
                 return
             slots = []
             keys = {}
+            extraKeys = {}
             for entityIdx, (itemName, entityName, entityState) in enumerate(item.getGuiIterator()):
                 bwKey, sfKey = self.__genKey(entityIdx)
-                keys[bwKey] = partial(self.__handleEquipmentPressed, intCD, entityName)
+                extraKeys[entityIdx] = keys[bwKey] = partial(self.__handleEquipmentPressed, intCD, entityName)
                 slots.append({'bwKeyCode': bwKey,
                  'sfKeyCode': sfKey,
                  'entityName': itemName,
-                 'entityState': entityState})
+                 'entityState': entityState,
+                 'entityIdx': entityIdx})
 
             self.__expandEquipmentSlot(self.__cds.index(intCD), slots)
             self.__keys.clear()
             self.__keys = keys
+            self.__extraKeys.clear()
+            self.__extraKeys = extraKeys
             return
 
     def __onShellsAdded(self, intCD, descriptor, quantity, _, gunSettings):
@@ -371,7 +386,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         idx = self.__genNextIdx(AMMO_FULL_MASK, AMMO_START_IDX)
         self.__cds[idx] = intCD
         bwKey, sfKey = self.__genKey(idx)
-        self.__keys[bwKey] = partial(self.__handleAmmoPressed, intCD)
+        self.__extraKeys[idx] = self.__keys[bwKey] = partial(self.__handleAmmoPressed, intCD)
         self._addShellSlot(idx, bwKey, sfKey, quantity, gunSettings.clip.size, shellIconPath, noShellIconPath, toolTip)
 
     def __onShellsUpdated(self, intCD, quantity, *args):
@@ -453,7 +468,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
             quantity = item.getQuantity()
             currentTime = item.getTimeRemaining()
             maxTime = item.getTotalTime()
-            self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime, item.getStage())
+            self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime)
             if item.isReusable or item.isAvatar() and item.getStage() != EQUIPMENT_STAGES.PREPARING:
                 glowType = CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN_SPECIAL if item.isAvatar() else CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN
                 if self.__canApplyingGlowEquipment(item):
@@ -505,7 +520,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
             else:
                 handler = partial(self.__handleEquipmentPressed, intCD)
             if item.getQuantity() > 0:
-                self.__keys[bwKey] = handler
+                self.__extraKeys[idx] = self.__keys[bwKey] = handler
         else:
             bwKey, sfKey = (None, None)
         self.as_addEquipmentSlotS(idx, bwKey, sfKey, tag, item.getQuantity(), item.getTimeRemaining(), item.getTotalTime(), iconPath, toolTip)
@@ -538,6 +553,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         self.__cds = [None] * PANEL_MAX_LENGTH
         self.__mask = 0
         self.__keys.clear()
+        self.__extraKeys.clear()
         self.__currentActivatedSlotIdx = -1
         self.delayedReload = None
         self.__delayedNextShellID = None
@@ -581,7 +597,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
                     item = ctrl.getEquipment(intCD)
                     if item and item.isEntityRequired():
                         bwKey, _ = self.__genKey(idx)
-                        self.__keys[bwKey] = partial(self.__handleEquipmentPressed, self.__cds[idx], deviceName)
+                        self.__extraKeys[idx] = self.__keys[bwKey] = partial(self.__handleEquipmentPressed, self.__cds[idx], deviceName)
             elif state == VEHICLE_VIEW_STATE.STUN:
                 if value.duration > 0:
                     for intCD, _ in ctrl.iterEquipmentsByTag('medkit', _isEquipmentAvailableToUse):
@@ -618,7 +634,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler, CallbackDelaye
         if equipment.getTag() == 'extinguisher':
             correction = True
             entityName = None
-        elif equipment.isAvatar() or isinstance(equipment, EventItem):
+        elif equipment.isAvatar():
             correction = False
             entityName = None
         else:

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_pass/battle_pass_helpers.py
+from collections import namedtuple
 from battle_pass_common import BattlePassConsts, BattlePassState, BattlePassInBattleProgress
 from gui import GUI_SETTINGS
 from gui.battle_pass.sounds import AwardVideoSoundControl
@@ -8,6 +9,26 @@ from gui.shared.formatters import time_formatters
 from helpers import dependency, time_utils
 from helpers.http.url_formatters import addParamsToUrlQuery
 from skeletons.gui.game_control import IBattlePassController
+
+class BattlePassProgressionSubTabs(object):
+    BUY_TAB = 0
+    BUY_TAB_FOR_SHOP = 1
+    VOTING_TAB = 2
+
+
+BattlePassSeasonHistory = namedtuple('BattlePassSeasonHistory', 'maxBaseLevel maxPostLevel rewardVehicles')
+
+class BackgroundPositions(object):
+    LEFT = 0
+    RIGHT = 1
+
+
+VEHICLES_BACKGROUND_POSITIONS = {22017: BackgroundPositions.LEFT,
+ 15697: BackgroundPositions.RIGHT}
+
+def getVehicleBackgroundPosition(vehCD):
+    return VEHICLES_BACKGROUND_POSITIONS.get(vehCD)
+
 
 def isBattlePassActiveSeason():
     battlePassController = dependency.instance(IBattlePassController)
@@ -47,6 +68,13 @@ def isCurrentBattlePassStateBase():
 
 def getFormattedTimeLeft(seconds):
     return time_formatters.getTillTimeByResource(seconds, R.strings.battle_pass_2020.status.timeLeft, removeLeadingZeros=True)
+
+
+def getSeasonHistory(seasonID):
+    battlePassController = dependency.instance(IBattlePassController)
+    seasonsHistory = battlePassController.getSeasonsHistory()
+    prevSeasonHistory = seasonsHistory.get(seasonID)
+    return None if prevSeasonHistory is None else BattlePassSeasonHistory(prevSeasonHistory.get('maxBaseLevel'), prevSeasonHistory.get('maxPostLevel'), prevSeasonHistory.get('rewardVehicles'))
 
 
 def getExtrasVideoPageURL():

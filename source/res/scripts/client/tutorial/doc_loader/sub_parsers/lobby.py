@@ -65,10 +65,6 @@ def readFreeXPChangedTriggerSection(xmlCtx, section, chapter, triggerID):
     return triggers.FreeXPChangedTrigger(triggerID)
 
 
-def readIsIngameShopEnabledSection(xmlCtx, section, chapter, triggerID):
-    return triggers.IsIngameShopEnabledTrigger(triggerID)
-
-
 def readIsCollectibleVehicleTrigger(xmlCtx, section, chapter, triggerID):
     return triggers.IsCollectibleVehicleTrigger(triggerID)
 

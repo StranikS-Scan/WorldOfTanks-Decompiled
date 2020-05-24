@@ -341,7 +341,7 @@ class AmmoController(MethodsRules, IBattleController):
             reloadStart = fabs(timeLeft - baseTime) < 0.001
             if timeLeft > 0.0 and reloadStart:
                 self.__gunSettings.reloadEffect.onClipLoad(timeLeft, shellsInClip, lastShell, canBeFull)
-            elif self.__gunSettings.clip.size == shellsInClip:
+            elif self.__gunSettings.clip.size == shellsInClip and not reloadStart:
                 self.__gunSettings.reloadEffect.onFull()
         return
 
@@ -413,9 +413,6 @@ class AmmoController(MethodsRules, IBattleController):
             return result
         else:
             return quantity
-
-    def getClipCapacity(self):
-        return self.__gunSettings.clip.size
 
     @MethodsRules.delayable('setGunSettings')
     def setShells(self, intCD, quantity, quantityInClip):

@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -140,7 +140,7 @@
   </ParticleSystem>
   <debug>
     <fullDump>	false	</fullDump>
-    <clientUrl>	https://cat.wargaming.net	</clientUrl>
+    <clientUrl>	http://cat-st1.wargaming.net	</clientUrl>
     <botsUrl>	http://cat-st1.wargaming.net	</botsUrl>
     <dxdiag>	false	</dxdiag>
     <framesCount>	0	</framesCount>
@@ -276,9 +276,6 @@
           <name>	wheel_vehicle_GUI.pck	</name>
         </project>
         <project>
-          <name>	weekend_brawl.pck	</name>
-        </project>
-        <project>
           <name>	plugin_media.bnk	</name>
         </project>
       </SFX_soundbanks_loadonce>
@@ -312,9 +309,6 @@
         </project>
         <project>
           <name>	researches.bnk	</name>
-        </project>
-        <project>
-          <name>	weekend_brawl.bnk	</name>
         </project>
         <project>
           <name>	tasks.bnk	</name>
@@ -394,9 +388,6 @@
         </project>
         <project>
           <name>	wheel_vehicle_GUI.bnk	</name>
-        </project>
-        <project>
-          <name>	ev_10y_countdown_gameplay.bnk	</name>
         </project>
       </SFX_soundbanks_arena>
       <SFX_soundbanks_editor>
@@ -586,8 +577,8 @@
       <source>	SCRIPT	</source>
       <source>	UI	</source>
       <openMode>	a	</openMode>
-      <maxSizeKB>	2048	</maxSizeKB>
-      <trimToKB>	512	</trimToKB>
+      <maxSizeKB>	512	</maxSizeKB>
+      <trimToKB>	0	</trimToKB>
       <showTime>	true	</showTime>
       <disableBuffering>	false	</disableBuffering>
       <messageLength>	8192	</messageLength>
@@ -595,8 +586,8 @@
     <file>	ui.log	  <enabled>	true	</enabled>
       <source>	UI	</source>
       <openMode>	a	</openMode>
-      <maxSizeKB>	2048	</maxSizeKB>
-      <trimToKB>	512	</trimToKB>
+      <maxSizeKB>	512	</maxSizeKB>
+      <trimToKB>	0	</trimToKB>
       <showTime>	true	</showTime>
       <disableBuffering>	false	</disableBuffering>
       <messageLength>	8192	</messageLength>

@@ -1,21 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/ArtyCamera.py
 from math import pi, copysign, atan2, sqrt
-import BattleReplay
 import BigWorld
+from Math import slerp, Vector2, Vector3, Matrix, MatrixProduct
+import BattleReplay
 import Settings
 import math_utils
 from AvatarInputHandler import aih_global_binding, cameras
 from AvatarInputHandler.AimingSystems.ArtyAimingSystem import ArtyAimingSystem
 from AvatarInputHandler.AimingSystems.ArtyAimingSystemRemote import ArtyAimingSystemRemote
-from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig
-from AvatarInputHandler.cameras import ICamera, readFloat, readVec2, ImpulseReason
-from Math import slerp, Vector2, Vector3, Matrix, MatrixProduct
+from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig, CameraWithSettings
+from AvatarInputHandler.cameras import readFloat, readVec2, ImpulseReason
 from ProjectileMover import collideDynamicAndStatic
 from debug_utils import LOG_WARNING
-from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
-from skeletons.account_helpers.settings_core import ISettingsCore
 
 class Hysteresis(object):
     threshold = property(lambda self: self.__threshold)
@@ -56,7 +54,7 @@ def getCameraAsSettingsHolder(settingsDataSec):
     return ArtyCamera(settingsDataSec)
 
 
-class ArtyCamera(ICamera, CallbackDelayer):
+class ArtyCamera(CameraWithSettings, CallbackDelayer):
     _DYNAMIC_ENABLED = True
 
     @staticmethod
@@ -69,17 +67,17 @@ class ArtyCamera(ICamera, CallbackDelayer):
 
     camera = property(lambda self: self.__cam)
     aimingSystem = property(lambda self: self.__aimingSystem)
-    settingsCore = dependency.descriptor(ISettingsCore)
     __aimOffset = aih_global_binding.bindRW(aih_global_binding.BINDING_ID.AIM_OFFSET)
 
     def __init__(self, dataSec):
+        super(ArtyCamera, self).__init__()
         CallbackDelayer.__init__(self)
         self.__positionOscillator = None
         self.__positionNoiseOscillator = None
         self.__dynamicCfg = CameraDynamicConfig()
         self.__readCfg(dataSec)
         self.__cam = BigWorld.CursorCamera()
-        self.__curSense = self.__cfg['sensitivity']
+        self.__curSense = self._cfg['sensitivity']
         self.__onChangeControlMode = None
         self.__camDist = 0.0
         self.__desiredCamDist = 0.0
@@ -97,13 +95,14 @@ class ArtyCamera(ICamera, CallbackDelayer):
         return
 
     def create(self, onChangeControlMode=None):
+        super(ArtyCamera, self).create()
         self.__onChangeControlMode = onChangeControlMode
         aimingSystemClass = ArtyAimingSystemRemote if BigWorld.player().isObserver() else ArtyAimingSystem
         self.__aimingSystem = aimingSystemClass()
-        self.__camDist = self.__cfg['camDist']
+        self.__camDist = self._cfg['camDist']
         self.__desiredCamDist = self.__camDist
-        self.__positionHysteresis = PositionHysteresis(self.__cfg['hPositionThresholdSq'])
-        self.__timeHysteresis = TimeHysteresis(self.__cfg['hTimeThreshold'])
+        self.__positionHysteresis = PositionHysteresis(self._cfg['hPositionThresholdSq'])
+        self.__timeHysteresis = TimeHysteresis(self._cfg['hTimeThreshold'])
         self.__cam.pivotMaxDist = 0.0
         self.__cam.maxDistHalfLife = 0.01
         self.__cam.movementHalfLife = 0.0
@@ -114,13 +113,14 @@ class ArtyCamera(ICamera, CallbackDelayer):
         self.__rotation = 0.0
 
     def destroy(self):
-        CallbackDelayer.destroy(self)
         self.disable()
         self.__onChangeControlMode = None
         self.__cam = None
         if self.__aimingSystem is not None:
             self.__aimingSystem.destroy()
             self.__aimingSystem = None
+        CallbackDelayer.destroy(self)
+        CameraWithSettings.destroy(self)
         return
 
     def enable(self, targetPos, saveDist):
@@ -151,25 +151,10 @@ class ArtyCamera(ICamera, CallbackDelayer):
         self.__aimingSystem.updateTargetPos(pos)
         self.update(0.0, 0.0, 0.0)
 
-    def getConfigValue(self, name):
-        return self.__cfg.get(name)
-
-    def getUserConfigValue(self, name):
-        return self.__userCfg.get(name)
-
-    def setUserConfigValue(self, name, value):
-        if name not in self.__userCfg:
-            return
-        self.__userCfg[name] = value
-        if name not in ('keySensitivity', 'sensitivity', 'scrollSensitivity'):
-            self.__cfg[name] = self.__userCfg[name]
-        else:
-            self.__cfg[name] = self.__baseCfg[name] * self.__userCfg[name]
-
     def update(self, dx, dy, dz, updateByKeyboard=False):
-        self.__curSense = self.__cfg['keySensitivity'] if updateByKeyboard else self.__cfg['sensitivity']
+        self.__curSense = self._cfg['keySensitivity'] if updateByKeyboard else self._cfg['sensitivity']
         self.__autoUpdatePosition = updateByKeyboard
-        self.__dxdydz = Vector3(dx if not self.__cfg['horzInvert'] else -dx, dy if not self.__cfg['vertInvert'] else -dy, dz)
+        self.__dxdydz = Vector3(dx if not self._cfg['horzInvert'] else -dx, dy if not self._cfg['vertInvert'] else -dy, dz)
 
     def applyImpulse(self, position, impulse, reason=ImpulseReason.ME_HIT):
         adjustedImpulse, noiseMagnitude = self.__dynamicCfg.adjustImpulse(impulse, reason)
@@ -198,14 +183,14 @@ class ArtyCamera(ICamera, CallbackDelayer):
         ds = Settings.g_instance.userPrefs
         if not ds.has_key(Settings.KEY_CONTROL_MODE):
             ds.write(Settings.KEY_CONTROL_MODE, '')
-        ucfg = self.__userCfg
+        ucfg = self._userCfg
         ds = ds[Settings.KEY_CONTROL_MODE]
         ds.writeBool('artyMode/camera/horzInvert', ucfg['horzInvert'])
         ds.writeBool('artyMode/camera/vertInvert', ucfg['vertInvert'])
         ds.writeFloat('artyMode/camera/keySensitivity', ucfg['keySensitivity'])
         ds.writeFloat('artyMode/camera/sensitivity', ucfg['sensitivity'])
         ds.writeFloat('artyMode/camera/scrollSensitivity', ucfg['scrollSensitivity'])
-        ds.writeFloat('artyMode/camera/camDist', self.__cfg['camDist'])
+        ds.writeFloat('artyMode/camera/camDist', self._cfg['camDist'])
 
     def __applyNoiseImpulse(self, noiseMagnitude):
         noiseImpulse = math_utils.RandomVectors.random3Flat(noiseMagnitude)
@@ -252,11 +237,11 @@ class ArtyCamera(ICamera, CallbackDelayer):
         return direction
 
     def __getDesiredCameraDistance(self):
-        distRange = self.__cfg['distRange']
+        distRange = self._cfg['distRange']
         self.__desiredCamDist -= self.__dxdydz.z * self.__curSense
         self.__desiredCamDist = math_utils.clamp(distRange[0], distRange[1], self.__desiredCamDist)
         self.__desiredCamDist = self.__aimingSystem.overrideCamDist(self.__desiredCamDist)
-        self.__cfg['camDist'] = self.__camDist
+        self._cfg['camDist'] = self.__camDist
         return self.__desiredCamDist
 
     def __updateTrajectoryDrawer(self):
@@ -270,7 +255,7 @@ class ArtyCamera(ICamera, CallbackDelayer):
         return deltaTime
 
     def __choosePitchLevel(self, aimPoint):
-        useHighPitch = (aimPoint - self.__aimingSystem.hitPoint).lengthSquared > self.__cfg['highPitchThresholdSq']
+        useHighPitch = (aimPoint - self.__aimingSystem.hitPoint).lengthSquared > self._cfg['highPitchThresholdSq']
         if useHighPitch:
             useHighPitch = self.__positionHysteresis.check(aimPoint) or self.__timeHysteresis.check(self.__prevTime)
         else:
@@ -279,7 +264,7 @@ class ArtyCamera(ICamera, CallbackDelayer):
         return useHighPitch
 
     def __getCollisionTestOrigin(self, aimPoint, direction):
-        distRange = self.__cfg['distRange']
+        distRange = self._cfg['distRange']
         vehiclePosition = BigWorld.player().getVehicleAttached().position
         collisionTestOrigin = Vector3(vehiclePosition)
         if direction.x * direction.x > direction.z * direction.z and not math_utils.almostZero(direction.x):
@@ -292,7 +277,7 @@ class ArtyCamera(ICamera, CallbackDelayer):
         return collisionTestOrigin
 
     def __resolveCollisions(self, aimPoint, distance, direction):
-        distRange = self.__cfg['distRange']
+        distRange = self._cfg['distRange']
         collisionTestOrigin = self.__getCollisionTestOrigin(aimPoint, direction)
         sign = copysign(1.0, distance * distance - (aimPoint - collisionTestOrigin).lengthSquared)
         srcPoint = collisionTestOrigin
@@ -316,18 +301,18 @@ class ArtyCamera(ICamera, CallbackDelayer):
     def __calculateIdealState(self, deltaTime):
         aimPoint = self.__aimingSystem.aimPoint
         direction = self.__aimingSystem.direction
-        impactPitch = max(direction.pitch, self.__cfg['minimalPitch'])
+        impactPitch = max(direction.pitch, self._cfg['minimalPitch'])
         self.__rotation = max(self.__rotation, impactPitch)
-        distRange = self.__cfg['distRange']
+        distRange = self._cfg['distRange']
         distanceCurSq = (aimPoint - BigWorld.player().getVehicleAttached().position).lengthSquared
         distanceMinSq = distRange[0] ** 2.0
         forcedPitch = impactPitch
         if distanceCurSq < distanceMinSq:
             forcedPitch = atan2(sqrt(distanceMinSq - distanceCurSq), sqrt(distanceCurSq))
-        angularShift = self.__cfg['angularSpeed'] * deltaTime
+        angularShift = self._cfg['angularSpeed'] * deltaTime
         angularShift = angularShift if self.__choosePitchLevel(aimPoint) else -angularShift
         minPitch = max(forcedPitch, impactPitch)
-        maxPitch = max(forcedPitch, self.__cfg['maximalPitch'])
+        maxPitch = max(forcedPitch, self._cfg['maximalPitch'])
         self.__rotation = math_utils.clamp(minPitch, maxPitch, self.__rotation + angularShift)
         desiredDistance = self.__getDesiredCameraDistance()
         cameraDirection = self.__getCameraDirection()
@@ -338,7 +323,7 @@ class ArtyCamera(ICamera, CallbackDelayer):
         return (translation, rotation)
 
     def __interpolateStates(self, deltaTime, translation, rotation):
-        lerpParam = math_utils.clamp(0.0, 1.0, deltaTime * self.__cfg['interpolationSpeed'])
+        lerpParam = math_utils.clamp(0.0, 1.0, deltaTime * self._cfg['interpolationSpeed'])
         self.__sourceMatrix = slerp(self.__sourceMatrix, rotation, lerpParam)
         self.__targetMatrix.translation = math_utils.lerp(self.__targetMatrix.translation, translation, lerpParam)
         return (self.__sourceMatrix, self.__targetMatrix)
@@ -376,8 +361,8 @@ class ArtyCamera(ICamera, CallbackDelayer):
     def __readCfg(self, dataSec):
         if not dataSec:
             LOG_WARNING('Invalid section <artyMode/camera> in avatar_input_handler.xml')
-        self.__baseCfg = dict()
-        bcfg = self.__baseCfg
+        self._baseCfg = dict()
+        bcfg = self._baseCfg
         bcfg['keySensitivity'] = readFloat(dataSec, 'keySensitivity', 0.005, 10.0, 0.025)
         bcfg['sensitivity'] = readFloat(dataSec, 'sensitivity', 0.005, 10.0, 0.025)
         bcfg['scrollSensitivity'] = readFloat(dataSec, 'scrollSensitivity', 0.005, 10.0, 0.025)
@@ -392,16 +377,16 @@ class ArtyCamera(ICamera, CallbackDelayer):
         ds = Settings.g_instance.userPrefs[Settings.KEY_CONTROL_MODE]
         if ds is not None:
             ds = ds['artyMode/camera']
-        self.__userCfg = dict()
-        ucfg = self.__userCfg
-        ucfg['horzInvert'] = self.settingsCore.getSetting('mouseHorzInvert')
-        ucfg['vertInvert'] = self.settingsCore.getSetting('mouseVertInvert')
+        self._userCfg = dict()
+        ucfg = self._userCfg
+        ucfg['horzInvert'] = False
+        ucfg['vertInvert'] = False
         ucfg['keySensitivity'] = readFloat(ds, 'keySensitivity', 0.0, 10.0, 1.0)
         ucfg['sensitivity'] = readFloat(ds, 'sensitivity', 0.0, 10.0, 1.0)
         ucfg['scrollSensitivity'] = readFloat(ds, 'scrollSensitivity', 0.0, 10.0, 1.0)
         ucfg['camDist'] = readFloat(ds, 'camDist', 0.0, 60.0, 0.0)
-        self.__cfg = dict()
-        cfg = self.__cfg
+        self._cfg = dict()
+        cfg = self._cfg
         cfg['keySensitivity'] = bcfg['keySensitivity']
         cfg['sensitivity'] = bcfg['sensitivity']
         cfg['scrollSensitivity'] = bcfg['scrollSensitivity']
@@ -422,5 +407,5 @@ class ArtyCamera(ICamera, CallbackDelayer):
         dynamicSection = dataSec['dynamics']
         self.__dynamicCfg.readImpulsesConfig(dynamicSection)
         self.__positionOscillator = createOscillatorFromSection(dynamicSection['oscillator'], False)
-        self.__positionNoiseOscillator = createOscillatorFromSection(dynamicSection['randomNoiseOscillatorFlat'], False)
+        self.__positionNoiseOscillator = createOscillatorFromSection(dynamicSection['randomNoiseOscillatorFlat'])
         return

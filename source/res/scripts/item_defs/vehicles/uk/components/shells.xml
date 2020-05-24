@@ -89,7 +89,7 @@
     <isTracer>	true	</isTracer>
     <effects>	smallArmorPiercing	</effects>
     <damage>
-      <armor>	50	</armor>
+      <armor>	60	</armor>
       <devices>	54	</devices>
     </damage>
   </_40mm_SAP>
@@ -104,7 +104,7 @@
     <isTracer>	true	</isTracer>
     <effects>	smallAPCR	</effects>
     <damage>
-      <armor>	50	</armor>
+      <armor>	60	</armor>
       <devices>	54	</devices>
     </damage>
   </_40mm_APHV>
@@ -119,7 +119,7 @@
     <isTracer>	true	</isTracer>
     <effects>	smallHighExplosive	</effects>
     <damage>
-      <armor>	60	</armor>
+      <armor>	75	</armor>
       <devices>	54	</devices>
     </damage>
   </_40mm_Mk2T>
@@ -2283,49 +2283,4 @@
       <devices>	155	</devices>
     </damage>
   </_9.2inch_HE_Mk_19>
-  <_75mm_AP_HV_Mk1_SE20_Gen_5_Lvl_1>
-    <id>	10	</id>
-    <userString>	#gb_vehicles:_75mm_AP_HV_Mk1_SE20_Gen_5_Lvl_1	</userString>
-    <icon>	ap	</icon>
-    <price>	100	</price>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	75	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mediumArmorPiercing	</effects>
-    <damage>
-      <armor>	115	</armor>
-      <devices>	100	</devices>
-    </damage>
-    <notInShop>	True	</notInShop>
-  </_75mm_AP_HV_Mk1_SE20_Gen_5_Lvl_1>
-  <_75mm_AP_HV_Mk1_SE20_Gen_5_Lvl_2>
-    <id>	11	</id>
-    <userString>	#gb_vehicles:_75mm_AP_HV_Mk1_SE20_Gen_5_Lvl_2	</userString>
-    <icon>	ap	</icon>
-    <price>	100	</price>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	75	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mediumArmorPiercing	</effects>
-    <damage>
-      <armor>	125	</armor>
-      <devices>	100	</devices>
-    </damage>
-    <notInShop>	True	</notInShop>
-  </_75mm_AP_HV_Mk1_SE20_Gen_5_Lvl_2>
-  <_77mm_APCBC_Mk8T_SE20_Gen_5_Lvl_3>
-    <id>	13	</id>
-    <userString>	#gb_vehicles:_77mm_APCBC_Mk8T_SE20_Gen_5_Lvl_3	</userString>
-    <icon>	ap	</icon>
-    <price>	150	</price>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	76.2	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mediumArmorPiercing	</effects>
-    <damage>
-      <armor>	150	</armor>
-      <devices>	105	</devices>
-    </damage>
-    <notInShop>	True	</notInShop>
-  </_77mm_APCBC_Mk8T_SE20_Gen_5_Lvl_3>
 </shells.xml>

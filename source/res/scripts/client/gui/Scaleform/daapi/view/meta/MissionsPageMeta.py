@@ -10,9 +10,6 @@ class MissionsPageMeta(View):
     def onTabSelected(self, alias, prefix):
         self._printOverrideError('onTabSelected')
 
-    def onToEventClick(self):
-        self._printOverrideError('onToEventClick')
-
     def onClose(self):
         self._printOverrideError('onClose')
 
@@ -30,9 +27,3 @@ class MissionsPageMeta(View):
 
     def as_setTabsCounterDataS(self, data):
         return self.flashObject.as_setTabsCounterData(data) if self._isDAAPIInited() else None
-
-    def as_showBackButtonS(self, label, description):
-        return self.flashObject.as_showBackButton(label, description) if self._isDAAPIInited() else None
-
-    def as_hideBackButtonS(self):
-        return self.flashObject.as_hideBackButton() if self._isDAAPIInited() else None

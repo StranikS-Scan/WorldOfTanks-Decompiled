@@ -5,7 +5,7 @@ from collections import namedtuple
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import ViewTypes, ScopeTemplates
+from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
@@ -17,7 +17,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.app_loader import sf_lobby
 from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_FLAG
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from gui.shared.events import ChannelManagementEvent, PreBattleChannelEvent, checkLoadedView
+from gui.shared.events import ChannelManagementEvent, PreBattleChannelEvent
 from helpers import dependency
 from gui.impl import backport
 from gui.impl.gen import R
@@ -29,8 +29,7 @@ from skeletons.gui.app_loader import IAppLoader
 TOOLTIP_PRB_DATA = namedtuple('TOOLTIP_PRB_DATA', ('tooltipId', 'label'))
 _SQUAD_TYPE_TO_ALIAS = {PREBATTLE_TYPE.EVENT: PREBATTLE_ALIASES.EVENT_SQUAD_WINDOW_PY,
  PREBATTLE_TYPE.SQUAD: PREBATTLE_ALIASES.SQUAD_WINDOW_PY,
- PREBATTLE_TYPE.EPIC: PREBATTLE_ALIASES.EPIC_SQUAD_WINDOW_PY,
- PREBATTLE_TYPE.BOB: PREBATTLE_ALIASES.BOB_SQUAD_WINDOW_PY}
+ PREBATTLE_TYPE.EPIC: PREBATTLE_ALIASES.EPIC_SQUAD_WINDOW_PY}
 _CarouselItemCtx = namedtuple('_CarouselItemCtx', ['label',
  'canClose',
  'isNotified',
@@ -63,7 +62,9 @@ class EventDispatcher(object):
         app = self.app
         if app and app.containerManager:
             app.containerManager.onViewAddedToContainer += self.__onViewAddedToContainer
-            app.containerManager.onViewLoadCanceled += self.__onViewLoadCanceled
+        g_eventBus.addListener(events.TrainingEvent.RETURN_TO_TRAINING_ROOM, self.__returnToTrainingRoom, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(events.TrainingEvent.SHOW_TRAINING_LIST, self.__showTrainingList, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(events.TrainingEvent.SHOW_EPIC_TRAINING_LIST, self.__showEpicTrainingList, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def fini(self):
         self.__setPrebattleDispatcher(None)
@@ -71,7 +72,9 @@ class EventDispatcher(object):
         app = self.app
         if app and app.containerManager:
             app.containerManager.onViewAddedToContainer -= self.__onViewAddedToContainer
-            app.containerManager.onViewLoadCanceled -= self.__onViewLoadCanceled
+        g_eventBus.removeListener(events.TrainingEvent.RETURN_TO_TRAINING_ROOM, self.__returnToTrainingRoom, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(events.TrainingEvent.SHOW_TRAINING_LIST, self.__showTrainingList, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(events.TrainingEvent.SHOW_EPIC_TRAINING_LIST, self.__showEpicTrainingList, scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
     def isTrainingLoaded(self):
@@ -87,16 +90,8 @@ class EventDispatcher(object):
     def loadHangar(self):
         self.__fireLoadEvent(VIEW_ALIAS.LOBBY_HANGAR)
 
-    @checkLoadedView(R.views.lobby.secretEvent.ActionHangarWindow())
-    def loadEventHangar(self):
-        from gui.impl.lobby.secret_event.action_hangar_view import ActionHangarView
-        g_eventBus.handleEvent(events.LoadUnboundViewEvent(R.views.lobby.secretEvent.ActionHangarWindow(), ActionHangarView, ScopeTemplates.DEFAULT_SCOPE), scope=EVENT_BUS_SCOPE.LOBBY)
-
     def loadBattleQueue(self):
         self.__fireLoadEvent(VIEW_ALIAS.BATTLE_QUEUE)
-
-    def loadEventBattleQueue(self):
-        self.__fireLoadEvent(VIEW_ALIAS.EVENT_BATTLE_QUEUE)
 
     def loadTrainingList(self):
         self.addTrainingToCarousel()
@@ -108,7 +103,7 @@ class EventDispatcher(object):
 
     def loadEpicTrainingList(self):
         self.addEpicTrainingToCarousel()
-        self._showEpicTrainingList()
+        self.__showEpicTrainingList()
 
     def loadEpicTrainingRoom(self):
         self.addEpicTrainingToCarousel(False)
@@ -181,11 +176,11 @@ class EventDispatcher(object):
         if isList:
             clientType = SPECIAL_CLIENT_WINDOWS.TRAINING_LIST
             alias = PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY
-            handler = self.__showTrainingList
+            handler = lambda : self.__fireEvent(events.TrainingEvent(events.TrainingEvent.SHOW_TRAINING_LIST))
         else:
             clientType = SPECIAL_CLIENT_WINDOWS.TRAINING_ROOM
             alias = PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY
-            handler = self.__returnToTrainingRoom
+            handler = lambda : self.__fireEvent(events.TrainingEvent(events.TrainingEvent.RETURN_TO_TRAINING_ROOM))
         clientID = channel_num_gen.getClientID4SpecialWindow(clientType)
         if not clientID:
             LOG_ERROR('Client ID not found', 'addTrainingToCarousel')
@@ -198,11 +193,11 @@ class EventDispatcher(object):
         if isList:
             clientType = SPECIAL_CLIENT_WINDOWS.EPIC_TRAINING_LIST
             alias = PREBATTLE_ALIASES.EPICBATTLE_LIST_VIEW_PY
-            handler = self._showEpicTrainingList
+            handler = lambda : self.__fireEvent(events.TrainingEvent(events.TrainingEvent.SHOW_EPIC_TRAINING_LIST))
         else:
             clientType = SPECIAL_CLIENT_WINDOWS.EPIC_TRAINING_ROOM
             alias = PREBATTLE_ALIASES.EPIC_TRAINING_ROOM_VIEW_PY
-            handler = self.__returnToTrainingRoom
+            handler = lambda : self.__fireEvent(events.TrainingEvent(events.TrainingEvent.RETURN_TO_TRAINING_ROOM))
         clientID = channel_num_gen.getClientID4SpecialWindow(clientType)
         if not clientID:
             LOG_ERROR('Client ID not found', 'addEpicTrainingToCarousel')
@@ -344,12 +339,6 @@ class EventDispatcher(object):
                 res = True
         return res
 
-    def showEpicBattlesPrimeTimeWindow(self):
-        g_eventBus.handleEvent(events.LoadViewEvent(alias=EPICBATTLES_ALIASES.EPIC_BATTLES_PRIME_TIME_ALIAS, ctx={}), EVENT_BUS_SCOPE.LOBBY)
-
-    def showRankedPrimeTimeWindow(self):
-        g_eventBus.handleEvent(events.LoadViewEvent(alias=RANKEDBATTLES_ALIASES.RANKED_BATTLE_PRIME_TIME, ctx={}), EVENT_BUS_SCOPE.LOBBY)
-
     def _showUnitProgress(self, prbType, show):
         clientID = channel_num_gen.getClientID4Prebattle(prbType)
         if not clientID:
@@ -366,10 +355,8 @@ class EventDispatcher(object):
     def __showTrainingRoom(self):
         self.__fireLoadEvent(PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY)
 
-    def __returnToTrainingRoom(self):
-        if self.__prbDispatcher is not None:
-            self.__prbDispatcher.doAction()
-        return
+    def __returnToTrainingRoom(self, event=None):
+        self.__prbDispatcher.doAction()
 
     def __showEpicTrainingRoom(self):
         self.__fireLoadEvent(PREBATTLE_ALIASES.EPIC_TRAINING_ROOM_VIEW_PY)
@@ -421,10 +408,10 @@ class EventDispatcher(object):
             self.__prbDispatcher = None
         return
 
-    def __showTrainingList(self):
+    def __showTrainingList(self, event=None):
         self.__fireLoadEvent(PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY)
 
-    def _showEpicTrainingList(self):
+    def __showEpicTrainingList(self, event=None):
         self.__fireLoadEvent(PREBATTLE_ALIASES.EPICBATTLE_LIST_VIEW_PY)
 
     def __getReadyPrbData(self, isReady):
@@ -446,12 +433,6 @@ class EventDispatcher(object):
             self.__loadingEvent = None
         if pyEntity.viewType == ViewTypes.LOBBY_SUB:
             self.updateUI(pyEntity.alias)
-        return
-
-    def __onViewLoadCanceled(self, _, pyEntity):
-        settings = pyEntity.settings
-        if settings is None or settings.event == self.__loadingEvent:
-            self.__loadingEvent = None
         return
 
     def __getLoadedEvent(self):

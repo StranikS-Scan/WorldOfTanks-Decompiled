@@ -81,18 +81,17 @@ class RankedUnavailableTooltip(BlocksTooltipData):
 
     def _packBlocks(self, *args, **kwargs):
         items = super(RankedUnavailableTooltip, self)._packBlocks(*args, **kwargs)
-        hasSuitableVehicles = self.rankedController.hasSuitableVehicles()
         tooltipData = R.strings.tooltips.battleTypes.ranked
         header = backport.text(tooltipData.header())
         body = backport.text(tooltipData.body())
         nextSeason = self.rankedController.getNextSeason()
-        if hasSuitableVehicles:
-            if self.rankedController.isFrozen() and self.rankedController.getCurrentSeason() is not None:
-                additionalInfo = backport.text(tooltipData.body.frozen())
-            elif nextSeason is not None:
-                additionalInfo = backport.text(tooltipData.body.coming(), date=backport.getShortDateFormat(time_utils.makeLocalServerTime(nextSeason.getStartDate())))
-            else:
-                additionalInfo = backport.text(tooltipData.body.disabled())
-            body = '%s\n\n%s' % (body, additionalInfo)
+        if self.rankedController.isFrozen() and self.rankedController.getCurrentSeason() is not None:
+            additionalInfo = backport.text(tooltipData.body.frozen())
+        elif nextSeason is not None:
+            date = backport.getShortDateFormat(time_utils.makeLocalServerTime(nextSeason.getStartDate()))
+            additionalInfo = backport.text(tooltipData.body.coming(), date=date)
+        else:
+            additionalInfo = backport.text(tooltipData.body.disabled())
+        body = '%s\n\n%s' % (body, additionalInfo)
         items.append(formatters.packImageTextBlockData(title=text_styles.middleTitle(header), desc=text_styles.main(body)))
         return items

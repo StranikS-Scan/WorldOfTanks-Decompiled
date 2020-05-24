@@ -2,16 +2,18 @@
 # Embedded file name: scripts/client/notification/actions_handlers.py
 from collections import defaultdict
 import BigWorld
+from CurrentVehicle import g_currentVehicle
 from adisp import process
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import DialogsInterface, makeHtmlString, SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
-from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.battle_results import RequestResultsContext
 from gui.clans.clan_helpers import showAcceptClanInviteDialog
+from gui.customization.constants import CustomizationModes, CustomizationModeSource
 from gui.prb_control import prbInvitesProperty, prbDispatcherProperty
 from gui.ranked_battles import ranked_helpers
 from gui.server_events.events_dispatcher import showPersonalMission, showMissionsBattlePassCommonProgression
@@ -334,9 +336,8 @@ class ShowRankedSeasonCompleteHandler(_ActionHandler):
         seasonID, _, _ = ranked_helpers.getDataFromSeasonTokenQuestID(quest.getID())
         season = self.rankedController.getSeason(seasonID)
         if season is not None:
-            g_eventBus.handleEvent(events.LoadViewEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_SEASON_COMPLETE, ctx={'quest': quest,
-             'awards': data,
-             'season': season}), scope=EVENT_BUS_SCOPE.LOBBY)
+            shared_events.showRankedSeasonCompleteView({'quest': quest,
+             'awards': data})
         return
 
 
@@ -360,6 +361,27 @@ class ShowRankedFinalYearHandler(_ActionHandler):
     def __showFinalAward(self, questID, data):
         points = ranked_helpers.getDataFromFinalTokenQuestID(questID)
         showRankedYeardAwardWindow(data, points)
+
+
+class ShowRankedBattlePageHandler(_ActionHandler):
+    __rankedController = dependency.descriptor(IRankedBattlesController)
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        notification = model.getNotification(self.getNotType(), entityID)
+        savedData = notification.getSavedData()
+        if savedData is not None and isinstance(savedData, dict):
+            ctx = savedData.get('ctx')
+            if ctx is not None and ctx.get('selectedItemID') is not None:
+                self.__rankedController.showRankedBattlePage(ctx)
+        return
 
 
 class ShowBattleResultsHandler(_ShowArenaResultHandler):
@@ -479,7 +501,7 @@ class AcceptPrbInviteHandler(_ActionHandler):
         invite = self.prbInvites.getInvite(entityID)
         state = self.prbDispatcher.getFunctionalState()
         if state.doLeaveToAcceptInvite(invite.type):
-            postActions.append(actions.LeavePrbModalEntity(inviteType=invite.type))
+            postActions.append(actions.LeavePrbModalEntity())
         if invite and invite.anotherPeriphery:
             success = True
             if g_preDefinedHosts.isRoamingPeriphery(invite.peripheryID):
@@ -489,8 +511,8 @@ class AcceptPrbInviteHandler(_ActionHandler):
             postActions.append(actions.DisconnectFromPeriphery())
             postActions.append(actions.ConnectToPeriphery(invite.peripheryID))
             postActions.append(actions.PrbInvitesInit())
-            postActions.append(actions.LeavePrbEntity(inviteType=invite.type))
-        self.prbInvites.acceptInvite(entityID, postActions=postActions)
+            postActions.append(actions.LeavePrbEntity())
+        g_eventBus.handleEvent(events.PrbInvitesEvent(events.PrbInvitesEvent.ACCEPT, inviteID=entityID, postActions=postActions), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 class DeclinePrbInviteHandler(_ActionHandler):
@@ -599,9 +621,35 @@ class OpenCustomizationHandler(_ActionHandler):
         savedData = notification.getSavedData()
         vehicleIntCD = savedData.get('vehicleIntCD')
         vehicle = self.service.getItemByCD(vehicleIntCD)
+
+        def toCustomizationCallback():
+            ctx = self.service.getCtx()
+            if savedData.get('toStyle'):
+                ctx.changeMode(CustomizationModes.STYLED, source=CustomizationModeSource.NOTIFICATION)
+            elif savedData.get('toProjectionDecals'):
+                itemCD = savedData.get('itemIntCD', 0)
+                if ctx.modeId in (CustomizationModes.STYLED, CustomizationModes.EDITABLE_STYLE):
+                    style = ctx.mode.modifiedStyle
+                    goToEditableStyle = False
+                    if style is not None:
+                        item = self.service.getItemByCD(itemCD)
+                        isInstallable = style.descriptor.isItemInstallable(item.descriptor)
+                        goToEditableStyle = style.isEditable and isInstallable
+                    if goToEditableStyle:
+                        ctx.editStyle(style.intCD, source=CustomizationModeSource.NOTIFICATION)
+                    else:
+                        ctx.changeMode(CustomizationModes.CUSTOM, source=CustomizationModeSource.NOTIFICATION)
+                ctx.mode.changeTab(tabId=CustomizationTabs.PROJECTION_DECALS, itemCD=itemCD)
+            return
+
         if vehicle.invID != -1:
-            callback = lambda : self.service.getCtx().switchToStyle if savedData.get('toStyle') else None
-            self.service.showCustomization(vehicle.invID, callback=callback)
+            context = self.service.getCtx()
+            if context is not None and g_currentVehicle.isPresent() and g_currentVehicle.item.intCD == vehicleIntCD and savedData.get('toProjectionDecals'):
+                context.changeModeWithProgressionDecal(itemCD=savedData.get('itemIntCD', 0), scrollToItem=True)
+            else:
+                g_eventBus.handleEvent(events.CustomizationEvent(events.CustomizationEvent.SHOW, ctx={'vehInvID': vehicle.invID,
+                 'callback': toCustomizationCallback}), scope=EVENT_BUS_SCOPE.LOBBY)
+        return
 
 
 class ProlongStyleRent(_ActionHandler):
@@ -623,9 +671,15 @@ class ProlongStyleRent(_ActionHandler):
         styleIntCD = savedData.get('styleIntCD')
         vehicle = self.service.getItemByCD(vehicleIntCD)
         style = self.service.getItemByCD(styleIntCD)
+
+        def prolongRentCallback():
+            ctx = self.service.getCtx()
+            ctx.changeMode(CustomizationModes.STYLED)
+            ctx.mode.prolongRent(style)
+
         if vehicle.invID != -1:
-            callback = lambda : self.service.getCtx().prolongStyleRent(style)
-            self.service.showCustomization(vehicle.invID, callback)
+            g_eventBus.handleEvent(events.CustomizationEvent(events.CustomizationEvent.SHOW, ctx={'vehInvID': vehicle.invID,
+             'callback': prolongRentCallback}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 class _OpenNotrecruitedHandler(_NavigationDisabledActionHandler):
@@ -720,7 +774,6 @@ class _OpenBattlePassProgressionView(_NavigationDisabledActionHandler):
     def getActions(cls):
         pass
 
-    @shared_events.leaveEventMode
     def doAction(self, model, entityID, action):
         showMissionsBattlePassCommonProgression()
 
@@ -737,6 +790,7 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  SecurityLinkHandler,
  ShowRankedSeasonCompleteHandler,
  ShowRankedFinalYearHandler,
+ ShowRankedBattlePageHandler,
  _ShowClanAppsHandler,
  _ShowClanInvitesHandler,
  _AcceptClanAppHandler,

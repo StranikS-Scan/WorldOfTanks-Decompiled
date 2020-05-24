@@ -3,9 +3,10 @@
 from __future__ import absolute_import
 import logging
 from shared_utils import first
+import BigWorld
 from bootcamp.Bootcamp import g_bootcamp
 from bootcamp.BootcampConstants import BATTLE_STATS_RESULT_FIELDS, BATTLE_STATS_ICONS
-from constants import PREMIUM_ENTITLEMENTS
+from constants import PREMIUM_ENTITLEMENTS, SPA_ATTRS
 from gui import makeHtmlString
 from gui.impl import backport
 from gui.impl.gen import R
@@ -163,6 +164,17 @@ class PlayerResultItem(base.StatsItem):
         killerName = makeString('#bootcamp:' + killerName)
         ctx['killer'] = killerName
         return makeHtmlString('html_templates:bootcamp/player_status', 'killed', ctx=ctx)
+
+
+class VideoButtonItem(base.StatsItem):
+    __slots__ = ()
+
+    def _convert(self, record, reusable):
+        player = BigWorld.player()
+        teamResult = reusable.getPersonalTeamResult()
+        messageVO = g_bootcamp.getInterludeVideoPageData()
+        return None if player.spaFlags.getFlag(SPA_ATTRS.BOOTCAMP_VIDEO_DISABLED) or teamResult != PLAYER_TEAM_RESULT.WIN or not messageVO else {'label': backport.text(R.strings.bootcamp.battle.result.videoButton()),
+         'image': backport.image(R.images.gui.maps.icons.bootcamp.battle_result.videoButton())}
 
 
 class CreditsBlock(base.StatsBlock):

@@ -146,24 +146,23 @@ _MESSENGER_ERROR_NAMES = {_id:_name for _name, _id in MESSENGER_ERRORS.__dict__.
 AdminChatCommand = namedtuple('AdminChatCommand', ('id', 'name', 'timeout'))
 ADMIN_CHAT_COMMANDS = (AdminChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS._ADMIN_COMMAND_START_ID), name='USERBAN', timeout=30.0), AdminChatCommand(id=_makeID(), name='USERUNBAN', timeout=30.0))
 ADMIN_CHAT_COMMANDS_BY_NAMES = {v.name:v for v in ADMIN_CHAT_COMMANDS}
-BattleChatCommand = namedtuple('BattleChatCommand', ('id', 'name', 'cooldownPeriod', 'msgText', 'vehMarker', 'soundNotification', 'msgOnMarker'))
-BattleChatCommand.__new__.__defaults__ = (0, None, 0, None, None, None, None)
+BattleChatCommand = namedtuple('BattleChatCommand', ('id', 'name', 'cooldownPeriod', 'msgText', 'vehMarker', 'soundNotification'))
 UnitChatCommand = namedtuple('UnitChatCommand', ('id', 'name', 'cooldownPeriod', 'msgText'))
 UNIT_CHAT_COMMANDS = (UnitChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS._UNIT_COMMAND_START_ID), name='ATTENTIONTOCELL', cooldownPeriod=1.0 + _COOLDOWN_OFFSET, msgText='attention_to_cell'),)
 UNIT_CHAT_COMMANDS_BY_NAMES = {v.name:v for v in UNIT_CHAT_COMMANDS}
 BATTLE_CHAT_COMMANDS = (BattleChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS._BATTLE_CHAT_COMMAND_START_ID), name='HELPME', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='help_me', vehMarker='help_me', soundNotification='help_me'),
  BattleChatCommand(id=_makeID(), name='FOLLOWME', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='follow_me', vehMarker='follow_me', soundNotification='follow_me'),
- BattleChatCommand(id=_makeID(), name='ATTACK', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='attack', soundNotification='attack'),
- BattleChatCommand(id=_makeID(), name='BACKTOBASE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='back_to_base', soundNotification='back_to_base'),
+ BattleChatCommand(id=_makeID(), name='ATTACK', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='attack', vehMarker=None, soundNotification='attack'),
+ BattleChatCommand(id=_makeID(), name='BACKTOBASE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='back_to_base', vehMarker=None, soundNotification='back_to_base'),
  BattleChatCommand(id=_makeID(), name='POSITIVE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='positive', vehMarker='positive', soundNotification='positive'),
  BattleChatCommand(id=_makeID(), name='NEGATIVE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='negative', vehMarker='negative', soundNotification='negative'),
- BattleChatCommand(id=_makeID(), name='ATTENTIONTOCELL', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='attention_to_cell'),
- BattleChatCommand(id=_makeID(), name='ATTENTIONTOPOSITION', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='attention_to_position'),
- BattleChatCommand(id=_makeID(), name='ATTENTIONTOOBJECTIVE_ATK', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='attention_to_objective_atk'),
- BattleChatCommand(id=_makeID(), name='ATTENTIONTOOBJECTIVE_DEF', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='attention_to_objective_def'),
- BattleChatCommand(id=_makeID(), name='ATTENTIONTOBASE_ATK', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='attention_to_base_atk'),
- BattleChatCommand(id=_makeID(), name='ATTENTIONTOBASE_DEF', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='attention_to_base_def'),
- BattleChatCommand(id=_makeID(), name='SPG_AIM_AREA', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='spg_aim_area'),
+ BattleChatCommand(id=_makeID(), name='ATTENTIONTOCELL', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='attention_to_cell', vehMarker=None, soundNotification=None),
+ BattleChatCommand(id=_makeID(), name='ATTENTIONTOPOSITION', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='attention_to_position', vehMarker=None, soundNotification=None),
+ BattleChatCommand(id=_makeID(), name='ATTENTIONTOOBJECTIVE_ATK', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='attention_to_objective_atk', vehMarker=None, soundNotification=None),
+ BattleChatCommand(id=_makeID(), name='ATTENTIONTOOBJECTIVE_DEF', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='attention_to_objective_def', vehMarker=None, soundNotification=None),
+ BattleChatCommand(id=_makeID(), name='ATTENTIONTOBASE_ATK', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='attention_to_base_atk', vehMarker=None, soundNotification=None),
+ BattleChatCommand(id=_makeID(), name='ATTENTIONTOBASE_DEF', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='attention_to_base_def', vehMarker=None, soundNotification=None),
+ BattleChatCommand(id=_makeID(), name='SPG_AIM_AREA', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='spg_aim_area', vehMarker=None, soundNotification=None),
  BattleChatCommand(id=_makeID(), name='ATTACKENEMY', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='attack_enemy', vehMarker='attack', soundNotification='attack_the_enemy'),
  BattleChatCommand(id=_makeID(), name='TURNBACK', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='turn_back', vehMarker='turn_back', soundNotification='turn_back'),
  BattleChatCommand(id=_makeID(), name='HELPMEEX', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='help_me_ex', vehMarker='help_me_ex', soundNotification='help_me_ex'),
@@ -171,32 +170,18 @@ BATTLE_CHAT_COMMANDS = (BattleChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS.
  BattleChatCommand(id=_makeID(), name='RELOADINGGUN', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='reloading_gun', vehMarker='reloading_gun', soundNotification='reloading_gun'),
  BattleChatCommand(id=_makeID(), name='STOP', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='stop', vehMarker='stop', soundNotification='stop'),
  BattleChatCommand(id=_makeID(), name='RELOADING_CASSETE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='reloading_cassette', vehMarker='reloading_gun', soundNotification='reloading_gun'),
- BattleChatCommand(id=_makeID(), name='RELOADING_READY', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='reloading_ready'),
- BattleChatCommand(id=_makeID(), name='RELOADING_READY_CASSETE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='reloading_ready_cassette'),
- BattleChatCommand(id=_makeID(), name='RELOADING_UNAVAILABLE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='reloading_unavailable'),
- BattleChatCommand(id=_makeID(), name='EPIC_GLOBAL_SAVETANKS_ATK', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='global_msg/atk/save_tanks'),
- BattleChatCommand(id=_makeID(), name='EPIC_GLOBAL_SAVETANKS_DEF', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='global_msg/def/save_tanks'),
- BattleChatCommand(id=_makeID(), name='EPIC_GLOBAL_TIME_ATK', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='global_msg/atk/time'),
- BattleChatCommand(id=_makeID(), name='EPIC_GLOBAL_TIME_DEF', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='global_msg/def/time'),
- BattleChatCommand(id=_makeID(), name='EPIC_GLOBAL_HQ_ATK', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='global_msg/atk/focus_hq'),
- BattleChatCommand(id=_makeID(), name='EPIC_GLOBAL_HQ_DEF', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='global_msg/def/focus_hq'),
- BattleChatCommand(id=_makeID(), name='EPIC_GLOBAL_WEST', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='global_msg/lane/west'),
- BattleChatCommand(id=_makeID(), name='EPIC_GLOBAL_CENTER', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='global_msg/lane/center'),
- BattleChatCommand(id=_makeID(), name='EPIC_GLOBAL_EAST', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='global_msg/lane/east'),
- BattleChatCommand(id=_makeID(), name='EVENT_CHAT_1', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_1', msgOnMarker='event_chat_1'),
- BattleChatCommand(id=_makeID(), name='EVENT_CHAT_2', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_2', msgOnMarker='event_chat_2'),
- BattleChatCommand(id=_makeID(), name='EVENT_CHAT_3', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_3', msgOnMarker='event_chat_3'),
- BattleChatCommand(id=_makeID(), name='EVENT_CHAT_4', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_4', msgOnMarker='event_chat_4'),
- BattleChatCommand(id=_makeID(), name='EVENT_CHAT_5', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_5', msgOnMarker='event_chat_5'),
- BattleChatCommand(id=_makeID(), name='EVENT_CHAT_6', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_6', msgOnMarker='event_chat_6'),
- BattleChatCommand(id=_makeID(), name='EVENT_CHAT_7', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_7', msgOnMarker='event_chat_7'),
- BattleChatCommand(id=_makeID(), name='EVENT_CHAT_1_EX', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_1_ex', msgOnMarker='event_chat_1'),
- BattleChatCommand(id=_makeID(), name='EVENT_CHAT_2_EX', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_2_ex', msgOnMarker='event_chat_2'),
- BattleChatCommand(id=_makeID(), name='EVENT_CHAT_3_EX', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_3_ex', msgOnMarker='event_chat_3'),
- BattleChatCommand(id=_makeID(), name='EVENT_CHAT_4_EX', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_4_ex', msgOnMarker='event_chat_4'),
- BattleChatCommand(id=_makeID(), name='EVENT_CHAT_5_EX', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_5_ex', msgOnMarker='event_chat_5'),
- BattleChatCommand(id=_makeID(), name='EVENT_CHAT_6_EX', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_6_ex', msgOnMarker='event_chat_6'),
- BattleChatCommand(id=_makeID(), name='EVENT_CHAT_7_EX', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_7_ex', msgOnMarker='event_chat_7'))
+ BattleChatCommand(id=_makeID(), name='RELOADING_READY', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='reloading_ready', vehMarker=None, soundNotification=None),
+ BattleChatCommand(id=_makeID(), name='RELOADING_READY_CASSETE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='reloading_ready_cassette', vehMarker=None, soundNotification=None),
+ BattleChatCommand(id=_makeID(), name='RELOADING_UNAVAILABLE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='reloading_unavailable', vehMarker=None, soundNotification=None),
+ BattleChatCommand(id=_makeID(), name='EPIC_GLOBAL_SAVETANKS_ATK', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='global_msg/atk/save_tanks', vehMarker=None, soundNotification=None),
+ BattleChatCommand(id=_makeID(), name='EPIC_GLOBAL_SAVETANKS_DEF', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='global_msg/def/save_tanks', vehMarker=None, soundNotification=None),
+ BattleChatCommand(id=_makeID(), name='EPIC_GLOBAL_TIME_ATK', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='global_msg/atk/time', vehMarker=None, soundNotification=None),
+ BattleChatCommand(id=_makeID(), name='EPIC_GLOBAL_TIME_DEF', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='global_msg/def/time', vehMarker=None, soundNotification=None),
+ BattleChatCommand(id=_makeID(), name='EPIC_GLOBAL_HQ_ATK', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='global_msg/atk/focus_hq', vehMarker=None, soundNotification=None),
+ BattleChatCommand(id=_makeID(), name='EPIC_GLOBAL_HQ_DEF', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='global_msg/def/focus_hq', vehMarker=None, soundNotification=None),
+ BattleChatCommand(id=_makeID(), name='EPIC_GLOBAL_WEST', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='global_msg/lane/west', vehMarker=None, soundNotification=None),
+ BattleChatCommand(id=_makeID(), name='EPIC_GLOBAL_CENTER', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='global_msg/lane/center', vehMarker=None, soundNotification=None),
+ BattleChatCommand(id=_makeID(), name='EPIC_GLOBAL_EAST', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='global_msg/lane/east', vehMarker=None, soundNotification=None))
 BATTLE_CHAT_COMMANDS_BY_NAMES = {v.name:v for v in BATTLE_CHAT_COMMANDS}
 
 class MUC_SERVICE_TYPE(object):

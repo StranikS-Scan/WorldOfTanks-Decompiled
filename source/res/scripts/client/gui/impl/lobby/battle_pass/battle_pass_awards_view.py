@@ -2,17 +2,18 @@
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/battle_pass_awards_view.py
 import SoundGroups
 from battle_pass_common import BattlePassState, BattlePassRewardReason
-from frameworks.wulf import ViewSettings, Array
+from frameworks.wulf import ViewSettings, Array, WindowFlags, ViewFlags
 from gui.battle_pass.battle_pass_award import BattlePassAwardsManager
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData, finalAwardsInjection
 from gui.battle_pass.sounds import BattlePassSounds
+from gui.battle_pass.battle_pass_helpers import BattlePassProgressionSubTabs
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_awards_view_model import BattlePassAwardsViewModel
 from gui.impl.pub import ViewImpl
+from gui.impl.pub.lobby_window import LobbyWindow
 from gui.server_events.events_dispatcher import showMissionsBattlePassCommonProgression
-from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE, event_dispatcher
-from gui.shared.event_dispatcher import showBattlePassBuyWindow
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
 from shared_utils import first
@@ -22,10 +23,10 @@ class BattlePassAwardsView(ViewImpl):
     __slots__ = ('__tooltipItems', '__closeCallback')
     __battlePassController = dependency.descriptor(IBattlePassController)
 
-    def __init__(self, layoutID, wsFlags, viewModelClazz=BattlePassAwardsViewModel, *args, **kwargs):
+    def __init__(self, layoutID, wsFlags, *args, **kwargs):
         settings = ViewSettings(layoutID)
         settings.flags = wsFlags
-        settings.model = viewModelClazz()
+        settings.model = BattlePassAwardsViewModel()
         settings.args = args
         settings.kwargs = kwargs
         self.__tooltipItems = {}
@@ -105,13 +106,8 @@ class BattlePassAwardsView(ViewImpl):
         return
 
     def _onBuyClick(self):
+        showMissionsBattlePassCommonProgression(BattlePassProgressionSubTabs.BUY_TAB)
         self.destroyWindow()
-        self.__showBuyWindow()
-
-    @event_dispatcher.leaveEventMode
-    def __showBuyWindow(self):
-        showMissionsBattlePassCommonProgression()
-        showBattlePassBuyWindow()
 
     def __setAwards(self, bonuses, isPremiumPurchase, isFinalReward, isPostProgression):
         rewards = BattlePassAwardsManager.composeBonuses(bonuses)
@@ -131,8 +127,9 @@ class BattlePassAwardsView(ViewImpl):
                     packBonusModelAndTooltipData([rewards.pop(1)], self.viewModel.mainRewards, self.__tooltipItems)
                     packBonusModelAndTooltipData(rewards[:2], self.viewModel.mainRewards, self.__tooltipItems)
                 rewards = rewards[2:]
-        elif not isPremiumPurchase and not isPostProgression:
-            packBonusModelAndTooltipData([rewards.pop(0)], self.viewModel.mainRewards, self.__tooltipItems)
+        elif not isPremiumPurchase:
+            if not isPostProgression or rewards[0].getName() == 'customizations':
+                packBonusModelAndTooltipData([rewards.pop(0)], self.viewModel.mainRewards, self.__tooltipItems)
         packBonusModelAndTooltipData(rewards, self.viewModel.additionalRewards, self.__tooltipItems)
 
     def __addBadgeInfo(self):
@@ -152,3 +149,11 @@ class BattlePassAwardsView(ViewImpl):
     def __removeListeners(self):
         model = self.viewModel
         model.onBuyClick -= self._onBuyClick
+
+
+class BattlePassAwardWindow(LobbyWindow):
+    __slots__ = ()
+
+    def __init__(self, bonuses, data):
+        super(BattlePassAwardWindow, self).__init__(content=BattlePassAwardsView(R.views.lobby.battle_pass.BattlePassAwardsView(), wsFlags=ViewFlags.OVERLAY_VIEW, bonuses=bonuses, data=data), wndFlags=WindowFlags.OVERLAY, decorator=None)
+        return

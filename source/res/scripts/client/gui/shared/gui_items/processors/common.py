@@ -3,6 +3,9 @@
 import logging
 import BigWorld
 from constants import EMPTY_GEOMETRY_ID
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from items import makeIntCompactDescrByID
+from items.components.c11n_constants import CustomizationType, SeasonType
 from skeletons.gui.shared import IItemsCache
 from gui import SystemMessages
 from gui.impl.gen import R
@@ -15,6 +18,7 @@ from gui.shared.gui_items.processors import Processor, makeError, makeSuccess, m
 from gui.shared.money import Money, Currency
 from messenger import g_settings
 from helpers import dependency
+from items.customizations import isEditedStyle, CustomizationOutfit
 from skeletons.gui.game_control import IVehicleComparisonBasket
 _logger = logging.getLogger(__name__)
 
@@ -150,22 +154,16 @@ class OutfitApplier(Processor):
 
     def _request(self, callback):
         _logger.debug('Make server request to put on outfit on vehicle %s, season %s', self.vehicle.invID, self.season)
-        BigWorld.player().shop.buyAndEquipOutfit(self.vehicle.invID, self.season, self.outfit.pack().makeCompDescr(), lambda code: self._response(code, callback))
-
-
-class StyleApplier(Processor):
-
-    def __init__(self, vehicle, style=None):
-        super(StyleApplier, self).__init__()
-        self.vehicle = vehicle
-        self.style = style
-
-    def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('customization/{}'.format(errStr or 'server_error'))
-
-    def _request(self, callback):
-        _logger.debug('Make server request to put on style on vehicle %s', self.vehicle.invID)
-        BigWorld.player().shop.buyAndEquipStyle(self.vehicle.invID, self.style.id if self.style else 0, lambda code: self._response(code, callback))
+        component = self.outfit.pack()
+        if self.season == SeasonType.ALL:
+            component = CustomizationOutfit()
+            component.styleId = self.outfit.id
+        elif component.styleId and isEditedStyle(component):
+            intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, component.styleId)
+            style = self.itemsCache.items.getItemByCD(intCD)
+            baseComponent = style.getOutfit(self.season, self.vehicle.descriptor.makeCompactDescr())
+            component = component.getDiff(baseComponent.pack())
+        BigWorld.player().shop.buyAndEquipOutfit(self.vehicle.invID, self.season, component.makeCompDescr(), lambda code: self._response(code, callback))
 
 
 class CustomizationsBuyer(Processor):
@@ -191,16 +189,23 @@ class CustomizationsBuyer(Processor):
         return buyPrice * self.count
 
     def _getMsgCtx(self):
-        return {'itemType': self.item.userType,
+        styleItemType = backport.text(R.strings.item_types.customization.style())
+        return {'itemType': styleItemType if self.item.itemTypeID == GUI_ITEM_TYPE.STYLE else self.item.userType,
          'itemName': self.item.userName,
          'count': backport.getIntegralFormat(int(self.count)),
          'money': formatPrice(self._getTotalPrice())}
 
     def _successHandler(self, code, ctx=None):
         currency = self.item.buyPrices.itemPrice.price.getCurrency(byWeight=True)
-        messageType = MESSENGER.SERVICECHANNELMESSAGES_SYSMSG_CUSTOMIZATIONS_BUY
         sysMsgType = CURRENCY_TO_SM_TYPE.get(currency, SM_TYPE.PurchaseForGold)
-        SystemMessages.pushI18nMessage(messageType, type=sysMsgType, **self._getMsgCtx())
+        msgCtx = self._getMsgCtx()
+        if self.count == 1:
+            msg = backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.customization.buyOne(), **msgCtx)
+        else:
+            msgCtx = {'items': backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.customization.item(), **msgCtx) + '.',
+             'money': msgCtx['money']}
+            msg = backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.customization.buyMany(), **msgCtx)
+        SystemMessages.pushMessage(msg, type=sysMsgType)
         return makeSuccess(auxData=ctx)
 
 
@@ -222,20 +227,25 @@ class CustomizationsSeller(Processor):
         return sellPrice * self.count
 
     def _getMsgCtx(self):
-        return {'itemType': self.item.userType,
+        styleItemType = backport.text(R.strings.item_types.customization.style())
+        return {'itemType': styleItemType if self.item.itemTypeID == GUI_ITEM_TYPE.STYLE else self.item.userType,
          'itemName': self.item.userName,
          'count': backport.getIntegralFormat(int(self.count)),
          'money': formatPrice(self._getTotalPrice())}
 
     def _successHandler(self, code, ctx=None):
         messageType = MESSENGER.SERVICECHANNELMESSAGES_SYSMSG_CUSTOMIZATIONS_SELL
-        SystemMessages.pushI18nMessage(messageType, type=SM_TYPE.Selling, **self._getMsgCtx())
+        if ctx is not None and 'count' in ctx:
+            self.count = ctx['count']
+        if self.count > 0:
+            SystemMessages.pushI18nMessage(messageType, type=SM_TYPE.Selling, **self._getMsgCtx())
         return makeSuccess(auxData=ctx)
 
     def _request(self, callback):
-        invID = self.vehicle.invID if self.vehicle else 0
-        _logger.debug('Make server request to sell customizations on vehicle %s, item %s, count %s', invID, self.item, self.count)
-        BigWorld.player().shop.sellCustomizations(invID, self.item.intCD, self.count, lambda code: self._response(code, callback))
+        vehicleCD = self.vehicle.intCD if self.vehicle is not None else 0
+        _logger.debug('Make server request to sell customizations on vehicle %s, item %s, count %s', vehicleCD, self.item, self.count)
+        BigWorld.player().shop.sellCustomizations(vehicleCD, self.item.intCD, self.count, lambda code, ctx={}: self._response(code, callback, ctx=ctx))
+        return
 
 
 class BadgesSelector(Processor):

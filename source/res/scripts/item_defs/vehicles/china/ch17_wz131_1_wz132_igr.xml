@@ -1058,8 +1058,8 @@
         <slot>
           <slotType>	player	</slotType>
           <slotId>	33000	</slotId>
-          <rayStart>	-1.05035 0.218173 -0.435968	</rayStart>
-          <rayEnd>	-0.997167 0.203771 -0.425963	</rayEnd>
+          <rayStart>	-1.05136 0.216527 -0.432998	</rayStart>
+          <rayEnd>	-0.99818 0.202126 -0.422992	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
@@ -1068,8 +1068,8 @@
         <slot>
           <slotType>	player	</slotType>
           <slotId>	33001	</slotId>
-          <rayStart>	1.12253 0.237718 -0.449548	</rayStart>
-          <rayEnd>	0.924987 0.184226 -0.412383	</rayEnd>
+          <rayStart>	1.05136 0.216527 -0.432998	</rayStart>
+          <rayEnd>	0.99818 0.202126 -0.422992	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
@@ -1104,36 +1104,15 @@
       <chassis>
         <Chassis_Ch17_WZ131_1_WZ132_2_IGR>
           <grounds>
-            <ground>
-              <medium>
-                <rollingFriction>	0.0483	</rollingFriction>
-              </medium>
-            </ground>
-            <sand>
-              <medium>
-                <rollingFriction>	0.0483	</rollingFriction>
-              </medium>
-            </sand>
-            <wood>
-              <medium>
-                <rollingFriction>	0.0483	</rollingFriction>
-              </medium>
-            </wood>
-            <snow>
-              <medium>
-                <rollingFriction>	0.0483	</rollingFriction>
-              </medium>
-            </snow>
-            <stone>
-              <medium>
-                <rollingFriction>	0.0483	</rollingFriction>
-              </medium>
-            </stone>
-            <metal>
-              <medium>
-                <rollingFriction>	0.0483	</rollingFriction>
-              </medium>
-            </metal>
+            <soft>
+              <rollingFriction>	0.10465	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.0483	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.04025	</rollingFriction>
+            </firm>
           </grounds>
         </Chassis_Ch17_WZ131_1_WZ132_2_IGR>
       </chassis>

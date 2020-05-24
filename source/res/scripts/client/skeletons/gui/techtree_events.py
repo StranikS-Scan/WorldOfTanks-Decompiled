@@ -16,7 +16,7 @@ class ITechTreeEventsListener(object):
     def actions(self):
         raise NotImplementedError
 
-    def getUserName(self):
+    def getUserName(self, actionID):
         raise NotImplementedError
 
     def getVehicles(self, nationID=None):
@@ -25,14 +25,17 @@ class ITechTreeEventsListener(object):
     def setNationViewed(self, nationID):
         raise NotImplementedError
 
-    def getNations(self, unviewed=False):
+    def getNations(self, unviewed=False, actionID=None):
         raise NotImplementedError
 
-    def getTimeTillEnd(self):
+    def getTimeTillEnd(self, actionID):
         raise NotImplementedError
 
-    def getFinishTime(self):
+    def getFinishTime(self, actionID):
         raise NotImplementedError
 
     def hasActiveAction(self, vehicleCD, nationID=None):
+        raise NotImplementedError
+
+    def getActiveAction(self, vehicleCD=None, nationID=None):
         raise NotImplementedError

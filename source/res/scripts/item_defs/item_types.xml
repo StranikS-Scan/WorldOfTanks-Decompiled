@@ -85,8 +85,6 @@
       <special></special>
       <disabledInRoaming></disabledInRoaming>
       <event_battles></event_battles>
-      <event_premium_vehicle></event_premium_vehicle>
-      <event_not_elite_vehicle></event_not_elite_vehicle>
       <fallout></fallout>
       <epic_battles></epic_battles>
       <bob></bob>
@@ -104,7 +102,6 @@
       <siegeMode></siegeMode>
       <autoSiege></autoSiege>
       <lockCrew></lockCrew>
-      <lockCrewSkills></lockCrewSkills>
       <lockOutfit></lockOutfit>
       <wheeledVehicle></wheeledVehicle>
       <burnout></burnout>
@@ -220,21 +217,18 @@
       <premium_equipment></premium_equipment>
       <builtin></builtin>
       <trophyUpgraded></trophyUpgraded>
-      <eventItem></eventItem>
-      <eventBuff></eventBuff>
-      <event_battles></event_battles>
-      <hpRepairAndCrewHeal></hpRepairAndCrewHeal>
-      <resurrect></resurrect>
-      <instantReload></instantReload>
-      <superShell></superShell>
     </tags>
   </equipment>
   <customizationItem>
     <userString>	#item_types:customizationItem/name	</userString>
     <description>	#item_types:customizationItem/name	</description>
     <tags>
+      <fullRGB></fullRGB>
       <notInShop></notInShop>
       <vehicleBound></vehicleBound>
+      <nationalEmblem></nationalEmblem>
+      <addNationalEmblem></addNationalEmblem>
+      <styleOnly></styleOnly>
       <locked></locked>
       <levelBasedPrice></levelBasedPrice>
       <IGR></IGR>
@@ -260,6 +254,15 @@
       <preferred_formfactor_rect1x3></preferred_formfactor_rect1x3>
       <preferred_formfactor_rect1x4></preferred_formfactor_rect1x4>
       <preferred_formfactor_rect1x6></preferred_formfactor_rect1x6>
+      <unified_square_front_matching_tag></unified_square_front_matching_tag>
+      <unified_square_left_matching_tag></unified_square_left_matching_tag>
+      <unified_square_right_matching_tag></unified_square_right_matching_tag>
+      <unified_rect_front_matching_tag></unified_rect_front_matching_tag>
+      <unified_rect_left_matching_tag></unified_rect_left_matching_tag>
+      <unified_rect_right_matching_tag></unified_rect_right_matching_tag>
+      <unified_rect_large_matching_tag></unified_rect_large_matching_tag>
+      <hidden_for_user></hidden_for_user>
+      <progression_required></progression_required>
       <NY2018_style></NY2018_style>
       <NY2019_style></NY2019_style>
       <NY2020_style></NY2020_style>
@@ -268,11 +271,6 @@
       <Kursk_battle></Kursk_battle>
       <Halloween></Halloween>
       <offspringArenaMusic></offspringArenaMusic>
-      <position_top></position_top>
-      <position_left></position_left>
-      <position_right></position_right>
-      <position_front></position_front>
-      <position_back></position_back>
     </tags>
   </customizationItem>
   <crewSkin>

@@ -4,14 +4,14 @@ import logging
 import time
 from math import ceil
 from constants import PremiumConfigs
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyPremiumUrl
 from gui.impl.gen import R
 from gui.impl.lobby.premacc.piggybank_base import PiggyBankBaseView, PiggyBankConstants
 from gui.impl.lobby.premacc.premacc_helpers import toPercents
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.impl.gen.view_models.views.lobby.premacc.piggybank_model import PiggybankModel
 from frameworks.wulf import ViewFlags, ViewSettings
-from gui.shared import event_dispatcher
-from gui.shared.event_dispatcher import showTankPremiumAboutPage
+from gui.shared.event_dispatcher import showTankPremiumAboutPage, showShop
 from gui.shared.utils.scheduled_notifications import _Notifier
 from helpers import time_utils
 _logger = logging.getLogger(__name__)
@@ -43,7 +43,7 @@ class PiggyBankView(PiggyBankBaseView):
         super(PiggyBankView, self).__init__(settings)
 
     def onPremAccProlong(self, _=None):
-        event_dispatcher.showPremiumDialog()
+        showShop(getBuyPremiumUrl())
 
     def onBackBtnClicked(self, _=None):
         self.destroyWindow()

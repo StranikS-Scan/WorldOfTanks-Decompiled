@@ -13,10 +13,9 @@ class EpicVehiclesWatcher(BaseVehiclesWatcher):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def _getUnsuitableVehicles(self):
+    def _getUnsuitableVehicles(self, onClear=False):
         config = self.lobbyContext.getServerSettings().epicBattles
         vehLevels = list(set(range(MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL + 1)) - set(config.validVehicleLevels))
         vehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(vehLevels)).itervalues()
         eventVehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.EVENT_BATTLE).itervalues()
-        bobVehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.BOB_BATTLE).itervalues()
-        return chain(vehs, eventVehs, bobVehs)
+        return chain(vehs, eventVehs)

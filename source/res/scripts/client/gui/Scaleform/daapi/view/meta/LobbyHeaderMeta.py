@@ -19,8 +19,8 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
     def showExchangeXPWindow(self):
         self._printOverrideError('showExchangeXPWindow')
 
-    def showPremiumDialog(self):
-        self._printOverrideError('showPremiumDialog')
+    def showPremiumView(self):
+        self._printOverrideError('showPremiumView')
 
     def onPremShopClick(self):
         self._printOverrideError('onPremShopClick')

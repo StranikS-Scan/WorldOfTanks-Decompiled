@@ -2,11 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/confirm_customization_item_dialog.py
 from debug_utils import LOG_ERROR
 from PlayerEvents import g_playerEvents
-from gui import DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.meta.ConfirmItemWindowMeta import ConfirmItemWindowMeta
-from gui.Scaleform.daapi.view.dialogs.confirm_customization_item_dialog_meta import Types
-from gui.Scaleform.genConsts.CUSTOMIZATION_DIALOGS import CUSTOMIZATION_DIALOGS
 from gui.shared.formatters import getMoneyVO
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
@@ -48,22 +45,13 @@ class ConfirmCustomizationItemDialog(ConfirmItemWindowMeta):
         self.destroy()
 
     def submit(self, count, currency):
-        item = self.meta.getItem()
-        if self.meta.type == Types.BUY and item.isRentable:
-
-            def callback(isOk):
-                if isOk:
-                    self.proceedSubmit(count, currency)
-
-            DialogsInterface.showI18nConfirmDialog(CUSTOMIZATION_DIALOGS.CUSTOMIZATION_INSTALL_BOUND_RIGHTCLICK_NOTIFICATION, callback)
-        else:
-            self.proceedSubmit(count, currency)
+        self.proceedSubmit(count, currency)
 
     def proceedSubmit(self, count, currency):
         item = self.meta.getItem()
         stepFactor = self.meta.getStepFactor(item)
         count = count / stepFactor
-        self.meta.submit(item, count, currency)
+        self.meta.submit(item, count, currency, self.meta.vehicle)
         self._callHandler(True, item, count, currency)
         self.destroy()
 
@@ -89,7 +77,12 @@ class ConfirmCustomizationItemDialog(ConfirmItemWindowMeta):
             countLabel = ''
             if item.isRentable and item.rentCount:
                 countLabel = VEHICLE_CUSTOMIZATION.CONFIRMITEMDIALOG_COUNTLABEL
-            smallSlotVO = {'itemIcon': item.icon,
+            if item.isProgressive and self.meta.vehicle is not None:
+                progressionLevel = item.getLatestOpenedProgressionLevel(self.meta.vehicle)
+                icon = item.iconByProgressionLevel(progressionLevel)
+            else:
+                icon = item.icon
+            smallSlotVO = {'itemIcon': icon,
              'isBgVisible': False,
              'isFrameVisible': True,
              'iconWidth': iconWidth,

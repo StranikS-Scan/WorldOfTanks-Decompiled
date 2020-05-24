@@ -4,7 +4,7 @@ import time
 from gui.impl.backport import text
 from helpers import time_utils
 
-def getTillTimeStringByRClass(timeValue, stringRClass, isRoundUp=False, removeLeadingZeros=False):
+def getTillTimeStringByRClass(timeValue, stringRClass, isRoundUp=False, removeLeadingZeros=True):
     gmtime = time.gmtime(timeValue)
     if isRoundUp and gmtime.tm_sec > 0:
         timeValue += time_utils.ONE_MINUTE

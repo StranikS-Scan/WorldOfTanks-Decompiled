@@ -8,17 +8,23 @@ MAX_CAMOUFLAGE_PATTERN_SIZE = 5
 MAX_ITEMS_FOR_BUY_OPERATION = 100
 HIDDEN_CAMOUFLAGE_ID = 1
 TOTAL_COUNTER_TYPE_DESCR = -1
-MAX_PROJECTION_DECALS = 6
+MAX_PROJECTION_DECALS = 9
 MAX_SEQUENCES = 5
 MAX_ATTACHMENTS = 5
-MAX_USERS_PROJECTION_DECALS = 2
-MAX_PROJECTION_DECALS_PER_AREA = 2
+MAX_USERS_PROJECTION_DECALS = 3
+MAX_PROJECTION_DECALS_PER_AREA = 3
 PROJECTION_DECALS_SCALE_ID_VALUES = (0, 1, 2, 3)
 DEFAULT_DECAL_SCALE_FACTORS = (0.6, 0.8, 1.0)
 DEFAULT_SCALE_FACTOR_ID = 3
 DEFAULT_PALETTE = 0
 DEFAULT_DECAL_CLIP_ANGLE = 0.0
+DEFAULT_DECAL_TINT_COLOR = (255, 255, 255, 255)
 RENT_IS_ALMOST_OVER_VALUE = 3
+EDITABLE_STYLE_STORAGE_DEPTH = 5
+EMPTY_ITEM_ID = 22222
+CUSTOM_STYLE_POOL_ID = 0
+SLOT_DEFAULT_ALLOWED_MODEL = 'default'
+OUTFIT_POOL_EMPTY_STUB = (None, None)
 
 class CustomizationType(object):
     PAINT = 1
@@ -42,16 +48,17 @@ class CustomizationType(object):
      PROJECTION_DECAL,
      PERSONAL_NUMBER,
      FONT}
-    _APPLIED_TO_TYPES = (PAINT,
+    APPLIED_TO_TYPES = (PAINT,
      CAMOUFLAGE,
      DECAL,
      PERSONAL_NUMBER)
-    _SIMPLE_TYPES = (STYLE,
+    SIMPLE_TYPES = (STYLE,
      MODIFICATION,
      PROJECTION_DECAL,
      SEQUENCE,
      ATTACHMENT)
-    _DISMOUNT_TYPE = (PAINT,
+    SIMPLE_OUTFIT_COMPONENT_TYPES = (MODIFICATION, PROJECTION_DECAL)
+    DISMOUNT_TYPE = (PAINT,
      CAMOUFLAGE,
      DECAL,
      PERSONAL_NUMBER,
@@ -69,6 +76,11 @@ class ItemTags(object):
     RARE = 'rare'
     HIDDEN_IN_UI = 'hiddenInUI'
     DIM = 'dim'
+    FULL_RGB = 'fullRGB'
+    NATIONAL_EMBLEM = 'nationalEmblem'
+    STYLE_ONLY = 'styleOnly'
+    PROGRESSION_REQUIRED = 'progression_required'
+    ADD_NATIONAL_EMBLEM = 'addNationalEmblem'
 
 
 class ProjectionDecalDirectionTags(object):
@@ -107,19 +119,8 @@ class ProjectionDecalPreferredTags(object):
      RECT1X6)
 
 
-class ProjectionDecalPositionTags(object):
-    PREFIX = 'position_'
-    TOP = PREFIX + 'top'
-    LEFT = PREFIX + 'left'
-    RIGHT = PREFIX + 'right'
-    FRONT = PREFIX + 'front'
-    BACK = PREFIX + 'back'
-    ALL = (TOP,
-     LEFT,
-     RIGHT,
-     FRONT,
-     BACK)
-
+MATCHING_TAGS_SUFFIX = '_matching_tag'
+HIDDEN_FOR_USER_TAG = 'hidden_for_user'
 
 class ApplyArea(object):
     NONE = 0
@@ -153,7 +154,6 @@ class ApplyArea(object):
     HULL_CAMOUFLAGE_REGIONS = (HULL,)
     HULL_EMBLEM_REGIONS = (HULL, HULL_1)
     HULL_INSCRIPTION_REGIONS = (HULL_2, HULL_3)
-    HULL_PROJECTION_DECAL_REGIONS = (HULL, HULL_1)
     HULL_INSIGNIA_REGIONS = (HULL, HULL_1)
     HULL_PERSONAL_NUMBER_REGIONS = (HULL_2, HULL_3)
     TURRET_REGIONS = (TURRET,
@@ -164,7 +164,6 @@ class ApplyArea(object):
     TURRET_CAMOUFLAGE_REGIONS = (TURRET,)
     TURRET_EMBLEM_REGIONS = (TURRET, TURRET_1)
     TURRET_INSCRIPTION_REGIONS = (TURRET_2, TURRET_3)
-    TURRET_PROJECTION_DECAL_REGIONS = (TURRET, TURRET_1)
     TURRET_INSIGNIA_REGIONS = (TURRET, TURRET_1)
     TURRET_PERSONAL_NUMBER_REGIONS = (TURRET_2, TURRET_3)
     GUN_REGIONS = (GUN,
@@ -175,7 +174,6 @@ class ApplyArea(object):
     GUN_CAMOUFLAGE_REGIONS = (GUN,)
     GUN_EMBLEM_REGIONS = (GUN, GUN_1)
     GUN_INSCRIPTION_REGIONS = (GUN_2, GUN_3)
-    GUN_PROJECTION_DECAL_REGIONS = (GUN, GUN_1)
     GUN_INSIGNIA_REGIONS = (GUN, GUN_1)
     GUN_PERSONAL_NUMBER_REGIONS = (GUN_2, GUN_3)
     RANGE = {HULL,
@@ -204,19 +202,23 @@ class ApplyArea(object):
      GUN_2}
     EMBLEM_REGIONS = HULL_EMBLEM_REGIONS + TURRET_EMBLEM_REGIONS + GUN_EMBLEM_REGIONS
     INSCRIPTION_REGIONS = HULL_INSCRIPTION_REGIONS + TURRET_INSCRIPTION_REGIONS + GUN_INSCRIPTION_REGIONS
-    PROJECTION_DECAL_REGIONS = HULL_PROJECTION_DECAL_REGIONS + TURRET_PROJECTION_DECAL_REGIONS + GUN_PROJECTION_DECAL_REGIONS
     PERSONAL_NUMBER_REGIONS = HULL_PERSONAL_NUMBER_REGIONS + TURRET_PERSONAL_NUMBER_REGIONS + GUN_PERSONAL_NUMBER_REGIONS
+    MODIFICATION_REGIONS = (NONE,)
     PAINT_REGIONS_VALUE = reduce(int.__or__, USER_PAINT_ALLOWED_REGIONS)
     DECAL_REGIONS_VALUE = reduce(int.__or__, DECAL_REGIONS)
     CAMOUFLAGE_REGIONS_VALUE = reduce(int.__or__, CAMOUFLAGE_REGIONS)
     EMBLEM_REGIONS_VALUE = reduce(int.__or__, EMBLEM_REGIONS)
     INSCRIPTION_REGIONS_VALUE = reduce(int.__or__, INSCRIPTION_REGIONS)
-    PROJECTION_DECAL_REGIONS_VALUE = reduce(int.__or__, PROJECTION_DECAL_REGIONS)
     PERSONAL_NUMBER_REGIONS_VALUE = reduce(int.__or__, PERSONAL_NUMBER_REGIONS)
     CHASSIS_REGIONS_VALUE = reduce(int.__or__, CHASSIS_REGIONS)
     GUN_REGIONS_VALUE = reduce(int.__or__, GUN_REGIONS)
     HULL_REGIONS_VALUE = reduce(int.__or__, HULL_REGIONS)
     TURRET_REGIONS_VALUE = reduce(int.__or__, TURRET_REGIONS)
+    RANGE_REGIONS_VALUE = reduce(int.__or__, RANGE)
+
+    @staticmethod
+    def getAppliedCount(appliedTo, appliedRange=RANGE_REGIONS_VALUE):
+        return bin(appliedTo & appliedRange).count('1')
 
 
 class SeasonType(object):
@@ -236,6 +238,7 @@ class SeasonType(object):
      DESERT,
      EVENT)
     COMMON_SEASONS = (WINTER, SUMMER, DESERT)
+    REGULAR = COMMON_SEASONS + (ALL,)
 
     @staticmethod
     def fromArenaKind(arenaKind):
@@ -262,6 +265,7 @@ class ModificationType(object):
 class DecalType(object):
     EMBLEM = 1
     INSCRIPTION = 2
+    ALL = (EMBLEM, INSCRIPTION)
 
 
 DecalTypeNames = {getattr(DecalType, k):k for k in dir(DecalType) if not k.startswith('_')}
@@ -275,10 +279,20 @@ class StyleFlags(object):
 
 class Options:
     NONE = 0
-    MIRRORED = 1
-    RANGE = (NONE, MIRRORED)
-    PROJECTION_DECALS_ALLOWED_OPTIONS = (MIRRORED,)
+    MIRRORED_HORIZONTALLY = 1
+    MIRRORED_VERTICALLY = 2
+    COMBO_MIRRORED = MIRRORED_HORIZONTALLY | MIRRORED_VERTICALLY
+    RANGE = (NONE,
+     MIRRORED_HORIZONTALLY,
+     MIRRORED_VERTICALLY,
+     COMBO_MIRRORED)
+    PROJECTION_DECALS_ALLOWED_OPTIONS = (MIRRORED_HORIZONTALLY, MIRRORED_VERTICALLY, COMBO_MIRRORED)
     PROJECTION_DECALS_ALLOWED_OPTIONS_VALUE = reduce(int.__or__, PROJECTION_DECALS_ALLOWED_OPTIONS)
+
+
+class ImageOptions:
+    NONE = 0
+    FULL_RGB = 1
 
 
 NO_OUTFIT_DATA = ('', StyleFlags.EMPTY)
@@ -289,7 +303,6 @@ C11N_GUN_APPLY_REGIONS = {'GUN': C11N_GUN_REGION,
  'GUN_2': C11N_MASK_REGION}
 CUSTOMIZATION_SLOTS_VEHICLE_PARTS = ('hull', 'chassis', 'turret', 'gun')
 UNBOUND_VEH_KEY = 0
-NUM_ALL_ITEMS_KEY = -1
 
 class CamouflageTilingType(object):
     NONE = 0
@@ -303,3 +316,31 @@ class CamouflageTilingType(object):
 CamouflageTilingType.RANGE = tuple([ getattr(CamouflageTilingType, k) for k in dir(CamouflageTilingType) if not k.startswith('_') and k not in ('RANGE', 'NONE') ])
 CamouflageTilingTypeNames = {getattr(CamouflageTilingType, k):k for k in dir(CamouflageTilingType) if not k.startswith('_') and k not in ('RANGE', 'NONE')}
 CamouflageTilingTypeNameToType = {v:k for k, v in CamouflageTilingTypeNames.iteritems()}
+EASING_TRANSITION_DURATION = 0.8
+
+class SLOT_TYPE_NAMES(object):
+    PAINT = 'paint'
+    CAMOUFLAGE = 'camouflage'
+    INSCRIPTION = 'inscription'
+    EMBLEM = 'player'
+    STYLE = 'style'
+    EFFECT = 'effect'
+    PROJECTION_DECAL = 'projectionDecal'
+    INSIGNIA = 'insignia'
+    FIXED_EMBLEM = 'fixedEmblem'
+    FIXED_INSCRIPTION = 'fixedInscription'
+    FIXED_PROJECTION_DECAL = 'fixedProjectionDecal'
+    EDITABLE_STYLE_DELETABLE = (INSCRIPTION, EMBLEM, PROJECTION_DECAL)
+    DECALS = (INSCRIPTION, EMBLEM)
+    FIXED = (FIXED_EMBLEM, FIXED_INSCRIPTION, FIXED_PROJECTION_DECAL)
+    ALL = (PAINT,
+     CAMOUFLAGE,
+     INSCRIPTION,
+     EMBLEM,
+     STYLE,
+     EFFECT,
+     PROJECTION_DECAL,
+     INSIGNIA,
+     FIXED_EMBLEM,
+     FIXED_INSCRIPTION,
+     FIXED_PROJECTION_DECAL)

@@ -23,7 +23,7 @@ class BadgeLayouts(CONST_CONTAINER):
 
 
 class Badge(GUIItem):
-    __slots__ = ('badgeID', 'data', 'isSelected', 'isAchieved', 'achievedAt', 'group', 'isAchievable')
+    __slots__ = ('badgeID', 'data', 'isSelected', 'isAchieved', 'achievedAt', 'group', 'isAchievable', 'isTemporary')
 
     def __init__(self, data, proxy=None):
         super(Badge, self).__init__(proxy)
@@ -31,6 +31,7 @@ class Badge(GUIItem):
         self.data = data
         self.group = data.get('group')
         self.isAchievable = data.get('achievable', True)
+        self.isTemporary = data.get('temporary', False)
         self.isSelected = False
         self.isAchieved = False
         self.achievedAt = None
@@ -103,7 +104,7 @@ class Badge(GUIItem):
 
     @classmethod
     def getSuffixSmallIconByID(cls, badgeID):
-        return getBadgeIconPath(BADGES_ICONS.X48, badgeID)
+        return getBadgeIconPath(BADGES_ICONS.X32, badgeID)
 
     @classmethod
     def getSmallIconById(cls, badgeID):

@@ -135,7 +135,11 @@ _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'arsonist',
  'bonecrusher',
  'charmed',
- 'even']
+ 'even',
+ 'marksOfMasteryCount1',
+ 'marksOfMasteryCount2',
+ 'marksOfMasteryCount3',
+ 'marksOfMasteryCount4']
 _achievements15x15PopUps = ['tankExpert',
  'tankExpert0',
  'tankExpert1',

@@ -34,6 +34,9 @@ class StorageVehicleFilterPopover(VehiclesFilterPopover):
 class StorageCategoryInHangarView(StorageCategoryInHangarViewMeta):
     _itemsCache = dependency.descriptor(IItemsCache)
 
+    def setActiveState(self, isActive):
+        self.setActive(isActive)
+
     def setActiveTab(self, tabId):
         tabsData = self.__getTabsData()
         if tabId:

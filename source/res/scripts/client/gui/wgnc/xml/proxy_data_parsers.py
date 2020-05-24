@@ -172,6 +172,20 @@ class _ReferralBubbleParser(SectionParser):
         return proxy_data.UpdateRefferalBubbleItem()
 
 
+class _ClanNotificationParser(SectionParser):
+
+    def getTagName(self):
+        pass
+
+    def parse(self, section):
+        alias = section.readString('alias')
+        value = section.readInt('count', 0)
+        isIncrement = section.readBool('isIncrement', True)
+        if alias:
+            return proxy_data.UpdateClanNotificationItem(alias, value, isIncrement)
+        LOG_WARNING('WGNC update_clan_news_counter item has no alias')
+
+
 class _BecomeRecruiterParser(SectionParser):
 
     def getTagName(self):
@@ -209,4 +223,5 @@ class ProxyDataItemParser_v2(_ProxyDataItemsParser):
          _ShowPromoParser(),
          _ReferralBubbleParser(),
          _BecomeRecruiterParser(),
-         _ShowReferralWindowParser()))
+         _ShowReferralWindowParser(),
+         _ClanNotificationParser()))

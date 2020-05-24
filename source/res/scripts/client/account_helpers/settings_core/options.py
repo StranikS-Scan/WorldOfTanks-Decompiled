@@ -1672,7 +1672,6 @@ class KeyboardSetting(ControlSetting):
         key = 'KEY_NONE'
         if value is not None:
             key = getBigworldNameFromKey(getBigworldKey(value))
-        LOG_DEBUG('Settings key command', self.cmd, value, key)
         if self.cmd == 'CMD_VOICECHAT_MUTE' and self.app is not None and self.app.gameInputManager is not None:
             self.app.gameInputManager.updateChatKeyHandlers(value)
         CommandMapping.g_instance.remove(self.cmd)
@@ -1704,8 +1703,7 @@ class KeyboardSettings(SettingsContainer):
      ('vehicle_other', (('showHUD', 'CMD_TOGGLE_GUI'),
        ('showRadialMenu', 'CMD_RADIAL_MENU_SHOW'),
        ('showQuestProgress', 'CMD_QUEST_PROGRESS_SHOW'),
-       ('frontlineSelfDestruction', 'CMD_REQUEST_RECOVERY'),
-       ('event_horn', 'CMD_EVENT_HORN'))),
+       ('frontlineSelfDestruction', 'CMD_REQUEST_RECOVERY'))),
      ('equipment', (('item01', 'CMD_AMMO_CHOICE_1'),
        ('item02', 'CMD_AMMO_CHOICE_2'),
        ('item03', 'CMD_AMMO_CHOICE_3'),

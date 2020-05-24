@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/battleground/BorderVisual.py
-import logging
 import math
 from collections import namedtuple
 import BigWorld
@@ -9,7 +8,6 @@ from epic_constants import SECTOR_EDGE_STATE
 from items import _xml
 from Math import Matrix, Vector3
 import math_utils
-_logger = logging.getLogger(__name__)
 CONFIG_FILE = 'scripts/dynamic_objects.xml'
 BORDER_VISUAL_TAG = 'SectorBorderVisual'
 VisualSetting = namedtuple('VisualSetting', ('modelPath', 'overTerrainHeight', 'modelSettings'))
@@ -53,9 +51,6 @@ class BorderVisual(object):
                 fromPos = BigWorld.player().arena.getClosestPointOnArenaBB(fromPos)
             if not BigWorld.player().arena.isPointInsideArenaBB(toPos):
                 toPos = BigWorld.player().arena.getClosestPointOnArenaBB(toPos)
-            if None in (fromPos, toPos):
-                _logger.warning('Wrong point at arenaBB')
-                return
             self.__direction = toPos - fromPos
             self.__length = self.__direction.length
             self.__direction.normalise()
@@ -91,7 +86,7 @@ class BorderVisual(object):
 
     def destroy(self):
         self.__rootMatrix = None
-        if self.__rootModel and self.__rootModel.inWorld:
+        if self.__rootModel.inWorld:
             BigWorld.player().delModel(self.__rootModel)
         self.__rootModel = None
         self.__attachNodes = None

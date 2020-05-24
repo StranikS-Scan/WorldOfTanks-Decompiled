@@ -10,12 +10,14 @@ from debug_utils import LOG_ERROR, LOG_WARNING
 from constants import IS_EDITOR
 from helpers import dependency
 import Math
+from items.vehicles import getItemByCompactDescr
+from items.components.c11n_constants import CustomizationType, DecalType
 from skeletons.gui.lobby_context import ILobbyContext
 from vehicle_systems import stricted_loading
 from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames, TankNodeNames
 from vehicle_systems.tankStructure import DetachedTurretPartIndexes, DetachedTurretPartNames
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.customization.outfit import Outfit
+from vehicle_outfit.outfit import Outfit
 from VehicleEffects import DamageFromShotDecoder
 import wrapped_options
 if not IS_EDITOR:
@@ -249,10 +251,6 @@ class FixedEmblemStickerPack(StickerPack):
 class EmblemStickerPack(StickerPack):
     _ALLOWED_PART_IDX = (TankPartIndexes.HULL, TankPartIndexes.TURRET, TankPartIndexes.GUN)
 
-    def __init__(self, vDesc, outfit):
-        super(EmblemStickerPack, self).__init__(vDesc, outfit)
-        self._defStickerID = vDesc.type.defaultPlayerEmblemID
-
     def bind(self, componentIdx, componentSlot):
         if not self._isValidComponentIdx(componentIdx):
             return
@@ -261,20 +259,14 @@ class EmblemStickerPack(StickerPack):
             slot = container.slotFor(GUI_ITEM_TYPE.EMBLEM)
             params = self._data[componentIdx]
             slotIdx = len(params)
-            item = slot.getItem(slotIdx)
-            if item is not None:
+            intCD = slot.getItemCD(slotIdx)
+            if intCD:
+                item = getItemByCompactDescr(intCD)
                 stickerParam = self.__convertToParams(item)
-            elif not slot.isLocked(slotIdx):
-                stickerParam = self._getDefaultParams()
             else:
                 stickerParam = None
             params.append(_StickerSlotPair(componentSlot, stickerParam))
             return
-
-    def _getDefaultParams(self):
-        stickerID = self._defStickerID
-        item = items.vehicles.g_cache.customization20().decals.get(stickerID)
-        return None if item is None else _TextureParams(item.texture, '', item.canBeMirrored)
 
     def __convertToParams(self, item):
         return _TextureParams(item.texture, '', item.canBeMirrored)
@@ -302,10 +294,12 @@ class InscriptionStickerPack(StickerPack):
             slot = container.slotFor(GUI_ITEM_TYPE.INSCRIPTION)
             params = self._data[componentIdx]
             slotIdx = len(params)
-            item = slot.getItem(slotIdx)
+            intCD = slot.getItemCD(slotIdx)
             stickerParam = None
-            if item and item.itemTypeID == GUI_ITEM_TYPE.INSCRIPTION:
-                stickerParam = self._convertToParams(item)
+            if intCD:
+                item = getItemByCompactDescr(intCD)
+                if hasattr(item, 'type') and item.type == DecalType.INSCRIPTION:
+                    stickerParam = self._convertToParams(item)
             params.append(_StickerSlotPair(componentSlot, stickerParam))
             return
 
@@ -331,15 +325,18 @@ class PersonalNumStickerPack(StickerPack):
             slot = container.slotFor(GUI_ITEM_TYPE.PERSONAL_NUMBER)
             params = self._data[componentIdx]
             slotIdx = len(params)
-            slotData = slot.getSlotData(slotIdx)
+            component = slot.getComponent(slotIdx)
+            intCD = slot.getItemCD(slotIdx)
             stickerParam = None
-            if slotData.component and slotData.item and slotData.item.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER:
-                stickerParam = self._convertToParams(slotData)
+            if intCD:
+                item = getItemByCompactDescr(intCD)
+                if component and item.itemType == CustomizationType.PERSONAL_NUMBER:
+                    stickerParam = self._convertToParams(item, component)
             params.append(_StickerSlotPair(componentSlot, stickerParam))
             return
 
-    def _convertToParams(self, slotData):
-        return _PersonalNumberTexParams(textureName=slotData.item.fontInfo.texture, textureMap=slotData.item.fontInfo.alphabet, text=slotData.component.number, fontMask=slotData.item.fontInfo.mask, digitsCount=slotData.item.digitsCount)
+    def _convertToParams(self, item, component):
+        return _PersonalNumberTexParams(textureName=item.fontInfo.texture, textureMap=item.fontInfo.alphabet, text=component.number, fontMask=item.fontInfo.mask, digitsCount=item.digitsCount)
 
     def _getStickerSize(self, slot):
         return (slot.size, slot.size * 0.5)
@@ -459,8 +456,9 @@ class InsigniaStickerPack(StickerPack):
             if componentIdx in Insignia.Indexes.ALL:
                 container = self._outfit.getContainer(TankPartIndexes.GUN)
                 slot = container.slotFor(GUI_ITEM_TYPE.INSIGNIA)
-                item = slot.getItem(slotIdx)
-                if item is not None:
+                intCD = slot.getItemCD(slotIdx)
+                if intCD:
+                    item = getItemByCompactDescr(intCD)
                     stickerParam = self._convertToInsignia(item)
                     self._useCustomInsignia = True
                 else:
@@ -468,8 +466,9 @@ class InsigniaStickerPack(StickerPack):
             else:
                 container = self._outfit.getContainer(componentIdx)
                 slot = container.slotFor(GUI_ITEM_TYPE.INSIGNIA)
-                item = slot.getItem(slotIdx)
-                if item is not None:
+                intCD = slot.getItemCD(slotIdx)
+                if intCD:
+                    item = getItemByCompactDescr(intCD)
                     stickerParam = self._convertToCounter(item)
                     self._useOldInsignia = False
                 else:
@@ -592,7 +591,7 @@ class VehicleStickers(object):
         self.__currentInsigniaRank = insigniaRank
         self.__componentNames = [(TankPartNames.HULL, TankPartNames.HULL), (TankPartNames.TURRET, TankPartNames.TURRET), (TankPartNames.GUN, TankNodeNames.GUN_INCLINATION)]
         if outfit is None:
-            outfit = Outfit()
+            outfit = Outfit(vehicleCD=vehicleDesc.makeCompactDescr())
         componentSlots = ((TankPartNames.HULL, vehicleDesc.hull.emblemSlots), (TankPartNames.GUN if self.__showEmblemsOnGun else TankPartNames.TURRET, vehicleDesc.turret.emblemSlots), (TankPartNames.TURRET if self.__showEmblemsOnGun else TankPartNames.GUN, []))
         if len(vehicleDesc.gun.emblemSlots) > 1:
             componentSlots += ((Insignia.Types.DUAL_LEFT, (vehicleDesc.gun.emblemSlots[0],)), (Insignia.Types.DUAL_RIGHT, (vehicleDesc.gun.emblemSlots[1],)))

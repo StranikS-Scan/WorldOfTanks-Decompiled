@@ -371,7 +371,7 @@ class _VehicleInfo(object):
 
 
 class VehicleDetailedInfo(_VehicleInfo):
-    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire', '_isTeamKiller', '_isKilledByTeamKiller', '_rollouts', '_respawns', '_extPublic', '_deathCount', '_equipmentDamageDealt', '_equipmentDamageAssisted', '_xpForAttack', '_xpForAssist', '_xpOther', '_xpPenalty', '_generalID', '_generalLevel', '_frontLevel', '_generalPoints', '_generalPointsPrev', '_frontPoints', '_frontPointsPrev', '_gereralLevelReached', '_frontLevelReached', '_eventGoals', '_generalPointsNoBonus', '_frontPointsNoBonus', '_energyToken')
+    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire', '_isTeamKiller', '_isKilledByTeamKiller', '_rollouts', '_respawns', '_extPublic', '_deathCount', '_equipmentDamageDealt', '_equipmentDamageAssisted', '_xpForAttack', '_xpForAssist', '_xpOther', '_xpPenalty')
 
     def __init__(self, vehicleID, vehicle, player, deathReason=DEATH_REASON_ALIVE):
         super(VehicleDetailedInfo, self).__init__(vehicleID, player, deathReason)
@@ -419,19 +419,6 @@ class VehicleDetailedInfo(_VehicleInfo):
         self._xpOther = 0
         self._xpPenalty = 0
         self._isKilledByTeamKiller = False
-        self._generalID = -1
-        self._generalLevel = 0
-        self._frontLevel = 0
-        self._generalPoints = 0
-        self._generalPointsPrev = 0
-        self._frontPoints = 0
-        self._frontPointsPrev = 0
-        self._gereralLevelReached = False
-        self._frontLevelReached = False
-        self._generalPointsNoBonus = 0
-        self._frontPointsNoBonus = 0
-        self._eventGoals = []
-        self._energyToken = ''
 
     @property
     def vehicle(self):
@@ -629,58 +616,6 @@ class VehicleDetailedInfo(_VehicleInfo):
     def xpPenalty(self):
         return self._xpPenalty
 
-    @property
-    def generalID(self):
-        return self._generalID
-
-    @property
-    def generalLevel(self):
-        return self._generalLevel
-
-    @property
-    def frontLevel(self):
-        return self._frontLevel
-
-    @property
-    def generalPoints(self):
-        return self._generalPoints
-
-    @property
-    def generalPointsNoBonus(self):
-        return self._generalPointsNoBonus
-
-    @property
-    def generalPointsPrev(self):
-        return self._generalPointsPrev
-
-    @property
-    def frontPoints(self):
-        return self._frontPoints
-
-    @property
-    def frontPointsNoBonus(self):
-        return self._frontPointsNoBonus
-
-    @property
-    def frontPointsPrev(self):
-        return self._frontPointsPrev
-
-    @property
-    def gereralLevelReached(self):
-        return self._gereralLevelReached
-
-    @property
-    def frontLevelReached(self):
-        return self._frontLevelReached
-
-    @property
-    def eventGoals(self):
-        return self._eventGoals
-
-    @property
-    def energyToken(self):
-        return self._energyToken
-
     def haveInteractionDetails(self):
         return self._spotted != 0 or self._deathReason > DEATH_REASON_ALIVE or self._directHits != 0 or self._explosionHits != 0 or self._piercings != 0 or self._damageDealt != 0 or self.damageAssisted != 0 or self.damageAssistedStun != 0 or self.stunNum != 0 or self.critsCount != 0 or self._fire != 0 or self._targetKills != 0 or self.stunDuration != 0 or self._damageBlockedByArmor != 0
 
@@ -737,19 +672,6 @@ class VehicleDetailedInfo(_VehicleInfo):
         info._deathCount = vehicleRecords['deathCount']
         info._extPublic = vehicleRecords['extPublic']
         info._equipmentDamageAssisted = vehicleRecords.get('damageAssistedInspire', 0) + vehicleRecords.get('damageAssistedSmoke', 0)
-        info._generalID = vehicleRecords['generalID']
-        info._generalLevel = vehicleRecords['generalLevel']
-        info._frontLevel = vehicleRecords['frontLevel']
-        info._eventGoals = vehicleRecords['eventGoals']
-        info._generalPoints = vehicleRecords['generalPoints']
-        info._generalPointsPrev = vehicleRecords['generalPointsPrev']
-        info._frontPoints = vehicleRecords['frontPoints']
-        info._frontPointsPrev = vehicleRecords['frontPointsPrev']
-        info._gereralLevelReached = vehicleRecords['gereralLevelReached']
-        info._frontLevelReached = vehicleRecords['frontLevelReached']
-        info._generalPointsNoBonus = vehicleRecords['generalPointsNoBonus']
-        info._frontPointsNoBonus = vehicleRecords['frontPointsNoBonus']
-        info._energyToken = vehicleRecords['energyToken']
         cls._setSharedRecords(info, vehicleRecords)
         return info
 
@@ -996,58 +918,6 @@ class VehicleSummarizeInfo(_VehicleInfo):
     @property
     def equipmentDamageAssisted(self):
         return self.__accumulate('equipmentDamageAssisted')
-
-    @property
-    def generalID(self):
-        return self.__findFirstNoZero('generalID')
-
-    @property
-    def generalLevel(self):
-        return self.__findFirstNoZero('generalLevel')
-
-    @property
-    def frontLevel(self):
-        return self.__findFirstNoZero('frontLevel')
-
-    @property
-    def generalPoints(self):
-        return self.__findFirstNoZero('generalPoints')
-
-    @property
-    def generalPointsNoBonus(self):
-        return self.__findFirstNoZero('generalPointsNoBonus')
-
-    @property
-    def generalPointsPrev(self):
-        return self.__findFirstNoZero('generalPointsPrev')
-
-    @property
-    def frontPoints(self):
-        return self.__findFirstNoZero('frontPoints')
-
-    @property
-    def frontPointsNoBonus(self):
-        return self.__findFirstNoZero('frontPointsNoBonus')
-
-    @property
-    def frontPointsPrev(self):
-        return self.__findFirstNoZero('frontPointsPrev')
-
-    @property
-    def gereralLevelReached(self):
-        return self.__findFirstNoZero('gereralLevelReached')
-
-    @property
-    def frontLevelReached(self):
-        return self.__findFirstNoZero('frontLevelReached')
-
-    @property
-    def eventGoals(self):
-        return self.__findFirstNoZero('eventGoals')
-
-    @property
-    def energyToken(self):
-        return self.__findFirstNoZero('energyToken')
 
     def addVehicleInfo(self, info):
         self.__vehicles.append(info)

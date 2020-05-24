@@ -226,9 +226,6 @@ class BattleFeedbackAdaptor(IBattleController):
         self.onVehicleFeedbackReceived(_FET.HIDE_VEHICLE_DAMAGES_DEVICES, vehicleID, None)
         return
 
-    def showActionMessage(self, vehicleID, message, isAlly):
-        self.onVehicleFeedbackReceived(_FET.VEHICLE_SHOW_MESSAGE, vehicleID, (message, isAlly))
-
     def setVehicleAttrs(self, vehicleID, attrs):
         self.__attrs = attrs
         self.onVehicleFeedbackReceived(_FET.VEHICLE_ATTRS_CHANGED, vehicleID, dict(self.__attrs))

@@ -366,19 +366,6 @@ class Shop(object):
             self.__account._doCmdIntArrStrArr(AccountCommands.CMD_VEH_APPLY_OUTFIT, intArr, strArr, proxy)
             return
 
-    def buyAndEquipStyle(self, vehInvID, styleID, callback):
-        if self.__ignore:
-            if callback is not None:
-                callback(AccountCommands.RES_NON_PLAYER)
-            return
-        else:
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            else:
-                proxy = None
-            self.__account._doCmdInt3(AccountCommands.CMD_VEH_APPLY_STYLE, self.__getCacheRevision(), vehInvID, styleID, proxy)
-            return
-
     def buyCustomizations(self, vehInvID, itemsCount, callback):
         if self.__ignore:
             if callback is not None:
@@ -403,7 +390,7 @@ class Shop(object):
             return
         else:
             if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, ext)
             else:
                 proxy = None
             self.__account._doCmdInt4(AccountCommands.CMD_SELL_C11N_ITEMS, self.__getCacheRevision(), itemCD, count, vehInvID, proxy)

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/migrations.py
 import BigWorld
 import constants
-from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS
+from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS, BattlePassStorageKeys
 from adisp import process, async
 from debug_utils import LOG_DEBUG
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
@@ -474,7 +474,26 @@ def _migrateTo52(core, data, initialized):
 
 
 def _migrateTo53(core, data, initialized):
-    data['gameExtData'][GAME.DISABLE_EVENT_HORN] = False
+    pass
+
+
+def _migrateTo54(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.GAME_EXTENDED, 0)
+    settingOffset = 50331648
+    if storedValue & settingOffset:
+        clear = data['clear']
+        clear[SETTINGS_SECTIONS.GAME_EXTENDED] = clear.get(SETTINGS_SECTIONS.GAME_EXTENDED, 0) | settingOffset
+
+
+def _migrateTo55(core, data, initialized):
+    data['onceOnlyHints']['CustomizationProgressionViewHint'] = False
+
+
+def _migrateTo56(core, data, initialized):
+    data['battlePassStorage'][BattlePassStorageKeys.BUY_ANIMATION_WAS_SHOWN] = False
+    data['battlePassStorage'][BattlePassStorageKeys.INTRO_VIDEO_SHOWN] = False
+    data['battlePassStorage'][BattlePassStorageKeys.BUY_BUTTON_HINT_IS_SHOWN] = False
 
 
 _versions = ((1,
@@ -683,6 +702,18 @@ _versions = ((1,
   False),
  (53,
   _migrateTo53,
+  False,
+  False),
+ (54,
+  _migrateTo54,
+  False,
+  False),
+ (55,
+  _migrateTo55,
+  False,
+  False),
+ (56,
+  _migrateTo56,
   False,
   False))
 

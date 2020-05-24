@@ -16,6 +16,15 @@ class CustomizationFiltersPopoverMeta(SmartPopOverView):
     def setShowOnlyAcquired(self, value):
         self._printOverrideError('setShowOnlyAcquired')
 
+    def setHideOnAnotherVeh(self, value):
+        self._printOverrideError('setHideOnAnotherVeh')
+
+    def setShowOnlyProgressionDecals(self, value):
+        self._printOverrideError('setShowOnlyProgressionDecals')
+
+    def setShowOnlyEditableStyles(self, value):
+        self._printOverrideError('setShowOnlyEditableStyles')
+
     def onFilterChange(self, index, value):
         self._printOverrideError('onFilterChange')
 

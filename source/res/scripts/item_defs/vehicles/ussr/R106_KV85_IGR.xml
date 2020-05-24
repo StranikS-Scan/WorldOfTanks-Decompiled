@@ -319,44 +319,6 @@
         </node>
       </trackNodes>
       <trackThickness>	0.00250771	</trackThickness>
-      <splineDesc>
-        <segmentModelLeft>	vehicles/russian/R106_KV85/track/segment.model	</segmentModelLeft>
-        <segmentModelRight>	vehicles/russian/R106_KV85/track/segment.model	</segmentModelRight>
-        <left>	vehicles/russian/R106_KV85/track/left.track	</left>
-        <right>	vehicles/russian/R106_KV85/track/right.track	</right>
-        <segmentLength>	0.135	</segmentLength>
-        <segmentOffset>	0.155	</segmentOffset>
-        <lodDist>	SPLINE_TRACK	</lodDist>
-        <atlas>
-          <UTiles>	1	</UTiles>
-          <VTiles>	1	</VTiles>
-        </atlas>
-      </splineDesc>
-      <effects>
-        <lodDist>	MEDIUM	</lodDist>
-        <mud>	largeTankMud	</mud>
-      </effects>
-      <wwsoundPC>	treads_type_pc	</wwsoundPC>
-      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 1.09869 0.000000	</hullPosition>
-      <hitTester>
-        <collisionModelServer>	vehicles/russian/R106_KV85/collision/Chassis.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/russian/R106_KV85/collision_client/Chassis.model	</collisionModelClient>
-      </hitTester>
-      <topRightCarryingPoint>	1.3014 2.14561	</topRightCarryingPoint>
-      <maxClimbAngle>	25	</maxClimbAngle>
-      <navmeshGirth>	6.0	</navmeshGirth>
-      <AODecals>
-        <decal>
-          <transform>
-            <row0>	4.576190 0.000000 0.000000	</row0>
-            <row1>	0.000000 1.648030 0.000000	</row1>
-            <row2>	0.000000 0.000000 8.153320	</row2>
-            <row3>	0.000000 0.000000 0.000001	</row3>
-          </transform>
-        </decal>
-      </AODecals>
-      <trackThickness>	0.000000	</trackThickness>
       <physicalTracks>
         <left>
           <segmentsCount>	106	</segmentsCount>
@@ -823,6 +785,44 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/russian/R106_KV85/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/russian/R106_KV85/track/segment.model	</segmentModelRight>
+        <left>	vehicles/russian/R106_KV85/track/left.track	</left>
+        <right>	vehicles/russian/R106_KV85/track/right.track	</right>
+        <segmentLength>	0.135	</segmentLength>
+        <segmentOffset>	0.155	</segmentOffset>
+        <lodDist>	SPLINE_TRACK	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.09869 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R106_KV85/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R106_KV85/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.3014 2.14561	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.576190 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.648030 0.000000	</row1>
+            <row2>	0.000000 0.000000 8.153320	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <trackThickness>	0.000000	</trackThickness>
       <customization>
         <customizableVehicleAreas>
           <paint>	CHASSIS	</paint>
@@ -1020,36 +1020,15 @@
       <chassis>
         <Chassis_R106_KV85_2_IGR>
           <grounds>
-            <ground>
-              <medium>
-                <rollingFriction>	0.08855	</rollingFriction>
-              </medium>
-            </ground>
-            <sand>
-              <medium>
-                <rollingFriction>	0.08855	</rollingFriction>
-              </medium>
-            </sand>
-            <wood>
-              <medium>
-                <rollingFriction>	0.08855	</rollingFriction>
-              </medium>
-            </wood>
-            <snow>
-              <medium>
-                <rollingFriction>	0.08855	</rollingFriction>
-              </medium>
-            </snow>
-            <stone>
-              <medium>
-                <rollingFriction>	0.08855	</rollingFriction>
-              </medium>
-            </stone>
-            <metal>
-              <medium>
-                <rollingFriction>	0.08855	</rollingFriction>
-              </medium>
-            </metal>
+            <soft>
+              <rollingFriction>	0.16905	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.08855	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0805	</rollingFriction>
+            </firm>
           </grounds>
         </Chassis_R106_KV85_2_IGR>
       </chassis>

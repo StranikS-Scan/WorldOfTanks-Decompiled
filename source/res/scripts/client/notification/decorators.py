@@ -210,7 +210,7 @@ class C11nMessageDecorator(MessageDecorator):
 
     def __init__(self, entityID, entity=None, settings=None, model=None):
         super(C11nMessageDecorator, self).__init__(entityID, entity, settings, model)
-        g_eventBus.addListener(VIEW_ALIAS.HERO_VEHICLE_PREVIEW_20, self.__lockButtons, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(VIEW_ALIAS.HERO_VEHICLE_PREVIEW, self.__lockButtons, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(VIEW_ALIAS.BATTLE_QUEUE, self.__lockButtons, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(VIEW_ALIAS.LOBBY_HANGAR, self.__updateButtons, EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.addCallbacks({'inventory': self.__updateButtons})
@@ -255,7 +255,7 @@ class C11nMessageDecorator(MessageDecorator):
 
     def clear(self):
         super(C11nMessageDecorator, self).clear()
-        g_eventBus.removeListener(VIEW_ALIAS.HERO_VEHICLE_PREVIEW_20, self.__lockButtons, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(VIEW_ALIAS.HERO_VEHICLE_PREVIEW, self.__lockButtons, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(VIEW_ALIAS.BATTLE_QUEUE, self.__lockButtons, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(VIEW_ALIAS.LOBBY_HANGAR, self.__updateButtons, EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.removeObjectCallbacks(self)

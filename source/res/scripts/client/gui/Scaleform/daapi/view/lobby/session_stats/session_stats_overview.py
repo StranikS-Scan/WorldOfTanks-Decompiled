@@ -133,12 +133,11 @@ class SessionStatsOverview(SessionStatsOverviewMeta):
         if resetResult and resetResult.userMsg:
             SystemMessages.pushI18nMessage(resetResult.userMsg, type=resetResult.sysMsgType)
 
-    def __updateViewHandler(self, reason, _):
+    def __updateViewHandler(self, reason, *_):
         if reason in (CACHE_SYNC_REASON.DOSSIER_RESYNC,):
             self.as_setDataS(self.__makeInitVO())
         if reason in (CACHE_SYNC_REASON.CLIENT_UPDATE,):
-            self.__updateHeaderTooltip()
-            self.as_setButtonsStateS(self.__getButtonStates())
+            self.updateData()
 
     def __makeInitVO(self):
         battleCnt = self._itemsCache.items.sessionStats.getAccountStats(ARENA_BONUS_TYPE.REGULAR).battleCnt

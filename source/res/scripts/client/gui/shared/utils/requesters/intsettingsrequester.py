@@ -1,11 +1,25 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/IntSettingsRequester.py
 import logging
+from functools import wraps
 import BigWorld
 import constants
 from adisp import async, process
+from debug_utils import LOG_ERROR
 from gui.shared.utils import code2str
 _logger = logging.getLogger(__name__)
+
+def requireSync(func):
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        instance = args[0]
+        if not instance.isSynced():
+            LOG_ERROR('Calling %s require for IntSettingsRequester to be synced.' % func.__name__, stack=True)
+        return func(*args, **kwargs)
+
+    return wrapper
+
 
 class IntSettingsRequester(object):
     __SETTINGS = {'VERSION': 0,
@@ -49,15 +63,19 @@ class IntSettingsRequester(object):
      'EPICBATTLE_CAROUSEL_FILTER_2': 88,
      'LINKEDSET_QUESTS': constants.USER_SERVER_SETTINGS.LINKEDSET_QUESTS,
      'QUESTS_PROGRESS': constants.USER_SERVER_SETTINGS.QUESTS_PROGRESS,
-     'BOB_CAROUSEL_FILTER_1': 92,
-     'BOB_CAROUSEL_FILTER_2': 93,
      'SESSION_STATS': constants.USER_SERVER_SETTINGS.SESSION_STATS,
      'BATTLEPASS_CAROUSEL_FILTER_1': 97,
-     'BATTLE_PASS_STORAGE': 98,
-     'GAME_EVENT': constants.USER_SERVER_SETTINGS.GAME_EVENT,
-     'GAME_EVENT_HANGAR_VO': constants.USER_SERVER_SETTINGS.GAME_EVENT_HANGAR_VO}
+     'BATTLE_PASS_STORAGE': 98}
 
     def __init__(self):
+        self.__isSynced = False
+        self.__cache = dict()
+
+    def isSynced(self):
+        return self.__isSynced
+
+    def clear(self):
+        self.__isSynced = False
         self.__cache = dict()
 
     @async
@@ -69,18 +87,22 @@ class IntSettingsRequester(object):
     def getCacheValue(self, key, defaultValue=None):
         return self.__cache.get(key, defaultValue)
 
+    @requireSync
     @process
     def setSetting(self, key, value):
         yield self._addIntSettings({self.__SETTINGS[key]: int(value)})
 
+    @requireSync
     @process
     def setSettings(self, settings):
         intSettings = {self.__SETTINGS[k]:int(v) for k, v in settings.iteritems()}
         yield self._addIntSettings(intSettings)
 
+    @requireSync
     def getSetting(self, key, defaultValue=None):
         return self.getCacheValue(self.__SETTINGS[key], defaultValue)
 
+    @requireSync
     @process
     def delSettings(self, settings):
         yield self._delIntSettings(settings)
@@ -89,12 +111,14 @@ class IntSettingsRequester(object):
         if resID < 0:
             _logger.error('[class %s] There is error while getting data from cache: %s[%d]', self.__class__.__name__, code2str(resID), resID)
             return callback(dict())
+        self.__isSynced = True
         callback(value)
 
     @async
     def _requestCache(self, callback=None):
         player = BigWorld.player()
         if player is not None and player.intUserSettings is not None:
+            self.__isSynced = False
             player.intUserSettings.getCache(lambda resID, value: self._response(resID, value, callback))
         else:
             _logger.warning('Player or intUserSettings is not defined: %r, %r', player, player.intUserSettings if player is not None else None)

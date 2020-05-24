@@ -222,9 +222,6 @@ class _EconomicsRecordsChains(object):
     def getBaseXPRecords(self):
         return self._baseXP
 
-    def getBaseFreeXPRecords(self):
-        return self._baseFreeXP
-
     def getPremiumXPRecords(self):
         return self._premiumXP
 
@@ -397,7 +394,7 @@ class _EconomicsRecordsChains(object):
 
 
 class PersonalInfo(shared.UnpackedInfo):
-    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '_economicsRecords', '__questsProgress', '__PM2Progress', '__rankInfo', '__isTeamKiller', '__progressiveReward', '__premiumMask', '__isAddXPBonusApplied')
+    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '_economicsRecords', '__questsProgress', '__PM2Progress', '__rankInfo', '__isTeamKiller', '__progressiveReward', '__premiumMask', '__isAddXPBonusApplied', '__c11nProgress')
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, personal):
@@ -416,6 +413,7 @@ class PersonalInfo(shared.UnpackedInfo):
         self.__lifeTimeInfo = _LifeTimeInfo(False, 0)
         self.__questsProgress = {}
         self.__PM2Progress = {}
+        self.__c11nProgress = {}
         self.__rankInfo = PostBattleRankInfo(0, 0, 0, 0, 0, 0, 0, 0, {}, {}, False, 0, 0)
         if not self.hasUnpackedItems():
             self.__collectRequiredData(personal)
@@ -496,6 +494,9 @@ class PersonalInfo(shared.UnpackedInfo):
     def getPM2Progress(self):
         return self.__PM2Progress
 
+    def getC11nProgress(self):
+        return self.__c11nProgress
+
     def getRankInfo(self):
         return self.__rankInfo
 
@@ -522,9 +523,6 @@ class PersonalInfo(shared.UnpackedInfo):
 
     def getPremiumXPRecords(self):
         return self._economicsRecords.getPremiumXPRecords()
-
-    def getBaseFreeXPRecords(self):
-        return self._economicsRecords.getBaseFreeXPRecords()
 
     def getPremiumXPAddRecords(self):
         return self._economicsRecords.getPremiumXPAddRecords()
@@ -567,6 +565,7 @@ class PersonalInfo(shared.UnpackedInfo):
             self.__premiumMask = data.get('premMask', PREMIUM_TYPE.NONE)
             self.__questsProgress.update(data.get('questsProgress', {}))
             self.__PM2Progress.update(data.get('PM2Progress', {}))
+            self.__c11nProgress[intCD] = data.get('c11nProgress', {})
 
         if lifeTimes:
             self.__lifeTimeInfo = _LifeTimeInfo(True, min(lifeTimes))

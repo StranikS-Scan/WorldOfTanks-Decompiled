@@ -5,13 +5,12 @@ import types
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
 from adisp import async, process
-from constants import IGR_TYPE, QUEUE_TYPE
+from constants import IGR_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import SystemMessages, DialogsInterface, GUI_SETTINGS
 from gui.prb_control import prb_getters
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities import initDevFunctional, finiDevFunctional
-from gui.prb_control.entities.base.pre_queue.ctx import LeavePreQueueCtx
 from gui.prb_control.entities.base.unit.ctx import JoinUnitCtx
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.factories import ControlFactoryComposite
@@ -28,7 +27,8 @@ from gui.prb_control.settings import PREBATTLE_RESTRICTION, FUNCTIONAL_FLAG
 from gui.prb_control.settings import UNIT_NOTIFICATION_TO_DISPLAY
 from gui.prb_control.settings import REQUEST_TYPE as _RQ_TYPE
 from gui.prb_control.storages import PrbStorageDecorator
-from gui.shared import actions
+from gui.shared import actions, events, g_eventBus
+from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.utils.listeners_collection import ListenersCollection
 from helpers import dependency
 from skeletons.gui.game_control import IGameSessionController, IRentalsController
@@ -516,6 +516,8 @@ class _PreBattleDispatcher(ListenersCollection):
         g_prbCtrlEvents.onPreQueueJoined += self.ctrl_onPreQueueJoined
         g_prbCtrlEvents.onPreQueueJoinFailure += self.ctrl_onPreQueueJoinFailure
         g_prbCtrlEvents.onPreQueueLeft += self.ctrl_onPreQueueLeft
+        g_eventBus.addListener(events.PrbActionEvent.SELECT, self.__onDoSelectAction, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(events.PrbActionEvent.LEAVE, self.__onDoLeaveAction, scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
     def __stopListening(self):
@@ -542,6 +544,8 @@ class _PreBattleDispatcher(ListenersCollection):
         if unitBrowser:
             unitBrowser.onErrorReceived -= self.unitBrowser_onErrorReceived
         g_prbCtrlEvents.clear()
+        g_eventBus.removeListener(events.PrbActionEvent.SELECT, self.__onDoSelectAction, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(events.PrbActionEvent.LEAVE, self.__onDoLeaveAction, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __clear(self, woEvents=False):
         if self.__requestCtx:
@@ -598,11 +602,7 @@ class _PreBattleDispatcher(ListenersCollection):
                 created.addMutualListeners(self)
             self.__entity = created
             self.__prevEntity = NotSupportedEntity()
-            if self.__entity.getQueueType() == QUEUE_TYPE.EVENT_BATTLES and not self.eventsCache.isEventEnabled():
-                self.__entity.leave(LeavePreQueueCtx())
-                flag = FUNCTIONAL_FLAG.UNDEFINED
-            else:
-                flag = self.__entity.init(ctx=ctx)
+            flag = self.__entity.init(ctx=ctx)
             self._invokeListeners('onPrbEntitySwitched')
             ctx.clearFlags()
             ctx.addFlags(flag | created.getFunctionalFlags())
@@ -613,6 +613,14 @@ class _PreBattleDispatcher(ListenersCollection):
         currentCtx.stopProcessing(result=True)
         g_eventDispatcher.updateUI()
         return ctx.getFlags()
+
+    @process
+    def __onDoSelectAction(self, event):
+        yield self.doSelectAction(event.action)
+
+    @process
+    def __onDoLeaveAction(self, event):
+        yield self.doLeaveAction(event.action)
 
 
 class _PrbPeripheriesHandler(object):

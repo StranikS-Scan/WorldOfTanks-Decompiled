@@ -1844,4 +1844,124 @@
       </mul>
     </kpi>
   </trophyUpgradedImprovedVentilation>
+  <trophyBasicAimingStabilizer>
+    <id>	56	</id>
+    <userString>	#artefacts:trophyBasicAimingStabilizer/name	</userString>
+    <description>	#artefacts:aimingStabilizer/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:deluxAimingStabilizer/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:deluxAimingStabilizer/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/aimingStabilizer.png 0 0	</icon>
+    <price>	100000	</price>
+    <notInShop>	true	</notInShop>
+    <removable>	false	</removable>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	aimingStabilizer_Mk1_user aimingStabilizer_Mk2_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <tags>	aimingStabilizer trophyBasic firepower	</tags>
+    <incompatibleTags>
+      <installed>	aimingStabilizer	</installed>
+    </incompatibleTags>
+    <script>	UpgradableStaticFactorDevice	  <weight>	100	</weight>
+      <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
+      <factor>	0.8	</factor>
+      <upgradeInfo>
+        <upgradedCompDescr>	14841	</upgradedCompDescr>
+        <price>	3000000	</price>
+      </upgradeInfo>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersion	</name>
+        <value>	0.8	</value>
+      </mul>
+    </kpi>
+  </trophyBasicAimingStabilizer>
+  <trophyUpgradedAimingStabilizer>
+    <id>	57	</id>
+    <userString>	#artefacts:trophyUpgradedAimingStabilizer/name	</userString>
+    <description>	#artefacts:deluxAimingStabilizer/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:deluxAimingStabilizer/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:deluxAimingStabilizer/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/aimingStabilizer.png 0 0	</icon>
+    <price>	100000	</price>
+    <notInShop>	true	</notInShop>
+    <removable>	false	</removable>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	aimingStabilizer_Mk1_user aimingStabilizer_Mk2_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <tags>	aimingStabilizer trophyUpgraded firepower	</tags>
+    <incompatibleTags>
+      <installed>	aimingStabilizer	</installed>
+    </incompatibleTags>
+    <script>	UpgradedStaticFactorDevice	  <weight>	100	</weight>
+      <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
+      <factor>	0.75	</factor>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersion	</name>
+        <value>	0.75	</value>
+      </mul>
+    </kpi>
+  </trophyUpgradedAimingStabilizer>
+  <trophyBasicCoatedOptics>
+    <id>	58	</id>
+    <userString>	#artefacts:trophyBasicCoatedOptics/name	</userString>
+    <description>	#artefacts:coatedOptics/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:deluxCoatedOptics/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:deluxCoatedOptics/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/coatedOptics.png 0 0	</icon>
+    <price>	100000	</price>
+    <notInShop>	true	</notInShop>
+    <removable>	false	</removable>
+    <tags>	coatedOptics trophyBasic reconnaissance	</tags>
+    <incompatibleTags>
+      <installed>	coatedOptics	</installed>
+    </incompatibleTags>
+    <script>	UpgradableStaticFactorDevice	  <attribute>	miscAttrs/circularVisionRadiusFactor	</attribute>
+      <factor>	1.1	</factor>
+      <upgradeInfo>
+        <upgradedCompDescr>	15353	</upgradedCompDescr>
+        <price>	3000000	</price>
+      </upgradeInfo>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleCircularVisionRadius	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+  </trophyBasicCoatedOptics>
+  <trophyUpgradedCoatedOptics>
+    <id>	59	</id>
+    <userString>	#artefacts:trophyUpgradedCoatedOptics/name	</userString>
+    <description>	#artefacts:deluxCoatedOptics/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:deluxCoatedOptics/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:deluxCoatedOptics/long_special	</longDescriptionSpecial>
+    <icon>	../maps/icons/artefact/coatedOptics.png 0 0	</icon>
+    <price>	100000	</price>
+    <notInShop>	true	</notInShop>
+    <removable>	false	</removable>
+    <tags>	coatedOptics trophyUpgraded reconnaissance	</tags>
+    <incompatibleTags>
+      <installed>	coatedOptics	</installed>
+    </incompatibleTags>
+    <script>	UpgradedStaticFactorDevice	  <attribute>	miscAttrs/circularVisionRadiusFactor	</attribute>
+      <factor>	1.125	</factor>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleCircularVisionRadius	</name>
+        <value>	1.125	</value>
+      </mul>
+    </kpi>
+  </trophyUpgradedCoatedOptics>
 </optional_devices.xml>

@@ -215,6 +215,30 @@
       </pixie>
     </effects>
   </turret_pull_ground>
+  <turret_pull_oil>
+    <timeline>
+      <fire>	0.0	</fire>
+      <end>	36000	</end>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	fire	</startKey>
+        <file>	particles/Tank/movement/oil/trail_small_spd1.eff	</file>
+      </pixie>
+    </effects>
+  </turret_pull_oil>
+  <turret_pull_dirt>
+    <timeline>
+      <fire>	0.0	</fire>
+      <end>	36000	</end>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	fire	</startKey>
+        <file>	particles/Tank/movement/dirt/trail_small_spd1.eff	</file>
+      </pixie>
+    </effects>
+  </turret_pull_dirt>
   <turret_pull_sand>
     <timeline>
       <fire>	0.0	</fire>

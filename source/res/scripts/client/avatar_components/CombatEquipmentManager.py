@@ -14,7 +14,6 @@ from constants import IS_DEVELOPMENT
 from debug_utils import LOG_DEBUG, LOG_ERROR
 import CombatSelectedArea
 from items import vehicles
-from items.artefacts import EventDeathZone
 import BattleReplay
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
@@ -90,12 +89,8 @@ class CombatEquipmentManager(object):
             wing.destroy()
 
         self.__callbackDelayer.destroy()
-        if self.__onCombatEquipmentShotCB is not None:
-            BigWorld.cancelCallback(self.__onCombatEquipmentShotCB)
-            self.__onCombatEquipmentShotCB = None
         self.__selectedAreas = {}
         self.__wings = {}
-        return
 
     def updatePlaneTrajectory(self, equipmentID, team, curTime, curPos, curDir, nextTime, nextPos, nextDir, isEndOfFlight):
         if _ENABLE_DEBUG_LOG:
@@ -147,19 +142,13 @@ class CombatEquipmentManager(object):
             BigWorld.callback(0.0, functools.partial(self.__showMarkerCallback, eq, pos, direction, time, areaUID))
         else:
             self.__showMarkerCallback(eq, pos, direction, time, areaUID)
-        self.__playCombatEquipmentShotSound(equipmentID, pos)
 
     def onCombatEquipmentShotLaunched(self, equipmentID, position):
         if _ENABLE_DEBUG_LOG:
             LOG_DEBUG('===== onCombatEquipmentShotLaunched =====')
             LOG_DEBUG(equipmentID, position)
-        self.__playCombatEquipmentShotSound(equipmentID, position)
-
-    def __playCombatEquipmentShotSound(self, equipmentID, position):
         equipment = vehicles.g_cache.equipments().get(equipmentID)
         if equipment is None:
-            return
-        elif not hasattr(equipment, 'wwsoundShot'):
             return
         elif equipment.wwsoundShot is None:
             LOG_DEBUG('LOG_GOGGI - wwsoundShot is None for ', equipment.name)
@@ -181,9 +170,7 @@ class CombatEquipmentManager(object):
             return
 
     def __triggerOnCombatEquipmentShot(self, eventName, position):
-        self.__onCombatEquipmentShotCB = None
         SoundGroups.g_instance.playSoundPos(eventName, position)
-        return
 
     def __delayedAreaDestroy(self, areaUID):
         area = self.__selectedAreas.pop(areaUID, None)
@@ -203,8 +190,7 @@ class CombatEquipmentManager(object):
             area = self.__selectedAreas[areaUID]
             if area is not None:
                 area.setGUIVisible(self.__isGUIVisible)
-            duration = eq.duration if isinstance(eq, EventDeathZone) else 0
-            self.__callbackDelayer.delayCallback(timer + duration, functools.partial(self.__delayedAreaDestroy, areaUID))
+            self.__callbackDelayer.delayCallback(timer, functools.partial(self.__delayedAreaDestroy, areaUID))
             ctrl = self.guiSessionProvider.shared.equipments
             if ctrl is not None:
                 ctrl.showMarker(eq, pos, direction, timer)

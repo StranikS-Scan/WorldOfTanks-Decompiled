@@ -239,6 +239,7 @@ class ShowChainHint(ApplicationEffect):
                  'arrowDir': '',
                  'arrowLoop': False,
                  'updateRuntime': hintProps.updateRuntime,
+                 'hideImmediately': hintProps.hideImmediately,
                  'checkViewArea': hintProps.checkViewArea}
                 arrow = hintProps.arrow
                 if arrow is not None:

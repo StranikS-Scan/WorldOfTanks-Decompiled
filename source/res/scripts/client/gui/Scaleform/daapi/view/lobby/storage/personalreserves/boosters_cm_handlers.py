@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/personalreserves/boosters_cm_handlers.py
 from adisp import process
-from gui import ingame_shop as shop
+from gui import shop
 from gui.Scaleform.daapi.view.lobby.storage.cm_handlers import ContextMenu, option, CMLabel
 from gui.Scaleform.framework.managers.context_menu import CM_BUY_COLOR
 from gui.shared import event_dispatcher as shared_events
@@ -26,7 +26,7 @@ class PersonalReservesCMHandler(ContextMenu):
 
     @option(__sqGen.next(), CMLabel.BUY_MORE)
     def buy(self):
-        shop.showBuyBoosterOverlay(self._id, _SOURCE, _ORIGIN)
+        shop.showBuyPersonalReservesOverlay(self._id, _SOURCE, _ORIGIN)
 
     def _getOptionCustomData(self, label):
         optionData = super(PersonalReservesCMHandler, self)._getOptionCustomData(label)

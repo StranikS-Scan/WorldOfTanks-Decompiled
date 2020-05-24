@@ -268,10 +268,18 @@ class ArenaDataProvider(IArenaDataProvider):
         return self.__getStateFlag(vID, 'isTeamKiller', playerTeam=self.__playerTeam)
 
     def isObserver(self, vID):
-        return self.__getStateFlag(vID, 'isObserver')
+        if vID not in self.__vInfoVOs:
+            _logger.warning('vID not in __vInfoVOs, vID = %s', vID)
+            return None
+        else:
+            return self.__getStateFlag(vID, 'isObserver')
 
     def isPlayerObserver(self):
-        return self.__getStateFlag(self.__playerVehicleID, 'isObserver')
+        if self.__playerVehicleID not in self.__vInfoVOs:
+            _logger.warning('vID not in __vInfoVOs, vID = %s', self.__playerVehicleID)
+            return None
+        else:
+            return self.__getStateFlag(self.__playerVehicleID, 'isObserver')
 
     def getVehIDByAccDBID(self, accDBID):
         try:
@@ -358,6 +366,8 @@ class ArenaDataProvider(IArenaDataProvider):
         result = False
         if vID in self.__vInfoVOs:
             result = operator.methodcaller(flagName, **kwargs)(self.__vInfoVOs[vID])
+        else:
+            _logger.warning('vID not in __vInfoVOs, vID = %s', vID)
         return result
 
     def __checkRequiredData(self):

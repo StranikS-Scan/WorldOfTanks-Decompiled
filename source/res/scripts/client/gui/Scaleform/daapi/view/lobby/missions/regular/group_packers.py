@@ -1,8 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/group_packers.py
-import locale
 import logging
-import time
 import weakref
 from collections import namedtuple, defaultdict, OrderedDict
 from CurrentVehicle import g_currentVehicle
@@ -27,20 +25,21 @@ from gui.server_events import settings
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.cond_formatters.tokens import TokensMarathonFormatter
 from gui.server_events.event_items import DEFAULTS_GROUPS
-from gui.server_events.events_constants import FRONTLINE_GROUP_ID
-from gui.server_events.events_helpers import hasAtLeastOneAvailableQuest, isAllQuestsCompleted, isLinkedSet, getLocalizedQuestNameForLinkedSetQuest, getLocalizedQuestDescForLinkedSetQuest, getLinkedSetMissionIDFromQuest, isPremium, premMissionsSortFunc, isPremiumQuestsEnable, getPremiumGroup, getDailyEpicGroup
+from gui.server_events.events_constants import FRONTLINE_GROUP_ID, RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID
+from gui.server_events.events_helpers import hasAtLeastOneAvailableQuest, isAllQuestsCompleted, isLinkedSet, getLocalizedQuestNameForLinkedSetQuest, getLocalizedQuestDescForLinkedSetQuest, getLinkedSetMissionIDFromQuest, isPremium, premMissionsSortFunc, isPremiumQuestsEnable, getPremiumGroup, getDailyEpicGroup, getRankedDailyGroup, getRankedPlatformGroup
 from gui.server_events.events_helpers import missionsSortFunc
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.icons import makeImageTag
 from helpers import dependency, time_utils, getLanguageCode
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IEpicBattleMetaGameController
+from skeletons.gui.game_control import IEpicBattleMetaGameController, IRankedBattlesController
 from skeletons.gui.linkedset import ILinkedSetController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+from BigWorld import formatTime
 _EventsBlockData = namedtuple('EventsBlockData', 'filteredCount totalCount blockData')
 _MAIN_QUEST_AWARDS_COUNT = 6
 _BIG_TOKENS_TRESHOLD = 2
@@ -248,6 +247,7 @@ class QuestsGroupsBuilder(GroupedEventsBlocksBuilder):
     linkedSet = dependency.descriptor(ILinkedSetController)
     lobbyContext = dependency.descriptor(ILobbyContext)
     epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
+    __rankedController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self):
         super(QuestsGroupsBuilder, self).__init__()
@@ -263,9 +263,17 @@ class QuestsGroupsBuilder(GroupedEventsBlocksBuilder):
         frontlineQuestsAvailable = isCycleActive and (self.epicMetaGameCtrl.isInPrimeTime() or self.epicMetaGameCtrl.hasPrimeTimesLeft())
         if group and frontlineQuestsAvailable and FRONTLINE_GROUP_ID not in self._cache['groupedEvents']:
             self._cache['groupedEvents'][FRONTLINE_GROUP_ID] = self._createGroupedEventsBlock(group)
+        if self.__rankedController.getCurrentSeason() is not None:
+            rankedDaily = getRankedDailyGroup()
+            if rankedDaily and RANKED_DAILY_GROUP_ID not in self._cache['groupedEvents']:
+                self._cache['groupedEvents'][RANKED_DAILY_GROUP_ID] = self._createGroupedEventsBlock(rankedDaily)
+            rankedPlatform = getRankedPlatformGroup()
+            if rankedPlatform and RANKED_PLATFORM_GROUP_ID not in self._cache['groupedEvents']:
+                self._cache['groupedEvents'][RANKED_PLATFORM_GROUP_ID] = self._createGroupedEventsBlock(rankedPlatform)
         group = getPremiumGroup()
         if isPremiumQuestsEnable() and 'premium' not in self._cache['groupedEvents'].iterkeys() and group:
             self._cache['groupedEvents']['premium'] = _PremiumGroupedQuestsBlockInfo()
+        return
 
     def _getDefaultBlocks(self):
         return [_MotiveQuestsBlockInfo(), _UngroupedQuestsBlockInfo()]
@@ -348,7 +356,7 @@ class _EventsBlockInfo(object):
         raise NotImplementedError
 
     def findEvents(self, srvEvents):
-        return sorted(self._findEvents(srvEvents), cmp=missionsSortFunc, reverse=True)
+        return sorted(self._findEvents(srvEvents), key=missionsSortFunc, reverse=True)
 
     def _getGuiBlockPriority(self):
         return GuiGroupBlockID.getBlockPriority(self.blockType)
@@ -873,10 +881,7 @@ class _PremiumGroupedQuestsBlockInfo(_GroupedQuestsBlockInfo):
         timeLeft = time_utils.ONE_DAY - time_utils.getServerRegionalTimeCurrentDay()
         if timeLeft >= 0:
             timeFmt = backport.text(R.strings.quests.details.conditions.postBattle.deltaDailyReset.timeFmt())
-            parts = time_utils.getTimeStructInUTC(timeLeft)
             try:
-                return time.strftime(timeFmt, parts)
-            except ValueError:
-                _logger.error('Current time locale: %r', locale.getlocale(locale.LC_TIME))
-                _logger.error('Selected language: %r', getLanguageCode())
-                _logger.exception('Invalid formatting string %r to delta of time %r', timeFmt, parts)
+                return formatTime(timeFmt, getLanguageCode(), timeLeft)
+            except ValueError as e:
+                _logger.error("ValueError: formatTime error - '%s'", e)

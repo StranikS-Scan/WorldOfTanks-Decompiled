@@ -8,7 +8,7 @@ import BattleReplay
 import TriggersManager
 import WWISE
 import MusicControllerWWISE as MC
-from constants import PREMIUM_ENTITLEMENTS
+from constants import PREMIUM_ENTITLEMENTS, SPA_ATTRS
 from account_helpers.AccountSettings import CURRENT_VEHICLE, AccountSettings
 from account_helpers.settings_core.settings_constants import BATTLE_EVENTS
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
@@ -27,6 +27,7 @@ from gui.Scaleform.daapi.view.login.EULADispatcher import EULADispatcher
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.prb_control import prbEntityProperty
 from gui.shared.items_cache import CACHE_SYNC_REASON
+from gui.shared.event_dispatcher import showInterludeVideoWindow
 from gui.battle_control.arena_info import player_format
 from helpers import dependency, aop, i18n
 from skeletons.connection_mgr import IConnectionManager
@@ -216,6 +217,7 @@ class Bootcamp(EventSystemEntity):
         if BattleReplay.g_replayCtrl.isPlaying:
             self.__replayController = BootcampReplayController()
             self.__replayController.init()
+        g_bootcampEvents.onInterludeVideoStarted += self.onInterludeVideoStarted
         g_bootcampEvents.onBattleLessonFinished += self.onBattleLessonFinished
         g_bootcampEvents.onGarageLessonFinished += self.onGarageLessonFinished
         g_bootcampEvents.onBattleLoaded += self.onBattleLoaded
@@ -302,6 +304,7 @@ class Bootcamp(EventSystemEntity):
         if self.__chapter is not None:
             self.__chapter.clear()
             self.__chapter = None
+        g_bootcampEvents.onInterludeVideoStarted -= self.onInterludeVideoStarted
         g_bootcampEvents.onBattleLessonFinished -= self.onBattleLessonFinished
         g_bootcampEvents.onGarageLessonFinished -= self.onGarageLessonFinished
         g_bootcampEvents.onBattleLoaded -= self.onBattleLoaded
@@ -379,6 +382,12 @@ class Bootcamp(EventSystemEntity):
             return
         self.__currentState = StateResultScreen(lessonResults)
         self.__currentState.activate()
+
+    def onInterludeVideoStarted(self):
+        messageVO = self.getInterludeVideoPageData()
+        player = BigWorld.player()
+        if not player.spaFlags.getFlag(SPA_ATTRS.BOOTCAMP_VIDEO_DISABLED) and self.__battleResults.type == BOOTCAMP_BATTLE_RESULT_MESSAGE.VICTORY and messageVO:
+            showInterludeVideoWindow(messageVO=messageVO)
 
     def __onAvatarBecomeNonPlayer(self):
         if self.__currentState is not None:
@@ -461,6 +470,15 @@ class Bootcamp(EventSystemEntity):
 
     def getBattleLoadingPages(self):
         return getBattleSettings(self.__lessonId).lessonPages
+
+    def getInterludeVideoPageData(self):
+        extraData = self.getBattleResultsExtra(self.__lessonId - 1)
+        messageVO = {}
+        if extraData['video']:
+            messageVO['messages'] = [extraData['video']['messages']]
+            messageVO['voiceovers'] = [ voiceover for voiceover in extraData['video']['voiceovers'] ]
+            messageVO['exitEvent'] = g_bootcampEvents.onInterludeVideoFinished
+        return messageVO
 
     def getIntroPageData(self, isChoice=False):
         parameters = self.getParameters()

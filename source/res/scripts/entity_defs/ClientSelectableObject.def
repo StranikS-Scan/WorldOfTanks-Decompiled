@@ -23,11 +23,23 @@
       <Flags>	ALL_CLIENTS	</Flags>
       <Editable>	true	</Editable>
     </mouseOverSoundName>
+    <isOver3DSound>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+      <Default>	1	</Default>
+    </isOver3DSound>
     <clickSoundName>
       <Type>	STRING	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
       <Editable>	true	</Editable>
     </clickSoundName>
+    <isClick3DSound>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+      <Default>	1	</Default>
+    </isClick3DSound>
     <edgeMode>
       <Type>	UINT8	</Type>
       <Flags>	ALL_CLIENTS	</Flags>

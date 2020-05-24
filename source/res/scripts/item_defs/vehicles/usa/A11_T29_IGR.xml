@@ -270,11 +270,6 @@
           <offset>	-0.036	</offset>
         </node>
         <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L0	</name>
-          <offset>	-0.036	</offset>
-        </node>
-        <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R1	</name>
           <forwardElastK>	0.9	</forwardElastK>
@@ -304,6 +299,11 @@
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R7	</name>
           <offset>	-0.048	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <offset>	-0.036	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
@@ -353,7 +353,6 @@
           <name>	Track_VD_R1	</name>
         </node>
       </trackNodes>
-      <trackThickness>	0.0012	</trackThickness>
       <physicalTracks>
         <left>
           <segmentsCount>	240	</segmentsCount>
@@ -947,6 +946,7 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <trackThickness>	0.0012	</trackThickness>
       <customization>
         <customizableVehicleAreas>
           <paint></paint>
@@ -1135,36 +1135,15 @@
       <chassis>
         <T84E3_IGR>
           <grounds>
-            <ground>
-              <medium>
-                <rollingFriction>	0.12075	</rollingFriction>
-              </medium>
-            </ground>
-            <sand>
-              <medium>
-                <rollingFriction>	0.12075	</rollingFriction>
-              </medium>
-            </sand>
-            <wood>
-              <medium>
-                <rollingFriction>	0.12075	</rollingFriction>
-              </medium>
-            </wood>
-            <snow>
-              <medium>
-                <rollingFriction>	0.12075	</rollingFriction>
-              </medium>
-            </snow>
-            <stone>
-              <medium>
-                <rollingFriction>	0.12075	</rollingFriction>
-              </medium>
-            </stone>
-            <metal>
-              <medium>
-                <rollingFriction>	0.12075	</rollingFriction>
-              </medium>
-            </metal>
+            <soft>
+              <rollingFriction>	0.2093	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.12075	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.08855	</rollingFriction>
+            </firm>
           </grounds>
         </T84E3_IGR>
       </chassis>

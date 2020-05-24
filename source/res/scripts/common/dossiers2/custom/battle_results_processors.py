@@ -396,6 +396,9 @@ def __updateMarkOfMastery(dossierDescr, results):
     if not BONUS_CAPS.checkAny(results['bonusType'], BONUS_CAPS.DOSSIER_MARK_OF_MASTERY):
         return
     achievements = dossierDescr['achievements']
+    markOfMasterField = 'marksOfMasteryCount{}'.format(results['markOfMastery'])
+    if markOfMasterField in achievements:
+        achievements[markOfMasterField] += 1
     if achievements['markOfMastery'] < results['markOfMastery']:
         achievements['markOfMastery'] = results['markOfMastery']
 

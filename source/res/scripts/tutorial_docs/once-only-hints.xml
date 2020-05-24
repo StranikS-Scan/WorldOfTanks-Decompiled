@@ -264,6 +264,23 @@
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	True	</ignore-outside-click>
     </hint>
+    <hint>	CustomizationProgressionViewHint	  <item-id>	ProgressionEntryPoint	</item-id>
+      <text>	_(#tutorial:customization/progression)	</text>
+      <arrow>
+        <direction>	R	</direction>
+        <loop>	True	</loop>
+        <position-value>	0.7	</position-value>
+      </arrow>
+      <has-box>	False	</has-box>
+      <checked-ui-state>
+        <simple-state>
+          <state>	visible	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <update-runtime>	True	</update-runtime>
+      <ignore-outside-click>	True	</ignore-outside-click>
+    </hint>
     <hint>	CustomizationCarouselHint	  <item-id>	CustomizationCarousel	</item-id>
       <text>	_(#tutorial:customization/decal)	</text>
       <arrow>
@@ -278,6 +295,41 @@
         </simple-state>
       </checked-ui-state>
       <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
+      <ignore-outside-click>	True	</ignore-outside-click>
+    </hint>
+    <hint>	CustomizationCarouselEditableStyleHint	  <item-id>	CustomizationCarouselEditableStyle	</item-id>
+      <text>	_(#tutorial:customization/carousel/editableStyle)	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+        <position-value>	0.25	</position-value>
+      </arrow>
+      <checked-ui-state>
+        <simple-state>
+          <state>	visible	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
+      <ignore-outside-click>	True	</ignore-outside-click>
+    </hint>
+    <hint>	CustomizationCarouselProgressionDecalHint	  <item-id>	CustomizationCarouselProgressionDecal	</item-id>
+      <text>	_(#tutorial:customization/carousel/progressionDecal)	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+        <position-value>	0.25	</position-value>
+      </arrow>
+      <checked-ui-state>
+        <simple-state>
+          <state>	visible	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
       <ignore-outside-click>	True	</ignore-outside-click>
     </hint>
     <hint>	CrewOperationBtnHint	  <item-id>	CrewOperationBtn	</item-id>

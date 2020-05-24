@@ -1,24 +1,24 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/customization_style_info.py
 from collections import namedtuple
-from CurrentVehicle import g_currentVehicle
 import GUI
-from gui.impl import backport
-from gui.impl.gen import R
-from helpers import dependency
-from helpers.CallbackDelayer import CallbackDelayer
+from CurrentVehicle import g_currentVehicle
 from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.customization.shared import C11nId, getPurchaseMoneyState, isTransactionValid, SEASON_TYPE_TO_IDX
 from gui.Scaleform.daapi.view.lobby.customization.shared import getSuitableText
 from gui.Scaleform.daapi.view.meta.CustomizationStyleInfoMeta import CustomizationStyleInfoMeta
+from gui.customization.shared import C11nId, getPurchaseMoneyState, isTransactionValid
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.customization.outfit import Area
+from helpers import dependency
+from helpers.CallbackDelayer import CallbackDelayer
 from items.components.c11n_constants import SeasonType
+from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
-from shared_utils import first
+from vehicle_outfit.outfit import Area
 StyleInfoVO = namedtuple('StyleInfoVO', ('styleName', 'styleInfo', 'styleInfoBig', 'suitableBlock', 'styleParams'))
 ButtonVO = namedtuple('ButtonVO', ('enabled', 'label', 'disabledTooltip', 'visible'))
 ParamVO = namedtuple('ParamVO', ('iconSrc', 'paramText'))
@@ -52,21 +52,21 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
         self.__ctx = self.service.getCtx()
         g_clientUpdateManager.addMoneyCallback(self.updateButton)
         g_currentVehicle.onChangeStarted += self.__onVehicleChangeStarted
-        self.__ctx.onLocateToStyleInfo += self.__onLocateToStyleInfo
+        self.__ctx.events.onUpdateStyleInfoDOF += self.__onUpdateStyleInfoDOF
         self.service.onCustomizationHelperRecreated += self.__onCustomizationHelperRecreated
 
     def _dispose(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
         g_currentVehicle.onChangeStarted -= self.__onVehicleChangeStarted
-        self.__ctx.onLocateToStyleInfo -= self.__onLocateToStyleInfo
+        self.__ctx.events.onUpdateStyleInfoDOF -= self.__onUpdateStyleInfoDOF
         self.service.onCustomizationHelperRecreated -= self.__onCustomizationHelperRecreated
         self.__blur.removeRect(_STYLE_INFO_BLUR_RECTANGLE_ID)
         self.__ctx = None
         return
 
     def show(self, style=None):
-        self.__prevStyle = self.__ctx.modifiedStyle
-        self.__selectedStyle = style or self.__ctx.modifiedStyle
+        self.__prevStyle = self.__ctx.mode.modifiedStyle
+        self.__selectedStyle = style or self.__ctx.mode.modifiedStyle
         if self.__selectedStyle is None:
             return
         else:
@@ -78,7 +78,7 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
             self.as_showS()
             self.__visible = True
             self.delayCallback(STYLE_INFO_BLUR_DELAY, self.__enableBlur)
-            self.__ctx.onClearItem()
+            self.__ctx.mode.unselectSlot()
             return
 
     def updateButton(self, *_):
@@ -87,20 +87,20 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
             self.as_buttonUpdateS(buttonVO)
 
     def onClose(self):
-        self.__ctx.onStyleInfoHidden()
+        self.__ctx.events.onHideStyleInfo()
         self.disableBlur()
         self.__visible = False
         self.__selectedStyle = None
         if self.__prevStyle is None:
-            self.__ctx.removeStyle(self.__ctx.modifiedStyle.intCD)
-        elif self.__prevStyle != self.__ctx.modifiedStyle:
+            slotId = C11nId(areaId=Area.MISC, slotType=GUI_ITEM_TYPE.STYLE, regionIdx=0)
+            self.__ctx.mode.removeItem(slotId)
+        elif self.__prevStyle != self.__ctx.mode.modifiedStyle:
             self.__installStyle(self.__prevStyle)
         self.__prevStyle = None
-        self.__ctx.onClearItem()
         return
 
     def onApply(self):
-        self.__ctx.onStyleInfoHidden(toBuyWindow=True)
+        self.__ctx.events.onHideStyleInfo(toBuyWindow=True)
         self.__blur.removeRect(_STYLE_INFO_BLUR_RECTANGLE_ID)
         self.service.setDOFenabled(False)
         self.__visible = False
@@ -141,7 +141,7 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
         if self.__ctx.isOutfitsModified():
             stylePrice = style.getBuyPrice().price
             moneyState = getPurchaseMoneyState(stylePrice)
-            purchaseItem = first(self.__ctx.getPurchaseItems())
+            purchaseItem = first(self.__ctx.mode.getPurchaseItems())
             if purchaseItem is not None and purchaseItem.isFromInventory:
                 label = backport.text(R.strings.vehicle_customization.commit.apply())
                 enabled = True
@@ -153,11 +153,15 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
 
     def __makeParamsVO(self, style):
         params = []
+        vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
         for season in SeasonType.COMMON_SEASONS:
-            outfit = style.getOutfit(season)
+            outfit = style.getOutfit(season, vehicleCD=vehicleCD)
             if outfit:
                 container = outfit.hull
-                camo = container.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).getItem()
+                intCD = container.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).getItemCD()
+                if not intCD:
+                    continue
+                camo = self.service.getItemByCD(intCD)
                 if camo and camo.bonus:
                     bonus = camo.bonus.getFormattedValue(g_currentVehicle.item)
                     bonusIcon = backport.image(R.images.gui.maps.icons.customization.style_info.bonus())
@@ -190,12 +194,10 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
         self.__blur.enable = True
 
     def __installStyle(self, style):
-        season = SEASON_TYPE_TO_IDX[self.__ctx.currentSeason]
-        styleSlot = C11nId(areaId=Area.MISC, slotType=GUI_ITEM_TYPE.STYLE, regionIdx=0)
-        self.__ctx.installItem(style.intCD, styleSlot, season)
-        self.__ctx.onClearItem()
+        slotId = C11nId(areaId=Area.MISC, slotType=GUI_ITEM_TYPE.STYLE, regionIdx=0)
+        self.__ctx.mode.installItem(style.intCD, slotId)
 
-    def __onLocateToStyleInfo(self, paramsDOF):
+    def __onUpdateStyleInfoDOF(self, paramsDOF):
         self.__paramsDOF = paramsDOF
         if self.__paramsDOF is not None and self.visible:
             self.service.setDOFparams(self.__paramsDOF)

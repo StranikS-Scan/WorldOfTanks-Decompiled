@@ -14,7 +14,6 @@ from gui.impl.gen import R
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.crew_book import orderCmp as crewBookCmp
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
-from constants import EVENT_BATTLES_TAG
 from helpers import dependency
 from skeletons.gui.demount_kit import IDemountKitNovelty
 from skeletons.gui.lobby_context import ILobbyContext
@@ -106,6 +105,9 @@ class InventoryCategoryStorageView(StorageCategoryStorageViewMeta):
         self.__currentTabId = tabId
         if self.__currentTabId in self.__views:
             self.__views[self.__currentTabId].setTabId(self.__currentTabId)
+
+    def setActiveState(self, isActive):
+        self.setActive(isActive)
 
     def setActiveTab(self, tabId):
         self.__currentTabId = tabId
@@ -203,8 +205,6 @@ class RegularInventoryCategoryTabView(InventoryCategoryView):
             criteria |= REQ_CRITERIA.TYPE_CRITERIA(GUI_ITEM_TYPE.VEHICLE_MODULES, REQ_CRITERIA.VEHICLE.SUITABLE(invVehicles))
         if self._currentTabId in (STORAGE_CONSTANTS.INVENTORY_TAB_ALL, STORAGE_CONSTANTS.INVENTORY_TAB_SHELLS):
             criteria |= REQ_CRITERIA.TYPE_CRITERIA((GUI_ITEM_TYPE.SHELL,), storage_helpers.getStorageShellsCriteria(self._itemsCache, invVehicles, True))
-        if self._currentTabId in (STORAGE_CONSTANTS.INVENTORY_TAB_ALL, STORAGE_CONSTANTS.INVENTORY_TAB_CONSUMABLE):
-            criteria |= REQ_CRITERIA.TYPE_CRITERIA((GUI_ITEM_TYPE.EQUIPMENT,), ~REQ_CRITERIA.EQUIPMENT.HAS_TAGS([EVENT_BATTLES_TAG]))
         return criteria
 
     def _getVO(self, item):

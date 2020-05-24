@@ -5,13 +5,11 @@ from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.daapi.view.lobby.rally.action_button_state_vo import ActionButtonStateVO
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.impl.lobby.secret_event import VehicleMixin
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.settings import UNIT_RESTRICTION
 from gui.shared.tooltips import ToolTipBaseData, TOOLTIP_TYPE
 from helpers import dependency
 from helpers import i18n
-from skeletons.gui.game_event_controller import IGameEventController
 from skeletons.gui.shared import IItemsCache
 
 class CybersportToolTipData(ToolTipBaseData):
@@ -63,8 +61,7 @@ class CybersportSlotSelectedToolTipData(CybersportToolTipData):
         return super(CybersportSlotSelectedToolTipData, self).getDisplayableData(index, unitMgrID)
 
 
-class SquadSlotSelectedToolTipData(CybersportToolTipData, VehicleMixin):
-    gameEventController = dependency.descriptor(IGameEventController)
+class SquadSlotSelectedToolTipData(CybersportToolTipData):
 
     def getDisplayableData(self, index, unitMgrID=None):
         if unitMgrID is not None:
@@ -76,15 +73,6 @@ class SquadSlotSelectedToolTipData(CybersportToolTipData, VehicleMixin):
             accountDBID = unit.getMembers()[index]['accountDBID']
             vehicles = unit.getVehicles()[accountDBID]
             if vehicles:
-                if unit.isEvent():
-                    pInfo = entity.getPlayerInfo(dbID=accountDBID)
-                    generalID, generalLevel, _, _ = pInfo.eventData
-                    commanderProgress = self.gameEventController.getCommander(generalID)
-                    vehicleData = self.getVehicleDataByLevel(commanderProgress, generalLevel)
-                    vehicle = self.itemsCache.items.getItemByCD(vehicleData.typeCompDescr)
-                    vo = vo_converters.makeVehicleVO(vehicle)
-                    vo['isEvent'] = True
-                    return vo
                 vehicle = self.itemsCache.items.getItemByCD(vehicles[0].vehTypeCompDescr)
                 return vo_converters.makeVehicleVO(vehicle)
         super(SquadSlotSelectedToolTipData, self).getDisplayableData()

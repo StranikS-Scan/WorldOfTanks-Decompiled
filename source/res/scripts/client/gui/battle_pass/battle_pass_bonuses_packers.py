@@ -8,6 +8,7 @@ from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusMo
 from gui.impl.gen.view_models.common.missions.bonuses.icon_bonus_model import IconBonusModel
 from gui.impl.gen.view_models.common.missions.bonuses.extended_icon_bonus_model import ExtendedIconBonusModel
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.shared.gui_items.customization import CustomizationTooltipContext
 from gui.shared.missions.packers.bonus import BonusUIPacker, getDefaultBonusPackersMap, BaseBonusUIPacker, DossierBonusUIPacker
 from gui.server_events.recruit_helper import getRecruitInfo
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
@@ -164,7 +165,7 @@ class BattlePassCustomizationsBonusPacker(_BattlePassFinalBonusPacker):
             if item is None:
                 continue
             itemCustomization = bonus.getC11nItem(item)
-            tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_AWARD, specialArgs=[itemCustomization.intCD, False]))
+            tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_AWARD, specialArgs=CustomizationTooltipContext(itemCD=itemCustomization.intCD)))
 
         return tooltipData
 

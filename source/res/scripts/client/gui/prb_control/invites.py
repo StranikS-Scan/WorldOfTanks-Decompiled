@@ -16,6 +16,8 @@ from gui.prb_control import prb_getters
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.items import prb_seqs
 from gui.prb_control.settings import PRB_INVITE_STATE
+from gui.shared import g_eventBus, events
+from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.actions import ActionsChain
 from gui.shared.formatters.icons import makeImageTag
 from gui.shared.utils import getPlayerDatabaseID, getPlayerName, showInvitationInWindowsBar
@@ -325,6 +327,7 @@ class InvitesManager(UsersInfoHelper):
         g_playerEvents.onPrebattleInvitesChanged += self.__onPrebattleInvitesChanged
         g_playerEvents.onPrebattleInvitationsChanged += self.__onPrebattleInvitationsChanged
         g_playerEvents.onPrebattleInvitesStatus += self.__onPrebattleInvitesStatus
+        g_eventBus.addListener(events.PrbInvitesEvent.ACCEPT, self.__acceptInvite, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def fini(self):
         self.__clearAcceptChain()
@@ -336,6 +339,7 @@ class InvitesManager(UsersInfoHelper):
         g_playerEvents.onPrebattleInvitationsChanged -= self.__onPrebattleInvitationsChanged
         g_playerEvents.onPrebattleInvitesChanged -= self.__onPrebattleInvitesChanged
         g_playerEvents.onPrebattleInvitesStatus -= self.__onPrebattleInvitesStatus
+        g_eventBus.removeListener(events.PrbInvitesEvent.ACCEPT, self.__acceptInvite, scope=EVENT_BUS_SCOPE.LOBBY)
         self.clear()
         return
 
@@ -841,6 +845,9 @@ class InvitesManager(UsersInfoHelper):
         self.onReceivedInviteListModified(invitations, [], [])
         if self.appLoader.getSpaceID() != GuiGlobalSpaceID.BATTLE:
             self.syncUsersInfo()
+
+    def __acceptInvite(self, event):
+        self.acceptInvite(event.inviteID, event.postActions)
 
 
 class AutoInvitesNotifier(object):

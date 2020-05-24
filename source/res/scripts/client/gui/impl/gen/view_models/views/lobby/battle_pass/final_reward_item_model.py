@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class FinalRewardItemModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=7, commands=0):
+    def __init__(self, properties=8, commands=0):
         super(FinalRewardItemModel, self).__init__(properties=properties, commands=commands)
 
     def getStyleID(self):
@@ -50,6 +50,12 @@ class FinalRewardItemModel(ViewModel):
     def setSelected(self, value):
         self._setBool(6, value)
 
+    def getRewards(self):
+        return self._getString(7)
+
+    def setRewards(self, value):
+        self._setString(7, value)
+
     def _initialize(self):
         super(FinalRewardItemModel, self)._initialize()
         self._addNumberProperty('styleID', 0)
@@ -59,3 +65,4 @@ class FinalRewardItemModel(ViewModel):
         self._addStringProperty('styleName', '')
         self._addStringProperty('recruitName', '')
         self._addBoolProperty('selected', False)
+        self._addStringProperty('rewards', '')

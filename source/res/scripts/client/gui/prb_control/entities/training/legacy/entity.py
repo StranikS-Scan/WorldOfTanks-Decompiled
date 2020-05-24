@@ -80,7 +80,7 @@ class TrainingIntroEntity(LegacyIntroEntity):
         result = super(TrainingIntroEntity, self).fini(clientPrb=clientPrb, ctx=ctx, woEvents=woEvents)
         if not woEvents:
             aliasToLoad = [PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY, PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY]
-            if not self.canSwitch(ctx) and g_eventDispatcher.needToLoadHangar(ctx, self.getModeFlags(), aliasToLoad) and not ctx.hasFlags(FUNCTIONAL_FLAG.LOAD_PAGE):
+            if not self.canSwitch(ctx) and g_eventDispatcher.needToLoadHangar(ctx, self.getModeFlags(), aliasToLoad):
                 g_eventDispatcher.loadHangar()
             g_eventDispatcher.removeTrainingFromCarousel()
         else:
@@ -106,8 +106,6 @@ class TrainingIntroEntity(LegacyIntroEntity):
 
 class TrainingEntity(LegacyEntity):
     __loadEvents = (VIEW_ALIAS.LOBBY_HANGAR,
-     VIEW_ALIAS.LOBBY_INVENTORY,
-     VIEW_ALIAS.LOBBY_STORE_OLD,
      VIEW_ALIAS.LOBBY_STORE,
      VIEW_ALIAS.LOBBY_STORAGE,
      VIEW_ALIAS.LOBBY_TECHTREE,
@@ -160,7 +158,7 @@ class TrainingEntity(LegacyEntity):
 
         if not woEvents:
             aliasToLoad = [PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY, PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY]
-            if not self.canSwitch(ctx) and g_eventDispatcher.needToLoadHangar(ctx, self.getModeFlags(), aliasToLoad) and (ctx is None or not ctx.hasFlags(FUNCTIONAL_FLAG.LOAD_PAGE)):
+            if not self.canSwitch(ctx) and g_eventDispatcher.needToLoadHangar(ctx, self.getModeFlags(), aliasToLoad):
                 g_eventDispatcher.loadHangar()
             g_eventDispatcher.removeTrainingFromCarousel(False)
             self.storage.suspend()

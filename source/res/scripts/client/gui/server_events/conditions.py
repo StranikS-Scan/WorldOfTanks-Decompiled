@@ -314,7 +314,7 @@ class _VehsListParser(object):
         return self._isAnyVehicleAcceptable(self._data)
 
     def getFilterCriteria(self, data):
-        types, nations, levels, classes = self._parseFilters(data)
+        types, nations, levels, classes, actionsGroups = self._parseFilters(data)
         defaultCriteria = self._getDefaultCriteria()
         if types:
             criteria = REQ_CRITERIA.VEHICLE.SPECIFIC_BY_CD(types)
@@ -326,6 +326,8 @@ class _VehsListParser(object):
                 criteria |= REQ_CRITERIA.VEHICLE.LEVELS(levels)
             if classes:
                 criteria |= REQ_CRITERIA.VEHICLE.CLASSES(classes)
+            if actionsGroups:
+                criteria |= REQ_CRITERIA.VEHICLE.ACTION_GROUPS(actionsGroups)
         return self._postProcessCriteria(defaultCriteria, criteria)
 
     def _clearItemsCache(self):
@@ -339,7 +341,8 @@ class _VehsListParser(object):
         return not set(data) & {'types',
          'nations',
          'levels',
-         'classes'}
+         'classes',
+         'actionsGroups'}
 
     def _getDefaultCriteria(self):
         return REQ_CRITERIA.DISCLOSABLE
@@ -353,7 +356,7 @@ class _VehsListParser(object):
         return self._getVehiclesCache(data).values()
 
     def _parseFilters(self, data):
-        types, nations, levels, classes = (None, None, None, None)
+        types, nations, levels, classes, actionsGroups = (None, None, None, None, None)
         if 'types' in data:
             types = _getNodeValue(data, 'types')
         if 'nations' in data:
@@ -364,10 +367,14 @@ class _VehsListParser(object):
         if 'classes' in data:
             acceptedClasses = _getNodeValue(data, 'classes')
             classes = [ name for name, index in constants.VEHICLE_CLASS_INDICES.items() if index in acceptedClasses ]
+        if 'actionsGroups' in data:
+            acceptedGroups = _getNodeValue(data, 'actionsGroups')
+            actionsGroups = [ constants.ACTIONS_GROUP_TYPE_TO_LABEL[groupID] for groupID in acceptedGroups ]
         return (types,
          nations,
          levels,
-         classes)
+         classes,
+         actionsGroups)
 
 
 class _VehsListCondition(_Condition, _VehsListParser):
@@ -1553,31 +1560,3 @@ def getProgressFromQuestWithSingleAccumulative(quest):
             currentProgress, totalProgress = item.getProgressPerGroup().get(None, [])[:2]
             return (currentProgress, totalProgress)
     return (None, None)
-
-
-def getTokenNeededCountInCondition(quest, tokenName, default=None):
-    return default if quest is None else _getTokenNeededCountInCondition(quest.accountReqs.getConditions().items, tokenName, default)
-
-
-def _getTokenNeededCountInCondition(items, tokenName, default=None):
-    item = _getTokenItemInCondition(items, tokenName)
-    return default if item is None else item.getNeededCount()
-
-
-def getTokenReceivedCountInCondition(quest, tokenName, default=None):
-    return default if quest is None else _getTokenReceivedCountInCondition(quest.accountReqs.getConditions().items, tokenName, default)
-
-
-def _getTokenReceivedCountInCondition(items, tokenName, default=None):
-    item = _getTokenItemInCondition(items, tokenName)
-    return default if item is None else item.getReceivedCount()
-
-
-def _getTokenItemInCondition(items, tokenName):
-    for item in items:
-        if isinstance(item, _ConditionsGroup):
-            return _getTokenItemInCondition(item.items, tokenName)
-        if item.getName() == 'token' and item.getID() == tokenName:
-            return item
-
-    return None

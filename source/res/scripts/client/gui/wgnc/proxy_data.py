@@ -11,7 +11,7 @@ from gui.wgnc.common import WebHandlersContainer
 from gui.wgnc.events import g_wgncEvents
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
 from helpers import dependency
-from skeletons.gui.game_control import IBrowserController, IPromoController, IReferralProgramController
+from skeletons.gui.game_control import IBrowserController, IPromoController, IReferralProgramController, IClanNotificationController
 from skeletons.gui.shared.promo import IPromoLogger
 
 class _ProxyDataItem(object):
@@ -248,6 +248,21 @@ class UpdateRefferalBubbleItem(_ProxyDataItem):
 
     def show(self, _):
         self._referralCtrl.updateBubble()
+
+
+class UpdateClanNotificationItem(_ProxyDataItem):
+    _notificationCtrl = dependency.descriptor(IClanNotificationController)
+
+    def __init__(self, alias, value, isIncrement):
+        self._alias = alias
+        self._value = value
+        self._isIncrement = isIncrement
+
+    def getType(self):
+        return WGNC_DATA_PROXY_TYPE.UPDATE_CLAN_NOTIFICATION
+
+    def show(self, notID):
+        self._notificationCtrl.setCounters(self._alias, self._value, self._isIncrement)
 
 
 class BecomeRecruiterItem(_ProxyDataItem):

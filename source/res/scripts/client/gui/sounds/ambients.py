@@ -37,7 +37,6 @@ class SoundEvent(Notifiable):
         self._params = params or {}
         self._checkFinish = checkFinish
         self._isStarted = False
-        self._extraData = {}
         self.onStarted = Event()
         self.onFinished = Event()
 
@@ -56,7 +55,7 @@ class SoundEvent(Notifiable):
     def start(self):
         if not self.isPlaying():
             SOUND_DEBUG('Start playing sound event', self._soundEventID, self._params)
-            _MC.g_musicController.play(self._soundEventID, self._params, extraData=self._extraData)
+            _MC.g_musicController.play(self._soundEventID, self._params)
             if self._checkFinish:
                 self._isStarted = True
                 self.addNotificators(PeriodicNotifier(self._getNotificationDelta, self._onCheckAmbientNotification, (PLAYING_SOUND_CHECK_PERIOD,)))
@@ -86,9 +85,6 @@ class SoundEvent(Notifiable):
     def setParam(self, paramName, value):
         self._params[paramName] = value
         _MC.g_musicController.setEventParam(paramName, int(value))
-
-    def setExtraData(self, key, value):
-        self._extraData[key] = value
 
     def _getNotificationDelta(self):
         return PLAYING_SOUND_CHECK_PERIOD if self._isStarted else 0
@@ -353,26 +349,11 @@ class BattlePassSoundEnv(SoundEnv):
         super(BattlePassSoundEnv, self).__init__(soundsCtrl, 'battlePass', filters=(SoundFilters.BATTLE_PASS_FILTER,))
 
 
-class EventBattleLoadingSpaceEnv(BattleLoadingSpaceEnv):
-
-    def __init__(self, soundsCtrl):
-        super(EventBattleLoadingSpaceEnv, self).__init__(soundsCtrl)
-        self._startStates = {'STATE_ev_2020_secret_event_gameplay': 'STATE_ev_2020_secret_event_gameplay_on'}
-
-
-class EventBattleSpaceEnv(BattleSpaceEnv):
-
-    def __init__(self, soundsCtrl):
-        super(EventBattleSpaceEnv, self).__init__(soundsCtrl)
-        self._stopStates = {'STATE_ev_2020_secret_event_gameplay': 'STATE_ev_2020_secret_event_gameplay_off'}
-
-
 class GuiAmbientsCtrl(object):
     _spaces = {GuiGlobalSpaceID.LOGIN: LoginSpaceEnv,
      GuiGlobalSpaceID.LOBBY: LobbySpaceEnv,
      GuiGlobalSpaceID.BATTLE_LOADING: BattleLoadingSpaceEnv,
      GuiGlobalSpaceID.BATTLE: BattleSpaceEnv}
-    sessionProvider = dependency.descriptor(IBattleSessionProvider)
     hangarSpace = dependency.descriptor(IHangarSpace)
     appLoader = dependency.descriptor(IAppLoader)
 
@@ -439,12 +420,9 @@ class GuiAmbientsCtrl(object):
     def app(self):
         return None
 
-    def _restartSounds(self, spaceID=None):
+    def _restartSounds(self):
         result = []
-        for vt in (ViewTypes.TOP_WINDOW,
-         ViewTypes.WINDOW,
-         ViewTypes.LOBBY_TOP_SUB,
-         ViewTypes.LOBBY_SUB):
+        for vt in (ViewTypes.TOP_WINDOW, ViewTypes.WINDOW, ViewTypes.LOBBY_SUB):
             result.extend(self._customEnvs[vt].values())
 
         result.append(self._spaceEnv)
@@ -459,8 +437,6 @@ class GuiAmbientsCtrl(object):
 
         SOUND_DEBUG('Starting sound events', music, ambient)
         for event in (music, ambient):
-            if spaceID:
-                event.setExtraData('spaceID', spaceID)
             event.start()
 
     def _buildSoundEnv(self, soundEnvClass):
@@ -495,7 +471,7 @@ class GuiAmbientsCtrl(object):
         if spaceID in self._spaces:
             self._clearSoundEnv(self._spaceEnv)
             self._spaceEnv = self._buildSoundEnv(self._spaces[spaceID])
-            self._restartSounds(spaceID)
+            self._restartSounds()
 
     def __onGUISpaceLeft(self, spaceID):
         SOUND_DEBUG('Leaving GUI space', spaceID, spaceID in self._spaces)

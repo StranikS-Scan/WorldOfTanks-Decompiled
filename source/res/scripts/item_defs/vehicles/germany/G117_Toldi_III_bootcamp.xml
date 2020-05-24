@@ -293,30 +293,6 @@
           <offset>	-0.012	</offset>
         </node>
       </trackNodes>
-      <effects>
-        <lodDist>	MEDIUM	</lodDist>
-        <mud>	smallTankMud	</mud>
-      </effects>
-      <wwsoundPC>	treads_type_pc	</wwsoundPC>
-      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.003332 0.868484 -0.090205	</hullPosition>
-      <hitTester>
-        <collisionModelServer>	vehicles/german/G117_Toldi_III/collision/Chassis.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/german/G117_Toldi_III/collision_client/Chassis.model	</collisionModelClient>
-      </hitTester>
-      <topRightCarryingPoint>	0.894914 1.3509	</topRightCarryingPoint>
-      <maxClimbAngle>	25	</maxClimbAngle>
-      <navmeshGirth>	6.0	</navmeshGirth>
-      <AODecals>
-        <decal>
-          <transform>
-            <row0>	2.872810 0.000000 0.000000	</row0>
-            <row1>	0.000000 0.988272 0.000000	</row1>
-            <row2>	0.000000 0.000000 4.967980	</row2>
-            <row3>	0.000000 0.000000 -0.000006	</row3>
-          </transform>
-        </decal>
-      </AODecals>
       <physicalTracks>
         <left>
           <segmentsCount>	130	</segmentsCount>
@@ -807,6 +783,30 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.003332 0.868484 -0.090205	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G117_Toldi_III/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G117_Toldi_III/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	0.894914 1.3509	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.872810 0.000000 0.000000	</row0>
+            <row1>	0.000000 0.988272 0.000000	</row1>
+            <row2>	0.000000 0.000000 4.967980	</row2>
+            <row3>	0.000000 0.000000 -0.000006	</row3>
+          </transform>
+        </decal>
+      </AODecals>
       <customization>
         <customizableVehicleAreas>
           <paint></paint>
@@ -990,36 +990,15 @@
       <chassis>
         <Chassis_G117_Toldi_III_bootcamp>
           <grounds>
-            <ground>
-              <medium>
-                <rollingFriction>	0.08855	</rollingFriction>
-              </medium>
-            </ground>
-            <sand>
-              <medium>
-                <rollingFriction>	0.08855	</rollingFriction>
-              </medium>
-            </sand>
-            <wood>
-              <medium>
-                <rollingFriction>	0.08855	</rollingFriction>
-              </medium>
-            </wood>
-            <snow>
-              <medium>
-                <rollingFriction>	0.08855	</rollingFriction>
-              </medium>
-            </snow>
-            <stone>
-              <medium>
-                <rollingFriction>	0.08855	</rollingFriction>
-              </medium>
-            </stone>
-            <metal>
-              <medium>
-                <rollingFriction>	0.08855	</rollingFriction>
-              </medium>
-            </metal>
+            <soft>
+              <rollingFriction>	0.13685	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.08855	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.07245	</rollingFriction>
+            </firm>
           </grounds>
         </Chassis_G117_Toldi_III_bootcamp>
       </chassis>

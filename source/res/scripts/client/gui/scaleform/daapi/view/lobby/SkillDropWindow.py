@@ -1,8 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/SkillDropWindow.py
 import cPickle as pickle
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
-from gui.ingame_shop import showBuyGoldForCrew
+from gui.shop import showBuyGoldForCrew
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from helpers import dependency
 from items import tankmen
@@ -108,7 +107,7 @@ class SkillDropWindow(SkillDropMeta):
         tankman = self.itemsCache.items.getTankman(self.tmanInvID)
         dropSkillCost = self.itemsCache.items.shop.dropSkillsCost[dropSkillCostIdx].get(Currency.GOLD, 0)
         currentGold = self.itemsCache.items.stats.gold
-        if currentGold < dropSkillCost and isIngameShopEnabled():
+        if currentGold < dropSkillCost:
             showBuyGoldForCrew(dropSkillCost)
             return
         proc = TankmanDropSkills(tankman, dropSkillCostIdx)

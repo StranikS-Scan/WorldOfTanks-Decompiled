@@ -4,6 +4,9 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class StorageCategoryStorageViewMeta(BaseDAAPIComponent):
 
+    def setActiveState(self, isActive):
+        self._printOverrideError('setActiveState')
+
     def onOpenTab(self, index):
         self._printOverrideError('onOpenTab')
 

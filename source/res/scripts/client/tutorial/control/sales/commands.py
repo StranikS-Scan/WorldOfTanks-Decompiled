@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/sales/commands.py
-from account_helpers.AccountSettings import AccountSettings, DEFAULT_VEHICLE_TYPES_FILTER, DEFAULT_LEVELS_FILTERS
+from account_helpers.AccountSettings import AccountSettings
+from gui.Scaleform.daapi.view.lobby.store.browser import shop_helpers
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.server_events.events_dispatcher import showMissionsMarathon
 from gui.shared import g_eventBus
+from gui.shared.event_dispatcher import showShop
 from gui.shared.events import OpenLinkEvent
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from helpers import dependency
@@ -26,18 +28,32 @@ def showMarathonPage():
     showMissionsMarathon()
 
 
-def configureShopForEquipment():
-    AccountSettings.setFilter('shop_current', (-1, STORE_CONSTANTS.EQUIPMENT, True))
-    eqFilter = AccountSettings.getFilter('shop_equipment')
-    eqFilter['fitsType'] = STORE_CONSTANTS.OTHER_VEHICLES_ARTEFACT_FIT
-    AccountSettings.setFilter('shop_equipment', eqFilter)
+def showShopPremium():
+    showShop(shop_helpers.getBuyPremiumUrl())
 
 
-def configureShopForOptionalDevice():
-    AccountSettings.setFilter('shop_current', (-1, STORE_CONSTANTS.OPTIONAL_DEVICE, True))
-    optDevFilter = AccountSettings.getFilter('shop_optionalDevice')
-    optDevFilter['fitsType'] = STORE_CONSTANTS.OTHER_VEHICLES_ARTEFACT_FIT
-    AccountSettings.setFilter('shop_optionalDevice', optDevFilter)
+def showShopEquipment():
+    showShop(shop_helpers.getBuyEquipmentUrl())
+
+
+def showShopOptionalDevice():
+    showShop(shop_helpers.getBuyOptionalDevicesUrl())
+
+
+def showShopPersonalReserves():
+    showShop(shop_helpers.getBuyPersonalReservesUrl())
+
+
+def showShopVehicles():
+    showShop(shop_helpers.getBuyVehiclesUrl())
+
+
+def showShopVehiclesRent():
+    showShop(shop_helpers.getBuyVehiclesUrl())
+
+
+def showShopVehiclesTradeIn():
+    showShop(shop_helpers.getTradeInVehiclesUrl())
 
 
 def configureShopForShells():
@@ -49,35 +65,6 @@ def configureShopForShells():
      STORE_CONSTANTS.HOLLOW_CHARGE_SHELL,
      STORE_CONSTANTS.HIGH_EXPLOSIVE_SHELL]
     AccountSettings.setFilter('shop_shell', shellsFilter)
-
-
-def configureShopForVehicleBuy():
-    AccountSettings.setFilter('shop_current', (-1, STORE_CONSTANTS.VEHICLE, True))
-    vehFilter = AccountSettings.getFilter('shop_vehicle')
-    vehFilter['obtainingType'] = STORE_CONSTANTS.VEHICLE
-    vehFilter['selectedTypes'] = DEFAULT_VEHICLE_TYPES_FILTER
-    vehFilter['selectedLevels'] = DEFAULT_LEVELS_FILTERS
-    vehFilter['extra'] = [STORE_CONSTANTS.LOCKED_EXTRA_NAME, STORE_CONSTANTS.IN_HANGAR_EXTRA_NAME]
-    AccountSettings.setFilter('shop_vehicle', vehFilter)
-
-
-def configureShopForVehicleRent():
-    AccountSettings.setFilter('shop_current', (-1, STORE_CONSTANTS.VEHICLE, True))
-    vehFilter = AccountSettings.getFilter('shop_vehicle')
-    vehFilter['obtainingType'] = STORE_CONSTANTS.VEHICLE
-    vehFilter['selectedTypes'] = DEFAULT_VEHICLE_TYPES_FILTER
-    vehFilter['selectedLevels'] = DEFAULT_LEVELS_FILTERS
-    vehFilter['extra'] = [STORE_CONSTANTS.RENTALS_EXTRA_NAME]
-    AccountSettings.setFilter('shop_vehicle', vehFilter)
-
-
-def configureShopForVehicleTradeIn():
-    AccountSettings.setFilter('shop_current', (-1, STORE_CONSTANTS.VEHICLE, True))
-    vehFilter = AccountSettings.getFilter('shop_vehicle')
-    vehFilter['obtainingType'] = STORE_CONSTANTS.TRADE_IN_VEHICLE
-    vehFilter['selectedTypes'] = DEFAULT_VEHICLE_TYPES_FILTER
-    vehFilter['selectedLevels'] = DEFAULT_LEVELS_FILTERS
-    AccountSettings.setFilter('shop_vehicle', vehFilter)
 
 
 def showAdventCalendarFromAction():

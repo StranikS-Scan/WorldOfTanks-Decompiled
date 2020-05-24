@@ -22,7 +22,6 @@ class TOOLTIPS(object):
     TRADEINUNAVAILABLE = '#tooltips:tradeInUnavailable'
     TRADEINNOVEHICLES = '#tooltips:tradeInNoVehicles'
     SENIORITYAWARDS_HANGARENTRYPOINT_TOOLTIP = '#tooltips:seniorityAwards/hangarEntryPoint/tooltip'
-    SECRET_EVENT_BANNER_TIMELEFT = '#tooltips:secret_event/banner/timeLeft'
     BATTLERESULTS_FORTRESOURCE_RESULTSSHAREBTN = '#tooltips:battleResults/FortResource/resultsShareBtn'
     PRIVATEQUESTS_AWARDSBUTTON = '#tooltips:privateQuests/awardsButton'
     PRIVATEQUESTS_BACKBUTTON = '#tooltips:privateQuests/backButton'
@@ -40,19 +39,18 @@ class TOOLTIPS(object):
     HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY = '#tooltips:hangar/ammo_panel/equipment/empty'
     HANGAR_AMMO_PANEL_BATTLEBOOSTER_EMPTY = '#tooltips:hangar/ammo_panel/battleBooster/empty'
     HANGAR_MAINTENANCE = '#tooltips:hangar/maintenance'
+    HANGAR_MAINTENANCE_DISABLED = '#tooltips:hangar/maintenance/disabled'
     HANGAR_AMMO_PANEL_BATTLEABILITY_EMPTY = '#tooltips:hangar/ammo_panel/battleAbility/empty'
     HEADER_ACCOUNT = '#tooltips:header/account'
     HEADER_SQUAD = '#tooltips:header/squad'
     HEADER_EVENTSQUAD = '#tooltips:header/eventSquad'
     HEADER_DOMINATIONSQUAD = '#tooltips:header/dominationSquad'
     HEADER_RANKEDSQUAD = '#tooltips:header/rankedSquad'
-    HEADER_BOBSQUAD = '#tooltips:header/bobSquad'
     HEADER_SQUAD_MEMBER = '#tooltips:header/squad_member'
     HEADER_BATTLETYPE = '#tooltips:header/battleType'
     HEADER_INFO_PLAYERS_ONLINE_FULL = '#tooltips:header/info/players_online_full'
     HEADER_BUTTONS_HANGAR = '#tooltips:header/buttons/hangar'
     HEADER_BUTTONS_SHOP = '#tooltips:header/buttons/shop'
-    HEADER_BUTTONS_SHOP2 = '#tooltips:header/buttons/shop2'
     HEADER_BUTTONS_STORAGE = '#tooltips:header/buttons/storage'
     HEADER_BUTTONS_PROFILE = '#tooltips:header/buttons/profile'
     HEADER_BUTTONS_TECHTREE = '#tooltips:header/buttons/techtree'
@@ -79,7 +77,6 @@ class TOOLTIPS(object):
     BATTLETYPES_FALLOUT = '#tooltips:battleTypes/fallout'
     BATTLETYPES_BATTLETUTORIAL = '#tooltips:battleTypes/battleTutorial'
     BATTLETYPES_RANKED = '#tooltips:battleTypes/ranked'
-    BATTLETYPES_EVENT = '#tooltips:battleTypes/event'
     LOBY_MESSENGER_CONTACTS_BUTTON = '#tooltips:loby_messenger/contacts_button'
     LOBY_MESSENGER_VEHICLE_COMPARE_BUTTON = '#tooltips:loby_messenger/vehicle_compare_button'
     LOBY_MESSENGER_REFERRAL_BUTTON = '#tooltips:loby_messenger/referral_button'
@@ -166,6 +163,7 @@ class TOOLTIPS(object):
     STORAGE_MAINMENU_PERSONAL_RESERVES = '#tooltips:storage/mainMenu/personal_reserves'
     STORAGE_MAINMENU_CUSTOMIZATION = '#tooltips:storage/mainMenu/customization'
     STORAGE_MAINMENU_BLUEPRINTS = '#tooltips:storage/mainMenu/blueprints'
+    STORAGE_MAINMENU_OFFERS = '#tooltips:storage/mainMenu/offers'
     TECHTREEPAGE_BLUEPRINTSSWITCHTOOLTIP = '#tooltips:techTreePage/blueprintsSwitchTooltip'
     TECHTREEPAGE_BLUEPRINTSSWITCHTOOLTIPDISABLED = '#tooltips:techTreePage/blueprintsSwitchTooltipDisabled'
     TECHTREEPAGE_BLUEPRINTCONVERTTOOLTIP = '#tooltips:techTreePage/blueprintConvertTooltip'
@@ -293,14 +291,6 @@ class TOOLTIPS(object):
     SQUADWINDOW_DEMANDFORVEHICLE_NOTVALIDVEHICLE_BODY = '#tooltips:squadWindow/demandForVehicle/notValidVehicle/body'
     SQUADWINDOW_DOMINATION_VEHICLESINFOICON_HEADER = '#tooltips:squadWindow/domination/vehiclesInfoIcon/header'
     SQUADWINDOW_DOMINATION_VEHICLESINFOICON_BODY = '#tooltips:squadWindow/domination/vehiclesInfoIcon/body'
-    SQUADWINDOW_INFOICON_TECH_EVENT_HEADER = '#tooltips:squadWindow/infoIcon/tech/event/header'
-    SQUADWINDOW_INFOICON_TECH_EVENT_BODY = '#tooltips:squadWindow/infoIcon/tech/event/body'
-    SQUADWINDOW_EVENTINFO_ROADTOBERLIN_HEADER = '#tooltips:squadWindow/eventInfo/roadToBerlin/header'
-    SQUADWINDOW_EVENTINFO_ROADTOBERLIN_BODY = '#tooltips:squadWindow/eventInfo/roadToBerlin/body'
-    SQUADWINDOW_EVENTINFO_BERLIN_HEADER = '#tooltips:squadWindow/eventInfo/berlin/header'
-    SQUADWINDOW_EVENTINFO_BERLIN_BODY = '#tooltips:squadWindow/eventInfo/berlin/body'
-    SQUADWINDOW_EVENTINFO_BERLIN_WINNERDAY = '#tooltips:squadWindow/eventInfo/berlin/winnerDay'
-    SQUADWINDOW_EVENTINFO_PLAYINFO = '#tooltips:squadWindow/eventInfo/playInfo'
     LOGIN_REMEMBERPASSWORD_SIMPLE_HEADER = '#tooltips:login/rememberPassword/simple/header'
     LOGIN_REMEMBERPASSWORD_SIMPLE_BODY = '#tooltips:login/rememberPassword/simple/body'
     LOGIN_REMEMBERPASSWORD_SOCIAL_HEADER = '#tooltips:login/rememberPassword/social/header'
@@ -570,7 +560,10 @@ class TOOLTIPS(object):
     BATTLETYPES_RANKED_STEPSCOUNT_8 = '#tooltips:battleTypes/ranked/stepsCount/8'
     BATTLETYPES_RANKED_STEPSCOUNT_9 = '#tooltips:battleTypes/ranked/stepsCount/9'
     BATTLETYPES_RANKED_BONUSBATTLE_TITLE = '#tooltips:battleTypes/ranked/bonusBattle/title'
-    BATTLETYPES_RANKED_BONUSBATTLE_COUNT = '#tooltips:battleTypes/ranked/bonusBattle/count'
+    BATTLETYPES_RANKED_BONUSBATTLE_PERSISTENT_TITLE = '#tooltips:battleTypes/ranked/bonusBattle/persistent/title'
+    BATTLETYPES_RANKED_BONUSBATTLE_DAILY_TITLE = '#tooltips:battleTypes/ranked/bonusBattle/daily/title'
+    BATTLETYPES_RANKED_BONUSBATTLE_DAILY_BODYINCOME = '#tooltips:battleTypes/ranked/bonusBattle/daily/bodyIncome'
+    BATTLETYPES_RANKED_BONUSBATTLE_DAILY_BODYOTHER = '#tooltips:battleTypes/ranked/bonusBattle/daily/bodyOther'
     BATTLETYPES_RANKED_BONUSBATTLE_DESCRIPTION = '#tooltips:battleTypes/ranked/bonusBattle/description'
     RANKED_SERVERNAME = '#tooltips:ranked/serverName'
     FALLOUTBATTLESELECTORWINDOW_INFO_HEADER = '#tooltips:falloutBattleSelectorWindow/info/header'
@@ -696,8 +689,6 @@ class TOOLTIPS(object):
     HEADER_DOMINATIONSQUAD_BODY = '#tooltips:header/dominationSquad/body'
     HEADER_RANKEDSQUAD_HEADER = '#tooltips:header/rankedSquad/header'
     HEADER_RANKEDSQUAD_BODY = '#tooltips:header/rankedSquad/body'
-    HEADER_BOBSQUAD_HEADER = '#tooltips:header/bobSquad/header'
-    HEADER_BOBSQUAD_BODY = '#tooltips:header/bobSquad/body'
     HEADER_BATTLETYPE_HEADER = '#tooltips:header/battleType/header'
     HEADER_BATTLETYPE_BODY = '#tooltips:header/battleType/body'
     HEADER_REFILL_ACTION_ATTENTION = '#tooltips:header/refill_action/attention'
@@ -741,6 +732,8 @@ class TOOLTIPS(object):
     HANGAR_UNLOCKBUTTON_BODY = '#tooltips:hangar/unlockButton/body'
     HANGAR_MAINTENANCE_HEADER = '#tooltips:hangar/maintenance/header'
     HANGAR_MAINTENANCE_BODY = '#tooltips:hangar/maintenance/body'
+    HANGAR_MAINTENANCE_DISABLED_HEADER = '#tooltips:hangar/maintenance/disabled/header'
+    HANGAR_MAINTENANCE_DISABLED_BODY = '#tooltips:hangar/maintenance/disabled/body'
     HANGAR_TUNING_HEADER = '#tooltips:hangar/tuning/header'
     HANGAR_TUNING_BODY = '#tooltips:hangar/tuning/body'
     HANGAR_TUNING_DISABLED_HEADER = '#tooltips:hangar/tuning/disabled/header'
@@ -980,8 +973,6 @@ class TOOLTIPS(object):
     HEADER_BUTTONS_INVENTORY_BODY = '#tooltips:header/buttons/inventory/body'
     HEADER_BUTTONS_SHOP_HEADER = '#tooltips:header/buttons/shop/header'
     HEADER_BUTTONS_SHOP_BODY = '#tooltips:header/buttons/shop/body'
-    HEADER_BUTTONS_SHOP2_HEADER = '#tooltips:header/buttons/shop2/header'
-    HEADER_BUTTONS_SHOP2_BODY = '#tooltips:header/buttons/shop2/body'
     HEADER_BUTTONS_STORAGE_HEADER = '#tooltips:header/buttons/storage/header'
     HEADER_BUTTONS_STORAGE_BODY = '#tooltips:header/buttons/storage/body'
     HEADER_BUTTONS_PROFILE_HEADER = '#tooltips:header/buttons/profile/header'
@@ -1150,7 +1141,6 @@ class TOOLTIPS(object):
     VEHICLE_DEAL_TELECOM_MAIN_TWITCHPRIME = '#tooltips:vehicle/deal/telecom/main/Twitchprime'
     VEHICLE_TRADE = '#tooltips:vehicle/trade'
     VEHICLE_DEAL_EPIC_MAIN = '#tooltips:vehicle/deal/epic/main'
-    VEHICLE_DEAL_BOB_MAIN = '#tooltips:vehicle/deal/bob/main'
     ANONYMIZER_TEAMSTATS_HEADER = '#tooltips:anonymizer/teamStats/header'
     ANONYMIZER_TEAMSTATS_BODY = '#tooltips:anonymizer/teamStats/body'
     BUYSKILL_FULLY = '#tooltips:buySkill/fully'
@@ -1163,9 +1153,13 @@ class TOOLTIPS(object):
     QUESTS_NEWLABEL_TASK = '#tooltips:quests/newLabel/task'
     QUESTS_NEWLABEL_ACTION = '#tooltips:quests/newLabel/action'
     QUESTS_LINKBTN_TASK = '#tooltips:quests/linkBtn/task'
+    QUESTS_LINKBTN_CUSTOMIZATIONPROGRESSION_ENABLED = '#tooltips:quests/linkBtn/customizationProgression/enabled'
+    QUESTS_LINKBTN_CUSTOMIZATIONPROGRESSION_DISABLED = '#tooltips:quests/linkBtn/customizationProgression/disabled'
     QUESTS_DISABLELINKBTN_TASK = '#tooltips:quests/disableLinkBtn/task'
     QUESTS_LINKBTN_BATTLEPASS = '#tooltips:quests/linkBtn/battlePass'
     QUESTS_STATUS_DONE = '#tooltips:quests/status/done'
+    QUESTS_STATUS_CUSTOMIZATIONPROGRESSION_DONEFIRST = '#tooltips:quests/status/customizationProgression/doneFirst'
+    QUESTS_STATUS_CUSTOMIZATIONPROGRESSION_DONE = '#tooltips:quests/status/customizationProgression/done'
     QUESTS_STATUS_NOTREADY = '#tooltips:quests/status/notready'
     QUESTS_STATUS_NOTDONE = '#tooltips:quests/status/notDone'
     QUESTS_RENDERER_LABEL = '#tooltips:quests/renderer/label'
@@ -1880,6 +1874,12 @@ class TOOLTIPS(object):
     AWARDITEM_ONEOF_RANKEDSEASON_HEADER = '#tooltips:awardItem/oneof/rankedSeason/header'
     AWARDITEM_ONEOF_RANKEDSEASON_BODY = '#tooltips:awardItem/oneof/rankedSeason/body'
     AWARDITEM_ONEOF_RANKEDSEASON_PREVIEWSTYLE_BODY = '#tooltips:awardItem/oneof/rankedSeason/previewStyle/body'
+    AWARDITEM_TESTENTITLEMENT_HEADER = '#tooltips:awardItem/testEntitlement/header'
+    AWARDITEM_TESTENTITLEMENT_BODY = '#tooltips:awardItem/testEntitlement/body'
+    AWARDITEM_RANKEDDAILYBATTLES_HEADER = '#tooltips:awardItem/rankedDailyBattles/header'
+    AWARDITEM_RANKEDDAILYBATTLES_BODY = '#tooltips:awardItem/rankedDailyBattles/body'
+    AWARDITEM_RANKEDBONUSBATTLES_HEADER = '#tooltips:awardItem/rankedBonusBattles/header'
+    AWARDITEM_RANKEDBONUSBATTLES_BODY = '#tooltips:awardItem/rankedBonusBattles/body'
     RANKEDBATTLEVIEW_SCOREPOINT_SHORT_HEADER = '#tooltips:rankedBattleView/scorePoint/short/header'
     RANKEDBATTLEVIEW_SCOREPOINT_HEADER = '#tooltips:rankedBattleView/scorePoint/header'
     RANKEDBATTLEVIEW_SCOREPOINT_BODY = '#tooltips:rankedBattleView/scorePoint/body'
@@ -1997,6 +1997,7 @@ class TOOLTIPS(object):
     VEHICLEPARAMS_PENALTIES_TITLE = '#tooltips:vehicleParams/penalties/title'
     VEHICLEPARAMS_BONUS_ARTEFACT_TEMPLATE = '#tooltips:vehicleParams/bonus/artefact/template'
     VEHICLEPARAMS_BONUS_SKILL_TEMPLATE = '#tooltips:vehicleParams/bonus/skill/template'
+    VEHICLEPARAMS_BONUS_PERK_TEMPLATE = '#tooltips:vehicleParams/bonus/perk/template'
     VEHICLEPARAMS_BONUS_BATTLEBOOSTER_TEMPLATE = '#tooltips:vehicleParams/bonus/battleBooster/template'
     VEHICLEPARAMS_BONUS_ROLE_TEMPLATE = '#tooltips:vehicleParams/bonus/role/template'
     VEHICLEPARAMS_BONUS_EXTRA_CAMOUFLAGEEXTRAS = '#tooltips:vehicleParams/bonus/extra/camouflageExtras'
@@ -2060,7 +2061,6 @@ class TOOLTIPS(object):
     VEHICLEPREVIEW_BUYBUTTON_ENDTIME_BODY = '#tooltips:vehiclePreview/buyButton/endTime/body'
     VEHICLEPREVIEW_BUYBUTTON_NOTUNLOCKEDNATION_HEADER = '#tooltips:vehiclePreview/buyButton/notUnlockedNation/header'
     VEHICLEPREVIEW_BUYBUTTON_NOTUNLOCKEDNATION_BODY = '#tooltips:vehiclePreview/buyButton/notUnlockedNation/body'
-    VEHICLEPREVIEW_NOTENOUGH = '#tooltips:vehiclePreview/notEnough'
     VEHICLEPREVIEW_MODULS_HEADER = '#tooltips:vehiclePreview/moduls/header'
     VEHICLEPREVIEW_MODULS_BODY = '#tooltips:vehiclePreview/moduls/body'
     VEHICLEPREVIEW_MODULSNOMODULES_HEADER = '#tooltips:vehiclePreview/modulsnoModules/header'
@@ -2179,7 +2179,6 @@ class TOOLTIPS(object):
     MISSIONS_TOKENPOPOVER_BUYBTN_BODY = '#tooltips:missions/tokenPopover/buyBtn/body'
     MISSIONS_TOKENPOPOVER_QUEST_HEADER = '#tooltips:missions/tokenPopover/quest/header'
     MISSIONS_TOKENPOPOVER_QUEST_BODY = '#tooltips:missions/tokenPopover/quest/body'
-    MISSIONS_TOKEN_SECRETEVENT_HEADER = '#tooltips:missions/token/secretEvent/header'
     MISSIONS_TOKEN_HEADER = '#tooltips:missions/token/header'
     MISSIONS_TOKEN_QUESTS_SINGLE = '#tooltips:missions/token/quests/single'
     MISSIONS_TOKEN_QUESTS_MULTIPLE = '#tooltips:missions/token/quests/multiple'
@@ -2258,8 +2257,8 @@ class TOOLTIPS(object):
     QUESTS_CONDITION_ACHIEVEMENTS_OTHERS = '#tooltips:quests/condition/achievements/others'
     QUESTS_BONUSES_TOKEN_HEADER = '#tooltips:quests/bonuses/token/header'
     QUESTS_BONUSES_TOKEN_BODY = '#tooltips:quests/bonuses/token/body'
-    QUESTS_BONUSES_TOKEN_SE20_TANK_DISCOUNT_HEADER = '#tooltips:quests/bonuses/token/se20_tank_discount/header'
-    QUESTS_BONUSES_TOKEN_SE20_TANK_DISCOUNT_BODY = '#tooltips:quests/bonuses/token/se20_tank_discount/body'
+    QUESTS_BONUSES_TOKEN_RESOURCE_CLAN_PROMORESOURCE_HEADER = '#tooltips:quests/bonuses/token/resource/clan_promoresource/header'
+    QUESTS_BONUSES_TOKEN_RESOURCE_CLAN_PROMORESOURCE_BODY = '#tooltips:quests/bonuses/token/resource/clan_promoresource/body'
     QUESTS_BONUSES_TOKEN_BATTLE_BONUS_X5_HEADER = '#tooltips:quests/bonuses/token/battle_bonus_x5/header'
     QUESTS_BONUSES_TOKEN_BATTLE_BONUS_X5_BODY = '#tooltips:quests/bonuses/token/battle_bonus_x5/body'
     HANGAR_HEADER_WGMONEYTOOLTIP_GOLDNAME = '#tooltips:hangar/header/wgmoneyTooltip/goldName'
@@ -2786,6 +2785,8 @@ class TOOLTIPS(object):
     STORAGE_MAINMENU_CUSTOMIZATION_BODY = '#tooltips:storage/mainMenu/customization/body'
     STORAGE_MAINMENU_BLUEPRINTS_HEADER = '#tooltips:storage/mainMenu/blueprints/header'
     STORAGE_MAINMENU_BLUEPRINTS_BODY = '#tooltips:storage/mainMenu/blueprints/body'
+    STORAGE_MAINMENU_OFFERS_HEADER = '#tooltips:storage/mainMenu/offers/header'
+    STORAGE_MAINMENU_OFFERS_BODY = '#tooltips:storage/mainMenu/offers/body'
     NOTRECRUITEDTANKMAN_HOWTOGET = '#tooltips:notrecruitedtankman/howToGet'
     NOTRECRUITEDTANKMAN_SKILLSTITLE = '#tooltips:notrecruitedtankman/skillsTitle'
     NOTRECRUITEDTANKMAN_EXPIRETITLE = '#tooltips:notrecruitedtankman/expireTitle'
@@ -2942,6 +2943,15 @@ class TOOLTIPS(object):
     CREWBOOKS_STORAGE_FILTERS_UNIVERSALBOOK_TITLE = '#tooltips:crewBooks/storage/filters/universalBook/title'
     CREWBOOKS_STORAGE_FILTERS_PERSONALBOOK_TITLE = '#tooltips:crewBooks/storage/filters/personalBook/title'
     CREWBOOKS_STORAGE_FILTERS_BODY = '#tooltips:crewBooks/storage/filters/body'
+    CUSTOMIZATION_STORAGE_FILTERS_STYLE_TITLE = '#tooltips:customization/storage/filters/style/title'
+    CUSTOMIZATION_STORAGE_FILTERS_PAINTS_TITLE = '#tooltips:customization/storage/filters/paints/title'
+    CUSTOMIZATION_STORAGE_FILTERS_CAMOUFLAGE_TITLE = '#tooltips:customization/storage/filters/camouflage/title'
+    CUSTOMIZATION_STORAGE_FILTERS_DECALS_TITLE = '#tooltips:customization/storage/filters/decals/title'
+    CUSTOMIZATION_STORAGE_FILTERS_EMBLEMS_TITLE = '#tooltips:customization/storage/filters/emblems/title'
+    CUSTOMIZATION_STORAGE_FILTERS_TEXT_TITLE = '#tooltips:customization/storage/filters/text/title'
+    CUSTOMIZATION_STORAGE_FILTERS_EFFECTS_TITLE = '#tooltips:customization/storage/filters/effects/title'
+    CUSTOMIZATION_SAVEDSTYLES_TITLE = '#tooltips:customization/savedStyles/title'
+    CUSTOMIZATION_SAVEDSTYLES_BODY = '#tooltips:customization/savedStyles/body'
     CREWBOOKS_SCREEN_INVALIDITEM_TITLE = '#tooltips:crewBooks/screen/invalidItem/title'
     CREWBOOKS_SCREEN_INVALIDPRICE_TITLE = '#tooltips:crewBooks/screen/invalidPrice/title'
     CREWBOOKS_TANKMAN_SKILL_LOWGAINEDXP = '#tooltips:crewBooks/tankman/skill/lowGainedXp'
@@ -2960,156 +2970,9 @@ class TOOLTIPS(object):
     EVENTPROGRESSION_UNLOCKEDDAILYMISSIONS = '#tooltips:eventProgression/unlockedDailyMissions'
     EVENTPROGRESSION_ALLSEASONSAREOVER = '#tooltips:eventProgression/allSeasonsAreOver'
     EVENTPROGRESSION_FRONTLINE = '#tooltips:eventProgression/frontLine'
-    QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_X15_DISCOUNT = '#tooltips:quests/bonuses/token/header/se20_energy_general_x15_discount'
-    QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_0_X1 = '#tooltips:quests/bonuses/token/header/se20_energy_general_0_x1'
-    QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_0_X5 = '#tooltips:quests/bonuses/token/header/se20_energy_general_0_x5'
-    QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_0_X10 = '#tooltips:quests/bonuses/token/header/se20_energy_general_0_x10'
-    QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_0_X10_PREMIUM = '#tooltips:quests/bonuses/token/header/se20_energy_general_0_x10_premium'
-    QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_0_X15 = '#tooltips:quests/bonuses/token/header/se20_energy_general_0_x15'
-    QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_1_X1 = '#tooltips:quests/bonuses/token/header/se20_energy_general_1_x1'
-    QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_1_X5 = '#tooltips:quests/bonuses/token/header/se20_energy_general_1_x5'
-    QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_1_X10 = '#tooltips:quests/bonuses/token/header/se20_energy_general_1_x10'
-    QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_1_X10_PREMIUM = '#tooltips:quests/bonuses/token/header/se20_energy_general_1_x10_premium'
-    QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_1_X15 = '#tooltips:quests/bonuses/token/header/se20_energy_general_1_x15'
-    QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_2_X1 = '#tooltips:quests/bonuses/token/header/se20_energy_general_2_x1'
-    QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_2_X5 = '#tooltips:quests/bonuses/token/header/se20_energy_general_2_x5'
-    QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_2_X10 = '#tooltips:quests/bonuses/token/header/se20_energy_general_2_x10'
-    QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_2_X10_PREMIUM = '#tooltips:quests/bonuses/token/header/se20_energy_general_2_x10_premium'
-    QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_2_X15 = '#tooltips:quests/bonuses/token/header/se20_energy_general_2_x15'
-    QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_3_X1 = '#tooltips:quests/bonuses/token/header/se20_energy_general_3_x1'
-    QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_3_X5 = '#tooltips:quests/bonuses/token/header/se20_energy_general_3_x5'
-    QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_3_X10 = '#tooltips:quests/bonuses/token/header/se20_energy_general_3_x10'
-    QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_3_X10_PREMIUM = '#tooltips:quests/bonuses/token/header/se20_energy_general_3_x10_premium'
-    QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_3_X15 = '#tooltips:quests/bonuses/token/header/se20_energy_general_3_x15'
-    QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_4_X1 = '#tooltips:quests/bonuses/token/header/se20_energy_general_4_x1'
-    QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_4_X5 = '#tooltips:quests/bonuses/token/header/se20_energy_general_4_x5'
-    QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_4_X10 = '#tooltips:quests/bonuses/token/header/se20_energy_general_4_x10'
-    QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_4_X10_PREMIUM = '#tooltips:quests/bonuses/token/header/se20_energy_general_4_x10_premium'
-    QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_4_X15 = '#tooltips:quests/bonuses/token/header/se20_energy_general_4_x15'
-    QUESTS_BONUSES_TOKEN_BODY_EVENT_DISCOUNT = '#tooltips:quests/bonuses/token/body/event_discount'
-    QUESTS_BONUSES_TOKEN_BODY_SE_ENERGY = '#tooltips:quests/bonuses/token/body/se_energy'
-    QUESTS_BONUSES_TOKEN_HOWTOGET_SE_ENERGY = '#tooltips:quests/bonuses/token/howToGet/se_energy'
-    QUESTS_BONUSES_TOKEN_HOWTOGETVARIANTS_SE_ENERGY_X5 = '#tooltips:quests/bonuses/token/howToGetVariants/se_energy_x5'
-    QUESTS_BONUSES_TOKEN_HOWTOGETVARIANTS_SE_ENERGY_X10 = '#tooltips:quests/bonuses/token/howToGetVariants/se_energy_x10'
-    QUESTS_BONUSES_TOKEN_HOWTOGETVARIANTS_SE_ENERGY_X15 = '#tooltips:quests/bonuses/token/howToGetVariants/se_energy_x15'
-    QUESTS_BONUSES_TOKEN_SE_ENERGY_WILL_BE_APPLIED = '#tooltips:quests/bonuses/token/se_energy/will_be_applied'
-    QUESTS_BONUSES_TOKEN_SE_ENERGY_NOT_IN_STORAGE = '#tooltips:quests/bonuses/token/se_energy/not_in_storage'
-    QUESTS_BONUSES_TOKEN_SE_ENERGY_IN_STORAGE = '#tooltips:quests/bonuses/token/se_energy/in_storage'
-    QUESTS_BONUSES_TOKEN_SE_ENERGY_SPECIALCONDITIONS = '#tooltips:quests/bonuses/token/se_energy/specialConditions'
-    QUESTS_BONUSES_TOKEN_SE20_FRONT_1_EVENT_POINTS_HEADER = '#tooltips:quests/bonuses/token/se20_front_1_event_points/header'
-    QUESTS_BONUSES_TOKEN_SE20_FRONT_1_EVENT_POINTS_BODY = '#tooltips:quests/bonuses/token/se20_front_1_event_points/body'
-    QUESTS_BONUSES_TOKEN_SE20_FRONT_1_EVENT_POINTS_HOWTOGET = '#tooltips:quests/bonuses/token/se20_front_1_event_points/howToGet'
-    QUESTS_BONUSES_TOKEN_SE20_FRONT_1_EVENT_POINTS_HOWTOGETVARIANTS = '#tooltips:quests/bonuses/token/se20_front_1_event_points/howToGetVariants'
-    QUESTS_BONUSES_TOKEN_SE20_FRONT_1_EVENT_POINTS_ADDITIONALINFO = '#tooltips:quests/bonuses/token/se20_front_1_event_points/additionalInfo'
-    QUESTS_BONUSES_TOKEN_SE_ENERGY_APPLIED = '#tooltips:quests/bonuses/token/se_energy/applied'
-    QUESTS_BONUSES_TOKEN_SE_ENERGY_ENDED = '#tooltips:quests/bonuses/token/se_energy/ended'
-    QUESTS_BONUSES_TOKEN_SE_ENERGY_POINTS = '#tooltips:quests/bonuses/token/se_energy/points'
-    BATTLETYPES_EVENT_END = '#tooltips:battleTypes/event/end'
-    BATTLETYPES_EVENT_DAYS = '#tooltips:battleTypes/event/days'
-    BATTLETYPES_EVENT_HOURS = '#tooltips:battleTypes/event/hours'
-    BATTLETYPES_EVENT_MIN = '#tooltips:battleTypes/event/min'
-    BATTLETYPES_EVENT_LESSMIN = '#tooltips:battleTypes/event/lessMin'
-    EVENT_COMMANDERS_HEADER = '#tooltips:event/commanders/header'
-    EVENT_COMMANDERS_BONUSESDESCRIPTION = '#tooltips:event/commanders/bonusesDescription'
-    EVENT_COMMANDERS_BONUSES = '#tooltips:event/commanders/bonuses'
-    EVENT_COMMANDERS_OTHERSBONUSES = '#tooltips:event/commanders/othersBonuses'
-    EVENT_COMMANDERS_DESCRIPTION2 = '#tooltips:event/commanders/description2'
-    SECRET_EVENT_HEROTANK_TITLE = '#tooltips:secret_event/herotank/title'
-    SECRET_EVENT_HEROTANK_BODY = '#tooltips:secret_event/herotank/body'
-    SECRET_EVENT_HEROTANK_FOOTER = '#tooltips:secret_event/herotank/footer'
-    SECRET_EVENT_GENERALINFOTIP_LEVEL = '#tooltips:secret_event/generalInfoTip/level'
-    SECRET_EVENT_GENERALINFOTIP_LVL = '#tooltips:secret_event/generalInfoTip/lvl'
-    SECRET_EVENT_GENERALINFOTIP_VEHICLES_TITLE = '#tooltips:secret_event/generalInfoTip/vehicles/title'
-    SECRET_EVENT_GENERALINFOTIP_VEHICLES_INFO = '#tooltips:secret_event/generalInfoTip/vehicles/info'
-    SECRET_EVENT_GENERALINFOTIP_SKILLS_TITLE = '#tooltips:secret_event/generalInfoTip/skills/title'
-    SECRET_EVENT_GENERALINFOTIP_SKILLS_INFO = '#tooltips:secret_event/generalInfoTip/skills/info'
-    SECRET_EVENT_GENERALINFOTIP_POINTS_TITLE = '#tooltips:secret_event/generalInfoTip/points/title'
-    SECRET_EVENT_GENERALINFOTIP_DESCRIPTION_0 = '#tooltips:secret_event/generalInfoTip/description/0'
-    SECRET_EVENT_GENERALINFOTIP_DESCRIPTION_1 = '#tooltips:secret_event/generalInfoTip/description/1'
-    SECRET_EVENT_GENERALINFOTIP_DESCRIPTION_2 = '#tooltips:secret_event/generalInfoTip/description/2'
-    SECRET_EVENT_GENERALINFOTIP_DESCRIPTION_3 = '#tooltips:secret_event/generalInfoTip/description/3'
-    SECRET_EVENT_GENERALINFOTIP_DESCRIPTION_4 = '#tooltips:secret_event/generalInfoTip/description/4'
-    SECRET_EVENT_GENERALINFOTIP_HOWGET = '#tooltips:secret_event/generalInfoTip/howGet'
-    SECRET_EVENT_GENERALINFOTIP_INFO_DESC = '#tooltips:secret_event/generalInfoTip/info/desc'
-    SECRET_EVENT_GENERALINFOTIP_INFO_USEFUL = '#tooltips:secret_event/generalInfoTip/info/useful'
-    SECRET_EVENT_GENERALINFOTIP_INFO_KILL = '#tooltips:secret_event/generalInfoTip/info/kill'
-    SECRET_EVENT_GENERALINFOTIP_INFO_DAMAGE = '#tooltips:secret_event/generalInfoTip/info/damage'
-    SECRET_EVENT_GENERALINFOTIP_INFO_HELP = '#tooltips:secret_event/generalInfoTip/info/help'
-    SECRET_EVENT_GENERALINFOTIP_INFO_BLOCKING = '#tooltips:secret_event/generalInfoTip/info/blocking'
-    SECRET_EVENT_GENERALINFOTIP_FASTINFO_TITLE = '#tooltips:secret_event/generalInfoTip/fastinfo/title'
-    SECRET_EVENT_GENERALINFOTIP_FASTINFO_DESCRIPTION = '#tooltips:secret_event/generalInfoTip/fastinfo/description'
-    SECRET_EVENT_GENERALINFOTIP_FASTINFO_ORDER = '#tooltips:secret_event/generalInfoTip/fastinfo/order'
-    SECRET_EVENT_GENERALINFOTIP_FASTINFO_X5 = '#tooltips:secret_event/generalInfoTip/fastinfo/x5'
-    SECRET_EVENT_GENERALINFOTIP_FASTINFO_X10 = '#tooltips:secret_event/generalInfoTip/fastinfo/x10'
-    SECRET_EVENT_GENERALINFOTIP_FASTINFO_X15 = '#tooltips:secret_event/generalInfoTip/fastinfo/x15'
-    SECRET_EVENT_GENERALINFOTIP_CLICK = '#tooltips:secret_event/generalInfoTip/click'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARGRAMOPHONE_TITLE = '#tooltips:secret_event/hangar/interactiveObject/hangarGramophone/title'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARGRAMOPHONE_DESC = '#tooltips:secret_event/hangar/interactiveObject/hangarGramophone/desc'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARPOSTMANBAG_TITLE = '#tooltips:secret_event/hangar/interactiveObject/hangarPostmanBag/title'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARPOSTMANBAG_DESC = '#tooltips:secret_event/hangar/interactiveObject/hangarPostmanBag/desc'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARPOSTMANBAG_PHASE2_TITLE = '#tooltips:secret_event/hangar/interactiveObject/hangarPostmanBag/phase2/title'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARPOSTMANBAG_PHASE2_DESC = '#tooltips:secret_event/hangar/interactiveObject/hangarPostmanBag/phase2/desc'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARBERLINSIGN_TITLE = '#tooltips:secret_event/hangar/interactiveObject/hangarBerlinSign/title'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARBERLINSIGN_DESC = '#tooltips:secret_event/hangar/interactiveObject/hangarBerlinSign/desc'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARBERLINSIGN_PHASE2_TITLE = '#tooltips:secret_event/hangar/interactiveObject/hangarBerlinSign/phase2/title'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARBERLINSIGN_PHASE2_DESC = '#tooltips:secret_event/hangar/interactiveObject/hangarBerlinSign/phase2/desc'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARAUTOMOBILE1_TITLE = '#tooltips:secret_event/hangar/interactiveObject/hangarAutomobile1/title'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARAUTOMOBILE1_DESC = '#tooltips:secret_event/hangar/interactiveObject/hangarAutomobile1/desc'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARAUTOMOBILE1_PHASE2_TITLE = '#tooltips:secret_event/hangar/interactiveObject/hangarAutomobile1/phase2/title'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARAUTOMOBILE1_PHASE2_DESC = '#tooltips:secret_event/hangar/interactiveObject/hangarAutomobile1/phase2/desc'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARPOSTER_TITLE = '#tooltips:secret_event/hangar/interactiveObject/hangarPoster/title'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARPOSTER_DESC = '#tooltips:secret_event/hangar/interactiveObject/hangarPoster/desc'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_PHONOGRAPH_TITLE = '#tooltips:secret_event/hangar/interactiveObject/phonograph/title'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_PHONOGRAPH_DESC = '#tooltips:secret_event/hangar/interactiveObject/phonograph/desc'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARDOG_TITLE = '#tooltips:secret_event/hangar/interactiveObject/hangarDog/title'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARDOG_DESC = '#tooltips:secret_event/hangar/interactiveObject/hangarDog/desc'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARDOG_PHASE2_TITLE = '#tooltips:secret_event/hangar/interactiveObject/hangarDog/phase2/title'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARDOG_PHASE2_DESC = '#tooltips:secret_event/hangar/interactiveObject/hangarDog/phase2/desc'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARCAT_TITLE = '#tooltips:secret_event/hangar/interactiveObject/hangarCat/title'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARCAT_DESC = '#tooltips:secret_event/hangar/interactiveObject/hangarCat/desc'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARCAT_PHASE2_TITLE = '#tooltips:secret_event/hangar/interactiveObject/hangarCat/phase2/title'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARCAT_PHASE2_DESC = '#tooltips:secret_event/hangar/interactiveObject/hangarCat/phase2/desc'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARSOLDIER_TITLE = '#tooltips:secret_event/hangar/interactiveObject/hangarSoldier/title'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARSOLDIER_DESC = '#tooltips:secret_event/hangar/interactiveObject/hangarSoldier/desc'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARSOLDIER_PHASE2_TITLE = '#tooltips:secret_event/hangar/interactiveObject/hangarSoldier/phase2/title'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARSOLDIER_PHASE2_DESC = '#tooltips:secret_event/hangar/interactiveObject/hangarSoldier/phase2/desc'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARRECRUIT_TITLE = '#tooltips:secret_event/hangar/interactiveObject/hangarRecruit/title'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARRECRUIT_DESC = '#tooltips:secret_event/hangar/interactiveObject/hangarRecruit/desc'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARRECRUIT_PHASE2_TITLE = '#tooltips:secret_event/hangar/interactiveObject/hangarRecruit/phase2/title'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARRECRUIT_PHASE2_DESC = '#tooltips:secret_event/hangar/interactiveObject/hangarRecruit/phase2/desc'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGAROFFICER1_TITLE = '#tooltips:secret_event/hangar/interactiveObject/hangarOfficer1/title'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGAROFFICER1_DESC = '#tooltips:secret_event/hangar/interactiveObject/hangarOfficer1/desc'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGAROFFICER1_PHASE2_TITLE = '#tooltips:secret_event/hangar/interactiveObject/hangarOfficer1/phase2/title'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGAROFFICER1_PHASE2_DESC = '#tooltips:secret_event/hangar/interactiveObject/hangarOfficer1/phase2/desc'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARTANK1_TITLE = '#tooltips:secret_event/hangar/interactiveObject/hangarTank1/title'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARTANK1_DESC = '#tooltips:secret_event/hangar/interactiveObject/hangarTank1/desc'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARTANK2_TITLE = '#tooltips:secret_event/hangar/interactiveObject/hangarTank2/title'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARTANK2_DESC = '#tooltips:secret_event/hangar/interactiveObject/hangarTank2/desc'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARTANK3_TITLE = '#tooltips:secret_event/hangar/interactiveObject/hangarTank3/title'
-    SECRET_EVENT_HANGAR_INTERACTIVEOBJECT_HANGARTANK3_DESC = '#tooltips:secret_event/hangar/interactiveObject/hangarTank3/desc'
-    SECRET_EVENT_BANNER_HEADER = '#tooltips:secret_event/banner/header'
-    SECRET_EVENT_BANNER_DESCRIPTION = '#tooltips:secret_event/banner/description'
-    SECRET_EVENT_BANNER_BERLIN = '#tooltips:secret_event/banner/berlin'
-    SECRET_EVENT_BANNER_FOOTER = '#tooltips:secret_event/banner/footer'
-    SECRET_EVENT_BANNER_TIMELEFT_DAYS = '#tooltips:secret_event/banner/timeLeft/days'
-    SECRET_EVENT_BANNER_TIMELEFT_HOURS = '#tooltips:secret_event/banner/timeLeft/hours'
-    SECRET_EVENT_BANNER_TIMELEFT_MIN = '#tooltips:secret_event/banner/timeLeft/min'
-    SECRET_EVENT_BANNER_TIMELEFT_LESSMIN = '#tooltips:secret_event/banner/timeLeft/lessMin'
-    SECRET_EVENT_BANNER_HAVE = '#tooltips:secret_event/banner/have'
-    SECRET_EVENT_BANNER_BEFOREBERLIN = '#tooltips:secret_event/banner/beforeBerlin'
-    SECRET_EVENT_RESPAWNABILITY_TITLE_HEADER = '#tooltips:secret_event/respawnAbility/title/header'
-    SECRET_EVENT_PASSIVEABILITY = '#tooltips:secret_event/passiveAbility'
-    SECRET_EVENT_RESPAWNABILITY_TITLE_BODY = '#tooltips:secret_event/respawnAbility/title/body'
-    SECRET_EVENT_RESPAWNABILITY_BODY = '#tooltips:secret_event/respawnAbility/body'
-    SECRET_EVENT_SQUADINFO_TITLE = '#tooltips:secret_event/squadInfo/title'
-    SECRET_EVENT_SQUADINFO_BODY = '#tooltips:secret_event/squadInfo/body'
-    SECRET_EVENT_SQUADINFO_FOOTER = '#tooltips:secret_event/squadInfo/footer'
-    SECRET_EVENT_SQUADINFO_NEWLEVEL = '#tooltips:secret_event/squadInfo/newLevel'
-    SECRET_EVENT_PROGRESSIONINFO_TITLE = '#tooltips:secret_event/progressionInfo/title'
-    SECRET_EVENT_PROGRESSIONINFO_DESC = '#tooltips:secret_event/progressionInfo/desc'
-    SECRET_EVENT_PROGRESSIONINFO_INFO = '#tooltips:secret_event/progressionInfo/info'
-    SECRET_EVENT_PROGRESSIONINFO_CLICK = '#tooltips:secret_event/progressionInfo/click'
-    SECRET_EVENT_HANGAR_HEADER_QUESTS_HEADER = '#tooltips:secret_event/hangar/header/quests/header'
+    ROLEEXP_STATUS_ROLEACTIONS_TITLE = '#tooltips:roleExp/status/roleActions/title'
+    ROLEEXP_STATUS_FOOTER = '#tooltips:roleExp/status/footer'
+    ROLEEXP_STATUS_FOOTEREXP = '#tooltips:roleExp/status/footerExp'
     ELEN_SUMMARY_RANK_ENUM = (ELEN_SUMMARY_RANK_1,
      ELEN_SUMMARY_RANK_2,
      ELEN_SUMMARY_RANK_3,
@@ -3303,7 +3166,10 @@ class TOOLTIPS(object):
      AWARDITEM_TANKMAN_HEADER,
      AWARDITEM_ONEOF_HEADER,
      AWARDITEM_ONEOF_RANKEDCYCLE_HEADER,
-     AWARDITEM_ONEOF_RANKEDSEASON_HEADER)
+     AWARDITEM_ONEOF_RANKEDSEASON_HEADER,
+     AWARDITEM_TESTENTITLEMENT_HEADER,
+     AWARDITEM_RANKEDDAILYBATTLES_HEADER,
+     AWARDITEM_RANKEDBONUSBATTLES_HEADER)
     AWARDITEM_ALL_BODY_ENUM = (AWARDITEM_GROUPS_BODY,
      AWARDITEM_CREDITS_BODY,
      AWARDITEM_RANDOMBOOKLET_BODY,
@@ -3363,7 +3229,10 @@ class TOOLTIPS(object):
      AWARDITEM_ONEOF_BODY,
      AWARDITEM_ONEOF_RANKEDCYCLE_BODY,
      AWARDITEM_ONEOF_RANKEDSEASON_BODY,
-     AWARDITEM_ONEOF_RANKEDSEASON_PREVIEWSTYLE_BODY)
+     AWARDITEM_ONEOF_RANKEDSEASON_PREVIEWSTYLE_BODY,
+     AWARDITEM_TESTENTITLEMENT_BODY,
+     AWARDITEM_RANKEDDAILYBATTLES_BODY,
+     AWARDITEM_RANKEDBONUSBATTLES_BODY)
     TEMPLATE_ALL_SHORT_ENUM = (TEMPLATE_DAYS_SHORT, TEMPLATE_HOURS_SHORT, TEMPLATE_MINUTES_SHORT)
     VEHICLEPARAMS_BONUS_TANKMANLEVEL_ENUM = (VEHICLEPARAMS_BONUS_TANKMANLEVEL_COMMANDER,
      VEHICLEPARAMS_BONUS_TANKMANLEVEL_GUNNER,
@@ -3719,33 +3588,6 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_COMMANDER_BP1_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_COMMANDER_BP2_HOWTOGETINFO)
     QUESTS_AWARDS_VEHICLERENT_RENTLEFT_ENUM = (QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTDAYS, QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTBATTLES, QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTWINS)
-    QUESTS_BONUSES_TOKEN_HEADER_ENUM = (QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_X15_DISCOUNT,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_0_X1,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_0_X5,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_0_X10,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_0_X10_PREMIUM,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_0_X15,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_1_X1,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_1_X5,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_1_X10,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_1_X10_PREMIUM,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_1_X15,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_2_X1,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_2_X5,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_2_X10,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_2_X10_PREMIUM,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_2_X15,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_3_X1,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_3_X5,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_3_X10,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_3_X10_PREMIUM,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_3_X15,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_4_X1,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_4_X5,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_4_X10,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_4_X10_PREMIUM,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_4_X15)
-    QUESTS_BONUSES_TOKEN_BODY_ENUM = (QUESTS_BONUSES_TOKEN_BODY_EVENT_DISCOUNT, QUESTS_BONUSES_TOKEN_BODY_SE_ENERGY)
     NOTRECRUITEDTANKMAN_ALL_HOWTOGETINFO_ENUM = (NOTRECRUITEDTANKMAN_TANKMAN_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERB_HOWTOGETINFO,
@@ -3755,33 +3597,6 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_NY20SNOWMEN_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_COMMANDER_BP1_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_COMMANDER_BP2_HOWTOGETINFO)
-    QUESTS_BONUSES_TOKEN_HEADER_ENUM = (QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_X15_DISCOUNT,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_0_X1,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_0_X5,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_0_X10,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_0_X10_PREMIUM,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_0_X15,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_1_X1,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_1_X5,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_1_X10,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_1_X10_PREMIUM,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_1_X15,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_2_X1,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_2_X5,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_2_X10,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_2_X10_PREMIUM,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_2_X15,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_3_X1,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_3_X5,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_3_X10,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_3_X10_PREMIUM,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_3_X15,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_4_X1,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_4_X5,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_4_X10,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_4_X10_PREMIUM,
-     QUESTS_BONUSES_TOKEN_HEADER_SE20_ENERGY_GENERAL_4_X15)
-    QUESTS_BONUSES_TOKEN_BODY_ENUM = (QUESTS_BONUSES_TOKEN_BODY_EVENT_DISCOUNT, QUESTS_BONUSES_TOKEN_BODY_SE_ENERGY)
 
     @classmethod
     def elen_summary_rank(cls, key0):
@@ -4171,34 +3986,6 @@ class TOOLTIPS(object):
             return outcome
 
     @classmethod
-    def getBonusesTokenHeader(cls, styleId):
-        outcome = '#tooltips:quests/bonuses/token/header/{}'.format(styleId)
-        if outcome not in cls.QUESTS_BONUSES_TOKEN_HEADER_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def getBonusesTokenBody(cls, styleId):
-        outcome = '#tooltips:quests/bonuses/token/body/{}'.format(styleId)
-        if outcome not in cls.QUESTS_BONUSES_TOKEN_BODY_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
     def hasNotRecruitedTankmanEventGetInfo(cls, eventName):
         outcome = '#tooltips:notrecruitedtankman/{}/howToGetInfo'.format(eventName)
         return outcome in cls.NOTRECRUITEDTANKMAN_ALL_HOWTOGETINFO_ENUM
-
-    @classmethod
-    def hasBonusesTokenHeader(cls, styleId):
-        outcome = '#tooltips:quests/bonuses/token/header/{}'.format(styleId)
-        return outcome in cls.QUESTS_BONUSES_TOKEN_HEADER_ENUM
-
-    @classmethod
-    def hasBonusesTokenBody(cls, styleId):
-        outcome = '#tooltips:quests/bonuses/token/body/{}'.format(styleId)
-        return outcome in cls.QUESTS_BONUSES_TOKEN_BODY_ENUM

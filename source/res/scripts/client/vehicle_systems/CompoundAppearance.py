@@ -29,20 +29,16 @@ from helpers.EffectsList import SpecialKeyPointNames
 from vehicle_systems import camouflages
 from svarog_script.script_game_object import ComponentDescriptor
 from vehicle_systems import model_assembler
-from gui.shared.gui_items.customization.outfit import Outfit
+from vehicle_outfit.outfit import Outfit
 from constants import VEHICLE_SIEGE_STATE
 from VehicleEffects import DamageFromShotDecoder
 from common_tank_appearance import CommonTankAppearance, MATKIND_COUNT
-_VEHICLE_APPEAR_TIME = 0.2
 _ROOT_NODE_NAME = 'V'
 _GUN_RECOIL_NODE_NAME = 'G'
 _PERIODIC_TIME = 0.25
 _PERIODIC_TIME_ENGINE = 0.1
 _PERIODIC_TIME_DIRT = ((0.05, 0.25), (10.0, 400.0))
 _DIRT_ALPHA = tan((_PERIODIC_TIME_DIRT[0][1] - _PERIODIC_TIME_DIRT[0][0]) / (_PERIODIC_TIME_DIRT[1][1] - _PERIODIC_TIME_DIRT[1][0]))
-_DISSOLVE_TIME_TICK = 0.05
-_DISSOLVE_FACTOR_STEP = 0.01
-_DISSOLVE_FULL_FACTOR = 1.0
 _LOD_DISTANCE_EXHAUST = 200.0
 _LOD_DISTANCE_TRAIL_PARTICLES = 100.0
 _MOVE_THROUGH_WATER_SOUND = '/vehicles/tanks/water'
@@ -57,6 +53,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
     wheelsSteering = property(lambda self: self.__vehicle.wheelsSteeringSmoothed if self.__vehicle is not None else None)
     wheelsScroll = property(lambda self: self.__vehicle.wheelsScrollSmoothed if self.__vehicle is not None else None)
     burnoutLevel = property(lambda self: self.__vehicle.burnoutLevel / 255.0 if self.__vehicle is not None else 0.0)
+    isConstructed = property(lambda self: self.__isConstructed)
     highlighter = ComponentDescriptor()
     peripheralsController = ComponentDescriptor()
     tutorialMatKindsController = ComponentDescriptor()
@@ -76,8 +73,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         self.__periodicTimerID = None
         self.__dirtUpdateTime = 0.0
         self.__inSpeedTreeCollision = False
-        self.__dissolveHandler = None
-        self.__effects = set()
+        self.__isConstructed = False
         return
 
     def setVehicle(self, vehicle):
@@ -261,13 +257,8 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
             self.wheelsAnimator = None
         self.gearbox = None
         self.gunRotatorAudition = None
-        fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(), BigWorld.WGVehicleFashion(), BigWorld.WGVehicleFashion(), BigWorld.WGVehicleFashion())
+        fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(), None, None, None)
         self._setFashions(fashions, isTurretDetached)
-        self.__dissolveHandler = BigWorld.PyDissolveHandler()
-        for fashionIdx, _ in enumerate(TankPartNames.ALL):
-            self.fashions[fashionIdx].addMaterialHandler(self.__dissolveHandler)
-            self.fashions[fashionIdx].addTrackMaterialHandler(self.__dissolveHandler)
-
         model_assembler.setupTracksFashion(self.typeDescriptor, self.fashion)
         self.showStickers(False)
         self.customEffectManager = None
@@ -288,19 +279,6 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         self.siegeEffects = None
         self._destroySystems()
         return
-
-    def __dissolve(self, factor):
-        factor += _DISSOLVE_FACTOR_STEP
-        self.__dissolveHandler.dissolveFactor(factor)
-        if factor < _DISSOLVE_FULL_FACTOR:
-            self.delayCallback(_DISSOLVE_TIME_TICK, self.__dissolve, factor)
-
-    def startDissolve(self):
-        if not self.__dissolveHandler:
-            self.delayCallback(0.1, self.startDissolve)
-        else:
-            self.__dissolveHandler.enabled(True)
-            self.delayCallback(5.0, self.__dissolve, 0.0)
 
     def destroy(self):
         if self.__vehicle is not None:
@@ -323,7 +301,8 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         self.highlighter = Highlighter()
         if isPlayer and BigWorld.player().isInTutorial:
             self.tutorialMatKindsController = TutorialMatKindsController()
-            self.tutorialMatKindsController.terrainMatKindsLink = lambda : self.terrainMatKind
+            self.tutorialMatKindsController.terrainGroundTypesLink = lambda : self.terrainGroundType
+        self.__isConstructed = True
         return
 
     def showStickers(self, show):
@@ -491,11 +470,11 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
             return gunRotator.maxturretRotationSpeed if gunRotator is not None else 0
 
     def _prepareOutfit(self, outfitCD):
-        outfitComponent = camouflages.getOutfitComponent(outfitCD)
-        outfit = Outfit(component=outfitComponent)
+        outfitComponent = camouflages.getOutfitComponent(outfitCD, self.typeDescriptor)
+        outfit = Outfit(component=outfitComponent, vehicleCD=self.typeDescriptor.makeCompactDescr())
         player = BigWorld.player()
         forceHistorical = player.isHistoricallyAccurate and player.playerVehicleID != self.id and not outfit.isHistorical()
-        return Outfit() if forceHistorical else outfit
+        return Outfit(vehicleCD=self.typeDescriptor.makeCompactDescr()) if forceHistorical else outfit
 
     def __initiateRecoil(self, gunNodeName, gunFireNodeName, gunAnimator):
         gunNode = self.compoundModel.node(gunNodeName)
@@ -516,9 +495,6 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
     def __requestModelsRefresh(self):
         self._onRequestModelsRefresh()
         modelsSetParams = self.modelsSetParams
-        self.__vehicle.compoundInvalidated = True
-        self.__vehicle.clearBuffs()
-        self.__vehicle.compoundInvalidated = False
         assembler = model_assembler.prepareCompoundAssembler(self.typeDescriptor, modelsSetParams, self.__vehicle.spaceID, self.__vehicle.isTurretDetached)
         BigWorld.loadResourceListBG((assembler,), makeCallbackWeak(self.__onModelsRefresh, modelsSetParams.state), loadingPriority(self.__vehicle.id))
 
@@ -557,15 +533,6 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         if self.engineAudition is not None:
             self.engineAudition.setWeaponEnergy(self._weaponEnergy)
             self.engineAudition.attachToModel(model)
-        return
-
-    def playEffectWithStopCallback(self, effects):
-        vehicle = self.__vehicle
-        return self.boundEffects.addNew(None, effects[1], effects[0], isPlayerVehicle=vehicle.isPlayerVehicle, showShockWave=vehicle.isPlayerVehicle, showFlashBang=vehicle.isPlayerVehicle, entity_id=vehicle.id, isPlayer=vehicle.isPlayerVehicle, showDecal=True, start=vehicle.position + Math.Vector3(0.0, 1.0, 0.0), end=vehicle.position + Math.Vector3(0.0, -1.0, 0.0)).stop
-
-    def playEffect(self, effects):
-        vehicle = self.__vehicle
-        self.boundEffects.addNew(None, effects[1], effects[0], isPlayerVehicle=vehicle.isPlayerVehicle, showShockWave=vehicle.isPlayerVehicle, showFlashBang=vehicle.isPlayerVehicle, entity_id=vehicle.id, isPlayer=vehicle.isPlayerVehicle, showDecal=True, start=vehicle.position + Math.Vector3(0.0, 1.0, 0.0), end=vehicle.position + Math.Vector3(0.0, -1.0, 0.0))
         return
 
     def __playEffect(self, kind, *modifs):
@@ -634,7 +601,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
             distanceFromPlayer = self.lodCalculator.lodDistance
             self.__updateCurrTerrainMatKinds()
             self.__updateEffectsLOD(distanceFromPlayer)
-            self.__updateTransmissionScroll(_PERIODIC_TIME)
+            self.__updateTransmissionScroll()
             if self.customEffectManager:
                 self.customEffectManager.update()
             return
@@ -679,10 +646,13 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
             return
         else:
             matKinds = self.terrainMatKindSensor.matKinds
-            matKindsCount = len(matKinds)
+            groundTypes = self.terrainMatKindSensor.groundTypes
+            materialsCount = len(matKinds)
             for i in xrange(MATKIND_COUNT):
-                matKind = matKinds[i] if i < matKindsCount else 0
+                matKind = matKinds[i] if i < materialsCount else 0
+                groundType = groundTypes[i] if i < materialsCount else 0
                 self.terrainMatKind[i] = matKind
+                self.terrainGroundType[i] = groundType
                 effectIndex = calcEffectMaterialIndex(matKind)
                 effectMaterialName = ''
                 if effectIndex is not None:
@@ -749,9 +719,6 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
     def __attachTerrainCircle(self):
         self.__terrainCircle.attach(self.__vehicle.id)
 
-    def __disableStipple(self):
-        self.compoundModel.stipple = False
-
     def computeFullVehicleLength(self):
         vehicleLength = 0.0
         if self.compoundModel is not None:
@@ -766,23 +733,6 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
     def onFriction(self, otherID, frictionPoint, state):
         if self.frictionAudition is not None:
             self.frictionAudition.processFriction(otherID, frictionPoint, state)
-        return
-
-    def assembleStipple(self):
-        compound = self.compoundModel
-        compound.matrix = Math.Matrix(compound.matrix)
-        hullNode = compound.node(TankPartNames.HULL)
-        compound.node(TankPartNames.HULL, hullNode.localMatrix)
-        turretRotation = compound.node(TankPartNames.TURRET)
-        if turretRotation is not None:
-            compound.node(TankPartNames.TURRET, turretRotation.localMatrix)
-        gunInclination = compound.node(TankNodeNames.GUN_INCLINATION)
-        if gunInclination is not None:
-            compound.node(TankNodeNames.GUN_INCLINATION, gunInclination.localMatrix)
-        gunRecoil = compound.node(TankNodeNames.GUN_RECOIL)
-        if gunRecoil is not None:
-            compound.node(TankNodeNames.GUN_RECOIL, gunRecoil.localMatrix)
-        self._setFashions(VehiclePartsTuple(None, None, None, None))
         return
 
     def onSiegeStateChanged(self, newState, timeToNextMode):
@@ -820,21 +770,21 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
             self.engineAudition.onEngineGearUp()
         return
 
-    def __updateTransmissionScroll(self, dt):
+    def __updateTransmissionScroll(self):
         self._commonSlip = 0.0
         self._commonScroll = 0.0
         worldMatrix = Math.Matrix(self.compoundModel.matrix)
         zAxis = worldMatrix.applyToAxis(2)
         vehicleSpeed = zAxis.dot(self.filter.velocity)
         if self.wheelsScroll is not None:
-            wheelsScrollDelta = self.wheelsAnimator.getWheelsScrollDelta()
-            wheelCount = len(wheelsScrollDelta)
+            wheelsSpeed = self.wheelsAnimator.getWheelsSpeed()
+            wheelCount = len(wheelsSpeed)
             skippedWheelsCount = 0
             for wheelIndex in xrange(0, wheelCount):
                 flying = self.wheelsAnimator.wheelIsFlying(wheelIndex)
                 if not flying:
-                    self._commonScroll += wheelsScrollDelta[wheelIndex]
-                    self._commonSlip += wheelsScrollDelta[wheelIndex] - vehicleSpeed * dt
+                    self._commonScroll += wheelsSpeed[wheelIndex]
+                    self._commonSlip += wheelsSpeed[wheelIndex] - vehicleSpeed
                 skippedWheelsCount += 1
 
             activeWheelCount = max(wheelCount - skippedWheelsCount, 1)

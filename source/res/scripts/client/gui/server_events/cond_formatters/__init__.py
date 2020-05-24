@@ -87,16 +87,14 @@ BATTLE_RESULTS_KEYS = {'capturePoints': CONDITION_ICON.BASE_CAPTURE,
  'tdamageDealt': CONDITION_ICON.DAMAGE,
  'tkills': CONDITION_ICON.KILL_VEHICLES,
  'xp': CONDITION_ICON.EXPERIENCE,
- 'xpForAttack': CONDITION_ICON.EXPERIENCE,
- 'xpForAssist': CONDITION_ICON.EXPERIENCE,
- 'xpOther': CONDITION_ICON.EXPERIENCE,
+ 'xp/attack': CONDITION_ICON.EXPERIENCE,
+ 'xp/assist': CONDITION_ICON.EXPERIENCE,
+ 'xp/other': CONDITION_ICON.EXPERIENCE,
  'spottedBeforeWeBecameSpotted': CONDITION_ICON.DISCOVER,
  'isEnemyBaseCaptured': CONDITION_ICON.BASE_CAPTURE,
  'isAnyOurCrittedInnerModules': CONDITION_ICON.SURVIVE,
  'isNotSpotted': CONDITION_ICON.SURVIVE,
- 'rankChange': CONDITION_ICON.RANK_UP,
- 'eventPoints': CONDITION_ICON.SURVIVE,
- 'environmentID': CONDITION_ICON.SURVIVE}
+ 'rankChange': CONDITION_ICON.RANK_UP}
 BATTLE_RESULTS_AGGREGATED_KEYS = {tuple(sorted(['damagedVehicleCntAssistedTrack', 'damagedVehicleCntAssistedRadio'])): CONDITION_ICON.ASSIST,
  tuple(sorted(['killsAssistedTrack', 'killsAssistedRadio'])): CONDITION_ICON.ASSIST,
  tuple(sorted(['damageAssistedStun', 'damageAssistedTrack'])): CONDITION_ICON.ASSIST,
@@ -175,24 +173,6 @@ def packTokenProgress(tokenId, questId, title, image, gotCount, needCount, isBig
      'isNormalSize': not isBigSize,
      'imgSrc': image,
      'countText': counterText}
-
-
-def getFiltersLabel(labelKey, condition):
-    _, fNations, fLevels, fClasses = condition.parseFilters()
-    keys, kwargs = [], {}
-    if fNations:
-        keys.append('nation')
-        kwargs['nation'] = ', '.join((i18n.makeString('#menu:nations/%s' % nations.NAMES[idx]) for idx in fNations))
-    if fClasses:
-        keys.append('type')
-        kwargs['type'] = ', '.join([ i18n.makeString('#menu:classes/%s' % name) for name in fClasses ])
-    if fLevels:
-        keys.append('level')
-        kwargs['level'] = ', '.join([ int2roman(lvl) for lvl in fLevels ])
-    labelKey = '%s/%s' % (labelKey, '_'.join(keys))
-    if condition.relationValue is None and condition.isNegative:
-        labelKey = '%s/not' % labelKey
-    return i18n.makeString(labelKey, **kwargs)
 
 
 def getResultsData(condition):

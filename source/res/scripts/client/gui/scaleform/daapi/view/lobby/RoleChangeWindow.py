@@ -1,9 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/RoleChangeWindow.py
 import constants
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.impl import backport
-from gui.ingame_shop import showBuyGoldForCrew
+from gui.shop import showBuyGoldForCrew
 from gui.shared.gui_items.Tankman import getCrewSkinIconBig
 from gui.shared.money import Money
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
@@ -141,7 +140,7 @@ class RoleChangeWindow(RoleChangeMeta):
     def changeRole(self, role, vehicleId):
         changeRoleCost = self.itemsCache.items.shop.changeRoleCost
         actualGold = self.itemsCache.items.stats.gold
-        if changeRoleCost > actualGold and isIngameShopEnabled():
+        if changeRoleCost > actualGold:
             showBuyGoldForCrew(changeRoleCost)
             return
         result = yield TankmanChangeRole(self.__tankman, role, int(vehicleId)).request()
@@ -182,13 +181,8 @@ class RoleChangeWindow(RoleChangeMeta):
         formattedPrice = backport.getIntegralFormat(changeRoleCost)
         actualGold = self.itemsCache.items.stats.gold
         enoughGold = actualGold - changeRoleCost >= 0
-        if enoughGold:
-            priceString = text_styles.gold(formattedPrice)
-        else:
-            priceString = text_styles.error(formattedPrice)
-        priceString += icons.gold()
-        changeRoleBtnEnabled = enoughGold or isIngameShopEnabled()
-        self.as_setPriceS(priceString, changeRoleBtnEnabled, discount)
+        style = text_styles.gold if enoughGold else text_styles.error
+        self.as_setPriceS(priceString='{}{}'.format(style(formattedPrice), icons.gold()), actionChangeRole=discount)
         return
 
     def __setCommonData(self):

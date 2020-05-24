@@ -94,6 +94,10 @@ def neutral(text):
     return _formatText('neutralText', text)
 
 
+def neutralBig(text):
+    return _formatText('neutralTextBig', text)
+
+
 def goodPing(text):
     return _formatText('goodPingText', text)
 
@@ -238,10 +242,6 @@ def gold(text):
     return _formatText('goldText', text)
 
 
-def epicText(text):
-    return _formatText('epicText', text)
-
-
 def goldSmall(text):
     return _formatText('goldTextSmall', text)
 
@@ -356,10 +356,6 @@ def highlightText(text):
     return _formatText('highlightText', text)
 
 
-def tooltipHaveText(text):
-    return _formatText('tooltipHaveText', text)
-
-
 def highlightTextPlain(text):
     return _formatText('highlightTextPlain', text)
 
@@ -406,10 +402,6 @@ def grandTitleTK(text):
 
 def failedStatusText(text):
     return _formatText('failedStatusText', text)
-
-
-def markerExtraText(text):
-    return _formatText('markerExtraText', text)
 
 
 def getRawStyles(names):

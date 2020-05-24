@@ -6,6 +6,7 @@ import operator
 from collections import namedtuple
 import personal_missions
 from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import getEventPostBattleInfo, getBattlePassQuestInfo
+from gui.Scaleform.daapi.view.lobby.customization.progression_helpers import getProgressionPostBattleInfo, parseEventID, getC11nProgressionLinkBtnParams
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.genConsts.PROGRESSIVEREWARD_CONSTANTS import PROGRESSIVEREWARD_CONSTANTS as prConst
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
@@ -288,6 +289,12 @@ class QuestsProgressBlock(base.StatsBlock):
             if info is not None:
                 self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', info))
 
+        for vehicleIntCD, c11nProgression in reusable.personal.getC11nProgress().iteritems():
+            for intCD, progressionData in sorted(c11nProgression.iteritems(), key=lambda (_, d): -d.get('level', 0)):
+                info = getProgressionPostBattleInfo(intCD, vehicleIntCD, progressionData)
+                if info is not None:
+                    self.addComponent(self.getNextComponentIndex(), ProgressiveCustomizationVO('', info))
+
         for e, pCur, pPrev, reset, complete in sorted(commonQuests, cmp=self.__sortCommonQuestsFunc):
             info = getEventPostBattleInfo(e, allCommonQuests, pCur, pPrev, reset, complete)
             if info is not None:
@@ -337,3 +344,19 @@ class ProgressiveRewardVO(base.StatsItem):
                 currentStep = currentStep - 1 if currentStep else maxSteps - 1
             descText = text_styles.standard(backport.text(R.strings.battle_results.progressiveReward.descr()))
             return getProgressiveRewardVO(currentStep=currentStep, probability=probability, maxSteps=maxSteps, showBg=True, align=prConst.WIDGET_LAYOUT_H, isHighTitle=True, hasCompleted=hasCompleted, descText=descText)
+
+
+class ProgressiveCustomizationVO(base.DirectStatsItem):
+    _itemsCache = dependency.descriptor(IItemsCache)
+    __slots__ = ()
+
+    def getVO(self):
+        questInfo = self._value.get('questInfo', {})
+        questID = questInfo.get('questID', None)
+        if questInfo and questID is not None:
+            _, vehicleIntCD = parseEventID(questID)
+            vehicle = self._itemsCache.items.getItemByCD(vehicleIntCD)
+            linkBtnEnabled, linkBtnTooltip = getC11nProgressionLinkBtnParams(vehicle)
+            self._value['linkBtnEnabled'] = linkBtnEnabled
+            self._value['linkBtnTooltip'] = backport.text(linkBtnTooltip)
+        return self._value

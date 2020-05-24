@@ -436,7 +436,7 @@ def packMoneyAndXpValueBlock(value, icon, iconYoffset, paddingBottom=15, valueWi
     return valueBlock
 
 
-def packMoneyAndXpBlocks(tooltipBlocks, btnType, valueBlocks, alternativeData=None, hideActionBlocks=False):
+def packMoneyAndXpBlocks(tooltipBlocks, btnType, valueBlocks, alternativeData=None):
     titleBlocks = list()
     alternativeData = alternativeData or {}
     titleBlocks.append(packTitleDescBlock(text_styles.highTitle(TOOLTIPS.getHeaderBtnTitle(alternativeData.get('title') or btnType)), None, padding=packPadding(bottom=15)))
@@ -447,15 +447,10 @@ def packMoneyAndXpBlocks(tooltipBlocks, btnType, valueBlocks, alternativeData=No
         decsBlocks = list()
         decsBlocks.append(packTextBlockData(text_styles.main(TOOLTIPS.getHeaderBtnDesc(alternativeData.get('btnDesc') or btnType)), padding=packPadding(bottom=15)))
         tooltipBlocks.append(packBuildUpBlockData(decsBlocks))
-    if not hideActionBlocks:
-        actionBlocks = list()
-        actionBlocks.append(packAlignedTextBlockData(text=text_styles.standard(TOOLTIPS.getHeaderBtnClickDesc(alternativeData.get('btnClickDesc') or btnType)), align=alternativeData.get('btnClickDescAlign') or BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
-        tooltipBlocks.append(packBuildUpBlockData(actionBlocks))
+    actionBlocks = list()
+    actionBlocks.append(packAlignedTextBlockData(text=text_styles.standard(TOOLTIPS.getHeaderBtnClickDesc(alternativeData.get('btnClickDesc') or btnType)), align=alternativeData.get('btnClickDescAlign') or BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
+    tooltipBlocks.append(packBuildUpBlockData(actionBlocks))
     return tooltipBlocks
-
-
-def packMoneyAndXpBlocksEvent(tooltipBlocks, btnType, valueBlocks, alternativeData=None):
-    return packMoneyAndXpBlocks(tooltipBlocks=tooltipBlocks, btnType=btnType, valueBlocks=valueBlocks, alternativeData=alternativeData, hideActionBlocks=True)
 
 
 def packSeparatorBlockData(paddings=None, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT):
@@ -468,7 +463,7 @@ def packItemPriceBlockData(price, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_COMPOUND_
     return packBlockDataItem(linkage, price, padding)
 
 
-def packCustomizationImageBlockData(img=None, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGE_BLOCK_LINKAGE, width=-1, height=-1, padding=None, isHistorical=False, formfactor=None, isDim=False):
+def packCustomizationImageBlockData(img=None, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGE_BLOCK_NON_HISTORICAL_LINKAGE, width=-1, height=-1, padding=None, formfactor=None, isDim=False):
     data = {'align': align}
     if img is not None:
         data['imagePath'] = img
@@ -476,8 +471,15 @@ def packCustomizationImageBlockData(img=None, align=BLOCKS_TOOLTIP_TYPES.ALIGN_L
         data['width'] = width
     if height != -1:
         data['height'] = height
-    data['isHistorical'] = isHistorical
     data['isDim'] = isDim
     if formfactor is not None:
         data['formfactor'] = formfactor
+    return packBlockDataItem(linkage, data, padding)
+
+
+def packCustomizationCharacteristicBlockData(icon, text, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_CUSTOMIZATION_ITEM_PROPERTY_BLOCK_LINKAGE, padding=None, isTextIcon=False, isWideOffset=False):
+    data = {'icon': icon,
+     'name': text,
+     'isTextIcon': isTextIcon,
+     'isWideOffset': isWideOffset}
     return packBlockDataItem(linkage, data, padding)

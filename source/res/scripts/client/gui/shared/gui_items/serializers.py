@@ -3,7 +3,6 @@
 import cPickle
 import math
 import collections
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.shared.money import Money, Currency
 from helpers import dependency, i18n
 from items.components import skills_constants
@@ -171,7 +170,7 @@ def packDropSkill(tankman, itemsCache=None):
     prices = items.shop.dropSkillsCost.values()
     trainingCosts = [ Money(credits=price[Currency.CREDITS] or None, gold=price[Currency.GOLD] or None) for price in prices ]
     defaultCosts = [ Money(credits=price[Currency.CREDITS] or None, gold=price[Currency.GOLD] or None) for price in items.shop.defaults.dropSkillsCost.itervalues() ]
-    states = [ cost <= currentMoney or cost.get(Currency.GOLD) is not None and isIngameShopEnabled() for cost in trainingCosts ]
+    states = [ cost <= currentMoney or cost.get(Currency.GOLD) is not None for cost in trainingCosts ]
     factors = [ price['xpReuseFraction'] for price in prices ]
     tankmanLevels = [ math.floor(tankman.efficiencyRoleLevel * factor) for factor in factors ]
     result = [ {'level': '{}%'.format(int(lvl)),
@@ -210,7 +209,7 @@ def packTraining(vehicle, crew=None, itemsCache=None):
         result.append({'level': _formatLevel(buttonMinLevel, buttonMaxLevel, isRange),
          'enabled': buttonState,
          'price': [currency, price],
-         'isMoneyEnough': currentMoney >= actualPrice or currency == Currency.GOLD and isIngameShopEnabled(),
+         'isMoneyEnough': currentMoney >= actualPrice or currency == Currency.GOLD,
          'isNativeVehicle': allNative,
          'nation': vehicle.nationName if vehicle is not None else None,
          'showAction': actualPrice != defaultPrice})
@@ -231,7 +230,6 @@ def repackTankmanWithSkinData(item, data, itemsCache=None, lobbyContext=None):
 
 
 def _getTrainingButtonsForTankman(costsActual, costsDefault, currentMoney, vehicle=None, tankman=None):
-    ingameShopEnabled = isIngameShopEnabled()
     trainingButtonsData = []
     defaults = vehicle is None or tankman is None
     roleLevel = 0
@@ -245,7 +243,7 @@ def _getTrainingButtonsForTankman(costsActual, costsDefault, currentMoney, vehic
         moneyDefault = Money(credits=costDefault[Currency.CREDITS] or None, gold=costDefault[Currency.GOLD] or None)
         moneyActual = Money(credits=costActual[Currency.CREDITS] or None, gold=costActual[Currency.GOLD] or None)
         trainingLevel = defaultTrainingLevel = costActual['roleLevel']
-        buttonState = moneyActual <= currentMoney or moneyActual.get(Currency.GOLD) is not None and ingameShopEnabled
+        buttonState = moneyActual <= currentMoney or moneyActual.get(Currency.GOLD) is not None
         if not defaults:
             baseRoleLoss = costActual['baseRoleLoss']
             classChangeRoleLoss = costActual['classChangeRoleLoss']

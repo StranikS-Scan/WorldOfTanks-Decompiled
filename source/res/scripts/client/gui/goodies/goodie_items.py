@@ -70,6 +70,10 @@ class _Goodie(object):
         return
 
     @property
+    def goodieID(self):
+        return self._goodieID
+
+    @property
     def count(self):
         return self.__getStateAttribute('count', 0)
 

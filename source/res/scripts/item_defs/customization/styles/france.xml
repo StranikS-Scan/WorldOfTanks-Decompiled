@@ -15,7 +15,7 @@
       <isRent>	true	</isRent>
       <rentCount>	100	</rentCount>
       <userString>	#vehicle_customization:rented_style/france	</userString>
-      <tags>	vehicleBound	</tags>
+      <tags>	vehicleBound addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -71,6 +71,14 @@
       <texture>	gui/maps/vehicles/styles/style_01.png	</texture>
       <userString>	#vehicle_customization:gold_style/gold_style_01	</userString>
       <longDescriptionSpecial>	#vehicle_customization:gold_style/gold_style_01_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -206,6 +214,14 @@
       <id>	149	</id>
       <texture>	gui/maps/vehicles/styles/global_map_01.png	</texture>
       <userString>	#vehicle_customization:special_style/global_map	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -296,12 +312,18 @@
     <style>
       <id>	229	</id>
       <texture>	gui/maps/vehicles/styles/Bat_Chatillon25t_NYst.png	</texture>
-      <description>	#vehicle_customization:special_style/Bat_Chatillon25t_NYst_description	</description>
       <longDescriptionSpecial>	#vehicle_customization:special_style/Bat_Chatillon25t_NYst_description/long	</longDescriptionSpecial>
       <modelsSet>	NYst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/Bat_Chatillon25t_NYst	</userString>
-      <tags>	NY2019_style	</tags>
+      <tags>	NY2019_style progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -343,6 +365,14 @@
       <description>	#vehicle_customization:main_style/generic_custom_look_france_desc	</description>
       <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_france_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:main_style/generic_custom_look_france	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	summer	</season>
@@ -414,9 +444,17 @@
     <style>
       <id>	13	</id>
       <texture>	gui/maps/vehicles/styles/Siroco.png	</texture>
-      <description>	#vehicle_customization:special_style/siroco_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/siroco_desc/long	</longDescriptionSpecial>
       <modelsSet>	Siroco	</modelsSet>
       <userString>	#vehicle_customization:special_style/siroco	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -453,6 +491,14 @@
       <texture>	gui/maps/vehicles/styles/generic_custom_look_2_france.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_2_france_desc	</description>
       <userString>	#vehicle_customization:main_style/generic_custom_look_2_france	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -526,6 +572,14 @@
       <texture>	gui/maps/vehicles/styles/generic_custom_look_3_france.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_3_france_desc	</description>
       <userString>	#vehicle_customization:main_style/generic_custom_look_3_france	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -597,10 +651,18 @@
     <style>
       <id>	78	</id>
       <texture>	gui/maps/vehicles/styles/F17_AMX_13_90_Halloween_3Dst.png	</texture>
-      <description>	#vehicle_customization:main_style/F17_AMX_13_90_Halloween_3Dst_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/F17_AMX_13_90_Halloween_3Dst_desc/long	</longDescriptionSpecial>
       <modelsSet>	Halloween_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:main_style/F17_AMX_13_90_Halloween_3Dst	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -639,12 +701,18 @@
     <style>
       <id>	97	</id>
       <texture>	gui/maps/vehicles/styles/F88_AMX_13_105_3Dst.png	</texture>
-      <description>	#vehicle_customization:unique_style/F88_AMX_13_105_3Dst_desc	</description>
       <longDescriptionSpecial>	#vehicle_customization:unique_style/F88_AMX_13_105_3Dst_desc/long	</longDescriptionSpecial>
       <modelsSet>	F88_AMX_13_105_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:unique_style/F88_AMX_13_105_3Dst	</userString>
-      <tags>	NY2020_style	</tags>
+      <tags>	NY2020_style progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -673,10 +741,18 @@
     <style>
       <id>	123	</id>
       <texture>	gui/maps/vehicles/styles/F10_AMX_50B_3Dst.png	</texture>
-      <description>	#vehicle_customization:main_style/F10_AMX_50B_3Dst_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/F10_AMX_50B_3Dst_desc/long	</longDescriptionSpecial>
       <modelsSet>	FULL3D	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:main_style/F10_AMX_50B_3Dst	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -715,10 +791,18 @@
     <style>
       <id>	266	</id>
       <texture>	gui/maps/vehicles/styles/F116_Bat_Chatillon_Bourrasque_3Dst.png	</texture>
-      <description>	#vehicle_customization:special_style/F116_Bat_Chatillon_Bourrasque_3Dst_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/F116_Bat_Chatillon_Bourrasque_3Dst_desc/long	</longDescriptionSpecial>
       <modelsSet>	F116_Bat_Chatillon_Bourrasque_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/F116_Bat_Chatillon_Bourrasque_3Dst	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -737,6 +821,56 @@
             </item>
             <item>
               <id>	201	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 5000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F108_Panhard_EBR_105	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	293	</id>
+      <texture>	gui/maps/vehicles/styles/F108_Panhard_EBR_105_3Dst.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/F108_Panhard_EBR_105_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	tramontana	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/F108_Panhard_EBR_105_3Dst	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	0	</id>
               <appliedTo>	52416	</appliedTo>
             </item>
           </decals>

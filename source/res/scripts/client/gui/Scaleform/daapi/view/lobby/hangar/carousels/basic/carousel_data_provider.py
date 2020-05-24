@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/carousels/basic/carousel_data_provider.py
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_data_provider import CarouselDataProvider
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_data_provider import getStatusStrings
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import text_styles
@@ -25,13 +24,10 @@ class HangarCarouselDataProvider(CarouselDataProvider):
 
     def __init__(self, carouselFilter, itemsCache, currentVehicle):
         super(HangarCarouselDataProvider, self).__init__(carouselFilter, itemsCache, currentVehicle)
-        self._baseCriteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.BOB_BATTLE | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
+        self._baseCriteria = REQ_CRITERIA.INVENTORY
         self._supplyItems = []
         self._emptySlotsCount = 0
         self._restorableVehiclesCount = 0
-
-    def hasEventVehicles(self):
-        return False
 
     @property
     def collection(self):
@@ -43,7 +39,7 @@ class HangarCarouselDataProvider(CarouselDataProvider):
     def updateSupplies(self):
         self._supplyItems = []
         self._buildSupplyItems()
-        self.flashObject.invalidateItems(self._getSupplyIndices(), self._supplyItems)
+        self.flashObject.invalidateItems(self.__getSupplyIndices(), self._supplyItems)
         self.applyFilter()
 
     def clear(self):
@@ -60,14 +56,14 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         self._buildSupplyItems()
 
     def _getAdditionalItemsIndexes(self):
-        supplyIndices = self._getSupplyIndices()
+        supplyIndices = self.__getSupplyIndices()
         serverSettings = dependency.instance(ILobbyContext).getServerSettings()
         restoreEnabled = serverSettings.isVehicleRestoreEnabled()
-        storageEnabled = serverSettings.isIngameStorageEnabled()
+        storageEnabled = serverSettings.isStorageEnabled()
         pruneIndices = set()
         if not self._emptySlotsCount:
             pruneIndices.add(_SUPPLY_ITEMS.BUY_TANK)
-        if self._restorableVehiclesCount == 0 or not restoreEnabled or not storageEnabled and isIngameShopEnabled():
+        if self._restorableVehiclesCount == 0 or not restoreEnabled or not storageEnabled:
             pruneIndices.add(_SUPPLY_ITEMS.RESTORE_TANK)
         return [ suppIdx for suppIdx in supplyIndices if supplyIndices.index(suppIdx) not in pruneIndices ]
 
@@ -76,10 +72,9 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         items = self._itemsCache.items
         inventory = self._itemsCache.items.inventory
         slots = items.stats.vehicleSlots
-        eventVehiclesCount = self.getEventVehiclesCount()
         slotPrice = items.shop.getVehicleSlotsPrice(slots)
         defaultSlotPrice = items.shop.defaults.getVehicleSlotsPrice(slots)
-        self._emptySlotsCount = inventory.getFreeSlots(slots) - eventVehiclesCount
+        self._emptySlotsCount = inventory.getFreeSlots(slots)
         criteria = REQ_CRITERIA.IN_CD_LIST(items.recycleBin.getVehiclesIntCDs()) | REQ_CRITERIA.VEHICLE.IS_RESTORE_POSSIBLE
         self._restorableVehiclesCount = len(items.getVehicles(criteria))
         if slotPrice != defaultSlotPrice:
@@ -95,7 +90,7 @@ class HangarCarouselDataProvider(CarouselDataProvider):
          'smallInfoText': text_styles.concatStylesToMultiLine(smallBuyTankString, smallEmptySlotsString),
          'infoText': text_styles.concatStylesToMultiLine(buyTankString, emptySlotsString),
          'icon': RES_ICONS.MAPS_ICONS_LIBRARY_TANKITEM_BUY_TANK,
-         'tooltip': TOOLTIPS.TANKS_CAROUSEL_BUY_VEHICLE_NEW if isIngameShopEnabled() else TOOLTIPS.TANKS_CAROUSEL_BUY_VEHICLE})
+         'tooltip': TOOLTIPS.TANKS_CAROUSEL_BUY_VEHICLE_NEW})
         self._supplyItems.append({'restoreTank': True,
          'smallInfoText': text_styles.concatStylesToMultiLine(smallRestoreTankString, smallRestoreTankCountString),
          'infoText': text_styles.concatStylesToMultiLine(restoreTankString, restoreTankCountString),
@@ -117,7 +112,7 @@ class HangarCarouselDataProvider(CarouselDataProvider):
     def _isSuitableForQueue(vehicle):
         return vehicle.getCustomState() != Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE
 
-    def _getSupplyIndices(self):
+    def __getSupplyIndices(self):
         return [ len(self._vehicles) + idx for idx in _SUPPLY_ITEMS.ALL ]
 
 

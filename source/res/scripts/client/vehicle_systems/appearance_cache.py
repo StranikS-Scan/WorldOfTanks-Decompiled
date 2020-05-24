@@ -4,7 +4,6 @@ import weakref
 from collections import namedtuple
 import BigWorld
 from debug_utils import LOG_DEBUG, LOG_WARNING
-from helpers import uniprof
 from vehicle_systems.CompoundAppearance import CompoundAppearance
 from vehicle_systems.stricted_loading import loadingPriority, makeCallbackWeak
 _ENABLE_CACHE_TRACKER = False
@@ -19,7 +18,7 @@ _VehicleInfo = namedtuple('_VehicleInfo', ['typeDescr',
 _AssemblerData = namedtuple('_AssemblerData', ['appearance', 'info', 'prereqsNames'])
 
 class _AppearanceCache(object):
-    __slots__ = ('__arena', '__appearanceCache', '__assemblersCache', '__spaceLoaded', '__weakref__')
+    __slots__ = ('__arena', '__appearanceCache', '__assemblersCache', '__spaceLoaded')
 
     @property
     def cache(self):
@@ -60,7 +59,6 @@ class _AppearanceCache(object):
     def onVehicleListReceived(self):
         if not self.__spaceLoaded or not _ENABLE_PRECACHE:
             return
-        self.__precacheBots(self.__arena.precachedVehicles)
         self.__precacheVehicle(self.__arena.vehicles)
 
     def onVehicleAddedUpdate(self, vId):
@@ -72,7 +70,6 @@ class _AppearanceCache(object):
         self.__spaceLoaded = True
         if _ENABLE_PRECACHE:
             self.__precacheVehicle(self.__arena.vehicles)
-            self.__precacheBots(self.__arena.precachedVehicles)
 
     def cacheApperance(self, vId, info):
         if vId in self.__assemblersCache or vId in self.__appearanceCache:
@@ -83,11 +80,7 @@ class _AppearanceCache(object):
                 return
             isAlive = info['isAlive']
             outfitCD = info['outfitCD']
-            appearanceID = self.__getAppearanceCacheID(vId, info)
-            if appearanceID is None:
-                self.__cacheApperance(vId, _VehicleInfo(typeDescriptor, 1 if isAlive else 0, True if isAlive else False, False, outfitCD))
-            else:
-                self.__reuseAppearance(vId, appearanceID)
+            self.__cacheApperance(vId, _VehicleInfo(typeDescriptor, 1 if isAlive else 0, True if isAlive else False, False, outfitCD))
             return
 
     def createAppearance(self, vId, vInfo, forceReloadingFromCache):
@@ -192,26 +185,6 @@ class _AppearanceCache(object):
             cacheApperance(vId, vInfo)
 
         return
-
-    @uniprof.regionDecorator(label='arena.precache_bots', scope='wrap')
-    def __precacheBots(self, vehicleIDs):
-        for vId, vInfo in vehicleIDs.iteritems():
-            cacheApperance(vId, vInfo)
-
-    def __getAppearanceCacheID(self, vehId, vehInfo):
-        for vId, vInfo in self.__appearanceCache.iteritems():
-            if vehId > 0 > vId and vInfo[1].typeDescr.name == vehInfo['vehicleType'].name:
-                return vId
-
-        return None
-
-    def __reuseAppearance(self, vId, cachedVehID):
-        self.__appearanceCache[cachedVehID][0].setID(vId)
-        self.__appearanceCache[vId] = self.__appearanceCache[cachedVehID]
-        del self.__appearanceCache[cachedVehID]
-        LOG_DEBUG('Reuse appearance', vId, cachedVehID)
-        if _ENABLE_CACHE_TRACKER:
-            d_cacheInfo[vId] = BigWorld.time()
 
 
 def _resourceLoaded(resNames, vId, resourceRefs):

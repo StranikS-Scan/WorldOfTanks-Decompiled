@@ -13,8 +13,11 @@ from notification.settings import LIST_SCROLL_STEP_FACTOR, NOTIFICATION_STATE
 from gui.shared.formatters import icons
 from gui.shared.notifications import NotificationGroup
 from helpers.i18n import makeString as _ms
+from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
 
 class NotificationListView(NotificationsListMeta, BaseNotificationView):
+    _lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, _):
         super(NotificationListView, self).__init__()
@@ -51,6 +54,7 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
         self._model.onNotificationUpdated -= self.__onNotificationUpdated
         self._model.onNotificationRemoved -= self.__onNotificationRemoved
         self.cleanUp()
+        self._lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
         super(NotificationListView, self)._dispose()
 
     def __setInitData(self):
@@ -58,9 +62,16 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
             self.__currentGroup = NotificationGroup.INVITE
         else:
             self.__currentGroup = NotificationGroup.INFO
+        self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
         self.as_setInitDataS({'scrollStepFactor': LIST_SCROLL_STEP_FACTOR,
          'btnBarSelectedIdx': NotificationGroup.ALL.index(self.__currentGroup),
          'tabsData': {'tabs': [self.__makeTabItemVO(NOTIFICATIONS_CONSTANTS.TAB_INFO, icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NOTIF_FILTERS_INFORMATION_16X16, 16, 16, -4, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_INFO), self.__makeTabItemVO(NOTIFICATIONS_CONSTANTS.TAB_INVITES, icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NOTIF_FILTERS_INVITATIONS_24X16, 24, 16, -5, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_INVITES), self.__makeTabItemVO(NOTIFICATIONS_CONSTANTS.TAB_OFFERS, icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NOTIF_FILTERS_GIFT_16X16, 16, 16, -4, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_OFFERS)]}})
+        if self._lobbyContext.getServerSettings().getProgressiveRewardConfig().isEnabled:
+            self.as_setProgressiveRewardEnabledS(True)
+
+    def __onServerSettingsChange(self, diff):
+        if 'progressive_reward_config' in diff:
+            self.as_setProgressiveRewardEnabledS(self._lobbyContext.getServerSettings().getProgressiveRewardConfig().isEnabled)
 
     def __updateCounters(self):
 

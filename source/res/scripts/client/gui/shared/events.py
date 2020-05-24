@@ -2,9 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/events.py
 from collections import namedtuple
 from gui.shared.event_bus import SharedEvent
-from helpers import dependency
 from shared_utils import CONST_CONTAINER
-from skeletons.gui.impl import IGuiLoader
 __all__ = ('ArgsEvent', 'LoadEvent', 'ComponentEvent', 'LoadViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginCreateEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent')
 
 class HasCtxEvent(SharedEvent):
@@ -37,7 +35,6 @@ class GameEvent(HasCtxEvent):
     HELP = 'game/help'
     HELP_DETAILED = 'game/helpWheeled'
     MINIMAP_CMD = 'game/minimapCmd'
-    FULL_MAP_CMD = 'game/fullMapCmd'
     RADIAL_MENU_CMD = 'game/radialMenuCmd'
     TOGGLE_GUI = 'game/toggleGUI'
     GUI_VISIBILITY = 'game/guiVisibility'
@@ -46,7 +43,6 @@ class GameEvent(HasCtxEvent):
     GUN_MARKER_VISIBILITY = 'game/gunMarkerVisibility'
     CROSSHAIR_VIEW = 'game/crosshairView'
     FULL_STATS = 'game/fullStats'
-    EVENT_STATS = 'game/eventStats'
     FULL_STATS_QUEST_PROGRESS = 'game/fullStats/questProgress'
     SHOW_CURSOR = 'game/showCursor'
     HIDE_CURSOR = 'game/hideCursor'
@@ -70,13 +66,6 @@ class GameEvent(HasCtxEvent):
     PRE_CHARGE = 'game/preCharge'
     CONTROL_MODE_CHANGE = 'game/controlModeChange'
     SNIPER_CAMERA_TRANSITION = 'game/sniperCameraTransition'
-    WORLD_MARKERS_COMPONENT_LIFETIME = 'game/worldMarkersComponentLifetime'
-    FADE_OUT_AND_IN = 'game/fadeOutIn'
-    ARENA_BORDER_TYPE_CHANGED = 'game/arenaBorderTypeChanged'
-    AREA_POINT_MARKER_CHANGED = 'game/areaPointMarkerChanged'
-    AREA_POINT_MARKER_LIFETIME = 'game/areaPointMarkerLifeTime'
-    EVENT_DEATHZONE_MARKER_CHANGED = 'game/eventDeathzoneMarkerChanged'
-    EVENT_DEATHZONE_MARKER_LIFETIME = 'game/eventDeathzoneMarkerLifeTime'
 
 
 class GUICommonEvent(SharedEvent):
@@ -211,7 +200,6 @@ class ShowDialogEvent(SharedEvent):
     SHOW_USE_AWARD_SHEET_DIALOG = 'useAwardSheetDialog'
     SHOW_CONFIRM_C11N_BUY_DIALOG = 'showConfirmC11nBuyDialog'
     SHOW_CONFIRM_C11N_SELL_DIALOG = 'showConfirmC11nSellDialog'
-    SHOW_EVENT_DESERTER_DLG = 'showEventDeserterDialog'
 
     def __init__(self, meta, handler):
         super(ShowDialogEvent, self).__init__(meta.getEventType())
@@ -282,7 +270,6 @@ class HideWindowEvent(HasCtxEvent):
     HIDE_MISSION_DETAILS_VIEW = 'hideMissionDetailsView'
     HIDE_PERSONAL_MISSION_DETAILS_VIEW = 'hidePersonalMissionDetailsView'
     HIDE_BROWSER_WINDOW = 'hideBrowserWindow'
-    HIDE_BOOSTERS_WINDOW = 'hideBoostersWindow'
     HIDE_VEHICLE_PREVIEW = 'hideVehiclePreview'
     HIDE_OVERLAY_BROWSER_VIEW = 'hideOverlayBrowserView'
     HIDE_MISSIONS_PAGE_VIEW = 'hideMissionsPageView'
@@ -305,14 +292,12 @@ class LobbySimpleEvent(HasCtxEvent):
     PREMIUM_BOUGHT = 'premiumBought'
     PREMIUM_XP_BONUS_CHANGED = 'premiumXPBonusChanged'
     WAITING_SHOWN = 'waitingShown'
-    WAITING_HIDDEN = 'waitingHidden'
     BATTLE_RESULTS_POSTED = 'battleResultsPosted'
     BATTLE_RESULTS_SHOW_QUEST = 'battleResultsWindowShowQuest'
     CHANGE_SOUND_ENVIRONMENT = 'changeSoundEnvironment'
     LOCK_OVERLAY_SCREEN = 'lockOverlayScreen'
     UNLOCK_OVERLAY_SCREEN = 'unlockOverlayScreen'
     VEHICLE_PREVIEW_HIDDEN = 'vehiclePreviewHidden'
-    PLAY_SE20_BANNER_SOUND = 'playSE20BannerSound'
 
 
 class MissionsEvent(HasCtxEvent):
@@ -365,14 +350,6 @@ class FightButtonEvent(LobbySimpleEvent):
 
 class LobbyHeaderMenuEvent(LobbySimpleEvent):
     TOGGLE_VISIBILITY = 'toggleVisibilityHeaderMenu'
-
-
-class LobbyNotificationEvent(SharedEvent):
-    SET_BOTTOM_PADDING = 'lobbyNotificationEventSetBottomPadding'
-
-    def __init__(self, eventType=None, bottomPadding=0):
-        super(LobbyNotificationEvent, self).__init__(eventType)
-        self.bottomPadding = bottomPadding
 
 
 class SkillDropEvent(SharedEvent):
@@ -464,11 +441,6 @@ class BootcampEvent(SharedEvent):
         self.eventArg = eventArg
 
 
-class ShopEvent(HasCtxEvent):
-    CONFIRM_TRADE_IN = 'confirmTradeIn'
-    SELECT_RENT_TERM = 'selectRentTerm'
-
-
 class MessengerEvent(HasCtxEvent):
     PRB_CHANNEL_CTRL_INITED = 'prbChannelCtrlInited'
     PRB_CHANNEL_CTRL_DESTROYED = 'prbChannelCtrlDestroyed'
@@ -548,11 +520,13 @@ class StrongholdEvent(HasCtxEvent):
     STRONGHOLD_VEHICLES_SELECTED = 'strongholdVehicleSelected'
 
 
-class IngameShopEvent(HasCtxEvent):
-    INGAMESHOP_ACTIVATED = 'ingameshopActivated'
-    INGAMESHOP_DEACTIVATED = 'ingameshopDeactivated'
-    INGAMESHOP_DATA_UNAVAILABLE = 'ingameshopDataUnavailable'
-    INGAMESHOP_ON_TIMER = 'ingameshopOnTimer'
+class ShopEvent(HasCtxEvent):
+    SHOP_ACTIVATED = 'shopActivated'
+    SHOP_DEACTIVATED = 'shopDeactivated'
+    SHOP_DATA_UNAVAILABLE = 'shopDataUnavailable'
+    SHOP_ON_TIMER = 'shopOnTimer'
+    CONFIRM_TRADE_IN = 'confirmTradeIn'
+    SELECT_RENT_TERM = 'selectRentTerm'
 
 
 class OpenLinkEvent(SharedEvent):
@@ -648,10 +622,8 @@ class VehicleBuyEvent(HasCtxEvent):
 
 class HangarVehicleEvent(HasCtxEvent):
     ON_HERO_TANK_LOADED = 'hangarVehicle/onHeroTankLoaded'
-    ON_HERO_TANK_UPDATED = 'hangarVehicle/onHeroTankUpdated'
     ON_HERO_TANK_DESTROY = 'hangarVehicle/onHeroTankDestroy'
     HERO_TANK_MARKER = 'hangarVehicle/heroTankMarker'
-    LOBBY_TYPE_CHANGED = 'hangarVehicle/lobbyTypeChanged'
 
 
 class LinkedSetEvent(HasCtxEvent):
@@ -676,15 +648,6 @@ class HangarCustomizationEvent(HasCtxEvent):
 class SeniorityAwardsEvent(HasCtxEvent):
     ON_REWARD_VIEW_CLOSED = 'seniorityAwards/onRewardViewClosed'
     ON_ENTRY_VIEW_LOADED = 'seniorityAwards/onEntryViewLoaded'
-
-
-class PickUpEvent(HasCtxEvent):
-    ON_PICKUP = 'PickUpEvent/onPickup'
-
-
-class BuffUiEvent(HasCtxEvent):
-    ON_APPLY = 'BuffUiEvent/onApply'
-    ON_UNAPPLY = 'BuffUiEvent/onUnapply'
 
 
 class ReferralProgramEvent(HasCtxEvent):
@@ -723,25 +686,33 @@ class ItemRemovalByDemountKitEvent(HasCtxEvent):
         super(ItemRemovalByDemountKitEvent, self).__init__(eventType)
 
 
-class RadialMenuEvent(SharedEvent):
-    RADIAL_MENU_ACTION = 'radialMenuAction'
+class TrainingEvent(HasCtxEvent):
+    RETURN_TO_TRAINING_ROOM = 'trainingEvent/returnToTrainingRoom'
+    SHOW_TRAINING_LIST = 'trainingEvent/showTrainingList'
+    SHOW_EPIC_TRAINING_LIST = 'trainingEvent/showEpicTrainingList'
 
 
-class EventHeaderEvent(HasCtxEvent):
-    TAB_CHANGED = 'eventHeader/tabChanged'
+class RallyWindowEvent(HasCtxEvent):
+    ON_CLOSE = 'rallyWindowEvent/onClose'
 
 
-def checkLoadedView(layoutID):
+class CustomizationEvent(HasCtxEvent):
+    SHOW = 'customizationEvent/show'
 
-    def wrapper(func):
 
-        def check(*args, **kwargs):
-            gui = dependency.instance(IGuiLoader)
-            found = gui.windowsManager.findViews(lambda view: view.layoutID == layoutID)
-            if found:
-                return
-            func(*args, **kwargs)
+class PrbInvitesEvent(HasCtxEvent):
+    ACCEPT = 'prbInvitesEvent/accept'
 
-        return check
+    def __init__(self, eventType=None, inviteID=None, postActions=None):
+        super(PrbInvitesEvent, self).__init__(eventType)
+        self.inviteID = inviteID
+        self.postActions = postActions
 
-    return wrapper
+
+class PrbActionEvent(HasCtxEvent):
+    SELECT = 'prbActionEvent/select'
+    LEAVE = 'prbActionEvent/leave'
+
+    def __init__(self, action, eventType=None):
+        super(PrbActionEvent, self).__init__(eventType)
+        self.action = action

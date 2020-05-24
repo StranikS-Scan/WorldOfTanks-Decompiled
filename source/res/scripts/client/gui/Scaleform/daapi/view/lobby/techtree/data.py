@@ -12,7 +12,7 @@ from gui.Scaleform.daapi.view.lobby.techtree.settings import RESEARCH_ITEMS
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockProps, UnlockStats, DEFAULT_UNLOCK_PROPS
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
-from gui.ingame_shop import canBuyGoldForItemThroughWeb
+from gui.shop import canBuyGoldForItemThroughWeb
 from gui.prb_control import prbDispatcherProperty
 from gui.shared.economics import getGUIPrice
 from gui.shared.gui_items import GUI_ITEM_TYPE

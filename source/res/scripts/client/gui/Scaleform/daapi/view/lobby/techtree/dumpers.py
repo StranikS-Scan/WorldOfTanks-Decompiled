@@ -180,4 +180,5 @@ class NationObjDumper(_BaseDumper):
             return ''
         if g_techTreeDP.isActionStartNode(node):
             eventsListener = g_techTreeDP.techTreeEventsListener
-            return TechTreeFormatters.getActionInfoStr(eventsListener.getUserName(), eventsListener.getFinishTime())
+            actionID = eventsListener.getActiveAction(vehicleCD=node.getNodeCD(), nationID=node.getNationID())
+            return TechTreeFormatters.getActionInfoStr(eventsListener.getUserName(actionID), eventsListener.getFinishTime(actionID))

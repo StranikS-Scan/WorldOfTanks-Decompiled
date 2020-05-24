@@ -31,10 +31,6 @@ class BattlePassEntryPointStates(object):
         g_playerEvents.onAccountBecomePlayer += self.reset
         return
 
-    def __del__(self):
-        g_playerEvents.onDisconnected -= self.reset
-        g_playerEvents.onAccountBecomePlayer -= self.reset
-
     def reset(self):
         self.isFirstShow = True
         self.isBPBought = False
@@ -194,17 +190,26 @@ class BattlePassEntryPointView(ViewImpl):
             model.setHasBattlePass(hasBattlePass)
             model.setIsPostProgressionCompleted(currentState == BattlePassState.COMPLETED)
             model.setState(state)
+            model.setCanPlay(self.__battlePassController.canPlayerParticipate())
             isSameLevel = g_BPEntryPointStates.curLevel == currentLevel
             isSameState = g_BPEntryPointStates.prevState == currentState
             isValidLevel = g_BPEntryPointStates.curLevel != -1
             showNewLevel = isValidLevel and not isSameLevel or isSameLevel and not isSameState
             showBuyBP = not g_BPEntryPointStates.isBPBought and hasBattlePass and not g_BPEntryPointStates.isFirstShow
-            model.setShowAttention(currentState != BattlePassState.BASE and not self.__battlePassController.isPlayerVoted())
+            showAttention = currentState != BattlePassState.BASE and not self.__battlePassController.isPlayerVoted()
+            animState = BattlePassEntryPointViewModel.ANIM_STATE_NORMAL
+            if g_BPEntryPointStates.showSwitchToPostProgression:
+                animState = BattlePassEntryPointViewModel.ANIM_STATE_SHOW_SWITCH_TO_POST_PROGRESSION
+            elif g_BPEntryPointStates.showPostProgressionCompleted:
+                animState = BattlePassEntryPointViewModel.ANIM_STATE_SHOW_POST_PROGRESSION_COMPLETED
+            elif showNewLevel:
+                animState = BattlePassEntryPointViewModel.ANIM_STATE_SHOW_NEW_LEVEL
+            elif showBuyBP:
+                animState = BattlePassEntryPointViewModel.ANIM_STATE_SHOW_BUY_BATTLEPASS
+            elif showAttention:
+                animState = BattlePassEntryPointViewModel.ANIM_STATE_SHOW_ATTENTION
+            model.setAnimState(animState)
             model.setIsFirstShow(g_BPEntryPointStates.isFirstShow)
-            model.setShowNewLevel(showNewLevel)
-            model.setShowBuyBP(showBuyBP)
-            model.setShowSwitchToPostProgression(g_BPEntryPointStates.showSwitchToPostProgression)
-            model.setShowPostProgressionCompleted(g_BPEntryPointStates.showPostProgressionCompleted)
             g_BPEntryPointStates.curLevel = currentLevel
             g_BPEntryPointStates.isFirstShow = False
             g_BPEntryPointStates.isBPBought = hasBattlePass

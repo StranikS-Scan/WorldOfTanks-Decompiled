@@ -392,49 +392,6 @@ class _WebProductExchangeItem(_ExchangeItem):
         pass
 
 
-class _RechargeInfoItem(InfoItemBase):
-
-    def __init__(self, name):
-        self.__name = name
-
-    @property
-    def itemTypeName(self):
-        pass
-
-    @property
-    def itemTypeID(self):
-        return None
-
-    @property
-    def userName(self):
-        return self.__name
-
-    def getExtraIconInfo(self):
-        return None
-
-    def getGUIEmblemID(self):
-        pass
-
-
-class _RechargeExchangeItem(_ExchangeItem):
-
-    def __init__(self, price, infoItem):
-        super(_RechargeExchangeItem, self).__init__(None)
-        self.__infoItem = infoItem
-        self.__price = price
-        return
-
-    @property
-    def price(self):
-        return self.__price
-
-    def _getInfoItem(self):
-        return self.__infoItem
-
-    def doAction(self, action, resultType):
-        pass
-
-
 class _ExchangeCreditsSubmitter(_ExchangeSubmitterBase):
     itemsCache = dependency.descriptor(IItemsCache)
 
@@ -575,25 +532,6 @@ class ExchangeCreditsWebProductMeta(_ExchangeDialogMeta, _ExchangeCreditsSubscri
 
     def _getSubmitterType(self):
         return _WebProductCreditsExchangeSubmitter
-
-
-class _RechargeCreditsExchangeSubmitter(_ExchangeCreditsSubmitter):
-
-    def _getResourceToExchange(self):
-        return self._exchangeItem.price - self.itemsCache.items.stats.credits
-
-
-class ExchangeCreditsRechargeMeta(_ExchangeDialogMeta, _ExchangeCreditsSubscriber):
-
-    def __init__(self, name, price, key='confirmExchangeDialog/exchangeCredits'):
-        infoItem = _RechargeInfoItem(name)
-        super(ExchangeCreditsRechargeMeta, self).__init__(_RechargeExchangeItem(price, infoItem), key)
-
-    def _getItemIconType(self, item):
-        return CONFIRM_EXCHANGE_DIALOG_TYPES.PLATFORM_PACK_ICON
-
-    def _getSubmitterType(self):
-        return _RechargeCreditsExchangeSubmitter
 
 
 class _RestoreExchangeCreditsSubmitter(_ExchangeCreditsSubmitter):

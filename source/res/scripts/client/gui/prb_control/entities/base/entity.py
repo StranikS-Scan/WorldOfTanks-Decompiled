@@ -54,9 +54,6 @@ class BasePrbEntryPoint(PrbFunctionalFlags):
     def setAccountsToInvite(self, accountsToInvite):
         pass
 
-    def setKeepCurrentView(self, keepCurrentView):
-        pass
-
 
 class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
 

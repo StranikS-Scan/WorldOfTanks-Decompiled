@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/ranked_battles/constants.py
+from enum import Enum, unique
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.shared.money import Currency
 from shared_utils import CONST_CONTAINER
@@ -33,11 +34,15 @@ class PrimeTimeStatus(CONST_CONTAINER):
 ZERO_RANK_ID = 0
 ZERO_DIVISION_ID = 0
 MAX_GROUPS_IN_DIVISION = 3
-AWARDS_ORDER = ('battleToken',
- 'items',
+AWARDS_ORDER = ('items',
  Currency.CREDITS,
  'premium',
+ 'premium_plus',
+ 'premium_vip',
  Currency.GOLD,
+ 'battleToken',
+ 'tokens',
+ 'entitlements',
  Currency.CRYSTAL)
 YEAR_AWARDS_BONUS_ORDER = (Currency.CRYSTAL,
  'customizations',
@@ -84,3 +89,10 @@ class SeasonGapStates(CONST_CONTAINER):
     WAITING_NOT_IN_SEASON = 9
     NOT_IN_SEASON = 10
     BANNED_NOT_IN_SEASON = 11
+
+
+@unique
+class AlertTypes(Enum):
+    PRIME = 'prime'
+    SEASON = 'season'
+    VEHICLE = 'vehicle'

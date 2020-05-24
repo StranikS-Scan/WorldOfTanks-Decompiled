@@ -15,7 +15,7 @@
       <isRent>	true	</isRent>
       <rentCount>	100	</rentCount>
       <userString>	#vehicle_customization:rented_style/uk	</userString>
-      <tags>	vehicleBound	</tags>
+      <tags>	vehicleBound addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -71,6 +71,14 @@
       <texture>	gui/maps/vehicles/styles/style_01.png	</texture>
       <userString>	#vehicle_customization:gold_style/gold_style_01	</userString>
       <longDescriptionSpecial>	#vehicle_customization:gold_style/gold_style_01_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -206,6 +214,14 @@
       <id>	154	</id>
       <texture>	gui/maps/vehicles/styles/global_map_01.png	</texture>
       <userString>	#vehicle_customization:special_style/global_map	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -258,6 +274,14 @@
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/royal_corps	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/royal_corps_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -299,6 +323,14 @@
       <description>	#vehicle_customization:special_style/marathon_september_desc	</description>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/marathon_september	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -336,6 +368,14 @@
       <description>	#vehicle_customization:main_style/generic_custom_look_uk_desc	</description>
       <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_uk_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:main_style/generic_custom_look_uk	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	summer	</season>
@@ -409,6 +449,14 @@
       <texture>	gui/maps/vehicles/styles/generic_custom_look_2_uk.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_2_uk_desc	</description>
       <userString>	#vehicle_customization:main_style/generic_custom_look_2_uk	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -486,6 +534,14 @@
       <description>	#vehicle_customization:special_style/desert_rats_desc	</description>
       <maxNumber>	2	</maxNumber>
       <userString>	#vehicle_customization:special_style/desert_rats	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -529,6 +585,14 @@
       <texture>	gui/maps/vehicles/styles/generic_custom_look_3_uk.png	</texture>
       <description>	#vehicle_customization:main_style/generic_custom_look_3_uk_desc	</description>
       <userString>	#vehicle_customization:main_style/generic_custom_look_3_uk	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -600,10 +664,18 @@
     <style>
       <id>	77	</id>
       <texture>	gui/maps/vehicles/styles/GB105_Black_Prince_2019_3Dst.png	</texture>
-      <description>	#vehicle_customization:special_style/black_prince_2019_3dst_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/black_prince_2019_3dst_desc/long	</longDescriptionSpecial>
       <modelsSet>	GB105_Black_Prince_2019_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/black_prince_2019_3dst	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -642,10 +714,18 @@
     <style>
       <id>	87	</id>
       <texture>	gui/maps/vehicles/styles/GB83_FV4005_3Dst.png	</texture>
-      <description>	#vehicle_customization:main_style/GB83_FV4005_3Dst_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/GB83_FV4005_3Dst_desc/long	</longDescriptionSpecial>
       <modelsSet>	GB83_FV4005_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:main_style/GB83_FV4005_3Dst	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -674,52 +754,18 @@
     <style>
       <id>	85	</id>
       <texture>	gui/maps/vehicles/styles/GB24_Centurion_Mk3_Halloween_3Dst.png	</texture>
-      <description>	#vehicle_customization:main_style/GB24_Centurion_Mk3_Halloween_3Dst_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/GB24_Centurion_Mk3_Halloween_3Dst_desc/long	</longDescriptionSpecial>
       <modelsSet>	halloween	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:main_style/GB24_Centurion_Mk3_Halloween_3Dst	</userString>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	1	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	0	</id>
-              <appliedTo>	13104	</appliedTo>
-            </item>
-            <item>
-              <id>	0	</id>
-              <appliedTo>	52416	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-      </outfits>
-    </style>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:styles/main_styles	</userString>
-    <season>	ALL	</season>
-    <historical>	false	</historical>
-    <priceGroup>	styles 3750g notInShop	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <vehicles>	uk:GB70_N_FV4202_105	</vehicles>
-      </include>
-    </vehicleFilter>
-    <style>
-      <id>	271	</id>
-      <texture>	gui/maps/vehicles/styles/GB70_FV4202_PatDay_3Dst.png	</texture>
-      <description>	#vehicle_customization:main_style/GB70_FV4202_PatDay_3Dst_desc	</description>
-      <modelsSet>	GB70_FV4202_PatDay_3Dst	</modelsSet>
-      <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:main_style/GB70_FV4202_PatDay_3Dst	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -758,10 +804,18 @@
     <style>
       <id>	89	</id>
       <texture>	gui/maps/vehicles/styles/GB91_Super_Conqueror_3Dst.png	</texture>
-      <description>	#vehicle_customization:main_style/GB91_Super_Conqueror_3Dst_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/GB91_Super_Conqueror_3Dst_desc/long	</longDescriptionSpecial>
       <modelsSet>	GB91_Super_Conqueror_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:main_style/GB91_Super_Conqueror_3Dst	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -778,144 +832,151 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
-    <priceGroup>	styles 1750g notInShop	</priceGroup>
+    <priceGroup>	styles 3750g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <vehicles>	uk:GB63_TOG_II	</vehicles>
+        <vehicles>	uk:GB70_N_FV4202_105	</vehicles>
       </include>
     </vehicleFilter>
     <style>
-      <id>	291	</id>
-      <texture>	gui/maps/vehicles/styles/hot_tog.png	</texture>
-      <description>	#vehicle_customization:special_style/hot_tog_desc	</description>
+      <id>	271	</id>
+      <texture>	gui/maps/vehicles/styles/GB70_FV4202_PatDay_3Dst.png	</texture>
+      <description>	#vehicle_customization:main_style/GB70_FV4202_PatDay_3Dst_desc	</description>
+      <modelsSet>	GB70_FV4202_PatDay_3Dst	</modelsSet>
       <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:special_style/hot_tog	</userString>
+      <userString>	#vehicle_customization:main_style/GB70_FV4202_PatDay_3Dst	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
-          <season>	winter	</season>
+          <season>	ALL	</season>
           <camouflages>
             <item>
-              <id>	113	</id>
-              <appliedTo>	16	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-            <item>
-              <id>	115	</id>
-              <appliedTo>	4352	</appliedTo>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>
             </item>
           </camouflages>
-          <paints>
-            <item>
-              <id>	37	</id>
-              <appliedTo>	30583	</appliedTo>
-            </item>
-          </paints>
-          <modifications>
-            <item>	6	</item>
-          </modifications>
           <decals>
-            <item>
-              <id>	208	</id>
-              <appliedTo>	64	</appliedTo>
-            </item>
-            <item>
-              <id>	211	</id>
-              <appliedTo>	1024	</appliedTo>
-            </item>
             <item>
               <id>	0	</id>
               <appliedTo>	13104	</appliedTo>
             </item>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
           </decals>
         </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 1200g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB23_Centurion	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	108	</id>
+      <texture>	gui/maps/vehicles/styles/GB23_Centurion_Maple_Leaf.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/GB23_Centurion_Maple_Leaf_desc/long	</longDescriptionSpecial>
+      <modelsSet>	Maple_Leaf	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/GB23_Centurion_Maple_Leaf	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
         <outfit>
-          <season>	summer	</season>
+          <season>	ALL	</season>
           <camouflages>
             <item>
-              <id>	112	</id>
-              <appliedTo>	16	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-            <item>
-              <id>	115	</id>
-              <appliedTo>	4352	</appliedTo>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>
             </item>
           </camouflages>
-          <paints>
-            <item>
-              <id>	37	</id>
-              <appliedTo>	30583	</appliedTo>
-            </item>
-          </paints>
-          <modifications>
-            <item>	6	</item>
-          </modifications>
           <decals>
-            <item>
-              <id>	206	</id>
-              <appliedTo>	64	</appliedTo>
-            </item>
-            <item>
-              <id>	209	</id>
-              <appliedTo>	1024	</appliedTo>
-            </item>
             <item>
               <id>	0	</id>
               <appliedTo>	13104	</appliedTo>
             </item>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
           </decals>
         </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 4000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB98_T95_FV4201_Chieftain	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	292	</id>
+      <texture>	gui/maps/vehicles/styles/GB98_T95_FV4201_Chieftain_3Dst.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/GB98_T95_FV4201_Chieftain_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	GM2020	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/GB98_T95_FV4201_Chieftain_3Dst	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
         <outfit>
-          <season>	desert	</season>
+          <season>	ALL	</season>
           <camouflages>
             <item>
-              <id>	114	</id>
-              <appliedTo>	16	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-            <item>
-              <id>	115	</id>
-              <appliedTo>	4352	</appliedTo>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>
             </item>
           </camouflages>
-          <paints>
-            <item>
-              <id>	37	</id>
-              <appliedTo>	30583	</appliedTo>
-            </item>
-          </paints>
-          <modifications>
-            <item>	6	</item>
-          </modifications>
           <decals>
-            <item>
-              <id>	207	</id>
-              <appliedTo>	64	</appliedTo>
-            </item>
-            <item>
-              <id>	210	</id>
-              <appliedTo>	1024	</appliedTo>
-            </item>
             <item>
               <id>	0	</id>
               <appliedTo>	13104	</appliedTo>
             </item>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
           </decals>
-        </outfit>
-        <outfit>
-          <season>	event	</season>
         </outfit>
       </outfits>
     </style>

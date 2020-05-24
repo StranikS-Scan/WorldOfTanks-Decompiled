@@ -128,6 +128,13 @@ class BattlePassStatsCommon(object):
     def getEmptyPackedSeasonStats():
         return struct.pack(BattlePassStatsCommon._CNT_SEASONS_FORMAT, 0)
 
+    @staticmethod
+    def initialSeasonStatsData():
+        return {'maxBase': 0,
+         'maxPost': 0,
+         'battles': 0,
+         'reachedCaps': set()}
+
 
 def getVehicleLevel(vehTypeCompDescr):
     _, nationID, innationID = parseIntCompactDescr(vehTypeCompDescr)
@@ -252,6 +259,10 @@ class BattlePassConfig(object):
     def finalReward(self):
         return self._config.get('finalReward', {})
 
+    @property
+    def seasonsHistory(self):
+        return self._config.get('seasonsHistory', {})
+
     def getSumPointsTo(self, state, level):
         if state == BattlePassState.BASE:
             if level:
@@ -318,7 +329,8 @@ class BattlePassConfig(object):
         return self._season.get('capBonuses', [0] * constants.MAX_VEHICLE_LEVEL)
 
     def vehicleCapacity(self, vehTypeCompDescr):
-        return 0 if 'secret' in vehicles.getVehicleType(vehTypeCompDescr).tags else self.vehCDCaps.get(vehTypeCompDescr, self.vehLevelCaps[getVehicleLevel(vehTypeCompDescr) - 1])
+        isSecret = 'secret' in vehicles.getVehicleType(vehTypeCompDescr).tags
+        return 0 if isSecret and vehTypeCompDescr not in self.vehCDCaps else self.vehCDCaps.get(vehTypeCompDescr, self.vehLevelCaps[getVehicleLevel(vehTypeCompDescr) - 1])
 
     def capBonus(self, vehLevel):
         return self.capBonusList()[vehLevel - 1]

@@ -1,8 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/recruitWindow/RecruitWindow.py
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
-from gui.ingame_shop import showBuyGoldForCrew
+from gui.shop import showBuyGoldForCrew
 from gui.shared.gui_items.serializers import packTraining
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 import nations
@@ -246,7 +245,7 @@ class RecruitWindow(RecruitWindowMeta):
         studyTypeIdx = int(studyType)
         studyGoldCost = self.itemsCache.items.shop.tankmanCost[studyTypeIdx][Currency.GOLD] or 0
         currentMoney = self.itemsCache.items.stats.money
-        if currentMoney.gold < studyGoldCost and isIngameShopEnabled():
+        if currentMoney.gold < studyGoldCost:
             showBuyGoldForCrew(studyGoldCost)
             return
         else:

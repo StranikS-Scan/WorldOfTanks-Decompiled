@@ -7,8 +7,14 @@ class BattlePassEntryPointViewModel(ViewModel):
     STATE_DISABLED = 'disabled'
     STATE_SEASON_WAITING = 'seasonWaiting'
     STATE_NORMAL = 'normal'
+    ANIM_STATE_NORMAL = 'normal'
+    ANIM_STATE_SHOW_NEW_LEVEL = 'showNewLevel'
+    ANIM_STATE_SHOW_BUY_BATTLEPASS = 'showBuyBP'
+    ANIM_STATE_SHOW_ATTENTION = 'showAttention'
+    ANIM_STATE_SHOW_POST_PROGRESSION_COMPLETED = 'showPostProgressionCompleted'
+    ANIM_STATE_SHOW_SWITCH_TO_POST_PROGRESSION = 'showSwitchToPostProgression'
 
-    def __init__(self, properties=17, commands=1):
+    def __init__(self, properties=14, commands=1):
         super(BattlePassEntryPointViewModel, self).__init__(properties=properties, commands=commands)
 
     def getPrevLevel(self):
@@ -77,41 +83,23 @@ class BattlePassEntryPointViewModel(ViewModel):
     def setTooltipID(self, value):
         self._setNumber(10, value)
 
-    def getIsFirstShow(self):
+    def getCanPlay(self):
         return self._getBool(11)
 
-    def setIsFirstShow(self, value):
+    def setCanPlay(self, value):
         self._setBool(11, value)
 
-    def getShowNewLevel(self):
+    def getIsFirstShow(self):
         return self._getBool(12)
 
-    def setShowNewLevel(self, value):
+    def setIsFirstShow(self, value):
         self._setBool(12, value)
 
-    def getShowBuyBP(self):
-        return self._getBool(13)
+    def getAnimState(self):
+        return self._getString(13)
 
-    def setShowBuyBP(self, value):
-        self._setBool(13, value)
-
-    def getShowAttention(self):
-        return self._getBool(14)
-
-    def setShowAttention(self, value):
-        self._setBool(14, value)
-
-    def getShowPostProgressionCompleted(self):
-        return self._getBool(15)
-
-    def setShowPostProgressionCompleted(self, value):
-        self._setBool(15, value)
-
-    def getShowSwitchToPostProgression(self):
-        return self._getBool(16)
-
-    def setShowSwitchToPostProgression(self, value):
-        self._setBool(16, value)
+    def setAnimState(self, value):
+        self._setString(13, value)
 
     def _initialize(self):
         super(BattlePassEntryPointViewModel, self)._initialize()
@@ -126,10 +114,7 @@ class BattlePassEntryPointViewModel(ViewModel):
         self._addStringProperty('state', '')
         self._addBoolProperty('isSmall', False)
         self._addNumberProperty('tooltipID', 0)
+        self._addBoolProperty('canPlay', False)
         self._addBoolProperty('isFirstShow', False)
-        self._addBoolProperty('showNewLevel', False)
-        self._addBoolProperty('showBuyBP', False)
-        self._addBoolProperty('showAttention', False)
-        self._addBoolProperty('showPostProgressionCompleted', False)
-        self._addBoolProperty('showSwitchToPostProgression', False)
+        self._addStringProperty('animState', '')
         self.onClick = self._addCommand('onClick')

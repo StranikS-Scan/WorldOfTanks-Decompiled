@@ -40,10 +40,3 @@ class SPEAKERS_CONFIG(object):
      SPEAKER_SETUP_2_0,
      SPEAKER_SETUP_5_1,
      SPEAKER_SETUP_7_1)
-
-
-class SoundLanguage(CONST_CONTAINER):
-    RU_VOICEOVER_REALM_CODES = ('RU', 'ST', 'QA', 'DEV', 'SB')
-    VOICEOVER_LOCALIZATION_SWITCH = 'SWITCH_ext_ev_2020_secret_event_voice_over'
-    VOICEOVER_RU = 'SWITCH_ext_ev_2020_secret_event_voice_over_ru'
-    VOICEOVER_EN = 'SWITCH_ext_ev_2020_secret_event_voice_over_en'

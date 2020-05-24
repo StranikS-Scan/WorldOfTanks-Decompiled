@@ -6,14 +6,13 @@ from goodies.goodie_constants import DEMOUNT_KIT_ID, GOODIE_VARIETY
 from gui import SystemMessages, makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.customization.shared import TYPES_ORDER
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.VehicleSellDialogMeta import VehicleSellDialogMeta
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 from gui.goodies.demount_kit import isDemountKitApplicableTo
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.ingame_shop import showBuyGoldForEquipment
+from gui.shop import showBuyGoldForEquipment
 from gui.shared import event_dispatcher
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.tankmen import formatDeletedTankmanStr
@@ -291,10 +290,15 @@ class VehicleSellDialog(VehicleSellDialogMeta):
             installedCustomizations = sorted(installedCustomizations, key=lambda item: TYPES_ORDER.index(item.itemTypeID))
         customizationOnVehicle = []
         for customization in installedCustomizations:
-            count = customization.getInstalledOnVehicleCount(vehicle.intCD)
-            data = _CustomizationData(customization, count)
-            self.__addVSDItem(data)
-            customizationOnVehicle.append(data.toFlashVO())
+            count = customization.installedCount(vehicle.intCD)
+            if customization.isProgressive:
+                inventoryCount = customization.fullInventoryCount(vehicle.intCD)
+                count += min(0, inventoryCount - customization.descriptor.progression.autoGrantCount)
+                count = max(0, count)
+            if count:
+                data = _CustomizationData(customization, count)
+                self.__addVSDItem(data)
+                customizationOnVehicle.append(data.toFlashVO())
 
         return customizationOnVehicle
 
@@ -353,8 +357,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         controlNumberValid = self.__enteredControlNumber == self.__controlNumber
         expenses = -self.__income
         shortage = expenses.getShortage(self.__accountMoney)
-        if isIngameShopEnabled():
-            shortage[Currency.GOLD] = 0
+        shortage[Currency.GOLD] = 0
         self.as_enableButtonS(controlNumberValid and shortage.isEmpty())
 
     def __getControlQuestion(self, usingGold=False):
@@ -433,7 +436,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         vehicleSeller = VehicleSeller(vehicle, shells, eqs, optDevicesToSell, inventory, customizationItems, boosters, isDismissCrew, itemsForDemountKit)
         currentMoneyGold = self.__itemsCache.items.stats.money.get(Currency.GOLD, 0)
         spendMoneyGold = vehicleSeller.spendMoney.get(Currency.GOLD, 0)
-        if isIngameShopEnabled() and currentMoneyGold < spendMoneyGold:
+        if currentMoneyGold < spendMoneyGold:
             showBuyGoldForEquipment(spendMoneyGold)
         else:
             result = yield vehicleSeller.request()

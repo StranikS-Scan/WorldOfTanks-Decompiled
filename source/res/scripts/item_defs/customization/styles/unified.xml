@@ -17,7 +17,14 @@
       <texture>	gui/maps/vehicles/styles/NY_4.png	</texture>
       <userString>	#vehicle_customization:ny_style/asian_ny_style_01	</userString>
       <longDescriptionSpecial>	#vehicle_customization:ny_style/asian_ny_style_01_desc/long	</longDescriptionSpecial>
-      <tags>	NY2018_style	</tags>
+      <tags>	NY2018_style progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -57,7 +64,14 @@
       <texture>	gui/maps/vehicles/styles/NY_2.png	</texture>
       <userString>	#vehicle_customization:ny_style/soviet_ny_style_01	</userString>
       <longDescriptionSpecial>	#vehicle_customization:ny_style/soviet_ny_style_01_desc/long	</longDescriptionSpecial>
-      <tags>	NY2018_style	</tags>
+      <tags>	NY2018_style progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -97,7 +111,14 @@
       <texture>	gui/maps/vehicles/styles/NY_3.png	</texture>
       <userString>	#vehicle_customization:ny_style/traditionalWestern_ny_style_01	</userString>
       <longDescriptionSpecial>	#vehicle_customization:ny_style/traditionalWestern_ny_style_01_desc/long	</longDescriptionSpecial>
-      <tags>	NY2018_style	</tags>
+      <tags>	NY2018_style progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -137,7 +158,14 @@
       <texture>	gui/maps/vehicles/styles/NY_1.png	</texture>
       <userString>	#vehicle_customization:ny_style/modernWestern_ny_style_01	</userString>
       <longDescriptionSpecial>	#vehicle_customization:ny_style/modernWestern_ny_style_01_desc/long	</longDescriptionSpecial>
-      <tags>	NY2018_style	</tags>
+      <tags>	NY2018_style progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -173,6 +201,14 @@
       <id>	132	</id>
       <texture>	gui/maps/vehicles/styles/wg_fest.png	</texture>
       <userString>	#vehicle_customization:special_style/wgfest_style_01	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -218,6 +254,14 @@
       <texture>	gui/maps/vehicles/styles/ranked.png	</texture>
       <description>	#vehicle_customization:special_style/ranked_1_desc	</description>
       <userString>	#vehicle_customization:special_style/ranked_1	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -263,6 +307,14 @@
       <texture>	gui/maps/vehicles/styles/ranked.png	</texture>
       <description>	#vehicle_customization:special_style/ranked_2_desc	</description>
       <userString>	#vehicle_customization:special_style/ranked_2	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -308,6 +360,14 @@
       <texture>	gui/maps/vehicles/styles/ranked.png	</texture>
       <description>	#vehicle_customization:special_style/ranked_3_desc	</description>
       <userString>	#vehicle_customization:special_style/ranked_3	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -349,6 +409,14 @@
       <id>	140	</id>
       <texture>	gui/maps/vehicles/styles/brw_winner.png	</texture>
       <userString>	#vehicle_customization:special_style/brw_winner	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -408,6 +476,14 @@
       <texture>	gui/maps/vehicles/styles/frontline_ussr.png	</texture>
       <description>	#vehicle_customization:special_style/frontline_ussr_desc	</description>
       <userString>	#vehicle_customization:special_style/frontline_ussr	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -447,6 +523,14 @@
       <texture>	gui/maps/vehicles/styles/frontline_alliance.png	</texture>
       <description>	#vehicle_customization:special_style/frontline_alliance_desc	</description>
       <userString>	#vehicle_customization:special_style/frontline_alliance	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -486,6 +570,14 @@
       <texture>	gui/maps/vehicles/styles/frontline_captured.png	</texture>
       <description>	#vehicle_customization:special_style/frontline_captured_desc	</description>
       <userString>	#vehicle_customization:special_style/frontline_captured	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -525,6 +617,14 @@
       <id>	137	</id>
       <texture>	gui/maps/vehicles/styles/23feb.png	</texture>
       <userString>	#vehicle_customization:special_style/23feb	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -622,7 +722,14 @@
       <texture>	gui/maps/vehicles/styles/football_otms.png	</texture>
       <userString>	#vehicle_customization:special_style/football_otms	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/football_otms_desc/long	</longDescriptionSpecial>
-      <tags>	football2018	</tags>
+      <tags>	football2018 progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -663,7 +770,14 @@
       <texture>	gui/maps/vehicles/styles/football_tms1.png	</texture>
       <userString>	#vehicle_customization:special_style/football_tms1	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/football_tms1_desc/long	</longDescriptionSpecial>
-      <tags>	football2018	</tags>
+      <tags>	football2018 progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -704,7 +818,14 @@
       <texture>	gui/maps/vehicles/styles/football_tms2.png	</texture>
       <userString>	#vehicle_customization:special_style/football_tms2	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/football_tms2_desc/long	</longDescriptionSpecial>
-      <tags>	football2018	</tags>
+      <tags>	football2018 progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -745,7 +866,14 @@
       <texture>	gui/maps/vehicles/styles/football_tms3.png	</texture>
       <userString>	#vehicle_customization:special_style/football_tms3	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/football_tms3_desc/long	</longDescriptionSpecial>
-      <tags>	football2018	</tags>
+      <tags>	football2018 progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -786,7 +914,14 @@
       <texture>	gui/maps/vehicles/styles/football_tms4.png	</texture>
       <userString>	#vehicle_customization:special_style/football_tms4	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/football_tms4_desc/long	</longDescriptionSpecial>
-      <tags>	football2018	</tags>
+      <tags>	football2018 progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -827,7 +962,14 @@
       <texture>	gui/maps/vehicles/styles/football_aces1.png	</texture>
       <userString>	#vehicle_customization:special_style/football_aces1	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/football_aces1_desc/long	</longDescriptionSpecial>
-      <tags>	football2018	</tags>
+      <tags>	football2018 progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -868,7 +1010,14 @@
       <texture>	gui/maps/vehicles/styles/football_aces2.png	</texture>
       <userString>	#vehicle_customization:special_style/football_aces2	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/football_aces2_desc/long	</longDescriptionSpecial>
-      <tags>	football2018	</tags>
+      <tags>	football2018 progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -909,7 +1058,14 @@
       <texture>	gui/maps/vehicles/styles/football_aces3.png	</texture>
       <userString>	#vehicle_customization:special_style/football_aces3	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/football_aces3_desc/long	</longDescriptionSpecial>
-      <tags>	football2018	</tags>
+      <tags>	football2018 progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -950,7 +1106,14 @@
       <texture>	gui/maps/vehicles/styles/football_aces4.png	</texture>
       <userString>	#vehicle_customization:special_style/football_aces4	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/football_aces4_desc/long	</longDescriptionSpecial>
-      <tags>	football2018	</tags>
+      <tags>	football2018 progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -991,7 +1154,14 @@
       <texture>	gui/maps/vehicles/styles/football_4sale2.png	</texture>
       <userString>	#vehicle_customization:special_style/football_4sale2	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/football_4sale2_desc/long	</longDescriptionSpecial>
-      <tags>	football2018	</tags>
+      <tags>	football2018 progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -1032,7 +1202,14 @@
       <texture>	gui/maps/vehicles/styles/football_4sale1.png	</texture>
       <userString>	#vehicle_customization:special_style/football_4sale1	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/football_4sale1_desc/long	</longDescriptionSpecial>
-      <tags>	football2018	</tags>
+      <tags>	football2018 progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -1073,7 +1250,14 @@
       <texture>	gui/maps/vehicles/styles/football_meta.png	</texture>
       <userString>	#vehicle_customization:special_style/football_meta	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/football_meta_desc/long	</longDescriptionSpecial>
-      <tags>	football2018	</tags>
+      <tags>	football2018 progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -1114,7 +1298,14 @@
       <texture>	gui/maps/vehicles/styles/football_gift.png	</texture>
       <userString>	#vehicle_customization:special_style/football_gift	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/football_gift_desc/long	</longDescriptionSpecial>
-      <tags>	football2018	</tags>
+      <tags>	football2018 progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -1156,7 +1347,14 @@
       <description>	#vehicle_customization:special_style/battle_of_kursk_02_desc	</description>
       <longDescriptionSpecial>	#vehicle_customization:special_style/battle_of_kursk_02_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:special_style/battle_of_kursk_02	</userString>
-      <tags>	Kursk_battle	</tags>
+      <tags>	Kursk_battle progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -1200,6 +1398,14 @@
       <texture>	gui/maps/vehicles/styles/ranked_2nd.png	</texture>
       <description>	#vehicle_customization:special_style/ranked_1_2nd_desc	</description>
       <userString>	#vehicle_customization:special_style/ranked_1_2nd	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -1245,6 +1451,14 @@
       <texture>	gui/maps/vehicles/styles/ranked_2nd.png	</texture>
       <description>	#vehicle_customization:special_style/ranked_2_2nd_desc	</description>
       <userString>	#vehicle_customization:special_style/ranked_2_2nd	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -1290,6 +1504,14 @@
       <texture>	gui/maps/vehicles/styles/ranked_2nd.png	</texture>
       <description>	#vehicle_customization:special_style/ranked_3_2nd_desc	</description>
       <userString>	#vehicle_customization:special_style/ranked_3_2nd	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -1332,6 +1554,14 @@
       <texture>	gui/maps/vehicles/styles/moon_camo.png	</texture>
       <description>	#vehicle_customization:special_style/moon_camo_desc	</description>
       <userString>	#vehicle_customization:special_style/moon_camo	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -1374,6 +1604,14 @@
       <texture>	gui/maps/vehicles/styles/autumn_wind.png	</texture>
       <description>	#vehicle_customization:special_style/autumn_wind_desc	</description>
       <userString>	#vehicle_customization:special_style/autumn_wind	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -1440,6 +1678,14 @@
       <texture>	gui/maps/vehicles/styles/gamescom.png	</texture>
       <description>	#vehicle_customization:special_style/gamescom_desc	</description>
       <userString>	#vehicle_customization:special_style/gamescom	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -1480,6 +1726,14 @@
       <texture>	gui/maps/vehicles/styles/clan_style_01.png	</texture>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/clan_style_01	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	summer	</season>
@@ -1535,6 +1789,14 @@
       <texture>	gui/maps/vehicles/styles/supertest_style.png	</texture>
       <description>	#vehicle_customization:special_style/supertest_style_desc	</description>
       <userString>	#vehicle_customization:special_style/supertest_style	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -1574,6 +1836,14 @@
       <texture>	gui/maps/vehicles/styles/veteran_style.png	</texture>
       <description>	#vehicle_customization:special_style/veteran_style_desc	</description>
       <userString>	#vehicle_customization:special_style/veteran_style	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -1613,6 +1883,14 @@
       <texture>	gui/maps/vehicles/styles/digital_style.png	</texture>
       <description>	#vehicle_customization:special_style/digital_style_desc	</description>
       <userString>	#vehicle_customization:special_style/digital_style	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	summer	</season>
@@ -1689,6 +1967,14 @@
       <texture>	gui/maps/vehicles/styles/cracked_stone.png	</texture>
       <description>	#vehicle_customization:special_style/cracked_stone_style_desc	</description>
       <userString>	#vehicle_customization:special_style/cracked_stone_style	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	summer	</season>
@@ -1762,6 +2048,14 @@
       <texture>	gui/maps/vehicles/styles/battle_of_bloggers_01.png	</texture>
       <description>	#vehicle_customization:special_style/battle_of_bloggers_01_desc	</description>
       <userString>	#vehicle_customization:special_style/battle_of_bloggers_01	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -1802,6 +2096,14 @@
       <texture>	gui/maps/vehicles/styles/battle_of_bloggers_02.png	</texture>
       <description>	#vehicle_customization:special_style/battle_of_bloggers_02_desc	</description>
       <userString>	#vehicle_customization:special_style/battle_of_bloggers_02	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -1842,6 +2144,14 @@
       <texture>	gui/maps/vehicles/styles/battle_of_bloggers_03.png	</texture>
       <description>	#vehicle_customization:special_style/battle_of_bloggers_03_desc	</description>
       <userString>	#vehicle_customization:special_style/battle_of_bloggers_03	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -1882,6 +2192,14 @@
       <texture>	gui/maps/vehicles/styles/battle_of_bloggers_04.png	</texture>
       <description>	#vehicle_customization:special_style/battle_of_bloggers_04_desc	</description>
       <userString>	#vehicle_customization:special_style/battle_of_bloggers_04	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -1922,6 +2240,14 @@
       <texture>	gui/maps/vehicles/styles/tankman_day.png	</texture>
       <description>	#vehicle_customization:special_style/tanksman_day_desc	</description>
       <userString>	#vehicle_customization:special_style/tanksman_day	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -1961,6 +2287,14 @@
       <id>	210	</id>
       <texture>	gui/maps/vehicles/styles/touchdown.png	</texture>
       <userString>	#vehicle_customization:special_style/touchdown	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -2004,6 +2338,14 @@
       <texture>	gui/maps/vehicles/styles/ranked_3rd.png	</texture>
       <description>	#vehicle_customization:special_style/ranked_1_3rd_desc	</description>
       <userString>	#vehicle_customization:special_style/ranked_1_3rd	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -2049,6 +2391,14 @@
       <texture>	gui/maps/vehicles/styles/ranked_3rd.png	</texture>
       <description>	#vehicle_customization:special_style/ranked_2_3rd_desc	</description>
       <userString>	#vehicle_customization:special_style/ranked_2_3rd	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -2094,6 +2444,14 @@
       <texture>	gui/maps/vehicles/styles/ranked_3rd.png	</texture>
       <description>	#vehicle_customization:special_style/ranked_3_3rd_desc	</description>
       <userString>	#vehicle_customization:special_style/ranked_3_3rd	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -2137,7 +2495,14 @@
       <description>	#vehicle_customization:special_style/jacks_lamp_desc	</description>
       <longDescriptionSpecial>	#vehicle_customization:special_style/jacks_lamp_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:special_style/jacks_lamp	</userString>
-      <tags>	Halloween	</tags>
+      <tags>	Halloween progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -2178,6 +2543,7 @@
       <texture>	gui/maps/vehicles/styles/tankolet.png	</texture>
       <description>	#vehicle_customization:special_style/Tankolet_desc	</description>
       <userString>	#vehicle_customization:special_style/Tankolet	</userString>
+      <tags>	addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -2207,6 +2573,14 @@
       <id>	218	</id>
       <texture>	gui/maps/vehicles/styles/diversity.png	</texture>
       <userString>	#vehicle_customization:special_style/diversity	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -2242,6 +2616,14 @@
       <id>	219	</id>
       <texture>	gui/maps/vehicles/styles/Armistice.png	</texture>
       <userString>	#vehicle_customization:special_style/Armistice	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -2282,6 +2664,14 @@
       <texture>	gui/maps/vehicles/styles/Thanksgiving.png	</texture>
       <description>	#vehicle_customization:special_style/Thanksgiving_desc	</description>
       <userString>	#vehicle_customization:special_style/Thanksgiving	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -2321,6 +2711,14 @@
       <id>	221	</id>
       <texture>	gui/maps/vehicles/styles/BlackFriday.png	</texture>
       <userString>	#vehicle_customization:special_style/BlackFriday	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -2365,7 +2763,14 @@
       <description>	#vehicle_customization:special_style/gift_NY_2019_desc	</description>
       <longDescriptionSpecial>	#vehicle_customization:special_style/gift_NY_2019_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:special_style/gift_NY_2019	</userString>
-      <tags>	NY2019_style	</tags>
+      <tags>	NY2019_style progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -2395,6 +2800,14 @@
       <id>	223	</id>
       <texture>	gui/maps/vehicles/styles/WGFest2018.png	</texture>
       <userString>	#vehicle_customization:special_style/WGFest2018	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -2435,6 +2848,14 @@
       <texture>	gui/maps/vehicles/styles/Counterattack.png	</texture>
       <description>	#vehicle_customization:special_style/Counterattack_desc	</description>
       <userString>	#vehicle_customization:special_style/Counterattack	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -2483,7 +2904,14 @@
       <description>	#vehicle_customization:special_style/hvoin_desc	</description>
       <longDescriptionSpecial>	#vehicle_customization:special_style/hvoin_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:special_style/hvoin	</userString>
-      <tags>	NY2019_style	</tags>
+      <tags>	NY2019_style progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -2564,7 +2992,14 @@
       <description>	#vehicle_customization:special_style/frost_desc	</description>
       <longDescriptionSpecial>	#vehicle_customization:special_style/frost_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:special_style/frost	</userString>
-      <tags>	NY2019_style	</tags>
+      <tags>	NY2019_style progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -2609,7 +3044,14 @@
       <description>	#vehicle_customization:special_style/fireworks_2019_desc	</description>
       <longDescriptionSpecial>	#vehicle_customization:special_style/fireworks_2019_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:special_style/fireworks_2019	</userString>
-      <tags>	NY2019_style	</tags>
+      <tags>	NY2019_style progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -2645,7 +3087,14 @@
       <id>	234	</id>
       <texture>	gui/maps/vehicles/styles/veteran_chieftain.png	</texture>
       <userString>	#vehicle_customization:special_style/veteran_chieftain	</userString>
-      <tags>	vehicleBound	</tags>
+      <tags>	vehicleBound progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -2687,6 +3136,14 @@
       <description>	#vehicle_customization:special_style/vbr_desc	</description>
       <maxNumber>	1	</maxNumber>
       <userString>	#vehicle_customization:special_style/vbr	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -2723,6 +3180,14 @@
       <texture>	gui/maps/vehicles/styles/defender_day.png	</texture>
       <description>	#vehicle_customization:special_style/defender_day_desc	</description>
       <userString>	#vehicle_customization:special_style/defender_day	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -2763,6 +3228,14 @@
       <texture>	gui/maps/vehicles/styles/australia_day.png	</texture>
       <description>	#vehicle_customization:special_style/australia_day_desc	</description>
       <userString>	#vehicle_customization:special_style/australia_day	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	summer	</season>
@@ -2836,6 +3309,14 @@
       <texture>	gui/maps/vehicles/styles/referal_programm.png	</texture>
       <description>	#vehicle_customization:special_style/referal_programm_desc	</description>
       <userString>	#vehicle_customization:special_style/referal_programm	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -2882,6 +3363,14 @@
       <texture>	gui/maps/vehicles/styles/defender_day_2.png	</texture>
       <description>	#vehicle_customization:main_style/defender_day_2_desc	</description>
       <userString>	#vehicle_customization:main_style/defender_day_2	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -2918,6 +3407,14 @@
       <texture>	gui/maps/vehicles/styles/left_alive.png	</texture>
       <description>	#vehicle_customization:main_style/left_alive_desc	</description>
       <userString>	#vehicle_customization:main_style/left_alive	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -2958,6 +3455,14 @@
       <texture>	gui/maps/vehicles/styles/wot_birthday_na.png	</texture>
       <description>	#vehicle_customization:main_style/wot_birthday_na_desc	</description>
       <userString>	#vehicle_customization:main_style/wot_birthday_na	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -2988,6 +3493,14 @@
       <texture>	gui/maps/vehicles/styles/wot_birthday_cn.png	</texture>
       <description>	#vehicle_customization:main_style/wot_birthday_cn_desc	</description>
       <userString>	#vehicle_customization:main_style/wot_birthday_cn	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -3018,6 +3531,14 @@
       <texture>	gui/maps/vehicles/styles/wot_birthday_eu.png	</texture>
       <description>	#vehicle_customization:main_style/wot_birthday_eu_desc	</description>
       <userString>	#vehicle_customization:main_style/wot_birthday_eu	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -3054,6 +3575,14 @@
       <texture>	gui/maps/vehicles/styles/WOT_Classic_2019.png	</texture>
       <description>	#vehicle_customization:special_style/wot_classic_desc	</description>
       <userString>	#vehicle_customization:special_style/wot_classic	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -3101,6 +3630,14 @@
       <texture>	gui/maps/vehicles/styles/cosmonautics_day_2019.png	</texture>
       <description>	#vehicle_customization:special_style/cosmonautics_day_desc	</description>
       <userString>	#vehicle_customization:special_style/cosmonautics_day	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -3153,6 +3690,14 @@
       <texture>	gui/maps/vehicles/styles/ranked_1_4th.png	</texture>
       <description>	#vehicle_customization:special_style/ranked_1_4th_desc	</description>
       <userString>	#vehicle_customization:special_style/ranked_1_4th	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -3205,6 +3750,14 @@
       <texture>	gui/maps/vehicles/styles/ranked_2_4th.png	</texture>
       <description>	#vehicle_customization:special_style/ranked_2_4th_desc	</description>
       <userString>	#vehicle_customization:special_style/ranked_2_4th	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -3257,6 +3810,14 @@
       <texture>	gui/maps/vehicles/styles/ranked_3_4th.png	</texture>
       <description>	#vehicle_customization:special_style/ranked_3_4th_desc	</description>
       <userString>	#vehicle_customization:special_style/ranked_3_4th	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -3306,6 +3867,14 @@
       <texture>	gui/maps/vehicles/styles/victory.png	</texture>
       <description>	#vehicle_customization:special_style/victory_desc	</description>
       <userString>	#vehicle_customization:special_style/victory	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -3342,6 +3911,7 @@
       <texture>	gui/maps/vehicles/styles/telecoms_kievstar.png	</texture>
       <description>	#vehicle_customization:special_style/telecoms_kievstar_desc	</description>
       <userString>	#vehicle_customization:special_style/telecoms_kievstar	</userString>
+      <tags>	addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -3378,6 +3948,7 @@
       <texture>	gui/maps/vehicles/styles/telecoms_beltelecom.png	</texture>
       <description>	#vehicle_customization:special_style/telecoms_beltelecom_desc	</description>
       <userString>	#vehicle_customization:special_style/telecoms_beltelecom	</userString>
+      <tags>	addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -3414,6 +3985,7 @@
       <texture>	gui/maps/vehicles/styles/telecoms_rostelecom.png	</texture>
       <description>	#vehicle_customization:special_style/telecoms_rostelecom_desc	</description>
       <userString>	#vehicle_customization:special_style/telecoms_rostelecom	</userString>
+      <tags>	addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -3452,6 +4024,14 @@
       <id>	23	</id>
       <texture>	gui/maps/vehicles/styles/clan_urban.png	</texture>
       <userString>	#vehicle_customization:special_style/clan_urban	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	summer	</season>
@@ -3527,6 +4107,14 @@
       <id>	725	</id>
       <texture>	gui/maps/vehicles/styles/vanquisher.png	</texture>
       <userString>	#vehicle_customization:special_style/vanquisher	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	summer	</season>
@@ -3620,6 +4208,14 @@
       <id>	726	</id>
       <texture>	gui/maps/vehicles/styles/conqueror.png	</texture>
       <userString>	#vehicle_customization:special_style/conqueror	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	summer	</season>
@@ -3713,6 +4309,14 @@
       <id>	45	</id>
       <texture>	gui/maps/vehicles/styles/bulat.png	</texture>
       <userString>	#vehicle_customization:special_style/bulat	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -3758,6 +4362,14 @@
       <texture>	gui/maps/vehicles/styles/gamescom.png	</texture>
       <description>	#vehicle_customization:special_style/icearmor_desc	</description>
       <userString>	#vehicle_customization:special_style/icearmor	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -3788,6 +4400,14 @@
       <texture>	gui/maps/vehicles/styles/BlackFriday.png	</texture>
       <description>	#vehicle_customization:special_style/blackdigital_desc	</description>
       <userString>	#vehicle_customization:special_style/blackdigital	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -3820,6 +4440,14 @@
       <id>	50	</id>
       <texture>	gui/maps/vehicles/styles/monochrome.png	</texture>
       <userString>	#vehicle_customization:special_style/monochrome	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -3868,6 +4496,14 @@
       <texture>	gui/maps/vehicles/styles/chaffee.png	</texture>
       <description>	#vehicle_customization:special_style/chaffee_desc	</description>
       <userString>	#vehicle_customization:special_style/chaffee	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -3904,6 +4540,14 @@
       <texture>	gui/maps/vehicles/styles/br_paid.png	</texture>
       <description>	#vehicle_customization:special_style/br_paid_desc	</description>
       <userString>	#vehicle_customization:special_style/br_paid	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -3949,6 +4593,14 @@
       <texture>	gui/maps/vehicles/styles/br_award_15.png	</texture>
       <description>	#vehicle_customization:special_style/br_award_15_desc	</description>
       <userString>	#vehicle_customization:special_style/br_award_15	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -4002,6 +4654,14 @@
       <texture>	gui/maps/vehicles/styles/br_award_25.png	</texture>
       <description>	#vehicle_customization:special_style/br_award_25_desc	</description>
       <userString>	#vehicle_customization:special_style/br_award_25	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -4057,6 +4717,14 @@
       <id>	57	</id>
       <texture>	gui/maps/vehicles/styles/wg_fest_2019.png	</texture>
       <userString>	#vehicle_customization:special_style/wg_fest_2019	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -4102,6 +4770,14 @@
       <texture>	gui/maps/vehicles/styles/wot_fest_2019.png	</texture>
       <description>	#vehicle_customization:special_style/wot_fest_2019_desc	</description>
       <userString>	#vehicle_customization:special_style/wot_fest_2019	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -4148,6 +4824,14 @@
       <description>	#vehicle_customization:main_style/generic_custom_look_3_desc	</description>
       <userString>	#vehicle_customization:main_style/generic_custom_look_3	</userString>
       <longDescriptionSpecial>	#vehicle_customization:main_style/generic_custom_look_3_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	summer	</season>
@@ -4236,6 +4920,14 @@
       <texture>	gui/maps/vehicles/styles/racing_2019_team_a.png	</texture>
       <description>	#vehicle_customization:special_style/racing_2019_team_a_desc	</description>
       <userString>	#vehicle_customization:special_style/racing_2019_team_a	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -4288,6 +4980,14 @@
       <texture>	gui/maps/vehicles/styles/racing_2019_team_b.png	</texture>
       <description>	#vehicle_customization:special_style/racing_2019_team_b_desc	</description>
       <userString>	#vehicle_customization:special_style/racing_2019_team_b	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -4340,6 +5040,14 @@
       <texture>	gui/maps/vehicles/styles/racing_2019_team_c.png	</texture>
       <description>	#vehicle_customization:special_style/racing_2019_team_c_desc	</description>
       <userString>	#vehicle_customization:special_style/racing_2019_team_c	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -4389,6 +5097,14 @@
       <texture>	gui/maps/vehicles/styles/Roll_out_paid.png	</texture>
       <description>	#vehicle_customization:special_style/battlepass_paid_desc	</description>
       <userString>	#vehicle_customization:special_style/battlepass_paid	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -4484,6 +5200,14 @@
       <texture>	gui/maps/vehicles/styles/halloween_2019_event_reward.png	</texture>
       <description>	#vehicle_customization:special_style/halloween_2019_event_reward_desc	</description>
       <userString>	#vehicle_customization:special_style/halloween_2019_event_reward	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -4529,6 +5253,14 @@
       <texture>	gui/maps/vehicles/styles/NY2020_magic.png	</texture>
       <description>	#vehicle_customization:special_style/NY2020_magic_desc	</description>
       <userString>	#vehicle_customization:special_style/NY2020_magic	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -4564,6 +5296,14 @@
       <texture>	gui/maps/vehicles/styles/NY2020_east.png	</texture>
       <description>	#vehicle_customization:special_style/NY2020_east_desc	</description>
       <userString>	#vehicle_customization:special_style/NY2020_east	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -4599,6 +5339,14 @@
       <texture>	gui/maps/vehicles/styles/NY2020_new_year.png	</texture>
       <description>	#vehicle_customization:special_style/NY2020_new_year_desc	</description>
       <userString>	#vehicle_customization:special_style/NY2020_new_year	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -4634,6 +5382,14 @@
       <texture>	gui/maps/vehicles/styles/NY2020_christmas.png	</texture>
       <description>	#vehicle_customization:special_style/NY2020_christmas_desc	</description>
       <userString>	#vehicle_customization:special_style/NY2020_christmas	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -4669,6 +5425,14 @@
       <texture>	gui/maps/vehicles/styles/NY2020_regular.png	</texture>
       <description>	#vehicle_customization:special_style/NY2020_regular_clone_desc	</description>
       <userString>	#vehicle_customization:special_style/NY2020_regular_clone	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -4709,6 +5473,7 @@
       <texture>	gui/maps/vehicles/styles/twitch_NY2020.png	</texture>
       <description>	#vehicle_customization:special_style/twitch_NY2020_desc	</description>
       <userString>	#vehicle_customization:special_style/twitch_NY2020	</userString>
+      <tags>	addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -4745,6 +5510,14 @@
       <texture>	gui/maps/vehicles/styles/Waitangi_Day.png	</texture>
       <description>	#vehicle_customization:special_style/waitangi_day_desc	</description>
       <userString>	#vehicle_customization:special_style/waitangi_day	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -4780,6 +5553,14 @@
       <texture>	gui/maps/vehicles/styles/Lava_Ocean.png	</texture>
       <description>	#vehicle_customization:special_style/lava_ocean_desc	</description>
       <userString>	#vehicle_customization:special_style/lava_ocean	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -4827,6 +5608,14 @@
       <description>	#vehicle_customization:special_style/bb2020_amway921_award_desc	</description>
       <userString>	#vehicle_customization:special_style/bb2020_amway921_award	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/bb2020_amway921_award/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -4877,6 +5666,14 @@
       <description>	#vehicle_customization:special_style/bb2020_lebwa_award_desc	</description>
       <userString>	#vehicle_customization:special_style/bb2020_lebwa_award	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/bb2020_lebwa_award/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -4927,6 +5724,14 @@
       <description>	#vehicle_customization:special_style/bb2020_yusha_award_desc	</description>
       <userString>	#vehicle_customization:special_style/bb2020_yusha_award	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/bb2020_yusha_award/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -4977,6 +5782,14 @@
       <description>	#vehicle_customization:special_style/bb2020_korbendallas_award_desc	</description>
       <userString>	#vehicle_customization:special_style/bb2020_korbendallas_award	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/bb2020_korbendallas_award/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -5027,6 +5840,14 @@
       <description>	#vehicle_customization:special_style/bb2020_mailand_award_desc	</description>
       <userString>	#vehicle_customization:special_style/bb2020_mailand_award	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/bb2020_mailand_award/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -5077,6 +5898,14 @@
       <description>	#vehicle_customization:special_style/bb2020_skill4ltu_award_desc	</description>
       <userString>	#vehicle_customization:special_style/bb2020_skill4ltu_award	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/bb2020_skill4ltu_award/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -5127,6 +5956,14 @@
       <description>	#vehicle_customization:special_style/bb2020_aeg_award_desc	</description>
       <userString>	#vehicle_customization:special_style/bb2020_aeg_award	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/bb2020_aeg_award/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -5177,6 +6014,14 @@
       <description>	#vehicle_customization:special_style/bb2020_dezgamez_award_desc	</description>
       <userString>	#vehicle_customization:special_style/bb2020_dezgamez_award	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/bb2020_dezgamez_award/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -5227,6 +6072,14 @@
       <description>	#vehicle_customization:special_style/bb2020_dragon_award_desc	</description>
       <userString>	#vehicle_customization:special_style/bb2020_dragon_award	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/bb2020_dragon_award/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -5277,6 +6130,14 @@
       <description>	#vehicle_customization:special_style/bb2020_tiger_award_desc	</description>
       <userString>	#vehicle_customization:special_style/bb2020_tiger_award	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/bb2020_tiger_award/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -5327,6 +6188,14 @@
       <description>	#vehicle_customization:special_style/bb2020_amway921_shop_desc	</description>
       <userString>	#vehicle_customization:special_style/bb2020_amway921_shop	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/bb2020_amway921_shop/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -5377,6 +6246,14 @@
       <description>	#vehicle_customization:special_style/bb2020_lebwa_shop_desc	</description>
       <userString>	#vehicle_customization:special_style/bb2020_lebwa_shop	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/bb2020_lebwa_shop/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -5427,6 +6304,14 @@
       <description>	#vehicle_customization:special_style/bb2020_yusha_shop_desc	</description>
       <userString>	#vehicle_customization:special_style/bb2020_yusha_shop	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/bb2020_yusha_shop/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -5477,6 +6362,14 @@
       <description>	#vehicle_customization:special_style/bb2020_korbendallas_shop_desc	</description>
       <userString>	#vehicle_customization:special_style/bb2020_korbendallas_shop	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/bb2020_korbendallas_shop/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -5527,6 +6420,14 @@
       <description>	#vehicle_customization:special_style/bb2020_mailand_shop_desc	</description>
       <userString>	#vehicle_customization:special_style/bb2020_mailand_shop	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/bb2020_mailand_shop/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -5577,6 +6478,14 @@
       <description>	#vehicle_customization:special_style/bb2020_skill4ltu_shop_desc	</description>
       <userString>	#vehicle_customization:special_style/bb2020_skill4ltu_shop	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/bb2020_skill4ltu_shop/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -5627,6 +6536,14 @@
       <description>	#vehicle_customization:special_style/bb2020_aeg_shop_desc	</description>
       <userString>	#vehicle_customization:special_style/bb2020_aeg_shop	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/bb2020_aeg_shop/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -5677,6 +6594,14 @@
       <description>	#vehicle_customization:special_style/bb2020_dezgamez_shop_desc	</description>
       <userString>	#vehicle_customization:special_style/bb2020_dezgamez_shop	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/bb2020_dezgamez_shop/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -5727,6 +6652,14 @@
       <description>	#vehicle_customization:special_style/bb2020_dragon_shop_desc	</description>
       <userString>	#vehicle_customization:special_style/bb2020_dragon_shop	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/bb2020_dragon_shop/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -5777,6 +6710,14 @@
       <description>	#vehicle_customization:special_style/bb2020_tiger_shop_desc	</description>
       <userString>	#vehicle_customization:special_style/bb2020_tiger_shop	</userString>
       <longDescriptionSpecial>	#vehicle_customization:special_style/bb2020_tiger_shop/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -5826,6 +6767,14 @@
       <texture>	gui/maps/vehicles/styles/master_of_orion.png	</texture>
       <description>	#vehicle_customization:special_style/master_of_orion_desc	</description>
       <userString>	#vehicle_customization:special_style/master_of_orion	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -5875,6 +6824,14 @@
       <texture>	gui/maps/vehicles/styles/korean_military.png	</texture>
       <description>	#vehicle_customization:special_style/korean_military_desc	</description>
       <userString>	#vehicle_customization:special_style/korean_military	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -5911,6 +6868,14 @@
       <texture>	gui/maps/vehicles/styles/fools_day.png	</texture>
       <description>	#vehicle_customization:special_style/fools_day_desc	</description>
       <userString>	#vehicle_customization:special_style/fools_day	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -5950,6 +6915,14 @@
       <texture>	gui/maps/vehicles/styles/pixel.png	</texture>
       <description>	#vehicle_customization:special_style/pixel_desc	</description>
       <userString>	#vehicle_customization:special_style/pixel	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	winter	</season>
@@ -6023,6 +6996,14 @@
       <texture>	gui/maps/vehicles/styles/cosmonautics_day_2020.png	</texture>
       <description>	#vehicle_customization:special_style/cosmonautics_day_2020_desc	</description>
       <userString>	#vehicle_customization:special_style/cosmonautics_day_2020	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -6069,6 +7050,14 @@
       <texture>	gui/maps/vehicles/styles/clan_rivals.png	</texture>
       <description>	#vehicle_customization:special_style/clan_rivals_bronze_desc	</description>
       <userString>	#vehicle_customization:special_style/clan_rivals_bronze	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -6115,6 +7104,14 @@
       <texture>	gui/maps/vehicles/styles/clan_rivals.png	</texture>
       <description>	#vehicle_customization:special_style/clan_rivals_silver_desc	</description>
       <userString>	#vehicle_customization:special_style/clan_rivals_silver	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -6161,6 +7158,14 @@
       <texture>	gui/maps/vehicles/styles/clan_rivals.png	</texture>
       <description>	#vehicle_customization:special_style/clan_rivals_gold_desc	</description>
       <userString>	#vehicle_customization:special_style/clan_rivals_gold	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -6207,6 +7212,14 @@
       <texture>	gui/maps/vehicles/styles/9th_anniversary_eu_na.png	</texture>
       <description>	#vehicle_customization:special_style/9th_anniversary_eu_na_desc	</description>
       <userString>	#vehicle_customization:special_style/9th_anniversary_eu_na	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -6253,6 +7266,14 @@
       <texture>	gui/maps/vehicles/styles/songkran.png	</texture>
       <description>	#vehicle_customization:special_style/songkran_desc	</description>
       <userString>	#vehicle_customization:special_style/songkran	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -6289,6 +7310,14 @@
       <texture>	gui/maps/vehicles/styles/japan_golden_week.png	</texture>
       <description>	#vehicle_customization:special_style/japan_golden_week_desc	</description>
       <userString>	#vehicle_customization:special_style/japan_golden_week	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -6371,6 +7400,14 @@
       <texture>	gui/maps/vehicles/styles/75_years_victory_day.png	</texture>
       <description>	#vehicle_customization:special_style/75_years_victory_day_desc	</description>
       <userString>	#vehicle_customization:special_style/75_years_victory_day	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -6409,10 +7446,72 @@
       </exclude>
     </vehicleFilter>
     <style>
+      <id>	284	</id>
+      <texture>	gui/maps/vehicles/styles/argentina.png	</texture>
+      <description>	#vehicle_customization:special_style/argentina_desc	</description>
+      <userString>	#vehicle_customization:special_style/argentina	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	102	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	33	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	115	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	114	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 1750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
       <id>	288	</id>
       <texture>	gui/maps/vehicles/styles/10years_universal.png	</texture>
       <description>	#vehicle_customization:special_style/10years_universal_desc	</description>
       <userString>	#vehicle_customization:special_style/10years_universal	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
       <outfits>
         <outfit>
           <season>	summer	</season>
@@ -6487,6 +7586,57 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	false	</historical>
+    <priceGroup>	styles 1750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	289	</id>
+      <texture>	gui/maps/vehicles/styles/ivankupala.png	</texture>
+      <description>	#vehicle_customization:special_style/ivankupala_desc	</description>
+      <userString>	#vehicle_customization:special_style/ivankupala	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	110	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	205	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
     <priceGroup>	styles 750g notInShop	</priceGroup>
     <vehicleFilter>
       <exclude>
@@ -6498,6 +7648,7 @@
       <texture>	gui/maps/vehicles/styles/twitch_may_2020.png	</texture>
       <description>	#vehicle_customization:special_style/twitch_may_2020_desc	</description>
       <userString>	#vehicle_customization:special_style/twitch_may_2020	</userString>
+      <tags>	addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -6520,26 +7671,44 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
-    <historical>	false	</historical>
-    <priceGroup>	styles 1750g notInShop	</priceGroup>
+    <historical>	true	</historical>
+    <priceGroup>	styles 1200g	</priceGroup>
     <vehicleFilter>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
-      <id>	308	</id>
-      <texture>	gui/maps/vehicles/styles/10years_universal_2.png	</texture>
-      <description>	#vehicle_customization:special_style/10years_universal_2_desc	</description>
-      <userString>	#vehicle_customization:special_style/10years_universal_2	</userString>
+      <id>	309	</id>
+      <texture>	gui/maps/vehicles/styles/collapsible_style_01.png	</texture>
+      <userString>	#vehicle_customization:main_style/collapsible_style_01	</userString>
+      <description>	#vehicle_customization:main_style/collapsible_style_01_desc	</description>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <alternateItems>
+        <camouflage>
+          <id>	121 122 123 125 126 127 128 129 130 132 134 135 136 137 138	</id>
+        </camouflage>
+        <decal>
+          <id>	228 229 230 231 232 233 234 235 236 237	</id>
+        </decal>
+        <personal_number>
+          <id>	14 15	</id>
+        </personal_number>
+      </alternateItems>
       <outfits>
         <outfit>
           <season>	summer	</season>
           <camouflages>
             <item>
-              <id>	118	</id>
+              <id>	124	</id>
               <appliedTo>	4368	</appliedTo>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>
@@ -6547,12 +7716,8 @@
           </camouflages>
           <decals>
             <item>
-              <id>	214	</id>
-              <appliedTo>	4384	</appliedTo>
-            </item>
-            <item>
-              <id>	215	</id>
-              <appliedTo>	8720	</appliedTo>
+              <id>	228	</id>
+              <appliedTo>	13104	</appliedTo>
             </item>
           </decals>
         </outfit>
@@ -6560,7 +7725,7 @@
           <season>	winter	</season>
           <camouflages>
             <item>
-              <id>	119	</id>
+              <id>	131	</id>
               <appliedTo>	4368	</appliedTo>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>
@@ -6568,12 +7733,8 @@
           </camouflages>
           <decals>
             <item>
-              <id>	214	</id>
-              <appliedTo>	4384	</appliedTo>
-            </item>
-            <item>
-              <id>	215	</id>
-              <appliedTo>	8720	</appliedTo>
+              <id>	232	</id>
+              <appliedTo>	13104	</appliedTo>
             </item>
           </decals>
         </outfit>
@@ -6581,7 +7742,7 @@
           <season>	desert	</season>
           <camouflages>
             <item>
-              <id>	120	</id>
+              <id>	133	</id>
               <appliedTo>	4368	</appliedTo>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>
@@ -6589,17 +7750,61 @@
           </camouflages>
           <decals>
             <item>
-              <id>	214	</id>
-              <appliedTo>	4384	</appliedTo>
-            </item>
-            <item>
-              <id>	215	</id>
-              <appliedTo>	8720	</appliedTo>
+              <id>	231	</id>
+              <appliedTo>	13104	</appliedTo>
             </item>
           </decals>
         </outfit>
         <outfit>
           <season>	event	</season>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <tags>	progression_required	</tags>
+    <itemFilters>
+      <projection_decal>
+        <include>
+          <itemGroupName>	Progression Decals	</itemGroupName>
+        </include>
+      </projection_decal>
+    </itemFilters>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	311	</id>
+      <texture>	gui/maps/vehicles/styles/stayhome.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/stayhome_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/stayhome	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	141	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	245	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	246	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
         </outfit>
       </outfits>
     </style>

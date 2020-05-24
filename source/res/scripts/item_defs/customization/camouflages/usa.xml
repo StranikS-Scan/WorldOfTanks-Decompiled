@@ -6134,40 +6134,4 @@
       </tiling>
     </camouflage>
   </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:camouflage/opaque	</userString>
-    <season>	ALL	</season>
-    <historical>	false	</historical>
-    <priceGroup>	camouflages 50g notInShop	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <vehicles>	usa:A80_T26_E4_SuperPershing	</vehicles>
-      </include>
-    </vehicleFilter>
-    <camouflage>
-      <id>	117	</id>
-      <texture>	vehicles/russian/Camouflage/10years_general_america.dds	</texture>
-      <description>	#vehicle_customization:camouflage/10years_general_america/description	</description>
-      <scales>	1.3 1 0.7	</scales>
-      <userString>	#vehicle_customization:camouflage/10years_general_america/label	</userString>
-      <tags>	hiddenInUI	</tags>
-      <invisibilityFactor>	1	</invisibilityFactor>
-      <palettes>
-        <palette>
-          <c0>	96 42 35 255	</c0>
-          <c1>	72 102 114 255	</c1>
-          <c2>	147 145 124 255	</c2>
-          <c3>	191 188 160 255	</c3>
-        </palette>
-      </palettes>
-      <rotation>
-        <HULL>	-0.289725	</HULL>
-        <TURRET>	-0.289725	</TURRET>
-        <GUN>	-0.289725	</GUN>
-      </rotation>
-      <tiling>
-        <usa:A09_T1_hvy7>	6.13 6.13 6.25 -1.64	</usa:A09_T1_hvy7>
-      </tiling>
-    </camouflage>
-  </itemGroup>
 </usa.xml>

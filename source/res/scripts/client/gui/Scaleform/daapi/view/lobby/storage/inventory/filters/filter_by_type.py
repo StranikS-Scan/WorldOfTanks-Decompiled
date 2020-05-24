@@ -34,11 +34,10 @@ class FiltrableInventoryCategoryByTypeTabView(ItemsWithTypeFilterTabViewMeta):
         self._filterMask = 0
         self._totalCount = -1
         self._currentCount = -1
-        self._isActive = False
         self.__loadFilters()
 
     def setActiveState(self, isActive):
-        self._isActive = isActive
+        self.setActive(isActive)
 
     @process
     def sellItem(self, itemId):

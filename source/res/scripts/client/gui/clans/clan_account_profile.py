@@ -18,6 +18,7 @@ from helpers import dependency
 from messenger.ext import passCensor
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.game_control import IClanNotificationController
 
 class SYNC_KEYS(CONST_CONTAINER):
     INVITES = 1
@@ -38,6 +39,7 @@ class _CACHE_KEYS(CONST_CONTAINER):
 
 
 class ClanAccountProfile(object):
+    _notificationCtrl = dependency.descriptor(IClanNotificationController)
 
     def __init__(self, clansCtrl, accountDbID, clanDbID=0, clanBwInfo=None):
         self._clansCtrl = weakref.proxy(clansCtrl)
@@ -49,6 +51,8 @@ class ClanAccountProfile(object):
         self._vitalWebInfo = defaultdict(lambda : None)
         self._cache = defaultdict(lambda : None)
         self._isInvitesLimitReached = CachedValue(INVITE_LIMITS_LIFE_TIME)
+        if self._clanDbID == 0:
+            self._notificationCtrl.resetCounters()
 
     def fini(self):
         self._waitForSync = 0
@@ -327,6 +331,7 @@ class ClanAccountProfile(object):
             self._vitalWebInfo[SYNC_KEYS.CLAN_INFO] = None
             self._vitalWebInfo[SYNC_KEYS.INVITES] = None
             self._vitalWebInfo[SYNC_KEYS.APPS] = None
+            self._notificationCtrl.resetCounters()
             if not self._clanDbID and clanDbID:
                 hasEnteredClan = True
         self._clanDbID, self._clanBwInfo = clanDbID, clanBwInfo

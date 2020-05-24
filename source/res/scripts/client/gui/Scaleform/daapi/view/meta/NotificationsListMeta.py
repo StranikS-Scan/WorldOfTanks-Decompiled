@@ -27,3 +27,6 @@ class NotificationsListMeta(SmartPopOverView):
 
     def as_updateCountersS(self, counts):
         return self.flashObject.as_updateCounters(counts) if self._isDAAPIInited() else None
+
+    def as_setProgressiveRewardEnabledS(self, isEnabled):
+        return self.flashObject.as_setProgressiveRewardEnabled(isEnabled) if self._isDAAPIInited() else None

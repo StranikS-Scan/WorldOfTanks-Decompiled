@@ -6,7 +6,6 @@ import random
 import weakref
 from collections import namedtuple
 import BigWorld
-import Event
 import Math
 import NetworkFilters
 import WoT
@@ -22,21 +21,17 @@ from TriggersManager import TRIGGER_TYPE
 from VehicleEffects import DamageFromShotDecoder
 from constants import SPT_MATKIND
 from constants import VEHICLE_HIT_EFFECT, VEHICLE_SIEGE_STATE
+from debug_utils import LOG_WARNING
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _GUI_EVENT_ID, VEHICLE_VIEW_STATE
 from gun_rotation_shared import decodeGunAngles
 from helpers import dependency
 from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
 from helpers.EffectsList import SoundStartParam
-from helpers.buffs import BuffContainer
 from items import vehicles
 from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES, EFFECT_MATERIALS
-from messenger import MessengerEntry, g_settings
-from gui.impl import backport
-from gui.impl.gen.resources import R
-import ten_year_countdown_config
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.game_control import ISpecialSoundCtrl, ITenYearsCountdownController
+from skeletons.gui.game_control import ISpecialSoundCtrl
 from soft_exception import SoftException
 from vehicle_systems import appearance_cache
 from vehicle_systems.entity_components.battle_abilities_component import BattleAbilitiesComponent
@@ -83,9 +78,9 @@ StunInfo = namedtuple('StunInfo', ('startTime',
  'endTime',
  'duration',
  'totalTime'))
-VEHICLE_COMPONENTS = {BattleAbilitiesComponent, BuffContainer}
+VEHICLE_COMPONENTS = {BattleAbilitiesComponent}
 
-class Vehicle(BigWorld.Entity, BattleAbilitiesComponent, BuffContainer):
+class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
     isEnteringWorld = property(lambda self: self.__isEnteringWorld)
     isTurretDetached = property(lambda self: constants.SPECIAL_VEHICLE_HEALTH.IS_TURRET_DETACHED(self.health) and self.__turretDetachmentConfirmed)
     isTurretMarkedForDetachment = property(lambda self: constants.SPECIAL_VEHICLE_HEALTH.IS_TURRET_DETACHED(self.health))
@@ -94,27 +89,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent, BuffContainer):
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
     lobbyContext = dependency.descriptor(ILobbyContext)
     __specialSounds = dependency.descriptor(ISpecialSoundCtrl)
-    tenYearsCountdownController = dependency.descriptor(ITenYearsCountdownController)
     activeGunIndex = property(lambda self: self.__activeGunIndex)
-
-    @property
-    def canBeDamaged(self):
-        return self.__canBeDamaged
-
-    @canBeDamaged.setter
-    def canBeDamaged(self, value):
-        if value is self.__canBeDamaged:
-            return
-        else:
-            self.__canBeDamaged = value
-            self.onCanBeDamagedChanged(value)
-            attachedVehicle = BigWorld.player().getVehicleAttached()
-            if attachedVehicle is None:
-                return
-            isAttachedVehicle = self.id == attachedVehicle.id
-            if isAttachedVehicle:
-                self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.CAN_BE_DAMAGED, self.__canBeDamaged)
-            return
 
     @property
     def speedInfo(self):
@@ -152,9 +127,8 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent, BuffContainer):
     def getSpeed(self):
         return self.__speedInfo.value[0]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self):
         global _g_waitingVehicle
-        super(Vehicle, self).__init__(*args, **kwargs)
         for comp in VEHICLE_COMPONENTS:
             comp.__init__(self)
 
@@ -164,7 +138,6 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent, BuffContainer):
         self.appearance = None
         self.isPlayerVehicle = False
         self.isStarted = False
-        self.__canBeDamaged = True
         self.__isEnteringWorld = False
         self.__turretDetachmentConfirmed = False
         self.__speedInfo = _VehicleSpeedProvider()
@@ -178,8 +151,6 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent, BuffContainer):
         self.__wheelsSteeringFilter = None
         self.__activeGunIndex = None
         self.refreshNationalVoice()
-        self.onCanBeDamagedChanged = Event.Event()
-        self.compoundInvalidated = False
         self.prereqsCompDescr = None
         return
 
@@ -342,9 +313,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent, BuffContainer):
                 return
             if attackerID == BigWorld.player().playerVehicleID:
                 if maxHitEffectCode is not None and not self.isPlayerVehicle:
-                    if not self.canBeDamaged:
-                        eventID = _GUI_EVENT_ID.VEHICLE_INVULNERABLE
-                    elif maxHitEffectCode in VEHICLE_HIT_EFFECT.RICOCHETS:
+                    if maxHitEffectCode in VEHICLE_HIT_EFFECT.RICOCHETS:
                         eventID = _GUI_EVENT_ID.VEHICLE_RICOCHET
                     elif maxHitEffectCode == VEHICLE_HIT_EFFECT.CRITICAL_HIT:
                         if maxDamagedComponent == TankPartNames.CHASSIS:
@@ -354,6 +323,8 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent, BuffContainer):
                                 eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT_CHASSIS
                         else:
                             eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT
+                    elif maxHitEffectCode == VEHICLE_HIT_EFFECT.ARMOR_PIERCED_DEVICE_DAMAGED:
+                        eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT
                     elif hasPiercedHit:
                         eventID = _GUI_EVENT_ID.VEHICLE_ARMOR_PIERCED
                     else:
@@ -556,32 +527,6 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent, BuffContainer):
 
         return
 
-    def receiveHorn(self, powerHorn, timeRecovery):
-        if not self.tenYearsCountdownController.isHornSettingsEnabled():
-            return
-        isNotHorn = powerHorn >= 0 and powerHorn < ten_year_countdown_config.HornParams.MAX_POWER
-        powerHorn = int(math.fabs(powerHorn))
-        if self.isPlayerVehicle:
-            self._useOwnHorn(powerHorn, timeRecovery, isNotHorn)
-        else:
-            soundObject = self._getSoundObject(powerHorn)
-            soundObject.play(ten_year_countdown_config.HornParams.SOUND_NPC)
-
-    def _showHornCooldownTime(self, seconds):
-        text = backport.text(R.strings.ten_year_countdown.horn.cooldown(), seconds)
-        MessengerEntry.g_instance.gui.addClientMessage(g_settings.htmlTemplates.format('battleErrorMessage', ctx={'error': text}))
-
-    def _useOwnHorn(self, powerHorn, timeRecovery, isNotHorn):
-        if not isNotHorn:
-            self._showHornCooldownTime(timeRecovery)
-        soundObject = self._getSoundObject(powerHorn)
-        soundObject.play(ten_year_countdown_config.HornParams.SOUND_PC)
-
-    def _getSoundObject(self, powerHorn):
-        soundObject = self.appearance.engineAudition.getSoundObject(TankSoundObjectsIndexes.ENGINE)
-        soundObject.setRTPC(ten_year_countdown_config.HornParams.SOUND_RTPC, powerHorn)
-        return soundObject
-
     def onHealthChanged(self, newHealth, attackerID, attackReasonID):
         if newHealth > 0 and self.health <= 0:
             self.health = newHealth
@@ -752,6 +697,9 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent, BuffContainer):
             raise SoftException('Vehicle is already started')
         avatar = BigWorld.player()
         self.appearance = appearance_cache.getAppearance(self.id, self.__prereqs)
+        if not self.appearance.isConstructed:
+            LOG_WARNING('Cache has returned not constructed appearance, manually constructing {0}'.format(self.typeDescriptor.name))
+            self.appearance.construct(self.isPlayerVehicle, self.__prereqs)
         self.appearance.setVehicle(self)
         self.appearance.activate()
         self.appearance.changeEngineMode(self.engineMode)
@@ -773,7 +721,6 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent, BuffContainer):
             self.updateStunInfo()
         self.set_inspiringEffect()
         self.set_inspired()
-        self.set_buffs()
         if self.isSpeedCapturing:
             self.set_isSpeedCapturing()
         if self.isBlockingCapture:
@@ -798,15 +745,9 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent, BuffContainer):
         elif self.id == player.playerVehicleID:
             self.__specialSounds.setPlayerVehicle(self.publicInfo, True)
 
-    def stopVisual(self, showStipple=False):
+    def stopVisual(self):
         if not self.isStarted:
             raise SoftException('Vehicle is already stopped')
-        self.compoundInvalidated = True
-        self.clearBuffs()
-        stippleModel = None
-        showStipple = False
-        if showStipple:
-            self.appearance.assembleStipple()
         self.__stopExtras()
         if TriggersManager.g_manager:
             TriggersManager.g_manager.activateTrigger(TriggersManager.TRIGGER_TYPE.VEHICLE_VISUAL_VISIBILITY_CHANGED, vehicleId=self.id, isVisible=False)
@@ -815,7 +756,7 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent, BuffContainer):
         self.appearance = None
         self.isStarted = False
         self.__speedInfo.reset()
-        return stippleModel
+        return
 
     def show(self, show):
         if show:

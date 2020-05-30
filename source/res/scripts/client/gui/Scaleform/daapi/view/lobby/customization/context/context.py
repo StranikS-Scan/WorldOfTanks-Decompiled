@@ -29,6 +29,7 @@ class _CustomizationEvents(object):
 
     def __init__(self):
         self._eventsManager = Event.EventManager()
+        self.onBeforeModeChange = Event.Event(self._eventsManager)
         self.onModeChanged = Event.Event(self._eventsManager)
         self.onTabChanged = Event.Event(self._eventsManager)
         self.onSeasonChanged = Event.Event(self._eventsManager)
@@ -184,6 +185,7 @@ class CustomizationContext(object):
         newMode.start(tabId=tabId, source=source)
         self.__modeId = modeId
         self.refreshOutfit()
+        self.events.onBeforeModeChange()
         self.events.onModeChanged(modeId, prevMode.modeId)
         self.events.onTabChanged(self.mode.tabId)
 

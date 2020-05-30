@@ -21,6 +21,7 @@ from vehicle_outfit.outfit import Area, SLOT_TYPE_TO_ANCHOR_TYPE_MAP, scaffold, 
 from gui.impl import backport
 from gui.impl.gen import R
 from helpers import dependency
+from items.vehicles import g_cache
 _logger = logging.getLogger(__name__)
 C11nId = namedtuple('C11nId', ('areaId', 'slotType', 'regionIdx'))
 C11nId.__new__.__defaults__ = (-1, -1, -1)
@@ -335,19 +336,32 @@ def isTransactionValid(moneyState, price):
 
 
 def isVehicleCanBeCustomized(vehicle, itemTypeID, itemsFilter=None):
-    for areaId in Area.ALL:
-        if any(vehicle.getAnchors(itemTypeID, areaId)):
-            break
-    else:
+    if itemTypeID not in C11N_ITEM_TYPE_MAP:
+        _logger.error('Failed to get customization item from cache. Wrong itemTypeID: %s', itemTypeID)
         return False
+    else:
+        cType = C11N_ITEM_TYPE_MAP[itemTypeID]
+        customizationCache = g_cache.customization20().itemTypes
+        if cType not in customizationCache:
+            _logger.error('Failed to get customization item from cache. Wrong cType: %s', cType)
+            return False
+        for areaId in Area.ALL:
+            if any(vehicle.getAnchors(itemTypeID, areaId)):
+                break
+        else:
+            return False
 
-    itemsCache = dependency.instance(IItemsCache)
-    eventsCache = dependency.instance(IEventsCache)
-    requirement = createCustomizationBaseRequestCriteria(vehicle, eventsCache.questsProgress, set(), itemTypeID=itemTypeID)
-    if itemsFilter is not None:
-        requirement |= REQ_CRITERIA.CUSTOM(itemsFilter)
-    allItems = itemsCache.items.getItems(GUI_ITEM_TYPE.CUSTOMIZATIONS, requirement)
-    return bool(allItems)
+        customizationService = dependency.instance(ICustomizationService)
+        eventsCache = dependency.instance(IEventsCache)
+        requirement = createCustomizationBaseRequestCriteria(vehicle, eventsCache.questsProgress, set(), itemTypeID=itemTypeID)
+        if itemsFilter is not None:
+            requirement |= REQ_CRITERIA.CUSTOM(itemsFilter)
+        for itemID in customizationCache[cType]:
+            item = customizationService.getItemByID(itemTypeID, itemID)
+            if requirement(item):
+                return True
+
+        return False
 
 
 def getBaseStyleItems():

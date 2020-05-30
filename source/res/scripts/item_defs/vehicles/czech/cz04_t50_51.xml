@@ -49,6 +49,13 @@
       <undamaged>	vehicles/czech/Cz04_T50_51/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/czech/Cz04_T50_51/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/czech/Cz04_T50_51/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <battlepass2020>
+          <undamaged>	vehicles/czech/Cz04_T50_51/_skins/battlepass2020/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/czech/Cz04_T50_51/_skins/battlepass2020/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/czech/Cz04_T50_51/_skins/battlepass2020/crash/lod0/Hull.model	</exploded>
+        </battlepass2020>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -832,6 +839,34 @@
         <anchorPosition>	-0.0102183 0.392162 2.35158	</anchorPosition>
         <anchorDirection>	0.000018 0.880199 0.474605	</anchorDirection>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15054	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	battlepass2020	</compatibleModels>
+        <position>	0.0995038 1.44293 2.25179	</position>
+        <rotation>	0.447994 -0.000006 3.14158	</rotation>
+        <scale>	0.607459 0.607459 0.60746	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	0.0995038 0.435133 2.25179	</anchorPosition>
+        <anchorDirection>	0.000011 0.901318 0.433158	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15055	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	battlepass2020	</compatibleModels>
+        <position>	-0.000198797 1.75829 -2.53318	</position>
+        <rotation>	3.14159 -0.000003 -0.000013	</rotation>
+        <scale>	0.607457 0.607459 0.607459	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	-0.000198797 0.750493 -2.53318	</anchorPosition>
+        <anchorDirection>	-0.000013 1 0.000000	</anchorDirection>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -874,6 +909,13 @@
         <undamaged>	vehicles/czech/Cz04_T50_51/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/czech/Cz04_T50_51/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/czech/Cz04_T50_51/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <battlepass2020>
+            <undamaged>	vehicles/czech/Cz04_T50_51/_skins/battlepass2020/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz04_T50_51/_skins/battlepass2020/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/czech/Cz04_T50_51/_skins/battlepass2020/crash/lod0/Chassis.model	</exploded>
+          </battlepass2020>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1717,6 +1759,13 @@
             <undamaged>	vehicles/czech/Cz04_T50_51/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/czech/Cz04_T50_51/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/czech/Cz04_T50_51/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <battlepass2020>
+                <undamaged>	vehicles/czech/Cz04_T50_51/_skins/battlepass2020/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/czech/Cz04_T50_51/_skins/battlepass2020/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/czech/Cz04_T50_51/_skins/battlepass2020/crash/lod0/Gun_01.model	</exploded>
+              </battlepass2020>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/czech/Cz04_T50_51/collision/Gun_01.model	</collisionModelServer>
@@ -1776,9 +1825,9 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	0.0939178 0.000000 2.54004	</rayStart>
-              <rayEnd>	0.0821858 -0.0222622 2.53929	</rayEnd>
-              <rayUp>	0.091 0.000000 0.000000	</rayUp>
+              <rayStart>	0.0939178 0.000000 2.36563	</rayStart>
+              <rayEnd>	0.0198386 0.00572838 2.36566	</rayEnd>
+              <rayUp>	0.102163 0.000000 0.000000	</rayUp>
               <applyToFabric>	true	</applyToFabric>
               <size>	0.5	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
@@ -1802,6 +1851,13 @@
         <undamaged>	vehicles/czech/Cz04_T50_51/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/czech/Cz04_T50_51/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/czech/Cz04_T50_51/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <battlepass2020>
+            <undamaged>	vehicles/czech/Cz04_T50_51/_skins/battlepass2020/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz04_T50_51/_skins/battlepass2020/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/czech/Cz04_T50_51/_skins/battlepass2020/crash/lod0/Turret_01.model	</exploded>
+          </battlepass2020>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/czech/Cz04_T50_51/collision/Turret_01.model	</collisionModelServer>
@@ -2255,6 +2311,34 @@
           <clipAngle>	0.825703	</clipAngle>
           <anchorPosition>	0.000055 0.781146 0.60196	</anchorPosition>
           <anchorDirection>	0.000036 0.946726 0.322041	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35031	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	battlepass2020	</compatibleModels>
+          <position>	-0.715679 1.95444 1.26609	</position>
+          <rotation>	1.16769 -0.702773 -3.09375	</rotation>
+          <scale>	0.328965 0.0999997 0.328965	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.000000	</clipAngle>
+          <anchorPosition>	-0.766107 0.30103 0.9468	</anchorPosition>
+          <anchorDirection>	-0.630344 0.39183 0.670175	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35032	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	battlepass2020	</compatibleModels>
+          <position>	0.813118 2.22535 1.113	</position>
+          <rotation>	1.26105 0.652729 3.03432	</rotation>
+          <scale>	0.423767 0.128818 0.423768	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.000000	</clipAngle>
+          <anchorPosition>	0.865933 0.564842 0.79508	</anchorPosition>
+          <anchorDirection>	0.660185 0.303065 0.687246	</anchorDirection>
         </slot>
       </customizationSlots>
       <customization>

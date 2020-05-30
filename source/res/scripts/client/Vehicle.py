@@ -778,6 +778,11 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
             self.appearance.removeCameraCollider()
         return
 
+    def changeVehicleExtrasSetting(self, extraName, newValue):
+        extra = self.typeDescriptor.extrasDict[extraName]
+        if self.extras.has_key(extra.index):
+            extra.updateFor(self, newValue)
+
     def _isDestructibleMayBeBroken(self, chunkID, itemIndex, matKind, itemFilename, itemScale, vehSpeed):
         desc = AreaDestructibles.g_cache.getDescByFilename(itemFilename)
         if desc is None:

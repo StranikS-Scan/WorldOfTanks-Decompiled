@@ -10,6 +10,7 @@ from gui.shared.gui_items.processors.module import ModuleBuyer
 from gui.shared.gui_items.processors.vehicle import VehicleAutoBattleBoosterEquipProcessor
 from adisp import process
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
+from helpers.func_utils import oncePerPeriod
 
 class BoosterBuyWindowView(DialogBuySellItemBaseView):
 
@@ -71,6 +72,7 @@ class BoosterBuyWindowView(DialogBuySellItemBaseView):
             self.viewModel.setIsRearm(args.get('isRearm'))
         return
 
+    @oncePerPeriod(1)
     @process
     def _onAcceptClicked(self):
         count = self.viewModel.getItemCount()

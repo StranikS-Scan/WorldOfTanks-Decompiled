@@ -943,7 +943,7 @@ class BattleBoosterConfirmator(I18nMessageAbstractConfirmator):
     def _makeMeta(self):
         data = self.itemsCache.items.getItems(GUI_ITEM_TYPE.OPTIONALDEVICE, REQ_CRITERIA.VEHICLE.SUITABLE([self.__vehicle], [GUI_ITEM_TYPE.OPTIONALDEVICE])).values()
         optDevicesList = [ device for device in data if self.__battleBooster.isOptionalDeviceCompatible(device) ]
-        ctx = {'devices': ', '.join([ device.userName for device in optDevicesList ])}
+        ctx = {'devices': ', '.join(set([ device.userName for device in optDevicesList ]))}
         localeKey = self.localeKey if optDevicesList else self.__notSuitableLocaleKey
         return I18nConfirmDialogMeta(localeKey, meta=HtmlMessageLocalDialogMeta('html_templates:lobby/dialogs', localeKey, ctx=ctx))
 

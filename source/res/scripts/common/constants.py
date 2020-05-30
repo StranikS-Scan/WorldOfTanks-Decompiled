@@ -111,6 +111,7 @@ else:
 ENABLE_TKILL_BANS = True
 HAS_DEV_RESOURCES = IS_DEVELOPMENT and not IS_CLIENT_BUILD
 IS_DEVELOPMENT_BUILD = IS_DEVELOPMENT and IS_CLIENT_BUILD
+MODULE_NAME_SEPARATOR = ', '
 
 class SPT_MATKIND:
     SOLID = 71
@@ -1382,6 +1383,7 @@ class REQUEST_COOLDOWN:
     UPDATE_IN_BATTLE_PLAYER_RELATIONS = 1.0
     FLUSH_RELATIONS = 1.0
     EQUIP_ENHANCEMENT = 1.0
+    DISMOUNT_ENHANCEMENT = 1.0
     BUY_BATTLE_PASS = 1.0
     BUY_BATTLE_PASS_LEVELS = 1.0
     BATTLE_PASS_VOTE = 2.0
@@ -2359,6 +2361,11 @@ class ClansConfig(object):
     QUEST_URL = 'clanQuestUrl'
 
 
+class EnhancementsConfig(object):
+    SECTION_NAME = 'enhancements_config'
+    ENABLED = 'enabled'
+
+
 SECONDS_IN_DAY = 86400
 
 class BattleUserActions(object):
@@ -2418,7 +2425,7 @@ class DailyQuestsTokensPrefixes(object):
     QUEST_TICKET = 'dqt:'
 
 
-class OVERRIDEN_BADGE(object):
+class OVERRIDDEN_BADGE(object):
     NONE = 0
     ENHANCEMENTS_LEVEL_1 = 1
 

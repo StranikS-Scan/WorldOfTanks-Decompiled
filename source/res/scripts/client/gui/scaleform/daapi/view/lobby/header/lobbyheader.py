@@ -857,7 +857,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             self.as_disableFightButtonS(self.__isFightBtnDisabled)
         self.as_setFightButtonS(selected.getFightButtonLabel(state, playerInfo))
         if self.__isHeaderButtonPresent(LobbyHeader.BUTTONS.BATTLE_SELECTOR):
-            eventEnabled = self.rankedController.isAvailable() or self.eventProgressionController.isEnabled
+            eventEnabled = not self.bootcampController.isInBootcamp() and (self.rankedController.isAvailable() or self.eventProgressionController.isEnabled)
             self.as_updateBattleTypeS(i18n.makeString(selected.getLabel()), selected.getSmallIcon(), selected.isSelectorBtnEnabled(), TOOLTIPS.HEADER_BATTLETYPE, TOOLTIP_TYPES.COMPLEX, selected.getData(), eventEnabled, eventEnabled and not WWISE.WG_isMSR())
         else:
             self.as_updateBattleTypeS('', '', False, '', TOOLTIP_TYPES.NONE, '', False, False)

@@ -71,6 +71,12 @@ class AdventCalendarAccessor(BaseAccessor):
         return self._data_source.advent_calendar_fetch_hero_tank_info(callback)
 
 
+class CrafmachineAccessor(BaseAccessor):
+
+    def craftmachine_modules_info(self, callback):
+        return self._data_source.craftmachine_modules_info(callback)
+
+
 class GmAccessor(BaseAccessor):
 
     def get_provinces(self, callback, clan_id, fields=None):
@@ -353,6 +359,7 @@ class Requester(object):
     promo_screens = RequestDescriptor(PromoScreensAccessor)
     freya = RequestDescriptor(FreyaAccessor)
     battle_pass = RequestDescriptor(BattlePassAccessor)
+    craftmachine = RequestDescriptor(CrafmachineAccessor)
 
     @classmethod
     def create_requester(cls, url_fetcher, config, client_lang=None, user_agent=None):

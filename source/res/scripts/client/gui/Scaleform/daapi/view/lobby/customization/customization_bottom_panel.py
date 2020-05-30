@@ -81,6 +81,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__setBottomPanelBillData()
         self.__updatePopoverBtnIcon()
         self.__c11nSettings = AccountSettings.getSettings(CUSTOMIZATION_SECTION)
+        self.__serverSettings = self.settingsCore.serverSettings
         BigWorld.callback(0.0, lambda : self.__onTabChanged(self.__ctx.mode.tabId))
 
     def _dispose(self):
@@ -110,6 +111,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__ctx = None
         self._selectedItem = None
         self.__c11nSettings = None
+        self.__serverSettings = None
         return
 
     def getDp(self):
@@ -234,6 +236,10 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             switchersCounter += getEditableStylesExtraNotificationCounter(styles)
         self.as_setNotificationCountersS({'tabsCounters': tabsCounters,
          'switchersCounter': switchersCounter})
+
+    def __resetTabs(self):
+        self.as_setBottomPanelTabsDataS({'tabsDP': [],
+         'selectedTab': -1})
 
     def __updateTabs(self):
         tabsData, pluses = self.__getItemTabsData()
@@ -387,13 +393,18 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         else:
             isDarked = purchaseLimit <= 0 and inventoryCount <= 0
             isUsedUp = isItemUsedUp(item)
+        showEditableHint = False
+        showEditBtnHint = False
         if self.__ctx.modeId == CustomizationModes.STYLED:
             autoRentEnabled = self.__ctx.mode.isAutoRentEnabled()
+            if item.isProgressionRequired:
+                showEditableHint = not bool(self.__serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_PROGRESSION_REQUIRED_STYLE_SLOT_HINT))
+                showEditBtnHint = not bool(self.__serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_PROGRESSION_REQUIRED_STYLE_SLOT_BUTTON_HINT))
+            elif item.isEditable:
+                showEditableHint = not bool(self.__serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_EDITABLE_STYLE_SLOT_HINT))
+                showEditBtnHint = not bool(self.__serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_EDITABLE_STYLE_SLOT_BUTTON_HINT))
         else:
             autoRentEnabled = False
-        settings = self.settingsCore.serverSettings.getOnceOnlyHintsSettings()
-        showEditableHint = settings.get(OnceOnlyHints.C11N_EDITABLE_STYLE_IN_SLOT_HINT) != HINT_SHOWN_STATUS
-        showEditBtnHint = settings.get(OnceOnlyHints.C11N_EDITABLE_STYLE_IN_SLOT_BUTTON_HINT) != HINT_SHOWN_STATUS
         return buildCustomizationItemDataVO(item=item, count=inventoryCount, isApplied=isApplied, isDarked=isDarked, isUsedUp=isUsedUp, autoRentEnabled=autoRentEnabled, vehicle=g_currentVehicle.item, showEditableHint=showEditableHint, showEditBtnHint=showEditBtnHint)
 
     def __getItemTabsData(self):
@@ -520,6 +531,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__setFooterInitData()
         self.__scrollToNewItem()
         self.__refreshHotFilters()
+        self.__resetTabs()
         if modeId == CustomizationModes.EDITABLE_STYLE:
             record = self.__ctx.mode.source in (CustomizationModeSource.CAROUSEL, CustomizationModeSource.PROPERTIES_SHEET, CustomizationModeSource.CONTEXT_MENU)
             self.__onEditableStylesHintsHidden(record=record)
@@ -623,8 +635,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.as_setProjectionDecalHintVisibilityS(self._projectionDecalOnlyOnceHintShow)
 
     def __onEditableStylesHintsShown(self):
-        serverSettings = self.settingsCore.serverSettings
-        if not serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_EDITABLE_STYLES_HINT):
+        if not self.__serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_EDITABLE_STYLES_HINT):
             for intCD in self._carouselDP.collection:
                 item = self.service.getItemByCD(intCD)
                 if item.itemTypeID != GUI_ITEM_TYPE.STYLE:
@@ -636,7 +647,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             else:
                 self.__onEditableStylesHintsHidden(record=False)
 
-        elif not serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_EDITABLE_PROGRESSION_REQUIRED_STYLES_HINT):
+        elif not self.__serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_PROGRESSION_REQUIRED_STYLES_HINT):
             for intCD in self._carouselDP.collection:
                 item = self.service.getItemByCD(intCD)
                 if item.itemTypeID != GUI_ITEM_TYPE.STYLE:
@@ -657,9 +668,8 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         if not record:
             return
         else:
-            serverSettings = self.settingsCore.serverSettings
-            editableStylesVisited = serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_EDITABLE_STYLES_HINT)
-            editableProgressionRequiredStylesVisited = serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_EDITABLE_PROGRESSION_REQUIRED_STYLES_HINT)
+            editableStylesVisited = self.__serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_EDITABLE_STYLES_HINT)
+            editableProgressionRequiredStylesVisited = self.__serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_PROGRESSION_REQUIRED_STYLES_HINT)
             if not editableStylesVisited or not editableProgressionRequiredStylesVisited:
                 editable = None
                 editableProgressionRequired = None
@@ -678,9 +688,9 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
                 if editable is not None:
                     settings[OnceOnlyHints.C11N_EDITABLE_STYLES_HINT] = HINT_SHOWN_STATUS
                 if editableProgressionRequired is not None:
-                    settings[OnceOnlyHints.C11N_EDITABLE_PROGRESSION_REQUIRED_STYLES_HINT] = HINT_SHOWN_STATUS
+                    settings[OnceOnlyHints.C11N_PROGRESSION_REQUIRED_STYLES_HINT] = HINT_SHOWN_STATUS
                 if settings:
-                    serverSettings.setOnceOnlyHintsSettings(settings)
+                    self.__serverSettings.setOnceOnlyHintsSettings(settings)
             return
 
     def __processBillDataPurchaseItems(self, purchseItems):

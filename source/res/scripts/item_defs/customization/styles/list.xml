@@ -7672,6 +7672,99 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 1750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	308	</id>
+      <texture>	gui/maps/vehicles/styles/10years_universal_2.png	</texture>
+      <description>	#vehicle_customization:special_style/10years_universal_2_desc	</description>
+      <userString>	#vehicle_customization:special_style/10years_universal_2	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	118	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	214	</id>
+              <appliedTo>	4384	</appliedTo>
+            </item>
+            <item>
+              <id>	215	</id>
+              <appliedTo>	8720	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	119	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	214	</id>
+              <appliedTo>	4384	</appliedTo>
+            </item>
+            <item>
+              <id>	215	</id>
+              <appliedTo>	8720	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	120	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	214	</id>
+              <appliedTo>	4384	</appliedTo>
+            </item>
+            <item>
+              <id>	215	</id>
+              <appliedTo>	8720	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
@@ -7764,14 +7857,6 @@
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
-    <tags>	progression_required	</tags>
-    <itemFilters>
-      <projection_decal>
-        <include>
-          <itemGroupName>	Progression Decals	</itemGroupName>
-        </include>
-      </projection_decal>
-    </itemFilters>
     <season>	ALL	</season>
     <historical>	false	</historical>
     <priceGroup>	styles 750g notInShop	</priceGroup>
@@ -7785,6 +7870,7 @@
       <texture>	gui/maps/vehicles/styles/stayhome.png	</texture>
       <longDescriptionSpecial>	#vehicle_customization:special_style/stayhome_desc/long	</longDescriptionSpecial>
       <userString>	#vehicle_customization:special_style/stayhome	</userString>
+      <tags>	progression_required	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -7808,6 +7894,13 @@
           </decals>
         </outfit>
       </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
     </style>
   </itemGroup>
   <itemGroup>
@@ -8978,6 +9071,46 @@
         </outfit>
         <outfit>
           <season>	event	</season>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	czech:Cz04_T50_51	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	312	</id>
+      <texture>	gui/maps/vehicles/styles/Cz04_T50_51_3Dst.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/Cz04_T50_51_3Dst_desc/long	</longDescriptionSpecial>
+      <maxNumber>	1	</maxNumber>
+      <modelsSet>	battlepass2020	</modelsSet>
+      <userString>	#vehicle_customization:special_style/Cz04_T50_51_3Dst	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
         </outfit>
       </outfits>
     </style>
@@ -12962,6 +13095,157 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 1750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB63_TOG_II	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	291	</id>
+      <texture>	gui/maps/vehicles/styles/hot_tog.png	</texture>
+      <description>	#vehicle_customization:special_style/hot_tog_desc	</description>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/hot_tog	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	113	</id>
+              <appliedTo>	16	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	115	</id>
+              <appliedTo>	4352	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	37	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <modifications>
+            <item>	6	</item>
+          </modifications>
+          <decals>
+            <item>
+              <id>	208	</id>
+              <appliedTo>	64	</appliedTo>
+            </item>
+            <item>
+              <id>	211	</id>
+              <appliedTo>	1024	</appliedTo>
+            </item>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	112	</id>
+              <appliedTo>	16	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	115	</id>
+              <appliedTo>	4352	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	37	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <modifications>
+            <item>	6	</item>
+          </modifications>
+          <decals>
+            <item>
+              <id>	206	</id>
+              <appliedTo>	64	</appliedTo>
+            </item>
+            <item>
+              <id>	209	</id>
+              <appliedTo>	1024	</appliedTo>
+            </item>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	114	</id>
+              <appliedTo>	16	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	115	</id>
+              <appliedTo>	4352	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	37	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <modifications>
+            <item>	6	</item>
+          </modifications>
+          <decals>
+            <item>
+              <id>	207	</id>
+              <appliedTo>	64	</appliedTo>
+            </item>
+            <item>
+              <id>	210	</id>
+              <appliedTo>	1024	</appliedTo>
+            </item>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
@@ -14214,6 +14498,101 @@
             <item>
               <id>	121	</id>
               <appliedTo>	13104	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 1750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A80_T26_E4_SuperPershing	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	307	</id>
+      <texture>	gui/maps/vehicles/styles/10years_general_america.png	</texture>
+      <description>	#vehicle_customization:special_style/10years_general_america_desc	</description>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/10years_general_america	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	117	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	213	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A120_M48A5	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	294	</id>
+      <texture>	gui/maps/vehicles/styles/A120_M48A5_3Dst.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/A120_M48A5_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	battlepass2020	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/A120_M48A5_3Dst	</userString>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	52416	</appliedTo>
             </item>
           </decals>
         </outfit>
@@ -15852,6 +16231,61 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 1750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R61_Object252	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	295	</id>
+      <texture>	gui/maps/vehicles/styles/10years_grandfather.png	</texture>
+      <description>	#vehicle_customization:special_style/10years_grandfather_desc	</description>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/10years_grandfather	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	116	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	38	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	212	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:styles/rented_styles	</userString>
     <season>	ALL	</season>
     <historical>	true	</historical>
@@ -16790,12 +17224,8 @@
           </camouflages>
           <decals>
             <item>
-              <id>	0	</id>
-              <appliedTo>	12848	</appliedTo>
-            </item>
-            <item>
-              <id>	0	</id>
-              <appliedTo>	52416	</appliedTo>
+              <id>	15516	</id>
+              <appliedTo>	256	</appliedTo>
             </item>
           </decals>
         </outfit>
@@ -17060,7 +17490,7 @@
       <id>	385	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	blackVictim	</tags>
+      <tags>	blackVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17090,7 +17520,7 @@
       <id>	386	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	redVictim	</tags>
+      <tags>	redVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17120,7 +17550,7 @@
       <id>	387	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	goldVictim	</tags>
+      <tags>	goldVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17150,7 +17580,7 @@
       <id>	388	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	silverVictim	</tags>
+      <tags>	silverVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17180,7 +17610,7 @@
       <id>	389	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	blackVictim	</tags>
+      <tags>	blackVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17210,7 +17640,7 @@
       <id>	390	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	redVictim	</tags>
+      <tags>	redVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17240,7 +17670,7 @@
       <id>	391	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	goldVictim	</tags>
+      <tags>	goldVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17270,7 +17700,7 @@
       <id>	392	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	silverVictim	</tags>
+      <tags>	silverVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17300,7 +17730,7 @@
       <id>	393	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	blackVictim	</tags>
+      <tags>	blackVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17330,7 +17760,7 @@
       <id>	394	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	redVictim	</tags>
+      <tags>	redVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17360,7 +17790,7 @@
       <id>	395	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	goldVictim	</tags>
+      <tags>	goldVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17390,7 +17820,7 @@
       <id>	396	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	silverVictim	</tags>
+      <tags>	silverVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17420,7 +17850,7 @@
       <id>	397	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	blackVictim	</tags>
+      <tags>	blackVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17450,7 +17880,7 @@
       <id>	398	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	redVictim	</tags>
+      <tags>	redVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17480,7 +17910,7 @@
       <id>	399	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	goldVictim	</tags>
+      <tags>	goldVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17510,7 +17940,7 @@
       <id>	400	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	silverVictim	</tags>
+      <tags>	silverVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17540,7 +17970,7 @@
       <id>	401	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	blackVictim	</tags>
+      <tags>	blackVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17570,7 +18000,7 @@
       <id>	402	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	redVictim	</tags>
+      <tags>	redVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17600,7 +18030,7 @@
       <id>	403	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	goldVictim	</tags>
+      <tags>	goldVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17630,7 +18060,7 @@
       <id>	404	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	silverVictim	</tags>
+      <tags>	silverVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17660,7 +18090,7 @@
       <id>	405	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	blackVictim	</tags>
+      <tags>	blackVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17690,7 +18120,7 @@
       <id>	406	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	redVictim	</tags>
+      <tags>	redVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17720,7 +18150,7 @@
       <id>	407	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	goldVictim	</tags>
+      <tags>	goldVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17750,7 +18180,7 @@
       <id>	408	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	silverVictim	</tags>
+      <tags>	silverVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17780,7 +18210,7 @@
       <id>	409	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	blackVictim	</tags>
+      <tags>	blackVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17810,7 +18240,7 @@
       <id>	410	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	redVictim	</tags>
+      <tags>	redVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17840,7 +18270,7 @@
       <id>	411	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	goldVictim	</tags>
+      <tags>	goldVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17870,7 +18300,7 @@
       <id>	412	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	silverVictim	</tags>
+      <tags>	silverVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17900,7 +18330,7 @@
       <id>	413	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	blackVictim	</tags>
+      <tags>	blackVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17930,7 +18360,7 @@
       <id>	414	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	redVictim	</tags>
+      <tags>	redVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17960,7 +18390,7 @@
       <id>	415	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	goldVictim	</tags>
+      <tags>	goldVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -17990,7 +18420,7 @@
       <id>	416	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	silverVictim	</tags>
+      <tags>	silverVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -18020,7 +18450,7 @@
       <id>	417	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	blackVictim	</tags>
+      <tags>	blackVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -18050,7 +18480,7 @@
       <id>	418	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	redVictim	</tags>
+      <tags>	redVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -18080,7 +18510,7 @@
       <id>	419	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	goldVictim	</tags>
+      <tags>	goldVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -18110,7 +18540,7 @@
       <id>	420	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	silverVictim	</tags>
+      <tags>	silverVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -18140,7 +18570,7 @@
       <id>	421	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	blackVictim	</tags>
+      <tags>	blackVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -18170,7 +18600,7 @@
       <id>	422	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	redVictim	</tags>
+      <tags>	redVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -18200,7 +18630,7 @@
       <id>	423	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	goldVictim	</tags>
+      <tags>	goldVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -18230,7 +18660,7 @@
       <id>	424	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	silverVictim	</tags>
+      <tags>	silverVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -18260,7 +18690,7 @@
       <id>	425	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	blackVictim	</tags>
+      <tags>	blackVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -18290,7 +18720,7 @@
       <id>	426	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	redVictim	</tags>
+      <tags>	redVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -18320,7 +18750,7 @@
       <id>	427	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	goldVictim	</tags>
+      <tags>	goldVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>
@@ -18350,7 +18780,7 @@
       <id>	428	</id>
       <texture></texture>
       <userString>	#vehicle_customization:victim_style/default	</userString>
-      <tags>	silverVictim	</tags>
+      <tags>	silverVictim addNationalEmblem	</tags>
       <outfits>
         <outfit>
           <season>	ALL	</season>

@@ -162,6 +162,8 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
 
     def _generateOptions(self, ctx=None):
         options = []
+        if self.sessionProvider.isReplayPlaying:
+            return options
         if not self.__userInfo.isBot:
             options = self.__addDyncSquadInfo(options)
             options = self.__addFriendshipInfo(options)

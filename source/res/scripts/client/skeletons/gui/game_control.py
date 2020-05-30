@@ -1068,6 +1068,12 @@ class IManualController(IGameController):
         raise NotImplementedError
 
 
+class ICraftmachineController(IGameController):
+
+    def getModuleName(self):
+        raise NotImplementedError
+
+
 class ICalendarController(IGameController):
 
     def updateHeroAdventActionInfo(self):

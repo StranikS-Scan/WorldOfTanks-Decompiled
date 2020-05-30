@@ -157,7 +157,6 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
         g_clientUpdateManager.addCallbacks({'inventory': self.__inventoryUpdateCallBack})
         g_eventBus.addListener(ItemRemovalByDemountKitEvent.DECLARED, self.__itemRemovalByDKDeclareHandler, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(ItemRemovalByDemountKitEvent.CANCELED, self.__itemRemovalByDKCancelHandler, EVENT_BUS_SCOPE.LOBBY)
-        self.update()
         AccountSettings.onSettingsChanging += self.__onAccountSettingsChanging
 
     def _dispose(self):

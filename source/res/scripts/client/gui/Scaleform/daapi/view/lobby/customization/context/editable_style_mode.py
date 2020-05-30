@@ -203,9 +203,18 @@ class EditableStyleMode(CustomMode):
             self.__baseOutfits[season] = baseOutfit
 
         serverSettings = self._settingsCore.serverSettings
-        editableStyleWasVisited = bool(serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_EDITABLE_STYLE_IN_SLOT_BUTTON_HINT))
-        if not editableStyleWasVisited:
-            serverSettings.setOnceOnlyHintsSettings({OnceOnlyHints.C11N_EDITABLE_STYLE_IN_SLOT_BUTTON_HINT: HINT_SHOWN_STATUS})
+        if style.isProgressionRequired:
+            hintShown = bool(serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_PROGRESSION_REQUIRED_STYLE_SLOT_BUTTON_HINT))
+            if not hintShown:
+                serverSettings.setOnceOnlyHintsSettings({OnceOnlyHints.C11N_PROGRESSION_REQUIRED_STYLE_SLOT_HINT: HINT_SHOWN_STATUS,
+                 OnceOnlyHints.C11N_PROGRESSION_REQUIRED_STYLE_SLOT_BUTTON_HINT: HINT_SHOWN_STATUS,
+                 OnceOnlyHints.C11N_EDITABLE_STYLE_SLOT_HINT: HINT_SHOWN_STATUS,
+                 OnceOnlyHints.C11N_EDITABLE_STYLE_SLOT_BUTTON_HINT: HINT_SHOWN_STATUS})
+        else:
+            hintShown = bool(serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_EDITABLE_STYLE_SLOT_BUTTON_HINT))
+            if not hintShown:
+                serverSettings.setOnceOnlyHintsSettings({OnceOnlyHints.C11N_EDITABLE_STYLE_SLOT_HINT: HINT_SHOWN_STATUS,
+                 OnceOnlyHints.C11N_EDITABLE_STYLE_SLOT_BUTTON_HINT: HINT_SHOWN_STATUS})
         super(EditableStyleMode, self)._onStart()
 
     def _onStop(self):

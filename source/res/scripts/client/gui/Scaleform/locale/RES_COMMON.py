@@ -9,7 +9,6 @@ class RES_COMMON(object):
     MAPS_LOADING_AWARD = '../maps/loading_award.png'
     MAPS_PROMO_BG = '../maps/promo_bg.png'
     MAPS_ICONS_BATTLEPASS2020_BUY_BG = '../maps/icons/battlePass2020/buy/bg.png'
-    MAPS_ICONS_BATTLEPASS2020_INTRO_BG = '../maps/icons/battlePass2020/intro/bg.png'
     MAPS_ICONS_BATTLEPASS2020_OFF_SEASON_BG = '../maps/icons/battlePass2020/off_season/bg.png'
     MAPS_ICONS_BATTLEPASS2020_PROGRESSION_BG = '../maps/icons/battlePass2020/progression/bg.png'
     MAPS_ICONS_BATTLEPASS2020_VOTING_BG = '../maps/icons/battlePass2020/voting/bg.png'

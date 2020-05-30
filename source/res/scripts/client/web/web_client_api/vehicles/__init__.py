@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/vehicles/__init__.py
 import nations
-from gui.shared.gui_items.processors.vehicle import SetEnhancementProcessor
+from gui.shared.gui_items.processors.vehicle import SetEnhancementProcessor, DismountEnhancementProcessor
 from helpers import dependency
 from items import vehicles
 from skeletons.gui.shared import IItemsCache
@@ -12,10 +12,15 @@ class _VehicleInfoSchema(W2CSchema):
     vehicle_id = Field(type=(int, long))
 
 
-class _VehicleEnhancementSchema(W2CSchema):
+class _VehicleEnhancementEquipSchema(W2CSchema):
     vehicle_int_cd = Field(required=True, type=int)
     slot = Field(required=True, type=int)
     enhancement_id = Field(required=True, type=int)
+
+
+class _VehicleEnhancementDismountSchema(W2CSchema):
+    vehicle_int_cd = Field(required=True, type=int)
+    slot = Field(required=True, type=int)
 
 
 @w2capi(name='vehicles', key='action')
@@ -40,19 +45,39 @@ class VehiclesWebApi(W2CSchema, ItemsWebApiMixin):
 
         return res
 
-    @w2c(_VehicleEnhancementSchema, 'vehicle_enhancement')
+    @w2c(_VehicleEnhancementEquipSchema, 'vehicle_enhancement_equip')
     def setVehicleEnhancement(self, cmd):
-        res = {'result': False}
+        success, error = False, ''
         vehicle = self.itemsCache.items.getItemByCD(cmd.vehicle_int_cd)
         if vehicle:
             processor = SetEnhancementProcessor(cmd.slot, cmd.enhancement_id, vehicle)
             response = yield processor.request()
             if response:
-                res['result'] = response.success
-                if not response.success:
-                    res['error'] = response.userMsg
+                success, error = response.success, response.userMsg
             else:
-                res['error'] = 'undefined server error'
+                error = 'Undefined server error'
         else:
-            res['error'] = 'vehicleInvID not found'
-        yield res
+            error = 'Vehicle not found'
+        yield {'success': success,
+         'error': error}
+
+    @w2c(_VehicleEnhancementDismountSchema, 'vehicle_enhancement_dismount')
+    def dismountVehicleEnhancement(self, cmd):
+        success, error, serverResponse = False, '', {}
+        vehicle = self.itemsCache.items.getItemByCD(cmd.vehicle_int_cd)
+        if vehicle:
+            processor = DismountEnhancementProcessor(cmd.slot, vehicle)
+            response = yield processor.request()
+            if response:
+                success, error = response.success, response.userMsg
+                if response.auxData:
+                    dismountResult, enhancementID = response.auxData
+                    serverResponse = {'dismount_result': dismountResult,
+                     'enhancement_id': enhancementID}
+            else:
+                error = 'Undefined server error'
+        else:
+            error = 'Vehicle not found'
+        yield {'success': success,
+         'error': error,
+         'response': serverResponse}

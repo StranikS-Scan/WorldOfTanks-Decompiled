@@ -20,6 +20,7 @@ from gui.wgcg.promo_screens.handlers import PromoScreensRequestHandlers
 from gui.wgcg.rank.handlers import RankRequestHandlers
 from gui.wgcg.settings import WebRequestDataType
 from gui.wgcg.external_battle_handlers import BaseExternalBattleUnitRequestHandlers
+from gui.wgcg.craftmachine.handlers import CraftmachineRequestHandlers
 
 class WgcgRequestResponse(Response):
 
@@ -100,6 +101,7 @@ class WgcgRequestsController(RequestsController):
         self.__handlers.update(RankRequestHandlers(requester).get())
         self.__handlers.update(PromoScreensRequestHandlers(requester).get())
         self.__handlers.update(UtilsRequestHandlers(requester).get())
+        self.__handlers.update(CraftmachineRequestHandlers(requester).get())
 
     def fini(self):
         super(WgcgRequestsController, self).fini()

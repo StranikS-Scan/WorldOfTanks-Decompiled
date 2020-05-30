@@ -527,7 +527,7 @@ def getEditableStylesExtraNotificationCounter(styles=None, settingsCore=None):
     serverSettings = settingsCore.serverSettings
     if not serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_EDITABLE_STYLES_HINT):
         itemsFilter = lambda item: item.isEditable
-    elif not serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_EDITABLE_PROGRESSION_REQUIRED_STYLES_HINT):
+    elif not serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_PROGRESSION_REQUIRED_STYLES_HINT):
         itemsFilter = lambda item: item.isProgressionRequiredCanBeEdited(vehicle.intCD)
     else:
         return 0

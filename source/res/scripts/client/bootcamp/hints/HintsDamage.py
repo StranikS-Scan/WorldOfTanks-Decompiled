@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bootcamp/hints/HintsDamage.py
+import BigWorld
 import TriggersManager
 from bootcamp.BootcampConstants import HINT_TYPE
 from HintsBase import HintBase, HINT_COMMAND
@@ -67,3 +68,9 @@ class HintCompositeBurn(HintDamage):
 
     def __init__(self, avatar, params):
         super(HintCompositeBurn, self).__init__(avatar, HINT_TYPE.HINT_USE_EXTINGUISHER, TriggersManager.TRIGGER_TYPE.PLAYER_VEHICLE_IN_FIRE, params['timeout'])
+
+    def onTriggerActivated(self, args):
+        super(HintCompositeBurn, self).onTriggerActivated(args)
+        if self._state == HintBase.STATE_HINT:
+            entity = BigWorld.entities.get(self._avatar.playerVehicleID)
+            entity.changeVehicleExtrasSetting('fire', self.cooldownAfter)

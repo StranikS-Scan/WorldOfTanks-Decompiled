@@ -290,7 +290,9 @@ class CarouselContext(InventoryContext):
     def getStatsConfiguration(self, item):
         value = super(CarouselContext, self).getStatsConfiguration(item)
         if self.__rankedController.isRankedPrbActive():
-            value.showRankedBonusBattle = self.__rankedController.hasVehicleRankedBonus(item.intCD)
+            suitResult = self.__rankedController.isSuitableVehicle(item)
+            hasRankedBonus = self.__rankedController.hasVehicleRankedBonus(item.intCD)
+            value.showRankedBonusBattle = hasRankedBonus and suitResult is None
         value.rentals = True
         value.buyPrice = True
         return value

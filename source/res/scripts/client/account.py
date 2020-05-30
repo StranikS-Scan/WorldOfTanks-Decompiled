@@ -1130,6 +1130,14 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self._doCmdInt3(AccountCommands.CMD_EQUIP_ENHANCEMENT, vehicleInvID, slot, enhancementID, proxy)
         return
 
+    def dismountEnhancement(self, vehicleInvID, slot, callback):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorStr, ext=None: callback(resultID, errorStr, ext)
+        else:
+            proxy = None
+        self._doCmdInt2(AccountCommands.CMD_DISMOUNT_ENHANCEMENT, vehicleInvID, slot, proxy)
+        return
+
     def setOfferBannerSeen(self, offerID, callback=None):
         return self._doCmdInt(AccountCommands.CMD_SET_OFFER_BANNER_SEEN, offerID, callback)
 

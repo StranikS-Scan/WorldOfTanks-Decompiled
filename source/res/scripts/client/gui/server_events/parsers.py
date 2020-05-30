@@ -168,7 +168,7 @@ class VehicleRequirements(ConditionsParser):
         if self._suitableVehicles is None:
             invVehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY)
             isAvailable = self.isAvailable
-            self._suitableVehicles = (vehicleItem for vehicleItem in invVehs.itervalues() if isAvailable(vehicleItem))
+            self._suitableVehicles = [ vehicleItem for vehicleItem in invVehs.itervalues() if isAvailable(vehicleItem) ]
         return self._suitableVehicles
 
     def _handleCondition(self, name, data, uniqueName, group):

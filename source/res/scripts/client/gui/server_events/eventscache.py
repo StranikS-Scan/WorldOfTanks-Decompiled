@@ -109,6 +109,8 @@ class EventsCache(IEventsCache):
         self.__personalMissions.fini()
         self.__prefetcher.fini()
         self.__em.clear()
+        self.__actions2quests.clear()
+        self.__quests2actions.clear()
         self.__compensations.clear()
         self.__clearInvalidateCallback()
 
@@ -126,7 +128,12 @@ class EventsCache(IEventsCache):
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
         g_playerEvents.onDailyQuestsInfoChange -= self.__onDailyQuestsInfoChange
         g_playerEvents.onPMLocksChanged -= self.__onLockedQuestsChanged
+        self.__clearQuestsItemsCache()
+        self.__actions2quests.clear()
+        self.__quests2actions.clear()
+        self.__compensations.clear()
         self.__clearCache()
+        self.__clearInvalidateCallback()
         return
 
     def clear(self):
@@ -797,7 +804,12 @@ class EventsCache(IEventsCache):
     def __loadInvalidateCallback(self, duration):
         LOG_DEBUG('load quest window invalidation callback (secs)', duration)
         self.__clearInvalidateCallback()
-        self.__invalidateCbID = BigWorld.callback(math.ceil(duration), self.__invalidateData)
+        self.__invalidateCbID = BigWorld.callback(math.ceil(duration), self.__onInvalidateNearestQuests)
+
+    def __onInvalidateNearestQuests(self):
+        if BigWorld.player() is not None:
+            self.__invalidateData()
+        return
 
     def __clearInvalidateCallback(self):
         if self.__invalidateCbID is not None:

@@ -930,7 +930,7 @@ def readQuestAwardWindowSection(xmlCtx, section, _, windowID, windowType, conten
 
 
 _AVAILABLE_DIRECTIONS = ('L', 'T', 'R', 'B')
-_ArrowProps = namedtuple('_ArrowProps', ('direction', 'loop', 'positionValue'))
+_ArrowProps = namedtuple('_ArrowProps', ('direction', 'loop', 'positionValue', 'textPadding'))
 _Padding = namedtuple('_Padding', ('left', 'top', 'right', 'bottom'))
 
 def parseHint(xmlCtx, section):
@@ -949,7 +949,8 @@ def parseHint(xmlCtx, section):
         if direction not in _AVAILABLE_DIRECTIONS:
             _xml.raiseWrongXml(xmlCtx, section, 'Arrow direction {} is invalid.'.format(direction))
         positionValue = _xml.readFloat(xmlCtx, subSec, 'position-value', 0.5)
-        sectionInfo['arrow'] = _ArrowProps(direction, _xml.readBool(xmlCtx, subSec, 'loop'), positionValue)
+        textPadding = _xml.readFloat(xmlCtx, subSec, 'text-padding', 0)
+        sectionInfo['arrow'] = _ArrowProps(direction, _xml.readBool(xmlCtx, subSec, 'loop'), positionValue, textPadding)
     else:
         sectionInfo['arrow'] = None
     if 'padding' in tags:

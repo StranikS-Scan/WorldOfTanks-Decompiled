@@ -15,6 +15,7 @@ from items.components.c11n_constants import EASING_TRANSITION_DURATION
 from gui import g_tankActiveCamouflage
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.simple_turret_rotator import SimpleTurretRotator
+from skeletons.gui.customization import ICustomizationService
 from vehicle_outfit.outfit import Area, ANCHOR_TYPE_TO_SLOT_TYPE_MAP, SLOT_TYPES
 from gui.shared.gui_items.customization.slots import SLOT_ASPECT_RATIO, BaseCustomizationSlot, EmblemSlot, getProgectionDecalAspect
 from gui.shared.items_cache import CACHE_SYNC_REASON
@@ -86,6 +87,7 @@ class HangarVehicleAppearance(ScriptGameObject):
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
     settingsCore = dependency.descriptor(ISettingsCore)
     turretAndGunAngles = dependency.descriptor(ITurretAndGunAngles)
+    customizationService = dependency.descriptor(ICustomizationService)
     wheelsAnimator = ComponentDescriptor()
     trackNodesAnimator = ComponentDescriptor()
     collisions = ComponentDescriptor()
@@ -364,20 +366,22 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.refresh()
 
     def _getActiveOutfit(self):
-        if g_currentPreviewVehicle.isPresent() and not g_currentPreviewVehicle.isHeroTank or not g_currentVehicle.isPresent():
+        if g_currentPreviewVehicle.isPresent() and not g_currentPreviewVehicle.isHeroTank:
+            vehicleCD = g_currentPreviewVehicle.item.descriptor.makeCompactDescr()
+            return self.customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD=vehicleCD)
+        if not g_currentVehicle.isPresent():
+            _logger.error('Failed to get base vehicle outfit. There is no vehicle in hangar.')
             return self.itemsFactory.createOutfit()
-        else:
-            vehicle = g_currentVehicle.item
-            if not vehicle:
-                return None
-            season = g_tankActiveCamouflage.get(vehicle.intCD, SeasonType.UNDEFINED)
-            if season == SeasonType.UNDEFINED:
-                season = vehicle.getAnyOutfitSeason()
-            g_tankActiveCamouflage[vehicle.intCD] = season
-            outfit = vehicle.getOutfit(season)
-            if not outfit:
-                outfit = self.itemsFactory.createOutfit(vehicleCD=vehicle.descriptor.makeCompactDescr())
-            return outfit
+        vehicle = g_currentVehicle.item
+        season = g_tankActiveCamouflage.get(vehicle.intCD, SeasonType.UNDEFINED)
+        if season == SeasonType.UNDEFINED:
+            season = vehicle.getAnyOutfitSeason()
+        g_tankActiveCamouflage[vehicle.intCD] = season
+        outfit = vehicle.getOutfit(season)
+        if not outfit:
+            vehicleCD = vehicle.descriptor.makeCompactDescr()
+            outfit = self.customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD=vehicleCD)
+        return outfit
 
     def __assembleModel(self):
         from vehicle_systems import model_assembler
@@ -597,7 +601,8 @@ class HangarVehicleAppearance(ScriptGameObject):
     def updateCustomization(self, outfit=None, callback=None):
         if self.__isVehicleDestroyed:
             return
-        outfit = outfit or self.itemsFactory.createOutfit(vehicleCD=g_currentVehicle.item.descriptor.makeCompactDescr())
+        vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
+        outfit = outfit or self.customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD=vehicleCD)
         if self.recreateRequired(outfit):
             self.refresh(outfit, callback)
             return

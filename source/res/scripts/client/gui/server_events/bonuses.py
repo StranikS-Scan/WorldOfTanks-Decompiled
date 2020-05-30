@@ -1976,7 +1976,11 @@ def getBonuses(quest, name, value, isCompensation=False, ctx=None):
 
 
 def getTutorialBonuses(name, value):
-    return _initFromTree((name,), name, value)
+    if name == 'dossier':
+        key = (name, 'default')
+    else:
+        key = (name,)
+    return _initFromTree(key, name, value)
 
 
 def getEventBoardsBonusObj(name, value):

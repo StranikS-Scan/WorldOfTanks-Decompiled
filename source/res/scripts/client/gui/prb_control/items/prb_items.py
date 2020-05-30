@@ -4,16 +4,16 @@ from collections import namedtuple
 from account_helpers import getAccountDatabaseID, getPlayerID
 from gui.prb_control.prb_helpers import BadgesHelper
 from helpers import dependency
-from constants import PREBATTLE_ACCOUNT_STATE, PREBATTLE_TEAM_STATE
+from constants import PREBATTLE_ACCOUNT_STATE, PREBATTLE_TEAM_STATE, OVERRIDDEN_BADGE
 from gui.prb_control.settings import PREBATTLE_PLAYERS_COMPARATORS
 from gui.shared.gui_items.Vehicle import Vehicle
 from skeletons.gui.lobby_context import ILobbyContext
 
 class PlayerPrbInfo(object):
-    __slots__ = ('accID', 'name', 'dbID', 'state', 'time', 'vehCompDescr', 'igrType', 'clanDBID', 'clanAbbrev', 'roster', 'isCreator', 'regionCode', 'badges', 'group')
+    __slots__ = ('accID', 'name', 'dbID', 'state', 'time', 'vehCompDescr', 'igrType', 'clanDBID', 'clanAbbrev', 'roster', 'isCreator', 'regionCode', 'badges', 'group', 'vehEnhancements')
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, accID, name='', dbID=0, state=PREBATTLE_ACCOUNT_STATE.UNKNOWN, time=0.0, vehCompDescr=0, igrType=0, clanDBID=0, clanAbbrev='', roster=0, entity=None, badges=None, group=0):
+    def __init__(self, accID, name='', dbID=0, state=PREBATTLE_ACCOUNT_STATE.UNKNOWN, time=0.0, vehCompDescr=0, igrType=0, clanDBID=0, clanAbbrev='', roster=0, entity=None, badges=None, group=0, vehEnhancements=None):
         self.accID = accID
         self.name = name
         self.dbID = dbID
@@ -26,6 +26,7 @@ class PlayerPrbInfo(object):
         self.roster = roster
         self.badges = BadgesHelper(badges or ())
         self.group = group
+        self.vehEnhancements = vehEnhancements or {}
         if entity is not None:
             self.isCreator = entity.isCommander(pDatabaseID=self.dbID)
         else:
@@ -34,7 +35,7 @@ class PlayerPrbInfo(object):
 
     def __repr__(self):
         badge = self.badges.getBadge()
-        return 'PlayerPrbInfo(accID = {0:n}, dbID = {1:n}, fullName = {2:>s}, state = {3:n}, isCreator = {4!r:s}, time = {5:n}, vehCompDescr = {6!r:s}, badgeID = {7})'.format(self.accID, self.dbID, self.getFullName(), self.state, self.isCreator, self.time, self.getVehicle().name if self.isVehicleSpecified() else None, badge.badgeID if badge else None)
+        return 'PlayerPrbInfo(accID = {0:n}, dbID = {1:n}, fullName = {2:>s}, state = {3:n}, isCreator = {4!r:s}, time = {5:n}, vehCompDescr = {6!r:s}, badgeID = {7}, vehEnhancements = {8})'.format(self.accID, self.dbID, self.getFullName(), self.state, self.isCreator, self.time, self.getVehicle().name if self.isVehicleSpecified() else None, badge.badgeID if badge else None, self.vehEnhancements)
 
     def getFullName(self, isClan=True, isRegion=True):
         if isClan:
@@ -71,6 +72,12 @@ class PlayerPrbInfo(object):
 
     def getBadge(self):
         return self.badges.getBadge()
+
+    def getEnhancementVisibility(self):
+        return self.vehEnhancements.get('badge', OVERRIDDEN_BADGE.NONE)
+
+    def getEnhancementModules(self):
+        return self.vehEnhancements.get('enhancements', [])
 
 
 class TeamStateInfo(object):

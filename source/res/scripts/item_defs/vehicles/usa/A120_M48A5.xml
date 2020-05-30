@@ -54,6 +54,13 @@
       <undamaged>	vehicles/american/A120_M48A5/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/american/A120_M48A5/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/american/A120_M48A5/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <battlepass2020>
+          <undamaged>	vehicles/american/A120_M48A5/_skins/battlepass2020/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A120_M48A5/_skins/battlepass2020/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A120_M48A5/_skins/battlepass2020/crash/lod0/Hull.model	</exploded>
+        </battlepass2020>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -76,10 +83,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.00449004 0.283626 3.09642	</rayStart>
-        <rayEnd>	-0.00260831 0.103674 3.00944	</rayEnd>
+        <rayStart>	-0.480234 0.327067 2.65914	</rayStart>
+        <rayEnd>	-0.443612 0.144331 2.58657	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
-        <size>	0.383	</size>
+        <size>	0.3	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isUVProportional>	true	</isUVProportional>
       </slot>
@@ -574,6 +581,48 @@
         <anchorDirection>	-0.000109322 0.999956 -0.009355	</anchorDirection>
         <verticalMirror>	true	</verticalMirror>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15036	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	battlepass2020	</compatibleModels>
+        <position>	0.148005 1.42326 2.82422	</position>
+        <rotation>	0.438785 -0.0262372 3.02099	</rotation>
+        <scale>	0.508114 0.508114 0.508114	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	0.148005 0.247692 2.82422	</anchorPosition>
+        <anchorDirection>	0.109209 0.898692 0.424765	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15037	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	battlepass2020	</compatibleModels>
+        <position>	-0.000018 1.90066 -2.29833	</position>
+        <rotation>	3.1272 -0.00331068 0.0450406	</rotation>
+        <scale>	0.530647 0.530647 0.530647	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	-0.000018 0.725085 -2.29833	</anchorPosition>
+        <anchorDirection>	0.0450727 0.998882 -0.0142304	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15038	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	battlepass2020	</compatibleModels>
+        <position>	-1.99335 1.17992 -1.03023	</position>
+        <rotation>	1.665 0.226037 -1.29904	</rotation>
+        <scale>	0.530644 0.0999999 0.530644	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorPosition>	-2.05327 0.00586611 -1.0329	</anchorPosition>
+        <anchorDirection>	-0.998688 0.0252495 -0.0445464	</anchorDirection>
+      </slot>
     </customizationSlots>
     <hangarShadowTexture>	vehicles/american/A120_M48A5/M48A5_HangarShadowMap.dds	</hangarShadowTexture>
     <customization>
@@ -617,6 +666,13 @@
         <undamaged>	vehicles/american/A120_M48A5/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A120_M48A5/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/american/A120_M48A5/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <battlepass2020>
+            <undamaged>	vehicles/american/A120_M48A5/_skins/battlepass2020/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A120_M48A5/_skins/battlepass2020/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A120_M48A5/_skins/battlepass2020/crash/lod0/Chassis.model	</exploded>
+          </battlepass2020>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1797,6 +1853,13 @@
             <undamaged>	vehicles/american/A120_M48A5/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A120_M48A5/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/american/A120_M48A5/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <battlepass2020>
+                <undamaged>	vehicles/american/A120_M48A5/_skins/battlepass2020/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/american/A120_M48A5/_skins/battlepass2020/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/american/A120_M48A5/_skins/battlepass2020/crash/lod0/Gun_01.model	</exploded>
+              </battlepass2020>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A120_M48A5/collision/Gun_01.model	</collisionModelServer>
@@ -1830,7 +1893,7 @@
               <rayStart>	0.000002 -0.0965396 2.05518	</rayStart>
               <rayEnd>	-0.0187218 -0.173012 2.05518	</rayEnd>
               <rayUp>	0.133 0.000000 0.000000	</rayUp>
-              <applyToFabric>	true	</applyToFabric>
+              <applyToFabric>	false	</applyToFabric>
               <size>	0.492	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
               <isUVProportional>	true	</isUVProportional>
@@ -1855,6 +1918,13 @@
         <undamaged>	vehicles/american/A120_M48A5/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/american/A120_M48A5/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/american/A120_M48A5/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <battlepass2020>
+            <undamaged>	vehicles/american/A120_M48A5/_skins/battlepass2020/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A120_M48A5/_skins/battlepass2020/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A120_M48A5/_skins/battlepass2020/crash/lod0/Turret_01.model	</exploded>
+          </battlepass2020>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/american/A120_M48A5/collision/Turret_01.model	</collisionModelServer>
@@ -1877,11 +1947,11 @@
         <slot>
           <slotType>	player	</slotType>
           <slotId>	33000	</slotId>
-          <rayStart>	1.22703 0.733217 -0.528833	</rayStart>
-          <rayEnd>	1.03002 0.699677 -0.536582	</rayEnd>
+          <rayStart>	1.22224 0.750551 -0.555055	</rayStart>
+          <rayEnd>	1.02914 0.706111 -0.527986	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <isMirrored>	true	</isMirrored>
-          <size>	0.26	</size>
+          <size>	0.22	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isUVProportional>	true	</isUVProportional>
         </slot>

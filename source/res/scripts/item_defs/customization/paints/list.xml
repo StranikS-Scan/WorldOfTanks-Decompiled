@@ -1224,6 +1224,14 @@
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/10years_geese	</userString>
     </paint>
+    <paint>
+      <id>	38	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_04.png	</texture>
+      <color>	116 109 56 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/10years_grandfather	</userString>
+    </paint>
     <usages>
       <item>
         <componentType>	ALL	</componentType>
@@ -1250,6 +1258,32 @@
       <metallic>	0.2	</metallic>
       <userString>	#vehicle_customization:repaint/twitch_may_2020	</userString>
       <tags>	hiddenInUI	</tags>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	Countdown TOG2	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	37	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_37.png	</texture>
+      <color>	217 166 48 255	</color>
+      <gloss>	0.579	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/contdown_tog2	</userString>
     </paint>
     <usages>
       <item>

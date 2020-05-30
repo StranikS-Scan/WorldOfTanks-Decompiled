@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/client_request_lib/data_sources/gateway.py
+import zlib
 import json
+import urllib
+from base64 import b64encode
 from datetime import datetime, timedelta, time as dt_time
 from client_request_lib import exceptions
 from client_request_lib.data_sources import base
-from base64 import b64encode
-import urllib
-import zlib
 EXAMPLES = {}
 DEFAULT_SINCE_DELAY = timedelta(days=1)
 SUCCESS_STATUSES = [200, 201, 304]
@@ -139,6 +139,10 @@ class GatewayDataAccessor(base.BaseDataAccessor):
 
     def advent_calendar_fetch_hero_tank_info(self, callback):
         url = '/advc/herotank/'
+        return self._request_data(callback, url)
+
+    def craftmachine_modules_info(self, callback):
+        url = '/craft/client_settings/'
         return self._request_data(callback, url)
 
     def get_clans_ratings(self, callback, clan_ids, fields=None):

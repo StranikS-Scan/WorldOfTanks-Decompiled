@@ -2,10 +2,12 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/PrebattleWindow.py
 from CurrentVehicle import g_currentVehicle
 from adisp import process
+from constants import MODULE_NAME_SEPARATOR
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.meta.PrebattleWindowMeta import PrebattleWindowMeta
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from skeletons.gui.game_control import ICraftmachineController
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.managers.windows_stored_data import DATA_TYPE, TARGET_ID
 from gui.Scaleform.managers.windows_stored_data import stored_window
@@ -32,6 +34,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 @stored_window(DATA_TYPE.CAROUSEL_WINDOW, TARGET_ID.CHANNEL_CAROUSEL)
 class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
     lobbyContext = dependency.descriptor(ILobbyContext)
+    __craftmacineConrtoller = dependency.descriptor(ICraftmachineController)
 
     def __init__(self, prbName='prebattle'):
         super(PrebattleWindow, self).__init__()
@@ -158,11 +161,17 @@ class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
          'vType': '',
          'isCurrentPayer': playerInfo.isCurrentPlayer()}
         if playerInfo.isVehicleSpecified():
+            moduleName = ''
             vehicle = playerInfo.getVehicle()
+            badgeVisibility = playerInfo.getEnhancementVisibility()
+            if badgeVisibility:
+                moduleName = MODULE_NAME_SEPARATOR.join([ self.__craftmacineConrtoller.getModuleName(module) for module in playerInfo.getEnhancementModules() ])
             data.update({'icon': vehicle.iconContour,
              'vShortName': vehicle.shortUserName,
              'vLevel': int2roman(vehicle.level),
-             'vType': vehicle.type})
+             'vType': vehicle.type,
+             'isExperimentalModule': bool(badgeVisibility),
+             'experimentalModuleName': moduleName})
         self.as_setPlayerStateS(team, assigned, data)
         if playerInfo.isCurrentPlayer():
             self.as_toggleReadyBtnS(not playerInfo.isReady())
@@ -202,6 +211,8 @@ class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
             vShortName = ''
             vLevel = ''
             vType = ''
+            moduleName = ''
+            badgeVisibility = False
             user = getUser(account.dbID)
             if user is not None:
                 key = user.getGuiType()
@@ -209,6 +220,9 @@ class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
                 key = USER_GUI_TYPE.OTHER
             if account.isVehicleSpecified():
                 vehicle = account.getVehicle()
+                badgeVisibility = account.getEnhancementVisibility()
+                if badgeVisibility:
+                    moduleName = MODULE_NAME_SEPARATOR.join([ self.__craftmacineConrtoller.getModuleName(module) for module in account.getEnhancementModules() ])
                 vContourIcon = vehicle.iconContour
                 vShortName = vehicle.shortUserName
                 vLevel = int2roman(vehicle.level)
@@ -230,7 +244,9 @@ class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
              'vType': vType,
              'tags': list(user.getTags()) if user else [],
              'isPlayerSpeaking': isPlayerSpeaking(account.dbID),
-             'colors': getColors(key)})
+             'colors': getColors(key),
+             'isExperimentalModule': bool(badgeVisibility),
+             'experimentalModuleName': moduleName})
 
         return result
 

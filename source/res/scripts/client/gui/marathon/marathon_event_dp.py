@@ -430,7 +430,7 @@ class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
         localDateTime = getTimeStructInLocal(dateTime)
         monthName = backport.text(R.strings.menu.dateTime.months.dyn('c_{}'.format(localDateTime.tm_mon))())
         dateTimeText = backport.text(R.strings.marathon.vehiclePreview.tooltip.dateTime(), day=localDateTime.tm_mday, monthName=monthName, year=localDateTime.tm_year, hour=localDateTime.tm_hour, min='{min:02d}'.format(min=localDateTime.tm_min))
-        return dateTimeText
+        return self.__noWrapTextFormat(dateTimeText)
 
     def __getPreviewInfoTooltip(self, tooltipBody, addInfo):
         return makeTooltip(header=backport.text(R.strings.marathon.vehiclePreview.title.tooltip.header()), body=backport.text(tooltipBody, addInfo=addInfo))
@@ -484,6 +484,9 @@ class MarathonEvent(IMarathonEvent, MarathonEventDataProvider):
             if firstQuestFinishTimeLeft <= ONE_DAY:
                 return self.icons.timeIcon
         return self.icons.saleIcon if self.__state == MARATHON_STATE.FINISHED else ''
+
+    def __noWrapTextFormat(self, text):
+        return text.replace(' ', '&nbsp;')
 
     def __getTillTimeEnd(self, value):
         return self.__getFormattedTillTimeString(value, self.tooltips.stateEnd)

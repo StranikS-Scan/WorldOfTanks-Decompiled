@@ -236,11 +236,8 @@ class BattlePassVotingResultView(ViewImpl):
     @staticmethod
     def __getRecruitRoleAndUserName(recruitInfo):
         roles = recruitInfo.getRoles()
-        if len(roles) != 1:
-            _logger.error('RecruitInfo contains more than one role!')
-            return ('', '')
-        role = backport.text(R.strings.battle_pass_2020.finalReward.tankman.roles.dyn(first(roles))())
         fullName = recruitInfo.getFullUserNameByNation(getRecruitNation(recruitInfo))
+        role = '' if len(roles) != 1 else backport.text(R.strings.battle_pass_2020.finalReward.tankman.roles.dyn(first(roles))())
         return (role, fullName)
 
     def __previewCallback(self, isOverlay):

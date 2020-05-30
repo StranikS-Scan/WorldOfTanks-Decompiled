@@ -259,7 +259,7 @@ def showMissionAward(quest, ctx):
                     showLootboxesAward(lootboxId=lootboxId, lootboxCount=lootboxInfo['count'], isFree=lootboxInfo['isFree'])
 
             else:
-                missionAward = awards.MissionAward(quest, ctx, showMissionsCategories())
+                missionAward = awards.MissionAward(quest, ctx, showMissionsCategories)
                 if missionAward.getAwards():
                     shared_events.showMissionAwardWindow(missionAward)
 

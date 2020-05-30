@@ -52,8 +52,7 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
         self.as_updateS(dataForUpdate)
 
     def __getCrewBooksOperationData(self, vehicle):
-        lastCrewIDs = vehicle.lastCrew
-        return self.__getInitCrewOperationObject(OPERATION_CREW_BOOKS, None, CREW_OPERATIONS.CREWBOOKS_WARNING_MEMBERSINBATTLE_TOOLTIP) if self.__isCrewLocked(lastCrewIDs) else self.__getInitCrewOperationObject(OPERATION_CREW_BOOKS)
+        return self.__getInitCrewOperationObject(OPERATION_CREW_BOOKS, None, CREW_OPERATIONS.CREWBOOKS_WARNING_MEMBERSINBATTLE_TOOLTIP) if vehicle.isInBattle else self.__getInitCrewOperationObject(OPERATION_CREW_BOOKS)
 
     def __getRetrainOperationData(self, vehicle):
         crew = vehicle.crew
@@ -118,19 +117,6 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
             return self.__getInitCrewOperationObject(OPERATION_DROP_IN_BARRACK, None, CREW_OPERATIONS.DROPINBARRACK_WARNING_INBATTLE_TOOLTIP)
         else:
             return self.__getInitCrewOperationObject(OPERATION_DROP_IN_BARRACK, None, CREW_OPERATIONS.DROPINBARRACK_WARNING_NOSPACE_TOOLTIP) if self.__isNotEnoughSpaceInBarrack(crew) else self.__getInitCrewOperationObject(OPERATION_DROP_IN_BARRACK)
-
-    def __isCrewLocked(self, lastCrewIDs):
-        if lastCrewIDs is not None:
-            for lastTankmenInvID in lastCrewIDs:
-                actualLastTankman = self.itemsCache.items.getTankman(lastTankmenInvID)
-                if actualLastTankman is not None:
-                    if actualLastTankman.isInTank:
-                        lastTankmanVehicle = self.itemsCache.items.getVehicle(actualLastTankman.vehicleInvID)
-                        if lastTankmanVehicle:
-                            if lastTankmanVehicle.isLocked:
-                                return True
-
-        return False
 
     def __isTopCrewForCurrentVehicle(self, crew, vehicle):
         for _, tman in crew:

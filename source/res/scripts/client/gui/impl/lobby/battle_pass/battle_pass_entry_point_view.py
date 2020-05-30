@@ -160,7 +160,7 @@ class BattlePassEntryPointView(ViewImpl):
         if self.__battlePassController.isPaused():
             state = BattlePassEntryPointViewModel.STATE_DISABLED
             tooltip = 0
-        elif self.__battlePassController.isSeasonFinished():
+        elif self.__battlePassController.isOffSeasonEnable():
             state = BattlePassEntryPointViewModel.STATE_SEASON_WAITING
             tooltip = R.views.lobby.battle_pass.tooltips.BattlePassNotStartedTooltipView()
         else:

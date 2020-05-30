@@ -4,7 +4,7 @@
 
 def subtitleDecorator(function):
 
-    def showSubtitle(self, *args, **kwargs):
+    def onCall(self, *args, **kwargs):
         if getattr(self.__class__, 'content', False) and self.content and self.content['voiceovers']:
             data = self.content['voiceovers'].pop(0)
             if data['subtitle']:
@@ -19,10 +19,6 @@ def subtitleDecorator(function):
                     showSubtitleWindow(messageVO={'voiceovers': [data]})
             elif data['voiceover']:
                 self.soundManager.playSound(data['voiceover'])
-        return
-
-    def onCall(self, *args, **kwargs):
-        showSubtitle(self, *args, **kwargs)
         return function(self, *args, **kwargs)
 
     return onCall

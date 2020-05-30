@@ -311,9 +311,11 @@ class ServerSettingsManager(object):
                                          OnceOnlyHints.SESSION_STATS_SETTINGS_BTN_HINT: 22,
                                          OnceOnlyHints.VEHICLE_PREVIEW_MODULES_BUTTON_HINT: 23,
                                          OnceOnlyHints.C11N_EDITABLE_STYLES_HINT: 24,
-                                         OnceOnlyHints.C11N_EDITABLE_PROGRESSION_REQUIRED_STYLES_HINT: 25,
-                                         OnceOnlyHints.C11N_EDITABLE_STYLE_IN_SLOT_HINT: 26,
-                                         OnceOnlyHints.C11N_EDITABLE_STYLE_IN_SLOT_BUTTON_HINT: 27}, offsets={}),
+                                         OnceOnlyHints.C11N_PROGRESSION_REQUIRED_STYLES_HINT: 25,
+                                         OnceOnlyHints.C11N_EDITABLE_STYLE_SLOT_HINT: 26,
+                                         OnceOnlyHints.C11N_EDITABLE_STYLE_SLOT_BUTTON_HINT: 27,
+                                         OnceOnlyHints.C11N_PROGRESSION_REQUIRED_STYLE_SLOT_HINT: 28,
+                                         OnceOnlyHints.C11N_PROGRESSION_REQUIRED_STYLE_SLOT_BUTTON_HINT: 29}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                           DAMAGE_INDICATOR.PRESET_CRITS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -387,7 +389,8 @@ class ServerSettingsManager(object):
                                              BattlePassStorageKeys.BUY_BUTTON_HINT_IS_SHOWN: 17,
                                              BattlePassStorageKeys.VOTED_WITH_BOUGHT_BP: 18,
                                              BattlePassStorageKeys.BUY_ANIMATION_WAS_SHOWN: 19,
-                                             BattlePassStorageKeys.INTRO_VIDEO_SHOWN: 20}, offsets={BattlePassStorageKeys.SHOWN_VIDEOS_FLAGS: Offset(0, 65535)})}
+                                             BattlePassStorageKeys.INTRO_VIDEO_SHOWN: 20}, offsets={BattlePassStorageKeys.SHOWN_VIDEOS_FLAGS: Offset(0, 65535),
+                                             BattlePassStorageKeys.FLAGS_VERSION: Offset(21, 266338304)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -450,7 +453,10 @@ class ServerSettingsManager(object):
         return self.setSections([SETTINGS_SECTIONS.UI_STORAGE], fields)
 
     def getBPStorage(self, defaults=None):
-        return self.getSection(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, defaults)
+        storageData = self.getSection(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, defaults)
+        if _updateBattlePassVersion(storageData):
+            self.saveInBPStorage(storageData)
+        return storageData
 
     def saveInBPStorage(self, settings):
         return self.setSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, settings)
@@ -771,3 +777,15 @@ class ServerSettingsManager(object):
         if delete:
             self.settingsCache.delSettings(delete)
         return
+
+
+def _updateBattlePassVersion(data):
+    version = 2
+    if data[BattlePassStorageKeys.FLAGS_VERSION] < version:
+        data[BattlePassStorageKeys.FLAGS_VERSION] = version
+        data[BattlePassStorageKeys.SHOWN_VIDEOS_FLAGS] = 0
+        data[BattlePassStorageKeys.INTRO_VIDEO_SHOWN] = False
+        data[BattlePassStorageKeys.BUY_ANIMATION_WAS_SHOWN] = False
+        data[BattlePassStorageKeys.BUY_BUTTON_HINT_IS_SHOWN] = False
+        return True
+    return False

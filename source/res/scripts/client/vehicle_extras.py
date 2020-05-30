@@ -257,7 +257,28 @@ class Fire(EntityExtra):
         if not isUnderwater:
             self.__playEffect(data)
         data['_isStarted'] = True
+        data['_invokeTime'] = BigWorld.time()
         vehicle.appearance.switchFireVibrations(True)
+
+    def _update(self, data, args):
+        if not data['_isStarted']:
+            return
+        else:
+            currTime = BigWorld.time()
+            if args and currTime - data.get('_invokeTime', currTime) > args:
+                effectsListPlayer = self.__getEffectsListPlayer(data)
+                if effectsListPlayer is None:
+                    return
+                effectsListPlayer.stop(forceCallback=True)
+                data['_isStarted'] = False
+                vehicle = data['entity']
+                if vehicle.health > 0:
+                    isUnderwater = vehicle.appearance.isUnderwater
+                    if not isUnderwater:
+                        self.__playEffect(data)
+                    data['_isStarted'] = True
+                    data['_invokeTime'] = BigWorld.time()
+            return
 
     def _cleanup(self, data):
         if not data['_isStarted']:

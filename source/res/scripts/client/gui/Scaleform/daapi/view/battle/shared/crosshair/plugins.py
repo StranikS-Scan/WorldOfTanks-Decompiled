@@ -852,6 +852,7 @@ class ShotResultIndicatorPlugin(CrosshairPlugin):
 
 class SiegeModePlugin(CrosshairPlugin):
     __slots__ = ('__siegeState',)
+    bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self, parentObj):
         super(SiegeModePlugin, self).__init__(parentObj)
@@ -914,7 +915,8 @@ class SiegeModePlugin(CrosshairPlugin):
             self._parentObj.as_setNetTypeS(NET_TYPE_OVERRIDE.SIEGE_MODE)
         elif self.__siegeState == _SIEGE_STATE.DISABLED:
             self._parentObj.as_setNetTypeS(NET_TYPE_OVERRIDE.DISABLED)
-        visibleMask = CROSSHAIR_CONSTANTS.VISIBLE_ALL if self.__siegeState not in _SIEGE_STATE.SWITCHING else 0
+        visibleMask = CROSSHAIR_CONSTANTS.VISIBLE_NET if self.bootcampController.isInBootcamp() else CROSSHAIR_CONSTANTS.VISIBLE_ALL
+        visibleMask = visibleMask if self.__siegeState not in _SIEGE_STATE.SWITCHING else CROSSHAIR_CONSTANTS.INVISIBLE
         self._parentObj.as_setNetVisibleS(visibleMask)
         return
 

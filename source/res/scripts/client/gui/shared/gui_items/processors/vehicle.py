@@ -773,4 +773,15 @@ class SetEnhancementProcessor(Processor):
         self.enhancementID = enhancementID
 
     def _request(self, callback):
-        BigWorld.player().setEnhancement(self.vehicleInvID, self.slot, self.enhancementID, lambda code, errStr: self._response(code, callback, errStr))
+        BigWorld.player().setEnhancement(self.vehicleInvID, self.slot, self.enhancementID, lambda code, errStr: self._response(code, callback, errStr=errStr))
+
+
+class DismountEnhancementProcessor(Processor):
+
+    def __init__(self, slot, vehicle):
+        super(DismountEnhancementProcessor, self).__init__(plugins=[proc_plugs.VehicleValidator(vehicle)])
+        self.vehicleInvID = vehicle.invID
+        self.slot = slot
+
+    def _request(self, callback):
+        BigWorld.player().dismountEnhancement(self.vehicleInvID, self.slot, lambda code, errStr, ext: self._response(code, callback, errStr=errStr, ctx=ext))

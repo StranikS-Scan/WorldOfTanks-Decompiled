@@ -144,6 +144,14 @@ def __mergeBlueprints(total, key, value, isLeaf=False, count=1, *args):
         totalBlueprints[fragmentCD] += count * fragmentData
 
 
+def __mergeEnhancements(total, key, value, isLeaf=False, count=1, *args):
+    enhancementsTotal = total.setdefault(key, {})
+    for enhancementID, enhancementData in value.iteritems():
+        enhancementMerged = enhancementsTotal.setdefault(enhancementID, {})
+        enhancementMerged.update({'count': enhancementMerged.get('count', 0) + enhancementData.get('count', 0) * count,
+         'wipe': enhancementMerged.get('wipe', False) or enhancementData.get('wipe', False)})
+
+
 BONUS_MERGERS = {'credits': __mergeValue,
  'gold': __mergeValue,
  'xp': __mergeValue,
@@ -172,7 +180,7 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'crewSkins': __mergeCrewSkins,
  'blueprintsAny': __mergeItems,
  'blueprints': __mergeBlueprints,
- 'enhancements': __mergeItems,
+ 'enhancements': __mergeEnhancements,
  'entitlements': __mergeEntitlements,
  'rankedDailyBattles': __mergeValue,
  'rankedBonusBattles': __mergeValue,

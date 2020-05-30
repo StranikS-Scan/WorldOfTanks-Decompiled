@@ -1016,7 +1016,8 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
         added = 0
         removed = 0
         result = []
-        for count in enhancements.itervalues():
+        for extra in enhancements.itervalues():
+            count = extra.get('count', 0)
             if count > 0:
                 added += count
             removed += -count
@@ -3214,6 +3215,23 @@ class EnhancementsWipedFormatter(ServiceChannelFormatter):
         if message.data:
             text = backport.text(R.strings.messenger.serviceChannelMessages.enhancements.wiped())
             formatted = g_settings.msgTemplates.format(self.__TEMPLATE, {'text': text})
+            guiSettings = self._getGuiSettings(message, self.__TEMPLATE, priorityLevel=NC_MESSAGE_PRIORITY.MEDIUM)
+            return [MessageData(formatted, guiSettings)]
+        else:
+            return [MessageData(None, None)]
+
+
+class EnhancementsWipedOnVehiclesFormatter(ServiceChannelFormatter):
+    __TEMPLATE = 'EnhancementsWipedOnVehiclesMessage'
+
+    def format(self, message, *args):
+        if message.data:
+            vehCompDescriptors = message.data.get('vehicles', set())
+            vehNames = [ getUserName(vehicles_core.getVehicleType(vehCD)) for vehCD in vehCompDescriptors ]
+            vehNames = ', '.join(vehNames)
+            text = backport.text(R.strings.messenger.serviceChannelMessages.enhancements.wipedOnVehicles())
+            formatted = g_settings.msgTemplates.format(self.__TEMPLATE, {'text': text,
+             'vehicleNames': vehNames})
             guiSettings = self._getGuiSettings(message, self.__TEMPLATE, priorityLevel=NC_MESSAGE_PRIORITY.MEDIUM)
             return [MessageData(formatted, guiSettings)]
         else:

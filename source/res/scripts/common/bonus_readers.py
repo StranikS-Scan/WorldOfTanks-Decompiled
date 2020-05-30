@@ -621,9 +621,13 @@ def __readBonus_goodies(bonus, _name, section, eventType):
 def __readBonus_enhancement(bonus, _name, section, eventType):
     enhancementID = section.asInt
     count = 1
+    wipe = False
     if section.has_key('count'):
         count = section['count'].asInt
-    bonus.setdefault('enhancements', {})[enhancementID] = count
+    if section.has_key('wipe'):
+        wipe = section['wipe'].asBool
+    bonus.setdefault('enhancements', {})[enhancementID] = {'count': count,
+     'wipe': wipe}
 
 
 def __readBonus_entitlement(bonus, _name, section, eventType):

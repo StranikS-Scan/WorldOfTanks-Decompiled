@@ -13,11 +13,26 @@ class BCOutroVideoPage(BCVideoPage, TutorialDialog):
         BCVideoPage.__init__(self, settings)
         TutorialDialog.__init__(self, settings)
 
-    @loggerEntry
-    def _populate(self):
-        BCVideoPage._populate(self)
+    def cancel(self):
+        self._onMouseClicked('cancelID')
+        self._onFinish()
 
     @simpleLog(action=BC_LOG_ACTIONS.SKIP_VIDEO)
-    def _onFinish(self):
-        self.soundManager.playInstantSound(self._message['event-stop'])
-        self._stop()
+    def _onDestroy(self):
+        self.onDispose -= self.__onDispose
+        self._content.clear()
+        if self._tutorial is not None:
+            for _, effect in self._gui.effects.iterEffects():
+                if effect.isStillRunning(self.uniqueName):
+                    effect.stop(effectID=None)
+
+        return
+
+    @loggerEntry
+    def _populate(self):
+        self.onDispose += self.__onDispose
+        BCVideoPage._populate(self)
+
+    def __onDispose(self, dispoableEntity):
+        if self is dispoableEntity:
+            self.cancel()

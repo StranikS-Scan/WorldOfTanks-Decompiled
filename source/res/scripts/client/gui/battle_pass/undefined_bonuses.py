@@ -7,6 +7,7 @@ from nations import INDICES
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_undefined_style_view import BattlePassUndefinedStyleTooltip
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_undefined_tankman_view import BattlePassUndefinedTankmanTooltip
 from gui.Scaleform.daapi.view.lobby.customization.shared import getSuitableText
+from gui.Scaleform.genConsts.SKILLS_CONSTANTS import SKILLS_CONSTANTS as SKILLS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events.recruit_helper import getRecruitInfo
 if typing.TYPE_CHECKING:
@@ -138,4 +139,7 @@ class UndefinedTmanBonus(UndefinedBonus):
         iconName = tankman.getIconByNation(nation)
         tankmanName = tankman.getFullUserNameByNation(nation)
         skills = tankman.getLearntSkills()
+        newSkillCount, _ = tankman.getNewSkillCount(onlyFull=True)
+        if newSkillCount > 0:
+            skills += [SKILLS.TYPE_NEW_SKILL] * (newSkillCount - skills.count(SKILLS.TYPE_NEW_SKILL))
         return (iconName, tankmanName, skills)

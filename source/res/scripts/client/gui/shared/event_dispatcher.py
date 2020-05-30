@@ -380,11 +380,11 @@ def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, v
     heroTankController = dependency.instance(IHeroTankController)
     heroTankCD = heroTankController.getCurrentTankCD()
     isHeroTank = heroTankCD and heroTankCD == vehTypeCompDescr
-    if isHeroTank and not (itemsPack or offers):
+    if isHeroTank and not (itemsPack or offers or vehParams):
         goToHeroTankOnScene(vehTypeCompDescr, previewAlias)
     else:
         vehicle = dependency.instance(IItemsCache).items.getItemByCD(vehTypeCompDescr)
-        if not (itemsPack or offers) and vehicle.canTradeIn:
+        if not (itemsPack or offers or vehParams) and vehicle.canTradeIn:
             viewAlias = VIEW_ALIAS.TRADE_IN_VEHICLE_PREVIEW
         else:
             viewAlias = VIEW_ALIAS.VEHICLE_PREVIEW

@@ -56,6 +56,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.special_sound_ctrl import SpecialSoundCtrl as _SpecialSoundCtrl
     from gui.game_control.battle_pass_controller import BattlePassController
     from gui.game_control.clan_notification_controller import ClanNotificationController as _ClanNotification
+    from gui.game_control.craftmachine_controller import CraftmachineController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -109,4 +110,5 @@ def getGameControllersConfig(manager):
     _config(_interface.ISeasonsController, _Seasons())
     _config(_interface.IBadgesController, _Badges())
     _config(_interface.IAnonymizerController, _Anonymizer())
+    _config(_interface.ICraftmachineController, CraftmachineController())
     _config(_interface.IClanNotificationController, _ClanNotification())

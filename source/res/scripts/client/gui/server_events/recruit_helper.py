@@ -3,9 +3,9 @@
 from constants import ENDLESS_TOKEN_TIME
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
-from items.tankmen import TankmanDescr
+from items.tankmen import TankmanDescr, MAX_SKILL_LEVEL
 from nations import NONE_INDEX, INDICES, NAMES as NationNames
-from items import tankmen
+from items import tankmen, vehicles
 from items.components.component_constants import EMPTY_STRING
 from items.components import skills_constants
 from helpers import dependency
@@ -155,6 +155,29 @@ class _BaseRecruitInfo(object):
     def isFemale(self):
         return self._isFemale
 
+    def getNewSkillCount(self, onlyFull=False):
+        if self._hasNewSkill:
+            tankman = Tankman.Tankman(self.__makeFakeDescriptor().makeCompactDescr())
+            count, lastSkillLevel = tankman.newSkillCount
+            if onlyFull and lastSkillLevel != MAX_SKILL_LEVEL:
+                count = max(count - 1, 0)
+                lastSkillLevel = MAX_SKILL_LEVEL
+            return (count, lastSkillLevel)
+
+    def _getSkillsForDescr(self):
+        return self._learntSkills
+
+    def _getFreeSkillsForDescr(self):
+        pass
+
+    def __makeFakeDescriptor(self):
+        vehType = vehicles.VehicleDescr(typeID=(0, 0)).type
+        skills = self._getSkillsForDescr()
+        freeSkills = self._getFreeSkillsForDescr()
+        tmanDescr = tankmen.TankmanDescr(tankmen.generateCompactDescr(tankmen.generatePassport(vehType.id[0], False), vehType.id[1], vehType.crewRoles[0][0], self._roleLevel, skills=skills, freeSkills=freeSkills, lastSkillLevel=self._lastSkillLevel))
+        tmanDescr.addXP(self._freeXP)
+        return tmanDescr
+
 
 class _QuestRecruitInfo(_BaseRecruitInfo):
     __slots__ = ('__operationName',)
@@ -177,11 +200,12 @@ class _QuestRecruitInfo(_BaseRecruitInfo):
 
 
 class _TokenRecruitInfo(_BaseRecruitInfo):
-    __slots__ = ('__isPremium', '__group')
+    __slots__ = ('__isPremium', '__group', '__freeSkills')
 
     def __init__(self, tokenName, expiryTime, nations, isPremium, group, freeSkills, skills, freeXP, lastSkillLevel, roleLevel, sourceID, roles):
         self.__group = group
         self.__isPremium = isPremium
+        self.__freeSkills = freeSkills
         learntSkills = freeSkills + skills
         nationNames = [ NationNames[i] for i in nations ]
         needXP = sum((TankmanDescr.levelUpXpCost(level, len(skills) + 1) for level in xrange(0, tankmen.MAX_SKILL_LEVEL)))
@@ -227,6 +251,12 @@ class _TokenRecruitInfo(_BaseRecruitInfo):
 
     def _getDefaultNation(self):
         return INDICES.get(first(self._nations), NONE_INDEX)
+
+    def _getSkillsForDescr(self):
+        return [ skill for skill in self._learntSkills if skill not in self.__freeSkills ]
+
+    def _getFreeSkillsForDescr(self):
+        return self.__freeSkills
 
     def __parseTankmanData(self, nationID):
         config = tankmen.getNationGroups(nationID, self.__isPremium)

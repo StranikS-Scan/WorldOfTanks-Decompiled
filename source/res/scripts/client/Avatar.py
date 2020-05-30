@@ -758,6 +758,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     gui_event_dispatcher.showExtendedInfo(isDown)
                     return True
                 if cmdMap.isFired(CommandMapping.CMD_SHOW_HELP, key) and isDown and mods == 0:
+                    if g_bootcamp.isRunning():
+                        return True
                     if self.__isVehicleAlive:
                         gui_event_dispatcher.setRadialMenuCmd(None, False)
                     vehicle = self.getVehicleAttached()
@@ -2246,7 +2248,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             curFireState = self.__fireInVehicle
             soundNotificationCheckFn = lambda : curFireState == self.__fireInVehicle
             if self.__fireInVehicle:
-                TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.PLAYER_VEHICLE_IN_FIRE, repeatable=True)
+                if damageCode not in self.__damageInfoNoNotification:
+                    TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.PLAYER_VEHICLE_IN_FIRE)
             else:
                 TriggersManager.g_manager.deactivateTrigger(TRIGGER_TYPE.PLAYER_VEHICLE_IN_FIRE)
         elif extra is not None:

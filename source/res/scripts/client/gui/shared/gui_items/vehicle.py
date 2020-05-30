@@ -602,6 +602,10 @@ class Vehicle(FittingItem):
     def dailyXPFactor(self):
         return self._dailyXPFactor
 
+    @dailyXPFactor.setter
+    def dailyXPFactor(self, value):
+        self._dailyXPFactor = value
+
     @property
     def isElite(self):
         return self._isElite

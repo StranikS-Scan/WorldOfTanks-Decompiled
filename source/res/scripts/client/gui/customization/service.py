@@ -14,12 +14,13 @@ from gui.customization.shared import C11N_ITEM_TYPE_MAP, HighlightingMode
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.gui_items import GUI_ITEM_TYPE, ItemsCollection
 from gui.shared.gui_items.customization.c11n_items import Customization
+from items.customizations import CustomizationOutfit, createNationalEmblemComponents
 from vehicle_outfit.outfit import Outfit
 from gui.shared.gui_items.processors.common import OutfitApplier, CustomizationsBuyer, CustomizationsSeller
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.decorators import process
 from gui.shared.utils.requesters import REQ_CRITERIA, RequestCriteria
-from items.vehicles import makeIntCompactDescrByID
+from items.vehicles import makeIntCompactDescrByID, VehicleDescr
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
@@ -62,9 +63,15 @@ class _ServiceHelpersMixin(object):
     itemsCache = dependency.descriptor(IItemsCache)
     hangarSpace = dependency.descriptor(IHangarSpace)
 
-    def getEmptyOutfit(self):
-        vehicleCD = self._getVehicleCD()
+    def getEmptyOutfit(self, vehicleCD=''):
+        vehicleCD = vehicleCD or self._getVehicleCD()
         return self.itemsFactory.createOutfit(vehicleCD=vehicleCD)
+
+    def getEmptyOutfitWithNationalEmblems(self, vehicleCD):
+        vehDesc = VehicleDescr(vehicleCD)
+        decals = createNationalEmblemComponents(vehDesc)
+        component = CustomizationOutfit(decals=decals)
+        return self.itemsFactory.createOutfit(component=component, vehicleCD=vehicleCD)
 
     def tryOnOutfit(self, outfit):
         self.hangarSpace.updateVehicleOutfit(outfit)
@@ -304,10 +311,14 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
             self._helper.resetHighlighting()
 
     def highlightRegions(self, regionsMask):
+        if not self._isHighlighterActive:
+            return
         if self._helper:
             self._helper.highlightRegions(regionsMask)
 
     def selectRegions(self, regionsMask):
+        if not self._isHighlighterActive:
+            return
         if self._helper:
             self._helper.selectRegions(regionsMask)
         self._selectedRegion = regionsMask

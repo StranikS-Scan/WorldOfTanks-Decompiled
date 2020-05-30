@@ -33,7 +33,7 @@ class RankedCarouselDataProvider(HangarCarouselDataProvider):
         result['hasRankedBonus'] = self.__rankedController.hasVehicleRankedBonus(vehicle.intCD)
         state, _ = vehicle.getState()
         suitResult = self.__rankedController.isSuitableVehicle(vehicle)
-        if state == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE and suitResult is not None:
+        if suitResult is not None:
             header, body = ('', '')
             resShortCut = R.strings.ranked_battles.rankedBattlesCarousel.lockedTooltip
             if suitResult.restriction == PRE_QUEUE_RESTRICTION.LIMIT_LEVEL:
@@ -49,7 +49,8 @@ class RankedCarouselDataProvider(HangarCarouselDataProvider):
                 classSubStr = text_styles.neutral(getTypeUserName(suitResult.ctx['forbiddenClass'], False))
                 header = backport.text(resShortCut.vehClass.header())
                 body = backport.text(resShortCut.vehClass.body(), forbiddenClass=classSubStr)
-            result['lockedTooltip'] = makeTooltip(header, body)
+            if state == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE:
+                result['lockedTooltip'] = makeTooltip(header, body)
             result['clickEnabled'] = True
             result['hasRankedBonus'] = False
         return result

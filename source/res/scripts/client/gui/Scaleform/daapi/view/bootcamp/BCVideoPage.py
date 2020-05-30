@@ -45,7 +45,7 @@ class _CallbackDelayer(object):
 
     def __addCallback(self):
         if self.__callbackTime < 0.0:
-            self.__callbackID = BigWorld.callback(0.0, functools.partial(self.__handleCallback, self.__callbackTime))
+            self.__handleCallback(self.__callbackTime)
             return
         self.__callbackID = BigWorld.callback(self.__callbackTime, functools.partial(self.__handleCallback, 0.0))
 
@@ -64,6 +64,7 @@ class _CallbackDelayer(object):
 
 class BCVideoPage(BCOutroVideoPageMeta):
     _DEFAULT_MASTER_VOLUME = 1.0
+    _ACCESSIBILITY_MINTIME = 0.1
     _HANGAR_OVERLAY_STATE = 'STATE_video_overlay'
     __SOUND_SETTINGS = CommonSoundSpaceSettings(name='hangar_video', entranceStates={_HANGAR_OVERLAY_STATE: '{}_on'.format(_HANGAR_OVERLAY_STATE)}, exitStates={_HANGAR_OVERLAY_STATE: '{}_off'.format(_HANGAR_OVERLAY_STATE)}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
     _COMMON_SOUND_SPACE = __SOUND_SETTINGS
@@ -74,6 +75,7 @@ class BCVideoPage(BCOutroVideoPageMeta):
         self._keypoints = []
         self.__accessible = True
         self.__soundDelayer = None
+        self.__pauseDelayerID = None
         return
 
     def stopVideo(self):
@@ -102,11 +104,17 @@ class BCVideoPage(BCOutroVideoPageMeta):
     def _onAccessibilityChanged(self, isAccessible):
         if self.__accessible == isAccessible:
             return
-        self.__accessible = isAccessible
-        if self.__accessible:
-            self.__onResume()
         else:
-            self.__onPause()
+            self.__accessible = isAccessible
+            if isAccessible:
+                if self.__pauseDelayerID is not None:
+                    BigWorld.cancelCallback(self.__pauseDelayerID)
+                    self.__pauseDelayerID = None
+                    return
+                self.__onResume()
+            else:
+                self.__pauseDelayerID = BigWorld.callback(self._ACCESSIBILITY_MINTIME, self.__onPause)
+            return
 
     def __showVideo(self):
         if self.content['messages']:
@@ -123,33 +131,41 @@ class BCVideoPage(BCOutroVideoPageMeta):
 
     @subtitleDecorator
     def playNotification(self, delay):
+        self.__soundDelayer = None
         self.__addKeyPoint(delay)
+        return
 
     def __addKeyPoint(self, delay):
         if self._keypoints:
             delayTime = self._keypoints.pop(0)
-            self.__soundDelayer = _CallbackDelayer(delayTime - delay, self.playNotification)
+            self.__soundDelayer = _CallbackDelayer(delayTime + delay, self.playNotification)
             self.__soundDelayer.startCallback()
 
     def __onPause(self):
-        if self.__soundDelayer is not None:
-            self.__soundDelayer.stopCallback()
         self.soundManager.playInstantSound(self._message['event-pause'])
         self.as_pausePlaybackS()
+        self.__pauseDelayerID = None
+        if self.__soundDelayer is not None:
+            self.__soundDelayer.stopCallback()
         return
 
     def __onResume(self):
-        if self.__soundDelayer is not None:
-            self.__soundDelayer.startCallback()
         self.soundManager.playInstantSound(self._message['event-resume'])
         self.as_resumePlaybackS()
+        if self.__soundDelayer is not None:
+            self.__soundDelayer.startCallback()
         return
 
     def _onFinish(self):
+        self.soundManager.playInstantSound(self._message['event-stop'])
+        if self.__pauseDelayerID is not None:
+            BigWorld.cancelCallback(self.__pauseDelayerID)
+            self.__pauseDelayerID = None
         if self.__soundDelayer is not None:
             self.__soundDelayer.cancelCallback()
-        self.soundManager.playInstantSound(self._message['event-stop'])
-        if self.content.get('exitEvent', False):
-            self.content['exitEvent']()
-        self.destroy()
+            self.__soundDelayer = None
+        self._onDestroy()
         return
+
+    def _onDestroy(self):
+        self.destroy()

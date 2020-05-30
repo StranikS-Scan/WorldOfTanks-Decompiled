@@ -316,7 +316,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         return quests
 
     def __updateBPWidget(self):
-        isBPAvailable = self.__battlePassController.isSeasonStarted() and not self.__battlePassController.isDisabled()
+        isBPAvailable = not self.__battlePassController.isDisabled()
         isValidBattleType = self.prbDispatcher and self.prbDispatcher.getEntity() and self.__battlePassController.isValidBattleType(self.prbDispatcher.getEntity())
         isVisible = isBPAvailable and isValidBattleType and not self.__bootcampController.isInBootcamp()
         if isVisible:

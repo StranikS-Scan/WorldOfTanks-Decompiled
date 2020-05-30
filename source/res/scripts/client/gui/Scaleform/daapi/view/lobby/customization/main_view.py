@@ -3,11 +3,12 @@
 import logging
 from collections import namedtuple
 import BigWorld
+from BWUtil import AsyncReturn
 from AccountCommands import isCodeValid
 from CurrentVehicle import g_currentVehicle
 from Math import Matrix
 from account_helpers.AccountSettings import AccountSettings, CUSTOMIZATION_SECTION, CAROUSEL_ARROWS_HINT_SHOWN_FIELD
-from adisp import async as adisp_async, process as adisp_process
+import adisp
 from async import async, await
 from debug_utils import LOG_WARNING
 from gui import g_tankActiveCamouflage, SystemMessages
@@ -50,7 +51,7 @@ from helpers import dependency, int2roman
 from helpers.i18n import makeString as _ms
 from items.components.c11n_constants import SeasonType, ApplyArea
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
@@ -206,6 +207,8 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__locateCameraToStyleInfo = False
         self.__carouselArrowsHintShown = False
         self.__dontPlayTabChangeSound = False
+        self.__itemsGrabMode = False
+        self.__finishGrabModeCallback = None
         self.__closed = False
         return
 
@@ -335,6 +338,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
     def onPressSelectNextItem(self, reverse=False):
         if self.__hasOpenedChildWindow():
             return
+        self.soundManager.playInstantSound(SOUNDS.SELECT)
         self.__ctx.events.onInstallNextCarouselItem(reverse)
         self.__tryHideCarouselArrowsHint()
 
@@ -383,10 +387,14 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__setHeaderInitData()
         self.__setNotificationCounters()
 
+    def __onBeforeModeChanged(self):
+        self.__dontPlayTabChangeSound = True
+
     def __onModeChanged(self, modeId, prevModeId):
+        self.soundManager.playInstantSound(SOUNDS.TAB_SWITCH)
+        self.__dontPlayTabChangeSound = True
         if modeId == CustomizationModes.EDITABLE_STYLE:
             self.soundManager.playInstantSound(SOUNDS.EDIT_MODE_SWITCH_ON)
-            self.__dontPlayTabChangeSound = True
         elif prevModeId == CustomizationModes.EDITABLE_STYLE:
             self.soundManager.playInstantSound(SOUNDS.EDIT_MODE_SWITCH_OFF)
         self.__setSeasonData(forceAnim=not (modeId == CustomizationModes.EDITABLE_STYLE and prevModeId == CustomizationModes.STYLED or modeId == CustomizationModes.STYLED and prevModeId == CustomizationModes.EDITABLE_STYLE))
@@ -437,7 +445,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.as_releaseItemS()
 
     def __onItemsRemoved(self, slotId=None):
-        self.soundManager.playInstantSound(SOUNDS.REMOVE)
+        self.soundManager.playInstantSound(SOUNDS.TAB_SWITCH)
         self.__setHeaderInitData()
         self.__setSeasonData()
         self.__setAnchorsInitData(True)
@@ -454,10 +462,10 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             return
         self.__ctx.mode.unselectItem()
         self.__ctx.mode.unselectSlot()
-        if force or not self.__ctx.isOutfitsModified():
+        if force:
             self.__onCloseWindow()
         else:
-            self.__showCloseDialog()
+            self.__confirmClose()
 
     def onLobbyClick(self):
         if self.__ctx.mode.isRegion:
@@ -515,16 +523,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
 
     def resetC11nItemsNovelty(self, itemsList):
         self.__resetItemsNovelty(itemsList)
-
-    @async
-    def __showCloseDialog(self):
-        if self.__hasOpenedChildWindow() or self.__isGamefaceBuyViewOpened():
-            return
-        builder = ResPureDialogBuilder()
-        builder.setMessagesAndButtons(R.strings.dialogs.customization.close, focused=DialogButtons.CANCEL)
-        result = yield await(dialogs.showSimple(builder.build(self)))
-        if result:
-            self.__onCloseWindow()
 
     def __resetItemsNovelty(self, itemsList):
 
@@ -626,6 +624,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__ctx = self.service.getCtx()
         self.__selectFirstVisibleTab()
         self.__ctx.events.onSeasonChanged += self.__onSeasonChanged
+        self.__ctx.events.onBeforeModeChange += self.__onBeforeModeChanged
         self.__ctx.events.onModeChanged += self.__onModeChanged
         self.__ctx.events.onTabChanged += self.__onTabChanged
         self.__ctx.events.onItemInstalled += self.__onItemsInstalled
@@ -652,7 +651,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         g_currentVehicle.onChangeStarted += self.__onVehicleChangeStarted
         g_currentVehicle.onChanged += self.__onVehicleChanged
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
-        self.soundManager.playInstantSound(SOUNDS.ENTER)
         self.__viewLifecycleWatcher.start(self.app.containerManager, [_ModalWindowsPopupHandler(self.__onViewCreatedCallback, self.__onViewDestroyedCallback)])
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         self.hangarSpace.onSpaceCreate += self.__onSpaceCreateHandler
@@ -704,8 +702,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.fireEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.HERO_TANK_MARKER, ctx={'isDisable': False}), EVENT_BUS_SCOPE.LOBBY)
         self.fireEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.ALL}), EVENT_BUS_SCOPE.LOBBY)
         self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': False}), scope=EVENT_BUS_SCOPE.LOBBY)
-        if self.appLoader.getSpaceID() != GuiGlobalSpaceID.LOGIN:
-            self.soundManager.playInstantSound(SOUNDS.EXIT)
         if self.__ctx.c11nCameraManager is not None:
             self.__ctx.c11nCameraManager.locateCameraToStartState()
             if self.__ctx.c11nCameraManager.vEntity is not None:
@@ -742,6 +738,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.__ctx.events.onItemInstalled -= self.__onItemsInstalled
         self.__ctx.events.onItemLimitReached -= self.__onItemLimitReached
         self.__ctx.events.onTabChanged -= self.__onTabChanged
+        self.__ctx.events.onBeforeModeChange -= self.__onBeforeModeChanged
         self.__ctx.events.onModeChanged -= self.__onModeChanged
         self.__ctx.events.onSeasonChanged -= self.__onSeasonChanged
         self.__ctx.events.onProlongStyleRent -= self.__onProlongStyleRent
@@ -760,6 +757,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         if self.__setCollisionsCallback is not None:
             BigWorld.cancelCallback(self.__setCollisionsCallback)
             self.__setCollisionsCallback = None
+        self.__clearGrabModeCallback()
         super(MainView, self)._dispose()
         self.__ctx = None
         self.service.closeCustomization()
@@ -818,10 +816,12 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         Waiting.show(_WAITING_MESSAGE)
 
     def __onCloseWindow(self, immediate=False):
+        if self.__closed:
+            return
+        self.__closed = True
         if not immediate:
             self.__ctx.mode.unselectItem()
             self.__ctx.mode.unselectSlot()
-        self.__closed = True
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __onCacheResync(self, *_):
@@ -842,7 +842,11 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
     def __onItemSelected(self, intCD):
         self.__slotSelector.selectItem(intCD)
         if self.__ctx.mode.selectedItem is not None:
-            self.soundManager.playInstantSound(SOUNDS.PICK)
+            if not self.__itemsGrabMode:
+                self.__itemsGrabMode = True
+                self.soundManager.playInstantSound(SOUNDS.PICK)
+            else:
+                self.__clearGrabModeCallback()
         if self.__ctx.mode.isRegion:
             outfit = self.__ctx.mode.currentOutfit
             slotType = self.__ctx.mode.slotType
@@ -853,10 +857,24 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
 
     def __onItemUnselected(self):
         self.__slotSelector.unselectItem()
-        self.soundManager.playInstantSound(SOUNDS.RELEASE)
+        if self.__itemsGrabMode:
+            self.__clearGrabModeCallback()
+            self.__finishGrabModeCallback = BigWorld.callback(0.5, self.__finishGrabMode)
         if self.__ctx.mode.isRegion:
             self.service.highlightRegions(ApplyArea.NONE)
         self.__updateDnd()
+
+    def __finishGrabMode(self):
+        self.__finishGrabModeCallback = None
+        self.__itemsGrabMode = False
+        self.soundManager.playInstantSound(SOUNDS.RELEASE)
+        return
+
+    def __clearGrabModeCallback(self):
+        if self.__finishGrabModeCallback is not None:
+            BigWorld.cancelCallback(self.__finishGrabModeCallback)
+            self.__finishGrabModeCallback = None
+        return
 
     def __onSlotSelected(self, slotId):
         if self.__ctx.mode.isRegion:
@@ -1099,37 +1117,38 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         for event in _RESTRICTED_EVENTS:
             self.removeRestriction(event, self.__confirmEvent, scope=EVENT_BUS_SCOPE.LOBBY)
 
-    @adisp_async
-    @adisp_process
+    @async
+    def __confirmClose(self):
+        if self.__hasOpenedChildWindow() or self.__isGamefaceBuyViewOpened():
+            return
+        yield self.__closeConfirmator()
+
+    @adisp.async
+    @async
     def __confirmHeaderNavigation(self, callback):
-        result = yield self.__closeConfirmator()
-        if result:
-            self.__onCloseWindow()
+        result = yield await(self.__closeConfirmator())
         callback(result)
 
-    @adisp_async
-    @adisp_process
+    @adisp.async
+    @async
     def __confirmEvent(self, event, callback):
         if event.eventType == events.ViewEventType.LOAD_UB_VIEW:
             if event.alias not in _RESTRICTED_UB_VIEWS:
                 callback(True)
                 return
-        if self.__closed:
-            callback(True)
-            return
-        result = yield self.__closeConfirmator()
+        result = yield await(self.__closeConfirmator())
         callback(result)
 
-    @adisp_async
-    @adisp_process
     @async
-    def __closeConfirmator(self, callback):
-        if self.__ctx.isOutfitsModified():
+    def __closeConfirmator(self):
+        if self.__closed or not self.__ctx.isOutfitsModified():
+            result = True
+        else:
             builder = ResPureDialogBuilder()
             builder.setMessagesAndButtons(R.strings.dialogs.customization.close, focused=DialogButtons.CANCEL)
             self.__onViewCreatedCallback()
             result = yield await(dialogs.showSimple(builder.build(self)))
             self.__onViewDestroyedCallback()
-        else:
-            result = True
-        callback(result)
+        if result:
+            self.__onCloseWindow()
+        raise AsyncReturn(result)

@@ -51,6 +51,18 @@ class TechTree(TechTreeMeta):
     def __del__(self):
         _logger.debug('TechTree deleted')
 
+    def goToBlueprintView(self, vehicleCD):
+        self.__stopTopOfTheTreeSounds()
+        super(TechTree, self).goToBlueprintView(vehicleCD)
+
+    def goToNationChangeView(self, vehicleCD):
+        self.__stopTopOfTheTreeSounds()
+        super(TechTree, self).goToNationChangeView(vehicleCD)
+
+    def goToVehicleCollection(self, nationName):
+        self.__stopTopOfTheTreeSounds()
+        super(TechTree, self).goToVehicleCollection(nationName)
+
     def redraw(self):
         self.as_refreshNationTreeDataS(SelectedNation.getName())
 
@@ -103,10 +115,12 @@ class TechTree(TechTreeMeta):
     def goToNextVehicle(self, vehCD):
         loadEvent = events.LoadViewEvent(VIEW_ALIAS.LOBBY_RESEARCH, ctx={BackButtonContextKeys.ROOT_CD: vehCD,
          BackButtonContextKeys.EXIT: self.__exitEvent()})
+        self.__stopTopOfTheTreeSounds()
         self.fireEvent(loadEvent, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onCloseTechTree(self):
         if self._canBeClosed:
+            self.__stopTopOfTheTreeSounds()
             self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onBlueprintModeSwitch(self, enabled):
@@ -120,6 +134,7 @@ class TechTree(TechTreeMeta):
             self.soundManager.playInstantSound(Sounds.BLUEPRINT_VIEW_OFF_SOUND_ID)
 
     def onGoToPremiumShop(self, nationName, level):
+        self.__stopTopOfTheTreeSounds()
         params = {'nation': nationName,
          'level': level,
          'vehicleFilterByUrl': _VEHICLE_URL_FILTER_PARAM}
@@ -138,6 +153,7 @@ class TechTree(TechTreeMeta):
         else:
             self.__blueprintMode = False
             self.__disableBlueprintsSwitchButton(isEnabled)
+            self.__stopTopOfTheTreeSounds()
             shared_events.showHangar()
         self.redraw()
 
@@ -205,7 +221,6 @@ class TechTree(TechTreeMeta):
             from gui import InputHandler
             InputHandler.g_instance.onKeyUp -= self.__handleReloadData
         self.__removeListeners()
-        self.__stopTopOfTheTreeSounds()
         super(TechTree, self)._dispose()
 
     def _blueprintExitEvent(self, vehicleCD):

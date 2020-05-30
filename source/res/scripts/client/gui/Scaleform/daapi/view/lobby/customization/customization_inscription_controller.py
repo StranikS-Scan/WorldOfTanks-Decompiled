@@ -170,6 +170,7 @@ class CustomizationInscriptionController(CustomizationInscriptionControllerMeta,
                 else:
                     self.__showProhibitedHint(newNumber)
                     self.__storedNumber = None
+            SoundGroups.g_instance.playSound2D(SOUNDS.CUST_CHOICE_ESC)
             return
 
     def stop(self):

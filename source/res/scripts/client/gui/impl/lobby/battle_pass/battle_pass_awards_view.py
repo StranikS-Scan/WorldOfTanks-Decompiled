@@ -129,7 +129,13 @@ class BattlePassAwardsView(ViewImpl):
                 rewards = rewards[2:]
         elif not isPremiumPurchase:
             if not isPostProgression or rewards[0].getName() == 'customizations':
-                packBonusModelAndTooltipData([rewards.pop(0)], self.viewModel.mainRewards, self.__tooltipItems)
+                reward = rewards.pop(0)
+                value = reward.getValue()
+                if reward.getName() == 'customizations' and value[0]['custType'] == 'projection_decal':
+                    with finalAwardsInjection(value[0]['id']):
+                        packBonusModelAndTooltipData([reward], self.viewModel.mainRewards, self.__tooltipItems)
+                else:
+                    packBonusModelAndTooltipData([reward], self.viewModel.mainRewards, self.__tooltipItems)
         packBonusModelAndTooltipData(rewards, self.viewModel.additionalRewards, self.__tooltipItems)
 
     def __addBadgeInfo(self):

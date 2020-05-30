@@ -4,36 +4,36 @@ from gui.impl.gen_utils import DynAccessor
 
 class Videos(DynAccessor):
     __slots__ = ()
-    _bootcampLesson2 = DynAccessor(40904)
-    _bootcampOutro = DynAccessor(40905)
-    _login = DynAccessor(40906)
-    _tutorialInitial = DynAccessor(40907)
-    _tutorialInitialLoop = DynAccessor(40908)
+    _bootcampLesson2 = DynAccessor(41040)
+    _bootcampOutro = DynAccessor(41041)
+    _login = DynAccessor(41042)
+    _tutorialInitial = DynAccessor(41043)
+    _tutorialInitialLoop = DynAccessor(41044)
 
     class _battle_pass(DynAccessor):
         __slots__ = ()
-        c_15697_0 = DynAccessor(40909)
-        c_15697_1 = DynAccessor(40910)
-        c_1_0 = DynAccessor(40911)
-        c_1_1 = DynAccessor(40912)
-        c_22017_0 = DynAccessor(40913)
-        c_22017_1 = DynAccessor(40914)
-        c_2_0 = DynAccessor(40915)
-        c_2_1 = DynAccessor(40916)
-        before_voting = DynAccessor(40917)
+        c_14113_0 = DynAccessor(41045)
+        c_14113_1 = DynAccessor(41046)
+        c_15697_0 = DynAccessor(41047)
+        c_15697_1 = DynAccessor(41048)
+        c_22017_0 = DynAccessor(41049)
+        c_22017_1 = DynAccessor(41050)
+        c_2417_0 = DynAccessor(41051)
+        c_2417_1 = DynAccessor(41052)
+        before_voting = DynAccessor(41053)
 
     battle_pass = _battle_pass()
 
     class _development(DynAccessor):
         __slots__ = ()
-        example = DynAccessor(40918)
-        example_2 = DynAccessor(40919)
+        example = DynAccessor(41054)
+        example_2 = DynAccessor(41055)
 
     development = _development()
 
     class _startup(DynAccessor):
         __slots__ = ()
-        Logo_All = DynAccessor(40920)
+        Logo_All = DynAccessor(41056)
 
     startup = _startup()
 
@@ -42,12 +42,12 @@ class Videos(DynAccessor):
 
         class _web(DynAccessor):
             __slots__ = ()
-            chapter_1 = DynAccessor(40921)
-            chapter_2 = DynAccessor(40922)
-            chapter_3 = DynAccessor(40923)
-            chapter_4 = DynAccessor(40924)
-            chapter_5 = DynAccessor(40925)
-            cinema = DynAccessor(40926)
+            chapter_1 = DynAccessor(41057)
+            chapter_2 = DynAccessor(41058)
+            chapter_3 = DynAccessor(41059)
+            chapter_4 = DynAccessor(41060)
+            chapter_5 = DynAccessor(41061)
+            cinema = DynAccessor(41062)
 
         web = _web()
 
@@ -55,6 +55,6 @@ class Videos(DynAccessor):
 
     class _vehicle(DynAccessor):
         __slots__ = ()
-        A122_TS_5 = DynAccessor(40927)
+        A122_TS_5 = DynAccessor(41063)
 
     vehicle = _vehicle()

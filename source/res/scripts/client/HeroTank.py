@@ -30,10 +30,11 @@ class _HeroTankAppearance(HangarVehicleAppearance):
 
     def _getActiveOutfit(self):
         styleId = self._heroTankCtrl.getCurrentTankStyleId()
+        vehicleCD = self.__typeDescriptor.makeCompactDescr()
         if styleId:
             style = self._c11nService.getItemByID(GUI_ITEM_TYPE.STYLE, styleId)
-            return style.getOutfit(self.__season, vehicleCD=self.__typeDescriptor.makeCompactDescr())
-        return self._c11nService.getEmptyOutfit()
+            return style.getOutfit(self.__season, vehicleCD=vehicleCD)
+        return self._c11nService.getEmptyOutfitWithNationalEmblems(vehicleCD)
 
     def _getTurretYaw(self):
         return self.__turretYaw

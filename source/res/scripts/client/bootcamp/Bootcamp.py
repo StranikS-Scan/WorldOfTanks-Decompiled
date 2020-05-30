@@ -472,12 +472,13 @@ class Bootcamp(EventSystemEntity):
         return getBattleSettings(self.__lessonId).lessonPages
 
     def getInterludeVideoPageData(self):
-        extraData = self.getBattleResultsExtra(self.__lessonId - 1)
         messageVO = {}
-        if extraData['video']:
-            messageVO['messages'] = [extraData['video']['messages']]
-            messageVO['voiceovers'] = [ voiceover for voiceover in extraData['video']['voiceovers'] ]
-            messageVO['exitEvent'] = g_bootcampEvents.onInterludeVideoFinished
+        if self.__lessonId:
+            extraData = self.getBattleResultsExtra(self.__lessonId - 1)
+            if extraData['video']:
+                messageVO['messages'] = [extraData['video']['messages']]
+                messageVO['voiceovers'] = [ voiceover for voiceover in extraData['video']['voiceovers'] ]
+                messageVO['exitEvent'] = g_bootcampEvents.onInterludeVideoFinished
         return messageVO
 
     def getIntroPageData(self, isChoice=False):

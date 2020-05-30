@@ -21,7 +21,8 @@ class _HangarSoundSchema(W2CSchema):
 
 @w2capi()
 class SoundWebApi(object):
-    _ENTER_EXIT_SOUND_MAPPING = {'eb_ambient_progress_page_enter': 'eb_ambient_progress_page_exit'}
+    _ENTER_EXIT_SOUND_MAPPING = {'eb_ambient_progress_page_enter': 'eb_ambient_progress_page_exit',
+     'clans_quests_enter': 'clans_quests_exit'}
 
     def __init__(self):
         super(SoundWebApi, self).__init__()

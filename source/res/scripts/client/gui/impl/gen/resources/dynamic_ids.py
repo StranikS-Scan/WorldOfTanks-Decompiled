@@ -7,44 +7,44 @@ class DynamicIds(DynAccessor):
 
     class _dialog_window(DynAccessor):
         __slots__ = ()
-        bottom_content = DynAccessor(40928)
-        balance_content = DynAccessor(40929)
+        bottom_content = DynAccessor(41064)
+        balance_content = DynAccessor(41065)
 
     dialog_window = _dialog_window()
 
     class _tooltip(DynAccessor):
         __slots__ = ()
-        normal_content = DynAccessor(40930)
-        advanced_content = DynAccessor(40931)
+        normal_content = DynAccessor(41066)
+        advanced_content = DynAccessor(41067)
 
     tooltip = _tooltip()
 
     class _blueprint_screen(DynAccessor):
         __slots__ = ()
-        balance_content = DynAccessor(40932)
+        balance_content = DynAccessor(41068)
 
     blueprint_screen = _blueprint_screen()
 
     class _crew_books_buy_dialog(DynAccessor):
         __slots__ = ()
-        balance_content = DynAccessor(40933)
+        balance_content = DynAccessor(41069)
 
     crew_books_buy_dialog = _crew_books_buy_dialog()
 
     class _prem_dashboard(DynAccessor):
         __slots__ = ()
-        header = DynAccessor(40934)
-        premium_card = DynAccessor(40935)
-        double_xp_card = DynAccessor(40936)
-        piggy_bank_card = DynAccessor(40937)
-        premium_quests_card = DynAccessor(40938)
-        maps_black_list_card = DynAccessor(40939)
+        header = DynAccessor(41070)
+        premium_card = DynAccessor(41071)
+        double_xp_card = DynAccessor(41072)
+        piggy_bank_card = DynAccessor(41073)
+        premium_quests_card = DynAccessor(41074)
+        maps_black_list_card = DynAccessor(41075)
 
     prem_dashboard = _prem_dashboard()
 
     class _demo_window(DynAccessor):
         __slots__ = ()
-        image_props = DynAccessor(40940)
-        bottom_panel = DynAccessor(40941)
+        image_props = DynAccessor(41076)
+        bottom_panel = DynAccessor(41077)
 
     demo_window = _demo_window()

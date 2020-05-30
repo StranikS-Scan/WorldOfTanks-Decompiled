@@ -69,7 +69,8 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.battlePassReachedCap.index(): _sc.BattlePassReachedCapFormatter(),
  _SM_TYPE.badges.index(): _sc.BadgesFormatter(),
  _SM_TYPE.collectibleVehiclesUnlocked.index(): _sc.CollectibleVehiclesUnlockedFormatter(),
- _SM_TYPE.customizationProgress.index(): _sc.CustomizationProgressFormatter()}
+ _SM_TYPE.customizationProgress.index(): _sc.CustomizationProgressFormatter(),
+ _SM_TYPE.enhancementsWipedOnVehicles.index(): _sc.EnhancementsWipedOnVehiclesFormatter()}
 CLIENT_FORMATTERS = {SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE: _sc.ClientSysMessageFormatter(),
  SCH_CLIENT_MSG_TYPE.PREMIUM_ACCOUNT_EXPIRY_MSG: _sc.PremiumAccountExpiryFormatter(),
  SCH_CLIENT_MSG_TYPE.AOGAS_NOTIFY_TYPE: _sc.AOGASNotifyFormatter(),

@@ -13,6 +13,7 @@ from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTab
 from gui.Scaleform.daapi.view.lobby.customization.vehicle_anchors_updater import VehicleAnchorsUpdater
 from gui.customization.constants import CustomizationModes
 from gui.hangar_cameras.c11n_hangar_camera_manager import C11nHangarCameraManager
+from gui.shared.utils.decorators import process
 from helpers import dependency
 from items.components.c11n_constants import SeasonType
 from shared_utils import first
@@ -249,10 +250,11 @@ class CustomizationContext(object):
             g_tankActiveCamouflage[g_currentVehicle.item.intCD] = self.season
         return
 
+    @process('customizationApply')
     def applyItems(self, purchaseItems):
         self._itemsCache.onSyncCompleted -= self.__onCacheResync
         isModeChanged = self.modeId != self.__startMode
-        self.mode.applyItems(purchaseItems, isModeChanged)
+        yield self.mode.applyItems(purchaseItems, isModeChanged)
         self.__onCacheResync()
         self._itemsCache.onSyncCompleted += self.__onCacheResync
 

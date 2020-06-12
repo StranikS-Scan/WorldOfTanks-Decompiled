@@ -1010,6 +1010,12 @@ def isEditedStyle(outfit):
     return not isEmpty
 
 
+def getNationalEmblemsOutfit(vehDescr):
+    decals = createNationalEmblemComponents(vehDescr)
+    outfit = CustomizationOutfit(decals=decals)
+    return outfit
+
+
 def __ignoreItem(itemId, cache, ignoreEmpty, ignoreStyleOnly):
     if itemId != EMPTY_ITEM_ID:
         if ignoreStyleOnly and cache[itemId].isStyleOnly:

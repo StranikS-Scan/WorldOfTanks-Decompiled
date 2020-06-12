@@ -694,6 +694,10 @@ class ProjectionDecal(Decal):
         return self.descriptor.canBeMirroredHorizontally
 
     @property
+    def canBeMirroredVertically(self):
+        return self.descriptor.canBeMirroredVertically
+
+    @property
     def previewIcon(self):
         if not self.__previewIcon:
             self.__previewIcon = self.__getPreviewIcon(self.texture)

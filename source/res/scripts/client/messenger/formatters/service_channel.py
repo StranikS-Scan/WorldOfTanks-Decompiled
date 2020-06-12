@@ -883,13 +883,14 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
 
     @classmethod
     def hasRenewBonus(cls, vehicles):
-        for vehInfo in vehicles.itervalues():
-            rent = vehInfo.get('rent')
-            if rent:
-                cycles = rent.get('cycle')
-                renew = rent.get('renew')
-                if cycles and not renew:
-                    return True
+        for vehicleDict in vehicles:
+            for vehInfo in vehicleDict.itervalues():
+                rent = vehInfo.get('rent')
+                if rent:
+                    cycles = rent.get('cycle')
+                    renew = rent.get('renew')
+                    if cycles and not renew:
+                        return True
 
         return False
 
@@ -928,22 +929,23 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
     def getVehiclesCompensationString(cls, vehicles, htmlTplPostfix='InvoiceReceived'):
         htmlTemplates = g_settings.htmlTemplates
         result = []
-        for vehCompDescr, vehData in vehicles.iteritems():
-            vehicleName = cls.__getVehicleName(vehCompDescr)
-            if vehicleName is None:
-                continue
-            if 'rentCompensation' in vehData:
-                comp = Money.makeFromMoneyTuple(vehData['rentCompensation'])
-                currency = comp.getCurrency(byWeight=True)
-                formatter = getBWFormatter(currency)
-                key = '{}RentCompensationReceived'.format(currency)
-                ctx = {currency: formatter(comp.get(currency)),
-                 'vehicleName': vehicleName}
-                result.append(htmlTemplates.format(key, ctx=ctx))
-            if 'customCompensation' in vehData:
-                itemNames = (vehicleName,)
-                comp = Money.makeFromMoneyTuple(vehData['customCompensation'])
-                result.append(cls._getCompensationString(comp, itemNames, htmlTplPostfix))
+        for vehicleDict in vehicles:
+            for vehCompDescr, vehData in vehicleDict.iteritems():
+                vehicleName = cls.__getVehicleName(vehCompDescr)
+                if vehicleName is None:
+                    continue
+                if 'rentCompensation' in vehData:
+                    comp = Money.makeFromMoneyTuple(vehData['rentCompensation'])
+                    currency = comp.getCurrency(byWeight=True)
+                    formatter = getBWFormatter(currency)
+                    key = '{}RentCompensationReceived'.format(currency)
+                    ctx = {currency: formatter(comp.get(currency)),
+                     'vehicleName': vehicleName}
+                    result.append(htmlTemplates.format(key, ctx=ctx))
+                if 'customCompensation' in vehData:
+                    itemNames = (vehicleName,)
+                    comp = Money.makeFromMoneyTuple(vehData['customCompensation'])
+                    result.append(cls._getCompensationString(comp, itemNames, htmlTplPostfix))
 
         return '<br/>'.join(result) if any(result) else ''
 
@@ -1073,19 +1075,22 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             vehicles = dataEx.get('vehicles', {})
             vehicleItems = {}
             if vehicles:
+                if isinstance(vehicles, dict):
+                    vehicles = [vehicles]
                 result = self.getVehiclesString(vehicles)
                 if result:
                     operations.append(result)
                 comptnStr = self.getVehiclesCompensationString(vehicles)
                 if comptnStr:
                     operations.append(comptnStr)
-                for v in vehicles.itervalues():
-                    tmen.extend(v.get('tankmen', []))
-                    items = v.get('items', {})
-                    for intCD, count in items.iteritems():
-                        if intCD in vehicleItems:
-                            vehicleItems[intCD] += count
-                        vehicleItems[intCD] = count
+                for vehicleDict in vehicles:
+                    for v in vehicleDict.itervalues():
+                        tmen.extend(v.get('tankmen', []))
+                        items = v.get('items', {})
+                        for intCD, count in items.iteritems():
+                            if intCD in vehicleItems:
+                                vehicleItems[intCD] += count
+                            vehicleItems[intCD] = count
 
             if vehicleItems:
                 operations.append(self.__getItemsString(vehicleItems, installed=True))
@@ -1168,24 +1173,25 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
         addVehNames = []
         removeVehNames = []
         rentedVehNames = []
-        for vehCompDescr, vehData in vehicles.iteritems():
-            if 'customCompensation' in vehData:
-                continue
-            isNegative = False
-            if isinstance(vehCompDescr, types.IntType):
-                isNegative = vehCompDescr < 0
-            isRented = 'rent' in vehData
-            vehicleName = cls.__getVehicleName(vehCompDescr)
-            if vehicleName is None:
-                continue
-            vehicleInfo = cls.__getVehicleInfo(vehData, isNegative)
-            vehicleInfoString = ' ({0:s})'.format(vehicleInfo) if vehicleInfo else ''
-            vehUserString = '{0:s}{1:s}'.format(vehicleName, vehicleInfoString)
-            if isNegative:
-                removeVehNames.append(vehUserString)
-            if isRented:
-                rentedVehNames.append(vehUserString)
-            addVehNames.append(vehUserString)
+        for vehicleDict in vehicles:
+            for vehCompDescr, vehData in vehicleDict.iteritems():
+                if 'customCompensation' in vehData:
+                    continue
+                isNegative = False
+                if isinstance(vehCompDescr, types.IntType):
+                    isNegative = vehCompDescr < 0
+                isRented = 'rent' in vehData
+                vehicleName = cls.__getVehicleName(vehCompDescr)
+                if vehicleName is None:
+                    continue
+                vehicleInfo = cls.__getVehicleInfo(vehData, isNegative)
+                vehicleInfoString = ' ({0:s})'.format(vehicleInfo) if vehicleInfo else ''
+                vehUserString = '{0:s}{1:s}'.format(vehicleName, vehicleInfoString)
+                if isNegative:
+                    removeVehNames.append(vehUserString)
+                if isRented:
+                    rentedVehNames.append(vehUserString)
+                addVehNames.append(vehUserString)
 
         return (addVehNames, removeVehNames, rentedVehNames)
 
@@ -2180,15 +2186,12 @@ class QuestAchievesFormatter(object):
             if freeXP:
                 result.append(cls.__makeQuestsAchieve('battleQuestsFreeXP', freeXP=backport.getIntegralFormat(freeXP)))
         vehiclesList = data.get('vehicles', [])
-        for vehiclesData in vehiclesList:
-            if vehiclesData:
-                msg = InvoiceReceivedFormatter.getVehiclesString(vehiclesData, htmlTplPostfix='QuestsReceived')
-                if msg:
-                    result.append(msg)
-                comptnStr = InvoiceReceivedFormatter.getVehiclesCompensationString(vehiclesData, htmlTplPostfix='QuestsReceived')
-                if comptnStr:
-                    result.append('<br/>' + comptnStr)
-
+        msg = InvoiceReceivedFormatter.getVehiclesString(vehiclesList, htmlTplPostfix='QuestsReceived')
+        if msg:
+            result.append(msg)
+        comptnStr = InvoiceReceivedFormatter.getVehiclesCompensationString(vehiclesList, htmlTplPostfix='QuestsReceived')
+        if comptnStr:
+            result.append('<br/>' + comptnStr)
         if not asBattleFormatter:
             creditsVal = data.get(Currency.CREDITS, 0)
             if creditsVal:

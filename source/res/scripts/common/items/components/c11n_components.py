@@ -144,6 +144,10 @@ class ProjectionDecalItem(BaseCustomizationItem):
         self.glossTexture = ''
         super(ProjectionDecalItem, self).__init__(parentGroup)
 
+    @property
+    def canBeMirroredVertically(self):
+        return ItemTags.DISABLE_VERTICAL_MIRROR not in self.tags
+
 
 class CamouflageItem(BaseCustomizationItem):
     __metaclass__ = ReflectionMetaclass
@@ -709,7 +713,7 @@ def _validateProjectionDecal(component, item, vehDescr, usedStyle=None):
         raise SoftException('projection decal {} wrong slotId = {}. VehType = {}'.format(component.id, slotId, vehDescr.type))
     if options & Options.MIRRORED_HORIZONTALLY and not item.canBeMirroredHorizontally:
         raise SoftException('projection decal {} wrong horizontally mirrored option'.format(component.id))
-    if options & Options.MIRRORED_VERTICALLY and not slotParams.canBeMirroredVertically:
+    if options & Options.MIRRORED_VERTICALLY and not (item.canBeMirroredVertically and slotParams.canBeMirroredVertically):
         raise SoftException('projection decal {} wrong vertically mirrored option for slotId = {}'.format(component.id, slotId))
     if HIDDEN_FOR_USER_TAG in slotParams.tags:
         raise SoftException('Hidden for user slot (slotId = {}) can not be in outfit'.format(slotId))

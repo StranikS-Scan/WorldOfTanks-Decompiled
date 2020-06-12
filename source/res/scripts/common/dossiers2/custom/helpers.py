@@ -42,7 +42,9 @@ def getVehicleCollectorRequirements(inventoryVehicles, nationID=ALL_NATIONS_INDE
     nationIDs = collectorVehiclesByNations.keys() if nationID == ALL_NATIONS_INDEX else [nationID]
     for nationIdx in nationIDs:
         achievementName = ''.join(['collectorVehicle', str(nationIdx)])
-        res[achievementName] = collectorVehiclesByNations.get(nationIdx, set()) - inventoryVehicles
+        collectorVehiclesByNation = collectorVehiclesByNations.get(nationIdx, set())
+        if collectorVehiclesByNation:
+            res[achievementName] = collectorVehiclesByNation - inventoryVehicles
 
     return res
 

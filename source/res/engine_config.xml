@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences_ct.xml	</preferences>
+  <preferences>	preferences.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -140,7 +140,7 @@
   </ParticleSystem>
   <debug>
     <fullDump>	false	</fullDump>
-    <clientUrl>	http://cat-st1.wargaming.net	</clientUrl>
+    <clientUrl>	https://cat.wargaming.net	</clientUrl>
     <botsUrl>	http://cat-st1.wargaming.net	</botsUrl>
     <dxdiag>	false	</dxdiag>
     <framesCount>	0	</framesCount>
@@ -580,8 +580,8 @@
       <source>	SCRIPT	</source>
       <source>	UI	</source>
       <openMode>	a	</openMode>
-      <maxSizeKB>	512	</maxSizeKB>
-      <trimToKB>	0	</trimToKB>
+      <maxSizeKB>	2048	</maxSizeKB>
+      <trimToKB>	512	</trimToKB>
       <showTime>	true	</showTime>
       <disableBuffering>	false	</disableBuffering>
       <messageLength>	8192	</messageLength>
@@ -589,8 +589,8 @@
     <file>	ui.log	  <enabled>	true	</enabled>
       <source>	UI	</source>
       <openMode>	a	</openMode>
-      <maxSizeKB>	512	</maxSizeKB>
-      <trimToKB>	0	</trimToKB>
+      <maxSizeKB>	2048	</maxSizeKB>
+      <trimToKB>	512	</trimToKB>
       <showTime>	true	</showTime>
       <disableBuffering>	false	</disableBuffering>
       <messageLength>	8192	</messageLength>

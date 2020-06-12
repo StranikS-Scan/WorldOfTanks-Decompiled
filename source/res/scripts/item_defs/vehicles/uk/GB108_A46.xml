@@ -1321,8 +1321,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	55	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.12	</vehicleMovement>
-        <vehicleRotation>	0.12	</vehicleRotation>
+        <vehicleMovement>	0.15	</vehicleMovement>
+        <vehicleRotation>	0.15	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	120	</maxHealth>
@@ -1949,11 +1949,11 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.45	</shotDispersionRadius>
-          <reloadTime>	3.3	</reloadTime>
-          <aimingTime>	1.9	</aimingTime>
+          <reloadTime>	4.2	</reloadTime>
+          <aimingTime>	2	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.06	</turretRotation>
-            <afterShot>	2.5	</afterShot>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <models>

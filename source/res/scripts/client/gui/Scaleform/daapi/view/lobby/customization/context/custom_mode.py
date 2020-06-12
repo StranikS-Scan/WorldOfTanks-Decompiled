@@ -5,6 +5,7 @@ from copy import copy
 import typing
 import BigWorld
 from CurrentVehicle import g_currentVehicle
+from adisp import process, async
 from gui.Scaleform.daapi.view.lobby.customization.context.customization_mode import CustomizationMode
 from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs, isNeedToMirrorProjectionDecal, isSlotFilled, isItemsQuantityLimitReached, fitPersonalNumber, formatPersonalNumber, EMPTY_PERSONAL_NUMBER, customizationSlotIdToUid, CustomizationSlotUpdateVO, getCustomPurchaseItems
 from gui.Scaleform.daapi.view.lobby.customization.shared import getOutfitWithoutItems
@@ -12,7 +13,7 @@ from gui.customization.constants import CustomizationModes
 from gui.customization.shared import C11nId, PurchaseItem, getAvailableRegions
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.common import OutfitApplier, CustomizationsSeller
-from gui.shared.utils.decorators import process
+from gui.shared.utils.decorators import process as wrappedProcess
 from items.components.c11n_components import isPersonalNumberAllowed
 from items.components.c11n_constants import SeasonType, DEFAULT_PALETTE, Options, SLOT_DEFAULT_ALLOWED_MODEL
 from items.customizations import CamouflageComponent, ProjectionDecalComponent, PersonalNumberComponent
@@ -308,8 +309,9 @@ class CustomMode(CustomizationMode):
         multiSlot.remove(slotId.regionIdx)
         return
 
-    @process('customizationApply')
-    def _applyItems(self, purchaseItems, isModeChanged):
+    @async
+    @process
+    def _applyItems(self, purchaseItems, isModeChanged, callback):
         modifiedOutfits = {season:outfit.copy() for season, outfit in self._modifiedOutfits.iteritems()}
         for pItem in purchaseItems:
             if not pItem.selected:
@@ -336,8 +338,9 @@ class CustomMode(CustomizationMode):
 
         if self.isInited:
             self._events.onItemsBought(purchaseItems, results)
+        callback(self)
 
-    @process('sellItem')
+    @wrappedProcess('sellItem')
     def _sellItem(self, item, count):
         if item.fullInventoryCount(g_currentVehicle.item.intCD) < count:
             for season, outfit in getOutfitWithoutItems(self.getOutfitsInfo(), item.intCD, count):
@@ -427,8 +430,12 @@ class CustomMode(CustomizationMode):
 
     def __configureProjectionDecalComponentMirror(self, component, item, prevItem, slotId):
         slot = g_currentVehicle.item.getAnchorBySlotId(slotId.slotType, slotId.areaId, slotId.regionIdx)
-        if not item.canBeMirroredHorizontally and not slot.canBeMirroredVertically:
-            component.options = Options.NONE
+        canBeMirroredHorizontally = item.canBeMirroredHorizontally
+        canBeMirroredVertically = item.canBeMirroredVertically and slot.canBeMirroredVertically
+        if not canBeMirroredVertically:
+            component.options &= ~Options.MIRRORED_VERTICALLY
+        if not canBeMirroredHorizontally:
+            component.options &= ~Options.MIRRORED_HORIZONTALLY
             return
         elif prevItem is not None and prevItem.canBeMirroredHorizontally:
             if not item.canBeMirroredHorizontally:

@@ -209,6 +209,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
 
     def _destroySystems(self):
         super(CompoundAppearance, self)._destroySystems()
+        self.highlighter.destroy()
         if self.__periodicTimerID is not None:
             BigWorld.cancelCallback(self.__periodicTimerID)
             self.__periodicTimerID = None
@@ -298,7 +299,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
             self.__playEffect(self.damageState.effect, SpecialKeyPointNames.STATIC)
         if self.isAlive and isPlayer:
             self.peripheralsController = PeripheralsController()
-        self.highlighter = Highlighter()
+        self.highlighter = Highlighter(self.isAlive)
         if isPlayer and BigWorld.player().isInTutorial:
             self.tutorialMatKindsController = TutorialMatKindsController()
             self.tutorialMatKindsController.terrainGroundTypesLink = lambda : self.terrainGroundType

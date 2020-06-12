@@ -37,10 +37,10 @@ class AwardVideoSoundControl(IVideoSoundManager):
     __LANGUAGE_STATES = {'ru': BattlePassLanguageSwitch.RU,
      'en': BattlePassLanguageSwitch.EN}
     __VIDEO_TO_SOUND = {R.videos.battle_pass.before_voting(): BattlePassSounds.VIDEO_BEFORE_VOTING,
-     R.videos.battle_pass.c_15697_0(): BattlePassSounds.VIDEO_OPT1_FREE,
-     R.videos.battle_pass.c_15697_1(): BattlePassSounds.VIDEO_OPT1_PAID,
-     R.videos.battle_pass.c_22017_0(): BattlePassSounds.VIDEO_OPT2_FREE,
-     R.videos.battle_pass.c_22017_1(): BattlePassSounds.VIDEO_OPT2_PAID}
+     R.videos.battle_pass.c_2417_0(): BattlePassSounds.VIDEO_OPT1_FREE,
+     R.videos.battle_pass.c_2417_1(): BattlePassSounds.VIDEO_OPT1_PAID,
+     R.videos.battle_pass.c_14113_0(): BattlePassSounds.VIDEO_OPT2_FREE,
+     R.videos.battle_pass.c_14113_1(): BattlePassSounds.VIDEO_OPT2_PAID}
 
     def __init__(self, videoID):
         self.__videoID = videoID

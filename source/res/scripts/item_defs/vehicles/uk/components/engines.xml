@@ -74,6 +74,7 @@
     <Nuffield_liberty_MKIII>	95	</Nuffield_liberty_MKIII>
     <Nuffield_liberty_MKIVA>	96	</Nuffield_liberty_MKIVA>
     <GMC6_71>	97	</GMC6_71>
+    <GMC>	98	</GMC>
     <Rolls_Royse_Meteor_MkIVC_IGR>	60001	</Rolls_Royse_Meteor_MkIVC_IGR>
     <Rolls_Royse_Meteor_M120_IGR>	60002	</Rolls_Royse_Meteor_M120_IGR>
     <Rolls_Royse_Meteor_MkIV_IGR>	60003	</Rolls_Royse_Meteor_MkIV_IGR>
@@ -1110,6 +1111,23 @@
       <rpm_min>	312	</rpm_min>
       <rpm_max>	2801	</rpm_max>
     </Rolls_Royce_Meteor_M300>
+    <GMC>
+      <userString>	#gb_vehicles:GMC	</userString>
+      <tags>	diesel	</tags>
+      <level>	5	</level>
+      <price>	13500	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	210	</power>
+      <weight>	1080	</weight>
+      <maxHealth>	176	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	306	</rpm_min>
+      <rpm_max>	2087	</rpm_max>
+    </GMC>
     <Meadows_ESTB>
       <userString>	#gb_vehicles:Meadows_ESTB	</userString>
       <tags>	gasoline	</tags>

@@ -904,17 +904,16 @@ class Vehicle(BigWorld.Entity, BattleAbilitiesComponent):
     def addModel(self, model):
         super(Vehicle, self).addModel(model)
         highlighter = self.appearance.highlighter
-        if highlighter.enabled:
+        if highlighter.isOn:
             highlighter.highlight(True)
 
     def delModel(self, model):
         highlighter = self.appearance.highlighter
-        hlEnabled = highlighter.enabled
+        hlOn = highlighter.isOn
         hlSimpleEdge = highlighter.isSimpleEdge
-        if hlEnabled:
-            highlighter.removeHighlight()
+        highlighter.removeHighlight()
         super(Vehicle, self).delModel(model)
-        if hlEnabled:
+        if hlOn:
             highlighter.highlight(True, hlSimpleEdge)
 
     def notifyInputKeysDown(self, movementDir, rotationDir, handbrakeFired):

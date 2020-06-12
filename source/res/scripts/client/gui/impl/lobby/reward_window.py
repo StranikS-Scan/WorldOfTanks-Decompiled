@@ -23,6 +23,9 @@ from gui.shared.event_dispatcher import showShop
 from gui.shared.money import Currency
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
+from constants import OFFER_TOKEN_PREFIX
+from skeletons.gui.offers import IOffersDataProvider
+from gui.shared.event_dispatcher import showOfferGiftsWindow
 _logger = logging.getLogger(__name__)
 BASE_EVENT_NAME = 'base'
 _ADDITIONAL_AWARDS_COUNT = 5
@@ -178,6 +181,7 @@ class QuestRewardWindowContent(BaseRewardWindowContent):
 
 class TwitchRewardWindowContent(QuestRewardWindowContent):
     __slots__ = ()
+    _offersProvider = dependency.descriptor(IOffersDataProvider)
     _BONUSES_ORDER = ('dossier',
      'customizations',
      'premium_plus',
@@ -188,15 +192,22 @@ class TwitchRewardWindowContent(QuestRewardWindowContent):
 
     def handleNextButton(self):
         bonuses = self._quest.getBonuses('tokens')
-        needContinue = False
+        hasCommander = False
+        offerID = None
         for bonus in bonuses:
             for tID in bonus.getTokens():
                 if getRecruitInfo(tID) is not None:
-                    needContinue = True
+                    hasCommander = True
                     break
+                if tID.startswith(OFFER_TOKEN_PREFIX):
+                    for offer in self._offersProvider.getAvailableOffers():
+                        if offer.token == tID:
+                            offerID = offer.id
 
-        if needContinue:
+        if hasCommander:
             g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_BARRACKS, ctx={'location': BARRACKS_CONSTANTS.LOCATION_FILTER_NOT_RECRUITED}), scope=EVENT_BUS_SCOPE.LOBBY)
+        elif offerID is not None:
+            showOfferGiftsWindow(offerID)
         return
 
 

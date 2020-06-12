@@ -3,6 +3,7 @@
 import logging
 import typing
 from CurrentVehicle import g_currentVehicle
+from adisp import process, async
 from gui.shared.gui_items.processors.common import OutfitApplier, CustomizationsSeller
 from gui.Scaleform.daapi.view.lobby.customization.context.custom_mode import CustomMode
 from gui.Scaleform.daapi.view.lobby.customization.context.styled_mode import StyledMode
@@ -11,7 +12,7 @@ from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTab
 from gui.customization.constants import CustomizationModes
 from gui.customization.shared import PurchaseItem, getAvailableRegions, EDITABLE_STYLE_IRREMOVABLE_TYPES, EDITABLE_STYLE_APPLY_TO_ALL_AREAS_TYPES, C11nId
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.utils.decorators import process
+from gui.shared.utils.decorators import process as wrapperdProcess
 from items.components.c11n_constants import SeasonType, MAX_USERS_PROJECTION_DECALS
 from vehicle_outfit.containers import SlotData
 from vehicle_outfit.outfit import Area, Outfit
@@ -227,8 +228,9 @@ class EditableStyleMode(CustomMode):
         self._ctx.stylesDiffsCache.saveDiffs(self.__style, diffs)
         super(EditableStyleMode, self)._onStop()
 
-    @process('customizationApply')
-    def _applyItems(self, purchaseItems, isModeChanged):
+    @async
+    @process
+    def _applyItems(self, purchaseItems, isModeChanged, callback):
         results = []
         vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
         modifiedOutfits = {season:outfit.copy() for season, outfit in self._modifiedOutfits.iteritems()}
@@ -247,6 +249,7 @@ class EditableStyleMode(CustomMode):
 
         if self.isInited:
             self._events.onItemsBought(purchaseItems, results)
+        callback(self)
 
     def _fillOutfits(self):
         isInstalled = self._service.isStyleInstalled()
@@ -285,7 +288,7 @@ class EditableStyleMode(CustomMode):
             result = super(EditableStyleMode, self)._selectItem(intCD, progressionLevel)
             return result
 
-    @process('sellItem')
+    @wrapperdProcess('sellItem')
     def _sellItem(self, item, count):
         if item.fullInventoryCount(g_currentVehicle.item.intCD) < count:
             vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()

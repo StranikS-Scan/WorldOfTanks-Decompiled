@@ -40,4 +40,4 @@ class SPAFlags(object):
         return
 
     def getFlag(self, flagName):
-        return self.__cache['spaFlags'].get(flagName, None)
+        return self.__cache['spaFlags'].get(flagName, None) if self.__cache and 'spaFlags' in self.__cache else None

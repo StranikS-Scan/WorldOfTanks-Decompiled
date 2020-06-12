@@ -5,7 +5,9 @@ import weakref
 import itertools
 import types
 import logging
+from functools import partial
 import BigWorld
+from adisp import async
 from debug_utils import LOG_ERROR
 _logger = logging.getLogger(__name__)
 ScalarTypes = (types.IntType,
@@ -250,3 +252,9 @@ def nextTick(func):
         BigWorld.callback(0.01, lambda : func(*args, **kwargs))
 
     return wrapper
+
+
+@async
+def awaitNextFrame(callback):
+    BigWorld.callback(0.0, partial(callback, None))
+    return

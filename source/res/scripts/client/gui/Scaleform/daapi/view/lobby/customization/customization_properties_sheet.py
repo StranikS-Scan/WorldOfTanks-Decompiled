@@ -572,7 +572,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         slotId = self._attachedAnchor
         slot = g_currentVehicle.item.getAnchorBySlotId(slotId.slotType, slotId.areaId, slotId.regionIdx)
         canBeMirroredHorizontally = self._currentItem.canBeMirroredHorizontally
-        canBeMirroredVertically = slot.canBeMirroredVertically
+        canBeMirroredVertically = self._currentItem.canBeMirroredVertically and slot.canBeMirroredVertically
         isMirroredHorizontally = self._currentComponent.isMirroredHorizontally()
         isMirroredVertically = self._currentComponent.isMirroredVertically()
         if canBeMirroredHorizontally and canBeMirroredVertically:

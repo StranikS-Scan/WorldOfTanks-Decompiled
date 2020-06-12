@@ -81,6 +81,7 @@ class ItemTags(object):
     STYLE_ONLY = 'styleOnly'
     PROGRESSION_REQUIRED = 'progression_required'
     ADD_NATIONAL_EMBLEM = 'addNationalEmblem'
+    DISABLE_VERTICAL_MIRROR = 'disableVerticalMirror'
 
 
 class ProjectionDecalDirectionTags(object):

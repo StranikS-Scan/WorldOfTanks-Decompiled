@@ -376,7 +376,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.rankedController.onUpdated += self.__updateRanked
         self.rankedController.onGameModeStatusUpdated += self.__updateRanked
         self.epicController.onUpdated += self.__updateEpic
-        self.epicController.onEventEnded += self.__switchToRandom
+        self.epicController.onEventEnded += self.__epicEventEnded
         self.eventProgressionController.onUpdated += self.__updateEventProgression
         self.epicController.onPrimeTimeStatusUpdated += self.__updateEpic
         self.badgesController.onUpdated += self.__updateBadge
@@ -448,7 +448,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.rankedController.onUpdated -= self.__updateRanked
         self.rankedController.onGameModeStatusUpdated -= self.__updateRanked
         self.epicController.onUpdated -= self.__updateEpic
-        self.epicController.onEventEnded -= self.__switchToRandom
+        self.epicController.onEventEnded -= self.__epicEventEnded
         self.eventProgressionController.onUpdated -= self.__updateEventProgression
         self.epicController.onPrimeTimeStatusUpdated -= self.__updateEpic
         self.badgesController.onUpdated -= self.__updateBadge
@@ -985,9 +985,11 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     def __updateEpic(self, *_):
         self._updatePrebattleControls()
 
-    def __switchToRandom(self, *_):
-        self.__doSelect(PREBATTLE_ACTION_NAME.RANDOM)
-        self._updatePrebattleControls()
+    def __epicEventEnded(self, *_):
+        state = self.prbDispatcher.getFunctionalState()
+        if state.isQueueSelected(constants.QUEUE_TYPE.EPIC):
+            self.__doSelect(PREBATTLE_ACTION_NAME.RANDOM)
+            self._updatePrebattleControls()
 
     def __updateEventProgression(self, *_):
         self._updatePrebattleControls()

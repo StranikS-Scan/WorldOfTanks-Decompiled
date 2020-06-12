@@ -644,8 +644,8 @@ class OpenCustomizationHandler(_ActionHandler):
 
         if vehicle.invID != -1:
             context = self.service.getCtx()
-            if context is not None and g_currentVehicle.isPresent() and g_currentVehicle.item.intCD == vehicleIntCD and savedData.get('toProjectionDecals'):
-                context.changeModeWithProgressionDecal(itemCD=savedData.get('itemIntCD', 0), scrollToItem=True)
+            if context is not None and g_currentVehicle.isPresent() and g_currentVehicle.item.intCD == vehicleIntCD:
+                toCustomizationCallback()
             else:
                 g_eventBus.handleEvent(events.CustomizationEvent(events.CustomizationEvent.SHOW, ctx={'vehInvID': vehicle.invID,
                  'callback': toCustomizationCallback}), scope=EVENT_BUS_SCOPE.LOBBY)

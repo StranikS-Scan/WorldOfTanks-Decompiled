@@ -257,6 +257,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
             entity.appearance.loadState.unsubscribe(self.__onVehicleLoadFinished, self.__onVehicleLoadStarted)
 
     def __onVehicleChanged(self):
+        self.__closed = False
         self.__locateCameraToStyleInfo = False
         entity = self.hangarSpace.getVehicleEntity()
         if entity and entity.appearance:
@@ -757,11 +758,13 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         if self.__setCollisionsCallback is not None:
             BigWorld.cancelCallback(self.__setCollisionsCallback)
             self.__setCollisionsCallback = None
-        self.__clearGrabModeCallback()
         super(MainView, self)._dispose()
         self.__ctx = None
         self.service.closeCustomization()
         self.__removeCloseConfirmators()
+        if self.__itemsGrabMode:
+            self.__clearGrabModeCallback()
+            self.__finishGrabMode()
         return
 
     def _getUpdatedAnchorsData(self):
@@ -1121,7 +1124,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
     def __confirmClose(self):
         if self.__hasOpenedChildWindow() or self.__isGamefaceBuyViewOpened():
             return
-        yield self.__closeConfirmator()
+        yield await(self.__closeConfirmator())
 
     @adisp.async
     @async

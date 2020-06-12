@@ -10,13 +10,11 @@ from VehicleEffects import DamageFromShotDecoder
 from VehicleStickers import VehicleStickers
 from svarog_script.py_component import Component
 from svarog_script.script_game_object import ScriptGameObject, ComponentDescriptor
-from vehicle_systems.camouflages import getOutfitComponent
-from vehicle_systems.tankStructure import TankPartNames, TankNodeNames, ColliderTypes, getPartModelsFromDesc, ModelsSetParams, ModelStates
+from vehicle_systems.tankStructure import TankPartNames, TankNodeNames, ColliderTypes
 from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
 from helpers.EffectsList import EffectsListPlayer, SoundStartParam, SpecialKeyPointNames
 from helpers.bound_effects import ModelBoundEffects
-from items import vehicles, makeIntCompactDescrByID
-from items.components.c11n_constants import CustomizationType
+from items import vehicles
 from constants import SERVER_TICK_LENGTH
 from debug_utils import LOG_DEBUG
 _MIN_COLLISION_SPEED = 3.5
@@ -45,31 +43,13 @@ class DetachedTurret(BigWorld.Entity, ScriptGameObject):
     def __prepareModelAssembler(self):
         LOG_DEBUG('__prepareModelAssembler', self.__vehDescr.name, self.spaceID)
         assembler = BigWorld.CompoundAssembler(self.__vehDescr.name, self.spaceID)
-        turretModel, gunModel = self.__getModels()
+        turretModel = self.__vehDescr.turret.models.exploded
+        gunModel = self.__vehDescr.gun.models.exploded
         assembler.addRootPart(turretModel, TankPartNames.TURRET)
         assembler.emplacePart(gunModel, TankNodeNames.GUN_JOINT, TankPartNames.GUN)
         bspModels = ((TankPartNames.getIdx(TankPartNames.TURRET), self.__vehDescr.turret.hitTester.bspModelName), (TankPartNames.getIdx(TankPartNames.GUN), self.__vehDescr.gun.hitTester.bspModelName))
         collisionAssembler = BigWorld.CollisionAssembler(bspModels, BigWorld.player().spaceID)
         return [assembler, collisionAssembler]
-
-    def __getModels(self):
-        defaultModels = (self.__vehDescr.turret.models.exploded, self.__vehDescr.gun.models.exploded)
-        vehicle = BigWorld.entity(self.vehicleID)
-        if vehicle is None:
-            return defaultModels
-        else:
-            outfitCD = vehicle.publicInfo['outfit']
-            if not outfitCD:
-                return defaultModels
-            outfitComponent = getOutfitComponent(outfitCD)
-            styleId = outfitComponent.styleId
-            if not styleId:
-                return defaultModels
-            styleIntCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, styleId)
-            styleDescr = vehicles.getItemByCompactDescr(styleIntCD)
-            modelsSetParams = ModelsSetParams(styleDescr.modelsSet, ModelStates.EXPLODED, [])
-            _, _, turretModel, gunModel = getPartModelsFromDesc(self.__vehDescr, modelsSetParams)
-            return (turretModel, gunModel)
 
     def prerequisites(self):
         LOG_DEBUG('prerequisites')

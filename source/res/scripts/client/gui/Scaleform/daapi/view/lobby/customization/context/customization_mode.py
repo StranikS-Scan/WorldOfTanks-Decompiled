@@ -4,12 +4,13 @@ import logging
 from copy import copy, deepcopy
 from functools import partial
 import typing
+from adisp import process, async
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.customization.shared import OutfitInfo, getItemAppliedCount, isItemLimitReached, getComponentFromSlot, getItemInventoryCount, getPurchaseLimit, CustomizationTabs, getItemFromSlot, getSlotDataFromSlot, getCurrentVehicleAvailableRegionsMap, fitOutfit, ITEM_TYPE_TO_SLOT_TYPE, removeItemsFromOutfit
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.customization.constants import CustomizationModes, CustomizationModeSource
 from gui.customization.shared import SeasonType, C11nId
-from gui.shared.utils.decorators import process
+from gui.shared.utils.decorators import process as wrappedProcess
 from helpers import dependency
 from shared_utils import first, nextTick
 from skeletons.gui.customization import ICustomizationService
@@ -180,9 +181,12 @@ class CustomizationMode(object):
             self._events.onItemsRemoved()
         return
 
-    def applyItems(self, purchaseItems, isModeChanged=False):
+    @async
+    @process
+    def applyItems(self, purchaseItems, isModeChanged, callback):
         purchaseItems = copy(purchaseItems)
-        self._applyItems(purchaseItems, isModeChanged)
+        yield self._applyItems(purchaseItems, isModeChanged)
+        callback(self)
 
     def sellItem(self, intCD, count, _):
         if not count:
@@ -274,11 +278,12 @@ class CustomizationMode(object):
         anchorParams = self._service.getAnchorParams(slotId.areaId, slotId.slotType, slotId.regionIdx)
         return anchorParams
 
-    @process('customizationApply')
-    def _applyItems(self, modifiedOutfits, isModeChanged):
+    @async
+    @process
+    def _applyItems(self, modifiedOutfits, isModeChanged, callback):
         raise NotImplementedError
 
-    @process('sellItem')
+    @wrappedProcess('sellItem')
     def _sellItem(self, item, count):
         raise NotImplementedError
 

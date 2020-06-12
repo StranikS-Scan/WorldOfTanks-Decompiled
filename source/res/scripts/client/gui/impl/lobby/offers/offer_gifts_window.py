@@ -19,6 +19,7 @@ from frameworks.wulf import ViewSettings, ViewFlags
 from gui.impl.gen.view_models.views.lobby.offers.gift_model import GiftModel
 from gui.impl.gen.view_models.views.lobby.offers.offer_model import OfferModel
 from gui.impl.pub import ViewImpl
+from shared_utils import awaitNextFrame
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider, IOffersNovelty
 from skeletons.gui.server_events import IEventsCache
@@ -80,7 +81,12 @@ class OfferGiftsWindow(ViewImpl):
         super(OfferGiftsWindow, self)._onLoading(*args, **kwargs)
         offerItem = self._offerItem
         if offerItem is not None:
-            yield self.syncOfferResources()
+            result = yield self.syncOfferResources()
+            if result != CachePrefetchResult.SUCCESS:
+                yield awaitNextFrame()
+                event_dispatcher.showStorage(defaultSection=STORAGE_CONSTANTS.OFFERS)
+                self.destroyWindow()
+                return
             self._offersNovelty.saveAsSeen(self._offerID)
             with self._viewModel.transaction() as model:
                 model.setId(offerItem.id)
@@ -98,9 +104,6 @@ class OfferGiftsWindow(ViewImpl):
         Waiting.show('loadContent')
         result = yield self._offersProvider.isCdnResourcesReady()
         Waiting.hide('loadContent')
-        if result != CachePrefetchResult.SUCCESS:
-            event_dispatcher.showStorage(defaultSection=STORAGE_CONSTANTS.OFFERS)
-            self.destroyWindow()
         callback(result)
 
     def _setDynamicInfo(self, offerModel):

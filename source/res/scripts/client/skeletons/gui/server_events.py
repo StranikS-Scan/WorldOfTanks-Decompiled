@@ -179,3 +179,6 @@ class IEventsCache(object):
 
     def getProgressiveReward(self):
         raise NotImplementedError
+
+    def getEventPrimeTimes(self):
+        raise NotImplementedError

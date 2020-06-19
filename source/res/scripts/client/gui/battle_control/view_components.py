@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/view_components.py
+import logging
 import weakref
 from collections import defaultdict
 from soft_exception import SoftException
-from debug_utils import LOG_WARNING, LOG_ERROR
 from gui.battle_control.battle_constants import VIEW_COMPONENT_RULE
 from gui.battle_control.controllers.interfaces import IBattleController
+_logger = logging.getLogger(__name__)
 
 class IViewComponentsCtrlListener(object):
 
@@ -98,7 +99,7 @@ class _ComponentsBridge(object):
             for ctrlID in ctrlsIDs:
                 index = self.__getIndexByComponentID(ctrlID, componentID)
                 if index is None:
-                    LOG_ERROR('View component data is broken', ctrlID, componentID, self.__indexes)
+                    _logger.error('View component data is broken: %r, %r, %r', ctrlID, componentID, self.__indexes)
                     continue
                 components = self.__components[ctrlID]
                 if rule == VIEW_COMPONENT_RULE.PROXY:
@@ -110,7 +111,7 @@ class _ComponentsBridge(object):
                 if ctrlID in self.__ctrls:
                     ctrl = self.__ctrls[ctrlID]
                     ctrl.setViewComponents(*components)
-                LOG_WARNING('Controller is not found', ctrlID)
+                _logger.warning('Controller is not found: %r', ctrlID)
 
             return
 
@@ -122,7 +123,7 @@ class _ComponentsBridge(object):
             for ctrlID in ctrlsIDs:
                 index = self.__getIndexByComponentID(ctrlID, componentID)
                 if index is None:
-                    LOG_ERROR('View component data is broken', ctrlID, componentID, self.__indexes)
+                    _logger.error('View component data is broken: %r, %r, %r', ctrlID, componentID, self.__indexes)
                     continue
                 if ctrlID not in self.__components:
                     continue

@@ -691,4 +691,59 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 1750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	czech:Cz01_Skoda_T40	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	316	</id>
+      <texture>	gui/maps/vehicles/styles/10years_skoda.png	</texture>
+      <description>	#vehicle_customization:special_style/10years_skoda_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/10years_skoda_desc/long	</longDescriptionSpecial>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/10years_skoda	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	148	</id>
+              <appliedTo>	4112	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	149	</id>
+              <appliedTo>	256	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	5	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	43	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </czech.xml>

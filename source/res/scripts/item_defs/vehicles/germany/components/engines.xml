@@ -141,6 +141,7 @@
     <Engine_PzIV>	253	</Engine_PzIV>
     <Engine_VK4502P>	254	</Engine_VK4502P>
     <Engine_Auf_Panther>	255	</Engine_Auf_Panther>
+    <SturmtigerEngine>	256	</SturmtigerEngine>
     <Maybach_HL_210P30_Ausf_A_IGR>	60001	</Maybach_HL_210P30_Ausf_A_IGR>
     <Maybach_HL_230_TRM_P30_IGR>	60002	</Maybach_HL_230_TRM_P30_IGR>
     <Maybach_HL_230_TRM_P45_IGR>	60003	</Maybach_HL_230_TRM_P45_IGR>
@@ -2734,5 +2735,22 @@
       <rpm_min>	250	</rpm_min>
       <rpm_max>	2800	</rpm_max>
     </MB507_IGR>
+    <SturmtigerEngine>
+      <userString>	#germany_vehicles:SturmtigerEngine	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	55000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	ev_10y_eng_pc	</wwsoundPC>
+      <wwsoundNPC>	ev_10y_eng_npc	</wwsoundNPC>
+      <power>	4200	</power>
+      <weight>	750	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	2800	</rpm_max>
+    </SturmtigerEngine>
   </shared>
 </engines.xml>

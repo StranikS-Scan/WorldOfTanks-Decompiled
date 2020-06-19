@@ -128,6 +128,9 @@ class TenYearsCountdownController(ITenYearsCountdownController):
         actions = self.__eventsCache.getActions()
         eventState = self.__getEventState(actions, _EVENT_STATE_NAME)
         if eventState is None:
+            if self.__isEventActive:
+                self.__isEventActive = False
+                self.onEventStateChanged()
             return
         else:
             isBlocksDataValid = False

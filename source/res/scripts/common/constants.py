@@ -2451,3 +2451,6 @@ class GF_RES_PROTOCOL(object):
     CAMO = 'camo://'
     PNUM = 'pnum://'
     SWF = 'swf://'
+
+
+EVENT_BATTLE_MODE_NAME = 'Sturmtiger_mode'

@@ -4379,4 +4379,40 @@
       </tiling>
     </camouflage>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F73_M4A1_Revalorise	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	145	</id>
+      <texture>	vehicles/russian/Camouflage/10years_m4a1.dds	</texture>
+      <description>	#vehicle_customization:camouflage/10years_m4a1/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/10years_m4a1/label	</userString>
+      <tags>	fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.305433	</HULL>
+        <TURRET>	-0.305433	</TURRET>
+        <GUN>	-0.305433	</GUN>
+      </rotation>
+      <tiling>
+        <france:F07_AMX_M4_19451>	3.2 3.2 -1.79 -9.35	</france:F07_AMX_M4_19451>
+      </tiling>
+    </camouflage>
+  </itemGroup>
 </france.xml>

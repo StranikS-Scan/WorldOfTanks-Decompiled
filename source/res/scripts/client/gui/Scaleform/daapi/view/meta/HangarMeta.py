@@ -82,5 +82,8 @@ class HangarMeta(View):
     def as_destroyDQWidgetS(self):
         return self.flashObject.as_destroyDQWidget() if self._isDAAPIInited() else None
 
+    def as_toggleSPGEventS(self, isVisible):
+        return self.flashObject.as_toggleSPGEvent(isVisible) if self._isDAAPIInited() else None
+
     def as_updateEventEntryPointS(self, alias, isVisible):
         return self.flashObject.as_updateEventEntryPoint(alias, isVisible) if self._isDAAPIInited() else None

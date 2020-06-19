@@ -27,7 +27,7 @@ from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.constants import PrimeTimeStatus
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showRankedPrimeTimeWindow, showTenYearsCountdownOnBoarding
+from gui.shared.event_dispatcher import showRankedPrimeTimeWindow, showTenYearsCountdownOnBoarding, showSPGPrimeTimeWindow
 from gui.shared.events import LobbySimpleEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
@@ -42,7 +42,7 @@ from helpers.i18n import makeString as _ms
 from helpers.statistics import HANGAR_LOADING_STATE
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IIGRController
+from skeletons.gui.game_control import IIGRController, IWOTSPGController
 from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController, IBattlePassController, IHangarLoadingController, ITenYearsCountdownController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
@@ -56,6 +56,8 @@ from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
 from gui.impl.gen import R
 from gui.impl import backport
 from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityAwardsBoxesCount
+from gui.periodic_battles.models import CalendarStatusVO
+from gui.shared.formatters import text_styles
 
 def predicateNotEmptyWindow(window):
     return window.content is not None and window.windowFlags != WindowFlags.TOOLTIP and window.content.viewFlags != ViewFlags.COMPONENT
@@ -82,6 +84,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     _offersBannerController = dependency.descriptor(IOffersBannerController)
     _countdownController = dependency.descriptor(ITenYearsCountdownController)
     _hangarLoadingController = dependency.descriptor(IHangarLoadingController)
+    _spgEvent = dependency.descriptor(IWOTSPGController)
     _COMMON_SOUND_SPACE = __SOUND_SETTINGS
 
     def __init__(self, _=None):
@@ -152,6 +155,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self._countdownController.onEventBlockChanged += self.__updateTenYearsCountdownEntryPointVisibility
         self._countdownController.onBlocksDataValidityChanged += self.__updateTenYearsCountdownEntryPointVisibility
         self._hangarLoadingController.onHangarLoadedAfterLogin += self.__onHangarLoadedAfterLogin
+        self._spgEvent.onEventTriggerChanged += self.__toggleSPGEvent
+        self._spgEvent.onPrimeTimeStatusUpdated += self.__updateAlertMessage
         self.startGlobalListening()
         self.__updateAll()
         self.addListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
@@ -165,6 +170,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.as_setNotificationEnabledS(crewBooksViewedCache().haveNewCrewBooks())
         self.__updateSenorityEntryPoint()
         self.__updateTenYearsCountdownEntryPointVisibility()
+        self.__toggleSPGEvent()
         self._offersBannerController.showBanners()
 
     def _dispose(self):
@@ -196,6 +202,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self._countdownController.onEventBlockChanged -= self.__updateTenYearsCountdownEntryPointVisibility
         self._countdownController.onBlocksDataValidityChanged -= self.__updateTenYearsCountdownEntryPointVisibility
         self._hangarLoadingController.onHangarLoadedAfterLogin -= self.__onHangarLoadedAfterLogin
+        self._spgEvent.onEventTriggerChanged -= self.__toggleSPGEvent
+        self._spgEvent.onPrimeTimeStatusUpdated -= self.__updateAlertMessage
         self.closeHelpLayout()
         self.stopGlobalListening()
         self._offersBannerController.hideBanners()
@@ -220,8 +228,13 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         linkage = HANGAR_ALIASES.TANK_CAROUSEL_UI
         newCarouselAlias = HANGAR_ALIASES.TANK_CAROUSEL
         if self.prbDispatcher is not None:
-            if self.battlePassController.isVisible() and self.battlePassController.isValidBattleType(self.prbDispatcher.getEntity()):
-                newCarouselAlias = HANGAR_ALIASES.BATTLEPASS_TANK_CAROUSEL
+            if self.battlePassController.isVisible():
+                entity = self.prbDispatcher.getEntity()
+                entityType = entity.getEntityType()
+                if hasattr(entity, 'getOriginalEntityType'):
+                    entityType = entity.getOriginalEntityType()
+                if self.battlePassController.isValidBattleType(entityType):
+                    newCarouselAlias = HANGAR_ALIASES.BATTLEPASS_TANK_CAROUSEL
             elif self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED):
                 linkage = HANGAR_ALIASES.TANK_CAROUSEL_UI
                 newCarouselAlias = HANGAR_ALIASES.RANKED_TANK_CAROUSEL
@@ -282,10 +295,39 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def __updateAlertMessage(self, *_):
         if self.prbDispatcher is not None:
+            if self.__needToShowSPGMessage():
+                self.__updateAlertSPGMessage()
+                return
             if self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED):
                 self.__updateRankedAlertMsg()
                 return
         self.as_setAlertMessageBlockVisibleS(False)
+        return
+
+    def __needToShowSPGMessage(self):
+        if not self._spgEvent.isEventVehicle() or self.prbDispatcher is None:
+            return False
+        else:
+            state = self.prbDispatcher.getFunctionalState()
+            if state.isQueueSelected(QUEUE_TYPE.EVENT_BATTLES):
+                status, _, _ = self._spgEvent.getPrimeTimeStatus()
+                return status in (PrimeTimeStatus.NOT_AVAILABLE, PrimeTimeStatus.NOT_SET)
+            return False
+
+    def __updateAlertSPGMessage(self, *args):
+        self.as_setAlertMessageBlockVisibleS(self._spgEvent.isEventVehicle())
+        buttonVisible = self._spgEvent.hasAvailablePrimeTimeServers()
+        availableServerForEvent, _, _ = self._spgEvent.getPrimeTimeStatus()
+        if self._connectionMgr.isStandalone():
+            text = backport.text(R.strings.menu.event10YC.standalone())
+        elif availableServerForEvent == PrimeTimeStatus.NOT_SET:
+            text = backport.text(R.strings.menu.event10YC.notAvailableServer(), serverName=self._connectionMgr.serverUserNameShort)
+        elif buttonVisible:
+            text = backport.text(R.strings.menu.event10YC.availableServer(), serverName=self._connectionMgr.serverUserNameShort)
+        else:
+            text = backport.text(R.strings.menu.event10YC.allServer())
+        data = CalendarStatusVO(alertIcon=backport.image(R.images.gui.maps.icons.library.alertBigIcon()), buttonIcon='', buttonLabel=backport.text(R.strings.menu.event10YC.button()), buttonVisible=buttonVisible, buttonTooltip=None, statusText=text_styles.vehicleStatusCriticalText(text), popoverAlias=None, bgVisible=True, shadowFilterVisible=False, tooltip=TOOLTIPS_CONSTANTS.SPG_CALENDAR_DAY_INFO)
+        self.__updateAlertBlock(showSPGPrimeTimeWindow, data, True)
         return
 
     def __updateRankedAlertMsg(self):
@@ -377,6 +419,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
                 if g_currentVehicle.item.invID in diff[GUI_ITEM_TYPE.VEHICLE]:
                     self.__updateAmmoPanel()
             self.__updateSenorityEntryPoint()
+            self.__toggleSPGEvent()
             return
 
     def onPlayerStateChanged(self, entity, roster, accountInfo):
@@ -443,6 +486,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateHeaderEpicWidget()
         self.__updateCrew()
         self.as_setNotificationEnabledS(crewBooksViewedCache().haveNewCrewBooks())
+        self.__toggleSPGEvent()
+        self.__updateAlertMessage()
         Waiting.hide('updateVehicle')
 
     def __onSpaceRefresh(self):
@@ -501,6 +546,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             changeNationTooltip = ''
         changeNationIsNew = not AccountSettings.getSettings(NATION_CHANGE_VIEWED)
         isMaintenanceEnabled = state.isMaintenanceEnabled()
+        if self._spgEvent.isEventVehicle():
+            isMaintenanceEnabled = False
         maintenanceTooltip = TOOLTIPS.HANGAR_MAINTENANCE if isMaintenanceEnabled else TOOLTIPS.HANGAR_MAINTENANCE_DISABLED
         self.as_setupAmmunitionPanelS({'maintenanceEnabled': isMaintenanceEnabled,
          'maintenanceTooltip': maintenanceTooltip,
@@ -550,6 +597,11 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         else:
             self.__isVehicleCameraReadyForC11n = vehicleEntity.state == CameraMovementStates.ON_OBJECT
             return
+
+    def __toggleSPGEvent(self, isEnabled=False):
+        self.as_toggleSPGEventS(not self._spgEvent.isEventVehicle())
+        if not self._spgEvent.isEnabled() and g_currentVehicle.isOnlyForEventBattles():
+            g_currentVehicle.selectVehicle(isNotEvent=True)
 
     def __onHangarLoadedAfterLogin(self):
         isEnabled = self._countdownController.isEnabled()

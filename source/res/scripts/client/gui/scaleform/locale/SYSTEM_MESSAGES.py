@@ -1156,6 +1156,9 @@ class SYSTEM_MESSAGES(object):
     OFFERS_SWITCH_OFF_BODY = '#system_messages:offers/switch_off/body'
     OFFERS_UNAVAILABLE_ONE = '#system_messages:offers/unavailable_one'
     OFFERS_UNAVAILABLE_MANY = '#system_messages:offers/unavailable_many'
+    SPGEVENT_NOTIFICATION_PRIMETIME = '#system_messages:spgEvent/notification/primeTime'
+    SPGEVENT_NOTIFICATION_NOTSET = '#system_messages:spgEvent/notification/notSet'
+    SPGEVENT_NOTIFICATION_AVAILABLE = '#system_messages:spgEvent/notification/available'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -2419,7 +2422,10 @@ class SYSTEM_MESSAGES(object):
      TECHTREE_ACTION_EXPIRETIME,
      OFFERS_SWITCH_OFF_BODY,
      OFFERS_UNAVAILABLE_ONE,
-     OFFERS_UNAVAILABLE_MANY)
+     OFFERS_UNAVAILABLE_MANY,
+     SPGEVENT_NOTIFICATION_PRIMETIME,
+     SPGEVENT_NOTIFICATION_NOTSET,
+     SPGEVENT_NOTIFICATION_AVAILABLE)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

@@ -52,10 +52,12 @@ class TenYearsCountdownEntryPoint(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         super(TenYearsCountdownEntryPoint, self)._onLoading(*args, **kwargs)
         self.__tenYearsCountdown.onEventStateChanged += self.__reinitialize
+        self.__tenYearsCountdown.onBlocksDataValidityChanged += self.__reinitialize
         self.__initialize()
 
     def _finalize(self):
         self.__tenYearsCountdown.onEventStateChanged -= self.__reinitialize
+        self.__tenYearsCountdown.onBlocksDataValidityChanged -= self.__reinitialize
         self.__tenYearsCountdown.onEventDataUpdated -= self.__reinitializeAfterEventUpdated
         self.__clear()
         self.__updateAnimationMethod = None
@@ -63,7 +65,7 @@ class TenYearsCountdownEntryPoint(ViewImpl):
         return
 
     def __initialize(self):
-        if self.__tenYearsCountdown.isEnabled():
+        if self.__tenYearsCountdown.isEventInProgress() and self.__tenYearsCountdown.isBlocksDataValid():
             self.__addListeners()
             self.__initNotifier()
             self.__updateModel()
@@ -137,9 +139,11 @@ class TenYearsCountdownEntryPoint(ViewImpl):
                     timerText = backport.text(R.strings.ten_year_countdown.entry_point.event_finish_timer.text())
             model.setTimerText(timerText)
         else:
-            model.setIsBlockLast(True)
+            timerText = backport.text(R.strings.ten_year_countdown.entry_point.event_finish_timer.text())
+            model.setTimerText(timerText)
             timer = backport.text(R.strings.ten_year_countdown.entry_point.event_finish_timer.lessDay(), value=0)
             model.setTimer(timer)
+            model.setIsTimerPaused(True)
 
     def __resetPeriodicNotifier(self):
         if self.__periodicNotifier:

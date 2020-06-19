@@ -19,6 +19,37 @@
     <wwmusicResultDefeat>	music_ruinberg_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
+  <extraSoundRemapping>
+    <Sturmtiger_mode>
+      <soundRemapping>
+        <loadBanks>
+          <bank>	ev_10y_countdown_gameplay.bnk	</bank>
+          <bank>	ev_10y_countdown_gameplay.pck	</bank>
+        </loadBanks>
+        <events>
+          <event>
+            <name>	wpn_huge_PC	</name>
+            <mod>	wpn_huge_PC	</mod>
+            <modAUX>	ev_10y_sturmtiger_wpn_pc	</modAUX>
+          </event>
+          <event>
+            <name>	wpn_huge_NPC	</name>
+            <mod>	wpn_huge_NPC	</mod>
+            <modAUX>	ev_10y_sturmtiger_wpn_npc	</modAUX>
+          </event>
+          <event>
+            <name>	psb_npc_stop	</name>
+            <mod>	ev_10y_sturmtiger_passBy_stop	</mod>
+          </event>
+          <event>
+            <name>	imp_surface_huge_NPC	</name>
+            <mod>	imp_surface_huge_NPC	</mod>
+            <modAUX>	ev_10y_sturmtiger_imp_surface	</modAUX>
+          </event>
+        </events>
+      </soundRemapping>
+    </Sturmtiger_mode>
+  </extraSoundRemapping>
   <umbraEnabled>	1	</umbraEnabled>
   <batchingEnabled>	0	</batchingEnabled>
   <defaultReverbPreset></defaultReverbPreset>

@@ -1193,7 +1193,7 @@ class IBattlePassController(IGameController):
     def isSellAnyLevelsUnlocked(self):
         raise NotImplementedError
 
-    def isValidBattleType(self, prbEntity):
+    def isValidBattleType(self, prbEntityType):
         raise NotImplementedError
 
     def getLevelByPoints(self, points):
@@ -1343,6 +1343,42 @@ class IBattlePassController(IGameController):
 
 class IHangarLoadingController(IGameController):
     onHangarLoadedAfterLogin = None
+
+
+class IWOTSPGController(IGameController):
+    onEventModeChanged = None
+    onEventTriggerChanged = None
+    onPrimeTimeStatusUpdated = None
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def onLobbyInited(self, ctx):
+        raise NotImplementedError
+
+    def isEventModeOn(self):
+        raise NotImplementedError
+
+    def isEventVehicle(self):
+        raise NotImplementedError
+
+    def onAvatarBecomePlayer(self):
+        raise NotImplementedError
+
+    def onDisconnected(self):
+        raise NotImplementedError
+
+    def getPrimeTimes(self):
+        raise NotImplementedError
+
+    def getPrimeTimesForDay(self, selectedTime, groupIdentical=False):
+        raise NotImplementedError
+
+    def getPrimeTimeStatus(self, peripheryID=None):
+        raise NotImplementedError
+
+    def getTimer(self):
+        raise NotImplementedError
 
 
 class ITenYearsCountdownController(IGameController):

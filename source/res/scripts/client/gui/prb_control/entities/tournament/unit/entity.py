@@ -10,6 +10,7 @@ from gui import SystemMessages
 from gui.prb_control import prb_getters
 from gui.prb_control import settings
 from gui.prb_control.entities.base.unit.entity import UnitEntity, UnitEntryPoint, UnitBrowserEntryPoint, UnitBrowserEntity
+from gui.prb_control.entities.tournament.unit.vehicles_watcher import TournamentVehiclesWatcher
 from gui.prb_control.items import SelectResult
 from gui.prb_control.items import ValidationResult, unit_items
 from gui.prb_control.events_dispatcher import g_eventDispatcher
@@ -147,6 +148,19 @@ class TournamentBrowserEntity(UnitBrowserEntity):
 
     def __init__(self):
         super(TournamentBrowserEntity, self).__init__(FUNCTIONAL_FLAG.TOURNAMENT, PREBATTLE_TYPE.TOURNAMENT)
+        self.__watcher = None
+        return
+
+    def init(self, ctx=None):
+        self.__watcher = TournamentVehiclesWatcher()
+        self.__watcher.start()
+        return super(TournamentBrowserEntity, self).init(ctx)
+
+    def fini(self, ctx=None, woEvents=False):
+        if self.__watcher is not None:
+            self.__watcher.stop()
+            self.__watcher = None
+        return super(TournamentBrowserEntity, self).fini(ctx, woEvents)
 
     def canKeepMode(self):
         return False

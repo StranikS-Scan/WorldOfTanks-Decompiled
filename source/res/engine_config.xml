@@ -172,6 +172,13 @@
     <wwmediaPath>	audioww	</wwmediaPath>
     <memoryLimit>	160	</memoryLimit>
     <highPriorityBankThread>	true	</highPriorityBankThread>
+    <playbackPools>
+      <pool>
+        <event>	obj_generative	</event>
+        <limit>	15	</limit>
+        <maxDistance>	100	</maxDistance>
+      </pool>
+    </playbackPools>
     <WWISE_active_profile>	WWISE_adv_profile	</WWISE_active_profile>
     <WWISE_emergency_profile>	WWISE_low_profile	</WWISE_emergency_profile>
     <WWISE_adv_profile>

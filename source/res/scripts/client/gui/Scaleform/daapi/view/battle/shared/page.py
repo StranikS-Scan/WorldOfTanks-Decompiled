@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/page.py
+import logging
 import BattleReplay
 import aih_constants
 from AvatarInputHandler import aih_global_binding
-from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.battle.shared import crosshair
 from gui.Scaleform.daapi.view.battle.shared import indicators
 from gui.Scaleform.daapi.view.battle.shared import markers2d
@@ -18,6 +18,7 @@ from gui.shared import EVENT_BUS_SCOPE, events
 from helpers import dependency, uniprof
 from skeletons.gameplay import IGameplayLogic, PlayerEventID
 from skeletons.gui.battle_session import IBattleSessionProvider
+_logger = logging.getLogger(__name__)
 
 class IComponentsConfig(object):
 
@@ -81,7 +82,7 @@ class SharedPage(BattlePageMeta):
         return
 
     def __del__(self):
-        LOG_DEBUG('SharedPage is deleted')
+        _logger.debug('SharedPage is deleted')
 
     def isGuiVisible(self):
         return self._isVisible
@@ -150,7 +151,7 @@ class SharedPage(BattlePageMeta):
         if hidden is None:
             hidden = set()
         if visible or hidden:
-            LOG_DEBUG('Sets components visibility', visible, hidden)
+            _logger.debug('Sets components visibility: visible = %r, hidden = %r', visible, hidden)
             self.as_setComponentsVisibilityS(visible, hidden)
         return
 
@@ -161,10 +162,12 @@ class SharedPage(BattlePageMeta):
         self.sessionProvider.removeViewComponent(alias)
 
     def _startBattleSession(self):
-        self.sessionProvider.registerViewComponents(*self.__componentsConfig.getConfig())
-        for alias, objFactory in self.__componentsConfig.getViewsConfig():
-            self.sessionProvider.addViewComponent(alias, objFactory(), rule=VIEW_COMPONENT_RULE.NONE)
+        if self.sessionProvider.registerViewComponents(*self.__componentsConfig.getConfig()):
+            for alias, objFactory in self.__componentsConfig.getViewsConfig():
+                self.sessionProvider.addViewComponent(alias, objFactory(), rule=VIEW_COMPONENT_RULE.NONE)
 
+        else:
+            _logger.warning('View components can not be added into battle session provider')
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             if ctrl.isInPostmortem:

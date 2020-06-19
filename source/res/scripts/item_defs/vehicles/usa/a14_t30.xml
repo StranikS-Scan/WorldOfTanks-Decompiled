@@ -53,6 +53,13 @@
       <undamaged>	vehicles/american/A14_T30/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/american/A14_T30/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/american/A14_T30/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <T30_Countdown>
+          <undamaged>	vehicles/american/A14_T30/_skins/T30_Countdown/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A14_T30/_skins/T30_Countdown/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A14_T30/_skins/T30_Countdown/crash/lod0/Hull.model	</exploded>
+        </T30_Countdown>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -82,8 +89,8 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.0896407 0.348674 2.9436	</rayStart>
-        <rayEnd>	0.0844246 0.0277039 2.70495	</rayEnd>
+        <rayStart>	-0.462118 0.402797 2.86259	</rayStart>
+        <rayEnd>	-0.463487 0.0794629 2.6271	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
@@ -947,6 +954,13 @@
         <undamaged>	vehicles/american/A14_T30/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A14_T30/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/american/A14_T30/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <T30_Countdown>
+            <undamaged>	vehicles/american/A14_T30/_skins/T30_Countdown/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A14_T30/_skins/T30_Countdown/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A14_T30/_skins/T30_Countdown/crash/lod0/Chassis.model	</exploded>
+          </T30_Countdown>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1234,6 +1248,10 @@
             </bottomFront>
           </snapWheels>
           <radiusOverrides>
+            <wheel>
+              <name>	W_L8	</name>
+              <radius>	0.15	</radius>
+            </wheel>
             <wheel>
               <name>	WD_L9	</name>
               <radius>	0.323434	</radius>
@@ -1611,6 +1629,10 @@
             </bottomFront>
           </snapWheels>
           <radiusOverrides>
+            <wheel>
+              <name>	W_R8	</name>
+              <radius>	0.15	</radius>
+            </wheel>
             <wheel>
               <name>	WD_R9	</name>
               <radius>	0.323434	</radius>
@@ -1959,6 +1981,13 @@
         <undamaged>	vehicles/american/A14_T30/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A14_T30/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/american/A14_T30/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <T30_Countdown>
+            <undamaged>	vehicles/american/A14_T30/_skins/T30_Countdown/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A14_T30/_skins/T30_Countdown/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A14_T30/_skins/T30_Countdown/crash/lod0/Chassis.model	</exploded>
+          </T30_Countdown>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -2252,6 +2281,10 @@
             </bottomFront>
           </snapWheels>
           <radiusOverrides>
+            <wheel>
+              <name>	W_L8	</name>
+              <radius>	0.15	</radius>
+            </wheel>
             <wheel>
               <name>	WD_L9	</name>
               <radius>	0.323434	</radius>
@@ -2629,6 +2662,10 @@
             </bottomFront>
           </snapWheels>
           <radiusOverrides>
+            <wheel>
+              <name>	W_R8	</name>
+              <radius>	0.15	</radius>
+            </wheel>
             <wheel>
               <name>	WD_R9	</name>
               <radius>	0.323434	</radius>
@@ -3023,6 +3060,13 @@
             <undamaged>	vehicles/american/A14_T30/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/american/A14_T30/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/american/A14_T30/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <T30_Countdown>
+                <undamaged>	vehicles/american/A14_T30/_skins/T30_Countdown/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/american/A14_T30/_skins/T30_Countdown/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/american/A14_T30/_skins/T30_Countdown/crash/lod0/Gun_02.model	</exploded>
+              </T30_Countdown>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A14_T30/collision/Gun_02.model	</collisionModelServer>
@@ -3121,6 +3165,13 @@
             <undamaged>	vehicles/american/A14_T30/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/american/A14_T30/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/american/A14_T30/crash/lod0/Gun_03.model	</exploded>
+            <sets>
+              <T30_Countdown>
+                <undamaged>	vehicles/american/A14_T30/_skins/T30_Countdown/normal/lod0/Gun_03.model	</undamaged>
+                <destroyed>	vehicles/american/A14_T30/_skins/T30_Countdown/crash/lod0/Gun_03.model	</destroyed>
+                <exploded>	vehicles/american/A14_T30/_skins/T30_Countdown/crash/lod0/Gun_03.model	</exploded>
+              </T30_Countdown>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A14_T30/collision/Gun_03.model	</collisionModelServer>
@@ -3213,6 +3264,13 @@
             <undamaged>	vehicles/american/A14_T30/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A14_T30/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/american/A14_T30/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <T30_Countdown>
+                <undamaged>	vehicles/american/A14_T30/_skins/T30_Countdown/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/american/A14_T30/_skins/T30_Countdown/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/american/A14_T30/_skins/T30_Countdown/crash/lod0/Gun_01.model	</exploded>
+              </T30_Countdown>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A14_T30/collision/Gun_01.model	</collisionModelServer>
@@ -3283,6 +3341,13 @@
         <undamaged>	vehicles/american/A14_T30/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/american/A14_T30/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/american/A14_T30/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <T30_Countdown>
+            <undamaged>	vehicles/american/A14_T30/_skins/T30_Countdown/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A14_T30/_skins/T30_Countdown/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A14_T30/_skins/T30_Countdown/crash/lod0/Turret_01.model	</exploded>
+          </T30_Countdown>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/american/A14_T30/collision/Turret_01.model	</collisionModelServer>
@@ -4010,6 +4075,48 @@
           <anchorPosition>	0.00984361 1.29211 -0.632315	</anchorPosition>
           <anchorDirection>	-0.00589266 0.99542 0.0954177	</anchorDirection>
           <verticalMirror>	true	</verticalMirror>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35051	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	T30_Countdown	</compatibleModels>
+          <position>	1.23071 2.27686 1.0545	</position>
+          <rotation>	1.44315 1.40108 -2.87088	</rotation>
+          <scale>	0.582857 0.582857 0.582857	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.000000	</clipAngle>
+          <anchorPosition>	1.23071 0.570864 0.471956	</anchorPosition>
+          <anchorDirection>	0.896841 0.122667 0.425004	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35052	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	T30_Countdown	</compatibleModels>
+          <position>	-1.25717 2.28219 1.07857	</position>
+          <rotation>	1.44755 -1.31807 3.07696	</rotation>
+          <scale>	0.582857 0.582857 0.582858	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.000000	</clipAngle>
+          <anchorPosition>	-1.25717 0.576195 0.496027	</anchorPosition>
+          <anchorDirection>	-0.942732 0.12268 0.310171	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35053	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	T30_Countdown	</compatibleModels>
+          <position>	-0.0193278 2.79468 1.0999	</position>
+          <rotation>	0.154867 -0.0138434 -3.01701	</rotation>
+          <scale>	0.64171 0.1 0.641709	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.000000	</clipAngle>
+          <anchorPosition>	-0.0307005 1.17691 0.530977	</anchorPosition>
+          <anchorDirection>	-0.126364 0.980375 0.151318	</anchorDirection>
         </slot>
       </customizationSlots>
       <camouflage>

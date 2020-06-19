@@ -472,22 +472,22 @@ class VehiclePreviewWebApiMixin(object):
         styledVehicleCD = None
         style = self.c11n.getItemByID(GUI_ITEM_TYPE.STYLE, styleId)
         vehicle = g_currentVehicle.item if g_currentVehicle.isPresent() else None
-        if vehicle is not None and style.mayInstall(vehicle):
+        if vehicle is not None and not vehicle.descriptor.type.isCustomizationLocked and style.mayInstall(vehicle):
             styledVehicleCD = vehicle.intCD
         else:
             accDossier = self.itemsCache.items.getAccountDossier()
             vehiclesStats = accDossier.getRandomStats().getVehicles()
             vehicleGetter = self.itemsCache.items.getItemByCD
-            vehiclesStats = {vehicleCD:value for vehicleCD, value in vehiclesStats.iteritems() if style.mayInstall(vehicleGetter(vehicleCD))}
+            vehiclesStats = {vehicleCD:value for vehicleCD, value in vehiclesStats.iteritems() if not vehicleGetter(vehicleCD).descriptor.type.isCustomizationLocked and style.mayInstall(vehicleGetter(vehicleCD))}
             if vehiclesStats:
                 sortedVehicles = sorted(vehiclesStats.items(), key=lambda vStat: vStat[1].battlesCount, reverse=True)
                 styledVehicleCD = sortedVehicles[0][0] if sortedVehicles else None
             if not styledVehicleCD:
-                criteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.FOR_ITEM(style)
+                criteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.IS_OUTFIT_LOCKED | REQ_CRITERIA.VEHICLE.FOR_ITEM(style)
                 vehicle = first(self.__getVehiclesForStylePreview(criteria=criteria))
                 styledVehicleCD = vehicle.intCD if vehicle else None
             if not styledVehicleCD:
-                criteria = ~REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.EVENT | REQ_CRITERIA.VEHICLE.FOR_ITEM(style)
+                criteria = ~REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.IS_OUTFIT_LOCKED | REQ_CRITERIA.VEHICLE.FOR_ITEM(style) | ~REQ_CRITERIA.VEHICLE.EVENT
                 vehicle = random.choice(self.__getVehiclesForStylePreview(criteria=criteria))
                 styledVehicleCD = vehicle.intCD if vehicle else None
         return styledVehicleCD

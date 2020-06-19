@@ -78,7 +78,7 @@ class _CmpOptDeviceRemover(ModuleProcessor):
 
 class _ConfigFittingSlotVO(FittingSlotVO):
 
-    def __init__(self, modulesData, vehicle, slotType, slotId=None, tooltipType=None):
+    def __init__(self, modulesData, vehicle, slotType, slotId=None, tooltipType=None, isDisabledTooltip=False):
         super(_ConfigFittingSlotVO, self).__init__(modulesData, vehicle, slotType, slotId, tooltipType)
         slotEmpty = self['id'] == -1
         self['showRemoveBtn'] = not slotEmpty

@@ -19,7 +19,7 @@ class _SlotVOConstants(object):
 
 class FittingSlotVO(dict):
 
-    def __init__(self, modulesData, vehicle, slotType, slotId=None, tooltipType=None):
+    def __init__(self, modulesData, vehicle, slotType, slotId=None, tooltipType=None, isDisabledTooltip=False):
         super(FittingSlotVO, self).__init__()
         if slotType == FITTING_TYPES.VEHICLE_TURRET and not vehicle.hasTurrets:
             ttType = ''
@@ -38,16 +38,25 @@ class FittingSlotVO(dict):
             self['id'] = _SlotVOConstants.UNRESOLVED_LIST_INDEX
             self['tooltipType'] = TOOLTIPS_CONSTANTS.COMPLEX
             if slotType == FITTING_TYPES.OPTIONAL_DEVICE:
-                self['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_DEVICE_EMPTY
+                if not isDisabledTooltip:
+                    self['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_DEVICE_EMPTY
+                else:
+                    self['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_DEVICE_DISABLED
                 self['moduleLabel'] = _SlotVOConstants.MODULE_LABEL_EMPTY
             elif slotType == FITTING_TYPES.BOOSTER:
-                self['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_BATTLEBOOSTER_EMPTY
+                if not isDisabledTooltip:
+                    self['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_BATTLEBOOSTER_EMPTY
+                else:
+                    self['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_BATTLEBOOSTER_DISABLED
                 self['moduleLabel'] = _SlotVOConstants.MODULE_LABEL_EMPTY_BOOSTER
             elif slotType == FITTING_TYPES.BATTLE_ABILITY:
                 self['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_BATTLEABILITY_EMPTY
                 self['moduleLabel'] = _SlotVOConstants.MODULE_LABEL_EMPTY_ABILITY
             else:
-                self['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY
+                if not isDisabledTooltip:
+                    self['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY
+                else:
+                    self['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_EQUIPMENT_DISABLED
                 self['moduleLabel'] = _SlotVOConstants.MODULE_LABEL_EMPTY
         else:
             self['id'] = vehicleModule.intCD

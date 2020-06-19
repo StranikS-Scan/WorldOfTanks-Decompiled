@@ -401,6 +401,7 @@ class MENU(object):
     PREBATTLE_TITLE = '#menu:prebattle/title'
     PREBATTLE_DESCRIPTION = '#menu:prebattle/description'
     PREBATTLE_WAITINGTIMEWARNING = '#menu:prebattle/waitingTimeWarning'
+    PREBATTLE_EVENTWAITINGTIMEWARNING = '#menu:prebattle/eventWaitingTimeWarning'
     PREBATTLE_COMPANIESTITLE_JUNIOR = '#menu:prebattle/CompaniesTitle/JUNIOR'
     PREBATTLE_COMPANIESTITLE_MIDDLE = '#menu:prebattle/CompaniesTitle/MIDDLE'
     PREBATTLE_COMPANIESTITLE_CHAMPION = '#menu:prebattle/CompaniesTitle/CHAMPION'
@@ -693,6 +694,10 @@ class MENU(object):
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDDISABLED_BODY = '#menu:headerButtons/fightBtn/tooltip/rankedDisabled/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDNOTSET_HEADER = '#menu:headerButtons/fightBtn/tooltip/rankedNotSet/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDNOTSET_BODY = '#menu:headerButtons/fightBtn/tooltip/rankedNotSet/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_SPGEVENTDISABLED_HEADER = '#menu:headerButtons/fightBtn/tooltip/spgEventDisabled/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_SPGEVENTDISABLED_BODY = '#menu:headerButtons/fightBtn/tooltip/spgEventDisabled/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_SPGEVENTNOTSET_HEADER = '#menu:headerButtons/fightBtn/tooltip/spgEventNotSet/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_SPGEVENTNOTSET_BODY = '#menu:headerButtons/fightBtn/tooltip/spgEventNotSet/body'
     HEADERBUTTONS_DEFAULTCOUNTER = '#menu:headerButtons/defaultCounter'
     PVESANDBOX_QUEUE_TITLE = '#menu:pveSandbox/queue/title'
     PVESANDBOX_QUEUE_UNITS = '#menu:pveSandbox/queue/units'
@@ -1382,6 +1387,7 @@ class MENU(object):
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_BUTTONS_APPLY = '#menu:hangar/ammunitionPanel/technicalMaitenance/buttons/apply'
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_BUTTONS_CLOSE = '#menu:hangar/ammunitionPanel/technicalMaitenance/buttons/close'
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_BUTTONS_LABELTOTAL = '#menu:hangar/ammunitionPanel/technicalMaitenance/buttons/labelTotal'
+    HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_EQUIPMENTDISABLED = '#menu:hangar/ammunitionPanel/technicalMaitenance/equipmentDisabled'
     FITTINGLISTITEMRENDERER_UNLOAD = '#menu:fittingListItemRenderer/unload'
     FITTINGLISTITEMRENDERER_REPLACE = '#menu:fittingListItemRenderer/replace'
     SHELLLISTITEMRENDERER_REPLACE = '#menu:shellListItemRenderer/replace'
@@ -2022,6 +2028,11 @@ class MENU(object):
     ROLEEXP_ACTION_DONEARDAMAGESQ = '#menu:roleExp/action/doNearDamageSq'
     ROLEEXP_ACTION_DOGROUPSTUN = '#menu:roleExp/action/doGroupStun'
     ROLEEXP_ACTION_DOINVISASSIST = '#menu:roleExp/action/doInvisAssist'
+    EVENT10YC_STANDALONE = '#menu:event10YC/standalone'
+    EVENT10YC_AVAILABLESERVER = '#menu:event10YC/availableServer'
+    EVENT10YC_NOTAVAILABLESERVER = '#menu:event10YC/notAvailableServer'
+    EVENT10YC_ALLSERVER = '#menu:event10YC/allServer'
+    EVENT10YC_BUTTON = '#menu:event10YC/button'
     CONTEXTMENU_ENUM = (CONTEXTMENU_EXCHANGE,
      CONTEXTMENU_VEHICLEINFO,
      CONTEXTMENU_VEHICLEINFOEX,

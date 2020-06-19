@@ -20,6 +20,7 @@ from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopURL
 from gui.Scaleform.daapi.view.lobby.clans.clan_helpers import getClanQuestURL
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.entities.View import ViewKey
+from gui.Scaleform.genConsts.EVENT10YC_ALIASES import EVENT10YC_ALIASES
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
@@ -95,6 +96,10 @@ def showRankedAwardWindow(awardsSequence, rankedInfo):
 
 def showRankedPrimeTimeWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(alias=RANKEDBATTLES_ALIASES.RANKED_BATTLE_PRIME_TIME, ctx={}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showSPGPrimeTimeWindow():
+    g_eventBus.handleEvent(events.LoadViewEvent(alias=EVENT10YC_ALIASES.EVENT_10YC_PRIME_TIME_ALIAS, ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showEpicBattlesPrimeTimeWindow():

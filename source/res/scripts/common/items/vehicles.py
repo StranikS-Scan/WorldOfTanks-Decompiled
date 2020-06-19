@@ -1557,6 +1557,14 @@ class VehicleType(object):
     def isCustomizationLocked(self):
         return 'lockOutfit' in self.tags
 
+    @property
+    def isEquipmentLocked(self):
+        return 'lockEquipment' in self.tags
+
+    @property
+    def isOptionalDevicesLocked(self):
+        return 'lockOptionalDevices' in self.tags
+
     def update(self, data):
         if json_vehicle_reader:
             json_vehicle_reader.readVehicle(self, data)

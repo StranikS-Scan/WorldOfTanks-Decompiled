@@ -282,6 +282,8 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
          'quests': []}
         if not self.app.tutorialManager.hangarHeaderEnabled:
             return emptyHeaderVO
+        if self._currentVehicle.isEvent():
+            return emptyHeaderVO
         if self.__rankedController.isRankedPrbActive():
             return {'isVisible': True,
              'quests': self.__getRankedQuestsToHeaderVO()}
@@ -317,7 +319,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
 
     def __updateBPWidget(self):
         isBPAvailable = not self.__battlePassController.isDisabled()
-        isValidBattleType = self.prbDispatcher and self.prbDispatcher.getEntity() and self.__battlePassController.isValidBattleType(self.prbDispatcher.getEntity())
+        isValidBattleType = self.prbDispatcher and self.prbDispatcher.getEntity() and self.__battlePassController.isValidBattleType(self.prbDispatcher.getEntity().getEntityType())
         isVisible = isBPAvailable and isValidBattleType and not self.__bootcampController.isInBootcamp()
         if isVisible:
             self.as_createBattlePassS()

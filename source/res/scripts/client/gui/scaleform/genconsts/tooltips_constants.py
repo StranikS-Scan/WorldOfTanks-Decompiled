@@ -180,6 +180,7 @@ class TOOLTIPS_CONSTANTS(object):
     BATTLE_TRAINING = 'battleTraining'
     OPERATION_POSTPONED = 'operationPostponed'
     SQUAD_BONUS = 'squadBonus'
+    TENYEARS_ENTRY_POINT = 'tenyearsEntryPoint'
     GF_TEST_TOOLTIP = 'gfTestTooltip'
     BATTLE_PASS_VEHICLE_POINTS = 'battlePassVehiclePoints'
     BATTLE_PASS_POINTS = 'battlePassPoints'
@@ -205,6 +206,7 @@ class TOOLTIPS_CONSTANTS(object):
     RANKED_BATTLES_POSITION = 'rankedBattlesPosition'
     RANKED_STEP = 'rankedStep'
     RANKED_CALENDAR_DAY_INFO = 'rankedCalendarDayInfo'
+    SPG_CALENDAR_DAY_INFO = 'SPGCalendarDayTooltip'
     RANKED_SELECTOR_INFO = 'rankedSelectorInfo'
     RANKED_UNAVAILABLE_INFO = 'rankedUnavailableInfo'
     RANKED_CALENDAR_STEPS_INFO = 'rankedCalendarStepsInfo'
@@ -333,7 +335,9 @@ class TOOLTIPS_CONSTANTS(object):
      SHOP_BOOSTER,
      BOOSTERS_QUESTS,
      NATION_CHANGE_BATTLE_BOOSTER]
-    COMMON_SET = [EFFICIENCY_PARAM,
+    COMMON_SET = [TENYEARS_ENTRY_POINT,
+     SPG_CALENDAR_DAY_INFO,
+     EFFICIENCY_PARAM,
      IGR_INFO,
      CONTACT,
      SORTIE_DIVISION,

@@ -889,7 +889,7 @@ class CustomizationOutfit(SerializableComponent):
                     count -= 1
         return countBefore - count
 
-    def wipe(self, gameParams, cache, getGroupedComponentPrice):
+    def wipe(self, gameParams, cache, getGroupedComponentPrice, vehType=None):
         outfitItems = getAllItemsFromOutfit(cache, self)
         for itemDescr, count in outfitItems.items():
             cid, itemId = cn.splitIntDescr(itemDescr)
@@ -897,7 +897,7 @@ class CustomizationOutfit(SerializableComponent):
             item = cache.itemTypes[cid][itemId]
             if cid == CustomizationType.STYLE and item.isRent or item.isProgressive():
                 isNeedRemove = True
-            else:
+            elif not (vehType is not None and cid == CustomizationType.DECAL and itemId == vehType.defaultPlayerEmblemID):
                 try:
                     getGroupedComponentPrice(gameParams, itemDescr, True)
                 except SoftException:
@@ -1179,6 +1179,7 @@ def getVehicleOutfit(outfits, vehTypeDescr, outfitType):
 
 def createNationalEmblemComponents(vehDescr):
     nationalEmblemId = vehDescr.type.defaultPlayerEmblemID
+    showTurretEmblemsOnGun = vehDescr.turret.showEmblemsOnGun
     decals = []
     for partName in CUSTOMIZATION_SLOTS_VEHICLE_PARTS:
         part = getattr(vehDescr, partName)
@@ -1191,6 +1192,8 @@ def createNationalEmblemComponents(vehDescr):
             except StopIteration:
                 raise SoftException('ApplyArea mismatch. Wrong slot {} for vehicle {}'.format(slot, vehDescr))
 
+            if showTurretEmblemsOnGun and appliedTo in ApplyArea.TURRET_EMBLEM_REGIONS:
+                appliedTo <<= 4
             decals.append(DecalComponent(id=nationalEmblemId, appliedTo=appliedTo))
 
     return decals

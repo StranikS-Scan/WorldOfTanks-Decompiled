@@ -5,7 +5,9 @@ from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.prb_control.settings import UNIT_RESTRICTION
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.prb_control.settings import UNIT_RESTRICTION, PRE_QUEUE_RESTRICTION
 from gui.shared.formatters import text_styles, icons
 from helpers import i18n
 from shared_utils import BoundMethodWeakref
@@ -62,7 +64,9 @@ class ActionButtonStateVO(dict):
          UNIT_RESTRICTION.UNIT_INACTIVE_PERIPHERY_BATTLE: (CYBERSPORT.WINDOW_UNIT_MESSAGE_INACTIVEPERIPHERYBATTLE, {}),
          UNIT_RESTRICTION.UNIT_WAITINGFORDATA: (TOOLTIPS.STRONGHOLDS_TIMER_WAITINGFORDATA, {}),
          UNIT_RESTRICTION.UNIT_MIN_CLAN_MEMBERS: BoundMethodWeakref(self._clanMembersNotEnoughMessage),
-         UNIT_RESTRICTION.UNIT_IS_IN_PLAYERS_MATCHING: (CYBERSPORT.WINDOW_UNIT_MESSAGE_IN_PLAYERS_MATCHING, {})}
+         UNIT_RESTRICTION.UNIT_IS_IN_PLAYERS_MATCHING: (CYBERSPORT.WINDOW_UNIT_MESSAGE_IN_PLAYERS_MATCHING, {}),
+         PRE_QUEUE_RESTRICTION.MODE_NOT_SET: (backport.text(R.strings.cyberSport.squadWindow.eventNotSetMessage()), {}),
+         PRE_QUEUE_RESTRICTION.MODE_DISABLED: (backport.text(R.strings.cyberSport.squadWindow.eventDisabledMessage()), {})}
         self.__WARNING_UNIT_MESSAGES = {UNIT_RESTRICTION.XP_PENALTY_VEHICLE_LEVELS: (MESSENGER.DIALOGS_SQUAD_MESSAGE_VEHICLES_DIFFERENTLEVELS, {})}
         self.__NEUTRAL_UNIT_MESSAGES = {UNIT_RESTRICTION.UNIT_WILL_SEARCH_PLAYERS: (FORTIFICATIONS.UNIT_WINDOW_WILLSEARCHPLAYERS, {})}
         stateKey, stateCtx = self.__getState()

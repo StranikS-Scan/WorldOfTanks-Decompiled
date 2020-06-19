@@ -716,3 +716,7 @@ class PrbActionEvent(HasCtxEvent):
     def __init__(self, action, eventType=None):
         super(PrbActionEvent, self).__init__(eventType)
         self.action = action
+
+
+class EventSquadEvent(HasCtxEvent):
+    READY_BUTTON_UPDATE = 'readyButtonUpdate'

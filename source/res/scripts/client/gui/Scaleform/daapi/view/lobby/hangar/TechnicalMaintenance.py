@@ -260,6 +260,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
 
         self.__saveCurrentLayout(eId1=eId1, currency1=currency1, eId2=eId2, currency2=currency2, eId3=eId3, currency3=currency3)
         self._setEquipment(installed, setup, modules)
+        self.as_setEquipmentVisibleS(isVisible=not g_currentVehicle.isEquipmentLocked())
         return
 
     @decorators.process('updateMyVehicles')
@@ -326,7 +327,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         self.as_setEquipmentS(installed, setup, modules)
 
     def __onCurrentVehicleChanged(self, *args):
-        if g_currentVehicle.isLocked() or not g_currentVehicle.isPresent():
+        if g_currentVehicle.isLocked() or not g_currentVehicle.isPresent() or g_currentVehicle.isEvent():
             self.destroy()
         else:
             self.populateTechnicalMaintenance()

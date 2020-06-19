@@ -54,6 +54,7 @@ from constants import VEHICLE_MISC_STATUS, VEHICLE_HIT_FLAGS
 from constants import VEHICLE_SIEGE_STATE
 from constants import DUAL_GUN, DUALGUN_CHARGER_STATUS, DUALGUN_CHARGER_ACTION_TYPE
 from constants import DEFAULT_VECTOR_3
+from constants import EVENT_BATTLE_MODE_NAME
 from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG_DEV, LOG_CODEPOINT_WARNING, LOG_NOTE
 from gui import GUI_CTRL_MODE_FLAG, IngameSoundNotifications, SystemMessages
 from gui.Scaleform.locale.MESSENGER import MESSENGER
@@ -64,6 +65,7 @@ from gui.battle_control import event_dispatcher as gui_event_dispatcher
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CANT_SHOOT_ERROR, DestroyTimerViewState, DeathZoneTimerViewState
 from gui.prb_control.formatters import messages
 from gui.wgnc import g_wgncProvider
+from gui.game_control.wot_spg_sounds import WOTSPGEventSounds
 from gun_rotation_shared import decodeGunAngles
 from helpers import DecalMap
 from helpers import bound_effects
@@ -270,6 +272,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             game.abort()
             return
         else:
+            if self.arenaGuiType == ARENA_GUI_TYPE.EVENT_BATTLES and EVENT_BATTLE_MODE_NAME:
+                WWISE.activateRemapping(EVENT_BATTLE_MODE_NAME)
             self.vehicleTypeDescriptor = None
             self.terrainEffects = bound_effects.StaticSceneBoundEffects()
             self.filter = BigWorld.AvatarFilter()
@@ -496,11 +500,15 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 BigWorld.callback(0, partial(self.set_playerVehicleID, 0))
         self.__consistentMatrices.notifyEnterWorld(self)
         AvatarObserver.onEnterWorld(self)
+        if self.arenaGuiType == ARENA_GUI_TYPE.EVENT_BATTLES:
+            WWISE.WW_eventGlobal(WOTSPGEventSounds.EV_10Y_STURMTIGER_ENTER)
 
     def onLeaveWorld(self):
         LOG_DEBUG('[INIT_STEPS] Avatar.onLeaveWorld')
         self.__consistentMatrices.notifyLeaveWorld(self)
         self.__cancelWaitingForCharge()
+        if self.arenaGuiType == ARENA_GUI_TYPE.EVENT_BATTLES:
+            WWISE.WW_eventGlobal(WOTSPGEventSounds.EV_10Y_STURMTIGER_EXIT)
 
     def onVehicleChanged(self):
         LOG_DEBUG('Avatar vehicle has changed to %s' % self.vehicle)

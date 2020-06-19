@@ -958,6 +958,9 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLEPASS_BADGES_HEADER_REMOVE = '#messenger:serviceChannelMessages/battlePass/badges/header/remove'
     SERVICECHANNELMESSAGES_BATTLEPASS_BADGES_TEXT_REMOVE = '#messenger:serviceChannelMessages/battlePass/badges/text/remove'
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_UPGRADE = '#messenger:serviceChannelMessages/sysMsg/titles/upgrade'
+    SERVICECHANNELMESSAGES_SPGEVENT_TITLES_AVAILABLE = '#messenger:serviceChannelMessages/spgEvent/titles/available'
+    SERVICECHANNELMESSAGES_SPGEVENT_TITLES_NOTSET = '#messenger:serviceChannelMessages/spgEvent/titles/notSet'
+    SERVICECHANNELMESSAGES_SPGEVENT_TITLES_PRIMETIME = '#messenger:serviceChannelMessages/spgEvent/titles/primeTime'
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_TRY_LATER,
      CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,

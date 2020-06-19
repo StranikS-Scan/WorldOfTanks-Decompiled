@@ -57,6 +57,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.battle_pass_controller import BattlePassController
     from gui.game_control.clan_notification_controller import ClanNotificationController as _ClanNotification
     from gui.game_control.craftmachine_controller import CraftmachineController
+    from gui.game_control.wot_spg_controller import WOTSPGEventController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -103,6 +104,7 @@ def getGameControllersConfig(manager):
     _config(_interface.IBattlePassController, BattlePassController())
     _config(_interface.ITenYearsCountdownController, _TenYears())
     _config(_interface.IHangarLoadingController, _HangarLoading())
+    _config(_interface.IWOTSPGController, WOTSPGEventController())
     if constants.IS_CHINA:
         _config(_interface.IChinaController, _China())
     else:

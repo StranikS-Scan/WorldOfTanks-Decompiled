@@ -33,3 +33,9 @@ class AmmunitionPanelMeta(ModulesPanelMeta):
 
     def as_showAnimationS(self, slotType, slotIndex, path):
         return self.flashObject.as_showAnimation(slotType, slotIndex, path) if self._isDAAPIInited() else None
+
+    def as_setEquipmentEnabledS(self, value):
+        return self.flashObject.as_setEquipmentEnabled(value) if self._isDAAPIInited() else None
+
+    def as_optionalDevicesEnabledS(self, value):
+        return self.flashObject.as_optionalDevicesEnabled(value) if self._isDAAPIInited() else None

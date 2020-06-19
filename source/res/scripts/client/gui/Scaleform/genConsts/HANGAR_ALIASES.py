@@ -19,6 +19,7 @@ class HANGAR_ALIASES(object):
     SENIORITY_AWARDS_ENTRY_POINT = 'SENIORITY_AWARDS_ENTRY_POINT'
     RANKED_PRIME_TIME = 'rankedPrimeTime.swf'
     EPIC_PRIME_TIME = 'epicPrimeTime.swf'
+    EVENT_10YC_PRIME_TIME = 'event10YCPrimeTime.swf'
     TANK_CAROUSEL_UI = 'TankCarouselUI'
     VEH_PARAM_RENDERER_STATE_SIMPLE_TOP = 'simpleTop'
     VEH_PARAM_RENDERER_STATE_SIMPLE_BOTTOM = 'simpleBottom'

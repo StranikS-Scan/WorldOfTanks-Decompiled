@@ -54,7 +54,7 @@ class ShellBlockToolTipData(BlocksTooltipData):
             items.append(formatters.packBuildUpBlockData(priceBlock, padding=blockPadding, gap=textGap))
         if vDescr is not None and not showBasicData:
             simplifiedStatsBlock = SimplifiedStatsBlockConstructor(shell, paramsConfig, params).construct()
-            if simplifiedStatsBlock:
+            if simplifiedStatsBlock and self.item.name != '_380mm_Rocket_2':
                 items.append(formatters.packBuildUpBlockData(simplifiedStatsBlock, padding=blockPadding, gap=textGap))
         statusBlock = StatusBlockConstructor(shell, statusConfig).construct()
         if self.__basicDataAllowed:

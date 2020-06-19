@@ -1,0 +1,356 @@
+<G62_Roket_Sturmtiger.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <crew>
+    <commander></commander>
+    <radioman></radioman>
+    <driver></driver>
+    <gunner></gunner>
+    <loader></loader>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	65	</forward>
+    <backward>	55	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.198	</moving>
+    <still>	0.263	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.395	</firePenalty>
+  </invisibility>
+  <repairCost>	0	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	2.0	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+    <density>	1 1	</density>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle>	0	</battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	150	</armor_1>
+      <armor_2>	70	</armor_2>
+      <armor_3>	60	</armor_3>
+      <armor_5>	60	</armor_5>
+      <armor_6>	60	</armor_6>
+      <armor_7>	30	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	100	</armor_9>
+      <armor_10>	30	</armor_10>
+      <armor_11>	80	</armor_11>
+      <armor_12>	40	</armor_12>
+      <armor_15>	80	</armor_15>
+      <armor_16>	80	</armor_16>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_16	</primaryArmor>
+    <weight>	60000	</weight>
+    <maxHealth>	7500	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/german/G62_Roket_Sturmtiger/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G62_Roket_Sturmtiger/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G62_Roket_Sturmtiger/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.34 38.00 0.36 1.00 0.05 0.34	</pitchParams>
+      <rollParams>	1.00 0.34 38.00 0.36 1.00 0.06 0.40	</rollParams>
+      <sensitivityToImpulse>	0.34	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.300077 1.14268 1.50792	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/german/G62_Roket_Sturmtiger/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G62_Roket_Sturmtiger/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <hangarShadowTexture>	vehicles/german/G62_Roket_Sturmtiger/Roket_Sturmtiger_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <density>	50.0609 49.9909	</density>
+      <aoTextureSize>	512 512	</aoTextureSize>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_G62_Roket_Sturmtiger>
+      <userString>	#germany_vehicles:Chassis_G62_Roket_Sturmtiger	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	240	</price>
+      <notInShop>	true	</notInShop>
+      <unlocks></unlocks>
+      <armor>
+        <leftTrack>	40	</leftTrack>
+        <rightTrack>	40	</rightTrack>
+      </armor>
+      <weight>	1200	</weight>
+      <maxLoad>	80800	</maxLoad>
+      <terrainResistance>	1.0 1.35 1.95	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	50	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.01	</vehicleMovement>
+        <vehicleRotation>	0.01	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	1000	</maxHealth>
+      <maxRegenHealth>	500	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G62_Roket_Sturmtiger/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G62_Roket_Sturmtiger/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G62_Roket_Sturmtiger/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	MEDIUM	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.5 0.74	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.73	</textureScale>
+      </tracks>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.430480 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.342020 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.652850	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.424238	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.326222	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R0	</name>
+          <radius>	0.415694	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R1	</name>
+          <radius>	0.406231	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.416077	</radius>
+          <startIndex>	2	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.42423	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.320419	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.416077	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L4	</name>
+          <radius>	0.404938	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.41608	</radius>
+          <startIndex>	5	</startIndex>
+          <count>	3	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G62_Roket_Sturmtiger/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G62_Roket_Sturmtiger/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.42413 1.8095	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+    </Chassis_G62_Roket_Sturmtiger>
+  </chassis>
+  <turrets0>
+    <Turret_1_G62_Roket_Sturmtiger>
+      <userString>	#germany_vehicles:Turret_1_G62_Roket_Sturmtiger	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	120	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	0	</armor_1>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	8000	</weight>
+      <maxHealth>	2500	</maxHealth>
+      <rotationSpeed>	50	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	450	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	40	</maxHealth>
+        <maxRegenHealth>	19	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_38cm_Raketenwerfer_61>	shared	  <maxAmmo>	50	</maxAmmo>
+          <armor>
+            <armor_1>	80	</armor_1>
+            <armor_3>	80	</armor_3>
+            <armor_4>	0	</armor_4>
+            <armor_5>	80	</armor_5>
+            <gun>	50	</gun>
+          </armor>
+          <shotDispersionRadius>	0.1	</shotDispersionRadius>
+          <reloadTime>	12	</reloadTime>
+          <aimingTime>	0.1	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	0.1	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <turretYawLimits>	-10 10	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 8 1 8	</maxPitch>
+          </pitchLimits>
+          <models>
+            <undamaged>	vehicles/german/G62_Roket_Sturmtiger/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G62_Roket_Sturmtiger/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G62_Roket_Sturmtiger/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G62_Roket_Sturmtiger/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G62_Roket_Sturmtiger/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <camouflage>
+            <density>	46.6052 46.2074	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
+        </_38cm_Raketenwerfer_61>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G62_Roket_Sturmtiger/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G62_Roket_Sturmtiger/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G62_Roket_Sturmtiger/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G62_Roket_Sturmtiger/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G62_Roket_Sturmtiger/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.000000 0.000000	</gunPosition>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+      <camouflage>
+        <density>	46.6052 46.2074	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
+    </Turret_1_G62_Roket_Sturmtiger>
+  </turrets0>
+  <engines>
+    <SturmtigerEngine>	shared	</SturmtigerEngine>
+  </engines>
+  <fuelTanks>
+    <Heavy>	shared	</Heavy>
+  </fuelTanks>
+  <radios>
+    <_10WSc>	shared	</_10WSc>
+  </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <SturmtigerEngine>
+          <smplEnginePower>	4200	</smplEnginePower>
+          <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
+        </SturmtigerEngine>
+      </engines>
+      <chassis>
+        <Chassis_G62_Roket_Sturmtiger>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.1	</rollingFriction>
+            </soft>
+            <firm>
+              <rollingFriction>	0.1	</rollingFriction>
+            </firm>
+            <medium>
+              <rollingFriction>	0.1	</rollingFriction>
+            </medium>
+          </grounds>
+          <axleCount>	5	</axleCount>
+        </Chassis_G62_Roket_Sturmtiger>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors>
+    <guns>
+      <_38cm_Raketenwerfer_61>
+        <delta>	0.01	</delta>
+      </_38cm_Raketenwerfer_61>
+    </guns>
+    <mobility>	0.7	</mobility>
+    <armour>	0.03	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	15502	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	1	</alpha>
+  </emblems>
+</G62_Roket_Sturmtiger.xml>

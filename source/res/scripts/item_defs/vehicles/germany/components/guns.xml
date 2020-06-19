@@ -130,6 +130,7 @@
     <Gun_PzIV>	255	</Gun_PzIV>
     <Gun_VK4502P>	256	</Gun_VK4502P>
     <Gun_Auf_Panther>	257	</Gun_Auf_Panther>
+    <_38cm_Raketenwerfer_61>	258	</_38cm_Raketenwerfer_61>
     <_88mm_KwK_43_L71A_IGR>	60001	</_88mm_KwK_43_L71A_IGR>
     <_88mm_KwK_43_L71_IGR>	60002	</_88mm_KwK_43_L71_IGR>
     <_105mm_KwK46_L68_IGR>	60003	</_105mm_KwK46_L68_IGR>
@@ -8282,5 +8283,56 @@
         </_128mm_SprG18>
       </shots>
     </_128mm_KwK44_L55_IGR>
+    <_38cm_Raketenwerfer_61>
+      <userString>	#germany_vehicles:_38cm_Raketenwerfer_61	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	340000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.72	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.000000	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_sturmtiger	</effects>
+      <reloadEffect>	reload155_170	</reloadEffect>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <pitchLimits>
+        <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
+        <maxPitch>	0.0 3.0 1.0 3.0	</maxPitch>
+      </pitchLimits>
+      <rotationSpeed>	17.5	</rotationSpeed>
+      <reloadTime>	37.2571428571429	</reloadTime>
+      <maxAmmo>	15	</maxAmmo>
+      <aimingTime>	6.85714285714286	</aimingTime>
+      <weight>	5900	</weight>
+      <maxHealth>	9001	</maxHealth>
+      <maxRegenHealth>	5000	</maxRegenHealth>
+      <repairCost>	15	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.56	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.5	</turretRotation>
+        <afterShot>	6.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_380mm_Rocket_1>
+          <defaultPortion>	0.5	</defaultPortion>
+          <speed>	200	</speed>
+          <gravity>	85	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	100 100	</piercingPower>
+        </_380mm_Rocket_1>
+        <_380mm_Rocket_2>
+          <defaultPortion>	0.5	</defaultPortion>
+          <speed>	100	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	250 250	</piercingPower>
+        </_380mm_Rocket_2>
+      </shots>
+    </_38cm_Raketenwerfer_61>
   </shared>
 </guns.xml>

@@ -8,7 +8,7 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PROGRESSIVE_REWARD_VISITED, SENIORITY_AWARDS_COUNTER
 from adisp import process
 from chat_shared import SYS_MESSAGE_TYPE
-from constants import AUTO_MAINTENANCE_RESULT, PremiumConfigs, DAILY_QUESTS_CONFIG
+from constants import AUTO_MAINTENANCE_RESULT, PremiumConfigs, DAILY_QUESTS_CONFIG, QUEUE_TYPE
 from collector_vehicle import CollectorVehicleConsts
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import SystemMessages
@@ -22,6 +22,7 @@ from gui.impl.gen import R
 from gui.impl.lobby.premacc.premacc_helpers import PiggyBankConstants, getDeltaTimeHelper
 from gui.prb_control import prbInvitesProperty
 from gui.prb_control.entities.listener import IGlobalListener
+from gui.ranked_battles.constants import PrimeTimeStatus
 from gui.shared import g_eventBus, events
 from gui.shared.formatters import time_formatters, text_styles
 from gui.shared.notifications import NotificationPriorityLevel
@@ -39,7 +40,7 @@ from messenger.formatters import TimeFormatter
 from notification import tutorial_helper
 from notification.decorators import MessageDecorator, PrbInviteDecorator, C11nMessageDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, ProgressiveRewardDecorator
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
-from skeletons.gui.game_control import IBootcampController, IGameSessionController, IBattlePassController
+from skeletons.gui.game_control import IBootcampController, IGameSessionController, IBattlePassController, IWOTSPGController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.daapi.view.lobby.hangar.seniority_awards import getSeniorityAwardsBoxesCount
@@ -982,6 +983,57 @@ class UpgradeTrophyDeviceListener(_NotificationListener):
                 SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.upgradeTrophyDevice.switch_off.body()), type=SystemMessages.SM_TYPE.ErrorSimple, priority=NotificationPriorityLevel.MEDIUM)
 
 
+class EventPrimeTimeListener(_NotificationListener, IGlobalListener):
+    __eventController = dependency.descriptor(IWOTSPGController)
+
+    def __init__(self):
+        super(EventPrimeTimeListener, self).__init__()
+        self.__isPrimeTime = False
+        self.__isConfigured = False
+
+    def start(self, model):
+        super(EventPrimeTimeListener, self).start(model)
+        self.startGlobalListening()
+        status, _, _ = self.__eventController.getPrimeTimeStatus()
+        self.__isPrimeTime = status == PrimeTimeStatus.AVAILABLE
+        self.__isConfigured = status != PrimeTimeStatus.NOT_SET
+        self.__eventController.onPrimeTimeStatusUpdated += self.__onPrimeTimeStatusUpdated
+        return True
+
+    def stop(self):
+        self.__eventController.onPrimeTimeStatusUpdated -= self.__onPrimeTimeStatusUpdated
+        self.stopGlobalListening()
+        super(EventPrimeTimeListener, self).stop()
+
+    def __onPrimeTimeStatusUpdated(self, *_):
+        status, _, _ = self.__eventController.getPrimeTimeStatus()
+        isPrimeTime = status == PrimeTimeStatus.AVAILABLE
+        isConfigured = status != PrimeTimeStatus.NOT_SET
+        if isPrimeTime != self.__isPrimeTime or isConfigured != self.__isConfigured:
+            self.__isPrimeTime = isPrimeTime
+            self.__isConfigured = isConfigured
+            self.__notify()
+
+    def __isEventPreQueue(self):
+        if not self.__eventController.isEventModeOn():
+            return False
+        elif self.prbDispatcher is not None:
+            state = self.prbDispatcher.getFunctionalState()
+            return state.isQueueSelected(QUEUE_TYPE.EVENT_BATTLES)
+        else:
+            return False
+
+    def __notify(self):
+        if not self.__isEventPreQueue():
+            return
+        if not self.__isConfigured:
+            SystemMessages.pushMessage(backport.text(R.strings.system_messages.spgEvent.notification.notSet()), type=SystemMessages.SM_TYPE.SPGEventNotSet)
+        elif not self.__isPrimeTime:
+            SystemMessages.pushMessage(backport.text(R.strings.system_messages.spgEvent.notification.primeTime()), type=SystemMessages.SM_TYPE.SPGEventPrimeTime)
+        else:
+            SystemMessages.pushMessage(backport.text(R.strings.system_messages.spgEvent.notification.available()), type=SystemMessages.SM_TYPE.SPGEventAvailable)
+
+
 class NotificationsListeners(_NotificationListener):
 
     def __init__(self):
@@ -995,7 +1047,8 @@ class NotificationsListeners(_NotificationListener):
          SwitcherListener(),
          TankPremiumListener(),
          BattlePassListener(),
-         UpgradeTrophyDeviceListener())
+         UpgradeTrophyDeviceListener(),
+         EventPrimeTimeListener())
 
     def start(self, model):
         for listener in self.__listeners:

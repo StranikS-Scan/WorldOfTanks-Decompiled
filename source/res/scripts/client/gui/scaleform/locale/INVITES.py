@@ -56,6 +56,7 @@ class INVITES(object):
     INVITES_NOTE_SERVER_CHANGE = '#invites:invites/note/server_change'
     INVITES_NOTE_CHANGE_AND_LEAVE_EVENT = '#invites:invites/note/change_and_leave/EVENT'
     INVITES_NOTE_LEAVE_SQUAD = '#invites:invites/note/leave/SQUAD'
+    INVITES_NOTE_LEAVE_EVENT = '#invites:invites/note/leave/EVENT'
     INVITES_NOTE_LEAVE_FALLOUT = '#invites:invites/note/leave/FALLOUT'
     INVITES_NOTE_CHANGE_AND_LEAVE_SQUAD = '#invites:invites/note/change_and_leave/SQUAD'
     INVITES_NOTE_CHANGE_AND_LEAVE_FALLOUT = '#invites:invites/note/change_and_leave/FALLOUT'

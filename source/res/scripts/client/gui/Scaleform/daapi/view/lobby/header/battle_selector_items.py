@@ -575,9 +575,6 @@ class _EventSquadItem(_SelectorItem):
         self._isSelected = state.isInUnit(PREBATTLE_TYPE.EVENT)
         self._isDisabled = state.hasLockedState and not state.isInUnit(PREBATTLE_TYPE.EVENT)
 
-    def getSpecialBGIcon(self):
-        return backport.image(_R_ICONS.lobby.eventPopoverBtnBG())
-
 
 class _RankedItem(_SelectorItem):
     rankedController = dependency.descriptor(IRankedBattlesController)

@@ -122,8 +122,8 @@ class BattlePassController(IBattlePassController):
     def isSellAnyLevelsUnlocked(self):
         return self.__getConfig().isSellAnyUnlocked(time_utils.getServerUTCTime())
 
-    def isValidBattleType(self, prbEntity):
-        return prbEntity.getEntityType() == constants.ARENA_GUI_TYPE.RANDOM
+    def isValidBattleType(self, prbEntityType):
+        return prbEntityType == constants.ARENA_GUI_TYPE.RANDOM
 
     def getMaxLevel(self, isBase=True):
         return len(self.getLevelsConfig(isBase))

@@ -53,7 +53,7 @@ class _CachedVehicle(object):
         self._clearChangeCallback()
         self._removeListeners()
 
-    def selectVehicle(self, vehInvID=0, callback=None, waitingOverlapsUI=False):
+    def selectVehicle(self, vehInvID=0, callback=None, waitingOverlapsUI=False, isNotEvent=False):
         raise NotImplementedError
 
     def selectNoVehicle(self):
@@ -290,10 +290,19 @@ class _CurrentVehicle(_CachedVehicle):
     def isCustomizationEnabled(self):
         return not self.isPresent() or self.item.isCustomizationEnabled()
 
-    def selectVehicle(self, vehInvID=0, callback=None, waitingOverlapsUI=False):
+    def isOptionalDevicesLocked(self):
+        return not self.isPresent() or self.item.isOptionalDevicesLocked
+
+    def isEquipmentLocked(self):
+        return not self.isPresent() or self.item.isEquipmentLocked
+
+    def selectVehicle(self, vehInvID=0, callback=None, waitingOverlapsUI=False, isNotEvent=False):
         vehicle = self.itemsCache.items.getVehicle(vehInvID)
         if vehicle is None:
             vehiclesCriteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP
+            vehiclesCriteria |= ~REQ_CRITERIA.VEHICLE.IS_IN_BATTLE
+            if isNotEvent:
+                vehiclesCriteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
             invVehs = self.itemsCache.items.getVehicles(criteria=vehiclesCriteria)
 
             def notEvent(x, y):

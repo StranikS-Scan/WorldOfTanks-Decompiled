@@ -263,6 +263,7 @@ class REQ_CRITERIA(object):
         ELITE = RequestCriteria(PredicateCondition(lambda item: item.isElite))
         IS_BOT = RequestCriteria(PredicateCondition(lambda item: item.name.endswith('_bot')))
         IS_CREW_LOCKED = RequestCriteria(PredicateCondition(lambda item: item.isCrewLocked))
+        IS_OUTFIT_LOCKED = RequestCriteria(PredicateCondition(lambda item: item.isOutfitLocked))
         FULLY_ELITE = RequestCriteria(PredicateCondition(lambda item: item.isFullyElite))
         EVENT = RequestCriteria(PredicateCondition(lambda item: item.isEvent))
         EVENT_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEventBattles))

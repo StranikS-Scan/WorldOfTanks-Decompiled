@@ -138,6 +138,8 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     UNRECOVERABLE = 'unrecoverable'
     CREW_LOCKED = 'lockCrew'
     OUTFIT_LOCKED = 'lockOutfit'
+    OPTIONAL_DEVICES_LOCKED = 'lockOptionalDevices'
+    EQUIPMENT_LOCKED = 'lockEquipment'
     EPIC_BATTLES = 'epic_battles'
     RENT_PROMOTION = 'rent_promotion'
 
@@ -1240,6 +1242,14 @@ class Vehicle(FittingItem):
     @property
     def isStyleInstalled(self):
         return self._isStyleInstalled
+
+    @property
+    def isEquipmentLocked(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.EQUIPMENT_LOCKED)
+
+    @property
+    def isOptionalDevicesLocked(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.OPTIONAL_DEVICES_LOCKED)
 
     def hasLockMode(self):
         isBS = prb_getters.isBattleSession()

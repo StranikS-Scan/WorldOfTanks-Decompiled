@@ -7790,4 +7790,66 @@
       </tiling>
     </camouflage>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G119_Panzer58	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	146	</id>
+      <texture>	vehicles/russian/Camouflage/10years_panzer58.dds	</texture>
+      <description>	#vehicle_customization:camouflage/10years_panzer58_hull/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/10years_panzer58_hull/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <germany:G04_PzVI_Tiger_I2>	2 2 -0.14 -0.52	</germany:G04_PzVI_Tiger_I2>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G119_Panzer58	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	147	</id>
+      <texture>	vehicles/russian/Camouflage/10years_panzer58.dds	</texture>
+      <description>	#vehicle_customization:camouflage/10years_panzer58_turret/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/10years_panzer58_turret/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <germany:G04_PzVI_Tiger_I2>	2 2 -0.56 -0.47	</germany:G04_PzVI_Tiger_I2>
+      </tiling>
+    </camouflage>
+  </itemGroup>
 </germany.xml>

@@ -1,18 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/vehicle_carousel/carousel_data_provider.py
+import copy
 from constants import SEASON_NAME_BY_TYPE
 from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
 from gui import GUI_NATIONS_ORDER_INDEX, makeHtmlString
 from gui.Scaleform import getButtonsAssetPath
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.Scaleform.locale.MENU import MENU
-from gui.impl import backport
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.time_formatters import RentLeftFormatter
 from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES, getVehicleStateIcon, getVehicleStateAddIcon, getBattlesLeft, getSmallIconPath, getIconPath
 from gui.shared.gui_items.dossier.achievements import isMarkOfMasteryAchieved
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers.i18n import makeString as ms
+from helpers import dependency
+from skeletons.gui.game_control import IWOTSPGController
+from gui.impl import backport
 
 def sortedIndices(seq, getter, reverse=False):
     return sorted(range(len(seq)), key=lambda idx: getter(seq[idx]), reverse=reverse)
@@ -108,6 +111,7 @@ def getVehicleDataVO(vehicle):
 
 
 class CarouselDataProvider(SortableDAAPIDataProvider):
+    __eventController = dependency.descriptor(IWOTSPGController)
 
     def __init__(self, carouselFilter, itemsCache, currentVehicle):
         super(CarouselDataProvider, self).__init__()
@@ -182,7 +186,10 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         filterCriteria = filterCriteria or REQ_CRITERIA.EMPTY
         if vehiclesCDs:
             filterCriteria |= REQ_CRITERIA.IN_CD_LIST(vehiclesCDs)
-        criteria = self._baseCriteria | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP
+        criteria = copy.deepcopy(self._baseCriteria)
+        if not self.__eventController.isEnabled():
+            criteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
+        criteria |= REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP
         newVehiclesCollection = self._itemsCache.items.getVehicles(criteria | filterCriteria)
         oldVehiclesCDs = [ vehicle.intCD for vehicle in self._vehicles ]
         isVehicleRemoved = not set(vehiclesCDs or ()).issubset(newVehiclesCollection.viewkeys())
@@ -277,7 +284,10 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         self._addCriteria()
 
     def _addCriteria(self):
-        self._addVehicleItemsByCriteria(self._baseCriteria | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP)
+        criteria = copy.deepcopy(self._baseCriteria)
+        if not self.__eventController.isEnabled():
+            criteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
+        self._addVehicleItemsByCriteria(criteria | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP)
 
     def _buildVehicle(self, vehicle):
         vo = getVehicleDataVO(vehicle)

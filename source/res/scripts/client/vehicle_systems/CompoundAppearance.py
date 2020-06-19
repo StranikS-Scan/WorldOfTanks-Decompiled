@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/CompoundAppearance.py
+import logging
 import random
 import math
 from math import tan
@@ -13,9 +14,13 @@ import NetworkComponents
 from Event import Event
 from debug_utils import LOG_ERROR
 from CustomEffectManager import EffectSettings
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers.EffectMaterialCalculation import calcEffectMaterialIndex
 from aih_constants import ShakeReason
 from VehicleStickers import VehicleStickers
+from items import makeIntCompactDescrByID
+from items.components.c11n_constants import CustomizationType
+from spg_event_config import ENEMY_TEAM_PAINT, ALLY_TEAM_PAINT
 from vehicle_systems.components.terrain_circle_component import TerrainCircleComponent
 from vehicle_systems.components import engine_state
 from vehicle_systems.stricted_loading import makeCallbackWeak, loadingPriority
@@ -30,7 +35,7 @@ from vehicle_systems import camouflages
 from svarog_script.script_game_object import ComponentDescriptor
 from vehicle_systems import model_assembler
 from vehicle_outfit.outfit import Outfit
-from constants import VEHICLE_SIEGE_STATE
+from constants import VEHICLE_SIEGE_STATE, ARENA_GUI_TYPE
 from VehicleEffects import DamageFromShotDecoder
 from common_tank_appearance import CommonTankAppearance, MATKIND_COUNT
 _ROOT_NODE_NAME = 'V'
@@ -45,6 +50,7 @@ _MOVE_THROUGH_WATER_SOUND = '/vehicles/tanks/water'
 _CAMOUFLAGE_MIN_INTENSITY = 1.0
 _PITCH_SWINGING_MODIFIERS = (0.9, 1.88, 0.3, 4.0, 1.0, 1.0)
 _MIN_DEPTH_FOR_HEAVY_SPLASH = 0.5
+_logger = logging.getLogger(__name__)
 
 class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
     frameTimeStamp = 0
@@ -488,7 +494,29 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         BigWorld.player().inputHandler.onVehicleShaken(self.__vehicle, gunPos, impulseDir, self.typeDescriptor.shot.shell.caliber, ShakeReason.OWN_SHOT_DELAYED)
 
     def __applyVehicleOutfit(self):
+        if BigWorld.player().arenaGuiType == ARENA_GUI_TYPE.EVENT_BATTLES:
+            self.__applyTeamColors()
         camouflages.updateFashions(self)
+
+    def __applyTeamColors(self):
+        player = BigWorld.player()
+        paintId = ENEMY_TEAM_PAINT if self.__vehicle.publicInfo['team'] != player.team else ALLY_TEAM_PAINT
+        try:
+            paintIntCD = makeIntCompactDescrByID('customizationItem', CustomizationType.PAINT, paintId)
+        except AssertionError as e:
+            _logger.error('invalid paint id: %s', e)
+            return
+
+        for part in TankPartIndexes.ALL:
+            container = self.outfit.getContainer(part)
+            if container is None:
+                continue
+            slot = container.slotFor(GUI_ITEM_TYPE.PAINT)
+            if slot is None:
+                continue
+            slot.set(intCD=paintIntCD)
+
+        return
 
     def getBounds(self, partIdx):
         return self.collisions.getBoundingBox(DamageFromShotDecoder.convertComponentIndex(partIdx)) if self.collisions is not None else (Math.Vector3(0.0, 0.0, 0.0), Math.Vector3(0.0, 0.0, 0.0), 0)

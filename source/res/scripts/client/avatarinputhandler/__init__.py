@@ -133,6 +133,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     bootcampCtrl = dependency.descriptor(IBootcampController)
     ctrl = property(lambda self: self.__curCtrl)
     ctrls = property(lambda self: self.__ctrls)
+    isEvent = property(lambda self: self.__isEvent)
     isSPG = property(lambda self: self.__isSPG)
     isATSPG = property(lambda self: self.__isATSPG)
     isWheeledTech = property(lambda self: self.__isWheeledTech)
@@ -471,6 +472,8 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         else:
             player = BigWorld.player()
             isObserverMode = 'observer' in player.vehicleTypeDescriptor.type.tags if player is not None else True
+            if not isObserverMode and self.isSPG and self.isEvent and eMode in (_CTRL_MODE.ARTY, _CTRL_MODE.STRATEGIC):
+                return
             if self.__waitObserverCallback is not None:
                 self.__waitObserverCallback = None
             if not isObserverMode and self.__isDualGun:
@@ -708,6 +711,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             return
         else:
             vehTypeDesc = veh.typeDescriptor.type
+            self.__isEvent = 'event_battles' in vehTypeDesc.tags
             self.__isSPG = 'SPG' in vehTypeDesc.tags
             self.__isATSPG = 'AT-SPG' in vehTypeDesc.tags
             self.__isDualGun = 'dualgun' in vehTypeDesc.tags

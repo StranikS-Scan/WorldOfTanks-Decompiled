@@ -21,6 +21,7 @@ from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
+from gui.impl.gen import R
 from gui.prb_control import prb_getters, prbEntityProperty
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.events_dispatcher import g_eventDispatcher
@@ -137,7 +138,7 @@ class _RandomQueueProvider(_QueueProvider):
         return self._needAdditionalInfo
 
     def additionalInfo(self):
-        return text_styles.main(makeString(MENU.PREBATTLE_WAITINGTIMEWARNING))
+        return text_styles.main(backport.text(R.strings.menu.prebattle.waitingTimeWarning()))
 
     @staticmethod
     def _isStartButtonDisplayed(vClasses):
@@ -157,7 +158,9 @@ class _EpicQueueProvider(_RandomQueueProvider):
 
 
 class _EventQueueProvider(_RandomQueueProvider):
-    pass
+
+    def additionalInfo(self):
+        return text_styles.main(backport.text(R.strings.menu.prebattle.eventWaitingTimeWarning()))
 
 
 class _RankedQueueProvider(_RandomQueueProvider):

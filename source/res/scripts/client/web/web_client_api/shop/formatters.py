@@ -80,7 +80,7 @@ def _formatVehicleRestore(item):
 
 
 def _formatVehicleOwnership(item):
-    if item.isInInventory and item.activeInNationGroup:
+    if item.isInInventory and item.activeInNationGroup and not item.isOnlyForEventBattles:
         result = {}
         if not item.isRented:
             result['type'] = 'permanent'

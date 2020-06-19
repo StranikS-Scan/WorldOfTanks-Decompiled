@@ -55,18 +55,25 @@ _EMPTY_ID = -1
 _logger = logging.getLogger(__name__)
 ANIMATION_REMOVE_DK = ('animations/ammunitionPanel/removedDK.swf', 'gui_hangar_ammunition_panel_removed_dk')
 
-def getFittingSlotsData(vehicle, slotsRange, voClass=None):
+def getFittingSlotsData(vehicle, slotsRange, voClass=None, isDisabledEquipment=False, isDisabledOptionalDevices=False):
     devices = []
     voClass = voClass or FittingSlotVO
     modulesData = _getVehicleModulesBySlotType(vehicle)
     for slotType in slotsRange:
         if slotType in ARTEFACTS_SLOTS:
+            if slotType == GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.OPTIONALDEVICE]:
+                isDisabledTooltip = isDisabledOptionalDevices
+            elif slotType == GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.EQUIPMENT]:
+                isDisabledTooltip = isDisabledEquipment
+            else:
+                isDisabledTooltip = False
             for slotId in xrange(NUM_OPTIONAL_DEVICE_SLOTS):
-                devices.append(voClass(modulesData[slotType], vehicle, slotType, slotId, TOOLTIPS_CONSTANTS.HANGAR_MODULE))
+                devices.append(voClass(modulesData[slotType], vehicle, slotType, slotId, TOOLTIPS_CONSTANTS.HANGAR_MODULE, isDisabledTooltip))
 
         if slotType in _BOOSTERS_SLOTS:
             for slotId in xrange(BATTLE_BOOSTER_LAYOUT_SIZE):
-                devices.append(voClass(modulesData[slotType], vehicle, slotType, slotId, tooltipType=TOOLTIPS_CONSTANTS.BATTLE_BOOSTER_BLOCK))
+                disabled = slotType == GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.BATTLE_BOOSTER] and isDisabledEquipment
+                devices.append(voClass(modulesData[slotType], vehicle, slotType, slotId, tooltipType=TOOLTIPS_CONSTANTS.BATTLE_BOOSTER_BLOCK, isDisabledTooltip=disabled))
 
         if slotType in _ABILITY_SLOTS:
             for slotId, _ in enumerate(vehicle.equipment.battleAbilityConsumables.getIntCDs()):
@@ -93,10 +100,10 @@ def _getVehicleModulesBySlotType(vehicle):
     return modules
 
 
-def getAmmo(shells):
+def getAmmo(shells, isEventVehicle=False):
     outcome = []
     for shell in shells:
-        if shell.isHidden:
+        if shell.isHidden and not isEventVehicle:
             continue
         outcome.append({'id': str(shell.intCD),
          'type': shell.type,
@@ -227,14 +234,18 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     def __updateDevices(self, vehicle):
         shells = []
         stateWarning = False
+        isEquipmentEnabled = not vehicle.isEquipmentLocked
+        isOptionalDevicesEnabled = not vehicle.isOptionalDevicesLocked
         if g_currentVehicle.isPresent():
             stateWarning = vehicle.isBroken or not vehicle.isAmmoFull or not g_currentVehicle.isAutoLoadFull() or not g_currentVehicle.isAutoEquipFull()
-            shells = getAmmo(vehicle.shells)
+            shells = getAmmo(vehicle.shells, vehicle.isOnlyForEventBattles)
         self.as_setAmmoS(shells, stateWarning)
         self.as_setModulesEnabledS(True)
         self.as_setVehicleHasTurretS(vehicle.hasTurrets)
+        self.as_setEquipmentEnabledS(isEquipmentEnabled)
+        self.as_optionalDevicesEnabledS(isOptionalDevicesEnabled)
         slotsRange = self.__getSlotsRange()
-        devices = getFittingSlotsData(vehicle, slotsRange, voClass=HangarFittingSlotVO)
+        devices = getFittingSlotsData(vehicle, slotsRange, voClass=HangarFittingSlotVO, isDisabledEquipment=not isEquipmentEnabled, isDisabledOptionalDevices=not isOptionalDevicesEnabled)
         self.__handleAnimationsForDemountKitRemoval(devices)
         self.as_setDataS({'devices': devices})
         if slotsRange == HANGAR_FITTING_SLOTS and self.itemsCache.items.getItems(GUI_ITEM_TYPE.BATTLE_ABILITY, REQ_CRITERIA.UNLOCKED):

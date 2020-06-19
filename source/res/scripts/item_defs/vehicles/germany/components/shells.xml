@@ -3,6 +3,8 @@
     <ap>	ARMOR_PIERCING.png 0 0	</ap>
     <ap_he>	ARMOR_PIERCING_HE.png 0 0	</ap_he>
     <ap_cr>	ARMOR_PIERCING_CR.png 0 0	</ap_cr>
+    <hc_ev>	HOLLOW_CHARGE_EV.png 0 0	</hc_ev>
+    <he_ev>	HIGH_EXLOSIVE_EV.png 0 0	</he_ev>
     <he>	HIGH_EXPLOSIVE.png 0 0	</he>
     <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
     <hc>	HOLLOW_CHARGE.png 0 0	</hc>
@@ -2989,4 +2991,36 @@
     <explosionDamageFactor>	1.0	</explosionDamageFactor>
     <explosionEdgeDamageFactor>	1.0	</explosionEdgeDamageFactor>
   </bomber_shell_epic_level5>
+  <_380mm_Rocket_1>
+    <id>	2660	</id>
+    <userString>	#germany_vehicles:_380mm_Rocket_1	</userString>
+    <icon>	he_ev	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	380	</caliber>
+    <explosionRadius>	15	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeRocket	</effects>
+    <damage>
+      <armor>	3000	</armor>
+      <devices>	140	</devices>
+    </damage>
+  </_380mm_Rocket_1>
+  <_380mm_Rocket_2>
+    <id>	2661	</id>
+    <userString>	#germany_vehicles:_380mm_Rocket_2	</userString>
+    <icon>	hc_ev	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	380	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeRocketSlow	</effects>
+    <damage>
+      <armor>	7000	</armor>
+      <devices>	140	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_380mm_Rocket_2>
 </shells.xml>

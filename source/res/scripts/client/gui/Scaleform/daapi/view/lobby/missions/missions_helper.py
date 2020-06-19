@@ -586,10 +586,11 @@ class _DetailedMissionInfo(_MissionInfo):
             if bonusTypes:
                 arenaTypes = bonusTypes.getValue()
                 if arenaTypes:
-                    if constants.ARENA_BONUS_TYPE.EVENT_BATTLES not in arenaTypes or constants.ARENA_BONUS_TYPE.EVENT_BATTLES_2 not in arenaTypes:
-                        criteria = criteria | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
+                    eventBattleTypes = (constants.ARENA_BONUS_TYPE.EVENT_BATTLES, constants.ARENA_BONUS_TYPE.EVENT_BATTLES_2)
+                    if not arenaTypes.intersection(eventBattleTypes):
+                        criteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
                     if constants.ARENA_BONUS_TYPE.EPIC_BATTLE not in arenaTypes:
-                        criteria = criteria | ~REQ_CRITERIA.VEHICLE.EPIC_BATTLE
+                        criteria |= ~REQ_CRITERIA.VEHICLE.EPIC_BATTLE
         xpMultCond = conds.find('hasReceivedMultipliedXP')
         if xpMultCond:
             extraConditions.append(xpMultCond)

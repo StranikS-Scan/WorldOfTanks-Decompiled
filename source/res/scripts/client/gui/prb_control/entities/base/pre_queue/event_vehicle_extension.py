@@ -7,11 +7,13 @@ from CurrentVehicle import g_currentVehicle
 from constants import QUEUE_TYPE
 from debug_utils import LOG_DEBUG
 from gui.prb_control.prb_getters import isInEventBattlesQueue
+from gui.prb_control import prbDispatcherProperty
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
-_SUPPORTED_ENTITIES = ()
+_SUPPORTED_ENTITIES = ('RandomEntity',)
 _PATCHED_METHODS = ('init', 'fini')
 _SWITCHED_METHODS = ('getQueueType', 'isInQueue', '_doQueue', '_doDequeue', '_makeQueueCtxByAction')
+_NEW_METHODS = ('getOriginalEntityType',)
 
 class EventVehicleMeta(type):
 
@@ -30,6 +32,7 @@ class _EventVehicleEntityExtension(object):
         super(_EventVehicleEntityExtension, self).__init__()
         self.__entity = None
         self.__patchedMethods = {}
+        self.__newMethods = []
         self.__originalSubscriber = None
         self.__isActivated = False
         self.__isEventsEnabled = False
@@ -42,12 +45,19 @@ class _EventVehicleEntityExtension(object):
         for name in _PATCHED_METHODS:
             self._patchMethod(name)
 
+        for name in _NEW_METHODS:
+            self._addMethod(name)
+
     def unbound(self):
         for k, m in self.__patchedMethods.iteritems():
             setattr(self.__entity, k, m)
 
         delattr(self.__entity, '_extension')
         self.__patchedMethods.clear()
+        for name in self.__newMethods:
+            self._delMethod(name)
+
+        del self.__newMethods[:]
         self.__entity = None
         return
 
@@ -75,6 +85,13 @@ class _EventVehicleEntityExtension(object):
 
     def isInQueue(self):
         return isInEventBattlesQueue()
+
+    def getOriginalEntityType(self):
+        return self._callOriginalMethod('getQueueType') if 'getQueueType' in self.__patchedMethods else self.__entity.getQueueType()
+
+    @prbDispatcherProperty
+    def prbDispatcher(self):
+        return None
 
     def _doQueue(self, ctx):
         BigWorld.player().enqueueEventBattles(ctx.getVehicleInventoryIDs())
@@ -120,6 +137,7 @@ class _EventVehicleEntityExtension(object):
                 newSubscriber.subscribe(self.__entity)
             self.__setSubscriber(newSubscriber)
             self.__isActivated = activate
+            self.prbDispatcher.notifyPrbEntitySwitched()
         LOG_DEBUG('Event Vehicle Entity is {} to entity {}'.format('set' if self.__isActivated else 'unset', self.__entity))
 
     def _patchMethod(self, name, method=None):
@@ -134,6 +152,20 @@ class _EventVehicleEntityExtension(object):
         if name in self.__patchedMethods:
             setattr(self.__entity, name, self.__patchedMethods[name])
             del self.__patchedMethods[name]
+
+    def _addMethod(self, name):
+        method = getattr(self, name)
+        if name not in self.__newMethods:
+            self.__newMethods.append(name)
+            setattr(self.__entity, name, method)
+
+    def _delMethod(self, name):
+        if name in self.__newMethods:
+            method = getattr(self.__entity, name, None)
+            if method:
+                del method
+            self.__newMethods.remove(name)
+        return
 
     def _callOriginalMethod(self, name, *args, **kwargs):
         m = self.__patchedMethods[name]

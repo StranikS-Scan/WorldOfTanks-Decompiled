@@ -65,7 +65,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.demount_kit import IDemountKitNovelty
 from skeletons.gui.offers import IOffersNovelty
-from skeletons.gui.game_control import IAnonymizerController, IBadgesController, IBoostersController, IBootcampController, IChinaController, IEpicBattleMetaGameController, IEventProgressionController, IGameSessionController, IIGRController, IRankedBattlesController, IServerStatsController, IWalletController, IClanNotificationController
+from skeletons.gui.game_control import IAnonymizerController, IBadgesController, IBoostersController, IBootcampController, IChinaController, IEpicBattleMetaGameController, IEventProgressionController, IGameSessionController, IIGRController, IRankedBattlesController, IServerStatsController, IWalletController, IClanNotificationController, IWOTSPGController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.server_events import IEventsCache
@@ -192,6 +192,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     clanNotificationCtrl = dependency.descriptor(IClanNotificationController)
     serverStats = dependency.descriptor(IServerStatsController)
     settingsCore = dependency.descriptor(ISettingsCore)
+    eventController = dependency.descriptor(IWOTSPGController)
     wallet = dependency.descriptor(IWalletController)
     offersNovelty = dependency.descriptor(IOffersNovelty)
 
@@ -382,6 +383,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.badgesController.onUpdated += self.__updateBadge
         self.anonymizerController.onStateChanged += self.__updateAnonymizedState
         self.clanNotificationCtrl.onClanNotificationUpdated += self.__updateStrongholdCounter
+        self.eventController.onPrimeTimeStatusUpdated += self.__updateEvent
         self.techTreeEventsListener.onSettingsChanged += self._updateHangarMenuData
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -453,6 +455,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.epicController.onPrimeTimeStatusUpdated -= self.__updateEpic
         self.badgesController.onUpdated -= self.__updateBadge
         self.clanNotificationCtrl.onClanNotificationUpdated -= self.__updateStrongholdCounter
+        self.eventController.onPrimeTimeStatusUpdated -= self.__updateEvent
         self.app.containerManager.onViewAddedToContainer -= self.__onViewAddedToContainer
         if constants.IS_SHOW_SERVER_STATS:
             self.serverStats.onStatsReceived -= self.__onStatsReceived
@@ -779,6 +782,18 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             body = text_styles.main(i18n.makeString(MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICLEVELREQUIRED_BODYSTART, requirements=text_styles.neutral(i18n.makeString(MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICLEVELREQUIRED_BODYEND, level=toRomanRangeString(result.ctx['levels'], 1)))))
             return makeTooltip(header, body)
 
+    def __getEventFightBtnTooltipData(self, result):
+        state = result.restriction
+        if state == PRE_QUEUE_RESTRICTION.MODE_DISABLED:
+            header = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.spgEventDisabled.header())
+            body = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.spgEventDisabled.body())
+        elif state == PRE_QUEUE_RESTRICTION.MODE_NOT_SET:
+            header = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.spgEventNotSet.header())
+            body = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.spgEventNotSet.body())
+        else:
+            return ''
+        return makeTooltip(header, body)
+
     def __getUnsuitableToQueueTooltipData(self, result):
         state = result.restriction
         if state == PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED:
@@ -815,6 +830,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         isSandbox = state.isInPreQueue(constants.QUEUE_TYPE.SANDBOX)
         isEpic = state.isInPreQueue(constants.QUEUE_TYPE.EPIC)
         isEpicEnabled = self.lobbyContext.getServerSettings().isEpicBattleEnabled()
+        isSPGEvent = self.eventController.isEventModeOn()
         if self.__isHeaderButtonPresent(LobbyHeader.BUTTONS.SQUAD):
             if not isNavigationEnabled:
                 tooltip = ''
@@ -835,6 +851,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         if self.__isFightBtnDisabled and not state.hasLockedState:
             if isSandbox:
                 self.as_setFightBtnTooltipS(self.__getSandboxTooltipData(result), False)
+            elif isSPGEvent:
+                self.as_setFightBtnTooltipS(self.__getEventFightBtnTooltipData(result), False)
             elif isEvent and state.isInUnit(constants.PREBATTLE_TYPE.EVENT):
                 self.as_setFightBtnTooltipS(self.__getEventTooltipData(), False)
             elif isInSquad:
@@ -992,6 +1010,9 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             self._updatePrebattleControls()
 
     def __updateEventProgression(self, *_):
+        self._updatePrebattleControls()
+
+    def __updateEvent(self, *_):
         self._updatePrebattleControls()
 
     def _updateStrongholdsSelector(self):

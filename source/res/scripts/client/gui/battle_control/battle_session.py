@@ -152,7 +152,9 @@ class BattleSessionProvider(IBattleSessionProvider):
     def registerViewComponents(self, *data):
         if self.__viewComponentsBridge is not None:
             self.__viewComponentsBridge.registerViewComponents(*data)
-        return
+            return True
+        else:
+            return False
 
     def addViewComponent(self, componentID, component, rule=VIEW_COMPONENT_RULE.PROXY):
         if self.__viewComponentsBridge is not None:

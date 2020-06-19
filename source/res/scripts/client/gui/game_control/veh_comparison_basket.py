@@ -523,7 +523,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
         return self.__vehicles[index]
 
     def writeCache(self):
-        if self.__cache:
+        if self.__cache and self.itemsCache and self.itemsCache.isSynced():
             self.__cache.write()
 
     def _createVehCompareData(self, intCD, initParameters=None):

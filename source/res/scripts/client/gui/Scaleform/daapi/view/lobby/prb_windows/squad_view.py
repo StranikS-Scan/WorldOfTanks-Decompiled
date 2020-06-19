@@ -171,11 +171,22 @@ class SquadView(SquadViewMeta):
 
 class EventSquadView(SquadView):
 
+    def _populate(self):
+        super(EventSquadView, self)._populate()
+        self.addListener(events.EventSquadEvent.READY_BUTTON_UPDATE, self.__updateActionButton, scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def _dispose(self):
+        self.removeListener(events.EventSquadEvent.READY_BUTTON_UPDATE, self.__updateActionButton, scope=EVENT_BUS_SCOPE.LOBBY)
+        super(EventSquadView, self)._dispose()
+
     def _getHeaderPresenter(self):
         return _EventHeaderPresenter(self.prbEntity)
 
     def _getLeaveBtnTooltip(self):
         return TOOLTIPS.SQUADWINDOW_BUTTONS_LEAVEEVENTSQUAD
+
+    def __updateActionButton(self, event):
+        self._setActionButtonState()
 
 
 class EpicSquadView(SquadView):

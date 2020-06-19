@@ -7944,12 +7944,6 @@
               <appliedTo>	30583	</appliedTo>
             </item>
           </paints>
-          <decals>
-            <item>
-              <id>	242	</id>
-              <appliedTo>	13104	</appliedTo>
-            </item>
-          </decals>
         </outfit>
       </outfits>
       <itemFilters>
@@ -8051,6 +8045,99 @@
               <appliedTo>	52416	</appliedTo>
             </item>
           </decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	styles 1750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	313	</id>
+      <texture>	gui/maps/vehicles/styles/10years_universal_3.png	</texture>
+      <description>	#vehicle_customization:special_style/10years_universal_3_desc	</description>
+      <userString>	#vehicle_customization:special_style/10years_universal_3	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	142	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	248	</id>
+              <appliedTo>	4384	</appliedTo>
+            </item>
+            <item>
+              <id>	249	</id>
+              <appliedTo>	8720	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	143	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	248	</id>
+              <appliedTo>	4384	</appliedTo>
+            </item>
+            <item>
+              <id>	249	</id>
+              <appliedTo>	8720	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	144	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	248	</id>
+              <appliedTo>	4384	</appliedTo>
+            </item>
+            <item>
+              <id>	249	</id>
+              <appliedTo>	8720	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
         </outfit>
       </outfits>
       <itemFilters>

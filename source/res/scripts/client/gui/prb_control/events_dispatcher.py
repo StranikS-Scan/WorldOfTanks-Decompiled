@@ -87,6 +87,9 @@ class EventDispatcher(object):
         self.__fireEvent(events.FightButtonEvent(events.FightButtonEvent.FIGHT_BUTTON_UPDATE))
         self.__invalidatePrbEntity(loadedAlias)
 
+    def updateSquadUI(self):
+        self.__fireEvent(events.EventSquadEvent(events.EventSquadEvent.READY_BUTTON_UPDATE))
+
     def loadHangar(self):
         self.__fireLoadEvent(VIEW_ALIAS.LOBBY_HANGAR)
 

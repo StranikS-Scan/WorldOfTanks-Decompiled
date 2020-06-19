@@ -478,6 +478,10 @@ class _PreBattleDispatcher(ListenersCollection):
             if g_currentVehicle.isPremiumIGR() and g_currentVehicle.isInPrebattle():
                 self.__entity.resetPlayerState()
 
+    def notifyPrbEntitySwitched(self):
+        if self.__isStarted:
+            self._invokeListeners('onPrbEntitySwitched')
+
     def __startListening(self):
         g_playerEvents.onPrebattleJoined += self.pe_onPrebattleJoined
         g_playerEvents.onPrebattleJoinFailure += self.pe_onPrebattleJoinFailure
@@ -603,7 +607,7 @@ class _PreBattleDispatcher(ListenersCollection):
             self.__entity = created
             self.__prevEntity = NotSupportedEntity()
             flag = self.__entity.init(ctx=ctx)
-            self._invokeListeners('onPrbEntitySwitched')
+            self.notifyPrbEntitySwitched()
             ctx.clearFlags()
             ctx.addFlags(flag | created.getFunctionalFlags())
         LOG_DEBUG('Entity have been updated', ctx.getFlagsToStrings())

@@ -424,6 +424,7 @@ class Views(DynAccessor):
                 RankedBattlesRolesTooltipView = DynAccessor(131)
 
             tooltips = _tooltips()
+            YearLeaderboardView = DynAccessor(132)
 
         ranked = _ranked()
 
@@ -503,8 +504,8 @@ class Views(DynAccessor):
                 TenYearsCountdownAward = DynAccessor(64)
 
             ten_years_countdown_award = _ten_years_countdown_award()
-            TenYearsCountdownEntryPoint = DynAccessor(133)
-            TenYearsOnboardingView = DynAccessor(134)
+            TenYearsCountdownEntryPoint = DynAccessor(134)
+            TenYearsOnboardingView = DynAccessor(135)
 
         ten_years_countdown = _ten_years_countdown()
 
@@ -590,7 +591,7 @@ class Views(DynAccessor):
 
         class _techtree(DynAccessor):
             __slots__ = ()
-            TechTreeIntro = DynAccessor(132)
+            TechTreeIntro = DynAccessor(133)
 
         techtree = _techtree()
 
@@ -806,21 +807,21 @@ class Views(DynAccessor):
         views = _views()
 
     wtypes_view = _wtypes_view()
-    Anchor = DynAccessor(135)
-    ComplexListView = DynAccessor(136)
-    ComponentsDemo = DynAccessor(137)
-    DataTrackerDemo = DynAccessor(138)
-    DemoContextMenu = DynAccessor(139)
-    Easings = DynAccessor(140)
-    GFComponents = DynAccessor(141)
-    GFDemoPopover = DynAccessor(142)
-    GFDemoRichTooltipWindow = DynAccessor(143)
-    GFDemoWindow = DynAccessor(144)
-    GFInjectView = DynAccessor(145)
-    GFSimpleTooltipWindow = DynAccessor(146)
-    LocaleDemo = DynAccessor(147)
-    MixBlendModeAnimation = DynAccessor(148)
-    PropsSupportDemo = DynAccessor(149)
-    StructuralDataBindDemo = DynAccessor(150)
-    TextFormat = DynAccessor(151)
-    VideoSupportView = DynAccessor(152)
+    Anchor = DynAccessor(136)
+    ComplexListView = DynAccessor(137)
+    ComponentsDemo = DynAccessor(138)
+    DataTrackerDemo = DynAccessor(139)
+    DemoContextMenu = DynAccessor(140)
+    Easings = DynAccessor(141)
+    GFComponents = DynAccessor(142)
+    GFDemoPopover = DynAccessor(143)
+    GFDemoRichTooltipWindow = DynAccessor(144)
+    GFDemoWindow = DynAccessor(145)
+    GFInjectView = DynAccessor(146)
+    GFSimpleTooltipWindow = DynAccessor(147)
+    LocaleDemo = DynAccessor(148)
+    MixBlendModeAnimation = DynAccessor(149)
+    PropsSupportDemo = DynAccessor(150)
+    StructuralDataBindDemo = DynAccessor(151)
+    TextFormat = DynAccessor(152)
+    VideoSupportView = DynAccessor(153)

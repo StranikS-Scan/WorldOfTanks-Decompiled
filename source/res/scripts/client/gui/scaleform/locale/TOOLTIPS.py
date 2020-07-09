@@ -49,6 +49,7 @@ class TOOLTIPS(object):
     HEADER_EVENTSQUAD = '#tooltips:header/eventSquad'
     HEADER_DOMINATIONSQUAD = '#tooltips:header/dominationSquad'
     HEADER_RANKEDSQUAD = '#tooltips:header/rankedSquad'
+    HEADER_BOBSQUAD = '#tooltips:header/bobSquad'
     HEADER_SQUAD_MEMBER = '#tooltips:header/squad_member'
     HEADER_BATTLETYPE = '#tooltips:header/battleType'
     HEADER_INFO_PLAYERS_ONLINE_FULL = '#tooltips:header/info/players_online_full'
@@ -174,6 +175,9 @@ class TOOLTIPS(object):
     HANGAR_CREW_RUDY_DOG = '#tooltips:hangar/crew/rudy/dog/'
     BADGEINFO_TITLE = '#tooltips:badgeinfo/title'
     BADGEINFO_TEXT = '#tooltips:badgeinfo/text'
+    BADGEPAGE_RANKED_SUFFIXITEM_POSITION = '#tooltips:badgepage/ranked/suffixItem/position'
+    BADGEPAGE_RANKED_SUFFIXITEM_CONFIRMATION = '#tooltips:badgepage/ranked/suffixItem/confirmation'
+    BADGEPAGE_RANKED_SUFFIXITEM_DURATION = '#tooltips:badgepage/ranked/suffixItem/duration'
     TEMPLATE_DAYS_SHORT = '#tooltips:template/days/short'
     TEMPLATE_DAYS_VALUE = '#tooltips:template/days/value'
     TEMPLATE_HOURS_SHORT = '#tooltips:template/hours/short'
@@ -692,6 +696,8 @@ class TOOLTIPS(object):
     HEADER_DOMINATIONSQUAD_BODY = '#tooltips:header/dominationSquad/body'
     HEADER_RANKEDSQUAD_HEADER = '#tooltips:header/rankedSquad/header'
     HEADER_RANKEDSQUAD_BODY = '#tooltips:header/rankedSquad/body'
+    HEADER_BOBSQUAD_HEADER = '#tooltips:header/bobSquad/header'
+    HEADER_BOBSQUAD_BODY = '#tooltips:header/bobSquad/body'
     HEADER_BATTLETYPE_HEADER = '#tooltips:header/battleType/header'
     HEADER_BATTLETYPE_BODY = '#tooltips:header/battleType/body'
     HEADER_REFILL_ACTION_ATTENTION = '#tooltips:header/refill_action/attention'
@@ -1150,6 +1156,7 @@ class TOOLTIPS(object):
     VEHICLE_DEAL_TELECOM_MAIN_TWITCHPRIME = '#tooltips:vehicle/deal/telecom/main/Twitchprime'
     VEHICLE_TRADE = '#tooltips:vehicle/trade'
     VEHICLE_DEAL_EPIC_MAIN = '#tooltips:vehicle/deal/epic/main'
+    VEHICLE_DEAL_BOB_MAIN = '#tooltips:vehicle/deal/bob/main'
     ANONYMIZER_TEAMSTATS_HEADER = '#tooltips:anonymizer/teamStats/header'
     ANONYMIZER_TEAMSTATS_BODY = '#tooltips:anonymizer/teamStats/body'
     BUYSKILL_FULLY = '#tooltips:buySkill/fully'
@@ -1885,6 +1892,10 @@ class TOOLTIPS(object):
     AWARDITEM_ONEOF_RANKEDSEASON_PREVIEWSTYLE_BODY = '#tooltips:awardItem/oneof/rankedSeason/previewStyle/body'
     AWARDITEM_TESTENTITLEMENT_HEADER = '#tooltips:awardItem/testEntitlement/header'
     AWARDITEM_TESTENTITLEMENT_BODY = '#tooltips:awardItem/testEntitlement/body'
+    AWARDITEM_RANKED_2020_DISCOUNT_HEADER = '#tooltips:awardItem/ranked_2020_discount/header'
+    AWARDITEM_RANKED_2020_DISCOUNT_BODY = '#tooltips:awardItem/ranked_2020_discount/body'
+    AWARDITEM_RANKED_202007_ACCESS_HEADER = '#tooltips:awardItem/ranked_202007_access/header'
+    AWARDITEM_RANKED_202007_ACCESS_BODY = '#tooltips:awardItem/ranked_202007_access/body'
     AWARDITEM_RANKEDDAILYBATTLES_HEADER = '#tooltips:awardItem/rankedDailyBattles/header'
     AWARDITEM_RANKEDDAILYBATTLES_BODY = '#tooltips:awardItem/rankedDailyBattles/body'
     AWARDITEM_RANKEDBONUSBATTLES_HEADER = '#tooltips:awardItem/rankedBonusBattles/header'
@@ -1915,10 +1926,16 @@ class TOOLTIPS(object):
     RANKEDBATTLESVIEW_RANKS_BODY = '#tooltips:rankedBattlesView/ranks/body'
     RANKEDBATTLESVIEW_REWARDS_HEADER = '#tooltips:rankedBattlesView/rewards/header'
     RANKEDBATTLESVIEW_REWARDS_BODY = '#tooltips:rankedBattlesView/rewards/body'
+    RANKEDBATTLESVIEW_SHOP_HEADER = '#tooltips:rankedBattlesView/shop/header'
+    RANKEDBATTLESVIEW_SHOP_BODY = '#tooltips:rankedBattlesView/shop/body'
     RANKEDBATTLESVIEW_RATING_HEADER = '#tooltips:rankedBattlesView/rating/header'
     RANKEDBATTLESVIEW_RATING_BODY = '#tooltips:rankedBattlesView/rating/body'
     RANKEDBATTLESVIEW_INFO_HEADER = '#tooltips:rankedBattlesView/info/header'
     RANKEDBATTLESVIEW_INFO_BODY = '#tooltips:rankedBattlesView/info/body'
+    RANKEDBATTLESVIEW_YEARRATING_HEADER = '#tooltips:rankedBattlesView/yearRating/header'
+    RANKEDBATTLESVIEW_YEARRATING_BODY = '#tooltips:rankedBattlesView/yearRating/body'
+    RANKEDBATTLESVIEW_SPRINTER_HEADER = '#tooltips:rankedBattlesView/sprinter/header'
+    RANKEDBATTLESVIEW_SPRINTER_BODY = '#tooltips:rankedBattlesView/sprinter/body'
     RANKED_WIDGET_EFFICIENCY_TITLE = '#tooltips:ranked/widget/efficiency/title'
     RANKED_WIDGET_EFFICIENCY_DESCRIPTION = '#tooltips:ranked/widget/efficiency/description'
     RANKED_WIDGET_EFFICIENCY_CURRENTUPDATE = '#tooltips:ranked/widget/efficiency/currentUpdate'
@@ -2829,6 +2846,8 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_TWITCH8_DESC = '#tooltips:notrecruitedtankman/twitch8/desc'
     NOTRECRUITEDTANKMAN_TWITCH9_LABEL = '#tooltips:notrecruitedtankman/twitch9/label'
     NOTRECRUITEDTANKMAN_TWITCH9_DESC = '#tooltips:notrecruitedtankman/twitch9/desc'
+    NOTRECRUITEDTANKMAN_COMMANDER_CESARE_LABEL = '#tooltips:notrecruitedtankman/commander_cesare/label'
+    NOTRECRUITEDTANKMAN_COMMANDER_CESARE_DESC = '#tooltips:notrecruitedtankman/commander_cesare/desc'
     NOTRECRUITEDTANKMAN_NY19MEN_LABEL = '#tooltips:notrecruitedtankman/ny19men/label'
     NOTRECRUITEDTANKMAN_NY19MEN_DESC = '#tooltips:notrecruitedtankman/ny19men/desc'
     NOTRECRUITEDTANKMAN_NY19WOMAN_LABEL = '#tooltips:notrecruitedtankman/ny19woman/label'
@@ -3184,6 +3203,8 @@ class TOOLTIPS(object):
      AWARDITEM_ONEOF_RANKEDCYCLE_HEADER,
      AWARDITEM_ONEOF_RANKEDSEASON_HEADER,
      AWARDITEM_TESTENTITLEMENT_HEADER,
+     AWARDITEM_RANKED_2020_DISCOUNT_HEADER,
+     AWARDITEM_RANKED_202007_ACCESS_HEADER,
      AWARDITEM_RANKEDDAILYBATTLES_HEADER,
      AWARDITEM_RANKEDBONUSBATTLES_HEADER)
     AWARDITEM_ALL_BODY_ENUM = (AWARDITEM_GROUPS_BODY,
@@ -3247,6 +3268,8 @@ class TOOLTIPS(object):
      AWARDITEM_ONEOF_RANKEDSEASON_BODY,
      AWARDITEM_ONEOF_RANKEDSEASON_PREVIEWSTYLE_BODY,
      AWARDITEM_TESTENTITLEMENT_BODY,
+     AWARDITEM_RANKED_2020_DISCOUNT_BODY,
+     AWARDITEM_RANKED_202007_ACCESS_BODY,
      AWARDITEM_RANKEDDAILYBATTLES_BODY,
      AWARDITEM_RANKEDBONUSBATTLES_BODY)
     TEMPLATE_ALL_SHORT_ENUM = (TEMPLATE_DAYS_SHORT, TEMPLATE_HOURS_SHORT, TEMPLATE_MINUTES_SHORT)
@@ -3527,6 +3550,7 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TWITCH7_LABEL,
      NOTRECRUITEDTANKMAN_TWITCH8_LABEL,
      NOTRECRUITEDTANKMAN_TWITCH9_LABEL,
+     NOTRECRUITEDTANKMAN_COMMANDER_CESARE_LABEL,
      NOTRECRUITEDTANKMAN_NY19MEN_LABEL,
      NOTRECRUITEDTANKMAN_NY19WOMAN_LABEL,
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_LABEL,
@@ -3567,6 +3591,7 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_TWITCH7_DESC,
      NOTRECRUITEDTANKMAN_TWITCH8_DESC,
      NOTRECRUITEDTANKMAN_TWITCH9_DESC,
+     NOTRECRUITEDTANKMAN_COMMANDER_CESARE_DESC,
      NOTRECRUITEDTANKMAN_NY19MEN_DESC,
      NOTRECRUITEDTANKMAN_NY19WOMAN_DESC,
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_DESC,

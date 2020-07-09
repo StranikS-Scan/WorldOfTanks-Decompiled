@@ -204,7 +204,7 @@ class RankedBattlesRewardsLeaguesView(RankedBattlesRewardsLeaguesMeta, IResetabl
             leagueID = data['league']
             styleBonus = first(formatter.getPreformattedBonuses(data['awards']))
             if leagueID and styleBonus:
-                isCurrent = self.__rankedController.getLeagueProvider().webLeague.league == leagueID
+                isCurrent = self.__rankedController.getWebSeasonProvider().seasonInfo.league == leagueID
                 styleCD = styleBonus.specialArgs[0]
                 self.__styleDescriptions[styleCD] = backport.text(R.strings.ranked_battles.rewardsView.tabs.leagues.description.dyn('league%s' % leagueID)())
                 result.append(rewards_vos.getLeagueRewardVO(leagueID, styleBonus, isCurrent))

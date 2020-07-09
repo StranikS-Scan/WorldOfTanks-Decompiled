@@ -24,3 +24,26 @@ class RankedPositionCtx(CommonWebRequestCtx):
     @staticmethod
     def getDefDataObj():
         return None
+
+
+class RankedYearPositionCtx(CommonWebRequestCtx):
+
+    def getRequestType(self):
+        return WebRequestDataType.RANKED_YEAR_POSITION
+
+    def isAuthorizationRequired(self):
+        return True
+
+    def isClanSyncRequired(self):
+        return False
+
+    def isCaching(self):
+        return False
+
+    @staticmethod
+    def getDataObj(incomeData):
+        return incomeData
+
+    @staticmethod
+    def getDefDataObj():
+        return None

@@ -921,6 +921,27 @@ class QUESTS(object):
     DETAILS_DOSSIER_LADDER_ORIGINALXP = '#quests:details/dossier/ladder/originalXP'
     DETAILS_DOSSIER_LADDER_DAMAGEASSISTEDTRACK = '#quests:details/dossier/ladder/damageAssistedTrack'
     DETAILS_DOSSIER_LADDER_DAMAGEASSISTEDRADIO = '#quests:details/dossier/ladder/damageAssistedRadio'
+    DETAILS_DOSSIER_BOB_XP = '#quests:details/dossier/bob/xp'
+    DETAILS_DOSSIER_BOB_BATTLESCOUNT = '#quests:details/dossier/bob/battlesCount'
+    DETAILS_DOSSIER_BOB_WINS = '#quests:details/dossier/bob/wins'
+    DETAILS_DOSSIER_BOB_LOSSES = '#quests:details/dossier/bob/losses'
+    DETAILS_DOSSIER_BOB_SURVIVEDBATTLES = '#quests:details/dossier/bob/survivedBattles'
+    DETAILS_DOSSIER_BOB_FRAGS = '#quests:details/dossier/bob/frags'
+    DETAILS_DOSSIER_BOB_DIRECTHITS = '#quests:details/dossier/bob/directHits'
+    DETAILS_DOSSIER_BOB_SPOTTED = '#quests:details/dossier/bob/spotted'
+    DETAILS_DOSSIER_BOB_DAMAGEDEALT = '#quests:details/dossier/bob/damageDealt'
+    DETAILS_DOSSIER_BOB_MAXDAMAGE = '#quests:details/dossier/bob/maxDamage'
+    DETAILS_DOSSIER_BOB_DAMAGERECEIVED = '#quests:details/dossier/bob/damageReceived'
+    DETAILS_DOSSIER_BOB_CAPTUREPOINTS = '#quests:details/dossier/bob/capturePoints'
+    DETAILS_DOSSIER_BOB_DROPPEDCAPTUREPOINTS = '#quests:details/dossier/bob/droppedCapturePoints'
+    DETAILS_DOSSIER_BOB_PIERCINGS = '#quests:details/dossier/bob/piercings'
+    DETAILS_DOSSIER_BOB_NODAMAGEDIRECTHITSRECEIVED = '#quests:details/dossier/bob/noDamageDirectHitsReceived'
+    DETAILS_DOSSIER_BOB_PIERCINGSRECEIVED = '#quests:details/dossier/bob/piercingsReceived'
+    DETAILS_DOSSIER_BOB_POTENTIALDAMAGERECEIVED = '#quests:details/dossier/bob/potentialDamageReceived'
+    DETAILS_DOSSIER_BOB_DAMAGEBLOCKEDBYARMOR = '#quests:details/dossier/bob/damageBlockedByArmor'
+    DETAILS_DOSSIER_BOB_ORIGINALXP = '#quests:details/dossier/bob/originalXP'
+    DETAILS_DOSSIER_BOB_DAMAGEASSISTEDTRACK = '#quests:details/dossier/bob/damageAssistedTrack'
+    DETAILS_DOSSIER_BOB_DAMAGEASSISTEDRADIO = '#quests:details/dossier/bob/damageAssistedRadio'
     DETAILS_DOSSIER_BATTLESCOUNT = '#quests:details/dossier/battlesCount'
     DETAILS_DOSSIER_0_BATTLESCOUNT = '#quests:details/dossier/0/battlesCount'
     DETAILS_DOSSIER_1_BATTLESCOUNT = '#quests:details/dossier/1/battlesCount'
@@ -939,6 +960,7 @@ class QUESTS(object):
     DETAILS_DOSSIER_22_BATTLESCOUNT = '#quests:details/dossier/22/battlesCount'
     DETAILS_DOSSIER_24_BATTLESCOUNT = '#quests:details/dossier/24/battlesCount'
     DETAILS_DOSSIER_27_BATTLESCOUNT = '#quests:details/dossier/27/battlesCount'
+    DETAILS_DOSSIER_32_BATTLESCOUNT = '#quests:details/dossier/32/battlesCount'
     DETAILS_MODIFIERS_TITLE_DISCOUNT = '#quests:details/modifiers/title/discount'
     DETAILS_MODIFIERS_TITLE_SELLING = '#quests:details/modifiers/title/selling'
     DETAILS_MODIFIERS_TITLE_AVAILABILITY = '#quests:details/modifiers/title/availability'
@@ -1228,6 +1250,8 @@ class QUESTS(object):
     BONUSNAME_RANKEDDAILYBATTLES = '#quests:bonusName/rankedDailyBattles'
     BONUSNAME_RANKEDBONUSBATTLES = '#quests:bonusName/rankedBonusBattles'
     BONUSNAME_ENTITLEMENTS_TESTENTITLEMENT = '#quests:bonusName/entitlements/testEntitlement'
+    BONUSNAME_ENTITLEMENTS_RANKED_2020_DISCOUNT = '#quests:bonusName/entitlements/ranked_2020_discount'
+    BONUSNAME_ENTITLEMENTS_RANKED_202007_ACCESS = '#quests:bonusName/entitlements/ranked_202007_access'
     ACTION_AUTO_CALENDAR = '#quests:action/auto/calendar'
     ACTION_FULL_CALENDAR = '#quests:action/full/calendar'
     ACTION_HERO_FULL_CALENDAR = '#quests:action/hero/full/calendar'
@@ -1757,7 +1781,9 @@ class QUESTS(object):
      BONUSNAME_PERSONALNUMBER,
      BONUSNAME_RANKEDDAILYBATTLES,
      BONUSNAME_RANKEDBONUSBATTLES,
-     BONUSNAME_ENTITLEMENTS_TESTENTITLEMENT)
+     BONUSNAME_ENTITLEMENTS_TESTENTITLEMENT,
+     BONUSNAME_ENTITLEMENTS_RANKED_2020_DISCOUNT,
+     BONUSNAME_ENTITLEMENTS_RANKED_202007_ACCESS)
     ACTION_ENUM = (ACTION_AUTO_CALENDAR,
      ACTION_FULL_CALENDAR,
      ACTION_HERO_FULL_CALENDAR,
@@ -2138,6 +2164,27 @@ class QUESTS(object):
      DETAILS_DOSSIER_LADDER_ORIGINALXP,
      DETAILS_DOSSIER_LADDER_DAMAGEASSISTEDTRACK,
      DETAILS_DOSSIER_LADDER_DAMAGEASSISTEDRADIO,
+     DETAILS_DOSSIER_BOB_XP,
+     DETAILS_DOSSIER_BOB_BATTLESCOUNT,
+     DETAILS_DOSSIER_BOB_WINS,
+     DETAILS_DOSSIER_BOB_LOSSES,
+     DETAILS_DOSSIER_BOB_SURVIVEDBATTLES,
+     DETAILS_DOSSIER_BOB_FRAGS,
+     DETAILS_DOSSIER_BOB_DIRECTHITS,
+     DETAILS_DOSSIER_BOB_SPOTTED,
+     DETAILS_DOSSIER_BOB_DAMAGEDEALT,
+     DETAILS_DOSSIER_BOB_MAXDAMAGE,
+     DETAILS_DOSSIER_BOB_DAMAGERECEIVED,
+     DETAILS_DOSSIER_BOB_CAPTUREPOINTS,
+     DETAILS_DOSSIER_BOB_DROPPEDCAPTUREPOINTS,
+     DETAILS_DOSSIER_BOB_PIERCINGS,
+     DETAILS_DOSSIER_BOB_NODAMAGEDIRECTHITSRECEIVED,
+     DETAILS_DOSSIER_BOB_PIERCINGSRECEIVED,
+     DETAILS_DOSSIER_BOB_POTENTIALDAMAGERECEIVED,
+     DETAILS_DOSSIER_BOB_DAMAGEBLOCKEDBYARMOR,
+     DETAILS_DOSSIER_BOB_ORIGINALXP,
+     DETAILS_DOSSIER_BOB_DAMAGEASSISTEDTRACK,
+     DETAILS_DOSSIER_BOB_DAMAGEASSISTEDRADIO,
      DETAILS_DOSSIER_0_BATTLESCOUNT,
      DETAILS_DOSSIER_1_BATTLESCOUNT,
      DETAILS_DOSSIER_2_BATTLESCOUNT,
@@ -2154,7 +2201,8 @@ class QUESTS(object):
      DETAILS_DOSSIER_21_BATTLESCOUNT,
      DETAILS_DOSSIER_22_BATTLESCOUNT,
      DETAILS_DOSSIER_24_BATTLESCOUNT,
-     DETAILS_DOSSIER_27_BATTLESCOUNT)
+     DETAILS_DOSSIER_27_BATTLESCOUNT,
+     DETAILS_DOSSIER_32_BATTLESCOUNT)
     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ENUM = (PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_USSR,
      PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_GERMANY,
      PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_USA,

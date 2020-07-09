@@ -24,7 +24,9 @@ _DEFAULT_SPACES_PATH = 'spaces'
 _SERVER_CMD_CHANGE_HANGAR = 'cmd_change_hangar'
 _SERVER_CMD_CHANGE_HANGAR_PREM = 'cmd_change_hangar_prem'
 _CUSTOMIZATION_HANGAR_SETTINGS_SEC = 'customizationHangarSettings'
-_SPACE_FULL_VISIBILITY_MASK = ~0
+_FULL_VISIBILITY = (1 << 10) - 1 | 1 << 16 | 1 << 17 | 1 << 18 | 1 << 19
+_RANKED_ON_MASK, _RANKED_GAP_MASK, _RANKED_OFF_MASK = (128, 256, 512)
+SPACE_FULL_VISIBILITY_MASK = _FULL_VISIBILITY & ~_RANKED_ON_MASK & ~_RANKED_GAP_MASK & ~_RANKED_OFF_MASK
 
 def _getDefaultHangarPath(isPremium):
     return '%s/hangar_v3' % _DEFAULT_SPACES_PATH
@@ -47,7 +49,7 @@ def _getHangarType(isPremium):
 
 
 def _getHangarVisibilityMask(isPremium):
-    return _EVENT_HANGAR_PATHS[isPremium][1] if isPremium in _EVENT_HANGAR_PATHS else _SPACE_FULL_VISIBILITY_MASK
+    return _EVENT_HANGAR_PATHS[isPremium][1] if isPremium in _EVENT_HANGAR_PATHS else SPACE_FULL_VISIBILITY_MASK
 
 
 _CFG = {}
@@ -395,7 +397,7 @@ class _ClientHangarSpacePathOverride(object):
     def setPremium(self, isPremium):
         self.hangarSpace.refreshSpace(isPremium, True)
 
-    def setPath(self, path, visibilityMask=_SPACE_FULL_VISIBILITY_MASK, isPremium=None, isReload=True):
+    def setPath(self, path, visibilityMask=SPACE_FULL_VISIBILITY_MASK, isPremium=None, isReload=True):
         if path is not None and not path.startswith('spaces/'):
             path = 'spaces/' + path
         if isPremium is None:
@@ -437,10 +439,10 @@ class _ClientHangarSpacePathOverride(object):
                 if 'visibilityMask' in data:
                     visibilityMask = int(data['visibilityMask'], 16)
                 else:
-                    visibilityMask = _SPACE_FULL_VISIBILITY_MASK
+                    visibilityMask = SPACE_FULL_VISIBILITY_MASK
             except Exception:
                 path = notification['data']
-                visibilityMask = _SPACE_FULL_VISIBILITY_MASK
+                visibilityMask = SPACE_FULL_VISIBILITY_MASK
 
             if notification['type'] == _SERVER_CMD_CHANGE_HANGAR:
                 _EVENT_HANGAR_PATHS[False] = (path, visibilityMask)

@@ -704,3 +704,7 @@ class BaseQuestProgress(object):
             return self._wasCompleted
         else:
             return False
+
+
+def hasCorrespondedCamouflage(vehDescr, outfit):
+    return bool(outfit and outfit.camouflages or vehDescr.type.hasCustomDefaultCamouflage)

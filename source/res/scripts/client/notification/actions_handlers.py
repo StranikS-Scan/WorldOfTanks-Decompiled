@@ -363,6 +363,27 @@ class ShowRankedFinalYearHandler(_ActionHandler):
         showRankedYeardAwardWindow(data, points)
 
 
+class ShowRankedYearPositionHandler(_ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        notification = model.getNotification(self.getNotType(), entityID)
+        savedData = notification.getSavedData()
+        if savedData is not None and isinstance(savedData, dict):
+            playerPosition = savedData.get('yearPosition')
+            rewardsData = savedData.get('rewardsData')
+            if playerPosition is not None and rewardsData:
+                shared_events.showRankedYearLBAwardWindow(playerPosition, rewardsData)
+        return
+
+
 class ShowRankedBattlePageHandler(_ActionHandler):
     __rankedController = dependency.descriptor(IRankedBattlesController)
 
@@ -790,6 +811,7 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  SecurityLinkHandler,
  ShowRankedSeasonCompleteHandler,
  ShowRankedFinalYearHandler,
+ ShowRankedYearPositionHandler,
  ShowRankedBattlePageHandler,
  _ShowClanAppsHandler,
  _ShowClanInvitesHandler,

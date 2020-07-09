@@ -5,8 +5,10 @@
 class RANKEDBATTLES_CONSTS(object):
     RANKED_BATTLES_RANKS_ID = 'rankedBattlesRanks'
     RANKED_BATTLES_REWARDS_ID = 'rankedBattlesRewards'
+    RANKED_BATTLES_SHOP_ID = 'rankedBattlesShop'
     RANKED_BATTLES_RATING_ID = 'rankedBattlesRating'
     RANKED_BATTLES_INFO_ID = 'rankedBattlesInfo'
+    RANKED_BATTLES_YEAR_RATING_ID = 'rankedBattlesYearRating'
     RANKED_BATTLES_REWARDS_RANKEDS_ID = 'rankedBattlesRewardsRankeds'
     RANKED_BATTLES_REWARDS_LEAGUES_ID = 'rankedBattlesRewardsLeagues'
     RANKED_BATTLES_REWARDS_YEAR_ID = 'rankedBattlesRewardsYear'

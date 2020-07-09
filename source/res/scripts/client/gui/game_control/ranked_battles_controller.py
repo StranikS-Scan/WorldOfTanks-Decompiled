@@ -9,11 +9,12 @@ import BigWorld
 import Event
 import season_common
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import RANKED_WEB_LEAGUE, RANKED_WEB_LEAGUE_UPDATE
+from account_helpers.AccountSettings import RANKED_WEB_INFO, RANKED_WEB_INFO_UPDATE
 from adisp import process
 from constants import ARENA_BONUS_TYPE, EVENT_TYPE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
+from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.periodic_battles.models import PrimeTime
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.entities.base.ctx import PrbAction
@@ -21,10 +22,11 @@ from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, PRE_QUEUE_RESTRICTION
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.ranked_battles import ranked_helpers
-from gui.ranked_battles.constants import PrimeTimeStatus, ZERO_RANK_ID, YEAR_POINTS_TOKEN, YEAR_AWARDS_ORDER, FINAL_QUEST_PATTERN, STANDARD_POINTS_COUNT, MAX_GROUPS_IN_DIVISION
+from gui.ranked_battles.constants import PrimeTimeStatus, ZERO_RANK_ID, YEAR_POINTS_TOKEN, YEAR_AWARDS_ORDER, FINAL_QUEST_PATTERN, STANDARD_POINTS_COUNT, YEAR_STRIPE_SERVER_TOKEN, YEAR_STRIPE_CLIENT_TOKEN, MAX_GROUPS_IN_DIVISION, ENTITLEMENT_EVENT_TOKEN, FINAL_LEADER_QUEST, NOT_IN_LEAGUES_QUEST
 from gui.ranked_battles.ranked_builders.postbattle_awards_vos import AwardBlock
 from gui.ranked_battles.ranked_formatters import getRankedAwardsFormatter
-from gui.ranked_battles.ranked_helpers.league_provider import RankedBattlesLeagueProvider, UNDEFINED_WEB_LEAGUE, UNDEFINED_LEAGUE_ID
+from gui.ranked_battles.ranked_helpers.web_season_provider import RankedWebSeasonProvider, UNDEFINED_WEB_INFO, UNDEFINED_LEAGUE_ID
+from gui.ranked_battles.ranked_helpers.year_position_provider import RankedYearPositionProvider
 from gui.ranked_battles.ranked_helpers.sound_manager import RankedSoundManager, Sounds
 from gui.ranked_battles.ranked_helpers.stats_composer import RankedBattlesStatsComposer
 from gui.ranked_battles.ranked_models import RankChangeStates, ShieldStatus, Division, RankedSeason, Rank, RankState, RankStep, RankProgress, RankData, BattleRankInfo
@@ -47,9 +49,10 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
+from web.web_client_api.ranked_battles import createRankedBattlesWebHandlers
 if typing.TYPE_CHECKING:
     from gui.ranked_battles.constants import YearAwardsNames
-    from gui.ranked_battles.ranked_helpers.league_provider import WebLeague
+    from gui.ranked_battles.ranked_helpers.web_season_provider import WebSeasonInfo
     from gui.ranked_battles.ranked_models import PostBattleRankInfo
     from season_common import GameSeason
 _logger = logging.getLogger(__name__)
@@ -62,6 +65,10 @@ def _showRankedBattlePage(ctx):
 
 def _showRankedBattlePageSeasonOff(ctx):
     g_eventBus.handleEvent(events.LoadViewEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_PAGE_SEASON_OFF_ALIAS, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def _showSeparateWebView(url, alias):
+    event_dispatcher.showBrowserOverlayView(url, alias=alias, webHandlers=createRankedBattlesWebHandlers())
 
 
 class ShowRankedPageCallback(object):
@@ -87,6 +94,8 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         self.onGameModeStatusTick = Event.Event()
         self.onGameModeStatusUpdated = Event.Event()
         self.onYearPointsChanges = Event.Event()
+        self.onEntitlementEvent = Event.Event()
+        self.onKillWebOverlays = Event.Event()
         self._setSeasonSettingsProvider(self.__getCachedSettings)
         self.__serverSettings = None
         self.__rankedSettings = None
@@ -97,15 +106,16 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         self.__clientRank = DEFAULT_RANK
         self.__clientShields = {}
         self.__clientMaxRank = DEFAULT_RANK
-        self.__clientLeague = UNDEFINED_WEB_LEAGUE
-        self.__clientLeagueUpdateTime = None
+        self.__clientWebSeasonInfo = UNDEFINED_WEB_INFO
+        self.__clientWebSeasonInfoUpdateTime = None
         self.__clientEfficiency = None
         self.__clientEfficiencyDiff = None
         self.__clientBonusBattlesCount = None
         self.__ranksCache = []
         self.__divisions = None
         self.__statsComposer = None
-        self.__leagueProvider = RankedBattlesLeagueProvider()
+        self.__webSeasonProvider = RankedWebSeasonProvider()
+        self.__yearPositionProvider = RankedYearPositionProvider()
         self.__soundManager = RankedSoundManager()
         self.__isRankedSoundMode = False
         self.__arenaBattleResultsWasShown = set()
@@ -121,6 +131,8 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         self.onGameModeStatusTick.clear()
         self.onGameModeStatusUpdated.clear()
         self.onYearPointsChanges.clear()
+        self.onEntitlementEvent.clear()
+        self.onKillWebOverlays.clear()
         self.clearNotification()
         super(RankedBattlesController, self).fini()
 
@@ -149,22 +161,24 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def onLobbyInited(self, event):
         if not self.__clientValuesInited:
             self.__resizeRanksCache(self.__rankedSettings)
-            self.__clientLeague = AccountSettings.getSettings(RANKED_WEB_LEAGUE)
-            self.__clientLeagueUpdateTime = AccountSettings.getSettings(RANKED_WEB_LEAGUE_UPDATE)
-            self.__leagueProvider.clear()
+            self.__clientWebSeasonInfo = AccountSettings.getSettings(RANKED_WEB_INFO)
+            self.__clientWebSeasonInfoUpdateTime = AccountSettings.getSettings(RANKED_WEB_INFO_UPDATE)
+            self.__webSeasonProvider.clear()
             self.updateClientValues()
             self.__clientValuesInited = True
-        shouldInitPrefs = self.__clientLeague is None
-        isDefinedLeague = not shouldInitPrefs and self.__clientLeague.league != UNDEFINED_LEAGUE_ID
+        shouldInitPrefs = self.__clientWebSeasonInfo is None
+        isDefinedLeague = not shouldInitPrefs and self.__clientWebSeasonInfo.league != UNDEFINED_LEAGUE_ID
         shouldFlushPrefs = isDefinedLeague and not self.isAccountMastered()
         if shouldInitPrefs or shouldFlushPrefs:
-            self.__leagueProvider.clear()
-            self.__clientLeague = UNDEFINED_WEB_LEAGUE
-            self.__clientLeagueUpdateTime = None
-            AccountSettings.setSettings(RANKED_WEB_LEAGUE, self.__clientLeague)
-            AccountSettings.setSettings(RANKED_WEB_LEAGUE_UPDATE, self.__clientLeagueUpdateTime)
-        if self.isAccountMastered() and not self.__leagueProvider.isStarted:
-            self.__leagueProvider.start()
+            self.__webSeasonProvider.clear()
+            self.__clientWebSeasonInfo = UNDEFINED_WEB_INFO
+            self.__clientWebSeasonInfoUpdateTime = None
+            AccountSettings.setSettings(RANKED_WEB_INFO, self.__clientWebSeasonInfo)
+            AccountSettings.setSettings(RANKED_WEB_INFO_UPDATE, self.__clientWebSeasonInfoUpdateTime)
+        if self.isAccountMastered() and not self.__webSeasonProvider.isStarted:
+            self.__webSeasonProvider.start()
+        if not self.__yearPositionProvider.isStarted:
+            self.__yearPositionProvider.start()
         self.__isRankedSoundMode = False
         self.__updateSounds()
         g_clientUpdateManager.addCallbacks({'ranked': self.__onUpdateRanked,
@@ -196,6 +210,15 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def isRankedPrbActive(self):
         return False if self.prbEntity is None else bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.RANKED)
 
+    def isRankedShopEnabled(self):
+        return self.__rankedSettings.isShopEnabled
+
+    def isSeasonRewarding(self):
+        prevSeason = self.getPreviousSeason()
+        notInLeaguesQuestID = NOT_IN_LEAGUES_QUEST.format(prevSeason.getSeasonID() if prevSeason is not None else '')
+        notInLeaguesQuest = self.__eventsCache.getHiddenQuests().get(notInLeaguesQuestID)
+        return notInLeaguesQuest is not None and notInLeaguesQuest.getStartTimeLeft() != 0
+
     def isSuitableVehicle(self, vehicle):
         ctx = {}
         restriction = None
@@ -215,6 +238,15 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def isUnset(self):
         status, _, _ = self.getPrimeTimeStatus()
         return status == PrimeTimeStatus.NOT_SET
+
+    def isYearGap(self):
+        prevSeason = self.getPreviousSeason()
+        isPrevFinal = prevSeason is not None and prevSeason.getNumber() == self.getExpectedSeasons()
+        finalLeaderQuest = self.__eventsCache.getHiddenQuests().get(FINAL_LEADER_QUEST)
+        return isPrevFinal and finalLeaderQuest is not None and finalLeaderQuest.getStartTimeLeft() == 0
+
+    def isYearLBEnabled(self):
+        return self.__rankedSettings.isYearLBEnabled
 
     def hasAnySeason(self):
         return bool(self.__rankedSettings.seasons)
@@ -238,6 +270,8 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         criteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(vehLevels)
         criteria |= ~REQ_CRITERIA.VEHICLE.CLASSES(self.__rankedSettings.forbiddenClassTags)
         criteria |= ~REQ_CRITERIA.VEHICLE.SPECIFIC_BY_CD(self.__rankedSettings.forbiddenVehTypes)
+        criteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE | ~REQ_CRITERIA.VEHICLE.EPIC_BATTLE
+        criteria |= ~REQ_CRITERIA.VEHICLE.BOB_BATTLE
         return len(self.__itemsCache.items.getVehicles(criteria)) > 0
 
     def hasVehicleRankedBonus(self, compactDescr):
@@ -266,11 +300,11 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def getClientShields(self):
         return self.__clientShields
 
-    def getClientLeague(self):
-        return self.__clientLeague
+    def getClientSeasonInfo(self):
+        return self.__clientWebSeasonInfo
 
-    def getClientLeagueUpdateTime(self):
-        return self.__clientLeagueUpdateTime
+    def getClientSeasonInfoUpdateTime(self):
+        return self.__clientWebSeasonInfoUpdateTime
 
     def getClientEfficiency(self):
         return self.__clientEfficiency
@@ -330,11 +364,14 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
             self.__divisions = self.__buildDivisions()
         return self.__divisions
 
+    def getEntitlementEvents(self):
+        return self.__getTokensAmount(ENTITLEMENT_EVENT_TOKEN)
+
     def getExpectedSeasons(self):
         return self.__rankedSettings.expectedSeasons
 
-    def getLeagueProvider(self):
-        return self.__leagueProvider
+    def getWebSeasonProvider(self):
+        return self.__webSeasonProvider
 
     def getLeagueRewards(self, bonusName=None):
         now = time_utils.getCurrentLocalServerTimestamp()
@@ -578,11 +615,11 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
 
         return result
 
+    def getYearLBSize(self):
+        return self.__rankedSettings.yearLBSize
+
     def getYearRewardPoints(self):
-        yearPointToken = self.__itemsCache.items.tokens.getTokens().get(YEAR_POINTS_TOKEN)
-        if yearPointToken:
-            _, count = yearPointToken
-            return count
+        return self.__getTokensAmount(YEAR_POINTS_TOKEN)
 
     def getYearRewards(self, points):
         quests = self.__eventsCache.getHiddenQuests()
@@ -638,6 +675,9 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
             _logger.info("Can't open ranked battles page. Forwarding ctx to web fallback.")
             self.__openWebPageByCtx(ctx)
             return
+        elif not self.__canShowSelectedPageID(ctx):
+            _logger.info("Can't open ranked battles page on selected tab. Call is skipped.")
+            return
         else:
             if self.getCurrentSeason() is not None:
                 if not self.isRankedPrbActive():
@@ -672,12 +712,12 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
             if shield is not None and isinstance(shield, tuple):
                 self.__clientShields[key] = shield[:]
 
-        if self.getLeagueProvider().webLeague.league != UNDEFINED_LEAGUE_ID:
-            self.__clientLeague = self.getLeagueProvider().webLeague
-            AccountSettings.setSettings(RANKED_WEB_LEAGUE, self.__clientLeague)
-        if self.getLeagueProvider().lastUpdateTime is not None:
-            self.__clientLeagueUpdateTime = self.getLeagueProvider().lastUpdateTime
-            AccountSettings.setSettings(RANKED_WEB_LEAGUE_UPDATE, self.__clientLeagueUpdateTime)
+        if self.__webSeasonProvider.seasonInfo.league != UNDEFINED_LEAGUE_ID:
+            self.__clientWebSeasonInfo = self.__webSeasonProvider.seasonInfo
+            AccountSettings.setSettings(RANKED_WEB_INFO, self.__clientWebSeasonInfo)
+        if self.__webSeasonProvider.lastUpdateTime is not None:
+            self.__clientWebSeasonInfoUpdateTime = self.__webSeasonProvider.lastUpdateTime
+            AccountSettings.setSettings(RANKED_WEB_INFO_UPDATE, self.__clientWebSeasonInfoUpdateTime)
         statsComposer = self.getStatsComposer()
         self.__clientEfficiency = statsComposer.currentSeasonEfficiency.efficiency
         self.__clientEfficiencyDiff = statsComposer.currentSeasonEfficiencyDiff
@@ -696,6 +736,12 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     def __onTokensUpdate(self, diff):
         if YEAR_POINTS_TOKEN in diff:
             self.onYearPointsChanges()
+        if YEAR_STRIPE_SERVER_TOKEN in diff and not self.__yearPositionProvider.isStarted:
+            self.__yearPositionProvider.start()
+        if YEAR_STRIPE_CLIENT_TOKEN in diff and self.__yearPositionProvider.isStarted:
+            self.__yearPositionProvider.stop()
+        if ENTITLEMENT_EVENT_TOKEN in diff:
+            self.onEntitlementEvent()
 
     def __onServerSettingsChanged(self, serverSettings):
         if self.__serverSettings is not None:
@@ -719,11 +765,11 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
             _logger.debug('Ranked Overlay windows will not be shown, received arenaBonusType: %s', arenaBonusType)
 
     def __onUpdateLeagueSync(self, _):
-        if self.isAccountMastered() and not self.__leagueProvider.isStarted:
+        if self.isAccountMastered() and not self.__webSeasonProvider.isStarted:
             self.__partialFlushRanksCache()
             self.__divisions = None
             self.__battlesGroups = None
-            self.__leagueProvider.start()
+            self.__webSeasonProvider.start()
             self.__soundManager.setProgressSound()
         return
 
@@ -753,6 +799,16 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         canShowSeasonOn = isEnabled and hasCurSeason
         canShowSeasonOff = isEnabled and not hasCurSeason and hasPrevSeason
         return canShowSeasonOn or canShowSeasonOff
+
+    def __canShowSelectedPageID(self, ctx):
+        selectedItemID = ctx.get('selectedItemID', '')
+        if selectedItemID == RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID and not self.isYearLBEnabled():
+            _logger.info("Can't open ranked battles page on year leaderboard tab.")
+            return False
+        if selectedItemID == RANKEDBATTLES_CONSTS.RANKED_BATTLES_SHOP_ID and not self.isRankedShopEnabled():
+            _logger.info("Can't open ranked battles page on ranked shop tab.")
+            return False
+        return True
 
     def __hasMatchMakerGroups(self, division, divisionLayout):
         matchMakerUnits = len(divisionLayout)
@@ -907,12 +963,19 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
 
         return generalSettings
 
+    def __getTokensAmount(self, tokenName):
+        tokenInfo = self.__itemsCache.items.tokens.getTokens().get(tokenName)
+        if tokenInfo:
+            _, count = tokenInfo
+            return count
+
     def __clear(self):
         self.clearWebOpenPageCtx()
         self.stopNotification()
         self.stopGlobalListening()
         self.clearRankedWelcomeCallback()
-        self.__leagueProvider.stop()
+        self.__webSeasonProvider.stop()
+        self.__yearPositionProvider.stop()
         self.__soundManager.clear()
         g_clientUpdateManager.removeObjectCallbacks(self)
 
@@ -929,8 +992,8 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         self.__clientRank = DEFAULT_RANK
         self.__clientShields = {}
         self.__clientMaxRank = DEFAULT_RANK
-        self.__clientLeague = UNDEFINED_WEB_LEAGUE
-        self.__clientLeagueUpdateTime = None
+        self.__clientWebSeasonInfo = UNDEFINED_WEB_INFO
+        self.__clientWebSeasonInfoUpdateTime = None
         self.__clientEfficiency = None
         self.__clientEfficiencyDiff = None
         self.__clientBonusBattlesCount = None
@@ -1023,7 +1086,17 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         return (rankID, rankState, progress)
 
     def __openWebPageByCtx(self, ctx):
-        pass
+        url = alias = None
+        selectedItemID = ctx.get('selectedItemID', '')
+        if selectedItemID == RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID and self.isYearLBEnabled():
+            url = ranked_helpers.getRankedBattlesYearRatingUrl(isLobbySub=True)
+            alias = RANKEDBATTLES_ALIASES.RANKED_BATTLE_YEAR_RATING_LANDING
+        elif selectedItemID == RANKEDBATTLES_CONSTS.RANKED_BATTLES_SHOP_ID and self.isRankedShopEnabled():
+            url = ranked_helpers.getRankedBattlesShopUrl(isLobbySub=True)
+            alias = RANKEDBATTLES_ALIASES.RANKED_BATTLE_SHOP_LANDING
+        if url and alias is not None:
+            _showSeparateWebView(url, alias)
+        return
 
     def __partialFlushRanksCache(self):
         leftFlushBorder = min(self.__clientRank[0], self.getCurrentRank()[0])

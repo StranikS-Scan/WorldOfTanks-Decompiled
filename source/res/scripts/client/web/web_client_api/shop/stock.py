@@ -99,7 +99,7 @@ _ITEMS_CRITERIA_MAP = {ShopItemType.VEHICLE: {'inventory': REQ_CRITERIA.INVENTOR
  ShopItemType.PAINT: {},
  ShopItemType.CAMOUFLAGE: {},
  ShopItemType.MODIFICATION: {},
- ShopItemType.STYLE: {},
+ ShopItemType.STYLE: {'on_account': REQ_CRITERIA.CUSTOMIZATION.ON_ACCOUNT},
  ShopItemType.DECAL: {},
  ShopItemType.EMBLEM: {},
  ShopItemType.INSCRIPTION: {},

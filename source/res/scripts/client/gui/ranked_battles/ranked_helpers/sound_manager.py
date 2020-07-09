@@ -18,9 +18,16 @@ class Sounds(CONST_CONTAINER):
     OVERLAY_HANGAR_GENERAL = 'STATE_overlay_hangar_general'
     OVERLAY_HANGAR_GENERAL_ON = 'STATE_overlay_hangar_general_on'
     OVERLAY_HANGAR_GENERAL_OFF = 'STATE_overlay_hangar_general_off'
+    SUBVIEW_SPACE_NAME = 'ranked_subview'
+    SUBVIEW_HANGAR_GENERAL = 'STATE_subview_hangar_general'
+    SUBVIEW_HANGAR_GENERAL_ON = 'STATE_subview_hangar_general_on'
+    SUBVIEW_HANGAR_GENERAL_OFF = 'STATE_subview_hangar_general_off'
     OVERLAY_HANGAR_FILTERED = 'STATE_hangar_filtered'
     OVERLAY_HANGAR_FILTERED_ON = 'STATE_hangar_filtered_on'
     OVERLAY_HANGAR_FILTERED_OFF = 'STATE_hangar_filtered_off'
+    SUBVIEW_HANGAR_FILTERED = 'STATE_subview_hangar_filtered'
+    SUBVIEW_HANGAR_FILTERED_ON = 'STATE_subview_hangar_filtered_on'
+    SUBVIEW_HANGAR_FILTERED_OFF = 'STATE_subview_hangar_filtered_off'
     HANGAR_PLACE_STATE = 'STATE_hangar_place'
     HANGAR_PLACE_GARAGE = 'STATE_hangar_place_garage'
     MAIN_PAGE_SPACE_NAME = 'ranked_main_page'
@@ -39,14 +46,19 @@ class Sounds(CONST_CONTAINER):
     PROGRESSION_STATE_2_DIVISION = 'STATE_rank_level_03'
     PROGRESSION_STATE_1_DIVISION = 'STATE_rank_level_04'
     PROGRESSION_STATE_LEAGUES = 'STATE_rank_level_05'
+    PROGRESSION_STATE_SHOP = 'STATE_rank_level_05'
 
 
 RANKED_MAIN_PAGE_SOUND_SPACE = CommonSoundSpaceSettings(name=Sounds.MAIN_PAGE_SPACE_NAME, entranceStates={Sounds.HANGAR_PLACE_STATE: Sounds.HANGAR_PLACE_GARAGE,
- Sounds.MAIN_PAGE_STATE: Sounds.MAIN_PAGE_STATE_ON}, exitStates={Sounds.MAIN_PAGE_STATE: Sounds.MAIN_PAGE_STATE_OFF,
- Sounds.OVERLAY_HANGAR_GENERAL: Sounds.OVERLAY_HANGAR_GENERAL_OFF}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent=Sounds.MAIN_PAGE_AMBIENT_ON_EVENT, exitEvent=Sounds.MAIN_PAGE_AMBIENT_OFF_EVENT)
+ Sounds.MAIN_PAGE_STATE: Sounds.MAIN_PAGE_STATE_ON,
+ Sounds.MAIN_PAGE_AMBIENT_STATE: Sounds.MAIN_PAGE_AMBIENT_STATE_1}, exitStates={Sounds.MAIN_PAGE_STATE: Sounds.MAIN_PAGE_STATE_OFF,
+ Sounds.SUBVIEW_HANGAR_GENERAL: Sounds.SUBVIEW_HANGAR_GENERAL_OFF}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent=Sounds.MAIN_PAGE_AMBIENT_ON_EVENT, exitEvent=Sounds.MAIN_PAGE_AMBIENT_OFF_EVENT)
 RANKED_OVERLAY_SOUND_SPACE = CommonSoundSpaceSettings(name=Sounds.OVERLAY_SPACE_NAME, entranceStates={Sounds.OVERLAY_HANGAR_GENERAL: Sounds.OVERLAY_HANGAR_GENERAL_ON,
  Sounds.OVERLAY_HANGAR_FILTERED: Sounds.OVERLAY_HANGAR_FILTERED_ON}, exitStates={Sounds.OVERLAY_HANGAR_GENERAL: Sounds.OVERLAY_HANGAR_GENERAL_OFF,
  Sounds.OVERLAY_HANGAR_FILTERED: Sounds.OVERLAY_HANGAR_FILTERED_OFF}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True)
+RANKED_SUBVIEW_SOUND_SPACE = CommonSoundSpaceSettings(name=Sounds.SUBVIEW_SPACE_NAME, entranceStates={Sounds.SUBVIEW_HANGAR_GENERAL: Sounds.SUBVIEW_HANGAR_GENERAL_ON,
+ Sounds.SUBVIEW_HANGAR_FILTERED: Sounds.SUBVIEW_HANGAR_FILTERED_ON}, exitStates={Sounds.SUBVIEW_HANGAR_GENERAL: Sounds.SUBVIEW_HANGAR_GENERAL_OFF,
+ Sounds.SUBVIEW_HANGAR_FILTERED: Sounds.SUBVIEW_HANGAR_FILTERED_OFF}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True)
 _DIVISION_TO_PROGRESSION_SOUND = {RANKEDBATTLES_ALIASES.DIVISIONS_CLASSIFICATION: Sounds.PROGRESSION_STATE_QUALIFICATION,
  RANKEDBATTLES_ALIASES.DIVISIONS_BRONZE: Sounds.PROGRESSION_STATE_3_DIVISION,
  RANKEDBATTLES_ALIASES.DIVISIONS_SILVER: Sounds.PROGRESSION_STATE_2_DIVISION,
@@ -76,14 +88,17 @@ class RankedSoundManager(object):
             WWISE.WW_eventGlobal(Sounds.DESELECT_EVENT)
         return
 
+    def setCustomProgressSound(self, state):
+        WWISE.WW_setState(Sounds.PROGRESSION_STATE, state)
+
     def setDefaultProgressSound(self):
         WWISE.WW_setState(Sounds.PROGRESSION_STATE, Sounds.PROGRESSION_STATE_DEFAULT)
 
     def setProgressSound(self, divisionUserID=None, isLoud=True):
         if isLoud:
-            WWISE.WW_setState(Sounds.OVERLAY_HANGAR_GENERAL, Sounds.OVERLAY_HANGAR_GENERAL_OFF)
+            WWISE.WW_setState(Sounds.SUBVIEW_HANGAR_GENERAL, Sounds.SUBVIEW_HANGAR_GENERAL_OFF)
         else:
-            WWISE.WW_setState(Sounds.OVERLAY_HANGAR_GENERAL, Sounds.OVERLAY_HANGAR_GENERAL_ON)
+            WWISE.WW_setState(Sounds.SUBVIEW_HANGAR_GENERAL, Sounds.SUBVIEW_HANGAR_GENERAL_ON)
         if divisionUserID is None:
             WWISE.WW_setState(Sounds.PROGRESSION_STATE, Sounds.PROGRESSION_STATE_LEAGUES)
         else:

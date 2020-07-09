@@ -3,17 +3,19 @@
 from constants import GameSeasonType
 from soft_exception import SoftException
 from helpers import dependency
-from skeletons.gui.game_control import ISeasonsController, IRankedBattlesController, IEpicBattleMetaGameController
+from skeletons.gui.game_control import ISeasonsController, IRankedBattlesController, IEpicBattleMetaGameController, IBobController
 from skeletons.gui.game_control import ISeasonProvider
 
 class SeasonsController(ISeasonsController):
     rankedController = dependency.descriptor(IRankedBattlesController)
     epicMetaController = dependency.descriptor(IEpicBattleMetaGameController)
+    bobEventController = dependency.descriptor(IBobController)
 
     def __init__(self):
         super(SeasonsController, self).__init__()
         self._seasonProvidersByType = {GameSeasonType.RANKED: self.rankedController,
-         GameSeasonType.EPIC: self.epicMetaController}
+         GameSeasonType.EPIC: self.epicMetaController,
+         GameSeasonType.BOB: self.bobEventController}
 
     def hasAnySeason(self, seasonType):
         return self.__getSeasonProviderChecked(seasonType).hasAnySeason()

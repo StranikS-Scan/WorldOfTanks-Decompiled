@@ -1047,6 +1047,13 @@ def getBattleOutfit(getter, vehType, arenaKind, bonusType):
     return parseOutfitDescr(styleOutfitDescr)
 
 
+def parseBattleOutfit(outfit, cache, arenaKind):
+    if not outfit.styleId:
+        return outfit
+    styleOutfit = cache.styles[outfit.styleId].outfits[SeasonType.fromArenaKind(arenaKind)]
+    return styleOutfit if not isEditedStyle(outfit) else copy.deepcopy(styleOutfit).applyDiff(outfit)
+
+
 class OutfitLogEntry(object):
 
     def __init__(self, outfit):

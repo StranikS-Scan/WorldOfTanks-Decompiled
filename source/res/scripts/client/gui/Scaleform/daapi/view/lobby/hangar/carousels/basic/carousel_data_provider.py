@@ -26,7 +26,7 @@ class HangarCarouselDataProvider(CarouselDataProvider):
 
     def __init__(self, carouselFilter, itemsCache, currentVehicle):
         super(HangarCarouselDataProvider, self).__init__(carouselFilter, itemsCache, currentVehicle)
-        self._baseCriteria = REQ_CRITERIA.INVENTORY
+        self._baseCriteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.BOB_BATTLE
         self._supplyItems = []
         self._emptySlotsCount = 0
         self._restorableVehiclesCount = 0

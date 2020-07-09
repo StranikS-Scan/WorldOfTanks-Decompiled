@@ -47,7 +47,7 @@ class SoundWebApi(object):
 
 @w2capi()
 class SoundStateWebApi(object):
-    __ON_EXIT_STATES = {'STATE_overlay_hangar_general': 'STATE_overlay_hangar_general_off',
+    _ON_EXIT_STATES = {'STATE_overlay_hangar_general': 'STATE_overlay_hangar_general_off',
      'STATE_video_overlay': 'STATE_video_overlay_off',
      'STATE_clans_craft': 'STATE_clans_craft_progress_off',
      'STATE_gamemode_progress_page': 'STATE_gamemode_progress_page_off'}
@@ -60,7 +60,7 @@ class SoundStateWebApi(object):
         self._statesFini()
 
     def _statesFini(self):
-        for stateName, stateValue in self.__ON_EXIT_STATES.iteritems():
+        for stateName, stateValue in self._ON_EXIT_STATES.iteritems():
             WWISE.WW_setState(stateName, stateValue)
 
 

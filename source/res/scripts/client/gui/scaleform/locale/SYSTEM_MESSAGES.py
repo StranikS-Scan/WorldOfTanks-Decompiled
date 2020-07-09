@@ -84,6 +84,7 @@ class SYSTEM_MESSAGES(object):
     PREBATTLE_VEHICLEINVALID_NO_READYVEHICLE = '#system_messages:prebattle/vehicleInvalid/no_readyVehicle'
     PREBATTLE_VEHICLEINVALID_VEHICLENOTSUPPORTED = '#system_messages:prebattle/vehicleInvalid/vehicleNotSupported'
     PREBATTLE_VEHICLEINVALID_EPICONLY = '#system_messages:prebattle/vehicleInvalid/epicOnly'
+    PREBATTLE_VEHICLEINVALID_BOBONLY = '#system_messages:prebattle/vehicleInvalid/bobOnly'
     PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS = '#system_messages:prebattle/vehicleInvalid/notSetReadyStatus'
     PREBATTLE_VEHICLEINVALID_FALLOUTONLY = '#system_messages:prebattle/vehicleInvalid/falloutOnly'
     PREBATTLE_VEHICLEINVALID_LIMITS_NATIONS = '#system_messages:prebattle/vehicleInvalid/limits/nations'
@@ -1067,6 +1068,10 @@ class SYSTEM_MESSAGES(object):
     RANKED_NOTIFICATION_NOTSET = '#system_messages:ranked/notification/notSet'
     RANKED_NOTIFICATION_AVAILABLE = '#system_messages:ranked/notification/available'
     TOKENS_NOTIFICATION_MARK_ACQUIRED = '#system_messages:tokens/notification/mark_acquired'
+    RANKED_NOTIFICATION_YEARLB_POSITIVE_TITLE = '#system_messages:ranked/notification/yearLB/positive/title'
+    RANKED_NOTIFICATION_YEARLB_POSITIVE_BODY = '#system_messages:ranked/notification/yearLB/positive/body'
+    RANKED_NOTIFICATION_YEARLB_NEGATIVE_TITLE = '#system_messages:ranked/notification/yearLB/negative/title'
+    RANKED_NOTIFICATION_YEARLB_NEGATIVE_BODY = '#system_messages:ranked/notification/yearLB/negative/body'
     EPICBATTLES_NOTIFICATION_NOTAVAILABLE = '#system_messages:epicBattles/notification/notAvailable'
     EPICBATTLES_PRESTIGETRIGGER_ERROR = '#system_messages:epicBattles/prestigeTrigger/error'
     LOOTBOXES_OPEN_SERVER_ERROR = '#system_messages:lootboxes/open/server_error'
@@ -1351,6 +1356,7 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_VEHICLEINVALID_NO_READYVEHICLE,
      PREBATTLE_VEHICLEINVALID_VEHICLENOTSUPPORTED,
      PREBATTLE_VEHICLEINVALID_EPICONLY,
+     PREBATTLE_VEHICLEINVALID_BOBONLY,
      PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS,
      PREBATTLE_VEHICLEINVALID_FALLOUTONLY,
      PREBATTLE_VEHICLEINVALID_LIMITS_NATIONS,
@@ -2334,6 +2340,10 @@ class SYSTEM_MESSAGES(object):
      RANKED_NOTIFICATION_NOTSET,
      RANKED_NOTIFICATION_AVAILABLE,
      TOKENS_NOTIFICATION_MARK_ACQUIRED,
+     RANKED_NOTIFICATION_YEARLB_POSITIVE_TITLE,
+     RANKED_NOTIFICATION_YEARLB_POSITIVE_BODY,
+     RANKED_NOTIFICATION_YEARLB_NEGATIVE_TITLE,
+     RANKED_NOTIFICATION_YEARLB_NEGATIVE_BODY,
      EPICBATTLES_NOTIFICATION_NOTAVAILABLE,
      EPICBATTLES_PRESTIGETRIGGER_ERROR,
      LOOTBOXES_OPEN_SERVER_ERROR,

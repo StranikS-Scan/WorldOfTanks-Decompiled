@@ -39,6 +39,14 @@ class BrowserPageComponent(BrowserViewStackExPaddingMeta):
                 _logger.error('Failed to invalidate browser url!')
         return
 
+    def refreshUrl(self):
+        browser = self.browserCtrl.getBrowser(self.__browserId)
+        if browser is not None:
+            browser.refresh()
+        else:
+            _logger.error('Failed to refresh browser!')
+        return
+
     def _populate(self):
         super(BrowserPageComponent, self)._populate()
         self.as_setWaitingMessageS(backport.text(R.strings.waiting.browser.init()))

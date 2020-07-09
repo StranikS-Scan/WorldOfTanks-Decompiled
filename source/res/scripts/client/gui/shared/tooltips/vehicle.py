@@ -675,8 +675,11 @@ class FrontlineRentBlockConstructor(VehicleTooltipBlockConstructor):
             else:
                 rentLeftKey = '#tooltips:vehicle/rentLeft/%s'
                 rentInfo = self.vehicle.rentInfo
-            if self.vehicle.isOnlyForEpicBattles:
-                block.append(formatters.packTextParameterBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_DEAL_EPIC_MAIN), value='', valueWidth=self._valueWidth, padding=paddings))
+            if self.vehicle.isOnlyForEpicBattles or self.vehicle.isOnlyForBob:
+                nameId = backport.text(R.strings.tooltips.vehicle.deal.epic.main())
+                if self.vehicle.isOnlyForBob:
+                    nameId = backport.text(R.strings.tooltips.vehicle.deal.bob.main())
+                block.append(formatters.packTextParameterBlockData(name=text_styles.main(nameId), value='', valueWidth=self._valueWidth, padding=paddings))
                 if rentInfo.getActiveSeasonRent() is not None:
                     rentFormatter = RentLeftFormatter(rentInfo)
                     rentLeftInfo = rentFormatter.getRentLeftStr(rentLeftKey)

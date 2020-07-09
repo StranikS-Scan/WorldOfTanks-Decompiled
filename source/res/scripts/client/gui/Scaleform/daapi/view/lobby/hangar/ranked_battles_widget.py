@@ -10,7 +10,7 @@ from gui.Scaleform.daapi.view.meta.RankedBattlesHangarWidgetMeta import RankedBa
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.ranked_battles.ranked_builders.widget_vos import StateBlock, WidgetPreferences, getQualAddVOs, getVOsSequence, getLeagueAdditionalVOs
-from gui.ranked_battles.ranked_helpers.league_provider import UNDEFINED_LEAGUE_ID
+from gui.ranked_battles.ranked_helpers.web_season_provider import UNDEFINED_LEAGUE_ID
 from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController
 _logger = logging.getLogger(__name__)
@@ -172,14 +172,14 @@ class RankedBattleResultsWidget(RankedBattlesHangarWidgetMeta):
             currEfficiency = statsComposer.currentSeasonEfficiency.efficiency
             prevEfficiencyDiff = self.rankedController.getClientEfficiencyDiff()
             currEfficiencyDiff = statsComposer.currentSeasonEfficiencyDiff
-            prevWebLeague = self.rankedController.getClientLeague()
-            currWebLeague = self.rankedController.getLeagueProvider().webLeague
-            if currWebLeague.league == UNDEFINED_LEAGUE_ID:
-                currWebLeague = prevWebLeague
-            additionalVOs = getLeagueAdditionalVOs(currEfficiency, currEfficiencyDiff, currWebLeague.position)
-            prevLeagueID = prevWebLeague.league
-            prevPosition = prevWebLeague.position
-            currLeagueID = currWebLeague.league
+            prevWebSeasonInfo = self.rankedController.getClientSeasonInfo()
+            currWebSeasonInfo = self.rankedController.getWebSeasonProvider().seasonInfo
+            if currWebSeasonInfo.league == UNDEFINED_LEAGUE_ID:
+                currWebSeasonInfo = prevWebSeasonInfo
+            additionalVOs = getLeagueAdditionalVOs(currEfficiency, currEfficiencyDiff, currWebSeasonInfo.position)
+            prevLeagueID = prevWebSeasonInfo.league
+            prevPosition = prevWebSeasonInfo.position
+            currLeagueID = currWebSeasonInfo.league
             if lastBlock.state == RANKEDBATTLES_ALIASES.LEAGUE_RECEIVE_STATE:
                 statesSequence.append(StateBlock(RANKEDBATTLES_ALIASES.LEAGUE_RECEIVE_STATE, lastBlock.lastID, currLeagueID, additionalVOs))
             else:
@@ -188,7 +188,7 @@ class RankedBattleResultsWidget(RankedBattlesHangarWidgetMeta):
                     state = RANKEDBATTLES_ALIASES.LEAGUE_INCREASE_STATE
                     if prevLeagueID != UNDEFINED_LEAGUE_ID and prevLeagueID < currLeagueID:
                         state = RANKEDBATTLES_ALIASES.LEAGUE_DECREASE_STATE
-                    additionalVOs = getLeagueAdditionalVOs(currEfficiency, currEfficiencyDiff, currWebLeague.position, prevEfficiency, prevEfficiencyDiff, prevPosition)
+                    additionalVOs = getLeagueAdditionalVOs(currEfficiency, currEfficiencyDiff, currWebSeasonInfo.position, prevEfficiency, prevEfficiencyDiff, prevPosition)
                 statesSequence.append(StateBlock(state, prevLeagueID, currLeagueID, additionalVOs))
         return statesSequence
 
@@ -230,10 +230,10 @@ class RankedBattlesHangarWidget(RankedBattleResultsWidget):
     def _populate(self):
         super(RankedBattlesHangarWidget, self)._populate()
         g_clientUpdateManager.addCallbacks({'stats.dossier': self.__dossierUpdateCallBack})
-        self.rankedController.getLeagueProvider().onLeagueUpdated += self.update
+        self.rankedController.getWebSeasonProvider().onInfoUpdated += self.update
 
     def _dispose(self):
-        self.rankedController.getLeagueProvider().onLeagueUpdated -= self.update
+        self.rankedController.getWebSeasonProvider().onInfoUpdated -= self.update
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(RankedBattlesHangarWidget, self)._dispose()
 

@@ -45,6 +45,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from gui.Scaleform.daapi.view.lobby.store.browser.sound_constants import SHOP_PREVIEW_SOUND_SPACE
+from gui.Scaleform.daapi.view.lobby.vehicle_preview.sound_constants import VEHICLE_PREVIEW_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.hero_tank_preview_constants import getHeroTankPreviewParams
 from web.web_client_api.common import ItemPackTypeGroup, ItemPackEntry, ItemPackType
 import SoundGroups
@@ -57,6 +58,7 @@ _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.VEHICLE_COMPARE: 'vehicleCompare',
  VIEW_ALIAS.REFERRAL_PROGRAM_WINDOW: 'referralProgram',
  VIEW_ALIAS.EPIC_BATTLE_PAGE: 'frontline',
+ VIEW_ALIAS.RANKED_BATTLE_PAGE: 'ranked',
  VIEW_ALIAS.ADVENT_CALENDAR: 'adventCalendar',
  PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS: 'personalAwards'}
 _TABS_DATA = ({'id': VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE,
@@ -111,6 +113,8 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             self._COMMON_SOUND_SPACE = SHOP_PREVIEW_SOUND_SPACE
         elif self._backAlias in (VIEW_ALIAS.LOBBY_TECHTREE, VIEW_ALIAS.LOBBY_RESEARCH):
             self._COMMON_SOUND_SPACE = RESEARCH_PREVIEW_SOUND_SPACE
+        elif self._backAlias == VIEW_ALIAS.RANKED_BATTLE_PAGE:
+            self._COMMON_SOUND_SPACE = VEHICLE_PREVIEW_SOUND_SPACE
         super(VehiclePreview, self).__init__(ctx)
         self.__currentOffer = None
         self._vehicleCD = ctx['itemCD']

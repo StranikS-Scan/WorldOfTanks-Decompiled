@@ -11,7 +11,7 @@ import ArenaType
 import gui.awards.event_dispatcher as shared_events
 import personal_missions
 from PlayerEvents import g_playerEvents
-from account_helpers.AccountSettings import AccountSettings, AWARDS, SPEAKERS_DEVICE, GUI_START_BEHAVIOR, TECHTREE_INTRO_BLUEPRINTS
+from account_helpers.AccountSettings import AccountSettings, AWARDS, SPEAKERS_DEVICE, GUI_START_BEHAVIOR, TECHTREE_INTRO_BLUEPRINTS, RANKED_YEAR_POSITION
 from account_helpers.settings_core.settings_constants import SOUND, GuiSettingsBehavior
 from account_shared import getFairPlayViolationName
 from battle_pass_common import BattlePassRewardReason
@@ -48,7 +48,7 @@ from gui.server_events.events_dispatcher import showLootboxesAward, showPiggyBan
 from gui.server_events.events_helpers import isDailyQuest
 from gui.server_events.finders import PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
-from gui.shared.event_dispatcher import showProgressiveRewardAwardWindow, showSeniorityRewardAwardWindow, showRankedSeasonCompleteView, showRankedYeardAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showProgressiveItemsRewardWindow, showProgressionRequiredStyleUnlockedWindow
+from gui.shared.event_dispatcher import showProgressiveRewardAwardWindow, showSeniorityRewardAwardWindow, showRankedSeasonCompleteView, showRankedYeardAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showProgressiveItemsRewardWindow, showProgressionRequiredStyleUnlockedWindow, showRankedYearLBAwardWindow
 from gui.shared.events import PersonalMissionsEvent, LobbySimpleEvent
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.utils import isPopupsWindowsOpenDisabled
@@ -1224,16 +1224,21 @@ class RankedQuestsHandler(ServiceChannelHandler):
         data = message.data.copy()
         seasonQuestIDs = []
         finalRewardsQuestIDs = []
+        finalLeaderQuestIDs = []
         for questID in (h for h in data.get('completedQuestIDs', set()) if ranked_helpers.isRankedQuestID(h)):
             if ranked_helpers.isSeasonTokenQuest(questID):
                 seasonQuestIDs.append(questID)
             if ranked_helpers.isFinalTokenQuest(questID):
                 finalRewardsQuestIDs.append(questID)
+            if ranked_helpers.isLeaderTokenQuest(questID):
+                finalLeaderQuestIDs.append(questID)
 
         if seasonQuestIDs:
             self.__processQuests(seasonQuestIDs, data, self.__showSeasonAward)
         if finalRewardsQuestIDs:
             self.__processQuests(finalRewardsQuestIDs, data, self.__showFinalAward)
+        if finalLeaderQuestIDs:
+            self.__processQuests(finalLeaderQuestIDs, data, self.__showFinalLeaderAward)
 
     def __showSeasonAward(self, quest, data):
         seasonID, _, _ = ranked_helpers.getDataFromSeasonTokenQuestID(quest.getID())
@@ -1251,6 +1256,14 @@ class RankedQuestsHandler(ServiceChannelHandler):
         awardType = self.__rankedController.getAwardTypeByPoints(points)
         if awardType is not None:
             showRankedYeardAwardWindow(data, points, closeCallback=self.__unlock)
+        else:
+            self.__unlock()
+        return
+
+    def __showFinalLeaderAward(self, _, data):
+        yearPosition = AccountSettings.getSettings(RANKED_YEAR_POSITION)
+        if yearPosition is not None and data:
+            showRankedYearLBAwardWindow(yearPosition, data, self.__unlock)
         else:
             self.__unlock()
         return

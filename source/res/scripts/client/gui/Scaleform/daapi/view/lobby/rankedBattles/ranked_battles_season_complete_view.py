@@ -8,7 +8,7 @@ from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.constants import RankedDossierKeys
 from gui.ranked_battles.ranked_builders import season_comple_vos
 from gui.ranked_battles.ranked_formatters import getRankedAwardsFormatter
-from gui.ranked_battles.ranked_helpers.league_provider import UNDEFINED_LEAGUE_ID
+from gui.ranked_battles.ranked_helpers.web_season_provider import UNDEFINED_LEAGUE_ID
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.bonuses import getBonuses
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
@@ -41,6 +41,7 @@ class RankedBattlesSeasonCompleteView(RankedBattlesSeasonCompleteViewMeta):
     def _populate(self):
         super(RankedBattlesSeasonCompleteView, self)._populate()
         self.__rankedController.getSoundManager().setOverlayStateOn()
+        self.__rankedController.getWebSeasonProvider().onInfoUpdated += self.__updatePosition
         if self._quest is not None and self._awards is not None:
             self.__setData()
         else:
@@ -48,11 +49,18 @@ class RankedBattlesSeasonCompleteView(RankedBattlesSeasonCompleteViewMeta):
         return
 
     def _dispose(self):
+        self.__rankedController.getWebSeasonProvider().onInfoUpdated -= self.__updatePosition
         self.__rankedController.getSoundManager().setOverlayStateOff()
         self.__closeCallback()
         super(RankedBattlesSeasonCompleteView, self)._dispose()
 
-    def _packAwards(self):
+    def __getPosition(self):
+        webSeasonInfo = self.__rankedController.getWebSeasonProvider().seasonInfo
+        if webSeasonInfo.league == UNDEFINED_LEAGUE_ID:
+            webSeasonInfo = self.__rankedController.getClientSeasonInfo()
+        return backport.getNiceNumberFormat(webSeasonInfo.position) if webSeasonInfo.position else '0'
+
+    def __packAwards(self):
         result = []
         formatter = getRankedAwardsFormatter()
         for name, value in self._awards.iteritems():
@@ -64,29 +72,27 @@ class RankedBattlesSeasonCompleteView(RankedBattlesSeasonCompleteViewMeta):
         seasonID, league, isSprinter = ranked_helpers.getDataFromSeasonTokenQuestID(self._quest.getID())
         season = self.__rankedController.getSeason(seasonID)
         if season is not None:
-            leagueData = self.__rankedController.getLeagueProvider().webLeague
-            if leagueData.league == UNDEFINED_LEAGUE_ID:
-                leagueData = self.__rankedController.getClientLeague()
-            if leagueData.league != UNDEFINED_LEAGUE_ID and leagueData.league == league:
-                position = backport.getNiceNumberFormat(leagueData.position)
-            else:
-                position = '0'
-            dossier = self.__itemsCache.items.getAccountDossier().getSeasonRankedStats(RankedDossierKeys.SEASON % season.getNumber(), seasonID)
-            efficiency = dossier.getStepsEfficiency()
-            efficiencyValue = efficiency * 100 if efficiency is not None else 0
+            awardsData = None
             seasonNumber = season.getNumber()
-            data = season_comple_vos.getFinishSeasonData(efficiencyValue, season.getNumber())
+            dossierKey = RankedDossierKeys.SEASON % seasonNumber
+            dossier = self.__itemsCache.items.getAccountDossier().getSeasonRankedStats(dossierKey, seasonID)
+            efficiency = dossier.getStepsEfficiency()
+            position = self.__getPosition()
+            efficiencyValue = efficiency * 100 if efficiency is not None else 0.0
+            data = season_comple_vos.getFinishSeasonData(efficiencyValue, seasonNumber)
             if league > UNDEFINED_LEAGUE_ID:
                 data.update(season_comple_vos.getFinishInLeagueData(league, position, seasonNumber, isSprinter))
-                awardsData = season_comple_vos.getAwardsData(self._packAwards())
+                awardsData = season_comple_vos.getAwardsData(self.__packAwards())
             else:
                 rankID = dossier.getAchievedRank()
                 division = self.__rankedController.getDivision(rankID)
                 data.update(season_comple_vos.getFinishInDivisionsData(division, rankID, seasonNumber))
-                awardsData = None
             self.as_setDataS(data)
             if awardsData:
                 self.as_setAwardsDataS(awardsData)
         else:
             _logger.warning('Try to show RankedBattlesSeasonCompleteView, but season is None. Params: %s %s', seasonID, league)
         return
+
+    def __updatePosition(self):
+        self.as_setPlaceS(self.__getPosition())

@@ -42,6 +42,9 @@ RANKED_CAROUSEL_FILTER_CLIENT_1 = 'RANKED_CAROUSEL_FILTER_CLIENT_1'
 EPICBATTLE_CAROUSEL_FILTER_1 = 'EPICBATTLE_CAROUSEL_FILTER_1'
 EPICBATTLE_CAROUSEL_FILTER_2 = 'EPICBATTLE_CAROUSEL_FILTER_2'
 EPICBATTLE_CAROUSEL_FILTER_CLIENT_1 = 'EPICBATTLE_CAROUSEL_FILTER_CLIENT_1'
+BOB_CAROUSEL_FILTER_1 = 'BOB_CAROUSEL_FILTER_1'
+BOB_CAROUSEL_FILTER_2 = 'BOB_CAROUSEL_FILTER_2'
+BOB_CAROUSEL_FILTER_CLIENT_1 = 'BOB_CAROUSEL_FILTER_CLIENT_1'
 STORAGE_VEHICLES_CAROUSEL_FILTER_1 = 'STORAGE_CAROUSEL_FILTER_1'
 BATTLEPASS_CAROUSEL_FILTER_1 = 'BATTLEPASS_CAROUSEL_FILTER_1'
 BATTLEPASS_CAROUSEL_FILTER_CLIENT_1 = 'BATTLEPASS_CAROUSEL_FILTER_CLIENT_1'
@@ -72,6 +75,8 @@ CLAN_NOTIFICATION_COUNTERS = 'ClanButtonNewsCounters'
 PROGRESSIVE_REWARD_VISITED = 'progressiveRewardVisited'
 RANKED_AWARDS_COUNTER = 'rankedAwardsCounter'
 RANKED_INFO_COUNTER = 'rankedInfoCounter'
+RANKED_YEAR_RATING_COUNTER = 'rankedYearRatingCounter'
+RANKED_SHOP_COUNTER = 'rankedShopCounter'
 BOOSTERS_FOR_CREDITS_SLOT_COUNTER = 'boostersForCreditsSlotCounter'
 SENIORITY_AWARDS_COUNTER = 'seniorityAwardsCounter'
 DEMOUNT_KIT_SEEN = 'demountKitSeen'
@@ -129,9 +134,11 @@ VEHICLES_WITH_BLUEPRINT_CONFIRM = 'showedBlueprintConfirm'
 IS_FIRST_ENTRY_BY_DIVISION_ID = 'isFirstEntryByDivisionId'
 RANKED_STYLED_VEHICLES_POOL = 'rankedStyledVehiclesPool'
 STYLE_PREVIEW_VEHICLES_POOL = 'stylePreviewVehiclesPool'
-RANKED_WEB_LEAGUE = 'rankedWebLeague'
-RANKED_WEB_LEAGUE_UPDATE = 'rankedWebLeagueUpdate'
+RANKED_WEB_INFO = 'rankedWebLeague'
+RANKED_WEB_INFO_UPDATE = 'rankedWebLeagueUpdate'
 RANKED_AWARDS_BUBBLE_YEAR_REACHED = 'rankedAwardsBubbleYearReached'
+RANKED_ENTITLEMENT_EVENTS_AMOUNT = 'rankedEntitlementEventsAmount'
+RANKED_YEAR_POSITION = 'rankedYearPosition'
 MARATHON_REWARD_WAS_SHOWN_PREFIX = 'marathonRewardScreenWasShown'
 MARATHON_VIDEO_WAS_SHOWN_PREFIX = 'marathonRewardVideoWasShown'
 SUBTITLES = 'subtitles'
@@ -318,6 +325,41 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'bonus': False},
                EPICBATTLE_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                BATTLEPASS_CAROUSEL_FILTER_1: {'isCommonProgression': False},
+               BOB_CAROUSEL_FILTER_1: {'ussr': False,
+                                       'germany': False,
+                                       'usa': False,
+                                       'china': False,
+                                       'france': False,
+                                       'uk': False,
+                                       'japan': False,
+                                       'czech': False,
+                                       'sweden': False,
+                                       'poland': False,
+                                       'italy': False,
+                                       'lightTank': False,
+                                       'mediumTank': False,
+                                       'heavyTank': False,
+                                       'SPG': False,
+                                       'AT-SPG': False,
+                                       'level_1': False,
+                                       'level_2': False,
+                                       'level_3': False,
+                                       'level_4': False,
+                                       'level_5': False,
+                                       'level_6': False,
+                                       'level_7': False,
+                                       'level_8': False,
+                                       'level_9': False,
+                                       'level_10': True},
+               BOB_CAROUSEL_FILTER_2: {'premium': False,
+                                       'elite': False,
+                                       'igr': False,
+                                       'rented': True,
+                                       'event': True,
+                                       'gameMode': False,
+                                       'favorite': False,
+                                       'bonus': False},
+               BOB_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                MISSION_SELECTOR_FILTER: {'inventory': False},
                PM_SELECTOR_FILTER: {'inventory': False},
                BLUEPRINTS_STORAGE_FILTER: {'unlock_available': False,
@@ -607,8 +649,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 IS_FIRST_ENTRY_BY_DIVISION_ID: {},
                 STYLE_PREVIEW_VEHICLES_POOL: [],
                 RANKED_STYLED_VEHICLES_POOL: [],
-                RANKED_WEB_LEAGUE: None,
-                RANKED_WEB_LEAGUE_UPDATE: None,
+                RANKED_WEB_INFO: None,
+                RANKED_WEB_INFO_UPDATE: None,
                 RANKED_AWARDS_BUBBLE_YEAR_REACHED: False,
                 NATION_CHANGE_VIEWED: False,
                 LAST_BATTLE_PASS_POINTS_SEEN: 0,
@@ -616,6 +658,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 TECHTREE_INTRO_BLUEPRINTS: {},
                 MODULES_ANIMATION_SHOWN: False,
                 SUBTITLES: True,
+                RANKED_YEAR_POSITION: None,
                 TOP_OF_TREE_CONFIG: {},
                 TEN_YEARS_COUNTDOWN_ON_BOARDING_LAST_VISITED_BLOCK: 0},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
@@ -626,6 +669,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 CLAN_NOTIFICATION_COUNTERS: {},
                 RANKED_AWARDS_COUNTER: 1,
                 RANKED_INFO_COUNTER: 1,
+                RANKED_YEAR_RATING_COUNTER: 1,
+                RANKED_SHOP_COUNTER: 1,
+                RANKED_ENTITLEMENT_EVENTS_AMOUNT: 0,
                 BOOSTERS_FOR_CREDITS_SLOT_COUNTER: 1,
                 SENIORITY_AWARDS_COUNTER: 1,
                 DEMOUNT_KIT_SEEN: False,
@@ -718,7 +764,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 40
+    version = 41
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -1141,6 +1187,20 @@ class AccountSettings(object):
                     for sectionName in obsoleteKeys:
                         if sectionName in accSettings.keys():
                             accSettings.deleteSection(sectionName)
+
+            if currVersion < 41:
+                for key, section in _filterAccountSection(ads):
+                    keyFlush = (RANKED_AWARDS_BUBBLE_YEAR_REACHED, RANKED_WEB_INFO, RANKED_WEB_INFO_UPDATE)
+                    keySettings = AccountSettings._readSection(section, KEY_SETTINGS)
+                    for flushName in keyFlush:
+                        if flushName in keySettings.keys():
+                            keySettings.write(flushName, _pack(None))
+
+                    countersFlush = (RANKED_AWARDS_COUNTER, RANKED_INFO_COUNTER)
+                    counterSettings = AccountSettings._readSection(section, KEY_COUNTERS)
+                    for flushName in countersFlush:
+                        if flushName in counterSettings.keys():
+                            counterSettings.write(flushName, _pack(1))
 
             ads.writeInt('version', AccountSettings.version)
         return

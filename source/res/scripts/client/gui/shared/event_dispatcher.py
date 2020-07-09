@@ -28,6 +28,7 @@ from gui.Scaleform.genConsts.EVENTPROGRESSION_ALIASES import EVENTPROGRESSION_AL
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
+from gui.Scaleform.genConsts.BATTLE_OF_BLOGGERS_ALIASES import BATTLE_OF_BLOGGERS_ALIASES
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.game_control.links import URLMacros
 from gui.impl import backport
@@ -37,6 +38,7 @@ from gui.impl.lobby.demount_kit.selector_dialog import DemountOpDevDialog
 from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
 from gui.impl.lobby.offers.offer_gift_dialog import makeOfferGiftDialog
 from gui.impl.lobby.techtree.techtree_intro_view import TechTreeIntroWindow
+from gui.impl.lobby.ranked.year_leaderboard_view import YearLeaderboardAwardWindow
 from gui.shop import generateShopRentRenewProductID, showBuyGoldForRentWebOverlay
 from gui.shop import getShopProductInfo
 from gui.shop import makeBuyParamsByProductInfo
@@ -108,6 +110,10 @@ def showEpicBattlesPrimeTimeWindow():
 
 def showEventProgressionBuyConfirmView(ctx):
     g_eventBus.handleEvent(events.LoadViewEvent(alias=EVENTPROGRESSION_ALIASES.EVENT_PROGRESION_BUY_CONFIRM_VIEW_ALIAS, ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showBobPrimeTimeWindow():
+    g_eventBus.handleEvent(events.LoadViewEvent(alias=BATTLE_OF_BLOGGERS_ALIASES.BOB_PRIME_TIME_ALIAS, ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showEpicBattlesWelcomeBackWindow():
@@ -645,13 +651,14 @@ def showTankPremiumAboutPage():
 
 
 @adisp.process
-def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=None, callbackOnLoad=None, webHandlers=None):
+def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=None, callbackOnLoad=None, webHandlers=None, forcedSkipEscape=False):
     if url:
         url = yield URLMacros().parse(url, params=params)
         g_eventBus.handleEvent(events.LoadViewEvent(alias, ctx={'url': url,
          'allowRightClick': False,
          'callbackOnLoad': callbackOnLoad,
-         'webHandlers': webHandlers}), EVENT_BUS_SCOPE.LOBBY)
+         'webHandlers': webHandlers,
+         'forcedSkipEscape': forcedSkipEscape}), EVENT_BUS_SCOPE.LOBBY)
 
 
 @adisp.process
@@ -769,6 +776,11 @@ def showTechTreeIntro(parent=None, blueprints=None):
 
 def showRankedSeasonCompleteView(ctx):
     g_eventBus.handleEvent(events.LoadViewEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_SEASON_COMPLETE, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showRankedYearLBAwardWindow(playerPosition, rewardsData, closeCallback=None):
+    window = YearLeaderboardAwardWindow(playerPosition, rewardsData, closeCallback)
+    window.load()
 
 
 @async

@@ -105,6 +105,7 @@ class WebBrowser(object):
         self.__startFocused = isFocused
         self.__browser = None
         self.__isNavigationComplete = False
+        self.__loadStartTime = None
         self.__isFocused = False
         self.__isAudioPlaying = False
         self.__navigationFilters = handlers or set()
@@ -305,12 +306,14 @@ class WebBrowser(object):
             self.__isWaitingForUnfocus = False
 
     def refresh(self, ignoreCache=True):
-        if BigWorld.time() - self.__loadStartTime < 0.5:
+        if self.__loadStartTime is None or BigWorld.time() - self.__loadStartTime < 0.5:
             _logger.debug('refresh - called too soon')
             return
-        if self.hasBrowser:
-            self.__browser.reload()
-            self.onNavigate(self.__browser.url)
+        else:
+            if self.hasBrowser:
+                self.__browser.reload()
+                self.onNavigate(self.__browser.url)
+            return
 
     def navigate(self, url):
         _logger.debug('navigate %s', url)
@@ -337,12 +340,14 @@ class WebBrowser(object):
             self.__browser.goForward(self.url)
 
     def navigateStop(self):
-        if BigWorld.time() - self.__loadStartTime < 0.5:
+        if self.__loadStartTime is None or BigWorld.time() - self.__loadStartTime < 0.5:
             _logger.debug('navigateStop - called too soon')
             return
-        if self.hasBrowser:
-            self.__browser.stop()
-            self.__onLoadEnd(self.__browser.url)
+        else:
+            if self.hasBrowser:
+                self.__browser.stop()
+                self.__onLoadEnd(self.__browser.url)
+            return
 
     def update(self):
         self.__cbID = BigWorld.callback(self.updateInterval, self.update)

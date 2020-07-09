@@ -26,8 +26,9 @@ class WebView(BrowserScreenMeta):
         self.__loadBrowserCbID = None
         self.__ctx = ctx
         self._url = ctx.get('url') if ctx else None
-        self.__callbackOnLoad = ctx.get('callbackOnLoad', None) if ctx else None
+        self._forcedSkipEscape = ctx.get('forcedSkipEscape', False) if ctx else False
         self._browserParams = (ctx or {}).get('browserParams', makeBrowserParams())
+        self.__callbackOnLoad = ctx.get('callbackOnLoad', None) if ctx else None
         return
 
     def onEscapePress(self):
@@ -105,7 +106,7 @@ class WebView(BrowserScreenMeta):
 
     def __updateSkipEscape(self, skipEscape):
         if self.__browser is not None:
-            self.__browser.skipEscape = skipEscape
+            self.__browser.skipEscape = self._forcedSkipEscape or skipEscape
             self.__browser.ignoreKeyEvents = skipEscape
         return
 

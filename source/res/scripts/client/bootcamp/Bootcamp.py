@@ -19,7 +19,7 @@ from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP
 from PlayerEvents import g_playerEvents
 from bootcamp_shared import BOOTCAMP_BATTLE_ACTION
 from gui import makeHtmlString
-from gui.ClientHangarSpace import g_clientHangarSpaceOverride
+from gui.ClientHangarSpace import g_clientHangarSpaceOverride, SPACE_FULL_VISIBILITY_MASK
 from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import isReferralProgramEnabled, isCurrentUserRecruit
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.Scaleform.Waiting import Waiting
@@ -505,8 +505,8 @@ class Bootcamp(EventSystemEntity):
         return self.__gui
 
     def setHangarSpace(self, hangarSpace, hangarSpacePremium):
-        g_clientHangarSpaceOverride.setPath(hangarSpacePremium, -1, True, False)
-        g_clientHangarSpaceOverride.setPath(hangarSpace, -1, False, False)
+        g_clientHangarSpaceOverride.setPath(hangarSpacePremium, SPACE_FULL_VISIBILITY_MASK, True, False)
+        g_clientHangarSpaceOverride.setPath(hangarSpace, SPACE_FULL_VISIBILITY_MASK, False, False)
 
     def setBootcampHangarSpace(self):
         BigWorld.updateTerrainBorders((-127, -237, -37, -157))

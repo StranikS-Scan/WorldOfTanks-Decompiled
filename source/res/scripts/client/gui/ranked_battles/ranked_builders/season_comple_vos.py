@@ -3,16 +3,17 @@
 import typing
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.ranked_battles.ranked_helpers.league_provider import TOP_LEAGUE_ID
+from gui.ranked_battles.ranked_helpers.web_season_provider import TOP_LEAGUE_ID
 from gui.shared.utils.functions import makeTooltip
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.formatters import text_styles, icons
 
 def getFinishSeasonData(efficiencyValue, seasonNumber):
     return {'typeTitle': backport.text(R.strings.ranked_battles.seasonComplete.smallTitle()),
      'typeIcon': backport.image(R.images.gui.maps.icons.battleTypes.c_40x40.ranked()),
      'seasonTitle': backport.text(R.strings.ranked_battles.seasonComplete.bigTitle(), season=str(seasonNumber)),
-     'effectValue': backport.getIntegralFormat(efficiencyValue),
+     'effectValue': backport.getIntegralFormat(int(round(efficiencyValue))),
      'effectLabel': backport.text(R.strings.ranked_battles.seasonComplete.effectLabel()),
      'btnLabel': backport.text(R.strings.ranked_battles.seasonComplete.leadersButton()),
      'bgSource': backport.image(R.images.gui.maps.icons.rankedBattles.bg.main())}
@@ -32,6 +33,7 @@ def getFinishInLeagueData(league, position, seasonNumber, isSprinter):
      'state': RANKEDBATTLES_ALIASES.SEASON_COMPLETE_VIEW_LEAGUE_STATE,
      'placeLabel': backport.text(R.strings.ranked_battles.seasonComplete.placeInRating()),
      'placeValue': position,
+     'placeTooltip': TOOLTIPS_CONSTANTS.RANKED_BATTLES_POSITION,
      'descr': '',
      'sprinterLabel': sprinterLabel,
      'tooltip': makeTooltip(header=header, body=body)}

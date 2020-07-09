@@ -13,7 +13,7 @@ from items.badges_common import BadgesCommon
 from ops_pack import OpsUnpacker, packPascalString, unpackPascalString, initOpsFormatDef
 from unit_helpers.ExtrasHandler import EmptyExtrasHandler, ClanBattleExtrasHandler
 from unit_helpers.ExtrasHandler import SquadExtrasHandler, ExternalExtrasHandler
-from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, FalloutClassicRoster, FalloutMultiteamRoster, EventRoster, EpicRoster
+from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, FalloutClassicRoster, FalloutMultiteamRoster, EventRoster, EpicRoster, BobRoster
 UnitVehicle = namedtuple('UnitVehicle', ('vehInvID', 'vehTypeCompDescr', 'vehLevel', 'vehClassIdx'))
 
 class UNIT_MGR_STATE:
@@ -326,6 +326,7 @@ class UNIT_MGR_FLAGS:
     STRONGHOLD = 2048
     EPIC = 4096
     TOURNAMENT = 8192
+    BOB = 16384
 
 
 def _prebattleTypeFromFlags(flags):
@@ -335,6 +336,8 @@ def _prebattleTypeFromFlags(flags):
         return PREBATTLE_TYPE.EVENT
     elif flags & UNIT_MGR_FLAGS.EPIC:
         return PREBATTLE_TYPE.EPIC
+    elif flags & UNIT_MGR_FLAGS.BOB:
+        return PREBATTLE_TYPE.BOB
     elif flags & UNIT_MGR_FLAGS.SQUAD:
         return PREBATTLE_TYPE.SQUAD
     elif flags & UNIT_MGR_FLAGS.SPEC_BATTLE:
@@ -354,6 +357,8 @@ def _entityNameFromFlags(flags):
         return 'FalloutUnitMgr'
     elif flags & UNIT_MGR_FLAGS.EVENT:
         return 'EventUnitMgr'
+    elif flags & UNIT_MGR_FLAGS.BOB:
+        return 'BobUnitMgr'
     elif flags & UNIT_MGR_FLAGS.SQUAD:
         return 'SquadUnitMgr'
     elif flags & UNIT_MGR_FLAGS.STRONGHOLD:
@@ -367,6 +372,8 @@ def _invitationTypeFromFlags(flags):
         return INVITATION_TYPE.EPIC
     elif flags & UNIT_MGR_FLAGS.EVENT:
         return INVITATION_TYPE.EVENT
+    elif flags & UNIT_MGR_FLAGS.BOB:
+        return INVITATION_TYPE.BOB
     elif flags & UNIT_MGR_FLAGS.SQUAD:
         return INVITATION_TYPE.SQUAD
     else:
@@ -383,7 +390,8 @@ class ROSTER_TYPE:
     STRONGHOLD_ROSTER = UNIT_MGR_FLAGS.STRONGHOLD
     TOURNAMENT_ROSTER = UNIT_MGR_FLAGS.TOURNAMENT
     EPIC_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.EPIC
-    _MASK = SQUAD_ROSTER | SPEC_ROSTER | UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM | UNIT_MGR_FLAGS.EVENT | STRONGHOLD_ROSTER | TOURNAMENT_ROSTER | UNIT_MGR_FLAGS.EPIC
+    BOB_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.BOB
+    _MASK = SQUAD_ROSTER | SPEC_ROSTER | UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM | UNIT_MGR_FLAGS.EVENT | STRONGHOLD_ROSTER | TOURNAMENT_ROSTER | UNIT_MGR_FLAGS.EPIC | UNIT_MGR_FLAGS.BOB
 
 
 class EXTRAS_HANDLER_TYPE:
@@ -403,7 +411,8 @@ ROSTER_TYPE_TO_CLASS = {ROSTER_TYPE.UNIT_ROSTER: UnitRoster,
  ROSTER_TYPE.EVENT_ROSTER: EventRoster,
  ROSTER_TYPE.STRONGHOLD_ROSTER: SpecRoster,
  ROSTER_TYPE.TOURNAMENT_ROSTER: SpecRoster,
- ROSTER_TYPE.EPIC_ROSTER: EpicRoster}
+ ROSTER_TYPE.EPIC_ROSTER: EpicRoster,
+ ROSTER_TYPE.BOB_ROSTER: BobRoster}
 EXTRAS_HANDLER_TYPE_TO_HANDLER = {EXTRAS_HANDLER_TYPE.EMPTY: EmptyExtrasHandler,
  EXTRAS_HANDLER_TYPE.SQUAD: SquadExtrasHandler,
  EXTRAS_HANDLER_TYPE.SPEC_BATTLE: ClanBattleExtrasHandler,

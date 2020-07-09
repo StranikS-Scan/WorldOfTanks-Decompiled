@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/ranked_battles_leagues.py
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.ranked_battles.ranked_builders import leagues_vos
-from gui.ranked_battles.ranked_helpers.league_provider import UNDEFINED_LEAGUE_ID
+from gui.ranked_battles.ranked_helpers.web_season_provider import UNDEFINED_LEAGUE_ID
 from gui.ranked_battles import ranked_helpers
 from helpers import dependency
 from gui.Scaleform.daapi.view.meta.RankedBattlesLeaguesViewMeta import RankedBattlesLeaguesViewMeta
@@ -13,7 +13,6 @@ from skeletons.gui.shared import IItemsCache
 class RankedBattlesLeaguesView(RankedBattlesLeaguesViewMeta, IResetablePage):
     rankedController = dependency.descriptor(IRankedBattlesController)
     itemsCache = dependency.descriptor(IItemsCache)
-    __slots__ = ()
 
     def reset(self):
         pass
@@ -22,7 +21,7 @@ class RankedBattlesLeaguesView(RankedBattlesLeaguesViewMeta, IResetablePage):
         super(RankedBattlesLeaguesView, self)._populate()
         g_clientUpdateManager.addCallbacks({'stats.dossier': self.__dossierUpdateCallBack})
         self.rankedController.onUpdated += self.__onRankedUpdate
-        self.rankedController.getLeagueProvider().onLeagueUpdated += self.__onLeagueUpdate
+        self.rankedController.getWebSeasonProvider().onInfoUpdated += self.__onWebSeasonInfoUpdate
         self.__setEfficiencyData()
         self.__setStatsData()
         self.__setBonusBattlesCount()
@@ -32,14 +31,14 @@ class RankedBattlesLeaguesView(RankedBattlesLeaguesViewMeta, IResetablePage):
     def _dispose(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.rankedController.onUpdated -= self.__onRankedUpdate
-        self.rankedController.getLeagueProvider().onLeagueUpdated -= self.__onLeagueUpdate
+        self.rankedController.getWebSeasonProvider().onInfoUpdated -= self.__onWebSeasonInfoUpdate
         super(RankedBattlesLeaguesView, self)._dispose()
 
-    def __dossierUpdateCallBack(self, *args):
+    def __dossierUpdateCallBack(self, *_):
         self.__setStatsData()
         self.__setEfficiencyData()
 
-    def __onLeagueUpdate(self):
+    def __onWebSeasonInfoUpdate(self):
         self.__setLeagueAndPositionData()
 
     def __onRankedUpdate(self):
@@ -58,19 +57,17 @@ class RankedBattlesLeaguesView(RankedBattlesLeaguesViewMeta, IResetablePage):
         self.as_setEfficiencyDataS(leagues_vos.getEfficiencyVO(currentSeasonEfficiency, currentSeasonEfficiencyDiff))
 
     def __setEmptyLeagueAndPositionData(self):
-        self.as_setDataS(leagues_vos.getLeagueVO(UNDEFINED_LEAGUE_ID))
+        self.as_setDataS(leagues_vos.getLeagueVO(UNDEFINED_LEAGUE_ID, False, False, 0))
         self.as_setRatingDataS(leagues_vos.getRatingVO(None))
         return
 
     def __setLeagueAndPositionData(self):
-        webLeague = self.rankedController.getLeagueProvider().webLeague
-        if webLeague.league == UNDEFINED_LEAGUE_ID:
-            webLeague = self.rankedController.getClientLeague()
-        if webLeague.league != UNDEFINED_LEAGUE_ID and webLeague.position is not None:
-            league = webLeague.league
-            position = webLeague.position
-            self.as_setDataS(leagues_vos.getLeagueVO(league))
-            self.as_setRatingDataS(leagues_vos.getRatingVO(position))
+        webInfo = self.rankedController.getWebSeasonProvider().seasonInfo
+        if webInfo.league == UNDEFINED_LEAGUE_ID:
+            webInfo = self.rankedController.getClientSeasonInfo()
+        if webInfo.league != UNDEFINED_LEAGUE_ID and webInfo.position is not None:
+            self.as_setDataS(leagues_vos.getLeagueVO(webInfo.league, webInfo.isSprinter, webInfo.isTop, self.rankedController.getYearLBSize()))
+            self.as_setRatingDataS(leagues_vos.getRatingVO(webInfo.position))
         return
 
     def __setStatsData(self):

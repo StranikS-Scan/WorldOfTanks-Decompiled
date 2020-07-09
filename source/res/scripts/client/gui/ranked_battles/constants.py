@@ -58,18 +58,24 @@ class RankedDossierKeys(CONST_CONTAINER):
 ARCHIVE_SEASON_ID = 0
 STANDARD_POINTS_COUNT = 1
 NOT_IN_LEAGUES_QUEST = 'ranked_{}_0_common'
-FINAL_QUEST_PATTERN = 'ranked_{}_final'
+FINAL_QUEST_PATTERN = 'ranked_2020_{}_final'
+FINAL_LEADER_QUEST = 'ranked_final_leader'
 RANKED_QUEST_ID_PREFIX = 'ranked'
-YEAR_POINTS_TOKEN = 'rb2019'
+YEAR_POINTS_TOKEN = 'rb2020'
+YEAR_STRIPE_SERVER_TOKEN = 'ranked_final_top'
+YEAR_STRIPE_CLIENT_TOKEN = 'ranked_final_ready'
+ENTITLEMENT_EVENT_TOKEN = 'ranked_entitlement_event'
 
 class RankedTokenQuestPostfix(CONST_CONTAINER):
     COMMON = 'common'
     SPRINTER = 'sprinter'
     FINAL = 'final'
+    LEADER = 'leader'
 
 
 class SeasonResultTokenPatterns(CONST_CONTAINER):
     RANKED_OFF_BANNED = 'ranked_{}_banned'
+    RANKED_OFF_ROLLED = 'ranked_{}_rolled'
     RANKED_OFF_SPRINTER = 'ranked_{}_sprinter'
     RANKED_OFF_GOLD_LEAGUE_TOKEN = 'ranked_{}_top_1'
     RANKED_OFF_SILVER_LEAGUE_TOKEN = 'ranked_{}_top_2'
@@ -80,15 +86,24 @@ class SeasonGapStates(CONST_CONTAINER):
     WAITING_IN_LEAGUES = 0
     IN_LEAGUES = 1
     BANNED_IN_LEAGUES = 2
-    WAITING_IN_DIVISIONS = 3
-    IN_DIVISIONS = 4
-    BANNED_IN_DIVISIONS = 5
-    WAITING_NOT_IN_DIVISIONS = 6
-    NOT_IN_DIVISIONS = 7
-    BANNED_NOT_IN_DIVISIONS = 8
-    WAITING_NOT_IN_SEASON = 9
-    NOT_IN_SEASON = 10
-    BANNED_NOT_IN_SEASON = 11
+    ROLLED_IN_LEAGUES = 3
+    WAITING_IN_DIVISIONS = 4
+    IN_DIVISIONS = 5
+    BANNED_IN_DIVISIONS = 6
+    ROLLED_IN_DIVISIONS = 7
+    WAITING_NOT_IN_DIVISIONS = 8
+    NOT_IN_DIVISIONS = 9
+    BANNED_NOT_IN_DIVISIONS = 10
+    ROLLED_NOT_IN_DIVISIONS = 11
+    WAITING_NOT_IN_SEASON = 12
+    NOT_IN_SEASON = 13
+    BANNED_NOT_IN_SEASON = 14
+    ROLLED_NOT_IN_SEASON = 15
+
+
+class LandingUrlParams(CONST_CONTAINER):
+    LOBBY_SUB = '/landing'
+    PAGE_TAB = ''
 
 
 @unique

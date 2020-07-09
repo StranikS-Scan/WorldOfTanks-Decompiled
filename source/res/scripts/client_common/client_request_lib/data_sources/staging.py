@@ -1144,6 +1144,15 @@ class StagingDataAccessor(base.BaseDataAccessor):
 
         return self._request_data(inner_callback, 'rblb', url, method='GET')
 
+    def user_ranked_year_position(self, callback):
+        url = '/user-yearly-position/{account_id}/'.format(account_id=self._account)
+
+        @preprocess_callback(callback, 'rblb')
+        def inner_callback(data):
+            return data or {}
+
+        return self._request_data(inner_callback, 'rblb', url, method='GET')
+
     @convert_data({'defence_hour': lambda x: dt_time(x, 0) if x >= 0 else None})
     @mapped_fields({'clan_id': 'clan_id',
      'defence_hour': 'defence_hour'})

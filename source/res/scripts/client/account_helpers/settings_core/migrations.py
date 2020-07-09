@@ -496,6 +496,10 @@ def _migrateTo56(core, data, initialized):
     data['battlePassStorage'][BattlePassStorageKeys.BUY_BUTTON_HINT_IS_SHOWN] = False
 
 
+def _migrateTo57(core, data, initialized):
+    data['guiStartBehavior']['isRankedWelcomeViewShowed'] = False
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -714,6 +718,10 @@ _versions = ((1,
   False),
  (56,
   _migrateTo56,
+  False,
+  False),
+ (57,
+  _migrateTo57,
   False,
   False))
 

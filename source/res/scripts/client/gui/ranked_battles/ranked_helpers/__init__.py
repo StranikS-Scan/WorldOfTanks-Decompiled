@@ -6,7 +6,7 @@ from collections import namedtuple
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.periodic_battles.models import CalendarStatusVO
-from gui.ranked_battles.constants import RANKED_QUEST_ID_PREFIX, PrimeTimeStatus, RankedTokenQuestPostfix, AlertTypes
+from gui.ranked_battles.constants import RANKED_QUEST_ID_PREFIX, PrimeTimeStatus, RankedTokenQuestPostfix, LandingUrlParams, AlertTypes
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.utils.functions import makeTooltip
@@ -106,12 +106,35 @@ def getRankedBattlesIntroPageUrl(lobbyContext=None):
     return lobbyContext.getServerSettings().bwRankedBattles.introPageUrl
 
 
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def getRankedBattlesSeasonGapUrl(lobbyContext=None):
+    return lobbyContext.getServerSettings().bwRankedBattles.seasonGapPageUrl
+
+
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def getRankedBattlesYearRatingUrl(lobbyContext=None, isLobbySub=False):
+    url = lobbyContext.getServerSettings().bwRankedBattles.yearRatingPageUrl
+    params = LandingUrlParams.LOBBY_SUB if isLobbySub else LandingUrlParams.PAGE_TAB
+    return url + params if url is not None else None
+
+
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def getRankedBattlesShopUrl(lobbyContext=None, isLobbySub=False):
+    url = lobbyContext.getServerSettings().bwRankedBattles.shopPageUrl
+    params = LandingUrlParams.LOBBY_SUB if isLobbySub else LandingUrlParams.PAGE_TAB
+    return url + params if url is not None else None
+
+
 def isSeasonTokenQuest(questID):
     return questID.split('_')[-1] in (RankedTokenQuestPostfix.SPRINTER, RankedTokenQuestPostfix.COMMON)
 
 
 def isFinalTokenQuest(questID):
     return questID.split('_')[-1] == RankedTokenQuestPostfix.FINAL
+
+
+def isLeaderTokenQuest(questID):
+    return questID.split('_')[-1] == RankedTokenQuestPostfix.LEADER
 
 
 def getDataFromSeasonTokenQuestID(questID):

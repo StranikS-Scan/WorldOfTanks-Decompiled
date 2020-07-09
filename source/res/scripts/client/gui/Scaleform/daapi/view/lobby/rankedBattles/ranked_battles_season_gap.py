@@ -4,7 +4,7 @@ import time
 from helpers import dependency, time_utils
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.ranked_battles.ranked_builders import season_gap_vos
-from gui.ranked_battles.ranked_helpers.league_provider import UNDEFINED_LEAGUE_ID
+from gui.ranked_battles.ranked_helpers.web_season_provider import UNDEFINED_LEAGUE_ID
 from gui.ranked_battles.constants import SeasonResultTokenPatterns, RankedDossierKeys, ZERO_RANK_ID, SeasonGapStates, NOT_IN_LEAGUES_QUEST
 from gui.Scaleform.daapi.view.meta.RankedBattlesSeasonGapViewMeta import RankedBattlesSeasonGapViewMeta
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_battles_page import IResetablePage
@@ -24,12 +24,21 @@ _STATE_TO_BANNED_GAP_STATE = {SeasonGapStates.WAITING_IN_LEAGUES: SeasonGapState
  SeasonGapStates.IN_DIVISIONS: SeasonGapStates.BANNED_IN_DIVISIONS,
  SeasonGapStates.NOT_IN_SEASON: SeasonGapStates.BANNED_NOT_IN_SEASON,
  SeasonGapStates.NOT_IN_DIVISIONS: SeasonGapStates.BANNED_NOT_IN_DIVISIONS}
+_STATE_TO_ROLLED_GAP_STATE = {SeasonGapStates.WAITING_IN_LEAGUES: SeasonGapStates.ROLLED_IN_LEAGUES,
+ SeasonGapStates.WAITING_IN_DIVISIONS: SeasonGapStates.ROLLED_IN_DIVISIONS,
+ SeasonGapStates.WAITING_NOT_IN_DIVISIONS: SeasonGapStates.ROLLED_NOT_IN_DIVISIONS,
+ SeasonGapStates.WAITING_NOT_IN_SEASON: SeasonGapStates.ROLLED_NOT_IN_SEASON,
+ SeasonGapStates.IN_LEAGUES: SeasonGapStates.ROLLED_IN_LEAGUES,
+ SeasonGapStates.IN_DIVISIONS: SeasonGapStates.ROLLED_IN_DIVISIONS,
+ SeasonGapStates.NOT_IN_SEASON: SeasonGapStates.ROLLED_NOT_IN_SEASON,
+ SeasonGapStates.NOT_IN_DIVISIONS: SeasonGapStates.ROLLED_NOT_IN_DIVISIONS}
 
 class RankedBattlesSeasonGapView(RankedBattlesSeasonGapViewMeta, IResetablePage):
     __eventsCache = dependency.descriptor(IEventsCache)
     __itemsCache = dependency.descriptor(IItemsCache)
     __rankedController = dependency.descriptor(IRankedBattlesController)
     __TOKENS_ORDER = (SeasonResultTokenPatterns.RANKED_OFF_BANNED,
+     SeasonResultTokenPatterns.RANKED_OFF_ROLLED,
      SeasonResultTokenPatterns.RANKED_OFF_BRONZE_LEAGUE_TOKEN,
      SeasonResultTokenPatterns.RANKED_OFF_SILVER_LEAGUE_TOKEN,
      SeasonResultTokenPatterns.RANKED_OFF_GOLD_LEAGUE_TOKEN)
@@ -117,10 +126,10 @@ class RankedBattlesSeasonGapView(RankedBattlesSeasonGapViewMeta, IResetablePage)
 
     def __updateRating(self):
         isMastered = self.__resultState in (SeasonGapStates.IN_LEAGUES, SeasonGapStates.WAITING_IN_LEAGUES)
-        webLeague = self.__rankedController.getLeagueProvider().webLeague
-        if webLeague.league != self.__resultLeague:
-            webLeague = self.__rankedController.getClientLeague()
-        position = webLeague.position if webLeague.league == self.__resultLeague else None
+        webSeasonInfo = self.__rankedController.getWebSeasonProvider().seasonInfo
+        if webSeasonInfo.league != self.__resultLeague:
+            webSeasonInfo = self.__rankedController.getClientSeasonInfo()
+        position = webSeasonInfo.position if webSeasonInfo.league == self.__resultLeague else None
         self.as_setRatingDataS(season_gap_vos.getRatingVO(position, isMastered))
         return
 
@@ -140,6 +149,8 @@ class RankedBattlesSeasonGapView(RankedBattlesSeasonGapViewMeta, IResetablePage)
         resultTokenPattern = self.__getResultTokenPattern()
         if resultTokenPattern == SeasonResultTokenPatterns.RANKED_OFF_BANNED:
             self.__resultState = _STATE_TO_BANNED_GAP_STATE.get(self.__resultState, self.__resultState)
+        elif resultTokenPattern == SeasonResultTokenPatterns.RANKED_OFF_ROLLED:
+            self.__resultState = _STATE_TO_ROLLED_GAP_STATE.get(self.__resultState, self.__resultState)
         elif resultTokenPattern is not None:
             self.__resultState = SeasonGapStates.IN_LEAGUES
             self.__resultLeague = int(resultTokenPattern.split('_')[-1])

@@ -550,6 +550,7 @@ class X5BattleTokensBonus(TokensBonus):
 
 class EntitlementBonus(SimpleBonus):
     _ENTITLEMENT_RECORD = namedtuple('_ENTITLEMENT_RECORD', ['id', 'amount'])
+    _FORMATTED_AMOUNT = ('ranked_202007_access',)
 
     @staticmethod
     def hasConfiguredResources(entitlementID):
@@ -562,15 +563,23 @@ class EntitlementBonus(SimpleBonus):
         return True
 
     @classmethod
+    def isFormattedAmount(cls, entitlementID):
+        return entitlementID in cls._FORMATTED_AMOUNT
+
+    @classmethod
     def getUserName(cls, entitlementID):
         return backport.text(R.strings.quests.bonusName.entitlements.dyn(entitlementID)()) if cls.hasConfiguredResources(entitlementID) else ''
 
     @classmethod
     def getUserNameWithCount(cls, entitlementID, count):
         if cls.hasConfiguredResources(entitlementID) and count > 0:
-            countRes = R.strings.messenger.serviceChannelMessages.battleResults.quests.entitlements.multiplier()
-            countStr = backport.text(countRes, count=backport.getIntegralFormat(count)) if count > 1 else ''
-            return text_styles.concatStylesWithSpace(cls.getUserName(entitlementID), countStr)
+            if cls.isFormattedAmount(entitlementID):
+                res = R.strings.messenger.serviceChannelMessages.battleResults.quests.entitlements.fmtMultiplier()
+                formattedCountStr = backport.text(res, count=backport.getIntegralFormat(count)) if count > 1 else ''
+            else:
+                countRes = R.strings.messenger.serviceChannelMessages.battleResults.quests.entitlements.multiplier()
+                formattedCountStr = backport.text(countRes, count=backport.getIntegralFormat(count))
+            return text_styles.concatStylesToSingleLine(cls.getUserName(entitlementID), formattedCountStr)
 
     def isShowInGUI(self):
         value = self.getValue()
@@ -1134,7 +1143,7 @@ class DossierBonus(SimpleBonus):
         return ', '.join(self.formattedList())
 
     def formattedList(self):
-        return self.getAchievements()
+        return [ achievement.getUserName() for achievement in self.getAchievements() ]
 
     def getWrappedEpicBonusList(self):
         result = []

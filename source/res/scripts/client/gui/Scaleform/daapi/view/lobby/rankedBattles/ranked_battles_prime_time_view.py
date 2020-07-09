@@ -6,7 +6,7 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
-from gui.ranked_battles.ranked_helpers.sound_manager import RANKED_OVERLAY_SOUND_SPACE
+from gui.ranked_battles.ranked_helpers.sound_manager import RANKED_SUBVIEW_SOUND_SPACE
 from gui.ranked_battles.constants import PrimeTimeStatus
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.time_formatters import formatDate
@@ -36,7 +36,7 @@ class RankedServerPresenter(ServerListItemPresenter):
 
 class RankedBattlesPrimeTimeView(RankedPrimeTimeMeta):
     __rankedController = dependency.descriptor(IRankedBattlesController)
-    _COMMON_SOUND_SPACE = RANKED_OVERLAY_SOUND_SPACE
+    _COMMON_SOUND_SPACE = RANKED_SUBVIEW_SOUND_SPACE
     _serverPresenterClass = RankedServerPresenter
 
     def _getController(self):
@@ -57,7 +57,8 @@ class RankedBattlesPrimeTimeView(RankedPrimeTimeMeta):
          'serversText': text_styles.expText(self._getServerText(serverList, serverInfo, True)),
          'serversDDEnabled': not isSingleServer,
          'serverDDVisible': not isSingleServer,
-         'timeText': text_styles.expText(self.__getTimeText(serverInfo))}
+         'timeText': text_styles.expText(self.__getTimeText(serverInfo)),
+         'background': backport.image(R.images.gui.maps.icons.rankedBattles.bg.main())}
 
     def _getPrbActionName(self):
         return self._getPrbForcedActionName()

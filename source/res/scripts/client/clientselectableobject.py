@@ -76,7 +76,7 @@ class ClientSelectableObject(BigWorld.Entity, ScriptGameObject, ISelectableObjec
 
     def onMouseClick(self):
         if self.__clickSound is None:
-            if self.clickSoundName:
+            if self.clickSoundName and self.__enabled:
                 if self.isClick3DSound:
                     self.__clickSound = SoundGroups.g_instance.getSound3D(self.model.root, self.clickSoundName)
                 else:

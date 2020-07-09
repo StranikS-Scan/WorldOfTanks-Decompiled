@@ -65,7 +65,7 @@ def getUniqueBlueprints(blueprints, isFullNationCD=False):
 
 
 def _isUnsuitableForBlueprints(vehicle):
-    return vehicle.isPremium or vehicle.isSecret or vehicle.isEvent or vehicle.isOnlyForEpicBattles or vehicle.isCollectible
+    return vehicle.isPremium or vehicle.isSecret or vehicle.isEvent or vehicle.isOnlyForEpicBattles or vehicle.isCollectible or vehicle.isOnlyForBob
 
 
 class BlueprintsRequester(AbstractSyncDataRequester, IBlueprintsRequester):

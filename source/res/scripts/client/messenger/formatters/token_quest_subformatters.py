@@ -7,6 +7,8 @@ from itertools import chain
 import constants
 import personal_missions
 from adisp import async, process
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import RANKED_YEAR_POSITION
 from dossiers2.custom.records import DB_ID_TO_RECORD, RECORD_DB_IDS
 from dossiers2.ui.achievements import BADGES_BLOCK, ACHIEVEMENT_BLOCK
 from gui import makeHtmlString
@@ -14,7 +16,8 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.constants import RankedDossierKeys, YEAR_POINTS_TOKEN
-from gui.ranked_battles.ranked_helpers.league_provider import UNDEFINED_LEAGUE_ID, TOP_LEAGUE_ID
+from gui.ranked_battles.ranked_helpers.web_season_provider import UNDEFINED_LEAGUE_ID, TOP_LEAGUE_ID
+from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.server_events.recruit_helper import getSourceIdFromQuest
 from gui.shared.formatters import text_styles
 from gui.shared.money import Currency
@@ -257,9 +260,9 @@ class RankedSeasonTokenQuestFormatter(RankedTokenQuestFormatter):
         return formattedMessages
 
     def __formatSeasonProgress(self, season, league, isSprinter, data):
-        webLeague = self.__rankedController.getLeagueProvider().webLeague
-        if webLeague.league == UNDEFINED_LEAGUE_ID:
-            webLeague = self.__rankedController.getClientLeague()
+        webSeasonInfo = self.__rankedController.getWebSeasonProvider().seasonInfo
+        if webSeasonInfo.league == UNDEFINED_LEAGUE_ID:
+            webSeasonInfo = self.__rankedController.getClientSeasonInfo()
         resultStrings = []
         rankedQuests = self.__eventsCache.getRankedQuests(lambda q: q.isHidden() and q.isForRank() and q.getSeasonID() == season.getSeasonID() and q.isCompleted())
         rankedQuests = rankedQuests.values()
@@ -268,8 +271,8 @@ class RankedSeasonTokenQuestFormatter(RankedTokenQuestFormatter):
         dossier = self._itemsCache.items.getAccountDossier().getSeasonRankedStats(RankedDossierKeys.SEASON % season.getNumber(), season.getSeasonID())
         if league != UNDEFINED_LEAGUE_ID:
             position = 0
-            if webLeague.league == league:
-                position = webLeague.position
+            if webSeasonInfo.league == league:
+                position = webSeasonInfo.position
             leagueName = self.__R_NOTIFICATIONS.dyn('league{}'.format(league))()
             resultStrings.append(backport.text(self.__R_NOTIFICATIONS.league(), leagueName=text_styles.stats(backport.text(leagueName if leagueName else ''))))
             if position > 0:
@@ -676,3 +679,35 @@ class BattlePassDefaultAwardsFormatter(WaitItemsSyncFormatter, TokenQuestsSubFor
             return MessageData(formatted, settings)
         else:
             return
+
+
+class RankedYearLeaderFormatter(RankedTokenQuestFormatter):
+
+    @async
+    @process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        formattedMessage = None
+        if isSynced:
+            yearPosition = AccountSettings.getSettings(RANKED_YEAR_POSITION)
+            completedIDs = message.data.get('completedQuestIDs', set())
+            rewardsData = getRewardsForQuests(message, self.getQuestOfThisGroup(completedIDs))
+            if yearPosition is not None and rewardsData:
+                formattedMessage = self.__formatFullMessage(yearPosition, rewardsData)
+            else:
+                formattedMessage = self.__formatShortMessage()
+        callback([MessageData(formattedMessage, self._getGuiSettings(message))])
+        return
+
+    @classmethod
+    def _isQuestOfThisGroup(cls, questID):
+        return ranked_helpers.isLeaderTokenQuest(questID)
+
+    def __formatFullMessage(self, yearPosition, rewardsData):
+        return g_settings.msgTemplates.format('rankedLeaderPositiveQuest', ctx={'title': backport.text(R.strings.system_messages.ranked.notification.yearLB.positive.title()),
+         'body': backport.text(R.strings.system_messages.ranked.notification.yearLB.positive.body(), playerPosition=text_styles.stats(str(yearPosition)))}, data={'savedData': {'yearPosition': yearPosition,
+                       'rewardsData': rewardsData}})
+
+    def __formatShortMessage(self):
+        return g_settings.msgTemplates.format('rankedLeaderNegativeQuest', ctx={'title': backport.text(R.strings.system_messages.ranked.notification.yearLB.negative.title()),
+         'body': backport.text(R.strings.system_messages.ranked.notification.yearLB.negative.body())}, data={'savedData': {'ctx': {'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID}}})

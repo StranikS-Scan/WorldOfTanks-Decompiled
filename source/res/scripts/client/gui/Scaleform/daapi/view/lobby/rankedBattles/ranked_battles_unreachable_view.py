@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/ranked_battles_unreachable_view.py
-from gui.ranked_battles.ranked_helpers.sound_manager import RANKED_OVERLAY_SOUND_SPACE
+from gui.ranked_battles.ranked_helpers.sound_manager import RANKED_SUBVIEW_SOUND_SPACE
 from gui.ranked_battles.ranked_builders.unreachable_vos import getUnreachableVO
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -12,7 +12,7 @@ from skeletons.gui.game_control import IRankedBattlesController
 
 class RankedBattlesUnreachableView(LobbySubView, RankedBattlesUnreachableViewMeta):
     __rankedController = dependency.descriptor(IRankedBattlesController)
-    _COMMON_SOUND_SPACE = RANKED_OVERLAY_SOUND_SPACE
+    _COMMON_SOUND_SPACE = RANKED_SUBVIEW_SOUND_SPACE
     __background_alpha__ = 0.5
 
     def __init__(self, _):

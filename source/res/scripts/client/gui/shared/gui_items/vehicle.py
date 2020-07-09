@@ -142,6 +142,7 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     EQUIPMENT_LOCKED = 'lockEquipment'
     EPIC_BATTLES = 'epic_battles'
     RENT_PROMOTION = 'rent_promotion'
+    BOB = 'bob'
 
 
 EPIC_ACTION_VEHICLE_CDS = (44033, 63265)
@@ -1230,6 +1231,10 @@ class Vehicle(FittingItem):
     @property
     def isEpicActionVehicle(self):
         return self.isOnlyForEpicBattles and self.intCD in EPIC_ACTION_VEHICLE_CDS
+
+    @property
+    def isOnlyForBob(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.BOB)
 
     @property
     def isTelecom(self):

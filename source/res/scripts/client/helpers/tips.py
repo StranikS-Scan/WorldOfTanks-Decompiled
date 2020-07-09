@@ -121,6 +121,12 @@ class _EventTipsCriteria(_TipsCriteria):
         return _TipData(R.strings.tips.eventTitle(), R.strings.tips.eventMessage(), R.images.gui.maps.icons.battleLoading.tips.event())
 
 
+class _BobTipsCriteria(_TipsCriteria):
+
+    def find(self):
+        return _TipData(R.strings.tips.bobTitle(), R.strings.tips.bobMessage(), R.images.gui.maps.icons.battleLoading.tips.bob())
+
+
 class _RankedTipsCriteria(_TipsCriteria):
 
     def _getTargetList(self):
@@ -142,7 +148,9 @@ def getTipsCriteria(arenaVisitor):
         return _RankedTipsCriteria()
     if arenaVisitor.gui.isEpicRandomBattle():
         return _EpicRandomTipsCriteria()
-    return _EpicBattleTipsCriteria() if arenaVisitor.gui.isInEpicRange() else _RandomTipsCriteria()
+    if arenaVisitor.gui.isInEpicRange():
+        return _EpicBattleTipsCriteria()
+    return _BobTipsCriteria() if arenaVisitor.gui.isBobBattle() else _RandomTipsCriteria()
 
 
 def _readTips(pattern):

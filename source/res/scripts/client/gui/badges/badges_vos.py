@@ -5,7 +5,7 @@ from gui.impl.gen.resources import R
 from gui.shared.formatters import text_styles, icons
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.settings import ICONS_SIZES
-_UNIQUE_SUFFIX_BADGE_TOOLTIPS = {}
+_UNIQUE_SUFFIX_BADGE_TOOLTIPS = {'ranked_2020_leader_suffix': TOOLTIPS_CONSTANTS.BADGES_SUFFIX_RANKED_ITEM}
 
 def getSuffixBadgeTooltip(badge):
     return _UNIQUE_SUFFIX_BADGE_TOOLTIPS.get(badge.getName(), TOOLTIPS_CONSTANTS.BADGES_SUFFIX_ITEM) if badge.isSuffixLayout() else ''

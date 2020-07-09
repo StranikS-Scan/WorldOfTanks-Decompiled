@@ -11,6 +11,12 @@ from gui.shared.utils.decorators import ReprInjector
 @ReprInjector.simple('ctrlTypeID', 'entityTypeID', 'hasModalEntity', 'hasLockedState', 'isIntroMode')
 class FunctionalState(object):
     __slots__ = ('ctrlTypeID', 'entityTypeID', 'hasModalEntity', 'hasLockedState', 'isIntroMode', 'funcState', 'funcFlags', 'rosterType')
+    __PREBATTLE_TYPE_TO_QUEUE_TYPE = {PREBATTLE_TYPE.SQUAD: QUEUE_TYPE.RANDOMS,
+     PREBATTLE_TYPE.FALLOUT: QUEUE_TYPE.FALLOUT_CLASSIC,
+     PREBATTLE_TYPE.UNIT: QUEUE_TYPE.UNITS,
+     PREBATTLE_TYPE.EVENT: QUEUE_TYPE.EVENT_BATTLES,
+     PREBATTLE_TYPE.EPIC: QUEUE_TYPE.EPIC,
+     PREBATTLE_TYPE.BOB: QUEUE_TYPE.BOB}
 
     def __init__(self, ctrlTypeID=0, entityTypeID=0, hasModalEntity=False, hasLockedState=False, isIntroMode=False, funcState=None, funcFlags=FUNCTIONAL_FLAG.UNDEFINED, rosterType=0):
         super(FunctionalState, self).__init__()
@@ -54,20 +60,28 @@ class FunctionalState(object):
             return True
         if self.isInUnit(PREBATTLE_TYPE.EPIC) and queueType == QUEUE_TYPE.EPIC:
             return True
-        return True if self.isInUnit(PREBATTLE_TYPE.EVENT) and queueType == QUEUE_TYPE.EVENT_BATTLES else False
+        if self.isInUnit(PREBATTLE_TYPE.EVENT) and queueType == QUEUE_TYPE.EVENT_BATTLES:
+            return True
+        return True if self.isInUnit(PREBATTLE_TYPE.BOB) and queueType == QUEUE_TYPE.BOB else False
 
     def doLeaveToAcceptInvite(self, prbType=0):
-        if self.hasModalEntity:
-            if prbType and self.isIntroMode:
-                return prbType != self.entityTypeID
+        if not self.hasModalEntity:
+            return False
+        if not prbType:
             return True
-        return False
+        if self.isIntroMode:
+            return prbType != self.entityTypeID
+        return True if self.isInLegacy() or self.isInUnit() else self.entityTypeID != self.__prebattleTypeToQueueType(prbType)
 
     def isReadyActionSupported(self):
         return self.hasModalEntity and not self.isIntroMode and (self.isInLegacy() or self.isInUnit())
 
     def isNavigationDisabled(self):
         return self.hasLockedState
+
+    @staticmethod
+    def __prebattleTypeToQueueType(prbType):
+        return FunctionalState.__PREBATTLE_TYPE_TO_QUEUE_TYPE.get(prbType, QUEUE_TYPE.UNKNOWN)
 
 
 @ReprInjector.simple('isCreator', 'isReady')

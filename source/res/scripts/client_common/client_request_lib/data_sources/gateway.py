@@ -505,6 +505,10 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/ranked/user_position/'
         return self._request_data(callback, url, get_data={}, method='GET')
 
+    def user_ranked_year_position(self, callback):
+        url = '/ranked/user_yearly_position/'
+        return self._request_data(callback, url, get_data={}, method='GET')
+
     def account_statistics(self, callback, account_id, fields=None):
         url = '/wgsh/accounts/{account_id}/'.format(account_id=account_id)
         return self._request_data(callback, url, get_data={}, converters={}, method='GET')

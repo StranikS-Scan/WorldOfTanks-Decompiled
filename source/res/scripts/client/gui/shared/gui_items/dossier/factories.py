@@ -328,6 +328,7 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.SINGLE, 'TenYearsCountdownParticipation'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.TOTAL, 'TenYearsCountdownStageMedal'): _AchieveFactory.get(_abstract_achievements.StageAchievement),
  (_AB.SINGLE, 'TenYearsCountdownSPGEventMedal'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'TenYearsCountdownBrawlMedal'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  WHITE_TIGER_RECORD: _CustomAchieveFactory.get(_as.regular.WhiteTigerAchievement),
  HONORED_RANK_RECORD: _CustomAchieveFactory.get(_as.regular.HonoredRankAchievement),
  (_AB.SINGLE, 'se2020Medal'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),

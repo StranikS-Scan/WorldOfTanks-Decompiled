@@ -16,6 +16,7 @@ from helpers.i18n import makeString as ms
 from helpers import dependency
 from skeletons.gui.game_control import IWOTSPGController
 from gui.impl import backport
+from gui.impl.gen import R
 
 def sortedIndices(seq, getter, reverse=False):
     return sorted(range(len(seq)), key=lambda idx: getter(seq[idx]), reverse=reverse)
@@ -71,9 +72,9 @@ def getVehicleDataVO(vehicle):
             customStateExt = '/' + SEASON_NAME_BY_TYPE.get(rentPackagesInfo.seasonType)
     smallStatus, largeStatus = getStatusStrings(vState + customStateExt, vStateLvl, substitute=rentInfoText, ctx={'icon': icons.premiumIgrSmall(),
      'battlesLeft': getBattlesLeft(vehicle)})
-    smallHoverStatus, largeHoverStatus = smallStatus, largeStatus
+    largeHoverStatus = largeStatus
     if vState == Vehicle.VEHICLE_STATE.RENTABLE:
-        smallHoverStatus, largeHoverStatus = getStatusStrings(vState + '/hover', vStateLvl, substitute=rentInfoText, ctx={'icon': icons.premiumIgrSmall(),
+        _, largeHoverStatus = getStatusStrings(vState + '/hover', vStateLvl, substitute=rentInfoText, ctx={'icon': icons.premiumIgrSmall(),
          'battlesLeft': getBattlesLeft(vehicle)})
     if vehicle.dailyXPFactor > 1:
         bonusImage = getButtonsAssetPath('bonus_x{}'.format(vehicle.dailyXPFactor))
@@ -81,12 +82,16 @@ def getVehicleDataVO(vehicle):
         bonusImage = ''
     label = vehicle.shortUserName if vehicle.isPremiumIGR else vehicle.userName
     labelStyle = text_styles.premiumVehicleName if vehicle.isPremium else text_styles.vehicleName
+    specialBgSrc = None
+    specialBgSmallSrc = None
+    if vehicle.isOnlyForBob:
+        specialBgSrc = backport.image(R.images.gui.maps.icons.tenYearsCountdown.vehicle.special_bg_big())
+        specialBgSmallSrc = backport.image(R.images.gui.maps.icons.tenYearsCountdown.vehicle.special_bg_small())
     return {'id': vehicle.invID,
      'intCD': vehicle.intCD,
      'infoText': largeStatus,
      'infoHoverText': largeHoverStatus,
      'smallInfoText': smallStatus,
-     'smallInfoHoverText': smallHoverStatus,
      'clanLock': vehicle.clanLock,
      'lockBackground': _isLockedBackground(vState, vStateLvl),
      'icon': vehicle.icon,
@@ -107,7 +112,10 @@ def getVehicleDataVO(vehicle):
      'additionalImgSrc': getVehicleStateAddIcon(vState),
      'isCritInfo': vStateLvl == Vehicle.VEHICLE_STATE_LEVEL.CRITICAL,
      'isRentPromotion': vehicle.isRentPromotion and not vehicle.isRented,
-     'isNationChangeAvailable': vehicle.hasNationGroup}
+     'isNationChangeAvailable': vehicle.hasNationGroup,
+     'specialBgSrc': specialBgSrc,
+     'specialBgSmallSrc': specialBgSmallSrc,
+     'isSpecialBgOverFlag': False}
 
 
 class CarouselDataProvider(SortableDAAPIDataProvider):

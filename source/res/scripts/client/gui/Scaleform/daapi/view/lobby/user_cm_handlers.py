@@ -27,7 +27,7 @@ from messenger.m_constants import PROTO_TYPE, USER_TAG
 from messenger.proto import proto_getter
 from messenger.storage import storage_getter
 from nation_change_helpers.client_nation_change_helper import getValidVehicleCDForNationChange
-from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.game_control import IVehicleComparisonBasket, IBobController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -52,6 +52,7 @@ class USER(object):
     UNSET_MUTED = 'unsetMuted'
     CREATE_SQUAD = 'createSquad'
     CREATE_EVENT_SQUAD = 'createEventSquad'
+    CREATE_BOB_SQUAD = 'createBobSquad'
     INVITE = 'invite'
     REQUEST_FRIENDSHIP = 'requestFriendship'
     VEHICLE_INFO = 'vehicleInfoEx'
@@ -66,6 +67,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     eventsCache = dependency.descriptor(IEventsCache)
     clanCtrl = dependency.descriptor(IWebController)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    bobCtrl = dependency.descriptor(IBobController)
 
     def __init__(self, cmProxy, ctx=None):
         super(BaseUserCMHandler, self).__init__(cmProxy, ctx, handlers=self._getHandlers())
@@ -155,6 +157,9 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     def createEventSquad(self):
         self._doSelect(PREBATTLE_ACTION_NAME.EVENT_SQUAD, (self.databaseID,))
 
+    def createBobSquad(self):
+        self._doSelect(PREBATTLE_ACTION_NAME.BOB_SQUAD, (self.databaseID,))
+
     def invite(self):
         user = self.usersStorage.getUser(self.databaseID)
         if self.prbEntity.getPermissions().canSendInvite():
@@ -177,6 +182,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
          USER.SET_MUTED: 'setMuted',
          USER.UNSET_MUTED: 'unsetMuted',
          USER.CREATE_SQUAD: 'createSquad',
+         USER.CREATE_BOB_SQUAD: 'createBobSquad',
          USER.CREATE_EVENT_SQUAD: 'createEventSquad',
          USER.INVITE: 'invite',
          USER.REQUEST_FRIENDSHIP: 'requestFriendship'}
@@ -250,6 +256,9 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
             options.append(self._makeItem(USER.CREATE_SQUAD, MENU.contextmenu(USER.CREATE_SQUAD), optInitData={'enabled': canCreate}))
             if self.eventsCache.isEventEnabled():
                 options.append(self._makeItem(USER.CREATE_EVENT_SQUAD, MENU.contextmenu(USER.CREATE_EVENT_SQUAD), optInitData={'enabled': canCreate,
+                 'textColor': 13347959}))
+            if self.bobCtrl.isModeActive():
+                options.append(self._makeItem(USER.CREATE_BOB_SQUAD, MENU.contextmenu(USER.CREATE_BOB_SQUAD), optInitData={'enabled': canCreate,
                  'textColor': 13347959}))
         return options
 

@@ -10,6 +10,7 @@ _TOKEN_QUEST_SUB_FORMATTERS = (token_quest_subformatters.LootBoxTokenQuestFormat
  token_quest_subformatters.FrontlineRewardQuestFormatter(),
  token_quest_subformatters.RankedSeasonTokenQuestFormatter(),
  token_quest_subformatters.RankedFinalTokenQuestFormatter(),
+ token_quest_subformatters.RankedYearLeaderFormatter(),
  token_quest_subformatters.SeniorityAwardsFormatter(),
  token_quest_subformatters.PersonalMissionsTokenQuestsFormatter(),
  token_quest_subformatters.BattlePassDefaultAwardsFormatter())

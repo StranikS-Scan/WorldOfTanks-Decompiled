@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/ranked_battles_page.py
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import GUI_START_BEHAVIOR, RANKED_AWARDS_COUNTER, RANKED_INFO_COUNTER, RANKED_AWARDS_BUBBLE_YEAR_REACHED
+from account_helpers.AccountSettings import GUI_START_BEHAVIOR, RANKED_AWARDS_COUNTER, RANKED_INFO_COUNTER, RANKED_SHOP_COUNTER, RANKED_YEAR_RATING_COUNTER, RANKED_AWARDS_BUBBLE_YEAR_REACHED, RANKED_ENTITLEMENT_EVENTS_AMOUNT
 from gui.ranked_battles.ranked_helpers.sound_manager import RANKED_MAIN_PAGE_SOUND_SPACE
 from gui.ranked_battles.constants import RankedDossierKeys
 from gui.ranked_battles.ranked_builders import main_page_vos
@@ -20,11 +20,18 @@ from skeletons.gui.server_events import IEventsCache
 _RANKED_BATTLES_VIEW_TO_ITEM_ID = {RANKEDBATTLES_ALIASES.RANKED_BATTLES_LEAGUES_VIEW_UI: RANKEDBATTLES_CONSTS.RANKED_BATTLES_RANKS_ID,
  RANKEDBATTLES_ALIASES.RANKED_BATTLES_DIVISIONS_VIEW_UI: RANKEDBATTLES_CONSTS.RANKED_BATTLES_RANKS_ID,
  RANKEDBATTLES_ALIASES.RANKED_BATTLES_SEASON_GAP_VIEW_UI: RANKEDBATTLES_CONSTS.RANKED_BATTLES_RANKS_ID,
+ RANKEDBATTLES_ALIASES.RANKED_BATTLES_WEB_SEASON_GAP_ALIAS: RANKEDBATTLES_CONSTS.RANKED_BATTLES_RANKS_ID,
  RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_UI: RANKEDBATTLES_CONSTS.RANKED_BATTLES_REWARDS_ID,
  RANKEDBATTLES_ALIASES.RANKED_BATTLES_REWARDS_SEASON_OFF_ALIAS: RANKEDBATTLES_CONSTS.RANKED_BATTLES_REWARDS_ID,
+ RANKEDBATTLES_ALIASES.RANKED_BATTLES_SHOP_ALIAS: RANKEDBATTLES_CONSTS.RANKED_BATTLES_SHOP_ID,
  RANKEDBATTLES_ALIASES.RANKED_BATTLES_RAITING_ALIAS: RANKEDBATTLES_CONSTS.RANKED_BATTLES_RATING_ID,
- RANKEDBATTLES_ALIASES.RANKED_BATTLES_INFO_ALIAS: RANKEDBATTLES_CONSTS.RANKED_BATTLES_INFO_ID}
-_RANKED_WEB_PAGES = (RANKEDBATTLES_ALIASES.RANKED_BATTLES_RAITING_ALIAS, RANKEDBATTLES_ALIASES.RANKED_BATTLES_INFO_ALIAS)
+ RANKEDBATTLES_ALIASES.RANKED_BATTLES_INFO_ALIAS: RANKEDBATTLES_CONSTS.RANKED_BATTLES_INFO_ID,
+ RANKEDBATTLES_ALIASES.RANKED_BATTLES_YEAR_RAITING_ALIAS: RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID}
+_RANKED_WEB_PAGES = (RANKEDBATTLES_ALIASES.RANKED_BATTLES_WEB_SEASON_GAP_ALIAS,
+ RANKEDBATTLES_ALIASES.RANKED_BATTLES_SHOP_ALIAS,
+ RANKEDBATTLES_ALIASES.RANKED_BATTLES_RAITING_ALIAS,
+ RANKEDBATTLES_ALIASES.RANKED_BATTLES_INFO_ALIAS,
+ RANKEDBATTLES_ALIASES.RANKED_BATTLES_YEAR_RAITING_ALIAS)
 
 class IResetablePage(object):
 
@@ -52,13 +59,24 @@ class RankedMainPage(LobbySubView, RankedBattlesPageMeta):
             self._updateSounds()
             self.__resetComponent(viewId)
         if isOtherSelected:
-            self._update()
+            self._updateHeader()
             self.__resetCounters(newSelectedID)
         self.__rankedController.clearWebOpenPageCtx()
 
+    def _checkOverlayDestroy(self, onClose=False):
+        isShopPage = self._selectedItemID == RANKEDBATTLES_CONSTS.RANKED_BATTLES_SHOP_ID
+        isYearLBPage = self._selectedItemID == RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID
+        isShopEnabled = self.__rankedController.isRankedShopEnabled()
+        isYearLBEnabled = self.__rankedController.isYearLBEnabled()
+        if onClose or isShopPage and not isShopEnabled or isYearLBPage and not isYearLBEnabled:
+            self.__rankedController.onKillWebOverlays()
+
     def _dispose(self):
+        self._updateSounds(True)
+        self._checkOverlayDestroy(True)
         self.__rankedController.clearWebOpenPageCtx()
         self.__rankedController.onUpdated -= self._update
+        self.__rankedController.onEntitlementEvent -= self.__onEntitlementEvent
         self.__rankedController.onYearPointsChanges -= self.__onYearAwardPointsUpdate
         super(RankedMainPage, self)._dispose()
 
@@ -77,8 +95,10 @@ class RankedMainPage(LobbySubView, RankedBattlesPageMeta):
     def _populate(self):
         super(RankedMainPage, self)._populate()
         self.__rankedController.onYearPointsChanges += self.__onYearAwardPointsUpdate
+        self.__rankedController.onEntitlementEvent += self.__onEntitlementEvent
         self.__rankedController.onUpdated += self._update
         self.__onYearAwardPointsUpdate()
+        self.__onEntitlementEvent()
         self.__resetCounters(self._selectedItemID)
         self._updateSounds()
         self._update()
@@ -90,21 +110,31 @@ class RankedMainPage(LobbySubView, RankedBattlesPageMeta):
         self._update()
 
     def _update(self):
+        self._checkOverlayDestroy()
         self._updateHeader()
-        self._updateMenuItems()
+        self._updateMenuItems(self.__rankedController.isRankedShopEnabled(), self.__rankedController.isYearLBEnabled(), self.__rankedController.getYearLBSize())
 
     def _updateHeader(self):
         raise NotImplementedError
 
-    def _updateMenuItems(self):
+    def _updateMenuItems(self, isRankedShopEnabled, isYearLBEnabled, yearLBSize):
         raise NotImplementedError
 
-    def _updateSounds(self):
+    def _updateSounds(self, onClose=False):
         self.__rankedController.getSoundManager().setAmbient()
 
     def __getShowStateFlags(self):
         defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
         return self.__settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
+
+    def __onEntitlementEvent(self):
+        currEventsCount = self.__rankedController.getEntitlementEvents()
+        oldEventsCount = AccountSettings.getCounters(RANKED_ENTITLEMENT_EVENTS_AMOUNT)
+        AccountSettings.setCounters(RANKED_ENTITLEMENT_EVENTS_AMOUNT, currEventsCount)
+        if currEventsCount > oldEventsCount:
+            AccountSettings.setCounters(RANKED_SHOP_COUNTER, 1)
+            self.__resetCounters(self._selectedItemID)
+            self.__updateCounters()
 
     def __onYearAwardPointsUpdate(self):
         if not AccountSettings.getSettings(RANKED_AWARDS_BUBBLE_YEAR_REACHED):
@@ -113,6 +143,7 @@ class RankedMainPage(LobbySubView, RankedBattlesPageMeta):
                 if maxPoints >= points >= minPoints:
                     AccountSettings.setCounters(RANKED_AWARDS_COUNTER, 1)
                     AccountSettings.setSettings(RANKED_AWARDS_BUBBLE_YEAR_REACHED, True)
+                    self.__resetCounters(self._selectedItemID)
                     self.__updateCounters()
                     break
 
@@ -122,6 +153,10 @@ class RankedMainPage(LobbySubView, RankedBattlesPageMeta):
                 AccountSettings.setCounters(RANKED_AWARDS_COUNTER, 0)
         elif selectedItemID == RANKEDBATTLES_CONSTS.RANKED_BATTLES_INFO_ID:
             AccountSettings.setCounters(RANKED_INFO_COUNTER, 0)
+        elif selectedItemID == RANKEDBATTLES_CONSTS.RANKED_BATTLES_YEAR_RATING_ID:
+            AccountSettings.setCounters(RANKED_YEAR_RATING_COUNTER, 0)
+        elif selectedItemID == RANKEDBATTLES_CONSTS.RANKED_BATTLES_SHOP_ID:
+            AccountSettings.setCounters(RANKED_SHOP_COUNTER, 0)
         self.__updateCounters()
 
     def __resetComponent(self, viewId):
@@ -136,7 +171,9 @@ class RankedMainPage(LobbySubView, RankedBattlesPageMeta):
     def __updateCounters(self):
         awardsCounter = main_page_vos.getBubbleLabel(AccountSettings.getCounters(RANKED_AWARDS_COUNTER))
         infoCounter = main_page_vos.getBubbleLabel(AccountSettings.getCounters(RANKED_INFO_COUNTER))
-        self.as_setCountersS(main_page_vos.getCountersData(awardsCounter, infoCounter))
+        yearRatingCounter = main_page_vos.getBubbleLabel(AccountSettings.getCounters(RANKED_YEAR_RATING_COUNTER))
+        shopCounter = main_page_vos.getBubbleLabel(AccountSettings.getCounters(RANKED_SHOP_COUNTER))
+        self.as_setCountersS(main_page_vos.getCountersData(awardsCounter, infoCounter, yearRatingCounter, shopCounter))
 
 
 class RankedMainSeasonOffPage(RankedMainPage):
@@ -169,17 +206,19 @@ class RankedMainSeasonOffPage(RankedMainPage):
         super(RankedMainSeasonOffPage, self)._update()
 
     def _updateHeader(self):
-        self.as_setHeaderDataS(main_page_vos.getRankedMainSeasonOffHeader(self.__prevSeason, self.__nextSeason, self._selectedItemID))
+        self.as_setHeaderDataS(main_page_vos.getRankedMainSeasonOffHeader(self.__prevSeason, self.__nextSeason, self.__isYearGap(), self._selectedItemID))
 
-    def _updateMenuItems(self):
-        menuItems = main_page_vos.getRankedMainSeasonOffItems()
+    def _updateMenuItems(self, isRankedShopEnabled, isYearLBEnabled, yearLBSize):
+        menuItems = main_page_vos.getRankedMainSeasonOffItems(isRankedShopEnabled, isYearLBEnabled, yearLBSize)
         self.as_setDataS({'menuItems': menuItems,
          'selectedIndex': self._getSelectedIdx(menuItems)})
 
-    def _updateSounds(self):
+    def _updateSounds(self, onClose=False):
         super(RankedMainSeasonOffPage, self)._updateSounds()
         soundManager = self.__rankedController.getSoundManager()
-        if self.__rankedController.getMaxPossibleRank() == self.__achievedRankID:
+        if onClose:
+            soundManager.setDefaultProgressSound()
+        elif self.__rankedController.getMaxPossibleRank() == self.__achievedRankID or self.__isYearGap():
             soundManager.setProgressSound()
         else:
             soundManager.setProgressSound(self.__rankedController.getDivision(self.__achievedRankID).getUserID())
@@ -187,9 +226,12 @@ class RankedMainSeasonOffPage(RankedMainPage):
     def __checkDestroy(self):
         ctrlPrevSeason = self.__rankedController.getPreviousSeason()
         isPrevValid = ctrlPrevSeason is not None and ctrlPrevSeason.getSeasonID() == self.__prevSeason.getSeasonID()
-        if self.__rankedController.getCurrentSeason() is not None or not isPrevValid:
+        if not self.__rankedController.isEnabled() or self.__rankedController.getCurrentSeason() or not isPrevValid:
             self.onClose()
         return
+
+    def __isYearGap(self):
+        return self.__rankedController.isYearGap()
 
 
 class RankedMainSeasonOnPage(RankedMainPage):
@@ -203,7 +245,6 @@ class RankedMainSeasonOnPage(RankedMainPage):
         return
 
     def _dispose(self):
-        self._updateSounds(True)
         self.__periodicNotifier.stopNotification()
         self.__periodicNotifier.clear()
         super(RankedMainSeasonOnPage, self)._dispose()
@@ -226,8 +267,9 @@ class RankedMainSeasonOnPage(RankedMainPage):
     def _updateHeader(self):
         self.as_setHeaderDataS(main_page_vos.getRankedMainSeasonOnHeader(self.__currentSeason, self._selectedItemID))
 
-    def _updateMenuItems(self):
-        menuItems = main_page_vos.getRankedMainSeasonOnItems(self.__rankedController.isAccountMastered())
+    def _updateMenuItems(self, isRankedShopEnabled, isYearLBEnabled, yearLBSize):
+        leagues = self.__rankedController.isAccountMastered()
+        menuItems = main_page_vos.getRankedMainSeasonOnItems(isRankedShopEnabled, isYearLBEnabled, yearLBSize, leagues)
         self.as_setDataS({'menuItems': menuItems,
          'selectedIndex': self._getSelectedIdx(menuItems)})
 

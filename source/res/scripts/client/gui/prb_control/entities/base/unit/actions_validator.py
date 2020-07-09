@@ -56,7 +56,7 @@ class UnitVehiclesValidator(BaseActionsValidator):
             return super(UnitVehiclesValidator, self)._validate()
 
     def _isValidMode(self, vehicle):
-        return not vehicle.isEvent and not vehicle.isOnlyForEpicBattles
+        return not vehicle.isEvent and not vehicle.isOnlyForEpicBattles and not vehicle.isOnlyForBob
 
     def _isCheckForRent(self):
         return True

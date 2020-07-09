@@ -277,6 +277,9 @@ class RblbAccessor(BaseAccessor):
     def user_ranked_position(self, callback, fields=None):
         return self._data_source.user_ranked_position(callback, fields=fields)
 
+    def user_ranked_year_position(self, callback):
+        return self._data_source.user_ranked_year_position(callback)
+
 
 class WGElenAccessor(BaseAccessor):
 

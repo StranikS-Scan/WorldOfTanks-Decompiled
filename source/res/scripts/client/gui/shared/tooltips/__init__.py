@@ -69,6 +69,8 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     TRADE_IN_STATE_NOT_AVAILABLE = 'tradeInStateNotAvailable'
     DEMOUNT_KIT = 'demountKit'
     VEHICLE_COLLECTOR = 'vehicleCollector'
+    BOB_SELECTOR_INFO = 'bobSelectorInfo'
+    BOB_CALENDAR_DAY = 'bobCalendarDay'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):

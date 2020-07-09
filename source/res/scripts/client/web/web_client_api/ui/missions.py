@@ -29,6 +29,10 @@ class _MarathonMissionsSchema(W2CSchema):
     prefix = Field(required=True, type=basestring, validator=lambda v, _: v in {m.prefix for m in MARATHON_EVENTS})
 
 
+class _MissionsCategoriesSchema(W2CSchema):
+    group_id = Field(required=False, type=basestring, default=None)
+
+
 class MissionsWebApiMixin(object):
 
     @w2c(_MissionsSchema, 'missions')
@@ -46,9 +50,9 @@ class MissionsWebApiMixin(object):
     def openVehicleMissions(self, cmd):
         server_events.showMissionsForCurrentVehicle()
 
-    @w2c(W2CSchema, 'missions_categories')
+    @w2c(_MissionsCategoriesSchema, 'missions_categories')
     def openMissionCategories(self, cmd):
-        server_events.showMissionsCategories()
+        server_events.showMissionsCategories(groupID=cmd.group_id)
 
     @w2c(W2CSchema, 'missions_competitions')
     def openMissionsElenEvents(self, cmd):

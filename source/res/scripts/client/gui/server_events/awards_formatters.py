@@ -1520,4 +1520,6 @@ class EntitlementFormatter(SimpleBonusFormatter):
         return result
 
     def __formatEntitlement(self, bonus):
-        return PreformattedBonus(bonusName=bonus.getName(), userName=bonus.getUserName(bonus.getValue().id), label=formatCountLabel(bonus.getValue().amount), labelFormatter=self._getLabelFormatter(bonus), images=self._getImages(bonus), tooltip=bonus.getTooltip(), align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus))
+        value = bonus.getValue()
+        isFormattedAmount = bonus.isFormattedAmount(value.id)
+        return PreformattedBonus(bonusName=bonus.getName(), userName=bonus.getUserName(value.id), label=formatCountLabel(value.amount) if isFormattedAmount else backport.getIntegralFormat(value.amount), labelFormatter=self._getLabelFormatter(bonus), images=self._getImages(bonus), tooltip=bonus.getTooltip(), align=LABEL_ALIGN.RIGHT if isFormattedAmount else LABEL_ALIGN.CENTER, isCompensation=self._isCompensation(bonus))

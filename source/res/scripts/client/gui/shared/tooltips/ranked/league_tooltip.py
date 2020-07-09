@@ -9,10 +9,10 @@ from helpers import dependency
 from gui.ranked_battles import ranked_formatters
 from skeletons.gui.game_control import IRankedBattlesController
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
-from gui.ranked_battles.ranked_helpers.league_provider import UNDEFINED_LEAGUE_ID
+from gui.ranked_battles.ranked_helpers.web_season_provider import UNDEFINED_LEAGUE_ID
 
 class BonusTooltipData(BlocksTooltipData):
-    rankedController = dependency.descriptor(IRankedBattlesController)
+    __rankedController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self, context):
         super(BonusTooltipData, self).__init__(context, TOOLTIP_TYPE.RANKED_RANK)
@@ -24,7 +24,7 @@ class BonusTooltipData(BlocksTooltipData):
         items = super(BonusTooltipData, self)._packBlocks()
         headerBlocks = [formatters.packImageTextBlockData(title=text_styles.highTitle(backport.text(R.strings.tooltips.battleTypes.ranked.bonusBattle.title())), img=backport.image(R.images.gui.maps.icons.rankedBattles.bonusIcons.c_48x48()), txtPadding=formatters.packPadding(left=20), titleAtMiddle=True, padding=formatters.packPadding(left=30, top=14))]
         items.append(formatters.packBuildUpBlockData(headerBlocks, stretchBg=False, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_NORMAL_VEHICLE_BG_LINKAGE, padding=formatters.packPadding(left=-20, top=-12, bottom=-6)))
-        statsComposer = self.rankedController.getStatsComposer()
+        statsComposer = self.__rankedController.getStatsComposer()
         persistentCount = statsComposer.persistentBonusBattles
         items.append(self.__packPersistentCount(persistentCount))
         dailyCount = statsComposer.dailyBonusBattles
@@ -49,7 +49,7 @@ class BonusTooltipData(BlocksTooltipData):
 
 
 class LeagueTooltipData(BlocksTooltipData):
-    rankedController = dependency.descriptor(IRankedBattlesController)
+    __rankedController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self, context):
         super(LeagueTooltipData, self).__init__(context, TOOLTIP_TYPE.RANKED_RANK)
@@ -59,19 +59,23 @@ class LeagueTooltipData(BlocksTooltipData):
 
     def _packBlocks(self, *args, **kwargs):
         items = super(LeagueTooltipData, self)._packBlocks()
-        webLeague = self.rankedController.getClientLeague()
-        if webLeague.league != UNDEFINED_LEAGUE_ID and webLeague.position is not None:
-            title = backport.text(R.strings.ranked_battles.rankedBattleMainView.leaguesView.dyn('league{}'.format(webLeague.league))())
-            description = backport.text(R.strings.ranked_battles.rankedBattleMainView.leaguesView.descr())
+        resShortCut = R.strings.ranked_battles.rankedBattleMainView.leaguesView
+        webSeasonInfo = self.__rankedController.getClientSeasonInfo()
+        yearLBsize = self.__rankedController.getYearLBSize()
+        if webSeasonInfo.league != UNDEFINED_LEAGUE_ID and webSeasonInfo.position is not None:
+            title = backport.text(resShortCut.dyn('league{}'.format(webSeasonInfo.league))())
+            description = backport.text(resShortCut.descr(), count=yearLBsize)
+            if webSeasonInfo.isTop:
+                description = backport.text(resShortCut.topDescr(), count=yearLBsize)
         else:
-            title = backport.text(R.strings.ranked_battles.rankedBattleMainView.leaguesView.unavailableTitle())
-            description = backport.text(R.strings.ranked_battles.rankedBattleMainView.leaguesView.unavailableDescr())
+            title = backport.text(resShortCut.unavailableTitle())
+            description = backport.text(resShortCut.unavailableDescr())
         items.append(formatters.packTitleDescBlock(title=text_styles.highTitle(title), desc=text_styles.main(description)))
         return items
 
 
 class EfficiencyTooltipData(BlocksTooltipData):
-    rankedController = dependency.descriptor(IRankedBattlesController)
+    __rankedController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self, context):
         super(EfficiencyTooltipData, self).__init__(context, TOOLTIP_TYPE.RANKED_RANK)
@@ -83,7 +87,7 @@ class EfficiencyTooltipData(BlocksTooltipData):
         items = super(EfficiencyTooltipData, self)._packBlocks()
         items.append(formatters.packTextBlockData(text_styles.highTitle(backport.text(R.strings.tooltips.ranked.widget.efficiency.title()))))
         efficiencyBlocks = []
-        statsComposer = self.rankedController.getStatsComposer()
+        statsComposer = self.__rankedController.getStatsComposer()
         currEff, currUpdateTime = statsComposer.currentSeasonEfficiency
         efficiencyBlocks.append(self.__getEfficiencyBlock(currEff, currUpdateTime, R.strings.tooltips.ranked.widget.efficiency.currentUpdate()))
         prevEff, prevUpdateTime = statsComposer.cachedSeasonEfficiency
@@ -98,7 +102,7 @@ class EfficiencyTooltipData(BlocksTooltipData):
 
 
 class PositionTooltipData(BlocksTooltipData):
-    rankedController = dependency.descriptor(IRankedBattlesController)
+    __rankedController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self, context):
         super(PositionTooltipData, self).__init__(context, TOOLTIP_TYPE.RANKED_RANK)
@@ -109,7 +113,8 @@ class PositionTooltipData(BlocksTooltipData):
     def _packBlocks(self, *args, **kwargs):
         items = super(PositionTooltipData, self)._packBlocks()
         title = text_styles.highTitle(backport.text(R.strings.tooltips.ranked.widget.position.title()))
-        updateTime = self.rankedController.getClientLeagueUpdateTime()
+        updateTime = self.__rankedController.getWebSeasonProvider().lastUpdateTime
+        updateTime = updateTime or self.__rankedController.getClientSeasonInfoUpdateTime()
         items.append(formatters.packTitleDescBlock(title=title, desc=text_styles.main(backport.text(R.strings.tooltips.ranked.widget.position.description()).format(date=text_styles.neutral(ranked_formatters.getTimeLongStr(updateTime))))))
         posComment = R.strings.tooltips.ranked.widget.position
         items.append(formatters.packTextBlockData(text_styles.standard(backport.text(posComment.updateLabel() if updateTime is not None else posComment.unavailableLabel()))))

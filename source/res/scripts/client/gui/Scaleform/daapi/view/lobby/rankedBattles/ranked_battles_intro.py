@@ -40,7 +40,6 @@ class RankedBattlesIntro(LobbySubView, RankedBattlesIntroMeta):
 
     def _populate(self):
         super(RankedBattlesIntro, self)._populate()
-        self.__rankedController.getSoundManager().setAmbient()
         headerData = {'title': backport.text(R.strings.ranked_battles.rankedBattle.title()),
          'leftSideText': backport.text(R.strings.ranked_battles.intoPage.description()),
          'rightSideText': None,
